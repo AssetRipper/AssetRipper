@@ -1,0 +1,552 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CA9420F4-4B54-4727-91E6-CCE20916D795}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>UtinyRipper</RootNamespace>
+    <AssemblyName>UtinyRipperCore</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Bins\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>7.2</LangVersion>
+    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Bins\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>7.2</LangVersion>
+    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Bins\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.2</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>..\Bins\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.2</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Bins\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.2</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\Bins\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.2</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\EnumNameAttribute.cs" />
+    <Compile Include="Converter\Textures\DDS\DDPFFlags.cs" />
+    <Compile Include="Converter\Textures\DDS\DDSCaps2Flags.cs" />
+    <Compile Include="Converter\Textures\DDS\DDSCapsFlags.cs" />
+    <Compile Include="Converter\Textures\DDS\DDSConverter.cs" />
+    <Compile Include="Converter\Textures\DDS\DDSConvertParameters.cs" />
+    <Compile Include="Converter\Textures\DDS\DDSDecompressor.cs" />
+    <Compile Include="Converter\Textures\DDS\DDSFourCCType.cs" />
+    <Compile Include="Converter\Textures\DDS\DDSPixelFormat.cs" />
+    <Compile Include="Converter\Textures\DDS\DXGIFormat.cs" />
+    <Compile Include="Converter\Textures\KTX\KTXBaseInternalFormat.cs" />
+    <Compile Include="Converter\Textures\KTX\KTXFormat.cs" />
+    <Compile Include="Converter\Textures\KTX\KTXInternalFormat.cs" />
+    <Compile Include="Converter\Textures\KTX\KTXConverter.cs" />
+    <Compile Include="Converter\Textures\KTX\KTXConvertParameters.cs" />
+    <Compile Include="Converter\Textures\KTX\KTXType.cs" />
+    <Compile Include="Converter\Textures\PVR\PVRChannelType.cs" />
+    <Compile Include="Converter\Textures\PVR\PVRColourSpace.cs" />
+    <Compile Include="Converter\Textures\PVR\PVRConverter.cs" />
+    <Compile Include="Converter\Textures\PVR\PVRConvertParameters.cs" />
+    <Compile Include="Converter\Textures\PVR\PVRFlag.cs" />
+    <Compile Include="Converter\Textures\PVR\PVRPixelFormat.cs" />
+    <Compile Include="Exporter\YAML\Base\ScalarType.cs" />
+    <Compile Include="Exporter\YAML\Utils\Extensions\IDictionaryExtensions.cs" />
+    <Compile Include="IO\EndianStream\IEndianReadable.cs" />
+    <Compile Include="IO\FileMultiStream\SplitNameComparer.cs" />
+    <Compile Include="IO\ReverseStream.cs" />
+    <Compile Include="IO\FileMultiStream\FileMultiStream.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\AssetsExportContainer.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\DefaultImporter.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\IHVImageFormatImporter.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\TextureImportSettings.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Collections\TextureExportCollection.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\ChildTrack.cs" />
+    <Compile Include="Parser\Classes\Animation\AnimationCullingType.cs" />
+    <Compile Include="Parser\Classes\AudioClip\AudioClip.cs" />
+    <Compile Include="Parser\Classes\AudioClip\AudioClipLoadType.cs" />
+    <Compile Include="Parser\Classes\AudioClip\AudioCompressionFormat.cs" />
+    <Compile Include="Parser\Classes\AudioClip\FMODSoundFormat.cs" />
+    <Compile Include="Parser\Classes\AudioClip\FMODSoundType.cs" />
+    <Compile Include="Parser\Classes\AudioClip\StreamedResource.cs" />
+    <Compile Include="Parser\Classes\NewAnimationTrack\Channel.cs" />
+    <Compile Include="Parser\Classes\NewAnimationTrack\NewAnimationTrack.cs" />
+    <Compile Include="Parser\Classes\TransformAnimationTrack.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\WrapMode.cs" />
+    <Compile Include="Parser\Classes\Base\BaseAnimationTrack.cs" />
+    <Compile Include="Parser\Classes\Camera.cs" />
+    <Compile Include="Parser\Classes\Flare.cs" />
+    <Compile Include="Parser\Classes\Font\CharacterInfo.cs" />
+    <Compile Include="Parser\Classes\Font\Font.cs" />
+    <Compile Include="Parser\Classes\Font\FontRenderingMode.cs" />
+    <Compile Include="Parser\Classes\Font\FontStyle.cs" />
+    <Compile Include="Parser\Classes\Mesh\Face.cs" />
+    <Compile Include="Parser\Classes\Mesh\LOD.cs" />
+    <Compile Include="Parser\Classes\Mesh\MeshData.cs" />
+    <Compile Include="Parser\Classes\Mesh\Tangent.cs" />
+    <Compile Include="Parser\Classes\Serialize\BitField.cs" />
+    <Compile Include="Parser\Classes\Light\Light.cs" />
+    <Compile Include="Parser\Classes\Light\LightBakingOutput.cs" />
+    <Compile Include="Parser\Classes\Light\LightmapBakeMode.cs" />
+    <Compile Include="Parser\Classes\Light\LightmapBakeType.cs" />
+    <Compile Include="Parser\Classes\Light\LightmappingMode.cs" />
+    <Compile Include="Parser\Classes\Light\LightRenderMode.cs" />
+    <Compile Include="Parser\Classes\Light\LightShadows.cs" />
+    <Compile Include="Parser\Classes\Light\LightType.cs" />
+    <Compile Include="Parser\Classes\Light\MixedLightingMode.cs" />
+    <Compile Include="Parser\Classes\Light\ShadowSettings.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ClampVelocityModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\CollisionModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ColorBySpeedModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ColorModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\CustomDataModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\EmissionModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ExternalForcesModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ForceModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\Gradient.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\InheritVelocityModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\InitialModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\LightsModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\MinMaxCurve.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\MinMaxGradient.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\MultiModeParameter.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\NoiseModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ParticleSystem.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ParticleSystemEmissionBurst.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\RotationBySpeedModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\RotationModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ShapeModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\SizeBySpeedModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\SizeModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\SpriteData.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\SubEmitterData.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\SubModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\TrailModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\TriggerModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\UVModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\VelocityModule.cs" />
+    <Compile Include="Parser\Classes\Serialize\ColorRGBA32.cs" />
+    <Compile Include="Parser\Classes\Texture\ColorSpace.cs" />
+    <Compile Include="Parser\Classes\UI\CanvasRenderer.cs" />
+    <Compile Include="Parser\Classes\Cubemap.cs" />
+    <Compile Include="Parser\Classes\SpriteRenderer\SpriteDrawMode.cs" />
+    <Compile Include="Parser\Classes\SpriteRenderer\SpriteMaskInteraction.cs" />
+    <Compile Include="Parser\Classes\SpriteRenderer\SpriteRenderer.cs" />
+    <Compile Include="Parser\Classes\SpriteRenderer\SpriteTileMode.cs" />
+    <Compile Include="Parser\Classes\UI\Canvas\Canvas.cs" />
+    <Compile Include="Parser\Classes\UI\Canvas\RenderMode.cs" />
+    <Compile Include="Parser\Format\BundleFile\Entry\BundleMetadata.cs" />
+    <Compile Include="Parser\Format\BundleFile\Parser\BlockInfo.cs" />
+    <Compile Include="Parser\Format\BundleFile\Parser\BundleHeader.cs" />
+    <Compile Include="Parser\Format\BundleFile\Parser\BundleFlag.cs" />
+    <Compile Include="Parser\Format\BundleFile\Parser\ChunkInfo.cs" />
+    <Compile Include="Parser\Format\SerializedFile\IO\SerializedFileStream.cs" />
+    <Compile Include="Parser\Format\SerializedFile\IO\ISerializedFileReadable.cs" />
+    <Compile Include="Parser\Format\SerializedFile\Parser\RTTIClassHierarchyDescriptor.cs" />
+    <Compile Include="Parser\Format\SerializedFile\Parser\SerializedFileHeader.cs" />
+    <Compile Include="Parser\Format\Entry\FileData.cs" />
+    <Compile Include="Parser\Format\Entry\FileEntry.cs" />
+    <Compile Include="Parser\Format\SerializedFile\Parser\SerializedFileMetadata.cs" />
+    <Compile Include="Parser\Format\SerializedFile\Parser\FileIdentifier.cs" />
+    <Compile Include="Parser\Format\SerializedFile\Parser\ObjectInfo.cs" />
+    <Compile Include="Parser\Format\SerializedFile\Parser\ObjectPtr.cs" />
+    <Compile Include="Parser\Format\SerializedFile\Parser\RTTIBaseClassDescriptor.cs" />
+    <Compile Include="Parser\Format\SerializedFile\Parser\TypeTree.cs" />
+    <Compile Include="Parser\Format\SerializedFile\Parser\TypeTreeNode.cs" />
+    <Compile Include="Parser\Format\WebFile\Entry\WebFileEntry.cs" />
+    <Compile Include="Parser\Format\WebFile\Entry\WebFileData.cs" />
+    <Compile Include="Parser\Format\WebFile\WebFile.cs" />
+    <Compile Include="Parser\IO\Extensions\IDictionaryExtensions.cs" />
+    <Compile Include="Parser\IO\Extensions\AssetStreamExtensions.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Utils\Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Parser\IO\AssetStream\AssetStream.cs" />
+    <Compile Include="IO\Utils\Extensions\EndianStreamExtensions.cs" />
+    <Compile Include="IO\Utils\Extensions\IListExtensions.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\AssetsExporter.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\NativeFormatImporter.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Classes\Meta.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Collections\AssetExportCollection.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Collections\EmptyExportCollection.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Collections\PrefabExportCollection.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Collections\IExportCollection.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Collections\SkipExportCollection.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Exporters\Base\AssetExporter.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Exporters\BinaryAssetExporter.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Exporters\Base\IAssetExporter.cs" />
+    <Compile Include="Exporter\YAML\Base\Emitter.cs" />
+    <Compile Include="Exporter\YAML\Base\MappingStyle.cs" />
+    <Compile Include="Exporter\YAML\Base\MetaType.cs" />
+    <Compile Include="Exporter\YAML\Base\ScalarStyle.cs" />
+    <Compile Include="Exporter\YAML\Base\SequenceStyle.cs" />
+    <Compile Include="Exporter\YAML\Base\YAMLDocument.cs" />
+    <Compile Include="Exporter\YAML\Base\YAMLMappingNode.cs" />
+    <Compile Include="Exporter\YAML\Base\YAMLNode.cs" />
+    <Compile Include="Exporter\YAML\Base\YAMLNodeType.cs" />
+    <Compile Include="Exporter\YAML\Base\YAMLScalarNode.cs" />
+    <Compile Include="Exporter\YAML\Base\YAMLSequenceNode.cs" />
+    <Compile Include="Exporter\YAML\Base\YAMLTag.cs" />
+    <Compile Include="Exporter\YAML\Base\YAMLWriter.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Interfaces\IYAMLDocExportable.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Interfaces\IYAMLExportable.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Utils\Extensions\IDictionaryExtensions.cs" />
+    <Compile Include="Exporter\YAML\Utils\Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="IO\EndianStream\AlignType.cs" />
+    <Compile Include="IO\EndianStream\EndianStream.cs" />
+    <Compile Include="IO\EndianStream\EndianType.cs" />
+    <Compile Include="IO\Lz4Stream.cs" />
+    <Compile Include="IO\Utils\Extensions\IDictionaryExtensions.cs" />
+    <Compile Include="IO\Utils\SevenZipHelper.cs" />
+    <Compile Include="Parser\AssetCollection\AssetCollection.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Exporters\DummyAssetExporter.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Exporters\YAMLAssetExporter.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Interfaces\IAssetsExporter.cs" />
+    <Compile Include="Parser\AssetCollection\IAssetCollection.cs" />
+    <Compile Include="Parser\AssetInfo.cs" />
+    <Compile Include="Parser\Format\SerializedFile\SerializedFile.cs" />
+    <Compile Include="Parser\Format\BundleFile\Entry\BundleFileEntry.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\AnimationType.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\Editor\StreamedCurveKey.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\Editor\StreamedFrame.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\GenericBinding\BindingType.cs" />
+    <Compile Include="Parser\Classes\Animator.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\AnimatorController.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\Blend1dDataConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\Blend2dDataConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\BlendDirectDataConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\BlendTreeConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\BlendTreeNodeConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\ConditionConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\ControllerConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\LeafInfoConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\SelectorStateConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\SelectorTransitionConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\AnimatorControllerLayers\StateBehavioursPair.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\AnimatorControllerParameter.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\AnimatorControllerLayers\AnimatorControllerLayers.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\AnimatorStateTransition\AnimatorState.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\AnimatorStateMachine\AnimatorStateMachine.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\AnimatorStateMachine\ChildAnimatorStateMachine.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\AnimatorStateTransition\AnimatorStateTransition.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\AnimatorStateMachine\ChildAnimatorState.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\AnimatorTransition.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\Base\AnimatorTransitionBase.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\AnimatorStateTransition\AnimatorCondition.cs" />
+    <Compile Include="Parser\Classes\Base\Motion.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\BlendTree\BlendTree.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\BlendTree\ChildMotion.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\AnimatorControllerLayers\StateMotionPair.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Mask\HumanPoseMask.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\LayerConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\MotionNeighborList.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Mask\SkeletonMask.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Mask\SkeletonMaskElement.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\StateConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\StateMachineConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Constants\TransitionConstant.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\State\StateKey.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\State\StateMachineBehaviourVectorDescription.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\State\StateRange.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\ValueArray.cs" />
+    <Compile Include="Parser\Classes\AnimatorOverrideController\AnimationClipOverride.cs" />
+    <Compile Include="Parser\Classes\AnimatorOverrideController\AnimatorOverrideController.cs" />
+    <Compile Include="Parser\Classes\AssetBundle\AssetBundle.cs" />
+    <Compile Include="Parser\Classes\AssetBundle\AssetBundleScriptInfo.cs" />
+    <Compile Include="Parser\Classes\AssetBundle\AssetInfo.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\AvatarMask\AvatarMask.cs" />
+    <Compile Include="Parser\Classes\AnimatorController\Editor\AvatarMask\TransformMaskElement.cs" />
+    <Compile Include="Parser\Classes\Avatar\Avatar.cs" />
+    <Compile Include="Parser\Classes\Avatar\AvatarConstant.cs" />
+    <Compile Include="Parser\Classes\Avatar\Axes.cs" />
+    <Compile Include="Parser\Classes\Avatar\Collider.cs" />
+    <Compile Include="Parser\Classes\Avatar\Hand.cs" />
+    <Compile Include="Parser\Classes\Avatar\Handle.cs" />
+    <Compile Include="Parser\Classes\Avatar\Human.cs" />
+    <Compile Include="Parser\Classes\Avatar\Limit.cs" />
+    <Compile Include="Parser\Classes\Avatar\Node.cs" />
+    <Compile Include="Parser\Classes\Base\OffsetPtr.cs" />
+    <Compile Include="Parser\Classes\Avatar\Skeleton.cs" />
+    <Compile Include="Parser\Classes\Avatar\SkeletonPose.cs" />
+    <Compile Include="Parser\Classes\Base\Behaviour.cs" />
+    <Compile Include="Parser\Classes\GameObject\ComponentPair.cs" />
+    <Compile Include="Parser\Classes\Base\RuntimeAnimatorController.cs" />
+    <Compile Include="Parser\Classes\MonoBehaviour.cs" />
+    <Compile Include="Parser\Classes\Serialize\PPtr\InnerPPtr.cs" />
+    <Compile Include="Parser\Classes\Serialize\PPtr\IPPtr.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Classes\ExportPointer.cs" />
+    <Compile Include="Parser\Classes\Serialize\PPtr\PrefabPtr.cs" />
+    <Compile Include="Parser\Classes\Serialize\Rectf.cs" />
+    <Compile Include="Parser\Classes\Shader\Enums\GPUPlatform.cs" />
+    <Compile Include="Parser\Classes\Shader\Parameters\StructParameter.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\Enum\BlendFactor.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\Enum\BlendOp.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\Enum\ColorMask.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\Enum\Cull.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\Enum\FogMode.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\Enum\SerializedPassType.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\Enum\StencilComp.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\Enum\StencilOp.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\Enum\StencilType.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\Enum\ZClip.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\Enum\ZTest.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\Enum\ZWrite.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedPropertyFlag.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\Enum\SerializedPropertyType.cs" />
+    <Compile Include="Parser\Classes\Shader\Enums\ShaderParamType.cs" />
+    <Compile Include="Parser\Classes\Shader\ShaderSubProgram.cs" />
+    <Compile Include="Parser\Classes\Shader\Enums\ShaderChannel.cs" />
+    <Compile Include="Parser\Classes\Shader\Enums\ShaderGpuProgramType.cs" />
+    <Compile Include="Parser\Classes\Shader\ShaderSubProgramBlob.cs" />
+    <Compile Include="Parser\Classes\Shader\Enums\ShaderType.cs" />
+    <Compile Include="Parser\Classes\Shader\Enums\VertexComponent.cs" />
+    <Compile Include="Parser\Classes\SpriteAtlas\SpriteAtlasData.cs" />
+    <Compile Include="Parser\Classes\Sprite\Sprite.cs" />
+    <Compile Include="Parser\Classes\SpriteAtlas\SpriteAtlas.cs" />
+    <Compile Include="Parser\Classes\Sprite\SpriteRenderData.cs" />
+    <Compile Include="Parser\Classes\Sprite\SpriteVertex.cs" />
+    <Compile Include="Parser\Classes\Texture\ContainerType.cs" />
+    <Compile Include="Converter\Textures\DDS\DDSDFlags.cs" />
+    <Compile Include="Parser\Classes\Texture\FilterMode.cs" />
+    <Compile Include="Parser\Classes\Texture\TextureSettings.cs" />
+    <Compile Include="Parser\Classes\Texture\StreamingInfo.cs" />
+    <Compile Include="Parser\Classes\Texture\Texture2D.cs" />
+    <Compile Include="Parser\Classes\Texture\TextureDimension.cs" />
+    <Compile Include="Parser\Classes\Texture\TextureFormat.cs" />
+    <Compile Include="Parser\Classes\Texture\TextureWrapMode.cs" />
+    <Compile Include="Parser\Classes\Utils\Extensions\UtinyStreamExtensions.cs" />
+    <Compile Include="Parser\Classes\Utils\Extensions\TypeExtensions.cs" />
+    <Compile Include="Parser\Classes\Utils\ObjectUtils.cs" />
+    <Compile Include="Parser\Enums\AssetType.cs" />
+    <Compile Include="Parser\Format\SerializedFile\ISerializedFile.cs" />
+    <Compile Include="Parser\Format\SerializedFile\Parser\TreeNodeType.cs" />
+    <Compile Include="Parser\Format\BundleFile\BundleType.cs" />
+    <Compile Include="Parser\Classes\Animation\Animation.cs" />
+    <Compile Include="Parser\Classes\Base\EditorExtension.cs" />
+    <Compile Include="Parser\Classes\Managers\GlobalGameManager.cs" />
+    <Compile Include="Parser\Classes\Material\FastPropertyName.cs" />
+    <Compile Include="Parser\Classes\Material\Material.cs" />
+    <Compile Include="Parser\Classes\Material\UnityPropertySheet.cs" />
+    <Compile Include="Parser\Classes\Material\UnityTexEnv.cs" />
+    <Compile Include="Parser\Classes\MeshRenderer.cs" />
+    <Compile Include="Parser\Classes\Base\Renderer\StaticBatchInfo.cs" />
+    <Compile Include="Parser\Classes\MonoScript.cs" />
+    <Compile Include="Parser\Classes\Prefab\Prefab.cs" />
+    <Compile Include="Parser\Classes\Prefab\PrefabModification.cs" />
+    <Compile Include="Parser\Classes\Prefab\PropertyModification.cs" />
+    <Compile Include="Parser\Classes\Serialize\ColorRGBAf.cs" />
+    <Compile Include="Parser\Classes\Serialize\UtinyGUID.cs" />
+    <Compile Include="Parser\Classes\Serialize\Hash128.cs" />
+    <Compile Include="Parser\Classes\Shader\Parameters\BufferBinding.cs" />
+    <Compile Include="Parser\Classes\Shader\Parameters\ConstantBuffer.cs" />
+    <Compile Include="Parser\Classes\Shader\Parameters\MatrixParameter.cs" />
+    <Compile Include="Parser\Classes\Shader\ParserBindChannels.cs" />
+    <Compile Include="Parser\Classes\Shader\Parameters\SamplerParameter.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedPass.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedProgram.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedProperties.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedProperty.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedShader.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedShaderDependency.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedShaderFloatValue.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedShaderRTBlendState.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedShaderState.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedShaderVectorValue.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedStencilOp.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedSubProgram.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedSubShader.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedTagMap.cs" />
+    <Compile Include="Parser\Classes\Shader\SerializedShader\SerializedTextureProperty.cs" />
+    <Compile Include="Parser\Classes\Shader\Shader.cs" />
+    <Compile Include="Parser\Classes\Shader\ShaderBindChannel.cs" />
+    <Compile Include="Parser\Classes\Shader\Parameters\TextureParameter.cs" />
+    <Compile Include="Parser\Classes\Shader\Parameters\UAVParameter.cs" />
+    <Compile Include="Parser\Classes\Shader\Parameters\VectorParameter.cs" />
+    <Compile Include="Parser\Classes\SkinnedMeshRenderer.cs" />
+    <Compile Include="Parser\Classes\Base\Texture.cs" />
+    <Compile Include="Parser\Classes\Utils\Extensions\UtinyClassTypeExtensions.cs" />
+    <Compile Include="Parser\Enums\ClassIDType.cs" />
+    <Compile Include="Parser\Format\SerializedFile\FileGeneration.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\AnimationClipBindingConstant.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\AnimationCurveTpl.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\AnimationEvent.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\Clip\Clip.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\Clip\ClipMuscleConstant.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\CompressedAnimationCurve.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\Clip\ConstantClip.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\Clip\DenseClip.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\Curves\FloatCurve.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\GenericBinding\GenericBinding.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\HandPose.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\HumanGoal.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\HumanPose.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\KeyframeTpl.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\Curves\PPtrCurve.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\PPtrKeyframe.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\Curves\QuaternionCurve.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\Clip\StreamedClip.cs" />
+    <Compile Include="Parser\Classes\Serialize\Animation\ValueArrayConstant.cs" />
+    <Compile Include="Parser\Classes\Serialize\Animation\ValueConstant.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\ValueDelta.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\Curves\Vector3Curve.cs" />
+    <Compile Include="Parser\Classes\Serialize\Animation\XForm.cs" />
+    <Compile Include="Parser\Classes\Base\Component.cs" />
+    <Compile Include="Parser\Classes\Base\Renderer\Renderer.cs" />
+    <Compile Include="Parser\Classes\Mesh\BlendShapeData.cs" />
+    <Compile Include="Parser\Classes\Mesh\BlendShapeVertex.cs" />
+    <Compile Include="Parser\Classes\Mesh\BoneWeights4.cs" />
+    <Compile Include="Parser\Classes\Mesh\ChannelInfo.cs" />
+    <Compile Include="Parser\Classes\Mesh\CollisionMeshData.cs" />
+    <Compile Include="Parser\Classes\Mesh\CompressedMesh.cs" />
+    <Compile Include="Parser\Classes\Mesh\Mesh.cs" />
+    <Compile Include="Parser\Classes\Mesh\BlendShape.cs" />
+    <Compile Include="Parser\Classes\Mesh\BlendShapeChannel.cs" />
+    <Compile Include="Parser\Classes\Mesh\StreamInfo.cs" />
+    <Compile Include="Parser\Classes\Mesh\SubMesh.cs" />
+    <Compile Include="Parser\Classes\Mesh\VertexData.cs" />
+    <Compile Include="Parser\Classes\MeshFilter.cs" />
+    <Compile Include="Parser\Classes\RectTransform.cs" />
+    <Compile Include="Parser\Classes\Serialize\Matrix4x4f.cs" />
+    <Compile Include="Parser\Classes\Serialize\Vector2f.cs" />
+    <Compile Include="Parser\Classes\TextAsset.cs" />
+    <Compile Include="Parser\Classes\Utils\Extensions\ArrayExtensions.cs" />
+    <Compile Include="Parser\Classes\Utils\Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Parser\Classes\Utils\Extensions\YAMLMappingNodeExtensions.cs" />
+    <Compile Include="Parser\Enums\Platform.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\AnimationClip.cs" />
+    <Compile Include="Parser\Classes\Base\NamedObject.cs" />
+    <Compile Include="Parser\Classes\Serialize\AABB.cs" />
+    <Compile Include="Parser\Classes\Serialize\Float.cs" />
+    <Compile Include="Parser\IO\AssetStream\IAssetReadable.cs" />
+    <Compile Include="Parser\Classes\Serialize\PackedQuatVector.cs" />
+    <Compile Include="Parser\Classes\Serialize\PackedFloatVector.cs" />
+    <Compile Include="Parser\Classes\Serialize\PackedIntVector.cs" />
+    <Compile Include="Parser\Classes\Serialize\Quaternionf.cs" />
+    <Compile Include="Parser\Classes\Serialize\Vector3f.cs" />
+    <Compile Include="Parser\Classes\Serialize\Vector4f.cs" />
+    <Compile Include="Parser\Classes\Transform.cs" />
+    <Compile Include="Parser\ResourcesFile.cs" />
+    <Compile Include="Parser\Version\VersionType.cs" />
+    <Compile Include="Parser\Format\BundleFile\Parser\BundleCompressType.cs" />
+    <Compile Include="Parser\Format\BundleFile\BundleFile.cs" />
+    <Compile Include="Parser\Format\BundleFile\BundleGeneration.cs" />
+    <Compile Include="Parser\Format\BundleFile\Entry\BundleFileData.cs" />
+    <Compile Include="Parser\Version\Version.cs" />
+    <Compile Include="Parser\Classes\Base\Object.cs" />
+    <Compile Include="Parser\Classes\Managers\BuildSettings.cs" />
+    <Compile Include="Parser\Classes\GameObject\GameObject.cs" />
+    <Compile Include="Parser\Classes\Serialize\PPtr\PPtr.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Parser\Utils\Config.cs" />
+    <Compile Include="ThirdParty\7zip\Common\CommandLineParser.cs" />
+    <Compile Include="ThirdParty\7zip\Common\CRC.cs" />
+    <Compile Include="ThirdParty\7zip\Common\InBuffer.cs" />
+    <Compile Include="ThirdParty\7zip\Common\OutBuffer.cs" />
+    <Compile Include="ThirdParty\7zip\Compress\LZMA\LzmaBase.cs" />
+    <Compile Include="ThirdParty\7zip\Compress\LZMA\LzmaDecoder.cs" />
+    <Compile Include="ThirdParty\7zip\Compress\LZMA\LzmaEncoder.cs" />
+    <Compile Include="ThirdParty\7zip\Compress\LZ\IMatchFinder.cs" />
+    <Compile Include="ThirdParty\7zip\Compress\LZ\LzBinTree.cs" />
+    <Compile Include="ThirdParty\7zip\Compress\LZ\LzInWindow.cs" />
+    <Compile Include="ThirdParty\7zip\Compress\LZ\LzOutWindow.cs" />
+    <Compile Include="ThirdParty\7zip\Compress\RangeCoder\RangeCoder.cs" />
+    <Compile Include="ThirdParty\7zip\Compress\RangeCoder\RangeCoderBit.cs" />
+    <Compile Include="ThirdParty\7zip\Compress\RangeCoder\RangeCoderBitTree.cs" />
+    <Compile Include="ThirdParty\7zip\ICoder.cs" />
+    <Compile Include="ThirdParty\Brotli\BitReader.cs" />
+    <Compile Include="ThirdParty\Brotli\BrotliInputStream.cs" />
+    <Compile Include="ThirdParty\Brotli\BrotliRuntimeException.cs" />
+    <Compile Include="ThirdParty\Brotli\Context.cs" />
+    <Compile Include="ThirdParty\Brotli\Decode.cs" />
+    <Compile Include="ThirdParty\Brotli\Dictionary.cs" />
+    <Compile Include="ThirdParty\Brotli\Huffman.cs" />
+    <Compile Include="ThirdParty\Brotli\HuffmanTreeGroup.cs" />
+    <Compile Include="ThirdParty\Brotli\IntReader.cs" />
+    <Compile Include="ThirdParty\Brotli\Prefix.cs" />
+    <Compile Include="ThirdParty\Brotli\RunningState.cs" />
+    <Compile Include="ThirdParty\Brotli\State.cs" />
+    <Compile Include="ThirdParty\Brotli\Transform.cs" />
+    <Compile Include="ThirdParty\Brotli\Utils.cs" />
+    <Compile Include="ThirdParty\Brotli\WordTransformType.cs" />
+    <Compile Include="ThirdParty\System.Half\Half.cs" />
+    <Compile Include="ThirdParty\System.Half\HalfHelper.cs" />
+    <Compile Include="Utils\DirectoryUtils.cs" />
+    <Compile Include="Utils\Extensions\BitConverterExtensions.cs" />
+    <Compile Include="Utils\Extensions\IReadOnlyListExtensions.cs" />
+    <Compile Include="Utils\Extensions\StreamExtensions.cs" />
+    <Compile Include="Utils\Extensions\StringBuilderExtensions.cs" />
+    <Compile Include="Utils\Extensions\TextWriterExtensions.cs" />
+    <Compile Include="Utils\Logger\ILogger.cs" />
+    <Compile Include="Utils\Logger\LogCategory.cs" />
+    <Compile Include="Utils\Logger\Logger.cs" />
+    <Compile Include="Utils\Logger\LogType.cs" />
+    <Compile Include="Utils\RandomUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,25 @@
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
+using UtinyRipper.Exporter.YAML;
+
+namespace UtinyRipper.Classes.Avatars
+{
+	public struct Hand : IAssetReadable, IYAMLExportable
+	{
+		public void Read(AssetStream stream)
+		{
+			m_handBoneIndex = stream.ReadInt32Array();
+		}
+
+		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add("m_HandBoneIndex", m_handBoneIndex.ExportYAML(true));
+			return node;
+		}
+
+		public IReadOnlyList<int> HandBoneIndex => m_handBoneIndex;
+
+		private int[] m_handBoneIndex;
+	}
+}
