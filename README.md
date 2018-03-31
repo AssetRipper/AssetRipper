@@ -1,5 +1,5 @@
 # UtinyRipper
-Latest build: [![Build status](https://ci.appveyor.com/api/projects/status/rds46l7fn62377p7?svg=true)](https://ci.appveyor.com/project/mafaca/utinyripper/branch/master)
+Latest build: [![Build status](https://ci.appveyor.com/api/projects/status/yd78hqp83f7vjkwb?svg=true)](https://ci.appveyor.com/project/mafaca/utinyripper/branch/master)
 
 Utiny Ripper is a tool for extracting assets from serialized files (CAB-*, *.assets, *.sharedAssets, etc.) and assets bundles (*.unity3d, *.assetbundle, etc.) into native Engine format.
 
