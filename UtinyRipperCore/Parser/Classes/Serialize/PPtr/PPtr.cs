@@ -99,7 +99,14 @@ namespace UtinyRipper.Classes
 
 		public bool IsObject(ISerializedFile file, Object @object)
 		{
-			return @object.PathID == PathID && file.Dependencies[FileIndex - 1].IsFile(@object.File);
+			if (FileIndex == 0)
+			{
+				return @object.PathID == PathID;
+			}
+			else
+			{
+				return @object.PathID == PathID && file.Dependencies[FileIndex - 1].IsFile(@object.File);
+			}
 		}
 
 		public override string ToString()
