@@ -48,7 +48,7 @@ namespace UtinyRipper.AssetExporters
 			string exportID = GetExportID(@object);
 			return isLocal ?
 				new ExportPointer(exportID) :
-				new ExportPointer(exportID, @object.GUID, AssetExporter.ToExportType(@object.ClassID));
+				new ExportPointer(exportID, Asset.GUID, AssetExporter.ToExportType(Asset.ClassID));
 		}
 
 		protected virtual IYAMLExportable CreateImporter(Object asset)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
 using UtinyRipper.SerializedFiles;
+
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
@@ -23,7 +24,7 @@ namespace UtinyRipper.AssetExporters
 			m_collections = collections;
 		}
 
-		public string GetExportID(UtinyRipper.Classes.Object @object)
+		public string GetExportID(Object @object)
 		{
 			if (CurrentCollection.IsContains(@object))
 			{
@@ -52,7 +53,7 @@ namespace UtinyRipper.AssetExporters
 			return m_exporter.ToExportType(classID);
 		}
 
-		public ExportPointer CreateExportPointer(UtinyRipper.Classes.Object @object)
+		public ExportPointer CreateExportPointer(Object @object)
 		{
 			if (CurrentCollection.IsContains(@object))
 			{

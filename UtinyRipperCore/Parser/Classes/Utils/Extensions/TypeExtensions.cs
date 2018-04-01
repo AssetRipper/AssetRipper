@@ -15,10 +15,12 @@ namespace UtinyRipper.Classes
 					case ClassIDType.Component:
 					case ClassIDType.Transform:
 					case ClassIDType.Camera:
-					case ClassIDType.Material:
-					case ClassIDType.Shader:
-					case ClassIDType.Mesh:
 					case ClassIDType.Texture:
+					case ClassIDType.Material:
+					case ClassIDType.Mesh:
+					case ClassIDType.Shader:
+					case ClassIDType.Collider:
+					case ClassIDType.PhysicsMaterial2D:
 					case ClassIDType.AnimationClip:
 					case ClassIDType.AudioClip:
 					case ClassIDType.Avatar:
@@ -28,6 +30,8 @@ namespace UtinyRipper.Classes
 					case ClassIDType.MonoScript:
 					case ClassIDType.Flare:
 					case ClassIDType.Font:
+					case ClassIDType.PhysicMaterial:
+					case ClassIDType.TerrainData:
 					case ClassIDType.Sprite:
 						return classID;
 

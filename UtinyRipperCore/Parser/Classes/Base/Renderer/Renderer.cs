@@ -361,6 +361,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_MinimumChartSize", 4);
 			node.Add("m_AutoUVMaxDistance", 0.5f);
 			node.Add("m_AutoUVMaxAngle", 89);
+#warning TODO?
 			node.Add("m_LightmapParameters", default(PPtr<Object>).ExportYAML(exporter));
 			node.Add("m_SortingLayerID", SortingLayerID);
 			node.Add("m_SortingLayer", SortingLayer);

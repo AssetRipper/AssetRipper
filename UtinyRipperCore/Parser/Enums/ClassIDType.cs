@@ -301,6 +301,7 @@ namespace UtinyRipper
 				case ClassIDType.Mesh:
 				case ClassIDType.Shader:
 				case ClassIDType.TextAsset:
+				case ClassIDType.PhysicsMaterial2D:
 				case ClassIDType.AnimationClip:
 				case ClassIDType.AudioClip:
 				case ClassIDType.Cubemap:
@@ -309,8 +310,11 @@ namespace UtinyRipper
 				case ClassIDType.MonoScript:
 				case ClassIDType.Font:
 				case ClassIDType.NamedObject:
+				case ClassIDType.PhysicMaterial:
 				case ClassIDType.BuildSettings:
 				case ClassIDType.AssetBundle:
+				case ClassIDType.MovieTexture:
+				case ClassIDType.TerrainData:
 				case ClassIDType.Sprite:
 				case ClassIDType.AnimatorOverrideController:
 				case ClassIDType.Prefab:
@@ -327,8 +331,10 @@ namespace UtinyRipper
 				case ClassIDType.Light:
 				case ClassIDType.Animation:
 				case ClassIDType.SkinnedMeshRenderer:
+				case ClassIDType.TerrainCollider:
 				case ClassIDType.ParticleSystem:
 				case ClassIDType.SpriteRenderer:
+				case ClassIDType.Terrain:
 				case ClassIDType.CanvasRenderer:
 				case ClassIDType.Canvas:
 				case ClassIDType.RectTransform:

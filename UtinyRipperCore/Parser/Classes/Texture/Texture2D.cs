@@ -6,7 +6,6 @@ using UtinyRipper.Classes.Textures;
 using UtinyRipper.Converter.Textures.DDS;
 using UtinyRipper.Converter.Textures.KTX;
 using UtinyRipper.Converter.Textures.PVR;
-using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes
 {
@@ -197,11 +196,6 @@ namespace UtinyRipper.Classes
 				}
 			}
 			return false;
-		}
-
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
-		{
-			throw new NotSupportedException();
 		}
 
 		private void Export(IAssetsExporter exporter, Stream destination, Stream source, long length)

@@ -78,6 +78,8 @@ namespace UtinyRipper.AssetExporters
 				case ClassIDType.AnimationClip:
 				case ClassIDType.Avatar:
 				case ClassIDType.AnimatorOverrideController:
+				case ClassIDType.TerrainData:
+				case ClassIDType.Prefab:
 					return AssetType.Serialized;
 
 				default:

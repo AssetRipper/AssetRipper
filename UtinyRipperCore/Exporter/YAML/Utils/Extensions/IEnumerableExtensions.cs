@@ -41,13 +41,13 @@ namespace UtinyRipper.Exporter.YAML
 
 		public static YAMLNode ExportYAML(this IEnumerable<short> _this)
 		{
-			throw new NotImplementedException();
-			/*YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+#warning TODO: check
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
 			foreach (short value in _this)
 			{
 				node.Add(value);
 			}
-			return node;*/
+			return node;
 		}
 
 		public static YAMLNode ExportYAML(this IEnumerable<uint> _this, bool isRaw)
@@ -121,7 +121,6 @@ namespace UtinyRipper.Exporter.YAML
 		public static YAMLNode ExportYAML(this IEnumerable<float> _this)
 		{
 #warning TODO: check
-			//throw new NotImplementedException();
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
 			foreach (float value in _this)
 			{

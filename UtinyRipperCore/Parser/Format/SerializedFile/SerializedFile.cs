@@ -119,14 +119,14 @@ namespace UtinyRipper.SerializedFiles
 			}
 		}
 
-		public Classes.Object GetObject(int fileIndex, long pathID)
+		public Object GetObject(int fileIndex, long pathID)
 		{
 			return FindObject(fileIndex, pathID, false);
 		}
 
-		public Classes.Object GetObject(long pathID)
+		public Object GetObject(long pathID)
 		{
-			Classes.Object @object = FindObject(pathID);
+			Object @object = FindObject(pathID);
 			if(@object == null)
 			{
 				throw new Exception($"Object with path ID {pathID} wasn't found");
@@ -135,14 +135,14 @@ namespace UtinyRipper.SerializedFiles
 			return @object;
 		}
 
-		public Classes.Object FindObject(int fileIndex, long pathID)
+		public Object FindObject(int fileIndex, long pathID)
 		{
 			return FindObject(fileIndex, pathID, true);
 		}
 
-		public Classes.Object FindObject(long pathID)
+		public Object FindObject(long pathID)
 		{
-			if(m_assets.TryGetValue(pathID, out Classes.Object asset))
+			if(m_assets.TryGetValue(pathID, out Object asset))
 			{
 				return asset;
 			}
@@ -167,9 +167,9 @@ namespace UtinyRipper.SerializedFiles
 			}
 		}
 
-		public IEnumerable<Classes.Object> FetchAssets()
+		public IEnumerable<Object> FetchAssets()
 		{
-			foreach(Classes.Object asset in m_assets.Values)
+			foreach(Object asset in m_assets.Values)
 			{
 				yield return asset;
 			}
@@ -180,7 +180,7 @@ namespace UtinyRipper.SerializedFiles
 			return Name;
 		}
 		
-		private Classes.Object FindObject(int fileIndex, long pathID, bool isSafe)
+		private Object FindObject(int fileIndex, long pathID, bool isSafe)
 		{
 			ISerializedFile file;
 			if (fileIndex == 0)
@@ -208,7 +208,7 @@ namespace UtinyRipper.SerializedFiles
 				throw new Exception($"{nameof(SerializedFile)} with index {fileIndex} was not found in collection");
 			}
 
-			Classes.Object @object = file.FindObject(pathID);
+			Object @object = file.FindObject(pathID);
 			if (@object == null)
 			{
 				if(isSafe)
@@ -239,7 +239,7 @@ namespace UtinyRipper.SerializedFiles
 					}
 					
 					long pathID = info.PathID;
-					Classes.Object asset = ReadAsset(ustream, assetInfo, startPosition + Header.DataOffset + info.DataOffset, info.DataSize);
+					Object asset = ReadAsset(ustream, assetInfo, startPosition + Header.DataOffset + info.DataOffset, info.DataSize);
 					if(asset != null)
 					{
 						m_assets.Add(pathID, asset);
@@ -269,9 +269,9 @@ namespace UtinyRipper.SerializedFiles
 			}
 		}
 
-		private static Classes.Object ReadAsset(AssetStream stream, AssetInfo assetInfo, long offset, int size)
+		private static Object ReadAsset(AssetStream stream, AssetInfo assetInfo, long offset, int size)
 		{
-			Classes.Object asset = null;
+			Object asset = null;
 			switch (assetInfo.ClassID)
 			{
 				case ClassIDType.GameObject:
@@ -308,6 +308,10 @@ namespace UtinyRipper.SerializedFiles
 
 				case ClassIDType.TextAsset:
 					asset = new TextAsset(assetInfo);
+					break;
+
+				case ClassIDType.PhysicsMaterial2D:
+					asset = new PhysicMaterial(assetInfo);
 					break;
 
 				case ClassIDType.AnimationClip:
@@ -354,6 +358,10 @@ namespace UtinyRipper.SerializedFiles
 					asset = new Font(assetInfo);
 					break;
 
+				case ClassIDType.PhysicMaterial:
+					asset = new PhysicMaterial(assetInfo);
+					break;
+
 				case ClassIDType.SkinnedMeshRenderer:
 					asset = new SkinnedMeshRenderer(assetInfo);
 					break;
@@ -366,6 +374,18 @@ namespace UtinyRipper.SerializedFiles
 					asset = new AssetBundle(assetInfo);
 					break;
 
+				case ClassIDType.MovieTexture:
+					asset = new MovieTexture(assetInfo);
+					break;
+
+				case ClassIDType.TerrainCollider:
+					asset = new TerrainCollider(assetInfo);
+					break;
+					
+				case ClassIDType.TerrainData:
+					asset = new TerrainData(assetInfo);
+					break;
+
 				/*case ClassIDType.ParticleSystem:
 					asset = new ParticleSystem(assetInfo);
 					break;*/
@@ -376,6 +396,10 @@ namespace UtinyRipper.SerializedFiles
 
 				case ClassIDType.Sprite:
 					asset = new Sprite(assetInfo);
+					break;
+
+				case ClassIDType.Terrain:
+					asset = new Terrain(assetInfo);
 					break;
 
 				case ClassIDType.AnimatorOverrideController:
@@ -434,10 +458,10 @@ namespace UtinyRipper.SerializedFiles
 		public Version Version => Metadata.Hierarchy.Version;
 		public Platform Platform => Metadata.Hierarchy.Platform;
 
-		public IReadOnlyCollection<Classes.Object> Assets => m_assets.Values;
+		public IReadOnlyCollection<Object> Assets => m_assets.Values;
 		public IAssetCollection Collection { get; }
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Dependencies;
 		
-		private readonly Dictionary<long, Classes.Object> m_assets = new Dictionary<long, Classes.Object>();
+		private readonly Dictionary<long, Object> m_assets = new Dictionary<long, Object>();
 	}
 }

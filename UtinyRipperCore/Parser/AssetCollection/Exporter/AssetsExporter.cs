@@ -24,10 +24,15 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.GameObject, yamlExporter);
 			OverrideExporter(ClassIDType.Material, yamlExporter);
 			OverrideExporter(ClassIDType.Mesh, yamlExporter);
+			OverrideExporter(ClassIDType.PhysicsMaterial2D, yamlExporter);
 			OverrideExporter(ClassIDType.AnimationClip, yamlExporter);
 			OverrideExporter(ClassIDType.Avatar, yamlExporter);
 			OverrideExporter(ClassIDType.Light, yamlExporter);
+			OverrideExporter(ClassIDType.PhysicMaterial, yamlExporter);
+			OverrideExporter(ClassIDType.TerrainCollider, yamlExporter);
+			OverrideExporter(ClassIDType.TerrainData, yamlExporter);
 			OverrideExporter(ClassIDType.SpriteRenderer, yamlExporter);
+			OverrideExporter(ClassIDType.Terrain, yamlExporter);
 			OverrideExporter(ClassIDType.AnimatorOverrideController, yamlExporter);
 			OverrideExporter(ClassIDType.CanvasRenderer, yamlExporter);
 			OverrideExporter(ClassIDType.Canvas, yamlExporter);
@@ -40,6 +45,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.AudioClip, binExporter);
 			OverrideExporter(ClassIDType.Cubemap, binExporter);
 			OverrideExporter(ClassIDType.Font, binExporter);
+			OverrideExporter(ClassIDType.MovieTexture, binExporter);
 		}
 
 		public void OverrideExporter(ClassIDType classType, IAssetExporter exporter)
