@@ -10,11 +10,150 @@ namespace UtinyRipper.Classes
 			base(assetInfo)
 		{
 		}
-
+		
+		/// <summary>
+		/// Less than 5.3.0
+		/// </summary>
+		public static bool IsReadStartDelaySingle(Version version)
+		{
+			return version.IsLess(5, 3);
+		}
+		/// <summary>
+		/// 2017.2 and greater
+		/// </summary>
+		public static bool IsReadStopAction(Version version)
+		{
+			return version.IsGreaterEqual(2017, 2);
+		}
+		/// <summary>
+		/// 2017.1.0b2 and greater
+		/// </summary>
+		public static bool IsReadUseUnscaledTime(Version version)
+		{
+			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		}
+		/// <summary>
+		/// 5.4.1 and greater
+		/// </summary>
+		public static bool IsReadAutoRandomSeed(Version version)
+		{
+			return version.IsGreaterEqual(5, 4, 0, VersionType.Patch, 4);
+		}
+		/// <summary>
+		/// 2017.1.0f1 and greater
+		/// </summary>
+		public static bool IsReadUseRigidbodyForVelocity(Version version)
+		{
+			return version.IsGreaterEqual(2017, 1, 0, VersionType.Final);
+		}
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool IsReadMoveWithCustomTransform(Version version)
+		{
+			return version.IsGreaterEqual(5, 5);
+		}
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool IsReadScalingMode(Version version)
+		{
+			return version.IsGreaterEqual(5, 3);
+		}
+		
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool IsReadInheritVelocityModule(Version version)
+		{
+			return version.IsGreaterEqual(5, 3);
+		}
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool IsReadExternalForcesModule(Version version)
+		{
+			return version.IsGreaterEqual(4);
+		}
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool IsReadNoiseModule(Version version)
+		{
+			return version.IsGreaterEqual(5, 5);
+		}
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		public static bool IsReadTriggerModule(Version version)
+		{
+			return version.IsGreaterEqual(5, 4);
+		}
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool IsReadLightsModule(Version version)
+		{
+			return version.IsGreaterEqual(5, 5);
+		}
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
+		public static bool IsReadCustomDataModule(Version version)
+		{
+			return version.IsGreaterEqual(5, 6);
+		}
+		
+		/// <summary>
+		/// Less than 5.5.0
+		/// </summary>
+		private static bool IsStartDelayFirst(Version version)
+		{
+			return version.IsLess(5, 5);
+		}
+		/// <summary>
+		/// Less than 5.4.1
+		/// </summary>
+		private static bool IsRandomSeedFirst(Version version)
+		{
+			return version.IsLess(5, 4, 0, VersionType.Patch, 4);
+		}
+		/// <summary>
+		/// Less than 5.5.0
+		/// </summary>
+		private static bool IsMoveWithTransformBool(Version version)
+		{
+			return version.IsLess(5, 5);
+		}
+		/// <summary>
+		/// 5.4.1 and greater
+		/// </summary>
+		private static bool IsAlign(Version version)
+		{
+			return version.IsGreaterEqual(5, 4, 1);
+		}
+		
 		private static int GetSerializedVersion(Version version)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			return 5;
+			if (Config.IsExportTopmostSerializedVersion)
+			{
+				return 5;
+			}
+
+			if (version.IsGreaterEqual(5, 5))
+			{
+				return 5;
+			}
+			if (version.IsGreaterEqual(5, 4, 0, VersionType.Patch, 4))
+			{
+				return 4;
+			}
+			// there is no 3rd version
+			if (version.IsGreaterEqual(5, 3))
+			{
+				return 2;
+			}
+			return 1;
 		}
 
 		public override void Read(AssetStream stream)
@@ -22,25 +161,77 @@ namespace UtinyRipper.Classes
 			base.Read(stream);
 			
 			LengthInSec = stream.ReadSingle();
+			if (IsStartDelayFirst(stream.Version))
+			{
+				if (IsReadStartDelaySingle(stream.Version))
+				{
+					StartDelaySingle = stream.ReadSingle();
+				}
+				else
+				{
+					StartDelay.Read(stream);
+				}
+			}
+			
 			SimulationSpeed = stream.ReadSingle();
-			StopAction = stream.ReadInt32();
+			if (IsReadStopAction(stream.Version))
+			{
+				StopAction = stream.ReadInt32();
+			}
+
+			if (IsRandomSeedFirst(stream.Version))
+			{
+				RandomSeed = unchecked((int)stream.ReadUInt32());
+			}
+			
 			Looping = stream.ReadBoolean();
 			Prewarm = stream.ReadBoolean();
 			PlayOnAwake = stream.ReadBoolean();
-			UseUnscaledTime = stream.ReadBoolean();
-			AutoRandomSeed = stream.ReadBoolean();
-			UseRigidbodyForVelocity = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
-			
-			StartDelay.Read(stream);
-			stream.AlignStream(AlignType.Align4);
-			
-			MoveWithTransform = stream.ReadInt32();
-			stream.AlignStream(AlignType.Align4);
-			
-			MoveWithCustomTransform.Read(stream);
-			ScalingMode = stream.ReadInt32();
-			RandomSeed = stream.ReadInt32();
+			if (IsReadUseUnscaledTime(stream.Version))
+			{
+				UseUnscaledTime = stream.ReadBoolean();
+			}
+			if (IsMoveWithTransformBool(stream.Version))
+			{
+				MoveWithTransform = stream.ReadBoolean() ? 1 : 0;
+			}
+			if (IsReadAutoRandomSeed(stream.Version))
+			{
+				AutoRandomSeed = stream.ReadBoolean();
+			}
+			if (IsReadUseRigidbodyForVelocity(stream.Version))
+			{
+				UseRigidbodyForVelocity = stream.ReadBoolean();
+			}
+			if (IsAlign(stream.Version))
+			{
+				stream.AlignStream(AlignType.Align4);
+			}
+
+			if (!IsStartDelayFirst(stream.Version))
+			{
+				StartDelay.Read(stream);
+				stream.AlignStream(AlignType.Align4);
+			}
+			if (!IsMoveWithTransformBool(stream.Version))
+			{
+				MoveWithTransform = stream.ReadInt32();
+				stream.AlignStream(AlignType.Align4);
+			}
+
+			if (IsReadMoveWithCustomTransform(stream.Version))
+			{
+				MoveWithCustomTransform.Read(stream);
+			}
+			if (IsReadScalingMode(stream.Version))
+			{
+				ScalingMode = stream.ReadInt32();
+			}
+			if (!IsRandomSeedFirst(stream.Version))
+			{
+				RandomSeed = stream.ReadInt32();
+			}
+
 			InitialModule.Read(stream);
 			ShapeModule.Read(stream);
 			EmissionModule.Read(stream);
@@ -49,24 +240,43 @@ namespace UtinyRipper.Classes
 			ColorModule.Read(stream);
 			UVModule.Read(stream);
 			VelocityModule.Read(stream);
-			InheritVelocityModule.Read(stream);
+			if (IsReadInheritVelocityModule(stream.Version))
+			{
+				InheritVelocityModule.Read(stream);
+			}
 			ForceModule.Read(stream);
-			ExternalForcesModule.Read(stream);
+			if (IsReadExternalForcesModule(stream.Version))
+			{
+				ExternalForcesModule.Read(stream);
+			}
 			ClampVelocityModule.Read(stream);
-			NoiseModule.Read(stream);
+			if (IsReadNoiseModule(stream.Version))
+			{
+				NoiseModule.Read(stream);
+			}
 			SizeBySpeedModule.Read(stream);
 			RotationBySpeedModule.Read(stream);
 			ColorBySpeedModule.Read(stream);
 			CollisionModule.Read(stream);
-			TriggerModule.Read(stream);
+			if (IsReadTriggerModule(stream.Version))
+			{
+				TriggerModule.Read(stream);
+			}
 			SubModule.Read(stream);
-			LightsModule.Read(stream);
-			TrailModule.Read(stream);
-			CustomDataModule.Read(stream);
+			if (IsReadLightsModule(stream.Version))
+			{
+				LightsModule.Read(stream);
+				TrailModule.Read(stream);
+			}
+			if (IsReadCustomDataModule(stream.Version))
+			{
+				CustomDataModule.Read(stream);
+			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
 		{
+#warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
 			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
 			node.Add("lengthInSec", LengthInSec);
@@ -105,10 +315,14 @@ namespace UtinyRipper.Classes
 			node.Add("LightsModule", LightsModule.ExportYAML(exporter));
 			node.Add("TrailModule", TrailModule.ExportYAML(exporter));
 			node.Add("CustomDataModule", CustomDataModule.ExportYAML(exporter));
-			throw new System.NotImplementedException();
+			return node;
 		}
 
 		public float LengthInSec { get; private set; }
+		public float StartDelaySingle { get; private set; }
+		/// <summary>
+		/// Speed previously
+		/// </summary>
 		public float SimulationSpeed { get; private set; }
 		public int StopAction { get; private set; }
 		public bool Looping { get; private set; }
@@ -120,30 +334,30 @@ namespace UtinyRipper.Classes
 		public int MoveWithTransform { get; private set; }
 		public int ScalingMode { get; private set; }
 		public int RandomSeed { get; private set; }
+		public InitialModule InitialModule { get; } = new InitialModule();
+		public ShapeModule ShapeModule { get; } = new ShapeModule();
+		public EmissionModule EmissionModule { get; } = new EmissionModule();
+		public SizeModule SizeModule { get; } = new SizeModule();
+		public RotationModule RotationModule { get; } = new RotationModule();
+		public ColorModule ColorModule { get; } = new ColorModule();
+		public UVModule UVModule { get; } = new UVModule();
+		public VelocityModule VelocityModule { get; } = new VelocityModule();
+		public InheritVelocityModule InheritVelocityModule { get; } = new InheritVelocityModule();
+		public ForceModule ForceModule { get; } = new ForceModule();
+		public ExternalForcesModule ExternalForcesModule { get; } = new ExternalForcesModule();
+		public ClampVelocityModule ClampVelocityModule { get; } = new ClampVelocityModule();
+		public NoiseModule NoiseModule { get; } = new NoiseModule();
+		public SizeBySpeedModule SizeBySpeedModule { get; } = new SizeBySpeedModule();
+		public RotationBySpeedModule RotationBySpeedModule { get; } = new RotationBySpeedModule();
+		public ColorBySpeedModule ColorBySpeedModule { get; } = new ColorBySpeedModule();
+		public CollisionModule CollisionModule { get; } = new CollisionModule();
+		public TriggerModule TriggerModule { get; } = new TriggerModule();
+		public SubModule SubModule { get; } = new SubModule();
+		public LightsModule LightsModule { get; } = new LightsModule();
+		public TrailModule TrailModule { get; } = new TrailModule();
+		public CustomDataModule CustomDataModule { get; } = new CustomDataModule();
 		
 		public MinMaxCurve StartDelay;
 		public PPtr<Transform> MoveWithCustomTransform;
-		public InitialModule InitialModule;
-		public ShapeModule ShapeModule;
-		public EmissionModule EmissionModule;
-		public SizeModule SizeModule;
-		public RotationModule RotationModule;
-		public ColorModule ColorModule;
-		public UVModule UVModule;
-		public VelocityModule VelocityModule;
-		public InheritVelocityModule InheritVelocityModule;
-		public ForceModule ForceModule;
-		public ExternalForcesModule ExternalForcesModule;
-		public ClampVelocityModule ClampVelocityModule;
-		public NoiseModule NoiseModule;
-		public SizeBySpeedModule SizeBySpeedModule;
-		public RotationBySpeedModule RotationBySpeedModule;
-		public ColorBySpeedModule ColorBySpeedModule;
-		public CollisionModule CollisionModule;
-		public TriggerModule TriggerModule;
-		public SubModule SubModule;
-		public LightsModule LightsModule;
-		public TrailModule TrailModule;
-		public CustomDataModule CustomDataModule;
 	}
 }

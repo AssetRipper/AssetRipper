@@ -3,24 +3,64 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
+	/// <summary>
+	/// GradientNEW previously
+	/// </summary>
 	public struct Gradient : IAssetReadable, IYAMLExportable
 	{
+		/// <summary>
+		/// Less than 5.6.0
+		/// </summary>
+		public static bool IsColor32(Version version)
+		{
+			return version.IsLess(5, 6);
+		}
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool IsReadMode(Version version)
+		{
+			return version.IsGreaterEqual(5, 5);
+		}
+
 		private static int GetSerializedVersion(Version version)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			return 2;
+			if (Config.IsExportTopmostSerializedVersion)
+			{
+				return 2;
+			}
+			
+			if (version.IsGreaterEqual(5, 6, 1))
+			{
+				return 2;
+			}
+			return 1;
 		}
 
 		public void Read(AssetStream stream)
 		{
-			Key0.Read(stream);
-			Key1.Read(stream);
-			Key2.Read(stream);
-			Key3.Read(stream);
-			Key4.Read(stream);
-			Key5.Read(stream);
-			Key6.Read(stream);
-			Key7.Read(stream);
+			if (IsColor32(stream.Version))
+			{
+				Key32_0.Read(stream);
+				Key32_1.Read(stream);
+				Key32_2.Read(stream);
+				Key32_3.Read(stream);
+				Key32_4.Read(stream);
+				Key32_5.Read(stream);
+				Key32_6.Read(stream);
+				Key32_7.Read(stream);
+			}
+			else
+			{
+				Key0.Read(stream);
+				Key1.Read(stream);
+				Key2.Read(stream);
+				Key3.Read(stream);
+				Key4.Read(stream);
+				Key5.Read(stream);
+				Key6.Read(stream);
+				Key7.Read(stream);
+			}
 			Ctime0 = stream.ReadUInt16();
 			Ctime1 = stream.ReadUInt16();
 			Ctime2 = stream.ReadUInt16();
@@ -37,7 +77,10 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Atime5 = stream.ReadUInt16();
 			Atime6 = stream.ReadUInt16();
 			Atime7 = stream.ReadUInt16();
-			Mode = stream.ReadInt32();
+			if (IsReadMode(stream.Version))
+			{
+				Mode = stream.ReadInt32();
+			}
 			NumColorKeys = stream.ReadByte();
 			NumAlphaKeys = stream.ReadByte();
 			stream.AlignStream(AlignType.Align4);
@@ -97,7 +140,15 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public int Mode { get; private set; }
 		public byte NumColorKeys { get; private set; }
 		public byte NumAlphaKeys { get; private set; }
-
+		
+		public ColorRGBA32 Key32_0;
+		public ColorRGBA32 Key32_1;
+		public ColorRGBA32 Key32_2;
+		public ColorRGBA32 Key32_3;
+		public ColorRGBA32 Key32_4;
+		public ColorRGBA32 Key32_5;
+		public ColorRGBA32 Key32_6;
+		public ColorRGBA32 Key32_7;
 		public ColorRGBAf Key0;
 		public ColorRGBAf Key1;
 		public ColorRGBAf Key2;

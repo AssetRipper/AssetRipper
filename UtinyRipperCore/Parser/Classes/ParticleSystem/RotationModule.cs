@@ -3,32 +3,37 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public struct RotationModule : IAssetReadable, IYAMLExportable
+	public class RotationModule : ParticleSystemModule
 	{
-		/*private static int GetSerializedVersion(Version version)
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool IsReadAxes(Version version)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			return 2;
-		}*/
-
-		public void Read(AssetStream stream)
-		{
-			Enabled = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
-			
-			X.Read(stream);
-			Y.Read(stream);
-			Curve.Read(stream);
-			SeparateAxes = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
-			
+			return version.IsGreaterEqual(5, 3);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override void Read(AssetStream stream)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("enabled", Enabled);
+			base.Read(stream);
+
+			if (IsReadAxes(stream.Version))
+			{
+				X.Read(stream);
+				Y.Read(stream);
+			}
+			Curve.Read(stream);
+
+			if (IsReadAxes(stream.Version))
+			{
+				SeparateAxes = stream.ReadBoolean();
+				stream.AlignStream(AlignType.Align4);
+			}
+		}
+
+		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		{
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
 			node.Add("x", X.ExportYAML(exporter));
 			node.Add("y", Y.ExportYAML(exporter));
 			node.Add("curve", Curve.ExportYAML(exporter));
@@ -36,7 +41,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public bool Enabled { get; private set; }
 		public bool SeparateAxes { get; private set; }
 
 		public MinMaxCurve X;

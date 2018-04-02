@@ -14,7 +14,6 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.MonoScript, dummyExporter);
 			OverrideExporter(ClassIDType.BuildSettings, dummyExporter);
 			OverrideExporter(ClassIDType.AssetBundle, dummyExporter);
-			OverrideExporter(ClassIDType.ParticleSystem, dummyExporter);
 			OverrideExporter(ClassIDType.Sprite, dummyExporter);
 			OverrideExporter(ClassIDType.SpriteAtlas, dummyExporter);
 
@@ -31,6 +30,8 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.PhysicMaterial, yamlExporter);
 			OverrideExporter(ClassIDType.TerrainCollider, yamlExporter);
 			OverrideExporter(ClassIDType.TerrainData, yamlExporter);
+			OverrideExporter(ClassIDType.ParticleSystem, yamlExporter);
+			OverrideExporter(ClassIDType.ParticleSystemRenderer, yamlExporter);
 			OverrideExporter(ClassIDType.SpriteRenderer, yamlExporter);
 			OverrideExporter(ClassIDType.Terrain, yamlExporter);
 			OverrideExporter(ClassIDType.AnimatorOverrideController, yamlExporter);

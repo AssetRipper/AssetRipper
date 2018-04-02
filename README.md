@@ -21,6 +21,7 @@ Utiny Ripper is a tool for extracting assets from serialized files (CAB-*, *.ass
   * Animation
   * Animator
   * Light
+  * ParticleSystem
 
 ## Structure
 Solution consist of two project:

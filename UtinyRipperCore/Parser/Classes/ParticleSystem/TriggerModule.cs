@@ -3,18 +3,11 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public struct TriggerModule : IAssetReadable, IYAMLExportable
+	public class TriggerModule : ParticleSystemModule
 	{
-		/*private static int GetSerializedVersion(Version version)
+		public override void Read(AssetStream stream)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			return 2;
-		}*/
-
-		public void Read(AssetStream stream)
-		{
-			Enabled = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			base.Read(stream);
 			
 			CollisionShape0.Read(stream);
 			CollisionShape1.Read(stream);
@@ -29,11 +22,9 @@ namespace UtinyRipper.Classes.ParticleSystems
 			RadiusScale = stream.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IAssetsExporter exporter)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("enabled", Enabled);
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
 			node.Add("collisionShape0", CollisionShape0.ExportYAML(exporter));
 			node.Add("collisionShape1", CollisionShape1.ExportYAML(exporter));
 			node.Add("collisionShape2", CollisionShape2.ExportYAML(exporter));
@@ -48,7 +39,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public bool Enabled { get; private set; }
 		public int Inside { get; private set; }
 		public int Outside { get; private set; }
 		public int Enter { get; private set; }

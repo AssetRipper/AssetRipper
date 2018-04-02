@@ -5,12 +5,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public struct MultiModeParameter : IAssetReadable, IYAMLExportable
 	{
-		/*private static int GetSerializedVersion(Version version)
-		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			return 2;
-		}*/
-
 		public void Read(AssetStream stream)
 		{
 			Value = stream.ReadSingle();
@@ -22,7 +16,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public YAMLNode ExportYAML(IAssetsExporter exporter)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
 			node.Add("value", Value);
 			node.Add("mode", Mode);
 			node.Add("spread", Spread);

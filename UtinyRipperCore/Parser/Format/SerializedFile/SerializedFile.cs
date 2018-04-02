@@ -386,9 +386,13 @@ namespace UtinyRipper.SerializedFiles
 					asset = new TerrainData(assetInfo);
 					break;
 
-				/*case ClassIDType.ParticleSystem:
+				case ClassIDType.ParticleSystem:
 					asset = new ParticleSystem(assetInfo);
-					break;*/
+					break;
+
+				case ClassIDType.ParticleSystemRenderer:
+					asset = new ParticleSystemRenderer(assetInfo);
+					break;
 
 				case ClassIDType.SpriteRenderer:
 					asset = new SpriteRenderer(assetInfo);

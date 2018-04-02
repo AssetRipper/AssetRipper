@@ -4,41 +4,83 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public struct UVModule : IAssetReadable, IYAMLExportable
+	public class UVModule : ParticleSystemModule
 	{
-		/*private static int GetSerializedVersion(Version version)
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		public static bool IsReadMode(Version version)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			return 2;
-		}*/
+			return version.IsGreaterEqual(2017);
+		}
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		public static bool IsReadStartFrame(Version version)
+		{
+			return version.IsGreaterEqual(5, 4);
+		}
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		public static bool IsReadUvChannelMask(Version version)
+		{
+			return version.IsGreaterEqual(5, 4);
+		}
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool IsReadFlipU(Version version)
+		{
+			return version.IsGreaterEqual(5, 5);
+		}
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		public static bool IsReadSprites(Version version)
+		{
+			return version.IsGreaterEqual(2017);
+		}
 
-		public void Read(AssetStream stream)
+		public override void Read(AssetStream stream)
 		{
-			Enabled = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
-			
-			Mode = stream.ReadInt32();
+			base.Read(stream);
+
+			if (IsReadMode(stream.Version))
+			{
+				Mode = stream.ReadInt32();
+			}
 			FrameOverTime.Read(stream);
-			StartFrame.Read(stream);
+			if (IsReadStartFrame(stream.Version))
+			{
+				StartFrame.Read(stream);
+			}
 			TilesX = stream.ReadInt32();
 			TilesY = stream.ReadInt32();
 			AnimationType = stream.ReadInt32();
 			RowIndex = stream.ReadInt32();
 			Cycles = stream.ReadSingle();
-			UvChannelMask = stream.ReadInt32();
-			FlipU = stream.ReadSingle();
-			FlipV = stream.ReadSingle();
+			if (IsReadUvChannelMask(stream.Version))
+			{
+				UvChannelMask = stream.ReadInt32();
+			}
+			if (IsReadFlipU(stream.Version))
+			{
+				FlipU = stream.ReadSingle();
+				FlipV = stream.ReadSingle();
+			}
 			RandomRow = stream.ReadBoolean();
 			stream.AlignStream(AlignType.Align4);
-			
-			m_sprites = stream.ReadArray<SpriteData>();
+
+			if (IsReadSprites(stream.Version))
+			{
+				m_sprites = stream.ReadArray<SpriteData>();
+			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IAssetsExporter exporter)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("enabled", Enabled);
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
 			node.Add("mode", Mode);
 			node.Add("frameOverTime", FrameOverTime.ExportYAML(exporter));
 			node.Add("startFrame", StartFrame.ExportYAML(exporter));
@@ -51,11 +93,10 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("flipU", FlipU);
 			node.Add("flipV", FlipV);
 			node.Add("randomRow", RandomRow);
-			node.Add("sprites", Sprites.ExportYAML(exporter));
+			node.Add("sprites", IsReadSprites(exporter.Version) ? Sprites.ExportYAML(exporter) : YAMLSequenceNode.Empty);
 			return node;
 		}
 
-		public bool Enabled { get; private set; }
 		public int Mode { get; private set; }
 		public int TilesX { get; private set; }
 		public int TilesY { get; private set; }

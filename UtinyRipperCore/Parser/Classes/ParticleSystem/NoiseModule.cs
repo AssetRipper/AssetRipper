@@ -3,18 +3,27 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public struct NoiseModule : IAssetReadable, IYAMLExportable
+	public class NoiseModule : ParticleSystemModule
 	{
-		/*private static int GetSerializedVersion(Version version)
+		/// <summary>
+		/// 2017.1.0b2 and greater
+		/// </summary>
+		public static bool IsReadPositionAmount(Version version)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			return 2;
-		}*/
+			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		}
+		
+		/// <summary>
+		/// 2017.1.0b2 and greater
+		/// </summary>
+		private static bool IsAlign(Version version)
+		{
+			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		}
 
-		public void Read(AssetStream stream)
+		public override void Read(AssetStream stream)
 		{
-			Enabled = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			base.Read(stream);
 			
 			Strength.Read(stream);
 			StrengthY.Read(stream);
@@ -35,18 +44,22 @@ namespace UtinyRipper.Classes.ParticleSystems
 			RemapY.Read(stream);
 			RemapZ.Read(stream);
 			RemapEnabled = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
-			
-			PositionAmount.Read(stream);
-			RotationAmount.Read(stream);
-			SizeAmount.Read(stream);
+			if (IsAlign(stream.Version))
+			{
+				stream.AlignStream(AlignType.Align4);
+			}
+
+			if (IsReadPositionAmount(stream.Version))
+			{
+				PositionAmount.Read(stream);
+				RotationAmount.Read(stream);
+				SizeAmount.Read(stream);
+			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IAssetsExporter exporter)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("enabled", Enabled);
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
 			node.Add("strength", Strength.ExportYAML(exporter));
 			node.Add("strengthY", StrengthY.ExportYAML(exporter));
 			node.Add("strengthZ", StrengthZ.ExportYAML(exporter));
@@ -68,7 +81,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public bool Enabled { get; private set; }
 		public bool SeparateAxes { get; private set; }
 		public float Frequency { get; private set; }
 		public bool Damping { get; private set; }

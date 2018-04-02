@@ -3,32 +3,66 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public struct TrailModule : IAssetReadable, IYAMLExportable
+	public class TrailModule : ParticleSystemModule
 	{
-		/*private static int GetSerializedVersion(Version version)
+		/// <summary>
+		/// 2017.3 and greater
+		/// </summary>
+		public static bool IsReadMode(Version version)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			return 2;
-		}*/
+			return version.IsGreaterEqual(2017, 3);
+		}
+		/// <summary>
+		/// 2017.3 and greater
+		/// </summary>
+		public static bool IsReadRibbonCount(Version version)
+		{
+			return version.IsGreaterEqual(2017, 3);
+		}
+		/// <summary>
+		/// 2017.1.0b2
+		/// </summary>
+		public static bool IsReadGenerateLightingData(Version version)
+		{
+			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		}
+		/// <summary>
+		/// 2017.3 and greater
+		/// </summary>
+		public static bool IsReadSplitSubEmitterRibbons(Version version)
+		{
+			return version.IsGreaterEqual(2017, 3);
+		}
+		
+		public override void Read(AssetStream stream)
+		{
+			base.Read(stream);
 
-		public void Read(AssetStream stream)
-		{
-			Enabled = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
-			
-			Mode = stream.ReadInt32();
+			if (IsReadMode(stream.Version))
+			{
+				Mode = stream.ReadInt32();
+			}
 			Ratio = stream.ReadSingle();
 			Lifetime.Read(stream);
 			MinVertexDistance = stream.ReadSingle();
 			TextureMode = stream.ReadInt32();
-			RibbonCount = stream.ReadInt32();
+			if (IsReadRibbonCount(stream.Version))
+			{
+				RibbonCount = stream.ReadInt32();
+			}
 			WorldSpace = stream.ReadBoolean();
 			DieWithParticles = stream.ReadBoolean();
 			SizeAffectsWidth = stream.ReadBoolean();
 			SizeAffectsLifetime = stream.ReadBoolean();
 			InheritParticleColor = stream.ReadBoolean();
-			GenerateLightingData = stream.ReadBoolean();
-			SplitSubEmitterRibbons = stream.ReadBoolean();
+			if (IsReadGenerateLightingData(stream.Version))
+			{
+				GenerateLightingData = stream.ReadBoolean();
+			}
+			if (IsReadSplitSubEmitterRibbons(stream.Version))
+			{
+				SplitSubEmitterRibbons = stream.ReadBoolean();
+			}
 			stream.AlignStream(AlignType.Align4);
 			
 			ColorOverLifetime.Read(stream);
@@ -36,11 +70,9 @@ namespace UtinyRipper.Classes.ParticleSystems
 			ColorOverTrail.Read(stream);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IAssetsExporter exporter)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("enabled", Enabled);
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
 			node.Add("mode", Mode);
 			node.Add("ratio", Ratio);
 			node.Add("lifetime", Lifetime.ExportYAML(exporter));
@@ -60,7 +92,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public bool Enabled { get; private set; }
 		public int Mode { get; private set; }
 		public float Ratio { get; private set; }
 		public float MinVertexDistance { get; private set; }

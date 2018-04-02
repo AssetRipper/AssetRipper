@@ -3,18 +3,11 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public struct ForceModule : IAssetReadable, IYAMLExportable
+	public class ForceModule : ParticleSystemModule
 	{
-		/*private static int GetSerializedVersion(Version version)
+		public override void Read(AssetStream stream)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			return 2;
-		}*/
-
-		public void Read(AssetStream stream)
-		{
-			Enabled = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			base.Read(stream);
 			
 			X.Read(stream);
 			Y.Read(stream);
@@ -22,14 +15,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			InWorldSpace = stream.ReadBoolean();
 			RandomizePerFrame = stream.ReadBoolean();
 			stream.AlignStream(AlignType.Align4);
-			
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IAssetsExporter exporter)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("enabled", Enabled);
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
 			node.Add("x", X.ExportYAML(exporter));
 			node.Add("y", Y.ExportYAML(exporter));
 			node.Add("z", Z.ExportYAML(exporter));
@@ -38,7 +28,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public bool Enabled { get; private set; }
 		public bool InWorldSpace { get; private set; }
 		public bool RandomizePerFrame { get; private set; }
 

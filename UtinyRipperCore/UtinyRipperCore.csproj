@@ -137,6 +137,11 @@
     <Compile Include="Parser\Classes\MovieTexture.cs" />
     <Compile Include="Parser\Classes\NewAnimationTrack\Channel.cs" />
     <Compile Include="Parser\Classes\NewAnimationTrack\NewAnimationTrack.cs" />
+    <Compile Include="Parser\Classes\ParticleSystemRenderer.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ParticleSystemCurveMode.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ParticleSystemModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\SubEmitter\ParticleSystemSubEmitterProperties.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\SubEmitter\ParticleSystemSubEmitterType.cs" />
     <Compile Include="Parser\Classes\PhysicMaterial\JointSpring.cs" />
     <Compile Include="Parser\Classes\PhysicMaterial\PhysicMaterial.cs" />
     <Compile Include="Parser\Classes\PhysicMaterial\PhysicsMaterial2D.cs" />
@@ -200,8 +205,8 @@
     <Compile Include="Parser\Classes\ParticleSystem\SizeBySpeedModule.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\SizeModule.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\SpriteData.cs" />
-    <Compile Include="Parser\Classes\ParticleSystem\SubEmitterData.cs" />
-    <Compile Include="Parser\Classes\ParticleSystem\SubModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\SubEmitter\SubEmitterData.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\SubEmitter\SubModule.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\TrailModule.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\TriggerModule.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\UVModule.cs" />

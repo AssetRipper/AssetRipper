@@ -3,33 +3,34 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public struct VelocityModule : IAssetReadable, IYAMLExportable
+	public class VelocityModule : ParticleSystemModule
 	{
-		/*private static int GetSerializedVersion(Version version)
+		/// <summary>
+		/// 2017.3 and greater
+		/// </summary>
+		public static bool IsReadSpeedModifier(Version version)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			return 2;
-		}*/
+			return version.IsGreaterEqual(2017, 3);
+		}
 
-		public void Read(AssetStream stream)
+		public override void Read(AssetStream stream)
 		{
-			Enabled = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			base.Read(stream);
 			
 			X.Read(stream);
 			Y.Read(stream);
 			Z.Read(stream);
-			SpeedModifier.Read(stream);
+			if (IsReadSpeedModifier(stream.Version))
+			{
+				SpeedModifier.Read(stream);
+			}
 			InWorldSpace = stream.ReadBoolean();
 			stream.AlignStream(AlignType.Align4);
-			
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IAssetsExporter exporter)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("enabled", Enabled);
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
 			node.Add("x", X.ExportYAML(exporter));
 			node.Add("y", Y.ExportYAML(exporter));
 			node.Add("z", Z.ExportYAML(exporter));
@@ -38,7 +39,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public bool Enabled { get; private set; }
 		public bool InWorldSpace { get; private set; }
 
 		public MinMaxCurve X;

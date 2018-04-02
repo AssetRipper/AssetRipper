@@ -333,6 +333,7 @@ namespace UtinyRipper
 				case ClassIDType.SkinnedMeshRenderer:
 				case ClassIDType.TerrainCollider:
 				case ClassIDType.ParticleSystem:
+				case ClassIDType.ParticleSystemRenderer:
 				case ClassIDType.SpriteRenderer:
 				case ClassIDType.Terrain:
 				case ClassIDType.CanvasRenderer:
