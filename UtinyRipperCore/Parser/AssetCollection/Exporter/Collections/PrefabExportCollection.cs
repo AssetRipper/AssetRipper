@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UtinyRipper.Classes;
+
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
@@ -18,7 +19,7 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
-		public override bool IsContains(UtinyRipper.Classes.Object @object)
+		public override bool IsContains(Object @object)
 		{
 			if(base.IsContains(@object))
 			{
@@ -27,7 +28,7 @@ namespace UtinyRipper.AssetExporters
 			return m_exportIDs.ContainsKey(@object);
 		}
 		
-		public override string GetExportID(UtinyRipper.Classes.Object @object)
+		public override string GetExportID(Object @object)
 		{
 			if(@object == Asset)
 			{
@@ -36,15 +37,15 @@ namespace UtinyRipper.AssetExporters
 			return m_exportIDs[@object];
 		}
 
-		public override IEnumerable<UtinyRipper.Classes.Object> Objects
+		public override IEnumerable<Object> Objects
 		{
 			get
 			{
-				foreach (UtinyRipper.Classes.Object @object in base.Objects)
+				foreach (Object @object in base.Objects)
 				{
 					yield return @object;
 				}
-				foreach (UtinyRipper.Classes.Object comp in m_exportIDs.Keys)
+				foreach (Object comp in m_exportIDs.Keys)
 				{
 					yield return comp;
 				}
@@ -76,7 +77,7 @@ namespace UtinyRipper.AssetExporters
 			m_exportIDs.Add(@object, exportID);
 		}
 		
-		private readonly Dictionary<UtinyRipper.Classes.Object, string> m_exportIDs = new Dictionary<UtinyRipper.Classes.Object, string>();
+		private readonly Dictionary<Object, string> m_exportIDs = new Dictionary<Object, string>();
 		private readonly StringBuilder m_builder = new StringBuilder();
 	}
 }

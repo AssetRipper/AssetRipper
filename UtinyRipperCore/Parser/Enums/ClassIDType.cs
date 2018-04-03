@@ -327,10 +327,21 @@ namespace UtinyRipper
 				case ClassIDType.MeshRenderer:
 				case ClassIDType.Renderer:
 				case ClassIDType.MeshFilter:
+				case ClassIDType.CircleCollider2D:
+				case ClassIDType.PolygonCollider2D:
+				case ClassIDType.BoxCollider2D:
+				case ClassIDType.MeshCollider:
+				case ClassIDType.BoxCollider:
+				case ClassIDType.SpriteCollider2D:
+				case ClassIDType.EdgeCollider2D:
+				case ClassIDType.CapsuleCollider2D:
 				case ClassIDType.Animator:
 				case ClassIDType.Light:
 				case ClassIDType.Animation:
+				case ClassIDType.SphereCollider:
+				case ClassIDType.CapsuleCollider:
 				case ClassIDType.SkinnedMeshRenderer:
+				case ClassIDType.WheelCollider:
 				case ClassIDType.TerrainCollider:
 				case ClassIDType.ParticleSystem:
 				case ClassIDType.ParticleSystemRenderer:

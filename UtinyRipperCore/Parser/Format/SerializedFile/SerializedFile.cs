@@ -310,8 +310,40 @@ namespace UtinyRipper.SerializedFiles
 					asset = new TextAsset(assetInfo);
 					break;
 
+				case ClassIDType.CircleCollider2D:
+					asset = new CircleCollider2D(assetInfo);
+					break;
+
+				case ClassIDType.PolygonCollider2D:
+					asset = new PolygonCollider2D(assetInfo);
+					break;
+
+				case ClassIDType.BoxCollider2D:
+					asset = new BoxCollider2D(assetInfo);
+					break;
+
 				case ClassIDType.PhysicsMaterial2D:
 					asset = new PhysicMaterial(assetInfo);
+					break;
+
+				case ClassIDType.MeshCollider:
+					asset = new MeshCollider(assetInfo);
+					break;
+
+				case ClassIDType.BoxCollider:
+					asset = new BoxCollider(assetInfo);
+					break;
+
+				case ClassIDType.SpriteCollider2D:
+					asset = new CompositeCollider2D(assetInfo);
+					break;
+
+				case ClassIDType.EdgeCollider2D:
+					asset = new EdgeCollider2D(assetInfo);
+					break;
+
+				case ClassIDType.CapsuleCollider2D:
+					asset = new CapsuleCollider2D(assetInfo);
 					break;
 
 				case ClassIDType.AnimationClip:
@@ -362,6 +394,14 @@ namespace UtinyRipper.SerializedFiles
 					asset = new PhysicMaterial(assetInfo);
 					break;
 
+				case ClassIDType.SphereCollider:
+					asset = new SphereCollider(assetInfo);
+					break;
+
+				case ClassIDType.CapsuleCollider:
+					asset = new CapsuleCollider(assetInfo);
+					break;
+
 				case ClassIDType.SkinnedMeshRenderer:
 					asset = new SkinnedMeshRenderer(assetInfo);
 					break;
@@ -372,6 +412,10 @@ namespace UtinyRipper.SerializedFiles
 
 				case ClassIDType.AssetBundle:
 					asset = new AssetBundle(assetInfo);
+					break;
+
+				case ClassIDType.WheelCollider:
+					asset = new WheelCollider(assetInfo);
 					break;
 
 				case ClassIDType.MovieTexture:

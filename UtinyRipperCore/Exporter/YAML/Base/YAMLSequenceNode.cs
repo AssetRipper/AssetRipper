@@ -156,7 +156,7 @@ namespace UtinyRipper.Exporter.YAML
 
 				if(next.NodeType == NodeType)
 				{
-					emitter.WriteLine();
+					emitter.IncreaseIntent();
 				}
 			}
 			if(next.IsIndent)
@@ -170,6 +170,10 @@ namespace UtinyRipper.Exporter.YAML
 			if(Style == SequenceStyle.Block)
 			{
 				emitter.WriteLine();
+				if(next.NodeType == NodeType)
+				{
+					emitter.DecreaseIntent();
+				}
 			}
 			else if(Style == SequenceStyle.Flow)
 			{

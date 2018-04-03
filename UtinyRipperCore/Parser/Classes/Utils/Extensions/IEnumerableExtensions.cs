@@ -39,5 +39,11 @@ namespace UtinyRipper.Classes
 			}
 			return node;
 		}
+		
+		public static YAMLNode ExportYAML<T>(this T[][] _this, IAssetsExporter exporter)
+			where T: IYAMLExportable
+		{
+			return ((IEnumerable<IEnumerable<T>>)_this).ExportYAML(exporter);
+		}
 	}
 }

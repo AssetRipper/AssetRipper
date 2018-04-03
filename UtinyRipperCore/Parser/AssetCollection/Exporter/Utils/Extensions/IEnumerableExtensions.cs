@@ -15,5 +15,16 @@ namespace UtinyRipper.AssetExporters
 			}
 			return node;
 		}
+
+		public static YAMLNode ExportYAML<T>(this IEnumerable<IEnumerable<T>> _this, IAssetsExporter exporter)
+			where T: IYAMLExportable
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			foreach (IEnumerable<T> export in _this)
+			{
+				node.Add(export.ExportYAML(exporter));
+			}
+			return node;
+		}
 	}
 }

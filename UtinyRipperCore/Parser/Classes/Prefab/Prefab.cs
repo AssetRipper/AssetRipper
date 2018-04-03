@@ -61,7 +61,7 @@ namespace UtinyRipper.Classes
 		{
 			List<Object> dependencies = ObjectUtils.CollectDependencies(root, isLog);
 			IEnumerable<Object> deps = dependencies.Where(t => !t.IsAsset);
-#warning dependency of other prefab's component?
+#warning dependency on other prefab's component?
 
 			IEnumerable<Object> gos = deps.Where(t => t.ClassID == ClassIDType.GameObject);
 			foreach (Object go in gos)

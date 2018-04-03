@@ -67,7 +67,7 @@ namespace UtinyRipper.Classes
 			YAMLMappingNode root = document.CreateMappingRoot();
 			root.Tag = ClassID.ToInt().ToString();
 			root.Anchor = exporter.GetExportID(this);
-			root.Add(ClassID.ToString(), node);
+			root.Add(ClassIDName, node);
 
 			return document;
 		}
@@ -96,6 +96,7 @@ namespace UtinyRipper.Classes
 
 		public ISerializedFile File => m_assetInfo.File;
 		public ClassIDType ClassID => m_assetInfo.ClassID;
+		public virtual string ClassIDName => ClassID.ToString();
 		public bool IsAsset => ClassID.IsAsset();
 		public virtual string ExportExtension => "asset";
 		public long PathID => m_assetInfo.PathID;

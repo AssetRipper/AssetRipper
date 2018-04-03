@@ -34,6 +34,19 @@ namespace UtinyRipper
 			return array;
 		}
 
+		public T[][] ReadArrayDouble<T>()
+			where T : IAssetReadable, new()
+		{
+			int count = ReadInt32();
+			T[][] array = new T[count][];
+			for (int i = 0; i < count; i++)
+			{
+				T[] innerArray = ReadArray<T>();
+				array[i] = innerArray;
+			}
+			return array;
+		}
+
 		public T[] ReadArray<T>(Func<T> instantiator)
 			where T : IAssetReadable
 		{
