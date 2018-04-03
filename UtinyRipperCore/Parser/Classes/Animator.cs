@@ -130,17 +130,20 @@ namespace UtinyRipper.Classes
 				yield return @object;
 			}
 
-			Avatar avatar = Avatar.FindObject(file);
-			if (avatar == null)
+			if(!Avatar.IsNull)
 			{
-				if (isLog)
+				Avatar avatar = Avatar.FindObject(file);
+				if (avatar == null)
 				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Avatar {Avatar.ToLogString(file)} wasn't found ");
+					if (isLog)
+					{
+						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Avatar {Avatar.ToLogString(file)} wasn't found ");
+					}
 				}
-			}
-			else
-			{
-				yield return avatar;
+				else
+				{
+					yield return avatar;
+				}
 			}
 
 			if(!Controller.IsNull)

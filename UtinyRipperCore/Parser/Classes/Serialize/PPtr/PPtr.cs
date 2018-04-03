@@ -118,7 +118,7 @@ namespace UtinyRipper.Classes
 		{
 			if(Config.IsAdvancedLog)
 			{
-				string depName = file.Dependencies[FileIndex - 1].FilePath;
+				string depName = FileIndex == 0 ? file.Name : file.Dependencies[FileIndex - 1].FilePath;
 				ClassIDType classID = typeof(T).ToClassIDType();
 				return $"[{classID} {PathID}({depName})]";
 			}

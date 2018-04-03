@@ -211,7 +211,7 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		private static bool IsReadIndexFormatCondition(Version version)
 		{
-			return version.IsGreaterEqual(2017, 3, 1, VersionType.Patch, 1);
+			return version.IsLess(2017, 3, 1, VersionType.Patch);
 		}
 
 		private static int GetSerializedVersion(Version version)
