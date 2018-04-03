@@ -19,6 +19,8 @@ namespace UtinyRipper.Classes
 					case ClassIDType.Material:
 					case ClassIDType.Mesh:
 					case ClassIDType.Shader:
+					case ClassIDType.Rigidbody2D:
+					case ClassIDType.Rigidbody:
 					case ClassIDType.Collider:
 					case ClassIDType.PhysicsMaterial2D:
 					case ClassIDType.AnimationClip:

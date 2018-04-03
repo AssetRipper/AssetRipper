@@ -310,6 +310,14 @@ namespace UtinyRipper.SerializedFiles
 					asset = new TextAsset(assetInfo);
 					break;
 
+				case ClassIDType.Rigidbody2D:
+					asset = new Rigidbody2D(assetInfo);
+					break;
+
+				case ClassIDType.Rigidbody:
+					asset = new Rigidbody(assetInfo);
+					break;
+
 				case ClassIDType.CircleCollider2D:
 					asset = new CircleCollider2D(assetInfo);
 					break;

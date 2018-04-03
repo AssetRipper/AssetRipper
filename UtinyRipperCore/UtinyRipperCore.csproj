@@ -164,6 +164,16 @@
     <Compile Include="Parser\Classes\PhysicsMaterial2D.cs" />
     <Compile Include="Parser\Classes\PolygonCollider2D\Polygon2D.cs" />
     <Compile Include="Parser\Classes\PolygonCollider2D\PolygonCollider2D.cs" />
+    <Compile Include="Parser\Classes\Rigidbody2D\CollisionDetectionMode2D.cs" />
+    <Compile Include="Parser\Classes\Rigidbody2D\Rigidbody2D.cs" />
+    <Compile Include="Parser\Classes\Rigidbody2D\RigidbodyConstraints2D.cs" />
+    <Compile Include="Parser\Classes\Rigidbody2D\RigidbodyInterpolation2D.cs" />
+    <Compile Include="Parser\Classes\Rigidbody2D\RigidbodySleepMode2D.cs" />
+    <Compile Include="Parser\Classes\Rigidbody2D\RigidbodyType2D.cs" />
+    <Compile Include="Parser\Classes\Rigidbody\CollisionDetectionMode.cs" />
+    <Compile Include="Parser\Classes\Rigidbody\Rigidbody.cs" />
+    <Compile Include="Parser\Classes\Rigidbody\RigidbodyConstraints.cs" />
+    <Compile Include="Parser\Classes\Rigidbody\RigidbodyInterpolation.cs" />
     <Compile Include="Parser\Classes\SphereCollider.cs" />
     <Compile Include="Parser\Classes\Terrain.cs" />
     <Compile Include="Parser\Classes\TerrainCollider.cs" />

@@ -327,6 +327,8 @@ namespace UtinyRipper
 				case ClassIDType.MeshRenderer:
 				case ClassIDType.Renderer:
 				case ClassIDType.MeshFilter:
+				case ClassIDType.Rigidbody2D:
+				case ClassIDType.Rigidbody:
 				case ClassIDType.CircleCollider2D:
 				case ClassIDType.PolygonCollider2D:
 				case ClassIDType.BoxCollider2D:

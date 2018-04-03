@@ -23,6 +23,8 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.GameObject, yamlExporter);
 			OverrideExporter(ClassIDType.Material, yamlExporter);
 			OverrideExporter(ClassIDType.Mesh, yamlExporter);
+			OverrideExporter(ClassIDType.Rigidbody2D, yamlExporter);
+			OverrideExporter(ClassIDType.Rigidbody, yamlExporter);
 			OverrideExporter(ClassIDType.CircleCollider2D, yamlExporter);
 			OverrideExporter(ClassIDType.PolygonCollider2D, yamlExporter);
 			OverrideExporter(ClassIDType.BoxCollider2D, yamlExporter);
