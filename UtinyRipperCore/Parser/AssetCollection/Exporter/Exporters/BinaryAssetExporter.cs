@@ -47,21 +47,7 @@ namespace UtinyRipper.AssetExporters
 
 		public override AssetType ToExportType(ClassIDType classID)
 		{
-			switch (classID)
-			{
-				case ClassIDType.Texture2D:
-				case ClassIDType.Cubemap:
-					return AssetType.Meta;
-
-				case ClassIDType.Shader:
-					return AssetType.Meta;
-
-				case ClassIDType.AudioClip:
-					return AssetType.Meta;
-
-				default:
-					throw new NotSupportedException(classID.ToString());
-			}
+			return AssetType.Meta;
 		}
 	}
 }

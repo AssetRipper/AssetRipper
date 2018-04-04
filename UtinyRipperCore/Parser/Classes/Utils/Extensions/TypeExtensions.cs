@@ -25,6 +25,7 @@ namespace UtinyRipper.Classes
 					case ClassIDType.PhysicsMaterial2D:
 					case ClassIDType.AnimationClip:
 					case ClassIDType.AudioClip:
+					case ClassIDType.RenderTexture:
 					case ClassIDType.Avatar:
 					case ClassIDType.RuntimeAnimatorController:
 					case ClassIDType.BaseAnimationTrack:

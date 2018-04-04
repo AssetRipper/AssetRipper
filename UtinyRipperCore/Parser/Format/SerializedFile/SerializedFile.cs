@@ -282,6 +282,10 @@ namespace UtinyRipper.SerializedFiles
 					asset = new Transform(assetInfo);
 					break;
 
+				case ClassIDType.Camera:
+					asset = new Camera(assetInfo);
+					break;
+
 				case ClassIDType.Material:
 					asset = new Material(assetInfo);
 					break;
@@ -370,6 +374,10 @@ namespace UtinyRipper.SerializedFiles
 					asset = new AudioClip(assetInfo);
 					break;
 
+				case ClassIDType.RenderTexture:
+					asset = new RenderTexture(assetInfo);
+					break;
+
 				case ClassIDType.Cubemap:
 					asset = new Cubemap(assetInfo);
 					break;
@@ -380,6 +388,10 @@ namespace UtinyRipper.SerializedFiles
 
 				case ClassIDType.AnimatorController:
 					asset = new AnimatorController(assetInfo);
+					break;
+
+				case ClassIDType.GUILayer:
+					asset = new GUILayer(assetInfo);
 					break;
 
 				case ClassIDType.Animator:
@@ -400,6 +412,10 @@ namespace UtinyRipper.SerializedFiles
 
 				case ClassIDType.NewAnimationTrack:
 					asset = new NewAnimationTrack(assetInfo);
+					break;
+
+				case ClassIDType.FlareLayer:
+					asset = new FlareLayer(assetInfo);
 					break;
 
 				case ClassIDType.Font:

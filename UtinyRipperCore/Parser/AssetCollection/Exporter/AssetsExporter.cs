@@ -21,6 +21,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.Prefab, yamlExporter);
 			OverrideExporter(ClassIDType.Component, yamlExporter);
 			OverrideExporter(ClassIDType.GameObject, yamlExporter);
+			OverrideExporter(ClassIDType.Camera, yamlExporter);
 			OverrideExporter(ClassIDType.Material, yamlExporter);
 			OverrideExporter(ClassIDType.Mesh, yamlExporter);
 			OverrideExporter(ClassIDType.Rigidbody2D, yamlExporter);
@@ -37,8 +38,11 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.AnimationClip, yamlExporter);
 			OverrideExporter(ClassIDType.AudioListener, yamlExporter);
 			OverrideExporter(ClassIDType.AudioSource, yamlExporter);
+			OverrideExporter(ClassIDType.RenderTexture, yamlExporter);
 			OverrideExporter(ClassIDType.Avatar, yamlExporter);
+			OverrideExporter(ClassIDType.GUILayer, yamlExporter);
 			OverrideExporter(ClassIDType.Light, yamlExporter);
+			OverrideExporter(ClassIDType.FlareLayer, yamlExporter);
 			OverrideExporter(ClassIDType.PhysicMaterial, yamlExporter);
 			OverrideExporter(ClassIDType.SphereCollider, yamlExporter);
 			OverrideExporter(ClassIDType.CapsuleCollider, yamlExporter);

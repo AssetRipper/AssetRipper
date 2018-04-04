@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using UtinyRipper.Classes;
 using UtinyRipper.Exporter.YAML;
+
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
 {
 	public class YAMLAssetExporter : AssetExporter
 	{
-		public override IExportCollection CreateCollection(UtinyRipper.Classes.Object @object)
+		public override IExportCollection CreateCollection(Object @object)
 		{
 			if (@object is Component comp)
 			{
@@ -71,20 +72,7 @@ namespace UtinyRipper.AssetExporters
 
 		public override AssetType ToExportType(ClassIDType classID)
 		{
-			switch (classID)
-			{
-				case ClassIDType.Material:
-				case ClassIDType.Mesh:
-				case ClassIDType.AnimationClip:
-				case ClassIDType.Avatar:
-				case ClassIDType.AnimatorOverrideController:
-				case ClassIDType.TerrainData:
-				case ClassIDType.Prefab:
-					return AssetType.Serialized;
-
-				default:
-					throw new NotSupportedException();
-			}
+			return AssetType.Serialized;
 		}
 
 		private IEnumerable<EditorExtension> EnumeratePrefabContent(Prefab prefab)
@@ -128,7 +116,7 @@ namespace UtinyRipper.AssetExporters
 				using (StreamWriter streamWriter = new StreamWriter(fileStream))
 				{
 					YAMLWriter writer = new YAMLWriter();
-					foreach (UtinyRipper.Classes.Object @object in objects)
+					foreach (Object @object in objects)
 					{
 						exporter.File = @object.File;
 						YAMLDocument doc = @object.ExportYAMLDocument(exporter);

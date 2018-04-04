@@ -6,6 +6,7 @@ using UtinyRipper.Classes.Textures;
 using UtinyRipper.Converter.Textures.DDS;
 using UtinyRipper.Converter.Textures.KTX;
 using UtinyRipper.Converter.Textures.PVR;
+using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes
 {
@@ -17,13 +18,6 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 2017.3 and greater
-		/// </summary>
-		public static bool IsReadFallbackFormat(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
 		/// <summary>
 		/// Less than 5.2.0
 		/// </summary>
@@ -70,13 +64,6 @@ namespace UtinyRipper.Classes
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
-
-			if(IsReadFallbackFormat(stream.Version))
-			{
-				ForcedFallbackFormat = stream.ReadInt32();
-				DownscaleFallback = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
-			}
 
 			Width = stream.ReadInt32();
 			Height = stream.ReadInt32();
@@ -196,6 +183,11 @@ namespace UtinyRipper.Classes
 				}
 			}
 			return false;
+		}
+
+		protected sealed override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		{
+			throw new NotSupportedException();
 		}
 
 		private void Export(IAssetsExporter exporter, Stream destination, Stream source, long length)
@@ -848,8 +840,6 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public int ForcedFallbackFormat { get; private set; }
-		public bool DownscaleFallback { get; private set; }
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 		public int CompleteImageSize { get; private set; }

@@ -27,7 +27,7 @@ namespace UtinyRipper.AssetExporters.Classes
 			}
 			else
 			{
-				node.Add("wrapMode", (int)m_textureSettings.WrapMode);
+				node.Add("wrapMode", (int)m_textureSettings.WrapU);
 			}
 			return node;
 		}

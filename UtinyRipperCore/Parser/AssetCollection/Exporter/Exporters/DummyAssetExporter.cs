@@ -1,12 +1,13 @@
 ﻿using System;
 using UtinyRipper.Classes;
+
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
 {
 	internal class DummyAssetExporter : IAssetExporter
 	{
-		public IExportCollection CreateCollection(UtinyRipper.Classes.Object @object)
+		public IExportCollection CreateCollection(Object @object)
 		{
 			if(@object is MonoScript monoScript)
 			{

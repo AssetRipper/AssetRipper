@@ -471,7 +471,7 @@ namespace UtinyRipper.Classes
 		public IReadOnlyList<Tangent> TangentSpace => m_tangentSpace;
 		public IReadOnlyList<Vector4f> Tangents => m_tangents;
 		public IReadOnlyList<Vector3f> Normals => m_normals;
-		public IReadOnlyList<ColorRGBA32> Сolors => m_colors;
+		public IReadOnlyList<ColorRGBA32> Colors => m_colors;
 		public IReadOnlyList<uint> CollisionTriangles => m_collisionTriangles;
 
 		public IReadOnlyList<byte> IndexBuffer => m_indexBuffer;

@@ -304,6 +304,7 @@ namespace UtinyRipper
 				case ClassIDType.PhysicsMaterial2D:
 				case ClassIDType.AnimationClip:
 				case ClassIDType.AudioClip:
+				case ClassIDType.RenderTexture:
 				case ClassIDType.Cubemap:
 				case ClassIDType.Avatar:
 				case ClassIDType.AnimatorController:
@@ -324,6 +325,7 @@ namespace UtinyRipper
 				case ClassIDType.GameObject:
 				case ClassIDType.Component:
 				case ClassIDType.Transform:
+				case ClassIDType.Camera:
 				case ClassIDType.MeshRenderer:
 				case ClassIDType.Renderer:
 				case ClassIDType.MeshFilter:
@@ -339,9 +341,11 @@ namespace UtinyRipper
 				case ClassIDType.CapsuleCollider2D:
 				case ClassIDType.AudioListener:
 				case ClassIDType.AudioSource:
+				case ClassIDType.GUILayer:
 				case ClassIDType.Animator:
 				case ClassIDType.Light:
 				case ClassIDType.Animation:
+				case ClassIDType.FlareLayer:
 				case ClassIDType.SphereCollider:
 				case ClassIDType.CapsuleCollider:
 				case ClassIDType.SkinnedMeshRenderer:

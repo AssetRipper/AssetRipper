@@ -39,7 +39,7 @@ namespace UtinyRipper
 		}
 
 		/// <summary>
-		/// Сontainer's file path (asset bundle or resources file itself)
+		/// Container's file path (asset bundle or resources file itself)
 		/// </summary>
 		public string FilePath { get; }
 		/// <summary>
