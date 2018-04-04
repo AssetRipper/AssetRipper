@@ -1,9 +1,11 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.TerrainDatas
 {
-	public struct DetailPrototype : IAssetReadable, IYAMLExportable
+	public struct DetailPrototype : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// Less than 3.0.0
@@ -43,6 +45,12 @@ namespace UtinyRipper.Classes.TerrainDatas
 			LightmapFactor = stream.ReadSingle();
 			RenderMode = stream.ReadInt32();
 			UsePrototypeMesh = stream.ReadInt32();
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield return Prototype.FetchDependency(file, isLog, () => nameof(DetailPrototype), "prototype");
+			yield return PrototypeTexture.FetchDependency(file, isLog, () => nameof(DetailPrototype), "prototypeTexture");
 		}
 
 		public YAMLNode ExportYAML(IAssetsExporter exporter)

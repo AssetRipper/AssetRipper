@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using UtinyRipper.AssetExporters;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
@@ -31,6 +32,16 @@ namespace UtinyRipper.Classes
 			{
 				writer.Write(m_movieData, 0, m_movieData.Length);
 			}
+		}
+
+		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			foreach(Object @object in base.FetchDependencies(file, isLog))
+			{
+				yield return @object;
+			}
+			
+			yield return AudioClip.FetchDependency(file, isLog, ToLogString, "m_AudioClip");
 		}
 
 		public override string ExportExtension => "ogv";

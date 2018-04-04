@@ -14,6 +14,11 @@ namespace UtinyRipper.Classes
 				Object dep = deps[i];
 				foreach (Object newDep in dep.FetchDependencies(dep.File, isLog))
 				{
+					if (newDep == null)
+					{
+						continue;
+					}
+
 					if (!deps.Contains(newDep))
 					{
 						deps.Add(newDep);

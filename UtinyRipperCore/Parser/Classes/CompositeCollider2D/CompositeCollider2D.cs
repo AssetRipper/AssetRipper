@@ -3,6 +3,7 @@ using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.CompositeCollider2Ds;
 using UtinyRipper.Classes.PolygonCollider2Ds;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
@@ -25,6 +26,22 @@ namespace UtinyRipper.Classes
 
 			CompositePaths.Read(stream);
 			VertexDistance = stream.ReadSingle();
+		}
+
+		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			foreach(Object @object in base.FetchDependencies(file, isLog))
+			{
+				yield return @object;
+			}
+
+			foreach (SubCollider collider in ColliderPaths)
+			{
+				foreach(Object @object in collider.FetchDependencies(file, isLog))
+				{
+					yield return @object;
+				}
+			}
 		}
 		
 		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)

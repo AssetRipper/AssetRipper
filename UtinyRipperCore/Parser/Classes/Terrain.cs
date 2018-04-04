@@ -1,5 +1,7 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
@@ -103,6 +105,17 @@ namespace UtinyRipper.Classes
 				DynamicUVST.Read(stream);
 				ChunkDynamicUVST.Read(stream);
 			}
+		}
+
+		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			foreach(Object @object in base.FetchDependencies(file, isLog))
+			{
+				yield return @object;
+			}
+
+			yield return TerrainData.FetchDependency(file, isLog, ToLogString, "m_TerrainData");
+			yield return MaterialTemplate.FetchDependency(file, isLog, ToLogString, "m_MaterialTemplate");
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)

@@ -358,6 +358,14 @@ namespace UtinyRipper.SerializedFiles
 					asset = new AnimationClip(assetInfo);
 					break;
 
+				case ClassIDType.AudioListener:
+					asset = new AudioListener(assetInfo);
+					break;
+
+				case ClassIDType.AudioSource:
+					asset = new AudioSource(assetInfo);
+					break;
+
 				case ClassIDType.AudioClip:
 					asset = new AudioClip(assetInfo);
 					break;

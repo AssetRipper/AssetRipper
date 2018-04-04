@@ -27,18 +27,8 @@ namespace UtinyRipper.Classes
 			{
 				yield return @object;
 			}
-			RuntimeAnimatorController runetime = Controller.FindObject(file);
-			if(runetime == null)
-			{
-				if(isLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Controller {Controller.ToLogString(file)} wasn't found ");
-				}
-			}
-			else
-			{
-				yield return runetime;
-			}
+			
+			yield return Controller.FetchDependency(file, isLog, ToLogString, "m_Controller");
 			foreach (AnimationClipOverride clip in Clips)
 			{
 				foreach (Object @object in clip.FetchDependencies(file, isLog))

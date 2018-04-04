@@ -243,41 +243,15 @@ namespace UtinyRipper.Classes
 
 			if(IsReadOffscreen(file.Version))
 			{
-				if(!DisableAnimationWhenOffscreen.IsNull)
-				{
-					Animation anim = DisableAnimationWhenOffscreen.GetObject(file);
-					if (anim == null)
-					{
-						if(isLog)
-						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_DisableAnimationWhenOffscreen {DisableAnimationWhenOffscreen.ToLogString(file)} wasn't found ");
-						}
-					}
-					else
-					{
-						yield return anim;
-					}
-				}
+				yield return DisableAnimationWhenOffscreen.FetchDependency(file, isLog, ToLogString, "m_DisableAnimationWhenOffscreen");
 			}
-			if(!Mesh.IsNull)
-			{
-				Mesh mesh = Mesh.FindObject(file);
-				if (mesh == null)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Mesh {Mesh.ToLogString(file)} wasn't found ");
-				}
-				else
-				{
-					yield return mesh;
-				}
-			}
+			yield return Mesh.FetchDependency(file, isLog, ToLogString, "m_Mesh");
 			foreach (PPtr<Transform> ptr in Bones)
 			{
-				if (ptr.IsNull)
+				if (!ptr.IsNull)
 				{
-					continue;
+					yield return ptr.GetObject(file);
 				}
-				yield return ptr.GetObject(file);
 			}
 			if (!RootBone.IsNull)
 			{

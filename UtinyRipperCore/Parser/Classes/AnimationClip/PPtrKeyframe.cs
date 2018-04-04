@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.AnimationClips
 {
-	public struct PPtrKeyframe : IAssetReadable, IYAMLExportable
+	public struct PPtrKeyframe : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetStream stream)
 		{
@@ -23,18 +23,7 @@ namespace UtinyRipper.Classes.AnimationClips
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			Object script = Script.FindObject(file);
-			if(script == null)
-			{
-				if(isLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"PPtrKeyframe's script {Script.ToLogString(file)} wasn't found ");
-				}
-			}
-			else
-			{
-				yield return script;
-			}
+			yield return Script.FetchDependency(file, isLog, () => nameof(PPtrKeyframe), "script");
 		}
 
 		public float Time { get; private set; }

@@ -35,6 +35,7 @@ namespace UtinyRipper.Classes
 					case ClassIDType.PhysicMaterial:
 					case ClassIDType.TerrainData:
 					case ClassIDType.Sprite:
+					case ClassIDType.AudioMixerGroup:
 						return classID;
 
 					default:

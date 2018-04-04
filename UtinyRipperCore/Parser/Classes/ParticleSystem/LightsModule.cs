@@ -1,9 +1,11 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class LightsModule : ParticleSystemModule
+	public class LightsModule : ParticleSystemModule, IDependent
 	{
 		public override void Read(AssetStream stream)
 		{
@@ -18,6 +20,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			RangeCurve.Read(stream);
 			IntensityCurve.Read(stream);
 			MaxLights = stream.ReadInt32();
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield return Light.FetchDependency(file, isLog, () => nameof(LightsModule), "light");
 		}
 
 		public override YAMLNode ExportYAML(IAssetsExporter exporter)

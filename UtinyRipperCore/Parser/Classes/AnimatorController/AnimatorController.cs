@@ -105,38 +105,15 @@ namespace UtinyRipper.Classes
 				yield return @object;
 			}
 
-			foreach (PPtr<AnimationClip> ptr in AnimationClips)
+			foreach (PPtr<AnimationClip> clip in AnimationClips)
 			{
-				AnimationClip clip = ptr.FindObject(file);
-				if (clip == null)
-				{
-					if (isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} AnimationClips {ptr.ToLogString(file)} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return clip;
-				}
+				yield return clip.FetchDependency(file, isLog, ToLogString, "AnimationClips");
 			}
-
 			if (IsReadStateMachineBehaviourVectorDescription(file.Version))
 			{
-				foreach (PPtr<MonoBehaviour> ptr in StateMachineBehaviours)
+				foreach (PPtr<MonoBehaviour> behaviour in StateMachineBehaviours)
 				{
-					MonoBehaviour behaviour = ptr.FindObject(file);
-					if (behaviour == null)
-					{
-						if (isLog)
-						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} StateMachineBehaviours {ptr.ToLogString(file)} wasn't found ");
-						}
-					}
-					else
-					{
-						yield return behaviour;
-					}
+					yield return behaviour.FetchDependency(file, isLog, ToLogString, "StateMachineBehaviours");
 				}
 			}
 		}

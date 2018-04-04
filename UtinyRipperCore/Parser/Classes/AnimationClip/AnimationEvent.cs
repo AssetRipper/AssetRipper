@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.AnimationClips
 {
-	public struct AnimationEvent : IAssetReadable, IYAMLExportable
+	public struct AnimationEvent : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 2.6.0 and greater
@@ -55,21 +55,7 @@ namespace UtinyRipper.Classes.AnimationClips
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			if(!ObjectReferenceParameter.IsNull)
-			{
-				Object @object = ObjectReferenceParameter.FindObject(file);
-				if (@object == null)
-				{
-					if (isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"AnimationEvent's objectReferenceParameter {ObjectReferenceParameter.ToLogString(file)} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return @object;
-				}
-			}
+			yield return ObjectReferenceParameter.FetchDependency(file, isLog, () => nameof(AnimationEvent), "objectReferenceParameter");
 		}
 
 		public float Time { get; private set; }

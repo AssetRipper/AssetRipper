@@ -7,7 +7,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
-	public abstract class Object : IAssetReadable, IYAMLDocExportable
+	public abstract class Object : IAssetReadable, IYAMLDocExportable, IDependent
 	{
 		protected Object(AssetInfo assetInfo)
 		{
@@ -84,7 +84,7 @@ namespace UtinyRipper.Classes
 
 		public virtual string ToLogString()
 		{
-			return $"{GetType().Name}'s[{PathID}]";
+			return $"{GetType().Name}[{PathID}]";
 		}
 
 		protected virtual YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)

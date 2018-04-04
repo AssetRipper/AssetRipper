@@ -198,20 +198,9 @@ namespace UtinyRipper.Classes
 
 			if (IsReadDependencies(file.Version))
 			{
-				foreach (PPtr<Shader> ptr in Dependencies)
+				foreach (PPtr<Shader> shader in Dependencies)
 				{
-					Shader shad = ptr.FindObject(file);
-					if (shad == null)
-					{
-						if(isLog)
-						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_dependencies {ptr.ToLogString(file)} wasn't found ");
-						}
-					}
-					else
-					{
-						yield return shad;
-					}
+					yield return shader.FetchDependency(file, isLog, ToLogString, "m_dependencies");
 				}
 			}
 		}

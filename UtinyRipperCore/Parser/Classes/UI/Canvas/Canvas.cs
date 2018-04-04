@@ -133,22 +133,8 @@ namespace UtinyRipper.Classes
 			{
 				yield return @object;
 			}
-
-			if(!Camera.IsNull)
-			{
-				Camera camera = Camera.FindObject(file);
-				if(camera == null)
-				{
-					if(isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Camera {Camera.ToLogString(file)} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return camera;
-				}
-			}
+			
+			yield return Camera.FetchDependency(file, isLog, ToLogString, "m_Camera");
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)

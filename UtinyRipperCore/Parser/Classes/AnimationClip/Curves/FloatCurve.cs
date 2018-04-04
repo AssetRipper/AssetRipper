@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.AnimationClips
 {
-	public struct FloatCurve : IAssetReadable, IYAMLExportable
+	public struct FloatCurve : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public FloatCurve(string path)
 		{
@@ -49,21 +49,7 @@ namespace UtinyRipper.Classes.AnimationClips
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			if (!Script.IsNull)
-			{
-				MonoScript script = Script.FindObject(file);
-				if (script == null)
-				{
-					if(isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"FloatCurve's script {Script.ToLogString(file)} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return script;
-				}
-			}
+			yield return Script.FetchDependency(file, isLog, () => nameof(FloatCurve), "script");
 		}
 
 		public string Attribute { get; private set; }

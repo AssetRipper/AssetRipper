@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.AnimationClips
 {
-	public struct PPtrCurve : IAssetReadable, IYAMLExportable
+	public struct PPtrCurve : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 2017.1 and greater
@@ -49,18 +49,7 @@ namespace UtinyRipper.Classes.AnimationClips
 					yield return @object;
 				}
 			}
-			MonoScript script = Script.FindObject(file);
-			if(script == null)
-			{
-				if(isLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"PPtrCurve's script {Script.ToLogString(file)} wasn't found ");
-				}
-			}
-			else
-			{
-				yield return script;
-			}
+			yield return Script.FetchDependency(file, isLog, () => nameof(PPtrCurve), "script");
 		}
 
 		public IReadOnlyList<PPtrKeyframe> Curve => m_curve;

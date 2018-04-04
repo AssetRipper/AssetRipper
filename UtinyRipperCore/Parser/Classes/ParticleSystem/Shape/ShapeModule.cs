@@ -1,9 +1,11 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class ShapeModule : ParticleSystemModule
+	public class ShapeModule : ParticleSystemModule, IDependent
 	{
 		/// <summary>
 		/// 4.0.0 to 5.6.0 exclusive
@@ -266,6 +268,13 @@ namespace UtinyRipper.Classes.ParticleSystems
 					Arc.Read(stream);
 				}
 			}
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield return Mesh.FetchDependency(file, isLog, () => nameof(ShapeModule), "m_Mesh");
+			yield return MeshRenderer.FetchDependency(file, isLog, () => nameof(ShapeModule), "m_MeshRenderer");
+			yield return SkinnedMeshRenderer.FetchDependency(file, isLog, () => nameof(ShapeModule), "m_SkinnedMeshRenderer");
 		}
 
 		public override YAMLNode ExportYAML(IAssetsExporter exporter)

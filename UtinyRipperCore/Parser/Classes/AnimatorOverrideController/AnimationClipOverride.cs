@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.AnimatorOverrideControllers
 {
-	public struct AnimationClipOverride : IAssetReadable, IYAMLExportable
+	public struct AnimationClipOverride : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetStream stream)
 		{
@@ -23,31 +23,8 @@ namespace UtinyRipper.Classes.AnimatorOverrideControllers
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			AnimationClip clip = OriginalClip.FindObject(file);
-			if (clip == null)
-			{
-				if(isLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"AnimationClipOverride's m_OriginalClip {OriginalClip.ToLogString(file)} wasn't found ");
-				}
-			}
-			else
-			{
-				yield return clip;
-			}
-
-			clip = OverrideClip.FindObject(file);
-			if (clip == null)
-			{
-				if (isLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"AnimationClipOverride's m_OverrideClip {OverrideClip.ToLogString(file)} wasn't found ");
-				}
-			}
-			else
-			{
-				yield return clip;
-			}
+			yield return OriginalClip.FetchDependency(file, isLog, () => nameof(AnimationClipOverride), "m_OriginalClip");
+			yield return OverrideClip.FetchDependency(file, isLog, () => nameof(AnimationClipOverride), "m_OverrideClip");
 		}
 
 		public PPtr<AnimationClip> OriginalClip;

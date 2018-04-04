@@ -109,22 +109,8 @@ namespace UtinyRipper.Classes
 			{
 				yield return @object;
 			}
-
-			if(!Sprite.IsNull)
-			{
-				Sprite sprite = Sprite.FindObject(file);
-				if(sprite == null)
-				{
-					if(isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Sprite {Sprite.ToLogString(file)} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return sprite;
-				}
-			}
+			
+			yield return Sprite.FetchDependency(file, isLog, ToLogString, "m_Sprite");
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)

@@ -30,34 +30,8 @@ namespace UtinyRipper.Classes.SpriteAtlases
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			Texture2D texture = Texture.FindObject(file);
-			if(texture == null)
-			{
-				if (isLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"SpiteAtlasData's Texture {Texture.ToLogString(file)} wasn't found");
-				}
-			}
-			else
-			{
-				yield return texture;
-			}
-
-			if(!AlphaTexture.IsNull)
-			{
-				texture = AlphaTexture.FindObject(file);
-				if (texture == null)
-				{
-					if (isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"SpiteAtlasData's AlphaTexture {AlphaTexture.ToLogString(file)} wasn't found");
-					}
-				}
-				else
-				{
-					yield return texture;
-				}
-			}
+			yield return Texture.FetchDependency(file, isLog, () => nameof(SpriteAtlasData), "Texture");
+			yield return AlphaTexture.FetchDependency(file, isLog, () => nameof(SpriteAtlasData), "AlphaTexture");
 		}
 
 		public float DownscaleMultiplier { get; private set; }

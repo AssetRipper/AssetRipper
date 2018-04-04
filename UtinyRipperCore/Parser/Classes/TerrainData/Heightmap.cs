@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.TerrainDatas
 {
-	public struct Heightmap : IAssetReadable, IYAMLExportable
+	public struct Heightmap : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 2.1.0 to 2.6.0 exclusive
@@ -78,6 +79,14 @@ namespace UtinyRipper.Classes.TerrainDatas
 			}
 			Levels = stream.ReadInt32();
 			Scale.Read(stream);
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			if (IsReadDefaultPhysicMaterial(file.Version))
+			{
+				yield return DefaultPhysicMaterial.FetchDependency(file, isLog, () => nameof(Heightmap), "m_DefaultPhysicMaterial");
+			}
 		}
 
 		public YAMLNode ExportYAML(IAssetsExporter exporter)

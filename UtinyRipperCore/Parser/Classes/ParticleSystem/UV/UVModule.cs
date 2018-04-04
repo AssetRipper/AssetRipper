@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
+using UtinyRipper.Classes.CompositeCollider2Ds;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class UVModule : ParticleSystemModule
+	public class UVModule : ParticleSystemModule, IDependent
 	{
 		/// <summary>
 		/// 2017.1 and greater
@@ -75,6 +77,17 @@ namespace UtinyRipper.Classes.ParticleSystems
 			if (IsReadSprites(stream.Version))
 			{
 				m_sprites = stream.ReadArray<SpriteData>();
+			}
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			foreach (SpriteData spriteData in Sprites)
+			{
+				foreach(Object @object in spriteData.FetchDependencies(file, isLog))
+				{
+					yield return @object;
+				}
 			}
 		}
 

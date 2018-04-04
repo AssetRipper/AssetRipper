@@ -1,9 +1,11 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.TerrainDatas
 {
-	public struct SplatPrototype : IAssetReadable, IYAMLExportable
+	public struct SplatPrototype : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 4.0.0 and greater
@@ -54,6 +56,15 @@ namespace UtinyRipper.Classes.TerrainDatas
 			if (IsReadSmoothness(stream.Version))
 			{
 				Smoothness = stream.ReadSingle();
+			}
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield return Texture.FetchDependency(file, isLog, () => nameof(SplatPrototype), "texture");
+			if (IsReadNormalMap(file.Version))
+			{
+				yield return NormalMap.FetchDependency(file, isLog, () => nameof(SplatPrototype), "normalMap");
 			}
 		}
 

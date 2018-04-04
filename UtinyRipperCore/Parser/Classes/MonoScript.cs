@@ -123,34 +123,11 @@ namespace UtinyRipper.Classes
 			}
 			if(IsReadScript(file.Platform))
 			{
-				foreach (PPtr<Object> ptr in DefaultReferences.Values)
+				foreach (PPtr<Object> reference in DefaultReferences.Values)
 				{
-					Object @object = ptr.FindObject(file);
-					if (@object == null)
-					{
-						if (isLog)
-						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} DefaultReferences {ptr.ToLogString(file)} wasn't found ");
-						}
-					}
-					else
-					{
-						yield return @object;
-					}
+					yield return reference.FetchDependency(file, isLog, ToLogString, "DefaultReferences");
 				}
-
-				Object icon = Icon.FindObject(file);
-				if (icon == null)
-				{
-					if (isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Icon {icon.ToLogString()} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return icon;
-				}
+				yield return Icon.FetchDependency(file, isLog, ToLogString, "m_Icon");
 			}
 		}
 

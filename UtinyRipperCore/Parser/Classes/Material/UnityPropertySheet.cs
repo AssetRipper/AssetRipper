@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.Materials
 {
-	public struct UnityPropertySheet : IAssetReadable, IYAMLExportable
+	public struct UnityPropertySheet : IAssetReadable, IYAMLExportable, IDependent
 	{
 		private static int GetSerializedVersion(Version version)
 		{

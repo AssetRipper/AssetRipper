@@ -100,18 +100,7 @@ namespace UtinyRipper.Classes
 			}
 			if(!SpriteAtlas.IsNull)
 			{
-				SpriteAtlas spriteAtlas = SpriteAtlas.FindObject(file);
-				if (spriteAtlas == null)
-				{
-					if (isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} SpriteAtlas {SpriteAtlas.ToLogString(file)} wasn't found");
-					}
-				}
-				else
-				{
-					yield return spriteAtlas;
-				}
+				yield return SpriteAtlas.FetchDependency(file, isLog, ToLogString, "SpriteAtlas");
 			}
 			foreach (Object @object in RD.FetchDependencies(file))
 			{

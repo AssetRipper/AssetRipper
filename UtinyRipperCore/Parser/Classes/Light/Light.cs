@@ -222,38 +222,9 @@ namespace UtinyRipper.Classes
 			{
 				yield return @object;
 			}
-
-			if (!Cookie.IsNull)
-			{
-				Texture texture = Cookie.FindObject(file);
-				if (texture == null)
-				{
-					if (isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Cookie {Cookie.ToLogString(file)} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return texture;
-				}
-			}
-
-			if (!Flare.IsNull)
-			{
-				Flare flare = Flare.FindObject(file);
-				if (flare == null)
-				{
-					if (isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Flare {Flare.ToLogString(file)} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return flare;
-				}
-			}
+			
+			yield return Cookie.FetchDependency(file, isLog, ToLogString, "m_Cookie");
+			yield return Flare.FetchDependency(file, isLog, ToLogString, "m_Flare");
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)

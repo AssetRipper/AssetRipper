@@ -35,6 +35,8 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.EdgeCollider2D, yamlExporter);
 			OverrideExporter(ClassIDType.CapsuleCollider2D, yamlExporter);
 			OverrideExporter(ClassIDType.AnimationClip, yamlExporter);
+			OverrideExporter(ClassIDType.AudioListener, yamlExporter);
+			OverrideExporter(ClassIDType.AudioSource, yamlExporter);
 			OverrideExporter(ClassIDType.Avatar, yamlExporter);
 			OverrideExporter(ClassIDType.Light, yamlExporter);
 			OverrideExporter(ClassIDType.PhysicMaterial, yamlExporter);
@@ -71,30 +73,30 @@ namespace UtinyRipper.AssetExporters
 			m_exporters[classType] = exporter;
 		}
 
-		public void Export(string path, UtinyRipper.Classes.Object @object)
+		public void Export(string path, Object @object)
 		{
 			Export(path, ToIEnumerable(@object));
 		}
 
-		public void Export(string path, IEnumerable<UtinyRipper.Classes.Object> objects)
+		public void Export(string path, IEnumerable<Object> objects)
 		{
 			List<IExportCollection> collections = new List<IExportCollection>();
 			// speed up fetching a little bit
-			List<UtinyRipper.Classes.Object> depList = new List<UtinyRipper.Classes.Object>();
-			HashSet<UtinyRipper.Classes.Object> depSet = new HashSet<UtinyRipper.Classes.Object>();
-			HashSet<UtinyRipper.Classes.Object> queued = new HashSet<UtinyRipper.Classes.Object>();
+			List<Object> depList = new List<Object>();
+			HashSet<Object> depSet = new HashSet<Object>();
+			HashSet<Object> queued = new HashSet<Object>();
 			depList.AddRange(objects);
 			depSet.UnionWith(depList);
 			for (int i = 0; i < depList.Count; i++)
 			{
-				UtinyRipper.Classes.Object current = depList[i];
+				Object current = depList[i];
 				if (!queued.Contains(current))
 				{
 					ClassIDType exportID = current.IsAsset ? current.ClassID : ClassIDType.Component;
 					IAssetExporter exporter = m_exporters[exportID];
 					IExportCollection collection = exporter.CreateCollection(current);
 
-					foreach (UtinyRipper.Classes.Object element in collection.Objects)
+					foreach (Object element in collection.Objects)
 					{
 						queued.Add(element);
 					}
@@ -104,12 +106,17 @@ namespace UtinyRipper.AssetExporters
 #warning TODO: if IsGenerateGUIDByContent set it should build collections and write actual references with persistent GUIS, but skip dependencies
 				if (Config.IsExportDependencies)
 				{
-					foreach (UtinyRipper.Classes.Object dep in current.FetchDependencies(true))
+					foreach (Object dependency in current.FetchDependencies(true))
 					{
-						if (!depSet.Contains(dep))
+						if (dependency == null)
 						{
-							depList.Add(dep);
-							depSet.Add(dep);
+							continue;
+						}
+
+						if (!depSet.Contains(dependency))
+						{
+							depList.Add(dependency);
+							depSet.Add(dependency);
 						}
 					}
 				}
@@ -149,6 +156,8 @@ namespace UtinyRipper.AssetExporters
 					return AssetType.Serialized;
 				case ClassIDType.Camera:
 					return AssetType.Serialized;
+				case ClassIDType.AudioMixerGroup:
+					return AssetType.Serialized;
 			}
 
 			if (!m_exporters.ContainsKey(classID))
@@ -159,7 +168,7 @@ namespace UtinyRipper.AssetExporters
 			return m_exporters[classID].ToExportType(classID);
 		}
 
-		private IEnumerable<UtinyRipper.Classes.Object> ToIEnumerable(UtinyRipper.Classes.Object @object)
+		private IEnumerable<Object> ToIEnumerable(Object @object)
 		{
 			yield return @object;
 		}

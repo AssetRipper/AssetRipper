@@ -37,18 +37,7 @@ namespace UtinyRipper.Classes
 
 			if(!AdditionalVertexStreams.IsNull)
 			{
-				Mesh mesh = AdditionalVertexStreams.FindObject(file);
-				if (mesh == null)
-				{
-					if(isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_AdditionalVertexStreams {AdditionalVertexStreams.ToLogString(file)} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return mesh;
-				}
+				yield return AdditionalVertexStreams.FetchDependency(file, isLog, ToLogString, "m_AdditionalVertexStreams");
 			}
 		}
 		

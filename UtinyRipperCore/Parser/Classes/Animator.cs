@@ -129,38 +129,9 @@ namespace UtinyRipper.Classes
 			{
 				yield return @object;
 			}
-
-			if(!Avatar.IsNull)
-			{
-				Avatar avatar = Avatar.FindObject(file);
-				if (avatar == null)
-				{
-					if (isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Avatar {Avatar.ToLogString(file)} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return avatar;
-				}
-			}
-
-			if(!Controller.IsNull)
-			{
-				RuntimeAnimatorController runetime = Controller.FindObject(file);
-				if (runetime == null)
-				{
-					if (isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Controller {Controller.ToLogString(file)} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return runetime;
-				}
-			}
+			
+			yield return Avatar.FetchDependency(file, isLog, ToLogString, "m_Avatar");
+			yield return Controller.FetchDependency(file, isLog, ToLogString, "m_Controller");
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)

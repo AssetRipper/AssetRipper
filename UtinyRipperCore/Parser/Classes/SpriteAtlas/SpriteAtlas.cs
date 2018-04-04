@@ -32,20 +32,10 @@ namespace UtinyRipper.Classes
 			{
 				yield return @object;
 			}
-			foreach(PPtr<Sprite> ptr in PackedSprites)
+
+			foreach(PPtr<Sprite> sprite in PackedSprites)
 			{
-				Sprite sprite = ptr.FindObject(file);
-				if (sprite == null)
-				{
-					if (isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} PackedSprite {ptr.ToLogString(file)} wasn't found");
-					}
-				}
-				else
-				{
-					yield return sprite;
-				}
+				yield return sprite.FetchDependency(file, isLog, ToLogString, "PackedSprite");
 			}
 			foreach (SpriteAtlasData atlasData in RenderDataMap.Values)
 			{

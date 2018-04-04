@@ -38,23 +38,9 @@ namespace UtinyRipper.Classes
 
 			if (IsReadSourceTextures(file.Version))
 			{
-				foreach(PPtr<Texture2D> ptr in m_sourceTextures)
+				foreach(PPtr<Texture2D> texture in m_sourceTextures)
 				{
-					if (!ptr.IsNull)
-					{
-						Texture2D texture = ptr.FindObject(file);
-						if (texture == null)
-						{
-							if (isLog)
-							{
-								Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} sourceTexture {ptr.ToLogString(file)} wasn't found ");
-							}
-						}
-						else
-						{
-							yield return texture;
-						}
-					}
+					yield return texture.FetchDependency(file, isLog, ToLogString, "sourceTextures");
 				}
 			}
 		}

@@ -3,6 +3,7 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes
 {
+#warning TODO: not implemented
 	public class Camera : Behaviour
 	{
 		public Camera(AssetInfo assetInfo):

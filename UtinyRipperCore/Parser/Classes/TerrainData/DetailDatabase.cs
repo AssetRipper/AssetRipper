@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.TerrainDatas
 {
-	public struct DetailDatabase : IAssetReadable, IYAMLExportable
+	public struct DetailDatabase : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// Less than 2.6.0
@@ -55,6 +56,35 @@ namespace UtinyRipper.Classes.TerrainDatas
 			if (IsReadPreloadTextureAtlasData(stream.Version))
 			{
 				m_preloadTextureAtlasData = stream.ReadArray<PPtr<Texture2D>>();
+			}
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			foreach (DetailPrototype prototype in DetailPrototypes)
+			{
+				foreach(Object @object in prototype.FetchDependencies(file, isLog))
+				{
+					yield return @object;
+				}
+			}
+			
+			if (IsReadAtlasTexture(file.Version))
+			{
+				yield return AtlasTexture.FetchDependency(file, isLog, () => nameof(DetailDatabase), "m_AtlasTexture");
+			}
+
+			foreach (TreePrototype prototype in TreePrototypes)
+			{
+				foreach(Object @object in prototype.FetchDependencies(file, isLog))
+				{
+					yield return @object;
+				}
+			}
+
+			foreach (PPtr<Texture2D> preloadTexture in PreloadTextureAtlasData)
+			{
+				yield return preloadTexture.FetchDependency(file, isLog, () => nameof(DetailDatabase), "m_PreloadTextureAtlasData");
 			}
 		}
 

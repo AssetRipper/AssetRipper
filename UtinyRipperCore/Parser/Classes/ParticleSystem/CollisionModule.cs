@@ -1,9 +1,12 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
+using UtinyRipper.Classes.CompositeCollider2Ds;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class CollisionModule : ParticleSystemModule
+	public class CollisionModule : ParticleSystemModule, IDependent
 	{
 		/// <summary>
 		/// 5.3.0 and greater
@@ -154,6 +157,16 @@ namespace UtinyRipper.Classes.ParticleSystems
 				InteriorCollisions = stream.ReadBoolean();
 				stream.AlignStream(AlignType.Align4);
 			}
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield return Plane0.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane0");
+			yield return Plane1.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane1");
+			yield return Plane2.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane2");
+			yield return Plane3.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane3");
+			yield return Plane4.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane4");
+			yield return Plane5.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane5");
 		}
 
 		public override YAMLNode ExportYAML(IAssetsExporter exporter)

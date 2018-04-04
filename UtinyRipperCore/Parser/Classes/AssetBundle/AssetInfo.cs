@@ -3,7 +3,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.AssetBundles
 {
-	public struct AssetInfo : IAssetReadable
+	public struct AssetInfo : IAssetReadable, IDependent
 	{
 		/// <summary>
 		/// 2.5.0 and greater
@@ -25,18 +25,7 @@ namespace UtinyRipper.Classes.AssetBundles
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			Object @object = Asset.FindObject(file);
-			if(@object == null)
-			{
-				if(isLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"AssetInfo's asset {Asset.ToLogString(file)} wasn't found ");
-				}
-			}
-			else
-			{
-				yield return @object;
-			}
+			yield return Asset.FetchDependency(file, isLog, () => nameof(AssetInfo), "asset");
 		}
 
 		public int PreloadIndex { get; private set; }

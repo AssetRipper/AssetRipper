@@ -320,7 +320,7 @@ namespace UtinyRipper
 				case ClassIDType.Prefab:
 				case ClassIDType.SpriteAtlas:
 					return true;
-
+					
 				case ClassIDType.GameObject:
 				case ClassIDType.Component:
 				case ClassIDType.Transform:
@@ -337,6 +337,8 @@ namespace UtinyRipper
 				case ClassIDType.SpriteCollider2D:
 				case ClassIDType.EdgeCollider2D:
 				case ClassIDType.CapsuleCollider2D:
+				case ClassIDType.AudioListener:
+				case ClassIDType.AudioSource:
 				case ClassIDType.Animator:
 				case ClassIDType.Light:
 				case ClassIDType.Animation:

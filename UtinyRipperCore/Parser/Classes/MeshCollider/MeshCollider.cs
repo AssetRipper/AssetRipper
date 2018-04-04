@@ -1,6 +1,8 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.MeshColliders;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
@@ -107,6 +109,16 @@ namespace UtinyRipper.Classes
 			{
 				Mesh.Read(stream);
 			}
+		}
+
+		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			foreach(Object @object in base.FetchDependencies(file, isLog))
+			{
+				yield return @object;
+			}
+			
+			yield return Mesh.FetchDependency(file, isLog, ToLogString, "m_Mesh");
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)

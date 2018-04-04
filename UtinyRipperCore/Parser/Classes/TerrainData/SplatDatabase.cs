@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.TerrainDatas
 {
-	public struct SplatDatabase : IAssetReadable, IYAMLExportable
+	public struct SplatDatabase : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 5.0.1 and greater
@@ -26,6 +27,22 @@ namespace UtinyRipper.Classes.TerrainDatas
 				MaterialRequiresMetallic = stream.ReadBoolean();
 				MaterialRequiresSmoothness = stream.ReadBoolean();
 				stream.AlignStream(AlignType.Align4);
+			}
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			foreach (SplatPrototype prototype in Splats)
+			{
+				foreach(Object @object in prototype.FetchDependencies(file, isLog))
+				{
+					yield return @object;
+				}
+			}
+			
+			foreach (PPtr<Texture2D> alphaTexture in AlphaTextures)
+			{
+				yield return alphaTexture.FetchDependency(file, isLog, () => nameof(SplatDatabase), "m_AlphaTextures");
 			}
 		}
 

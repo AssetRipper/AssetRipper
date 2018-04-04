@@ -1,6 +1,8 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.ParticleSystems;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
@@ -271,6 +273,24 @@ namespace UtinyRipper.Classes
 			if (IsReadCustomDataModule(stream.Version))
 			{
 				CustomDataModule.Read(stream);
+			}
+		}
+
+		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			foreach(Object @object in base.FetchDependencies(file, isLog))
+			{
+				yield return @object;
+			}
+			
+			yield return MoveWithCustomTransform.FetchDependency(file, isLog, ToLogString, "moveWithCustomTransform");
+			foreach(Object @object in CollisionModule.FetchDependencies(file, isLog))
+			{
+				yield return @object;
+			}
+			foreach(Object @object in SubModule.FetchDependencies(file, isLog))
+			{
+				yield return @object;
 			}
 		}
 

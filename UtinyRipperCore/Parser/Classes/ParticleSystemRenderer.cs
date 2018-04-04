@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
@@ -172,6 +174,22 @@ namespace UtinyRipper.Classes
 			if (IsReadMaskInteraction(stream.Version))
 			{
 				MaskInteraction = stream.ReadInt32();
+			}
+		}
+
+		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			foreach(Object @object in base.FetchDependencies(file, isLog))
+			{
+				yield return @object;
+			}
+			
+			yield return Mesh.FetchDependency(file, isLog, ToLogString, "m_Mesh");
+			if (IsReadMeshes(file.Version))
+			{
+				yield return Mesh1.FetchDependency(file, isLog, ToLogString, "m_Mesh1");
+				yield return Mesh2.FetchDependency(file, isLog, ToLogString, "m_Mesh2");
+				yield return Mesh3.FetchDependency(file, isLog, ToLogString, "m_Mesh3");
 			}
 		}
 

@@ -122,19 +122,7 @@ namespace UtinyRipper.Classes
 				yield return @object;
 			}
 			
-			Shader shader = Shader.FindObject(file);
-			if (shader == null)
-			{
-				if (isLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Shader {Shader.ToLogString(file)} wasn't found ");
-				}
-			}
-			else
-			{
-				yield return shader;
-			}
-
+			yield return Shader.FetchDependency(file, isLog, ToLogString, "m_Shader");
 			foreach(Object @object in SavedProperties.FetchDependencies(file, isLog))
 			{
 				yield return @object;

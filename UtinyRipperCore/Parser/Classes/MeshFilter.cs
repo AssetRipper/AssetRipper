@@ -25,19 +25,8 @@ namespace UtinyRipper.Classes
 			{
 				yield return @object;
 			}
-
-			Mesh mesh = Mesh.FindObject(file);
-			if (mesh == null)
-			{
-				if(isLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Mesh {Mesh.ToLogString(file)} wasn't found ");
-				}
-			}
-			else
-			{
-				yield return mesh;
-			}
+			
+			yield return Mesh.FetchDependency(file, isLog, ToLogString, "m_Mesh");
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)

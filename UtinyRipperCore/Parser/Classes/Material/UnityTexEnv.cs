@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.Materials
 {
-	public struct UnityTexEnv : IAssetReadable, IYAMLExportable
+	public struct UnityTexEnv : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 2.1.0 and greater
@@ -41,11 +41,7 @@ namespace UtinyRipper.Classes.Materials
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			Texture texture = Texture.FindObject(file);
-			if (texture != null)
-			{
-				yield return texture;
-			}
+			yield return Texture.FetchDependency(file, isLog, () => nameof(UnityTexEnv), "m_Texture");
 		}
 
 		public PPtr<Texture> Texture;

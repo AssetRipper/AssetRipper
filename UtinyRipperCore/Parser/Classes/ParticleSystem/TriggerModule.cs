@@ -1,9 +1,11 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class TriggerModule : ParticleSystemModule
+	public class TriggerModule : ParticleSystemModule, IDependent
 	{
 		public override void Read(AssetStream stream)
 		{
@@ -20,6 +22,16 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Enter = stream.ReadInt32();
 			Exit = stream.ReadInt32();
 			RadiusScale = stream.ReadSingle();
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield return CollisionShape0.FetchDependency(file, isLog, () => nameof(TriggerModule), "collisionShape0");
+			yield return CollisionShape1.FetchDependency(file, isLog, () => nameof(TriggerModule), "collisionShape1");
+			yield return CollisionShape2.FetchDependency(file, isLog, () => nameof(TriggerModule), "collisionShape2");
+			yield return CollisionShape3.FetchDependency(file, isLog, () => nameof(TriggerModule), "collisionShape3");
+			yield return CollisionShape4.FetchDependency(file, isLog, () => nameof(TriggerModule), "collisionShape4");
+			yield return CollisionShape5.FetchDependency(file, isLog, () => nameof(TriggerModule), "collisionShape5");
 		}
 
 		public override YAMLNode ExportYAML(IAssetsExporter exporter)

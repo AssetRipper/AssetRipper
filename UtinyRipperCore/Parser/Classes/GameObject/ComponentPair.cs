@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.GameObjects
 {
-	public struct ComponentPair : IAssetReadable, IYAMLExportable
+	public struct ComponentPair : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// Less than 5.5.0

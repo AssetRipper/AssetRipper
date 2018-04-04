@@ -4,7 +4,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.Sprites
 {
-	public struct SpriteRenderData : IAssetReadable
+	public struct SpriteRenderData : IAssetReadable, IDependent
 	{
 		/// <summary>
 		/// 5.0.0 and greater
@@ -84,34 +84,8 @@ namespace UtinyRipper.Classes.Sprites
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			Texture2D texture = Texture.FindObject(file);
-			if (texture == null)
-			{
-				if (isLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"SpiteAtlasData's Texture {Texture.ToLogString(file)} wasn't found");
-				}
-			}
-			else
-			{
-				yield return texture;
-			}
-
-			if (!AlphaTexture.IsNull)
-			{
-				texture = AlphaTexture.FindObject(file);
-				if (texture == null)
-				{
-					if (isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"SpiteAtlasData's AlphaTexture {AlphaTexture.ToLogString(file)} wasn't found");
-					}
-				}
-				else
-				{
-					yield return texture;
-				}
-			}
+			yield return Texture.FetchDependency(file, isLog, () => nameof(SpriteRenderData), "Texture");
+			yield return AlphaTexture.FetchDependency(file, isLog, () => nameof(SpriteRenderData), "AlphaTexture");
 		}
 
 		public IReadOnlyList<SpriteVertex> Vertices => m_vertices;

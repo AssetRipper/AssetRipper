@@ -278,25 +278,9 @@ namespace UtinyRipper.Classes
 				yield return @object;
 			}
 
-			foreach (PPtr<Material> ptr in Materials)
+			foreach (PPtr<Material> material in Materials)
 			{
-				if(ptr.IsNull)
-				{
-					continue;
-				}
-
-				Material mat = ptr.FindObject(file);
-				if (mat == null)
-				{
-					if(isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Materials {ptr.ToLogString(file)} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return mat;
-				}
+				yield return material.FetchDependency(file, isLog, ToLogString, "m_Materials");
 			}
 			if (!StaticBatchRoot.IsNull)
 			{

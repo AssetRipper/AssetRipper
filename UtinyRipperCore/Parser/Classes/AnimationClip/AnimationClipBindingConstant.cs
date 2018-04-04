@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.AnimationClips
 {
-	public struct AnimationClipBindingConstant : IAssetReadable, IYAMLExportable
+	public struct AnimationClipBindingConstant : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 2017.1 and greater
@@ -42,18 +42,7 @@ namespace UtinyRipper.Classes.AnimationClips
 		{
 			foreach (PPtr<Object> ptr in m_pptrCurveMapping)
 			{
-				Object @object = ptr.FindObject(file);
-				if(@object == null)
-				{
-					if(isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"AnimationClipBindingConstant's pptrCurveMapping {ptr.ToLogString(file)} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return @object;
-				}
+				yield return ptr.FetchDependency(file, isLog, () => nameof(AnimationClipBindingConstant), "pptrCurveMapping");
 			}
 		}
 

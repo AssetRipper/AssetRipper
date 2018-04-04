@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class SubModule : ParticleSystemModule
+	public class SubModule : ParticleSystemModule, IDependent
 	{
 		/// <summary>
 		/// 5.5.0 and greater
@@ -59,6 +60,32 @@ namespace UtinyRipper.Classes.ParticleSystems
 				if (IsReadSecond(stream.Version))
 				{
 					SubEmitterCollision1.Read(stream);
+				}
+			}
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			if (IsReadSubEmitters(file.Version))
+			{
+				foreach (SubEmitterData subEmitter in SubEmitters)
+				{
+					foreach(Object @object in subEmitter.FetchDependencies(file, isLog))
+					{
+						yield return @object;
+					}
+				}
+			}
+			else
+			{
+				yield return SubEmitterBirth.FetchDependency(file, isLog, () => nameof(SubModule), "m_SubEmitterBirth");
+				yield return SubEmitterDeath.FetchDependency(file, isLog, () => nameof(SubModule), "m_SubEmitterDeath");
+				yield return SubEmitterCollision.FetchDependency(file, isLog, () => nameof(SubModule), "m_SubEmitterCollision");
+				if (IsReadSecond(file.Version))
+				{
+					yield return SubEmitterBirth1.FetchDependency(file, isLog, () => nameof(SubModule), "m_SubEmitterBirth1");
+					yield return SubEmitterDeath1.FetchDependency(file, isLog, () => nameof(SubModule), "m_SubEmitterDeath1");
+					yield return SubEmitterCollision1.FetchDependency(file, isLog, () => nameof(SubModule), "m_SubEmitterCollision1");
 				}
 			}
 		}

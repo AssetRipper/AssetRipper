@@ -326,32 +326,9 @@ namespace UtinyRipper.Classes
 			{
 				yield return @object;
 			}
-
-			Material material = DefaultMaterial.FindObject(file);
-			if (material == null)
-			{
-				if(isLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_DefaultMaterial {DefaultMaterial.ToLogString(file)} wasn't found ");
-				}
-			}
-			else
-			{
-				yield return material;
-			}
-
-			Texture texture = Texture.FindObject(file);
-			if (texture == null)
-			{
-				if(isLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Texture {Texture.ToLogString(file)} wasn't found ");
-				}
-			}
-			else
-			{
-				yield return texture;
-			}
+			
+			yield return DefaultMaterial.FetchDependency(file, isLog, ToLogString, "m_DefaultMaterial");
+			yield return Texture.FetchDependency(file, isLog, ToLogString, "m_Texture");
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)

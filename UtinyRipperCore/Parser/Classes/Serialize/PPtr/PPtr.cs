@@ -109,6 +109,38 @@ namespace UtinyRipper.Classes
 			}
 		}
 
+		public Object FetchDependency(ISerializedFile file)
+		{
+			return FetchDependency(file, null, null);
+		}
+
+		public Object FetchDependency(ISerializedFile file, Func<string> logger, string name)
+		{
+			return FetchDependency(file, logger != null, logger, name);
+		}
+
+		public Object FetchDependency(ISerializedFile file, bool isLog, Func<string> owner, string name)
+		{
+			if (IsNull)
+			{
+				return null;
+			}
+			
+			T obj = FindObject(file);
+			if (obj == null)
+			{
+				if(isLog)
+				{
+					Logger.Log(LogType.Warning, LogCategory.Export, $"{owner}'s {name} {ToLogString(file)} wasn't found ");
+				}
+			}
+			else
+			{
+				return obj;
+			}
+			return null;
+		}
+
 		public override string ToString()
 		{
 			return $"[{FileIndex}, {PathID}]";

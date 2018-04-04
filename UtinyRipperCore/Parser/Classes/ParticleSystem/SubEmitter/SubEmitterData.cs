@@ -1,9 +1,11 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public struct SubEmitterData : IAssetReadable, IYAMLExportable
+	public struct SubEmitterData : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public SubEmitterData(PPtr<ParticleSystem> emitter, ParticleSystemSubEmitterType type)
 		{
@@ -31,6 +33,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Emitter.Read(stream);
 			Type = (ParticleSystemSubEmitterType)stream.ReadInt32();
 			Properties = (ParticleSystemSubEmitterProperties)stream.ReadInt32();
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield return Emitter.FetchDependency(file, isLog, () => nameof(SubEmitterData), "emitter");
 		}
 
 		public YAMLNode ExportYAML(IAssetsExporter exporter)

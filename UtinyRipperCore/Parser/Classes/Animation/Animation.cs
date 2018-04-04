@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.AnimationClips;
 using UtinyRipper.Classes.Animations;
@@ -112,57 +113,21 @@ namespace UtinyRipper.Classes
 			{
 				yield return @object;
 			}
-
-			if (!DefaultAnimation.IsNull)
-			{
-				AnimationClip defClip = DefaultAnimation.FindObject(file);
-				if (defClip == null)
-				{
-					if(isLog)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_DefaultAnimation {DefaultAnimation.ToLogString(file)} wasn't found ");
-					}
-				}
-				else
-				{
-					yield return defClip;
-				}
-			}
+			
+			yield return DefaultAnimation.FetchDependency(file, isLog, ToLogString, "m_DefaultAnimation");
 
 			if (IsReadAnimationsPaired(file.Version))
 			{
-				foreach(Tuple<string, PPtr<AnimationClip>> tuple in AnimationsPaired)
+				foreach(PPtr<AnimationClip> clip in AnimationsPaired.Select(t => t.Item2))
 				{
-					AnimationClip clip = tuple.Item2.FindObject(file);
-					if (clip == null)
-					{
-						if(isLog)
-						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Animations {tuple.Item2.ToLogString(file)} wasn't found ");
-						}
-					}
-					else
-					{
-						yield return clip;
-					}
+					yield return clip.FetchDependency(file, isLog, ToLogString, "m_Animations");
 				}
 			}
 			else
 			{
-				foreach(PPtr<AnimationClip> ptr in Animations)
+				foreach(PPtr<AnimationClip> clip in Animations)
 				{
-					AnimationClip clip = ptr.FindObject(file);
-					if (clip == null)
-					{
-						if(isLog)
-						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"{ToLogString()} m_Animations {ptr.ToLogString(file)} wasn't found ");
-						}
-					}
-					else
-					{
-						yield return clip;
-					}
+					yield return clip.FetchDependency(file, isLog, ToLogString, "m_Animations");
 				}
 			}
 		}

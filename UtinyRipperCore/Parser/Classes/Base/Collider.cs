@@ -1,5 +1,7 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
@@ -48,6 +50,16 @@ namespace UtinyRipper.Classes
 				stream.AlignStream(AlignType.Align4);
 			}
 		}
+		
+		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			foreach(Object @object in base.FetchDependencies(file, isLog))
+			{
+				yield return @object;
+			}
+			
+			yield return Material.FetchDependency(file, isLog, ToLogString, "m_Material");
+		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
 		{
@@ -63,11 +75,11 @@ namespace UtinyRipper.Classes
 			node.Add("m_Enabled", Enabled);
 			return node;
 		}
-
-		public PPtr<PhysicMaterial> Material;
 		
 		public bool IsTrigger { get; private set; }
 		public bool Enabled { get; private set; }
+
+		public PPtr<PhysicMaterial> Material;
 
 		protected abstract bool IsReadMaterial { get; }
 		protected abstract bool IsReadIsTrigger { get; }
