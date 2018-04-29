@@ -15,6 +15,7 @@ Utiny Ripper is a tool for extracting assets from serialized files (CAB-*, *.ass
 * Avatars
 * Terrains
 * TextAssets
+* Scenes
 * Components:
   * MeshRenderer
   * SkinnedMeshRenderer

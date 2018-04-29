@@ -2,8 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using UtinyRipper.SerializedFiles;
 
 using Object = UtinyRipper.Classes.Object;
@@ -47,18 +51,16 @@ namespace UtinyRipper
 			try
 #endif
 			{
+				string name = Path.GetFileNameWithoutExtension(args.First());
+				string exportPath = ".\\Ripped\\" + name;
+				PrepareExportDirectory(exportPath);
+
 				AssetCollection collection = new AssetCollection();
 				LoadFiles(collection, args);
 
 				LoadDependencies(collection, args);
 				ValidateCollection(collection);
 
-				string name = Path.GetFileNameWithoutExtension(args.First());
-				string exportPath = ".\\Ripped\\" + name;
-				if (Directory.Exists(exportPath))
-				{
-					Directory.Delete(exportPath, true);
-				}
 				collection.Exporter.Export(exportPath, FetchExportObjects(collection));
 
 				Logger.Instance.Log(LogType.Info, LogCategory.General, "Finished");
@@ -182,6 +184,84 @@ namespace UtinyRipper
 			return false;
 		}
 		
+		private static void PrepareExportDirectory(string path)
+		{
+			string directory = Directory.GetCurrentDirectory();
+			CheckWritePermission(directory);
+
+			if (Directory.Exists(path))
+			{
+				Directory.Delete(path, true);
+			}
+		}
+
+		private static void CheckWritePermission(string path)
+		{
+			WindowsIdentity identity = WindowsIdentity.GetCurrent();
+			bool access = false;
+			try
+			{
+				DirectorySecurity ds = Directory.GetAccessControl(path);
+				AuthorizationRuleCollection rules = ds.GetAccessRules(true, true, typeof(SecurityIdentifier));
+				foreach (FileSystemAccessRule rule in rules)
+				{
+					if (identity.Groups.Contains(rule.IdentityReference))
+					{
+						if ((rule.FileSystemRights & FileSystemRights.WriteAttributes) == FileSystemRights.WriteAttributes)
+						{
+							if (rule.AccessControlType == AccessControlType.Allow)
+							{
+								access = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+			catch (UnauthorizedAccessException)
+			{
+			}
+
+			if(!access)
+			{
+				// is run as administrator?
+				WindowsPrincipal principal = new WindowsPrincipal(identity);
+				if (principal.IsInRole(WindowsBuiltInRole.Administrator))
+				{
+					return;
+				}
+
+				// try run as admin
+				Process proc = new Process();
+				string[] args = Environment.GetCommandLineArgs();
+				proc.StartInfo.FileName = args[0];
+				proc.StartInfo.Arguments = string.Join(" ", args.Skip(1).Select(t => $"\"{t}\""));
+				proc.StartInfo.UseShellExecute = true;
+				proc.StartInfo.Verb = "runas";
+
+				try
+				{
+					proc.Start();
+					Environment.Exit(0);
+				}
+				catch (Win32Exception ex)
+				{
+					//The operation was canceled by the user.
+					const int ERROR_CANCELLED = 1223;
+					if (ex.NativeErrorCode == ERROR_CANCELLED)
+					{
+						Logger.Instance.Log(LogType.Error, LogCategory.General, $"You can't export to folder {path} without Administrator permission");
+						Console.ReadKey();
+					}
+					else
+					{
+						Logger.Instance.Log(LogType.Error, LogCategory.General, $"You have to restart application as Administator in order to export to folder {path}");
+						Console.ReadKey();
+					}
+				}
+			}
+		}
+
 		private static IEnumerable<string> FetchNameVariants(string name)
 		{
 			yield return name;

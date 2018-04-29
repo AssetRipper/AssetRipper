@@ -13,38 +13,38 @@ namespace UtinyRipper.AssetExporters
 	{
 		public override IExportCollection CreateCollection(Object @object)
 		{
-			if(@object.File.IsScene)
+			if (@object is Component comp)
 			{
-				return new SceneExportCollection(this, @object.File.Name, @object.File.FetchAssets().Where(t => !t.ClassID.IsAsset()));
+				@object = comp.GameObject.GetObject(comp.File);
 			}
-			else
+			if (@object.ClassID == ClassIDType.GameObject)
 			{
-				if (@object is Component comp)
-				{
-					@object = comp.GameObject.GetObject(comp.File);
-				}
-				if (@object.ClassID == ClassIDType.GameObject)
-				{
-					GameObject go = (GameObject)@object;
-					@object = go.GetRoot();
-				}
+				GameObject go = (GameObject)@object;
+				@object = go.GetRoot();
+			}
 
-				if (@object.ClassID == ClassIDType.GameObject)
+			if (@object.ClassID == ClassIDType.GameObject)
+			{
+				if (@object.File.IsScene)
+				{
+					return new SceneExportCollection(this, @object.File.Name, @object.File.FetchAssets().Where(t => !t.ClassID.IsAsset()));
+				}
+				else
 				{
 					GameObject go = (GameObject)@object;
 					Prefab prefab = new Prefab(go);
 					IEnumerable<EditorExtension> prefabContent = EnumeratePrefabContent(prefab);
 					return new PrefabExportCollection(this, prefab, prefabContent);
 				}
-				else
+			}
+			else
+			{
+				if (!@object.IsAsset)
 				{
-					if (!@object.IsAsset)
-					{
-						throw new ArgumentException($"Unsupported export object type {@object.ClassID}", nameof(@object));
-					}
-
-					return new AssetExportCollection(this, @object);
+					throw new ArgumentException($"Unsupported export object type {@object.ClassID}", nameof(@object));
 				}
+
+				return new AssetExportCollection(this, @object);
 			}
 		}
 
