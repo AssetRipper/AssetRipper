@@ -5,14 +5,13 @@ namespace UtinyRipper.AssetExporters
 {
 	public class TextureExportCollection : AssetExportCollection
 	{
-		public TextureExportCollection(IAssetExporter assetExporter, Object texture):
-			base(assetExporter, texture)
+		public TextureExportCollection(IAssetExporter assetExporter, Texture2D texture):
+			base(assetExporter, texture, CreateImporter(texture))
 		{
 		}
 		
-		protected override IYAMLExportable CreateImporter(Object asset)
+		protected static IYAMLExportable CreateImporter(Texture2D texture)
 		{
-			Texture2D texture = (Texture2D)asset;
 			if (Config.IsConvertTexturesToPNG)
 			{
 #warning TODO: texture exporter

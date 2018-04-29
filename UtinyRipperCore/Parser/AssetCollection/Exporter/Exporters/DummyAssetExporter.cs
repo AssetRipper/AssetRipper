@@ -9,20 +9,25 @@ namespace UtinyRipper.AssetExporters
 	{
 		public IExportCollection CreateCollection(Object @object)
 		{
-			if(@object is MonoScript monoScript)
+			switch (@object)
 			{
-				return new SkipExportCollection(this, monoScript, monoScript.ClassName);
+				case RenderSettings renderSettings:
+					return new SkipExportCollection(this, renderSettings);
+				case OcclusionCullingSettings cullSettings:
+					return new SkipExportCollection(this, cullSettings);
+				case NavMeshSettings navSettings:
+					return new SkipExportCollection(this, navSettings);
+				case BuildSettings buildSettings:
+					return new SkipExportCollection(this, buildSettings);
+				case MonoScript monoScript:
+					return new SkipExportCollection(this, monoScript, monoScript.ClassName);
+				case AssetBundle bundle:
+					string name = AssetBundle.IsReadAssetBundleName(bundle.File.Version) ? bundle.AssetBundleName : bundle.Name;
+					return new EmptyExportCollection(this, name);
+
+				default:
+					return new SkipExportCollection(this, (NamedObject)@object);
 			}
-			if(@object is BuildSettings buildSettings)
-			{
-				return new SkipExportCollection(this, buildSettings, typeof(BuildSettings).Name);
-			}
-			if(@object is AssetBundle bundle)
-			{
-				string name = AssetBundle.IsReadAssetBundleName(bundle.File.Version) ? bundle.AssetBundleName : bundle.Name;
-				return new EmptyExportCollection(this, name);
-			}
-			return new SkipExportCollection(this, (NamedObject)@object);
 		}
 
 		public bool Export(IAssetsExporter exporter, IExportCollection collection, string dirPath)

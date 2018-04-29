@@ -37,6 +37,8 @@ namespace UtinyRipper.Classes
 					case ClassIDType.TerrainData:
 					case ClassIDType.Sprite:
 					case ClassIDType.AudioMixerGroup:
+					case ClassIDType.SceneAsset:
+					case ClassIDType.LightmapParameters:
 						return classID;
 
 					default:

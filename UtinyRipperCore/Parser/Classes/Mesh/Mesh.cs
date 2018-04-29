@@ -429,13 +429,13 @@ namespace UtinyRipper.Classes
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
 			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_SubMeshes", SubMeshes.ExportYAML(exporter));
+			node.Add("m_SubMeshes", IsReadSubMeshes(exporter.Version) ? SubMeshes.ExportYAML(exporter) : YAMLSequenceNode.Empty);
 			node.Add("m_Shapes", Shapes.ExportYAML(exporter));
-			node.Add("m_BindPose", BindPoses.ExportYAML(exporter));
-#warning ???
+			node.Add("m_BindPose", IsReadBindPoses(exporter.Version) ? BindPoses.ExportYAML(exporter) : YAMLSequenceNode.Empty);
+#warning TODO?
 			node.Add("m_BoneNames", YAMLSequenceNode.Empty);
 			node.Add("m_BoneNameHashes", IsReadBoneNameHashes(exporter.Version) ? BoneNameHashes.ExportYAML(false) : YAMLSequenceNode.Empty);
-#warning ???
+#warning TODO?
 			node.Add("m_RootBoneName", YAMLScalarNode.Empty);
 			node.Add("m_RootBoneNameHash", RootBoneNameHash);
 			node.Add("m_MeshCompression", MeshCompression);

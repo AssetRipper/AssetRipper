@@ -28,6 +28,9 @@ namespace UtinyRipper
 		ParticleRenderer		= 26,
 		Texture					= 27,
 		Texture2D				= 28,
+		/// <summary>
+		/// OcclusionCullingSettings
+		/// </summary>
 		SceneSettings			= 29,
 		GraphicsSettings		= 30,
 		PipelineManager			= 31,
@@ -52,6 +55,9 @@ namespace UtinyRipper
 		PhysicsMaterial2D		= 62,
 		MeshCollider			= 64,
 		BoxCollider				= 65,
+		/// <summary>
+		/// CompositeCollider2D
+		/// </summary>
 		SpriteCollider2D		= 66,
 		EdgeCollider2D			= 68,
 		CapsuleCollider2D		= 70,
@@ -318,7 +324,11 @@ namespace UtinyRipper
 				case ClassIDType.TerrainData:
 				case ClassIDType.Sprite:
 				case ClassIDType.AnimatorOverrideController:
+				case ClassIDType.NavMeshData:
+				case ClassIDType.OcclusionCullingData:
 				case ClassIDType.Prefab:
+				case ClassIDType.SceneAsset:
+				case ClassIDType.LightmapParameters:
 				case ClassIDType.SpriteAtlas:
 					return true;
 					
@@ -328,7 +338,9 @@ namespace UtinyRipper
 				case ClassIDType.Camera:
 				case ClassIDType.MeshRenderer:
 				case ClassIDType.Renderer:
+				case ClassIDType.SceneSettings:
 				case ClassIDType.MeshFilter:
+				case ClassIDType.OcclusionPortal:
 				case ClassIDType.Rigidbody2D:
 				case ClassIDType.Rigidbody:
 				case ClassIDType.CircleCollider2D:
@@ -343,6 +355,7 @@ namespace UtinyRipper
 				case ClassIDType.AudioSource:
 				case ClassIDType.GUILayer:
 				case ClassIDType.Animator:
+				case ClassIDType.RenderSettings:
 				case ClassIDType.Light:
 				case ClassIDType.Animation:
 				case ClassIDType.FlareLayer:
@@ -351,6 +364,9 @@ namespace UtinyRipper
 				case ClassIDType.SkinnedMeshRenderer:
 				case ClassIDType.WheelCollider:
 				case ClassIDType.TerrainCollider:
+				case ClassIDType.LightmapSettings:
+				case ClassIDType.OcclusionArea:
+				case ClassIDType.NavMeshSettings:
 				case ClassIDType.ParticleSystem:
 				case ClassIDType.ParticleSystemRenderer:
 				case ClassIDType.SpriteRenderer:

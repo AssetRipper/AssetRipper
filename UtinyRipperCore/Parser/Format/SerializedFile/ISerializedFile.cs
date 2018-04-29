@@ -40,7 +40,10 @@ namespace UtinyRipper.SerializedFiles
 		string Name { get; }
 		Platform Platform { get; }
 		Version Version { get; }
-		
+		TransferInstructionFlags Flags { get; }
+
+		bool IsScene { get; }
+
 		IAssetCollection Collection { get; }
 		IReadOnlyList<FileIdentifier> Dependencies { get; }
 	}

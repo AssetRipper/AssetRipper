@@ -125,9 +125,9 @@
 		/// </summary>
 		Switch					= 38,
 		PlayerTypeCount,
-
+		
 		/// <summary>
-		/// Engine package
+		/// Editor
 		/// </summary>
 		NoTarget				= 0xFFFFFFFE,
 		AnyPlayer				= 0xFFFFFFFF,

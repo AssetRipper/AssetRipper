@@ -3,6 +3,9 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
+	/// <summary>
+	/// CubemapTexture previously
+	/// </summary>
 	public sealed class Cubemap : Texture2D
 	{
 		public Cubemap(AssetInfo assetInfo):

@@ -11,6 +11,7 @@ namespace UtinyRipper
 		{
 			Version = version;
 			Platform = platform;
+			Flags = platform == Platform.NoTarget ? TransferInstructionFlags.NoTransferInstructionFlags : TransferInstructionFlags.SerializeGameRelease;
 		}
 
 		public AssetStream(EndianStream stream, Version version, Platform platform) :
@@ -18,6 +19,7 @@ namespace UtinyRipper
 		{
 			Version = version;
 			Platform = platform;
+			Flags = platform == Platform.NoTarget ? TransferInstructionFlags.NoTransferInstructionFlags : TransferInstructionFlags.SerializeGameRelease;
 		}
 
 		public new T[] ReadArray<T>()
@@ -74,5 +76,6 @@ namespace UtinyRipper
 
 		public Version Version { get; }
 		public Platform Platform { get; }
+		public TransferInstructionFlags Flags { get; }
 	}
 }

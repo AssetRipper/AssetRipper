@@ -74,6 +74,5 @@ namespace UtinyRipper.Classes.Lights
 		public bool IsBaked { get; private set; }
 
 		public LightmapBakeMode LightmapBakeMode;
-
 	}
 }

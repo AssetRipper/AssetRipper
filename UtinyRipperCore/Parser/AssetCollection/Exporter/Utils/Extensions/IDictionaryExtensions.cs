@@ -18,6 +18,28 @@ namespace UtinyRipper.AssetExporters
 			return node;
 		}
 
+		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<T, int> _this, IAssetsExporter exporter)
+			where T : IYAMLExportable
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			foreach (var kvp in _this)
+			{
+				YAMLMappingNode map = new YAMLMappingNode();
+				YAMLNode key = kvp.Key.ExportYAML(exporter);
+				if (key.NodeType == YAMLNodeType.Scalar)
+				{
+					map.Add(key, kvp.Value);
+				}
+				else
+				{
+					map.Add("first", key);
+					map.Add("second", kvp.Value);
+				}
+				node.Add(map);
+			}
+			return node;
+		}
+
 		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<T, float> _this, IAssetsExporter exporter)
 			where T: IYAMLExportable
 		{

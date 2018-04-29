@@ -10,7 +10,7 @@ namespace UtinyRipper.Classes.Avatars
 		/// </summary>
 		public static bool IsVector3(Version version)
 		{
-			return version.IsGreaterEqual(5, 6, 3);
+			return version.IsGreaterEqual(5, 6, 1);
 		}
 
 		public void Read(AssetStream stream)

@@ -10,19 +10,23 @@ namespace UtinyRipper.AssetExporters
 		public AssetsExporter()
 		{
 			DummyAssetExporter dummyExporter = new DummyAssetExporter();
+			OverrideExporter(ClassIDType.SceneSettings, dummyExporter);
 			OverrideExporter(ClassIDType.AnimatorController, dummyExporter);
+			OverrideExporter(ClassIDType.RenderSettings, dummyExporter);
 			OverrideExporter(ClassIDType.MonoScript, dummyExporter);
 			OverrideExporter(ClassIDType.BuildSettings, dummyExporter);
 			OverrideExporter(ClassIDType.AssetBundle, dummyExporter);
+			OverrideExporter(ClassIDType.NavMeshSettings, dummyExporter);
 			OverrideExporter(ClassIDType.Sprite, dummyExporter);
 			OverrideExporter(ClassIDType.SpriteAtlas, dummyExporter);
 
 			YAMLAssetExporter yamlExporter = new YAMLAssetExporter();
-			OverrideExporter(ClassIDType.Prefab, yamlExporter);
-			OverrideExporter(ClassIDType.Component, yamlExporter);
 			OverrideExporter(ClassIDType.GameObject, yamlExporter);
+			OverrideExporter(ClassIDType.Component, yamlExporter);
+			OverrideExporter(ClassIDType.Transform, yamlExporter);
 			OverrideExporter(ClassIDType.Camera, yamlExporter);
 			OverrideExporter(ClassIDType.Material, yamlExporter);
+			OverrideExporter(ClassIDType.OcclusionPortal, yamlExporter);
 			OverrideExporter(ClassIDType.Mesh, yamlExporter);
 			OverrideExporter(ClassIDType.Rigidbody2D, yamlExporter);
 			OverrideExporter(ClassIDType.Rigidbody, yamlExporter);
@@ -49,6 +53,8 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.WheelCollider, yamlExporter);
 			OverrideExporter(ClassIDType.TerrainCollider, yamlExporter);
 			OverrideExporter(ClassIDType.TerrainData, yamlExporter);
+			OverrideExporter(ClassIDType.OcclusionArea, yamlExporter);
+			OverrideExporter(ClassIDType.LightmapSettings, yamlExporter);
 			OverrideExporter(ClassIDType.ParticleSystem, yamlExporter);
 			OverrideExporter(ClassIDType.ParticleSystemRenderer, yamlExporter);
 			OverrideExporter(ClassIDType.SpriteRenderer, yamlExporter);
@@ -56,7 +62,12 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.AnimatorOverrideController, yamlExporter);
 			OverrideExporter(ClassIDType.CanvasRenderer, yamlExporter);
 			OverrideExporter(ClassIDType.Canvas, yamlExporter);
+			OverrideExporter(ClassIDType.NavMeshData, yamlExporter);
+			OverrideExporter(ClassIDType.OcclusionCullingData, yamlExporter);
+			OverrideExporter(ClassIDType.Prefab, yamlExporter);
 			OverrideExporter(ClassIDType.AvatarMask, yamlExporter);
+			OverrideExporter(ClassIDType.SceneAsset, yamlExporter);
+			OverrideExporter(ClassIDType.LightmapParameters, yamlExporter);
 
 			BinaryAssetExporter binExporter = new BinaryAssetExporter();
 			OverrideExporter(ClassIDType.Texture2D, binExporter);
@@ -96,8 +107,7 @@ namespace UtinyRipper.AssetExporters
 				Object current = depList[i];
 				if (!queued.Contains(current))
 				{
-					ClassIDType exportID = current.IsAsset ? current.ClassID : ClassIDType.Component;
-					IAssetExporter exporter = m_exporters[exportID];
+					IAssetExporter exporter = m_exporters[current.ClassID];
 					IExportCollection collection = exporter.CreateCollection(current);
 
 					foreach (Object element in collection.Objects)

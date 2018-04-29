@@ -31,38 +31,18 @@ namespace UtinyRipper.Classes
 			AssetInfo assetInfo = new AssetInfo(root.File, 0, ClassIDType.Prefab);
 			if(Config.IsGenerateGUIDByContent)
 			{
-				assetInfo.GUID = CalculatePrefabHash(root);
+				assetInfo.GUID = ObjectUtils.CalculateObjectsGUID(FetchObjects(root));
 			}
 			return assetInfo;
 		}
-
-		private static UtinyGUID CalculatePrefabHash(GameObject root)
-		{
-			List<uint> hashList = new List<uint>();
-			foreach (EditorExtension @object in FetchObjects(root))
-			{
-				hashList.Add(@object.GUID.Data0);
-				hashList.Add(@object.GUID.Data1);
-				hashList.Add(@object.GUID.Data2);
-				hashList.Add(@object.GUID.Data3);
-			}
-
-			uint[] hashArray = hashList.ToArray();
-			byte[] buffer = new byte[hashArray.Length * sizeof(uint)];
-			Buffer.BlockCopy(hashArray, 0, buffer, 0, buffer.Length);
-			using (MD5 md5 = MD5.Create())
-			{
-				byte[] hash = md5.ComputeHash(buffer);
-				return new UtinyGUID(hash);
-			}
-		}
-
+		
 		private static IEnumerable<EditorExtension> FetchObjects(GameObject root, bool isLog = false)
 		{
 			List<Object> dependencies = ObjectUtils.CollectDependencies(root, isLog);
 			IEnumerable<Object> deps = dependencies.Where(t => !t.IsAsset);
 #warning dependency on other prefab's component?
 
+#warning: TODO: OrderBy inside exporter
 			IEnumerable<Object> gos = deps.Where(t => t.ClassID == ClassIDType.GameObject);
 			foreach (Object go in gos)
 			{

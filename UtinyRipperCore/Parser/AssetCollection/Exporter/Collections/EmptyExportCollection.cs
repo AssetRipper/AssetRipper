@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
+
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
@@ -22,23 +23,23 @@ namespace UtinyRipper.AssetExporters
 			Name = name;
 		}
 
-		public bool IsContains(UtinyRipper.Classes.Object @object)
+		public bool IsContains(Object @object)
 		{
 			return false;
 		}
 
-		public string GetExportID(UtinyRipper.Classes.Object @object)
+		public string GetExportID(Object @object)
 		{
 			throw new NotSupportedException();
 		}
 
-		public ExportPointer CreateExportPointer(UtinyRipper.Classes.Object @object, bool isLocal)
+		public ExportPointer CreateExportPointer(Object @object, bool isLocal)
 		{
 			throw new NotSupportedException();
 		}
 
 		public IAssetExporter AssetExporter { get; }
-		public IEnumerable<UtinyRipper.Classes.Object> Objects
+		public IEnumerable<Object> Objects
 		{
 			get { yield break; }
 		}

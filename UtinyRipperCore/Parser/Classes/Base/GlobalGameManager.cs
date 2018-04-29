@@ -3,7 +3,7 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes
 {
-	public abstract class GlobalGameManager : Object
+	public abstract class GlobalGameManager : GameManager
 	{
 		protected GlobalGameManager(AssetInfo assetInfo):
 			base(assetInfo)

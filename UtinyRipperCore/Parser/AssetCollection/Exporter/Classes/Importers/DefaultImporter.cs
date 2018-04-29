@@ -4,10 +4,23 @@ namespace UtinyRipper.AssetExporters.Classes
 {
 	public class DefaultImporter: IYAMLExportable
 	{
+		public DefaultImporter():
+			this(true)
+		{
+		}
+
+		public DefaultImporter(bool isExportExternalObjects)
+		{
+			m_isExportExternalObjects = isExportExternalObjects;
+		}
+
 		public YAMLNode ExportYAML(IAssetsExporter exporter)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("externalObjects", YAMLMappingNode.Empty);
+			if(m_isExportExternalObjects)
+			{
+				node.Add("externalObjects", YAMLMappingNode.Empty);
+			}
 			ExportYAMLInner(exporter, node);
 			node.Add("userData", string.Empty);
 			node.Add("assetBundleName", string.Empty);
@@ -18,5 +31,7 @@ namespace UtinyRipper.AssetExporters.Classes
 		protected virtual void ExportYAMLInner(IAssetsExporter exporter, YAMLMappingNode node)
 		{
 		}
+
+		private readonly bool m_isExportExternalObjects;
 	}
 }

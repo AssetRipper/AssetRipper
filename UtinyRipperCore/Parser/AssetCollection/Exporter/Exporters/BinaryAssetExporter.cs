@@ -1,5 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using UtinyRipper.Classes;
 
 using Object = UtinyRipper.Classes.Object;
 
@@ -7,13 +7,13 @@ namespace UtinyRipper.AssetExporters
 {
 	public class BinaryAssetExporter : AssetExporter
 	{
-		public override IExportCollection CreateCollection(UtinyRipper.Classes.Object @object)
+		public override IExportCollection CreateCollection(Object @object)
 		{
 			switch (@object.ClassID)
 			{
 				case ClassIDType.Texture2D:
 				case ClassIDType.Cubemap:
-					return new TextureExportCollection(this, @object);
+					return new TextureExportCollection(this, (Texture2D)@object);
 
 				default:
 					return new AssetExportCollection(this, @object);

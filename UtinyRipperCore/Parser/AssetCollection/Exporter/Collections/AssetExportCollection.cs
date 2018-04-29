@@ -9,7 +9,12 @@ namespace UtinyRipper.AssetExporters
 {
 	public class AssetExportCollection : IExportCollection
 	{
-		public AssetExportCollection(IAssetExporter assetExporter, Object asset)
+		public AssetExportCollection(IAssetExporter assetExporter, Object asset):
+			this(assetExporter, asset, new NativeFormatImporter(asset))
+		{
+		}
+
+		public AssetExportCollection(IAssetExporter assetExporter, Object asset, IYAMLExportable metaImporter)
 		{
 			if (assetExporter == null)
 			{
@@ -19,9 +24,13 @@ namespace UtinyRipper.AssetExporters
 			{
 				throw new ArgumentNullException(nameof(asset));
 			}
+			if (metaImporter == null)
+			{
+				throw new ArgumentNullException(nameof(metaImporter));
+			}
 			AssetExporter = assetExporter;
 			Asset = asset;
-			MetaImporter = CreateImporter(asset);
+			MetaImporter = metaImporter;
 		}
 
 		public static string GetMainExportID(Object @object)
@@ -50,12 +59,7 @@ namespace UtinyRipper.AssetExporters
 				new ExportPointer(exportID) :
 				new ExportPointer(exportID, Asset.GUID, AssetExporter.ToExportType(Asset.ClassID));
 		}
-
-		protected virtual IYAMLExportable CreateImporter(Object asset)
-		{
-			return new NativeFormatImporter(asset);
-		}
-
+		
 		public IAssetExporter AssetExporter { get; }
 		public virtual IEnumerable<Object> Objects
 		{

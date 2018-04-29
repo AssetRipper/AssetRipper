@@ -1,12 +1,13 @@
 ﻿using System;
 using UtinyRipper.Exporter.YAML;
+
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters.Classes
 {
 	public class NativeFormatImporter : DefaultImporter
 	{
-		public NativeFormatImporter(UtinyRipper.Classes.Object mainObject)
+		public NativeFormatImporter(Object mainObject)
 		{
 			if(mainObject == null)
 			{
@@ -20,6 +21,6 @@ namespace UtinyRipper.AssetExporters.Classes
 			node.Add("mainObjectFileID", exporter.GetExportID(m_mainObject));
 		}
 
-		private readonly UtinyRipper.Classes.Object m_mainObject;
+		private readonly Object m_mainObject;
 	}
 }

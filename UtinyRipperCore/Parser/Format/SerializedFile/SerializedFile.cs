@@ -235,14 +235,14 @@ namespace UtinyRipper.SerializedFiles
 					}
 					else
 					{
-						assetInfo = new AssetInfo(this, info.PathID, (ClassIDType)info.ClassID);
+						assetInfo = new AssetInfo(this, info.PathID, info.ClassID);
 					}
 					
 					long pathID = info.PathID;
 					Object asset = ReadAsset(ustream, assetInfo, startPosition + Header.DataOffset + info.DataOffset, info.DataSize);
 					if(asset != null)
 					{
-						m_assets.Add(pathID, asset);
+						AddAsset(pathID, asset);
 					}
 				}
 
@@ -271,7 +271,7 @@ namespace UtinyRipper.SerializedFiles
 
 		private static Object ReadAsset(AssetStream stream, AssetInfo assetInfo, long offset, int size)
 		{
-			Object asset = null;
+			Object asset;
 			switch (assetInfo.ClassID)
 			{
 				case ClassIDType.GameObject:
@@ -298,8 +298,16 @@ namespace UtinyRipper.SerializedFiles
 					asset = new Texture2D(assetInfo);
 					break;
 
+				case ClassIDType.SceneSettings:
+					asset = new OcclusionCullingSettings(assetInfo);
+					break;
+
 				case ClassIDType.MeshFilter:
 					asset = new MeshFilter(assetInfo);
+					break;
+
+				case ClassIDType.OcclusionPortal:
+					asset = new OcclusionPortal(assetInfo);
 					break;
 
 				case ClassIDType.Mesh:
@@ -335,7 +343,7 @@ namespace UtinyRipper.SerializedFiles
 					break;
 
 				case ClassIDType.PhysicsMaterial2D:
-					asset = new PhysicMaterial(assetInfo);
+					asset = new PhysicsMaterial2D(assetInfo);
 					break;
 
 				case ClassIDType.MeshCollider:
@@ -396,6 +404,10 @@ namespace UtinyRipper.SerializedFiles
 
 				case ClassIDType.Animator:
 					asset = new Animator(assetInfo);
+					break;
+
+				case ClassIDType.RenderSettings:
+					asset = new RenderSettings(assetInfo);
 					break;
 
 				case ClassIDType.Light:
@@ -462,6 +474,18 @@ namespace UtinyRipper.SerializedFiles
 					asset = new TerrainData(assetInfo);
 					break;
 
+				case ClassIDType.LightmapSettings:
+					asset = new LightmapSettings(assetInfo);
+					break;
+
+				case ClassIDType.OcclusionArea:
+					asset = new OcclusionArea(assetInfo);
+					break;
+
+				case ClassIDType.NavMeshSettings:
+					asset = new NavMeshSettings(assetInfo);
+					break;
+
 				case ClassIDType.ParticleSystem:
 					asset = new ParticleSystem(assetInfo);
 					break;
@@ -498,6 +522,22 @@ namespace UtinyRipper.SerializedFiles
 					asset = new RectTransform(assetInfo);
 					break;
 
+				case ClassIDType.NavMeshData:
+					asset = new NavMeshData(assetInfo);
+					break;
+
+				case ClassIDType.OcclusionCullingData:
+					asset = new OcclusionCullingData(assetInfo);
+					break;
+
+				case ClassIDType.SceneAsset:
+					asset = new SceneAsset(assetInfo);
+					break;
+
+				case ClassIDType.LightmapParameters:
+					asset = new LightmapParameters(assetInfo);
+					break;
+
 				case ClassIDType.SpriteAtlas:
 					asset = new SpriteAtlas(assetInfo);
 					break;
@@ -531,17 +571,38 @@ namespace UtinyRipper.SerializedFiles
 			return asset;
 		}
 
+		private void AddAsset(long pathID, Object asset)
+		{
+			if(!IsScene)
+			{
+				// save IsScene value for optimization purpose
+				switch (asset.ClassID)
+				{
+					case ClassIDType.SceneSettings:
+					case ClassIDType.RenderSettings:
+					case ClassIDType.LightmapSettings:
+					case ClassIDType.NavMeshSettings:
+						IsScene = true;
+						break;
+				}
+			}
+			m_assets.Add(pathID, asset);
+		}
+
 		public string Name { get; }
 		public string FilePath { get; }
 		public SerializedFileHeader Header { get; }
 		public SerializedFileMetadata Metadata { get; }
 		public Version Version => Metadata.Hierarchy.Version;
 		public Platform Platform => Metadata.Hierarchy.Platform;
+		public TransferInstructionFlags Flags => Metadata.Hierarchy.Platform == Platform.NoTarget ? TransferInstructionFlags.NoTransferInstructionFlags : TransferInstructionFlags.SerializeGameRelease;
+		
+		public bool IsScene { get; private set; }
 
 		public IReadOnlyCollection<Object> Assets => m_assets.Values;
 		public IAssetCollection Collection { get; }
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Dependencies;
-		
+
 		private readonly Dictionary<long, Object> m_assets = new Dictionary<long, Object>();
 	}
 }

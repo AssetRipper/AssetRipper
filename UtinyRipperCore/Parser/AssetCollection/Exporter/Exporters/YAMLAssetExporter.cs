@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UtinyRipper.Classes;
 using UtinyRipper.Exporter.YAML;
 
@@ -12,60 +13,92 @@ namespace UtinyRipper.AssetExporters
 	{
 		public override IExportCollection CreateCollection(Object @object)
 		{
-			if (@object is Component comp)
+			if(@object.File.IsScene)
 			{
-				@object = comp.GameObject.GetObject(comp.File);
-			}
-			if (@object.ClassID == ClassIDType.GameObject)
-			{
-				GameObject go = (GameObject)@object;
-				@object = go.GetRoot();
-			}
-
-			if (@object.ClassID == ClassIDType.GameObject)
-			{
-				GameObject go = (GameObject)@object;
-				Prefab prefab = new Prefab(go);
-				IEnumerable<EditorExtension> prefabContent = EnumeratePrefabContent(prefab);
-				PrefabExportCollection collection = new PrefabExportCollection(this, prefab, prefabContent);
-				return collection;
+				return new SceneExportCollection(this, @object.File.Name, @object.File.FetchAssets().Where(t => !t.ClassID.IsAsset()));
 			}
 			else
 			{
-				if (!@object.IsAsset)
+				if (@object is Component comp)
 				{
-					throw new ArgumentException($"Unsupported export object type {@object.ClassID}", nameof(@object));
+					@object = comp.GameObject.GetObject(comp.File);
 				}
-				
-				AssetExportCollection collection = new AssetExportCollection(this, @object);
-				return collection;
+				if (@object.ClassID == ClassIDType.GameObject)
+				{
+					GameObject go = (GameObject)@object;
+					@object = go.GetRoot();
+				}
+
+				if (@object.ClassID == ClassIDType.GameObject)
+				{
+					GameObject go = (GameObject)@object;
+					Prefab prefab = new Prefab(go);
+					IEnumerable<EditorExtension> prefabContent = EnumeratePrefabContent(prefab);
+					return new PrefabExportCollection(this, prefab, prefabContent);
+				}
+				else
+				{
+					if (!@object.IsAsset)
+					{
+						throw new ArgumentException($"Unsupported export object type {@object.ClassID}", nameof(@object));
+					}
+
+					return new AssetExportCollection(this, @object);
+				}
 			}
 		}
 
 		public override bool Export(IAssetsExporter exporter, IExportCollection collection, string dirPath)
 		{
-			AssetExportCollection asset = (AssetExportCollection)collection;
-			string subFolder = asset.Asset.ClassID.ToString();
-			string subPath = Path.Combine(dirPath, subFolder);
-			string fileName = GetUniqueFileName(asset.Asset, subPath);
-			string filePath = Path.Combine(subPath, fileName);
-
-			if (!Directory.Exists(subPath))
+			switch(collection)
 			{
-				Directory.CreateDirectory(subPath);
-			}
+#warning TODO: make universal!
+				case SceneExportCollection scene:
+					{
+						string subFolder = "Scenes";
+						string subPath = Path.Combine(dirPath, subFolder);
+						string fileName = $"{scene.Name}.unity";
+						string filePath = Path.Combine(subPath, fileName);
 
-			if(asset is PrefabExportCollection prefab)
-			{
-				ExportYAML(exporter, prefab.Objects, filePath);
-			}
-			else
-			{
-				ExportYAML(exporter, asset.Asset, filePath);
-			}
+						if (!Directory.Exists(subPath))
+						{
+							Directory.CreateDirectory(subPath);
+						}
 
-			exporter.File = asset.Asset.File;
-			ExportMeta(exporter, asset, filePath);
+						ExportYAML(exporter, scene.Objects, filePath);
+						ExportMeta(exporter, scene, filePath);
+					}
+					break;
+
+				case AssetExportCollection asset:
+					{
+						string subFolder = asset.Asset.ClassID.ToString();
+						string subPath = Path.Combine(dirPath, subFolder);
+						string fileName = GetUniqueFileName(asset.Asset, subPath);
+						string filePath = Path.Combine(subPath, fileName);
+
+						if (!Directory.Exists(subPath))
+						{
+							Directory.CreateDirectory(subPath);
+						}
+
+						if (asset is PrefabExportCollection prefab)
+						{
+							ExportYAML(exporter, prefab.Objects, filePath);
+						}
+						else
+						{
+							ExportYAML(exporter, asset.Asset, filePath);
+						}
+
+						exporter.File = asset.Asset.File;
+						ExportMeta(exporter, asset, filePath);
+					}
+					break;
+
+				default:
+					throw new NotSupportedException(collection.GetType().Name);
+			}
 
 			return true;
 		}
@@ -94,7 +127,7 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
-		private void ExportYAML(IAssetsExporter exporter, UtinyRipper.Classes.Object asset, string path)
+		private void ExportYAML(IAssetsExporter exporter, Object asset, string path)
 		{
 			using (FileStream fileStream = File.Open(path, FileMode.Create, FileAccess.Write))
 			{
@@ -109,7 +142,7 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
-		private void ExportYAML(IAssetsExporter exporter, IEnumerable<UtinyRipper.Classes.Object> objects, string path)
+		private void ExportYAML(IAssetsExporter exporter, IEnumerable<Object> objects, string path)
 		{
 			using (FileStream fileStream = File.Open(path, FileMode.Create, FileAccess.Write))
 			{

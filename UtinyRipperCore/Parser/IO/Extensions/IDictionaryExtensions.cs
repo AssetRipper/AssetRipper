@@ -222,6 +222,19 @@ namespace UtinyRipper
 			}
 		}
 
+		public static void Read<T>(this IDictionary<T, int> _this, AssetStream stream)
+			where T : IAssetReadable, new()
+		{
+			int count = stream.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				T key = new T();
+				key.Read(stream);
+				int value = stream.ReadInt32();
+				_this.Add(key, value);
+			}
+		}
+
 		public static void Read<T>(this IDictionary<T, float> _this, AssetStream stream)
 			where T : IAssetReadable, new()
 		{

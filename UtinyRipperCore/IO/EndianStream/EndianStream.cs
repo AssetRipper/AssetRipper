@@ -167,12 +167,8 @@ namespace UtinyRipper
 
 		public string ReadString(int length)
 		{
-			int read = Read(m_bufferString, 0, length);
-			if (read < length)
-			{
-				throw new Exception($"Read {read} bytes intead of {length}");
-			}
-			return Encoding.UTF8.GetString(m_bufferString, 0, length);
+			byte[] buffer = ReadStringBuffer(length);
+			return Encoding.UTF8.GetString(buffer, 0, length);
 		}
 
 		public string ReadStringAligned()
@@ -188,13 +184,7 @@ namespace UtinyRipper
 			AlignStream(AlignType.Align4);
 			return result;
 		}
-
-		public string ReadStringASCII(int length)
-		{
-			byte[] buffer = ReadStringBuffer(length);
-			return Encoding.UTF8.GetString(buffer, 0, length);
-		}
-
+		
 		/// <summary>
 		/// Read C like UTF8 format zero terminated string
 		/// </summary>

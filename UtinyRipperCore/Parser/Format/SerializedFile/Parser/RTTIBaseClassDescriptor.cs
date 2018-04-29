@@ -70,6 +70,11 @@ namespace UtinyRipper.SerializedFiles
 			}
 		}
 
+		public override string ToString()
+		{
+			return ClassID.ToString();
+		}
+
 		/// <summary>
 		/// The ID of the class. Only one type tree per class ID is allowed. Can be used as a key for a map.
 		/// </summary>

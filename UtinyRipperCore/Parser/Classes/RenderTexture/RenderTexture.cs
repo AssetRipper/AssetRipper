@@ -173,6 +173,8 @@ namespace UtinyRipper.Classes
 			return node;
 		}
 
+		public override string ExportExtension => "renderTexture";
+
 		public bool IsPowerOfTwo { get; private set; }
 		public int Width { get; private set; }
 		public int Height { get; private set; }

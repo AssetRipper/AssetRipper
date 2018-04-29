@@ -2,18 +2,24 @@
 using System.Collections.Generic;
 using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
+
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
 {
 	internal class SkipExportCollection : IExportCollection
 	{
+		public SkipExportCollection(DummyAssetExporter assetExporter, Object asset):
+			this(assetExporter, asset, asset.GetType().Name)
+		{
+		}
+
 		public SkipExportCollection(DummyAssetExporter assetExporter, NamedObject asset):
 			this(assetExporter, asset, asset.Name)
 		{
 		}
 
-		public SkipExportCollection(DummyAssetExporter assetExporter, UtinyRipper.Classes.Object asset, string name)
+		public SkipExportCollection(DummyAssetExporter assetExporter, Object asset, string name)
 		{
 			if (assetExporter == null)
 			{
@@ -33,12 +39,12 @@ namespace UtinyRipper.AssetExporters
 			m_asset = asset;
 		}
 
-		public bool IsContains(UtinyRipper.Classes.Object @object)
+		public bool IsContains(Object @object)
 		{
 			return @object == m_asset;
 		}
 
-		public string GetExportID(UtinyRipper.Classes.Object @object)
+		public string GetExportID(Object @object)
 		{
 			if (@object == m_asset)
 			{
@@ -47,7 +53,7 @@ namespace UtinyRipper.AssetExporters
 			throw new ArgumentException(nameof(@object));
 		}
 
-		public ExportPointer CreateExportPointer(UtinyRipper.Classes.Object @object, bool isLocal)
+		public ExportPointer CreateExportPointer(Object @object, bool isLocal)
 		{
 			if (isLocal)
 			{
@@ -60,7 +66,7 @@ namespace UtinyRipper.AssetExporters
 		}
 
 		public IAssetExporter AssetExporter { get; }
-		public IEnumerable<UtinyRipper.Classes.Object> Objects
+		public IEnumerable<Object> Objects
 		{
 			get { yield return m_asset; }
 		}
@@ -68,6 +74,6 @@ namespace UtinyRipper.AssetExporters
 		public UtinyGUID GUID => throw new NotSupportedException();
 		public IYAMLExportable MetaImporter => throw new NotSupportedException();
 
-		private readonly UtinyRipper.Classes.Object m_asset;
+		private readonly Object m_asset;
 	}
 }

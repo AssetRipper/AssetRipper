@@ -7,7 +7,9 @@ namespace UtinyRipper.Classes.Meshes
 		public void Read(AssetStream stream)
 		{
 			m_bakedConvexCollisionMesh = stream.ReadByteArray();
+			stream.AlignStream(AlignType.Align4);
 			m_bakedTriangleCollisionMesh = stream.ReadByteArray();
+			stream.AlignStream(AlignType.Align4);
 		}
 
 		public IReadOnlyList<byte> BakedConvexCollisionMesh => m_bakedConvexCollisionMesh;

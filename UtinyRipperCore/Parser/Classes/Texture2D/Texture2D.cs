@@ -11,6 +11,9 @@ using UtinyRipper.Exporter.YAML;
 namespace UtinyRipper.Classes
 {
 #warning TODO: exclusive exporter (for meta)
+	/// <summary>
+	/// FileTexture previously
+	/// </summary>
 	public class Texture2D : Texture
 	{
 		public Texture2D(AssetInfo assetInfo) :

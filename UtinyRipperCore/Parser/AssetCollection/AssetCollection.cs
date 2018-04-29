@@ -7,6 +7,7 @@ using UtinyRipper.BundleFiles;
 using UtinyRipper.Classes;
 using UtinyRipper.SerializedFiles;
 using UtinyRipper.WebFiles;
+
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper
@@ -174,11 +175,11 @@ namespace UtinyRipper
 			return null;
 		}
 		
-		public IEnumerable<Classes.Object> FetchAssets()
+		public IEnumerable<Object> FetchAssets()
 		{
 			foreach(SerializedFile file in m_files)
 			{
-				foreach(Classes.Object asset in file.FetchAssets())
+				foreach(Object asset in file.FetchAssets())
 				{
 					yield return asset;
 				}
