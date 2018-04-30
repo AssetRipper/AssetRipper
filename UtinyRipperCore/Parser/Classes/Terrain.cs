@@ -20,16 +20,32 @@ namespace UtinyRipper.Classes
 #warning unknown bottom version
 			return version.IsGreater(5, 0, 0, VersionType.Beta, 1) && version.IsLess(5, 0, 1);
 		}
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
 		public static bool IsReadDrawHeightmap(Version version)
 		{
 #warning unknown
 			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
 		}
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
 		public static bool IsReadReflectionProbeUsage(Version version)
 		{
 #warning unknown
 			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
 		}
+		/// <summary>
+		/// 2017.2 and greater
+		/// </summary>
+		public static bool IsReadExplicitProbeSetHash(Version version)
+		{
+			return version.IsGreaterEqual(2017, 2);
+		}
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
 		public static bool IsReadBakeLightProbesForTrees(Version version)
 		{
 #warning unknown
@@ -95,7 +111,10 @@ namespace UtinyRipper.Classes
 			LightmapIndexDynamic = stream.ReadUInt16();
 			LightmapTilingOffset.Read(stream);
 			LightmapTilingOffsetDynamic.Read(stream);
-			ExplicitProbeSetHash.Read(stream);
+			if(IsReadExplicitProbeSetHash(stream.Version))
+			{
+				ExplicitProbeSetHash.Read(stream);
+			}
 
 			if (IsReadBakeLightProbesForTrees(stream.Version))
 			{

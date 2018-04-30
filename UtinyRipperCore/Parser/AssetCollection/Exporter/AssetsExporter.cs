@@ -26,6 +26,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.Transform, yamlExporter);
 			OverrideExporter(ClassIDType.Camera, yamlExporter);
 			OverrideExporter(ClassIDType.Material, yamlExporter);
+			OverrideExporter(ClassIDType.MeshRenderer, yamlExporter);
 			OverrideExporter(ClassIDType.OcclusionPortal, yamlExporter);
 			OverrideExporter(ClassIDType.Mesh, yamlExporter);
 			OverrideExporter(ClassIDType.Rigidbody2D, yamlExporter);
@@ -50,6 +51,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.PhysicMaterial, yamlExporter);
 			OverrideExporter(ClassIDType.SphereCollider, yamlExporter);
 			OverrideExporter(ClassIDType.CapsuleCollider, yamlExporter);
+			OverrideExporter(ClassIDType.SkinnedMeshRenderer, yamlExporter);
 			OverrideExporter(ClassIDType.WheelCollider, yamlExporter);
 			OverrideExporter(ClassIDType.TerrainCollider, yamlExporter);
 			OverrideExporter(ClassIDType.TerrainData, yamlExporter);

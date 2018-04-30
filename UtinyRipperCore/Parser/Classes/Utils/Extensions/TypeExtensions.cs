@@ -16,6 +16,7 @@ namespace UtinyRipper.Classes
 					case ClassIDType.Transform:
 					case ClassIDType.Camera:
 					case ClassIDType.Texture:
+					case ClassIDType.Texture2D:
 					case ClassIDType.Material:
 					case ClassIDType.Mesh:
 					case ClassIDType.Shader:
@@ -26,6 +27,7 @@ namespace UtinyRipper.Classes
 					case ClassIDType.AnimationClip:
 					case ClassIDType.AudioClip:
 					case ClassIDType.RenderTexture:
+					case ClassIDType.Cubemap:
 					case ClassIDType.Avatar:
 					case ClassIDType.RuntimeAnimatorController:
 					case ClassIDType.BaseAnimationTrack:
@@ -37,6 +39,7 @@ namespace UtinyRipper.Classes
 					case ClassIDType.TerrainData:
 					case ClassIDType.Sprite:
 					case ClassIDType.AudioMixerGroup:
+					case ClassIDType.OcclusionCullingData:
 					case ClassIDType.SceneAsset:
 					case ClassIDType.LightmapParameters:
 						return classID;

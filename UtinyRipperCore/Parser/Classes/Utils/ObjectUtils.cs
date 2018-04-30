@@ -35,6 +35,11 @@ namespace UtinyRipper.Classes
 
 		public static string GenerateExportID(Object @object, IEnumerable<string> exportIDs)
 		{
+			return GenerateExportID(@object, (id) => exportIDs.Any(t => t == id));
+		}
+
+		public static string GenerateExportID(Object @object, Func<string, bool> uniqueChecker)
+		{
 			if (@object == null)
 			{
 				throw new ArgumentNullException(nameof(@object));
@@ -53,7 +58,7 @@ namespace UtinyRipper.Classes
 				exportID = s_builder.ToString();
 				s_builder.Length = 0;
 			}
-			while (exportIDs.Any(t => t == exportID));
+			while (uniqueChecker(exportID));
 			return exportID;
 		}
 

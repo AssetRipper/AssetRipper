@@ -24,9 +24,10 @@ namespace UtinyRipper.AssetExporters
 			AssetExporter = assetExporter;
 			Name = name;
 
+			HashSet<string> exportIDs = new HashSet<string>();
 			foreach (Object @object in objects.OrderBy(t => t, this))
 			{
-				AddObject(@object);
+				AddObject(@object, exportIDs);
 			}
 
 			if (Config.IsGenerateGUIDByContent)
@@ -81,7 +82,7 @@ namespace UtinyRipper.AssetExporters
 			return 0;
 		}
 
-		private void AddObject(Object @object)
+		private void AddObject(Object @object, HashSet<string> exportIDs)
 		{
 			string exportID;
 			switch(@object.ClassID)
@@ -103,11 +104,12 @@ namespace UtinyRipper.AssetExporters
 					break;
 
 				default:
-					exportID = ObjectUtils.GenerateExportID(@object, m_exportIDs.Values);
+					exportID = ObjectUtils.GenerateExportID(@object, (t) => exportIDs.Contains(t));
 					break;
 			}
 
 			m_exportIDs.Add(@object, exportID);
+			exportIDs.Add(exportID);
 		}
 
 		private static bool IsSceneObject(Object obj1)

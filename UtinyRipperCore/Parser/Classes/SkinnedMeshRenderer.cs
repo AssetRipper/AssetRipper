@@ -125,6 +125,13 @@ namespace UtinyRipper.Classes
 		{
 			return version.IsGreaterEqual(4, 3);
 		}
+		/// <summary>
+		/// 4.1.0 and greater
+		/// </summary>
+		private static bool IsAlignDirty(Version version)
+		{
+			return version.IsGreaterEqual(4, 1);
+		}
 
 		private static int GetSerializedVersion(Version version)
 		{
@@ -230,7 +237,10 @@ namespace UtinyRipper.Classes
 			{
 				AABB.Read(stream);
 				DirtyAABB = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				if(IsAlignDirty(stream.Version))
+				{
+					stream.AlignStream(AlignType.Align4);
+				}
 			}
 		}
 
