@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 
@@ -9,6 +9,94 @@ namespace UtinyRipper.Classes.Meshes
 {
 	public struct VertexData : IAssetReadable, IYAMLExportable
 	{
+		public VertexData(Version version, IReadOnlyList<Vector3f> vertices, IReadOnlyList<Vector3f> normals, IReadOnlyList<ColorRGBA32> colors,
+			IReadOnlyList<Vector2f> uv0, IReadOnlyList<Vector2f> uv1, IReadOnlyList<Vector4f> tangents)
+		{
+			BitArray curChannels = new BitArray(8);
+			byte stride = 0;
+
+			bool isWriteVertices = vertices.Count > 0;
+			bool isWriteNormals = normals != null && normals.Count > 0;
+			bool isWriteColors = colors.Count > 0;
+			bool isWriteUV0 = uv0.Count > 0;
+			bool isWriteUV1 = uv1 != null && uv1.Count > 0;
+			bool isWriteTangents = tangents != null && tangents.Count > 0;
+
+			if (isWriteVertices)
+			{
+				curChannels.Set((int)ChannelType.Vertex, true);
+				stride += ChannelType.Vertex.GetStride(version);
+			}
+			if (isWriteNormals)
+			{
+				curChannels.Set((int)ChannelType.Normal, true);
+				stride += ChannelType.Normal.GetStride(version);
+			}
+			if(isWriteColors)
+			{
+				curChannels.Set((int)ChannelType.Color, true);
+				stride += ChannelType.Color.GetStride(version);
+			}
+			if (isWriteUV0)
+			{
+				curChannels.Set((int)ChannelType.UV0, true);
+				stride += ChannelType.UV0.GetStride(version);
+			}
+			if (isWriteUV1)
+			{
+				curChannels.Set((int)ChannelType.UV1, true);
+				stride += ChannelType.UV1.GetStride(version);
+			}
+			if (isWriteTangents)
+			{
+				curChannels.Set((int)ChannelType.TangentsOld, true);
+				stride += ChannelType.TangentsOld.GetStride(version);
+			}
+
+			CurrentChannels = curChannels.ToUInt32();
+			VertexCount = unchecked((uint)vertices.Count);
+			m_channels = null;
+
+			StreamInfo info = new StreamInfo(CurrentChannels, 0, stride);
+			m_streams = new StreamInfo[] { info, default, default, default, };
+
+			using (MemoryStream stream = new MemoryStream())
+			{
+				using (BinaryWriter writer = new BinaryWriter(stream))
+				{
+					for (int i = 0; i < VertexCount; i++)
+					{
+						vertices[i].Write(writer);
+						if (isWriteNormals)
+						{
+							normals[i].Write(writer);
+						}
+						if(isWriteColors)
+						{
+							colors[i].Write(writer);
+						}
+						if (isWriteColors)
+						{
+							colors[i].Write(writer);
+						}
+						if (isWriteUV0)
+						{
+							uv0[i].Write(writer);
+						}
+						if (isWriteUV1)
+						{
+							uv1[i].Write(writer);
+						}
+						if (isWriteTangents)
+						{
+							tangents[i].Write(writer);
+						}
+					}
+				}
+				m_data = stream.ToArray();
+			}
+		}
+
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
@@ -73,8 +161,6 @@ namespace UtinyRipper.Classes.Meshes
 				byte offset = 0;
 				for (int j = 0; j < 6; j++)
 				{
-					byte format = 0;
-					byte dimention = 0;
 					ChannelInfo channel;
 
 					if ((ChannelType)j == ChannelType.TangentsOld)
@@ -87,34 +173,9 @@ namespace UtinyRipper.Classes.Meshes
 
 					if (streamChannels.Get(j))
 					{
-						switch ((ChannelType)j)
-						{
-							case ChannelType.Vertex:
-							case ChannelType.Normal:
-								format = 0;
-								dimention = 3;
-								break;
-
-							case ChannelType.Color:
-								format = 2;
-								dimention = 4;
-								break;
-
-							case ChannelType.UV1:
-							case ChannelType.UV2:
-								format = 0;
-								dimention = 2;
-								break;
-
-							case ChannelType.TangentsOld:
-								format = 0;
-								dimention = 4;
-								break;
-
-							default:
-								throw new Exception($"Unsupported channel type {j}");
-						}
-						channel = new ChannelInfo(i, offset, format, dimention);
+						ChannelType channelType = (ChannelType)j;
+						channel = new ChannelInfo(i, offset, channelType.GetFormat(version), channelType.GetDimention(version));
+						offset += channelType.GetStride(version);
 					}
 					else
 					{
@@ -122,10 +183,6 @@ namespace UtinyRipper.Classes.Meshes
 					}
 
 					channels.Add(channel);
-
-					int elementSize = (4 / (int)Math.Pow(2, format));
-					int stride = elementSize * dimention;
-					offset += (byte)stride;
 				}
 			}
 			return channels;

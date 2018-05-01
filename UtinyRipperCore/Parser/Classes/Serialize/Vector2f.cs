@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 
@@ -16,6 +17,12 @@ namespace UtinyRipper.Classes
 		{
 			X = stream.ReadSingle();
 			Y = stream.ReadSingle();
+		}
+
+		public void Write(BinaryWriter stream)
+		{
+			stream.Write(X);
+			stream.Write(Y);
 		}
 		
 		public float GetMember(int index)

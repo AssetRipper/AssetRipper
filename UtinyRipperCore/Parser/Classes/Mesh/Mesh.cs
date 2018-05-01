@@ -202,7 +202,7 @@ namespace UtinyRipper.Classes
 		/// <summary>
 		/// 3.5.1 and greater
 		/// </summary>
-		private static bool IsReadBothVertexData(Version version)
+		private static bool IsReadOnlyVertexData(Version version)
 		{
 			return version.IsGreaterEqual(3, 5, 1);
 		}
@@ -252,6 +252,32 @@ namespace UtinyRipper.Classes
 				return 2;
 			}
 			return 1;
+		}
+
+		private VertexData GetExportVertexData(Version version)
+		{
+			if(IsReadVertexData(version))
+			{
+				if(IsReadOnlyVertexData(version))
+				{
+					return VertexData;
+				}
+				else
+				{
+					if(MeshCompression == 0)
+					{
+						return VertexData;
+					}
+					else
+					{
+						return new VertexData(version, Vertices, Normals, Colors, UV, UV1, Tangents);
+					}
+				}
+			}
+			else
+			{
+				return new VertexData(version, Vertices, Normals, Colors, UV, UV1, Tangents);
+			}
 		}
 
 		public override void Read(AssetStream stream)
@@ -338,7 +364,17 @@ namespace UtinyRipper.Classes
 			
 			if (IsReadVertices(stream.Version))
 			{
-				m_vertices = stream.ReadArray<Vector3f>();
+				if (IsReadVertexData(stream.Version))
+				{
+					if(MeshCompression != 0)
+					{
+						m_vertices = stream.ReadArray<Vector3f>();
+					}
+				}
+				else
+				{
+					m_vertices = stream.ReadArray<Vector3f>();
+				}
 			}
 
 			m_skin = stream.ReadArray<BoneWeights4>();
@@ -352,7 +388,7 @@ namespace UtinyRipper.Classes
 			
 			if (IsReadVertexData(stream.Version))
 			{
-				if (IsReadBothVertexData(stream.Version))
+				if (IsReadOnlyVertexData(stream.Version))
 				{
 					VertexData.Read(stream);
 				}
@@ -364,10 +400,8 @@ namespace UtinyRipper.Classes
 					}
 					else
 					{
-#warning TODO: check is valid
 						m_UV = stream.ReadArray<Vector2f>();
 						m_UV1 = stream.ReadArray<Vector2f>();
-						m_tangentSpace = stream.ReadArray<Tangent>();
 						m_tangents = stream.ReadArray<Vector4f>();
 						m_normals = stream.ReadArray<Vector3f>();
 						m_colors = stream.ReadArray<ColorRGBA32>();
@@ -385,7 +419,7 @@ namespace UtinyRipper.Classes
 				{
 					m_tangentSpace = stream.ReadArray<Tangent>();
 				}
-				else if(IsReadTangents(stream.Version))
+				else
 				{
 					m_tangents = stream.ReadArray<Vector4f>();
 					m_normals = stream.ReadArray<Vector3f>();
@@ -445,7 +479,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_KeepIndices", KeepIndices);
 			node.Add("m_IndexBuffer", IsReadIndexBuffer(exporter.Version) ? IndexBuffer.ExportYAML() : YAMLSequenceNode.Empty);
 			node.Add("m_Skin", Skin.ExportYAML(exporter));
-			node.Add("m_VertexData", VertexData.ExportYAML(exporter));
+			node.Add("m_VertexData", GetExportVertexData(exporter.Version).ExportYAML(exporter));
 			node.Add("m_CompressedMesh", CompressedMesh.ExportYAML(exporter));
 			node.Add("m_LocalAABB", LocalAABB.ExportYAML(exporter));
 			node.Add("m_MeshUsageFlags", MeshUsageFlags);

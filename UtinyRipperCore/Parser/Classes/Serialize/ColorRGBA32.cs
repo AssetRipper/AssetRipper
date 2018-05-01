@@ -1,4 +1,5 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.IO;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes
@@ -19,6 +20,11 @@ namespace UtinyRipper.Classes
 		public void Read(AssetStream stream)
 		{
 			RGBA = stream.ReadUInt32();
+		}
+
+		public void Write(BinaryWriter stream)
+		{
+			stream.Write(RGBA);
 		}
 
 		public YAMLNode ExportYAML(IAssetsExporter exporter)

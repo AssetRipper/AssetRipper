@@ -1,4 +1,5 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.IO;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes
@@ -27,7 +28,15 @@ namespace UtinyRipper.Classes
 			Y = stream.ReadSingle();
 			Z = stream.ReadSingle();
 		}
-		
+
+		public void Write(BinaryWriter stream)
+		{
+			stream.Write(X);
+			stream.Write(Y);
+			stream.Write(Z);
+			stream.Write(W);
+		}
+
 		public YAMLNode ExportYAML(IAssetsExporter exporter)
 		{
 			YAMLMappingNode node = new YAMLMappingNode(MappingStyle.Flow);

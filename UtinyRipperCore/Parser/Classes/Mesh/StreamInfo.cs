@@ -5,6 +5,16 @@ namespace UtinyRipper.Classes.Meshes
 {
 	public struct StreamInfo : IAssetReadable
 	{
+		public StreamInfo(uint mask, uint offset, uint stride)
+		{
+			ChannelMask = mask;
+			Offset = offset;
+			Stride = stride;
+			Align = 0;
+			DividerOp = 0;
+			Frequency = 0;
+		}
+
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
