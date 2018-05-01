@@ -14,6 +14,17 @@ namespace UtinyRipper.Classes
 		{
 		}
 
+		/// <summary>
+		/// Less than 4.0.0
+		/// In earlier versions GameObjects always has IsActive as false.
+		/// Don't known why, so just export as true
+		/// </summary>
+		private static bool IsExportAlwaysActive(Version version)
+		{
+#warning unknown
+			return version.IsLess(4);
+		}
+
 		private static int GetSerializedVersion(Version version)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
@@ -96,7 +107,8 @@ namespace UtinyRipper.Classes
 			node.Add("m_Icon", default(PPtr<Object>).ExportYAML(exporter));
 			node.Add("m_NavMeshLayer", 0);
 			node.Add("m_StaticEditorFlags", 0);
-			node.Add("m_IsActive", IsActive);
+#warning TODO: fix
+			node.Add("m_IsActive", IsExportAlwaysActive(exporter.Version) ? true : IsActive);
 			return node;
 		}
 

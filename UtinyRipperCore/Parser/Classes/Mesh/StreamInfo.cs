@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace UtinyRipper.Classes.Meshes
 {
@@ -29,6 +30,8 @@ namespace UtinyRipper.Classes.Meshes
 				Frequency = stream.ReadUInt16();
 			}
 		}
+
+		public BitArray ChannelMaskBits => new BitArray(BitConverter.GetBytes(ChannelMask));
 
 		public uint ChannelMask { get; private set; }
 		public uint Offset { get; private set; }

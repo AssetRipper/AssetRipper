@@ -5,6 +5,14 @@ namespace UtinyRipper.Classes.Meshes
 {
 	public struct ChannelInfo : IAssetReadable, IYAMLExportable
 	{
+		public ChannelInfo(byte stream, byte offset, byte format, byte dimention)
+		{
+			Stream = stream;
+			Offset = offset;
+			Format = format;
+			Dimension = dimention;
+		}
+
 		public void Read(AssetStream stream)
 		{
 			Stream = stream.ReadByte();

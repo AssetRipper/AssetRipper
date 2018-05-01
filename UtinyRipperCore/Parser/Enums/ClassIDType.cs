@@ -322,6 +322,7 @@ namespace UtinyRipper
 				case ClassIDType.AssetBundle:
 				case ClassIDType.MovieTexture:
 				case ClassIDType.TerrainData:
+				case ClassIDType.LightmapSettings:
 				case ClassIDType.Sprite:
 				case ClassIDType.AnimatorOverrideController:
 				case ClassIDType.NavMeshData:
@@ -364,7 +365,6 @@ namespace UtinyRipper
 				case ClassIDType.SkinnedMeshRenderer:
 				case ClassIDType.WheelCollider:
 				case ClassIDType.TerrainCollider:
-				case ClassIDType.LightmapSettings:
 				case ClassIDType.OcclusionArea:
 				case ClassIDType.NavMeshSettings:
 				case ClassIDType.ParticleSystem:

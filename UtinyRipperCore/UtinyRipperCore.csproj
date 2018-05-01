@@ -183,6 +183,8 @@
     <Compile Include="Parser\Classes\LightProbes\LightProbeData.cs" />
     <Compile Include="Parser\Classes\LightProbes\LightProbeOcclusion.cs" />
     <Compile Include="Parser\Classes\LightProbes\LightProbes.cs" />
+    <Compile Include="Parser\Classes\Mesh\ChannelType.cs" />
+    <Compile Include="Parser\Classes\Mesh\MeshTopology.cs" />
     <Compile Include="Parser\Classes\RenderSettings\SHCoefficientsBaked.cs" />
     <Compile Include="Parser\Classes\SceneAsset.cs" />
     <Compile Include="Parser\Classes\Serialize\Matrix3x4f.cs" />
@@ -649,6 +651,7 @@
     <Compile Include="ThirdParty\System.Half\Half.cs" />
     <Compile Include="ThirdParty\System.Half\HalfHelper.cs" />
     <Compile Include="Utils\DirectoryUtils.cs" />
+    <Compile Include="Utils\Extensions\BitArrayExtensions.cs" />
     <Compile Include="Utils\Extensions\BitConverterExtensions.cs" />
     <Compile Include="Utils\Extensions\IReadOnlyListExtensions.cs" />
     <Compile Include="Utils\Extensions\StreamExtensions.cs" />

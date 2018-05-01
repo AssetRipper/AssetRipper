@@ -198,22 +198,38 @@ namespace UtinyRipper
 		private static void CheckWritePermission(string path)
 		{
 			WindowsIdentity identity = WindowsIdentity.GetCurrent();
-			bool access = false;
+			WindowsPrincipal principal = new WindowsPrincipal(identity);
+			bool isInRoleWithAccess = false;
 			try
 			{
-				DirectorySecurity ds = Directory.GetAccessControl(path);
-				AuthorizationRuleCollection rules = ds.GetAccessRules(true, true, typeof(SecurityIdentifier));
-				foreach (FileSystemAccessRule rule in rules)
+				DirectoryInfo di = new DirectoryInfo(path);
+				DirectorySecurity ds = di.GetAccessControl();
+				AuthorizationRuleCollection rules = ds.GetAccessRules(true, true, typeof(NTAccount));
+				
+				foreach (AuthorizationRule rule in rules)
 				{
-					if (identity.Groups.Contains(rule.IdentityReference))
+					FileSystemAccessRule fsAccessRule = rule as FileSystemAccessRule;
+					if (fsAccessRule == null)
 					{
-						if ((rule.FileSystemRights & FileSystemRights.WriteAttributes) == FileSystemRights.WriteAttributes)
+						continue;
+					}
+
+					if ((fsAccessRule.FileSystemRights & FileSystemRights.Write) != 0)
+					{
+						NTAccount ntAccount = rule.IdentityReference as NTAccount;
+						if (ntAccount == null)
 						{
-							if (rule.AccessControlType == AccessControlType.Allow)
+							continue;
+						}
+
+						if (principal.IsInRole(ntAccount.Value))
+						{
+							if(fsAccessRule.AccessControlType == AccessControlType.Deny)
 							{
-								access = true;
+								isInRoleWithAccess = false;
 								break;
 							}
+							isInRoleWithAccess = true;
 						}
 					}
 				}
@@ -222,10 +238,9 @@ namespace UtinyRipper
 			{
 			}
 
-			if(!access)
+			if(!isInRoleWithAccess)
 			{
 				// is run as administrator?
-				WindowsPrincipal principal = new WindowsPrincipal(identity);
 				if (principal.IsInRole(WindowsBuiltInRole.Administrator))
 				{
 					return;

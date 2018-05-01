@@ -27,6 +27,14 @@ namespace UtinyRipper.Classes.Meshes
 			return version.IsGreaterEqual(2017, 3);
 		}
 
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool IsNewTopologyFormat(Version version)
+		{
+			return version.IsGreaterEqual(4);
+		}
+
 		private static int GetSerializedVersion(Version version)
 		{
 			if (Config.IsExportTopmostSerializedVersion)
@@ -41,11 +49,23 @@ namespace UtinyRipper.Classes.Meshes
 			return 1;
 		}
 
+		private uint GetExportTopology(Version version)
+		{
+			if (IsNewTopologyFormat(version))
+			{
+				return (uint)Topology;
+			}
+			else
+			{
+				return Topology == MeshTopology.Triangles ? (uint)MeshTopology.Triangles : (uint)MeshTopology.Deprecated;
+			}
+		}
+
 		public void Read(AssetStream stream)
 		{
 			FirstByte = stream.ReadUInt32();
 			IndexCount = stream.ReadUInt32();
-			Topology = stream.ReadUInt32();
+			Topology = (MeshTopology)stream.ReadUInt32();
 
 			if(IsReadTriangleCount(stream.Version))
 			{
@@ -70,7 +90,7 @@ namespace UtinyRipper.Classes.Meshes
 			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
 			node.Add("firstByte", FirstByte);
 			node.Add("indexCount", IndexCount);
-			node.Add("topology", Topology);
+			node.Add("topology", GetExportTopology(exporter.Version));
 			node.Add("firstVertex", FirstVertex);
 			node.Add("vertexCount", VertexCount);
 			node.Add("localAABB", LocalAABB.ExportYAML(exporter));
@@ -83,7 +103,7 @@ namespace UtinyRipper.Classes.Meshes
 		/// <summary>
 		/// isTriStrip previously
 		/// </summary>
-		public uint Topology { get; private set; }
+		public MeshTopology Topology { get; private set; }
 		public uint TriangleCount { get; private set; }
 		public uint BaseVertex { get; private set; }
 		public uint FirstVertex { get; private set; }

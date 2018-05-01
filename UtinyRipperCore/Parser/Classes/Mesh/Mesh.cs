@@ -364,6 +364,7 @@ namespace UtinyRipper.Classes
 					}
 					else
 					{
+#warning TODO: check is valid
 						m_UV = stream.ReadArray<Vector2f>();
 						m_UV1 = stream.ReadArray<Vector2f>();
 						m_tangentSpace = stream.ReadArray<Tangent>();
@@ -384,7 +385,7 @@ namespace UtinyRipper.Classes
 				{
 					m_tangentSpace = stream.ReadArray<Tangent>();
 				}
-				if(IsReadTangents(stream.Version))
+				else if(IsReadTangents(stream.Version))
 				{
 					m_tangents = stream.ReadArray<Vector4f>();
 					m_normals = stream.ReadArray<Vector3f>();
@@ -479,6 +480,9 @@ namespace UtinyRipper.Classes
 		public IReadOnlyList<Matrix4x4f> BindPoses => m_bindPoses;
 		public IReadOnlyList<uint> BoneNameHashes => m_boneNameHashes;
 		public IReadOnlyList<BoneWeights4> Skin => m_skin;
+		/// <summary>
+		/// Newer versions always use 16bit indecies
+		/// </summary>
 		public int Use16bitIndices { get; private set; }
 		public uint RootBoneNameHash { get; private set; }
 		public byte MeshCompression { get; private set; }
