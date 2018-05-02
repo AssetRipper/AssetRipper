@@ -653,6 +653,7 @@
     <Compile Include="Utils\DirectoryUtils.cs" />
     <Compile Include="Utils\Extensions\BitArrayExtensions.cs" />
     <Compile Include="Utils\Extensions\BitConverterExtensions.cs" />
+    <Compile Include="Utils\Extensions\PrimitiveExtensions.cs" />
     <Compile Include="Utils\Extensions\IReadOnlyListExtensions.cs" />
     <Compile Include="Utils\Extensions\StreamExtensions.cs" />
     <Compile Include="Utils\Extensions\StringBuilderExtensions.cs" />

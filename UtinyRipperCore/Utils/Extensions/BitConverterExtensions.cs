@@ -10,6 +10,12 @@ namespace UtinyRipper
 			return BitConverter.ToUInt32(bytes, 0);
 		}
 
+		public static ulong ToUInt64(double value)
+		{
+			byte[] bytes = BitConverter.GetBytes(value);
+			return BitConverter.ToUInt64(bytes, 0);
+		}
+
 		public static uint Reverse(uint value)
 		{
 			uint reverse = (value & 0x000000FF) << 24 | (value & 0x0000FF00) << 8 |

@@ -122,14 +122,15 @@ namespace UtinyRipper.Exporter.YAML
 
 		public void SetValue(float value)
 		{
-			uint hex = BitConverterExtensions.ToUInt32(value);
 #if USE_HEX_SINGLE
 			// It is more precise technic but output looks vague and less readable
-			m_value = $"0x{hex.ToString("X8")}({value.ToString(CultureInfo.InvariantCulture)})";
+			uint hex = BitConverterExtensions.ToUInt32(value);
+			m_string = $"0x{hex.ToHexString()}({value.ToString(CultureInfo.InvariantCulture)})";
+			m_objectType = ScalarType.String;
 #else
 			m_single = value;
-#endif
 			m_objectType = ScalarType.Single;
+#endif
 		}
 
 		public void SetValue(string value)
@@ -184,23 +185,23 @@ namespace UtinyRipper.Exporter.YAML
 					switch (m_objectType)
 					{
 						case ScalarType.Byte:
-							return ((byte)m_value).ToString("x2");
+							return ((byte)m_value).ToHexString();
 						case ScalarType.Int16:
-							return ((short)m_value).ToString("x4");
+							return ((short)m_value).ToHexString();
 						case ScalarType.UInt16:
-							return ((ushort)m_value).ToString("x4");
+							return ((ushort)m_value).ToHexString();
 						case ScalarType.Int32:
-							return ((int)m_value).ToString("x8");
+							return ((int)m_value).ToHexString();
 						case ScalarType.UInt32:
-							return ((uint)m_value).ToString("x8");
+							return ((uint)m_value).ToHexString();
 						case ScalarType.Int64:
-							return m_value.ToString("x16");
+							return m_value.ToHexString();
 						case ScalarType.UInt64:
-							return (unchecked((ulong)m_value)).ToString("x16");
+							return (unchecked((ulong)m_value)).ToHexString();
 						case ScalarType.Single:
-							return m_single.ToString("x8");
+							return m_single.ToHexString();
 						//case ScalarType.Double:
-						//	return ((double)m_single).ToString("x16");
+						//	return m_double.ToHexString();
 						case ScalarType.String:
 							return m_string;
 						default:

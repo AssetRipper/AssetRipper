@@ -143,11 +143,11 @@ namespace UtinyRipper.Classes
 				return 6;
 			}
 
+#warning unknown
 			if (version.IsGreaterEqual(5, 0, 0, VersionType.Beta))
 			{
 				return 6;
 			}
-#warning unknown
 			if (version.IsGreaterEqual(5))
 			{
 				return 5;

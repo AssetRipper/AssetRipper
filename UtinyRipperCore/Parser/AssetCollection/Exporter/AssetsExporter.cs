@@ -27,6 +27,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.Camera, yamlExporter);
 			OverrideExporter(ClassIDType.Material, yamlExporter);
 			OverrideExporter(ClassIDType.MeshRenderer, yamlExporter);
+			OverrideExporter(ClassIDType.MeshFilter, yamlExporter);
 			OverrideExporter(ClassIDType.OcclusionPortal, yamlExporter);
 			OverrideExporter(ClassIDType.Mesh, yamlExporter);
 			OverrideExporter(ClassIDType.Rigidbody2D, yamlExporter);

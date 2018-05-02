@@ -21,7 +21,7 @@ namespace UtinyRipper.Exporter.YAML
 		{
 			foreach (byte value in _this)
 			{
-				s_sb.Append(value.ToString("x2"));
+				s_sb.Append(value.ToHexString());
 			}
 			YAMLScalarNode node = new YAMLScalarNode(s_sb.ToString());
 			s_sb.Length = 0;
@@ -56,7 +56,7 @@ namespace UtinyRipper.Exporter.YAML
 			{
 				foreach (uint value in _this)
 				{
-					s_sb.Append(value.ToString("x8"));
+					s_sb.Append(value.ToHexString());
 				}
 				YAMLScalarNode node = new YAMLScalarNode(s_sb.ToString());
 				s_sb.Length = 0;
@@ -79,7 +79,7 @@ namespace UtinyRipper.Exporter.YAML
 			{
 				foreach (int value in _this)
 				{
-					s_sb.Append(value.ToString("x8"));
+					s_sb.Append(value.ToHexString());
 				}
 				YAMLScalarNode node = new YAMLScalarNode(s_sb.ToString());
 				s_sb.Length = 0;

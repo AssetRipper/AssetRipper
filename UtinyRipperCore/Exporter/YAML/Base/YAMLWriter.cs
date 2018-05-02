@@ -59,6 +59,7 @@ namespace UtinyRipper.Exporter.YAML
 				doc.Emit(emitter, isWriteSeparator);
 				isWriteSeparator = true;
 			}
+			output.Write('\n');
 		}
 
 		public static Version Version { get; } = new Version(1, 1);

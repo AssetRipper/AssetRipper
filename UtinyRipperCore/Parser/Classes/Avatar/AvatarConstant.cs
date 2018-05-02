@@ -84,8 +84,7 @@ namespace UtinyRipper.Classes.Avatars
 			node.Add("m_Human", Human.ExportYAML(exporter));
 			node.Add("m_HumanSkeletonIndexArray", HumanSkeletonIndexArray.ExportYAML(true));
 			node.Add("m_HumanSkeletonReverseIndexArray", IsReadHumanSkeletonReverseIndexArray(exporter.Version) ? HumanSkeletonReverseIndexArray.ExportYAML(true) : YAMLSequenceNode.Empty);
-#warning other values crash Engine. Why?
-			node.Add("m_RootMotionBoneIndex", -1/*RootMotionBoneIndex*/);
+			node.Add("m_RootMotionBoneIndex", RootMotionBoneIndex);
 			node.Add("m_RootMotionBoneX", RootMotionBoneX.ExportYAML(exporter));
 			node.Add("m_RootMotionSkeleton", RootMotionSkeleton.ExportYAML(exporter));
 			node.Add("m_RootMotionSkeletonPose", RootMotionSkeletonPose.ExportYAML(exporter));

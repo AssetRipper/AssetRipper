@@ -7,13 +7,10 @@ namespace UtinyRipper.Exporter.YAML
 	{
 		public static YAMLNode ExportYAML(this IReadOnlyDictionary<uint, string> _this)
 		{
-#warning TODO: check
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			YAMLMappingNode node = new YAMLMappingNode();
 			foreach (var kvp in _this)
 			{
-				YAMLMappingNode map = new YAMLMappingNode();
-				map.Add(kvp.Key.ToString(), kvp.Value);
-				node.Add(map);
+				node.Add(kvp.Key.ToString(), kvp.Value);
 			}
 			return node;
 		}
