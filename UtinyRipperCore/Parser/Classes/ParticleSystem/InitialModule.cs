@@ -73,6 +73,18 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
+		private MinMaxCurve GetExportGravityModifier(Version version)
+		{
+			if(IsReadGravityModifierSingle(version))
+			{
+				return new MinMaxCurve(GravityModifierSingle);
+			}
+			else
+			{
+				return GravityModifier;
+			}
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);

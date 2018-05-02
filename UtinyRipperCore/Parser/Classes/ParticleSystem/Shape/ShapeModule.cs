@@ -8,28 +8,28 @@ namespace UtinyRipper.Classes.ParticleSystems
 	public class ShapeModule : ParticleSystemModule, IDependent
 	{
 		/// <summary>
-		/// 4.0.0 to 5.6.0 exclusive
+		/// Less than 5.6.0
 		/// </summary>
 		public static bool IsReadRadiusSingle(Version version)
 		{
-			return version.IsGreaterEqual(4) && version.IsLess(5, 6);
+			return version.IsLess(5, 6);
 		}
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool IsReadAngle(Version version)
+		public static bool IsReadLength(Version version)
 		{
 			return version.IsGreaterEqual(4);
 		}
 		/// <summary>
-		/// 4.0.0 to 2017.1.0b2 exclusive
+		/// Less than 2017.1.0b2
 		/// </summary>
 		public static bool IsReadBoxAxes(Version version)
 		{
-			return version.IsGreaterEqual(4) && version.IsLess(2017, 1, 0, VersionType.Beta, 2);
+			return version.IsLess(2017, 1, 0, VersionType.Beta, 2);
 		}
 		/// <summary>
-		/// 5.0.0 to
+		/// 5.0.0 to 5.6.0
 		/// </summary>
 		public static bool IsReadArcSingle(Version version)
 		{
@@ -43,25 +43,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 		}
 		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadPlacementMode(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
 		public static bool IsReadMeshMaterialIndex(Version version)
 		{
 			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadMesh(Version version)
-		{
-			return version.IsGreaterEqual(4);
 		}
 		/// <summary>
 		/// 5.3.0 and greater
@@ -158,22 +144,45 @@ namespace UtinyRipper.Classes.ParticleSystems
 			{
 				return 2;
 			}
-			return 1;
-			
+			return 1;			
+		}
+
+		private MultiModeParameter GetExportRadius(Version version)
+		{
+			if(IsReadRadiusSingle(version))
+			{
+				return new MultiModeParameter(RadiusSingle);
+			}
+			else
+			{
+				return Radius;
+			}
+		}
+
+		private MultiModeParameter GetExportArc(Version version)
+		{
+			if (IsReadArcSingle(version))
+			{
+				return new MultiModeParameter(ArcSingle);
+			}
+			else
+			{
+				return Arc;
+			}
 		}
 
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
 			
-			Type = stream.ReadInt32();
+			Type = (ParticleSystemShapeType)stream.ReadInt32();
 			if (IsReadRadiusSingle(stream.Version))
 			{
 				RadiusSingle = stream.ReadSingle();
 			}
-			if (IsReadAngle(stream.Version))
+			Angle = stream.ReadSingle();
+			if (IsReadLength(stream.Version))
 			{
-				Angle = stream.ReadSingle();
 				Length = stream.ReadSingle();
 			}
 			if (IsReadBoxAxes(stream.Version))
@@ -203,10 +212,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 				Rotation.Read(stream);
 				Scale.Read(stream);
 			}
-			if (IsReadPlacementMode(stream.Version))
-			{
-				PlacementMode = stream.ReadInt32();
-			}
+			PlacementMode = stream.ReadInt32();
 			if (IsReadMeshMaterialIndex(stream.Version))
 			{
 				if (IsReadMeshMaterialIndexFirst(stream.Version))
@@ -215,10 +221,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 					MeshNormalOffset = stream.ReadSingle();
 				}
 			}
-			if (IsReadMesh(stream.Version))
-			{
-				Mesh.Read(stream);
-			}
+			Mesh.Read(stream);
 			if (IsReadMeshRenderer(stream.Version))
 			{
 				MeshRenderer.Read(stream);
@@ -282,7 +285,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
 			node.InsertSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("type", Type);
+			node.Add("type", (int)Type);
 			node.Add("angle", Angle);
 			node.Add("length", Length);
 			node.Add("boxThickness", BoxThickness.ExportYAML(exporter));
@@ -303,12 +306,12 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("randomDirectionAmount", RandomDirectionAmount);
 			node.Add("sphericalDirectionAmount", SphericalDirectionAmount);
 			node.Add("randomPositionAmount", RandomPositionAmount);
-			node.Add("radius", Radius.ExportYAML(exporter));
-			node.Add("arc", Arc.ExportYAML(exporter));
+			node.Add("radius", GetExportRadius(exporter.Version).ExportYAML(exporter));
+			node.Add("arc", GetExportArc(exporter.Version).ExportYAML(exporter));
 			return node;
 		}
 
-		public int Type { get; private set; }
+		public ParticleSystemShapeType Type { get; private set; }
 		public float RadiusSingle { get; private set; }
 		public float Angle { get; private set; }
 		public float Length { get; private set; }

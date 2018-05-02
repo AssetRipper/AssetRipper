@@ -185,6 +185,8 @@
     <Compile Include="Parser\Classes\LightProbes\LightProbes.cs" />
     <Compile Include="Parser\Classes\Mesh\ChannelType.cs" />
     <Compile Include="Parser\Classes\Mesh\MeshTopology.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\Shape\ParticleSystemShapeMultiModeValue.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\Shape\ParticleSystemShapeType.cs" />
     <Compile Include="Parser\Classes\RenderSettings\SHCoefficientsBaked.cs" />
     <Compile Include="Parser\Classes\SceneAsset.cs" />
     <Compile Include="Parser\Classes\Serialize\Matrix3x4f.cs" />

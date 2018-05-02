@@ -158,6 +158,18 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
+		private MinMaxCurve GetExportStartDelay(Version version)
+		{
+			if(IsReadStartDelaySingle(version))
+			{
+				return new MinMaxCurve(StartDelaySingle);
+			}
+			else
+			{
+				return StartDelay;
+			}
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -308,7 +320,7 @@ namespace UtinyRipper.Classes
 			node.Add("useUnscaledTime", UseUnscaledTime);
 			node.Add("autoRandomSeed", AutoRandomSeed);
 			node.Add("useRigidbodyForVelocity", UseRigidbodyForVelocity);
-			node.Add("startDelay", StartDelay.ExportYAML(exporter));
+			node.Add("startDelay", GetExportStartDelay(exporter.Version).ExportYAML(exporter));
 			node.Add("moveWithTransform", MoveWithTransform);
 			node.Add("moveWithCustomTransform", MoveWithCustomTransform.ExportYAML(exporter));
 			node.Add("scalingMode", ScalingMode);
