@@ -161,7 +161,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 		}
 		private Vector3f GetExportScale(Version version)
 		{
-			return IsReadBoxThickness(version) ? Scale : Vector3f.One;
+			return IsReadBoxThickness(version) ? Scale : new Vector3f(BoxX, BoxY, BoxZ);
 		}
 		private bool GetExportUseMeshColors(Version version)
 		{

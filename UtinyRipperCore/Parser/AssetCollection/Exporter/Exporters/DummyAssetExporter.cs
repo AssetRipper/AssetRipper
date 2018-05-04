@@ -22,7 +22,7 @@ namespace UtinyRipper.AssetExporters
 				case MonoScript monoScript:
 					return new SkipExportCollection(this, monoScript, monoScript.ClassName);
 				case AssetBundle bundle:
-					string name = AssetBundle.IsReadAssetBundleName(bundle.File.Version) ? bundle.AssetBundleName : bundle.Name;
+					string name = string.IsNullOrEmpty(bundle.AssetBundleName) ? bundle.Name : bundle.AssetBundleName;
 					return new EmptyExportCollection(this, name);
 
 				default:
