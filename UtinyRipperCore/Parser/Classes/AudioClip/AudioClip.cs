@@ -220,7 +220,6 @@ namespace UtinyRipper.Classes
 				{
 					AudioClipFlags = stream.ReadInt32();
 				}
-
 				if (IsReadFSBResourceFirst(stream.Version))
 				{
 					FSBResource.Read(stream);

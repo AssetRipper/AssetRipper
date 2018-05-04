@@ -11,9 +11,10 @@ namespace UtinyRipper.Classes.ParticleSystems
 			MinMaxState = ParticleSystemCurveMode.Constant;
 			Scalar = value;
 			MinScalar = value;
-
-			MinCurve = new AnimationCurveTpl<Float>(default(Float));
-			MaxCurve = new AnimationCurveTpl<Float>(default(Float));
+			
+			Float defWeight = new Float(1.0f / 3.0f);
+			MinCurve = new AnimationCurveTpl<Float>(default, defWeight);
+			MaxCurve = new AnimationCurveTpl<Float>(default, defWeight);
 		}
 
 		public MinMaxCurve(float minValue, float maxValue):
@@ -23,8 +24,9 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Scalar = maxValue;
 			MinScalar = minValue;
 
-			MinCurve = new AnimationCurveTpl<Float>(default(Float));
-			MaxCurve = new AnimationCurveTpl<Float>(default(Float));
+			Float defWeight = new Float(1.0f / 3.0f);
+			MinCurve = new AnimationCurveTpl<Float>(default, defWeight);
+			MaxCurve = new AnimationCurveTpl<Float>(default, defWeight);
 		}
 
 		/// <summary>

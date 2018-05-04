@@ -15,11 +15,11 @@ namespace UtinyRipper.Classes.AnimationClips
 			RotationOrder = 4;
 		}
 
-		public AnimationCurveTpl(T defaultValue):
+		public AnimationCurveTpl(T defaultValue, T defaultWeight):
 			this(true)
 		{
-			KeyframeTpl<T> firstKey = new KeyframeTpl<T>(0.0f, defaultValue);
-			KeyframeTpl<T> secondKey = new KeyframeTpl<T>(1.0f, defaultValue);
+			KeyframeTpl<T> firstKey = new KeyframeTpl<T>(0.0f, defaultValue, defaultWeight);
+			KeyframeTpl<T> secondKey = new KeyframeTpl<T>(1.0f, defaultValue, defaultWeight);
 			Curve.Add(firstKey);
 			Curve.Add(secondKey);
 		}

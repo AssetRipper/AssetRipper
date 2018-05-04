@@ -58,6 +58,20 @@ namespace UtinyRipper.Classes
 		{
 			return version.IsGreaterEqual(4);
 		}
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool IsReadNonModifiableTextures(Version version)
+		{
+			return version.IsGreaterEqual(2018);
+		}		
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool IsReadShaderIsBaked(Version version)
+		{
+			return version.IsGreaterEqual(4);
+		}
 
 		public override void Read(AssetStream stream)
 		{
@@ -162,6 +176,13 @@ namespace UtinyRipper.Classes
 			if (IsReadDependencies(stream.Version))
 			{
 				m_dependencies = stream.ReadArray<PPtr<Shader>>();
+			}
+			if(IsReadNonModifiableTextures(stream.Version))
+			{
+				m_nonModifiableTextures = stream.ReadArray<PPtr<Texture>>();
+			}
+			if (IsReadShaderIsBaked(stream.Version))
+			{
 				ShaderIsBaked = stream.ReadBoolean();
 				stream.AlignStream(AlignType.Align4);
 			}
@@ -210,6 +231,7 @@ namespace UtinyRipper.Classes
 		public IReadOnlyList<GPUPlatform> Platforms => m_platforms;
 		public IReadOnlyList<ShaderSubProgramBlob> SubProgramBlobs => m_subProgramBlobs;
 		public IReadOnlyList<PPtr<Shader>> Dependencies => m_dependencies;
+		public IReadOnlyList<PPtr<Texture>> NonModifiableTextures => m_nonModifiableTextures;
 		public bool ShaderIsBaked { get; private set; }
 		
 		public SerializedShader ParsedForm;
@@ -220,6 +242,7 @@ namespace UtinyRipper.Classes
 		
 		private GPUPlatform[] m_platforms;
 		private ShaderSubProgramBlob[] m_subProgramBlobs;
-		private PPtr<Shader>[] m_dependencies = null;
+		private PPtr<Shader>[] m_dependencies;
+		private PPtr<Texture>[] m_nonModifiableTextures;
 	}
 }

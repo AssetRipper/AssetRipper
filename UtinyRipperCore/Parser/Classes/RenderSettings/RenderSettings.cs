@@ -160,6 +160,13 @@ namespace UtinyRipper.Classes
 		{
 			return version.IsGreaterEqual(5, 4);
 		}
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool IsReadUseRadianceAmbientProbe(Version version)
+		{
+			return version.IsGreaterEqual(2018);
+		}
 
 		/// <summary>
 		/// Less than 5.0.0b2
@@ -181,9 +188,14 @@ namespace UtinyRipper.Classes
 		{
 			if (Config.IsExportTopmostSerializedVersion)
 			{
+				//return 9;
 				return 8;
 			}
-			
+
+			/*if (version.IsGreaterEqual(2018))
+			{
+				return 9;
+			}*/
 			if (version.IsGreaterEqual(5, 6))
 			{
 				return 8;
@@ -331,6 +343,10 @@ namespace UtinyRipper.Classes
 			{
 				IndirectSpecularColor.Read(stream);
 			}
+			if(IsReadUseRadianceAmbientProbe(stream.Version))
+			{
+				UseRadianceAmbientProbe = stream.ReadBoolean();
+			}
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -406,6 +422,7 @@ namespace UtinyRipper.Classes
 		public int ReflectionBounces { get; private set; }
 		public float ReflectionIntensity { get; private set; }
 		public float AmbientLightScale { get; private set; }
+		public bool UseRadianceAmbientProbe { get; private set; }
 
 		public ColorRGBAf FogColor;
 		public ColorRGBAf AmbientSkyColor;

@@ -6,6 +6,11 @@ namespace UtinyRipper.Classes
 {
 	public struct Quaternionf : IAssetReadable, IYAMLExportable
 	{
+		public Quaternionf(float value) :
+			this(value, value, value, value)
+		{
+		}
+
 		public Quaternionf(float x, float y, float z, float w)
 		{
 			X = x;

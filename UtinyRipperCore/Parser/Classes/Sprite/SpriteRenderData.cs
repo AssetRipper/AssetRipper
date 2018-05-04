@@ -21,6 +21,13 @@ namespace UtinyRipper.Classes.Sprites
 			return version.IsLess(5, 6);
 		}
 		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool IsReadBindpose(Version version)
+		{
+			return version.IsGreaterEqual(2018);
+		}		
+		/// <summary>
 		/// 5.4.5p1 to 5.5.0 exclusive or 5.5.3 and greater
 		/// </summary>
 		public bool IsReadAtlasRectOffset(Version version)
@@ -64,6 +71,11 @@ namespace UtinyRipper.Classes.Sprites
 
 				VertexData.Read(stream);
 			}
+			if (IsReadBindpose(stream.Version))
+			{
+				m_bindpose = stream.ReadArray<Matrix4x4f>();
+				m_sourceSkin = stream.ReadArray<BoneWeights4>();
+			}
 
 			TextureRect.Read(stream);
 			TextureRectOffset.Read(stream);
@@ -92,6 +104,8 @@ namespace UtinyRipper.Classes.Sprites
 		public IReadOnlyList<ushort> Indices => m_indices;
 		public IReadOnlyList<SubMesh> SubMeshes => m_subMeshes;
 		public IReadOnlyList<byte> IndexBuffer => m_indexBuffer;
+		public IReadOnlyList<Matrix4x4f> Bindpose => m_bindpose;
+		public IReadOnlyList<BoneWeights4> SourceSkin => m_sourceSkin;
 		public uint SettingsRaw { get; private set; }
 		public float DownscaleMultiplier { get; private set; }
 
@@ -107,5 +121,7 @@ namespace UtinyRipper.Classes.Sprites
 		private ushort[] m_indices;
 		private SubMesh[] m_subMeshes;
 		private byte[] m_indexBuffer;
+		private Matrix4x4f[] m_bindpose;
+		private BoneWeights4[] m_sourceSkin;
 	}
 }

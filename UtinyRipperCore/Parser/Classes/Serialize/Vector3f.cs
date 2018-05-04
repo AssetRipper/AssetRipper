@@ -7,6 +7,11 @@ namespace UtinyRipper.Classes
 {
 	public struct Vector3f : IAssetReadable, IYAMLExportable
 	{
+		public Vector3f(float value):
+			this(value, value, value)
+		{
+		}
+
 		public Vector3f(float x, float y, float z)
 		{
 			X = x;

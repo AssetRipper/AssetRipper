@@ -127,6 +127,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Collections\SceneExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Collections\TextureExportCollection.cs" />
     <Compile Include="Parser\Classes\AnimationClip\ChildTrack.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\KeyframeTpl\WeightedMode.cs" />
     <Compile Include="Parser\Classes\Animation\AnimationCullingType.cs" />
     <Compile Include="Parser\Classes\AudioClip\AudioClip.cs" />
     <Compile Include="Parser\Classes\AudioClip\AudioClipLoadType.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Parser\Classes\Rigidbody\RigidbodyConstraints.cs" />
     <Compile Include="Parser\Classes\Rigidbody\RigidbodyInterpolation.cs" />
     <Compile Include="Parser\Classes\SphereCollider.cs" />
+    <Compile Include="Parser\Classes\Sprite\SpriteBone.cs" />
     <Compile Include="Parser\Classes\Terrain.cs" />
     <Compile Include="Parser\Classes\TerrainCollider.cs" />
     <Compile Include="Parser\Classes\TerrainData\DetailDatabase.cs" />

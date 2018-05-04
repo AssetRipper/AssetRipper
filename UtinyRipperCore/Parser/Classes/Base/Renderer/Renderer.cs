@@ -28,6 +28,13 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(5, 4);
 		}
 		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool IsReadRenderingLayerMask(Version version)
+		{
+			return version.IsGreaterEqual(2018);
+		}
+		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
 		public static bool IsReadLightmapIndex(Version version)
@@ -187,6 +194,10 @@ namespace UtinyRipper.Classes
 				stream.AlignStream(AlignType.Align4);
 			}
 
+			if(IsReadRenderingLayerMask(stream.Version))
+			{
+				RenderingLayerMask = stream.ReadUInt32();
+			}
 			if (IsReadLightmapIndex(stream.Version))
 			{
 				LightmapIndex = IsByteLightIndex(stream.Version) ? stream.ReadByte() : stream.ReadUInt16();
@@ -359,6 +370,7 @@ namespace UtinyRipper.Classes
 		public byte MotionVectors { get; private set; }
 		public byte LightProbeUsage { get; private set; }
 		public int ReflectionProbeUsage { get; private set; }
+		public uint RenderingLayerMask { get; private set; }
 		public ushort LightmapIndex { get; private set; }
 		public ushort LightmapIndexDynamic { get; private set; }
 		public IReadOnlyList<PPtr<Material>> Materials => m_materials;

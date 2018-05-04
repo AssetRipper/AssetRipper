@@ -460,7 +460,8 @@ namespace UtinyRipper.Classes
 									translations[pathHash] = transCurve;
 								}
 
-								KeyframeTpl<Vector3f> transKey = new KeyframeTpl<Vector3f>(time, trans);
+								Vector3f defWeight = new Vector3f(1.0f / 3.0f);
+								KeyframeTpl<Vector3f> transKey = new KeyframeTpl<Vector3f>(time, trans, defWeight);
 								transCurve.Curve.Curve.Add(transKey);
 							}
 							break;
@@ -479,7 +480,8 @@ namespace UtinyRipper.Classes
 									rotations[pathHash] = rotCurve;
 								}
 
-								KeyframeTpl<Quaternionf> rotKey = new KeyframeTpl<Quaternionf>(time, rot);
+								Quaternionf defWeight = new Quaternionf(1.0f / 3.0f);
+								KeyframeTpl<Quaternionf> rotKey = new KeyframeTpl<Quaternionf>(time, rot, defWeight);
 								rotCurve.Curve.Curve.Add(rotKey);
 							}
 							break;
@@ -497,7 +499,8 @@ namespace UtinyRipper.Classes
 									scales[pathHash] = scaleCurve;
 								}
 
-								KeyframeTpl<Vector3f> scaleKey = new KeyframeTpl<Vector3f>(time, scale);
+								Vector3f defWeight = new Vector3f(1.0f / 3.0f);
+								KeyframeTpl<Vector3f> scaleKey = new KeyframeTpl<Vector3f>(time, scale, defWeight);
 								scaleCurve.Curve.Curve.Add(scaleKey);
 							}
 							break;
@@ -515,7 +518,8 @@ namespace UtinyRipper.Classes
 									eulers[pathHash] = eulerCurve;
 								}
 
-								KeyframeTpl<Vector3f> eulerKey = new KeyframeTpl<Vector3f>(time, euler);
+								Vector3f defWeight = new Vector3f(1.0f / 3.0f);
+								KeyframeTpl<Vector3f> eulerKey = new KeyframeTpl<Vector3f>(time, euler, defWeight);
 								eulerCurve.Curve.Curve.Add(eulerKey);
 							}
 							break;
@@ -531,7 +535,8 @@ namespace UtinyRipper.Classes
 									floats[pathHash] = floatCurve;
 								}
 
-								KeyframeTpl<Float> floatKey = new KeyframeTpl<Float>(time, @float);
+								Float defWeight = new Float(1.0f / 3.0f);
+								KeyframeTpl<Float> floatKey = new KeyframeTpl<Float>(time, @float, defWeight);
 								floatCurve.Curve.Curve.Add(floatKey);
 							}
 							break;

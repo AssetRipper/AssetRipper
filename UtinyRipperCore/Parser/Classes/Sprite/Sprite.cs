@@ -49,6 +49,28 @@ namespace UtinyRipper.Classes
 		{
 			return version.IsGreaterEqual(2017);
 		}
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool IsReadBones(Version version)
+		{
+			return version.IsGreaterEqual(2018);
+		}
+
+		private static int GetSerializedVersion(Version version)
+		{
+			if(Config.IsExportTopmostSerializedVersion)
+			{
+				// return 2;
+				return 1;
+			}
+
+			if(version.IsGreaterEqual(2018))
+			{
+				return 2;
+			}
+			return 1;
+		}
 
 		public override void Read(AssetStream stream)
 		{
@@ -90,6 +112,11 @@ namespace UtinyRipper.Classes
 					m_physicsShape[i] = stream.ReadArray<Vector2f>();
 				}
 			}
+
+			if(IsReadBones(stream.Version))
+			{
+				m_bones = stream.ReadArray<SpriteBone>();
+			}
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -118,6 +145,7 @@ namespace UtinyRipper.Classes
 		public bool IsPolygon { get; private set; }
 		public IReadOnlyList<string> AtlasTags => m_atlasTags;
 		public IReadOnlyList<IReadOnlyList<Vector2f>> PhysicsShape => m_physicsShape;
+		public IReadOnlyList<SpriteBone> Bones => m_bones;
 
 		public Rectf Rect;
 		public Vector2f Offset;
@@ -129,5 +157,6 @@ namespace UtinyRipper.Classes
 
 		private string[] m_atlasTags;
 		private Vector2f[][] m_physicsShape;
+		private SpriteBone[] m_bones;
 	}
 }

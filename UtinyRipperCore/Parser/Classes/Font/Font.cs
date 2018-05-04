@@ -65,7 +65,7 @@ namespace UtinyRipper.Classes
 			return version.IsLess(2, 1);
 		}
 		/// <summary>
-		/// 1.6.0 and greater
+		/// Less than 1.6.0
 		/// </summary>
 		public static bool IsByteKerningValues(Version version)
 		{
@@ -113,6 +113,13 @@ namespace UtinyRipper.Classes
 		{
 			return version.IsGreaterEqual(5, 6, 3) && version.IsLess(2017) || version.IsGreaterEqual(2017, 2, 1);
 		}
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool IsReadShouldRoundAdvanceValue(Version version)
+		{
+			return version.IsGreaterEqual(2018, 1);
+		}		
 
 		/// <summary>
 		/// 5.5.0 and greater
@@ -307,6 +314,10 @@ namespace UtinyRipper.Classes
 			{
 				UseLegacyBoundsCalculation = stream.ReadBoolean();
 			}
+			if(IsReadShouldRoundAdvanceValue(stream.Version))
+			{
+				ShouldRoundAdvanceValue = stream.ReadBoolean();
+			}
 		}
 
 		public override void ExportBinary(IAssetsExporter exporter, Stream stream)
@@ -379,6 +390,7 @@ namespace UtinyRipper.Classes
 		public IReadOnlyList<PPtr<Font>> FallbackFonts => m_fallbackFonts;
 		public FontRenderingMode FontRenderingMode { get; private set; }
 		public bool UseLegacyBoundsCalculation { get; private set; }
+		public bool ShouldRoundAdvanceValue { get; private set; }
 
 		public PPtr<Material> DefaultMaterial;
 		public PPtr<Texture> Texture;

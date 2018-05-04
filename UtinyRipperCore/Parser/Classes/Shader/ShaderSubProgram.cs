@@ -67,7 +67,7 @@ namespace UtinyRipper.Classes.Shaders
 			{
 				return 201609010;
 			}
-			else if (version.IsEqual(2017, 3))
+			else if (version.IsLessEqual(2018, 1))
 			{
 				return 201708220;
 			}

@@ -98,6 +98,13 @@ namespace UtinyRipper.Classes.Meshes
 		}
 
 		/// <summary>
+		/// Less than 2018.1
+		/// </summary>
+		public static bool IsReadCurrentChannels(Version version)
+		{
+			return version.IsLess(2018);
+		}
+		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
 		public static bool IsReadChannels(Version version)
@@ -126,21 +133,89 @@ namespace UtinyRipper.Classes.Meshes
 			return version.IsLess(4);
 		}
 
+		public void Read(AssetStream stream)
+		{
+			if(IsReadCurrentChannels(stream.Version))
+			{
+				CurrentChannels = stream.ReadUInt32();
+			}
+			VertexCount = stream.ReadUInt32();
+
+			if (IsReadChannels(stream.Version))
+			{
+				m_channels = stream.ReadArray<ChannelInfo>();
+				stream.AlignStream(AlignType.Align4);
+			}
+			if (IsReadStream(stream.Version))
+			{
+				if (IsStreamStatic(stream.Version))
+				{
+					m_streams = new StreamInfo[4];
+					for (int i = 0; i < 4; i++)
+					{
+						StreamInfo streamInfo = new StreamInfo();
+						streamInfo.Read(stream);
+						m_streams[i] = streamInfo;
+					}
+				}
+				else
+				{
+					m_streams = stream.ReadArray<StreamInfo>();
+				}
+			}
+
+			m_data = stream.ReadByteArray();
+			stream.AlignStream(AlignType.Align4);
+		}
+
+		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		{
+#warning TODO: values acording to read version (current 2017.3.0f3)
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add("m_CurrentChannels", GetExportCurrentChannels(exporter.Version));
+			node.Add("m_VertexCount", VertexCount);
+			IEnumerable<ChannelInfo> channels = GetExportChannels(exporter.Version);
+			node.Add("m_Channels", (channels == null) ? YAMLSequenceNode.Empty : channels.ExportYAML(exporter));
+			node.Add("m_DataSize", (m_data == null) ? 0 : m_data.Length);
+			node.Add("_typelessdata", (m_data == null) ? YAMLSequenceNode.Empty : m_data.ExportYAML());
+			return node;
+		}
+
 		private uint GetExportCurrentChannels(Version version)
 		{
-			if (IsReadChannels(version))
+			if(IsReadCurrentChannels(version))
 			{
-				return CurrentChannels;
+				if (IsReadChannels(version))
+				{
+					return CurrentChannels;
+				}
+				else
+				{
+					BitArray curBits = CurrentChannelsBits;
+					curBits.Set((int)ChannelType.Tangents, curBits.Get((int)ChannelType.TangentsOld));
+					curBits.Set((int)ChannelType.TangentsOld, false);
+					return curBits.ToUInt32();
+				}
 			}
 			else
 			{
-				BitArray curBits = CurrentChannelsBits;
-				curBits.Set((int)ChannelType.Tangents, curBits.Get((int)ChannelType.TangentsOld));
-				curBits.Set((int)ChannelType.TangentsOld, false);
-				return curBits.ToUInt32();
+#warning not sure it is right approach
+				BitArray curChannels = new BitArray(32);
+				int prevStream = 0;
+				for(int i = 0, j = 0; i < Channels.Count; i++, j++)
+				{
+					ChannelInfo channel = Channels[i];
+					if(channel.Stream != prevStream)
+					{
+						prevStream = channel.Stream;
+						j = 0;
+					}
+
+					curChannels.Set(j, channel.Dimension != 0);
+				}
+				return curChannels.ToUInt32();
 			}
 		}
-
 		private IEnumerable<ChannelInfo> GetExportChannels(Version version)
 		{
 			if (IsReadChannels(version))
@@ -186,53 +261,6 @@ namespace UtinyRipper.Classes.Meshes
 				}
 			}
 			return channels;
-		}
-
-		public void Read(AssetStream stream)
-		{
-			CurrentChannels = stream.ReadUInt32();
-			VertexCount = stream.ReadUInt32();
-
-			if (IsReadChannels(stream.Version))
-			{
-				m_channels = stream.ReadArray<ChannelInfo>();
-				stream.AlignStream(AlignType.Align4);
-			}
-			if (IsReadStream(stream.Version))
-			{
-				if (IsStreamStatic(stream.Version))
-				{
-					m_streams = new StreamInfo[4];
-					for (int i = 0; i < 4; i++)
-					{
-						StreamInfo streamInfo = new StreamInfo();
-						streamInfo.Read(stream);
-						m_streams[i] = streamInfo;
-					}
-				}
-				else
-				{
-					m_streams = stream.ReadArray<StreamInfo>();
-				}
-			}
-
-			m_data = stream.ReadByteArray();
-			stream.AlignStream(AlignType.Align4);
-		}
-
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
-		{
-#warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = new YAMLMappingNode();
-
-			node.Add("m_CurrentChannels", GetExportCurrentChannels(exporter.Version));
-			node.Add("m_VertexCount", VertexCount);
-			IEnumerable<ChannelInfo> channels = GetExportChannels(exporter.Version);
-			node.Add("m_Channels", (channels == null) ? YAMLSequenceNode.Empty : channels.ExportYAML(exporter));
-
-			node.Add("m_DataSize", (m_data == null) ? 0 : m_data.Length);
-			node.Add("_typelessdata", (m_data == null) ? YAMLSequenceNode.Empty : m_data.ExportYAML());
-			return node;
 		}
 
 		public BitArray CurrentChannelsBits => new BitArray(BitConverter.GetBytes(CurrentChannels));
