@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
-using UtinyRipper.Classes.CompositeCollider2Ds;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
 
@@ -42,6 +41,19 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public static bool IsReadSprites(Version version)
 		{
 			return version.IsGreaterEqual(2017);
+		}
+
+		private MinMaxCurve GetExportStartFrame(Version version)
+		{
+			return IsReadStartFrame(version) ? StartFrame : new MinMaxCurve(0.0f);
+		}
+		private int GetExportUvChannelMask(Version version)
+		{
+			return IsReadUvChannelMask(version) ? UvChannelMask : -1;
+		}
+		private IReadOnlyList<SpriteData> GetExportSprites(Version version)
+		{
+			return IsReadSprites(version) ? Sprites : new SpriteData[] { default };
 		}
 
 		public override void Read(AssetStream stream)
@@ -96,17 +108,17 @@ namespace UtinyRipper.Classes.ParticleSystems
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
 			node.Add("mode", Mode);
 			node.Add("frameOverTime", FrameOverTime.ExportYAML(exporter));
-			node.Add("startFrame", StartFrame.ExportYAML(exporter));
+			node.Add("startFrame", GetExportStartFrame(exporter.Version).ExportYAML(exporter));
 			node.Add("tilesX", TilesX);
 			node.Add("tilesY", TilesY);
 			node.Add("animationType", AnimationType);
 			node.Add("rowIndex", RowIndex);
 			node.Add("cycles", Cycles);
-			node.Add("uvChannelMask", UvChannelMask);
+			node.Add("uvChannelMask", GetExportUvChannelMask(exporter.Version));
 			node.Add("flipU", FlipU);
 			node.Add("flipV", FlipV);
 			node.Add("randomRow", RandomRow);
-			node.Add("sprites", IsReadSprites(exporter.Version) ? Sprites.ExportYAML(exporter) : YAMLSequenceNode.Empty);
+			node.Add("sprites", GetExportSprites(exporter.Version).ExportYAML(exporter));
 			return node;
 		}
 

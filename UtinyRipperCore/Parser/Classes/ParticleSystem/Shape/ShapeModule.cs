@@ -57,11 +57,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(5, 3);
 		}
 		/// <summary>
-		/// 5.5.0 to 2017.1.0b2 exclusive
+		/// 5.5.0 to 2017.1.0b1
 		/// </summary>
 		public static bool IsReadMeshScale(Version version)
 		{
-			return version.IsGreaterEqual(5, 5) && version.IsLess(2017, 1, 0, VersionType.Beta, 2);
+			return version.IsGreaterEqual(5, 5) && version.IsLessEqual(2017, 1, 0, VersionType.Beta, 1);
 		}
 		/// <summary>
 		/// 5.3.0 and greater
@@ -147,28 +147,33 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;			
 		}
 
+		private float GetExportLength(Version version)
+		{
+			return IsReadLength(version) ? Length : 5.0f;
+		}
+		private float GetExportRadiusThickness(Version version)
+		{
+			return IsReadBoxThickness(version) ? RadiusThickness : 1.0f;
+		}
+		private float GetExportDonutRadius(Version version)
+		{
+			return IsReadBoxThickness(version) ? DonutRadius : 0.2f;
+		}
+		private Vector3f GetExportScale(Version version)
+		{
+			return IsReadBoxThickness(version) ? Scale : Vector3f.One;
+		}
+		private bool GetExportUseMeshColors(Version version)
+		{
+			return IsReadUseMeshMaterialIndex(version) ? UseMeshColors : true;
+		}
 		private MultiModeParameter GetExportRadius(Version version)
 		{
-			if(IsReadRadiusSingle(version))
-			{
-				return new MultiModeParameter(RadiusSingle);
-			}
-			else
-			{
-				return Radius;
-			}
+			return IsReadRadiusSingle(version) ? new MultiModeParameter(RadiusSingle) : Radius;
 		}
-
 		private MultiModeParameter GetExportArc(Version version)
 		{
-			if (IsReadArcSingle(version))
-			{
-				return new MultiModeParameter(ArcSingle);
-			}
-			else
-			{
-				return Arc;
-			}
+			return IsReadArcSingle(version) ? new MultiModeParameter(ArcSingle) : Arc;
 		}
 
 		public override void Read(AssetStream stream)
@@ -287,13 +292,13 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.InsertSerializedVersion(GetSerializedVersion(exporter.Version));
 			node.Add("type", (int)Type);
 			node.Add("angle", Angle);
-			node.Add("length", Length);
+			node.Add("length", GetExportLength(exporter.Version));
 			node.Add("boxThickness", BoxThickness.ExportYAML(exporter));
-			node.Add("radiusThickness", RadiusThickness);
-			node.Add("donutRadius", DonutRadius);
+			node.Add("radiusThickness", GetExportRadiusThickness(exporter.Version));
+			node.Add("donutRadius", GetExportDonutRadius(exporter.Version));
 			node.Add("m_Position", Position.ExportYAML(exporter));
 			node.Add("m_Rotation", Rotation.ExportYAML(exporter));
-			node.Add("m_Scale", Scale.ExportYAML(exporter));
+			node.Add("m_Scale", GetExportScale(exporter.Version).ExportYAML(exporter));
 			node.Add("placementMode", PlacementMode);
 			node.Add("m_MeshMaterialIndex", MeshMaterialIndex);
 			node.Add("m_MeshNormalOffset", MeshNormalOffset);
@@ -301,7 +306,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("m_MeshRenderer", MeshRenderer.ExportYAML(exporter));
 			node.Add("m_SkinnedMeshRenderer", SkinnedMeshRenderer.ExportYAML(exporter));
 			node.Add("m_UseMeshMaterialIndex", UseMeshMaterialIndex);
-			node.Add("m_UseMeshColors", UseMeshColors);
+			node.Add("m_UseMeshColors", GetExportUseMeshColors(exporter.Version));
 			node.Add("alignToDirection", AlignToDirection);
 			node.Add("randomDirectionAmount", RandomDirectionAmount);
 			node.Add("sphericalDirectionAmount", SphericalDirectionAmount);

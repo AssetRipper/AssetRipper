@@ -50,11 +50,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 		}
 
 		/// <summary>
-		/// Less than 5.4.0
+		/// 5.4.0 and greater
 		/// </summary>
-		private static bool IsBurstCountByte(Version version)
+		private static bool IsIntCount(Version version)
 		{
-			return version.IsLess(5, 4);
+			return version.IsGreaterEqual(5, 4);
 		}
 
 		private static int GetSerializedVersion(Version version)
@@ -79,6 +79,27 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
+		private MinMaxCurve GetExportRateOverDistance(Version version)
+		{
+			return IsReadRateOverDistance(version) ? RateOverDistance : new MinMaxCurve(0.0f);
+		}
+		private IReadOnlyList<ParticleSystemEmissionBurst> GetExportBursts(Version version)
+		{
+			if (IsReadBursts(version))
+			{
+				return Bursts;
+			}
+			else
+			{
+				ParticleSystemEmissionBurst[] bursts = new ParticleSystemEmissionBurst[4];
+				bursts[0] = new ParticleSystemEmissionBurst(Time0, Cnt0, IsReadCntMax(version) ? CntMax0 : Cnt0);
+				bursts[1] = new ParticleSystemEmissionBurst(Time1, Cnt1, IsReadCntMax(version) ? CntMax1 : Cnt1);
+				bursts[2] = new ParticleSystemEmissionBurst(Time2, Cnt2, IsReadCntMax(version) ? CntMax2 : Cnt2);
+				bursts[3] = new ParticleSystemEmissionBurst(Time3, Cnt3, IsReadCntMax(version) ? CntMax3 : Cnt3);
+				return bursts;
+			}
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -96,17 +117,17 @@ namespace UtinyRipper.Classes.ParticleSystems
 
 			if (IsReadCnt(stream.Version))
 			{
-				Cnt0 = stream.ReadUInt16();
-				Cnt1 = stream.ReadUInt16();
-				Cnt2 = stream.ReadUInt16();
-				Cnt3 = stream.ReadUInt16();
+				Cnt0 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
+				Cnt1 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
+				Cnt2 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
+				Cnt3 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
 			}
 			if (IsReadCntMax(stream.Version))
 			{
-				CntMax0 = stream.ReadUInt16();
-				CntMax1 = stream.ReadUInt16();
-				CntMax2 = stream.ReadUInt16();
-				CntMax3 = stream.ReadUInt16();
+				CntMax0 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
+				CntMax1 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
+				CntMax2 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
+				CntMax3 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
 			}
 			if (IsReadTime(stream.Version))
 			{
@@ -116,13 +137,13 @@ namespace UtinyRipper.Classes.ParticleSystems
 				Time3 = stream.ReadSingle();
 			}
 
-			if (IsBurstCountByte(stream.Version))
+			if (IsIntCount(stream.Version))
 			{
-				BurstCount = stream.ReadByte();
+				BurstCount = stream.ReadInt32();
 			}
 			else
 			{
-				BurstCount = stream.ReadInt32();
+				BurstCount = stream.ReadByte();
 			}
 			stream.AlignStream(AlignType.Align4);
 
@@ -138,34 +159,22 @@ namespace UtinyRipper.Classes.ParticleSystems
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
 			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
 			node.Add("rateOverTime", RateOverTime.ExportYAML(exporter));
-			node.Add("rateOverDistance", RateOverDistance.ExportYAML(exporter));
+			node.Add("rateOverDistance", GetExportRateOverDistance(exporter.Version).ExportYAML(exporter));
 			node.Add("m_BurstCount", BurstCount);
-			if (IsReadBursts(exporter.Version))
-			{
-				node.Add("m_Bursts", Bursts.ExportYAML(exporter));
-			}
-			else if (Config.IsExportTopmostSerializedVersion)
-			{
-				ParticleSystemEmissionBurst[] bursts = new ParticleSystemEmissionBurst[4];
-				bursts[0] = new ParticleSystemEmissionBurst(Time0, Cnt0, IsReadCntMax(exporter.Version) ? CntMax0 : Cnt0);
-				bursts[1] = new ParticleSystemEmissionBurst(Time1, Cnt1, IsReadCntMax(exporter.Version) ? CntMax1 : Cnt1);
-				bursts[2] = new ParticleSystemEmissionBurst(Time2, Cnt2, IsReadCntMax(exporter.Version) ? CntMax2 : Cnt2);
-				bursts[3] = new ParticleSystemEmissionBurst(Time3, Cnt3, IsReadCntMax(exporter.Version) ? CntMax3 : Cnt3);
-				node.Add("m_Bursts", bursts.ExportYAML(exporter));
-			}
+			node.Add("m_Bursts", GetExportBursts(exporter.Version).ExportYAML(exporter));
 			return node;
 		}
 
 		public int Type { get; private set; }
 		public int BurstCount { get; private set; }
-		public ushort Cnt0 { get; private set; }
-		public ushort Cnt1 { get; private set; }
-		public ushort Cnt2 { get; private set; }
-		public ushort Cnt3 { get; private set; }
-		public ushort CntMax0 { get; private set; }
-		public ushort CntMax1 { get; private set; }
-		public ushort CntMax2 { get; private set; }
-		public ushort CntMax3 { get; private set; }
+		public int Cnt0 { get; private set; }
+		public int Cnt1 { get; private set; }
+		public int Cnt2 { get; private set; }
+		public int Cnt3 { get; private set; }
+		public int CntMax0 { get; private set; }
+		public int CntMax1 { get; private set; }
+		public int CntMax2 { get; private set; }
+		public int CntMax3 { get; private set; }
 		public float Time0 { get; private set; }
 		public float Time1 { get; private set; }
 		public float Time2 { get; private set; }

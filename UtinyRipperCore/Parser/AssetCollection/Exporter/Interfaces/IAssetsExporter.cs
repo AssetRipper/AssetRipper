@@ -13,5 +13,6 @@ namespace UtinyRipper.AssetExporters
 		ISerializedFile File { get; set; }
 		Version Version { get; }
 		Platform Platform { get; }
+		TransferInstructionFlags Flags { get; }
 	}
 }

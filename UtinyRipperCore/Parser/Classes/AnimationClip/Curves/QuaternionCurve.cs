@@ -7,7 +7,7 @@ namespace UtinyRipper.Classes.AnimationClips
 	{
 		public QuaternionCurve(string path)
 		{
-			Curve = new AnimationCurveTpl<Quaternionf>(2, 2, 4);
+			Curve = new AnimationCurveTpl<Quaternionf>(true);
 			Path = path;
 		}
 

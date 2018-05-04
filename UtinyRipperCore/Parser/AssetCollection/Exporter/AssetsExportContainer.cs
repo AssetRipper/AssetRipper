@@ -82,7 +82,8 @@ namespace UtinyRipper.AssetExporters
 		public ISerializedFile File { get; set; }
 		public Version Version => File.Version;
 		public Platform Platform => File.Platform;
-		
+		public TransferInstructionFlags Flags => File.Flags;
+
 		private readonly AssetsExporter m_exporter;
 		private readonly List<IExportCollection> m_collections;
 	}

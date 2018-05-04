@@ -1,4 +1,5 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
@@ -35,6 +36,31 @@ namespace UtinyRipper.Classes.ParticleSystems
 				return 2;
 			}
 			return 1;
+		}
+
+		private ColorRGBAf GetExportKey(Version version, int key)
+		{
+			switch (key)
+			{
+				case 0:
+					return IsColor32(version) ? new ColorRGBAf(Key32_0) : Key0;
+				case 1:
+					return IsColor32(version) ? new ColorRGBAf(Key32_1) : Key1;
+				case 2:
+					return IsColor32(version) ? new ColorRGBAf(Key32_2) : Key2;
+				case 3:
+					return IsColor32(version) ? new ColorRGBAf(Key32_3) : Key3;
+				case 4:
+					return IsColor32(version) ? new ColorRGBAf(Key32_4) : Key4;
+				case 5:
+					return IsColor32(version) ? new ColorRGBAf(Key32_5) : Key5;
+				case 6:
+					return IsColor32(version) ? new ColorRGBAf(Key32_6) : Key6;
+				case 7:
+					return IsColor32(version) ? new ColorRGBAf(Key32_7) : Key7;
+				default:
+					throw new Exception($"Unsupported key {key}");
+			}
 		}
 
 		public void Read(AssetStream stream)
@@ -91,14 +117,14 @@ namespace UtinyRipper.Classes.ParticleSystems
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("key0", Key0.ExportYAML(exporter));
-			node.Add("key1", Key1.ExportYAML(exporter));
-			node.Add("key2", Key2.ExportYAML(exporter));
-			node.Add("key3", Key3.ExportYAML(exporter));
-			node.Add("key4", Key4.ExportYAML(exporter));
-			node.Add("key5", Key5.ExportYAML(exporter));
-			node.Add("key6", Key6.ExportYAML(exporter));
-			node.Add("key7", Key7.ExportYAML(exporter));
+			node.Add("key0", GetExportKey(exporter.Version, 0).ExportYAML(exporter));
+			node.Add("key1", GetExportKey(exporter.Version, 1).ExportYAML(exporter));
+			node.Add("key2", GetExportKey(exporter.Version, 2).ExportYAML(exporter));
+			node.Add("key3", GetExportKey(exporter.Version, 3).ExportYAML(exporter));
+			node.Add("key4", GetExportKey(exporter.Version, 4).ExportYAML(exporter));
+			node.Add("key5", GetExportKey(exporter.Version, 5).ExportYAML(exporter));
+			node.Add("key6", GetExportKey(exporter.Version, 6).ExportYAML(exporter));
+			node.Add("key7", GetExportKey(exporter.Version, 7).ExportYAML(exporter));
 			node.Add("ctime0", Ctime0);
 			node.Add("ctime1", Ctime1);
 			node.Add("ctime2", Ctime2);

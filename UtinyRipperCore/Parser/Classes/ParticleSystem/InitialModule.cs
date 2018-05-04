@@ -73,16 +73,25 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
+		private MinMaxCurve GetExportStartSizeY(Version version)
+		{
+			return IsReadSizeAxes(version) ? StartSizeY : StartSize;
+		}
+		private MinMaxCurve GetExportStartSizeZ(Version version)
+		{
+			return IsReadSizeAxes(version) ? StartSizeZ : StartSize;
+		}
+		private MinMaxCurve GetExportStartRotationX(Version version)
+		{
+			return IsReadRotationAxes(version) ? StartRotationX : new MinMaxCurve(0.0f);
+		}
+		private MinMaxCurve GetExportStartRotationY(Version version)
+		{
+			return IsReadRotationAxes(version) ? StartRotationY : new MinMaxCurve(0.0f);
+		}
 		private MinMaxCurve GetExportGravityModifier(Version version)
 		{
-			if(IsReadGravityModifierSingle(version))
-			{
-				return new MinMaxCurve(GravityModifierSingle);
-			}
-			else
-			{
-				return GravityModifier;
-			}
+			return IsReadGravityModifierSingle(version) ? new MinMaxCurve(GravityModifierSingle) : GravityModifier;
 		}
 
 		public override void Read(AssetStream stream)
@@ -143,10 +152,10 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("startSpeed", StartSpeed.ExportYAML(exporter));
 			node.Add("startColor", StartColor.ExportYAML(exporter));
 			node.Add("startSize", StartSize.ExportYAML(exporter));
-			node.Add("startSizeY", StartSizeY.ExportYAML(exporter));
-			node.Add("startSizeZ", StartSizeZ.ExportYAML(exporter));
-			node.Add("startRotationX", StartRotationX.ExportYAML(exporter));
-			node.Add("startRotationY", StartRotationY.ExportYAML(exporter));
+			node.Add("startSizeY", GetExportStartSizeY(exporter.Version).ExportYAML(exporter));
+			node.Add("startSizeZ", GetExportStartSizeZ(exporter.Version).ExportYAML(exporter));
+			node.Add("startRotationX", GetExportStartRotationX(exporter.Version).ExportYAML(exporter));
+			node.Add("startRotationY", GetExportStartRotationY(exporter.Version).ExportYAML(exporter));
 			node.Add("startRotation", StartRotation.ExportYAML(exporter));
 			node.Add("randomizeRotationDirection", RandomizeRotationDirection);
 			node.Add("maxNumParticles", MaxNumParticles);

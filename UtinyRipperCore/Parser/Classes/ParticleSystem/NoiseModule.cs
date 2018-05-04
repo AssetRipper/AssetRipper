@@ -21,6 +21,19 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 		}
 
+		private MinMaxCurve GetExportPositionAmount(Version version)
+		{
+			return IsReadPositionAmount(version) ? PositionAmount : new MinMaxCurve(1.0f);
+		}
+		private MinMaxCurve GetExportRotationAmount(Version version)
+		{
+			return IsReadPositionAmount(version) ? RotationAmount : new MinMaxCurve(0.0f);
+		}
+		private MinMaxCurve GetExportSizeAmount(Version version)
+		{
+			return IsReadPositionAmount(version) ? SizeAmount : new MinMaxCurve(0.0f);
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -75,9 +88,9 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("remapY", RemapY.ExportYAML(exporter));
 			node.Add("remapZ", RemapZ.ExportYAML(exporter));
 			node.Add("remapEnabled", RemapEnabled);
-			node.Add("positionAmount", PositionAmount.ExportYAML(exporter));
-			node.Add("rotationAmount", RotationAmount.ExportYAML(exporter));
-			node.Add("sizeAmount", SizeAmount.ExportYAML(exporter));
+			node.Add("positionAmount", GetExportPositionAmount(exporter.Version).ExportYAML(exporter));
+			node.Add("rotationAmount", GetExportRotationAmount(exporter.Version).ExportYAML(exporter));
+			node.Add("sizeAmount", GetExportSizeAmount(exporter.Version).ExportYAML(exporter));
 			return node;
 		}
 

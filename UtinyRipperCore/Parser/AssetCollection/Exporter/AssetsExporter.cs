@@ -47,6 +47,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.RenderTexture, yamlExporter);
 			OverrideExporter(ClassIDType.Avatar, yamlExporter);
 			OverrideExporter(ClassIDType.GUILayer, yamlExporter);
+			OverrideExporter(ClassIDType.Animator, yamlExporter);
 			OverrideExporter(ClassIDType.Light, yamlExporter);
 			OverrideExporter(ClassIDType.Animation, yamlExporter);
 			OverrideExporter(ClassIDType.FlareLayer, yamlExporter);

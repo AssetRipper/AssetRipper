@@ -9,7 +9,7 @@ namespace UtinyRipper.Classes.AnimationClips
 	{
 		public FloatCurve(string path)
 		{
-			Curve = new AnimationCurveTpl<Float>(2, 2, 4);
+			Curve = new AnimationCurveTpl<Float>(true);
 			Attribute = string.Empty;
 			Path = path;
 			ClassID = 0;

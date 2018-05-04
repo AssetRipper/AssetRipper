@@ -11,17 +11,20 @@ namespace UtinyRipper.Classes.ParticleSystems
 			MinMaxState = ParticleSystemCurveMode.Constant;
 			Scalar = value;
 			MinScalar = value;
-			MinCurve = default;
-			MaxCurve = default;
+
+			MinCurve = new AnimationCurveTpl<Float>(default(Float));
+			MaxCurve = new AnimationCurveTpl<Float>(default(Float));
 		}
 
-		public MinMaxCurve(float minValue, float maxValue)
+		public MinMaxCurve(float minValue, float maxValue):
+			this(maxValue)
 		{
 			MinMaxState = ParticleSystemCurveMode.TwoConstants;
 			Scalar = maxValue;
 			MinScalar = minValue;
-			MinCurve = default;
-			MaxCurve = default;
+
+			MinCurve = new AnimationCurveTpl<Float>(default(Float));
+			MaxCurve = new AnimationCurveTpl<Float>(default(Float));
 		}
 
 		/// <summary>
@@ -54,6 +57,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
+		private float GetExportMinScalar(Version version)
+		{
+			return IsReadMinScalar(version) ? MinScalar : Scalar;
+		}
+
 		public void Read(AssetStream stream)
 		{
 			if (IsMinMaxStateFirst(stream.Version))
@@ -84,7 +92,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
 			node.Add("minMaxState", (ushort)MinMaxState);
 			node.Add("scalar", Scalar);
-			node.Add("minScalar", MinScalar);
+			node.Add("minScalar", GetExportMinScalar(exporter.Version));
 			node.Add("maxCurve", MaxCurve.ExportYAML(exporter));
 			node.Add("minCurve", MinCurve.ExportYAML(exporter));
 			return node;

@@ -10,9 +10,9 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Time = time;
 			MinValue = minValue;
 			MaxValue = maxValue;
-			CycleCount = 0;
-			RepeatInterval = 0.0f;
-			CountCurve = default;
+			CycleCount = 1;
+			RepeatInterval = 0.01f;
+			CountCurve = new MinMaxCurve(minValue, maxValue);
 		}
 
 		/// <summary>
@@ -37,6 +37,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
+		private MinMaxCurve GetExportCountCurve(Version version)
+		{
+			return IsReadCurve(version) ? CountCurve : new MinMaxCurve(MinValue, MaxValue);
+		}
+
 		public void Read(AssetStream stream)
 		{
 			Time = stream.ReadSingle();
@@ -59,15 +64,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
 			node.Add("time", Time);
-			if (IsReadCurve(exporter.Version))
-			{
-				node.Add("countCurve", CountCurve.ExportYAML(exporter));
-			}
-			else if (Config.IsExportTopmostSerializedVersion)
-			{
-				MinMaxCurve countCurve = new MinMaxCurve(MinValue, MaxValue);
-				node.Add("countCurve", countCurve.ExportYAML(exporter));
-			}
+			node.Add("countCurve", GetExportCountCurve(exporter.Version).ExportYAML(exporter));
 			node.Add("cycleCount", CycleCount);
 			node.Add("repeatInterval", RepeatInterval);
 			return node;

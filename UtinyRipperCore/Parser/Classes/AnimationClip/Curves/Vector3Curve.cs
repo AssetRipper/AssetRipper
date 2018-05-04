@@ -7,7 +7,7 @@ namespace UtinyRipper.Classes.AnimationClips
 	{
 		public Vector3Curve(string path)
 		{
-			Curve = new AnimationCurveTpl<Vector3f>(2, 2, 4);
+			Curve = new AnimationCurveTpl<Vector3f>(true);
 			Path = path;
 		}
 

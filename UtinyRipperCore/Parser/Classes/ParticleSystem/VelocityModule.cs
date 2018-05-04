@@ -13,6 +13,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2017, 3);
 		}
 
+		private MinMaxCurve GetExportSpeedModifier(Version version)
+		{
+			return IsReadSpeedModifier(version) ? SpeedModifier : new MinMaxCurve(1.0f);
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);

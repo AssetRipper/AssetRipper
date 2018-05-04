@@ -75,6 +75,8 @@ namespace UtinyRipper.Classes
 			return $"[{X:0.00}, {Y:0.00}, {Z:0.00}]";
 		}
 
+		public static Vector3f One => new Vector3f(1.0f, 1.0f, 1.0f);
+
 		public float X { get; private set; }
 		public float Y { get; private set; }
 		public float Z { get; private set; }

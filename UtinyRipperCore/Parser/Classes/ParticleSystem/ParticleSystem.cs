@@ -158,16 +158,21 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
+		private bool GetExportAutoRandomSeed(Version version)
+		{
+			return IsReadAutoRandomSeed(version) ? AutoRandomSeed : true;
+		}
+		public bool GetExportUseRigidbodyForVelocity(Version version)
+		{
+			return IsReadUseRigidbodyForVelocity(version) ? UseRigidbodyForVelocity : true;
+		}
 		private MinMaxCurve GetExportStartDelay(Version version)
 		{
-			if(IsReadStartDelaySingle(version))
-			{
-				return new MinMaxCurve(StartDelaySingle);
-			}
-			else
-			{
-				return StartDelay;
-			}
+			return IsReadStartDelaySingle(version) ? new MinMaxCurve(StartDelaySingle) : StartDelay;
+		}
+		private ParticleSystemScalingMode GetExportScalingMode(Version version)
+		{
+			return IsReadScalingMode(version) ? ScalingMode : ParticleSystemScalingMode.Local;
 		}
 
 		public override void Read(AssetStream stream)
@@ -239,7 +244,7 @@ namespace UtinyRipper.Classes
 			}
 			if (IsReadScalingMode(stream.Version))
 			{
-				ScalingMode = stream.ReadInt32();
+				ScalingMode = (ParticleSystemScalingMode)stream.ReadInt32();
 			}
 			if (!IsRandomSeedFirst(stream.Version))
 			{
@@ -318,12 +323,12 @@ namespace UtinyRipper.Classes
 			node.Add("prewarm", Prewarm);
 			node.Add("playOnAwake", PlayOnAwake);
 			node.Add("useUnscaledTime", UseUnscaledTime);
-			node.Add("autoRandomSeed", AutoRandomSeed);
-			node.Add("useRigidbodyForVelocity", UseRigidbodyForVelocity);
+			node.Add("autoRandomSeed", GetExportAutoRandomSeed(exporter.Version));
+			node.Add("useRigidbodyForVelocity", GetExportUseRigidbodyForVelocity(exporter.Version));
 			node.Add("startDelay", GetExportStartDelay(exporter.Version).ExportYAML(exporter));
 			node.Add("moveWithTransform", MoveWithTransform);
 			node.Add("moveWithCustomTransform", MoveWithCustomTransform.ExportYAML(exporter));
-			node.Add("scalingMode", ScalingMode);
+			node.Add("scalingMode", (int)ScalingMode);
 			node.Add("randomSeed", RandomSeed);
 			node.Add("InitialModule", InitialModule.ExportYAML(exporter));
 			node.Add("ShapeModule", ShapeModule.ExportYAML(exporter));
@@ -364,7 +369,7 @@ namespace UtinyRipper.Classes
 		public bool AutoRandomSeed { get; private set; }
 		public bool UseRigidbodyForVelocity { get; private set; }
 		public int MoveWithTransform { get; private set; }
-		public int ScalingMode { get; private set; }
+		public ParticleSystemScalingMode ScalingMode { get; private set; }
 		public int RandomSeed { get; private set; }
 		public InitialModule InitialModule { get; } = new InitialModule();
 		public ShapeModule ShapeModule { get; } = new ShapeModule();

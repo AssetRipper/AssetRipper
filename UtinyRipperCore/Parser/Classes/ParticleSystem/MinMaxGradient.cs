@@ -5,11 +5,17 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public struct MinMaxGradient : IAssetReadable, IYAMLExportable
 	{
+		/// <summary>
+		/// Less than 5.4.0
+		/// </summary>
 		public static bool IsColor32(Version version)
 		{
 			return version.IsLess(5, 4);
 		}
 
+		/// <summary>
+		/// Less than 5.6.0
+		/// </summary>
 		private static bool IsMaxGradientFirst(Version version)
 		{
 			return version.IsLess(5, 6);
@@ -27,6 +33,15 @@ namespace UtinyRipper.Classes.ParticleSystems
 				return 2;
 			}
 			return 1;
+		}
+
+		private ColorRGBAf GetExportMinColor(Version version)
+		{
+			return IsColor32(version) ? new ColorRGBAf(MinColor32) : MinColor;
+		}
+		private ColorRGBAf GetExportMaxColor(Version version)
+		{
+			return IsColor32(version) ? new ColorRGBAf(MaxColor32) : MaxColor;
 		}
 
 		public void Read(AssetStream stream)
@@ -65,8 +80,8 @@ namespace UtinyRipper.Classes.ParticleSystems
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
 			node.Add("minMaxState", MinMaxState);
-			node.Add("minColor", MinColor.ExportYAML(exporter));
-			node.Add("maxColor", MaxColor.ExportYAML(exporter));
+			node.Add("minColor", GetExportMinColor(exporter.Version).ExportYAML(exporter));
+			node.Add("maxColor", GetExportMaxColor(exporter.Version).ExportYAML(exporter));
 			node.Add("maxGradient", MaxGradient.ExportYAML(exporter));
 			node.Add("minGradient", MinGradient.ExportYAML(exporter));
 			return node;

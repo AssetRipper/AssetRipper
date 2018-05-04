@@ -5,6 +5,11 @@ namespace UtinyRipper.Classes
 {
 	public struct BitField : IAssetReadable, IYAMLExportable
 	{
+		public BitField(uint bits)
+		{
+			Bits = bits;
+		}
+
 		/// <summary>
 		/// Less than 2.0.0
 		/// </summary>

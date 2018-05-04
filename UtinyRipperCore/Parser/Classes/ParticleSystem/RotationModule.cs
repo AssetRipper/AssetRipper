@@ -13,6 +13,15 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(5, 3);
 		}
 
+		private MinMaxCurve GetExportX(Version version)
+		{
+			return IsReadAxes(version) ? X : new MinMaxCurve(0.0f);
+		}
+		private MinMaxCurve GetExportY(Version version)
+		{
+			return IsReadAxes(version) ? Y : new MinMaxCurve(0.0f);
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -34,8 +43,8 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IAssetsExporter exporter)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
-			node.Add("x", X.ExportYAML(exporter));
-			node.Add("y", Y.ExportYAML(exporter));
+			node.Add("x", GetExportX(exporter.Version).ExportYAML(exporter));
+			node.Add("y", GetExportY(exporter.Version).ExportYAML(exporter));
 			node.Add("curve", Curve.ExportYAML(exporter));
 			node.Add("separateAxes", SeparateAxes);
 			return node;

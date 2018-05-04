@@ -36,6 +36,28 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
+		private IReadOnlyList<SubEmitterData> GetExportSubEmitters(Version version)
+		{
+			if (IsReadSubEmitters(version))
+			{
+				return SubEmitters;
+			}
+			else
+			{
+				SubEmitterData[] subEmitters = new SubEmitterData[IsReadSecond(version) ? 6 : 3];
+				subEmitters[0] = new SubEmitterData(SubEmitterBirth, ParticleSystemSubEmitterType.Birth);
+				subEmitters[1] = new SubEmitterData(SubEmitterDeath, ParticleSystemSubEmitterType.Death);
+				subEmitters[2] = new SubEmitterData(SubEmitterCollision, ParticleSystemSubEmitterType.Collision);
+				if (IsReadSecond(version))
+				{
+					subEmitters[3] = new SubEmitterData(SubEmitterBirth1, ParticleSystemSubEmitterType.Birth);
+					subEmitters[4] = new SubEmitterData(SubEmitterDeath1, ParticleSystemSubEmitterType.Death);
+					subEmitters[5] = new SubEmitterData(SubEmitterCollision1, ParticleSystemSubEmitterType.Collision);
+				}
+				return subEmitters;
+			}
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -95,23 +117,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
 			node.InsertSerializedVersion(GetSerializedVersion(exporter.Version));
-			if (IsReadSubEmitters(exporter.Version))
-			{
-				node.Add("subEmitters", SubEmitters.ExportYAML(exporter));
-			}
-			else if (Config.IsExportTopmostSerializedVersion)
-			{
-				SubEmitterData[] subEmitters = new SubEmitterData[IsReadSecond(exporter.Version) ? 6 : 3];
-				subEmitters[0] = new SubEmitterData(SubEmitterBirth, ParticleSystemSubEmitterType.Birth);
-				subEmitters[1] = new SubEmitterData(SubEmitterDeath, ParticleSystemSubEmitterType.Death);
-				subEmitters[2] = new SubEmitterData(SubEmitterCollision, ParticleSystemSubEmitterType.Collision);
-				if (IsReadSecond(exporter.Version))
-				{
-					subEmitters[3] = new SubEmitterData(SubEmitterBirth1, ParticleSystemSubEmitterType.Birth);
-					subEmitters[4] = new SubEmitterData(SubEmitterDeath1, ParticleSystemSubEmitterType.Death);
-					subEmitters[5] = new SubEmitterData(SubEmitterCollision1, ParticleSystemSubEmitterType.Collision);
-				}
-			}
+			node.Add("subEmitters", GetExportSubEmitters(exporter.Version).ExportYAML(exporter));
 			return node;
 		}
 

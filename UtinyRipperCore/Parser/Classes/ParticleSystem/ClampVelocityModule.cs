@@ -27,6 +27,19 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2017, 2);
 		}
 
+		private bool GetExportMultiplyDragByParticleSize(Version version)
+		{
+			return IsReadMultiplyDragByParticleSize(version) ? MultiplyDragByParticleSize : true;
+		}
+		private bool GetExportMultiplyDragByParticleVelocity(Version version)
+		{
+			return IsReadMultiplyDragByParticleSize(version) ? MultiplyDragByParticleVelocity : true;
+		}
+		private MinMaxCurve GetExportDrag(Version version)
+		{
+			return IsReadDrag(version) ? Drag : new MinMaxCurve(0.0f);
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -63,10 +76,10 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("magnitude", Magnitude.ExportYAML(exporter));
 			node.Add("separateAxis", SeparateAxis);
 			node.Add("inWorldSpace", InWorldSpace);
-			node.Add("multiplyDragByParticleSize", MultiplyDragByParticleSize);
-			node.Add("multiplyDragByParticleVelocity", MultiplyDragByParticleVelocity);
+			node.Add("multiplyDragByParticleSize", GetExportMultiplyDragByParticleSize(exporter.Version));
+			node.Add("multiplyDragByParticleVelocity", GetExportMultiplyDragByParticleVelocity(exporter.Version));
 			node.Add("dampen", Dampen);
-			node.Add("drag", Drag.ExportYAML(exporter));
+			node.Add("drag", GetExportDrag(exporter.Version).ExportYAML(exporter));
 			return node;
 		}
 

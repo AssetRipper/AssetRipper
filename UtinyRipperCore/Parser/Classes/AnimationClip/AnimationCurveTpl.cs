@@ -7,12 +7,21 @@ namespace UtinyRipper.Classes.AnimationClips
 	public struct AnimationCurveTpl<T> : IAssetReadable, IYAMLExportable
 		where T : struct, IAssetReadable, IYAMLExportable
 	{
-		public AnimationCurveTpl(int preInfinity, int postInfinity, int rotationOrder)
+		public AnimationCurveTpl(bool _)
 		{
 			Curve = new List<KeyframeTpl<T>>();
-			PreInfinity = preInfinity;
-			PostInfinity = postInfinity;
-			RotationOrder = rotationOrder;
+			PreInfinity = 2;
+			PostInfinity = 2;
+			RotationOrder = 4;
+		}
+
+		public AnimationCurveTpl(T defaultValue):
+			this(true)
+		{
+			KeyframeTpl<T> firstKey = new KeyframeTpl<T>(0.0f, defaultValue);
+			KeyframeTpl<T> secondKey = new KeyframeTpl<T>(1.0f, defaultValue);
+			Curve.Add(firstKey);
+			Curve.Add(secondKey);
 		}
 
 		/// <summary>
@@ -37,6 +46,11 @@ namespace UtinyRipper.Classes.AnimationClips
 			return 1;
 		}
 
+		private int GetExportRotationOrder(Version version)
+		{
+			return IsReadRotationOrder(version) ? RotationOrder : 4;
+		}
+
 		public void Read(AssetStream stream)
 		{
 			Curve = new List<KeyframeTpl<T>>();
@@ -59,7 +73,7 @@ namespace UtinyRipper.Classes.AnimationClips
 			node.Add("m_Curve", (Curve == null) ? YAMLSequenceNode.Empty : Curve.ExportYAML(exporter));
 			node.Add("m_PreInfinity", PreInfinity);
 			node.Add("m_PostInfinity", PostInfinity);
-			node.Add("m_RotationOrder", IsReadRotationOrder(exporter.Version) ? RotationOrder : 0);
+			node.Add("m_RotationOrder", GetExportRotationOrder(exporter.Version));
 
 			return node;
 		}

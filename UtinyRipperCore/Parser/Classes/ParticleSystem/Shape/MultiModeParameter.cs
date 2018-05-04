@@ -10,7 +10,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Value = value;
 			Mode = ParticleSystemShapeMultiModeValue.Random;
 			Spread = 0.0f;
-			Speed = default;
+			Speed = new MinMaxCurve(1.0f);
 		}
 
 		public void Read(AssetStream stream)

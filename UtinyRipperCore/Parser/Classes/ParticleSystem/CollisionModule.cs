@@ -90,6 +90,47 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
+		private bool GetExportMultiplyColliderForceByCollisionAngle(Version version)
+		{
+			return IsReadColliderForce(version) ? MultiplyColliderForceByCollisionAngle : true;
+		}
+		private MinMaxCurve GetExportDampen(Version version)
+		{
+			return IsReadDampenSingle(version) ? new MinMaxCurve(DampenSingle) : Dampen;
+		}
+		private MinMaxCurve GetExportBounce(Version version)
+		{
+			return IsReadDampenSingle(version) ? new MinMaxCurve(BounceSingle) : Bounce;
+		}
+		private MinMaxCurve GetExportEnergyLossOnCollision(Version version)
+		{
+			return IsReadDampenSingle(version) ? new MinMaxCurve(EnergyLossOnCollisionSingle) : EnergyLossOnCollision;
+		}
+		private float GetExportMaxKillSpeed(Version version)
+		{
+			return IsReadMaxKillSpeed(version) ? MaxKillSpeed : MinKillSpeed;
+		}
+		private float GetExportRadiusScale(Version version)
+		{
+			return IsReadRadiusScale(version) ? RadiusScale : 1.0f;
+		}
+		private BitField GetExportCollidesWith(Version version)
+		{
+			return IsReadRadiusScale(version) ? CollidesWith : new BitField(uint.MaxValue);
+		}
+		private int GetExportMaxCollisionShapes(Version version)
+		{
+			return IsReadMaxCollisionShapes(version) ? MaxCollisionShapes : 256;
+		}
+		private float GetExportVoxelSize(Version version)
+		{
+			return IsReadQuality(version) ? VoxelSize : 0.5f;
+		}
+		private bool GetExportCollidesWithDynamic(Version version)
+		{
+			return IsReadCollidesWithDynamic(version) ? CollidesWithDynamic : true;
+		}		
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -179,25 +220,25 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("colliderForce", ColliderForce);
 			node.Add("multiplyColliderForceByParticleSize", MultiplyColliderForceByParticleSize);
 			node.Add("multiplyColliderForceByParticleSpeed", MultiplyColliderForceByParticleSpeed);
-			node.Add("multiplyColliderForceByCollisionAngle", MultiplyColliderForceByCollisionAngle);
+			node.Add("multiplyColliderForceByCollisionAngle", GetExportMultiplyColliderForceByCollisionAngle(exporter.Version));
 			node.Add("plane0", Plane0.ExportYAML(exporter));
 			node.Add("plane1", Plane1.ExportYAML(exporter));
 			node.Add("plane2", Plane2.ExportYAML(exporter));
 			node.Add("plane3", Plane3.ExportYAML(exporter));
 			node.Add("plane4", Plane4.ExportYAML(exporter));
 			node.Add("plane5", Plane5.ExportYAML(exporter));
-			node.Add("m_Dampen", Dampen.ExportYAML(exporter));
-			node.Add("m_Bounce", Bounce.ExportYAML(exporter));
-			node.Add("m_EnergyLossOnCollision", EnergyLossOnCollision.ExportYAML(exporter));
+			node.Add("m_Dampen", GetExportDampen(exporter.Version).ExportYAML(exporter));
+			node.Add("m_Bounce", GetExportBounce(exporter.Version).ExportYAML(exporter));
+			node.Add("m_EnergyLossOnCollision", GetExportEnergyLossOnCollision(exporter.Version).ExportYAML(exporter));
 			node.Add("minKillSpeed", MinKillSpeed);
-			node.Add("maxKillSpeed", MaxKillSpeed);
-			node.Add("radiusScale", RadiusScale);
-			node.Add("collidesWith", CollidesWith.ExportYAML(exporter));
-			node.Add("maxCollisionShapes", MaxCollisionShapes);
+			node.Add("maxKillSpeed", GetExportMaxKillSpeed(exporter.Version));
+			node.Add("radiusScale", GetExportRadiusScale(exporter.Version));
+			node.Add("collidesWith", GetExportCollidesWith(exporter.Version).ExportYAML(exporter));
+			node.Add("maxCollisionShapes", GetExportMaxCollisionShapes(exporter.Version));
 			node.Add("quality", Quality);
-			node.Add("voxelSize", VoxelSize);
+			node.Add("voxelSize", GetExportVoxelSize(exporter.Version));
 			node.Add("collisionMessages", CollisionMessages);
-			node.Add("collidesWithDynamic", CollidesWithDynamic);
+			node.Add("collidesWithDynamic", GetExportCollidesWithDynamic(exporter.Version));
 			node.Add("interiorCollisions", InteriorCollisions);
 			return node;
 		}

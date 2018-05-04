@@ -21,11 +21,11 @@ namespace UtinyRipper.Classes.Sprites
 			return version.IsLess(5, 6);
 		}
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.4.5p1 to 5.5.0 exclusive or 5.5.3 and greater
 		/// </summary>
 		public bool IsReadAtlasRectOffset(Version version)
 		{
-			return version.IsGreaterEqual(5, 6);
+			return version.IsGreaterEqual(5, 4, 5, VersionType.Patch, 1) && version.IsLess(5, 5) || version.IsGreaterEqual(5, 5, 3);
 		}
 		/// <summary>
 		/// 4.5.0 and greater

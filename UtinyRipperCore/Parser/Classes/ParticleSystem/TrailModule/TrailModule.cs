@@ -33,14 +33,19 @@ namespace UtinyRipper.Classes.ParticleSystems
 		{
 			return version.IsGreaterEqual(2017, 3);
 		}
-		
+
+		private int GetExportRibbonCount(Version version)
+		{
+			return IsReadRibbonCount(version) ? RibbonCount : 1;
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
 
 			if (IsReadMode(stream.Version))
 			{
-				Mode = stream.ReadInt32();
+				Mode = (ParticleSystemTrailMode)stream.ReadInt32();
 			}
 			Ratio = stream.ReadSingle();
 			Lifetime.Read(stream);
@@ -73,12 +78,12 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IAssetsExporter exporter)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
-			node.Add("mode", Mode);
+			node.Add("mode", (int)Mode);
 			node.Add("ratio", Ratio);
 			node.Add("lifetime", Lifetime.ExportYAML(exporter));
 			node.Add("minVertexDistance", MinVertexDistance);
 			node.Add("textureMode", TextureMode);
-			node.Add("ribbonCount", RibbonCount);
+			node.Add("ribbonCount", GetExportRibbonCount(exporter.Version));
 			node.Add("worldSpace", WorldSpace);
 			node.Add("dieWithParticles", DieWithParticles);
 			node.Add("sizeAffectsWidth", SizeAffectsWidth);
@@ -92,7 +97,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public int Mode { get; private set; }
+		public ParticleSystemTrailMode Mode { get; private set; }
 		public float Ratio { get; private set; }
 		public float MinVertexDistance { get; private set; }
 		public int TextureMode { get; private set; }
