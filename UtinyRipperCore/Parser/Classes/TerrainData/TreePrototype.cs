@@ -18,10 +18,10 @@ namespace UtinyRipper.Classes.TerrainDatas
 			yield return Prefab.FetchDependency(file, isLog, () => nameof(TreePrototype), "prefab");
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("prefab", Prefab.ExportYAML(exporter));
+			node.Add("prefab", Prefab.ExportYAML(container));
 			node.Add("bendFactor", BendFactor);
 			return node;
 		}

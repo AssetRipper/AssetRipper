@@ -11,10 +11,10 @@ namespace UtinyRipper.Classes.Avatars
 			m_x = stream.ReadArray<XForm>();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_X", X == null ? YAMLSequenceNode.Empty : X.ExportYAML(exporter));
+			node.Add("m_X", X == null ? YAMLSequenceNode.Empty : X.ExportYAML(container));
 			return node;
 		}
 

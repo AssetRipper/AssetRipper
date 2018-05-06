@@ -35,20 +35,20 @@ namespace UtinyRipper.Classes.AudioMixers
 			m_exposedParameterIndices = stream.ReadUInt32Array();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("groups", Groups.ExportYAML(exporter));
-			node.Add("groupGUIDs", GroupGUIDs.ExportYAML(exporter));
-			node.Add("effects", Effects.ExportYAML(exporter));
-			node.Add("effectGUIDs", EffectGUIDs.ExportYAML(exporter));
+			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("groups", Groups.ExportYAML(container));
+			node.Add("groupGUIDs", GroupGUIDs.ExportYAML(container));
+			node.Add("effects", Effects.ExportYAML(container));
+			node.Add("effectGUIDs", EffectGUIDs.ExportYAML(container));
 			node.Add("numSideChainBuffers", NumSideChainBuffers);
-			node.Add("snapshots", Snapshots.ExportYAML(exporter));
-			node.Add("snapshotGUIDs", SnapshotGUIDs.ExportYAML(exporter));
-			//node.Add("groupNameBuffer", GroupNameBuffer.ExportYAML(exporter));
-			//node.Add("snapshotNameBuffer", SnapshotNameBuffer.ExportYAML(exporter));
-			//node.Add("pluginEffectNameBuffer", PluginEffectNameBuffer.ExportYAML(exporter));
+			node.Add("snapshots", Snapshots.ExportYAML(container));
+			node.Add("snapshotGUIDs", SnapshotGUIDs.ExportYAML(container));
+			//node.Add("groupNameBuffer", GroupNameBuffer.ExportYAML(container));
+			//node.Add("snapshotNameBuffer", SnapshotNameBuffer.ExportYAML(container));
+			//node.Add("pluginEffectNameBuffer", PluginEffectNameBuffer.ExportYAML(container));
 			node.Add("exposedParameterNames", ExposedParameterNames.ExportYAML(true));
 			node.Add("exposedParameterIndices", ExposedParameterIndices.ExportYAML(true));
 			return node;

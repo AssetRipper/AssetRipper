@@ -44,13 +44,13 @@ namespace UtinyRipper.Classes.Meshes
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("vertices", (m_vertices == null) ? YAMLSequenceNode.Empty : m_vertices.ExportYAML(exporter));
-			node.Add("shapes", (m_shapes == null) ? YAMLSequenceNode.Empty : m_shapes.ExportYAML(exporter));
-			node.Add("channels", IsReadChannels(exporter.Version) ? m_channels.ExportYAML(exporter) : YAMLSequenceNode.Empty);
-			node.Add("fullWeights", IsReadChannels(exporter.Version) ? m_fullWeights.ExportYAML() : YAMLSequenceNode.Empty);
+			node.Add("vertices", (m_vertices == null) ? YAMLSequenceNode.Empty : m_vertices.ExportYAML(container));
+			node.Add("shapes", (m_shapes == null) ? YAMLSequenceNode.Empty : m_shapes.ExportYAML(container));
+			node.Add("channels", IsReadChannels(container.Version) ? m_channels.ExportYAML(container) : YAMLSequenceNode.Empty);
+			node.Add("fullWeights", IsReadChannels(container.Version) ? m_fullWeights.ExportYAML() : YAMLSequenceNode.Empty);
 			return node;
 		}
 

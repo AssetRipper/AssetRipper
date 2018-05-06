@@ -60,13 +60,13 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_SplatDatabase", SplatDatabase.ExportYAML(exporter));
-			node.Add("m_DetailDatabase", DetailDatabase.ExportYAML(exporter));
-			node.Add("m_Heightmap", Heightmap.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_SplatDatabase", SplatDatabase.ExportYAML(container));
+			node.Add("m_DetailDatabase", DetailDatabase.ExportYAML(container));
+			node.Add("m_Heightmap", Heightmap.ExportYAML(container));
 			return node;
 		}
 

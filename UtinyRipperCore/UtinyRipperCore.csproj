@@ -120,10 +120,12 @@
     <Compile Include="IO\FileMultiStream\SplitNameComparer.cs" />
     <Compile Include="IO\ReverseStream.cs" />
     <Compile Include="IO\FileMultiStream\FileMultiStream.cs" />
-    <Compile Include="Parser\AssetCollection\Exporter\AssetsExportContainer.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\ProjectAssetContainer.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\DefaultImporter.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\IAssetImporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\IHVImageFormatImporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\TextureImportSettings.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Collections\ExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Collections\SceneExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Collections\TextureExportCollection.cs" />
     <Compile Include="Parser\Classes\AnimationClip\ChildTrack.cs" />
@@ -181,6 +183,7 @@
     <Compile Include="Parser\Classes\LightmapSettings\LightmapData.cs" />
     <Compile Include="Parser\Classes\LightmapSettings\LightmapEditorSettings.cs" />
     <Compile Include="Parser\Classes\LightmapSettings\LightmapSettings.cs" />
+    <Compile Include="Parser\Classes\LightmapSettings\LightmapsMode.cs" />
     <Compile Include="Parser\Classes\LightProbes\LightProbeData.cs" />
     <Compile Include="Parser\Classes\LightProbes\LightProbeOcclusion.cs" />
     <Compile Include="Parser\Classes\LightProbes\LightProbes.cs" />
@@ -190,6 +193,8 @@
     <Compile Include="Parser\Classes\ParticleSystem\Shape\ParticleSystemShapeMultiModeValue.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Shape\ParticleSystemShapeType.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\TrailModule\ParticleSystemTrailMode.cs" />
+    <Compile Include="Parser\Classes\RenderSettings\AmbientMode.cs" />
+    <Compile Include="Parser\Classes\RenderSettings\FogMode.cs" />
     <Compile Include="Parser\Classes\RenderSettings\SHCoefficientsBaked.cs" />
     <Compile Include="Parser\Classes\SceneAsset.cs" />
     <Compile Include="Parser\Classes\Serialize\Matrix3x4f.cs" />
@@ -350,7 +355,7 @@
     <Compile Include="Parser\IO\AssetStream\AssetStream.cs" />
     <Compile Include="IO\Utils\Extensions\EndianStreamExtensions.cs" />
     <Compile Include="IO\Utils\Extensions\IListExtensions.cs" />
-    <Compile Include="Parser\AssetCollection\Exporter\AssetsExporter.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\ProjectExporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\NativeFormatImporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Meta.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Collections\AssetExportCollection.cs" />
@@ -358,9 +363,8 @@
     <Compile Include="Parser\AssetCollection\Exporter\Collections\PrefabExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Collections\IExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Collections\SkipExportCollection.cs" />
-    <Compile Include="Parser\AssetCollection\Exporter\Exporters\Base\AssetExporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\BinaryAssetExporter.cs" />
-    <Compile Include="Parser\AssetCollection\Exporter\Exporters\Base\IAssetExporter.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Exporters\IAssetExporter.cs" />
     <Compile Include="Exporter\YAML\Base\Emitter.cs" />
     <Compile Include="Exporter\YAML\Base\MappingStyle.cs" />
     <Compile Include="Exporter\YAML\Base\MetaType.cs" />
@@ -384,11 +388,11 @@
     <Compile Include="IO\Lz4Stream.cs" />
     <Compile Include="IO\Utils\Extensions\IDictionaryExtensions.cs" />
     <Compile Include="IO\Utils\SevenZipHelper.cs" />
-    <Compile Include="Parser\AssetCollection\AssetCollection.cs" />
+    <Compile Include="Parser\AssetCollection\FileCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\DummyAssetExporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\YAMLAssetExporter.cs" />
-    <Compile Include="Parser\AssetCollection\Exporter\Interfaces\IAssetsExporter.cs" />
-    <Compile Include="Parser\AssetCollection\IAssetCollection.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Interfaces\IExportContainer.cs" />
+    <Compile Include="Parser\AssetCollection\IFileCollection.cs" />
     <Compile Include="Parser\AssetInfo.cs" />
     <Compile Include="Parser\Format\SerializedFile\SerializedFile.cs" />
     <Compile Include="Parser\Format\BundleFile\Entry\BundleFileEntry.cs" />

@@ -140,12 +140,12 @@ namespace UtinyRipper.Classes.AnimationClips
 			stream.AlignStream(AlignType.Align4);
 		}
 		
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: value acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_AdditiveReferencePoseClip", default(PPtr<AnimationClip>).ExportYAML(exporter));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_AdditiveReferencePoseClip", default(PPtr<AnimationClip>).ExportYAML(container));
 			node.Add("m_AdditiveReferencePoseTime", 0);
 			node.Add("m_StartTime", StartTime);
 			node.Add("m_StopTime", StopTime);

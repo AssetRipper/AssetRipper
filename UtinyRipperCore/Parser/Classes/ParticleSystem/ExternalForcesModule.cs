@@ -12,9 +12,9 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Multiplier = stream.ReadSingle();
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
 			node.Add("multiplier", Multiplier);
 			return node;
 		}

@@ -30,9 +30,9 @@ namespace UtinyRipper.Classes
 			yield return Script.GetObject(file);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			throw new System.NotImplementedException();
 		}
 

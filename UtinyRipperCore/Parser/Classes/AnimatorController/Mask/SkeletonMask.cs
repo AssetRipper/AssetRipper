@@ -12,7 +12,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			m_data = stream.ReadArray<SkeletonMaskElement>();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

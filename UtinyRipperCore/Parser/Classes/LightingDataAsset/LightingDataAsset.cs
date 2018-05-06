@@ -133,26 +133,28 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_Scene", Scene.ExportYAML(exporter));
-			node.Add("m_Lightmaps", Lightmaps.ExportYAML(exporter));
-			node.Add("m_LightProbes", LightProbes.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_Scene", Scene.ExportYAML(container));
+			node.Add("m_Lightmaps", Lightmaps.ExportYAML(container));
+			node.Add("m_LightProbes", LightProbes.ExportYAML(container));
 			node.Add("m_LightmapsMode", LightmapsMode);
-			node.Add("m_BakedAmbientProbeInLinear", BakedAmbientProbeInLinear.ExportYAML(exporter));
-			node.Add("m_LightmappedRendererData", LightmappedRendererData.ExportYAML(exporter));
-			node.Add("m_LightmappedRendererDataIDs", LightmappedRendererDataIDs.ExportYAML(exporter));
-			node.Add("m_EnlightenSceneMapping", EnlightenSceneMapping.ExportYAML(exporter));
-			node.Add("m_EnlightenSceneMappingRendererIDs", EnlightenSceneMappingRendererIDs.ExportYAML(exporter));
-			node.Add("m_Lights", Lights.ExportYAML(exporter));
-			node.Add("m_LightBakingOutputs", LightBakingOutputs.ExportYAML(exporter));
-			node.Add("m_BakedReflectionProbeCubemaps", BakedReflectionProbeCubemaps.ExportYAML(exporter));
-			node.Add("m_BakedReflectionProbes", BakedReflectionProbes.ExportYAML(exporter));
+			node.Add("m_BakedAmbientProbeInLinear", BakedAmbientProbeInLinear.ExportYAML(container));
+			node.Add("m_LightmappedRendererData", LightmappedRendererData.ExportYAML(container));
+			node.Add("m_LightmappedRendererDataIDs", LightmappedRendererDataIDs.ExportYAML(container));
+			node.Add("m_EnlightenSceneMapping", EnlightenSceneMapping.ExportYAML(container));
+			node.Add("m_EnlightenSceneMappingRendererIDs", EnlightenSceneMappingRendererIDs.ExportYAML(container));
+			node.Add("m_Lights", Lights.ExportYAML(container));
+			node.Add("m_LightBakingOutputs", LightBakingOutputs.ExportYAML(container));
+			node.Add("m_BakedReflectionProbeCubemaps", BakedReflectionProbeCubemaps.ExportYAML(container));
+			node.Add("m_BakedReflectionProbes", BakedReflectionProbes.ExportYAML(container));
 			node.Add("m_EnlightenData", EnlightenData.ExportYAML());
 			node.Add("m_EnlightenDataVersion", EnlightenDataVersion);
 			return node;
 		}
+
+		public override string ExportName => $"{OcclusionCullingSettings.SceneExportFolder}/{base.ExportName}";
 
 		public IReadOnlyList<LightmapData> Lightmaps => m_lightmaps;
 		public int LightmapsMode { get; private set; }

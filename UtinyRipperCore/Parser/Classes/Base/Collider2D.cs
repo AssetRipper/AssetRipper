@@ -77,15 +77,15 @@ namespace UtinyRipper.Classes
 			yield return Material.FetchDependency(file, isLog, ToLogString, "m_Material");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("m_Density", Density);
-			node.Add("m_Material", Material.ExportYAML(exporter));
+			node.Add("m_Material", Material.ExportYAML(container));
 			node.Add("m_IsTrigger", IsTrigger);
 			node.Add("m_UsedByEffector", UsedByEffector);
 			node.Add("m_UsedByComposite", UsedByComposite);
-			node.Add("m_Offset", Offset.ExportYAML(exporter));
+			node.Add("m_Offset", Offset.ExportYAML(container));
 			return node;
 		}
 

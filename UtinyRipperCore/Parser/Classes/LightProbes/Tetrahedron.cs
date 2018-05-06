@@ -18,7 +18,7 @@ namespace UtinyRipper.Classes.LightProbess
 			Matrix.Read(stream);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("indices[0]", Indices_0);
@@ -29,7 +29,7 @@ namespace UtinyRipper.Classes.LightProbess
 			node.Add("neighbors[1]", Neighbors_1);
 			node.Add("neighbors[2]", Neighbors_2);
 			node.Add("neighbors[3]", Neighbors_3);
-			node.Add("matrix", Matrix.ExportYAML(exporter));
+			node.Add("matrix", Matrix.ExportYAML(container));
 			return node;
 		}
 

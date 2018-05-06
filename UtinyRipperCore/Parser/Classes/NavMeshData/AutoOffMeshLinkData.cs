@@ -15,11 +15,11 @@ namespace UtinyRipper.Classes.NavMeshDatas
 			LinkDirection = stream.ReadByte();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Start", Start.ExportYAML(exporter));
-			node.Add("m_End", End.ExportYAML(exporter));
+			node.Add("m_Start", Start.ExportYAML(container));
+			node.Add("m_End", End.ExportYAML(container));
 			node.Add("m_Radius", Radius);
 			node.Add("m_LinkType", LinkType);
 			node.Add("m_Area", Area);

@@ -18,7 +18,7 @@ namespace UtinyRipper.Classes.Materials
 			Value = stream.ReadStringAligned();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			//if(IsPlainString)

@@ -11,40 +11,6 @@ namespace UtinyRipper.Classes
 		public LightmapSettings(AssetInfo assetInfo):
 			base(assetInfo)
 		{
-			LightmapEditorSettings.Resolution = 2.0f;
-			LightmapEditorSettings.BakeResolution = 0.0f;
-			LightmapEditorSettings.TextureWidth = 1024;
-			LightmapEditorSettings.TextureHeight = 1024;
-			LightmapEditorSettings.AO = false;
-			LightmapEditorSettings.AOMaxDistance = 1.0f;
-			LightmapEditorSettings.CompAOExponent = 1.0f;
-			LightmapEditorSettings.CompAOExponentDirect = 0.0f;
-			LightmapEditorSettings.Padding = 2;
-			LightmapEditorSettings.LightmapParameters = default;
-			LightmapEditorSettings.LightmapsBakeMode = 1;
-			LightmapEditorSettings.TextureCompression = true;
-			LightmapEditorSettings.FinalGather = false;
-			LightmapEditorSettings.FinalGatherFiltering = true;
-			LightmapEditorSettings.FinalGatherRayCount = 256;
-			LightmapEditorSettings.ReflectionCompression = 2;
-			LightmapEditorSettings.MixedBakeMode = 1;
-			LightmapEditorSettings.BakeBackend = 0;
-			LightmapEditorSettings.PVRSampling = 1;
-			LightmapEditorSettings.PVRDirectSampleCount = 32;
-			LightmapEditorSettings.PVRSampleCount = 500;
-			LightmapEditorSettings.PVRBounces = 2;
-			LightmapEditorSettings.PVRFilterTypeDirect = 0;
-			LightmapEditorSettings.PVRFilterTypeIndirect = 0;
-			LightmapEditorSettings.PVRFilterTypeAO = 0;
-			LightmapEditorSettings.PVRFilteringMode = 0;
-			LightmapEditorSettings.PVRCulling = true;
-			LightmapEditorSettings.PVRFilteringGaussRadiusDirect = 1;
-			LightmapEditorSettings.PVRFilteringGaussRadiusIndirect = 5;
-			LightmapEditorSettings.PVRFilteringGaussRadiusAO = 2;
-			LightmapEditorSettings.PVRFilteringAtrousPositionSigmaDirect = 0.5f;
-			LightmapEditorSettings.PVRFilteringAtrousPositionSigmaIndirect = 2.0f;
-			LightmapEditorSettings.PVRFilteringAtrousPositionSigmaAO = 1.0f;
-			LightmapEditorSettings.ShowResolutionOverlay = true;
 		}
 
 		/// <summary>
@@ -55,7 +21,7 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(5) && flags.IsSerializeGameRelease();
 		}
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.0.0 and greater and Not Release
 		/// </summary>
 		public static bool IsReadGIWorkflowMode(Version version, TransferInstructionFlags flags)
 		{
@@ -126,6 +92,9 @@ namespace UtinyRipper.Classes
 		{
 			return version.IsGreaterEqual(5) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 6);
 		}
+		/// <summary>
+		/// 5.6.0b2 and greater
+		/// </summary>
 		public static bool IsReadUseShadowmask(Version version)
 		{
 			return version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
@@ -237,7 +206,7 @@ namespace UtinyRipper.Classes
 
 			if(IsReadLightmapsMode(stream.Version, stream.Flags))
 			{
-				LightmapsMode = stream.ReadInt32();
+				LightmapsMode = (LightmapsMode)stream.ReadInt32();
 			}
 			if (IsReadBakedColorSpace(stream.Version))
 			{
@@ -320,23 +289,40 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-#warning TODO: convert data
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_GIWorkflowMode", GIWorkflowMode);
-			node.Add("m_GISettings", GISettings.ExportYAML(exporter));
-			node.Add("m_LightmapEditorSettings", LightmapEditorSettings.ExportYAML(exporter));
-			node.Add("m_LightingDataAsset", LightingDataAsset.ExportYAML(exporter));
-			node.Add("m_UseShadowmask", 0);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_GIWorkflowMode", GetExportGIWorkflowMode(container.Version, container.Flags));
+			node.Add("m_GISettings", GetExportGISettings(container.Version).ExportYAML(container));
+			node.Add("m_LightmapEditorSettings", GetExportLightmapEditorSettings(container.Version, container.Flags).ExportYAML(container));
+#warning is that possible to somehow create LightingDataAsset with Release data?
+			node.Add("m_LightingDataAsset", LightingDataAsset.ExportYAML(container));
+			node.Add("m_UseShadowmask", GetExportUseShadowmask(container.Version));
 			return node;
+		}
+
+		private int GetExportGIWorkflowMode(Version version, TransferInstructionFlags flags)
+		{
+			return IsReadGIWorkflowMode(version, flags) ? GIWorkflowMode : 1;
+		}
+		private GISettings GetExportGISettings(Version version)
+		{
+			return IsReadGISettings(version) ? GISettings : new GISettings(true);
+		}
+		private LightmapEditorSettings GetExportLightmapEditorSettings(Version version, TransferInstructionFlags flags)
+		{
+			return IsReadLightmapEditorSettings(version, flags) ? LightmapEditorSettings : new LightmapEditorSettings(true);
+		}
+		private bool GetExportUseShadowmask(Version version)
+		{
+			return IsReadUseShadowmask(version) ? UseShadowmask : true;
 		}
 
 		public int GIWorkflowMode { get; private set; }
 		public IReadOnlyList<LightmapData> Lightmaps => m_lightmaps;
-		public int LightmapsMode { get; private set; }
+		public LightmapsMode LightmapsMode { get; private set; }
 		public int BakedColorSpace { get; private set; }
 		public bool UseDualLightmapsInForward { get; private set; }
 		public int RuntimeCPUUsage { get; private set; }

@@ -10,7 +10,9 @@ namespace UtinyRipper.Classes
 	{
 		public static List<Object> CollectDependencies(Object @object, bool isLog = false)
 		{
+			HashSet<Object> hdeps = new HashSet<Object>();
 			List<Object> deps = new List<Object>();
+			hdeps.Add(@object);
 			deps.Add(@object);
 
 			for (int i = 0; i < deps.Count; i++)
@@ -23,7 +25,7 @@ namespace UtinyRipper.Classes
 						continue;
 					}
 
-					if (!deps.Contains(newDep))
+					if (hdeps.Add(newDep))
 					{
 						deps.Add(newDep);
 					}

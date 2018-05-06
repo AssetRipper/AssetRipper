@@ -17,10 +17,10 @@ namespace UtinyRipper.Classes.AnimationClips
 			Path = stream.ReadStringAligned();
 		}
 		
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("curve", Curve.ExportYAML(exporter));
+			node.Add("curve", Curve.ExportYAML(container));
 			node.Add("path", Path);
 
 			return node;

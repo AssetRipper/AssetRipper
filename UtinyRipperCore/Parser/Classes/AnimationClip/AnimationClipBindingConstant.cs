@@ -30,11 +30,11 @@ namespace UtinyRipper.Classes.AnimationClips
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("genericBindings", (GenericBindings == null) ? YAMLSequenceNode.Empty : GenericBindings.ExportYAML(exporter));
-			node.Add("pptrCurveMapping", (PptrCurveMapping == null) ? YAMLSequenceNode.Empty : PptrCurveMapping.ExportYAML(exporter));
+			node.Add("genericBindings", (GenericBindings == null) ? YAMLSequenceNode.Empty : GenericBindings.ExportYAML(container));
+			node.Add("pptrCurveMapping", (PptrCurveMapping == null) ? YAMLSequenceNode.Empty : PptrCurveMapping.ExportYAML(container));
 			return node;
 		}
 

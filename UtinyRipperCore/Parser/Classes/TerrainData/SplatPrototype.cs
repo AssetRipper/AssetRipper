@@ -68,14 +68,14 @@ namespace UtinyRipper.Classes.TerrainDatas
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("texture", Texture.ExportYAML(exporter));
-			node.Add("normalMap", NormalMap.ExportYAML(exporter));
-			node.Add("tileSize", TileSize.ExportYAML(exporter));
-			node.Add("tileOffset", TileOffset.ExportYAML(exporter));
-			node.Add("specularMetallic", SpecularMetallic.ExportYAML(exporter));
+			node.Add("texture", Texture.ExportYAML(container));
+			node.Add("normalMap", NormalMap.ExportYAML(container));
+			node.Add("tileSize", TileSize.ExportYAML(container));
+			node.Add("tileOffset", TileOffset.ExportYAML(container));
+			node.Add("specularMetallic", SpecularMetallic.ExportYAML(container));
 			node.Add("smoothness", Smoothness);
 			return node;
 		}

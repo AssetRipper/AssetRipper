@@ -12,10 +12,10 @@ namespace UtinyRipper.Classes.Avatars
 			ID = stream.ReadUInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_X", X.ExportYAML(exporter));
+			node.Add("m_X", X.ExportYAML(container));
 			node.Add("m_ParentHumanIndex", ParentHumanIndex);
 			node.Add("m_ID", ID);
 			return node;

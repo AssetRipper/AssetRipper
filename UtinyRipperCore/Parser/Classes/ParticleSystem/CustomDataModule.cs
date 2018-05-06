@@ -73,33 +73,33 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
 			node.Add("mode0", Mode0);
 			node.Add("vectorComponentCount0", VectorComponentCount0);
-			node.Add("color0", Color0.ExportYAML(exporter));
-			node.Add("colorLabel0", IsReadLabel(exporter.Flags) ? ColorLabel0 : "Color");
-			node.Add("vector0_0", Vector0_0.ExportYAML(exporter));
-			node.Add("vectorLabel0_0", IsReadLabel(exporter.Flags) ? VectorLabel0_0 : "X");
-			node.Add("vector0_1", Vector0_1.ExportYAML(exporter));
-			node.Add("vectorLabel0_1", IsReadLabel(exporter.Flags) ? VectorLabel0_1 : "Y");
-			node.Add("vector0_2", Vector0_2.ExportYAML(exporter));
-			node.Add("vectorLabel0_2", IsReadLabel(exporter.Flags) ? VectorLabel0_2 : "Z");
-			node.Add("vector0_3", Vector0_3.ExportYAML(exporter));
-			node.Add("vectorLabel0_3", IsReadLabel(exporter.Flags) ? VectorLabel0_3 : "W");
+			node.Add("color0", Color0.ExportYAML(container));
+			node.Add("colorLabel0", IsReadLabel(container.Flags) ? ColorLabel0 : "Color");
+			node.Add("vector0_0", Vector0_0.ExportYAML(container));
+			node.Add("vectorLabel0_0", IsReadLabel(container.Flags) ? VectorLabel0_0 : "X");
+			node.Add("vector0_1", Vector0_1.ExportYAML(container));
+			node.Add("vectorLabel0_1", IsReadLabel(container.Flags) ? VectorLabel0_1 : "Y");
+			node.Add("vector0_2", Vector0_2.ExportYAML(container));
+			node.Add("vectorLabel0_2", IsReadLabel(container.Flags) ? VectorLabel0_2 : "Z");
+			node.Add("vector0_3", Vector0_3.ExportYAML(container));
+			node.Add("vectorLabel0_3", IsReadLabel(container.Flags) ? VectorLabel0_3 : "W");
 			node.Add("mode1", Mode1);
 			node.Add("vectorComponentCount1", VectorComponentCount1);
-			node.Add("color1", Color1.ExportYAML(exporter));
-			node.Add("colorLabel1", IsReadLabel(exporter.Flags) ? ColorLabel1 : "Color");
-			node.Add("vector1_0", Vector1_0.ExportYAML(exporter));
-			node.Add("vectorLabel1_0", IsReadLabel(exporter.Flags) ? VectorLabel1_0 : "X");
-			node.Add("vector1_1", Vector1_1.ExportYAML(exporter));
-			node.Add("vectorLabel1_1", IsReadLabel(exporter.Flags) ? VectorLabel1_1 : "Y");
-			node.Add("vector1_2", Vector1_2.ExportYAML(exporter));
-			node.Add("vectorLabel1_2", IsReadLabel(exporter.Flags) ? VectorLabel1_2 : "Z");
-			node.Add("vector1_3", Vector1_3.ExportYAML(exporter));
-			node.Add("vectorLabel1_3", IsReadLabel(exporter.Flags) ? VectorLabel1_3 : "W");
+			node.Add("color1", Color1.ExportYAML(container));
+			node.Add("colorLabel1", IsReadLabel(container.Flags) ? ColorLabel1 : "Color");
+			node.Add("vector1_0", Vector1_0.ExportYAML(container));
+			node.Add("vectorLabel1_0", IsReadLabel(container.Flags) ? VectorLabel1_0 : "X");
+			node.Add("vector1_1", Vector1_1.ExportYAML(container));
+			node.Add("vectorLabel1_1", IsReadLabel(container.Flags) ? VectorLabel1_1 : "Y");
+			node.Add("vector1_2", Vector1_2.ExportYAML(container));
+			node.Add("vectorLabel1_2", IsReadLabel(container.Flags) ? VectorLabel1_2 : "Z");
+			node.Add("vector1_3", Vector1_3.ExportYAML(container));
+			node.Add("vectorLabel1_3", IsReadLabel(container.Flags) ? VectorLabel1_3 : "W");
 			return node;
 		}
 

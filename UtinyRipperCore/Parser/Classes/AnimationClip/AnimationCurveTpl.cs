@@ -65,15 +65,15 @@ namespace UtinyRipper.Classes.AnimationClips
 			}
 		}
 		
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: value acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_Curve", (Curve == null) ? YAMLSequenceNode.Empty : Curve.ExportYAML(exporter));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_Curve", (Curve == null) ? YAMLSequenceNode.Empty : Curve.ExportYAML(container));
 			node.Add("m_PreInfinity", PreInfinity);
 			node.Add("m_PostInfinity", PostInfinity);
-			node.Add("m_RotationOrder", GetExportRotationOrder(exporter.Version));
+			node.Add("m_RotationOrder", GetExportRotationOrder(container.Version));
 
 			return node;
 		}

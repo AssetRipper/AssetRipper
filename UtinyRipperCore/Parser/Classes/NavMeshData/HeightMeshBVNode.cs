@@ -13,11 +13,11 @@ namespace UtinyRipper.Classes.NavMeshDatas
 			N = stream.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("min", Min.ExportYAML(exporter));
-			node.Add("max", Max.ExportYAML(exporter));
+			node.Add("min", Min.ExportYAML(container));
+			node.Add("max", Max.ExportYAML(container));
 			node.Add("i", I);
 			node.Add("n", N);
 			return node;

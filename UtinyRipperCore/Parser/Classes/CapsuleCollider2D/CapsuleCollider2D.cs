@@ -19,10 +19,10 @@ namespace UtinyRipper.Classes
 			Direction = (CapsuleDirection2D)stream.ReadInt32();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_Size", Size.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_Size", Size.ExportYAML(container));
 			node.Add("m_Direction", (int)Direction);
 			return node;
 		}

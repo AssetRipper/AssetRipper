@@ -11,7 +11,7 @@ namespace UtinyRipper.Classes.Avatars
 			m_handBoneIndex = stream.ReadInt32Array();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("m_HandBoneIndex", m_handBoneIndex.ExportYAML(true));

@@ -11,7 +11,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			stream.AlignStream(AlignType.Align4);
 		}
 
-		public virtual YAMLNode ExportYAML(IAssetsExporter exporter)
+		public virtual YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("enabled", Enabled);

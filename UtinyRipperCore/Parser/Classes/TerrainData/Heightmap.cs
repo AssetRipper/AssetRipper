@@ -89,11 +89,11 @@ namespace UtinyRipper.Classes.TerrainDatas
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_Heights", Heights.ExportYAML());
 			node.Add("m_PrecomputedError", PrecomputedError.ExportYAML());
 			node.Add("m_MinMaxPatchHeights", MinMaxPatchHeights.ExportYAML());
@@ -101,7 +101,7 @@ namespace UtinyRipper.Classes.TerrainDatas
 			node.Add("m_Height", Height);
 			node.Add("m_Thickness", Thickness);
 			node.Add("m_Levels", Levels);
-			node.Add("m_Scale", Scale.ExportYAML(exporter));
+			node.Add("m_Scale", Scale.ExportYAML(container));
 			return node;
 		}
 

@@ -83,21 +83,30 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.InsertSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_NavMeshTiles", NavMeshTiles.ExportYAML(exporter));
-			node.Add("m_NavMeshBuildSettings", NavMeshBuildSettings.ExportYAML(exporter));
-			node.Add("m_Heightmaps", Heightmaps.ExportYAML(exporter));
-			node.Add("m_HeightMeshes", HeightMeshes.ExportYAML(exporter));
-			node.Add("m_OffMeshLinks", OffMeshLinks.ExportYAML(exporter));
-			node.Add("m_SourceBounds", SourceBounds.ExportYAML(exporter));
-			node.Add("m_Rotation", Rotation.ExportYAML(exporter));
-			node.Add("m_Position", Position.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_NavMeshTiles", NavMeshTiles.ExportYAML(container));
+			node.Add("m_NavMeshBuildSettings", GetExportNavMeshBuildSettings(container.Version).ExportYAML(container));
+			node.Add("m_Heightmaps", Heightmaps.ExportYAML(container));
+			node.Add("m_HeightMeshes", HeightMeshes.ExportYAML(container));
+			node.Add("m_OffMeshLinks", OffMeshLinks.ExportYAML(container));
+			node.Add("m_SourceBounds", SourceBounds.ExportYAML(container));
+			node.Add("m_Rotation", GetExportRotation(container.Version).ExportYAML(container));
+			node.Add("m_Position", Position.ExportYAML(container));
 			node.Add("m_AgentTypeID", AgentTypeID);
 			return node;
+		}
+
+		private NavMeshBuildSettings GetExportNavMeshBuildSettings(Version version)
+		{
+			return IsReadNavMeshParams(version) ? new NavMeshBuildSettings(NavMeshParams) : NavMeshBuildSettings;
+		}
+		private Quaternionf GetExportRotation(Version version)
+		{
+			return IsReadSourceBounds(version) ? Rotation : Quaternionf.Zero;
 		}
 
 		public IReadOnlyList<NavMeshTileData> NavMeshTiles => m_navMeshTiles;

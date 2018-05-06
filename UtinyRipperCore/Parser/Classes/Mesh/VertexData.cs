@@ -168,14 +168,14 @@ namespace UtinyRipper.Classes.Meshes
 			stream.AlignStream(AlignType.Align4);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_CurrentChannels", GetExportCurrentChannels(exporter.Version));
+			node.Add("m_CurrentChannels", GetExportCurrentChannels(container.Version));
 			node.Add("m_VertexCount", VertexCount);
-			IEnumerable<ChannelInfo> channels = GetExportChannels(exporter.Version);
-			node.Add("m_Channels", (channels == null) ? YAMLSequenceNode.Empty : channels.ExportYAML(exporter));
+			IEnumerable<ChannelInfo> channels = GetExportChannels(container.Version);
+			node.Add("m_Channels", (channels == null) ? YAMLSequenceNode.Empty : channels.ExportYAML(container));
 			node.Add("m_DataSize", (m_data == null) ? 0 : m_data.Length);
 			node.Add("_typelessdata", (m_data == null) ? YAMLSequenceNode.Empty : m_data.ExportYAML());
 			return node;

@@ -19,10 +19,10 @@ namespace UtinyRipper.Classes
 			Height = stream.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("x", X);
 			node.Add("y", Y);
 			node.Add("width", Width);

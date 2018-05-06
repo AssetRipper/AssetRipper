@@ -70,12 +70,12 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
-			node.Add("strength", Strength.ExportYAML(exporter));
-			node.Add("strengthY", StrengthY.ExportYAML(exporter));
-			node.Add("strengthZ", StrengthZ.ExportYAML(exporter));
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			node.Add("strength", Strength.ExportYAML(container));
+			node.Add("strengthY", StrengthY.ExportYAML(container));
+			node.Add("strengthZ", StrengthZ.ExportYAML(container));
 			node.Add("separateAxes", SeparateAxes);
 			node.Add("frequency", Frequency);
 			node.Add("damping", Damping);
@@ -83,14 +83,14 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("octaveMultiplier", OctaveMultiplier);
 			node.Add("octaveScale", OctaveScale);
 			node.Add("quality", Quality);
-			node.Add("scrollSpeed", ScrollSpeed.ExportYAML(exporter));
-			node.Add("remap", Remap.ExportYAML(exporter));
-			node.Add("remapY", RemapY.ExportYAML(exporter));
-			node.Add("remapZ", RemapZ.ExportYAML(exporter));
+			node.Add("scrollSpeed", ScrollSpeed.ExportYAML(container));
+			node.Add("remap", Remap.ExportYAML(container));
+			node.Add("remapY", RemapY.ExportYAML(container));
+			node.Add("remapZ", RemapZ.ExportYAML(container));
 			node.Add("remapEnabled", RemapEnabled);
-			node.Add("positionAmount", GetExportPositionAmount(exporter.Version).ExportYAML(exporter));
-			node.Add("rotationAmount", GetExportRotationAmount(exporter.Version).ExportYAML(exporter));
-			node.Add("sizeAmount", GetExportSizeAmount(exporter.Version).ExportYAML(exporter));
+			node.Add("positionAmount", GetExportPositionAmount(container.Version).ExportYAML(container));
+			node.Add("rotationAmount", GetExportRotationAmount(container.Version).ExportYAML(container));
+			node.Add("sizeAmount", GetExportSizeAmount(container.Version).ExportYAML(container));
 			return node;
 		}
 

@@ -72,23 +72,23 @@ namespace UtinyRipper.Classes.Avatars
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_AvatarSkeleton", AvatarSkeleton.ExportYAML(exporter));
-			node.Add("m_AvatarSkeletonPose", AvatarSkeletonPose.ExportYAML(exporter));
-			node.Add("m_DefaultPose", DefaultPose.ExportYAML(exporter));
-			node.Add("m_SkeletonNameIDArray", IsReadDefaultPose(exporter.Version) ? SkeletonNameIDArray.ExportYAML(true) : YAMLSequenceNode.Empty);
-			node.Add("m_Human", Human.ExportYAML(exporter));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_AvatarSkeleton", AvatarSkeleton.ExportYAML(container));
+			node.Add("m_AvatarSkeletonPose", AvatarSkeletonPose.ExportYAML(container));
+			node.Add("m_DefaultPose", DefaultPose.ExportYAML(container));
+			node.Add("m_SkeletonNameIDArray", IsReadDefaultPose(container.Version) ? SkeletonNameIDArray.ExportYAML(true) : YAMLSequenceNode.Empty);
+			node.Add("m_Human", Human.ExportYAML(container));
 			node.Add("m_HumanSkeletonIndexArray", HumanSkeletonIndexArray.ExportYAML(true));
-			node.Add("m_HumanSkeletonReverseIndexArray", IsReadHumanSkeletonReverseIndexArray(exporter.Version) ? HumanSkeletonReverseIndexArray.ExportYAML(true) : YAMLSequenceNode.Empty);
+			node.Add("m_HumanSkeletonReverseIndexArray", IsReadHumanSkeletonReverseIndexArray(container.Version) ? HumanSkeletonReverseIndexArray.ExportYAML(true) : YAMLSequenceNode.Empty);
 			node.Add("m_RootMotionBoneIndex", RootMotionBoneIndex);
-			node.Add("m_RootMotionBoneX", RootMotionBoneX.ExportYAML(exporter));
-			node.Add("m_RootMotionSkeleton", RootMotionSkeleton.ExportYAML(exporter));
-			node.Add("m_RootMotionSkeletonPose", RootMotionSkeletonPose.ExportYAML(exporter));
-			node.Add("m_RootMotionSkeletonIndexArray", IsReadRootMotionSkeleton(exporter.Version) ? RootMotionSkeletonIndexArray.ExportYAML(true) : YAMLSequenceNode.Empty);
+			node.Add("m_RootMotionBoneX", RootMotionBoneX.ExportYAML(container));
+			node.Add("m_RootMotionSkeleton", RootMotionSkeleton.ExportYAML(container));
+			node.Add("m_RootMotionSkeletonPose", RootMotionSkeletonPose.ExportYAML(container));
+			node.Add("m_RootMotionSkeletonIndexArray", IsReadRootMotionSkeleton(container.Version) ? RootMotionSkeletonIndexArray.ExportYAML(true) : YAMLSequenceNode.Empty);
 			return node;
 		}
 

@@ -33,14 +33,14 @@ namespace UtinyRipper.Classes.Materials
 			m_colors.Read(stream);
 		}
 		
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_TexEnvs", m_texEnvs.ExportYAML(exporter));
-			node.Add("m_Floats", m_floats.ExportYAML(exporter));
-			node.Add("m_Colors", m_colors.ExportYAML(exporter));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_TexEnvs", m_texEnvs.ExportYAML(container));
+			node.Add("m_Floats", m_floats.ExportYAML(container));
+			node.Add("m_Colors", m_colors.ExportYAML(container));
 			return node;
 		}
 

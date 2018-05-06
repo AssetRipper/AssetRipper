@@ -75,18 +75,18 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_Center", Center.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_Center", Center.ExportYAML(container));
 			node.Add("m_Radius", Radius);
-			node.Add("m_SuspensionSpring", SuspensionSpring.ExportYAML(exporter));
+			node.Add("m_SuspensionSpring", SuspensionSpring.ExportYAML(container));
 			node.Add("m_SuspensionDistance", SuspensionDistance);
 			node.Add("m_ForceAppPointDistance", ForceAppPointDistance);
 			node.Add("m_Mass", Mass);
 			node.Add("m_WheelDampingRate", WheelDampingRate);
-			node.Add("m_ForwardFriction", ForwardFriction.ExportYAML(exporter));
-			node.Add("m_SidewaysFriction", SidewaysFriction.ExportYAML(exporter));
+			node.Add("m_ForwardFriction", ForwardFriction.ExportYAML(container));
+			node.Add("m_SidewaysFriction", SidewaysFriction.ExportYAML(container));
 			node.Add("m_Enabled", Enabled);
 			return node;
 		}

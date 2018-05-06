@@ -31,9 +31,9 @@ namespace UtinyRipper.Classes
 			return $"{GetType().Name}'s({Name})[{PathID}]";
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode root = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode root = base.ExportYAMLRoot(container);
 			root.Add("m_Name", Name);
 			return root;
 		}

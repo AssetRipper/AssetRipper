@@ -17,12 +17,12 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			throw new NotSupportedException();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_Conditions", Conditions.ExportYAML(exporter));
-			node.Add("m_DstStateMachine", DstStateMachine.ExportYAML(exporter));
-			node.Add("m_DstState", DstState.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_Conditions", Conditions.ExportYAML(container));
+			node.Add("m_DstStateMachine", DstStateMachine.ExportYAML(container));
+			node.Add("m_DstState", DstState.ExportYAML(container));
 			node.Add("m_Solo", Solo);
 			node.Add("m_Mute", Mute);
 			node.Add("m_IsExit", IsExit);

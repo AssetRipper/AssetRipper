@@ -15,7 +15,7 @@ namespace UtinyRipper.Classes
 			Value = stream.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			return new YAMLScalarNode(Value);
 		}

@@ -18,11 +18,11 @@ namespace UtinyRipper.Classes.NavMeshDatas
 			yield return TerrainData.FetchDependency(file, isLog, () => nameof(HeightmapData), "terrainData");
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("position", Position.ExportYAML(exporter));
-			node.Add("terrainData", TerrainData.ExportYAML(exporter));
+			node.Add("position", Position.ExportYAML(container));
+			node.Add("terrainData", TerrainData.ExportYAML(container));
 			return node;
 		}
 

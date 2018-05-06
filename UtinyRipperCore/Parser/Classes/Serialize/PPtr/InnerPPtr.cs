@@ -13,11 +13,11 @@ namespace UtinyRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Style = MappingStyle.Flow;
-			node.Add("fileID", GetPathIDString(exporter));
+			node.Add("fileID", GetPathIDString(container));
 			return node;
 		}
 
@@ -31,7 +31,7 @@ namespace UtinyRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		protected abstract string GetPathIDString(IAssetsExporter exporter);
+		protected abstract string GetPathIDString(IExportContainer container);
 
 		public bool IsNull => false;
 	}

@@ -67,19 +67,19 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
-			node.Add("x", X.ExportYAML(exporter));
-			node.Add("y", Y.ExportYAML(exporter));
-			node.Add("z", Z.ExportYAML(exporter));
-			node.Add("magnitude", Magnitude.ExportYAML(exporter));
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			node.Add("x", X.ExportYAML(container));
+			node.Add("y", Y.ExportYAML(container));
+			node.Add("z", Z.ExportYAML(container));
+			node.Add("magnitude", Magnitude.ExportYAML(container));
 			node.Add("separateAxis", SeparateAxis);
 			node.Add("inWorldSpace", InWorldSpace);
-			node.Add("multiplyDragByParticleSize", GetExportMultiplyDragByParticleSize(exporter.Version));
-			node.Add("multiplyDragByParticleVelocity", GetExportMultiplyDragByParticleVelocity(exporter.Version));
+			node.Add("multiplyDragByParticleSize", GetExportMultiplyDragByParticleSize(container.Version));
+			node.Add("multiplyDragByParticleVelocity", GetExportMultiplyDragByParticleVelocity(container.Version));
 			node.Add("dampen", Dampen);
-			node.Add("drag", GetExportDrag(exporter.Version).ExportYAML(exporter));
+			node.Add("drag", GetExportDrag(container.Version).ExportYAML(container));
 			return node;
 		}
 

@@ -16,7 +16,7 @@ namespace UtinyRipper
 {
 	public class Program
 	{
-		public static IEnumerable<Object> FetchExportObjects(AssetCollection collection)
+		public static IEnumerable<Object> FetchExportObjects(FileCollection collection)
 		{
 			//yield break;
 			return collection.FetchAssets();
@@ -55,7 +55,7 @@ namespace UtinyRipper
 				string exportPath = ".\\Ripped\\" + name;
 				PrepareExportDirectory(exportPath);
 
-				AssetCollection collection = new AssetCollection();
+				FileCollection collection = new FileCollection();
 				LoadFiles(collection, args);
 
 				LoadDependencies(collection, args);
@@ -74,7 +74,7 @@ namespace UtinyRipper
 			Console.ReadKey();
 		}
 
-		private static void LoadFiles(AssetCollection collection, IEnumerable<string> filePathes)
+		private static void LoadFiles(FileCollection collection, IEnumerable<string> filePathes)
 		{
 			List<string> processed = new List<string>();
 			foreach (string path in filePathes)
@@ -94,7 +94,7 @@ namespace UtinyRipper
 			}
 		}
 
-		private static void ValidateCollection(AssetCollection collection)
+		private static void ValidateCollection(FileCollection collection)
 		{
 			Version[] versions = collection.Files.Select(t => t.Version).Distinct().ToArray();
 			if(versions.Count() > 1)
@@ -107,7 +107,7 @@ namespace UtinyRipper
 			}
 		}
 
-		private static void LoadDependencies(AssetCollection collection, IEnumerable<string> files)
+		private static void LoadDependencies(FileCollection collection, IEnumerable<string> files)
 		{
 			HashSet<string> directories = new HashSet<string>();
 			foreach (string filePath in files)
@@ -139,7 +139,7 @@ namespace UtinyRipper
 			}
 		}
 
-		private static void LoadDependency(AssetCollection collection, IReadOnlyCollection<string> directories, string fileName)
+		private static void LoadDependency(FileCollection collection, IReadOnlyCollection<string> directories, string fileName)
 		{
 			foreach (string loadName in FetchNameVariants(fileName))
 			{
@@ -153,7 +153,7 @@ namespace UtinyRipper
 			Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Dependency '{fileName}' wasn't found");
 		}
 
-		private static bool TryLoadDependency(AssetCollection collection, IEnumerable<string> directories, string originalName, string loadName)
+		private static bool TryLoadDependency(FileCollection collection, IEnumerable<string> directories, string originalName, string loadName)
 		{
 			foreach (string dirPath in directories)
 			{

@@ -9,18 +9,19 @@ namespace UtinyRipper.AssetExporters
 {
 	internal sealed class EmptyExportCollection : IExportCollection
 	{
-		public EmptyExportCollection(DummyAssetExporter assetExporter, string name)
+		public EmptyExportCollection(IAssetExporter assetExporter)
 		{
 			if (assetExporter == null)
 			{
 				throw new ArgumentNullException(nameof(assetExporter));
 			}
-			if (string.IsNullOrEmpty(name))
-			{
-				throw new ArgumentNullException(nameof(name));
-			}
 			AssetExporter = assetExporter;
-			Name = name;
+			Name = string.Empty;
+		}
+
+		public bool Export(ProjectAssetContainer container, string dirPath)
+		{
+			return false;
 		}
 
 		public bool IsContains(Object @object)
@@ -29,6 +30,11 @@ namespace UtinyRipper.AssetExporters
 		}
 
 		public string GetExportID(Object @object)
+		{
+			throw new NotSupportedException();
+		}
+
+		public UtinyGUID GetExportGUID(Object asset)
 		{
 			throw new NotSupportedException();
 		}
@@ -44,7 +50,6 @@ namespace UtinyRipper.AssetExporters
 			get { yield break; }
 		}
 		public string Name { get; }
-		public UtinyGUID GUID => throw new NotSupportedException();
-		public IYAMLExportable MetaImporter => throw new NotSupportedException();
+		public IAssetImporter MetaImporter => throw new NotSupportedException();
 	}
 }

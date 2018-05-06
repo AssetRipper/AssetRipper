@@ -320,9 +320,9 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public override void ExportBinary(IAssetsExporter exporter, Stream stream)
+		public override void ExportBinary(IExportContainer container, Stream stream)
 		{
-			if (IsReadFontData(exporter.Version))
+			if (IsReadFontData(container.Version))
 			{
 				using (BinaryWriter writer = new BinaryWriter(stream))
 				{
@@ -342,7 +342,7 @@ namespace UtinyRipper.Classes
 			yield return Texture.FetchDependency(file, isLog, ToLogString, "m_Texture");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

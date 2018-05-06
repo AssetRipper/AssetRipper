@@ -88,11 +88,11 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_Mass", Mass);
 			node.Add("m_Drag", Drag);
 			node.Add("m_AngularDrag", AngularDrag);

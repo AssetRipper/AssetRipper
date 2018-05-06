@@ -6,14 +6,13 @@ namespace UtinyRipper.AssetExporters
 {
 	public interface IExportCollection
 	{
-		bool IsContains(Object @object);
-		string GetExportID(Object @object);
-		ExportPointer CreateExportPointer(Object @object, bool isLocal);
+		bool Export(ProjectAssetContainer container, string dirPath);
+		bool IsContains(Object asset);
+		string GetExportID(Object asset);
+		ExportPointer CreateExportPointer(Object asset, bool isLocal);
 
 		IAssetExporter AssetExporter { get; }
 		IEnumerable<Object> Objects { get; }
 		string Name { get; }
-		UtinyGUID GUID { get; }
-		IYAMLExportable MetaImporter { get; }
 	}
 }

@@ -36,24 +36,24 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			if (IsNull)
 			{
-				return ExportPointer.EmptyPointer.ExportYAML(exporter);
+				return ExportPointer.EmptyPointer.ExportYAML(container);
 			}
 
-			T @object = FindObject(exporter.File);
+			T @object = FindObject(container);
 			if (@object == null)
 			{
 				ClassIDType classType = typeof(T).ToClassIDType();
-				AssetType assetType = exporter.ToExportType(classType);
+				AssetType assetType = container.ToExportType(classType);
 				ExportPointer pointer = new ExportPointer(classType, assetType);
-				return pointer.ExportYAML(exporter);
+				return pointer.ExportYAML(container);
 			}
 
-			ExportPointer exPointer = exporter.CreateExportPointer(@object);
-			return exPointer.ExportYAML(exporter);
+			ExportPointer exPointer = container.CreateExportPointer(@object);
+			return exPointer.ExportYAML(container);
 		}
 
 		public T FindObject(ISerializedFile file)
@@ -63,6 +63,24 @@ namespace UtinyRipper.Classes
 				return null;
 			}
 			Object @object = file.FindObject(FileIndex, PathID);
+			switch (@object)
+			{
+				case null:
+					return null;
+				case T t:
+					return t;
+				default:
+					throw new Exception($"Object's type {@object.ClassID} doesn't assignable from {typeof(T).Name}");
+			}
+		}
+
+		public T FindObject(IExportContainer container)
+		{
+			if (IsNull)
+			{
+				return null;
+			}
+			Object @object = container.FindObject(FileIndex, PathID);
 			switch (@object)
 			{
 				case null:
@@ -157,9 +175,9 @@ namespace UtinyRipper.Classes
 			return ToString();
 		}
 
-		public bool IsValid(ISerializedFile file)
+		public bool IsValid(IExportContainer container)
 		{
-			return FindObject(file) != null;
+			return FindObject(container) != null;
 		}
 
 		public bool IsNull => PathID == 0;

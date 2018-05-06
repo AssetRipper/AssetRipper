@@ -40,9 +40,9 @@ namespace UtinyRipper.Classes.Textures
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
-			int version = GetSerializedVersion(exporter.Version);
+			int version = GetSerializedVersion(container.Version);
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(version);
 			node.Add("m_FilterMode", (int)FilterMode);

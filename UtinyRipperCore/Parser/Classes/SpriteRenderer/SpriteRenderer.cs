@@ -113,16 +113,16 @@ namespace UtinyRipper.Classes
 			yield return Sprite.FetchDependency(file, isLog, ToLogString, "m_Sprite");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_Sprite", Sprite.ExportYAML(exporter));
-			node.Add("m_Color", Color.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_Sprite", Sprite.ExportYAML(container));
+			node.Add("m_Color", Color.ExportYAML(container));
 			node.Add("m_FlipX", FlipX);
 			node.Add("m_FlipY", FlipY);
 			node.Add("m_DrawMode", (int)DrawMode);
-			node.Add("m_Size", (IsReadDrawMode(exporter.Version) ? Size : Vector2f.One).ExportYAML(exporter));
+			node.Add("m_Size", (IsReadDrawMode(container.Version) ? Size : Vector2f.One).ExportYAML(container));
 			node.Add("m_AdaptiveModeThreshold", AdaptiveModeThreshold);
 			node.Add("m_SpriteTileMode", (int)SpriteTileMode);
 			node.Add("m_WasSpriteAssigned", WasSpriteAssigned);

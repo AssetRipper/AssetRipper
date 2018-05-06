@@ -11,12 +11,9 @@ namespace UtinyRipper.Classes
 	/// </summary>
 	public sealed class OcclusionCullingSettings : LevelGameManager
 	{
-		public OcclusionCullingSettings(AssetInfo assetInfo):
+		public OcclusionCullingSettings(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
-			OcclusionBakeSettings.SmallestOccluder = 5.0f;
-			OcclusionBakeSettings.SmallestHole = 0.25f;
-			OcclusionBakeSettings.BackfaceThreshold = 100.0f;
 		}
 
 		/// <summary>
@@ -62,7 +59,7 @@ namespace UtinyRipper.Classes
 			{
 				return 2;
 			}
-			
+
 			// min version is 2nd
 			return 2;
 		}
@@ -75,11 +72,11 @@ namespace UtinyRipper.Classes
 			{
 				m_PVSData = stream.ReadByteArray();
 				stream.AlignStream(AlignType.Align4);
-				if(IsReadQueryMode(stream.Version))
+				if (IsReadQueryMode(stream.Version))
 				{
 					QueryMode = stream.ReadInt32();
 				}
-				
+
 				m_staticRenderers = stream.ReadArray<PPtr<Renderer>>();
 				m_portals = stream.ReadArray<PPtr<OcclusionPortal>>();
 
@@ -96,7 +93,7 @@ namespace UtinyRipper.Classes
 				}
 				SceneGUID.Read(stream);
 				OcclusionCullingData.Read(stream);
-				
+
 				if (IsReadStaticRenderers(stream.Version, stream.Flags))
 				{
 					m_staticRenderers = stream.ReadArray<PPtr<Renderer>>();
@@ -107,7 +104,7 @@ namespace UtinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object @object in base.FetchDependencies(file, isLog))
+			foreach (Object @object in base.FetchDependencies(file, isLog))
 			{
 				yield return @object;
 			}
@@ -123,17 +120,76 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_OcclusionBakeSettings", OcclusionBakeSettings.ExportYAML(exporter));
-			node.Add("m_SceneGUID", SceneGUID.ExportYAML(exporter));
-			node.Add("m_OcclusionCullingData", OcclusionCullingData.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_OcclusionBakeSettings", GetExportOcclusionBakeSettings(container.Flags).ExportYAML(container));
+			node.Add("m_SceneGUID", GetExportSceneGUID(container).ExportYAML(container));
+			node.Add("m_OcclusionCullingData", GetExportOcclusionCullingData(container));
 			return node;
 		}
-		
+
+		private OcclusionBakeSettings GetExportOcclusionBakeSettings(TransferInstructionFlags flags)
+		{
+			if (IsReadOcclusionBakeSettings(flags))
+			{
+				return OcclusionBakeSettings;
+			}
+			else
+			{
+				OcclusionBakeSettings settings = new OcclusionBakeSettings();
+				settings.SmallestOccluder = 5.0f;
+				settings.SmallestHole = 0.25f;
+				settings.BackfaceThreshold = 100.0f;
+				return settings;
+			}
+		}
+		private UtinyGUID GetExportSceneGUID(IExportContainer container)
+		{
+			if(IsReadPVSData(container.Version))
+			{
+				SceneExportCollection scene = (SceneExportCollection)container.CurrentCollection;
+				return scene.GUID;
+			}
+			else
+			{
+				return SceneGUID;
+			}
+		}
+		private YAMLNode GetExportOcclusionCullingData(IExportContainer container)
+		{
+			if(IsReadPVSData(container.Version))
+			{
+#warning HACK!!!
+				AssetInfo dataAssetInfo = new AssetInfo(File, 0, ClassIDType.OcclusionCullingData);
+				OcclusionCullingData ocData = new OcclusionCullingData(dataAssetInfo, container, m_PVSData, SceneGUID, StaticRenderers, Portals);
+				SceneExportCollection scene = (SceneExportCollection)container.CurrentCollection;
+				scene.OcclusionCullingData = ocData;
+
+				var exPointer = container.CreateExportPointer(ocData);
+				return exPointer.ExportYAML(container);
+			}
+			else
+			{
+#warning TODO: OcclusionCullingData has to find all corresponding OcclusionCullingSettings and fill IDs itself
+				if (Classes.OcclusionCullingData.IsReadStaticRenderers(container.Flags))
+				{
+					return OcclusionCullingData.ExportYAML(container);
+				}
+				else
+				{
+					OcclusionCullingData data = OcclusionCullingData.FindObject(container);
+					if(data != null)
+					{
+						data.SetIDs(container, SceneGUID, StaticRenderers, Portals);
+					}
+					return OcclusionCullingData.ExportYAML(container);
+				}
+			}
+		}
+
 		public IReadOnlyList<byte> PVSData => m_PVSData;
 		public int QueryMode { get; private set; }
 		/// <summary>
@@ -144,6 +200,8 @@ namespace UtinyRipper.Classes
 		/// PVSPortalsArray previously
 		/// </summary>
 		public IReadOnlyList<PPtr<OcclusionPortal>> Portals => m_portals;
+		
+		public const string SceneExportFolder = "Scenes";
 
 		public OcclusionBakeSettings OcclusionBakeSettings;
 		public UtinyGUID SceneGUID;

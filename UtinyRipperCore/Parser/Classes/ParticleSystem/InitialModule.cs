@@ -143,25 +143,25 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
-			node.InsertSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("startLifetime", StartLifetime.ExportYAML(exporter));
-			node.Add("startSpeed", StartSpeed.ExportYAML(exporter));
-			node.Add("startColor", StartColor.ExportYAML(exporter));
-			node.Add("startSize", StartSize.ExportYAML(exporter));
-			node.Add("startSizeY", GetExportStartSizeY(exporter.Version).ExportYAML(exporter));
-			node.Add("startSizeZ", GetExportStartSizeZ(exporter.Version).ExportYAML(exporter));
-			node.Add("startRotationX", GetExportStartRotationX(exporter.Version).ExportYAML(exporter));
-			node.Add("startRotationY", GetExportStartRotationY(exporter.Version).ExportYAML(exporter));
-			node.Add("startRotation", StartRotation.ExportYAML(exporter));
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("startLifetime", StartLifetime.ExportYAML(container));
+			node.Add("startSpeed", StartSpeed.ExportYAML(container));
+			node.Add("startColor", StartColor.ExportYAML(container));
+			node.Add("startSize", StartSize.ExportYAML(container));
+			node.Add("startSizeY", GetExportStartSizeY(container.Version).ExportYAML(container));
+			node.Add("startSizeZ", GetExportStartSizeZ(container.Version).ExportYAML(container));
+			node.Add("startRotationX", GetExportStartRotationX(container.Version).ExportYAML(container));
+			node.Add("startRotationY", GetExportStartRotationY(container.Version).ExportYAML(container));
+			node.Add("startRotation", StartRotation.ExportYAML(container));
 			node.Add("randomizeRotationDirection", RandomizeRotationDirection);
 			node.Add("maxNumParticles", MaxNumParticles);
 			node.Add("size3D", Size3D);
 			node.Add("rotation3D", Rotation3D);
-			node.Add("gravityModifier", GravityModifier.ExportYAML(exporter));
+			node.Add("gravityModifier", GravityModifier.ExportYAML(container));
 			return node;
 		}
 		

@@ -13,12 +13,12 @@ namespace UtinyRipper.Classes.Avatars
 			m_axesArray = stream.ReadArray<Axes>();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Node", Node == null ? YAMLSequenceNode.Empty : Node.ExportYAML(exporter));
+			node.Add("m_Node", Node == null ? YAMLSequenceNode.Empty : Node.ExportYAML(container));
 			node.Add("m_ID", ID == null ? YAMLSequenceNode.Empty : ID.ExportYAML(true));
-			node.Add("m_AxesArray", AxesArray == null ? YAMLSequenceNode.Empty : AxesArray.ExportYAML(exporter));
+			node.Add("m_AxesArray", AxesArray == null ? YAMLSequenceNode.Empty : AxesArray.ExportYAML(container));
 			return node;
 		}
 

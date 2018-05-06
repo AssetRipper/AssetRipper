@@ -92,7 +92,7 @@ namespace UtinyRipper.Classes.Lights
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();

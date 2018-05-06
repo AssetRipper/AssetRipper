@@ -35,7 +35,7 @@ namespace UtinyRipper.Classes.MeshRenderers
 			SubMeshCount = stream.ReadUInt16();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("firstSubMesh", FirstSubMesh);

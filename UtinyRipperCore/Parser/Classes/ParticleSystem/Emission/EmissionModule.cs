@@ -153,15 +153,15 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("rateOverTime", RateOverTime.ExportYAML(exporter));
-			node.Add("rateOverDistance", GetExportRateOverDistance(exporter.Version).ExportYAML(exporter));
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("rateOverTime", RateOverTime.ExportYAML(container));
+			node.Add("rateOverDistance", GetExportRateOverDistance(container.Version).ExportYAML(container));
 			node.Add("m_BurstCount", BurstCount);
-			node.Add("m_Bursts", GetExportBursts(exporter.Version).ExportYAML(exporter));
+			node.Add("m_Bursts", GetExportBursts(container.Version).ExportYAML(container));
 			return node;
 		}
 

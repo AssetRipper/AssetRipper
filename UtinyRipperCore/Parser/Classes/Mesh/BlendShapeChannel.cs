@@ -16,7 +16,7 @@ namespace UtinyRipper.Classes.Meshes
 			FrameCount = stream.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("name", Name);

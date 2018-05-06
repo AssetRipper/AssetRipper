@@ -42,10 +42,10 @@ namespace UtinyRipper.Classes
 			yield return TerrainData.FetchDependency(file, isLog, ToLogString, "m_TerrainData");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_TerrainData", TerrainData.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_TerrainData", TerrainData.ExportYAML(container));
 			node.Add("m_EnableTreeColliders", EnableTreeColliders);
 			return node;
 		}

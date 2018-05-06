@@ -14,7 +14,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			ExitTime = stream.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

@@ -18,6 +18,14 @@ namespace UtinyRipper.Classes
 			A = (value32 & 0x000000FF >> 0) / 255.0f;
 		}
 
+		public ColorRGBAf(float r, float g, float b, float a)
+		{
+			R = r;
+			G = g;
+			B = b;
+			A = a;
+		}
+
 		public void Read(AssetStream stream)
 		{
 			R = stream.ReadSingle();
@@ -26,7 +34,7 @@ namespace UtinyRipper.Classes
 			A = stream.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Style = MappingStyle.Flow;

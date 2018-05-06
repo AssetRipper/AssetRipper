@@ -17,10 +17,10 @@ namespace UtinyRipper.Classes.ParticleSystems
 			yield return Sprite.FetchDependency(file, isLog, () => nameof(SpriteData), "sprite");
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("sprite", Sprite.ExportYAML(exporter));
+			node.Add("sprite", Sprite.ExportYAML(container));
 			return node;
 		}
 

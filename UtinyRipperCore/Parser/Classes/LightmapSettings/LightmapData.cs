@@ -56,13 +56,13 @@ namespace UtinyRipper.Classes.LightmapSettingss
 			yield return ShadowMask.FetchDependency(file, isLog, () => nameof(LightmapData), "m_ShadowMask");
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_Lightmap", Lightmap.ExportYAML(exporter));
-			node.Add("m_DirLightmap", DirLightmap.ExportYAML(exporter));
-			node.Add("m_ShadowMask", ShadowMask.ExportYAML(exporter));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_Lightmap", Lightmap.ExportYAML(container));
+			node.Add("m_DirLightmap", DirLightmap.ExportYAML(container));
+			node.Add("m_ShadowMask", ShadowMask.ExportYAML(container));
 			return node;
 		}
 

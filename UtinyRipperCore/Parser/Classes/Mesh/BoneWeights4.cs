@@ -20,7 +20,7 @@ namespace UtinyRipper.Classes.Meshes
 			BoneIndex3 = stream.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("weight[0]", Weight0);

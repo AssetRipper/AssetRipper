@@ -11,7 +11,7 @@ namespace UtinyRipper.Classes.AvatarMasks
 			Weight = stream.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("m_Path", Path);

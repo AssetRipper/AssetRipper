@@ -138,11 +138,11 @@ namespace UtinyRipper.Classes
 			yield return Material.FetchDependency(file, isLog, ToLogString, "m_Material");
 		}
 		
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.InsertSerializedVersion(GetSerializedVersion(exporter.Version));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_BodyType", (int)BodyType);
 			node.Add("m_Simulated", Simulated);
 			node.Add("m_UseFullKinematicContacts", UseFullKinematicContacts);
@@ -151,7 +151,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_LinearDrag", LinearDrag);
 			node.Add("m_AngularDrag", AngularDrag);
 			node.Add("m_GravityScale", GravityScale);
-			node.Add("m_Material", Material.ExportYAML(exporter));
+			node.Add("m_Material", Material.ExportYAML(container));
 			node.Add("m_Interpolate", (int)Interpolate);
 			node.Add("m_SleepingMode", (int)SleepingMode);
 			node.Add("m_CollisionDetection", (int)CollisionDetection);

@@ -23,11 +23,11 @@ namespace UtinyRipper.Classes
 			m_TOS.Read(stream);
 		}
 		
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("m_AvatarSize", AvatarSize);
-			node.Add("m_Avatar", AvatarConstant.ExportYAML(exporter));
+			node.Add("m_Avatar", AvatarConstant.ExportYAML(container));
 			node.Add("m_TOS", TOS.ExportYAML());
 			return node;
 		}

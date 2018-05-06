@@ -121,14 +121,14 @@ namespace UtinyRipper.Classes
 			yield return Mesh.FetchDependency(file, isLog, ToLogString, "m_Mesh");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_Convex", Convex);
 			node.Add("m_CookingOptions", (int)CookingOptions);
 			node.Add("m_SkinWidth", SkinWidth);
-			node.Add("m_Mesh", Mesh.ExportYAML(exporter));
+			node.Add("m_Mesh", Mesh.ExportYAML(container));
 			return node;
 		}
 

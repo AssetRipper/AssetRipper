@@ -23,16 +23,16 @@ namespace UtinyRipper.Classes.LightingDataAssets
 			yield return UVMesh.FetchDependency(file, isLog, () => nameof(RendererData), "uvMesh");
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("uvMesh", UVMesh.ExportYAML(exporter));
-			node.Add("terrainDynamicUVST", TerrainDynamicUVST.ExportYAML(exporter));
-			node.Add("terrainChunkDynamicUVST", TerrainChunkDynamicUVST.ExportYAML(exporter));
+			node.Add("uvMesh", UVMesh.ExportYAML(container));
+			node.Add("terrainDynamicUVST", TerrainDynamicUVST.ExportYAML(container));
+			node.Add("terrainChunkDynamicUVST", TerrainChunkDynamicUVST.ExportYAML(container));
 			node.Add("lightmapIndex", LightmapIndex);
 			node.Add("lightmapIndexDynamic", LightmapIndexDynamic);
-			node.Add("lightmapST", LightmapST.ExportYAML(exporter));
-			node.Add("lightmapSTDynamic", LightmapSTDynamic.ExportYAML(exporter));
+			node.Add("lightmapST", LightmapST.ExportYAML(container));
+			node.Add("lightmapSTDynamic", LightmapSTDynamic.ExportYAML(container));
 			return node;
 		}
 

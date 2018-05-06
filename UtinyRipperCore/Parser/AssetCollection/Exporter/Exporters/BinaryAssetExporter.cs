@@ -1,51 +1,43 @@
-﻿using System.IO;
-using UtinyRipper.Classes;
+﻿using System.Collections.Generic;
+using System.IO;
 
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
 {
-	public class BinaryAssetExporter : AssetExporter
+	public class BinaryAssetExporter : IAssetExporter
 	{
-		public override IExportCollection CreateCollection(Object @object)
+		public void Export(ProjectAssetContainer container, Object asset, string path)
 		{
-			switch (@object.ClassID)
+			using (FileStream fileStream = new FileStream(path, FileMode.CreateNew, FileAccess.Write))
+			{
+				container.File = asset.File;
+				asset.ExportBinary(container, fileStream);
+			}
+		}
+
+		public void Export(ProjectAssetContainer container, IEnumerable<Object> assets, string path)
+		{
+			foreach (Object asset in assets)
+			{
+				Export(container, asset, path);
+			}
+		}
+
+		public IExportCollection CreateCollection(Object asset)
+		{
+			switch(asset.ClassID)
 			{
 				case ClassIDType.Texture2D:
 				case ClassIDType.Cubemap:
-					return new TextureExportCollection(this, (Texture2D)@object);
+					return new TextureExportCollection(this, asset);
 
 				default:
-					return new AssetExportCollection(this, @object);
+					return new AssetExportCollection(this, asset);
 			}
 		}
 
-		public override bool Export(IAssetsExporter exporter, IExportCollection collection, string dirPath)
-		{
-			AssetExportCollection asset = (AssetExportCollection)collection;
-			exporter.File = asset.Asset.File;
-
-			string subFolder = asset.Asset.ClassID.ToString();
-			string subPath = Path.Combine(dirPath, subFolder);
-			string fileName = GetUniqueFileName(asset.Asset, subPath);
-			string filePath = Path.Combine(subPath, fileName);
-
-			if(!Directory.Exists(subPath))
-			{
-				Directory.CreateDirectory(subPath);
-			}
-
-			exporter.File = asset.Asset.File;
-			using (FileStream fileStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write))
-			{
-				asset.Asset.ExportBinary(exporter, fileStream);
-			}
-
-			ExportMeta(exporter, asset, filePath);
-			return true;
-		}
-
-		public override AssetType ToExportType(ClassIDType classID)
+		public AssetType ToExportType(ClassIDType classID)
 		{
 			return AssetType.Meta;
 		}

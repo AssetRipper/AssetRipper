@@ -74,14 +74,14 @@ namespace UtinyRipper.Classes.LightmapSettingss
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Renderers", Renderers.ExportYAML(exporter));
-			node.Add("m_Systems", Systems.ExportYAML(exporter));
-			node.Add("m_Probesets", Probesets.ExportYAML(exporter));
-			node.Add("m_SystemAtlases", SystemAtlases.ExportYAML(exporter));
-			node.Add("m_TerrainChunks", TerrainChunks.ExportYAML(exporter));
+			node.Add("m_Renderers", Renderers.ExportYAML(container));
+			node.Add("m_Systems", Systems.ExportYAML(container));
+			node.Add("m_Probesets", Probesets.ExportYAML(container));
+			node.Add("m_SystemAtlases", SystemAtlases.ExportYAML(container));
+			node.Add("m_TerrainChunks", TerrainChunks.ExportYAML(container));
 			return node;
 		}
 

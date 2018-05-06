@@ -73,20 +73,20 @@ namespace UtinyRipper.Classes.Meshes
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Vertices", Vertices.ExportYAML(exporter));
-			node.Add("m_UV", UV.ExportYAML(exporter));
-			node.Add("m_Normals", Normals.ExportYAML(exporter));
-			node.Add("m_Tangents", Tangents.ExportYAML(exporter));
-			node.Add("m_Weights", Weight.ExportYAML(exporter));
-			node.Add("m_NormalSigns", NormalSigns.ExportYAML(exporter));
-			node.Add("m_TangentSigns", TangentSigns.ExportYAML(exporter));
-			node.Add("m_FloatColors", IsReadFloatColors(exporter.Version) ? FloatColors.ExportYAML(exporter) : default(PackedFloatVector).ExportYAML(exporter));
-			node.Add("m_BoneIndices", BoneIndices.ExportYAML(exporter));
-			node.Add("m_Triangles", Triangles.ExportYAML(exporter));
+			node.Add("m_Vertices", Vertices.ExportYAML(container));
+			node.Add("m_UV", UV.ExportYAML(container));
+			node.Add("m_Normals", Normals.ExportYAML(container));
+			node.Add("m_Tangents", Tangents.ExportYAML(container));
+			node.Add("m_Weights", Weight.ExportYAML(container));
+			node.Add("m_NormalSigns", NormalSigns.ExportYAML(container));
+			node.Add("m_TangentSigns", TangentSigns.ExportYAML(container));
+			node.Add("m_FloatColors", IsReadFloatColors(container.Version) ? FloatColors.ExportYAML(container) : default(PackedFloatVector).ExportYAML(container));
+			node.Add("m_BoneIndices", BoneIndices.ExportYAML(container));
+			node.Add("m_Triangles", Triangles.ExportYAML(container));
 			node.Add("m_UVInfo", UVInfo);
 			return node;
 		}

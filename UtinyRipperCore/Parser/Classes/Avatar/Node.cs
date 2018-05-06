@@ -11,7 +11,7 @@ namespace UtinyRipper.Classes.Avatars
 			AxesId = stream.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("m_ParentId", ParentId);

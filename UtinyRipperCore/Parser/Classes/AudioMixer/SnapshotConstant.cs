@@ -21,10 +21,10 @@ namespace UtinyRipper.Classes.AudioMixers
 			m_transitionIndices = stream.ReadUInt32Array();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("nameHash", NameHash);
 			node.Add("values", Values.ExportYAML());
 			node.Add("transitionTypes", TransitionTypes.ExportYAML(true));

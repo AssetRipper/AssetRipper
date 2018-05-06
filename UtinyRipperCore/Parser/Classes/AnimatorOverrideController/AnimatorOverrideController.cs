@@ -38,11 +38,11 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_Controller", Controller.ExportYAML(exporter));
-			node.Add("m_Clips", Clips.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_Controller", Controller.ExportYAML(container));
+			node.Add("m_Clips", Clips.ExportYAML(container));
 			return node;
 		}
 

@@ -11,11 +11,11 @@ namespace UtinyRipper.Classes
 			Extent.Read(stream);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Center", Center.ExportYAML(exporter));
-			node.Add("m_Extent", Extent.ExportYAML(exporter));
+			node.Add("m_Center", Center.ExportYAML(container));
+			node.Add("m_Extent", Extent.ExportYAML(container));
 			return node;
 		}
 

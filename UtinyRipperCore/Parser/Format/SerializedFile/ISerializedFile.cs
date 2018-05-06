@@ -44,7 +44,7 @@ namespace UtinyRipper.SerializedFiles
 
 		bool IsScene { get; }
 
-		IAssetCollection Collection { get; }
+		IFileCollection Collection { get; }
 		IReadOnlyList<FileIdentifier> Dependencies { get; }
 	}
 }

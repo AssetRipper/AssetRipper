@@ -5,28 +5,27 @@ using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
 {
-	public class AssetsExporter
+	public class ProjectExporter
 	{
-		public AssetsExporter()
+		public ProjectExporter(IFileCollection fileCollection)
 		{
+			m_fileCollection = fileCollection;
+
 			DummyAssetExporter dummyExporter = new DummyAssetExporter();
-			OverrideExporter(ClassIDType.SceneSettings, dummyExporter);
 			OverrideExporter(ClassIDType.AnimatorController, dummyExporter);
-			OverrideExporter(ClassIDType.RenderSettings, dummyExporter);
 			OverrideExporter(ClassIDType.MonoScript, dummyExporter);
 			OverrideExporter(ClassIDType.BuildSettings, dummyExporter);
 			OverrideExporter(ClassIDType.AssetBundle, dummyExporter);
-			OverrideExporter(ClassIDType.NavMeshSettings, dummyExporter);
 			OverrideExporter(ClassIDType.Sprite, dummyExporter);
 			OverrideExporter(ClassIDType.SpriteAtlas, dummyExporter);
 
 			YAMLAssetExporter yamlExporter = new YAMLAssetExporter();
 			OverrideExporter(ClassIDType.GameObject, yamlExporter);
-			OverrideExporter(ClassIDType.Component, yamlExporter);
 			OverrideExporter(ClassIDType.Transform, yamlExporter);
 			OverrideExporter(ClassIDType.Camera, yamlExporter);
 			OverrideExporter(ClassIDType.Material, yamlExporter);
 			OverrideExporter(ClassIDType.MeshRenderer, yamlExporter);
+			OverrideExporter(ClassIDType.OcclusionCullingSettings, yamlExporter);
 			OverrideExporter(ClassIDType.MeshFilter, yamlExporter);
 			OverrideExporter(ClassIDType.OcclusionPortal, yamlExporter);
 			OverrideExporter(ClassIDType.Mesh, yamlExporter);
@@ -38,7 +37,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.PhysicsMaterial2D, yamlExporter);
 			OverrideExporter(ClassIDType.MeshCollider, yamlExporter);
 			OverrideExporter(ClassIDType.BoxCollider, yamlExporter);
-			OverrideExporter(ClassIDType.SpriteCollider2D, yamlExporter);
+			OverrideExporter(ClassIDType.CompositeCollider2D, yamlExporter);
 			OverrideExporter(ClassIDType.EdgeCollider2D, yamlExporter);
 			OverrideExporter(ClassIDType.CapsuleCollider2D, yamlExporter);
 			OverrideExporter(ClassIDType.AnimationClip, yamlExporter);
@@ -48,6 +47,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.Avatar, yamlExporter);
 			OverrideExporter(ClassIDType.GUILayer, yamlExporter);
 			OverrideExporter(ClassIDType.Animator, yamlExporter);
+			OverrideExporter(ClassIDType.RenderSettings, yamlExporter);
 			OverrideExporter(ClassIDType.Light, yamlExporter);
 			OverrideExporter(ClassIDType.Animation, yamlExporter);
 			OverrideExporter(ClassIDType.FlareLayer, yamlExporter);
@@ -60,6 +60,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.TerrainData, yamlExporter);
 			OverrideExporter(ClassIDType.OcclusionArea, yamlExporter);
 			OverrideExporter(ClassIDType.LightmapSettings, yamlExporter);
+			OverrideExporter(ClassIDType.NavMeshSettings, yamlExporter);
 			OverrideExporter(ClassIDType.ParticleSystem, yamlExporter);
 			OverrideExporter(ClassIDType.ParticleSystemRenderer, yamlExporter);
 			OverrideExporter(ClassIDType.SpriteRenderer, yamlExporter);
@@ -144,11 +145,11 @@ namespace UtinyRipper.AssetExporters
 			depSet.Clear();
 			queued.Clear();
 			
-			AssetsExportContainer container = new AssetsExportContainer(this, collections);
+			ProjectAssetContainer container = new ProjectAssetContainer(this, collections);
 			foreach (IExportCollection collection in collections)
 			{
 				container.CurrentCollection = collection;
-				bool isExported = collection.AssetExporter.Export(container, collection, path);
+				bool isExported = collection.Export(container, path);
 				if (isExported)
 				{
 					Logger.Log(LogType.Info, LogCategory.Export, $"'{collection.Name}' exported");
@@ -158,22 +159,18 @@ namespace UtinyRipper.AssetExporters
 
 		public AssetType ToExportType(ClassIDType classID)
 		{
-			// abstract objects
 			switch (classID)
 			{
+				// abstract objects
 				case ClassIDType.Object:
 					return AssetType.Meta;
-
 				case ClassIDType.Texture:
-					return AssetType.Meta;
-
+					return m_exporters[ClassIDType.Texture2D].ToExportType(classID);
 				case ClassIDType.RuntimeAnimatorController:
-					return AssetType.Serialized;
-					
-					// not implemented yet
+					return m_exporters[ClassIDType.AnimatorController].ToExportType(classID);
+
+				// not implemented yet
 				case ClassIDType.Flare:
-					return AssetType.Serialized;
-				case ClassIDType.Camera:
 					return AssetType.Serialized;
 				case ClassIDType.AudioMixerGroup:
 					return AssetType.Serialized;
@@ -183,7 +180,6 @@ namespace UtinyRipper.AssetExporters
 			{
 				throw new NotImplementedException($"Export type for class {classID} is undefined");
 			}
-
 			return m_exporters[classID].ToExportType(classID);
 		}
 
@@ -193,5 +189,7 @@ namespace UtinyRipper.AssetExporters
 		}
 
 		private readonly Dictionary<ClassIDType, IAssetExporter> m_exporters = new Dictionary<ClassIDType, IAssetExporter>();
+
+		private readonly IFileCollection m_fileCollection;
 	}
 }

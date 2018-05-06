@@ -19,11 +19,11 @@ namespace UtinyRipper.Classes.CompositeCollider2Ds
 			yield return Collider.FetchDependency(file, isLog, () => nameof(SubCollider), "m_Collider");
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Collider", Collider.ExportYAML(exporter));
-			node.Add("m_ColliderPaths", ColliderPaths.ExportYAML(exporter));
+			node.Add("m_Collider", Collider.ExportYAML(container));
+			node.Add("m_ColliderPaths", ColliderPaths.ExportYAML(container));
 			return node;
 		}
 

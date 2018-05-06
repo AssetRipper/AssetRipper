@@ -269,19 +269,19 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_Quality", Quality);
 			node.Add("m_UpdateWhenOffscreen", UpdateWhenOffscreen);
 			node.Add("m_skinnedMotionVectors", SkinnedMotionVectors);
-			node.Add("m_Mesh", Mesh.ExportYAML(exporter));
-			node.Add("m_Bones", Bones.ExportYAML(exporter));
-			node.Add("m_BlendShapeWeights", IsReadWeights(exporter.Version) ? m_blendShapeWeights.ExportYAML() : YAMLSequenceNode.Empty);
-			node.Add("m_RootBone", RootBone.ExportYAML(exporter));
-			node.Add("m_AABB", AABB.ExportYAML(exporter));
+			node.Add("m_Mesh", Mesh.ExportYAML(container));
+			node.Add("m_Bones", Bones.ExportYAML(container));
+			node.Add("m_BlendShapeWeights", IsReadWeights(container.Version) ? m_blendShapeWeights.ExportYAML() : YAMLSequenceNode.Empty);
+			node.Add("m_RootBone", RootBone.ExportYAML(container));
+			node.Add("m_AABB", AABB.ExportYAML(container));
 			node.Add("m_DirtyAABB", DirtyAABB);
 			return node;
 		}

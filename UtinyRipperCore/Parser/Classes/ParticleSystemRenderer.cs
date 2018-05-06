@@ -193,11 +193,11 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.InsertSerializedVersion(GetSerializedVersion(exporter.Version));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_RenderMode", RenderMode);
 			node.Add("m_SortMode", SortMode);
 			node.Add("m_MinParticleSize", MinParticleSize);
@@ -208,13 +208,13 @@ namespace UtinyRipper.Classes
 			node.Add("m_SortingFudge", SortingFudge);
 			node.Add("m_NormalDirection", NormalDirection);
 			node.Add("m_RenderAlignment", RenderAlignment);
-			node.Add("m_Pivot", Pivot.ExportYAML(exporter));
+			node.Add("m_Pivot", Pivot.ExportYAML(container));
 			node.Add("m_UseCustomVertexStreams", UseCustomVertexStreams);
-			node.Add("m_VertexStreams", IsReadVertexStreams(exporter.Version) ? VertexStreams.ExportYAML() : YAMLScalarNode.Empty);
-			node.Add("m_Mesh", Mesh.ExportYAML(exporter));
-			node.Add("m_Mesh1", Mesh1.ExportYAML(exporter));
-			node.Add("m_Mesh2", Mesh2.ExportYAML(exporter));
-			node.Add("m_Mesh3", Mesh3.ExportYAML(exporter));
+			node.Add("m_VertexStreams", IsReadVertexStreams(container.Version) ? VertexStreams.ExportYAML() : YAMLScalarNode.Empty);
+			node.Add("m_Mesh", Mesh.ExportYAML(container));
+			node.Add("m_Mesh1", Mesh1.ExportYAML(container));
+			node.Add("m_Mesh2", Mesh2.ExportYAML(container));
+			node.Add("m_Mesh3", Mesh3.ExportYAML(container));
 			node.Add("m_MaskInteraction", MaskInteraction);
 			return node;
 		}

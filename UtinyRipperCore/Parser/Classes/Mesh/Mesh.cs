@@ -459,17 +459,17 @@ namespace UtinyRipper.Classes
 			}
 		}
 		
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_SubMeshes", IsReadSubMeshes(exporter.Version) ? SubMeshes.ExportYAML(exporter) : YAMLSequenceNode.Empty);
-			node.Add("m_Shapes", Shapes.ExportYAML(exporter));
-			node.Add("m_BindPose", IsReadBindPoses(exporter.Version) ? BindPoses.ExportYAML(exporter) : YAMLSequenceNode.Empty);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_SubMeshes", IsReadSubMeshes(container.Version) ? SubMeshes.ExportYAML(container) : YAMLSequenceNode.Empty);
+			node.Add("m_Shapes", Shapes.ExportYAML(container));
+			node.Add("m_BindPose", IsReadBindPoses(container.Version) ? BindPoses.ExportYAML(container) : YAMLSequenceNode.Empty);
 #warning TODO?
 			node.Add("m_BoneNames", YAMLSequenceNode.Empty);
-			node.Add("m_BoneNameHashes", IsReadBoneNameHashes(exporter.Version) ? BoneNameHashes.ExportYAML(false) : YAMLSequenceNode.Empty);
+			node.Add("m_BoneNameHashes", IsReadBoneNameHashes(container.Version) ? BoneNameHashes.ExportYAML(false) : YAMLSequenceNode.Empty);
 #warning TODO?
 			node.Add("m_RootBoneName", YAMLScalarNode.Empty);
 			node.Add("m_RootBoneNameHash", RootBoneNameHash);
@@ -477,13 +477,13 @@ namespace UtinyRipper.Classes
 			node.Add("m_IsReadable", IsReadable);
 			node.Add("m_KeepVertices", KeepVertices);
 			node.Add("m_KeepIndices", KeepIndices);
-			node.Add("m_IndexBuffer", IsReadIndexBuffer(exporter.Version) ? IndexBuffer.ExportYAML() : YAMLSequenceNode.Empty);
-			node.Add("m_Skin", Skin.ExportYAML(exporter));
-			node.Add("m_VertexData", GetExportVertexData(exporter.Version).ExportYAML(exporter));
-			node.Add("m_CompressedMesh", CompressedMesh.ExportYAML(exporter));
-			node.Add("m_LocalAABB", LocalAABB.ExportYAML(exporter));
+			node.Add("m_IndexBuffer", IsReadIndexBuffer(container.Version) ? IndexBuffer.ExportYAML() : YAMLSequenceNode.Empty);
+			node.Add("m_Skin", Skin.ExportYAML(container));
+			node.Add("m_VertexData", GetExportVertexData(container.Version).ExportYAML(container));
+			node.Add("m_CompressedMesh", CompressedMesh.ExportYAML(container));
+			node.Add("m_LocalAABB", LocalAABB.ExportYAML(container));
 			node.Add("m_MeshUsageFlags", MeshUsageFlags);
-			if (IsReadCollision(exporter.Version))
+			if (IsReadCollision(container.Version))
 			{
 				node.Add("m_BakedConvexCollisionMesh", CollisionData.BakedConvexCollisionMesh.ExportYAML());
 				node.Add("m_BakedTriangleCollisionMesh", CollisionData.BakedTriangleCollisionMesh.ExportYAML());

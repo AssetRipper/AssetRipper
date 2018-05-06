@@ -70,16 +70,16 @@ namespace UtinyRipper.Classes
 			throw new Exception("Transorm hasn't been found among father's children");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_LocalRotation", LocalRotation.ExportYAML(exporter));
-			node.Add("m_LocalPosition", LocalPosition.ExportYAML(exporter));
-			node.Add("m_LocalScale", LocalScale.ExportYAML(exporter));
-			node.Add("m_Children", Children.ExportYAML(exporter));
-			node.Add("m_Father", Father.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_LocalRotation", LocalRotation.ExportYAML(container));
+			node.Add("m_LocalPosition", LocalPosition.ExportYAML(container));
+			node.Add("m_LocalScale", LocalScale.ExportYAML(container));
+			node.Add("m_Children", Children.ExportYAML(container));
+			node.Add("m_Father", Father.ExportYAML(container));
 			node.Add("m_RootOrder", GetSiblingIndex());
-			node.Add("m_LocalEulerAnglesHint", LocalRotation.ToEuler().ExportYAML(exporter));
+			node.Add("m_LocalEulerAnglesHint", LocalRotation.ToEuler().ExportYAML(container));
 			return node;
 		}
 

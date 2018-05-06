@@ -12,11 +12,11 @@ namespace UtinyRipper.Classes.LightmapSettingss
 			FirstSystemId = stream.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("atlasSize", AtlasSize);
-			node.Add("atlasHash", AtlasHash.ExportYAML(exporter));
+			node.Add("atlasHash", AtlasHash.ExportYAML(container));
 			node.Add("firstSystemId", FirstSystemId);
 			return node;
 		}

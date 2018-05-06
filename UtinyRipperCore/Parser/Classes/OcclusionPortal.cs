@@ -21,12 +21,12 @@ namespace UtinyRipper.Classes
 			Size.Read(stream);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("m_Open", Open);
-			node.Add("m_Center", Center.ExportYAML(exporter));
-			node.Add("m_Size", Size.ExportYAML(exporter));
+			node.Add("m_Center", Center.ExportYAML(container));
+			node.Add("m_Size", Size.ExportYAML(container));
 			return node;
 		}
 

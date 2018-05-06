@@ -176,23 +176,23 @@ namespace UtinyRipper.Classes
 			yield return TargetTexture.FetchDependency(file, isLog, ToLogString, "m_TargetTexture");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_ClearFlags", ClearFlags);
-			node.Add("m_BackGroundColor", BackGroundColor.ExportYAML(exporter));
-			node.Add("m_NormalizedViewPortRect", NormalizedViewPortRect.ExportYAML(exporter));
+			node.Add("m_BackGroundColor", BackGroundColor.ExportYAML(container));
+			node.Add("m_NormalizedViewPortRect", NormalizedViewPortRect.ExportYAML(container));
 			node.Add("near clip plane", NearClipPlane);
 			node.Add("far clip plane", FarClipPlane);
 			node.Add("field of view", FieldOfView);
 			node.Add("orthographic", Orthographic);
 			node.Add("orthographic size", OrthographicSize);
 			node.Add("m_Depth", Depth);
-			node.Add("m_CullingMask", CullingMask.ExportYAML(exporter));
+			node.Add("m_CullingMask", CullingMask.ExportYAML(container));
 			node.Add("m_RenderingPath", (int)RenderingPath);
-			node.Add("m_TargetTexture", TargetTexture.ExportYAML(exporter));
+			node.Add("m_TargetTexture", TargetTexture.ExportYAML(container));
 			node.Add("m_TargetDisplay", TargetDisplay);
 			node.Add("m_TargetEye", (int)TargetEye);
 			node.Add("m_HDR", HDR);

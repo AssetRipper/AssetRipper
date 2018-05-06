@@ -26,10 +26,10 @@ namespace UtinyRipper.Classes.AudioMixers
 			m_parameterIndices = stream.ReadUInt32Array();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("type", Type);
 			node.Add("groupConstantIndex", GroupConstantIndex);
 			node.Add("sendTargetEffectIndex", SendTargetEffectIndex);

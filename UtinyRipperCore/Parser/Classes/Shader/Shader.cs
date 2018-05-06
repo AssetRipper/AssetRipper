@@ -188,16 +188,16 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public override void ExportBinary(IAssetsExporter exporter, Stream stream)
+		public override void ExportBinary(IExportContainer container, Stream stream)
 		{
-			if (IsSerialized(exporter.Version))
+			if (IsSerialized(container.Version))
 			{
 				using (StreamWriter writer = new StreamWriter(stream))
 				{
 					ParsedForm.Export(writer, this);
 				}
 			}
-			else if (IsEncoded(exporter.Version))
+			else if (IsEncoded(container.Version))
 			{
 				using (StreamWriter writer = new StreamWriter(stream))
 				{
@@ -206,7 +206,7 @@ namespace UtinyRipper.Classes
 			}
 			else
 			{
-				base.ExportBinary(exporter, stream);
+				base.ExportBinary(container, stream);
 			}
 		}
 

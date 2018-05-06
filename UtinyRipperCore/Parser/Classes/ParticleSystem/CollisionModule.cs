@@ -210,35 +210,35 @@ namespace UtinyRipper.Classes.ParticleSystems
 			yield return Plane5.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane5");
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("type", Type);
 			node.Add("collisionMode", CollisionMode);
 			node.Add("colliderForce", ColliderForce);
 			node.Add("multiplyColliderForceByParticleSize", MultiplyColliderForceByParticleSize);
 			node.Add("multiplyColliderForceByParticleSpeed", MultiplyColliderForceByParticleSpeed);
-			node.Add("multiplyColliderForceByCollisionAngle", GetExportMultiplyColliderForceByCollisionAngle(exporter.Version));
-			node.Add("plane0", Plane0.ExportYAML(exporter));
-			node.Add("plane1", Plane1.ExportYAML(exporter));
-			node.Add("plane2", Plane2.ExportYAML(exporter));
-			node.Add("plane3", Plane3.ExportYAML(exporter));
-			node.Add("plane4", Plane4.ExportYAML(exporter));
-			node.Add("plane5", Plane5.ExportYAML(exporter));
-			node.Add("m_Dampen", GetExportDampen(exporter.Version).ExportYAML(exporter));
-			node.Add("m_Bounce", GetExportBounce(exporter.Version).ExportYAML(exporter));
-			node.Add("m_EnergyLossOnCollision", GetExportEnergyLossOnCollision(exporter.Version).ExportYAML(exporter));
+			node.Add("multiplyColliderForceByCollisionAngle", GetExportMultiplyColliderForceByCollisionAngle(container.Version));
+			node.Add("plane0", Plane0.ExportYAML(container));
+			node.Add("plane1", Plane1.ExportYAML(container));
+			node.Add("plane2", Plane2.ExportYAML(container));
+			node.Add("plane3", Plane3.ExportYAML(container));
+			node.Add("plane4", Plane4.ExportYAML(container));
+			node.Add("plane5", Plane5.ExportYAML(container));
+			node.Add("m_Dampen", GetExportDampen(container.Version).ExportYAML(container));
+			node.Add("m_Bounce", GetExportBounce(container.Version).ExportYAML(container));
+			node.Add("m_EnergyLossOnCollision", GetExportEnergyLossOnCollision(container.Version).ExportYAML(container));
 			node.Add("minKillSpeed", MinKillSpeed);
-			node.Add("maxKillSpeed", GetExportMaxKillSpeed(exporter.Version));
-			node.Add("radiusScale", GetExportRadiusScale(exporter.Version));
-			node.Add("collidesWith", GetExportCollidesWith(exporter.Version).ExportYAML(exporter));
-			node.Add("maxCollisionShapes", GetExportMaxCollisionShapes(exporter.Version));
+			node.Add("maxKillSpeed", GetExportMaxKillSpeed(container.Version));
+			node.Add("radiusScale", GetExportRadiusScale(container.Version));
+			node.Add("collidesWith", GetExportCollidesWith(container.Version).ExportYAML(container));
+			node.Add("maxCollisionShapes", GetExportMaxCollisionShapes(container.Version));
 			node.Add("quality", Quality);
-			node.Add("voxelSize", GetExportVoxelSize(exporter.Version));
+			node.Add("voxelSize", GetExportVoxelSize(container.Version));
 			node.Add("collisionMessages", CollisionMessages);
-			node.Add("collidesWithDynamic", GetExportCollidesWithDynamic(exporter.Version));
+			node.Add("collidesWithDynamic", GetExportCollidesWithDynamic(container.Version));
 			node.Add("interiorCollisions", InteriorCollisions);
 			return node;
 		}

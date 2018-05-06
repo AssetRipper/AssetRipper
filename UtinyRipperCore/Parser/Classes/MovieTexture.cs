@@ -26,7 +26,7 @@ namespace UtinyRipper.Classes
 			ColorSpace = stream.ReadInt32();
 		}
 
-		public override void ExportBinary(IAssetsExporter exporter, Stream stream)
+		public override void ExportBinary(IExportContainer container, Stream stream)
 		{
 			using (BinaryWriter writer = new BinaryWriter(stream))
 			{

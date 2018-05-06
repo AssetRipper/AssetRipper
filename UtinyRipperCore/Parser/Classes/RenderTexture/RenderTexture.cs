@@ -154,9 +154,9 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("m_Width", Width);
 			node.Add("m_Height", Height);
 			node.Add("m_AntiAliasing", AntiAliasing);
@@ -167,7 +167,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_SRGB", SRGB);
 			node.Add("m_UseDynamicScale", UseDynamicScale);
 			node.Add("m_BindMS", BindMS);
-			node.Add("m_TextureSettings", TextureSettings.ExportYAML(exporter));
+			node.Add("m_TextureSettings", TextureSettings.ExportYAML(container));
 			node.Add("m_Dimension", Dimension);
 			node.Add("m_VolumeDepth", VolumeDepth);
 			return node;

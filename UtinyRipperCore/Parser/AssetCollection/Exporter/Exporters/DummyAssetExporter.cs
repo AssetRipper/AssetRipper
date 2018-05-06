@@ -1,5 +1,5 @@
 ﻿using System;
-using UtinyRipper.Classes;
+using System.Collections.Generic;
 
 using Object = UtinyRipper.Classes.Object;
 
@@ -7,32 +7,24 @@ namespace UtinyRipper.AssetExporters
 {
 	internal class DummyAssetExporter : IAssetExporter
 	{
-		public IExportCollection CreateCollection(Object @object)
+		public void Export(ProjectAssetContainer container, Object asset, string path)
 		{
-			switch (@object)
-			{
-				case RenderSettings renderSettings:
-					return new SkipExportCollection(this, renderSettings);
-				case OcclusionCullingSettings cullSettings:
-					return new SkipExportCollection(this, cullSettings);
-				case NavMeshSettings navSettings:
-					return new SkipExportCollection(this, navSettings);
-				case BuildSettings buildSettings:
-					return new SkipExportCollection(this, buildSettings);
-				case MonoScript monoScript:
-					return new SkipExportCollection(this, monoScript, monoScript.ClassName);
-				case AssetBundle bundle:
-					string name = string.IsNullOrEmpty(bundle.AssetBundleName) ? bundle.Name : bundle.AssetBundleName;
-					return new EmptyExportCollection(this, name);
-
-				default:
-					return new SkipExportCollection(this, (NamedObject)@object);
-			}
 		}
 
-		public bool Export(IAssetsExporter exporter, IExportCollection collection, string dirPath)
+		public void Export(ProjectAssetContainer container, IEnumerable<Object> assets, string path)
 		{
-			return false;
+		}
+
+		public IExportCollection CreateCollection(Object asset)
+		{
+			switch(asset.ClassID)
+			{
+				case ClassIDType.AssetBundle:
+					return new EmptyExportCollection(this);
+
+				default:
+					return new SkipExportCollection(this, asset);
+			}
 		}
 
 		public AssetType ToExportType(ClassIDType classID)
@@ -41,9 +33,9 @@ namespace UtinyRipper.AssetExporters
 			{
 				case ClassIDType.AnimatorController:
 					return AssetType.Serialized;
+
 				case ClassIDType.MonoScript:
 					return AssetType.Meta;
-
 				case ClassIDType.Sprite:
 					return AssetType.Meta;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using UtinyRipper.Classes;
+
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.SerializedFiles
@@ -13,7 +14,7 @@ namespace UtinyRipper.SerializedFiles
 	/// </summary>
 	internal class SerializedFile : ISerializedFile
 	{
-		public SerializedFile(IAssetCollection collection, string filePath, string fileName)
+		public SerializedFile(IFileCollection collection, string filePath, string fileName)
 		{
 			if(collection == null)
 			{
@@ -298,7 +299,7 @@ namespace UtinyRipper.SerializedFiles
 					asset = new Texture2D(assetInfo);
 					break;
 
-				case ClassIDType.SceneSettings:
+				case ClassIDType.OcclusionCullingSettings:
 					asset = new OcclusionCullingSettings(assetInfo);
 					break;
 
@@ -354,7 +355,7 @@ namespace UtinyRipper.SerializedFiles
 					asset = new BoxCollider(assetInfo);
 					break;
 
-				case ClassIDType.SpriteCollider2D:
+				case ClassIDType.CompositeCollider2D:
 					asset = new CompositeCollider2D(assetInfo);
 					break;
 
@@ -538,6 +539,10 @@ namespace UtinyRipper.SerializedFiles
 					asset = new LightmapParameters(assetInfo);
 					break;
 
+				case ClassIDType.LightingDataAsset:
+					asset = new LightingDataAsset(assetInfo);
+					break;
+
 				case ClassIDType.SpriteAtlas:
 					asset = new SpriteAtlas(assetInfo);
 					break;
@@ -576,14 +581,9 @@ namespace UtinyRipper.SerializedFiles
 			if(!IsScene)
 			{
 				// save IsScene value for optimization purpose
-				switch (asset.ClassID)
+				if(asset.ClassID.IsSceneComponent())
 				{
-					case ClassIDType.SceneSettings:
-					case ClassIDType.RenderSettings:
-					case ClassIDType.LightmapSettings:
-					case ClassIDType.NavMeshSettings:
-						IsScene = true;
-						break;
+					IsScene = true;
 				}
 			}
 			m_assets.Add(pathID, asset);
@@ -600,7 +600,7 @@ namespace UtinyRipper.SerializedFiles
 		public bool IsScene { get; private set; }
 
 		public IReadOnlyCollection<Object> Assets => m_assets.Values;
-		public IAssetCollection Collection { get; }
+		public IFileCollection Collection { get; }
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Dependencies;
 
 		private readonly Dictionary<long, Object> m_assets = new Dictionary<long, Object>();

@@ -132,13 +132,13 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_Animation", DefaultAnimation.ExportYAML(exporter));
-			node.Add("m_Animations", Animations.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_Animation", DefaultAnimation.ExportYAML(container));
+			node.Add("m_Animations", Animations.ExportYAML(container));
 			node.Add("m_WrapMode", (int)WrapMode);
 			node.Add("m_PlayAutomatically", PlayAutomatically);
 			node.Add("m_AnimatePhysics", AnimatePhysics);

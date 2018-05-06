@@ -5,6 +5,17 @@ namespace UtinyRipper.Classes.LightmapSettingss
 {
 	public struct GISettings : IAssetReadable, IYAMLExportable
 	{
+		public GISettings(bool _)
+		{
+			BounceScale = 1.0f;
+			IndirectOutputScale = 1.0f;
+			AlbedoBoost = 1.0f;
+			TemporalCoherenceThreshold = 1.0f;
+			EnvironmentLightingMode = 0;
+			EnableBakedLightmaps = true;
+			EnableRealtimeLightmaps = true;
+		}
+
 		private static int GetSerializedVersion(Version version)
 		{
 			if (Config.IsExportTopmostSerializedVersion)
@@ -32,10 +43,10 @@ namespace UtinyRipper.Classes.LightmapSettingss
 			stream.AlignStream(AlignType.Align4);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_BounceScale", BounceScale);
 			node.Add("m_IndirectOutputScale", IndirectOutputScale);
 			node.Add("m_AlbedoBoost", AlbedoBoost);

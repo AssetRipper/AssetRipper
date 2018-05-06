@@ -16,10 +16,12 @@ namespace UtinyRipper.AssetExporters.Classes
 			m_mainObject = mainObject;
 		}
 
-		protected override void ExportYAMLInner(IAssetsExporter exporter, YAMLMappingNode node)
+		protected override void ExportYAMLInner(IExportContainer container, YAMLMappingNode node)
 		{
-			node.Add("mainObjectFileID", exporter.GetExportID(m_mainObject));
+			node.Add("mainObjectFileID", container.GetExportID(m_mainObject));
 		}
+
+		public override string Name => nameof(NativeFormatImporter);
 
 		private readonly Object m_mainObject;
 	}

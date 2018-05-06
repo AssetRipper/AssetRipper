@@ -29,14 +29,14 @@ namespace UtinyRipper.AssetExporters.Classes
 		{
 		}
 		
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Style = MappingStyle.Flow;
 			node.Add("fileID", FileID);
 			if(!GUID.IsZero)
 			{
-				node.Add("guid", GUID.ExportYAML(exporter));
+				node.Add("guid", GUID.ExportYAML(container));
 				node.Add("type", (int)AssetType);
 			}
 			return node;

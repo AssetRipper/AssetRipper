@@ -4,7 +4,7 @@ using UtinyRipper.Classes.AnimatorControllers;
 using UtinyRipper.Classes.AnimatorControllers.Editor;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
-using IAssetsExporter = UtinyRipper.AssetExporters.IAssetsExporter;
+using IExportContainer = UtinyRipper.AssetExporters.IExportContainer;
 
 namespace UtinyRipper.Classes
 {
@@ -126,17 +126,17 @@ namespace UtinyRipper.Classes
 			throw new System.NotImplementedException();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 #warning TODO: build controller from data
 			AnimatorControllerParameter[] @params = null;
 			AnimatorControllerLayers[] layers = null;
 			
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_AnimatorParameters", @params.ExportYAML(exporter));
-			node.Add("m_AnimatorLayers", layers.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_AnimatorParameters", @params.ExportYAML(container));
+			node.Add("m_AnimatorLayers", layers.ExportYAML(container));
 			return node;
 		}
 

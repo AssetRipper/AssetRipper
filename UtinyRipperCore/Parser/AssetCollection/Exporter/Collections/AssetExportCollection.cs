@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using UtinyRipper.AssetExporters.Classes;
-using UtinyRipper.Classes;
 
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
 {
-	public class AssetExportCollection : IExportCollection
+	public class AssetExportCollection : ExportCollection
 	{
 		public AssetExportCollection(IAssetExporter assetExporter, Object asset):
 			this(assetExporter, asset, new NativeFormatImporter(asset))
 		{
 		}
 
-		public AssetExportCollection(IAssetExporter assetExporter, Object asset, IYAMLExportable metaImporter)
+		public AssetExportCollection(IAssetExporter assetExporter, Object asset, IAssetImporter metaImporter)
 		{
 			if (assetExporter == null)
 			{
@@ -30,44 +30,62 @@ namespace UtinyRipper.AssetExporters
 			}
 			AssetExporter = assetExporter;
 			Asset = asset;
-			MetaImporter = metaImporter;
+			m_metaImporter = metaImporter;
 		}
 
-		public static string GetMainExportID(Object @object)
+		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
-			return $"{(int)@object.ClassID}00000";
+			string subFolder = Asset.ExportName;
+			string subPath = Path.Combine(dirPath, subFolder);
+			string fileName = GetUniqueFileName(Asset, subPath);
+			string filePath = Path.Combine(subPath, fileName);
+
+			if (!Directory.Exists(subPath))
+			{
+				Directory.CreateDirectory(subPath);
+			}
+
+			ExportInner(container, filePath);
+			Meta meta = new Meta(m_metaImporter, Asset.GUID);
+			ExportMeta(container, meta, filePath);
+			return true;
 		}
 
-		public virtual bool IsContains(Object @object)
+		public override bool IsContains(Object asset)
 		{
-			return Asset == @object;
+			return Asset == asset;
 		}
 
-		public virtual string GetExportID(Object @object)
+		public override string GetExportID(Object asset)
 		{
-			if(@object == Asset)
+			if(asset == Asset)
 			{
 				return GetMainExportID(Asset);
 			}
-			throw new ArgumentException(nameof(@object));
+			throw new ArgumentException(nameof(asset));
 		}
 
-		public ExportPointer CreateExportPointer(Object @object, bool isLocal)
+		public override ExportPointer CreateExportPointer(Object asset, bool isLocal)
 		{
-			string exportID = GetExportID(@object);
+			string exportID = GetExportID(asset);
 			return isLocal ?
 				new ExportPointer(exportID) :
 				new ExportPointer(exportID, Asset.GUID, AssetExporter.ToExportType(Asset.ClassID));
 		}
-		
-		public IAssetExporter AssetExporter { get; }
-		public virtual IEnumerable<Object> Objects
+
+		protected virtual void ExportInner(ProjectAssetContainer container, string filePath)
+		{
+			AssetExporter.Export(container, Asset, filePath);
+		}
+
+		public override IAssetExporter AssetExporter { get; }
+		public override IEnumerable<Object> Objects
 		{
 			get { yield return Asset; }
 		}
-		public string Name => Asset.ToString();
-		public UtinyGUID GUID => Asset.GUID;
+		public override string Name => Asset.ToString();
 		public Object Asset { get; }
-		public IYAMLExportable MetaImporter { get; }
+
+		private IAssetImporter m_metaImporter;
 	}
 }

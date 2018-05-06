@@ -33,12 +33,12 @@ namespace UtinyRipper.Classes
 			Points.Read(stream);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_SpriteTilingProperty", SpriteTilingProperty.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_SpriteTilingProperty", SpriteTilingProperty.ExportYAML(container));
 			node.Add("m_AutoTiling", AutoTiling);
-			node.Add("m_Points", Points.ExportYAML(exporter));
+			node.Add("m_Points", Points.ExportYAML(container));
 			return node;
 		}
 

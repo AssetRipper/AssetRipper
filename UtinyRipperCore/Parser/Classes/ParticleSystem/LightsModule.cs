@@ -27,17 +27,17 @@ namespace UtinyRipper.Classes.ParticleSystems
 			yield return Light.FetchDependency(file, isLog, () => nameof(LightsModule), "light");
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
 			node.Add("ratio", Ratio);
-			node.Add("light", Light.ExportYAML(exporter));
+			node.Add("light", Light.ExportYAML(container));
 			node.Add("randomDistribution", RandomDistribution);
 			node.Add("color", Color);
 			node.Add("range", Range);
 			node.Add("intensity", Intensity);
-			node.Add("rangeCurve", RangeCurve.ExportYAML(exporter));
-			node.Add("intensityCurve", IntensityCurve.ExportYAML(exporter));
+			node.Add("rangeCurve", RangeCurve.ExportYAML(container));
+			node.Add("intensityCurve", IntensityCurve.ExportYAML(container));
 			node.Add("maxLights", MaxLights);
 			return node;
 		}

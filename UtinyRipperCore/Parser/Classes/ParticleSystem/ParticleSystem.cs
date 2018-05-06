@@ -311,11 +311,11 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("lengthInSec", LengthInSec);
 			node.Add("simulationSpeed", SimulationSpeed);
 			node.Add("stopAction", StopAction);
@@ -323,35 +323,35 @@ namespace UtinyRipper.Classes
 			node.Add("prewarm", Prewarm);
 			node.Add("playOnAwake", PlayOnAwake);
 			node.Add("useUnscaledTime", UseUnscaledTime);
-			node.Add("autoRandomSeed", GetExportAutoRandomSeed(exporter.Version));
-			node.Add("useRigidbodyForVelocity", GetExportUseRigidbodyForVelocity(exporter.Version));
-			node.Add("startDelay", GetExportStartDelay(exporter.Version).ExportYAML(exporter));
+			node.Add("autoRandomSeed", GetExportAutoRandomSeed(container.Version));
+			node.Add("useRigidbodyForVelocity", GetExportUseRigidbodyForVelocity(container.Version));
+			node.Add("startDelay", GetExportStartDelay(container.Version).ExportYAML(container));
 			node.Add("moveWithTransform", MoveWithTransform);
-			node.Add("moveWithCustomTransform", MoveWithCustomTransform.ExportYAML(exporter));
+			node.Add("moveWithCustomTransform", MoveWithCustomTransform.ExportYAML(container));
 			node.Add("scalingMode", (int)ScalingMode);
 			node.Add("randomSeed", RandomSeed);
-			node.Add("InitialModule", InitialModule.ExportYAML(exporter));
-			node.Add("ShapeModule", ShapeModule.ExportYAML(exporter));
-			node.Add("EmissionModule", EmissionModule.ExportYAML(exporter));
-			node.Add("SizeModule", SizeModule.ExportYAML(exporter));
-			node.Add("RotationModule", RotationModule.ExportYAML(exporter));
-			node.Add("ColorModule", ColorModule.ExportYAML(exporter));
-			node.Add("UVModule", UVModule.ExportYAML(exporter));
-			node.Add("VelocityModule", VelocityModule.ExportYAML(exporter));
-			node.Add("InheritVelocityModule", InheritVelocityModule.ExportYAML(exporter));
-			node.Add("ForceModule", ForceModule.ExportYAML(exporter));
-			node.Add("ExternalForcesModule", ExternalForcesModule.ExportYAML(exporter));
-			node.Add("ClampVelocityModule", ClampVelocityModule.ExportYAML(exporter));
-			node.Add("NoiseModule", NoiseModule.ExportYAML(exporter));
-			node.Add("SizeBySpeedModule", SizeBySpeedModule.ExportYAML(exporter));
-			node.Add("RotationBySpeedModule", RotationBySpeedModule.ExportYAML(exporter));
-			node.Add("ColorBySpeedModule", ColorBySpeedModule.ExportYAML(exporter));
-			node.Add("CollisionModule", CollisionModule.ExportYAML(exporter));
-			node.Add("TriggerModule", TriggerModule.ExportYAML(exporter));
-			node.Add("SubModule", SubModule.ExportYAML(exporter));
-			node.Add("LightsModule", LightsModule.ExportYAML(exporter));
-			node.Add("TrailModule", TrailModule.ExportYAML(exporter));
-			node.Add("CustomDataModule", CustomDataModule.ExportYAML(exporter));
+			node.Add("InitialModule", InitialModule.ExportYAML(container));
+			node.Add("ShapeModule", ShapeModule.ExportYAML(container));
+			node.Add("EmissionModule", EmissionModule.ExportYAML(container));
+			node.Add("SizeModule", SizeModule.ExportYAML(container));
+			node.Add("RotationModule", RotationModule.ExportYAML(container));
+			node.Add("ColorModule", ColorModule.ExportYAML(container));
+			node.Add("UVModule", UVModule.ExportYAML(container));
+			node.Add("VelocityModule", VelocityModule.ExportYAML(container));
+			node.Add("InheritVelocityModule", InheritVelocityModule.ExportYAML(container));
+			node.Add("ForceModule", ForceModule.ExportYAML(container));
+			node.Add("ExternalForcesModule", ExternalForcesModule.ExportYAML(container));
+			node.Add("ClampVelocityModule", ClampVelocityModule.ExportYAML(container));
+			node.Add("NoiseModule", NoiseModule.ExportYAML(container));
+			node.Add("SizeBySpeedModule", SizeBySpeedModule.ExportYAML(container));
+			node.Add("RotationBySpeedModule", RotationBySpeedModule.ExportYAML(container));
+			node.Add("ColorBySpeedModule", ColorBySpeedModule.ExportYAML(container));
+			node.Add("CollisionModule", CollisionModule.ExportYAML(container));
+			node.Add("TriggerModule", TriggerModule.ExportYAML(container));
+			node.Add("SubModule", SubModule.ExportYAML(container));
+			node.Add("LightsModule", LightsModule.ExportYAML(container));
+			node.Add("TrailModule", TrailModule.ExportYAML(container));
+			node.Add("CustomDataModule", CustomDataModule.ExportYAML(container));
 			return node;
 		}
 

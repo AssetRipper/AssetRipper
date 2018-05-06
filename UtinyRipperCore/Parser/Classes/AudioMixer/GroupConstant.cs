@@ -24,10 +24,10 @@ namespace UtinyRipper.Classes.AudioMixers
 			
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("parentConstantIndex", ParentConstantIndex);
 			node.Add("volumeIndex", VolumeIndex);
 			node.Add("pitchIndex", PitchIndex);

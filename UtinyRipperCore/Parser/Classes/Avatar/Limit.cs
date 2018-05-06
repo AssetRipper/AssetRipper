@@ -27,11 +27,11 @@ namespace UtinyRipper.Classes.Avatars
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Min", Min.ExportYAML3(exporter));
-			node.Add("m_Max", Max.ExportYAML3(exporter));
+			node.Add("m_Min", Min.ExportYAML3(container));
+			node.Add("m_Max", Max.ExportYAML3(container));
 			return node;
 		}
 

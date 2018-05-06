@@ -29,21 +29,21 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			throw new NotSupportedException();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_ChildStates", ChildStates.ExportYAML(exporter));
-			node.Add("m_ChildStateMachines", ChildStateMachines.ExportYAML(exporter));
-			node.Add("m_AnyStateTransitions", AnyStateTransitions.ExportYAML(exporter));
-			node.Add("m_EntryTransitions", EntryTransitions.ExportYAML(exporter));
-			node.Add("m_StateMachineTransitions", StateMachineTransitions.ExportYAMLArrayPPtr(exporter));
-			node.Add("m_StateMachineBehaviours", StateMachineBehaviours.ExportYAML(exporter));
-			node.Add("m_AnyStatePosition", AnyStatePosition.ExportYAML(exporter));
-			node.Add("m_EntryPosition", EntryPosition.ExportYAML(exporter));
-			node.Add("m_ExitPosition", ExitPosition.ExportYAML(exporter));
-			node.Add("m_ParentStateMachinePosition", ParentStateMachinePosition.ExportYAML(exporter));
-			node.Add("m_DefaultState", DefaultState.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_ChildStates", ChildStates.ExportYAML(container));
+			node.Add("m_ChildStateMachines", ChildStateMachines.ExportYAML(container));
+			node.Add("m_AnyStateTransitions", AnyStateTransitions.ExportYAML(container));
+			node.Add("m_EntryTransitions", EntryTransitions.ExportYAML(container));
+			node.Add("m_StateMachineTransitions", StateMachineTransitions.ExportYAMLArrayPPtr(container));
+			node.Add("m_StateMachineBehaviours", StateMachineBehaviours.ExportYAML(container));
+			node.Add("m_AnyStatePosition", AnyStatePosition.ExportYAML(container));
+			node.Add("m_EntryPosition", EntryPosition.ExportYAML(container));
+			node.Add("m_ExitPosition", ExitPosition.ExportYAML(container));
+			node.Add("m_ParentStateMachinePosition", ParentStateMachinePosition.ExportYAML(container));
+			node.Add("m_DefaultState", DefaultState.ExportYAML(container));
 			return node;
 		}
 

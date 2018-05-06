@@ -27,7 +27,7 @@ namespace UtinyRipper.Classes
 			W = stream.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Style = MappingStyle.Flow;
@@ -88,6 +88,8 @@ namespace UtinyRipper.Classes
 		{
 			return $"[{X:0.00}, {Y:0.00}, {Z:0.00}, {W:0.00}]";
 		}
+
+		public static Quaternionf Zero => new Quaternionf(0.0f, 0.0f, 0.0f, 1.0f);
 
 		public float X { get; private set; }
 		public float Y { get; private set; }

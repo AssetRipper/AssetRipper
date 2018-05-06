@@ -16,7 +16,7 @@ namespace UtinyRipper.Classes.LightmapSettingss
 			RadiositySystemHash.Read(stream);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("rendererIndex", RendererIndex);
@@ -24,8 +24,8 @@ namespace UtinyRipper.Classes.LightmapSettingss
 			node.Add("atlasIndex", AtlasIndex);
 			node.Add("atlasOffsetX", AtlasOffsetX);
 			node.Add("atlasOffsetY", AtlasOffsetY);
-			node.Add("inputSystemHash", InputSystemHash.ExportYAML(exporter));
-			node.Add("radiositySystemHash", RadiositySystemHash.ExportYAML(exporter));
+			node.Add("inputSystemHash", InputSystemHash.ExportYAML(container));
+			node.Add("radiositySystemHash", RadiositySystemHash.ExportYAML(container));
 			return node;
 		}
 

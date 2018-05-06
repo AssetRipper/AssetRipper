@@ -42,7 +42,7 @@ namespace UtinyRipper.Classes
 			stream.Write(W);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode(MappingStyle.Flow);
 			node.Add("x", X);
@@ -52,7 +52,7 @@ namespace UtinyRipper.Classes
 			return node;
 		}
 
-		public YAMLNode ExportYAML3(IAssetsExporter exporter)
+		public YAMLNode ExportYAML3(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode(MappingStyle.Flow);
 			node.Add("x", X);

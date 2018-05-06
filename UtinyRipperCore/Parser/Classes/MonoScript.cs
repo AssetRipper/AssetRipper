@@ -131,19 +131,19 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			if (IsReadScript(exporter.Platform))
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			if (IsReadScript(container.Platform))
 			{
 				node.Add("m_Script", Script);
-				node.Add("m_DefaultReferences", DefaultReferences.ExportYAML(exporter));
-				node.Add("m_Icon", Icon.ExportYAML(exporter));
+				node.Add("m_DefaultReferences", DefaultReferences.ExportYAML(container));
+				node.Add("m_Icon", Icon.ExportYAML(container));
 			}
 			node.Add("m_ExecutionOrder", ExecutionOrder);
 			node.Add("m_ClassName", ClassName);
-			node.Add("m_Namespace", IsReadNamespace(exporter.Version) ? Namespace : string.Empty);
+			node.Add("m_Namespace", IsReadNamespace(container.Version) ? Namespace : string.Empty);
 			node.Add("m_AssemblyName", AssemblyName);
 			node.Add("m_IsEditorScript", IsEditorScript);
 			return node;

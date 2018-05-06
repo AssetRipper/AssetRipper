@@ -18,10 +18,10 @@ namespace UtinyRipper.Classes.Avatars
 			MaxLimitZ = stream.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_X", X.ExportYAML(exporter));
+			node.Add("m_X", X.ExportYAML(container));
 			node.Add("m_Type", Type);
 			node.Add("m_XMotionType", XMotionType);
 			node.Add("m_YMotionType", YMotionType);

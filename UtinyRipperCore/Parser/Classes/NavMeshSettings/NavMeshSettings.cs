@@ -30,12 +30,39 @@ namespace UtinyRipper.Classes
 			NavMeshData.Read(stream);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_BuildSettings", BuildSettings.ExportYAML(exporter));
-			node.Add("m_NavMeshData", NavMeshData.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_BuildSettings", GetExportNavMeshBuildSettings(container).ExportYAML(container));
+			node.Add("m_NavMeshData", NavMeshData.ExportYAML(container));
 			return node;
+		}
+
+		private NavMeshBuildSettings GetExportNavMeshBuildSettings(IExportContainer container)
+		{
+			if(IsReadBuildSettings(container.Flags))
+			{
+				return BuildSettings;
+			}
+			else
+			{
+				NavMeshData data = NavMeshData.FindObject(container);
+				if (data == null)
+				{
+					return new NavMeshBuildSettings(true);
+				}
+				else
+				{
+					if (Classes.NavMeshData.IsReadNavMeshParams(container.Version))
+					{
+						return new NavMeshBuildSettings(data.NavMeshParams);
+					}
+					else
+					{
+						return data.NavMeshBuildSettings;
+					}
+				}
+			}
 		}
 
 		public NavMeshBuildSettings BuildSettings;

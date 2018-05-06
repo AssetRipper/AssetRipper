@@ -5,6 +5,15 @@ namespace UtinyRipper.Classes.OcclusionCullingDatas
 {
 	public struct OcclusionScene : IAssetReadable, IYAMLExportable
 	{
+		public OcclusionScene(UtinyGUID scene, int renderSize, int portalSize)
+		{
+			Scene = scene;
+			IndexRenderers = 0;
+			SizeRenderers = renderSize;
+			IndexPortals = 0;
+			SizePortals = portalSize;
+		}
+
 		public void Read(AssetStream stream)
 		{
 			IndexRenderers = stream.ReadInt32();
@@ -14,14 +23,14 @@ namespace UtinyRipper.Classes.OcclusionCullingDatas
 			Scene.Read(stream);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("indexRenderers", IndexRenderers);
 			node.Add("sizeRenderers", SizeRenderers);
 			node.Add("indexPortals", IndexPortals);
 			node.Add("sizePortals", SizePortals);
-			node.Add("scene", Scene.ExportYAML(exporter));
+			node.Add("scene", Scene.ExportYAML(container));
 			return node;
 		}
 

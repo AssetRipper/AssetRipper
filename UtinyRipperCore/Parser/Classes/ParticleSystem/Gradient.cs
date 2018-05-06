@@ -113,18 +113,18 @@ namespace UtinyRipper.Classes.ParticleSystems
 			
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("key0", GetExportKey(exporter.Version, 0).ExportYAML(exporter));
-			node.Add("key1", GetExportKey(exporter.Version, 1).ExportYAML(exporter));
-			node.Add("key2", GetExportKey(exporter.Version, 2).ExportYAML(exporter));
-			node.Add("key3", GetExportKey(exporter.Version, 3).ExportYAML(exporter));
-			node.Add("key4", GetExportKey(exporter.Version, 4).ExportYAML(exporter));
-			node.Add("key5", GetExportKey(exporter.Version, 5).ExportYAML(exporter));
-			node.Add("key6", GetExportKey(exporter.Version, 6).ExportYAML(exporter));
-			node.Add("key7", GetExportKey(exporter.Version, 7).ExportYAML(exporter));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("key0", GetExportKey(container.Version, 0).ExportYAML(container));
+			node.Add("key1", GetExportKey(container.Version, 1).ExportYAML(container));
+			node.Add("key2", GetExportKey(container.Version, 2).ExportYAML(container));
+			node.Add("key3", GetExportKey(container.Version, 3).ExportYAML(container));
+			node.Add("key4", GetExportKey(container.Version, 4).ExportYAML(container));
+			node.Add("key5", GetExportKey(container.Version, 5).ExportYAML(container));
+			node.Add("key6", GetExportKey(container.Version, 6).ExportYAML(container));
+			node.Add("key7", GetExportKey(container.Version, 7).ExportYAML(container));
 			node.Add("ctime0", Ctime0);
 			node.Add("ctime1", Ctime1);
 			node.Add("ctime2", Ctime2);

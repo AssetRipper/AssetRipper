@@ -227,25 +227,25 @@ namespace UtinyRipper.Classes
 			yield return Flare.FetchDependency(file, isLog, ToLogString, "m_Flare");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node =  base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			YAMLMappingNode node =  base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_Type", (int)Type);
-			node.Add("m_Color", Color.ExportYAML(exporter));
+			node.Add("m_Color", Color.ExportYAML(container));
 			node.Add("m_Intensity", Intensity);
 			node.Add("m_Range", Range);
 			node.Add("m_SpotAngle", SpotAngle);
 			node.Add("m_CookieSize", CookieSize);
-			node.Add("m_Shadows", Shadows.ExportYAML(exporter));
-			node.Add("m_Cookie", Cookie.ExportYAML(exporter));
+			node.Add("m_Shadows", Shadows.ExportYAML(container));
+			node.Add("m_Cookie", Cookie.ExportYAML(container));
 			node.Add("m_DrawHalo", DrawHalo);
-			node.Add("m_Flare", Flare.ExportYAML(exporter));
+			node.Add("m_Flare", Flare.ExportYAML(container));
 			node.Add("m_RenderMode", (int)RenderMode);
-			node.Add("m_CullingMask", CullingMask.ExportYAML(exporter));
+			node.Add("m_CullingMask", CullingMask.ExportYAML(container));
 			node.Add("m_Lightmapping", (int)Lightmapping);
-			node.Add("m_AreaSize", AreaSize.ExportYAML(exporter));
+			node.Add("m_AreaSize", AreaSize.ExportYAML(container));
 			node.Add("m_BounceIntensity", BounceIntensity);
 			node.Add("m_ColorTemperature", ColorTemperature);
 			node.Add("m_UseColorTemperature", UseColorTemperature);

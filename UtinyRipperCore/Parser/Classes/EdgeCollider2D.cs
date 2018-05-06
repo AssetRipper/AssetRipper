@@ -30,11 +30,11 @@ namespace UtinyRipper.Classes
 			m_points = stream.ReadArray<Vector2f>();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("m_EdgeRadius", EdgeRadius);
-			node.Add("m_Points", m_points.ExportYAML(exporter));
+			node.Add("m_Points", m_points.ExportYAML(container));
 			return node;
 		}
 

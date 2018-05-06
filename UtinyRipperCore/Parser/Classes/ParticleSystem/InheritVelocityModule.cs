@@ -13,11 +13,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Curve.Read(stream);
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
 			node.Add("m_Mode", Mode);
-			node.Add("m_Curve", Curve.ExportYAML(exporter));
+			node.Add("m_Curve", Curve.ExportYAML(container));
 			return node;
 		}
 

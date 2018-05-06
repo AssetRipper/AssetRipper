@@ -9,17 +9,7 @@ namespace UtinyRipper.AssetExporters
 {
 	internal class SkipExportCollection : IExportCollection
 	{
-		public SkipExportCollection(DummyAssetExporter assetExporter, Object asset):
-			this(assetExporter, asset, asset.GetType().Name)
-		{
-		}
-
-		public SkipExportCollection(DummyAssetExporter assetExporter, NamedObject asset):
-			this(assetExporter, asset, asset.Name)
-		{
-		}
-
-		public SkipExportCollection(DummyAssetExporter assetExporter, Object asset, string name)
+		public SkipExportCollection(IAssetExporter assetExporter, Object asset)
 		{
 			if (assetExporter == null)
 			{
@@ -29,14 +19,15 @@ namespace UtinyRipper.AssetExporters
 			{
 				throw new ArgumentNullException(nameof(asset));
 			}
-			if (string.IsNullOrEmpty(name))
-			{
-				throw new ArgumentNullException(nameof(name));
-			}
 
 			AssetExporter = assetExporter;
-			Name = name;
+			Name = asset.GetType().Name;
 			m_asset = asset;
+		}
+
+		public bool Export(ProjectAssetContainer container, string dirPath)
+		{
+			return false;
 		}
 
 		public bool IsContains(Object @object)
@@ -51,6 +42,11 @@ namespace UtinyRipper.AssetExporters
 				return $"{(int)m_asset.ClassID}00000";
 			}
 			throw new ArgumentException(nameof(@object));
+		}
+
+		public UtinyGUID GetExportGUID(Object asset)
+		{
+			throw new NotSupportedException();
 		}
 
 		public ExportPointer CreateExportPointer(Object @object, bool isLocal)
@@ -71,8 +67,7 @@ namespace UtinyRipper.AssetExporters
 			get { yield return m_asset; }
 		}
 		public string Name { get; }
-		public UtinyGUID GUID => throw new NotSupportedException();
-		public IYAMLExportable MetaImporter => throw new NotSupportedException();
+		public IAssetImporter MetaImporter => throw new NotSupportedException();
 
 		private readonly Object m_asset;
 	}

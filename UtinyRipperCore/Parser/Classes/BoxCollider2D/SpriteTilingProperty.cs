@@ -17,13 +17,13 @@ namespace UtinyRipper.Classes.BoxCollider2Ds
 			stream.AlignStream(AlignType.Align4);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("border", Border.ExportYAML(exporter));
-			node.Add("pivot", Pivot.ExportYAML(exporter));
-			node.Add("oldSize", OldSize.ExportYAML(exporter));
-			node.Add("newSize", NewSize.ExportYAML(exporter));
+			node.Add("border", Border.ExportYAML(container));
+			node.Add("pivot", Pivot.ExportYAML(container));
+			node.Add("oldSize", OldSize.ExportYAML(container));
+			node.Add("newSize", NewSize.ExportYAML(container));
 			node.Add("adaptiveTilingThreshold", AdaptiveTilingThreshold);
 			node.Add("drawMode", DrawMode);
 			node.Add("adaptiveTiling", AdaptiveTiling);

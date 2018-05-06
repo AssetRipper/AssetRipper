@@ -103,22 +103,22 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
 			node.Add("mode", Mode);
-			node.Add("frameOverTime", FrameOverTime.ExportYAML(exporter));
-			node.Add("startFrame", GetExportStartFrame(exporter.Version).ExportYAML(exporter));
+			node.Add("frameOverTime", FrameOverTime.ExportYAML(container));
+			node.Add("startFrame", GetExportStartFrame(container.Version).ExportYAML(container));
 			node.Add("tilesX", TilesX);
 			node.Add("tilesY", TilesY);
 			node.Add("animationType", AnimationType);
 			node.Add("rowIndex", RowIndex);
 			node.Add("cycles", Cycles);
-			node.Add("uvChannelMask", GetExportUvChannelMask(exporter.Version));
+			node.Add("uvChannelMask", GetExportUvChannelMask(container.Version));
 			node.Add("flipU", FlipU);
 			node.Add("flipV", FlipV);
 			node.Add("randomRow", RandomRow);
-			node.Add("sprites", GetExportSprites(exporter.Version).ExportYAML(exporter));
+			node.Add("sprites", GetExportSprites(container.Version).ExportYAML(container));
 			return node;
 		}
 

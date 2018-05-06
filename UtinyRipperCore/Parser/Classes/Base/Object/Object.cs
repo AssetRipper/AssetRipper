@@ -55,19 +55,19 @@ namespace UtinyRipper.Classes
 		/// Export object's content in such formats as txt or png
 		/// </summary>
 		/// <returns>Object's content</returns>
-		public virtual void ExportBinary(IAssetsExporter exporter, Stream stream)
+		public virtual void ExportBinary(IExportContainer container, Stream stream)
 		{
 			throw new NotSupportedException($"Type {GetType()} doesn't support binary export");
 		}
 
-		public YAMLDocument ExportYAMLDocument(IAssetsExporter exporter)
+		public YAMLDocument ExportYAMLDocument(IExportContainer container)
 		{
 			YAMLDocument document = new YAMLDocument();
-			YAMLMappingNode node = ExportYAMLRoot(exporter);
+			YAMLMappingNode node = ExportYAMLRoot(container);
 			YAMLMappingNode root = document.CreateMappingRoot();
 			root.Tag = ClassID.ToInt().ToString();
-			root.Anchor = exporter.GetExportID(this);
-			root.Add(ClassIDName, node);
+			root.Anchor = container.GetExportID(this);
+			root.Add(ClassID.ToString(), node);
 
 			return document;
 		}
@@ -87,7 +87,7 @@ namespace UtinyRipper.Classes
 			return $"{GetType().Name}[{PathID}]";
 		}
 
-		protected virtual YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("m_ObjectHideFlags", ObjectHideFlags);
@@ -96,8 +96,8 @@ namespace UtinyRipper.Classes
 
 		public ISerializedFile File => m_assetInfo.File;
 		public ClassIDType ClassID => m_assetInfo.ClassID;
-		public virtual string ClassIDName => ClassID.ToString();
-		public bool IsAsset => ClassID.IsAsset();
+		public virtual string ExportName => ClassID.ToString();
+		public bool IsComponent => ClassID.IsComponent();
 		public virtual string ExportExtension => "asset";
 		public long PathID => m_assetInfo.PathID;
 		
@@ -105,9 +105,9 @@ namespace UtinyRipper.Classes
 		{
 			get
 			{
-				if(!Config.IsGenerateGUIDByContent && !IsAsset)
+				if(IsComponent && !Config.IsGenerateGUIDByContent)
 				{
-					throw new NotSupportedException("GUIDs are supported only for asset files");
+					throw new NotSupportedException("GUIDs arn't supported for components");
 				}
 				return m_assetInfo.GUID;
 			}

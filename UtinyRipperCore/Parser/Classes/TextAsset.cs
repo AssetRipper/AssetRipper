@@ -32,7 +32,7 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public override void ExportBinary(IAssetsExporter exporter, Stream stream)
+		public override void ExportBinary(IExportContainer container, Stream stream)
 		{
 			using (StreamWriter writer = new StreamWriter(stream))
 			{
@@ -45,7 +45,7 @@ namespace UtinyRipper.Classes
 			base.Read(stream);
 		}
 
-		protected sealed override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected sealed override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

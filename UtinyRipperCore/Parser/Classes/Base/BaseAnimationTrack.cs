@@ -12,14 +12,14 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public sealed override void ExportBinary(IAssetsExporter exporter, Stream stream)
+		public sealed override void ExportBinary(IExportContainer container, Stream stream)
 		{
 			throw new NotSupportedException();
 		}
 
-		protected sealed override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected sealed override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			throw new NotImplementedException();
 		}
 	}

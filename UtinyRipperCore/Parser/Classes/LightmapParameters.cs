@@ -52,9 +52,9 @@ namespace UtinyRipper.Classes
 			AOAntiAliasingSamples = stream.ReadInt32();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("resolution", Resolution);
 			node.Add("clusterResolution", ClusterResolution);
 			node.Add("irradianceBudget", IrradianceBudget);

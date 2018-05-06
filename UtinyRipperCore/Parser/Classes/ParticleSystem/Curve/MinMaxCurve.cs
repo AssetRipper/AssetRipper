@@ -82,16 +82,16 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("minMaxState", (ushort)MinMaxState);
-			node.Add("scalar", GetExportScalar(exporter.Version));
-			node.Add("minScalar", GetExportMinScalar(exporter.Version));
-			node.Add("maxCurve", MaxCurve.ExportYAML(exporter));
-			node.Add("minCurve", MinCurve.ExportYAML(exporter));
+			node.Add("scalar", GetExportScalar(container.Version));
+			node.Add("minScalar", GetExportMinScalar(container.Version));
+			node.Add("maxCurve", MaxCurve.ExportYAML(container));
+			node.Add("minCurve", MinCurve.ExportYAML(container));
 			return node;
 		}
 

@@ -22,10 +22,10 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			return 3;
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_TransitionDuration", TransitionDuration);
 			node.Add("m_TransitionOffset", TransitionOffset);
 			node.Add("m_ExitTime", ExitTime);

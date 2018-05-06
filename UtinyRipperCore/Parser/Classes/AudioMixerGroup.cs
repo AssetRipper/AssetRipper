@@ -37,7 +37,7 @@ namespace UtinyRipper.Classes
 			yield return AudioMixer.FetchDependency(file, isLog, ToLogString, "AudioMixer");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

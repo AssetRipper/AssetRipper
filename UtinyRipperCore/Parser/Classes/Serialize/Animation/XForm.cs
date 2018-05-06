@@ -34,12 +34,12 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("t", IsVector3(exporter.Version) ? T.ExportYAML3(exporter) : T.ExportYAML(exporter));
-			node.Add("q", Q.ExportYAML(exporter));
-			node.Add("s", IsVector3(exporter.Version) ? S.ExportYAML3(exporter) : S.ExportYAML(exporter));
+			node.Add("t", IsVector3(container.Version) ? T.ExportYAML3(container) : T.ExportYAML(container));
+			node.Add("q", Q.ExportYAML(container));
+			node.Add("s", IsVector3(container.Version) ? S.ExportYAML3(container) : S.ExportYAML(container));
 			return node;
 		}
 

@@ -16,10 +16,10 @@ namespace UtinyRipper.Classes
 			Instance.Read(stream);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("data", Instance.ExportYAML(exporter));
+			node.Add("data", Instance.ExportYAML(container));
 			return node;
 		}
 

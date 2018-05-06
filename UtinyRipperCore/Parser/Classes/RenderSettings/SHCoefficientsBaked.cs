@@ -21,7 +21,7 @@ namespace UtinyRipper.Classes.RenderSettingss
 			Sh11 = stream.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("sh0", Sh0);

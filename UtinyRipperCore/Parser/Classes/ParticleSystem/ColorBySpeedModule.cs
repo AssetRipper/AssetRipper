@@ -13,11 +13,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Range.Read(stream);
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
-			node.Add("gradient", Gradient.ExportYAML(exporter));
-			node.Add("range", Range.ExportYAML(exporter));
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			node.Add("gradient", Gradient.ExportYAML(container));
+			node.Add("range", Range.ExportYAML(container));
 			return node;
 		}
 

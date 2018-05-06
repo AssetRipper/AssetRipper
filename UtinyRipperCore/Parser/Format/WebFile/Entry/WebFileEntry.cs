@@ -10,7 +10,7 @@ namespace UtinyRipper.WebFiles
 		{
 		}
 
-		public void ReadFile(AssetCollection collection, string filePath)
+		public void ReadFile(FileCollection collection, string filePath)
 		{
 			m_stream.Position = m_offset;
 #warning TODO: replace resource/unity_default_resources to library/unity default resources ???;

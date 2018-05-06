@@ -11,13 +11,13 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			return 2;
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_Motion", Motion.ExportYAML(exporter));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_Motion", Motion.ExportYAML(container));
 			node.Add("m_Threshold", Threshold);
-			node.Add("m_Position", Position.ExportYAML(exporter));
+			node.Add("m_Position", Position.ExportYAML(container));
 			node.Add("m_TimeScale", TimeScale);
 			node.Add("m_CycleOffset", CycleOffset);
 			node.Add("m_DirectBlendParameter", DirectBlendParameter);

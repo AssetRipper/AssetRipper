@@ -1,138 +1,216 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
+using UtinyRipper.SerializedFiles;
 
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
 {
-	public class SceneExportCollection : IExportCollection, IComparer<Object>
+	public sealed class SceneExportCollection : ExportCollection, IComparer<Object>
 	{
-		public SceneExportCollection(IAssetExporter assetExporter, string name, IEnumerable<Object> objects)
+		public SceneExportCollection(IAssetExporter assetExporter, ISerializedFile file)
 		{
 			if (assetExporter == null)
 			{
 				throw new ArgumentNullException(nameof(assetExporter));
 			}
-			if (string.IsNullOrEmpty(name))
+			if (file == null)
 			{
-				throw new ArgumentNullException(nameof(name));
+				throw new ArgumentNullException(nameof(file));
 			}
 
 			AssetExporter = assetExporter;
-			Name = name;
+			Name = file.Name;
 
-			HashSet<string> exportIDs = new HashSet<string>();
-			foreach (Object @object in objects.OrderBy(t => t, this))
+			foreach(Object asset in file.FetchAssets())
 			{
-				AddObject(@object, exportIDs);
+				if(asset.IsComponent || asset.ClassID == ClassIDType.GameObject)
+				{
+					AddComponent(file, asset);
+				}
 			}
+			m_cexportIDs = m_cexportIDs.OrderBy(t => t.Key, this).ToDictionary(t => t.Key, t => t.Value);
 
-			if (Config.IsGenerateGUIDByContent)
+			if(OcclusionCullingSettings.IsReadPVSData(file.Version))
 			{
-				GUID = ObjectUtils.CalculateObjectsGUID(objects);
+				if (Config.IsGenerateGUIDByContent)
+				{
+					GUID = ObjectUtils.CalculateObjectsGUID(Objects);
+				}
+				else
+				{
+					GUID = new UtinyGUID(Guid.NewGuid());
+				}
 			}
 			else
 			{
-				GUID = new UtinyGUID(new Guid());
+				GUID = Components.Where(t => t.ClassID == ClassIDType.OcclusionCullingSettings).Select(t => (OcclusionCullingSettings)t).First().SceneGUID;
 			}
 		}
 
-		public bool IsContains(Object @object)
+		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
-			return m_exportIDs.ContainsKey(@object);
+			string folderPath = Path.Combine(dirPath, OcclusionCullingSettings.SceneExportFolder);
+			string fileName = $"{Name}.unity";
+			string filePath = Path.Combine(folderPath, fileName);
+
+			if (!Directory.Exists(folderPath))
+			{
+				Directory.CreateDirectory(folderPath);
+			}
+
+			AssetExporter.Export(container, Components, filePath);
+			DefaultImporter sceneImporter = new DefaultImporter(false);
+			Meta meta = new Meta(sceneImporter, GUID);
+			ExportMeta(container, meta, filePath);
+
+			string subFolderPath = Path.Combine(folderPath, Name);
+			if (OcclusionCullingData != null)
+			{
+				ExportAsset(container, OcclusionCullingData, subFolderPath);
+			}
+			if (LightingDataAsset != null)
+			{
+				ExportAsset(container, OcclusionCullingData, subFolderPath);
+			}
+			if (m_navMeshData != null)
+			{
+				ExportAsset(container, m_navMeshData, subFolderPath);
+			}
+
+			return true;
 		}
 
-		public string GetExportID(Object @object)
+		public override bool IsContains(Object asset)
 		{
-			return m_exportIDs[@object];
+			if(asset == OcclusionCullingData)
+			{
+				return true;
+			}
+			if(asset == LightingDataAsset)
+			{
+				return true;
+			}
+			if(asset == m_navMeshData)
+			{
+				return true;
+			}
+			return m_cexportIDs.ContainsKey(asset);
 		}
 
-		public ExportPointer CreateExportPointer(Object @object, bool isLocal)
+		public override string GetExportID(Object asset)
 		{
-			string exportID = GetExportID(@object);
-			return isLocal ?
-				new ExportPointer(exportID) :
-				new ExportPointer(exportID, GUID, AssetType.Serialized);
+			return IsComponent(asset) ? m_cexportIDs[asset] : GetMainExportID(asset);
+		}
+		
+		public override ExportPointer CreateExportPointer(Object asset, bool isLocal)
+		{
+			string exportID = GetExportID(asset);
+			if (isLocal && IsComponent(asset))
+			{
+				return new ExportPointer(exportID);
+			}
+			else
+			{
+				UtinyGUID guid = IsComponent(asset) ? GUID : asset.GUID;
+				return new ExportPointer(exportID, guid, AssetType.Serialized);
+			}				
 		}
 
 		public int Compare(Object obj1, Object obj2)
 		{
-			if(IsSceneObject(obj1))
+			if (obj1.ClassID == obj2.ClassID)
 			{
-				if(IsSceneObject(obj2))
+				return 0;
+			}
+
+			if (obj1.ClassID.IsSceneComponent())
+			{
+				if(obj2.ClassID.IsSceneComponent())
 				{
-					if(obj1.ClassID == obj2.ClassID)
-					{
-						return 0;
-					}
-					else
-					{
-						return obj1.ClassID < obj2.ClassID ? 1 : -1;
-					}
+					return obj1.ClassID < obj2.ClassID ? -1 : 1;
 				}
-				return -1;
+				else
+				{
+					return -1;
+				}
 			}
-			if(IsSceneObject(obj2))
+			else
 			{
-				return 1;
+				if (obj2.ClassID.IsSceneComponent())
+				{
+					return 1;
+				}
+				else
+				{
+					return 0;
+				}
 			}
-			return 0;
 		}
 
-		private void AddObject(Object @object, HashSet<string> exportIDs)
+		private void ExportAsset(ProjectAssetContainer container, NamedObject asset, string path)
 		{
-			string exportID;
-			switch(@object.ClassID)
-			{
-				case ClassIDType.SceneSettings:
-					exportID = 1.ToString();
-					break;
-
-				case ClassIDType.RenderSettings:
-					exportID = 2.ToString();
-					break;
-
-				case ClassIDType.LightmapSettings:
-					exportID = 3.ToString();
-					break;
-
-				case ClassIDType.NavMeshSettings:
-					exportID = 4.ToString();
-					break;
-
-				default:
-					exportID = ObjectUtils.GenerateExportID(@object, (t) => exportIDs.Contains(t));
-					break;
-			}
-
-			m_exportIDs.Add(@object, exportID);
-			exportIDs.Add(exportID);
+			NativeFormatImporter importer = new NativeFormatImporter(asset);
+			ExportAsset(container, importer, asset, path, m_navMeshData.Name);
 		}
 
-		private static bool IsSceneObject(Object obj1)
+		private void AddComponent(ISerializedFile file, Object comp)
 		{
-			switch (obj1.ClassID)
+			if(comp.ClassID == ClassIDType.NavMeshSettings)
 			{
-				case ClassIDType.SceneSettings:
-				case ClassIDType.RenderSettings:
-				case ClassIDType.LightmapSettings:
-				case ClassIDType.NavMeshSettings:
-					return true;
-
-				default:
-					return false;
+				NavMeshSettings settings = (NavMeshSettings)comp;
+				NavMeshData data = settings.NavMeshData.FindObject(file);
+				if (data != null)
+				{
+					m_navMeshData = data;
+				}
 			}
+
+			m_cexportIDs.Add(comp, comp.PathID.ToString());
 		}
 
-		public IAssetExporter AssetExporter { get; }
-		public IEnumerable<Object> Objects => m_exportIDs.Keys;
-		public string Name { get; }
+		private bool IsComponent(Object asset)
+		{
+			return asset != OcclusionCullingData && asset != LightingDataAsset && asset != m_navMeshData;
+		}
+
+		public override IAssetExporter AssetExporter { get; }
+		public override IEnumerable<Object> Objects
+		{
+			get
+			{
+				foreach(Object asset in Components)
+				{
+					yield return asset;
+				}
+				if(OcclusionCullingData != null)
+				{
+					yield return OcclusionCullingData;
+				}
+				if (LightingDataAsset != null)
+				{
+					yield return LightingDataAsset;
+				}
+				if (m_navMeshData != null)
+				{
+					yield return m_navMeshData;
+				}
+			}
+		}
+		public override string Name { get; }
+
+		public OcclusionCullingData OcclusionCullingData { get; set; }
+		public LightingDataAsset LightingDataAsset { get; set; }
 		public UtinyGUID GUID { get; }
-		public IYAMLExportable MetaImporter { get; } = new DefaultImporter(false);
 
-		private readonly Dictionary<Object, string> m_exportIDs = new Dictionary<Object, string>();
+		private IEnumerable<Object> Components => m_cexportIDs.Keys;
+
+		private readonly Dictionary<Object, string> m_cexportIDs = new Dictionary<Object, string>();
+
+		private NavMeshData m_navMeshData;
 	}
 }

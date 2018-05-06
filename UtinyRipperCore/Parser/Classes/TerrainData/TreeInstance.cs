@@ -27,15 +27,15 @@ namespace UtinyRipper.Classes.TerrainDatas
 			Index = stream.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("position", Position.ExportYAML(exporter));
+			node.Add("position", Position.ExportYAML(container));
 			node.Add("widthScale", WidthScale);
 			node.Add("heightScale", HeightScale);
 			node.Add("rotation", Rotation);
-			node.Add("color", Color.ExportYAML(exporter));
-			node.Add("lightmapColor", LightmapColor.ExportYAML(exporter));
+			node.Add("color", Color.ExportYAML(container));
+			node.Add("lightmapColor", LightmapColor.ExportYAML(container));
 			node.Add("index", Index);
 			return node;
 		}

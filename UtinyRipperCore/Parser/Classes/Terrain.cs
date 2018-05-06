@@ -137,12 +137,12 @@ namespace UtinyRipper.Classes
 			yield return MaterialTemplate.FetchDependency(file, isLog, ToLogString, "m_MaterialTemplate");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_TerrainData", TerrainData.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_TerrainData", TerrainData.ExportYAML(container));
 			node.Add("m_TreeDistance", TreeDistance);
 			node.Add("m_TreeBillboardDistance", TreeBillboardDistance);
 			node.Add("m_TreeCrossFadeLength", TreeCrossFadeLength);
@@ -157,13 +157,13 @@ namespace UtinyRipper.Classes
 			node.Add("m_DrawTreesAndFoliage", DrawTreesAndFoliage);
 			node.Add("m_ReflectionProbeUsage", ReflectionProbeUsage);
 			node.Add("m_MaterialType", MaterialType);
-			node.Add("m_LegacySpecular", LegacySpecular.ExportYAML(exporter));
+			node.Add("m_LegacySpecular", LegacySpecular.ExportYAML(container));
 			node.Add("m_LegacyShininess", LegacyShininess);
-			node.Add("m_MaterialTemplate", MaterialTemplate.ExportYAML(exporter));
+			node.Add("m_MaterialTemplate", MaterialTemplate.ExportYAML(container));
 			node.Add("m_BakeLightProbesForTrees", BakeLightProbesForTrees);
 #warning TODO: get lightmap by index and fill those values
 			node.Add("m_ScaleInLightmap", 0.0512f);
-			node.Add("m_LightmapParameters", default(PPtr<Object>).ExportYAML(exporter));
+			node.Add("m_LightmapParameters", default(PPtr<Object>).ExportYAML(container));
 			return node;
 		}
 

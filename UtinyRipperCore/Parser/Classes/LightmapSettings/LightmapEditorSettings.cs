@@ -8,6 +8,44 @@ namespace UtinyRipper.Classes.LightmapSettingss
 {
 	public struct LightmapEditorSettings
 	{
+		public LightmapEditorSettings(bool _)
+		{
+			Resolution = 2.0f;
+			BakeResolution = 40.0f;
+			TextureWidth = 1024;
+			TextureHeight = 1024;
+			AO = false;
+			AOMaxDistance = 1.0f;
+			CompAOExponent = 1.0f;
+			CompAOExponentDirect = 0.0f;
+			Padding = 2;
+			LightmapParameters = default;
+			LightmapsBakeMode = 1;
+			TextureCompression = true;
+			FinalGather = false;
+			FinalGatherFiltering = true;
+			FinalGatherRayCount = 256;
+			ReflectionCompression = 2;
+			MixedBakeMode = 2;
+			BakeBackend = 0;
+			PVRSampling = 1;
+			PVRDirectSampleCount = 32;
+			PVRSampleCount = 500;
+			PVRBounces = 2;
+			PVRFilterTypeDirect = 0;
+			PVRFilterTypeIndirect = 0;
+			PVRFilterTypeAO = 0;
+			PVRFilteringMode = 1;
+			PVRCulling = true;
+			PVRFilteringGaussRadiusDirect = 1;
+			PVRFilteringGaussRadiusIndirect = 5;
+			PVRFilteringGaussRadiusAO = 2;
+			PVRFilteringAtrousPositionSigmaDirect = 0.5f;
+			PVRFilteringAtrousPositionSigmaIndirect = 2.0f;
+			PVRFilteringAtrousPositionSigmaAO = 1.0f;
+			ShowResolutionOverlay = true;
+		}
+
 		private static int GetSerializedVersion(Version version)
 		{
 			if (Config.IsExportTopmostSerializedVersion)
@@ -102,10 +140,10 @@ namespace UtinyRipper.Classes.LightmapSettingss
 			yield return LightmapParameters.FetchDependency(file, isLog, () => nameof(LightmapEditorSettings), "m_LightmapParameters");
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_Resolution", Resolution);
 			node.Add("m_BakeResolution", BakeResolution);
 			node.Add("m_TextureWidth", TextureWidth);
@@ -115,7 +153,7 @@ namespace UtinyRipper.Classes.LightmapSettingss
 			node.Add("m_CompAOExponent", CompAOExponent);
 			node.Add("m_CompAOExponentDirect", CompAOExponentDirect);
 			node.Add("m_Padding", Padding);
-			node.Add("m_LightmapParameters", LightmapParameters.ExportYAML(exporter));
+			node.Add("m_LightmapParameters", LightmapParameters.ExportYAML(container));
 			node.Add("m_LightmapsBakeMode", LightmapsBakeMode);
 			node.Add("m_TextureCompression", TextureCompression);
 			node.Add("m_FinalGather", FinalGather);

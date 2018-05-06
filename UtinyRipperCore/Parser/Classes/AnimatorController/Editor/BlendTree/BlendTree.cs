@@ -23,10 +23,10 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			throw new NotSupportedException();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_Childs", Childs.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_Childs", Childs.ExportYAML(container));
 			node.Add("m_BlendParameter", BlendParameter);
 			node.Add("m_BlendParameterY", BlendParameterY);
 			node.Add("m_MinThreshold", MinThreshold);

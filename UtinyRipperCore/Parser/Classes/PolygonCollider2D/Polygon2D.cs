@@ -12,10 +12,10 @@ namespace UtinyRipper.Classes.PolygonCollider2Ds
 			stream.AlignStream(AlignType.Align4);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Paths", m_paths.ExportYAML(exporter));
+			node.Add("m_Paths", m_paths.ExportYAML(container));
 			return node;
 		}
 

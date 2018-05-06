@@ -33,14 +33,7 @@ namespace UtinyRipper.Classes
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadAmbientSkyColor(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
-		/// <summary>
-		/// 5.0.0 and greater
-		/// </summary>
-		public static bool IsReadAmbientIntensity(Version version)
+		public static bool IsReadAmbientEquatorColor(Version version)
 		{
 			return version.IsGreaterEqual(5);
 		}
@@ -242,7 +235,7 @@ namespace UtinyRipper.Classes
 			FogColor.Read(stream);
 			if (IsReadFogMode(stream.Version))
 			{
-				FogMode = stream.ReadInt32();
+				FogMode = (FogMode)stream.ReadInt32();
 			}
 			FogDensity = stream.ReadSingle();
 			if (IsReadLinearFogStart(stream.Version))
@@ -250,14 +243,11 @@ namespace UtinyRipper.Classes
 				LinearFogStart = stream.ReadSingle();
 				LinearFogEnd = stream.ReadSingle();
 			}
-			if (IsReadAmbientSkyColor(stream.Version))
+			AmbientSkyColor.Read(stream);
+			if (IsReadAmbientEquatorColor(stream.Version))
 			{
-				AmbientSkyColor.Read(stream);
 				AmbientEquatorColor.Read(stream);
-			}
-			AmbientGroundColor.Read(stream);
-			if (IsReadAmbientIntensity(stream.Version))
-			{
+				AmbientGroundColor.Read(stream);
 				AmbientIntensity = stream.ReadSingle();
 			}
 			if (IsReadAmbientProbe(stream.Version, stream.Flags))
@@ -273,7 +263,7 @@ namespace UtinyRipper.Classes
 			}
 			if (IsReadAmbientMode(stream.Version))
 			{
-				AmbientMode = stream.ReadInt32();
+				AmbientMode = (AmbientMode)stream.ReadInt32();
 				if (IsReadCreateAmbientLight(stream.Version))
 				{
 					CreateAmbientLight = stream.ReadBoolean();
@@ -367,43 +357,86 @@ namespace UtinyRipper.Classes
 			yield return Sun.FetchDependency(file, isLog, ToLogString, "m_Sun");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_Fog", Fog);
-			node.Add("m_FogColor", FogColor.ExportYAML(exporter));
-			node.Add("m_FogMode", FogMode);
+			node.Add("m_FogColor", FogColor.ExportYAML(container));
+			node.Add("m_FogMode", (int)GetExportFogMode(container.Version));
 			node.Add("m_FogDensity", FogDensity);
 			node.Add("m_LinearFogStart", LinearFogStart);
-			node.Add("m_LinearFogEnd", LinearFogEnd);
-			node.Add("m_AmbientSkyColor", AmbientSkyColor.ExportYAML(exporter));
-			node.Add("m_AmbientEquatorColor", AmbientEquatorColor.ExportYAML(exporter));
-			node.Add("m_AmbientGroundColor", AmbientGroundColor.ExportYAML(exporter));
-			node.Add("m_AmbientIntensity", AmbientIntensity);
-			node.Add("m_AmbientMode", AmbientMode);
-			node.Add("m_SubtractiveShadowColor", SubtractiveShadowColor.ExportYAML(exporter));
-			node.Add("m_SkyboxMaterial", SkyboxMaterial.ExportYAML(exporter));
+			node.Add("m_LinearFogEnd", GetExportLinearFogEnd(container.Version));
+			node.Add("m_AmbientSkyColor", AmbientSkyColor.ExportYAML(container));
+			node.Add("m_AmbientEquatorColor", GetExportAmbientEquatorColor(container.Version).ExportYAML(container));
+			node.Add("m_AmbientGroundColor", GetExportAmbientGroundColor(container.Version).ExportYAML(container));
+			node.Add("m_AmbientIntensity", GetExportAmbientIntensity(container.Version));
+			node.Add("m_AmbientMode", (int)AmbientMode);
+			node.Add("m_SubtractiveShadowColor", GetExportSubtractiveShadowColor(container.Version).ExportYAML(container));
+			node.Add("m_SkyboxMaterial", SkyboxMaterial.ExportYAML(container));
 			node.Add("m_HaloStrength", HaloStrength);
 			node.Add("m_FlareStrength", FlareStrength);
-			node.Add("m_FlareFadeSpeed", FlareFadeSpeed);
-			node.Add("m_HaloTexture", HaloTexture.ExportYAML(exporter));
-			node.Add("m_SpotCookie", SpotCookie.ExportYAML(exporter));
+			node.Add("m_FlareFadeSpeed", GetExportFlareFadeSpeed(container.Version));
+			node.Add("m_HaloTexture", HaloTexture.ExportYAML(container));
+			node.Add("m_SpotCookie", SpotCookie.ExportYAML(container));
 			node.Add("m_DefaultReflectionMode", DefaultReflectionMode);
-			node.Add("m_DefaultReflectionResolution", DefaultReflectionResolution);
-			node.Add("m_ReflectionBounces", ReflectionBounces);
-			node.Add("m_ReflectionIntensity", ReflectionIntensity);
-			node.Add("m_CustomReflection", CustomReflection.ExportYAML(exporter));
-			node.Add("m_AmbientProbe", AmbientProbe.ExportYAML(exporter));
-			node.Add("m_GeneratedSkyboxReflection", GeneratedSkyboxReflection.ExportYAML(exporter));
-			node.Add("m_Sun", Sun.ExportYAML(exporter));
-			node.Add("m_IndirectSpecularColor", IndirectSpecularColor.ExportYAML(exporter));
+			node.Add("m_DefaultReflectionResolution", GetExportDefaultReflectionResolution(container.Version));
+			node.Add("m_ReflectionBounces", GetExportReflectionBounces(container.Version));
+			node.Add("m_ReflectionIntensity", GetExportReflectionIntensity(container.Version));
+			node.Add("m_CustomReflection", CustomReflection.ExportYAML(container));
+			node.Add("m_Sun", Sun.ExportYAML(container));
+			node.Add("m_IndirectSpecularColor", GetExportIndirectSpecularColor(container.Version).ExportYAML(container));
 			return node;
 		}
 
+		private FogMode GetExportFogMode(Version version)
+		{
+			return IsReadFogMode(version) ? FogMode : FogMode.ExponentialSquared;
+		}
+		private float GetExportLinearFogEnd(Version version)
+		{
+			return IsReadLinearFogStart(version) ? LinearFogEnd : 300.0f;
+		}
+		private ColorRGBAf GetExportAmbientEquatorColor(Version version)
+		{
+			return IsReadAmbientEquatorColor(version) ? AmbientEquatorColor : new ColorRGBAf(0.114f, 0.125f, 0.133f, 1.0f);
+		}
+		private ColorRGBAf GetExportAmbientGroundColor(Version version)
+		{
+			return IsReadAmbientEquatorColor(version) ? AmbientGroundColor : new ColorRGBAf(0.047f, 0.043f, 0.035f, 1.0f);
+		}
+		private float GetExportAmbientIntensity(Version version)
+		{
+			return IsReadAmbientEquatorColor(version) ? AmbientIntensity : 1.0f;
+		}
+		private ColorRGBAf GetExportSubtractiveShadowColor(Version version)
+		{
+			return IsReadSubtractiveShadowColor(version) ? SubtractiveShadowColor : new ColorRGBAf(0.42f, 0.478f, 0.627f, 1.0f);
+		}
+		private float GetExportFlareFadeSpeed(Version version)
+		{
+			return IsReadFlareFadeSpeed(version) ? FlareFadeSpeed : 3.0f;
+		}
+		private int GetExportDefaultReflectionResolution(Version version)
+		{
+			return IsReadDefaultReflectionResolution(version) ? DefaultReflectionResolution : 128;
+		}
+		private int GetExportReflectionBounces(Version version)
+		{
+			return IsReadDefaultReflectionResolution(version) ? ReflectionBounces : 1;
+		}
+		private float GetExportReflectionIntensity(Version version)
+		{
+			return IsReadDefaultReflectionResolution(version) ? ReflectionIntensity : 1.0f;
+		}
+		private ColorRGBAf GetExportIndirectSpecularColor(Version version)
+		{
+			return IsReadIndirectSpecularColor(version) ? IndirectSpecularColor : new ColorRGBAf(0.44657898f, 0.4964133f, 0.5748178f, 1.0f);
+		}
+
 		public bool Fog { get; private set; }
-		public int FogMode { get; private set; }
+		public FogMode FogMode { get; private set; }
 		public float FogDensity { get; private set; }
 		public float LinearFogStart { get; private set; }
 		public float LinearFogEnd { get; private set; }
@@ -411,7 +444,7 @@ namespace UtinyRipper.Classes
 		/// AmbientSkyboxExposure previously
 		/// </summary>
 		public float AmbientIntensity { get; private set; }
-		public int AmbientMode { get; private set; }
+		public AmbientMode AmbientMode { get; private set; }
 		public bool CreateAmbientLight { get; private set; }
 		public float HaloStrength { get; private set; }
 		public float FlareStrength { get; private set; }
@@ -425,11 +458,11 @@ namespace UtinyRipper.Classes
 		public bool UseRadianceAmbientProbe { get; private set; }
 
 		public ColorRGBAf FogColor;
-		public ColorRGBAf AmbientSkyColor;
-		public ColorRGBAf AmbientEquatorColor;
 		/// <summary>
 		/// Ambient/AmbientLight previously
 		/// </summary>
+		public ColorRGBAf AmbientSkyColor;
+		public ColorRGBAf AmbientEquatorColor;
 		public ColorRGBAf AmbientGroundColor;
 		public PPtr<Light> AmbientSkyboxLight;
 		public ColorRGBAf SubtractiveShadowColor;

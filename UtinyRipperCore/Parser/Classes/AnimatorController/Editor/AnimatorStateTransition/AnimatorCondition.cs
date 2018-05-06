@@ -5,7 +5,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class AnimatorCondition : IYAMLExportable
 	{
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("m_ConditionMode", ConditionMode);

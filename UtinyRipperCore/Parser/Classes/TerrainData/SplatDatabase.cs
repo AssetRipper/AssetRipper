@@ -46,11 +46,11 @@ namespace UtinyRipper.Classes.TerrainDatas
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Splats", Splats.ExportYAML(exporter));
-			node.Add("m_AlphaTextures", AlphaTextures.ExportYAML(exporter));
+			node.Add("m_Splats", Splats.ExportYAML(container));
+			node.Add("m_AlphaTextures", AlphaTextures.ExportYAML(container));
 			node.Add("m_AlphamapResolution", AlphamapResolution);
 			node.Add("m_BaseMapResolution", BaseMapResolution);
 			node.Add("m_ColorSpace", ColorSpace);

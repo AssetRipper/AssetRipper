@@ -53,21 +53,21 @@ namespace UtinyRipper.Classes.TerrainDatas
 			yield return PrototypeTexture.FetchDependency(file, isLog, () => nameof(DetailPrototype), "prototypeTexture");
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("prototype", Prototype.ExportYAML(exporter));
-			node.Add("prototypeTexture", PrototypeTexture.ExportYAML(exporter));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("prototype", Prototype.ExportYAML(container));
+			node.Add("prototypeTexture", PrototypeTexture.ExportYAML(container));
 			node.Add("minWidth", MinWidth);
 			node.Add("maxWidth", MaxWidth);
 			node.Add("minHeight", MinHeight);
 			node.Add("maxHeight", MaxHeight);
 			node.Add("noiseSpread", NoiseSpread);
 			node.Add("bendFactor", BendFactor);
-			node.Add("healthyColor", HealthyColor.ExportYAML(exporter));
-			node.Add("dryColor", DryColor.ExportYAML(exporter));
+			node.Add("healthyColor", HealthyColor.ExportYAML(container));
+			node.Add("dryColor", DryColor.ExportYAML(container));
 			node.Add("lightmapFactor", LightmapFactor);
 			node.Add("renderMode", RenderMode);
 			node.Add("usePrototypeMesh", UsePrototypeMesh);

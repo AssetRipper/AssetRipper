@@ -21,13 +21,13 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Speed.Read(stream);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("value", Value);
 			node.Add("mode", (int)Mode);
 			node.Add("spread", Spread);
-			node.Add("speed", Speed.ExportYAML(exporter));
+			node.Add("speed", Speed.ExportYAML(container));
 			return node;
 		}
 

@@ -5,7 +5,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class AnimatorControllerParameter : IYAMLExportable
 	{
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("m_Name", Name);
@@ -13,7 +13,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			node.Add("m_DefaultFloat", DefaultFloat);
 			node.Add("m_DefaultInt", DefaultInt);
 			node.Add("m_DefaultBool", DefaultBool);
-			node.Add("m_DefaultController", DefaultController.ExportYAML(exporter));
+			node.Add("m_DefaultController", DefaultController.ExportYAML(container));
 			return node;
 		}
 

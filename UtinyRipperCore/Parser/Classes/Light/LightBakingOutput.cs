@@ -50,15 +50,15 @@ namespace UtinyRipper.Classes.Lights
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("probeOcclusionLightIndex", ProbeOcclusionLightIndex);
 			node.Add("occlusionMaskChannel", OcclusionMaskChannel);
-			if (GetSerializedVersion(exporter.Version) >= 2)
+			if (GetSerializedVersion(container.Version) >= 2)
 			{
-				node.Add("lightmapBakeMode", LightmapBakeMode.ExportYAML(exporter));
+				node.Add("lightmapBakeMode", LightmapBakeMode.ExportYAML(container));
 				node.Add("isBaked", IsBaked);
 			}
 			else

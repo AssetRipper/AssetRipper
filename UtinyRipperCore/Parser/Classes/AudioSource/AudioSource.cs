@@ -224,13 +224,13 @@ namespace UtinyRipper.Classes
 			yield return AudioClip.FetchDependency(file, isLog, ToLogString, "m_audioClip");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("OutputAudioMixerGroup", OutputAudioMixerGroup.ExportYAML(exporter));
-			node.Add("m_audioClip", AudioClip.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("OutputAudioMixerGroup", OutputAudioMixerGroup.ExportYAML(container));
+			node.Add("m_audioClip", AudioClip.ExportYAML(container));
 			node.Add("m_PlayOnAwake", PlayOnAwake);
 			node.Add("m_Volume", Volume);
 			node.Add("m_Pitch", Pitch);
@@ -247,10 +247,10 @@ namespace UtinyRipper.Classes
 			node.Add("BypassEffects", BypassEffects);
 			node.Add("BypassListenerEffects", BypassListenerEffects);
 			node.Add("BypassReverbZones", BypassReverbZones);
-			node.Add("rolloffCustomCurve", RolloffCustomCurve.ExportYAML(exporter));
-			node.Add("panLevelCustomCurve", PanLevelCustomCurve.ExportYAML(exporter));
-			node.Add("spreadCustomCurve", SpreadCustomCurve.ExportYAML(exporter));
-			node.Add("reverbZoneMixCustomCurve", ReverbZoneMixCustomCurve.ExportYAML(exporter));
+			node.Add("rolloffCustomCurve", RolloffCustomCurve.ExportYAML(container));
+			node.Add("panLevelCustomCurve", PanLevelCustomCurve.ExportYAML(container));
+			node.Add("spreadCustomCurve", SpreadCustomCurve.ExportYAML(container));
+			node.Add("reverbZoneMixCustomCurve", ReverbZoneMixCustomCurve.ExportYAML(container));
 			return node;
 		}
 

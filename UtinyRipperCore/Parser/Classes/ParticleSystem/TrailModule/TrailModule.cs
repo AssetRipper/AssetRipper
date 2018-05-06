@@ -75,15 +75,15 @@ namespace UtinyRipper.Classes.ParticleSystems
 			ColorOverTrail.Read(stream);
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
 			node.Add("mode", (int)Mode);
 			node.Add("ratio", Ratio);
-			node.Add("lifetime", Lifetime.ExportYAML(exporter));
+			node.Add("lifetime", Lifetime.ExportYAML(container));
 			node.Add("minVertexDistance", MinVertexDistance);
 			node.Add("textureMode", TextureMode);
-			node.Add("ribbonCount", GetExportRibbonCount(exporter.Version));
+			node.Add("ribbonCount", GetExportRibbonCount(container.Version));
 			node.Add("worldSpace", WorldSpace);
 			node.Add("dieWithParticles", DieWithParticles);
 			node.Add("sizeAffectsWidth", SizeAffectsWidth);
@@ -91,9 +91,9 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("inheritParticleColor", InheritParticleColor);
 			node.Add("generateLightingData", GenerateLightingData);
 			node.Add("splitSubEmitterRibbons", SplitSubEmitterRibbons);
-			node.Add("colorOverLifetime", ColorOverLifetime.ExportYAML(exporter));
-			node.Add("widthOverTrail", WidthOverTrail.ExportYAML(exporter));
-			node.Add("colorOverTrail", ColorOverTrail.ExportYAML(exporter));
+			node.Add("colorOverLifetime", ColorOverLifetime.ExportYAML(container));
+			node.Add("widthOverTrail", WidthOverTrail.ExportYAML(container));
+			node.Add("colorOverTrail", ColorOverTrail.ExportYAML(container));
 			return node;
 		}
 

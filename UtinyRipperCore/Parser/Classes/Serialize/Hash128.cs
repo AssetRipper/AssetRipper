@@ -38,11 +38,11 @@ namespace UtinyRipper.Classes
 			Read((EndianStream)stream);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			if (GetSerializedVersion(exporter.Version) == 1)
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			if (GetSerializedVersion(container.Version) == 1)
 			{
 				node.Add("bytes[0]", (byte)((Data0 & 0x000000FF) >> 0));
 				node.Add("bytes[1]", (byte)((Data0 & 0x0000FF00) >> 8));

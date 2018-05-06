@@ -12,11 +12,11 @@ namespace UtinyRipper.Classes.LightProbess
 			m_hullRays = stream.ReadArray<Vector3f>();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Tetrahedra", Tetrahedra.ExportYAML(exporter));
-			node.Add("m_HullRays", HullRays.ExportYAML(exporter));
+			node.Add("m_Tetrahedra", Tetrahedra.ExportYAML(container));
+			node.Add("m_HullRays", HullRays.ExportYAML(container));
 			return node;
 		}
 

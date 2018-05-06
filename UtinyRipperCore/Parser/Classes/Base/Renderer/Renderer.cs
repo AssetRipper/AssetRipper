@@ -312,15 +312,15 @@ namespace UtinyRipper.Classes
 			base.Read(stream);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: check undefined vars
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("m_Enabled", Enabled);
 			node.Add("m_CastShadows", CastShadows);
 			node.Add("m_ReceiveShadows", ReceiveShadows);
-			if(IsReadDynamicOccludee(exporter.Version))
+			if(IsReadDynamicOccludee(container.Version))
 			{
 #warning TODO:
 				node.Add("m_DynamicOccludee", 1);
@@ -332,19 +332,19 @@ namespace UtinyRipper.Classes
 			node.Add("m_MotionVectors", MotionVectors);
 			node.Add("m_LightProbeUsage", LightProbeUsage);
 			node.Add("m_ReflectionProbeUsage", ReflectionProbeUsage);
-			node.Add("m_Materials", Materials.ExportYAML(exporter));
-			if (IsReadSubsetIndices(exporter.Version))
+			node.Add("m_Materials", Materials.ExportYAML(container));
+			if (IsReadSubsetIndices(container.Version))
 			{
 				StaticBatchInfo staticBatchInfo = new StaticBatchInfo(SubsetIndices);
-				node.Add("m_StaticBatchInfo", staticBatchInfo.ExportYAML(exporter));
+				node.Add("m_StaticBatchInfo", staticBatchInfo.ExportYAML(container));
 			}
 			else
 			{
-				node.Add("m_StaticBatchInfo", StaticBatchInfo.ExportYAML(exporter));
+				node.Add("m_StaticBatchInfo", StaticBatchInfo.ExportYAML(container));
 			}
-			node.Add("m_StaticBatchRoot", StaticBatchRoot.ExportYAML(exporter));
-			node.Add("m_ProbeAnchor", ProbeAnchor.ExportYAML(exporter));
-			node.Add("m_LightProbeVolumeOverride", LightProbeVolumeOverride.ExportYAML(exporter));
+			node.Add("m_StaticBatchRoot", StaticBatchRoot.ExportYAML(container));
+			node.Add("m_ProbeAnchor", ProbeAnchor.ExportYAML(container));
+			node.Add("m_LightProbeVolumeOverride", LightProbeVolumeOverride.ExportYAML(container));
 #warning what are those vars?
 			node.Add("m_ScaleInLightmap", 1);
 			node.Add("m_PreserveUVs", 0);
@@ -357,7 +357,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_AutoUVMaxDistance", 0.5f);
 			node.Add("m_AutoUVMaxAngle", 89);
 #warning TODO?
-			node.Add("m_LightmapParameters", default(PPtr<Object>).ExportYAML(exporter));
+			node.Add("m_LightmapParameters", default(PPtr<Object>).ExportYAML(container));
 			node.Add("m_SortingLayerID", SortingLayerID);
 			node.Add("m_SortingLayer", SortingLayer);
 			node.Add("m_SortingOrder", SortingOrder);

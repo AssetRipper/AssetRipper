@@ -21,7 +21,7 @@ namespace UtinyRipper.Classes.Meshes
 			Dimension = stream.ReadByte();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("stream", Stream);

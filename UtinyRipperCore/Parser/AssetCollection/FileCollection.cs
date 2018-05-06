@@ -12,8 +12,13 @@ using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper
 {
-	public class AssetCollection : IAssetCollection
+	public class FileCollection : IFileCollection
 	{
+		public FileCollection()
+		{
+			Exporter = new ProjectExporter(this);
+		}
+
 		public void Load(string filePath)
 		{
 			if (BundleFile.IsBundleFile(filePath))
@@ -224,7 +229,7 @@ namespace UtinyRipper
 
 			if(!RTTIClassHierarchyDescriptor.IsReadSignature(file.Header.Generation))
 			{
-				FillVersion(file);
+				SetVersion(file);
 			}
 			
 			if (m_files.Any(t => !t.Platform.IsCompatible(file.Platform)))
@@ -235,14 +240,14 @@ namespace UtinyRipper
 			m_files.Add(file);
 		}
 
-		private void FillVersion(SerializedFile file)
+		private void SetVersion(SerializedFile file)
 		{
 			if (file.Version.IsSet)
 			{
 				return;
 			}
 
-			foreach (Classes.Object asset in file.Assets)
+			foreach (Object asset in file.Assets)
 			{
 				if(asset.ClassID == ClassIDType.BuildSettings)
 				{	
@@ -253,7 +258,7 @@ namespace UtinyRipper
 			}
 		}
 		
-		public AssetsExporter Exporter { get; } = new AssetsExporter();
+		public ProjectExporter Exporter { get; }
 		public IReadOnlyList<ISerializedFile> Files => m_files;
 
 		private readonly List<SerializedFile> m_files = new List<SerializedFile>();

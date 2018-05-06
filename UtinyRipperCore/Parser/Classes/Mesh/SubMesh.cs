@@ -83,17 +83,17 @@ namespace UtinyRipper.Classes.Meshes
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("firstByte", FirstByte);
 			node.Add("indexCount", IndexCount);
-			node.Add("topology", GetExportTopology(exporter.Version));
+			node.Add("topology", GetExportTopology(container.Version));
 			node.Add("firstVertex", FirstVertex);
 			node.Add("vertexCount", VertexCount);
-			node.Add("localAABB", LocalAABB.ExportYAML(exporter));
+			node.Add("localAABB", LocalAABB.ExportYAML(container));
 			return node;
 		}
 

@@ -15,13 +15,13 @@ namespace UtinyRipper.Classes.AnimationClips
 			PostInfinity = stream.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("m_Path", Path);
-			node.Add("m_Times", Times.ExportYAML(exporter));
-			node.Add("m_Values", Values.ExportYAML(exporter));
-			node.Add("m_Slopes", Slopes.ExportYAML(exporter));
+			node.Add("m_Times", Times.ExportYAML(container));
+			node.Add("m_Values", Values.ExportYAML(container));
+			node.Add("m_Slopes", Slopes.ExportYAML(container));
 			node.Add("m_PreInfinity", PreInfinity);
 			node.Add("m_PostInfinity", PostInfinity);
 			return node;

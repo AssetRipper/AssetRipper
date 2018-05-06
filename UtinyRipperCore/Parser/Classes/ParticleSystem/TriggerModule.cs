@@ -34,15 +34,15 @@ namespace UtinyRipper.Classes.ParticleSystems
 			yield return CollisionShape5.FetchDependency(file, isLog, () => nameof(TriggerModule), "collisionShape5");
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
-			node.Add("collisionShape0", CollisionShape0.ExportYAML(exporter));
-			node.Add("collisionShape1", CollisionShape1.ExportYAML(exporter));
-			node.Add("collisionShape2", CollisionShape2.ExportYAML(exporter));
-			node.Add("collisionShape3", CollisionShape3.ExportYAML(exporter));
-			node.Add("collisionShape4", CollisionShape4.ExportYAML(exporter));
-			node.Add("collisionShape5", CollisionShape5.ExportYAML(exporter));
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			node.Add("collisionShape0", CollisionShape0.ExportYAML(container));
+			node.Add("collisionShape1", CollisionShape1.ExportYAML(container));
+			node.Add("collisionShape2", CollisionShape2.ExportYAML(container));
+			node.Add("collisionShape3", CollisionShape3.ExportYAML(container));
+			node.Add("collisionShape4", CollisionShape4.ExportYAML(container));
+			node.Add("collisionShape5", CollisionShape5.ExportYAML(container));
 			node.Add("inside", Inside);
 			node.Add("outside", Outside);
 			node.Add("enter", Enter);

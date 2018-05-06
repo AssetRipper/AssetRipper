@@ -12,7 +12,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			m_childThresholdArray = stream.ReadSingleArray();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

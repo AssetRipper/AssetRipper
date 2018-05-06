@@ -33,13 +33,13 @@ namespace UtinyRipper.Classes.ParticleSystems
 			stream.AlignStream(AlignType.Align4);
 		}
 
-		public override YAMLNode ExportYAML(IAssetsExporter exporter)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(exporter);
-			node.Add("x", X.ExportYAML(exporter));
-			node.Add("y", Y.ExportYAML(exporter));
-			node.Add("z", Z.ExportYAML(exporter));
-			node.Add("speedModifier", SpeedModifier.ExportYAML(exporter));
+			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			node.Add("x", X.ExportYAML(container));
+			node.Add("y", Y.ExportYAML(container));
+			node.Add("z", Z.ExportYAML(container));
+			node.Add("speedModifier", SpeedModifier.ExportYAML(container));
 			node.Add("inWorldSpace", InWorldSpace);
 			return node;
 		}

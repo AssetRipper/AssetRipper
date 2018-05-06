@@ -122,14 +122,14 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public override void ExportBinary(IAssetsExporter exporter, Stream stream)
+		public override void ExportBinary(IExportContainer container, Stream stream)
 		{
 			if (CompleteImageSize == 0)
 			{
 				return;
 			}
 
-			if (IsReadStreamData(exporter.Version))
+			if (IsReadStreamData(container.Version))
 			{
 				string path = StreamData.Path;
 				if (path != string.Empty)
@@ -147,14 +147,14 @@ namespace UtinyRipper.Classes
 					}
 					
 					res.Stream.Position = StreamData.Offset;
-					Export(exporter, stream, res.Stream, StreamData.Size);
+					Export(container, stream, res.Stream, StreamData.Size);
 					return;
 				}
 			}
 
 			using (MemoryStream memStream = new MemoryStream(m_imageData))
 			{
-				Export(exporter, stream, memStream, m_imageData.Length);
+				Export(container, stream, memStream, m_imageData.Length);
 			}
 		}
 
@@ -188,12 +188,12 @@ namespace UtinyRipper.Classes
 			return false;
 		}
 
-		protected sealed override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected sealed override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}
 
-		private void Export(IAssetsExporter exporter, Stream destination, Stream source, long length)
+		private void Export(IExportContainer container, Stream destination, Stream source, long length)
 		{
 			switch (TextureFormat.ToContainerType())
 			{
@@ -202,7 +202,7 @@ namespace UtinyRipper.Classes
 					break;
 
 				case ContainerType.DDS:
-					ExportDDS(exporter, destination, source, length);
+					ExportDDS(container, destination, source, length);
 					break;
 
 				case ContainerType.PVR:
@@ -218,7 +218,7 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		private void ExportDDS(IAssetsExporter exporter, Stream destination, Stream source, long length)
+		private void ExportDDS(IExportContainer container, Stream destination, Stream source, long length)
 		{
 			DDSConvertParameters @params = new DDSConvertParameters()
 			{
@@ -234,10 +234,10 @@ namespace UtinyRipper.Classes
 				GBitMask = DDSGBitMask,
 				BBitMask = DDSBBitMask,
 				ABitMask = DDSABitMask,
-				Caps = DDSCaps(exporter.Version),
+				Caps = DDSCaps(container.Version),
 			};
 			
-			if (IsSwapBytes(exporter.Platform))
+			if (IsSwapBytes(container.Platform))
 			{
 				using (ReverseStream reverse = new ReverseStream(source, source.Position, length, true))
 				{

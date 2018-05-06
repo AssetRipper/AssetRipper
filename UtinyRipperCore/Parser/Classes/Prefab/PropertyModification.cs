@@ -13,13 +13,13 @@ namespace UtinyRipper.Classes.Prefabs
 			ObjectReference.Read(stream);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("target", Target.ExportYAML(exporter));
+			node.Add("target", Target.ExportYAML(container));
 			node.Add("propertyPath", PropertyPath);
 			node.Add("value", Value);
-			node.Add("objectReference", ObjectReference.ExportYAML(exporter));
+			node.Add("objectReference", ObjectReference.ExportYAML(container));
 			return node;
 		}
 

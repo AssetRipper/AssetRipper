@@ -14,12 +14,34 @@ namespace UtinyRipper.Classes
 		{
 		}
 
+		private static void CollectHierarchy(GameObject root, List<EditorExtension> heirarchy)
+		{
+			heirarchy.Add(root);
+
+			Transform transform = null;
+			foreach (ComponentPair cpair in root.Components)
+			{
+				Component component = cpair.Component.GetObject(root.File);
+				heirarchy.Add(component);
+				if (component.ClassID.IsTransform())
+				{
+					transform = (Transform)component;
+				}
+			}
+
+			foreach (PPtr<Transform> pchild in transform.Children)
+			{
+				Transform child = pchild.GetObject(root.File);
+				GameObject childGO = child.GameObject.GetObject(root.File);
+				CollectHierarchy(childGO, heirarchy);
+			}
+		}
+
 		/// <summary>
 		/// Less than 4.0.0
 		/// In earlier versions GameObjects always has IsActive as false.
-		/// Don't known why, so just export as true
 		/// </summary>
-		private static bool IsExportAlwaysActive(Version version)
+		private static bool IsAlwaysDeactivated(Version version)
 		{
 #warning unknown
 			return version.IsLess(4);
@@ -94,21 +116,20 @@ namespace UtinyRipper.Classes
 			return depth;
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_Component", Components.ExportYAML(exporter));
+#warning TODO: values acording to read version (current 2017.3.0f3)
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_Component", Components.ExportYAML(container));
 			node.Add("m_Layer", Layer);
 			node.Add("m_Name", Name);
 #warning TODO: tag index to string name
 			node.Add("m_TagString", "Untagged");
-#warning what are those 3 params???
-			node.Add("m_Icon", default(PPtr<Object>).ExportYAML(exporter));
+			node.Add("m_Icon", default(PPtr<Object>).ExportYAML(container));
 			node.Add("m_NavMeshLayer", 0);
 			node.Add("m_StaticEditorFlags", 0);
-#warning TODO: fix
-			node.Add("m_IsActive", IsExportAlwaysActive(exporter.Version) ? true : IsActive);
+			node.Add("m_IsActive", GetExportIsActive(container.Version));
 			return node;
 		}
 
@@ -129,6 +150,13 @@ namespace UtinyRipper.Classes
 			}
 			return null;
 		}
+		
+		public List<EditorExtension> CollectHierarchy()
+		{
+			List<EditorExtension> heirarchy = new List<EditorExtension>();
+			CollectHierarchy(this, heirarchy);
+			return heirarchy;
+		}
 
 		public override string ToString()
 		{
@@ -137,6 +165,12 @@ namespace UtinyRipper.Classes
 				return base.ToString();
 			}
 			return $"{Name}({GetType().Name})";
+		}
+
+		private bool GetExportIsActive(Version version)
+		{
+#warning TODO: fix
+			return IsAlwaysDeactivated(version) ? true : IsActive;
 		}
 
 		public override string ExportExtension => throw new NotSupportedException();

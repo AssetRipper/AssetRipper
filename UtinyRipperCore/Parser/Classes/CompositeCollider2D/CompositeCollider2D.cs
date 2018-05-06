@@ -44,20 +44,18 @@ namespace UtinyRipper.Classes
 			}
 		}
 		
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("m_GeometryType", (int)GeometryType);
 			node.Add("m_GenerationType", (int)GenerationType);
 			node.Add("m_EdgeRadius", EdgeRadius);
-			node.Add("m_ColliderPaths", ColliderPaths.ExportYAML(exporter));
-			node.Add("m_CompositePaths", CompositePaths.ExportYAML(exporter));
+			node.Add("m_ColliderPaths", ColliderPaths.ExportYAML(container));
+			node.Add("m_CompositePaths", CompositePaths.ExportYAML(container));
 			node.Add("m_VertexDistance", VertexDistance);
 			return node;
 		}
 		
-		public override string ClassIDName => "CompositeCollider2D";
-
 		public GeometryType GeometryType { get; private set; }
 		public GenerationType GenerationType { get; private set; }
 		public float EdgeRadius {get; private set; }

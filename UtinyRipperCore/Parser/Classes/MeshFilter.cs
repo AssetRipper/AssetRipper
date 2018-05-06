@@ -29,10 +29,10 @@ namespace UtinyRipper.Classes
 			yield return Mesh.FetchDependency(file, isLog, ToLogString, "m_Mesh");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_Mesh", Mesh.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_Mesh", Mesh.ExportYAML(container));
 			return node;
 		}
 

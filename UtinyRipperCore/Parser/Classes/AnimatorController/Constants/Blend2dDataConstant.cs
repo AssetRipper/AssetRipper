@@ -16,7 +16,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			m_childNeighborListArray = stream.ReadArray<MotionNeighborList>();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

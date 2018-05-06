@@ -32,13 +32,13 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			if (IsWritePrefab)
 			{
-				node.Add("m_PrefabParentObject", PrefabParentObject.ExportYAML(exporter));
-				node.Add("m_PrefabInternal", PrefabInternal.ExportYAML(exporter));
+				node.Add("m_PrefabParentObject", PrefabParentObject.ExportYAML(container));
+				node.Add("m_PrefabInternal", PrefabInternal.ExportYAML(container));
 			}
 			return node;
 		}

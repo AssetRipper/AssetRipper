@@ -40,12 +40,12 @@ namespace UtinyRipper.Classes.ParticleSystems
 			yield return Emitter.FetchDependency(file, isLog, () => nameof(SubEmitterData), "emitter");
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("emitter", Emitter.ExportYAML(exporter));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("emitter", Emitter.ExportYAML(container));
 			node.Add("type", (int)Type);
 			node.Add("properties", (int)Properties);
 			return node;

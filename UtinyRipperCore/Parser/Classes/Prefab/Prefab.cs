@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.Prefabs;
 using UtinyRipper.Exporter.YAML;
@@ -38,20 +37,10 @@ namespace UtinyRipper.Classes
 		
 		private static IEnumerable<EditorExtension> FetchObjects(GameObject root, bool isLog = false)
 		{
-			List<Object> dependencies = ObjectUtils.CollectDependencies(root, isLog);
-			IEnumerable<Object> deps = dependencies.Where(t => !t.IsAsset);
-#warning dependency on other prefab's component?
-
-#warning: TODO: OrderBy inside exporter
-			IEnumerable<Object> gos = deps.Where(t => t.ClassID == ClassIDType.GameObject);
-			foreach (Object go in gos)
+			List<EditorExtension> hierarchy = root.CollectHierarchy();
+			foreach (EditorExtension obj in hierarchy)
 			{
-				yield return (GameObject)go;
-			}
-			IEnumerable<Object> comps = deps.Where(t => t.ClassID != ClassIDType.GameObject).OrderBy(t => t.ClassID);
-			foreach (Object comp in comps)
-			{
-				yield return (Component)comp;
+				yield return obj;
 			}
 		}
 
@@ -107,13 +96,13 @@ namespace UtinyRipper.Classes
 			return $"{GetName()}(Prefab)";
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_Modification", Modification.ExportYAML(exporter));
-			node.Add("m_ParentPrefab", ParentPrefab.ExportYAML(exporter));
-			node.Add("m_RootGameObject", RootGameObject.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_Modification", Modification.ExportYAML(container));
+			node.Add("m_ParentPrefab", ParentPrefab.ExportYAML(container));
+			node.Add("m_RootGameObject", RootGameObject.ExportYAML(container));
 			node.Add("m_IsPrefabParent", IsPrefabParent);
 			return node;
 		}

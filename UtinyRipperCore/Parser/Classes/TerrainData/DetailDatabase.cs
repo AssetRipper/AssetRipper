@@ -88,23 +88,23 @@ namespace UtinyRipper.Classes.TerrainDatas
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_Patches", Patches.ExportYAML(exporter));
-			node.Add("m_DetailPrototypes", DetailPrototypes.ExportYAML(exporter));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_Patches", Patches.ExportYAML(container));
+			node.Add("m_DetailPrototypes", DetailPrototypes.ExportYAML(container));
 			node.Add("m_PatchCount", PatchCount);
 			node.Add("m_PatchSamples", PatchSamples);
-			node.Add("m_RandomRotations", RandomRotations.ExportYAML(exporter));
-			node.Add("WavingGrassTint", WavingGrassTint.ExportYAML(exporter));
+			node.Add("m_RandomRotations", RandomRotations.ExportYAML(container));
+			node.Add("WavingGrassTint", WavingGrassTint.ExportYAML(container));
 			node.Add("m_WavingGrassStrength", WavingGrassStrength);
 			node.Add("m_WavingGrassAmount", WavingGrassAmount);
 			node.Add("m_WavingGrassSpeed", WavingGrassSpeed);
-			node.Add("m_TreeInstances", TreeInstances.ExportYAML(exporter));
-			node.Add("m_TreePrototypes", TreePrototypes.ExportYAML(exporter));
-			node.Add("m_PreloadTextureAtlasData", PreloadTextureAtlasData.ExportYAML(exporter));
+			node.Add("m_TreeInstances", TreeInstances.ExportYAML(container));
+			node.Add("m_TreePrototypes", TreePrototypes.ExportYAML(container));
+			node.Add("m_PreloadTextureAtlasData", PreloadTextureAtlasData.ExportYAML(container));
 			return node;
 		}
 

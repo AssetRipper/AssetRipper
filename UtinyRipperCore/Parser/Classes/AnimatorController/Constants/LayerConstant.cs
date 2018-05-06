@@ -45,7 +45,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			stream.AlignStream(AlignType.Align4);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

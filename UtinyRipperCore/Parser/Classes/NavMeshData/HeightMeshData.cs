@@ -14,13 +14,13 @@ namespace UtinyRipper.Classes.NavMeshDatas
 			m_nodes = stream.ReadArray<HeightMeshBVNode>();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Vertices", Vertices.ExportYAML(exporter));
+			node.Add("m_Vertices", Vertices.ExportYAML(container));
 			node.Add("m_Indices", Indices.ExportYAML(true));
-			node.Add("m_Bounds", Bounds.ExportYAML(exporter));
-			node.Add("m_Nodes", Nodes.ExportYAML(exporter));
+			node.Add("m_Bounds", Bounds.ExportYAML(container));
+			node.Add("m_Nodes", Nodes.ExportYAML(container));
 			return node;
 		}
 

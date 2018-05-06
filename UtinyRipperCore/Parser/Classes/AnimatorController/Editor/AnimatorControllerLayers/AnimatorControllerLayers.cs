@@ -12,20 +12,20 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			return 5;
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("m_Name", Name);
-			node.Add("m_StateMachine", StateMachine.ExportYAML(exporter));
-			node.Add("m_Mask", Mask.ExportYAML(exporter));
-			node.Add("m_Motions", Motions.ExportYAML(exporter));
-			node.Add("m_Behaviours", Behaviours.ExportYAML(exporter));
+			node.Add("m_StateMachine", StateMachine.ExportYAML(container));
+			node.Add("m_Mask", Mask.ExportYAML(container));
+			node.Add("m_Motions", Motions.ExportYAML(container));
+			node.Add("m_Behaviours", Behaviours.ExportYAML(container));
 			node.Add("m_BlendingMode", BlendingMode);
 			node.Add("m_SyncedLayerIndex", SyncedLayerIndex);
 			node.Add("m_DefaultWeight", DefaultWeight);
 			node.Add("m_IKPass", IKPass);
 			node.Add("m_SyncedLayerAffectsTiming", SyncedLayerAffectsTiming);
-			node.Add("m_Controller", Controller.ExportYAML(exporter));
+			node.Add("m_Controller", Controller.ExportYAML(container));
 			return node;
 		}
 

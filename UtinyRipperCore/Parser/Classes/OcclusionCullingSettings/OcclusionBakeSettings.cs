@@ -12,7 +12,7 @@ namespace UtinyRipper.Classes.OcclusionCullingSettingses
 			BackfaceThreshold = stream.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("smallestOccluder", SmallestOccluder);

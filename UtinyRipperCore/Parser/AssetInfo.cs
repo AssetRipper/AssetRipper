@@ -17,7 +17,7 @@ namespace UtinyRipper
 			PathID = pathID;
 			ClassID = classID;
 
-			if (classID.IsAsset(true))
+			if (!classID.IsComponent(true))
 			{
 				GUID = new UtinyGUID(Guid.NewGuid());
 			}

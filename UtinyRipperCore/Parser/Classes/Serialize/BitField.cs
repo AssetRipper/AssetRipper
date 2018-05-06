@@ -37,10 +37,10 @@ namespace UtinyRipper.Classes
 			Bits = Is16Bits(stream.Version) ? stream.ReadUInt16() : stream.ReadUInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_Bits", Bits);
 			return node;
 		}

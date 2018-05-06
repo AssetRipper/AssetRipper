@@ -16,13 +16,15 @@ namespace UtinyRipper.AssetExporters.Classes
 			m_importSettings = new TextureImportSettings(m_texture.TextureSettings);
 		}
 
-		protected override void ExportYAMLInner(IAssetsExporter exporter, YAMLMappingNode node)
+		protected override void ExportYAMLInner(IExportContainer container, YAMLMappingNode node)
 		{
-			node.Add("textureSettings", m_importSettings.ExportYAML(exporter));
+			node.Add("textureSettings", m_importSettings.ExportYAML(container));
 			node.Add("isReadable", m_texture.IsReadable);
 #warning TODO: imageFormat convertion?
 			node.Add("sRGBTexture", true);
 		}
+
+		public override string Name => nameof(IHVImageFormatImporter);
 
 		private readonly Texture2D m_texture;
 		private readonly TextureImportSettings m_importSettings;

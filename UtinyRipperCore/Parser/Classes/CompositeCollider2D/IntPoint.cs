@@ -11,7 +11,7 @@ namespace UtinyRipper.Classes.CompositeCollider2Ds
 			Y = stream.ReadInt64();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("X", X);

@@ -1,17 +1,24 @@
 ﻿using System;
+using UtinyRipper.Classes;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.AssetExporters.Classes
 {
-	public class Meta : IYAMLDocExportable
+	public struct Meta : IYAMLDocExportable
 	{
-		public Meta(IExportCollection collection)
+		public Meta(IAssetImporter importer, UtinyGUID guid)
 		{
-			if (collection == null)
+			if (importer == null)
 			{
-				throw new ArgumentNullException(nameof(collection));
+				throw new ArgumentNullException(nameof(importer));
 			}
-			m_collection = collection;
+			if (guid.IsZero)
+			{
+				throw new ArgumentNullException(nameof(guid));
+			}
+
+			m_importer = importer;
+			m_guid = guid;
 		}
 
 		private static int GetFileFormatVersion(Version version)
@@ -20,20 +27,21 @@ namespace UtinyRipper.AssetExporters.Classes
 			return 2;
 		}
 
-		public YAMLDocument ExportYAMLDocument(IAssetsExporter exporter)
+		public YAMLDocument ExportYAMLDocument(IExportContainer container)
 		{
 			YAMLDocument document = new YAMLDocument();
 			YAMLMappingNode root = document.CreateMappingRoot();
-			root.Add("fileFormatVersion", GetFileFormatVersion(exporter.Version));
-			root.Add("guid", m_collection.GUID.ExportYAML(exporter));
+			root.Add("fileFormatVersion", GetFileFormatVersion(container.Version));
+			root.Add("guid", m_guid.ExportYAML(container));
 			long cplusTick = (DateTime.Now.Ticks - 0x089f7ff5f7b58000) / 10000000;
 			root.Add("timeCreated", cplusTick);
 			root.Add("licenseType", "Free");			
-			root.Add("NativeFormatImporter", m_collection.MetaImporter.ExportYAML(exporter));
+			root.Add(m_importer.Name, m_importer.ExportYAML(container));
 
 			return document;
 		}
 
-		private readonly IExportCollection m_collection;
+		private readonly IAssetImporter m_importer;
+		private readonly UtinyGUID m_guid;
 	}
 }

@@ -4,6 +4,6 @@ namespace UtinyRipper.AssetExporters
 {
 	public interface IYAMLDocExportable
 	{
-		YAMLDocument ExportYAMLDocument(IAssetsExporter exporter);
+		YAMLDocument ExportYAMLDocument(IExportContainer container);
 	}
 }

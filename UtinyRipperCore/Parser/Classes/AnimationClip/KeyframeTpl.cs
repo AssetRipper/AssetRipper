@@ -58,24 +58,24 @@ namespace UtinyRipper.Classes.AnimationClips
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("time", Time);
-			node.Add("value", Value.ExportYAML(exporter));
-			node.Add("inSlope", InSlope.ExportYAML(exporter));
-			node.Add("outSlope", OutSlope.ExportYAML(exporter));
-			if (GetSerializedVersion(exporter.Version) >= 2)
+			node.Add("value", Value.ExportYAML(container));
+			node.Add("inSlope", InSlope.ExportYAML(container));
+			node.Add("outSlope", OutSlope.ExportYAML(container));
+			if (GetSerializedVersion(container.Version) >= 2)
 			{
 #warning TODO: value?
 				node.Add("tangentMode", 0);
 			}
-			if (GetSerializedVersion(exporter.Version) >= 3)
+			if (GetSerializedVersion(container.Version) >= 3)
 			{
 				node.Add("weightedMode", (int)WeightedMode);
-				node.Add("inWeight", InWeight.ExportYAML(exporter));
-				node.Add("outWeight", OutWeight.ExportYAML(exporter));
+				node.Add("inWeight", InWeight.ExportYAML(container));
+				node.Add("outWeight", OutWeight.ExportYAML(container));
 			}
 			return node;
 		}

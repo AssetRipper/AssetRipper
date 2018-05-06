@@ -16,12 +16,12 @@ namespace UtinyRipper.Classes.Meshes
 			Index = stream.ReadUInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("vertex", Position.ExportYAML(exporter));
-			node.Add("normal", Normal.ExportYAML(exporter));
-			node.Add("tangent", Tangent.ExportYAML(exporter));
+			node.Add("vertex", Position.ExportYAML(container));
+			node.Add("normal", Normal.ExportYAML(container));
+			node.Add("tangent", Tangent.ExportYAML(container));
 			node.Add("index", Index);
 			return node;
 		}

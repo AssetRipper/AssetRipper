@@ -28,7 +28,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			MotionSetCount = stream.ReadUInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

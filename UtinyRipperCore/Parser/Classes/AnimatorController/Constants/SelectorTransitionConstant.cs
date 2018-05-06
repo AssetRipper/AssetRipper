@@ -13,7 +13,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			m_conditionConstantArray = stream.ReadArray<OffsetPtr<ConditionConstant>>();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

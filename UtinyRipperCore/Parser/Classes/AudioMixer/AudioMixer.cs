@@ -39,18 +39,18 @@ namespace UtinyRipper.Classes
 			
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			//node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_OutputGroup", OutputGroup.ExportYAML(exporter));
-			node.Add("m_MasterGroup", MasterGroup.ExportYAML(exporter));
-			node.Add("m_Snapshots", Snapshots.ExportYAML(exporter));
-			node.Add("m_StartSnapshot", StartSnapshot.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_OutputGroup", OutputGroup.ExportYAML(container));
+			node.Add("m_MasterGroup", MasterGroup.ExportYAML(container));
+			node.Add("m_Snapshots", Snapshots.ExportYAML(container));
+			node.Add("m_StartSnapshot", StartSnapshot.ExportYAML(container));
 			node.Add("m_SuspendThreshold", SuspendThreshold);
 			node.Add("m_EnableSuspend", EnableSuspend);
 			node.Add("m_UpdateMode", UpdateMode);
-			node.Add("m_MixerConstant", MixerConstant.ExportYAML(exporter));
+			node.Add("m_MixerConstant", MixerConstant.ExportYAML(container));
 			return node;
 		}
 

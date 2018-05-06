@@ -324,9 +324,9 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public override void ExportBinary(IAssetsExporter exporter, Stream stream)
+		public override void ExportBinary(IExportContainer container, Stream stream)
 		{
-			if (IsReadLoadType(exporter.Version))
+			if (IsReadLoadType(container.Version))
 			{
 				ResourcesFile res = File.Collection.FindResourcesFile(File, FSBResource.Source);
 				if (res == null)
@@ -336,7 +336,7 @@ namespace UtinyRipper.Classes
 				}
 
 				res.Stream.Position = FSBResource.Offset;
-				if (StreamedResource.IsReadSize(exporter.Version))
+				if (StreamedResource.IsReadSize(container.Version))
 				{
 					res.Stream.CopyStream(stream, FSBResource.Size);
 				}
@@ -347,7 +347,7 @@ namespace UtinyRipper.Classes
 			}
 			else
 			{
-				if (IsReadStreamingInfo(exporter.Version))
+				if (IsReadStreamingInfo(container.Version))
 				{
 					if (Stream == 2)
 					{
@@ -373,7 +373,7 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

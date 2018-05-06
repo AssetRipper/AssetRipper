@@ -18,9 +18,9 @@ namespace UtinyRipper.Classes
 			Bounciness = stream.ReadSingle();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("friction", Friction);
 			node.Add("bounciness", Bounciness);
 			return node;

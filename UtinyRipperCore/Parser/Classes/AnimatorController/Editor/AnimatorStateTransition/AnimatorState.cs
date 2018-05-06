@@ -29,15 +29,15 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			throw new NotSupportedException();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.InsertSerializedVersion(GetSerializedVersion(exporter.Version));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_Speed", Speed);
 			node.Add("m_CycleOffset", CycleOffset);
-			node.Add("m_Transitions", Transitions.ExportYAML(exporter));
-			node.Add("m_StateMachineBehaviours", StateMachineBehaviours.ExportYAML(exporter));
-			node.Add("m_Position", Position.ExportYAML(exporter));
+			node.Add("m_Transitions", Transitions.ExportYAML(container));
+			node.Add("m_StateMachineBehaviours", StateMachineBehaviours.ExportYAML(container));
+			node.Add("m_Position", Position.ExportYAML(container));
 			node.Add("m_IKOnFeet", IKOnFeet);
 			node.Add("m_WriteDefaultValues", WriteDefaultValues);
 			node.Add("m_Mirror", Mirror);
@@ -45,7 +45,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			node.Add("m_MirrorParameterActive", MirrorParameterActive);
 			node.Add("m_CycleOffsetParameterActive", CycleOffsetParameterActive);
 			node.Add("m_TimeParameterActive", TimeParameterActive);
-			node.Add("m_Motion", Motion.ExportYAML(exporter));
+			node.Add("m_Motion", Motion.ExportYAML(container));
 			node.Add("m_Tag", Tag);
 			node.Add("m_SpeedParameter", SpeedParameter);
 			node.Add("m_MirrorParameter", MirrorParameter);

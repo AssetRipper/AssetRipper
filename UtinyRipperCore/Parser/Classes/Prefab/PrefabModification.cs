@@ -13,12 +13,12 @@ namespace UtinyRipper.Classes.Prefabs
 			m_removedComponents = stream.ReadArray<PPtr<Object>>();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_TransformParent", TransformParent.ExportYAML(exporter));
-			node.Add("m_Modifications", m_modifications == null ? YAMLSequenceNode.Empty : Modifications.ExportYAML(exporter));
-			node.Add("m_RemovedComponents", m_removedComponents == null ? YAMLSequenceNode.Empty : RemovedComponents.ExportYAML(exporter));
+			node.Add("m_TransformParent", TransformParent.ExportYAML(container));
+			node.Add("m_Modifications", m_modifications == null ? YAMLSequenceNode.Empty : Modifications.ExportYAML(container));
+			node.Add("m_RemovedComponents", m_removedComponents == null ? YAMLSequenceNode.Empty : RemovedComponents.ExportYAML(container));
 			return node;
 		}
 

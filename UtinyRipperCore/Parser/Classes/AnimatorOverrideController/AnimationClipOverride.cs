@@ -13,11 +13,11 @@ namespace UtinyRipper.Classes.AnimatorOverrideControllers
 			OverrideClip.Read(stream);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_OriginalClip", OriginalClip.ExportYAML(exporter));
-			node.Add("m_OverrideClip", OverrideClip.ExportYAML(exporter));
+			node.Add("m_OriginalClip", OriginalClip.ExportYAML(container));
+			node.Add("m_OverrideClip", OverrideClip.ExportYAML(container));
 			return node;
 		}
 

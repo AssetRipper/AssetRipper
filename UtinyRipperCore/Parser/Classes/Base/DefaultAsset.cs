@@ -18,9 +18,9 @@ namespace UtinyRipper.Classes
 			IsWarning = stream.ReadBoolean();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("m_Message", Message);
 			node.Add("m_IsWarning", IsWarning);
 			return node;

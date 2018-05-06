@@ -21,9 +21,9 @@ namespace UtinyRipper.Classes
 			GameObject.Read(stream);
 		}
 
-		public sealed override void ExportBinary(IAssetsExporter exporter, Stream stream)
+		public sealed override void ExportBinary(IExportContainer container, Stream stream)
 		{
-			base.ExportBinary(exporter, stream);
+			base.ExportBinary(container, stream);
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -48,10 +48,10 @@ namespace UtinyRipper.Classes
 			return go.GetRootDepth();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.Add("m_GameObject", GameObject.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_GameObject", GameObject.ExportYAML(container));
 			return node;
 		}
 

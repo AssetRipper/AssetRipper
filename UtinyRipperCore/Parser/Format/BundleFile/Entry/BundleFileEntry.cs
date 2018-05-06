@@ -10,7 +10,7 @@ namespace UtinyRipper.BundleFiles
 		{
 		}
 
-		public SerializedFile ReadSerializedFile(IAssetCollection collection, string filePath)
+		public SerializedFile ReadSerializedFile(IFileCollection collection, string filePath)
 		{
 			SerializedFile file = new SerializedFile(collection, filePath, Name);
 			m_stream.Position = m_offset;

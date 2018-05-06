@@ -18,9 +18,9 @@ namespace UtinyRipper.Classes
 			stream.AlignStream(AlignType.Align4);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("m_Enabled", IsEnabled);
 			return node;
 		}

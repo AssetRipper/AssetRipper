@@ -29,9 +29,9 @@ namespace UtinyRipper
 		Texture					= 27,
 		Texture2D				= 28,
 		/// <summary>
-		/// OcclusionCullingSettings
+		/// SceneSettings previously
 		/// </summary>
-		SceneSettings			= 29,
+		OcclusionCullingSettings = 29,
 		GraphicsSettings		= 30,
 		PipelineManager			= 31,
 		MeshFilter				= 33,
@@ -56,9 +56,9 @@ namespace UtinyRipper
 		MeshCollider			= 64,
 		BoxCollider				= 65,
 		/// <summary>
-		/// CompositeCollider2D
+		/// SpriteCollider2D previously
 		/// </summary>
-		SpriteCollider2D		= 66,
+		CompositeCollider2D		= 66,
 		EdgeCollider2D			= 68,
 		CapsuleCollider2D		= 70,
 		ComputeShader			= 72,
@@ -272,7 +272,10 @@ namespace UtinyRipper
 		AnimatorTransitionBase	= 1111,
 		SubstanceImporter		= 1112,
 		LightmapParameters		= 1113,
-		LightmapSnapshot		= 1120,
+		/// <summary>
+		/// LightmapSnapshot previously
+		/// </summary>
+		LightingDataAsset		= 1120,
 
 		SubDerived				= 367388927,
 		SiblingDerived			= 334799969,
@@ -288,19 +291,16 @@ namespace UtinyRipper
 		{
 			return (int)_this;
 		}
-
-		public static bool IsAsset(this ClassIDType _this)
+		
+		public static bool IsComponent(this ClassIDType _this)
 		{
-			return IsAsset(_this, false);
+			return IsComponent(_this, false);
 		}
 
-		public static bool IsAsset(this ClassIDType _this, bool isSafe)
+		public static bool IsComponent(this ClassIDType _this, bool isSafe)
 		{
 			switch(_this)
 			{
-				case ClassIDType.Object:
-					throw new NotSupportedException();
-
 				case ClassIDType.GlobalGameManager:
 				case ClassIDType.Material:
 				case ClassIDType.Texture2D:
@@ -322,7 +322,6 @@ namespace UtinyRipper
 				case ClassIDType.AssetBundle:
 				case ClassIDType.MovieTexture:
 				case ClassIDType.TerrainData:
-				case ClassIDType.LightmapSettings:
 				case ClassIDType.Sprite:
 				case ClassIDType.AnimatorOverrideController:
 				case ClassIDType.NavMeshData:
@@ -331,7 +330,7 @@ namespace UtinyRipper
 				case ClassIDType.SceneAsset:
 				case ClassIDType.LightmapParameters:
 				case ClassIDType.SpriteAtlas:
-					return true;
+					return false;
 					
 				case ClassIDType.GameObject:
 				case ClassIDType.Component:
@@ -339,7 +338,7 @@ namespace UtinyRipper
 				case ClassIDType.Camera:
 				case ClassIDType.MeshRenderer:
 				case ClassIDType.Renderer:
-				case ClassIDType.SceneSettings:
+				case ClassIDType.OcclusionCullingSettings:
 				case ClassIDType.MeshFilter:
 				case ClassIDType.OcclusionPortal:
 				case ClassIDType.Rigidbody2D:
@@ -349,7 +348,7 @@ namespace UtinyRipper
 				case ClassIDType.BoxCollider2D:
 				case ClassIDType.MeshCollider:
 				case ClassIDType.BoxCollider:
-				case ClassIDType.SpriteCollider2D:
+				case ClassIDType.CompositeCollider2D:
 				case ClassIDType.EdgeCollider2D:
 				case ClassIDType.CapsuleCollider2D:
 				case ClassIDType.AudioListener:
@@ -365,6 +364,7 @@ namespace UtinyRipper
 				case ClassIDType.SkinnedMeshRenderer:
 				case ClassIDType.WheelCollider:
 				case ClassIDType.TerrainCollider:
+				case ClassIDType.LightmapSettings:
 				case ClassIDType.OcclusionArea:
 				case ClassIDType.NavMeshSettings:
 				case ClassIDType.ParticleSystem:
@@ -374,7 +374,7 @@ namespace UtinyRipper
 				case ClassIDType.CanvasRenderer:
 				case ClassIDType.Canvas:
 				case ClassIDType.RectTransform:
-					return false;
+					return true;
 
 				default:
 					if(isSafe)
@@ -388,6 +388,19 @@ namespace UtinyRipper
 		public static bool IsTransform(this ClassIDType _this)
 		{
 			return _this == ClassIDType.Transform || _this == ClassIDType.RectTransform;
+		}
+
+		public static bool IsSceneComponent(this ClassIDType _this)
+		{
+			switch (_this)
+			{
+				case ClassIDType.OcclusionCullingSettings:
+				case ClassIDType.RenderSettings:
+				case ClassIDType.LightmapSettings:
+				case ClassIDType.NavMeshSettings:
+					return true;
+			}
+			return false;
 		}
 	}
 }

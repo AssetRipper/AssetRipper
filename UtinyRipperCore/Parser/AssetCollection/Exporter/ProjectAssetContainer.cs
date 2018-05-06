@@ -8,9 +8,9 @@ using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
 {
-	public class AssetsExportContainer : IAssetsExporter
+	public class ProjectAssetContainer : IExportContainer
 	{
-		public AssetsExportContainer(AssetsExporter exporter, List<IExportCollection> collections)
+		public ProjectAssetContainer(ProjectExporter exporter, List<IExportCollection> collections)
 		{
 			if(exporter == null)
 			{
@@ -22,6 +22,11 @@ namespace UtinyRipper.AssetExporters
 			}
 			m_exporter = exporter;
 			m_collections = collections;
+		}
+
+		public Object FindObject(int fileIndex, long pathID)
+		{
+			return File.FindObject(fileIndex, pathID);
 		}
 
 		public string GetExportID(Object @object)
@@ -44,7 +49,7 @@ namespace UtinyRipper.AssetExporters
 			}
 			else
 			{
-				return AssetExportCollection.GetMainExportID(@object);
+				return ExportCollection.GetMainExportID(@object);
 			}
 		}
 
@@ -73,7 +78,7 @@ namespace UtinyRipper.AssetExporters
 			}
 			else
 			{
-				string exportID = AssetExportCollection.GetMainExportID(@object);
+				string exportID = ExportCollection.GetMainExportID(@object);
 				return new ExportPointer(exportID, UtinyGUID.MissingReference, AssetType.Meta);
 			}
 		}
@@ -84,7 +89,7 @@ namespace UtinyRipper.AssetExporters
 		public Platform Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
 
-		private readonly AssetsExporter m_exporter;
+		private readonly ProjectExporter m_exporter;
 		private readonly List<IExportCollection> m_collections;
 	}
 }

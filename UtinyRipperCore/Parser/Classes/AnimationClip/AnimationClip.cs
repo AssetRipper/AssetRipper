@@ -299,46 +299,46 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_Legacy", IsReadLegacy(exporter.Version) ? Legacy : true);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_Legacy", IsReadLegacy(container.Version) ? Legacy : true);
 			node.Add("m_Compressed", Compressed);
 			node.Add("m_UseHighQualityCurve", UseHightQualityCurve);
 
-			if(IsExportGenericData(exporter.Version))
+			if(IsExportGenericData(container.Version))
 			{
-				ExportGenericData(exporter, node);
+				ExportGenericData(container, node);
 			}
 			else
 			{
-				node.Add("m_RotationCurves", IsReadCurves(exporter.Version) ? m_rotationCurves.ExportYAML(exporter) : YAMLSequenceNode.Empty);
-				node.Add("m_CompressedRotationCurves", IsReadCompressedRotationCurves(exporter.Version) ? m_compressedRotationCurves.ExportYAML(exporter) : YAMLSequenceNode.Empty);
-				node.Add("m_EulerCurves", IsReadEulerCurves(exporter.Version) ? m_eulerCurves.ExportYAML(exporter) : YAMLSequenceNode.Empty);
-				node.Add("m_PositionCurves", IsReadCurves(exporter.Version) ? m_positionCurves.ExportYAML(exporter) : YAMLSequenceNode.Empty);
-				node.Add("m_ScaleCurves",  IsReadCurves(exporter.Version) ?  m_scaleCurves.ExportYAML(exporter) : YAMLSequenceNode.Empty);
-				node.Add("m_FloatCurves", IsReadCurves(exporter.Version) ? m_floatCurves.ExportYAML(exporter) : YAMLSequenceNode.Empty);
+				node.Add("m_RotationCurves", IsReadCurves(container.Version) ? m_rotationCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
+				node.Add("m_CompressedRotationCurves", IsReadCompressedRotationCurves(container.Version) ? m_compressedRotationCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
+				node.Add("m_EulerCurves", IsReadEulerCurves(container.Version) ? m_eulerCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
+				node.Add("m_PositionCurves", IsReadCurves(container.Version) ? m_positionCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
+				node.Add("m_ScaleCurves",  IsReadCurves(container.Version) ?  m_scaleCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
+				node.Add("m_FloatCurves", IsReadCurves(container.Version) ? m_floatCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
 			}
 			
-			node.Add("m_PPtrCurves", IsReadPPtrCurves(exporter.Version) ? m_PPtrCurves.ExportYAML(exporter) : YAMLSequenceNode.Empty);
+			node.Add("m_PPtrCurves", IsReadPPtrCurves(container.Version) ? m_PPtrCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
 			node.Add("m_SampleRate", SampleRate);
 			node.Add("m_WrapMode", (int)WrapMode);
-			node.Add("m_Bounds", Bounds.ExportYAML(exporter));
-			node.Add("m_ClipBindingConstant", ClipBindingConstant.ExportYAML(exporter));
-			node.Add("m_AnimationClipSettings", MuscleClip.ExportYAML(exporter));
+			node.Add("m_Bounds", Bounds.ExportYAML(container));
+			node.Add("m_ClipBindingConstant", ClipBindingConstant.ExportYAML(container));
+			node.Add("m_AnimationClipSettings", MuscleClip.ExportYAML(container));
 			node.Add("m_EditorCurves", YAMLSequenceNode.Empty);
 			node.Add("m_EulerEditorCurves", YAMLSequenceNode.Empty);
 			node.Add("m_HasGenericRootTransform", false);
 			node.Add("m_HasMotionFloatCurves", false);
 			node.Add("m_GenerateMotionCurves", false);
-			node.Add("m_Events", IsReadEvents(exporter.Version) ? m_events.ExportYAML(exporter) : YAMLSequenceNode.Empty);
+			node.Add("m_Events", IsReadEvents(container.Version) ? m_events.ExportYAML(container) : YAMLSequenceNode.Empty);
 			
 			return node;
 		}
 
-		private void ExportGenericData(IAssetsExporter exporter, YAMLMappingNode node)
+		private void ExportGenericData(IExportContainer container, YAMLMappingNode node)
 		{
 			IReadOnlyDictionary<uint, string> tos = FindTOS();
 			/*if(tos == null)
@@ -347,17 +347,17 @@ namespace UtinyRipper.Classes
 				return;
 			}*/
 
-			ExportGenericData(exporter, node, tos);
+			ExportGenericData(container, node, tos);
 		}
 
 #warning TODO: it's too complicated and unintuitive. need to simplify
-		private void ExportGenericData(IAssetsExporter exporter, YAMLMappingNode node, IReadOnlyDictionary<uint, string> tos)
+		private void ExportGenericData(IExportContainer container, YAMLMappingNode node, IReadOnlyDictionary<uint, string> tos)
 		{
 			StreamedClip streamedClip = MuscleClip.Clip.StreamedClip;
 			DenseClip denseClip = MuscleClip.Clip.DenseClip;
 			ConstantClip constantClip = MuscleClip.Clip.ConstantClip;
 
-			IReadOnlyList<StreamedFrame> streamedFrames = streamedClip.GenerateFrames(exporter);
+			IReadOnlyList<StreamedFrame> streamedFrames = streamedClip.GenerateFrames(container);
 			Dictionary<uint, Vector3Curve> translations = new Dictionary<uint, Vector3Curve>();
 			Dictionary<uint, QuaternionCurve> rotations = new Dictionary<uint, QuaternionCurve>();
 			Dictionary<uint, Vector3Curve> scales = new Dictionary<uint, Vector3Curve>();
@@ -550,12 +550,12 @@ namespace UtinyRipper.Classes
 				}
 			}
 
-			node.Add("m_RotationCurves", rotations.Values.ExportYAML(exporter));
+			node.Add("m_RotationCurves", rotations.Values.ExportYAML(container));
 			node.Add("m_CompressedRotationCurves", YAMLSequenceNode.Empty);
-			node.Add("m_EulerCurves", eulers.Values.ExportYAML(exporter));
-			node.Add("m_PositionCurves", translations.Values.ExportYAML(exporter));
-			node.Add("m_ScaleCurves", scales.Values.ExportYAML(exporter));
-			node.Add("m_FloatCurves", floats.Values.ExportYAML(exporter));
+			node.Add("m_EulerCurves", eulers.Values.ExportYAML(container));
+			node.Add("m_PositionCurves", translations.Values.ExportYAML(container));
+			node.Add("m_ScaleCurves", scales.Values.ExportYAML(container));
+			node.Add("m_FloatCurves", floats.Values.ExportYAML(container));
 		}
 
 		/*private void ExportEmptyGenericData(YAMLMappingNode node)
@@ -586,40 +586,43 @@ namespace UtinyRipper.Classes
 
 		private Avatar FindAvatar()
 		{
-			foreach (Object @object in File.Collection.FetchAssets())
+			foreach (ISerializedFile file in File.Collection.Files)
 			{
-				if (@object.ClassID != ClassIDType.Animator)
+				foreach (Object @object in file.FetchAssets())
 				{
-					continue;
-				}
-
-				Animator animator = (Animator)@object;
-				RuntimeAnimatorController runetime = animator.Controller.FindObject(animator.File);
-				switch (runetime)
-				{
-					case null:
+					if (@object.ClassID != ClassIDType.Animator)
+					{
 						continue;
+					}
 
-					case AnimatorOverrideController @override:
-						foreach (var clip in @override.Clips)
-						{
-							if (clip.OverrideClip.IsObject(@override.File, this))
-							{
-								return animator.Avatar.FindObject(animator.File);
-							}
-						}
-						break;
+					Animator animator = (Animator)@object;
+					RuntimeAnimatorController runetime = animator.Controller.FindObject(animator.File);
+					switch (runetime)
+					{
+						case null:
+							continue;
 
-					default:
-						AnimatorController controller = (AnimatorController)runetime;
-						foreach (PPtr<AnimationClip> clip in controller.AnimationClips)
-						{
-							if (clip.IsObject(controller.File, this))
+						case AnimatorOverrideController @override:
+							foreach (var clip in @override.Clips)
 							{
-								return animator.Avatar.FindObject(animator.File);
+								if (clip.OverrideClip.IsObject(@override.File, this))
+								{
+									return animator.Avatar.FindObject(animator.File);
+								}
 							}
-						}
-						break;
+							break;
+
+						default:
+							AnimatorController controller = (AnimatorController)runetime;
+							foreach (PPtr<AnimationClip> clip in controller.AnimationClips)
+							{
+								if (clip.IsObject(controller.File, this))
+								{
+									return animator.Avatar.FindObject(animator.File);
+								}
+							}
+							break;
+					}
 				}
 			}
 			return null;

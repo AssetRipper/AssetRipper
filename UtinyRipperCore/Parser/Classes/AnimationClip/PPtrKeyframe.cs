@@ -13,11 +13,11 @@ namespace UtinyRipper.Classes.AnimationClips
 			Script.Read(stream);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("time", Time);
-			node.Add("value", Script.ExportYAML(exporter));
+			node.Add("value", Script.ExportYAML(container));
 			return node;
 		}
 

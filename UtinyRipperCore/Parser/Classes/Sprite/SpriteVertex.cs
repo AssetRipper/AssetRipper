@@ -28,11 +28,11 @@ namespace UtinyRipper.Classes.Sprites
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("pos", Position.ExportYAML(exporter));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("pos", Position.ExportYAML(container));
 			/*if(IsReadUV)
 			{
 				node.Add("uv", UV.ExportYAML());

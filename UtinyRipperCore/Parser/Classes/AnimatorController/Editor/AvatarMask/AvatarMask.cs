@@ -20,11 +20,11 @@ namespace UtinyRipper.Classes
 			m_elements = stream.ReadArray<TransformMaskElement>();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("m_Mask", Mask.ExportYAML(true));
-			node.Add("m_Elements", Elements.ExportYAML(exporter));
+			node.Add("m_Elements", Elements.ExportYAML(container));
 			return node;
 		}
 

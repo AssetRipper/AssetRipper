@@ -137,16 +137,16 @@ namespace UtinyRipper.Classes
 			yield return Camera.FetchDependency(file, isLog, ToLogString, "m_Camera");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_RenderMode", (int)RenderMode);
-			node.Add("m_Camera", Camera.ExportYAML(exporter));
-			node.Add("m_PlaneDistance", IsReadPlaneDistance(exporter.Version) ? PlaneDistance : 100.0f);
+			node.Add("m_Camera", Camera.ExportYAML(container));
+			node.Add("m_PlaneDistance", IsReadPlaneDistance(container.Version) ? PlaneDistance : 100.0f);
 			node.Add("m_PixelPerfect", PixelPerfect);
-			node.Add("m_ReceivesEvents", IsReadRecievesEvents(exporter.Version) ? RecievesEvents : true);
+			node.Add("m_ReceivesEvents", IsReadRecievesEvents(container.Version) ? RecievesEvents : true);
 			node.Add("m_OverrideSorting", OverrideSorting);
 			node.Add("m_OverridePixelPerfect", OverridePixelPerfect);
 			node.Add("m_SortingBucketNormalizedSize", SortingBucketNormalizedSize);

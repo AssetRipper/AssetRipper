@@ -42,14 +42,14 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			if (IsExportImageContentsHash(exporter.Version))
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			if (IsExportImageContentsHash(container.Version))
 			{
-				node.Add("m_ImageContentsHash", ImageContentsHash.ExportYAML(exporter));
+				node.Add("m_ImageContentsHash", ImageContentsHash.ExportYAML(container));
 			}
-			if (IsExportFallbackFormat(exporter.Version))
+			if (IsExportFallbackFormat(container.Version))
 			{
 				node.Add("m_ForcedFallbackFormat", ForcedFallbackFormat);
 				node.Add("m_DownscaleFallback", DownscaleFallback);

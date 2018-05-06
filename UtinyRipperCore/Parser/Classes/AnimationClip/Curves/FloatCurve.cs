@@ -36,14 +36,14 @@ namespace UtinyRipper.Classes.AnimationClips
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("curve", Curve.ExportYAML(exporter));
+			node.Add("curve", Curve.ExportYAML(container));
 			node.Add("attribute", Attribute);
 			node.Add("path", Path);
 			node.Add("classID", ClassID);
-			node.Add("script", Script.ExportYAML(exporter));
+			node.Add("script", Script.ExportYAML(container));
 			return node;
 		}
 

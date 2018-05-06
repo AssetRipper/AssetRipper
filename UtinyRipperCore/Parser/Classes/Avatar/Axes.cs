@@ -30,13 +30,13 @@ namespace UtinyRipper.Classes.Avatars
 			Type = stream.ReadUInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_PreQ", PreQ.ExportYAML(exporter));
-			node.Add("m_PostQ", PostQ.ExportYAML(exporter));
-			node.Add("m_Sgn", Sgn.ExportYAML(exporter));
-			node.Add("m_Limit", Limit.ExportYAML(exporter));
+			node.Add("m_PreQ", PreQ.ExportYAML(container));
+			node.Add("m_PostQ", PostQ.ExportYAML(container));
+			node.Add("m_Sgn", Sgn.ExportYAML(container));
+			node.Add("m_Limit", Limit.ExportYAML(container));
 			node.Add("m_Length", Length);
 			node.Add("m_Type", Type);
 			return node;

@@ -30,12 +30,12 @@ namespace UtinyRipper.Classes.Materials
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Texture", Texture.ExportYAML(exporter));
-			node.Add("m_Scale", Scale.ExportYAML2(exporter));
-			node.Add("m_Offset", Offset.ExportYAML2(exporter));
+			node.Add("m_Texture", Texture.ExportYAML(container));
+			node.Add("m_Scale", Scale.ExportYAML2(container));
+			node.Add("m_Offset", Offset.ExportYAML2(container));
 			return node;
 		}
 

@@ -40,13 +40,13 @@ namespace UtinyRipper.Classes.AnimationClips
 			MessageOptions = stream.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("time", Time);
 			node.Add("functionName", FunctionName);
 			node.Add("data", StringParameter);
-			node.Add("objectReferenceParameter", ObjectReferenceParameter.ExportYAML(exporter));
+			node.Add("objectReferenceParameter", ObjectReferenceParameter.ExportYAML(container));
 			node.Add("floatParameter", FloatParameter);
 			node.Add("intParameter", IntParameter);
 			node.Add("messageOptions", MessageOptions);

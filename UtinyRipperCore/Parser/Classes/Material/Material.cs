@@ -129,20 +129,20 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.InsertSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_Shader", Shader.ExportYAML(exporter));
-			node.Add("m_ShaderKeywords", IsReadKeywords(exporter.Version) ? (IsKeywordsArray(exporter.Version) ? string.Join(" ", m_shaderKeywordsArray) : ShaderKeywords) : string.Empty);
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_Shader", Shader.ExportYAML(container));
+			node.Add("m_ShaderKeywords", IsReadKeywords(container.Version) ? (IsKeywordsArray(container.Version) ? string.Join(" ", m_shaderKeywordsArray) : ShaderKeywords) : string.Empty);
 			node.Add("m_LightmapFlags", LightmapFlags);
 			node.Add("m_EnableInstancingVariants", EnableInstancingVariants);
 			node.Add("m_DoubleSidedGI", DoubleSidedGI);
 			node.Add("m_CustomRenderQueue", CustomRenderQueue);
-			node.Add("stringTagMap", IsReadStringTagMap(exporter.Version) ? StringTagMap.ExportYAML() : YAMLMappingNode.Empty);
+			node.Add("stringTagMap", IsReadStringTagMap(container.Version) ? StringTagMap.ExportYAML() : YAMLMappingNode.Empty);
 #warning TODO: untested
-			node.Add("disabledShaderPasses", IsReadDisabledShaderPasses(exporter.Version) ? DisabledShaderPasses.ExportYAML() : YAMLSequenceNode.Empty);
-			node.Add("m_SavedProperties", SavedProperties.ExportYAML(exporter));
+			node.Add("disabledShaderPasses", IsReadDisabledShaderPasses(container.Version) ? DisabledShaderPasses.ExportYAML() : YAMLSequenceNode.Empty);
+			node.Add("m_SavedProperties", SavedProperties.ExportYAML(container));
 			return node;
 		}
 		

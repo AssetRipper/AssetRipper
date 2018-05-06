@@ -134,13 +134,13 @@ namespace UtinyRipper.Classes
 			yield return Controller.FetchDependency(file, isLog, ToLogString, "m_Controller");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			YAMLMappingNode node = base.ExportYAMLRoot(exporter);
-			node.InsertSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_Avatar", Avatar.ExportYAML(exporter));
-			node.Add("m_Controller", Controller.ExportYAML(exporter));
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_Avatar", Avatar.ExportYAML(container));
+			node.Add("m_Controller", Controller.ExportYAML(container));
 			node.Add("m_CullingMode", CullingMode);
 			node.Add("m_UpdateMode", UpdateMode);
 			node.Add("m_ApplyRootMotion", ApplyRootMotion);

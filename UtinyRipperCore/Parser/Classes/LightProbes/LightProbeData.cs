@@ -36,13 +36,13 @@ namespace UtinyRipper.Classes.LightProbess
 			}
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Tetrahedralization", Tetrahedralization.ExportYAML(exporter));
-			node.Add("m_ProbeSets", IsReadProbeSets(exporter.Version) ? ProbeSets.ExportYAML(exporter) : YAMLSequenceNode.Empty);
-			node.Add("m_Positions", IsReadProbeSets(exporter.Version) ? Positions.ExportYAML(exporter) : YAMLSequenceNode.Empty);
-			node.Add("m_NonTetrahedralizedProbeSetIndexMap", IsReadNonTetrahedralizedProbeSetIndexMap(exporter.Version) ? NonTetrahedralizedProbeSetIndexMap.ExportYAML(exporter) : YAMLSequenceNode.Empty);
+			node.Add("m_Tetrahedralization", Tetrahedralization.ExportYAML(container));
+			node.Add("m_ProbeSets", IsReadProbeSets(container.Version) ? ProbeSets.ExportYAML(container) : YAMLSequenceNode.Empty);
+			node.Add("m_Positions", IsReadProbeSets(container.Version) ? Positions.ExportYAML(container) : YAMLSequenceNode.Empty);
+			node.Add("m_NonTetrahedralizedProbeSetIndexMap", IsReadNonTetrahedralizedProbeSetIndexMap(container.Version) ? NonTetrahedralizedProbeSetIndexMap.ExportYAML(container) : YAMLSequenceNode.Empty);
 			return node;
 		}
 

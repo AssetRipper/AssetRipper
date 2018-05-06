@@ -12,10 +12,10 @@ namespace UtinyRipper.Classes.LightProbess
 			Size = stream.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Hash", Hash.ExportYAML(exporter));
+			node.Add("m_Hash", Hash.ExportYAML(container));
 			node.Add("m_Offset", Offset);
 			node.Add("m_Size", Size);
 			return node;

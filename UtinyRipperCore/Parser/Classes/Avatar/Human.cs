@@ -57,18 +57,18 @@ namespace UtinyRipper.Classes.Avatars
 			stream.AlignStream(AlignType.Align4);
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(exporter.Version));
-			node.Add("m_RootX", RootX.ExportYAML(exporter));
-			node.Add("m_Skeleton", Skeleton.ExportYAML(exporter));
-			node.Add("m_SkeletonPose", SkeletonPose.ExportYAML(exporter));
-			node.Add("m_LeftHand", LeftHand.ExportYAML(exporter));
-			node.Add("m_RightHand", RightHand.ExportYAML(exporter));
-			node.Add("m_Handles", Handles.ExportYAML(exporter));
-			node.Add("m_ColliderArray", ColliderArray.ExportYAML(exporter));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add("m_RootX", RootX.ExportYAML(container));
+			node.Add("m_Skeleton", Skeleton.ExportYAML(container));
+			node.Add("m_SkeletonPose", SkeletonPose.ExportYAML(container));
+			node.Add("m_LeftHand", LeftHand.ExportYAML(container));
+			node.Add("m_RightHand", RightHand.ExportYAML(container));
+			node.Add("m_Handles", Handles.ExportYAML(container));
+			node.Add("m_ColliderArray", ColliderArray.ExportYAML(container));
 			node.Add("m_HumanBoneIndex", HumanBoneIndex.ExportYAML(true));
 			node.Add("m_HumanBoneMass", HumanBoneMass.ExportYAML());
 			node.Add("m_ColliderIndex", ColliderIndex.ExportYAML(true));

@@ -15,9 +15,9 @@ namespace UtinyRipper.Classes
 			base.Read(stream);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IAssetsExporter exporter)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			return base.ExportYAMLRoot(exporter);
+			return base.ExportYAMLRoot(container);
 		}
 	}
 }

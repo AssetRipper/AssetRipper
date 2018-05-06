@@ -13,10 +13,10 @@ namespace UtinyRipper.Classes.TerrainDatas
 			m_numberOfObjects = stream.ReadByteArray();
 		}
 
-		public YAMLNode ExportYAML(IAssetsExporter exporter)
+		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("bounds", Bounds.ExportYAML(exporter));
+			node.Add("bounds", Bounds.ExportYAML(container));
 			node.Add("layerIndices", LayerIndices.ExportYAML());
 			node.Add("numberOfObjects", NumberOfObjects.ExportYAML());
 			return node;
