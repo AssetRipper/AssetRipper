@@ -21,7 +21,12 @@ namespace UtinyRipper.Classes
 			Transform transform = null;
 			foreach (ComponentPair cpair in root.Components)
 			{
-				Component component = cpair.Component.GetObject(root.File);
+				Component component = cpair.Component.FindObject(root.File);
+				if(component == null)
+				{
+					continue;
+				}
+
 				heirarchy.Add(component);
 				if (component.ClassID.IsTransform())
 				{
