@@ -14,8 +14,10 @@ namespace UtinyRipper.AssetExporters
 			DummyAssetExporter dummyExporter = new DummyAssetExporter();
 			OverrideExporter(ClassIDType.AnimatorController, dummyExporter);
 			OverrideExporter(ClassIDType.MonoScript, dummyExporter);
+			OverrideExporter(ClassIDType.MonoManager, dummyExporter);
 			OverrideExporter(ClassIDType.BuildSettings, dummyExporter);
 			OverrideExporter(ClassIDType.AssetBundle, dummyExporter);
+			OverrideExporter(ClassIDType.PreloadData, dummyExporter);
 			OverrideExporter(ClassIDType.Sprite, dummyExporter);
 			OverrideExporter(ClassIDType.SpriteAtlas, dummyExporter);
 

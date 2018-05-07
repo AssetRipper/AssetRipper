@@ -2,6 +2,8 @@
 using UtinyRipper.Classes;
 using UtinyRipper.Exporter.YAML;
 
+using DateTime = System.DateTime;
+
 namespace UtinyRipper.AssetExporters.Classes
 {
 	public struct Meta : IYAMLDocExportable

@@ -315,11 +315,13 @@ namespace UtinyRipper
 				case ClassIDType.Avatar:
 				case ClassIDType.AnimatorController:
 				case ClassIDType.MonoScript:
+				case ClassIDType.MonoManager:
 				case ClassIDType.Font:
 				case ClassIDType.NamedObject:
 				case ClassIDType.PhysicMaterial:
 				case ClassIDType.BuildSettings:
 				case ClassIDType.AssetBundle:
+				case ClassIDType.PreloadData:
 				case ClassIDType.MovieTexture:
 				case ClassIDType.TerrainData:
 				case ClassIDType.Sprite:

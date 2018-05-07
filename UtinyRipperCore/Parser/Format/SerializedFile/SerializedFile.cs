@@ -423,6 +423,10 @@ namespace UtinyRipper.SerializedFiles
 					asset = new MonoScript(assetInfo);
 					break;
 
+				case ClassIDType.MonoManager:
+					asset = new MonoManager(assetInfo);
+					break;
+
 				case ClassIDType.NewAnimationTrack:
 					asset = new NewAnimationTrack(assetInfo);
 					break;
@@ -461,6 +465,10 @@ namespace UtinyRipper.SerializedFiles
 
 				case ClassIDType.WheelCollider:
 					asset = new WheelCollider(assetInfo);
+					break;
+
+				case ClassIDType.PreloadData:
+					asset = new PreloadData(assetInfo);
 					break;
 
 				case ClassIDType.MovieTexture:

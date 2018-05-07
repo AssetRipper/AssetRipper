@@ -189,14 +189,17 @@
     <Compile Include="Parser\Classes\LightProbes\LightProbes.cs" />
     <Compile Include="Parser\Classes\Mesh\ChannelType.cs" />
     <Compile Include="Parser\Classes\Mesh\MeshTopology.cs" />
+    <Compile Include="Parser\Classes\MonoManager.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\ParticleSystemScalingMode.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Shape\ParticleSystemShapeMultiModeValue.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Shape\ParticleSystemShapeType.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\TrailModule\ParticleSystemTrailMode.cs" />
+    <Compile Include="Parser\Classes\PreloadData.cs" />
     <Compile Include="Parser\Classes\RenderSettings\AmbientMode.cs" />
     <Compile Include="Parser\Classes\RenderSettings\FogMode.cs" />
     <Compile Include="Parser\Classes\RenderSettings\SHCoefficientsBaked.cs" />
     <Compile Include="Parser\Classes\SceneAsset.cs" />
+    <Compile Include="Parser\Classes\Serialize\DateTime.cs" />
     <Compile Include="Parser\Classes\Serialize\Matrix3x4f.cs" />
     <Compile Include="Parser\Classes\LightProbes\ProbeSetIndex.cs" />
     <Compile Include="Parser\Classes\LightProbes\ProbeSetTetrahedralization.cs" />

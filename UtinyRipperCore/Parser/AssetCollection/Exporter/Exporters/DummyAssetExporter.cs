@@ -19,7 +19,9 @@ namespace UtinyRipper.AssetExporters
 		{
 			switch(asset.ClassID)
 			{
+				case ClassIDType.MonoManager:
 				case ClassIDType.AssetBundle:
+				case ClassIDType.PreloadData:
 					return new EmptyExportCollection(this);
 
 				default:
