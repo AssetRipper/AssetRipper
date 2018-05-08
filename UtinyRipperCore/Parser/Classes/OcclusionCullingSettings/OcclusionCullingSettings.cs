@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
+using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes.OcclusionCullingSettingses;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
@@ -162,14 +163,21 @@ namespace UtinyRipper.Classes
 		{
 			if(IsReadPVSData(container.Version))
 			{
+				if (m_PVSData.Length == 0)
+				{
+					return ExportPointer.EmptyPointer.ExportYAML(container);
+				}
+				else
+				{
 #warning HACK!!!
-				AssetInfo dataAssetInfo = new AssetInfo(File, 0, ClassIDType.OcclusionCullingData);
-				OcclusionCullingData ocData = new OcclusionCullingData(dataAssetInfo, container, m_PVSData, SceneGUID, StaticRenderers, Portals);
-				SceneExportCollection scene = (SceneExportCollection)container.CurrentCollection;
-				scene.OcclusionCullingData = ocData;
+					AssetInfo dataAssetInfo = new AssetInfo(File, 0, ClassIDType.OcclusionCullingData);
+					OcclusionCullingData ocData = new OcclusionCullingData(dataAssetInfo, container, m_PVSData, SceneGUID, StaticRenderers, Portals);
+					SceneExportCollection scene = (SceneExportCollection)container.CurrentCollection;
+					scene.OcclusionCullingData = ocData;
 
-				var exPointer = container.CreateExportPointer(ocData);
-				return exPointer.ExportYAML(container);
+					var exPointer = container.CreateExportPointer(ocData);
+					return exPointer.ExportYAML(container);
+				}
 			}
 			else
 			{

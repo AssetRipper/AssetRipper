@@ -155,7 +155,7 @@ namespace UtinyRipper.AssetExporters
 		private void ExportAsset(ProjectAssetContainer container, NamedObject asset, string path)
 		{
 			NativeFormatImporter importer = new NativeFormatImporter(asset);
-			ExportAsset(container, importer, asset, path, m_navMeshData.Name);
+			ExportAsset(container, importer, asset, path, asset.Name);
 		}
 
 		private void AddComponent(ISerializedFile file, Object comp)

@@ -18,6 +18,8 @@ namespace UtinyRipper.Classes
 			byte[] pvsData, UtinyGUID guid, IReadOnlyList<PPtr<Renderer>> renderers, IReadOnlyList<PPtr<OcclusionPortal>> portals) :
 			this(assetInfo)
 		{
+			Name = nameof(OcclusionCullingData);
+
 			m_PVSData = pvsData;
 			OcclusionScene scene = new OcclusionScene(guid, renderers.Count, portals.Count);
 			m_scenes = new OcclusionScene[] { scene };
@@ -43,8 +45,7 @@ namespace UtinyRipper.Classes
 		public void SetIDs(IExportContainer container,
 			UtinyGUID guid, IReadOnlyList<PPtr<Renderer>> renderers, IReadOnlyList<PPtr<OcclusionPortal>> portals)
 		{
-			if(m_staticRenderers.Length == 0 && renderers.Count != 0 ||
-				m_portals.Length == 0 && portals.Count != 0)
+			if(m_staticRenderers.Length == 0 && renderers.Count != 0 || m_portals.Length == 0 && portals.Count != 0)
 			{
 				int maxRenderer = Scenes.Max(j => j.IndexRenderers);
 				OcclusionScene rscene = Scenes.First(t => t.IndexRenderers == maxRenderer);
@@ -94,11 +95,6 @@ namespace UtinyRipper.Classes
 				m_staticRenderers = stream.ReadArray<SceneObjectIdentifier>();
 				m_portals = stream.ReadArray<SceneObjectIdentifier>();
 			}
-			else
-			{
-				m_staticRenderers = new SceneObjectIdentifier[0];
-				m_portals = new SceneObjectIdentifier[0];
-			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -120,7 +116,7 @@ namespace UtinyRipper.Classes
 		
 		private byte[] m_PVSData;
 		private OcclusionScene[] m_scenes;
-		private SceneObjectIdentifier[] m_staticRenderers;
-		private SceneObjectIdentifier[] m_portals;
+		private SceneObjectIdentifier[] m_staticRenderers = new SceneObjectIdentifier[0];
+		private SceneObjectIdentifier[] m_portals = new SceneObjectIdentifier[0];
 	}
 }

@@ -99,7 +99,7 @@ namespace UtinyRipper
 			Version[] versions = collection.Files.Select(t => t.Version).Distinct().ToArray();
 			if(versions.Count() > 1)
 			{
-				Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Asset collection has (possibly) incompatible with each assets file versions. Here they are:");
+				Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"File collection has probably with each assets file versions. Here they are:");
 				foreach(Version version in versions)
 				{
 					Logger.Instance.Log(LogType.Warning, LogCategory.Import, version.ToString());
@@ -158,20 +158,21 @@ namespace UtinyRipper
 			foreach (string dirPath in directories)
 			{
 				string path = Path.Combine(dirPath, loadName);
+				if (!FileMultiStream.Exists(path))
+				{
+					continue;
+				}
+
 #if !DEBUG_PROGRAM
 				try
 #endif
 				{
-					if (FileMultiStream.Exists(path))
+					using (Stream stream = FileMultiStream.OpenRead(path))
 					{
-						using (Stream stream = FileMultiStream.OpenRead(path))
-						{
-							collection.Read(stream, path, originalName);
-						}
-
-						Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Dependency '{path}' was loaded");
-						return true;
+						collection.Read(stream, path, originalName);
 					}
+
+					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Dependency '{path}' was loaded");
 				}
 #if !DEBUG_PROGRAM
 				catch (Exception ex)
@@ -180,6 +181,7 @@ namespace UtinyRipper
 					Logger.Instance.Log(LogType.Error, LogCategory.Debug, ex.ToString());
 				}
 #endif
+				return true;
 			}
 			return false;
 		}
