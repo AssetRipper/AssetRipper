@@ -26,7 +26,10 @@ namespace UtinyRipper.Classes
 			base.Read(stream);
 
 			m_assets = stream.ReadArray<PPtr<Object>>();
-			m_dependencies = stream.ReadStringArray();
+			if(IsReadDependencies(stream.Version))
+			{
+				m_dependencies = stream.ReadStringArray();
+			}
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

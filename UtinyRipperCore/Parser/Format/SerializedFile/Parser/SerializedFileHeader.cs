@@ -34,7 +34,7 @@ namespace UtinyRipper.SerializedFiles
 			FileSize = stream.ReadInt32();
 			if (FileSize <= 0)
 			{
-				throw new Exception($"Invalid data end {FileSize} for asset file {m_name}");
+				throw new Exception($"Invalid data size {FileSize} for asset file {m_name}");
 			}
 			Generation = (FileGeneration)stream.ReadInt32();
 			if (!Enum.IsDefined(typeof(FileGeneration), Generation))
