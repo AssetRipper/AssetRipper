@@ -97,7 +97,6 @@ namespace UtinyRipper.Classes
 		public ISerializedFile File => m_assetInfo.File;
 		public ClassIDType ClassID => m_assetInfo.ClassID;
 		public virtual string ExportName => ClassID.ToString();
-		public bool IsComponent => ClassID.IsComponent();
 		public virtual string ExportExtension => "asset";
 		public long PathID => m_assetInfo.PathID;
 		
@@ -105,9 +104,9 @@ namespace UtinyRipper.Classes
 		{
 			get
 			{
-				if(IsComponent && !Config.IsGenerateGUIDByContent)
+				if(!Config.IsGenerateGUIDByContent && this is Component)
 				{
-					throw new NotSupportedException("GUIDs arn't supported for components");
+					throw new NotSupportedException("GUIDs aren't supported for components");
 				}
 				return m_assetInfo.GUID;
 			}

@@ -16,11 +16,7 @@ namespace UtinyRipper
 
 			PathID = pathID;
 			ClassID = classID;
-
-			if (!classID.IsComponent(true))
-			{
-				GUID = new UtinyGUID(Guid.NewGuid());
-			}
+			GUID = new UtinyGUID(Guid.NewGuid());
 		}
 
 		public ISerializedFile File { get; }

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UtinyRipper.Classes;
 using UtinyRipper.Exporter.YAML;
 
@@ -46,7 +44,7 @@ namespace UtinyRipper.AssetExporters
 
 		public IExportCollection CreateCollection(Object asset)
 		{
-			if(asset.ClassID.IsComponent() || asset.ClassID == ClassIDType.GameObject)
+			if(Prefab.IsCompatible(asset))
 			{
 				if (asset.File.IsScene)
 				{

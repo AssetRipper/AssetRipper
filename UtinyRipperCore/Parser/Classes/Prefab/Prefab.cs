@@ -25,6 +25,19 @@ namespace UtinyRipper.Classes
 			ObjectHideFlags = 1;
 		}
 
+		public static bool IsCompatible(Object asset)
+		{
+			if (asset.ClassID == ClassIDType.GameObject)
+			{
+				return true;
+			}
+			if (asset.ClassID.IsSceneComponent())
+			{
+				return true;
+			}
+			return asset is Component;
+		}
+
 		private static AssetInfo CreateAssetsInfo(GameObject root)
 		{
 			AssetInfo assetInfo = new AssetInfo(root.File, 0, ClassIDType.Prefab);

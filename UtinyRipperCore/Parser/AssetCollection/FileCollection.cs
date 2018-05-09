@@ -14,6 +14,8 @@ namespace UtinyRipper
 {
 	public class FileCollection : IFileCollection
 	{
+		public event Action<string> EventRequestDependency;
+
 		public FileCollection()
 		{
 			Exporter = new ProjectExporter(this);
@@ -91,6 +93,8 @@ namespace UtinyRipper
 		public void ReadSerializedFile(string filePath, string fileName)
 		{
 			SerializedFile file = new SerializedFile(this, filePath, fileName);
+			file.EventRequestDependency += OnRequestDependency;
+
 			file.Load(filePath);
 			AddSerializedFile(file);
 		}
@@ -98,6 +102,8 @@ namespace UtinyRipper
 		public void ReadSerializedFile(Stream stream, string filePath, string fileName)
 		{
 			SerializedFile file = new SerializedFile(this, filePath, fileName);
+			file.EventRequestDependency += OnRequestDependency;
+
 			file.Read(stream);
 			AddSerializedFile(file);
 		}
@@ -257,8 +263,14 @@ namespace UtinyRipper
 				}
 			}
 		}
-		
+
+		private void OnRequestDependency(string dependency)
+		{
+			EventRequestDependency?.Invoke(dependency);
+		}
+
 		public ProjectExporter Exporter { get; }
+		public AssetFactory AssetFactory { get; } = new AssetFactory();
 		public IReadOnlyList<ISerializedFile> Files => m_files;
 
 		private readonly List<SerializedFile> m_files = new List<SerializedFile>();

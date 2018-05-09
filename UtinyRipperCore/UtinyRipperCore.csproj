@@ -120,6 +120,7 @@
     <Compile Include="IO\FileMultiStream\SplitNameComparer.cs" />
     <Compile Include="IO\ReverseStream.cs" />
     <Compile Include="IO\FileMultiStream\FileMultiStream.cs" />
+    <Compile Include="Parser\AssetCollection\AssetFactory.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\ProjectAssetContainer.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\DefaultImporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\IAssetImporter.cs" />

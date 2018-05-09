@@ -28,7 +28,7 @@ namespace UtinyRipper.AssetExporters
 
 			foreach(Object asset in file.FetchAssets())
 			{
-				if(asset.IsComponent || asset.ClassID == ClassIDType.GameObject)
+				if(asset.ClassID == ClassIDType.GameObject || asset is Component)
 				{
 					AddComponent(file, asset);
 				}

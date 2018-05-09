@@ -28,41 +28,48 @@ namespace UtinyRipper
 			Config.IsAdvancedLog = true;
 			Config.IsGenerateGUIDByContent = false;
 			Config.IsExportDependencies = false;
-
+			
 			if (args.Length == 0)
 			{
 				Console.WriteLine("No arguments");
-				Console.ReadKey();
 				return;
 			}
-			foreach(string arg in args)
+			foreach (string arg in args)
 			{
-				if(!FileMultiStream.Exists(arg))
+				if (!FileMultiStream.Exists(arg))
 				{
 					Console.WriteLine(FileMultiStream.IsMultiFile(arg) ?
 						$"File {arg} doen't has all parts for combining" :
 						$"File {arg} doesn't exist", arg);
-					Console.ReadKey();
 					return;
 				}
 			}
 
+			Program program = new Program();
+			program.Load(args);
+			Console.ReadKey();
+		}
+
+		public Program()
+		{
+			m_collection = new FileCollection();
+			m_collection.EventRequestDependency += OnRequestDependency;
+		}
+
+		public void Load(IReadOnlyList<string> args)
+		{
 #if !DEBUG_PROGRAM
 			try
 #endif
 			{
 				string name = Path.GetFileNameWithoutExtension(args.First());
-				string exportPath = ".\\Ripped\\" + name;
-				PrepareExportDirectory(exportPath);
+				string exportPath = Path.Combine("Ripped", name);
 
-				FileCollection collection = new FileCollection();
-				LoadFiles(collection, args);
+				Prepare(exportPath, args);
+				LoadFiles(args);
+				Validate();
 
-				LoadDependencies(collection, args);
-				ValidateCollection(collection);
-
-				collection.Exporter.Export(exportPath, FetchExportObjects(collection));
-
+				m_collection.Exporter.Export(exportPath, FetchExportObjects(m_collection));
 				Logger.Instance.Log(LogType.Info, LogCategory.General, "Finished");
 			}
 #if !DEBUG_PROGRAM
@@ -71,79 +78,58 @@ namespace UtinyRipper
 				Logger.Instance.Log(LogType.Error, LogCategory.General, ex.ToString());
 			}
 #endif
-			Console.ReadKey();
 		}
 
-		private static void LoadFiles(FileCollection collection, IEnumerable<string> filePathes)
+		private void Prepare(string exportPath, IEnumerable<string> filePathes)
 		{
-			List<string> processed = new List<string>();
-			foreach (string path in filePathes)
+			PrepareExportDirectory(exportPath);
+
+			foreach (string filePath in filePathes)
 			{
-				string filePath = FileMultiStream.GetFilePath(path);
-				if (processed.Contains(filePath))
-				{
-					continue;
-				}
-				
-				string fileName = FileMultiStream.GetFileName(path);
-				using (Stream stream = FileMultiStream.OpenRead(path))
-				{
-					collection.Read(stream, filePath, fileName);
-				}
-				processed.Add(filePath);
+				string dirPath = Path.GetDirectoryName(filePath);
+				m_knownDirectories.Add(dirPath);
+			}
+		}
+		
+		private void LoadFiles(IEnumerable<string> filePathes)
+		{
+			foreach (string filePath in filePathes)
+			{
+				string fileName = FileMultiStream.GetFileName(filePath);
+				LoadFile(filePath, fileName);
 			}
 		}
 
-		private static void ValidateCollection(FileCollection collection)
+		private void LoadFile(string fullFilePath, string originalFileName)
 		{
-			Version[] versions = collection.Files.Select(t => t.Version).Distinct().ToArray();
-			if(versions.Count() > 1)
+			if (m_knownFiles.Add(originalFileName))
 			{
-				Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"File collection has probably with each assets file versions. Here they are:");
-				foreach(Version version in versions)
+				string filePath = FileMultiStream.GetFilePath(fullFilePath);
+				using (Stream stream = FileMultiStream.OpenRead(filePath))
+				{
+					m_collection.Read(stream, filePath, originalFileName);
+				}
+			}
+		}
+
+		private void Validate()
+		{
+			Version[] versions = m_collection.Files.Select(t => t.Version).Distinct().ToArray();
+			if (versions.Count() > 1)
+			{
+				Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Asset collection has versions probably incompatible with each other. Here they are:");
+				foreach (Version version in versions)
 				{
 					Logger.Instance.Log(LogType.Warning, LogCategory.Import, version.ToString());
 				}
 			}
 		}
 
-		private static void LoadDependencies(FileCollection collection, IEnumerable<string> files)
-		{
-			HashSet<string> directories = new HashSet<string>();
-			foreach (string filePath in files)
-			{
-				string dirPath = Path.GetDirectoryName(filePath);
-				directories.Add(dirPath);
-			}
-
-			HashSet<string> processed = new HashSet<string>();
-			foreach (ISerializedFile file in collection.Files)
-			{
-				processed.Add(file.Name);
-			}
-
-			for (int i = 0; i < collection.Files.Count; i++)
-			{
-				ISerializedFile serializedFile = collection.Files[i];
-				foreach (FileIdentifier file in serializedFile.Dependencies)
-				{
-					string fileName = file.FilePath;
-					if (processed.Contains(fileName))
-					{
-						continue;
-					}
-					
-					LoadDependency(collection, directories, fileName);
-					processed.Add(fileName);
-				}
-			}
-		}
-
-		private static void LoadDependency(FileCollection collection, IReadOnlyCollection<string> directories, string fileName)
+		private void LoadDependency(string fileName)
 		{
 			foreach (string loadName in FetchNameVariants(fileName))
 			{
-				bool found = TryLoadDependency(collection, directories, fileName, loadName);
+				bool found = TryLoadDependency(loadName, fileName);
 				if (found)
 				{
 					return;
@@ -153,37 +139,29 @@ namespace UtinyRipper
 			Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Dependency '{fileName}' wasn't found");
 		}
 
-		private static bool TryLoadDependency(FileCollection collection, IEnumerable<string> directories, string originalName, string loadName)
+		private bool TryLoadDependency(string loadName, string originalName)
 		{
-			foreach (string dirPath in directories)
+			foreach (string dirPath in m_knownDirectories)
 			{
 				string path = Path.Combine(dirPath, loadName);
-				if (!FileMultiStream.Exists(path))
+				if (FileMultiStream.Exists(path))
 				{
-					continue;
-				}
-
-#if !DEBUG_PROGRAM
-				try
-#endif
-				{
-					using (Stream stream = FileMultiStream.OpenRead(path))
-					{
-						collection.Read(stream, path, originalName);
-					}
-
+					LoadFile(path, originalName);
 					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Dependency '{path}' was loaded");
+					return true;
 				}
-#if !DEBUG_PROGRAM
-				catch (Exception ex)
-				{
-					Logger.Instance.Log(LogType.Error, LogCategory.Import, $"Can't parse dependency file {path}");
-					Logger.Instance.Log(LogType.Error, LogCategory.Debug, ex.ToString());
-				}
-#endif
-				return true;
 			}
 			return false;
+		}
+
+		private void OnRequestDependency(string dependency)
+		{
+			if(m_knownFiles.Contains(dependency))
+			{
+				return;
+			}
+
+			LoadDependency(dependency);
 		}
 		
 		private static void PrepareExportDirectory(string path)
@@ -207,7 +185,7 @@ namespace UtinyRipper
 				DirectoryInfo di = new DirectoryInfo(path);
 				DirectorySecurity ds = di.GetAccessControl();
 				AuthorizationRuleCollection rules = ds.GetAccessRules(true, true, typeof(NTAccount));
-				
+
 				foreach (AuthorizationRule rule in rules)
 				{
 					FileSystemAccessRule fsAccessRule = rule as FileSystemAccessRule;
@@ -226,7 +204,7 @@ namespace UtinyRipper
 
 						if (principal.IsInRole(ntAccount.Value))
 						{
-							if(fsAccessRule.AccessControlType == AccessControlType.Deny)
+							if (fsAccessRule.AccessControlType == AccessControlType.Deny)
 							{
 								isInRoleWithAccess = false;
 								break;
@@ -240,7 +218,7 @@ namespace UtinyRipper
 			{
 			}
 
-			if(!isInRoleWithAccess)
+			if (!isInRoleWithAccess)
 			{
 				// is run as administrator?
 				if (principal.IsInRole(WindowsBuiltInRole.Administrator))
@@ -293,5 +271,10 @@ namespace UtinyRipper
 				yield return fixedName;
 			}
 		}
+
+		private readonly HashSet<string> m_knownDirectories = new HashSet<string>();
+		private readonly HashSet<string> m_knownFiles = new HashSet<string>();
+
+		private readonly FileCollection m_collection;
 	}
 }

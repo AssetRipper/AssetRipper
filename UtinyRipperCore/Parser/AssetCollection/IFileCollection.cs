@@ -9,6 +9,7 @@ namespace UtinyRipper
 		ISerializedFile FindSerializedFile(FileIdentifier fileRef);
 		ResourcesFile FindResourcesFile(ISerializedFile file, string fileName);
 
+		AssetFactory AssetFactory { get; }
 		IReadOnlyList<ISerializedFile> Files { get; }
 	}
 }

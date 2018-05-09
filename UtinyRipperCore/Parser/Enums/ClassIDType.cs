@@ -292,7 +292,7 @@ namespace UtinyRipper
 			return (int)_this;
 		}
 		
-		public static bool IsComponent(this ClassIDType _this)
+		/*public static bool IsComponent(this ClassIDType _this)
 		{
 			return IsComponent(_this, false);
 		}
@@ -385,7 +385,7 @@ namespace UtinyRipper
 					}
 					throw new NotImplementedException($"{nameof(ClassIDType)} {_this}");
 			}
-		}
+		}*/
 
 		public static bool IsTransform(this ClassIDType _this)
 		{

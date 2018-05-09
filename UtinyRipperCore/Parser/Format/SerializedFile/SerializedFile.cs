@@ -14,6 +14,8 @@ namespace UtinyRipper.SerializedFiles
 	/// </summary>
 	internal class SerializedFile : ISerializedFile
 	{
+		public event Action<string> EventRequestDependency;
+
 		public SerializedFile(IFileCollection collection, string filePath, string fileName)
 		{
 			if(collection == null)
@@ -87,6 +89,11 @@ namespace UtinyRipper.SerializedFiles
 				using (SerializedFileStream fileStream = new SerializedFileStream(stream, Header.Generation))
 				{
 					Metadata.Read(fileStream);
+				}
+
+				foreach (FileIdentifier dependency in Dependencies)
+				{
+					EventRequestDependency?.Invoke(dependency.FilePath);
 				}
 
 				if (RTTIClassHierarchyDescriptor.IsReadSignature(Header.Generation))
@@ -180,7 +187,27 @@ namespace UtinyRipper.SerializedFiles
 		{
 			return Name;
 		}
-		
+
+		private static string[] GetGenerationVersions(FileGeneration generation)
+		{
+			if (generation < FileGeneration.FG_120_200)
+			{
+				return new[] { "1.2.2" };
+			}
+
+			switch (generation)
+			{
+				case FileGeneration.FG_120_200:
+					return new[] { "2.0.0", "1.6.0", "1.5.0", "1.2.2" };
+				case FileGeneration.FG_210_261:
+					return new[] { "2.6.1", "2.6.0", "2.5.1", "2.5.0", "2.1.0", };
+				case FileGeneration.FG_300b:
+					return new[] { "3.0.0b1" };
+				default:
+					throw new NotSupportedException();
+			}
+		}
+
 		private Object FindObject(int fileIndex, long pathID, bool isSafe)
 		{
 			ISerializedFile file;
@@ -250,313 +277,12 @@ namespace UtinyRipper.SerializedFiles
 			}
 		}
 
-		private static string[] GetGenerationVersions(FileGeneration generation)
+		private Object ReadAsset(AssetStream stream, AssetInfo assetInfo, long offset, int size)
 		{
-			if (generation < FileGeneration.FG_120_200)
+			Object asset = Collection.AssetFactory.CreateAsset(assetInfo);
+			if(asset == null)
 			{
-				return new[] { "1.2.2" };
-			}
-
-			switch (generation)
-			{
-				case FileGeneration.FG_120_200:
-					return new[] { "2.0.0", "1.6.0", "1.5.0", "1.2.2"};
-				case FileGeneration.FG_210_261:
-					return new[] { "2.6.1", "2.6.0", "2.5.1",  "2.5.0", "2.1.0", };
-				case FileGeneration.FG_300b:
-					return new[] { "3.0.0b1" };
-				default:
-					throw new NotSupportedException();
-			}
-		}
-
-		private static Object ReadAsset(AssetStream stream, AssetInfo assetInfo, long offset, int size)
-		{
-			Object asset;
-			switch (assetInfo.ClassID)
-			{
-				case ClassIDType.GameObject:
-					asset = new GameObject(assetInfo);
-					break;
-
-				case ClassIDType.Transform:
-					asset = new Transform(assetInfo);
-					break;
-
-				case ClassIDType.Camera:
-					asset = new Camera(assetInfo);
-					break;
-
-				case ClassIDType.Material:
-					asset = new Material(assetInfo);
-					break;
-
-				case ClassIDType.MeshRenderer:
-					asset = new MeshRenderer(assetInfo);
-					break;
-
-				case ClassIDType.Texture2D:
-					asset = new Texture2D(assetInfo);
-					break;
-
-				case ClassIDType.OcclusionCullingSettings:
-					asset = new OcclusionCullingSettings(assetInfo);
-					break;
-
-				case ClassIDType.MeshFilter:
-					asset = new MeshFilter(assetInfo);
-					break;
-
-				case ClassIDType.OcclusionPortal:
-					asset = new OcclusionPortal(assetInfo);
-					break;
-
-				case ClassIDType.Mesh:
-					asset = new Mesh(assetInfo);
-					break;
-
-				case ClassIDType.Shader:
-					asset = new Shader(assetInfo);
-					break;
-
-				case ClassIDType.TextAsset:
-					asset = new TextAsset(assetInfo);
-					break;
-
-				case ClassIDType.Rigidbody2D:
-					asset = new Rigidbody2D(assetInfo);
-					break;
-
-				case ClassIDType.Rigidbody:
-					asset = new Rigidbody(assetInfo);
-					break;
-
-				case ClassIDType.CircleCollider2D:
-					asset = new CircleCollider2D(assetInfo);
-					break;
-
-				case ClassIDType.PolygonCollider2D:
-					asset = new PolygonCollider2D(assetInfo);
-					break;
-
-				case ClassIDType.BoxCollider2D:
-					asset = new BoxCollider2D(assetInfo);
-					break;
-
-				case ClassIDType.PhysicsMaterial2D:
-					asset = new PhysicsMaterial2D(assetInfo);
-					break;
-
-				case ClassIDType.MeshCollider:
-					asset = new MeshCollider(assetInfo);
-					break;
-
-				case ClassIDType.BoxCollider:
-					asset = new BoxCollider(assetInfo);
-					break;
-
-				case ClassIDType.CompositeCollider2D:
-					asset = new CompositeCollider2D(assetInfo);
-					break;
-
-				case ClassIDType.EdgeCollider2D:
-					asset = new EdgeCollider2D(assetInfo);
-					break;
-
-				case ClassIDType.CapsuleCollider2D:
-					asset = new CapsuleCollider2D(assetInfo);
-					break;
-
-				case ClassIDType.AnimationClip:
-					asset = new AnimationClip(assetInfo);
-					break;
-
-				case ClassIDType.AudioListener:
-					asset = new AudioListener(assetInfo);
-					break;
-
-				case ClassIDType.AudioSource:
-					asset = new AudioSource(assetInfo);
-					break;
-
-				case ClassIDType.AudioClip:
-					asset = new AudioClip(assetInfo);
-					break;
-
-				case ClassIDType.RenderTexture:
-					asset = new RenderTexture(assetInfo);
-					break;
-
-				case ClassIDType.Cubemap:
-					asset = new Cubemap(assetInfo);
-					break;
-
-				case ClassIDType.Avatar:
-					asset = new Avatar(assetInfo);
-					break;
-
-				case ClassIDType.AnimatorController:
-					asset = new AnimatorController(assetInfo);
-					break;
-
-				case ClassIDType.GUILayer:
-					asset = new GUILayer(assetInfo);
-					break;
-
-				case ClassIDType.Animator:
-					asset = new Animator(assetInfo);
-					break;
-
-				case ClassIDType.RenderSettings:
-					asset = new RenderSettings(assetInfo);
-					break;
-
-				case ClassIDType.Light:
-					asset = new Light(assetInfo);
-					break;
-
-				case ClassIDType.Animation:
-					asset = new Animation(assetInfo);
-					break;
-
-				case ClassIDType.MonoScript:
-					asset = new MonoScript(assetInfo);
-					break;
-
-				case ClassIDType.MonoManager:
-					asset = new MonoManager(assetInfo);
-					break;
-
-				case ClassIDType.NewAnimationTrack:
-					asset = new NewAnimationTrack(assetInfo);
-					break;
-
-				case ClassIDType.FlareLayer:
-					asset = new FlareLayer(assetInfo);
-					break;
-
-				case ClassIDType.Font:
-					asset = new Font(assetInfo);
-					break;
-
-				case ClassIDType.PhysicMaterial:
-					asset = new PhysicMaterial(assetInfo);
-					break;
-
-				case ClassIDType.SphereCollider:
-					asset = new SphereCollider(assetInfo);
-					break;
-
-				case ClassIDType.CapsuleCollider:
-					asset = new CapsuleCollider(assetInfo);
-					break;
-
-				case ClassIDType.SkinnedMeshRenderer:
-					asset = new SkinnedMeshRenderer(assetInfo);
-					break;
-
-				case ClassIDType.BuildSettings:
-					asset = new BuildSettings(assetInfo);
-					break;
-
-				case ClassIDType.AssetBundle:
-					asset = new AssetBundle(assetInfo);
-					break;
-
-				case ClassIDType.WheelCollider:
-					asset = new WheelCollider(assetInfo);
-					break;
-
-				case ClassIDType.PreloadData:
-					asset = new PreloadData(assetInfo);
-					break;
-
-				case ClassIDType.MovieTexture:
-					asset = new MovieTexture(assetInfo);
-					break;
-
-				case ClassIDType.TerrainCollider:
-					asset = new TerrainCollider(assetInfo);
-					break;
-					
-				case ClassIDType.TerrainData:
-					asset = new TerrainData(assetInfo);
-					break;
-
-				case ClassIDType.LightmapSettings:
-					asset = new LightmapSettings(assetInfo);
-					break;
-
-				case ClassIDType.OcclusionArea:
-					asset = new OcclusionArea(assetInfo);
-					break;
-
-				case ClassIDType.NavMeshSettings:
-					asset = new NavMeshSettings(assetInfo);
-					break;
-
-				case ClassIDType.ParticleSystem:
-					asset = new ParticleSystem(assetInfo);
-					break;
-
-				case ClassIDType.ParticleSystemRenderer:
-					asset = new ParticleSystemRenderer(assetInfo);
-					break;
-
-				case ClassIDType.SpriteRenderer:
-					asset = new SpriteRenderer(assetInfo);
-					break;
-
-				case ClassIDType.Sprite:
-					asset = new Sprite(assetInfo);
-					break;
-
-				case ClassIDType.Terrain:
-					asset = new Terrain(assetInfo);
-					break;
-
-				case ClassIDType.AnimatorOverrideController:
-					asset = new AnimatorOverrideController(assetInfo);
-					break;
-
-				case ClassIDType.CanvasRenderer:
-					asset = new CanvasRenderer(assetInfo);
-					break;
-
-				case ClassIDType.Canvas:
-					asset = new Canvas(assetInfo);
-					break;
-
-				case ClassIDType.RectTransform:
-					asset = new RectTransform(assetInfo);
-					break;
-
-				case ClassIDType.NavMeshData:
-					asset = new NavMeshData(assetInfo);
-					break;
-
-				case ClassIDType.OcclusionCullingData:
-					asset = new OcclusionCullingData(assetInfo);
-					break;
-
-				case ClassIDType.SceneAsset:
-					asset = new SceneAsset(assetInfo);
-					break;
-
-				case ClassIDType.LightmapParameters:
-					asset = new LightmapParameters(assetInfo);
-					break;
-
-				case ClassIDType.LightingDataAsset:
-					asset = new LightingDataAsset(assetInfo);
-					break;
-
-				case ClassIDType.SpriteAtlas:
-					asset = new SpriteAtlas(assetInfo);
-					break;
-
-				default:
-					return null;
+				return null;
 			}
 
 			stream.BaseStream.Position = offset;
