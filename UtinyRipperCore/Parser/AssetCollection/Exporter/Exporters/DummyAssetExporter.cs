@@ -22,7 +22,7 @@ namespace UtinyRipper.AssetExporters
 				case ClassIDType.MonoManager:
 				case ClassIDType.AssetBundle:
 				case ClassIDType.PreloadData:
-					return new EmptyExportCollection(this);
+					return new EmptyExportCollection();
 
 				default:
 					return new SkipExportCollection(this, asset);

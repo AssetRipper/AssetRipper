@@ -76,6 +76,13 @@ namespace UtinyRipper.Exporter.YAML
 			Add(node);
 		}
 
+		public void Add(double value)
+		{
+			YAMLScalarNode node = new YAMLScalarNode(value);
+			node.Style = Style.ToScalarStyle();
+			Add(node);
+		}
+
 		public void Add(string value)
 		{
 			YAMLScalarNode node = new YAMLScalarNode(value);

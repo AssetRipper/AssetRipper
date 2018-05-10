@@ -28,7 +28,7 @@ namespace UtinyRipper.AssetExporters
 
 			foreach(Object asset in file.FetchAssets())
 			{
-				if(asset.ClassID == ClassIDType.GameObject || asset is Component)
+				if(OcclusionCullingSettings.IsCompatible(asset))
 				{
 					AddComponent(file, asset);
 				}
@@ -128,9 +128,9 @@ namespace UtinyRipper.AssetExporters
 				return 0;
 			}
 
-			if (obj1.ClassID.IsSceneComponent())
+			if (obj1.ClassID.IsSceneSettings())
 			{
-				if(obj2.ClassID.IsSceneComponent())
+				if(obj2.ClassID.IsSceneSettings())
 				{
 					return obj1.ClassID < obj2.ClassID ? -1 : 1;
 				}
@@ -141,7 +141,7 @@ namespace UtinyRipper.AssetExporters
 			}
 			else
 			{
-				if (obj2.ClassID.IsSceneComponent())
+				if (obj2.ClassID.IsSceneSettings())
 				{
 					return 1;
 				}

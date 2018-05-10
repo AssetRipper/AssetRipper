@@ -347,14 +347,12 @@ namespace UtinyRipper.Classes
 			throw new NotSupportedException();
 		}
 
+		public override bool IsValid => m_fontData != null && m_fontData.Length > 0;
+
 		public override string ExportExtension
 		{
 			get
 			{
-				if (m_fontData == null || m_fontData.Length == 0)
-				{
-					return "ttf";
-				}
 				uint type = BitConverter.ToUInt32(m_fontData, 0);
 				// OTTO ASCII
 				if (type == 0x4F54544F)

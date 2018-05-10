@@ -94,7 +94,7 @@ namespace UtinyRipper.Classes.TerrainDatas
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Heights", Heights.ExportYAML());
+			node.Add("m_Heights", Heights.ExportYAML(true));
 			node.Add("m_PrecomputedError", PrecomputedError.ExportYAML());
 			node.Add("m_MinMaxPatchHeights", MinMaxPatchHeights.ExportYAML());
 			node.Add("m_Width", Width);

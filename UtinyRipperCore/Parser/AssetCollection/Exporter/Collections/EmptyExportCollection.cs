@@ -7,15 +7,10 @@ using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
 {
-	internal sealed class EmptyExportCollection : IExportCollection
+	public sealed class EmptyExportCollection : IExportCollection
 	{
-		public EmptyExportCollection(IAssetExporter assetExporter)
+		public EmptyExportCollection()
 		{
-			if (assetExporter == null)
-			{
-				throw new ArgumentNullException(nameof(assetExporter));
-			}
-			AssetExporter = assetExporter;
 			Name = string.Empty;
 		}
 

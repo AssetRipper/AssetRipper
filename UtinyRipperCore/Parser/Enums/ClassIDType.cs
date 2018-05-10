@@ -291,108 +291,13 @@ namespace UtinyRipper
 		{
 			return (int)_this;
 		}
-		
-		/*public static bool IsComponent(this ClassIDType _this)
-		{
-			return IsComponent(_this, false);
-		}
-
-		public static bool IsComponent(this ClassIDType _this, bool isSafe)
-		{
-			switch(_this)
-			{
-				case ClassIDType.GlobalGameManager:
-				case ClassIDType.Material:
-				case ClassIDType.Texture2D:
-				case ClassIDType.Mesh:
-				case ClassIDType.Shader:
-				case ClassIDType.TextAsset:
-				case ClassIDType.PhysicsMaterial2D:
-				case ClassIDType.AnimationClip:
-				case ClassIDType.AudioClip:
-				case ClassIDType.RenderTexture:
-				case ClassIDType.Cubemap:
-				case ClassIDType.Avatar:
-				case ClassIDType.AnimatorController:
-				case ClassIDType.MonoScript:
-				case ClassIDType.MonoManager:
-				case ClassIDType.Font:
-				case ClassIDType.NamedObject:
-				case ClassIDType.PhysicMaterial:
-				case ClassIDType.BuildSettings:
-				case ClassIDType.AssetBundle:
-				case ClassIDType.PreloadData:
-				case ClassIDType.MovieTexture:
-				case ClassIDType.TerrainData:
-				case ClassIDType.Sprite:
-				case ClassIDType.AnimatorOverrideController:
-				case ClassIDType.NavMeshData:
-				case ClassIDType.OcclusionCullingData:
-				case ClassIDType.Prefab:
-				case ClassIDType.SceneAsset:
-				case ClassIDType.LightmapParameters:
-				case ClassIDType.SpriteAtlas:
-					return false;
-					
-				case ClassIDType.GameObject:
-				case ClassIDType.Component:
-				case ClassIDType.Transform:
-				case ClassIDType.Camera:
-				case ClassIDType.MeshRenderer:
-				case ClassIDType.Renderer:
-				case ClassIDType.OcclusionCullingSettings:
-				case ClassIDType.MeshFilter:
-				case ClassIDType.OcclusionPortal:
-				case ClassIDType.Rigidbody2D:
-				case ClassIDType.Rigidbody:
-				case ClassIDType.CircleCollider2D:
-				case ClassIDType.PolygonCollider2D:
-				case ClassIDType.BoxCollider2D:
-				case ClassIDType.MeshCollider:
-				case ClassIDType.BoxCollider:
-				case ClassIDType.CompositeCollider2D:
-				case ClassIDType.EdgeCollider2D:
-				case ClassIDType.CapsuleCollider2D:
-				case ClassIDType.AudioListener:
-				case ClassIDType.AudioSource:
-				case ClassIDType.GUILayer:
-				case ClassIDType.Animator:
-				case ClassIDType.RenderSettings:
-				case ClassIDType.Light:
-				case ClassIDType.Animation:
-				case ClassIDType.FlareLayer:
-				case ClassIDType.SphereCollider:
-				case ClassIDType.CapsuleCollider:
-				case ClassIDType.SkinnedMeshRenderer:
-				case ClassIDType.WheelCollider:
-				case ClassIDType.TerrainCollider:
-				case ClassIDType.LightmapSettings:
-				case ClassIDType.OcclusionArea:
-				case ClassIDType.NavMeshSettings:
-				case ClassIDType.ParticleSystem:
-				case ClassIDType.ParticleSystemRenderer:
-				case ClassIDType.SpriteRenderer:
-				case ClassIDType.Terrain:
-				case ClassIDType.CanvasRenderer:
-				case ClassIDType.Canvas:
-				case ClassIDType.RectTransform:
-					return true;
-
-				default:
-					if(isSafe)
-					{
-						return false;
-					}
-					throw new NotImplementedException($"{nameof(ClassIDType)} {_this}");
-			}
-		}*/
 
 		public static bool IsTransform(this ClassIDType _this)
 		{
 			return _this == ClassIDType.Transform || _this == ClassIDType.RectTransform;
 		}
 
-		public static bool IsSceneComponent(this ClassIDType _this)
+		public static bool IsSceneSettings(this ClassIDType _this)
 		{
 			switch (_this)
 			{

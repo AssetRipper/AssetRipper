@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.Prefabs;
 using UtinyRipper.Exporter.YAML;
@@ -23,19 +22,6 @@ namespace UtinyRipper.Classes
 			ThisPrefab = new PrefabPtr(this);
 			IsPrefabParent = true;
 			ObjectHideFlags = 1;
-		}
-
-		public static bool IsCompatible(Object asset)
-		{
-			if (asset.ClassID == ClassIDType.GameObject)
-			{
-				return true;
-			}
-			if (asset.ClassID.IsSceneComponent())
-			{
-				return true;
-			}
-			return asset is Component;
 		}
 
 		private static AssetInfo CreateAssetsInfo(GameObject root)

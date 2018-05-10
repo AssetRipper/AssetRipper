@@ -247,33 +247,52 @@ namespace UtinyRipper.SerializedFiles
 			}
 			return @object;
 		}
-		
+
 		private void ReadAssets(EndianStream stream, long startPosition)
 		{
 			m_assets.Clear();
+			HashSet<long> preloaded = new HashSet<long>();
 			using (AssetStream ustream = new AssetStream(stream.BaseStream, Version, Platform))
 			{
-				foreach (ObjectInfo info in Metadata.Objects.Values)
+				foreach (ObjectPtr ptr in Metadata.Preloads)
 				{
-					AssetInfo assetInfo;
-					if (ObjectInfo.IsReadTypeIndex(Header.Generation))
+					if (ptr.FileID == 0)
 					{
-						RTTIBaseClassDescriptor typemeta = Metadata.Hierarchy.Types[info.TypeIndex];
-						assetInfo = new AssetInfo(this, info.PathID, typemeta.ClassID);
-					}
-					else
-					{
-						assetInfo = new AssetInfo(this, info.PathID, info.ClassID);
-					}
-					
-					long pathID = info.PathID;
-					Object asset = ReadAsset(ustream, assetInfo, startPosition + Header.DataOffset + info.DataOffset, info.DataSize);
-					if(asset != null)
-					{
-						AddAsset(pathID, asset);
+						ObjectInfo info = Metadata.Objects[ptr.PathID];
+						ReadAsset(ustream, info, startPosition);
+						preloaded.Add(ptr.PathID);
 					}
 				}
 
+				foreach (ObjectInfo info in Metadata.Objects.Values)
+				{
+					if (!preloaded.Contains(info.PathID))
+					{
+						ReadAsset(ustream, info, startPosition);
+					}
+				}
+
+			}
+		}
+
+		private void ReadAsset(AssetStream stream, ObjectInfo info, long startPosition)
+		{
+			AssetInfo assetInfo;
+			if (ObjectInfo.IsReadTypeIndex(Header.Generation))
+			{
+				RTTIBaseClassDescriptor typemeta = Metadata.Hierarchy.Types[info.TypeIndex];
+				assetInfo = new AssetInfo(this, info.PathID, typemeta.ClassID);
+			}
+			else
+			{
+				assetInfo = new AssetInfo(this, info.PathID, info.ClassID);
+			}
+
+			long pathID = info.PathID;
+			Object asset = ReadAsset(stream, assetInfo, startPosition + Header.DataOffset + info.DataOffset, info.DataSize);
+			if (asset != null)
+			{
+				AddAsset(pathID, asset);
 			}
 		}
 
@@ -315,7 +334,7 @@ namespace UtinyRipper.SerializedFiles
 			if(!IsScene)
 			{
 				// save IsScene value for optimization purpose
-				if(asset.ClassID.IsSceneComponent())
+				if(asset.ClassID.IsSceneSettings())
 				{
 					IsScene = true;
 				}

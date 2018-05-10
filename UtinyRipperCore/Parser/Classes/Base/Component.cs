@@ -55,6 +55,8 @@ namespace UtinyRipper.Classes
 			return node;
 		}
 
+		public override bool IsValid => !GameObject.IsNull;
+
 		public sealed override string ExportExtension => throw new NotSupportedException();
 
 		public PPtr<GameObject> GameObject;

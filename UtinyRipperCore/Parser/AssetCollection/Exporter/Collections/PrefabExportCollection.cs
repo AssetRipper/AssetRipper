@@ -20,20 +20,36 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
-		private static Prefab CreatePrefab(Object obj)
+		private static Prefab CreatePrefab(Object asset)
 		{
 			GameObject go;
-			if(obj.ClassID == ClassIDType.GameObject)
+			if(asset.ClassID == ClassIDType.GameObject)
 			{
-				go = (GameObject)obj;
+				go = (GameObject)asset;
 			}
 			else
 			{
-				Component component = (Component)obj;
+				Component component = (Component)asset;
 				go = component.GameObject.GetObject(component.File);
 			}
 			GameObject root = go.GetRoot();
-			return new Prefab(root);
+
+			Prefab prefab = new Prefab(root);
+			foreach (EditorExtension comp in prefab.FetchObjects())
+			{
+				if (comp.ClassID == ClassIDType.GameObject)
+				{
+					go = (GameObject)comp;
+					int depth = go.GetRootDepth();
+					comp.ObjectHideFlags = depth > 1 ? 1u : 0u;
+				}
+				else
+				{
+					comp.ObjectHideFlags = 1;
+				}
+				comp.PrefabInternal = prefab.ThisPrefab;
+			}
+			return prefab;
 		}
 
 		public override bool IsContains(Object @object)

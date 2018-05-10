@@ -11,7 +11,6 @@ namespace UtinyRipper.AssetExporters
 		string GetExportID(Object asset);
 		ExportPointer CreateExportPointer(Object asset, bool isLocal);
 
-		IAssetExporter AssetExporter { get; }
 		IEnumerable<Object> Objects { get; }
 		string Name { get; }
 	}

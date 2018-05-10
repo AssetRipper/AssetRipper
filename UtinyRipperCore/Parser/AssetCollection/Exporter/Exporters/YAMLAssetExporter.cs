@@ -44,7 +44,13 @@ namespace UtinyRipper.AssetExporters
 
 		public IExportCollection CreateCollection(Object asset)
 		{
-			if(Prefab.IsCompatible(asset))
+			if (!asset.IsValid)
+			{
+				Logger.Instance.Log(LogType.Warning, LogCategory.Export, $"Can't export '{asset}' because it isn't valid");
+				return new EmptyExportCollection();
+			}
+
+			if (OcclusionCullingSettings.IsCompatible(asset))
 			{
 				if (asset.File.IsScene)
 				{
@@ -60,7 +66,7 @@ namespace UtinyRipper.AssetExporters
 				switch (asset.ClassID)
 				{
 					case ClassIDType.NavMeshData:
-						return new EmptyExportCollection(this);
+						return new EmptyExportCollection();
 
 					default:
 						return new AssetExportCollection(this, asset);

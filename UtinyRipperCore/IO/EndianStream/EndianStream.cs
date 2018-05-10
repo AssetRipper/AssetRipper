@@ -316,6 +316,18 @@ namespace UtinyRipper
 			return array;
 		}
 
+		public double[] ReadDoubleArray()
+		{
+			int count = ReadInt32();
+			double[] array = new double[count];
+			for (int i = 0; i < count; i++)
+			{
+				double value = ReadDouble();
+				array[i] = value;
+			}
+			return array;
+		}
+
 		public string[] ReadStringArray()
 		{
 			int count = ReadInt32();

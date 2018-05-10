@@ -8,13 +8,14 @@ namespace UtinyRipper.Exporter.YAML
 	{
 		public static YAMLNode ExportYAML(this IEnumerable<bool> _this)
 		{
-			throw new NotImplementedException();
-			/*YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
 			foreach (bool value in _this)
 			{
-				node.Add(value);
+				byte bvalue = unchecked((byte)(value ? 1 : 0));
+				s_sb.Append(bvalue.ToHexString());
 			}
-			return node;*/
+			YAMLScalarNode node = new YAMLScalarNode(s_sb.ToString());
+			s_sb.Length = 0;
+			return node;
 		}
 
 		public static YAMLNode ExportYAML(this IEnumerable<byte> _this)
@@ -28,26 +29,50 @@ namespace UtinyRipper.Exporter.YAML
 			return node;
 		}
 
-		public static YAMLNode ExportYAML(this IEnumerable<ushort> _this)
+		public static YAMLNode ExportYAML(this IEnumerable<ushort> _this, bool isRaw)
 		{
-			throw new NotImplementedException();
-			/*YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
-			foreach (ushort value in _this)
+			if (isRaw)
 			{
-				node.Add(value);
+				foreach (ushort value in _this)
+				{
+					s_sb.Append(value.ToHexString());
+				}
+				YAMLScalarNode node = new YAMLScalarNode(s_sb.ToString());
+				s_sb.Length = 0;
+				return node;
 			}
-			return node;*/
+			else
+			{
+				YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+				foreach (ushort value in _this)
+				{
+					node.Add(value);
+				}
+				return node;
+			}
 		}
 
-		public static YAMLNode ExportYAML(this IEnumerable<short> _this)
+		public static YAMLNode ExportYAML(this IEnumerable<short> _this, bool isRaw)
 		{
-#warning TODO: check
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
-			foreach (short value in _this)
+			if (isRaw)
 			{
-				node.Add(value);
+				foreach (short value in _this)
+				{
+					s_sb.Append(value.ToHexString());
+				}
+				YAMLScalarNode node = new YAMLScalarNode(s_sb.ToString());
+				s_sb.Length = 0;
+				return node;
 			}
-			return node;
+			else
+			{
+				YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+				foreach (short value in _this)
+				{
+					node.Add(value);
+				}
+				return node;
+			}
 		}
 
 		public static YAMLNode ExportYAML(this IEnumerable<uint> _this, bool isRaw)
@@ -96,33 +121,66 @@ namespace UtinyRipper.Exporter.YAML
 			}
 		}
 
-		public static YAMLNode ExportYAML(this IEnumerable<ulong> _this)
+		public static YAMLNode ExportYAML(this IEnumerable<ulong> _this, bool isRaw)
 		{
-			throw new NotImplementedException();
-			/*YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
-			foreach (ulong value in _this)
+			if (isRaw)
 			{
-				node.Add(value);
+				foreach (ulong value in _this)
+				{
+					s_sb.Append(value.ToHexString());
+				}
+				YAMLScalarNode node = new YAMLScalarNode(s_sb.ToString());
+				s_sb.Length = 0;
+				return node;
 			}
-			return node;*/
+			else
+			{
+				YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+				foreach (ulong value in _this)
+				{
+					node.Add(value);
+				}
+				return node;
+			}
 		}
 
-		public static YAMLNode ExportYAML(this IEnumerable<long> _this)
+		public static YAMLNode ExportYAML(this IEnumerable<long> _this, bool isRaw)
 		{
-			throw new NotImplementedException();
-			/*YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
-			foreach (long value in _this)
+			if (isRaw)
 			{
-				node.Add(value);
+				foreach (long value in _this)
+				{
+					s_sb.Append(value.ToHexString());
+				}
+				YAMLScalarNode node = new YAMLScalarNode(s_sb.ToString());
+				s_sb.Length = 0;
+				return node;
 			}
-			return node;*/
+			else
+			{
+				YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+				foreach (long value in _this)
+				{
+					node.Add(value);
+				}
+				return node;
+			}
 		}
 
 		public static YAMLNode ExportYAML(this IEnumerable<float> _this)
 		{
-#warning TODO: check
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
 			foreach (float value in _this)
+			{
+				node.Add(value);
+			}
+			return node;
+		}
+
+		public static YAMLNode ExportYAML(this IEnumerable<double> _this)
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			foreach (double value in _this)
 			{
 				node.Add(value);
 			}

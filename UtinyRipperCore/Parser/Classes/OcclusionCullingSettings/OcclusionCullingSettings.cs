@@ -16,6 +16,19 @@ namespace UtinyRipper.Classes
 			base(assetInfo)
 		{
 		}
+		
+		public static bool IsCompatible(Object asset)
+		{
+			if (asset.ClassID == ClassIDType.GameObject)
+			{
+				return true;
+			}
+			if (asset.ClassID.IsSceneSettings())
+			{
+				return true;
+			}
+			return asset is Component;
+		}
 
 		/// <summary>
 		/// Less than 5.5.0

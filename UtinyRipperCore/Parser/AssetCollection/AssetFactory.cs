@@ -10,14 +10,14 @@ namespace UtinyRipper
 	{
 		public Object CreateAsset(AssetInfo assetInfo)
 		{
-			if (m_instantiators.TryGetValue(assetInfo.ClassID, out Func<ClassIDType, AssetInfo, Object> instantiator))
+			if (m_instantiators.TryGetValue(assetInfo.ClassID, out Func<AssetInfo, Object> instantiator))
 			{
-				return instantiator(assetInfo.ClassID, assetInfo);
+				return instantiator(assetInfo);
 			}
-			return DefaultInstantiator(assetInfo.ClassID, assetInfo);
+			return DefaultInstantiator(assetInfo);
 		}
 
-		public void OverrideInstantiator(ClassIDType classType, Func<ClassIDType, AssetInfo, Object> instantiator)
+		public void OverrideInstantiator(ClassIDType classType, Func<AssetInfo, Object> instantiator)
 		{
 			if (instantiator == null)
 			{
@@ -26,9 +26,9 @@ namespace UtinyRipper
 			m_instantiators[classType] = instantiator;
 		}
 
-		private static Object DefaultInstantiator(ClassIDType classType, AssetInfo assetInfo)
+		private static Object DefaultInstantiator(AssetInfo assetInfo)
 		{
-			switch (classType)
+			switch (assetInfo.ClassID)
 			{
 				case ClassIDType.GameObject:
 					return new GameObject(assetInfo);
@@ -176,6 +176,6 @@ namespace UtinyRipper
 			}
 		}
 
-		private readonly Dictionary<ClassIDType, Func<ClassIDType, AssetInfo, Object>> m_instantiators = new Dictionary<ClassIDType, Func<ClassIDType, AssetInfo, Object>>();
+		private readonly Dictionary<ClassIDType, Func<AssetInfo, Object>> m_instantiators = new Dictionary<ClassIDType, Func<AssetInfo, Object>>();
 	}
 }

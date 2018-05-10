@@ -30,7 +30,7 @@ namespace UtinyRipper.AssetExporters
 			}
 			AssetExporter = assetExporter;
 			Asset = asset;
-			m_metaImporter = metaImporter;
+			MetaImporter = metaImporter;
 		}
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)
@@ -46,7 +46,7 @@ namespace UtinyRipper.AssetExporters
 			}
 
 			ExportInner(container, filePath);
-			Meta meta = new Meta(m_metaImporter, Asset.GUID);
+			Meta meta = new Meta(MetaImporter, Asset.GUID);
 			ExportMeta(container, meta, filePath);
 			return true;
 		}
@@ -86,6 +86,6 @@ namespace UtinyRipper.AssetExporters
 		public override string Name => Asset.ToString();
 		public Object Asset { get; }
 
-		private IAssetImporter m_metaImporter;
+		protected IAssetImporter MetaImporter { get; }
 	}
 }

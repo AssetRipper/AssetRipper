@@ -96,6 +96,7 @@ namespace UtinyRipper.Classes
 
 		public ISerializedFile File => m_assetInfo.File;
 		public ClassIDType ClassID => m_assetInfo.ClassID;
+		public virtual bool IsValid => true;
 		public virtual string ExportName => ClassID.ToString();
 		public virtual string ExportExtension => "asset";
 		public long PathID => m_assetInfo.PathID;

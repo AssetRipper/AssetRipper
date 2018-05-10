@@ -11,7 +11,7 @@
 		UInt64,
 		Int64,
 		Single,
-		//Double,
+		Double,
 		String,
 	}
 }

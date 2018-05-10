@@ -39,7 +39,7 @@ namespace UtinyRipper.SerializedFiles
 
 			if (IsReadAddresses(stream.Generation))
 			{
-				m_addresses = stream.ReadArray<ObjectPtr>();
+				m_preloads = stream.ReadArray<ObjectPtr>();
 			}
 			m_dependencies = stream.ReadArray<FileIdentifier>();
 			if (IsReadUnknown(stream.Generation))
@@ -50,12 +50,12 @@ namespace UtinyRipper.SerializedFiles
 
 		public RTTIClassHierarchyDescriptor Hierarchy { get; }
 		public IReadOnlyDictionary<long, ObjectInfo> Objects => m_objects;
-		public IReadOnlyList<ObjectPtr> Addresses => m_addresses;
+		public IReadOnlyList<ObjectPtr> Preloads => m_preloads;
 		public IReadOnlyList<FileIdentifier> Dependencies => m_dependencies;
 		public string Unknown { get; private set; }
 		
 		private Dictionary<long, ObjectInfo> m_objects;
-		private ObjectPtr[] m_addresses;
+		private ObjectPtr[] m_preloads;
 		private FileIdentifier[] m_dependencies;
 	}
 }

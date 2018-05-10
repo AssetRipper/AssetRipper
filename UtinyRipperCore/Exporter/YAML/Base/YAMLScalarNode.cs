@@ -1,4 +1,4 @@
-﻿//#define USE_HEX_SINGLE
+﻿//#define USE_HEX_FLOAT
 
 using System;
 using System.Globalization;
@@ -66,6 +66,12 @@ namespace UtinyRipper.Exporter.YAML
 			Style = ScalarStyle.Plain;
 		}
 
+		public YAMLScalarNode(double value)
+		{
+			SetValue(value);
+			Style = ScalarStyle.Plain;
+		}
+
 		public YAMLScalarNode(string value)
 		{
 			SetValue(value);
@@ -122,14 +128,27 @@ namespace UtinyRipper.Exporter.YAML
 
 		public void SetValue(float value)
 		{
-#if USE_HEX_SINGLE
+#if USE_HEX_FLOAT
 			// It is more precise technic but output looks vague and less readable
 			uint hex = BitConverterExtensions.ToUInt32(value);
 			m_string = $"0x{hex.ToHexString()}({value.ToString(CultureInfo.InvariantCulture)})";
 			m_objectType = ScalarType.String;
 #else
-			m_single = value;
+			m_double = value;
 			m_objectType = ScalarType.Single;
+#endif
+		}
+
+		public void SetValue(double value)
+		{
+#if USE_HEX_FLOAT
+			// It is more precise technic but output looks vague and less readable
+			ulong hex = BitConverterExtensions.ToUInt64(value);
+			m_string = $"0x{hex.ToHexString()}({value.ToString(CultureInfo.InvariantCulture)})";
+			m_objectType = ScalarType.String;
+#else
+			m_double = value;
+			m_objectType = ScalarType.Double;
 #endif
 		}
 
@@ -199,9 +218,9 @@ namespace UtinyRipper.Exporter.YAML
 						case ScalarType.UInt64:
 							return (unchecked((ulong)m_value)).ToHexString();
 						case ScalarType.Single:
-							return m_single.ToHexString();
-						//case ScalarType.Double:
-						//	return m_double.ToHexString();
+							return ((float)m_double).ToHexString();
+						case ScalarType.Double:
+							return m_double.ToHexString();
 						case ScalarType.String:
 							return m_string;
 						default:
@@ -214,8 +233,9 @@ namespace UtinyRipper.Exporter.YAML
 					case ScalarType.Boolean:
 						return m_value == 0 ? 0.ToString() : 1.ToString();
 					case ScalarType.Single:
-					//case ScalarType.Double:
-						return m_single.ToString(CultureInfo.InvariantCulture);
+						return ((float)m_double).ToString(CultureInfo.InvariantCulture);
+					case ScalarType.Double:
+						return m_double.ToString(CultureInfo.InvariantCulture);
 					case ScalarType.String:
 						return m_string;
 
@@ -232,6 +252,6 @@ namespace UtinyRipper.Exporter.YAML
 		private ScalarType m_objectType = ScalarType.String;
 		private string m_string = string.Empty;
 		private long m_value = 0;
-		private float m_single = 0.0f;
+		private double m_double = 0.0;
 	}
 }

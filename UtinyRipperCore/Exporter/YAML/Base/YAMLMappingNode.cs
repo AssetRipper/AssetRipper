@@ -150,6 +150,14 @@ namespace UtinyRipper.Exporter.YAML
 			InsertEnd(key, value);
 		}
 
+		public void Concatenate(YAMLMappingNode map)
+		{
+			foreach(KeyValuePair<YAMLNode, YAMLNode> child in map.m_children)
+			{
+				Add(child.Key, child.Value);
+			}
+		}
+
 		public void InsertBegin(string key, int value)
 		{
 			YAMLScalarNode valueNode = new YAMLScalarNode(value);

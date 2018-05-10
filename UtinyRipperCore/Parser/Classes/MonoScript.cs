@@ -10,18 +10,18 @@ namespace UtinyRipper.Classes
 		public MonoScript(AssetInfo assetInfo):
 			base(assetInfo)
 		{
-			if (IsReadScript(File.Platform))
+			if (IsReadScript(File.Flags))
 			{
 				m_defaultReferences = new Dictionary<string, PPtr<Object>>();
 			}
 		}
 
 		/// <summary>
-		/// Engine Package
+		/// Not Release
 		/// </summary>
-		public static bool IsReadScript(Platform platform)
+		public static bool IsReadScript(TransferInstructionFlags flags)
 		{
-			return platform == Platform.NoTarget;
+			return !flags.IsSerializeGameRelease();
 		}
 		/// <summary>
 		/// 3.4.0 and greater
@@ -80,7 +80,7 @@ namespace UtinyRipper.Classes
 		{
 			base.Read(stream);
 
-			if(IsReadScript(stream.Platform))
+			if(IsReadScript(stream.Flags))
 			{
 				m_defaultReferences = new Dictionary<string, PPtr<Object>>();
 
@@ -121,7 +121,7 @@ namespace UtinyRipper.Classes
 			{
 				yield return @object;
 			}
-			if(IsReadScript(file.Platform))
+			if(IsReadScript(file.Flags))
 			{
 				foreach (PPtr<Object> reference in DefaultReferences.Values)
 				{
@@ -135,7 +135,7 @@ namespace UtinyRipper.Classes
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			if (IsReadScript(container.Platform))
+			if (IsReadScript(container.Flags))
 			{
 				node.Add("m_Script", Script);
 				node.Add("m_DefaultReferences", DefaultReferences.ExportYAML(container));
@@ -148,6 +148,9 @@ namespace UtinyRipper.Classes
 			node.Add("m_IsEditorScript", IsEditorScript);
 			return node;
 		}
+
+		public override string ExportName => "Scripts";
+		public override string ExportExtension => "cs";
 
 		public string Script { get; private set; }
 		public IReadOnlyDictionary<string, PPtr<Object>> DefaultReferences => m_defaultReferences;

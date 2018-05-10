@@ -7,7 +7,7 @@ using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
 {
-	internal class SkipExportCollection : IExportCollection
+	public class SkipExportCollection : IExportCollection
 	{
 		public SkipExportCollection(IAssetExporter assetExporter, Object asset)
 		{
