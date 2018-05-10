@@ -12,7 +12,7 @@ namespace UtinyRipper.SerializedFiles
 		/// <summary>
 		/// 5.0.0Unk0 and greater
 		/// </summary>
-		public static bool IsReadAddresses(FileGeneration generation)
+		public static bool IsReadPreload(FileGeneration generation)
 		{
 			return generation >= FileGeneration.FG_500aunk;
 		}
@@ -37,7 +37,7 @@ namespace UtinyRipper.SerializedFiles
 				m_objects.Add(objectInfo.PathID, objectInfo);
 			}
 
-			if (IsReadAddresses(stream.Generation))
+			if (IsReadPreload(stream.Generation))
 			{
 				m_preloads = stream.ReadArray<ObjectPtr>();
 			}

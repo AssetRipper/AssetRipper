@@ -254,13 +254,16 @@ namespace UtinyRipper.SerializedFiles
 			HashSet<long> preloaded = new HashSet<long>();
 			using (AssetStream ustream = new AssetStream(stream.BaseStream, Version, Platform))
 			{
-				foreach (ObjectPtr ptr in Metadata.Preloads)
+				if(SerializedFileMetadata.IsReadPreload(Header.Generation))
 				{
-					if (ptr.FileID == 0)
+					foreach (ObjectPtr ptr in Metadata.Preloads)
 					{
-						ObjectInfo info = Metadata.Objects[ptr.PathID];
-						ReadAsset(ustream, info, startPosition);
-						preloaded.Add(ptr.PathID);
+						if (ptr.FileID == 0)
+						{
+							ObjectInfo info = Metadata.Objects[ptr.PathID];
+							ReadAsset(ustream, info, startPosition);
+							preloaded.Add(ptr.PathID);
+						}
 					}
 				}
 
