@@ -9,18 +9,23 @@ namespace UtinyRipper.BundleFiles
 	/// </summary>
 	internal class BundleMetadata : FileData<BundleFileEntry>
 	{
-		public BundleMetadata(Stream stream, bool isClosable):
+		public BundleMetadata(Stream stream, string filePath, bool isClosable) :
 			base(stream, isClosable)
 		{
+			if(string.IsNullOrEmpty(filePath))
+			{
+				throw new ArgumentNullException(filePath);
+			}
+			m_filePath = filePath;
 		}
 
-		public BundleMetadata(Stream stream, bool isClosable, IReadOnlyList<BundleFileEntry> entries):
-			this(stream, isClosable)
+		public BundleMetadata(Stream stream, string filePath, bool isClosable, IReadOnlyList<BundleFileEntry> entries):
+			this(stream, filePath, isClosable)
 		{
 			m_entries = entries;
 		}
 
-		public void ReadPre530Metadata(EndianStream stream)
+		public void ReadPre530(EndianStream stream)
 		{
 			if (m_stream != stream.BaseStream)
 			{
@@ -38,13 +43,13 @@ namespace UtinyRipper.BundleFiles
 				int size = stream.ReadInt32();
 
 				long globalOffset = basePosition + offset;
-				BundleFileEntry entry = new BundleFileEntry(m_stream, name, globalOffset, size);
+				BundleFileEntry entry = new BundleFileEntry(m_stream, m_filePath, name, globalOffset, size);
 				entries[i] = entry;
 			}
 			m_entries = entries;
 		}
 
-		public void Read530Metadata(EndianStream stream, long basePosition)
+		public void Read530(EndianStream stream, long basePosition)
 		{
 			int count = stream.ReadInt32();
 			BundleFileEntry[] entries = new BundleFileEntry[count];
@@ -56,12 +61,14 @@ namespace UtinyRipper.BundleFiles
 				string name = stream.ReadStringZeroTerm();
 				
 				long globalOffset = basePosition + offset;
-				BundleFileEntry entry = new BundleFileEntry(m_stream, name, globalOffset, size);
+				BundleFileEntry entry = new BundleFileEntry(m_stream, m_filePath, name, globalOffset, size);
 				entries[i] = entry;
 			}
 			m_entries = entries;
 		}
 
 		public IReadOnlyList<BundleFileEntry> Entries => m_entries;
+
+		private readonly string m_filePath;
 	}
 }

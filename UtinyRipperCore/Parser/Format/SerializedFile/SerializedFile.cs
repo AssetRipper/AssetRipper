@@ -14,8 +14,6 @@ namespace UtinyRipper.SerializedFiles
 	/// </summary>
 	internal class SerializedFile : ISerializedFile
 	{
-		public event Action<string> EventRequestDependency;
-
 		public SerializedFile(IFileCollection collection, string filePath, string fileName)
 		{
 			if(collection == null)
@@ -43,7 +41,7 @@ namespace UtinyRipper.SerializedFiles
 			return generation <= FileGeneration.FG_300_342;
 		}
 
-		public void Load(string assetPath)
+		public void Load(string assetPath, Action<string> requestDependencyCallback)
 		{
 			if (!File.Exists(assetPath))
 			{
@@ -52,7 +50,7 @@ namespace UtinyRipper.SerializedFiles
 
 			using (FileStream stream = File.OpenRead(assetPath))
 			{
-				Read(stream);
+				Read(stream, requestDependencyCallback);
 				if (stream.Position != stream.Length)
 				{
 					//throw new Exception($"Read {read} but expected {m_length}");
@@ -60,11 +58,11 @@ namespace UtinyRipper.SerializedFiles
 			}
 		}
 
-		public void Read(byte[] buffer)
+		public void Read(byte[] buffer, Action<string> requestDependencyCallback)
 		{
 			using (MemoryStream memStream = new MemoryStream(buffer))
 			{
-				Read(memStream);
+				Read(memStream, requestDependencyCallback);
 				if (memStream.Position != buffer.Length)
 				{
 					//throw new Exception($"Read {read} but expected {m_length}");
@@ -72,7 +70,7 @@ namespace UtinyRipper.SerializedFiles
 			}
 		}
 
-		public void Read(Stream baseStream)
+		public void Read(Stream baseStream, Action<string> requestDependencyCallback)
 		{
 			using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
 			{
@@ -93,7 +91,7 @@ namespace UtinyRipper.SerializedFiles
 
 				foreach (FileIdentifier dependency in Dependencies)
 				{
-					EventRequestDependency?.Invoke(dependency.FilePath);
+					requestDependencyCallback?.Invoke(dependency.FilePath);
 				}
 
 				if (RTTIClassHierarchyDescriptor.IsReadSignature(Header.Generation))

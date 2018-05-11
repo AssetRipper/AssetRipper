@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.WebFiles
 {
@@ -13,7 +12,6 @@ namespace UtinyRipper.WebFiles
 		public void ReadFile(FileCollection collection, string filePath)
 		{
 			m_stream.Position = m_offset;
-#warning TODO: replace resource/unity_default_resources to library/unity default resources ???;
 			collection.Read(m_stream, filePath, Name);
 		}
 		

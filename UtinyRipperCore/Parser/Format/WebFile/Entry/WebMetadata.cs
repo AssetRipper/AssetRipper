@@ -3,9 +3,9 @@ using System.IO;
 
 namespace UtinyRipper.WebFiles
 {
-	internal class WebFileData : FileData<WebFileEntry>
+	internal class WebMetadata : FileData<WebFileEntry>
 	{
-		public WebFileData(Stream stream, bool isClosable, IReadOnlyList<WebFileEntry> entries):
+		public WebMetadata(Stream stream, bool isClosable, IReadOnlyList<WebFileEntry> entries):
 			base(stream, isClosable)
 		{
 			m_entries = entries;

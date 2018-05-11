@@ -8,6 +8,22 @@ namespace UtinyRipper.WebFiles
 {
 	internal class WebFile : IDisposable
 	{
+		public WebFile(FileCollection fileCollection, string filePath, Action<string> requestDependencyCallback)
+		{
+			if (fileCollection == null)
+			{
+				throw new ArgumentNullException(nameof(fileCollection));
+			}
+			if (string.IsNullOrEmpty(filePath))
+			{
+				throw new ArgumentNullException(nameof(filePath));
+			}
+
+			m_fileCollection = fileCollection;
+			m_filePath = filePath;
+			m_requestDependencyCallback = requestDependencyCallback;
+		}
+
 		public static bool IsWebFile(string webPath)
 		{
 			if (!File.Exists(webPath))
@@ -88,11 +104,26 @@ namespace UtinyRipper.WebFiles
 
 		private void Read(Stream baseStream, bool isClosable)
 		{
+			ReadMetadata(baseStream, isClosable);
+
+			foreach (WebFileEntry entry in Metadata.AssetsEntries)
+			{
+				entry.ReadFile(m_fileCollection, m_filePath);
+			}
+			foreach (WebFileEntry entry in Metadata.ResourceEntries)
+			{
+				ResourcesFile resource = entry.ReadResourcesFile(m_filePath);
+				m_resources.Add(resource);
+			}
+		}
+
+		private void ReadMetadata(Stream baseStream, bool isClosable)
+		{
 			using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
 			{
 				long position = stream.BaseStream.Position;
 				ulong magic = stream.ReadUInt16();
-				if(magic == GZipMagic)
+				if (magic == GZipMagic)
 				{
 					stream.BaseStream.Position = position;
 					ReadGZip(stream, isClosable);
@@ -170,13 +201,13 @@ namespace UtinyRipper.WebFiles
 				WebFileEntry entry = new WebFileEntry(stream.BaseStream, path, offset, length);
 				entries.Add(entry);
 			}
-			FileData = new WebFileData(stream.BaseStream, isClosable, entries);
+			Metadata = new WebMetadata(stream.BaseStream, isClosable, entries);
 		}
 		
-		public WebFileData FileData
+		public WebMetadata Metadata
 		{
 			get => m_fileData;
-			set
+			private set
 			{
 				m_fileData = value;
 				m_isDisposable = value != null;
@@ -187,7 +218,15 @@ namespace UtinyRipper.WebFiles
 		private const ulong BrotliMagic = 0x62726F746C69;
 		private const string Signature = "UnityWebData1.0";
 
-		private WebFileData m_fileData = null;
+		public IReadOnlyList<ResourcesFile> ResourceFiles => m_resources;
+
+		private readonly List<ResourcesFile> m_resources = new List<ResourcesFile>();
+
+		private readonly FileCollection m_fileCollection;
+		private readonly string m_filePath;
+		private readonly Action<string> m_requestDependencyCallback;
+
+		private WebMetadata m_fileData = null;
 		private bool m_isDisposable = false;
 	}
 }

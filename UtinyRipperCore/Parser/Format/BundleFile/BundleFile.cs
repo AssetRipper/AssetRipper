@@ -1,11 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.BundleFiles
 {
 	internal class BundleFile : IDisposable
 	{
+		public BundleFile(FileCollection fileCollection, string filePath, Action<string> requestDependencyCallback)
+		{
+			if(fileCollection == null)
+			{
+				throw new ArgumentNullException(nameof(fileCollection));
+			}
+			if(string.IsNullOrEmpty(filePath))
+			{
+				throw new ArgumentNullException(nameof(filePath));
+			}
+
+			m_fileCollection = fileCollection;
+			m_filePath = filePath;
+			m_requestDependencyCallback = requestDependencyCallback;
+		}
+
 		public static bool IsBundleFile(string bundlePath)
 		{
 			if (!File.Exists(bundlePath))
@@ -42,7 +60,7 @@ namespace UtinyRipper.BundleFiles
 			FileStream stream = File.OpenRead(bundlePath);
 			try
 			{
-				FileData = Read(stream, true);
+				Read(stream, true);
 			}
 			catch
 			{
@@ -53,36 +71,59 @@ namespace UtinyRipper.BundleFiles
 
 		public void Read(Stream baseStream)
 		{
-			FileData = Read(baseStream, false);
+			Read(baseStream, false);
 		}
 
 		public void Dispose()
 		{
 			if(m_isDisposable)
 			{
-				FileData.Dispose();
+				foreach(BundleMetadata metadata in Metadatas)
+				{
+					metadata.Dispose();
+				}
 				m_isDisposable = false;
 			}
 		}
 
-		private BundleFileData Read(Stream baseStream, bool isClosable)
+		private void Read(Stream baseStream, bool isClosable)
 		{
+			m_files.Clear();
+			m_resources.Clear();
+
 			using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
 			{
 				long position = stream.BaseStream.Position;
 				Header.Read(stream);
 				if (Header.Generation < BundleGeneration.BF_530_x)
 				{
-					return ReadPre530Metadata(stream, isClosable);
+					ReadPre530Metadata(stream, isClosable);
 				}
 				else
 				{
-					return Read530Metadata(stream, isClosable, position);
+					Read530Metadata(stream, isClosable, position);
+				}
+
+				foreach (BundleMetadata metadata in Metadatas)
+				{
+					foreach (BundleFileEntry entry in metadata.AssetsEntries)
+					{
+						if (!IsSerializedFileLoaded(entry.Name))
+						{
+							SerializedFile file = entry.ReadSerializedFile(m_fileCollection, OnRequestDependency);
+							m_files.Add(file);
+						}
+					}
+					foreach (BundleFileEntry entry in metadata.ResourceEntries)
+					{
+						ResourcesFile resesFile = entry.ReadResourcesFile(m_filePath);
+						m_resources.Add(resesFile);
+					}
 				}
 			}
 		}
 
-		private BundleFileData ReadPre530Metadata(EndianStream stream, bool isClosable)
+		private void ReadPre530Metadata(EndianStream stream, bool isClosable)
 		{
 			switch (Header.Type)
 			{
@@ -93,11 +134,11 @@ namespace UtinyRipper.BundleFiles
 						throw new NotSupportedException($"Raw data with several chunks {Header.ChunkInfos.Count} isn't supported");
 					}
 					
-					BundleMetadata metadata = new BundleMetadata(stream.BaseStream, isClosable);
-					metadata.ReadPre530Metadata(stream);
-					
-					return new BundleFileData(metadata);
+					BundleMetadata metadata = new BundleMetadata(stream.BaseStream, m_filePath, isClosable);
+					metadata.ReadPre530(stream);
+					Metadatas = new BundleMetadata[] { metadata };
 				}
+				break;
 
 				case BundleType.UnityWeb:
 				case BundleType.HexFA:
@@ -109,27 +150,27 @@ namespace UtinyRipper.BundleFiles
 						MemoryStream memStream = new MemoryStream(new byte[chunkInfo.DecompressedSize]);
 						SevenZipHelper.DecompressLZMASizeStream(stream.BaseStream, chunkInfo.CompressedSize, memStream);
 						
-						BundleMetadata metadata = new BundleMetadata(memStream, true);
+						BundleMetadata metadata = new BundleMetadata(memStream, m_filePath, true);
 						using (EndianStream decompressStream = new EndianStream(memStream, EndianType.BigEndian))
 						{
-							metadata.ReadPre530Metadata(decompressStream);
+							metadata.ReadPre530(decompressStream);
 						}
 						metadatas[i] = metadata;
 					}
-					if(isClosable)
+					Metadatas = metadatas;
+					if (isClosable)
 					{
 						stream.Dispose();
-					}
-					
-					return new BundleFileData(metadatas);
+					}					
 				}
+				break;
 
 				default:
 					throw new NotSupportedException($"Bundle type {Header.Type} isn't supported before 530 generation");
 			}
 		}
 
-		private BundleFileData Read530Metadata(EndianStream stream, bool isClosable, long basePosition)
+		private void Read530Metadata(EndianStream stream, bool isClosable, long basePosition)
 		{
 			long dataPosition = stream.BaseStream.Position;
 			if (Header.Flags.IsMetadataAtTheEnd())
@@ -153,8 +194,8 @@ namespace UtinyRipper.BundleFiles
 					// unknown 0x10
 					stream.BaseStream.Position += 0x10;
 					blockInfos = stream.ReadArray<BlockInfo>();
-					metadata = new BundleMetadata(stream.BaseStream, isClosable);
-					metadata.Read530Metadata(stream, dataPosition);
+					metadata = new BundleMetadata(stream.BaseStream, m_filePath, isClosable);
+					metadata.Read530(stream, dataPosition);
 					
 					if(stream.BaseStream.Position != metaPosition + Header.MetadataDecompressedSize)
 					{
@@ -175,8 +216,8 @@ namespace UtinyRipper.BundleFiles
 							// unknown 0x10
 							metadataStream.BaseStream.Position += 0x10;
 							blockInfos = metadataStream.ReadArray<BlockInfo>();
-							metadata = new BundleMetadata(stream.BaseStream, isClosable);
-							metadata.Read530Metadata(metadataStream, dataPosition);
+							metadata = new BundleMetadata(stream.BaseStream, m_filePath, isClosable);
+							metadata.Read530(metadataStream, dataPosition);
 								
 							if(memStream.Position != memStream.Length)
 							{
@@ -208,8 +249,8 @@ namespace UtinyRipper.BundleFiles
 							// unknown 0x10
 							metadataStream.BaseStream.Position += 0x10;
 							blockInfos = metadataStream.ReadArray<BlockInfo>();
-							metadata = new BundleMetadata(stream.BaseStream, isClosable);
-							metadata.Read530Metadata(metadataStream, dataPosition);
+							metadata = new BundleMetadata(stream.BaseStream, m_filePath, isClosable);
+							metadata.Read530(metadataStream, dataPosition);
 							
 							if (memStream.Position != memStream.Length)
 							{
@@ -225,15 +266,15 @@ namespace UtinyRipper.BundleFiles
 			}
 
 			stream.BaseStream.Position = dataPosition;
-			return Read530Blocks(stream, isClosable, blockInfos, metadata);
+			Read530Blocks(stream, isClosable, blockInfos, metadata);
 		}
 				
-		private BundleFileData Read530Blocks(EndianStream stream, bool isClosable, BlockInfo[] blockInfos, BundleMetadata metadata)
+		private void Read530Blocks(EndianStream stream, bool isClosable, BlockInfo[] blockInfos, BundleMetadata metadata)
 		{
 			// Special case. If bundle has no compressed blocks then pass it as a stream
 			if(blockInfos.All(t => t.Flags.GetCompression() == BundleCompressType.None))
 			{
-				return new BundleFileData(metadata);
+				Metadatas = new BundleMetadata[] { metadata };
 			}
 
 			long dataPosisition = stream.BaseStream.Position;
@@ -286,25 +327,62 @@ namespace UtinyRipper.BundleFiles
 				string name = bundleEntry.Name;
 				long offset = bundleEntry.Offset - dataPosisition;
 				long size = bundleEntry.Size;
-				BundleFileEntry streamEntry = new BundleFileEntry(memStream, name, offset, size);
+				BundleFileEntry streamEntry = new BundleFileEntry(memStream, m_filePath, name, offset, size);
 				entries[i] = streamEntry;
 			}
-			BundleMetadata streamMetadata = new BundleMetadata(memStream, true, entries);
-			return new BundleFileData(streamMetadata);
-		}
-		
-		public BundleHeader Header { get; } = new BundleHeader();
-		public BundleFileData FileData
-		{
-			get => m_fileData;
-			set
-			{
-				m_fileData = value;
-				m_isDisposable = value != null;
-			}
+			BundleMetadata streamMetadata = new BundleMetadata(memStream, m_filePath, true, entries);
+			Metadatas = new BundleMetadata[] { streamMetadata };
 		}
 
-		private BundleFileData m_fileData;
+		private bool IsSerializedFileLoaded(string name)
+		{
+			return SerializedFiles.Any(t => t.Name == name);
+		}
+
+		private void OnRequestDependency(string dependency)
+		{
+			if(IsSerializedFileLoaded(dependency))
+			{
+				return;
+			}
+
+			foreach (BundleMetadata metadata in Metadatas)
+			{
+				foreach (BundleFileEntry entry in metadata.AssetsEntries)
+				{
+					if(entry.Name == dependency)
+					{
+						SerializedFile file = entry.ReadSerializedFile(m_fileCollection, OnRequestDependency);
+						m_files.Add(file);
+						return;
+					}
+				}
+			}
+
+			m_requestDependencyCallback?.Invoke(dependency);
+		}
+
+		public BundleHeader Header { get; } = new BundleHeader();
+		public IReadOnlyList<BundleMetadata> Metadatas
+		{
+			get => m_metadatas;
+			private set
+			{
+				m_metadatas = value;
+				m_isDisposable = m_metadatas != null;
+			}
+		}
+		public IReadOnlyList<SerializedFile> SerializedFiles => m_files;
+		public IReadOnlyList<ResourcesFile> ResourceFiles => m_resources;
+
+		private readonly List<SerializedFile> m_files = new List<SerializedFile>();
+		private readonly List<ResourcesFile> m_resources = new List<ResourcesFile>();
+
+		private readonly FileCollection m_fileCollection;
+		private readonly string m_filePath;
+		private readonly Action<string> m_requestDependencyCallback;
+
 		private bool m_isDisposable = false;
+		private IReadOnlyList<BundleMetadata> m_metadatas;
 	}
 }

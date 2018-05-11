@@ -350,7 +350,7 @@
     <Compile Include="Parser\Format\SerializedFile\Parser\TypeTree.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\TypeTreeNode.cs" />
     <Compile Include="Parser\Format\WebFile\Entry\WebFileEntry.cs" />
-    <Compile Include="Parser\Format\WebFile\Entry\WebFileData.cs" />
+    <Compile Include="Parser\Format\WebFile\Entry\WebMetadata.cs" />
     <Compile Include="Parser\Format\WebFile\WebFile.cs" />
     <Compile Include="Parser\IO\AssetStream\TransferInstructionFlags.cs" />
     <Compile Include="Parser\IO\Extensions\IDictionaryExtensions.cs" />
@@ -624,7 +624,6 @@
     <Compile Include="Parser\Format\BundleFile\Parser\BundleCompressType.cs" />
     <Compile Include="Parser\Format\BundleFile\BundleFile.cs" />
     <Compile Include="Parser\Format\BundleFile\BundleGeneration.cs" />
-    <Compile Include="Parser\Format\BundleFile\Entry\BundleFileData.cs" />
     <Compile Include="Parser\Version\Version.cs" />
     <Compile Include="Parser\Classes\Base\Object\Object.cs" />
     <Compile Include="Parser\Classes\BuildSettings.cs" />

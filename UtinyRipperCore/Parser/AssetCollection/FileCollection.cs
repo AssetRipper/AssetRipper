@@ -27,17 +27,26 @@ namespace UtinyRipper
 			{
 				LoadAssetBundle(filePath);
 			}
-			else if(WebFile.IsWebFile(filePath))
+			else if (WebFile.IsWebFile(filePath))
 			{
 				LoadWebFile(filePath);
 			}
 			else
 			{
 				string fileName = Path.GetFileName(filePath);
-				ReadSerializedFile(filePath, fileName);
+				LoadSerializedFile(filePath, fileName);
 			}
 		}
 
+		public void Load(IReadOnlyCollection<string> filePathes)
+		{
+			foreach (string file in filePathes)
+			{
+				Load(file);
+			}
+		}
+
+#warning TODO: replace resource/unity_default_resources to library/unity default resources
 		public void Read(Stream stream, string filePath, string fileName)
 		{
 			if (BundleFile.IsBundleFile(stream))
@@ -54,65 +63,53 @@ namespace UtinyRipper
 			}
 		}
 
-		public void LoadAssetBundle(string filePath)
-		{
-			using (BundleFile bundle = new BundleFile())
-			{
-				bundle.Load(filePath);
-				ProcessSerializedFileData(bundle.FileData, filePath);
-			}
-		}
-
-		public void ReadAssetBundle(Stream stream, string filePath)
-		{
-			using (BundleFile bundle = new BundleFile())
-			{
-				bundle.Read(stream);
-				ProcessSerializedFileData(bundle.FileData, filePath);
-			}
-		}
-
-		public void LoadWebFile(string filePath)
-		{
-			using (WebFile web = new WebFile())
-			{
-				web.Load(filePath);
-				ProcessWebFileData(web.FileData, filePath);
-			}
-		}
-
-		public void ReadWebFile(Stream stream, string filePath)
-		{
-			using (WebFile web = new WebFile())
-			{
-				web.Read(stream);
-				ProcessWebFileData(web.FileData, filePath);
-			}
-		}
-
-		public void ReadSerializedFile(string filePath, string fileName)
+		public void LoadSerializedFile(string filePath, string fileName)
 		{
 			SerializedFile file = new SerializedFile(this, filePath, fileName);
-			file.EventRequestDependency += OnRequestDependency;
-
-			file.Load(filePath);
+			file.Load(filePath, OnRequestDependency);
 			AddSerializedFile(file);
 		}
 
 		public void ReadSerializedFile(Stream stream, string filePath, string fileName)
 		{
 			SerializedFile file = new SerializedFile(this, filePath, fileName);
-			file.EventRequestDependency += OnRequestDependency;
-
-			file.Read(stream);
+			file.Read(stream, OnRequestDependency);
 			AddSerializedFile(file);
 		}
 
-		public void Load(IReadOnlyCollection<string> filePathes)
+		public void LoadAssetBundle(string filePath)
 		{
-			foreach(string file in filePathes)
+			using (BundleFile bundle = new BundleFile(this, filePath, OnRequestDependency))
 			{
-				Load(file);
+				bundle.Load(filePath);
+				AddBundleFile(bundle);
+			}
+		}
+
+		public void ReadAssetBundle(Stream stream, string filePath)
+		{
+			using (BundleFile bundle = new BundleFile(this, filePath, OnRequestDependency))
+			{
+				bundle.Read(stream);
+				AddBundleFile(bundle);
+			}
+		}
+
+		public void LoadWebFile(string filePath)
+		{
+			using (WebFile web = new WebFile(this, filePath, OnRequestDependency))
+			{
+				web.Load(filePath);
+				AddWebFile(web);
+			}
+		}
+
+		public void ReadWebFile(Stream stream, string filePath)
+		{
+			using (WebFile web = new WebFile(this, filePath, OnRequestDependency))
+			{
+				web.Read(stream);
+				AddWebFile(web);
 			}
 		}
 
@@ -197,24 +194,7 @@ namespace UtinyRipper
 			}
 		}
 
-		private void ProcessSerializedFileData(BundleFileData fileData, string filePath)
-		{
-			foreach (BundleMetadata metadata in fileData.Metadatas)
-			{
-				foreach (BundleFileEntry entry in metadata.AssetsEntries)
-				{
-					SerializedFile file = entry.ReadSerializedFile(this, filePath);
-					AddSerializedFile(file);
-				}
-				foreach (BundleFileEntry entry in metadata.ResourceEntries)
-				{
-					ResourcesFile resesFile = entry.ReadResourcesFile(filePath);
-					m_resources.Add(resesFile);
-				}
-			}
-		}
-
-		private void ProcessWebFileData(WebFileData fileData, string filePath)
+		private void ProcessWebFileData(WebMetadata fileData, string filePath)
 		{
 			foreach (WebFileEntry entry in fileData.AssetsEntries)
 			{
@@ -246,6 +226,26 @@ namespace UtinyRipper
 			m_files.Add(file);
 		}
 
+		private void AddBundleFile(BundleFile bundle)
+		{
+			foreach(SerializedFile file in bundle.SerializedFiles)
+			{
+				AddSerializedFile(file);
+			}
+			foreach (ResourcesFile resource in bundle.ResourceFiles)
+			{
+				m_resources.Add(resource);
+			}
+		}
+
+		private void AddWebFile(WebFile web)
+		{
+			foreach (ResourcesFile resource in web.ResourceFiles)
+			{
+				m_resources.Add(resource);
+			}
+		}
+
 		private void SetVersion(SerializedFile file)
 		{
 			if (file.Version.IsSet)
@@ -266,6 +266,14 @@ namespace UtinyRipper
 
 		private void OnRequestDependency(string dependency)
 		{
+			foreach(SerializedFile file in Files)
+			{
+				if(file.Name == dependency)
+				{
+					return;
+				}
+			}
+
 			EventRequestDependency?.Invoke(dependency);
 		}
 
