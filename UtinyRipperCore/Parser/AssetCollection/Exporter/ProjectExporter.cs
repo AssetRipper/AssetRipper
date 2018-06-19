@@ -167,9 +167,9 @@ namespace UtinyRipper.AssetExporters
 				case ClassIDType.Object:
 					return AssetType.Meta;
 				case ClassIDType.Texture:
-					return m_exporters[ClassIDType.Texture2D].ToExportType(classID);
+					return m_exporters[ClassIDType.Texture2D].ToExportType(ClassIDType.Texture2D);
 				case ClassIDType.RuntimeAnimatorController:
-					return m_exporters[ClassIDType.AnimatorController].ToExportType(classID);
+					return m_exporters[ClassIDType.AnimatorController].ToExportType(ClassIDType.AnimatorController);
 
 				// not implemented yet
 				case ClassIDType.Flare:

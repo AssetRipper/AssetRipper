@@ -447,6 +447,13 @@ namespace UtinyRipper.Classes
 					switch (binding.BindingType)
 					{
 						case BindingType.Translation:
+							// HACK: TEMP:
+							if(curve + 3 > curvesValue.Count )
+							{
+								curve += 3;
+								break;
+							}
+
 							float x = curvesValue[curve++ - offset];
 							float y = curvesValue[curve++ - offset];
 							float z = curvesValue[curve++ - offset];
@@ -467,6 +474,13 @@ namespace UtinyRipper.Classes
 							break;
 
 						case BindingType.Rotation:
+							// HACK: TEMP:
+							if (curve + 4 > curvesValue.Count)
+							{
+								curve += 4;
+								break;
+							}
+
 							x = curvesValue[curve++ - offset];
 							y = curvesValue[curve++ - offset];
 							z = curvesValue[curve++ - offset];
@@ -487,6 +501,13 @@ namespace UtinyRipper.Classes
 							break;
 
 						case BindingType.Scaling:
+							// HACK: TEMP:
+							if (curve + 3 > curvesValue.Count)
+							{
+								curve += 3;
+								break;
+							}
+
 							x = curvesValue[curve++ - offset];
 							y = curvesValue[curve++ - offset];
 							z = curvesValue[curve++ - offset];
@@ -506,6 +527,13 @@ namespace UtinyRipper.Classes
 							break;
 
 						case BindingType.EulerRotation:
+							// HACK: TEMP:
+							if (curve + 3 > curvesValue.Count)
+							{
+								curve += 3;
+								break;
+							}
+
 							x = curvesValue[curve++ - offset];
 							y = curvesValue[curve++ - offset];
 							z = curvesValue[curve++ - offset];

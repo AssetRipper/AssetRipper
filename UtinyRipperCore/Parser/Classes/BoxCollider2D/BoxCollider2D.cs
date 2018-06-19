@@ -16,7 +16,7 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public static bool IsReadSpriteTilingProperty(Version version)
 		{
-			return version.IsGreaterEqual(2017);
+			return version.IsGreaterEqual(5, 6);
 		}
 		/// <summary>
 		/// Less than 5.0.0

@@ -48,7 +48,15 @@ namespace UtinyRipper.AssetExporters
 			}
 			else
 			{
-				GUID = Components.Where(t => t.ClassID == ClassIDType.OcclusionCullingSettings).Select(t => (OcclusionCullingSettings)t).First().SceneGUID;
+				OcclusionCullingSettings sceneSettings = Components.Where(t => t.ClassID == ClassIDType.OcclusionCullingSettings).Select(t => (OcclusionCullingSettings)t).FirstOrDefault();
+				if(sceneSettings == null)
+				{
+					GUID = new UtinyGUID(Guid.NewGuid());
+				}
+				else
+				{
+					GUID = sceneSettings.SceneGUID;
+				}
 			}
 		}
 
