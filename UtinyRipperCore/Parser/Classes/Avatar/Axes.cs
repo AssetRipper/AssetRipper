@@ -6,11 +6,11 @@ namespace UtinyRipper.Classes.Avatars
 	public struct Axes : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
-		/// 5.6.3 and greater
+		/// 5.4.0 and greater
 		/// </summary>
 		public static bool IsVector3(Version version)
 		{
-			return version.IsGreaterEqual(5, 6, 1);
+			return version.IsGreaterEqual(5, 4);
 		}
 
 		public void Read(AssetStream stream)

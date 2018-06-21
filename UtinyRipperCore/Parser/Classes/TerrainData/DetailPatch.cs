@@ -10,7 +10,9 @@ namespace UtinyRipper.Classes.TerrainDatas
 		{
 			Bounds.Read(stream);
 			m_layerIndices = stream.ReadByteArray();
+			stream.AlignStream(AlignType.Align4);
 			m_numberOfObjects = stream.ReadByteArray();
+			stream.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
