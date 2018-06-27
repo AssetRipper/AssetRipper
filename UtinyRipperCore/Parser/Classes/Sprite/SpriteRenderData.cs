@@ -26,13 +26,15 @@ namespace UtinyRipper.Classes.Sprites
 		public static bool IsReadBindpose(Version version)
 		{
 			return version.IsGreaterEqual(2018);
-		}		
+		}
 		/// <summary>
-		/// 5.4.5p1 to 5.5.0 exclusive or 5.5.3 and greater
+		/// 5.4.5p1 to 5.5.0 exclusive or 5.5.0p3 to 5.5.0px or 5.5.3 and greater
 		/// </summary>
 		public bool IsReadAtlasRectOffset(Version version)
 		{
-			return version.IsGreaterEqual(5, 4, 5, VersionType.Patch, 1) && version.IsLess(5, 5) || version.IsGreaterEqual(5, 5, 3);
+			return (version.IsGreaterEqual(5, 4, 5, VersionType.Patch, 1) && version.IsLess(5, 5)) ||
+				(version.IsEqual(5, 5, 0) && version.IsGreaterEqual(5, 5, 0, VersionType.Patch, 3)) ||
+				version.IsGreaterEqual(5, 5, 3);
 		}
 		/// <summary>
 		/// 4.5.0 and greater

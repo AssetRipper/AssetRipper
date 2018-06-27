@@ -36,8 +36,12 @@ namespace UtinyRipper.Classes
 
 		private static SceneObjectIdentifier CreateObjectID(IExportContainer container, Object asset)
 		{
-			string id = container.GetExportID(asset);
-			long lid = long.Parse(id);
+			long lid = 0;
+			if (asset != null)
+			{
+				string id = container.GetExportID(asset);
+				lid = long.Parse(id);
+			}
 			SceneObjectIdentifier soId = new SceneObjectIdentifier(lid, 0);
 			return soId;
 		}
