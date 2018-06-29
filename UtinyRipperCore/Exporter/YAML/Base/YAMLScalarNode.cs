@@ -75,7 +75,7 @@ namespace UtinyRipper.Exporter.YAML
 		public YAMLScalarNode(string value)
 		{
 			SetValue(value);
-			Style = GetStyle(value);
+			UpdateStyle();
 		}
 
 		public void SetValue(bool value)
@@ -175,18 +175,44 @@ namespace UtinyRipper.Exporter.YAML
 					emitter.Write('\'');
 					break;
 
+				case ScalarStyle.DoubleQuoted:
+					emitter.Write('"');
+					emitter.Write(Value);
+					emitter.Write('"');
+					break;
+
 				default:
 					throw new Exception($"Unsupported scalar style {Style}");
 			}
 		}
 
-		private ScalarStyle GetStyle(string value)
+		private void UpdateStyle()
 		{
-			if(s_illegal.IsMatch(value))
+			string value = Value;
+			if (s_illegal.IsMatch(value))
 			{
-				return ScalarStyle.SingleQuoted;
+				if(value.Contains("'"))
+				{
+					if(value.Contains("\""))
+					{
+						value = value.Replace("'", "''");
+						SetValue(value);
+						Style = ScalarStyle.SingleQuoted;
+					}
+					else
+					{
+						Style = ScalarStyle.DoubleQuoted;
+					}
+				}
+				else
+				{
+					Style = ScalarStyle.SingleQuoted;
+				}
 			}
-			return ScalarStyle.Plain;
+			else
+			{
+				Style = ScalarStyle.Plain;
+			}
 		}
 
 		public static YAMLScalarNode Empty { get; } = new YAMLScalarNode();

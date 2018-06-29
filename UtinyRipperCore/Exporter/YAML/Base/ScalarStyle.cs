@@ -19,5 +19,10 @@
 		/// The single-quoted scalar style.
 		/// </summary>
 		SingleQuoted,
+
+		/// <summary>
+		/// The double-quoted scalar style.
+		/// </summary>
+		DoubleQuoted,
 	}
 }

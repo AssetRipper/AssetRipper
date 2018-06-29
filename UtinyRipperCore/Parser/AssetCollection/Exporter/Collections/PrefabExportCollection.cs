@@ -116,9 +116,10 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
-		protected override void ExportInner(ProjectAssetContainer container, string filePath)
+		protected override string ExportInner(ProjectAssetContainer container, string filePath)
 		{
 			AssetExporter.Export(container, Objects, filePath);
+			return filePath;
 		}
 
 		private void AddObject(EditorExtension @object)

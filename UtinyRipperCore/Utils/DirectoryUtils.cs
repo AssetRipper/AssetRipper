@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace UtinyRipper
 {
@@ -13,8 +15,17 @@ namespace UtinyRipper
 				return fileName;
 			}
 
-			string[] files = Directory.GetFiles(dirPath, $"{fileName}*.*").Where(t => !t.EndsWith(".meta")).Select(t => Path.GetFileName(t).ToLower()).ToArray();
-			if (files.Length == 0)
+			Regex regex = new Regex($"{fileName}[_]?[\\d]*\\.[^.]+$");
+			DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
+			List<string> files = new List<string>();
+			foreach(FileInfo fileInfo in dirInfo.EnumerateFiles())
+			{
+				if(regex.IsMatch(fileInfo.Name))
+				{
+					files.Add(fileInfo.Name.ToLower());
+				}
+			}
+			if (files.Count == 0)
 			{
 				return fileName;
 			}
@@ -22,7 +33,7 @@ namespace UtinyRipper
 			for (int i = 1; i < int.MaxValue; i++)
 			{
 				string newName = $"{fileName}_{i}.".ToLower();
-				if (!files.Any(t => t.StartsWith(newName)))
+				if (files.All(t => !t.StartsWith(newName)))
 				{
 					return $"{fileName}_{i}";
 				}
