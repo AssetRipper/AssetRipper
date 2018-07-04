@@ -17,7 +17,7 @@ namespace UtinyRipper.Classes.SpriteAtlases
 		{
 			Texture.Read(stream);
 			AlphaTexture.Read(stream);
-			Texture.Read(stream);
+			TextureRect.Read(stream);
 			TextureRectOffset.Read(stream);
 			if(IsReadAtlasRectOffset(stream.Version))
 			{
