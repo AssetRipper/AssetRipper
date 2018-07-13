@@ -32,14 +32,7 @@ namespace UtinyRipper
 
 		public ResourcesFile ReadResourcesFile(string filePath)
 		{
-			byte[] buffer = new byte[m_size];
-			m_stream.Position = m_offset;
-			int read = m_stream.Read(buffer, 0, buffer.Length);
-			if (read != m_size)
-			{
-				throw new Exception($"Can't read {m_size} bytes from resource file. Read only {read} bytes");
-			}
-			ResourcesFile resesFile = new ResourcesFile(filePath, Name, buffer);
+			ResourcesFile resesFile = new ResourcesFile(filePath, Name, m_stream, m_offset);
 			return resesFile;
 		}
 

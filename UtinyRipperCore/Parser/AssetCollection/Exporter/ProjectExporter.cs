@@ -70,6 +70,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.AnimatorOverrideController, yamlExporter);
 			OverrideExporter(ClassIDType.CanvasRenderer, yamlExporter);
 			OverrideExporter(ClassIDType.Canvas, yamlExporter);
+			OverrideExporter(ClassIDType.RectTransform, yamlExporter);
 			OverrideExporter(ClassIDType.NavMeshData, yamlExporter);
 			OverrideExporter(ClassIDType.OcclusionCullingData, yamlExporter);
 			OverrideExporter(ClassIDType.Prefab, yamlExporter);

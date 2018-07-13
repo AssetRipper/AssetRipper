@@ -146,7 +146,7 @@ namespace UtinyRipper.Classes
 						return;
 					}
 					
-					res.Stream.Position = StreamData.Offset;
+					res.Position = StreamData.Offset;
 					Export(container, stream, res.Stream, StreamData.Size);
 					return;
 				}

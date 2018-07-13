@@ -62,6 +62,11 @@ namespace UtinyRipper.Classes
 #warning unknown
 			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
 		}
+		public static bool IsReadExplicitDataLayout(Version version)
+		{
+#warning unknown
+			return version.IsGreaterEqual(2017, 4);
+		}
 		/// <summary>
 		/// 2017.1.0b2 andgreater
 		/// </summary>
@@ -69,8 +74,12 @@ namespace UtinyRipper.Classes
 		{
 			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 		}
-		
-		
+		public static bool IsReadSceneHashes(Version version)
+		{
+#warning unknown
+			return version.IsGreaterEqual(2017, 4);
+		}
+
 		private static int GetSerializedVersion(Version version)
 		{
 			if (Config.IsExportTopmostSerializedVersion)
@@ -131,10 +140,19 @@ namespace UtinyRipper.Classes
 				IsStreamedSceneAssetBundle = stream.ReadBoolean();
 				stream.AlignStream(AlignType.Align4);
 			}
-
+			if(IsReadExplicitDataLayout(stream.Version))
+			{
+				ExplicitDataLayout = stream.ReadInt32();
+			}
 			if (IsReadPathFlags(stream.Version))
 			{
 				PathFlags = stream.ReadInt32();
+			}
+
+			if(IsReadSceneHashes(stream.Version))
+			{
+				m_sceneHashes = new Dictionary<string, string>();
+				m_sceneHashes.Read(stream);
 			}
 		}
 
@@ -169,6 +187,7 @@ namespace UtinyRipper.Classes
 		public string AssetBundleName { get; private set; }
 		public IReadOnlyList<string> Dependencies  => m_dependencies;
 		public bool IsStreamedSceneAssetBundle { get; private set; }
+		public int ExplicitDataLayout { get; private set; }
 		public int PathFlags { get; private set; }
 		
 		public AssetBundles.AssetInfo MainAsset;
@@ -179,6 +198,6 @@ namespace UtinyRipper.Classes
 		private KeyValuePair<int, uint>[] m_classCampatibility;
 		private Dictionary<int, int> m_classVersionMap;
 		private string[] m_dependencies;
-
+		private Dictionary<string, string> m_sceneHashes;
 	}
 }

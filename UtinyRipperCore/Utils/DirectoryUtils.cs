@@ -16,7 +16,7 @@ namespace UtinyRipper
 			}
 
 			string escapeFileName = Regex.Escape(fileName);
-			Regex regex = new Regex($"{escapeFileName}[_]?[\\d]*\\.[^.]+$");
+			Regex regex = new Regex($"(?i){escapeFileName}[_]?[\\d]*\\.[^.]+$");
 			DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
 			List<string> files = new List<string>();
 			foreach(FileInfo fileInfo in dirInfo.EnumerateFiles())

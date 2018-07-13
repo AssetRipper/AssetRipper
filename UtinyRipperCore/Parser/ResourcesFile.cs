@@ -5,11 +5,6 @@ namespace UtinyRipper
 {
 	public class ResourcesFile : IDisposable
 	{
-		public ResourcesFile(string filePath, string fileName, byte[] data):
-			this(filePath, fileName, new MemoryStream(data))
-		{
-		}
-
 		public ResourcesFile(string filePath, string fileName, Stream stream)
 		{
 			if (string.IsNullOrEmpty(filePath))
@@ -30,6 +25,12 @@ namespace UtinyRipper
 			Stream = stream;
 		}
 
+		public ResourcesFile(string filePath, string fileName, Stream stream, long basePisition) :
+			this(filePath, fileName, stream)
+		{
+			m_basePisition = basePisition;
+		}
+
 		public void Dispose()
 		{
 			if(Stream != null)
@@ -47,5 +48,11 @@ namespace UtinyRipper
 		/// </summary>
 		public string Name { get; }
 		public Stream Stream { get; }
+		public long Position
+		{
+			set => Stream.Position = m_basePisition + value;
+		}
+
+		private long m_basePisition = 0;
 	}
 }

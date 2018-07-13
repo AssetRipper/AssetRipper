@@ -279,30 +279,35 @@ namespace UtinyRipper.BundleFiles
 
 			long dataPosisition = stream.BaseStream.Position;
 			long decompressedSize = blockInfos.Sum(t => t.DecompressedSize);
+			Stream bufferStream;
 			if (decompressedSize > int.MaxValue)
 			{
-				throw new Exception("How to read such big data? Save to file and then read?");
+				string tempFile = Path.GetTempFileName();
+				bufferStream = new FileStream(tempFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose); 
 			}
-
-			MemoryStream memStream = new MemoryStream((int)decompressedSize);
+			else
+			{
+				bufferStream = new MemoryStream((int)decompressedSize);
+			}
+			
 			foreach (BlockInfo blockInfo in blockInfos)
 			{
 				BundleCompressType compressType = blockInfo.Flags.GetCompression();
 				switch (compressType)
 				{
 					case BundleCompressType.None:
-						stream.BaseStream.CopyStream(memStream, blockInfo.DecompressedSize);
+						stream.BaseStream.CopyStream(bufferStream, blockInfo.DecompressedSize);
 						break;
 
 					case BundleCompressType.LZMA:
-						SevenZipHelper.DecompressLZMAStream(stream.BaseStream, blockInfo.CompressedSize, memStream, blockInfo.DecompressedSize);
+						SevenZipHelper.DecompressLZMAStream(stream.BaseStream, blockInfo.CompressedSize, bufferStream, blockInfo.DecompressedSize);
 						break;
 
 					case BundleCompressType.LZ4:
 					case BundleCompressType.LZ4HZ:
 						using (Lz4Stream lzStream = new Lz4Stream(stream.BaseStream, blockInfo.CompressedSize))
 						{
-							long read = lzStream.Read(memStream, blockInfo.DecompressedSize);
+							long read = lzStream.Read(bufferStream, blockInfo.DecompressedSize);
 							if(read != blockInfo.DecompressedSize)
 							{
 								throw new Exception($"Read {read} but expected {blockInfo.CompressedSize}");
@@ -314,7 +319,7 @@ namespace UtinyRipper.BundleFiles
 						throw new NotImplementedException($"Bundle compression '{compressType}' isn't supported");
 				}
 			}
-			
+
 			if (isClosable)
 			{
 				stream.Dispose();
@@ -327,10 +332,10 @@ namespace UtinyRipper.BundleFiles
 				string name = bundleEntry.Name;
 				long offset = bundleEntry.Offset - dataPosisition;
 				long size = bundleEntry.Size;
-				BundleFileEntry streamEntry = new BundleFileEntry(memStream, m_filePath, name, offset, size);
+				BundleFileEntry streamEntry = new BundleFileEntry(bufferStream, m_filePath, name, offset, size);
 				entries[i] = streamEntry;
 			}
-			BundleMetadata streamMetadata = new BundleMetadata(memStream, m_filePath, true, entries);
+			BundleMetadata streamMetadata = new BundleMetadata(bufferStream, m_filePath, false, entries);
 			Metadatas = new BundleMetadata[] { streamMetadata };
 		}
 

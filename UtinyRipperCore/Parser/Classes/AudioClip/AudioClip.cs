@@ -335,7 +335,7 @@ namespace UtinyRipper.Classes
 					return;
 				}
 
-				res.Stream.Position = FSBResource.Offset;
+				res.Position = FSBResource.Offset;
 				if (StreamedResource.IsReadSize(container.Version))
 				{
 					res.Stream.CopyStream(stream, FSBResource.Size);
@@ -358,7 +358,7 @@ namespace UtinyRipper.Classes
 							return;
 						}
 
-						res.Stream.Position = FSBResource.Offset;
+						res.Position = FSBResource.Offset;
 						res.Stream.CopyStream(stream, StreamingInfo.Size);
 					}
 					else
