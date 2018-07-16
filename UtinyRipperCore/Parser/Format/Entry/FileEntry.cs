@@ -72,6 +72,11 @@ namespace UtinyRipper
 				{
 					return true;
 				}
+				if(ext == CawExtention || ext == EcmExtention || ext == SseExtention ||
+					ext == RgbExtention || ext == VisExtention)
+				{
+					return true;
+				}
 
 				return false;
 			}
@@ -82,6 +87,12 @@ namespace UtinyRipper
 		private const string ManifestExtention = ".manifest";
 		private const string ResourceExtension = ".resource";
 		private const string ResExtension = ".resS";
+		// Scene GI extensions
+		private const string CawExtention = ".caw";
+		private const string EcmExtention = ".ecm";
+		private const string SseExtention = ".sse";
+		private const string RgbExtention = ".rgb";
+		private const string VisExtention = ".vis";
 
 		protected readonly Stream m_stream;
 		protected readonly long m_offset;

@@ -71,6 +71,10 @@ namespace UtinyRipper.Classes.Shaders
 			{
 				return 201708220;
 			}
+			else if(version.IsLessEqual(2018, 2))
+			{
+				return 201802150;
+			}
 			else
 			{
 				throw new NotSupportedException($"No magic number for version {version}");

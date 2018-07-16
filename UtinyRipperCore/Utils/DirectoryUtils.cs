@@ -15,6 +15,10 @@ namespace UtinyRipper
 				return fileName;
 			}
 
+			if (fileName.Length > 245)
+			{
+				fileName = fileName.Substring(0, 245);
+			}
 			string escapeFileName = Regex.Escape(fileName);
 			Regex regex = new Regex($"(?i){escapeFileName}[_]?[\\d]*\\.[^.]+$");
 			DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
