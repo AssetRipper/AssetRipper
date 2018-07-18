@@ -93,6 +93,13 @@ namespace UtinyRipper.Classes
 			return version.IsLess(3, 5, 1);
 		}
 		/// <summary>
+		/// Less than 2018.2
+		/// </summary>
+		public static bool IsReadSkin(Version version)
+		{
+			return version.IsLess(2018, 2);
+		}
+		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
 		public static bool IsReadBindPoses(Version version)
@@ -176,8 +183,14 @@ namespace UtinyRipper.Classes
 		{
 			return version.IsGreaterEqual(5);
 		}
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadMeshMetrics(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
 
-		
 		/// <summary>
 		/// Less than 2.6.0
 		/// </summary>
@@ -218,9 +231,14 @@ namespace UtinyRipper.Classes
 		{
 			if (Config.IsExportTopmostSerializedVersion)
 			{
+#warning update version:
 				return 8;
 			}
-			
+
+			if (version.IsGreater(2018, 2))
+			{
+				return 9;
+			}
 #warning unknown
 			if (version.IsGreater(4, 0, 0, VersionType.Beta, 1))
 			{
@@ -377,7 +395,10 @@ namespace UtinyRipper.Classes
 				}
 			}
 
-			m_skin = stream.ReadArray<BoneWeights4>();
+			if(IsReadSkin(stream.Version))
+			{
+				m_skin = stream.ReadArray<BoneWeights4>();
+			}
 			if (IsReadBindPoses(stream.Version))
 			{
 				if (!IsReadBindPosesFirst(stream.Version))
@@ -457,6 +478,12 @@ namespace UtinyRipper.Classes
 			{
 				CollisionData.Read(stream);
 			}
+			if(IsReadMeshMetrics(stream.Version))
+			{
+				m_meshMetrics = new float[2];
+				m_meshMetrics[0] = stream.ReadSingle();
+				m_meshMetrics[1] = stream.ReadSingle();
+			}
 		}
 		
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -478,7 +505,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_KeepVertices", KeepVertices);
 			node.Add("m_KeepIndices", KeepIndices);
 			node.Add("m_IndexBuffer", IsReadIndexBuffer(container.Version) ? IndexBuffer.ExportYAML() : YAMLSequenceNode.Empty);
-			node.Add("m_Skin", Skin.ExportYAML(container));
+			node.Add("m_Skin", IsReadSkin(container.Version) ? Skin.ExportYAML(container) : YAMLSequenceNode.Empty);
 			node.Add("m_VertexData", GetExportVertexData(container.Version).ExportYAML(container));
 			node.Add("m_CompressedMesh", CompressedMesh.ExportYAML(container));
 			node.Add("m_LocalAABB", LocalAABB.ExportYAML(container));
@@ -549,5 +576,6 @@ namespace UtinyRipper.Classes
 		private uint[] m_boneNameHashes;
 		private Vector3f[] m_vertices;
 		private BoneWeights4[] m_skin;
+		private float[] m_meshMetrics;
 	}
 }

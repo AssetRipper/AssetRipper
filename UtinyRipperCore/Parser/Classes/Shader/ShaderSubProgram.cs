@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using UtinyRipper.Classes.Shaders.Exporters;
 
 namespace UtinyRipper.Classes.Shaders
 {
@@ -282,7 +283,7 @@ namespace UtinyRipper.Classes.Shaders
 			}
 		}
 		
-		public void Export(TextWriter writer)
+		public void Export(TextWriter writer, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
 		{
 			if(Keywords.Count > 0)
 			{
@@ -303,37 +304,13 @@ namespace UtinyRipper.Classes.Shaders
 			writer.Write("\"!!{0}\n", ProgramType.ToString());
 			writer.WriteIntent(5);
 
-#warning TODO: shader exporters
-			bool isText = ProgramType.IsGL() || ProgramType.IsMetal();
-			if (isText)
+			using (MemoryStream stream = new MemoryStream(m_programData))
 			{
-				using (MemoryStream stream = new MemoryStream(m_programData))
+				using (BinaryReader reader = new BinaryReader(stream))
 				{
-					using (BinaryReader reader = new BinaryReader(stream))
-					{
-						while(stream.Position != stream.Length)
-						{
-							char c = reader.ReadChar();
-							if (c == '\n')
-							{
-								if (stream.Position == stream.Length)
-								{
-									break;
-								}
-								writer.Write(c);
-								writer.WriteIntent(5);
-							}
-							else
-							{
-								writer.Write(c);
-							}
-						}
-					}
+					ShaderTextExporter exporter = exporterInstantiator.Invoke(ProgramType);
+					exporter.Export(reader, writer);
 				}
-			}
-			else
-			{
-				writer.Write("/*Can't export program data {0} as a text*/", ProgramType);
 			}
 			writer.Write('"');
 		}

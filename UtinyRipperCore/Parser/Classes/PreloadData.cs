@@ -20,7 +20,14 @@ namespace UtinyRipper.Classes
 		{
 			return version.IsGreaterEqual(5);
 		}
-
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadExplicitDataLayout(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+		
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -29,6 +36,10 @@ namespace UtinyRipper.Classes
 			if(IsReadDependencies(stream.Version))
 			{
 				m_dependencies = stream.ReadStringArray();
+			}
+			if(IsReadExplicitDataLayout(stream.Version))
+			{
+				ExplicitDataLayout = stream.ReadBoolean();
 			}
 		}
 
@@ -50,8 +61,9 @@ namespace UtinyRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		private IReadOnlyList<PPtr<Object>> Assets => m_assets;
-		private IReadOnlyList<string> Dependencies => m_dependencies;
+		public IReadOnlyList<PPtr<Object>> Assets => m_assets;
+		public IReadOnlyList<string> Dependencies => m_dependencies;
+		public bool ExplicitDataLayout { get; private set; }
 
 		private PPtr<Object>[] m_assets;
 		private string[] m_dependencies;

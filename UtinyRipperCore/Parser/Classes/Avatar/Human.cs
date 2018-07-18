@@ -7,6 +7,20 @@ namespace UtinyRipper.Classes.Avatars
 	public struct Human : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
+		/// Less than 2018.2
+		/// </summary>
+		public static bool IsReadHandles(Version version)
+		{
+			return version.IsLess(2018, 2);
+		}
+		/// <summary>
+		/// Less than 2018.2
+		/// </summary>
+		public static bool IsReadColliderIndex(Version version)
+		{
+			return version.IsLess(2018, 2);
+		}
+		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
 		public static bool IsReadHasTDoF(Version version)
@@ -28,6 +42,19 @@ namespace UtinyRipper.Classes.Avatars
 			return 1;
 		}
 
+		private IReadOnlyList<Handle> GetExportHandles(Version version)
+		{
+			return IsReadHandles(version) ? Handles : new Handle[0];
+		}
+		private IReadOnlyList<Collider> GetExportColliderArray(Version version)
+		{
+			return IsReadHandles(version) ? ColliderArray : new Collider[0];
+		}
+		private IReadOnlyList<int> GetExportColliderIndex(Version version)
+		{
+			return IsReadColliderIndex(version) ? ColliderIndex : new int[0];
+		}
+
 		public void Read(AssetStream stream)
 		{
 			RootX.Read(stream);
@@ -35,11 +62,17 @@ namespace UtinyRipper.Classes.Avatars
 			SkeletonPose.Read(stream);
 			LeftHand.Read(stream);
 			RightHand.Read(stream);
-			m_handles = stream.ReadArray<Handle>();
-			m_colliderArray = stream.ReadArray<Collider>();
+			if(IsReadHandles(stream.Version))
+			{
+				m_handles = stream.ReadArray<Handle>();
+				m_colliderArray = stream.ReadArray<Collider>();
+			}
 			m_humanBoneIndex = stream.ReadInt32Array();
 			m_humanBoneMass = stream.ReadSingleArray();
-			m_colliderIndex = stream.ReadInt32Array();
+			if (IsReadColliderIndex(stream.Version))
+			{
+				m_colliderIndex = stream.ReadInt32Array();
+			}
 			Scale = stream.ReadSingle();
 			ArmTwist = stream.ReadSingle();
 			ForeArmTwist = stream.ReadSingle();
@@ -67,11 +100,11 @@ namespace UtinyRipper.Classes.Avatars
 			node.Add("m_SkeletonPose", SkeletonPose.ExportYAML(container));
 			node.Add("m_LeftHand", LeftHand.ExportYAML(container));
 			node.Add("m_RightHand", RightHand.ExportYAML(container));
-			node.Add("m_Handles", Handles.ExportYAML(container));
-			node.Add("m_ColliderArray", ColliderArray.ExportYAML(container));
+			node.Add("m_Handles", GetExportHandles(container.Version).ExportYAML(container));
+			node.Add("m_ColliderArray", GetExportColliderArray(container.Version).ExportYAML(container));
 			node.Add("m_HumanBoneIndex", HumanBoneIndex.ExportYAML(true));
 			node.Add("m_HumanBoneMass", HumanBoneMass.ExportYAML());
-			node.Add("m_ColliderIndex", ColliderIndex.ExportYAML(true));
+			node.Add("m_ColliderIndex", GetExportColliderIndex(container.Version).ExportYAML(true));
 			node.Add("m_Scale", Scale);
 			node.Add("m_ArmTwist", ArmTwist);
 			node.Add("m_ForeArmTwist", ForeArmTwist);

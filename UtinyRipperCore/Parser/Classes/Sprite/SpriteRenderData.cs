@@ -28,6 +28,13 @@ namespace UtinyRipper.Classes.Sprites
 			return version.IsGreaterEqual(2018);
 		}
 		/// <summary>
+		/// Less than 2018.2
+		/// </summary>
+		public static bool IsReadSourceSkin(Version version)
+		{
+			return version.IsLess(2018, 2);
+		}
+		/// <summary>
 		/// 5.4.5p1 to 5.5.0 exclusive or 5.5.0p3 to 5.5.0px or 5.5.3 and greater
 		/// </summary>
 		public bool IsReadAtlasRectOffset(Version version)
@@ -76,6 +83,9 @@ namespace UtinyRipper.Classes.Sprites
 			if (IsReadBindpose(stream.Version))
 			{
 				m_bindpose = stream.ReadArray<Matrix4x4f>();
+			}
+			if(IsReadSourceSkin(stream.Version))
+			{
 				m_sourceSkin = stream.ReadArray<BoneWeights4>();
 			}
 

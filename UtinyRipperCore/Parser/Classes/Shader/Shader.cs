@@ -6,6 +6,7 @@ using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.Materials;
 using UtinyRipper.Classes.Shaders;
 using UtinyRipper.SerializedFiles;
+using UtinyRipper.Classes.Shaders.Exporters;
 
 namespace UtinyRipper.Classes
 {
@@ -201,7 +202,7 @@ namespace UtinyRipper.Classes
 			{
 				using (StreamWriter writer = new StreamWriter(stream))
 				{
-					SubProgramBlob.Export(writer, Script);
+					SubProgramBlob.Export(writer, Script, DefaultShaderExporterInstantiator);
 				}
 			}
 			else
@@ -224,6 +225,19 @@ namespace UtinyRipper.Classes
 					yield return shader.FetchDependency(file, isLog, ToLogString, "m_dependencies");
 				}
 			}
+		}
+
+		public static ShaderTextExporter DefaultShaderExporterInstantiator(ShaderGpuProgramType programType)
+		{
+			if(programType.IsGL())
+			{
+				return new ShaderGLESExporter();
+			}
+			if(programType.IsMetal())
+			{
+				return new ShaderMetalExporter();
+			}
+			return new ShaderUnknownExporter(programType);
 		}
 
 		public override string ExportExtension => "shader";

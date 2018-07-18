@@ -7,7 +7,7 @@
 			Name = stream.ReadStringAligned();
 			Position.Read(stream);
 			Rotation.Read(stream);
-			Length = stream.ReadInt32();
+			Length = stream.ReadSingle();
 			ParentID = stream.ReadInt32();
 		}
 

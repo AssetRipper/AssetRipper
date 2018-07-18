@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using UtinyRipper.Classes.Shaders.Exporters;
 
 namespace UtinyRipper.Classes.Shaders
 {
@@ -31,7 +32,7 @@ namespace UtinyRipper.Classes.Shaders
 			}
 		}
 
-		public void Export(TextWriter writer, string header)
+		public void Export(TextWriter writer, string header, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
 		{
 			int j = 0;
 			while (true)
@@ -57,7 +58,7 @@ namespace UtinyRipper.Classes.Shaders
 					}
 				}
 
-				SubPrograms[subProgram].Export(writer);
+				SubPrograms[subProgram].Export(writer, exporterInstantiator);
 			}
 			writer.WriteString(header, j, header.Length - j);
 		}

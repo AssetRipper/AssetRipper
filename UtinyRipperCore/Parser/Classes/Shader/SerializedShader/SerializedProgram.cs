@@ -24,7 +24,7 @@ namespace UtinyRipper.Classes.Shaders
 					int index = shader.Platforms.IndexOf(platform);
 					ShaderSubProgramBlob blob = shader.SubProgramBlobs[index];
 					int count = SubPrograms.Where(t => t.GpuProgramType == subProgram.GpuProgramType).Select(t => t.ShaderHardwareTier).Distinct().Count();
-					subProgram.Export(writer, blob, uplatform, count > 1);
+					subProgram.Export(writer, blob, uplatform, count > 1, Shader.DefaultShaderExporterInstantiator);
 				}
 				writer.WriteIntent(3);
 				writer.Write("}\n");

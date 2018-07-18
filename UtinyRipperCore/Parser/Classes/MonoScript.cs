@@ -44,6 +44,13 @@ namespace UtinyRipper.Classes
 		{
 			return version.IsGreaterEqual(3);
 		}
+		/// <summary>
+		/// Less than 2018.2
+		/// </summary>
+		public static bool IsReadIsEditorScript(Version version)
+		{
+			return version.IsLess(2018, 2);
+		}		
 
 		/// <summary>
 		/// Less than 5.0.0
@@ -57,9 +64,14 @@ namespace UtinyRipper.Classes
 		{
 			if (Config.IsExportTopmostSerializedVersion)
 			{
+#warning update version:
 				return 4;
 			}
 			
+			if(version.IsGreaterEqual(2018, 2))
+			{
+				return 5;
+			}
 			if (version.IsGreaterEqual(3, 4))
 			{
 				return 4;
@@ -112,7 +124,10 @@ namespace UtinyRipper.Classes
 				Namespace = stream.ReadStringAligned();
 			}
 			AssemblyName = stream.ReadStringAligned();
-			IsEditorScript = stream.ReadBoolean();
+			if (IsReadIsEditorScript(stream.Version))
+			{
+				IsEditorScript = stream.ReadBoolean();
+			}
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

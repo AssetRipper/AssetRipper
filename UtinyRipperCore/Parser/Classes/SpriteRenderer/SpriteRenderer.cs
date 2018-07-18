@@ -50,6 +50,14 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(2017);
 		}
 		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadSpriteSortPoint(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+		
+		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
 		private static bool IsAlignColor(Version version)
@@ -101,6 +109,10 @@ namespace UtinyRipper.Classes
 			{
 				MaskInteraction = (SpriteMaskInteraction)stream.ReadInt32();
 			}
+			if(IsReadSpriteSortPoint(stream.Version))
+			{
+				SpriteSortPoint = (SpriteSortPoint)stream.ReadInt32();
+			}
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -137,6 +149,7 @@ namespace UtinyRipper.Classes
 		public SpriteTileMode SpriteTileMode { get; private set; }
 		public bool WasSpriteAssigned { get; private set; }
 		public SpriteMaskInteraction MaskInteraction { get; private set; }
+		public SpriteSortPoint SpriteSortPoint { get; private set; }
 
 		public PPtr<Sprite> Sprite;
 		public ColorRGBAf Color;

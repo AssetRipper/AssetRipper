@@ -43,6 +43,20 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(3) && version.IsLess(5, 5);
 		}
 		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadStreamingMipmaps(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadStreamingMipmapsPriority(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
 		public static bool IsReadLightmapFormat(Version version)
@@ -99,8 +113,16 @@ namespace UtinyRipper.Classes
 			{
 				ReadAllowed = stream.ReadBoolean();
 			}
+			if(IsReadStreamingMipmaps(stream.Version))
+			{
+				StreamingMipmaps = stream.ReadBoolean();
+			}
 			stream.AlignStream(AlignType.Align4);
 
+			if(IsReadStreamingMipmapsPriority(stream.Version))
+			{
+				StreamingMipmapsPriority = stream.ReadInt32();
+			}
 			ImageCount = stream.ReadInt32();
 			TextureDimension = stream.ReadInt32();
 			TextureSettings.Read(stream);
@@ -851,6 +873,8 @@ namespace UtinyRipper.Classes
 		public bool MipMap { get; private set; }
 		public bool IsReadable { get; private set; }
 		public bool ReadAllowed { get; private set; }
+		public bool StreamingMipmaps { get; private set; }
+		public int StreamingMipmapsPriority { get; private set; }
 		public int ImageCount { get; private set; }
 		/// <summary>
 		/// TextureDimension enum has beed changed at least one time so it's impossible to cast to enum directly

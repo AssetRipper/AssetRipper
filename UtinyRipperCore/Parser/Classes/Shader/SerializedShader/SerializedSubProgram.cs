@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using UtinyRipper.Classes.Shaders.Exporters;
 
 namespace UtinyRipper.Classes.Shaders
 {
@@ -60,7 +62,7 @@ namespace UtinyRipper.Classes.Shaders
 			}
 		}
 
-		public void Export(TextWriter writer, ShaderSubProgramBlob blob, Platform platform, bool isTier)
+		public void Export(TextWriter writer, ShaderSubProgramBlob blob, Platform platform, bool isTier, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
 		{
 			writer.WriteIntent(4);
 			writer.Write("SubProgram \"{0} ", GpuProgramType.ToGPUPlatform(platform));
@@ -71,7 +73,7 @@ namespace UtinyRipper.Classes.Shaders
 			writer.Write("\" {\n");
 			writer.WriteIntent(5);
 			
-			blob.SubPrograms[(int)BlobIndex].Export(writer);
+			blob.SubPrograms[(int)BlobIndex].Export(writer, exporterInstantiator);
 
 			writer.Write('\n');
 			writer.WriteIntent(4);
