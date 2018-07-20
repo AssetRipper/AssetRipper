@@ -65,11 +65,11 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(2, 6);
 		}
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.3.0 and greater
 		/// </summary>
 		public static bool IsReadEulerCurves(Version version)
 		{
-			return version.IsGreaterEqual(5);
+			return version.IsGreaterEqual(5, 3);
 		}
 		/// <summary>
 		/// 4.3.0 and greater

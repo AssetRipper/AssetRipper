@@ -28,11 +28,11 @@ namespace UtinyRipper.Classes.AnimationClips
 			return version.IsLess(4, 3);
 		}
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.3.0 and greater
 		/// </summary>
 		public static bool IsReadValueArrayReferencePose(Version version)
 		{
-			return version.IsGreaterEqual(5, 0);
+			return version.IsGreaterEqual(5, 3);
 		}
 		/// <summary>
 		/// 4.3.0 and greater
