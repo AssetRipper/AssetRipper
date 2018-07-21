@@ -28,11 +28,11 @@ namespace UtinyRipper.Classes.Sprites
 			return version.IsGreaterEqual(2018);
 		}
 		/// <summary>
-		/// Less than 2018.2
+		/// 2018.1
 		/// </summary>
 		public static bool IsReadSourceSkin(Version version)
 		{
-			return version.IsLess(2018, 2);
+			return version.IsEqual(2018, 1);
 		}
 		/// <summary>
 		/// 5.4.5p1 to 5.5.0 exclusive or 5.5.0p3 to 5.5.0px or 5.5.3 and greater

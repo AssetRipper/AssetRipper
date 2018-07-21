@@ -9,7 +9,7 @@ namespace UtinyRipper.Classes.Shaders.Exporters
 			m_programType = programType;
 		}
 
-		public override void Export(BinaryReader reader, TextWriter writer)
+		protected override void Export(BinaryReader reader, TextWriter writer)
 		{
 			writer.Write("/*Can't export program data {0} as a text*/", m_programType);
 		}

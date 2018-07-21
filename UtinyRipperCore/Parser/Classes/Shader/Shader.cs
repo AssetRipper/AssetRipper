@@ -191,18 +191,23 @@ namespace UtinyRipper.Classes
 
 		public override void ExportBinary(IExportContainer container, Stream stream)
 		{
+			ExportBinary(container, stream, DefaultShaderExporterInstantiator);
+		}
+
+		public void ExportBinary(IExportContainer container, Stream stream, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
+		{
 			if (IsSerialized(container.Version))
 			{
 				using (StreamWriter writer = new StreamWriter(stream))
 				{
-					ParsedForm.Export(writer, this);
+					ParsedForm.Export(writer, this, exporterInstantiator);
 				}
 			}
 			else if (IsEncoded(container.Version))
 			{
 				using (StreamWriter writer = new StreamWriter(stream))
 				{
-					SubProgramBlob.Export(writer, Script, DefaultShaderExporterInstantiator);
+					SubProgramBlob.Export(writer, Script, exporterInstantiator);
 				}
 			}
 			else

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System;
+using UtinyRipper.Classes.Shaders.Exporters;
 
 namespace UtinyRipper.Classes.Shaders
 {
@@ -11,7 +13,7 @@ namespace UtinyRipper.Classes.Shaders
 			m_subPrograms = stream.ReadArray<SerializedSubProgram>();
 		}
 
-		public void Export(TextWriter writer, Shader shader, ShaderType type)
+		public void Export(TextWriter writer, Shader shader, ShaderType type, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
 		{
 			if(SubPrograms.Count > 0)
 			{
@@ -24,7 +26,7 @@ namespace UtinyRipper.Classes.Shaders
 					int index = shader.Platforms.IndexOf(platform);
 					ShaderSubProgramBlob blob = shader.SubProgramBlobs[index];
 					int count = SubPrograms.Where(t => t.GpuProgramType == subProgram.GpuProgramType).Select(t => t.ShaderHardwareTier).Distinct().Count();
-					subProgram.Export(writer, blob, uplatform, count > 1, Shader.DefaultShaderExporterInstantiator);
+					subProgram.Export(writer, blob, uplatform, count > 1, exporterInstantiator);
 				}
 				writer.WriteIntent(3);
 				writer.Write("}\n");

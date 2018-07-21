@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using UtinyRipper.Classes.Shaders.Exporters;
 
 namespace UtinyRipper.Classes.Shaders
 {
@@ -28,7 +29,7 @@ namespace UtinyRipper.Classes.Shaders
 			Tags.Read(stream);
 		}
 
-		public void Export(TextWriter writer, Shader shader)
+		public void Export(TextWriter writer, Shader shader, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
 		{
 			writer.WriteIntent(2);
 			writer.Write("{0} ", Type.ToString());
@@ -53,11 +54,11 @@ namespace UtinyRipper.Classes.Shaders
 				{
 					State.Export(writer);
 
-					ProgVertex.Export(writer, shader, ShaderType.Vertex);
-					ProgFragment.Export(writer, shader, ShaderType.Fragment);
-					ProgGeometry.Export(writer, shader, ShaderType.Geometry);
-					ProgHull.Export(writer, shader, ShaderType.Hull);
-					ProgDomain.Export(writer, shader, ShaderType.Domain);
+					ProgVertex.Export(writer, shader, ShaderType.Vertex, exporterInstantiator);
+					ProgFragment.Export(writer, shader, ShaderType.Fragment, exporterInstantiator);
+					ProgGeometry.Export(writer, shader, ShaderType.Geometry, exporterInstantiator);
+					ProgHull.Export(writer, shader, ShaderType.Hull, exporterInstantiator);
+					ProgDomain.Export(writer, shader, ShaderType.Domain, exporterInstantiator);
 
 #warning ProgramMask?
 #warning HasInstancingVariant?

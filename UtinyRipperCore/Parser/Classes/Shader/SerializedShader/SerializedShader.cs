@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using UtinyRipper.Classes.Shaders.Exporters;
 
 namespace UtinyRipper.Classes.Shaders
 {
@@ -17,7 +19,7 @@ namespace UtinyRipper.Classes.Shaders
 			stream.AlignStream(AlignType.Align4);
 		}
 
-		public void Export(TextWriter writer, Shader shader)
+		public void Export(TextWriter writer, Shader shader, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
 		{
 			writer.Write("Shader \"{0}\" {{\n", Name);
 
@@ -25,7 +27,7 @@ namespace UtinyRipper.Classes.Shaders
 
 			foreach(SerializedSubShader subShader in SubShaders)
 			{
-				subShader.Export(writer, shader);
+				subShader.Export(writer, shader, exporterInstantiator);
 			}
 
 			if(FallbackName != string.Empty)

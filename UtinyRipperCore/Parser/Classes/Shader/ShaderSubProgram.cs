@@ -304,14 +304,9 @@ namespace UtinyRipper.Classes.Shaders
 			writer.Write("\"!!{0}\n", ProgramType.ToString());
 			writer.WriteIntent(5);
 
-			using (MemoryStream stream = new MemoryStream(m_programData))
-			{
-				using (BinaryReader reader = new BinaryReader(stream))
-				{
-					ShaderTextExporter exporter = exporterInstantiator.Invoke(ProgramType);
-					exporter.Export(reader, writer);
-				}
-			}
+			ShaderTextExporter exporter = exporterInstantiator.Invoke(ProgramType);
+			exporter.Export(m_programData, writer);
+
 			writer.Write('"');
 		}
 		
