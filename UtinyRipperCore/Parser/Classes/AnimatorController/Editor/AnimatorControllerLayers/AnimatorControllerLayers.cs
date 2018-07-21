@@ -6,6 +6,12 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class AnimatorControllerLayers : IYAMLExportable
 	{
+		public AnimatorControllerLayers(string name)
+		{
+			Name = name;
+
+		}
+
 		private static int GetSerializedVersion(Version version)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
@@ -15,6 +21,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_Name", Name);
 			node.Add("m_StateMachine", StateMachine.ExportYAML(container));
 			node.Add("m_Mask", Mask.ExportYAML(container));

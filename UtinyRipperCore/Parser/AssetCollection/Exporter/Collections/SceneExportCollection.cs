@@ -72,7 +72,7 @@ namespace UtinyRipper.AssetExporters
 			}
 
 			AssetExporter.Export(container, Components, filePath);
-			DefaultImporter sceneImporter = new DefaultImporter(false);
+			SceneImporter sceneImporter = new SceneImporter();
 			Meta meta = new Meta(sceneImporter, GUID);
 			ExportMeta(container, meta, filePath);
 

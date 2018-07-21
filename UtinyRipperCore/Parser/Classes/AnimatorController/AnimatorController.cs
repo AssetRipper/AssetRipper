@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.AnimatorControllers;
 using UtinyRipper.Classes.AnimatorControllers.Editor;
@@ -132,7 +133,46 @@ namespace UtinyRipper.Classes
 #warning TODO: build controller from data
 			AnimatorControllerParameter[] @params = null;
 			AnimatorControllerLayers[] layers = null;
+
+			IReadOnlyList<ValueConstant> values = Controller.Values.Instance.ValueArray;
+			ValueArray defaultValues = Controller.DefaultValues.Instance;
+			@params = new AnimatorControllerParameter[values.Count];
+			for(int i = 0; i < values.Count; i++)
+			{
+				ValueConstant value = values[i];
+				string name = TOS[value.ID];
+#warning TODO:
+				AnimatorControllerParameterType type = ValueConstant.IsReadType(container.Version) ? value.Type : (AnimatorControllerParameterType)value.TypeID;
+				switch (type)
+				{
+					case AnimatorControllerParameterType.Trigger:
+						@params[i] = new AnimatorControllerParameter(name, type, this);
+						break;
+
+					case AnimatorControllerParameterType.Bool:
+						@params[i] = new AnimatorControllerParameter(name, type, this, defaultValues.BoolValues[value.Index]);
+						break;
+
+					case AnimatorControllerParameterType.Int:
+						@params[i] = new AnimatorControllerParameter(name, type, this, defaultValues.IntValues[value.Index]);
+						break;
+
+					case AnimatorControllerParameterType.Float:
+						@params[i] = new AnimatorControllerParameter(name, type, this, defaultValues.FloatValues[value.Index]);
+						break;
+
+					default:
+						throw new NotSupportedException($"Parameter type '{type}' isn't supported");
+				}
+			}
 			
+			layers = new AnimatorControllerLayers[Controller.LayerArray.Count];
+			for(int i = 0; i < Controller.LayerArray.Count; i++)
+			{
+				LayerConstant layerConstant = Controller.LayerArray[i].Instance;
+
+			}
+
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_AnimatorParameters", @params.ExportYAML(container));

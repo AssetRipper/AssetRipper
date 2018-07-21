@@ -31,7 +31,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			BodyMask.Read(stream);
 			SkeletonMask.Read(stream);
 			Binding = stream.ReadUInt32();
-			LayerBlendingMode = stream.ReadInt32();
+			LayerBlendingMode = (AnimatorLayerBlendingMode)stream.ReadInt32();
 			if (IsReadDefaultWeight(stream.Version))
 			{
 				DefaultWeight = stream.ReadSingle();
@@ -53,7 +53,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 		public uint StateMachineIndex { get; private set; }
 		public uint StateMachineMotionSetIndex { get; private set; }
 		public uint Binding { get; private set; }
-		public int LayerBlendingMode { get; private set; }
+		public AnimatorLayerBlendingMode LayerBlendingMode { get; private set; }
 		public float DefaultWeight { get; private set; }
 		public bool IKPass { get; private set; }
 		public bool SyncedLayerAffectsTiming { get; private set; }

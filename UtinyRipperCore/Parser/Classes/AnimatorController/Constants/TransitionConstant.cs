@@ -52,7 +52,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 				HasFixedDuration = stream.ReadBoolean();
 				stream.AlignStream(AlignType.Align4);
 
-				InterruptionSource = stream.ReadInt32();
+				InterruptionSource = (TransitionInterruptionSource)stream.ReadInt32();
 				OrderedInterruption = stream.ReadBoolean();
 			}
 
@@ -79,7 +79,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 		public float ExitTime { get; private set; }
 		public bool HasExitTime { get; private set; }
 		public bool HasFixedDuration { get; private set; }
-		public int InterruptionSource { get; private set; }
+		public TransitionInterruptionSource InterruptionSource { get; private set; }
 		public bool OrderedInterruption { get; private set; }
 		public bool CanTransitionToSelf { get; private set; }
 

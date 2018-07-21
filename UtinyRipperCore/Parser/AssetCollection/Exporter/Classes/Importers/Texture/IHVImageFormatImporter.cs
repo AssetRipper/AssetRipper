@@ -1,5 +1,6 @@
 ﻿using System;
 using UtinyRipper.Classes;
+using UtinyRipper.Classes.Textures;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.AssetExporters.Classes
@@ -13,20 +14,20 @@ namespace UtinyRipper.AssetExporters.Classes
 				throw new ArgumentNullException(nameof(texture));
 			}
 			m_texture = texture;
-			m_importSettings = new TextureImportSettings(m_texture.TextureSettings);
 		}
 
 		protected override void ExportYAMLInner(IExportContainer container, YAMLMappingNode node)
 		{
-			node.Add("textureSettings", m_importSettings.ExportYAML(container));
+			base.ExportYAMLInner(container, node);
+
+			TextureImportSettings importSettings = new TextureImportSettings(m_texture.TextureSettings);
+			node.Add("textureSettings", importSettings.ExportYAML(container));
 			node.Add("isReadable", m_texture.IsReadable);
-#warning TODO: imageFormat convertion?
-			node.Add("sRGBTexture", true);
+			node.Add("sRGBTexture", m_texture.ColorSpace == ColorSpace.Gamma ? true : false);
 		}
 
 		public override string Name => nameof(IHVImageFormatImporter);
 
 		private readonly Texture2D m_texture;
-		private readonly TextureImportSettings m_importSettings;
 	}
 }

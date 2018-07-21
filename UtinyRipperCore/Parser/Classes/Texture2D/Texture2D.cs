@@ -10,7 +10,6 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes
 {
-#warning TODO: exclusive exporter (for meta)
 	/// <summary>
 	/// FileTexture previously
 	/// </summary>
@@ -124,7 +123,7 @@ namespace UtinyRipper.Classes
 				StreamingMipmapsPriority = stream.ReadInt32();
 			}
 			ImageCount = stream.ReadInt32();
-			TextureDimension = stream.ReadInt32();
+			TextureDimension = (TextureDimension)stream.ReadInt32();
 			TextureSettings.Read(stream);
 
 			if(IsReadLightmapFormat(stream.Version))
@@ -876,10 +875,7 @@ namespace UtinyRipper.Classes
 		public bool StreamingMipmaps { get; private set; }
 		public int StreamingMipmapsPriority { get; private set; }
 		public int ImageCount { get; private set; }
-		/// <summary>
-		/// TextureDimension enum has beed changed at least one time so it's impossible to cast to enum directly
-		/// </summary>
-		public int TextureDimension { get; private set; }
+		public TextureDimension TextureDimension { get; private set; }
 		public int LightmapFormat { get; private set; }
 		public ColorSpace ColorSpace { get; private set; }
 		public IReadOnlyCollection<byte> ImageData => m_imageData;

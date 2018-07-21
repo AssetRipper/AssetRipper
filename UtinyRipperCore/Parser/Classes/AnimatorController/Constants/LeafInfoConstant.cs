@@ -1,4 +1,6 @@
-﻿namespace UtinyRipper.Classes.AnimatorControllers
+﻿using System.Collections.Generic;
+
+namespace UtinyRipper.Classes.AnimatorControllers
 {
 	public struct LeafInfoConstant : IAssetReadable
 	{
@@ -8,7 +10,7 @@
 			IndexOffset = stream.ReadUInt32();
 		}
 
-		public uint[] IDArray => m_IDArray;
+		public IReadOnlyList<uint> IDArray => m_IDArray;
 		public uint IndexOffset { get; private set; }
 		
 		private uint[] m_IDArray;

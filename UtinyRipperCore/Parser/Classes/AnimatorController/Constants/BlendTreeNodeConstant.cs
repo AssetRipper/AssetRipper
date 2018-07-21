@@ -61,7 +61,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 		{
 			if (IsReadBlendType(stream.Version))
 			{
-				BlendType = stream.ReadUInt32();
+				BlendType = (BlendTreeType)stream.ReadUInt32();
 			}
 			BlendEventID = stream.ReadUInt32();
 			if (IsReadBlendEventYID(stream.Version))
@@ -104,7 +104,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 
-		public uint BlendType { get; private set; }
+		public BlendTreeType BlendType { get; private set; }
 		public uint BlendEventID { get; private set; }
 		public uint BlendEventYID { get; private set; }
 		public IReadOnlyList<uint> ChildIndices => m_childIndices;

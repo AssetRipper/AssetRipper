@@ -1,4 +1,6 @@
-﻿namespace UtinyRipper.Classes
+﻿using UtinyRipper.Classes.AnimatorControllers;
+
+namespace UtinyRipper.Classes
 {
 	public struct ValueConstant : IAssetReadable
 	{
@@ -16,10 +18,10 @@
 			TypeID = stream.ReadUInt32();
 			if(IsReadType(stream.Version))
 			{
-				Type = stream.ReadUInt32();
+				Type = (AnimatorControllerParameterType)stream.ReadUInt32();
 			}
 
-			Index = stream.ReadUInt32();
+			Index = (int)stream.ReadUInt32();
 		}
 
 		/*public YAMLNode ExportYAML()
@@ -35,7 +37,7 @@
 
 		public uint ID { get; private set; }
 		public uint TypeID { get; private set; }
-		public uint Type { get; private set; }
-		public uint Index { get; private set; }
+		public AnimatorControllerParameterType Type { get; private set; }
+		public int Index { get; private set; }
 	}
 }

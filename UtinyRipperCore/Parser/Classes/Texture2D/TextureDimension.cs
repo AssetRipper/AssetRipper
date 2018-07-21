@@ -17,6 +17,7 @@
 		/// Any texture type.
 		/// </summary>
 		Any = 1,
+		Deprecated1D = 1,
 		/// <summary>
 		/// 2D texture (Texture2D).
 		/// </summary>
@@ -33,9 +34,11 @@
 		/// 2D array texture (Texture2DArray).
 		/// </summary>
 		Tex2DArray = 5,
+		AnyOld = 5,
 		/// <summary>
 		/// Cubemap array texture (CubemapArray).
 		/// </summary>
-		CubeArray = 6
+		CubeArray = 6,
+		CountOld = 6,
 	}
 }

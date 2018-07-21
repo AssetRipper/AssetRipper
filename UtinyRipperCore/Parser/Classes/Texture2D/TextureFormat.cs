@@ -9,6 +9,34 @@ namespace UtinyRipper.Classes.Textures
 		PVRTC_4BPP_RGB = -127,
 		PVRTC_4BPP_RGBA = -127,
 		/// <summary>
+		/// Choose a compressed HDR format automatically.
+		/// </summary>
+		AutomaticCompressedHDR = -7,
+		/// <summary>
+		/// Choose an HDR format automatically.
+		/// </summary>
+		AutomaticHDR = -6,
+		/// <summary>
+		/// Choose a crunched format automatically.
+		/// </summary>
+		AutomaticCrunched = -5,
+		/// <summary>
+		/// Choose a Truecolor format automatically.
+		/// </summary>
+		AutomaticTruecolor = -3,
+		/// <summary>
+		/// Choose a 16 bit format automatically.
+		/// </summary>
+		Automatic16bit = -2,
+		/// <summary>
+		/// Choose texture format automatically based on the texture parameters.
+		/// </summary>
+		Automatic = -1,
+		/// <summary>
+		/// Choose a compressed format automatically.
+		/// </summary>
+		AutomaticCompressed = -1,
+		/// <summary>
 		/// Alpha-only texture format.
 		/// </summary>
 		Alpha8 = 1,

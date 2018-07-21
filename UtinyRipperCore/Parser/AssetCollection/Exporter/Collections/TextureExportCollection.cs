@@ -19,9 +19,7 @@ namespace UtinyRipper.AssetExporters
 		{
 			if (Config.IsConvertTexturesToPNG)
 			{
-#warning TODO: texture exporter
-				return new NativeFormatImporter(texture);
-				throw new System.NotImplementedException();
+				return new TextureImporter(texture);
 			}
 			else
 			{
