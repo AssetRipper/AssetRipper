@@ -36,7 +36,7 @@ namespace UtinyRipper.Classes
 		
 		private static IEnumerable<EditorExtension> FetchObjects(GameObject root, bool isLog = false)
 		{
-			List<EditorExtension> hierarchy = root.CollectHierarchy();
+			IReadOnlyList<EditorExtension> hierarchy = root.CollectHierarchy();
 			foreach (EditorExtension obj in hierarchy)
 			{
 				yield return obj;

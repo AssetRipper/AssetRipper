@@ -128,7 +128,7 @@ namespace UtinyRipper.Classes
 
 			if(IsReadLightmapFormat(stream.Version))
 			{
-				LightmapFormat = stream.ReadInt32();
+				LightmapFormat = (TextureUsageMode)stream.ReadInt32();
 			}
 			if(IsReadColorSpace(stream.Version))
 			{
@@ -876,7 +876,7 @@ namespace UtinyRipper.Classes
 		public int StreamingMipmapsPriority { get; private set; }
 		public int ImageCount { get; private set; }
 		public TextureDimension TextureDimension { get; private set; }
-		public int LightmapFormat { get; private set; }
+		public TextureUsageMode LightmapFormat { get; private set; }
 		public ColorSpace ColorSpace { get; private set; }
 		public IReadOnlyCollection<byte> ImageData => m_imageData;
 

@@ -38,6 +38,22 @@ namespace UtinyRipper.Classes
 			}
 		}
 
+		public override bool IsContainsAnimationClip(AnimationClip clip)
+		{
+			foreach (AnimationClipOverride overClip in Clips)
+			{
+				if(overClip.OriginalClip.IsObject(File, clip))
+				{
+					return true;
+				}
+				else if (overClip.OverrideClip.IsObject(File, clip))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);

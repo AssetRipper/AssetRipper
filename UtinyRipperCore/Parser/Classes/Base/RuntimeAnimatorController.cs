@@ -15,6 +15,8 @@ namespace UtinyRipper.Classes
 			base.Read(stream);
 		}
 
+		public abstract bool IsContainsAnimationClip(AnimationClip clip);
+
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			return base.ExportYAMLRoot(container);

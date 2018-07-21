@@ -291,6 +291,7 @@
     <Compile Include="Parser\Classes\TerrainData\TerrainData.cs" />
     <Compile Include="Parser\Classes\TerrainData\TreeInstance.cs" />
     <Compile Include="Parser\Classes\TerrainData\TreePrototype.cs" />
+    <Compile Include="Parser\Classes\Texture2D\TextureUsageMode.cs" />
     <Compile Include="Parser\Classes\TransformAnimationTrack.cs" />
     <Compile Include="Parser\Classes\AnimationClip\WrapMode.cs" />
     <Compile Include="Parser\Classes\Base\BaseAnimationTrack.cs" />

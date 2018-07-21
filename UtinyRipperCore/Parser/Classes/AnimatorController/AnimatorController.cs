@@ -127,6 +127,18 @@ namespace UtinyRipper.Classes
 			throw new System.NotImplementedException();
 		}
 
+		public override bool IsContainsAnimationClip(AnimationClip clip)
+		{
+			foreach (PPtr<AnimationClip> clipPtr in AnimationClips)
+			{
+				if (clipPtr.IsObject(File, clip))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)

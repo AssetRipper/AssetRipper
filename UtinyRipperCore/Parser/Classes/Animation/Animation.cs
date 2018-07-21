@@ -131,6 +131,18 @@ namespace UtinyRipper.Classes
 				}
 			}
 		}
+		
+		public bool IsContainsAnimationClip(AnimationClip clip)
+		{
+			foreach (PPtr<AnimationClip> clipPtr in Animations)
+			{
+				if (clipPtr.IsObject(File, clip))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{

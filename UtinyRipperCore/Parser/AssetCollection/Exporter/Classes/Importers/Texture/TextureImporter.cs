@@ -85,7 +85,9 @@ namespace UtinyRipper.AssetExporters.Classes
 			node.Add("alphaUsage", true);
 			node.Add("alphaIsTransparency", true);
 			node.Add("spriteTessellationDetail", -1);
-			node.Add("textureType", (int)TextureImporterType.Default);
+
+			TextureImporterType type = m_texture.LightmapFormat.IsNormalmap() ? TextureImporterType.NormalMap : TextureImporterType.Default;
+			node.Add("textureType", (int)type);
 
 			TextureImporterShape shape = (m_texture is Cubemap) ? TextureImporterShape.TextureCube : TextureImporterShape.Texture2D;
 			node.Add("textureShape", (int)shape);

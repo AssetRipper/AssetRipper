@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SevenZip;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.GameObjects;
 using UtinyRipper.Exporter.YAML;
@@ -44,7 +46,7 @@ namespace UtinyRipper.Classes
 
 		/// <summary>
 		/// Less than 4.0.0
-		/// In earlier versions GameObjects always has IsActive as false.
+		/// In earlier versions GameObject always has IsActive as false.
 		/// </summary>
 		private static bool IsAlwaysDeactivated(Version version)
 		{
@@ -85,6 +87,24 @@ namespace UtinyRipper.Classes
 			}
 		}
 
+		public Transform GetTransform()
+		{
+			foreach (ComponentPair pair in Components)
+			{
+				Component comp = pair.Component.FindObject(File);
+				if (comp == null)
+				{
+					continue;
+				}
+
+				if (comp.ClassID.IsTransform())
+				{
+					return (Transform)comp;
+				}
+			}
+			return null;
+		}
+
 		public GameObject GetRoot()
 		{
 			Transform root = GetTransform();
@@ -120,6 +140,31 @@ namespace UtinyRipper.Classes
 			}
 			return depth;
 		}
+		
+		public IReadOnlyList<EditorExtension> CollectHierarchy()
+		{
+			List<EditorExtension> heirarchy = new List<EditorExtension>();
+			CollectHierarchy(this, heirarchy);
+			return heirarchy;
+		}
+
+		public IReadOnlyDictionary<uint, string> BuildTOS()
+		{
+			Dictionary<uint, string> tos = new Dictionary<uint, string>();
+			tos.Add(0, string.Empty);
+
+			BuildTOS(this, string.Empty, tos);
+			return tos;
+		}
+
+		public override string ToString()
+		{
+			if (string.IsNullOrEmpty(Name))
+			{
+				return base.ToString();
+			}
+			return $"{Name}({GetType().Name})";
+		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
@@ -138,38 +183,22 @@ namespace UtinyRipper.Classes
 			return node;
 		}
 
-		public Transform GetTransform()
+		private void BuildTOS(GameObject parent, string parentPath, Dictionary<uint, string> tos)
 		{
-			foreach (ComponentPair pair in Components)
+			Transform transform = parent.GetTransform();
+			foreach (PPtr<Transform> childPtr in transform.Children)
 			{
-				Component comp = pair.Component.FindObject(File);
-				if (comp == null)
-				{
-					continue;
-				}
+				Transform childTransform = childPtr.GetObject(File);
+				GameObject child = childTransform.GameObject.GetObject(File);
+				string path = parentPath != string.Empty ? parentPath + "/" + child.Name : child.Name;
+				CRC crc = new CRC();
+				byte[] pathBytes = Encoding.UTF8.GetBytes(path);
+				crc.Update(pathBytes, 0, (uint)pathBytes.Length);
+				uint pathHash = crc.GetDigest();
+				tos[pathHash] = path;
 
-				if (comp.ClassID.IsTransform())
-				{
-					return (Transform)comp;
-				}
+				BuildTOS(child, path, tos);
 			}
-			return null;
-		}
-		
-		public List<EditorExtension> CollectHierarchy()
-		{
-			List<EditorExtension> heirarchy = new List<EditorExtension>();
-			CollectHierarchy(this, heirarchy);
-			return heirarchy;
-		}
-
-		public override string ToString()
-		{
-			if (string.IsNullOrEmpty(Name))
-			{
-				return base.ToString();
-			}
-			return $"{Name}({GetType().Name})";
 		}
 
 		private bool GetExportIsActive(Version version)

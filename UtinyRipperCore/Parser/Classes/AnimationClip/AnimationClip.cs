@@ -163,6 +163,15 @@ namespace UtinyRipper.Classes
 			// min version is 2nd
 			return 2;
 		}
+		
+		private bool GetIsLegacy(Version version)
+		{
+			if (IsReadLegacy(version))
+			{
+				return Legacy;
+			}
+			return AnimationType == AnimationType.Legacy;
+		}
 
 		public override void Read(AssetStream stream)
 		{
@@ -304,7 +313,7 @@ namespace UtinyRipper.Classes
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Legacy", IsReadLegacy(container.Version) ? Legacy : true);
+			node.Add("m_Legacy", GetIsLegacy(container.Version));
 			node.Add("m_Compressed", Compressed);
 			node.Add("m_UseHighQualityCurve", UseHightQualityCurve);
 
@@ -341,12 +350,6 @@ namespace UtinyRipper.Classes
 		private void ExportGenericData(IExportContainer container, YAMLMappingNode node)
 		{
 			IReadOnlyDictionary<uint, string> tos = FindTOS();
-			/*if(tos == null)
-			{
-				ExportEmptyGenericData(node);
-				return;
-			}*/
-
 			ExportGenericData(container, node, tos);
 		}
 
@@ -448,11 +451,11 @@ namespace UtinyRipper.Classes
 					{
 						case BindingType.Translation:
 							// HACK: TEMP:
-							if(curve + 3 > curvesValue.Count )
+							/*if(curve + 3 > curvesValue.Count )
 							{
 								curve += 3;
 								break;
-							}
+							}*/
 
 							float x = curvesValue[curve++ - offset];
 							float y = curvesValue[curve++ - offset];
@@ -475,11 +478,11 @@ namespace UtinyRipper.Classes
 
 						case BindingType.Rotation:
 							// HACK: TEMP:
-							if (curve + 4 > curvesValue.Count)
+							/*if (curve + 4 > curvesValue.Count)
 							{
 								curve += 4;
 								break;
-							}
+							}*/
 
 							x = curvesValue[curve++ - offset];
 							y = curvesValue[curve++ - offset];
@@ -502,11 +505,11 @@ namespace UtinyRipper.Classes
 
 						case BindingType.Scaling:
 							// HACK: TEMP:
-							if (curve + 3 > curvesValue.Count)
+							/*if (curve + 3 > curvesValue.Count)
 							{
 								curve += 3;
 								break;
-							}
+							}*/
 
 							x = curvesValue[curve++ - offset];
 							y = curvesValue[curve++ - offset];
@@ -528,11 +531,11 @@ namespace UtinyRipper.Classes
 
 						case BindingType.EulerRotation:
 							// HACK: TEMP:
-							if (curve + 3 > curvesValue.Count)
+							/*if (curve + 3 > curvesValue.Count)
 							{
 								curve += 3;
 								break;
-							}
+							}*/
 
 							x = curvesValue[curve++ - offset];
 							y = curvesValue[curve++ - offset];
@@ -585,89 +588,92 @@ namespace UtinyRipper.Classes
 			node.Add("m_ScaleCurves", scales.Values.ExportYAML(container));
 			node.Add("m_FloatCurves", floats.Values.ExportYAML(container));
 		}
-
-		/*private void ExportEmptyGenericData(YAMLMappingNode node)
-		{
-			node.Add("m_RotationCurves", YAMLMappingNode.Empty);
-			node.Add("m_CompressedRotationCurves", YAMLMappingNode.Empty);
-			node.Add("m_EulerCurves", YAMLMappingNode.Empty);
-			node.Add("m_PositionCurves", YAMLMappingNode.Empty);
-			node.Add("m_ScaleCurves", YAMLMappingNode.Empty);
-			node.Add("m_FloatCurves", YAMLMappingNode.Empty);
-		}*/
-
+		
 		private IReadOnlyDictionary<uint, string> FindTOS()
-		{
-			Avatar avatar = FindAvatar();
-			if(avatar == null)
-			{
-				//Logger.Log(LogType.Warning, LogCategory.Export, $"Avatar for {ToLogString()} wasn't found");
-			}
-			else
-			{
-				return avatar.TOS;
-			}
-
-#warning TODO: build TOS with transforms
-			return new Dictionary<uint, string>() { { 0, string.Empty } };
-		}
-
-		private Avatar FindAvatar()
 		{
 			foreach (ISerializedFile file in File.Collection.Files)
 			{
-				foreach (Object @object in file.FetchAssets())
+				foreach (Object asset in file.FetchAssets())
 				{
-					if (@object.ClassID != ClassIDType.Animator)
+					switch(asset.ClassID)
 					{
-						continue;
-					}
-
-					Animator animator = (Animator)@object;
-					RuntimeAnimatorController runetime = animator.Controller.FindObject(animator.File);
-					switch (runetime)
-					{
-						case null:
-							continue;
-
-						case AnimatorOverrideController @override:
-							foreach (var clip in @override.Clips)
+						case ClassIDType.Animator:
+							Animator animator = (Animator)asset;
+							if (IsAnimatorContainsClip(animator))
 							{
-								if (clip.OverrideClip.IsObject(@override.File, this))
+								Avatar avatar = animator.Avatar.FindObject(animator.File);
+								if (avatar == null)
 								{
-									return animator.Avatar.FindObject(animator.File);
+									if(Animator.IsReadHasTransformHierarchy(File.Version))
+									{
+										if (animator.HasTransformHierarchy)
+										{
+											GameObject go = animator.GameObject.GetObject(animator.File);
+											return go.BuildTOS();
+										}
+										else
+										{
+											return new Dictionary<uint, string>() { { 0, string.Empty } };
+										}
+									}
+									else
+									{
+										GameObject go = animator.GameObject.GetObject(animator.File);
+										return go.BuildTOS();
+									}
+								}
+								else
+								{
+									return avatar.TOS;
 								}
 							}
 							break;
 
-						default:
-							AnimatorController controller = (AnimatorController)runetime;
-							foreach (PPtr<AnimationClip> clip in controller.AnimationClips)
+						case ClassIDType.Animation:
+							Animation animation = (Animation)asset;
+							if (IsAnimationContainsClip(animation))
 							{
-								if (clip.IsObject(controller.File, this))
-								{
-									return animator.Avatar.FindObject(animator.File);
-								}
+								GameObject go = animation.GameObject.GetObject(animation.File);
+								return go.BuildTOS();
 							}
 							break;
-					}
+					}					
 				}
 			}
-			return null;
+			
+			return new Dictionary<uint, string>() { { 0, string.Empty } };
+		}
+
+		private bool IsAnimatorContainsClip(Animator animator)
+		{
+			RuntimeAnimatorController runetime = animator.Controller.FindObject(animator.File);
+			if(runetime == null)
+			{
+				return false;
+			}
+			else
+			{
+				return runetime.IsContainsAnimationClip(this);
+			}
+		}
+
+		private bool IsAnimationContainsClip(Animation animation)
+		{
+			return animation.IsContainsAnimationClip(this);
 		}
 
 #warning what about humanoid?
 		private bool IsExportGenericData(Version version)
 		{
-			if (IsReadAnimationType(version) && AnimationType == AnimationType.Mecanim)
-			{
-				return true;
-			}
 			if (IsReadLegacy(version))
 			{
-				if (MuscleClip.Clip.IsValid(version))
+				return MuscleClip.Clip.IsValid(version);
+			}
+			if (IsReadAnimationType(version))
+			{
+				if(AnimationType != AnimationType.Legacy)
 				{
-					return true;
+					return MuscleClip.Clip.IsValid(version);
 				}
 			}
 			return false;
@@ -696,7 +702,7 @@ namespace UtinyRipper.Classes
 		public AABB Bounds;
 		public ClipMuscleConstant MuscleClip;
 		public AnimationClipBindingConstant ClipBindingConstant;
-
+		
 		private Dictionary<int, PPtr<BaseAnimationTrack>> m_classIDToTrack;
 		private ChildTrack[] m_childTracks;
 		private QuaternionCurve[] m_rotationCurves;
