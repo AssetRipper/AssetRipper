@@ -4,6 +4,7 @@ using System.Linq;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.OcclusionCullingDatas;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
@@ -14,16 +15,12 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public OcclusionCullingData(AssetInfo assetInfo, IExportContainer container,
-			byte[] pvsData, UtinyGUID guid, IReadOnlyList<PPtr<Renderer>> renderers, IReadOnlyList<PPtr<OcclusionPortal>> portals) :
-			this(assetInfo)
+		public OcclusionCullingData(VirtualSerializedFile file):
+			this(file.CreateAssetInfo(ClassIDType.OcclusionCullingData))
 		{
 			Name = nameof(OcclusionCullingData);
 
-			m_PVSData = pvsData;
-			OcclusionScene scene = new OcclusionScene(guid, renderers.Count, portals.Count);
-			m_scenes = new OcclusionScene[] { scene };
-			SetIDs(container, guid, renderers, portals);
+			file.AddAsset(this);
 		}
 
 		/// <summary>
@@ -44,6 +41,15 @@ namespace UtinyRipper.Classes
 			}
 			SceneObjectIdentifier soId = new SceneObjectIdentifier(lid, 0);
 			return soId;
+		}
+
+		public void Initialize(IExportContainer container, byte[] pvsData, UtinyGUID guid,
+			IReadOnlyList<PPtr<Renderer>> renderers, IReadOnlyList<PPtr<OcclusionPortal>> portals)
+		{
+			m_PVSData = pvsData;
+			OcclusionScene scene = new OcclusionScene(guid, renderers.Count, portals.Count);
+			m_scenes = new OcclusionScene[] { scene };
+			SetIDs(container, guid, renderers, portals);
 		}
 
 		public void SetIDs(IExportContainer container,

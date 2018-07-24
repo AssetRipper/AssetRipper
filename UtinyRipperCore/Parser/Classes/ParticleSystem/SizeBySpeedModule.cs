@@ -3,7 +3,7 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class SizeBySpeedModule : ParticleSystemModule
+	public sealed class SizeBySpeedModule : ParticleSystemModule
 	{
 		/// <summary>
 		/// 5.4.0 and greater

@@ -6,7 +6,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
-	public class SpriteRenderer : Renderer
+	public sealed class SpriteRenderer : Renderer
 	{
 		public SpriteRenderer(AssetInfo assetInfo):
 			base(assetInfo)

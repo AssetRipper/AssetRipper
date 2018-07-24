@@ -1,10 +1,21 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class ChildAnimatorStateMachine : IYAMLExportable
 	{
+		public ChildAnimatorStateMachine(AnimatorStateMachine stateMachine, Vector3f position)
+		{
+			if (stateMachine == null)
+			{
+				throw new ArgumentNullException(nameof(stateMachine));
+			}
+			StateMachine = PPtr<AnimatorStateMachine>.CreateVirtualPointer(stateMachine);
+			Position = position;
+		}
+
 		private static int GetSerializedVersion(Version version)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)

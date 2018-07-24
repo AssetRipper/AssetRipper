@@ -29,10 +29,62 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			return version.IsGreaterEqual(4, 5);
 		}
 		
+		public bool GetHasFixedDuration(Version version)
+		{
+			return IsReadAtomic(version) ? true : HasFixedDuration;
+		}
+		public TransitionInterruptionSource GetInterruptionSource(Version version)
+		{
+			if(IsReadAtomic(version))
+			{
+				return Atomic ? TransitionInterruptionSource.None : TransitionInterruptionSource.Destination;
+			}
+			else
+			{
+				return InterruptionSource;
+			}
+		}
+		public float GetExitTime(Version version)
+		{
+			if (IsReadAtomic(version))
+			{
+				foreach (OffsetPtr<ConditionConstant> conditionPtr in ConditionConstantArray)
+				{
+					if (conditionPtr.Instance.ConditionMode == AnimatorConditionMode.ExitTime)
+					{
+						return conditionPtr.Instance.ExitTime;
+					}
+				}
+				return 1.0f;
+			}
+			else
+			{
+				return ExitTime;
+			}
+		}
+		public bool GetHasExitTime(Version version)
+		{
+			if(IsReadAtomic(version))
+			{
+				foreach(OffsetPtr<ConditionConstant> conditionPtr in ConditionConstantArray)
+				{
+					if(conditionPtr.Instance.ConditionMode == AnimatorConditionMode.ExitTime)
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+			else
+			{
+				return HasExitTime;
+			}
+		}
+
 		public void Read(AssetStream stream)
 		{
 			m_conditionConstantArray = stream.ReadArray<OffsetPtr<ConditionConstant>>();
-			DestinationState = stream.ReadUInt32();
+			DestinationState = (int)stream.ReadUInt32();
 			if(IsReadPathID(stream.Version))
 			{
 				FullPathID = stream.ReadUInt32();
@@ -68,10 +120,18 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 
+		public bool IsExit => DestinationState >= 30000;
+
 		public IReadOnlyList<OffsetPtr<ConditionConstant>> ConditionConstantArray => m_conditionConstantArray;
-		public uint DestinationState { get; private set; }
+		public int DestinationState { get; private set; }
 		public uint FullPathID { get; private set; }
+		/// <summary>
+		/// PathID
+		/// </summary>
 		public uint ID { get; private set; }
+		/// <summary>
+		/// Name
+		/// </summary>
 		public uint UserID { get; private set; }
 		public float TransitionDuration { get; private set; }
 		public float TransitionOffset { get; private set; }

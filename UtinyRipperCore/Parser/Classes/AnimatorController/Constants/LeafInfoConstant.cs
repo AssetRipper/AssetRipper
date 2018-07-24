@@ -7,11 +7,11 @@ namespace UtinyRipper.Classes.AnimatorControllers
 		public void Read(AssetStream stream)
 		{
 			m_IDArray = stream.ReadUInt32Array();
-			IndexOffset = stream.ReadUInt32();
+			IndexOffset = (int)stream.ReadUInt32();
 		}
 
 		public IReadOnlyList<uint> IDArray => m_IDArray;
-		public uint IndexOffset { get; private set; }
+		public int IndexOffset { get; private set; }
 		
 		private uint[] m_IDArray;
 	}

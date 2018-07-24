@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class SubModule : ParticleSystemModule, IDependent
+	public sealed class SubModule : ParticleSystemModule, IDependent
 	{
 		/// <summary>
 		/// 5.5.0 and greater

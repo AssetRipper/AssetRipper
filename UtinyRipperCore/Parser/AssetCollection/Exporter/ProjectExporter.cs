@@ -13,6 +13,7 @@ namespace UtinyRipper.AssetExporters
 
 			DummyAssetExporter dummyExporter = new DummyAssetExporter();
 			OverrideExporter(ClassIDType.AnimatorController, dummyExporter);
+			OverrideExporter(ClassIDType.MonoBehaviour, dummyExporter);
 			OverrideExporter(ClassIDType.MonoScript, dummyExporter);
 			OverrideExporter(ClassIDType.MonoManager, dummyExporter);
 			OverrideExporter(ClassIDType.BuildSettings, dummyExporter);
@@ -47,6 +48,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.AudioSource, yamlExporter);
 			OverrideExporter(ClassIDType.RenderTexture, yamlExporter);
 			OverrideExporter(ClassIDType.Avatar, yamlExporter);
+			OverrideExporter(ClassIDType.AnimatorController, yamlExporter);
 			OverrideExporter(ClassIDType.GUILayer, yamlExporter);
 			OverrideExporter(ClassIDType.Animator, yamlExporter);
 			OverrideExporter(ClassIDType.RenderSettings, yamlExporter);
@@ -171,6 +173,8 @@ namespace UtinyRipper.AssetExporters
 					return m_exporters[ClassIDType.Texture2D].ToExportType(ClassIDType.Texture2D);
 				case ClassIDType.RuntimeAnimatorController:
 					return m_exporters[ClassIDType.AnimatorController].ToExportType(ClassIDType.AnimatorController);
+				case ClassIDType.Motion:
+					return AssetType.Serialized;
 
 				// not implemented yet
 				case ClassIDType.Flare:

@@ -25,6 +25,7 @@ namespace UtinyRipper.AssetExporters
 
 			AssetExporter = assetExporter;
 			Name = file.Name;
+			m_file = file;
 
 			foreach(Object asset in file.FetchAssets())
 			{
@@ -62,6 +63,8 @@ namespace UtinyRipper.AssetExporters
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
+			TryInitialize(container);
+
 			string folderPath = Path.Combine(dirPath, OcclusionCullingSettings.SceneExportFolder);
 			string fileName = $"{Name}.unity";
 			string filePath = Path.Combine(folderPath, fileName);
@@ -83,11 +86,11 @@ namespace UtinyRipper.AssetExporters
 			}
 			if (LightingDataAsset != null)
 			{
-				ExportAsset(container, OcclusionCullingData, subFolderPath);
+				ExportAsset(container, LightingDataAsset, subFolderPath);
 			}
-			if (m_navMeshData != null)
+			if (NavMeshData != null)
 			{
-				ExportAsset(container, m_navMeshData, subFolderPath);
+				ExportAsset(container, NavMeshData, subFolderPath);
 			}
 
 			return true;
@@ -103,7 +106,7 @@ namespace UtinyRipper.AssetExporters
 			{
 				return true;
 			}
-			if(asset == m_navMeshData)
+			if(asset == NavMeshData)
 			{
 				return true;
 			}
@@ -166,24 +169,51 @@ namespace UtinyRipper.AssetExporters
 			ExportAsset(container, importer, asset, path, asset.Name);
 		}
 
-		private void AddComponent(ISerializedFile file, Object comp)
+		private void TryInitialize(ProjectAssetContainer container)
 		{
-			if(comp.ClassID == ClassIDType.NavMeshSettings)
+			if(m_initialized)
 			{
-				NavMeshSettings settings = (NavMeshSettings)comp;
-				NavMeshData data = settings.NavMeshData.FindObject(file);
-				if (data != null)
+				return;
+			}
+
+			foreach(Object comp in Components)
+			{
+				switch (comp.ClassID)
 				{
-					m_navMeshData = data;
+					case ClassIDType.NavMeshSettings:
+						{
+							NavMeshSettings settings = (NavMeshSettings)comp;
+							NavMeshData = settings.NavMeshData.FindObject(File);
+						}
+						break;
+
+					case ClassIDType.OcclusionCullingSettings:
+						{
+							OcclusionCullingSettings settings = (OcclusionCullingSettings)comp;
+							if (OcclusionCullingSettings.IsReadPVSData(File.Version))
+							{
+								if (settings.PVSData.Count > 0)
+								{
+									OcclusionCullingData = new OcclusionCullingData(container.VirtualFile);
+									OcclusionCullingData.Initialize(container, (byte[])settings.PVSData, settings.SceneGUID, settings.StaticRenderers, settings.Portals);
+								}
+							}
+						}
+						break;
 				}
 			}
 
+			m_initialized = true;
+		}
+
+		private void AddComponent(ISerializedFile file, Object comp)
+		{
 			m_cexportIDs.Add(comp, comp.PathID.ToString());
 		}
 
 		private bool IsComponent(Object asset)
 		{
-			return asset != OcclusionCullingData && asset != LightingDataAsset && asset != m_navMeshData;
+			return asset != OcclusionCullingData && asset != LightingDataAsset && asset != NavMeshData;
 		}
 
 		public override IAssetExporter AssetExporter { get; }
@@ -203,22 +233,26 @@ namespace UtinyRipper.AssetExporters
 				{
 					yield return LightingDataAsset;
 				}
-				if (m_navMeshData != null)
+				if (NavMeshData != null)
 				{
-					yield return m_navMeshData;
+					yield return NavMeshData;
 				}
 			}
 		}
 		public override string Name { get; }
+		public override ISerializedFile File => m_file;
 
-		public OcclusionCullingData OcclusionCullingData { get; set; }
+		public OcclusionCullingData OcclusionCullingData { get; private set; }
 		public LightingDataAsset LightingDataAsset { get; set; }
 		public UtinyGUID GUID { get; }
 
 		private IEnumerable<Object> Components => m_cexportIDs.Keys;
 
-		private readonly Dictionary<Object, string> m_cexportIDs = new Dictionary<Object, string>();
+		private NavMeshData NavMeshData { get; set; }
 
-		private NavMeshData m_navMeshData;
+		private readonly Dictionary<Object, string> m_cexportIDs = new Dictionary<Object, string>();
+		private readonly ISerializedFile m_file;
+
+		private bool m_initialized = false;
 	}
 }

@@ -4,7 +4,7 @@ using UtinyRipper.Classes;
 
 namespace UtinyRipper.AssetExporters
 {
-	public sealed class PrefabExportCollection : AssetExportCollection, IComparer<Object>
+	public sealed class PrefabExportCollection : AssetsExportCollection, IComparer<Object>
 	{
 		public PrefabExportCollection(IAssetExporter assetExporter, Object asset) :
 			this(assetExporter, CreatePrefab(asset))
@@ -14,9 +14,9 @@ namespace UtinyRipper.AssetExporters
 		private PrefabExportCollection(IAssetExporter assetExporter, Prefab prefab) :
 			base(assetExporter, prefab)
 		{
-			foreach (EditorExtension @object in prefab.FetchObjects().OrderBy(t => t, this))
+			foreach (EditorExtension asset in prefab.FetchObjects().OrderBy(t => t, this))
 			{
-				AddObject(@object);
+				AddAsset(asset);
 			}
 		}
 
@@ -52,24 +52,6 @@ namespace UtinyRipper.AssetExporters
 			return prefab;
 		}
 
-		public override bool IsContains(Object @object)
-		{
-			if(base.IsContains(@object))
-			{
-				return true;
-			}
-			return m_exportIDs.ContainsKey(@object);
-		}
-		
-		public override string GetExportID(Object @object)
-		{
-			if(@object == Asset)
-			{
-				return base.GetExportID(@object);
-			}
-			return m_exportIDs[@object];
-		}
-
 		public int Compare(Object obj1, Object obj2)
 		{
 			if (obj1.ClassID == obj2.ClassID)
@@ -100,34 +82,7 @@ namespace UtinyRipper.AssetExporters
 				}
 			}
 		}
-
-		public override IEnumerable<Object> Objects
-		{
-			get
-			{
-				foreach (Object @object in base.Objects)
-				{
-					yield return @object;
-				}
-				foreach (Object comp in m_exportIDs.Keys)
-				{
-					yield return comp;
-				}
-			}
-		}
-
-		protected override string ExportInner(ProjectAssetContainer container, string filePath)
-		{
-			AssetExporter.Export(container, Objects, filePath);
-			return filePath;
-		}
-
-		private void AddObject(EditorExtension @object)
-		{
-			string exportID = ObjectUtils.GenerateExportID(@object, m_exportIDs.Values);
-			m_exportIDs.Add(@object, exportID);
-		}
-
+		
 		private static bool IsCoreComponent(Object component)
 		{
 			switch (component.ClassID)
@@ -141,7 +96,5 @@ namespace UtinyRipper.AssetExporters
 					return false;
 			}
 		}
-
-		private readonly Dictionary<Object, string> m_exportIDs = new Dictionary<Object, string>();
 	}
 }

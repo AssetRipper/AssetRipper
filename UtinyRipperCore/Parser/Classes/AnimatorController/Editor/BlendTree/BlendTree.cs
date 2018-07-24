@@ -8,14 +8,29 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class BlendTree : Motion
 	{
-		public BlendTree(AssetInfo assetsInfo) :
-			base(assetsInfo)
+		public BlendTree(VirtualSerializedFile file, AnimatorController controller, StateConstant state, int nodeIndex) :
+			base(file.CreateAssetInfo(ClassIDType.BlendTree))
 		{
-		}
+			BlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Instance;
 
-		private static AssetInfo CreateAssetsInfo(ISerializedFile file)
-		{
-			return new AssetInfo(file, 0, ClassIDType.BlendTree);
+			ObjectHideFlags = 1;
+			Name = nameof(BlendTree);
+
+			m_childs = new ChildMotion[node.ChildIndices.Count];
+			for(int i = 0; i < node.ChildIndices.Count; i++)
+			{
+				m_childs[i] = new ChildMotion(file, controller, state, nodeIndex, i);
+			}
+
+			BlendParameter = node.BlendEventID == uint.MaxValue ? string.Empty : controller.TOS[node.BlendEventID];
+			BlendParameterY = node.BlendEventYID == uint.MaxValue ? string.Empty : controller.TOS[node.BlendEventYID];
+			MinThreshold = node.GetMinThreshold(controller.File.Version);
+			MaxThreshold = node.GetMaxThreshold(controller.File.Version);
+			UseAutomaticThresholds = false;
+			NormalizedBlendValues = node.BlendDirectData.Instance.NormalizedBlendValues;
+			BlendType = node.BlendType;
+
+			file.AddAsset(this);
 		}
 
 		public override void Read(AssetStream stream)
@@ -33,7 +48,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			node.Add("m_MaxThreshold", MaxThreshold);
 			node.Add("m_UseAutomaticThresholds", UseAutomaticThresholds);
 			node.Add("m_NormalizedBlendValues", NormalizedBlendValues);
-			node.Add("m_BlendType", BlendType);
+			node.Add("m_BlendType", (int)BlendType);
 			return node;
 		}
 
@@ -46,7 +61,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 		public float MaxThreshold { get; private set; }
 		public bool UseAutomaticThresholds { get; private set; }
 		public bool NormalizedBlendValues { get; private set; }
-		public int BlendType { get; private set; }
+		public BlendTreeType BlendType { get; private set; }
 
 		private ChildMotion[] m_childs;
 	}

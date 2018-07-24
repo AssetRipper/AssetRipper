@@ -1,4 +1,5 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
 
@@ -6,14 +7,29 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class AnimatorStateTransition : AnimatorTransitionBase
 	{
-		public AnimatorStateTransition(ISerializedFile file) :
-			base(CreateAssetsInfo(file))
+		public AnimatorStateTransition(VirtualSerializedFile file, AnimatorController controller, TransitionConstant transition) :
+			base(file, ClassIDType.AnimatorStateTransition, controller, transition)
 		{
+			TransitionDuration = transition.TransitionDuration;
+			TransitionOffset = transition.TransitionOffset;
+			ExitTime = transition.GetExitTime(controller.File.Version);
+			HasExitTime = transition.GetHasExitTime(controller.File.Version);
+			HasFixedDuration = transition.GetHasFixedDuration(controller.File.Version); ;
+			InterruptionSource = transition.GetInterruptionSource(controller.File.Version);
+			OrderedInterruption = transition.OrderedInterruption;
+			CanTransitionToSelf = transition.CanTransitionToSelf;
+
+			file.AddAsset(this);
 		}
 
-		private static AssetInfo CreateAssetsInfo(ISerializedFile file)
+		public AnimatorStateTransition(VirtualSerializedFile file, AnimatorController controller, TransitionConstant transition,
+			IReadOnlyList<AnimatorState> states) :
+			this(file, controller, transition)
 		{
-			return new AssetInfo(file, 0, ClassIDType.AnimatorStateTransition);
+			if(!transition.IsExit)
+			{
+				DstState = PPtr<AnimatorState>.CreateVirtualPointer(states[transition.DestinationState]);
+			}
 		}
 
 		private static int GetSerializedVersion(Version version)
@@ -31,7 +47,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			node.Add("m_ExitTime", ExitTime);
 			node.Add("m_HasExitTime", HasExitTime);
 			node.Add("m_HasFixedDuration", HasFixedDuration);
-			node.Add("m_InterruptionSource", InterruptionSource);
+			node.Add("m_InterruptionSource", (int)InterruptionSource);
 			node.Add("m_OrderedInterruption", OrderedInterruption);
 			node.Add("m_CanTransitionToSelf", CanTransitionToSelf);
 			return node;
@@ -42,7 +58,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 		public float ExitTime { get; private set; }
 		public bool HasExitTime { get; private set; }
 		public bool HasFixedDuration { get; private set; }
-		public bool InterruptionSource { get; private set; }
+		public TransitionInterruptionSource InterruptionSource { get; private set; }
 		public bool OrderedInterruption { get; private set; }
 		public bool CanTransitionToSelf { get; private set; }
 	}

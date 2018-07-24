@@ -4,7 +4,7 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class EmissionModule : ParticleSystemModule
+	public sealed class EmissionModule : ParticleSystemModule
 	{
 		/// <summary>
 		/// Less than 5.5.0

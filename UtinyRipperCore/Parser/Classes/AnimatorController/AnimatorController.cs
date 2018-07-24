@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.AnimatorControllers;
 using UtinyRipper.Classes.AnimatorControllers.Editor;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
-using IExportContainer = UtinyRipper.AssetExporters.IExportContainer;
 
 namespace UtinyRipper.Classes
 {
@@ -78,12 +76,11 @@ namespace UtinyRipper.Classes
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
-
-			m_TOS.Clear();
-
+			
 			ControllerSize = stream.ReadUInt32();
 			Controller.Read(stream);
-			TOS.Read(stream);
+			m_TOS.Clear();
+			m_TOS.Read(stream);
 			m_animationClips = stream.ReadArray<PPtr<AnimationClip>>();
 
 			if (IsReadStateMachineBehaviourVectorDescription(stream.Version))
@@ -118,13 +115,32 @@ namespace UtinyRipper.Classes
 				}
 			}
 		}
-
-#warning TODO: exporter for animator controller
-		public YAMLDocument FetchSubDocuments()
+		
+		public PPtr<MonoBehaviour>[] GetStateBeahviours(int stateMachineIndex, int stateIndex)
 		{
-#warning TODO: build submachines, animstates, etc from data
-
-			throw new System.NotImplementedException();
+			if (IsReadStateMachineBehaviourVectorDescription(File.Version))
+			{
+				int layerIndex = Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
+				StateMachineConstant stateMachine = Controller.StateMachineArray[stateMachineIndex].Instance;
+				StateConstant state = stateMachine.StateConstantArray[stateIndex].Instance;
+				uint stateID = state.GetID(File.Version);
+				foreach (KeyValuePair<StateKey, StateRange> pair in StateMachineBehaviourVectorDescription.StateMachineBehaviourRanges)
+				{
+					StateKey key = pair.Key;
+					if (key.LayerIndex == layerIndex && key.StateID == stateID)
+					{
+						StateRange range = pair.Value;
+						PPtr<MonoBehaviour>[] stateMachineBehaviours = new PPtr<MonoBehaviour>[range.Count];
+						for (int i = 0; i < range.Count; i++)
+						{
+							int index = (int)StateMachineBehaviourVectorDescription.StateMachineBehaviourIndices[range.StartIndex + i];
+							stateMachineBehaviours[i] = StateMachineBehaviours[index];
+						}
+						return stateMachineBehaviours;
+					}
+				}
+			}
+			return new PPtr<MonoBehaviour>[0];
 		}
 
 		public override bool IsContainsAnimationClip(AnimationClip clip)
@@ -142,47 +158,20 @@ namespace UtinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
-#warning TODO: build controller from data
-			AnimatorControllerParameter[] @params = null;
-			AnimatorControllerLayers[] layers = null;
+			AnimatorControllerExportCollection collection = (AnimatorControllerExportCollection)container.CurrentCollection;
 
-			IReadOnlyList<ValueConstant> values = Controller.Values.Instance.ValueArray;
-			ValueArray defaultValues = Controller.DefaultValues.Instance;
-			@params = new AnimatorControllerParameter[values.Count];
-			for(int i = 0; i < values.Count; i++)
+			AnimatorControllerParameter[] @params = new AnimatorControllerParameter[Controller.Values.Instance.ValueArray.Count];
+			for(int i = 0; i < Controller.Values.Instance.ValueArray.Count; i++)
 			{
-				ValueConstant value = values[i];
-				string name = TOS[value.ID];
-#warning TODO:
-				AnimatorControllerParameterType type = ValueConstant.IsReadType(container.Version) ? value.Type : (AnimatorControllerParameterType)value.TypeID;
-				switch (type)
-				{
-					case AnimatorControllerParameterType.Trigger:
-						@params[i] = new AnimatorControllerParameter(name, type, this);
-						break;
-
-					case AnimatorControllerParameterType.Bool:
-						@params[i] = new AnimatorControllerParameter(name, type, this, defaultValues.BoolValues[value.Index]);
-						break;
-
-					case AnimatorControllerParameterType.Int:
-						@params[i] = new AnimatorControllerParameter(name, type, this, defaultValues.IntValues[value.Index]);
-						break;
-
-					case AnimatorControllerParameterType.Float:
-						@params[i] = new AnimatorControllerParameter(name, type, this, defaultValues.FloatValues[value.Index]);
-						break;
-
-					default:
-						throw new NotSupportedException($"Parameter type '{type}' isn't supported");
-				}
+				@params[i] = new AnimatorControllerParameter(this, i);
 			}
-			
-			layers = new AnimatorControllerLayers[Controller.LayerArray.Count];
+
+			AnimatorControllerLayers[] layers = new AnimatorControllerLayers[Controller.LayerArray.Count];
 			for(int i = 0; i < Controller.LayerArray.Count; i++)
 			{
-				LayerConstant layerConstant = Controller.LayerArray[i].Instance;
-
+				int stateMachineIndex = Controller.LayerArray[i].Instance.StateMachineIndex;
+				AnimatorStateMachine stateMachine = collection.StateMachines[stateMachineIndex];
+				layers[i] = new AnimatorControllerLayers(stateMachine, this, i);
 			}
 
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
@@ -192,8 +181,10 @@ namespace UtinyRipper.Classes
 			return node;
 		}
 
+		public override string ExportExtension => "controller";
+
 		public uint ControllerSize { get; private set; }
-		public IDictionary<uint, string> TOS => m_TOS;
+		public IReadOnlyDictionary<uint, string> TOS => m_TOS;
 		public IReadOnlyList<PPtr<AnimationClip>> AnimationClips => m_animationClips;
 		public IReadOnlyList<PPtr<MonoBehaviour>> StateMachineBehaviours => m_stateMachineBehaviours;
 		public bool MultiThreadedStateMachine { get; private set; }

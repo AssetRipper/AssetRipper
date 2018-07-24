@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class LightsModule : ParticleSystemModule, IDependent
+	public sealed class LightsModule : ParticleSystemModule, IDependent
 	{
 		public override void Read(AssetStream stream)
 		{

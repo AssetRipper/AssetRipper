@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
+using UtinyRipper.Classes.AnimatorControllers.Editor;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.AnimatorControllers
 {
@@ -24,7 +26,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 				m_selectorStateConstantArray = stream.ReadArray<OffsetPtr<SelectorStateConstant>>();
 			}
 
-			DefaultState = stream.ReadUInt32();
+			DefaultState = (int)stream.ReadUInt32();
 			MotionSetCount = stream.ReadUInt32();
 		}
 
@@ -33,10 +35,34 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 
+		public PPtr<AnimatorTransition>[] GetEntryTransitions(VirtualSerializedFile file,
+			AnimatorController controller, uint ID, IReadOnlyList<AnimatorState> states)
+		{
+			if (IsReadConstantArray(controller.File.Version))
+			{
+				foreach (OffsetPtr<SelectorStateConstant> selectorPtr in SelectorStateConstantArray)
+				{
+					SelectorStateConstant selector = selectorPtr.Instance;
+					if (selector.FullPathID == ID && selector.IsEntry)
+					{
+						PPtr<AnimatorTransition>[] transitions = new PPtr<AnimatorTransition>[selector.TransitionConstantArray.Count - 1];
+						for(int i = 0; i < selector.TransitionConstantArray.Count - 1; i++)
+						{
+							SelectorTransitionConstant selectorTrans = selector.TransitionConstantArray[i].Instance;
+							AnimatorTransition transition = new AnimatorTransition(file, controller, selectorTrans, states);
+							transitions[i] = PPtr<AnimatorTransition>.CreateVirtualPointer(transition);
+						}
+						return transitions;
+					}
+				}
+			}
+			return new PPtr<AnimatorTransition>[0];
+		}
+
 		public IReadOnlyList<OffsetPtr<StateConstant>> StateConstantArray => m_stateConstantArray;
 		public IReadOnlyList<OffsetPtr<TransitionConstant>> AnyStateTransitionConstantArray => m_anyStateTransitionConstantArray;
 		public IReadOnlyList<OffsetPtr<SelectorStateConstant>> SelectorStateConstantArray => m_selectorStateConstantArray;
-		public uint DefaultState { get; private set; }
+		public int DefaultState { get; private set; }
 		public uint MotionSetCount { get; private set; }
 
 		private OffsetPtr<StateConstant>[] m_stateConstantArray;

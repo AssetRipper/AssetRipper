@@ -12,6 +12,11 @@ namespace UtinyRipper.Classes
 			return version.IsLess(5, 5);
 		}
 
+		public AnimatorControllerParameterType GetTypeValue(Version version)
+		{
+			return IsReadType(version) ? Type : (AnimatorControllerParameterType)TypeID;
+		}
+
 		public void Read(AssetStream stream)
 		{
 			ID = stream.ReadUInt32();

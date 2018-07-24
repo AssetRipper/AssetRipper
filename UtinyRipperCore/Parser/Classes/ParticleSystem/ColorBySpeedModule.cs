@@ -3,7 +3,7 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class ColorBySpeedModule : ParticleSystemModule
+	public sealed class ColorBySpeedModule : ParticleSystemModule
 	{
 		public override void Read(AssetStream stream)
 		{

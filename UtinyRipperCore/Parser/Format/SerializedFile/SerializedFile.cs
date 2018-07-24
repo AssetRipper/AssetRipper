@@ -148,11 +148,8 @@ namespace UtinyRipper.SerializedFiles
 
 		public Object FindObject(long pathID)
 		{
-			if(m_assets.TryGetValue(pathID, out Object asset))
-			{
-				return asset;
-			}
-			return null;
+			m_assets.TryGetValue(pathID, out Object asset);
+			return asset;
 		}
 
 		public ObjectInfo GetObjectInfo(long pathID)
@@ -175,10 +172,7 @@ namespace UtinyRipper.SerializedFiles
 
 		public IEnumerable<Object> FetchAssets()
 		{
-			foreach(Object asset in m_assets.Values)
-			{
-				yield return asset;
-			}
+			return m_assets.Values;
 		}
 
 		public override string ToString()

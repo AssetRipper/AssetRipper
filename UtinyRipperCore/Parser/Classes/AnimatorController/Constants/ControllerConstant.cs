@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace UtinyRipper.Classes.AnimatorControllers
 {
@@ -10,6 +11,45 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			m_stateMachineArray = stream.ReadArray<OffsetPtr<StateMachineConstant>>();
 			Values.Read(stream);
 			DefaultValues.Read(stream);
+		}
+
+		public LayerConstant GetLayerByStateMachineIndex(int index)
+		{
+			foreach(OffsetPtr<LayerConstant> layerPtr in LayerArray)
+			{
+				LayerConstant layer = layerPtr.Instance;
+				if(layer.StateMachineIndex == index && layer.StateMachineMotionSetIndex == 0)
+				{
+					return layer;
+				}
+			}
+			throw new ArgumentOutOfRangeException(nameof(index));
+		}
+		
+		public int GetLayerIndexByStateMachineIndex(int index)
+		{
+			for (int i = 0; i < LayerArray.Count; i++)
+			{
+				LayerConstant layer = LayerArray[i].Instance;
+				if (layer.StateMachineIndex == index && layer.StateMachineMotionSetIndex == 0)
+				{
+					return i;
+				}
+			}
+			throw new ArgumentOutOfRangeException(nameof(index));
+		}
+
+		public int GetLayerIndex(LayerConstant layer)
+		{
+			for(int i = 0; i < LayerArray.Count; i++)
+			{
+				LayerConstant checkLayer = LayerArray[i].Instance;
+				if(checkLayer.StateMachineIndex == layer.StateMachineIndex && checkLayer.StateMachineMotionSetIndex == layer.StateMachineMotionSetIndex)
+				{
+					return i;
+				}
+			}
+			throw new ArgumentException("Layer wasn't found", nameof(layer));
 		}
 
 		public IReadOnlyList<OffsetPtr<LayerConstant>> LayerArray => m_layerArray;

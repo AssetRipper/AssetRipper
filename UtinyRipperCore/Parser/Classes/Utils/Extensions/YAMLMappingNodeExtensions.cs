@@ -12,6 +12,14 @@ namespace UtinyRipper.Classes
 			}
 		}
 
+		public static void ForceAddSerializedVersion(this YAMLMappingNode _this, int version)
+		{
+			if (version > 0)
+			{
+				_this.Add(SerializedVersionName, version);
+			}
+		}
+
 		public static void InsertSerializedVersion(this YAMLMappingNode _this, int version)
 		{
 			if(version > 1)
@@ -20,6 +28,6 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		private const string SerializedVersionName = "serializedVersion";
+		public const string SerializedVersionName = "serializedVersion";
 	}
 }

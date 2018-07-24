@@ -9,7 +9,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 	{
 		public void Read(AssetStream stream)
 		{
-			Destination = stream.ReadUInt32();
+			Destination = (int)stream.ReadUInt32();
 			m_conditionConstantArray = stream.ReadArray<OffsetPtr<ConditionConstant>>();
 		}
 
@@ -18,7 +18,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 
-		public uint Destination { get; private set; }
+		public int Destination { get; private set; }
 		public IReadOnlyList<OffsetPtr<ConditionConstant>> ConditionConstantArray => m_conditionConstantArray;
 		
 		private OffsetPtr<ConditionConstant>[] m_conditionConstantArray;

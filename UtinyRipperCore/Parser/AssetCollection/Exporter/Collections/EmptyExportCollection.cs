@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
+using UtinyRipper.SerializedFiles;
 
 using Object = UtinyRipper.Classes.Object;
 
@@ -9,11 +10,6 @@ namespace UtinyRipper.AssetExporters
 {
 	public sealed class EmptyExportCollection : IExportCollection
 	{
-		public EmptyExportCollection()
-		{
-			Name = string.Empty;
-		}
-
 		public bool Export(ProjectAssetContainer container, string dirPath)
 		{
 			return false;
@@ -38,13 +34,13 @@ namespace UtinyRipper.AssetExporters
 		{
 			throw new NotSupportedException();
 		}
-
-		public IAssetExporter AssetExporter { get; }
+		
+		public ISerializedFile File => throw new NotSupportedException();
 		public IEnumerable<Object> Objects
 		{
 			get { yield break; }
 		}
-		public string Name { get; }
+		public string Name => throw new NotSupportedException();
 		public IAssetImporter MetaImporter => throw new NotSupportedException();
 	}
 }

@@ -26,7 +26,14 @@ namespace UtinyRipper.AssetExporters
 
 		public Object FindObject(int fileIndex, long pathID)
 		{
-			return File.FindObject(fileIndex, pathID);
+			if(fileIndex == PPtr<Object>.VirtualFileIndex)
+			{
+				return VirtualFile.FindObject(pathID);
+			}
+			else
+			{
+				return File.FindObject(fileIndex, pathID);
+			}
 		}
 
 		public string GetExportID(Object @object)
@@ -74,17 +81,15 @@ namespace UtinyRipper.AssetExporters
 
 			if (Config.IsExportDependencies)
 			{
-				throw new InvalidOperationException($"Object {@object} wasn't found in any export collection");
+				//throw new InvalidOperationException($"Object {@object} wasn't found in any export collection");
 			}
-			else
-			{
-				string exportID = ExportCollection.GetMainExportID(@object);
-				return new ExportPointer(exportID, UtinyGUID.MissingReference, AssetType.Meta);
-			}
+			string exportID = ExportCollection.GetMainExportID(@object);
+			return new ExportPointer(exportID, UtinyGUID.MissingReference, AssetType.Meta);
 		}
 
 		public IExportCollection CurrentCollection { get; set; }
-		public ISerializedFile File { get; set; }
+		public VirtualSerializedFile VirtualFile { get; } = new VirtualSerializedFile();
+		public ISerializedFile File => CurrentCollection.File;
 		public Version Version => File.Version;
 		public Platform Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;

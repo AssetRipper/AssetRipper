@@ -1,7 +1,6 @@
 ﻿using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
 
-
 namespace UtinyRipper.AssetExporters
 {
 	public interface IExportContainer

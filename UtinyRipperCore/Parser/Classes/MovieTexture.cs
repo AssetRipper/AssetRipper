@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
-	public class MovieTexture : Texture
+	public sealed class MovieTexture : Texture
 	{
 		public MovieTexture(AssetInfo assetInfo):
 			base(assetInfo)

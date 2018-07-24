@@ -1,10 +1,29 @@
 ﻿using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class ChildMotion : IYAMLExportable
 	{
+		public ChildMotion(VirtualSerializedFile file, AnimatorController controller, StateConstant state, int nodeIndex, int childIndex)
+		{
+			BlendTreeConstant treeConstant = state.GetBlendTree();
+			BlendTreeNodeConstant node = treeConstant.NodeArray[nodeIndex].Instance;
+			int childNodeIndex = (int)node.ChildIndices[childIndex];
+			Motion = state.CreateMotion(file, controller, childNodeIndex);
+
+			Threshold = node.GetThreshold(controller.File.Version, childIndex);
+			Position = default;
+			TimeScale = 1.0f;
+			CycleOffset = node.CycleOffset;
+
+			uint directID = node.GetDirectBlendParameter(controller.File.Version, childIndex);
+			DirectBlendParameter = controller.TOS[directID];
+
+			Mirror = node.Mirror;
+		}
+
 		private static int GetSerializedVersion(Version version)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)

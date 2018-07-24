@@ -3,7 +3,7 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class InheritVelocityModule : ParticleSystemModule
+	public sealed class InheritVelocityModule : ParticleSystemModule
 	{
 		public override void Read(AssetStream stream)
 		{

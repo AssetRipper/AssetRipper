@@ -3,7 +3,7 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class RotationModule : ParticleSystemModule
+	public sealed class RotationModule : ParticleSystemModule
 	{
 		/// <summary>
 		/// 5.3.0 and greater

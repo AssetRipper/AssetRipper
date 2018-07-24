@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UtinyRipper.AssetExporters.Classes;
+using UtinyRipper.SerializedFiles;
 
 using Object = UtinyRipper.Classes.Object;
 
@@ -80,6 +81,7 @@ namespace UtinyRipper.AssetExporters
 		}
 
 		public override IAssetExporter AssetExporter { get; }
+		public override ISerializedFile File => Asset.File;
 		public override IEnumerable<Object> Objects
 		{
 			get { yield return Asset; }

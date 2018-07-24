@@ -7,11 +7,11 @@ namespace UtinyRipper.AssetExporters
 {
 	internal class DummyAssetExporter : IAssetExporter
 	{
-		public void Export(ProjectAssetContainer container, Object asset, string path)
+		public void Export(IExportContainer container, Object asset, string path)
 		{
 		}
 
-		public void Export(ProjectAssetContainer container, IEnumerable<Object> assets, string path)
+		public void Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
 		}
 
@@ -34,6 +34,8 @@ namespace UtinyRipper.AssetExporters
 			switch (classID)
 			{
 				case ClassIDType.AnimatorController:
+					return AssetType.Serialized;
+				case ClassIDType.MonoBehaviour:
 					return AssetType.Serialized;
 
 				case ClassIDType.MonoScript:

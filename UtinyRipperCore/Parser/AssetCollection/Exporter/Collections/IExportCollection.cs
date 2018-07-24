@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.AssetExporters
 {
@@ -11,7 +12,8 @@ namespace UtinyRipper.AssetExporters
 		string GetExportID(Object asset);
 		ExportPointer CreateExportPointer(Object asset, bool isLocal);
 
+		ISerializedFile File { get; }
 		IEnumerable<Object> Objects { get; }
-		string Name { get; }
+		string Name { get; } 
 	}
 }

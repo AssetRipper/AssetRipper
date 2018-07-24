@@ -12,15 +12,19 @@
 		/// <summary>
 		/// The condition is true when the parameter value is false.
 		/// </summary>
-		IfNot,
+		IfNot = 2,
 		/// <summary>
 		/// The condition is true when parameter value is greater than the threshold.
 		/// </summary>
-		Greater,
+		Greater = 3,
 		/// <summary>
 		/// The condition is true when the parameter value is less than the threshold.
 		/// </summary>
-		Less,
+		Less = 4,
+		/// <summary>
+		/// The condition is true when the source state has stepped over the exit time value.
+		/// </summary>
+		ExitTime = 5,
 		/// <summary>
 		/// The condition is true when parameter value is equal to the threshold.
 		/// </summary>
@@ -28,6 +32,6 @@
 		/// <summary>
 		/// The condition is true when the parameter value is not equal to the threshold.
 		/// </summary>
-		NotEqual
+		NotEqual = 7,
 	}
 }

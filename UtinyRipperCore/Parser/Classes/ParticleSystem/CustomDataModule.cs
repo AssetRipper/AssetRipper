@@ -3,7 +3,7 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class CustomDataModule : ParticleSystemModule
+	public sealed class CustomDataModule : ParticleSystemModule
 	{
 		/// <summary>
 		/// Not Release

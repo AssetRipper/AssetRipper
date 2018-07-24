@@ -9,14 +9,13 @@ namespace UtinyRipper.AssetExporters
 {
 	public class YAMLAssetExporter : IAssetExporter
 	{
-		public void Export(ProjectAssetContainer container, Object asset, string path)
+		public void Export(IExportContainer container, Object asset, string path)
 		{
 			using (FileStream fileStream = File.Open(path, FileMode.Create, FileAccess.Write))
 			{
 				using (StreamWriter streamWriter = new StreamWriter(fileStream))
 				{
 					YAMLWriter writer = new YAMLWriter();
-					container.File = asset.File;
 					YAMLDocument doc = asset.ExportYAMLDocument(container);
 					writer.AddDocument(doc);
 					writer.Write(streamWriter);
@@ -24,7 +23,7 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
-		public void Export(ProjectAssetContainer container, IEnumerable<Object> assets, string path)
+		public void Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
 			using (FileStream fileStream = File.Open(path, FileMode.Create, FileAccess.Write))
 			{
@@ -33,7 +32,6 @@ namespace UtinyRipper.AssetExporters
 					YAMLWriter writer = new YAMLWriter();
 					foreach (Object asset in assets)
 					{
-						container.File = asset.File;
 						YAMLDocument doc = asset.ExportYAMLDocument(container);
 						writer.AddDocument(doc);
 					}
@@ -67,36 +65,18 @@ namespace UtinyRipper.AssetExporters
 				{
 					case ClassIDType.NavMeshData:
 						return new EmptyExportCollection();
+					case ClassIDType.AnimatorController:
+						return new AnimatorControllerExportCollection(this, asset);
 
 					default:
 						return new AssetExportCollection(this, asset);
 				}
 			}
-
 		}
 
 		public AssetType ToExportType(ClassIDType classID)
 		{
 			return AssetType.Serialized;
-		}
-
-		private IEnumerable<EditorExtension> EnumeratePrefabContent(Prefab prefab)
-		{
-			foreach(EditorExtension @object in prefab.FetchObjects())
-			{
-				if(@object.ClassID == ClassIDType.GameObject)
-				{
-					GameObject go = (GameObject)@object;
-					int depth = go.GetRootDepth();
-					@object.ObjectHideFlags = depth > 1 ? 1u : 0u;
-				}
-				else
-				{
-					@object.ObjectHideFlags = 1;
-				}
-				@object.PrefabInternal = prefab.ThisPrefab;
-				yield return @object;
-			}
 		}
 	}
 }

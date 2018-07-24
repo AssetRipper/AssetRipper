@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UtinyRipper.AssetExporters;
+using UtinyRipper.Classes.AnimatorControllers.Editor;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.AnimatorControllers
@@ -56,7 +58,7 @@ namespace UtinyRipper.Classes.AnimatorControllers
 		{
 			return version.IsGreaterEqual(4, 1, 3);
 		}
-
+		
 		public void Read(AssetStream stream)
 		{
 			if (IsReadBlendType(stream.Version))
@@ -103,6 +105,68 @@ namespace UtinyRipper.Classes.AnimatorControllers
 		{
 			throw new NotSupportedException();
 		}
+		
+		public PPtr<Motion> CreateMotion(AnimatorController controller, int clipIndex)
+		{
+			if (clipIndex == -1)
+			{
+				return default;
+			}
+			else
+			{
+				return controller.AnimationClips[clipIndex].CastTo<Motion>();
+			}
+		}
+
+		public float GetThreshold(Version version, int index)
+		{
+			if (IsReadBlendData(version))
+			{
+				if(BlendType == BlendTreeType.Simple1D)
+				{
+					return Blend1dData.Instance.ChildThresholdArray[index];
+				}
+			}
+			return 0.0f;
+		}
+
+		public float GetMinThreshold(Version version)
+		{
+			if (IsReadBlendData(version))
+			{
+				if (BlendType == BlendTreeType.Simple1D)
+				{
+					return Blend1dData.Instance.ChildThresholdArray.Min();
+				}
+			}
+			return 0.0f;
+		}
+
+		public float GetMaxThreshold(Version version)
+		{
+			if (IsReadBlendData(version))
+			{
+				if(BlendType == BlendTreeType.Simple1D)
+				{
+					return Blend1dData.Instance.ChildThresholdArray.Max();
+				}
+			}
+			return 1.0f;
+		}
+		
+		public uint GetDirectBlendParameter(Version version, int index)
+		{
+			if(IsReadBlendDirectData(version))
+			{
+				if(BlendType == BlendTreeType.Direct)
+				{
+					return BlendDirectData.Instance.ChildBlendEventIDArray[index];
+				}
+			}
+			return 0;
+		}
+		
+		public bool IsBlendTree => ChildIndices.Count > 0;
 
 		public BlendTreeType BlendType { get; private set; }
 		public uint BlendEventID { get; private set; }

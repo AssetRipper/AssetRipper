@@ -6,7 +6,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
-	public class Camera : Behaviour
+	public sealed class Camera : Behaviour
 	{
 		public Camera(AssetInfo assetInfo):
 			base(assetInfo)

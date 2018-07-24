@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 
@@ -6,10 +7,27 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class AnimatorControllerLayers : IYAMLExportable
 	{
-		public AnimatorControllerLayers(string name)
+		public AnimatorControllerLayers(AnimatorStateMachine stateMachine, AnimatorController controller, int layerIndex)
 		{
-			Name = name;
+			LayerConstant layer = controller.Controller.LayerArray[layerIndex].Instance;
 
+			stateMachine.ParentStateMachinePosition = new Vector3f(800.0f, 20.0f, 0.0f);
+
+			Name = controller.TOS[layer.Binding];
+
+			StateMachine = PPtr<AnimatorStateMachine>.CreateVirtualPointer(stateMachine);
+
+#warning TODO: animator
+			Mask = default;
+
+			m_motions = new StateMotionPair[0];
+			m_behaviours = new StateBehavioursPair[0];
+			BlendingMode = layer.LayerBlendingMode;
+			SyncedLayerIndex = layer.StateMachineMotionSetIndex == 0 ? -1 : layer.StateMachineIndex;
+			DefaultWeight = layer.DefaultWeight;
+			IKPass = layer.IKPass;
+			SyncedLayerAffectsTiming = layer.SyncedLayerAffectsTiming;
+			Controller = new PPtr<AnimatorController>(controller);
 		}
 
 		private static int GetSerializedVersion(Version version)
@@ -17,7 +35,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			return 5;
 		}
-
+		
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
@@ -27,7 +45,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			node.Add("m_Mask", Mask.ExportYAML(container));
 			node.Add("m_Motions", Motions.ExportYAML(container));
 			node.Add("m_Behaviours", Behaviours.ExportYAML(container));
-			node.Add("m_BlendingMode", BlendingMode);
+			node.Add("m_BlendingMode", (int)BlendingMode);
 			node.Add("m_SyncedLayerIndex", SyncedLayerIndex);
 			node.Add("m_DefaultWeight", DefaultWeight);
 			node.Add("m_IKPass", IKPass);
@@ -39,7 +57,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 		public string Name { get; private set; }
 		public IReadOnlyList<StateMotionPair> Motions => m_motions;
 		public IReadOnlyList<StateBehavioursPair> Behaviours => m_behaviours;
-		public int BlendingMode { get; private set; }
+		public AnimatorLayerBlendingMode BlendingMode { get; private set; }
 		public int SyncedLayerIndex { get; private set; }
 		public float DefaultWeight { get; private set; }
 		public bool IKPass { get; private set; }

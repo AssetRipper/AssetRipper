@@ -3,7 +3,7 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class NoiseModule : ParticleSystemModule
+	public sealed class NoiseModule : ParticleSystemModule
 	{
 		/// <summary>
 		/// 2017.1.0b2 and greater

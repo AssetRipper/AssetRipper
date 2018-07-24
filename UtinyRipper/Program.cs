@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using UtinyRipper.SerializedFiles;
 
 using Object = UtinyRipper.Classes.Object;
 

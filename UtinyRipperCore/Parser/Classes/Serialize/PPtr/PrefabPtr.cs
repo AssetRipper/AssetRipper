@@ -3,7 +3,7 @@ using UtinyRipper.AssetExporters;
 
 namespace UtinyRipper.Classes
 {
-	public class PrefabPtr : InnerPPtr<Prefab>
+	public sealed class PrefabPtr : InnerPPtr<Prefab>
 	{
 		public PrefabPtr(Prefab prefab)
 		{

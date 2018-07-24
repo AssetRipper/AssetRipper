@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.AssetExporters
 {
@@ -42,7 +43,7 @@ namespace UtinyRipper.AssetExporters
 		protected void ExportMeta(ProjectAssetContainer container, Meta meta, string filePath)
 		{
 			string metaPath = $"{filePath}.meta";
-			using (FileStream fileStream = File.Open(metaPath, FileMode.Create, FileAccess.Write))
+			using (FileStream fileStream = System.IO.File.Open(metaPath, FileMode.Create, FileAccess.Write))
 			{
 				using (StreamWriter streamWriter = new StreamWriter(fileStream))
 				{
@@ -80,6 +81,7 @@ namespace UtinyRipper.AssetExporters
 		}
 
 		public abstract IAssetExporter AssetExporter { get; }
+		public abstract ISerializedFile File { get; }
 		public abstract IEnumerable<Object> Objects { get; }
 		public abstract string Name { get; }
 

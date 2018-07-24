@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
-	public class MonoBehaviour : Behaviour
+	public sealed class MonoBehaviour : Behaviour
 	{
 		public MonoBehaviour(AssetInfo assetInfo) :
 			base(assetInfo)

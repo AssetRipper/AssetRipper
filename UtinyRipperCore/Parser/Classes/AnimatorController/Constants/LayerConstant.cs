@@ -26,8 +26,8 @@ namespace UtinyRipper.Classes.AnimatorControllers
 
 		public void Read(AssetStream stream)
 		{
-			StateMachineIndex = stream.ReadUInt32();
-			StateMachineMotionSetIndex = stream.ReadUInt32();
+			StateMachineIndex = (int)stream.ReadUInt32();
+			StateMachineMotionSetIndex = (int)stream.ReadUInt32();
 			BodyMask.Read(stream);
 			SkeletonMask.Read(stream);
 			Binding = stream.ReadUInt32();
@@ -50,8 +50,8 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 		
-		public uint StateMachineIndex { get; private set; }
-		public uint StateMachineMotionSetIndex { get; private set; }
+		public int StateMachineIndex { get; private set; }
+		public int StateMachineMotionSetIndex { get; private set; }
 		public uint Binding { get; private set; }
 		public AnimatorLayerBlendingMode LayerBlendingMode { get; private set; }
 		public float DefaultWeight { get; private set; }

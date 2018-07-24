@@ -7,16 +7,15 @@ namespace UtinyRipper.AssetExporters
 {
 	public class BinaryAssetExporter : IAssetExporter
 	{
-		public void Export(ProjectAssetContainer container, Object asset, string path)
+		public void Export(IExportContainer container, Object asset, string path)
 		{
 			using (FileStream fileStream = new FileStream(path, FileMode.CreateNew, FileAccess.Write))
 			{
-				container.File = asset.File;
 				asset.ExportBinary(container, fileStream);
 			}
 		}
 
-		public void Export(ProjectAssetContainer container, IEnumerable<Object> assets, string path)
+		public void Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
 			foreach (Object asset in assets)
 			{

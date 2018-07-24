@@ -16,7 +16,7 @@
 		/// <summary>
 		/// Boolean type parameter.
 		/// </summary>
-		Bool,
+		Bool = 4,
 		/// <summary>
 		/// Trigger type parameter.
 		/// </summary>

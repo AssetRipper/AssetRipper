@@ -5,7 +5,7 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
-	public class TerrainCollider : Collider
+	public sealed class TerrainCollider : Collider
 	{
 		public TerrainCollider(AssetInfo assetInfo):
 			base(assetInfo)

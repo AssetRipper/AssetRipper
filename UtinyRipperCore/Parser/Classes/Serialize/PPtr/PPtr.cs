@@ -9,10 +9,20 @@ namespace UtinyRipper.Classes
 	public struct PPtr<T> : IPPtr<T>
 		where T: Object
 	{
-		public PPtr(Object @object)
+		public PPtr(Object asset)
 		{
 			FileIndex = 0;
-			PathID = @object.PathID;
+			PathID = asset.PathID;
+		}
+
+		public static PPtr<T> CreateVirtualPointer(Object asset)
+		{
+			PPtr<T> ptr = new PPtr<T>()
+			{
+				FileIndex = VirtualFileIndex,
+				PathID = asset.PathID,
+			};
+			return ptr;
 		}
 
 		/// <summary>
@@ -21,6 +31,16 @@ namespace UtinyRipper.Classes
 		private static bool IsLongID(Version version)
 		{
 			return version.IsGreaterEqual(5);
+		}
+
+		public PPtr<T1> CastTo<T1>()
+			where T1 : Object
+		{
+			return new PPtr<T1>()
+			{
+				FileIndex = FileIndex,
+				PathID = PathID,
+			};
 		}
 
 		public void Read(AssetStream stream)
@@ -180,6 +200,7 @@ namespace UtinyRipper.Classes
 			return FindObject(container) != null;
 		}
 
+		public bool IsVirtual => FileIndex == VirtualFileIndex;
 		public bool IsNull => PathID == 0;
 
 		/// <summary>
@@ -190,5 +211,7 @@ namespace UtinyRipper.Classes
 		/// It is acts more like a hash in some cases
 		/// </summary>
 		public long PathID { get; private set; }
+
+		public const int VirtualFileIndex = -1;
 	}
 }

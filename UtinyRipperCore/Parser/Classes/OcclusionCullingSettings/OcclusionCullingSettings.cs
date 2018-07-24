@@ -178,29 +178,24 @@ namespace UtinyRipper.Classes
 			{
 				if (m_PVSData.Length == 0)
 				{
-					return ExportPointer.EmptyPointer.ExportYAML(container);
+					return default(PPtr<OcclusionCullingData>).ExportYAML(container);
 				}
 				else
 				{
-#warning HACK!!!
-					AssetInfo dataAssetInfo = new AssetInfo(File, 0, ClassIDType.OcclusionCullingData);
-					OcclusionCullingData ocData = new OcclusionCullingData(dataAssetInfo, container, m_PVSData, SceneGUID, StaticRenderers, Portals);
 					SceneExportCollection scene = (SceneExportCollection)container.CurrentCollection;
-					scene.OcclusionCullingData = ocData;
-
-					var exPointer = container.CreateExportPointer(ocData);
-					return exPointer.ExportYAML(container);
+					PPtr<OcclusionCullingData> occlusionData = PPtr<OcclusionCullingData>.CreateVirtualPointer(scene.OcclusionCullingData);
+					return occlusionData.ExportYAML(container);
 				}
 			}
 			else
 			{
-#warning TODO: OcclusionCullingData has to find all corresponding OcclusionCullingSettings and fill IDs itself
 				if (Classes.OcclusionCullingData.IsReadStaticRenderers(container.Flags))
 				{
 					return OcclusionCullingData.ExportYAML(container);
 				}
 				else
 				{
+#warning TODO: OcclusionCullingData has to find all corresponding OcclusionCullingSettings and fill IDs itself
 					OcclusionCullingData data = OcclusionCullingData.FindObject(container);
 					if(data != null)
 					{
