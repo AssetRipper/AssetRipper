@@ -4,32 +4,34 @@ namespace UtinyRipper.Classes.Shaders
 {
 	public enum ShaderGpuProgramType
 	{
-		Unknown				= 0x0,
-		GLLegacy			= 0x1,
-		GLES31AEP			= 0x2,
-		GLES31				= 0x3,
-		GLES3				= 0x4,
-		GLES				= 0x5,
-		GLCore32			= 0x6,
-		GLCore41			= 0x7,
-		GLCore43			= 0x8,
-		DX9VertexSM20		= 0x9,
-		DX9VertexSM30		= 0xA,
-		DX9PixelSM20		= 0xB,
-		DX9PixelSM30		= 0xC,
-		DX10Level9Vertex	= 0xD,
-		DX10Level9Pixel		= 0xE,
-		DX11VertexSM40		= 0xF,
-		DX11VertexSM50		= 0x10,
-		DX11PixelSM40		= 0x11,
-		DX11PixelSM50		= 0x12,
-		DX11GeometrySM40	= 0x13,
-		DX11GeometrySM50	= 0x14,
-		DX11HullSM50		= 0x15,
-		DX11DomainSM50		= 0x16,
-		MetalVS				= 0x17,
-		MetalFS				= 0x18,
-		Console				= 0x19,
+		Unknown				= 0,
+		GLLegacy			= 1,
+		GLES31AEP			= 2,
+		GLES31				= 3,
+		GLES3				= 4,
+		GLES				= 5,
+		GLCore32			= 6,
+		GLCore41			= 7,
+		GLCore43			= 8,
+		DX9VertexSM20		= 9,
+		DX9VertexSM30		= 10,
+		DX9PixelSM20		= 11,
+		DX9PixelSM30		= 12,
+		DX10Level9Vertex	= 13,
+		DX10Level9Pixel		= 14,
+		DX11VertexSM40		= 15,
+		DX11VertexSM50		= 16,
+		DX11PixelSM40		= 17,
+		DX11PixelSM50		= 18,
+		DX11GeometrySM40	= 19,
+		DX11GeometrySM50	= 20,
+		DX11HullSM50		= 21,
+		DX11DomainSM50		= 22,
+		MetalVS				= 23,
+		MetalFS				= 24,
+		Console				= 25,
+		PSVertex			= 26,
+		PSPixel				= 27,
 	}
 
 	public static class ShaderGpuProgramTypeExtensions
@@ -177,6 +179,10 @@ namespace UtinyRipper.Classes.Shaders
 						default:
 							throw new NotSupportedException($"Unsupported console platform {platform}");
 					}
+
+				case ShaderGpuProgramType.PSVertex:
+				case ShaderGpuProgramType.PSPixel:
+					return GPUPlatform.ps4;
 
 				default:
 					throw new NotSupportedException($"Unsupported gpu program type {_this}");

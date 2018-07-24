@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.Materials;
