@@ -146,7 +146,7 @@ namespace UtinyRipper
 			SerializedFile file = (SerializedFile)ifile;
 			
 			const string archivePrefix = "archive:/";
-			if (fileName.StartsWith(archivePrefix))
+			if (fileName.StartsWith(archivePrefix, StringComparison.Ordinal))
 			{
 				fileName = Path.GetFileName(fileName);
 			}

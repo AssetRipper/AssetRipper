@@ -6,16 +6,16 @@ namespace UtinyRipper.AssetExporters.Classes
 {
 	public class SpriteMetaData : IYAMLExportable
 	{
-		public SpriteMetaData(string name, Rectf rect, int alignment, Vector2f pivot, Vector4f border)
+		public SpriteMetaData(Sprite sprite)
 		{
-			Name = name;
-			Rect = rect;
-			Alignment = alignment;
-			Pivot = pivot;
-			Border = border;
-
-			m_outline = new Vector2f[0];
-			m_physicsShape = new Vector2f[0];
+			Name = sprite.Name;
+			Rect = sprite.Rect;
+			Alignment = SpriteAlignment.Custom;
+			Pivot = sprite.Pivot;
+			Border = sprite.Border;			
+			Outline = sprite.GenerateOutline();
+			PhysicsShape = sprite.GeneratePhysicsShape();
+			TessellationDetail = 0;
 		}
 
 		private static int GetSerializedVersion(Version version)
@@ -30,7 +30,7 @@ namespace UtinyRipper.AssetExporters.Classes
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("name", Name);
 			node.Add("rect", Rect.ExportYAML(container));
-			node.Add("alignment", Alignment);
+			node.Add("alignment", (int)Alignment);
 			node.Add("pivot", Pivot.ExportYAML(container));
 			node.Add("border", Border.ExportYAML(container));
 			node.Add("outline", Outline.ExportYAML(container));
@@ -40,16 +40,13 @@ namespace UtinyRipper.AssetExporters.Classes
 		}
 
 		public string Name { get; private set; }
-		public int Alignment { get; private set; }
-		public IReadOnlyList<Vector2f> Outline => m_outline;
-		public IReadOnlyList<Vector2f> PhysicsShape => m_physicsShape;
+		public SpriteAlignment Alignment { get; private set; }
+		public IReadOnlyList<IReadOnlyList<Vector2f>> Outline;
+		public IReadOnlyList<IReadOnlyList<Vector2f>> PhysicsShape;
 		public float TessellationDetail { get; private set; }
 
 		public Rectf Rect;
 		public Vector2f Pivot;
 		public Vector4f Border;
-
-		private Vector2f[] m_outline;
-		private Vector2f[] m_physicsShape;
 	}
 }

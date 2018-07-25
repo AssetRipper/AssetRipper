@@ -272,7 +272,7 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		private VertexData GetExportVertexData(Version version)
+		private VertexData GetVertexData(Version version)
 		{
 			if(IsReadVertexData(version))
 			{
@@ -506,7 +506,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_KeepIndices", KeepIndices);
 			node.Add("m_IndexBuffer", IsReadIndexBuffer(container.Version) ? IndexBuffer.ExportYAML() : YAMLSequenceNode.Empty);
 			node.Add("m_Skin", IsReadSkin(container.Version) ? Skin.ExportYAML(container) : YAMLSequenceNode.Empty);
-			node.Add("m_VertexData", GetExportVertexData(container.Version).ExportYAML(container));
+			node.Add("m_VertexData", GetVertexData(container.Version).ExportYAML(container));
 			node.Add("m_CompressedMesh", CompressedMesh.ExportYAML(container));
 			node.Add("m_LocalAABB", LocalAABB.ExportYAML(container));
 			node.Add("m_MeshUsageFlags", MeshUsageFlags);

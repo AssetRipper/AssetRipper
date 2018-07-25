@@ -58,6 +58,11 @@ namespace UtinyRipper.Classes
 			return node;
 		}
 
+		public Vector2f ToVector2()
+		{
+			return new Vector2f(X, Y);
+		}
+
 		public float GetMember(int index)
 		{
 			if (index == 0)

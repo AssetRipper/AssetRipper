@@ -135,15 +135,27 @@ namespace UtinyRipper.Classes
 			throw new Exception($"Object's type {@object.ClassID} doesn't assignable from {typeof(T).Name}");
 		}
 
-		public bool IsObject(ISerializedFile file, Object @object)
+		public bool IsObject(Object asset)
 		{
-			if (FileIndex == 0)
+			if(FileIndex == 0)
 			{
-				return @object.PathID == PathID;
+				return asset.PathID == PathID;
 			}
 			else
 			{
-				return @object.PathID == PathID && file.Dependencies[FileIndex - 1].IsFile(@object.File);
+				throw new NotSupportedException("Need to specify file where to find");
+			}
+		}
+
+		public bool IsObject(ISerializedFile file, Object asset)
+		{
+			if (FileIndex == 0)
+			{
+				return asset.PathID == PathID;
+			}
+			else
+			{
+				return asset.PathID == PathID && file.Dependencies[FileIndex - 1].IsFile(asset.File);
 			}
 		}
 

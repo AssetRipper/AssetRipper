@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UtinyRipper.Classes;
 using UtinyRipper.Classes.Textures;
 using UtinyRipper.Exporter.YAML;
@@ -21,17 +22,33 @@ namespace UtinyRipper.AssetExporters.Classes
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			return 4;
 		}
-
+		
 		protected override void ExportYAMLPreInner(IExportContainer container, YAMLMappingNode node)
 		{
 			base.ExportYAMLPreInner(container, node);
 
-			node.Add("fileIDToRecycleName", YAMLMappingNode.Empty);
+			YAMLMappingNode fileNode = YAMLMappingNode.Empty;
+			if(m_sprites.Count > 0)
+			{
+				fileNode = new YAMLMappingNode();
+				foreach(Sprite sprite in m_sprites)
+				{
+					string exportID = container.GetExportID(sprite);
+					fileNode.Add(exportID, sprite.Name);
+				}
+			}
+			node.Add("fileIDToRecycleName", fileNode);
 		}
 
 		protected override void ExportYAMLInner(IExportContainer container, YAMLMappingNode node)
 		{
 			base.ExportYAMLInner(container, node);
+			
+			SpriteMetaData[] sprites = new SpriteMetaData[m_sprites.Count];
+			for (int i = 0; i < m_sprites.Count; i++)
+			{
+				sprites[i] = new SpriteMetaData(m_sprites[i]);
+			}
 
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 
@@ -72,7 +89,33 @@ namespace UtinyRipper.AssetExporters.Classes
 			node.Add("nPOTScale", false);
 			node.Add("lightmap", false);
 			node.Add("compressionQuality", 50);
-			node.Add("spriteMode", (int)SpriteImportMode.Single);
+
+			SpriteImportMode spriteMode;
+			switch(m_sprites.Count)
+			{
+				case 0:
+					spriteMode = SpriteImportMode.Single;
+					break;
+
+				case 1:
+					Sprite sprite = m_sprites[0];
+					Rectf textureRect = new Rectf(0.0f, 0.0f, m_texture.Width, m_texture.Height);
+					if(m_sprites[0].Rect == textureRect)
+					{
+						spriteMode = sprite.Name == m_texture.Name ? SpriteImportMode.Single : SpriteImportMode.Multiple;
+					}
+					else
+					{
+						spriteMode = SpriteImportMode.Multiple;
+					}
+					break;
+
+				default:
+					spriteMode = SpriteImportMode.Multiple;
+					break;
+			}
+			node.Add("spriteMode", (int)spriteMode);
+
 			node.Add("spriteExtrude", 1);
 			node.Add("spriteMeshType", (int)SpriteMeshType.Tight);
 			node.Add("alignment", 0);
@@ -86,7 +129,15 @@ namespace UtinyRipper.AssetExporters.Classes
 			node.Add("alphaIsTransparency", true);
 			node.Add("spriteTessellationDetail", -1);
 
-			TextureImporterType type = m_texture.LightmapFormat.IsNormalmap() ? TextureImporterType.NormalMap : TextureImporterType.Default;
+			TextureImporterType type;
+			if (m_texture.LightmapFormat.IsNormalmap())
+			{
+				type = TextureImporterType.NormalMap;
+			}
+			else
+			{
+				type = m_sprites.Count == 0 ? TextureImporterType.Default : TextureImporterType.Sprite;
+			}
 			node.Add("textureType", (int)type);
 
 			TextureImporterShape shape = (m_texture is Cubemap) ? TextureImporterShape.TextureCube : TextureImporterShape.Texture2D;
@@ -100,15 +151,69 @@ namespace UtinyRipper.AssetExporters.Classes
 			TextureImporterPlatformSettings[] platforms = new TextureImporterPlatformSettings[] { platform };
 			node.Add("platformSettings", platforms.ExportYAML(container));
 
-			SpriteMetaData[] sprites = new SpriteMetaData[0];
-			SpriteSheetMetaData spriteSheet = new SpriteSheetMetaData(sprites);
+			SpriteSheetMetaData spriteSheet;
+			if(spriteMode == SpriteImportMode.Single)
+			{
+				if(sprites.Length == 0)
+				{
+					spriteSheet = new SpriteSheetMetaData(sprites);
+				}
+				else
+				{
+					spriteSheet = new SpriteSheetMetaData(sprites[0]);
+				}
+			}
+			else
+			{
+				spriteSheet = new SpriteSheetMetaData(sprites);
+			}
 			node.Add("spriteSheet", spriteSheet.ExportYAML(container));
 
 			node.Add("spritePackingTag", string.Empty);
 		}
 
+		/*private bool IsSingle(Sprite sprite, SpriteMetaData spriteMeta)
+		{
+			Rectf textureRect = new Rectf(0.0f, 0.0f, m_texture.Width, m_texture.Height);
+			if (sprite.RD.TextureRect == textureRect)
+			{
+				return true;
+			}
+
+			if (spriteMeta.Outline.Count == 0)
+			{
+				return true;
+			}
+			if (spriteMeta.Outline.Count > 1)
+			{
+				return false;
+			}
+			IReadOnlyList<Vector2f> outline = spriteMeta.Outline[0];
+			if (outline.Count != 4)
+			{
+				return false;
+			}
+			Vector2f center = sprite.RD.TextureRect.Center;
+			foreach (Vector2f outPoint in outline)
+			{
+				Vector2f globalPoint = center + outPoint;
+				if (!textureRect.ContainsCorner(globalPoint))
+				{
+					return false;
+				}
+			}
+			return true;
+		}*/
+
 		public override string Name => nameof(TextureImporter);
 
+		public IReadOnlyList<Sprite> Sprites
+		{
+			set => m_sprites = value;
+		}
+
 		private readonly Texture2D m_texture;
+
+		private IReadOnlyList<Sprite> m_sprites;
 	}
 }

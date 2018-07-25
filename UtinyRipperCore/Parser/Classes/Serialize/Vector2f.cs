@@ -18,6 +18,41 @@ namespace UtinyRipper.Classes
 			Y = y;
 		}
 
+		public static Vector2f operator -(Vector2f left, Vector2f right)
+		{
+			return new Vector2f(left.X - right.X, left.Y - right.Y);
+		}
+
+		public static Vector2f operator +(Vector2f left, Vector2f right)
+		{
+			return new Vector2f(left.X + right.X, left.Y + right.Y);
+		}
+
+		public static Vector2f operator *(Vector2f left, float right)
+		{
+			return new Vector2f(left.X * right, left.Y * right);
+		}
+
+		/// <summary>
+		/// Angle increase when 2nd line is moving in clockwise direction
+		/// </summary>
+		/// <returns>Angle in degrees</returns>
+		public static float AngleFrom3Points(Vector2f point1, Vector2f point2, Vector2f point3)
+		{
+			Vector2f transformedP1 = new Vector2f(point1.X - point2.X, point1.Y - point2.Y);
+			Vector2f transformedP2 = new Vector2f(point3.X - point2.X, point3.Y - point2.Y);
+
+			double angleToP1 = Math.Atan2(transformedP1.Y, transformedP1.X);
+			double angleToP2 = Math.Atan2(transformedP2.Y, transformedP2.X);
+
+			double angle = angleToP1 - angleToP2;
+			if (angle < 0)
+			{
+				angle += (2 * Math.PI);
+			}
+			return (float)(360.0 * angle / (2.0 * Math.PI));
+		}
+
 		public void Read(AssetStream stream)
 		{
 			X = stream.ReadSingle();

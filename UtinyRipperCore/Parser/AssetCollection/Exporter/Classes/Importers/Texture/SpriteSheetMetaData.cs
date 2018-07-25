@@ -6,11 +6,18 @@ namespace UtinyRipper.AssetExporters.Classes
 {
 	public class SpriteSheetMetaData : IYAMLExportable
 	{
+		public SpriteSheetMetaData(SpriteMetaData sprite)
+		{
+			m_sprites = new SpriteMetaData[] { sprite };
+			m_outline = (Vector2f[][])sprite.Outline;
+			m_physicsShape = new Vector2f[0][];
+		}
+
 		public SpriteSheetMetaData(SpriteMetaData[] sprites)
 		{
 			m_sprites = sprites;
-			m_outline = new Vector2f[0];
-			m_physicsShape = new Vector2f[0];
+			m_outline = new Vector2f[0][];
+			m_physicsShape = new Vector2f[0][];
 		}
 
 		private static int GetSerializedVersion(Version version)
@@ -30,11 +37,11 @@ namespace UtinyRipper.AssetExporters.Classes
 		}
 
 		public IReadOnlyList<SpriteMetaData> Sprites => m_sprites;
-		public IReadOnlyList<Vector2f> Outline => m_outline;
-		public IReadOnlyList<Vector2f> PhysicsShape => m_physicsShape;
+		public IReadOnlyList<IReadOnlyList<Vector2f>> Outline => m_outline;
+		public IReadOnlyList<IReadOnlyList<Vector2f>> PhysicsShape => m_physicsShape;
 
 		private SpriteMetaData[] m_sprites;
-		private Vector2f[] m_outline;
-		private Vector2f[] m_physicsShape;
+		private Vector2f[][] m_outline;
+		private Vector2f[][] m_physicsShape;
 	}
 }

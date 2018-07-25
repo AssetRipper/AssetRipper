@@ -55,9 +55,14 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
+		protected virtual string GenerateExportID(Object asset)
+		{
+			return ObjectUtils.GenerateExportID(asset, IsContainsID);
+		}
+
 		protected void AddAsset(Object asset)
 		{
-			string exportID = ObjectUtils.GenerateExportID(asset, IsContainsID);
+			string exportID = GenerateExportID(asset);
 			m_exportIDs.Add(asset, exportID);
 		}
 
@@ -66,6 +71,6 @@ namespace UtinyRipper.AssetExporters
 			return m_exportIDs.ContainsValue(id);
 		}
 
-		private readonly Dictionary<Object, string> m_exportIDs = new Dictionary<Object, string>();
+		protected readonly Dictionary<Object, string> m_exportIDs = new Dictionary<Object, string>();
 	}
 }

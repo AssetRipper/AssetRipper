@@ -93,8 +93,7 @@ namespace UtinyRipper.Classes.Meshes
 		{
 			int format = _this.GetFormat(version);
 			int dimention = _this.GetDimention(version);
-			int elementSize = (4 / (int)Math.Pow(2, format));
-			return (byte)(elementSize * dimention);
+			return ChannelInfo.CalculateStride(format, dimention);
 		}
 	}
 }

@@ -26,5 +26,11 @@ namespace UtinyRipper.AssetExporters
 			}
 			return node;
 		}
+
+		public static YAMLNode ExportYAML<T>(this IEnumerable<IReadOnlyList<T>> _this, IExportContainer container)
+			where T : IYAMLExportable
+		{
+			return ExportYAML((IEnumerable<IEnumerable<T>>)_this, container);
+		}
 	}
 }

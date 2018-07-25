@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using UtinyRipper.Classes;
 
 using Object = UtinyRipper.Classes.Object;
 
@@ -261,7 +262,7 @@ namespace UtinyRipper
 			yield return name;
 
 			const string libraryFolder = "library";
-			if (name.ToLower().StartsWith(libraryFolder))
+			if (name.ToLower().StartsWith(libraryFolder, StringComparison.Ordinal))
 			{
 				string fixedName = name.Substring(libraryFolder.Length + 1);
 				yield return fixedName;

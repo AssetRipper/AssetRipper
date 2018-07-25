@@ -280,6 +280,7 @@
     <Compile Include="Parser\Classes\Shader\Exporters\ShaderUnknownExporter.cs" />
     <Compile Include="Parser\Classes\SphereCollider.cs" />
     <Compile Include="Parser\Classes\SpriteRenderer\SpriteSortPoint.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\SpriteAlignment.cs" />
     <Compile Include="Parser\Classes\Sprite\SpriteBone.cs" />
     <Compile Include="Parser\Classes\Terrain.cs" />
     <Compile Include="Parser\Classes\TerrainCollider.cs" />
@@ -358,6 +359,7 @@
     <Compile Include="Parser\Classes\SpriteRenderer\SpriteTileMode.cs" />
     <Compile Include="Parser\Classes\UI\Canvas\Canvas.cs" />
     <Compile Include="Parser\Classes\UI\Canvas\RenderMode.cs" />
+    <Compile Include="Parser\Classes\Utils\Vector3i.cs" />
     <Compile Include="Parser\Classes\WheelCollider\WheelCollider.cs" />
     <Compile Include="Parser\Classes\WheelCollider\WheelFrictionCurve.cs" />
     <Compile Include="Parser\Format\BundleFile\Entry\BundleMetadata.cs" />

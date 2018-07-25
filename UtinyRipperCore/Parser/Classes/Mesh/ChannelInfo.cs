@@ -1,4 +1,5 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.Meshes
@@ -11,6 +12,17 @@ namespace UtinyRipper.Classes.Meshes
 			Offset = offset;
 			Format = format;
 			Dimension = dimention;
+		}
+
+		public static byte CalculateStride(int format, int dimention)
+		{
+			int elementSize = (4 / (int)Math.Pow(2, format));
+			return (byte)(elementSize * dimention);
+		}
+
+		public byte GetStride()
+		{
+			return CalculateStride(Format, Dimension);
 		}
 
 		public void Read(AssetStream stream)

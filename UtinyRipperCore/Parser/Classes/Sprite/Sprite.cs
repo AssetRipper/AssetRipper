@@ -72,6 +72,45 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
+		public IReadOnlyList<IReadOnlyList<Vector2f>> GenerateOutline()
+		{
+			Vector2f[][] outlines = RD.GenerateOutline(File.Version);
+			Vector2f center = RD.TextureRect.Center;
+			Vector2f pivotShift = new Vector2f(Rect.Width * Pivot.X - Rect.Width * 0.5f, Rect.Height * Pivot.Y - Rect.Height * 0.5f);
+			foreach (Vector2f[] outline in outlines)
+			{
+				for (int i = 0; i < outline.Length; i++)
+				{
+					Vector2f point = outline[i] * PixelsToUnits;
+					outline[i] = point + pivotShift;
+				}
+			}
+			return outlines;
+		}
+
+		public IReadOnlyList<IReadOnlyList<Vector2f>> GeneratePhysicsShape()
+		{
+			if(IsReadPhysicsShape(File.Version))
+			{
+				Vector2f[][] shape = new Vector2f[PhysicsShape.Count][];
+				Vector2f pivotShift = new Vector2f(Rect.Width * Pivot.X - Rect.Width * 0.5f, Rect.Height * Pivot.Y - Rect.Height * 0.5f);
+				for (int i = 0; i < PhysicsShape.Count; i++)
+				{
+					shape[i] = new Vector2f[PhysicsShape[i].Count];
+					for(int j = 0; j < PhysicsShape[i].Count; j++)
+					{
+						Vector2f point = PhysicsShape[i][j] * PixelsToUnits;
+						shape[i][j] = point + pivotShift;
+					}
+				}
+				return shape;
+			}
+			else
+			{
+				return new Vector2f[0][];
+			}
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);

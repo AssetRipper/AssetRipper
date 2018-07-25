@@ -8,12 +8,12 @@ namespace UtinyRipper.Classes
 {
 	public static class ObjectUtils
 	{
-		public static List<Object> CollectDependencies(Object @object, bool isLog = false)
+		public static List<Object> CollectDependencies(Object asset, bool isLog = false)
 		{
 			HashSet<Object> hdeps = new HashSet<Object>();
 			List<Object> deps = new List<Object>();
-			hdeps.Add(@object);
-			deps.Add(@object);
+			hdeps.Add(asset);
+			deps.Add(asset);
 
 			for (int i = 0; i < deps.Count; i++)
 			{
@@ -35,23 +35,23 @@ namespace UtinyRipper.Classes
 			return deps;
 		}
 
-		public static string GenerateExportID(Object @object, IEnumerable<string> exportIDs)
+		public static string GenerateExportID(Object asset, IEnumerable<string> exportIDs)
 		{
-			return GenerateExportID(@object, (id) => exportIDs.Any(t => t == id));
+			return GenerateExportID(asset, (id) => exportIDs.Any(t => t == id));
 		}
 
-		public static string GenerateExportID(Object @object, Func<string, bool> uniqueChecker)
+		public static string GenerateExportID(Object asset, Func<string, bool> uniqueChecker)
 		{
-			if (@object == null)
+			if (asset == null)
 			{
-				throw new ArgumentNullException(nameof(@object));
+				throw new ArgumentNullException(nameof(asset));
 			}
 
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			string exportID;
 			do
 			{
-				s_builder.Append((int)@object.ClassID);
+				s_builder.Append((int)asset.ClassID);
 				for (int i = 0; i < 15; i++)
 				{
 					int number = RandomUtils.Next(0, 10);
@@ -64,10 +64,10 @@ namespace UtinyRipper.Classes
 			return exportID;
 		}
 
-		public static UtinyGUID CalculateObjectsGUID(IEnumerable<Object> objects)
+		public static UtinyGUID CalculateObjectsGUID(IEnumerable<Object> asset)
 		{
 			List<uint> hashList = new List<uint>();
-			foreach (Object @object in objects)
+			foreach (Object @object in asset)
 			{
 				hashList.Add(@object.GUID.Data0);
 				hashList.Add(@object.GUID.Data1);

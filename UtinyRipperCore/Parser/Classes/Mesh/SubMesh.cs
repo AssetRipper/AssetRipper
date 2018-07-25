@@ -63,13 +63,13 @@ namespace UtinyRipper.Classes.Meshes
 
 		public void Read(AssetStream stream)
 		{
-			FirstByte = stream.ReadUInt32();
-			IndexCount = stream.ReadUInt32();
+			FirstByte = (int)stream.ReadUInt32();
+			IndexCount = (int)stream.ReadUInt32();
 			Topology = (MeshTopology)stream.ReadUInt32();
 
 			if(IsReadTriangleCount(stream.Version))
 			{
-				TriangleCount = stream.ReadUInt32();
+				TriangleCount = (int)stream.ReadUInt32();
 			}
 			if(IsReadBaseVertex(stream.Version))
 			{
@@ -97,14 +97,14 @@ namespace UtinyRipper.Classes.Meshes
 			return node;
 		}
 
-		public uint FirstByte { get; private set; }
+		public int FirstByte { get; private set; }
 		// What is this in case of triangle strips?
-		public uint IndexCount { get; private set; }
+		public int IndexCount { get; private set; }
 		/// <summary>
 		/// isTriStrip previously
 		/// </summary>
 		public MeshTopology Topology { get; private set; }
-		public uint TriangleCount { get; private set; }
+		public int TriangleCount { get; private set; }
 		public uint BaseVertex { get; private set; }
 		public uint FirstVertex { get; private set; }
 		public uint VertexCount { get; private set; }

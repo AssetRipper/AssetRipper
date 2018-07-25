@@ -38,7 +38,7 @@ namespace UtinyRipper
 			for (int i = 1; i < int.MaxValue; i++)
 			{
 				string newName = $"{fileName}_{i}.".ToLower();
-				if (files.All(t => !t.StartsWith(newName)))
+				if (files.All(t => !t.StartsWith(newName, StringComparison.Ordinal)))
 				{
 					return $"{fileName}_{i}";
 				}
