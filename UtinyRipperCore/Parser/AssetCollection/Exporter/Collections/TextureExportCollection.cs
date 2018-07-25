@@ -33,11 +33,11 @@ namespace UtinyRipper.AssetExporters
 
 		protected static IAssetImporter CreateImporter(Texture2D texture)
 		{
-			//if (Config.IsConvertTexturesToPNG)
+			if (Config.IsConvertTexturesToPNG)
 			{
 				return new TextureImporter(texture);
 			}
-			//else
+			else
 			{
 				return new IHVImageFormatImporter(texture);
 			}

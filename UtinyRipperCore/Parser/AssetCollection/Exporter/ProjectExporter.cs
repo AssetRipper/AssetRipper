@@ -116,6 +116,12 @@ namespace UtinyRipper.AssetExporters
 			for (int i = 0; i < depList.Count; i++)
 			{
 				Object current = depList[i];
+				if (!current.IsValid)
+				{
+					Logger.Instance.Log(LogType.Warning, LogCategory.Export, $"Can't export '{current}' because it isn't valid");
+					continue;
+				}
+
 				if (!queued.Contains(current))
 				{
 					IAssetExporter exporter = m_exporters[current.ClassID];

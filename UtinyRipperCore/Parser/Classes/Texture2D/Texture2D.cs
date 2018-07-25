@@ -864,6 +864,23 @@ namespace UtinyRipper.Classes
 			}
 		}
 
+		public override bool IsValid
+		{
+			get
+			{
+				if (IsReadStreamData(File.Version))
+				{
+					string path = StreamData.Path;
+					if (path != string.Empty)
+					{
+						ResourcesFile res = File.Collection.FindResourcesFile(File, path);
+						return res != null;
+					}
+				}
+				return ImageData.Count > 0;
+			}
+		}
+
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 		public int CompleteImageSize { get; private set; }

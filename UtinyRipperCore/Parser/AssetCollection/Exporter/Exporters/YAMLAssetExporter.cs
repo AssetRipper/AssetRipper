@@ -42,12 +42,6 @@ namespace UtinyRipper.AssetExporters
 
 		public IExportCollection CreateCollection(Object asset)
 		{
-			if (!asset.IsValid)
-			{
-				Logger.Instance.Log(LogType.Warning, LogCategory.Export, $"Can't export '{asset}' because it isn't valid");
-				return new EmptyExportCollection();
-			}
-
 			if (OcclusionCullingSettings.IsCompatible(asset))
 			{
 				if (asset.File.IsScene)
