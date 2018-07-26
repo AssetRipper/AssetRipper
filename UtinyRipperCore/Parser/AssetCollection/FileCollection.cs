@@ -144,12 +144,8 @@ namespace UtinyRipper
 		public ResourcesFile FindResourcesFile(ISerializedFile ifile, string fileName)
 		{
 			SerializedFile file = (SerializedFile)ifile;
-			
-			const string archivePrefix = "archive:/";
-			if (fileName.StartsWith(archivePrefix, StringComparison.Ordinal))
-			{
-				fileName = Path.GetFileName(fileName);
-			}
+
+			fileName = PathUtils.FixResourcePath(fileName);
 
 			// check assets bundles / web files
 			string filePath = file.FilePath;

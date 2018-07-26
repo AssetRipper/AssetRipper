@@ -346,7 +346,7 @@ namespace UtinyRipper.BundleFiles
 
 		private void OnRequestDependency(string dependency)
 		{
-			if(IsSerializedFileLoaded(dependency))
+			if (IsSerializedFileLoaded(dependency))
 			{
 				return;
 			}

@@ -652,6 +652,7 @@
     <Compile Include="Parser\Classes\Serialize\Vector4f.cs" />
     <Compile Include="Parser\Classes\Transform.cs" />
     <Compile Include="Parser\ResourcesFile.cs" />
+    <Compile Include="Parser\Utils\PathUtils.cs" />
     <Compile Include="Parser\Version\VersionType.cs" />
     <Compile Include="Parser\Format\BundleFile\Parser\BundleCompressType.cs" />
     <Compile Include="Parser\Format\BundleFile\BundleFile.cs" />

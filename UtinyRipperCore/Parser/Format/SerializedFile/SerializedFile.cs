@@ -91,7 +91,7 @@ namespace UtinyRipper.SerializedFiles
 
 				foreach (FileIdentifier dependency in Dependencies)
 				{
-					requestDependencyCallback?.Invoke(dependency.FilePath);
+					requestDependencyCallback?.Invoke(dependency.FilePathFixed);
 				}
 
 				if (RTTIClassHierarchyDescriptor.IsReadSignature(Header.Generation))
