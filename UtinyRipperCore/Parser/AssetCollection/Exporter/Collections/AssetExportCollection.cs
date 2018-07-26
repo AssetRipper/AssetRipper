@@ -57,7 +57,7 @@ namespace UtinyRipper.AssetExporters
 			return Asset == asset;
 		}
 
-		public override string GetExportID(Object asset)
+		public override ulong GetExportID(Object asset)
 		{
 			if(asset == Asset)
 			{
@@ -68,7 +68,7 @@ namespace UtinyRipper.AssetExporters
 
 		public override ExportPointer CreateExportPointer(Object asset, bool isLocal)
 		{
-			string exportID = GetExportID(asset);
+			ulong exportID = GetExportID(asset);
 			return isLocal ?
 				new ExportPointer(exportID) :
 				new ExportPointer(exportID, Asset.GUID, AssetExporter.ToExportType(Asset.ClassID));
@@ -82,7 +82,7 @@ namespace UtinyRipper.AssetExporters
 
 		public override IAssetExporter AssetExporter { get; }
 		public override ISerializedFile File => Asset.File;
-		public override IEnumerable<Object> Objects
+		public override IEnumerable<Object> Assets
 		{
 			get { yield return Asset; }
 		}

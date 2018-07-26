@@ -6,18 +6,14 @@ namespace UtinyRipper.AssetExporters.Classes
 {
 	public sealed class ExportPointer : IYAMLExportable
 	{
-		public ExportPointer(string fileID)
+		public ExportPointer(ulong fileID)
 		{
-			if(string.IsNullOrEmpty(fileID))
-			{
-				throw new ArgumentNullException(nameof(fileID));
-			}
 			FileID = fileID;
 			GUID = default;
 			AssetType = default;
 		}
 
-		public ExportPointer(string fileID, UtinyGUID guid, AssetType assetType):
+		public ExportPointer(ulong fileID, UtinyGUID guid, AssetType assetType):
 			this(fileID)
 		{
 			GUID = guid;
@@ -25,7 +21,7 @@ namespace UtinyRipper.AssetExporters.Classes
 		}
 
 		public ExportPointer(ClassIDType classID, AssetType assetType) :
-			this($"{(int)classID}00000", UtinyGUID.MissingReference, assetType)
+			this(ExportCollection.GetMainExportID((uint)classID), UtinyGUID.MissingReference, assetType)
 		{
 		}
 		
@@ -42,9 +38,9 @@ namespace UtinyRipper.AssetExporters.Classes
 			return node;
 		}
 
-		public static readonly ExportPointer EmptyPointer = new ExportPointer(0.ToString());
+		public static readonly ExportPointer EmptyPointer = new ExportPointer(0);
 
-		public string FileID { get; }
+		public ulong FileID { get; }
 		public UtinyGUID GUID { get; }
 		public AssetType AssetType { get; }
 	}

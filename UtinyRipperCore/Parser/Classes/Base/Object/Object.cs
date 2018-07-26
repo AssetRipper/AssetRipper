@@ -66,7 +66,7 @@ namespace UtinyRipper.Classes
 			YAMLMappingNode node = ExportYAMLRoot(container);
 			YAMLMappingNode root = document.CreateMappingRoot();
 			root.Tag = ClassID.ToInt().ToString();
-			root.Anchor = container.GetExportID(this);
+			root.Anchor = container.GetExportID(this).ToString();
 			root.Add(ClassID.ToString(), node);
 
 			return document;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -35,12 +36,12 @@ namespace UtinyRipper.Classes
 			return deps;
 		}
 
-		public static string GenerateExportID(Object asset, IEnumerable<string> exportIDs)
+		public static ulong GenerateExportID(Object asset, IEnumerable<ulong> exportIDs)
 		{
 			return GenerateExportID(asset, (id) => exportIDs.Any(t => t == id));
 		}
 
-		public static string GenerateExportID(Object asset, Func<string, bool> uniqueChecker)
+		public static ulong GenerateExportID(Object asset, Func<ulong, bool> uniqueChecker)
 		{
 			if (asset == null)
 			{
@@ -48,17 +49,23 @@ namespace UtinyRipper.Classes
 			}
 
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			string exportID;
+			ulong exportID;
 			do
 			{
-				s_builder.Append((int)asset.ClassID);
-				for (int i = 0; i < 15; i++)
+				uint classID = (uint)asset.ClassID;
+#if DEBUG
+				int length = BitConverterExtensions.GetDigitsCount(classID);
+				if (length > 4)
 				{
-					int number = RandomUtils.Next(0, 10);
-					s_builder.Append(number);
+					throw new NotSupportedException($"Class ID {classID} with more that 4 digits isn't supported");
 				}
-				exportID = s_builder.ToString();
-				s_builder.Length = 0;
+#endif
+				exportID = classID << 28;
+				for(int i = 0; i < 28; i++)
+				{
+					ulong bitValue = unchecked((ulong)RandomUtils.Next(0, 2));
+					exportID |= bitValue << i;
+				}
 			}
 			while (uniqueChecker(exportID));
 			return exportID;
@@ -84,7 +91,5 @@ namespace UtinyRipper.Classes
 				return new UtinyGUID(hash);
 			}
 		}
-
-		private static readonly StringBuilder s_builder = new StringBuilder();
 	}
 }

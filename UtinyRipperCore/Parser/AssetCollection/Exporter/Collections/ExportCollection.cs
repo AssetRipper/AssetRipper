@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
+
+using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
 {
@@ -17,14 +20,36 @@ namespace UtinyRipper.AssetExporters
 			FileNameRegex = new Regex($"[{escapedChars}]");
 		}
 
-		public static string GetMainExportID(Object asset)
+		public static ulong GetMainExportID(Object asset)
 		{
-			return $"{(int)asset.ClassID}00000";
+			return GetMainExportID((uint)asset.ClassID, 0);
+		}
+
+		public static ulong GetMainExportID(uint classID)
+		{
+			return GetMainExportID(classID, 0);
+		}
+
+		public static ulong GetMainExportID(Object asset, uint value)
+		{
+			return GetMainExportID((uint)asset.ClassID, 0);
+		}
+
+		public static ulong GetMainExportID(uint classID, uint value)
+		{
+#if DEBUG
+			int digits = BitConverterExtensions.GetDigitsCount(value);
+			if(digits > 5)
+			{
+				throw new ArgumentException($"Value {value} for main export ID must have not more than 5 digits");
+			}
+#endif
+			return (classID << 5) | value;
 		}
 
 		public abstract bool Export(ProjectAssetContainer container, string dirPath);
 		public abstract bool IsContains(Object asset);
-		public abstract string GetExportID(Object asset);
+		public abstract ulong GetExportID(Object asset);
 		public abstract ExportPointer CreateExportPointer(Object asset, bool isLocal);
 		
 		protected void ExportAsset(ProjectAssetContainer container, IAssetImporter importer, Object asset, string path, string name)
@@ -82,7 +107,7 @@ namespace UtinyRipper.AssetExporters
 
 		public abstract IAssetExporter AssetExporter { get; }
 		public abstract ISerializedFile File { get; }
-		public abstract IEnumerable<Object> Objects { get; }
+		public abstract IEnumerable<Object> Assets { get; }
 		public abstract string Name { get; }
 
 		private static readonly Regex FileNameRegex;

@@ -32,5 +32,16 @@ namespace UtinyRipper
 				return (int)reverse;
 			}
 		}
+
+		public static int GetDigitsCount(uint value)
+		{
+			int count = 0;
+			while(value != 0)
+			{
+				value >>= 1;
+				count++;
+			}
+			return count;
+		}
 	}
 }

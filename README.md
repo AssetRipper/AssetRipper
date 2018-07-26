@@ -50,6 +50,6 @@ If you want to build solution you need:
 
 If you want to only run binaries of sample project you need to install:
 
-[.NET Framework 4.6.1](https://www.microsoft.com/en-us/download/details.aspx?id=49982)
+[.NET Framework 4.7.1](https://www.microsoft.com/en-us/download/details.aspx?id=56116)
 
 [Unity 2017.3.0f3](https://unity3d.com/get-unity/download/archive)

@@ -17,7 +17,7 @@ namespace UtinyRipper.Classes
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Style = MappingStyle.Flow;
-			node.Add("fileID", GetPathIDString(container));
+			node.Add("fileID", GetPathID(container));
 			return node;
 		}
 
@@ -31,7 +31,7 @@ namespace UtinyRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		protected abstract string GetPathIDString(IExportContainer container);
+		protected abstract ulong GetPathID(IExportContainer container);
 
 		public bool IsNull => false;
 	}

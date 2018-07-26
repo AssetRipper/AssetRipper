@@ -33,8 +33,8 @@ namespace UtinyRipper.AssetExporters.Classes
 				fileNode = new YAMLMappingNode();
 				foreach(Sprite sprite in m_sprites)
 				{
-					string exportID = container.GetExportID(sprite);
-					fileNode.Add(exportID, sprite.Name);
+					ulong exportID = container.GetExportID(sprite);
+					fileNode.Add(exportID.ToString(), sprite.Name);
 				}
 			}
 			node.Add("fileIDToRecycleName", fileNode);

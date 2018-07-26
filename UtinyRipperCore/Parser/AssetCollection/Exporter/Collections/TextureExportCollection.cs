@@ -9,21 +9,23 @@ namespace UtinyRipper.AssetExporters
 		public TextureExportCollection(IAssetExporter assetExporter, Texture2D texture):
 			base(assetExporter, texture, CreateImporter(texture))
 		{
-			List<Sprite> sprites = new List<Sprite>();
-			foreach (Object asset in texture.File.FetchAssets())
+			if(MetaImporter is TextureImporter textureImporter)
 			{
-				if (asset.ClassID == ClassIDType.Sprite)
+				List<Sprite> sprites = new List<Sprite>();
+				foreach (Object asset in texture.File.FetchAssets())
 				{
-					Sprite sprite = (Sprite)asset;
-					if (sprite.RD.Texture.IsObject(texture))
+					if (asset.ClassID == ClassIDType.Sprite)
 					{
-						sprites.Add(sprite);
-						AddAsset(sprite);
+						Sprite sprite = (Sprite)asset;
+						if (sprite.RD.Texture.IsObject(texture))
+						{
+							sprites.Add(sprite);
+							AddAsset(sprite);
+						}
 					}
 				}
+				textureImporter.Sprites = sprites;
 			}
-			TextureImporter importer = (TextureImporter)MetaImporter;
-			importer.Sprites = sprites;
 		}
 
 		public static IExportCollection CreateExportCollection(IAssetExporter assetExporter, Sprite asset)
@@ -65,7 +67,7 @@ namespace UtinyRipper.AssetExporters
 				}
 				else
 				{
-					string exportID = GetExportID(asset);
+					ulong exportID = GetExportID(asset);
 					return new ExportPointer(exportID, UtinyGUID.MissingReference, AssetType.Meta);
 				}
 			}
@@ -77,13 +79,13 @@ namespace UtinyRipper.AssetExporters
 			return filePath;
 		}
 
-		protected override string GenerateExportID(Object asset)
+		protected override ulong GenerateExportID(Object asset)
 		{
-			string id = $"{(int)asset.ClassID}{m_nextExportID:D5}";
+			ulong exportID = GetMainExportID(asset, m_nextExportID);
 			m_nextExportID += 2;
-			return id;
+			return exportID;
 		}
 
-		private int m_nextExportID = 0;
+		private uint m_nextExportID = 0;
 	}
 }

@@ -6,7 +6,7 @@ namespace UtinyRipper.AssetExporters
 	public interface IExportContainer
 	{
 		Object FindObject(int fileIndex, long pathID);
-		string GetExportID(Object @object);
+		ulong GetExportID(Object asset);
 		AssetType ToExportType(ClassIDType classID);
 		ExportPointer CreateExportPointer(Object @object);
 

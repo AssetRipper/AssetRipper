@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
 using UtinyRipper.SerializedFiles;
+
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
@@ -30,18 +31,18 @@ namespace UtinyRipper.AssetExporters
 			return false;
 		}
 
-		public bool IsContains(Object @object)
+		public bool IsContains(Object asset)
 		{
-			return @object == m_asset;
+			return asset == m_asset;
 		}
 
-		public string GetExportID(Object @object)
+		public ulong GetExportID(Object asset)
 		{
-			if (@object == m_asset)
+			if (asset == m_asset)
 			{
-				return $"{(int)m_asset.ClassID}00000";
+				return ExportCollection.GetMainExportID(m_asset);
 			}
-			throw new ArgumentException(nameof(@object));
+			throw new ArgumentException(nameof(asset));
 		}
 
 		public UtinyGUID GetExportGUID(Object asset)
@@ -49,21 +50,21 @@ namespace UtinyRipper.AssetExporters
 			throw new NotSupportedException();
 		}
 
-		public ExportPointer CreateExportPointer(Object @object, bool isLocal)
+		public ExportPointer CreateExportPointer(Object asset, bool isLocal)
 		{
 			if (isLocal)
 			{
 				throw new ArgumentException(nameof(isLocal));
 			}
 
-			string exportId = GetExportID(@object);
-			AssetType type = AssetExporter.ToExportType(@object.ClassID);
+			ulong exportId = GetExportID(asset);
+			AssetType type = AssetExporter.ToExportType(asset.ClassID);
 			return new ExportPointer(exportId, UtinyGUID.MissingReference, type);
 		}
 
 		public IAssetExporter AssetExporter { get; }
 		public ISerializedFile File => m_asset.File;
-		public IEnumerable<Object> Objects
+		public IEnumerable<Object> Assets
 		{
 			get { yield return m_asset; }
 		}

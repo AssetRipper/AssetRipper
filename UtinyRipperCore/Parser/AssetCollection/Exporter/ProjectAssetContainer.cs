@@ -36,27 +36,27 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
-		public string GetExportID(Object @object)
+		public ulong GetExportID(Object asset)
 		{
-			if (CurrentCollection.IsContains(@object))
+			if (CurrentCollection.IsContains(asset))
 			{
-				return CurrentCollection.GetExportID(@object);
+				return CurrentCollection.GetExportID(asset);
 			}
 			foreach (IExportCollection collection in m_collections)
 			{
-				if (collection.IsContains(@object))
+				if (collection.IsContains(asset))
 				{
-					return collection.GetExportID(@object);
+					return collection.GetExportID(asset);
 				}
 			}
 
 			if (Config.IsExportDependencies)
 			{
-				throw new InvalidOperationException($"Object {@object} wasn't found in any export collection");
+				throw new InvalidOperationException($"Object {asset} wasn't found in any export collection");
 			}
 			else
 			{
-				return ExportCollection.GetMainExportID(@object);
+				return ExportCollection.GetMainExportID(asset);
 			}
 		}
 
@@ -83,7 +83,7 @@ namespace UtinyRipper.AssetExporters
 			{
 				//throw new InvalidOperationException($"Object {@object} wasn't found in any export collection");
 			}
-			string exportID = ExportCollection.GetMainExportID(asset);
+			ulong exportID = ExportCollection.GetMainExportID(asset);
 			return new ExportPointer(exportID, UtinyGUID.MissingReference, AssetType.Meta);
 		}
 

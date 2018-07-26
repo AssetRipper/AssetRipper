@@ -127,7 +127,7 @@ namespace UtinyRipper.AssetExporters
 					IAssetExporter exporter = m_exporters[current.ClassID];
 					IExportCollection collection = exporter.CreateCollection(current);
 
-					foreach (Object element in collection.Objects)
+					foreach (Object element in collection.Assets)
 					{
 						queued.Add(element);
 					}

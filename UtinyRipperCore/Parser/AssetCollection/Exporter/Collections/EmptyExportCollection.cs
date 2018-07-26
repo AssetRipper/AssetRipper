@@ -15,12 +15,12 @@ namespace UtinyRipper.AssetExporters
 			return false;
 		}
 
-		public bool IsContains(Object @object)
+		public bool IsContains(Object asset)
 		{
 			return false;
 		}
 
-		public string GetExportID(Object @object)
+		public ulong GetExportID(Object asset)
 		{
 			throw new NotSupportedException();
 		}
@@ -30,13 +30,13 @@ namespace UtinyRipper.AssetExporters
 			throw new NotSupportedException();
 		}
 
-		public ExportPointer CreateExportPointer(Object @object, bool isLocal)
+		public ExportPointer CreateExportPointer(Object asset, bool isLocal)
 		{
 			throw new NotSupportedException();
 		}
 		
 		public ISerializedFile File => throw new NotSupportedException();
-		public IEnumerable<Object> Objects
+		public IEnumerable<Object> Assets
 		{
 			get { yield break; }
 		}

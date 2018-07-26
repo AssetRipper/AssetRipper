@@ -36,8 +36,7 @@ namespace UtinyRipper.Classes
 			long lid = 0;
 			if (asset != null)
 			{
-				string id = container.GetExportID(asset);
-				lid = long.Parse(id);
+				lid = (long)container.GetExportID(asset);
 			}
 			SceneObjectIdentifier soId = new SceneObjectIdentifier(lid, 0);
 			return soId;
