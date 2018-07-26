@@ -11,6 +11,7 @@ namespace UtinyRipper.Exporter.YAML
 	{
 		public void AddDocument(YAMLDocument document)
 		{
+#if DEBUG
 			if (document == null)
 			{
 				throw new ArgumentNullException(nameof(document));
@@ -19,6 +20,7 @@ namespace UtinyRipper.Exporter.YAML
 			{
 				throw new ArgumentException($"Document {document} is added already", nameof(document));
 			}
+#endif
 			m_documents.Add(document);
 		}
 
@@ -34,31 +36,45 @@ namespace UtinyRipper.Exporter.YAML
 
 		public void Write(TextWriter output)
 		{
-			Emitter emitter = new Emitter(output);
+			WriteHead(output);
+			foreach (YAMLDocument doc in m_documents)
+			{
+				WriteDocument(doc);
+			}
+			WriteTail(output);
+		}
 
-			bool isWriteSeparator = false;
-			if(IsWriteVersion)
+		public void WriteHead(TextWriter output)
+		{
+			m_emitter = new Emitter(output);
+			m_isWriteSeparator = false;
+
+			if (IsWriteVersion)
 			{
-				emitter.WriteMeta(MetaType.YAML, Version.ToString());
-				isWriteSeparator = true;
+				m_emitter.WriteMeta(MetaType.YAML, Version.ToString());
+				m_isWriteSeparator = true;
 			}
 
-			if(IsWriteDefaultTag)
+			if (IsWriteDefaultTag)
 			{
-				emitter.WriteMeta(MetaType.TAG, DefaultTag.ToHeaderString());
-				isWriteSeparator = true;
+				m_emitter.WriteMeta(MetaType.TAG, DefaultTag.ToHeaderString());
+				m_isWriteSeparator = true;
 			}
-			foreach(YAMLTag tag in m_tags)
+			foreach (YAMLTag tag in m_tags)
 			{
-				emitter.WriteMeta(MetaType.TAG, tag.ToHeaderString());
-				isWriteSeparator = true;
+				m_emitter.WriteMeta(MetaType.TAG, tag.ToHeaderString());
+				m_isWriteSeparator = true;
 			}
+		}
 
-			foreach(YAMLDocument doc in m_documents)
-			{
-				doc.Emit(emitter, isWriteSeparator);
-				isWriteSeparator = true;
-			}
+		public void WriteDocument(YAMLDocument doc)
+		{
+			doc.Emit(m_emitter, m_isWriteSeparator);
+			m_isWriteSeparator = true;
+		}
+
+		public void WriteTail(TextWriter output)
+		{
 			output.Write('\n');
 		}
 
@@ -72,7 +88,10 @@ namespace UtinyRipper.Exporter.YAML
 		public bool IsWriteVersion { get; set; } = true;
 		public bool IsWriteDefaultTag { get; set; } = true;
 
-		private readonly List<YAMLDocument> m_documents = new List<YAMLDocument>();
+		private readonly HashSet<YAMLDocument> m_documents = new HashSet<YAMLDocument>();
 		private readonly List<YAMLTag> m_tags = new List<YAMLTag>();
+
+		private Emitter m_emitter;
+		private bool m_isWriteSeparator;
 	}
 }

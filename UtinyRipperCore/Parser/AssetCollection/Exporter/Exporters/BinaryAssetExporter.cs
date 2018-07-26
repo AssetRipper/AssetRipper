@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using UtinyRipper.Classes;
 
 using Object = UtinyRipper.Classes.Object;
 
@@ -27,9 +28,12 @@ namespace UtinyRipper.AssetExporters
 		{
 			switch(asset.ClassID)
 			{
+				case ClassIDType.Sprite:
+					return TextureExportCollection.CreateExportCollection(this, (Sprite)asset);
+
 				case ClassIDType.Texture2D:
 				case ClassIDType.Cubemap:
-					return new TextureExportCollection(this, asset);
+					return new TextureExportCollection(this, (Texture2D)asset);
 
 				default:
 					return new AssetExportCollection(this, asset);

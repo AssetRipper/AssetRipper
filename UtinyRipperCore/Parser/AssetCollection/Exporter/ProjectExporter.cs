@@ -19,7 +19,6 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.BuildSettings, dummyExporter);
 			OverrideExporter(ClassIDType.AssetBundle, dummyExporter);
 			OverrideExporter(ClassIDType.PreloadData, dummyExporter);
-			OverrideExporter(ClassIDType.Sprite, dummyExporter);
 			OverrideExporter(ClassIDType.SpriteAtlas, dummyExporter);
 
 			YAMLAssetExporter yamlExporter = new YAMLAssetExporter();
@@ -88,6 +87,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.Cubemap, binExporter);
 			OverrideExporter(ClassIDType.Font, binExporter);
 			OverrideExporter(ClassIDType.MovieTexture, binExporter);
+			OverrideExporter(ClassIDType.Sprite, binExporter);
 		}
 
 		public void OverrideExporter(ClassIDType classType, IAssetExporter exporter)

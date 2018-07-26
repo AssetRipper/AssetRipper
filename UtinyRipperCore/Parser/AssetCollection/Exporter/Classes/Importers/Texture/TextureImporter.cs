@@ -16,7 +16,7 @@ namespace UtinyRipper.AssetExporters.Classes
 			}
 			m_texture = texture;
 		}
-		
+
 		private static int GetSerializedVersion(Version version)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
@@ -172,48 +172,14 @@ namespace UtinyRipper.AssetExporters.Classes
 			node.Add("spritePackingTag", string.Empty);
 		}
 
-		/*private bool IsSingle(Sprite sprite, SpriteMetaData spriteMeta)
-		{
-			Rectf textureRect = new Rectf(0.0f, 0.0f, m_texture.Width, m_texture.Height);
-			if (sprite.RD.TextureRect == textureRect)
-			{
-				return true;
-			}
-
-			if (spriteMeta.Outline.Count == 0)
-			{
-				return true;
-			}
-			if (spriteMeta.Outline.Count > 1)
-			{
-				return false;
-			}
-			IReadOnlyList<Vector2f> outline = spriteMeta.Outline[0];
-			if (outline.Count != 4)
-			{
-				return false;
-			}
-			Vector2f center = sprite.RD.TextureRect.Center;
-			foreach (Vector2f outPoint in outline)
-			{
-				Vector2f globalPoint = center + outPoint;
-				if (!textureRect.ContainsCorner(globalPoint))
-				{
-					return false;
-				}
-			}
-			return true;
-		}*/
-
 		public override string Name => nameof(TextureImporter);
-
+		
 		public IReadOnlyList<Sprite> Sprites
 		{
-			set => m_sprites = value;
+			set => m_sprites = value ?? throw new ArgumentNullException();
 		}
 
-		private readonly Texture2D m_texture;
-
+		private Texture2D m_texture;
 		private IReadOnlyList<Sprite> m_sprites;
 	}
 }

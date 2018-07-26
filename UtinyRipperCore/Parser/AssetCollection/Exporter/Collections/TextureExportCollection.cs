@@ -6,11 +6,6 @@ namespace UtinyRipper.AssetExporters
 {
 	public class TextureExportCollection : AssetsExportCollection
 	{
-		public TextureExportCollection(IAssetExporter assetExporter, Object textureAsset) :
-			this(assetExporter, (Texture2D)textureAsset)
-		{
-		}
-
 		public TextureExportCollection(IAssetExporter assetExporter, Texture2D texture):
 			base(assetExporter, texture, CreateImporter(texture))
 		{
@@ -31,7 +26,20 @@ namespace UtinyRipper.AssetExporters
 			importer.Sprites = sprites;
 		}
 
-		protected static IAssetImporter CreateImporter(Texture2D texture)
+		public static IExportCollection CreateExportCollection(IAssetExporter assetExporter, Sprite asset)
+		{
+			if (Config.IsConvertTexturesToPNG)
+			{
+				Texture2D texture = asset.RD.Texture.FindObject(asset.File);
+				if(texture != null)
+				{
+					return new TextureExportCollection(assetExporter, texture);
+				}
+			}
+			return new SkipExportCollection(assetExporter, asset);
+		}
+
+		private static IAssetImporter CreateImporter(Texture2D texture)
 		{
 			if (Config.IsConvertTexturesToPNG)
 			{

@@ -65,17 +65,17 @@ namespace UtinyRipper.AssetExporters
 			return m_exporter.ToExportType(classID);
 		}
 
-		public ExportPointer CreateExportPointer(Object @object)
+		public ExportPointer CreateExportPointer(Object asset)
 		{
-			if (CurrentCollection.IsContains(@object))
+			if (CurrentCollection.IsContains(asset))
 			{
-				return CurrentCollection.CreateExportPointer(@object, true);
+				return CurrentCollection.CreateExportPointer(asset, true);
 			}
 			foreach (IExportCollection collection in m_collections)
 			{
-				if (collection.IsContains(@object))
+				if (collection.IsContains(asset))
 				{
-					return collection.CreateExportPointer(@object, false);
+					return collection.CreateExportPointer(asset, false);
 				}
 			}
 
@@ -83,7 +83,7 @@ namespace UtinyRipper.AssetExporters
 			{
 				//throw new InvalidOperationException($"Object {@object} wasn't found in any export collection");
 			}
-			string exportID = ExportCollection.GetMainExportID(@object);
+			string exportID = ExportCollection.GetMainExportID(asset);
 			return new ExportPointer(exportID, UtinyGUID.MissingReference, AssetType.Meta);
 		}
 

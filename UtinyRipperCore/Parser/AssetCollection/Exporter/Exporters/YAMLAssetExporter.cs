@@ -30,12 +30,13 @@ namespace UtinyRipper.AssetExporters
 				using (StreamWriter streamWriter = new StreamWriter(fileStream))
 				{
 					YAMLWriter writer = new YAMLWriter();
+					writer.WriteHead(streamWriter);
 					foreach (Object asset in assets)
 					{
 						YAMLDocument doc = asset.ExportYAMLDocument(container);
-						writer.AddDocument(doc);
+						writer.WriteDocument(doc);
 					}
-					writer.Write(streamWriter);
+					writer.WriteTail(streamWriter);
 				}
 			}
 		}

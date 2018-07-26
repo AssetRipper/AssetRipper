@@ -63,8 +63,8 @@ namespace UtinyRipper.Classes
 				return ExportPointer.EmptyPointer.ExportYAML(container);
 			}
 
-			T @object = FindObject(container);
-			if (@object == null)
+			T asset = FindObject(container);
+			if (asset == null)
 			{
 				ClassIDType classType = typeof(T).ToClassIDType();
 				AssetType assetType = container.ToExportType(classType);
@@ -72,7 +72,7 @@ namespace UtinyRipper.Classes
 				return pointer.ExportYAML(container);
 			}
 
-			ExportPointer exPointer = container.CreateExportPointer(@object);
+			ExportPointer exPointer = container.CreateExportPointer(asset);
 			return exPointer.ExportYAML(container);
 		}
 
