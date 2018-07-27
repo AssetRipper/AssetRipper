@@ -435,12 +435,12 @@ namespace UtinyRipper.Classes
 
 					GenericBinding binding = ClipBindingConstant.FindBinding(curveIndex);
 					uint pathHash = binding.Path;
-
-					if (pathHash == 0)
+					if (binding.ClassID != ClassIDType.Transform)
 					{
 						curve++;
 						continue;
 					}
+
 					if (!tos.TryGetValue(pathHash, out string path))
 					{
 						path = "dummy" + pathHash;
@@ -573,7 +573,7 @@ namespace UtinyRipper.Classes
 							break;
 
 						default:
-#warning TODO: ???
+#warning TODO: AnimationClip
 							curve++;
 							//throw new NotImplementedException(binding.BindingType.ToString());
 							break;
@@ -597,35 +597,21 @@ namespace UtinyRipper.Classes
 				{
 					switch(asset.ClassID)
 					{
+						case ClassIDType.Avatar:
+							{
+								Avatar avatar = (Avatar)asset;
+								if(ClipBindingConstant.IsAvatarMatch(avatar))
+								{
+									return avatar.TOS;
+								}
+							}
+							break;
+
 						case ClassIDType.Animator:
 							Animator animator = (Animator)asset;
 							if (IsAnimatorContainsClip(animator))
 							{
-								Avatar avatar = animator.Avatar.FindObject(animator.File);
-								if (avatar == null)
-								{
-									if(Animator.IsReadHasTransformHierarchy(File.Version))
-									{
-										if (animator.HasTransformHierarchy)
-										{
-											GameObject go = animator.GameObject.GetObject(animator.File);
-											return go.BuildTOS();
-										}
-										else
-										{
-											return new Dictionary<uint, string>() { { 0, string.Empty } };
-										}
-									}
-									else
-									{
-										GameObject go = animator.GameObject.GetObject(animator.File);
-										return go.BuildTOS();
-									}
-								}
-								else
-								{
-									return avatar.TOS;
-								}
+								return animator.RetrieveTOS();
 							}
 							break;
 

@@ -1,4 +1,6 @@
-﻿namespace UtinyRipper.Classes.AnimationClips
+﻿using System;
+
+namespace UtinyRipper.Classes.AnimationClips
 {
 	public enum BindingType
 	{
@@ -8,11 +10,30 @@
 		EulerRotation	= 4,
 		Floats			= 5,
 		Unknown1		= 7,
-		Unknown2		= 8,
-		Unknown3		= 9,
-		Unknown4		= 10,
-		Unknown5		= 11,
-		Unknown6		= 12,
-		Unknown7		= 13,
+	}
+
+	public static class BindingTypeExtensions
+	{
+		public static int GetSize(this BindingType _this)
+		{
+			switch(_this)
+			{
+				case BindingType.Translation:
+				case BindingType.Scaling:
+				case BindingType.EulerRotation:
+					return 3;
+
+				case BindingType.Rotation:
+					return 4;
+
+				case BindingType.Floats:
+					return 1;
+
+#warning TODO: AnimationClip
+				default:
+					return 1;
+					//throw new NotImplementedException($"Binding type {_this} is not implemented");
+			}
+		}
 	}
 }

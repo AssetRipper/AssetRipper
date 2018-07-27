@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
@@ -52,25 +53,28 @@ namespace UtinyRipper.Classes.AnimationClips
 			for (int i = 0; i < GenericBindings.Count; i++)
 			{
 				GenericBinding gb = GenericBindings[i];
-				if(gb.Attribute == 2) // Quaternion
-				{
-					curves += 4;
-				}
-				else if(gb.Attribute <= 4) // Vector3
-				{
-					curves += 3;
-				}
-				else // float
-				{
-					curves++;
-				}
+				curves = gb.BindingType.GetSize();
 				if (curves > index)
 				{
 					return gb;
 				}
 			}
 
+#warning TODO: AnimationClip
 			return default;
+			//throw new ArgumentException($"Binding with index {index} wasn't found", nameof(index));
+		}
+
+		public bool IsAvatarMatch(Avatar avatar)
+		{
+			foreach (GenericBinding binding in GenericBindings)
+			{
+				if (!avatar.TOS.ContainsKey(binding.Path))
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 
 		public IReadOnlyList<GenericBinding> GenericBindings => m_genericBindings;

@@ -51,6 +51,11 @@ namespace UtinyRipper.Classes
 					return true;
 				}
 			}
+			RuntimeAnimatorController baseController = Controller.FindObject(File);
+			if(baseController != null)
+			{
+				return baseController.IsContainsAnimationClip(clip);
+			}
 			return false;
 		}
 

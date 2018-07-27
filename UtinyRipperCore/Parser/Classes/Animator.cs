@@ -134,6 +134,40 @@ namespace UtinyRipper.Classes
 			yield return Controller.FetchDependency(file, isLog, ToLogString, "m_Controller");
 		}
 
+		public IReadOnlyDictionary<uint, string> RetrieveTOS()
+		{
+			Avatar avatar = Avatar.FindObject(File);
+			if (avatar == null)
+			{
+				return BuildTOS();
+			}
+			else
+			{
+				return avatar.TOS;
+			}
+		}
+
+		public IReadOnlyDictionary<uint, string> BuildTOS()
+		{
+			if (IsReadHasTransformHierarchy(File.Version))
+			{
+				if (HasTransformHierarchy)
+				{
+					GameObject go = GameObject.GetObject(File);
+					return go.BuildTOS();
+				}
+				else
+				{
+					return new Dictionary<uint, string>() { { 0, string.Empty } };
+				}
+			}
+			else
+			{
+				GameObject go = GameObject.GetObject(File);
+				return go.BuildTOS();
+			}
+		}
+
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)

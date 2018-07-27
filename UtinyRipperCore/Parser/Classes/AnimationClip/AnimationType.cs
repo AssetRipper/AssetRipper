@@ -2,7 +2,8 @@
 {
 	public enum AnimationType
 	{
-		Legacy = 1,
-		Mecanim = 2,
+		Legacy		= 1,
+		Mecanim		= 2,
+		Human		= 3,
 	}
 }
