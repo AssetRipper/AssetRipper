@@ -38,7 +38,7 @@ namespace UtinyRipper
 			int count = 0;
 			while(value != 0)
 			{
-				value >>= 1;
+				value /= 10;
 				count++;
 			}
 			return count;
