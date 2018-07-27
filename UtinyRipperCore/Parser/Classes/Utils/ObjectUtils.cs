@@ -60,18 +60,29 @@ namespace UtinyRipper.Classes
 					throw new NotSupportedException($"Class ID {classID} with more that 4 digits isn't supported");
 				}
 #endif
-				exportID = classID << 28;
-				for(int i = 0; i < 28; i++)
-				{
-					ulong bitValue = unchecked((ulong)RandomUtils.Next(0, 2));
-					exportID |= bitValue << i;
-				}
+				exportID = classID;
+				exportID *= 1000000000000000UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 100000000000000UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 10000000000000UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 1000000000000UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 100000000000UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 10000000000UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 1000000000UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 100000000UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 10000000UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 1000000UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 100000UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 10000UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 1000UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 100UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 10UL;
+				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 1UL;
 			}
 			while (uniqueChecker(exportID));
 			return exportID;
 		}
 
-		public static UtinyGUID CalculateObjectsGUID(IEnumerable<Object> asset)
+		public static EngineGUID CalculateObjectsGUID(IEnumerable<Object> asset)
 		{
 			List<uint> hashList = new List<uint>();
 			foreach (Object @object in asset)
@@ -88,7 +99,7 @@ namespace UtinyRipper.Classes
 			using (MD5 md5 = MD5.Create())
 			{
 				byte[] hash = md5.ComputeHash(buffer);
-				return new UtinyGUID(hash);
+				return new EngineGUID(hash);
 			}
 		}
 	}

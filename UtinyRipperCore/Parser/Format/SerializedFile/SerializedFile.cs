@@ -308,7 +308,7 @@ namespace UtinyRipper.SerializedFiles
 				using (MD5 md5 = MD5.Create())
 				{
 					byte[] md5Hash = md5.ComputeHash(data);
-					assetInfo.GUID = new UtinyGUID(md5Hash);
+					assetInfo.GUID = new EngineGUID(md5Hash);
 				}
 			}
 			else

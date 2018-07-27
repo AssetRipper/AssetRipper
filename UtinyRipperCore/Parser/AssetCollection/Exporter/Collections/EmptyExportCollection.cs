@@ -25,7 +25,7 @@ namespace UtinyRipper.AssetExporters
 			throw new NotSupportedException();
 		}
 
-		public UtinyGUID GetExportGUID(Object asset)
+		public EngineGUID GetExportGUID(Object asset)
 		{
 			throw new NotSupportedException();
 		}

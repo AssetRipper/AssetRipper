@@ -5,7 +5,7 @@ namespace UtinyRipper.Classes.OcclusionCullingDatas
 {
 	public struct OcclusionScene : IAssetReadable, IYAMLExportable
 	{
-		public OcclusionScene(UtinyGUID scene, int renderSize, int portalSize)
+		public OcclusionScene(EngineGUID scene, int renderSize, int portalSize)
 		{
 			Scene = scene;
 			IndexRenderers = 0;
@@ -39,6 +39,6 @@ namespace UtinyRipper.Classes.OcclusionCullingDatas
 		public int IndexPortals { get; private set; }
 		public int SizePortals { get; private set; }
 
-		public UtinyGUID Scene;
+		public EngineGUID Scene;
 	}
 }

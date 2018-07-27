@@ -42,7 +42,7 @@ namespace UtinyRipper.Classes
 			return soId;
 		}
 
-		public void Initialize(IExportContainer container, byte[] pvsData, UtinyGUID guid,
+		public void Initialize(IExportContainer container, byte[] pvsData, EngineGUID guid,
 			IReadOnlyList<PPtr<Renderer>> renderers, IReadOnlyList<PPtr<OcclusionPortal>> portals)
 		{
 			m_PVSData = pvsData;
@@ -52,7 +52,7 @@ namespace UtinyRipper.Classes
 		}
 
 		public void SetIDs(IExportContainer container,
-			UtinyGUID guid, IReadOnlyList<PPtr<Renderer>> renderers, IReadOnlyList<PPtr<OcclusionPortal>> portals)
+			EngineGUID guid, IReadOnlyList<PPtr<Renderer>> renderers, IReadOnlyList<PPtr<OcclusionPortal>> portals)
 		{
 			if(m_staticRenderers.Length == 0 && renderers.Count != 0 || m_portals.Length == 0 && portals.Count != 0)
 			{

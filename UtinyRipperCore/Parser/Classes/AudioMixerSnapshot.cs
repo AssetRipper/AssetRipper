@@ -39,6 +39,6 @@ namespace UtinyRipper.Classes
 		}
 
 		public PPtr<AudioMixer> AudioMixer;
-		public UtinyGUID SnapshotID;
+		public EngineGUID SnapshotID;
 	}
 }

@@ -53,11 +53,11 @@ namespace UtinyRipper.Classes
 
 		public IReadOnlyList<PPtr<Sprite>> PackedSprites => m_packedSprites;
 		public IReadOnlyList<string> PackedSpriteNamesToIndex => m_packedSpriteNamesToIndex;
-		public IReadOnlyDictionary<Tuple<UtinyGUID, long>, SpriteAtlasData> RenderDataMap => m_renderDataMap;
+		public IReadOnlyDictionary<Tuple<EngineGUID, long>, SpriteAtlasData> RenderDataMap => m_renderDataMap;
 		public string Tag { get; private set; }
 		public bool IsVariant { get; private set; }
 
-		private readonly Dictionary<Tuple<UtinyGUID, long>, SpriteAtlasData> m_renderDataMap = new Dictionary<Tuple<UtinyGUID, long>, SpriteAtlasData>();
+		private readonly Dictionary<Tuple<EngineGUID, long>, SpriteAtlasData> m_renderDataMap = new Dictionary<Tuple<EngineGUID, long>, SpriteAtlasData>();
 
 		private PPtr<Sprite>[] m_packedSprites;
 		private string[] m_packedSpriteNamesToIndex;

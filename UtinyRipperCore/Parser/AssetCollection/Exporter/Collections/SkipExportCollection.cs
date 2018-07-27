@@ -45,7 +45,7 @@ namespace UtinyRipper.AssetExporters
 			throw new ArgumentException(nameof(asset));
 		}
 
-		public UtinyGUID GetExportGUID(Object asset)
+		public EngineGUID GetExportGUID(Object asset)
 		{
 			throw new NotSupportedException();
 		}
@@ -58,8 +58,8 @@ namespace UtinyRipper.AssetExporters
 			}
 
 			ulong exportId = GetExportID(asset);
-			AssetType type = AssetExporter.ToExportType(asset.ClassID);
-			return new ExportPointer(exportId, UtinyGUID.MissingReference, type);
+			AssetType type = AssetExporter.ToExportType(asset);
+			return new ExportPointer(exportId, EngineGUID.MissingReference, type);
 		}
 
 		public IAssetExporter AssetExporter { get; }

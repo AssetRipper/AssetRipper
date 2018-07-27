@@ -9,6 +9,11 @@ namespace UtinyRipper.AssetExporters
 {
 	public class YAMLAssetExporter : IAssetExporter
 	{
+		public bool IsHandle(Object asset)
+		{
+			return true;
+		}
+
 		public void Export(IExportContainer container, Object asset, string path)
 		{
 			using (FileStream fileStream = File.Open(path, FileMode.Create, FileAccess.Write))
@@ -69,9 +74,16 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
-		public AssetType ToExportType(ClassIDType classID)
+		public AssetType ToExportType(Object asset)
 		{
-			return AssetType.Serialized;
+			ToUnknownExportType(asset.ClassID, out AssetType assetType);
+			return assetType;
+		}
+
+		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
+		{
+			assetType = AssetType.Serialized;
+			return true;
 		}
 	}
 }

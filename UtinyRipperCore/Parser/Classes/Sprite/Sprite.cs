@@ -135,7 +135,7 @@ namespace UtinyRipper.Classes
 
 			if(IsReadRendererData(stream.Version))
 			{
-				RenderDataKey = stream.ReadTupleTLong<UtinyGUID>();
+				RenderDataKey = stream.ReadTupleTLong<EngineGUID>();
 				m_atlasTags = stream.ReadStringArray();
 				SpriteAtlas.Read(stream);
 			}
@@ -190,7 +190,7 @@ namespace UtinyRipper.Classes
 		public Vector2f Offset;
 		public Vector4f Border;
 		public Vector2f Pivot;
-		public Tuple<UtinyGUID, long> RenderDataKey;
+		public Tuple<EngineGUID, long> RenderDataKey;
 		public PPtr<SpriteAtlas> SpriteAtlas;
 		public SpriteRenderData RD;
 

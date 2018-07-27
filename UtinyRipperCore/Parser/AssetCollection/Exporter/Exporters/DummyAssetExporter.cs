@@ -7,6 +7,11 @@ namespace UtinyRipper.AssetExporters
 {
 	internal class DummyAssetExporter : IAssetExporter
 	{
+		public bool IsHandle(Object asset)
+		{
+			return true;
+		}
+
 		public void Export(IExportContainer container, Object asset, string path)
 		{
 		}
@@ -29,23 +34,30 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
-		public AssetType ToExportType(ClassIDType classID)
+		public AssetType ToExportType(Object asset)
+		{
+			ToUnknownExportType(asset.ClassID, out AssetType assetType);
+			return assetType;
+		}
+
+		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
 		{
 			switch (classID)
 			{
 				case ClassIDType.AnimatorController:
-					return AssetType.Serialized;
 				case ClassIDType.MonoBehaviour:
-					return AssetType.Serialized;
+					assetType = AssetType.Serialized;
+					break;
 
 				case ClassIDType.MonoScript:
-					return AssetType.Meta;
 				case ClassIDType.Sprite:
-					return AssetType.Meta;
+					assetType = AssetType.Meta;
+					break;
 
 				default:
 					throw new NotSupportedException(classID.ToString());
 			}
+			return true;
 		}
 	}
 }

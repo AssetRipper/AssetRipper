@@ -16,7 +16,7 @@ namespace UtinyRipper
 
 			PathID = pathID;
 			ClassID = classID;
-			GUID = new UtinyGUID(Guid.NewGuid());
+			GUID = new EngineGUID(Guid.NewGuid());
 		}
 
 		public ISerializedFile File { get; }
@@ -24,6 +24,6 @@ namespace UtinyRipper
 		public long PathID { get; }
 		public ClassIDType ClassID  { get; }
 
-		public UtinyGUID GUID;
+		public EngineGUID GUID;
 	}
 }

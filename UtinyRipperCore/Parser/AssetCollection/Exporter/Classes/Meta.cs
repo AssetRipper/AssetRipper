@@ -8,7 +8,7 @@ namespace UtinyRipper.AssetExporters.Classes
 {
 	public struct Meta : IYAMLDocExportable
 	{
-		public Meta(IAssetImporter importer, UtinyGUID guid)
+		public Meta(IAssetImporter importer, EngineGUID guid)
 		{
 			if (importer == null)
 			{
@@ -44,6 +44,6 @@ namespace UtinyRipper.AssetExporters.Classes
 		}
 
 		private readonly IAssetImporter m_importer;
-		private readonly UtinyGUID m_guid;
+		private readonly EngineGUID m_guid;
 	}
 }

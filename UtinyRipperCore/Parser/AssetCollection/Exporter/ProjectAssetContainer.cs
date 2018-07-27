@@ -84,7 +84,7 @@ namespace UtinyRipper.AssetExporters
 				//throw new InvalidOperationException($"Object {@object} wasn't found in any export collection");
 			}
 			ulong exportID = ExportCollection.GetMainExportID(asset);
-			return new ExportPointer(exportID, UtinyGUID.MissingReference, AssetType.Meta);
+			return new ExportPointer(exportID, EngineGUID.MissingReference, AssetType.Meta);
 		}
 
 		public IExportCollection CurrentCollection { get; set; }

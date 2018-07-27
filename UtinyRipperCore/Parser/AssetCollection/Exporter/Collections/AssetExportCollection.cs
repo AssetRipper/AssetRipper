@@ -71,7 +71,7 @@ namespace UtinyRipper.AssetExporters
 			ulong exportID = GetExportID(asset);
 			return isLocal ?
 				new ExportPointer(exportID) :
-				new ExportPointer(exportID, Asset.GUID, AssetExporter.ToExportType(Asset.ClassID));
+				new ExportPointer(exportID, Asset.GUID, AssetExporter.ToExportType(Asset));
 		}
 
 		protected virtual string ExportInner(ProjectAssetContainer container, string filePath)

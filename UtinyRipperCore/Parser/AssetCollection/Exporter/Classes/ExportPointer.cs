@@ -13,7 +13,7 @@ namespace UtinyRipper.AssetExporters.Classes
 			AssetType = default;
 		}
 
-		public ExportPointer(ulong fileID, UtinyGUID guid, AssetType assetType):
+		public ExportPointer(ulong fileID, EngineGUID guid, AssetType assetType):
 			this(fileID)
 		{
 			GUID = guid;
@@ -21,7 +21,7 @@ namespace UtinyRipper.AssetExporters.Classes
 		}
 
 		public ExportPointer(ClassIDType classID, AssetType assetType) :
-			this(ExportCollection.GetMainExportID((uint)classID), UtinyGUID.MissingReference, assetType)
+			this(ExportCollection.GetMainExportID((uint)classID), EngineGUID.MissingReference, assetType)
 		{
 		}
 		
@@ -41,7 +41,7 @@ namespace UtinyRipper.AssetExporters.Classes
 		public static readonly ExportPointer EmptyPointer = new ExportPointer(0);
 
 		public ulong FileID { get; }
-		public UtinyGUID GUID { get; }
+		public EngineGUID GUID { get; }
 		public AssetType AssetType { get; }
 	}
 }

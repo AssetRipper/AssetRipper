@@ -561,7 +561,7 @@
     <Compile Include="Parser\Classes\Prefab\PrefabModification.cs" />
     <Compile Include="Parser\Classes\Prefab\PropertyModification.cs" />
     <Compile Include="Parser\Classes\Serialize\ColorRGBAf.cs" />
-    <Compile Include="Parser\Classes\Serialize\UtinyGUID.cs" />
+    <Compile Include="Parser\Classes\Serialize\EngineGUID.cs" />
     <Compile Include="Parser\Classes\Serialize\Hash128.cs" />
     <Compile Include="Parser\Classes\Shader\Parameters\BufferBinding.cs" />
     <Compile Include="Parser\Classes\Shader\Parameters\ConstantBuffer.cs" />

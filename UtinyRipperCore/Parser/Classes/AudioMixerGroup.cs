@@ -45,7 +45,7 @@ namespace UtinyRipper.Classes
 		public IReadOnlyList<PPtr<AudioMixerGroup>> Children => m_children;
 
 		public PPtr<AudioMixer> AudioMixer;
-		public UtinyGUID GroupID;
+		public EngineGUID GroupID;
 
 		private PPtr<AudioMixerGroup>[] m_children;
 	}

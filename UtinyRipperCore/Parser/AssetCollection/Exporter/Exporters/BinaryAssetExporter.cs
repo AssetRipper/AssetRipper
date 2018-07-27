@@ -8,6 +8,11 @@ namespace UtinyRipper.AssetExporters
 {
 	public class BinaryAssetExporter : IAssetExporter
 	{
+		public bool IsHandle(Object asset)
+		{
+			return true;
+		}
+
 		public void Export(IExportContainer container, Object asset, string path)
 		{
 			using (FileStream fileStream = new FileStream(path, FileMode.CreateNew, FileAccess.Write))
@@ -40,9 +45,16 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
-		public AssetType ToExportType(ClassIDType classID)
+		public AssetType ToExportType(Object asset)
 		{
-			return AssetType.Meta;
+			ToUnknownExportType(asset.ClassID, out AssetType assetType);
+			return assetType;
+		}
+
+		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
+		{
+			assetType = AssetType.Meta;
+			return true;
 		}
 	}
 }

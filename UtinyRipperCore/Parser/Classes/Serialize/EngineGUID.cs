@@ -4,11 +4,11 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes
 {
-	public struct UtinyGUID : IAssetReadable, IYAMLExportable
+	public struct EngineGUID : IAssetReadable, IYAMLExportable
 	{
-		static UtinyGUID()
+		static EngineGUID()
 		{
-			MissingReference = new UtinyGUID
+			MissingReference = new EngineGUID
 			{
 				Data0 = 0xD0000000,
 				Data1 = 0x5DEADF00,
@@ -17,12 +17,12 @@ namespace UtinyRipper.Classes
 			};
 		}
 		
-		public UtinyGUID(Guid guid):
+		public EngineGUID(Guid guid):
 			this(guid.ToByteArray())
 		{
 		}
 
-		public UtinyGUID(byte[] guidData)
+		public EngineGUID(byte[] guidData)
 		{
 			Data0 = BitConverter.ToUInt32(guidData, 0);
 			Data1 = BitConverter.ToUInt32(guidData, 4);
@@ -30,12 +30,20 @@ namespace UtinyRipper.Classes
 			Data3 = BitConverter.ToUInt32(guidData, 12);
 		}
 
-		public static bool operator==(UtinyGUID left, UtinyGUID right)
+		public EngineGUID(uint dword0, uint dword1, uint dword2, uint dword3)
+		{
+			Data0 = dword0;
+			Data1 = dword1;
+			Data2 = dword2;
+			Data3 = dword3;
+		}
+
+		public static bool operator==(EngineGUID left, EngineGUID right)
 		{
 			return left.Data0 == right.Data0 && left.Data1 == right.Data1 && left.Data2 == right.Data2 && left.Data3 == right.Data3;
 		}
 
-		public static bool operator !=(UtinyGUID left, UtinyGUID right)
+		public static bool operator !=(EngineGUID left, EngineGUID right)
 		{
 			return left.Data0 != right.Data0 || left.Data1 != right.Data1 || left.Data2 != right.Data2 || left.Data3 != right.Data3;
 		}
@@ -61,11 +69,11 @@ namespace UtinyRipper.Classes
 			{
 				return false;
 			}
-			if(obj.GetType() != typeof(UtinyGUID))
+			if(obj.GetType() != typeof(EngineGUID))
 			{
 				return false;
 			}
-			return this == (UtinyGUID)obj;
+			return this == (EngineGUID)obj;
 		}
 
 		public override int GetHashCode()
@@ -88,6 +96,6 @@ namespace UtinyRipper.Classes
 		public uint Data2 { get; private set; }
 		public uint Data3 { get; private set; }
 
-		public static readonly UtinyGUID MissingReference;
+		public static readonly EngineGUID MissingReference;
 	}
 }

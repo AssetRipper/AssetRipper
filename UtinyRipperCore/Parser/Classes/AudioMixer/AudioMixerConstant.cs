@@ -16,12 +16,12 @@ namespace UtinyRipper.Classes.AudioMixers
 		public void Read(AssetStream stream)
 		{
 			m_groups = stream.ReadArray<GroupConstant>();
-			m_groupGUIDs = stream.ReadArray<UtinyGUID>();
+			m_groupGUIDs = stream.ReadArray<EngineGUID>();
 			m_effects = stream.ReadArray<EffectConstant>();
-			m_effectGUIDs = stream.ReadArray<UtinyGUID>();
+			m_effectGUIDs = stream.ReadArray<EngineGUID>();
 			NumSideChainBuffers = stream.ReadUInt32();
 			m_snapshots = stream.ReadArray<SnapshotConstant>();
-			m_snapshotGUIDs = stream.ReadArray<UtinyGUID>();
+			m_snapshotGUIDs = stream.ReadArray<EngineGUID>();
 			//m_groupNameBuffer = stream.ReadArray<char>();
 			stream.AlignStream(AlignType.Align4);
 			
@@ -55,12 +55,12 @@ namespace UtinyRipper.Classes.AudioMixers
 		}
 
 		public IReadOnlyList<GroupConstant> Groups => m_groups;
-		public IReadOnlyList<UtinyGUID> GroupGUIDs => m_groupGUIDs;
+		public IReadOnlyList<EngineGUID> GroupGUIDs => m_groupGUIDs;
 		public IReadOnlyList<EffectConstant> Effects => m_effects;
-		public IReadOnlyList<UtinyGUID> EffectGUIDs => m_effectGUIDs;
+		public IReadOnlyList<EngineGUID> EffectGUIDs => m_effectGUIDs;
 		public uint NumSideChainBuffers { get; private set; }
 		public IReadOnlyList<SnapshotConstant> Snapshots => m_snapshots;
-		public IReadOnlyList<UtinyGUID> SnapshotGUIDs => m_snapshotGUIDs;
+		public IReadOnlyList<EngineGUID> SnapshotGUIDs => m_snapshotGUIDs;
 		public IReadOnlyList<char> GroupNameBuffer => m_groupNameBuffer;
 		public IReadOnlyList<char> SnapshotNameBuffer => m_snapshotNameBuffer;
 		public IReadOnlyList<char> PluginEffectNameBuffer => m_pluginEffectNameBuffer;
@@ -68,11 +68,11 @@ namespace UtinyRipper.Classes.AudioMixers
 		public IReadOnlyList<uint> ExposedParameterIndices => m_exposedParameterIndices;
 
 		private GroupConstant[] m_groups;
-		private UtinyGUID[] m_groupGUIDs;
+		private EngineGUID[] m_groupGUIDs;
 		private EffectConstant[] m_effects;
-		private UtinyGUID[] m_effectGUIDs;
+		private EngineGUID[] m_effectGUIDs;
 		private SnapshotConstant[] m_snapshots;
-		private UtinyGUID[] m_snapshotGUIDs;
+		private EngineGUID[] m_snapshotGUIDs;
 		private char[] m_groupNameBuffer;
 		private char[] m_snapshotNameBuffer;
 		private char[] m_pluginEffectNameBuffer;

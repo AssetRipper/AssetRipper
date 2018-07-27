@@ -44,7 +44,7 @@ namespace UtinyRipper.AssetExporters
 				throw new ArgumentException($"Value {value} for main export ID must have not more than 5 digits");
 			}
 #endif
-			return (classID << 5) | value;
+			return (classID * 100000) | value;
 		}
 
 		public abstract bool Export(ProjectAssetContainer container, string dirPath);

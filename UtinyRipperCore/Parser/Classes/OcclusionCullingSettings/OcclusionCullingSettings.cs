@@ -160,7 +160,7 @@ namespace UtinyRipper.Classes
 				return settings;
 			}
 		}
-		private UtinyGUID GetExportSceneGUID(IExportContainer container)
+		private EngineGUID GetExportSceneGUID(IExportContainer container)
 		{
 			if(IsReadPVSData(container.Version))
 			{
@@ -220,7 +220,7 @@ namespace UtinyRipper.Classes
 		public const string SceneExportFolder = "Scenes";
 
 		public OcclusionBakeSettings OcclusionBakeSettings;
-		public UtinyGUID SceneGUID;
+		public EngineGUID SceneGUID;
 		public PPtr<OcclusionCullingData> OcclusionCullingData;
 
 		private byte[] m_PVSData;

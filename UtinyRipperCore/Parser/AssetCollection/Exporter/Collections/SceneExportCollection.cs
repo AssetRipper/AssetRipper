@@ -44,7 +44,7 @@ namespace UtinyRipper.AssetExporters
 				}
 				else
 				{
-					GUID = new UtinyGUID(Guid.NewGuid());
+					GUID = new EngineGUID(Guid.NewGuid());
 				}
 			}
 			else
@@ -52,7 +52,7 @@ namespace UtinyRipper.AssetExporters
 				OcclusionCullingSettings sceneSettings = Components.Where(t => t.ClassID == ClassIDType.OcclusionCullingSettings).Select(t => (OcclusionCullingSettings)t).FirstOrDefault();
 				if(sceneSettings == null)
 				{
-					GUID = new UtinyGUID(Guid.NewGuid());
+					GUID = new EngineGUID(Guid.NewGuid());
 				}
 				else
 				{
@@ -127,7 +127,7 @@ namespace UtinyRipper.AssetExporters
 			}
 			else
 			{
-				UtinyGUID guid = IsComponent(asset) ? GUID : asset.GUID;
+				EngineGUID guid = IsComponent(asset) ? GUID : asset.GUID;
 				return new ExportPointer(exportID, guid, AssetType.Serialized);
 			}				
 		}
@@ -244,7 +244,7 @@ namespace UtinyRipper.AssetExporters
 
 		public OcclusionCullingData OcclusionCullingData { get; private set; }
 		public LightingDataAsset LightingDataAsset { get; set; }
-		public UtinyGUID GUID { get; }
+		public EngineGUID GUID { get; }
 
 		private IEnumerable<Object> Components => m_cexportIDs.Keys;
 

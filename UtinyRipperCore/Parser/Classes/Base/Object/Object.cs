@@ -101,7 +101,7 @@ namespace UtinyRipper.Classes
 		public virtual string ExportExtension => "asset";
 		public long PathID => m_assetInfo.PathID;
 		
-		public UtinyGUID GUID
+		public EngineGUID GUID
 		{
 			get
 			{

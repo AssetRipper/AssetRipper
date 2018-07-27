@@ -68,7 +68,7 @@ namespace UtinyRipper.AssetExporters
 				else
 				{
 					ulong exportID = GetExportID(asset);
-					return new ExportPointer(exportID, UtinyGUID.MissingReference, AssetType.Meta);
+					return new ExportPointer(exportID, EngineGUID.MissingReference, AssetType.Meta);
 				}
 			}
 		}

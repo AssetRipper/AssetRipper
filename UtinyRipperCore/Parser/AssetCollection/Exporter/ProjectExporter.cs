@@ -96,37 +96,40 @@ namespace UtinyRipper.AssetExporters
 			{
 				throw new ArgumentNullException(nameof(exporter));
 			}
-			m_exporters[classType] = exporter;
+			if(!m_exporters.ContainsKey(classType))
+			{
+				m_exporters[classType] = new Stack<IAssetExporter>(2);
+
+			}
+			m_exporters[classType].Push(exporter);
 		}
 
-		public void Export(string path, Object @object)
+		public void Export(string path, Object asset)
 		{
-			Export(path, ToIEnumerable(@object));
+			Export(path, ToIEnumerable(asset));
 		}
 
-		public void Export(string path, IEnumerable<Object> objects)
+		public void Export(string path, IEnumerable<Object> assets)
 		{
 			List<IExportCollection> collections = new List<IExportCollection>();
 			// speed up fetching a little bit
 			List<Object> depList = new List<Object>();
 			HashSet<Object> depSet = new HashSet<Object>();
 			HashSet<Object> queued = new HashSet<Object>();
-			depList.AddRange(objects);
+			depList.AddRange(assets);
 			depSet.UnionWith(depList);
 			for (int i = 0; i < depList.Count; i++)
 			{
-				Object current = depList[i];
-				if (!current.IsValid)
+				Object asset = depList[i];
+				if (!asset.IsValid)
 				{
-					Logger.Instance.Log(LogType.Warning, LogCategory.Export, $"Can't export '{current}' because it isn't valid");
+					Logger.Instance.Log(LogType.Warning, LogCategory.Export, $"Can't export '{asset}' because it isn't valid");
 					continue;
 				}
 
-				if (!queued.Contains(current))
+				if (!queued.Contains(asset))
 				{
-					IAssetExporter exporter = m_exporters[current.ClassID];
-					IExportCollection collection = exporter.CreateCollection(current);
-
+					IExportCollection collection = CreateCollection(asset);
 					foreach (Object element in collection.Assets)
 					{
 						queued.Add(element);
@@ -137,7 +140,7 @@ namespace UtinyRipper.AssetExporters
 #warning TODO: if IsGenerateGUIDByContent set it should build collections and write actual references with persistent GUIS, but skip dependencies
 				if (Config.IsExportDependencies)
 				{
-					foreach (Object dependency in current.FetchDependencies(true))
+					foreach (Object dependency in asset.FetchDependencies(true))
 					{
 						if (dependency == null)
 						{
@@ -176,9 +179,11 @@ namespace UtinyRipper.AssetExporters
 				case ClassIDType.Object:
 					return AssetType.Meta;
 				case ClassIDType.Texture:
-					return m_exporters[ClassIDType.Texture2D].ToExportType(ClassIDType.Texture2D);
+					classID = ClassIDType.Texture2D;
+					break;
 				case ClassIDType.RuntimeAnimatorController:
-					return m_exporters[ClassIDType.AnimatorController].ToExportType(ClassIDType.AnimatorController);
+					classID = ClassIDType.AnimatorController;
+					break;
 				case ClassIDType.Motion:
 					return AssetType.Serialized;
 
@@ -193,15 +198,36 @@ namespace UtinyRipper.AssetExporters
 			{
 				throw new NotImplementedException($"Export type for class {classID} is undefined");
 			}
-			return m_exporters[classID].ToExportType(classID);
+			Stack<IAssetExporter> exporters = m_exporters[classID];
+			foreach(IAssetExporter exporter in exporters)
+			{
+				if(exporter.ToUnknownExportType(classID, out AssetType assetType))
+				{
+					return assetType;
+				}
+			}
+			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{classID}'");
 		}
 
-		private IEnumerable<Object> ToIEnumerable(Object @object)
+		private IExportCollection CreateCollection(Object asset)
 		{
-			yield return @object;
+			Stack<IAssetExporter> exporters = m_exporters[asset.ClassID];
+			foreach(IAssetExporter exporter in exporters)
+			{
+				if(exporter.IsHandle(asset))
+				{
+					return exporter.CreateCollection(asset);
+				}
+			}
+			throw new Exception($"There is no exporter that can handle '{asset}'");
 		}
 
-		private readonly Dictionary<ClassIDType, IAssetExporter> m_exporters = new Dictionary<ClassIDType, IAssetExporter>();
+		private IEnumerable<Object> ToIEnumerable(Object asset)
+		{
+			yield return asset;
+		}
+
+		private readonly Dictionary<ClassIDType, Stack<IAssetExporter>> m_exporters = new Dictionary<ClassIDType, Stack<IAssetExporter>>();
 
 		private readonly IFileCollection m_fileCollection;
 	}
