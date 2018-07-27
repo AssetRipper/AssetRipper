@@ -247,11 +247,28 @@ namespace UtinyRipper.Classes
 			node.Add("BypassEffects", BypassEffects);
 			node.Add("BypassListenerEffects", BypassListenerEffects);
 			node.Add("BypassReverbZones", BypassReverbZones);
-			node.Add("rolloffCustomCurve", RolloffCustomCurve.ExportYAML(container));
-			node.Add("panLevelCustomCurve", PanLevelCustomCurve.ExportYAML(container));
-			node.Add("spreadCustomCurve", SpreadCustomCurve.ExportYAML(container));
-			node.Add("reverbZoneMixCustomCurve", ReverbZoneMixCustomCurve.ExportYAML(container));
+			node.Add("rolloffCustomCurve", GetRolloffCustomCurve(container.Version).ExportYAML(container));
+			node.Add("panLevelCustomCurve", GetPanLevelCustomCurve(container.Version).ExportYAML(container));
+			node.Add("spreadCustomCurve", GetSpreadCustomCurve(container.Version).ExportYAML(container));
+			node.Add("reverbZoneMixCustomCurve", GetReverbZoneMixCustomCurve(container.Version).ExportYAML(container));
 			return node;
+		}
+
+		private AnimationCurveTpl<Float> GetRolloffCustomCurve(Version version)
+		{
+			return IsReadRolloffCustomCurve(version) ? RolloffCustomCurve : AnimationCurveTpl<Float>.Empty;
+		}
+		private AnimationCurveTpl<Float> GetPanLevelCustomCurve(Version version)
+		{
+			return IsReadRolloffCustomCurve(version) ? PanLevelCustomCurve : AnimationCurveTpl<Float>.Empty;
+		}
+		private AnimationCurveTpl<Float> GetSpreadCustomCurve(Version version)
+		{
+			return IsReadRolloffCustomCurve(version) ? SpreadCustomCurve : AnimationCurveTpl<Float>.Empty;
+		}
+		private AnimationCurveTpl<Float> GetReverbZoneMixCustomCurve(Version version)
+		{
+			return IsReadReverbZoneMixCustomCurve(version) ? ReverbZoneMixCustomCurve : AnimationCurveTpl<Float>.Empty;
 		}
 
 		public bool PlayOnAwake { get; private set; }

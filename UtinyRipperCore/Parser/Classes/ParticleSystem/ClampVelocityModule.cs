@@ -27,19 +27,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2017, 2);
 		}
 
-		private bool GetExportMultiplyDragByParticleSize(Version version)
-		{
-			return IsReadMultiplyDragByParticleSize(version) ? MultiplyDragByParticleSize : true;
-		}
-		private bool GetExportMultiplyDragByParticleVelocity(Version version)
-		{
-			return IsReadMultiplyDragByParticleSize(version) ? MultiplyDragByParticleVelocity : true;
-		}
-		private MinMaxCurve GetExportDrag(Version version)
-		{
-			return IsReadDrag(version) ? Drag : new MinMaxCurve(0.0f);
-		}
-
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -81,6 +68,19 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("dampen", Dampen);
 			node.Add("drag", GetExportDrag(container.Version).ExportYAML(container));
 			return node;
+		}
+
+		private bool GetExportMultiplyDragByParticleSize(Version version)
+		{
+			return IsReadMultiplyDragByParticleSize(version) ? MultiplyDragByParticleSize : true;
+		}
+		private bool GetExportMultiplyDragByParticleVelocity(Version version)
+		{
+			return IsReadMultiplyDragByParticleSize(version) ? MultiplyDragByParticleVelocity : true;
+		}
+		private MinMaxCurve GetExportDrag(Version version)
+		{
+			return IsReadDrag(version) ? Drag : new MinMaxCurve(0.0f);
 		}
 
 		public bool SeparateAxis { get; private set; }

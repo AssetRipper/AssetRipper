@@ -17,6 +17,17 @@ namespace UtinyRipper.Classes.AnimationClips
 			OutWeight = weight;
 		}
 
+		public KeyframeTpl(float time, KeyframeTpl<T> copy)
+		{
+			Time = time;
+			Value = copy.Value;
+			InSlope = copy.InSlope;
+			OutSlope = copy.OutSlope;
+			WeightedMode = copy.WeightedMode;
+			InWeight = copy.InWeight;
+			OutWeight = copy.OutWeight;
+		}
+
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>

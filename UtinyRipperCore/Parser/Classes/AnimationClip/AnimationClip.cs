@@ -15,6 +15,31 @@ namespace UtinyRipper.Classes
 		{
 		}
 
+
+		private struct AnimationCurves
+		{
+			public AnimationCurves(IEnumerable<QuaternionCurve> rotations, IEnumerable<CompressedAnimationCurve> compressedRotations,
+				IEnumerable<Vector3Curve> eulers, IEnumerable<Vector3Curve> positions, IEnumerable<Vector3Curve> scales,
+				IEnumerable<FloatCurve> floats, IEnumerable<PPtrCurve> PPtrs)
+			{
+				RotationCurves = rotations;
+				CompressedRotationCurves = compressedRotations;
+				EulerCurves = eulers;
+				PositionCurves = positions;
+				ScaleCurves = scales;
+				FloatCurves = floats;
+				PPtrCurves = PPtrs;
+			}
+
+			public IEnumerable<QuaternionCurve> RotationCurves { get; }
+			public IEnumerable<CompressedAnimationCurve> CompressedRotationCurves { get; }
+			public IEnumerable<Vector3Curve> EulerCurves { get; }
+			public IEnumerable<Vector3Curve> PositionCurves { get; }
+			public IEnumerable<Vector3Curve> ScaleCurves { get; }
+			public IEnumerable<FloatCurve> FloatCurves { get; }
+			public IEnumerable<PPtrCurve> PPtrCurves { get; }
+		}
+
 		/// <summary>
 		/// Less than 2.0.0
 		/// </summary>
@@ -163,15 +188,6 @@ namespace UtinyRipper.Classes
 			// min version is 2nd
 			return 2;
 		}
-		
-		private bool GetIsLegacy(Version version)
-		{
-			if (IsReadLegacy(version))
-			{
-				return Legacy;
-			}
-			return AnimationType == AnimationType.Legacy;
-		}
 
 		public override void Read(AssetStream stream)
 		{
@@ -317,21 +333,15 @@ namespace UtinyRipper.Classes
 			node.Add("m_Compressed", Compressed);
 			node.Add("m_UseHighQualityCurve", UseHightQualityCurve);
 
-			if(IsExportGenericData(container.Version))
-			{
-				ExportGenericData(container, node);
-			}
-			else
-			{
-				node.Add("m_RotationCurves", IsReadCurves(container.Version) ? m_rotationCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
-				node.Add("m_CompressedRotationCurves", IsReadCompressedRotationCurves(container.Version) ? m_compressedRotationCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
-				node.Add("m_EulerCurves", IsReadEulerCurves(container.Version) ? m_eulerCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
-				node.Add("m_PositionCurves", IsReadCurves(container.Version) ? m_positionCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
-				node.Add("m_ScaleCurves",  IsReadCurves(container.Version) ?  m_scaleCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
-				node.Add("m_FloatCurves", IsReadCurves(container.Version) ? m_floatCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
-			}
-			
-			node.Add("m_PPtrCurves", IsReadPPtrCurves(container.Version) ? m_PPtrCurves.ExportYAML(container) : YAMLSequenceNode.Empty);
+			AnimationCurves curves = GetAnimationCurves(container.Version, container.Platform);
+			node.Add("m_RotationCurves", curves.RotationCurves.ExportYAML(container));
+			node.Add("m_CompressedRotationCurves", curves.RotationCurves.ExportYAML(container));
+			node.Add("m_EulerCurves", curves.EulerCurves.ExportYAML(container));
+			node.Add("m_PositionCurves", curves.PositionCurves.ExportYAML(container));
+			node.Add("m_ScaleCurves", curves.ScaleCurves.ExportYAML(container));
+			node.Add("m_FloatCurves", curves.FloatCurves.ExportYAML(container));
+			node.Add("m_PPtrCurves", curves.PPtrCurves.ExportYAML(container));
+
 			node.Add("m_SampleRate", SampleRate);
 			node.Add("m_WrapMode", (int)WrapMode);
 			node.Add("m_Bounds", Bounds.ExportYAML(container));
@@ -347,20 +357,20 @@ namespace UtinyRipper.Classes
 			return node;
 		}
 
-		private void ExportGenericData(IExportContainer container, YAMLMappingNode node)
+		private AnimationCurves ExportGenericData(Version version, Platform platform)
 		{
 			IReadOnlyDictionary<uint, string> tos = FindTOS();
-			ExportGenericData(container, node, tos);
+			return ExportGenericData(tos, version, platform);
 		}
 
 #warning TODO: it's too complicated and unintuitive. need to simplify
-		private void ExportGenericData(IExportContainer container, YAMLMappingNode node, IReadOnlyDictionary<uint, string> tos)
+		private AnimationCurves ExportGenericData(IReadOnlyDictionary<uint, string> tos, Version version, Platform platform)
 		{
 			StreamedClip streamedClip = MuscleClip.Clip.StreamedClip;
 			DenseClip denseClip = MuscleClip.Clip.DenseClip;
 			ConstantClip constantClip = MuscleClip.Clip.ConstantClip;
 
-			IReadOnlyList<StreamedFrame> streamedFrames = streamedClip.GenerateFrames(container);
+			IReadOnlyList<StreamedFrame> streamedFrames = streamedClip.GenerateFrames(version, platform);
 			Dictionary<uint, Vector3Curve> translations = new Dictionary<uint, Vector3Curve>();
 			Dictionary<uint, QuaternionCurve> rotations = new Dictionary<uint, QuaternionCurve>();
 			Dictionary<uint, Vector3Curve> scales = new Dictionary<uint, Vector3Curve>();
@@ -581,12 +591,8 @@ namespace UtinyRipper.Classes
 				}
 			}
 
-			node.Add("m_RotationCurves", rotations.Values.ExportYAML(container));
-			node.Add("m_CompressedRotationCurves", YAMLSequenceNode.Empty);
-			node.Add("m_EulerCurves", eulers.Values.ExportYAML(container));
-			node.Add("m_PositionCurves", translations.Values.ExportYAML(container));
-			node.Add("m_ScaleCurves", scales.Values.ExportYAML(container));
-			node.Add("m_FloatCurves", floats.Values.ExportYAML(container));
+			return new AnimationCurves(rotations.Values, new CompressedAnimationCurve[0],
+				eulers.Values, translations.Values, scales.Values, floats.Values, new PPtrCurve[0]);
 		}
 		
 		private IReadOnlyDictionary<uint, string> FindTOS()
@@ -663,6 +669,36 @@ namespace UtinyRipper.Classes
 				}
 			}
 			return false;
+		}
+
+		private bool GetIsLegacy(Version version)
+		{
+			if (IsReadLegacy(version))
+			{
+				return Legacy;
+			}
+			return AnimationType == AnimationType.Legacy;
+		}
+
+		private AnimationCurves GetAnimationCurves(Version version, Platform platform)
+		{
+			if (IsExportGenericData(version))
+			{
+				return ExportGenericData(version, platform);
+			}
+			else
+			{
+				IReadOnlyList<QuaternionCurve> rotationCurves = IsReadCurves(version) ? RotationCurves : new QuaternionCurve[0];
+				IReadOnlyList<CompressedAnimationCurve> compressedRotationCurves = IsReadCompressedRotationCurves(version) ? CompressedRotationCurves : new CompressedAnimationCurve[0];
+				IReadOnlyList<Vector3Curve> eulerCurves = IsReadEulerCurves(version) ? EulerCurves : new Vector3Curve[0];
+				IReadOnlyList<Vector3Curve> positionCurves = IsReadCurves(version) ? PositionCurves : new Vector3Curve[0];
+				IReadOnlyList<Vector3Curve> scaleCurves = IsReadCurves(version) ? ScaleCurves : new Vector3Curve[0];
+				IReadOnlyList<FloatCurve> floatCurves = IsReadCurves(version) ? FloatCurves : new FloatCurve[0];
+				IReadOnlyList<PPtrCurve> pPtrCurves = IsReadPPtrCurves(version) ? PPtrCurves : new PPtrCurve[0];
+				return new AnimationCurves(rotationCurves, compressedRotationCurves, eulerCurves, positionCurves,
+					scaleCurves, floatCurves, pPtrCurves);
+			}
+
 		}
 
 		public override string ExportExtension => "anim";

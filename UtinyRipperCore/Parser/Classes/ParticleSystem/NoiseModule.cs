@@ -21,19 +21,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 		}
 
-		private MinMaxCurve GetExportPositionAmount(Version version)
-		{
-			return IsReadPositionAmount(version) ? PositionAmount : new MinMaxCurve(1.0f);
-		}
-		private MinMaxCurve GetExportRotationAmount(Version version)
-		{
-			return IsReadPositionAmount(version) ? RotationAmount : new MinMaxCurve(0.0f);
-		}
-		private MinMaxCurve GetExportSizeAmount(Version version)
-		{
-			return IsReadPositionAmount(version) ? SizeAmount : new MinMaxCurve(0.0f);
-		}
-
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -92,6 +79,19 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("rotationAmount", GetExportRotationAmount(container.Version).ExportYAML(container));
 			node.Add("sizeAmount", GetExportSizeAmount(container.Version).ExportYAML(container));
 			return node;
+		}
+
+		private MinMaxCurve GetExportPositionAmount(Version version)
+		{
+			return IsReadPositionAmount(version) ? PositionAmount : new MinMaxCurve(1.0f);
+		}
+		private MinMaxCurve GetExportRotationAmount(Version version)
+		{
+			return IsReadPositionAmount(version) ? RotationAmount : new MinMaxCurve(0.0f);
+		}
+		private MinMaxCurve GetExportSizeAmount(Version version)
+		{
+			return IsReadPositionAmount(version) ? SizeAmount : new MinMaxCurve(0.0f);
 		}
 
 		public bool SeparateAxes { get; private set; }

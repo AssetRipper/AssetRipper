@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
-using UtinyRipper.Classes.CompositeCollider2Ds;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
 
@@ -89,48 +88,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 			return 1;
 		}
-
-		private bool GetExportMultiplyColliderForceByCollisionAngle(Version version)
-		{
-			return IsReadColliderForce(version) ? MultiplyColliderForceByCollisionAngle : true;
-		}
-		private MinMaxCurve GetExportDampen(Version version)
-		{
-			return IsReadDampenSingle(version) ? new MinMaxCurve(DampenSingle) : Dampen;
-		}
-		private MinMaxCurve GetExportBounce(Version version)
-		{
-			return IsReadDampenSingle(version) ? new MinMaxCurve(BounceSingle) : Bounce;
-		}
-		private MinMaxCurve GetExportEnergyLossOnCollision(Version version)
-		{
-			return IsReadDampenSingle(version) ? new MinMaxCurve(EnergyLossOnCollisionSingle) : EnergyLossOnCollision;
-		}
-		private float GetExportMaxKillSpeed(Version version)
-		{
-			return IsReadMaxKillSpeed(version) ? MaxKillSpeed : MinKillSpeed;
-		}
-		private float GetExportRadiusScale(Version version)
-		{
-			return IsReadRadiusScale(version) ? RadiusScale : 1.0f;
-		}
-		private BitField GetExportCollidesWith(Version version)
-		{
-			return IsReadRadiusScale(version) ? CollidesWith : new BitField(uint.MaxValue);
-		}
-		private int GetExportMaxCollisionShapes(Version version)
-		{
-			return IsReadMaxCollisionShapes(version) ? MaxCollisionShapes : 256;
-		}
-		private float GetExportVoxelSize(Version version)
-		{
-			return IsReadQuality(version) ? VoxelSize : 0.5f;
-		}
-		private bool GetExportCollidesWithDynamic(Version version)
-		{
-			return IsReadCollidesWithDynamic(version) ? CollidesWithDynamic : true;
-		}		
-
+		
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -241,6 +199,47 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("collidesWithDynamic", GetExportCollidesWithDynamic(container.Version));
 			node.Add("interiorCollisions", InteriorCollisions);
 			return node;
+		}
+
+		private bool GetExportMultiplyColliderForceByCollisionAngle(Version version)
+		{
+			return IsReadColliderForce(version) ? MultiplyColliderForceByCollisionAngle : true;
+		}
+		private MinMaxCurve GetExportDampen(Version version)
+		{
+			return IsReadDampenSingle(version) ? new MinMaxCurve(DampenSingle) : Dampen;
+		}
+		private MinMaxCurve GetExportBounce(Version version)
+		{
+			return IsReadDampenSingle(version) ? new MinMaxCurve(BounceSingle) : Bounce;
+		}
+		private MinMaxCurve GetExportEnergyLossOnCollision(Version version)
+		{
+			return IsReadDampenSingle(version) ? new MinMaxCurve(EnergyLossOnCollisionSingle) : EnergyLossOnCollision;
+		}
+		private float GetExportMaxKillSpeed(Version version)
+		{
+			return IsReadMaxKillSpeed(version) ? MaxKillSpeed : MinKillSpeed;
+		}
+		private float GetExportRadiusScale(Version version)
+		{
+			return IsReadRadiusScale(version) ? RadiusScale : 1.0f;
+		}
+		private BitField GetExportCollidesWith(Version version)
+		{
+			return IsReadRadiusScale(version) ? CollidesWith : new BitField(uint.MaxValue);
+		}
+		private int GetExportMaxCollisionShapes(Version version)
+		{
+			return IsReadMaxCollisionShapes(version) ? MaxCollisionShapes : 256;
+		}
+		private float GetExportVoxelSize(Version version)
+		{
+			return IsReadQuality(version) ? VoxelSize : 0.5f;
+		}
+		private bool GetExportCollidesWithDynamic(Version version)
+		{
+			return IsReadCollidesWithDynamic(version) ? CollidesWithDynamic : true;
 		}
 
 		public int Type { get; private set; }

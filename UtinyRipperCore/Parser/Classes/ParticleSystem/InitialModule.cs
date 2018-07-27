@@ -73,27 +73,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
-		private MinMaxCurve GetExportStartSizeY(Version version)
-		{
-			return IsReadSizeAxes(version) ? StartSizeY : StartSize;
-		}
-		private MinMaxCurve GetExportStartSizeZ(Version version)
-		{
-			return IsReadSizeAxes(version) ? StartSizeZ : StartSize;
-		}
-		private MinMaxCurve GetExportStartRotationX(Version version)
-		{
-			return IsReadRotationAxes(version) ? StartRotationX : new MinMaxCurve(0.0f);
-		}
-		private MinMaxCurve GetExportStartRotationY(Version version)
-		{
-			return IsReadRotationAxes(version) ? StartRotationY : new MinMaxCurve(0.0f);
-		}
-		private MinMaxCurve GetExportGravityModifier(Version version)
-		{
-			return IsReadGravityModifierSingle(version) ? new MinMaxCurve(GravityModifierSingle) : GravityModifier;
-		}
-
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -164,7 +143,28 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("gravityModifier", GravityModifier.ExportYAML(container));
 			return node;
 		}
-		
+
+		private MinMaxCurve GetExportStartSizeY(Version version)
+		{
+			return IsReadSizeAxes(version) ? StartSizeY : StartSize;
+		}
+		private MinMaxCurve GetExportStartSizeZ(Version version)
+		{
+			return IsReadSizeAxes(version) ? StartSizeZ : StartSize;
+		}
+		private MinMaxCurve GetExportStartRotationX(Version version)
+		{
+			return IsReadRotationAxes(version) ? StartRotationX : new MinMaxCurve(0.0f);
+		}
+		private MinMaxCurve GetExportStartRotationY(Version version)
+		{
+			return IsReadRotationAxes(version) ? StartRotationY : new MinMaxCurve(0.0f);
+		}
+		private MinMaxCurve GetExportGravityModifier(Version version)
+		{
+			return IsReadGravityModifierSingle(version) ? new MinMaxCurve(GravityModifierSingle) : GravityModifier;
+		}
+
 		public float RandomizeRotationDirection { get; private set; }
 		public float GravityModifierSingle { get; private set; }
 		public float InheritVelocity { get; private set; }
