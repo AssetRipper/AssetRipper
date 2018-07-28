@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.AnimationClips.Editor;
 
 namespace UtinyRipper.Classes.AnimationClips

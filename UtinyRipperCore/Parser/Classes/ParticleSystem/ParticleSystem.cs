@@ -157,24 +157,7 @@ namespace UtinyRipper.Classes
 			}
 			return 1;
 		}
-
-		private bool GetExportAutoRandomSeed(Version version)
-		{
-			return IsReadAutoRandomSeed(version) ? AutoRandomSeed : true;
-		}
-		public bool GetExportUseRigidbodyForVelocity(Version version)
-		{
-			return IsReadUseRigidbodyForVelocity(version) ? UseRigidbodyForVelocity : true;
-		}
-		private MinMaxCurve GetExportStartDelay(Version version)
-		{
-			return IsReadStartDelaySingle(version) ? new MinMaxCurve(StartDelaySingle) : StartDelay;
-		}
-		private ParticleSystemScalingMode GetExportScalingMode(Version version)
-		{
-			return IsReadScalingMode(version) ? ScalingMode : ParticleSystemScalingMode.Local;
-		}
-
+		
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -323,12 +306,12 @@ namespace UtinyRipper.Classes
 			node.Add("prewarm", Prewarm);
 			node.Add("playOnAwake", PlayOnAwake);
 			node.Add("useUnscaledTime", UseUnscaledTime);
-			node.Add("autoRandomSeed", GetExportAutoRandomSeed(container.Version));
-			node.Add("useRigidbodyForVelocity", GetExportUseRigidbodyForVelocity(container.Version));
-			node.Add("startDelay", GetExportStartDelay(container.Version).ExportYAML(container));
+			node.Add("autoRandomSeed", GetAutoRandomSeed(container.Version));
+			node.Add("useRigidbodyForVelocity", GetUseRigidbodyForVelocity(container.Version));
+			node.Add("startDelay", GetStartDelay(container.Version).ExportYAML(container));
 			node.Add("moveWithTransform", MoveWithTransform);
 			node.Add("moveWithCustomTransform", MoveWithCustomTransform.ExportYAML(container));
-			node.Add("scalingMode", (int)ScalingMode);
+			node.Add("scalingMode", (int)GetScalingMode(container.Version));
 			node.Add("randomSeed", RandomSeed);
 			node.Add("InitialModule", InitialModule.ExportYAML(container));
 			node.Add("ShapeModule", ShapeModule.ExportYAML(container));
@@ -338,21 +321,66 @@ namespace UtinyRipper.Classes
 			node.Add("ColorModule", ColorModule.ExportYAML(container));
 			node.Add("UVModule", UVModule.ExportYAML(container));
 			node.Add("VelocityModule", VelocityModule.ExportYAML(container));
-			node.Add("InheritVelocityModule", InheritVelocityModule.ExportYAML(container));
+			node.Add("InheritVelocityModule", GetInheritVelocityModule(container.Version).ExportYAML(container));
 			node.Add("ForceModule", ForceModule.ExportYAML(container));
-			node.Add("ExternalForcesModule", ExternalForcesModule.ExportYAML(container));
+			node.Add("ExternalForcesModule", GetExternalForcesModule(container.Version).ExportYAML(container));
 			node.Add("ClampVelocityModule", ClampVelocityModule.ExportYAML(container));
-			node.Add("NoiseModule", NoiseModule.ExportYAML(container));
+			node.Add("NoiseModule", GetNoiseModule(container.Version).ExportYAML(container));
 			node.Add("SizeBySpeedModule", SizeBySpeedModule.ExportYAML(container));
 			node.Add("RotationBySpeedModule", RotationBySpeedModule.ExportYAML(container));
 			node.Add("ColorBySpeedModule", ColorBySpeedModule.ExportYAML(container));
 			node.Add("CollisionModule", CollisionModule.ExportYAML(container));
-			node.Add("TriggerModule", TriggerModule.ExportYAML(container));
+			node.Add("TriggerModule", GetTriggerModule(container.Version).ExportYAML(container));
 			node.Add("SubModule", SubModule.ExportYAML(container));
-			node.Add("LightsModule", LightsModule.ExportYAML(container));
-			node.Add("TrailModule", TrailModule.ExportYAML(container));
-			node.Add("CustomDataModule", CustomDataModule.ExportYAML(container));
+			node.Add("LightsModule", GetLightsModule(container.Version).ExportYAML(container));
+			node.Add("TrailModule", GetTrailModule(container.Version).ExportYAML(container));
+			node.Add("CustomDataModule", GetCustomDataModule(container.Version).ExportYAML(container));
 			return node;
+		}
+
+		private bool GetAutoRandomSeed(Version version)
+		{
+			return IsReadAutoRandomSeed(version) ? AutoRandomSeed : true;
+		}
+		public bool GetUseRigidbodyForVelocity(Version version)
+		{
+			return IsReadUseRigidbodyForVelocity(version) ? UseRigidbodyForVelocity : true;
+		}
+		private MinMaxCurve GetStartDelay(Version version)
+		{
+			return IsReadStartDelaySingle(version) ? new MinMaxCurve(StartDelaySingle) : StartDelay;
+		}
+		private ParticleSystemScalingMode GetScalingMode(Version version)
+		{
+			return IsReadScalingMode(version) ? ScalingMode : ParticleSystemScalingMode.Local;
+		}
+		private InheritVelocityModule GetInheritVelocityModule(Version version)
+		{
+			return IsReadInheritVelocityModule(version) ? InheritVelocityModule : new InheritVelocityModule(true);
+		}
+		private ExternalForcesModule GetExternalForcesModule(Version version)
+		{
+			return IsReadExternalForcesModule(version) ? ExternalForcesModule : new ExternalForcesModule(true);
+		}
+		public NoiseModule GetNoiseModule(Version version)
+		{
+			return IsReadNoiseModule(version) ? NoiseModule : new NoiseModule(true);
+		}
+		public TriggerModule GetTriggerModule(Version version)
+		{
+			return IsReadTriggerModule(version) ? TriggerModule : new TriggerModule(true);
+		}
+		public LightsModule GetLightsModule(Version version)
+		{
+			return IsReadLightsModule(version) ? LightsModule : new LightsModule(true);
+		}
+		public TrailModule GetTrailModule(Version version)
+		{
+			return IsReadLightsModule(version) ? TrailModule : new TrailModule(true);
+		}
+		public CustomDataModule GetCustomDataModule(Version version)
+		{
+			return IsReadCustomDataModule(version) ? CustomDataModule : new CustomDataModule(true);
 		}
 
 		public float LengthInSec { get; private set; }

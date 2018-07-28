@@ -198,7 +198,7 @@ namespace UtinyRipper.WebFiles
 				int pathLength = stream.ReadInt32();
 				string path = stream.ReadString(pathLength);
 				
-				WebFileEntry entry = new WebFileEntry(stream.BaseStream, path, offset, length);
+				WebFileEntry entry = new WebFileEntry(stream.BaseStream, path, offset, length, isClosable);
 				entries.Add(entry);
 			}
 			Metadata = new WebMetadata(stream.BaseStream, isClosable, entries);

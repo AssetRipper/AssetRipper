@@ -11,24 +11,40 @@ namespace UtinyRipper
 		protected FileData(Stream stream, bool isClosable)
 		{
 			m_stream = stream;
-			m_isDisposable = isClosable;
+			IsDisposable = isClosable;
 		}
 
 		public void Dispose()
 		{
-			if (m_isDisposable)
+			if (IsDisposable)
 			{
 				m_stream.Dispose();
-				m_isDisposable = false;
+				IsDisposable = false;
 			}
 		}
 
 		public IEnumerable<T> AssetsEntries => m_entries.Where(t => t.IsSerializedFile);
 		public IEnumerable<T> ResourceEntries => m_entries.Where(t => !t.IsSkipFile && !t.IsSerializedFile);
 		
-		protected Stream m_stream;
-		protected IReadOnlyList<T> m_entries;
+		protected IReadOnlyList<T> EntriesBase
+		{
+			get => m_entries;
+			set
+			{
+				m_entries = value;
+				foreach(T entry in ResourceEntries)
+				{
+					IsDisposable = false;
+					break;
+				}
+			}
+		}
 
-		private bool m_isDisposable = false;
+		protected bool IsDisposable { get; private set; }
+
+		protected Stream m_stream;
+
+		private IReadOnlyList<T> m_entries;
+
 	}
 }

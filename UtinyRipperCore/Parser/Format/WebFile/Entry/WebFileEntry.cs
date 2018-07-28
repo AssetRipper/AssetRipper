@@ -4,8 +4,8 @@ namespace UtinyRipper.WebFiles
 {
 	internal class WebFileEntry : FileEntry
 	{
-		public WebFileEntry(Stream stream, string name, long offset, long size):
-			base(stream, name, offset, size)
+		public WebFileEntry(Stream stream, string name, long offset, long size, bool isStreamPermanent):
+			base(stream, name, offset, size, isStreamPermanent)
 		{
 		}
 

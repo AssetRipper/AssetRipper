@@ -25,10 +25,10 @@ namespace UtinyRipper
 			Stream = stream;
 		}
 
-		public ResourcesFile(string filePath, string fileName, Stream stream, long basePisition) :
+		public ResourcesFile(string filePath, string fileName, Stream stream, long basePosition) :
 			this(filePath, fileName, stream)
 		{
-			m_basePisition = basePisition;
+			m_basePisition = basePosition;
 		}
 
 		public void Dispose()

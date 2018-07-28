@@ -7,6 +7,16 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public sealed class TriggerModule : ParticleSystemModule, IDependent
 	{
+		public TriggerModule()
+		{
+		}
+
+		public TriggerModule(bool _)
+		{
+			Inside = TriggerAction.Kill;
+			RadiusScale = 1.0f;
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -17,8 +27,8 @@ namespace UtinyRipper.Classes.ParticleSystems
 			CollisionShape3.Read(stream);
 			CollisionShape4.Read(stream);
 			CollisionShape5.Read(stream);
-			Inside = stream.ReadInt32();
-			Outside = stream.ReadInt32();
+			Inside = (TriggerAction)stream.ReadInt32();
+			Outside = (TriggerAction)stream.ReadInt32();
 			Enter = stream.ReadInt32();
 			Exit = stream.ReadInt32();
 			RadiusScale = stream.ReadSingle();
@@ -43,16 +53,16 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("collisionShape3", CollisionShape3.ExportYAML(container));
 			node.Add("collisionShape4", CollisionShape4.ExportYAML(container));
 			node.Add("collisionShape5", CollisionShape5.ExportYAML(container));
-			node.Add("inside", Inside);
-			node.Add("outside", Outside);
+			node.Add("inside", (int)Inside);
+			node.Add("outside", (int)Outside);
 			node.Add("enter", Enter);
 			node.Add("exit", Exit);
 			node.Add("radiusScale", RadiusScale);
 			return node;
 		}
 
-		public int Inside { get; private set; }
-		public int Outside { get; private set; }
+		public TriggerAction Inside { get; private set; }
+		public TriggerAction Outside { get; private set; }
 		public int Enter { get; private set; }
 		public int Exit { get; private set; }
 		public float RadiusScale { get; private set; }

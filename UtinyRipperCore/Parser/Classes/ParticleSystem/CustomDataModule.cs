@@ -5,6 +5,37 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public sealed class CustomDataModule : ParticleSystemModule
 	{
+		public CustomDataModule()
+		{
+		}
+
+		public CustomDataModule(bool _)
+		{
+			VectorComponentCount0 = 4;
+			Color0 = new MinMaxGradient(true);
+			ColorLabel0 = "Color";
+			Vector0_0 = new MinMaxCurve(0.0f);
+			VectorLabel0_0 = "X";
+			Vector0_1 = new MinMaxCurve(0.0f);
+			VectorLabel0_1 = "Y";
+			Vector0_2 = new MinMaxCurve(0.0f);
+			VectorLabel0_2 = "Z";
+			Vector0_3 = new MinMaxCurve(0.0f);
+			VectorLabel0_3 = "W";
+			
+			VectorComponentCount0 = 4;
+			Color1= new MinMaxGradient(true);
+			ColorLabel1 = "Color";
+			Vector1_0 = new MinMaxCurve(0.0f);
+			VectorLabel1_0 = "X";
+			Vector1_1 = new MinMaxCurve(0.0f);
+			VectorLabel1_1 = "Y";
+			Vector1_2 = new MinMaxCurve(0.0f);
+			VectorLabel1_2 = "Z";
+			Vector1_3 = new MinMaxCurve(0.0f);
+			VectorLabel1_3 = "W";
+		}
+
 		/// <summary>
 		/// Not Release
 		/// </summary>

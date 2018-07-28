@@ -5,6 +5,15 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public sealed class ExternalForcesModule : ParticleSystemModule
 	{
+		public ExternalForcesModule()
+		{
+		}
+
+		public ExternalForcesModule(bool _)
+		{
+			Multiplier = 1.0f;
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);

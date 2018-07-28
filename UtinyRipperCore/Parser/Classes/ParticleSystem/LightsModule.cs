@@ -7,6 +7,21 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public sealed class LightsModule : ParticleSystemModule, IDependent
 	{
+		public LightsModule()
+		{
+		}
+
+		public LightsModule(bool _)
+		{
+			RandomDistribution = true;
+			Color = true;
+			Range = true;
+			Intensity = true;
+			RangeCurve = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
+			IntensityCurve = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
+			MaxLights = 20;
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);

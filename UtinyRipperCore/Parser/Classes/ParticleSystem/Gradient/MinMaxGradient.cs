@@ -5,6 +5,28 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public struct MinMaxGradient : IAssetReadable, IYAMLExportable
 	{
+		public MinMaxGradient(bool _)
+		{
+			MinMaxState = MinMaxGradientState.Color;
+
+			MinColor = new ColorRGBAf(1.0f, 1.0f, 1.0f, 1.0f);
+			MinColor32 = new ColorRGBA32(255, 255, 255, 255);
+			MaxColor = new ColorRGBAf(1.0f, 1.0f, 1.0f, 1.0f);
+			MaxColor32 = new ColorRGBA32(255, 255, 255, 255);
+
+			MaxGradient = default;
+			MaxGradient.AddColor(0, 1.0f, 1.0f, 1.0f);
+			MaxGradient.AddColor(ushort.MaxValue, 1.0f, 1.0f, 1.0f);
+			MaxGradient.AddAlpha(0, 1.0f);
+			MaxGradient.AddAlpha(ushort.MaxValue, 1.0f);
+
+			MinGradient = default;
+			MinGradient.AddColor(0, 1.0f, 1.0f, 1.0f);
+			MinGradient.AddColor(ushort.MaxValue, 1.0f, 1.0f, 1.0f);
+			MinGradient.AddAlpha(0, 1.0f);
+			MinGradient.AddAlpha(ushort.MaxValue, 1.0f);
+		}
+
 		/// <summary>
 		/// Less than 5.4.0
 		/// </summary>
@@ -35,15 +57,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
-		private ColorRGBAf GetExportMinColor(Version version)
-		{
-			return IsColor32(version) ? new ColorRGBAf(MinColor32) : MinColor;
-		}
-		private ColorRGBAf GetExportMaxColor(Version version)
-		{
-			return IsColor32(version) ? new ColorRGBAf(MaxColor32) : MaxColor;
-		}
-
 		public void Read(AssetStream stream)
 		{
 			if (IsMaxGradientFirst(stream.Version))
@@ -62,7 +75,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 				}
 			}
 
-			MinMaxState = stream.ReadUInt16();
+			MinMaxState = (MinMaxGradientState)stream.ReadUInt16();
 			stream.AlignStream(AlignType.Align4);
 
 			if (!IsMaxGradientFirst(stream.Version))
@@ -79,15 +92,24 @@ namespace UtinyRipper.Classes.ParticleSystems
 #warning TODO: value acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("minMaxState", MinMaxState);
-			node.Add("minColor", GetExportMinColor(container.Version).ExportYAML(container));
-			node.Add("maxColor", GetExportMaxColor(container.Version).ExportYAML(container));
+			node.Add("minMaxState", (ushort)MinMaxState);
+			node.Add("minColor", GetMinColor(container.Version).ExportYAML(container));
+			node.Add("maxColor", GetMaxColor(container.Version).ExportYAML(container));
 			node.Add("maxGradient", MaxGradient.ExportYAML(container));
 			node.Add("minGradient", MinGradient.ExportYAML(container));
 			return node;
 		}
 
-		public ushort MinMaxState { get; private set; }
+		private ColorRGBAf GetMinColor(Version version)
+		{
+			return IsColor32(version) ? new ColorRGBAf(MinColor32) : MinColor;
+		}
+		private ColorRGBAf GetMaxColor(Version version)
+		{
+			return IsColor32(version) ? new ColorRGBAf(MaxColor32) : MaxColor;
+		}
+
+		public MinMaxGradientState MinMaxState { get; private set; }
 		
 		public ColorRGBA32 MinColor32;
 		public ColorRGBA32 MaxColor32;

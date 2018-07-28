@@ -271,10 +271,11 @@ namespace UtinyRipper.BundleFiles
 				
 		private void Read530Blocks(EndianStream stream, bool isClosable, BlockInfo[] blockInfos, BundleMetadata metadata)
 		{
-			// Special case. If bundle has no compressed blocks then pass it as a stream
+			// Special case. If bundle has no compressed blocks then pass it as is
 			if(blockInfos.All(t => t.Flags.GetCompression() == BundleCompressType.None))
 			{
 				Metadatas = new BundleMetadata[] { metadata };
+				return;
 			}
 
 			long dataPosisition = stream.BaseStream.Position;
@@ -332,7 +333,7 @@ namespace UtinyRipper.BundleFiles
 				string name = bundleEntry.Name;
 				long offset = bundleEntry.Offset - dataPosisition;
 				long size = bundleEntry.Size;
-				BundleFileEntry streamEntry = new BundleFileEntry(bufferStream, m_filePath, name, offset, size);
+				BundleFileEntry streamEntry = new BundleFileEntry(bufferStream, m_filePath, name, offset, size, true);
 				entries[i] = streamEntry;
 			}
 			BundleMetadata streamMetadata = new BundleMetadata(bufferStream, m_filePath, false, entries);

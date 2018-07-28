@@ -8,7 +8,7 @@ namespace UtinyRipper.WebFiles
 		public WebMetadata(Stream stream, bool isClosable, IReadOnlyList<WebFileEntry> entries):
 			base(stream, isClosable)
 		{
-			m_entries = entries;
+			EntriesBase = entries;
 		}
 	}
 }

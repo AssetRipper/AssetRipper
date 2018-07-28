@@ -1,10 +1,35 @@
 ﻿using UtinyRipper.AssetExporters;
+using UtinyRipper.Classes.AnimationClips;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
 	public sealed class NoiseModule : ParticleSystemModule
 	{
+		public NoiseModule()
+		{
+		}
+
+		public NoiseModule(bool _)
+		{
+			Strength = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
+			StrengthY = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
+			StrengthZ = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
+			Frequency = 0.5f;
+			Damping = true;
+			Octaves = 1;
+			OctaveMultiplier = 0.5f;
+			OctaveScale = 2.0f;
+			Quality = 2;
+			ScrollSpeed = new MinMaxCurve(0.0f, 0.0f, 0.0f, 0.0f);
+			Remap = new MinMaxCurve(1.0f, 1.0f, 1.0f, 0.0f, 1.0f);
+			RemapY = new MinMaxCurve(1.0f, 1.0f, 1.0f, 0.0f, 1.0f);
+			RemapZ = new MinMaxCurve(1.0f, 1.0f, 1.0f, 0.0f, 1.0f);
+			PositionAmount = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
+			RotationAmount = new MinMaxCurve(0.0f, 0.0f, 0.0f, 0.0f);
+			SizeAmount = new MinMaxCurve(0.0f, 0.0f, 0.0f, 0.0f);
+		}
+
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>

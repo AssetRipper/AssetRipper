@@ -22,9 +22,13 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public static bool IsReadHideFlag(Platform platform)
+		public static bool IsReadHideFlag(TransferInstructionFlags flags)
 		{
-			return platform == Platform.NoTarget;
+			return !flags.IsSerializeGameRelease() && !flags.IsSerializeForPrefabSystem();
+		}
+		public static bool IsReadInstanceID(TransferInstructionFlags flags)
+		{
+			return flags.IsUnknown2();
 		}
 
 		public void Read(byte[] buffer)
@@ -45,9 +49,18 @@ namespace UtinyRipper.Classes
 
 		public virtual void Read(AssetStream stream)
 		{
-			if (IsReadHideFlag(stream.Platform))
+			if (IsReadHideFlag(stream.Flags))
 			{
 				ObjectHideFlags = stream.ReadUInt32();
+			}
+			if(IsReadInstanceID(stream.Flags))
+			{
+				int instanceID = stream.ReadInt32();
+				long localIdentfierInFile = stream.ReadInt64();
+#if DEBUG
+				InstanceID = instanceID;
+				LocalIdentfierInFile = localIdentfierInFile;
+#endif
 			}
 		}
 		
@@ -114,7 +127,11 @@ namespace UtinyRipper.Classes
 		}
 
 		public uint ObjectHideFlags { get; set; }
-		
+#if DEBUG
+		public int InstanceID { get; private set; }
+		public long LocalIdentfierInFile { get; private set; }
+#endif
+
 		private readonly AssetInfo m_assetInfo;
 	}
 }

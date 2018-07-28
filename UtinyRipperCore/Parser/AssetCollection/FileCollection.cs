@@ -46,7 +46,6 @@ namespace UtinyRipper
 			}
 		}
 
-#warning TODO: replace resource/unity_default_resources to library/unity default resources
 		public void Read(Stream stream, string filePath, string fileName)
 		{
 			if (BundleFile.IsBundleFile(stream))
@@ -189,19 +188,7 @@ namespace UtinyRipper
 				}
 			}
 		}
-
-		private void ProcessWebFileData(WebMetadata fileData, string filePath)
-		{
-			foreach (WebFileEntry entry in fileData.AssetsEntries)
-			{
-				entry.ReadFile(this, filePath);
-			}
-			foreach (WebFileEntry entry in fileData.ResourceEntries)
-			{
-				entry.ReadResourcesFile(filePath);
-			}
-		}
-
+		
 		private void AddSerializedFile(SerializedFile file)
 		{
 			if(m_files.Any(t => t.Name == file.Name))

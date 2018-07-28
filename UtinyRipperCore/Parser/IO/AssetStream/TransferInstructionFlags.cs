@@ -9,12 +9,20 @@ namespace UtinyRipper
 		NeedsInstanceIDRemapping				= 0x1,
 		AssetMetaDataOnly						= 0x2,
 		YamlGlobalPPtrReference					= 0x4,
+		Unknown1								= 0x8,
+		Unknown2								= 0x10,
 		IgnoreDebugPropertiesForIndex			= 0x20,
-		SerializeGameRelease					= 0x100,
+		/// <summary>
+		/// Has this file been built for release game?
+		/// </summary>
+		SerializeGameRelease = 0x100,
 		SwapEndianess							= 0x200,
 		DontReadObjectsFromDiskBeforeWriting	= 0x800,
 		SerializeMonoReload						= 0x1000,
 		DontRequireAllMetaFlags					= 0x2000,
+		/// <summary>
+		/// Is prefab's format read?
+		/// </summary>
 		SerializeForPrefabSystem				= 0x4000,
 		ThreadedSerialization					= 0x800000,
 		IsBuiltinResourcesFile					= 0x1000000,
@@ -29,9 +37,21 @@ namespace UtinyRipper
 
 	public static class TransferInstructionFlagsExtensions
 	{
+		public static bool IsUnknown1(this TransferInstructionFlags _this)
+		{
+			return (_this & TransferInstructionFlags.Unknown1) != 0;
+		}
+		public static bool IsUnknown2(this TransferInstructionFlags _this)
+		{
+			return (_this & TransferInstructionFlags.Unknown2) != 0;
+		}
 		public static bool IsSerializeGameRelease(this TransferInstructionFlags _this)
 		{
 			return (_this & TransferInstructionFlags.SerializeGameRelease) != 0;
+		}
+		public static bool IsSerializeForPrefabSystem(this TransferInstructionFlags _this)
+		{
+			return (_this & TransferInstructionFlags.SerializeForPrefabSystem) != 0;
 		}
 		public static bool IsBuiltinResourcesFile(this TransferInstructionFlags _this)
 		{

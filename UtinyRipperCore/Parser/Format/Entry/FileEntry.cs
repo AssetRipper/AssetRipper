@@ -5,7 +5,7 @@ namespace UtinyRipper
 {
 	internal abstract class FileEntry
 	{
-		protected FileEntry(Stream stream, string name, long offset, long size)
+		protected FileEntry(Stream stream, string name, long offset, long size, bool isStreamPermanent)
 		{
 			if (stream == null)
 			{
@@ -28,11 +28,20 @@ namespace UtinyRipper
 			Name = name;
 			m_offset = offset;
 			m_size = size;
+			m_isStreamPermanent = isStreamPermanent;
 		}
 
 		public ResourcesFile ReadResourcesFile(string filePath)
 		{
-			ResourcesFile resesFile = new ResourcesFile(filePath, Name, m_stream, m_offset);
+			Stream stream = m_stream;
+			if (!m_isStreamPermanent)
+			{
+				stream = new MemoryStream();
+				m_stream.Position = m_offset;
+				m_stream.CopyStream(stream, m_size);
+			}
+
+			ResourcesFile resesFile = new ResourcesFile(filePath, Name, stream, m_offset);
 			return resesFile;
 		}
 
@@ -97,5 +106,7 @@ namespace UtinyRipper
 		protected readonly Stream m_stream;
 		protected readonly long m_offset;
 		protected readonly long m_size;
+
+		private readonly bool m_isStreamPermanent;
 	}
 }

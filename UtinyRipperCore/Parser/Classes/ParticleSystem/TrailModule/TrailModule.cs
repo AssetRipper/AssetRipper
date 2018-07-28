@@ -5,6 +5,24 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public sealed class TrailModule : ParticleSystemModule
 	{
+		public TrailModule()
+		{
+		}
+
+		public TrailModule(bool _)
+		{
+			Ratio = 1.0f;
+			Lifetime = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
+			MinVertexDistance = 0.2f;
+			RibbonCount = 1;
+			DieWithParticles = true;
+			SizeAffectsWidth = true;
+			InheritParticleColor = true;
+			ColorOverLifetime = new MinMaxGradient(true);
+			WidthOverTrail = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
+			ColorOverTrail = new MinMaxGradient(true);
+		}
+
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>

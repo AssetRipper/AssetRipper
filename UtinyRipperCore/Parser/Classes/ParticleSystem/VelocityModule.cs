@@ -13,11 +13,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2017, 3);
 		}
 
-		private MinMaxCurve GetExportSpeedModifier(Version version)
-		{
-			return IsReadSpeedModifier(version) ? SpeedModifier : new MinMaxCurve(1.0f);
-		}
-
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -39,11 +34,16 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("x", X.ExportYAML(container));
 			node.Add("y", Y.ExportYAML(container));
 			node.Add("z", Z.ExportYAML(container));
-			node.Add("speedModifier", SpeedModifier.ExportYAML(container));
+			node.Add("speedModifier", GetSpeedModifier(container.Version).ExportYAML(container));
 			node.Add("inWorldSpace", InWorldSpace);
 			return node;
 		}
 
+		private MinMaxCurve GetSpeedModifier(Version version)
+		{
+			return IsReadSpeedModifier(version) ? SpeedModifier : new MinMaxCurve(1.0f);
+		}
+		
 		public bool InWorldSpace { get; private set; }
 
 		public MinMaxCurve X;

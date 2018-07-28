@@ -6,12 +6,17 @@ namespace UtinyRipper.Classes.AnimationClips
 	public struct KeyframeTpl<T> : IAssetReadable, IYAMLExportable
 		where T : struct, IAssetReadable, IYAMLExportable
 	{
-		public KeyframeTpl(float time, T value, T weight)
+		public KeyframeTpl(float time, T value, T weight):
+			this(time, value, default, default, weight)
+		{
+		}
+
+		public KeyframeTpl(float time, T value, T inSlope, T outSlope, T weight)
 		{
 			Time = time;
 			Value = value;
-			InSlope = default;
-			OutSlope = default;
+			InSlope = inSlope;
+			OutSlope = outSlope;
 			WeightedMode = WeightedMode.None;
 			InWeight = weight;
 			OutWeight = weight;
@@ -40,6 +45,7 @@ namespace UtinyRipper.Classes.AnimationClips
 		{
 			if (Config.IsExportTopmostSerializedVersion)
 			{
+#warning TODO: 2018
 				//return 3;
 				return 2;
 			}

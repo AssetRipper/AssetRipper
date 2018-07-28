@@ -24,45 +24,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(5, 5);
 		}
 
-		private static int GetSerializedVersion(Version version)
-		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-			
-			if (version.IsGreaterEqual(5, 6, 1))
-			{
-				return 2;
-			}
-			return 1;
-		}
-
-		private ColorRGBAf GetExportKey(Version version, int key)
-		{
-			switch (key)
-			{
-				case 0:
-					return IsColor32(version) ? new ColorRGBAf(Key32_0) : Key0;
-				case 1:
-					return IsColor32(version) ? new ColorRGBAf(Key32_1) : Key1;
-				case 2:
-					return IsColor32(version) ? new ColorRGBAf(Key32_2) : Key2;
-				case 3:
-					return IsColor32(version) ? new ColorRGBAf(Key32_3) : Key3;
-				case 4:
-					return IsColor32(version) ? new ColorRGBAf(Key32_4) : Key4;
-				case 5:
-					return IsColor32(version) ? new ColorRGBAf(Key32_5) : Key5;
-				case 6:
-					return IsColor32(version) ? new ColorRGBAf(Key32_6) : Key6;
-				case 7:
-					return IsColor32(version) ? new ColorRGBAf(Key32_7) : Key7;
-				default:
-					throw new Exception($"Unsupported key {key}");
-			}
-		}
-
 		public void Read(AssetStream stream)
 		{
 			if (IsColor32(stream.Version))
@@ -145,6 +106,145 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("m_NumColorKeys", NumColorKeys);
 			node.Add("m_NumAlphaKeys", NumAlphaKeys);
 			return node;
+		}
+
+		public void AddColor(ushort time, float r, float g, float b)
+		{
+			switch(NumColorKeys)
+			{
+				case 0:
+					Key0 = new ColorRGBAf(r, g, b, Key0.A);
+					Key32_0 = new ColorRGBA32(Key0);
+					Ctime0 = time;
+					break;
+				case 1:
+					Key1 = new ColorRGBAf(r, g, b, Key1.A);
+					Key32_1 = new ColorRGBA32(Key1);
+					Ctime1 = time;
+					break;
+				case 2:
+					Key2 = new ColorRGBAf(r, g, b, Key2.A);
+					Key32_2 = new ColorRGBA32(Key2);
+					Ctime2 = time;
+					break;
+				case 3:
+					Key3 = new ColorRGBAf(r, g, b, Key3.A);
+					Key32_3 = new ColorRGBA32(Key3);
+					Ctime3 = time;
+					break;
+				case 4:
+					Key4 = new ColorRGBAf(r, g, b, Key4.A);
+					Key32_4 = new ColorRGBA32(Key4);
+					Ctime4 = time;
+					break;
+				case 5:
+					Key5 = new ColorRGBAf(r, g, b, Key5.A);
+					Key32_5 = new ColorRGBA32(Key5);
+					Ctime5 = time;
+					break;
+				case 6:
+					Key6 = new ColorRGBAf(r, g, b, Key6.A);
+					Key32_6 = new ColorRGBA32(Key6);
+					Ctime6 = time;
+					break;
+				case 7:
+					Key7 = new ColorRGBAf(r, g, b, Key7.A);
+					Key32_7 = new ColorRGBA32(Key7);
+					Ctime7 = time;
+					break;
+				default:
+					throw new NotSupportedException();
+			}
+			NumColorKeys++;
+		}
+
+		public void AddAlpha(ushort time, float a)
+		{
+			switch (NumAlphaKeys)
+			{
+				case 0:
+					Key0 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
+					Key32_0 = new ColorRGBA32(Key0);
+					Atime0 = time;
+					break;
+				case 1:
+					Key1 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
+					Key32_1 = new ColorRGBA32(Key1);
+					Atime1 = time;
+					break;
+				case 2:
+					Key2 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
+					Key32_2 = new ColorRGBA32(Key2);
+					Atime2 = time;
+					break;
+				case 3:
+					Key3 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
+					Key32_3 = new ColorRGBA32(Key3);
+					Atime3 = time;
+					break;
+				case 4:
+					Key4 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
+					Key32_4 = new ColorRGBA32(Key4);
+					Atime4 = time;
+					break;
+				case 5:
+					Key5 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
+					Key32_5 = new ColorRGBA32(Key5);
+					Atime5 = time;
+					break;
+				case 6:
+					Key6 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
+					Key32_6 = new ColorRGBA32(Key6);
+					Atime6 = time;
+					break;
+				case 7:
+					Key7 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
+					Key32_7 = new ColorRGBA32(Key7);
+					Atime7 = time;
+					break;
+				default:
+					throw new NotSupportedException();
+			}
+			NumAlphaKeys++;
+		}
+
+		private static int GetSerializedVersion(Version version)
+		{
+			if (Config.IsExportTopmostSerializedVersion)
+			{
+				return 2;
+			}
+
+			if (version.IsGreaterEqual(5, 6, 1))
+			{
+				return 2;
+			}
+			return 1;
+		}
+
+		private ColorRGBAf GetExportKey(Version version, int key)
+		{
+			switch (key)
+			{
+				case 0:
+					return IsColor32(version) ? new ColorRGBAf(Key32_0) : Key0;
+				case 1:
+					return IsColor32(version) ? new ColorRGBAf(Key32_1) : Key1;
+				case 2:
+					return IsColor32(version) ? new ColorRGBAf(Key32_2) : Key2;
+				case 3:
+					return IsColor32(version) ? new ColorRGBAf(Key32_3) : Key3;
+				case 4:
+					return IsColor32(version) ? new ColorRGBAf(Key32_4) : Key4;
+				case 5:
+					return IsColor32(version) ? new ColorRGBAf(Key32_5) : Key5;
+				case 6:
+					return IsColor32(version) ? new ColorRGBAf(Key32_6) : Key6;
+				case 7:
+					return IsColor32(version) ? new ColorRGBAf(Key32_7) : Key7;
+				default:
+					throw new Exception($"Unsupported key {key}");
+			}
 		}
 
 		public ushort Ctime0 { get; private set; }

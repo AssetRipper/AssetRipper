@@ -16,16 +16,16 @@ namespace UtinyRipper.Classes
 		/// <summary>
 		/// Engine Package
 		/// </summary>
-		public static bool IsReadPrefab(Platform platform)
+		public static bool IsReadPrefab(TransferInstructionFlags flags)
 		{
-			return platform == Platform.NoTarget;
+			return !flags.IsUnknown1() && !flags.IsSerializeForPrefabSystem();
 		}
 
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
 
-			if (IsReadPrefab(stream.Platform))
+			if (IsReadPrefab(stream.Flags))
 			{
 				PrefabParentObject.Read(stream);
 				PrefabInternal.Read(stream);

@@ -11,7 +11,7 @@ namespace UtinyRipper
 		{
 			Version = version;
 			Platform = platform;
-			Flags = platform == Platform.NoTarget ? TransferInstructionFlags.NoTransferInstructionFlags : TransferInstructionFlags.SerializeGameRelease;
+			Flags = ToTransferFlags(platform);
 		}
 
 		public AssetStream(EndianStream stream, Version version, Platform platform) :
@@ -19,7 +19,19 @@ namespace UtinyRipper
 		{
 			Version = version;
 			Platform = platform;
-			Flags = platform == Platform.NoTarget ? TransferInstructionFlags.NoTransferInstructionFlags : TransferInstructionFlags.SerializeGameRelease;
+			Flags = ToTransferFlags(platform);
+		}
+
+#warning TODO: create special parameter and set flags based on this paramter
+		private static TransferInstructionFlags ToTransferFlags(Platform platform)
+		{
+			TransferInstructionFlags flags = TransferInstructionFlags.NoTransferInstructionFlags;
+			if (platform != Platform.NoTarget)
+			{
+				flags |= TransferInstructionFlags.Unknown1;
+				flags |= TransferInstructionFlags.SerializeGameRelease;
+			}
+			return flags;
 		}
 
 		public new T[] ReadArray<T>()

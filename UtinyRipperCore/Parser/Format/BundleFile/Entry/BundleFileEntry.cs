@@ -6,8 +6,8 @@ namespace UtinyRipper.BundleFiles
 {
 	internal class BundleFileEntry : FileEntry
 	{
-		public BundleFileEntry(Stream stream, string filePath, string name, long offset, long size):
-			base(stream, name, offset, size)
+		public BundleFileEntry(Stream stream, string filePath, string name, long offset, long size, bool isDisposable):
+			base(stream, name, offset, size, isDisposable)
 		{
 			if (string.IsNullOrEmpty(filePath))
 			{

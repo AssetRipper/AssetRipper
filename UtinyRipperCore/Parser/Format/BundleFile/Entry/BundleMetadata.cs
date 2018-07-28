@@ -22,7 +22,7 @@ namespace UtinyRipper.BundleFiles
 		public BundleMetadata(Stream stream, string filePath, bool isClosable, IReadOnlyList<BundleFileEntry> entries):
 			this(stream, filePath, isClosable)
 		{
-			m_entries = entries;
+			EntriesBase = entries;
 		}
 
 		public void ReadPre530(EndianStream stream)
@@ -43,10 +43,10 @@ namespace UtinyRipper.BundleFiles
 				int size = stream.ReadInt32();
 
 				long globalOffset = basePosition + offset;
-				BundleFileEntry entry = new BundleFileEntry(m_stream, m_filePath, name, globalOffset, size);
+				BundleFileEntry entry = new BundleFileEntry(m_stream, m_filePath, name, globalOffset, size, IsDisposable);
 				entries[i] = entry;
 			}
-			m_entries = entries;
+			EntriesBase = entries;
 		}
 
 		public void Read530(EndianStream stream, long basePosition)
@@ -61,13 +61,13 @@ namespace UtinyRipper.BundleFiles
 				string name = stream.ReadStringZeroTerm();
 				
 				long globalOffset = basePosition + offset;
-				BundleFileEntry entry = new BundleFileEntry(m_stream, m_filePath, name, globalOffset, size);
+				BundleFileEntry entry = new BundleFileEntry(m_stream, m_filePath, name, globalOffset, size, IsDisposable);
 				entries[i] = entry;
 			}
-			m_entries = entries;
+			EntriesBase = entries;
 		}
 
-		public IReadOnlyList<BundleFileEntry> Entries => m_entries;
+		public IReadOnlyList<BundleFileEntry> Entries => EntriesBase;
 
 		private readonly string m_filePath;
 	}

@@ -131,36 +131,36 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("startSpeed", StartSpeed.ExportYAML(container));
 			node.Add("startColor", StartColor.ExportYAML(container));
 			node.Add("startSize", StartSize.ExportYAML(container));
-			node.Add("startSizeY", GetExportStartSizeY(container.Version).ExportYAML(container));
-			node.Add("startSizeZ", GetExportStartSizeZ(container.Version).ExportYAML(container));
-			node.Add("startRotationX", GetExportStartRotationX(container.Version).ExportYAML(container));
-			node.Add("startRotationY", GetExportStartRotationY(container.Version).ExportYAML(container));
+			node.Add("startSizeY", GetStartSizeY(container.Version).ExportYAML(container));
+			node.Add("startSizeZ", GetStartSizeZ(container.Version).ExportYAML(container));
+			node.Add("startRotationX", GetStartRotationX(container.Version).ExportYAML(container));
+			node.Add("startRotationY", GetStartRotationY(container.Version).ExportYAML(container));
 			node.Add("startRotation", StartRotation.ExportYAML(container));
 			node.Add("randomizeRotationDirection", RandomizeRotationDirection);
 			node.Add("maxNumParticles", MaxNumParticles);
 			node.Add("size3D", Size3D);
 			node.Add("rotation3D", Rotation3D);
-			node.Add("gravityModifier", GravityModifier.ExportYAML(container));
+			node.Add("gravityModifier", GetGravityModifier(container.Version).ExportYAML(container));
 			return node;
 		}
 
-		private MinMaxCurve GetExportStartSizeY(Version version)
+		private MinMaxCurve GetStartSizeY(Version version)
 		{
 			return IsReadSizeAxes(version) ? StartSizeY : StartSize;
 		}
-		private MinMaxCurve GetExportStartSizeZ(Version version)
+		private MinMaxCurve GetStartSizeZ(Version version)
 		{
 			return IsReadSizeAxes(version) ? StartSizeZ : StartSize;
 		}
-		private MinMaxCurve GetExportStartRotationX(Version version)
+		private MinMaxCurve GetStartRotationX(Version version)
 		{
 			return IsReadRotationAxes(version) ? StartRotationX : new MinMaxCurve(0.0f);
 		}
-		private MinMaxCurve GetExportStartRotationY(Version version)
+		private MinMaxCurve GetStartRotationY(Version version)
 		{
 			return IsReadRotationAxes(version) ? StartRotationY : new MinMaxCurve(0.0f);
 		}
-		private MinMaxCurve GetExportGravityModifier(Version version)
+		private MinMaxCurve GetGravityModifier(Version version)
 		{
 			return IsReadGravityModifierSingle(version) ? new MinMaxCurve(GravityModifierSingle) : GravityModifier;
 		}

@@ -24,12 +24,21 @@ namespace UtinyRipper.Classes.AnimationClips
 			Curve.Add(secondKey);
 		}
 
+		public AnimationCurveTpl(T value0, T inSlope0, T outSlope0, T value1, T inSlope1, T outSlope1, T defaultWeight) :
+		   this(true)
+		{
+			KeyframeTpl<T> firstKey = new KeyframeTpl<T>(0.0f, value0, inSlope0, outSlope0, defaultWeight);
+			KeyframeTpl<T> secondKey = new KeyframeTpl<T>(1.0f, value1, inSlope1, outSlope1, defaultWeight);
+			Curve.Add(firstKey);
+			Curve.Add(secondKey);
+		}
+
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.3.0 and greater
 		/// </summary>
 		public static bool IsReadRotationOrder(Version version)
 		{
-			return version.IsGreaterEqual(5);
+			return version.IsGreaterEqual(5, 3);
 		}
 
 		private static int GetSerializedVersion(Version version)

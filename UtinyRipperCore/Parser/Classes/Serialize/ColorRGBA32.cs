@@ -6,6 +6,20 @@ namespace UtinyRipper.Classes
 {
 	public struct ColorRGBA32 : IAssetReadable, IYAMLExportable
 	{
+		public ColorRGBA32(ColorRGBAf rgba)
+		{
+			byte r = (byte)(rgba.R * 255.0f);
+			byte g = (byte)(rgba.G * 255.0f);
+			byte b = (byte)(rgba.B * 255.0f);
+			byte a = (byte)(rgba.A * 255.0f);
+			RGBA = unchecked((uint)(r | (g << 8) | (b << 16) | (a << 24)));
+		}
+
+		public ColorRGBA32(byte r, byte g, byte b, byte a)
+		{
+			RGBA = unchecked((uint)(r | (g << 8) | (b << 16) | (a << 24)));
+		}
+
 		private static int GetSerializedVersion(Version version)
 		{
 			if (Config.IsExportTopmostSerializedVersion)
