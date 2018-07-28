@@ -6,15 +6,9 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public struct MinMaxCurve : IAssetReadable, IYAMLExportable
 	{
-		public MinMaxCurve(float value)
+		public MinMaxCurve(float value) :
+			this(ParticleSystemCurveMode.Constant, value, value, 0.0f, 0.0f)
 		{
-			MinMaxState = ParticleSystemCurveMode.Constant;
-			Scalar = value;
-			MinScalar = value;
-			
-			Float defWeight = new Float(1.0f / 3.0f);
-			MinCurve = new AnimationCurveTpl<Float>(default, defWeight);
-			MaxCurve = new AnimationCurveTpl<Float>(default, defWeight);
 		}
 
 		public MinMaxCurve(float minValue, float maxValue) :

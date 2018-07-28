@@ -43,6 +43,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.EdgeCollider2D, yamlExporter);
 			OverrideExporter(ClassIDType.CapsuleCollider2D, yamlExporter);
 			OverrideExporter(ClassIDType.AnimationClip, yamlExporter);
+			OverrideExporter(ClassIDType.TagManager, yamlExporter);
 			OverrideExporter(ClassIDType.AudioListener, yamlExporter);
 			OverrideExporter(ClassIDType.AudioSource, yamlExporter);
 			OverrideExporter(ClassIDType.RenderTexture, yamlExporter);
@@ -58,6 +59,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.SphereCollider, yamlExporter);
 			OverrideExporter(ClassIDType.CapsuleCollider, yamlExporter);
 			OverrideExporter(ClassIDType.SkinnedMeshRenderer, yamlExporter);
+			//OverrideExporter(ClassIDType.BuildSettings, yamlExporter);
 			OverrideExporter(ClassIDType.WheelCollider, yamlExporter);
 			OverrideExporter(ClassIDType.TerrainCollider, yamlExporter);
 			OverrideExporter(ClassIDType.TerrainData, yamlExporter);
@@ -153,7 +155,7 @@ namespace UtinyRipper.AssetExporters
 			depSet.Clear();
 			queued.Clear();
 
-			ProjectAssetContainer container = new ProjectAssetContainer(this, collections);
+			ProjectAssetContainer container = new ProjectAssetContainer(this, assets, collections);
 			foreach (IExportCollection collection in collections)
 			{
 				container.CurrentCollection = collection;

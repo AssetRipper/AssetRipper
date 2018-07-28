@@ -10,7 +10,7 @@ namespace UtinyRipper.AssetExporters
 {
 	public class ProjectAssetContainer : IExportContainer
 	{
-		public ProjectAssetContainer(ProjectExporter exporter, List<IExportCollection> collections)
+		public ProjectAssetContainer(ProjectExporter exporter, IEnumerable<Object> assets, IReadOnlyList<IExportCollection> collections)
 		{
 			if(exporter == null)
 			{
@@ -22,6 +22,20 @@ namespace UtinyRipper.AssetExporters
 			}
 			m_exporter = exporter;
 			m_collections = collections;
+
+			foreach (Object asset in assets)
+			{
+				switch (asset.ClassID)
+				{
+					case ClassIDType.BuildSettings:
+						m_buildSettings = (BuildSettings)asset;
+						break;
+
+					case ClassIDType.TagManager:
+						m_tagManager = (TagManager)asset;
+						break;
+				}
+			}
 		}
 
 		public Object FindObject(int fileIndex, long pathID)
@@ -87,6 +101,39 @@ namespace UtinyRipper.AssetExporters
 			return new ExportPointer(exportID, EngineGUID.MissingReference, AssetType.Meta);
 		}
 
+		public string SceneIDToString(int sceneID)
+		{
+			return m_buildSettings == null ? $"level{sceneID}" : m_buildSettings.Scenes[sceneID];
+		}
+
+		public string TagIDToString(int tagID)
+		{
+			const string UntaggedTag = "Untagged";
+			switch (tagID)
+			{
+				case 0:
+					return UntaggedTag;
+				case 1:
+					return "Respawn";
+				case 2:
+					return "Finish";
+				case 3:
+					return "EditorOnly";
+				//case 4:
+				case 5:
+					return "MainCamera";
+				case 6:
+					return "Player";
+				case 7:
+					return "GameController";
+			}
+			if(m_tagManager == null)
+			{
+				return UntaggedTag;
+			}
+			return m_tagManager.Tags[tagID - 20000];
+		}
+
 		public IExportCollection CurrentCollection { get; set; }
 		public VirtualSerializedFile VirtualFile { get; } = new VirtualSerializedFile();
 		public ISerializedFile File => CurrentCollection.File;
@@ -95,6 +142,9 @@ namespace UtinyRipper.AssetExporters
 		public TransferInstructionFlags Flags => File.Flags;
 
 		private readonly ProjectExporter m_exporter;
-		private readonly List<IExportCollection> m_collections;
+		private readonly IReadOnlyList<IExportCollection> m_collections;
+
+		private BuildSettings m_buildSettings;
+		private TagManager m_tagManager;
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
 using UtinyRipper.SerializedFiles;
@@ -61,12 +62,18 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
+		private static bool IsReadMainData(Version version)
+		{
+			return version.IsLess(5);
+		}
+
 		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
 			TryInitialize(container);
 
 			string folderPath = Path.Combine(dirPath, OcclusionCullingSettings.SceneExportFolder);
-			string fileName = $"{Name}.unity";
+			string sceneName = GetSceneName(container);
+			string fileName = $"{sceneName}.unity";
 			string filePath = Path.Combine(folderPath, fileName);
 
 			if (!Directory.Exists(folderPath))
@@ -79,7 +86,7 @@ namespace UtinyRipper.AssetExporters
 			Meta meta = new Meta(sceneImporter, GUID);
 			ExportMeta(container, meta, filePath);
 
-			string subFolderPath = Path.Combine(folderPath, Name);
+			string subFolderPath = Path.Combine(folderPath, sceneName);
 			if (OcclusionCullingData != null)
 			{
 				ExportAsset(container, OcclusionCullingData, subFolderPath);
@@ -216,6 +223,47 @@ namespace UtinyRipper.AssetExporters
 			return asset != OcclusionCullingData && asset != LightingDataAsset && asset != NavMeshData;
 		}
 
+		private string GetSceneName(IExportContainer container)
+		{
+			if(Name == MainSceneName || m_sceneNameFormat.IsMatch(Name))
+			{
+				int index = GetSceneIndex(Name, File.Version);
+				string scenePath = container.SceneIDToString(index);
+				if (scenePath.StartsWith(AssetsName, StringComparison.Ordinal))
+				{
+					string relativePath = scenePath.Substring(AssetsName.Length);
+					string extension = Path.GetExtension(scenePath);
+					return relativePath.Substring(0, relativePath.Length - extension.Length);
+				}
+				else
+				{
+					return scenePath;
+				}
+			}
+			return Name;
+		}
+
+		private static int GetSceneIndex(string name, Version version)
+		{
+			if (IsReadMainData(version))
+			{
+				if (name == MainSceneName)
+				{
+					return 0;
+				}
+				else
+				{
+					string indexStr = name.Substring(LevelName.Length);
+					return int.Parse(indexStr) + 1;
+				}
+			}
+			else
+			{
+				string indexStr = name.Substring(LevelName.Length);
+				return int.Parse(indexStr);
+			}
+		}
+
 		public override IAssetExporter AssetExporter { get; }
 		public override IEnumerable<Object> Assets
 		{
@@ -249,6 +297,12 @@ namespace UtinyRipper.AssetExporters
 		private IEnumerable<Object> Components => m_cexportIDs.Keys;
 
 		private NavMeshData NavMeshData { get; set; }
+
+		private const string AssetsName = "Assets/";
+		private const string LevelName = "level";
+		private const string MainSceneName = "maindata";
+
+		private readonly static Regex m_sceneNameFormat = new Regex($"{LevelName}[0-9]+");
 
 		private readonly Dictionary<Object, ulong> m_cexportIDs = new Dictionary<Object, ulong>();
 		private readonly ISerializedFile m_file;

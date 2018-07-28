@@ -78,6 +78,8 @@ namespace UtinyRipper
 					return new CapsuleCollider2D(assetInfo);
 				case ClassIDType.AnimationClip:
 					return new AnimationClip(assetInfo);
+				case ClassIDType.TagManager:
+					return new TagManager(assetInfo);
 				case ClassIDType.AudioListener:
 					return new AudioListener(assetInfo);
 				case ClassIDType.AudioSource:

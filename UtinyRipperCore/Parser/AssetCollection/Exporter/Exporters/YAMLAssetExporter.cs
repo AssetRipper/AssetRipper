@@ -67,6 +67,8 @@ namespace UtinyRipper.AssetExporters
 						return new EmptyExportCollection();
 					case ClassIDType.AnimatorController:
 						return new AnimatorControllerExportCollection(this, asset);
+					case ClassIDType.TagManager:
+						return new ManagerExportCollection(this, asset);
 
 					default:
 						return new AssetExportCollection(this, asset);

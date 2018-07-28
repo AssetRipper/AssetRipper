@@ -139,6 +139,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\TextureResizeAlgorithm.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Collections\AnimatorControllerExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Collections\AssetsExportCollection.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Collections\ManagerExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\ProjectAssetContainer.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\DefaultImporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\IAssetImporter.cs" />
@@ -285,6 +286,8 @@
     <Compile Include="Parser\Classes\SpriteRenderer\SpriteSortPoint.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\SpriteAlignment.cs" />
     <Compile Include="Parser\Classes\Sprite\SpriteBone.cs" />
+    <Compile Include="Parser\Classes\TagManager\SortingLayerEntry.cs" />
+    <Compile Include="Parser\Classes\TagManager\TagManager.cs" />
     <Compile Include="Parser\Classes\Terrain.cs" />
     <Compile Include="Parser\Classes\TerrainCollider.cs" />
     <Compile Include="Parser\Classes\TerrainData\DetailDatabase.cs" />

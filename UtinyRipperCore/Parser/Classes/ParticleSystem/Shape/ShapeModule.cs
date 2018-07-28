@@ -169,11 +169,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 		}
 		private MultiModeParameter GetExportRadius(Version version)
 		{
-			return IsReadRadiusSingle(version) ? new MultiModeParameter(RadiusSingle) : Radius;
+			return IsReadRadius(version) ? Radius : new MultiModeParameter(RadiusSingle);
 		}
 		private MultiModeParameter GetExportArc(Version version)
 		{
-			return IsReadArcSingle(version) ? new MultiModeParameter(ArcSingle) : Arc;
+			return IsReadRadius(version) ? Arc : new MultiModeParameter(ArcSingle);
 		}
 
 		public override void Read(AssetStream stream)

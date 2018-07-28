@@ -317,7 +317,7 @@ namespace UtinyRipper.Classes
 		public IReadOnlyList<int> GraphicsAPIs => m_graphicsAPIs;
 
 		public EngineGUID BuildGUID;
-		
+
 		private readonly Dictionary<int, Hash128> m_runtimeClassHashes = new Dictionary<int, Hash128>();
 		private readonly Dictionary<Hash128, Hash128> m_scriptHashes = new Dictionary<Hash128, Hash128>();
 
