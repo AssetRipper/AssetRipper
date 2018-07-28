@@ -96,7 +96,7 @@ namespace UtinyRipper.AssetExporters
 			{
 				throw new ArgumentNullException(nameof(exporter));
 			}
-			if(!m_exporters.ContainsKey(classType))
+			if (!m_exporters.ContainsKey(classType))
 			{
 				m_exporters[classType] = new Stack<IAssetExporter>(2);
 
@@ -121,12 +121,6 @@ namespace UtinyRipper.AssetExporters
 			for (int i = 0; i < depList.Count; i++)
 			{
 				Object asset = depList[i];
-				if (!asset.IsValid)
-				{
-					Logger.Instance.Log(LogType.Warning, LogCategory.Export, $"Can't export '{asset}' because it isn't valid");
-					continue;
-				}
-
 				if (!queued.Contains(asset))
 				{
 					IExportCollection collection = CreateCollection(asset);
@@ -158,7 +152,7 @@ namespace UtinyRipper.AssetExporters
 			depList.Clear();
 			depSet.Clear();
 			queued.Clear();
-			
+
 			ProjectAssetContainer container = new ProjectAssetContainer(this, collections);
 			foreach (IExportCollection collection in collections)
 			{
@@ -199,9 +193,9 @@ namespace UtinyRipper.AssetExporters
 				throw new NotImplementedException($"Export type for class {classID} is undefined");
 			}
 			Stack<IAssetExporter> exporters = m_exporters[classID];
-			foreach(IAssetExporter exporter in exporters)
+			foreach (IAssetExporter exporter in exporters)
 			{
-				if(exporter.ToUnknownExportType(classID, out AssetType assetType))
+				if (exporter.ToUnknownExportType(classID, out AssetType assetType))
 				{
 					return assetType;
 				}
@@ -212,11 +206,19 @@ namespace UtinyRipper.AssetExporters
 		private IExportCollection CreateCollection(Object asset)
 		{
 			Stack<IAssetExporter> exporters = m_exporters[asset.ClassID];
-			foreach(IAssetExporter exporter in exporters)
+			foreach (IAssetExporter exporter in exporters)
 			{
-				if(exporter.IsHandle(asset))
+				if (exporter.IsHandle(asset))
 				{
-					return exporter.CreateCollection(asset);
+					if (asset.IsValid)
+					{
+						return exporter.CreateCollection(asset);
+					}
+					else
+					{
+						Logger.Instance.Log(LogType.Warning, LogCategory.Export, $"Can't export '{asset}' because it isn't valid");
+						return new SkipExportCollection(exporter, asset);
+					}
 				}
 			}
 			throw new Exception($"There is no exporter that can handle '{asset}'");
