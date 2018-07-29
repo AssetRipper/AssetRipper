@@ -150,6 +150,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Collections\TextureExportCollection.cs" />
     <Compile Include="Parser\Classes\AnimationClip\ChildTrack.cs" />
     <Compile Include="Parser\Classes\AnimationClip\KeyframeTpl\WeightedMode.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\Utils\AnimationClipGenericConverter.cs" />
     <Compile Include="Parser\Classes\Animation\AnimationCullingType.cs" />
     <Compile Include="Parser\Classes\AnimatorController\Editor\BlendTree\BlendTreeType.cs" />
     <Compile Include="Parser\Classes\AnimatorController\Editor\AnimatorTransition\AnimatorConditionMode.cs" />

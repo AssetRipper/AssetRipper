@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.AnimationClips;
 using UtinyRipper.Classes.AnimationClips.Editor;
@@ -18,26 +19,13 @@ namespace UtinyRipper.Classes
 
 		private struct AnimationCurves
 		{
-			public AnimationCurves(IEnumerable<QuaternionCurve> rotations, IEnumerable<CompressedAnimationCurve> compressedRotations,
-				IEnumerable<Vector3Curve> eulers, IEnumerable<Vector3Curve> positions, IEnumerable<Vector3Curve> scales,
-				IEnumerable<FloatCurve> floats, IEnumerable<PPtrCurve> PPtrs)
-			{
-				RotationCurves = rotations;
-				CompressedRotationCurves = compressedRotations;
-				EulerCurves = eulers;
-				PositionCurves = positions;
-				ScaleCurves = scales;
-				FloatCurves = floats;
-				PPtrCurves = PPtrs;
-			}
-
-			public IEnumerable<QuaternionCurve> RotationCurves { get; }
-			public IEnumerable<CompressedAnimationCurve> CompressedRotationCurves { get; }
-			public IEnumerable<Vector3Curve> EulerCurves { get; }
-			public IEnumerable<Vector3Curve> PositionCurves { get; }
-			public IEnumerable<Vector3Curve> ScaleCurves { get; }
-			public IEnumerable<FloatCurve> FloatCurves { get; }
-			public IEnumerable<PPtrCurve> PPtrCurves { get; }
+			public IEnumerable<QuaternionCurve> RotationCurves { get; set; }
+			public IEnumerable<CompressedAnimationCurve> CompressedRotationCurves { get; set; }
+			public IEnumerable<Vector3Curve> EulerCurves { get; set; }
+			public IEnumerable<Vector3Curve> PositionCurves { get; set; }
+			public IEnumerable<Vector3Curve> ScaleCurves { get; set; }
+			public IEnumerable<FloatCurve> FloatCurves { get; set; }
+			public IEnumerable<PPtrCurve> PPtrCurves { get; set; }
 		}
 
 		/// <summary>
@@ -357,242 +345,23 @@ namespace UtinyRipper.Classes
 			return node;
 		}
 
-		private AnimationCurves ExportGenericData(Version version, Platform platform)
+		private AnimationCurves ExportGenericData()
 		{
 			IReadOnlyDictionary<uint, string> tos = FindTOS();
-			return ExportGenericData(tos, version, platform);
-		}
 
-#warning TODO: it's too complicated and unintuitive. need to simplify
-		private AnimationCurves ExportGenericData(IReadOnlyDictionary<uint, string> tos, Version version, Platform platform)
-		{
-			StreamedClip streamedClip = MuscleClip.Clip.StreamedClip;
-			DenseClip denseClip = MuscleClip.Clip.DenseClip;
-			ConstantClip constantClip = MuscleClip.Clip.ConstantClip;
+			AnimationClipGenericConverter converter = new AnimationClipGenericConverter(File.Version, File.Platform);
+			converter.Process(MuscleClip.Clip, ClipBindingConstant, tos);
 
-			IReadOnlyList<StreamedFrame> streamedFrames = streamedClip.GenerateFrames(version, platform);
-			Dictionary<uint, Vector3Curve> translations = new Dictionary<uint, Vector3Curve>();
-			Dictionary<uint, QuaternionCurve> rotations = new Dictionary<uint, QuaternionCurve>();
-			Dictionary<uint, Vector3Curve> scales = new Dictionary<uint, Vector3Curve>();
-			Dictionary<uint, Vector3Curve> eulers = new Dictionary<uint, Vector3Curve>();
-			Dictionary<uint, FloatCurve> floats = new Dictionary<uint, FloatCurve>();
-
-			int frameCount = Math.Max(denseClip.FrameCount - 1, streamedFrames.Count - 2);
-			float[] frameCurvesValue = new float[streamedClip.CurveCount];
-			for (int frame = 0, streamFrame = 1; frame < frameCount; frame++, streamFrame++)
+			return new AnimationCurves()
 			{
-				bool isAdd = true;
-				float time;
-				StreamedFrame streamedFrame = new StreamedFrame();
-				if (streamFrame < streamedFrames.Count)
-				{
-					streamedFrame = streamedFrames[streamFrame];
-					time = streamedFrame.Time;
-				}
-				else
-				{
-					time = (float)frame / SampleRate;
-				}
-
-				bool isStreamFrame = streamFrame < (streamedFrames.Count - 1);
-				bool isDenseFrame = frame < (denseClip.FrameCount - 1);
-
-				// number of stream curves which has key in current frame
-				int streamFrameCurveCount = isStreamFrame ? streamedFrame.Curves.Count : 0;
-				int denseFrameCurveCount = (int)denseClip.CurveCount;
-				// total amount of curves which has key in current frame
-				int frameCurveCount = streamFrameCurveCount + denseFrameCurveCount + constantClip.Constants.Count;
-				int streamOffset = (int)streamedClip.CurveCount - streamFrameCurveCount;
-				for (int curve = 0; curve < frameCurveCount;)
-				{
-					int curveIndex;
-					IReadOnlyList<float> curvesValue;
-					int offset;
-
-					if (isStreamFrame && curve < streamedFrame.Curves.Count)
-					{
-#warning TODO: read TCB and convert to in/out slope
-						for (int key = curve; key < Math.Min(curve + 5, streamedFrame.Curves.Count); key++)
-						{
-							frameCurvesValue[key] = streamedFrame.Curves[key].Value;
-						}
-						curveIndex = streamedFrame.Curves[curve].Index;
-						curvesValue = frameCurvesValue;
-						offset = 0;
-					}
-					else if (isDenseFrame && curve < streamFrameCurveCount + denseFrameCurveCount)
-					{
-						curveIndex = curve + streamOffset;
-						curvesValue = denseClip.SampleArray;
-						offset = streamFrameCurveCount - frame * denseFrameCurveCount;
-					}
-					else if (!isDenseFrame && curve < streamFrameCurveCount + denseFrameCurveCount)
-					{
-						curve += denseFrameCurveCount;
-
-						curveIndex = curve + streamOffset;
-						curvesValue = constantClip.Constants;
-						offset = streamFrameCurveCount + denseFrameCurveCount;
-						isAdd = frame == 0 || frame == frameCount - 1;
-					}
-					else
-					{
-						curveIndex = curve + streamOffset;
-						curvesValue = constantClip.Constants;
-						offset = streamFrameCurveCount + denseFrameCurveCount;
-						isAdd = frame == 0 || frame == frameCount - 1;
-					}
-
-					GenericBinding binding = ClipBindingConstant.FindBinding(curveIndex);
-					uint pathHash = binding.Path;
-					if (binding.ClassID != ClassIDType.Transform)
-					{
-						curve++;
-						continue;
-					}
-
-					if (!tos.TryGetValue(pathHash, out string path))
-					{
-						path = "dummy" + pathHash;
-						//Logger.Log(LogType.Debug, LogCategory.Export, $"Can't find path '{binding.Path}' in TOS for {ToLogString()}");
-					}
-
-					switch (binding.BindingType)
-					{
-						case BindingType.Translation:
-							// HACK: TEMP:
-							/*if(curve + 3 > curvesValue.Count )
-							{
-								curve += 3;
-								break;
-							}*/
-
-							float x = curvesValue[curve++ - offset];
-							float y = curvesValue[curve++ - offset];
-							float z = curvesValue[curve++ - offset];
-							float w = 0;
-							if (isAdd)
-							{
-								Vector3f trans = new Vector3f(x, y, z);
-								if (!translations.TryGetValue(pathHash, out Vector3Curve transCurve))
-								{
-									transCurve = new Vector3Curve(path);
-									translations[pathHash] = transCurve;
-								}
-
-								Vector3f defWeight = new Vector3f(1.0f / 3.0f);
-								KeyframeTpl<Vector3f> transKey = new KeyframeTpl<Vector3f>(time, trans, defWeight);
-								transCurve.Curve.Curve.Add(transKey);
-							}
-							break;
-
-						case BindingType.Rotation:
-							// HACK: TEMP:
-							/*if (curve + 4 > curvesValue.Count)
-							{
-								curve += 4;
-								break;
-							}*/
-
-							x = curvesValue[curve++ - offset];
-							y = curvesValue[curve++ - offset];
-							z = curvesValue[curve++ - offset];
-							w = curvesValue[curve++ - offset];
-							if (isAdd)
-							{
-								Quaternionf rot = new Quaternionf(x, y, z, w);
-								if (!rotations.TryGetValue(pathHash, out QuaternionCurve rotCurve))
-								{
-									rotCurve = new QuaternionCurve(path);
-									rotations[pathHash] = rotCurve;
-								}
-
-								Quaternionf defWeight = new Quaternionf(1.0f / 3.0f);
-								KeyframeTpl<Quaternionf> rotKey = new KeyframeTpl<Quaternionf>(time, rot, defWeight);
-								rotCurve.Curve.Curve.Add(rotKey);
-							}
-							break;
-
-						case BindingType.Scaling:
-							// HACK: TEMP:
-							/*if (curve + 3 > curvesValue.Count)
-							{
-								curve += 3;
-								break;
-							}*/
-
-							x = curvesValue[curve++ - offset];
-							y = curvesValue[curve++ - offset];
-							z = curvesValue[curve++ - offset];
-							if(isAdd)
-							{
-								Vector3f scale = new Vector3f(x, y, z);
-								if (!scales.TryGetValue(pathHash, out Vector3Curve scaleCurve))
-								{
-									scaleCurve = new Vector3Curve(path);
-									scales[pathHash] = scaleCurve;
-								}
-
-								Vector3f defWeight = new Vector3f(1.0f / 3.0f);
-								KeyframeTpl<Vector3f> scaleKey = new KeyframeTpl<Vector3f>(time, scale, defWeight);
-								scaleCurve.Curve.Curve.Add(scaleKey);
-							}
-							break;
-
-						case BindingType.EulerRotation:
-							// HACK: TEMP:
-							/*if (curve + 3 > curvesValue.Count)
-							{
-								curve += 3;
-								break;
-							}*/
-
-							x = curvesValue[curve++ - offset];
-							y = curvesValue[curve++ - offset];
-							z = curvesValue[curve++ - offset];
-							if (isAdd)
-							{
-								Vector3f euler = new Vector3f(x, y, z);
-								if (!eulers.TryGetValue(pathHash, out Vector3Curve eulerCurve))
-								{
-									eulerCurve = new Vector3Curve(path);
-									eulers[pathHash] = eulerCurve;
-								}
-
-								Vector3f defWeight = new Vector3f(1.0f / 3.0f);
-								KeyframeTpl<Vector3f> eulerKey = new KeyframeTpl<Vector3f>(time, euler, defWeight);
-								eulerCurve.Curve.Curve.Add(eulerKey);
-							}
-							break;
-
-						case BindingType.Floats:
-							float value = curvesValue[curve++ - offset];
-							if (isAdd)
-							{
-								Float @float = new Float(value);
-								if (!floats.TryGetValue(pathHash, out FloatCurve floatCurve))
-								{
-									floatCurve = new FloatCurve(path);
-									floats[pathHash] = floatCurve;
-								}
-
-								Float defWeight = new Float(1.0f / 3.0f);
-								KeyframeTpl<Float> floatKey = new KeyframeTpl<Float>(time, @float, defWeight);
-								floatCurve.Curve.Curve.Add(floatKey);
-							}
-							break;
-
-						default:
-#warning TODO: AnimationClip
-							curve++;
-							//throw new NotImplementedException(binding.BindingType.ToString());
-							break;
-					}
-				}
-			}
-
-			return new AnimationCurves(rotations.Values, new CompressedAnimationCurve[0],
-				eulers.Values, translations.Values, scales.Values, floats.Values, new PPtrCurve[0]);
+				RotationCurves = converter.Rotations.Values.Union(GetRotationCurves(File.Version)),
+				CompressedRotationCurves = GetCompressedRotationCurves(File.Version),
+				EulerCurves = converter.Eulers.Values.Union(GetEulerCurves(File.Version)),
+				PositionCurves = converter.Translations.Values.Union(GetPositionCurves(File.Version)),
+				ScaleCurves = converter.Scales.Values.Union(GetScaleCurves(File.Version)),
+				FloatCurves = converter.Floats.Values.Union(GetFloatCurves(File.Version)),
+				PPtrCurves = GetPPtrCurves(File.Version),
+			};
 		}
 		
 		private IReadOnlyDictionary<uint, string> FindTOS()
@@ -684,21 +453,50 @@ namespace UtinyRipper.Classes
 		{
 			if (IsExportGenericData(version))
 			{
-				return ExportGenericData(version, platform);
+				return ExportGenericData();
 			}
 			else
 			{
-				IReadOnlyList<QuaternionCurve> rotationCurves = IsReadCurves(version) ? RotationCurves : new QuaternionCurve[0];
-				IReadOnlyList<CompressedAnimationCurve> compressedRotationCurves = IsReadCompressedRotationCurves(version) ? CompressedRotationCurves : new CompressedAnimationCurve[0];
-				IReadOnlyList<Vector3Curve> eulerCurves = IsReadEulerCurves(version) ? EulerCurves : new Vector3Curve[0];
-				IReadOnlyList<Vector3Curve> positionCurves = IsReadCurves(version) ? PositionCurves : new Vector3Curve[0];
-				IReadOnlyList<Vector3Curve> scaleCurves = IsReadCurves(version) ? ScaleCurves : new Vector3Curve[0];
-				IReadOnlyList<FloatCurve> floatCurves = IsReadCurves(version) ? FloatCurves : new FloatCurve[0];
-				IReadOnlyList<PPtrCurve> pPtrCurves = IsReadPPtrCurves(version) ? PPtrCurves : new PPtrCurve[0];
-				return new AnimationCurves(rotationCurves, compressedRotationCurves, eulerCurves, positionCurves,
-					scaleCurves, floatCurves, pPtrCurves);
+				return new AnimationCurves()
+				{
+					RotationCurves = GetRotationCurves(File.Version),
+					CompressedRotationCurves = GetCompressedRotationCurves(File.Version),
+					EulerCurves = GetEulerCurves(File.Version),
+					PositionCurves = GetPositionCurves(File.Version),
+					ScaleCurves = GetScaleCurves(File.Version),
+					FloatCurves = GetFloatCurves(File.Version),
+					PPtrCurves = GetPPtrCurves(File.Version),
+				};
 			}
+		}
 
+		private IReadOnlyList<QuaternionCurve> GetRotationCurves(Version version)
+		{
+			return IsReadCurves(version) ? RotationCurves : new QuaternionCurve[0];
+		}
+		private IReadOnlyList<CompressedAnimationCurve> GetCompressedRotationCurves(Version version)
+		{
+			return IsReadCompressedRotationCurves(version) ? CompressedRotationCurves : new CompressedAnimationCurve[0];
+		}
+		private IReadOnlyList<Vector3Curve> GetEulerCurves(Version version)
+		{
+			return IsReadEulerCurves(version) ? EulerCurves : new Vector3Curve[0];
+		}
+		private IReadOnlyList<Vector3Curve> GetPositionCurves(Version version)
+		{
+			return IsReadCurves(version) ? PositionCurves : new Vector3Curve[0];
+		}
+		private IReadOnlyList<Vector3Curve> GetScaleCurves(Version version)
+		{
+			return IsReadCurves(version) ? ScaleCurves : new Vector3Curve[0];
+		}
+		private IReadOnlyList<FloatCurve> GetFloatCurves(Version version)
+		{
+			return IsReadCurves(version) ? FloatCurves : new FloatCurve[0];
+		}
+		private IReadOnlyList<PPtrCurve> GetPPtrCurves(Version version)
+		{
+			return IsReadPPtrCurves(version) ? PPtrCurves : new PPtrCurve[0];
 		}
 
 		public override string ExportExtension => "anim";

@@ -18,7 +18,7 @@ namespace UtinyRipper.Classes
 			Y = y;
 			Z = z;
 		}
-
+		
 		public void Read(AssetStream stream)
 		{
 			X = stream.ReadSingle();

@@ -9,12 +9,11 @@ namespace UtinyRipper.Classes.AnimationClips
 		Scaling			= 3,
 		EulerRotation	= 4,
 		Floats			= 5,
-		Unknown1		= 7,
 	}
 
 	public static class BindingTypeExtensions
 	{
-		public static int GetSize(this BindingType _this)
+		public static int GetDimension(this BindingType _this)
 		{
 			switch(_this)
 			{
@@ -29,10 +28,8 @@ namespace UtinyRipper.Classes.AnimationClips
 				case BindingType.Floats:
 					return 1;
 
-#warning TODO: AnimationClip
 				default:
-					return 1;
-					//throw new NotImplementedException($"Binding type {_this} is not implemented");
+					throw new NotImplementedException($"Binding type {_this} is not implemented");
 			}
 		}
 	}

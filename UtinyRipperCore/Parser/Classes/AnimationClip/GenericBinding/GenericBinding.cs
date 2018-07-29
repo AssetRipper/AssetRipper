@@ -54,10 +54,8 @@ namespace UtinyRipper.Classes.AnimationClips
 			node.Add("isPPtrCurve", IsPPtrCurve);
 			return node;
 		}
-
-#warning TODO: AnimationClip
+		
 		public BindingType BindingType => (BindingType)(Attribute);
-		//public BindingType BindingType => (BindingType)(Attribute & 0x8);
 
 		public uint Path { get; private set; }
 		public uint Attribute { get; private set; }

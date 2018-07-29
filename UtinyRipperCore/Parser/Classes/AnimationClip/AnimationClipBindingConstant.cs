@@ -53,16 +53,21 @@ namespace UtinyRipper.Classes.AnimationClips
 			for (int i = 0; i < GenericBindings.Count; i++)
 			{
 				GenericBinding gb = GenericBindings[i];
-				curves += gb.BindingType.GetSize();
+				if(gb.ClassID == ClassIDType.Transform)
+				{
+					curves += gb.BindingType.GetDimension();
+				}
+				else
+				{
+					curves += 1;
+				}
+
 				if (curves > index)
 				{
 					return gb;
 				}
-			}
-
-#warning TODO: AnimationClip
-			return default;
-			//throw new ArgumentException($"Binding with index {index} wasn't found", nameof(index));
+			}			
+			throw new ArgumentException($"Binding with index {index} wasn't found", nameof(index));
 		}
 
 		public bool IsAvatarMatch(Avatar avatar)

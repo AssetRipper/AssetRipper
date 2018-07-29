@@ -10,7 +10,7 @@ namespace UtinyRipper.Classes.AnimationClips
 		public void Read(AssetStream stream)
 		{
 			m_data = stream.ReadUInt32Array();
-			CurveCount = stream.ReadUInt32();
+			CurveCount = (int)stream.ReadUInt32();
 		}
 
 		public IReadOnlyList<StreamedFrame> GenerateFrames(Version version, Platform platform)
@@ -36,7 +36,7 @@ namespace UtinyRipper.Classes.AnimationClips
 		public bool IsValid => Data.Count > 0;
 		
 		public IReadOnlyList<uint> Data => m_data;
-		public uint CurveCount { get; private set; }
+		public int CurveCount { get; private set; }
 
 		private uint[] m_data;
 	}
