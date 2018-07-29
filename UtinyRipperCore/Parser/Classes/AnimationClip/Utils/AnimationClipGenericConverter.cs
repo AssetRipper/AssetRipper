@@ -15,12 +15,14 @@ namespace UtinyRipper.Classes.AnimationClips
 		public void Process(Clip clip, AnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos)
 		{
 			IReadOnlyList<StreamedFrame> streamedFrames = clip.StreamedClip.GenerateFrames(m_version, m_platform);
-			int frameCount = Math.Max(clip.DenseClip.FrameCount, streamedFrames.Count - 2);
+			float lastDenseFrame = clip.DenseClip.FrameCount / clip.DenseClip.SampleRate;
+			float lastSampleFrame = streamedFrames.Count > 1 ? streamedFrames[streamedFrames.Count - 2].Time : 0.0f;
+			float lastFrame = Math.Max(lastDenseFrame, lastSampleFrame);
 
 			Clear();
 			ProcessStreams(streamedFrames, bindings, tos);
 			ProcessDenses(clip, bindings, tos);
-			ProcessConstant(clip, bindings, tos, frameCount);
+			ProcessConstant(clip, bindings, tos, lastFrame);
 		}
 
 		public void Clear()
@@ -102,18 +104,17 @@ namespace UtinyRipper.Classes.AnimationClips
 			}
 		}
 
-		private void ProcessConstant(Clip clip, AnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos, int frameCount)
+		private void ProcessConstant(Clip clip, AnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos, float lastFrame)
 		{
-			DenseClip dense = clip.DenseClip;
 			ConstantClip constant = clip.ConstantClip;
 			int streamCount = clip.StreamedClip.CurveCount;
 			int denseCount = clip.DenseClip.CurveCount;
 			float[] slopeValues = new float[4]; // no slopes - 0 values
 
 			// only first and last frames
-			for (int frameIndex = 0; frameIndex < frameCount; frameIndex += (frameCount > 1 ? frameCount - 1 : 1))
+			float time = 0.0f;
+			for (int i = 0; i < 2; i++, time += lastFrame)
 			{
-				float time = frameIndex / dense.SampleRate;
 				for (int curveIndex = 0; curveIndex < constant.Constants.Count;)
 				{
 					int index = streamCount + denseCount + curveIndex;
