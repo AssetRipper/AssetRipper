@@ -149,6 +149,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Collections\SceneExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Collections\TextureExportCollection.cs" />
     <Compile Include="Parser\Classes\AnimationClip\ChildTrack.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\KeyframeTpl\TangentMode.cs" />
     <Compile Include="Parser\Classes\AnimationClip\KeyframeTpl\WeightedMode.cs" />
     <Compile Include="Parser\Classes\AnimationClip\Utils\AnimationClipGenericConverter.cs" />
     <Compile Include="Parser\Classes\Animation\AnimationCullingType.cs" />
@@ -613,7 +614,7 @@
     <Compile Include="Parser\Classes\AnimationClip\HandPose.cs" />
     <Compile Include="Parser\Classes\AnimationClip\HumanGoal.cs" />
     <Compile Include="Parser\Classes\AnimationClip\HumanPose.cs" />
-    <Compile Include="Parser\Classes\AnimationClip\KeyframeTpl.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\KeyframeTpl\KeyframeTpl.cs" />
     <Compile Include="Parser\Classes\AnimationClip\Curves\PPtrCurve.cs" />
     <Compile Include="Parser\Classes\AnimationClip\PPtrKeyframe.cs" />
     <Compile Include="Parser\Classes\AnimationClip\Curves\QuaternionCurve.cs" />

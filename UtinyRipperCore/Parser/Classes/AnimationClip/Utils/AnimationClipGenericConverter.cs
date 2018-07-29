@@ -17,17 +17,29 @@ namespace UtinyRipper.Classes.AnimationClips
 			IReadOnlyList<StreamedFrame> streamedFrames = clip.StreamedClip.GenerateFrames(m_version, m_platform);
 			int frameCount = Math.Max(clip.DenseClip.FrameCount, streamedFrames.Count - 2);
 
+			Clear();
 			ProcessStreams(streamedFrames, bindings, tos);
 			ProcessDenses(clip, bindings, tos);
 			ProcessConstant(clip, bindings, tos, frameCount);
 		}
 
-#warning TODO: read TCB and convert to in/out slope
+		public void Clear()
+		{
+			m_translations.Clear();
+			m_rotations.Clear();
+			m_scales.Clear();
+			m_eulers.Clear();
+			m_floats.Clear();
+		}
+
 		private void ProcessStreams(IReadOnlyList<StreamedFrame> streamFrames, AnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos)
 		{
 			float[] curveValues = new float[4];
-			// first (index [0]) stream frame is -Infinity
-			// last one is +Infinity
+			float[] inSlopeValues = new float[4];
+			float[] outSlopeValues = new float[4];
+
+			// first (index [0]) stream frame is for slope calculation for the first real frame (index [1])
+			// last one (index [count - 1]) is +Infinity
 			// it is made for slope processing, but we don't need them
 			for (int frameIndex = 1; frameIndex < streamFrames.Count - 1; frameIndex++)
 			{
@@ -35,20 +47,31 @@ namespace UtinyRipper.Classes.AnimationClips
 				for (int curveIndex = 0; curveIndex < frame.Curves.Count; )
 				{
 					StreamedCurveKey curve = frame.Curves[curveIndex];
-					if(!GetGenericBinding(bindings, curve.Index, out GenericBinding binding))
+					if (!GetGenericBinding(bindings, curve.Index, out GenericBinding binding))
 					{
 						curveIndex++;
 						continue;
 					}
 
+					//FindPreviousCurve(streamFrames, curve.Index, frameIndex, out int prevFrameIndex, out int prevCurveIndex);
+					//FindNextCurve(streamFrames, curve.Index, frameIndex, out int nextFrameIndex, out int nextCurveIndex);
+
 					string path = GetCurvePath(tos, binding.Path);
 					int dimension = binding.BindingType.GetDimension();
 					for (int key = 0; key < dimension; key++)
 					{
-						curveValues[key] = frame.Curves[curveIndex + key].Value;
+						StreamedCurveKey keyCurve = frame.Curves[curveIndex + key];
+						//StreamedFrame prevFrame = streamFrames[prevFrameIndex];
+						//StreamedFrame nextFrame = streamFrames[nextFrameIndex];
+						//StreamedCurveKey prevKeyCurve = prevFrame.Curves[prevCurveIndex + key];
+						//StreamedCurveKey nextKeyCurve = nextFrame.Curves[nextCurveIndex + key];
+						curveValues[key] = keyCurve.Value;
+#warning TODO: TCB to in/out slope
+						//inSlopeValues[key] = prevKeyCurve.CalculateNextInTangent(keyCurve.Value, nextKeyCurve.Value);
+						//outSlopeValues[key] = keyCurve.CalculateOutTangent(prevKeyCurve.Value, nextKeyCurve.Value);
 					}
 
-					AddComplexCurve(frame.Time, binding.BindingType, curveValues, 0, path);
+					AddComplexCurve(frame.Time, binding.BindingType, curveValues, inSlopeValues, outSlopeValues, 0, path);
 					curveIndex += dimension;
 				}
 			}
@@ -58,6 +81,7 @@ namespace UtinyRipper.Classes.AnimationClips
 		{
 			DenseClip dense = clip.DenseClip;
 			int streamCount = clip.StreamedClip.CurveCount;
+			float[] slopeValues = new float[4]; // no slopes - 0 values
 			for (int frameIndex = 0; frameIndex < dense.FrameCount; frameIndex++)
 			{
 				float time = frameIndex / dense.SampleRate;
@@ -72,7 +96,7 @@ namespace UtinyRipper.Classes.AnimationClips
 					}
 
 					string path = GetCurvePath(tos, binding.Path);
-					AddComplexCurve(time, binding.BindingType, dense.SampleArray, frameOffset + curveIndex, path);
+					AddComplexCurve(time, binding.BindingType, dense.SampleArray, slopeValues, slopeValues, frameOffset + curveIndex, path);
 					curveIndex += binding.BindingType.GetDimension();
 				}
 			}
@@ -84,6 +108,7 @@ namespace UtinyRipper.Classes.AnimationClips
 			ConstantClip constant = clip.ConstantClip;
 			int streamCount = clip.StreamedClip.CurveCount;
 			int denseCount = clip.DenseClip.CurveCount;
+			float[] slopeValues = new float[4]; // no slopes - 0 values
 
 			// only first and last frames
 			for (int frameIndex = 0; frameIndex < frameCount; frameIndex += (frameCount > 1 ? frameCount - 1 : 1))
@@ -99,30 +124,41 @@ namespace UtinyRipper.Classes.AnimationClips
 					}
 
 					string path = GetCurvePath(tos, binding.Path);
-					AddComplexCurve(time, binding.BindingType, constant.Constants, curveIndex, path);
+					AddComplexCurve(time, binding.BindingType, constant.Constants, slopeValues, slopeValues, curveIndex, path);
 					curveIndex += binding.BindingType.GetDimension();
 				}
 			}
 		}
 
-		private void AddComplexCurve(float time, BindingType bindType, IReadOnlyList<float> curveValues, int offset, string path)
+		private void AddComplexCurve(float time, BindingType bindType, IReadOnlyList<float> curveValues,
+			IReadOnlyList<float> inSlopeValues, IReadOnlyList<float> outSlopeValues, int offset, string path)
 		{
 			switch (bindType)
 			{
 				case BindingType.Translation:
 					{
-						float x = curveValues[offset + 0];
-						float y = curveValues[offset + 1];
-						float z = curveValues[offset + 2];
-
 						if (!m_translations.TryGetValue(path, out Vector3Curve transCurve))
 						{
 							transCurve = new Vector3Curve(path);
 						}
 
-						Vector3f trans = new Vector3f(x, y, z);
+						float x = curveValues[offset + 0];
+						float y = curveValues[offset + 1];
+						float z = curveValues[offset + 2];
+
+						float inX = inSlopeValues[0];
+						float inY = inSlopeValues[1];
+						float inZ = inSlopeValues[2];
+
+						float outX = outSlopeValues[0];
+						float outY = outSlopeValues[1];
+						float outZ = outSlopeValues[2];
+
+						Vector3f value = new Vector3f(x, y, z);
+						Vector3f inSlope = new Vector3f(inX, inY, inZ);
+						Vector3f outSlope = new Vector3f(outX, outY, outZ);
 						Vector3f defWeight = new Vector3f(1.0f / 3.0f);
-						KeyframeTpl<Vector3f> transKey = new KeyframeTpl<Vector3f>(time, trans, defWeight);
+						KeyframeTpl<Vector3f> transKey = new KeyframeTpl<Vector3f>(time, value, inSlope, outSlope, defWeight);
 						transCurve.Curve.Curve.Add(transKey);
 						m_translations[path] = transCurve;
 					}
@@ -130,19 +166,31 @@ namespace UtinyRipper.Classes.AnimationClips
 
 				case BindingType.Rotation:
 					{
-						float x = curveValues[offset + 0];
-						float y = curveValues[offset + 1];
-						float z = curveValues[offset + 2];
-						float w = curveValues[offset + 3];
-
 						if (!m_rotations.TryGetValue(path, out QuaternionCurve rotCurve))
 						{
 							rotCurve = new QuaternionCurve(path);
 						}
 
-						Quaternionf rot = new Quaternionf(x, y, z, w);
+						float x = curveValues[offset + 0];
+						float y = curveValues[offset + 1];
+						float z = curveValues[offset + 2];
+						float w = curveValues[offset + 3];
+
+						float inX = 0;//inSlopeValues[0];
+						float inY = 0;//inSlopeValues[1];
+						float inZ = 0;//inSlopeValues[2];
+						float inW = 0;//inSlopeValues[3];
+
+						float outX = 0;//outSlopeValues[0];
+						float outY = 0;//outSlopeValues[1];
+						float outZ = 0;//outSlopeValues[2];
+						float outW = 0;//outSlopeValues[3];
+
+						Quaternionf value = new Quaternionf(x, y, z, w);
+						Quaternionf inSlope = new Quaternionf(inX, inY, inZ, inW);
+						Quaternionf outSlope = new Quaternionf(outX, outY, outZ, outW);
 						Quaternionf defWeight = new Quaternionf(1.0f / 3.0f);
-						KeyframeTpl<Quaternionf> rotKey = new KeyframeTpl<Quaternionf>(time, rot, defWeight);
+						KeyframeTpl<Quaternionf> rotKey = new KeyframeTpl<Quaternionf>(time, value, inSlope, outSlope, defWeight);
 						rotCurve.Curve.Curve.Add(rotKey);
 						m_rotations[path] = rotCurve;
 					}
@@ -150,18 +198,28 @@ namespace UtinyRipper.Classes.AnimationClips
 
 				case BindingType.Scaling:
 					{
-						float x = curveValues[offset + 0];
-						float y = curveValues[offset + 1];
-						float z = curveValues[offset + 2];
-						
 						if (!m_scales.TryGetValue(path, out Vector3Curve scaleCurve))
 						{
 							scaleCurve = new Vector3Curve(path);
 						}
 
-						Vector3f scale = new Vector3f(x, y, z);
+						float x = curveValues[offset + 0];
+						float y = curveValues[offset + 1];
+						float z = curveValues[offset + 2];
+
+						float inX = inSlopeValues[0];
+						float inY = inSlopeValues[1];
+						float inZ = inSlopeValues[2];
+
+						float outX = outSlopeValues[0];
+						float outY = outSlopeValues[1];
+						float outZ = outSlopeValues[2];
+
+						Vector3f value = new Vector3f(x, y, z);
+						Vector3f inSlope = new Vector3f(inX, inY, inZ);
+						Vector3f outSlope = new Vector3f(outX, outY, outZ);
 						Vector3f defWeight = new Vector3f(1.0f / 3.0f);
-						KeyframeTpl<Vector3f> scaleKey = new KeyframeTpl<Vector3f>(time, scale, defWeight);
+						KeyframeTpl<Vector3f> scaleKey = new KeyframeTpl<Vector3f>(time, value, inSlope, outSlope, defWeight);
 						scaleCurve.Curve.Curve.Add(scaleKey);
 						m_scales[path] = scaleCurve;
 					}
@@ -169,18 +227,28 @@ namespace UtinyRipper.Classes.AnimationClips
 
 				case BindingType.EulerRotation:
 					{
-						float x = curveValues[offset + 0];
-						float y = curveValues[offset + 1];
-						float z = curveValues[offset + 2];
-
 						if (!m_eulers.TryGetValue(path, out Vector3Curve eulerCurve))
 						{
 							eulerCurve = new Vector3Curve(path);
 						}
 
-						Vector3f euler = new Vector3f(x, y, z);
+						float x = curveValues[offset + 0];
+						float y = curveValues[offset + 1];
+						float z = curveValues[offset + 2];
+
+						float inX = inSlopeValues[0];
+						float inY = inSlopeValues[1];
+						float inZ = inSlopeValues[2];
+
+						float outX = outSlopeValues[0];
+						float outY = outSlopeValues[1];
+						float outZ = outSlopeValues[2];
+
+						Vector3f value = new Vector3f(x, y, z);
+						Vector3f inSlope = new Vector3f(inX, inY, inZ);
+						Vector3f outSlope = new Vector3f(outX, outY, outZ);
 						Vector3f defWeight = new Vector3f(1.0f / 3.0f);
-						KeyframeTpl<Vector3f> eulerKey = new KeyframeTpl<Vector3f>(time, euler, defWeight);
+						KeyframeTpl<Vector3f> eulerKey = new KeyframeTpl<Vector3f>(time, value, inSlope, outSlope, defWeight);
 						eulerCurve.Curve.Curve.Add(eulerKey);
 						m_eulers[path] = eulerCurve;
 					}
@@ -188,16 +256,20 @@ namespace UtinyRipper.Classes.AnimationClips
 
 				case BindingType.Floats:
 					{
-						float value = curveValues[offset];
-
 						if (!m_floats.TryGetValue(path, out FloatCurve floatCurve))
 						{
 							floatCurve = new FloatCurve(path);
 						}
 
-						Float @float = new Float(value);
+						float x = curveValues[offset];
+						float inX = inSlopeValues[0];
+						float outX = outSlopeValues[0];
+
+						Float value = new Float(x);
+						Float inSlope = new Float(inX);
+						Float outSlope = new Float(outX);
 						Float defWeight = new Float(1.0f / 3.0f);
-						KeyframeTpl<Float> floatKey = new KeyframeTpl<Float>(time, @float, defWeight);
+						KeyframeTpl<Float> floatKey = new KeyframeTpl<Float>(time, value, inSlope, outSlope, defWeight);
 						floatCurve.Curve.Curve.Add(floatKey);
 						m_floats[path] = floatCurve;
 					}
@@ -206,6 +278,52 @@ namespace UtinyRipper.Classes.AnimationClips
 				default:
 					throw new NotImplementedException(bindType.ToString());
 			}
+		}
+
+		private void FindPreviousCurve(IReadOnlyList<StreamedFrame> streamFrames, int index, int currentFrame, out int frameIndex, out int curveIndex)
+		{
+			for (frameIndex = currentFrame - 1; frameIndex >= 0; frameIndex--)
+			{
+				StreamedFrame frame = streamFrames[frameIndex];
+				for (curveIndex = 0; curveIndex < frame.Curves.Count; curveIndex++)
+				{
+					StreamedCurveKey curve = frame.Curves[curveIndex];
+					if (curve.Index == index)
+					{
+						return;
+					}
+				}
+			}
+			throw new Exception($"There is no curve with index {index} in any of previous frames");
+		}
+
+		private void FindNextCurve(IReadOnlyList<StreamedFrame> streamFrames, int index, int currentFrameIndex, out int frameIndex, out int curveIndex)
+		{
+			for (frameIndex = currentFrameIndex + 1; frameIndex < streamFrames.Count; frameIndex++)
+			{
+				StreamedFrame frame = streamFrames[frameIndex];
+				for (curveIndex = 0; curveIndex < frame.Curves.Count; curveIndex++)
+				{
+					StreamedCurveKey curve = frame.Curves[curveIndex];
+					if (curve.Index == index)
+					{
+						return;
+					}
+				}
+			}
+
+			// if there is no next curve, use current one
+			frameIndex = currentFrameIndex;
+			StreamedFrame currentFrame = streamFrames[currentFrameIndex];
+			for (curveIndex = 0; curveIndex < currentFrame.Curves.Count; curveIndex++)
+			{
+				StreamedCurveKey curve = currentFrame.Curves[curveIndex];
+				if (curve.Index == index)
+				{
+					return;
+				}
+			}
+			throw new Exception($"There is no curve with index {index} in any of current or next frames");
 		}
 
 		private static bool GetGenericBinding(AnimationClipBindingConstant bindings, int index, out GenericBinding binding)

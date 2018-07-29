@@ -85,8 +85,7 @@ namespace UtinyRipper.Classes.AnimationClips
 			node.Add("outSlope", OutSlope.ExportYAML(container));
 			if (GetSerializedVersion(container.Version) >= 2)
 			{
-#warning TODO: value?
-				node.Add("tangentMode", 0);
+				node.Add("tangentMode", (int)TangentMode.FreeSmooth);
 			}
 			if (GetSerializedVersion(container.Version) >= 3)
 			{
