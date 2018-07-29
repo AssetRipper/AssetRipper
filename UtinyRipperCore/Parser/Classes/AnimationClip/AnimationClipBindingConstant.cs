@@ -53,7 +53,7 @@ namespace UtinyRipper.Classes.AnimationClips
 			for (int i = 0; i < GenericBindings.Count; i++)
 			{
 				GenericBinding gb = GenericBindings[i];
-				curves = gb.BindingType.GetSize();
+				curves += gb.BindingType.GetSize();
 				if (curves > index)
 				{
 					return gb;
