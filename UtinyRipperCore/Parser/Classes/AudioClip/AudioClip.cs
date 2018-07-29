@@ -342,7 +342,7 @@ namespace UtinyRipper.Classes
 				}
 				else
 				{
-					// I think they read data by it's type for this verison, so I can't even export raw data :/
+					// I think they read data by its type for this verison, so I can't even export raw data :/
 				}
 			}
 			else

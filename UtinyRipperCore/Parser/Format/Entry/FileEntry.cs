@@ -34,14 +34,16 @@ namespace UtinyRipper
 		public ResourcesFile ReadResourcesFile(string filePath)
 		{
 			Stream stream = m_stream;
+			long offset = m_offset;
 			if (!m_isStreamPermanent)
 			{
 				stream = new MemoryStream();
+				offset = 0;
 				m_stream.Position = m_offset;
 				m_stream.CopyStream(stream, m_size);
 			}
 
-			ResourcesFile resesFile = new ResourcesFile(filePath, Name, stream, m_offset);
+			ResourcesFile resesFile = new ResourcesFile(filePath, Name, stream, offset);
 			return resesFile;
 		}
 
