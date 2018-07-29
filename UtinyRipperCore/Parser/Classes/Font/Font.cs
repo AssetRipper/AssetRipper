@@ -111,7 +111,7 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public static bool IsReadUseLegacyBoundsCalculation(Version version)
 		{
-			return version.IsGreaterEqual(5, 6, 5) && version.IsLess(2017) || version.IsGreaterEqual(2017, 2, 1);
+			return version.IsGreaterEqual(5, 6, 5) && version.IsLess(2017) || version.IsGreaterEqual(2017, 2, 0, VersionType.Patch, 2);
 		}
 		/// <summary>
 		/// 2018.1 and greater

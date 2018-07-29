@@ -17,7 +17,7 @@ namespace UtinyRipper.AssetExporters
 					if (asset.ClassID == ClassIDType.Sprite)
 					{
 						Sprite sprite = (Sprite)asset;
-						if (sprite.RD.Texture.IsObject(texture))
+						if (sprite.RD.Texture.IsObject(sprite.File, texture))
 						{
 							sprites.Add(sprite);
 							AddAsset(sprite);

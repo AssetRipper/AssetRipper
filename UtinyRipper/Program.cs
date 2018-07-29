@@ -1,4 +1,6 @@
-﻿//#define DEBUG_PROGRAM
+﻿#if DEBUG
+#define DEBUG_PROGRAM
+#endif
 
 using System;
 using System.Collections.Generic;
