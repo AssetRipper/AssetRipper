@@ -49,7 +49,8 @@ namespace UtinyRipper.Classes.AnimatorControllers
 		/// </summary>
 		public static bool IsReadClipIndex(Version version)
 		{
-			return version.IsLess(5);
+#warning TODO: unknown start version
+			return version.IsGreaterEqual(4, 5, 5) && version.IsLess(5);
 		}
 		/// <summary>
 		/// 4.1.3 and greater

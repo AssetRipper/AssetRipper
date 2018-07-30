@@ -75,6 +75,7 @@ namespace UtinyRipper.AssetExporters
 			string sceneName = GetSceneName(container);
 			string fileName = $"{sceneName}.unity";
 			string filePath = Path.Combine(folderPath, fileName);
+			folderPath = Path.GetDirectoryName(filePath);
 
 			if (!Directory.Exists(folderPath))
 			{
