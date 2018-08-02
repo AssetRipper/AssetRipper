@@ -10,11 +10,22 @@ namespace UtinyRipper.Classes
 		{
 		}
 
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadCullTransparentMesh(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
 
-			CullTransparentMesh = stream.ReadBoolean();
+			if(IsReadCullTransparentMesh(stream.Version))
+			{
+				CullTransparentMesh = stream.ReadBoolean();
+			}
 		}
 
 		/*protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
