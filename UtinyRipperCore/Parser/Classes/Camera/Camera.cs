@@ -14,6 +14,13 @@ namespace UtinyRipper.Classes
 		}
 
 		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadProjectionMatrixMode(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
 		public static bool IsReadRenderingPath(Version version)
@@ -108,6 +115,13 @@ namespace UtinyRipper.Classes
 
 			ClearFlags = stream.ReadUInt32();
 			BackGroundColor.Read(stream);
+			if(IsReadProjectionMatrixMode(stream.Version))
+			{
+				ProjectionMatrixMode = (ProjectionMatrixMode)stream.ReadInt32();
+				SensorSize.Read(stream);
+				LensShift.Read(stream);
+				FocalLength = stream.ReadSingle();
+			}
 			NormalizedViewPortRect.Read(stream);
 			NearClipPlane = stream.ReadSingle();
 			FarClipPlane = stream.ReadSingle();
@@ -206,6 +220,8 @@ namespace UtinyRipper.Classes
 		}
 
 		public uint ClearFlags { get; private set; }
+		public ProjectionMatrixMode ProjectionMatrixMode { get; private set; }
+		public float FocalLength { get; private set; }
 		public float NearClipPlane { get; private set; }
 		public float FarClipPlane { get; private set; }
 		public float FieldOfView { get; private set; }
@@ -228,6 +244,8 @@ namespace UtinyRipper.Classes
 		public bool StereoMirrorMode { get; private set; }
 
 		public ColorRGBAf BackGroundColor;
+		public Vector2f SensorSize;
+		public Vector2f LensShift;
 		public Rectf NormalizedViewPortRect;
 		public BitField CullingMask;
 		public PPtr<RenderTexture> TargetTexture;

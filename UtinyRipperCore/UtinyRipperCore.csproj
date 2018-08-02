@@ -184,6 +184,7 @@
     <Compile Include="Parser\Classes\BoxCollider.cs" />
     <Compile Include="Parser\Classes\BoxCollider2D\BoxCollider2D.cs" />
     <Compile Include="Parser\Classes\BoxCollider2D\SpriteTilingProperty.cs" />
+    <Compile Include="Parser\Classes\Camera\ProjectionMatrixMode.cs" />
     <Compile Include="Parser\Classes\Camera\RenderingPath.cs" />
     <Compile Include="Parser\Classes\Camera\StereoTargetEyeMask.cs" />
     <Compile Include="Parser\Classes\CapsuleCollider.cs" />
