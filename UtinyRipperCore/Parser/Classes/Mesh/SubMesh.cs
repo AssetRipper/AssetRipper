@@ -49,15 +49,15 @@ namespace UtinyRipper.Classes.Meshes
 			return 1;
 		}
 
-		private uint GetExportTopology(Version version)
+		public MeshTopology GetTopology(Version version)
 		{
 			if (IsNewTopologyFormat(version))
 			{
-				return (uint)Topology;
+				return Topology;
 			}
 			else
 			{
-				return Topology == MeshTopology.Triangles ? (uint)MeshTopology.Triangles : (uint)MeshTopology.Deprecated;
+				return Topology == MeshTopology.Triangles ? MeshTopology.Triangles : MeshTopology.Deprecated;
 			}
 		}
 
@@ -90,7 +90,7 @@ namespace UtinyRipper.Classes.Meshes
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("firstByte", FirstByte);
 			node.Add("indexCount", IndexCount);
-			node.Add("topology", GetExportTopology(container.Version));
+			node.Add("topology", (uint)GetTopology(container.Version));
 			node.Add("firstVertex", FirstVertex);
 			node.Add("vertexCount", VertexCount);
 			node.Add("localAABB", LocalAABB.ExportYAML(container));
@@ -98,7 +98,6 @@ namespace UtinyRipper.Classes.Meshes
 		}
 
 		public int FirstByte { get; private set; }
-		// What is this in case of triangle strips?
 		public int IndexCount { get; private set; }
 		/// <summary>
 		/// isTriStrip previously

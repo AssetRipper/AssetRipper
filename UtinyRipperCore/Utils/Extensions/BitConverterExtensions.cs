@@ -16,6 +16,20 @@ namespace UtinyRipper
 			return BitConverter.ToUInt64(bytes, 0);
 		}
 
+		public static void GetBytes(ushort value, byte[] buffer, int offset)
+		{
+			buffer[offset + 0] = unchecked((byte)((value & 0xFF) >> 0));
+			buffer[offset + 1] = unchecked((byte)((value & 0xFF00) >> 8));
+		}
+
+		public static void GetBytes(uint value, byte[] buffer, int offset)
+		{
+			buffer[offset + 0] = unchecked((byte)((value & 0xFF) >> 0));
+			buffer[offset + 1] = unchecked((byte)((value & 0xFF00) >> 8));
+			buffer[offset + 2] = unchecked((byte)((value & 0xFF0000) >> 16));
+			buffer[offset + 3] = unchecked((byte)((value & 0xFF000000) >> 24));
+		}
+
 		public static uint Reverse(uint value)
 		{
 			uint reverse = (value & 0x000000FF) << 24 | (value & 0x0000FF00) << 8 |

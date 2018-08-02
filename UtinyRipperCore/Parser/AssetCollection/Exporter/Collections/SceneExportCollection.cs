@@ -198,7 +198,7 @@ namespace UtinyRipper.AssetExporters
 					case ClassIDType.OcclusionCullingSettings:
 						{
 							OcclusionCullingSettings settings = (OcclusionCullingSettings)comp;
-							if (OcclusionCullingSettings.IsReadPVSData(File.Version))
+							if (OcclusionCullingSettings.IsReadAnything(File.Version) && OcclusionCullingSettings.IsReadPVSData(File.Version))
 							{
 								if (settings.PVSData.Count > 0)
 								{

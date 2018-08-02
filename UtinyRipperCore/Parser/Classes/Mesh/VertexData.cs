@@ -68,7 +68,7 @@ namespace UtinyRipper.Classes.Meshes
 			if (isWriteTangents)
 			{
 				curChannels.Set((int)ChannelType.TangentsOld, true);
-				stride += ChannelType.TangentsOld.GetStride(version);
+				stride += ChannelType.Tangents.GetStride(version);
 			}
 
 			CurrentChannels = curChannels.ToUInt32();
@@ -90,10 +90,6 @@ namespace UtinyRipper.Classes.Meshes
 							normals[i].Write(writer);
 						}
 						if(isWriteColors)
-						{
-							colors[i].Write(writer);
-						}
-						if (isWriteColors)
 						{
 							colors[i].Write(writer);
 						}

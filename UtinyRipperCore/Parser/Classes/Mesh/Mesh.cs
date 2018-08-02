@@ -272,32 +272,6 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		private VertexData GetVertexData(Version version)
-		{
-			if(IsReadVertexData(version))
-			{
-				if(IsReadOnlyVertexData(version))
-				{
-					return VertexData;
-				}
-				else
-				{
-					if(MeshCompression == 0)
-					{
-						return VertexData;
-					}
-					else
-					{
-						return new VertexData(version, Vertices, Normals, Colors, UV, UV1, Tangents);
-					}
-				}
-			}
-			else
-			{
-				return new VertexData(version, Vertices, Normals, Colors, UV, UV1, Tangents);
-			}
-		}
-
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);
@@ -308,7 +282,7 @@ namespace UtinyRipper.Classes
 			}
 			if (IsReadIndicesUsage(stream.Version))
 			{
-				Use16bitIndices = stream.ReadInt32();
+				Use16bitIndices = stream.ReadInt32() > 0;
 			}
 			if (IsReadIndexBuffer(stream.Version))
 			{
@@ -491,7 +465,7 @@ namespace UtinyRipper.Classes
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_SubMeshes", IsReadSubMeshes(container.Version) ? SubMeshes.ExportYAML(container) : YAMLSequenceNode.Empty);
+			node.Add("m_SubMeshes", GetSubMeshes(container.Version).ExportYAML(container));
 			node.Add("m_Shapes", Shapes.ExportYAML(container));
 			node.Add("m_BindPose", IsReadBindPoses(container.Version) ? BindPoses.ExportYAML(container) : YAMLSequenceNode.Empty);
 #warning TODO?
@@ -504,7 +478,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_IsReadable", IsReadable);
 			node.Add("m_KeepVertices", KeepVertices);
 			node.Add("m_KeepIndices", KeepIndices);
-			node.Add("m_IndexBuffer", IsReadIndexBuffer(container.Version) ? IndexBuffer.ExportYAML() : YAMLSequenceNode.Empty);
+			node.Add("m_IndexBuffer", GetIndexBuffer(container.Version).ExportYAML());
 			node.Add("m_Skin", IsReadSkin(container.Version) ? Skin.ExportYAML(container) : YAMLSequenceNode.Empty);
 			node.Add("m_VertexData", GetVertexData(container.Version).ExportYAML(container));
 			node.Add("m_CompressedMesh", CompressedMesh.ExportYAML(container));
@@ -525,7 +499,43 @@ namespace UtinyRipper.Classes
 			
 			return node;
 		}
-		
+
+		private IReadOnlyList<SubMesh> GetSubMeshes(Version version)
+		{
+			return IsReadSubMeshes(version) ? SubMeshes : new SubMesh[0];
+		}
+
+		private IReadOnlyList<byte> GetIndexBuffer(Version version)
+		{
+			return IsReadIndexBuffer(version) ? IndexBuffer : new byte[0];
+		}
+
+		private VertexData GetVertexData(Version version)
+		{
+			if (IsReadVertexData(version))
+			{
+				if (IsReadOnlyVertexData(version))
+				{
+					return VertexData;
+				}
+				else
+				{
+					if (MeshCompression == 0)
+					{
+						return VertexData;
+					}
+					else
+					{
+						return new VertexData(version, Vertices, Normals, Colors, UV, UV1, Tangents);
+					}
+				}
+			}
+			else
+			{
+				return new VertexData(version, Vertices, Normals, Colors, UV, UV1, Tangents);
+			}
+		}
+
 		public IReadOnlyList<LOD> LODData => m_LODData;
 		public IReadOnlyList<Vector3f> Vertices => m_vertices;
 		public IReadOnlyList<Vector2f> UV => m_UV;
@@ -544,7 +554,7 @@ namespace UtinyRipper.Classes
 		/// <summary>
 		/// Newer versions always use 16bit indecies
 		/// </summary>
-		public int Use16bitIndices { get; private set; }
+		public bool Use16bitIndices { get; private set; }
 		public uint RootBoneNameHash { get; private set; }
 		public byte MeshCompression { get; private set; }
 		public byte StreamCompression { get; private set; }

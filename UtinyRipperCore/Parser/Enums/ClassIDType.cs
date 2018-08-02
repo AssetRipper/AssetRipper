@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UtinyRipper
+﻿namespace UtinyRipper
 {
 	public enum ClassIDType
 	{
@@ -29,9 +27,12 @@ namespace UtinyRipper
 		Texture					= 27,
 		Texture2D				= 28,
 		/// <summary>
-		/// SceneSettings previously
+		/// SceneSettings/Scene previously
 		/// </summary>
 		OcclusionCullingSettings = 29,
+		/// <summary>
+		/// RenderManager previously
+		/// </summary>
 		GraphicsSettings		= 30,
 		PipelineManager			= 31,
 		MeshFilter				= 33,

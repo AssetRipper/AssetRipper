@@ -31,6 +31,13 @@ namespace UtinyRipper.Classes
 		}
 
 		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool IsReadAnything(Version version)
+		{
+			return version.IsGreaterEqual(3);
+		}
+		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
 		public static bool IsReadPVSData(Version version)
@@ -38,11 +45,18 @@ namespace UtinyRipper.Classes
 			return version.IsLess(5, 5);
 		}
 		/// <summary>
-		/// Less than 4.3.0
+		/// 3.5.0 to 4.3.0 exclusive
 		/// </summary>
 		public static bool IsReadQueryMode(Version version)
 		{
-			return version.IsLess(4, 3);
+			return version.IsGreaterEqual(3, 5) && version.IsLess(4, 3);
+		}
+		/// <summary>
+		/// Greater than 3.5.0
+		/// </summary>
+		public static bool IsReadPortals(Version version)
+		{
+			return version.IsGreaterEqual(3, 5);
 		}
 
 		/// <summary>
@@ -82,36 +96,42 @@ namespace UtinyRipper.Classes
 		{
 			base.Read(stream);
 
-			if (IsReadPVSData(stream.Version))
+			if(IsReadAnything(stream.Version))
 			{
-				m_PVSData = stream.ReadByteArray();
-				stream.AlignStream(AlignType.Align4);
-				if (IsReadQueryMode(stream.Version))
+				if (IsReadPVSData(stream.Version))
 				{
-					QueryMode = stream.ReadInt32();
-				}
+					m_PVSData = stream.ReadByteArray();
+					stream.AlignStream(AlignType.Align4);
+					if (IsReadQueryMode(stream.Version))
+					{
+						QueryMode = stream.ReadInt32();
+					}
 
-				m_staticRenderers = stream.ReadArray<PPtr<Renderer>>();
-				m_portals = stream.ReadArray<PPtr<OcclusionPortal>>();
-
-				if (IsReadOcclusionBakeSettings(stream.Flags))
-				{
-					OcclusionBakeSettings.Read(stream);
-				}
-			}
-			else
-			{
-				if (IsReadOcclusionBakeSettings(stream.Flags))
-				{
-					OcclusionBakeSettings.Read(stream);
-				}
-				SceneGUID.Read(stream);
-				OcclusionCullingData.Read(stream);
-
-				if (IsReadStaticRenderers(stream.Version, stream.Flags))
-				{
 					m_staticRenderers = stream.ReadArray<PPtr<Renderer>>();
-					m_portals = stream.ReadArray<PPtr<OcclusionPortal>>();
+					if (IsReadPortals(stream.Version))
+					{
+						m_portals = stream.ReadArray<PPtr<OcclusionPortal>>();
+					}
+
+					if (IsReadOcclusionBakeSettings(stream.Flags))
+					{
+						OcclusionBakeSettings.Read(stream);
+					}
+				}
+				else
+				{
+					if (IsReadOcclusionBakeSettings(stream.Flags))
+					{
+						OcclusionBakeSettings.Read(stream);
+					}
+					SceneGUID.Read(stream);
+					OcclusionCullingData.Read(stream);
+
+					if (IsReadStaticRenderers(stream.Version, stream.Flags))
+					{
+						m_staticRenderers = stream.ReadArray<PPtr<Renderer>>();
+						m_portals = stream.ReadArray<PPtr<OcclusionPortal>>();
+					}
 				}
 			}
 		}
@@ -139,15 +159,15 @@ namespace UtinyRipper.Classes
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_OcclusionBakeSettings", GetExportOcclusionBakeSettings(container.Flags).ExportYAML(container));
+			node.Add("m_OcclusionBakeSettings", GetExportOcclusionBakeSettings(container).ExportYAML(container));
 			node.Add("m_SceneGUID", GetExportSceneGUID(container).ExportYAML(container));
-			node.Add("m_OcclusionCullingData", GetExportOcclusionCullingData(container));
+			node.Add("m_OcclusionCullingData", GetExportOcclusionCullingData(container).ExportYAML(container));
 			return node;
 		}
 
-		private OcclusionBakeSettings GetExportOcclusionBakeSettings(TransferInstructionFlags flags)
+		private OcclusionBakeSettings GetExportOcclusionBakeSettings(IExportContainer container)
 		{
-			if (IsReadOcclusionBakeSettings(flags))
+			if (IsReadAnything(container.Version) && IsReadOcclusionBakeSettings(container.Flags))
 			{
 				return OcclusionBakeSettings;
 			}
@@ -162,36 +182,41 @@ namespace UtinyRipper.Classes
 		}
 		private EngineGUID GetExportSceneGUID(IExportContainer container)
 		{
-			if(IsReadPVSData(container.Version))
+			if(IsReadAnything(container.Version) && !IsReadPVSData(container.Version))
+			{
+				return SceneGUID;
+			}
+			else
 			{
 				SceneExportCollection scene = (SceneExportCollection)container.CurrentCollection;
 				return scene.GUID;
 			}
-			else
-			{
-				return SceneGUID;
-			}
 		}
-		private YAMLNode GetExportOcclusionCullingData(IExportContainer container)
+		private PPtr<OcclusionCullingData> GetExportOcclusionCullingData(IExportContainer container)
 		{
+			if(!IsReadAnything(container.Version))
+			{
+				return default;
+			}
+
 			if(IsReadPVSData(container.Version))
 			{
 				if (m_PVSData.Length == 0)
 				{
-					return default(PPtr<OcclusionCullingData>).ExportYAML(container);
+					return default;
 				}
 				else
 				{
 					SceneExportCollection scene = (SceneExportCollection)container.CurrentCollection;
 					PPtr<OcclusionCullingData> occlusionData = PPtr<OcclusionCullingData>.CreateVirtualPointer(scene.OcclusionCullingData);
-					return occlusionData.ExportYAML(container);
+					return occlusionData;
 				}
 			}
 			else
 			{
 				if (Classes.OcclusionCullingData.IsReadStaticRenderers(container.Flags))
 				{
-					return OcclusionCullingData.ExportYAML(container);
+					return OcclusionCullingData;
 				}
 				else
 				{
@@ -201,7 +226,7 @@ namespace UtinyRipper.Classes
 					{
 						data.SetIDs(container, SceneGUID, StaticRenderers, Portals);
 					}
-					return OcclusionCullingData.ExportYAML(container);
+					return OcclusionCullingData;
 				}
 			}
 		}
@@ -209,7 +234,7 @@ namespace UtinyRipper.Classes
 		public IReadOnlyList<byte> PVSData => m_PVSData;
 		public int QueryMode { get; private set; }
 		/// <summary>
-		/// PVSObjectsArray previously
+		/// PVSObjectsArray/m_PVSObjectsArray previously
 		/// </summary>
 		public IReadOnlyList<PPtr<Renderer>> StaticRenderers => m_staticRenderers;
 		/// <summary>

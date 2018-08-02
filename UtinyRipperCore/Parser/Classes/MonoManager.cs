@@ -42,6 +42,14 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(2017);
 		}
 
+		/// <summary>
+		/// 2.1.0 and greater
+		/// </summary>
+		private static bool IsAlign(Version version)
+		{
+			return version.IsGreaterEqual(2, 1);
+		}
+
 		private int GetSerializedVersion(Version version)
 		{
 			if(Config.IsExportTopmostSerializedVersion)
@@ -64,6 +72,11 @@ namespace UtinyRipper.Classes
 			if(IsReadHasCompileErrors(stream.Version))
 			{
 				HasCompileErrors = stream.ReadBoolean();
+				if(IsAlign(stream.Version))
+				{
+					stream.AlignStream(AlignType.Align4);
+				}
+
 				EngineDllModDate.Read(stream);
 			}
 			if (IsReadCustomDlls(stream.Version))
