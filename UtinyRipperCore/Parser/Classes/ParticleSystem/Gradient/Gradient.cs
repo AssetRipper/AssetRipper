@@ -1,14 +1,55 @@
 ﻿using System;
+using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
 	/// <summary>
 	/// GradientNEW previously
 	/// </summary>
-	public struct Gradient : IAssetReadable, IYAMLExportable
+	public struct Gradient : IScriptStructure
 	{
+		public Gradient(Gradient copy)
+		{
+			Ctime0 = copy.Ctime0;
+			Ctime1 = copy.Ctime1;
+			Ctime2 = copy.Ctime2;
+			Ctime3 = copy.Ctime3;
+			Ctime4 = copy.Ctime4;
+			Ctime5 = copy.Ctime5;
+			Ctime6 = copy.Ctime6;
+			Ctime7 = copy.Ctime7;
+			Atime0 = copy.Atime0;
+			Atime1 = copy.Atime1;
+			Atime2 = copy.Atime2;
+			Atime3 = copy.Atime3;
+			Atime4 = copy.Atime4;
+			Atime5 = copy.Atime5;
+			Atime6 = copy.Atime6;
+			Atime7 = copy.Atime7;
+			Mode = copy.Mode;
+			NumColorKeys = copy.NumColorKeys;
+			NumAlphaKeys = copy.NumAlphaKeys;
+			Key32_0 = copy.Key32_0;
+			Key32_1 = copy.Key32_1;
+			Key32_2 = copy.Key32_2;
+			Key32_3 = copy.Key32_3;
+			Key32_4 = copy.Key32_4;
+			Key32_5 = copy.Key32_5;
+			Key32_6 = copy.Key32_6;
+			Key32_7 = copy.Key32_7;
+			Key0 = copy.Key0;
+			Key1 = copy.Key1;
+			Key2 = copy.Key2;
+			Key3 = copy.Key3;
+			Key4 = copy.Key4;
+			Key5 = copy.Key5;
+			Key6 = copy.Key6;
+			Key7 = copy.Key7;
+		}
+
 		/// <summary>
 		/// Less than 5.6.0
 		/// </summary>
@@ -22,6 +63,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public static bool IsReadMode(Version version)
 		{
 			return version.IsGreaterEqual(5, 5);
+		}
+
+		public IScriptStructure CreateCopy()
+		{
+			return new Gradient(this);
 		}
 
 		public void Read(AssetStream stream)
@@ -106,6 +152,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("m_NumColorKeys", NumColorKeys);
 			node.Add("m_NumAlphaKeys", NumAlphaKeys);
 			return node;
+		}
+		
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield break;
 		}
 
 		public void AddColor(ushort time, float r, float g, float b)

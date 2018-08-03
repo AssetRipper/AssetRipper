@@ -1,22 +1,29 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
-	public struct Rectf : IAssetReadable, IYAMLExportable
+	public struct Rectf : IScriptStructure
 	{
 		private static int GetSerializedVersion(Version version)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			return 2;
 		}
-
+		
 		public Rectf(float x, float y, float width, float height)
 		{
 			X = x;
 			Y = y;
 			Width = width;
 			Height = height;
+		}
+
+		public Rectf(Rectf copy):
+			this(copy.X, copy.Y, copy.Width, copy.Height)
+		{
 		}
 
 		public static bool operator == (Rectf left, Rectf right)
@@ -61,6 +68,11 @@ namespace UtinyRipper.Classes
 			return false;
 		}
 
+		public IScriptStructure CreateCopy()
+		{
+			return new Rectf(this);
+		}
+
 		public void Read(AssetStream stream)
 		{
 			X = stream.ReadSingle();
@@ -78,6 +90,11 @@ namespace UtinyRipper.Classes
 			node.Add("width", Width);
 			node.Add("height", Height);
 			return node;
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield break;
 		}
 
 		public override bool Equals(object obj)

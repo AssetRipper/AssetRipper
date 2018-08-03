@@ -22,15 +22,21 @@ namespace UtinyRipper.Classes.AnimationClips
 			OutWeight = weight;
 		}
 
-		public KeyframeTpl(float time, KeyframeTpl<T> copy)
+		public KeyframeTpl(KeyframeTpl<T> copy)
 		{
-			Time = time;
+			Time = copy.Time;
 			Value = copy.Value;
 			InSlope = copy.InSlope;
 			OutSlope = copy.OutSlope;
 			WeightedMode = copy.WeightedMode;
 			InWeight = copy.InWeight;
 			OutWeight = copy.OutWeight;
+		}
+
+		public KeyframeTpl(float time, KeyframeTpl<T> copy):
+			this(copy)
+		{
+			Time = time;
 		}
 
 		/// <summary>

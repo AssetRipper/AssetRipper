@@ -88,6 +88,25 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
+		public ScriptStructure RetriveStructure()
+		{
+			if(IsReadNamespace(File.Version))
+			{
+				if (File.Collection.AssemblyManager.IsValid(AssemblyName, Namespace, Name))
+				{
+					return File.Collection.AssemblyManager.CreateStructure(AssemblyName, Namespace, Name);
+				}
+			}
+			else
+			{
+				if (File.Collection.AssemblyManager.IsValid(AssemblyName, Name))
+				{
+					return File.Collection.AssemblyManager.CreateStructure(AssemblyName, Name);
+				}
+			}
+			return null;
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);

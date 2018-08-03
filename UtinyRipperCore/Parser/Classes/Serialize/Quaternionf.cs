@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
-	public struct Quaternionf : IAssetReadable, IYAMLExportable
+	public struct Quaternionf : IScriptStructure
 	{
 		public Quaternionf(float value) :
 			this(value, value, value, value)
@@ -17,6 +19,16 @@ namespace UtinyRipper.Classes
 			Y = y;
 			Z = z;
 			W = w;
+		}
+
+		public Quaternionf(Quaternionf copy):
+			this(copy.X, copy.Y, copy.Z, copy.W)
+		{
+		}
+		
+		public IScriptStructure CreateCopy()
+		{
+			return new Quaternionf(this);
 		}
 
 		public void Read(AssetStream stream)
@@ -36,6 +48,11 @@ namespace UtinyRipper.Classes
 			node.Add("z", Z);
 			node.Add("w", W);
 			return node;
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield break;
 		}
 
 		public Vector3f ToEuler()

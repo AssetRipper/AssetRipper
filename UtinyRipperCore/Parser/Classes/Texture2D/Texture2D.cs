@@ -873,8 +873,7 @@ namespace UtinyRipper.Classes
 					string path = StreamData.Path;
 					if (path != string.Empty)
 					{
-						ResourcesFile res = File.Collection.FindResourcesFile(File, path);
-						return res != null;
+						return true;
 					}
 				}
 				return ImageData.Count > 0;

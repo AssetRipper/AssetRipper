@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes;
 
 using Object = UtinyRipper.Classes.Object;
@@ -54,8 +55,7 @@ namespace UtinyRipper
 
 		public Program()
 		{
-			m_collection = new FileCollection();
-			m_collection.EventRequestDependency += OnRequestDependency;
+			m_collection = new FileCollection(OnRequestDependency, OnRequestAssembly);
 		}
 
 		public void Load(IReadOnlyList<string> args)
@@ -68,6 +68,7 @@ namespace UtinyRipper
 				string exportPath = Path.Combine("Ripped", name);
 
 				Prepare(exportPath, args);
+				LoadAssemblies();
 				LoadFiles(args);
 				Validate();
 
@@ -92,7 +93,29 @@ namespace UtinyRipper
 				m_knownDirectories.Add(dirPath);
 			}
 		}
-		
+
+		private void LoadAssemblies()
+		{
+			foreach (string dirPath in m_knownDirectories)
+			{
+				string path = Path.Combine(dirPath, AssemblyFolder);
+				DirectoryInfo managedDirecoty = new DirectoryInfo(path);
+				if (!managedDirecoty.Exists)
+				{
+					continue;
+				}
+
+				foreach (FileInfo file in managedDirecoty.EnumerateFiles())
+				{
+					if (AssemblyManager.IsAssembly(file.Name))
+					{
+						LoadAssembly(file.FullName);
+					}
+				}
+				break;
+			}
+		}
+
 		private void LoadFiles(IEnumerable<string> filePathes)
 		{
 			foreach (string filePath in filePathes)
@@ -110,6 +133,17 @@ namespace UtinyRipper
 				using (Stream stream = FileMultiStream.OpenRead(filePath))
 				{
 					m_collection.Read(stream, filePath, originalFileName);
+				}
+			}
+		}
+
+		private void LoadAssembly(string filePath)
+		{
+			if(m_knownAssemblies.Add(filePath))
+			{
+				using (Stream stream = FileMultiStream.OpenRead(filePath))
+				{
+					m_collection.ReadAssembly(stream, filePath);
 				}
 			}
 		}
@@ -139,6 +173,19 @@ namespace UtinyRipper
 			}
 
 			Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Dependency '{fileName}' wasn't found");
+			m_knownFiles.Add(fileName);
+		}
+
+		private void LoadDependencyAssembly(string fileName)
+		{
+			bool found = TryLoadDependencyAssembly(fileName);
+			if (found)
+			{
+				return;
+			}
+
+			Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Assembly '{fileName}' wasn't found");
+			m_knownAssemblies.Add(fileName);
 		}
 
 		private bool TryLoadDependency(string loadName, string originalName)
@@ -156,6 +203,41 @@ namespace UtinyRipper
 			return false;
 		}
 
+		private bool TryLoadDependencyAssembly(string loadName)
+		{
+			foreach (string dirPath in m_knownDirectories)
+			{
+				string path = Path.Combine(dirPath, AssemblyFolder);
+				DirectoryInfo managedDirecoty = new DirectoryInfo(path);
+				if (!managedDirecoty.Exists)
+				{
+					continue;
+				}
+
+				foreach (FileInfo file in managedDirecoty.EnumerateFiles())
+				{
+					if (AssemblyManager.IsAssembly(file.Name))
+					{
+						string fileName = file.Name;
+						if(fileName == loadName)
+						{
+							LoadAssembly(file.FullName);
+							return true;
+						}
+
+						fileName = Path.GetFileNameWithoutExtension(fileName);
+						if (fileName == loadName)
+						{
+							LoadAssembly(file.FullName);
+							return true;
+						}
+					}
+				}
+				break;
+			}
+			return false;
+		}
+		
 		private void OnRequestDependency(string dependency)
 		{
 			if(m_knownFiles.Contains(dependency))
@@ -164,6 +246,16 @@ namespace UtinyRipper
 			}
 
 			LoadDependency(dependency);
+		}
+
+		private void OnRequestAssembly(string assembly)
+		{
+			if(m_knownAssemblies.Contains(assembly))
+			{
+				return;
+			}
+
+			LoadDependencyAssembly(assembly);
 		}
 		
 		private static void PrepareExportDirectory(string path)
@@ -276,6 +368,9 @@ namespace UtinyRipper
 
 		private readonly HashSet<string> m_knownDirectories = new HashSet<string>();
 		private readonly HashSet<string> m_knownFiles = new HashSet<string>();
+		private readonly HashSet<string> m_knownAssemblies = new HashSet<string>();
+
+		private const string AssemblyFolder = "Managed";
 
 		private readonly FileCollection m_collection;
 	}

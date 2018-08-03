@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper
@@ -11,5 +12,6 @@ namespace UtinyRipper
 
 		AssetFactory AssetFactory { get; }
 		IReadOnlyList<ISerializedFile> Files { get; }
+		IAssemblyManager AssemblyManager { get; }
 	}
 }

@@ -1,10 +1,37 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
-	public struct Matrix4x4f : IAssetReadable, IYAMLExportable
+	public struct Matrix4x4f : IScriptStructure
 	{
+		public Matrix4x4f(Matrix4x4f copy)
+		{
+			E00 = copy.E00;
+			E01 = copy.E01;
+			E02 = copy.E02;
+			E03 = copy.E03;
+			E10 = copy.E10;
+			E11 = copy.E11;
+			E12 = copy.E12;
+			E13 = copy.E13;
+			E20 = copy.E20;
+			E21 = copy.E21;
+			E22 = copy.E22;
+			E23 = copy.E23;
+			E30 = copy.E30;
+			E31 = copy.E31;
+			E32 = copy.E32;
+			E33 = copy.E33;
+		}
+
+		public IScriptStructure CreateCopy()
+		{
+			return new Matrix4x4f(this);
+		}
+
 		public void Read(AssetStream stream)
 		{
 			E00 = stream.ReadSingle();
@@ -45,6 +72,11 @@ namespace UtinyRipper.Classes
 			node.Add("e32", E32);
 			node.Add("e33", E33);
 			return node;
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield break;
 		}
 
 		public float E00 { get; private set; }

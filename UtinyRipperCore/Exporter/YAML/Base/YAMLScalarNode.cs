@@ -273,7 +273,7 @@ namespace UtinyRipper.Exporter.YAML
 		}
 		public ScalarStyle Style { get; set; }
 
-		private static readonly Regex s_illegal = new Regex("[\\:\\[\\]'\"]");
+		private static readonly Regex s_illegal = new Regex("[\\:\\[\\]'\"*&!@#%{}?<>,`]");
 
 		private ScalarType m_objectType = ScalarType.String;
 		private string m_string = string.Empty;

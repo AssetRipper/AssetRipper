@@ -1,13 +1,23 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
-	public struct ColorRGBAf : IAssetReadable, IYAMLExportable
+	public struct ColorRGBAf : IScriptStructure
 	{
 		public ColorRGBAf(ColorRGBA32 color):
 			this(color.RGBA)
 		{
+		}
+
+		public ColorRGBAf(ColorRGBAf copy)
+		{
+			R = copy.R;
+			G = copy.G;
+			B = copy.B;
+			A = copy.A;
 		}
 
 		public ColorRGBAf(uint value32)
@@ -24,6 +34,11 @@ namespace UtinyRipper.Classes
 			G = g;
 			B = b;
 			A = a;
+		}
+
+		public IScriptStructure CreateCopy()
+		{
+			return new ColorRGBAf(this);
 		}
 
 		public void Read(AssetStream stream)
@@ -43,6 +58,11 @@ namespace UtinyRipper.Classes
 			node.Add("b", B);
 			node.Add("a", A);
 			return node;
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield break;
 		}
 
 		public float R { get; private set; }

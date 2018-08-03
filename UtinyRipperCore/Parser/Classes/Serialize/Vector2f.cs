@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
-	public struct Vector2f : IAssetReadable, IYAMLExportable
+	public struct Vector2f : IScriptStructure
 	{
 		public Vector2f(float value) :
 			this(value, value)
@@ -16,6 +18,11 @@ namespace UtinyRipper.Classes
 		{
 			X = x;
 			Y = y;
+		}
+
+		public Vector2f(Vector2f copy):
+			this(copy.X, copy.Y)
+		{
 		}
 
 		public static Vector2f operator -(Vector2f left, Vector2f right)
@@ -53,6 +60,11 @@ namespace UtinyRipper.Classes
 			return (float)(360.0 * angle / (2.0 * Math.PI));
 		}
 
+		public IScriptStructure CreateCopy()
+		{
+			return new Vector2f(this);
+		}
+
 		public void Read(AssetStream stream)
 		{
 			X = stream.ReadSingle();
@@ -65,19 +77,6 @@ namespace UtinyRipper.Classes
 			stream.Write(Y);
 		}
 		
-		public float GetMember(int index)
-		{
-			if (index == 0)
-			{
-				return X;
-			}
-			if(index == 1)
-			{
-				return Y;
-			}
-			throw new ArgumentException($"Invalid index {index}", nameof(index));
-		}
-		
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
@@ -85,6 +84,24 @@ namespace UtinyRipper.Classes
 			node.Add("x", X);
 			node.Add("y", Y);
 			return node;
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield break;
+		}
+
+		public float GetMember(int index)
+		{
+			if (index == 0)
+			{
+				return X;
+			}
+			if (index == 1)
+			{
+				return Y;
+			}
+			throw new ArgumentException($"Invalid index {index}", nameof(index));
 		}
 
 		public override string ToString()

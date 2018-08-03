@@ -104,6 +104,8 @@ namespace UtinyRipper
 					return new Light(assetInfo);
 				case ClassIDType.Animation:
 					return new Animation(assetInfo);
+				case ClassIDType.MonoBehaviour:
+					return new MonoBehaviour(assetInfo);
 				case ClassIDType.MonoScript:
 					return new MonoScript(assetInfo);
 				case ClassIDType.MonoManager:

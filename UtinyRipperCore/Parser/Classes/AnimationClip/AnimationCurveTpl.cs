@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.AnimationClips
 {
-	public struct AnimationCurveTpl<T> : IAssetReadable, IYAMLExportable
+	public struct AnimationCurveTpl<T> : IScriptStructure
 		where T : struct, IAssetReadable, IYAMLExportable
 	{
 		public AnimationCurveTpl(bool _)
@@ -13,6 +14,20 @@ namespace UtinyRipper.Classes.AnimationClips
 			PreInfinity = 2;
 			PostInfinity = 2;
 			RotationOrder = 4;
+		}
+
+		public AnimationCurveTpl(AnimationCurveTpl<T> copy)
+		{
+			Curve = new List<KeyframeTpl<T>>(copy.Curve.Count);
+			foreach(KeyframeTpl<T> keyframe in copy.Curve)
+			{
+				KeyframeTpl<T> keyframeCopy = new KeyframeTpl<T>(keyframe);
+				Curve.Add(keyframeCopy);
+			}
+
+			PreInfinity = copy.PreInfinity;
+			PostInfinity = copy.PostInfinity;
+			RotationOrder = copy.RotationOrder;
 		}
 
 		public AnimationCurveTpl(T defaultValue, T defaultWeight):
@@ -55,6 +70,11 @@ namespace UtinyRipper.Classes.AnimationClips
 			return 1;
 		}
 
+		public IScriptStructure CreateCopy()
+		{
+			return new AnimationCurveTpl<T>(this);
+		}
+
 		public void Read(AssetStream stream)
 		{
 			Curve = new List<KeyframeTpl<T>>();
@@ -80,6 +100,11 @@ namespace UtinyRipper.Classes.AnimationClips
 			node.Add("m_RotationOrder", GetExportRotationOrder(container.Version));
 
 			return node;
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield break;
 		}
 
 		private IReadOnlyList<KeyframeTpl<T>> GetCurves()

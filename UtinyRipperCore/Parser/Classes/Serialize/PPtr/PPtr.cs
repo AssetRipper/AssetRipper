@@ -15,6 +15,12 @@ namespace UtinyRipper.Classes
 			PathID = asset.PathID;
 		}
 
+		public PPtr(PPtr<T> copy)
+		{
+			FileIndex = copy.FileIndex;
+			PathID = copy.PathID;
+		}
+
 		public static PPtr<T> CreateVirtualPointer(Object asset)
 		{
 			PPtr<T> ptr = new PPtr<T>()

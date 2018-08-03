@@ -140,7 +140,7 @@ namespace UtinyRipper.AssetExporters
 		public Version Version => File.Version;
 		public Platform Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
-
+		
 		private readonly ProjectExporter m_exporter;
 		private readonly IReadOnlyList<IExportCollection> m_collections;
 

@@ -14,11 +14,23 @@ namespace UtinyRipper
 {
 	public class FileCollection : IFileCollection
 	{
-		public event Action<string> EventRequestDependency;
+		public FileCollection():
+			this(null)
+		{
+		}
 
-		public FileCollection()
+		public FileCollection(Action<string> requestDependencyCallback):
+			this(requestDependencyCallback, null)
+		{
+		}
+
+		public FileCollection(Action<string> requestDependencyCallback, Action<string> requestAssemblyCallback)
 		{
 			Exporter = new ProjectExporter(this);
+			AssemblyManager = new AssemblyManager(OnRequestAssembly);
+
+			m_requestDependencyCallback = requestDependencyCallback;
+			m_requestAssemblyCallback = requestAssemblyCallback;
 		}
 
 		public void Load(string filePath)
@@ -112,6 +124,16 @@ namespace UtinyRipper
 			}
 		}
 
+		public void LoadAssembly(string filePath)
+		{
+			AssemblyManager.Load(filePath);
+		}
+
+		public void ReadAssembly(Stream stream, string filePath)
+		{
+			AssemblyManager.Read(stream, filePath);
+		}
+
 		public void Unload(string filepath)
 		{
 			for(int i = 0; i > m_files.Count; i++)
@@ -123,8 +145,36 @@ namespace UtinyRipper
 					i--;
 				}
 			}
+			for (int i = 0; i > m_resources.Count; i++)
+			{
+				ResourcesFile file = m_resources[i];
+				if (file.FilePath.StartsWith(filepath, StringComparison.Ordinal))
+				{
+					file.Dispose();
+					m_resources.RemoveAt(i);
+					i--;
+				}
+			}
 		}
-		
+
+		public void UnloadAssembly(string name)
+		{
+			AssemblyManager.Unload(name);
+		}
+
+		public void UnloadAll()
+		{
+			m_files.Clear();
+
+			foreach (ResourcesFile resource in m_resources)
+			{
+				resource.Dispose();
+			}
+			m_resources.Clear();
+
+			AssemblyManager.Dispose();
+		}
+
 		public ISerializedFile GetSerializedFile(FileIdentifier fileRef)
 		{
 			ISerializedFile file = FindSerializedFile(fileRef);
@@ -257,14 +307,23 @@ namespace UtinyRipper
 				}
 			}
 
-			EventRequestDependency?.Invoke(dependency);
+			m_requestDependencyCallback?.Invoke(dependency);
 		}
 
+		private void OnRequestAssembly(string assembly)
+		{
+			m_requestAssemblyCallback?.Invoke(assembly);
+		}
+		
 		public ProjectExporter Exporter { get; }
 		public AssetFactory AssetFactory { get; } = new AssetFactory();
 		public IReadOnlyList<ISerializedFile> Files => m_files;
+		public IAssemblyManager AssemblyManager { get; }
 
 		private readonly List<SerializedFile> m_files = new List<SerializedFile>();
 		private readonly List<ResourcesFile> m_resources = new List<ResourcesFile>();
+
+		private event Action<string> m_requestDependencyCallback;
+		private event Action<string> m_requestAssemblyCallback;
 	}
 }

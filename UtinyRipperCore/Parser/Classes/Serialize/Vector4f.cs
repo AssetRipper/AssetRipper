@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
-	public struct Vector4f : IAssetReadable, IYAMLExportable
+	public struct Vector4f : IScriptStructure
 	{
 		public Vector4f(float value) :
 			this(value, value, value, value)
@@ -17,6 +19,16 @@ namespace UtinyRipper.Classes
 			Y = y;
 			Z = z;
 			W = w;
+		}
+
+		public Vector4f(Vector4f copy) :
+			this(copy.X, copy.Y, copy.Z, copy.W)
+		{
+		}
+
+		public IScriptStructure CreateCopy()
+		{
+			return new Vector4f(this);
 		}
 
 		public void Read(AssetStream stream)
@@ -59,6 +71,11 @@ namespace UtinyRipper.Classes
 			node.Add("y", Y);
 			node.Add("z", Z);
 			return node;
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield break;
 		}
 
 		public override string ToString()
