@@ -26,11 +26,19 @@ namespace UtinyRipper.AssetExporters
 		
 		public bool IsValid(string assembly, string name)
 		{
+			if (m_manager == null)
+			{
+				return false;
+			}
 			return m_manager.IsValid(assembly, name);
 		}
 
 		public bool IsValid(string assembly, string @namespace, string name)
 		{
+			if (m_manager == null)
+			{
+				return false;
+			}
 			return m_manager.IsValid(assembly, @namespace, name);
 		}
 
