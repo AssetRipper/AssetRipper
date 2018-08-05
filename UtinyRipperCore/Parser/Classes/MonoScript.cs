@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
+using UtinyRipper.Exporters.Scripts;
 using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
@@ -88,7 +90,19 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public ScriptStructure RetriveStructure()
+		public bool IsScriptPresents()
+		{
+			if (IsReadNamespace(File.Version))
+			{
+				return File.Collection.AssemblyManager.IsPresent(AssemblyName, Namespace, ClassName);
+			}
+			else
+			{
+				return File.Collection.AssemblyManager.IsPresent(AssemblyName, ClassName);
+			}
+		}
+
+		public ScriptStructure CreateStructure()
 		{
 			if(IsReadNamespace(File.Version))
 			{
@@ -107,6 +121,18 @@ namespace UtinyRipper.Classes
 			return null;
 		}
 
+		public ScriptExportType CreateExportType(ScriptExportManager exportManager)
+		{
+			if(IsReadNamespace(File.Version))
+			{
+				return File.Collection.AssemblyManager.CreateExportType(exportManager, AssemblyName, Namespace, ClassName);
+			}
+			else
+			{
+				return File.Collection.AssemblyManager.CreateExportType(exportManager, AssemblyName, ClassName);
+			}
+		}
+		
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);

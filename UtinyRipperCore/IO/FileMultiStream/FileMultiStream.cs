@@ -359,7 +359,7 @@ namespace UtinyRipper
 		public override bool CanWrite => m_streams.All(t => t.CanWrite);
 		public override bool CanSeek => true;
 		
-		private static readonly Regex s_splitCheck = new Regex(@".*split\d+$");
+		private static readonly Regex s_splitCheck = new Regex(@".*split\d+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 		private static readonly SplitNameComparer s_splitNameComparer = new SplitNameComparer();
 
 		private readonly IReadOnlyList<Stream> m_streams;

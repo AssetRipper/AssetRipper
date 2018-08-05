@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UtinyRipper.Exporters.Scripts;
 
 namespace UtinyRipper.AssetExporters.Mono
 {
@@ -58,80 +59,76 @@ namespace UtinyRipper.AssetExporters.Mono
 			}
 		}
 
+		public bool IsPresent(string assembly, string name)
+		{
+			return FindType(assembly, name) != null;
+		}
+
+		public bool IsPresent(string assembly, string @namespace, string name)
+		{
+			return FindType(assembly, @namespace, name) != null;
+		}
+
 		public bool IsValid(string assembly, string name)
 		{
-			AssemblyDefinition definition = RetrieveAssembly(assembly);
-			if (definition == null)
+			TypeDefinition type = FindType(assembly, name);
+			if(type == null)
 			{
 				return false;
 			}
-
-			foreach (ModuleDefinition module in definition.Modules)
-			{
-				foreach (TypeDefinition type in module.Types)
-				{
-					if (type.Name == name)
-					{
-						return IsTypeValid(type);
-					}
-				}
-			}
-			return false;
+			return IsTypeValid(type);
 		}
 
 		public bool IsValid(string assembly, string @namespace, string name)
 		{
-			AssemblyDefinition definition = RetrieveAssembly(assembly);
-			if(definition == null)
+			TypeDefinition type = FindType(assembly, @namespace, name);
+			if (type == null)
 			{
 				return false;
 			}
-
-			foreach (ModuleDefinition module in definition.Modules)
-			{
-				foreach (TypeDefinition type in module.Types)
-				{
-					if (type.Name == name && type.Namespace == @namespace)
-					{
-						return IsTypeValid(type);
-					}
-				}
-			}
-			return false;
+			return IsTypeValid(type);
 		}
 
 		public ScriptStructure CreateStructure(string assembly, string name)
 		{
-			AssemblyDefinition definition = RetrieveAssembly(assembly);
-			foreach (ModuleDefinition module in definition.Modules)
+			TypeDefinition type = FindType(assembly, name);
+			if (type == null)
 			{
-				foreach (TypeDefinition type in module.Types)
-				{
-					if (type.Name == name)
-					{
-						return new MonoStructure(type);
-					}
-				}
+				throw new ArgumentException($"Can't find type {name}[{assembly}]");
 			}
-			throw new ArgumentException($"Can't find type {name}[{assembly}]");
+			return new MonoStructure(type);
 		}
 
 		public ScriptStructure CreateStructure(string assembly, string @namespace, string name)
 		{
-			AssemblyDefinition definition = RetrieveAssembly(assembly);
-			foreach (ModuleDefinition module in definition.Modules)
+			TypeDefinition type = FindType(assembly, @namespace, name);
+			if (type == null)
 			{
-				foreach (TypeDefinition type in module.Types)
-				{
-					if (type.Name == name && type.Namespace == @namespace)
-					{
-						return new MonoStructure(type);
-					}
-				}
+				throw new ArgumentException($"Can't find type {@namespace}.{name}[{assembly}]");
 			}
-			throw new ArgumentException($"Can't find type {@namespace}.{name}[{assembly}]");
+			return new MonoStructure(type);
 		}
 
+		public ScriptExportType CreateExportType(ScriptExportManager exportManager, string assembly, string name)
+		{
+			TypeDefinition type = FindType(assembly, name);
+			if (type == null)
+			{
+				throw new ArgumentException($"Can't find type {name}[{assembly}]");
+			}
+			return exportManager.CreateExportType(type);
+		}
+
+		public ScriptExportType CreateExportType(ScriptExportManager exportManager, string assembly, string @namespace, string name)
+		{
+			TypeDefinition type = FindType(assembly, @namespace, name);
+			if (type == null)
+			{
+				throw new ArgumentException($"Can't find type {@namespace}.{name}[{assembly}]");
+			}
+			return exportManager.CreateExportType(type);
+		}
+		
 		public void Dispose()
 		{
 			foreach(AssemblyDefinition assembly in m_assemblies.Values)
@@ -172,6 +169,48 @@ namespace UtinyRipper.AssetExporters.Mono
 			if (m_assemblies.TryGetValue(name, out assembly))
 			{
 				return assembly;
+			}
+			return null;
+		}
+
+		private TypeDefinition FindType(string assembly, string name)
+		{
+			AssemblyDefinition definition = RetrieveAssembly(assembly);
+			if (definition == null)
+			{
+				return null;
+			}
+
+			foreach (ModuleDefinition module in definition.Modules)
+			{
+				foreach (TypeDefinition type in module.Types)
+				{
+					if (type.Name == name)
+					{
+						return type;
+					}
+				}
+			}
+			return null;
+		}
+
+		private TypeDefinition FindType(string assembly, string @namespace, string name)
+		{
+			AssemblyDefinition definition = RetrieveAssembly(assembly);
+			if (definition == null)
+			{
+				return null;
+			}
+
+			foreach (ModuleDefinition module in definition.Modules)
+			{
+				foreach (TypeDefinition type in module.Types)
+				{
+					if (type.Name == name && type.Namespace == @namespace)
+					{
+						return type;
+					}
+				}
 			}
 			return null;
 		}

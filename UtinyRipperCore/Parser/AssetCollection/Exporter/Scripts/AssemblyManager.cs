@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Mono.Cecil;
+using System;
 using System.IO;
 using UtinyRipper.AssetExporters.Mono;
+using UtinyRipper.Exporters.Scripts;
 
 namespace UtinyRipper.AssetExporters
 {
@@ -23,10 +25,28 @@ namespace UtinyRipper.AssetExporters
 			}
 			return false;
 		}
-		
-		public bool IsValid(string assembly, string name)
+
+		public bool IsPresent(string assembly, string name)
 		{
 			if (m_manager == null)
+			{
+				return false;
+			}
+			return m_manager.IsPresent(assembly, name);
+		}
+
+		public bool IsPresent(string assembly, string @namespace, string name)
+		{
+			if (m_manager == null)
+			{
+				return false;
+			}
+			return m_manager.IsPresent(assembly, @namespace, name);
+		}
+
+		public bool IsValid(string assembly, string name)
+		{
+			if(m_manager == null)
 			{
 				return false;
 			}
@@ -50,6 +70,15 @@ namespace UtinyRipper.AssetExporters
 		public ScriptStructure CreateStructure(string assembly, string @namespace, string name)
 		{
 			return m_manager.CreateStructure(assembly, @namespace, name);
+		}
+
+		public ScriptExportType CreateExportType(ScriptExportManager exportManager, string assembly, string name)
+		{
+			return m_manager.CreateExportType(exportManager, assembly, name);
+		}
+		public ScriptExportType CreateExportType(ScriptExportManager exportManager, string assembly, string @namespace, string name)
+		{
+			return m_manager.CreateExportType(exportManager, assembly, @namespace, name);
 		}
 
 		public void Dispose()

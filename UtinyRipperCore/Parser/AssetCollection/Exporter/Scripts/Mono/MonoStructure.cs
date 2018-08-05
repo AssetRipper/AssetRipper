@@ -15,35 +15,6 @@ namespace UtinyRipper.AssetExporters.Mono
 		{
 		}
 
-		public static bool IsSerializableType(TypeReference type)
-		{
-			TypeReference elementType = MonoType.GetElementType(type);
-			if (elementType.IsPrimitive)
-			{
-				return true;
-			}
-			if (IsSerializableType(elementType.Namespace, elementType.Name))
-			{
-				return true;
-			}
-			if (MonoType.IsEnginePointer(elementType))
-			{
-				return true;
-			}
-
-			TypeDefinition definition = elementType.Resolve();
-			if (definition.IsSerializable)
-			{
-				return true;
-			}
-			if(definition.IsEnum)
-			{
-				return true;
-			}
-
-			return false;
-		}
-
 		private static IScriptStructure CreateBase(TypeDefinition type)
 		{
 			if (MonoType.IsPrime(type.BaseType))

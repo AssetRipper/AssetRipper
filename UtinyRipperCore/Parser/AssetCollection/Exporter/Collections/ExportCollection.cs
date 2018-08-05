@@ -65,7 +65,7 @@ namespace UtinyRipper.AssetExporters
 			ExportMeta(container, meta, filePath);
 		}
 
-		protected void ExportMeta(ProjectAssetContainer container, Meta meta, string filePath)
+		protected void ExportMeta(IExportContainer container, Meta meta, string filePath)
 		{
 			string metaPath = $"{filePath}.meta";
 			using (FileStream fileStream = System.IO.File.Open(metaPath, FileMode.Create, FileAccess.Write))

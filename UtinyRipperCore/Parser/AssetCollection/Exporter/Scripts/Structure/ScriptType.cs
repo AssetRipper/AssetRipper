@@ -19,6 +19,25 @@ namespace UtinyRipper.AssetExporters
 			ComplexType = complexType;
 		}
 
+		public static bool IsSerializableType(string @namespace, string name)
+		{
+			if (IsString(@namespace, name))
+			{
+				return true;
+			}
+			if (IsList(@namespace, name))
+			{
+				return true;
+			}
+
+			if (IsEngineStruct(@namespace, name))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 		public static bool IsDelegate(string @namespace, string name)
 		{
 			return @namespace == SystemName && name == MulticastDelegateName;

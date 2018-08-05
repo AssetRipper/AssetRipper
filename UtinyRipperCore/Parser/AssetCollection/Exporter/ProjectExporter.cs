@@ -87,6 +87,8 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.Font, BinExporter);
 			OverrideExporter(ClassIDType.MovieTexture, BinExporter);
 			OverrideExporter(ClassIDType.Sprite, BinExporter);
+
+			OverrideExporter(ClassIDType.MonoScript, ScriptExporter);
 		}
 
 		public void OverrideExporter(ClassIDType classType, IAssetExporter exporter)
@@ -232,6 +234,7 @@ namespace UtinyRipper.AssetExporters
 		public BinaryAssetExporter BinExporter { get; } = new BinaryAssetExporter();
 
 		internal DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
+		internal ScriptAssetExporter ScriptExporter { get; } = new ScriptAssetExporter();
 
 		private readonly Dictionary<ClassIDType, Stack<IAssetExporter>> m_exporters = new Dictionary<ClassIDType, Stack<IAssetExporter>>();
 

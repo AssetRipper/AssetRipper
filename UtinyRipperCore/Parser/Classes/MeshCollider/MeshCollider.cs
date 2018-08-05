@@ -126,10 +126,33 @@ namespace UtinyRipper.Classes
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_Convex", Convex);
-			node.Add("m_CookingOptions", (int)CookingOptions);
-			node.Add("m_SkinWidth", SkinWidth);
+			node.Add("m_CookingOptions", (int)GetCookingOptions(container.Version));
+			node.Add("m_SkinWidth", GetSkinWidth(container.Version));
 			node.Add("m_Mesh", Mesh.ExportYAML(container));
 			return node;
+		}
+
+		private MeshColliderCookingOptions GetCookingOptions(Version version)
+		{
+			if(IsReadCookingOptions(version))
+			{
+				return CookingOptions;
+			}
+			else
+			{
+				MeshColliderCookingOptions options = MeshColliderCookingOptions.CookForFasterSimulation |
+					MeshColliderCookingOptions.EnableMeshCleaning | MeshColliderCookingOptions.WeldColocatedVertices;
+				if (IsReadInflateMesh(version))
+				{
+					options |= InflateMesh ? MeshColliderCookingOptions.InflateConvexMesh : MeshColliderCookingOptions.None;
+				}
+				return options;
+			}
+		}
+
+		private float GetSkinWidth(Version version)
+		{
+			return IsReadSkinWidth(version) ? SkinWidth : 0.01f;
 		}
 
 		public bool Convex { get; private set; }

@@ -22,7 +22,7 @@ namespace UtinyRipper.AssetExporters.Mono
 				{
 					return false;
 				}
-				return MonoStructure.IsSerializableType(field.FieldType);
+				return MonoType.IsSerializableType(field.FieldType);
 			}
 			else
 			{
@@ -30,7 +30,7 @@ namespace UtinyRipper.AssetExporters.Mono
 				{
 					if (IsSerializeFieldAttrribute(attr))
 					{
-						return MonoStructure.IsSerializableType(field.FieldType);
+						return MonoType.IsSerializableType(field.FieldType);
 					}
 				}
 			}

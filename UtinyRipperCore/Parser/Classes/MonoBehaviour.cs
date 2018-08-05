@@ -23,7 +23,7 @@ namespace UtinyRipper.Classes
 			MonoScript script = Script.FindObject(File);
 			if(script != null)
 			{
-				Structure = script.RetriveStructure();
+				Structure = script.CreateStructure();
 				if(Structure != null)
 				{
 					Structure.Read(stream);
@@ -44,9 +44,12 @@ namespace UtinyRipper.Classes
 
 			yield return Script.GetObject(file);
 			
-			foreach (Object asset in Structure.FetchDependencies(file, isLog))
+			if(Structure != null)
 			{
-				yield return asset;
+				foreach (Object asset in Structure.FetchDependencies(file, isLog))
+				{
+					yield return asset;
+				}
 			}
 		}
 

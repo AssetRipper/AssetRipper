@@ -16,7 +16,15 @@ namespace UtinyRipper.AssetExporters
 		{
 		}
 
+		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		{
+		}
+
 		public void Export(IExportContainer container, IEnumerable<Object> assets, string path)
+		{
+		}
+
+		public void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback)
 		{
 		}
 

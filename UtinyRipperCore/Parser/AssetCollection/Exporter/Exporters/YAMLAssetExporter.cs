@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using UtinyRipper.Classes;
 using UtinyRipper.Exporter.YAML;
@@ -16,6 +17,11 @@ namespace UtinyRipper.AssetExporters
 
 		public void Export(IExportContainer container, Object asset, string path)
 		{
+			Export(container, asset, path, null);
+		}
+		
+		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		{
 			using (FileStream fileStream = File.Open(path, FileMode.Create, FileAccess.Write))
 			{
 				using (StreamWriter streamWriter = new StreamWriter(fileStream))
@@ -26,6 +32,7 @@ namespace UtinyRipper.AssetExporters
 					writer.Write(streamWriter);
 				}
 			}
+			callback?.Invoke(container, asset, path);
 		}
 
 		public void Export(IExportContainer container, IEnumerable<Object> assets, string path)
@@ -44,6 +51,11 @@ namespace UtinyRipper.AssetExporters
 					writer.WriteTail(streamWriter);
 				}
 			}
+		}
+
+		public void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback)
+		{
+			throw new NotSupportedException();
 		}
 
 		public IExportCollection CreateCollection(Object asset)

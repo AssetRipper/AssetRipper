@@ -43,25 +43,6 @@ namespace UtinyRipper.AssetExporters
 			this(copy.Namespace, copy.Name, CreateBase(copy), CreateFields(copy))
 		{
 		}
-
-		public static bool IsSerializableType(string @namespace, string name)
-		{
-			if (ScriptType.IsString(@namespace, name))
-			{
-				return true;
-			}
-			if (ScriptType.IsList(@namespace, name))
-			{
-				return true;
-			}
-
-			if (ScriptType.IsEngineStruct(@namespace, name))
-			{
-				return true;
-			}
-
-			return false;
-		}
 		
 		public static IScriptStructure EngineTypeToScriptStructure(string name)
 		{

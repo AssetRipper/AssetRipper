@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
-using UtinyRipper.Classes;
+﻿using System;
+using System.Collections.Generic;
+
+using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
 {
@@ -8,7 +10,9 @@ namespace UtinyRipper.AssetExporters
 		bool IsHandle(Object asset);
 
 		void Export(IExportContainer container, Object asset, string path);
+		void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback);
 		void Export(IExportContainer container, IEnumerable<Object> assets, string path);
+		void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback);
 
 		IExportCollection CreateCollection(Object asset);
 		AssetType ToExportType(Object asset);
