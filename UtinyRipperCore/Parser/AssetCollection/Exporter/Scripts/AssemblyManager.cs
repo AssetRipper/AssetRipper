@@ -1,5 +1,4 @@
-﻿using Mono.Cecil;
-using System;
+﻿using System;
 using System.IO;
 using UtinyRipper.AssetExporters.Mono;
 using UtinyRipper.Exporters.Scripts;
@@ -17,6 +16,33 @@ namespace UtinyRipper.AssetExporters
 			m_requestAssemblyCallback = requestAssemblyCallback;
 		}
 
+		public void Load(string filePath)
+		{
+			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
+			{
+				throw new Exception("You have to set backend first");
+			}
+			m_manager.Load(filePath);
+		}
+
+		public void Read(Stream stream, string filePath)
+		{
+			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
+			{
+				throw new Exception("You have to set backend first");
+			}
+			m_manager.Read(stream, filePath);
+		}
+
+		public void Unload(string fileName)
+		{
+			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
+			{
+				throw new Exception("You have to set backend first");
+			}
+			m_manager.Unload(fileName);
+		}
+
 		public static bool IsAssembly(string fileName)
 		{
 			if(MonoManager.IsMonoAssembly(fileName))
@@ -28,7 +54,7 @@ namespace UtinyRipper.AssetExporters
 
 		public bool IsPresent(string assembly, string name)
 		{
-			if (m_manager == null)
+			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
 			{
 				return false;
 			}
@@ -37,7 +63,7 @@ namespace UtinyRipper.AssetExporters
 
 		public bool IsPresent(string assembly, string @namespace, string name)
 		{
-			if (m_manager == null)
+			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
 			{
 				return false;
 			}
@@ -46,7 +72,7 @@ namespace UtinyRipper.AssetExporters
 
 		public bool IsValid(string assembly, string name)
 		{
-			if(m_manager == null)
+			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
 			{
 				return false;
 			}
@@ -55,7 +81,7 @@ namespace UtinyRipper.AssetExporters
 
 		public bool IsValid(string assembly, string @namespace, string name)
 		{
-			if (m_manager == null)
+			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
 			{
 				return false;
 			}
@@ -83,51 +109,46 @@ namespace UtinyRipper.AssetExporters
 
 		public void Dispose()
 		{
-			if(m_manager != null)
-			{
-				m_manager.Dispose();
-				m_manager = null;
-			}
+			ScriptingBackEnd = ScriptingBackEnd.Unknown;
 		}
 
-		public void Load(string filePath)
+		public ScriptingBackEnd ScriptingBackEnd
 		{
-			if(m_manager == null)
+			get => m_scriptingBackEnd;
+			set
 			{
-				CreateManager(filePath);
-			}
-			m_manager.Load(filePath);
-		}
+				if(value == ScriptingBackEnd.Unknown)
+				{
+					if (m_scriptingBackEnd != ScriptingBackEnd.Unknown)
+					{
+						m_manager.Dispose();
+						m_manager = null;
+						m_scriptingBackEnd = value;
+					}
+					return;
+				}
 
-		public void Read(Stream stream, string filePath)
-		{
-			if (m_manager == null)
-			{
-				CreateManager(filePath);
-			}
-			m_manager.Read(stream, filePath);
-		}
+				if(m_scriptingBackEnd != ScriptingBackEnd.Unknown)
+				{
+					throw new Exception("Scripting backend is already set");
+				}
 
-		public void Unload(string fileName)
-		{
-			if(m_manager != null)
-			{
-				m_manager.Unload(fileName);
-			}
-		}
+				m_scriptingBackEnd = value;
+				switch (value)
+				{
+					case ScriptingBackEnd.Mono:
+						m_manager = new MonoManager(m_requestAssemblyCallback);
+						break;
 
-		private void CreateManager(string assemblyName)
-		{
-			if(MonoManager.IsMonoAssembly(assemblyName))
-			{
-				m_manager = new MonoManager(m_requestAssemblyCallback);
-				return;
+					default:
+						throw new NotImplementedException($"Scripting backend {value} is not impelented yet");
+				}
 			}
-			throw new NotSupportedException();
 		}
 
 		private event Action<string> m_requestAssemblyCallback;
 
 		private IAssemblyManager m_manager;
+		private ScriptingBackEnd m_scriptingBackEnd;
 	}
 }

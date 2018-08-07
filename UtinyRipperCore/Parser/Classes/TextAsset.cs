@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 
@@ -25,7 +24,9 @@ namespace UtinyRipper.Classes
 		{
 			base.Read(stream);
 
-			Script = stream.ReadStringAligned();
+			Script = stream.ReadByteArray();
+			stream.AlignStream(AlignType.Align4);
+
 			if(IsReadPath(stream.Version))
 			{
 				PathName = stream.ReadStringAligned();
@@ -34,7 +35,7 @@ namespace UtinyRipper.Classes
 
 		public override void ExportBinary(IExportContainer container, Stream stream)
 		{
-			using (StreamWriter writer = new StreamWriter(stream))
+			using (BinaryWriter writer = new BinaryWriter(stream))
 			{
 				writer.Write(Script);
 			}
@@ -50,9 +51,9 @@ namespace UtinyRipper.Classes
 			throw new NotSupportedException();
 		}
 		
-		public override string ExportExtension => "txt";
+		public override string ExportExtension => "bytes";
 
-		public string Script { get; private set; } = string.Empty;
+		public byte[] Script { get; private set; }
 		public string PathName { get; private set; } = string.Empty;
 	}
 }

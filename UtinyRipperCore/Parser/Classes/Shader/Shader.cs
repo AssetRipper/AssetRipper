@@ -6,6 +6,7 @@ using UtinyRipper.Classes.Materials;
 using UtinyRipper.Classes.Shaders;
 using UtinyRipper.SerializedFiles;
 using UtinyRipper.Classes.Shaders.Exporters;
+using System.Text;
 
 namespace UtinyRipper.Classes
 {
@@ -208,7 +209,8 @@ namespace UtinyRipper.Classes
 			{
 				using (StreamWriter writer = new StreamWriter(stream))
 				{
-					SubProgramBlob.Export(writer, Script, exporterInstantiator);
+					string header = Encoding.UTF8.GetString(Script);
+					SubProgramBlob.Export(writer, header, exporterInstantiator);
 				}
 			}
 			else

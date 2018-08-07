@@ -266,6 +266,12 @@ namespace UtinyRipper.AssetExporters.Mono
 			fileName = Path.GetFileNameWithoutExtension(fileName);
 			m_assemblies.Add(fileName, assembly);
 		}
+		
+		public ScriptingBackEnd ScriptingBackEnd
+		{
+			get => ScriptingBackEnd.Mono;
+			set => throw new NotSupportedException();
+		}
 
 		private readonly Dictionary<string, AssemblyDefinition> m_assemblies = new Dictionary<string, AssemblyDefinition>();
 		private readonly Dictionary<string, bool> m_validTypes = new Dictionary<string, bool>();

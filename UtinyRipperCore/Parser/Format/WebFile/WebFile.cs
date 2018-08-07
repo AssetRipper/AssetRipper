@@ -26,12 +26,12 @@ namespace UtinyRipper.WebFiles
 
 		public static bool IsWebFile(string webPath)
 		{
-			if (!File.Exists(webPath))
+			if (!FileMultiStream.Exists(webPath))
 			{
 				throw new Exception($"Web at path '{webPath}' doesn't exist");
 			}
 
-			using (FileStream stream = File.OpenRead(webPath))
+			using (Stream stream = FileMultiStream.OpenRead(webPath))
 			{
 				return IsWebFile(stream);
 			}

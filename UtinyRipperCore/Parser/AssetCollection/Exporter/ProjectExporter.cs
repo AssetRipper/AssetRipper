@@ -107,7 +107,7 @@ namespace UtinyRipper.AssetExporters
 
 		public void Export(string path, Object asset)
 		{
-			Export(path, ToIEnumerable(asset));
+			Export(path, new Object[] { asset });
 		}
 
 		public void Export(string path, IEnumerable<Object> assets)
@@ -223,11 +223,6 @@ namespace UtinyRipper.AssetExporters
 				}
 			}
 			throw new Exception($"There is no exporter that can handle '{asset}'");
-		}
-
-		private IEnumerable<Object> ToIEnumerable(Object asset)
-		{
-			yield return asset;
 		}
 
 		public YAMLAssetExporter YamlExporter { get; } = new YAMLAssetExporter();

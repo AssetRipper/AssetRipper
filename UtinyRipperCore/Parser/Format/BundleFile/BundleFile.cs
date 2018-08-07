@@ -26,12 +26,12 @@ namespace UtinyRipper.BundleFiles
 
 		public static bool IsBundleFile(string bundlePath)
 		{
-			if (!File.Exists(bundlePath))
+			if (!FileMultiStream.Exists(bundlePath))
 			{
 				throw new Exception($"Bundle at path '{bundlePath}' doesn't exist");
 			}
 
-			using (FileStream stream = File.OpenRead(bundlePath))
+			using (Stream stream = FileMultiStream.OpenRead(bundlePath))
 			{
 				return IsBundleFile(stream);
 			}

@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes;
 
 using Object = UtinyRipper.Classes.Object;
@@ -19,10 +18,9 @@ namespace UtinyRipper
 {
 	public class Program
 	{
-		public static IEnumerable<Object> FetchExportObjects(FileCollection collection)
+		public static bool AssetSelector(Object asset)
 		{
-			//yield break;
-			return collection.FetchAssets();
+			return true;
 		}
 
 		public static void Main(string[] args)
@@ -35,27 +33,30 @@ namespace UtinyRipper
 			if (args.Length == 0)
 			{
 				Console.WriteLine("No arguments");
+				Console.ReadKey();
 				return;
 			}
+
 			foreach (string arg in args)
 			{
-				if (!FileMultiStream.Exists(arg))
+				if (FileMultiStream.Exists(arg))
 				{
-					Console.WriteLine(FileMultiStream.IsMultiFile(arg) ?
-						$"File {arg} doen't has all parts for combining" :
-						$"File {arg} doesn't exist", arg);
-					return;
+					continue;
 				}
+				if(Directory.Exists(arg))
+				{
+					continue;
+				}
+				Console.WriteLine(FileMultiStream.IsMultiFile(arg) ?
+					$"File '{arg}' doesn't has all parts for combining" :
+					$"Neither file nor directory with path '{arg}' exists");
+				Console.ReadKey();
+				return;
 			}
 
 			Program program = new Program();
 			program.Load(args);
 			Console.ReadKey();
-		}
-
-		public Program()
-		{
-			m_collection = new FileCollection(OnRequestDependency, OnRequestAssembly);
 		}
 
 		public void Load(IReadOnlyList<string> args)
@@ -64,15 +65,13 @@ namespace UtinyRipper
 			try
 #endif
 			{
-				string name = Path.GetFileNameWithoutExtension(args.First());
-				string exportPath = Path.Combine("Ripped", name);
-
-				Prepare(exportPath, args);
-				LoadAssemblies();
-				LoadFiles(args);
+				GameStructure.Load(args);
 				Validate();
 
-				m_collection.Exporter.Export(exportPath, FetchExportObjects(m_collection));
+				string exportPath = Path.Combine("Ripped", GameStructure.Name);
+				PrepareExportDirectory(exportPath);
+
+				GameStructure.Export(exportPath, AssetSelector);
 				Logger.Instance.Log(LogType.Info, LogCategory.General, "Finished");
 			}
 #if !DEBUG_PROGRAM
@@ -82,75 +81,10 @@ namespace UtinyRipper
 			}
 #endif
 		}
-
-		private void Prepare(string exportPath, IEnumerable<string> filePathes)
-		{
-			PrepareExportDirectory(exportPath);
-
-			foreach (string filePath in filePathes)
-			{
-				string dirPath = Path.GetDirectoryName(filePath);
-				m_knownDirectories.Add(dirPath);
-			}
-		}
-
-		private void LoadAssemblies()
-		{
-			foreach (string dirPath in m_knownDirectories)
-			{
-				string path = Path.Combine(dirPath, AssemblyFolder);
-				DirectoryInfo managedDirecoty = new DirectoryInfo(path);
-				if (!managedDirecoty.Exists)
-				{
-					continue;
-				}
-
-				foreach (FileInfo file in managedDirecoty.EnumerateFiles())
-				{
-					if (AssemblyManager.IsAssembly(file.Name))
-					{
-						LoadAssembly(file.FullName);
-					}
-				}
-				break;
-			}
-		}
-
-		private void LoadFiles(IEnumerable<string> filePathes)
-		{
-			foreach (string filePath in filePathes)
-			{
-				string fileName = FileMultiStream.GetFileName(filePath);
-				LoadFile(filePath, fileName);
-			}
-		}
-
-		private void LoadFile(string fullFilePath, string originalFileName)
-		{
-			if (m_knownFiles.Add(originalFileName))
-			{
-				string filePath = FileMultiStream.GetFilePath(fullFilePath);
-				using (Stream stream = FileMultiStream.OpenRead(filePath))
-				{
-					m_collection.Read(stream, filePath, originalFileName);
-				}
-			}
-		}
-
-		private void LoadAssembly(string filePath)
-		{
-			if(m_knownAssemblies.Add(filePath))
-			{
-				using (Stream stream = FileMultiStream.OpenRead(filePath))
-				{
-					m_collection.ReadAssembly(stream, filePath);
-				}
-			}
-		}
-
+		
 		private void Validate()
 		{
-			Version[] versions = m_collection.Files.Select(t => t.Version).Distinct().ToArray();
+			Version[] versions = GameStructure.FileCollection.Files.Select(t => t.Version).Distinct().ToArray();
 			if (versions.Count() > 1)
 			{
 				Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Asset collection has versions probably incompatible with each other. Here they are:");
@@ -159,103 +93,6 @@ namespace UtinyRipper
 					Logger.Instance.Log(LogType.Warning, LogCategory.Import, version.ToString());
 				}
 			}
-		}
-
-		private void LoadDependency(string fileName)
-		{
-			foreach (string loadName in FetchNameVariants(fileName))
-			{
-				bool found = TryLoadDependency(loadName, fileName);
-				if (found)
-				{
-					return;
-				}
-			}
-
-			Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Dependency '{fileName}' wasn't found");
-			m_knownFiles.Add(fileName);
-		}
-
-		private void LoadDependencyAssembly(string fileName)
-		{
-			bool found = TryLoadDependencyAssembly(fileName);
-			if (found)
-			{
-				return;
-			}
-
-			Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Assembly '{fileName}' wasn't found");
-			m_knownAssemblies.Add(fileName);
-		}
-
-		private bool TryLoadDependency(string loadName, string originalName)
-		{
-			foreach (string dirPath in m_knownDirectories)
-			{
-				string path = Path.Combine(dirPath, loadName);
-				if (FileMultiStream.Exists(path))
-				{
-					LoadFile(path, originalName);
-					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Dependency '{path}' was loaded");
-					return true;
-				}
-			}
-			return false;
-		}
-
-		private bool TryLoadDependencyAssembly(string loadName)
-		{
-			foreach (string dirPath in m_knownDirectories)
-			{
-				string path = Path.Combine(dirPath, AssemblyFolder);
-				DirectoryInfo managedDirecoty = new DirectoryInfo(path);
-				if (!managedDirecoty.Exists)
-				{
-					continue;
-				}
-
-				foreach (FileInfo file in managedDirecoty.EnumerateFiles())
-				{
-					if (AssemblyManager.IsAssembly(file.Name))
-					{
-						string fileName = file.Name;
-						if(fileName == loadName)
-						{
-							LoadAssembly(file.FullName);
-							return true;
-						}
-
-						fileName = Path.GetFileNameWithoutExtension(fileName);
-						if (fileName == loadName)
-						{
-							LoadAssembly(file.FullName);
-							return true;
-						}
-					}
-				}
-				break;
-			}
-			return false;
-		}
-		
-		private void OnRequestDependency(string dependency)
-		{
-			if(m_knownFiles.Contains(dependency))
-			{
-				return;
-			}
-
-			LoadDependency(dependency);
-		}
-
-		private void OnRequestAssembly(string assembly)
-		{
-			if(m_knownAssemblies.Contains(assembly))
-			{
-				return;
-			}
-
-			LoadDependencyAssembly(assembly);
 		}
 		
 		private static void PrepareExportDirectory(string path)
@@ -351,27 +188,6 @@ namespace UtinyRipper
 			}
 		}
 
-		private static IEnumerable<string> FetchNameVariants(string name)
-		{
-			yield return name;
-
-			const string libraryFolder = "library";
-			if (name.ToLower().StartsWith(libraryFolder, StringComparison.Ordinal))
-			{
-				string fixedName = name.Substring(libraryFolder.Length + 1);
-				yield return fixedName;
-
-				fixedName = Path.Combine("Resources", fixedName);
-				yield return fixedName;
-			}
-		}
-
-		private readonly HashSet<string> m_knownDirectories = new HashSet<string>();
-		private readonly HashSet<string> m_knownFiles = new HashSet<string>();
-		private readonly HashSet<string> m_knownAssemblies = new HashSet<string>();
-
-		private const string AssemblyFolder = "Managed";
-
-		private readonly FileCollection m_collection;
+		private GameStructure GameStructure { get; } = new GameStructure();
 	}
 }

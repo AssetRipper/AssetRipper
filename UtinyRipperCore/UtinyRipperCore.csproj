@@ -169,6 +169,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Mono\MonoManager.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\AssemblyManager.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Mono\MonoField.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Scripts\ScriptingBackEnd.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Structure\IScriptField.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Structure\IScriptStructure.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Structure\ScriptPointer.cs" />
@@ -427,6 +428,12 @@
     <Compile Include="Parser\Format\WebFile\Entry\WebFileEntry.cs" />
     <Compile Include="Parser\Format\WebFile\Entry\WebMetadata.cs" />
     <Compile Include="Parser\Format\WebFile\WebFile.cs" />
+    <Compile Include="Parser\Game\AndroidGameStructure.cs" />
+    <Compile Include="Parser\Game\GameStructure.cs" />
+    <Compile Include="Parser\Game\IGameStructure.cs" />
+    <Compile Include="Parser\Game\MixedGameStructure.cs" />
+    <Compile Include="Parser\Game\PCGameStructure.cs" />
+    <Compile Include="Parser\Game\PlatformGameStructure.cs" />
     <Compile Include="Parser\IO\AssetStream\TransferInstructionFlags.cs" />
     <Compile Include="Parser\IO\Extensions\IDictionaryExtensions.cs" />
     <Compile Include="Parser\IO\Extensions\AssetStreamExtensions.cs" />
@@ -472,7 +479,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\YAMLAssetExporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Interfaces\IExportContainer.cs" />
     <Compile Include="Parser\AssetCollection\IFileCollection.cs" />
-    <Compile Include="Parser\AssetInfo.cs" />
+    <Compile Include="Parser\Format\Entry\AssetInfo.cs" />
     <Compile Include="Parser\Format\SerializedFile\SerializedFile.cs" />
     <Compile Include="Parser\Format\BundleFile\Entry\BundleFileEntry.cs" />
     <Compile Include="Parser\Classes\AnimationClip\AnimationType.cs" />
@@ -586,7 +593,7 @@
     <Compile Include="Parser\Classes\Utils\Extensions\UtinyStreamExtensions.cs" />
     <Compile Include="Parser\Classes\Utils\Extensions\TypeExtensions.cs" />
     <Compile Include="Parser\Classes\Utils\ObjectUtils.cs" />
-    <Compile Include="Parser\Enums\AssetType.cs" />
+    <Compile Include="Parser\Format\AssetType.cs" />
     <Compile Include="Parser\Format\SerializedFile\ISerializedFile\ISerializedFile.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\TreeNodeType.cs" />
     <Compile Include="Parser\Format\BundleFile\BundleType.cs" />
@@ -634,7 +641,7 @@
     <Compile Include="Parser\Classes\SkinnedMeshRenderer.cs" />
     <Compile Include="Parser\Classes\Base\Texture.cs" />
     <Compile Include="Parser\Classes\Utils\Extensions\UtinyClassTypeExtensions.cs" />
-    <Compile Include="Parser\Enums\ClassIDType.cs" />
+    <Compile Include="Parser\Format\ClassIDType.cs" />
     <Compile Include="Parser\Format\SerializedFile\FileGeneration.cs" />
     <Compile Include="Parser\Classes\AnimationClip\AnimationClipBindingConstant.cs" />
     <Compile Include="Parser\Classes\AnimationClip\AnimationCurveTpl.cs" />
@@ -681,7 +688,7 @@
     <Compile Include="Parser\Classes\Utils\Extensions\ArrayExtensions.cs" />
     <Compile Include="Parser\Classes\Utils\Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Parser\Classes\Utils\Extensions\YAMLMappingNodeExtensions.cs" />
-    <Compile Include="Parser\Enums\Platform.cs" />
+    <Compile Include="Parser\Format\Platform.cs" />
     <Compile Include="Parser\Classes\AnimationClip\AnimationClip.cs" />
     <Compile Include="Parser\Classes\Base\NamedObject.cs" />
     <Compile Include="Parser\Classes\Serialize\AABB.cs" />
@@ -694,7 +701,7 @@
     <Compile Include="Parser\Classes\Serialize\Vector3f.cs" />
     <Compile Include="Parser\Classes\Serialize\Vector4f.cs" />
     <Compile Include="Parser\Classes\Transform.cs" />
-    <Compile Include="Parser\ResourcesFile.cs" />
+    <Compile Include="Parser\Format\Entry\ResourcesFile.cs" />
     <Compile Include="Parser\Utils\PathUtils.cs" />
     <Compile Include="Parser\Version\VersionType.cs" />
     <Compile Include="Parser\Format\BundleFile\Parser\BundleCompressType.cs" />

@@ -43,12 +43,12 @@ namespace UtinyRipper.SerializedFiles
 
 		public void Load(string assetPath, Action<string> requestDependencyCallback)
 		{
-			if (!File.Exists(assetPath))
+			if (!FileMultiStream.Exists(assetPath))
 			{
 				throw new Exception($"Asset at path '{assetPath}' doesn't exist");
 			}
 
-			using (FileStream stream = File.OpenRead(assetPath))
+			using (Stream stream = FileMultiStream.OpenRead(assetPath))
 			{
 				Read(stream, requestDependencyCallback);
 				if (stream.Position != stream.Length)
