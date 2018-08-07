@@ -70,6 +70,18 @@ namespace UtinyRipper.AssetExporters
 					stream.AlignStream(AlignType.Align4);
 					break;
 
+				case PrimitiveType.Char:
+					if (IsArray)
+					{
+						Value = stream.ReadCharArray();
+					}
+					else
+					{
+						Value = stream.ReadChar();
+					}
+					stream.AlignStream(AlignType.Align4);
+					break;
+
 				case PrimitiveType.Short:
 					if (IsArray)
 					{
@@ -283,6 +295,8 @@ namespace UtinyRipper.AssetExporters
 					{
 						case PrimitiveType.Bool:
 							return new YAMLScalarNode((bool)Value);
+						case PrimitiveType.Char:
+							return new YAMLScalarNode((int)(char)Value);
 						case PrimitiveType.Byte:
 							return new YAMLScalarNode((byte)Value);
 						case PrimitiveType.Short:

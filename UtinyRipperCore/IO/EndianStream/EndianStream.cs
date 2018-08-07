@@ -220,6 +220,18 @@ namespace UtinyRipper
 			return array;
 		}
 
+		public char[] ReadCharArray()
+		{
+			int count = ReadInt32();
+			char[] array = new char[count];
+			int read = Read(array, 0, count);
+			if (read != count)
+			{
+				throw new Exception($"Read {read} but expected {count}");
+			}
+			return array;
+		}
+
 		public byte[] ReadByteArray()
 		{
 			int count = ReadInt32();

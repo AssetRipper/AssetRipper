@@ -148,6 +148,8 @@ namespace UtinyRipper.AssetExporters
 						return PrimitiveType.Void;
 					case BooleanName:
 						return PrimitiveType.Bool;
+					case CharName:
+						return PrimitiveType.Char;
 					case ByteName:
 						return PrimitiveType.Byte;
 					case Int16Name:
@@ -198,6 +200,7 @@ namespace UtinyRipper.AssetExporters
 		private const string ObjectName = "Object";
 		private const string VoidName = "Void";
 		private const string BooleanName = "Boolean";
+		private const string CharName = "Char";
 		private const string ByteName = "Byte";
 		private const string Int16Name = "Int16";
 		private const string UInt16Name = "UInt16";

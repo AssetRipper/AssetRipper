@@ -4,6 +4,7 @@
 	{
 		Void,
 		Bool,
+		Char,
 		Byte,
 		Short,
 		UShort,
