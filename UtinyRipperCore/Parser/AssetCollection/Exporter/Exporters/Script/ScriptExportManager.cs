@@ -187,6 +187,7 @@ namespace UtinyRipper.Exporters.Scripts
 			ScriptExportType exportType = new ScriptExportMonoType(type);
 			m_types.Add(type.FullName, exportType);
 			exportType.Init(this);
+			exportType.GetTopmostContainer(this);
 			return exportType;
 		}
 
@@ -195,6 +196,7 @@ namespace UtinyRipper.Exporters.Scripts
 			ScriptExportMonoEnum exportEnum = new ScriptExportMonoEnum(@enum);
 			m_enums.Add(@enum.FullName, exportEnum);
 			exportEnum.Init(this);
+			exportEnum.GetTopmostContainer(this);
 			return exportEnum;
 		}
 
@@ -203,6 +205,7 @@ namespace UtinyRipper.Exporters.Scripts
 			ScriptExportMonoDelegate exportDelegate = new ScriptExportMonoDelegate(@delegate);
 			m_delegates.Add(@delegate.FullName, exportDelegate);
 			exportDelegate.Init(this);
+			exportDelegate.GetTopmostContainer(this);
 			return exportDelegate;
 		}
 
