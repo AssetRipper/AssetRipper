@@ -30,7 +30,7 @@ namespace UtinyRipper.Exporters.Scripts
 		private static string GetExportSubPath(ScriptExportType type)
 		{
 			string typeName = type.Name;
-			string fixedTypeName = m_illegal.Replace(typeName, "_");
+			string fixedTypeName = s_illegal.Replace(typeName, "_");
 			return GetExportSubPath(type.Module, type.Namespace, fixedTypeName);
 		}
 
@@ -291,7 +291,7 @@ namespace UtinyRipper.Exporters.Scripts
 		private const string BooName = "Boo";
 		private const string MonoName = "Mono";
 
-		private static readonly Regex m_illegal = new Regex("[<>]", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+		private static readonly Regex s_illegal = new Regex("[<>]", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
 		private readonly Dictionary<string, ScriptExportType> m_types = new Dictionary<string, ScriptExportType>();
 		private readonly Dictionary<string, ScriptExportEnum> m_enums = new Dictionary<string, ScriptExportEnum>();

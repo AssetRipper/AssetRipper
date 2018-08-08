@@ -440,6 +440,25 @@ namespace UtinyRipper.Classes
 			}
 		}
 
+		public override bool IsValid
+		{
+			get
+			{
+				if(IsReadLoadType(File.Version))
+				{
+					return true;
+				}
+				if(IsReadStreamingInfo(File.Version))
+				{
+					if(Stream == 2)
+					{
+						return true;
+					}
+				}
+				return m_audioData.Length > 0;
+			}
+		}
+
 		public AudioClipLoadType LoadType { get; private set; }
 		public int Channels { get; private set; }
 		public int BitsPerSample { get; private set; }

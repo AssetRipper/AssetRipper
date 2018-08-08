@@ -6,15 +6,16 @@ namespace UtinyRipper.Classes.AnimationClips
 {
 	public class AnimationClipGenericConverter
 	{
-		public AnimationClipGenericConverter(Version version, Platform platform)
+		public AnimationClipGenericConverter(Version version, Platform platform, TransferInstructionFlags flags)
 		{
 			m_version = version;
 			m_platform = platform;
+			m_flags = flags;
 		}
 
 		public void Process(Clip clip, AnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos)
 		{
-			IReadOnlyList<StreamedFrame> streamedFrames = clip.StreamedClip.GenerateFrames(m_version, m_platform);
+			IReadOnlyList<StreamedFrame> streamedFrames = clip.StreamedClip.GenerateFrames(m_version, m_platform, m_flags);
 			float lastDenseFrame = clip.DenseClip.FrameCount / clip.DenseClip.SampleRate;
 			float lastSampleFrame = streamedFrames.Count > 1 ? streamedFrames[streamedFrames.Count - 2].Time : 0.0f;
 			float lastFrame = Math.Max(lastDenseFrame, lastSampleFrame);
@@ -364,5 +365,6 @@ namespace UtinyRipper.Classes.AnimationClips
 
 		private readonly Version m_version;
 		private readonly Platform m_platform;
+		private readonly TransferInstructionFlags m_flags;
 	}
 }

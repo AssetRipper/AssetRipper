@@ -6,32 +6,20 @@ namespace UtinyRipper
 {
 	public sealed class AssetStream : EndianStream
 	{
-		public AssetStream(Stream stream, Version version, Platform platform) :
+		public AssetStream(Stream stream, Version version, Platform platform, TransferInstructionFlags flags) :
 			base(stream)
 		{
 			Version = version;
 			Platform = platform;
-			Flags = ToTransferFlags(platform);
+			Flags = flags;
 		}
 
-		public AssetStream(EndianStream stream, Version version, Platform platform) :
+		public AssetStream(EndianStream stream, Version version, Platform platform, TransferInstructionFlags flags) :
 			base(stream.BaseStream, stream.AlignPosition, stream.EndianType)
 		{
 			Version = version;
 			Platform = platform;
-			Flags = ToTransferFlags(platform);
-		}
-
-#warning TODO: create special parameter and set flags based on this paramter
-		private static TransferInstructionFlags ToTransferFlags(Platform platform)
-		{
-			TransferInstructionFlags flags = TransferInstructionFlags.NoTransferInstructionFlags;
-			if (platform != Platform.NoTarget)
-			{
-				flags |= TransferInstructionFlags.Unknown1;
-				flags |= TransferInstructionFlags.SerializeGameRelease;
-			}
-			return flags;
+			Flags = flags;
 		}
 
 		public new T[] ReadArray<T>()

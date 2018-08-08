@@ -157,7 +157,14 @@ namespace UtinyRipper.Classes
 		{
 			if (FileIndex == 0)
 			{
-				return asset.PathID == PathID;
+				if (file == asset.File)
+				{
+					return asset.PathID == PathID;
+				}
+				else
+				{
+					return false;
+				}
 			}
 			else
 			{

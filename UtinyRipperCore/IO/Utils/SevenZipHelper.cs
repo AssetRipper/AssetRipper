@@ -16,24 +16,27 @@ namespace UtinyRipper
 		public static void DecompressLZMASizeStream(Stream baseStream, long compressSize, Stream decompressedStream)
 		{
 			long basePosition = baseStream.Position;
-			int read = baseStream.Read(s_properties, 0, PropertiesSize);
+			byte[] properties = new byte[PropertiesSize];
+			int read = baseStream.Read(properties, 0, PropertiesSize);
 			if (read != PropertiesSize)
 			{
 				throw new Exception("Unable to read lzma properties");
 			}
-			read = baseStream.Read(s_countBuffer, 0, CountSize);
+			byte[] countBuffer = new byte[CountSize];
+			read = baseStream.Read(countBuffer, 0, CountSize);
 			if (read != CountSize)
 			{
 				throw new Exception("Unable to read decompressed lzma size");
 			}
 			
-			long decompressedSize = BitConverter.ToInt64(s_countBuffer, 0);
-			s_decoder.SetDecoderProperties(s_properties);
+			long decompressedSize = BitConverter.ToInt64(countBuffer, 0);
+			Decoder decoder = new Decoder();
+			decoder.SetDecoderProperties(properties);
 
 			long headSize = baseStream.Position - basePosition;
 			long headlessSize = compressSize - headSize;
 			long startPosition = decompressedStream.Position;
-			s_decoder.Code(baseStream, decompressedStream, headlessSize, decompressedSize, null);
+			decoder.Code(baseStream, decompressedStream, headlessSize, decompressedSize, null);
 
 			if (baseStream.Position > basePosition + compressSize)
 			{
@@ -70,18 +73,20 @@ namespace UtinyRipper
 		public static void DecompressLZMAStream(Stream baseStream, long compressSize, Stream decompressedStream, long decompreesSize)
 		{
 			long basePosition = baseStream.Position;
-			int read = baseStream.Read(s_properties, 0, PropertiesSize);
+			byte[] properties = new byte[PropertiesSize];
+			int read = baseStream.Read(properties, 0, PropertiesSize);
 			if (read != PropertiesSize)
 			{
 				throw new Exception("Unable to read lzma properties");
 			}
-			
-			s_decoder.SetDecoderProperties(s_properties);
+
+			Decoder decoder = new Decoder();
+			decoder.SetDecoderProperties(properties);
 
 			long headSize = baseStream.Position - basePosition;
 			long headlessSize = compressSize - headSize;
 			long startPosition = decompressedStream.Position;
-			s_decoder.Code(baseStream, decompressedStream, headlessSize, decompreesSize, null);
+			decoder.Code(baseStream, decompressedStream, headlessSize, decompreesSize, null);
 
 			if(baseStream.Position > basePosition + compressSize)
 			{
@@ -108,9 +113,5 @@ namespace UtinyRipper
 
 		private const int PropertiesSize = 5;
 		private const int CountSize = 8;
-
-		private static readonly Decoder s_decoder = new Decoder();
-		private static readonly byte[] s_properties = new byte[PropertiesSize];
-		private static readonly byte[] s_countBuffer = new byte[CountSize];
 	}
 }

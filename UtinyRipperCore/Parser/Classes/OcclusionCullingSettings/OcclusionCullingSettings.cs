@@ -241,8 +241,6 @@ namespace UtinyRipper.Classes
 		/// PVSPortalsArray previously
 		/// </summary>
 		public IReadOnlyList<PPtr<OcclusionPortal>> Portals => m_portals;
-		
-		public const string SceneExportFolder = "Scenes";
 
 		public OcclusionBakeSettings OcclusionBakeSettings;
 		public EngineGUID SceneGUID;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.LightingDataAssets;
 using UtinyRipper.Classes.LightmapSettingss;
@@ -153,8 +154,6 @@ namespace UtinyRipper.Classes
 			node.Add("m_EnlightenDataVersion", EnlightenDataVersion);
 			return node;
 		}
-
-		public override string ExportName => $"{OcclusionCullingSettings.SceneExportFolder}/{base.ExportName}";
 
 		public IReadOnlyList<LightmapData> Lightmaps => m_lightmaps;
 		public int LightmapsMode { get; private set; }

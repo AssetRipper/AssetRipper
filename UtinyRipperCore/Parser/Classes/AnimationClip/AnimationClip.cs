@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.AnimationClips;
-using UtinyRipper.Classes.AnimationClips.Editor;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
 
@@ -349,7 +347,7 @@ namespace UtinyRipper.Classes
 		{
 			IReadOnlyDictionary<uint, string> tos = FindTOS();
 
-			AnimationClipGenericConverter converter = new AnimationClipGenericConverter(File.Version, File.Platform);
+			AnimationClipGenericConverter converter = new AnimationClipGenericConverter(File.Version, File.Platform, File.Flags);
 			converter.Process(MuscleClip.Clip, ClipBindingConstant, tos);
 
 			return new AnimationCurves()

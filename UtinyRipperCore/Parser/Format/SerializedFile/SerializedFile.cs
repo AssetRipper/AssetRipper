@@ -14,7 +14,12 @@ namespace UtinyRipper.SerializedFiles
 	/// </summary>
 	internal class SerializedFile : ISerializedFile
 	{
-		public SerializedFile(IFileCollection collection, string filePath, string fileName)
+		public SerializedFile(IFileCollection collection, string filePath, string fileName):
+			this(collection, filePath, fileName, GetCompiledTransferFlag())
+		{
+		}
+
+		public SerializedFile(IFileCollection collection, string filePath, string fileName, TransferInstructionFlags flags)
 		{
 			if(collection == null)
 			{
@@ -28,9 +33,15 @@ namespace UtinyRipper.SerializedFiles
 			Collection = collection;
 			FilePath = filePath;
 			Name = fileName.ToLower();
-			
+			Flags = flags;
+
 			Header = new SerializedFileHeader(Name);
 			Metadata = new SerializedFileMetadata(Name);
+		}
+
+		private static TransferInstructionFlags GetCompiledTransferFlag()
+		{
+			return TransferInstructionFlags.Unknown1 | TransferInstructionFlags.SerializeGameRelease;
 		}
 
 		/// <summary>
@@ -244,7 +255,7 @@ namespace UtinyRipper.SerializedFiles
 		{
 			m_assets.Clear();
 			HashSet<long> preloaded = new HashSet<long>();
-			using (AssetStream ustream = new AssetStream(stream.BaseStream, Version, Platform))
+			using (AssetStream ustream = new AssetStream(stream.BaseStream, Version, Platform, Flags))
 			{
 				if(SerializedFileMetadata.IsReadPreload(Header.Generation))
 				{
@@ -343,7 +354,7 @@ namespace UtinyRipper.SerializedFiles
 		public SerializedFileMetadata Metadata { get; }
 		public Version Version => Metadata.Hierarchy.Version;
 		public Platform Platform => Metadata.Hierarchy.Platform;
-		public TransferInstructionFlags Flags => Metadata.Hierarchy.Platform == Platform.NoTarget ? TransferInstructionFlags.NoTransferInstructionFlags : TransferInstructionFlags.SerializeGameRelease;
+		public TransferInstructionFlags Flags { get; }
 		
 		public bool IsScene { get; private set; }
 

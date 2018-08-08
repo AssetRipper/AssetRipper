@@ -13,14 +13,14 @@ namespace UtinyRipper.Classes.AnimationClips
 			CurveCount = (int)stream.ReadUInt32();
 		}
 
-		public IReadOnlyList<StreamedFrame> GenerateFrames(Version version, Platform platform)
+		public IReadOnlyList<StreamedFrame> GenerateFrames(Version version, Platform platform, TransferInstructionFlags flags)
 		{
 			List<StreamedFrame> frames = new List<StreamedFrame>();
 			byte[] memStreamBuffer = new byte[m_data.Length * sizeof(uint)];
 			Buffer.BlockCopy(m_data, 0, memStreamBuffer, 0, memStreamBuffer.Length);
 			using (MemoryStream memStream = new MemoryStream(memStreamBuffer))
 			{
-				using (AssetStream stream = new AssetStream(memStream, version, platform))
+				using (AssetStream stream = new AssetStream(memStream, version, platform, flags))
 				{
 					while (stream.BaseStream.Position < stream.BaseStream.Length)
 					{

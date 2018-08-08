@@ -35,7 +35,7 @@ namespace UtinyRipper.Classes
 		{
 			using (MemoryStream baseStream = new MemoryStream(buffer))
 			{
-				using (AssetStream stream = new AssetStream(baseStream, File.Version, File.Platform))
+				using (AssetStream stream = new AssetStream(baseStream, File.Version, File.Platform, File.Flags))
 				{
 					Read(stream);
 
@@ -110,7 +110,7 @@ namespace UtinyRipper.Classes
 		public ISerializedFile File => m_assetInfo.File;
 		public ClassIDType ClassID => m_assetInfo.ClassID;
 		public virtual bool IsValid => true;
-		public virtual string ExportName => ClassID.ToString();
+		public virtual string ExportName => Path.Combine(AssetsName, ClassID.ToString());
 		public virtual string ExportExtension => "asset";
 		public long PathID => m_assetInfo.PathID;
 		
@@ -131,6 +131,8 @@ namespace UtinyRipper.Classes
 		public int InstanceID { get; private set; }
 		public long LocalIdentfierInFile { get; private set; }
 #endif
+
+		public const string AssetsName = "Assets";
 
 		private readonly AssetInfo m_assetInfo;
 	}

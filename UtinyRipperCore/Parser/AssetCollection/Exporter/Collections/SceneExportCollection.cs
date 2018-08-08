@@ -71,7 +71,7 @@ namespace UtinyRipper.AssetExporters
 		{
 			TryInitialize(container);
 
-			string folderPath = Path.Combine(dirPath, OcclusionCullingSettings.SceneExportFolder);
+			string folderPath = Path.Combine(dirPath, Object.AssetsName, "Scenes");
 			string sceneName = GetSceneName(container);
 			string fileName = $"{sceneName}.unity";
 			string filePath = Path.Combine(folderPath, fileName);
@@ -303,7 +303,7 @@ namespace UtinyRipper.AssetExporters
 		private const string LevelName = "level";
 		private const string MainSceneName = "maindata";
 
-		private readonly static Regex m_sceneNameFormat = new Regex($"{LevelName}[0-9]+");
+		private static readonly Regex m_sceneNameFormat = new Regex($"{LevelName}[0-9]+");
 
 		private readonly Dictionary<Object, ulong> m_cexportIDs = new Dictionary<Object, ulong>();
 		private readonly ISerializedFile m_file;

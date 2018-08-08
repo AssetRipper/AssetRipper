@@ -1,4 +1,5 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.IO;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes
@@ -19,5 +20,7 @@ namespace UtinyRipper.Classes
 			YAMLMappingNode node = new YAMLMappingNode();
 			return node;
 		}
+
+		public override string ExportName => Path.Combine("ProjectSettings", ClassID.ToString());
 	}
 }

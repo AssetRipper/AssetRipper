@@ -81,9 +81,23 @@ namespace UtinyRipper
 			AddSerializedFile(file);
 		}
 
+		public void LoadSerializedFile(string filePath, string fileName, TransferInstructionFlags flags)
+		{
+			SerializedFile file = new SerializedFile(this, filePath, fileName, flags);
+			file.Load(filePath, OnRequestDependency);
+			AddSerializedFile(file);
+		}
+
 		public void ReadSerializedFile(Stream stream, string filePath, string fileName)
 		{
 			SerializedFile file = new SerializedFile(this, filePath, fileName);
+			file.Read(stream, OnRequestDependency);
+			AddSerializedFile(file);
+		}
+
+		public void ReadSerializedFile(Stream stream, string filePath, string fileName, TransferInstructionFlags flags)
+		{
+			SerializedFile file = new SerializedFile(this, filePath, fileName, flags);
 			file.Read(stream, OnRequestDependency);
 			AddSerializedFile(file);
 		}

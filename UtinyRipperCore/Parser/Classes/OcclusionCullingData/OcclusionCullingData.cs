@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.OcclusionCullingDatas;
@@ -115,8 +116,6 @@ namespace UtinyRipper.Classes
 			node.Add("m_Portals", Portals.ExportYAML(container));
 			return node;
 		}
-
-		public override string ExportName => $"{OcclusionCullingSettings.SceneExportFolder}/{base.ExportName}";
 
 		public IReadOnlyList<byte> PVSData => m_PVSData;
 		public IReadOnlyList<OcclusionScene> Scenes => m_scenes;

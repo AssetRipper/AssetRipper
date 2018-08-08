@@ -114,7 +114,7 @@ namespace UtinyRipper.Classes
 
 						using (MemoryStream blobMem = new MemoryStream(decompressedBuffer))
 						{
-							using (AssetStream blobStream = new AssetStream(blobMem, stream.Version, stream.Platform))
+							using (AssetStream blobStream = new AssetStream(blobMem, stream.Version, stream.Platform, stream.Flags))
 							{
 								ShaderSubProgramBlob blob = new ShaderSubProgramBlob();
 								blob.Read(blobStream);
@@ -154,7 +154,7 @@ namespace UtinyRipper.Classes
 
 						using (MemoryStream memStream = new MemoryStream(decompressedBuffer))
 						{
-							using (AssetStream blobStream = new AssetStream(memStream, stream.Version, stream.Platform))
+							using (AssetStream blobStream = new AssetStream(memStream, stream.Version, stream.Platform, stream.Flags))
 							{
 								SubProgramBlob.Read(blobStream);
 							}
