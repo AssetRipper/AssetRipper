@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
-using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes.OcclusionCullingSettingses;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
@@ -27,6 +26,15 @@ namespace UtinyRipper.Classes
 			{
 				return true;
 			}
+			if (asset.ClassID == ClassIDType.MonoBehaviour)
+			{
+				MonoBehaviour monoBeh = (MonoBehaviour)asset;
+				if (monoBeh.IsScriptableObject())
+				{
+					return false;
+				}
+			}
+
 			return asset is Component;
 		}
 

@@ -71,9 +71,9 @@ namespace UtinyRipper.AssetExporters
 		{
 			TryInitialize(container);
 
-			string folderPath = Path.Combine(dirPath, Object.AssetsName, "Scenes");
-			string sceneName = GetSceneName(container);
-			string fileName = $"{sceneName}.unity";
+			string folderPath = Path.Combine(dirPath, Object.AssetsName, "Scene");
+			string sceneSubPath = GetSceneName(container);
+			string fileName = $"{sceneSubPath}.unity";
 			string filePath = Path.Combine(folderPath, fileName);
 			folderPath = Path.GetDirectoryName(filePath);
 
@@ -87,6 +87,7 @@ namespace UtinyRipper.AssetExporters
 			Meta meta = new Meta(sceneImporter, GUID);
 			ExportMeta(container, meta, filePath);
 
+			string sceneName = Path.GetFileName(sceneSubPath);
 			string subFolderPath = Path.Combine(folderPath, sceneName);
 			if (OcclusionCullingData != null)
 			{

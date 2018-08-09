@@ -23,7 +23,7 @@ namespace UtinyRipper.Classes
 
 		public GUIStyle(GUIStyle copy)
 		{
-			Name = copy.Name;
+			StyleName = copy.Name;
 			Normal = new GUIStyleState(copy.Normal);
 			Hover = new GUIStyleState(copy.Hover);
 			Active = new GUIStyleState(copy.Active);
@@ -58,7 +58,7 @@ namespace UtinyRipper.Classes
 
 		public void Read(AssetStream stream)
 		{
-			Name = stream.ReadStringAligned();
+			StyleName = stream.ReadStringAligned();
 			Normal.Read(stream);
 			Hover.Read(stream);
 			Active.Read(stream);
@@ -126,7 +126,14 @@ namespace UtinyRipper.Classes
 			yield break;
 		}
 
-		public string Name { get; private set; }
+		public IScriptStructure Base => null;
+		public string Namespace => ScriptType.UnityEngineName;
+		public string Name => ScriptType.GUIStyleName;
+
+		/// <summary>
+		/// Name field
+		/// </summary>
+		public string StyleName { get; private set; }
 		public int FontSize { get; private set; }
 		public int FontStyle { get; private set; }
 		public int Alignment { get; private set; }

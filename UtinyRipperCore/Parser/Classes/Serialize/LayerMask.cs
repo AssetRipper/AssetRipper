@@ -46,6 +46,10 @@ namespace UtinyRipper.Classes
 			yield break;
 		}
 
+		public IScriptStructure Base => null;
+		public string Namespace => ScriptType.UnityEngineName;
+		public string Name => ScriptType.LayerMaskName;
+
 		public uint Bits { get; private set; }
 	}
 }

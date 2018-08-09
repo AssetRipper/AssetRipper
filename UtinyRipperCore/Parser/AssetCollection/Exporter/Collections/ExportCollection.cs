@@ -93,6 +93,9 @@ namespace UtinyRipper.AssetExporters
 				case Prefab prefab:
 					fileName = prefab.GetName();
 					break;
+				case MonoBehaviour monoBehaviour:
+					fileName = monoBehaviour.Name;
+					break;
 
 				default:
 					fileName = @object.GetType().Name;

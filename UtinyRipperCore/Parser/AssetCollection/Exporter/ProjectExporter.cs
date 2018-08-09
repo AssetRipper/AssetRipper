@@ -105,12 +105,12 @@ namespace UtinyRipper.AssetExporters
 			m_exporters[classType].Push(exporter);
 		}
 
-		public void Export(string path, Object asset)
+		public void Export(string path, FileCollection fileCollection, Object asset)
 		{
-			Export(path, new Object[] { asset });
+			Export(path, fileCollection, new Object[] { asset });
 		}
 
-		public void Export(string path, IEnumerable<Object> assets)
+		public void Export(string path, FileCollection fileCollection, IEnumerable<Object> assets)
 		{
 			List<IExportCollection> collections = new List<IExportCollection>();
 			// speed up fetching a little bit
@@ -154,7 +154,7 @@ namespace UtinyRipper.AssetExporters
 			depSet.Clear();
 			queued.Clear();
 
-			ProjectAssetContainer container = new ProjectAssetContainer(this, assets, collections);
+			ProjectAssetContainer container = new ProjectAssetContainer(this, fileCollection.FetchAssets(), collections);
 			foreach (IExportCollection collection in collections)
 			{
 				container.CurrentCollection = collection;

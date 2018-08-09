@@ -10,9 +10,9 @@ using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
 {
-	public class ScriptCollection : ExportCollection
+	public class ScriptExportCollection : ExportCollection
 	{
-		public ScriptCollection(IAssetExporter assetExporter, MonoScript script)
+		public ScriptExportCollection(IAssetExporter assetExporter, MonoScript script)
 		{
 			if (assetExporter == null)
 			{
@@ -113,7 +113,7 @@ namespace UtinyRipper.AssetExporters
 		public override IAssetExporter AssetExporter { get; }
 		public override ISerializedFile File { get; }
 		public override IEnumerable<Object> Assets => m_scripts.Keys;
-		public override string Name => nameof(ScriptCollection);
+		public override string Name => nameof(ScriptExportCollection);
 
 		private readonly List<MonoScript> m_export = new List<MonoScript>();
 		private readonly HashSet<MonoScript> m_unique = new HashSet<MonoScript>();

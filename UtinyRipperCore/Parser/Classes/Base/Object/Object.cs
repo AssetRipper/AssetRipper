@@ -111,20 +111,10 @@ namespace UtinyRipper.Classes
 		public ClassIDType ClassID => m_assetInfo.ClassID;
 		public virtual bool IsValid => true;
 		public virtual string ExportName => Path.Combine(AssetsName, ClassID.ToString());
-		public virtual string ExportExtension => "asset";
+		public virtual string ExportExtension => AssetExtension;
 		public long PathID => m_assetInfo.PathID;
 		
-		public EngineGUID GUID
-		{
-			get
-			{
-				if(!Config.IsGenerateGUIDByContent && this is Component)
-				{
-					throw new NotSupportedException("GUIDs aren't supported for components");
-				}
-				return m_assetInfo.GUID;
-			}
-		}
+		public EngineGUID GUID => m_assetInfo.GUID;
 
 		public uint ObjectHideFlags { get; set; }
 #if DEBUG
@@ -133,6 +123,7 @@ namespace UtinyRipper.Classes
 #endif
 
 		public const string AssetsName = "Assets";
+		protected const string AssetExtension = "asset";
 
 		private readonly AssetInfo m_assetInfo;
 	}

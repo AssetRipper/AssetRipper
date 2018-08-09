@@ -43,6 +43,10 @@ namespace UtinyRipper.Classes
 			yield break;
 		}
 
+		public IScriptStructure Base => null;
+		public string Namespace => ScriptType.UnityEngineName;
+		public string Name => ScriptType.RectOffsetName;
+
 		public float Left { get; private set; }
 		public float Right { get; private set; }
 		public float Top { get; private set; }

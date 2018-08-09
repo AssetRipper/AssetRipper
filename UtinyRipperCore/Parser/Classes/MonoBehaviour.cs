@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
@@ -53,6 +54,30 @@ namespace UtinyRipper.Classes
 			}
 		}
 
+		public override string ToString()
+		{
+			return $"{Name}({nameof(MonoBehaviour)})";
+		}
+
+		public bool IsScriptableObject()
+		{
+			if(!GameObject.IsNull)
+			{
+				return false;
+			}
+
+			IScriptStructure structure = Structure;
+			while(structure != null)
+			{
+				if(ScriptType.IsScriptableObject(structure.Namespace, structure.Name))
+				{
+					return true;
+				}
+				structure = structure.Base;
+			}
+			return false;
+		}
+
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
@@ -68,10 +93,20 @@ namespace UtinyRipper.Classes
 			return node;
 		}
 
-		public override string ToString()
+		public override bool IsValid
 		{
-			return $"{Name}({nameof(MonoBehaviour)})";
+			get
+			{
+				if(GameObject.IsNull)
+				{
+					return IsScriptableObject();
+				}
+				return true;
+			}
 		}
+
+		public override string ExportName => Path.Combine(AssetsName, "ScriptableObject");
+		public override string ExportExtension => AssetExtension;
 
 		public string Name { get; private set; }
 		public ScriptStructure Structure { get; private set; }

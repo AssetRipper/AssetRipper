@@ -17,7 +17,7 @@ namespace UtinyRipper.AssetExporters
 
 		public IExportCollection CreateCollection(Object asset)
 		{
-			return new ScriptCollection(this, (MonoScript)asset);
+			return new ScriptExportCollection(this, (MonoScript)asset);
 		}
 
 		public void Export(IExportContainer container, Object asset, string path)

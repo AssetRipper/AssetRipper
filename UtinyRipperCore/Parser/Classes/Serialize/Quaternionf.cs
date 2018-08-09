@@ -108,6 +108,10 @@ namespace UtinyRipper.Classes
 
 		public static Quaternionf Zero => new Quaternionf(0.0f, 0.0f, 0.0f, 1.0f);
 
+		public IScriptStructure Base => null;
+		public string Namespace => ScriptType.UnityEngineName;
+		public string Name => ScriptType.QuaternionName;
+
 		public float X { get; private set; }
 		public float Y { get; private set; }
 		public float Z { get; private set; }

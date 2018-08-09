@@ -126,10 +126,6 @@ namespace UtinyRipper.AssetExporters
 			{
 				return true;
 			}
-			if (IsScriptableObject(@namespace, name))
-			{
-				return true;
-			}
 			if (IsEngineObject(@namespace, name))
 			{
 				return true;

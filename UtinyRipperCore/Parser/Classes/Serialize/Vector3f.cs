@@ -104,6 +104,10 @@ namespace UtinyRipper.Classes
 
 		public static Vector3f One => new Vector3f(1.0f, 1.0f, 1.0f);
 
+		public IScriptStructure Base => null;
+		public string Namespace => ScriptType.UnityEngineName;
+		public string Name => ScriptType.Vector3Name;
+
 		public float X { get; private set; }
 		public float Y { get; private set; }
 		public float Z { get; private set; }

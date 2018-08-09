@@ -65,6 +65,10 @@ namespace UtinyRipper.Classes
 			yield break;
 		}
 
+		public IScriptStructure Base => null;
+		public string Namespace => ScriptType.UnityEngineName;
+		public string Name => ScriptType.ColorName;
+
 		public float R { get; private set; }
 		public float G { get; private set; }
 		public float B { get; private set; }

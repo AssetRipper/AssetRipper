@@ -298,6 +298,10 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 		}
 
+		public IScriptStructure Base => null;
+		public string Namespace => ScriptType.UnityEngineName;
+		public string Name => ScriptType.GradientName;
+
 		public ushort Ctime0 { get; private set; }
 		public ushort Ctime1 { get; private set; }
 		public ushort Ctime2 { get; private set; }

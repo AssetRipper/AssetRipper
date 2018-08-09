@@ -47,7 +47,7 @@ namespace UtinyRipper
 
 		public void Export(string exportPath, Func<Object, bool> selector)
 		{
-			FileCollection.Exporter.Export(exportPath, FileCollection.FetchAssets().Where(t => selector(t)));
+			FileCollection.Exporter.Export(exportPath, FileCollection, FileCollection.FetchAssets().Where(t => selector(t)));
 		}
 		
 		public IEnumerable<string> FetchFiles()

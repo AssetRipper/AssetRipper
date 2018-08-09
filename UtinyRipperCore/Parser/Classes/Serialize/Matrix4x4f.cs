@@ -79,6 +79,10 @@ namespace UtinyRipper.Classes
 			yield break;
 		}
 
+		public IScriptStructure Base => null;
+		public string Namespace => ScriptType.UnityEngineName;
+		public string Name => ScriptType.Matrix4x4Name;
+
 		public float E00 { get; private set; }
 		public float E01 { get; private set; }
 		public float E02 { get; private set; }

@@ -83,6 +83,10 @@ namespace UtinyRipper.Classes
 			return $"[{X:0.00}, {Y:0.00}, {Z:0.00}, {W:0.00}]";
 		}
 
+		public IScriptStructure Base => null;
+		public string Namespace => ScriptType.UnityEngineName;
+		public string Name => ScriptType.Vector4Name;
+
 		public float X { get; private set; }
 		public float Y { get; private set; }
 		public float Z { get; private set; }

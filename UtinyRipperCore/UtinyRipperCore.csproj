@@ -155,7 +155,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\ScriptExportManager.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\ScriptExportParameter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\ScriptExportType.cs" />
-    <Compile Include="Parser\AssetCollection\Exporter\Collections\ScriptCollection.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Collections\ScriptExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\ScriptAssetExporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\ProjectAssetContainer.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\DefaultImporter.cs" />

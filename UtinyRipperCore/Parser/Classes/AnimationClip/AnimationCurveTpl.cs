@@ -131,6 +131,10 @@ namespace UtinyRipper.Classes.AnimationClips
 
 		public static AnimationCurveTpl<T> Empty { get; } = new AnimationCurveTpl<T>(true);
 
+		public IScriptStructure Base => null;
+		public string Namespace => ScriptType.UnityEngineName;
+		public string Name => ScriptType.AnimationCurveName;
+
 		public List<KeyframeTpl<T>> Curve { get; private set; }
 		public int PreInfinity { get; private set; }
 		public int PostInfinity { get; private set; }

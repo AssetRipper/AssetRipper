@@ -111,6 +111,10 @@ namespace UtinyRipper.Classes
 
 		public static Vector2f One { get; } = new Vector2f(1.0f, 1.0f);
 
+		public IScriptStructure Base => null;
+		public string Namespace => ScriptType.UnityEngineName;
+		public string Name => ScriptType.Vector2Name;
+
 		public float X { get; private set; }
 		public float Y { get; private set; }
 	}

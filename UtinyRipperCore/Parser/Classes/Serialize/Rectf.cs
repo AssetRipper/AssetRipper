@@ -143,6 +143,10 @@ namespace UtinyRipper.Classes
 
 		public Vector2f Center => new Vector2f(X + Width / 2.0f, Y + Height / 2.0f);
 
+		public IScriptStructure Base => null;
+		public string Namespace => ScriptType.UnityEngineName;
+		public string Name => ScriptType.RectName;
+
 		public float X { get; private set; }
 		public float Y { get; private set; }
 		public float Width { get; private set; }
