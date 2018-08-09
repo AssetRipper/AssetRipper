@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UtinyRipper.AssetExporters;
+using UtinyRipper.AssetExporters.Mono;
 
 namespace UtinyRipper
 {
@@ -73,7 +74,17 @@ namespace UtinyRipper
 				}
 				else if (AssemblyManager.IsAssembly(file.Name))
 				{
+					if (MonoManager.IsMonoAssembly(file.Name))
+					{
+						m_fileCollection.AssemblyManager.ScriptingBackEnd = ScriptingBackEnd.Mono;
+					}
+					else
+					{
+						m_fileCollection.AssemblyManager.ScriptingBackEnd = ScriptingBackEnd.Il2Cpp;
+					}
+
 					m_assemblies.Add(file.FullName);
+
 					Logger.Log(LogType.Info, LogCategory.Import, $"Assembly '{file.Name}' has been found at '{directory.FullName}'");
 				}
 			}

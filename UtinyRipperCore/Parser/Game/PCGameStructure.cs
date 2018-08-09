@@ -94,6 +94,5 @@ namespace UtinyRipper
 
 		private readonly DirectoryInfo m_root;
 		private readonly string m_dataPath;
-		private readonly string m_managedPath;
 	}
 }

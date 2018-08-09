@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using UtinyRipper.AssetExporters;
+using UtinyRipper.AssetExporters.Mono;
 
 namespace UtinyRipper
 {
@@ -42,6 +44,28 @@ namespace UtinyRipper
 				if (!Directory.Exists(m_obbDataPath))
 				{
 					throw new Exception($"Obb data directory hasn't beed found");
+				}
+			}
+
+			DirectoryInfo managedDirectory = new DirectoryInfo(ManagedPath);
+			if (!managedDirectory.Exists)
+			{
+				throw new Exception($"Managed directory hasn't been found");
+			}
+
+			foreach (FileInfo assemblyFile in managedDirectory.EnumerateFiles())
+			{
+				if (AssemblyManager.IsAssembly(assemblyFile.Name))
+				{
+					if (MonoManager.IsMonoAssembly(assemblyFile.Name))
+					{
+						m_fileCollection.AssemblyManager.ScriptingBackEnd = ScriptingBackEnd.Mono;
+					}
+					else
+					{
+						m_fileCollection.AssemblyManager.ScriptingBackEnd = ScriptingBackEnd.Il2Cpp;
+					}
+					break;
 				}
 			}
 		}

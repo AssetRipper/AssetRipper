@@ -117,6 +117,11 @@ namespace UtinyRipper.AssetExporters
 			get => m_scriptingBackEnd;
 			set
 			{
+				if(m_scriptingBackEnd == value)
+				{
+					return;
+				}
+
 				if(value == ScriptingBackEnd.Unknown)
 				{
 					if (m_scriptingBackEnd != ScriptingBackEnd.Unknown)
