@@ -88,15 +88,15 @@ namespace UtinyRipper.Classes
 			{
 				return null;
 			}
-			Object @object = file.FindObject(FileIndex, PathID);
-			switch (@object)
+			Object asset = file.FindObject(FileIndex, PathID);
+			switch (asset)
 			{
 				case null:
 					return null;
 				case T t:
 					return t;
 				default:
-					throw new Exception($"Object's type {@object.ClassID} doesn't assignable from {typeof(T).Name}");
+					throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
 			}
 		}
 
@@ -106,15 +106,15 @@ namespace UtinyRipper.Classes
 			{
 				return null;
 			}
-			Object @object = container.FindObject(FileIndex, PathID);
-			switch (@object)
+			Object asset = container.FindObject(FileIndex, PathID);
+			switch (asset)
 			{
 				case null:
 					return null;
 				case T t:
 					return t;
 				default:
-					throw new Exception($"Object's type {@object.ClassID} doesn't assignable from {typeof(T).Name}");
+					throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
 			}
 		}
 
@@ -133,12 +133,12 @@ namespace UtinyRipper.Classes
 			{
 				throw new Exception("Can't get null PPtr");
 			}
-			Object @object = file.GetObject(FileIndex, PathID);
-			if(@object is T t)
+			Object asset = file.GetObject(FileIndex, PathID);
+			if(asset is T t)
 			{
 				return t;
 			}
-			throw new Exception($"Object's type {@object.ClassID} doesn't assignable from {typeof(T).Name}");
+			throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
 		}
 
 		public bool IsObject(Object asset)

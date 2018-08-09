@@ -143,13 +143,13 @@ namespace UtinyRipper.SerializedFiles
 
 		public Object GetObject(long pathID)
 		{
-			Object @object = FindObject(pathID);
-			if(@object == null)
+			Object asset = FindObject(pathID);
+			if(asset == null)
 			{
 				throw new Exception($"Object with path ID {pathID} wasn't found");
 			}
 
-			return @object;
+			return asset;
 		}
 
 		public Object FindObject(int fileIndex, long pathID)
@@ -163,15 +163,15 @@ namespace UtinyRipper.SerializedFiles
 			return asset;
 		}
 
-		public ObjectInfo GetObjectInfo(long pathID)
+		public AssetEntry GetAssetEntry(long pathID)
 		{
 			return Metadata.Objects[pathID];
 		}
 
 		public ClassIDType GetClassID(long pathID)
 		{
-			ObjectInfo info = Metadata.Objects[pathID];
-			if (ObjectInfo.IsReadTypeIndex(Header.Generation))
+			AssetEntry info = Metadata.Objects[pathID];
+			if (AssetEntry.IsReadTypeIndex(Header.Generation))
 			{
 				return Metadata.Hierarchy.Types[info.TypeIndex].ClassID;
 			}
@@ -263,38 +263,41 @@ namespace UtinyRipper.SerializedFiles
 					{
 						if (ptr.FileID == 0)
 						{
-							ObjectInfo info = Metadata.Objects[ptr.PathID];
+							AssetEntry info = Metadata.Objects[ptr.PathID];
 							ReadAsset(ustream, info, startPosition);
 							preloaded.Add(ptr.PathID);
 						}
 					}
 				}
 
-				foreach (ObjectInfo info in Metadata.Objects.Values)
+				foreach (KeyValuePair<long, AssetEntry> infoPair in Metadata.Objects)
+				{
+					ClassIDType classID = AssetEntryToClassIDType(infoPair.Value);
+					if (classID == ClassIDType.MonoScript)
+					{
+						if (!preloaded.Contains(infoPair.Key))
+						{
+							ReadAsset(ustream, infoPair.Value, startPosition);
+							preloaded.Add(infoPair.Key);
+						}
+					}
+				}
+
+				foreach (AssetEntry info in Metadata.Objects.Values)
 				{
 					if (!preloaded.Contains(info.PathID))
 					{
 						ReadAsset(ustream, info, startPosition);
 					}
 				}
-
 			}
 		}
 
-		private void ReadAsset(AssetStream stream, ObjectInfo info, long startPosition)
+		private void ReadAsset(AssetStream stream, AssetEntry info, long startPosition)
 		{
-			AssetInfo assetInfo;
-			if (ObjectInfo.IsReadTypeIndex(Header.Generation))
-			{
-				RTTIBaseClassDescriptor typemeta = Metadata.Hierarchy.Types[info.TypeIndex];
-				assetInfo = new AssetInfo(this, info.PathID, typemeta.ClassID);
-			}
-			else
-			{
-				assetInfo = new AssetInfo(this, info.PathID, info.ClassID);
-			}
-
 			long pathID = info.PathID;
+			ClassIDType classID = AssetEntryToClassIDType(info);
+			AssetInfo assetInfo = new AssetInfo(this, pathID, classID);
 			Object asset = ReadAsset(stream, assetInfo, startPosition + Header.DataOffset + info.DataOffset, info.DataSize);
 			if (asset != null)
 			{
@@ -346,6 +349,19 @@ namespace UtinyRipper.SerializedFiles
 				}
 			}
 			m_assets.Add(pathID, asset);
+		}
+
+		private ClassIDType AssetEntryToClassIDType(AssetEntry info)
+		{
+			if (AssetEntry.IsReadTypeIndex(Header.Generation))
+			{
+				RTTIBaseClassDescriptor typemeta = Metadata.Hierarchy.Types[info.TypeIndex];
+				return typemeta.ClassID;
+			}
+			else
+			{
+				return info.ClassID;
+			}
 		}
 
 		public string Name { get; }

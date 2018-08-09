@@ -42,7 +42,7 @@ namespace UtinyRipper.SerializedFiles
 			throw new NotSupportedException();
 		}
 
-		public ObjectInfo GetObjectInfo(long pathID)
+		public AssetEntry GetAssetEntry(long pathID)
 		{
 			throw new NotSupportedException();
 		}

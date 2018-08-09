@@ -22,7 +22,7 @@ namespace UtinyRipper.Classes
 			Name = stream.ReadStringAligned();
 			
 			MonoScript script = Script.FindObject(File);
-			if(script != null)
+			if (script != null)
 			{
 				Structure = script.CreateStructure();
 				if(Structure != null)
@@ -32,7 +32,7 @@ namespace UtinyRipper.Classes
 				}
 			}
 
-			ObjectInfo info = File.GetObjectInfo(PathID);
+			AssetEntry info = File.GetAssetEntry(PathID);
 			stream.BaseStream.Position = position + info.DataSize;
 		}
 

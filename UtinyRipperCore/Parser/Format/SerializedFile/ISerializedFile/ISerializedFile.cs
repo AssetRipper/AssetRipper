@@ -6,33 +6,33 @@ namespace UtinyRipper.SerializedFiles
 	public interface ISerializedFile
 	{
 		/// <summary>
-		/// Get object from current assets file
+		/// Get object from current serialized file
 		/// </summary>
 		/// <param name="fileIndex">Path ID for searching object</param>
-		/// <returns>Founded object</returns>
+		/// <returns>Found object</returns>
 		Object GetObject(long pathID);
 		/// <summary>
-		/// Get object in assets file with specified file index
+		/// Get object in serialized file with specified file index
 		/// </summary>
 		/// <param name="fileIndex">Dependency index</param>
 		/// <param name="pathID">Path ID for searching object</param>
-		/// <returns></returns>
+		/// <returns>Found object</returns>
 		Object GetObject(int fileIndex, long pathID);
 		/// <summary>
 		/// Try to find object from current assets file
 		/// </summary>
 		/// <param name="pathID">Path ID for searching object</param>
-		/// <returns>Founded object or null</returns>
+		/// <returns>Found object or null</returns>
 		Object FindObject(long pathID);
 		/// <summary>
-		/// Try to find object in assets file with specified file index
+		/// Try to find object in serialized file with specified file index
 		/// </summary>
 		/// <param name="fileIndex">Dependency index</param>
 		/// <param name="pathID">Path ID for searching object</param>
-		/// <returns></returns>
+		/// <returns>Found object or null</returns>
 		Object FindObject(int fileIndex, long pathID);
 
-		ObjectInfo GetObjectInfo(long pathID);
+		AssetEntry GetAssetEntry(long pathID);
 		ClassIDType GetClassID(long pathID);
 		
 		IEnumerable<Object> FetchAssets();

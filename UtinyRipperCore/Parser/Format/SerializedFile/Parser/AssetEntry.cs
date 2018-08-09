@@ -1,9 +1,9 @@
 ﻿namespace UtinyRipper.SerializedFiles
 {
 	/// <summary>
-	/// The object info contains information for a block of raw serialized object data.
+	/// Contains information for a block of raw serialized object data.
 	/// </summary>
-	public class ObjectInfo : ISerializedFileReadable
+	public class AssetEntry : ISerializedFileReadable
 	{
 		/// <summary>
 		/// 5.0.0 and greater

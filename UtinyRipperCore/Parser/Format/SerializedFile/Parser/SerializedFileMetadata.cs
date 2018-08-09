@@ -29,10 +29,10 @@ namespace UtinyRipper.SerializedFiles
 			Hierarchy.Read(stream);
 
 			int count = stream.ReadInt32();
-			m_objects = new Dictionary<long, ObjectInfo>(count);
+			m_objects = new Dictionary<long, AssetEntry>(count);
 			for (int i = 0; i < count; i++)
 			{
-				ObjectInfo objectInfo = new ObjectInfo();
+				AssetEntry objectInfo = new AssetEntry();
 				objectInfo.Read(stream);
 				m_objects.Add(objectInfo.PathID, objectInfo);
 			}
@@ -49,12 +49,12 @@ namespace UtinyRipper.SerializedFiles
 		}
 
 		public RTTIClassHierarchyDescriptor Hierarchy { get; }
-		public IReadOnlyDictionary<long, ObjectInfo> Objects => m_objects;
+		public IReadOnlyDictionary<long, AssetEntry> Objects => m_objects;
 		public IReadOnlyList<ObjectPtr> Preloads => m_preloads;
 		public IReadOnlyList<FileIdentifier> Dependencies => m_dependencies;
 		public string Unknown { get; private set; }
 		
-		private Dictionary<long, ObjectInfo> m_objects;
+		private Dictionary<long, AssetEntry> m_objects;
 		private ObjectPtr[] m_preloads;
 		private FileIdentifier[] m_dependencies;
 	}

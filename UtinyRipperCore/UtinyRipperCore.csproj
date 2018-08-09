@@ -416,11 +416,11 @@
     <Compile Include="Parser\Format\SerializedFile\ISerializedFile\VirtualSerializedFile.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\RTTIClassHierarchyDescriptor.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\SerializedFileHeader.cs" />
-    <Compile Include="Parser\Format\Entry\FileData.cs" />
-    <Compile Include="Parser\Format\Entry\FileEntry.cs" />
+    <Compile Include="Parser\Format\Data\FileData.cs" />
+    <Compile Include="Parser\Format\Data\FileEntry.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\SerializedFileMetadata.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\FileIdentifier.cs" />
-    <Compile Include="Parser\Format\SerializedFile\Parser\ObjectInfo.cs" />
+    <Compile Include="Parser\Format\SerializedFile\Parser\AssetEntry.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\ObjectPtr.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\RTTIBaseClassDescriptor.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\TypeTree.cs" />
@@ -479,7 +479,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\YAMLAssetExporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Interfaces\IExportContainer.cs" />
     <Compile Include="Parser\AssetCollection\IFileCollection.cs" />
-    <Compile Include="Parser\Format\Entry\AssetInfo.cs" />
+    <Compile Include="Parser\Format\Data\AssetInfo.cs" />
     <Compile Include="Parser\Format\SerializedFile\SerializedFile.cs" />
     <Compile Include="Parser\Format\BundleFile\Entry\BundleFileEntry.cs" />
     <Compile Include="Parser\Classes\AnimationClip\AnimationType.cs" />
@@ -701,7 +701,7 @@
     <Compile Include="Parser\Classes\Serialize\Vector3f.cs" />
     <Compile Include="Parser\Classes\Serialize\Vector4f.cs" />
     <Compile Include="Parser\Classes\Transform.cs" />
-    <Compile Include="Parser\Format\Entry\ResourcesFile.cs" />
+    <Compile Include="Parser\Format\Data\ResourcesFile.cs" />
     <Compile Include="Parser\Utils\PathUtils.cs" />
     <Compile Include="Parser\Version\VersionType.cs" />
     <Compile Include="Parser\Format\BundleFile\Parser\BundleCompressType.cs" />
