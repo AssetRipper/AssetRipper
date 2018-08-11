@@ -889,6 +889,8 @@
     <Compile Include="Utils\Logger\Logger.cs" />
     <Compile Include="Utils\Logger\LogType.cs" />
     <Compile Include="Utils\RandomUtils.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoArray.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\ScriptExportArray.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
