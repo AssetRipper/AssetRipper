@@ -98,8 +98,11 @@ namespace UtinyRipper
 		private static void PrepareExportDirectory(string path)
 		{
 			string directory = Directory.GetCurrentDirectory();
-			CheckWritePermission(directory);
-
+			if (!RunetimeUtils.IsRunningOnMono)
+			{
+				CheckWritePermission(directory);
+			}
+			
 			if (Directory.Exists(path))
 			{
 				Directory.Delete(path, true);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using UtinyRipper.AssetExporters;
@@ -15,6 +16,46 @@ namespace UtinyRipper
 				throw new ArgumentNullException(nameof(collection));
 			}
 			m_fileCollection = collection;
+		}
+
+		protected static string GetPresentFileName(string rootPath, string fileName)
+		{
+			if (RunetimeUtils.IsRunningOnMono)
+			{
+				if (Directory.Exists(rootPath))
+				{
+					fileName = Path.GetFileName(fileName).ToLower(CultureInfo.InvariantCulture);
+					DirectoryInfo root = new DirectoryInfo(rootPath);
+					foreach (FileInfo file in root.EnumerateFiles())
+					{
+						if (file.Name.ToLower(CultureInfo.InvariantCulture) == fileName)
+						{
+							return file.Name;
+						}
+					}
+				}
+			}
+			return fileName;
+		}
+
+		protected static string GetPresentDirectoryName(string rootPath, string directoryName)
+		{
+			if (RunetimeUtils.IsRunningOnMono)
+			{
+				if (Directory.Exists(rootPath))
+				{
+					directoryName = Path.GetFileName(directoryName).ToLower(CultureInfo.InvariantCulture);
+					DirectoryInfo root = new DirectoryInfo(rootPath);
+					foreach (DirectoryInfo directory in root.EnumerateDirectories())
+					{
+						if (directory.Name.ToLower(CultureInfo.InvariantCulture) == directoryName)
+						{
+							return directory.Name;
+						}
+					}
+				}
+			}
+			return directoryName;
 		}
 
 		private static bool IsDefaultResource(string fileName)
@@ -93,22 +134,22 @@ namespace UtinyRipper
 				}
 				if (IsDefaultResource(dependency))
 				{
-					if (LoadEngineDependency(dataPath, DefaultResourceName1))
+					if (LoadEngineDependency(dataPath, DefaultResourceName1, dependency))
 					{
 						return true;
 					}
-					if (LoadEngineDependency(dataPath, DefaultResourceName2))
+					if (LoadEngineDependency(dataPath, DefaultResourceName2, dependency))
 					{
 						return true;
 					}
 				}
 				else if (IsBuiltinExtra(dependency))
 				{
-					if (LoadEngineDependency(dataPath, BuiltinExtraName1))
+					if (LoadEngineDependency(dataPath, BuiltinExtraName1, dependency))
 					{
 						return true;
 					}
-					if (LoadEngineDependency(dataPath, BuiltinExtraName2))
+					if (LoadEngineDependency(dataPath, BuiltinExtraName2, dependency))
 					{
 						return true;
 					}
@@ -139,25 +180,6 @@ namespace UtinyRipper
 			return false;
 		}
 		
-		private bool LoadEngineDependency(string path, string dependency)
-		{
-			string filePath = Path.Combine(path, DefaultResourceName1);
-			if (File.Exists(filePath))
-			{
-				m_fileCollection.LoadSerializedFile(filePath, dependency);
-				return true;
-			}
-
-			string resourcePath = Path.Combine(path, ResourceName);
-			filePath = Path.Combine(resourcePath, DefaultResourceName1);
-			if (File.Exists(filePath))
-			{
-				m_fileCollection.LoadSerializedFile(filePath, dependency);
-				return true;
-			}
-			return false;
-		}
-
 		protected IEnumerable<string> FetchAssetBundles(DirectoryInfo root)
 		{
 			foreach(FileInfo file in root.EnumerateFiles())
@@ -174,6 +196,25 @@ namespace UtinyRipper
 					yield return path;
 				}
 			}
+		}
+
+		private bool LoadEngineDependency(string path, string dependency, string originName)
+		{
+			string filePath = Path.Combine(path, dependency);
+			if (File.Exists(filePath))
+			{
+				m_fileCollection.LoadSerializedFile(filePath, originName);
+				return true;
+			}
+
+			string resourcePath = Path.Combine(path, ResourceName);
+			filePath = Path.Combine(resourcePath, dependency);
+			if (File.Exists(filePath))
+			{
+				m_fileCollection.LoadSerializedFile(filePath, originName);
+				return true;
+			}
+			return false;
 		}
 
 		public abstract string Name { get; }
