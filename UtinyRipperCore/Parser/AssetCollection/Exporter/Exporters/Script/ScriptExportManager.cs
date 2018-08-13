@@ -118,6 +118,11 @@ namespace UtinyRipper.Exporters.Scripts
 		
 		public ScriptExportType RetrieveType(TypeReference type)
 		{
+			if (type.IsArray)
+			{
+				TypeDefinition definition = type.Resolve();
+				return RetrieveArray(type, definition);
+			}
 			if(type.Module != null)
 			{
 				TypeDefinition definition = type.Resolve();
@@ -133,7 +138,6 @@ namespace UtinyRipper.Exporters.Scripts
 					}
 				}
 			}
-
 			if (m_types.TryGetValue(type.FullName, out ScriptExportType exportType))
 			{
 				return exportType;
@@ -173,6 +177,13 @@ namespace UtinyRipper.Exporters.Scripts
 			ScriptExportField exportField = new ScriptExportMonoField(field);
 			exportField.Init(this);
 			return exportField;
+		}
+
+		public ScriptExportArray RetrieveArray(TypeReference type, TypeDefinition definition)
+		{
+			ScriptExportArray exportType = new ScriptExportMonoArray(type, definition);
+			exportType.Init(this);
+			return exportType;
 		}
 
 		public ScriptExportParameter RetrieveParameter(ParameterDefinition parameter)
