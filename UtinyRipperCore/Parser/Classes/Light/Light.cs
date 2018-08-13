@@ -88,6 +88,16 @@ namespace UtinyRipper.Classes
 		{
 			return version.IsGreaterEqual(5);
 		}
+		/// <summary>
+		/// 2017.1.0
+		/// </summary>
+		public static bool IsReadFalloffTable(Version version)
+		{
+			return version.IsGreaterEqual(2017, 1, 0);
+		}
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
 		public static bool IsReadColorTemperature(Version version)
 		{
 			return version.IsGreaterEqual(5, 6);
@@ -208,6 +218,10 @@ namespace UtinyRipper.Classes
 			{
 				BounceIntensity = stream.ReadSingle();
 			}
+			if(IsReadFalloffTable(stream.Version))
+			{
+				FalloffTable.Read(stream);
+			}
 			if (IsReadColorTemperature(stream.Version))
 			{
 				ColorTemperature = stream.ReadSingle();
@@ -280,5 +294,6 @@ namespace UtinyRipper.Classes
 		public PPtr<Flare> Flare;
 		public BitField CullingMask;
 		public Vector2f AreaSize;
+		public FalloffTable FalloffTable;
 	}
 }

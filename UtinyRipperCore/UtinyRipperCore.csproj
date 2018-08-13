@@ -246,6 +246,7 @@
     <Compile Include="Parser\Classes\LightProbes\LightProbeData.cs" />
     <Compile Include="Parser\Classes\LightProbes\LightProbeOcclusion.cs" />
     <Compile Include="Parser\Classes\LightProbes\LightProbes.cs" />
+    <Compile Include="Parser\Classes\Light\FalloffTable.cs" />
     <Compile Include="Parser\Classes\Mesh\ChannelType.cs" />
     <Compile Include="Parser\Classes\Mesh\MeshTopology.cs" />
     <Compile Include="Parser\Classes\MonoManager.cs" />
