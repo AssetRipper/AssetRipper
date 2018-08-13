@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using UtinyRipper;
 
 namespace UtinyRipper.Exporters.Scripts
 {
@@ -18,6 +16,18 @@ namespace UtinyRipper.Exporters.Scripts
 		public void GetUsedNamespaces(ICollection<string> namespaces)
 		{
 			Type.GetTypeNamespaces(namespaces);
+		}
+
+		public override string ToString()
+		{
+			if (FullName == null)
+			{
+				return base.ToString();
+			}
+			else
+			{
+				return FullName;
+			}
 		}
 
 		public abstract string Name { get; }

@@ -20,6 +20,20 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			{
 				Definition = type.Resolve();
 			}
+
+			m_name = GetName();
+			m_module = GetModule(Type);
+			m_fullName = ScriptExportManager.ToFullName(Module, Type.FullName);
+		}
+
+		public static string ToFullName(TypeReference type)
+		{
+			return ScriptExportManager.ToFullName(GetModule(type), type.FullName);
+		}
+
+		public static string GetModule(TypeReference type)
+		{
+			return Path.GetFileNameWithoutExtension(type.Scope.Name);
 		}
 		
 		public override void Init(IScriptExportManager manager)
@@ -35,15 +49,8 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			m_delegates = CreateDelegates(manager);
 			m_fields = CreateFields(manager);
 
-			m_name = GetName();
-			m_module = Path.GetFileNameWithoutExtension(Type.Scope.Name);
-			m_fullName = $"[{Module}]{Type.FullName}";
-
 			// force manager to create container type
-			if (Type.IsNested)
-			{
-				manager.RetrieveType(Type.DeclaringType);
-			}
+			GetContainer(manager);
 		}
 
 		public override ScriptExportType GetContainer(IScriptExportManager manager)
@@ -218,19 +225,20 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 				typeName = typeName.Substring(0, typeName.Length - 1);
 			}*/
 
-			if (GenericArguments.Count > 0)
+			if (Type.IsGenericInstance)
 			{
 				int index = typeName.IndexOf('`');
-				if(index > 0)
+				if (index > 0)
 				{
 					string fixedName = typeName.Substring(0, index);
 					name += fixedName;
 					name += '<';
-					for (int i = 0; i < GenericArguments.Count; i++)
+					GenericInstanceType generic = (GenericInstanceType)Type;
+					for (int i = 0; i < generic.GenericArguments.Count; i++)
 					{
-						ScriptExportType arg = GenericArguments[i];
+						TypeReference arg = generic.GenericArguments[i];
 						name += arg.Name;
-						if (i < GenericArguments.Count - 1)
+						if (i < generic.GenericArguments.Count - 1)
 						{
 							name += ", ";
 						}

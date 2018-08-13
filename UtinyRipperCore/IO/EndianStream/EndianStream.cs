@@ -188,24 +188,38 @@ namespace UtinyRipper
 		/// <summary>
 		/// Read C like UTF8 format zero terminated string
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>Read string</returns>
 		public string ReadStringZeroTerm()
 		{
-			int i;
-			for(i = 0; i < m_bufferString.Length; i++)
+			if(ReadStringZeroTerm(m_bufferString.Length, out string result))
 			{
-				byte character = ReadByte();
-				if(character == 0)
+				return result;
+			}
+			throw new Exception("Can't find end of string");
+		}
+
+		/// <summary>
+		/// Read C like UTF8 format zero terminated string
+		/// </summary>
+		/// <param name="maxLength">Max allowed character count to read</param>
+		/// <param name="result">Read string if found</param>
+		/// <returns>Whether zero term has been found</returns>
+		public bool ReadStringZeroTerm(int maxLength, out string result)
+		{
+			maxLength = Math.Min(maxLength, m_bufferString.Length);
+			for (int i = 0; i < maxLength; i++)
+			{
+				byte bt = ReadByte();
+				if (bt == 0)
 				{
-					break;
+					result = Encoding.UTF8.GetString(m_bufferString, 0, i);
+					return true;
 				}
-				m_bufferString[i] = character;
+				m_bufferString[i] = bt;
 			}
-			if(i == m_bufferString.Length)
-			{
-				throw new Exception("Can't find end of string");
-			}
-			return Encoding.UTF8.GetString(m_bufferString, 0, i);
+
+			result = null;
+			return false;
 		}
 
 		public bool[] ReadBooleanArray()

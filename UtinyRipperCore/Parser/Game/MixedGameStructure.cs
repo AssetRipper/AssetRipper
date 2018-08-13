@@ -66,7 +66,22 @@ namespace UtinyRipper
 		{
 			foreach (FileInfo file in directory.EnumerateFiles())
 			{
-				if (file.Extension == AssetBundleExtension)
+				if (file.Name == MainDataName)
+				{
+					AddFile(file.FullName);
+					Logger.Log(LogType.Info, LogCategory.Import, $"'{MainDataName}' has been found at '{directory.FullName}'");
+				}
+				else  if (file.Name == GlobalGameManagerName)
+				{
+					AddFile(file.FullName);
+					Logger.Log(LogType.Info, LogCategory.Import, $"'{GlobalGameManagerName}' has been found at '{directory.FullName}'");
+				}
+				else if (m_levelName.IsMatch(file.Name))
+				{
+					AddFile(file.FullName);
+					Logger.Log(LogType.Info, LogCategory.Import, $"'{file.Name}' has been found at '{directory.FullName}'");
+				}
+				else if (file.Extension == AssetBundleExtension)
 				{
 					string onlyName = Path.GetFileNameWithoutExtension(file.Name);
 					m_files.Add(onlyName, file.FullName);
@@ -80,58 +95,17 @@ namespace UtinyRipper
 					}
 					else
 					{
-						m_fileCollection.AssemblyManager.ScriptingBackEnd = ScriptingBackEnd.Il2Cpp;
+						throw new NotImplementedException();
 					}
 
 					m_assemblies.Add(file.FullName);
-
 					Logger.Log(LogType.Info, LogCategory.Import, $"Assembly '{file.Name}' has been found at '{directory.FullName}'");
 				}
 			}
-
-			CheckGameDirectory(directory);
-
+			
 			foreach(DirectoryInfo subDirectory in directory.EnumerateDirectories())
 			{
 				AddDirectory(subDirectory);
-			}
-		}
-
-		private void CheckGameDirectory(DirectoryInfo directory)
-		{
-			string filePath = Path.Combine(directory.FullName, MainDataName);
-			if (File.Exists(filePath))
-			{
-				AddFile(filePath);
-				Logger.Log(LogType.Info, LogCategory.Import, $"'{MainDataName}' has been found at '{directory.FullName}'");
-			}
-
-			filePath = Path.Combine(directory.FullName, GlobalGameManagerName);
-			if (File.Exists(filePath))
-			{
-				AddFile(filePath);
-				Logger.Log(LogType.Info, LogCategory.Import, $"'{GlobalGameManagerName}' has been found at '{directory.FullName}'");
-			}
-			
-			foreach (FileInfo levelFile in directory.EnumerateFiles())
-			{
-				if (m_levelName.IsMatch(levelFile.Name))
-				{
-					AddFile(levelFile.FullName);
-					Logger.Log(LogType.Info, LogCategory.Import, $"'{levelFile.Name}' has been found at '{directory.FullName}'");
-				}
-			}
-
-			string streamingPath = Path.Combine(directory.FullName, StreamingName);
-			DirectoryInfo streamingDirectory = new DirectoryInfo(streamingPath);
-			if (streamingDirectory.Exists)
-			{
-				foreach (string path in FetchAssetBundles(streamingDirectory))
-				{
-					AddFile(filePath);
-					string name = Path.GetFileNameWithoutExtension(path);
-					Logger.Log(LogType.Info, LogCategory.Import, $"Asset bundle '{name}' has been found at '{streamingDirectory.FullName}'");
-				}
 			}
 		}
 

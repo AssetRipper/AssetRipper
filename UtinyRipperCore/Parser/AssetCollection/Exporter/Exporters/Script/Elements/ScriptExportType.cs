@@ -7,6 +7,9 @@ namespace UtinyRipper.Exporters.Scripts
 	{
 		public abstract void Init(IScriptExportManager manager);
 
+		/// <summary>
+		/// Get declaring type if exist, otherwise self
+		/// </summary>
 		public abstract ScriptExportType GetContainer(IScriptExportManager manager);
 
 		public ScriptExportType GetTopmostContainer(IScriptExportManager manager)
@@ -15,7 +18,7 @@ namespace UtinyRipper.Exporters.Scripts
 			while(true)
 			{
 				ScriptExportType next = current.GetContainer(manager);
-				if(current == next)
+				if(next == current)
 				{
 					break;
 				}
@@ -116,6 +119,18 @@ namespace UtinyRipper.Exporters.Scripts
 			foreach (ScriptExportField field in Fields)
 			{
 				field.GetUsedNamespaces(namespaces);
+			}
+		}
+
+		public override string ToString()
+		{
+			if(FullName == null)
+			{
+				return base.ToString();
+			}
+			else
+			{
+				return FullName;
 			}
 		}
 

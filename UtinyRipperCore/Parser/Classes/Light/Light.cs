@@ -93,7 +93,7 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public static bool IsReadFalloffTable(Version version)
 		{
-			return version.IsGreaterEqual(2017, 1, 0);
+			return version.IsEqual(2017, 1, 0);
 		}
 		/// <summary>
 		/// 5.6.0 and greater

@@ -1,7 +1,6 @@
 ﻿using Mono.Cecil;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace UtinyRipper.Exporters.Scripts.Mono
 {
@@ -19,6 +18,9 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			{
 				Definition = @enum.Resolve();
 			}
+
+			m_module = ScriptExportMonoType.GetModule(Type);
+			m_fullName = ScriptExportManager.ToFullName(Module, Type.FullName);
 		}
 
 		public override void Init(IScriptExportManager manager)
@@ -32,8 +34,8 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 				m_fields = CreateFields(manager);
 			}
 
-			m_module = Path.GetFileNameWithoutExtension(Type.Scope.Name);
-			m_fullName = $"[{Module}]{Type.FullName}";
+			// force manager to create container type
+			GetContainer(manager);
 		}
 
 		public override ScriptExportType GetContainer(IScriptExportManager manager)

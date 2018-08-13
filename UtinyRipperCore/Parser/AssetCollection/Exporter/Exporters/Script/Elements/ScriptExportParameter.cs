@@ -17,6 +17,18 @@ namespace UtinyRipper.Exporters.Scripts
 			Type.GetTypeNamespaces(namespaces);
 		}
 
+		public override string ToString()
+		{
+			if (Name == null)
+			{
+				return base.ToString();
+			}
+			else
+			{
+				return Name;
+			}
+		}
+
 		protected abstract ScriptExportType Type { get; }
 
 		protected abstract string Name { get; }

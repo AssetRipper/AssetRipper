@@ -46,6 +46,18 @@ namespace UtinyRipper.Exporters.Scripts
 			}
 		}
 
+		public override string ToString()
+		{
+			if (Name == null)
+			{
+				return base.ToString();
+			}
+			else
+			{
+				return Name;
+			}
+		}
+
 		public abstract ScriptExportType Type { get; }
 		public abstract ScriptExportAttribute Attribute { get; }
 

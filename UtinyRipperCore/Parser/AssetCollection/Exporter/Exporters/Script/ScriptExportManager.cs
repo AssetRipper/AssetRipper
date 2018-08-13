@@ -18,6 +18,11 @@ namespace UtinyRipper.Exporters.Scripts
 			m_exportPath = exportPath;
 		}
 
+		public static string ToFullName(string module, string fullname)
+		{
+			return $"[{module}]{fullname}";
+		}
+
 		private static string GetExportSubPath(string assembly, string @namespace, string @class)
 		{
 			string assFolderName = Path.GetFileNameWithoutExtension(assembly);
@@ -90,12 +95,9 @@ namespace UtinyRipper.Exporters.Scripts
 			foreach (ScriptExportEnum @enum in m_enums.Values)
 			{
 				ScriptExportType top = @enum.GetTopmostContainer(this);
-				if(top != @enum)
+				if (m_exported.Contains(top.FullName))
 				{
-					if (m_exported.Contains(top.FullName))
-					{
-						continue;
-					}
+					continue;
 				}
 
 				Export(top);
@@ -104,12 +106,9 @@ namespace UtinyRipper.Exporters.Scripts
 			foreach (ScriptExportDelegate @delegate in m_delegates.Values)
 			{
 				ScriptExportType top = @delegate.GetTopmostContainer(this);
-				if (top != @delegate)
+				if (m_exported.Contains(top.FullName))
 				{
-					if (m_exported.Contains(top.FullName))
-					{
-						continue;
-					}
+					continue;
 				}
 
 				Export(top);
@@ -120,9 +119,9 @@ namespace UtinyRipper.Exporters.Scripts
 		{
 			if (type.IsArray)
 			{
-				TypeDefinition definition = type.Resolve();
-				return RetrieveArray(type, definition);
+				return RetrieveArray(type);
 			}
+
 			if(type.Module != null)
 			{
 				TypeDefinition definition = type.Resolve();
@@ -138,16 +137,29 @@ namespace UtinyRipper.Exporters.Scripts
 					}
 				}
 			}
-			if (m_types.TryGetValue(type.FullName, out ScriptExportType exportType))
+
+			string fullname = ScriptExportMonoType.ToFullName(type);
+			if (m_types.TryGetValue(fullname, out ScriptExportType exportType))
 			{
 				return exportType;
 			}
 			return CreateType(type);
 		}
 
+		public ScriptExportArray RetrieveArray(TypeReference array)
+		{
+			string fullname = ScriptExportMonoType.ToFullName(array);
+			if (m_arrays.TryGetValue(fullname, out ScriptExportArray exportArray))
+			{
+				return exportArray;
+			}
+			return CreateArray(array);
+		}
+
 		public ScriptExportEnum RetrieveEnum(TypeDefinition @enum)
 		{
-			if (m_enums.TryGetValue(@enum.FullName, out ScriptExportEnum exportEnum))
+			string fullname = ScriptExportMonoType.ToFullName(@enum);
+			if (m_enums.TryGetValue(fullname, out ScriptExportEnum exportEnum))
 			{
 				return exportEnum;
 			}
@@ -156,7 +168,8 @@ namespace UtinyRipper.Exporters.Scripts
 
 		public ScriptExportDelegate RetrieveDelegate(TypeDefinition @delegate)
 		{
-			if (m_delegates.TryGetValue(@delegate.FullName, out ScriptExportDelegate exportDelegate))
+			string fullname = ScriptExportMonoType.ToFullName(@delegate);
+			if (m_delegates.TryGetValue(fullname, out ScriptExportDelegate exportDelegate))
 			{
 				return exportDelegate;
 			}
@@ -165,7 +178,8 @@ namespace UtinyRipper.Exporters.Scripts
 
 		public ScriptExportAttribute RetrieveAttribute(CustomAttribute attribute)
 		{
-			if (m_attributes.TryGetValue(attribute.AttributeType.FullName, out ScriptExportAttribute exportAttribute))
+			string fullname = ScriptExportMonoAttribute.ToFullName(attribute);
+			if (m_attributes.TryGetValue(fullname, out ScriptExportAttribute exportAttribute))
 			{
 				return exportAttribute;
 			}
@@ -179,13 +193,6 @@ namespace UtinyRipper.Exporters.Scripts
 			return exportField;
 		}
 
-		public ScriptExportArray RetrieveArray(TypeReference type, TypeDefinition definition)
-		{
-			ScriptExportArray exportType = new ScriptExportMonoArray(type, definition);
-			exportType.Init(this);
-			return exportType;
-		}
-
 		public ScriptExportParameter RetrieveParameter(ParameterDefinition parameter)
 		{
 			ScriptExportParameter exportParameter = new ScriptExportMonoParameter(parameter);
@@ -196,34 +203,39 @@ namespace UtinyRipper.Exporters.Scripts
 		private ScriptExportType CreateType(TypeReference type)
 		{
 			ScriptExportType exportType = new ScriptExportMonoType(type);
-			m_types.Add(type.FullName, exportType);
+			m_types.Add(exportType.FullName, exportType);
 			exportType.Init(this);
-			exportType.GetTopmostContainer(this);
 			return exportType;
+		}
+
+		public ScriptExportArray CreateArray(TypeReference type)
+		{
+			ScriptExportArray exportArray = new ScriptExportMonoArray(type);
+			m_arrays.Add(exportArray.FullName, exportArray);
+			exportArray.Init(this);
+			return exportArray;
 		}
 
 		private ScriptExportEnum CreateEnum(TypeReference @enum)
 		{
 			ScriptExportMonoEnum exportEnum = new ScriptExportMonoEnum(@enum);
-			m_enums.Add(@enum.FullName, exportEnum);
+			m_enums.Add(exportEnum.FullName, exportEnum);
 			exportEnum.Init(this);
-			exportEnum.GetTopmostContainer(this);
 			return exportEnum;
 		}
 
 		private ScriptExportDelegate CreateDelegate(TypeDefinition @delegate)
 		{
 			ScriptExportMonoDelegate exportDelegate = new ScriptExportMonoDelegate(@delegate);
-			m_delegates.Add(@delegate.FullName, exportDelegate);
+			m_delegates.Add(exportDelegate.FullName, exportDelegate);
 			exportDelegate.Init(this);
-			exportDelegate.GetTopmostContainer(this);
 			return exportDelegate;
 		}
 
 		private ScriptExportAttribute CreateAttribute(CustomAttribute attribute)
 		{
 			ScriptExportMonoAttribute exportAttribute = new ScriptExportMonoAttribute(attribute);
-			m_attributes.Add(attribute.AttributeType.FullName, exportAttribute);
+			m_attributes.Add(exportAttribute.FullName, exportAttribute);
 			exportAttribute.Init(this);
 			return exportAttribute;
 		}
@@ -305,6 +317,7 @@ namespace UtinyRipper.Exporters.Scripts
 		private static readonly Regex s_illegal = new Regex("[<>]", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
 		private readonly Dictionary<string, ScriptExportType> m_types = new Dictionary<string, ScriptExportType>();
+		private readonly Dictionary<string, ScriptExportArray> m_arrays = new Dictionary<string, ScriptExportArray>();
 		private readonly Dictionary<string, ScriptExportEnum> m_enums = new Dictionary<string, ScriptExportEnum>();
 		private readonly Dictionary<string, ScriptExportDelegate> m_delegates = new Dictionary<string, ScriptExportDelegate>();
 		private readonly Dictionary<string, ScriptExportAttribute> m_attributes = new Dictionary<string, ScriptExportAttribute>();

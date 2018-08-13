@@ -42,8 +42,11 @@ namespace UtinyRipper.BundleFiles
 			using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
 			{
 				long position = stream.BaseStream.Position;
-				string signature = stream.ReadStringZeroTerm();
-				bool isBundle = BundleHeader.TryParseSignature(signature, out BundleType _);
+				bool isBundle = false;
+				if (stream.ReadStringZeroTerm(0x20, out string signature))
+				{
+					isBundle = BundleHeader.TryParseSignature(signature, out BundleType _);
+				}
 				stream.BaseStream.Position = position;
 
 				return isBundle;

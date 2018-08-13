@@ -18,10 +18,8 @@ namespace UtinyRipper
 		{
 			List<string> toProcess = new List<string>();
 			toProcess.AddRange(pathes);
-			if(CheckPC(toProcess))
-			{ }
-			else if(CheckAndroid(toProcess))
-			{ }
+			if(CheckPC(toProcess)) { }
+			else if(CheckAndroid(toProcess)) { }
 			CheckMixed(toProcess);
 
 			if(PlatformStructure != null)

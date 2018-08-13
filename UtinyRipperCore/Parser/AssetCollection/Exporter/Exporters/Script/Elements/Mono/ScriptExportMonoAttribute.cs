@@ -1,5 +1,6 @@
 ﻿using Mono.Cecil;
 using System;
+using System.IO;
 
 namespace UtinyRipper.Exporters.Scripts.Mono
 {
@@ -13,6 +14,9 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			}
 			
 			Attribute = attribute;
+
+			m_module = ScriptExportMonoType.GetModule(Attribute.AttributeType);
+			m_fullName = ScriptExportManager.ToFullName(Module, Attribute.AttributeType.FullName);
 		}
 
 		public static bool IsCompilerGenerated(TypeDefinition type)
@@ -26,11 +30,20 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			}
 			return false;
 		}
-		
+
+		public static string ToFullName(CustomAttribute attribute)
+		{
+			return ScriptExportManager.ToFullName(GetModule(attribute.AttributeType), attribute.AttributeType.FullName);
+		}
+
+		private static string GetModule(TypeReference type)
+		{
+			return Path.GetFileNameWithoutExtension(type.Scope.Name);
+		}
+
 		public override void Init(IScriptExportManager manager)
 		{
 			m_type = manager.RetrieveType(Attribute.AttributeType);
-			m_fullName = $"[{Module}]{Attribute.AttributeType.FullName}";
 		}
 
 		public static bool IsSerializableAttribute(CustomAttribute attr)
@@ -47,7 +60,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		public override string FullName => m_fullName;
 		public override string Name => Attribute.AttributeType.Name;
-		public override string Module => Attribute.AttributeType.Module.ToString();
+		public override string Module => m_module;
 
 		protected override ScriptExportType Type => m_type;
 
@@ -55,5 +68,6 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		private ScriptExportType m_type;
 		private string m_fullName;
+		private string m_module;
 	}
 }
