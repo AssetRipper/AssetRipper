@@ -34,19 +34,10 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 				m_fields = CreateFields(manager);
 			}
 
-			// force manager to create container type
-			GetContainer(manager);
-		}
-
-		public override ScriptExportType GetContainer(IScriptExportManager manager)
-		{
 			if (Type.IsNested)
 			{
-				return manager.RetrieveType(Type.DeclaringType);
-			}
-			else
-			{
-				return this;
+				m_declaringType = manager.RetrieveType(Type.DeclaringType);
+				AddAsNestedEnum(manager);
 			}
 		}
 
@@ -71,6 +62,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 		public override string Namespace => Type.Namespace;
 		public override string Module => m_module;
 
+		public override ScriptExportType DeclaringType => m_declaringType;
 		public override IReadOnlyList<ScriptExportField> Fields => m_fields;
 
 		protected override string Keyword
@@ -101,6 +93,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 		private TypeReference Type { get; }
 		private TypeDefinition Definition { get; }
 
+		private ScriptExportType m_declaringType;
 		private IReadOnlyList<ScriptExportField> m_fields;
 		private string m_fullName;
 		private string m_module;

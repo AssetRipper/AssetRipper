@@ -34,26 +34,9 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		public override void Init(IScriptExportManager manager)
 		{
+			m_declaringType = manager.RetrieveType(Field.DeclaringType);
 			m_type = manager.RetrieveType(Field.FieldType);
 			m_attribute = CreateAttribute(manager);
-
-			TypeReference baseType = Field.DeclaringType.BaseType;
-			while(baseType != null)
-			{
-				if(baseType.Module == null)
-				{
-					break;
-				}
-
-				TypeDefinition baseDefinition = baseType.Resolve();
-				m_isNew = HasSameField(baseDefinition);
-				if(m_isNew)
-				{
-					break;
-				}
-
-				baseType = baseDefinition.BaseType;
-			}
 		}
 
 		private ScriptExportAttribute CreateAttribute(IScriptExportManager manager)
@@ -69,27 +52,15 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			}
 		}
 
-		private bool HasSameField(TypeDefinition type)
+		private bool HasSameField(ScriptExportType type)
 		{
-			foreach (FieldDefinition field in type.Fields)
-			{
-				if (field.Name == Name)
-				{
-					return true;
-				}
-			}
-
-			foreach (PropertyDefinition property in type.Properties)
-			{
-				if (property.Name == Name)
-				{
-					return true;
-				}
-			}
 
 			return false;
 		}
 
+		public override string Name => Field.Name;
+
+		public override ScriptExportType DeclaringType => m_declaringType;
 		public override ScriptExportType Type => m_type;
 		public override ScriptExportAttribute Attribute => m_attribute;
 
@@ -112,14 +83,12 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 				return ProtectedKeyWord;
 			}
 		}
-		protected override bool IsNew => m_isNew;
-		protected override string Name => Field.Name;
 		protected override string Constant => Field.Constant.ToString();
 
 		private FieldDefinition Field { get; }
 
+		private ScriptExportType m_declaringType;
 		private ScriptExportType m_type;
 		private ScriptExportAttribute m_attribute;
-		private bool m_isNew;
 	}
 }

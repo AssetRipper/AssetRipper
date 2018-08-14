@@ -37,19 +37,10 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			m_return = CreateReturnType(manager);
 			m_parameters = CreateParameterTypes(manager);
 
-			// force manager to create container type
-			GetContainer(manager);
-		}
-
-		public override ScriptExportType GetContainer(IScriptExportManager manager)
-		{
 			if (Type.IsNested)
 			{
-				return manager.RetrieveType(Type.DeclaringType);
-			}
-			else
-			{
-				return this;
+				m_declaringType = manager.RetrieveType(Type.DeclaringType);
+				AddAsNestedDelegate(manager);
 			}
 		}
 
@@ -87,8 +78,9 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 		public override string Namespace => Type.Namespace;
 		public override string Module => m_module;
 
-		protected override ScriptExportType Return => m_return;
-		protected override IReadOnlyList<ScriptExportParameter> Parameters => m_parameters;
+		public override ScriptExportType DeclaringType => m_declaringType;
+		public override ScriptExportType Return => m_return;
+		public override IReadOnlyList<ScriptExportParameter> Parameters => m_parameters;
 
 		protected override string Keyword
 		{
@@ -112,6 +104,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		private TypeDefinition Type { get; }
 
+		private ScriptExportType m_declaringType;
 		private ScriptExportType m_return;
 		private IReadOnlyList<ScriptExportParameter> m_parameters;
 		private string m_fullName;

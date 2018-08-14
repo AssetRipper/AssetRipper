@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace UtinyRipper.Exporters.Scripts
 {
 	public abstract class ScriptExportDelegate : ScriptExportType
 	{
-		public override void Export(TextWriter writer, int intent)
+		public sealed override void Export(TextWriter writer, int intent)
 		{
 			writer.WriteIntent(intent);
 			writer.Write("{0} delegate {1} {2}(", Keyword, Return.Name, Name);
@@ -21,7 +22,7 @@ namespace UtinyRipper.Exporters.Scripts
 			writer.WriteLine(");");
 		}
 
-		public override void GetUsedNamespaces(ICollection<string> namespaces)
+		public sealed override void GetUsedNamespaces(ICollection<string> namespaces)
 		{
 			GetTypeNamespaces(namespaces);
 			Return.GetTypeNamespaces(namespaces);
@@ -31,19 +32,18 @@ namespace UtinyRipper.Exporters.Scripts
 			}
 		}
 
-		protected override ScriptExportType Base => null;
-		
-		public override IReadOnlyList<ScriptExportType> GenericArguments { get; } = new ScriptExportType[0];
-		public override IReadOnlyList<ScriptExportType> NestedTypes { get; } = new ScriptExportType[0];
-		public override IReadOnlyList<ScriptExportEnum> NestedEnums { get; } = new ScriptExportEnum[0];
-		public override IReadOnlyList<ScriptExportDelegate> Delegates { get; } = new ScriptExportDelegate[0];
-		public override IReadOnlyList<ScriptExportField> Fields { get; } = new ScriptExportField[0];
+		protected sealed override bool HasMemberInner(string name)
+		{
+			throw new NotSupportedException();
+		}
 
-		protected abstract ScriptExportType Return { get; }
-		protected abstract IReadOnlyList<ScriptExportParameter> Parameters { get; }
+		public sealed override ScriptExportType Base => null;
+		public sealed override IReadOnlyList<ScriptExportField> Fields { get; } = new ScriptExportField[0];
+		public abstract ScriptExportType Return { get; }
+		public abstract IReadOnlyList<ScriptExportParameter> Parameters { get; }
 
-		protected override bool IsStruct => false;
-		protected override bool IsSerializable => false;
+		protected sealed override bool IsStruct => false;
+		protected sealed override bool IsSerializable => false;
 
 		protected const string SystemName = "System";
 

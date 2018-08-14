@@ -6,27 +6,7 @@ namespace UtinyRipper.Exporters.Scripts
 	public abstract class ScriptExportType
 	{
 		public abstract void Init(IScriptExportManager manager);
-
-		/// <summary>
-		/// Get declaring type if exist, otherwise self
-		/// </summary>
-		public abstract ScriptExportType GetContainer(IScriptExportManager manager);
-
-		public ScriptExportType GetTopmostContainer(IScriptExportManager manager)
-		{
-			ScriptExportType current = GetContainer(manager);
-			while(true)
-			{
-				ScriptExportType next = current.GetContainer(manager);
-				if(next == current)
-				{
-					break;
-				}
-				current = next;
-			}
-			return current;
-		}
-
+		
 		public void Export(TextWriter writer)
 		{
 			ExportUsings(writer);
@@ -92,13 +72,9 @@ namespace UtinyRipper.Exporters.Scripts
 			writer.WriteLine('}');
 		}
 
-		public void GetTypeNamespaces(ICollection<string> namespaces)
+		public virtual void GetTypeNamespaces(ICollection<string> namespaces)
 		{
 			namespaces.Add(Namespace);
-			foreach (ScriptExportType arg in GenericArguments)
-			{
-				arg.GetTypeNamespaces(namespaces);
-			}
 		}
 
 		public virtual void GetUsedNamespaces(ICollection<string> namespaces)
@@ -122,6 +98,33 @@ namespace UtinyRipper.Exporters.Scripts
 			}
 		}
 
+		public bool HasMember(string name)
+		{
+			return HasMember(this, name);
+		}
+
+		protected bool HasMember(ScriptExportType type, string name)
+		{
+			foreach (ScriptExportField field in type.Fields)
+			{
+				if (field.Name == Name)
+				{
+					return true;
+				}
+			}
+
+			if (type.Base == null)
+			{
+				return HasMemberInner(name);
+			}
+			else
+			{
+				return HasMember(type.Base, name);
+			}
+		}
+
+		protected abstract bool HasMemberInner(string name);
+
 		public override string ToString()
 		{
 			if(FullName == null)
@@ -132,6 +135,21 @@ namespace UtinyRipper.Exporters.Scripts
 			{
 				return FullName;
 			}
+		}
+
+		protected void AddAsNestedType(IScriptExportManager manager)
+		{
+			DeclaringType.m_nestedTypes.Add(this);
+		}
+
+		protected void AddAsNestedEnum(IScriptExportManager manager)
+		{
+			DeclaringType.m_nestedEnums.Add((ScriptExportEnum)this);
+		}
+
+		protected void AddAsNestedDelegate(IScriptExportManager manager)
+		{
+			DeclaringType.m_nestedDelegates.Add((ScriptExportDelegate)this);
 		}
 
 		private void ExportUsings(TextWriter writer)
@@ -155,14 +173,14 @@ namespace UtinyRipper.Exporters.Scripts
 		public abstract string Namespace { get; }
 		public abstract string Module { get; }
 		public virtual bool IsEnum => false;
-		
-		public abstract IReadOnlyList<ScriptExportType> GenericArguments { get; }
-		public abstract IReadOnlyList<ScriptExportType> NestedTypes { get; }
-		public abstract IReadOnlyList<ScriptExportEnum> NestedEnums { get; }
-		public abstract IReadOnlyList<ScriptExportDelegate> Delegates { get; }
-		public abstract IReadOnlyList<ScriptExportField> Fields { get; }
 
-		protected abstract ScriptExportType Base { get; }
+		public abstract ScriptExportType DeclaringType { get; }
+		public abstract ScriptExportType Base { get; }
+
+		public IReadOnlyList<ScriptExportType> NestedTypes => m_nestedTypes;
+		public IReadOnlyList<ScriptExportEnum> NestedEnums => m_nestedEnums;
+		public IReadOnlyList<ScriptExportDelegate> Delegates => m_nestedDelegates;
+		public abstract IReadOnlyList<ScriptExportField> Fields { get; }
 
 		protected abstract string Keyword { get; }
 		protected abstract bool IsStruct { get; }
@@ -179,5 +197,9 @@ namespace UtinyRipper.Exporters.Scripts
 
 		protected const string ObjectType = "Object";
 		protected const string ValueType = "ValueType";
+
+		protected readonly List<ScriptExportType> m_nestedTypes = new List<ScriptExportType>();
+		protected readonly List<ScriptExportEnum> m_nestedEnums = new List<ScriptExportEnum>();
+		protected readonly List<ScriptExportDelegate> m_nestedDelegates = new List<ScriptExportDelegate>();
 	}
 }

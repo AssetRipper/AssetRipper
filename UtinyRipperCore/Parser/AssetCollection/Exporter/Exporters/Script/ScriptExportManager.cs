@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UtinyRipper.Exporters.Scripts.Mono;
 
@@ -35,8 +36,13 @@ namespace UtinyRipper.Exporters.Scripts
 		private static string GetExportSubPath(ScriptExportType type)
 		{
 			string typeName = type.Name;
-			string fixedTypeName = s_illegal.Replace(typeName, "_");
-			return GetExportSubPath(type.Module, type.Namespace, fixedTypeName);
+			int index = typeName.IndexOf('<');
+			if(index >= 0)
+			{
+				typeName = typeName.Substring(0, index);
+				typeName += $".{typeName.Count(t => t == ',') + 1}";
+			}
+			return GetExportSubPath(type.Module, type.Namespace, typeName);
 		}
 
 		public ScriptExportType CreateExportType(TypeReference type)
@@ -47,13 +53,10 @@ namespace UtinyRipper.Exporters.Scripts
 
 		public string Export(ScriptExportType exportType)
 		{
-#if DEBUG
-			ScriptExportType topType = exportType.GetTopmostContainer(this);
-			if (topType != exportType)
+			if (exportType.DeclaringType != null)
 			{
 				throw new NotSupportedException("You can export only topmost types");
 			}
-#endif
 
 			if (IsBuiltInType(exportType))
 			{
@@ -83,35 +86,44 @@ namespace UtinyRipper.Exporters.Scripts
 		{
 			foreach (ScriptExportType type in m_types.Values)
 			{
-				ScriptExportType top = type.GetTopmostContainer(this);
-				if (m_exported.Contains(top.FullName))
+				if(type.DeclaringType != null)
+				{
+					continue;
+				}
+				if (m_exported.Contains(type.FullName))
 				{
 					continue;
 				}
 
-				Export(top);
+				Export(type);
 			}
 
 			foreach (ScriptExportEnum @enum in m_enums.Values)
 			{
-				ScriptExportType top = @enum.GetTopmostContainer(this);
-				if (m_exported.Contains(top.FullName))
+				if(@enum.DeclaringType != null)
+				{
+					continue;
+				}
+				if (m_exported.Contains(@enum.FullName))
 				{
 					continue;
 				}
 
-				Export(top);
+				Export(@enum);
 			}
 
 			foreach (ScriptExportDelegate @delegate in m_delegates.Values)
 			{
-				ScriptExportType top = @delegate.GetTopmostContainer(this);
-				if (m_exported.Contains(top.FullName))
+				if (@delegate.DeclaringType != null)
+				{
+					continue;
+				}
+				if (m_exported.Contains(@delegate.FullName))
 				{
 					continue;
 				}
 
-				Export(top);
+				Export(@delegate);
 			}
 		}
 		
@@ -121,8 +133,12 @@ namespace UtinyRipper.Exporters.Scripts
 			{
 				return RetrieveArray(type);
 			}
+			if (type.IsGenericInstance)
+			{
+				return RetrieveGeneric(type);
+			}
 
-			if(type.Module != null)
+			if (type.Module != null)
 			{
 				TypeDefinition definition = type.Resolve();
 				if(definition != null)
@@ -154,6 +170,16 @@ namespace UtinyRipper.Exporters.Scripts
 				return exportArray;
 			}
 			return CreateArray(array);
+		}
+
+		public ScriptExportGeneric RetrieveGeneric(TypeReference generic)
+		{
+			string fullname = ScriptExportMonoType.ToFullName(generic);
+			if (m_generic.TryGetValue(fullname, out ScriptExportGeneric exportGeneric))
+			{
+				return exportGeneric;
+			}
+			return CreateGeneric(generic);
 		}
 
 		public ScriptExportEnum RetrieveEnum(TypeDefinition @enum)
@@ -214,6 +240,14 @@ namespace UtinyRipper.Exporters.Scripts
 			m_arrays.Add(exportArray.FullName, exportArray);
 			exportArray.Init(this);
 			return exportArray;
+		}
+
+		public ScriptExportGeneric CreateGeneric(TypeReference type)
+		{
+			ScriptExportGeneric exportGeneric = new ScriptExportMonoGeneric(type);
+			m_generic.Add(exportGeneric.FullName, exportGeneric);
+			exportGeneric.Init(this);
+			return exportGeneric;
 		}
 
 		private ScriptExportEnum CreateEnum(TypeReference @enum)
@@ -308,16 +342,19 @@ namespace UtinyRipper.Exporters.Scripts
 			}
 		}
 
+		public IEnumerable<ScriptExportType> Types => m_types.Values;
+		public IEnumerable<ScriptExportEnum> Enums => m_enums.Values;
+		public IEnumerable<ScriptExportDelegate> Delegates => m_delegates.Values;
+
 		private const string MSCoreLibName = "mscorlib";
 		private const string SystemName = "System";
 		private const string UnityEngineName = "UnityEngine";
 		private const string BooName = "Boo";
 		private const string MonoName = "Mono";
 
-		private static readonly Regex s_illegal = new Regex("[<>]", RegexOptions.Compiled | RegexOptions.CultureInvariant);
-
 		private readonly Dictionary<string, ScriptExportType> m_types = new Dictionary<string, ScriptExportType>();
 		private readonly Dictionary<string, ScriptExportArray> m_arrays = new Dictionary<string, ScriptExportArray>();
+		private readonly Dictionary<string, ScriptExportGeneric> m_generic = new Dictionary<string, ScriptExportGeneric>();
 		private readonly Dictionary<string, ScriptExportEnum> m_enums = new Dictionary<string, ScriptExportEnum>();
 		private readonly Dictionary<string, ScriptExportDelegate> m_delegates = new Dictionary<string, ScriptExportDelegate>();
 		private readonly Dictionary<string, ScriptExportAttribute> m_attributes = new Dictionary<string, ScriptExportAttribute>();

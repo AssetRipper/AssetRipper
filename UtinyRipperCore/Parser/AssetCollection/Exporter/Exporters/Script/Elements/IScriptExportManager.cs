@@ -1,4 +1,5 @@
 ﻿using Mono.Cecil;
+using System.Collections.Generic;
 
 namespace UtinyRipper.Exporters.Scripts
 {
@@ -10,5 +11,9 @@ namespace UtinyRipper.Exporters.Scripts
 		ScriptExportAttribute RetrieveAttribute(CustomAttribute attribute);
 		ScriptExportField RetrieveField(FieldDefinition field);
 		ScriptExportParameter RetrieveParameter(ParameterDefinition parameter);
+
+		IEnumerable<ScriptExportType> Types { get; }
+		IEnumerable<ScriptExportEnum> Enums { get; }
+		IEnumerable<ScriptExportDelegate> Delegates { get; }
 	}
 }

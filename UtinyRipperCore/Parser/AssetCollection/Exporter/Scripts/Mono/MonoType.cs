@@ -12,6 +12,13 @@ namespace UtinyRipper.AssetExporters.Mono
 		public static bool IsSerializableType(TypeReference type)
 		{
 			TypeReference elementType = GetElementType(type);
+			if(type.IsArray)
+			{
+				if(IsList(elementType))
+				{
+					return false;
+				}
+			}
 			if (elementType.IsPrimitive)
 			{
 				return true;

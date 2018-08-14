@@ -23,16 +23,16 @@ namespace UtinyRipper.Exporters.Scripts
 			writer.WriteLine('}');
 		}
 
+		protected sealed override bool HasMemberInner(string name)
+		{
+			throw new NotSupportedException();
+		}
+
 		public sealed override bool IsEnum => true;
 
-		protected sealed override ScriptExportType Base => null;
-		
-		public override IReadOnlyList<ScriptExportType> GenericArguments { get; } = new ScriptExportType[0];
-		public override IReadOnlyList<ScriptExportType> NestedTypes { get; } = new ScriptExportType[0];
-		public override IReadOnlyList<ScriptExportEnum> NestedEnums { get; } = new ScriptExportEnum[0];
-		public override IReadOnlyList<ScriptExportDelegate> Delegates { get; } = new ScriptExportDelegate[0];
+		public sealed override ScriptExportType Base => null;
 
-		protected override bool IsStruct => throw new NotSupportedException();
-		protected override bool IsSerializable => false;
+		protected sealed override bool IsStruct => throw new NotSupportedException();
+		protected sealed override bool IsSerializable => false;
 	}
 }

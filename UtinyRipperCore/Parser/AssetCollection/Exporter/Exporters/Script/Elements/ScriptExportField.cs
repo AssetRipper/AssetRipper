@@ -21,7 +21,8 @@ namespace UtinyRipper.Exporters.Scripts
 			{
 				writer.Write("new ");
 			}
-			writer.WriteLine("{0} {1};", Type.Name, Name);
+			string name = GetTypeNestedName(Type);
+			writer.WriteLine("{0} {1};", name, Name);
 		}
 
 		public void ExportEnum(TextWriter writer, int intent)
@@ -58,12 +59,40 @@ namespace UtinyRipper.Exporters.Scripts
 			}
 		}
 
+		private string GetTypeNestedName(ScriptExportType type)
+		{
+			if(type.DeclaringType == null)
+			{
+				return type.Name;
+			}
+			if(type == DeclaringType)
+			{
+				return type.Name;
+			}
+
+			string declaringName = GetTypeNestedName(type.DeclaringType);
+			return $"{declaringName}.{type.Name}";
+		}
+		
+		public abstract string Name { get; }
+
+		public abstract ScriptExportType DeclaringType { get; }
 		public abstract ScriptExportType Type { get; }
 		public abstract ScriptExportAttribute Attribute { get; }
 
 		protected abstract string Keyword { get; }
-		protected abstract bool IsNew { get; }
-		protected abstract string Name { get; }
+		protected bool IsNew
+		{
+			get
+			{
+				ScriptExportType baseType = DeclaringType.Base;
+				if (baseType == null)
+				{
+					return false;
+				}
+				return baseType.HasMember(Name);
+			}
+		}
 		protected abstract string Constant { get; }
 
 		protected const string PublicKeyWord = "public";

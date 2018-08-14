@@ -35,7 +35,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 		{
 			return Path.GetFileNameWithoutExtension(type.Scope.Name);
 		}
-		
+
 		public override void Init(IScriptExportManager manager)
 		{
 			if (Definition != null && Definition.BaseType != null)
@@ -43,28 +43,15 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 				m_base = manager.RetrieveType(Definition.BaseType);
 			}
 
-			m_genericArguments = CreateGenericArguments(manager);
-			m_nestedTypes = CreateNestedTypes(manager);
-			m_nestedEnums = CreateNestedEnums(manager);
-			m_delegates = CreateDelegates(manager);
 			m_fields = CreateFields(manager);
 
-			// force manager to create container type
-			GetContainer(manager);
-		}
-
-		public override ScriptExportType GetContainer(IScriptExportManager manager)
-		{
 			if(Type.IsNested)
 			{
-				return manager.RetrieveType(Type.DeclaringType);
-			}
-			else
-			{
-				return this;
+				m_declaringType = manager.RetrieveType(Type.DeclaringType);
+				AddAsNestedType(manager);
 			}
 		}
-		
+				
 		public override void GetUsedNamespaces(ICollection<string> namespaces)
 		{
 			if(Definition != null)
@@ -78,86 +65,42 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			base.GetUsedNamespaces(namespaces);
 		}
 
-		private IReadOnlyList<ScriptExportType> CreateGenericArguments(IScriptExportManager manager)
-		{
-			List<ScriptExportType> arguments = new List<ScriptExportType>();
-			if (Type.IsGenericInstance)
-			{
-				GenericInstanceType generic = (GenericInstanceType)Type;
-				foreach (TypeReference arg in generic.GenericArguments)
-				{
-					ScriptExportType argType = manager.RetrieveType(arg);
-					arguments.Add(argType);
-				}
-			}
-			return arguments.ToArray();
-		}
-
-		private IReadOnlyList<ScriptExportType> CreateNestedTypes(IScriptExportManager manager)
+		protected override bool HasMemberInner(string name)
 		{
 			if(Definition == null)
 			{
-				return new ScriptExportType[0];
+				return false;
 			}
-
-			List<ScriptExportType> nestedTypes = new List<ScriptExportType>();
-			foreach (TypeDefinition nested in Definition.NestedTypes)
-			{
-				if(nested.IsEnum)
-				{
-					continue;
-				}
-				if (!nested.IsSerializable)
-				{
-					continue;
-				}
-				if(ScriptExportMonoAttribute.IsCompilerGenerated(nested))
-				{
-					continue;
-				}
-
-				ScriptExportType nestedType = manager.RetrieveType(nested);
-				nestedTypes.Add(nestedType);
-			}
-			return nestedTypes.ToArray();
+			return HasMemberInner(Definition.BaseType, name);
 		}
 
-		private IReadOnlyList<ScriptExportEnum> CreateNestedEnums(IScriptExportManager manager)
+		private bool HasMemberInner(TypeReference type, string name)
 		{
-			if(Definition == null)
+			if(type == null)
 			{
-				return new ScriptExportEnum[0];
+				return false;
+			}
+			if (type.Module == null)
+			{
+				return false;
 			}
 
-			List<ScriptExportEnum> nestedEnums = new List<ScriptExportEnum>();
-			foreach (TypeDefinition nested in Definition.NestedTypes)
+			TypeDefinition definition = type.Resolve();
+			foreach (FieldDefinition field in definition.Fields)
 			{
-				if (nested.IsEnum)
+				if (field.Name == Name)
 				{
-					ScriptExportEnum nestedEnum = manager.RetrieveEnum(nested);
-					nestedEnums.Add(nestedEnum);
+					return true;
 				}
 			}
-			return nestedEnums.ToArray();
-		}
-
-		private IReadOnlyList<ScriptExportDelegate> CreateDelegates(IScriptExportManager manager)
-		{
-			if(Definition == null)
+			foreach (PropertyDefinition property in definition.Properties)
 			{
-				return new ScriptExportDelegate[0];
-			}
-
-			List<ScriptExportDelegate> delegates = new List<ScriptExportDelegate>();
-			foreach (TypeDefinition nested in Definition.NestedTypes)
-			{
-				if (ScriptExportMonoDelegate.IsDelegate(nested))
+				if (property.Name == Name)
 				{
-					ScriptExportDelegate @delegate = manager.RetrieveDelegate(nested);
-					delegates.Add(@delegate);
+					return true;
 				}
 			}
-			return delegates.ToArray();
+			return HasMemberInner(definition.BaseType, name);
 		}
 
 		private IReadOnlyList<ScriptExportField> CreateFields(IScriptExportManager manager)
@@ -207,7 +150,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			}
 			return fields.ToArray();
 		}
-		
+
 		private string GetName()
 		{
 			string name = string.Empty;
@@ -219,13 +162,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			}
 
 			string typeName = elementType.Name;
-			/*if (elementType.IsByReference)
-			{
-				name += "ref ";
-				typeName = typeName.Substring(0, typeName.Length - 1);
-			}*/
-
-			if (Type.IsGenericInstance)
+			if (Type.HasGenericParameters)
 			{
 				int index = typeName.IndexOf('`');
 				if (index > 0)
@@ -233,14 +170,20 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 					string fixedName = typeName.Substring(0, index);
 					name += fixedName;
 					name += '<';
-					GenericInstanceType generic = (GenericInstanceType)Type;
-					for (int i = 0; i < generic.GenericArguments.Count; i++)
+					if(Type.GenericParameters.Count == 1)
 					{
-						TypeReference arg = generic.GenericArguments[i];
-						name += arg.Name;
-						if (i < generic.GenericArguments.Count - 1)
+						name += 'T';
+					}
+					else
+					{
+						for (int i = 0; i < Type.GenericParameters.Count; i++)
 						{
-							name += ", ";
+							GenericParameter par = Type.GenericParameters[i];
+							name += $"T{i}";
+							if (i < Type.GenericParameters.Count - 1)
+							{
+								name += ", ";
+							}
 						}
 					}
 					name += '>';
@@ -267,13 +210,10 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 		public override string Namespace => Type.Namespace;
 		public override string Module => m_module;
 
-		public override IReadOnlyList<ScriptExportType> GenericArguments => m_genericArguments;
-		public override IReadOnlyList<ScriptExportType> NestedTypes => m_nestedTypes;
-		public override IReadOnlyList<ScriptExportEnum> NestedEnums => m_nestedEnums;
-		public override IReadOnlyList<ScriptExportDelegate> Delegates => m_delegates;
-		public override IReadOnlyList<ScriptExportField> Fields => m_fields;
+		public override ScriptExportType DeclaringType => m_declaringType;
+		public override ScriptExportType Base => m_base;
 
-		protected override ScriptExportType Base => m_base;
+		public override IReadOnlyList<ScriptExportField> Fields => m_fields;
 
 		protected override string Keyword
 		{
@@ -308,11 +248,8 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 		private string m_fullName;
 		private string m_name;
 		private string m_module;
-		private IReadOnlyList<ScriptExportType> m_genericArguments;
-		private IReadOnlyList<ScriptExportType> m_nestedTypes;
-		private IReadOnlyList<ScriptExportEnum> m_nestedEnums;
-		private IReadOnlyList<ScriptExportDelegate> m_delegates;
-		private IReadOnlyList<ScriptExportField> m_fields;
+		private ScriptExportType m_declaringType;
 		private ScriptExportType m_base;
+		private IReadOnlyList<ScriptExportField> m_fields;
 	}
 }

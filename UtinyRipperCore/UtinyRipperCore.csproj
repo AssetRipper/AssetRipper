@@ -146,12 +146,14 @@
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoDelegate.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoEnum.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoField.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoGeneric.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoParameter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoType.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\ScriptExportAttribute.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\ScriptExportDelegate.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\ScriptExportEnum.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\ScriptExportField.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\ScriptExportGeneric.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\ScriptExportManager.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\ScriptExportParameter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\ScriptExportType.cs" />

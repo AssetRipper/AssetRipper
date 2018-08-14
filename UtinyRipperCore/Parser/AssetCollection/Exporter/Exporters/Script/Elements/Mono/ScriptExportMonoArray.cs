@@ -24,27 +24,21 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 		
 		public override void Init(IScriptExportManager manager)
 		{
-			m_element = manager.RetrieveType(Type.GetElementType());
+			TypeSpecification specification = (TypeSpecification)Type;
+			m_element = manager.RetrieveType(specification.ElementType);
 		}
 
-		public override ScriptExportType GetContainer(IScriptExportManager manager)
+		protected override bool HasMemberInner(string name)
 		{
-			if (Type.IsNested)
-			{
-				return manager.RetrieveType(Type.DeclaringType);
-			}
-			else
-			{
-				return this;
-			}
+			throw new NotSupportedException();
 		}
+
+		public override ScriptExportType Element => m_element;
 
 		public override string FullName => m_fullName;
 		public override string Name => Type.Name;
 		public override string Namespace => Type.Namespace;
 		public override string Module => m_module;
-
-		protected override ScriptExportType Element => m_element;
 
 		private TypeReference Type { get; }
 
