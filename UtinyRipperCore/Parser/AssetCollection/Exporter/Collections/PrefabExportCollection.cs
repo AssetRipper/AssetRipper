@@ -30,7 +30,7 @@ namespace UtinyRipper.AssetExporters
 			else
 			{
 				Component component = (Component)asset;
-				go = component.GameObject.GetObject(component.File);
+				go = component.GameObject.GetAsset(component.File);
 			}
 			GameObject root = go.GetRoot();
 

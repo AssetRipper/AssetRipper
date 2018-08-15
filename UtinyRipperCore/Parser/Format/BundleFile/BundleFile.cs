@@ -55,12 +55,12 @@ namespace UtinyRipper.BundleFiles
 
 		public void Load(string bundlePath)
 		{
-			if(!File.Exists(bundlePath))
+			if(!FileUtils.Exists(bundlePath))
 			{
 				throw new Exception($"Bundle at path '{bundlePath}' doesn't exist");
 			}
 
-			FileStream stream = File.OpenRead(bundlePath);
+			FileStream stream = FileUtils.OpenRead(bundlePath);
 			try
 			{
 				Read(stream, true);

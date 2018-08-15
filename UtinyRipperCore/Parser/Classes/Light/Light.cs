@@ -75,6 +75,13 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(3);
 		}
 		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadLightShadowCasterMode(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
 		public static bool IsReadAreaSize(Version version)
@@ -210,6 +217,10 @@ namespace UtinyRipper.Classes
 			{
 				Lightmapping = (LightmappingMode)stream.ReadInt32();
 			}
+			if(IsReadLightShadowCasterMode(stream.Version))
+			{
+				LightShadowCasterMode = (LightShadowCasterMode)stream.ReadInt32();
+			}
 			if (IsReadAreaSize(stream.Version))
 			{
 				AreaSize.Read(stream);
@@ -280,6 +291,7 @@ namespace UtinyRipper.Classes
 		public int BakedIndex { get; private set; }
 		public LightRenderMode RenderMode { get; private set; }
 		public LightmappingMode Lightmapping { get; private set; }
+		public LightShadowCasterMode LightShadowCasterMode { get; private set; }
 		/// <summary>
 		/// IndirectIntensity in 5.0.0beta
 		/// </summary>

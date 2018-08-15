@@ -392,7 +392,7 @@ namespace UtinyRipper.Classes
 							Animation animation = (Animation)asset;
 							if (IsAnimationContainsClip(animation))
 							{
-								GameObject go = animation.GameObject.GetObject(animation.File);
+								GameObject go = animation.GameObject.GetAsset(animation.File);
 								return go.BuildTOS();
 							}
 							break;
@@ -405,7 +405,7 @@ namespace UtinyRipper.Classes
 
 		private bool IsAnimatorContainsClip(Animator animator)
 		{
-			RuntimeAnimatorController runetime = animator.Controller.FindObject(animator.File);
+			RuntimeAnimatorController runetime = animator.Controller.FindAsset(animator.File);
 			if(runetime == null)
 			{
 				return false;

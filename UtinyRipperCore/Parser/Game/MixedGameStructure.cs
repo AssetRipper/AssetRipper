@@ -22,9 +22,9 @@ namespace UtinyRipper
 				{
 					AddFile(path);
 				}
-				else if (Directory.Exists(path))
+				else if (DirectoryUtils.Exists(path))
 				{
-					DirectoryInfo directory = new DirectoryInfo(path);
+					DirectoryInfo directory = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
 					AddDirectory(directory);
 				}
 				else

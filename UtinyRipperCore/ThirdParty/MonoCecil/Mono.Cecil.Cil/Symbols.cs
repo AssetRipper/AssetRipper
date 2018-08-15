@@ -827,7 +827,7 @@ namespace Mono.Cecil.Cil {
 
 			var pdb_file_name = Mixin.GetPdbFileName (fileName);
 
-			if (File.Exists (pdb_file_name)) {
+			if (UtinyRipper.FileUtils.Exists (pdb_file_name)) {
 				if (Mixin.IsPortablePdb (Mixin.GetPdbFileName (fileName)))
 					return new PortablePdbReaderProvider ().GetSymbolReader (module, fileName);
 
@@ -839,7 +839,7 @@ namespace Mono.Cecil.Cil {
 			}
 
 			var mdb_file_name = Mixin.GetMdbFileName (fileName);
-			if (File.Exists (mdb_file_name)) {
+			if (UtinyRipper.FileUtils.Exists (mdb_file_name)) {
 				try {
 					return SymbolProvider.GetReaderProvider (SymbolKind.Mdb).GetSymbolReader (module, fileName);
 				} catch (Exception) {
@@ -1038,7 +1038,7 @@ namespace Mono.Cecil {
 
 		public static bool IsPortablePdb (string fileName)
 		{
-			using (var file = new FileStream (fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+			using (var file = new FileStream (UtinyRipper.FileUtils.ToLongPath(fileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 				return IsPortablePdb (file);
 		}
 

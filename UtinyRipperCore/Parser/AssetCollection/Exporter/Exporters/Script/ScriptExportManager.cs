@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using UtinyRipper.Exporters.Scripts.Mono;
 
 namespace UtinyRipper.Exporters.Scripts
@@ -66,12 +65,12 @@ namespace UtinyRipper.Exporters.Scripts
 			string subPath = GetExportSubPath(exportType);
 			string filePath = Path.Combine(m_exportPath, subPath);
 			string directory = Path.GetDirectoryName(filePath);
-			if(!Directory.Exists(directory))
+			if(!DirectoryUtils.Exists(directory))
 			{
-				Directory.CreateDirectory(directory);
+				DirectoryUtils.CreateDirectory(directory);
 			}
 
-			using (FileStream file = File.OpenWrite(filePath))
+			using (FileStream file = FileUtils.OpenWrite(filePath))
 			{
 				using (StreamWriter writer = new StreamWriter(file))
 				{

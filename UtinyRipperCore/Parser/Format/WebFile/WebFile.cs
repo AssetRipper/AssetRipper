@@ -79,12 +79,12 @@ namespace UtinyRipper.WebFiles
 		
 		public void Load(string webPath)
 		{
-			if (!File.Exists(webPath))
+			if (!FileUtils.Exists(webPath))
 			{
 				throw new Exception($"WebFile at path '{webPath}' doesn't exist");
 			}
 
-			FileStream stream = File.OpenRead(webPath);
+			FileStream stream = FileUtils.OpenRead(webPath);
 			Read(stream, true);
 		}
 		

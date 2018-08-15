@@ -1144,7 +1144,7 @@ namespace Mono.Cecil {
 		{
 			Mixin.CheckFileName (fileName);
 
-			return new FileStream (fileName, mode, access, share);
+			return new FileStream (UtinyRipper.FileUtils.ToLongPath(fileName), mode, access, share);
 		}
 
 		public static ModuleDefinition ReadModule (Stream stream)

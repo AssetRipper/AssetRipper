@@ -209,7 +209,7 @@ namespace UtinyRipper.Classes
 			return node;
 		}
 
-		public override string ExportName => Path.Combine(AssetsName, "Scripts");
+		public override string ExportName => Path.Combine(AssetsKeyWord, "Scripts");
 		public override string ExportExtension => "cs";
 
 		public string Script { get; private set; }

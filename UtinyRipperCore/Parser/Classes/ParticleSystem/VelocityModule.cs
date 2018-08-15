@@ -6,6 +6,13 @@ namespace UtinyRipper.Classes.ParticleSystems
 	public sealed class VelocityModule : ParticleSystemModule
 	{
 		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadOrbital(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
 		public static bool IsReadSpeedModifier(Version version)
@@ -20,6 +27,16 @@ namespace UtinyRipper.Classes.ParticleSystems
 			X.Read(stream);
 			Y.Read(stream);
 			Z.Read(stream);
+			if (IsReadOrbital(stream.Version))
+			{
+				OrbitalX.Read(stream);
+				OrbitalY.Read(stream);
+				OrbitalZ.Read(stream);
+				OrbitalOffsetX.Read(stream);
+				OrbitalOffsetY.Read(stream);
+				OrbitalOffsetZ.Read(stream);
+				Radial.Read(stream);
+			}
 			if (IsReadSpeedModifier(stream.Version))
 			{
 				SpeedModifier.Read(stream);
@@ -49,6 +66,13 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public MinMaxCurve X;
 		public MinMaxCurve Y;
 		public MinMaxCurve Z;
+		public MinMaxCurve OrbitalX;
+		public MinMaxCurve OrbitalY;
+		public MinMaxCurve OrbitalZ;
+		public MinMaxCurve OrbitalOffsetX;
+		public MinMaxCurve OrbitalOffsetY;
+		public MinMaxCurve OrbitalOffsetZ;
+		public MinMaxCurve Radial;
 		public MinMaxCurve SpeedModifier;
 	}
 }

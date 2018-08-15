@@ -34,7 +34,7 @@ namespace UtinyRipper.Classes.GameObjects
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			Component comp = Component.FindObject(file);
+			Component comp = Component.FindAsset(file);
 			if(comp == null)
 			{
 				if(isLog)

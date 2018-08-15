@@ -57,6 +57,13 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(5, 3);
 		}
 		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadSprite(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+		/// <summary>
 		/// 5.5.0 to 2017.1.0b1
 		/// </summary>
 		public static bool IsReadMeshScale(Version version)
@@ -83,6 +90,13 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public static bool IsReadRandomDirection(Version version)
 		{
 			return version.IsLess(5, 5);
+		}
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool IsReadTexture(Version version)
+		{
+			return version.IsGreaterEqual(2018, 1);
 		}
 		/// <summary>
 		/// 5.5.0 and greater
@@ -232,6 +246,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 				MeshRenderer.Read(stream);
 				SkinnedMeshRenderer.Read(stream);
 			}
+			if(IsReadSprite(stream.Version))
+			{
+				Sprite.Read(stream);
+				SpriteRenderer.Read(stream);
+			}
 			if (IsReadMeshMaterialIndex(stream.Version))
 			{
 				if (!IsReadMeshMaterialIndexFirst(stream.Version))
@@ -258,6 +277,18 @@ namespace UtinyRipper.Classes.ParticleSystems
 				RandomDirection = stream.ReadBoolean();
 			}
 			stream.AlignStream(AlignType.Align4);
+
+			if(IsReadTexture(stream.Version))
+			{
+				Texture.Read(stream);
+				TextureClipChannel = stream.ReadInt32();
+				TextureClipThreshold = stream.ReadSingle();
+				TextureUVChannel = stream.ReadInt32();
+				TextureColorAffectsParticles = stream.ReadBoolean();
+				TextureAlphaAffectsParticles = stream.ReadBoolean();
+				TextureBilinearFiltering = stream.ReadBoolean();
+				stream.AlignStream(AlignType.Align4);
+			}
 
 			if (IsReadRandomDirectionAmount(stream.Version))
 			{
@@ -334,6 +365,12 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public bool UseMeshColors { get; private set; }
 		public bool AlignToDirection { get; private set; }
 		public bool RandomDirection { get; private set; }
+		public int TextureClipChannel { get; private set; }
+		public float TextureClipThreshold { get; private set; }
+		public int TextureUVChannel { get; private set; }
+		public bool TextureColorAffectsParticles { get; private set; }
+		public bool TextureAlphaAffectsParticles { get; private set; }
+		public bool TextureBilinearFiltering { get; private set; }
 		public float RandomDirectionAmount { get; private set; }
 		public float SphericalDirectionAmount { get; private set; }
 		public float RandomPositionAmount { get; private set; }
@@ -345,6 +382,9 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public PPtr<Mesh> Mesh;
 		public PPtr<MeshRenderer> MeshRenderer;
 		public PPtr<SkinnedMeshRenderer> SkinnedMeshRenderer;
+		public PPtr<Sprite> Sprite;
+		public PPtr<SpriteRenderer> SpriteRenderer;
+		public PPtr<Texture2D> Texture;
 		public MultiModeParameter Radius;
 		public MultiModeParameter Arc;
 	}

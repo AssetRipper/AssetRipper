@@ -33,18 +33,18 @@ namespace UtinyRipper.Classes
 				yield return @object;
 			}
 
-			yield return GameObject.GetObject(file);
+			yield return GameObject.GetAsset(file);
 		}
 
 		public GameObject GetRoot()
 		{
-			GameObject go = GameObject.GetObject(File);
+			GameObject go = GameObject.GetAsset(File);
 			return go.GetRoot();
 		}
 
 		public int GetRootDepth()
 		{
-			GameObject go = GameObject.GetObject(File);
+			GameObject go = GameObject.GetAsset(File);
 			return go.GetRootDepth();
 		}
 

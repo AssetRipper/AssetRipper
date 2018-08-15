@@ -20,7 +20,7 @@ namespace UtinyRipper.AssetExporters
 						case ClassIDType.Sprite:
 							{
 								Sprite sprite = (Sprite)asset;
-								if (sprite.RD.Texture.IsObject(sprite.File, texture))
+								if (sprite.RD.Texture.IsAsset(sprite.File, texture))
 								{
 									sprites.Add(sprite);
 									AddAsset(sprite);
@@ -34,9 +34,9 @@ namespace UtinyRipper.AssetExporters
 								SpriteAtlas atlas = (SpriteAtlas)asset;
 								foreach(SpriteAtlasData atlasData in atlas.RenderDataMap.Values)
 								{
-									if(atlasData.Texture.IsObject(atlas.File, texture))
+									if(atlasData.Texture.IsAsset(atlas.File, texture))
 									{
-										Sprite sprite = atlas.PackedSprites[index].GetObject(atlas.File);
+										Sprite sprite = atlas.PackedSprites[index].GetAsset(atlas.File);
 										sprites.Add(sprite);
 										AddAsset(sprite);
 									}
@@ -54,7 +54,7 @@ namespace UtinyRipper.AssetExporters
 		{
 			if (Config.IsConvertTexturesToPNG)
 			{
-				Texture2D texture = asset.RD.Texture.FindObject(asset.File);
+				Texture2D texture = asset.RD.Texture.FindAsset(asset.File);
 				if(texture != null)
 				{
 					return new TextureExportCollection(assetExporter, texture);

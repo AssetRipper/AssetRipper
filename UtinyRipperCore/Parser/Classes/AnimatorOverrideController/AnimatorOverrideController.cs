@@ -42,16 +42,16 @@ namespace UtinyRipper.Classes
 		{
 			foreach (AnimationClipOverride overClip in Clips)
 			{
-				if(overClip.OriginalClip.IsObject(File, clip))
+				if(overClip.OriginalClip.IsAsset(File, clip))
 				{
 					return true;
 				}
-				else if (overClip.OverrideClip.IsObject(File, clip))
+				else if (overClip.OverrideClip.IsAsset(File, clip))
 				{
 					return true;
 				}
 			}
-			RuntimeAnimatorController baseController = Controller.FindObject(File);
+			RuntimeAnimatorController baseController = Controller.FindAsset(File);
 			if(baseController != null)
 			{
 				return baseController.IsContainsAnimationClip(clip);

@@ -137,14 +137,14 @@ namespace UtinyRipper.SerializedFiles
 			}
 		}
 
-		public Object GetObject(int fileIndex, long pathID)
+		public Object GetAsset(int fileIndex, long pathID)
 		{
-			return FindObject(fileIndex, pathID, false);
+			return FindAsset(fileIndex, pathID, false);
 		}
 
-		public Object GetObject(long pathID)
+		public Object GetAsset(long pathID)
 		{
-			Object asset = FindObject(pathID);
+			Object asset = FindAsset(pathID);
 			if(asset == null)
 			{
 				throw new Exception($"Object with path ID {pathID} wasn't found");
@@ -153,12 +153,12 @@ namespace UtinyRipper.SerializedFiles
 			return asset;
 		}
 
-		public Object FindObject(int fileIndex, long pathID)
+		public Object FindAsset(int fileIndex, long pathID)
 		{
-			return FindObject(fileIndex, pathID, true);
+			return FindAsset(fileIndex, pathID, true);
 		}
 
-		public Object FindObject(long pathID)
+		public Object FindAsset(long pathID)
 		{
 			m_assets.TryGetValue(pathID, out Object asset);
 			return asset;
@@ -212,7 +212,7 @@ namespace UtinyRipper.SerializedFiles
 			}
 		}
 
-		private Object FindObject(int fileIndex, long pathID, bool isSafe)
+		private Object FindAsset(int fileIndex, long pathID, bool isSafe)
 		{
 			ISerializedFile file;
 			if (fileIndex == 0)
@@ -240,8 +240,8 @@ namespace UtinyRipper.SerializedFiles
 				throw new Exception($"{nameof(SerializedFile)} with index {fileIndex} was not found in collection");
 			}
 
-			Object @object = file.FindObject(pathID);
-			if (@object == null)
+			Object asset = file.FindAsset(pathID);
+			if (asset == null)
 			{
 				if(isSafe)
 				{
@@ -249,7 +249,7 @@ namespace UtinyRipper.SerializedFiles
 				}
 				throw new Exception($"Object with path ID {pathID} was not found");
 			}
-			return @object;
+			return asset;
 		}
 
 		private void ReadAssets(EndianStream stream, long startPosition)
@@ -318,7 +318,19 @@ namespace UtinyRipper.SerializedFiles
 			if (Config.IsGenerateGUIDByContent)
 			{
 				byte[] data = stream.ReadBytes(size);
-				asset.Read(data);
+#if !DEBUG
+				try
+#endif
+				{
+					asset.Read(data);
+				}
+#if !DEBUG
+				catch
+				{
+					Logger.Instance.Log(LogType.Error, LogCategory.General, $"Version[{stream.Version}] '{Name}'");
+					throw;
+				}
+#endif
 
 				using (MD5 md5 = MD5.Create())
 				{
@@ -329,11 +341,23 @@ namespace UtinyRipper.SerializedFiles
 			else
 			{
 				stream.AlignPosition = offset;
-				asset.Read(stream);
+#if !DEBUG
+				try
+#endif
+				{
+					asset.Read(stream);
+				}
+#if !DEBUG
+				catch
+				{
+					Logger.Instance.Log(LogType.Error, LogCategory.General, $"Version[{stream.Version}] '{Name}'");
+					throw;
+				}
+#endif
 				long read = stream.BaseStream.Position - offset;
 				if (read != size)
 				{
-					throw new Exception($"Read {read} but expected {size} for asset type {asset.ClassID}");
+					throw new Exception($"Read {read} but expected {size} for asset type {asset.ClassID}. Version[{stream.Version}]");
 				}
 			}
 			return asset;
@@ -375,7 +399,7 @@ namespace UtinyRipper.SerializedFiles
 		
 		public bool IsScene { get; private set; }
 
-		public IReadOnlyCollection<Object> Assets => m_assets.Values;
+		public IEnumerable<Object> Assets => m_assets.Values;
 		public IFileCollection Collection { get; }
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Dependencies;
 

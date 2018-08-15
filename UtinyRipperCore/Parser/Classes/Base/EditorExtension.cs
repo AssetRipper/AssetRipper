@@ -52,7 +52,7 @@ namespace UtinyRipper.Classes
 			
 			if (!PrefabParentObject.IsNull)
 			{
-				yield return PrefabParentObject.GetObject(file);
+				yield return PrefabParentObject.GetAsset(file);
 			}
 		}
 

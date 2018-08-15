@@ -71,15 +71,15 @@ namespace UtinyRipper.AssetExporters
 		{
 			TryInitialize(container);
 
-			string folderPath = Path.Combine(dirPath, Object.AssetsName, "Scene");
+			string folderPath = Path.Combine(dirPath, Object.AssetsKeyWord, OcclusionCullingSettings.SceneKeyWord);
 			string sceneSubPath = GetSceneName(container);
 			string fileName = $"{sceneSubPath}.unity";
 			string filePath = Path.Combine(folderPath, fileName);
 			folderPath = Path.GetDirectoryName(filePath);
 
-			if (!Directory.Exists(folderPath))
+			if (!DirectoryUtils.Exists(folderPath))
 			{
-				Directory.CreateDirectory(folderPath);
+				DirectoryUtils.CreateDirectory(folderPath);
 			}
 
 			AssetExporter.Export(container, Components, filePath);
@@ -93,14 +93,6 @@ namespace UtinyRipper.AssetExporters
 			{
 				ExportAsset(container, OcclusionCullingData, subFolderPath);
 			}
-			if (LightingDataAsset != null)
-			{
-				ExportAsset(container, LightingDataAsset, subFolderPath);
-			}
-			if (NavMeshData != null)
-			{
-				ExportAsset(container, NavMeshData, subFolderPath);
-			}
 
 			return true;
 		}
@@ -108,14 +100,6 @@ namespace UtinyRipper.AssetExporters
 		public override bool IsContains(Object asset)
 		{
 			if(asset == OcclusionCullingData)
-			{
-				return true;
-			}
-			if(asset == LightingDataAsset)
-			{
-				return true;
-			}
-			if(asset == NavMeshData)
 			{
 				return true;
 			}
@@ -187,28 +171,17 @@ namespace UtinyRipper.AssetExporters
 
 			foreach(Object comp in Components)
 			{
-				switch (comp.ClassID)
+				if(comp.ClassID == ClassIDType.OcclusionCullingSettings)
 				{
-					case ClassIDType.NavMeshSettings:
+					OcclusionCullingSettings settings = (OcclusionCullingSettings)comp;
+					if (OcclusionCullingSettings.IsReadPVSData(File.Version))
+					{
+						if (settings.PVSData.Count > 0)
 						{
-							NavMeshSettings settings = (NavMeshSettings)comp;
-							NavMeshData = settings.NavMeshData.FindObject(File);
+							OcclusionCullingData = new OcclusionCullingData(container.VirtualFile);
+							OcclusionCullingData.Initialize(container, settings);
 						}
-						break;
-
-					case ClassIDType.OcclusionCullingSettings:
-						{
-							OcclusionCullingSettings settings = (OcclusionCullingSettings)comp;
-							if (OcclusionCullingSettings.IsReadAnything(File.Version) && OcclusionCullingSettings.IsReadPVSData(File.Version))
-							{
-								if (settings.PVSData.Count > 0)
-								{
-									OcclusionCullingData = new OcclusionCullingData(container.VirtualFile);
-									OcclusionCullingData.Initialize(container, (byte[])settings.PVSData, settings.SceneGUID, settings.StaticRenderers, settings.Portals);
-								}
-							}
-						}
-						break;
+					}
 				}
 			}
 
@@ -222,7 +195,7 @@ namespace UtinyRipper.AssetExporters
 
 		private bool IsComponent(Object asset)
 		{
-			return asset != OcclusionCullingData && asset != LightingDataAsset && asset != NavMeshData;
+			return asset != OcclusionCullingData;
 		}
 
 		private string GetSceneName(IExportContainer container)
@@ -279,26 +252,15 @@ namespace UtinyRipper.AssetExporters
 				{
 					yield return OcclusionCullingData;
 				}
-				if (LightingDataAsset != null)
-				{
-					yield return LightingDataAsset;
-				}
-				if (NavMeshData != null)
-				{
-					yield return NavMeshData;
-				}
 			}
 		}
 		public override string Name { get; }
 		public override ISerializedFile File => m_file;
 
 		public OcclusionCullingData OcclusionCullingData { get; private set; }
-		public LightingDataAsset LightingDataAsset { get; set; }
 		public EngineGUID GUID { get; }
 
 		private IEnumerable<Object> Components => m_cexportIDs.Keys;
-
-		private NavMeshData NavMeshData { get; set; }
 
 		private const string AssetsName = "Assets/";
 		private const string LevelName = "level";

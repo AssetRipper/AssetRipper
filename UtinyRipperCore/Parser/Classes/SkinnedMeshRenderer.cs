@@ -260,12 +260,12 @@ namespace UtinyRipper.Classes
 			{
 				if (!ptr.IsNull)
 				{
-					yield return ptr.GetObject(file);
+					yield return ptr.GetAsset(file);
 				}
 			}
 			if (!RootBone.IsNull)
 			{
-				yield return RootBone.GetObject(file);
+				yield return RootBone.GetAsset(file);
 			}
 		}
 

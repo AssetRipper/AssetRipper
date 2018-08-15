@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.NavMeshDatas;
 using UtinyRipper.Exporter.YAML;
@@ -108,6 +109,8 @@ namespace UtinyRipper.Classes
 		{
 			return IsReadSourceBounds(version) ? Rotation : Quaternionf.Zero;
 		}
+
+		public override string ExportName => Path.Combine(AssetsKeyWord, OcclusionCullingSettings.SceneKeyWord, ClassID.ToString());
 
 		public IReadOnlyList<NavMeshTileData> NavMeshTiles => m_navMeshTiles;
 		public IReadOnlyList<HeightmapData> Heightmaps => m_heightmaps;

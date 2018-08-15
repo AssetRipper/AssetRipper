@@ -54,9 +54,9 @@ namespace UtinyRipper.AssetExporters
 		
 		protected void ExportAsset(ProjectAssetContainer container, IAssetImporter importer, Object asset, string path, string name)
 		{
-			if (!Directory.Exists(path))
+			if (!DirectoryUtils.Exists(path))
 			{
-				Directory.CreateDirectory(path);
+				DirectoryUtils.CreateDirectory(path);
 			}
 
 			string filePath = $"{Path.Combine(path, name)}.{asset.ExportExtension}";
@@ -68,7 +68,7 @@ namespace UtinyRipper.AssetExporters
 		protected void ExportMeta(IExportContainer container, Meta meta, string filePath)
 		{
 			string metaPath = $"{filePath}.meta";
-			using (FileStream fileStream = System.IO.File.Open(metaPath, FileMode.Create, FileAccess.Write))
+			using (FileStream fileStream = FileUtils.Open(metaPath, FileMode.Create, FileAccess.Write))
 			{
 				using (StreamWriter streamWriter = new StreamWriter(fileStream))
 				{

@@ -20,34 +20,34 @@ namespace UtinyRipper
 			{
 				throw new ArgumentNullException(rootPath);
 			}
-			m_root = new DirectoryInfo(rootPath);
+			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
 			if (!m_root.Exists)
 			{
 				throw new Exception($"Root directory '{rootPath}' doesn't exist");
 			}
 
 			m_dataPath = Path.Combine(rootPath, AssetName, BinName, DataName);
-			if (!Directory.Exists(m_dataPath))
+			if (!DirectoryUtils.Exists(m_dataPath))
 			{
 				throw new Exception($"Data directory hasn't beed found");
 			}
 
 			if(obbPath != null)
 			{
-				m_obbRoot = new DirectoryInfo(obbPath);
+				m_obbRoot = new DirectoryInfo(DirectoryUtils.ToLongPath(obbPath));
 				if (!m_obbRoot.Exists)
 				{
 					throw new Exception($"Obb directory '{obbPath}' doesn't exist");
 				}
 
 				m_obbDataPath = Path.Combine(obbPath, AssetName, BinName, DataName);
-				if (!Directory.Exists(m_obbDataPath))
+				if (!DirectoryUtils.Exists(m_obbDataPath))
 				{
 					throw new Exception($"Obb data directory hasn't beed found");
 				}
 			}
 
-			DirectoryInfo managedDirectory = new DirectoryInfo(ManagedPath);
+			DirectoryInfo managedDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(ManagedPath));
 			if (!managedDirectory.Exists)
 			{
 				throw new Exception($"Managed directory hasn't been found");
@@ -72,7 +72,7 @@ namespace UtinyRipper
 		
 		public static bool IsAndroidStructure(string path)
 		{
-			DirectoryInfo directory = new DirectoryInfo(path);
+			DirectoryInfo directory = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
 			if (!directory.Exists)
 			{
 				return false;
@@ -85,7 +85,7 @@ namespace UtinyRipper
 			}
 
 			string dataPath = Path.Combine(path, AssetName, BinName, DataName);
-			if(!Directory.Exists(dataPath))
+			if(!DirectoryUtils.Exists(dataPath))
 			{
 				return false;
 			}
@@ -95,7 +95,7 @@ namespace UtinyRipper
 
 		public static bool IsAndroidObbStructure(string path)
 		{
-			DirectoryInfo directory = new DirectoryInfo(path);
+			DirectoryInfo directory = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
 			if (!directory.Exists)
 			{
 				return false;
@@ -108,7 +108,7 @@ namespace UtinyRipper
 			}
 
 			string dataPath = Path.Combine(path, AssetName, BinName, DataName);
-			if (!Directory.Exists(dataPath))
+			if (!DirectoryUtils.Exists(dataPath))
 			{
 				return false;
 			}
@@ -146,7 +146,7 @@ namespace UtinyRipper
 				yield return file;
 			}
 			string assetPath = Path.Combine(m_root.FullName, AssetName);
-			DirectoryInfo assetDirectory = new DirectoryInfo(assetPath);
+			DirectoryInfo assetDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(assetPath));
 			foreach(string assetBundle in FetchGameAssetBundles(assetDirectory))
 			{
 				yield return assetBundle;
@@ -203,6 +203,5 @@ namespace UtinyRipper
 		private readonly DirectoryInfo m_obbRoot;
 		private readonly string m_dataPath;
 		private readonly string m_obbDataPath;
-		private readonly string m_managedPath;
 	}
 }

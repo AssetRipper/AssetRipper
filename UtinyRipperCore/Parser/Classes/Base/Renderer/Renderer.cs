@@ -295,15 +295,15 @@ namespace UtinyRipper.Classes
 			}
 			if (!StaticBatchRoot.IsNull)
 			{
-				yield return StaticBatchRoot.GetObject(file);
+				yield return StaticBatchRoot.GetAsset(file);
 			}
 			if(!ProbeAnchor.IsNull)
 			{
-				yield return ProbeAnchor.GetObject(file);
+				yield return ProbeAnchor.GetAsset(file);
 			}
 			if(!LightProbeVolumeOverride.IsNull)
 			{
-				yield return LightProbeVolumeOverride.GetObject(file);
+				yield return LightProbeVolumeOverride.GetAsset(file);
 			}
 		}
 

@@ -69,7 +69,7 @@ namespace UtinyRipper.Classes
 				return ExportPointer.EmptyPointer.ExportYAML(container);
 			}
 
-			T asset = FindObject(container);
+			T asset = FindAsset(container);
 			if (asset == null)
 			{
 				ClassIDType classType = typeof(T).ToClassIDType();
@@ -82,13 +82,13 @@ namespace UtinyRipper.Classes
 			return exPointer.ExportYAML(container);
 		}
 
-		public T FindObject(ISerializedFile file)
+		public T FindAsset(ISerializedFile file)
 		{
 			if (IsNull)
 			{
 				return null;
 			}
-			Object asset = file.FindObject(FileIndex, PathID);
+			Object asset = file.FindAsset(FileIndex, PathID);
 			switch (asset)
 			{
 				case null:
@@ -100,7 +100,7 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public T FindObject(IExportContainer container)
+		public T FindAsset(IExportContainer container)
 		{
 			if (IsNull)
 			{
@@ -118,22 +118,22 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public T TryGetObject(ISerializedFile file)
+		public T TryGetAsset(ISerializedFile file)
 		{
 			if(IsNull)
 			{
 				return null;
 			}
-			return GetObject(file);
+			return GetAsset(file);
 		}
 
-		public T GetObject(ISerializedFile file)
+		public T GetAsset(ISerializedFile file)
 		{
 			if (IsNull)
 			{
 				throw new Exception("Can't get null PPtr");
 			}
-			Object asset = file.GetObject(FileIndex, PathID);
+			Object asset = file.GetAsset(FileIndex, PathID);
 			if(asset is T t)
 			{
 				return t;
@@ -141,7 +141,7 @@ namespace UtinyRipper.Classes
 			throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
 		}
 
-		public bool IsObject(Object asset)
+		public bool IsAsset(Object asset)
 		{
 			if(FileIndex == 0)
 			{
@@ -153,7 +153,7 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public bool IsObject(ISerializedFile file, Object asset)
+		public bool IsAsset(ISerializedFile file, Object asset)
 		{
 			if (FileIndex == 0)
 			{
@@ -189,7 +189,7 @@ namespace UtinyRipper.Classes
 				return null;
 			}
 			
-			T obj = FindObject(file);
+			T obj = FindAsset(file);
 			if (obj == null)
 			{
 				if(isLog)
@@ -222,7 +222,7 @@ namespace UtinyRipper.Classes
 
 		public bool IsValid(IExportContainer container)
 		{
-			return FindObject(container) != null;
+			return FindAsset(container) != null;
 		}
 
 		public bool IsVirtual => FileIndex == VirtualFileIndex;

@@ -44,7 +44,7 @@ namespace UtinyRipper
 				string fileName = Path.GetFileNameWithoutExtension(path) ?? string.Empty;
 				return Exists(dirPath, fileName);
 			}
-			if (File.Exists(path))
+			if (FileUtils.Exists(path))
 			{
 				return true;
 			}
@@ -64,9 +64,9 @@ namespace UtinyRipper
 				string fileName = Path.GetFileNameWithoutExtension(path) ?? string.Empty;
 				return OpenRead(dirPath, fileName);
 			}
-			if (File.Exists(path))
+			if (FileUtils.Exists(path))
 			{
-				return File.OpenRead(path);
+				return FileUtils.OpenRead(path);
 			}
 
 			{
@@ -105,7 +105,7 @@ namespace UtinyRipper
 				return GetFiles(dirPath, fileName);
 			}
 			
-			if (File.Exists(path))
+			if (FileUtils.Exists(path))
 			{
 				return new [] { path };
 			}
@@ -136,13 +136,13 @@ namespace UtinyRipper
 
 		private static string[] GetFiles(string dirPath, string fileName)
 		{
-			if (!Directory.Exists(dirPath))
+			if (!DirectoryUtils.Exists(dirPath))
 			{
 				return new string[0];
 			}
 
 			string filePatern = fileName + ".split*";
-			return Directory.GetFiles(dirPath, filePatern);
+			return DirectoryUtils.GetFiles(dirPath, filePatern);
 		}
 
 		private static Stream OpenRead(string dirPath, string fileName)
@@ -166,7 +166,7 @@ namespace UtinyRipper
 			{
 				for (int i = 0; i < splitFiles.Length; i++)
 				{
-					Stream stream = File.OpenRead(splitFiles[i]);
+					Stream stream = FileUtils.OpenRead(splitFiles[i]);
 					streams[i] = stream;
 				}
 

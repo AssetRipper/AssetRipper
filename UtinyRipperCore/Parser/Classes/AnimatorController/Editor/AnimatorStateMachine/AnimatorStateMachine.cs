@@ -47,7 +47,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 				for(int j = 0; j < stateConstant.TransitionConstantArray.Count; j++)
 				{
 					long stateTransitionPath = state.Transitions[j].PathID;
-					AnimatorStateTransition transition = (AnimatorStateTransition)file.GetObject(stateTransitionPath);
+					AnimatorStateTransition transition = (AnimatorStateTransition)file.GetAsset(stateTransitionPath);
 					TransitionConstant transitionConstant = stateConstant.TransitionConstantArray[j].Instance;
 					if (!transitionConstant.IsExit)
 					{

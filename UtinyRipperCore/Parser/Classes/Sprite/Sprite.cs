@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
+using UtinyRipper.Classes.SpriteAtlases;
 using UtinyRipper.Classes.Sprites;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
@@ -70,6 +71,43 @@ namespace UtinyRipper.Classes
 				return 2;
 			}
 			return 1;
+		}
+
+		public void GetExportPosition(out Rectf rect, out Vector2f pivot, out Vector4f border)
+		{
+			SpriteAtlas atlas = null;
+			if(IsReadRendererData(File.Version))
+			{
+				atlas = SpriteAtlas.FindAsset(File);
+			}
+			Vector2f rectOffset;
+			if (atlas == null)
+			{
+				Vector2f textureOffset = RD.TextureRect.Position + Rect.Position;
+				Vector2f textureSize = RD.TextureRect.Size;
+				rectOffset = RD.TextureRectOffset;
+				rect = new Rectf(textureOffset, textureSize);
+			}
+			else
+			{
+				SpriteAtlasData atlasData = atlas.RenderDataMap[RenderDataKey];
+				Vector2f textureOffset = atlasData.TextureRect.Position + Rect.Position;
+				Vector2f textureSize = atlasData.TextureRect.Size;
+				rectOffset = atlasData.TextureRectOffset;
+				rect = new Rectf(textureOffset, textureSize);
+			}
+
+			Vector2f decSizeDif = Rect.Size - rect.Size;
+			Vector2f pivotShiftSize = new Vector2f(Pivot.X * decSizeDif.X, Pivot.Y * decSizeDif.Y);
+			Vector2f relPivotShiftPos = new Vector2f(rectOffset.X / Rect.Size.X, rectOffset.Y / Rect.Size.Y);
+			Vector2f relPivotShiftSize = new Vector2f(pivotShiftSize.X / Rect.Size.X, pivotShiftSize.Y / Rect.Size.Y);
+			pivot = Pivot - relPivotShiftPos + relPivotShiftSize;
+
+			float borderL = Border.X == 0.0f ? 0.0f : Border.X - rectOffset.X;
+			float borderB = Border.Y == 0.0f ? 0.0f : Border.Y - rectOffset.Y;
+			float borderR = Border.Z == 0.0f ? 0.0f : Border.Z + rectOffset.X - decSizeDif.X;
+			float borderT = Border.W == 0.0f ? 0.0f : Border.W + rectOffset.Y - decSizeDif.Y;
+			border = new Vector4f(borderL, borderB, borderR, borderT);
 		}
 
 		public IReadOnlyList<IReadOnlyList<Vector2f>> GenerateOutline(Rectf rect, Vector2f pivot)

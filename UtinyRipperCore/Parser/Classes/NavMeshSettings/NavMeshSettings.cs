@@ -46,7 +46,7 @@ namespace UtinyRipper.Classes
 			}
 			else
 			{
-				NavMeshData data = NavMeshData.FindObject(container);
+				NavMeshData data = NavMeshData.FindAsset(container);
 				if (data == null)
 				{
 					return new NavMeshBuildSettings(true);

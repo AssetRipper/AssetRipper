@@ -33,11 +33,11 @@ namespace UtinyRipper.Classes
 
 			foreach (PPtr<Transform> ptr in Children)
 			{
-				yield return ptr.GetObject(file);
+				yield return ptr.GetAsset(file);
 			}
 			if (!Father.IsNull)
 			{
-				yield return Father.GetObject(file);
+				yield return Father.GetAsset(file);
 			}
 		}
 
@@ -46,14 +46,14 @@ namespace UtinyRipper.Classes
 			string pre = string.Empty;
 			if(!Father.IsNull)
 			{
-				pre = Father.GetObject(File).GetRootPath() + "/";
+				pre = Father.GetAsset(File).GetRootPath() + "/";
 			}
-			return pre + GameObject.GetObject(File).Name;
+			return pre + GameObject.GetAsset(File).Name;
 		}
 
 		public int GetSiblingIndex()
 		{
-			Transform father = Father.FindObject(File);
+			Transform father = Father.FindAsset(File);
 			if(father == null)
 			{
 				return 0;

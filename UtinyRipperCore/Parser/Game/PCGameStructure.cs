@@ -15,7 +15,7 @@ namespace UtinyRipper
 			{
 				throw new ArgumentNullException(rootPath);
 			}
-			m_root = new DirectoryInfo(rootPath);
+			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
 			if(!m_root.Exists)
 			{
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
@@ -27,7 +27,7 @@ namespace UtinyRipper
 				throw new Exception($"Data directory hasn't been found");
 			}
 
-			DirectoryInfo managedDirectory = new DirectoryInfo(ManagedPath);
+			DirectoryInfo managedDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(ManagedPath));
 			if (!managedDirectory.Exists)
 			{
 				throw new Exception($"Managed directory hasn't been found");
@@ -52,7 +52,7 @@ namespace UtinyRipper
 
 		public static bool IsPCStructure(string path)
 		{
-			DirectoryInfo dinfo = new DirectoryInfo(path);
+			DirectoryInfo dinfo = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
 			if(!dinfo.Exists)
 			{
 				return false;
@@ -74,7 +74,7 @@ namespace UtinyRipper
 					string exeName = Path.GetFileNameWithoutExtension(finfo.Name);
 					string dataFolder = $"{exeName}_{DataPostfix}";
 					string dataDirectory = Path.Combine(rootDiectory.FullName, dataFolder);
-					if (Directory.Exists(dataDirectory))
+					if (DirectoryUtils.Exists(dataDirectory))
 					{
 						return dataDirectory;
 					}

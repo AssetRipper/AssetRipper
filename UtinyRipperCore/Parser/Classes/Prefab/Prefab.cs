@@ -67,7 +67,7 @@ namespace UtinyRipper.Classes
 
 		public IEnumerable<EditorExtension> FetchObjects(ISerializedFile file, bool isLog = false)
 		{
-			GameObject root = RootGameObject.GetObject(file);
+			GameObject root = RootGameObject.GetAsset(file);
 			return FetchObjects(root);
 		}
 
@@ -80,14 +80,14 @@ namespace UtinyRipper.Classes
 
 			if(!ParentPrefab.IsNull)
 			{
-				yield return ParentPrefab.GetObject(file);
+				yield return ParentPrefab.GetAsset(file);
 			}
-			yield return RootGameObject.GetObject(file);
+			yield return RootGameObject.GetAsset(file);
 		}
 
 		public string GetName()
 		{
-			return RootGameObject.GetObject(File).Name;
+			return RootGameObject.GetAsset(File).Name;
 		}
 
 		public override string ToString()

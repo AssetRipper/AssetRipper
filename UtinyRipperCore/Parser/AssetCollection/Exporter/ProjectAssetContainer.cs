@@ -42,11 +42,11 @@ namespace UtinyRipper.AssetExporters
 		{
 			if(fileIndex == PPtr<Object>.VirtualFileIndex)
 			{
-				return VirtualFile.FindObject(pathID);
+				return VirtualFile.FindAsset(pathID);
 			}
 			else
 			{
-				return File.FindObject(fileIndex, pathID);
+				return File.FindAsset(fileIndex, pathID);
 			}
 		}
 

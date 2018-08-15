@@ -147,7 +147,7 @@ namespace UtinyRipper.Classes
 		{
 			foreach (PPtr<AnimationClip> clipPtr in AnimationClips)
 			{
-				if (clipPtr.IsObject(File, clip))
+				if (clipPtr.IsAsset(File, clip))
 				{
 					return true;
 				}

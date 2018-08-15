@@ -20,6 +20,7 @@ namespace UtinyRipper
 	{
 		public static bool AssetSelector(Object asset)
 		{
+			return asset.ClassID == ClassIDType.OcclusionCullingData || OcclusionCullingSettings.IsCompatible(asset);
 			return true;
 		}
 
@@ -43,7 +44,7 @@ namespace UtinyRipper
 				{
 					continue;
 				}
-				if(Directory.Exists(arg))
+				if(DirectoryUtils.Exists(arg))
 				{
 					continue;
 				}
@@ -97,15 +98,15 @@ namespace UtinyRipper
 		
 		private static void PrepareExportDirectory(string path)
 		{
-			string directory = Directory.GetCurrentDirectory();
 			if (!RunetimeUtils.IsRunningOnMono)
 			{
+				string directory = Directory.GetCurrentDirectory();
 				CheckWritePermission(directory);
 			}
 			
-			if (Directory.Exists(path))
+			if (DirectoryUtils.Exists(path))
 			{
-				Directory.Delete(path, true);
+				DirectoryUtils.Delete(path, true);
 			}
 		}
 
@@ -116,7 +117,7 @@ namespace UtinyRipper
 			bool isInRoleWithAccess = false;
 			try
 			{
-				DirectoryInfo di = new DirectoryInfo(path);
+				DirectoryInfo di = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
 				DirectorySecurity ds = di.GetAccessControl();
 				AuthorizationRuleCollection rules = ds.GetAccessRules(true, true, typeof(NTAccount));
 

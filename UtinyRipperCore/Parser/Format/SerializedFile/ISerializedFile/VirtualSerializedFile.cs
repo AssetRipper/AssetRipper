@@ -7,9 +7,9 @@ namespace UtinyRipper.SerializedFiles
 {
 	public class VirtualSerializedFile : ISerializedFile
 	{
-		public Object GetObject(long pathID)
+		public Object GetAsset(long pathID)
 		{
-			Object @object = FindObject(pathID);
+			Object @object = FindAsset(pathID);
 			if (@object == null)
 			{
 				throw new Exception($"Object with path ID {pathID} wasn't found");
@@ -18,26 +18,26 @@ namespace UtinyRipper.SerializedFiles
 			return @object;
 		}
 
-		public Object GetObject(int fileIndex, long pathID)
+		public Object GetAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == PPtr<Object>.VirtualFileIndex)
 			{
-				return GetObject(pathID);
+				return GetAsset(pathID);
 			}
 			throw new NotSupportedException();
 		}
 
-		public Object FindObject(long pathID)
+		public Object FindAsset(long pathID)
 		{
 			m_assets.TryGetValue(pathID, out Object asset);
 			return asset;
 		}
 
-		public Object FindObject(int fileIndex, long pathID)
+		public Object FindAsset(int fileIndex, long pathID)
 		{
 			if(fileIndex == PPtr<Object>.VirtualFileIndex)
 			{
-				return FindObject(pathID);
+				return FindAsset(pathID);
 			}
 			throw new NotSupportedException();
 		}

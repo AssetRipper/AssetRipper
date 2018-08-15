@@ -110,7 +110,7 @@ namespace UtinyRipper.Classes
 		public ISerializedFile File => m_assetInfo.File;
 		public ClassIDType ClassID => m_assetInfo.ClassID;
 		public virtual bool IsValid => true;
-		public virtual string ExportName => Path.Combine(AssetsName, ClassID.ToString());
+		public virtual string ExportName => Path.Combine(AssetsKeyWord, ClassID.ToString());
 		public virtual string ExportExtension => AssetExtension;
 		public long PathID => m_assetInfo.PathID;
 		
@@ -122,7 +122,7 @@ namespace UtinyRipper.Classes
 		public long LocalIdentfierInFile { get; private set; }
 #endif
 
-		public const string AssetsName = "Assets";
+		public const string AssetsKeyWord = "Assets";
 		protected const string AssetExtension = "asset";
 
 		private readonly AssetInfo m_assetInfo;

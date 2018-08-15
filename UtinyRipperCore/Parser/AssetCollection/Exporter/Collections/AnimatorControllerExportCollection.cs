@@ -51,19 +51,19 @@ namespace UtinyRipper.AssetExporters
 
 				foreach(PPtr<AnimatorStateTransition> transitionPtr in stateMachine.AnyStateTransitions)
 				{
-					AnimatorStateTransition transition = transitionPtr.GetObject(container.VirtualFile);
+					AnimatorStateTransition transition = transitionPtr.GetAsset(container.VirtualFile);
 					AddAsset(transition);
 				}
 				foreach (PPtr<AnimatorTransition> transitionPtr in stateMachine.EntryTransitions)
 				{
-					AnimatorTransition transition = transitionPtr.GetObject(container.VirtualFile);
+					AnimatorTransition transition = transitionPtr.GetAsset(container.VirtualFile);
 					AddAsset(transition);
 				}
 
 				for (int j = 0; j < stateMachine.ChildStates.Count; j++)
 				{
 					PPtr<AnimatorState> statePtr = stateMachine.ChildStates[j].State;
-					AnimatorState state = statePtr.GetObject(container.VirtualFile);
+					AnimatorState state = statePtr.GetAsset(container.VirtualFile);
 					StateConstant stateConstant = stateMachineConstant.StateConstantArray[j].Instance;
 					AddAsset(state);
 					
@@ -75,7 +75,7 @@ namespace UtinyRipper.AssetExporters
 					for(int k = 0; k < state.Transitions.Count; k++)
 					{
 						PPtr<AnimatorStateTransition> transitionPtr = state.Transitions[k];
-						AnimatorStateTransition transition = transitionPtr.GetObject(container.VirtualFile);
+						AnimatorStateTransition transition = transitionPtr.GetAsset(container.VirtualFile);
 						TransitionConstant transitionConstant = stateConstant.TransitionConstantArray[k].Instance;
 						
 						AddAsset(transition);
@@ -88,7 +88,7 @@ namespace UtinyRipper.AssetExporters
 
 		private void AddBlendTree(VirtualSerializedFile file, PPtr<BlendTree> blendTreePtr)
 		{
-			BlendTree blendTree = blendTreePtr.GetObject(file);
+			BlendTree blendTree = blendTreePtr.GetAsset(file);
 			AddAsset(blendTree);
 
 			foreach (ChildMotion childMotion in blendTree.Childs)

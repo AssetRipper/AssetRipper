@@ -103,14 +103,14 @@ namespace Mono.Cecil {
 
 		public static byte [] ComputeHash (string file)
 		{
-			if (!File.Exists (file))
+			if (!UtinyRipper.FileUtils.Exists (file))
 				return Empty<byte>.Array;
 
 			const int buffer_size = 8192;
 
 			var sha1 = new SHA1Managed ();
 
-			using (var stream = new FileStream (file, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+			using (var stream = new FileStream (UtinyRipper.FileUtils.ToLongPath(file), FileMode.Open, FileAccess.Read, FileShare.Read)) {
 
 				var buffer = new byte [buffer_size];
 

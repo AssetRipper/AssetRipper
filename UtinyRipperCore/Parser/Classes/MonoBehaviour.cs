@@ -21,7 +21,7 @@ namespace UtinyRipper.Classes
 			Script.Read(stream);
 			Name = stream.ReadStringAligned();
 			
-			MonoScript script = Script.FindObject(File);
+			MonoScript script = Script.FindAsset(File);
 			if (script != null)
 			{
 				Structure = script.CreateStructure();
@@ -43,7 +43,7 @@ namespace UtinyRipper.Classes
 				yield return asset;
 			}
 
-			yield return Script.GetObject(file);
+			yield return Script.GetAsset(file);
 			
 			if(Structure != null)
 			{
@@ -105,7 +105,7 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public override string ExportName => Path.Combine(AssetsName, "ScriptableObject");
+		public override string ExportName => Path.Combine(AssetsKeyWord, "ScriptableObject");
 		public override string ExportExtension => AssetExtension;
 
 		public string Name { get; private set; }

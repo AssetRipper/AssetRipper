@@ -21,12 +21,12 @@ namespace UtinyRipper.Classes
 			return node;
 		}
 
-		public T FindObject(ISerializedFile file)
+		public T FindAsset(ISerializedFile file)
 		{
 			throw new NotSupportedException();
 		}
 
-		public T GetObject(ISerializedFile file)
+		public T GetAsset(ISerializedFile file)
 		{
 			throw new NotSupportedException();
 		}

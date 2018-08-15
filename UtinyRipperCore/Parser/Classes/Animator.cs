@@ -136,7 +136,7 @@ namespace UtinyRipper.Classes
 
 		public IReadOnlyDictionary<uint, string> RetrieveTOS()
 		{
-			Avatar avatar = Avatar.FindObject(File);
+			Avatar avatar = Avatar.FindAsset(File);
 			if (avatar == null)
 			{
 				return BuildTOS();
@@ -153,7 +153,7 @@ namespace UtinyRipper.Classes
 			{
 				if (HasTransformHierarchy)
 				{
-					GameObject go = GameObject.GetObject(File);
+					GameObject go = GameObject.GetAsset(File);
 					return go.BuildTOS();
 				}
 				else
@@ -163,7 +163,7 @@ namespace UtinyRipper.Classes
 			}
 			else
 			{
-				GameObject go = GameObject.GetObject(File);
+				GameObject go = GameObject.GetAsset(File);
 				return go.BuildTOS();
 			}
 		}

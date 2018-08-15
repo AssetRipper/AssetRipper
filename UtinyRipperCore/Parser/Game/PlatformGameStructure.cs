@@ -22,10 +22,10 @@ namespace UtinyRipper
 		{
 			if (RunetimeUtils.IsRunningOnMono)
 			{
-				if (Directory.Exists(rootPath))
+				if (DirectoryUtils.Exists(rootPath))
 				{
 					fileName = Path.GetFileName(fileName).ToLower(CultureInfo.InvariantCulture);
-					DirectoryInfo root = new DirectoryInfo(rootPath);
+					DirectoryInfo root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
 					foreach (FileInfo file in root.EnumerateFiles())
 					{
 						if (file.Name.ToLower(CultureInfo.InvariantCulture) == fileName)
@@ -42,10 +42,10 @@ namespace UtinyRipper
 		{
 			if (RunetimeUtils.IsRunningOnMono)
 			{
-				if (Directory.Exists(rootPath))
+				if (DirectoryUtils.Exists(rootPath))
 				{
 					directoryName = Path.GetFileName(directoryName).ToLower(CultureInfo.InvariantCulture);
-					DirectoryInfo root = new DirectoryInfo(rootPath);
+					DirectoryInfo root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
 					foreach (DirectoryInfo directory in root.EnumerateDirectories())
 					{
 						if (directory.Name.ToLower(CultureInfo.InvariantCulture) == directoryName)
@@ -71,20 +71,20 @@ namespace UtinyRipper
 		public virtual IEnumerable<string> FetchFiles()
 		{
 			string filePath = Path.Combine(MainDataPath, MainDataName);
-			if (File.Exists(filePath))
+			if (FileUtils.Exists(filePath))
 			{
 				yield return filePath;
 			}
 
 			filePath = Path.Combine(MainDataPath, GlobalGameManagerName);
-			if (File.Exists(filePath))
+			if (FileUtils.Exists(filePath))
 			{
 				yield return filePath;
 			}
 
 			foreach(string dataPath in DataPathes)
 			{
-				DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
+				DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(dataPath));
 				foreach (FileInfo levelFile in dataDirectory.EnumerateFiles())
 				{
 					if (m_levelName.IsMatch(levelFile.Name))
@@ -94,7 +94,7 @@ namespace UtinyRipper
 				}
 
 				string streamingPath = Path.Combine(dataPath, StreamingName);
-				DirectoryInfo streamingDirectory = new DirectoryInfo(streamingPath);
+				DirectoryInfo streamingDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(streamingPath));
 				if (streamingDirectory.Exists)
 				{
 					foreach (string path in FetchAssetBundles(streamingDirectory))
@@ -107,7 +107,7 @@ namespace UtinyRipper
 
 		public virtual IEnumerable<string> FetchAssemblies()
 		{
-			DirectoryInfo managedDirectory = new DirectoryInfo(ManagedPath);
+			DirectoryInfo managedDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(ManagedPath));
 			foreach (FileInfo assemblyFile in managedDirectory.EnumerateFiles())
 			{
 				if (AssemblyManager.IsAssembly(assemblyFile.Name))
@@ -201,7 +201,7 @@ namespace UtinyRipper
 		private bool LoadEngineDependency(string path, string dependency, string originName)
 		{
 			string filePath = Path.Combine(path, dependency);
-			if (File.Exists(filePath))
+			if (FileUtils.Exists(filePath))
 			{
 				m_fileCollection.LoadSerializedFile(filePath, originName);
 				return true;
@@ -209,7 +209,7 @@ namespace UtinyRipper
 
 			string resourcePath = Path.Combine(path, ResourceName);
 			filePath = Path.Combine(resourcePath, dependency);
-			if (File.Exists(filePath))
+			if (FileUtils.Exists(filePath))
 			{
 				m_fileCollection.LoadSerializedFile(filePath, originName);
 				return true;

@@ -22,7 +22,7 @@ namespace UtinyRipper.AssetExporters
 		
 		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
 		{
-			using (FileStream fileStream = File.Open(path, FileMode.Create, FileAccess.Write))
+			using (FileStream fileStream = FileUtils.Open(path, FileMode.Create, FileAccess.Write))
 			{
 				using (StreamWriter streamWriter = new StreamWriter(fileStream))
 				{
@@ -37,7 +37,7 @@ namespace UtinyRipper.AssetExporters
 
 		public void Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
-			using (FileStream fileStream = File.Open(path, FileMode.Create, FileAccess.Write))
+			using (FileStream fileStream = FileUtils.Open(path, FileMode.Create, FileAccess.Write))
 			{
 				using (StreamWriter streamWriter = new StreamWriter(fileStream))
 				{

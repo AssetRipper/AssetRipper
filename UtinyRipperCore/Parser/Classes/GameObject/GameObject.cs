@@ -23,7 +23,7 @@ namespace UtinyRipper.Classes
 			Transform transform = null;
 			foreach (ComponentPair cpair in root.Components)
 			{
-				Component component = cpair.Component.FindObject(root.File);
+				Component component = cpair.Component.FindAsset(root.File);
 				if(component == null)
 				{
 					continue;
@@ -38,8 +38,8 @@ namespace UtinyRipper.Classes
 
 			foreach (PPtr<Transform> pchild in transform.Children)
 			{
-				Transform child = pchild.GetObject(root.File);
-				GameObject childGO = child.GameObject.GetObject(root.File);
+				Transform child = pchild.GetAsset(root.File);
+				GameObject childGO = child.GameObject.GetAsset(root.File);
 				CollectHierarchy(childGO, heirarchy);
 			}
 		}
@@ -91,7 +91,7 @@ namespace UtinyRipper.Classes
 		{
 			foreach (ComponentPair pair in Components)
 			{
-				Component comp = pair.Component.FindObject(File);
+				Component comp = pair.Component.FindAsset(File);
 				if (comp == null)
 				{
 					continue;
@@ -110,7 +110,7 @@ namespace UtinyRipper.Classes
 			Transform root = GetTransform();
 			while (true)
 			{
-				Transform parent = root.Father.TryGetObject(File);
+				Transform parent = root.Father.TryGetAsset(File);
 				if (parent == null)
 				{
 					break;
@@ -120,7 +120,7 @@ namespace UtinyRipper.Classes
 					root = parent;
 				}
 			}
-			return root.GameObject.GetObject(File);
+			return root.GameObject.GetAsset(File);
 		}
 
 		public int GetRootDepth()
@@ -129,7 +129,7 @@ namespace UtinyRipper.Classes
 			int depth = 0;
 			while (true)
 			{
-				Transform parent = root.Father.TryGetObject(File);
+				Transform parent = root.Father.TryGetAsset(File);
 				if (parent == null)
 				{
 					break;
@@ -187,8 +187,8 @@ namespace UtinyRipper.Classes
 			Transform transform = parent.GetTransform();
 			foreach (PPtr<Transform> childPtr in transform.Children)
 			{
-				Transform childTransform = childPtr.GetObject(File);
-				GameObject child = childTransform.GameObject.GetObject(File);
+				Transform childTransform = childPtr.GetAsset(File);
+				GameObject child = childTransform.GameObject.GetAsset(File);
 				string path = parentPath != string.Empty ? parentPath + "/" + child.Name : child.Name;
 				CRC crc = new CRC();
 				byte[] pathBytes = Encoding.UTF8.GetBytes(path);

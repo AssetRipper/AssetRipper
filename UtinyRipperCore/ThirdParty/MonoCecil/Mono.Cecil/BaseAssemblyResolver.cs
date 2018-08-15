@@ -216,7 +216,7 @@ namespace Mono.Cecil {
 			foreach (var directory in directories) {
 				foreach (var extension in extensions) {
 					string file = Path.Combine (directory, name.Name + extension);
-					if (!File.Exists (file))
+					if (!UtinyRipper.FileUtils.Exists (file))
 						continue;
 					try {
 						return GetAssembly (file, parameters);
@@ -242,8 +242,8 @@ namespace Mono.Cecil {
 			if (corlib.Version == version || IsZero (version))
 				return GetAssembly (typeof (object).Module.FullyQualifiedName, parameters);
 
-			var path = Directory.GetParent (
-				Directory.GetParent (
+			var path = UtinyRipper.DirectoryUtils.GetParent (
+				UtinyRipper.DirectoryUtils.GetParent (
 					typeof (object).Module.FullyQualifiedName).FullName
 				).FullName;
 
@@ -279,12 +279,12 @@ namespace Mono.Cecil {
 			}
 
 			var file = Path.Combine (path, "mscorlib.dll");
-			if (File.Exists (file))
+			if (UtinyRipper.FileUtils.Exists (file))
 				return GetAssembly (file, parameters);
 
-			if (on_mono && Directory.Exists (path + "-api")) {
+			if (on_mono && UtinyRipper.DirectoryUtils.Exists (path + "-api")) {
 				file = Path.Combine (path + "-api", "mscorlib.dll");
-				if (File.Exists (file))
+				if (UtinyRipper.FileUtils.Exists (file))
 					return GetAssembly (file, parameters);
 			}
 
@@ -323,7 +323,7 @@ namespace Mono.Cecil {
 					continue;
 
 				var gac_path = Path.Combine (Path.Combine (Path.Combine (prefix, "lib"), "mono"), "gac");
-				if (Directory.Exists (gac_path) && !paths.Contains (gac))
+				if (UtinyRipper.DirectoryUtils.Exists (gac_path) && !paths.Contains (gac))
 					paths.Add (gac_path);
 			}
 
@@ -333,7 +333,7 @@ namespace Mono.Cecil {
 		static string GetCurrentMonoGac ()
 		{
 			return Path.Combine (
-				Directory.GetParent (
+				UtinyRipper.DirectoryUtils.GetParent (
 					Path.GetDirectoryName (typeof (object).Module.FullyQualifiedName)).FullName,
 				"gac");
 		}
@@ -357,7 +357,7 @@ namespace Mono.Cecil {
 			for (int i = 0; i < gac_paths.Count; i++) {
 				var gac_path = gac_paths [i];
 				var file = GetAssemblyFile (reference, string.Empty, gac_path);
-				if (File.Exists (file))
+				if (UtinyRipper.FileUtils.Exists (file))
 					return GetAssembly (file, parameters);
 			}
 
@@ -373,7 +373,7 @@ namespace Mono.Cecil {
 				for (int j = 0; j < gacs.Length; j++) {
 					var gac = Path.Combine (gac_paths [i], gacs [j]);
 					var file = GetAssemblyFile (reference, prefixes [i], gac);
-					if (Directory.Exists (gac) && File.Exists (file))
+					if (UtinyRipper.DirectoryUtils.Exists (gac) && UtinyRipper.FileUtils.Exists (file))
 						return GetAssembly (file, parameters);
 				}
 			}
