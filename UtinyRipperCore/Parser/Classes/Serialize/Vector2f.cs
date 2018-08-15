@@ -25,6 +25,11 @@ namespace UtinyRipper.Classes
 		{
 		}
 
+		public static Vector2f operator -(Vector2f left)
+		{
+			return new Vector2f(-left.X, -left.Y);
+		}
+
 		public static Vector2f operator -(Vector2f left, Vector2f right)
 		{
 			return new Vector2f(left.X - right.X, left.Y - right.Y);
@@ -38,6 +43,11 @@ namespace UtinyRipper.Classes
 		public static Vector2f operator *(Vector2f left, float right)
 		{
 			return new Vector2f(left.X * right, left.Y * right);
+		}
+
+		public static Vector2f operator /(Vector2f left, float right)
+		{
+			return new Vector2f(left.X / right, left.Y / right);
 		}
 
 		/// <summary>

@@ -21,6 +21,11 @@ namespace UtinyRipper.Classes
 			Height = height;
 		}
 
+		public Rectf(Vector2f positon, Vector2f size):
+			this(positon.X, positon.Y, size.X, size.Y)
+		{
+		}
+
 		public Rectf(Rectf copy):
 			this(copy.X, copy.Y, copy.Width, copy.Height)
 		{
@@ -66,6 +71,26 @@ namespace UtinyRipper.Classes
 				return true;
 			}
 			return false;
+		}
+
+		public static Rectf operator +(Rectf left, Rectf right)
+		{
+			Rectf result = default;
+			result.X = left.X + right.X;
+			result.Y = left.Y + right.Y;
+			result.Width = left.Width + right.Width;
+			result.Height = left.Height + right.Height;
+			return result;
+		}
+
+		public static Rectf operator -(Rectf left, Rectf right)
+		{
+			Rectf result = default;
+			result.X = left.X - right.X;
+			result.Y = left.Y - right.Y;
+			result.Width = left.Width - right.Width;
+			result.Height = left.Height - right.Height;
+			return result;
 		}
 
 		public IScriptStructure CreateCopy()
@@ -146,6 +171,9 @@ namespace UtinyRipper.Classes
 		public IScriptStructure Base => null;
 		public string Namespace => ScriptType.UnityEngineName;
 		public string Name => ScriptType.RectName;
+
+		public Vector2f Position => new Vector2f(X, Y);
+		public Vector2f Size => new Vector2f(Width, Height);
 
 		public float X { get; private set; }
 		public float Y { get; private set; }

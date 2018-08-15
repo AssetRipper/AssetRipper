@@ -179,7 +179,6 @@ namespace UtinyRipper.Classes.Sprites
 
 			int currentPoint = point2;
 			int currentIndex = outsideVertexIndex;
-			bool isMoreMeshes = false;
 			Vector2f prevPointValue = vertexValues[point1].ToVector2();
 			Vector2f curPointValue = vertexValues[point2].ToVector2();
 			

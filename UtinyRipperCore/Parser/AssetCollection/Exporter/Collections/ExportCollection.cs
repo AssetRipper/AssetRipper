@@ -32,7 +32,7 @@ namespace UtinyRipper.AssetExporters
 
 		public static ulong GetMainExportID(Object asset, uint value)
 		{
-			return GetMainExportID((uint)asset.ClassID, 0);
+			return GetMainExportID((uint)asset.ClassID, value);
 		}
 
 		public static ulong GetMainExportID(uint classID, uint value)

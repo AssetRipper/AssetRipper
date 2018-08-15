@@ -72,11 +72,13 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public IReadOnlyList<IReadOnlyList<Vector2f>> GenerateOutline()
+		public IReadOnlyList<IReadOnlyList<Vector2f>> GenerateOutline(Rectf rect, Vector2f pivot)
 		{
 			Vector2f[][] outlines = RD.GenerateOutline(File.Version);
 			Vector2f center = RD.TextureRect.Center;
-			Vector2f pivotShift = new Vector2f(Rect.Width * Pivot.X - Rect.Width * 0.5f, Rect.Height * Pivot.Y - Rect.Height * 0.5f);
+			float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
+			float pivotShiftY = rect.Height * pivot.Y - rect.Height * 0.5f;
+			Vector2f pivotShift = new Vector2f(pivotShiftX, pivotShiftY);
 			foreach (Vector2f[] outline in outlines)
 			{
 				for (int i = 0; i < outline.Length; i++)

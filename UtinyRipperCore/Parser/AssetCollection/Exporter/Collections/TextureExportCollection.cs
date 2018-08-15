@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
+using UtinyRipper.Classes.SpriteAtlases;
 
 namespace UtinyRipper.AssetExporters
 {
@@ -14,14 +15,35 @@ namespace UtinyRipper.AssetExporters
 				List<Sprite> sprites = new List<Sprite>();
 				foreach (Object asset in texture.File.FetchAssets())
 				{
-					if (asset.ClassID == ClassIDType.Sprite)
+					switch (asset.ClassID)
 					{
-						Sprite sprite = (Sprite)asset;
-						if (sprite.RD.Texture.IsObject(sprite.File, texture))
-						{
-							sprites.Add(sprite);
-							AddAsset(sprite);
-						}
+						case ClassIDType.Sprite:
+							{
+								Sprite sprite = (Sprite)asset;
+								if (sprite.RD.Texture.IsObject(sprite.File, texture))
+								{
+									sprites.Add(sprite);
+									AddAsset(sprite);
+								}
+							}
+							break;
+
+						case ClassIDType.SpriteAtlas:
+							{
+								int index = 0;
+								SpriteAtlas atlas = (SpriteAtlas)asset;
+								foreach(SpriteAtlasData atlasData in atlas.RenderDataMap.Values)
+								{
+									if(atlasData.Texture.IsObject(atlas.File, texture))
+									{
+										Sprite sprite = atlas.PackedSprites[index].GetObject(atlas.File);
+										sprites.Add(sprite);
+										AddAsset(sprite);
+									}
+									index++;
+								}
+							}
+							break;
 					}
 				}
 				textureImporter.Sprites = sprites;
