@@ -20,7 +20,6 @@ namespace UtinyRipper
 	{
 		public static bool AssetSelector(Object asset)
 		{
-			return asset.ClassID == ClassIDType.OcclusionCullingData || OcclusionCullingSettings.IsCompatible(asset);
 			return true;
 		}
 
