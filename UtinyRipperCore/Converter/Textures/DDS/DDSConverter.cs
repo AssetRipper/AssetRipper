@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace UtinyRipper.Converter.Textures.DDS
@@ -20,7 +17,7 @@ namespace UtinyRipper.Converter.Textures.DDS
 
 		public static void ExportDDSHeader(Stream destination, DDSConvertParameters @params)
 		{
-			using (BinaryWriter binWriter = new BinaryWriter(destination, Encoding.Default, true))
+			using (BinaryWriter binWriter = new BinaryWriter(destination, Encoding.UTF8, true))
 			{
 				binWriter.Write(MagicNumber);
 				binWriter.Write(HeaderSize);
@@ -100,73 +97,6 @@ namespace UtinyRipper.Converter.Textures.DDS
 			}
 		}
 
-		public static void ExportBitmap(byte[] buffer, int offset, Stream source, DDSConvertParameters @params)
-		{
-			using (MemoryStream stream = new MemoryStream(buffer))
-			{
-				stream.Position = offset;
-				ExportBitmap(stream, source, @params);
-			}
-		}
-
-		public static void ExportBitmap(Stream destination, Stream source, DDSConvertParameters @params)
-		{
-			int width = @params.Width;
-			int height = @params.Height;
-			int size = width * height * 4;
-			byte[] buffer = new byte[size];
-			using (MemoryStream memStream = new MemoryStream(buffer))
-			{
-				ExportBitmapData(memStream, source, @params);
-				Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-				Rectangle rect = new Rectangle(0, 0, width, height);
-				BitmapData bitData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-				IntPtr pointer = bitData.Scan0;
-				Marshal.Copy(buffer, 0, pointer, size);
-				bitmap.UnlockBits(bitData);
-
-				bitmap.Save(destination, ImageFormat.Png);
-			}
-		}
-
-		private static void ExportBitmapData(Stream destination, Stream source, DDSConvertParameters @params)
-		{
-			if(@params.PixelFormatFlags.IsFourCC())
-			{
-				switch(@params.FourCC)
-				{
-					case DDSFourCCType.DXT1:
-						DDSDecompressor.DecompressDXT1(destination, source, @params);
-						break;
-						
-					case DDSFourCCType.DXT5:
-						DDSDecompressor.DecompressDXT5(destination, source, @params);
-						break;
-
-					default:
-						throw new NotImplementedException(@params.FourCC.ToString());
-				}
-			}
-			else
-			{
-				if (@params.PixelFormatFlags.IsLuminace())
-				{
-					throw new NotSupportedException("Luminace isn't supported");
-				}
-				else
-				{
-					if (@params.PixelFormatFlags.IsAlphaPixels())
-					{
-						DDSDecompressor.DecompressRGBA(destination, source, @params);
-					}
-					else
-					{
-						DDSDecompressor.DecompressRGB(destination, source, @params);
-					}
-				}
-			}
-		}
-
 		private static void ExportRGBA32ToDDS(Stream destination, Stream source, DDSConvertParameters @params)
 		{
 			DDSConvertParameters bgraParams = new DDSConvertParameters();
@@ -175,7 +105,7 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.BBitMask = 0xFF;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.Default, true))
+			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
 			{
 				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
 				for (int i = 0; i < pixelCount; i++)
@@ -202,7 +132,7 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.ABitMask = 0xFF000000;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.Default, true))
+			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
 			{
 				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
 				for (int i = 0; i < pixelCount; i++)
@@ -227,7 +157,7 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.BBitMask = 0xF;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.Default, true))
+			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
 			{
 				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
 				for (int i = 0; i < pixelCount; i++)
@@ -254,7 +184,7 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.ABitMask = 0xFF000000;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.Default, true))
+			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
 			{
 				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
 				for (int i = 0; i < pixelCount; i++)
@@ -279,7 +209,7 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.ABitMask = 0xFF000000;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.Default, true))
+			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
 			{
 				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
 				for (int i = 0; i < pixelCount; i++)
@@ -304,7 +234,7 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.ABitMask = 0xFF000000;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.Default, true))
+			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
 			{
 				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
 				for (int i = 0; i < pixelCount; i++)
@@ -331,7 +261,7 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.ABitMask = 0xFF000000;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.Default, true))
+			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
 			{
 				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
 				for (int i = 0; i < pixelCount; i++)

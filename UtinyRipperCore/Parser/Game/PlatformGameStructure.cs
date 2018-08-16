@@ -24,11 +24,11 @@ namespace UtinyRipper
 			{
 				if (DirectoryUtils.Exists(rootPath))
 				{
-					fileName = Path.GetFileName(fileName).ToLower(CultureInfo.InvariantCulture);
+					fileName = Path.GetFileName(fileName).ToLowerInvariant();
 					DirectoryInfo root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
 					foreach (FileInfo file in root.EnumerateFiles())
 					{
-						if (file.Name.ToLower(CultureInfo.InvariantCulture) == fileName)
+						if (file.Name.ToLowerInvariant() == fileName)
 						{
 							return file.Name;
 						}
@@ -44,11 +44,11 @@ namespace UtinyRipper
 			{
 				if (DirectoryUtils.Exists(rootPath))
 				{
-					directoryName = Path.GetFileName(directoryName).ToLower(CultureInfo.InvariantCulture);
+					directoryName = Path.GetFileName(directoryName).ToLowerInvariant();
 					DirectoryInfo root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
 					foreach (DirectoryInfo directory in root.EnumerateDirectories())
 					{
-						if (directory.Name.ToLower(CultureInfo.InvariantCulture) == directoryName)
+						if (directory.Name.ToLowerInvariant() == directoryName)
 						{
 							return directory.Name;
 						}

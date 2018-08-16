@@ -4,12 +4,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
+#if !NET_CORE
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Security.AccessControl;
 using System.Security.Principal;
+#endif
 using UtinyRipper.Classes;
 
 using Object = UtinyRipper.Classes.Object;
@@ -97,11 +99,13 @@ namespace UtinyRipper
 		
 		private static void PrepareExportDirectory(string path)
 		{
+#if !NET_CORE
 			if (!RunetimeUtils.IsRunningOnMono)
 			{
 				string directory = Directory.GetCurrentDirectory();
 				CheckWritePermission(directory);
 			}
+#endif
 			
 			if (DirectoryUtils.Exists(path))
 			{
@@ -109,6 +113,7 @@ namespace UtinyRipper
 			}
 		}
 
+#if !NET_CORE
 		private static void CheckWritePermission(string path)
 		{
 			WindowsIdentity identity = WindowsIdentity.GetCurrent();
@@ -190,6 +195,7 @@ namespace UtinyRipper
 				}
 			}
 		}
+#endif
 
 		private GameStructure GameStructure { get; } = new GameStructure();
 	}

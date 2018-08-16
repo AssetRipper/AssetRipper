@@ -34,7 +34,7 @@ namespace Mono.Cecil {
 		}
 	}
 
-#if !NET_CORE
+#if !NET_CORE && !NET_STANDARD
 	[Serializable]
 #endif
 	public sealed class AssemblyResolutionException : FileNotFoundException {
@@ -56,7 +56,7 @@ namespace Mono.Cecil {
 			this.reference = reference;
 		}
 
-#if !NET_CORE
+#if !NET_CORE && !NET_STANDARD
 		AssemblyResolutionException (
 			System.Runtime.Serialization.SerializationInfo info,
 			System.Runtime.Serialization.StreamingContext context)
@@ -72,7 +72,7 @@ namespace Mono.Cecil {
 
 		readonly Collection<string> directories;
 
-#if NET_CORE
+#if NET_CORE || NET_STANDARD
 		// Maps file names of available trusted platform assemblies to their full paths.
 		// Internal for testing.
 		internal static readonly Lazy<Dictionary<string, string>> TrustedPlatformAssemblies = new Lazy<Dictionary<string, string>> (CreateTrustedPlatformAssemblyMap);
@@ -133,7 +133,7 @@ namespace Mono.Cecil {
 				};
 			}
 
-#if NET_CORE
+#if NET_CORE || NET_STANDARD
 			assembly = SearchTrustedPlatformAssemblies (name, parameters);
 			if (assembly != null)
 				return assembly;
@@ -172,7 +172,7 @@ namespace Mono.Cecil {
 			throw new AssemblyResolutionException (name);
 		}
 
-#if NET_CORE
+#if NET_CORE || NET_STANDARD
 		AssemblyDefinition SearchTrustedPlatformAssemblies (AssemblyNameReference name, ReaderParameters parameters)
 		{
 			if (name.IsWindowsRuntime)
@@ -234,7 +234,7 @@ namespace Mono.Cecil {
 			return version.Major == 0 && version.Minor == 0 && version.Build == 0 && version.Revision == 0;
 		}
 
-#if !NET_CORE
+#if !NET_CORE && !NET_STANDARD
 		AssemblyDefinition GetCorlib (AssemblyNameReference reference, ReaderParameters parameters)
 		{
 			var version = reference.Version;

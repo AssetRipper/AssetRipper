@@ -22,8 +22,7 @@ namespace System
     ///     - Fast Half Float Conversions, Jeroen van der Zijp, link: http://www.fox-toolkit.org/ftp/fasthalffloatconversion.pdf
     ///     - IEEE 754 revision, link: http://grouper.ieee.org/groups/754/
     /// </remarks>
-    [Serializable]
-    public struct Half : IComparable, IFormattable, IConvertible, IComparable<Half>, IEquatable<Half>
+    public struct Half : IComparable, IFormattable, IComparable<Half>, IEquatable<Half>
     {
         /// <summary>
         /// Internal representation of the half-precision floating-point number.
@@ -480,14 +479,6 @@ namespace System
         {
             return value.GetHashCode();
         }
-        /// <summary>
-        /// Returns the System.TypeCode for value type System.Half.
-        /// </summary>
-        /// <returns>The enumerated constant (TypeCode)255.</returns>
-        public TypeCode GetTypeCode()
-        { 
-            return (TypeCode)255;
-        }
 
         #region BitConverter & Math methods for Half
         /// <summary>
@@ -811,77 +802,6 @@ namespace System
         public string ToString(string format, IFormatProvider formatProvider)
         {
             return ((float)this).ToString(format, formatProvider);
-        }
-        #endregion
-
-        #region IConvertible Members
-        float IConvertible.ToSingle(IFormatProvider provider)
-        {
-            return (float)this;
-        }
-        TypeCode IConvertible.GetTypeCode()
-        {
-            return GetTypeCode();
-        }
-        bool IConvertible.ToBoolean(IFormatProvider provider)
-        {
-            return Convert.ToBoolean((float)this);
-        }
-        byte IConvertible.ToByte(IFormatProvider provider)
-        {
-            return Convert.ToByte((float)this);
-        }
-        char IConvertible.ToChar(IFormatProvider provider)
-        {
-            throw new InvalidCastException(string.Format(CultureInfo.CurrentCulture, "Invalid cast from '{0}' to '{1}'.", "Half", "Char"));
-        }
-        DateTime IConvertible.ToDateTime(IFormatProvider provider)
-        {
-            throw new InvalidCastException(string.Format(CultureInfo.CurrentCulture, "Invalid cast from '{0}' to '{1}'.", "Half", "DateTime"));
-        }
-        decimal IConvertible.ToDecimal(IFormatProvider provider)
-        {
-            return Convert.ToDecimal((float)this);
-        }
-        double IConvertible.ToDouble(IFormatProvider provider)
-        {
-            return Convert.ToDouble((float)this);
-        }
-        short IConvertible.ToInt16(IFormatProvider provider)
-        {
-            return Convert.ToInt16((float)this);
-        }
-        int IConvertible.ToInt32(IFormatProvider provider)
-        {
-            return Convert.ToInt32((float)this);
-        }
-        long IConvertible.ToInt64(IFormatProvider provider)
-        {
-            return Convert.ToInt64((float)this);
-        }
-        sbyte IConvertible.ToSByte(IFormatProvider provider)
-        {
-            return Convert.ToSByte((float)this);
-        }
-        string IConvertible.ToString(IFormatProvider provider)
-        {
-            return Convert.ToString((float)this, CultureInfo.InvariantCulture);
-        }
-        object IConvertible.ToType(Type conversionType, IFormatProvider provider)
-        {
-            return (((float)this) as IConvertible).ToType(conversionType, provider);
-        }
-        ushort IConvertible.ToUInt16(IFormatProvider provider)
-        {
-            return Convert.ToUInt16((float)this);
-        }
-        uint IConvertible.ToUInt32(IFormatProvider provider)
-        {
-            return Convert.ToUInt32((float)this);
-        }
-        ulong IConvertible.ToUInt64(IFormatProvider provider)
-        {
-            return Convert.ToUInt64((float)this);
         }
         #endregion
     }

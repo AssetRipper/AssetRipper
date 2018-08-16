@@ -42,12 +42,9 @@ namespace UtinyRipper.AssetExporters
 		{
 			switch(asset.ClassID)
 			{
-				case ClassIDType.Sprite:
-					return TextureExportCollection.CreateExportCollection(this, (Sprite)asset);
-
 				case ClassIDType.Texture2D:
 				case ClassIDType.Cubemap:
-					return new TextureExportCollection(this, (Texture2D)asset);
+					return new TextureExportCollection(this, (Texture2D)asset, false);
 
 				default:
 					return new AssetExportCollection(this, asset);

@@ -43,7 +43,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\Bins\x64\Debug\</OutputPath>
+    <OutputPath>..\Bins\Debug\x64\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -54,7 +54,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>..\Bins\x64\Release\</OutputPath>
+    <OutputPath>..\Bins\Release\x64\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -67,7 +67,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\Bins\x86\Debug\</OutputPath>
+    <OutputPath>..\Bins\Debug\x86\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -78,7 +78,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\Bins\x86\Release\</OutputPath>
+    <OutputPath>..\Bins\Release\x86\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -96,7 +96,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\EnumNameAttribute.cs" />
@@ -756,7 +755,6 @@
     <Compile Include="ThirdParty\Brotli\WordTransformType.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Cil\Code.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Cil\CodeReader.cs" />
-    <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Cil\CodeWriter.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Cil\Document.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Cil\ExceptionHandler.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Cil\ILProcessor.cs" />
@@ -770,7 +768,6 @@
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Cil\VariableDefinition.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Cil\VariableReference.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Metadata\BlobHeap.cs" />
-    <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Metadata\Buffers.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Metadata\CodedIndex.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Metadata\ElementType.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Metadata\GuidHeap.cs" />
@@ -784,15 +781,12 @@
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Metadata\UserStringHeap.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.Metadata\Utilities.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.PE\BinaryStreamReader.cs" />
-    <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.PE\BinaryStreamWriter.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.PE\ByteBuffer.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.PE\ByteBufferEqualityComparer.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.PE\DataDirectory.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.PE\Image.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.PE\ImageReader.cs" />
-    <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.PE\ImageWriter.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.PE\Section.cs" />
-    <Compile Include="ThirdParty\MonoCecil\Mono.Cecil.PE\TextMap.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil\ArrayType.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil\AssemblyDefinition.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil\AssemblyFlags.cs" />
@@ -879,8 +873,6 @@
     <Compile Include="ThirdParty\MonoCecil\Mono.Cecil\WindowsRuntimeProjections.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Collections.Generic\Collection.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono.Collections.Generic\ReadOnlyCollection.cs" />
-    <Compile Include="ThirdParty\MonoCecil\Mono.Security.Cryptography\CryptoConvert.cs" />
-    <Compile Include="ThirdParty\MonoCecil\Mono.Security.Cryptography\CryptoService.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono\Disposable.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono\Empty.cs" />
     <Compile Include="ThirdParty\MonoCecil\Mono\Type.cs" />

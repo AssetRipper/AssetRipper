@@ -15,11 +15,6 @@
 		/// </summary>
 		public static bool IsExportDependencies { get; set; } = true;
 #warning TODO: implement
-		/// <summary>
-		/// Is convert textures to png file format or export in container format?
-		/// </summary>
-		public static bool IsConvertTexturesToPNG { get; set; } = false;
-#warning TODO: implement
 		public static bool IsExportTopmostSerializedVersion => true;
 	}
 }

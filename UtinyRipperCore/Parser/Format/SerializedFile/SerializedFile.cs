@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Security.Cryptography;
 using UtinyRipper.Classes;
@@ -33,7 +32,7 @@ namespace UtinyRipper.SerializedFiles
 
 			Collection = collection;
 			FilePath = filePath;
-			Name = fileName.ToLower(CultureInfo.InvariantCulture);
+			Name = fileName.ToLowerInvariant();
 			Flags = flags;
 
 			Header = new SerializedFileHeader(Name);

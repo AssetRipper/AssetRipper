@@ -115,13 +115,6 @@ namespace Brotli
 
 		/// <summary><inheritDoc/></summary>
 		/// <exception cref="System.IO.IOException"/>
-		public override void Close()
-		{
-			Brotli.State.Close(state);
-		}
-
-		/// <summary><inheritDoc/></summary>
-		/// <exception cref="System.IO.IOException"/>
 		public override int ReadByte()
 		{
 			if (bufferOffset >= remainingBufferBytes)
@@ -210,14 +203,17 @@ namespace Brotli
 		}
 
 		public override bool CanWrite{get{return false;}}
-		public override System.IAsyncResult BeginWrite(byte[] buffer, int offset,
-				int count, System.AsyncCallback callback, object state) {
-			throw new System.NotSupportedException();
-		}
 		public override void Write(byte[] buffer, int offset, int count) {
 			throw new System.NotSupportedException();
 		}
 
-		public override void Flush() {}
+		public override void Flush() { }
+
+		/// <summary><inheritDoc/></summary>
+		/// <exception cref="System.IO.IOException"/>
+		protected override void Dispose(bool disposing)
+		{
+			Brotli.State.Close(state);
+		}
 	}
 }

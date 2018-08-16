@@ -103,13 +103,11 @@ namespace UtinyRipper.Classes
 
 						memStream.Position = offset;
 						byte[] decompressedBuffer = new byte[decompressedLength];
-						using (Lz4Stream lz4Stream = new Lz4Stream(memStream, (int)compressedLength))
+						Lz4Stream lz4Stream = new Lz4Stream(memStream, (int)compressedLength);
+						int read = lz4Stream.Read(decompressedBuffer, 0, decompressedBuffer.Length);
+						if (read != decompressedLength)
 						{
-							int read = lz4Stream.Read(decompressedBuffer, 0, decompressedBuffer.Length);
-							if (read != decompressedLength)
-							{
-								throw new Exception($"Can't properly decode shader blob. Read {read} but expected {decompressedLength}");
-							}
+							throw new Exception($"Can't properly decode shader blob. Read {read} but expected {decompressedLength}");
 						}
 
 						using (MemoryStream blobMem = new MemoryStream(decompressedBuffer))

@@ -69,13 +69,6 @@ namespace Mono.Cecil {
 			if (parameters.metadata_resolver != null)
 				module.metadata_resolver = parameters.metadata_resolver;
 
-#if !READ_ONLY
-			if (parameters.metadata_importer_provider != null)
-				module.metadata_importer = parameters.metadata_importer_provider.GetMetadataImporter (module);
-			if (parameters.reflection_importer_provider != null)
-				module.reflection_importer = parameters.reflection_importer_provider.GetReflectionImporter (module);
-#endif
-
 			GetMetadataKind (module, parameters);
 
 			reader.ReadModule ();

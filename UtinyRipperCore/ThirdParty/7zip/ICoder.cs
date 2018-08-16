@@ -7,7 +7,7 @@ namespace SevenZip
 	/// <summary>
 	/// The exception that is thrown when an error in input stream occurs during decoding.
 	/// </summary>
-	class DataErrorException : ApplicationException
+	class DataErrorException : Exception
 	{
 		public DataErrorException(): base("Data Error") { }
 	}
@@ -15,7 +15,7 @@ namespace SevenZip
 	/// <summary>
 	/// The exception that is thrown when the value of an argument is outside the allowable range.
 	/// </summary>
-	class InvalidParamException : ApplicationException
+	class InvalidParamException : Exception
 	{
 		public InvalidParamException(): base("Invalid Parameter") { }
 	}

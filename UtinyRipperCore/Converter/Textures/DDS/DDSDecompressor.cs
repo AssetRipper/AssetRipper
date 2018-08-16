@@ -4,7 +4,7 @@ using System.Text;
 
 namespace UtinyRipper.Converter.Textures.DDS
 {
-	internal static class DDSDecompressor
+	public static class DDSDecompressor
 	{
 		private struct Color8888
 		{
@@ -47,7 +47,7 @@ namespace UtinyRipper.Converter.Textures.DDS
 			Color8888[] colors = new Color8888[4];
 
 			long position = destination.Position;
-			using (BinaryReader reader = new BinaryReader(source, Encoding.Default, true))
+			using (BinaryReader reader = new BinaryReader(source, Encoding.UTF8, true))
 			{
 				for (int z = 0; z < depth; z++)
 				{
@@ -136,7 +136,7 @@ namespace UtinyRipper.Converter.Textures.DDS
 			byte[] alphaMask = new byte[6];
 
 			long position = destination.Position;
-			using (BinaryReader reader = new BinaryReader(source, Encoding.Default, true))
+			using (BinaryReader reader = new BinaryReader(source, Encoding.UTF8, true))
 			{
 				for (int z = 0; z < depth; z++)
 				{
@@ -283,7 +283,7 @@ namespace UtinyRipper.Converter.Textures.DDS
 			ColorMask aMask = ComputeMaskParams(@params.ABitMask);
 
 			long position = destination.Position;
-			using (BinaryReader reader = new BinaryReader(source, Encoding.Default, true))
+			using (BinaryReader reader = new BinaryReader(source, Encoding.UTF8, true))
 			{
 				for(int z = 0; z < depth; z++)
 				{

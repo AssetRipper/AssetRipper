@@ -7,7 +7,7 @@ namespace UtinyRipper.Converter.Textures.PVR
 	{
 		public static void ExportPVRHeader(Stream destination, PVRConvertParameters @params)
 		{
-			using (BinaryWriter binWriter = new BinaryWriter(destination, Encoding.Default, true))
+			using (BinaryWriter binWriter = new BinaryWriter(destination, Encoding.UTF8, true))
 			{
 				binWriter.Write(Version);
 				binWriter.Write((uint)Flags);

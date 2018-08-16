@@ -262,26 +262,12 @@ namespace UtinyRipper.Classes
 			{
 				using (ReverseStream reverse = new ReverseStream(source, source.Position, length, true))
 				{
-					if (Config.IsConvertTexturesToPNG)
-					{
-						DDSConverter.ExportBitmap(destination, reverse, @params);
-					}
-					else
-					{
-						DDSConverter.ExportDDS(destination, reverse, @params);
-					}
+					DDSConverter.ExportDDS(destination, reverse, @params);
 				}
 			}
 			else
 			{
-				if (Config.IsConvertTexturesToPNG)
-				{
-					DDSConverter.ExportBitmap(destination, source, @params);
-				}
-				else
-				{
-					DDSConverter.ExportDDS(destination, source, @params);
-				}
+				DDSConverter.ExportDDS(destination, source, @params);
 			}
 		}
 		
@@ -295,15 +281,7 @@ namespace UtinyRipper.Classes
 				Height = Height,
 				MipMapCount = MipCount,
 			};
-
-			if (Config.IsConvertTexturesToPNG)
-			{
-				throw new NotImplementedException();
-			}
-			else
-			{
-				PVRConverter.ExportPVR(writer, reader, @params);
-			}
+			PVRConverter.ExportPVR(writer, reader, @params);
 		}
 
 		private void ExportKTX(Stream writer, Stream reader, long length)
@@ -316,52 +294,37 @@ namespace UtinyRipper.Classes
 				Width = Width,
 				Height = Height,
 			};
-			
-			if (Config.IsConvertTexturesToPNG)
-			{
-				throw new NotImplementedException();
-			}
-			else
-			{
-				KTXConverter.ExportKXT(writer, reader, @params);
-			}
+			KTXConverter.ExportKXT(writer, reader, @params);
 		}
 
 		public override string ExportExtension
 		{
 			get
 			{
-				if(Config.IsConvertTexturesToPNG)
+				switch (TextureFormat.ToContainerType())
 				{
-					return "png";
-				}
-				else
-				{
-					switch(TextureFormat.ToContainerType())
-					{
-						case ContainerType.None:
-							switch(TextureFormat)
-							{
-								case TextureFormat.DXT1Crunched:
-								case TextureFormat.DXT5Crunched:
-								case TextureFormat.ETC_RGB4Crunched:
-								case TextureFormat.ETC2_RGBA8Crunched:
-									return "crn";
-							}
-							return "tex";
+					case ContainerType.None:
+						switch (TextureFormat)
+						{
+							case TextureFormat.DXT1Crunched:
+							case TextureFormat.DXT5Crunched:
+							case TextureFormat.ETC_RGB4Crunched:
+							case TextureFormat.ETC2_RGBA8Crunched:
+								return "crn";
+						}
+						return "tex";
 
-						case ContainerType.DDS:
-							return "dds";
+					case ContainerType.DDS:
+						return "dds";
 
-						case ContainerType.PVR:
-							return "pvr";
+					case ContainerType.PVR:
+						return "pvr";
 
-						case ContainerType.KTX:
-							return "ktx";
+					case ContainerType.KTX:
+						return "ktx";
 
-						default:
-							throw new NotSupportedException($"Unsupported container type {TextureFormat.ToContainerType()}");
-					}
+					default:
+						throw new NotSupportedException($"Unsupported container type {TextureFormat.ToContainerType()}");
 				}
 			}
 		}
@@ -498,7 +461,7 @@ namespace UtinyRipper.Classes
 						return 0xF000;
 
 					case TextureFormat.RGB24:
-						return Config.IsConvertTexturesToPNG ? unchecked((uint)0x0000FF) : 0xFF0000;
+						return 0xFF0000;
 						
 					case TextureFormat.RGB565:
 						return 0xF800;
@@ -590,7 +553,7 @@ namespace UtinyRipper.Classes
 						return 0x00F0;
 
 					case TextureFormat.RGB24:
-						return Config.IsConvertTexturesToPNG ? unchecked((uint)0xFF0000) : 0x0000FF;
+						return 0x0000FF;
 						
 					case TextureFormat.RGB565:
 						return 0x001F;

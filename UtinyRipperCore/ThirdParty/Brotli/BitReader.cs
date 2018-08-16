@@ -176,7 +176,7 @@ namespace Brotli
 			br.input = null;
 			if (@is != null)
 			{
-				@is.Close();
+				@is.Dispose();
 			}
 		}
 

@@ -17,7 +17,7 @@ namespace UtinyRipper
 		}
 
 		public EndianStream(Stream stream, long alignPosition, EndianType endType) :
-		   base(stream, Encoding.Default, true)
+		   base(stream, Encoding.UTF8, true)
 		{
 			EndianType = endType;
 			AlignPosition = alignPosition;

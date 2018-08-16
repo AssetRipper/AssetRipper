@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security.AccessControl;
 
 namespace UtinyRipper
 {
@@ -54,11 +53,6 @@ namespace UtinyRipper
 		public static FileStream Create(string path, int bufferSize, FileOptions options)
 		{
 			return File.Create(ToLongPath(path), bufferSize, options);
-		}
-
-		public static FileStream Create(string path, int bufferSize, FileOptions options, FileSecurity fileSecurity)
-		{
-			return File.Create(ToLongPath(path), bufferSize, options, fileSecurity);
 		}
 
 		public static StreamWriter CreateText(string path)

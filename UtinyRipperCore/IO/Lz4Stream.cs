@@ -33,7 +33,6 @@ namespace UtinyRipper
 			}
 
 			m_baseStream = new MemoryStream(buffer);
-			m_isDisposable = true;
 			m_inputLength = length;
 			m_phase = DecodePhase.ReadToken;
 		}
@@ -64,22 +63,12 @@ namespace UtinyRipper
 			}
 
 			m_baseStream = baseStream;
-			m_isDisposable = false;
 			m_inputLength = compressedSize;
 			m_phase = DecodePhase.ReadToken;
 		}
 
 		public override void Flush()
 		{
-		}
-
-		public override void Close()
-		{
-			if(m_isDisposable)
-			{
-				m_baseStream.Dispose();
-				m_isDisposable = false;
-			}
 		}
 
 		public override long Seek(long offset, SeekOrigin origin)
@@ -158,6 +147,11 @@ namespace UtinyRipper
 		public override void SetLength(long value)
 		{
 			throw new NotSupportedException();
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			m_baseStream.Dispose();
 		}
 
 		private void ReadToken()
@@ -433,9 +427,7 @@ namespace UtinyRipper
 		private readonly byte[] m_decodeBuffer = new byte[DecodeBufferLength];
 
 		private readonly Stream m_baseStream;
-
-		private bool m_isDisposable;
-
+		
 		private DecodePhase m_phase;
 		private long m_inputLength = 0;
 		private int m_inputBufferPosition = 0;

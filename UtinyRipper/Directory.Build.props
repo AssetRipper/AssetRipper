@@ -1,0 +1,7 @@
+<Project>
+
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>..\Bins\obj\core\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  
+</Project>

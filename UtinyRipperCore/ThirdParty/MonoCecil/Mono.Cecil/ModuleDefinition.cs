@@ -31,10 +31,6 @@ namespace Mono.Cecil {
 		ReadingMode reading_mode;
 		internal IAssemblyResolver assembly_resolver;
 		internal IMetadataResolver metadata_resolver;
-#if !READ_ONLY
-		internal IMetadataImporterProvider metadata_importer_provider;
-		internal IReflectionImporterProvider reflection_importer_provider;
-#endif
 		Stream symbol_stream;
 		ISymbolReaderProvider symbol_reader_provider;
 		bool read_symbols;
@@ -62,18 +58,6 @@ namespace Mono.Cecil {
 			get { return metadata_resolver; }
 			set { metadata_resolver = value; }
 		}
-
-#if !READ_ONLY
-		public IMetadataImporterProvider MetadataImporterProvider {
-			get { return metadata_importer_provider; }
-			set { metadata_importer_provider = value; }
-		}
-
-		public IReflectionImporterProvider ReflectionImporterProvider {
-			get { return reflection_importer_provider; }
-			set { reflection_importer_provider = value; }
-		}
-#endif
 
 		public Stream SymbolStream {
 			get { return symbol_stream; }
@@ -117,150 +101,6 @@ namespace Mono.Cecil {
 		}
 	}
 
-#if !READ_ONLY
-
-	public sealed class ModuleParameters {
-
-		ModuleKind kind;
-		TargetRuntime runtime;
-		uint? timestamp;
-		TargetArchitecture architecture;
-		IAssemblyResolver assembly_resolver;
-		IMetadataResolver metadata_resolver;
-#if !READ_ONLY
-		IMetadataImporterProvider metadata_importer_provider;
-		IReflectionImporterProvider reflection_importer_provider;
-#endif
-
-		public ModuleKind Kind {
-			get { return kind; }
-			set { kind = value; }
-		}
-
-		public TargetRuntime Runtime {
-			get { return runtime; }
-			set { runtime = value; }
-		}
-
-		public uint? Timestamp {
-			get { return timestamp; }
-			set { timestamp = value; }
-		}
-
-		public TargetArchitecture Architecture {
-			get { return architecture; }
-			set { architecture = value; }
-		}
-
-		public IAssemblyResolver AssemblyResolver {
-			get { return assembly_resolver; }
-			set { assembly_resolver = value; }
-		}
-
-		public IMetadataResolver MetadataResolver {
-			get { return metadata_resolver; }
-			set { metadata_resolver = value; }
-		}
-
-#if !READ_ONLY
-		public IMetadataImporterProvider MetadataImporterProvider {
-			get { return metadata_importer_provider; }
-			set { metadata_importer_provider = value; }
-		}
-
-		public IReflectionImporterProvider ReflectionImporterProvider {
-			get { return reflection_importer_provider; }
-			set { reflection_importer_provider = value; }
-		}
-#endif
-
-		public ModuleParameters ()
-		{
-			this.kind = ModuleKind.Dll;
-			this.Runtime = GetCurrentRuntime ();
-			this.architecture = TargetArchitecture.I386;
-		}
-
-		static TargetRuntime GetCurrentRuntime ()
-		{
-#if !NET_CORE
-			return typeof (object).Assembly.ImageRuntimeVersion.ParseRuntime ();
-#else
-			var corlib_name = AssemblyNameReference.Parse (typeof (object).Assembly ().FullName);
-			var corlib_version = corlib_name.Version;
-
-			switch (corlib_version.Major) {
-			case 1:
-				return corlib_version.Minor == 0
-					? TargetRuntime.Net_1_0
-					: TargetRuntime.Net_1_1;
-			case 2:
-				return TargetRuntime.Net_2_0;
-			case 4:
-				return TargetRuntime.Net_4_0;
-			default:
-				throw new NotSupportedException ();
-			}
-#endif
-		}
-	}
-
-	interface ICustomMetadataWriter
-	{
-		/*
-		 * Remap TypeReference or create custom TypeRef token.
-		 *
-		 * Return true to use the returned custom 'token'.
-		 *
-		 * Return false to create a TypeRef token for 'type'
-		 * (which may have been replaced with a different TypeReference).
-		 * 
-		 * This is necessary when types are moved from one assembly to another
-		 * to either adjust the scope or replace a TypeRef with a TypeDef token.
-		 */
-		bool CreateTypeRefToken (ref TypeReference type, out MetadataToken token);
-	}
-
-	public sealed class WriterParameters {
-
-		uint? timestamp;
-		Stream symbol_stream;
-		ISymbolWriterProvider symbol_writer_provider;
-		bool write_symbols;
-#if !NET_CORE
-		SR.StrongNameKeyPair key_pair;
-#endif
-
-		public uint? Timestamp {
-			get { return timestamp; }
-			set { timestamp = value; }
-		}
-
-		public Stream SymbolStream {
-			get { return symbol_stream; }
-			set { symbol_stream = value; }
-		}
-
-		public ISymbolWriterProvider SymbolWriterProvider {
-			get { return symbol_writer_provider; }
-			set { symbol_writer_provider = value; }
-		}
-
-		public bool WriteSymbols {
-			get { return write_symbols; }
-			set { write_symbols = value; }
-		}
-
-#if !NET_CORE
-		public SR.StrongNameKeyPair StrongNameKeyPair {
-			get { return key_pair; }
-			set { key_pair = value; }
-		}
-#endif
-	}
-
-#endif
-
 	public sealed class ModuleDefinition : ModuleReference, ICustomAttributeProvider, ICustomDebugInformationProvider, IDisposable {
 
 		internal Image Image;
@@ -290,11 +130,6 @@ namespace Mono.Cecil {
 		internal AssemblyDefinition assembly;
 		MethodDefinition entry_point;
 
-#if !READ_ONLY
-		internal IReflectionImporter reflection_importer;
-		internal IMetadataImporter metadata_importer;
-		ICustomMetadataWriter custom_writer;
-#endif
 		Collection<CustomAttribute> custom_attributes;
 		Collection<AssemblyNameReference> references;
 		Collection<ModuleReference> modules;
@@ -391,38 +226,6 @@ namespace Mono.Cecil {
 		public AssemblyDefinition Assembly {
 			get { return assembly; }
 		}
-
-#if !READ_ONLY
-		internal IReflectionImporter ReflectionImporter {
-			get {
-				if (reflection_importer == null)
-					Interlocked.CompareExchange (ref reflection_importer, new DefaultReflectionImporter (this), null);
-
-				return reflection_importer;
-			}
-		}
-
-		internal IMetadataImporter MetadataImporter {
-			get {
-				if (metadata_importer == null)
-					Interlocked.CompareExchange (ref metadata_importer, new DefaultMetadataImporter (this), null);
-
-				return metadata_importer;
-			}
-		}
-
-		internal void SetMetadataImporter (IMetadataImporter importer)
-		{
-			if (this.metadata_importer != null)
-				throw new InvalidOperationException ();
-			this.metadata_importer = importer;
-		}
-
-		internal ICustomMetadataWriter CustomMetadataWriter {
-			get { return custom_writer; }
-			set { custom_writer = value; }
-		}
-#endif
 
 		public IAssemblyResolver AssemblyResolver {
 			get {
@@ -774,181 +577,6 @@ namespace Mono.Cecil {
 			return MetadataResolver.Resolve (type);
 		}
 
-#if !READ_ONLY
-
-		static void CheckContext (IGenericParameterProvider context, ModuleDefinition module)
-		{
-			if (context == null)
-				return;
-
-			if (context.Module != module)
-				throw new ArgumentException ();
-		}
-
-		[Obsolete ("Use ImportReference", error: false)]
-		public TypeReference Import (Type type)
-		{
-			return ImportReference (type, null);
-		}
-
-		public TypeReference ImportReference (Type type)
-		{
-			return ImportReference (type, null);
-		}
-
-		[Obsolete ("Use ImportReference", error: false)]
-		public TypeReference Import (Type type, IGenericParameterProvider context)
-		{
-			return ImportReference (type, context);
-		}
-
-		public TypeReference ImportReference (Type type, IGenericParameterProvider context)
-		{
-			Mixin.CheckType (type);
-			CheckContext (context, this);
-
-			return ReflectionImporter.ImportReference (type, context);
-		}
-
-		[Obsolete ("Use ImportReference", error: false)]
-		public FieldReference Import (SR.FieldInfo field)
-		{
-			return ImportReference (field, null);
-		}
-
-		[Obsolete ("Use ImportReference", error: false)]
-		public FieldReference Import (SR.FieldInfo field, IGenericParameterProvider context)
-		{
-			return ImportReference (field, context);
-		}
-
-		public FieldReference ImportReference (SR.FieldInfo field)
-		{
-			return ImportReference (field, null);
-		}
-
-		public FieldReference ImportReference (SR.FieldInfo field, IGenericParameterProvider context)
-		{
-			Mixin.CheckField (field);
-			CheckContext (context, this);
-
-			return ReflectionImporter.ImportReference (field, context);
-		}
-
-		[Obsolete ("Use ImportReference", error: false)]
-		public MethodReference Import (SR.MethodBase method)
-		{
-			return ImportReference (method, null);
-		}
-
-		[Obsolete ("Use ImportReference", error: false)]
-		public MethodReference Import (SR.MethodBase method, IGenericParameterProvider context)
-		{
-			return ImportReference (method, context);
-		}
-
-		public MethodReference ImportReference (SR.MethodBase method)
-		{
-			return ImportReference (method, null);
-		}
-
-		public MethodReference ImportReference (SR.MethodBase method, IGenericParameterProvider context)
-		{
-			Mixin.CheckMethod (method);
-			CheckContext (context, this);
-
-			return ReflectionImporter.ImportReference (method, context);
-		}
-
-		[Obsolete ("Use ImportReference", error: false)]
-		public TypeReference Import (TypeReference type)
-		{
-			return ImportReference (type, null);
-		}
-
-		[Obsolete ("Use ImportReference", error: false)]
-		public TypeReference Import (TypeReference type, IGenericParameterProvider context)
-		{
-			return ImportReference (type, context);
-		}
-
-		public TypeReference ImportReference (TypeReference type)
-		{
-			return ImportReference (type, null);
-		}
-
-		public TypeReference ImportReference (TypeReference type, IGenericParameterProvider context)
-		{
-			Mixin.CheckType (type);
-
-			if (type.Module == this)
-				return type;
-
-			CheckContext (context, this);
-
-			return MetadataImporter.ImportReference (type, context);
-		}
-
-		[Obsolete ("Use ImportReference", error: false)]
-		public FieldReference Import (FieldReference field)
-		{
-			return ImportReference (field, null);
-		}
-
-		[Obsolete ("Use ImportReference", error: false)]
-		public FieldReference Import (FieldReference field, IGenericParameterProvider context)
-		{
-			return ImportReference (field, context);
-		}
-
-		public FieldReference ImportReference (FieldReference field)
-		{
-			return ImportReference (field, null);
-		}
-
-		public FieldReference ImportReference (FieldReference field, IGenericParameterProvider context)
-		{
-			Mixin.CheckField (field);
-
-			if (field.Module == this)
-				return field;
-
-			CheckContext (context, this);
-
-			return MetadataImporter.ImportReference (field, context);
-		}
-
-		[Obsolete ("Use ImportReference", error: false)]
-		public MethodReference Import (MethodReference method)
-		{
-			return ImportReference (method, null);
-		}
-
-		[Obsolete ("Use ImportReference", error: false)]
-		public MethodReference Import (MethodReference method, IGenericParameterProvider context)
-		{
-			return ImportReference (method, context);
-		}
-
-		public MethodReference ImportReference (MethodReference method)
-		{
-			return ImportReference (method, null);
-		}
-
-		public MethodReference ImportReference (MethodReference method, IGenericParameterProvider context)
-		{
-			Mixin.CheckMethod (method);
-
-			if (method.Module == this)
-				return method;
-
-			CheckContext (context, this);
-
-			return MetadataImporter.ImportReference (method, context);
-		}
-
-#endif
-
 		public IMetadataTokenProvider LookupToken (int token)
 		{
 			return LookupToken (new MetadataToken ((uint) token));
@@ -1019,64 +647,6 @@ namespace Mono.Cecil {
 		{
 			return Image.DebugHeader ?? new ImageDebugHeader ();
 		}
-
-#if !READ_ONLY
-
-		public static ModuleDefinition CreateModule (string name, ModuleKind kind)
-		{
-			return CreateModule (name, new ModuleParameters { Kind = kind });
-		}
-
-		public static ModuleDefinition CreateModule (string name, ModuleParameters parameters)
-		{
-			Mixin.CheckName (name);
-			Mixin.CheckParameters (parameters);
-
-			var module = new ModuleDefinition {
-				Name = name,
-				kind = parameters.Kind,
-				timestamp = parameters.Timestamp ?? Mixin.GetTimestamp (),
-				Runtime = parameters.Runtime,
-				architecture = parameters.Architecture,
-				mvid = Guid.NewGuid (),
-				Attributes = ModuleAttributes.ILOnly,
-				Characteristics = (ModuleCharacteristics) 0x8540,
-			};
-
-			if (parameters.AssemblyResolver != null)
-				module.assembly_resolver = Disposable.NotOwned (parameters.AssemblyResolver);
-
-			if (parameters.MetadataResolver != null)
-				module.metadata_resolver = parameters.MetadataResolver;
-
-#if !READ_ONLY
-			if (parameters.MetadataImporterProvider != null)
-				module.metadata_importer = parameters.MetadataImporterProvider.GetMetadataImporter (module);
-			if (parameters.ReflectionImporterProvider != null)
-				module.reflection_importer = parameters.ReflectionImporterProvider.GetReflectionImporter (module);
-#endif
-
-			if (parameters.Kind != ModuleKind.NetModule) {
-				var assembly = new AssemblyDefinition ();
-				module.assembly = assembly;
-				module.assembly.Name = CreateAssemblyName (name);
-				assembly.main_module = module;
-			}
-
-			module.Types.Add (new TypeDefinition (string.Empty, "<Module>", TypeAttributes.NotPublic));
-
-			return module;
-		}
-
-		static AssemblyNameDefinition CreateAssemblyName (string name)
-		{
-			if (name.EndsWith (".dll") || name.EndsWith (".exe"))
-				name = name.Substring (0, name.Length - 4);
-
-			return new AssemblyNameDefinition (name, Mixin.ZeroVersion);
-		}
-
-#endif
 
 		public void ReadSymbols ()
 		{
@@ -1168,50 +738,6 @@ namespace Mono.Cecil {
 				ImageReader.ReadImage (stream, fileName),
 				parameters);
 		}
-
-#if !READ_ONLY
-
-		public void Write (string fileName)
-		{
-			Write (fileName, new WriterParameters ());
-		}
-
-		public void Write (string fileName, WriterParameters parameters)
-		{
-			Mixin.CheckParameters (parameters);
-			var file = GetFileStream (fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
-			ModuleWriter.WriteModule (this, Disposable.Owned (file), parameters);
-		}
-
-		public void Write ()
-		{
-			Write (new WriterParameters ());
-		}
-
-		public void Write (WriterParameters parameters)
-		{
-			if (!HasImage)
-				throw new InvalidOperationException ();
-
-			Write (Image.Stream.value, parameters);
-		}
-
-		public void Write (Stream stream)
-		{
-			Write (stream, new WriterParameters ());
-		}
-
-		public void Write (Stream stream, WriterParameters parameters)
-		{
-			Mixin.CheckStream (stream);
-			Mixin.CheckWriteSeek (stream);
-			Mixin.CheckParameters (parameters);
-
-			ModuleWriter.WriteModule (this, Disposable.NotOwned (stream), parameters);
-		}
-
-#endif
-
 	}
 
 	static partial class Mixin {

@@ -134,20 +134,19 @@ namespace UtinyRipper.SerializedFiles
 	{
 		static TreeNodeTypeExtentions()
 		{
+			int index = 0;
 			Type type = typeof(TreeNodeType);
 			TreeNodeType[] values = (TreeNodeType[])Enum.GetValues(type);
-			FieldInfo[] fields = type.GetFields();
-			for(int i = 1; i < fields.Length; i++)
+			IEnumerable<FieldInfo> fields = type.GetRuntimeFields();
+			foreach(FieldInfo field in fields)
 			{
-				MemberInfo member = fields[i];
-				EnumNameAttribute name = member.GetCustomAttribute<EnumNameAttribute>();
-				if(name == null)
+				EnumNameAttribute name = field.GetCustomAttribute<EnumNameAttribute>();
+				if(name != null)
 				{
-					continue;
+					TreeNodeType value = values[index - 1];
+					s_typeNames.Add(value, name.Name);
 				}
-
-				TreeNodeType value = values[i - 1];
-				s_typeNames.Add(value, name.Name);
+				index++;
 			}
 		}
 

@@ -6,9 +6,15 @@ namespace UtinyRipper
 	{
 		public static uint ToUInt32(this BitArray _this)
 		{
-			int[] bitArray = new int[1];
-			_this.CopyTo(bitArray, 0);
-			return unchecked((uint)bitArray[0]);
+			int value = 0;
+			for(int i = 0; i < 8 * sizeof(uint); i++)
+			{
+				if(_this[i])
+				{
+					value |= (1 << i);
+				}
+			}
+			return unchecked((uint)value);
 		}
 	}
 }

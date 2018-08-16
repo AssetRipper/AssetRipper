@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace UtinyRipper.Exporter.YAML
+﻿namespace UtinyRipper.Exporter.YAML
 {
 	public readonly struct YAMLTag
 	{
@@ -15,7 +13,6 @@ namespace UtinyRipper.Exporter.YAML
 			return IsEmpty ? string.Empty : $"{Handle}{Content}";
 		}
 
-		[Pure]
 		public string ToHeaderString()
 		{
 			return IsEmpty ? string.Empty : $"{Handle} {Content}";

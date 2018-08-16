@@ -11,12 +11,12 @@ namespace UtinyRipper.AssetExporters
 		{
 			m_fileCollection = fileCollection;
 
-			OverrideExporter(ClassIDType.AnimatorController, DummyExporter);
 			OverrideExporter(ClassIDType.MonoScript, DummyExporter);
 			OverrideExporter(ClassIDType.MonoManager, DummyExporter);
 			OverrideExporter(ClassIDType.BuildSettings, DummyExporter);
 			OverrideExporter(ClassIDType.AssetBundle, DummyExporter);
 			OverrideExporter(ClassIDType.PreloadData, DummyExporter);
+			OverrideExporter(ClassIDType.Sprite, DummyExporter);
 			OverrideExporter(ClassIDType.SpriteAtlas, DummyExporter);
 
 			OverrideExporter(ClassIDType.GameObject, YamlExporter);
@@ -86,7 +86,6 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.Cubemap, BinExporter);
 			OverrideExporter(ClassIDType.Font, BinExporter);
 			OverrideExporter(ClassIDType.MovieTexture, BinExporter);
-			OverrideExporter(ClassIDType.Sprite, BinExporter);
 
 			OverrideExporter(ClassIDType.MonoScript, ScriptExporter);
 		}

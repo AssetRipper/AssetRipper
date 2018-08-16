@@ -749,9 +749,6 @@ namespace Mono.Cecil.Cil {
 	}
 
 	public interface ISymbolReader : IDisposable {
-#if !READ_ONLY
-		ISymbolWriterProvider GetWriterProvider ();
-#endif
 		bool ProcessDebugHeader (ImageDebugHeader header);
 		MethodDebugInformation Read (MethodDefinition method);
 	}
@@ -761,7 +758,7 @@ namespace Mono.Cecil.Cil {
 		ISymbolReader GetSymbolReader (ModuleDefinition module, Stream symbolStream);
 	}
 
-#if !NET_CORE
+#if !NET_CORE && !NET_STANDARD
 	[Serializable]
 #endif
 	public sealed class SymbolsNotFoundException : FileNotFoundException {
@@ -770,7 +767,7 @@ namespace Mono.Cecil.Cil {
 		{
 		}
 
-#if !NET_CORE
+#if !NET_CORE && !NET_STANDARD
 		SymbolsNotFoundException (
 			System.Runtime.Serialization.SerializationInfo info,
 			System.Runtime.Serialization.StreamingContext context)
@@ -780,7 +777,7 @@ namespace Mono.Cecil.Cil {
 #endif
 	}
 
-#if !NET_CORE
+#if !NET_CORE && !NET_STANDARD
 	[Serializable]
 #endif
 	public sealed class SymbolsNotMatchingException : InvalidOperationException {
@@ -789,7 +786,7 @@ namespace Mono.Cecil.Cil {
 		{
 		}
 
-#if !NET_CORE
+#if !NET_CORE && !NET_STANDARD
 		SymbolsNotMatchingException (
 			System.Runtime.Serialization.SerializationInfo info,
 			System.Runtime.Serialization.StreamingContext context)
@@ -904,7 +901,6 @@ namespace Mono.Cecil.Cil {
 				if (assembly != null)
 					return assembly.GetType (fullname);
 			} catch (FileNotFoundException) {
-			} catch (FileLoadException) {
 			}
 
 			return null;
@@ -942,43 +938,6 @@ namespace Mono.Cecil.Cil {
 			throw new ArgumentException ();
 		}
 	}
-
-#if !READ_ONLY
-
-	public interface ISymbolWriter : IDisposable {
-
-		ISymbolReaderProvider GetReaderProvider ();
-		ImageDebugHeader GetDebugHeader ();
-		void Write (MethodDebugInformation info);
-	}
-
-	public interface ISymbolWriterProvider {
-
-		ISymbolWriter GetSymbolWriter (ModuleDefinition module, string fileName);
-		ISymbolWriter GetSymbolWriter (ModuleDefinition module, Stream symbolStream);
-	}
-
-	public class DefaultSymbolWriterProvider : ISymbolWriterProvider {
-
-		public ISymbolWriter GetSymbolWriter (ModuleDefinition module, string fileName)
-		{
-			var reader = module.SymbolReader;
-			if (reader == null)
-				throw new InvalidOperationException ();
-
-			if (module.Image != null && module.Image.HasDebugTables ())
-				return null;
-
-			return reader.GetWriterProvider ().GetSymbolWriter (module, fileName);
-		}
-
-		public ISymbolWriter GetSymbolWriter (ModuleDefinition module, Stream symbolStream)
-		{
-			throw new NotSupportedException ();
-		}
-	}
-
-#endif
 }
 
 namespace Mono.Cecil {

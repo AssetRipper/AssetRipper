@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
 using UtinyRipper.Classes.SpriteAtlases;
@@ -7,11 +8,13 @@ namespace UtinyRipper.AssetExporters
 {
 	public class TextureExportCollection : AssetsExportCollection
 	{
-		public TextureExportCollection(IAssetExporter assetExporter, Texture2D texture):
-			base(assetExporter, texture, CreateImporter(texture))
+		public TextureExportCollection(IAssetExporter assetExporter, Texture2D texture, bool convert):
+			base(assetExporter, texture, CreateImporter(texture, convert))
 		{
-			if(MetaImporter is TextureImporter textureImporter)
+			m_convert = convert;
+			if (convert)
 			{
+				TextureImporter textureImporter = (TextureImporter)MetaImporter;
 				List<Sprite> sprites = new List<Sprite>();
 				foreach (Object asset in texture.File.FetchAssets())
 				{
@@ -52,20 +55,17 @@ namespace UtinyRipper.AssetExporters
 
 		public static IExportCollection CreateExportCollection(IAssetExporter assetExporter, Sprite asset)
 		{
-			if (Config.IsConvertTexturesToPNG)
+			Texture2D texture = asset.RD.Texture.FindAsset(asset.File);
+			if (texture == null)
 			{
-				Texture2D texture = asset.RD.Texture.FindAsset(asset.File);
-				if(texture != null)
-				{
-					return new TextureExportCollection(assetExporter, texture);
-				}
+				return new SkipExportCollection(assetExporter, asset);
 			}
-			return new SkipExportCollection(assetExporter, asset);
+			return new TextureExportCollection(assetExporter, texture, true);
 		}
 
-		private static IAssetImporter CreateImporter(Texture2D texture)
+		private static IAssetImporter CreateImporter(Texture2D texture, bool convert)
 		{
-			if (Config.IsConvertTexturesToPNG)
+			if (convert)
 			{
 				return new TextureImporter(texture);
 			}
@@ -75,28 +75,14 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
-		public override ExportPointer CreateExportPointer(Object asset, bool isLocal)
-		{
-			if(Config.IsConvertTexturesToPNG)
-			{
-				return base.CreateExportPointer(asset, isLocal);
-			}
-			else
-			{
-				if(Asset == asset)
-				{
-					return base.CreateExportPointer(asset, isLocal);
-				}
-				else
-				{
-					ulong exportID = GetExportID(asset);
-					return new ExportPointer(exportID, EngineGUID.MissingReference, AssetType.Meta);
-				}
-			}
-		}
-
 		protected override string ExportInner(ProjectAssetContainer container, string filePath)
 		{
+			if(m_convert)
+			{
+				string dirPath = Path.GetDirectoryName(filePath);
+				string fileName = Path.GetFileNameWithoutExtension(filePath);
+				filePath = $"{Path.Combine(dirPath, fileName)}.png";
+			}
 			AssetExporter.Export(container, Asset, filePath);
 			return filePath;
 		}
@@ -109,5 +95,6 @@ namespace UtinyRipper.AssetExporters
 		}
 
 		private uint m_nextExportID = 0;
+		private bool m_convert = false;
 	}
 }

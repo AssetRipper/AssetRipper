@@ -7,7 +7,7 @@ namespace UtinyRipper.Converter.Textures.KTX
 	{
 		public static void ExportKXTHeader(Stream destination, KTXConvertParameters @params)
 		{
-			using (BinaryWriter binWriter = new BinaryWriter(destination, Encoding.Default, true))
+			using (BinaryWriter binWriter = new BinaryWriter(destination, Encoding.UTF8, true))
 			{
 				binWriter.Write(Identifier);
 				binWriter.Write(EndianessLE);

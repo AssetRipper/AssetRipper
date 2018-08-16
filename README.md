@@ -48,10 +48,10 @@ This is a sample application and it won't get improved in any way.
 
 If you want to build solution you need:
 
-.NET Framework 4.7.1 compiler with C# 7.2 syntax support (Visual Studio 2017)
+.NET Framework 4.5.0 compiler with C# 7.2 syntax support (Visual Studio 2017)
 
 If you want to only run binaries of sample project you need to install:
 
-[.NET Framework 4.7.1](https://www.microsoft.com/en-us/download/details.aspx?id=56116)
+[.NET Framework 4.5.0](https://www.microsoft.com/en-us/download/details.aspx?id=30653)
 
 [Unity 2017.3.0f3](https://unity3d.com/get-unity/download/archive)
