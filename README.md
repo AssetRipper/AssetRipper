@@ -1,8 +1,10 @@
 # UtinyRipper
-Latest build: [![Build status](https://ci.appveyor.com/api/projects/status/yd78hqp83f7vjkwb?svg=true)](https://ci.appveyor.com/project/mafaca/utinyripper/branch/master)
+**Latest build:** [![Build status](https://ci.appveyor.com/api/projects/status/yd78hqp83f7vjkwb?svg=true)](https://ci.appveyor.com/project/mafaca/utinyripper/build/artifacts)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/UtinyRipper/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Utiny Ripper is a tool for extracting assets from serialized files (CAB-*, *.assets, *.sharedAssets, etc.) and assets bundles (*.unity3d, *.assetbundle, etc.) into native Engine format.
+**Latest .NETCore build:** [![Build status](https://ci.appveyor.com/api/projects/status/b9pwiknmdysm2n1c?svg=true)](https://ci.appveyor.com/project/mafaca/utinyripper-99ola/build/artifacts)
+
+Utiny Ripper is a tool for extracting assets from serialized files (*CAB-*\*, *\*.assets*, *\*.sharedAssets*, etc.) and assets bundles (*\*.unity3d*, *\*.assetbundle*, etc.) and conveting them into native Engine format.
 
 ## Export features
 * Prefabs (GameObjects with transform components)
@@ -34,24 +36,33 @@ Utiny Ripper is a tool for extracting assets from serialized files (CAB-*, *.ass
   * MonoScript (Mono only)
 
 ## Structure
-Solution consist of two project:
-* UtinyRipperCore 
+Solution consist of four projects:
+* *UtinyRipperCore*
 
    Core library. It's designed as an single module without any third party dependencies.
-* UtinyRipper
+* *UtinyRipper*
 
-   Test console application. You can use it as an example for your own project.
-This is command line console application. Drag and drop any resource file(s) to it to retrive assets. It will automaticly try to find resource dependencies, create 'Ripped' directory and extract all supported asset files into created folder.
-This is a sample application and it won't get improved in any way.
+   Sample console application which is designed to test Core library functionality.   
+   It is command line console application. Drag and drop resource file(s) or/and folder(s) onto .exe to retrive assets. It will automaticly try to find resource dependencies, create 'Ripped' folder and extract all supported assets into created directory.
+As it is a sample application so I'm not going to improve it in any way.
+
+* *UtinyRipperNETCore* and *UtinyRipperCoreNETStandard*
+
+   They are copies of previous two but target other platform. Those two projects are cross platform and could be lauched on Windows, Linux and Mac using .NET Core frameword runetime.
+   
+   
 
 ### Requirements:
 
 If you want to build solution you need:
 
-.NET Framework 4.5.0 compiler with C# 7.2 syntax support (Visual Studio 2017)
+ \- .NET Framework 4.5.0 or .NET Standard 1.3 + .NET Core 2.1 SDK
 
-If you want to only run binaries of sample project you need to install:
+ \- Compiler with C# 7.2 syntax support (Visual Studio 2017)
 
-[.NET Framework 4.5.0](https://www.microsoft.com/en-us/download/details.aspx?id=30653)
 
-[Unity 2017.3.0f3](https://unity3d.com/get-unity/download/archive)
+If you want only to run binaries of sample project you need to install:
+
+ \- [.NET Framework 4.5.0](https://www.microsoft.com/en-us/download/details.aspx?id=30653) or [.NET Core 2.1](https://www.microsoft.com/net/download/dotnet-core/2.1) Runetime
+
+ \- [Unity 2017.3.0f3](https://unity3d.com/get-unity/download/archive)
