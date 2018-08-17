@@ -72,7 +72,7 @@ namespace UtinyRipper.Classes.Meshes
 			}
 
 			CurrentChannels = curChannels.ToUInt32();
-			VertexCount = unchecked((uint)vertices.Count);
+			VertexCount = vertices.Count;
 			m_channels = null;
 
 			StreamInfo info = new StreamInfo(CurrentChannels, 0, stride);
@@ -152,47 +152,58 @@ namespace UtinyRipper.Classes.Meshes
 			Vector3f[] verts = new Vector3f[submesh.VertexCount];
 			IReadOnlyList<ChannelInfo> channels = GetChannels(version);
 
-			int channelIndex = 0;
-			if(channels.Count == (int)ChannelType.Tangents + 1)
+			for (int i = 0, streamOffset = 0; i < 4; i++)
 			{
-				channelIndex = (int)ChannelType.Vertex;
-			}
-			else
-			{
-				uint currentChannels = GetCurrentChannels(version);
-				BitArray channelsBits = CreateChannelsBits(currentChannels);
-				if (!channelsBits.Get((int)ChannelType.Vertex))
+				int vertexSize = channels.Where(t => t.Stream == i).Sum(t => t.GetStride());
+				for (int j = 0; j < channels.Count; j++)
 				{
-					throw new NotImplementedException();
-				}
-
-				for (int i = 0; i < (int)ChannelType.Vertex; i++)
-				{
-					if (channelsBits.Get(i))
+					ChannelInfo channel = channels[j];
+					if(channel.Stream != i)
 					{
-						channelIndex++;
+						continue;
 					}
+					if (channel.Dimension == 0)
+					{
+						continue;
+					}
+					ChannelType type = (ChannelType)(j % 8);
+					if (type != (int)ChannelType.Vertex)
+					{
+						continue;
+					}
+					using (MemoryStream memStream = new MemoryStream(m_data))
+					{
+						using (BinaryReader reader = new BinaryReader(memStream))
+						{
+							memStream.Position = streamOffset + submesh.FirstVertex * vertexSize + channel.Offset;
+							for (int v = 0; v < submesh.VertexCount; v++)
+							{
+								float x = reader.ReadSingle();
+								float y = reader.ReadSingle();
+								float z = reader.ReadSingle();
+								verts[v] = new Vector3f(x, y, z);
+								memStream.Position += vertexSize - 12;
+							}
+						}
+					}
+					return verts;
 				}
+				// There is a gape between streams (usually 8 bytes )
+				// This is NOT an alignment, even if sometimes it may seem so
+				if (i == 0)
+				{
+					int size = channels.Sum(t => t.GetStride());
+					int leftSize = channels.Where(t => t.Stream != 0).Sum(t => t.GetStride());
+					streamOffset = m_data.Length - (size - leftSize) * VertexCount;
+				}
+				else
+				{
+					streamOffset += vertexSize * VertexCount;
+				}
+#warning TODO: if (streamCount == 2 && s == 1) offset = m_DataSize.Length - stride * m_VertexCount;
 			}
 
-			ChannelInfo vertChannel = channels[channelIndex];
-			int vertexSize = channels.Where(t => t.Stream == vertChannel.Stream).Sum(t => t.GetStride());
-			using (MemoryStream memStream = new MemoryStream(m_data))
-			{
-				using (BinaryReader reader = new BinaryReader(memStream))
-				{
-					memStream.Position = submesh.FirstVertex * vertexSize + vertChannel.Offset;
-					for (int i = 0; i < submesh.VertexCount; i++)
-					{
-						float x = reader.ReadSingle();
-						float y = reader.ReadSingle();
-						float z = reader.ReadSingle();
-						verts[i] = new Vector3f(x, y, z);
-						memStream.Position += vertexSize - 12;
-					}
-				}
-			}
-			return verts;
+			throw new Exception("Vertices hasn't been found");
 		}
 
 		public void Read(AssetStream stream)
@@ -201,7 +212,7 @@ namespace UtinyRipper.Classes.Meshes
 			{
 				CurrentChannels = stream.ReadUInt32();
 			}
-			VertexCount = stream.ReadUInt32();
+			VertexCount = (int)stream.ReadUInt32();
 
 			if (IsReadChannels(stream.Version))
 			{
@@ -239,6 +250,7 @@ namespace UtinyRipper.Classes.Meshes
 			node.Add("m_Channels", GetChannels(container.Version).ExportYAML(container));
 			node.Add("m_DataSize", m_data.Length);
 			node.Add("_typelessdata", m_data.ExportYAML());
+			GenerateVertices(container.Version, default);
 			return node;
 		}
 
@@ -260,19 +272,17 @@ namespace UtinyRipper.Classes.Meshes
 			}
 			else
 			{
-#warning not sure that it is a right approach
 				BitArray curChannels = new BitArray(32);
-				int prevStream = 0;
-				for(int i = 0, j = 0; i < Channels.Count; i++, j++)
+				for(int i = 0; i < 4; i ++)
 				{
-					ChannelInfo channel = Channels[i];
-					if(channel.Stream != prevStream)
+					for(int j = 0, k = 0; j < Channels.Count; j++)
 					{
-						prevStream = channel.Stream;
-						j = 0;
+						ChannelInfo channel = Channels[j];
+						if(channel.Stream == i)
+						{
+							curChannels[k++] |= channel.Dimension != 0;
+						}
 					}
-
-					curChannels[j] |= channel.Dimension != 0;
 				}
 				return curChannels.ToUInt32();
 			}
@@ -328,11 +338,11 @@ namespace UtinyRipper.Classes.Meshes
 		{
 			return new BitArray(BitConverter.GetBytes(CurrentChannels));
 		}
-
+		
 		public BitArray CurrentChannelsBits => CreateChannelsBits(CurrentChannels);
 
 		public uint CurrentChannels { get; private set; }
-		public uint VertexCount { get; private set; }
+		public int VertexCount { get; private set; }
 		public IReadOnlyList<ChannelInfo> Channels => m_channels;
 		public IReadOnlyList<StreamInfo> Streams => m_streams;
 		public IReadOnlyList<byte> Data => m_data;

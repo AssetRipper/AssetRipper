@@ -41,8 +41,8 @@ namespace UtinyRipper
 		/// Whole base stream is compressed data
 		/// </summary>
 		/// <param name="baseStream">Stream with compressed data</param>
-		public Lz4Stream(Stream baseStream) :
-			this(baseStream, baseStream.Length - baseStream.Position)
+		public Lz4Stream(Stream baseStream, bool leaveOpen = true) :
+			this(baseStream, baseStream.Length - baseStream.Position, leaveOpen)
 		{
 		}
 
@@ -51,7 +51,7 @@ namespace UtinyRipper
 		/// </summary>
 		/// <param name="baseStream">Stream with compressed data</param>
 		/// <param name="compressedSize">Amount of comprassed data</param>
-		public Lz4Stream(Stream baseStream, long compressedSize)
+		public Lz4Stream(Stream baseStream, long compressedSize, bool leaveOpen = true)
 		{
 			if(baseStream == null)
 			{
@@ -65,6 +65,7 @@ namespace UtinyRipper
 			m_baseStream = baseStream;
 			m_inputLength = compressedSize;
 			m_phase = DecodePhase.ReadToken;
+			m_leaveOpen = leaveOpen;
 		}
 
 		public override void Flush()
@@ -151,7 +152,10 @@ namespace UtinyRipper
 
 		protected override void Dispose(bool disposing)
 		{
-			m_baseStream.Dispose();
+			if(!m_leaveOpen)
+			{
+				m_baseStream.Dispose();
+			}
 		}
 
 		private void ReadToken()
@@ -427,7 +431,8 @@ namespace UtinyRipper
 		private readonly byte[] m_decodeBuffer = new byte[DecodeBufferLength];
 
 		private readonly Stream m_baseStream;
-		
+		private readonly bool m_leaveOpen;
+
 		private DecodePhase m_phase;
 		private long m_inputLength = 0;
 		private int m_inputBufferPosition = 0;

@@ -43,6 +43,11 @@ namespace UtinyRipper.Classes.Meshes
 			return node;
 		}
 
+		public override string ToString()
+		{
+			return $"S[{Stream}];\tO[{Offset}];\tF[{Format}];\tD[{Dimension}]";
+		}
+
 		public byte Stream { get; private set; }
 		public byte Offset { get; private set; }
 		public byte Format { get; private set; }

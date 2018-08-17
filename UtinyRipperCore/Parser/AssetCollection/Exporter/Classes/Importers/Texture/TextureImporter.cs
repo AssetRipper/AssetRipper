@@ -99,8 +99,7 @@ namespace UtinyRipper.AssetExporters.Classes
 
 				case 1:
 					Sprite sprite = m_sprites[0];
-					Rectf textureRect = new Rectf(0.0f, 0.0f, m_texture.Width, m_texture.Height);
-					if(m_sprites[0].Rect == textureRect)
+					if(sprite.Rect == sprite.RD.TextureRect)
 					{
 						spriteMode = sprite.Name == m_texture.Name ? SpriteImportMode.Single : SpriteImportMode.Multiple;
 					}

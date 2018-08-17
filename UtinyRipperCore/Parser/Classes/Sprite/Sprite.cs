@@ -83,30 +83,30 @@ namespace UtinyRipper.Classes
 			Vector2f rectOffset;
 			if (atlas == null)
 			{
-				Vector2f textureOffset = RD.TextureRect.Position + Rect.Position;
+				Vector2f textureOffset = RD.TextureRect.Position;
 				Vector2f textureSize = RD.TextureRect.Size;
-				rectOffset = RD.TextureRectOffset;
+				rectOffset = RD.TextureRectOffset; // should be equal to RD.TextureRect.Position - Rect.Position
 				rect = new Rectf(textureOffset, textureSize);
 			}
 			else
 			{
 				SpriteAtlasData atlasData = atlas.RenderDataMap[RenderDataKey];
-				Vector2f textureOffset = atlasData.TextureRect.Position + Rect.Position;
+				Vector2f textureOffset = atlasData.TextureRect.Position;
 				Vector2f textureSize = atlasData.TextureRect.Size;
 				rectOffset = atlasData.TextureRectOffset;
 				rect = new Rectf(textureOffset, textureSize);
 			}
 
-			Vector2f decSizeDif = Rect.Size - rect.Size;
-			Vector2f pivotShiftSize = new Vector2f(Pivot.X * decSizeDif.X, Pivot.Y * decSizeDif.Y);
+			Vector2f sizeDif = Rect.Size - rect.Size;
+			Vector2f pivotShiftSize = new Vector2f(Pivot.X * sizeDif.X, Pivot.Y * sizeDif.Y);
 			Vector2f relPivotShiftPos = new Vector2f(rectOffset.X / rect.Size.X, rectOffset.Y / rect.Size.Y);
 			Vector2f relPivotShiftSize = new Vector2f(pivotShiftSize.X / rect.Size.X, pivotShiftSize.Y / rect.Size.Y);
 			pivot = Pivot - relPivotShiftPos + relPivotShiftSize;
 
 			float borderL = Border.X == 0.0f ? 0.0f : Border.X - rectOffset.X;
 			float borderB = Border.Y == 0.0f ? 0.0f : Border.Y - rectOffset.Y;
-			float borderR = Border.Z == 0.0f ? 0.0f : Border.Z + rectOffset.X - decSizeDif.X;
-			float borderT = Border.W == 0.0f ? 0.0f : Border.W + rectOffset.Y - decSizeDif.Y;
+			float borderR = Border.Z == 0.0f ? 0.0f : Border.Z + rectOffset.X - sizeDif.X;
+			float borderT = Border.W == 0.0f ? 0.0f : Border.W + rectOffset.Y - sizeDif.Y;
 			border = new Vector4f(borderL, borderB, borderR, borderT);
 		}
 
