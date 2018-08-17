@@ -49,6 +49,16 @@ namespace UtinyRipper.Classes
 		{
 			return new Vector2f(left.X / right, left.Y / right);
 		}
+		
+		public static bool operator ==(Vector2f left, Vector2f right)
+		{
+			return left.X == right.X && left.Y == right.Y;
+		}
+
+		public static bool operator !=(Vector2f left, Vector2f right)
+		{
+			return left.X != right.X || left.Y != right.Y;
+		}
 
 		/// <summary>
 		/// Angle increase when 2nd line is moving in clockwise direction
@@ -112,6 +122,30 @@ namespace UtinyRipper.Classes
 				return Y;
 			}
 			throw new ArgumentException($"Invalid index {index}", nameof(index));
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj == null)
+			{
+				return false;
+			}
+			if (obj.GetType() != typeof(Vector2f))
+			{
+				return false;
+			}
+			return this == (Vector2f)obj;
+		}
+
+		public override int GetHashCode()
+		{
+			int hash = 61;
+			unchecked
+			{
+				hash = hash * 73 + X.GetHashCode();
+				hash = hash * 73 + Y.GetHashCode();
+			}
+			return hash;
 		}
 
 		public override string ToString()

@@ -77,8 +77,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
   </PropertyGroup>
-  <PropertyGroup />
-  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>App.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />

@@ -149,13 +149,13 @@ namespace UtinyRipper.Classes.Meshes
 
 		public Vector3f[] GenerateVertices(Version version, SubMesh submesh)
 		{
-			Vector3f[] uvs = new Vector3f[submesh.VertexCount];
+			Vector3f[] verts = new Vector3f[submesh.VertexCount];
 			IReadOnlyList<ChannelInfo> channels = GetChannels(version);
 
-			int uvIndex = 0;
+			int channelIndex = 0;
 			if(channels.Count == (int)ChannelType.Tangents + 1)
 			{
-				uvIndex = (int)ChannelType.Vertex;
+				channelIndex = (int)ChannelType.Vertex;
 			}
 			else
 			{
@@ -170,29 +170,29 @@ namespace UtinyRipper.Classes.Meshes
 				{
 					if (channelsBits.Get(i))
 					{
-						uvIndex++;
+						channelIndex++;
 					}
 				}
 			}
 
-			ChannelInfo uvChannel = channels[uvIndex];
-			int vertexSize = channels.Sum(t => t.GetStride());
+			ChannelInfo vertChannel = channels[channelIndex];
+			int vertexSize = channels.Where(t => t.Stream == vertChannel.Stream).Sum(t => t.GetStride());
 			using (MemoryStream memStream = new MemoryStream(m_data))
 			{
 				using (BinaryReader reader = new BinaryReader(memStream))
 				{
-					memStream.Position = submesh.FirstVertex * vertexSize + uvChannel.Offset;
+					memStream.Position = submesh.FirstVertex * vertexSize + vertChannel.Offset;
 					for (int i = 0; i < submesh.VertexCount; i++)
 					{
 						float x = reader.ReadSingle();
 						float y = reader.ReadSingle();
 						float z = reader.ReadSingle();
-						uvs[i] = new Vector3f(x, y, z);
+						verts[i] = new Vector3f(x, y, z);
 						memStream.Position += vertexSize - 12;
 					}
 				}
 			}
-			return uvs;
+			return verts;
 		}
 
 		public void Read(AssetStream stream)
@@ -272,7 +272,7 @@ namespace UtinyRipper.Classes.Meshes
 						j = 0;
 					}
 
-					curChannels.Set(j, channel.Dimension != 0);
+					curChannels[j] |= channel.Dimension != 0;
 				}
 				return curChannels.ToUInt32();
 			}

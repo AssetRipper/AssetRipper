@@ -333,6 +333,7 @@
     <Compile Include="Parser\Classes\SpriteRenderer\SpriteSortPoint.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\SpriteAlignment.cs" />
     <Compile Include="Parser\Classes\Sprite\SpriteBone.cs" />
+    <Compile Include="Parser\Classes\Sprite\Utils\MeshOutlineGenerator.cs" />
     <Compile Include="Parser\Classes\TagManager\SortingLayerEntry.cs" />
     <Compile Include="Parser\Classes\TagManager\TagManager.cs" />
     <Compile Include="Parser\Classes\Terrain.cs" />

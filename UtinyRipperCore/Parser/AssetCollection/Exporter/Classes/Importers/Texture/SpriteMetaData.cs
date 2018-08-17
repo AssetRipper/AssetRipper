@@ -17,7 +17,7 @@ namespace UtinyRipper.AssetExporters.Classes
 			Pivot = pivot;
 			Border = border;
 			Outline = sprite.GenerateOutline(Rect, Pivot);
-			PhysicsShape = sprite.GeneratePhysicsShape();
+			PhysicsShape = sprite.GeneratePhysicsShape(Rect, Pivot);
 			TessellationDetail = 0;
 		}
 

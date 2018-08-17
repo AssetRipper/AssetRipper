@@ -99,8 +99,8 @@ namespace UtinyRipper.Classes
 
 			Vector2f decSizeDif = Rect.Size - rect.Size;
 			Vector2f pivotShiftSize = new Vector2f(Pivot.X * decSizeDif.X, Pivot.Y * decSizeDif.Y);
-			Vector2f relPivotShiftPos = new Vector2f(rectOffset.X / Rect.Size.X, rectOffset.Y / Rect.Size.Y);
-			Vector2f relPivotShiftSize = new Vector2f(pivotShiftSize.X / Rect.Size.X, pivotShiftSize.Y / Rect.Size.Y);
+			Vector2f relPivotShiftPos = new Vector2f(rectOffset.X / rect.Size.X, rectOffset.Y / rect.Size.Y);
+			Vector2f relPivotShiftSize = new Vector2f(pivotShiftSize.X / rect.Size.X, pivotShiftSize.Y / rect.Size.Y);
 			pivot = Pivot - relPivotShiftPos + relPivotShiftSize;
 
 			float borderL = Border.X == 0.0f ? 0.0f : Border.X - rectOffset.X;
@@ -128,12 +128,14 @@ namespace UtinyRipper.Classes
 			return outlines;
 		}
 
-		public IReadOnlyList<IReadOnlyList<Vector2f>> GeneratePhysicsShape()
+		public IReadOnlyList<IReadOnlyList<Vector2f>> GeneratePhysicsShape(Rectf rect, Vector2f pivot)
 		{
 			if(IsReadPhysicsShape(File.Version))
 			{
 				Vector2f[][] shape = new Vector2f[PhysicsShape.Count][];
-				Vector2f pivotShift = new Vector2f(Rect.Width * Pivot.X - Rect.Width * 0.5f, Rect.Height * Pivot.Y - Rect.Height * 0.5f);
+				float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
+				float pivotShiftY = rect.Height * pivot.Y - rect.Height * 0.5f;
+				Vector2f pivotShift = new Vector2f(pivotShiftX, pivotShiftY);
 				for (int i = 0; i < PhysicsShape.Count; i++)
 				{
 					shape[i] = new Vector2f[PhysicsShape[i].Count];
