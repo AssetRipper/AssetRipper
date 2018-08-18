@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.AssetExporters.Mono;
 
 namespace UtinyRipper.Exporters.Scripts.Mono
@@ -48,20 +49,22 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			if(Type.IsNested)
 			{
 				m_declaringType = manager.RetrieveType(Type.DeclaringType);
-				AddAsNestedType(manager);
+				if(!Type.IsGenericParameter)
+				{
+					AddAsNestedType(manager);
+				}
 			}
 		}
 				
 		public override void GetUsedNamespaces(ICollection<string> namespaces)
 		{
-			if(Definition != null)
+			if (Definition != null)
 			{
 				if (Definition.IsSerializable)
 				{
 					namespaces.Add(ScriptExportAttribute.SystemNamespace);
 				}
 			}
-
 			base.GetUsedNamespaces(namespaces);
 		}
 
@@ -153,6 +156,15 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		private string GetName()
 		{
+			if(MonoType.IsPrimitive(Type))
+			{
+				return ScriptType.ToPrimitiveString(Type.Name);
+			}
+			if(MonoType.IsString(Type))
+			{
+				return ScriptType.CStringName;
+			}
+
 			string name = string.Empty;
 			bool isArray = Type.IsArray;
 			TypeReference elementType = Type;

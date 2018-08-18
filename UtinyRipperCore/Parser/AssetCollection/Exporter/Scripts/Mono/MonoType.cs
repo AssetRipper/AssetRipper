@@ -9,6 +9,11 @@ namespace UtinyRipper.AssetExporters.Mono
 		{
 		}
 
+		public static bool IsPrimitive(TypeReference type)
+		{
+			return type.IsPrimitive;
+		}
+
 		public static bool IsSerializableType(TypeReference type)
 		{
 			TypeReference elementType = GetElementType(type);

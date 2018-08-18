@@ -20,7 +20,7 @@ namespace UtinyRipper.AssetExporters
 			return false;
 		}
 
-		public ulong GetExportID(Object asset)
+		public long GetExportID(Object asset)
 		{
 			throw new NotSupportedException();
 		}

@@ -6,7 +6,7 @@ namespace UtinyRipper.Classes.Meshes
 {
 	public struct ChannelInfo : IAssetReadable, IYAMLExportable
 	{
-		public ChannelInfo(byte stream, byte offset, byte format, byte dimention)
+		public ChannelInfo(byte stream, byte offset, ChannelFormat format, byte dimention)
 		{
 			Stream = stream;
 			Offset = offset;
@@ -14,12 +14,11 @@ namespace UtinyRipper.Classes.Meshes
 			Dimension = dimention;
 		}
 
-		public static byte CalculateStride(int format, int dimention)
+		public static byte CalculateStride(ChannelFormat format, int dimention)
 		{
-			int elementSize = (4 / (int)Math.Pow(2, format));
-			return (byte)(elementSize * dimention);
+			return (byte)(format.GetSize() * dimention);
 		}
-
+		
 		public byte GetStride()
 		{
 			return CalculateStride(Format, Dimension);
@@ -29,7 +28,7 @@ namespace UtinyRipper.Classes.Meshes
 		{
 			Stream = stream.ReadByte();
 			Offset = stream.ReadByte();
-			Format = stream.ReadByte();
+			Format = (ChannelFormat)stream.ReadByte();
 			Dimension = stream.ReadByte();
 		}
 
@@ -38,7 +37,7 @@ namespace UtinyRipper.Classes.Meshes
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("stream", Stream);
 			node.Add("offset", Offset);
-			node.Add("format", Format);
+			node.Add("format", (byte)Format);
 			node.Add("dimension", Dimension);
 			return node;
 		}
@@ -48,9 +47,11 @@ namespace UtinyRipper.Classes.Meshes
 			return $"S[{Stream}];\tO[{Offset}];\tF[{Format}];\tD[{Dimension}]";
 		}
 
+		public bool IsSet => Dimension > 0;
+
 		public byte Stream { get; private set; }
 		public byte Offset { get; private set; }
-		public byte Format { get; private set; }
+		public ChannelFormat Format { get; private set; }
 		public byte Dimension { get; private set; }
 	}
 }

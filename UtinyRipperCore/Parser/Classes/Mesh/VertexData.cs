@@ -10,23 +10,6 @@ namespace UtinyRipper.Classes.Meshes
 {
 	public struct VertexData : IAssetReadable, IYAMLExportable
 	{
-		/*public VertexData(Version version)
-		{
-			CurrentChannels = 0;
-			VertexCount = 0;
-			if(IsReadChannels(version))
-			{
-				m_channels = new ChannelInfo[0];
-				m_streams = null;
-			}
-			else
-			{
-				m_channels = null;
-				m_streams = new StreamInfo[0];
-			}
-			m_data = new byte[0];
-		}*/
-
 		public VertexData(Version version, IReadOnlyList<Vector3f> vertices, IReadOnlyList<Vector3f> normals, IReadOnlyList<ColorRGBA32> colors,
 			IReadOnlyList<Vector2f> uv0, IReadOnlyList<Vector2f> uv1, IReadOnlyList<Vector4f> tangents)
 		{
@@ -42,33 +25,33 @@ namespace UtinyRipper.Classes.Meshes
 
 			if (isWriteVertices)
 			{
-				curChannels.Set((int)ChannelType.Vertex, true);
-				stride += ChannelType.Vertex.GetStride(version);
+				curChannels.Set((int)ChannelType3.Vertex, true);
+				stride += ChannelType3.Vertex.GetStride();
 			}
 			if (isWriteNormals)
 			{
-				curChannels.Set((int)ChannelType.Normal, true);
-				stride += ChannelType.Normal.GetStride(version);
+				curChannels.Set((int)ChannelType3.Normal, true);
+				stride += ChannelType3.Normal.GetStride();
 			}
 			if(isWriteColors)
 			{
-				curChannels.Set((int)ChannelType.Color, true);
-				stride += ChannelType.Color.GetStride(version);
+				curChannels.Set((int)ChannelType3.Color, true);
+				stride += ChannelType3.Color.GetStride();
 			}
 			if (isWriteUV0)
 			{
-				curChannels.Set((int)ChannelType.UV0, true);
-				stride += ChannelType.UV0.GetStride(version);
+				curChannels.Set((int)ChannelType3.UV0, true);
+				stride += ChannelType3.UV0.GetStride();
 			}
 			if (isWriteUV1)
 			{
-				curChannels.Set((int)ChannelType.UV1, true);
-				stride += ChannelType.UV1.GetStride(version);
+				curChannels.Set((int)ChannelType3.UV1, true);
+				stride += ChannelType3.UV1.GetStride();
 			}
 			if (isWriteTangents)
 			{
-				curChannels.Set((int)ChannelType.TangentsOld, true);
-				stride += ChannelType.Tangents.GetStride(version);
+				curChannels.Set((int)ChannelType3.Tangent, true);
+				stride += ChannelType3.Tangent.GetStride();
 			}
 
 			CurrentChannels = curChannels.ToUInt32();
@@ -147,63 +130,87 @@ namespace UtinyRipper.Classes.Meshes
 			return version.IsLess(4);
 		}
 
-		public Vector3f[] GenerateVertices(Version version, SubMesh submesh)
+		private static int GetSerializedVersion(Version version)
 		{
-			Vector3f[] verts = new Vector3f[submesh.VertexCount];
-			IReadOnlyList<ChannelInfo> channels = GetChannels(version);
-
-			for (int i = 0, streamOffset = 0; i < 4; i++)
+			if (Config.IsExportTopmostSerializedVersion)
 			{
-				int vertexSize = channels.Where(t => t.Stream == i).Sum(t => t.GetStride());
-				for (int j = 0; j < channels.Count; j++)
-				{
-					ChannelInfo channel = channels[j];
-					if(channel.Stream != i)
-					{
-						continue;
-					}
-					if (channel.Dimension == 0)
-					{
-						continue;
-					}
-					ChannelType type = (ChannelType)(j % 8);
-					if (type != (int)ChannelType.Vertex)
-					{
-						continue;
-					}
-					using (MemoryStream memStream = new MemoryStream(m_data))
-					{
-						using (BinaryReader reader = new BinaryReader(memStream))
-						{
-							memStream.Position = streamOffset + submesh.FirstVertex * vertexSize + channel.Offset;
-							for (int v = 0; v < submesh.VertexCount; v++)
-							{
-								float x = reader.ReadSingle();
-								float y = reader.ReadSingle();
-								float z = reader.ReadSingle();
-								verts[v] = new Vector3f(x, y, z);
-								memStream.Position += vertexSize - 12;
-							}
-						}
-					}
-					return verts;
-				}
-				// There is a gape between streams (usually 8 bytes )
-				// This is NOT an alignment, even if sometimes it may seem so
-				if (i == 0)
-				{
-					int size = channels.Sum(t => t.GetStride());
-					int leftSize = channels.Where(t => t.Stream != 0).Sum(t => t.GetStride());
-					streamOffset = m_data.Length - (size - leftSize) * VertexCount;
-				}
-				else
-				{
-					streamOffset += vertexSize * VertexCount;
-				}
-#warning TODO: if (streamCount == 2 && s == 1) offset = m_DataSize.Length - stride * m_VertexCount;
+				return 1;
 			}
 
-			throw new Exception("Vertices hasn't been found");
+			if (version.IsGreaterEqual(2018))
+			{
+				return 2;
+			}
+			return 1;
+		}
+
+		public Vector3f[] GenerateVertices(Version version, SubMesh submesh)
+		{
+			IReadOnlyList<ChannelInfo> channels = GetChannels(version);
+			ChannelInfo channel = channels[(int)ChannelType.Vertex];
+			if (!channel.IsSet)
+			{
+				throw new Exception("Vertices hasn't been found");
+			}
+
+			Vector3f[] verts = new Vector3f[submesh.VertexCount];
+			int vertexSize = channels.Where(t => t.Stream == channel.Stream).Sum(t => t.GetStride());
+			int streamOffset = GetStreamOffset(channel.Stream, channels);
+			using (MemoryStream memStream = new MemoryStream(m_data))
+			{
+				using (BinaryReader reader = new BinaryReader(memStream))
+				{
+					memStream.Position = streamOffset + submesh.FirstVertex * vertexSize + channel.Offset;
+					for (int v = 0; v < submesh.VertexCount; v++)
+					{
+						float x = reader.ReadSingle();
+						float y = reader.ReadSingle();
+						float z = reader.ReadSingle();
+						verts[v] = new Vector3f(x, y, z);
+						memStream.Position += vertexSize - 12;
+					}
+				}
+			}
+			return verts;
+		}
+
+		public BoneWeights4[] GenerateSkin()
+		{
+			BoneWeights4[] skin = new BoneWeights4[VertexCount];
+			ChannelInfo weightChannel = Channels[(int)ChannelType2018.SkinWeight];
+			ChannelInfo boneIndexChannel = Channels[(int)ChannelType2018.SkinBoneIndex];
+			if(!weightChannel.IsSet)
+			{
+				return new BoneWeights4[0];
+			}
+
+			int weightVertexSize = Channels.Where(t => t.Stream == weightChannel.Stream).Sum(t => t.GetStride());
+			int weightStreamOffset = GetStreamOffset(weightChannel.Stream, Channels);
+			int boneIndexVertexSize = Channels.Where(t => t.Stream == boneIndexChannel.Stream).Sum(t => t.GetStride());
+			int boneIndexStreamOffset = GetStreamOffset(boneIndexChannel.Stream, Channels);
+			using (MemoryStream memStream = new MemoryStream(m_data))
+			{
+				using (BinaryReader reader = new BinaryReader(memStream))
+				{
+					for (int v = 0; v < VertexCount; v++)
+					{
+						memStream.Position = weightStreamOffset + v * weightVertexSize + weightChannel.Offset;
+						float w0 = reader.ReadSingle();
+						float w1 = reader.ReadSingle();
+						float w2 = reader.ReadSingle();
+						float w3 = reader.ReadSingle();
+
+						memStream.Position = boneIndexStreamOffset + v * boneIndexVertexSize + boneIndexChannel.Offset;
+						int i0 = reader.ReadInt32();
+						int i1 = reader.ReadInt32();
+						int i2 = reader.ReadInt32();
+						int i3 = reader.ReadInt32();
+
+						skin[v] = new BoneWeights4(w0, w1, w2, w3, i0, i1, i2, i3);
+					}
+				}
+			}
+			return skin;
 		}
 
 		public void Read(AssetStream stream)
@@ -245,12 +252,12 @@ namespace UtinyRipper.Classes.Meshes
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_CurrentChannels", GetCurrentChannels(container.Version));
 			node.Add("m_VertexCount", VertexCount);
 			node.Add("m_Channels", GetChannels(container.Version).ExportYAML(container));
 			node.Add("m_DataSize", m_data.Length);
 			node.Add("_typelessdata", m_data.ExportYAML());
-			GenerateVertices(container.Version, default);
 			return node;
 		}
 
@@ -265,23 +272,32 @@ namespace UtinyRipper.Classes.Meshes
 				else
 				{
 					BitArray curBits = CurrentChannelsBits;
-					curBits.Set((int)ChannelType.Tangents, curBits.Get((int)ChannelType.TangentsOld));
-					curBits.Set((int)ChannelType.TangentsOld, false);
+					curBits.Set((int)ChannelType.Tangent, curBits.Get((int)ChannelType3.Tangent));
+					curBits.Set((int)ChannelType3.Tangent, false);
 					return curBits.ToUInt32();
 				}
 			}
 			else
 			{
 				BitArray curChannels = new BitArray(32);
-				for(int i = 0; i < 4; i ++)
+				for (int i = 0; i < Channels.Count; i++)
 				{
-					for(int j = 0, k = 0; j < Channels.Count; j++)
+					ChannelType2018 channelType = (ChannelType2018)i;
+					switch(channelType)
 					{
-						ChannelInfo channel = Channels[j];
-						if(channel.Stream == i)
-						{
-							curChannels[k++] |= channel.Dimension != 0;
-						}
+						case ChannelType2018.Vertex:
+						case ChannelType2018.Normal:
+						case ChannelType2018.Color:
+						case ChannelType2018.UV0:
+						case ChannelType2018.UV1:
+						case ChannelType2018.UV2:
+						case ChannelType2018.UV3:
+						case ChannelType2018.Tangent:
+							{
+								ChannelInfo channel = Channels[i];
+								curChannels[(int)channelType.ToChannelType()] |= channel.Dimension != 0;
+							}
+							break;
 					}
 				}
 				return curChannels.ToUInt32();
@@ -291,54 +307,98 @@ namespace UtinyRipper.Classes.Meshes
 		{
 			if (IsReadChannels(version))
 			{
-				return m_channels;
+				if (IsReadCurrentChannels(version))
+				{
+					return Channels;
+				}
+				else
+				{
+					ChannelInfo[] channels = new ChannelInfo[8];
+					for(int i = 0, j = 0; i < Channels.Count; i++)
+					{
+						ChannelType2018 channelType = (ChannelType2018)i;
+						switch (channelType)
+						{
+							case ChannelType2018.Vertex:
+							case ChannelType2018.Normal:
+							case ChannelType2018.Color:
+							case ChannelType2018.UV0:
+							case ChannelType2018.UV1:
+							case ChannelType2018.UV2:
+							case ChannelType2018.UV3:
+							case ChannelType2018.Tangent:
+								{
+									ChannelInfo channel = Channels[i];
+									channels[j++] = channel;
+								}
+								break;
+						}
+					}
+					return channels;
+				}
 			}
-
-			List<ChannelInfo> channels = new List<ChannelInfo>();
-			for (byte i = 0; i < Streams.Count; i++)
+			else
 			{
-				StreamInfo stream = Streams[i];
-				if (stream.ChannelMask == 0)
-				{
-					continue;
-				}
-
-				BitArray streamChannels = stream.ChannelMaskBits;
-				byte offset = 0;
-				for (int j = 0; j <= (int)ChannelType.TangentsOld; j++)
-				{
-					ChannelInfo channel;
-
-					ChannelType channelType = (ChannelType)j;
-					if (channelType == ChannelType.TangentsOld)
-					{
-						// UV3
-						channels.Add(new ChannelInfo(i, 0, 0, 0));
-						// UV4
-						channels.Add(new ChannelInfo(i, 0, 0, 0));
-					}
-
-					if (streamChannels.Get(j))
-					{
-						channel = new ChannelInfo(i, offset, channelType.GetFormat(version), channelType.GetDimention(version));
-						offset += channelType.GetStride(version);
-					}
-					else
-					{
-						channel = new ChannelInfo(i, 0, 0, 0);
-					}
-
-					channels.Add(channel);
-				}
+				ChannelInfo[] channels = new ChannelInfo[8];
+				channels[(int)ChannelType.Vertex] = CreateChannelFromStream(ChannelType3.Vertex);
+				channels[(int)ChannelType.Normal] = CreateChannelFromStream(ChannelType3.Normal);
+				channels[(int)ChannelType.Color] = CreateChannelFromStream(ChannelType3.Color);
+				channels[(int)ChannelType.UV0] = CreateChannelFromStream(ChannelType3.UV0);
+				channels[(int)ChannelType.UV1] = CreateChannelFromStream(ChannelType3.UV1);
+				channels[(int)ChannelType.UV2] = new ChannelInfo(0, 0, 0, 0);
+				channels[(int)ChannelType.UV3] = new ChannelInfo(0, 0, 0, 0);
+				channels[(int)ChannelType.Tangent] = CreateChannelFromStream(ChannelType3.Tangent);
+				return channels;
 			}
-			return channels;
 		}
 
 		private BitArray CreateChannelsBits(uint channels)
 		{
 			return new BitArray(BitConverter.GetBytes(CurrentChannels));
 		}
-		
+
+		private ChannelInfo CreateChannelFromStream(ChannelType3 channelType)
+		{
+			int streamIndex = Streams.IndexOf(t => t.IsMatch(channelType));
+			if (streamIndex == -1)
+			{
+				return new ChannelInfo(0, 0, 0, 0);
+			}
+			else
+			{
+				StreamInfo stream = Streams[streamIndex];
+				byte offset = 0;
+				for (ChannelType3 type = ChannelType3.Vertex; type < channelType; type++)
+				{
+					if(stream.IsMatch(type))
+					{
+						offset += type.GetStride();
+					}
+				}
+				return new ChannelInfo((byte)streamIndex, offset, channelType.GetFormat(), channelType.GetDimention());
+			}
+		}
+
+		private int GetStreamOffset(int stream, IReadOnlyList<ChannelInfo> channels)
+		{
+			if (stream == 0)
+			{
+				return 0;
+			}
+
+			// There is a gape between streams (usually 8 bytes )
+			// This is NOT an alignment, even if sometimes it may seem so
+			int leftSize = channels.Where(t => t.Stream != 0).Sum(t => t.GetStride());
+			int offset = m_data.Length - leftSize * VertexCount;
+
+			for(int i = 1; i < stream; i++)
+			{
+				int vertexSize = channels.Where(t => t.Stream == i).Sum(t => t.GetStride());
+				offset += vertexSize * VertexCount;
+			}
+			return offset;
+		}
+
 		public BitArray CurrentChannelsBits => CreateChannelsBits(CurrentChannels);
 
 		public uint CurrentChannels { get; private set; }

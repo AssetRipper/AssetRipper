@@ -34,12 +34,12 @@ namespace UtinyRipper.Classes
 			return deps;
 		}
 
-		public static ulong GenerateExportID(Object asset, IEnumerable<ulong> exportIDs)
+		public static long GenerateExportID(Object asset, IEnumerable<long> exportIDs)
 		{
 			return GenerateExportID(asset, (id) => exportIDs.Any(t => t == id));
 		}
 
-		public static ulong GenerateExportID(Object asset, Func<ulong, bool> uniqueChecker)
+		public static long GenerateExportID(Object asset, Func<long, bool> uniqueChecker)
 		{
 			if (asset == null)
 			{
@@ -47,7 +47,7 @@ namespace UtinyRipper.Classes
 			}
 
 #warning TODO: values acording to read version (current 2017.3.0f3)
-			ulong exportID;
+			long exportID;
 			do
 			{
 				uint classID = (uint)asset.ClassID;
@@ -59,22 +59,22 @@ namespace UtinyRipper.Classes
 				}
 #endif
 				exportID = classID;
-				exportID *= 1000000000000000UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 100000000000000UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 10000000000000UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 1000000000000UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 100000000000UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 10000000000UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 1000000000UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 100000000UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 10000000UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 1000000UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 100000UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 10000UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 1000UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 100UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 10UL;
-				exportID |= unchecked((ulong)RandomUtils.Next(0, 2)) * 1UL;
+				exportID *= 1000000000000000L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 100000000000000L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 10000000000000L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 1000000000000L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 100000000000L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 10000000000L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 1000000000L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 100000000L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 10000000L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 1000000L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 100000L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 10000L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 1000L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 100L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 10L;
+				exportID |= unchecked(RandomUtils.Next(0, 2)) * 1L;
 			}
 			while (uniqueChecker(exportID));
 			return exportID;

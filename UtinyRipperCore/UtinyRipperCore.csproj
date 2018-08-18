@@ -176,6 +176,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Mono\MonoManager.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\AssemblyManager.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Mono\MonoField.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Scripts\ScriptInfo.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\ScriptingBackEnd.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Structure\IScriptField.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Structure\IScriptStructure.cs" />
@@ -255,7 +256,10 @@
     <Compile Include="Parser\Classes\LightProbes\LightProbes.cs" />
     <Compile Include="Parser\Classes\Light\FalloffTable.cs" />
     <Compile Include="Parser\Classes\Light\LightShadowCasterMode.cs" />
-    <Compile Include="Parser\Classes\Mesh\ChannelType.cs" />
+    <Compile Include="Parser\Classes\Mesh\ChannelFormat.cs" />
+    <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelType.cs" />
+    <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelType2018.cs" />
+    <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelType3.cs" />
     <Compile Include="Parser\Classes\Mesh\MeshTopology.cs" />
     <Compile Include="Parser\Classes\MonoManager.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Gradient\MinMaxGradientState.cs" />
@@ -892,6 +896,7 @@
     <Compile Include="Utils\Logger\LogCategory.cs" />
     <Compile Include="Utils\Logger\Logger.cs" />
     <Compile Include="Utils\Logger\LogType.cs" />
+    <Compile Include="Utils\MD4.cs" />
     <Compile Include="Utils\RandomUtils.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoArray.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\ScriptExportArray.cs" />

@@ -18,6 +18,7 @@ namespace UtinyRipper.AssetExporters
 		ScriptStructure CreateStructure(string assembly, string @namespace, string name);
 		ScriptExportType CreateExportType(ScriptExportManager exportManager, string assembly, string name);
 		ScriptExportType CreateExportType(ScriptExportManager exportManager, string assembly, string @namespace, string name);
+		ScriptInfo GetScriptInfo(string assembly, string name);
 
 		ScriptingBackEnd ScriptingBackEnd { get; set; }
 	}

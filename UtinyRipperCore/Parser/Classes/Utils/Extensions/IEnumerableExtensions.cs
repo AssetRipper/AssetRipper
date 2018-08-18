@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.GameObjects;
 using UtinyRipper.Exporter.YAML;
@@ -7,6 +8,20 @@ namespace UtinyRipper.Classes
 {
 	public static class IEnumerableExtensions
 	{
+		public static int IndexOf<T>(this IEnumerable<T> _this, Func<T, bool> predicate)
+		{
+			int index = 0;
+			foreach(T t in _this)
+			{
+				if(predicate(t))
+				{
+					return index;
+				}
+				index++;
+			}
+			return -1;
+		}
+
 		public static YAMLNode ExportYAML3(this IEnumerable<Vector4f> _this, IExportContainer container)
 		{
 			YAMLSequenceNode node = new YAMLSequenceNode();

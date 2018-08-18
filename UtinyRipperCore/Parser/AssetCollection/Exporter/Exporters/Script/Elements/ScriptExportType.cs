@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using UtinyRipper.AssetExporters;
 
 namespace UtinyRipper.Exporters.Scripts
 {
@@ -74,6 +75,15 @@ namespace UtinyRipper.Exporters.Scripts
 
 		public virtual void GetTypeNamespaces(ICollection<string> namespaces)
 		{
+			if (ScriptType.IsPrimitive(Namespace, Name))
+			{
+				return;
+			}
+			if (ScriptType.IsString(Namespace, Name))
+			{
+				return;
+			}
+
 			namespaces.Add(Namespace);
 		}
 

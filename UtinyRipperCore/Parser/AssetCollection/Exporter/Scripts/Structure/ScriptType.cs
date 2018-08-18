@@ -19,6 +19,40 @@ namespace UtinyRipper.AssetExporters
 			ComplexType = complexType;
 		}
 
+		public static bool IsPrimitive(string @namespace, string name)
+		{
+			if(@namespace == SystemName)
+			{
+				switch (name)
+				{
+					case VoidName:
+					case CVoidName:
+					case BooleanName:
+					case BoolName:
+					case ByteName:
+					case CByteName:
+					case Int16Name:
+					case ShortName:
+					case UInt16Name:
+					case UShortName:
+					case Int32Name:
+					case IntName:
+					case UInt32Name:
+					case UIntName:
+					case Int64Name:
+					case LongName:
+					case UInt64Name:
+					case ULongName:
+					case SingleName:
+					case FloatName:
+					case DoubleName:
+					case CDoubleName:
+						return true;
+				}
+			}
+			return false;
+		}
+
 		public static bool IsSerializableType(string @namespace, string name)
 		{
 			if (IsString(@namespace, name))
@@ -44,11 +78,11 @@ namespace UtinyRipper.AssetExporters
 		}
 		public static bool IsObject(string @namespace, string name)
 		{
-			return @namespace == SystemName && name == ObjectName;
+			return @namespace == SystemName && (name == ObjectName || name == CObjectName);
 		}
 		public static bool IsString(string @namespace, string name)
 		{
-			return @namespace == SystemName && name == StringName;
+			return @namespace == SystemName && (name == StringName || name == CStringName);
 		}
 		public static bool IsList(string @namespace, string name)
 		{
@@ -133,6 +167,51 @@ namespace UtinyRipper.AssetExporters
 
 			return false;
 		}
+
+		public static string ToPrimitiveString(string name)
+		{
+			switch(name)
+			{
+				case VoidName:
+				case CVoidName:
+					return CVoidName;
+				case BooleanName:
+				case BoolName:
+					return BoolName;
+				case CharName:
+				case CCharName:
+					return CCharName;
+				case ByteName:
+				case CByteName:
+					return CByteName;
+				case Int16Name:
+				case ShortName:
+					return ShortName;
+				case UInt16Name:
+				case UShortName:
+					return UShortName;
+				case Int32Name:
+				case IntName:
+					return IntName;
+				case UInt32Name:
+				case UIntName:
+					return UIntName;
+				case Int64Name:
+				case LongName:
+					return LongName;
+				case UInt64Name:
+				case ULongName:
+					return ULongName;
+				case SingleName:
+				case FloatName:
+					return FloatName;
+				case DoubleName:
+				case CDoubleName:
+					return CDoubleName;
+				default:
+					throw new Exception(name);
+			}
+		}
 		
 		protected static PrimitiveType ToPrimitiveType(string @namespace, string name)
 		{
@@ -193,22 +272,36 @@ namespace UtinyRipper.AssetExporters
 		public const string SystemCollectionGenericName = "System.Collections.Generic";
 		public const string UnityEngineName = "UnityEngine";
 
-		private const string ObjectName = "Object";
-		private const string VoidName = "Void";
-		private const string BooleanName = "Boolean";
-		private const string CharName = "Char";
-		private const string ByteName = "Byte";
-		private const string Int16Name = "Int16";
-		private const string UInt16Name = "UInt16";
-		private const string Int32Name = "Int32";
-		private const string UInt32Name = "UInt32";
-		private const string Int64Name = "Int64";
-		private const string UInt64Name = "UInt64";
-		private const string SingleName = "Single";
-		private const string DoubleName = "Double";
-		private const string StringName = "String";
-		private const string MulticastDelegateName = "MulticastDelegate";
-		private const string ListName = "List`1";
+		public const string ObjectName = "Object";
+		public const string CObjectName = "object";
+		public const string VoidName = "Void";
+		public const string CVoidName = "void";
+		public const string BooleanName = "Boolean";
+		public const string BoolName = "bool";
+		public const string CharName = "Char";
+		public const string CCharName = "char";
+		public const string ByteName = "Byte";
+		public const string CByteName = "byte";
+		public const string Int16Name = "Int16";
+		public const string ShortName = "short";
+		public const string UInt16Name = "UInt16";
+		public const string UShortName = "ushort";
+		public const string Int32Name = "Int32";
+		public const string IntName = "int";
+		public const string UInt32Name = "UInt32";
+		public const string UIntName = "uint";
+		public const string Int64Name = "Int64";
+		public const string LongName = "long";
+		public const string UInt64Name = "UInt64";
+		public const string ULongName = "ulong";
+		public const string SingleName = "Single";
+		public const string FloatName = "float";
+		public const string DoubleName = "Double";
+		public const string CDoubleName = "double";
+		public const string StringName = "String";
+		public const string CStringName = "string";
+		public const string MulticastDelegateName = "MulticastDelegate";
+		public const string ListName = "List`1";
 
 		public const string Vector2Name = "Vector2";
 		public const string Vector3Name = "Vector3";

@@ -50,7 +50,7 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
-		public ulong GetExportID(Object asset)
+		public long GetExportID(Object asset)
 		{
 			if (CurrentCollection.IsContains(asset))
 			{
@@ -97,7 +97,7 @@ namespace UtinyRipper.AssetExporters
 			{
 				//throw new InvalidOperationException($"Object {@object} wasn't found in any export collection");
 			}
-			ulong exportID = ExportCollection.GetMainExportID(asset);
+			long exportID = ExportCollection.GetMainExportID(asset);
 			return new ExportPointer(exportID, EngineGUID.MissingReference, AssetType.Meta);
 		}
 

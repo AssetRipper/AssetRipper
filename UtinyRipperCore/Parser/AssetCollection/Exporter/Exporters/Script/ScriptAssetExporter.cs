@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using UtinyRipper.Classes;
 using UtinyRipper.Exporters.Scripts;
 
@@ -32,7 +31,7 @@ namespace UtinyRipper.AssetExporters
 
 		public void Export(IExportContainer container, IEnumerable<Object> assets, string dirPath)
 		{
-			throw new NotSupportedException("You have to specify callback in order to create valid metadata");
+			Export(container, assets, dirPath, null);
 		}
 		
 		public void Export(IExportContainer container, IEnumerable<Object> assets, string dirPath, Action<IExportContainer, Object, string> callback)
@@ -48,7 +47,7 @@ namespace UtinyRipper.AssetExporters
 					callback?.Invoke(container, asset, path);
 				}
 			}
-			scriptManager.ExportRest();
+			scriptManager?.ExportRest();
 		}
 
 		public AssetType ToExportType(Object asset)

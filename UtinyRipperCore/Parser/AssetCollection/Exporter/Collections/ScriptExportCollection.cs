@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
 using UtinyRipper.SerializedFiles;
@@ -85,7 +88,7 @@ namespace UtinyRipper.AssetExporters
 			return m_scripts.ContainsKey(asset);
 		}
 
-		public override ulong GetExportID(Object asset)
+		public override long GetExportID(Object asset)
 		{
 			return GetMainExportID(asset);
 		}
@@ -97,9 +100,46 @@ namespace UtinyRipper.AssetExporters
 				throw new NotSupportedException();
 			}
 
-			ulong exportID = GetExportID(asset);
-			EngineGUID uniqueGUID = m_scripts[asset].GUID;
+			MonoScript script = m_scripts[asset];
+			if(s_unityEngine.IsMatch(script.AssemblyName))
+			{
+				if(MonoScript.IsReadNamespace(script.File.Version))
+				{
+					int fileID = Compute(script.Namespace, script.Name);
+					return new ExportPointer(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
+				}
+				else
+				{
+					ScriptInfo scriptInfo = script.GetScriptInfo();
+					if (scriptInfo != default)
+					{
+						int fileID = Compute(scriptInfo.Namespace, scriptInfo.Name);
+						return new ExportPointer(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
+					}
+				}
+			}
+
+			long exportID = GetExportID(asset);
+			EngineGUID uniqueGUID = script.GUID;
 			return new ExportPointer(exportID, uniqueGUID, AssetExporter.ToExportType(asset));
+		}
+
+		private static int Compute(string @namespace, string name)
+		{
+			string toBeHashed = $"s\0\0\0{@namespace}{name}";
+			using (HashAlgorithm hash = new MD4())
+			{
+				byte[] hashed = hash.ComputeHash(Encoding.UTF8.GetBytes(toBeHashed));
+
+				int result = 0;
+				for (int i = 3; i >= 0; --i)
+				{
+					result <<= 8;
+					result |= hashed[i];
+				}
+
+				return result;
+			}
 		}
 
 		private void OnScriptExported(IExportContainer container, Object asset, string path)
@@ -115,8 +155,11 @@ namespace UtinyRipper.AssetExporters
 		public override IEnumerable<Object> Assets => m_scripts.Keys;
 		public override string Name => nameof(ScriptExportCollection);
 
+		private static readonly EngineGUID UnityEngineGUID = new EngineGUID(0xE09C671C, 0x825f0804, 0x44d8491a, 0xf70555f1);
+		private static readonly Regex s_unityEngine = new Regex(@"^UnityEngine[.0-9a-zA-Z]*\.dll$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
 		private readonly List<MonoScript> m_export = new List<MonoScript>();
 		private readonly HashSet<MonoScript> m_unique = new HashSet<MonoScript>();
-		private readonly Dictionary<Object, Object> m_scripts = new Dictionary<Object, Object>();
+		private readonly Dictionary<Object, MonoScript> m_scripts = new Dictionary<Object, MonoScript>();
 	}
 }

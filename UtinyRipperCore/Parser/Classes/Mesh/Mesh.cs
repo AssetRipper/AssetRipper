@@ -235,7 +235,7 @@ namespace UtinyRipper.Classes
 				return 8;
 			}
 
-			if (version.IsGreater(2018, 2))
+			if (version.IsGreaterEqual(2018, 2))
 			{
 				return 9;
 			}
@@ -479,7 +479,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_KeepVertices", KeepVertices);
 			node.Add("m_KeepIndices", KeepIndices);
 			node.Add("m_IndexBuffer", GetIndexBuffer(container.Version).ExportYAML());
-			node.Add("m_Skin", IsReadSkin(container.Version) ? Skin.ExportYAML(container) : YAMLSequenceNode.Empty);
+			node.Add("m_Skin", GetSkin(container.Version).ExportYAML(container));
 			node.Add("m_VertexData", GetVertexData(container.Version).ExportYAML(container));
 			node.Add("m_CompressedMesh", CompressedMesh.ExportYAML(container));
 			node.Add("m_LocalAABB", LocalAABB.ExportYAML(container));
@@ -508,6 +508,18 @@ namespace UtinyRipper.Classes
 		private IReadOnlyList<byte> GetIndexBuffer(Version version)
 		{
 			return IsReadIndexBuffer(version) ? IndexBuffer : new byte[0];
+		}
+
+		private IReadOnlyList<BoneWeights4> GetSkin(Version version)
+		{
+			if(IsReadSkin(version))
+			{
+				return Skin;
+			}
+			else
+			{
+				return VertexData.GenerateSkin();
+			}
 		}
 
 		private VertexData GetVertexData(Version version)

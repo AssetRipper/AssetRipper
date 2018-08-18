@@ -9,7 +9,7 @@ namespace UtinyRipper.AssetExporters
 	{
 		bool Export(ProjectAssetContainer container, string dirPath);
 		bool IsContains(Object asset);
-		ulong GetExportID(Object asset);
+		long GetExportID(Object asset);
 		ExportPointer CreateExportPointer(Object asset, bool isLocal);
 
 		ISerializedFile File { get; }

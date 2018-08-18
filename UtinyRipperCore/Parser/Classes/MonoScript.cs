@@ -132,7 +132,13 @@ namespace UtinyRipper.Classes
 				return File.Collection.AssemblyManager.CreateExportType(exportManager, AssemblyName, ClassName);
 			}
 		}
-		
+
+		public ScriptInfo GetScriptInfo()
+		{
+
+			return File.Collection.AssemblyManager.GetScriptInfo(AssemblyName, Name);
+		}
+
 		public override void Read(AssetStream stream)
 		{
 			base.Read(stream);

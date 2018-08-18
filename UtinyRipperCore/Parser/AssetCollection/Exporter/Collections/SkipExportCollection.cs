@@ -36,7 +36,7 @@ namespace UtinyRipper.AssetExporters
 			return asset == m_asset;
 		}
 
-		public ulong GetExportID(Object asset)
+		public long GetExportID(Object asset)
 		{
 			if (asset == m_asset)
 			{
@@ -57,7 +57,7 @@ namespace UtinyRipper.AssetExporters
 				throw new ArgumentException(nameof(isLocal));
 			}
 
-			ulong exportId = GetExportID(asset);
+			long exportId = GetExportID(asset);
 			AssetType type = AssetExporter.ToExportType(asset);
 			return new ExportPointer(exportId, EngineGUID.MissingReference, type);
 		}

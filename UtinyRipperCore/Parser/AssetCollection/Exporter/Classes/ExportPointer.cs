@@ -6,16 +6,16 @@ namespace UtinyRipper.AssetExporters.Classes
 {
 	public sealed class ExportPointer : IYAMLExportable
 	{
-		public ExportPointer(ulong fileID)
+		public ExportPointer(long fileID)
 		{
 			FileID = fileID;
 			GUID = default;
 			AssetType = default;
 		}
 
-		public ExportPointer(ulong fileID, EngineGUID guid, AssetType assetType):
-			this(fileID)
+		public ExportPointer(long fileID, EngineGUID guid, AssetType assetType)
 		{
+			FileID = fileID;
 			GUID = guid;
 			AssetType = assetType;
 		}
@@ -40,7 +40,7 @@ namespace UtinyRipper.AssetExporters.Classes
 
 		public static readonly ExportPointer EmptyPointer = new ExportPointer(0);
 
-		public ulong FileID { get; }
+		public long FileID { get; }
 		public EngineGUID GUID { get; }
 		public AssetType AssetType { get; }
 	}

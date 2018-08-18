@@ -128,7 +128,17 @@ namespace UtinyRipper.AssetExporters.Mono
 			}
 			return exportManager.CreateExportType(type);
 		}
-		
+
+		public ScriptInfo GetScriptInfo(string assembly, string name)
+		{
+			TypeDefinition type = FindType(assembly, name);
+			if (type == null)
+			{
+				return default;
+			}
+			return new ScriptInfo(type.Scope.Name, type.Namespace, type.Name);
+		}
+
 		public void Dispose()
 		{
 			foreach(AssemblyDefinition assembly in m_assemblies.Values)

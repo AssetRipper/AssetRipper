@@ -136,6 +136,10 @@ namespace UtinyRipper.Exporters.Scripts
 			{
 				return RetrieveGeneric(type);
 			}
+			if(type.IsGenericParameter)
+			{
+				return CreateType(type, false);
+			}
 
 			if (type.Module != null)
 			{
@@ -225,10 +229,13 @@ namespace UtinyRipper.Exporters.Scripts
 			return exportParameter;
 		}
 
-		private ScriptExportType CreateType(TypeReference type)
+		private ScriptExportType CreateType(TypeReference type, bool unique = true)
 		{
 			ScriptExportType exportType = new ScriptExportMonoType(type);
-			m_types.Add(exportType.FullName, exportType);
+			if(unique)
+			{
+				m_types.Add(exportType.FullName, exportType);
+			}
 			exportType.Init(this);
 			return exportType;
 		}
@@ -299,7 +306,7 @@ namespace UtinyRipper.Exporters.Scripts
 			}
 			if (IsUnityLibrary(type.Module))
 			{
-				//return true;
+				return true;
 			}
 
 			return false;

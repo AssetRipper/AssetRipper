@@ -18,7 +18,7 @@ namespace UtinyRipper.Classes.Meshes
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		public static bool IsReadAlign(Version version)
+		private static bool IsReadAlign(Version version)
 		{
 			return version.IsLess(4);
 		}
@@ -28,7 +28,7 @@ namespace UtinyRipper.Classes.Meshes
 			ChannelMask = stream.ReadUInt32();
 			Offset = stream.ReadUInt32();
 
-			if(IsReadAlign(stream.Version))
+			if (IsReadAlign(stream.Version))
 			{
 				Stride = stream.ReadUInt32();
 				Align = stream.ReadUInt32();
@@ -41,7 +41,10 @@ namespace UtinyRipper.Classes.Meshes
 			}
 		}
 
-		public BitArray ChannelMaskBits => new BitArray(BitConverter.GetBytes(ChannelMask));
+		public bool IsMatch(ChannelType3 channel)
+		{
+			return (ChannelMask & (1 << (int)channel)) != 0;
+		}
 
 		public uint ChannelMask { get; private set; }
 		public uint Offset { get; private set; }

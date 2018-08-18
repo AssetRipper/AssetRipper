@@ -16,6 +16,15 @@ namespace UtinyRipper.AssetExporters
 			m_requestAssemblyCallback = requestAssemblyCallback;
 		}
 
+		public static bool IsAssembly(string fileName)
+		{
+			if (MonoManager.IsMonoAssembly(fileName))
+			{
+				return true;
+			}
+			return false;
+		}
+
 		public void Load(string filePath)
 		{
 			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
@@ -41,15 +50,6 @@ namespace UtinyRipper.AssetExporters
 				throw new Exception("You have to set backend first");
 			}
 			m_manager.Unload(fileName);
-		}
-
-		public static bool IsAssembly(string fileName)
-		{
-			if(MonoManager.IsMonoAssembly(fileName))
-			{
-				return true;
-			}
-			return false;
 		}
 
 		public bool IsPresent(string assembly, string name)
@@ -102,9 +102,19 @@ namespace UtinyRipper.AssetExporters
 		{
 			return m_manager.CreateExportType(exportManager, assembly, name);
 		}
+
 		public ScriptExportType CreateExportType(ScriptExportManager exportManager, string assembly, string @namespace, string name)
 		{
 			return m_manager.CreateExportType(exportManager, assembly, @namespace, name);
+		}
+
+		public ScriptInfo GetScriptInfo(string assembly, string name)
+		{
+			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
+			{
+				return default;
+			}
+			return m_manager.GetScriptInfo(assembly, name);
 		}
 
 		public void Dispose()

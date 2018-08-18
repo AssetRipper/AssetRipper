@@ -25,7 +25,7 @@ namespace UtinyRipper.AssetExporters
 			return m_exportIDs.ContainsKey(asset);
 		}
 
-		public override ulong GetExportID(Object asset)
+		public override long GetExportID(Object asset)
 		{
 			if (asset == Asset)
 			{
@@ -55,22 +55,22 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 
-		protected virtual ulong GenerateExportID(Object asset)
+		protected virtual long GenerateExportID(Object asset)
 		{
 			return ObjectUtils.GenerateExportID(asset, IsContainsID);
 		}
 
 		protected void AddAsset(Object asset)
 		{
-			ulong exportID = GenerateExportID(asset);
+			long exportID = GenerateExportID(asset);
 			m_exportIDs.Add(asset, exportID);
 		}
 
-		private bool IsContainsID(ulong id)
+		private bool IsContainsID(long id)
 		{
 			return m_exportIDs.ContainsValue(id);
 		}
 
-		protected readonly Dictionary<Object, ulong> m_exportIDs = new Dictionary<Object, ulong>();
+		protected readonly Dictionary<Object, long> m_exportIDs = new Dictionary<Object, long>();
 	}
 }

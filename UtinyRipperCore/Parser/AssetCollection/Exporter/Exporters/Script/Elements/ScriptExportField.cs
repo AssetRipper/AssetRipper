@@ -65,7 +65,7 @@ namespace UtinyRipper.Exporters.Scripts
 			{
 				return type.Name;
 			}
-			if(type == DeclaringType)
+			if(type.DeclaringType == DeclaringType)
 			{
 				return type.Name;
 			}

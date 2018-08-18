@@ -34,7 +34,7 @@ namespace UtinyRipper.AssetExporters
 			return true;
 		}
 
-		public override ulong GetExportID(Object asset)
+		public override long GetExportID(Object asset)
 		{
 			if (asset == Asset)
 			{

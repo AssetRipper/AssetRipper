@@ -106,14 +106,14 @@ namespace UtinyRipper.AssetExporters
 			return m_cexportIDs.ContainsKey(asset);
 		}
 
-		public override ulong GetExportID(Object asset)
+		public override long GetExportID(Object asset)
 		{
 			return IsComponent(asset) ? m_cexportIDs[asset] : GetMainExportID(asset);
 		}
 		
 		public override ExportPointer CreateExportPointer(Object asset, bool isLocal)
 		{
-			ulong exportID = GetExportID(asset);
+			long exportID = GetExportID(asset);
 			if (isLocal && IsComponent(asset))
 			{
 				return new ExportPointer(exportID);
@@ -190,7 +190,7 @@ namespace UtinyRipper.AssetExporters
 
 		private void AddComponent(ISerializedFile file, Object comp)
 		{
-			m_cexportIDs.Add(comp, unchecked((ulong)comp.PathID));
+			m_cexportIDs.Add(comp, comp.PathID);
 		}
 
 		private bool IsComponent(Object asset)
@@ -268,7 +268,7 @@ namespace UtinyRipper.AssetExporters
 
 		private static readonly Regex m_sceneNameFormat = new Regex($"{LevelName}[0-9]+");
 
-		private readonly Dictionary<Object, ulong> m_cexportIDs = new Dictionary<Object, ulong>();
+		private readonly Dictionary<Object, long> m_cexportIDs = new Dictionary<Object, long>();
 		private readonly ISerializedFile m_file;
 
 		private bool m_initialized = false;

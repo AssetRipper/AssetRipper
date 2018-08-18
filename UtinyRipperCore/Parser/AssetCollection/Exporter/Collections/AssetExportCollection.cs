@@ -57,7 +57,7 @@ namespace UtinyRipper.AssetExporters
 			return Asset == asset;
 		}
 
-		public override ulong GetExportID(Object asset)
+		public override long GetExportID(Object asset)
 		{
 			if(asset == Asset)
 			{
@@ -68,7 +68,7 @@ namespace UtinyRipper.AssetExporters
 
 		public override ExportPointer CreateExportPointer(Object asset, bool isLocal)
 		{
-			ulong exportID = GetExportID(asset);
+			long exportID = GetExportID(asset);
 			return isLocal ?
 				new ExportPointer(exportID) :
 				new ExportPointer(exportID, Asset.GUID, AssetExporter.ToExportType(Asset));

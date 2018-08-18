@@ -8,6 +8,18 @@ namespace UtinyRipper.Classes.Meshes
 	/// </summary>
 	public struct BoneWeights4 : IAssetReadable, IYAMLExportable
 	{
+		public BoneWeights4(float w0, float w1, float w2, float w3, int i0, int i1, int i2, int i3)
+		{
+			Weight0 = w0;
+			Weight1 = w1;
+			Weight2 = w2;
+			Weight3 = w3;
+			BoneIndex0 = i0;
+			BoneIndex1 = i1;
+			BoneIndex2 = i2;
+			BoneIndex3 = i3;
+		}
+
 		public void Read(AssetStream stream)
 		{
 			Weight0 = stream.ReadSingle();

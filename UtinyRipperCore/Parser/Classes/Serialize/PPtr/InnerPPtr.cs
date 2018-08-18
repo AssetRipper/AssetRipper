@@ -31,7 +31,7 @@ namespace UtinyRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		protected abstract ulong GetPathID(IExportContainer container);
+		protected abstract long GetPathID(IExportContainer container);
 
 		public bool IsNull => false;
 	}

@@ -14,7 +14,7 @@ namespace UtinyRipper.Classes
 			m_prefab = prefab;
 		}
 
-		protected override ulong GetPathID(IExportContainer container)
+		protected override long GetPathID(IExportContainer container)
 		{
 			return container.GetExportID(m_prefab);
 		}

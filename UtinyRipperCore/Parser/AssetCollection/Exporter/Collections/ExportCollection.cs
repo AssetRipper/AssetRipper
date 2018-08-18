@@ -20,22 +20,22 @@ namespace UtinyRipper.AssetExporters
 			FileNameRegex = new Regex($"[{escapedChars}]");
 		}
 
-		public static ulong GetMainExportID(Object asset)
+		public static long GetMainExportID(Object asset)
 		{
 			return GetMainExportID((uint)asset.ClassID, 0);
 		}
 
-		public static ulong GetMainExportID(uint classID)
+		public static long GetMainExportID(uint classID)
 		{
 			return GetMainExportID(classID, 0);
 		}
 
-		public static ulong GetMainExportID(Object asset, uint value)
+		public static long GetMainExportID(Object asset, uint value)
 		{
 			return GetMainExportID((uint)asset.ClassID, value);
 		}
 
-		public static ulong GetMainExportID(uint classID, uint value)
+		public static long GetMainExportID(uint classID, uint value)
 		{
 #if DEBUG
 			int digits = BitConverterExtensions.GetDigitsCount(value);
@@ -49,7 +49,7 @@ namespace UtinyRipper.AssetExporters
 
 		public abstract bool Export(ProjectAssetContainer container, string dirPath);
 		public abstract bool IsContains(Object asset);
-		public abstract ulong GetExportID(Object asset);
+		public abstract long GetExportID(Object asset);
 		public abstract ExportPointer CreateExportPointer(Object asset, bool isLocal);
 		
 		protected void ExportAsset(ProjectAssetContainer container, IAssetImporter importer, Object asset, string path, string name)

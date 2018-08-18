@@ -87,9 +87,9 @@ namespace UtinyRipper.AssetExporters
 			return filePath;
 		}
 
-		protected override ulong GenerateExportID(Object asset)
+		protected override long GenerateExportID(Object asset)
 		{
-			ulong exportID = GetMainExportID(asset, m_nextExportID);
+			long exportID = GetMainExportID(asset, m_nextExportID);
 			m_nextExportID += 2;
 			return exportID;
 		}
