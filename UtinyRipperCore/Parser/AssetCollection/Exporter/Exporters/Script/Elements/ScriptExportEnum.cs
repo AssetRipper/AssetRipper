@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace UtinyRipper.Exporters.Scripts
@@ -23,7 +22,7 @@ namespace UtinyRipper.Exporters.Scripts
 			writer.WriteLine('}');
 		}
 
-		protected sealed override bool HasMemberInner(string name)
+		public sealed override bool HasMember(string name)
 		{
 			throw new NotSupportedException();
 		}

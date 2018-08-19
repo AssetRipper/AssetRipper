@@ -34,7 +34,7 @@ namespace UtinyRipper.Exporters.Scripts
 
 			writer.WriteIntent(intent);
 			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", Name);
-			if (Base != null && !Base.IsBasic)
+			if (Base != null && !ScriptType.IsBasic(Base.Namespace, Base.Name))
 			{
 				writer.Write(" : {0}", Base.Name);
 			}
@@ -75,16 +75,11 @@ namespace UtinyRipper.Exporters.Scripts
 
 		public virtual void GetTypeNamespaces(ICollection<string> namespaces)
 		{
-			if (ScriptType.IsPrimitive(Namespace, Name))
+			if (ScriptType.IsCPrimitive(Namespace, Name))
 			{
 				return;
 			}
-			if (ScriptType.IsString(Namespace, Name))
-			{
-				return;
-			}
-
-			namespaces.Add(Namespace);
+			namespaces.Add(ExportNamespace());
 		}
 
 		public virtual void GetUsedNamespaces(ICollection<string> namespaces)
@@ -92,7 +87,7 @@ namespace UtinyRipper.Exporters.Scripts
 			GetTypeNamespaces(namespaces);
 			if (Base != null)
 			{
-				namespaces.Add(Base.Namespace);
+				Base.GetTypeNamespaces(namespaces);
 			}
 			foreach(ScriptExportType nestedType in NestedTypes)
 			{
@@ -108,32 +103,17 @@ namespace UtinyRipper.Exporters.Scripts
 			}
 		}
 
-		public bool HasMember(string name)
+		public virtual bool HasMember(string name)
 		{
-			return HasMember(this, name);
+			switch (name)
+			{
+				case "audio":
+				case "light":
+				case "collider":					
+					return ScriptType.IsComponent(Namespace, Name);
+			}
+			return false;
 		}
-
-		protected bool HasMember(ScriptExportType type, string name)
-		{
-			foreach (ScriptExportField field in type.Fields)
-			{
-				if (field.Name == Name)
-				{
-					return true;
-				}
-			}
-
-			if (type.Base == null)
-			{
-				return HasMemberInner(name);
-			}
-			else
-			{
-				return HasMember(type.Base, name);
-			}
-		}
-
-		protected abstract bool HasMemberInner(string name);
 
 		public override string ToString()
 		{
@@ -147,17 +127,17 @@ namespace UtinyRipper.Exporters.Scripts
 			}
 		}
 
-		protected void AddAsNestedType(IScriptExportManager manager)
+		protected void AddAsNestedType()
 		{
 			DeclaringType.m_nestedTypes.Add(this);
 		}
 
-		protected void AddAsNestedEnum(IScriptExportManager manager)
+		protected void AddAsNestedEnum()
 		{
 			DeclaringType.m_nestedEnums.Add((ScriptExportEnum)this);
 		}
 
-		protected void AddAsNestedDelegate(IScriptExportManager manager)
+		protected void AddAsNestedDelegate()
 		{
 			DeclaringType.m_nestedDelegates.Add((ScriptExportDelegate)this);
 		}
@@ -178,6 +158,20 @@ namespace UtinyRipper.Exporters.Scripts
 			}
 		}
 
+		private string ExportNamespace()
+		{
+			if(Namespace == ScriptType.UnityEngineName)
+			{
+				switch (Name)
+				{
+					case "NavMeshAgent":
+					case "OffMeshLink":
+						return $"{ScriptType.UnityEngineName}.AI";
+				}
+			}
+			return Namespace;
+		}
+
 		public abstract string FullName { get; }
 		public abstract string Name { get; }
 		public abstract string Namespace { get; }
@@ -196,18 +190,11 @@ namespace UtinyRipper.Exporters.Scripts
 		protected abstract bool IsStruct { get; }
 		protected abstract bool IsSerializable { get; }
 
-		private bool IsBasic => (Name == ObjectType || Name == ValueType) && Namespace == SystemNamespace;
-
 		protected const string PublicKeyWord = "public";
 		protected const string InternalKeyWord = "internal";
 		protected const string ProtectedKeyWord = "protected";
 		protected const string PrivateKeyWord = "private";
-
-		protected const string SystemNamespace = "System";
-
-		protected const string ObjectType = "Object";
-		protected const string ValueType = "ValueType";
-
+		
 		protected readonly List<ScriptExportType> m_nestedTypes = new List<ScriptExportType>();
 		protected readonly List<ScriptExportEnum> m_nestedEnums = new List<ScriptExportEnum>();
 		protected readonly List<ScriptExportDelegate> m_nestedDelegates = new List<ScriptExportDelegate>();

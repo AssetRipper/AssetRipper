@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using UtinyRipper.AssetExporters;
 
 namespace UtinyRipper.Exporters.Scripts
 {
@@ -61,6 +62,10 @@ namespace UtinyRipper.Exporters.Scripts
 
 		private string GetTypeNestedName(ScriptExportType type)
 		{
+			if(ScriptType.IsEngineObject(type.Namespace, type.Name))
+			{
+				return $"{type.Namespace}.{type.Name}";
+			}
 			if(type.DeclaringType == null)
 			{
 				return type.Name;

@@ -20,7 +20,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			Type = @delegate;
 
 			m_module = ScriptExportMonoType.GetModule(Type);
-			m_fullName = ScriptExportManager.ToFullName(Module, Type.FullName);
+			m_fullName = ScriptExportMonoType.ToFullName(Type, Module);
 		}
 
 		public static bool IsDelegate(TypeDefinition type)
@@ -40,7 +40,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			if (Type.IsNested)
 			{
 				m_declaringType = manager.RetrieveType(Type.DeclaringType);
-				AddAsNestedDelegate(manager);
+				AddAsNestedDelegate();
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		public override string FullName => m_fullName;
 		public override string Name => Type.Name;
-		public override string Namespace => Type.Namespace;
+		public override string Namespace => DeclaringType == null ? Type.Namespace : DeclaringType.Namespace;
 		public override string Module => m_module;
 
 		public override ScriptExportType DeclaringType => m_declaringType;
@@ -104,10 +104,11 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		private TypeDefinition Type { get; }
 
+		private readonly string m_fullName;
+		private readonly string m_module;
+
 		private ScriptExportType m_declaringType;
 		private ScriptExportType m_return;
 		private IReadOnlyList<ScriptExportParameter> m_parameters;
-		private string m_fullName;
-		private string m_module;
 	}
 }

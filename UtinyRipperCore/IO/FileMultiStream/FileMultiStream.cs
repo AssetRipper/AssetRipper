@@ -112,6 +112,12 @@ namespace UtinyRipper
 			return new string[0];
 		}
 
+		public static bool IsNameEquals(string fileName, string compare)
+		{
+			fileName = GetFileName(fileName);
+			return fileName == compare;
+		}
+
 		private static bool Exists(string dirPath, string fileName)
 		{
 			string filePath = Path.Combine(dirPath, fileName);
@@ -359,8 +365,10 @@ namespace UtinyRipper
 		public override bool CanWrite => m_streams.All(t => t.CanWrite);
 		public override bool CanSeek => true;
 		
-		private static readonly Regex s_splitCheck = new Regex(@".*split\d+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+		private static readonly Regex s_splitCheck = new Regex($@".*{MultifileRegex}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 		private static readonly SplitNameComparer s_splitNameComparer = new SplitNameComparer();
+
+		public const string MultifileRegex = @"\.split[0-9]+";
 
 		private readonly IReadOnlyList<Stream> m_streams;
 

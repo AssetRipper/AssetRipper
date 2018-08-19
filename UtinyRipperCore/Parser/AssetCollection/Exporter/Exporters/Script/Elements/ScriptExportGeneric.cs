@@ -5,27 +5,22 @@ namespace UtinyRipper.Exporters.Scripts
 {
 	public abstract class ScriptExportGeneric : ScriptExportType
 	{
-		public override void GetUsedNamespaces(ICollection<string> namespaces)
-		{
-			Owner.GetUsedNamespaces(namespaces);
-			foreach (ScriptExportType parameter in Arguments)
-			{
-				parameter.GetTypeNamespaces(namespaces);
-			}
-		}
-
 		public override void GetTypeNamespaces(ICollection<string> namespaces)
 		{
 			base.GetTypeNamespaces(namespaces);
-			foreach (ScriptExportType arg in Arguments)
+			foreach (ScriptExportType argument in Arguments)
 			{
-				arg.GetTypeNamespaces(namespaces);
+				argument.GetTypeNamespaces(namespaces);
 			}
 		}
 
-		protected sealed override bool HasMemberInner(string name)
+		public override void GetUsedNamespaces(ICollection<string> namespaces)
 		{
-			throw new NotSupportedException();
+			foreach (ScriptExportType argument in Arguments)
+			{
+				argument.GetTypeNamespaces(namespaces);
+			}
+			Owner.GetUsedNamespaces(namespaces);
 		}
 
 		public sealed override ScriptExportType DeclaringType => Base.DeclaringType;

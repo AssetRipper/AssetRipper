@@ -11,12 +11,27 @@ namespace UtinyRipper.AssetExporters.Mono
 
 		public static bool IsPrimitive(TypeReference type)
 		{
-			return type.IsPrimitive;
+			return IsPrimitive(type.Namespace, type.Name);
+		}
+
+		public static bool IsCPrimitive(TypeReference type)
+		{
+			return IsCPrimitive(type.Namespace, type.Name);
+		}
+
+		public static bool IsBasic(TypeReference type)
+		{
+			return IsBasic(type.Namespace, type.Name);
 		}
 
 		public static bool IsSerializableType(TypeReference type)
 		{
 			TypeReference elementType = GetElementType(type);
+#warning TODO: IsGenericParameter
+			if (elementType.IsGenericParameter)
+			{
+				return false;
+			}
 			if(type.IsArray)
 			{
 				if(IsList(elementType))
@@ -54,7 +69,7 @@ namespace UtinyRipper.AssetExporters.Mono
 		{
 			return IsDelegate(type.Namespace, type.Name);
 		}
-		public static bool IsSystemObject(TypeReference type)
+		public static bool IsObject(TypeReference type)
 		{
 			return IsObject(type.Namespace, type.Name);
 		}
@@ -67,8 +82,7 @@ namespace UtinyRipper.AssetExporters.Mono
 			return IsList(type.Namespace, type.Name);
 		}
 
-
-		public static bool IsUnityObject(TypeReference type)
+		public static bool IsEngineObject(TypeReference type)
 		{
 			return IsEngineObject(type.Namespace, type.Name);
 		}
@@ -104,7 +118,7 @@ namespace UtinyRipper.AssetExporters.Mono
 		
 		public static bool IsEnginePointer(TypeReference type)
 		{
-			if (IsSystemObject(type))
+			if (IsObject(type))
 			{
 				return false;
 			}
@@ -114,6 +128,10 @@ namespace UtinyRipper.AssetExporters.Mono
 			}
 
 			TypeDefinition definition = type.Resolve();
+			if(definition.IsInterface)
+			{
+				return false;
+			}
 			return IsEnginePointer(definition.BaseType);
 		}
 

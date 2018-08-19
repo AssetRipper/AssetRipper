@@ -229,10 +229,10 @@ namespace UtinyRipper.Exporters.Scripts
 			return exportParameter;
 		}
 
-		private ScriptExportType CreateType(TypeReference type, bool unique = true)
+		private ScriptExportType CreateType(TypeReference type, bool isUnique = true)
 		{
 			ScriptExportType exportType = new ScriptExportMonoType(type);
-			if(unique)
+			if(isUnique)
 			{
 				m_types.Add(exportType.FullName, exportType);
 			}

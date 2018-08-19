@@ -356,7 +356,7 @@ namespace UtinyRipper.SerializedFiles
 				long read = stream.BaseStream.Position - offset;
 				if (read != size)
 				{
-					throw new Exception($"Read {read} but expected {size} for asset type {asset.ClassID}. Version[{stream.Version}]");
+					throw new Exception($"Read {read} but expected {size} for asset type {asset.ClassID}. Version[{stream.Version}] '{Name}'");
 				}
 			}
 			return asset;

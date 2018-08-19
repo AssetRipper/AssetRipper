@@ -19,7 +19,8 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			Type = type;
 
 			m_module = ScriptExportMonoType.GetModule(Type);
-			m_fullName = ScriptExportManager.ToFullName(Module, Type.FullName);
+			m_name = ScriptExportMonoType.GetName(Type);
+			m_fullName = ScriptExportMonoType.ToFullName(Type, Module);
 		}
 		
 		public override void Init(IScriptExportManager manager)
@@ -28,7 +29,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			m_element = manager.RetrieveType(specification.ElementType);
 		}
 
-		protected override bool HasMemberInner(string name)
+		public sealed override bool HasMember(string name)
 		{
 			throw new NotSupportedException();
 		}
@@ -36,14 +37,16 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 		public override ScriptExportType Element => m_element;
 
 		public override string FullName => m_fullName;
-		public override string Name => Type.Name;
-		public override string Namespace => Type.Namespace;
+		public override string Name => m_name;
+		public override string Namespace => Element.Namespace;
 		public override string Module => m_module;
 
 		private TypeReference Type { get; }
 
+		private readonly string m_fullName;
+		private readonly string m_name;
+		private readonly string m_module;
+
 		private ScriptExportType m_element;
-		private string m_fullName;
-		private string m_module;
 	}
 }

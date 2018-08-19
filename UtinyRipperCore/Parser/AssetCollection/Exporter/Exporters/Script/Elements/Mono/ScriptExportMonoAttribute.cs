@@ -16,7 +16,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			Attribute = attribute;
 
 			m_module = ScriptExportMonoType.GetModule(Attribute.AttributeType);
-			m_fullName = ScriptExportManager.ToFullName(Module, Attribute.AttributeType.FullName);
+			m_fullName = ToFullName(Attribute, Module);
 		}
 
 		public static bool IsCompilerGenerated(TypeDefinition type)
@@ -33,7 +33,12 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		public static string ToFullName(CustomAttribute attribute)
 		{
-			return ScriptExportManager.ToFullName(GetModule(attribute.AttributeType), attribute.AttributeType.FullName);
+			return ScriptExportMonoType.ToFullName(attribute.AttributeType);
+		}
+
+		public static string ToFullName(CustomAttribute attribute, string module)
+		{
+			return ScriptExportMonoType.ToFullName(attribute.AttributeType, module);
 		}
 
 		private static string GetModule(TypeReference type)
@@ -66,8 +71,9 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		private CustomAttribute Attribute { get; }
 
+		private readonly string m_fullName;
+		private readonly string m_module;
+
 		private ScriptExportType m_type;
-		private string m_fullName;
-		private string m_module;
 	}
 }

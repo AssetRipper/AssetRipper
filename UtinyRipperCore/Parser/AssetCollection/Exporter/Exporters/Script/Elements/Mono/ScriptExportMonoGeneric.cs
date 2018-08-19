@@ -19,15 +19,14 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 			Type = (GenericInstanceType)type;
 
-			m_name = GetName();
+			m_name = ScriptExportMonoType.GetName(type);
 			m_module = ScriptExportMonoType.GetModule(Type);
-			m_fullName = ScriptExportManager.ToFullName(Module, Type.FullName);
+			m_fullName = ScriptExportMonoType.ToFullName(Type, Module);
 		}
 
 		public override void Init(IScriptExportManager manager)
 		{
-			TypeSpecification specification = (TypeSpecification)Type;
-			m_owner = manager.RetrieveType(specification.ElementType);
+			m_owner = manager.RetrieveType(Type.ElementType);
 
 			List<ScriptExportType> arguments = new List<ScriptExportType>();
 			foreach(TypeReference argument in Type.GenericArguments)
@@ -38,51 +37,13 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			m_arguments = arguments.ToArray();
 		}
 
-		private string GetName()
+		public override bool HasMember(string name)
 		{
-			string name = string.Empty;
-			bool isArray = Type.IsArray;
-			TypeReference elementType = Type;
-			if (isArray)
+			if (base.HasMember(name))
 			{
-				elementType = Type.GetElementType();
+				return true;
 			}
-	
-			if (Type.IsGenericInstance)
-			{
-				int index = elementType.Name.IndexOf('`');
-				if (index > 0)
-				{
-					string fixedName = elementType.Name.Substring(0, index);
-					name += fixedName;
-					name += '<';
-					GenericInstanceType generic = (GenericInstanceType)Type;
-					for (int i = 0; i < generic.GenericArguments.Count; i++)
-					{
-						TypeReference arg = generic.GenericArguments[i];
-						name += arg.Name;
-						if (i < generic.GenericArguments.Count - 1)
-						{
-							name += ", ";
-						}
-					}
-					name += '>';
-				}
-				else
-				{
-					name += elementType.Name;
-				}
-			}
-			else
-			{
-				name += elementType.Name;
-			}
-
-			if (isArray)
-			{
-				name += "[]";
-			}
-			return name;
+			return ScriptExportMonoType.HasMember(Type.ElementType, name);
 		}
 
 		public override ScriptExportType Owner => m_owner;
@@ -96,10 +57,11 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		private GenericInstanceType Type { get; }
 
+		private readonly string m_fullName;
+		private readonly string m_name;
+		private readonly string m_module;
+
 		private ScriptExportType m_owner;
 		private ScriptExportType[] m_arguments;
-		private string m_fullName;
-		private string m_name;
-		private string m_module;
 	}
 }

@@ -244,6 +244,19 @@ namespace UtinyRipper.AssetExporters.Mono
 				return false;
 			}
 
+			if(reference.IsGenericInstance)
+			{
+				GenericInstanceType generic = (GenericInstanceType)reference;
+				foreach(TypeReference genericArg in generic.GenericArguments)
+				{
+					if (!IsTypeValid(genericArg))
+					{
+						m_validTypes[reference.FullName] = false;
+						return false;
+					}
+				}
+			}
+
 			TypeDefinition definition = reference.Resolve();
 			isValid = IsTypeValid(definition.BaseType);
 			if(!isValid)

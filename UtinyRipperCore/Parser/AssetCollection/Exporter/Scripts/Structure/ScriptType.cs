@@ -53,6 +53,36 @@ namespace UtinyRipper.AssetExporters
 			return false;
 		}
 
+		public static bool IsCPrimitive(string @namespace, string name)
+		{
+			if(IsPrimitive(@namespace, name))
+			{
+				return true;
+			}
+			if(IsString(@namespace, name))
+			{
+				return true;
+			}
+			if (IsObject(@namespace, name))
+			{
+				return true;
+			}
+			return false;
+		}
+
+		public static bool IsBasic(string @namespace, string name)
+		{
+			if(IsObject(@namespace, name))
+			{
+				return true;
+			}
+			if(@namespace == SystemName && name == ValueType)
+			{
+				return true;
+			}
+			return false;
+		}
+
 		public static bool IsSerializableType(string @namespace, string name)
 		{
 			if (IsString(@namespace, name))
@@ -212,7 +242,24 @@ namespace UtinyRipper.AssetExporters
 					throw new Exception(name);
 			}
 		}
-		
+
+		public static string ToCPrimitiveString(string name)
+		{
+			switch(name)
+			{
+				case StringName:
+				case CStringName:
+					return CStringName;
+
+				case ObjectName:
+				case CObjectName:
+					return CObjectName;
+
+				default:
+					return ToPrimitiveString(name);
+			}
+		}
+
 		protected static PrimitiveType ToPrimitiveType(string @namespace, string name)
 		{
 			if (@namespace == SystemName)
@@ -272,36 +319,37 @@ namespace UtinyRipper.AssetExporters
 		public const string SystemCollectionGenericName = "System.Collections.Generic";
 		public const string UnityEngineName = "UnityEngine";
 
-		public const string ObjectName = "Object";
-		public const string CObjectName = "object";
-		public const string VoidName = "Void";
-		public const string CVoidName = "void";
-		public const string BooleanName = "Boolean";
-		public const string BoolName = "bool";
-		public const string CharName = "Char";
-		public const string CCharName = "char";
-		public const string ByteName = "Byte";
-		public const string CByteName = "byte";
-		public const string Int16Name = "Int16";
-		public const string ShortName = "short";
-		public const string UInt16Name = "UInt16";
-		public const string UShortName = "ushort";
-		public const string Int32Name = "Int32";
-		public const string IntName = "int";
-		public const string UInt32Name = "UInt32";
-		public const string UIntName = "uint";
-		public const string Int64Name = "Int64";
-		public const string LongName = "long";
-		public const string UInt64Name = "UInt64";
-		public const string ULongName = "ulong";
-		public const string SingleName = "Single";
-		public const string FloatName = "float";
-		public const string DoubleName = "Double";
-		public const string CDoubleName = "double";
-		public const string StringName = "String";
-		public const string CStringName = "string";
-		public const string MulticastDelegateName = "MulticastDelegate";
-		public const string ListName = "List`1";
+		private const string ObjectName = "Object";
+		private const string CObjectName = "object";
+		private const string ValueType = "ValueType";
+		private const string VoidName = "Void";
+		private const string CVoidName = "void";
+		private const string BooleanName = "Boolean";
+		private const string BoolName = "bool";
+		private const string CharName = "Char";
+		private const string CCharName = "char";
+		private const string ByteName = "Byte";
+		private const string CByteName = "byte";
+		private const string Int16Name = "Int16";
+		private const string ShortName = "short";
+		private const string UInt16Name = "UInt16";
+		private const string UShortName = "ushort";
+		private const string Int32Name = "Int32";
+		private const string IntName = "int";
+		private const string UInt32Name = "UInt32";
+		private const string UIntName = "uint";
+		private const string Int64Name = "Int64";
+		private const string LongName = "long";
+		private const string UInt64Name = "UInt64";
+		private const string ULongName = "ulong";
+		private const string SingleName = "Single";
+		private const string FloatName = "float";
+		private const string DoubleName = "Double";
+		private const string CDoubleName = "double";
+		private const string StringName = "String";
+		private const string CStringName = "string";
+		private const string MulticastDelegateName = "MulticastDelegate";
+		private const string ListName = "List`1";
 
 		public const string Vector2Name = "Vector2";
 		public const string Vector3Name = "Vector3";

@@ -32,7 +32,7 @@ namespace UtinyRipper.Exporters.Scripts
 			}
 		}
 
-		protected sealed override bool HasMemberInner(string name)
+		public sealed override bool HasMember(string name)
 		{
 			throw new NotSupportedException();
 		}

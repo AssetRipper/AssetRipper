@@ -71,13 +71,13 @@ namespace UtinyRipper
 		public virtual IEnumerable<string> FetchFiles()
 		{
 			string filePath = Path.Combine(MainDataPath, MainDataName);
-			if (FileUtils.Exists(filePath))
+			if (FileMultiStream.Exists(filePath))
 			{
 				yield return filePath;
 			}
 
 			filePath = Path.Combine(MainDataPath, GlobalGameManagerName);
-			if (FileUtils.Exists(filePath))
+			if (FileMultiStream.Exists(filePath))
 			{
 				yield return filePath;
 			}
@@ -240,6 +240,6 @@ namespace UtinyRipper
 		private const string BuiltinExtraName2 = "unity_builtin_extra";
 
 		protected readonly FileCollection m_fileCollection;
-		protected readonly Regex m_levelName = new Regex("level[0-9]{1,3}$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+		protected readonly Regex m_levelName = new Regex($@"^level[1-9][0-9]*({FileMultiStream.MultifileRegex})?$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 	}
 }

@@ -66,12 +66,12 @@ namespace UtinyRipper
 		{
 			foreach (FileInfo file in directory.EnumerateFiles())
 			{
-				if (file.Name == MainDataName)
+				if (FileMultiStream.IsNameEquals(file.Name, MainDataName))
 				{
 					AddFile(file.FullName);
 					Logger.Log(LogType.Info, LogCategory.Import, $"'{MainDataName}' has been found at '{directory.FullName}'");
 				}
-				else  if (file.Name == GlobalGameManagerName)
+				else  if (FileMultiStream.IsNameEquals(file.Name, GlobalGameManagerName))
 				{
 					AddFile(file.FullName);
 					Logger.Log(LogType.Info, LogCategory.Import, $"'{GlobalGameManagerName}' has been found at '{directory.FullName}'");
