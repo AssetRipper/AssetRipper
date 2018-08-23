@@ -13,7 +13,7 @@ namespace UtinyRipper.Classes.Meshes
 		public VertexData(Version version, IReadOnlyList<Vector3f> vertices, IReadOnlyList<Vector3f> normals, IReadOnlyList<ColorRGBA32> colors,
 			IReadOnlyList<Vector2f> uv0, IReadOnlyList<Vector2f> uv1, IReadOnlyList<Vector4f> tangents)
 		{
-			BitArray curChannels = new BitArray(8);
+			BitArray curChannels = new BitArray(32);
 			byte stride = 0;
 
 			bool isWriteVertices = vertices.Count > 0;

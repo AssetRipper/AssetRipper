@@ -260,6 +260,7 @@
     <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelType.cs" />
     <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelType2018.cs" />
     <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelType3.cs" />
+    <Compile Include="Parser\Classes\Mesh\MeshCompression.cs" />
     <Compile Include="Parser\Classes\Mesh\MeshTopology.cs" />
     <Compile Include="Parser\Classes\MonoManager.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Gradient\MinMaxGradientState.cs" />

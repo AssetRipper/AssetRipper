@@ -37,7 +37,19 @@ namespace UtinyRipper.AssetExporters
 			}
 			m_cexportIDs = m_cexportIDs.OrderBy(t => t.Key, this).ToDictionary(t => t.Key, t => t.Value);
 
-			if(OcclusionCullingSettings.IsReadPVSData(file.Version))
+			if(OcclusionCullingSettings.IsReadSceneGUID(file.Version))
+			{
+				OcclusionCullingSettings sceneSettings = Components.Where(t => t.ClassID == ClassIDType.OcclusionCullingSettings).Select(t => (OcclusionCullingSettings)t).FirstOrDefault();
+				if (sceneSettings == null)
+				{
+					GUID = new EngineGUID(Guid.NewGuid());
+				}
+				else
+				{
+					GUID = sceneSettings.SceneGUID;
+				}
+			}
+			else
 			{
 				if (Config.IsGenerateGUIDByContent)
 				{
@@ -46,18 +58,6 @@ namespace UtinyRipper.AssetExporters
 				else
 				{
 					GUID = new EngineGUID(Guid.NewGuid());
-				}
-			}
-			else
-			{
-				OcclusionCullingSettings sceneSettings = Components.Where(t => t.ClassID == ClassIDType.OcclusionCullingSettings).Select(t => (OcclusionCullingSettings)t).FirstOrDefault();
-				if(sceneSettings == null)
-				{
-					GUID = new EngineGUID(Guid.NewGuid());
-				}
-				else
-				{
-					GUID = sceneSettings.SceneGUID;
 				}
 			}
 		}

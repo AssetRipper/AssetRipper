@@ -313,7 +313,7 @@ namespace UtinyRipper.Classes
 
 			if (IsReadMeshCompression(stream.Version))
 			{
-				MeshCompression = stream.ReadByte();
+				MeshCompression = (MeshCompression)stream.ReadByte();
 			}
 			if(IsReadStreamCompression(stream.Version))
 			{
@@ -474,7 +474,7 @@ namespace UtinyRipper.Classes
 #warning TODO?
 			node.Add("m_RootBoneName", YAMLScalarNode.Empty);
 			node.Add("m_RootBoneNameHash", RootBoneNameHash);
-			node.Add("m_MeshCompression", MeshCompression);
+			node.Add("m_MeshCompression", (byte)MeshCompression);
 			node.Add("m_IsReadable", IsReadable);
 			node.Add("m_KeepVertices", KeepVertices);
 			node.Add("m_KeepIndices", KeepIndices);
@@ -568,7 +568,7 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public bool Use16bitIndices { get; private set; }
 		public uint RootBoneNameHash { get; private set; }
-		public byte MeshCompression { get; private set; }
+		public MeshCompression MeshCompression { get; private set; }
 		public byte StreamCompression { get; private set; }
 		public bool IsReadable { get; private set; }
 		public bool KeepVertices { get; private set; }

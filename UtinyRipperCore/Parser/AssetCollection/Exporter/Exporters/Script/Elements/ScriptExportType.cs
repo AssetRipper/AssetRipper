@@ -109,7 +109,7 @@ namespace UtinyRipper.Exporters.Scripts
 			{
 				case "audio":
 				case "light":
-				case "collider":					
+				case "collider":
 					return ScriptType.IsComponent(Namespace, Name);
 			}
 			return false;
