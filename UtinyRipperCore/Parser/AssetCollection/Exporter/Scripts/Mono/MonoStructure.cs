@@ -6,7 +6,7 @@ namespace UtinyRipper.AssetExporters.Mono
 	public sealed class MonoStructure : ScriptStructure
 	{
 		internal MonoStructure(TypeDefinition type):
-			this(type, null)
+			this(type, s_emptyArguments)
 		{
 		}
 
@@ -35,7 +35,13 @@ namespace UtinyRipper.AssetExporters.Mono
 				TypeDefinition template = instance.ElementType.Resolve();
 				for (int i = 0; i < instance.GenericArguments.Count; i++)
 				{
-					templateArguments.Add(template.GenericParameters[i], instance.GenericArguments[i].Resolve());
+					GenericParameter parameter = template.GenericParameters[i];
+					TypeReference argument = instance.GenericArguments[i];
+					if(argument.IsGenericParameter)
+					{
+						argument = arguments[(GenericParameter)argument];
+					}
+					templateArguments.Add(parameter, argument.Resolve());
 				}
 
 				return new MonoStructure(template, templateArguments);
@@ -77,5 +83,7 @@ namespace UtinyRipper.AssetExporters.Mono
 		{
 			return new MonoStructure(this);
 		}
+
+		private static readonly IReadOnlyDictionary<GenericParameter, TypeReference> s_emptyArguments = new Dictionary<GenericParameter, TypeReference>(0);
 	}
 }

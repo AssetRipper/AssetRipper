@@ -130,6 +130,7 @@ namespace UtinyRipper.AssetExporters
 					case Vector3Name:
 					case Vector4Name:
 					case RectName:
+					case BoundsName:
 					case QuaternionName:
 					case Matrix4x4Name:
 					case ColorName:
@@ -336,6 +337,7 @@ namespace UtinyRipper.AssetExporters
 		public const string Vector3Name = "Vector3";
 		public const string Vector4Name = "Vector4";
 		public const string RectName = "Rect";
+		public const string BoundsName = "Bounds";
 		public const string QuaternionName = "Quaternion";
 		public const string Matrix4x4Name = "Matrix4x4";
 		public const string ColorName = "Color";

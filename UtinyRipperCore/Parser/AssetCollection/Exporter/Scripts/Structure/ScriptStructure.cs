@@ -56,6 +56,8 @@ namespace UtinyRipper.AssetExporters
 					return new Vector4f();
 				case ScriptType.RectName:
 					return new Rectf();
+				case ScriptType.BoundsName:
+					return new AABB();
 				case ScriptType.QuaternionName:
 					return new Quaternionf();
 				case ScriptType.Matrix4x4Name:

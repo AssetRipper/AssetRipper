@@ -229,7 +229,12 @@ namespace UtinyRipper.AssetExporters.Mono
 		{
 			if(type.IsArray)
 			{
-				type = type.GetElementType();
+				return IsTypeValid(type.GetElementType(), arguments);
+			}
+			if(MonoType.IsList(type))
+			{
+				GenericInstanceType list = (GenericInstanceType)type;
+				return IsTypeValid(list.GenericArguments[0], arguments);
 			}
 
 			if(type.IsGenericParameter)
@@ -260,12 +265,6 @@ namespace UtinyRipper.AssetExporters.Mono
 				for (int i = 0; i < instance.GenericArguments.Count; i++)
 				{
 					TypeReference argument = instance.GenericArguments[i];
-					if(argument.IsGenericParameter)
-					{
-						GenericParameter parameter = (GenericParameter)argument;
-						argument = arguments[parameter];
-					}
-
 					if (!IsTypeValid(argument, arguments))
 					{
 						m_validTypes[type.FullName] = false;

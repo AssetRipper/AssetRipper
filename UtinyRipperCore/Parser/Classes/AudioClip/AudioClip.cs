@@ -331,7 +331,7 @@ namespace UtinyRipper.Classes
 				ResourcesFile res = File.Collection.FindResourcesFile(File, FSBResource.Source);
 				if (res == null)
 				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because resources file '{FSBResource.Source}' wasn't found");
+					Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because resources file '{FSBResource.Source}' hasn't been found");
 					return;
 				}
 
@@ -354,7 +354,7 @@ namespace UtinyRipper.Classes
 						ResourcesFile res = File.Collection.FindResourcesFile(File, StreamingInfo.Path);
 						if (res == null)
 						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because resources file '{StreamingInfo.Path}' wasn't found");
+							Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because resources file '{StreamingInfo.Path}' hasn't been found");
 							return;
 						}
 

@@ -172,8 +172,6 @@ namespace UtinyRipper.AssetExporters.Mono
 			return ToPrimitiveType(type.Namespace, type.Name);
 		}
 
-		public IReadOnlyDictionary<GenericParameter, TypeDefinition> GenericArguments { get; }
-
 		private const string EnumValueFieldName = "value__";
 	}
 }
