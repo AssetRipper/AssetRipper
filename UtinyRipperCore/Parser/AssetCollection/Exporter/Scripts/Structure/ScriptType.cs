@@ -55,11 +55,11 @@ namespace UtinyRipper.AssetExporters
 
 		public static bool IsCPrimitive(string @namespace, string name)
 		{
-			if(IsPrimitive(@namespace, name))
+			if (IsPrimitive(@namespace, name))
 			{
 				return true;
 			}
-			if(IsString(@namespace, name))
+			if (IsString(@namespace, name))
 			{
 				return true;
 			}
@@ -80,25 +80,6 @@ namespace UtinyRipper.AssetExporters
 			{
 				return true;
 			}
-			return false;
-		}
-
-		public static bool IsSerializableType(string @namespace, string name)
-		{
-			if (IsString(@namespace, name))
-			{
-				return true;
-			}
-			if (IsList(@namespace, name))
-			{
-				return true;
-			}
-
-			if (IsEngineStruct(@namespace, name))
-			{
-				return true;
-			}
-
 			return false;
 		}
 

@@ -18,6 +18,17 @@ namespace UtinyRipper.Exporter.YAML
 			return node;
 		}
 
+		public static YAMLNode ExportYAML(this IEnumerable<char> _this)
+		{
+			foreach (char value in _this)
+			{
+				s_sb.Append(((ushort)value).ToHexString());
+			}
+			YAMLScalarNode node = new YAMLScalarNode(s_sb.ToString());
+			s_sb.Length = 0;
+			return node;
+		}
+
 		public static YAMLNode ExportYAML(this IEnumerable<byte> _this)
 		{
 			foreach (byte value in _this)

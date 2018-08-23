@@ -200,51 +200,43 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			List<ScriptExportField> fields = new List<ScriptExportField>();
 			foreach (FieldDefinition field in Definition.Fields)
 			{
-				if(field.IsStatic)
-				{
-					continue;
-				}
-
-				if (field.IsPublic)
-				{
-					if (field.IsNotSerialized)
-					{
-						continue;
-					}
-				}
-				else
-				{
-					if (!ScriptExportMonoField.HasSerializeFieldAttribute(field))
-					{
-						continue;
-					}
-				}
-
 				if (field.FieldType.Module == null)
 				{
 					// if field has unknown type then consider it as serializable
 				}
-				else if (field.FieldType.IsGenericParameter)
+				else if(IsContainsGenericParameter(field.FieldType))
 				{
-					// consider generic fields as serializable
+					// if field type has generic parameter then consider it as serializable
 				}
-				else
+				else if (!MonoField.IsSerializable(field, null))
 				{
-					TypeDefinition fieldTypeDefinition = field.FieldType.Resolve();
-					if(fieldTypeDefinition.IsInterface)
-					{
-						continue;
-					}
-					if (!MonoType.IsSerializableType(field.FieldType))
-					{
-						continue;
-					}
+					continue;
 				}
 
 				ScriptExportField efield = manager.RetrieveField(field);
 				fields.Add(efield);
 			}
 			return fields.ToArray();
+		}
+
+		private static bool IsContainsGenericParameter(TypeReference type)
+		{
+			if(type.IsGenericParameter)
+			{
+				return true;
+			}
+			if(type.IsGenericInstance)
+			{
+				GenericInstanceType instance = (GenericInstanceType)type;
+				foreach(TypeReference argument in instance.GenericArguments)
+				{
+					if(IsContainsGenericParameter(argument))
+					{
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 		public override string FullName => m_fullName;

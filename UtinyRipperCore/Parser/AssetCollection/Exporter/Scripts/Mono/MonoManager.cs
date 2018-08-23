@@ -6,7 +6,7 @@ using UtinyRipper.Exporters.Scripts;
 
 namespace UtinyRipper.AssetExporters.Mono
 {
-	internal class MonoManager : IAssemblyManager, IAssemblyResolver
+	internal sealed class MonoManager : IAssemblyManager, IAssemblyResolver
 	{
 		public MonoManager(Action<string> requestAssemblyCallback)
 		{
@@ -76,7 +76,7 @@ namespace UtinyRipper.AssetExporters.Mono
 			{
 				return false;
 			}
-			return IsTypeValid(type);
+			return IsTypeValid(type, s_emptyArguments);
 		}
 
 		public bool IsValid(string assembly, string @namespace, string name)
@@ -86,7 +86,7 @@ namespace UtinyRipper.AssetExporters.Mono
 			{
 				return false;
 			}
-			return IsTypeValid(type);
+			return IsTypeValid(type, s_emptyArguments);
 		}
 
 		public ScriptStructure CreateStructure(string assembly, string name)
@@ -225,57 +225,75 @@ namespace UtinyRipper.AssetExporters.Mono
 			return null;
 		}
 
-		private bool IsTypeValid(TypeReference reference)
+		private bool IsTypeValid(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
-			if(m_validTypes.TryGetValue(reference.FullName, out bool isValid))
+			if(type.IsArray)
+			{
+				type = type.GetElementType();
+			}
+
+			if(type.IsGenericParameter)
+			{
+				return true;
+			}
+			if (MonoType.IsPrime(type))
+			{
+				return true;
+			}
+			if (type.Module == null)
+			{
+				return false;
+			}
+
+			if (m_validTypes.TryGetValue(type.FullName, out bool isValid))
 			{
 				return isValid;
 			}
 
 			// set value at the beginning to prevent loop referencing
-			m_validTypes[reference.FullName] = true;
-			if (MonoType.IsPrime(reference))
+			m_validTypes[type.FullName] = true;
+			if (type.IsGenericInstance)
 			{
-				return true;
-			}
-			if (reference.Module == null)
-			{
-				m_validTypes[reference.FullName] = false;
-				return false;
-			}
-
-			if(reference.IsGenericInstance)
-			{
-				GenericInstanceType generic = (GenericInstanceType)reference;
-				foreach(TypeReference genericArg in generic.GenericArguments)
+				GenericInstanceType instance = (GenericInstanceType)type;
+				Dictionary<GenericParameter, TypeReference> templateArguments = new Dictionary<GenericParameter, TypeReference>();
+				TypeReference template = instance.ElementType;
+				for (int i = 0; i < instance.GenericArguments.Count; i++)
 				{
-					if (!IsTypeValid(genericArg))
+					TypeReference argument = instance.GenericArguments[i];
+					if(argument.IsGenericParameter)
 					{
-						m_validTypes[reference.FullName] = false;
+						GenericParameter parameter = (GenericParameter)argument;
+						argument = arguments[parameter];
+					}
+
+					if (!IsTypeValid(argument, arguments))
+					{
+						m_validTypes[type.FullName] = false;
 						return false;
 					}
+					templateArguments.Add(template.GenericParameters[i], argument);
 				}
+
+				return IsTypeValid(template, templateArguments);
 			}
 
-			TypeDefinition definition = reference.Resolve();
-			isValid = IsTypeValid(definition.BaseType);
-			if(!isValid)
+			TypeDefinition definition = type.Resolve();
+			if (!IsTypeValid(definition.BaseType, arguments))
 			{
-				m_validTypes[reference.FullName] = false;
+				m_validTypes[type.FullName] = false;
 				return false;
 			}
 
-			foreach(FieldDefinition field in definition.Fields)
+			foreach (FieldDefinition field in definition.Fields)
 			{
-				if (!MonoField.IsSerializableField(field))
+				if(!MonoField.IsSerializable(field, arguments))
 				{
 					continue;
 				}
 
-				isValid = IsTypeValid(field.FieldType);
-				if(!isValid)
+				if (!IsTypeValid(field.FieldType, arguments))
 				{
-					m_validTypes[reference.FullName] = false;
+					m_validTypes[type.FullName] = false;
 					return false;
 				}
 			}
@@ -295,6 +313,8 @@ namespace UtinyRipper.AssetExporters.Mono
 			get => ScriptingBackEnd.Mono;
 			set => throw new NotSupportedException();
 		}
+
+		private static readonly IReadOnlyDictionary<GenericParameter, TypeReference> s_emptyArguments = new Dictionary<GenericParameter, TypeReference>();
 
 		private readonly Dictionary<string, AssemblyDefinition> m_assemblies = new Dictionary<string, AssemblyDefinition>();
 		private readonly Dictionary<string, bool> m_validTypes = new Dictionary<string, bool>();

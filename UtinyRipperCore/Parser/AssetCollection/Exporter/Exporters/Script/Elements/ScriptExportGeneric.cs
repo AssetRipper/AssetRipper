@@ -23,7 +23,7 @@ namespace UtinyRipper.Exporters.Scripts
 			Owner.GetUsedNamespaces(namespaces);
 		}
 
-		public sealed override ScriptExportType DeclaringType => Base.DeclaringType;
+		public sealed override ScriptExportType DeclaringType => Owner.DeclaringType;
 		public abstract ScriptExportType Owner { get; } 
 		public abstract IReadOnlyList<ScriptExportType> Arguments { get; }
 

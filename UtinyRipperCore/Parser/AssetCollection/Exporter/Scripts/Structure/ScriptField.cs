@@ -227,6 +227,11 @@ namespace UtinyRipper.AssetExporters
 								bool[] array = (bool[])Value;
 								return array.ExportYAML();
 							}
+						case PrimitiveType.Char:
+							{
+								char[] array = (char[])Value;
+								return array.ExportYAML();
+							}
 						case PrimitiveType.Byte:
 							{
 								byte[] array = (byte[])Value;

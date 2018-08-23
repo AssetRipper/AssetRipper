@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UtinyRipper
 {
-	public static class IDictionaryExtensions
+	public static class IDictionaryIOExtensions
 	{
 		public static void Read(this IDictionary<int, int> _this, EndianStream stream)
 		{

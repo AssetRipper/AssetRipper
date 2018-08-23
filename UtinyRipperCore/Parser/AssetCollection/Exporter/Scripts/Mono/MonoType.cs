@@ -1,11 +1,13 @@
 ﻿using Mono.Cecil;
+using System;
+using System.Collections.Generic;
 
 namespace UtinyRipper.AssetExporters.Mono
 {
 	public class MonoType : ScriptType
 	{
-		public MonoType(TypeReference type) :
-			base(GetPrimitiveType(type), CreateComplexType(type))
+		internal MonoType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
+			base(GetPrimitiveType(type, arguments), CreateComplexType(type, arguments))
 		{
 		}
 
@@ -22,47 +24,6 @@ namespace UtinyRipper.AssetExporters.Mono
 		public static bool IsBasic(TypeReference type)
 		{
 			return IsBasic(type.Namespace, type.Name);
-		}
-
-		public static bool IsSerializableType(TypeReference type)
-		{
-			TypeReference elementType = GetElementType(type);
-#warning TODO: IsGenericParameter
-			if (elementType.IsGenericParameter)
-			{
-				return false;
-			}
-			if(type.IsArray)
-			{
-				if(IsList(elementType))
-				{
-					return false;
-				}
-			}
-			if (elementType.IsPrimitive)
-			{
-				return true;
-			}
-			if (IsSerializableType(elementType.Namespace, elementType.Name))
-			{
-				return true;
-			}
-			if (IsEnginePointer(elementType))
-			{
-				return true;
-			}
-
-			TypeDefinition definition = elementType.Resolve();
-			if (definition.IsSerializable)
-			{
-				return true;
-			}
-			if (definition.IsEnum)
-			{
-				return true;
-			}
-
-			return false;
 		}
 
 		public static bool IsDelegate(TypeReference type)
@@ -110,12 +71,12 @@ namespace UtinyRipper.AssetExporters.Mono
 		public static bool IsPrime(TypeReference type)
 		{
 			return IsPrime(type.Namespace, type.Name);
-		}		
+		}
 		public static bool IsMonoPrime(TypeReference type)
 		{
 			return IsMonoPrime(type.Namespace, type.Name);
 		}
-		
+
 		public static bool IsEnginePointer(TypeReference type)
 		{
 			if (IsObject(type))
@@ -128,69 +89,37 @@ namespace UtinyRipper.AssetExporters.Mono
 			}
 
 			TypeDefinition definition = type.Resolve();
-			if(definition.IsInterface)
+			if (definition.IsInterface)
 			{
 				return false;
 			}
 			return IsEnginePointer(definition.BaseType);
 		}
 
-		public static TypeReference GetElementType(TypeReference type)
+		private static PrimitiveType GetPrimitiveType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
-			if (type.IsArray)
-			{
-				return type.GetElementType();
-			}
-			if (IsList(type))
-			{
-				GenericInstanceType generic = (GenericInstanceType)type;
-				return generic.GenericArguments[0];
-			}
-			return type;
+			type = GetElementType(type, arguments);
+			return ToPrimitiveType(type);
 		}
 
-		private static PrimitiveType GetPrimitiveType(TypeReference type)
+		private static IScriptStructure CreateComplexType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
-			TypeReference elementType = GetElementType(type);
-			TypeDefinition definition = elementType.Resolve();
-			if(definition.IsEnum)
+			type = GetElementType(type, arguments);
+			if (IsEngineStruct(type))
 			{
-				foreach(FieldDefinition field in definition.Fields)
-				{
-					if(field.Name == EnumValueFieldName)
-					{
-						elementType = field.FieldType;
-						break;
-					}
-				}
-			}
-			return ToPrimitiveType(elementType);
-		}
-
-		private static IScriptStructure CreateComplexType(TypeReference type)
-		{
-			TypeReference elementType = GetElementType(type);
-			if (IsEngineStruct(elementType))
-			{
-				return ScriptStructure.EngineTypeToScriptStructure(elementType.Name);
+				return ScriptStructure.EngineTypeToScriptStructure(type.Name);
 			}
 
-			TypeDefinition definition = elementType.Resolve();
-			if (definition.IsEnum)
-			{
-				return null;
-			}
-
-			PrimitiveType primType = ToPrimitiveType(elementType);
+			PrimitiveType primType = ToPrimitiveType(type);
 			if (primType == PrimitiveType.Complex)
 			{
-				if (IsEnginePointer(elementType))
+				if (IsEnginePointer(type))
 				{
-					return new ScriptPointer(elementType);
+					return new ScriptPointer(type);
 				}
 				else
 				{
-					return new MonoStructure(definition);
+					return new MonoStructure(type.Resolve(), arguments);
 				}
 			}
 			else
@@ -199,10 +128,51 @@ namespace UtinyRipper.AssetExporters.Mono
 			}
 		}
 
+		private static TypeReference GetElementType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		{
+			if (type.IsGenericParameter)
+			{
+				GenericParameter parameter = (GenericParameter)type;
+				type = arguments[parameter];
+			}
+
+			if (type.IsArray)
+			{
+				type = type.GetElementType();
+			}
+			else if (IsList(type))
+			{
+				GenericInstanceType generic = (GenericInstanceType)type;
+				type = generic.GenericArguments[0];
+			}
+
+			if (type.IsGenericParameter)
+			{
+				GenericParameter parameter = (GenericParameter)type;
+				type = arguments[parameter];
+			}
+			return type;
+		}
+
 		private static PrimitiveType ToPrimitiveType(TypeReference type)
 		{
+			TypeDefinition definition = type.Resolve();
+			if (definition.IsEnum)
+			{
+				foreach (FieldDefinition field in definition.Fields)
+				{
+					if (field.Name == EnumValueFieldName)
+					{
+						type = field.FieldType;
+						break;
+					}
+				}
+			}
+
 			return ToPrimitiveType(type.Namespace, type.Name);
 		}
+
+		public IReadOnlyDictionary<GenericParameter, TypeDefinition> GenericArguments { get; }
 
 		private const string EnumValueFieldName = "value__";
 	}
