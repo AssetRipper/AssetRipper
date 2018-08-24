@@ -146,10 +146,11 @@ namespace UtinyRipper.BundleFiles
 				case BundleType.UnityWeb:
 				case BundleType.HexFA:
 				{
-					BundleMetadata[] metadatas = new BundleMetadata[Header.ChunkInfos.Count];
-					for(int i = 0; i < Header.ChunkInfos.Count; i++)
+					// read only last chunk. wtf?
+					BundleMetadata[] metadatas = new BundleMetadata[1];
+					for(int i = 0; i < 1; i++)
 					{
-						ChunkInfo chunkInfo = Header.ChunkInfos[i];
+						ChunkInfo chunkInfo = Header.ChunkInfos[Header.ChunkInfos.Count - 1];
 						MemoryStream memStream = new MemoryStream(new byte[chunkInfo.DecompressedSize]);
 						SevenZipHelper.DecompressLZMASizeStream(stream.BaseStream, chunkInfo.CompressedSize, memStream);
 						

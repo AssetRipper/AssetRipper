@@ -62,15 +62,15 @@ namespace UtinyRipper
 				}
 
 				string ext = Path.GetExtension(Name);
-				if (ext == ResourceExtension)
+				switch (ext)
 				{
-					return false;
+					case ResourceExtension:
+					case ResExtension:
+						return false;
+
+					default:
+						return true;
 				}
-				if (ext == ResExtension)
-				{
-					return false;
-				}
-				return true;
 			}
 		}
 
@@ -79,17 +79,22 @@ namespace UtinyRipper
 			get
 			{
 				string ext = Path.GetExtension(Name);
-				if (ext == ManifestExtention)
+				switch(ext)
 				{
-					return true;
-				}
-				if(ext == CawExtention || ext == EcmExtention || ext == SseExtention ||
-					ext == RgbExtention || ext == VisExtention)
-				{
-					return true;
-				}
+					case ManifestExtention:
+					case AssemblyExtension:
+						return true;
 
-				return false;
+					case CawExtention:
+					case EcmExtention:
+					case SseExtention:
+					case RgbExtention:
+					case VisExtention:
+						return true;
+
+					default:
+						return false;
+				}
 			}
 		}
 
@@ -98,6 +103,7 @@ namespace UtinyRipper
 		private const string ManifestExtention = ".manifest";
 		private const string ResourceExtension = ".resource";
 		private const string ResExtension = ".resS";
+		private const string AssemblyExtension = ".dll";
 		// Scene GI extensions
 		private const string CawExtention = ".caw";
 		private const string EcmExtention = ".ecm";
