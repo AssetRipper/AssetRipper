@@ -3,11 +3,11 @@
 	public struct HumanPoseMask : IAssetReadable
 	{
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.2.0 and greater
 		/// </summary>
 		public static bool IsReadSecondWord(Version version)
 		{
-			return version.IsGreaterEqual(5);
+			return version.IsGreaterEqual(5, 2);
 		}
 
 		public void Read(AssetStream stream)

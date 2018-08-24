@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using UtinyRipper.Classes.Meshes;
 using UtinyRipper.Classes.Sprites.Utils;
@@ -10,11 +9,11 @@ namespace UtinyRipper.Classes.Sprites
 	public struct SpriteRenderData : IAssetReadable, IDependent
 	{
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.2.0 and greater
 		/// </summary>
 		public static bool IsReadAlphaTexture(Version version)
 		{
-			return version.IsGreaterEqual(5);
+			return version.IsGreaterEqual(5, 2);
 		}
 		/// <summary>
 		/// Less than 5.6.0

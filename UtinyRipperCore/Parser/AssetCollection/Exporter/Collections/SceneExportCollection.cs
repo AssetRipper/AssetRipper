@@ -64,7 +64,7 @@ namespace UtinyRipper.AssetExporters
 
 		private static bool IsReadMainData(Version version)
 		{
-			return version.IsLess(5);
+			return version.IsLess(5, 3);
 		}
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)

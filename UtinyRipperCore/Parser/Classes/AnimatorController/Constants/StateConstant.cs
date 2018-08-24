@@ -11,11 +11,11 @@ namespace UtinyRipper.Classes.AnimatorControllers
 	public struct StateConstant : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
-		/// Less than 5.0.0
+		/// Less than 5.2.0
 		/// </summary>
 		public static bool IsReadLeafInfo(Version version)
 		{
-			return version.IsLess(5);
+			return version.IsLess(5, 2);
 		}
 		/// <summary>
 		/// 4.3.0 and greater
@@ -32,11 +32,11 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			return version.IsGreaterEqual(5);
 		}
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.1.0 and greater
 		/// </summary>
 		public static bool IsReadSpeedParam(Version version)
 		{
-			return version.IsGreaterEqual(5);
+			return version.IsGreaterEqual(5, 1);
 		}
 		/// <summary>
 		/// 2017.2 and greater

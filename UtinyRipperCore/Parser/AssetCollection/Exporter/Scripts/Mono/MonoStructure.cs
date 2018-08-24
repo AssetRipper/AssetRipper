@@ -13,7 +13,6 @@ namespace UtinyRipper.AssetExporters.Mono
 		internal MonoStructure(TypeDefinition type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
 			base(type.Namespace, type.Name, CreateBase(type, arguments), CreateFields(type, arguments))
 		{
-
 		}
 
 		private MonoStructure(MonoStructure copy) :
@@ -56,18 +55,6 @@ namespace UtinyRipper.AssetExporters.Mono
 			List<IScriptField> fields = new List<IScriptField>();
 			foreach (FieldDefinition field in type.Fields)
 			{
-				if (field.HasConstant)
-				{
-					continue;
-				}
-				if (field.IsStatic)
-				{
-					continue;
-				}
-				if(field.IsInitOnly)
-				{
-					continue;
-				}
 				if (!MonoField.IsSerializable(field, arguments))
 				{
 					continue;

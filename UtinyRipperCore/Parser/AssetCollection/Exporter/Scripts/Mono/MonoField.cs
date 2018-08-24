@@ -17,7 +17,15 @@ namespace UtinyRipper.AssetExporters.Mono
 		
 		public static bool IsSerializable(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
-			if(field.IsStatic)
+			if (field.HasConstant)
+			{
+				return false;
+			}
+			if (field.IsStatic)
+			{
+				return false;
+			}
+			if (field.IsInitOnly)
 			{
 				return false;
 			}
@@ -133,6 +141,11 @@ namespace UtinyRipper.AssetExporters.Mono
 						return false;
 					}
 				}
+			}
+
+			if (MonoType.IsObject(type))
+			{
+				return false;
 			}
 
 			TypeDefinition definition = type.Resolve();

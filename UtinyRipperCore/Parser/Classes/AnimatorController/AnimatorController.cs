@@ -30,20 +30,13 @@ namespace UtinyRipper.Classes
 			return version.IsGreater(5, 0, 0, VersionType.Beta, 1) && version.IsLess(5, 2) || version.IsGreaterEqual(5, 4);
 		}
 
-		/*/// <summary>
-		/// Less than 5.1.0
-		/// </summary>
-		private static bool IsReadAlign(Version version)
-		{
-			return version.IsLess(5, 1);
-		}
 		/// <summary>
 		/// 5.1.0 and greater
 		/// </summary>
 		private static bool IsAlignMultiThreadedStateMachine(Version version)
 		{
 			return version.IsGreaterEqual(5, 1);
-		}*/
+		}
 
 		private static int GetSerializedVersion(Version version)
 		{
@@ -89,11 +82,18 @@ namespace UtinyRipper.Classes
 				m_stateMachineBehaviours = stream.ReadArray<PPtr<MonoBehaviour>>();
 			}
 
+			if (!IsAlignMultiThreadedStateMachine(stream.Version))
+			{
+				stream.AlignStream(AlignType.Align4);
+			}
 			if (IsReadMultiThreadedStateMachine(stream.Version))
 			{
 				MultiThreadedStateMachine = stream.ReadBoolean();
 			}
-			stream.AlignStream(AlignType.Align4);
+			if(IsAlignMultiThreadedStateMachine(stream.Version))
+			{
+				stream.AlignStream(AlignType.Align4);
+			}
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
