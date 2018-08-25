@@ -35,11 +35,11 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(4, 5);
 		}
 		/// <summary>
-		/// 5.1.0 and greater
+		/// 5.1.3 and greater
 		/// </summary>
 		public static bool IsReadTargetEye(Version version)
 		{
-			return version.IsGreaterEqual(5, 1);
+			return version.IsGreaterEqual(5, 1, 3);
 		}
 		/// <summary>
 		/// 3.5.0 and greater
