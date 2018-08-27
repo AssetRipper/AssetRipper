@@ -68,6 +68,7 @@ namespace UtinyRipper.Classes.Textures
 		/// Compressed color texture format.
 		/// </summary>
 		DXT1 = 10,
+		DXT3 = 11,
 		/// <summary>
 		/// Compressed color with alpha channel texture format.
 		/// </summary>
@@ -287,6 +288,7 @@ namespace UtinyRipper.Classes.Textures
 				case TextureFormat.RGB565:
 				case TextureFormat.R16:
 				case TextureFormat.DXT1:
+				case TextureFormat.DXT3:
 				case TextureFormat.DXT5:
 				case TextureFormat.RGBA4444:
 				case TextureFormat.BGRA32:

@@ -201,6 +201,7 @@ namespace UtinyRipper.Classes
 					case TextureFormat.RGB565:
 					case TextureFormat.DXT1:
 					case TextureFormat.DXT1Crunched:
+					case TextureFormat.DXT3:
 					case TextureFormat.DXT5:
 					case TextureFormat.DXT5Crunched:
 						return true;
@@ -339,6 +340,7 @@ namespace UtinyRipper.Classes
 					{
 						case TextureFormat.DXT1:
 						case TextureFormat.DXT1Crunched:
+						case TextureFormat.DXT3:
 						case TextureFormat.DXT5:
 						case TextureFormat.DXT5Crunched:
 							return true;
@@ -369,6 +371,7 @@ namespace UtinyRipper.Classes
 
 					case TextureFormat.DXT1:
 					case TextureFormat.DXT1Crunched:
+					case TextureFormat.DXT3:
 					case TextureFormat.DXT5:
 					case TextureFormat.DXT5Crunched:
 						return DDPFFlags.DDPF_FOURCC;
@@ -389,6 +392,9 @@ namespace UtinyRipper.Classes
 					case TextureFormat.DXT1Crunched:
 						// ASCII - 'DXT1'
 						return 0x31545844;
+					case TextureFormat.DXT3:
+						// ASCII - 'DXT3'
+						return 0x33545844;
 					case TextureFormat.DXT5:
 					case TextureFormat.DXT5Crunched:
 						// ASCII - 'DXT5'
@@ -432,6 +438,7 @@ namespace UtinyRipper.Classes
 
 					case TextureFormat.DXT1:
 					case TextureFormat.DXT1Crunched:
+					case TextureFormat.DXT3:
 					case TextureFormat.DXT5:
 					case TextureFormat.DXT5Crunched:
 						return 0;
@@ -478,6 +485,7 @@ namespace UtinyRipper.Classes
 
 					case TextureFormat.DXT1:
 					case TextureFormat.DXT1Crunched:
+					case TextureFormat.DXT3:
 					case TextureFormat.DXT5:
 					case TextureFormat.DXT5Crunched:
 						return 0;
@@ -524,6 +532,7 @@ namespace UtinyRipper.Classes
 
 					case TextureFormat.DXT1:
 					case TextureFormat.DXT1Crunched:
+					case TextureFormat.DXT3:
 					case TextureFormat.DXT5:
 					case TextureFormat.DXT5Crunched:
 						return 0;
@@ -570,6 +579,7 @@ namespace UtinyRipper.Classes
 
 					case TextureFormat.DXT1:
 					case TextureFormat.DXT1Crunched:
+					case TextureFormat.DXT3:
 					case TextureFormat.DXT5:
 					case TextureFormat.DXT5Crunched:
 						return 0;
@@ -614,6 +624,7 @@ namespace UtinyRipper.Classes
 						return 0;
 					case TextureFormat.DXT1:
 					case TextureFormat.DXT1Crunched:
+					case TextureFormat.DXT3:
 					case TextureFormat.DXT5:
 					case TextureFormat.DXT5Crunched:
 						return 0;

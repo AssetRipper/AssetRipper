@@ -121,6 +121,98 @@ namespace UtinyRipper.Converter.Textures.DDS
 			}
 		}
 
+		public static void DecompressDXT3(Stream destination, Stream source, DDSConvertParameters @params)
+		{
+			int depth = @params.BitMapDepth;
+			int width = @params.Width;
+			int height = @params.Height;
+			int bpp = GetRGBABytesPerPixel(@params);
+			int bpc = GetBytesPerColor(@params);
+			int bps = width * bpp * bpc;
+			long sizeOfPlane = bps * height;
+
+			Color8888[] colors = new Color8888[4];
+			byte[] alphas = new byte[16];
+
+			long position = destination.Position;
+			using (BinaryReader reader = new BinaryReader(source, Encoding.UTF8, true))
+			{
+				for (int z = 0; z < depth; z++)
+				{
+					// mirror Y
+					for (int y = height - 1; y >= 0; y -= 4)
+					{
+						for (int x = 0; x < width; x += 4)
+						{
+							for (int i = 0; i < 4; ++i)
+							{
+								ushort alpha = reader.ReadUInt16();
+								alphas[i * 4 + 0] = (byte)(((alpha >> 0) & 0xF) * 0x11);
+								alphas[i * 4 + 1] = (byte)(((alpha >> 4) & 0xF) * 0x11);
+								alphas[i * 4 + 2] = (byte)(((alpha >> 8) & 0xF) * 0x11);
+								alphas[i * 4 + 3] = (byte)(((alpha >> 12) & 0xF) * 0x11);
+							}
+
+							ushort color0 = reader.ReadUInt16();
+							ushort color1 = reader.ReadUInt16();
+							uint bitMask = reader.ReadUInt32();
+
+							colors[0] = DxtcRead3bColor(color0);
+							colors[1] = DxtcRead3bColor(color1);
+
+							if (color0 > color1)
+							{
+								// Four-color block: derive the other two colors.
+								// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
+								// These 2-bit codes correspond to the 2-bit fields
+								// stored in the 64-bit block.
+								colors[2].Blue = unchecked((byte)((2 * colors[0].Blue + colors[1].Blue + 1) / 3));
+								colors[2].Green = unchecked((byte)((2 * colors[0].Green + colors[1].Green + 1) / 3));
+								colors[2].Red = unchecked((byte)((2 * colors[0].Red + colors[1].Red + 1) / 3));
+							}
+							else
+							{
+								// Three-color block: derive the other color.
+								// 00 = color_0,  01 = color_1,  10 = color_2,
+								// 11 = transparent.
+								// These 2-bit codes correspond to the 2-bit fields 
+								// stored in the 64-bit block.
+								colors[2].Blue = unchecked((byte)((colors[0].Blue + colors[1].Blue) / 2));
+								colors[2].Green = unchecked((byte)((colors[0].Green + colors[1].Green) / 2));
+								colors[2].Red = unchecked((byte)((colors[0].Red + colors[1].Red) / 2));
+							}
+
+							colors[3].Blue = unchecked((byte)((colors[0].Blue + 2 * colors[1].Blue + 1) / 3));
+							colors[3].Green = unchecked((byte)((colors[0].Green + 2 * colors[1].Green + 1) / 3));
+							colors[3].Red = unchecked((byte)((colors[0].Red + 2 * colors[1].Red + 1) / 3));
+
+							int bitIndex = 0;
+							for (int ly = 0; ly < 4; ly++)
+							{
+								for (int lx = 0; lx < 4; lx++, bitIndex++)
+								{
+									int colorIndex = unchecked((int)((bitMask & (3 << bitIndex * 2)) >> bitIndex * 2));
+									Color8888 color = colors[colorIndex];
+									color.Alpha = alphas[bitIndex];
+									if ((x + lx) < width && (y - ly) < height && (y - ly) >= 0)
+									{
+										// mirror Y
+										long offset = z * sizeOfPlane + (y - ly) * bps + (x + lx) * bpp;
+										destination.Position = position + offset;
+
+										destination.WriteByte(color.Red);
+										destination.WriteByte(color.Green);
+										destination.WriteByte(color.Blue);
+										destination.WriteByte(color.Alpha);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
 		public static void DecompressDXT5(Stream destination, Stream source, DDSConvertParameters @params)
 		{
 			int depth = @params.BitMapDepth;

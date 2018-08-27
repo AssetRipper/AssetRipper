@@ -119,19 +119,19 @@ namespace UtinyRipper.SerializedFiles
 						string version = versions[i];
 						Logger.Log(LogType.Debug, LogCategory.Import, $"Try parse {Name} as {version} version");
 						Version.Parse(version);
-						//try
+						try
 						{
 							ReadAssets(stream, startPosition);
 							break;
 						}
-						/*catch
+						catch
 						{
 							Logger.Log(LogType.Debug, LogCategory.Import, "Faild");
 							if (i == versions.Length - 1)
 							{
 								throw;
 							}
-						}*/
+						}
 					}
 				}
 			}
