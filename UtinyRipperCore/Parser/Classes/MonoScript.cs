@@ -94,11 +94,11 @@ namespace UtinyRipper.Classes
 		{
 			if (IsReadNamespace(File.Version))
 			{
-				return File.Collection.AssemblyManager.IsPresent(AssemblyName, Namespace, ClassName);
+				return File.AssemblyManager.IsPresent(AssemblyName, Namespace, ClassName);
 			}
 			else
 			{
-				return File.Collection.AssemblyManager.IsPresent(AssemblyName, ClassName);
+				return File.AssemblyManager.IsPresent(AssemblyName, ClassName);
 			}
 		}
 
@@ -106,16 +106,16 @@ namespace UtinyRipper.Classes
 		{
 			if(IsReadNamespace(File.Version))
 			{
-				if (File.Collection.AssemblyManager.IsValid(AssemblyName, Namespace, Name))
+				if (File.AssemblyManager.IsValid(AssemblyName, Namespace, Name))
 				{
-					return File.Collection.AssemblyManager.CreateStructure(AssemblyName, Namespace, Name);
+					return File.AssemblyManager.CreateStructure(AssemblyName, Namespace, Name);
 				}
 			}
 			else
 			{
-				if (File.Collection.AssemblyManager.IsValid(AssemblyName, Name))
+				if (File.AssemblyManager.IsValid(AssemblyName, Name))
 				{
-					return File.Collection.AssemblyManager.CreateStructure(AssemblyName, Name);
+					return File.AssemblyManager.CreateStructure(AssemblyName, Name);
 				}
 			}
 			return null;
@@ -125,18 +125,18 @@ namespace UtinyRipper.Classes
 		{
 			if(IsReadNamespace(File.Version))
 			{
-				return File.Collection.AssemblyManager.CreateExportType(exportManager, AssemblyName, Namespace, ClassName);
+				return File.AssemblyManager.CreateExportType(exportManager, AssemblyName, Namespace, ClassName);
 			}
 			else
 			{
-				return File.Collection.AssemblyManager.CreateExportType(exportManager, AssemblyName, ClassName);
+				return File.AssemblyManager.CreateExportType(exportManager, AssemblyName, ClassName);
 			}
 		}
 
 		public ScriptInfo GetScriptInfo()
 		{
 
-			return File.Collection.AssemblyManager.GetScriptInfo(AssemblyName, Name);
+			return File.AssemblyManager.GetScriptInfo(AssemblyName, Name);
 		}
 
 		public override void Read(AssetStream stream)
@@ -174,7 +174,8 @@ namespace UtinyRipper.Classes
 			{
 				Namespace = stream.ReadStringAligned();
 			}
-			AssemblyName = stream.ReadStringAligned();
+			AssemblyNameOrigin = stream.ReadStringAligned();
+			AssemblyName = FilenameUtils.FixAssemblyName(AssemblyNameOrigin);
 			if (IsReadIsEditorScript(stream.Version))
 			{
 				IsEditorScript = stream.ReadBoolean();
@@ -210,7 +211,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_ExecutionOrder", ExecutionOrder);
 			node.Add("m_ClassName", ClassName);
 			node.Add("m_Namespace", IsReadNamespace(container.Version) ? Namespace : string.Empty);
-			node.Add("m_AssemblyName", AssemblyName);
+			node.Add("m_AssemblyName", AssemblyNameOrigin);
 			node.Add("m_IsEditorScript", IsEditorScript);
 			return node;
 		}
@@ -229,6 +230,7 @@ namespace UtinyRipper.Classes
 		/// AssemblyIdentifier previously
 		/// </summary>
 		public string AssemblyName { get; private set; }
+		public string AssemblyNameOrigin { get; private set; }
 		public bool IsEditorScript { get; private set; }
 
 		public PPtr<Object> Icon;

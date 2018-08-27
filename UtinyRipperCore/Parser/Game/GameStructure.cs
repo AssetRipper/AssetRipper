@@ -6,78 +6,32 @@ using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper
 {
-	public sealed class GameStructure : IGameStructure
+	public sealed class GameStructure
 	{
-		public GameStructure()
+		private GameStructure()
 		{
 			FileCollection = new FileCollection(OnRequestDependency, OnRequestAssembly);
-			m_mixedStructure = new MixedGameStructure(FileCollection);
 		}
 
-		public void Load(IEnumerable<string> pathes)
+		public static GameStructure Load(IEnumerable<string> pathes)
 		{
 			List<string> toProcess = new List<string>();
 			toProcess.AddRange(pathes);
-			if(CheckPC(toProcess)) { }
-			else if(CheckAndroid(toProcess)) { }
-			CheckMixed(toProcess);
+			if (toProcess.Count == 0)
+			{
+				throw new ArgumentException("No pathes found", nameof(pathes));
+			}
 
-			if(PlatformStructure != null)
-			{
-				foreach (string filePath in PlatformStructure.FetchFiles())
-				{
-					string fileName = FileMultiStream.GetFileName(filePath);
-					if (m_knownFiles.Add(fileName))
-					{
-						FileCollection.Load(filePath);
-					}
-				}
-			}
-			foreach (string filePath in MixedStructure.FetchFiles())
-			{
-				string fileName = FileMultiStream.GetFileName(filePath);
-				if (m_knownFiles.Add(fileName))
-				{
-					FileCollection.Load(filePath);
-				}
-			}
+			GameStructure structure = new GameStructure();
+			structure.Load(toProcess);
+			return structure;
 		}
 
-		public void Export(string exportPath, Func<Object, bool> selector)
+		public void Export(string exportPath, Func<Object, bool> filter)
 		{
-			FileCollection.Exporter.Export(exportPath, FileCollection, FileCollection.FetchAssets().Where(t => selector(t)));
+			FileCollection.Exporter.Export(exportPath, FileCollection, FileCollection.FetchAssets().Where(t => filter(t)));
 		}
 		
-		public IEnumerable<string> FetchFiles()
-		{
-			if(PlatformStructure != null)
-			{
-				foreach (string assemblyPath in PlatformStructure.FetchFiles())
-				{
-					yield return assemblyPath;
-				}
-			}
-			foreach (string assemblyPath in MixedStructure.FetchFiles())
-			{
-				yield return assemblyPath;
-			}
-		}
-
-		public IEnumerable<string> FetchAssemblies()
-		{
-			if (PlatformStructure != null)
-			{
-				foreach (string assemblyPath in PlatformStructure.FetchAssemblies())
-				{
-					yield return assemblyPath;
-				}
-			}
-			foreach (string assemblyPath in MixedStructure.FetchAssemblies())
-			{
-				yield return assemblyPath;
-			}
-		}
-
 		public bool RequestDependency(string dependency)
 		{
 			if (m_knownFiles.Add(dependency))
@@ -86,14 +40,15 @@ namespace UtinyRipper
 				{
 					if (PlatformStructure.RequestDependency(dependency))
 					{
-						Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Dependency '{dependency}' has been loaded");
 						return true;
 					}
 				}
-				if (MixedStructure.RequestDependency(dependency))
+				if (MixedStructure != null)
 				{
-					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Dependency '{dependency}' has been loaded");
-					return true;
+					if (MixedStructure.RequestDependency(dependency))
+					{
+						return true;
+					}
 				}
 
 				Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Dependency '{dependency}' hasn't been found");
@@ -107,28 +62,51 @@ namespace UtinyRipper
 
 		public bool RequestAssembly(string assembly)
 		{
-			if (m_knownAssemblies.Add(assembly))
+			string fixedAssembly = FilenameUtils.FixAssemblyName(assembly);
+			if (PlatformStructure != null)
 			{
-				if (PlatformStructure != null)
+				if (PlatformStructure.RequestAssembly(assembly))
 				{
-					if (PlatformStructure.RequestAssembly(assembly))
-					{
-						Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
-						return true;
-					}
-				}
-				if (MixedStructure.RequestAssembly(assembly))
-				{
-					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
 					return true;
 				}
-
-				Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
-				return false;
 			}
-			else
+			if (MixedStructure != null)
 			{
-				return true;
+				if (MixedStructure.RequestAssembly(assembly))
+				{
+					return true;
+				}
+			}
+
+			Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
+			return false;
+		}
+
+		private void Load(List<string> pathes)
+		{
+			if (CheckPC(pathes)) { }
+			else if (CheckAndroid(pathes)) { }
+			CheckMixed(pathes);
+
+			if (PlatformStructure != null)
+			{
+				foreach (KeyValuePair<string, string> file in PlatformStructure.Files)
+				{
+					if (m_knownFiles.Add(file.Key))
+					{
+						FileCollection.Load(file.Value);
+					}
+				}
+			}
+			if (MixedStructure != null)
+			{
+				foreach (KeyValuePair<string, string> file in MixedStructure.Files)
+				{
+					if (m_knownFiles.Add(file.Key))
+					{
+						FileCollection.Load(file.Value);
+					}
+				}
 			}
 		}
 
@@ -211,7 +189,7 @@ namespace UtinyRipper
 		{
 			if(pathes.Count > 0)
 			{
-				m_mixedStructure.AddFiles(pathes);
+				MixedStructure = new MixedGameStructure(FileCollection, pathes);
 				pathes.Clear();
 			}
 		}
@@ -228,7 +206,7 @@ namespace UtinyRipper
 
 		public FileCollection FileCollection { get; }
 		public PlatformGameStructure PlatformStructure { get; private set; }
-		public IGameStructure MixedStructure => m_mixedStructure;
+		public PlatformGameStructure MixedStructure { get; private set; }
 
 		public string Name
 		{
@@ -246,8 +224,5 @@ namespace UtinyRipper
 		}
 
 		private readonly HashSet<string> m_knownFiles = new HashSet<string>();
-		private readonly HashSet<string> m_knownAssemblies = new HashSet<string>();
-
-		private readonly MixedGameStructure m_mixedStructure;
 	}
 }

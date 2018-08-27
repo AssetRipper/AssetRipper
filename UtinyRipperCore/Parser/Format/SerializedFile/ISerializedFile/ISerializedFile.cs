@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes;
 
 namespace UtinyRipper.SerializedFiles
@@ -45,6 +46,7 @@ namespace UtinyRipper.SerializedFiles
 		bool IsScene { get; }
 
 		IFileCollection Collection { get; }
+		IAssemblyManager AssemblyManager { get; }
 		IReadOnlyList<FileIdentifier> Dependencies { get; }
 	}
 }

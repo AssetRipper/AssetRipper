@@ -39,6 +39,11 @@ namespace UtinyRipper
 			}
 		}
 
+		public override string ToString()
+		{
+			return Name == null ? base.ToString() : Name;
+		}
+
 		/// <summary>
 		/// Container's file path (asset bundle or resources file itself)
 		/// </summary>

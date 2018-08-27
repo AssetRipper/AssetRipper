@@ -49,6 +49,15 @@ namespace UtinyRipper.Classes
 			FixedHeight = copy.FixedHeight;
 			StretchWidth = copy.StretchWidth;
 			StretchHeight = copy.StretchHeight;
+			ClipOffset = copy.ClipOffset;
+		}
+
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool IsBuiltIn(Version version)
+		{
+			return version.IsGreaterEqual(4);
 		}
 
 		public IScriptStructure CreateCopy()
@@ -68,25 +77,54 @@ namespace UtinyRipper.Classes
 			OnActive.Read(stream);
 			OnFocused.Read(stream);
 			Border.Read(stream);
-			Margin.Read(stream);
-			Padding.Read(stream);
+			if(IsBuiltIn(stream.Version))
+			{
+				Margin.Read(stream);
+				Padding.Read(stream);
+			}
+			else
+			{
+				Padding.Read(stream);
+				Margin.Read(stream);
+			}
 			Overflow.Read(stream);
 			Font.Read(stream);
-			FontSize = stream.ReadInt32();
-			FontStyle = stream.ReadInt32();
-			Alignment = stream.ReadInt32();
-			WordWrap = stream.ReadBoolean();
-			RichText = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
 
-			TextClipping = stream.ReadInt32();
-			ImagePosition = stream.ReadInt32();
-			ContentOffset.Read(stream);
-			FixedWidth = stream.ReadSingle();
-			FixedHeight = stream.ReadSingle();
-			StretchWidth = stream.ReadBoolean();
-			StretchHeight = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			if(IsBuiltIn(stream.Version))
+			{
+				FontSize = stream.ReadInt32();
+				FontStyle = stream.ReadInt32();
+				Alignment = (TextAnchor)stream.ReadInt32();
+				WordWrap = stream.ReadBoolean();
+				RichText = stream.ReadBoolean();
+				stream.AlignStream(AlignType.Align4);
+
+				TextClipping = (TextClipping)stream.ReadInt32();
+				ImagePosition = (ImagePosition)stream.ReadInt32();
+				ContentOffset.Read(stream);
+				FixedWidth = stream.ReadSingle();
+				FixedHeight = stream.ReadSingle();
+				StretchWidth = stream.ReadBoolean();
+				StretchHeight = stream.ReadBoolean();
+				stream.AlignStream(AlignType.Align4);
+			}
+			else
+			{
+				ImagePosition = (ImagePosition)stream.ReadInt32();
+				Alignment = (TextAnchor)stream.ReadInt32();
+				WordWrap = stream.ReadBoolean();
+				stream.AlignStream(AlignType.Align4);
+
+				TextClipping = (TextClipping)stream.ReadInt32();
+				ContentOffset.Read(stream);
+				ClipOffset.Read(stream);
+				FixedWidth = stream.ReadSingle();
+				FixedHeight = stream.ReadSingle();
+				StretchWidth = stream.ReadBoolean();
+				stream.AlignStream(AlignType.Align4);
+				StretchHeight = stream.ReadBoolean();
+				stream.AlignStream(AlignType.Align4);
+			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -108,11 +146,11 @@ namespace UtinyRipper.Classes
 			node.Add("m_Font", Font.ExportYAML(container));
 			node.Add("m_FontSize", FontSize);
 			node.Add("m_FontStyle", FontStyle);
-			node.Add("m_Alignment", Alignment);
+			node.Add("m_Alignment", (int)Alignment);
 			node.Add("m_WordWrap", WordWrap);
 			node.Add("m_RichText", RichText);
-			node.Add("m_TextClipping", TextClipping);
-			node.Add("m_ImagePosition", ImagePosition);
+			node.Add("m_TextClipping", (int)TextClipping);
+			node.Add("m_ImagePosition", (int)ImagePosition);
 			node.Add("m_ContentOffset", ContentOffset.ExportYAML(container));
 			node.Add("m_FixedWidth", FixedWidth);
 			node.Add("m_FixedHeight", FixedHeight);
@@ -136,11 +174,11 @@ namespace UtinyRipper.Classes
 		public string StyleName { get; private set; }
 		public int FontSize { get; private set; }
 		public int FontStyle { get; private set; }
-		public int Alignment { get; private set; }
+		public TextAnchor Alignment { get; private set; }
 		public bool WordWrap { get; private set; }
 		public bool RichText { get; private set; }
-		public int TextClipping { get; private set; }
-		public int ImagePosition { get; private set; }
+		public TextClipping TextClipping { get; private set; }
+		public ImagePosition ImagePosition { get; private set; }
 		public float FixedWidth { get; private set; }
 		public float FixedHeight { get; private set; }
 		public bool StretchWidth { get; private set; }
@@ -160,5 +198,6 @@ namespace UtinyRipper.Classes
 		public RectOffset Overflow;
 		public PPtr<Font> Font;
 		public Vector2f ContentOffset;
+		public Vector2f ClipOffset;
 	}
 }

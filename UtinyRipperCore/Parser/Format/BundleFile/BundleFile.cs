@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.BundleFiles
 {
@@ -17,6 +16,10 @@ namespace UtinyRipper.BundleFiles
 			if(string.IsNullOrEmpty(filePath))
 			{
 				throw new ArgumentNullException(nameof(filePath));
+			}
+			if (requestDependencyCallback == null)
+			{
+				throw new ArgumentNullException(nameof(requestDependencyCallback));
 			}
 
 			m_fileCollection = fileCollection;
@@ -79,21 +82,12 @@ namespace UtinyRipper.BundleFiles
 
 		public void Dispose()
 		{
-			if(m_isDisposable)
-			{
-				foreach(BundleMetadata metadata in Metadatas)
-				{
-					metadata.Dispose();
-				}
-				m_isDisposable = false;
-			}
+			Metadata.Dispose();
 		}
 
 		private void Read(Stream baseStream, bool isClosable)
 		{
-			m_files.Clear();
-			m_resources.Clear();
-
+			m_loadedFiles.Clear();
 			using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
 			{
 				long position = stream.BaseStream.Position;
@@ -107,20 +101,15 @@ namespace UtinyRipper.BundleFiles
 					Read530Metadata(stream, isClosable, position);
 				}
 
-				foreach (BundleMetadata metadata in Metadatas)
+				foreach (BundleFileEntry entry in Metadata.ResourceEntries)
 				{
-					foreach (BundleFileEntry entry in metadata.AssetsEntries)
+					entry.ReadResourcesFile(m_fileCollection);
+				}
+				foreach (BundleFileEntry entry in Metadata.AssetsEntries)
+				{
+					if (m_loadedFiles.Add(entry.Name))
 					{
-						if (!IsSerializedFileLoaded(entry.Name))
-						{
-							SerializedFile file = entry.ReadSerializedFile(m_fileCollection, OnRequestDependency);
-							m_files.Add(file);
-						}
-					}
-					foreach (BundleFileEntry entry in metadata.ResourceEntries)
-					{
-						ResourcesFile resesFile = entry.ReadResourcesFile(m_filePath);
-						m_resources.Add(resesFile);
+						entry.ReadFile(m_fileCollection, OnRequestDependency);
 					}
 				}
 			}
@@ -136,10 +125,9 @@ namespace UtinyRipper.BundleFiles
 					{
 						throw new NotSupportedException($"Raw data with several chunks {Header.ChunkInfos.Count} isn't supported");
 					}
-					
-					BundleMetadata metadata = new BundleMetadata(stream.BaseStream, m_filePath, isClosable);
-					metadata.ReadPre530(stream);
-					Metadatas = new BundleMetadata[] { metadata };
+
+					Metadata = new BundleMetadata(stream.BaseStream, m_filePath, isClosable);
+					Metadata.ReadPre530(stream);
 				}
 				break;
 
@@ -147,21 +135,16 @@ namespace UtinyRipper.BundleFiles
 				case BundleType.HexFA:
 				{
 					// read only last chunk. wtf?
-					BundleMetadata[] metadatas = new BundleMetadata[1];
-					for(int i = 0; i < 1; i++)
+					ChunkInfo chunkInfo = Header.ChunkInfos[Header.ChunkInfos.Count - 1];
+					MemoryStream memStream = new MemoryStream(new byte[chunkInfo.DecompressedSize]);
+					SevenZipHelper.DecompressLZMASizeStream(stream.BaseStream, chunkInfo.CompressedSize, memStream);
+
+					Metadata = new BundleMetadata(memStream, m_filePath, true);
+					using (EndianStream decompressStream = new EndianStream(memStream, EndianType.BigEndian))
 					{
-						ChunkInfo chunkInfo = Header.ChunkInfos[Header.ChunkInfos.Count - 1];
-						MemoryStream memStream = new MemoryStream(new byte[chunkInfo.DecompressedSize]);
-						SevenZipHelper.DecompressLZMASizeStream(stream.BaseStream, chunkInfo.CompressedSize, memStream);
-						
-						BundleMetadata metadata = new BundleMetadata(memStream, m_filePath, true);
-						using (EndianStream decompressStream = new EndianStream(memStream, EndianType.BigEndian))
-						{
-							metadata.ReadPre530(decompressStream);
-						}
-						metadatas[i] = metadata;
+						Metadata.ReadPre530(decompressStream);
 					}
-					Metadatas = metadatas;
+
 					if (isClosable)
 					{
 						stream.Dispose();
@@ -278,7 +261,7 @@ namespace UtinyRipper.BundleFiles
 			// Special case. If bundle has no compressed blocks then pass it as is
 			if(blockInfos.All(t => t.Flags.GetCompression() == BundleCompressType.None))
 			{
-				Metadatas = new BundleMetadata[] { metadata };
+				Metadata = metadata;
 				return;
 			}
 
@@ -340,59 +323,35 @@ namespace UtinyRipper.BundleFiles
 				BundleFileEntry streamEntry = new BundleFileEntry(bufferStream, m_filePath, name, offset, size, true);
 				entries[i] = streamEntry;
 			}
-			BundleMetadata streamMetadata = new BundleMetadata(bufferStream, m_filePath, false, entries);
-			Metadatas = new BundleMetadata[] { streamMetadata };
-		}
-
-		private bool IsSerializedFileLoaded(string name)
-		{
-			return SerializedFiles.Any(t => t.Name == name);
+			Metadata = new BundleMetadata(bufferStream, m_filePath, false, entries);
 		}
 
 		private void OnRequestDependency(string dependency)
 		{
-			if (IsSerializedFileLoaded(dependency))
+			if (FilenameUtils.ContainsDependency(m_loadedFiles, dependency))
 			{
 				return;
 			}
-
-			foreach (BundleMetadata metadata in Metadatas)
+			foreach (BundleFileEntry entry in Metadata.AssetsEntries)
 			{
-				foreach (BundleFileEntry entry in metadata.AssetsEntries)
+				if (FilenameUtils.IsDependency(entry.Name, dependency))
 				{
-					if(entry.Name == dependency)
-					{
-						SerializedFile file = entry.ReadSerializedFile(m_fileCollection, OnRequestDependency);
-						m_files.Add(file);
-						return;
-					}
+					entry.ReadFile(m_fileCollection, OnRequestDependency);
+					m_loadedFiles.Add(entry.Name);
+					return;
 				}
 			}
 
-			m_requestDependencyCallback?.Invoke(dependency);
+			m_requestDependencyCallback.Invoke(dependency);
 		}
 
 		public BundleHeader Header { get; } = new BundleHeader();
-		public IReadOnlyList<BundleMetadata> Metadatas
-		{
-			get => m_metadatas;
-			private set
-			{
-				m_metadatas = value;
-				m_isDisposable = m_metadatas != null;
-			}
-		}
-		public IReadOnlyList<SerializedFile> SerializedFiles => m_files;
-		public IReadOnlyList<ResourcesFile> ResourceFiles => m_resources;
+		public BundleMetadata Metadata { get; private set; }
 
-		private readonly List<SerializedFile> m_files = new List<SerializedFile>();
-		private readonly List<ResourcesFile> m_resources = new List<ResourcesFile>();
+		private readonly HashSet<string> m_loadedFiles = new HashSet<string>();
 
 		private readonly FileCollection m_fileCollection;
 		private readonly string m_filePath;
 		private readonly Action<string> m_requestDependencyCallback;
-
-		private bool m_isDisposable = false;
-		private IReadOnlyList<BundleMetadata> m_metadatas;
 	}
 }

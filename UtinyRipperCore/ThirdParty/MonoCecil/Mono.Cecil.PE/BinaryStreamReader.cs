@@ -15,18 +15,21 @@ namespace Mono.Cecil.PE {
 
 	class BinaryStreamReader : BinaryReader {
 
+		public int BasePosition { get; }
+
 		public int Position {
-			get { return (int) BaseStream.Position; }
-			set { BaseStream.Position = value; }
+			get { return (int) BaseStream.Position - BasePosition; }
+			set { BaseStream.Position = BasePosition + value; }
 		}
 
 		public int Length {
-			get { return (int) BaseStream.Length; }
+			get { return (int) BaseStream.Length - BasePosition; }
 		}
 
 		public BinaryStreamReader (Stream stream)
 			: base (stream)
 		{
+			BasePosition = Position;
 		}
 
 		public void Advance (int bytes)
@@ -36,14 +39,15 @@ namespace Mono.Cecil.PE {
 
 		public void MoveTo (uint position)
 		{
-			BaseStream.Seek (position, SeekOrigin.Begin);
+			BaseStream.Seek (BasePosition + position, SeekOrigin.Begin);
 		}
 
 		public void Align (int align)
 		{
+			int shift = BasePosition % align;
 			align--;
-			var position = Position;
-			Advance (((position + align) & ~align) - position);
+			var position = (int)BaseStream.Position - shift;
+			Advance (((position + align) & ~align) - position + shift);
 		}
 
 		public DataDirectory ReadDataDirectory ()

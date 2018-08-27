@@ -40,9 +40,8 @@ namespace UtinyRipper
 		{
 			if (IsMultiFile(path))
 			{
-				string dirPath = Path.GetDirectoryName(path) ?? string.Empty;
-				string fileName = Path.GetFileNameWithoutExtension(path) ?? string.Empty;
-				return Exists(dirPath, fileName);
+				SplitPathWithoutExtension(path, out string directory, out string file);
+				return Exists(directory, file);
 			}
 			if (FileUtils.Exists(path))
 			{
@@ -50,9 +49,8 @@ namespace UtinyRipper
 			}
 
 			{
-				string dirPath = Path.GetDirectoryName(path) ?? string.Empty;
-				string fileName = Path.GetFileName(path) ?? string.Empty;
-				return Exists(dirPath, fileName);
+				SplitPath(path, out string directory, out string file);
+				return Exists(directory, file);
 			}
 		}
 
@@ -60,9 +58,8 @@ namespace UtinyRipper
 		{
 			if (IsMultiFile(path))
 			{
-				string dirPath = Path.GetDirectoryName(path) ?? string.Empty;
-				string fileName = Path.GetFileNameWithoutExtension(path) ?? string.Empty;
-				return OpenRead(dirPath, fileName);
+				SplitPathWithoutExtension(path, out string directory, out string file);
+				return OpenRead(directory, file);
 			}
 			if (FileUtils.Exists(path))
 			{
@@ -70,9 +67,8 @@ namespace UtinyRipper
 			}
 
 			{
-				string dirPath = Path.GetDirectoryName(path) ?? string.Empty;
-				string fileName = Path.GetFileName(path) ?? string.Empty;
-				return OpenRead(dirPath, fileName);
+				SplitPath(path, out string directory, out string file);
+				return OpenRead(directory, file);
 			}
 		}
 
@@ -80,9 +76,8 @@ namespace UtinyRipper
 		{
 			if (IsMultiFile(path))
 			{
-				string dirPath = Path.GetDirectoryName(path) ?? string.Empty;
-				string fileName = Path.GetFileNameWithoutExtension(path) ?? string.Empty;
-				return Path.Combine(dirPath, fileName);
+				SplitPathWithoutExtension(path, out string directory, out string file);
+				return Path.Combine(directory, file);
 			}
 			return path;
 		}
@@ -100,9 +95,8 @@ namespace UtinyRipper
 		{
 			if (IsMultiFile(path))
 			{
-				string dirPath = Path.GetDirectoryName(path) ?? string.Empty;
-				string fileName = Path.GetFileNameWithoutExtension(path) ?? string.Empty;
-				return GetFiles(dirPath, fileName);
+				SplitPathWithoutExtension(path, out string directory, out string file);
+				return GetFiles(directory, file);
 			}
 			
 			if (FileUtils.Exists(path))
@@ -192,6 +186,28 @@ namespace UtinyRipper
 			}
 		}
 		
+		private static void SplitPath(string path, out string directory, out string file)
+		{
+			directory = Path.GetDirectoryName(path);
+			directory = string.IsNullOrEmpty(directory) ? "." : directory;
+			file = Path.GetFileName(path);
+			if (string.IsNullOrEmpty(file))
+			{
+				throw new Exception($"Can't determine file name for {path}");
+			}
+		}
+
+		private static void SplitPathWithoutExtension(string path, out string directory, out string file)
+		{
+			directory = Path.GetDirectoryName(path);
+			directory = string.IsNullOrEmpty(directory) ? "." : directory;
+			file = Path.GetFileNameWithoutExtension(path);
+			if (string.IsNullOrEmpty(file))
+			{
+				throw new Exception($"Can't determine file name for {path}");
+			}
+		}
+
 		public override void Flush()
 		{
 			if (m_currentStream != null)
@@ -365,7 +381,7 @@ namespace UtinyRipper
 		public override bool CanWrite => m_streams.All(t => t.CanWrite);
 		public override bool CanSeek => true;
 		
-		private static readonly Regex s_splitCheck = new Regex($@".*{MultifileRegex}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+		private static readonly Regex s_splitCheck = new Regex($@".+{MultifileRegex}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 		private static readonly SplitNameComparer s_splitNameComparer = new SplitNameComparer();
 
 		public const string MultifileRegex = @"\.split[0-9]+";

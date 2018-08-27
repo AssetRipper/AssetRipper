@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UtinyRipper.AssetExporters;
+using UtinyRipper.AssetExporters.Mono;
 
 namespace UtinyRipper
 {
-	public abstract class PlatformGameStructure : IGameStructure
+	public abstract class PlatformGameStructure
 	{
 		public PlatformGameStructure(FileCollection collection)
 		{
@@ -18,7 +19,7 @@ namespace UtinyRipper
 			m_fileCollection = collection;
 		}
 
-		protected static string GetPresentFileName(string rootPath, string fileName)
+		/*protected static string GetPresentFileName(string rootPath, string fileName)
 		{
 			if (RunetimeUtils.IsRunningOnMono)
 			{
@@ -56,100 +57,43 @@ namespace UtinyRipper
 				}
 			}
 			return directoryName;
-		}
-
-		private static bool IsDefaultResource(string fileName)
+		}*/
+		
+		public bool RequestDependency(string dependency)
 		{
-			return fileName == DefaultResourceName1 || fileName == DefaultResourceName2;
-		}
-
-		private static bool IsBuiltinExtra(string fileName)
-		{
-			return fileName == BuiltinExtraName1 || fileName == BuiltinExtraName2;
-		}
-
-		public virtual IEnumerable<string> FetchFiles()
-		{
-			string filePath = Path.Combine(MainDataPath, MainDataName);
-			if (FileMultiStream.Exists(filePath))
+			if(Files.TryGetValue(dependency, out string dependencyPath))
 			{
-				yield return filePath;
+				LoadDependency(dependency, dependencyPath);
+				return true;
 			}
 
-			filePath = Path.Combine(MainDataPath, GlobalGameManagerName);
-			if (FileMultiStream.Exists(filePath))
-			{
-				yield return filePath;
-			}
-
-			foreach(string dataPath in DataPathes)
-			{
-				DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(dataPath));
-				foreach (FileInfo levelFile in dataDirectory.EnumerateFiles())
-				{
-					if (m_levelName.IsMatch(levelFile.Name))
-					{
-						yield return levelFile.FullName;
-					}
-				}
-
-				string streamingPath = Path.Combine(dataPath, StreamingName);
-				DirectoryInfo streamingDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(streamingPath));
-				if (streamingDirectory.Exists)
-				{
-					foreach (string path in FetchAssetBundles(streamingDirectory))
-					{
-						yield return path;
-					}
-				}
-			}
-		}
-
-		public virtual IEnumerable<string> FetchAssemblies()
-		{
-			DirectoryInfo managedDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(ManagedPath));
-			foreach (FileInfo assemblyFile in managedDirectory.EnumerateFiles())
-			{
-				if (AssemblyManager.IsAssembly(assemblyFile.Name))
-				{
-					yield return assemblyFile.FullName;
-				}
-			}
-		}
-
-		public virtual bool RequestDependency(string dependency)
-		{
 			foreach (string dataPath in DataPathes)
 			{
 				string filePath = Path.Combine(dataPath, dependency);
 				if (FileMultiStream.Exists(filePath))
 				{
-					m_fileCollection.Load(filePath);
+					LoadDependency(dependency, filePath);
 					return true;
 				}
 
-				if (dependency.StartsWith(LibraryFolder, StringComparison.Ordinal))
+				if (FilenameUtils.IsDefaultResource(dependency))
 				{
-					dependency = dependency.Substring(LibraryFolder.Length + 1);
-				}
-				if (IsDefaultResource(dependency))
-				{
-					if (LoadEngineDependency(dataPath, DefaultResourceName1, dependency))
+					if (LoadEngineDependency(dataPath, FilenameUtils.DefaultResourceName1))
 					{
 						return true;
 					}
-					if (LoadEngineDependency(dataPath, DefaultResourceName2, dependency))
+					if (LoadEngineDependency(dataPath, FilenameUtils.DefaultResourceName2))
 					{
 						return true;
 					}
 				}
-				else if (IsBuiltinExtra(dependency))
+				else if (FilenameUtils.IsBuiltinExtra(dependency))
 				{
-					if (LoadEngineDependency(dataPath, BuiltinExtraName1, dependency))
+					if (LoadEngineDependency(dataPath, FilenameUtils.BuiltinExtraName1))
 					{
 						return true;
 					}
-					if (LoadEngineDependency(dataPath, BuiltinExtraName2, dependency))
+					if (LoadEngineDependency(dataPath, FilenameUtils.BuiltinExtraName2))
 					{
 						return true;
 					}
@@ -158,52 +102,130 @@ namespace UtinyRipper
 			return false;
 		}
 
-		public virtual bool RequestAssembly(string assembly)
+		public bool RequestAssembly(string assembly)
 		{
-			foreach(string assemblyPath in FetchAssemblies())
+			string assemblyName = $"{assembly}{MonoManager.AssemblyExtension}";
+			if(Assemblies.TryGetValue(assemblyName, out string assemblyPath))
 			{
-				string fileName = Path.GetFileName(assemblyPath);
-				if (fileName == assembly)
-				{
-					m_fileCollection.LoadAssembly(assemblyPath);
-					return true;
-				}
+				m_fileCollection.LoadAssembly(assemblyPath);
+				Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
+				return true;
+			}
+			return false;
+		}
 
-				fileName = Path.GetFileNameWithoutExtension(fileName);
-				if (fileName == assembly)
+		protected void SetScriptingBackend()
+		{
+			if(Assemblies.Count == 0)
+			{
+				return;
+			}
+
+			string assemblyPath = Assemblies.First().Value;
+			if(MonoManager.IsMonoAssembly(assemblyPath))
+			{
+				m_fileCollection.AssemblyManager.ScriptingBackEnd = ScriptingBackEnd.Mono;
+			}
+			else
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		protected void CollectGameFiles(DirectoryInfo root, IDictionary<string, string> files)
+		{
+			string filePath = Path.Combine(root.FullName, GlobalGameManagerName);
+			if (FileMultiStream.Exists(filePath))
+			{
+				AddFile(files, GlobalGameManagerName, filePath);
+			}
+			else
+			{
+				filePath = Path.Combine(root.FullName, MainDataName);
+				if (FileMultiStream.Exists(filePath))
 				{
-					m_fileCollection.LoadAssembly(assemblyPath);
-					return true;
+					AddFile(files, MainDataName, filePath);
 				}
 			}
-			
-			return false;
+
+			foreach (FileInfo levelFile in root.EnumerateFiles())
+			{
+				string levelName = FileMultiStream.GetFileName(levelFile.Name);
+				if (s_levelName.IsMatch(levelName))
+				{
+					AddFile(files, levelName, levelFile.FullName);
+				}
+			}
+		}
+
+		protected void CollectStreamingAssets(DirectoryInfo root, IDictionary<string, string> files)
+		{
+			string streamingPath = Path.Combine(root.FullName, StreamingName);
+			DirectoryInfo streamingDirectory = new DirectoryInfo(streamingPath);
+			if (streamingDirectory.Exists)
+			{
+				CollectAssetBundlesRecursivly(root, files);
+			}
 		}
 		
-		protected IEnumerable<string> FetchAssetBundles(DirectoryInfo root)
+		protected void CollectAssetBundles(DirectoryInfo root, IDictionary<string, string> files)
 		{
 			foreach(FileInfo file in root.EnumerateFiles())
 			{
 				if(file.Extension == AssetBundleExtension)
 				{
-					yield return file.FullName;
-				}
-			}
-			foreach(DirectoryInfo directory in root.EnumerateDirectories())
-			{
-				foreach(string path in FetchAssetBundles(directory))
-				{
-					yield return path;
+					string name = Path.GetFileNameWithoutExtension(file.Name).ToLowerInvariant();
+					AddAssetBundle(files, name, file.FullName);
 				}
 			}
 		}
 
-		private bool LoadEngineDependency(string path, string dependency, string originName)
+		protected void CollectAssetBundlesRecursivly(DirectoryInfo root, IDictionary<string, string> files)
+		{
+			CollectAssetBundles(root, files);
+			foreach (DirectoryInfo directory in root.EnumerateDirectories())
+			{
+				CollectAssetBundlesRecursivly(directory, files);
+			}
+		}
+
+		protected void CollectAssemblies(DirectoryInfo root, IDictionary<string, string> assemblies)
+		{
+			foreach (FileInfo file in root.EnumerateFiles())
+			{
+				if(AssemblyManager.IsAssembly(file.Name))
+				{
+					assemblies.Add(file.Name, file.FullName);
+				}
+			}
+		}
+
+		protected void CollectMainAssemblies(DirectoryInfo root, IDictionary<string, string> assemblies)
+		{
+			string managedPath = Path.Combine(root.FullName, ManagedName);
+			if (Directory.Exists(managedPath))
+			{
+				DirectoryInfo managedDirectory = new DirectoryInfo(managedPath);
+				CollectAssemblies(managedDirectory, assemblies);
+			}
+			else
+			{
+				string libPath = Path.Combine(root.FullName, LibName);
+				if (Directory.Exists(libPath))
+				{
+					CollectAssemblies(root, assemblies);
+					DirectoryInfo libDirectory = new DirectoryInfo(libPath);
+					CollectAssemblies(libDirectory, assemblies);
+				}
+			}
+		}
+
+		private bool LoadEngineDependency(string path, string dependency)
 		{
 			string filePath = Path.Combine(path, dependency);
 			if (FileUtils.Exists(filePath))
 			{
-				m_fileCollection.LoadSerializedFile(filePath, originName);
+				LoadDependency(dependency, filePath);
 				return true;
 			}
 
@@ -211,19 +233,40 @@ namespace UtinyRipper
 			filePath = Path.Combine(resourcePath, dependency);
 			if (FileUtils.Exists(filePath))
 			{
-				m_fileCollection.LoadSerializedFile(filePath, originName);
+				LoadDependency(dependency, filePath);
 				return true;
 			}
 			return false;
 		}
 
+		private void AddFile(IDictionary<string, string> files, string name, string path)
+		{
+			files.Add(name, path);
+			Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Game file '{name}' has been found");
+		}
+
+		private void AddAssetBundle(IDictionary<string, string> files, string name, string path)
+		{
+			files.Add(name, path);
+			Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Asset bundle '{name}' has been found");
+		}
+
+		private void LoadDependency(string name, string path)
+		{
+			m_fileCollection.Load(path);
+			Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Dependency '{name}' has been loaded");
+		}
+
 		public abstract string Name { get; }
-		public abstract string MainDataPath { get; }
-		public abstract IEnumerable<string> DataPathes { get; }
-		public string ManagedPath => Path.Combine(MainDataPath, ManagedName);
-		protected string ResourcePath => Path.Combine(MainDataPath, ResourceName);
+		public abstract IReadOnlyList<string> DataPathes { get; }
+
+		public abstract IReadOnlyDictionary<string, string> Files { get; }
+		public abstract IReadOnlyDictionary<string, string> Assemblies { get; }
+
+		protected static readonly Regex s_levelName = new Regex($@"^level[1-9][0-9]*$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
 		protected const string ManagedName = "Managed";
+		protected const string LibName = "lib";
 		protected const string ResourceName = "Resources";
 		protected const string StreamingName = "StreamingAssets";
 
@@ -233,13 +276,6 @@ namespace UtinyRipper
 
 		protected const string AssetBundleExtension = ".unity3d";
 
-		private const string LibraryFolder = "library";
-		private const string DefaultResourceName1 = "unity default resources";
-		private const string DefaultResourceName2 = "unity_default_resources";
-		private const string BuiltinExtraName1 = "unity builtin extra";
-		private const string BuiltinExtraName2 = "unity_builtin_extra";
-
 		protected readonly FileCollection m_fileCollection;
-		protected readonly Regex m_levelName = new Regex($@"^level[1-9][0-9]*({FileMultiStream.MultifileRegex})?$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 	}
 }

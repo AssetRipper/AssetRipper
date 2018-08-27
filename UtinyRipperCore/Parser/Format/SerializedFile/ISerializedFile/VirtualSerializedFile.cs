@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes;
+
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.SerializedFiles
@@ -75,6 +77,7 @@ namespace UtinyRipper.SerializedFiles
 		public bool IsScene => throw new NotSupportedException();
 
 		public IFileCollection Collection => throw new NotSupportedException();
+		public IAssemblyManager AssemblyManager => throw new NotSupportedException();
 		public IReadOnlyList<FileIdentifier> Dependencies => throw new NotSupportedException();
 
 		private readonly Dictionary<long, Object> m_assets = new Dictionary<long, Object>();

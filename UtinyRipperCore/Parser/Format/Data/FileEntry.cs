@@ -1,17 +1,22 @@
 ﻿using System;
 using System.IO;
+using UtinyRipper.AssetExporters;
 
 namespace UtinyRipper
 {
 	internal abstract class FileEntry
 	{
-		protected FileEntry(Stream stream, string name, long offset, long size, bool isStreamPermanent)
+		protected FileEntry(Stream stream, string filePath, string name, long offset, long size, bool isStreamPermanent)
 		{
 			if (stream == null)
 			{
 				throw new ArgumentNullException(nameof(stream));
 			}
 			if (string.IsNullOrEmpty(name))
+			{
+				throw new ArgumentNullException(nameof(name));
+			}
+			if (string.IsNullOrEmpty(filePath))
 			{
 				throw new ArgumentNullException(nameof(name));
 			}
@@ -26,12 +31,13 @@ namespace UtinyRipper
 
 			m_stream = stream;
 			Name = name;
+			m_filePath = filePath;
 			m_offset = offset;
 			m_size = size;
 			m_isStreamPermanent = isStreamPermanent;
 		}
 
-		public ResourcesFile ReadResourcesFile(string filePath)
+		public void ReadResourcesFile(FileCollection collection)
 		{
 			Stream stream = m_stream;
 			long offset = m_offset;
@@ -43,8 +49,8 @@ namespace UtinyRipper
 				m_stream.CopyStream(stream, m_size);
 			}
 
-			ResourcesFile resesFile = new ResourcesFile(filePath, Name, stream, offset);
-			return resesFile;
+			ResourcesFile resesFile = new ResourcesFile(m_filePath, Name, stream, offset);
+			collection.AddResourceFile(resesFile);
 		}
 
 		public override string ToString()
@@ -57,6 +63,11 @@ namespace UtinyRipper
 			get
 			{
 				if(IsSkipFile)
+				{
+					return false;
+				}
+
+				if(AssemblyManager.IsAssembly(Name))
 				{
 					return false;
 				}
@@ -82,7 +93,6 @@ namespace UtinyRipper
 				switch(ext)
 				{
 					case ManifestExtention:
-					case AssemblyExtension:
 						return true;
 
 					case CawExtention:
@@ -103,7 +113,6 @@ namespace UtinyRipper
 		private const string ManifestExtention = ".manifest";
 		private const string ResourceExtension = ".resource";
 		private const string ResExtension = ".resS";
-		private const string AssemblyExtension = ".dll";
 		// Scene GI extensions
 		private const string CawExtention = ".caw";
 		private const string EcmExtention = ".ecm";
@@ -112,6 +121,7 @@ namespace UtinyRipper
 		private const string VisExtention = ".vis";
 
 		protected readonly Stream m_stream;
+		protected readonly string m_filePath;
 		protected readonly long m_offset;
 		protected readonly long m_size;
 

@@ -172,6 +172,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Collections\ExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Collections\SceneExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Collections\TextureExportCollection.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Scripts\AssemblyManagerWrapper.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\IAssemblyManager.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Mono\MonoManager.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\AssemblyManager.cs" />
@@ -278,6 +279,9 @@
     <Compile Include="Parser\Classes\Serialize\DateTime.cs" />
     <Compile Include="Parser\Classes\Serialize\GUIStyle\GUIStyle.cs" />
     <Compile Include="Parser\Classes\Serialize\GUIStyle\GUIStyleState.cs" />
+    <Compile Include="Parser\Classes\Serialize\GUIStyle\ImagePosition.cs" />
+    <Compile Include="Parser\Classes\Serialize\GUIStyle\TextAnchor.cs" />
+    <Compile Include="Parser\Classes\Serialize\GUIStyle\TextClipping.cs" />
     <Compile Include="Parser\Classes\Serialize\LayerMask.cs" />
     <Compile Include="Parser\Classes\Serialize\Matrix3x4f.cs" />
     <Compile Include="Parser\Classes\LightProbes\ProbeSetIndex.cs" />
@@ -443,11 +447,10 @@
     <Compile Include="Parser\Format\WebFile\Entry\WebFileEntry.cs" />
     <Compile Include="Parser\Format\WebFile\Entry\WebMetadata.cs" />
     <Compile Include="Parser\Format\WebFile\WebFile.cs" />
-    <Compile Include="Parser\Game\AndroidGameStructure.cs" />
+    <Compile Include="Parser\Game\Platforms\AndroidGameStructure.cs" />
     <Compile Include="Parser\Game\GameStructure.cs" />
-    <Compile Include="Parser\Game\IGameStructure.cs" />
-    <Compile Include="Parser\Game\MixedGameStructure.cs" />
-    <Compile Include="Parser\Game\PCGameStructure.cs" />
+    <Compile Include="Parser\Game\Platforms\MixedGameStructure.cs" />
+    <Compile Include="Parser\Game\Platforms\PCGameStructure.cs" />
     <Compile Include="Parser\Game\PlatformGameStructure.cs" />
     <Compile Include="Parser\IO\AssetStream\TransferInstructionFlags.cs" />
     <Compile Include="Parser\IO\Extensions\IDictionaryExtensions.cs" />
@@ -717,7 +720,6 @@
     <Compile Include="Parser\Classes\Serialize\Vector4f.cs" />
     <Compile Include="Parser\Classes\Transform.cs" />
     <Compile Include="Parser\Format\Data\ResourcesFile.cs" />
-    <Compile Include="Parser\Utils\PathUtils.cs" />
     <Compile Include="Parser\Version\VersionType.cs" />
     <Compile Include="Parser\Format\BundleFile\Parser\BundleCompressType.cs" />
     <Compile Include="Parser\Format\BundleFile\BundleFile.cs" />
@@ -884,6 +886,7 @@
     <Compile Include="ThirdParty\MonoCecil\Mono\Type.cs" />
     <Compile Include="ThirdParty\System.Half\Half.cs" />
     <Compile Include="ThirdParty\System.Half\HalfHelper.cs" />
+    <Compile Include="Parser\Utils\FilenameUtils.cs" />
     <Compile Include="Utils\DirectoryUtils.cs" />
     <Compile Include="Utils\Extensions\BitArrayExtensions.cs" />
     <Compile Include="Utils\Extensions\BitConverterExtensions.cs" />

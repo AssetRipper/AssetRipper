@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using UtinyRipper.AssetExporters;
-using UtinyRipper.AssetExporters.Mono;
 
 namespace UtinyRipper
 {
@@ -26,13 +24,16 @@ namespace UtinyRipper
 				throw new Exception($"Root directory '{rootPath}' doesn't exist");
 			}
 
-			m_dataPath = Path.Combine(rootPath, AssetName, BinName, DataName);
-			if (!DirectoryUtils.Exists(m_dataPath))
+			string apkDataPath = Path.Combine(rootPath, AssetName, BinName, DataName);
+			DirectoryInfo apkDataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(apkDataPath));
+			if (!apkDataDirectory.Exists)
 			{
-				throw new Exception($"Data directory hasn't beed found");
+				throw new Exception($"Data directory hasn't been found");
 			}
+			List<string> dataPathes = new List<string>() { apkDataPath };
 
-			if(obbPath != null)
+			DirectoryInfo obbDataDirectory = null;
+			if (obbPath != null)
 			{
 				m_obbRoot = new DirectoryInfo(DirectoryUtils.ToLongPath(obbPath));
 				if (!m_obbRoot.Exists)
@@ -40,34 +41,28 @@ namespace UtinyRipper
 					throw new Exception($"Obb directory '{obbPath}' doesn't exist");
 				}
 
-				m_obbDataPath = Path.Combine(obbPath, AssetName, BinName, DataName);
-				if (!DirectoryUtils.Exists(m_obbDataPath))
+				string obbDataPath = Path.Combine(obbPath, AssetName, BinName, DataName);
+				if (!DirectoryUtils.Exists(obbDataPath))
 				{
-					throw new Exception($"Obb data directory hasn't beed found");
+					throw new Exception($"Obb data directory '{obbDataPath}' hasn't beed found");
 				}
+				dataPathes.Add(obbDataPath);
 			}
+			DataPathes = dataPathes.ToArray();
 
-			DirectoryInfo managedDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(ManagedPath));
-			if (!managedDirectory.Exists)
+			Dictionary<string, string> files = new Dictionary<string, string>();
+			CollectGameFiles(apkDataDirectory, files);
+			if (obbDataDirectory != null)
 			{
-				throw new Exception($"Managed directory hasn't been found");
+				CollectGameFiles(obbDataDirectory, files);
 			}
+			CollectApkAssetBundles(files);
+			Files = files;
 
-			foreach (FileInfo assemblyFile in managedDirectory.EnumerateFiles())
-			{
-				if (AssemblyManager.IsAssembly(assemblyFile.Name))
-				{
-					if (MonoManager.IsMonoAssembly(assemblyFile.Name))
-					{
-						m_fileCollection.AssemblyManager.ScriptingBackEnd = ScriptingBackEnd.Mono;
-					}
-					else
-					{
-						m_fileCollection.AssemblyManager.ScriptingBackEnd = ScriptingBackEnd.Il2Cpp;
-					}
-					break;
-				}
-			}
+			Dictionary<string, string> assemblies = new Dictionary<string, string>();
+			CollectMainAssemblies(apkDataDirectory, assemblies);
+			Assemblies = assemblies;
+			SetScriptingBackend();
 		}
 		
 		public static bool IsAndroidStructure(string path)
@@ -139,69 +134,34 @@ namespace UtinyRipper
 			return matches;
 		}
 		
-		public override IEnumerable<string> FetchFiles()
+		private void CollectApkAssetBundles(IDictionary<string, string> files)
 		{
-			foreach(string file in base.FetchFiles())
-			{
-				yield return file;
-			}
 			string assetPath = Path.Combine(m_root.FullName, AssetName);
-			DirectoryInfo assetDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(assetPath));
-			foreach(string assetBundle in FetchGameAssetBundles(assetDirectory))
-			{
-				yield return assetBundle;
-			}
-		}
+			DirectoryInfo root = new DirectoryInfo(assetPath);
 
-		private IEnumerable<string> FetchGameAssetBundles(DirectoryInfo assetDirectory)
-		{
-			foreach (FileInfo file in assetDirectory.EnumerateFiles())
-			{
-				if (file.Extension == AssetBundleExtension)
-				{
-					yield return file.FullName;
-				}
-			}
-
-			foreach(DirectoryInfo subDirectory in assetDirectory.EnumerateDirectories())
+			CollectAssetBundles(root, files);
+			foreach(DirectoryInfo subDirectory in root.EnumerateDirectories())
 			{
 				if(subDirectory.Name == BinName)
 				{
 					continue;
 				}
-				foreach(string assetBundle in FetchAssetBundles(subDirectory))
-				{
-					yield return assetBundle;
-				}
+				CollectAssetBundles(subDirectory, files);
 			}
 		}
 
 		public override string Name => m_root.Name;
-		public override string MainDataPath => m_dataPath;
-		public override IEnumerable<string> DataPathes
-		{
-			get
-			{
-				if(m_obbDataPath == null)
-				{
-					return new string[] { m_dataPath };
-				}
-				else
-				{
-					return new string[] { m_dataPath, m_obbDataPath };
-				}
-			}
-		}
+		public override IReadOnlyList<string> DataPathes { get; }
+
+		public override IReadOnlyDictionary<string, string> Files { get; }
+		public override IReadOnlyDictionary<string, string> Assemblies { get; }
 
 		private const string AssetName = "assets";
-		private const string LibName = "lib";
 		private const string MetaName = "META-INF";
 		private const string BinName = "bin";
 		private const string DataName = "Data";
 		
 		private readonly DirectoryInfo m_root;
 		private readonly DirectoryInfo m_obbRoot;
-		private readonly string m_dataPath;
-		private readonly string m_obbDataPath;
 	}
 }

@@ -14,8 +14,8 @@ namespace UtinyRipper.AssetExporters.Mono
 			base(copy)
 		{
 		}
-		
-		public static bool IsSerializable(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+
+		public static bool IsSerializableModifier(FieldDefinition field)
 		{
 			if (field.HasConstant)
 			{
@@ -32,11 +32,11 @@ namespace UtinyRipper.AssetExporters.Mono
 
 			if (field.IsPublic)
 			{
-				if(field.IsNotSerialized)
+				if (field.IsNotSerialized)
 				{
 					return false;
 				}
-				return IsSerializable(field.FieldType, arguments);
+				return true;
 			}
 			else
 			{
@@ -44,9 +44,18 @@ namespace UtinyRipper.AssetExporters.Mono
 				{
 					if (IsSerializeFieldAttrribute(attr))
 					{
-						return IsSerializable(field.FieldType, arguments);
+						return true;
 					}
 				}
+			}
+			return false;
+		}
+
+		public static bool IsSerializable(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		{
+			if(IsSerializableModifier(field))
+			{
+				return IsSerializable(field.FieldType, arguments);
 			}
 			return false;
 		}

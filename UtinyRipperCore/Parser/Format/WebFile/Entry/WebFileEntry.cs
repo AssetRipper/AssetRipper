@@ -1,18 +1,19 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace UtinyRipper.WebFiles
 {
 	internal class WebFileEntry : FileEntry
 	{
-		public WebFileEntry(Stream stream, string name, long offset, long size, bool isStreamPermanent):
-			base(stream, name, offset, size, isStreamPermanent)
+		public WebFileEntry(Stream stream, string filePath, string name, long offset, long size, bool isStreamPermanent):
+			base(stream, filePath, name, offset, size, isStreamPermanent)
 		{
 		}
 
-		public void ReadFile(FileCollection collection, string filePath)
+		public void ReadFile(FileCollection collection, Action<string> requestDependencyCallback)
 		{
 			m_stream.Position = m_offset;
-			collection.Read(m_stream, filePath, Name);
+			collection.Read(m_stream, Name, m_filePath, requestDependencyCallback);
 		}
 		
 		public override bool IsSkipFile

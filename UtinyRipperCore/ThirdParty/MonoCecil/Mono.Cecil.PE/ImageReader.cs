@@ -38,12 +38,12 @@ namespace Mono.Cecil.PE {
 
 		void MoveTo (DataDirectory directory)
 		{
-			BaseStream.Position = image.ResolveVirtualAddress (directory.VirtualAddress);
+			Position = (int)image.ResolveVirtualAddress (directory.VirtualAddress);
 		}
 
 		void ReadImage ()
 		{
-			if (BaseStream.Length < 128)
+			if (Length < 128)
 				throw new BadImageFormatException ();
 
 			// - DOSHeader
@@ -401,10 +401,10 @@ namespace Mono.Cecil.PE {
 
 		byte [] ReadHeapData (uint offset, uint size)
 		{
-			var position = BaseStream.Position;
+			var position = Position;
 			MoveTo (offset + image.MetadataSection.PointerToRawData);
 			var data = ReadBytes ((int) size);
-			BaseStream.Position = position;
+			Position = position;
 
 			return data;
 		}
@@ -475,7 +475,7 @@ namespace Mono.Cecil.PE {
 
 		void ComputeTableInformations ()
 		{
-			uint offset = (uint) BaseStream.Position - table_heap_offset - image.MetadataSection.PointerToRawData; // header
+			uint offset = (uint) Position - table_heap_offset - image.MetadataSection.PointerToRawData; // header
 
 			int stridx_size = image.StringHeap.IndexSize;
 			int guididx_size = image.GuidHeap != null ? image.GuidHeap.IndexSize : 2;

@@ -33,18 +33,18 @@ namespace UtinyRipper.SerializedFiles
 				Hash.Read(stream);
 				Type = (AssetType)stream.ReadInt32();
 			}
-			FilePath = stream.ReadStringZeroTerm();
-			FilePathFixed = PathUtils.FixResourcePath(FilePath);
+			FilePathOrigin = stream.ReadStringZeroTerm();
+			FilePath = FilenameUtils.FixFileIdentifier(FilePathOrigin);
 		}
 
 		public bool IsFile(ISerializedFile file)
 		{
-			return file.Name == FilePathFixed;
+			return file.Name == FilePath;
 		}
 
 		public override string ToString()
 		{
-			return FilePath ?? base.ToString();
+			return FilePathOrigin ?? base.ToString();
 		}
 
 		/// <summary>
@@ -57,14 +57,14 @@ namespace UtinyRipper.SerializedFiles
 		/// </summary>
 		public AssetType Type { get; private set; }
 		/// <summary>
-		/// Actual file path. This path is relative to the path of the current file.
-		/// The folder "library" often needs to be translated to "resources" in order to find the file on the file system.
+		/// File path without such prefixes as archive:/directory/fileName
 		/// </summary>
 		public string FilePath { get; private set; }
 		/// <summary>
-		/// File path without such constructions as archive:/directory/fileName
+		/// Actual file path. This path is relative to the path of the current file.
+		/// The folder "library" often needs to be translated to "resources" in order to find the file on the file system.
 		/// </summary>
-		public string FilePathFixed { get; private set; }
+		public string FilePathOrigin { get; private set; }
 
 		/// <summary>
 		/// Globally unique identifier of the file (or Hash?), 16 bytes long.

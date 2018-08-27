@@ -19,7 +19,7 @@ namespace UtinyRipper.AssetExporters.Mono
 
 		public static bool IsMonoAssembly(string fileName)
 		{
-			if (fileName.EndsWith(".dll", StringComparison.Ordinal))
+			if (fileName.EndsWith(AssemblyExtension, StringComparison.Ordinal))
 			{
 				return true;
 			}
@@ -35,10 +35,13 @@ namespace UtinyRipper.AssetExporters.Mono
 				AssemblyResolver = this,
 			};
 			AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(filePath, parameters);
-			AddAssembly(assembly, filePath);
+			string fileName = Path.GetFileNameWithoutExtension(filePath);
+			string assemblyName = AssemblyManager.ToAssemblyName(assembly.Name.Name);
+			m_assemblies.Add(fileName, assembly);
+			m_assemblies[assemblyName] = assembly;
 		}
 
-		public void Read(Stream stream, string filePath)
+		public void Read(Stream stream, string fileName)
 		{
 			ReaderParameters parameters = new ReaderParameters(ReadingMode.Immediate)
 			{
@@ -47,7 +50,10 @@ namespace UtinyRipper.AssetExporters.Mono
 				AssemblyResolver = this,
 			};
 			AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(stream, parameters);
-			AddAssembly(assembly, filePath);
+			fileName = Path.GetFileNameWithoutExtension(fileName);
+			string assemblyName = AssemblyManager.ToAssemblyName(assembly.Name.Name);
+			m_assemblies.Add(fileName, assembly);
+			m_assemblies[assemblyName] = assembly;
 		}
 
 		public void Unload(string fileName)
@@ -57,6 +63,11 @@ namespace UtinyRipper.AssetExporters.Mono
 				assembly.Dispose();
 				m_assemblies.Remove(fileName);
 			}
+		}
+
+		public bool IsAssemblyLoaded(string assembly)
+		{
+			return m_assemblies.ContainsKey(assembly);
 		}
 
 		public bool IsPresent(string assembly, string name)
@@ -150,24 +161,29 @@ namespace UtinyRipper.AssetExporters.Mono
 
 		public AssemblyDefinition Resolve(AssemblyNameReference name)
 		{
-			if(m_assemblies.TryGetValue(name.Name, out AssemblyDefinition assembly))
+			string assemblyName = AssemblyManager.ToAssemblyName(name.Name);
+			AssemblyDefinition definition = RetrieveAssembly(assemblyName);
+			if(definition == null)
 			{
-				return assembly;
+				const string MSCorLibName = "mscorlib";
+				if (name.Name == MSCorLibName)
+				{
+					DefaultAssemblyResolver defaultResolver = new DefaultAssemblyResolver();
+					definition = defaultResolver.Resolve(name);
+					if (definition != null)
+					{
+						m_assemblies.Add(MSCorLibName, definition);
+					}
+				}
 			}
-
-			m_requestAssemblyCallback.Invoke(name.Name);
-			if (m_assemblies.TryGetValue(name.Name, out assembly))
-			{
-				return assembly;
-			}
-			return null;
+			return definition;
 		}
 
 		public AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
 		{
 			return Resolve(name);
 		}
-		
+
 		private AssemblyDefinition RetrieveAssembly(string name)
 		{
 			if (m_assemblies.TryGetValue(name, out AssemblyDefinition assembly))
@@ -277,6 +293,10 @@ namespace UtinyRipper.AssetExporters.Mono
 			}
 
 			TypeDefinition definition = type.Resolve();
+			if(definition == null)
+			{
+				return false;
+			}
 			if (!IsTypeValid(definition.BaseType, arguments))
 			{
 				m_validTypes[type.FullName] = false;
@@ -285,7 +305,7 @@ namespace UtinyRipper.AssetExporters.Mono
 
 			foreach (FieldDefinition field in definition.Fields)
 			{
-				if(!MonoField.IsSerializable(field, arguments))
+				if(!MonoField.IsSerializableModifier(field))
 				{
 					continue;
 				}
@@ -299,14 +319,6 @@ namespace UtinyRipper.AssetExporters.Mono
 			return true;
 		}
 		
-		private void AddAssembly(AssemblyDefinition assembly, string filePath)
-		{
-			string fileName = Path.GetFileName(filePath);
-			m_assemblies.Add(fileName, assembly);
-			fileName = Path.GetFileNameWithoutExtension(fileName);
-			m_assemblies.Add(fileName, assembly);
-		}
-		
 		public ScriptingBackEnd ScriptingBackEnd
 		{
 			get => ScriptingBackEnd.Mono;
@@ -314,6 +326,8 @@ namespace UtinyRipper.AssetExporters.Mono
 		}
 
 		private static readonly IReadOnlyDictionary<GenericParameter, TypeReference> s_emptyArguments = new Dictionary<GenericParameter, TypeReference>();
+
+		public const string AssemblyExtension = ".dll";
 
 		private readonly Dictionary<string, AssemblyDefinition> m_assemblies = new Dictionary<string, AssemblyDefinition>();
 		private readonly Dictionary<string, bool> m_validTypes = new Dictionary<string, bool>();

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using UtinyRipper.AssetExporters;
-using UtinyRipper.AssetExporters.Mono;
 
 namespace UtinyRipper
 {
@@ -21,33 +19,24 @@ namespace UtinyRipper
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
 			}
 
-			m_dataPath = GetDataPCDirectory(m_root);
-			if (m_dataPath == null)
+			string dataPath = GetDataPCDirectory(m_root);
+			if (dataPath == null)
 			{
 				throw new Exception($"Data directory hasn't been found");
 			}
+			DataPathes = new string[] { dataPath };
 
-			DirectoryInfo managedDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(ManagedPath));
-			if (!managedDirectory.Exists)
-			{
-				throw new Exception($"Managed directory hasn't been found");
-			}
+			DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(dataPath));
 
-			foreach(FileInfo assemblyFile in managedDirectory.EnumerateFiles())
-			{
-				if(AssemblyManager.IsAssembly(assemblyFile.Name))
-				{
-					if(MonoManager.IsMonoAssembly(assemblyFile.Name))
-					{
-						m_fileCollection.AssemblyManager.ScriptingBackEnd = ScriptingBackEnd.Mono;
-					}
-					else
-					{
-						m_fileCollection.AssemblyManager.ScriptingBackEnd = ScriptingBackEnd.Il2Cpp;
-					}
-					break;
-				}
-			}
+			Dictionary<string, string> files = new Dictionary<string, string>();
+			CollectGameFiles(dataDirectory, files);
+			CollectStreamingAssets(dataDirectory, files);
+			Files = files;
+
+			Dictionary<string, string> assemblies = new Dictionary<string, string>();
+			CollectMainAssemblies(dataDirectory, assemblies);
+			Assemblies = assemblies;
+			SetScriptingBackend();
 		}
 
 		public static bool IsPCStructure(string path)
@@ -78,14 +67,22 @@ namespace UtinyRipper
 					{
 						return dataDirectory;
 					}
+
+					dataDirectory = Path.Combine(rootDiectory.FullName, DataPostfix);
+					if (DirectoryUtils.Exists(dataDirectory))
+					{
+						return dataDirectory;
+					}
 				}
 			}
 			return null;
 		}
 
 		public override string Name => m_root.Name;
-		public override string MainDataPath => m_dataPath;
-		public override IEnumerable<string> DataPathes => new string[] { MainDataPath };
+		public override IReadOnlyList<string> DataPathes { get; }
+
+		public override IReadOnlyDictionary<string, string> Files { get; }
+		public override IReadOnlyDictionary<string, string> Assemblies { get; }
 
 		private const string DataPostfix = "Data";
 		private const string ResourcesName = "Resources";
@@ -93,6 +90,5 @@ namespace UtinyRipper
 		private const string ExeExtension = ".exe";
 
 		private readonly DirectoryInfo m_root;
-		private readonly string m_dataPath;
 	}
 }

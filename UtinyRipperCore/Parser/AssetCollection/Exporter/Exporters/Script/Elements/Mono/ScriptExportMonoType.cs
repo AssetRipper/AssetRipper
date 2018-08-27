@@ -42,7 +42,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		public static string GetModule(TypeReference type)
 		{
-			return Path.GetFileNameWithoutExtension(type.Scope.Name);
+			return AssemblyManager.ToAssemblyName(type.Scope.Name);
 		}
 
 		public static bool HasMember(TypeReference type, string name)
@@ -204,13 +204,21 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 				{
 					// if field has unknown type then consider it as serializable
 				}
-				else if(IsContainsGenericParameter(field.FieldType))
+				else if (IsContainsGenericParameter(field.FieldType))
 				{
 					// if field type has generic parameter then consider it as serializable
 				}
-				else if (!MonoField.IsSerializable(field, null))
+				else
 				{
-					continue;
+					TypeDefinition definition = field.FieldType.Resolve();
+					if(definition == null)
+					{
+						// if field has unknown type then consider it as serializable
+					}
+					else if (!MonoField.IsSerializable(field, null))
+					{
+						continue;
+					}
 				}
 
 				ScriptExportField efield = manager.RetrieveField(field);

@@ -7,9 +7,10 @@ namespace UtinyRipper.AssetExporters
 	public interface IAssemblyManager : IDisposable
 	{
 		void Load(string filePath);
-		void Read(Stream stream, string filePath);
+		void Read(Stream stream, string fileName);
 		void Unload(string fileName);
 
+		bool IsAssemblyLoaded(string assembly);
 		bool IsPresent(string assembly, string name);
 		bool IsPresent(string assembly, string @namespace, string name);
 		bool IsValid(string assembly, string name);

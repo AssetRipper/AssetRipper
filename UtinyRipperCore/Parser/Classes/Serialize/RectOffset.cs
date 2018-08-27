@@ -22,10 +22,10 @@ namespace UtinyRipper.Classes
 
 		public void Read(AssetStream stream)
 		{
-			Left = stream.ReadSingle();
-			Right = stream.ReadSingle();
-			Top = stream.ReadSingle();
-			Bottom = stream.ReadSingle();
+			Left = stream.ReadInt32();
+			Right = stream.ReadInt32();
+			Top = stream.ReadInt32();
+			Bottom = stream.ReadInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -47,9 +47,9 @@ namespace UtinyRipper.Classes
 		public string Namespace => ScriptType.UnityEngineName;
 		public string Name => ScriptType.RectOffsetName;
 
-		public float Left { get; private set; }
-		public float Right { get; private set; }
-		public float Top { get; private set; }
-		public float Bottom { get; private set; }
+		public int Left { get; private set; }
+		public int Right { get; private set; }
+		public int Top { get; private set; }
+		public int Bottom { get; private set; }
 	}
 }

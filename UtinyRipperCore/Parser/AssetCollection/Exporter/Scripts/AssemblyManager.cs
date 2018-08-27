@@ -25,6 +25,15 @@ namespace UtinyRipper.AssetExporters
 			return false;
 		}
 
+		public static string ToAssemblyName(string scopeName)
+		{
+			if (scopeName.EndsWith(MonoManager.AssemblyExtension))
+			{
+				return scopeName.Substring(0, scopeName.Length - MonoManager.AssemblyExtension.Length);
+			}
+			return scopeName;
+		}
+
 		public void Load(string filePath)
 		{
 			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
@@ -34,13 +43,13 @@ namespace UtinyRipper.AssetExporters
 			m_manager.Load(filePath);
 		}
 
-		public void Read(Stream stream, string filePath)
+		public void Read(Stream stream, string fileName)
 		{
 			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
 			{
 				throw new Exception("You have to set backend first");
 			}
-			m_manager.Read(stream, filePath);
+			m_manager.Read(stream, fileName);
 		}
 
 		public void Unload(string fileName)
@@ -50,6 +59,11 @@ namespace UtinyRipper.AssetExporters
 				throw new Exception("You have to set backend first");
 			}
 			m_manager.Unload(fileName);
+		}
+
+		public bool IsAssemblyLoaded(string assembly)
+		{
+			return m_manager.IsAssemblyLoaded(assembly);
 		}
 
 		public bool IsPresent(string assembly, string name)
@@ -124,31 +138,29 @@ namespace UtinyRipper.AssetExporters
 
 		public ScriptingBackEnd ScriptingBackEnd
 		{
-			get => m_scriptingBackEnd;
+			get => m_manager == null ? ScriptingBackEnd.Unknown : m_manager.ScriptingBackEnd;
 			set
 			{
-				if(m_scriptingBackEnd == value)
+				if(ScriptingBackEnd == value)
 				{
 					return;
 				}
 
 				if(value == ScriptingBackEnd.Unknown)
 				{
-					if (m_scriptingBackEnd != ScriptingBackEnd.Unknown)
+					if (ScriptingBackEnd != ScriptingBackEnd.Unknown)
 					{
 						m_manager.Dispose();
 						m_manager = null;
-						m_scriptingBackEnd = value;
 					}
 					return;
 				}
 
-				if(m_scriptingBackEnd != ScriptingBackEnd.Unknown)
+				if(ScriptingBackEnd != ScriptingBackEnd.Unknown)
 				{
 					throw new Exception("Scripting backend is already set");
 				}
 
-				m_scriptingBackEnd = value;
 				switch (value)
 				{
 					case ScriptingBackEnd.Mono:
@@ -164,6 +176,5 @@ namespace UtinyRipper.AssetExporters
 		private event Action<string> m_requestAssemblyCallback;
 
 		private IAssemblyManager m_manager;
-		private ScriptingBackEnd m_scriptingBackEnd;
 	}
 }

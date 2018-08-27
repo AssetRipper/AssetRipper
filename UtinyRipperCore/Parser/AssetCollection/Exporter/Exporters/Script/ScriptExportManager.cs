@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporters.Scripts.Mono;
 
 namespace UtinyRipper.Exporters.Scripts
@@ -25,7 +26,7 @@ namespace UtinyRipper.Exporters.Scripts
 
 		private static string GetExportSubPath(string assembly, string @namespace, string @class)
 		{
-			string assFolderName = Path.GetFileNameWithoutExtension(assembly);
+			string assFolderName = AssemblyManager.ToAssemblyName(assembly);
 			string nsFolder = @namespace.Replace('.', Path.DirectorySeparatorChar);
 			string finalFolderPath = Path.Combine(assFolderName, nsFolder);
 			string filePath = Path.Combine(finalFolderPath, @class);
@@ -318,6 +319,7 @@ namespace UtinyRipper.Exporters.Scripts
 			{
 				case MSCoreLibName:
 				case SystemName:
+				case CLRName:
 					return true;
 
 				default:
@@ -331,6 +333,9 @@ namespace UtinyRipper.Exporters.Scripts
 			{
 				case UnityEngineName:
 				case BooName:
+				case BooLangName:
+				case UnityScriptName:
+				case UnityScriptLangName:
 					return true;
 
 				default:
@@ -354,8 +359,12 @@ namespace UtinyRipper.Exporters.Scripts
 
 		private const string MSCoreLibName = "mscorlib";
 		private const string SystemName = "System";
+		private const string CLRName = "CommonLanguageRuntimeLibrary";
 		private const string UnityEngineName = "UnityEngine";
 		private const string BooName = "Boo";
+		private const string BooLangName = "Boo.Lang";
+		private const string UnityScriptName = "UnityScript";
+		private const string UnityScriptLangName = "UnityScript.Lang";
 		private const string MonoName = "Mono";
 
 		private readonly Dictionary<string, ScriptExportType> m_types = new Dictionary<string, ScriptExportType>();

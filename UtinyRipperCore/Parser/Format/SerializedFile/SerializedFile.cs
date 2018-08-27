@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes;
 
 using Object = UtinyRipper.Classes.Object;
@@ -14,25 +15,25 @@ namespace UtinyRipper.SerializedFiles
 	/// </summary>
 	internal class SerializedFile : ISerializedFile
 	{
-		public SerializedFile(IFileCollection collection, string filePath, string fileName):
-			this(collection, filePath, fileName, GetCompiledTransferFlag())
+		public SerializedFile(FileCollection collection, string name, string filePath):
+			this(collection, name, filePath, GetCompiledTransferFlag())
 		{
 		}
 
-		public SerializedFile(IFileCollection collection, string filePath, string fileName, TransferInstructionFlags flags)
+		public SerializedFile(FileCollection collection, string name, string filePath, TransferInstructionFlags flags)
 		{
 			if(collection == null)
 			{
 				throw new ArgumentNullException(nameof(collection));
 			}
-			if (string.IsNullOrEmpty(fileName))
+			if (string.IsNullOrEmpty(filePath))
 			{
-				throw new ArgumentNullException(nameof(fileName));
+				throw new ArgumentNullException(nameof(filePath));
 			}
 
-			Collection = collection;
+			m_collection = collection;
 			FilePath = filePath;
-			Name = fileName.ToLowerInvariant();
+			Name = FilenameUtils.FixFileIdentifier(name);
 			Flags = flags;
 
 			Header = new SerializedFileHeader(Name);
@@ -102,7 +103,7 @@ namespace UtinyRipper.SerializedFiles
 
 				foreach (FileIdentifier dependency in Dependencies)
 				{
-					requestDependencyCallback?.Invoke(dependency.FilePathFixed);
+					requestDependencyCallback?.Invoke(dependency.FilePath);
 				}
 
 				if (RTTIClassHierarchyDescriptor.IsReadSignature(Header.Generation))
@@ -116,21 +117,21 @@ namespace UtinyRipper.SerializedFiles
 					for (int i = 0; i < versions.Length; i++)
 					{
 						string version = versions[i];
-						Logger.Log(LogType.Debug, LogCategory.Import, $"Try parse {nameof(SerializedFile)} as {version} version");
+						Logger.Log(LogType.Debug, LogCategory.Import, $"Try parse {Name} as {version} version");
 						Version.Parse(version);
-						try
+						//try
 						{
 							ReadAssets(stream, startPosition);
 							break;
 						}
-						catch
+						/*catch
 						{
 							Logger.Log(LogType.Debug, LogCategory.Import, "Faild");
 							if (i == versions.Length - 1)
 							{
 								throw;
 							}
-						}
+						}*/
 					}
 				}
 			}
@@ -399,9 +400,12 @@ namespace UtinyRipper.SerializedFiles
 		public bool IsScene { get; private set; }
 
 		public IEnumerable<Object> Assets => m_assets.Values;
-		public IFileCollection Collection { get; }
+		public IFileCollection Collection => m_collection;
+		public IAssemblyManager AssemblyManager => m_collection.AssemblyManager;
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Dependencies;
 
 		private readonly Dictionary<long, Object> m_assets = new Dictionary<long, Object>();
+
+		private readonly FileCollection m_collection;
 	}
 }

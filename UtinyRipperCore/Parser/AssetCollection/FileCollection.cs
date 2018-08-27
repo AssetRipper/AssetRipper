@@ -8,6 +8,7 @@ using UtinyRipper.Classes;
 using UtinyRipper.SerializedFiles;
 using UtinyRipper.WebFiles;
 
+using MonoManager = UtinyRipper.AssetExporters.Mono.MonoManager;
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper
@@ -45,8 +46,7 @@ namespace UtinyRipper
 			}
 			else
 			{
-				string fileName = Path.GetFileName(filePath);
-				LoadSerializedFile(filePath, fileName);
+				LoadSerializedFile(filePath);
 			}
 		}
 
@@ -58,46 +58,86 @@ namespace UtinyRipper
 			}
 		}
 
-		public void Read(Stream stream, string filePath, string fileName)
+		public void Read(Stream stream, string filePath)
+		{
+			string fileName = Path.GetFileName(filePath);
+			Read(stream, fileName, filePath);
+		}
+
+		internal void Read(Stream stream, string fileName, string filePath)
+		{
+			Read(stream, fileName, filePath, OnRequestDependency);
+		}
+
+		internal void Read(Stream stream, string fileName, string filePath, Action<string> requestDependencyCallback)
 		{
 			if (BundleFile.IsBundleFile(stream))
 			{
-				ReadAssetBundle(stream, filePath);
+				ReadAssetBundle(stream, filePath, requestDependencyCallback);
 			}
 			else if (WebFile.IsWebFile(stream))
 			{
-				ReadWebFile(stream, filePath);
+				ReadWebFile(stream, filePath, requestDependencyCallback);
 			}
 			else
 			{
-				ReadSerializedFile(stream, filePath, fileName);
+				ReadSerializedFile(stream, fileName, filePath, requestDependencyCallback);
 			}
 		}
 
-		public void LoadSerializedFile(string filePath, string fileName)
+		public void LoadSerializedFile(string filePath)
 		{
-			SerializedFile file = new SerializedFile(this, filePath, fileName);
+			string fileName = Path.GetFileName(filePath);
+			LoadSerializedFile(fileName, filePath);
+		}
+
+		internal void LoadSerializedFile(string fileName, string filePath)
+		{
+			SerializedFile file = new SerializedFile(this, fileName, filePath);
 			file.Load(filePath, OnRequestDependency);
 			AddSerializedFile(file);
 		}
 
-		public void LoadSerializedFile(string filePath, string fileName, TransferInstructionFlags flags)
+		public void LoadSerializedFile(string filePath, TransferInstructionFlags flags)
 		{
-			SerializedFile file = new SerializedFile(this, filePath, fileName, flags);
+			string fileName = Path.GetFileName(filePath);
+			LoadSerializedFile(fileName, filePath, flags);
+		}
+
+		internal void LoadSerializedFile(string fileName, string filePath, TransferInstructionFlags flags)
+		{
+			SerializedFile file = new SerializedFile(this, fileName, filePath, flags);
 			file.Load(filePath, OnRequestDependency);
 			AddSerializedFile(file);
 		}
 
-		public void ReadSerializedFile(Stream stream, string filePath, string fileName)
+		public void ReadSerializedFile(Stream stream, string filePath)
 		{
-			SerializedFile file = new SerializedFile(this, filePath, fileName);
-			file.Read(stream, OnRequestDependency);
+			string fileName = Path.GetFileName(filePath);
+			ReadSerializedFile(stream, fileName, filePath);
+		}
+
+		internal void ReadSerializedFile(Stream stream, string fileName, string filePath)
+		{
+			ReadSerializedFile(stream, fileName, filePath, OnRequestDependency);
+		}
+
+		internal void ReadSerializedFile(Stream stream, string fileName, string filePath, Action<string> requestDependencyCallback)
+		{
+			SerializedFile file = new SerializedFile(this, fileName, filePath);
+			file.Read(stream, requestDependencyCallback);
 			AddSerializedFile(file);
 		}
 
-		public void ReadSerializedFile(Stream stream, string filePath, string fileName, TransferInstructionFlags flags)
+		public void ReadSerializedFile(Stream stream, string filePath, TransferInstructionFlags flags)
 		{
-			SerializedFile file = new SerializedFile(this, filePath, fileName, flags);
+			string fileName = Path.GetFileName(filePath);
+			ReadSerializedFile(stream, fileName, filePath, flags);
+		}
+
+		internal void ReadSerializedFile(Stream stream, string fileName, string filePath, TransferInstructionFlags flags)
+		{
+			SerializedFile file = new SerializedFile(this, fileName, filePath, flags);
 			file.Read(stream, OnRequestDependency);
 			AddSerializedFile(file);
 		}
@@ -107,16 +147,19 @@ namespace UtinyRipper
 			using (BundleFile bundle = new BundleFile(this, filePath, OnRequestDependency))
 			{
 				bundle.Load(filePath);
-				AddBundleFile(bundle);
 			}
 		}
 
 		public void ReadAssetBundle(Stream stream, string filePath)
 		{
-			using (BundleFile bundle = new BundleFile(this, filePath, OnRequestDependency))
+			ReadAssetBundle(stream, filePath, OnRequestDependency);
+		}
+
+		internal void ReadAssetBundle(Stream stream, string filePath, Action<string> requestDependencyCallback)
+		{
+			using (BundleFile bundle = new BundleFile(this, filePath, requestDependencyCallback))
 			{
 				bundle.Read(stream);
-				AddBundleFile(bundle);
 			}
 		}
 
@@ -125,16 +168,19 @@ namespace UtinyRipper
 			using (WebFile web = new WebFile(this, filePath, OnRequestDependency))
 			{
 				web.Load(filePath);
-				AddWebFile(web);
 			}
 		}
 
 		public void ReadWebFile(Stream stream, string filePath)
 		{
-			using (WebFile web = new WebFile(this, filePath, OnRequestDependency))
+			ReadWebFile(stream, filePath, OnRequestDependency);
+		}
+
+		internal void ReadWebFile(Stream stream, string filePath, Action<string> requestDependencyCallback)
+		{
+			using (WebFile web = new WebFile(this, filePath, requestDependencyCallback))
 			{
 				web.Read(stream);
-				AddWebFile(web);
 			}
 		}
 
@@ -143,9 +189,9 @@ namespace UtinyRipper
 			AssemblyManager.Load(filePath);
 		}
 
-		public void ReadAssembly(Stream stream, string filePath)
+		public void ReadAssembly(Stream stream, string fileName)
 		{
-			AssemblyManager.Read(stream, filePath);
+			AssemblyManager.Read(stream, fileName);
 		}
 
 		public void Unload(string filepath)
@@ -194,7 +240,7 @@ namespace UtinyRipper
 			ISerializedFile file = FindSerializedFile(fileRef);
 			if (file == null)
 			{
-				throw new Exception($"{nameof(SerializedFile)} with Name '{fileRef.AssetPath}' and FileName '{fileRef.FilePath}' was not found");
+				throw new Exception($"{nameof(SerializedFile)} with Name '{fileRef.AssetPath}' and FileName '{fileRef.FilePathOrigin}' was not found");
 			}
 			return file;
 		}
@@ -208,9 +254,9 @@ namespace UtinyRipper
 		{
 			SerializedFile file = (SerializedFile)ifile;
 
-			fileName = PathUtils.FixResourcePath(fileName);
+			fileName = FilenameUtils.FixResourcePath(fileName);
 
-			// check assets bundles / web files
+			// check asset bundles / web files
 			string filePath = file.FilePath;
 			foreach (ResourcesFile res in m_resources)
 			{
@@ -252,7 +298,7 @@ namespace UtinyRipper
 				}
 			}
 		}
-		
+				
 		private void AddSerializedFile(SerializedFile file)
 		{
 			if(m_files.Any(t => t.Name == file.Name))
@@ -273,24 +319,13 @@ namespace UtinyRipper
 			m_files.Add(file);
 		}
 
-		private void AddBundleFile(BundleFile bundle)
+		internal void AddResourceFile(ResourcesFile resource)
 		{
-			foreach(SerializedFile file in bundle.SerializedFiles)
+			if (m_resources.Any(t => t.Name == resource.Name))
 			{
-				AddSerializedFile(file);
+				throw new ArgumentException($"Resource file with name '{resource.Name}' already presents in collection", nameof(resource));
 			}
-			foreach (ResourcesFile resource in bundle.ResourceFiles)
-			{
-				m_resources.Add(resource);
-			}
-		}
-
-		private void AddWebFile(WebFile web)
-		{
-			foreach (ResourcesFile resource in web.ResourceFiles)
-			{
-				m_resources.Add(resource);
-			}
+			m_resources.Add(resource);
 		}
 
 		private void SetVersion(SerializedFile file)
@@ -315,17 +350,30 @@ namespace UtinyRipper
 		{
 			foreach(SerializedFile file in Files)
 			{
-				if(file.Name == dependency)
+				if (file.Name == dependency)
 				{
 					return;
 				}
 			}
-
 			m_requestDependencyCallback?.Invoke(dependency);
 		}
 
 		private void OnRequestAssembly(string assembly)
 		{
+			string assemblyName = $"{assembly}{MonoManager.AssemblyExtension}";
+			foreach (ResourcesFile file in m_resources)
+			{
+				if (file.Name == assemblyName)
+				{
+					long position = file.Stream.Position;
+					file.Position = 0;
+					ReadAssembly(file.Stream, assemblyName);
+					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
+					file.Stream.Position = position;
+					return;
+				}
+			}
+
 			m_requestAssemblyCallback?.Invoke(assembly);
 		}
 		
@@ -337,7 +385,7 @@ namespace UtinyRipper
 		private readonly List<SerializedFile> m_files = new List<SerializedFile>();
 		private readonly List<ResourcesFile> m_resources = new List<ResourcesFile>();
 
-		private event Action<string> m_requestDependencyCallback;
-		private event Action<string> m_requestAssemblyCallback;
+		private readonly Action<string> m_requestDependencyCallback;
+		private readonly Action<string> m_requestAssemblyCallback;
 	}
 }

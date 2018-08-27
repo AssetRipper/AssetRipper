@@ -18,6 +18,10 @@ namespace UtinyRipper.WebFiles
 			{
 				throw new ArgumentNullException(nameof(filePath));
 			}
+			if (requestDependencyCallback == null)
+			{
+				throw new ArgumentNullException(nameof(requestDependencyCallback));
+			}
 
 			m_fileCollection = fileCollection;
 			m_filePath = filePath;
@@ -95,25 +99,20 @@ namespace UtinyRipper.WebFiles
 
 		public void Dispose()
 		{
-			if(m_isDisposable)
-			{
-				m_fileData.Dispose();
-				m_isDisposable = false;
-			}
+			Metadata.Dispose();
 		}
 
 		private void Read(Stream baseStream, bool isClosable)
 		{
 			ReadMetadata(baseStream, isClosable);
 
-			foreach (WebFileEntry entry in Metadata.AssetsEntries)
-			{
-				entry.ReadFile(m_fileCollection, m_filePath);
-			}
 			foreach (WebFileEntry entry in Metadata.ResourceEntries)
 			{
-				ResourcesFile resource = entry.ReadResourcesFile(m_filePath);
-				m_resources.Add(resource);
+				entry.ReadResourcesFile(m_fileCollection);
+			}
+			foreach (WebFileEntry entry in Metadata.AssetsEntries)
+			{
+				entry.ReadFile(m_fileCollection, OnRequestDependency);
 			}
 		}
 
@@ -198,35 +197,41 @@ namespace UtinyRipper.WebFiles
 				int pathLength = stream.ReadInt32();
 				string path = stream.ReadString(pathLength);
 				
-				WebFileEntry entry = new WebFileEntry(stream.BaseStream, path, offset, length, isClosable);
+				WebFileEntry entry = new WebFileEntry(stream.BaseStream, m_filePath, path, offset, length, isClosable);
 				entries.Add(entry);
 			}
 			Metadata = new WebMetadata(stream.BaseStream, isClosable, entries);
 		}
-		
-		public WebMetadata Metadata
+
+		private void OnRequestDependency(string dependency)
 		{
-			get => m_fileData;
-			private set
+			if (FilenameUtils.ContainsDependency(m_loadedFiles, dependency))
 			{
-				m_fileData = value;
-				m_isDisposable = value != null;
+				return;
 			}
+			foreach (WebFileEntry entry in Metadata.AssetsEntries)
+			{
+				if (FilenameUtils.IsDependency(entry.Name, dependency))
+				{
+					m_loadedFiles.Add(entry.Name);
+					entry.ReadFile(m_fileCollection, OnRequestDependency);
+					return;
+				}
+			}
+
+			m_requestDependencyCallback.Invoke(dependency);
 		}
+
+		public WebMetadata Metadata { get; private set; }
 
 		private const ushort GZipMagic = 0x1F8B;
 		private const ulong BrotliMagic = 0x62726F746C69;
 		private const string Signature = "UnityWebData1.0";
 
-		public IReadOnlyList<ResourcesFile> ResourceFiles => m_resources;
-
-		private readonly List<ResourcesFile> m_resources = new List<ResourcesFile>();
+		private readonly HashSet<string> m_loadedFiles = new HashSet<string>();
 
 		private readonly FileCollection m_fileCollection;
 		private readonly string m_filePath;
 		private readonly Action<string> m_requestDependencyCallback;
-
-		private WebMetadata m_fileData = null;
-		private bool m_isDisposable = false;
 	}
 }
