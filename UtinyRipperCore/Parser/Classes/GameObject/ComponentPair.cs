@@ -40,7 +40,7 @@ namespace UtinyRipper.Classes.GameObjects
 				if(isLog)
 				{
 					ClassIDType compType = file.GetClassID(Component.PathID);
-					Logger.Log(LogType.Debug, LogCategory.Export, $"GameObject's component {Component}[{compType}] isn't implemeneted;");
+					Logger.Log(LogType.Debug, LogCategory.Export, $"GameObject's component {Component}[{compType}] isn't implemeneted yet");
 				}
 			}
 			else

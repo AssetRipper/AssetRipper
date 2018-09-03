@@ -3,9 +3,9 @@
 namespace UtinyRipper.Classes.Meshes
 {
 	/// <summary>
-	/// Less than 4.0.0 version
+	/// Less than 5.0.0 version
 	/// </summary>
-	public enum ChannelType3
+	public enum ChannelType4
 	{
 		Vertex		= 0,
 		Normal		= 1,
@@ -17,22 +17,22 @@ namespace UtinyRipper.Classes.Meshes
 
 	public static class ChannelType3Extensions
 	{
-		public static ChannelFormat GetFormat(this ChannelType3 _this)
+		public static ChannelFormat GetFormat(this ChannelType4 _this)
 		{
 			switch (_this)
 			{
-				case ChannelType3.Vertex:
-				case ChannelType3.Normal:
+				case ChannelType4.Vertex:
+				case ChannelType4.Normal:
 					return ChannelFormat.Float;
 
-				case ChannelType3.Color:
+				case ChannelType4.Color:
 					return ChannelFormat.Byte;
 
-				case ChannelType3.UV0:
-				case ChannelType3.UV1:
+				case ChannelType4.UV0:
+				case ChannelType4.UV1:
 					return ChannelFormat.Float;
 
-				case ChannelType3.Tangent:
+				case ChannelType4.Tangent:
 					return ChannelFormat.Float;
 
 				default:
@@ -40,22 +40,22 @@ namespace UtinyRipper.Classes.Meshes
 			}
 		}
 
-		public static byte GetDimention(this ChannelType3 _this)
+		public static byte GetDimention(this ChannelType4 _this)
 		{
 			switch (_this)
 			{
-				case ChannelType3.Vertex:
-				case ChannelType3.Normal:
+				case ChannelType4.Vertex:
+				case ChannelType4.Normal:
 					return 3;
 
-				case ChannelType3.Color:
+				case ChannelType4.Color:
 					return 4;
 
-				case ChannelType3.UV0:
-				case ChannelType3.UV1:
+				case ChannelType4.UV0:
+				case ChannelType4.UV1:
 					return 2;
 
-				case ChannelType3.Tangent:
+				case ChannelType4.Tangent:
 					return 4;
 
 				default:
@@ -63,21 +63,21 @@ namespace UtinyRipper.Classes.Meshes
 			}
 		}
 
-		public static ChannelType ToChannelType(this ChannelType3 _this)
+		public static ChannelType ToChannelType(this ChannelType4 _this)
 		{
 			switch(_this)
 			{
-				case ChannelType3.Vertex:
+				case ChannelType4.Vertex:
 					return ChannelType.Vertex;
-				case ChannelType3.Normal:
+				case ChannelType4.Normal:
 					return ChannelType.Normal;
-				case ChannelType3.Color:
+				case ChannelType4.Color:
 					return ChannelType.Color;
-				case ChannelType3.UV0:
+				case ChannelType4.UV0:
 					return ChannelType.UV0;
-				case ChannelType3.UV1:
+				case ChannelType4.UV1:
 					return ChannelType.UV1;
-				case ChannelType3.Tangent:
+				case ChannelType4.Tangent:
 					return ChannelType.Tangent;
 
 				default:
@@ -85,7 +85,7 @@ namespace UtinyRipper.Classes.Meshes
 			}
 		}
 
-		public static byte GetStride(this ChannelType3 _this)
+		public static byte GetStride(this ChannelType4 _this)
 		{
 			ChannelFormat format = _this.GetFormat();
 			int dimention = _this.GetDimention();

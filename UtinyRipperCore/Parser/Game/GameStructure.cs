@@ -62,24 +62,30 @@ namespace UtinyRipper
 
 		public bool RequestAssembly(string assembly)
 		{
-			string fixedAssembly = FilenameUtils.FixAssemblyName(assembly);
-			if (PlatformStructure != null)
+			if(m_knownAssemblies.Add(assembly))
 			{
-				if (PlatformStructure.RequestAssembly(assembly))
+				if (PlatformStructure != null)
 				{
-					return true;
+					if (PlatformStructure.RequestAssembly(assembly))
+					{
+						return true;
+					}
 				}
-			}
-			if (MixedStructure != null)
-			{
-				if (MixedStructure.RequestAssembly(assembly))
+				if (MixedStructure != null)
 				{
-					return true;
+					if (MixedStructure.RequestAssembly(assembly))
+					{
+						return true;
+					}
 				}
-			}
 
-			Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
-			return false;
+				Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		}
 
 		private void Load(List<string> pathes)
@@ -224,5 +230,6 @@ namespace UtinyRipper
 		}
 
 		private readonly HashSet<string> m_knownFiles = new HashSet<string>();
+		private readonly HashSet<string> m_knownAssemblies = new HashSet<string>();
 	}
 }

@@ -41,7 +41,7 @@ namespace UtinyRipper.Classes.Meshes
 			}
 		}
 
-		public bool IsMatch(ChannelType3 channel)
+		public bool IsMatch(ChannelType4 channel)
 		{
 			return (ChannelMask & (1 << (int)channel)) != 0;
 		}

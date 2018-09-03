@@ -194,7 +194,7 @@ namespace UtinyRipper.Classes
 			{
 				if(isLog)
 				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"{owner}'s {name} {ToLogString(file)} wasn't found ");
+					Logger.Log(LogType.Warning, LogCategory.Export, $"{owner.Invoke()}'s {name} {ToLogString(file)} hasn't been found");
 				}
 			}
 			else

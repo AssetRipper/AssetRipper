@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UtinyRipper.AssetExporters.Mono;
 
 namespace UtinyRipper
 {
@@ -39,6 +40,10 @@ namespace UtinyRipper
 			{
 				return dependency.Substring(LibraryFolder.Length + 1);
 			}
+			else if (dependency.StartsWith(ResourcesFolder, StringComparison.Ordinal))
+			{
+				return dependency.Substring(ResourcesFolder.Length + 1);
+			}
 			return dependency;
 		}
 
@@ -56,7 +61,11 @@ namespace UtinyRipper
 		{
 			if (IsAssemblyIdentifier(assembly))
 			{
-				return $"Assembly - {assembly}";
+				assembly = $"Assembly - {assembly}";
+			}
+			if(assembly.EndsWith(MonoManager.AssemblyExtension))
+			{
+				assembly = assembly.Substring(0, assembly.Length - MonoManager.AssemblyExtension.Length);
 			}
 			return assembly;
 		}
@@ -111,6 +120,7 @@ namespace UtinyRipper
 		}
 
 		public const string LibraryFolder = "library";
+		public const string ResourcesFolder = "resources";
 		public const string DefaultResourceName1 = "unity default resources";
 		public const string DefaultResourceName2 = "unity_default_resources";
 		public const string BuiltinExtraName1 = "unity builtin extra";

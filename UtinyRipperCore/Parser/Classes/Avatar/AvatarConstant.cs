@@ -79,17 +79,34 @@ namespace UtinyRipper.Classes.Avatars
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_AvatarSkeleton", AvatarSkeleton.ExportYAML(container));
 			node.Add("m_AvatarSkeletonPose", AvatarSkeletonPose.ExportYAML(container));
-			node.Add("m_DefaultPose", DefaultPose.ExportYAML(container));
-			node.Add("m_SkeletonNameIDArray", IsReadDefaultPose(container.Version) ? SkeletonNameIDArray.ExportYAML(true) : YAMLSequenceNode.Empty);
+			node.Add("m_DefaultPose", GetDefaultPose(container.Version).ExportYAML(container));
+			node.Add("m_SkeletonNameIDArray", GetSkeletonNameIDArray(container.Version).ExportYAML(true));
 			node.Add("m_Human", Human.ExportYAML(container));
 			node.Add("m_HumanSkeletonIndexArray", HumanSkeletonIndexArray.ExportYAML(true));
-			node.Add("m_HumanSkeletonReverseIndexArray", IsReadHumanSkeletonReverseIndexArray(container.Version) ? HumanSkeletonReverseIndexArray.ExportYAML(true) : YAMLSequenceNode.Empty);
+			node.Add("m_HumanSkeletonReverseIndexArray", GetHumanSkeletonReverseIndexArray(container.Version).ExportYAML(true));
 			node.Add("m_RootMotionBoneIndex", RootMotionBoneIndex);
 			node.Add("m_RootMotionBoneX", RootMotionBoneX.ExportYAML(container));
 			node.Add("m_RootMotionSkeleton", RootMotionSkeleton.ExportYAML(container));
 			node.Add("m_RootMotionSkeletonPose", RootMotionSkeletonPose.ExportYAML(container));
-			node.Add("m_RootMotionSkeletonIndexArray", IsReadRootMotionSkeleton(container.Version) ? RootMotionSkeletonIndexArray.ExportYAML(true) : YAMLSequenceNode.Empty);
+			node.Add("m_RootMotionSkeletonIndexArray", GetRootMotionSkeletonIndexArray(container.Version).ExportYAML(true));
 			return node;
+		}
+
+		private OffsetPtr<SkeletonPose> GetDefaultPose(Version version)
+		{
+			return IsReadDefaultPose(version) ? DefaultPose : AvatarSkeletonPose;
+		}
+		private IReadOnlyList<uint> GetSkeletonNameIDArray(Version version)
+		{
+			return IsReadDefaultPose(version) ? SkeletonNameIDArray : AvatarSkeleton.Instance.ID;
+		}
+		private IReadOnlyList<int> GetHumanSkeletonReverseIndexArray(Version version)
+		{
+			return IsReadHumanSkeletonReverseIndexArray(version) ? HumanSkeletonReverseIndexArray : new int[0];
+		}
+		private IReadOnlyList<int> GetRootMotionSkeletonIndexArray(Version version)
+		{
+			return IsReadRootMotionSkeleton(version) ? RootMotionSkeletonIndexArray : new int[0];
 		}
 
 		public IReadOnlyList<uint> SkeletonNameIDArray => m_skeletonNameIDArray;

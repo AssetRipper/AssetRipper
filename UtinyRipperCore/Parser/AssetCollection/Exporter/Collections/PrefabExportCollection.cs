@@ -14,7 +14,7 @@ namespace UtinyRipper.AssetExporters
 		private PrefabExportCollection(IAssetExporter assetExporter, Prefab prefab) :
 			base(assetExporter, prefab)
 		{
-			foreach (EditorExtension asset in prefab.FetchObjects().OrderBy(t => t, this))
+			foreach (EditorExtension asset in prefab.FetchObjects())
 			{
 				AddAsset(asset);
 			}

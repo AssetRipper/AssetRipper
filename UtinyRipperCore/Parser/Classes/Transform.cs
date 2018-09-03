@@ -53,12 +53,11 @@ namespace UtinyRipper.Classes
 
 		public int GetSiblingIndex()
 		{
-			Transform father = Father.FindAsset(File);
-			if(father == null)
+			if(Father.IsNull)
 			{
 				return 0;
 			}
-
+			Transform father = Father.GetAsset(File);
 			for(int i = 0; i < father.Children.Count; i++)
 			{
 				PPtr<Transform> child = father.Children[i];

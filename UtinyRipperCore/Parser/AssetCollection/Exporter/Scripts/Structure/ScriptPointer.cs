@@ -33,7 +33,7 @@ namespace UtinyRipper.AssetExporters
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			yield return Pointer.FetchDependency(file, () => nameof(ScriptPointer), ToString());
+			yield return Pointer.FetchDependency(file, () => nameof(MonoBehaviour), ToString());
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)
