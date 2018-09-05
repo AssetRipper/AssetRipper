@@ -425,6 +425,9 @@
     <Compile Include="Parser\Classes\Utils\Vector3i.cs" />
     <Compile Include="Parser\Classes\WheelCollider\WheelCollider.cs" />
     <Compile Include="Parser\Classes\WheelCollider\WheelFrictionCurve.cs" />
+    <Compile Include="Parser\Format\ArchiveFile\ArchiveFile.cs" />
+    <Compile Include="Parser\Format\ArchiveFile\Entry\ArchiveFileEntry.cs" />
+    <Compile Include="Parser\Format\ArchiveFile\Entry\ArchiveMetadata.cs" />
     <Compile Include="Parser\Format\BundleFile\Entry\BundleMetadata.cs" />
     <Compile Include="Parser\Format\BundleFile\Parser\BlockInfo.cs" />
     <Compile Include="Parser\Format\BundleFile\Parser\BundleHeader.cs" />
@@ -449,9 +452,14 @@
     <Compile Include="Parser\Format\WebFile\WebFile.cs" />
     <Compile Include="Parser\Game\Platforms\AndroidGameStructure.cs" />
     <Compile Include="Parser\Game\GameStructure.cs" />
+    <Compile Include="Parser\Game\Platforms\iOSGameStructure.cs" />
+    <Compile Include="Parser\Game\Platforms\LinuxGameStructure.cs" />
+    <Compile Include="Parser\Game\Platforms\MacGameStructure.cs" />
     <Compile Include="Parser\Game\Platforms\MixedGameStructure.cs" />
     <Compile Include="Parser\Game\Platforms\PCGameStructure.cs" />
     <Compile Include="Parser\Game\PlatformGameStructure.cs" />
+    <Compile Include="Parser\Game\Platforms\WebGLStructure.cs" />
+    <Compile Include="Parser\Game\Platforms\WebPlayerStructure.cs" />
     <Compile Include="Parser\IO\AssetStream\TransferInstructionFlags.cs" />
     <Compile Include="Parser\IO\Extensions\IDictionaryExtensions.cs" />
     <Compile Include="Parser\IO\Extensions\AssetStreamExtensions.cs" />

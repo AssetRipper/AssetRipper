@@ -18,46 +18,6 @@ namespace UtinyRipper
 			}
 			m_fileCollection = collection;
 		}
-
-		/*protected static string GetPresentFileName(string rootPath, string fileName)
-		{
-			if (RunetimeUtils.IsRunningOnMono)
-			{
-				if (DirectoryUtils.Exists(rootPath))
-				{
-					fileName = Path.GetFileName(fileName).ToLowerInvariant();
-					DirectoryInfo root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
-					foreach (FileInfo file in root.EnumerateFiles())
-					{
-						if (file.Name.ToLowerInvariant() == fileName)
-						{
-							return file.Name;
-						}
-					}
-				}
-			}
-			return fileName;
-		}
-
-		protected static string GetPresentDirectoryName(string rootPath, string directoryName)
-		{
-			if (RunetimeUtils.IsRunningOnMono)
-			{
-				if (DirectoryUtils.Exists(rootPath))
-				{
-					directoryName = Path.GetFileName(directoryName).ToLowerInvariant();
-					DirectoryInfo root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
-					foreach (DirectoryInfo directory in root.EnumerateDirectories())
-					{
-						if (directory.Name.ToLowerInvariant() == directoryName)
-						{
-							return directory.Name;
-						}
-					}
-				}
-			}
-			return directoryName;
-		}*/
 		
 		public bool RequestDependency(string dependency)
 		{
@@ -239,13 +199,13 @@ namespace UtinyRipper
 			return false;
 		}
 
-		private void AddFile(IDictionary<string, string> files, string name, string path)
+		protected void AddFile(IDictionary<string, string> files, string name, string path)
 		{
 			files.Add(name, path);
 			Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Game file '{name}' has been found");
 		}
 
-		private void AddAssetBundle(IDictionary<string, string> files, string name, string path)
+		protected void AddAssetBundle(IDictionary<string, string> files, string name, string path)
 		{
 			files.Add(name, path);
 			Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Asset bundle '{name}' has been found");
@@ -263,7 +223,7 @@ namespace UtinyRipper
 		public abstract IReadOnlyDictionary<string, string> Files { get; }
 		public abstract IReadOnlyDictionary<string, string> Assemblies { get; }
 
-		protected static readonly Regex s_levelName = new Regex($@"^level[1-9][0-9]*$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+		protected static readonly Regex s_levelName = new Regex($@"^level[0-9][0-9]*$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
 		protected const string ManagedName = "Managed";
 		protected const string LibName = "lib";

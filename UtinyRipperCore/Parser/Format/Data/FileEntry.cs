@@ -93,6 +93,7 @@ namespace UtinyRipper
 				switch(ext)
 				{
 					case ManifestExtention:
+					case MdbExtension:
 						return true;
 
 					case CawExtention:
@@ -113,6 +114,7 @@ namespace UtinyRipper
 		private const string ManifestExtention = ".manifest";
 		private const string ResourceExtension = ".resource";
 		private const string ResExtension = ".resS";
+		private const string MdbExtension = ".mdb";
 		// Scene GI extensions
 		private const string CawExtention = ".caw";
 		private const string EcmExtention = ".ecm";

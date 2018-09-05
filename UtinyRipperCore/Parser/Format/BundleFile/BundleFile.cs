@@ -44,11 +44,14 @@ namespace UtinyRipper.BundleFiles
 		{
 			using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
 			{
-				long position = stream.BaseStream.Position;
 				bool isBundle = false;
-				if (stream.ReadStringZeroTerm(0x20, out string signature))
+				long position = stream.BaseStream.Position;
+				if(stream.BaseStream.Length - position > 0x20)
 				{
-					isBundle = BundleHeader.TryParseSignature(signature, out BundleType _);
+					if (stream.ReadStringZeroTerm(0x20, out string signature))
+					{
+						isBundle = BundleHeader.TryParseSignature(signature, out BundleType _);
+					}
 				}
 				stream.BaseStream.Position = position;
 
@@ -100,17 +103,17 @@ namespace UtinyRipper.BundleFiles
 				{
 					Read530Metadata(stream, isClosable, position);
 				}
+			}
 
-				foreach (BundleFileEntry entry in Metadata.ResourceEntries)
+			foreach (BundleFileEntry entry in Metadata.ResourceEntries)
+			{
+				entry.ReadResourcesFile(m_fileCollection);
+			}
+			foreach (BundleFileEntry entry in Metadata.AssetsEntries)
+			{
+				if (m_loadedFiles.Add(entry.Name))
 				{
-					entry.ReadResourcesFile(m_fileCollection);
-				}
-				foreach (BundleFileEntry entry in Metadata.AssetsEntries)
-				{
-					if (m_loadedFiles.Add(entry.Name))
-					{
-						entry.ReadFile(m_fileCollection, OnRequestDependency);
-					}
+					entry.ReadFile(m_fileCollection, OnRequestDependency);
 				}
 			}
 		}

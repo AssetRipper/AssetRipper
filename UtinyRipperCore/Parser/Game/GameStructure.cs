@@ -91,7 +91,12 @@ namespace UtinyRipper
 		private void Load(List<string> pathes)
 		{
 			if (CheckPC(pathes)) { }
+			else if (CheckLinux(pathes)) { }
+			else if (CheckMac(pathes)) { }
 			else if (CheckAndroid(pathes)) { }
+			else if (CheckiOS(pathes)) { }
+			else if (CheckWebGL(pathes)) { }
+			else if (CheckWebPlayer(pathes)) { }
 			CheckMixed(pathes);
 
 			if (PlatformStructure != null)
@@ -122,17 +127,40 @@ namespace UtinyRipper
 			{
 				if(PCGameStructure.IsPCStructure(path))
 				{
-					if(PlatformStructure == null)
-					{
-						PlatformStructure = new PCGameStructure(FileCollection, path);
-						pathes.Remove(path);
-						Logger.Instance.Log(LogType.Info, LogCategory.Import, $"PC game structure has been found at '{path}'");
-						return true;
-					}
-					else
-					{
-						throw new Exception("Platform structure already exists");
-					}
+					PlatformStructure = new PCGameStructure(FileCollection, path);
+					pathes.Remove(path);
+					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"PC game structure has been found at '{path}'");
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private bool CheckLinux(List<string> pathes)
+		{
+			foreach (string path in pathes)
+			{
+				if (LinuxGameStructure.IsLinuxStructure(path))
+				{
+					PlatformStructure = new LinuxGameStructure(FileCollection, path);
+					pathes.Remove(path);
+					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Linux game structure has been found at '{path}'");
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private bool CheckMac(List<string> pathes)
+		{
+			foreach (string path in pathes)
+			{
+				if (MacGameStructure.IsMacStructure(path))
+				{
+					PlatformStructure = new MacGameStructure(FileCollection, path);
+					pathes.Remove(path);
+					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Mac game structure has been found at '{path}'");
+					return true;
 				}
 			}
 			return false;
@@ -170,24 +198,62 @@ namespace UtinyRipper
 
 			if(androidStructure != null)
 			{
-				if (PlatformStructure == null)
+				PlatformStructure = new AndroidGameStructure(FileCollection, androidStructure, obbStructure);
+				pathes.Remove(androidStructure);
+				Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Android game structure has been found at '{androidStructure}'");
+				if (obbStructure != null)
 				{
-					PlatformStructure = new AndroidGameStructure(FileCollection, androidStructure, obbStructure);
-					pathes.Remove(androidStructure);
-					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Android game structure has been found at '{androidStructure}'");
-					if(obbStructure != null)
-					{
-						pathes.Remove(obbStructure);
-						Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Android obb game structure has been found at '{obbStructure}'");
-					}
-					return true;
+					pathes.Remove(obbStructure);
+					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Android obb game structure has been found at '{obbStructure}'");
 				}
-				else
-				{
-					throw new Exception("Platform structure already exists");
-				}
+				return true;
 			}
 
+			return false;
+		}
+
+		private bool CheckiOS(List<string> pathes)
+		{
+			foreach (string path in pathes)
+			{
+				if (iOSGameStructure.IsiOSStructure(path))
+				{
+					PlatformStructure = new iOSGameStructure(FileCollection, path);
+					pathes.Remove(path);
+					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"iOS game structure has been found at '{path}'");
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private bool CheckWebGL(List<string> pathes)
+		{
+			foreach (string path in pathes)
+			{
+				if (WebGLStructure.IsWebGLStructure(path))
+				{
+					PlatformStructure = new WebGLStructure(FileCollection, path);
+					pathes.Remove(path);
+					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"WebPlayer game structure has been found at '{path}'");
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private bool CheckWebPlayer(List<string> pathes)
+		{
+			foreach (string path in pathes)
+			{
+				if (WebPlayerStructure.IsWebPlayerStructure(path))
+				{
+					PlatformStructure = new WebPlayerStructure(FileCollection, path);
+					pathes.Remove(path);
+					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"WebPlayer game structure has been found at '{path}'");
+					return true;
+				}
+			}
 			return false;
 		}
 

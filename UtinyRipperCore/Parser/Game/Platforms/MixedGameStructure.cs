@@ -33,6 +33,11 @@ namespace UtinyRipper
 				}
 			}
 
+			if (files.Count == 0)
+			{
+				throw new Exception("No files has been found");
+			}
+
 			DataPathes = dataPathes.ToArray();
 			Files = files;
 			Assemblies = assemblies;
@@ -44,6 +49,7 @@ namespace UtinyRipper
 		{
 			int count = files.Count;
 			CollectGameFiles(root, files);
+			CollectWebFiles(root, files);
 			CollectAssetBundles(root, files);
 			CollectAssemblies(root, assemblies);
 			if (files.Count != count)
@@ -54,6 +60,34 @@ namespace UtinyRipper
 			foreach (DirectoryInfo subDirectory in root.EnumerateDirectories())
 			{
 				CollectFromDirectory(subDirectory, files, assemblies, dataPathes);
+			}
+		}
+
+		private void CollectWebFiles(DirectoryInfo root, IDictionary<string, string> files)
+		{
+			foreach (FileInfo levelFile in root.EnumerateFiles())
+			{
+				string extension = Path.GetExtension(levelFile.Name);
+				switch(extension)
+				{
+					case WebGLStructure.DataExtension:
+					case WebGLStructure.DataGzExtension:
+						{
+							string name = Path.GetFileNameWithoutExtension(levelFile.Name);
+							AddFile(files, name, levelFile.FullName);
+						}
+						break;
+
+					case WebGLStructure.UnityWebExtension:
+						{
+							if(levelFile.Name.EndsWith(WebGLStructure.DataWebExtension, StringComparison.Ordinal))
+							{
+								string name = levelFile.Name.Substring(0, levelFile.Name.Length - WebGLStructure.DataWebExtension.Length);
+								AddFile(files, name, levelFile.FullName);
+							}
+						}
+						break;
+				}
 			}
 		}
 

@@ -4,22 +4,22 @@ using System.IO;
 
 namespace UtinyRipper
 {
-	internal class PCGameStructure : PlatformGameStructure
+	internal sealed class LinuxGameStructure : PlatformGameStructure
 	{
-		public PCGameStructure(FileCollection collection, string rootPath):
+		public LinuxGameStructure(FileCollection collection, string rootPath) :
 			base(collection)
 		{
-			if(string.IsNullOrEmpty(rootPath))
+			if (string.IsNullOrEmpty(rootPath))
 			{
 				throw new ArgumentNullException(rootPath);
 			}
 			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
-			if(!m_root.Exists)
+			if (!m_root.Exists)
 			{
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
 			}
 
-			if (!GetDataPCDirectory(m_root, out string dataPath, out string name))
+			if (!GetDataLinuxDirectory(m_root, out string dataPath, out string name))
 			{
 				throw new Exception($"Data directory hasn't been found");
 			}
@@ -39,30 +39,27 @@ namespace UtinyRipper
 			SetScriptingBackend();
 		}
 
-		public static bool IsPCStructure(string path)
+		public static bool IsLinuxStructure(string path)
 		{
 			DirectoryInfo dinfo = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
-			if(!dinfo.Exists)
+			if (!dinfo.Exists)
 			{
 				return false;
 			}
-			return IsRootPCDirectory(dinfo);
+			return IsRootLinuxDirectory(dinfo);
 		}
 
-		private static bool IsRootPCDirectory(DirectoryInfo rootDiectory)
+		private static bool IsRootLinuxDirectory(DirectoryInfo rootDiectory)
 		{
-			return GetDataPCDirectory(rootDiectory, out string _, out string _);
+			return GetDataLinuxDirectory(rootDiectory, out string _, out string _);
 		}
-		
-		private static bool GetDataPCDirectory(DirectoryInfo rootDiectory, out string dataPath, out string name)
+
+		private static bool GetDataLinuxDirectory(DirectoryInfo rootDiectory, out string dataPath, out string name)
 		{
-			name = null;
-			int exeCount = 0;
 			foreach (FileInfo finfo in rootDiectory.EnumerateFiles())
 			{
-				if (finfo.Extension == ExeExtension)
+				if (finfo.Extension == x86Extension || finfo.Extension == x64Extension)
 				{
-					exeCount++;
 					name = Path.GetFileNameWithoutExtension(finfo.Name);
 					string dataFolder = $"{name}_{DataPostfix}";
 					dataPath = Path.Combine(rootDiectory.FullName, dataFolder);
@@ -70,16 +67,6 @@ namespace UtinyRipper
 					{
 						return true;
 					}
-				}
-			}
-
-			if(exeCount > 0)
-			{
-				name = exeCount == 1 ? name : rootDiectory.Name;
-				dataPath = Path.Combine(rootDiectory.FullName, DataPostfix);
-				if (DirectoryUtils.Exists(dataPath))
-				{
-					return true;
 				}
 			}
 
@@ -96,7 +83,8 @@ namespace UtinyRipper
 
 		private const string DataPostfix = "Data";
 
-		private const string ExeExtension = ".exe";
+		private const string x86Extension = ".x86";
+		private const string x64Extension = ".x64";
 
 		private readonly DirectoryInfo m_root;
 	}

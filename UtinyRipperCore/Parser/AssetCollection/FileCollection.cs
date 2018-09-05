@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UtinyRipper.ArchiveFiles;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.BundleFiles;
 using UtinyRipper.Classes;
@@ -40,6 +41,10 @@ namespace UtinyRipper
 			{
 				LoadAssetBundle(filePath);
 			}
+			else if(ArchiveFile.IsArchiveFile(filePath))
+			{
+				LoadArchiveFile(filePath);
+			}
 			else if (WebFile.IsWebFile(filePath))
 			{
 				LoadWebFile(filePath);
@@ -74,6 +79,10 @@ namespace UtinyRipper
 			if (BundleFile.IsBundleFile(stream))
 			{
 				ReadAssetBundle(stream, filePath, requestDependencyCallback);
+			}
+			else if (ArchiveFile.IsArchiveFile(stream))
+			{
+				ReadArchiveFile(stream, filePath);
 			}
 			else if (WebFile.IsWebFile(stream))
 			{
@@ -160,6 +169,22 @@ namespace UtinyRipper
 			using (BundleFile bundle = new BundleFile(this, filePath, requestDependencyCallback))
 			{
 				bundle.Read(stream);
+			}
+		}
+
+		public void LoadArchiveFile(string filePath)
+		{
+			using (ArchiveFile archive = new ArchiveFile(this, filePath))
+			{
+				archive.Load(filePath);
+			}
+		}
+
+		public void ReadArchiveFile(Stream stream, string filePath)
+		{
+			using (ArchiveFile archive = new ArchiveFile(this, filePath))
+			{
+				archive.Read(stream);
 			}
 		}
 

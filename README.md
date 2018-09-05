@@ -56,7 +56,7 @@ As it is a sample application so I'm not going to improve it in any way.
 
 If you want to build solution you need:
 
- \- .NET Framework 4.5.0 or .NET Standard 1.3 + .NET Core 2.1 SDK
+ \- .NET Framework 4.5.0 or .NET Standard 1.3 + .NET Core 1.0 SDK
 
  \- Compiler with C# 7.2 syntax support (Visual Studio 2017)
 

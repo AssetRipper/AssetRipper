@@ -1,8 +1,6 @@
-﻿using Brotli;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 
 namespace UtinyRipper.WebFiles
 {
@@ -43,40 +41,21 @@ namespace UtinyRipper.WebFiles
 
 		public static bool IsWebFile(Stream baseStream)
 		{
-			try
+			using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
 			{
-				using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
+				long position = stream.BaseStream.Position;
+				long maxLengthLong = stream.BaseStream.Length - position;
+				int maxLength = maxLengthLong > int.MaxValue ? int.MaxValue : (int)maxLengthLong;
+				if (stream.ReadStringZeroTerm(maxLength, out string signature))
 				{
-					long position = stream.BaseStream.Position;
-					ulong magic = stream.ReadUInt16();
-					if (magic == GZipMagic)
-					{
-						stream.BaseStream.Position = position;
-						return true;
-					}
-
-					stream.BaseStream.Position = position + 0x20;
-					magic = (stream.ReadUInt64() & 0xFFFFFFFFFFFF0000) >> 16;
-					if (magic == BrotliMagic)
-					{
-						stream.BaseStream.Position = position;
-						return true;
-					}
-
-					stream.BaseStream.Position = position;
-					string signature = stream.ReadStringZeroTerm();
 					if (signature == Signature)
 					{
 						stream.BaseStream.Position = position;
 						return true;
 					}
-
-					stream.BaseStream.Position = position;
-					return false;
 				}
-			}
-			catch
-			{
+
+				stream.BaseStream.Position = position;
 				return false;
 			}
 		}
@@ -104,7 +83,11 @@ namespace UtinyRipper.WebFiles
 
 		private void Read(Stream baseStream, bool isClosable)
 		{
-			ReadMetadata(baseStream, isClosable);
+			using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
+			{
+				stream.EndianType = EndianType.LittleEndian;
+				ReadMetadata(stream, isClosable);
+			}
 
 			foreach (WebFileEntry entry in Metadata.ResourceEntries)
 			{
@@ -116,76 +99,12 @@ namespace UtinyRipper.WebFiles
 			}
 		}
 
-		private void ReadMetadata(Stream baseStream, bool isClosable)
-		{
-			using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
-			{
-				long position = stream.BaseStream.Position;
-				ulong magic = stream.ReadUInt16();
-				if (magic == GZipMagic)
-				{
-					stream.BaseStream.Position = position;
-					ReadGZip(stream, isClosable);
-					return;
-				}
-
-				stream.BaseStream.Position = position + 0x20;
-				magic = (stream.ReadUInt64() & 0xFFFFFFFFFFFF0000) >> 16;
-				if (magic == BrotliMagic)
-				{
-					stream.BaseStream.Position = position;
-					ReadBrotli(stream, isClosable);
-					return;
-				}
-
-				stream.BaseStream.Position = position;
-				stream.EndianType = EndianType.LittleEndian;
-				ReadWebFiles(stream, isClosable);
-			}
-		}
-
-		private void ReadGZip(EndianStream stream, bool isClosable)
-		{
-			MemoryStream memStream = new MemoryStream();
-			using (GZipStream gzipStream = new GZipStream(stream.BaseStream, CompressionMode.Decompress))
-			{
-				gzipStream.CopyTo(memStream);
-				memStream.Position = 0;
-			}
-			if (isClosable)
-			{
-				stream.Dispose();
-			}
-			using (EndianStream dataStream = new EndianStream(memStream, EndianType.LittleEndian))
-			{
-				ReadWebFiles(dataStream, true);
-			}
-		}
-
-		private void ReadBrotli(EndianStream stream, bool isClosable)
-		{
-			MemoryStream memStream = new MemoryStream();
-			using (BrotliInputStream brotliStream = new BrotliInputStream(stream.BaseStream))
-			{
-				brotliStream.CopyStream(memStream);
-				memStream.Position = 0;
-			}
-			if (isClosable)
-			{
-				stream.Dispose();
-			}
-			using (EndianStream dataStream = new EndianStream(memStream, EndianType.LittleEndian))
-			{
-				ReadWebFiles(dataStream, true);
-			}
-		}
-
-		private void ReadWebFiles(EndianStream stream, bool isClosable)
+		private void ReadMetadata(EndianStream stream, bool isClosable)
 		{
 			string signature = stream.ReadStringZeroTerm();
 			if(signature != Signature)
 			{
-				throw new Exception($"Signature dosn't match to '{Signature}'");
+				throw new Exception($"Signature '{signature}' doesn't match to '{Signature}'");
 			}
 
 			List<WebFileEntry> entries = new List<WebFileEntry>();
@@ -224,8 +143,6 @@ namespace UtinyRipper.WebFiles
 
 		public WebMetadata Metadata { get; private set; }
 
-		private const ushort GZipMagic = 0x1F8B;
-		private const ulong BrotliMagic = 0x62726F746C69;
 		private const string Signature = "UnityWebData1.0";
 
 		private readonly HashSet<string> m_loadedFiles = new HashSet<string>();
