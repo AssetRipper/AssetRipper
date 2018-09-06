@@ -82,34 +82,34 @@ namespace UtinyRipper.Classes.Shaders
 			}
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			int magic = stream.ReadInt32();
-			if (magic != GetMagicNumber(stream.Version))
+			int magic = reader.ReadInt32();
+			if (magic != GetMagicNumber(reader.Version))
 			{
 				throw new Exception($"Magic number {magic} doesn't match");
 			}
 
-			ProgramType = (ShaderGpuProgramType)stream.ReadInt32();
-			int unknown1 = stream.ReadInt32();
-			int unknown2 = stream.ReadInt32();
-			int unknown3 = stream.ReadInt32();
-			if(IsReadUnknown4(stream.Version))
+			ProgramType = (ShaderGpuProgramType)reader.ReadInt32();
+			int unknown1 = reader.ReadInt32();
+			int unknown2 = reader.ReadInt32();
+			int unknown3 = reader.ReadInt32();
+			if(IsReadUnknown4(reader.Version))
 			{
-				int unknown4 = stream.ReadInt32();
+				int unknown4 = reader.ReadInt32();
 			}
 
-			m_keywords = stream.ReadStringArray();
-			m_programData = stream.ReadByteArray();
-			stream.AlignStream(AlignType.Align4);
+			m_keywords = reader.ReadStringArray();
+			m_programData = reader.ReadByteArray();
+			reader.AlignStream(AlignType.Align4);
 
-			int sourceMap = stream.ReadInt32();
-			int bindCount = stream.ReadInt32();
+			int sourceMap = reader.ReadInt32();
+			int bindCount = reader.ReadInt32();
 			ShaderBindChannel[] channels = new ShaderBindChannel[bindCount];
 			for (int i = 0; i < bindCount; i++)
 			{
-				ShaderChannel source = (ShaderChannel)stream.ReadUInt32();
-				VertexComponent target = (VertexComponent)stream.ReadUInt32();
+				ShaderChannel source = (ShaderChannel)reader.ReadUInt32();
+				VertexComponent target = (VertexComponent)reader.ReadUInt32();
 				ShaderBindChannel channel = new ShaderBindChannel(source, target);
 				channels[i] = channel;
 				sourceMap |= 1 << (int)source;
@@ -120,41 +120,41 @@ namespace UtinyRipper.Classes.Shaders
 			List<MatrixParameter> matrices = new List<MatrixParameter>();
 			List<TextureParameter> textures = new List<TextureParameter>();
 			List<BufferBinding> buffers = new List<BufferBinding>();
-			List<UAVParameter> uavs = IsReadUAVParameters(stream.Version) ? new List<UAVParameter>() : null;
-			List<SamplerParameter> samplers = IsReadSamplerParameters(stream.Version) ? new List<SamplerParameter>() : null;
+			List<UAVParameter> uavs = IsReadUAVParameters(reader.Version) ? new List<UAVParameter>() : null;
+			List<SamplerParameter> samplers = IsReadSamplerParameters(reader.Version) ? new List<SamplerParameter>() : null;
 			List<BufferBinding> constBindings = new List<BufferBinding>();
-			List<StructParameter> structs = IsReadStructParameters(stream.Version) ? new List<StructParameter>() : null;
+			List<StructParameter> structs = IsReadStructParameters(reader.Version) ? new List<StructParameter>() : null;
 
-			int paramGroupCount = stream.ReadInt32();
+			int paramGroupCount = reader.ReadInt32();
 			m_constantBuffers = new ConstantBuffer[paramGroupCount - 1];
 			for (int i = 0; i < paramGroupCount; i++)
 			{
 				vectors.Clear();
 				matrices.Clear();
 
-				string name = stream.ReadStringAligned();
-				int usedSize = stream.ReadInt32();
-				int paramCount = stream.ReadInt32();
+				string name = reader.ReadStringAligned();
+				int usedSize = reader.ReadInt32();
+				int paramCount = reader.ReadInt32();
 				for (int j = 0; j < paramCount; j++)
 				{
-					string paramName = stream.ReadStringAligned();
-					ShaderParamType paramType = (ShaderParamType)stream.ReadInt32();
-					int rows = stream.ReadInt32();
-					int dimension = stream.ReadInt32();
-					bool isMatrix = stream.ReadInt32() > 0;
-					int arraySize = stream.ReadInt32();
-					int index = stream.ReadInt32();
+					string paramName = reader.ReadStringAligned();
+					ShaderParamType paramType = (ShaderParamType)reader.ReadInt32();
+					int rows = reader.ReadInt32();
+					int dimension = reader.ReadInt32();
+					bool isMatrix = reader.ReadInt32() > 0;
+					int arraySize = reader.ReadInt32();
+					int index = reader.ReadInt32();
 
 					if (isMatrix)
 					{
-						MatrixParameter matrix = IsAllParamArgs(stream.Version) ?
+						MatrixParameter matrix = IsAllParamArgs(reader.Version) ?
 							new MatrixParameter(paramName, paramType, index, arraySize, rows) :
 							new MatrixParameter(paramName, paramType, index, rows);
 						matrices.Add(matrix);
 					}
 					else
 					{
-						VectorParameter vector = IsAllParamArgs(stream.Version) ?
+						VectorParameter vector = IsAllParamArgs(reader.Version) ?
 							new VectorParameter(paramName, paramType, index, arraySize, dimension) :
 							new VectorParameter(paramName, paramType, index, dimension);
 						vectors.Add(vector);
@@ -172,41 +172,41 @@ namespace UtinyRipper.Classes.Shaders
 					m_constantBuffers[i - 1] = constBuffer;
 				}
 
-				if (IsReadStructParameters(stream.Version))
+				if (IsReadStructParameters(reader.Version))
 				{
-					int structCount = stream.ReadInt32();
+					int structCount = reader.ReadInt32();
 					for(int j = 0; j < structCount; j++)
 					{
 						vectors.Clear();
 						matrices.Clear();
 
-						string structName = stream.ReadStringAligned();
-						int index = stream.ReadInt32();
-						int arraySize = stream.ReadInt32();
-						int structSize = stream.ReadInt32();
+						string structName = reader.ReadStringAligned();
+						int index = reader.ReadInt32();
+						int arraySize = reader.ReadInt32();
+						int structSize = reader.ReadInt32();
 
-						int strucParamCount = stream.ReadInt32();
+						int strucParamCount = reader.ReadInt32();
 						for(int k = 0; k < strucParamCount; k++)
 						{
-							string paramName = stream.ReadStringAligned();
+							string paramName = reader.ReadStringAligned();
 							paramName = $"{structName}.{paramName}";
-							ShaderParamType paramType = (ShaderParamType)stream.ReadInt32();
-							int rows = stream.ReadInt32();
-							int dimension = stream.ReadInt32();
-							bool isMatrix = stream.ReadInt32() > 0;
-							int vectorArraySize = stream.ReadInt32();
-							int paramIndex = stream.ReadInt32();
+							ShaderParamType paramType = (ShaderParamType)reader.ReadInt32();
+							int rows = reader.ReadInt32();
+							int dimension = reader.ReadInt32();
+							bool isMatrix = reader.ReadInt32() > 0;
+							int vectorArraySize = reader.ReadInt32();
+							int paramIndex = reader.ReadInt32();
 
 							if (isMatrix)
 							{
-								MatrixParameter matrix = IsAllParamArgs(stream.Version) ?
+								MatrixParameter matrix = IsAllParamArgs(reader.Version) ?
 									new MatrixParameter(paramName, paramType, paramIndex, vectorArraySize, rows) :
 									new MatrixParameter(paramName, paramType, paramIndex, rows);
 								matrices.Add(matrix);
 							}
 							else
 							{
-								VectorParameter vector = IsAllParamArgs(stream.Version) ?
+								VectorParameter vector = IsAllParamArgs(reader.Version) ?
 									new VectorParameter(paramName, paramType, paramIndex, vectorArraySize, dimension) :
 									new VectorParameter(paramName, paramType, paramIndex, dimension);
 								vectors.Add(vector);
@@ -219,20 +219,20 @@ namespace UtinyRipper.Classes.Shaders
 				}
 			}
 
-			int paramGroup2Count = stream.ReadInt32();
+			int paramGroup2Count = reader.ReadInt32();
 			for (int i = 0; i < paramGroup2Count; i++)
 			{
-				string name = stream.ReadStringAligned();
-				int type = stream.ReadInt32();
-				int index = stream.ReadInt32();
-				int extraValue = stream.ReadInt32();
+				string name = reader.ReadStringAligned();
+				int type = reader.ReadInt32();
+				int index = reader.ReadInt32();
+				int extraValue = reader.ReadInt32();
 
 				if (type == 0)
 				{
 					TextureParameter texture;
-					if (IsReadMultiSampled(stream.Version))
+					if (IsReadMultiSampled(reader.Version))
 					{
-						bool isMultiSampled = stream.ReadUInt32() > 0;
+						bool isMultiSampled = reader.ReadUInt32() > 0;
 						texture = new TextureParameter(name, index, isMultiSampled, extraValue);
 					}
 					else
@@ -251,12 +251,12 @@ namespace UtinyRipper.Classes.Shaders
 					BufferBinding buffer = new BufferBinding(name, index);
 					buffers.Add(buffer);
 				}
-				else if(type == 3 && IsReadUAVParameters(stream.Version))
+				else if(type == 3 && IsReadUAVParameters(reader.Version))
 				{
 					UAVParameter uav = new UAVParameter(name, index, extraValue);
 					uavs.Add(uav);
 				}
-				else if(type == 4 && IsReadSamplerParameters(stream.Version))
+				else if(type == 4 && IsReadSamplerParameters(reader.Version))
 				{
 					SamplerParameter sampler = new SamplerParameter((uint)extraValue, index);
 					samplers.Add(sampler);
@@ -268,16 +268,16 @@ namespace UtinyRipper.Classes.Shaders
 			}
 			m_textureParameters = textures.ToArray();
 			m_bufferParameters = buffers.ToArray();
-			if(IsReadUAVParameters(stream.Version))
+			if(IsReadUAVParameters(reader.Version))
 			{
 				m_UAVParameters = uavs.ToArray();
 			}
-			if(IsReadSamplerParameters(stream.Version))
+			if(IsReadSamplerParameters(reader.Version))
 			{
 				m_samplerParameters = samplers.ToArray();
 			}
 			m_constantBufferBindings = constBindings.ToArray();
-			if(IsReadStructParameters(stream.Version))
+			if(IsReadStructParameters(reader.Version))
 			{
 				m_structParameters = structs.ToArray();
 			}

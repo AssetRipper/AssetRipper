@@ -47,28 +47,28 @@ namespace UtinyRipper.Classes.Avatars
 			return 1;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			AvatarSkeleton.Read(stream);
-			AvatarSkeletonPose.Read(stream);
-			if (IsReadDefaultPose(stream.Version))
+			AvatarSkeleton.Read(reader);
+			AvatarSkeletonPose.Read(reader);
+			if (IsReadDefaultPose(reader.Version))
 			{
-				DefaultPose.Read(stream);
-				m_skeletonNameIDArray = stream.ReadUInt32Array();
+				DefaultPose.Read(reader);
+				m_skeletonNameIDArray = reader.ReadUInt32Array();
 			}
-			Human.Read(stream);
-			m_humanSkeletonIndexArray = stream.ReadInt32Array();
-			if (IsReadHumanSkeletonReverseIndexArray(stream.Version))
+			Human.Read(reader);
+			m_humanSkeletonIndexArray = reader.ReadInt32Array();
+			if (IsReadHumanSkeletonReverseIndexArray(reader.Version))
 			{
-				m_humanSkeletonReverseIndexArray = stream.ReadInt32Array();
+				m_humanSkeletonReverseIndexArray = reader.ReadInt32Array();
 			}
-			RootMotionBoneIndex = stream.ReadInt32();
-			RootMotionBoneX.Read(stream);
-			if (IsReadRootMotionSkeleton(stream.Version))
+			RootMotionBoneIndex = reader.ReadInt32();
+			RootMotionBoneX.Read(reader);
+			if (IsReadRootMotionSkeleton(reader.Version))
 			{
-				RootMotionSkeleton.Read(stream);
-				RootMotionSkeletonPose.Read(stream);
-				m_rootMotionSkeletonIndexArray = stream.ReadInt32Array();
+				RootMotionSkeleton.Read(reader);
+				RootMotionSkeletonPose.Read(reader);
+				m_rootMotionSkeletonIndexArray = reader.ReadInt32Array();
 			}
 		}
 

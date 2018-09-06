@@ -5,13 +5,13 @@ namespace UtinyRipper.Classes.WheelColliders
 {
 	public struct WheelFrictionCurve : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			ExtremumSlip = stream.ReadSingle();
-			ExtremumValue = stream.ReadSingle();
-			AsymptoteSlip = stream.ReadSingle();
-			AsymptoteValue = stream.ReadSingle();
-			Stiffness = stream.ReadSingle();
+			ExtremumSlip = reader.ReadSingle();
+			ExtremumValue = reader.ReadSingle();
+			AsymptoteSlip = reader.ReadSingle();
+			AsymptoteValue = reader.ReadSingle();
+			Stiffness = reader.ReadSingle();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

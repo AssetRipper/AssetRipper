@@ -89,7 +89,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			return 5;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
 			throw new NotSupportedException();
 		}

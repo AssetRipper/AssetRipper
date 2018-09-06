@@ -25,12 +25,12 @@ namespace UtinyRipper.Classes.GUIStyles
 			}
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Background.Read(stream);
+			Background.Read(reader);
 			m_scaledBackgrounds = new PPtr<Texture2D>[0];
 			//m_scaledBackgrounds = stream.ReadArray<PPtr<Texture2D>>();
-			TextColor.Read(stream);
+			TextColor.Read(reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

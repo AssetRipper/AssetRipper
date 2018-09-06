@@ -13,12 +13,12 @@ namespace UtinyRipper.Classes.AudioMixers
 			return 2;
 		}*/
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			NameHash = stream.ReadUInt32();
-			m_values = stream.ReadSingleArray();
-			m_transitionTypes = stream.ReadUInt32Array();
-			m_transitionIndices = stream.ReadUInt32Array();
+			NameHash = reader.ReadUInt32();
+			m_values = reader.ReadSingleArray();
+			m_transitionTypes = reader.ReadUInt32Array();
+			m_transitionIndices = reader.ReadUInt32Array();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

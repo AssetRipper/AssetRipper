@@ -7,10 +7,10 @@ namespace UtinyRipper.Classes.AnimatorOverrideControllers
 {
 	public struct AnimationClipOverride : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			OriginalClip.Read(stream);
-			OverrideClip.Read(stream);
+			OriginalClip.Read(reader);
+			OverrideClip.Read(reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

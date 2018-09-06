@@ -90,49 +90,49 @@ namespace UtinyRipper.Classes.LightmapSettingss
 		}
 
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Resolution = stream.ReadSingle();
-			BakeResolution = stream.ReadSingle();
-			TextureWidth = stream.ReadInt32();
-			TextureHeight = stream.ReadInt32();
-			AO = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			Resolution = reader.ReadSingle();
+			BakeResolution = reader.ReadSingle();
+			TextureWidth = reader.ReadInt32();
+			TextureHeight = reader.ReadInt32();
+			AO = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 
-			AOMaxDistance = stream.ReadSingle();
-			CompAOExponent = stream.ReadSingle();
-			CompAOExponentDirect = stream.ReadSingle();
-			Padding = stream.ReadInt32();
-			LightmapParameters.Read(stream);
-			LightmapsBakeMode = stream.ReadInt32();
-			TextureCompression = stream.ReadBoolean();
-			FinalGather = stream.ReadBoolean();
-			FinalGatherFiltering = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			AOMaxDistance = reader.ReadSingle();
+			CompAOExponent = reader.ReadSingle();
+			CompAOExponentDirect = reader.ReadSingle();
+			Padding = reader.ReadInt32();
+			LightmapParameters.Read(reader);
+			LightmapsBakeMode = reader.ReadInt32();
+			TextureCompression = reader.ReadBoolean();
+			FinalGather = reader.ReadBoolean();
+			FinalGatherFiltering = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 
-			FinalGatherRayCount = stream.ReadInt32();
-			ReflectionCompression = stream.ReadInt32();
-			MixedBakeMode = stream.ReadInt32();
-			BakeBackend = stream.ReadInt32();
-			PVRSampling = stream.ReadInt32();
-			PVRDirectSampleCount = stream.ReadInt32();
-			PVRSampleCount = stream.ReadInt32();
-			PVRBounces = stream.ReadInt32();
-			PVRFilterTypeDirect = stream.ReadInt32();
-			PVRFilterTypeIndirect = stream.ReadInt32();
-			PVRFilterTypeAO = stream.ReadInt32();
-			PVRFilteringMode = stream.ReadInt32();
-			PVRCulling = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			FinalGatherRayCount = reader.ReadInt32();
+			ReflectionCompression = reader.ReadInt32();
+			MixedBakeMode = reader.ReadInt32();
+			BakeBackend = reader.ReadInt32();
+			PVRSampling = reader.ReadInt32();
+			PVRDirectSampleCount = reader.ReadInt32();
+			PVRSampleCount = reader.ReadInt32();
+			PVRBounces = reader.ReadInt32();
+			PVRFilterTypeDirect = reader.ReadInt32();
+			PVRFilterTypeIndirect = reader.ReadInt32();
+			PVRFilterTypeAO = reader.ReadInt32();
+			PVRFilteringMode = reader.ReadInt32();
+			PVRCulling = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 
-			PVRFilteringGaussRadiusDirect = stream.ReadInt32();
-			PVRFilteringGaussRadiusIndirect = stream.ReadInt32();
-			PVRFilteringGaussRadiusAO = stream.ReadInt32();
-			PVRFilteringAtrousPositionSigmaDirect = stream.ReadSingle();
-			PVRFilteringAtrousPositionSigmaIndirect = stream.ReadSingle();
-			PVRFilteringAtrousPositionSigmaAO = stream.ReadSingle();
-			ShowResolutionOverlay = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			PVRFilteringGaussRadiusDirect = reader.ReadInt32();
+			PVRFilteringGaussRadiusIndirect = reader.ReadInt32();
+			PVRFilteringGaussRadiusAO = reader.ReadInt32();
+			PVRFilteringAtrousPositionSigmaDirect = reader.ReadSingle();
+			PVRFilteringAtrousPositionSigmaIndirect = reader.ReadSingle();
+			PVRFilteringAtrousPositionSigmaAO = reader.ReadSingle();
+			ShowResolutionOverlay = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

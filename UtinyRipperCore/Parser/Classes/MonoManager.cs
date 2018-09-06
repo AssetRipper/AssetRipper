@@ -64,33 +64,33 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			m_scripts = stream.ReadArray<PPtr<MonoScript>>();
-			if(IsReadHasCompileErrors(stream.Version))
+			m_scripts = reader.ReadArray<PPtr<MonoScript>>();
+			if(IsReadHasCompileErrors(reader.Version))
 			{
-				HasCompileErrors = stream.ReadBoolean();
-				if(IsAlign(stream.Version))
+				HasCompileErrors = reader.ReadBoolean();
+				if(IsAlign(reader.Version))
 				{
-					stream.AlignStream(AlignType.Align4);
+					reader.AlignStream(AlignType.Align4);
 				}
 
-				EngineDllModDate.Read(stream);
+				EngineDllModDate.Read(reader);
 			}
-			if (IsReadCustomDlls(stream.Version))
+			if (IsReadCustomDlls(reader.Version))
 			{
-				m_customDlls = stream.ReadStringArray();
+				m_customDlls = reader.ReadStringArray();
 			}
-			m_assemblyNames = stream.ReadStringArray();
-			if(IsReadAssemblyIdentifiers(stream.Version))
+			m_assemblyNames = reader.ReadStringArray();
+			if(IsReadAssemblyIdentifiers(reader.Version))
 			{
-				m_assemblyIdentifiers = stream.ReadStringArray();
+				m_assemblyIdentifiers = reader.ReadStringArray();
 			}
-			if (IsReadAssemblyTypes(stream.Version))
+			if (IsReadAssemblyTypes(reader.Version))
 			{
-				m_assemblyTypes = stream.ReadInt32Array();
+				m_assemblyTypes = reader.ReadInt32Array();
 			}
 		}
 

@@ -8,12 +8,12 @@ namespace UtinyRipper.Classes.Meshes
 	/// </summary>
 	public struct BlendShapeVertex : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Position.Read(stream);
-			Normal.Read(stream);
-			Tangent.Read(stream);
-			Index = stream.ReadUInt32();
+			Position.Read(reader);
+			Normal.Read(reader);
+			Tangent.Read(reader);
+			Index = reader.ReadUInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

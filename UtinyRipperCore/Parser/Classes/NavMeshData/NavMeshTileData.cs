@@ -14,12 +14,12 @@ namespace UtinyRipper.Classes.NavMeshDatas
 			return version.IsGreaterEqual(5, 6);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_meshData = stream.ReadByteArray();
-			if (IsReadHash(stream.Version))
+			m_meshData = reader.ReadByteArray();
+			if (IsReadHash(reader.Version))
 			{
-				Hash.Read(stream);
+				Hash.Read(reader);
 			}
 		}
 

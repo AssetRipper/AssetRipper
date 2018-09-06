@@ -34,19 +34,19 @@ namespace UtinyRipper.Classes.Lights
 			return 1;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			ProbeOcclusionLightIndex = stream.ReadInt32();
-			OcclusionMaskChannel = stream.ReadInt32();
-			if (IsReadLightmappingMask(stream.Version))
+			ProbeOcclusionLightIndex = reader.ReadInt32();
+			OcclusionMaskChannel = reader.ReadInt32();
+			if (IsReadLightmappingMask(reader.Version))
 			{
-				LightmappingMask = stream.ReadInt32();
+				LightmappingMask = reader.ReadInt32();
 			}
-			if (IsReadIsBaked(stream.Version))
+			if (IsReadIsBaked(reader.Version))
 			{
-				LightmapBakeMode.Read(stream);
-				IsBaked = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				LightmapBakeMode.Read(reader);
+				IsBaked = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

@@ -5,11 +5,11 @@ namespace UtinyRipper.Classes
 {
 	public struct DateTime : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			HighSeconds = stream.ReadUInt16();
-			Fraction = stream.ReadUInt16();
-			LowSeconds = stream.ReadUInt32();
+			HighSeconds = reader.ReadUInt16();
+			Fraction = reader.ReadUInt16();
+			LowSeconds = reader.ReadUInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

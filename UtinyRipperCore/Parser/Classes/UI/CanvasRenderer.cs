@@ -18,13 +18,13 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(2018, 2);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if(IsReadCullTransparentMesh(stream.Version))
+			if(IsReadCullTransparentMesh(reader.Version))
 			{
-				CullTransparentMesh = stream.ReadBoolean();
+				CullTransparentMesh = reader.ReadBoolean();
 			}
 		}
 

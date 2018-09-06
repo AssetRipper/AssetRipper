@@ -7,10 +7,10 @@ namespace UtinyRipper.Classes.AnimationClips
 {
 	public struct PPtrKeyframe : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Time = stream.ReadSingle();
-			Script.Read(stream);
+			Time = reader.ReadSingle();
+			Script.Read(reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

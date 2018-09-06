@@ -5,20 +5,20 @@ namespace UtinyRipper.Classes
 {
 	public struct Matrix3x4f : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			E00 = stream.ReadSingle();
-			E01 = stream.ReadSingle();
-			E02 = stream.ReadSingle();
-			E03 = stream.ReadSingle();
-			E10 = stream.ReadSingle();
-			E11 = stream.ReadSingle();
-			E12 = stream.ReadSingle();
-			E13 = stream.ReadSingle();
-			E20 = stream.ReadSingle();
-			E21 = stream.ReadSingle();
-			E22 = stream.ReadSingle();
-			E23 = stream.ReadSingle();
+			E00 = reader.ReadSingle();
+			E01 = reader.ReadSingle();
+			E02 = reader.ReadSingle();
+			E03 = reader.ReadSingle();
+			E10 = reader.ReadSingle();
+			E11 = reader.ReadSingle();
+			E12 = reader.ReadSingle();
+			E13 = reader.ReadSingle();
+			E20 = reader.ReadSingle();
+			E21 = reader.ReadSingle();
+			E22 = reader.ReadSingle();
+			E23 = reader.ReadSingle();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

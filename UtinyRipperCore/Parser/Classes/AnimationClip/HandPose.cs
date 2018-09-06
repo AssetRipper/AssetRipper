@@ -4,15 +4,15 @@ namespace UtinyRipper.Classes.AnimationClips
 {
 	public struct HandPose : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			GrabX.Read(stream);
+			GrabX.Read(reader);
 
-			m_doFArray = stream.ReadSingleArray();
-			Override = stream.ReadSingle();
-			CloseOpen = stream.ReadSingle();
-			InOut = stream.ReadSingle();
-			Grab = stream.ReadSingle();
+			m_doFArray = reader.ReadSingleArray();
+			Override = reader.ReadSingle();
+			CloseOpen = reader.ReadSingle();
+			InOut = reader.ReadSingle();
+			Grab = reader.ReadSingle();
 		}
 
 		public IReadOnlyList<float> DoFArray => m_doFArray;

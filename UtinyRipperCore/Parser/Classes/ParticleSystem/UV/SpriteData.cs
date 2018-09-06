@@ -7,9 +7,9 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public struct SpriteData : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Sprite.Read(stream);
+			Sprite.Read(reader);
 		}
 		
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

@@ -6,11 +6,11 @@ namespace UtinyRipper.Classes.Avatars
 {
 	public struct Skeleton : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_node = stream.ReadArray<Node>();
-			m_ID = stream.ReadUInt32Array();
-			m_axesArray = stream.ReadArray<Axes>();
+			m_node = reader.ReadArray<Node>();
+			m_ID = reader.ReadUInt32Array();
+			m_axesArray = reader.ReadArray<Axes>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -2,11 +2,11 @@
 {
 	public struct Tangent : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Normal.Read(stream);
-			TangentValue.Read(stream);
-			Handedness = stream.ReadSingle();
+			Normal.Read(reader);
+			TangentValue.Read(reader);
+			Handedness = reader.ReadSingle();
 		}
 
 		public float Handedness { get; private set; }

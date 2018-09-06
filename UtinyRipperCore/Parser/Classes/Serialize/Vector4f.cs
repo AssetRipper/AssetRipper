@@ -31,19 +31,19 @@ namespace UtinyRipper.Classes
 			return new Vector4f(this);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			X = stream.ReadSingle();
-			Y = stream.ReadSingle();
-			Z = stream.ReadSingle();
-			W = stream.ReadSingle();
+			X = reader.ReadSingle();
+			Y = reader.ReadSingle();
+			Z = reader.ReadSingle();
+			W = reader.ReadSingle();
 		}
 
-		public void Read3(AssetStream stream)
+		public void Read3(AssetReader reader)
 		{
-			X = stream.ReadSingle();
-			Y = stream.ReadSingle();
-			Z = stream.ReadSingle();
+			X = reader.ReadSingle();
+			Y = reader.ReadSingle();
+			Z = reader.ReadSingle();
 		}
 
 		public void Write(BinaryWriter stream)

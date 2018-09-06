@@ -28,18 +28,18 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(2018, 2);
 		}
 		
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			m_assets = stream.ReadArray<PPtr<Object>>();
-			if(IsReadDependencies(stream.Version))
+			m_assets = reader.ReadArray<PPtr<Object>>();
+			if(IsReadDependencies(reader.Version))
 			{
-				m_dependencies = stream.ReadStringArray();
+				m_dependencies = reader.ReadStringArray();
 			}
-			if(IsReadExplicitDataLayout(stream.Version))
+			if(IsReadExplicitDataLayout(reader.Version))
 			{
-				ExplicitDataLayout = stream.ReadBoolean();
+				ExplicitDataLayout = reader.ReadBoolean();
 			}
 		}
 

@@ -77,18 +77,18 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(5, 3);
 		}
 		
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Width = stream.ReadInt32();
-			Height = stream.ReadInt32();
-			CompleteImageSize = stream.ReadInt32();
-			TextureFormat = (TextureFormat)stream.ReadInt32();
+			Width = reader.ReadInt32();
+			Height = reader.ReadInt32();
+			CompleteImageSize = reader.ReadInt32();
+			TextureFormat = (TextureFormat)reader.ReadInt32();
 
-			if(IsBoolMinMap(stream.Version))
+			if(IsBoolMinMap(reader.Version))
 			{
-				MipMap = stream.ReadBoolean();
+				MipMap = reader.ReadBoolean();
 				if(MipMap)
 				{
 					int maxSide = Math.Max(Width, Height);
@@ -101,45 +101,45 @@ namespace UtinyRipper.Classes
 			}
 			else
 			{
-				MipCount = stream.ReadInt32();
+				MipCount = reader.ReadInt32();
 			}
 
-			if(IsReadIsReadable(stream.Version))
+			if(IsReadIsReadable(reader.Version))
 			{
-				IsReadable = stream.ReadBoolean();
+				IsReadable = reader.ReadBoolean();
 			}
-			if(IsReadReadAllowed(stream.Version))
+			if(IsReadReadAllowed(reader.Version))
 			{
-				ReadAllowed = stream.ReadBoolean();
+				ReadAllowed = reader.ReadBoolean();
 			}
-			if(IsReadStreamingMipmaps(stream.Version))
+			if(IsReadStreamingMipmaps(reader.Version))
 			{
-				StreamingMipmaps = stream.ReadBoolean();
+				StreamingMipmaps = reader.ReadBoolean();
 			}
-			stream.AlignStream(AlignType.Align4);
+			reader.AlignStream(AlignType.Align4);
 
-			if(IsReadStreamingMipmapsPriority(stream.Version))
+			if(IsReadStreamingMipmapsPriority(reader.Version))
 			{
-				StreamingMipmapsPriority = stream.ReadInt32();
+				StreamingMipmapsPriority = reader.ReadInt32();
 			}
-			ImageCount = stream.ReadInt32();
-			TextureDimension = (TextureDimension)stream.ReadInt32();
-			TextureSettings.Read(stream);
+			ImageCount = reader.ReadInt32();
+			TextureDimension = (TextureDimension)reader.ReadInt32();
+			TextureSettings.Read(reader);
 
-			if(IsReadLightmapFormat(stream.Version))
+			if(IsReadLightmapFormat(reader.Version))
 			{
-				LightmapFormat = (TextureUsageMode)stream.ReadInt32();
+				LightmapFormat = (TextureUsageMode)reader.ReadInt32();
 			}
-			if(IsReadColorSpace(stream.Version))
+			if(IsReadColorSpace(reader.Version))
 			{
-				ColorSpace = (ColorSpace)stream.ReadInt32();
+				ColorSpace = (ColorSpace)reader.ReadInt32();
 			}
 
-			m_imageData = stream.ReadByteArray();
-			stream.AlignStream(AlignType.Align4);
-			if(IsReadStreamData(stream.Version))
+			m_imageData = reader.ReadByteArray();
+			reader.AlignStream(AlignType.Align4);
+			if(IsReadStreamData(reader.Version))
 			{
-				StreamData.Read(stream);
+				StreamData.Read(reader);
 			}
 		}
 

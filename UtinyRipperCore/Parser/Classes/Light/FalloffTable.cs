@@ -6,12 +6,12 @@ namespace UtinyRipper.Classes.Lights
 {
 	public struct FalloffTable : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
 			m_table = new float[13];
 			for(int i = 0; i < m_table.Length; i++)
 			{
-				m_table[i] = stream.ReadSingle();
+				m_table[i] = reader.ReadSingle();
 			}
 		}
 

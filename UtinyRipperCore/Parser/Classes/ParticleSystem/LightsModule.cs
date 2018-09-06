@@ -22,19 +22,19 @@ namespace UtinyRipper.Classes.ParticleSystems
 			MaxLights = 20;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			Ratio = stream.ReadSingle();
-			Light.Read(stream);
-			RandomDistribution = stream.ReadBoolean();
-			Color = stream.ReadBoolean();
-			Range = stream.ReadBoolean();
-			Intensity = stream.ReadBoolean();
-			RangeCurve.Read(stream);
-			IntensityCurve.Read(stream);
-			MaxLights = stream.ReadInt32();
+			Ratio = reader.ReadSingle();
+			Light.Read(reader);
+			RandomDistribution = reader.ReadBoolean();
+			Color = reader.ReadBoolean();
+			Range = reader.ReadBoolean();
+			Intensity = reader.ReadBoolean();
+			RangeCurve.Read(reader);
+			IntensityCurve.Read(reader);
+			MaxLights = reader.ReadInt32();
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

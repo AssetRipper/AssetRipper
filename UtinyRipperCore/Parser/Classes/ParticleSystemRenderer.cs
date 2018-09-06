@@ -108,72 +108,72 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsModeShort(stream.Version))
+			if (IsModeShort(reader.Version))
 			{
-				RenderMode = stream.ReadUInt16();
+				RenderMode = reader.ReadUInt16();
 			}
 			else
 			{
-				RenderMode = stream.ReadInt32();
+				RenderMode = reader.ReadInt32();
 			}
-			if (IsSortModeFirst(stream.Version))
+			if (IsSortModeFirst(reader.Version))
 			{
-				SortMode = stream.ReadUInt16();
-			}
-
-			if (IsReadMinParticleSize(stream.Version))
-			{
-				MinParticleSize = stream.ReadSingle();
-			}
-			MaxParticleSize = stream.ReadSingle();
-			CameraVelocityScale = stream.ReadSingle();
-			VelocityScale = stream.ReadSingle();
-			LengthScale = stream.ReadSingle();
-			SortingFudge = stream.ReadSingle();
-
-			if (IsReadNormalDirection(stream.Version))
-			{
-				NormalDirection = stream.ReadSingle();
-			}
-			if (!IsSortModeFirst(stream.Version))
-			{
-				SortMode = stream.ReadInt32();
+				SortMode = reader.ReadUInt16();
 			}
 
-			if (IsReadRenderAlignment(stream.Version))
+			if (IsReadMinParticleSize(reader.Version))
 			{
-				RenderAlignment = stream.ReadInt32();
-				Pivot.Read(stream);
+				MinParticleSize = reader.ReadSingle();
 			}
-			if (IsReadUseCustomVertexStreams(stream.Version))
+			MaxParticleSize = reader.ReadSingle();
+			CameraVelocityScale = reader.ReadSingle();
+			VelocityScale = reader.ReadSingle();
+			LengthScale = reader.ReadSingle();
+			SortingFudge = reader.ReadSingle();
+
+			if (IsReadNormalDirection(reader.Version))
 			{
-				UseCustomVertexStreams = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				NormalDirection = reader.ReadSingle();
 			}
-			if (IsReadVertexStreamMask(stream.Version))
+			if (!IsSortModeFirst(reader.Version))
 			{
-				VertexStreamMask = stream.ReadInt32();
-			}
-			if (IsReadVertexStreams(stream.Version))
-			{
-				m_vertexStreams = stream.ReadByteArray();
-				stream.AlignStream(AlignType.Align4);
+				SortMode = reader.ReadInt32();
 			}
 
-			Mesh.Read(stream);
-			if (IsReadMeshes(stream.Version))
+			if (IsReadRenderAlignment(reader.Version))
 			{
-				Mesh1.Read(stream);
-				Mesh2.Read(stream);
-				Mesh3.Read(stream);
+				RenderAlignment = reader.ReadInt32();
+				Pivot.Read(reader);
 			}
-			if (IsReadMaskInteraction(stream.Version))
+			if (IsReadUseCustomVertexStreams(reader.Version))
 			{
-				MaskInteraction = stream.ReadInt32();
+				UseCustomVertexStreams = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
+			}
+			if (IsReadVertexStreamMask(reader.Version))
+			{
+				VertexStreamMask = reader.ReadInt32();
+			}
+			if (IsReadVertexStreams(reader.Version))
+			{
+				m_vertexStreams = reader.ReadByteArray();
+				reader.AlignStream(AlignType.Align4);
+			}
+
+			Mesh.Read(reader);
+			if (IsReadMeshes(reader.Version))
+			{
+				Mesh1.Read(reader);
+				Mesh2.Read(reader);
+				Mesh3.Read(reader);
+			}
+			if (IsReadMaskInteraction(reader.Version))
+			{
+				MaskInteraction = reader.ReadInt32();
 			}
 		}
 

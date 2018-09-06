@@ -2,7 +2,7 @@
 
 namespace UtinyRipper.SerializedFiles
 {
-	internal class SerializedFileMetadata : ISerializedFileReadable
+	public sealed class SerializedFileMetadata : ISerializedFileReadable
 	{
 		public SerializedFileMetadata(string name)
 		{
@@ -24,27 +24,27 @@ namespace UtinyRipper.SerializedFiles
 			return generation >= FileGeneration.FG_120_200;
 		}
 
-		public void Read(SerializedFileStream stream)
+		public void Read(SerializedFileReader reader)
 		{
-			Hierarchy.Read(stream);
+			Hierarchy.Read(reader);
 
-			int count = stream.ReadInt32();
+			int count = reader.ReadInt32();
 			m_objects = new Dictionary<long, AssetEntry>(count);
 			for (int i = 0; i < count; i++)
 			{
 				AssetEntry objectInfo = new AssetEntry();
-				objectInfo.Read(stream);
+				objectInfo.Read(reader);
 				m_objects.Add(objectInfo.PathID, objectInfo);
 			}
 
-			if (IsReadPreload(stream.Generation))
+			if (IsReadPreload(reader.Generation))
 			{
-				m_preloads = stream.ReadArray<ObjectPtr>();
+				m_preloads = reader.ReadArray<ObjectPtr>();
 			}
-			m_dependencies = stream.ReadArray<FileIdentifier>();
-			if (IsReadUnknown(stream.Generation))
+			m_dependencies = reader.ReadArray<FileIdentifier>();
+			if (IsReadUnknown(reader.Generation))
 			{
-				Unknown = stream.ReadStringZeroTerm();
+				Unknown = reader.ReadStringZeroTerm();
 			}
 		}
 

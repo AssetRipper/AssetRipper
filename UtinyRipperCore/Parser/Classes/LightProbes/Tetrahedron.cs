@@ -5,17 +5,17 @@ namespace UtinyRipper.Classes.LightProbess
 {
 	public struct Tetrahedron : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Indices_0 = stream.ReadInt32();
-			Indices_1 = stream.ReadInt32();
-			Indices_2 = stream.ReadInt32();
-			Indices_3 = stream.ReadInt32();
-			Neighbors_0 = stream.ReadInt32();
-			Neighbors_1 = stream.ReadInt32();
-			Neighbors_2 = stream.ReadInt32();
-			Neighbors_3 = stream.ReadInt32();
-			Matrix.Read(stream);
+			Indices_0 = reader.ReadInt32();
+			Indices_1 = reader.ReadInt32();
+			Indices_2 = reader.ReadInt32();
+			Indices_3 = reader.ReadInt32();
+			Neighbors_0 = reader.ReadInt32();
+			Neighbors_1 = reader.ReadInt32();
+			Neighbors_2 = reader.ReadInt32();
+			Neighbors_3 = reader.ReadInt32();
+			Matrix.Read(reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

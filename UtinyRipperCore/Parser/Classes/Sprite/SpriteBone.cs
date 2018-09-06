@@ -2,13 +2,13 @@
 {
 	public struct SpriteBone : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Name = stream.ReadStringAligned();
-			Position.Read(stream);
-			Rotation.Read(stream);
-			Length = stream.ReadSingle();
-			ParentID = stream.ReadInt32();
+			Name = reader.ReadStringAligned();
+			Position.Read(reader);
+			Rotation.Read(reader);
+			Length = reader.ReadSingle();
+			ParentID = reader.ReadInt32();
 		}
 
 		public string Name { get; private set; }

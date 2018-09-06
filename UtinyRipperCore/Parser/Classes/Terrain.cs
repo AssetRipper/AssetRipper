@@ -72,57 +72,57 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			TerrainData.Read(stream);
-			TreeDistance = stream.ReadSingle();
-			TreeBillboardDistance = stream.ReadSingle();
-			TreeCrossFadeLength = stream.ReadSingle();
-			TreeMaximumFullLODCount = stream.ReadInt32();
-			DetailObjectDistance = stream.ReadSingle();
-			DetailObjectDensity = stream.ReadSingle();
-			HeightmapPixelError = stream.ReadSingle();
-			SplatMapDistance = stream.ReadSingle();
-			HeightmapMaximumLOD = stream.ReadInt32();
-			CastShadows = stream.ReadBoolean();
-			if (IsReadDrawHeightmap(stream.Version))
+			TerrainData.Read(reader);
+			TreeDistance = reader.ReadSingle();
+			TreeBillboardDistance = reader.ReadSingle();
+			TreeCrossFadeLength = reader.ReadSingle();
+			TreeMaximumFullLODCount = reader.ReadInt32();
+			DetailObjectDistance = reader.ReadSingle();
+			DetailObjectDensity = reader.ReadSingle();
+			HeightmapPixelError = reader.ReadSingle();
+			SplatMapDistance = reader.ReadSingle();
+			HeightmapMaximumLOD = reader.ReadInt32();
+			CastShadows = reader.ReadBoolean();
+			if (IsReadDrawHeightmap(reader.Version))
 			{
-				DrawHeightmap = stream.ReadBoolean();
+				DrawHeightmap = reader.ReadBoolean();
 			}
-			DrawTreesAndFoliage = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			DrawTreesAndFoliage = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 
-			if (IsReadReflectionProbeUsage(stream.Version))
+			if (IsReadReflectionProbeUsage(reader.Version))
 			{
-				ReflectionProbeUsage = stream.ReadInt32();
-				MaterialType = stream.ReadInt32();
-				LegacySpecular.Read(stream);
-				LegacyShininess = stream.ReadSingle();
+				ReflectionProbeUsage = reader.ReadInt32();
+				MaterialType = reader.ReadInt32();
+				LegacySpecular.Read(reader);
+				LegacyShininess = reader.ReadSingle();
 			}
-			if (IsReadDefaultSmoothness(stream.Version))
+			if (IsReadDefaultSmoothness(reader.Version))
 			{
-				UseDefaultSmoothness = stream.ReadBoolean();
-				DefaultSmoothness = stream.ReadSingle();
+				UseDefaultSmoothness = reader.ReadBoolean();
+				DefaultSmoothness = reader.ReadSingle();
 			}
-			MaterialTemplate.Read(stream);
-			LightmapIndex = stream.ReadUInt16();
-			LightmapIndexDynamic = stream.ReadUInt16();
-			LightmapTilingOffset.Read(stream);
-			LightmapTilingOffsetDynamic.Read(stream);
-			if(IsReadExplicitProbeSetHash(stream.Version))
+			MaterialTemplate.Read(reader);
+			LightmapIndex = reader.ReadUInt16();
+			LightmapIndexDynamic = reader.ReadUInt16();
+			LightmapTilingOffset.Read(reader);
+			LightmapTilingOffsetDynamic.Read(reader);
+			if(IsReadExplicitProbeSetHash(reader.Version))
 			{
-				ExplicitProbeSetHash.Read(stream);
+				ExplicitProbeSetHash.Read(reader);
 			}
 
-			if (IsReadBakeLightProbesForTrees(stream.Version))
+			if (IsReadBakeLightProbesForTrees(reader.Version))
 			{
-				BakeLightProbesForTrees = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				BakeLightProbesForTrees = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			
-				DynamicUVST.Read(stream);
-				ChunkDynamicUVST.Read(stream);
+				DynamicUVST.Read(reader);
+				ChunkDynamicUVST.Read(reader);
 			}
 		}
 

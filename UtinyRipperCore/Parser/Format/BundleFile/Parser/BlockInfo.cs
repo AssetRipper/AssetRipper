@@ -6,7 +6,7 @@
 	/// </summary>
 	internal struct BlockInfo : IEndianReadable
 	{
-		public void Read(EndianStream stream)
+		public void Read(EndianReader stream)
 		{
 			DecompressedSize = stream.ReadUInt32();
 			CompressedSize = stream.ReadUInt32();

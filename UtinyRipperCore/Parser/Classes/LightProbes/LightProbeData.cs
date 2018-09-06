@@ -22,17 +22,17 @@ namespace UtinyRipper.Classes.LightProbess
 			return version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 1);
 		}
 		
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Tetrahedralization.Read(stream);
-			if(IsReadProbeSets(stream.Version))
+			Tetrahedralization.Read(reader);
+			if(IsReadProbeSets(reader.Version))
 			{
-				m_probeSets = stream.ReadArray<ProbeSetIndex>();
-				m_positions = stream.ReadArray<Vector3f>();
+				m_probeSets = reader.ReadArray<ProbeSetIndex>();
+				m_positions = reader.ReadArray<Vector3f>();
 			}
-			if(IsReadNonTetrahedralizedProbeSetIndexMap(stream.Version))
+			if(IsReadNonTetrahedralizedProbeSetIndexMap(reader.Version))
 			{
-				m_nonTetrahedralizedProbeSetIndexMap.Read(stream);
+				m_nonTetrahedralizedProbeSetIndexMap.Read(reader);
 			}
 		}
 

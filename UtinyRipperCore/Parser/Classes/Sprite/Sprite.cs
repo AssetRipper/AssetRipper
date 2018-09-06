@@ -153,50 +153,50 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Rect.Read(stream);
-			Offset.Read(stream);
-			if(IsReadBorder(stream.Version))
+			Rect.Read(reader);
+			Offset.Read(reader);
+			if(IsReadBorder(reader.Version))
 			{
-				Border.Read(stream);
+				Border.Read(reader);
 			}
-			PixelsToUnits = stream.ReadSingle();
-			if(IsReadPivot(stream.Version))
+			PixelsToUnits = reader.ReadSingle();
+			if(IsReadPivot(reader.Version))
 			{
-				Pivot.Read(stream);
+				Pivot.Read(reader);
 			}
-			Extrude = stream.ReadUInt32();
-			if(IsReadPolygon(stream.Version))
+			Extrude = reader.ReadUInt32();
+			if(IsReadPolygon(reader.Version))
 			{
-				IsPolygon = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				IsPolygon = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if(IsReadRendererData(stream.Version))
+			if(IsReadRendererData(reader.Version))
 			{
-				RenderDataKey = stream.ReadTupleTLong<EngineGUID>();
-				m_atlasTags = stream.ReadStringArray();
-				SpriteAtlas.Read(stream);
+				RenderDataKey = reader.ReadTupleTLong<EngineGUID>();
+				m_atlasTags = reader.ReadStringArray();
+				SpriteAtlas.Read(reader);
 			}
-			RD.Read(stream);
-			stream.AlignStream(AlignType.Align4);
+			RD.Read(reader);
+			reader.AlignStream(AlignType.Align4);
 
-			if(IsReadPhysicsShape(stream.Version))
+			if(IsReadPhysicsShape(reader.Version))
 			{
-				int count = stream.ReadInt32();
+				int count = reader.ReadInt32();
 				m_physicsShape = new Vector2f[count][];
 				for (int i = 0; i < count; i++)
 				{
-					m_physicsShape[i] = stream.ReadArray<Vector2f>();
+					m_physicsShape[i] = reader.ReadArray<Vector2f>();
 				}
 			}
 
-			if(IsReadBones(stream.Version))
+			if(IsReadBones(reader.Version))
 			{
-				m_bones = stream.ReadArray<SpriteBone>();
+				m_bones = reader.ReadArray<SpriteBone>();
 			}
 		}
 

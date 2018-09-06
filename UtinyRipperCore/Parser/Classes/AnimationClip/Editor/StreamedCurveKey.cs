@@ -2,11 +2,11 @@
 {
 	public struct StreamedCurveKey : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Index = stream.ReadInt32();
-			TCB.Read(stream);
-			Value = stream.ReadSingle();
+			Index = reader.ReadInt32();
+			TCB.Read(reader);
+			Value = reader.ReadSingle();
 		}
 
 		public float CalculateOutTangent(float prevValue, float nextValue)

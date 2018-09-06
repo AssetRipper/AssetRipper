@@ -2,10 +2,10 @@
 {
 	public struct SerializedShaderFloatValue : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Val = stream.ReadSingle();
-			Name = stream.ReadStringAligned();
+			Val = reader.ReadSingle();
+			Name = reader.ReadStringAligned();
 		}
 
 		public bool IsZero => Val == 0.0f;

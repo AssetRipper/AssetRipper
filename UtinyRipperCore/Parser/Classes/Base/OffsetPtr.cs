@@ -11,9 +11,9 @@ namespace UtinyRipper.Classes
 			Instance = instance;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Instance.Read(stream);
+			Instance.Read(reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

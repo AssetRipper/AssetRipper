@@ -6,12 +6,12 @@ namespace UtinyRipper.Classes.AnimatorControllers
 {
 	public struct ConditionConstant : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			ConditionMode = (AnimatorConditionMode)stream.ReadUInt32();
-			EventID = stream.ReadUInt32();
-			EventThreshold = stream.ReadSingle();
-			ExitTime = stream.ReadSingle();
+			ConditionMode = (AnimatorConditionMode)reader.ReadUInt32();
+			EventID = reader.ReadUInt32();
+			EventThreshold = reader.ReadSingle();
+			ExitTime = reader.ReadSingle();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

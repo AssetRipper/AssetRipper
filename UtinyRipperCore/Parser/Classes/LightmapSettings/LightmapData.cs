@@ -36,16 +36,16 @@ namespace UtinyRipper.Classes.LightmapSettingss
 			return 1;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Lightmap.Read(stream);
-			if(IsReadDirLightmap(stream.Version))
+			Lightmap.Read(reader);
+			if(IsReadDirLightmap(reader.Version))
 			{
-				DirLightmap.Read(stream);
+				DirLightmap.Read(reader);
 			}
-			if(IsReadShadowMask(stream.Version))
+			if(IsReadShadowMask(reader.Version))
 			{
-				ShadowMask.Read(stream);
+				ShadowMask.Read(reader);
 			}
 		}
 

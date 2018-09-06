@@ -5,7 +5,7 @@ namespace UtinyRipper
 {
 	public class ResourcesFile : IDisposable
 	{
-		public ResourcesFile(string filePath, string fileName, Stream stream)
+		public ResourcesFile(Stream stream, string filePath, string fileName)
 		{
 			if (string.IsNullOrEmpty(filePath))
 			{
@@ -23,14 +23,9 @@ namespace UtinyRipper
 			FilePath = filePath;
 			Name = fileName;
 			Stream = stream;
+			m_basePisition = stream.Position;
 		}
-
-		public ResourcesFile(string filePath, string fileName, Stream stream, long basePosition) :
-			this(filePath, fileName, stream)
-		{
-			m_basePisition = basePosition;
-		}
-
+		
 		public void Dispose()
 		{
 			if(Stream != null)

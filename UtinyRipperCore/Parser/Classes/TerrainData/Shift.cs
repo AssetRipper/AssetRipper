@@ -2,11 +2,11 @@
 {
 	public struct Shift : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			X = stream.ReadUInt16();
-			Y = stream.ReadUInt16();
-			Flags = stream.ReadUInt16();
+			X = reader.ReadUInt16();
+			Y = reader.ReadUInt16();
+			Flags = reader.ReadUInt16();
 		}
 
 		public ushort X { get; private set; }

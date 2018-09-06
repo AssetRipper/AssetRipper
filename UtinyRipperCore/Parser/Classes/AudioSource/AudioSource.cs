@@ -134,82 +134,82 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadOutputAudioMixerGroup(stream.Version))
+			if (IsReadOutputAudioMixerGroup(reader.Version))
 			{
-				OutputAudioMixerGroup.Read(stream);
+				OutputAudioMixerGroup.Read(reader);
 			}
-			AudioClip.Read(stream);
-			PlayOnAwake = stream.ReadBoolean();
-			if (IsAlignAwake(stream.Version))
+			AudioClip.Read(reader);
+			PlayOnAwake = reader.ReadBoolean();
+			if (IsAlignAwake(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 			
-			Volume = stream.ReadSingle();
-			if (IsReadMinVolume(stream.Version))
+			Volume = reader.ReadSingle();
+			if (IsReadMinVolume(reader.Version))
 			{
-				MinVolume = stream.ReadSingle();
-				MaxVolume = stream.ReadSingle();
+				MinVolume = reader.ReadSingle();
+				MaxVolume = reader.ReadSingle();
 			}
-			if (IsReadPitch(stream.Version))
+			if (IsReadPitch(reader.Version))
 			{
-				Pitch = stream.ReadSingle();
+				Pitch = reader.ReadSingle();
 			}
-			Loop = stream.ReadBoolean();
-			if (IsReadRolloffFactor(stream.Version))
+			Loop = reader.ReadBoolean();
+			if (IsReadRolloffFactor(reader.Version))
 			{
-				RolloffFactor = stream.ReadSingle();
+				RolloffFactor = reader.ReadSingle();
 			}
-			if (IsReadMute(stream.Version))
+			if (IsReadMute(reader.Version))
 			{
-				Mute = stream.ReadBoolean();
+				Mute = reader.ReadBoolean();
 			}
-			if (IsReadSpatialize(stream.Version))
+			if (IsReadSpatialize(reader.Version))
 			{
-				Spatialize = stream.ReadBoolean();
+				Spatialize = reader.ReadBoolean();
 			}
-			if (IsReadSpatializePostEffects(stream.Version))
+			if (IsReadSpatializePostEffects(reader.Version))
 			{
-				SpatializePostEffects = stream.ReadBoolean();
+				SpatializePostEffects = reader.ReadBoolean();
 			}
-			if (IsAlignMute(stream.Version))
+			if (IsAlignMute(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
-			}
-
-			if (IsReadPriority(stream.Version))
-			{
-				Priority = stream.ReadInt32();
-				DopplerLevel = stream.ReadSingle();
-				MinDistance = stream.ReadSingle();
-				MaxDistance = stream.ReadSingle();
-				Pan2D = stream.ReadSingle();
-				RolloffMode = (AudioRolloffMode)stream.ReadInt32();
-				BypassEffects = stream.ReadBoolean();
-			}
-			if (IsReadBypassListenerEffects(stream.Version))
-			{
-				BypassListenerEffects = stream.ReadBoolean();
-				BypassReverbZones = stream.ReadBoolean();
-			}
-			if (IsAlignBypass(stream.Version))
-			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadRolloffCustomCurve(stream.Version))
+			if (IsReadPriority(reader.Version))
 			{
-				RolloffCustomCurve.Read(stream);
-				PanLevelCustomCurve.Read(stream);
-				SpreadCustomCurve.Read(stream);
+				Priority = reader.ReadInt32();
+				DopplerLevel = reader.ReadSingle();
+				MinDistance = reader.ReadSingle();
+				MaxDistance = reader.ReadSingle();
+				Pan2D = reader.ReadSingle();
+				RolloffMode = (AudioRolloffMode)reader.ReadInt32();
+				BypassEffects = reader.ReadBoolean();
 			}
-			if (IsReadReverbZoneMixCustomCurve(stream.Version))
+			if (IsReadBypassListenerEffects(reader.Version))
 			{
-				ReverbZoneMixCustomCurve.Read(stream);
+				BypassListenerEffects = reader.ReadBoolean();
+				BypassReverbZones = reader.ReadBoolean();
+			}
+			if (IsAlignBypass(reader.Version))
+			{
+				reader.AlignStream(AlignType.Align4);
+			}
+
+			if (IsReadRolloffCustomCurve(reader.Version))
+			{
+				RolloffCustomCurve.Read(reader);
+				PanLevelCustomCurve.Read(reader);
+				SpreadCustomCurve.Read(reader);
+			}
+			if (IsReadReverbZoneMixCustomCurve(reader.Version))
+			{
+				ReverbZoneMixCustomCurve.Read(reader);
 			}
 		}
 

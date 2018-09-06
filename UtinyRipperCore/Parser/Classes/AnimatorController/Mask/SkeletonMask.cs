@@ -7,9 +7,9 @@ namespace UtinyRipper.Classes.AnimatorControllers
 {
 	public struct SkeletonMask : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_data = stream.ReadArray<SkeletonMaskElement>();
+			m_data = reader.ReadArray<SkeletonMaskElement>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

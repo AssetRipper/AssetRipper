@@ -21,14 +21,14 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(4);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadSourceTextures(stream.Version))
+			if (IsReadSourceTextures(reader.Version))
 			{
-				m_sourceTextures = stream.ReadArray<PPtr<Texture2D>>();
-				stream.AlignStream(AlignType.Align4);
+				m_sourceTextures = reader.ReadArray<PPtr<Texture2D>>();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

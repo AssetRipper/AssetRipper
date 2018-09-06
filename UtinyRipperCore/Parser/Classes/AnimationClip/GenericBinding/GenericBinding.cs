@@ -20,26 +20,26 @@ namespace UtinyRipper.Classes.AnimationClips
 			return version.IsGreaterEqual(5, 6);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Path = stream.ReadUInt32();
-			Attribute = stream.ReadUInt32();
-			Script.Read(stream);
+			Path = reader.ReadUInt32();
+			Attribute = reader.ReadUInt32();
+			Script.Read(reader);
 
-			if(IsInt32ID(stream.Version))
+			if(IsInt32ID(reader.Version))
 			{
-				ClassID = (ClassIDType)stream.ReadInt32();
+				ClassID = (ClassIDType)reader.ReadInt32();
 			}
 			else
 			{
-				ClassID = (ClassIDType)stream.ReadUInt16();
+				ClassID = (ClassIDType)reader.ReadUInt16();
 			}
 
-			CustomType = stream.ReadByte();
-			IsPPtrCurve = stream.ReadByte();
-			if (IsAlign(stream.Version))
+			CustomType = reader.ReadByte();
+			IsPPtrCurve = reader.ReadByte();
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

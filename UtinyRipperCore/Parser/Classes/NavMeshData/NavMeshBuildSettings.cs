@@ -52,24 +52,24 @@ namespace UtinyRipper.Classes.NavMeshDatas
 			return 2;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			AgentTypeID = stream.ReadInt32();
-			AgentRadius = stream.ReadSingle();
-			AgentHeight = stream.ReadSingle();
-			AgentSlope = stream.ReadSingle();
-			AgentClimb = stream.ReadSingle();
-			LedgeDropHeight = stream.ReadSingle();
-			MaxJumpAcrossDistance = stream.ReadSingle();
-			MinRegionArea = stream.ReadSingle();
-			ManualCellSize = stream.ReadInt32();
-			CellSize = stream.ReadSingle();
-			ManualTileSize = stream.ReadInt32();
-			TileSize = stream.ReadInt32();
-			AccuratePlacement = stream.ReadInt32();
-			if (IsReadDebug(stream.Version))
+			AgentTypeID = reader.ReadInt32();
+			AgentRadius = reader.ReadSingle();
+			AgentHeight = reader.ReadSingle();
+			AgentSlope = reader.ReadSingle();
+			AgentClimb = reader.ReadSingle();
+			LedgeDropHeight = reader.ReadSingle();
+			MaxJumpAcrossDistance = reader.ReadSingle();
+			MinRegionArea = reader.ReadSingle();
+			ManualCellSize = reader.ReadInt32();
+			CellSize = reader.ReadSingle();
+			ManualTileSize = reader.ReadInt32();
+			TileSize = reader.ReadInt32();
+			AccuratePlacement = reader.ReadInt32();
+			if (IsReadDebug(reader.Version))
 			{
-				Debug.Read(stream);
+				Debug.Read(reader);
 			}
 		}
 

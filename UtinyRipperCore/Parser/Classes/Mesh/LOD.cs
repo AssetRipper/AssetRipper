@@ -4,13 +4,13 @@ namespace UtinyRipper.Classes.Meshes
 {
 	public struct LOD : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_meshData = stream.ReadArray<MeshData>();
-			VertexCount = stream.ReadInt32();
-			NewVertexStart = stream.ReadInt32();
-			MeshError = stream.ReadSingle();
-			m_morphToVertex = stream.ReadUInt16Array();
+			m_meshData = reader.ReadArray<MeshData>();
+			VertexCount = reader.ReadInt32();
+			NewVertexStart = reader.ReadInt32();
+			MeshError = reader.ReadSingle();
+			m_morphToVertex = reader.ReadUInt16Array();
 		}
 
 		public IReadOnlyList<MeshData> MeshData => m_meshData;

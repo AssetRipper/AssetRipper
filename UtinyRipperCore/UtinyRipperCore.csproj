@@ -122,7 +122,7 @@
     <Compile Include="Converter\Textures\PVR\PVRPixelFormat.cs" />
     <Compile Include="Exporter\YAML\Base\ScalarType.cs" />
     <Compile Include="Exporter\YAML\Utils\Extensions\IDictionaryExtensions.cs" />
-    <Compile Include="IO\EndianStream\IEndianReadable.cs" />
+    <Compile Include="IO\EndianReader\IEndianReadable.cs" />
     <Compile Include="IO\FileMultiStream\SplitNameComparer.cs" />
     <Compile Include="IO\ReverseStream.cs" />
     <Compile Include="IO\FileMultiStream\FileMultiStream.cs" />
@@ -172,7 +172,6 @@
     <Compile Include="Parser\AssetCollection\Exporter\Collections\ExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Collections\SceneExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Collections\TextureExportCollection.cs" />
-    <Compile Include="Parser\AssetCollection\Exporter\Scripts\AssemblyManagerWrapper.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\IAssemblyManager.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Mono\MonoManager.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\AssemblyManager.cs" />
@@ -433,7 +432,9 @@
     <Compile Include="Parser\Format\BundleFile\Parser\BundleHeader.cs" />
     <Compile Include="Parser\Format\BundleFile\Parser\BundleFlag.cs" />
     <Compile Include="Parser\Format\BundleFile\Parser\ChunkInfo.cs" />
-    <Compile Include="Parser\Format\SerializedFile\IO\SerializedFileStream.cs" />
+    <Compile Include="Parser\Format\Data\FileEntryType.cs" />
+    <Compile Include="Parser\AssetCollection\DependencyCollection.cs" />
+    <Compile Include="Parser\Format\SerializedFile\IO\SerializedFileReader.cs" />
     <Compile Include="Parser\Format\SerializedFile\IO\ISerializedFileReadable.cs" />
     <Compile Include="Parser\Format\SerializedFile\ISerializedFile\VirtualSerializedFile.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\RTTIClassHierarchyDescriptor.cs" />
@@ -460,11 +461,11 @@
     <Compile Include="Parser\Game\PlatformGameStructure.cs" />
     <Compile Include="Parser\Game\Platforms\WebGLStructure.cs" />
     <Compile Include="Parser\Game\Platforms\WebPlayerStructure.cs" />
-    <Compile Include="Parser\IO\AssetStream\TransferInstructionFlags.cs" />
+    <Compile Include="Parser\IO\AssetReader\TransferInstructionFlags.cs" />
     <Compile Include="Parser\IO\Extensions\IDictionaryExtensions.cs" />
     <Compile Include="Parser\IO\Extensions\AssetStreamExtensions.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Utils\Extensions\IEnumerableExtensions.cs" />
-    <Compile Include="Parser\IO\AssetStream\AssetStream.cs" />
+    <Compile Include="Parser\IO\AssetReader\AssetReader.cs" />
     <Compile Include="IO\Utils\Extensions\EndianStreamExtensions.cs" />
     <Compile Include="IO\Utils\Extensions\IListExtensions.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\ProjectExporter.cs" />
@@ -494,9 +495,9 @@
     <Compile Include="Parser\AssetCollection\Exporter\Interfaces\IYAMLExportable.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Utils\Extensions\IDictionaryExtensions.cs" />
     <Compile Include="Exporter\YAML\Utils\Extensions\IEnumerableExtensions.cs" />
-    <Compile Include="IO\EndianStream\AlignType.cs" />
-    <Compile Include="IO\EndianStream\EndianStream.cs" />
-    <Compile Include="IO\EndianStream\EndianType.cs" />
+    <Compile Include="IO\EndianReader\AlignType.cs" />
+    <Compile Include="IO\EndianReader\EndianReader.cs" />
+    <Compile Include="IO\EndianReader\EndianType.cs" />
     <Compile Include="IO\Lz4Stream.cs" />
     <Compile Include="IO\Utils\Extensions\IDictionaryExtensions.cs" />
     <Compile Include="IO\Utils\SevenZipHelper.cs" />
@@ -719,7 +720,7 @@
     <Compile Include="Parser\Classes\Base\NamedObject.cs" />
     <Compile Include="Parser\Classes\Serialize\AABB.cs" />
     <Compile Include="Parser\Classes\Serialize\Float.cs" />
-    <Compile Include="Parser\IO\AssetStream\IAssetReadable.cs" />
+    <Compile Include="Parser\IO\AssetReader\IAssetReadable.cs" />
     <Compile Include="Parser\Classes\Serialize\PackedQuatVector.cs" />
     <Compile Include="Parser\Classes\Serialize\PackedFloatVector.cs" />
     <Compile Include="Parser\Classes\Serialize\PackedIntVector.cs" />

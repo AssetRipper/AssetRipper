@@ -48,12 +48,12 @@ namespace UtinyRipper.Classes
 			return left.Data0 != right.Data0 || left.Data1 != right.Data1 || left.Data2 != right.Data2 || left.Data3 != right.Data3;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Data0 = stream.ReadUInt32();
-			Data1 = stream.ReadUInt32();
-			Data2 = stream.ReadUInt32();
-			Data3 = stream.ReadUInt32();
+			Data0 = reader.ReadUInt32();
+			Data1 = reader.ReadUInt32();
+			Data2 = reader.ReadUInt32();
+			Data3 = reader.ReadUInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

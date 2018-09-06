@@ -6,10 +6,10 @@ namespace UtinyRipper.Classes.LightProbess
 {
 	public struct ProbeSetTetrahedralization : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_tetrahedra = stream.ReadArray<Tetrahedron>();
-			m_hullRays = stream.ReadArray<Vector3f>();
+			m_tetrahedra = reader.ReadArray<Tetrahedron>();
+			m_hullRays = reader.ReadArray<Vector3f>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

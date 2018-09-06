@@ -30,26 +30,26 @@ namespace UtinyRipper.Classes
 			throw new NotImplementedException();
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Resolution = stream.ReadSingle();
-			ClusterResolution = stream.ReadSingle();
-			IrradianceBudget = stream.ReadInt32();
-			IrradianceQuality = stream.ReadInt32();
-			BackFaceTolerance = stream.ReadSingle();
-			IsTransparent = stream.ReadInt32();
-			ModellingTolerance = stream.ReadSingle();
-			SystemTag = stream.ReadInt32();
-			EdgeStitching = stream.ReadInt32();
-			BlurRadius = stream.ReadInt32();
-			DirectLightQuality = stream.ReadInt32();
-			AntiAliasingSamples = stream.ReadInt32();
-			BakedLightmapTag = stream.ReadInt32();
-			Pushoff = stream.ReadSingle();
-			AOQuality = stream.ReadInt32();
-			AOAntiAliasingSamples = stream.ReadInt32();
+			Resolution = reader.ReadSingle();
+			ClusterResolution = reader.ReadSingle();
+			IrradianceBudget = reader.ReadInt32();
+			IrradianceQuality = reader.ReadInt32();
+			BackFaceTolerance = reader.ReadSingle();
+			IsTransparent = reader.ReadInt32();
+			ModellingTolerance = reader.ReadSingle();
+			SystemTag = reader.ReadInt32();
+			EdgeStitching = reader.ReadInt32();
+			BlurRadius = reader.ReadInt32();
+			DirectLightQuality = reader.ReadInt32();
+			AntiAliasingSamples = reader.ReadInt32();
+			BakedLightmapTag = reader.ReadInt32();
+			Pushoff = reader.ReadSingle();
+			AOQuality = reader.ReadInt32();
+			AOAntiAliasingSamples = reader.ReadInt32();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

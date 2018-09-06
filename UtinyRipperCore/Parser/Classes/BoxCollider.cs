@@ -29,16 +29,16 @@ namespace UtinyRipper.Classes
 			return 2;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
-			if (IsAlign(stream.Version))
+			base.Read(reader);
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 			
-			Size.Read(stream);
-			Center.Read(stream);
+			Size.Read(reader);
+			Center.Read(reader);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

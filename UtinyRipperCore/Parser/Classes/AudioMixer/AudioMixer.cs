@@ -19,23 +19,23 @@ namespace UtinyRipper.Classes
 			return 2;
 		}*/
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			OutputGroup.Read(stream);
-			MasterGroup.Read(stream);
-			m_snapshots = stream.ReadArray<PPtr<AudioMixerSnapshot>>();
-			StartSnapshot.Read(stream);
-			SuspendThreshold = stream.ReadSingle();
-			EnableSuspend = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			OutputGroup.Read(reader);
+			MasterGroup.Read(reader);
+			m_snapshots = reader.ReadArray<PPtr<AudioMixerSnapshot>>();
+			StartSnapshot.Read(reader);
+			SuspendThreshold = reader.ReadSingle();
+			EnableSuspend = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 			
-			UpdateMode = stream.ReadInt32();
-			stream.AlignStream(AlignType.Align4);
+			UpdateMode = reader.ReadInt32();
+			reader.AlignStream(AlignType.Align4);
 			
-			MixerConstant.Read(stream);
-			stream.AlignStream(AlignType.Align4);
+			MixerConstant.Read(reader);
+			reader.AlignStream(AlignType.Align4);
 			
 		}
 

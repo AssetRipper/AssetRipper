@@ -139,46 +139,46 @@ namespace UtinyRipper.Classes
 			return File.AssemblyManager.GetScriptInfo(AssemblyName, Name);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if(IsReadScript(stream.Flags))
+			if(IsReadScript(reader.Flags))
 			{
 				m_defaultReferences = new Dictionary<string, PPtr<Object>>();
 
-				Script = stream.ReadStringAligned();
-				m_defaultReferences.Read(stream);
-				Icon.Read(stream);
+				Script = reader.ReadStringAligned();
+				m_defaultReferences.Read(reader);
+				Icon.Read(reader);
 			}
 
-			if (IsReadExecutionOrder(stream.Version))
+			if (IsReadExecutionOrder(reader.Version))
 			{
-				ExecutionOrder = stream.ReadInt32();
-				if (IsUInt32Hash(stream.Version))
+				ExecutionOrder = reader.ReadInt32();
+				if (IsUInt32Hash(reader.Version))
 				{
-					PropertiesHash = stream.ReadUInt32();
+					PropertiesHash = reader.ReadUInt32();
 				}
 				else
 				{
-					PropertiesHash128.Read(stream);
+					PropertiesHash128.Read(reader);
 				}
 			}
 
-			if (IsReadPathName(stream.Version))
+			if (IsReadPathName(reader.Version))
 			{
-				PathName = stream.ReadStringAligned();
+				PathName = reader.ReadStringAligned();
 			}
-			ClassName = stream.ReadStringAligned();
-			if (IsReadNamespace(stream.Version))
+			ClassName = reader.ReadStringAligned();
+			if (IsReadNamespace(reader.Version))
 			{
-				Namespace = stream.ReadStringAligned();
+				Namespace = reader.ReadStringAligned();
 			}
-			AssemblyNameOrigin = stream.ReadStringAligned();
+			AssemblyNameOrigin = reader.ReadStringAligned();
 			AssemblyName = FilenameUtils.FixAssemblyName(AssemblyNameOrigin);
-			if (IsReadIsEditorScript(stream.Version))
+			if (IsReadIsEditorScript(reader.Version))
 			{
-				IsEditorScript = stream.ReadBoolean();
+				IsEditorScript = reader.ReadBoolean();
 			}
 		}
 

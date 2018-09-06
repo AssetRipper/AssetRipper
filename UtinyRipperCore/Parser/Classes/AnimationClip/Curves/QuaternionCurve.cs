@@ -11,10 +11,10 @@ namespace UtinyRipper.Classes.AnimationClips
 			Path = path;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Curve.Read(stream);
-			Path = stream.ReadStringAligned();
+			Curve.Read(reader);
+			Path = reader.ReadStringAligned();
 		}
 		
 		public YAMLNode ExportYAML(IExportContainer container)

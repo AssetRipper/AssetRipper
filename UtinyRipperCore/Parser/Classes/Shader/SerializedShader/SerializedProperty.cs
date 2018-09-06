@@ -7,18 +7,18 @@ namespace UtinyRipper.Classes.Shaders
 {
 	public struct SerializedProperty : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Name = stream.ReadStringAligned();
-			Description = stream.ReadStringAligned();
-			m_attributes = stream.ReadStringArray();
-			Type = (SerializedPropertyType)stream.ReadInt32();
-			Flags = (SerializedPropertyFlag)stream.ReadUInt32();
-			DefValue0 = stream.ReadSingle();
-			DefValue1 = stream.ReadSingle();
-			DefValue2 = stream.ReadSingle();
-			DefValue3 = stream.ReadSingle();
-			DefTexture.Read(stream);
+			Name = reader.ReadStringAligned();
+			Description = reader.ReadStringAligned();
+			m_attributes = reader.ReadStringArray();
+			Type = (SerializedPropertyType)reader.ReadInt32();
+			Flags = (SerializedPropertyFlag)reader.ReadUInt32();
+			DefValue0 = reader.ReadSingle();
+			DefValue1 = reader.ReadSingle();
+			DefValue2 = reader.ReadSingle();
+			DefValue3 = reader.ReadSingle();
+			DefTexture.Read(reader);
 		}
 
 		public void Export(TextWriter writer)

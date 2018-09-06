@@ -15,12 +15,12 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			return version.IsLess(4, 5);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_nodeArray = stream.ReadArray<OffsetPtr<BlendTreeNodeConstant>>();
-			if (IsReadBlendEventArrayConstant(stream.Version))
+			m_nodeArray = reader.ReadArray<OffsetPtr<BlendTreeNodeConstant>>();
+			if (IsReadBlendEventArrayConstant(reader.Version))
 			{
-				BlendEventArrayConstant.Read(stream);
+				BlendEventArrayConstant.Read(reader);
 			}
 		}
 

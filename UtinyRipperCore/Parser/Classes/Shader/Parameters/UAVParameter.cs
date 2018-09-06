@@ -10,11 +10,11 @@
 			OriginalIndex = originalIndex;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			NameIndex = stream.ReadInt32();
-			Index = stream.ReadInt32();
-			OriginalIndex = stream.ReadInt32();
+			NameIndex = reader.ReadInt32();
+			Index = reader.ReadInt32();
+			OriginalIndex = reader.ReadInt32();
 		}
 
 		public string Name { get; private set; }

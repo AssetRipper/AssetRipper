@@ -29,10 +29,10 @@ namespace UtinyRipper.Classes.MeshRenderers
 			}
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			FirstSubMesh = stream.ReadUInt16();
-			SubMeshCount = stream.ReadUInt16();
+			FirstSubMesh = reader.ReadUInt16();
+			SubMeshCount = reader.ReadUInt16();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -213,39 +213,39 @@ namespace UtinyRipper.Classes.Meshes
 			return skin;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if(IsReadCurrentChannels(stream.Version))
+			if(IsReadCurrentChannels(reader.Version))
 			{
-				CurrentChannels = stream.ReadUInt32();
+				CurrentChannels = reader.ReadUInt32();
 			}
-			VertexCount = (int)stream.ReadUInt32();
+			VertexCount = (int)reader.ReadUInt32();
 
-			if (IsReadChannels(stream.Version))
+			if (IsReadChannels(reader.Version))
 			{
-				m_channels = stream.ReadArray<ChannelInfo>();
-				stream.AlignStream(AlignType.Align4);
+				m_channels = reader.ReadArray<ChannelInfo>();
+				reader.AlignStream(AlignType.Align4);
 			}
-			if (IsReadStream(stream.Version))
+			if (IsReadStream(reader.Version))
 			{
-				if (IsStreamStatic(stream.Version))
+				if (IsStreamStatic(reader.Version))
 				{
 					m_streams = new StreamInfo[4];
 					for (int i = 0; i < 4; i++)
 					{
 						StreamInfo streamInfo = new StreamInfo();
-						streamInfo.Read(stream);
+						streamInfo.Read(reader);
 						m_streams[i] = streamInfo;
 					}
 				}
 				else
 				{
-					m_streams = stream.ReadArray<StreamInfo>();
+					m_streams = reader.ReadArray<StreamInfo>();
 				}
 			}
 
-			m_data = stream.ReadByteArray();
-			stream.AlignStream(AlignType.Align4);
+			m_data = reader.ReadByteArray();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

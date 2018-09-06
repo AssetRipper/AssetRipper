@@ -10,11 +10,11 @@ namespace UtinyRipper.Classes.Shaders
 			SourceMap = sourceMap;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_channels = stream.ReadArray<ShaderBindChannel>();
-			stream.AlignStream(AlignType.Align4);
-			SourceMap = stream.ReadInt32();
+			m_channels = reader.ReadArray<ShaderBindChannel>();
+			reader.AlignStream(AlignType.Align4);
+			SourceMap = reader.ReadInt32();
 		}
 
 		public IReadOnlyList<ShaderBindChannel> Channels => m_channels;

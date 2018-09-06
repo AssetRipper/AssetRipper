@@ -71,39 +71,39 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			DefaultAnimation.Read(stream);
-			if (IsReadAnimationsPaired(stream.Version))
+			DefaultAnimation.Read(reader);
+			if (IsReadAnimationsPaired(reader.Version))
 			{
-				m_animationsPaired = stream.ReadTupleStringTArray<PPtr<AnimationClip>>();
+				m_animationsPaired = reader.ReadTupleStringTArray<PPtr<AnimationClip>>();
 			}
 			else
 			{
-				m_animations = stream.ReadArray<PPtr<AnimationClip>>();
+				m_animations = reader.ReadArray<PPtr<AnimationClip>>();
 			}
-			WrapMode = (WrapMode)stream.ReadInt32();
-			PlayAutomatically = stream.ReadBoolean();
-			AnimatePhysics = stream.ReadBoolean();
-			if(IsReadAnimateOnlyIfVisible(stream.Version))
+			WrapMode = (WrapMode)reader.ReadInt32();
+			PlayAutomatically = reader.ReadBoolean();
+			AnimatePhysics = reader.ReadBoolean();
+			if(IsReadAnimateOnlyIfVisible(reader.Version))
 			{
-				AnimateOnlyIfVisible = stream.ReadBoolean();
+				AnimateOnlyIfVisible = reader.ReadBoolean();
 			}
-			if (IsAlign(stream.Version))
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
-			}
-
-			if (IsReadCullingType(stream.Version))
-			{
-				CullingType = (AnimationCullingType)stream.ReadInt32();
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadUserAABB(stream.Version))
+			if (IsReadCullingType(reader.Version))
 			{
-				UserAABB.Read(stream);
+				CullingType = (AnimationCullingType)reader.ReadInt32();
+			}
+
+			if (IsReadUserAABB(reader.Version))
+			{
+				UserAABB.Read(reader);
 			}
 		}
 

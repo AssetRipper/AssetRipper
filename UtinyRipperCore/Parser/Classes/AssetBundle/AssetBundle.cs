@@ -98,61 +98,61 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadPreloadTable(stream.Version))
+			if (IsReadPreloadTable(reader.Version))
 			{
-				m_preloadTable = stream.ReadArray<PPtr<Object>>();
+				m_preloadTable = reader.ReadArray<PPtr<Object>>();
 			}
 
-			m_container = stream.ReadStringKVPArray<AssetBundles.AssetInfo>();
-			MainAsset.Read(stream);
+			m_container = reader.ReadStringKVPArray<AssetBundles.AssetInfo>();
+			MainAsset.Read(reader);
 
-			if(IsReadScriptCampatibility(stream.Version))
+			if(IsReadScriptCampatibility(reader.Version))
 			{
-				m_scriptCampatibility = stream.ReadArray<AssetBundleScriptInfo>();
+				m_scriptCampatibility = reader.ReadArray<AssetBundleScriptInfo>();
 			}
-			if (IsReadClassCampatibility(stream.Version))
+			if (IsReadClassCampatibility(reader.Version))
 			{
-				m_classCampatibility = stream.ReadInt32KVPUInt32Array();
+				m_classCampatibility = reader.ReadInt32KVPUInt32Array();
 			}
 
-			if (IsReadClassVersionMap(stream.Version))
+			if (IsReadClassVersionMap(reader.Version))
 			{
 				m_classVersionMap = new Dictionary<int, int>();
-				m_classVersionMap.Read(stream);
+				m_classVersionMap.Read(reader);
 			}
 
-			if (IsReadRuntimeCompatibility(stream.Version))
+			if (IsReadRuntimeCompatibility(reader.Version))
 			{
-				RuntimeCompatibility = stream.ReadUInt32();
+				RuntimeCompatibility = reader.ReadUInt32();
 			}
 
-			if(IsReadAssetBundleName(stream.Version))
+			if(IsReadAssetBundleName(reader.Version))
 			{
-				AssetBundleName = stream.ReadStringAligned();
-				m_dependencies = stream.ReadStringArray();
+				AssetBundleName = reader.ReadStringAligned();
+				m_dependencies = reader.ReadStringArray();
 			}
-			if (IsReadIsStreamedSceneAssetBundle(stream.Version))
+			if (IsReadIsStreamedSceneAssetBundle(reader.Version))
 			{
-				IsStreamedSceneAssetBundle = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				IsStreamedSceneAssetBundle = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
-			if(IsReadExplicitDataLayout(stream.Version))
+			if(IsReadExplicitDataLayout(reader.Version))
 			{
-				ExplicitDataLayout = stream.ReadInt32();
+				ExplicitDataLayout = reader.ReadInt32();
 			}
-			if (IsReadPathFlags(stream.Version))
+			if (IsReadPathFlags(reader.Version))
 			{
-				PathFlags = stream.ReadInt32();
+				PathFlags = reader.ReadInt32();
 			}
 
-			if(IsReadSceneHashes(stream.Version))
+			if(IsReadSceneHashes(reader.Version))
 			{
 				m_sceneHashes = new Dictionary<string, string>();
-				m_sceneHashes.Read(stream);
+				m_sceneHashes.Read(reader);
 			}
 		}
 

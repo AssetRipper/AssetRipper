@@ -5,11 +5,11 @@ namespace UtinyRipper.Classes.PhysicMaterials
 {
 	public struct JointSpring : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Spring = stream.ReadSingle();
-			Damper = stream.ReadSingle();
-			TargetPosition = stream.ReadSingle();
+			Spring = reader.ReadSingle();
+			Damper = reader.ReadSingle();
+			TargetPosition = reader.ReadSingle();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

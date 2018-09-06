@@ -13,50 +13,50 @@ namespace UtinyRipper.SerializedFiles
 			return generation == FileGeneration.FG_500a1 || generation >= FileGeneration.FG_500aunk1;
 		}
 
-		public void Read(SerializedFileStream stream)
+		public void Read(SerializedFileReader reader)
 		{
-			if (IsRead5Format(stream.Generation))
+			if (IsRead5Format(reader.Generation))
 			{
-				int nodesCount = stream.ReadInt32();
+				int nodesCount = reader.ReadInt32();
 				if(nodesCount < 0)
 				{
 					throw new Exception($"Invalid type tree's node count {nodesCount}");
 				}
 
-				int stringSize = stream.ReadInt32();
+				int stringSize = reader.ReadInt32();
 				if (stringSize < 0)
 				{
 					throw new Exception($"Invalid type tree's string size {stringSize}");
 				}
 					
 				m_nodes = new TypeTreeNode[nodesCount];
-				long stringPosition = stream.BaseStream.Position + nodesCount * TypeTreeNode.NodeSize;
+				long stringPosition = reader.BaseStream.Position + nodesCount * TypeTreeNode.NodeSize;
 				for (int i = 0; i < nodesCount; i++)
 				{
 					TypeTreeNode node = new TypeTreeNode();
-					node.Read(stream, stringPosition);
+					node.Read(reader, stringPosition);
 					m_nodes[i] = node;
 				}
-				stream.BaseStream.Position += stringSize;
+				reader.BaseStream.Position += stringSize;
 			}
 			else
 			{
 				List<TypeTreeNode> nodes = new List<TypeTreeNode>();
-				ReadTreeNode(stream, nodes, 0);
+				ReadTreeNode(reader, nodes, 0);
 				m_nodes = nodes.ToArray();
 			}
 		}
 
-		private static void ReadTreeNode(SerializedFileStream stream, ICollection<TypeTreeNode> nodes, byte depth)
+		private static void ReadTreeNode(SerializedFileReader reader, ICollection<TypeTreeNode> nodes, byte depth)
 		{
 			TypeTreeNode node = new TypeTreeNode(depth);
-			node.Read(stream);
+			node.Read(reader);
 			nodes.Add(node);
 
-			int childCount = stream.ReadInt32();
+			int childCount = reader.ReadInt32();
 			for (int i = 0; i < childCount; i++)
 			{
-				ReadTreeNode(stream, nodes, (byte)(depth + 1));
+				ReadTreeNode(reader, nodes, (byte)(depth + 1));
 			}
 		}
 

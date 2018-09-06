@@ -14,13 +14,13 @@ namespace UtinyRipper.Classes.LightProbess
 			return version.IsGreaterEqual(5, 6);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_probeOcclusionLightIndex = stream.ReadInt32Array();
-			m_occlusion = stream.ReadSingleArray();
-			if(IsReadOcclusionMaskChannel(stream.Version))
+			m_probeOcclusionLightIndex = reader.ReadInt32Array();
+			m_occlusion = reader.ReadSingleArray();
+			if(IsReadOcclusionMaskChannel(reader.Version))
 			{
-				m_occlusionMaskChannel = stream.ReadByteArray();
+				m_occlusionMaskChannel = reader.ReadByteArray();
 			}
 		}
 

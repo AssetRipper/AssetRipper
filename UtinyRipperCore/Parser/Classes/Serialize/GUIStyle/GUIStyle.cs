@@ -65,65 +65,65 @@ namespace UtinyRipper.Classes
 			return new GUIStyle(this);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			StyleName = stream.ReadStringAligned();
-			Normal.Read(stream);
-			Hover.Read(stream);
-			Active.Read(stream);
-			Focused.Read(stream);
-			OnNormal.Read(stream);
-			OnHover.Read(stream);
-			OnActive.Read(stream);
-			OnFocused.Read(stream);
-			Border.Read(stream);
-			if(IsBuiltIn(stream.Version))
+			StyleName = reader.ReadStringAligned();
+			Normal.Read(reader);
+			Hover.Read(reader);
+			Active.Read(reader);
+			Focused.Read(reader);
+			OnNormal.Read(reader);
+			OnHover.Read(reader);
+			OnActive.Read(reader);
+			OnFocused.Read(reader);
+			Border.Read(reader);
+			if(IsBuiltIn(reader.Version))
 			{
-				Margin.Read(stream);
-				Padding.Read(stream);
+				Margin.Read(reader);
+				Padding.Read(reader);
 			}
 			else
 			{
-				Padding.Read(stream);
-				Margin.Read(stream);
+				Padding.Read(reader);
+				Margin.Read(reader);
 			}
-			Overflow.Read(stream);
-			Font.Read(stream);
+			Overflow.Read(reader);
+			Font.Read(reader);
 
-			if(IsBuiltIn(stream.Version))
+			if(IsBuiltIn(reader.Version))
 			{
-				FontSize = stream.ReadInt32();
-				FontStyle = stream.ReadInt32();
-				Alignment = (TextAnchor)stream.ReadInt32();
-				WordWrap = stream.ReadBoolean();
-				RichText = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				FontSize = reader.ReadInt32();
+				FontStyle = reader.ReadInt32();
+				Alignment = (TextAnchor)reader.ReadInt32();
+				WordWrap = reader.ReadBoolean();
+				RichText = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 
-				TextClipping = (TextClipping)stream.ReadInt32();
-				ImagePosition = (ImagePosition)stream.ReadInt32();
-				ContentOffset.Read(stream);
-				FixedWidth = stream.ReadSingle();
-				FixedHeight = stream.ReadSingle();
-				StretchWidth = stream.ReadBoolean();
-				StretchHeight = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				TextClipping = (TextClipping)reader.ReadInt32();
+				ImagePosition = (ImagePosition)reader.ReadInt32();
+				ContentOffset.Read(reader);
+				FixedWidth = reader.ReadSingle();
+				FixedHeight = reader.ReadSingle();
+				StretchWidth = reader.ReadBoolean();
+				StretchHeight = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 			else
 			{
-				ImagePosition = (ImagePosition)stream.ReadInt32();
-				Alignment = (TextAnchor)stream.ReadInt32();
-				WordWrap = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				ImagePosition = (ImagePosition)reader.ReadInt32();
+				Alignment = (TextAnchor)reader.ReadInt32();
+				WordWrap = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 
-				TextClipping = (TextClipping)stream.ReadInt32();
-				ContentOffset.Read(stream);
-				ClipOffset.Read(stream);
-				FixedWidth = stream.ReadSingle();
-				FixedHeight = stream.ReadSingle();
-				StretchWidth = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
-				StretchHeight = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				TextClipping = (TextClipping)reader.ReadInt32();
+				ContentOffset.Read(reader);
+				ClipOffset.Read(reader);
+				FixedWidth = reader.ReadSingle();
+				FixedHeight = reader.ReadSingle();
+				StretchWidth = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
+				StretchHeight = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

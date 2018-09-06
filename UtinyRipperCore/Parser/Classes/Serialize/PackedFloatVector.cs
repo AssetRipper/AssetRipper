@@ -6,15 +6,15 @@ namespace UtinyRipper.Classes
 {
 	public struct PackedFloatVector : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			NumItems = stream.ReadUInt32();
-			Range = stream.ReadSingle();
-			Start = stream.ReadSingle();
-			m_data = stream.ReadByteArray();
-			stream.AlignStream(AlignType.Align4);
-			BitSize = stream.ReadByte();
-			stream.AlignStream(AlignType.Align4);
+			NumItems = reader.ReadUInt32();
+			Range = reader.ReadSingle();
+			Start = reader.ReadSingle();
+			m_data = reader.ReadByteArray();
+			reader.AlignStream(AlignType.Align4);
+			BitSize = reader.ReadByte();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -7,15 +7,15 @@
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			AnchorMin.Read(stream);
-			AnchorMax.Read(stream);
-			AnchorPosition.Read(stream);
-			SizeDelta.Read(stream);
-			Pivot.Read(stream);
+			AnchorMin.Read(reader);
+			AnchorMax.Read(reader);
+			AnchorPosition.Read(reader);
+			SizeDelta.Read(reader);
+			Pivot.Read(reader);
 		}
 
 		public Vector2f AnchorMin;

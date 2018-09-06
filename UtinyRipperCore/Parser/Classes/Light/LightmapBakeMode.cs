@@ -5,10 +5,10 @@ namespace UtinyRipper.Classes.Lights
 {
 	public struct LightmapBakeMode : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			LightmapBakeType = (LightmapBakeType)stream.ReadInt32();
-			MixedLightingMode = (MixedLightingMode)stream.ReadInt32();
+			LightmapBakeType = (LightmapBakeType)reader.ReadInt32();
+			MixedLightingMode = (MixedLightingMode)reader.ReadInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

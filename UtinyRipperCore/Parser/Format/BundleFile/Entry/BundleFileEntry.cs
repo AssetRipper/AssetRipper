@@ -1,27 +1,53 @@
 ﻿using System;
 using System.IO;
+using UtinyRipper.AssetExporters;
 
 namespace UtinyRipper.BundleFiles
 {
-	internal class BundleFileEntry : FileEntry
+	public class BundleFileEntry : FileEntry
 	{
 		public BundleFileEntry(Stream stream, string filePath, string name, long offset, long size, bool isStreamPermanent) :
 			base(stream, filePath, name, offset, size, isStreamPermanent)
 		{
-		}
-
-		public void ReadFile(FileCollection collection, Action<string> requestDependencyCallback)
-		{
-			m_stream.Position = m_offset;
-			collection.ReadSerializedFile(m_stream, Name, m_filePath, requestDependencyCallback);
-			long read = m_stream.Position - m_offset;
-			if (read != m_size)
+			if(IsResourceFile)
 			{
-				//throw new System.Exception($"Read {read} but expected {m_length}");
+				EntryType = FileEntryType.Resource;
+			}
+			else if (IsSerializedFile)
+			{
+				EntryType = FileEntryType.Serialized;
+			}
+			else if (IsSkipFile)
+			{
+				EntryType = FileEntryType.Unknown;
+			}
+			else
+			{
+				throw new Exception($"Unsupport {nameof(BundleFile)} entry {Name} for file '{filePath}'");
 			}
 		}
 
+		protected override bool IsResourceFileInner
+		{
+			get
+			{
+				return AssemblyManager.IsAssembly(Name);
+			}
+		}
+
+		protected override bool IsSkipFileInner
+		{
+			get
+			{
+				return Name.EndsWith(ManifestExtention, StringComparison.Ordinal);
+			}
+		}
+
+		public override FileEntryType EntryType { get; }
+
 		public long Offset => m_offset;
 		public long Size => m_size;
+
+		private const string ManifestExtention = ".manifest";
 	}
 }

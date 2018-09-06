@@ -5,12 +5,12 @@ namespace UtinyRipper.Classes.Prefabs
 {
 	public struct PropertyModification : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Target.Read(stream);
-			PropertyPath = stream.ReadStringAligned();
-			Value = stream.ReadStringAligned();
-			ObjectReference.Read(stream);
+			Target.Read(reader);
+			PropertyPath = reader.ReadStringAligned();
+			Value = reader.ReadStringAligned();
+			ObjectReference.Read(reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

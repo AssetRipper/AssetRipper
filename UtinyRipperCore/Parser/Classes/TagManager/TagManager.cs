@@ -43,26 +43,26 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			m_tags = stream.ReadStringArray();
-			if(IsReadStaticArray(stream.Version))
+			m_tags = reader.ReadStringArray();
+			if(IsReadStaticArray(reader.Version))
 			{
 				m_layers = new string[32];
 				for(int i = 0; i < m_layers.Length; i++)
 				{
-					m_layers[i] = stream.ReadStringAligned();
+					m_layers[i] = reader.ReadStringAligned();
 				}
 			}
 			else
 			{
-				m_layers = stream.ReadStringArray();
+				m_layers = reader.ReadStringArray();
 			}
-			if(IsReadSortingLayers(stream.Version))
+			if(IsReadSortingLayers(reader.Version))
 			{
-				m_sortingLayers = stream.ReadArray<SortingLayerEntry>();
+				m_sortingLayers = reader.ReadArray<SortingLayerEntry>();
 			}
 		}
 

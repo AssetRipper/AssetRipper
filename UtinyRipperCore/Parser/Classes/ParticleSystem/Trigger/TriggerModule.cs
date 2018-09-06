@@ -17,21 +17,21 @@ namespace UtinyRipper.Classes.ParticleSystems
 			RadiusScale = 1.0f;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			CollisionShape0.Read(stream);
-			CollisionShape1.Read(stream);
-			CollisionShape2.Read(stream);
-			CollisionShape3.Read(stream);
-			CollisionShape4.Read(stream);
-			CollisionShape5.Read(stream);
-			Inside = (TriggerAction)stream.ReadInt32();
-			Outside = (TriggerAction)stream.ReadInt32();
-			Enter = stream.ReadInt32();
-			Exit = stream.ReadInt32();
-			RadiusScale = stream.ReadSingle();
+			CollisionShape0.Read(reader);
+			CollisionShape1.Read(reader);
+			CollisionShape2.Read(reader);
+			CollisionShape3.Read(reader);
+			CollisionShape4.Read(reader);
+			CollisionShape5.Read(reader);
+			Inside = (TriggerAction)reader.ReadInt32();
+			Outside = (TriggerAction)reader.ReadInt32();
+			Enter = reader.ReadInt32();
+			Exit = reader.ReadInt32();
+			RadiusScale = reader.ReadSingle();
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

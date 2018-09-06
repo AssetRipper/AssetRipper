@@ -7,11 +7,11 @@ namespace UtinyRipper.Classes.Shaders
 {
 	public struct SerializedSubShader : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_passes = stream.ReadArray<SerializedPass>();
-			Tags.Read(stream);
-			LOD = stream.ReadInt32();
+			m_passes = reader.ReadArray<SerializedPass>();
+			Tags.Read(reader);
+			LOD = reader.ReadInt32();
 		}
 
 		public void Export(TextWriter writer, Shader shader, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)

@@ -13,17 +13,17 @@ namespace UtinyRipper.Classes.AudioMixers
 			return 2;
 		}*/
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Type = stream.ReadInt32();
-			GroupConstantIndex = stream.ReadUInt32();
-			SendTargetEffectIndex = stream.ReadUInt32();
-			WetMixLevelIndex = stream.ReadUInt32();
-			PrevEffectIndex = stream.ReadUInt32();
-			Bypass = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			Type = reader.ReadInt32();
+			GroupConstantIndex = reader.ReadUInt32();
+			SendTargetEffectIndex = reader.ReadUInt32();
+			WetMixLevelIndex = reader.ReadUInt32();
+			PrevEffectIndex = reader.ReadUInt32();
+			Bypass = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 			
-			m_parameterIndices = stream.ReadUInt32Array();
+			m_parameterIndices = reader.ReadUInt32Array();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

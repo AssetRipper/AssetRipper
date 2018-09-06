@@ -4,9 +4,9 @@ using System.Text;
 
 namespace UtinyRipper
 {
-	public sealed class AssetStream : EndianStream
+	public sealed class AssetReader : EndianReader
 	{
-		public AssetStream(Stream stream, Version version, Platform platform, TransferInstructionFlags flags) :
+		public AssetReader(Stream stream, Version version, Platform platform, TransferInstructionFlags flags) :
 			base(stream)
 		{
 			Version = version;
@@ -14,12 +14,20 @@ namespace UtinyRipper
 			Flags = flags;
 		}
 
-		public AssetStream(EndianStream stream, Version version, Platform platform, TransferInstructionFlags flags) :
-			base(stream.BaseStream, stream.AlignPosition, stream.EndianType)
+		public AssetReader(EndianReader reader, Version version, Platform platform, TransferInstructionFlags flags) :
+			base(reader)
 		{
 			Version = version;
 			Platform = platform;
 			Flags = flags;
+		}
+
+		public AssetReader(AssetReader reader, long alignPosition):
+			base(reader, alignPosition)
+		{
+			Version = reader.Version;
+			Platform = reader.Platform;
+			Flags = reader.Flags;
 		}
 
 		public new T[] ReadArray<T>()

@@ -30,18 +30,18 @@
 			MultiSampled = multiSampled;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			NameIndex = stream.ReadInt32();
-			Index = stream.ReadInt32();
-			SamplerIndex = stream.ReadInt32();
+			NameIndex = reader.ReadInt32();
+			Index = reader.ReadInt32();
+			SamplerIndex = reader.ReadInt32();
 
-			if(IsReadMultiSampled(stream.Version))
+			if(IsReadMultiSampled(reader.Version))
 			{
-				MultiSampled = stream.ReadBoolean();
+				MultiSampled = reader.ReadBoolean();
 			}
-			Dim = stream.ReadByte();
-			stream.AlignStream(AlignType.Align4);
+			Dim = reader.ReadByte();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public string Name { get; private set; }

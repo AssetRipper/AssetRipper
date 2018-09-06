@@ -20,17 +20,17 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(2017);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			if (IsReadSpriteTilingProperty(stream.Version))
+			if (IsReadSpriteTilingProperty(reader.Version))
 			{
-				SpriteTilingProperty.Read(stream);
-				AutoTiling = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				SpriteTilingProperty.Read(reader);
+				AutoTiling = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
-			Points.Read(stream);
+			Points.Read(reader);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

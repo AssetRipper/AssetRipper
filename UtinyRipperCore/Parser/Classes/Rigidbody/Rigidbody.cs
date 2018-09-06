@@ -55,36 +55,36 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Mass = stream.ReadSingle();
-			Drag = stream.ReadSingle();
-			AngularDrag = stream.ReadSingle();
-			UseGravity = stream.ReadBoolean();
-			IsKinematic = stream.ReadBoolean();
-			if (IsReadInterpolate(stream.Version))
+			Mass = reader.ReadSingle();
+			Drag = reader.ReadSingle();
+			AngularDrag = reader.ReadSingle();
+			UseGravity = reader.ReadBoolean();
+			IsKinematic = reader.ReadBoolean();
+			if (IsReadInterpolate(reader.Version))
 			{
-				Interpolate = (RigidbodyInterpolation)stream.ReadByte();
-				if (IsAlign(stream.Version))
+				Interpolate = (RigidbodyInterpolation)reader.ReadByte();
+				if (IsAlign(reader.Version))
 				{
-					stream.AlignStream(AlignType.Align4);
+					reader.AlignStream(AlignType.Align4);
 				}
 			}
 
-			if (IsReadFreezeRotation(stream.Version))
+			if (IsReadFreezeRotation(reader.Version))
 			{
-				bool freezeRotation = stream.ReadBoolean();
+				bool freezeRotation = reader.ReadBoolean();
 				Constraints = freezeRotation ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.None;
 			}
 			else
 			{
-				Constraints = (RigidbodyConstraints)stream.ReadInt32();
+				Constraints = (RigidbodyConstraints)reader.ReadInt32();
 			}
-			if (IsReadCollisionDetection(stream.Version))
+			if (IsReadCollisionDetection(reader.Version))
 			{
-				CollisionDetection = (CollisionDetectionMode)stream.ReadInt32();
+				CollisionDetection = (CollisionDetectionMode)reader.ReadInt32();
 			}
 		}
 

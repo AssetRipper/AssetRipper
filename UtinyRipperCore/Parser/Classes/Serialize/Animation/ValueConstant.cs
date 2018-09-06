@@ -17,16 +17,16 @@ namespace UtinyRipper.Classes
 			return IsReadType(version) ? Type : (AnimatorControllerParameterType)TypeID;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			ID = stream.ReadUInt32();
-			TypeID = stream.ReadUInt32();
-			if(IsReadType(stream.Version))
+			ID = reader.ReadUInt32();
+			TypeID = reader.ReadUInt32();
+			if(IsReadType(reader.Version))
 			{
-				Type = (AnimatorControllerParameterType)stream.ReadUInt32();
+				Type = (AnimatorControllerParameterType)reader.ReadUInt32();
 			}
 
-			Index = (int)stream.ReadUInt32();
+			Index = (int)reader.ReadUInt32();
 		}
 
 		/*public YAMLNode ExportYAML()

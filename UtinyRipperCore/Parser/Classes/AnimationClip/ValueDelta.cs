@@ -2,10 +2,10 @@
 {
 	public struct ValueDelta : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Start = stream.ReadSingle();
-			Stop = stream.ReadSingle();
+			Start = reader.ReadSingle();
+			Stop = reader.ReadSingle();
 		}
 
 		public float Start { get; private set; }

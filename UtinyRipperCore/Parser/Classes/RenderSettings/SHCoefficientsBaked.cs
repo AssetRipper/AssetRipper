@@ -5,20 +5,20 @@ namespace UtinyRipper.Classes.RenderSettingss
 {
 	public struct SHCoefficientsBaked : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Sh0 = stream.ReadSingle();
-			Sh1 = stream.ReadSingle();
-			Sh2 = stream.ReadSingle();
-			Sh3 = stream.ReadSingle();
-			Sh4 = stream.ReadSingle();
-			Sh5 = stream.ReadSingle();
-			Sh6 = stream.ReadSingle();
-			Sh7 = stream.ReadSingle();
-			Sh8 = stream.ReadSingle();
-			Sh9 = stream.ReadSingle();
-			Sh10 = stream.ReadSingle();
-			Sh11 = stream.ReadSingle();
+			Sh0 = reader.ReadSingle();
+			Sh1 = reader.ReadSingle();
+			Sh2 = reader.ReadSingle();
+			Sh3 = reader.ReadSingle();
+			Sh4 = reader.ReadSingle();
+			Sh5 = reader.ReadSingle();
+			Sh6 = reader.ReadSingle();
+			Sh7 = reader.ReadSingle();
+			Sh8 = reader.ReadSingle();
+			Sh9 = reader.ReadSingle();
+			Sh10 = reader.ReadSingle();
+			Sh11 = reader.ReadSingle();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -27,16 +27,16 @@ namespace UtinyRipper.Classes.Textures
 			return 1;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			FilterMode = (FilterMode)stream.ReadInt32();
-			Aniso = stream.ReadInt32();
-			MipBias = stream.ReadSingle();
-			WrapU = (TextureWrapMode)stream.ReadInt32();
-			if (IsReadWraps(stream.Version))
+			FilterMode = (FilterMode)reader.ReadInt32();
+			Aniso = reader.ReadInt32();
+			MipBias = reader.ReadSingle();
+			WrapU = (TextureWrapMode)reader.ReadInt32();
+			if (IsReadWraps(reader.Version))
 			{
-				WrapV = (TextureWrapMode)stream.ReadInt32();
-				WrapW = (TextureWrapMode)stream.ReadInt32();
+				WrapV = (TextureWrapMode)reader.ReadInt32();
+				WrapW = (TextureWrapMode)reader.ReadInt32();
 			}
 		}
 

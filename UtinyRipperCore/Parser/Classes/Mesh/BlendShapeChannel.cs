@@ -8,12 +8,12 @@ namespace UtinyRipper.Classes.Meshes
 	/// </summary>
 	public struct BlendShapeChannel : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Name = stream.ReadStringAligned();
-			NameHash = stream.ReadUInt32();
-			FrameIndex = stream.ReadInt32();
-			FrameCount = stream.ReadInt32();
+			Name = reader.ReadStringAligned();
+			NameHash = reader.ReadUInt32();
+			FrameIndex = reader.ReadInt32();
+			FrameCount = reader.ReadInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

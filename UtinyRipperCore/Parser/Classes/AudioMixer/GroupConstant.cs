@@ -12,15 +12,15 @@ namespace UtinyRipper.Classes.AudioMixers
 			return 2;
 		}*/
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			ParentConstantIndex = stream.ReadInt32();
-			VolumeIndex = stream.ReadUInt32();
-			PitchIndex = stream.ReadUInt32();
-			Mute = stream.ReadBoolean();
-			Solo = stream.ReadBoolean();
-			BypassEffects = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			ParentConstantIndex = reader.ReadInt32();
+			VolumeIndex = reader.ReadUInt32();
+			PitchIndex = reader.ReadUInt32();
+			Mute = reader.ReadBoolean();
+			Solo = reader.ReadBoolean();
+			BypassEffects = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 			
 		}
 

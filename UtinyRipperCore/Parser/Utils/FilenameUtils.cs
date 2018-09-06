@@ -70,32 +70,6 @@ namespace UtinyRipper
 			return assembly;
 		}
 
-		public static bool IsDependency(string filename, string dependency)
-		{
-			if (IsDefaultResource(dependency))
-			{
-				return IsDefaultResource(filename);
-			}
-			else if (IsBuiltinExtra(dependency))
-			{
-				return IsBuiltinExtra(filename);
-			}
-			return filename == dependency;
-		}
-
-		public static bool ContainsDependency(IEnumerable<string> collection, string dependency)
-		{
-			if (IsDefaultResource(dependency))
-			{
-				return collection.Any(IsDefaultResource);
-			}
-			else if (IsBuiltinExtra(dependency))
-			{
-				return collection.Any(IsBuiltinExtra);
-			}
-			return collection.Any(t => t == dependency);
-		}
-
 		public static bool IsProjectAssembly(string assembly)
 		{
 			const string PrefixName = "Assembly";

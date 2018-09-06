@@ -46,7 +46,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			IsExit = false;
 		}
 
-		public sealed override void Read(AssetStream stream)
+		public sealed override void Read(AssetReader reader)
 		{
 			throw new NotSupportedException();
 		}

@@ -10,17 +10,17 @@
 			return version.IsGreaterEqual(4, 3);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if (IsReadIndex(stream.Version))
+			if (IsReadIndex(reader.Version))
 			{
-				Index = stream.ReadUInt32();
+				Index = reader.ReadUInt32();
 			}
 			else
 			{
-				PathHash = stream.ReadUInt32();
+				PathHash = reader.ReadUInt32();
 			}
-			Weight = stream.ReadSingle();
+			Weight = reader.ReadSingle();
 		}
 
 		public uint Index  { get; private set; }

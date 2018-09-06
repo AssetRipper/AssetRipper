@@ -7,16 +7,16 @@ namespace UtinyRipper.Classes.Shaders
 {
 	public struct SerializedShader : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			PropInfo.Read(stream);
-			m_subShaders = stream.ReadArray<SerializedSubShader>();
-			Name = stream.ReadStringAligned();
-			CustomEditorName = stream.ReadStringAligned();
-			FallbackName = stream.ReadStringAligned();
-			m_dependencies = stream.ReadArray<SerializedShaderDependency>();
-			DisableNoSubshadersMessage = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			PropInfo.Read(reader);
+			m_subShaders = reader.ReadArray<SerializedSubShader>();
+			Name = reader.ReadStringAligned();
+			CustomEditorName = reader.ReadStringAligned();
+			FallbackName = reader.ReadStringAligned();
+			m_dependencies = reader.ReadArray<SerializedShaderDependency>();
+			DisableNoSubshadersMessage = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public void Export(TextWriter writer, Shader shader, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)

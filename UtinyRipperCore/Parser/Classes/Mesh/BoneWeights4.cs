@@ -20,16 +20,16 @@ namespace UtinyRipper.Classes.Meshes
 			BoneIndex3 = i3;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Weight0 = stream.ReadSingle();
-			Weight1 = stream.ReadSingle();
-			Weight2 = stream.ReadSingle();
-			Weight3 = stream.ReadSingle();
-			BoneIndex0 = stream.ReadInt32();
-			BoneIndex1 = stream.ReadInt32();
-			BoneIndex2 = stream.ReadInt32();
-			BoneIndex3 = stream.ReadInt32();
+			Weight0 = reader.ReadSingle();
+			Weight1 = reader.ReadSingle();
+			Weight2 = reader.ReadSingle();
+			Weight3 = reader.ReadSingle();
+			BoneIndex0 = reader.ReadInt32();
+			BoneIndex1 = reader.ReadInt32();
+			BoneIndex2 = reader.ReadInt32();
+			BoneIndex3 = reader.ReadInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

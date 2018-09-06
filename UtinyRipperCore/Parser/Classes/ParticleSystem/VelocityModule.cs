@@ -20,29 +20,29 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2017, 3);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			X.Read(stream);
-			Y.Read(stream);
-			Z.Read(stream);
-			if (IsReadOrbital(stream.Version))
+			X.Read(reader);
+			Y.Read(reader);
+			Z.Read(reader);
+			if (IsReadOrbital(reader.Version))
 			{
-				OrbitalX.Read(stream);
-				OrbitalY.Read(stream);
-				OrbitalZ.Read(stream);
-				OrbitalOffsetX.Read(stream);
-				OrbitalOffsetY.Read(stream);
-				OrbitalOffsetZ.Read(stream);
-				Radial.Read(stream);
+				OrbitalX.Read(reader);
+				OrbitalY.Read(reader);
+				OrbitalZ.Read(reader);
+				OrbitalOffsetX.Read(reader);
+				OrbitalOffsetY.Read(reader);
+				OrbitalOffsetZ.Read(reader);
+				Radial.Read(reader);
 			}
-			if (IsReadSpeedModifier(stream.Version))
+			if (IsReadSpeedModifier(reader.Version))
 			{
-				SpeedModifier.Read(stream);
+				SpeedModifier.Read(reader);
 			}
-			InWorldSpace = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			InWorldSpace = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)

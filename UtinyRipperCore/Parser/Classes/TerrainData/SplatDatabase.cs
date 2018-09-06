@@ -15,18 +15,18 @@ namespace UtinyRipper.Classes.TerrainDatas
 			return version.IsGreaterEqual(5, 0, 1);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_splats = stream.ReadArray<SplatPrototype>();
-			m_alphaTextures = stream.ReadArray<PPtr<Texture2D>>();
-			AlphamapResolution = stream.ReadInt32();
-			BaseMapResolution = stream.ReadInt32();
-			if (IsReadColorSpace(stream.Version))
+			m_splats = reader.ReadArray<SplatPrototype>();
+			m_alphaTextures = reader.ReadArray<PPtr<Texture2D>>();
+			AlphamapResolution = reader.ReadInt32();
+			BaseMapResolution = reader.ReadInt32();
+			if (IsReadColorSpace(reader.Version))
 			{
-				ColorSpace = stream.ReadInt32();
-				MaterialRequiresMetallic = stream.ReadBoolean();
-				MaterialRequiresSmoothness = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				ColorSpace = reader.ReadInt32();
+				MaterialRequiresMetallic = reader.ReadBoolean();
+				MaterialRequiresSmoothness = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

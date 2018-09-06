@@ -5,11 +5,11 @@ namespace UtinyRipper.Classes.OcclusionCullingSettingses
 {
 	public struct OcclusionBakeSettings : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			SmallestOccluder = stream.ReadSingle();
-			SmallestHole = stream.ReadSingle();
-			BackfaceThreshold = stream.ReadSingle();
+			SmallestOccluder = reader.ReadSingle();
+			SmallestHole = reader.ReadSingle();
+			BackfaceThreshold = reader.ReadSingle();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

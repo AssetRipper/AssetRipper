@@ -80,46 +80,46 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Avatar.Read(stream);
-			Controller.Read(stream);
-			CullingMode = stream.ReadInt32();
+			Avatar.Read(reader);
+			Controller.Read(reader);
+			CullingMode = reader.ReadInt32();
 
-			if(IsReadUpdateMode(stream.Version))
+			if(IsReadUpdateMode(reader.Version))
 			{
-				UpdateMode = stream.ReadInt32();
+				UpdateMode = reader.ReadInt32();
 			}
 
-			ApplyRootMotion = stream.ReadBoolean();
+			ApplyRootMotion = reader.ReadBoolean();
 
-			if(IsReadAnimatePhisics(stream.Version))
+			if(IsReadAnimatePhisics(reader.Version))
 			{
-				AnimatePhisics = stream.ReadBoolean();
+				AnimatePhisics = reader.ReadBoolean();
 			}
-			if (IsReadLinearVelocityBlending(stream.Version))
+			if (IsReadLinearVelocityBlending(reader.Version))
 			{
-				LinearVelocityBlending = stream.ReadBoolean();
+				LinearVelocityBlending = reader.ReadBoolean();
 			}
-			if (IsAlignMiddle(stream.Version))
+			if (IsAlignMiddle(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 			
-			if(IsReadHasTransformHierarchy(stream.Version))
+			if(IsReadHasTransformHierarchy(reader.Version))
 			{
-				HasTransformHierarchy = stream.ReadBoolean();
+				HasTransformHierarchy = reader.ReadBoolean();
 			}
 
-			if (IsReadAllowConstantOptimization(stream.Version))
+			if (IsReadAllowConstantOptimization(reader.Version))
 			{
-				AllowConstantClipSamplingOptimization = stream.ReadBoolean();
+				AllowConstantClipSamplingOptimization = reader.ReadBoolean();
 			}
-			if (IsAlignEnd(stream.Version))
+			if (IsAlignEnd(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

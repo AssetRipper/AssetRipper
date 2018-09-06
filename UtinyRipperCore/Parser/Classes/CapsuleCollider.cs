@@ -18,18 +18,18 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(2, 1);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
-			if (IsAlign(stream.Version))
+			base.Read(reader);
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 			
-			Radius = stream.ReadSingle();
-			Height = stream.ReadSingle();
-			Direction = stream.ReadInt32();
-			Center.Read(stream);
+			Radius = reader.ReadSingle();
+			Height = reader.ReadSingle();
+			Direction = reader.ReadInt32();
+			Center.Read(reader);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

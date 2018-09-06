@@ -31,16 +31,16 @@ namespace UtinyRipper.Classes.LightmapSettingss
 			return 1;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			BounceScale = stream.ReadSingle();
-			IndirectOutputScale = stream.ReadSingle();
-			AlbedoBoost = stream.ReadSingle();
-			TemporalCoherenceThreshold = stream.ReadSingle();
-			EnvironmentLightingMode = stream.ReadUInt32();
-			EnableBakedLightmaps = stream.ReadBoolean();
-			EnableRealtimeLightmaps = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			BounceScale = reader.ReadSingle();
+			IndirectOutputScale = reader.ReadSingle();
+			AlbedoBoost = reader.ReadSingle();
+			TemporalCoherenceThreshold = reader.ReadSingle();
+			EnvironmentLightingMode = reader.ReadUInt32();
+			EnableBakedLightmaps = reader.ReadBoolean();
+			EnableRealtimeLightmaps = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

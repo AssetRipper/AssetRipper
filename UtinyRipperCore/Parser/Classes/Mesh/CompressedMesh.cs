@@ -42,34 +42,34 @@ namespace UtinyRipper.Classes.Meshes
 			return version.IsGreaterEqual(5);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Vertices.Read(stream);
-			UV.Read(stream);
-			if(IsReadBindPoses(stream.Version))
+			Vertices.Read(reader);
+			UV.Read(reader);
+			if(IsReadBindPoses(reader.Version))
 			{
-				BindPoses.Read(stream);
+				BindPoses.Read(reader);
 			}
-			Normals.Read(stream);
-			Tangents.Read(stream);
-			Weight.Read(stream);
-			NormalSigns.Read(stream);
-			TangentSigns.Read(stream);
-			if(IsReadFloatColors(stream.Version))
+			Normals.Read(reader);
+			Tangents.Read(reader);
+			Weight.Read(reader);
+			NormalSigns.Read(reader);
+			TangentSigns.Read(reader);
+			if(IsReadFloatColors(reader.Version))
 			{
-				FloatColors.Read(stream);
+				FloatColors.Read(reader);
 			}
 
-			BoneIndices.Read(stream);
-			Triangles.Read(stream);
+			BoneIndices.Read(reader);
+			Triangles.Read(reader);
 
-			if (IsReadColors(stream.Version))
+			if (IsReadColors(reader.Version))
 			{
-				Colors.Read(stream);
+				Colors.Read(reader);
 			}
-			if (IsReadUVInfo(stream.Version))
+			if (IsReadUVInfo(reader.Version))
 			{
-				UVInfo = stream.ReadUInt32();
+				UVInfo = reader.ReadUInt32();
 			}
 		}
 

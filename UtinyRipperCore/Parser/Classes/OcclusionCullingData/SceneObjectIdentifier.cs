@@ -11,10 +11,10 @@ namespace UtinyRipper.Classes.OcclusionCullingDatas
 			TargetPrefab = targetPrefab;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			TargetObject = stream.ReadInt64();
-			TargetPrefab = stream.ReadInt64();
+			TargetObject = reader.ReadInt64();
+			TargetPrefab = reader.ReadInt64();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

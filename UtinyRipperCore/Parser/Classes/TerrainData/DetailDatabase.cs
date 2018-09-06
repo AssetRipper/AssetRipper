@@ -36,26 +36,26 @@ namespace UtinyRipper.Classes.TerrainDatas
 			return 1;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_patches = stream.ReadArray<DetailPatch>();
-			m_detailPrototypes = stream.ReadArray<DetailPrototype>();
-			PatchCount = stream.ReadInt32();
-			PatchSamples = stream.ReadInt32();
-			m_randomRotations = stream.ReadArray<Vector3f>();
-			if (IsReadAtlasTexture(stream.Version))
+			m_patches = reader.ReadArray<DetailPatch>();
+			m_detailPrototypes = reader.ReadArray<DetailPrototype>();
+			PatchCount = reader.ReadInt32();
+			PatchSamples = reader.ReadInt32();
+			m_randomRotations = reader.ReadArray<Vector3f>();
+			if (IsReadAtlasTexture(reader.Version))
 			{
-				AtlasTexture.Read(stream);
+				AtlasTexture.Read(reader);
 			}
-			WavingGrassTint.Read(stream);
-			WavingGrassStrength = stream.ReadSingle();
-			WavingGrassAmount = stream.ReadSingle();
-			WavingGrassSpeed = stream.ReadSingle();
-			m_treeInstances = stream.ReadArray<TreeInstance>();
-			m_treePrototypes = stream.ReadArray<TreePrototype>();
-			if (IsReadPreloadTextureAtlasData(stream.Version))
+			WavingGrassTint.Read(reader);
+			WavingGrassStrength = reader.ReadSingle();
+			WavingGrassAmount = reader.ReadSingle();
+			WavingGrassSpeed = reader.ReadSingle();
+			m_treeInstances = reader.ReadArray<TreeInstance>();
+			m_treePrototypes = reader.ReadArray<TreePrototype>();
+			if (IsReadPreloadTextureAtlasData(reader.Version))
 			{
-				m_preloadTextureAtlasData = stream.ReadArray<PPtr<Texture2D>>();
+				m_preloadTextureAtlasData = reader.ReadArray<PPtr<Texture2D>>();
 			}
 		}
 

@@ -17,37 +17,37 @@ namespace UtinyRipper.Classes.RenderSettingss
 			return !version.IsEqual(5, 0, 0, VersionType.Beta, 1);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Sh0 = stream.ReadSingle();
-			Sh1 = stream.ReadSingle();
-			Sh2 = stream.ReadSingle();
-			Sh3 = stream.ReadSingle();
-			Sh4 = stream.ReadSingle();
-			Sh5 = stream.ReadSingle();
-			Sh6 = stream.ReadSingle();
-			Sh7 = stream.ReadSingle();
-			Sh8 = stream.ReadSingle();
-			Sh9 = stream.ReadSingle();
-			Sh10 = stream.ReadSingle();
-			Sh11 = stream.ReadSingle();
-			Sh12 = stream.ReadSingle();
-			Sh13 = stream.ReadSingle();
-			Sh14 = stream.ReadSingle();
-			Sh15 = stream.ReadSingle();
-			Sh16 = stream.ReadSingle();
-			Sh17 = stream.ReadSingle();
-			Sh18 = stream.ReadSingle();
-			Sh19 = stream.ReadSingle();
-			Sh20 = stream.ReadSingle();
-			Sh21 = stream.ReadSingle();
-			Sh22 = stream.ReadSingle();
-			Sh23 = stream.ReadSingle();
-			Sh24 = stream.ReadSingle();
-			if (IsRead25(stream.Version))
+			Sh0 = reader.ReadSingle();
+			Sh1 = reader.ReadSingle();
+			Sh2 = reader.ReadSingle();
+			Sh3 = reader.ReadSingle();
+			Sh4 = reader.ReadSingle();
+			Sh5 = reader.ReadSingle();
+			Sh6 = reader.ReadSingle();
+			Sh7 = reader.ReadSingle();
+			Sh8 = reader.ReadSingle();
+			Sh9 = reader.ReadSingle();
+			Sh10 = reader.ReadSingle();
+			Sh11 = reader.ReadSingle();
+			Sh12 = reader.ReadSingle();
+			Sh13 = reader.ReadSingle();
+			Sh14 = reader.ReadSingle();
+			Sh15 = reader.ReadSingle();
+			Sh16 = reader.ReadSingle();
+			Sh17 = reader.ReadSingle();
+			Sh18 = reader.ReadSingle();
+			Sh19 = reader.ReadSingle();
+			Sh20 = reader.ReadSingle();
+			Sh21 = reader.ReadSingle();
+			Sh22 = reader.ReadSingle();
+			Sh23 = reader.ReadSingle();
+			Sh24 = reader.ReadSingle();
+			if (IsRead25(reader.Version))
 			{
-				Sh25 = stream.ReadSingle();
-				Sh26 = stream.ReadSingle();
+				Sh25 = reader.ReadSingle();
+				Sh26 = reader.ReadSingle();
 			}
 		}
 

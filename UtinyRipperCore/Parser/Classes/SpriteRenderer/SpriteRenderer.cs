@@ -72,46 +72,46 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(5, 4);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Sprite.Read(stream);
-			Color.Read(stream);
-			if (IsAlignColor(stream.Version))
+			Sprite.Read(reader);
+			Color.Read(reader);
+			if (IsAlignColor(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if(IsReadFlip(stream.Version))
+			if(IsReadFlip(reader.Version))
 			{
-				FlipX = stream.ReadBoolean();
-				FlipY = stream.ReadBoolean();
-				if(IsAlignFlip(stream.Version))
+				FlipX = reader.ReadBoolean();
+				FlipY = reader.ReadBoolean();
+				if(IsAlignFlip(reader.Version))
 				{
-					stream.AlignStream(AlignType.Align4);
+					reader.AlignStream(AlignType.Align4);
 				}
 			}
 
-			if(IsReadDrawMode(stream.Version))
+			if(IsReadDrawMode(reader.Version))
 			{
-				DrawMode = (SpriteDrawMode)stream.ReadInt32();
-				Size.Read(stream);
-				AdaptiveModeThreshold = stream.ReadSingle();
-				SpriteTileMode = (SpriteTileMode)stream.ReadInt32();
+				DrawMode = (SpriteDrawMode)reader.ReadInt32();
+				Size.Read(reader);
+				AdaptiveModeThreshold = reader.ReadSingle();
+				SpriteTileMode = (SpriteTileMode)reader.ReadInt32();
 			}
-			if(IsReadWasSpriteAssigned(stream.Version))
+			if(IsReadWasSpriteAssigned(reader.Version))
 			{
-				WasSpriteAssigned = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				WasSpriteAssigned = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
-			if(IsReadMaskInteraction(stream.Version))
+			if(IsReadMaskInteraction(reader.Version))
 			{
-				MaskInteraction = (SpriteMaskInteraction)stream.ReadInt32();
+				MaskInteraction = (SpriteMaskInteraction)reader.ReadInt32();
 			}
-			if(IsReadSpriteSortPoint(stream.Version))
+			if(IsReadSpriteSortPoint(reader.Version))
 			{
-				SpriteSortPoint = (SpriteSortPoint)stream.ReadInt32();
+				SpriteSortPoint = (SpriteSortPoint)reader.ReadInt32();
 			}
 		}
 

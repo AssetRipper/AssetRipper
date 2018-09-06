@@ -83,51 +83,51 @@ namespace UtinyRipper.Classes.Sprites
 			}
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Texture.Read(stream);
-			if (IsReadAlphaTexture(stream.Version))
+			Texture.Read(reader);
+			if (IsReadAlphaTexture(reader.Version))
 			{
-				AlphaTexture.Read(stream);
+				AlphaTexture.Read(reader);
 			}
 
-			if (IsReadVertices(stream.Version))
+			if (IsReadVertices(reader.Version))
 			{
-				m_vertices = stream.ReadArray<SpriteVertex>();
-				m_indices = stream.ReadUInt16Array();
-				stream.AlignStream(AlignType.Align4);
+				m_vertices = reader.ReadArray<SpriteVertex>();
+				m_indices = reader.ReadUInt16Array();
+				reader.AlignStream(AlignType.Align4);
 			}
 			else
 			{
-				m_subMeshes = stream.ReadArray<SubMesh>();
-				m_indexBuffer = stream.ReadByteArray();
-				stream.AlignStream(AlignType.Align4);
+				m_subMeshes = reader.ReadArray<SubMesh>();
+				m_indexBuffer = reader.ReadByteArray();
+				reader.AlignStream(AlignType.Align4);
 
-				VertexData.Read(stream);
+				VertexData.Read(reader);
 			}
-			if (IsReadBindpose(stream.Version))
+			if (IsReadBindpose(reader.Version))
 			{
-				m_bindpose = stream.ReadArray<Matrix4x4f>();
+				m_bindpose = reader.ReadArray<Matrix4x4f>();
 			}
-			if(IsReadSourceSkin(stream.Version))
+			if(IsReadSourceSkin(reader.Version))
 			{
-				m_sourceSkin = stream.ReadArray<BoneWeights4>();
+				m_sourceSkin = reader.ReadArray<BoneWeights4>();
 			}
 
-			TextureRect.Read(stream);
-			TextureRectOffset.Read(stream);
-			if(IsReadAtlasRectOffset(stream.Version))
+			TextureRect.Read(reader);
+			TextureRectOffset.Read(reader);
+			if(IsReadAtlasRectOffset(reader.Version))
 			{
-				AtlasRectOffset.Read(stream);
+				AtlasRectOffset.Read(reader);
 			}
-			SettingsRaw = stream.ReadUInt32();
-			if(IsReadUVTransform(stream.Version))
+			SettingsRaw = reader.ReadUInt32();
+			if(IsReadUVTransform(reader.Version))
 			{
-				UVTransform.Read(stream);
+				UVTransform.Read(reader);
 			}
-			if(IsReadDownscaleMultiplier(stream.Version))
+			if(IsReadDownscaleMultiplier(reader.Version))
 			{
-				DownscaleMultiplier = stream.ReadSingle();
+				DownscaleMultiplier = reader.ReadSingle();
 			}
 		}
 

@@ -71,73 +71,73 @@ namespace UtinyRipper.Classes.AnimationClips
 			return 1;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			DeltaPose.Read(stream);
-			StartX.Read(stream);
-			if (IsReadStopX(stream.Version))
+			DeltaPose.Read(reader);
+			StartX.Read(reader);
+			if (IsReadStopX(reader.Version))
 			{
-				StopX.Read(stream);
+				StopX.Read(reader);
 			}
-			LeftFootStartX.Read(stream);
-			RightFootStartX.Read(stream);
+			LeftFootStartX.Read(reader);
+			RightFootStartX.Read(reader);
 
-			if (IsReadMotion(stream.Version))
+			if (IsReadMotion(reader.Version))
 			{
-				MotionStartX.Read(stream);
-				MotionStopX.Read(stream);
+				MotionStartX.Read(reader);
+				MotionStopX.Read(reader);
 			}
 
-			if(IsVector3(stream.Version))
+			if(IsVector3(reader.Version))
 			{
-				AverageSpeed.Read3(stream);
+				AverageSpeed.Read3(reader);
 			}
 			else
 			{
-				AverageSpeed.Read(stream);
+				AverageSpeed.Read(reader);
 			}
 
-			Clip.Read(stream);
+			Clip.Read(reader);
 
-			StartTime = stream.ReadSingle();
-			StopTime = stream.ReadSingle();
-			OrientationOffsetY = stream.ReadSingle();
-			Level = stream.ReadSingle();
-			CycleOffset = stream.ReadSingle();
-			AverageAngularSpeed = stream.ReadSingle();
+			StartTime = reader.ReadSingle();
+			StopTime = reader.ReadSingle();
+			OrientationOffsetY = reader.ReadSingle();
+			Level = reader.ReadSingle();
+			CycleOffset = reader.ReadSingle();
+			AverageAngularSpeed = reader.ReadSingle();
 
-			m_indexArray = stream.ReadInt32Array();
-			if (IsReadAdditionalCurveIndexArray(stream.Version))
+			m_indexArray = reader.ReadInt32Array();
+			if (IsReadAdditionalCurveIndexArray(reader.Version))
 			{
-				m_additionalCurveIndexArray = stream.ReadInt32Array();
+				m_additionalCurveIndexArray = reader.ReadInt32Array();
 			}
-			m_valueArrayDelta = stream.ReadArray<ValueDelta>();
+			m_valueArrayDelta = reader.ReadArray<ValueDelta>();
 
-			if(IsReadValueArrayReferencePose(stream.Version))
+			if(IsReadValueArrayReferencePose(reader.Version))
 			{
-				m_valueArrayReferencePose = stream.ReadSingleArray();
+				m_valueArrayReferencePose = reader.ReadSingleArray();
 			}
 
-			Mirror = stream.ReadBoolean();
-			if (IsReadLoopTime(stream.Version))
+			Mirror = reader.ReadBoolean();
+			if (IsReadLoopTime(reader.Version))
 			{
-				LoopTime = stream.ReadBoolean();
+				LoopTime = reader.ReadBoolean();
 			}
-			LoopBlend = stream.ReadBoolean();
-			LoopBlendOrientation = stream.ReadBoolean();
-			LoopBlendPositionY = stream.ReadBoolean();
-			LoopBlendPositionXZ = stream.ReadBoolean();
+			LoopBlend = reader.ReadBoolean();
+			LoopBlendOrientation = reader.ReadBoolean();
+			LoopBlendPositionY = reader.ReadBoolean();
+			LoopBlendPositionXZ = reader.ReadBoolean();
 
-			if(IsReadStartAtOrigin(stream.Version))
+			if(IsReadStartAtOrigin(reader.Version))
 			{
-				StartAtOrigin = stream.ReadBoolean();
+				StartAtOrigin = reader.ReadBoolean();
 			}
 
-			KeepOriginalOrientation = stream.ReadBoolean();
-			KeepOriginalPositionY = stream.ReadBoolean();
-			KeepOriginalPositionXZ = stream.ReadBoolean();
-			HeightFromFeet = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			KeepOriginalOrientation = reader.ReadBoolean();
+			KeepOriginalPositionY = reader.ReadBoolean();
+			KeepOriginalPositionXZ = reader.ReadBoolean();
+			HeightFromFeet = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 		}
 		
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -13,21 +13,21 @@ namespace UtinyRipper.Classes.Avatars
 			return version.IsGreaterEqual(5, 4);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			PreQ.Read(stream);
-			PostQ.Read(stream);
-			if (IsVector3(stream.Version))
+			PreQ.Read(reader);
+			PostQ.Read(reader);
+			if (IsVector3(reader.Version))
 			{
-				Sgn.Read3(stream);
+				Sgn.Read3(reader);
 			}
 			else
 			{
-				Sgn.Read(stream);
+				Sgn.Read(reader);
 			}
-			Limit.Read(stream);
-			Length = stream.ReadSingle();
-			Type = stream.ReadUInt32();
+			Limit.Read(reader);
+			Length = reader.ReadSingle();
+			Type = reader.ReadUInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

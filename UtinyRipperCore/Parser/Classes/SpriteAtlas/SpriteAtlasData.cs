@@ -13,19 +13,19 @@ namespace UtinyRipper.Classes.SpriteAtlases
 			return version.IsGreaterEqual(2017, 2);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Texture.Read(stream);
-			AlphaTexture.Read(stream);
-			TextureRect.Read(stream);
-			TextureRectOffset.Read(stream);
-			if(IsReadAtlasRectOffset(stream.Version))
+			Texture.Read(reader);
+			AlphaTexture.Read(reader);
+			TextureRect.Read(reader);
+			TextureRectOffset.Read(reader);
+			if(IsReadAtlasRectOffset(reader.Version))
 			{
-				AtlasRectOffset.Read(stream);
+				AtlasRectOffset.Read(reader);
 			}
-			UVTransform.Read(stream);
-			DownscaleMultiplier = stream.ReadSingle();
-			SettingsRaw = stream.ReadUInt32();
+			UVTransform.Read(reader);
+			DownscaleMultiplier = reader.ReadSingle();
+			SettingsRaw = reader.ReadUInt32();
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

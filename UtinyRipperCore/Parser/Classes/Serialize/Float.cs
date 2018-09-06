@@ -10,9 +10,9 @@ namespace UtinyRipper.Classes
 			Value = value;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Value = stream.ReadSingle();
+			Value = reader.ReadSingle();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

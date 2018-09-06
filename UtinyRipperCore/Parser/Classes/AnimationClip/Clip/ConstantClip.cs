@@ -4,9 +4,9 @@ namespace UtinyRipper.Classes.AnimationClips
 {
 	public struct ConstantClip : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_constants = stream.ReadSingleArray();
+			m_constants = reader.ReadSingleArray();
 		}
 		
 		public bool IsValid => Constants.Count > 0;

@@ -18,13 +18,13 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(5);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			if (IsReadVertex(stream.Version))
+			if (IsReadVertex(reader.Version))
 			{
-				AdditionalVertexStreams.Read(stream);
+				AdditionalVertexStreams.Read(reader);
 			}
 		}
 

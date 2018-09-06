@@ -73,52 +73,52 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			StartLifetime.Read(stream);
-			StartSpeed.Read(stream);
-			StartColor.Read(stream);
-			StartSize.Read(stream);
-			if (IsReadSizeAxes(stream.Version))
+			StartLifetime.Read(reader);
+			StartSpeed.Read(reader);
+			StartColor.Read(reader);
+			StartSize.Read(reader);
+			if (IsReadSizeAxes(reader.Version))
 			{
-				StartSizeY.Read(stream);
-				StartSizeZ.Read(stream);
+				StartSizeY.Read(reader);
+				StartSizeZ.Read(reader);
 			}
-			if (IsReadRotationAxes(stream.Version))
+			if (IsReadRotationAxes(reader.Version))
 			{
-				StartRotationX.Read(stream);
-				StartRotationY.Read(stream);
+				StartRotationX.Read(reader);
+				StartRotationY.Read(reader);
 			}
-			StartRotation.Read(stream);
+			StartRotation.Read(reader);
 			
-			if (IsReadRandomizeRotationDirection(stream.Version))
+			if (IsReadRandomizeRotationDirection(reader.Version))
 			{
-				RandomizeRotationDirection = stream.ReadSingle();
+				RandomizeRotationDirection = reader.ReadSingle();
 			}
-			if (IsReadGravityModifierSingle(stream.Version))
+			if (IsReadGravityModifierSingle(reader.Version))
 			{
-				GravityModifierSingle = stream.ReadSingle();
+				GravityModifierSingle = reader.ReadSingle();
 			}
-			if (IsReadInheritVelocity(stream.Version))
+			if (IsReadInheritVelocity(reader.Version))
 			{
-				InheritVelocity = stream.ReadSingle();
+				InheritVelocity = reader.ReadSingle();
 			}
-			MaxNumParticles = stream.ReadInt32();
-			if (IsReadSize3D(stream.Version))
+			MaxNumParticles = reader.ReadInt32();
+			if (IsReadSize3D(reader.Version))
 			{
-				Size3D = stream.ReadBoolean();
+				Size3D = reader.ReadBoolean();
 			}
-			if (IsReadRotation3D(stream.Version))
+			if (IsReadRotation3D(reader.Version))
 			{
-				Rotation3D = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				Rotation3D = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 			
-			if (!IsReadGravityModifierSingle(stream.Version))
+			if (!IsReadGravityModifierSingle(reader.Version))
 			{
-				GravityModifier.Read(stream);
+				GravityModifier.Read(reader);
 			}
 		}
 

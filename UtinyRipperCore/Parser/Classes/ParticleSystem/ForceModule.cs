@@ -5,16 +5,16 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public sealed class ForceModule : ParticleSystemModule
 	{
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			X.Read(stream);
-			Y.Read(stream);
-			Z.Read(stream);
-			InWorldSpace = stream.ReadBoolean();
-			RandomizePerFrame = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			X.Read(reader);
+			Y.Read(reader);
+			Z.Read(reader);
+			InWorldSpace = reader.ReadBoolean();
+			RandomizePerFrame = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)

@@ -30,15 +30,15 @@ namespace UtinyRipper.Classes
 			return Config.IsExportTopmostSerializedVersion || IsReadFallbackFormat(version);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if(IsReadFallbackFormat(stream.Version))
+			if(IsReadFallbackFormat(reader.Version))
 			{
-				ForcedFallbackFormat = stream.ReadInt32();
-				DownscaleFallback = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				ForcedFallbackFormat = reader.ReadInt32();
+				DownscaleFallback = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

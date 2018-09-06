@@ -41,29 +41,29 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(5);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadDensity(stream.Version))
+			if (IsReadDensity(reader.Version))
 			{
-				Density = stream.ReadSingle();
+				Density = reader.ReadSingle();
 			}
-			Material.Read(stream);
-			IsTrigger = stream.ReadBoolean();
-			if (IsReadUsedByEffector(stream.Version))
+			Material.Read(reader);
+			IsTrigger = reader.ReadBoolean();
+			if (IsReadUsedByEffector(reader.Version))
 			{
-				UsedByEffector = stream.ReadBoolean();
+				UsedByEffector = reader.ReadBoolean();
 			}
-			if (IsReadUsedByComposite(stream.Version))
+			if (IsReadUsedByComposite(reader.Version))
 			{
-				UsedByComposite = stream.ReadBoolean();
+				UsedByComposite = reader.ReadBoolean();
 			}
-			stream.AlignStream(AlignType.Align4);
+			reader.AlignStream(AlignType.Align4);
 
-			if (IsReadOffset(stream.Version))
+			if (IsReadOffset(reader.Version))
 			{
-				Offset.Read(stream);
+				Offset.Read(reader);
 			}
 		}
 		

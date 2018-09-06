@@ -8,9 +8,9 @@ namespace UtinyRipper.Classes.Shaders
 {
 	public struct SerializedProgram : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_subPrograms = stream.ReadArray<SerializedSubProgram>();
+			m_subPrograms = reader.ReadArray<SerializedSubProgram>();
 		}
 
 		public void Export(TextWriter writer, Shader shader, ShaderType type, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)

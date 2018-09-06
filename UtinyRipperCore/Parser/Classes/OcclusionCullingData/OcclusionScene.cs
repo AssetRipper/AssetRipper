@@ -14,13 +14,13 @@ namespace UtinyRipper.Classes.OcclusionCullingDatas
 			SizePortals = portalSize;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			IndexRenderers = stream.ReadInt32();
-			SizeRenderers = stream.ReadInt32();
-			IndexPortals = stream.ReadInt32();
-			SizePortals = stream.ReadInt32();
-			Scene.Read(stream);
+			IndexRenderers = reader.ReadInt32();
+			SizeRenderers = reader.ReadInt32();
+			IndexPortals = reader.ReadInt32();
+			SizePortals = reader.ReadInt32();
+			Scene.Read(reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -66,33 +66,33 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			ControllerSize = stream.ReadUInt32();
-			Controller.Read(stream);
+			ControllerSize = reader.ReadUInt32();
+			Controller.Read(reader);
 			m_TOS.Clear();
-			m_TOS.Read(stream);
-			m_animationClips = stream.ReadArray<PPtr<AnimationClip>>();
+			m_TOS.Read(reader);
+			m_animationClips = reader.ReadArray<PPtr<AnimationClip>>();
 
-			if (IsReadStateMachineBehaviourVectorDescription(stream.Version))
+			if (IsReadStateMachineBehaviourVectorDescription(reader.Version))
 			{
-				StateMachineBehaviourVectorDescription.Read(stream);
-				m_stateMachineBehaviours = stream.ReadArray<PPtr<MonoBehaviour>>();
+				StateMachineBehaviourVectorDescription.Read(reader);
+				m_stateMachineBehaviours = reader.ReadArray<PPtr<MonoBehaviour>>();
 			}
 
-			if (!IsAlignMultiThreadedStateMachine(stream.Version))
+			if (!IsAlignMultiThreadedStateMachine(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
-			if (IsReadMultiThreadedStateMachine(stream.Version))
+			if (IsReadMultiThreadedStateMachine(reader.Version))
 			{
-				MultiThreadedStateMachine = stream.ReadBoolean();
+				MultiThreadedStateMachine = reader.ReadBoolean();
 			}
-			if(IsAlignMultiThreadedStateMachine(stream.Version))
+			if(IsAlignMultiThreadedStateMachine(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

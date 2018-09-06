@@ -2,17 +2,17 @@
 {
 	public struct StreamingInfo : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Offset = stream.ReadUInt32();
-			Size = stream.ReadUInt32();
-			Path = stream.ReadStringAligned();
+			Offset = reader.ReadUInt32();
+			Size = reader.ReadUInt32();
+			Path = reader.ReadStringAligned();
 		}
 
-		public void Read(AssetStream stream, string path)
+		public void Read(AssetReader reader, string path)
 		{
-			Size = stream.ReadUInt32();
-			Offset = stream.ReadUInt32();
+			Size = reader.ReadUInt32();
+			Offset = reader.ReadUInt32();
 			Path = path;
 		}
 

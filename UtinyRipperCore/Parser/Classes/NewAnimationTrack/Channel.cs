@@ -4,11 +4,11 @@ namespace UtinyRipper.Classes.NewAnimationTracks
 {
 	public struct Channel : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			ByteOffset = stream.ReadInt32();
-			Curve.Read(stream);
-			AttributeName = stream.ReadStringAligned();
+			ByteOffset = reader.ReadInt32();
+			Curve.Read(reader);
+			AttributeName = reader.ReadStringAligned();
 		}
 
 		public int ByteOffset { get; private set; }

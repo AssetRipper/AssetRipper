@@ -32,9 +32,9 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 		
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Bits = Is16Bits(stream.Version) ? stream.ReadUInt16() : stream.ReadUInt32();
+			Bits = Is16Bits(reader.Version) ? reader.ReadUInt16() : reader.ReadUInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

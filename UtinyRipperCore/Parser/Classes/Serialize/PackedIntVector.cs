@@ -6,13 +6,13 @@ namespace UtinyRipper.Classes
 {
 	public struct PackedIntVector : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			NumItems = stream.ReadUInt32();
-			m_data = stream.ReadByteArray();
-			stream.AlignStream(AlignType.Align4);
-			BitSize = stream.ReadByte();
-			stream.AlignStream(AlignType.Align4);
+			NumItems = reader.ReadUInt32();
+			m_data = reader.ReadByteArray();
+			reader.AlignStream(AlignType.Align4);
+			BitSize = reader.ReadByte();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

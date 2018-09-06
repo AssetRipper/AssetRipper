@@ -178,75 +178,75 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if(IsReadEnlightenSceneMapping(stream.Version, stream.Flags))
+			if(IsReadEnlightenSceneMapping(reader.Version, reader.Flags))
 			{
-				EnlightenSceneMapping.Read(stream);
+				EnlightenSceneMapping.Read(reader);
 			}
-			if(IsReadGIWorkflowMode(stream.Version, stream.Flags))
+			if(IsReadGIWorkflowMode(reader.Version, reader.Flags))
 			{
-				GIWorkflowMode = stream.ReadInt32();
-			}
-
-			if (IsReadLightProbes(stream.Version, stream.Flags))
-			{
-				LightProbes.Read(stream);
-			}
-			if(IsReadLightmaps(stream.Flags))
-			{
-				m_lightmaps = stream.ReadArray<LightmapData>();
-			}
-			if (IsAlign1(stream.Version, stream.Flags))
-			{
-				stream.AlignStream(AlignType.Align4);
+				GIWorkflowMode = reader.ReadInt32();
 			}
 
-			if(IsReadLightmapsMode(stream.Version, stream.Flags))
+			if (IsReadLightProbes(reader.Version, reader.Flags))
 			{
-				LightmapsMode = (LightmapsMode)stream.ReadInt32();
+				LightProbes.Read(reader);
 			}
-			if (IsReadBakedColorSpace(stream.Version))
+			if(IsReadLightmaps(reader.Flags))
 			{
-				BakedColorSpace = stream.ReadInt32();
+				m_lightmaps = reader.ReadArray<LightmapData>();
 			}
-			if (IsReadUseDualLightmapsInForward(stream.Version))
+			if (IsAlign1(reader.Version, reader.Flags))
 			{
-				UseDualLightmapsInForward = stream.ReadBoolean();
-			}
-			if (IsAlign2(stream.Version))
-			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadGISettings(stream.Version))
+			if(IsReadLightmapsMode(reader.Version, reader.Flags))
 			{
-				GISettings.Read(stream);
+				LightmapsMode = (LightmapsMode)reader.ReadInt32();
+			}
+			if (IsReadBakedColorSpace(reader.Version))
+			{
+				BakedColorSpace = reader.ReadInt32();
+			}
+			if (IsReadUseDualLightmapsInForward(reader.Version))
+			{
+				UseDualLightmapsInForward = reader.ReadBoolean();
+			}
+			if (IsAlign2(reader.Version))
+			{
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadLightmapEditorSettings(stream.Version, stream.Flags))
+			if (IsReadGISettings(reader.Version))
 			{
-				LightmapEditorSettings.Read(stream);
+				GISettings.Read(reader);
 			}
-			if(IsReadLightingDataAsset(stream.Version, stream.Flags))
+
+			if (IsReadLightmapEditorSettings(reader.Version, reader.Flags))
 			{
-				LightingDataAsset.Read(stream);
+				LightmapEditorSettings.Read(reader);
 			}
-			if(IsReadRuntimeCPUUsage(stream.Version))
+			if(IsReadLightingDataAsset(reader.Version, reader.Flags))
 			{
-				RuntimeCPUUsage = stream.ReadInt32();
+				LightingDataAsset.Read(reader);
 			}
-			if(IsReadUseShadowmask(stream.Version))
+			if(IsReadRuntimeCPUUsage(reader.Version))
 			{
-				if(IsBoolShadowmask(stream.Version))
+				RuntimeCPUUsage = reader.ReadInt32();
+			}
+			if(IsReadUseShadowmask(reader.Version))
+			{
+				if(IsBoolShadowmask(reader.Version))
 				{
-					UseShadowmask = stream.ReadBoolean();
+					UseShadowmask = reader.ReadBoolean();
 				}
 				else
 				{
-					UseShadowmask = stream.ReadInt32() == 0 ? false : true;
+					UseShadowmask = reader.ReadInt32() == 0 ? false : true;
 				}
 			}
 		}

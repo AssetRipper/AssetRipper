@@ -28,9 +28,9 @@ namespace UtinyRipper.Classes
 			return new LayerMask(this);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Bits = stream.ReadUInt32();
+			Bits = reader.ReadUInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -7,13 +7,13 @@ namespace UtinyRipper.Classes.AnimatorControllers
 {
 	public struct Blend2dDataConstant : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_childPositionArray = stream.ReadArray<Vector2f>();
-			m_childMagnitudeArray = stream.ReadSingleArray();
-			m_childPairVectorArray = stream.ReadArray<Vector2f>();
-			m_childPairAvgMagInvArray = stream.ReadSingleArray();
-			m_childNeighborListArray = stream.ReadArray<MotionNeighborList>();
+			m_childPositionArray = reader.ReadArray<Vector2f>();
+			m_childMagnitudeArray = reader.ReadSingleArray();
+			m_childPairVectorArray = reader.ReadArray<Vector2f>();
+			m_childPairAvgMagInvArray = reader.ReadSingleArray();
+			m_childNeighborListArray = reader.ReadArray<MotionNeighborList>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

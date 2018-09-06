@@ -24,25 +24,25 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			return version.IsGreaterEqual(4, 2);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			StateMachineIndex = (int)stream.ReadUInt32();
-			StateMachineMotionSetIndex = (int)stream.ReadUInt32();
-			BodyMask.Read(stream);
-			SkeletonMask.Read(stream);
-			Binding = stream.ReadUInt32();
-			LayerBlendingMode = (AnimatorLayerBlendingMode)stream.ReadInt32();
-			if (IsReadDefaultWeight(stream.Version))
+			StateMachineIndex = (int)reader.ReadUInt32();
+			StateMachineMotionSetIndex = (int)reader.ReadUInt32();
+			BodyMask.Read(reader);
+			SkeletonMask.Read(reader);
+			Binding = reader.ReadUInt32();
+			LayerBlendingMode = (AnimatorLayerBlendingMode)reader.ReadInt32();
+			if (IsReadDefaultWeight(reader.Version))
 			{
-				DefaultWeight = stream.ReadSingle();
+				DefaultWeight = reader.ReadSingle();
 			}
 
-			IKPass = stream.ReadBoolean();
-			if (IsReadSyncedLayerAffectsTiming(stream.Version))
+			IKPass = reader.ReadBoolean();
+			if (IsReadSyncedLayerAffectsTiming(reader.Version))
 			{
-				SyncedLayerAffectsTiming = stream.ReadBoolean();
+				SyncedLayerAffectsTiming = reader.ReadBoolean();
 			}
-			stream.AlignStream(AlignType.Align4);
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

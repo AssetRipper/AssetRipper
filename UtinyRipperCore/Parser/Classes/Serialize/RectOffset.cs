@@ -20,12 +20,12 @@ namespace UtinyRipper.Classes
 			return new RectOffset(this);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Left = stream.ReadInt32();
-			Right = stream.ReadInt32();
-			Top = stream.ReadInt32();
-			Bottom = stream.ReadInt32();
+			Left = reader.ReadInt32();
+			Right = reader.ReadInt32();
+			Top = reader.ReadInt32();
+			Bottom = reader.ReadInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

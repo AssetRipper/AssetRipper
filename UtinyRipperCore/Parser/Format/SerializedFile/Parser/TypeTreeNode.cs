@@ -13,41 +13,41 @@ namespace UtinyRipper.SerializedFiles
 			Depth = depth;
 		}
 
-		public void Read(SerializedFileStream stream)
+		public void Read(SerializedFileReader reader)
 		{
-			Type = stream.ReadStringZeroTerm();
-			Name = stream.ReadStringZeroTerm();
-			ByteSize = stream.ReadInt32();
-			Index = stream.ReadInt32();
-			IsArray = stream.ReadInt32() != 0;
-			Version = stream.ReadInt32();
-			MetaFlag = stream.ReadUInt32();
+			Type = reader.ReadStringZeroTerm();
+			Name = reader.ReadStringZeroTerm();
+			ByteSize = reader.ReadInt32();
+			Index = reader.ReadInt32();
+			IsArray = reader.ReadInt32() != 0;
+			Version = reader.ReadInt32();
+			MetaFlag = reader.ReadUInt32();
 		}
 
-		public void Read(SerializedFileStream stream, long stringPosition)
+		public void Read(SerializedFileReader reader, long stringPosition)
 		{
-			Version = stream.ReadUInt16();
-			Depth = stream.ReadByte();
-			IsArray = stream.ReadBoolean();
-			uint type = stream.ReadUInt32();
-			uint name = stream.ReadUInt32();
-			ByteSize = stream.ReadInt32();
-			Index = stream.ReadInt32();
-			MetaFlag = stream.ReadUInt32();
+			Version = reader.ReadUInt16();
+			Depth = reader.ReadByte();
+			IsArray = reader.ReadBoolean();
+			uint type = reader.ReadUInt32();
+			uint name = reader.ReadUInt32();
+			ByteSize = reader.ReadInt32();
+			Index = reader.ReadInt32();
+			MetaFlag = reader.ReadUInt32();
 
-			Type = ReadString(stream, stringPosition, type);
-			Name = ReadString(stream, stringPosition, name);
+			Type = ReadString(reader, stringPosition, type);
+			Name = ReadString(reader, stringPosition, name);
 		}
 
-		private static string ReadString(SerializedFileStream stream, long stringPosition, uint value)
+		private static string ReadString(SerializedFileReader reader, long stringPosition, uint value)
 		{
 			bool isCustomType = (value & 0x80000000) == 0;
 			if (isCustomType)
 			{
-				long position = stream.BaseStream.Position;
-				stream.BaseStream.Position = stringPosition + value;
-				string stringValue = stream.ReadStringZeroTerm();
-				stream.BaseStream.Position = position;
+				long position = reader.BaseStream.Position;
+				reader.BaseStream.Position = stringPosition + value;
+				string stringValue = reader.ReadStringZeroTerm();
+				reader.BaseStream.Position = position;
 				return stringValue;
 			}
 			else

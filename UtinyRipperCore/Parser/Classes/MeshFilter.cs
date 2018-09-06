@@ -12,11 +12,11 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Mesh.Read(stream);
+			Mesh.Read(reader);
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

@@ -61,25 +61,25 @@ namespace UtinyRipper.Classes.Meshes
 			}
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			FirstByte = (int)stream.ReadUInt32();
-			IndexCount = (int)stream.ReadUInt32();
-			Topology = (MeshTopology)stream.ReadUInt32();
+			FirstByte = (int)reader.ReadUInt32();
+			IndexCount = (int)reader.ReadUInt32();
+			Topology = (MeshTopology)reader.ReadUInt32();
 
-			if(IsReadTriangleCount(stream.Version))
+			if(IsReadTriangleCount(reader.Version))
 			{
-				TriangleCount = (int)stream.ReadUInt32();
+				TriangleCount = (int)reader.ReadUInt32();
 			}
-			if(IsReadBaseVertex(stream.Version))
+			if(IsReadBaseVertex(reader.Version))
 			{
-				BaseVertex = stream.ReadUInt32();
+				BaseVertex = reader.ReadUInt32();
 			}
-			if(IsReadVertex(stream.Version))
+			if(IsReadVertex(reader.Version))
 			{
-				FirstVertex = stream.ReadUInt32();
-				VertexCount = stream.ReadUInt32();
-				LocalAABB.Read(stream);
+				FirstVertex = reader.ReadUInt32();
+				VertexCount = reader.ReadUInt32();
+				LocalAABB.Read(reader);
 			}
 		}
 

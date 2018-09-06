@@ -7,11 +7,11 @@ namespace UtinyRipper.Classes.CompositeCollider2Ds
 {
 	public struct SubCollider : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Collider.Read(stream);
-			m_colliderPaths = stream.ReadArray<IntPoint>();
-			stream.AlignStream(AlignType.Align4);
+			Collider.Read(reader);
+			m_colliderPaths = reader.ReadArray<IntPoint>();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

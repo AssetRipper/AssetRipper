@@ -5,11 +5,11 @@ namespace UtinyRipper.Classes.LightmapSettingss
 {
 	public struct EnlightenTerrainChunksInformation : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			FirstSystemId = stream.ReadInt32();
-			NumChunksInX = stream.ReadInt32();
-			NumChunksInY = stream.ReadInt32();
+			FirstSystemId = reader.ReadInt32();
+			NumChunksInX = reader.ReadInt32();
+			NumChunksInY = reader.ReadInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

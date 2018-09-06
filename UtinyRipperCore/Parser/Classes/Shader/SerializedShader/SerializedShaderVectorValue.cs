@@ -2,13 +2,13 @@
 {
 	public struct SerializedShaderVectorValue : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			X.Read(stream);
-			Y.Read(stream);
-			Z.Read(stream);
-			W.Read(stream);
-			Name = stream.ReadStringAligned();
+			X.Read(reader);
+			Y.Read(reader);
+			Z.Read(reader);
+			W.Read(reader);
+			Name = reader.ReadStringAligned();
 		}
 
 		public bool IsZero => X.IsZero && Y.IsZero && Z.IsZero && W.IsZero;

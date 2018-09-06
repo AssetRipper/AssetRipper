@@ -16,18 +16,18 @@ namespace UtinyRipper.Classes.AnimationClips
 			return version.IsGreater(2017);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_genericBindings = stream.ReadArray<GenericBinding>();
-			if (IsAlign(stream.Version))
+			m_genericBindings = reader.ReadArray<GenericBinding>();
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			m_pptrCurveMapping = stream.ReadArray<PPtr<Object>>();
-			if (IsAlign(stream.Version))
+			m_pptrCurveMapping = reader.ReadArray<PPtr<Object>>();
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

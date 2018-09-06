@@ -55,40 +55,40 @@ namespace UtinyRipper.Classes.Lights
 			return version.IsGreaterEqual(5, 3);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Type = (LightShadows)stream.ReadInt32();
-			Resolution = stream.ReadInt32();
-			if (IsReadCustomResolution(stream.Version))
+			Type = (LightShadows)reader.ReadInt32();
+			Resolution = reader.ReadInt32();
+			if (IsReadCustomResolution(reader.Version))
 			{
-				CustomResolution = stream.ReadInt32();
+				CustomResolution = reader.ReadInt32();
 			}
-			Strength = stream.ReadSingle();
-			if (IsReadProjection(stream.Version))
+			Strength = reader.ReadSingle();
+			if (IsReadProjection(reader.Version))
 			{
-				Projection = stream.ReadInt32();
+				Projection = reader.ReadInt32();
 			}
-			if (IsReadConstantBias(stream.Version))
+			if (IsReadConstantBias(reader.Version))
 			{
-				ConstantBias = stream.ReadSingle();
-				ObjectSizeBias = stream.ReadSingle();
+				ConstantBias = reader.ReadSingle();
+				ObjectSizeBias = reader.ReadSingle();
 			}
-			if (IsReadBias(stream.Version))
+			if (IsReadBias(reader.Version))
 			{
-				Bias = stream.ReadSingle();
+				Bias = reader.ReadSingle();
 			}
-			if (IsReadSoftness(stream.Version))
+			if (IsReadSoftness(reader.Version))
 			{
-				Softness = stream.ReadSingle();
-				SoftnessFade = stream.ReadSingle();
+				Softness = reader.ReadSingle();
+				SoftnessFade = reader.ReadSingle();
 			}
-			if (IsReadNormalBias(stream.Version))
+			if (IsReadNormalBias(reader.Version))
 			{
-				NormalBias = stream.ReadSingle();
+				NormalBias = reader.ReadSingle();
 			}
-			if (IsReadNearPlane(stream.Version))
+			if (IsReadNearPlane(reader.Version))
 			{
-				NearPlane = stream.ReadSingle();
+				NearPlane = reader.ReadSingle();
 			}
 		}
 

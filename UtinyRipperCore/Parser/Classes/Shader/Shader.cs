@@ -74,23 +74,23 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(4);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			if(IsSerialized(stream.Version))
+			if(IsSerialized(reader.Version))
 			{
-				ReadBase(stream);
+				ReadBase(reader);
 
-				ParsedForm.Read(stream);
+				ParsedForm.Read(reader);
 #if DEBUG
 				Name = ParsedForm.Name;
 #endif
 
-				m_platforms = stream.ReadEnum32Array((t) => (GPUPlatform)t);
-				uint[] offsets = stream.ReadUInt32Array();
-				uint[] compressedLengths = stream.ReadUInt32Array();
-				uint[] decompressedLengths = stream.ReadUInt32Array();
-				byte[] compressedBlob = stream.ReadByteArray();
-				stream.AlignStream(AlignType.Align4);
+				m_platforms = reader.ReadEnum32Array((t) => (GPUPlatform)t);
+				uint[] offsets = reader.ReadUInt32Array();
+				uint[] compressedLengths = reader.ReadUInt32Array();
+				uint[] decompressedLengths = reader.ReadUInt32Array();
+				byte[] compressedBlob = reader.ReadByteArray();
+				reader.AlignStream(AlignType.Align4);
 
 				m_subProgramBlobs = new ShaderSubProgramBlob[m_platforms.Length];
 				using (MemoryStream memStream = new MemoryStream(compressedBlob))
@@ -114,10 +114,10 @@ namespace UtinyRipper.Classes
 
 						using (MemoryStream blobMem = new MemoryStream(decompressedBuffer))
 						{
-							using (AssetStream blobStream = new AssetStream(blobMem, stream.Version, stream.Platform, stream.Flags))
+							using (AssetReader blobReader = new AssetReader(blobMem, reader.Version, reader.Platform, reader.Flags))
 							{
 								ShaderSubProgramBlob blob = new ShaderSubProgramBlob();
-								blob.Read(blobStream);
+								blob.Read(blobReader);
 								m_subProgramBlobs[i] = blob;
 							}
 						}
@@ -126,16 +126,16 @@ namespace UtinyRipper.Classes
 			}
 			else
 			{
-				base.Read(stream);
+				base.Read(reader);
 				
-				if(IsEncoded(stream.Version))
+				if(IsEncoded(reader.Version))
 				{
-					uint decompressedSize = stream.ReadUInt32();
-					int comressedSize = stream.ReadInt32();
+					uint decompressedSize = reader.ReadUInt32();
+					int comressedSize = reader.ReadInt32();
 
 					byte[] subProgramBlob = new byte[comressedSize];
-					stream.Read(subProgramBlob, 0, comressedSize);
-					stream.AlignStream(AlignType.Align4);
+					reader.Read(subProgramBlob, 0, comressedSize);
+					reader.AlignStream(AlignType.Align4);
 
 					if (comressedSize > 0 && decompressedSize > 0)
 					{
@@ -154,40 +154,40 @@ namespace UtinyRipper.Classes
 
 						using (MemoryStream memStream = new MemoryStream(decompressedBuffer))
 						{
-							using (AssetStream blobStream = new AssetStream(memStream, stream.Version, stream.Platform, stream.Flags))
+							using (AssetReader blobReader = new AssetReader(memStream, reader.Version, reader.Platform, reader.Flags))
 							{
-								SubProgramBlob.Read(blobStream);
+								SubProgramBlob.Read(blobReader);
 							}
 						}
 					}
 				}
 
-				if (IsReadFallback(stream.Version))
+				if (IsReadFallback(reader.Version))
 				{
-					Fallback.Read(stream);
+					Fallback.Read(reader);
 				}
-				if (IsReadDefaultProperties(stream.Version))
+				if (IsReadDefaultProperties(reader.Version))
 				{
-					DefaultProperties.Read(stream);
+					DefaultProperties.Read(reader);
 				}
-				if (IsReadStaticProperties(stream.Version))
+				if (IsReadStaticProperties(reader.Version))
 				{
-					StaticProperties.Read(stream);
+					StaticProperties.Read(reader);
 				}
 			}
 			
-			if (IsReadDependencies(stream.Version))
+			if (IsReadDependencies(reader.Version))
 			{
-				m_dependencies = stream.ReadArray<PPtr<Shader>>();
+				m_dependencies = reader.ReadArray<PPtr<Shader>>();
 			}
-			if(IsReadNonModifiableTextures(stream.Version))
+			if(IsReadNonModifiableTextures(reader.Version))
 			{
-				m_nonModifiableTextures = stream.ReadArray<PPtr<Texture>>();
+				m_nonModifiableTextures = reader.ReadArray<PPtr<Texture>>();
 			}
-			if (IsReadShaderIsBaked(stream.Version))
+			if (IsReadShaderIsBaked(reader.Version))
 			{
-				ShaderIsBaked = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				ShaderIsBaked = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

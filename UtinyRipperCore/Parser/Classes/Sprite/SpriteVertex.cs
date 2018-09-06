@@ -19,12 +19,12 @@ namespace UtinyRipper.Classes.Sprites
 			return 2;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Position.Read(stream);
-			if(IsReadUV(stream.Version))
+			Position.Read(reader);
+			if(IsReadUV(reader.Version))
 			{
-				UV.Read(stream);
+				UV.Read(reader);
 			}
 		}
 

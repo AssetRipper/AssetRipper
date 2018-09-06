@@ -15,18 +15,18 @@ namespace UtinyRipper.Classes.AnimationClips
 			return version.IsGreaterEqual(2017);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_curve = stream.ReadArray<PPtrKeyframe>();
-			if (IsAlign(stream.Version))
+			m_curve = reader.ReadArray<PPtrKeyframe>();
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			Attribute = stream.ReadStringAligned();
-			Path = stream.ReadStringAligned();
-			ClassID = stream.ReadInt32();
-			Script.Read(stream);
+			Attribute = reader.ReadStringAligned();
+			Path = reader.ReadStringAligned();
+			ClassID = reader.ReadInt32();
+			Script.Read(reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

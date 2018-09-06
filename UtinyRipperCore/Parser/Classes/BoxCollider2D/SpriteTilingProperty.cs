@@ -5,16 +5,16 @@ namespace UtinyRipper.Classes.BoxCollider2Ds
 {
 	public struct SpriteTilingProperty : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Border.Read(stream);
-			Pivot.Read(stream);
-			OldSize.Read(stream);
-			NewSize.Read(stream);
-			AdaptiveTilingThreshold = stream.ReadSingle();
-			DrawMode = stream.ReadInt32();
-			AdaptiveTiling = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			Border.Read(reader);
+			Pivot.Read(reader);
+			OldSize.Read(reader);
+			NewSize.Read(reader);
+			AdaptiveTilingThreshold = reader.ReadSingle();
+			DrawMode = reader.ReadInt32();
+			AdaptiveTiling = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

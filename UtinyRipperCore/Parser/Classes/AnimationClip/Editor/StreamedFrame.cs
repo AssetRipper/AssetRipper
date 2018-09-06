@@ -4,10 +4,10 @@ namespace UtinyRipper.Classes.AnimationClips.Editor
 {
 	public struct StreamedFrame : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Time = stream.ReadSingle();
-			m_curves = stream.ReadArray<StreamedCurveKey>();
+			Time = reader.ReadSingle();
+			m_curves = reader.ReadArray<StreamedCurveKey>();
 		}
 
 		public float Time { get; set; }

@@ -6,11 +6,11 @@ namespace UtinyRipper.Classes.Prefabs
 {
 	public struct PrefabModification : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			TransformParent.Read(stream);
-			m_modifications = stream.ReadArray<PropertyModification>();
-			m_removedComponents = stream.ReadArray<PPtr<Object>>();
+			TransformParent.Read(reader);
+			m_modifications = reader.ReadArray<PropertyModification>();
+			m_removedComponents = reader.ReadArray<PPtr<Object>>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

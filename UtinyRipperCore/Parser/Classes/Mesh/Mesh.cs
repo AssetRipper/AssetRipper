@@ -272,191 +272,191 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadLODData(stream.Version))
+			if (IsReadLODData(reader.Version))
 			{
-				m_LODData = stream.ReadArray<LOD>();
+				m_LODData = reader.ReadArray<LOD>();
 			}
-			if (IsReadIndicesUsage(stream.Version))
+			if (IsReadIndicesUsage(reader.Version))
 			{
-				Use16bitIndices = stream.ReadInt32() > 0;
+				Use16bitIndices = reader.ReadInt32() > 0;
 			}
-			if (IsReadIndexBuffer(stream.Version))
+			if (IsReadIndexBuffer(reader.Version))
 			{
-				if (IsReadIndexBufferFirst(stream.Version))
+				if (IsReadIndexBufferFirst(reader.Version))
 				{
-					m_indexBuffer = stream.ReadByteArray();
-					stream.AlignStream(AlignType.Align4);
+					m_indexBuffer = reader.ReadByteArray();
+					reader.AlignStream(AlignType.Align4);
 				}
 			}
-			if (IsReadSubMeshes(stream.Version))
+			if (IsReadSubMeshes(reader.Version))
 			{
-				m_subMeshes = stream.ReadArray<SubMesh>();
+				m_subMeshes = reader.ReadArray<SubMesh>();
 			}
 			
-			if(IsReadBlendShapes(stream.Version))
+			if(IsReadBlendShapes(reader.Version))
 			{
-				Shapes.Read(stream);
+				Shapes.Read(reader);
 			}
-			if (IsReadBindPosesFirst(stream.Version))
+			if (IsReadBindPosesFirst(reader.Version))
 			{
-				m_bindPoses = stream.ReadArray<Matrix4x4f>();
+				m_bindPoses = reader.ReadArray<Matrix4x4f>();
 			}
-			if (IsReadBoneNameHashes(stream.Version))
+			if (IsReadBoneNameHashes(reader.Version))
 			{
-				m_boneNameHashes = stream.ReadUInt32Array();
-				RootBoneNameHash = stream.ReadUInt32();
-			}
-
-			if (IsReadMeshCompression(stream.Version))
-			{
-				MeshCompression = (MeshCompression)stream.ReadByte();
-			}
-			if(IsReadStreamCompression(stream.Version))
-			{
-				StreamCompression = stream.ReadByte();
-			}
-			if(IsReadIsReadable(stream.Version))
-			{
-				IsReadable = stream.ReadBoolean();
-				KeepVertices = stream.ReadBoolean();
-				KeepIndices = stream.ReadBoolean();
-			}
-			if (IsAlign(stream.Version))
-			{
-				stream.AlignStream(AlignType.Align4);
+				m_boneNameHashes = reader.ReadUInt32Array();
+				RootBoneNameHash = reader.ReadUInt32();
 			}
 
-			if (IsReadIndexFormat(stream.Version))
+			if (IsReadMeshCompression(reader.Version))
 			{
-				if (IsReadIndexFormatCondition(stream.Version))
+				MeshCompression = (MeshCompression)reader.ReadByte();
+			}
+			if(IsReadStreamCompression(reader.Version))
+			{
+				StreamCompression = reader.ReadByte();
+			}
+			if(IsReadIsReadable(reader.Version))
+			{
+				IsReadable = reader.ReadBoolean();
+				KeepVertices = reader.ReadBoolean();
+				KeepIndices = reader.ReadBoolean();
+			}
+			if (IsAlign(reader.Version))
+			{
+				reader.AlignStream(AlignType.Align4);
+			}
+
+			if (IsReadIndexFormat(reader.Version))
+			{
+				if (IsReadIndexFormatCondition(reader.Version))
 				{
 					if(MeshCompression == 0)
 					{
-						IndexFormat = stream.ReadInt32();
+						IndexFormat = reader.ReadInt32();
 					}
 				}
 				else
 				{
-					IndexFormat = stream.ReadInt32();
+					IndexFormat = reader.ReadInt32();
 				}
 			}
 
-			if (IsReadIndexBuffer(stream.Version))
+			if (IsReadIndexBuffer(reader.Version))
 			{
-				if (!IsReadIndexBufferFirst(stream.Version))
+				if (!IsReadIndexBufferFirst(reader.Version))
 				{
-					m_indexBuffer = stream.ReadByteArray();
-					stream.AlignStream(AlignType.Align4);
+					m_indexBuffer = reader.ReadByteArray();
+					reader.AlignStream(AlignType.Align4);
 				}
 			}
 			
-			if (IsReadVertices(stream.Version))
+			if (IsReadVertices(reader.Version))
 			{
-				if (IsReadVertexData(stream.Version))
+				if (IsReadVertexData(reader.Version))
 				{
 					if(MeshCompression != 0)
 					{
-						m_vertices = stream.ReadArray<Vector3f>();
+						m_vertices = reader.ReadArray<Vector3f>();
 					}
 				}
 				else
 				{
-					m_vertices = stream.ReadArray<Vector3f>();
+					m_vertices = reader.ReadArray<Vector3f>();
 				}
 			}
 
-			if(IsReadSkin(stream.Version))
+			if(IsReadSkin(reader.Version))
 			{
-				m_skin = stream.ReadArray<BoneWeights4>();
+				m_skin = reader.ReadArray<BoneWeights4>();
 			}
-			if (IsReadBindPoses(stream.Version))
+			if (IsReadBindPoses(reader.Version))
 			{
-				if (!IsReadBindPosesFirst(stream.Version))
+				if (!IsReadBindPosesFirst(reader.Version))
 				{
-					m_bindPoses = stream.ReadArray<Matrix4x4f>();
+					m_bindPoses = reader.ReadArray<Matrix4x4f>();
 				}
 			}
 			
-			if (IsReadVertexData(stream.Version))
+			if (IsReadVertexData(reader.Version))
 			{
-				if (IsReadOnlyVertexData(stream.Version))
+				if (IsReadOnlyVertexData(reader.Version))
 				{
-					VertexData.Read(stream);
+					VertexData.Read(reader);
 				}
 				else
 				{
 					if (MeshCompression == 0)
 					{
-						VertexData.Read(stream);
+						VertexData.Read(reader);
 					}
 					else
 					{
-						m_UV = stream.ReadArray<Vector2f>();
-						m_UV1 = stream.ReadArray<Vector2f>();
-						m_tangents = stream.ReadArray<Vector4f>();
-						m_normals = stream.ReadArray<Vector3f>();
-						m_colors = stream.ReadArray<ColorRGBA32>();
+						m_UV = reader.ReadArray<Vector2f>();
+						m_UV1 = reader.ReadArray<Vector2f>();
+						m_tangents = reader.ReadArray<Vector4f>();
+						m_normals = reader.ReadArray<Vector3f>();
+						m_colors = reader.ReadArray<ColorRGBA32>();
 					}
 				}
 			}
 			else
 			{
-				m_UV = stream.ReadArray<Vector2f>();
-				if (IsReadUV1(stream.Version))
+				m_UV = reader.ReadArray<Vector2f>();
+				if (IsReadUV1(reader.Version))
 				{
-					m_UV1 = stream.ReadArray<Vector2f>();
+					m_UV1 = reader.ReadArray<Vector2f>();
 				}
-				if (IsReadTangentSpace(stream.Version))
+				if (IsReadTangentSpace(reader.Version))
 				{
-					m_tangentSpace = stream.ReadArray<Tangent>();
+					m_tangentSpace = reader.ReadArray<Tangent>();
 				}
 				else
 				{
-					m_tangents = stream.ReadArray<Vector4f>();
-					m_normals = stream.ReadArray<Vector3f>();
+					m_tangents = reader.ReadArray<Vector4f>();
+					m_normals = reader.ReadArray<Vector3f>();
 				}
 			}
-			if (IsReadAlign(stream.Version))
+			if (IsReadAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadCompressedMesh(stream.Version))
+			if (IsReadCompressedMesh(reader.Version))
 			{
-				CompressedMesh.Read(stream);
+				CompressedMesh.Read(reader);
 			}
 
-			LocalAABB.Read(stream);
-			if (IsReadColors(stream.Version))
+			LocalAABB.Read(reader);
+			if (IsReadColors(reader.Version))
 			{
-				if (!IsReadVertexData(stream.Version))
+				if (!IsReadVertexData(reader.Version))
 				{
-					m_colors = stream.ReadArray<ColorRGBA32>();
+					m_colors = reader.ReadArray<ColorRGBA32>();
 				}
 			}
-			if (IsReadCollisionTriangles(stream.Version))
+			if (IsReadCollisionTriangles(reader.Version))
 			{
-				m_collisionTriangles = stream.ReadUInt32Array();
-				CollisionVertexCount = stream.ReadInt32();
+				m_collisionTriangles = reader.ReadUInt32Array();
+				CollisionVertexCount = reader.ReadInt32();
 			}
-			if (IsReadMeshUsageFlags(stream.Version))
+			if (IsReadMeshUsageFlags(reader.Version))
 			{
-				MeshUsageFlags = stream.ReadInt32();
+				MeshUsageFlags = reader.ReadInt32();
 			}
 			
-			if(IsReadCollision(stream.Version))
+			if(IsReadCollision(reader.Version))
 			{
-				CollisionData.Read(stream);
+				CollisionData.Read(reader);
 			}
-			if(IsReadMeshMetrics(stream.Version))
+			if(IsReadMeshMetrics(reader.Version))
 			{
 				m_meshMetrics = new float[2];
-				m_meshMetrics[0] = stream.ReadSingle();
-				m_meshMetrics[1] = stream.ReadSingle();
+				m_meshMetrics[0] = reader.ReadSingle();
+				m_meshMetrics[1] = reader.ReadSingle();
 			}
 		}
 		

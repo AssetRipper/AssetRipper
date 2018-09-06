@@ -13,13 +13,13 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			long position = stream.BaseStream.Position;
-			base.Read(stream);
+			long position = reader.BaseStream.Position;
+			base.Read(reader);
 
-			Script.Read(stream);
-			Name = stream.ReadStringAligned();
+			Script.Read(reader);
+			Name = reader.ReadStringAligned();
 			
 			MonoScript script = Script.FindAsset(File);
 			if (script != null)
@@ -27,13 +27,13 @@ namespace UtinyRipper.Classes
 				Structure = script.CreateStructure();
 				if(Structure != null)
 				{
-					Structure.Read(stream);
+					Structure.Read(reader);
 					return;
 				}
 			}
 
 			AssetEntry info = File.GetAssetEntry(PathID);
-			stream.BaseStream.Position = position + info.DataSize;
+			reader.BaseStream.Position = position + info.DataSize;
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

@@ -4,10 +4,10 @@ namespace UtinyRipper.Classes.AnimatorControllers
 {
 	public struct StateKey : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			StateID = stream.ReadUInt32();
-			LayerIndex = stream.ReadInt32();
+			StateID = reader.ReadUInt32();
+			LayerIndex = reader.ReadInt32();
 		}
 
 		public override int GetHashCode()

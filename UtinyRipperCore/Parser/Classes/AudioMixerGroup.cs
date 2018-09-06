@@ -14,13 +14,13 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			AudioMixer.Read(stream);
-			GroupID.Read(stream);
-			m_children = stream.ReadArray<PPtr<AudioMixerGroup>>();
+			AudioMixer.Read(reader);
+			GroupID.Read(reader);
+			m_children = reader.ReadArray<PPtr<AudioMixerGroup>>();
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

@@ -7,9 +7,9 @@ namespace UtinyRipper.Classes
 {
 	public struct ValueArrayConstant : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_valueArray = stream.ReadArray<ValueConstant>();
+			m_valueArray = reader.ReadArray<ValueConstant>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

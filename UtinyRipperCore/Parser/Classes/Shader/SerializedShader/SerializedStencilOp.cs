@@ -4,12 +4,12 @@ namespace UtinyRipper.Classes.Shaders
 {
 	public struct SerializedStencilOp : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Pass.Read(stream);
-			Fail.Read(stream);
-			ZFail.Read(stream);
-			Comp.Read(stream);
+			Pass.Read(reader);
+			Fail.Read(reader);
+			ZFail.Read(reader);
+			Comp.Read(reader);
 		}
 
 		public void Export(TextWriter writer, StencilType type)

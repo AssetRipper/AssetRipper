@@ -27,30 +27,30 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2017, 2);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			X.Read(stream);
-			Y.Read(stream);
-			Z.Read(stream);
-			Magnitude.Read(stream);
-			SeparateAxis = stream.ReadBoolean();
-			if (IsReadInWorldSpace(stream.Version))
+			X.Read(reader);
+			Y.Read(reader);
+			Z.Read(reader);
+			Magnitude.Read(reader);
+			SeparateAxis = reader.ReadBoolean();
+			if (IsReadInWorldSpace(reader.Version))
 			{
-				InWorldSpace = stream.ReadBoolean();
+				InWorldSpace = reader.ReadBoolean();
 			}
-			if (IsReadMultiplyDragByParticleSize(stream.Version))
+			if (IsReadMultiplyDragByParticleSize(reader.Version))
 			{
-				MultiplyDragByParticleSize = stream.ReadBoolean();
-				MultiplyDragByParticleVelocity = stream.ReadBoolean();
+				MultiplyDragByParticleSize = reader.ReadBoolean();
+				MultiplyDragByParticleVelocity = reader.ReadBoolean();
 			}
-			stream.AlignStream(AlignType.Align4);
+			reader.AlignStream(AlignType.Align4);
 			
-			Dampen = stream.ReadSingle();
-			if (IsReadDrag(stream.Version))
+			Dampen = reader.ReadSingle();
+			if (IsReadDrag(reader.Version))
 			{
-				Drag.Read(stream);
+				Drag.Read(reader);
 			}
 		}
 

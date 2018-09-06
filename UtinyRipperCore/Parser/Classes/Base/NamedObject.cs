@@ -10,11 +10,11 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Name = stream.ReadStringAligned();
+			Name = reader.ReadStringAligned();
 			if(string.IsNullOrEmpty(Name))
 			{
 				Name = GetType().Name;

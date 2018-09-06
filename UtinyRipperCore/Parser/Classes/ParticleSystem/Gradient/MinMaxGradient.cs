@@ -57,33 +57,33 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if (IsMaxGradientFirst(stream.Version))
+			if (IsMaxGradientFirst(reader.Version))
 			{
-				MaxGradient.Read(stream);
-				MinGradient.Read(stream);
-				if (IsColor32(stream.Version))
+				MaxGradient.Read(reader);
+				MinGradient.Read(reader);
+				if (IsColor32(reader.Version))
 				{
-					MinColor32.Read(stream);
-					MaxColor32.Read(stream);
+					MinColor32.Read(reader);
+					MaxColor32.Read(reader);
 				}
 				else
 				{
-					MinColor.Read(stream);
-					MaxColor.Read(stream);
+					MinColor.Read(reader);
+					MaxColor.Read(reader);
 				}
 			}
 
-			MinMaxState = (MinMaxGradientState)stream.ReadUInt16();
-			stream.AlignStream(AlignType.Align4);
+			MinMaxState = (MinMaxGradientState)reader.ReadUInt16();
+			reader.AlignStream(AlignType.Align4);
 
-			if (!IsMaxGradientFirst(stream.Version))
+			if (!IsMaxGradientFirst(reader.Version))
 			{
-				MinColor.Read(stream);
-				MaxColor.Read(stream);
-				MaxGradient.Read(stream);
-				MinGradient.Read(stream);
+				MinColor.Read(reader);
+				MaxColor.Read(reader);
+				MaxGradient.Read(reader);
+				MinGradient.Read(reader);
 			}
 		}
 

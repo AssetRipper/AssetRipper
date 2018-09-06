@@ -26,25 +26,25 @@ namespace UtinyRipper.Classes.TerrainDatas
 			return 2;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Prototype.Read(stream);
-			PrototypeTexture.Read(stream);
-			MinWidth = stream.ReadSingle();
-			MaxWidth = stream.ReadSingle();
-			MinHeight = stream.ReadSingle();
-			MaxHeight = stream.ReadSingle();
-			NoiseSpread = stream.ReadSingle();
-			BendFactor = stream.ReadSingle();
-			HealthyColor.Read(stream);
-			DryColor.Read(stream);
-			if (IsReadGrayscaleLighting(stream.Version))
+			Prototype.Read(reader);
+			PrototypeTexture.Read(reader);
+			MinWidth = reader.ReadSingle();
+			MaxWidth = reader.ReadSingle();
+			MinHeight = reader.ReadSingle();
+			MaxHeight = reader.ReadSingle();
+			NoiseSpread = reader.ReadSingle();
+			BendFactor = reader.ReadSingle();
+			HealthyColor.Read(reader);
+			DryColor.Read(reader);
+			if (IsReadGrayscaleLighting(reader.Version))
 			{
-				GrayscaleLighting = stream.ReadInt32();
+				GrayscaleLighting = reader.ReadInt32();
 			}
-			LightmapFactor = stream.ReadSingle();
-			RenderMode = stream.ReadInt32();
-			UsePrototypeMesh = stream.ReadInt32();
+			LightmapFactor = reader.ReadSingle();
+			RenderMode = reader.ReadInt32();
+			UsePrototypeMesh = reader.ReadInt32();
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

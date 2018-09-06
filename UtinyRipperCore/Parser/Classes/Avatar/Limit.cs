@@ -13,17 +13,17 @@ namespace UtinyRipper.Classes.Avatars
 			return version.IsGreaterEqual(5, 4);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if(IsVector3(stream.Version))
+			if(IsVector3(reader.Version))
 			{
-				Min.Read3(stream);
-				Max.Read3(stream);
+				Min.Read3(reader);
+				Max.Read3(reader);
 			}
 			else
 			{
-				Min.Read(stream);
-				Max.Read(stream);
+				Min.Read(reader);
+				Max.Read(reader);
 			}
 		}
 

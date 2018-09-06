@@ -13,24 +13,24 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(5, 4);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if(IsVector3(stream.Version))
+			if(IsVector3(reader.Version))
 			{
-				T.Read3(stream);
+				T.Read3(reader);
 			}
 			else
 			{
-				T.Read(stream);
+				T.Read(reader);
 			}
-			Q.Read(stream);
-			if (IsVector3(stream.Version))
+			Q.Read(reader);
+			if (IsVector3(reader.Version))
 			{
-				S.Read3(stream);
+				S.Read3(reader);
 			}
 			else
 			{
-				S.Read(stream);
+				S.Read(reader);
 			}
 		}
 

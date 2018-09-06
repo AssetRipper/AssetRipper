@@ -72,42 +72,42 @@ namespace UtinyRipper.Classes
 			return 2;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadMeshFirst(stream.Version))
+			if (IsReadMeshFirst(reader.Version))
 			{
-				Mesh.Read(stream);
-			}
-
-			if (IsReadSmoothSphereCollisions(stream.Version))
-			{
-				SmoothSphereCollisions = stream.ReadBoolean();
-			}
-			Convex = stream.ReadBoolean();
-			if (IsReadInflateMesh(stream.Version))
-			{
-				InflateMesh = stream.ReadBoolean();
-			}
-			if (IsAlign(stream.Version))
-			{
-				stream.AlignStream(AlignType.Align4);
+				Mesh.Read(reader);
 			}
 
-			if (IsReadCookingOptions(stream.Version))
+			if (IsReadSmoothSphereCollisions(reader.Version))
 			{
-				CookingOptions = (MeshColliderCookingOptions)stream.ReadInt32();
-				stream.AlignStream(AlignType.Align4);
+				SmoothSphereCollisions = reader.ReadBoolean();
 			}
-			if (IsReadSkinWidth(stream.Version))
+			Convex = reader.ReadBoolean();
+			if (IsReadInflateMesh(reader.Version))
 			{
-				SkinWidth = stream.ReadSingle();
+				InflateMesh = reader.ReadBoolean();
+			}
+			if (IsAlign(reader.Version))
+			{
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (!IsReadMeshFirst(stream.Version))
+			if (IsReadCookingOptions(reader.Version))
 			{
-				Mesh.Read(stream);
+				CookingOptions = (MeshColliderCookingOptions)reader.ReadInt32();
+				reader.AlignStream(AlignType.Align4);
+			}
+			if (IsReadSkinWidth(reader.Version))
+			{
+				SkinWidth = reader.ReadSingle();
+			}
+
+			if (!IsReadMeshFirst(reader.Version))
+			{
+				Mesh.Read(reader);
 			}
 		}
 

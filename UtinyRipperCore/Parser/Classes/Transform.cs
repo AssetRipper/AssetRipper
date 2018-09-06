@@ -13,15 +13,15 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			LocalRotation.Read(stream);
-			LocalPosition.Read(stream);
-			LocalScale.Read(stream);
-			m_children = stream.ReadArray<PPtr<Transform>>();
-			Father.Read(stream);
+			LocalRotation.Read(reader);
+			LocalPosition.Read(reader);
+			LocalScale.Read(reader);
+			m_children = reader.ReadArray<PPtr<Transform>>();
+			Father.Read(reader);
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

@@ -31,34 +31,34 @@ namespace UtinyRipper.Classes.LightmapSettingss
 			return version.IsGreaterEqual(2017);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_renderers = stream.ReadArray<EnlightenRendererInformation>();
-			if(IsAlign(stream.Version))
+			m_renderers = reader.ReadArray<EnlightenRendererInformation>();
+			if(IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
-			m_systems = stream.ReadArray<EnlightenSystemInformation>();
-			if (IsAlign(stream.Version))
+			m_systems = reader.ReadArray<EnlightenSystemInformation>();
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
-			if (IsReadProbesets(stream.Version))
+			if (IsReadProbesets(reader.Version))
 			{
-				m_probesets = stream.ReadArray<Hash128>();
-				stream.AlignStream(AlignType.Align4);
+				m_probesets = reader.ReadArray<Hash128>();
+				reader.AlignStream(AlignType.Align4);
 			}
-			m_systemAtlases = stream.ReadArray<EnlightenSystemAtlasInformation>();
-			if (IsAlign(stream.Version))
+			m_systemAtlases = reader.ReadArray<EnlightenSystemAtlasInformation>();
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
-			if(IsReadTerrainChunks(stream.Version))
+			if(IsReadTerrainChunks(reader.Version))
 			{
-				m_terrainChunks = stream.ReadArray<EnlightenTerrainChunksInformation>();
-				if (IsAlign(stream.Version))
+				m_terrainChunks = reader.ReadArray<EnlightenTerrainChunksInformation>();
+				if (IsAlign(reader.Version))
 				{
-					stream.AlignStream(AlignType.Align4);
+					reader.AlignStream(AlignType.Align4);
 				}
 			}
 		}

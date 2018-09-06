@@ -13,10 +13,10 @@ namespace UtinyRipper.Classes
 			Extent = copy.Extent;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Center.Read(stream);
-			Extent.Read(stream);
+			Center.Read(reader);
+			Extent.Read(reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

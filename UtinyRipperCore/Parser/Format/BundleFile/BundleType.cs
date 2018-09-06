@@ -1,6 +1,6 @@
 ﻿namespace UtinyRipper.BundleFiles
 {
-	internal enum BundleType
+	public enum BundleType
 	{
 		UnityRaw,
 		UnityWeb,

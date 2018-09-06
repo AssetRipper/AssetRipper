@@ -5,10 +5,10 @@ namespace UtinyRipper.Classes.AvatarMasks
 {
 	public sealed class TransformMaskElement : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Path = stream.ReadStringAligned();
-			Weight = stream.ReadSingle();
+			Path = reader.ReadStringAligned();
+			Weight = reader.ReadSingle();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -116,47 +116,47 @@ namespace UtinyRipper.Classes
 			return 2;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadPVSData(stream.Version))
+			if (IsReadPVSData(reader.Version))
 			{
-				m_PVSData = stream.ReadByteArray();
-				stream.AlignStream(AlignType.Align4);
+				m_PVSData = reader.ReadByteArray();
+				reader.AlignStream(AlignType.Align4);
 			}
-			if (IsReadQueryMode(stream.Version))
+			if (IsReadQueryMode(reader.Version))
 			{
-				QueryMode = stream.ReadInt32();
+				QueryMode = reader.ReadInt32();
 			}
 			
-			if (IsReadOcclusionBakeSettings(stream.Version, stream.Flags))
+			if (IsReadOcclusionBakeSettings(reader.Version, reader.Flags))
 			{
-				if (IsReadOcclusionBakeSettingsFirst(stream.Version))
+				if (IsReadOcclusionBakeSettingsFirst(reader.Version))
 				{
-					OcclusionBakeSettings.Read(stream);
+					OcclusionBakeSettings.Read(reader);
 				}
 			}
 
-			if(IsReadSceneGUID(stream.Version))
+			if(IsReadSceneGUID(reader.Version))
 			{
-				SceneGUID.Read(stream);
-				OcclusionCullingData.Read(stream);
+				SceneGUID.Read(reader);
+				OcclusionCullingData.Read(reader);
 			}
-			if (IsReadStaticRenderers(stream.Version, stream.Flags))
+			if (IsReadStaticRenderers(reader.Version, reader.Flags))
 			{
-				m_staticRenderers = stream.ReadArray<PPtr<Renderer>>();
+				m_staticRenderers = reader.ReadArray<PPtr<Renderer>>();
 			}
-			if (IsReadPortals(stream.Version, stream.Flags))
+			if (IsReadPortals(reader.Version, reader.Flags))
 			{
-				m_portals = stream.ReadArray<PPtr<OcclusionPortal>>();
+				m_portals = reader.ReadArray<PPtr<OcclusionPortal>>();
 			}
 
-			if (IsReadOcclusionBakeSettings(stream.Version, stream.Flags))
+			if (IsReadOcclusionBakeSettings(reader.Version, reader.Flags))
 			{
-				if (!IsReadOcclusionBakeSettingsFirst(stream.Version))
+				if (!IsReadOcclusionBakeSettingsFirst(reader.Version))
 				{
-					OcclusionBakeSettings.Read(stream);
+					OcclusionBakeSettings.Read(reader);
 				}
 			}
 		}

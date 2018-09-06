@@ -8,10 +8,10 @@
 			Target = target;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Source = (ShaderChannel)stream.ReadByte();
-			Target = (VertexComponent)stream.ReadByte();
+			Source = (ShaderChannel)reader.ReadByte();
+			Target = (VertexComponent)reader.ReadByte();
 		}
 
 		public ShaderChannel Source { get; private set; }

@@ -5,9 +5,9 @@ namespace UtinyRipper.Classes.Shaders
 {
 	public struct SerializedProperties : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_props = stream.ReadArray<SerializedProperty>();
+			m_props = reader.ReadArray<SerializedProperty>();
 		}
 
 		public void Export(TextWriter writer)

@@ -2,12 +2,12 @@
 {
 	public struct AssetBundleScriptInfo : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			ClassName = stream.ReadStringAligned();
-			NameSpace = stream.ReadStringAligned();
-			AssemblyName = stream.ReadStringAligned();
-			Hash = stream.ReadUInt32();
+			ClassName = reader.ReadStringAligned();
+			NameSpace = reader.ReadStringAligned();
+			AssemblyName = reader.ReadStringAligned();
+			Hash = reader.ReadUInt32();
 		}
 
 		public string ClassName { get; private set; }

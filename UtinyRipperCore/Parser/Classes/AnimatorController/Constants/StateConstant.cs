@@ -76,56 +76,56 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			return IsReadFullPathID(version) ? FullPathID : NameID;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_transitionConstantArray = stream.ReadArray<OffsetPtr<TransitionConstant>>();
-			m_blendTreeConstantIndexArray = stream.ReadInt32Array();
-			if(IsReadLeafInfo(stream.Version))
+			m_transitionConstantArray = reader.ReadArray<OffsetPtr<TransitionConstant>>();
+			m_blendTreeConstantIndexArray = reader.ReadInt32Array();
+			if(IsReadLeafInfo(reader.Version))
 			{
-				m_leafInfoArray = stream.ReadArray<LeafInfoConstant>();
+				m_leafInfoArray = reader.ReadArray<LeafInfoConstant>();
 			}
 
-			m_blendTreeConstantArray = stream.ReadArray<OffsetPtr<BlendTreeConstant>>();
-			NameID = stream.ReadUInt32();
-			if (IsReadPathID(stream.Version))
+			m_blendTreeConstantArray = reader.ReadArray<OffsetPtr<BlendTreeConstant>>();
+			NameID = reader.ReadUInt32();
+			if (IsReadPathID(reader.Version))
 			{
-				PathID = stream.ReadUInt32();
+				PathID = reader.ReadUInt32();
 			}
-			if(IsReadFullPathID(stream.Version))
+			if(IsReadFullPathID(reader.Version))
 			{
-				FullPathID = stream.ReadUInt32();
-			}
-
-			TagID = stream.ReadUInt32();
-			if(IsReadSpeedParam(stream.Version))
-			{
-				SpeedParamID = stream.ReadUInt32();
-				MirrorParamID = stream.ReadUInt32();
-				CycleOffsetParamID = stream.ReadUInt32();
-			}
-			if (IsReadTimeParam(stream.Version))
-			{
-				TimeParamID = stream.ReadUInt32();
+				FullPathID = reader.ReadUInt32();
 			}
 
-			Speed = stream.ReadSingle();
-			if (IsReadCycleOffset(stream.Version))
+			TagID = reader.ReadUInt32();
+			if(IsReadSpeedParam(reader.Version))
 			{
-				CycleOffset = stream.ReadSingle();
+				SpeedParamID = reader.ReadUInt32();
+				MirrorParamID = reader.ReadUInt32();
+				CycleOffsetParamID = reader.ReadUInt32();
+			}
+			if (IsReadTimeParam(reader.Version))
+			{
+				TimeParamID = reader.ReadUInt32();
 			}
 
-			IKOnFeet = stream.ReadBoolean();
-			if (IsReadDefaultValues(stream.Version))
+			Speed = reader.ReadSingle();
+			if (IsReadCycleOffset(reader.Version))
 			{
-				WriteDefaultValues = stream.ReadBoolean();
+				CycleOffset = reader.ReadSingle();
 			}
 
-			Loop = stream.ReadBoolean();
-			if (IsReadMirror(stream.Version))
+			IKOnFeet = reader.ReadBoolean();
+			if (IsReadDefaultValues(reader.Version))
 			{
-				Mirror = stream.ReadBoolean();
+				WriteDefaultValues = reader.ReadBoolean();
 			}
-			stream.AlignStream(AlignType.Align4);
+
+			Loop = reader.ReadBoolean();
+			if (IsReadMirror(reader.Version))
+			{
+				Mirror = reader.ReadBoolean();
+			}
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

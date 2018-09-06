@@ -56,39 +56,39 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return IsReadSprites(version) ? Sprites : new SpriteData[] { default };
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadMode(stream.Version))
+			if (IsReadMode(reader.Version))
 			{
-				Mode = stream.ReadInt32();
+				Mode = reader.ReadInt32();
 			}
-			FrameOverTime.Read(stream);
-			if (IsReadStartFrame(stream.Version))
+			FrameOverTime.Read(reader);
+			if (IsReadStartFrame(reader.Version))
 			{
-				StartFrame.Read(stream);
+				StartFrame.Read(reader);
 			}
-			TilesX = stream.ReadInt32();
-			TilesY = stream.ReadInt32();
-			AnimationType = stream.ReadInt32();
-			RowIndex = stream.ReadInt32();
-			Cycles = stream.ReadSingle();
-			if (IsReadUvChannelMask(stream.Version))
+			TilesX = reader.ReadInt32();
+			TilesY = reader.ReadInt32();
+			AnimationType = reader.ReadInt32();
+			RowIndex = reader.ReadInt32();
+			Cycles = reader.ReadSingle();
+			if (IsReadUvChannelMask(reader.Version))
 			{
-				UvChannelMask = stream.ReadInt32();
+				UvChannelMask = reader.ReadInt32();
 			}
-			if (IsReadFlipU(stream.Version))
+			if (IsReadFlipU(reader.Version))
 			{
-				FlipU = stream.ReadSingle();
-				FlipV = stream.ReadSingle();
+				FlipU = reader.ReadSingle();
+				FlipV = reader.ReadSingle();
 			}
-			RandomRow = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			RandomRow = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 
-			if (IsReadSprites(stream.Version))
+			if (IsReadSprites(reader.Version))
 			{
-				m_sprites = stream.ReadArray<SpriteData>();
+				m_sprites = reader.ReadArray<SpriteData>();
 			}
 		}
 

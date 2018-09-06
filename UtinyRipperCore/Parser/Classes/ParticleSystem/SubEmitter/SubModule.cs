@@ -58,30 +58,30 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadSubEmitters(stream.Version))
+			if (IsReadSubEmitters(reader.Version))
 			{
-				m_subEmitters = stream.ReadArray<SubEmitterData>();
+				m_subEmitters = reader.ReadArray<SubEmitterData>();
 			}
 			else
 			{
-				SubEmitterBirth.Read(stream);
-				if (IsReadSecond(stream.Version))
+				SubEmitterBirth.Read(reader);
+				if (IsReadSecond(reader.Version))
 				{
-					SubEmitterBirth1.Read(stream);
+					SubEmitterBirth1.Read(reader);
 				}
-				SubEmitterDeath.Read(stream);
-				if (IsReadSecond(stream.Version))
+				SubEmitterDeath.Read(reader);
+				if (IsReadSecond(reader.Version))
 				{
-					SubEmitterDeath1.Read(stream);
+					SubEmitterDeath1.Read(reader);
 				}
-				SubEmitterCollision.Read(stream);
-				if (IsReadSecond(stream.Version))
+				SubEmitterCollision.Read(reader);
+				if (IsReadSecond(reader.Version))
 				{
-					SubEmitterCollision1.Read(stream);
+					SubEmitterCollision1.Read(reader);
 				}
 			}
 		}

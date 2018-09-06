@@ -105,16 +105,16 @@ namespace UtinyRipper.AssetExporters
 
 		public abstract IScriptStructure CreateCopy();
 
-		public virtual void Read(AssetStream stream)
+		public virtual void Read(AssetReader reader)
 		{
 			if(Base != null)
 			{
-				Base.Read(stream);
+				Base.Read(reader);
 			}
 
 			foreach (ScriptField field in Fields)
 			{
-				field.Read(stream);
+				field.Read(reader);
 			}
 		}
 

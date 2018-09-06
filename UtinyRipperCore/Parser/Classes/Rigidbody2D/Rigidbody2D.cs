@@ -76,55 +76,55 @@ namespace UtinyRipper.Classes
 			return 4;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadBodyType(stream.Version))
+			if (IsReadBodyType(reader.Version))
 			{
-				BodyType = (RigidbodyType2D)stream.ReadInt32();
-				Simulated = stream.ReadBoolean();
-				UseFullKinematicContacts = stream.ReadBoolean();
+				BodyType = (RigidbodyType2D)reader.ReadInt32();
+				Simulated = reader.ReadBoolean();
+				UseFullKinematicContacts = reader.ReadBoolean();
 			}
-			if (IsReadUseAutoMass(stream.Version))
+			if (IsReadUseAutoMass(reader.Version))
 			{
-				UseAutoMass = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				UseAutoMass = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 			
-			Mass = stream.ReadSingle();
-			LinearDrag = stream.ReadSingle();
-			AngularDrag = stream.ReadSingle();
-			GravityScale = stream.ReadSingle();
-			if (IsReadMaterial(stream.Version))
+			Mass = reader.ReadSingle();
+			LinearDrag = reader.ReadSingle();
+			AngularDrag = reader.ReadSingle();
+			GravityScale = reader.ReadSingle();
+			if (IsReadMaterial(reader.Version))
 			{
-				Material.Read(stream);
+				Material.Read(reader);
 			}
 
-			if (IsReadFixedAngle(stream.Version))
+			if (IsReadFixedAngle(reader.Version))
 			{
-				bool fixedAngle = stream.ReadBoolean();
+				bool fixedAngle = reader.ReadBoolean();
 				Constraints = fixedAngle ? RigidbodyConstraints2D.FreezeRotation : RigidbodyConstraints2D.None;
 			}
-			if (IsReadIsKinematic(stream.Version))
+			if (IsReadIsKinematic(reader.Version))
 			{
-				bool isKinematic = stream.ReadBoolean();
+				bool isKinematic = reader.ReadBoolean();
 				BodyType = isKinematic ? RigidbodyType2D.Kinematic : RigidbodyType2D.Static;
-				Interpolate = (RigidbodyInterpolation2D)stream.ReadByte();
-				SleepingMode = (RigidbodySleepMode2D)stream.ReadByte();
-				CollisionDetection = (CollisionDetectionMode2D)stream.ReadByte();
-				stream.AlignStream(AlignType.Align4);
+				Interpolate = (RigidbodyInterpolation2D)reader.ReadByte();
+				SleepingMode = (RigidbodySleepMode2D)reader.ReadByte();
+				CollisionDetection = (CollisionDetectionMode2D)reader.ReadByte();
+				reader.AlignStream(AlignType.Align4);
 			}
 			
-			if (IsReadInterpolate(stream.Version))
+			if (IsReadInterpolate(reader.Version))
 			{
-				Interpolate = (RigidbodyInterpolation2D)stream.ReadInt32();
-				SleepingMode = (RigidbodySleepMode2D)stream.ReadInt32();
-				CollisionDetection = (CollisionDetectionMode2D)stream.ReadInt32();
+				Interpolate = (RigidbodyInterpolation2D)reader.ReadInt32();
+				SleepingMode = (RigidbodySleepMode2D)reader.ReadInt32();
+				CollisionDetection = (CollisionDetectionMode2D)reader.ReadInt32();
 			}
-			if (!IsReadFixedAngle(stream.Version))
+			if (!IsReadFixedAngle(reader.Version))
 			{
-				Constraints = (RigidbodyConstraints2D)stream.ReadInt32();
+				Constraints = (RigidbodyConstraints2D)reader.ReadInt32();
 			}
 		}
 		

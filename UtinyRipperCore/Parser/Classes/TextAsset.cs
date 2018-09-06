@@ -20,16 +20,16 @@ namespace UtinyRipper.Classes
 			return version.IsLess(2017);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Script = stream.ReadByteArray();
-			stream.AlignStream(AlignType.Align4);
+			Script = reader.ReadByteArray();
+			reader.AlignStream(AlignType.Align4);
 
-			if(IsReadPath(stream.Version))
+			if(IsReadPath(reader.Version))
 			{
-				PathName = stream.ReadStringAligned();
+				PathName = reader.ReadStringAligned();
 			}
 		}
 
@@ -41,9 +41,9 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected void ReadBase(AssetStream stream)
+		protected void ReadBase(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 		}
 
 		protected sealed override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

@@ -109,74 +109,74 @@ namespace UtinyRipper.Classes
 			return 2;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			ClearFlags = stream.ReadUInt32();
-			BackGroundColor.Read(stream);
-			if(IsReadProjectionMatrixMode(stream.Version))
+			ClearFlags = reader.ReadUInt32();
+			BackGroundColor.Read(reader);
+			if(IsReadProjectionMatrixMode(reader.Version))
 			{
-				ProjectionMatrixMode = (ProjectionMatrixMode)stream.ReadInt32();
-				SensorSize.Read(stream);
-				LensShift.Read(stream);
-				FocalLength = stream.ReadSingle();
+				ProjectionMatrixMode = (ProjectionMatrixMode)reader.ReadInt32();
+				SensorSize.Read(reader);
+				LensShift.Read(reader);
+				FocalLength = reader.ReadSingle();
 			}
-			NormalizedViewPortRect.Read(stream);
-			NearClipPlane = stream.ReadSingle();
-			FarClipPlane = stream.ReadSingle();
-			FieldOfView = stream.ReadSingle();
-			Orthographic = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			NormalizedViewPortRect.Read(reader);
+			NearClipPlane = reader.ReadSingle();
+			FarClipPlane = reader.ReadSingle();
+			FieldOfView = reader.ReadSingle();
+			Orthographic = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 			
-			OrthographicSize = stream.ReadSingle();
-			Depth = stream.ReadSingle();
-			CullingMask.Read(stream);
-			if (IsReadRenderingPath(stream.Version))
+			OrthographicSize = reader.ReadSingle();
+			Depth = reader.ReadSingle();
+			CullingMask.Read(reader);
+			if (IsReadRenderingPath(reader.Version))
 			{
-				RenderingPath = (RenderingPath)stream.ReadInt32();
+				RenderingPath = (RenderingPath)reader.ReadInt32();
 			}
-			TargetTexture.Read(stream);
-			if (IsReadTargetDisplay(stream.Version))
+			TargetTexture.Read(reader);
+			if (IsReadTargetDisplay(reader.Version))
 			{
-				TargetDisplay = stream.ReadInt32();
+				TargetDisplay = reader.ReadInt32();
 			}
-			if (IsReadTargetEye(stream.Version))
+			if (IsReadTargetEye(reader.Version))
 			{
-				TargetEye = (StereoTargetEyeMask)stream.ReadInt32();
+				TargetEye = (StereoTargetEyeMask)reader.ReadInt32();
 			}
-			if (IsReadHDR(stream.Version))
+			if (IsReadHDR(reader.Version))
 			{
-				HDR = stream.ReadBoolean();
+				HDR = reader.ReadBoolean();
 			}
-			if (IsReadAllowMSAA(stream.Version))
+			if (IsReadAllowMSAA(reader.Version))
 			{
-				AllowMSAA = stream.ReadBoolean();
+				AllowMSAA = reader.ReadBoolean();
 			}
-			if (IsReadAllowDynamicResolution(stream.Version))
+			if (IsReadAllowDynamicResolution(reader.Version))
 			{
-				AllowDynamicResolution = stream.ReadBoolean();
+				AllowDynamicResolution = reader.ReadBoolean();
 			}
-			if (IsReadForceIntoRT(stream.Version))
+			if (IsReadForceIntoRT(reader.Version))
 			{
-				ForceIntoRT = stream.ReadBoolean();
+				ForceIntoRT = reader.ReadBoolean();
 			}
-			if (IsReadOcclusionCulling(stream.Version))
+			if (IsReadOcclusionCulling(reader.Version))
 			{
-				OcclusionCulling = stream.ReadBoolean();
+				OcclusionCulling = reader.ReadBoolean();
 			}
-			if (IsAlign(stream.Version))
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
-			if (IsReadStereoConvergence(stream.Version))
+			if (IsReadStereoConvergence(reader.Version))
 			{
-				StereoConvergence = stream.ReadSingle();
-				StereoSeparation = stream.ReadSingle();
+				StereoConvergence = reader.ReadSingle();
+				StereoSeparation = reader.ReadSingle();
 			}
-			if (IsReadStereoMirrorMode(stream.Version))
+			if (IsReadStereoMirrorMode(reader.Version))
 			{
-				StereoMirrorMode = stream.ReadBoolean();
+				StereoMirrorMode = reader.ReadBoolean();
 			}
 		}
 

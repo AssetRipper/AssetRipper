@@ -5,11 +5,11 @@ namespace UtinyRipper.Classes.Shaders
 {
 	public struct SerializedTagMap : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
 			m_tags = new Dictionary<string, string>();
 
-			m_tags.Read(stream);
+			m_tags.Read(reader);
 		}
 
 		public void Export(TextWriter writer, int intent)

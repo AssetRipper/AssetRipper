@@ -4,12 +4,12 @@ namespace UtinyRipper.Classes.Meshes
 {
 	public struct CollisionMeshData : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_bakedConvexCollisionMesh = stream.ReadByteArray();
-			stream.AlignStream(AlignType.Align4);
-			m_bakedTriangleCollisionMesh = stream.ReadByteArray();
-			stream.AlignStream(AlignType.Align4);
+			m_bakedConvexCollisionMesh = reader.ReadByteArray();
+			reader.AlignStream(AlignType.Align4);
+			m_bakedTriangleCollisionMesh = reader.ReadByteArray();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public IReadOnlyList<byte> BakedConvexCollisionMesh => m_bakedConvexCollisionMesh;

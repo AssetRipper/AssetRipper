@@ -43,28 +43,28 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			m_navMeshTiles = stream.ReadArray<NavMeshTileData>();
-			if (IsReadNavMeshParams(stream.Version))
+			m_navMeshTiles = reader.ReadArray<NavMeshTileData>();
+			if (IsReadNavMeshParams(reader.Version))
 			{
-				NavMeshParams.Read(stream);
+				NavMeshParams.Read(reader);
 			}
 			else
 			{
-				NavMeshBuildSettings.Read(stream);
+				NavMeshBuildSettings.Read(reader);
 			}
-			m_heightmaps = stream.ReadArray<HeightmapData>();
-			m_heightMeshes = stream.ReadArray<HeightMeshData>();
-			m_offMeshLinks = stream.ReadArray<AutoOffMeshLinkData>();
-			if (IsReadSourceBounds(stream.Version))
+			m_heightmaps = reader.ReadArray<HeightmapData>();
+			m_heightMeshes = reader.ReadArray<HeightMeshData>();
+			m_offMeshLinks = reader.ReadArray<AutoOffMeshLinkData>();
+			if (IsReadSourceBounds(reader.Version))
 			{
-				SourceBounds.Read(stream);
-				Rotation.Read(stream);
-				Position.Read(stream);
-				AgentTypeID = stream.ReadInt32();
+				SourceBounds.Read(reader);
+				Rotation.Read(reader);
+				Position.Read(reader);
+				AgentTypeID = reader.ReadInt32();
 			}
 		}
 

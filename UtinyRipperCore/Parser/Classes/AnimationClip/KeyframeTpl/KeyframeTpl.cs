@@ -67,17 +67,17 @@ namespace UtinyRipper.Classes.AnimationClips
 			return 1;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Time = stream.ReadSingle();
-			Value.Read(stream);
-			InSlope.Read(stream);
-			OutSlope.Read(stream);
-			if(IsReadWeight(stream.Version))
+			Time = reader.ReadSingle();
+			Value.Read(reader);
+			InSlope.Read(reader);
+			OutSlope.Read(reader);
+			if(IsReadWeight(reader.Version))
 			{
-				WeightedMode = (WeightedMode)stream.ReadInt32();
-				InWeight.Read(stream);
-				OutWeight.Read(stream);
+				WeightedMode = (WeightedMode)reader.ReadInt32();
+				InWeight.Read(reader);
+				OutWeight.Read(reader);
 			}
 		}
 

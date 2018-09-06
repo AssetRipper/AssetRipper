@@ -10,12 +10,12 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			IsEnabled = stream.ReadByte();
-			stream.AlignStream(AlignType.Align4);
+			IsEnabled = reader.ReadByte();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

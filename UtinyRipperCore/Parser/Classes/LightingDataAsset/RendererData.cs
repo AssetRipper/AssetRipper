@@ -7,15 +7,15 @@ namespace UtinyRipper.Classes.LightingDataAssets
 {
 	public struct RendererData : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			UVMesh.Read(stream);
-			TerrainDynamicUVST.Read(stream);
-			TerrainChunkDynamicUVST.Read(stream);
-			LightmapIndex = stream.ReadUInt16();
-			LightmapIndexDynamic = stream.ReadUInt16();
-			LightmapST.Read(stream);
-			LightmapSTDynamic.Read(stream);
+			UVMesh.Read(reader);
+			TerrainDynamicUVST.Read(reader);
+			TerrainChunkDynamicUVST.Read(reader);
+			LightmapIndex = reader.ReadUInt16();
+			LightmapIndexDynamic = reader.ReadUInt16();
+			LightmapST.Read(reader);
+			LightmapSTDynamic.Read(reader);
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

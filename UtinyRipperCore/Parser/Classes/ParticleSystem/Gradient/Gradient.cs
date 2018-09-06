@@ -70,53 +70,53 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return new Gradient(this);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if (IsColor32(stream.Version))
+			if (IsColor32(reader.Version))
 			{
-				Key32_0.Read(stream);
-				Key32_1.Read(stream);
-				Key32_2.Read(stream);
-				Key32_3.Read(stream);
-				Key32_4.Read(stream);
-				Key32_5.Read(stream);
-				Key32_6.Read(stream);
-				Key32_7.Read(stream);
+				Key32_0.Read(reader);
+				Key32_1.Read(reader);
+				Key32_2.Read(reader);
+				Key32_3.Read(reader);
+				Key32_4.Read(reader);
+				Key32_5.Read(reader);
+				Key32_6.Read(reader);
+				Key32_7.Read(reader);
 			}
 			else
 			{
-				Key0.Read(stream);
-				Key1.Read(stream);
-				Key2.Read(stream);
-				Key3.Read(stream);
-				Key4.Read(stream);
-				Key5.Read(stream);
-				Key6.Read(stream);
-				Key7.Read(stream);
+				Key0.Read(reader);
+				Key1.Read(reader);
+				Key2.Read(reader);
+				Key3.Read(reader);
+				Key4.Read(reader);
+				Key5.Read(reader);
+				Key6.Read(reader);
+				Key7.Read(reader);
 			}
-			Ctime0 = stream.ReadUInt16();
-			Ctime1 = stream.ReadUInt16();
-			Ctime2 = stream.ReadUInt16();
-			Ctime3 = stream.ReadUInt16();
-			Ctime4 = stream.ReadUInt16();
-			Ctime5 = stream.ReadUInt16();
-			Ctime6 = stream.ReadUInt16();
-			Ctime7 = stream.ReadUInt16();
-			Atime0 = stream.ReadUInt16();
-			Atime1 = stream.ReadUInt16();
-			Atime2 = stream.ReadUInt16();
-			Atime3 = stream.ReadUInt16();
-			Atime4 = stream.ReadUInt16();
-			Atime5 = stream.ReadUInt16();
-			Atime6 = stream.ReadUInt16();
-			Atime7 = stream.ReadUInt16();
-			if (IsReadMode(stream.Version))
+			Ctime0 = reader.ReadUInt16();
+			Ctime1 = reader.ReadUInt16();
+			Ctime2 = reader.ReadUInt16();
+			Ctime3 = reader.ReadUInt16();
+			Ctime4 = reader.ReadUInt16();
+			Ctime5 = reader.ReadUInt16();
+			Ctime6 = reader.ReadUInt16();
+			Ctime7 = reader.ReadUInt16();
+			Atime0 = reader.ReadUInt16();
+			Atime1 = reader.ReadUInt16();
+			Atime2 = reader.ReadUInt16();
+			Atime3 = reader.ReadUInt16();
+			Atime4 = reader.ReadUInt16();
+			Atime5 = reader.ReadUInt16();
+			Atime6 = reader.ReadUInt16();
+			Atime7 = reader.ReadUInt16();
+			if (IsReadMode(reader.Version))
 			{
-				Mode = stream.ReadInt32();
+				Mode = reader.ReadInt32();
 			}
-			NumColorKeys = stream.ReadByte();
-			NumAlphaKeys = stream.ReadByte();
-			stream.AlignStream(AlignType.Align4);
+			NumColorKeys = reader.ReadByte();
+			NumAlphaKeys = reader.ReadByte();
+			reader.AlignStream(AlignType.Align4);
 			
 		}
 

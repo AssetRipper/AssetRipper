@@ -13,9 +13,9 @@ namespace UtinyRipper.Classes.Materials
 			return version.IsGreaterEqual(2017, 3);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Value = stream.ReadStringAligned();
+			Value = reader.ReadStringAligned();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

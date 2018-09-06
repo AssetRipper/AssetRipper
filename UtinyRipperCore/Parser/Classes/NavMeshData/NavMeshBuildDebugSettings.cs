@@ -5,10 +5,10 @@ namespace UtinyRipper.Classes.NavMeshDatas
 {
 	public struct NavMeshBuildDebugSettings : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Flags = stream.ReadByte();
-			stream.AlignStream(AlignType.Align4);
+			Flags = reader.ReadByte();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

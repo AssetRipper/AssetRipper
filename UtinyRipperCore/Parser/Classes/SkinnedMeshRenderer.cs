@@ -147,99 +147,99 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			if (IsReadRenderer(stream.Version))
+			if (IsReadRenderer(reader.Version))
 			{
-				base.Read(stream);
+				base.Read(reader);
 			}
 			else
 			{
-				ReadBase(stream);
+				ReadBase(reader);
 			}
 
-			if (IsReadQuality(stream.Version))
+			if (IsReadQuality(reader.Version))
 			{
-				if (IsReadQualityFirst(stream.Version))
+				if (IsReadQualityFirst(reader.Version))
 				{
-					Quality = stream.ReadInt32();
+					Quality = reader.ReadInt32();
 				}
 			}
-			if (IsReadUpdateWhenOffscreen(stream.Version))
+			if (IsReadUpdateWhenOffscreen(reader.Version))
 			{
-				UpdateWhenOffscreen = stream.ReadBoolean();
+				UpdateWhenOffscreen = reader.ReadBoolean();
 			}
-			if (IsReadQuality(stream.Version))
+			if (IsReadQuality(reader.Version))
 			{
-				if (!IsReadQualityFirst(stream.Version))
+				if (!IsReadQualityFirst(reader.Version))
 				{
-					Quality = stream.ReadInt32();
+					Quality = reader.ReadInt32();
 				}
 			}
 			
-			if(IsReadSkinNormals(stream.Version))
+			if(IsReadSkinNormals(reader.Version))
 			{
-				SkinNormals = stream.ReadBoolean();
+				SkinNormals = reader.ReadBoolean();
 			}
-			if(IsReadSkinMotionVector(stream.Version))
+			if(IsReadSkinMotionVector(reader.Version))
 			{
-				SkinnedMotionVectors = stream.ReadBoolean();
+				SkinnedMotionVectors = reader.ReadBoolean();
 			}
-			if (IsAlignBools(stream.Version))
+			if (IsAlignBools(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if(IsReadOffscreen(stream.Version))
+			if(IsReadOffscreen(reader.Version))
 			{
-				DisableAnimationWhenOffscreen.Read(stream);
+				DisableAnimationWhenOffscreen.Read(reader);
 			}
 			
-			if (IsReadMeshFirst(stream.Version))
+			if (IsReadMeshFirst(reader.Version))
 			{
-				Mesh.Read(stream);
+				Mesh.Read(reader);
 			}
 
-			if (IsReadAnimation(stream.Version))
+			if (IsReadAnimation(reader.Version))
 			{
-				Animation.Read(stream);
+				Animation.Read(reader);
 			}
 
-			m_bones = stream.ReadArray<PPtr<Transform>>();
-			if (IsAlignBones(stream.Version))
+			m_bones = reader.ReadArray<PPtr<Transform>>();
+			if (IsAlignBones(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (!IsReadMeshFirst(stream.Version))
+			if (!IsReadMeshFirst(reader.Version))
 			{
-				Mesh.Read(stream);
+				Mesh.Read(reader);
 			}
 
-			if(IsReadBindPose(stream.Version))
+			if(IsReadBindPose(reader.Version))
 			{
-				m_bindPose = stream.ReadArray<Matrix4x4f>();
+				m_bindPose = reader.ReadArray<Matrix4x4f>();
 			}
-			if (IsReadCurrentPose(stream.Version))
+			if (IsReadCurrentPose(reader.Version))
 			{
-				CurrentPose.Read(stream);
+				CurrentPose.Read(reader);
 			}
 			
-			if(IsReadWeights(stream.Version))
+			if(IsReadWeights(reader.Version))
 			{
-				m_blendShapeWeights = stream.ReadSingleArray();
+				m_blendShapeWeights = reader.ReadSingleArray();
 			}
-			if(IsReadRootBone(stream.Version))
+			if(IsReadRootBone(reader.Version))
 			{
-				RootBone.Read(stream);
+				RootBone.Read(reader);
 			}
-			if(IsReadAABB(stream.Version))
+			if(IsReadAABB(reader.Version))
 			{
-				AABB.Read(stream);
-				DirtyAABB = stream.ReadBoolean();
-				if(IsAlignDirty(stream.Version))
+				AABB.Read(reader);
+				DirtyAABB = reader.ReadBoolean();
+				if(IsAlignDirty(reader.Version))
 				{
-					stream.AlignStream(AlignType.Align4);
+					reader.AlignStream(AlignType.Align4);
 				}
 			}
 		}

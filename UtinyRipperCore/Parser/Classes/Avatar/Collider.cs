@@ -5,17 +5,17 @@ namespace UtinyRipper.Classes.Avatars
 {
 	public struct Collider : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			X.Read(stream);
-			Type = stream.ReadUInt32();
-			XMotionType = stream.ReadUInt32();
-			YMotionType = stream.ReadUInt32();
-			ZMotionType = stream.ReadUInt32();
-			MinLimitX = stream.ReadSingle();
-			MaxLimitX = stream.ReadSingle();
-			MaxLimitY = stream.ReadSingle();
-			MaxLimitZ = stream.ReadSingle();
+			X.Read(reader);
+			Type = reader.ReadUInt32();
+			XMotionType = reader.ReadUInt32();
+			YMotionType = reader.ReadUInt32();
+			ZMotionType = reader.ReadUInt32();
+			MinLimitX = reader.ReadSingle();
+			MaxLimitX = reader.ReadSingle();
+			MaxLimitY = reader.ReadSingle();
+			MaxLimitZ = reader.ReadSingle();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

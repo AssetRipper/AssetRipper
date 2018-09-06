@@ -4,10 +4,10 @@ namespace UtinyRipper.Classes.Meshes
 {
 	public struct MeshData : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_faces = stream.ReadArray<Face>();
-			m_strips = stream.ReadUInt16Array();
+			m_faces = reader.ReadArray<Face>();
+			m_strips = reader.ReadUInt16Array();
 		}
 		
 		public IReadOnlyList<Face> Faces => m_faces;

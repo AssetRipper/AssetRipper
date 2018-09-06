@@ -32,14 +32,14 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Radius = stream.ReadSingle();
-			if (IsReadCenter(stream.Version))
+			Radius = reader.ReadSingle();
+			if (IsReadCenter(reader.Version))
 			{
-				Center.Read(stream);
+				Center.Read(reader);
 			}
 		}
 

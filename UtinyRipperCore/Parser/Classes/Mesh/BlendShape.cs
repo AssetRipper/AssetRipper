@@ -31,24 +31,24 @@ namespace UtinyRipper.Classes.Meshes
 			return version.IsGreaterEqual(4, 3);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if (IsReadName(stream.Version))
+			if (IsReadName(reader.Version))
 			{
-				Name = stream.ReadString();
+				Name = reader.ReadString();
 			}
-			FirstVertex = stream.ReadUInt32();
-			VertexCount = stream.ReadUInt32();
-			if (IsReadAABB(stream.Version))
+			FirstVertex = reader.ReadUInt32();
+			VertexCount = reader.ReadUInt32();
+			if (IsReadAABB(reader.Version))
 			{
-				AabbMinDelta.Read(stream);
-				AabbMaxDelta.Read(stream);
+				AabbMinDelta.Read(reader);
+				AabbMaxDelta.Read(reader);
 			}
-			HasNormals = stream.ReadBoolean();
-			HasTangents = stream.ReadBoolean();
-			if (IsAlign(stream.Version))
+			HasNormals = reader.ReadBoolean();
+			HasTangents = reader.ReadBoolean();
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

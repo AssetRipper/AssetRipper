@@ -7,9 +7,9 @@ namespace UtinyRipper.Classes.AnimatorControllers
 {
 	public struct Blend1dDataConstant : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_childThresholdArray = stream.ReadSingleArray();
+			m_childThresholdArray = reader.ReadSingleArray();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

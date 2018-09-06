@@ -21,16 +21,16 @@ namespace UtinyRipper.Classes
 			return version.IsLess(3);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			SplatDatabase.Read(stream);
-			DetailDatabase.Read(stream);
-			Heightmap.Read(stream);
-			if (IsReadLightmap(stream.Version))
+			SplatDatabase.Read(reader);
+			DetailDatabase.Read(reader);
+			Heightmap.Read(reader);
+			if (IsReadLightmap(reader.Version))
 			{
-				Lightmap.Read(stream);
+				Lightmap.Read(reader);
 			}
 		}
 

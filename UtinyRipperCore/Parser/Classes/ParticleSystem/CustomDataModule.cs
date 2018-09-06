@@ -44,63 +44,63 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return !flags.IsSerializeGameRelease();
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			Mode0 = stream.ReadInt32();
-			VectorComponentCount0 = stream.ReadInt32();
-			Color0.Read(stream);
-			if (IsReadLabel(stream.Flags))
+			Mode0 = reader.ReadInt32();
+			VectorComponentCount0 = reader.ReadInt32();
+			Color0.Read(reader);
+			if (IsReadLabel(reader.Flags))
 			{
-				ColorLabel0 = stream.ReadStringAligned();
+				ColorLabel0 = reader.ReadStringAligned();
 			}
-			Vector0_0.Read(stream);
-			if (IsReadLabel(stream.Flags))
+			Vector0_0.Read(reader);
+			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel0_0 = stream.ReadStringAligned();
+				VectorLabel0_0 = reader.ReadStringAligned();
 			}
-			Vector0_1.Read(stream);
-			if (IsReadLabel(stream.Flags))
+			Vector0_1.Read(reader);
+			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel0_1 = stream.ReadStringAligned();
+				VectorLabel0_1 = reader.ReadStringAligned();
 			}
-			Vector0_2.Read(stream);
-			if (IsReadLabel(stream.Flags))
+			Vector0_2.Read(reader);
+			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel0_2 = stream.ReadStringAligned();
+				VectorLabel0_2 = reader.ReadStringAligned();
 			}
-			Vector0_3.Read(stream);
-			if (IsReadLabel(stream.Flags))
+			Vector0_3.Read(reader);
+			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel0_3 = stream.ReadStringAligned();
+				VectorLabel0_3 = reader.ReadStringAligned();
 			}
-			Mode1 = stream.ReadInt32();
-			VectorComponentCount1 = stream.ReadInt32();
-			Color1.Read(stream);
-			if (IsReadLabel(stream.Flags))
+			Mode1 = reader.ReadInt32();
+			VectorComponentCount1 = reader.ReadInt32();
+			Color1.Read(reader);
+			if (IsReadLabel(reader.Flags))
 			{
-				ColorLabel1 = stream.ReadStringAligned();
+				ColorLabel1 = reader.ReadStringAligned();
 			}
-			Vector1_0.Read(stream);
-			if (IsReadLabel(stream.Flags))
+			Vector1_0.Read(reader);
+			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel1_0 = stream.ReadStringAligned();
+				VectorLabel1_0 = reader.ReadStringAligned();
 			}
-			Vector1_1.Read(stream);
-			if (IsReadLabel(stream.Flags))
+			Vector1_1.Read(reader);
+			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel1_1 = stream.ReadStringAligned();
+				VectorLabel1_1 = reader.ReadStringAligned();
 			}
-			Vector1_2.Read(stream);
-			if (IsReadLabel(stream.Flags))
+			Vector1_2.Read(reader);
+			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel1_2 = stream.ReadStringAligned();
+				VectorLabel1_2 = reader.ReadStringAligned();
 			}
-			Vector1_3.Read(stream);
-			if (IsReadLabel(stream.Flags))
+			Vector1_3.Read(reader);
+			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel1_3 = stream.ReadStringAligned();
+				VectorLabel1_3 = reader.ReadStringAligned();
 			}
 		}
 

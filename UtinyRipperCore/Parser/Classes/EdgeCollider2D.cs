@@ -19,15 +19,15 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(5, 6);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadEdgeRadius(stream.Version))
+			if (IsReadEdgeRadius(reader.Version))
 			{
-				EdgeRadius = stream.ReadSingle();
+				EdgeRadius = reader.ReadSingle();
 			}
-			m_points = stream.ReadArray<Vector2f>();
+			m_points = reader.ReadArray<Vector2f>();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

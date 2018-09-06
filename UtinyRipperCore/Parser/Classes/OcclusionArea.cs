@@ -45,22 +45,22 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Size.Read(stream);
-			Center.Read(stream);
-			IsViewVolume = stream.ReadBoolean();
-			if (IsReadIsTargetVolume(stream.Version))
+			Size.Read(reader);
+			Center.Read(reader);
+			IsViewVolume = reader.ReadBoolean();
+			if (IsReadIsTargetVolume(reader.Version))
 			{
-				IsTargetVolume = stream.ReadBoolean();
+				IsTargetVolume = reader.ReadBoolean();
 			}
-			stream.AlignStream(AlignType.Align4);
+			reader.AlignStream(AlignType.Align4);
 
-			if (IsReadTargetResolution(stream.Version))
+			if (IsReadTargetResolution(reader.Version))
 			{
-				TargetResolution = stream.ReadInt32();
+				TargetResolution = reader.ReadInt32();
 			}
 		}
 

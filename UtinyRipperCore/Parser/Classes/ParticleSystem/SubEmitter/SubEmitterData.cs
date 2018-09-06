@@ -28,11 +28,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Emitter.Read(stream);
-			Type = (ParticleSystemSubEmitterType)stream.ReadInt32();
-			Properties = (ParticleSystemSubEmitterProperties)stream.ReadInt32();
+			Emitter.Read(reader);
+			Type = (ParticleSystemSubEmitterType)reader.ReadInt32();
+			Properties = (ParticleSystemSubEmitterProperties)reader.ReadInt32();
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

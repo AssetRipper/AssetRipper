@@ -2,10 +2,10 @@
 {
 	public struct StateRange : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			StartIndex = (int)stream.ReadUInt32();
-			Count = (int)stream.ReadUInt32();
+			StartIndex = (int)reader.ReadUInt32();
+			Count = (int)reader.ReadUInt32();
 		}
 
 		public int StartIndex { get; private set; }

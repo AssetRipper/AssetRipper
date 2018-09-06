@@ -5,10 +5,10 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public class ParticleSystemModule : IAssetReadable, IYAMLExportable
 	{
-		public virtual void Read(AssetStream stream)
+		public virtual void Read(AssetReader reader)
 		{
-			Enabled = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			Enabled = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public virtual YAMLNode ExportYAML(IExportContainer container)

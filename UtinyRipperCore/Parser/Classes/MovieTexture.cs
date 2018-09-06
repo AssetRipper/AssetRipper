@@ -12,18 +12,18 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			IsLoop = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			IsLoop = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 
-			AudioClip.Read(stream);
-			m_movieData = stream.ReadByteArray();
-			stream.AlignStream(AlignType.Align4);
+			AudioClip.Read(reader);
+			m_movieData = reader.ReadByteArray();
+			reader.AlignStream(AlignType.Align4);
 
-			ColorSpace = stream.ReadInt32();
+			ColorSpace = reader.ReadInt32();
 		}
 
 		public override void ExportBinary(IExportContainer container, Stream stream)

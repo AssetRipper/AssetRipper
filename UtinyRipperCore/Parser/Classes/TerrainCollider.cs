@@ -20,16 +20,16 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(2, 6);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
-			if (IsAlign(stream.Version))
+			base.Read(reader);
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			TerrainData.Read(stream);
-			EnableTreeColliders = stream.ReadBoolean();
+			TerrainData.Read(reader);
+			EnableTreeColliders = reader.ReadBoolean();
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

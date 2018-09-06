@@ -91,66 +91,66 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(2, 1);
 		}
 		
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadIsPowerOfTwo(stream.Version))
+			if (IsReadIsPowerOfTwo(reader.Version))
 			{
-				if (IsReadIsPowerOfTwoFirst(stream.Version))
+				if (IsReadIsPowerOfTwoFirst(reader.Version))
 				{
-					IsPowerOfTwo = stream.ReadBoolean();
+					IsPowerOfTwo = reader.ReadBoolean();
 				}
 			}
-			Width = stream.ReadInt32();
-			Height = stream.ReadInt32();
-			if (IsReadAntiAliasing(stream.Version))
+			Width = reader.ReadInt32();
+			Height = reader.ReadInt32();
+			if (IsReadAntiAliasing(reader.Version))
 			{
-				AntiAliasing = stream.ReadInt32();
+				AntiAliasing = reader.ReadInt32();
 			}
-			DepthFormat = stream.ReadInt32();
-			if (IsReadColorFormat(stream.Version))
+			DepthFormat = reader.ReadInt32();
+			if (IsReadColorFormat(reader.Version))
 			{
-				ColorFormat = (RenderTextureFormat)stream.ReadInt32();
+				ColorFormat = (RenderTextureFormat)reader.ReadInt32();
 			}
-			if (IsReadIsPowerOfTwo(stream.Version))
+			if (IsReadIsPowerOfTwo(reader.Version))
 			{
-				if (!IsReadIsPowerOfTwoFirst(stream.Version))
+				if (!IsReadIsPowerOfTwoFirst(reader.Version))
 				{
-					IsPowerOfTwo = stream.ReadBoolean();
+					IsPowerOfTwo = reader.ReadBoolean();
 				}
 			}
-			if (IsReadIsCubemap(stream.Version))
+			if (IsReadIsCubemap(reader.Version))
 			{
-				IsCubemap = stream.ReadBoolean();
+				IsCubemap = reader.ReadBoolean();
 			}
-			if (IsReadMipMap(stream.Version))
+			if (IsReadMipMap(reader.Version))
 			{
-				MipMap = stream.ReadBoolean();
+				MipMap = reader.ReadBoolean();
 			}
-			if (IsReadGenerateMips(stream.Version))
+			if (IsReadGenerateMips(reader.Version))
 			{
-				GenerateMips = stream.ReadBoolean();
+				GenerateMips = reader.ReadBoolean();
 			}
-			if (IsReadSRGB(stream.Version))
+			if (IsReadSRGB(reader.Version))
 			{
-				SRGB = stream.ReadBoolean();
+				SRGB = reader.ReadBoolean();
 			}
-			if (IsReadUseDynamicScale(stream.Version))
+			if (IsReadUseDynamicScale(reader.Version))
 			{
-				UseDynamicScale = stream.ReadBoolean();
-				BindMS = stream.ReadBoolean();
+				UseDynamicScale = reader.ReadBoolean();
+				BindMS = reader.ReadBoolean();
 			}
-			if (IsAlign(stream.Version))
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 			
-			TextureSettings.Read(stream);
-			if (IsReadDimension(stream.Version))
+			TextureSettings.Read(reader);
+			if (IsReadDimension(reader.Version))
 			{
-				Dimension = stream.ReadInt32();
-				VolumeDepth = stream.ReadInt32();
+				Dimension = reader.ReadInt32();
+				VolumeDepth = reader.ReadInt32();
 			}
 		}
 

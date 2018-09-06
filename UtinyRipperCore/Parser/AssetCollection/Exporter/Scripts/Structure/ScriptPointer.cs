@@ -26,9 +26,9 @@ namespace UtinyRipper.AssetExporters
 			return new ScriptPointer(this);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			Pointer.Read(stream);
+			Pointer.Read(reader);
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

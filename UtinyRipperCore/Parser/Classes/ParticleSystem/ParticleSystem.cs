@@ -158,121 +158,121 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 		
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			LengthInSec = stream.ReadSingle();
-			if (IsStartDelayFirst(stream.Version))
+			LengthInSec = reader.ReadSingle();
+			if (IsStartDelayFirst(reader.Version))
 			{
-				if (IsReadStartDelaySingle(stream.Version))
+				if (IsReadStartDelaySingle(reader.Version))
 				{
-					StartDelaySingle = stream.ReadSingle();
+					StartDelaySingle = reader.ReadSingle();
 				}
 				else
 				{
-					StartDelay.Read(stream);
+					StartDelay.Read(reader);
 				}
 			}
 			
-			SimulationSpeed = stream.ReadSingle();
-			if (IsReadStopAction(stream.Version))
+			SimulationSpeed = reader.ReadSingle();
+			if (IsReadStopAction(reader.Version))
 			{
-				StopAction = stream.ReadInt32();
+				StopAction = reader.ReadInt32();
 			}
 
-			if (IsRandomSeedFirst(stream.Version))
+			if (IsRandomSeedFirst(reader.Version))
 			{
-				RandomSeed = unchecked((int)stream.ReadUInt32());
+				RandomSeed = unchecked((int)reader.ReadUInt32());
 			}
 			
-			Looping = stream.ReadBoolean();
-			Prewarm = stream.ReadBoolean();
-			PlayOnAwake = stream.ReadBoolean();
-			if (IsReadUseUnscaledTime(stream.Version))
+			Looping = reader.ReadBoolean();
+			Prewarm = reader.ReadBoolean();
+			PlayOnAwake = reader.ReadBoolean();
+			if (IsReadUseUnscaledTime(reader.Version))
 			{
-				UseUnscaledTime = stream.ReadBoolean();
+				UseUnscaledTime = reader.ReadBoolean();
 			}
-			if (IsMoveWithTransformBool(stream.Version))
+			if (IsMoveWithTransformBool(reader.Version))
 			{
-				MoveWithTransform = stream.ReadBoolean() ? 1 : 0;
+				MoveWithTransform = reader.ReadBoolean() ? 1 : 0;
 			}
-			if (IsReadAutoRandomSeed(stream.Version))
+			if (IsReadAutoRandomSeed(reader.Version))
 			{
-				AutoRandomSeed = stream.ReadBoolean();
+				AutoRandomSeed = reader.ReadBoolean();
 			}
-			if (IsReadUseRigidbodyForVelocity(stream.Version))
+			if (IsReadUseRigidbodyForVelocity(reader.Version))
 			{
-				UseRigidbodyForVelocity = stream.ReadBoolean();
+				UseRigidbodyForVelocity = reader.ReadBoolean();
 			}
-			if (IsAlign(stream.Version))
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
-			}
-
-			if (!IsStartDelayFirst(stream.Version))
-			{
-				StartDelay.Read(stream);
-				stream.AlignStream(AlignType.Align4);
-			}
-			if (!IsMoveWithTransformBool(stream.Version))
-			{
-				MoveWithTransform = stream.ReadInt32();
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadMoveWithCustomTransform(stream.Version))
+			if (!IsStartDelayFirst(reader.Version))
 			{
-				MoveWithCustomTransform.Read(stream);
+				StartDelay.Read(reader);
+				reader.AlignStream(AlignType.Align4);
 			}
-			if (IsReadScalingMode(stream.Version))
+			if (!IsMoveWithTransformBool(reader.Version))
 			{
-				ScalingMode = (ParticleSystemScalingMode)stream.ReadInt32();
-			}
-			if (!IsRandomSeedFirst(stream.Version))
-			{
-				RandomSeed = stream.ReadInt32();
+				MoveWithTransform = reader.ReadInt32();
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			InitialModule.Read(stream);
-			ShapeModule.Read(stream);
-			EmissionModule.Read(stream);
-			SizeModule.Read(stream);
-			RotationModule.Read(stream);
-			ColorModule.Read(stream);
-			UVModule.Read(stream);
-			VelocityModule.Read(stream);
-			if (IsReadInheritVelocityModule(stream.Version))
+			if (IsReadMoveWithCustomTransform(reader.Version))
 			{
-				InheritVelocityModule.Read(stream);
+				MoveWithCustomTransform.Read(reader);
 			}
-			ForceModule.Read(stream);
-			if (IsReadExternalForcesModule(stream.Version))
+			if (IsReadScalingMode(reader.Version))
 			{
-				ExternalForcesModule.Read(stream);
+				ScalingMode = (ParticleSystemScalingMode)reader.ReadInt32();
 			}
-			ClampVelocityModule.Read(stream);
-			if (IsReadNoiseModule(stream.Version))
+			if (!IsRandomSeedFirst(reader.Version))
 			{
-				NoiseModule.Read(stream);
+				RandomSeed = reader.ReadInt32();
 			}
-			SizeBySpeedModule.Read(stream);
-			RotationBySpeedModule.Read(stream);
-			ColorBySpeedModule.Read(stream);
-			CollisionModule.Read(stream);
-			if (IsReadTriggerModule(stream.Version))
+
+			InitialModule.Read(reader);
+			ShapeModule.Read(reader);
+			EmissionModule.Read(reader);
+			SizeModule.Read(reader);
+			RotationModule.Read(reader);
+			ColorModule.Read(reader);
+			UVModule.Read(reader);
+			VelocityModule.Read(reader);
+			if (IsReadInheritVelocityModule(reader.Version))
 			{
-				TriggerModule.Read(stream);
+				InheritVelocityModule.Read(reader);
 			}
-			SubModule.Read(stream);
-			if (IsReadLightsModule(stream.Version))
+			ForceModule.Read(reader);
+			if (IsReadExternalForcesModule(reader.Version))
 			{
-				LightsModule.Read(stream);
-				TrailModule.Read(stream);
+				ExternalForcesModule.Read(reader);
 			}
-			if (IsReadCustomDataModule(stream.Version))
+			ClampVelocityModule.Read(reader);
+			if (IsReadNoiseModule(reader.Version))
 			{
-				CustomDataModule.Read(stream);
+				NoiseModule.Read(reader);
+			}
+			SizeBySpeedModule.Read(reader);
+			RotationBySpeedModule.Read(reader);
+			ColorBySpeedModule.Read(reader);
+			CollisionModule.Read(reader);
+			if (IsReadTriggerModule(reader.Version))
+			{
+				TriggerModule.Read(reader);
+			}
+			SubModule.Read(reader);
+			if (IsReadLightsModule(reader.Version))
+			{
+				LightsModule.Read(reader);
+				TrailModule.Read(reader);
+			}
+			if (IsReadCustomDataModule(reader.Version))
+			{
+				CustomDataModule.Read(reader);
 			}
 		}
 

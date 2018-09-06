@@ -2,11 +2,11 @@
 {
 	public struct Face : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			V1 = stream.ReadUInt16();
-			V2 = stream.ReadUInt16();
-			V3 = stream.ReadUInt16();
+			V1 = reader.ReadUInt16();
+			V2 = reader.ReadUInt16();
+			V3 = reader.ReadUInt16();
 		}
 
 		public ushort V1 { get; private set; }

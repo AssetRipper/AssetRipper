@@ -5,11 +5,11 @@ namespace UtinyRipper.Classes.Avatars
 {
 	public struct Handle : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			X.Read(stream);
-			ParentHumanIndex = stream.ReadUInt32();
-			ID = stream.ReadUInt32();
+			X.Read(reader);
+			ParentHumanIndex = reader.ReadUInt32();
+			ID = reader.ReadUInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

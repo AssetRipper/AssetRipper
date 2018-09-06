@@ -100,56 +100,56 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadType(stream.Version))
+			if (IsReadType(reader.Version))
 			{
-				Type = stream.ReadInt32();
-			}
-
-			RateOverTime.Read(stream);
-			if (IsReadRateOverDistance(stream.Version))
-			{
-				RateOverDistance.Read(stream);
+				Type = reader.ReadInt32();
 			}
 
-			if (IsReadCnt(stream.Version))
+			RateOverTime.Read(reader);
+			if (IsReadRateOverDistance(reader.Version))
 			{
-				Cnt0 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
-				Cnt1 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
-				Cnt2 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
-				Cnt3 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
-			}
-			if (IsReadCntMax(stream.Version))
-			{
-				CntMax0 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
-				CntMax1 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
-				CntMax2 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
-				CntMax3 = IsIntCount(stream.Version) ? stream.ReadInt32() : stream.ReadUInt16();
-			}
-			if (IsReadTime(stream.Version))
-			{
-				Time0 = stream.ReadSingle();
-				Time1 = stream.ReadSingle();
-				Time2 = stream.ReadSingle();
-				Time3 = stream.ReadSingle();
+				RateOverDistance.Read(reader);
 			}
 
-			if (IsIntCount(stream.Version))
+			if (IsReadCnt(reader.Version))
 			{
-				BurstCount = stream.ReadInt32();
+				Cnt0 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+				Cnt1 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+				Cnt2 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+				Cnt3 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+			}
+			if (IsReadCntMax(reader.Version))
+			{
+				CntMax0 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+				CntMax1 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+				CntMax2 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+				CntMax3 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+			}
+			if (IsReadTime(reader.Version))
+			{
+				Time0 = reader.ReadSingle();
+				Time1 = reader.ReadSingle();
+				Time2 = reader.ReadSingle();
+				Time3 = reader.ReadSingle();
+			}
+
+			if (IsIntCount(reader.Version))
+			{
+				BurstCount = reader.ReadInt32();
 			}
 			else
 			{
-				BurstCount = stream.ReadByte();
+				BurstCount = reader.ReadByte();
 			}
-			stream.AlignStream(AlignType.Align4);
+			reader.AlignStream(AlignType.Align4);
 
-			if (IsReadBursts(stream.Version))
+			if (IsReadBursts(reader.Version))
 			{
-				m_bursts = stream.ReadArray<ParticleSystemEmissionBurst>();
+				m_bursts = reader.ReadArray<ParticleSystemEmissionBurst>();
 			}
 		}
 

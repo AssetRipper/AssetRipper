@@ -42,156 +42,156 @@ namespace UtinyRipper.AssetExporters
 
 		public abstract IScriptField CreateCopy();
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
 			switch (Type.Type)
 			{
 				case PrimitiveType.Bool:
 					if (IsArray)
 					{
-						Value = stream.ReadBooleanArray();
+						Value = reader.ReadBooleanArray();
 					}
 					else
 					{
-						Value = stream.ReadBoolean();
+						Value = reader.ReadBoolean();
 					}
-					stream.AlignStream(AlignType.Align4);
+					reader.AlignStream(AlignType.Align4);
 					break;
 
 				case PrimitiveType.Byte:
 					if (IsArray)
 					{
-						Value = stream.ReadByteArray();
+						Value = reader.ReadByteArray();
 					}
 					else
 					{
-						Value = stream.ReadByte();
+						Value = reader.ReadByte();
 					}
-					stream.AlignStream(AlignType.Align4);
+					reader.AlignStream(AlignType.Align4);
 					break;
 
 				case PrimitiveType.Char:
 					if (IsArray)
 					{
-						Value = stream.ReadCharArray();
+						Value = reader.ReadCharArray();
 					}
 					else
 					{
-						Value = stream.ReadChar();
+						Value = reader.ReadChar();
 					}
-					stream.AlignStream(AlignType.Align4);
+					reader.AlignStream(AlignType.Align4);
 					break;
 
 				case PrimitiveType.Short:
 					if (IsArray)
 					{
-						Value = stream.ReadInt16Array();
+						Value = reader.ReadInt16Array();
 					}
 					else
 					{
-						Value = stream.ReadInt16();
+						Value = reader.ReadInt16();
 					}
-					stream.AlignStream(AlignType.Align4);
+					reader.AlignStream(AlignType.Align4);
 					break;
 
 				case PrimitiveType.UShort:
 					if (IsArray)
 					{
-						Value = stream.ReadUInt16Array();
+						Value = reader.ReadUInt16Array();
 					}
 					else
 					{
-						Value = stream.ReadUInt16();
+						Value = reader.ReadUInt16();
 					}
-					stream.AlignStream(AlignType.Align4);
+					reader.AlignStream(AlignType.Align4);
 					break;
 
 				case PrimitiveType.Int:
 					if (IsArray)
 					{
-						Value = stream.ReadInt32Array();
+						Value = reader.ReadInt32Array();
 					}
 					else
 					{
-						Value = stream.ReadInt32();
+						Value = reader.ReadInt32();
 					}
 					break;
 
 				case PrimitiveType.UInt:
 					if (IsArray)
 					{
-						Value = stream.ReadUInt32Array();
+						Value = reader.ReadUInt32Array();
 					}
 					else
 					{
-						Value = stream.ReadUInt32();
+						Value = reader.ReadUInt32();
 					}
 					break;
 
 				case PrimitiveType.Long:
 					if (IsArray)
 					{
-						Value = stream.ReadInt64Array();
+						Value = reader.ReadInt64Array();
 					}
 					else
 					{
-						Value = stream.ReadInt64();
+						Value = reader.ReadInt64();
 					}
 					break;
 
 				case PrimitiveType.ULong:
 					if (IsArray)
 					{
-						Value = stream.ReadUInt64Array();
+						Value = reader.ReadUInt64Array();
 					}
 					else
 					{
-						Value = stream.ReadUInt64();
+						Value = reader.ReadUInt64();
 					}
 					break;
 
 				case PrimitiveType.Single:
 					if (IsArray)
 					{
-						Value = stream.ReadSingleArray();
+						Value = reader.ReadSingleArray();
 					}
 					else
 					{
-						Value = stream.ReadSingle();
+						Value = reader.ReadSingle();
 					}
 					break;
 
 				case PrimitiveType.Double:
 					if (IsArray)
 					{
-						Value = stream.ReadDoubleArray();
+						Value = reader.ReadDoubleArray();
 					}
 					else
 					{
-						Value = stream.ReadDouble();
+						Value = reader.ReadDouble();
 					}
 					break;
 
 				case PrimitiveType.String:
 					if (IsArray)
 					{
-						Value = stream.ReadStringArray();
+						Value = reader.ReadStringArray();
 					}
 					else
 					{
-						Value = stream.ReadStringAligned();
+						Value = reader.ReadStringAligned();
 					}
 					break;
 
 				case PrimitiveType.Complex:
 					if (IsArray)
 					{
-						int count = stream.ReadInt32();
+						int count = reader.ReadInt32();
 						IScriptStructure[] structures = new IScriptStructure[count];
 						for (int i = 0; i < count; i++)
 						{
 							IScriptStructure structure = Type.ComplexType.CreateCopy();
-							structure.Read(stream);
+							structure.Read(reader);
 							structures[i] = structure;
 						}
 						Value = structures;
@@ -199,7 +199,7 @@ namespace UtinyRipper.AssetExporters
 					else
 					{
 						IScriptStructure structure = Type.ComplexType.CreateCopy();
-						structure.Read(stream);
+						structure.Read(reader);
 						Value = structure;
 					}
 					break;

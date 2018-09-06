@@ -81,49 +81,49 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadAlpha(stream.Version))
+			if (IsReadAlpha(reader.Version))
 			{
-				Alpha = stream.ReadSingle();
+				Alpha = reader.ReadSingle();
 			}
-			RenderMode = (RenderMode)stream.ReadInt32();
-			Camera.Read(stream);
-			if (IsReadNormals(stream.Version))
+			RenderMode = (RenderMode)reader.ReadInt32();
+			Camera.Read(reader);
+			if (IsReadNormals(reader.Version))
 			{
-				Normals = stream.ReadBoolean();
-				PositionUVs = stream.ReadBoolean();
+				Normals = reader.ReadBoolean();
+				PositionUVs = reader.ReadBoolean();
 			}
 
-			if (IsReadPlaneDistance(stream.Version))
+			if (IsReadPlaneDistance(reader.Version))
 			{
-				PlaneDistance = stream.ReadSingle();
+				PlaneDistance = reader.ReadSingle();
 			}
-			PixelPerfect = stream.ReadBoolean();
+			PixelPerfect = reader.ReadBoolean();
 
-			if (IsReadRecievesEvents(stream.Version))
+			if (IsReadRecievesEvents(reader.Version))
 			{
-				RecievesEvents = stream.ReadBoolean();
-				OverrideSorting = stream.ReadBoolean();
-				OverridePixelPerfect = stream.ReadBoolean();
-				if (IsReadSortingBucketNormalizedSize(stream.Version))
+				RecievesEvents = reader.ReadBoolean();
+				OverrideSorting = reader.ReadBoolean();
+				OverridePixelPerfect = reader.ReadBoolean();
+				if (IsReadSortingBucketNormalizedSize(reader.Version))
 				{
-					SortingBucketNormalizedSize = stream.ReadSingle();
+					SortingBucketNormalizedSize = reader.ReadSingle();
 				}
-				if (IsReadAdditionalShaderChannelsFlag(stream.Version))
+				if (IsReadAdditionalShaderChannelsFlag(reader.Version))
 				{
-					AdditionalShaderChannelsFlag = stream.ReadInt32();
+					AdditionalShaderChannelsFlag = reader.ReadInt32();
 				}
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 
-				SortingLayerID = stream.ReadInt32();
-				SortingOrder = stream.ReadInt16();
+				SortingLayerID = reader.ReadInt32();
+				SortingOrder = reader.ReadInt16();
 			}
-			if (IsReadTargetDisplay(stream.Version))
+			if (IsReadTargetDisplay(reader.Version))
 			{
-				TargetDisplay = stream.ReadByte();
+				TargetDisplay = reader.ReadByte();
 			}
 		}
 

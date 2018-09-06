@@ -6,12 +6,12 @@ namespace UtinyRipper.Classes.NavMeshDatas
 {
 	public struct HeightMeshData : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_vertices = stream.ReadArray<Vector3f>();
-			m_indices = stream.ReadInt32Array();
-			Bounds.Read(stream);
-			m_nodes = stream.ReadArray<HeightMeshBVNode>();
+			m_vertices = reader.ReadArray<Vector3f>();
+			m_indices = reader.ReadInt32Array();
+			Bounds.Read(reader);
+			m_nodes = reader.ReadArray<HeightMeshBVNode>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

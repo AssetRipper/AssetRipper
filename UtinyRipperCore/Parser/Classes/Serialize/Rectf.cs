@@ -98,12 +98,12 @@ namespace UtinyRipper.Classes
 			return new Rectf(this);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			X = stream.ReadSingle();
-			Y = stream.ReadSingle();
-			Width = stream.ReadSingle();
-			Height = stream.ReadSingle();
+			X = reader.ReadSingle();
+			Y = reader.ReadSingle();
+			Width = reader.ReadSingle();
+			Height = reader.ReadSingle();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

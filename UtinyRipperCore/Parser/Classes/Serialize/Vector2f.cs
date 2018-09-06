@@ -85,10 +85,10 @@ namespace UtinyRipper.Classes
 			return new Vector2f(this);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			X = stream.ReadSingle();
-			Y = stream.ReadSingle();
+			X = reader.ReadSingle();
+			Y = reader.ReadSingle();
 		}
 
 		public void Write(BinaryWriter stream)

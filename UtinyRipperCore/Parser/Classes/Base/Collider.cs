@@ -32,22 +32,22 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(5);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (!IsMaterialConditional(stream.Version) || IsReadMaterial)
+			if (!IsMaterialConditional(reader.Version) || IsReadMaterial)
 			{
-				Material.Read(stream);
+				Material.Read(reader);
 			}
-			if (!IsTriggerConditional(stream.Version) || IsReadIsTrigger)
+			if (!IsTriggerConditional(reader.Version) || IsReadIsTrigger)
 			{
-				IsTrigger = stream.ReadBoolean();
+				IsTrigger = reader.ReadBoolean();
 			}
-			if (IsReadEnabled(stream.Version))
+			if (IsReadEnabled(reader.Version))
 			{
-				Enabled = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				Enabled = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 		

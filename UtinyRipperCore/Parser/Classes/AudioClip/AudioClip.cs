@@ -191,134 +191,134 @@ namespace UtinyRipper.Classes
 			return 2;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			if (IsReadLoadType(stream.Version))
+			if (IsReadLoadType(reader.Version))
 			{
-				LoadType = (AudioClipLoadType)stream.ReadInt32();
-				Channels = stream.ReadInt32();
-				Frequency = stream.ReadInt32();
-				BitsPerSample = stream.ReadInt32();
-				Length = stream.ReadSingle();
+				LoadType = (AudioClipLoadType)reader.ReadInt32();
+				Channels = reader.ReadInt32();
+				Frequency = reader.ReadInt32();
+				BitsPerSample = reader.ReadInt32();
+				Length = reader.ReadSingle();
 				
-				if (IsReadIsTrackerFormat(stream.Version))
+				if (IsReadIsTrackerFormat(reader.Version))
 				{
-					IsTrackerFormat = stream.ReadBoolean();
+					IsTrackerFormat = reader.ReadBoolean();
 				}
-				if (IsReadAmbisonic(stream.Version))
+				if (IsReadAmbisonic(reader.Version))
 				{
-					Ambisonic = stream.ReadBoolean();
+					Ambisonic = reader.ReadBoolean();
 				}
-				if (IsAlignTrackerFormat(stream.Version))
+				if (IsAlignTrackerFormat(reader.Version))
 				{
-					stream.AlignStream(AlignType.Align4);
-				}
-
-				if (IsReadAudioClipFlags(stream.Version))
-				{
-					AudioClipFlags = stream.ReadInt32();
-				}
-				if (IsReadFSBResourceFirst(stream.Version))
-				{
-					FSBResource.Read(stream);
+					reader.AlignStream(AlignType.Align4);
 				}
 
-				SubsoundIndex = stream.ReadInt32();
-				PreloadAudioData = stream.ReadBoolean();
-				LoadInBackground = stream.ReadBoolean();
-				Legacy3D = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
-
-				if (!IsReadFSBResourceFirst(stream.Version))
+				if (IsReadAudioClipFlags(reader.Version))
 				{
-					FSBResource.Read(stream);
+					AudioClipFlags = reader.ReadInt32();
+				}
+				if (IsReadFSBResourceFirst(reader.Version))
+				{
+					FSBResource.Read(reader);
 				}
 
-				if (IsReadType(stream.Version))
+				SubsoundIndex = reader.ReadInt32();
+				PreloadAudioData = reader.ReadBoolean();
+				LoadInBackground = reader.ReadBoolean();
+				Legacy3D = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
+
+				if (!IsReadFSBResourceFirst(reader.Version))
 				{
-					Type = (FMODSoundType)stream.ReadInt32();
+					FSBResource.Read(reader);
 				}
-				if (IsReadCompressionFormat(stream.Version))
+
+				if (IsReadType(reader.Version))
 				{
-					CompressionFormat = (AudioCompressionFormat)stream.ReadInt32();
+					Type = (FMODSoundType)reader.ReadInt32();
 				}
-				stream.AlignStream(AlignType.Align4);
+				if (IsReadCompressionFormat(reader.Version))
+				{
+					CompressionFormat = (AudioCompressionFormat)reader.ReadInt32();
+				}
+				reader.AlignStream(AlignType.Align4);
 			}
 			else
 			{
-				if (IsReadDecompressOnLoadFirst(stream.Version))
+				if (IsReadDecompressOnLoadFirst(reader.Version))
 				{
-					DecompressOnLoad = stream.ReadBoolean();
+					DecompressOnLoad = reader.ReadBoolean();
 				}
 
-				Format = (FMODSoundFormat)stream.ReadInt32();
-				if (IsReadType(stream.Version))
+				Format = (FMODSoundFormat)reader.ReadInt32();
+				if (IsReadType(reader.Version))
 				{
-					Type = (FMODSoundType)stream.ReadInt32();
+					Type = (FMODSoundType)reader.ReadInt32();
 				}
-				if (IsReadLength(stream.Version))
+				if (IsReadLength(reader.Version))
 				{
-					Length = stream.ReadSingle();
-					Frequency = stream.ReadInt32();
-					Size = stream.ReadInt32();
+					Length = reader.ReadSingle();
+					Frequency = reader.ReadInt32();
+					Size = reader.ReadInt32();
 				}
 			
-				if (IsReadDecompressOnLoadSecond(stream.Version))
+				if (IsReadDecompressOnLoadSecond(reader.Version))
 				{
-					DecompressOnLoad = stream.ReadBoolean();
+					DecompressOnLoad = reader.ReadBoolean();
 				}
-				if (IsRead3D(stream.Version))
+				if (IsRead3D(reader.Version))
 				{
-					Legacy3D = stream.ReadBoolean();
+					Legacy3D = reader.ReadBoolean();
 				}
-				if (IsReadUseHardware(stream.Version))
+				if (IsReadUseHardware(reader.Version))
 				{
-					UseHardware = stream.ReadBoolean();
+					UseHardware = reader.ReadBoolean();
 				}
-				if (IsAlignBools(stream.Version))
+				if (IsAlignBools(reader.Version))
 				{
-					stream.AlignStream(AlignType.Align4);
-				}
-
-				if (IsStreamInt32(stream.Version))
-				{
-					Stream = stream.ReadInt32();
+					reader.AlignStream(AlignType.Align4);
 				}
 
-				if (IsReadStreamingInfo(stream.Version))
+				if (IsStreamInt32(reader.Version))
+				{
+					Stream = reader.ReadInt32();
+				}
+
+				if (IsReadStreamingInfo(reader.Version))
 				{
 					if (Stream == 2)
 					{
 						string resImageName = $"{File.Name}.resS";
-						StreamingInfo.Read(stream, resImageName);
+						StreamingInfo.Read(reader, resImageName);
 					}
 					else
 					{
-						m_audioData = stream.ReadByteArray();
-						stream.AlignStream(AlignType.Align4);
+						m_audioData = reader.ReadByteArray();
+						reader.AlignStream(AlignType.Align4);
 					}
 				}
 				else
 				{
-					m_audioData = stream.ReadByteArray();
-					if (IsAlignAudioData(stream.Version))
+					m_audioData = reader.ReadByteArray();
+					if (IsAlignAudioData(reader.Version))
 					{
-						stream.AlignStream(AlignType.Align4);
+						reader.AlignStream(AlignType.Align4);
 					}
 				}
 
-				if (IsReadDecompressOnLoadThird(stream.Version))
+				if (IsReadDecompressOnLoadThird(reader.Version))
 				{
-					DecompressOnLoad = stream.ReadBoolean();
+					DecompressOnLoad = reader.ReadBoolean();
 				}
 
-				if (IsReadStream(stream.Version))
+				if (IsReadStream(reader.Version))
 				{
-					if (!IsStreamInt32(stream.Version))
+					if (!IsStreamInt32(reader.Version))
 					{
-						Stream = stream.ReadBoolean() ? 1 : 0;
+						Stream = reader.ReadBoolean() ? 1 : 0;
 					}
 				}
 			}

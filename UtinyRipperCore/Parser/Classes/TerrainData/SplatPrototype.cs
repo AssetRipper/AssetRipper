@@ -37,25 +37,25 @@ namespace UtinyRipper.Classes.TerrainDatas
 			return version.IsGreaterEqual(5, 0, 1);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Texture.Read(stream);
-			if (IsReadNormalMap(stream.Version))
+			Texture.Read(reader);
+			if (IsReadNormalMap(reader.Version))
 			{
-				NormalMap.Read(stream);
+				NormalMap.Read(reader);
 			}
-			TileSize.Read(stream);
-			if (IsReadTileOffset(stream.Version))
+			TileSize.Read(reader);
+			if (IsReadTileOffset(reader.Version))
 			{
-				TileOffset.Read(stream);
+				TileOffset.Read(reader);
 			}
-			if (IsReadSpecularMetallic(stream.Version))
+			if (IsReadSpecularMetallic(reader.Version))
 			{
-				SpecularMetallic.Read(stream);
+				SpecularMetallic.Read(reader);
 			}
-			if (IsReadSmoothness(stream.Version))
+			if (IsReadSmoothness(reader.Version))
 			{
-				Smoothness = stream.ReadSingle();
+				Smoothness = reader.ReadSingle();
 			}
 		}
 

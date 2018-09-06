@@ -7,10 +7,10 @@ namespace UtinyRipper.Classes.NavMeshDatas
 {
 	public struct HeightmapData : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Position.Read(stream);
-			TerrainData.Read(stream);
+			Position.Read(reader);
+			TerrainData.Read(reader);
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

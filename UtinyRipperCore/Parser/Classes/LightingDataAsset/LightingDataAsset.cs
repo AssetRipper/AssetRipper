@@ -58,46 +58,46 @@ namespace UtinyRipper.Classes
 		}
 
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Scene.Read(stream);
-			if(IsReadLightmaps(stream.Flags))
+			Scene.Read(reader);
+			if(IsReadLightmaps(reader.Flags))
 			{
-				m_lightmaps = stream.ReadArray<LightmapData>();
-				stream.AlignStream(AlignType.Align4);
+				m_lightmaps = reader.ReadArray<LightmapData>();
+				reader.AlignStream(AlignType.Align4);
 
-				LightProbes.Read(stream);
-				LightmapsMode = stream.ReadInt32();
-				BakedAmbientProbeInLinear.Read(stream);
-				m_lightmappedRendererData = stream.ReadArray<RendererData>();
-				stream.AlignStream(AlignType.Align4);
+				LightProbes.Read(reader);
+				LightmapsMode = reader.ReadInt32();
+				BakedAmbientProbeInLinear.Read(reader);
+				m_lightmappedRendererData = reader.ReadArray<RendererData>();
+				reader.AlignStream(AlignType.Align4);
 
-				m_lightmappedRendererDataIDs = stream.ReadArray<SceneObjectIdentifier>();
-				stream.AlignStream(AlignType.Align4);
+				m_lightmappedRendererDataIDs = reader.ReadArray<SceneObjectIdentifier>();
+				reader.AlignStream(AlignType.Align4);
 
-				EnlightenSceneMapping.Read(stream);
-				m_enlightenSceneMappingRendererIDs = stream.ReadArray<SceneObjectIdentifier>();
-				stream.AlignStream(AlignType.Align4);
+				EnlightenSceneMapping.Read(reader);
+				m_enlightenSceneMappingRendererIDs = reader.ReadArray<SceneObjectIdentifier>();
+				reader.AlignStream(AlignType.Align4);
 
-				m_lights = stream.ReadArray<SceneObjectIdentifier>();
-				stream.AlignStream(AlignType.Align4);
+				m_lights = reader.ReadArray<SceneObjectIdentifier>();
+				reader.AlignStream(AlignType.Align4);
 
-				m_lightBakingOutputs = stream.ReadArray<LightBakingOutput>();
-				stream.AlignStream(AlignType.Align4);
+				m_lightBakingOutputs = reader.ReadArray<LightBakingOutput>();
+				reader.AlignStream(AlignType.Align4);
 
-				m_bakedReflectionProbeCubemaps = stream.ReadArray<PPtr<Texture>>();
-				m_bakedReflectionProbes = stream.ReadArray<SceneObjectIdentifier>();
-				stream.AlignStream(AlignType.Align4);
+				m_bakedReflectionProbeCubemaps = reader.ReadArray<PPtr<Texture>>();
+				m_bakedReflectionProbes = reader.ReadArray<SceneObjectIdentifier>();
+				reader.AlignStream(AlignType.Align4);
 
-				if (IsReadEnlightenData(stream.Flags))
+				if (IsReadEnlightenData(reader.Flags))
 				{
-					m_enlightenData = stream.ReadByteArray();
-					stream.AlignStream(AlignType.Align4);
+					m_enlightenData = reader.ReadByteArray();
+					reader.AlignStream(AlignType.Align4);
 				}
 
-				EnlightenDataVersion = stream.ReadInt32();
+				EnlightenDataVersion = reader.ReadInt32();
 			}
 		}
 

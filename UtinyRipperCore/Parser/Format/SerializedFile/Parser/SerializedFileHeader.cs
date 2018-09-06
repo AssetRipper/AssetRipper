@@ -5,7 +5,7 @@ namespace UtinyRipper.SerializedFiles
 	/// <summary>
 	/// The file header is found at the beginning of an asset file. The header is always using big endian byte order.
 	/// </summary>
-	internal class SerializedFileHeader
+	public sealed class SerializedFileHeader
 	{
 		public SerializedFileHeader(string name)
 		{
@@ -24,28 +24,28 @@ namespace UtinyRipper.SerializedFiles
 			return generation >= FileGeneration.FG_350_47x;
 		}
 
-		public void Read(EndianStream stream)
+		public void Read(EndianReader reader)
 		{
-			MetadataSize = stream.ReadInt32();
+			MetadataSize = reader.ReadInt32();
 			if (MetadataSize <= 0)
 			{
 				throw new Exception($"Invalid metadata size {MetadataSize} for asset file {m_name}");
 			}
-			FileSize = stream.ReadInt32();
+			FileSize = reader.ReadInt32();
 			if (FileSize <= 0)
 			{
 				throw new Exception($"Invalid data size {FileSize} for asset file {m_name}");
 			}
-			Generation = (FileGeneration)stream.ReadInt32();
+			Generation = (FileGeneration)reader.ReadInt32();
 			if (!Enum.IsDefined(typeof(FileGeneration), Generation))
 			{
 				throw new Exception($"Unsuported file generation {Generation} for asset file '{m_name}'");
 			}
-			DataOffset = stream.ReadUInt32();
+			DataOffset = reader.ReadUInt32();
 			if(IsReadEndian(Generation))
 			{
-				Endianess = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				Endianess = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 			else
 			{

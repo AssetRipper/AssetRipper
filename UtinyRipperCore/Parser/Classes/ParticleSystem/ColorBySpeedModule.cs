@@ -5,12 +5,12 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public sealed class ColorBySpeedModule : ParticleSystemModule
 	{
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			Gradient.Read(stream);
-			Range.Read(stream);
+			Gradient.Read(reader);
+			Range.Read(reader);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)

@@ -89,72 +89,72 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 		
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			Type = stream.ReadInt32();
-			if (IsReadCollisionMode(stream.Version))
+			Type = reader.ReadInt32();
+			if (IsReadCollisionMode(reader.Version))
 			{
-				CollisionMode = stream.ReadInt32();
+				CollisionMode = reader.ReadInt32();
 			}
-			if (IsReadColliderForce(stream.Version))
+			if (IsReadColliderForce(reader.Version))
 			{
-				ColliderForce = stream.ReadSingle();
-				MultiplyColliderForceByParticleSize = stream.ReadBoolean();
-				MultiplyColliderForceByParticleSpeed = stream.ReadBoolean();
-				MultiplyColliderForceByCollisionAngle = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				ColliderForce = reader.ReadSingle();
+				MultiplyColliderForceByParticleSize = reader.ReadBoolean();
+				MultiplyColliderForceByParticleSpeed = reader.ReadBoolean();
+				MultiplyColliderForceByCollisionAngle = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 			
-			Plane0.Read(stream);
-			Plane1.Read(stream);
-			Plane2.Read(stream);
-			Plane3.Read(stream);
-			Plane4.Read(stream);
-			Plane5.Read(stream);
+			Plane0.Read(reader);
+			Plane1.Read(reader);
+			Plane2.Read(reader);
+			Plane3.Read(reader);
+			Plane4.Read(reader);
+			Plane5.Read(reader);
 
-			if (IsReadDampenSingle(stream.Version))
+			if (IsReadDampenSingle(reader.Version))
 			{
-				DampenSingle = stream.ReadSingle();
-				BounceSingle = stream.ReadSingle();
-				EnergyLossOnCollisionSingle = stream.ReadSingle();
+				DampenSingle = reader.ReadSingle();
+				BounceSingle = reader.ReadSingle();
+				EnergyLossOnCollisionSingle = reader.ReadSingle();
 			}
 			else
 			{
-				Dampen.Read(stream);
-				Bounce.Read(stream);
-				EnergyLossOnCollision.Read(stream);
+				Dampen.Read(reader);
+				Bounce.Read(reader);
+				EnergyLossOnCollision.Read(reader);
 			}
 
-			MinKillSpeed = stream.ReadSingle();
-			if (IsReadMaxKillSpeed(stream.Version))
+			MinKillSpeed = reader.ReadSingle();
+			if (IsReadMaxKillSpeed(reader.Version))
 			{
-				MaxKillSpeed = stream.ReadSingle();
+				MaxKillSpeed = reader.ReadSingle();
 			}
-			if (IsReadRadiusScale(stream.Version))
+			if (IsReadRadiusScale(reader.Version))
 			{
-				RadiusScale = stream.ReadSingle();
-				CollidesWith.Read(stream);
+				RadiusScale = reader.ReadSingle();
+				CollidesWith.Read(reader);
 			}
-			if (IsReadMaxCollisionShapes(stream.Version))
+			if (IsReadMaxCollisionShapes(reader.Version))
 			{
-				MaxCollisionShapes = stream.ReadInt32();
+				MaxCollisionShapes = reader.ReadInt32();
 			}
-			if (IsReadQuality(stream.Version))
+			if (IsReadQuality(reader.Version))
 			{
-				Quality = stream.ReadInt32();
-				VoxelSize = stream.ReadSingle();
+				Quality = reader.ReadInt32();
+				VoxelSize = reader.ReadSingle();
 			}
-			if (IsReadCollisionMessages(stream.Version))
+			if (IsReadCollisionMessages(reader.Version))
 			{
-				CollisionMessages = stream.ReadBoolean();
+				CollisionMessages = reader.ReadBoolean();
 			}
-			if (IsReadCollidesWithDynamic(stream.Version))
+			if (IsReadCollidesWithDynamic(reader.Version))
 			{
-				CollidesWithDynamic = stream.ReadBoolean();
-				InteriorCollisions = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				CollidesWithDynamic = reader.ReadBoolean();
+				InteriorCollisions = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

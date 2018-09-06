@@ -13,14 +13,14 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			return version.IsGreater(5, 0, 0, VersionType.Beta);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
 			m_stateMachineBehaviourRanges = new Dictionary<StateKey, StateRange>();
 
-			m_stateMachineBehaviourRanges.Read(stream);
-			if (IsReadStateMachineBehaviourIndices(stream.Version))
+			m_stateMachineBehaviourRanges.Read(reader);
+			if (IsReadStateMachineBehaviourIndices(reader.Version))
 			{
-				m_stateMachineBehaviourIndices = stream.ReadUInt32Array();
+				m_stateMachineBehaviourIndices = reader.ReadUInt32Array();
 			}
 		}
 		

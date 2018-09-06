@@ -14,18 +14,18 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			GeometryType = (GeometryType)stream.ReadInt32();
-			GenerationType = (GenerationType)stream.ReadInt32();
-			EdgeRadius = stream.ReadSingle();
-			m_colliderPaths = stream.ReadArray<SubCollider>();
-			stream.AlignStream(AlignType.Align4);
+			GeometryType = (GeometryType)reader.ReadInt32();
+			GenerationType = (GenerationType)reader.ReadInt32();
+			EdgeRadius = reader.ReadSingle();
+			m_colliderPaths = reader.ReadArray<SubCollider>();
+			reader.AlignStream(AlignType.Align4);
 
-			CompositePaths.Read(stream);
-			VertexDistance = stream.ReadSingle();
+			CompositePaths.Read(reader);
+			VertexDistance = reader.ReadSingle();
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

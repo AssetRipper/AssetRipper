@@ -4,14 +4,14 @@ namespace UtinyRipper.Classes.AnimationClips
 {
 	public struct DenseClip : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			FrameCount = stream.ReadInt32();
-			CurveCount = (int)stream.ReadUInt32();
-			SampleRate = stream.ReadSingle();
-			BeginTime = stream.ReadSingle();
+			FrameCount = reader.ReadInt32();
+			CurveCount = (int)reader.ReadUInt32();
+			SampleRate = reader.ReadSingle();
+			BeginTime = reader.ReadSingle();
 
-			m_sampleArray = stream.ReadSingleArray();
+			m_sampleArray = reader.ReadSingleArray();
 		}
 
 		public bool IsValid => SampleArray.Count > 0;

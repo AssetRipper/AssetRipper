@@ -7,12 +7,12 @@ namespace UtinyRipper.Classes.AnimatorControllers
 {
 	public struct SelectorStateConstant : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_transitionConstantArray = stream.ReadArray<OffsetPtr<SelectorTransitionConstant>>();
-			FullPathID = stream.ReadUInt32();
-			IsEntry = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			m_transitionConstantArray = reader.ReadArray<OffsetPtr<SelectorTransitionConstant>>();
+			FullPathID = reader.ReadUInt32();
+			IsEntry = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

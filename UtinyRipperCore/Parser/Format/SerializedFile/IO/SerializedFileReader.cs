@@ -2,10 +2,10 @@
 
 namespace UtinyRipper.SerializedFiles
 {
-	public sealed class SerializedFileStream : EndianStream
+	public sealed class SerializedFileReader : EndianReader
 	{
-		public SerializedFileStream(EndianStream stream, FileGeneration generation) :
-			base(stream.BaseStream, stream.AlignPosition, stream.EndianType)
+		public SerializedFileReader(EndianReader reader, FileGeneration generation) :
+			base(reader)
 		{
 			Generation = generation;
 		}

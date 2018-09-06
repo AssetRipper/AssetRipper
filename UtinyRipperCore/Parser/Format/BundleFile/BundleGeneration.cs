@@ -1,6 +1,6 @@
 ﻿namespace UtinyRipper.BundleFiles
 {
-	internal enum BundleGeneration
+	public enum BundleGeneration
 	{
 		Unknown = 0,
 

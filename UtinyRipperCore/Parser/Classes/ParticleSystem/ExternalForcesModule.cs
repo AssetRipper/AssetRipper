@@ -14,11 +14,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Multiplier = 1.0f;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			Multiplier = stream.ReadSingle();
+			Multiplier = reader.ReadSingle();
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)

@@ -7,26 +7,26 @@ namespace UtinyRipper.Classes.Shaders
 {
 	public struct ShaderSubProgramBlob : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			long startPosition = stream.BaseStream.Position;
-			int count = stream.ReadInt32();
-			long headerPosition = stream.BaseStream.Position;
+			long startPosition = reader.BaseStream.Position;
+			int count = reader.ReadInt32();
+			long headerPosition = reader.BaseStream.Position;
 
 			m_subPrograms = new ShaderSubProgram[count];
 			for (int i = 0; i < count; i++)
 			{
-				stream.BaseStream.Position = headerPosition + i * 8;
-				int offset = stream.ReadInt32();
-				int length = stream.ReadInt32();
+				reader.BaseStream.Position = headerPosition + i * 8;
+				int offset = reader.ReadInt32();
+				int length = reader.ReadInt32();
 				
 				long dataPosition = startPosition + offset;
-				stream.BaseStream.Position = dataPosition;
+				reader.BaseStream.Position = dataPosition;
 				ShaderSubProgram subProgram = new ShaderSubProgram();
-				subProgram.Read(stream);
-				if (stream.BaseStream.Position != dataPosition + length)
+				subProgram.Read(reader);
+				if (reader.BaseStream.Position != dataPosition + length)
 				{
-					throw new Exception($"Read less {stream.BaseStream.Position - dataPosition} than expected {length}");
+					throw new Exception($"Read less {reader.BaseStream.Position - dataPosition} than expected {length}");
 				}
 				m_subPrograms[i] = subProgram;
 			}

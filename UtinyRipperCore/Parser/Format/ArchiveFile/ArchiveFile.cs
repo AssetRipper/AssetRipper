@@ -5,20 +5,15 @@ using System.IO.Compression;
 
 namespace UtinyRipper.ArchiveFiles
 {
-	internal class ArchiveFile : IDisposable
+	public class ArchiveFile : IDisposable
 	{
-		public ArchiveFile(FileCollection fileCollection, string filePath)
+		private ArchiveFile(string filePath)
 		{
-			if (fileCollection == null)
-			{
-				throw new ArgumentNullException(nameof(fileCollection));
-			}
 			if (string.IsNullOrEmpty(filePath))
 			{
 				throw new ArgumentNullException(nameof(filePath));
 			}
 
-			m_fileCollection = fileCollection;
 			m_filePath = filePath;
 		}
 
@@ -37,49 +32,47 @@ namespace UtinyRipper.ArchiveFiles
 
 		public static bool IsArchiveFile(Stream baseStream)
 		{
-			using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
+			using (EndianReader reader = new EndianReader(baseStream, baseStream.Position, EndianType.BigEndian))
 			{
-				long position = stream.BaseStream.Position;
-				if (stream.BaseStream.Length - position >= 2)
+				long position = reader.BaseStream.Position;
+				if (reader.BaseStream.Length - position >= 2)
 				{
-					ulong magic = stream.ReadUInt16();
+					ulong magic = reader.ReadUInt16();
 					if (magic == GZipMagic)
 					{
-						stream.BaseStream.Position = position;
+						reader.BaseStream.Position = position;
 						return true;
 					}
 				}
 
-				if (stream.BaseStream.Length - position >= 0x28)
+				if (reader.BaseStream.Length - position >= 0x28)
 				{
-					stream.BaseStream.Position = position + 0x20;
-					ulong magic = (stream.ReadUInt64() & 0xFFFFFFFFFFFF0000) >> 16;
+					reader.BaseStream.Position = position + 0x20;
+					ulong magic = (reader.ReadUInt64() & 0xFFFFFFFFFFFF0000) >> 16;
 					if (magic == BrotliSignature)
 					{
-						stream.BaseStream.Position = position;
+						reader.BaseStream.Position = position;
 						return true;
 					}
 				}
 
-				stream.BaseStream.Position = position;
+				reader.BaseStream.Position = position;
 				return false;
 			}
 		}
 
-		public void Load(string archivePath)
+		public static ArchiveFile Load(string archivePath)
 		{
-			if (!FileUtils.Exists(archivePath))
-			{
-				throw new Exception($"ArchiveFile at path '{archivePath}' doesn't exist");
-			}
-
-			FileStream stream = FileUtils.OpenRead(archivePath);
-			Read(stream, true);
+			ArchiveFile archive = new ArchiveFile(archivePath);
+			archive.Load();
+			return archive;
 		}
 
-		public void Read(Stream baseStream)
+		public static ArchiveFile Read(Stream stream, string archivePath)
 		{
-			Read(baseStream, false);
+			ArchiveFile archive = new ArchiveFile(archivePath);
+			archive.Read(stream);
+			return archive;
 		}
 
 		public void Dispose()
@@ -87,39 +80,43 @@ namespace UtinyRipper.ArchiveFiles
 			Metadata.Dispose();
 		}
 
-		private void Read(Stream baseStream, bool isClosable)
+		private void Load()
 		{
-			using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
+			if (!FileUtils.Exists(m_filePath))
 			{
-				ulong magic = stream.ReadUInt16();
-				stream.BaseStream.Position -= 2;
-				if (magic == GZipMagic)
-				{
-					ReadGZip(stream, isClosable);
-				}
-				else
-				{
-					ReadBrotli(stream, isClosable);
-				}
+				throw new Exception($"ArchiveFile at path '{m_filePath}' doesn't exist");
 			}
 
-			foreach (ArchiveFileEntry entry in Metadata.AssetsEntries)
+			using (FileStream stream = FileUtils.OpenRead(m_filePath))
 			{
-				entry.ReadFile(m_fileCollection);
+				Read(stream);
 			}
 		}
 
-		private void ReadGZip(EndianStream stream, bool isClosable)
+		private void Read(Stream stream)
+		{
+			using (EndianReader reader = new EndianReader(stream, stream.Position, EndianType.BigEndian))
+			{
+				ulong magic = reader.ReadUInt16();
+				reader.BaseStream.Position -= 2;
+				if (magic == GZipMagic)
+				{
+					ReadGZip(reader);
+				}
+				else
+				{
+					ReadBrotli(reader);
+				}
+			}
+		}
+
+		private void ReadGZip(EndianReader reader)
 		{
 			MemoryStream memStream = new MemoryStream();
-			using (GZipStream gzipStream = new GZipStream(stream.BaseStream, CompressionMode.Decompress))
+			using (GZipStream gzipStream = new GZipStream(reader.BaseStream, CompressionMode.Decompress))
 			{
 				gzipStream.CopyTo(memStream);
 				memStream.Position = 0;
-			}
-			if (isClosable)
-			{
-				stream.Dispose();
 			}
 
 			string name = Path.GetFileName(m_filePath);
@@ -127,17 +124,13 @@ namespace UtinyRipper.ArchiveFiles
 			Metadata = new ArchiveMetadata(entry);
 		}
 
-		private void ReadBrotli(EndianStream stream, bool isClosable)
+		private void ReadBrotli(EndianReader reader)
 		{
 			MemoryStream memStream = new MemoryStream();
-			using (BrotliInputStream brotliStream = new BrotliInputStream(stream.BaseStream))
+			using (BrotliInputStream brotliStream = new BrotliInputStream(reader.BaseStream))
 			{
 				brotliStream.CopyStream(memStream);
 				memStream.Position = 0;
-			}
-			if (isClosable)
-			{
-				stream.Dispose();
 			}
 
 			string name = Path.GetFileName(m_filePath);
@@ -153,7 +146,6 @@ namespace UtinyRipper.ArchiveFiles
 		/// </summary>
 		private const ulong BrotliSignature = 0x62726F746C69;
 
-		private readonly FileCollection m_fileCollection;
 		private readonly string m_filePath;
 	}
 }

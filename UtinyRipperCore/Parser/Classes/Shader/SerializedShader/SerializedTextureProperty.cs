@@ -2,10 +2,10 @@
 {
 	public struct SerializedTextureProperty : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			DefaultName = stream.ReadStringAligned();
-			TexDim = stream.ReadInt32();
+			DefaultName = reader.ReadStringAligned();
+			TexDim = reader.ReadInt32();
 		}
 
 		public string DefaultName { get; private set; }

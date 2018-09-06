@@ -5,13 +5,13 @@ namespace UtinyRipper.Classes.NavMeshDatas
 {
 	public struct NavMeshParams : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			TileSize = stream.ReadSingle();
-			WalkableHeight = stream.ReadSingle();
-			WalkableRadius = stream.ReadSingle();
-			WalkableClimb = stream.ReadSingle();
-			CellSize = stream.ReadSingle();
+			TileSize = reader.ReadSingle();
+			WalkableHeight = reader.ReadSingle();
+			WalkableRadius = reader.ReadSingle();
+			WalkableClimb = reader.ReadSingle();
+			CellSize = reader.ReadSingle();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

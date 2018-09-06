@@ -49,16 +49,16 @@ namespace UtinyRipper.Classes
 			};
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			FileIndex = stream.ReadInt32();
-			if (IsLongID(stream.Version))
+			FileIndex = reader.ReadInt32();
+			if (IsLongID(reader.Version))
 			{
-				PathID = stream.ReadInt64();
+				PathID = reader.ReadInt64();
 			}
 			else
 			{
-				PathID = stream.ReadInt32();
+				PathID = reader.ReadInt32();
 			}
 		}
 

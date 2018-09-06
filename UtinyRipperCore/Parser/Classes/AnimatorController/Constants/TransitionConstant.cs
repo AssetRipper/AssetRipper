@@ -81,38 +81,38 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			}
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_conditionConstantArray = stream.ReadArray<OffsetPtr<ConditionConstant>>();
-			DestinationState = (int)stream.ReadUInt32();
-			if(IsReadPathID(stream.Version))
+			m_conditionConstantArray = reader.ReadArray<OffsetPtr<ConditionConstant>>();
+			DestinationState = (int)reader.ReadUInt32();
+			if(IsReadPathID(reader.Version))
 			{
-				FullPathID = stream.ReadUInt32();
+				FullPathID = reader.ReadUInt32();
 			}
-			ID = stream.ReadUInt32();
-			UserID = stream.ReadUInt32();
-			TransitionDuration = stream.ReadSingle();
-			TransitionOffset = stream.ReadSingle();
-			if(IsReadAtomic(stream.Version))
+			ID = reader.ReadUInt32();
+			UserID = reader.ReadUInt32();
+			TransitionDuration = reader.ReadSingle();
+			TransitionOffset = reader.ReadSingle();
+			if(IsReadAtomic(reader.Version))
 			{
-				Atomic = stream.ReadBoolean();
+				Atomic = reader.ReadBoolean();
 			}
 			else
 			{
-				ExitTime = stream.ReadSingle();
-				HasExitTime = stream.ReadBoolean();
-				HasFixedDuration = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				ExitTime = reader.ReadSingle();
+				HasExitTime = reader.ReadBoolean();
+				HasFixedDuration = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 
-				InterruptionSource = (TransitionInterruptionSource)stream.ReadInt32();
-				OrderedInterruption = stream.ReadBoolean();
+				InterruptionSource = (TransitionInterruptionSource)reader.ReadInt32();
+				OrderedInterruption = reader.ReadBoolean();
 			}
 
-			if (IsCanTransitionToSelf(stream.Version))
+			if (IsCanTransitionToSelf(reader.Version))
 			{
-				CanTransitionToSelf = stream.ReadBoolean();
+				CanTransitionToSelf = reader.ReadBoolean();
 			}
-			stream.AlignStream(AlignType.Align4);
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

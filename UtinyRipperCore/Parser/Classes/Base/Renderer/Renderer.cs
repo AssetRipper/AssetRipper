@@ -169,116 +169,116 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(4, 5);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Enabled = stream.ReadBoolean();
-			if(IsAlignEnabled(stream.Version))
+			Enabled = reader.ReadBoolean();
+			if(IsAlignEnabled(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
-			}
-
-			CastShadows = stream.ReadByte();
-			ReceiveShadows = stream.ReadByte();
-			if (IsAlignEnabled(stream.Version))
-			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadMotionVector(stream.Version))
+			CastShadows = reader.ReadByte();
+			ReceiveShadows = reader.ReadByte();
+			if (IsAlignEnabled(reader.Version))
 			{
-				MotionVectors = stream.ReadByte();
-				LightProbeUsage = stream.ReadByte();
-				ReflectionProbeUsage = stream.ReadByte();
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if(IsReadRenderingLayerMask(stream.Version))
+			if (IsReadMotionVector(reader.Version))
 			{
-				RenderingLayerMask = stream.ReadUInt32();
-			}
-			if (IsReadLightmapIndex(stream.Version))
-			{
-				LightmapIndex = IsByteLightIndex(stream.Version) ? stream.ReadByte() : stream.ReadUInt16();
-			}
-
-			if(IsReadLightDynamic(stream.Version))
-			{
-				LightmapIndexDynamic = stream.ReadUInt16();
+				MotionVectors = reader.ReadByte();
+				LightProbeUsage = reader.ReadByte();
+				ReflectionProbeUsage = reader.ReadByte();
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadMaterialFirst(stream.Version))
+			if(IsReadRenderingLayerMask(reader.Version))
 			{
-				m_materials = stream.ReadArray<PPtr<Material>>();
+				RenderingLayerMask = reader.ReadUInt32();
+			}
+			if (IsReadLightmapIndex(reader.Version))
+			{
+				LightmapIndex = IsByteLightIndex(reader.Version) ? reader.ReadByte() : reader.ReadUInt16();
 			}
 
-			if (IsReadTileOffset(stream.Version))
+			if(IsReadLightDynamic(reader.Version))
 			{
-				LightmapTilingOffset.Read(stream);
+				LightmapIndexDynamic = reader.ReadUInt16();
 			}
-			if (IsReadTileDynamic(stream.Version))
+
+			if (IsReadMaterialFirst(reader.Version))
 			{
-				LightmapTilingOffsetDynamic.Read(stream);
+				m_materials = reader.ReadArray<PPtr<Material>>();
+			}
+
+			if (IsReadTileOffset(reader.Version))
+			{
+				LightmapTilingOffset.Read(reader);
+			}
+			if (IsReadTileDynamic(reader.Version))
+			{
+				LightmapTilingOffsetDynamic.Read(reader);
 			}
 			
-			if (!IsReadMaterialFirst(stream.Version))
+			if (!IsReadMaterialFirst(reader.Version))
 			{
-				m_materials = stream.ReadArray<PPtr<Material>>();
+				m_materials = reader.ReadArray<PPtr<Material>>();
 			}
 
-			if (IsReadSubsetIndices(stream.Version))
+			if (IsReadSubsetIndices(reader.Version))
 			{
-				m_subsetIndices = stream.ReadUInt32Array();
+				m_subsetIndices = reader.ReadUInt32Array();
 			}
-			if(IsReadStaticBatchInfo(stream.Version))
+			if(IsReadStaticBatchInfo(reader.Version))
 			{
-				StaticBatchInfo.Read(stream);
-			}
-
-			if (IsReadStaticBatchRoot(stream.Version))
-			{
-				StaticBatchRoot.Read(stream);
+				StaticBatchInfo.Read(reader);
 			}
 
-			if (IsReadUseLight(stream.Version))
+			if (IsReadStaticBatchRoot(reader.Version))
 			{
-				UseLightProbes = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
-			}
-			if (IsReadReflectUsage(stream.Version))
-			{
-				ReflectionProbeUsage = stream.ReadInt32();
+				StaticBatchRoot.Read(reader);
 			}
 
-			if (IsReadProbeAnchor(stream.Version))
+			if (IsReadUseLight(reader.Version))
 			{
-				ProbeAnchor.Read(stream);
+				UseLightProbes = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
-			if (IsReadLightOverride(stream.Version))
+			if (IsReadReflectUsage(reader.Version))
 			{
-				LightProbeVolumeOverride.Read(stream);
-			}
-			if (IsAlignLightProbe(stream.Version))
-			{
-				stream.AlignStream(AlignType.Align4);
+				ReflectionProbeUsage = reader.ReadInt32();
 			}
 
-			if (IsReadSortingLayerID(stream.Version))
+			if (IsReadProbeAnchor(reader.Version))
 			{
-				SortingLayerID = stream.ReadInt32();
+				ProbeAnchor.Read(reader);
 			}
-			if (IsReadSortingLayer(stream.Version))
+			if (IsReadLightOverride(reader.Version))
 			{
-				SortingLayer = stream.ReadInt16();
+				LightProbeVolumeOverride.Read(reader);
 			}
-			if (IsReadSortingOrder(stream.Version))
+			if (IsAlignLightProbe(reader.Version))
 			{
-				SortingOrder = stream.ReadInt16();
+				reader.AlignStream(AlignType.Align4);
 			}
-			if (IsAlignSortingOrder(stream.Version))
+
+			if (IsReadSortingLayerID(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				SortingLayerID = reader.ReadInt32();
+			}
+			if (IsReadSortingLayer(reader.Version))
+			{
+				SortingLayer = reader.ReadInt16();
+			}
+			if (IsReadSortingOrder(reader.Version))
+			{
+				SortingOrder = reader.ReadInt16();
+			}
+			if (IsAlignSortingOrder(reader.Version))
+			{
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 
@@ -307,9 +307,9 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		protected void ReadBase(AssetStream stream)
+		protected void ReadBase(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

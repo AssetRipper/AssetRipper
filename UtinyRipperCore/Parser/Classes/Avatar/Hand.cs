@@ -6,9 +6,9 @@ namespace UtinyRipper.Classes.Avatars
 {
 	public struct Hand : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_handBoneIndex = stream.ReadInt32Array();
+			m_handBoneIndex = reader.ReadInt32Array();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

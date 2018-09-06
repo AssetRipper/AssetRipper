@@ -22,17 +22,17 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return IsReadAxes(version) ? Z : Curve;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			Curve.Read(stream);
-			if (IsReadAxes(stream.Version))
+			Curve.Read(reader);
+			if (IsReadAxes(reader.Version))
 			{
-				Y.Read(stream);
-				Z.Read(stream);
-				SeparateAxes = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				Y.Read(reader);
+				Z.Read(reader);
+				SeparateAxes = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

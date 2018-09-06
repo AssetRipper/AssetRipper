@@ -222,120 +222,120 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Fog = stream.ReadBoolean();
-			if (IsAlign(stream.Version))
+			Fog = reader.ReadBoolean();
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 			
-			FogColor.Read(stream);
-			if (IsReadFogMode(stream.Version))
+			FogColor.Read(reader);
+			if (IsReadFogMode(reader.Version))
 			{
-				FogMode = (FogMode)stream.ReadInt32();
+				FogMode = (FogMode)reader.ReadInt32();
 			}
-			FogDensity = stream.ReadSingle();
-			if (IsReadLinearFogStart(stream.Version))
+			FogDensity = reader.ReadSingle();
+			if (IsReadLinearFogStart(reader.Version))
 			{
-				LinearFogStart = stream.ReadSingle();
-				LinearFogEnd = stream.ReadSingle();
+				LinearFogStart = reader.ReadSingle();
+				LinearFogEnd = reader.ReadSingle();
 			}
-			AmbientSkyColor.Read(stream);
-			if (IsReadAmbientEquatorColor(stream.Version))
+			AmbientSkyColor.Read(reader);
+			if (IsReadAmbientEquatorColor(reader.Version))
 			{
-				AmbientEquatorColor.Read(stream);
-				AmbientGroundColor.Read(stream);
-				AmbientIntensity = stream.ReadSingle();
+				AmbientEquatorColor.Read(reader);
+				AmbientGroundColor.Read(reader);
+				AmbientIntensity = reader.ReadSingle();
 			}
-			if (IsReadAmbientProbe(stream.Version, stream.Flags))
+			if (IsReadAmbientProbe(reader.Version, reader.Flags))
 			{
-				if (IsReadAmbientProbeFirst(stream.Version))
+				if (IsReadAmbientProbeFirst(reader.Version))
 				{
-					AmbientProbe.Read(stream);
+					AmbientProbe.Read(reader);
 				}
 			}
-			if (IsReadAmbientSkyboxLight(stream.Version))
+			if (IsReadAmbientSkyboxLight(reader.Version))
 			{
-				AmbientSkyboxLight.Read(stream);
+				AmbientSkyboxLight.Read(reader);
 			}
-			if (IsReadAmbientMode(stream.Version))
+			if (IsReadAmbientMode(reader.Version))
 			{
-				AmbientMode = (AmbientMode)stream.ReadInt32();
-				if (IsReadCreateAmbientLight(stream.Version))
+				AmbientMode = (AmbientMode)reader.ReadInt32();
+				if (IsReadCreateAmbientLight(reader.Version))
 				{
-					CreateAmbientLight = stream.ReadBoolean();
+					CreateAmbientLight = reader.ReadBoolean();
 				}
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
-			if (IsReadSubtractiveShadowColor(stream.Version))
+			if (IsReadSubtractiveShadowColor(reader.Version))
 			{
-				SubtractiveShadowColor.Read(stream);
+				SubtractiveShadowColor.Read(reader);
 			}
 			
-			SkyboxMaterial.Read(stream);
-			HaloStrength = stream.ReadSingle();
-			FlareStrength = stream.ReadSingle();
-			if (IsReadFlareFadeSpeed(stream.Version))
+			SkyboxMaterial.Read(reader);
+			HaloStrength = reader.ReadSingle();
+			FlareStrength = reader.ReadSingle();
+			if (IsReadFlareFadeSpeed(reader.Version))
 			{
-				FlareFadeSpeed = stream.ReadSingle();
+				FlareFadeSpeed = reader.ReadSingle();
 			}
-			if (IsReadPixelLightCount(stream.Version))
+			if (IsReadPixelLightCount(reader.Version))
 			{
-				PixelLightCount = stream.ReadInt32();
+				PixelLightCount = reader.ReadInt32();
 			}
-			HaloTexture.Read(stream);
-			if (IsReadAmbientLightScale(stream.Version))
+			HaloTexture.Read(reader);
+			if (IsReadAmbientLightScale(reader.Version))
 			{
-				AmbientLightScale = stream.ReadSingle();
+				AmbientLightScale = reader.ReadSingle();
 			}
-			if (IsReadSpecularTex(stream.Version))
+			if (IsReadSpecularTex(reader.Version))
 			{
-				SpecularTexture.Read(stream);
+				SpecularTexture.Read(reader);
 			}
-			SpotCookie.Read(stream);
-			if (IsReadDefaultReflectionMode(stream.Version))
+			SpotCookie.Read(reader);
+			if (IsReadDefaultReflectionMode(reader.Version))
 			{
-				DefaultReflectionMode = stream.ReadInt32();
+				DefaultReflectionMode = reader.ReadInt32();
 			}
-			if (IsReadDefaultReflectionResolution(stream.Version))
+			if (IsReadDefaultReflectionResolution(reader.Version))
 			{
-				DefaultReflectionResolution = stream.ReadInt32();
-				ReflectionBounces = stream.ReadInt32();
-				ReflectionIntensity = stream.ReadSingle();
+				DefaultReflectionResolution = reader.ReadInt32();
+				ReflectionBounces = reader.ReadInt32();
+				ReflectionIntensity = reader.ReadSingle();
 			}
-			if (IsReadCustomReflection(stream.Version))
+			if (IsReadCustomReflection(reader.Version))
 			{
-				CustomReflection.Read(stream);
+				CustomReflection.Read(reader);
 			}
-			if (IsReadAmbientProbe(stream.Version, stream.Flags))
+			if (IsReadAmbientProbe(reader.Version, reader.Flags))
 			{
-				if (!IsReadAmbientProbeFirst(stream.Version))
+				if (!IsReadAmbientProbeFirst(reader.Version))
 				{
-					AmbientProbe.Read(stream);
+					AmbientProbe.Read(reader);
 				}
 			}
-			if (IsReadAmbientProbeInGamma(stream.Version, stream.Flags))
+			if (IsReadAmbientProbeInGamma(reader.Version, reader.Flags))
 			{
-				AmbientProbeInGamma.Read(stream);
+				AmbientProbeInGamma.Read(reader);
 			}
-			if (IsReadGeneratedSkyboxReflection(stream.Version, stream.Flags))
+			if (IsReadGeneratedSkyboxReflection(reader.Version, reader.Flags))
 			{
-				GeneratedSkyboxReflection.Read(stream);
+				GeneratedSkyboxReflection.Read(reader);
 			}
-			if (IsReadSun(stream.Version))
+			if (IsReadSun(reader.Version))
 			{
-				Sun.Read(stream);
+				Sun.Read(reader);
 			}
-			if (IsReadIndirectSpecularColor(stream.Version))
+			if (IsReadIndirectSpecularColor(reader.Version))
 			{
-				IndirectSpecularColor.Read(stream);
+				IndirectSpecularColor.Read(reader);
 			}
-			if(IsReadUseRadianceAmbientProbe(stream.Version))
+			if(IsReadUseRadianceAmbientProbe(reader.Version))
 			{
-				UseRadianceAmbientProbe = stream.ReadBoolean();
+				UseRadianceAmbientProbe = reader.ReadBoolean();
 			}
 		}
 

@@ -2,11 +2,11 @@
 {
 	public struct ChildTrack : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Path = stream.ReadStringAligned();
-			ClassID = (ClassIDType)stream.ReadInt32();
-			Track.Read(stream);
+			Path = reader.ReadStringAligned();
+			ClassID = (ClassIDType)reader.ReadInt32();
+			Track.Read(reader);
 		}
 
 		public string Path { get; private set; }

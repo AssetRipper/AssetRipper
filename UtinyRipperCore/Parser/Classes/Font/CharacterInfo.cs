@@ -45,27 +45,27 @@
 			return 1;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if (IsReadIndex(stream.Version))
+			if (IsReadIndex(reader.Version))
 			{
-				Index = stream.ReadInt32();
+				Index = reader.ReadInt32();
 			}
-			UV.Read(stream);
-			Vert.Read(stream);
+			UV.Read(reader);
+			Vert.Read(reader);
 			
-			if (IsReadWidth(stream.Version))
+			if (IsReadWidth(reader.Version))
 			{
-				Width = stream.ReadSingle();
+				Width = reader.ReadSingle();
 			}
-			if (IsReadAdvance(stream.Version))
+			if (IsReadAdvance(reader.Version))
 			{
-				Advance = stream.ReadSingle();
+				Advance = reader.ReadSingle();
 			}
-			if (IsReadFlipped(stream.Version))
+			if (IsReadFlipped(reader.Version))
 			{
-				Flipped = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				Flipped = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

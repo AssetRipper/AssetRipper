@@ -11,17 +11,17 @@
 			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Source = stream.ReadStringAligned();
-			Offset = (long)stream.ReadUInt64();
-			if (IsReadSize(stream.Version))
+			Source = reader.ReadStringAligned();
+			Offset = (long)reader.ReadUInt64();
+			if (IsReadSize(reader.Version))
 			{
-				Size = (long)stream.ReadUInt64();
+				Size = (long)reader.ReadUInt64();
 			}
 			else
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

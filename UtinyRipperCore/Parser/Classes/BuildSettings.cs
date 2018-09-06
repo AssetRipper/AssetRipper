@@ -171,109 +171,109 @@ namespace UtinyRipper.Classes
 			return 2;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			m_scenes = stream.ReadStringArray();
-			if (IsReadPreloadPlugin(stream.Version))
+			m_scenes = reader.ReadStringArray();
+			if (IsReadPreloadPlugin(reader.Version))
 			{
-				m_preloadedPlugins = stream.ReadStringArray();
-			}
-
-			if (IsReadEnabledVRDevices(stream.Version))
-			{
-				m_enabledVRDevices = stream.ReadStringArray();
-			}
-			if(IsReadBuildTags(stream.Version))
-			{
-				m_buildTags = stream.ReadStringArray();
-				BuildGUID.Read(stream);
+				m_preloadedPlugins = reader.ReadStringArray();
 			}
 
-			if (IsReadHasRenderTexture(stream.Version))
+			if (IsReadEnabledVRDevices(reader.Version))
 			{
-				HasRenderTexture = stream.ReadBoolean();
+				m_enabledVRDevices = reader.ReadStringArray();
 			}
-			HasPROVersion = stream.ReadBoolean();
-			if (IsReadIsNoWatermarkBuild(stream.Version))
+			if(IsReadBuildTags(reader.Version))
 			{
-				IsNoWatermarkBuild = stream.ReadBoolean();
-				IsPrototypingBuild = stream.ReadBoolean();
-			}
-			if (IsReadIsEducationalBuild(stream.Version))
-			{
-				IsEducationalBuild = stream.ReadBoolean();
-			}
-			if (IsReadIsEmbedded(stream.Version))
-			{
-				IsEmbedded = stream.ReadBoolean();
-			}
-			HasPublishingRights = stream.ReadBoolean();
-			if (IsReadHasShadows(stream.Version))
-			{
-				HasShadows = stream.ReadBoolean();
-			}
-			if (IsReadHasSoftShadows(stream.Version))
-			{
-				HasSoftShadows = stream.ReadBoolean();
-				HasLocalLightShadows = stream.ReadBoolean();
-			}
-			if (IsReadHasAdvancedVersion(stream.Version))
-			{
-				HasAdvancedVersion = stream.ReadBoolean();
-				EnableDynamicBatching = stream.ReadBoolean();
-				IsDebugBuild = stream.ReadBoolean();
-			}
-			if (IsReadUsesOnMouseEvents(stream.Version))
-			{
-				UsesOnMouseEvents = stream.ReadBoolean();
-			}
-			if (IsReadEnableMultipleDisplays(stream.Version))
-			{
-				EnableMultipleDisplays =  stream.ReadBoolean();
-			}
-			if (IsReadHasOculusPlugin(stream.Version))
-			{
-				HasOculusPlugin = stream.ReadBoolean();
-			}
-			if (IsReadHasClusterRendering(stream.Version))
-			{
-				HasClusterRendering = stream.ReadBoolean();
-			}
-			if (IsAlignBools(stream.Version))
-			{
-				stream.AlignStream(AlignType.Align4);
+				m_buildTags = reader.ReadStringArray();
+				BuildGUID.Read(reader);
 			}
 
-			if (IsReadBSVersion(stream.Version))
+			if (IsReadHasRenderTexture(reader.Version))
 			{
-				BSVersion = stream.ReadStringAligned();
+				HasRenderTexture = reader.ReadBoolean();
 			}
-			if (IsReadAuthToken(stream.Version))
+			HasPROVersion = reader.ReadBoolean();
+			if (IsReadIsNoWatermarkBuild(reader.Version))
 			{
-				AuthToken = stream.ReadStringAligned();
+				IsNoWatermarkBuild = reader.ReadBoolean();
+				IsPrototypingBuild = reader.ReadBoolean();
+			}
+			if (IsReadIsEducationalBuild(reader.Version))
+			{
+				IsEducationalBuild = reader.ReadBoolean();
+			}
+			if (IsReadIsEmbedded(reader.Version))
+			{
+				IsEmbedded = reader.ReadBoolean();
+			}
+			HasPublishingRights = reader.ReadBoolean();
+			if (IsReadHasShadows(reader.Version))
+			{
+				HasShadows = reader.ReadBoolean();
+			}
+			if (IsReadHasSoftShadows(reader.Version))
+			{
+				HasSoftShadows = reader.ReadBoolean();
+				HasLocalLightShadows = reader.ReadBoolean();
+			}
+			if (IsReadHasAdvancedVersion(reader.Version))
+			{
+				HasAdvancedVersion = reader.ReadBoolean();
+				EnableDynamicBatching = reader.ReadBoolean();
+				IsDebugBuild = reader.ReadBoolean();
+			}
+			if (IsReadUsesOnMouseEvents(reader.Version))
+			{
+				UsesOnMouseEvents = reader.ReadBoolean();
+			}
+			if (IsReadEnableMultipleDisplays(reader.Version))
+			{
+				EnableMultipleDisplays =  reader.ReadBoolean();
+			}
+			if (IsReadHasOculusPlugin(reader.Version))
+			{
+				HasOculusPlugin = reader.ReadBoolean();
+			}
+			if (IsReadHasClusterRendering(reader.Version))
+			{
+				HasClusterRendering = reader.ReadBoolean();
+			}
+			if (IsAlignBools(reader.Version))
+			{
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadRuntimeClassHashes(stream.Version))
+			if (IsReadBSVersion(reader.Version))
 			{
-				if (IsRuntimeClassHashesUInt32(stream.Version))
+				BSVersion = reader.ReadStringAligned();
+			}
+			if (IsReadAuthToken(reader.Version))
+			{
+				AuthToken = reader.ReadStringAligned();
+			}
+
+			if (IsReadRuntimeClassHashes(reader.Version))
+			{
+				if (IsRuntimeClassHashesUInt32(reader.Version))
 				{
 					m_runtimeClassHashesUInt32 = new Dictionary<int, uint>();
-					m_runtimeClassHashesUInt32.Read(stream);
+					m_runtimeClassHashesUInt32.Read(reader);
 				}
 				else
 				{
-					m_runtimeClassHashes.Read(stream);
+					m_runtimeClassHashes.Read(reader);
 				}
 			}
-			if (IsReadScriptHashes(stream.Version))
+			if (IsReadScriptHashes(reader.Version))
 			{
-				m_scriptHashes.Read(stream);
+				m_scriptHashes.Read(reader);
 			}
-			if (IsReadGraphicsAPIs(stream.Version))
+			if (IsReadGraphicsAPIs(reader.Version))
 			{
-				m_graphicsAPIs = stream.ReadInt32Array();
+				m_graphicsAPIs = reader.ReadInt32Array();
 			}
 		}
 

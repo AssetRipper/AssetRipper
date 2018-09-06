@@ -49,14 +49,14 @@ namespace UtinyRipper.Classes
 			return 2;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			ParentPrefab.Read(stream);
-			RootGameObject.Read(stream);
-			IsPrefabParent = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align64);
+			ParentPrefab.Read(reader);
+			RootGameObject.Read(reader);
+			IsPrefabParent = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align64);
 			throw new NotSupportedException("Currently EditorExtension's PrefabInternal field doesn't support Engine's prefabs");
 		}
 

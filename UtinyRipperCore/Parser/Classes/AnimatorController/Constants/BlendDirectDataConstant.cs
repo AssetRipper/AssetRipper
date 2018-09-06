@@ -7,11 +7,11 @@ namespace UtinyRipper.Classes.AnimatorControllers
 {
 	public struct BlendDirectDataConstant : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_childBlendEventIDArray = stream.ReadUInt32Array();
-			NormalizedBlendValues = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			m_childBlendEventIDArray = reader.ReadUInt32Array();
+			NormalizedBlendValues = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

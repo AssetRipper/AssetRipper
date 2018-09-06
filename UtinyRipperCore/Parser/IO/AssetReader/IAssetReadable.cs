@@ -2,6 +2,6 @@
 {
 	public interface IAssetReadable
 	{
-		void Read(AssetStream stream);
+		void Read(AssetReader reader);
 	}
 }

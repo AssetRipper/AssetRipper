@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UtinyRipper.BundleFiles
 {
-	internal sealed class BundleHeader
+	public sealed class BundleHeader
 	{
 		public static BundleType ParseSignature(string signature)
 		{
@@ -55,15 +55,15 @@ namespace UtinyRipper.BundleFiles
 			return generation >= BundleGeneration.BF_350_4x;
 		}
 
-		public void Read(EndianStream stream)
+		public void Read(EndianReader reader)
 		{
-			string signature = stream.ReadStringZeroTerm();
+			string signature = reader.ReadStringZeroTerm();
 			Type = ParseSignature(signature);
 
-			Generation = (BundleGeneration)stream.ReadInt32();
+			Generation = (BundleGeneration)reader.ReadInt32();
 
-			PlayerVersion = stream.ReadStringZeroTerm();
-			string engineVersion = stream.ReadStringZeroTerm();
+			PlayerVersion = reader.ReadStringZeroTerm();
+			string engineVersion = reader.ReadStringZeroTerm();
 			EngineVersion.Parse(engineVersion);
 
 			switch (Type)
@@ -71,11 +71,11 @@ namespace UtinyRipper.BundleFiles
 				case BundleType.UnityRaw:
 				case BundleType.UnityWeb:
 				case BundleType.HexFA:
-					ReadRawWeb(stream);
+					ReadRawWeb(reader);
 					break;
 
 				case BundleType.UnityFS:
-					ReadFileStream(stream);
+					ReadFileStream(reader);
 					break;
 
 				default:
@@ -84,52 +84,52 @@ namespace UtinyRipper.BundleFiles
 
 		}
 
-		private void ReadRawWeb(EndianStream stream)
+		private void ReadRawWeb(EndianReader reader)
 		{
 			if (Generation < BundleGeneration.BF_530_x)
 			{
-				ReadPre530Generation(stream);
+				ReadPre530Generation(reader);
 			}
 			else
 			{
-				Read530Generation(stream);
-				stream.BaseStream.Position++;
+				Read530Generation(reader);
+				reader.BaseStream.Position++;
 			}
 		}
 
-		private void ReadFileStream(EndianStream stream)
+		private void ReadFileStream(EndianReader reader)
 		{
 			if (Generation < BundleGeneration.BF_530_x)
 			{
 				throw new NotSupportedException("File stream supports only 530 and greater generations");
 			}
 
-			Read530Generation(stream);
+			Read530Generation(reader);
 		}
 
-		private void ReadPre530Generation(EndianStream stream)
+		private void ReadPre530Generation(EndianReader reader)
 		{
-			MinimumStreamedBytes = stream.ReadUInt32();
-			HeaderSize = stream.ReadInt32();
-			TotalChunkCount = stream.ReadInt32();
-			m_chunkInfos = stream.ReadArray<ChunkInfo>();
+			MinimumStreamedBytes = reader.ReadUInt32();
+			HeaderSize = reader.ReadInt32();
+			TotalChunkCount = reader.ReadInt32();
+			m_chunkInfos = reader.ReadArray<ChunkInfo>();
 			if (IsReadBundleSize(Generation))
 			{
-				BundleSize = stream.ReadUInt32();
+				BundleSize = reader.ReadUInt32();
 			}
 			if (IsReadMetadataDecompressedSize(Generation))
 			{
-				MetadataDecompressedSize = (int)stream.ReadUInt32();
+				MetadataDecompressedSize = (int)reader.ReadUInt32();
 			}
-			stream.BaseStream.Position++;
+			reader.BaseStream.Position++;
 		}
 
-		private void Read530Generation(EndianStream stream)
+		private void Read530Generation(EndianReader reader)
 		{
-			BundleSize = stream.ReadInt64();
-			MetadataCompressedSize = stream.ReadInt32();
-			MetadataDecompressedSize = stream.ReadInt32();
-			Flags = (BundleFlag)stream.ReadInt32();
+			BundleSize = reader.ReadInt64();
+			MetadataCompressedSize = reader.ReadInt32();
+			MetadataDecompressedSize = reader.ReadInt32();
+			Flags = (BundleFlag)reader.ReadInt32();
 		}
 
 		/// <summary>
@@ -152,15 +152,15 @@ namespace UtinyRipper.BundleFiles
 		/// <summary>
 		/// Minimum number of bytes to read for streamed bundles, equal to BundleSize for normal bundles
 		/// </summary>
-		public uint MinimumStreamedBytes { get; private set; }
+		internal uint MinimumStreamedBytes { get; private set; }
 		/// <summary>
 		/// Equal to 1 if it's a streamed bundle, number of LZMAChunkInfos + mainData assets otherwise
 		/// </summary>
-		public int TotalChunkCount { get; private set; }
+		internal int TotalChunkCount { get; private set; }
 		/// <summary>
 		/// LZMA chunks info
 		/// </summary>
-		public IReadOnlyList<ChunkInfo> ChunkInfos => m_chunkInfos;
+		internal IReadOnlyList<ChunkInfo> ChunkInfos => m_chunkInfos;
 		/// <summary>
 		/// Size of the header
 		/// </summary>
@@ -181,7 +181,7 @@ namespace UtinyRipper.BundleFiles
 		/// <summary>
 		/// UnityFS flags
 		/// </summary>
-		public BundleFlag Flags { get; private set; }
+		internal BundleFlag Flags { get; private set; }
 
 		private const string HexFASignature = "\xFA\xFA\xFA\xFA\xFA\xFA\xFA\xFA";
 

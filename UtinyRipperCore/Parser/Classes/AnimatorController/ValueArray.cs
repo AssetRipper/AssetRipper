@@ -30,48 +30,48 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			return version.IsLess(5, 5);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if(IsPrimeFirst(stream.Version))
+			if(IsPrimeFirst(reader.Version))
 			{
-				m_boolValues = stream.ReadBooleanArray();
-				stream.AlignStream(AlignType.Align4);
+				m_boolValues = reader.ReadBooleanArray();
+				reader.AlignStream(AlignType.Align4);
 
-				m_intValues = stream.ReadInt32Array();
-				m_floatValues = stream.ReadSingleArray();
+				m_intValues = reader.ReadInt32Array();
+				m_floatValues = reader.ReadSingleArray();
 			}
 
-			if (IsReadVectorValues(stream.Version))
+			if (IsReadVectorValues(reader.Version))
 			{
-				m_vectorValues = stream.ReadArray<Vector4f>();
+				m_vectorValues = reader.ReadArray<Vector4f>();
 			}
 			else
 			{
-				if(IsVector4(stream.Version))
+				if(IsVector4(reader.Version))
 				{
-					m_position4Values = stream.ReadArray<Vector4f>();
+					m_position4Values = reader.ReadArray<Vector4f>();
 				}
 				else
 				{
-					m_position3Values = stream.ReadArray<Vector3f>();
+					m_position3Values = reader.ReadArray<Vector3f>();
 				}
-				m_quaternionValues = stream.ReadArray<Quaternionf>();
-				if (IsVector4(stream.Version))
+				m_quaternionValues = reader.ReadArray<Quaternionf>();
+				if (IsVector4(reader.Version))
 				{
-					m_scale4Values = stream.ReadArray<Vector4f>();
+					m_scale4Values = reader.ReadArray<Vector4f>();
 				}
 				else
 				{
-					m_scale3Values = stream.ReadArray<Vector3f>();
+					m_scale3Values = reader.ReadArray<Vector3f>();
 				}
 			}
 
-			if (!IsPrimeFirst(stream.Version))
+			if (!IsPrimeFirst(reader.Version))
 			{
-				m_floatValues = stream.ReadSingleArray();
-				m_intValues = stream.ReadInt32Array();
-				m_boolValues = stream.ReadBooleanArray();
-				stream.AlignStream(AlignType.Align4);
+				m_floatValues = reader.ReadSingleArray();
+				m_intValues = reader.ReadInt32Array();
+				m_boolValues = reader.ReadBooleanArray();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

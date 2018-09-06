@@ -20,22 +20,22 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public void Read(EndianStream stream)
+		public void Read(EndianReader reader)
 		{
-			Data0 = stream.ReadUInt32();
-			Data1 = stream.ReadUInt32();
-			Data2 = stream.ReadUInt32();
-			Data3 = stream.ReadUInt32();
+			Data0 = reader.ReadUInt32();
+			Data1 = reader.ReadUInt32();
+			Data2 = reader.ReadUInt32();
+			Data3 = reader.ReadUInt32();
 		}
 		
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Read((EndianStream)stream);
+			Read((EndianReader)reader);
 		}
 
-		public void Read(SerializedFileStream stream)
+		public void Read(SerializedFileReader reader)
 		{
-			Read((EndianStream)stream);
+			Read((EndianReader)reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

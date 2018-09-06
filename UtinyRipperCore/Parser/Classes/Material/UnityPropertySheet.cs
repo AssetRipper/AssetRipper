@@ -22,15 +22,15 @@ namespace UtinyRipper.Classes.Materials
 			return 2;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
 			m_texEnvs = new Dictionary<FastPropertyName, UnityTexEnv>();
 			m_floats = new Dictionary<FastPropertyName, float>();
 			m_colors = new Dictionary<FastPropertyName, ColorRGBAf>();
 
-			m_texEnvs.Read(stream);
-			m_floats.Read(stream);
-			m_colors.Read(stream);
+			m_texEnvs.Read(reader);
+			m_floats.Read(reader);
+			m_colors.Read(reader);
 		}
 		
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -4,26 +4,16 @@ using System.IO;
 
 namespace UtinyRipper.WebFiles
 {
-	internal class WebFile : IDisposable
+	public class WebFile : IDisposable
 	{
-		public WebFile(FileCollection fileCollection, string filePath, Action<string> requestDependencyCallback)
+		public WebFile(string filePath)
 		{
-			if (fileCollection == null)
-			{
-				throw new ArgumentNullException(nameof(fileCollection));
-			}
 			if (string.IsNullOrEmpty(filePath))
 			{
 				throw new ArgumentNullException(nameof(filePath));
 			}
-			if (requestDependencyCallback == null)
-			{
-				throw new ArgumentNullException(nameof(requestDependencyCallback));
-			}
 
-			m_fileCollection = fileCollection;
 			m_filePath = filePath;
-			m_requestDependencyCallback = requestDependencyCallback;
 		}
 
 		public static bool IsWebFile(string webPath)
@@ -39,41 +29,39 @@ namespace UtinyRipper.WebFiles
 			}
 		}
 
-		public static bool IsWebFile(Stream baseStream)
+		public static bool IsWebFile(Stream stream)
 		{
-			using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
+			using (EndianReader reader = new EndianReader(stream, stream.Position, EndianType.BigEndian))
 			{
-				long position = stream.BaseStream.Position;
-				long maxLengthLong = stream.BaseStream.Length - position;
+				long position = reader.BaseStream.Position;
+				long maxLengthLong = reader.BaseStream.Length - position;
 				int maxLength = maxLengthLong > int.MaxValue ? int.MaxValue : (int)maxLengthLong;
-				if (stream.ReadStringZeroTerm(maxLength, out string signature))
+				if (reader.ReadStringZeroTerm(maxLength, out string signature))
 				{
 					if (signature == Signature)
 					{
-						stream.BaseStream.Position = position;
+						reader.BaseStream.Position = position;
 						return true;
 					}
 				}
 
-				stream.BaseStream.Position = position;
+				reader.BaseStream.Position = position;
 				return false;
 			}
 		}
-		
-		public void Load(string webPath)
-		{
-			if (!FileUtils.Exists(webPath))
-			{
-				throw new Exception($"WebFile at path '{webPath}' doesn't exist");
-			}
 
-			FileStream stream = FileUtils.OpenRead(webPath);
-			Read(stream, true);
-		}
-		
-		public void Read(Stream baseStream)
+		public static WebFile Load(string webPath)
 		{
-			Read(baseStream, false);
+			WebFile web = new WebFile(webPath);
+			web.Load();
+			return web;
+		}
+
+		public static WebFile Read(Stream stream, string webPath)
+		{
+			WebFile web = new WebFile(webPath);
+			web.Read(stream);
+			return web;
 		}
 
 		public void Dispose()
@@ -81,74 +69,57 @@ namespace UtinyRipper.WebFiles
 			Metadata.Dispose();
 		}
 
-		private void Read(Stream baseStream, bool isClosable)
+		private void Load()
 		{
-			using (EndianStream stream = new EndianStream(baseStream, baseStream.Position, EndianType.BigEndian))
+			if (!FileUtils.Exists(m_filePath))
 			{
-				stream.EndianType = EndianType.LittleEndian;
-				ReadMetadata(stream, isClosable);
+				throw new Exception($"WebFile at path '{m_filePath}' doesn't exist");
 			}
 
-			foreach (WebFileEntry entry in Metadata.ResourceEntries)
+			FileStream stream = FileUtils.OpenRead(m_filePath);
+			Read(stream, true);
+		}
+
+		private void Read(Stream stream)
+		{
+			Read(stream, false);
+		}
+
+		private void Read(Stream stream, bool isClosable)
+		{
+			using (EndianReader reader = new EndianReader(stream, stream.Position, EndianType.LittleEndian))
 			{
-				entry.ReadResourcesFile(m_fileCollection);
-			}
-			foreach (WebFileEntry entry in Metadata.AssetsEntries)
-			{
-				entry.ReadFile(m_fileCollection, OnRequestDependency);
+				ReadMetadata(reader, isClosable);
 			}
 		}
 
-		private void ReadMetadata(EndianStream stream, bool isClosable)
+		private void ReadMetadata(EndianReader reader, bool isClosable)
 		{
-			string signature = stream.ReadStringZeroTerm();
+			string signature = reader.ReadStringZeroTerm();
 			if(signature != Signature)
 			{
 				throw new Exception($"Signature '{signature}' doesn't match to '{Signature}'");
 			}
 
 			List<WebFileEntry> entries = new List<WebFileEntry>();
-			long headerLength = stream.ReadInt32();
-			while(stream.BaseStream.Position < headerLength)
+			long headerLength = reader.ReadInt32();
+			while(reader.BaseStream.Position < headerLength)
 			{
-				int offset = stream.ReadInt32();
-				int length = stream.ReadInt32();
-				int pathLength = stream.ReadInt32();
-				string path = stream.ReadString(pathLength);
+				int offset = reader.ReadInt32();
+				int length = reader.ReadInt32();
+				int pathLength = reader.ReadInt32();
+				string path = reader.ReadString(pathLength);
 				
-				WebFileEntry entry = new WebFileEntry(stream.BaseStream, m_filePath, path, offset, length, isClosable);
+				WebFileEntry entry = new WebFileEntry(reader.BaseStream, m_filePath, path, offset, length, isClosable);
 				entries.Add(entry);
 			}
-			Metadata = new WebMetadata(stream.BaseStream, isClosable, entries);
-		}
-
-		private void OnRequestDependency(string dependency)
-		{
-			if (FilenameUtils.ContainsDependency(m_loadedFiles, dependency))
-			{
-				return;
-			}
-			foreach (WebFileEntry entry in Metadata.AssetsEntries)
-			{
-				if (FilenameUtils.IsDependency(entry.Name, dependency))
-				{
-					m_loadedFiles.Add(entry.Name);
-					entry.ReadFile(m_fileCollection, OnRequestDependency);
-					return;
-				}
-			}
-
-			m_requestDependencyCallback.Invoke(dependency);
+			Metadata = new WebMetadata(reader.BaseStream, isClosable, entries);
 		}
 
 		public WebMetadata Metadata { get; private set; }
 
 		private const string Signature = "UnityWebData1.0";
 
-		private readonly HashSet<string> m_loadedFiles = new HashSet<string>();
-
-		private readonly FileCollection m_fileCollection;
 		private readonly string m_filePath;
-		private readonly Action<string> m_requestDependencyCallback;
 	}
 }

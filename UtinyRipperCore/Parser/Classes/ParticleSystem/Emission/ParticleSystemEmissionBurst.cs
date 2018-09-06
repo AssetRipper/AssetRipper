@@ -42,20 +42,20 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return IsReadCurve(version) ? CountCurve : new MinMaxCurve(MinValue, MaxValue);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Time = stream.ReadSingle();
-			if (IsReadCurve(stream.Version))
+			Time = reader.ReadSingle();
+			if (IsReadCurve(reader.Version))
 			{
-				CountCurve.Read(stream);
+				CountCurve.Read(reader);
 			}
 			else
 			{
-				MinValue = stream.ReadInt32();
-				MaxValue = stream.ReadInt32();
+				MinValue = reader.ReadInt32();
+				MaxValue = reader.ReadInt32();
 			}
-			CycleCount = stream.ReadInt32();
-			RepeatInterval = stream.ReadSingle();
+			CycleCount = reader.ReadInt32();
+			RepeatInterval = reader.ReadSingle();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

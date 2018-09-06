@@ -51,34 +51,34 @@ namespace UtinyRipper.Classes.TerrainDatas
 			return 1;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_heights = stream.ReadInt16Array();
-			if (IsReadAlign(stream.Version))
+			m_heights = reader.ReadInt16Array();
+			if (IsReadAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
-			if (IsReadShifts(stream.Version))
+			if (IsReadShifts(reader.Version))
 			{
-				m_shifts = stream.ReadArray<Shift>();
-				stream.AlignStream(AlignType.Align4);
+				m_shifts = reader.ReadArray<Shift>();
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			m_precomputedError = stream.ReadSingleArray();
-			m_minMaxPatchHeights = stream.ReadSingleArray();
+			m_precomputedError = reader.ReadSingleArray();
+			m_minMaxPatchHeights = reader.ReadSingleArray();
 
-			if (IsReadDefaultPhysicMaterial(stream.Version))
+			if (IsReadDefaultPhysicMaterial(reader.Version))
 			{
-				DefaultPhysicMaterial.Read(stream);
+				DefaultPhysicMaterial.Read(reader);
 			}
-			Width = stream.ReadInt32();
-			Height = stream.ReadInt32();
-			if (IsReadThickness(stream.Version))
+			Width = reader.ReadInt32();
+			Height = reader.ReadInt32();
+			if (IsReadThickness(reader.Version))
 			{
-				Thickness = stream.ReadSingle();
+				Thickness = reader.ReadSingle();
 			}
-			Levels = stream.ReadInt32();
-			Scale.Read(stream);
+			Levels = reader.ReadInt32();
+			Scale.Read(reader);
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

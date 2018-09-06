@@ -5,10 +5,10 @@ namespace UtinyRipper.Classes.CompositeCollider2Ds
 {
 	public struct IntPoint : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			X = stream.ReadInt64();
-			Y = stream.ReadInt64();
+			X = reader.ReadInt64();
+			Y = reader.ReadInt64();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

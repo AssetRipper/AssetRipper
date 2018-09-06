@@ -43,34 +43,34 @@ namespace UtinyRipper.Classes
 			return version.IsLess(5);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if(IsReadBakedPositions(stream.Version))
+			if(IsReadBakedPositions(reader.Version))
 			{
-				m_bakedPositions = stream.ReadArray<Vector3f>();
+				m_bakedPositions = reader.ReadArray<Vector3f>();
 			}
-			if(IsReadBakedCoefficientsFirst(stream.Version))
+			if(IsReadBakedCoefficientsFirst(reader.Version))
 			{
-				m_bakedCoefficients = stream.ReadArray<SphericalHarmonicsL2>();
+				m_bakedCoefficients = reader.ReadArray<SphericalHarmonicsL2>();
 			}
 
-			Data.Read(stream);
-			if (!IsReadBakedCoefficientsFirst(stream.Version))
+			Data.Read(reader);
+			if (!IsReadBakedCoefficientsFirst(reader.Version))
 			{
-				if(IsReadBakedCoefficients11(stream.Version))
+				if(IsReadBakedCoefficients11(reader.Version))
 				{
-					m_bakedCoefficients11 = stream.ReadArray<SHCoefficientsBaked>();
+					m_bakedCoefficients11 = reader.ReadArray<SHCoefficientsBaked>();
 				}
 				else
 				{
-					m_bakedCoefficients = stream.ReadArray<SphericalHarmonicsL2>();
+					m_bakedCoefficients = reader.ReadArray<SphericalHarmonicsL2>();
 				}
 			}
-			if(IsReadBakedLightOcclusion(stream.Version))
+			if(IsReadBakedLightOcclusion(reader.Version))
 			{
-				m_bakedLightOcclusion = stream.ReadArray<LightProbeOcclusion>();
+				m_bakedLightOcclusion = reader.ReadArray<LightProbeOcclusion>();
 			}
 		}
 

@@ -35,38 +35,38 @@ namespace UtinyRipper.SerializedFiles
 			return generation < FileGeneration.FG_550_x;
 		}
 
-		public void Read(SerializedFileStream stream)
+		public void Read(SerializedFileReader reader)
 		{
-			ClassID = (ClassIDType)stream.ReadInt32();
-			if (IsReadUnknown(stream.Generation))
+			ClassID = (ClassIDType)reader.ReadInt32();
+			if (IsReadUnknown(reader.Generation))
 			{
-				Unknown = stream.ReadByte();
-				ScriptID = stream.ReadInt16();
+				Unknown = reader.ReadByte();
+				ScriptID = reader.ReadInt16();
 			}
 
-			if (IsReadHash(stream.Generation))
+			if (IsReadHash(reader.Generation))
 			{
-				if (IsOldHashType(stream.Generation))
+				if (IsOldHashType(reader.Generation))
 				{
 					if ((int)ClassID <= -1)
 					{
-						ScriptHash.Read(stream);
+						ScriptHash.Read(reader);
 					}
 				}
 				else
 				{
 					if (ClassID == ClassIDType.MonoBehaviour)
 					{
-						ScriptHash.Read(stream);
+						ScriptHash.Read(reader);
 					}
 				}
-				TypeHash.Read(stream);
+				TypeHash.Read(reader);
 			}
 			
 			// isSerializeTypeTrees
 			if (Tree != null)
 			{
-				Tree.Read(stream);
+				Tree.Read(reader);
 			}
 		}
 

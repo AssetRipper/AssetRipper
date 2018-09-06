@@ -13,14 +13,14 @@ namespace UtinyRipper.Classes.AssetBundles
 			return version.IsGreaterEqual(2, 5);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if (IsReadPreload(stream.Version))
+			if (IsReadPreload(reader.Version))
 			{	
-				PreloadIndex = stream.ReadInt32();
-				PreloadSize = stream.ReadInt32();
+				PreloadIndex = reader.ReadInt32();
+				PreloadSize = reader.ReadInt32();
 			}
-			Asset.Read(stream);
+			Asset.Read(reader);
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

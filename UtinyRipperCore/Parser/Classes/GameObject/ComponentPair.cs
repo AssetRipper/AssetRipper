@@ -15,13 +15,13 @@ namespace UtinyRipper.Classes.GameObjects
 			return version.IsLess(5, 5);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if(IsReadClassID(stream.Version))
+			if(IsReadClassID(reader.Version))
 			{
-				ClassID = (ClassIDType)stream.ReadInt32();
+				ClassID = (ClassIDType)reader.ReadInt32();
 			}
-			Component.Read(stream);
+			Component.Read(reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -190,121 +190,121 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return IsReadRadius(version) ? Arc : new MultiModeParameter(ArcSingle);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			Type = (ParticleSystemShapeType)stream.ReadInt32();
-			if (IsReadRadiusSingle(stream.Version))
+			Type = (ParticleSystemShapeType)reader.ReadInt32();
+			if (IsReadRadiusSingle(reader.Version))
 			{
-				RadiusSingle = stream.ReadSingle();
+				RadiusSingle = reader.ReadSingle();
 			}
-			Angle = stream.ReadSingle();
-			if (IsReadLength(stream.Version))
+			Angle = reader.ReadSingle();
+			if (IsReadLength(reader.Version))
 			{
-				Length = stream.ReadSingle();
+				Length = reader.ReadSingle();
 			}
-			if (IsReadBoxAxes(stream.Version))
+			if (IsReadBoxAxes(reader.Version))
 			{
-				BoxX = stream.ReadSingle();
-				BoxY = stream.ReadSingle();
-				BoxZ = stream.ReadSingle();
+				BoxX = reader.ReadSingle();
+				BoxY = reader.ReadSingle();
+				BoxZ = reader.ReadSingle();
 			}
-			if (IsReadArcSingle(stream.Version))
+			if (IsReadArcSingle(reader.Version))
 			{
-				ArcSingle = stream.ReadSingle();
+				ArcSingle = reader.ReadSingle();
 			}
-			if (IsReadRadius(stream.Version))
+			if (IsReadRadius(reader.Version))
 			{
-				if (IsReadRadiusFirst(stream.Version))
+				if (IsReadRadiusFirst(reader.Version))
 				{
-					Radius.Read(stream);
-					Arc.Read(stream);
+					Radius.Read(reader);
+					Arc.Read(reader);
 				}
 			}
-			if (IsReadBoxThickness(stream.Version))
+			if (IsReadBoxThickness(reader.Version))
 			{
-				BoxThickness.Read(stream);
-				RadiusThickness = stream.ReadSingle();
-				DonutRadius = stream.ReadSingle();
-				Position.Read(stream);
-				Rotation.Read(stream);
-				Scale.Read(stream);
+				BoxThickness.Read(reader);
+				RadiusThickness = reader.ReadSingle();
+				DonutRadius = reader.ReadSingle();
+				Position.Read(reader);
+				Rotation.Read(reader);
+				Scale.Read(reader);
 			}
-			PlacementMode = stream.ReadInt32();
-			if (IsReadMeshMaterialIndex(stream.Version))
+			PlacementMode = reader.ReadInt32();
+			if (IsReadMeshMaterialIndex(reader.Version))
 			{
-				if (IsReadMeshMaterialIndexFirst(stream.Version))
+				if (IsReadMeshMaterialIndexFirst(reader.Version))
 				{
-					MeshMaterialIndex = stream.ReadInt32();
-					MeshNormalOffset = stream.ReadSingle();
+					MeshMaterialIndex = reader.ReadInt32();
+					MeshNormalOffset = reader.ReadSingle();
 				}
 			}
-			Mesh.Read(stream);
-			if (IsReadMeshRenderer(stream.Version))
+			Mesh.Read(reader);
+			if (IsReadMeshRenderer(reader.Version))
 			{
-				MeshRenderer.Read(stream);
-				SkinnedMeshRenderer.Read(stream);
+				MeshRenderer.Read(reader);
+				SkinnedMeshRenderer.Read(reader);
 			}
-			if(IsReadSprite(stream.Version))
+			if(IsReadSprite(reader.Version))
 			{
-				Sprite.Read(stream);
-				SpriteRenderer.Read(stream);
+				Sprite.Read(reader);
+				SpriteRenderer.Read(reader);
 			}
-			if (IsReadMeshMaterialIndex(stream.Version))
+			if (IsReadMeshMaterialIndex(reader.Version))
 			{
-				if (!IsReadMeshMaterialIndexFirst(stream.Version))
+				if (!IsReadMeshMaterialIndexFirst(reader.Version))
 				{
-					MeshMaterialIndex = stream.ReadInt32();
-					MeshNormalOffset = stream.ReadSingle();
+					MeshMaterialIndex = reader.ReadInt32();
+					MeshNormalOffset = reader.ReadSingle();
 				}
 			}
-			if (IsReadMeshScale(stream.Version))
+			if (IsReadMeshScale(reader.Version))
 			{
-				MeshScale = stream.ReadSingle();
+				MeshScale = reader.ReadSingle();
 			}
-			if (IsReadUseMeshMaterialIndex(stream.Version))
+			if (IsReadUseMeshMaterialIndex(reader.Version))
 			{
-				UseMeshMaterialIndex = stream.ReadBoolean();
-				UseMeshColors = stream.ReadBoolean();
+				UseMeshMaterialIndex = reader.ReadBoolean();
+				UseMeshColors = reader.ReadBoolean();
 			}
-			if (IsReadAlignToDirection(stream.Version))
+			if (IsReadAlignToDirection(reader.Version))
 			{
-				AlignToDirection = stream.ReadBoolean();
+				AlignToDirection = reader.ReadBoolean();
 			}
-			if (IsReadRandomDirection(stream.Version))
+			if (IsReadRandomDirection(reader.Version))
 			{
-				RandomDirection = stream.ReadBoolean();
+				RandomDirection = reader.ReadBoolean();
 			}
-			stream.AlignStream(AlignType.Align4);
+			reader.AlignStream(AlignType.Align4);
 
-			if(IsReadTexture(stream.Version))
+			if(IsReadTexture(reader.Version))
 			{
-				Texture.Read(stream);
-				TextureClipChannel = stream.ReadInt32();
-				TextureClipThreshold = stream.ReadSingle();
-				TextureUVChannel = stream.ReadInt32();
-				TextureColorAffectsParticles = stream.ReadBoolean();
-				TextureAlphaAffectsParticles = stream.ReadBoolean();
-				TextureBilinearFiltering = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				Texture.Read(reader);
+				TextureClipChannel = reader.ReadInt32();
+				TextureClipThreshold = reader.ReadSingle();
+				TextureUVChannel = reader.ReadInt32();
+				TextureColorAffectsParticles = reader.ReadBoolean();
+				TextureAlphaAffectsParticles = reader.ReadBoolean();
+				TextureBilinearFiltering = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadRandomDirectionAmount(stream.Version))
+			if (IsReadRandomDirectionAmount(reader.Version))
 			{
-				RandomDirectionAmount = stream.ReadSingle();
-				SphericalDirectionAmount = stream.ReadSingle();
+				RandomDirectionAmount = reader.ReadSingle();
+				SphericalDirectionAmount = reader.ReadSingle();
 			}
-			if (IsReadRandomPositionAmount(stream.Version))
+			if (IsReadRandomPositionAmount(reader.Version))
 			{
-				RandomPositionAmount = stream.ReadSingle();
+				RandomPositionAmount = reader.ReadSingle();
 			}
-			if (IsReadRadius(stream.Version))
+			if (IsReadRadius(reader.Version))
 			{
-				if (!IsReadRadiusFirst(stream.Version))
+				if (!IsReadRadiusFirst(reader.Version))
 				{
-					Radius.Read(stream);
-					Arc.Read(stream);
+					Radius.Read(reader);
+					Arc.Read(reader);
 				}
 			}
 		}

@@ -9,17 +9,17 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Curves0.Read(stream);
-			Curves1.Read(stream);
-			Curves2.Read(stream);
-			Curves3.Read(stream);
-			Curves4.Read(stream);
-			Curves5.Read(stream);
-			Curves6.Read(stream);
+			Curves0.Read(reader);
+			Curves1.Read(reader);
+			Curves2.Read(reader);
+			Curves3.Read(reader);
+			Curves4.Read(reader);
+			Curves5.Read(reader);
+			Curves6.Read(reader);
 		}
 
 		public AnimationCurveTpl<Float> Curves0;

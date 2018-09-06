@@ -31,17 +31,17 @@ namespace UtinyRipper.Classes
 			return new Vector3f(this);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			X = stream.ReadSingle();
-			Y = stream.ReadSingle();
-			Z = stream.ReadSingle();
+			X = reader.ReadSingle();
+			Y = reader.ReadSingle();
+			Z = reader.ReadSingle();
 		}
 
-		public void Read2(AssetStream stream)
+		public void Read2(AssetReader reader)
 		{
-			X = stream.ReadSingle();
-			Y = stream.ReadSingle();
+			X = reader.ReadSingle();
+			Y = reader.ReadSingle();
 		}
 
 		public void Write(BinaryWriter stream)

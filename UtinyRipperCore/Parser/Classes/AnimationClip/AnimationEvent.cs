@@ -22,22 +22,22 @@ namespace UtinyRipper.Classes.AnimationClips
 			return version.IsGreaterEqual(3);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Time = stream.ReadSingle();
+			Time = reader.ReadSingle();
 
-			FunctionName = stream.ReadStringAligned();
-			StringParameter = stream.ReadStringAligned();
-			if (IsReadObjectReferenceParameter(stream.Version))
+			FunctionName = reader.ReadStringAligned();
+			StringParameter = reader.ReadStringAligned();
+			if (IsReadObjectReferenceParameter(reader.Version))
 			{
-				ObjectReferenceParameter.Read(stream);
-				FloatParameter = stream.ReadSingle();
+				ObjectReferenceParameter.Read(reader);
+				FloatParameter = reader.ReadSingle();
 			}
-			if (IsReadIntParameter(stream.Version))
+			if (IsReadIntParameter(reader.Version))
 			{
-				IntParameter = stream.ReadInt32();
+				IntParameter = reader.ReadInt32();
 			}
-			MessageOptions = stream.ReadInt32();
+			MessageOptions = reader.ReadInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -12,12 +12,12 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			m_mask = stream.ReadUInt32Array();
-			m_elements = stream.ReadArray<TransformMaskElement>();
+			m_mask = reader.ReadUInt32Array();
+			m_elements = reader.ReadArray<TransformMaskElement>();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

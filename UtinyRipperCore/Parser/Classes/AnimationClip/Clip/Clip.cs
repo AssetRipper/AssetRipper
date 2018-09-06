@@ -10,15 +10,15 @@
 			return version.IsGreaterEqual(4, 3);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			StreamedClip.Read(stream);
-			DenseClip.Read(stream);
-			if (IsReadConstantClip(stream.Version))
+			StreamedClip.Read(reader);
+			DenseClip.Read(reader);
+			if (IsReadConstantClip(reader.Version))
 			{
-				ConstantClip.Read(stream);
+				ConstantClip.Read(reader);
 			}
-			Binding.Read(stream);
+			Binding.Read(reader);
 		}
 
 		public bool IsValid(Version version)

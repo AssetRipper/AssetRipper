@@ -175,92 +175,92 @@ namespace UtinyRipper.Classes
 			return 2;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadClassIDToTrack(stream.Version))
+			if (IsReadClassIDToTrack(reader.Version))
 			{
 				m_classIDToTrack = new Dictionary<int, PPtr<BaseAnimationTrack>>();
-				m_classIDToTrack.Read(stream);
-				m_childTracks = stream.ReadArray<ChildTrack>();
+				m_classIDToTrack.Read(reader);
+				m_childTracks = reader.ReadArray<ChildTrack>();
 			}
 
-			if (IsReadAnimationType(stream.Version))
+			if (IsReadAnimationType(reader.Version))
 			{
-				AnimationType = (AnimationType)stream.ReadInt32();
+				AnimationType = (AnimationType)reader.ReadInt32();
 			}
-			if(IsReadLegacy(stream.Version))
+			if(IsReadLegacy(reader.Version))
 			{
-				Legacy = stream.ReadBoolean();
-			}
-
-			if (IsReadCompressed(stream.Version))
-			{
-				Compressed = stream.ReadBoolean();
-			}
-			if (IsReadUseHightQualityCurve(stream.Version))
-			{
-				UseHightQualityCurve = stream.ReadBoolean();
-			}
-			if (IsAlignCompressed(stream.Version))
-			{
-				stream.AlignStream(AlignType.Align4);
+				Legacy = reader.ReadBoolean();
 			}
 
-			if (IsReadCurves(stream.Version))
+			if (IsReadCompressed(reader.Version))
 			{
-				m_rotationCurves = stream.ReadArray<QuaternionCurve>();
+				Compressed = reader.ReadBoolean();
 			}
-			if (IsReadCompressedRotationCurves(stream.Version))
+			if (IsReadUseHightQualityCurve(reader.Version))
 			{
-				m_compressedRotationCurves = stream.ReadArray<CompressedAnimationCurve>();
+				UseHightQualityCurve = reader.ReadBoolean();
 			}
-			if (IsReadEulerCurves(stream.Version))
+			if (IsAlignCompressed(reader.Version))
 			{
-				m_eulerCurves = stream.ReadArray<Vector3Curve>();
-			}
-			if (IsReadCurves(stream.Version))
-			{
-				m_positionCurves = stream.ReadArray<Vector3Curve>();
-				m_scaleCurves = stream.ReadArray<Vector3Curve>();
-				m_floatCurves = stream.ReadArray<FloatCurve>();
-			}
-			if (IsReadPPtrCurves(stream.Version))
-			{
-				m_PPtrCurves = stream.ReadArray<PPtrCurve>();
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadSampleRate(stream.Version))
+			if (IsReadCurves(reader.Version))
 			{
-				SampleRate = stream.ReadSingle();
+				m_rotationCurves = reader.ReadArray<QuaternionCurve>();
+			}
+			if (IsReadCompressedRotationCurves(reader.Version))
+			{
+				m_compressedRotationCurves = reader.ReadArray<CompressedAnimationCurve>();
+			}
+			if (IsReadEulerCurves(reader.Version))
+			{
+				m_eulerCurves = reader.ReadArray<Vector3Curve>();
+			}
+			if (IsReadCurves(reader.Version))
+			{
+				m_positionCurves = reader.ReadArray<Vector3Curve>();
+				m_scaleCurves = reader.ReadArray<Vector3Curve>();
+				m_floatCurves = reader.ReadArray<FloatCurve>();
+			}
+			if (IsReadPPtrCurves(reader.Version))
+			{
+				m_PPtrCurves = reader.ReadArray<PPtrCurve>();
 			}
 
-			if (IsReadWrapMode(stream.Version))
+			if (IsReadSampleRate(reader.Version))
 			{
-				WrapMode = (WrapMode)stream.ReadInt32();
-			}
-			if (IsReadBounds(stream.Version))
-			{
-				Bounds.Read(stream);
-			}
-			if (IsReadMuscleClipSize(stream.Version))
-			{
-				MuscleClipSize = stream.ReadUInt32();
-				MuscleClip.Read(stream);
-			}
-			if (IsReadClipBindingConstant(stream.Version))
-			{
-				ClipBindingConstant.Read(stream);
+				SampleRate = reader.ReadSingle();
 			}
 
-			if (IsReadEvents(stream.Version))
+			if (IsReadWrapMode(reader.Version))
 			{
-				m_events = stream.ReadArray<AnimationEvent>();
+				WrapMode = (WrapMode)reader.ReadInt32();
 			}
-			if (IsAlign(stream.Version))
+			if (IsReadBounds(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				Bounds.Read(reader);
+			}
+			if (IsReadMuscleClipSize(reader.Version))
+			{
+				MuscleClipSize = reader.ReadUInt32();
+				MuscleClip.Read(reader);
+			}
+			if (IsReadClipBindingConstant(reader.Version))
+			{
+				ClipBindingConstant.Read(reader);
+			}
+
+			if (IsReadEvents(reader.Version))
+			{
+				m_events = reader.ReadArray<AnimationEvent>();
+			}
+			if (IsAlign(reader.Version))
+			{
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

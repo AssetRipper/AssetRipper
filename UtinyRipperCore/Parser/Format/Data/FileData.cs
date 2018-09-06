@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace UtinyRipper
 {
-	internal abstract class FileData<T> : IDisposable
+	public abstract class FileData<T> : IDisposable
 		where T: FileEntry
 	{
 		protected FileData(Stream stream, bool isClosable)
 		{
 			m_stream = stream;
-			IsDisposable = isClosable;
+			IsDisposable = false; // = isClosable;
 		}
 
 		public void Dispose()
@@ -23,28 +22,11 @@ namespace UtinyRipper
 			}
 		}
 
-		public IEnumerable<T> AssetsEntries => m_entries.Where(t => t.IsSerializedFile);
-		public IEnumerable<T> ResourceEntries => m_entries.Where(t => !t.IsSkipFile && !t.IsSerializedFile);
+		public abstract IReadOnlyList<T> Entries { get; }
 		
-		protected IReadOnlyList<T> EntriesBase
-		{
-			get => m_entries;
-			set
-			{
-				m_entries = value;
-				foreach(T entry in ResourceEntries)
-				{
-					IsDisposable = false;
-					break;
-				}
-			}
-		}
-
 		protected bool IsDisposable { get; private set; }
 
 		protected Stream m_stream;
-
-		private IReadOnlyList<T> m_entries;
 
 	}
 }

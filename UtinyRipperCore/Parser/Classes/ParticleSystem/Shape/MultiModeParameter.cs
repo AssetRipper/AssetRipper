@@ -13,12 +13,12 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Speed = new MinMaxCurve(1.0f);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Value = stream.ReadSingle();
-			Mode = (ParticleSystemShapeMultiModeValue)stream.ReadInt32();
-			Spread = stream.ReadSingle();
-			Speed.Read(stream);
+			Value = reader.ReadSingle();
+			Mode = (ParticleSystemShapeMultiModeValue)reader.ReadInt32();
+			Spread = reader.ReadSingle();
+			Speed.Read(reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

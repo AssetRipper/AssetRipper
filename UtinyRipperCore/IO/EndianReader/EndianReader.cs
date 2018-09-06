@@ -4,23 +4,33 @@ using System.Text;
 
 namespace UtinyRipper
 {
-	public class EndianStream : BinaryReader
+	public class EndianReader : BinaryReader
 	{
-		public EndianStream(Stream stream)
+		public EndianReader(Stream stream)
 			: this(stream, EndianType.LittleEndian)
 		{
 		}
 
-		public EndianStream(Stream stream, EndianType endType):
-			this(stream, 0, endType)
+		public EndianReader(Stream stream, EndianType endianess):
+			this(stream, 0, endianess)
 		{
 		}
 
-		public EndianStream(Stream stream, long alignPosition, EndianType endType) :
+		public EndianReader(Stream stream, long alignPosition, EndianType endianess) :
 		   base(stream, Encoding.UTF8, true)
 		{
-			EndianType = endType;
+			EndianType = endianess;
 			AlignPosition = alignPosition;
+		}
+
+		protected EndianReader(EndianReader reader):
+			this(reader, reader.AlignPosition)
+		{
+		}
+
+		protected EndianReader(EndianReader reader, long alignPosition) :
+			this(reader.BaseStream, alignPosition, reader.EndianType)
+		{
 		}
 
 		public override short ReadInt16()
@@ -473,8 +483,8 @@ namespace UtinyRipper
 			}
 		}
 
-		public EndianType EndianType { get; set; }
-		public long AlignPosition { get; set; }
+		protected EndianType EndianType { get; private set; }
+		protected long AlignPosition { get; private set; }
 
 		private const int StringBufferSize = 8096;
 		

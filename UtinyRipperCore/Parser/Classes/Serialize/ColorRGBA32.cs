@@ -43,9 +43,9 @@ namespace UtinyRipper.Classes
 			return new ColorRGBA32(this);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			RGBA = stream.ReadUInt32();
+			RGBA = reader.ReadUInt32();
 		}
 
 		public void Write(BinaryWriter stream)

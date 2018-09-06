@@ -15,16 +15,16 @@ namespace UtinyRipper.Classes.Shaders
 			m_matrixMembers = matrices;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			NameIndex = stream.ReadInt32();
-			Index = stream.ReadInt32();
-			ArraySize = stream.ReadInt32();
-			StructSize = stream.ReadInt32();
-			m_vectorMembers = stream.ReadArray<VectorParameter>();
-			stream.AlignStream(AlignType.Align4);
-			m_matrixMembers = stream.ReadArray<MatrixParameter>();
-			stream.AlignStream(AlignType.Align4);
+			NameIndex = reader.ReadInt32();
+			Index = reader.ReadInt32();
+			ArraySize = reader.ReadInt32();
+			StructSize = reader.ReadInt32();
+			m_vectorMembers = reader.ReadArray<VectorParameter>();
+			reader.AlignStream(AlignType.Align4);
+			m_matrixMembers = reader.ReadArray<MatrixParameter>();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public string Name { get; private set; }

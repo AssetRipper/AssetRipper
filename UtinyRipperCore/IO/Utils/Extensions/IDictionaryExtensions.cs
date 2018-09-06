@@ -5,134 +5,134 @@ namespace UtinyRipper
 {
 	public static class IDictionaryIOExtensions
 	{
-		public static void Read(this IDictionary<int, int> _this, EndianStream stream)
+		public static void Read(this IDictionary<int, int> _this, EndianReader reader)
 		{
-			int count = stream.ReadInt32();
+			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				int key = stream.ReadInt32();
-				int value = stream.ReadInt32();
+				int key = reader.ReadInt32();
+				int value = reader.ReadInt32();
 				_this.Add(key, value);
 			}
 		}
 
-		public static void Read(this IDictionary<uint, string> _this, EndianStream stream)
+		public static void Read(this IDictionary<uint, string> _this, EndianReader reader)
 		{
-			int count = stream.ReadInt32();
+			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				uint key = stream.ReadUInt32();
-				string value = stream.ReadStringAligned();
+				uint key = reader.ReadUInt32();
+				string value = reader.ReadStringAligned();
 				_this.Add(key, value);
 			}
 		}
 
-		public static void Read(this IDictionary<string, byte> _this, EndianStream stream)
+		public static void Read(this IDictionary<string, byte> _this, EndianReader reader)
 		{
-			int count = stream.ReadInt32();
+			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = stream.ReadStringAligned();
-				byte value = stream.ReadByte();
+				string key = reader.ReadStringAligned();
+				byte value = reader.ReadByte();
 				_this.Add(key, value);
 			}
 		}
 
-		public static void Read(this IDictionary<string, short> _this, EndianStream stream)
+		public static void Read(this IDictionary<string, short> _this, EndianReader reader)
 		{
-			int count = stream.ReadInt32();
+			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = stream.ReadStringAligned();
-				short value = stream.ReadInt16();
+				string key = reader.ReadStringAligned();
+				short value = reader.ReadInt16();
 				_this.Add(key, value);
 			}
 		}
 
-		public static void Read(this IDictionary<string, ushort> _this, EndianStream stream)
+		public static void Read(this IDictionary<string, ushort> _this, EndianReader reader)
 		{
-			int count = stream.ReadInt32();
+			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = stream.ReadStringAligned();
-				ushort value = stream.ReadUInt16();
+				string key = reader.ReadStringAligned();
+				ushort value = reader.ReadUInt16();
 				_this.Add(key, value);
 			}
 		}
 
-		public static void Read(this IDictionary<string, int> _this, EndianStream stream)
+		public static void Read(this IDictionary<string, int> _this, EndianReader reader)
 		{
-			int count = stream.ReadInt32();
+			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = stream.ReadStringAligned();
-				int value = stream.ReadInt32();
+				string key = reader.ReadStringAligned();
+				int value = reader.ReadInt32();
 				_this.Add(key, value);
 			}
 		}
 
-		public static void Read(this IDictionary<string, uint> _this, EndianStream stream)
+		public static void Read(this IDictionary<string, uint> _this, EndianReader reader)
 		{
-			int count = stream.ReadInt32();
+			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = stream.ReadStringAligned();
-				uint value = stream.ReadUInt32();
+				string key = reader.ReadStringAligned();
+				uint value = reader.ReadUInt32();
 				_this.Add(key, value);
 			}
 		}
 
-		public static void Read(this IDictionary<string, long> _this, EndianStream stream)
+		public static void Read(this IDictionary<string, long> _this, EndianReader reader)
 		{
-			int count = stream.ReadInt32();
+			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = stream.ReadStringAligned();
-				long value = stream.ReadInt64();
+				string key = reader.ReadStringAligned();
+				long value = reader.ReadInt64();
 				_this.Add(key, value);
 			}
 		}
 
-		public static void Read(this IDictionary<string, ulong> _this, EndianStream stream)
+		public static void Read(this IDictionary<string, ulong> _this, EndianReader reader)
 		{
-			int count = stream.ReadInt32();
+			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = stream.ReadStringAligned();
-				ulong value = stream.ReadUInt64();
+				string key = reader.ReadStringAligned();
+				ulong value = reader.ReadUInt64();
 				_this.Add(key, value);
 			}
 		}
 
-		public static void Read(this IDictionary<string, float> _this, EndianStream stream)
+		public static void Read(this IDictionary<string, float> _this, EndianReader reader)
 		{
-			int count = stream.ReadInt32();
+			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = stream.ReadStringAligned();
-				float value = stream.ReadSingle();
+				string key = reader.ReadStringAligned();
+				float value = reader.ReadSingle();
 				_this.Add(key, value);
 			}
 		}
 
-		public static void Read(this IDictionary<string, string> _this, EndianStream stream)
+		public static void Read(this IDictionary<string, string> _this, EndianReader reader)
 		{
-			int count = stream.ReadInt32();
+			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = stream.ReadStringAligned();
-				string value = stream.ReadStringAligned();
+				string key = reader.ReadStringAligned();
+				string value = reader.ReadStringAligned();
 				_this.Add(key, value);
 			}
 		}
 
-		public static void Read(this IDictionary<Tuple<char, char>, float> _this, EndianStream stream)
+		public static void Read(this IDictionary<Tuple<char, char>, float> _this, EndianReader reader)
 		{
-			int count = stream.ReadInt32();
+			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				Tuple<char, char> key = stream.ReadTupleCharChar();
-				float value = stream.ReadSingle();
+				Tuple<char, char> key = reader.ReadTupleCharChar();
+				float value = reader.ReadSingle();
 				_this.Add(key, value);
 			}
 		}

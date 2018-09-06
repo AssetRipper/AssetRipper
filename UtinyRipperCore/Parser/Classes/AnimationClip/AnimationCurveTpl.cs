@@ -75,17 +75,17 @@ namespace UtinyRipper.Classes.AnimationClips
 			return new AnimationCurveTpl<T>(this);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
 			Curve = new List<KeyframeTpl<T>>();
-			Curve.Read(stream);
-			stream.AlignStream(AlignType.Align4);
+			Curve.Read(reader);
+			reader.AlignStream(AlignType.Align4);
 
-			PreInfinity = stream.ReadInt32();
-			PostInfinity = stream.ReadInt32();
-			if (IsReadRotationOrder(stream.Version))
+			PreInfinity = reader.ReadInt32();
+			PostInfinity = reader.ReadInt32();
+			if (IsReadRotationOrder(reader.Version))
 			{
-				RotationOrder = stream.ReadInt32();
+				RotationOrder = reader.ReadInt32();
 			}
 		}
 		

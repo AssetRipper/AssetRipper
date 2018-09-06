@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
-using UtinyRipper.AssetExporters;
 
 namespace UtinyRipper
 {
-	internal abstract class FileEntry
+	public abstract class FileEntry
 	{
 		protected FileEntry(Stream stream, string filePath, string name, long offset, long size, bool isStreamPermanent)
 		{
@@ -31,7 +30,7 @@ namespace UtinyRipper
 
 			m_stream = stream;
 			Name = name;
-			m_filePath = filePath;
+			FilePath = filePath;
 			m_offset = offset;
 			m_size = size;
 			m_isStreamPermanent = isStreamPermanent;
@@ -39,18 +38,35 @@ namespace UtinyRipper
 
 		public void ReadResourcesFile(FileCollection collection)
 		{
-			Stream stream = m_stream;
-			long offset = m_offset;
-			if (!m_isStreamPermanent)
+			m_stream.Position = m_offset;
+			if (m_isStreamPermanent)
 			{
-				stream = new MemoryStream();
-				offset = 0;
-				m_stream.Position = m_offset;
-				m_stream.CopyStream(stream, m_size);
+				collection.ReadResourceFile(m_stream, FilePath, Name);
 			}
+			else
+			{
+				MemoryStream stream = new MemoryStream();
+				m_stream.CopyStream(stream, m_size);
+				collection.ReadResourceFile(m_stream, FilePath, Name);
+			}
+		}
 
-			ResourcesFile resesFile = new ResourcesFile(m_filePath, Name, stream, offset);
-			collection.AddResourceFile(resesFile);
+		public void ReadSerializedFile(FileCollection collection, Action<string> dependencyCallback)
+		{
+			m_stream.Position = m_offset;
+			collection.ReadSerializedFile(m_stream, FilePath, Name, dependencyCallback);
+		}
+
+		public void ReadBundleFile(FileCollection collection)
+		{
+			m_stream.Position = m_offset;
+			collection.ReadBundleFile(m_stream, FilePath);
+		}
+
+		public void ReadWebFile(FileCollection collection)
+		{
+			m_stream.Position = m_offset;
+			collection.ReadWebFile(m_stream, FilePath);
 		}
 
 		public override string ToString()
@@ -58,41 +74,51 @@ namespace UtinyRipper
 			return Name;
 		}
 
-		public bool IsSerializedFile
+		public abstract FileEntryType EntryType { get; }
+		public string Name { get; }
+		public string FilePath { get; }
+
+		protected bool IsSerializedFile
 		{
 			get
 			{
-				if(IsSkipFile)
+				if (IsSkipFile)
+				{
+					return false;
+				}
+				if (IsResourceFile)
 				{
 					return false;
 				}
 
-				if(AssemblyManager.IsAssembly(Name))
-				{
-					return false;
-				}
+				return IsSerializedFileInner;
+			}
+		}
 
+		protected bool IsResourceFile
+		{
+			get
+			{
 				string ext = Path.GetExtension(Name);
 				switch (ext)
 				{
 					case ResourceExtension:
 					case ResExtension:
-						return false;
+						return true;
 
 					default:
-						return true;
+						return IsResourceFileInner;
 				}
 			}
 		}
 
-		public virtual bool IsSkipFile
+		protected bool IsSkipFile
 		{
 			get
 			{
 				string ext = Path.GetExtension(Name);
-				switch(ext)
+				switch (ext)
 				{
-					case ManifestExtention:
 					case MdbExtension:
 						return true;
 
@@ -104,16 +130,18 @@ namespace UtinyRipper
 						return true;
 
 					default:
-						return false;
+						return IsSkipFileInner;
 				}
 			}
 		}
 
-		public string Name { get; }
+		protected virtual bool IsSerializedFileInner => true;
+		protected virtual bool IsResourceFileInner => false;
+		protected virtual bool IsSkipFileInner => false;
 		
-		private const string ManifestExtention = ".manifest";
 		private const string ResourceExtension = ".resource";
 		private const string ResExtension = ".resS";
+
 		private const string MdbExtension = ".mdb";
 		// Scene GI extensions
 		private const string CawExtention = ".caw";
@@ -123,7 +151,6 @@ namespace UtinyRipper
 		private const string VisExtention = ".vis";
 
 		protected readonly Stream m_stream;
-		protected readonly string m_filePath;
 		protected readonly long m_offset;
 		protected readonly long m_size;
 

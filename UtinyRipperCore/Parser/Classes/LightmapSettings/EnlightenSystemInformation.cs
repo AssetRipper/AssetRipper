@@ -5,15 +5,15 @@ namespace UtinyRipper.Classes.LightmapSettingss
 {
 	public struct EnlightenSystemInformation : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			RendererIndex = stream.ReadUInt32();
-			RendererSize = stream.ReadUInt32();
-			AtlasIndex = stream.ReadInt32();
-			AtlasOffsetX = stream.ReadInt32();
-			AtlasOffsetY = stream.ReadInt32();
-			InputSystemHash.Read(stream);
-			RadiositySystemHash.Read(stream);
+			RendererIndex = reader.ReadUInt32();
+			RendererSize = reader.ReadUInt32();
+			AtlasIndex = reader.ReadInt32();
+			AtlasOffsetX = reader.ReadInt32();
+			AtlasOffsetY = reader.ReadInt32();
+			InputSystemHash.Read(reader);
+			RadiositySystemHash.Read(reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -41,12 +41,12 @@ namespace UtinyRipper.Classes
 			return new ColorRGBAf(this);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			R = stream.ReadSingle();
-			G = stream.ReadSingle();
-			B = stream.ReadSingle();
-			A = stream.ReadSingle();
+			R = reader.ReadSingle();
+			G = reader.ReadSingle();
+			B = reader.ReadSingle();
+			A = reader.ReadSingle();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

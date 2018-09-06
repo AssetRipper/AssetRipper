@@ -57,40 +57,40 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return IsReadRibbonCount(version) ? RibbonCount : 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadMode(stream.Version))
+			if (IsReadMode(reader.Version))
 			{
-				Mode = (ParticleSystemTrailMode)stream.ReadInt32();
+				Mode = (ParticleSystemTrailMode)reader.ReadInt32();
 			}
-			Ratio = stream.ReadSingle();
-			Lifetime.Read(stream);
-			MinVertexDistance = stream.ReadSingle();
-			TextureMode = stream.ReadInt32();
-			if (IsReadRibbonCount(stream.Version))
+			Ratio = reader.ReadSingle();
+			Lifetime.Read(reader);
+			MinVertexDistance = reader.ReadSingle();
+			TextureMode = reader.ReadInt32();
+			if (IsReadRibbonCount(reader.Version))
 			{
-				RibbonCount = stream.ReadInt32();
+				RibbonCount = reader.ReadInt32();
 			}
-			WorldSpace = stream.ReadBoolean();
-			DieWithParticles = stream.ReadBoolean();
-			SizeAffectsWidth = stream.ReadBoolean();
-			SizeAffectsLifetime = stream.ReadBoolean();
-			InheritParticleColor = stream.ReadBoolean();
-			if (IsReadGenerateLightingData(stream.Version))
+			WorldSpace = reader.ReadBoolean();
+			DieWithParticles = reader.ReadBoolean();
+			SizeAffectsWidth = reader.ReadBoolean();
+			SizeAffectsLifetime = reader.ReadBoolean();
+			InheritParticleColor = reader.ReadBoolean();
+			if (IsReadGenerateLightingData(reader.Version))
 			{
-				GenerateLightingData = stream.ReadBoolean();
+				GenerateLightingData = reader.ReadBoolean();
 			}
-			if (IsReadSplitSubEmitterRibbons(stream.Version))
+			if (IsReadSplitSubEmitterRibbons(reader.Version))
 			{
-				SplitSubEmitterRibbons = stream.ReadBoolean();
+				SplitSubEmitterRibbons = reader.ReadBoolean();
 			}
-			stream.AlignStream(AlignType.Align4);
+			reader.AlignStream(AlignType.Align4);
 			
-			ColorOverLifetime.Read(stream);
-			WidthOverTrail.Read(stream);
-			ColorOverTrail.Read(stream);
+			ColorOverLifetime.Read(reader);
+			WidthOverTrail.Read(reader);
+			ColorOverTrail.Read(reader);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)

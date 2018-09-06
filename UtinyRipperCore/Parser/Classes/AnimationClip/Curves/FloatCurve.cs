@@ -24,15 +24,15 @@ namespace UtinyRipper.Classes.AnimationClips
 			return version.IsGreaterEqual(2);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Curve.Read(stream);
-			Attribute = stream.ReadStringAligned();
-			Path = stream.ReadStringAligned();
-			ClassID = stream.ReadInt32();
-			if (IsReadScript(stream.Version))
+			Curve.Read(reader);
+			Attribute = reader.ReadStringAligned();
+			Path = reader.ReadStringAligned();
+			ClassID = reader.ReadInt32();
+			if (IsReadScript(reader.Version))
 			{
-				Script.Read(stream);
+				Script.Read(reader);
 			}
 		}
 

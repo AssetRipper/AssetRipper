@@ -69,50 +69,50 @@ namespace UtinyRipper.Classes
 			return 6;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			Shader.Read(stream);
-			if(IsReadKeywords(stream.Version))
+			Shader.Read(reader);
+			if(IsReadKeywords(reader.Version))
 			{
-				if(IsKeywordsArray(stream.Version))
+				if(IsKeywordsArray(reader.Version))
 				{
-					m_shaderKeywordsArray = stream.ReadStringArray();
+					m_shaderKeywordsArray = reader.ReadStringArray();
 				}
 				else
 				{
-					ShaderKeywords = stream.ReadStringAligned();
+					ShaderKeywords = reader.ReadStringAligned();
 				}
 			}
 
-			if(IsReadLightmapFlags(stream.Version))
+			if(IsReadLightmapFlags(reader.Version))
 			{
-				LightmapFlags = stream.ReadUInt32();
-				if (IsReadOtherFlags(stream.Version))
+				LightmapFlags = reader.ReadUInt32();
+				if (IsReadOtherFlags(reader.Version))
 				{
-					EnableInstancingVariants = stream.ReadBoolean();
-					DoubleSidedGI = stream.ReadBoolean();
-					stream.AlignStream(AlignType.Align4);
+					EnableInstancingVariants = reader.ReadBoolean();
+					DoubleSidedGI = reader.ReadBoolean();
+					reader.AlignStream(AlignType.Align4);
 				}
 			}
 
-			if (IsReadCustomRenderQueue(stream.Version))
+			if (IsReadCustomRenderQueue(reader.Version))
 			{
-				CustomRenderQueue = stream.ReadInt32();
+				CustomRenderQueue = reader.ReadInt32();
 			}
 
-			if (IsReadStringTagMap(stream.Version))
+			if (IsReadStringTagMap(reader.Version))
 			{
 				m_stringTagMap = new Dictionary<string, string>();
-				m_stringTagMap.Read(stream);
-				if (IsReadDisabledShaderPasses(stream.Version))
+				m_stringTagMap.Read(reader);
+				if (IsReadDisabledShaderPasses(reader.Version))
 				{
-					m_disabledShaderPasses = stream.ReadStringArray();
+					m_disabledShaderPasses = reader.ReadStringArray();
 				}
 			}
 
-			SavedProperties.Read(stream);
+			SavedProperties.Read(reader);
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

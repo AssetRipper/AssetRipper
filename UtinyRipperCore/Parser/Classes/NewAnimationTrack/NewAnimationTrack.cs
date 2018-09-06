@@ -10,12 +10,12 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			m_curves = stream.ReadArray<Channel>();
-			AClassID = (ClassIDType)stream.ReadInt32();
+			m_curves = reader.ReadArray<Channel>();
+			AClassID = (ClassIDType)reader.ReadInt32();
 		}
 
 		public IReadOnlyList<Channel> Curves => m_curves;

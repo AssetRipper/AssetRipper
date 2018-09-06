@@ -13,12 +13,12 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Controller.Read(stream);
-			m_clips = stream.ReadArray<AnimationClipOverride>();
+			Controller.Read(reader);
+			m_clips = reader.ReadArray<AnimationClipOverride>();
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

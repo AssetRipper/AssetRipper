@@ -5,11 +5,11 @@ namespace UtinyRipper.Classes.LightProbess
 {
 	public struct ProbeSetIndex : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Hash.Read(stream);
-			Offset = stream.ReadInt32();
-			Size = stream.ReadInt32();
+			Hash.Read(reader);
+			Offset = reader.ReadInt32();
+			Size = reader.ReadInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

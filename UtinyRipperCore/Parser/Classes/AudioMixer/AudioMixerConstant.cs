@@ -13,26 +13,26 @@ namespace UtinyRipper.Classes.AudioMixers
 			return 2;
 		}*/
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_groups = stream.ReadArray<GroupConstant>();
-			m_groupGUIDs = stream.ReadArray<EngineGUID>();
-			m_effects = stream.ReadArray<EffectConstant>();
-			m_effectGUIDs = stream.ReadArray<EngineGUID>();
-			NumSideChainBuffers = stream.ReadUInt32();
-			m_snapshots = stream.ReadArray<SnapshotConstant>();
-			m_snapshotGUIDs = stream.ReadArray<EngineGUID>();
+			m_groups = reader.ReadArray<GroupConstant>();
+			m_groupGUIDs = reader.ReadArray<EngineGUID>();
+			m_effects = reader.ReadArray<EffectConstant>();
+			m_effectGUIDs = reader.ReadArray<EngineGUID>();
+			NumSideChainBuffers = reader.ReadUInt32();
+			m_snapshots = reader.ReadArray<SnapshotConstant>();
+			m_snapshotGUIDs = reader.ReadArray<EngineGUID>();
 			//m_groupNameBuffer = stream.ReadArray<char>();
-			stream.AlignStream(AlignType.Align4);
+			reader.AlignStream(AlignType.Align4);
 			
 			//m_snapshotNameBuffer = stream.ReadArray<char>();
-			stream.AlignStream(AlignType.Align4);
+			reader.AlignStream(AlignType.Align4);
 			
 			//m_pluginEffectNameBuffer = stream.ReadArray<char>();
-			stream.AlignStream(AlignType.Align4);
+			reader.AlignStream(AlignType.Align4);
 			
-			m_exposedParameterNames = stream.ReadUInt32Array();
-			m_exposedParameterIndices = stream.ReadUInt32Array();
+			m_exposedParameterNames = reader.ReadUInt32Array();
+			m_exposedParameterIndices = reader.ReadUInt32Array();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

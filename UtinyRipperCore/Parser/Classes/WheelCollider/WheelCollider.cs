@@ -42,36 +42,36 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(5);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Center.Read(stream);
-			Radius = stream.ReadSingle();
-			if (IsReadSuspensionSpringFirst(stream.Version))
+			Center.Read(reader);
+			Radius = reader.ReadSingle();
+			if (IsReadSuspensionSpringFirst(reader.Version))
 			{
-				SuspensionSpring.Read(stream);
+				SuspensionSpring.Read(reader);
 			}
-			SuspensionDistance = stream.ReadSingle();
-			if (!IsReadSuspensionSpringFirst(stream.Version))
+			SuspensionDistance = reader.ReadSingle();
+			if (!IsReadSuspensionSpringFirst(reader.Version))
 			{
-				SuspensionSpring.Read(stream);
+				SuspensionSpring.Read(reader);
 			}
-			if (IsReadForceAppPointDistance(stream.Version))
+			if (IsReadForceAppPointDistance(reader.Version))
 			{
-				ForceAppPointDistance = stream.ReadSingle();
+				ForceAppPointDistance = reader.ReadSingle();
 			}
-			Mass = stream.ReadSingle();
-			if (IsReadWheelDampingRate(stream.Version))
+			Mass = reader.ReadSingle();
+			if (IsReadWheelDampingRate(reader.Version))
 			{
-				WheelDampingRate = stream.ReadSingle();
+				WheelDampingRate = reader.ReadSingle();
 			}
-			ForwardFriction.Read(stream);
-			SidewaysFriction.Read(stream);
-			if (IsReadEnabled(stream.Version))
+			ForwardFriction.Read(reader);
+			SidewaysFriction.Read(reader);
+			if (IsReadEnabled(reader.Version))
 			{
-				Enabled = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				Enabled = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

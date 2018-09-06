@@ -7,10 +7,10 @@ namespace UtinyRipper.Classes.AnimationClips
 {
 	public struct StreamedClip : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_data = stream.ReadUInt32Array();
-			CurveCount = (int)stream.ReadUInt32();
+			m_data = reader.ReadUInt32Array();
+			CurveCount = (int)reader.ReadUInt32();
 		}
 
 		public IReadOnlyList<StreamedFrame> GenerateFrames(Version version, Platform platform, TransferInstructionFlags flags)
@@ -18,14 +18,14 @@ namespace UtinyRipper.Classes.AnimationClips
 			List<StreamedFrame> frames = new List<StreamedFrame>();
 			byte[] memStreamBuffer = new byte[m_data.Length * sizeof(uint)];
 			Buffer.BlockCopy(m_data, 0, memStreamBuffer, 0, memStreamBuffer.Length);
-			using (MemoryStream memStream = new MemoryStream(memStreamBuffer))
+			using (MemoryStream stream = new MemoryStream(memStreamBuffer))
 			{
-				using (AssetStream stream = new AssetStream(memStream, version, platform, flags))
+				using (AssetReader reader = new AssetReader(stream, version, platform, flags))
 				{
-					while (stream.BaseStream.Position < stream.BaseStream.Length)
+					while (reader.BaseStream.Position < reader.BaseStream.Length)
 					{
 						StreamedFrame frame = new StreamedFrame();
-						frame.Read(stream);
+						frame.Read(reader);
 						frames.Add(frame);
 					}
 				}

@@ -17,23 +17,23 @@
 			return version.IsGreaterEqual(5, 4);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			X.Read(stream);
+			X.Read(reader);
 
-			WeightT = stream.ReadSingle();
-			WeightR = stream.ReadSingle();
-			if(IsReadHints(stream.Version))
+			WeightT = reader.ReadSingle();
+			WeightR = reader.ReadSingle();
+			if(IsReadHints(reader.Version))
 			{
-				if(IsVector3(stream.Version))
+				if(IsVector3(reader.Version))
 				{
-					HintT.Read3(stream);
+					HintT.Read3(reader);
 				}
 				else
 				{
-					HintT.Read(stream);
+					HintT.Read(reader);
 				}
-				HintWeightT = stream.ReadSingle();
+				HintWeightT = reader.ReadSingle();
 			}
 		}
 		

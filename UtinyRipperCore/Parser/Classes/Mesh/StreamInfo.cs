@@ -23,21 +23,21 @@ namespace UtinyRipper.Classes.Meshes
 			return version.IsLess(4);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			ChannelMask = stream.ReadUInt32();
-			Offset = stream.ReadUInt32();
+			ChannelMask = reader.ReadUInt32();
+			Offset = reader.ReadUInt32();
 
-			if (IsReadAlign(stream.Version))
+			if (IsReadAlign(reader.Version))
 			{
-				Stride = stream.ReadUInt32();
-				Align = stream.ReadUInt32();
+				Stride = reader.ReadUInt32();
+				Align = reader.ReadUInt32();
 			}
 			else
 			{
-				Stride = stream.ReadByte();
-				DividerOp = stream.ReadByte();
-				Frequency = stream.ReadUInt16();
+				Stride = reader.ReadByte();
+				DividerOp = reader.ReadByte();
+				Frequency = reader.ReadUInt16();
 			}
 		}
 

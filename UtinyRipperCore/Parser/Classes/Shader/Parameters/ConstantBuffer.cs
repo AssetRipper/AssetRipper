@@ -22,16 +22,16 @@ namespace UtinyRipper.Classes.Shaders
 			Size = usedSize;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			NameIndex = stream.ReadInt32();
-			m_matrixParams = stream.ReadArray<MatrixParameter>();
-			m_vectorParams = stream.ReadArray<VectorParameter>();
-			if(IsReadStructParams(stream.Version))
+			NameIndex = reader.ReadInt32();
+			m_matrixParams = reader.ReadArray<MatrixParameter>();
+			m_vectorParams = reader.ReadArray<VectorParameter>();
+			if(IsReadStructParams(reader.Version))
 			{
-				m_structParams = stream.ReadArray<StructParameter>();
+				m_structParams = reader.ReadArray<StructParameter>();
 			}
-			Size = stream.ReadInt32();
+			Size = reader.ReadInt32();
 		}
 
 		public string Name { get; private set; }

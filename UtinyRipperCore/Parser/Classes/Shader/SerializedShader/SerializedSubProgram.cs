@@ -30,35 +30,35 @@ namespace UtinyRipper.Classes.Shaders
 			return version.IsGreaterEqual(2017, 1);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			BlobIndex = stream.ReadUInt32();
-			Channels.Read(stream);
-			m_keywordIndices = stream.ReadUInt16Array();
-			if(IsAlignKeywordIndices(stream.Version))
+			BlobIndex = reader.ReadUInt32();
+			Channels.Read(reader);
+			m_keywordIndices = reader.ReadUInt16Array();
+			if(IsAlignKeywordIndices(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			ShaderHardwareTier = stream.ReadByte();
-			GpuProgramType = (ShaderGpuProgramType)stream.ReadByte();
-			stream.AlignStream(AlignType.Align4);
+			ShaderHardwareTier = reader.ReadByte();
+			GpuProgramType = (ShaderGpuProgramType)reader.ReadByte();
+			reader.AlignStream(AlignType.Align4);
 
-			m_vectorParams = stream.ReadArray<VectorParameter>();
-			m_matrixParams = stream.ReadArray<MatrixParameter>();
-			m_textureParams = stream.ReadArray<TextureParameter>();
-			m_bufferParams = stream.ReadArray<BufferBinding>();
-			m_constantBuffers = stream.ReadArray<ConstantBuffer>();
-			m_constantBufferBindings = stream.ReadArray<BufferBinding>();
-			m_UAVParams = stream.ReadArray<UAVParameter>();
+			m_vectorParams = reader.ReadArray<VectorParameter>();
+			m_matrixParams = reader.ReadArray<MatrixParameter>();
+			m_textureParams = reader.ReadArray<TextureParameter>();
+			m_bufferParams = reader.ReadArray<BufferBinding>();
+			m_constantBuffers = reader.ReadArray<ConstantBuffer>();
+			m_constantBufferBindings = reader.ReadArray<BufferBinding>();
+			m_UAVParams = reader.ReadArray<UAVParameter>();
 
-			if(IsReadSamplers(stream.Version))
+			if(IsReadSamplers(reader.Version))
 			{
-				m_samplers = stream.ReadArray<SamplerParameter>();
+				m_samplers = reader.ReadArray<SamplerParameter>();
 			}
-			if(IsReadShaderRequirements(stream.Version))
+			if(IsReadShaderRequirements(reader.Version))
 			{
-				ShaderRequirements = stream.ReadInt32();
+				ShaderRequirements = reader.ReadInt32();
 			}
 		}
 

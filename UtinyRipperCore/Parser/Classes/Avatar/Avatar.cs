@@ -12,15 +12,15 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
 			m_TOS.Clear();
 
-			AvatarSize = stream.ReadUInt32();
-			AvatarConstant.Read(stream);
-			m_TOS.Read(stream);
+			AvatarSize = reader.ReadUInt32();
+			AvatarConstant.Read(reader);
+			m_TOS.Read(reader);
 		}
 		
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

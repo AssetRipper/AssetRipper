@@ -60,45 +60,45 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			return version.IsGreaterEqual(4, 1, 3);
 		}
 		
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if (IsReadBlendType(stream.Version))
+			if (IsReadBlendType(reader.Version))
 			{
-				BlendType = (BlendTreeType)stream.ReadUInt32();
+				BlendType = (BlendTreeType)reader.ReadUInt32();
 			}
-			BlendEventID = stream.ReadUInt32();
-			if (IsReadBlendEventYID(stream.Version))
+			BlendEventID = reader.ReadUInt32();
+			if (IsReadBlendEventYID(reader.Version))
 			{
-				BlendEventYID = stream.ReadUInt32();
+				BlendEventYID = reader.ReadUInt32();
 			}
-			m_childIndices = stream.ReadUInt32Array();
-			if (IsReadChildThresholdArray(stream.Version))
+			m_childIndices = reader.ReadUInt32Array();
+			if (IsReadChildThresholdArray(reader.Version))
 			{
-				m_childThresholdArray = stream.ReadSingleArray();
-			}
-
-			if (IsReadBlendData(stream.Version))
-			{
-				Blend1dData.Read(stream);
-				Blend2dData.Read(stream);
-			}
-			if(IsReadBlendDirectData(stream.Version))
-			{
-				BlendDirectData.Read(stream);
+				m_childThresholdArray = reader.ReadSingleArray();
 			}
 
-			ClipID = stream.ReadUInt32();
-			if(IsReadClipIndex(stream.Version))
+			if (IsReadBlendData(reader.Version))
 			{
-				ClipIndex = stream.ReadUInt32();
+				Blend1dData.Read(reader);
+				Blend2dData.Read(reader);
+			}
+			if(IsReadBlendDirectData(reader.Version))
+			{
+				BlendDirectData.Read(reader);
 			}
 
-			Duration = stream.ReadSingle();
-			if (IsReadCycleOffset(stream.Version))
+			ClipID = reader.ReadUInt32();
+			if(IsReadClipIndex(reader.Version))
 			{
-				CycleOffset = stream.ReadSingle();
-				Mirror = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				ClipIndex = reader.ReadUInt32();
+			}
+
+			Duration = reader.ReadSingle();
+			if (IsReadCycleOffset(reader.Version))
+			{
+				CycleOffset = reader.ReadSingle();
+				Mirror = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

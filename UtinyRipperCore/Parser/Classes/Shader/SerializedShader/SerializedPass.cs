@@ -7,26 +7,26 @@ namespace UtinyRipper.Classes.Shaders
 {
 	public struct SerializedPass : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
 			m_nameIndices = new Dictionary<string, int>();
 			
-			m_nameIndices.Read(stream);
-			Type = (SerializedPassType)stream.ReadInt32();
-			State.Read(stream);
-			ProgramMask = stream.ReadUInt32();
-			ProgVertex.Read(stream);
-			ProgFragment.Read(stream);
-			ProgGeometry.Read(stream);
-			ProgHull.Read(stream);
-			ProgDomain.Read(stream);
-			HasInstancingVariant = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			m_nameIndices.Read(reader);
+			Type = (SerializedPassType)reader.ReadInt32();
+			State.Read(reader);
+			ProgramMask = reader.ReadUInt32();
+			ProgVertex.Read(reader);
+			ProgFragment.Read(reader);
+			ProgGeometry.Read(reader);
+			ProgHull.Read(reader);
+			ProgDomain.Read(reader);
+			HasInstancingVariant = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 
-			UseName = stream.ReadStringAligned();
-			Name = stream.ReadStringAligned();
-			TextureName = stream.ReadStringAligned();
-			Tags.Read(stream);
+			UseName = reader.ReadStringAligned();
+			Name = reader.ReadStringAligned();
+			TextureName = reader.ReadStringAligned();
+			Tags.Read(reader);
 		}
 
 		public void Export(TextWriter writer, Shader shader, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)

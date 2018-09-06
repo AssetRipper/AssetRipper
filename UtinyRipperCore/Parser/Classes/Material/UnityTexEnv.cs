@@ -15,18 +15,18 @@ namespace UtinyRipper.Classes.Materials
 			return version.IsGreaterEqual(2, 1);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Texture.Read(stream);
-			if (IsReadVector2(stream.Version))
+			Texture.Read(reader);
+			if (IsReadVector2(reader.Version))
 			{
-				Scale.Read2(stream);
-				Offset.Read2(stream);
+				Scale.Read2(reader);
+				Offset.Read2(reader);
 			}
 			else
 			{
-				Scale.Read(stream);
-				Offset.Read(stream);
+				Scale.Read(reader);
+				Offset.Read(reader);
 			}
 		}
 

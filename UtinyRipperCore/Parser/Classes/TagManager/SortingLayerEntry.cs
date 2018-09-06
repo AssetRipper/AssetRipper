@@ -13,15 +13,15 @@ namespace UtinyRipper.Classes.TagManagers
 			return version.IsLess(5);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Name = stream.ReadStringAligned();
-			if(IsReadUserID(stream.Version))
+			Name = reader.ReadStringAligned();
+			if(IsReadUserID(reader.Version))
 			{
-				UserID = stream.ReadUInt32();
+				UserID = reader.ReadUInt32();
 			}
-			UniqueID = stream.ReadUInt32();
-			stream.AlignStream(AlignType.Align4);
+			UniqueID = reader.ReadUInt32();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

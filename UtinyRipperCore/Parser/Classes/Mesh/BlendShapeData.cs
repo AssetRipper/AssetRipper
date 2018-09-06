@@ -22,25 +22,25 @@ namespace UtinyRipper.Classes.Meshes
 			return version.IsGreaterEqual(2017);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if (IsReadChannels(stream.Version))
+			if (IsReadChannels(reader.Version))
 			{
-				m_vertices = stream.ReadArray<BlendShapeVertex>();
-				m_shapes = stream.ReadArray<BlendShape>();
-				m_channels = stream.ReadArray<BlendShapeChannel>();
-				if (IsAlign(stream.Version))
+				m_vertices = reader.ReadArray<BlendShapeVertex>();
+				m_shapes = reader.ReadArray<BlendShape>();
+				m_channels = reader.ReadArray<BlendShapeChannel>();
+				if (IsAlign(reader.Version))
 				{
-					stream.AlignStream(AlignType.Align4);
+					reader.AlignStream(AlignType.Align4);
 				}
 
-				m_fullWeights = stream.ReadSingleArray();
+				m_fullWeights = reader.ReadSingleArray();
 			}
 			else
 			{
-				m_shapes = stream.ReadArray<BlendShape>();
-				stream.AlignStream(AlignType.Align4);
-				m_vertices = stream.ReadArray<BlendShapeVertex>();
+				m_shapes = reader.ReadArray<BlendShape>();
+				reader.AlignStream(AlignType.Align4);
+				m_vertices = reader.ReadArray<BlendShapeVertex>();
 			}
 		}
 

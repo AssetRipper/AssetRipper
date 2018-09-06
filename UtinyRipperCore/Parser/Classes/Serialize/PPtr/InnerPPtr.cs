@@ -8,7 +8,7 @@ namespace UtinyRipper.Classes
 	public abstract class InnerPPtr<T> : IPPtr<T>
 		where T: Object
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
 			throw new NotSupportedException();
 		}

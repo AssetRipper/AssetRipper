@@ -14,12 +14,12 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Curve = new MinMaxCurve(0.0f);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			Mode = (InheritVelocityMode)stream.ReadInt32();
-			Curve.Read(stream);
+			Mode = (InheritVelocityMode)reader.ReadInt32();
+			Curve.Read(reader);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)

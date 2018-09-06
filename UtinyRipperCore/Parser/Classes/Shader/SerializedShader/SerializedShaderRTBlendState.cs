@@ -4,15 +4,15 @@ namespace UtinyRipper.Classes.Shaders
 {
 	public struct SerializedShaderRTBlendState : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			SrcBlend.Read(stream);
-			DestBlend.Read(stream);
-			SrcBlendAlpha.Read(stream);
-			DestBlendAlpha.Read(stream);
-			BlendOp.Read(stream);
-			BlendOpAlpha.Read(stream);
-			ColMask.Read(stream);
+			SrcBlend.Read(reader);
+			DestBlend.Read(reader);
+			SrcBlendAlpha.Read(reader);
+			DestBlendAlpha.Read(reader);
+			BlendOp.Read(reader);
+			BlendOpAlpha.Read(reader);
+			ColMask.Read(reader);
 		}
 
 		public void Export(TextWriter writer, int index)

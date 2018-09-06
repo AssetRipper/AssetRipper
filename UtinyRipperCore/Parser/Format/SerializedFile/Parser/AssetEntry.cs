@@ -27,32 +27,32 @@
 			return generation >= FileGeneration.FG_501_54 &&  generation <= FileGeneration.FG_5unknown;
 		}
 
-		public void Read(SerializedFileStream stream)
+		public void Read(SerializedFileReader reader)
 		{
-			if (IsReadLongID(stream.Generation))
+			if (IsReadLongID(reader.Generation))
 			{
-				stream.AlignStream(AlignType.Align4);
-				PathID = stream.ReadInt64();
+				reader.AlignStream(AlignType.Align4);
+				PathID = reader.ReadInt64();
 			}
 			else
 			{
-				PathID = stream.ReadInt32();
+				PathID = reader.ReadInt32();
 			}
-			DataOffset = stream.ReadInt32();
-			DataSize = stream.ReadInt32();
-			if (IsReadTypeIndex(stream.Generation))
+			DataOffset = reader.ReadInt32();
+			DataSize = reader.ReadInt32();
+			if (IsReadTypeIndex(reader.Generation))
 			{
-				TypeIndex = stream.ReadInt32();
+				TypeIndex = reader.ReadInt32();
 			}
 			else
 			{
-				TypeID = stream.ReadInt32();
-				ClassID = (ClassIDType)stream.ReadInt16();
-				ScriptID = stream.ReadInt16();
+				TypeID = reader.ReadInt32();
+				ClassID = (ClassIDType)reader.ReadInt16();
+				ScriptID = reader.ReadInt16();
 			}
-			if (IsReadUnknown(stream.Generation))
+			if (IsReadUnknown(reader.Generation))
 			{
-				Unknown = stream.ReadBoolean();
+				Unknown = reader.ReadBoolean();
 			}
 		}
 

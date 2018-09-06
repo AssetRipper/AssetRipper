@@ -173,150 +173,150 @@ namespace UtinyRipper.Classes
 			return 2;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadFontImpl(stream.Version))
+			if (IsReadFontImpl(reader.Version))
 			{
-				LineSpacing = stream.ReadSingle();
-				DefaultMaterial.Read(stream);
-				FontSize = stream.ReadSingle();
-				Texture.Read(stream);
-				stream.AlignStream(AlignType.Align4);
+				LineSpacing = reader.ReadSingle();
+				DefaultMaterial.Read(reader);
+				FontSize = reader.ReadSingle();
+				Texture.Read(reader);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsShortAsciiStartOffset(stream.Version))
+			if (IsShortAsciiStartOffset(reader.Version))
 			{
-				AsciiStartOffset = stream.ReadInt16();
-				FontCountX = stream.ReadInt16();
-				FontCountY = stream.ReadInt16();
+				AsciiStartOffset = reader.ReadInt16();
+				FontCountX = reader.ReadInt16();
+				FontCountY = reader.ReadInt16();
 			}
 			else
 			{
-				AsciiStartOffset = stream.ReadInt32();
-				if (IsReadFontCount(stream.Version))
+				AsciiStartOffset = reader.ReadInt32();
+				if (IsReadFontCount(reader.Version))
 				{
-					FontCountX = stream.ReadInt32();
-					FontCountY = stream.ReadInt32();
+					FontCountX = reader.ReadInt32();
+					FontCountY = reader.ReadInt32();
 				}
 			}
 
-			if (IsReadKerning(stream.Version))
+			if (IsReadKerning(reader.Version))
 			{
-				Kerning = stream.ReadSingle();
+				Kerning = reader.ReadSingle();
 			}
-			if (IsReadTracking(stream.Version))
+			if (IsReadTracking(reader.Version))
 			{
-				Tracking = stream.ReadSingle();
-			}
-
-			if (!IsReadFontImpl(stream.Version))
-			{
-				LineSpacing = stream.ReadSingle();
+				Tracking = reader.ReadSingle();
 			}
 
-			if (IsReadCharacterSpacing(stream.Version))
+			if (!IsReadFontImpl(reader.Version))
 			{
-				CharacterSpacing = stream.ReadInt32();
-				CharacterPadding = stream.ReadInt32();
+				LineSpacing = reader.ReadSingle();
 			}
 
-			if (IsReadPerCharacterKerning(stream.Version))
+			if (IsReadCharacterSpacing(reader.Version))
 			{
-				if (IsBytePerCharacterKerning(stream.Version))
+				CharacterSpacing = reader.ReadInt32();
+				CharacterPadding = reader.ReadInt32();
+			}
+
+			if (IsReadPerCharacterKerning(reader.Version))
+			{
+				if (IsBytePerCharacterKerning(reader.Version))
 				{
-					m_perCharacterKerningByte = stream.ReadTupleByteSingleArray();
+					m_perCharacterKerningByte = reader.ReadTupleByteSingleArray();
 				}
 				else
 				{
-					m_perCharacterKerning = stream.ReadTupleIntFloatArray();
+					m_perCharacterKerning = reader.ReadTupleIntFloatArray();
 				}
 			}
 
-			ConvertCase = stream.ReadInt32();
-			if (!IsReadFontImpl(stream.Version))
+			ConvertCase = reader.ReadInt32();
+			if (!IsReadFontImpl(reader.Version))
 			{
-				DefaultMaterial.Read(stream);
+				DefaultMaterial.Read(reader);
 			}
-			m_characterRects = stream.ReadArray<CharacterInfo>();
-			if (!IsReadFontImpl(stream.Version))
+			m_characterRects = reader.ReadArray<CharacterInfo>();
+			if (!IsReadFontImpl(reader.Version))
 			{
-				Texture.Read(stream);
+				Texture.Read(reader);
 			}
 
-			if (IsReadGridFont(stream.Version))
+			if (IsReadGridFont(reader.Version))
 			{
-				if (IsGridFontFirst(stream.Version))
+				if (IsGridFontFirst(reader.Version))
 				{
-					GridFont = stream.ReadBoolean();
+					GridFont = reader.ReadBoolean();
 				}
 			}
 
-			if (IsByteKerningValues(stream.Version))
+			if (IsByteKerningValues(reader.Version))
 			{
 				m_kerningValuesByte = new Dictionary<Tuple<byte, byte>, float>();
-				m_kerningValuesByte.Read(stream);
+				m_kerningValuesByte.Read(reader);
 			}
 			else
 			{
-				m_kerningValues.Read(stream);
+				m_kerningValues.Read(reader);
 			}
 
-			if (IsReadPixelScale(stream.Version))
+			if (IsReadPixelScale(reader.Version))
 			{
-				PixelScale = stream.ReadSingle();
-				stream.AlignStream(AlignType.Align4);
+				PixelScale = reader.ReadSingle();
+				reader.AlignStream(AlignType.Align4);
 			}
 			
-			if (IsReadGridFont(stream.Version))
+			if (IsReadGridFont(reader.Version))
 			{
-				if (!IsGridFontFirst(stream.Version))
+				if (!IsGridFontFirst(reader.Version))
 				{
-					GridFont = stream.ReadBoolean();
-					if (IsAlign(stream.Version))
+					GridFont = reader.ReadBoolean();
+					if (IsAlign(reader.Version))
 					{
-						stream.AlignStream(AlignType.Align4);
+						reader.AlignStream(AlignType.Align4);
 					}
 				}
 			}
 
-			if (IsReadFontData(stream.Version))
+			if (IsReadFontData(reader.Version))
 			{
-				m_fontData = stream.ReadByteArray();
-				stream.AlignStream(AlignType.Align4);
+				m_fontData = reader.ReadByteArray();
+				reader.AlignStream(AlignType.Align4);
 
-				if (!IsReadFontImpl(stream.Version))
+				if (!IsReadFontImpl(reader.Version))
 				{
-					FontSize = stream.ReadSingle();
+					FontSize = reader.ReadSingle();
 				}
-				Ascent = stream.ReadSingle();
+				Ascent = reader.ReadSingle();
 			}
-			if (IsReadDescent(stream.Version))
+			if (IsReadDescent(reader.Version))
 			{
-				Descent = stream.ReadSingle();
+				Descent = reader.ReadSingle();
 			}
-			if (IsReadDefaultStyle(stream.Version))
+			if (IsReadDefaultStyle(reader.Version))
 			{
-				DefaultStyle = (FontStyle)stream.ReadUInt32();
-				m_fontNames = stream.ReadStringArray();
-			}
-
-			if (IsReadFallbackFonts(stream.Version))
-			{
-				m_fallbackFonts = stream.ReadArray<PPtr<Font>>();
-				stream.AlignStream(AlignType.Align4);
-
-				FontRenderingMode = (FontRenderingMode)stream.ReadInt32();
+				DefaultStyle = (FontStyle)reader.ReadUInt32();
+				m_fontNames = reader.ReadStringArray();
 			}
 
-			if (IsReadUseLegacyBoundsCalculation(stream.Version))
+			if (IsReadFallbackFonts(reader.Version))
 			{
-				UseLegacyBoundsCalculation = stream.ReadBoolean();
+				m_fallbackFonts = reader.ReadArray<PPtr<Font>>();
+				reader.AlignStream(AlignType.Align4);
+
+				FontRenderingMode = (FontRenderingMode)reader.ReadInt32();
 			}
-			if(IsReadShouldRoundAdvanceValue(stream.Version))
+
+			if (IsReadUseLegacyBoundsCalculation(reader.Version))
 			{
-				ShouldRoundAdvanceValue = stream.ReadBoolean();
+				UseLegacyBoundsCalculation = reader.ReadBoolean();
+			}
+			if(IsReadShouldRoundAdvanceValue(reader.Version))
+			{
+				ShouldRoundAdvanceValue = reader.ReadBoolean();
 			}
 		}
 

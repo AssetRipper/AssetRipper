@@ -5,14 +5,14 @@ namespace UtinyRipper.Classes.NavMeshDatas
 {
 	public struct AutoOffMeshLinkData : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Start.Read(stream);
-			End.Read(stream);
-			Radius = stream.ReadSingle();
-			LinkType = stream.ReadUInt16();
-			Area = stream.ReadByte();
-			LinkDirection = stream.ReadByte();
+			Start.Read(reader);
+			End.Read(reader);
+			Radius = reader.ReadSingle();
+			LinkType = reader.ReadUInt16();
+			Area = reader.ReadByte();
+			LinkDirection = reader.ReadByte();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

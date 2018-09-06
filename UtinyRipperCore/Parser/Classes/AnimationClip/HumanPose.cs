@@ -19,32 +19,32 @@ namespace UtinyRipper.Classes.AnimationClips
 			return version.IsGreaterEqual(5, 2);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			RootX.Read(stream);
-			if(IsVector3(stream.Version))
+			RootX.Read(reader);
+			if(IsVector3(reader.Version))
 			{
-				LookAtPosition.Read3(stream);
+				LookAtPosition.Read3(reader);
 			}
 			else
 			{
-				LookAtPosition.Read(stream);
+				LookAtPosition.Read(reader);
 			}
-			LookAtWeight.Read(stream);
-			m_goalArray = stream.ReadArray<HumanGoal>();
-			LeftHandPose.Read(stream);
-			RightHandPose.Read(stream);
-			m_doFArray = stream.ReadSingleArray();
+			LookAtWeight.Read(reader);
+			m_goalArray = reader.ReadArray<HumanGoal>();
+			LeftHandPose.Read(reader);
+			RightHandPose.Read(reader);
+			m_doFArray = reader.ReadSingleArray();
 
-			if(IsReadTArray(stream.Version))
+			if(IsReadTArray(reader.Version))
 			{
-				if(IsVector3(stream.Version))
+				if(IsVector3(reader.Version))
 				{
-					m_TDoFArray = stream.ReadVector3Array();
+					m_TDoFArray = reader.ReadVector3Array();
 				}
 				else
 				{
-					m_TDoFArray = stream.ReadArray<Vector4f>();
+					m_TDoFArray = reader.ReadArray<Vector4f>();
 				}
 			}
 		}

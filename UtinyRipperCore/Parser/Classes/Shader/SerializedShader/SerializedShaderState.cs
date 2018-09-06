@@ -13,47 +13,47 @@ namespace UtinyRipper.Classes.Shaders
 			return version.IsGreaterEqual(2017, 2);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Name = stream.ReadStringAligned();
-			RtBlend0.Read(stream);
-			RtBlend1.Read(stream);
-			RtBlend2.Read(stream);
-			RtBlend3.Read(stream);
-			RtBlend4.Read(stream);
-			RtBlend5.Read(stream);
-			RtBlend6.Read(stream);
-			RtBlend7.Read(stream);
-			RtSeparateBlend = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			Name = reader.ReadStringAligned();
+			RtBlend0.Read(reader);
+			RtBlend1.Read(reader);
+			RtBlend2.Read(reader);
+			RtBlend3.Read(reader);
+			RtBlend4.Read(reader);
+			RtBlend5.Read(reader);
+			RtBlend6.Read(reader);
+			RtBlend7.Read(reader);
+			RtSeparateBlend = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 
-			if (IsReadZClip(stream.Version))
+			if (IsReadZClip(reader.Version))
 			{
-				ZClip.Read(stream);
+				ZClip.Read(reader);
 			}
-			ZTest.Read(stream);
-			ZWrite.Read(stream);
-			Culling.Read(stream);
-			OffsetFactor.Read(stream);
-			OffsetUnits.Read(stream);
-			AlphaToMask.Read(stream);
-			StencilOp.Read(stream);
-			StencilOpFront.Read(stream);
-			StencilOpBack.Read(stream);
-			StencilReadMask.Read(stream);
-			StencilWriteMask.Read(stream);
-			StencilRef.Read(stream);
-			FogStart.Read(stream);
-			FogEnd.Read(stream);
-			FogDensity.Read(stream);
-			FogColor.Read(stream);
+			ZTest.Read(reader);
+			ZWrite.Read(reader);
+			Culling.Read(reader);
+			OffsetFactor.Read(reader);
+			OffsetUnits.Read(reader);
+			AlphaToMask.Read(reader);
+			StencilOp.Read(reader);
+			StencilOpFront.Read(reader);
+			StencilOpBack.Read(reader);
+			StencilReadMask.Read(reader);
+			StencilWriteMask.Read(reader);
+			StencilRef.Read(reader);
+			FogStart.Read(reader);
+			FogEnd.Read(reader);
+			FogDensity.Read(reader);
+			FogColor.Read(reader);
 
-			FogMode = (FogMode)stream.ReadInt32();
-			GpuProgramID = stream.ReadInt32();
-			Tags.Read(stream);
-			LOD = stream.ReadInt32();
-			Lighting = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			FogMode = (FogMode)reader.ReadInt32();
+			GpuProgramID = reader.ReadInt32();
+			Tags.Read(reader);
+			LOD = reader.ReadInt32();
+			Lighting = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public void Export(TextWriter writer)

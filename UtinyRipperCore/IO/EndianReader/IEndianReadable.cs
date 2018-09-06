@@ -2,6 +2,6 @@
 {
 	public interface IEndianReadable
 	{
-		void Read(EndianStream stream);
+		void Read(EndianReader reader);
 	}
 }

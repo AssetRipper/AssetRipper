@@ -8,10 +8,10 @@
 			BindPoint = bindPoint;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Sampler = stream.ReadUInt32();
-			BindPoint = stream.ReadInt32();
+			Sampler = reader.ReadUInt32();
+			BindPoint = reader.ReadInt32();
 		}
 
 		public uint Sampler { get; private set; }

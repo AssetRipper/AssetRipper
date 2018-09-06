@@ -18,14 +18,14 @@
 			ArraySize = arraySize;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			NameIndex = stream.ReadInt32();
-			Index = stream.ReadInt32();
-			ArraySize = stream.ReadInt32();
-			Type = (ShaderParamType)stream.ReadByte();
-			Dim = stream.ReadByte();
-			stream.AlignStream(AlignType.Align4);
+			NameIndex = reader.ReadInt32();
+			Index = reader.ReadInt32();
+			ArraySize = reader.ReadInt32();
+			Type = (ShaderParamType)reader.ReadByte();
+			Dim = reader.ReadByte();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public string Name { get; private set; }

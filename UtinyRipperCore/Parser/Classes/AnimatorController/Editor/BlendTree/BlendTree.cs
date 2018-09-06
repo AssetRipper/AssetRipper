@@ -33,7 +33,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			file.AddAsset(this);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
 			throw new NotSupportedException();
 		}

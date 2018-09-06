@@ -13,18 +13,18 @@ namespace UtinyRipper.Classes.TerrainDatas
 			return version.IsGreaterEqual(5);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Position.Read(stream);
-			WidthScale = stream.ReadSingle();
-			HeightScale = stream.ReadSingle();
-			if (IsReadRotation(stream.Version))
+			Position.Read(reader);
+			WidthScale = reader.ReadSingle();
+			HeightScale = reader.ReadSingle();
+			if (IsReadRotation(reader.Version))
 			{
-				Rotation = stream.ReadSingle();
+				Rotation = reader.ReadSingle();
 			}
-			Color.Read(stream);
-			LightmapColor.Read(stream);
-			Index = stream.ReadInt32();
+			Color.Read(reader);
+			LightmapColor.Read(reader);
+			Index = reader.ReadInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

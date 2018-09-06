@@ -75,26 +75,26 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			if (IsMinMaxStateFirst(stream.Version))
+			if (IsMinMaxStateFirst(reader.Version))
 			{
-				MinMaxState = (ParticleSystemCurveMode)stream.ReadUInt16();
-				stream.AlignStream(AlignType.Align4);
+				MinMaxState = (ParticleSystemCurveMode)reader.ReadUInt16();
+				reader.AlignStream(AlignType.Align4);
 			}
 			
-			Scalar = stream.ReadSingle();
-			if (IsReadMinScalar(stream.Version))
+			Scalar = reader.ReadSingle();
+			if (IsReadMinScalar(reader.Version))
 			{
-				MinScalar = stream.ReadSingle();
+				MinScalar = reader.ReadSingle();
 			}
-			MaxCurve.Read(stream);
-			MinCurve.Read(stream);
+			MaxCurve.Read(reader);
+			MinCurve.Read(reader);
 			
-			if (!IsMinMaxStateFirst(stream.Version))
+			if (!IsMinMaxStateFirst(reader.Version))
 			{
-				MinMaxState = (ParticleSystemCurveMode)stream.ReadUInt16();
-				stream.AlignStream(AlignType.Align4);
+				MinMaxState = (ParticleSystemCurveMode)reader.ReadUInt16();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

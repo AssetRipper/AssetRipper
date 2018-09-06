@@ -19,15 +19,15 @@ namespace UtinyRipper.Classes
 			return !flags.IsSerializeGameRelease();
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadBuildSettings(stream.Flags))
+			if (IsReadBuildSettings(reader.Flags))
 			{
-				BuildSettings.Read(stream);
+				BuildSettings.Read(reader);
 			}
-			NavMeshData.Read(stream);
+			NavMeshData.Read(reader);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

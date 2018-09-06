@@ -2,10 +2,10 @@
 {
 	public struct SerializedShaderDependency : IAssetReadable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			From = stream.ReadStringAligned();
-			To = stream.ReadStringAligned();
+			From = reader.ReadStringAligned();
+			To = reader.ReadStringAligned();
 		}
 
 		public string From { get; private set; }

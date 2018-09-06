@@ -17,17 +17,17 @@ namespace UtinyRipper.Classes.AnimatorControllers
 			return version.IsGreaterEqual(5);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_stateConstantArray = stream.ReadArray<OffsetPtr<StateConstant>>();
-			m_anyStateTransitionConstantArray = stream.ReadArray<OffsetPtr<TransitionConstant>>();
-			if(IsReadConstantArray(stream.Version))
+			m_stateConstantArray = reader.ReadArray<OffsetPtr<StateConstant>>();
+			m_anyStateTransitionConstantArray = reader.ReadArray<OffsetPtr<TransitionConstant>>();
+			if(IsReadConstantArray(reader.Version))
 			{
-				m_selectorStateConstantArray = stream.ReadArray<OffsetPtr<SelectorStateConstant>>();
+				m_selectorStateConstantArray = reader.ReadArray<OffsetPtr<SelectorStateConstant>>();
 			}
 
-			DefaultState = (int)stream.ReadUInt32();
-			MotionSetCount = stream.ReadUInt32();
+			DefaultState = (int)reader.ReadUInt32();
+			MotionSetCount = reader.ReadUInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

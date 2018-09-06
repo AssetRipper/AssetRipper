@@ -6,9 +6,9 @@ namespace UtinyRipper.Classes.Avatars
 {
 	public struct SkeletonPose : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_x = stream.ReadArray<XForm>();
+			m_x = reader.ReadArray<XForm>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -5,14 +5,14 @@ namespace UtinyRipper.Classes.AnimationClips
 {
 	public struct CompressedAnimationCurve : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Path = stream.ReadStringAligned();
-			Times.Read(stream);
-			Values.Read(stream);
-			Slopes.Read(stream);
-			PreInfinity = stream.ReadInt32();
-			PostInfinity = stream.ReadInt32();
+			Path = reader.ReadStringAligned();
+			Times.Read(reader);
+			Values.Read(reader);
+			Slopes.Read(reader);
+			PreInfinity = reader.ReadInt32();
+			PostInfinity = reader.ReadInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

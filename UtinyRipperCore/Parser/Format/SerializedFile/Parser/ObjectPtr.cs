@@ -10,17 +10,17 @@
 			return generation >= FileGeneration.FG_500;
 		}
 
-		public void Read(SerializedFileStream stream)
+		public void Read(SerializedFileReader reader)
 		{
-			FileID = stream.ReadInt32();
-			if (IsReadLongPathID(stream.Generation))
+			FileID = reader.ReadInt32();
+			if (IsReadLongPathID(reader.Generation))
 			{
-				stream.AlignStream(AlignType.Align4);
-				PathID = stream.ReadInt64();
+				reader.AlignStream(AlignType.Align4);
+				PathID = reader.ReadInt64();
 			}
 			else
 			{
-				PathID = stream.ReadInt32();
+				PathID = reader.ReadInt32();
 			}
 		}
 

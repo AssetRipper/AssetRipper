@@ -55,39 +55,39 @@ namespace UtinyRipper.Classes.Avatars
 			return IsReadColliderIndex(version) ? ColliderIndex : new int[0];
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			RootX.Read(stream);
-			Skeleton.Read(stream);
-			SkeletonPose.Read(stream);
-			LeftHand.Read(stream);
-			RightHand.Read(stream);
-			if(IsReadHandles(stream.Version))
+			RootX.Read(reader);
+			Skeleton.Read(reader);
+			SkeletonPose.Read(reader);
+			LeftHand.Read(reader);
+			RightHand.Read(reader);
+			if(IsReadHandles(reader.Version))
 			{
-				m_handles = stream.ReadArray<Handle>();
-				m_colliderArray = stream.ReadArray<Collider>();
+				m_handles = reader.ReadArray<Handle>();
+				m_colliderArray = reader.ReadArray<Collider>();
 			}
-			m_humanBoneIndex = stream.ReadInt32Array();
-			m_humanBoneMass = stream.ReadSingleArray();
-			if (IsReadColliderIndex(stream.Version))
+			m_humanBoneIndex = reader.ReadInt32Array();
+			m_humanBoneMass = reader.ReadSingleArray();
+			if (IsReadColliderIndex(reader.Version))
 			{
-				m_colliderIndex = stream.ReadInt32Array();
+				m_colliderIndex = reader.ReadInt32Array();
 			}
-			Scale = stream.ReadSingle();
-			ArmTwist = stream.ReadSingle();
-			ForeArmTwist = stream.ReadSingle();
-			UpperLegTwist = stream.ReadSingle();
-			LegTwist = stream.ReadSingle();
-			ArmStretch = stream.ReadSingle();
-			LegStretch = stream.ReadSingle();
-			FeetSpacing = stream.ReadSingle();
-			HasLeftHand = stream.ReadBoolean();
-			HasRightHand = stream.ReadBoolean();
-			if (IsReadHasTDoF(stream.Version))
+			Scale = reader.ReadSingle();
+			ArmTwist = reader.ReadSingle();
+			ForeArmTwist = reader.ReadSingle();
+			UpperLegTwist = reader.ReadSingle();
+			LegTwist = reader.ReadSingle();
+			ArmStretch = reader.ReadSingle();
+			LegStretch = reader.ReadSingle();
+			FeetSpacing = reader.ReadSingle();
+			HasLeftHand = reader.ReadBoolean();
+			HasRightHand = reader.ReadBoolean();
+			if (IsReadHasTDoF(reader.Version))
 			{
-				HasTDoF = stream.ReadBoolean();
+				HasTDoF = reader.ReadBoolean();
 			}
-			stream.AlignStream(AlignType.Align4);
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

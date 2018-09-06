@@ -5,12 +5,12 @@ namespace UtinyRipper.Classes.AnimatorControllers
 {
 	public struct ControllerConstant : IAssetReadable
 	{		
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_layerArray = stream.ReadArray<OffsetPtr<LayerConstant>>();
-			m_stateMachineArray = stream.ReadArray<OffsetPtr<StateMachineConstant>>();
-			Values.Read(stream);
-			DefaultValues.Read(stream);
+			m_layerArray = reader.ReadArray<OffsetPtr<LayerConstant>>();
+			m_stateMachineArray = reader.ReadArray<OffsetPtr<StateMachineConstant>>();
+			Values.Read(reader);
+			DefaultValues.Read(reader);
 		}
 
 		public LayerConstant GetLayerByStateMachineIndex(int index)

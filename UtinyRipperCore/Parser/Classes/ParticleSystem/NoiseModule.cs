@@ -46,39 +46,39 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 			
-			Strength.Read(stream);
-			StrengthY.Read(stream);
-			StrengthZ.Read(stream);
-			SeparateAxes = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			Strength.Read(reader);
+			StrengthY.Read(reader);
+			StrengthZ.Read(reader);
+			SeparateAxes = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 			
-			Frequency = stream.ReadSingle();
-			Damping = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			Frequency = reader.ReadSingle();
+			Damping = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 			
-			Octaves = stream.ReadInt32();
-			OctaveMultiplier = stream.ReadSingle();
-			OctaveScale = stream.ReadSingle();
-			Quality = stream.ReadInt32();
-			ScrollSpeed.Read(stream);
-			Remap.Read(stream);
-			RemapY.Read(stream);
-			RemapZ.Read(stream);
-			RemapEnabled = stream.ReadBoolean();
-			if (IsAlign(stream.Version))
+			Octaves = reader.ReadInt32();
+			OctaveMultiplier = reader.ReadSingle();
+			OctaveScale = reader.ReadSingle();
+			Quality = reader.ReadInt32();
+			ScrollSpeed.Read(reader);
+			Remap.Read(reader);
+			RemapY.Read(reader);
+			RemapZ.Read(reader);
+			RemapEnabled = reader.ReadBoolean();
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadPositionAmount(stream.Version))
+			if (IsReadPositionAmount(reader.Version))
 			{
-				PositionAmount.Read(stream);
-				RotationAmount.Read(stream);
-				SizeAmount.Read(stream);
+				PositionAmount.Read(reader);
+				RotationAmount.Read(reader);
+				SizeAmount.Read(reader);
 			}
 		}
 

@@ -24,12 +24,12 @@ namespace UtinyRipper.Classes.Meshes
 			return CalculateStride(Format, Dimension);
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Stream = stream.ReadByte();
-			Offset = stream.ReadByte();
-			Format = (ChannelFormat)stream.ReadByte();
-			Dimension = stream.ReadByte();
+			Stream = reader.ReadByte();
+			Offset = reader.ReadByte();
+			Format = (ChannelFormat)reader.ReadByte();
+			Dimension = reader.ReadByte();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -6,10 +6,10 @@
 	/// </summary>
 	internal struct ChunkInfo : IEndianReadable
 	{
-		public void Read(EndianStream stream)
+		public void Read(EndianReader reader)
 		{
-			CompressedSize = stream.ReadUInt32();
-			DecompressedSize = stream.ReadUInt32();
+			CompressedSize = reader.ReadUInt32();
+			DecompressedSize = reader.ReadUInt32();
 		}
 
 		public uint CompressedSize { get; private set; }

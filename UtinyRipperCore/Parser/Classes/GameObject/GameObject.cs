@@ -60,16 +60,16 @@ namespace UtinyRipper.Classes
 			return 5;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Components = stream.ReadArray<ComponentPair>();
+			Components = reader.ReadArray<ComponentPair>();
 
-			Layer = stream.ReadInt32();
-			Name = stream.ReadStringAligned();
-			Tag = stream.ReadUInt16();
-			IsActive = stream.ReadBoolean();
+			Layer = reader.ReadInt32();
+			Name = reader.ReadStringAligned();
+			Tag = reader.ReadUInt16();
+			IsActive = reader.ReadBoolean();
 		}
 		
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

@@ -21,14 +21,14 @@ namespace UtinyRipper.Classes
 			return !flags.IsUnknown1() && !flags.IsSerializeForPrefabSystem();
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadPrefab(stream.Flags))
+			if (IsReadPrefab(reader.Flags))
 			{
-				PrefabParentObject.Read(stream);
-				PrefabInternal.Read(stream);
+				PrefabParentObject.Read(reader);
+				PrefabInternal.Read(reader);
 			}
 		}
 

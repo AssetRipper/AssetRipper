@@ -26,26 +26,26 @@ namespace UtinyRipper.Classes
 			return version.IsLess(2);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			DynamicFriction = stream.ReadSingle();
-			StaticFriction = stream.ReadSingle();
-			Bounciness = stream.ReadSingle();
-			FrictionCombine = stream.ReadInt32();
-			BounceCombine = stream.ReadInt32();
+			DynamicFriction = reader.ReadSingle();
+			StaticFriction = reader.ReadSingle();
+			Bounciness = reader.ReadSingle();
+			FrictionCombine = reader.ReadInt32();
+			BounceCombine = reader.ReadInt32();
 
-			if (IsReadFrictionDirection2(stream.Version))
+			if (IsReadFrictionDirection2(reader.Version))
 			{
-				FrictionDirection2.Read(stream);
-				DynamicFriction2 = stream.ReadSingle();
-				StaticFriction2 = stream.ReadSingle();
+				FrictionDirection2.Read(reader);
+				DynamicFriction2 = reader.ReadSingle();
+				StaticFriction2 = reader.ReadSingle();
 			}
-			if (IsReadUseSpring(stream.Version))
+			if (IsReadUseSpring(reader.Version))
 			{
-				UseSpring = stream.ReadBoolean();
-				Spring.Read(stream);
+				UseSpring = reader.ReadBoolean();
+				Spring.Read(reader);
 			}
 		}
 

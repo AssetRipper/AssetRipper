@@ -15,15 +15,15 @@ namespace UtinyRipper.Classes.LightmapSettingss
 			return !flags.IsSerializeGameRelease();
 		}
 
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Renderer.Read(stream);
-			DynamicLightmapSTInSystem.Read(stream);
-			SystemId = stream.ReadInt32();
-			InstanceHash.Read(stream);
-			if(IsReadGeometryHash(stream.Flags))
+			Renderer.Read(reader);
+			DynamicLightmapSTInSystem.Read(reader);
+			SystemId = reader.ReadInt32();
+			InstanceHash.Read(reader);
+			if(IsReadGeometryHash(reader.Flags))
 			{
-				GeometryHash.Read(stream);
+				GeometryHash.Read(reader);
 			}
 		}
 

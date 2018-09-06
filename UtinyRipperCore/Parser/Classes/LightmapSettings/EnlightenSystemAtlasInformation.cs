@@ -5,11 +5,11 @@ namespace UtinyRipper.Classes.LightmapSettingss
 {
 	public struct EnlightenSystemAtlasInformation : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			AtlasSize = stream.ReadInt32();
-			AtlasHash.Read(stream);
-			FirstSystemId = stream.ReadInt32();
+			AtlasSize = reader.ReadInt32();
+			AtlasHash.Read(reader);
+			FirstSystemId = reader.ReadInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -160,84 +160,84 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			Type = (LightType)stream.ReadInt32();
-			Color.Read(stream);
-			if (IsReadAttenuate(stream.Version))
+			Type = (LightType)reader.ReadInt32();
+			Color.Read(reader);
+			if (IsReadAttenuate(reader.Version))
 			{
-				Attenuate = stream.ReadBoolean();
-				if (IsAlign(stream.Version))
+				Attenuate = reader.ReadBoolean();
+				if (IsAlign(reader.Version))
 				{
-					stream.AlignStream(AlignType.Align4);
+					reader.AlignStream(AlignType.Align4);
 				}
 			}
-			if (IsReadIntensity(stream.Version))
+			if (IsReadIntensity(reader.Version))
 			{
-				Intensity = stream.ReadSingle();
+				Intensity = reader.ReadSingle();
 			}
-			Range = stream.ReadSingle();
-			SpotAngle = stream.ReadSingle();
-			if (IsReadCookieSize(stream.Version))
+			Range = reader.ReadSingle();
+			SpotAngle = reader.ReadSingle();
+			if (IsReadCookieSize(reader.Version))
 			{
-				CookieSize = stream.ReadSingle();
+				CookieSize = reader.ReadSingle();
 			}
-			if (IsReadShadows(stream.Version))
+			if (IsReadShadows(reader.Version))
 			{
-				Shadows.Read(stream);
+				Shadows.Read(reader);
 			}
-			Cookie.Read(stream);
-			DrawHalo = stream.ReadBoolean();
-			if (IsReadActuallyLightmapped(stream.Version))
+			Cookie.Read(reader);
+			DrawHalo = reader.ReadBoolean();
+			if (IsReadActuallyLightmapped(reader.Version))
 			{
-				ActuallyLightmapped = stream.ReadBoolean();
+				ActuallyLightmapped = reader.ReadBoolean();
 			}
-			if (IsAlign(stream.Version))
+			if (IsAlign(reader.Version))
 			{
-				stream.AlignStream(AlignType.Align4);
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadBakedIndex(stream.Version))
+			if (IsReadBakedIndex(reader.Version))
 			{
-				BakedIndex = stream.ReadInt32();
+				BakedIndex = reader.ReadInt32();
 			}
-			if (IsReadBakingOutput(stream.Version))
+			if (IsReadBakingOutput(reader.Version))
 			{
-				BakingOutput.Read(stream);
+				BakingOutput.Read(reader);
 			}
-			Flare.Read(stream);
-			RenderMode = (LightRenderMode)stream.ReadInt32();
-			if (IsReadCullingMask(stream.Version))
+			Flare.Read(reader);
+			RenderMode = (LightRenderMode)reader.ReadInt32();
+			if (IsReadCullingMask(reader.Version))
 			{
-				CullingMask.Read(stream);
+				CullingMask.Read(reader);
 			}
-			if (IsReadLightmapping(stream.Version))
+			if (IsReadLightmapping(reader.Version))
 			{
-				Lightmapping = (LightmappingMode)stream.ReadInt32();
+				Lightmapping = (LightmappingMode)reader.ReadInt32();
 			}
-			if(IsReadLightShadowCasterMode(stream.Version))
+			if(IsReadLightShadowCasterMode(reader.Version))
 			{
-				LightShadowCasterMode = (LightShadowCasterMode)stream.ReadInt32();
+				LightShadowCasterMode = (LightShadowCasterMode)reader.ReadInt32();
 			}
-			if (IsReadAreaSize(stream.Version))
+			if (IsReadAreaSize(reader.Version))
 			{
-				AreaSize.Read(stream);
+				AreaSize.Read(reader);
 			}
-			if (IsReadBounceIntensity(stream.Version))
+			if (IsReadBounceIntensity(reader.Version))
 			{
-				BounceIntensity = stream.ReadSingle();
+				BounceIntensity = reader.ReadSingle();
 			}
-			if(IsReadFalloffTable(stream.Version))
+			if(IsReadFalloffTable(reader.Version))
 			{
-				FalloffTable.Read(stream);
+				FalloffTable.Read(reader);
 			}
-			if (IsReadColorTemperature(stream.Version))
+			if (IsReadColorTemperature(reader.Version))
 			{
-				ColorTemperature = stream.ReadSingle();
-				UseColorTemperature = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				ColorTemperature = reader.ReadSingle();
+				UseColorTemperature = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 		}
 

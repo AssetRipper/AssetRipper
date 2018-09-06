@@ -47,25 +47,25 @@ namespace UtinyRipper.Classes
 			return 1;
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			if (IsReadSpriteTilingProperty(stream.Version))
+			if (IsReadSpriteTilingProperty(reader.Version))
 			{
-				SpriteTilingProperty.Read(stream);
-				AutoTiling = stream.ReadBoolean();
-				stream.AlignStream(AlignType.Align4);
+				SpriteTilingProperty.Read(reader);
+				AutoTiling = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
 			}
 
-			Size.Read(stream);
-			if (IsReadCenter(stream.Version))
+			Size.Read(reader);
+			if (IsReadCenter(reader.Version))
 			{
-				Center.Read(stream);
+				Center.Read(reader);
 			}
-			if (IsReadEdgeRadius(stream.Version))
+			if (IsReadEdgeRadius(reader.Version))
 			{
-				EdgeRadius = stream.ReadSingle();
+				EdgeRadius = reader.ReadSingle();
 			}
 		}
 

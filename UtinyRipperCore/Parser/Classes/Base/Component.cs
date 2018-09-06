@@ -14,11 +14,11 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			GameObject.Read(stream);
+			GameObject.Read(reader);
 		}
 
 		public sealed override void ExportBinary(IExportContainer container, Stream stream)

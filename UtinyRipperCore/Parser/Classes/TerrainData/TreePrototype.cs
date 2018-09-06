@@ -7,10 +7,10 @@ namespace UtinyRipper.Classes.TerrainDatas
 {
 	public struct TreePrototype : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			Prefab.Read(stream);
-			BendFactor = stream.ReadSingle();
+			Prefab.Read(reader);
+			BendFactor = reader.ReadSingle();
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

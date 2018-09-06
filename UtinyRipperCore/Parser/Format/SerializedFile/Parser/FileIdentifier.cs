@@ -22,18 +22,18 @@ namespace UtinyRipper.SerializedFiles
 			return generation >= FileGeneration.FG_120_200;
 		}
 
-		public void Read(SerializedFileStream stream)
+		public void Read(SerializedFileReader reader)
 		{
-			if (IsReadAssetName(stream.Generation))
+			if (IsReadAssetName(reader.Generation))
 			{
-				AssetPath = stream.ReadStringZeroTerm();
+				AssetPath = reader.ReadStringZeroTerm();
 			}
-			if (IsReadHash(stream.Generation))
+			if (IsReadHash(reader.Generation))
 			{
-				Hash.Read(stream);
-				Type = (AssetType)stream.ReadInt32();
+				Hash.Read(reader);
+				Type = (AssetType)reader.ReadInt32();
 			}
-			FilePathOrigin = stream.ReadStringZeroTerm();
+			FilePathOrigin = reader.ReadStringZeroTerm();
 			FilePath = FilenameUtils.FixFileIdentifier(FilePathOrigin);
 		}
 

@@ -13,9 +13,9 @@ namespace UtinyRipper.Classes.Shaders.Exporters
 				int offset = reader.ReadInt32();
 				reader.BaseStream.Position = position + offset;
 			}
-			using (EndianStream stream = new EndianStream(reader.BaseStream))
+			using (EndianReader endReader = new EndianReader(reader.BaseStream))
 			{
-				EntryName = stream.ReadStringZeroTerm();
+				EntryName = endReader.ReadStringZeroTerm();
 			}
 			base.Export(reader, writer);
 		}

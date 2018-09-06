@@ -33,30 +33,30 @@ namespace UtinyRipper.Classes
 
 		public void Read(byte[] buffer)
 		{
-			using (MemoryStream baseStream = new MemoryStream(buffer))
+			using (MemoryStream stream = new MemoryStream(buffer))
 			{
-				using (AssetStream stream = new AssetStream(baseStream, File.Version, File.Platform, File.Flags))
+				using (AssetReader reader = new AssetReader(stream, File.Version, File.Platform, File.Flags))
 				{
-					Read(stream);
+					Read(reader);
 
-					if (stream.BaseStream.Position != buffer.Length)
+					if (reader.BaseStream.Position != buffer.Length)
 					{
-						throw new Exception($"Read less {stream.BaseStream.Position} than expected {buffer.Length}");
+						throw new Exception($"Read less {reader.BaseStream.Position} than expected {buffer.Length}");
 					}
 				}
 			}
 		}
 
-		public virtual void Read(AssetStream stream)
+		public virtual void Read(AssetReader reader)
 		{
-			if (IsReadHideFlag(stream.Flags))
+			if (IsReadHideFlag(reader.Flags))
 			{
-				ObjectHideFlags = stream.ReadUInt32();
+				ObjectHideFlags = reader.ReadUInt32();
 			}
-			if(IsReadInstanceID(stream.Flags))
+			if(IsReadInstanceID(reader.Flags))
 			{
-				int instanceID = stream.ReadInt32();
-				long localIdentfierInFile = stream.ReadInt64();
+				int instanceID = reader.ReadInt32();
+				long localIdentfierInFile = reader.ReadInt64();
 #if DEBUG
 				InstanceID = instanceID;
 				LocalIdentfierInFile = localIdentfierInFile;

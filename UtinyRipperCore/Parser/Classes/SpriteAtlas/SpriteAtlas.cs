@@ -14,16 +14,16 @@ namespace UtinyRipper.Classes
 		{
 		}
 		
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			m_packedSprites = stream.ReadArray<PPtr<Sprite>>();
-			m_packedSpriteNamesToIndex = stream.ReadStringArray();
-			m_renderDataMap.Read(stream);
-			Tag = stream.ReadStringAligned();
-			IsVariant = stream.ReadBoolean();
-			stream.AlignStream(AlignType.Align4);
+			m_packedSprites = reader.ReadArray<PPtr<Sprite>>();
+			m_packedSpriteNamesToIndex = reader.ReadStringArray();
+			m_renderDataMap.Read(reader);
+			Tag = reader.ReadStringAligned();
+			IsVariant = reader.ReadBoolean();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

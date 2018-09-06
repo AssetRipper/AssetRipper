@@ -6,10 +6,10 @@ namespace UtinyRipper.Classes.PolygonCollider2Ds
 {
 	public struct Polygon2D : IAssetReadable, IYAMLExportable
 	{
-		public void Read(AssetStream stream)
+		public void Read(AssetReader reader)
 		{
-			m_paths = stream.ReadArrayDouble<Vector2f>();
-			stream.AlignStream(AlignType.Align4);
+			m_paths = reader.ReadArrayDouble<Vector2f>();
+			reader.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -51,18 +51,18 @@ namespace UtinyRipper.Classes
 			SetIDs(container, cullingSetting, scene);
 		}
 
-		public override void Read(AssetStream stream)
+		public override void Read(AssetReader reader)
 		{
-			base.Read(stream);
+			base.Read(reader);
 
-			m_PVSData = stream.ReadByteArray();
-			stream.AlignStream(AlignType.Align4);
+			m_PVSData = reader.ReadByteArray();
+			reader.AlignStream(AlignType.Align4);
 
-			m_scenes = stream.ReadArray<OcclusionScene>();
-			if (IsReadStaticRenderers(stream.Flags))
+			m_scenes = reader.ReadArray<OcclusionScene>();
+			if (IsReadStaticRenderers(reader.Flags))
 			{
-				m_staticRenderers = stream.ReadArray<SceneObjectIdentifier>();
-				m_portals = stream.ReadArray<SceneObjectIdentifier>();
+				m_staticRenderers = reader.ReadArray<SceneObjectIdentifier>();
+				m_portals = reader.ReadArray<SceneObjectIdentifier>();
 			}
 		}
 

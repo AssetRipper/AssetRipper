@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UtinyRipper.SerializedFiles
 {
-	internal sealed class RTTIClassHierarchyDescriptor
+	public sealed class RTTIClassHierarchyDescriptor
 	{
 		public RTTIClassHierarchyDescriptor(string name)
 		{
@@ -43,34 +43,34 @@ namespace UtinyRipper.SerializedFiles
 			return generation >= FileGeneration.FG_300b && generation < FileGeneration.FG_500;
 		}
 
-		public void Read(SerializedFileStream stream)
+		public void Read(SerializedFileReader reader)
 		{
-			if (IsReadSignature(stream.Generation))
+			if (IsReadSignature(reader.Generation))
 			{
-				string signature = stream.ReadStringZeroTerm();
+				string signature = reader.ReadStringZeroTerm();
 				Version.Parse(signature);
 			}
-			if (IsReadAttributes(stream.Generation))
+			if (IsReadAttributes(reader.Generation))
 			{
-				Platform = (Platform)stream.ReadUInt32();
+				Platform = (Platform)reader.ReadUInt32();
 				if (!Enum.IsDefined(typeof(Platform), Platform))
 				{
 					throw new Exception($"Unsuported platform {Platform} for asset file '{Name}'");
 				}
 			}
-			if (IsReadSerializeTypeTrees(stream.Generation))
+			if (IsReadSerializeTypeTrees(reader.Generation))
 			{
-				SerializeTypeTrees = stream.ReadBoolean();
+				SerializeTypeTrees = reader.ReadBoolean();
 			}
 			else
 			{
 				SerializeTypeTrees = true;
 			}
-			m_types = stream.ReadArray(() => new RTTIBaseClassDescriptor(SerializeTypeTrees));
+			m_types = reader.ReadArray(() => new RTTIBaseClassDescriptor(SerializeTypeTrees));
 
-			if (IsReadUnknown(stream.Generation))
+			if (IsReadUnknown(reader.Generation))
 			{
-				Unknown = stream.ReadInt32();
+				Unknown = reader.ReadInt32();
 			}
 		}
 
@@ -82,9 +82,9 @@ namespace UtinyRipper.SerializedFiles
 		/// Attributes
 		/// </summary>
 		public Platform Platform { get; private set; }
-		public bool SerializeTypeTrees { get; private set; }
-		public IReadOnlyList<RTTIBaseClassDescriptor> Types => m_types;
-		public int Unknown { get; private set; }
+		internal bool SerializeTypeTrees { get; private set; }
+		internal IReadOnlyList<RTTIBaseClassDescriptor> Types => m_types;
+		internal int Unknown { get; private set; }
 		
 		private string Name { get; }
 
