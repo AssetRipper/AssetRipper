@@ -63,7 +63,7 @@ namespace UtinyRipper
 			}
 		}
 
-		public void Read(Stream stream, string filePath)
+		public void Read(SmartStream stream, string filePath)
 		{
 			if (BundleFile.IsBundleFile(stream))
 			{
@@ -84,7 +84,7 @@ namespace UtinyRipper
 			}
 		}
 
-		internal void ReadResourceFile(Stream stream, string filePath, string fileName)
+		internal void ReadResourceFile(SmartStream stream, string filePath, string fileName)
 		{
 			ResourcesFile resource = new ResourcesFile(stream, filePath, fileName);
 			AddResourceFile(resource);
@@ -168,7 +168,7 @@ namespace UtinyRipper
 			}
 		}
 
-		public void ReadBundleFile(Stream stream, string bundlePath)
+		public void ReadBundleFile(SmartStream stream, string bundlePath)
 		{
 			using (BundleFile bundle = BundleFile.Read(stream, bundlePath))
 			{
@@ -184,7 +184,7 @@ namespace UtinyRipper
 			}
 		}
 
-		public void ReadArchiveFile(Stream stream, string archivePath)
+		public void ReadArchiveFile(SmartStream stream, string archivePath)
 		{
 			using (ArchiveFile archive = ArchiveFile.Read(stream, archivePath))
 			{
@@ -200,7 +200,7 @@ namespace UtinyRipper
 			}
 		}
 
-		public void ReadWebFile(Stream stream, string webPath)
+		public void ReadWebFile(SmartStream stream, string webPath)
 		{
 			using (WebFile web = WebFile.Read(stream, webPath))
 			{
@@ -277,7 +277,6 @@ namespace UtinyRipper
 		public ResourcesFile FindResourcesFile(ISerializedFile ifile, string fileName)
 		{
 			SerializedFile file = (SerializedFile)ifile;
-
 			fileName = FilenameUtils.FixResourcePath(fileName);
 
 			// check asset bundles / web files
@@ -286,28 +285,21 @@ namespace UtinyRipper
 			{
 				if(res.FilePath == filePath && res.Name == fileName)
 				{
-					return res;
+					return new ResourcesFile(res);
 				}
 			}
 
-			// check manualy loaded resource files 
-			string dirPath = Path.GetDirectoryName(filePath) ?? string.Empty;
+#warning TODO: request dependency
+			string dirPath = Path.GetDirectoryName(filePath);
+			dirPath = string.IsNullOrEmpty(dirPath) ? "." : dirPath;
 			string resPath = Path.Combine(dirPath, fileName);
-			foreach (ResourcesFile res in m_resources)
-			{
-				if (res.FilePath == resPath && res.Name == fileName)
-				{
-					return res;
-				}
-			}
-			
-			// lazy loading
 			if (FileMultiStream.Exists(resPath))
 			{
-				Stream stream = FileMultiStream.OpenRead(resPath);
-				ResourcesFile resesFile = new ResourcesFile(stream, resPath, fileName);
-				m_resources.Add(resesFile);
-				return resesFile;
+				using (SmartStream stream = SmartStream.OpenRead(resPath))
+				{
+					ResourcesFile resesFile = new ResourcesFile(stream, resPath, fileName);
+					return resesFile;
+				}
 			}
 			return null;
 		}

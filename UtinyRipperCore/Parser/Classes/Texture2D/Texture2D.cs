@@ -159,17 +159,19 @@ namespace UtinyRipper.Classes
 					{
 						throw new Exception("Texture contains data and resource path");
 					}
-					
-					ResourcesFile res = File.Collection.FindResourcesFile(File, path);
-					if (res == null)
+
+					using (ResourcesFile res = File.Collection.FindResourcesFile(File, path))
 					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because resources file '{path}' wasn't found");
+						if (res == null)
+						{
+							Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because resources file '{path}' wasn't found");
+							return;
+						}
+
+						res.Position = StreamData.Offset;
+						Export(container, stream, res.Stream, StreamData.Size);
 						return;
 					}
-					
-					res.Position = StreamData.Offset;
-					Export(container, stream, res.Stream, StreamData.Size);
-					return;
 				}
 			}
 

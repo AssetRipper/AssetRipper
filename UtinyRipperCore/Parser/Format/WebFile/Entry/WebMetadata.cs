@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 
 namespace UtinyRipper.WebFiles
 {
-	public class WebMetadata : FileData<WebFileEntry>
+	public class WebMetadata : Metadata<WebFileEntry>
 	{
-		public WebMetadata(Stream stream, bool isClosable, IReadOnlyList<WebFileEntry> entries):
-			base(stream, isClosable)
+		internal WebMetadata(IReadOnlyList<WebFileEntry> entries)
 		{
 			Entries = entries;
 		}

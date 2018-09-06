@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using UtinyRipper.BundleFiles;
 using UtinyRipper.WebFiles;
 
@@ -7,8 +6,8 @@ namespace UtinyRipper.ArchiveFiles
 {
 	public sealed class ArchiveFileEntry : FileEntry
 	{
-		public ArchiveFileEntry(Stream stream, string filePath, string name, long offset, long size) :
-			base(stream, filePath, name, offset, size, true)
+		public ArchiveFileEntry(SmartStream stream, string filePath, string name, long offset, long size) :
+			base(stream, filePath, name, offset, size)
 		{
 			if (IsSerializedFile)
 			{

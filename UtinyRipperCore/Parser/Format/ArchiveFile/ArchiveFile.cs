@@ -5,7 +5,7 @@ using System.IO.Compression;
 
 namespace UtinyRipper.ArchiveFiles
 {
-	public class ArchiveFile : IDisposable
+	public sealed class ArchiveFile : IDisposable
 	{
 		private ArchiveFile(string filePath)
 		{
@@ -15,6 +15,11 @@ namespace UtinyRipper.ArchiveFiles
 			}
 
 			m_filePath = filePath;
+		}
+
+		~ArchiveFile()
+		{
+			Dispose(false);
 		}
 
 		public static bool IsArchiveFile(string webPath)
@@ -68,7 +73,7 @@ namespace UtinyRipper.ArchiveFiles
 			return archive;
 		}
 
-		public static ArchiveFile Read(Stream stream, string archivePath)
+		public static ArchiveFile Read(SmartStream stream, string archivePath)
 		{
 			ArchiveFile archive = new ArchiveFile(archivePath);
 			archive.Read(stream);
@@ -76,6 +81,12 @@ namespace UtinyRipper.ArchiveFiles
 		}
 
 		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		private void Dispose(bool disposing)
 		{
 			Metadata.Dispose();
 		}
@@ -87,7 +98,7 @@ namespace UtinyRipper.ArchiveFiles
 				throw new Exception($"ArchiveFile at path '{m_filePath}' doesn't exist");
 			}
 
-			using (FileStream stream = FileUtils.OpenRead(m_filePath))
+			using (FileStream stream = File.OpenRead(m_filePath))
 			{
 				Read(stream);
 			}
@@ -112,30 +123,34 @@ namespace UtinyRipper.ArchiveFiles
 
 		private void ReadGZip(EndianReader reader)
 		{
-			MemoryStream memStream = new MemoryStream();
-			using (GZipStream gzipStream = new GZipStream(reader.BaseStream, CompressionMode.Decompress))
+			using (SmartStream stream = SmartStream.CreateMemory())
 			{
-				gzipStream.CopyTo(memStream);
-				memStream.Position = 0;
-			}
+				using (GZipStream gzipStream = new GZipStream(reader.BaseStream, CompressionMode.Decompress))
+				{
+					gzipStream.CopyTo(stream);
+					stream.Position = 0;
+				}
 
-			string name = Path.GetFileName(m_filePath);
-			ArchiveFileEntry entry = new ArchiveFileEntry(memStream, m_filePath, name, 0, memStream.Length);
-			Metadata = new ArchiveMetadata(entry);
+				string name = Path.GetFileName(m_filePath);
+				ArchiveFileEntry entry = new ArchiveFileEntry(stream, m_filePath, name, 0, stream.Length);
+				Metadata = new ArchiveMetadata(entry);
+			}
 		}
 
 		private void ReadBrotli(EndianReader reader)
 		{
-			MemoryStream memStream = new MemoryStream();
-			using (BrotliInputStream brotliStream = new BrotliInputStream(reader.BaseStream))
+			using (SmartStream stream = SmartStream.CreateMemory())
 			{
-				brotliStream.CopyStream(memStream);
-				memStream.Position = 0;
-			}
+				using (BrotliInputStream brotliStream = new BrotliInputStream(reader.BaseStream))
+				{
+					brotliStream.CopyStream(stream);
+					stream.Position = 0;
+				}
 
-			string name = Path.GetFileName(m_filePath);
-			ArchiveFileEntry entry = new ArchiveFileEntry(memStream, m_filePath, name, 0, memStream.Length);
-			Metadata = new ArchiveMetadata(entry);
+				string name = Path.GetFileName(m_filePath);
+				ArchiveFileEntry entry = new ArchiveFileEntry(stream, m_filePath, name, 0, stream.Length);
+				Metadata = new ArchiveMetadata(entry);
+			}
 		}
 
 		public ArchiveMetadata Metadata { get; private set; }

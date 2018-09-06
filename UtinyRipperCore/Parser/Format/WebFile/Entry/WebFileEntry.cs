@@ -7,8 +7,8 @@ namespace UtinyRipper.WebFiles
 {
 	public class WebFileEntry : FileEntry
 	{
-		public WebFileEntry(Stream stream, string filePath, string name, long offset, long size, bool isStreamPermanent):
-			base(stream, filePath, name, offset, size, isStreamPermanent)
+		internal WebFileEntry(SmartStream stream, string filePath, string name, long offset, long size):
+			base(stream, filePath, name, offset, size)
 		{
 			if(IsResourceFile)
 			{

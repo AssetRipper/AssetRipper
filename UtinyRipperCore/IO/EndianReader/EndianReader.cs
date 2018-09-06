@@ -33,6 +33,11 @@ namespace UtinyRipper
 		{
 		}
 
+		~EndianReader()
+		{
+			Dispose(false);
+		}
+
 		public override short ReadInt16()
 		{
 			if (EndianType == EndianType.BigEndian)

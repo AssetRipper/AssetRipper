@@ -4,7 +4,7 @@ using System.IO;
 
 namespace UtinyRipper.WebFiles
 {
-	public class WebFile : IDisposable
+	public sealed class WebFile : IDisposable
 	{
 		public WebFile(string filePath)
 		{
@@ -14,6 +14,11 @@ namespace UtinyRipper.WebFiles
 			}
 
 			m_filePath = filePath;
+		}
+
+		~WebFile()
+		{
+			Dispose(false);
 		}
 
 		public static bool IsWebFile(string webPath)
@@ -57,7 +62,7 @@ namespace UtinyRipper.WebFiles
 			return web;
 		}
 
-		public static WebFile Read(Stream stream, string webPath)
+		public static WebFile Read(SmartStream stream, string webPath)
 		{
 			WebFile web = new WebFile(webPath);
 			web.Read(stream);
@@ -65,6 +70,12 @@ namespace UtinyRipper.WebFiles
 		}
 
 		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		public void Dispose(bool disposing)
 		{
 			Metadata.Dispose();
 		}
@@ -76,24 +87,21 @@ namespace UtinyRipper.WebFiles
 				throw new Exception($"WebFile at path '{m_filePath}' doesn't exist");
 			}
 
-			FileStream stream = FileUtils.OpenRead(m_filePath);
-			Read(stream, true);
-		}
-
-		private void Read(Stream stream)
-		{
-			Read(stream, false);
-		}
-
-		private void Read(Stream stream, bool isClosable)
-		{
-			using (EndianReader reader = new EndianReader(stream, stream.Position, EndianType.LittleEndian))
+			using (SmartStream stream = SmartStream.OpenRead(m_filePath))
 			{
-				ReadMetadata(reader, isClosable);
+				Read(stream);
 			}
 		}
 
-		private void ReadMetadata(EndianReader reader, bool isClosable)
+		private void Read(SmartStream stream)
+		{
+			using (EndianReader reader = new EndianReader(stream, stream.Position, EndianType.LittleEndian))
+			{
+				ReadMetadata(reader);
+			}
+		}
+
+		private void ReadMetadata(EndianReader reader)
 		{
 			string signature = reader.ReadStringZeroTerm();
 			if(signature != Signature)
@@ -101,19 +109,20 @@ namespace UtinyRipper.WebFiles
 				throw new Exception($"Signature '{signature}' doesn't match to '{Signature}'");
 			}
 
+			SmartStream webStream = (SmartStream)reader.BaseStream;
 			List<WebFileEntry> entries = new List<WebFileEntry>();
 			long headerLength = reader.ReadInt32();
-			while(reader.BaseStream.Position < headerLength)
+			while(webStream.Position < headerLength)
 			{
 				int offset = reader.ReadInt32();
 				int length = reader.ReadInt32();
 				int pathLength = reader.ReadInt32();
 				string path = reader.ReadString(pathLength);
 				
-				WebFileEntry entry = new WebFileEntry(reader.BaseStream, m_filePath, path, offset, length, isClosable);
+				WebFileEntry entry = new WebFileEntry(webStream, m_filePath, path, offset, length);
 				entries.Add(entry);
 			}
-			Metadata = new WebMetadata(reader.BaseStream, isClosable, entries);
+			Metadata = new WebMetadata(entries);
 		}
 
 		public WebMetadata Metadata { get; private set; }

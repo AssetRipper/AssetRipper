@@ -47,6 +47,11 @@ namespace UtinyRipper
 			m_leaveOpen = leaveOpen;
 		}
 
+		~ReverseStream()
+		{
+			Dispose(false);
+		}
+
 		public override void Flush()
 		{
 			m_stream.Flush();

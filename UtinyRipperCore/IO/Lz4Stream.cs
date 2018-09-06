@@ -68,6 +68,11 @@ namespace UtinyRipper
 			m_leaveOpen = leaveOpen;
 		}
 
+		~Lz4Stream()
+		{
+			Dispose(false);
+		}
+
 		public override void Flush()
 		{
 		}
@@ -156,6 +161,7 @@ namespace UtinyRipper
 			{
 				m_baseStream.Dispose();
 			}
+			base.Dispose(disposing);
 		}
 
 		private void ReadToken()

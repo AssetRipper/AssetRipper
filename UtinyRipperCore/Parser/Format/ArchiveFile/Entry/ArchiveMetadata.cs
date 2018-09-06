@@ -2,10 +2,9 @@
 
 namespace UtinyRipper.ArchiveFiles
 {
-	public class ArchiveMetadata : FileData<ArchiveFileEntry>
+	public class ArchiveMetadata : Metadata<ArchiveFileEntry>
 	{
-		public ArchiveMetadata(ArchiveFileEntry entry) :
-			base(null, false)
+		public ArchiveMetadata(ArchiveFileEntry entry)
 		{
 			Entries = new ArchiveFileEntry[] { entry };
 		}

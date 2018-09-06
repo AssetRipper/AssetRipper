@@ -1,13 +1,12 @@
 ﻿using System;
-using System.IO;
 using UtinyRipper.AssetExporters;
 
 namespace UtinyRipper.BundleFiles
 {
 	public class BundleFileEntry : FileEntry
 	{
-		public BundleFileEntry(Stream stream, string filePath, string name, long offset, long size, bool isStreamPermanent) :
-			base(stream, filePath, name, offset, size, isStreamPermanent)
+		internal BundleFileEntry(SmartStream stream, string filePath, string name, long offset, long size) :
+			base(stream, filePath, name, offset, size)
 		{
 			if(IsResourceFile)
 			{

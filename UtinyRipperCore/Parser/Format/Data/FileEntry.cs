@@ -3,9 +3,9 @@ using System.IO;
 
 namespace UtinyRipper
 {
-	public abstract class FileEntry
+	public abstract class FileEntry : IDisposable
 	{
-		protected FileEntry(Stream stream, string filePath, string name, long offset, long size, bool isStreamPermanent)
+		protected FileEntry(SmartStream stream, string filePath, string name, long offset, long size)
 		{
 			if (stream == null)
 			{
@@ -28,27 +28,22 @@ namespace UtinyRipper
 				throw new ArgumentException(nameof(size));
 			}
 
-			m_stream = stream;
+			m_stream = stream.CreateReference();
 			Name = name;
 			FilePath = filePath;
 			m_offset = offset;
 			m_size = size;
-			m_isStreamPermanent = isStreamPermanent;
+		}
+
+		~FileEntry()
+		{
+			Dispose(false);
 		}
 
 		public void ReadResourcesFile(FileCollection collection)
 		{
 			m_stream.Position = m_offset;
-			if (m_isStreamPermanent)
-			{
-				collection.ReadResourceFile(m_stream, FilePath, Name);
-			}
-			else
-			{
-				MemoryStream stream = new MemoryStream();
-				m_stream.CopyStream(stream, m_size);
-				collection.ReadResourceFile(m_stream, FilePath, Name);
-			}
+			collection.ReadResourceFile(m_stream, FilePath, Name);
 		}
 
 		public void ReadSerializedFile(FileCollection collection, Action<string> dependencyCallback)
@@ -69,9 +64,20 @@ namespace UtinyRipper
 			collection.ReadWebFile(m_stream, FilePath);
 		}
 
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
 		public override string ToString()
 		{
 			return Name;
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			m_stream.Dispose();
 		}
 
 		public abstract FileEntryType EntryType { get; }
@@ -150,10 +156,9 @@ namespace UtinyRipper
 		private const string RgbExtention = ".rgb";
 		private const string VisExtention = ".vis";
 
-		protected readonly Stream m_stream;
 		protected readonly long m_offset;
 		protected readonly long m_size;
 
-		private readonly bool m_isStreamPermanent;
+		protected readonly SmartStream m_stream;
 	}
 }

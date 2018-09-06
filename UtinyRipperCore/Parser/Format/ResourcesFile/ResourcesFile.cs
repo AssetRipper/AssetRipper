@@ -1,11 +1,10 @@
 ﻿using System;
-using System.IO;
 
 namespace UtinyRipper
 {
 	public class ResourcesFile : IDisposable
 	{
-		public ResourcesFile(Stream stream, string filePath, string fileName)
+		internal ResourcesFile(SmartStream stream, string filePath, string fileName)
 		{
 			if (string.IsNullOrEmpty(filePath))
 			{
@@ -22,16 +21,32 @@ namespace UtinyRipper
 
 			FilePath = filePath;
 			Name = fileName;
-			Stream = stream;
+			Stream = stream.CreateReference();
 			m_basePisition = stream.Position;
 		}
-		
+
+		internal ResourcesFile(ResourcesFile copy)
+		{
+			FilePath = copy.FilePath;
+			Name = copy.Name;
+			Stream = copy.Stream.CreateReference();
+			m_basePisition = copy.m_basePisition;
+		}
+
+		~ResourcesFile()
+		{
+			Dispose(false);
+		}
+
 		public void Dispose()
 		{
-			if(Stream != null)
-			{
-				Stream.Dispose();
-			}
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		public void Dispose(bool disposing)
+		{
+			Stream.Dispose();
 		}
 
 		public override string ToString()
@@ -47,7 +62,7 @@ namespace UtinyRipper
 		/// Name of resources file in file system or in asset bundle
 		/// </summary>
 		public string Name { get; }
-		public Stream Stream { get; }
+		public SmartStream Stream { get; }
 		public long Position
 		{
 			set => Stream.Position = m_basePisition + value;

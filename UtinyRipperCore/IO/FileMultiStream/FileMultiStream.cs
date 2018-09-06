@@ -31,6 +31,11 @@ namespace UtinyRipper
 			UpdateCurrentStream();
 		}
 
+		~FileMultiStream()
+		{
+			Dispose(false);
+		}
+
 		public static bool IsMultiFile(string path)
 		{
 			return s_splitCheck.IsMatch(path);
@@ -322,13 +327,11 @@ namespace UtinyRipper
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing)
+			foreach (Stream stream in m_streams)
 			{
-				foreach (Stream stream in m_streams)
-				{
-					stream.Dispose();
-				}
+				stream.Dispose();
 			}
+			base.Dispose(disposing);
 		}
 
 		private bool UpdateCurrentStream()

@@ -126,6 +126,7 @@
     <Compile Include="IO\FileMultiStream\SplitNameComparer.cs" />
     <Compile Include="IO\ReverseStream.cs" />
     <Compile Include="IO\FileMultiStream\FileMultiStream.cs" />
+    <Compile Include="IO\SmartStream.cs" />
     <Compile Include="Parser\AssetCollection\AssetFactory.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\MonoImporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\SceneImporter.cs" />
@@ -439,7 +440,7 @@
     <Compile Include="Parser\Format\SerializedFile\ISerializedFile\VirtualSerializedFile.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\RTTIClassHierarchyDescriptor.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\SerializedFileHeader.cs" />
-    <Compile Include="Parser\Format\Data\FileData.cs" />
+    <Compile Include="Parser\Format\Data\Metadata.cs" />
     <Compile Include="Parser\Format\Data\FileEntry.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\SerializedFileMetadata.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\FileIdentifier.cs" />
@@ -506,7 +507,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\YAMLAssetExporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Interfaces\IExportContainer.cs" />
     <Compile Include="Parser\AssetCollection\IFileCollection.cs" />
-    <Compile Include="Parser\Format\Data\AssetInfo.cs" />
+    <Compile Include="Parser\Format\Data\Asset\AssetInfo.cs" />
     <Compile Include="Parser\Format\SerializedFile\SerializedFile.cs" />
     <Compile Include="Parser\Format\BundleFile\Entry\BundleFileEntry.cs" />
     <Compile Include="Parser\Classes\AnimationClip\AnimationType.cs" />
@@ -620,7 +621,7 @@
     <Compile Include="Parser\Classes\Utils\Extensions\UtinyStreamExtensions.cs" />
     <Compile Include="Parser\Classes\Utils\Extensions\TypeExtensions.cs" />
     <Compile Include="Parser\Classes\Utils\ObjectUtils.cs" />
-    <Compile Include="Parser\Format\AssetType.cs" />
+    <Compile Include="Parser\Format\Data\Asset\AssetType.cs" />
     <Compile Include="Parser\Format\SerializedFile\ISerializedFile\ISerializedFile.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\TreeNodeType.cs" />
     <Compile Include="Parser\Format\BundleFile\BundleType.cs" />
@@ -668,7 +669,7 @@
     <Compile Include="Parser\Classes\SkinnedMeshRenderer.cs" />
     <Compile Include="Parser\Classes\Base\Texture.cs" />
     <Compile Include="Parser\Classes\Utils\Extensions\UtinyClassTypeExtensions.cs" />
-    <Compile Include="Parser\Format\ClassIDType.cs" />
+    <Compile Include="Parser\Format\Data\Asset\ClassIDType.cs" />
     <Compile Include="Parser\Format\SerializedFile\FileGeneration.cs" />
     <Compile Include="Parser\Classes\AnimationClip\AnimationClipBindingConstant.cs" />
     <Compile Include="Parser\Classes\AnimationClip\AnimationCurveTpl.cs" />
@@ -715,7 +716,7 @@
     <Compile Include="Parser\Classes\Utils\Extensions\ArrayExtensions.cs" />
     <Compile Include="Parser\Classes\Utils\Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Parser\Classes\Utils\Extensions\YAMLMappingNodeExtensions.cs" />
-    <Compile Include="Parser\Format\Platform.cs" />
+    <Compile Include="Parser\Format\Data\Platform.cs" />
     <Compile Include="Parser\Classes\AnimationClip\AnimationClip.cs" />
     <Compile Include="Parser\Classes\Base\NamedObject.cs" />
     <Compile Include="Parser\Classes\Serialize\AABB.cs" />
@@ -728,7 +729,7 @@
     <Compile Include="Parser\Classes\Serialize\Vector3f.cs" />
     <Compile Include="Parser\Classes\Serialize\Vector4f.cs" />
     <Compile Include="Parser\Classes\Transform.cs" />
-    <Compile Include="Parser\Format\Data\ResourcesFile.cs" />
+    <Compile Include="Parser\Format\ResourcesFile\ResourcesFile.cs" />
     <Compile Include="Parser\Version\VersionType.cs" />
     <Compile Include="Parser\Format\BundleFile\Parser\BundleCompressType.cs" />
     <Compile Include="Parser\Format\BundleFile\BundleFile.cs" />

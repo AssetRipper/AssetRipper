@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace UtinyRipper.BundleFiles
 {
 	/// <summary>
 	/// Metadata about bundle's block or chunk
 	/// </summary>
-	public class BundleMetadata : FileData<BundleFileEntry>
+	public class BundleMetadata : Metadata<BundleFileEntry>
 	{
-		public BundleMetadata(Stream stream, string filePath, bool isClosable) :
-			base(stream, isClosable)
+		internal BundleMetadata(string filePath)
 		{
 			if(string.IsNullOrEmpty(filePath))
 			{
@@ -19,19 +17,15 @@ namespace UtinyRipper.BundleFiles
 			m_filePath = filePath;
 		}
 
-		public BundleMetadata(Stream stream, string filePath, bool isClosable, IReadOnlyList<BundleFileEntry> entries):
-			this(stream, filePath, isClosable)
+		internal BundleMetadata(string filePath, IReadOnlyList<BundleFileEntry> entries):
+			this(filePath)
 		{
 			m_entries = entries;
 		}
 
 		public void ReadPre530(EndianReader reader)
 		{
-			if (m_stream != reader.BaseStream)
-			{
-				throw new ArgumentException("Stream doesn't match", nameof(reader));
-			}
-
+			SmartStream dataStream = (SmartStream)reader.BaseStream;
 			long basePosition = reader.BaseStream.Position;
 
 			int count = reader.ReadInt32();
@@ -43,13 +37,13 @@ namespace UtinyRipper.BundleFiles
 				int size = reader.ReadInt32();
 
 				long globalOffset = basePosition + offset;
-				BundleFileEntry entry = new BundleFileEntry(m_stream, m_filePath, name, globalOffset, size, IsDisposable);
+				BundleFileEntry entry = new BundleFileEntry(dataStream, m_filePath, name, globalOffset, size);
 				entries[i] = entry;
 			}
 			m_entries = entries;
 		}
 
-		public void Read530(EndianReader reader, long basePosition)
+		public void Read530(EndianReader reader, SmartStream dataStream, long dataOffset)
 		{
 			int count = reader.ReadInt32();
 			BundleFileEntry[] entries = new BundleFileEntry[count];
@@ -60,8 +54,8 @@ namespace UtinyRipper.BundleFiles
 				int blobIndex = reader.ReadInt32();
 				string name = reader.ReadStringZeroTerm();
 				
-				long globalOffset = basePosition + offset;
-				BundleFileEntry entry = new BundleFileEntry(m_stream, m_filePath, name, globalOffset, size, IsDisposable);
+				long globalOffset = dataOffset + offset;
+				BundleFileEntry entry = new BundleFileEntry(dataStream, m_filePath, name, globalOffset, size);
 				entries[i] = entry;
 			}
 			m_entries = entries;

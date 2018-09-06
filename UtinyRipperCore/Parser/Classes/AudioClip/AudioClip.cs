@@ -328,21 +328,24 @@ namespace UtinyRipper.Classes
 		{
 			if (IsReadLoadType(container.Version))
 			{
-				ResourcesFile res = File.Collection.FindResourcesFile(File, FSBResource.Source);
-				if (res == null)
+				using (ResourcesFile res = File.Collection.FindResourcesFile(File, FSBResource.Source))
 				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because resources file '{FSBResource.Source}' hasn't been found");
-					return;
-				}
+					if (res == null)
+					{
+						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because resources file '{FSBResource.Source}' hasn't been found");
+						return;
+					}
 
-				res.Position = FSBResource.Offset;
-				if (StreamedResource.IsReadSize(container.Version))
-				{
-					res.Stream.CopyStream(stream, FSBResource.Size);
-				}
-				else
-				{
-					// I think they read data by its type for this verison, so I can't even export raw data :/
+					res.Position = FSBResource.Offset;
+					if (StreamedResource.IsReadSize(container.Version))
+					{
+						res.Stream.CopyStream(stream, FSBResource.Size);
+					}
+					else
+					{
+						// I think they read data by its type for this verison, so I can't even export raw data :/
+						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because of unknown size");
+					}
 				}
 			}
 			else
@@ -351,15 +354,17 @@ namespace UtinyRipper.Classes
 				{
 					if (Stream == 2)
 					{
-						ResourcesFile res = File.Collection.FindResourcesFile(File, StreamingInfo.Path);
-						if (res == null)
+						using (ResourcesFile res = File.Collection.FindResourcesFile(File, StreamingInfo.Path))
 						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because resources file '{StreamingInfo.Path}' hasn't been found");
-							return;
-						}
+							if (res == null)
+							{
+								Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because resources file '{StreamingInfo.Path}' hasn't been found");
+								return;
+							}
 
-						res.Position = FSBResource.Offset;
-						res.Stream.CopyStream(stream, StreamingInfo.Size);
+							res.Position = FSBResource.Offset;
+							res.Stream.CopyStream(stream, StreamingInfo.Size);
+						}
 					}
 					else
 					{
