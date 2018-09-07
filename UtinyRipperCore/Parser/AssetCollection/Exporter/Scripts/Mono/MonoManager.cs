@@ -17,6 +17,11 @@ namespace UtinyRipper.AssetExporters.Mono
 			m_requestAssemblyCallback = requestAssemblyCallback;
 		}
 
+		~MonoManager()
+		{
+			Dispose(false);
+		}
+
 		public static bool IsMonoAssembly(string fileName)
 		{
 			if (fileName.EndsWith(AssemblyExtension, StringComparison.Ordinal))
@@ -150,15 +155,6 @@ namespace UtinyRipper.AssetExporters.Mono
 			return new ScriptInfo(type.Scope.Name, type.Namespace, type.Name);
 		}
 
-		public void Dispose()
-		{
-			foreach(AssemblyDefinition assembly in m_assemblies.Values)
-			{
-				assembly.Dispose();
-			}
-			m_assemblies.Clear();
-		}
-
 		public AssemblyDefinition Resolve(AssemblyNameReference name)
 		{
 			string assemblyName = AssemblyManager.ToAssemblyName(name.Name);
@@ -182,6 +178,20 @@ namespace UtinyRipper.AssetExporters.Mono
 		public AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
 		{
 			return Resolve(name);
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		private void Dispose(bool disposing)
+		{
+			foreach (AssemblyDefinition assembly in m_assemblies.Values)
+			{
+				assembly.Dispose();
+			}
 		}
 
 		private AssemblyDefinition RetrieveAssembly(string name)

@@ -74,6 +74,20 @@ namespace UtinyRipper
 			return false;
 		}
 
+		public bool RequestResource(string resource, out string path)
+		{
+			foreach (string dataPath in DataPathes)
+			{
+				path = Path.Combine(dataPath, resource);
+				if(FileMultiStream.Exists(path))
+				{
+					return true;
+				}
+			}
+			path = null;
+			return false;
+		}
+
 		protected void SetScriptingBackend()
 		{
 			if(Assemblies.Count == 0)

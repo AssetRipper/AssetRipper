@@ -5,7 +5,7 @@ using UtinyRipper.Exporters.Scripts;
 
 namespace UtinyRipper.AssetExporters
 {
-	public class AssemblyManager : IAssemblyManager
+	public sealed class AssemblyManager : IAssemblyManager
 	{
 		public AssemblyManager(Action<string> requestAssemblyCallback)
 		{
@@ -14,6 +14,11 @@ namespace UtinyRipper.AssetExporters
 				throw new ArgumentNullException(nameof(requestAssemblyCallback));
 			}
 			m_requestAssemblyCallback = requestAssemblyCallback;
+		}
+
+		~AssemblyManager()
+		{
+			Dispose(false);
 		}
 
 		public static bool IsAssembly(string fileName)
@@ -133,7 +138,16 @@ namespace UtinyRipper.AssetExporters
 
 		public void Dispose()
 		{
-			ScriptingBackEnd = ScriptingBackEnd.Unknown;
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		private void Dispose(bool disposing)
+		{
+			if (m_manager != null)
+			{
+				m_manager.Dispose();
+			}
 		}
 
 		public ScriptingBackEnd ScriptingBackEnd

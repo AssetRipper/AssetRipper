@@ -10,7 +10,13 @@ namespace UtinyRipper
 	{
 		private GameStructure()
 		{
-			FileCollection = new FileCollection(OnRequestDependency, OnRequestAssembly);
+			FileCollection.Parameters pars = new FileCollection.Parameters()
+			{
+				RequestDependencyCallback = OnRequestDependency,
+				RequestAssemblyCallback = OnRequestAssembly,
+				RequestResourceCallback = OnRequestResource,
+			};
+			FileCollection = new FileCollection(pars);
 		}
 
 		public static GameStructure Load(IEnumerable<string> pathes)
@@ -86,6 +92,27 @@ namespace UtinyRipper
 			{
 				return true;
 			}
+		}
+
+		public bool RequestResource(string resource, out string path)
+		{
+			if (PlatformStructure != null)
+			{
+				if (PlatformStructure.RequestResource(resource, out path))
+				{
+					return true;
+				}
+			}
+			if (MixedStructure != null)
+			{
+				if (MixedStructure.RequestResource(resource, out path))
+				{
+					return true;
+				}
+			}
+
+			path = null;
+			return false;
 		}
 
 		private void Load(List<string> pathes)
@@ -274,6 +301,12 @@ namespace UtinyRipper
 		private void OnRequestAssembly(string assembly)
 		{
 			RequestAssembly(assembly);
+		}
+
+		private string OnRequestResource(string resource)
+		{
+			RequestResource(resource, out string path);
+			return path;
 		}
 
 		public FileCollection FileCollection { get; }

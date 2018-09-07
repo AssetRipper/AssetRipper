@@ -48,14 +48,14 @@ namespace UtinyRipper
 			GC.SuppressFinalize(this);
 		}
 
-		public void Dispose(bool disposing)
-		{
-			m_stream.Dispose();
-		}
-
 		public override string ToString()
 		{
 			return Name ?? base.ToString();
+		}
+
+		protected void Dispose(bool disposing)
+		{
+			m_stream.Dispose();
 		}
 
 		/// <summary>

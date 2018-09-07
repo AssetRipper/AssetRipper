@@ -14,25 +14,32 @@ using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper
 {
-	public class FileCollection : IFileCollection
+	public sealed class FileCollection : IFileCollection, IDisposable
 	{
-		public FileCollection():
-			this(null)
+		public struct Parameters
 		{
+			public Action<string> RequestDependencyCallback { get; set; }
+			public Action<string> RequestAssemblyCallback { get; set; }
+			public Func<string, string> RequestResourceCallback { get; set; }
 		}
 
-		public FileCollection(Action<string> dependencyCallback):
-			this(dependencyCallback, null)
-		{
-		}
-
-		public FileCollection(Action<string> dependencyCallback, Action<string> assemblyCallback)
+		public FileCollection()
 		{
 			Exporter = new ProjectExporter(this);
 			AssemblyManager = new AssemblyManager(OnRequestAssembly);
+		}
 
-			m_dependencyCallback = dependencyCallback;
-			m_assemblyCallback = assemblyCallback;
+		public FileCollection(Parameters pars) :
+			this()
+		{
+			m_dependencyCallback = pars.RequestDependencyCallback;
+			m_assemblyCallback = pars.RequestAssemblyCallback;
+			m_resourceCallback = pars.RequestResourceCallback;
+		}
+
+		~FileCollection()
+		{
+			Dispose(false);
 		}
 
 		public void Load(string filePath)
@@ -274,33 +281,30 @@ namespace UtinyRipper
 			return m_files.Find(file.IsFile);
 		}
 
-		public ResourcesFile FindResourcesFile(ISerializedFile ifile, string fileName)
+		public ResourcesFile FindResourcesFile(ISerializedFile ifile, string resName)
 		{
 			SerializedFile file = (SerializedFile)ifile;
-			fileName = FilenameUtils.FixResourcePath(fileName);
+			resName = FilenameUtils.FixResourcePath(resName);
 
 			// check asset bundles / web files
 			string filePath = file.FilePath;
 			foreach (ResourcesFile res in m_resources)
 			{
-				if(res.FilePath == filePath && res.Name == fileName)
+				if(res.FilePath == filePath && res.Name == resName)
 				{
 					return res.CreateReference();
 				}
 			}
 
-#warning TODO: request dependency
-			string dirPath = Path.GetDirectoryName(filePath);
-			dirPath = string.IsNullOrEmpty(dirPath) ? "." : dirPath;
-			string resPath = Path.Combine(dirPath, fileName);
-			if (FileMultiStream.Exists(resPath))
+			string resPath = m_resourceCallback?.Invoke(resName);
+			if(resPath == null)
 			{
-				using (SmartStream stream = SmartStream.OpenRead(resPath))
-				{
-					return new ResourcesFile(stream, resPath, fileName, 0, stream.Length);
-				}
+				return null;
 			}
-			return null;
+			using (SmartStream stream = SmartStream.OpenRead(resPath))
+			{
+				return new ResourcesFile(stream, resPath, resName, 0, stream.Length);
+			}
 		}
 		
 		public IEnumerable<Object> FetchAssets()
@@ -313,7 +317,22 @@ namespace UtinyRipper
 				}
 			}
 		}
-				
+		
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		private void Dispose(bool disposing)
+		{
+			AssemblyManager.Dispose();
+			foreach (ResourcesFile res in m_resources)
+			{
+				res.Dispose();
+			}
+		}
+
 		private void AddSerializedFile(SerializedFile file)
 		{
 #if DEBUG
@@ -449,5 +468,6 @@ namespace UtinyRipper
 
 		private readonly Action<string> m_dependencyCallback;
 		private readonly Action<string> m_assemblyCallback;
+		private readonly Func<string, string> m_resourceCallback;
 	}
 }

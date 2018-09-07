@@ -77,7 +77,10 @@ namespace UtinyRipper.WebFiles
 
 		public void Dispose(bool disposing)
 		{
-			Metadata.Dispose();
+			if(Metadata != null)
+			{
+				Metadata.Dispose();
+			}
 		}
 
 		private void Load()

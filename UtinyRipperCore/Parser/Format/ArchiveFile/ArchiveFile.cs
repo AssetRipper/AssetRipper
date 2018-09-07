@@ -88,7 +88,10 @@ namespace UtinyRipper.ArchiveFiles
 
 		private void Dispose(bool disposing)
 		{
-			Metadata.Dispose();
+			if(Metadata != null)
+			{
+				Metadata.Dispose();
+			}
 		}
 
 		private void Load()

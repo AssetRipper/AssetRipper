@@ -74,7 +74,10 @@ namespace UtinyRipper.BundleFiles
 
 		public void Dispose(bool disposing)
 		{
-			Metadata.Dispose();
+			if(Metadata != null)
+			{
+				Metadata.Dispose();
+			}
 		}
 
 		private void Load()
@@ -159,7 +162,6 @@ namespace UtinyRipper.BundleFiles
 			}
 
 			BlockInfo[] blockInfos;
-			BundleMetadata metadata;
 			BundleCompressType metaCompression = Header.Flags.GetCompression();
 			switch(metaCompression)
 			{
@@ -170,8 +172,8 @@ namespace UtinyRipper.BundleFiles
 						// unknown 0x10
 						bundleStream.Position += 0x10;
 						blockInfos = reader.ReadArray<BlockInfo>();
-						metadata = new BundleMetadata(m_filePath);
-						metadata.Read530(reader, bundleStream, dataPosition);
+						Metadata = new BundleMetadata(m_filePath);
+						Metadata.Read530(reader, bundleStream, dataPosition);
 					
 						if(bundleStream.Position != metaPosition + Header.MetadataDecompressedSize)
 						{
@@ -190,8 +192,8 @@ namespace UtinyRipper.BundleFiles
 								// unknown 0x10
 								metaReader.BaseStream.Position += 0x10;
 								blockInfos = metaReader.ReadArray<BlockInfo>();
-								metadata = new BundleMetadata(m_filePath);
-								metadata.Read530(metaReader, bundleStream, dataPosition);
+								Metadata = new BundleMetadata(m_filePath);
+								Metadata.Read530(metaReader, bundleStream, dataPosition);
 							}
 
 							if (metaStream.Position != metaStream.Length)
@@ -223,8 +225,8 @@ namespace UtinyRipper.BundleFiles
 								// unknown 0x10
 								metaReader.BaseStream.Position += 0x10;
 								blockInfos = metaReader.ReadArray<BlockInfo>();
-								metadata = new BundleMetadata(m_filePath);
-								metadata.Read530(metaReader, bundleStream, dataPosition);
+								Metadata = new BundleMetadata(m_filePath);
+								Metadata.Read530(metaReader, bundleStream, dataPosition);
 							}
 
 							if (metaStream.Position != metaStream.Length)
@@ -240,15 +242,14 @@ namespace UtinyRipper.BundleFiles
 			}
 
 			bundleStream.Position = dataPosition;
-			Read530Blocks(reader, blockInfos, metadata);
+			Read530Blocks(reader, blockInfos);
 		}
 				
-		private void Read530Blocks(EndianReader reader, BlockInfo[] blockInfos, BundleMetadata metadata)
+		private void Read530Blocks(EndianReader reader, BlockInfo[] blockInfos)
 		{
 			// Special case. If bundle has no compressed blocks then pass it as is
 			if(blockInfos.All(t => t.Flags.GetCompression() == BundleCompressType.None))
 			{
-				Metadata = metadata;
 				return;
 			}
 
@@ -287,17 +288,17 @@ namespace UtinyRipper.BundleFiles
 					}
 				}
 
-				BundleFileEntry[] entries = new BundleFileEntry[metadata.Entries.Count];
-				for (int i = 0; i < metadata.Entries.Count; i++)
+				BundleFileEntry[] entries = new BundleFileEntry[Metadata.Entries.Count];
+				for (int i = 0; i < Metadata.Entries.Count; i++)
 				{
-					BundleFileEntry bundleEntry = metadata.Entries[i];
+					BundleFileEntry bundleEntry = Metadata.Entries[i];
 					string name = bundleEntry.Name;
 					long offset = bundleEntry.Offset - dataOffset;
 					long size = bundleEntry.Size;
 					BundleFileEntry streamEntry = new BundleFileEntry(blockStream, m_filePath, name, offset, size);
 					entries[i] = streamEntry;
 				}
-				metadata.Dispose();
+				Metadata.Dispose();
 				Metadata = new BundleMetadata(m_filePath, entries);
 			}
 		}

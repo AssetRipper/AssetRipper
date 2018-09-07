@@ -368,7 +368,7 @@ namespace UtinyRipper.Classes
 							using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
 							{
 								resStream.Position = StreamingInfo.Offset;
-								resStream.CopyStream(resStream, StreamingInfo.Size);
+								resStream.CopyStream(stream, StreamingInfo.Size);
 							}
 						}
 					}
