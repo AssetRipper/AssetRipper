@@ -5,6 +5,11 @@ namespace UtinyRipper.BundleFiles
 {
 	public class BundleFileEntry : FileEntry
 	{
+		internal BundleFileEntry(BundleFileEntry copy, long offset):
+			this(copy.m_stream, copy.FilePath, copy.Name, offset, copy.Size)
+		{
+		}
+
 		internal BundleFileEntry(SmartStream stream, string filePath, string name, long offset, long size) :
 			base(stream, filePath, name, offset, size)
 		{

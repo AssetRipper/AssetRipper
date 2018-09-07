@@ -173,7 +173,7 @@ namespace UtinyRipper.BundleFiles
 						bundleStream.Position += 0x10;
 						blockInfos = reader.ReadArray<BlockInfo>();
 						Metadata = new BundleMetadata(m_filePath);
-						Metadata.Read530(reader, bundleStream, dataPosition);
+						Metadata.Read530(reader, bundleStream);
 					
 						if(bundleStream.Position != metaPosition + Header.MetadataDecompressedSize)
 						{
@@ -193,7 +193,7 @@ namespace UtinyRipper.BundleFiles
 								metaReader.BaseStream.Position += 0x10;
 								blockInfos = metaReader.ReadArray<BlockInfo>();
 								Metadata = new BundleMetadata(m_filePath);
-								Metadata.Read530(metaReader, bundleStream, dataPosition);
+								Metadata.Read530(metaReader, bundleStream);
 							}
 
 							if (metaStream.Position != metaStream.Length)
@@ -226,7 +226,7 @@ namespace UtinyRipper.BundleFiles
 								metaReader.BaseStream.Position += 0x10;
 								blockInfos = metaReader.ReadArray<BlockInfo>();
 								Metadata = new BundleMetadata(m_filePath);
-								Metadata.Read530(metaReader, bundleStream, dataPosition);
+								Metadata.Read530(metaReader, bundleStream);
 							}
 
 							if (metaStream.Position != metaStream.Length)
@@ -242,68 +242,138 @@ namespace UtinyRipper.BundleFiles
 			}
 
 			bundleStream.Position = dataPosition;
-			Read530Blocks(reader, blockInfos);
+			Read530Blocks(bundleStream, blockInfos);
 		}
 				
-		private void Read530Blocks(EndianReader reader, BlockInfo[] blockInfos)
+		private void Read530Blocks(SmartStream bundleStream, BlockInfo[] blockInfos)
 		{
-			// Special case. If bundle has no compressed blocks then pass it as is
-			if(blockInfos.All(t => t.Flags.GetCompression() == BundleCompressType.None))
-			{
-				return;
-			}
-
-			SmartStream bundleStream = (SmartStream)reader.BaseStream;
+			int cachedBlock = -1;
 			long dataOffset = bundleStream.Position;
-			long decompressedSize = blockInfos.Sum(t => t.DecompressedSize);
-			using (SmartStream blockStream = CreateBlockStream(decompressedSize))
+			BundleFileEntry[] newEntries = new BundleFileEntry[Metadata.Entries.Count];
+			using (SmartStream blockStream = SmartStream.CreateNull())
 			{
-				foreach (BlockInfo blockInfo in blockInfos)
+				for (int ei = 0; ei < Metadata.Entries.Count; ei++)
 				{
-					BundleCompressType compressType = blockInfo.Flags.GetCompression();
-					switch (compressType)
+					BundleFileEntry entry = Metadata.Entries[ei];
+
+					// find block corresponding to current entry
+					int blockIndex = 0;
+					long compressedOffset = 0;
+					long decompressedOffset = 0;
+					while (true)
 					{
-						case BundleCompressType.None:
-							bundleStream.CopyStream(blockStream, blockInfo.DecompressedSize);
+						BlockInfo block = blockInfos[blockIndex];
+						if (decompressedOffset + block.DecompressedSize > entry.Offset)
+						{
 							break;
+						}
+						blockIndex++;
+						compressedOffset += block.CompressedSize;
+						decompressedOffset += block.DecompressedSize;
+					}
 
-						case BundleCompressType.LZMA:
-							SevenZipHelper.DecompressLZMAStream(bundleStream, blockInfo.CompressedSize, blockStream, blockInfo.DecompressedSize);
+					// check does this entry use any compressed blocks
+					long entrySize = 0;
+					bool isCompressed = false;
+					for (int bi = blockIndex; entrySize < entry.Size; bi++)
+					{
+						BlockInfo block = blockInfos[bi];
+						entrySize += block.DecompressedSize;
+						if(block.Flags.GetCompression() != BundleCompressType.None)
+						{
+							isCompressed = true;
 							break;
+						}
+					}
 
-						case BundleCompressType.LZ4:
-						case BundleCompressType.LZ4HZ:
-							using (Lz4Stream lzStream = new Lz4Stream(bundleStream, blockInfo.CompressedSize))
+					if(isCompressed)
+					{
+						// well, at leat one block is compressed so we should copy data of current entry to separate stream
+						using (SmartStream entryStream = CreateStream(entry.Size))
+						{
+							long left = entry.Size;
+							long entryOffset = entry.Offset - decompressedOffset;
+							bundleStream.Position = dataOffset + compressedOffset;
+
+							// copy data of all blocks used by current entry to created stream
+							for (int bi = blockIndex; left > 0; bi++)
 							{
-								long read = lzStream.Read(blockStream, blockInfo.DecompressedSize);
-								if (read != blockInfo.DecompressedSize)
+								long blockOffset = 0;
+								BlockInfo block = blockInfos[bi];
+								if (cachedBlock == bi)
 								{
-									throw new Exception($"Read {read} but expected {blockInfo.CompressedSize}");
+									// some data of previous entry is in the same block as this one
+									// so we don't need to unpack it once again but can use cached stream
+									bundleStream.Position += block.CompressedSize;
 								}
-							}
-							break;
+								else
+								{
+									BundleCompressType compressType = block.Flags.GetCompression();
+									switch (compressType)
+									{
+										case BundleCompressType.None:
+											blockOffset = dataOffset + compressedOffset;
+											blockStream.Assign(bundleStream);
+											break;
 
-						default:
-							throw new NotImplementedException($"Bundle compression '{compressType}' isn't supported");
+										case BundleCompressType.LZMA:
+											blockStream.Move(CreateStream(block.DecompressedSize));
+											SevenZipHelper.DecompressLZMAStream(bundleStream, block.CompressedSize, blockStream, block.DecompressedSize);
+											break;
+
+										case BundleCompressType.LZ4:
+										case BundleCompressType.LZ4HZ:
+											blockStream.Move(CreateStream(block.DecompressedSize));
+											using (Lz4Stream lzStream = new Lz4Stream(bundleStream, block.CompressedSize))
+											{
+												long read = lzStream.Read(blockStream, block.DecompressedSize);
+												if (read != block.DecompressedSize)
+												{
+													throw new Exception($"Read {read} but expected {block.CompressedSize}");
+												}
+											}
+											break;
+
+										default:
+											throw new NotImplementedException($"Bundle compression '{compressType}' isn't supported");
+									}
+									cachedBlock = bi;
+								}
+
+								// consider next offsets:
+								// 1) block - if it is new stream then offset is 0, otherwise offset of this block in bundle file
+								// 2) entry - if this is first block for current entry then it is offset of this entry related to this block
+								//			  otherwise 0
+								long fragmentSize = block.DecompressedSize - entryOffset;
+								blockStream.Position = blockOffset + entryOffset;
+								entryOffset = 0;
+
+								long size = Math.Min(fragmentSize, left);
+								blockStream.CopyStream(entryStream, size);
+
+								compressedOffset += block.CompressedSize;
+								left -= size;
+							}
+							if (left < 0)
+							{
+								throw new Exception($"Read more than expected");
+							}
+
+							newEntries[ei] = new BundleFileEntry(entryStream, entry.FilePath, entry.Name, 0, entry.Size);
+						}
+					}
+					else
+					{
+						// no compressed blocks was found so we can use original bundle stream
+						newEntries[ei] = new BundleFileEntry(entry, dataOffset + entry.Offset);
 					}
 				}
-
-				BundleFileEntry[] entries = new BundleFileEntry[Metadata.Entries.Count];
-				for (int i = 0; i < Metadata.Entries.Count; i++)
-				{
-					BundleFileEntry bundleEntry = Metadata.Entries[i];
-					string name = bundleEntry.Name;
-					long offset = bundleEntry.Offset - dataOffset;
-					long size = bundleEntry.Size;
-					BundleFileEntry streamEntry = new BundleFileEntry(blockStream, m_filePath, name, offset, size);
-					entries[i] = streamEntry;
-				}
-				Metadata.Dispose();
-				Metadata = new BundleMetadata(m_filePath, entries);
 			}
+			Metadata.Dispose();
+			Metadata = new BundleMetadata(m_filePath, newEntries);
 		}
 
-		private SmartStream CreateBlockStream(long decompressedSize)
+		private SmartStream CreateStream(long decompressedSize)
 		{
 			return decompressedSize > int.MaxValue ? SmartStream.CreateTemp() : SmartStream.CreateMemory(new byte[decompressedSize]);
 		}

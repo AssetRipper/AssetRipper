@@ -127,7 +127,8 @@
     <Compile Include="IO\PartialStream.cs" />
     <Compile Include="IO\ReverseStream.cs" />
     <Compile Include="IO\FileMultiStream\FileMultiStream.cs" />
-    <Compile Include="IO\SmartStream.cs" />
+    <Compile Include="IO\SmartStream\SmartStream.cs" />
+    <Compile Include="IO\SmartStream\SmartStreamType.cs" />
     <Compile Include="Parser\AssetCollection\AssetFactory.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\MonoImporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\SceneImporter.cs" />

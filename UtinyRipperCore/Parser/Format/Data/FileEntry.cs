@@ -42,7 +42,22 @@ namespace UtinyRipper
 
 		public void ReadResourcesFile(FileCollection collection)
 		{
-			collection.ReadResourceFile(m_stream, FilePath, Name, m_offset, m_size);
+			if(m_stream.StreamType == SmartStreamType.Memory && m_stream.Length > m_size)
+			{
+				// create separate stream so resouce file don't refer to huge memory blob and this blob will be released
+				using (SmartStream resStream = SmartStream.CreateMemory(new byte[m_size]))
+				{
+					using (PartialStream partStream = new PartialStream(m_stream, m_offset, m_size))
+					{
+						partStream.CopyTo(resStream);
+					}
+					collection.ReadResourceFile(resStream, FilePath, Name, 0, m_size);
+				}
+			}
+			else
+			{
+				collection.ReadResourceFile(m_stream, FilePath, Name, m_offset, m_size);
+			}
 		}
 
 		public void ReadSerializedFile(FileCollection collection, Action<string> dependencyCallback)
@@ -139,7 +154,7 @@ namespace UtinyRipper
 				}
 			}
 		}
-
+		
 		protected virtual bool IsSerializedFileInner => true;
 		protected virtual bool IsResourceFileInner => false;
 		protected virtual bool IsSkipFileInner => false;

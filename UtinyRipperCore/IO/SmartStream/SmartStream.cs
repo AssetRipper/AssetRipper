@@ -51,26 +51,26 @@ namespace UtinyRipper
 			private int m_refCount = 0;
 		}
 
-		private SmartStream(Stream baseStream)
+		private SmartStream()
+		{
+			m_isDisposed = true;
+		}
+
+		private SmartStream(Stream baseStream, SmartStreamType type)
 		{
 			if (baseStream == null)
 			{
 				throw new ArgumentNullException(nameof(baseStream));
 			}
 			m_stream = baseStream;
-			RefCount = new SmartRefCount();
-			RefCount.Increase();
+			m_streamType = type;
+			m_refCount = new SmartRefCount();
+			m_refCount++;
 		}
 
 		private SmartStream(SmartStream copy)
 		{
-			if (copy == null)
-			{
-				throw new ArgumentNullException(nameof(copy));
-			}
-			m_stream = copy.m_stream;
-			RefCount = copy.RefCount;
-			RefCount.Increase();
+			Assign(copy);
 		}
 
 		~SmartStream()
@@ -78,27 +78,59 @@ namespace UtinyRipper
 			Dispose(false);
 		}
 
+		public static SmartStream CreateNull()
+		{
+			return new SmartStream();
+		}
+
 		public static SmartStream OpenRead(string path)
 		{
-			return new SmartStream(FileMultiStream.OpenRead(path));
+			return new SmartStream(FileMultiStream.OpenRead(path), SmartStreamType.File);
 		}
 
 		public static SmartStream CreateTemp()
 		{
 			string tempFile = Path.GetTempFileName();
-			return new SmartStream(new FileStream(tempFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose));
+			return new SmartStream(new FileStream(tempFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose), SmartStreamType.File);
 		}
 
 		public static SmartStream CreateMemory()
 		{
-			return new SmartStream(new MemoryStream());
+			return new SmartStream(new MemoryStream(), SmartStreamType.Memory);
 		}
 
 		public static SmartStream CreateMemory(byte[] buffer)
 		{
-			return new SmartStream(new MemoryStream(buffer));
+			return new SmartStream(new MemoryStream(buffer), SmartStreamType.Memory);
 		}
-		
+
+		public void Assign(SmartStream source)
+		{
+			Dispose();
+
+			m_stream = source.m_stream;
+			m_streamType = source.m_streamType;
+			m_refCount = source.m_refCount;
+			m_isDisposed = source.m_isDisposed;
+			if (m_isDisposed)
+			{
+				if(!IsNull)
+				{
+					throw new ObjectDisposedException(nameof(source));
+				}
+			}
+			else
+			{
+				m_refCount++;
+			}
+		}
+
+		public void Move(SmartStream source)
+		{
+			Assign(source);
+			source.Dispose();
+		}
+
 		public SmartStream CreateReference()
 		{
 			return new SmartStream(this);
@@ -106,7 +138,7 @@ namespace UtinyRipper
 
 		public override void Flush()
 		{
-			if(m_isDisposed)
+			if (m_isDisposed)
 			{
 				throw new ObjectDisposedException(null);
 			}
@@ -151,10 +183,10 @@ namespace UtinyRipper
 
 		protected override void Dispose(bool disposing)
 		{
-			if (!m_isDisposed)
+			if (!IsNull && !m_isDisposed)
 			{
-				RefCount.Decrease();
-				if (RefCount.IsZero)
+				m_refCount--;
+				if (m_refCount.IsZero)
 				{
 					m_stream.Dispose();
 				}
@@ -229,9 +261,23 @@ namespace UtinyRipper
 			}
 		}
 
-		private SmartRefCount RefCount { get; }
+		public SmartStreamType StreamType
+		{
+			get
+			{
+				if (m_isDisposed)
+				{
+					throw new ObjectDisposedException(null);
+				}
+				return m_streamType;
+			}
+		}
 
-		private readonly Stream m_stream;
+		public bool IsNull => m_stream == null;
+
+		private SmartRefCount m_refCount;
+		private Stream m_stream;
+		private SmartStreamType m_streamType;
 		private bool m_isDisposed;
 	}
 }

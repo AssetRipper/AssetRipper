@@ -43,7 +43,7 @@ namespace UtinyRipper.BundleFiles
 			m_entries = entries;
 		}
 
-		public void Read530(EndianReader reader, SmartStream dataStream, long dataOffset)
+		public void Read530(EndianReader reader, SmartStream dataStream)
 		{
 			int count = reader.ReadInt32();
 			BundleFileEntry[] entries = new BundleFileEntry[count];
@@ -54,8 +54,7 @@ namespace UtinyRipper.BundleFiles
 				int blobIndex = reader.ReadInt32();
 				string name = reader.ReadStringZeroTerm();
 				
-				long globalOffset = dataOffset + offset;
-				BundleFileEntry entry = new BundleFileEntry(dataStream, m_filePath, name, globalOffset, size);
+				BundleFileEntry entry = new BundleFileEntry(dataStream, m_filePath, name, offset, size);
 				entries[i] = entry;
 			}
 			m_entries = entries;
