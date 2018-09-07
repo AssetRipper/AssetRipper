@@ -6,7 +6,7 @@ namespace UtinyRipper
 	public class ReverseStream : Stream
 	{
 		public ReverseStream(Stream stream):
-			this(stream, false)
+			this(stream, true)
 		{
 		}
 
@@ -15,24 +15,24 @@ namespace UtinyRipper
 		{
 		}
 
-		public ReverseStream(Stream stream, long startPosition, long length):
-			this(stream, startPosition, length, false)
+		public ReverseStream(Stream stream, long offset, long size):
+			this(stream, offset, size, true)
 		{
 		}
 
-		public ReverseStream(Stream stream, long startPosition, long length, bool leaveOpen)
+		public ReverseStream(Stream stream, long offset, long size, bool leaveOpen)
 		{
 			if(stream == null)
 			{
 				throw new ArgumentNullException(nameof(stream));
 			}
-			if (startPosition > stream.Length)
+			if (offset > stream.Length)
 			{
-				throw new ArgumentException($"Start position {startPosition} grater than stream lengh {stream.Length}", nameof(startPosition));
+				throw new ArgumentException($"Start position {offset} grater than stream lengh {stream.Length}", nameof(offset));
 			}
-			if (length > stream.Length)
+			if (size > stream.Length)
 			{
-				throw new ArgumentException($"Length {length} grater than stream lengh {stream.Length}", nameof(stream));
+				throw new ArgumentException($"Length {size} grater than stream lengh {stream.Length}", nameof(stream));
 			}
 			if(!stream.CanSeek)
 			{
@@ -40,10 +40,10 @@ namespace UtinyRipper
 			}
 
 			m_stream = stream;
-			m_begin = startPosition;
-			m_end = startPosition + length;
+			m_begin = offset;
+			m_end = offset + size;
 			Position = m_stream.Position - m_begin;
-			Length = length;
+			Length = size;
 			m_leaveOpen = leaveOpen;
 		}
 

@@ -336,10 +336,13 @@ namespace UtinyRipper.Classes
 						return;
 					}
 
-					res.Position = FSBResource.Offset;
 					if (StreamedResource.IsReadSize(container.Version))
 					{
-						res.Stream.CopyStream(stream, FSBResource.Size);
+						using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
+						{
+							resStream.Position = FSBResource.Offset;
+							resStream.CopyStream(stream, FSBResource.Size);
+						}
 					}
 					else
 					{
@@ -362,8 +365,11 @@ namespace UtinyRipper.Classes
 								return;
 							}
 
-							res.Position = FSBResource.Offset;
-							res.Stream.CopyStream(stream, StreamingInfo.Size);
+							using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
+							{
+								resStream.Position = StreamingInfo.Offset;
+								resStream.CopyStream(resStream, StreamingInfo.Size);
+							}
 						}
 					}
 					else

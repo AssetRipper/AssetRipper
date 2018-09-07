@@ -42,8 +42,7 @@ namespace UtinyRipper
 
 		public void ReadResourcesFile(FileCollection collection)
 		{
-			m_stream.Position = m_offset;
-			collection.ReadResourceFile(m_stream, FilePath, Name);
+			collection.ReadResourceFile(m_stream, FilePath, Name, m_offset, m_size);
 		}
 
 		public void ReadSerializedFile(FileCollection collection, Action<string> dependencyCallback)

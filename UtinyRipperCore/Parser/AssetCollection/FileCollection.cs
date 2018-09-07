@@ -84,9 +84,9 @@ namespace UtinyRipper
 			}
 		}
 
-		internal void ReadResourceFile(SmartStream stream, string filePath, string fileName)
+		internal void ReadResourceFile(SmartStream stream, string filePath, string fileName, long offset, long size)
 		{
-			ResourcesFile resource = new ResourcesFile(stream, filePath, fileName);
+			ResourcesFile resource = new ResourcesFile(stream, filePath, fileName, offset, size);
 			AddResourceFile(resource);
 		}
 
@@ -285,7 +285,7 @@ namespace UtinyRipper
 			{
 				if(res.FilePath == filePath && res.Name == fileName)
 				{
-					return new ResourcesFile(res);
+					return res.CreateReference();
 				}
 			}
 
@@ -297,8 +297,7 @@ namespace UtinyRipper
 			{
 				using (SmartStream stream = SmartStream.OpenRead(resPath))
 				{
-					ResourcesFile resesFile = new ResourcesFile(stream, resPath, fileName);
-					return resesFile;
+					return new ResourcesFile(stream, resPath, fileName, 0, stream.Length);
 				}
 			}
 			return null;
@@ -428,12 +427,11 @@ namespace UtinyRipper
 			{
 				if (file.Name == assemblyName)
 				{
-#warning TODO: get rid of this stupid offset
-					long position = file.Stream.Position;
-					file.Position = 0;
-					ReadAssembly(file.Stream, assemblyName);
+					using (PartialStream stream = new PartialStream(file.Stream, file.Offset, file.Size))
+					{
+						ReadAssembly(stream, assemblyName);
+					}
 					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
-					file.Stream.Position = position;
 					return;
 				}
 			}

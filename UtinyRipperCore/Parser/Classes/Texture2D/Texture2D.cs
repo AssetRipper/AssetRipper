@@ -168,10 +168,13 @@ namespace UtinyRipper.Classes
 							return;
 						}
 
-						res.Position = StreamData.Offset;
-						Export(container, stream, res.Stream, StreamData.Size);
-						return;
+						using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
+						{
+							resStream.Position = StreamData.Offset;
+							Export(container, stream, resStream, StreamData.Size);
+						}
 					}
+					return;
 				}
 			}
 

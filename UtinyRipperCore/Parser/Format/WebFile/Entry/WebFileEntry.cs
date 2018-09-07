@@ -84,12 +84,10 @@ namespace UtinyRipper.WebFiles
 		{
 			get
 			{
-#warning TODO: get rid of this stupid offset
-				long position = m_stream.Position;
-				m_stream.Position = m_offset;
-				bool result = BundleFile.IsBundleFile(m_stream);
-				m_stream.Position = position;
-				return result;
+				using (PartialStream stream = new PartialStream(m_stream, m_offset, m_size))
+				{
+					return BundleFile.IsBundleFile(stream);
+				}
 			}
 		}
 
@@ -97,12 +95,10 @@ namespace UtinyRipper.WebFiles
 		{
 			get
 			{
-#warning TODO: get rid of this stupid offset
-				long position = m_stream.Position;
-				m_stream.Position = m_offset;
-				bool result = WebFile.IsWebFile(m_stream);
-				m_stream.Position = position;
-				return result;
+				using (PartialStream stream = new PartialStream(m_stream, m_offset, m_size))
+				{
+					return WebFile.IsWebFile(stream);
+				}
 			}
 		}
 

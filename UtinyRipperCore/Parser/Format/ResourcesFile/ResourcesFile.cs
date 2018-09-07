@@ -1,10 +1,11 @@
 ﻿using System;
+using System.IO;
 
 namespace UtinyRipper
 {
 	public class ResourcesFile : IDisposable
 	{
-		internal ResourcesFile(SmartStream stream, string filePath, string fileName)
+		internal ResourcesFile(SmartStream stream, string filePath, string fileName, long offset, long size)
 		{
 			if (string.IsNullOrEmpty(filePath))
 			{
@@ -21,21 +22,24 @@ namespace UtinyRipper
 
 			FilePath = filePath;
 			Name = fileName;
-			Stream = stream.CreateReference();
-			m_basePisition = stream.Position;
+			m_stream = stream.CreateReference();
+			Offset = offset;
+			Size = size;
 		}
 
-		internal ResourcesFile(ResourcesFile copy)
+		private ResourcesFile(ResourcesFile copy):
+			this(copy.m_stream, copy.FilePath, copy.Name, copy.Offset, copy.Size)
 		{
-			FilePath = copy.FilePath;
-			Name = copy.Name;
-			Stream = copy.Stream.CreateReference();
-			m_basePisition = copy.m_basePisition;
 		}
 
 		~ResourcesFile()
 		{
 			Dispose(false);
+		}
+		
+		public ResourcesFile CreateReference()
+		{
+			return new ResourcesFile(this);
 		}
 
 		public void Dispose()
@@ -46,12 +50,12 @@ namespace UtinyRipper
 
 		public void Dispose(bool disposing)
 		{
-			Stream.Dispose();
+			m_stream.Dispose();
 		}
 
 		public override string ToString()
 		{
-			return Name == null ? base.ToString() : Name;
+			return Name ?? base.ToString();
 		}
 
 		/// <summary>
@@ -62,12 +66,10 @@ namespace UtinyRipper
 		/// Name of resources file in file system or in asset bundle
 		/// </summary>
 		public string Name { get; }
-		public SmartStream Stream { get; }
-		public long Position
-		{
-			set => Stream.Position = m_basePisition + value;
-		}
+		public Stream Stream => m_stream;
+		public long Offset { get; }
+		public long Size { get; }
 
-		private long m_basePisition = 0;
+		private readonly SmartStream m_stream;
 	}
 }

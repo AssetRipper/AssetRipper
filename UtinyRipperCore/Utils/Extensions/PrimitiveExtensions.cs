@@ -57,5 +57,18 @@
 			ulong value = BitConverterExtensions.ToUInt64(_this);
 			return ToHexString(value);
 		}
+
+		public static int ToClosestInt(this long _this)
+		{
+			if(_this > int.MaxValue)
+			{
+				return int.MaxValue;
+			}
+			if(_this < int.MinValue)
+			{
+				return int.MinValue;
+			}
+			return unchecked((int)_this);
+		}
 	}
 }

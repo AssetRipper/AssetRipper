@@ -98,7 +98,7 @@ namespace UtinyRipper
 		{
 			return new SmartStream(new MemoryStream(buffer));
 		}
-
+		
 		public SmartStream CreateReference()
 		{
 			return new SmartStream(this);

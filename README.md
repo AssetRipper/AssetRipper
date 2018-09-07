@@ -64,6 +64,6 @@ If you want to build solution you need:
 
 If you want only to run binaries of sample project you need to install:
 
- \- [.NET Framework 4.5.0](https://www.microsoft.com/en-us/download/details.aspx?id=30653) or [.NET Core 2.1](https://www.microsoft.com/net/download/dotnet-core/1.0) Runetime
+ \- [.NET Framework 4.5.0](https://www.microsoft.com/en-us/download/details.aspx?id=30653) or [.NET Core 1.0](https://www.microsoft.com/net/download/dotnet-core/1.0) Runetime
 
  \- [Unity 2017.3.0f3](https://unity3d.com/get-unity/download/archive)

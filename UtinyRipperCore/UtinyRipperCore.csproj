@@ -124,6 +124,7 @@
     <Compile Include="Exporter\YAML\Utils\Extensions\IDictionaryExtensions.cs" />
     <Compile Include="IO\EndianReader\IEndianReadable.cs" />
     <Compile Include="IO\FileMultiStream\SplitNameComparer.cs" />
+    <Compile Include="IO\PartialStream.cs" />
     <Compile Include="IO\ReverseStream.cs" />
     <Compile Include="IO\FileMultiStream\FileMultiStream.cs" />
     <Compile Include="IO\SmartStream.cs" />
