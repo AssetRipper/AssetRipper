@@ -20,11 +20,13 @@ namespace UtinyRipper.Exporters.Scripts
 			{
 				argument.GetTypeNamespaces(namespaces);
 			}
-			Owner.GetUsedNamespaces(namespaces);
+			Template.GetUsedNamespaces(namespaces);
 		}
 
-		public sealed override ScriptExportType DeclaringType => Owner.DeclaringType;
-		public abstract ScriptExportType Owner { get; } 
+		public sealed override string ClearName => Template.ClearName;
+
+		public sealed override ScriptExportType DeclaringType => Template.DeclaringType;
+		public abstract ScriptExportType Template { get; } 
 		public abstract IReadOnlyList<ScriptExportType> Arguments { get; }
 
 		public sealed override IReadOnlyList<ScriptExportField> Fields { get; } = new ScriptExportField[0];

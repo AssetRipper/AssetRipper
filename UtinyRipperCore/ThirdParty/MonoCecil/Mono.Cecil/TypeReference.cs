@@ -279,6 +279,15 @@ namespace Mono.Cecil {
 
 			return module.Resolve (this);
 		}
+
+		public TypeReference ResolveOrDefault()
+		{
+			var module = this.Module;
+			if (module == null)
+				return this;
+
+			return module.Resolve (this);
+		}
 	}
 
 	static partial class Mixin {

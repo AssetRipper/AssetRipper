@@ -27,6 +27,7 @@ namespace UtinyRipper.Exporters.Scripts
 			throw new NotSupportedException();
 		}
 
+		public sealed override string ClearName => Name;
 		public sealed override bool IsEnum => true;
 
 		public sealed override ScriptExportType Base => null;

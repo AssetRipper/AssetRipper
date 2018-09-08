@@ -29,6 +29,10 @@ namespace UtinyRipper.AssetExporters.Mono
 			{
 				return false;
 			}
+			if (IsCompilerGenerated(field))
+			{
+				return false;
+			}
 
 			if (field.IsPublic)
 			{
@@ -38,29 +42,19 @@ namespace UtinyRipper.AssetExporters.Mono
 				}
 				return true;
 			}
-			else
-			{
-				foreach (CustomAttribute attr in field.CustomAttributes)
-				{
-					if (IsSerializeFieldAttrribute(attr))
-					{
-						return true;
-					}
-				}
-			}
-			return false;
+			return HasSerializeFieldAttribute(field);
 		}
 
 		public static bool IsSerializable(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
 			if(IsSerializableModifier(field))
 			{
-				return IsSerializable(field.FieldType, arguments);
+				return IsFieldTypeSerializable(field.FieldType, arguments);
 			}
 			return false;
 		}
 
-		private static bool IsSerializable(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		public static bool IsFieldTypeSerializable(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
 			// if it's generic parameter then get its real type
 			if (type.IsGenericParameter)
@@ -86,13 +80,18 @@ namespace UtinyRipper.AssetExporters.Mono
 					elementType = arguments[parameter];
 				}
 
-				// array of list isn't serializable
+				// array of arrays isn't serializable
+				if (elementType.IsArray)
+				{
+					return false;
+				}
+				// array of lists isn't serializable
 				if (MonoType.IsList(elementType))
 				{
 					return false;
 				}
-				// check if elelent is serializable
-				return IsSerializable(elementType, arguments);
+				// check if element is serializable
+				return IsFieldTypeSerializable(elementType, arguments);
 			}
 
 			if (MonoType.IsList(type))
@@ -108,18 +107,18 @@ namespace UtinyRipper.AssetExporters.Mono
 					listElement = arguments[parameter];
 				}
 
-				// list of array isn't serializable
+				// list of arrays isn't serializable
 				if (listElement.IsArray)
 				{
 					return false;
 				}
-				// list of list isn't serializable
+				// list of lists isn't serializable
 				if (MonoType.IsList(listElement))
 				{
 					return false;
 				}
-				// check if elelent is serializable
-				return IsSerializable(listElement, arguments);
+				// check if element is serializable
+				return IsFieldTypeSerializable(listElement, arguments);
 			}
 
 			if (type.IsPrimitive)
@@ -141,17 +140,8 @@ namespace UtinyRipper.AssetExporters.Mono
 
 			if (type.IsGenericInstance)
 			{
-				// if generic instance contains argument other than generic parameter then it isn't serializable
-				GenericInstanceType instance = (GenericInstanceType)type;
-				foreach (TypeReference argument in instance.GenericArguments)
-				{
-					if (!argument.IsGenericParameter)
-					{
-						return false;
-					}
-				}
+				return false;
 			}
-
 			if (MonoType.IsObject(type))
 			{
 				return false;
@@ -159,6 +149,10 @@ namespace UtinyRipper.AssetExporters.Mono
 
 			TypeDefinition definition = type.Resolve();
 			if (definition.IsInterface)
+			{
+				return false;
+			}
+			if(MonoType.IsCompilerGenerated(definition))
 			{
 				return false;
 			}
@@ -174,10 +168,30 @@ namespace UtinyRipper.AssetExporters.Mono
 			return false;
 		}
 
-		private static bool IsSerializeFieldAttrribute(CustomAttribute attribute)
+		public static bool IsCompilerGenerated(FieldDefinition field)
 		{
-			TypeReference type = attribute.AttributeType;
-			return IsSerializeFieldAttrribute(type.Namespace, type.Name);
+			foreach (CustomAttribute attribute in field.CustomAttributes)
+			{
+				TypeReference type = attribute.AttributeType;
+				if (IsCompilerGeneratedAttrribute(type.Namespace, type.Name))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private static bool HasSerializeFieldAttribute(FieldDefinition field)
+		{
+			foreach (CustomAttribute attribute in field.CustomAttributes)
+			{
+				TypeReference type = attribute.AttributeType;
+				if(IsSerializeFieldAttrribute(type.Namespace, type.Name))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		private static bool IsArrayType(TypeReference type)

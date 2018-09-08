@@ -22,7 +22,9 @@ namespace UtinyRipper.Exporters.Scripts
 			{
 				writer.Write("new ");
 			}
-			string name = GetTypeNestedName(Type);
+
+			string name = Type.GetTypeNestedName(DeclaringType);
+			name = ScriptType.IsEngineObject(Type.Namespace, name) ? $"{Type.Namespace}.{name}" : name;
 			writer.WriteLine("{0} {1};", name, Name);
 		}
 
@@ -58,25 +60,6 @@ namespace UtinyRipper.Exporters.Scripts
 			{
 				return Name;
 			}
-		}
-
-		private string GetTypeNestedName(ScriptExportType type)
-		{
-			if(ScriptType.IsEngineObject(type.Namespace, type.Name))
-			{
-				return $"{type.Namespace}.{type.Name}";
-			}
-			if(type.DeclaringType == null)
-			{
-				return type.Name;
-			}
-			if(type.DeclaringType == DeclaringType)
-			{
-				return type.Name;
-			}
-
-			string declaringName = GetTypeNestedName(type.DeclaringType);
-			return $"{declaringName}.{type.Name}";
 		}
 		
 		public abstract string Name { get; }

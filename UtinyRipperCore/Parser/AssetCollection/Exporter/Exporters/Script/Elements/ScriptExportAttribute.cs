@@ -38,10 +38,8 @@ namespace UtinyRipper.Exporters.Scripts
 		
 		public const string SystemNamespace = "System";
 		protected const string UnityEngineNamespace = "UnityEngine";
-		protected const string CompilerServicesNamespace = "System.Runtime.CompilerServices";
 
 		public const string SerializableName = "Serializable";
 		protected const string SerializeFieldName = "SerializeField";
-		protected const string CompilerGeneratedName = "CompilerGeneratedAttribute";
 	}
 }

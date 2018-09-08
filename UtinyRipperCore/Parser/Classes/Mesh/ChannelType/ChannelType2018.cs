@@ -37,7 +37,7 @@ namespace UtinyRipper.Classes.Meshes
 					return ChannelFormat.Float;
 
 				case ChannelType2018.Color:
-					return ChannelFormat.Byte;
+					return ChannelFormat.Color;
 
 				case ChannelType2018.UV0:
 				case ChannelType2018.UV1:

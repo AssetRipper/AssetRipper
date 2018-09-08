@@ -437,6 +437,7 @@
     <Compile Include="Parser\Format\BundleFile\Parser\ChunkInfo.cs" />
     <Compile Include="Parser\Format\Data\FileEntryType.cs" />
     <Compile Include="Parser\AssetCollection\DependencyCollection.cs" />
+    <Compile Include="Parser\Format\Data\FileScheme.cs" />
     <Compile Include="Parser\Format\SerializedFile\IO\SerializedFileReader.cs" />
     <Compile Include="Parser\Format\SerializedFile\IO\ISerializedFileReadable.cs" />
     <Compile Include="Parser\Format\SerializedFile\ISerializedFile\VirtualSerializedFile.cs" />
@@ -449,6 +450,7 @@
     <Compile Include="Parser\Format\SerializedFile\Parser\AssetEntry.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\ObjectPtr.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\RTTIBaseClassDescriptor.cs" />
+    <Compile Include="Parser\Format\SerializedFile\Parser\SerializedFileScheme.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\TypeTree.cs" />
     <Compile Include="Parser\Format\SerializedFile\Parser\TypeTreeNode.cs" />
     <Compile Include="Parser\Format\WebFile\Entry\WebFileEntry.cs" />

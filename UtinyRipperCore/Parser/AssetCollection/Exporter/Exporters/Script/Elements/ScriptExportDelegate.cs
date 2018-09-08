@@ -37,6 +37,8 @@ namespace UtinyRipper.Exporters.Scripts
 			throw new NotSupportedException();
 		}
 
+		public sealed override string ClearName => Name;
+
 		public sealed override ScriptExportType Base => null;
 		public sealed override IReadOnlyList<ScriptExportField> Fields { get; } = new ScriptExportField[0];
 		public abstract ScriptExportType Return { get; }

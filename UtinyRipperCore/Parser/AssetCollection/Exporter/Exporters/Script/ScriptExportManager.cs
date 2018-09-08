@@ -158,7 +158,7 @@ namespace UtinyRipper.Exporters.Scripts
 				}
 			}
 
-			string fullname = ScriptExportMonoType.ToFullName(type);
+			string fullname = ScriptExportMonoType.GetFullName(type);
 			if (m_types.TryGetValue(fullname, out ScriptExportType exportType))
 			{
 				return exportType;
@@ -168,7 +168,7 @@ namespace UtinyRipper.Exporters.Scripts
 
 		public ScriptExportArray RetrieveArray(TypeReference array)
 		{
-			string fullname = ScriptExportMonoType.ToFullName(array);
+			string fullname = ScriptExportMonoType.GetFullName(array);
 			if (m_arrays.TryGetValue(fullname, out ScriptExportArray exportArray))
 			{
 				return exportArray;
@@ -178,7 +178,7 @@ namespace UtinyRipper.Exporters.Scripts
 
 		public ScriptExportGeneric RetrieveGeneric(TypeReference generic)
 		{
-			string fullname = ScriptExportMonoType.ToFullName(generic);
+			string fullname = ScriptExportMonoType.GetFullName(generic);
 			if (m_generic.TryGetValue(fullname, out ScriptExportGeneric exportGeneric))
 			{
 				return exportGeneric;
@@ -188,7 +188,7 @@ namespace UtinyRipper.Exporters.Scripts
 
 		public ScriptExportEnum RetrieveEnum(TypeDefinition @enum)
 		{
-			string fullname = ScriptExportMonoType.ToFullName(@enum);
+			string fullname = ScriptExportMonoType.GetFullName(@enum);
 			if (m_enums.TryGetValue(fullname, out ScriptExportEnum exportEnum))
 			{
 				return exportEnum;
@@ -198,7 +198,7 @@ namespace UtinyRipper.Exporters.Scripts
 
 		public ScriptExportDelegate RetrieveDelegate(TypeDefinition @delegate)
 		{
-			string fullname = ScriptExportMonoType.ToFullName(@delegate);
+			string fullname = ScriptExportMonoType.GetFullName(@delegate);
 			if (m_delegates.TryGetValue(fullname, out ScriptExportDelegate exportDelegate))
 			{
 				return exportDelegate;

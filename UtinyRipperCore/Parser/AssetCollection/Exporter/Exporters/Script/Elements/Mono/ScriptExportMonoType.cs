@@ -1,7 +1,6 @@
 ﻿using Mono.Cecil;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.AssetExporters.Mono;
 
@@ -22,21 +21,95 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 				Definition = type.Resolve();
 			}
 
-			m_name = GetName(Type);
-			m_module = GetModule(Type);
-			m_fullName = ToFullName(Type, Module);
+			TypeName = GetTypeName(Type);
+			Name = GetName(Type, TypeName);
+			int index = Name.IndexOf('<');
+			ClearName = index == -1 ? Name : Name.Substring(0, index);
+			Module = GetModule(Type);
+			FullName = GetFullName(Type, Module);
 		}
 
-		public static string ToFullName(TypeReference type)
+		public static string GetName(TypeReference type)
+		{
+			string typeName = GetTypeName(type);
+			return GetName(type, typeName);
+		}
+
+		public static string GetName(TypeReference type, string typeName)
+		{
+			if (type.IsGenericParameter)
+			{
+				return typeName;
+			}
+			if (type.IsNested)
+			{
+				string declaringName = GetName(type.DeclaringType);
+				return $"{declaringName}.{typeName}";
+			}
+			return typeName;
+		}
+
+		public static string GetTypeName(TypeReference type)
+		{
+			if (MonoType.IsCPrimitive(type))
+			{
+				return ScriptType.ToCPrimitiveString(type.Name);
+			}
+
+			string name = type.Name;
+			if (type.IsGenericInstance)
+			{
+				GenericInstanceType generic = (GenericInstanceType)type;
+				int index = name.IndexOf('`');
+				name = name.Substring(0, index);
+				name += '<';
+				for (int i = 0; i < generic.GenericArguments.Count; i++)
+				{
+					TypeReference arg = generic.GenericArguments[i];
+					name += GetArgumentName(arg);
+					if (i < generic.GenericArguments.Count - 1)
+					{
+						name += ", ";
+					}
+				}
+				name += '>';
+			}
+			else if (type.HasGenericParameters)
+			{
+				// TypeReference names parameters as <!0,!1> (!index) but TypeDefinition names them as <T1,T2> (RealParameterName)
+				type = type.ResolveOrDefault();
+				int index = name.IndexOf('`');
+				name = name.Substring(0, index);
+				name += '<';
+				for (int i = 0; i < type.GenericParameters.Count; i++)
+				{
+					GenericParameter par = type.GenericParameters[i];
+					name += GetArgumentName(par);
+					if (i < type.GenericParameters.Count - 1)
+					{
+						name += ", ";
+					}
+				}
+				name += '>';
+			}
+			else if (type.IsArray)
+			{
+				ArrayType array = (ArrayType)type;
+				name = GetName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
+			}
+			return name;
+		}
+
+		public static string GetFullName(TypeReference type)
 		{
 			string module = GetModule(type);
-			return ToFullName(type, module);
+			return GetFullName(type, module);
 		}
 
-		public static string ToFullName(TypeReference type, string module)
+		public static string GetFullName(TypeReference type, string module)
 		{
 			string name = GetName(type);
-			string fullName = $"{type.Namespace}.{ToNestedName(type, name)}";
+			string fullName = $"{type.Namespace}.{name}";
 			return ScriptExportManager.ToFullName(module, fullName);
 		}
 
@@ -74,55 +147,6 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			return HasMember(definition.BaseType, name);
 		}
 
-		public static string GetName(TypeReference type)
-		{
-			if (MonoType.IsCPrimitive(type))
-			{
-				return ScriptType.ToCPrimitiveString(type.Name);
-			}
-
-			string name = type.Name;
-			if (type.IsGenericInstance)
-			{
-				GenericInstanceType generic = (GenericInstanceType)type;
-				int index = name.IndexOf('`');
-				name = name.Substring(0, index);
-				name += '<';
-				for (int i = 0; i < generic.GenericArguments.Count; i++)
-				{
-					TypeReference arg = generic.GenericArguments[i];
-					name += GetArgumentName(arg);
-					if (i < generic.GenericArguments.Count - 1)
-					{
-						name += ", ";
-					}
-				}
-				name += '>';
-			}
-			else if (type.HasGenericParameters)
-			{
-				int index = name.IndexOf('`');
-				name = name.Substring(0, index);
-				name += '<';
-				for (int i = 0; i < type.GenericParameters.Count; i++)
-				{
-					GenericParameter par = type.GenericParameters[i];
-					name += GetArgumentName(par);
-					if (i < type.GenericParameters.Count - 1)
-					{
-						name += ", ";
-					}
-				}
-				name += '>';
-			}
-			else if(type.IsArray)
-			{
-				ArrayType array = (ArrayType)type;
-				name = GetName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
-			}
-			return name;
-		}
-
 		private static string GetArgumentName(TypeReference type)
 		{
 			if(MonoType.IsEngineObject(type))
@@ -130,23 +154,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 				return $"{type.Namespace}.{type.Name}";
 			}
 
-			string name = GetName(type);
-			return ToNestedName(type, name);
-		}
-
-		private static string ToNestedName(TypeReference type, string name)
-		{
-			if(type.IsGenericParameter)
-			{
-				return name;
-			}
-			if(type.IsNested)
-			{
-				string declaringName = GetName(type.DeclaringType);
-				string declaringNestedName = ToNestedName(type.DeclaringType, declaringName);
-				return $"{declaringNestedName}.{name}";
-			}
-			return name;
+			return GetName(type);
 		}
 
 		public override void Init(IScriptExportManager manager)
@@ -192,7 +200,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		private IReadOnlyList<ScriptExportField> CreateFields(IScriptExportManager manager)
 		{
-			if(Definition == null)
+			if (Definition == null)
 			{
 				return new ScriptExportField[0];
 			}
@@ -200,6 +208,11 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			List<ScriptExportField> fields = new List<ScriptExportField>();
 			foreach (FieldDefinition field in Definition.Fields)
 			{
+				if(!MonoField.IsSerializableModifier(field))
+				{
+					continue;
+				}
+
 				if (field.FieldType.Module == null)
 				{
 					// if field has unknown type then consider it as serializable
@@ -211,11 +224,11 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 				else
 				{
 					TypeDefinition definition = field.FieldType.Resolve();
-					if(definition == null)
+					if (definition == null)
 					{
 						// if field has unknown type then consider it as serializable
 					}
-					else if (!MonoField.IsSerializable(field, null))
+					else if (!MonoField.IsFieldTypeSerializable(field.FieldType, null))
 					{
 						continue;
 					}
@@ -229,16 +242,20 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		private static bool IsContainsGenericParameter(TypeReference type)
 		{
-			if(type.IsGenericParameter)
+			if (type.IsGenericParameter)
 			{
 				return true;
 			}
-			if(type.IsGenericInstance)
+			if (type.IsArray)
+			{
+				return IsContainsGenericParameter(type.GetElementType());
+			}
+			if (type.IsGenericInstance)
 			{
 				GenericInstanceType instance = (GenericInstanceType)type;
-				foreach(TypeReference argument in instance.GenericArguments)
+				foreach (TypeReference argument in instance.GenericArguments)
 				{
-					if(IsContainsGenericParameter(argument))
+					if (IsContainsGenericParameter(argument))
 					{
 						return true;
 					}
@@ -247,10 +264,12 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			return false;
 		}
 
-		public override string FullName => m_fullName;
-		public override string Name => m_name;
+		public override string FullName { get; }
+		public override string Name { get; }
+		public override string TypeName { get; }
+		public override string ClearName { get; }
 		public override string Namespace => DeclaringType == null ? Type.Namespace : DeclaringType.Namespace;
-		public override string Module => m_module;
+		public override string Module { get; }
 
 		public override ScriptExportType DeclaringType => m_declaringType;
 		public override ScriptExportType Base => m_base;
@@ -286,11 +305,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 
 		private TypeReference Type { get; }
 		private TypeDefinition Definition { get; }
-
-		private readonly string m_fullName;
-		private readonly string m_name;
-		private readonly string m_module;
-
+		
 		private ScriptExportType m_declaringType;
 		private ScriptExportType m_base;
 		private IReadOnlyList<ScriptExportField> m_fields;

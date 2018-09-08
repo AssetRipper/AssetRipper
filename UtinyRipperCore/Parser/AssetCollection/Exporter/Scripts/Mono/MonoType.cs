@@ -1,5 +1,4 @@
 ﻿using Mono.Cecil;
-using System;
 using System.Collections.Generic;
 
 namespace UtinyRipper.AssetExporters.Mono
@@ -94,6 +93,18 @@ namespace UtinyRipper.AssetExporters.Mono
 				return false;
 			}
 			return IsEnginePointer(definition.BaseType);
+		}
+
+		public static bool IsCompilerGenerated(TypeDefinition type)
+		{
+			foreach (CustomAttribute attr in type.CustomAttributes)
+			{
+				if (attr.AttributeType.Name == CompilerGeneratedName && attr.AttributeType.Namespace == CompilerServicesNamespace)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		private static PrimitiveType GetPrimitiveType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)

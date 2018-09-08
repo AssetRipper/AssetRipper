@@ -5,8 +5,9 @@ namespace UtinyRipper.Classes.Meshes
 	public enum ChannelFormat : byte
 	{
 		Float		= 0,
-		HalfFloat	= 1,
-		Byte		= 2,
+		Float16		= 1,
+		Color		= 2,
+		Byte		= 3,
 		Int			= 11,
 	}
 
@@ -18,8 +19,10 @@ namespace UtinyRipper.Classes.Meshes
 			{
 				case ChannelFormat.Float:
 					return 4;
-				case ChannelFormat.HalfFloat:
+				case ChannelFormat.Float16:
 					return 2;
+				case ChannelFormat.Color:
+					return 1;
 				case ChannelFormat.Byte:
 					return 1;
 				case ChannelFormat.Int:

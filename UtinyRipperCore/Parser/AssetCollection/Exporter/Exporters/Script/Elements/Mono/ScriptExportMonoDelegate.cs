@@ -19,8 +19,9 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			
 			Type = @delegate;
 
-			m_module = ScriptExportMonoType.GetModule(Type);
-			m_fullName = ScriptExportMonoType.ToFullName(Type, Module);
+			Name = ScriptExportMonoType.GetName(Type);
+			Module = ScriptExportMonoType.GetModule(Type);
+			FullName = ScriptExportMonoType.GetFullName(Type, Module);
 		}
 
 		public static bool IsDelegate(TypeDefinition type)
@@ -73,10 +74,11 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			throw new Exception($"Invoke method '{InvokeMethodName}' wasn't found");
 		}
 
-		public override string FullName => m_fullName;
-		public override string Name => Type.Name;
+		public override string FullName { get; }
+		public override string Name { get; }
+		public override string TypeName => Type.Name;
 		public override string Namespace => DeclaringType == null ? Type.Namespace : DeclaringType.Namespace;
-		public override string Module => m_module;
+		public override string Module { get; }
 
 		public override ScriptExportType DeclaringType => m_declaringType;
 		public override ScriptExportType Return => m_return;
@@ -103,9 +105,6 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 		}
 
 		private TypeDefinition Type { get; }
-
-		private readonly string m_fullName;
-		private readonly string m_module;
 
 		private ScriptExportType m_declaringType;
 		private ScriptExportType m_return;

@@ -30,7 +30,16 @@ namespace UtinyRipper.AssetExporters
 			this(copy.Type, copy.IsArray, copy.Name)
 		{
 		}
-		
+
+		protected static bool IsCompilerGeneratedAttrribute(string @namespace, string name)
+		{
+			if (@namespace == ScriptType.CompilerServicesNamespace)
+			{
+				return name == ScriptType.CompilerGeneratedName;
+			}
+			return false;
+		}
+
 		protected static bool IsSerializeFieldAttrribute(string @namespace, string name)
 		{
 			if (@namespace == ScriptType.UnityEngineName)

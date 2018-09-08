@@ -15,30 +15,18 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			
 			Attribute = attribute;
 
-			m_module = ScriptExportMonoType.GetModule(Attribute.AttributeType);
-			m_fullName = ToFullName(Attribute, Module);
-		}
-
-		public static bool IsCompilerGenerated(TypeDefinition type)
-		{
-			foreach(CustomAttribute attr in type.CustomAttributes)
-			{
-				if(attr.AttributeType.Name == CompilerGeneratedName && attr.AttributeType.Namespace == CompilerServicesNamespace)
-				{
-					return true;
-				}
-			}
-			return false;
+			Module = ScriptExportMonoType.GetModule(Attribute.AttributeType);
+			FullName = ToFullName(Attribute, Module);
 		}
 
 		public static string ToFullName(CustomAttribute attribute)
 		{
-			return ScriptExportMonoType.ToFullName(attribute.AttributeType);
+			return ScriptExportMonoType.GetFullName(attribute.AttributeType);
 		}
 
 		public static string ToFullName(CustomAttribute attribute, string module)
 		{
-			return ScriptExportMonoType.ToFullName(attribute.AttributeType, module);
+			return ScriptExportMonoType.GetFullName(attribute.AttributeType, module);
 		}
 
 		private static string GetModule(TypeReference type)
@@ -63,16 +51,13 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			return attrType.Namespace == UnityEngineNamespace && attrType.Name == SerializeFieldName;
 		}
 
-		public override string FullName => m_fullName;
+		public override string FullName { get; }
 		public override string Name => Attribute.AttributeType.Name;
-		public override string Module => m_module;
+		public override string Module { get; }
 
 		protected override ScriptExportType Type => m_type;
 
 		private CustomAttribute Attribute { get; }
-
-		private readonly string m_fullName;
-		private readonly string m_module;
 
 		private ScriptExportType m_type;
 	}

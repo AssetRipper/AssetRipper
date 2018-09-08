@@ -300,6 +300,9 @@ namespace UtinyRipper.AssetExporters
 		public const string SystemName = "System";
 		public const string SystemCollectionGenericName = "System.Collections.Generic";
 		public const string UnityEngineName = "UnityEngine";
+		public const string CompilerServicesNamespace = "System.Runtime.CompilerServices";
+		
+		public const string CompilerGeneratedName = "CompilerGeneratedAttribute";
 
 		private const string ObjectName = "Object";
 		private const string CObjectName = "object";

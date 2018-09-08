@@ -253,14 +253,18 @@ namespace UtinyRipper.AssetExporters.Mono
 
 		private bool IsTypeValid(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
+			if(type.IsGenericParameter)
+			{
+				GenericParameter parameter = (GenericParameter)type;
+				return IsTypeValid(arguments[parameter], arguments);
+			}
 			if(type.IsArray)
 			{
 				return IsTypeValid(type.GetElementType(), arguments);
 			}
 			if(MonoType.IsList(type))
 			{
-				GenericInstanceType list = (GenericInstanceType)type;
-				return IsTypeValid(list.GenericArguments[0], arguments);
+				return IsListValid(type, arguments);
 			}
 
 			if(type.IsGenericParameter)
@@ -283,19 +287,22 @@ namespace UtinyRipper.AssetExporters.Mono
 
 			// set value at the beginning to prevent loop referencing
 			m_validTypes[type.FullName] = true;
+
 			if (type.IsGenericInstance)
 			{
+				// this is the case only for base classes. Field types aren't checked here
 				GenericInstanceType instance = (GenericInstanceType)type;
 				Dictionary<GenericParameter, TypeReference> templateArguments = new Dictionary<GenericParameter, TypeReference>();
-				TypeReference template = instance.ElementType;
+				TypeReference template = instance.ElementType.ResolveOrDefault();
 				for (int i = 0; i < instance.GenericArguments.Count; i++)
 				{
 					TypeReference argument = instance.GenericArguments[i];
-					if (!IsTypeValid(argument, arguments))
+					// don't check the validity of argument since it may not be used as a serialize field
+					/*if (!IsTypeValid(argument, arguments))
 					{
 						m_validTypes[type.FullName] = false;
 						return false;
-					}
+					}*/
 					templateArguments.Add(template.GenericParameters[i], argument);
 				}
 
@@ -305,7 +312,12 @@ namespace UtinyRipper.AssetExporters.Mono
 			TypeDefinition definition = type.Resolve();
 			if(definition == null)
 			{
+				m_validTypes[type.FullName] = false;
 				return false;
+			}
+			if(definition.IsInterface)
+			{
+				return true;
 			}
 			if (!IsTypeValid(definition.BaseType, arguments))
 			{
@@ -319,6 +331,19 @@ namespace UtinyRipper.AssetExporters.Mono
 				{
 					continue;
 				}
+				if (field.FieldType.IsGenericInstance)
+				{
+					// generic instances aren't serializable. Exception - list
+					if (MonoType.IsList(type))
+					{
+						if (!IsListValid(type, arguments))
+						{
+							m_validTypes[type.FullName] = false;
+							return false;
+						}
+					}
+					continue;
+				}
 
 				if (!IsTypeValid(field.FieldType, arguments))
 				{
@@ -327,6 +352,13 @@ namespace UtinyRipper.AssetExporters.Mono
 				}
 			}
 			return true;
+		}
+
+		private bool IsListValid(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		{
+			GenericInstanceType list = (GenericInstanceType)type;
+			TypeReference element = list.GenericArguments[0];
+			return IsTypeValid(element, arguments);
 		}
 		
 		public ScriptingBackEnd ScriptingBackEnd

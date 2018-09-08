@@ -25,6 +25,15 @@ namespace UtinyRipper.SerializedFiles
 			public TransferInstructionFlags Flags { get; set; }
 		}
 
+		internal SerializedFile(IFileCollection collection, IAssemblyManager manager, SerializedFileScheme scheme)
+		{
+			if (scheme == null)
+			{
+				throw new ArgumentNullException(nameof(scheme));
+			}
+
+		}
+
 		private SerializedFile(IFileCollection collection, IAssemblyManager manager, string filePath, string name, TransferInstructionFlags flags)
 		{
 			if(collection == null)

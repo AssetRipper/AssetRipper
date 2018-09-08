@@ -33,10 +33,11 @@ namespace UtinyRipper.Exporters.Scripts
 			}
 
 			writer.WriteIntent(intent);
-			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", Name);
+			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", TypeName);
+
 			if (Base != null && !ScriptType.IsBasic(Base.Namespace, Base.Name))
 			{
-				writer.Write(" : {0}", Base.Name);
+				writer.Write(" : {0}", Base.GetTypeNestedName(DeclaringType));
 			}
 			writer.WriteLine();
 
@@ -75,7 +76,7 @@ namespace UtinyRipper.Exporters.Scripts
 
 		public virtual void GetTypeNamespaces(ICollection<string> namespaces)
 		{
-			if (ScriptType.IsCPrimitive(Namespace, Name))
+			if (ScriptType.IsCPrimitive(Namespace, ClearName))
 			{
 				return;
 			}
@@ -113,6 +114,29 @@ namespace UtinyRipper.Exporters.Scripts
 					return ScriptType.IsComponent(Namespace, Name);
 			}
 			return false;
+		}
+
+		public string GetTypeNestedName(ScriptExportType relativeType)
+		{
+			if(relativeType == null)
+			{
+				return Name;
+			}
+			if (ScriptType.IsEngineObject(Namespace, Name))
+			{
+				return $"{Namespace}.{Name}";
+			}
+			if (DeclaringType == null)
+			{
+				return TypeName;
+			}
+			if (relativeType == DeclaringType)
+			{
+				return TypeName;
+			}
+
+			string declaringName = DeclaringType.GetTypeNestedName(relativeType);
+			return $"{declaringName}.{TypeName}";
 		}
 
 		public override string ToString()
@@ -162,7 +186,7 @@ namespace UtinyRipper.Exporters.Scripts
 		{
 			if(Namespace == ScriptType.UnityEngineName)
 			{
-				switch (Name)
+				switch (ClearName)
 				{
 					case "NavMeshAgent":
 					case "OffMeshLink":
@@ -174,6 +198,8 @@ namespace UtinyRipper.Exporters.Scripts
 
 		public abstract string FullName { get; }
 		public abstract string Name { get; }
+		public abstract string TypeName { get; }
+		public abstract string ClearName { get; }
 		public abstract string Namespace { get; }
 		public abstract string Module { get; }
 		public virtual bool IsEnum => false;

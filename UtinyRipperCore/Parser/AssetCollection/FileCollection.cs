@@ -225,6 +225,61 @@ namespace UtinyRipper
 			AssemblyManager.Read(stream, fileName);
 		}
 
+		internal void AddResourceFile(ResourcesFile resource)
+		{
+			if (m_resources.Any(t => t.Name == resource.Name))
+			{
+				throw new ArgumentException($"Resource file with name '{resource.Name}' already presents in collection", nameof(resource));
+			}
+			m_resources.Add(resource);
+		}
+
+		internal void AddBundleFile(BundleFile bundle)
+		{
+			DependencyCollection depCollection = new DependencyCollection(this, bundle.Metadata.Entries, OnRequestDependency);
+			depCollection.ReadFiles();
+		}
+
+		internal void AddArchiveFile(ArchiveFile archive)
+		{
+			if (archive.Metadata.Entries.Count > 1)
+			{
+				throw new NotSupportedException("More than one file for archive isn't supported");
+			}
+
+			foreach (ArchiveFileEntry entry in archive.Metadata.Entries)
+			{
+				// for now archive contains only one file so we shouldn't concern about dependencies
+				switch (entry.EntryType)
+				{
+					case FileEntryType.Serialized:
+						{
+							entry.ReadSerializedFile(this);
+						}
+						break;
+					case FileEntryType.Bundle:
+						{
+							entry.ReadBundleFile(this);
+						}
+						break;
+					case FileEntryType.Web:
+						{
+							entry.ReadWebFile(this);
+						}
+						break;
+
+					default:
+						throw new Exception($"Unsupported file '{entry.Name}' inside archive '{entry.FilePath}'");
+				}
+			}
+		}
+
+		internal void AddWebFile(WebFile web)
+		{
+			DependencyCollection depCollection = new DependencyCollection(this, web.Metadata.Entries, OnRequestDependency);
+			depCollection.ReadFiles();
+		}
+
 		public void Unload(string filepath)
 		{
 			for(int i = 0; i > m_files.Count; i++)
@@ -333,7 +388,7 @@ namespace UtinyRipper
 			}
 		}
 
-		private void AddSerializedFile(SerializedFile file)
+		internal void AddSerializedFile(SerializedFile file)
 		{
 #if DEBUG
 			if(m_files.Any(t => t.Name == file.Name))
@@ -352,61 +407,6 @@ namespace UtinyRipper
 			}
 
 			m_files.Add(file);
-		}
-
-		private void AddResourceFile(ResourcesFile resource)
-		{
-			if (m_resources.Any(t => t.Name == resource.Name))
-			{
-				throw new ArgumentException($"Resource file with name '{resource.Name}' already presents in collection", nameof(resource));
-			}
-			m_resources.Add(resource);
-		}
-
-		private void AddBundleFile(BundleFile bundle)
-		{
-			DependencyCollection depCollection = new DependencyCollection(this, bundle.Metadata.Entries, OnRequestDependency);
-			depCollection.ReadFiles();
-		}
-
-		private void AddArchiveFile(ArchiveFile archive)
-		{
-			if(archive.Metadata.Entries.Count > 1)
-			{
-				throw new NotSupportedException("More than one file for archive isn't supported");
-			}
-
-			foreach(ArchiveFileEntry entry in archive.Metadata.Entries)
-			{
-				// for now archive contains only one file so we shouldn't concern about dependencies
-				switch (entry.EntryType)
-				{
-					case FileEntryType.Serialized:
-						{
-							entry.ReadSerializedFile(this);
-						}
-						break;
-					case FileEntryType.Bundle:
-						{
-							entry.ReadBundleFile(this);
-						}
-						break;
-					case FileEntryType.Web:
-						{
-							entry.ReadWebFile(this);
-						}
-						break;
-
-					default:
-						throw new Exception($"Unsupported file '{entry.Name}' inside archive '{entry.FilePath}'");
-				}
-			}
-		}
-
-		private void AddWebFile(WebFile web)
-		{
-			DependencyCollection depCollection = new DependencyCollection(this, web.Metadata.Entries, OnRequestDependency);
-			depCollection.ReadFiles();
 		}
 
 		private void SetVersion(SerializedFile file)
