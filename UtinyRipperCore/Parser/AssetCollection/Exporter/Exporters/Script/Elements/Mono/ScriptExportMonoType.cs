@@ -95,7 +95,7 @@ namespace UtinyRipper.Exporters.Scripts.Mono
 			else if (type.IsArray)
 			{
 				ArrayType array = (ArrayType)type;
-				name = GetName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
+				name = GetTypeName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
 			}
 			return name;
 		}

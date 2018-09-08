@@ -5,10 +5,10 @@ namespace UtinyRipper.Exporters.Scripts
 {
 	public abstract class ScriptExportEnum : ScriptExportType
 	{
-		public override void Export(TextWriter writer, int intent)
+		public sealed override void Export(TextWriter writer, int intent)
 		{
 			writer.WriteIntent(intent);
-			writer.WriteLine("{0} enum {1}", Keyword, Name);
+			writer.WriteLine("{0} enum {1}", Keyword, TypeName);
 
 			writer.WriteIntent(intent++);
 			writer.WriteLine('{');

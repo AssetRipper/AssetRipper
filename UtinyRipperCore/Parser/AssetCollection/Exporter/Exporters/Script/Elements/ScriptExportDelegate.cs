@@ -9,7 +9,7 @@ namespace UtinyRipper.Exporters.Scripts
 		public sealed override void Export(TextWriter writer, int intent)
 		{
 			writer.WriteIntent(intent);
-			writer.Write("{0} delegate {1} {2}(", Keyword, Return.Name, Name);
+			writer.Write("{0} delegate {1} {2}(", Keyword, Return.Name, TypeName);
 			for (int i = 0; i < Parameters.Count; i++)
 			{
 				ScriptExportParameter parameter = Parameters[i];

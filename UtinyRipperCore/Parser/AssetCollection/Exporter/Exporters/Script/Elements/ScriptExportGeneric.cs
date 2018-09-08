@@ -5,7 +5,7 @@ namespace UtinyRipper.Exporters.Scripts
 {
 	public abstract class ScriptExportGeneric : ScriptExportType
 	{
-		public override void GetTypeNamespaces(ICollection<string> namespaces)
+		public sealed override void GetTypeNamespaces(ICollection<string> namespaces)
 		{
 			base.GetTypeNamespaces(namespaces);
 			foreach (ScriptExportType argument in Arguments)
@@ -14,7 +14,7 @@ namespace UtinyRipper.Exporters.Scripts
 			}
 		}
 
-		public override void GetUsedNamespaces(ICollection<string> namespaces)
+		public sealed override void GetUsedNamespaces(ICollection<string> namespaces)
 		{
 			foreach (ScriptExportType argument in Arguments)
 			{

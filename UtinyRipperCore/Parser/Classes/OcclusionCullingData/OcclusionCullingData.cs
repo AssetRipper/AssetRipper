@@ -34,8 +34,9 @@ namespace UtinyRipper.Classes
 
 		private static SceneObjectIdentifier CreateObjectID(IExportContainer container, Object asset)
 		{
-			long lid = (long)container.GetExportID(asset);
-			return new SceneObjectIdentifier(lid, 0);
+			long lid = asset == null ? 0 : container.GetExportID(asset);
+			SceneObjectIdentifier soId = new SceneObjectIdentifier(lid, 0);
+			return soId;
 		}
 
 		public void Initialize(IExportContainer container, OcclusionCullingSettings cullingSetting)
@@ -139,14 +140,14 @@ namespace UtinyRipper.Classes
 			for (int i = 0; i < cullingSetting.StaticRenderers.Count; i++)
 			{
 				PPtr<Renderer> prenderer = cullingSetting.StaticRenderers[i];
-				Renderer renderer = prenderer.GetAsset(cullingSetting.File);
+				Renderer renderer = prenderer.FindAsset(cullingSetting.File);
 				m_staticRenderers[scene.IndexRenderers + i] = CreateObjectID(container, renderer);
 			}
 
 			for (int i = 0; i < cullingSetting.Portals.Count; i++)
 			{
 				PPtr<OcclusionPortal> pportal = cullingSetting.Portals[i];
-				OcclusionPortal portal = pportal.GetAsset(cullingSetting.File);
+				OcclusionPortal portal = pportal.FindAsset(cullingSetting.File);
 				m_portals[scene.IndexPortals + i] = CreateObjectID(container, portal);
 			}
 		}
