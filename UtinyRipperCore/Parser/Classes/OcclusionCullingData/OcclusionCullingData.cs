@@ -29,7 +29,7 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public static bool IsReadStaticRenderers(TransferInstructionFlags flags)
 		{
-			return !flags.IsSerializeGameRelease();
+			return !flags.IsRelease();
 		}
 
 		private static SceneObjectIdentifier CreateObjectID(IExportContainer container, Object asset)

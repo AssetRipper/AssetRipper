@@ -7,12 +7,12 @@ namespace UtinyRipper.Classes.ParticleSystems
 	public struct MinMaxCurve : IAssetReadable, IYAMLExportable
 	{
 		public MinMaxCurve(float value) :
-			this(ParticleSystemCurveMode.Constant, value, value, 0.0f, 0.0f)
+			this(ParticleSystemCurveMode.Constant, value, value, 1.0f, 1.0f)
 		{
 		}
 
 		public MinMaxCurve(float minValue, float maxValue) :
-			this(ParticleSystemCurveMode.Constant, minValue, maxValue, 0.0f, 0.0f)
+			this(ParticleSystemCurveMode.Constant, minValue, maxValue, 1.0f, 1.0f)
 		{
 		}
 
@@ -21,28 +21,24 @@ namespace UtinyRipper.Classes.ParticleSystems
 		{
 		}
 
-		public MinMaxCurve(float minValue, float maxValue, float minCurve, float maxCurve0, float maxCurve1)
+		public MinMaxCurve(float minValue, float maxValue, float minCurve, float maxCurve1, float maxCurve2)
 		{
 			MinMaxState = ParticleSystemCurveMode.Curve;
 			Scalar = maxValue;
 			MinScalar = minValue;
 
-			Float defWeight = new Float(1.0f / 3.0f);
-			Float zero = new Float(0.0f);
-			Float one = new Float(1.0f);
-			MaxCurve = new AnimationCurveTpl<Float>(new Float(maxCurve0), zero, one, new Float(maxCurve1), one, zero, defWeight);
-			MinCurve = new AnimationCurveTpl<Float>(new Float(minCurve), defWeight);
+			MinCurve = new AnimationCurveTpl<Float>(minCurve, 1.0f / 3.0f);
+			MaxCurve = new AnimationCurveTpl<Float>(maxCurve1, 0.0f, 1.0f, maxCurve2, 1.0f, 0.0f, 1.0f / 3.0f);
 		}
 
 		public MinMaxCurve(ParticleSystemCurveMode mode, float minValue, float maxValue, float minCurve, float maxCurve)
 		{
 			MinMaxState = mode;
-			Scalar = maxValue;
 			MinScalar = minValue;
+			Scalar = maxValue;
 
-			Float defWeight = new Float(1.0f / 3.0f);
-			MaxCurve = new AnimationCurveTpl<Float>(new Float(maxCurve), defWeight);
-			MinCurve = new AnimationCurveTpl<Float>(new Float(minCurve), defWeight);
+			MinCurve = new AnimationCurveTpl<Float>(minCurve, 1.0f / 3.0f);
+			MaxCurve = new AnimationCurveTpl<Float>(maxCurve, 1.0f / 3.0f);
 		}
 
 		/// <summary>
@@ -84,10 +80,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 			
 			Scalar = reader.ReadSingle();
-			if (IsReadMinScalar(reader.Version))
-			{
-				MinScalar = reader.ReadSingle();
-			}
+			MinScalar = IsReadMinScalar(reader.Version) ? reader.ReadSingle() : Scalar;
 			MaxCurve.Read(reader);
 			MinCurve.Read(reader);
 			
@@ -143,7 +136,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 				}
 				else
 				{
-					return Scalar;
+					return MinScalar;
 				}
 			}
 		}

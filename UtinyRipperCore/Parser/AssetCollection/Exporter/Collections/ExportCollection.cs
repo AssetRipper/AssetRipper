@@ -41,7 +41,7 @@ namespace UtinyRipper.AssetExporters
 			int digits = BitConverterExtensions.GetDigitsCount(value);
 			if(digits > 5)
 			{
-				throw new ArgumentException($"Value {value} for main export ID must have not more than 5 digits");
+				throw new ArgumentException($"Value {value} for main export ID must have no more than 5 digits");
 			}
 #endif
 			return (classID * 100000) | value;

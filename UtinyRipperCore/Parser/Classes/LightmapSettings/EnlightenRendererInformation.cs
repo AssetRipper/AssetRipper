@@ -12,7 +12,7 @@ namespace UtinyRipper.Classes.LightmapSettingss
 		/// </summary>
 		public static bool IsReadGeometryHash(TransferInstructionFlags flags)
 		{
-			return !flags.IsSerializeGameRelease();
+			return !flags.IsRelease();
 		}
 
 		public void Read(AssetReader reader)

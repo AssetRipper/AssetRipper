@@ -14,13 +14,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsLess(5, 5);
 		}
 		/// <summary>
-		/// 5.5.0 and greater
-		/// </summary>
-		public static bool IsReadRateOverDistance(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
-		/// <summary>
 		/// Less than 5.6.0
 		/// </summary>
 		public static bool IsReadCnt(Version version)
@@ -33,20 +26,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public static bool IsReadCntMax(Version version)
 		{
 			return version.IsGreaterEqual(5, 3) && version.IsLess(5, 6);
-		}
-		/// <summary>
-		/// Less than 5.6.0
-		/// </summary>
-		public static bool IsReadTime(Version version)
-		{
-			return version.IsLess(5, 6);
-		}
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		public static bool IsReadBursts(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
 		}
 
 		/// <summary>
@@ -79,76 +58,80 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
-		private MinMaxCurve GetExportRateOverDistance(Version version)
-		{
-			return IsReadRateOverDistance(version) ? RateOverDistance : new MinMaxCurve(0.0f);
-		}
-		private IReadOnlyList<ParticleSystemEmissionBurst> GetExportBursts(Version version)
-		{
-			if (IsReadBursts(version))
-			{
-				return Bursts;
-			}
-			else
-			{
-				ParticleSystemEmissionBurst[] bursts = new ParticleSystemEmissionBurst[4];
-				bursts[0] = new ParticleSystemEmissionBurst(Time0, Cnt0, IsReadCntMax(version) ? CntMax0 : Cnt0);
-				bursts[1] = new ParticleSystemEmissionBurst(Time1, Cnt1, IsReadCntMax(version) ? CntMax1 : Cnt1);
-				bursts[2] = new ParticleSystemEmissionBurst(Time2, Cnt2, IsReadCntMax(version) ? CntMax2 : Cnt2);
-				bursts[3] = new ParticleSystemEmissionBurst(Time3, Cnt3, IsReadCntMax(version) ? CntMax3 : Cnt3);
-				return bursts;
-			}
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
 			if (IsReadType(reader.Version))
 			{
-				Type = reader.ReadInt32();
+				EmissionType type = (EmissionType)reader.ReadInt32();
+				if(type == EmissionType.Time)
+				{
+					RateOverTime.Read(reader);
+					RateOverDistance = new MinMaxCurve(0.0f);
+				}
+				else
+				{
+					RateOverTime = new MinMaxCurve(0.0f);
+					RateOverDistance.Read(reader);
+				}
 			}
-
-			RateOverTime.Read(reader);
-			if (IsReadRateOverDistance(reader.Version))
+			else
 			{
+				RateOverTime.Read(reader);
 				RateOverDistance.Read(reader);
 			}
 
 			if (IsReadCnt(reader.Version))
 			{
-				Cnt0 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
-				Cnt1 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
-				Cnt2 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
-				Cnt3 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
-			}
-			if (IsReadCntMax(reader.Version))
-			{
-				CntMax0 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
-				CntMax1 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
-				CntMax2 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
-				CntMax3 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
-			}
-			if (IsReadTime(reader.Version))
-			{
-				Time0 = reader.ReadSingle();
-				Time1 = reader.ReadSingle();
-				Time2 = reader.ReadSingle();
-				Time3 = reader.ReadSingle();
-			}
+				int cnt0 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+				int cnt1 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+				int cnt2 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+				int cnt3 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
 
-			if (IsIntCount(reader.Version))
-			{
-				BurstCount = reader.ReadInt32();
+				int cntMax0 = cnt0;
+				int cntMax1 = cnt1;
+				int cntMax2 = cnt2;
+				int cntMax3 = cnt3;
+				if (IsReadCntMax(reader.Version))
+				{
+					cntMax0 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+					cntMax1 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+					cntMax2 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+					cntMax3 = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadUInt16();
+				}
+
+				float time0 = reader.ReadSingle();
+				float time1 = reader.ReadSingle();
+				float time2 = reader.ReadSingle();
+				float time3 = reader.ReadSingle();
+
+				BurstCount = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadByte();
+				reader.AlignStream(AlignType.Align4);
+
+				m_bursts = new ParticleSystemEmissionBurst[BurstCount];
+				if(BurstCount > 0)
+				{
+					m_bursts[0] = new ParticleSystemEmissionBurst(time0, cnt0, cntMax0);
+					if (BurstCount > 1)
+					{
+						m_bursts[1] = new ParticleSystemEmissionBurst(time1, cnt1, cntMax1);
+						if (BurstCount > 2)
+						{
+							m_bursts[2] = new ParticleSystemEmissionBurst(time2, cnt2, cntMax2);
+							if (BurstCount > 3)
+							{
+								m_bursts[3] = new ParticleSystemEmissionBurst(time3, cnt3, cntMax3);
+							}
+						}
+					}
+				}
 			}
 			else
 			{
-				BurstCount = reader.ReadByte();
-			}
-			reader.AlignStream(AlignType.Align4);
+				BurstCount = reader.ReadInt32();
+				reader.AlignStream(AlignType.Align4);
 
-			if (IsReadBursts(reader.Version))
-			{
 				m_bursts = reader.ReadArray<ParticleSystemEmissionBurst>();
 			}
 		}
@@ -159,26 +142,13 @@ namespace UtinyRipper.Classes.ParticleSystems
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("rateOverTime", RateOverTime.ExportYAML(container));
-			node.Add("rateOverDistance", GetExportRateOverDistance(container.Version).ExportYAML(container));
+			node.Add("rateOverDistance", RateOverDistance.ExportYAML(container));
 			node.Add("m_BurstCount", BurstCount);
-			node.Add("m_Bursts", GetExportBursts(container.Version).ExportYAML(container));
+			node.Add("m_Bursts", Bursts.ExportYAML(container));
 			return node;
 		}
 
-		public int Type { get; private set; }
 		public int BurstCount { get; private set; }
-		public int Cnt0 { get; private set; }
-		public int Cnt1 { get; private set; }
-		public int Cnt2 { get; private set; }
-		public int Cnt3 { get; private set; }
-		public int CntMax0 { get; private set; }
-		public int CntMax1 { get; private set; }
-		public int CntMax2 { get; private set; }
-		public int CntMax3 { get; private set; }
-		public float Time0 { get; private set; }
-		public float Time1 { get; private set; }
-		public float Time2 { get; private set; }
-		public float Time3 { get; private set; }
 		public IReadOnlyList<ParticleSystemEmissionBurst> Bursts => m_bursts;
 
 		/// <summary>

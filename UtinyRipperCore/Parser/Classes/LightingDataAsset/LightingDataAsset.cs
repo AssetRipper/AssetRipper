@@ -24,14 +24,14 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public static bool IsReadLightmaps(TransferInstructionFlags flags)
 		{
-			return !flags.IsSerializeForInspector() || (((int)flags & 0x10) != 0);
+			return !flags.IsForInspector() || (((int)flags & 0x10) != 0);
 		}
 		/// <summary>
 		/// Not Inspector
 		/// </summary>
 		public static bool IsReadEnlightenData(TransferInstructionFlags flags)
 		{
-			return !flags.IsSerializeForInspector();
+			return !flags.IsForInspector();
 		}
 
 		private static int GetSerializedVersion(Version version)

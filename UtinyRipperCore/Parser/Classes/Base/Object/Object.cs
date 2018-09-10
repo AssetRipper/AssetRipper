@@ -24,7 +24,7 @@ namespace UtinyRipper.Classes
 
 		public static bool IsReadHideFlag(TransferInstructionFlags flags)
 		{
-			return !flags.IsSerializeGameRelease() && !flags.IsSerializeForPrefabSystem();
+			return !flags.IsRelease() && !flags.IsForPrefab();
 		}
 		public static bool IsReadInstanceID(TransferInstructionFlags flags)
 		{
@@ -53,17 +53,15 @@ namespace UtinyRipper.Classes
 			{
 				ObjectHideFlags = reader.ReadUInt32();
 			}
-			if(IsReadInstanceID(reader.Flags))
+#if UNIVERSAL
+			if (IsReadInstanceID(reader.Flags))
 			{
-				int instanceID = reader.ReadInt32();
-				long localIdentfierInFile = reader.ReadInt64();
-#if DEBUG
-				InstanceID = instanceID;
-				LocalIdentfierInFile = localIdentfierInFile;
-#endif
+				InstanceID = reader.ReadInt32();
+				LocalIdentfierInFile = reader.ReadInt64();
 			}
+#endif
 		}
-		
+
 		/// <summary>
 		/// Export object's content in such formats as txt or png
 		/// </summary>
@@ -117,7 +115,7 @@ namespace UtinyRipper.Classes
 		public EngineGUID GUID => m_assetInfo.GUID;
 
 		public uint ObjectHideFlags { get; set; }
-#if DEBUG
+#if UNIVERSAL
 		public int InstanceID { get; private set; }
 		public long LocalIdentfierInFile { get; private set; }
 #endif

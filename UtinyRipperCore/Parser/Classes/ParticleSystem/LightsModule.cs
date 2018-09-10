@@ -17,8 +17,8 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Color = true;
 			Range = true;
 			Intensity = true;
-			RangeCurve = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
-			IntensityCurve = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
+			RangeCurve = new MinMaxCurve(1.0f);
+			IntensityCurve = new MinMaxCurve(1.0f);
 			MaxLights = 20;
 		}
 

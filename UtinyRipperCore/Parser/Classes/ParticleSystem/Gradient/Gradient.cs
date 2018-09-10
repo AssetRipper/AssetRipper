@@ -11,43 +11,17 @@ namespace UtinyRipper.Classes.ParticleSystems
 	/// </summary>
 	public struct Gradient : IScriptStructure
 	{
-		public Gradient(Gradient copy)
+		public Gradient(ColorRGBAf color1, ColorRGBAf color2):
+			this()
 		{
-			Ctime0 = copy.Ctime0;
-			Ctime1 = copy.Ctime1;
-			Ctime2 = copy.Ctime2;
-			Ctime3 = copy.Ctime3;
-			Ctime4 = copy.Ctime4;
-			Ctime5 = copy.Ctime5;
-			Ctime6 = copy.Ctime6;
-			Ctime7 = copy.Ctime7;
-			Atime0 = copy.Atime0;
-			Atime1 = copy.Atime1;
-			Atime2 = copy.Atime2;
-			Atime3 = copy.Atime3;
-			Atime4 = copy.Atime4;
-			Atime5 = copy.Atime5;
-			Atime6 = copy.Atime6;
-			Atime7 = copy.Atime7;
-			Mode = copy.Mode;
-			NumColorKeys = copy.NumColorKeys;
-			NumAlphaKeys = copy.NumAlphaKeys;
-			Key32_0 = copy.Key32_0;
-			Key32_1 = copy.Key32_1;
-			Key32_2 = copy.Key32_2;
-			Key32_3 = copy.Key32_3;
-			Key32_4 = copy.Key32_4;
-			Key32_5 = copy.Key32_5;
-			Key32_6 = copy.Key32_6;
-			Key32_7 = copy.Key32_7;
-			Key0 = copy.Key0;
-			Key1 = copy.Key1;
-			Key2 = copy.Key2;
-			Key3 = copy.Key3;
-			Key4 = copy.Key4;
-			Key5 = copy.Key5;
-			Key6 = copy.Key6;
-			Key7 = copy.Key7;
+			Ctime0 = 0;
+			Atime0 = 0;
+			Ctime1 = ushort.MaxValue;
+			Atime1 = ushort.MaxValue;
+			Key0 = color1;
+			Key1 = color2;
+			NumColorKeys = 2;
+			NumAlphaKeys = 2;
 		}
 
 		/// <summary>
@@ -67,21 +41,21 @@ namespace UtinyRipper.Classes.ParticleSystems
 
 		public IScriptStructure CreateCopy()
 		{
-			return new Gradient(this);
+			return this;
 		}
 
 		public void Read(AssetReader reader)
 		{
 			if (IsColor32(reader.Version))
 			{
-				Key32_0.Read(reader);
-				Key32_1.Read(reader);
-				Key32_2.Read(reader);
-				Key32_3.Read(reader);
-				Key32_4.Read(reader);
-				Key32_5.Read(reader);
-				Key32_6.Read(reader);
-				Key32_7.Read(reader);
+				Key0.Read32(reader);
+				Key1.Read32(reader);
+				Key2.Read32(reader);
+				Key3.Read32(reader);
+				Key4.Read32(reader);
+				Key5.Read32(reader);
+				Key6.Read32(reader);
+				Key7.Read32(reader);
 			}
 			else
 			{
@@ -112,7 +86,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Atime7 = reader.ReadUInt16();
 			if (IsReadMode(reader.Version))
 			{
-				Mode = reader.ReadInt32();
+				Mode = (GradientMode)reader.ReadInt32();
 			}
 			NumColorKeys = reader.ReadByte();
 			NumAlphaKeys = reader.ReadByte();
@@ -124,14 +98,14 @@ namespace UtinyRipper.Classes.ParticleSystems
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("key0", GetExportKey(container.Version, 0).ExportYAML(container));
-			node.Add("key1", GetExportKey(container.Version, 1).ExportYAML(container));
-			node.Add("key2", GetExportKey(container.Version, 2).ExportYAML(container));
-			node.Add("key3", GetExportKey(container.Version, 3).ExportYAML(container));
-			node.Add("key4", GetExportKey(container.Version, 4).ExportYAML(container));
-			node.Add("key5", GetExportKey(container.Version, 5).ExportYAML(container));
-			node.Add("key6", GetExportKey(container.Version, 6).ExportYAML(container));
-			node.Add("key7", GetExportKey(container.Version, 7).ExportYAML(container));
+			node.Add("key0", Key0.ExportYAML(container));
+			node.Add("key1", Key1.ExportYAML(container));
+			node.Add("key2", Key2.ExportYAML(container));
+			node.Add("key3", Key3.ExportYAML(container));
+			node.Add("key4", Key4.ExportYAML(container));
+			node.Add("key5", Key5.ExportYAML(container));
+			node.Add("key6", Key6.ExportYAML(container));
+			node.Add("key7", Key7.ExportYAML(container));
 			node.Add("ctime0", Ctime0);
 			node.Add("ctime1", Ctime1);
 			node.Add("ctime2", Ctime2);
@@ -148,7 +122,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("atime5", Atime5);
 			node.Add("atime6", Atime6);
 			node.Add("atime7", Atime7);
-			node.Add("m_Mode", Mode);
+			node.Add("m_Mode", (int)Mode);
 			node.Add("m_NumColorKeys", NumColorKeys);
 			node.Add("m_NumAlphaKeys", NumAlphaKeys);
 			return node;
@@ -165,42 +139,34 @@ namespace UtinyRipper.Classes.ParticleSystems
 			{
 				case 0:
 					Key0 = new ColorRGBAf(r, g, b, Key0.A);
-					Key32_0 = new ColorRGBA32(Key0);
 					Ctime0 = time;
 					break;
 				case 1:
 					Key1 = new ColorRGBAf(r, g, b, Key1.A);
-					Key32_1 = new ColorRGBA32(Key1);
 					Ctime1 = time;
 					break;
 				case 2:
 					Key2 = new ColorRGBAf(r, g, b, Key2.A);
-					Key32_2 = new ColorRGBA32(Key2);
 					Ctime2 = time;
 					break;
 				case 3:
 					Key3 = new ColorRGBAf(r, g, b, Key3.A);
-					Key32_3 = new ColorRGBA32(Key3);
 					Ctime3 = time;
 					break;
 				case 4:
 					Key4 = new ColorRGBAf(r, g, b, Key4.A);
-					Key32_4 = new ColorRGBA32(Key4);
 					Ctime4 = time;
 					break;
 				case 5:
 					Key5 = new ColorRGBAf(r, g, b, Key5.A);
-					Key32_5 = new ColorRGBA32(Key5);
 					Ctime5 = time;
 					break;
 				case 6:
 					Key6 = new ColorRGBAf(r, g, b, Key6.A);
-					Key32_6 = new ColorRGBA32(Key6);
 					Ctime6 = time;
 					break;
 				case 7:
 					Key7 = new ColorRGBAf(r, g, b, Key7.A);
-					Key32_7 = new ColorRGBA32(Key7);
 					Ctime7 = time;
 					break;
 				default:
@@ -215,42 +181,34 @@ namespace UtinyRipper.Classes.ParticleSystems
 			{
 				case 0:
 					Key0 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
-					Key32_0 = new ColorRGBA32(Key0);
 					Atime0 = time;
 					break;
 				case 1:
 					Key1 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
-					Key32_1 = new ColorRGBA32(Key1);
 					Atime1 = time;
 					break;
 				case 2:
 					Key2 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
-					Key32_2 = new ColorRGBA32(Key2);
 					Atime2 = time;
 					break;
 				case 3:
 					Key3 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
-					Key32_3 = new ColorRGBA32(Key3);
 					Atime3 = time;
 					break;
 				case 4:
 					Key4 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
-					Key32_4 = new ColorRGBA32(Key4);
 					Atime4 = time;
 					break;
 				case 5:
 					Key5 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
-					Key32_5 = new ColorRGBA32(Key5);
 					Atime5 = time;
 					break;
 				case 6:
 					Key6 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
-					Key32_6 = new ColorRGBA32(Key6);
 					Atime6 = time;
 					break;
 				case 7:
 					Key7 = new ColorRGBAf(Key0.R, Key0.G, Key0.B, a);
-					Key32_7 = new ColorRGBA32(Key7);
 					Atime7 = time;
 					break;
 				default:
@@ -273,31 +231,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
-		private ColorRGBAf GetExportKey(Version version, int key)
-		{
-			switch (key)
-			{
-				case 0:
-					return IsColor32(version) ? new ColorRGBAf(Key32_0) : Key0;
-				case 1:
-					return IsColor32(version) ? new ColorRGBAf(Key32_1) : Key1;
-				case 2:
-					return IsColor32(version) ? new ColorRGBAf(Key32_2) : Key2;
-				case 3:
-					return IsColor32(version) ? new ColorRGBAf(Key32_3) : Key3;
-				case 4:
-					return IsColor32(version) ? new ColorRGBAf(Key32_4) : Key4;
-				case 5:
-					return IsColor32(version) ? new ColorRGBAf(Key32_5) : Key5;
-				case 6:
-					return IsColor32(version) ? new ColorRGBAf(Key32_6) : Key6;
-				case 7:
-					return IsColor32(version) ? new ColorRGBAf(Key32_7) : Key7;
-				default:
-					throw new Exception($"Unsupported key {key}");
-			}
-		}
-
 		public IScriptStructure Base => null;
 		public string Namespace => ScriptType.UnityEngineName;
 		public string Name => ScriptType.GradientName;
@@ -318,18 +251,10 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public ushort Atime5 { get; private set; }
 		public ushort Atime6 { get; private set; }
 		public ushort Atime7 { get; private set; }
-		public int Mode { get; private set; }
+		public GradientMode Mode { get; private set; }
 		public byte NumColorKeys { get; private set; }
 		public byte NumAlphaKeys { get; private set; }
 		
-		public ColorRGBA32 Key32_0;
-		public ColorRGBA32 Key32_1;
-		public ColorRGBA32 Key32_2;
-		public ColorRGBA32 Key32_3;
-		public ColorRGBA32 Key32_4;
-		public ColorRGBA32 Key32_5;
-		public ColorRGBA32 Key32_6;
-		public ColorRGBA32 Key32_7;
 		public ColorRGBAf Key0;
 		public ColorRGBAf Key1;
 		public ColorRGBAf Key2;

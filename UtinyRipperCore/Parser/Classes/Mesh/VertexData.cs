@@ -25,33 +25,33 @@ namespace UtinyRipper.Classes.Meshes
 
 			if (isWriteVertices)
 			{
-				curChannels.Set((int)ChannelType4.Vertex, true);
-				stride += ChannelType4.Vertex.GetStride();
+				curChannels.Set((int)ChannelTypeV4.Vertex, true);
+				stride += ChannelTypeV4.Vertex.GetStride();
 			}
 			if (isWriteNormals)
 			{
-				curChannels.Set((int)ChannelType4.Normal, true);
-				stride += ChannelType4.Normal.GetStride();
+				curChannels.Set((int)ChannelTypeV4.Normal, true);
+				stride += ChannelTypeV4.Normal.GetStride();
 			}
 			if(isWriteColors)
 			{
-				curChannels.Set((int)ChannelType4.Color, true);
-				stride += ChannelType4.Color.GetStride();
+				curChannels.Set((int)ChannelTypeV4.Color, true);
+				stride += ChannelTypeV4.Color.GetStride();
 			}
 			if (isWriteUV0)
 			{
-				curChannels.Set((int)ChannelType4.UV0, true);
-				stride += ChannelType4.UV0.GetStride();
+				curChannels.Set((int)ChannelTypeV4.UV0, true);
+				stride += ChannelTypeV4.UV0.GetStride();
 			}
 			if (isWriteUV1)
 			{
-				curChannels.Set((int)ChannelType4.UV1, true);
-				stride += ChannelType4.UV1.GetStride();
+				curChannels.Set((int)ChannelTypeV4.UV1, true);
+				stride += ChannelTypeV4.UV1.GetStride();
 			}
 			if (isWriteTangents)
 			{
-				curChannels.Set((int)ChannelType4.Tangent, true);
-				stride += ChannelType4.Tangent.GetStride();
+				curChannels.Set((int)ChannelTypeV4.Tangent, true);
+				stride += ChannelTypeV4.Tangent.GetStride();
 			}
 
 			CurrentChannels = curChannels.ToUInt32();
@@ -177,8 +177,8 @@ namespace UtinyRipper.Classes.Meshes
 		public BoneWeights4[] GenerateSkin()
 		{
 			BoneWeights4[] skin = new BoneWeights4[VertexCount];
-			ChannelInfo weightChannel = Channels[(int)ChannelType2018.SkinWeight];
-			ChannelInfo boneIndexChannel = Channels[(int)ChannelType2018.SkinBoneIndex];
+			ChannelInfo weightChannel = Channels[(int)ChannelTypeV2018.SkinWeight];
+			ChannelInfo boneIndexChannel = Channels[(int)ChannelTypeV2018.SkinBoneIndex];
 			if(!weightChannel.IsSet)
 			{
 				return new BoneWeights4[0];
@@ -268,8 +268,8 @@ namespace UtinyRipper.Classes.Meshes
 				if (IsReadStream(version))
 				{
 					BitArray curBits = CurrentChannelsBits;
-					curBits.Set((int)ChannelType.Tangent, curBits.Get((int)ChannelType4.Tangent));
-					curBits.Set((int)ChannelType4.Tangent, false);
+					curBits.Set((int)ChannelType.Tangent, curBits.Get((int)ChannelTypeV4.Tangent));
+					curBits.Set((int)ChannelTypeV4.Tangent, false);
 					return curBits.ToUInt32();
 				}
 				else
@@ -282,17 +282,17 @@ namespace UtinyRipper.Classes.Meshes
 				BitArray curChannels = new BitArray(32);
 				for (int i = 0; i < Channels.Count; i++)
 				{
-					ChannelType2018 channelType = (ChannelType2018)i;
+					ChannelTypeV2018 channelType = (ChannelTypeV2018)i;
 					switch(channelType)
 					{
-						case ChannelType2018.Vertex:
-						case ChannelType2018.Normal:
-						case ChannelType2018.Color:
-						case ChannelType2018.UV0:
-						case ChannelType2018.UV1:
-						case ChannelType2018.UV2:
-						case ChannelType2018.UV3:
-						case ChannelType2018.Tangent:
+						case ChannelTypeV2018.Vertex:
+						case ChannelTypeV2018.Normal:
+						case ChannelTypeV2018.Color:
+						case ChannelTypeV2018.UV0:
+						case ChannelTypeV2018.UV1:
+						case ChannelTypeV2018.UV2:
+						case ChannelTypeV2018.UV3:
+						case ChannelTypeV2018.Tangent:
 							{
 								ChannelInfo channel = Channels[i];
 								curChannels[(int)channelType.ToChannelType()] |= channel.Dimension != 0;
@@ -310,14 +310,17 @@ namespace UtinyRipper.Classes.Meshes
 				if(IsReadStream(version))
 				{
 					ChannelInfo[] channels = new ChannelInfo[8];
-					channels[(int)ChannelType.Vertex] = Channels[(int)ChannelType4.Vertex];
-					channels[(int)ChannelType.Normal] = Channels[(int)ChannelType4.Normal];
-					channels[(int)ChannelType.Color] = Channels[(int)ChannelType4.Color];
-					channels[(int)ChannelType.UV0] = Channels[(int)ChannelType4.UV0];
-					channels[(int)ChannelType.UV1] = Channels[(int)ChannelType4.UV1];
+					channels[(int)ChannelType.Vertex] = Channels[(int)ChannelTypeV4.Vertex];
+					channels[(int)ChannelType.Normal] = Channels[(int)ChannelTypeV4.Normal];
+					// replace ChannelFormat.Color with 1 dimention to ChannelFormat.Byte with 4 dimention
+					ChannelInfo cV4C = Channels[(int)ChannelTypeV4.Color];
+					ChannelInfo colorChannel = new ChannelInfo(cV4C.Stream, cV4C.Offset, ChannelFormat.Byte, cV4C.Dimension == 0 ? (byte)0 : (byte)4);
+					channels[(int)ChannelType.Color] = colorChannel;
+					channels[(int)ChannelType.UV0] = Channels[(int)ChannelTypeV4.UV0];
+					channels[(int)ChannelType.UV1] = Channels[(int)ChannelTypeV4.UV1];
 					channels[(int)ChannelType.UV2] = new ChannelInfo(0, 0, 0, 0);
 					channels[(int)ChannelType.UV3] = new ChannelInfo(0, 0, 0, 0);
-					channels[(int)ChannelType.Tangent] = Channels[(int)ChannelType4.Tangent];
+					channels[(int)ChannelType.Tangent] = Channels[(int)ChannelTypeV4.Tangent];
 					return channels;
 				}
 				else if (IsReadCurrentChannels(version))
@@ -327,28 +330,28 @@ namespace UtinyRipper.Classes.Meshes
 				else
 				{
 					ChannelInfo[] channels = new ChannelInfo[8];
-					channels[(int)ChannelType.Vertex] = Channels[(int)ChannelType2018.Vertex];
-					channels[(int)ChannelType.Normal] = Channels[(int)ChannelType2018.Normal];
-					channels[(int)ChannelType.Color] = Channels[(int)ChannelType2018.Color];
-					channels[(int)ChannelType.UV0] = Channels[(int)ChannelType2018.UV0];
-					channels[(int)ChannelType.UV1] = Channels[(int)ChannelType2018.UV1];
-					channels[(int)ChannelType.UV2] = Channels[(int)ChannelType2018.UV2];
-					channels[(int)ChannelType.UV3] = Channels[(int)ChannelType2018.UV3];
-					channels[(int)ChannelType.Tangent] = Channels[(int)ChannelType2018.Tangent];
+					channels[(int)ChannelType.Vertex] = Channels[(int)ChannelTypeV2018.Vertex];
+					channels[(int)ChannelType.Normal] = Channels[(int)ChannelTypeV2018.Normal];
+					channels[(int)ChannelType.Color] = Channels[(int)ChannelTypeV2018.Color];
+					channels[(int)ChannelType.UV0] = Channels[(int)ChannelTypeV2018.UV0];
+					channels[(int)ChannelType.UV1] = Channels[(int)ChannelTypeV2018.UV1];
+					channels[(int)ChannelType.UV2] = Channels[(int)ChannelTypeV2018.UV2];
+					channels[(int)ChannelType.UV3] = Channels[(int)ChannelTypeV2018.UV3];
+					channels[(int)ChannelType.Tangent] = Channels[(int)ChannelTypeV2018.Tangent];
 					return channels;
 				}
 			}
 			else
 			{
 				ChannelInfo[] channels = new ChannelInfo[8];
-				channels[(int)ChannelType.Vertex] = CreateChannelFromStream(ChannelType4.Vertex);
-				channels[(int)ChannelType.Normal] = CreateChannelFromStream(ChannelType4.Normal);
-				channels[(int)ChannelType.Color] = CreateChannelFromStream(ChannelType4.Color);
-				channels[(int)ChannelType.UV0] = CreateChannelFromStream(ChannelType4.UV0);
-				channels[(int)ChannelType.UV1] = CreateChannelFromStream(ChannelType4.UV1);
+				channels[(int)ChannelType.Vertex] = CreateChannelFromStream(ChannelTypeV4.Vertex);
+				channels[(int)ChannelType.Normal] = CreateChannelFromStream(ChannelTypeV4.Normal);
+				channels[(int)ChannelType.Color] = CreateChannelFromStream(ChannelTypeV4.Color);
+				channels[(int)ChannelType.UV0] = CreateChannelFromStream(ChannelTypeV4.UV0);
+				channels[(int)ChannelType.UV1] = CreateChannelFromStream(ChannelTypeV4.UV1);
 				channels[(int)ChannelType.UV2] = new ChannelInfo(0, 0, 0, 0);
 				channels[(int)ChannelType.UV3] = new ChannelInfo(0, 0, 0, 0);
-				channels[(int)ChannelType.Tangent] = CreateChannelFromStream(ChannelType4.Tangent);
+				channels[(int)ChannelType.Tangent] = CreateChannelFromStream(ChannelTypeV4.Tangent);
 				return channels;
 			}
 		}
@@ -358,7 +361,7 @@ namespace UtinyRipper.Classes.Meshes
 			return new BitArray(BitConverter.GetBytes(CurrentChannels));
 		}
 
-		private ChannelInfo CreateChannelFromStream(ChannelType4 channelType)
+		private ChannelInfo CreateChannelFromStream(ChannelTypeV4 channelType)
 		{
 			int streamIndex = Streams.IndexOf(t => t.IsMatch(channelType));
 			if (streamIndex == -1)
@@ -369,7 +372,7 @@ namespace UtinyRipper.Classes.Meshes
 			{
 				StreamInfo stream = Streams[streamIndex];
 				byte offset = 0;
-				for (ChannelType4 type = ChannelType4.Vertex; type < channelType; type++)
+				for (ChannelTypeV4 type = ChannelTypeV4.Vertex; type < channelType; type++)
 				{
 					if(stream.IsMatch(type))
 					{

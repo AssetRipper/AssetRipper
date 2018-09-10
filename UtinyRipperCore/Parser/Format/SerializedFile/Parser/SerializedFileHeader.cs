@@ -39,7 +39,7 @@ namespace UtinyRipper.SerializedFiles
 			Generation = (FileGeneration)reader.ReadInt32();
 			if (!Enum.IsDefined(typeof(FileGeneration), Generation))
 			{
-				throw new Exception($"Unsuported file generation {Generation} for asset file '{m_name}'");
+				throw new Exception($"Unsupported file generation {Generation} for asset file '{m_name}'");
 			}
 			DataOffset = reader.ReadUInt32();
 			if(IsReadEndian(Generation))

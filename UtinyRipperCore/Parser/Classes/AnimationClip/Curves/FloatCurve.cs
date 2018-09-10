@@ -7,9 +7,9 @@ namespace UtinyRipper.Classes.AnimationClips
 {
 	public struct FloatCurve : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public FloatCurve(string path)
+		public FloatCurve(string path, IReadOnlyList<KeyframeTpl<Float>> keyframes)
 		{
-			Curve = new AnimationCurveTpl<Float>(true);
+			Curve = new AnimationCurveTpl<Float>(keyframes);
 			Attribute = string.Empty;
 			Path = path;
 			ClassID = 0;
@@ -51,7 +51,7 @@ namespace UtinyRipper.Classes.AnimationClips
 		{
 			yield return Script.FetchDependency(file, isLog, () => nameof(FloatCurve), "script");
 		}
-
+		
 		public string Attribute { get; private set; }
 		public string Path { get; private set; }
 		public int ClassID { get; private set; }

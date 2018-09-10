@@ -16,7 +16,7 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public static bool IsReadBuildSettings(TransferInstructionFlags flags)
 		{
-			return !flags.IsSerializeGameRelease();
+			return !flags.IsRelease();
 		}
 
 		public override void Read(AssetReader reader)

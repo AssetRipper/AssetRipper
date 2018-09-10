@@ -1,5 +1,4 @@
 ﻿using UtinyRipper.AssetExporters;
-using UtinyRipper.Classes.AnimationClips;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
@@ -12,22 +11,22 @@ namespace UtinyRipper.Classes.ParticleSystems
 
 		public NoiseModule(bool _)
 		{
-			Strength = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
-			StrengthY = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
-			StrengthZ = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
+			Strength = new MinMaxCurve(1.0f);
+			StrengthY = new MinMaxCurve(1.0f);
+			StrengthZ = new MinMaxCurve(1.0f);
 			Frequency = 0.5f;
 			Damping = true;
 			Octaves = 1;
 			OctaveMultiplier = 0.5f;
 			OctaveScale = 2.0f;
-			Quality = 2;
-			ScrollSpeed = new MinMaxCurve(0.0f, 0.0f, 0.0f, 0.0f);
+			Quality = ParticleSystemNoiseQuality.High;
+			ScrollSpeed = new MinMaxCurve(0.0f);
 			Remap = new MinMaxCurve(1.0f, 1.0f, 1.0f, 0.0f, 1.0f);
 			RemapY = new MinMaxCurve(1.0f, 1.0f, 1.0f, 0.0f, 1.0f);
 			RemapZ = new MinMaxCurve(1.0f, 1.0f, 1.0f, 0.0f, 1.0f);
-			PositionAmount = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
-			RotationAmount = new MinMaxCurve(0.0f, 0.0f, 0.0f, 0.0f);
-			SizeAmount = new MinMaxCurve(0.0f, 0.0f, 0.0f, 0.0f);
+			PositionAmount = new MinMaxCurve(1.0f);
+			RotationAmount = new MinMaxCurve(0.0f);
+			SizeAmount = new MinMaxCurve(0.0f);
 		}
 
 		/// <summary>
@@ -63,7 +62,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Octaves = reader.ReadInt32();
 			OctaveMultiplier = reader.ReadSingle();
 			OctaveScale = reader.ReadSingle();
-			Quality = reader.ReadInt32();
+			Quality = (ParticleSystemNoiseQuality)reader.ReadInt32();
 			ScrollSpeed.Read(reader);
 			Remap.Read(reader);
 			RemapY.Read(reader);
@@ -94,7 +93,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("octaves", Octaves);
 			node.Add("octaveMultiplier", OctaveMultiplier);
 			node.Add("octaveScale", OctaveScale);
-			node.Add("quality", Quality);
+			node.Add("quality", (int)Quality);
 			node.Add("scrollSpeed", ScrollSpeed.ExportYAML(container));
 			node.Add("remap", Remap.ExportYAML(container));
 			node.Add("remapY", RemapY.ExportYAML(container));
@@ -125,7 +124,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public int Octaves { get; private set; }
 		public float OctaveMultiplier { get; private set; }
 		public float OctaveScale { get; private set; }
-		public int Quality { get; private set; }
+		public ParticleSystemNoiseQuality Quality { get; private set; }
 		public bool RemapEnabled { get; private set; }
 
 		public MinMaxCurve Strength;

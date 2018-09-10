@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.MeshRenderers;
+using UtinyRipper.Classes.Renderers;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
 
@@ -37,30 +38,34 @@ namespace UtinyRipper.Classes
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		public static bool IsReadLightmapIndex(Version version)
+		public static bool IsReadLightmapIndex(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(2, 1);
+#warning TODO: separate by version
+			return version.IsGreaterEqual(2, 1) && (flags.IsRelease() || flags.IsForInspector());
 		}
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadLightDynamic(Version version)
+		public static bool IsReadLightmapIndexDynamic(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(5);
+#warning TODO: separate by version
+			return version.IsGreaterEqual(5) && (flags.IsRelease() || flags.IsForInspector());
 		}
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		public static bool IsReadTileOffset(Version version)
+		public static bool IsReadLightmapTilingOffset(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(2, 1);
+#warning TODO: separate by version
+			return version.IsGreaterEqual(2, 1) && (flags.IsRelease() || flags.IsForInspector());
 		}
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadTileDynamic(Version version)
+		public static bool IsReadLightmapTilingOffsetDynamic(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(5);
+#warning TODO: separate by version
+			return version.IsGreaterEqual(5) && (flags.IsRelease() || flags.IsForInspector());
 		}
 		/// <summary>
 		/// 3.0.0 to 5.5.0
@@ -91,11 +96,11 @@ namespace UtinyRipper.Classes
 			return version.IsGreaterEqual(3, 5) && version.IsLess(5, 4);
 		}
 		/// <summary>
-		/// 5.0.0 to 5.3.x
+		/// 5.0.0 and greater
 		/// </summary>
 		public static bool IsReadReflectUsage(Version version)
 		{
-			return version.IsGreaterEqual(5, 0) && version.IsLess(5, 4);
+			return version.IsGreaterEqual(5, 0);
 		}
 		/// <summary>
 		/// 3.5.0 and greater
@@ -110,6 +115,10 @@ namespace UtinyRipper.Classes
 		public static bool IsReadLightOverride(Version version)
 		{
 			return version.IsGreaterEqual(5, 4);
+		}
+		public static bool IsReadScaleInLightmap(TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease();
 		}
 		/// <summary>
 		/// 4.5.0 and greater
@@ -168,19 +177,30 @@ namespace UtinyRipper.Classes
 		{
 			return version.IsGreaterEqual(4, 5);
 		}
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		public static bool IsReadReflectUsageFirst(Version version)
+		{
+			return version.IsGreaterEqual(5, 4);
+		}
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
 			Enabled = reader.ReadBoolean();
-			if(IsAlignEnabled(reader.Version))
+			if (IsAlignEnabled(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
 
-			CastShadows = reader.ReadByte();
+			CastShadows = (ShadowCastingMode)reader.ReadByte();
 			ReceiveShadows = reader.ReadByte();
+			if(IsReadDynamicOccludee(reader.Version))
+			{
+				DynamicOccludee = reader.ReadByte();
+			}
 			if (IsAlignEnabled(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
@@ -188,22 +208,29 @@ namespace UtinyRipper.Classes
 
 			if (IsReadMotionVector(reader.Version))
 			{
-				MotionVectors = reader.ReadByte();
-				LightProbeUsage = reader.ReadByte();
-				ReflectionProbeUsage = reader.ReadByte();
-				reader.AlignStream(AlignType.Align4);
+				MotionVectors = (MotionVectorGenerationMode)reader.ReadByte();
+				LightProbeUsage = (LightProbeUsage)reader.ReadByte();
+			}
+			if (IsReadReflectUsage(reader.Version))
+			{
+				if (IsReadReflectUsageFirst(reader.Version))
+				{
+					ReflectionProbeUsage = (ReflectionProbeUsage)reader.ReadByte();
+					reader.AlignStream(AlignType.Align4);
+				}
 			}
 
-			if(IsReadRenderingLayerMask(reader.Version))
+			if (IsReadRenderingLayerMask(reader.Version))
 			{
 				RenderingLayerMask = reader.ReadUInt32();
 			}
-			if (IsReadLightmapIndex(reader.Version))
+
+			if (IsReadLightmapIndex(reader.Version, reader.Flags))
 			{
 				LightmapIndex = IsByteLightIndex(reader.Version) ? reader.ReadByte() : reader.ReadUInt16();
 			}
 
-			if(IsReadLightDynamic(reader.Version))
+			if (IsReadLightmapIndexDynamic(reader.Version, reader.Flags))
 			{
 				LightmapIndexDynamic = reader.ReadUInt16();
 			}
@@ -213,15 +240,15 @@ namespace UtinyRipper.Classes
 				m_materials = reader.ReadArray<PPtr<Material>>();
 			}
 
-			if (IsReadTileOffset(reader.Version))
+			if (IsReadLightmapTilingOffset(reader.Version, reader.Flags))
 			{
 				LightmapTilingOffset.Read(reader);
 			}
-			if (IsReadTileDynamic(reader.Version))
+			if (IsReadLightmapTilingOffsetDynamic(reader.Version, reader.Flags))
 			{
 				LightmapTilingOffsetDynamic.Read(reader);
 			}
-			
+
 			if (!IsReadMaterialFirst(reader.Version))
 			{
 				m_materials = reader.ReadArray<PPtr<Material>>();
@@ -231,7 +258,7 @@ namespace UtinyRipper.Classes
 			{
 				m_subsetIndices = reader.ReadUInt32Array();
 			}
-			if(IsReadStaticBatchInfo(reader.Version))
+			if (IsReadStaticBatchInfo(reader.Version))
 			{
 				StaticBatchInfo.Read(reader);
 			}
@@ -248,7 +275,10 @@ namespace UtinyRipper.Classes
 			}
 			if (IsReadReflectUsage(reader.Version))
 			{
-				ReflectionProbeUsage = reader.ReadInt32();
+				if (!IsReadReflectUsageFirst(reader.Version))
+				{
+					ReflectionProbeUsage = (ReflectionProbeUsage)reader.ReadInt32();
+				}
 			}
 
 			if (IsReadProbeAnchor(reader.Version))
@@ -259,6 +289,24 @@ namespace UtinyRipper.Classes
 			{
 				LightProbeVolumeOverride.Read(reader);
 			}
+#if UNIVERSAL
+			if (IsReadScaleInLightmap(reader.Flags))
+			{
+#warning TODO: separate by version
+				ScaleInLightmap = reader.ReadSingle();
+				PreserveUVs = reader.ReadBoolean();
+				IgnoreNormalsForChartDetection = reader.ReadBoolean();
+				ImportantGI = reader.ReadBoolean();
+				StitchLightmapSeams = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
+
+				SelectedEditorRenderState = (EditorSelectedRenderState)reader.ReadInt32();
+				MinimumChartSize = reader.ReadInt32();
+				AutoUVMaxDistance = reader.ReadSingle();
+				AutoUVMaxAngle = reader.ReadSingle();
+				LightmapParameters.Read(reader);
+			}
+#endif
 			if (IsAlignLightProbe(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
@@ -314,68 +362,176 @@ namespace UtinyRipper.Classes
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-#warning TODO: check undefined vars
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("m_Enabled", Enabled);
-			node.Add("m_CastShadows", CastShadows);
+			node.Add("m_CastShadows", (byte)CastShadows);
 			node.Add("m_ReceiveShadows", ReceiveShadows);
-			if(IsReadDynamicOccludee(container.Version))
-			{
-#warning TODO:
-				node.Add("m_DynamicOccludee", 1);
-			}
-			else
-			{
-				node.Add("m_DynamicOccludee", 1);
-			}
-			node.Add("m_MotionVectors", MotionVectors);
-			node.Add("m_LightProbeUsage", LightProbeUsage);
-			node.Add("m_ReflectionProbeUsage", ReflectionProbeUsage);
+			node.Add("m_DynamicOccludee", GetDynamicOccludee(container.Version));
+			node.Add("m_MotionVectors", (byte)GetMotionVectors(container.Version));
+			node.Add("m_LightProbeUsage", (byte)LightProbeUsage);
+			node.Add("m_ReflectionProbeUsage", (byte)GetReflectionProbeUsage(container.Version));
 			node.Add("m_Materials", Materials.ExportYAML(container));
-			if (IsReadSubsetIndices(container.Version))
-			{
-				StaticBatchInfo staticBatchInfo = new StaticBatchInfo(SubsetIndices);
-				node.Add("m_StaticBatchInfo", staticBatchInfo.ExportYAML(container));
-			}
-			else
-			{
-				node.Add("m_StaticBatchInfo", StaticBatchInfo.ExportYAML(container));
-			}
+			node.Add("m_StaticBatchInfo", GetStaticBatchInfo(container.Version).ExportYAML(container));
 			node.Add("m_StaticBatchRoot", StaticBatchRoot.ExportYAML(container));
 			node.Add("m_ProbeAnchor", ProbeAnchor.ExportYAML(container));
 			node.Add("m_LightProbeVolumeOverride", LightProbeVolumeOverride.ExportYAML(container));
-#warning what are those vars?
-			node.Add("m_ScaleInLightmap", 1);
-			node.Add("m_PreserveUVs", 0);
-			node.Add("m_IgnoreNormalsForChartDetection", 0);
-			node.Add("m_ImportantGI", 0);
-#warning TODO? Should I read this parameter or just write default value?
-			node.Add("m_StitchLightmapSeams", 0);
-			node.Add("m_SelectedEditorRenderState", 3);
-			node.Add("m_MinimumChartSize", 4);
-			node.Add("m_AutoUVMaxDistance", 0.5f);
-			node.Add("m_AutoUVMaxAngle", 89);
-#warning TODO?
-			node.Add("m_LightmapParameters", default(PPtr<Object>).ExportYAML(container));
+			node.Add("m_ScaleInLightmap", GetScaleInLightmap(container.Flags));
+			node.Add("m_PreserveUVs", GetPreserveUVs(container.Flags));
+			node.Add("m_IgnoreNormalsForChartDetection", GetIgnoreNormalsForChartDetection(container.Flags));
+			node.Add("m_ImportantGI", GetImportantGI(container.Flags));
+			node.Add("m_StitchLightmapSeams", GetStitchLightmapSeams(container.Flags));
+			node.Add("m_SelectedEditorRenderState", (int)GetSelectedEditorRenderState(container.Flags));
+			node.Add("m_MinimumChartSize", GetMinimumChartSize(container.Flags));
+			node.Add("m_AutoUVMaxDistance", GetAutoUVMaxDistance(container.Flags));
+			node.Add("m_AutoUVMaxAngle", GetAutoUVMaxAngle(container.Flags));
+			node.Add("m_LightmapParameters", GetLightmapParameters(container.Flags).ExportYAML(container));
 			node.Add("m_SortingLayerID", SortingLayerID);
 			node.Add("m_SortingLayer", SortingLayer);
 			node.Add("m_SortingOrder", SortingOrder);
 			return node;
 		}
 
+		private int GetDynamicOccludee(Version version)
+		{
+			return IsReadDynamicOccludee(version) ? DynamicOccludee : 1;
+		}
+		private MotionVectorGenerationMode GetMotionVectors(Version version)
+		{
+			return IsReadMotionVector(version) ? MotionVectors : MotionVectorGenerationMode.Object;
+		}
+		private ReflectionProbeUsage GetReflectionProbeUsage(Version version)
+		{
+			return IsReadReflectUsage(version) ? ReflectionProbeUsage : ReflectionProbeUsage.BlendProbes;
+		}
+		private StaticBatchInfo GetStaticBatchInfo(Version version)
+		{
+			return IsReadSubsetIndices(version) ? new StaticBatchInfo(SubsetIndices) : StaticBatchInfo;
+		}
+		private float GetScaleInLightmap(TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if(IsReadScaleInLightmap(flags))
+			{
+				return ScaleInLightmap;
+			}
+#endif
+			return 1.0f;
+		}
+		private bool GetPreserveUVs(TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if(IsReadScaleInLightmap(flags))
+			{
+				return PreserveUVs;
+			}
+#endif
+			return false;
+		}
+		private bool GetIgnoreNormalsForChartDetection(TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if(IsReadScaleInLightmap(flags))
+			{
+				return IgnoreNormalsForChartDetection;
+			}
+#endif
+			return false;
+		}
+		private bool GetImportantGI(TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if(IsReadScaleInLightmap(flags))
+			{
+				return ImportantGI;
+			}
+#endif
+			return false;
+		}
+		private bool GetStitchLightmapSeams(TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if(IsReadScaleInLightmap(flags))
+			{
+				return StitchLightmapSeams;
+			}
+#endif
+			return false;
+		}		
+		private EditorSelectedRenderState GetSelectedEditorRenderState(TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if(IsReadScaleInLightmap(flags))
+			{
+				return SelectedEditorRenderState;
+			}
+#endif
+			return (EditorSelectedRenderState)3;
+		}
+		private int GetMinimumChartSize(TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadScaleInLightmap(flags))
+			{
+				return MinimumChartSize;
+			}
+#endif
+			return 4;
+		}
+		private float GetAutoUVMaxDistance(TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadScaleInLightmap(flags))
+			{
+				return AutoUVMaxDistance;
+			}
+#endif
+			return 0.5f;
+		}
+		private float GetAutoUVMaxAngle(TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadScaleInLightmap(flags))
+			{
+				return AutoUVMaxAngle;
+			}
+#endif
+			return 89.0f;
+		}
+		private PPtr<LightmapParameters> GetLightmapParameters(TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			return LightmapParameters;
+#else
+			return default;
+#endif
+		}
+
 		public bool Enabled { get; private set; }
-		public byte CastShadows { get; private set; }
+		public ShadowCastingMode CastShadows { get; private set; }
 		public byte ReceiveShadows { get; private set; }
-		public byte MotionVectors { get; private set; }
-		public byte LightProbeUsage { get; private set; }
-		public int ReflectionProbeUsage { get; private set; }
+		public byte DynamicOccludee { get; private set; }
+		public MotionVectorGenerationMode MotionVectors { get; private set; }
+		public LightProbeUsage LightProbeUsage { get; private set; }
+		public ReflectionProbeUsage ReflectionProbeUsage { get; private set; }
 		public uint RenderingLayerMask { get; private set; }
 		public ushort LightmapIndex { get; private set; }
 		public ushort LightmapIndexDynamic { get; private set; }
 		public IReadOnlyList<PPtr<Material>> Materials => m_materials;
 		public IReadOnlyList<uint> SubsetIndices => m_subsetIndices;
 		public bool UseLightProbes { get; private set; }
+#if UNIVERSAL
+		public float ScaleInLightmap { get; private set; }
+		public bool PreserveUVs { get; private set; }
+		public bool IgnoreNormalsForChartDetection { get; private set; }
+		public bool ImportantGI { get; private set; }
+		public bool StitchLightmapSeams { get; private set; }
+
+		public EditorSelectedRenderState SelectedEditorRenderState { get; private set; }
+		public int MinimumChartSize { get; private set; }
+		public float AutoUVMaxDistance { get; private set; }
+		public float AutoUVMaxAngle { get; private set; }
+#endif
 		public int SortingLayerID { get; private set; }
 		public short SortingLayer { get; private set; }
 		public short SortingOrder { get; private set; }
@@ -389,7 +545,10 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public PPtr<Transform> ProbeAnchor;
 		public PPtr<GameObject> LightProbeVolumeOverride;
-		
+#if UNIVERSAL
+		public PPtr<LightmapParameters> LightmapParameters;
+#endif
+
 		private PPtr<Material>[] m_materials;
 		private uint[] m_subsetIndices;
 	}

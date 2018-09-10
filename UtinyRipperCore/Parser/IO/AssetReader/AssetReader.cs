@@ -22,12 +22,20 @@ namespace UtinyRipper
 			Flags = flags;
 		}
 
-		public AssetReader(AssetReader reader, long alignPosition):
+		public AssetReader(AssetReader reader, long alignPosition) :
 			base(reader, alignPosition)
 		{
 			Version = reader.Version;
 			Platform = reader.Platform;
 			Flags = reader.Flags;
+		}
+
+		public T Read<T>()
+			where T: IAssetReadable, new()
+		{
+			T t = new T();
+			t.Read(this);
+			return t;
 		}
 
 		public new T[] ReadArray<T>()

@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\Bins\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;UNIVERSAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>7.2</LangVersion>
@@ -44,7 +44,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\Bins\Debug\x64\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;UNIVERSAL</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.2</LangVersion>
@@ -68,7 +68,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\Bins\Debug\x86\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;UNIVERSAL</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>7.2</LangVersion>
@@ -190,6 +190,8 @@
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Structure\ScriptField.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Structure\ScriptStructure.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Scripts\Structure\ScriptType.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\AnimationCurveTpl\CurveLoopTypes.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\AnimationCurveTpl\RotationOrder.cs" />
     <Compile Include="Parser\Classes\AnimationClip\ChildTrack.cs" />
     <Compile Include="Parser\Classes\AnimationClip\KeyframeTpl\TangentMode.cs" />
     <Compile Include="Parser\Classes\AnimationClip\KeyframeTpl\WeightedMode.cs" />
@@ -223,6 +225,11 @@
     <Compile Include="Parser\Classes\Base\GameManager.cs" />
     <Compile Include="Parser\Classes\Base\LevelGameManager.cs" />
     <Compile Include="Parser\Classes\Base\Object\IDependent.cs" />
+    <Compile Include="Parser\Classes\Base\Renderer\EditorSelectedRenderState.cs" />
+    <Compile Include="Parser\Classes\Base\Renderer\LightProbeUsage.cs" />
+    <Compile Include="Parser\Classes\Base\Renderer\MotionVectorGenerationMode.cs" />
+    <Compile Include="Parser\Classes\Base\Renderer\ReflectionProbeUsage.cs" />
+    <Compile Include="Parser\Classes\Base\Renderer\ShadowCastingMode.cs" />
     <Compile Include="Parser\Classes\BoxCollider.cs" />
     <Compile Include="Parser\Classes\BoxCollider2D\BoxCollider2D.cs" />
     <Compile Include="Parser\Classes\BoxCollider2D\SpriteTilingProperty.cs" />
@@ -261,18 +268,32 @@
     <Compile Include="Parser\Classes\Light\LightShadowCasterMode.cs" />
     <Compile Include="Parser\Classes\Mesh\ChannelFormat.cs" />
     <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelType.cs" />
-    <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelType2018.cs" />
-    <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelType4.cs" />
+    <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelTypeV2018.cs" />
+    <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelTypeV4.cs" />
     <Compile Include="Parser\Classes\Mesh\MeshCompression.cs" />
     <Compile Include="Parser\Classes\Mesh\MeshTopology.cs" />
     <Compile Include="Parser\Classes\MonoManager.cs" />
+    <Compile Include="Parser\Classes\ParticleSystemRenderer\ParticleSystemRenderMode.cs" />
+    <Compile Include="Parser\Classes\ParticleSystemRenderer\ParticleSystemRenderSpace.cs" />
+    <Compile Include="Parser\Classes\ParticleSystemRenderer\ParticleSystemSortMode.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\CollisionModule\ParticleSystemCollisionMode.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\CollisionModule\ParticleSystemCollisionQuality.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\CollisionModule\ParticleSystemCollisionType.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\CustomDataModule\ParticleSystemCustomDataMode.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\Emission\EmissionType.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\Gradient\GradientMode.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Gradient\MinMaxGradientState.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\InheritVelocity\InheritVelocityMode.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\NoiseModule\ParticleSystemNoiseQuality.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\ParticleSystemScalingMode.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ParticleSystemSimulationSpace.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Shape\ParticleSystemShapeMultiModeValue.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Shape\ParticleSystemShapeType.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\Shape\PlacementMode.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\TrailModule\ParticleSystemTrailMode.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Trigger\TriggerAction.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\UV\ParticleSystemAnimationType.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\UV\ParticleSystemAnimationMode.cs" />
     <Compile Include="Parser\Classes\PreloadData.cs" />
     <Compile Include="Parser\Classes\RenderSettings\AmbientMode.cs" />
     <Compile Include="Parser\Classes\RenderSettings\FogMode.cs" />
@@ -311,7 +332,7 @@
     <Compile Include="Parser\Classes\OcclusionCullingSettings\OcclusionBakeSettings.cs" />
     <Compile Include="Parser\Classes\OcclusionCullingSettings\OcclusionCullingSettings.cs" />
     <Compile Include="Parser\Classes\OcclusionPortal.cs" />
-    <Compile Include="Parser\Classes\ParticleSystemRenderer.cs" />
+    <Compile Include="Parser\Classes\ParticleSystemRenderer\ParticleSystemRenderer.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Curve\ParticleSystemCurveMode.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\ParticleSystemModule.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\SubEmitter\ParticleSystemSubEmitterProperties.cs" />
@@ -385,10 +406,10 @@
     <Compile Include="Parser\Classes\Light\MixedLightingMode.cs" />
     <Compile Include="Parser\Classes\Light\ShadowSettings.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\ClampVelocityModule.cs" />
-    <Compile Include="Parser\Classes\ParticleSystem\CollisionModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\CollisionModule\CollisionModule.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\ColorBySpeedModule.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\ColorModule.cs" />
-    <Compile Include="Parser\Classes\ParticleSystem\CustomDataModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\CustomDataModule\CustomDataModule.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Emission\EmissionModule.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\ExternalForcesModule.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\ForceModule.cs" />
@@ -399,7 +420,7 @@
     <Compile Include="Parser\Classes\ParticleSystem\Curve\MinMaxCurve.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Gradient\MinMaxGradient.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Shape\MultiModeParameter.cs" />
-    <Compile Include="Parser\Classes\ParticleSystem\NoiseModule.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\NoiseModule\NoiseModule.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\ParticleSystem.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\Emission\ParticleSystemEmissionBurst.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\RotationBySpeedModule.cs" />
@@ -676,7 +697,7 @@
     <Compile Include="Parser\Format\Data\Asset\ClassIDType.cs" />
     <Compile Include="Parser\Format\SerializedFile\FileGeneration.cs" />
     <Compile Include="Parser\Classes\AnimationClip\AnimationClipBindingConstant.cs" />
-    <Compile Include="Parser\Classes\AnimationClip\AnimationCurveTpl.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\AnimationCurveTpl\AnimationCurveTpl.cs" />
     <Compile Include="Parser\Classes\AnimationClip\AnimationEvent.cs" />
     <Compile Include="Parser\Classes\AnimationClip\Clip\Clip.cs" />
     <Compile Include="Parser\Classes\AnimationClip\Clip\ClipMuscleConstant.cs" />

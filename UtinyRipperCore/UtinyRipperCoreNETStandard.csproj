@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;NET_STANDARD</DefineConstants>
+    <DefineConstants>TRACE;NET_STANDARD;UNIVERSAL</DefineConstants>
     <OutputPath>..\Bins\CP\Debug\</OutputPath>
   </PropertyGroup>
 

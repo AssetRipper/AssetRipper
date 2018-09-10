@@ -195,7 +195,7 @@ namespace UtinyRipper.Classes
 			}
 			if (IsMoveWithTransformBool(reader.Version))
 			{
-				MoveWithTransform = reader.ReadBoolean() ? 1 : 0;
+				MoveWithTransform = reader.ReadBoolean() ? ParticleSystemSimulationSpace.Local : ParticleSystemSimulationSpace.World;
 			}
 			if (IsReadAutoRandomSeed(reader.Version))
 			{
@@ -217,7 +217,7 @@ namespace UtinyRipper.Classes
 			}
 			if (!IsMoveWithTransformBool(reader.Version))
 			{
-				MoveWithTransform = reader.ReadInt32();
+				MoveWithTransform = (ParticleSystemSimulationSpace)reader.ReadInt32();
 				reader.AlignStream(AlignType.Align4);
 			}
 
@@ -278,19 +278,19 @@ namespace UtinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object @object in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
 			
 			yield return MoveWithCustomTransform.FetchDependency(file, isLog, ToLogString, "moveWithCustomTransform");
-			foreach(Object @object in CollisionModule.FetchDependencies(file, isLog))
+			foreach(Object asset in CollisionModule.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
-			foreach(Object @object in SubModule.FetchDependencies(file, isLog))
+			foreach(Object asset in SubModule.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
 		}
 
@@ -309,7 +309,7 @@ namespace UtinyRipper.Classes
 			node.Add("autoRandomSeed", GetAutoRandomSeed(container.Version));
 			node.Add("useRigidbodyForVelocity", GetUseRigidbodyForVelocity(container.Version));
 			node.Add("startDelay", GetStartDelay(container.Version).ExportYAML(container));
-			node.Add("moveWithTransform", MoveWithTransform);
+			node.Add("moveWithTransform", (int)MoveWithTransform);
 			node.Add("moveWithCustomTransform", MoveWithCustomTransform.ExportYAML(container));
 			node.Add("scalingMode", (int)GetScalingMode(container.Version));
 			node.Add("randomSeed", RandomSeed);
@@ -352,11 +352,11 @@ namespace UtinyRipper.Classes
 		}
 		private ParticleSystemScalingMode GetScalingMode(Version version)
 		{
-			return IsReadScalingMode(version) ? ScalingMode : ParticleSystemScalingMode.Local;
+			return IsReadScalingMode(version) ? ScalingMode : ParticleSystemScalingMode.Shape;
 		}
 		private InheritVelocityModule GetInheritVelocityModule(Version version)
 		{
-			return IsReadInheritVelocityModule(version) ? InheritVelocityModule : new InheritVelocityModule(true);
+			return IsReadInheritVelocityModule(version) ? InheritVelocityModule : new InheritVelocityModule(InitialModule.InheritVelocity);
 		}
 		private ExternalForcesModule GetExternalForcesModule(Version version)
 		{
@@ -396,7 +396,7 @@ namespace UtinyRipper.Classes
 		public bool UseUnscaledTime { get; private set; }
 		public bool AutoRandomSeed { get; private set; }
 		public bool UseRigidbodyForVelocity { get; private set; }
-		public int MoveWithTransform { get; private set; }
+		public ParticleSystemSimulationSpace MoveWithTransform { get; private set; }
 		public ParticleSystemScalingMode ScalingMode { get; private set; }
 		public int RandomSeed { get; private set; }
 		public InitialModule InitialModule { get; } = new InitialModule();

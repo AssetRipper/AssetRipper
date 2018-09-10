@@ -9,22 +9,10 @@ namespace UtinyRipper.Classes.ParticleSystems
 		{
 			MinMaxState = MinMaxGradientState.Color;
 
-			MinColor = new ColorRGBAf(1.0f, 1.0f, 1.0f, 1.0f);
-			MinColor32 = new ColorRGBA32(255, 255, 255, 255);
-			MaxColor = new ColorRGBAf(1.0f, 1.0f, 1.0f, 1.0f);
-			MaxColor32 = new ColorRGBA32(255, 255, 255, 255);
-
-			MaxGradient = default;
-			MaxGradient.AddColor(0, 1.0f, 1.0f, 1.0f);
-			MaxGradient.AddColor(ushort.MaxValue, 1.0f, 1.0f, 1.0f);
-			MaxGradient.AddAlpha(0, 1.0f);
-			MaxGradient.AddAlpha(ushort.MaxValue, 1.0f);
-
-			MinGradient = default;
-			MinGradient.AddColor(0, 1.0f, 1.0f, 1.0f);
-			MinGradient.AddColor(ushort.MaxValue, 1.0f, 1.0f, 1.0f);
-			MinGradient.AddAlpha(0, 1.0f);
-			MinGradient.AddAlpha(ushort.MaxValue, 1.0f);
+			MinColor = ColorRGBAf.White;
+			MaxColor = ColorRGBAf.White;
+			MaxGradient = new Gradient(ColorRGBAf.White, ColorRGBAf.White);
+			MinGradient = new Gradient(ColorRGBAf.White, ColorRGBAf.White);
 		}
 
 		/// <summary>
@@ -65,8 +53,8 @@ namespace UtinyRipper.Classes.ParticleSystems
 				MinGradient.Read(reader);
 				if (IsColor32(reader.Version))
 				{
-					MinColor32.Read(reader);
-					MaxColor32.Read(reader);
+					MinColor.Read32(reader);
+					MaxColor.Read32(reader);
 				}
 				else
 				{
@@ -93,26 +81,15 @@ namespace UtinyRipper.Classes.ParticleSystems
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("minMaxState", (ushort)MinMaxState);
-			node.Add("minColor", GetMinColor(container.Version).ExportYAML(container));
-			node.Add("maxColor", GetMaxColor(container.Version).ExportYAML(container));
+			node.Add("minColor", MinColor.ExportYAML(container));
+			node.Add("maxColor", MaxColor.ExportYAML(container));
 			node.Add("maxGradient", MaxGradient.ExportYAML(container));
 			node.Add("minGradient", MinGradient.ExportYAML(container));
 			return node;
 		}
 
-		private ColorRGBAf GetMinColor(Version version)
-		{
-			return IsColor32(version) ? new ColorRGBAf(MinColor32) : MinColor;
-		}
-		private ColorRGBAf GetMaxColor(Version version)
-		{
-			return IsColor32(version) ? new ColorRGBAf(MaxColor32) : MaxColor;
-		}
-
 		public MinMaxGradientState MinMaxState { get; private set; }
 		
-		public ColorRGBA32 MinColor32;
-		public ColorRGBA32 MaxColor32;
 		public ColorRGBAf MinColor;
 		public ColorRGBAf MaxColor;
 		public Gradient MaxGradient;

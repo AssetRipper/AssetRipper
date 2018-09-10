@@ -60,7 +60,35 @@ namespace UtinyRipper.Classes.ParticleSystems
 		{
 			return IsReadSpeedModifier(version) ? SpeedModifier : new MinMaxCurve(1.0f);
 		}
-		
+		private MinMaxCurve GetOrbitalX(Version version)
+		{
+			return IsReadOrbital(version) ? OrbitalX : new MinMaxCurve(0.0f);
+		}
+		private MinMaxCurve GetOrbitalY(Version version)
+		{
+			return IsReadOrbital(version) ? OrbitalY : new MinMaxCurve(0.0f);
+		}
+		private MinMaxCurve GetOrbitalZ(Version version)
+		{
+			return IsReadOrbital(version) ? OrbitalZ : new MinMaxCurve(0.0f);
+		}
+		private MinMaxCurve GetOrbitalOffsetX(Version version)
+		{
+			return IsReadOrbital(version) ? OrbitalOffsetX : new MinMaxCurve(0.0f);
+		}
+		private MinMaxCurve GetOrbitalOffsetY(Version version)
+		{
+			return IsReadOrbital(version) ? OrbitalOffsetY : new MinMaxCurve(0.0f);
+		}
+		private MinMaxCurve GetOrbitalOffsetZ(Version version)
+		{
+			return IsReadOrbital(version) ? OrbitalOffsetZ : new MinMaxCurve(0.0f);
+		}
+		private MinMaxCurve GetRadial(Version version)
+		{
+			return IsReadOrbital(version) ? Radial : new MinMaxCurve(0.0f);
+		}
+
 		public bool InWorldSpace { get; private set; }
 
 		public MinMaxCurve X;

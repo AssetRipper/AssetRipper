@@ -18,7 +18,7 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public static bool IsReadPrefab(TransferInstructionFlags flags)
 		{
-			return !flags.IsUnknown1() && !flags.IsSerializeForPrefabSystem();
+			return !flags.IsUnknown1() && !flags.IsForPrefab();
 		}
 
 		public override void Read(AssetReader reader)

@@ -1,13 +1,14 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.AnimationClips
 {
 	public struct QuaternionCurve : IAssetReadable, IYAMLExportable
 	{
-		public QuaternionCurve(string path)
+		public QuaternionCurve(string path, IReadOnlyList<KeyframeTpl<Quaternionf>> keyframes)
 		{
-			Curve = new AnimationCurveTpl<Quaternionf>(true);
+			Curve = new AnimationCurveTpl<Quaternionf>(keyframes);
 			Path = path;
 		}
 

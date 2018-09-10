@@ -13,15 +13,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(5, 4);
 		}
 
-		private MinMaxCurve GetExportY(Version version)
-		{
-			return IsReadAxes(version) ? Y : Curve;
-		}
-		private MinMaxCurve GetExportZ(Version version)
-		{
-			return IsReadAxes(version) ? Z : Curve;
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -49,6 +40,15 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("range", Range.ExportYAML(container));
 			node.Add("separateAxes", SeparateAxes);
 			return node;
+		}
+
+		private MinMaxCurve GetExportY(Version version)
+		{
+			return IsReadAxes(version) ? Y : new MinMaxCurve(1.0f, 1.0f, 1.0f, 0.0f, 1.0f);
+		}
+		private MinMaxCurve GetExportZ(Version version)
+		{
+			return IsReadAxes(version) ? Z : new MinMaxCurve(1.0f, 1.0f, 1.0f, 0.0f, 1.0f);
 		}
 
 		public bool SeparateAxes { get; private set; }

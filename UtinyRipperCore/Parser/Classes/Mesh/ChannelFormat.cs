@@ -6,8 +6,18 @@ namespace UtinyRipper.Classes.Meshes
 	{
 		Float		= 0,
 		Float16		= 1,
+		/// <summary>
+		/// 4.x.x.
+		/// </summary>
 		Color		= 2,
-		Byte		= 3,
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
+		Byte		= 2,
+		/// <summary>
+		/// 4.x.x
+		/// </summary>
+		ByteV4		= 3,
 		Int			= 11,
 	}
 
@@ -21,9 +31,8 @@ namespace UtinyRipper.Classes.Meshes
 					return 4;
 				case ChannelFormat.Float16:
 					return 2;
-				case ChannelFormat.Color:
-					return 1;
 				case ChannelFormat.Byte:
+				case ChannelFormat.ByteV4:
 					return 1;
 				case ChannelFormat.Int:
 					return 4;

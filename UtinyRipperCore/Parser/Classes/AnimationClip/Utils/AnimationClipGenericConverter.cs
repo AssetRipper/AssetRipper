@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UtinyRipper.Classes.AnimationClips.Editor;
 
 namespace UtinyRipper.Classes.AnimationClips
@@ -24,15 +25,31 @@ namespace UtinyRipper.Classes.AnimationClips
 			ProcessStreams(streamedFrames, bindings, tos);
 			ProcessDenses(clip, bindings, tos);
 			ProcessConstant(clip, bindings, tos, lastFrame);
+			CreateCurves();
 		}
 
 		public void Clear()
 		{
+			m_translationCurves = null;
+			m_rotationCurves = null;
+			m_scaleCurves = null;
+			m_eulerCurves = null;
+			m_floatCurves = null;
+
 			m_translations.Clear();
 			m_rotations.Clear();
 			m_scales.Clear();
 			m_eulers.Clear();
 			m_floats.Clear();
+		}
+
+		private void CreateCurves()
+		{
+			m_translationCurves = m_translations.Select(t => new Vector3Curve(t.Key, t.Value)).ToArray();
+			m_rotationCurves = m_rotations.Select(t => new QuaternionCurve(t.Key, t.Value)).ToArray();
+			m_scaleCurves = m_scales.Select(t => new Vector3Curve(t.Key, t.Value)).ToArray();
+			m_eulerCurves = m_eulers.Select(t => new Vector3Curve(t.Key, t.Value)).ToArray();
+			m_floatCurves = m_floats.Select(t => new FloatCurve(t.Key, t.Value)).ToArray();
 		}
 
 		private void ProcessStreams(IReadOnlyList<StreamedFrame> streamFrames, AnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos)
@@ -139,9 +156,10 @@ namespace UtinyRipper.Classes.AnimationClips
 			{
 				case BindingType.Translation:
 					{
-						if (!m_translations.TryGetValue(path, out Vector3Curve transCurve))
+						if (!m_translations.TryGetValue(path, out List<KeyframeTpl<Vector3f>> transCurve))
 						{
-							transCurve = new Vector3Curve(path);
+							transCurve = new List<KeyframeTpl<Vector3f>>();
+							m_translations.Add(path, transCurve);
 						}
 
 						float x = curveValues[offset + 0];
@@ -161,16 +179,17 @@ namespace UtinyRipper.Classes.AnimationClips
 						Vector3f outSlope = new Vector3f(outX, outY, outZ);
 						Vector3f defWeight = new Vector3f(1.0f / 3.0f);
 						KeyframeTpl<Vector3f> transKey = new KeyframeTpl<Vector3f>(time, value, inSlope, outSlope, defWeight);
-						transCurve.Curve.Curve.Add(transKey);
+						transCurve.Add(transKey);
 						m_translations[path] = transCurve;
 					}
 					break;
 
 				case BindingType.Rotation:
 					{
-						if (!m_rotations.TryGetValue(path, out QuaternionCurve rotCurve))
+						if (!m_rotations.TryGetValue(path, out List<KeyframeTpl<Quaternionf>> rotCurve))
 						{
-							rotCurve = new QuaternionCurve(path);
+							rotCurve = new List<KeyframeTpl<Quaternionf>>();
+							m_rotations.Add(path, rotCurve);
 						}
 
 						float x = curveValues[offset + 0];
@@ -193,16 +212,17 @@ namespace UtinyRipper.Classes.AnimationClips
 						Quaternionf outSlope = new Quaternionf(outX, outY, outZ, outW);
 						Quaternionf defWeight = new Quaternionf(1.0f / 3.0f);
 						KeyframeTpl<Quaternionf> rotKey = new KeyframeTpl<Quaternionf>(time, value, inSlope, outSlope, defWeight);
-						rotCurve.Curve.Curve.Add(rotKey);
+						rotCurve.Add(rotKey);
 						m_rotations[path] = rotCurve;
 					}
 					break;
 
 				case BindingType.Scaling:
 					{
-						if (!m_scales.TryGetValue(path, out Vector3Curve scaleCurve))
+						if (!m_scales.TryGetValue(path, out List<KeyframeTpl<Vector3f>> scaleCurve))
 						{
-							scaleCurve = new Vector3Curve(path);
+							scaleCurve = new List<KeyframeTpl<Vector3f>>();
+							m_scales.Add(path, scaleCurve);
 						}
 
 						float x = curveValues[offset + 0];
@@ -222,16 +242,17 @@ namespace UtinyRipper.Classes.AnimationClips
 						Vector3f outSlope = new Vector3f(outX, outY, outZ);
 						Vector3f defWeight = new Vector3f(1.0f / 3.0f);
 						KeyframeTpl<Vector3f> scaleKey = new KeyframeTpl<Vector3f>(time, value, inSlope, outSlope, defWeight);
-						scaleCurve.Curve.Curve.Add(scaleKey);
+						scaleCurve.Add(scaleKey);
 						m_scales[path] = scaleCurve;
 					}
 					break;
 
 				case BindingType.EulerRotation:
 					{
-						if (!m_eulers.TryGetValue(path, out Vector3Curve eulerCurve))
+						if (!m_eulers.TryGetValue(path, out List<KeyframeTpl<Vector3f>> eulerCurve))
 						{
-							eulerCurve = new Vector3Curve(path);
+							eulerCurve = new List<KeyframeTpl<Vector3f>>();
+							m_eulers.Add(path, eulerCurve);
 						}
 
 						float x = curveValues[offset + 0];
@@ -251,16 +272,17 @@ namespace UtinyRipper.Classes.AnimationClips
 						Vector3f outSlope = new Vector3f(outX, outY, outZ);
 						Vector3f defWeight = new Vector3f(1.0f / 3.0f);
 						KeyframeTpl<Vector3f> eulerKey = new KeyframeTpl<Vector3f>(time, value, inSlope, outSlope, defWeight);
-						eulerCurve.Curve.Curve.Add(eulerKey);
+						eulerCurve.Add(eulerKey);
 						m_eulers[path] = eulerCurve;
 					}
 					break;
 
 				case BindingType.Floats:
 					{
-						if (!m_floats.TryGetValue(path, out FloatCurve floatCurve))
+						if (!m_floats.TryGetValue(path, out List<KeyframeTpl<Float>> floatCurve))
 						{
-							floatCurve = new FloatCurve(path);
+							floatCurve = new List<KeyframeTpl<Float>>();
+							m_floats.Add(path, floatCurve);
 						}
 
 						float x = curveValues[offset];
@@ -272,7 +294,7 @@ namespace UtinyRipper.Classes.AnimationClips
 						Float outSlope = new Float(outX);
 						Float defWeight = new Float(1.0f / 3.0f);
 						KeyframeTpl<Float> floatKey = new KeyframeTpl<Float>(time, value, inSlope, outSlope, defWeight);
-						floatCurve.Curve.Curve.Add(floatKey);
+						floatCurve.Add(floatKey);
 						m_floats[path] = floatCurve;
 					}
 					break;
@@ -351,20 +373,26 @@ namespace UtinyRipper.Classes.AnimationClips
 			}
 		}
 
-		public IReadOnlyDictionary<string, Vector3Curve> Translations => m_translations;
-		public IReadOnlyDictionary<string, QuaternionCurve> Rotations => m_rotations;
-		public IReadOnlyDictionary<string, Vector3Curve> Scales => m_scales;
-		public IReadOnlyDictionary<string, Vector3Curve> Eulers => m_eulers;
-		public IReadOnlyDictionary<string, FloatCurve> Floats => m_floats;
+		public IReadOnlyList<Vector3Curve> Translations => m_translationCurves;
+		public IReadOnlyList<QuaternionCurve> Rotations => m_rotationCurves;
+		public IReadOnlyList<Vector3Curve> Scales => m_scaleCurves;
+		public IReadOnlyList<Vector3Curve> Eulers => m_eulerCurves;
+		public IReadOnlyList<FloatCurve> Floats => m_floatCurves;
 
-		private readonly Dictionary<string, Vector3Curve> m_translations = new Dictionary<string, Vector3Curve>();
-		private readonly Dictionary<string, QuaternionCurve> m_rotations = new Dictionary<string, QuaternionCurve>();
-		private readonly Dictionary<string, Vector3Curve> m_scales = new Dictionary<string, Vector3Curve>();
-		private readonly Dictionary<string, Vector3Curve> m_eulers = new Dictionary<string, Vector3Curve>();
-		private readonly Dictionary<string, FloatCurve> m_floats = new Dictionary<string, FloatCurve>();
+		private readonly Dictionary<string, List<KeyframeTpl<Vector3f>>> m_translations = new Dictionary<string, List<KeyframeTpl<Vector3f>>>();
+		private readonly Dictionary<string, List<KeyframeTpl<Quaternionf>>> m_rotations = new Dictionary<string, List<KeyframeTpl<Quaternionf>>>();
+		private readonly Dictionary<string, List<KeyframeTpl<Vector3f>>> m_scales = new Dictionary<string, List<KeyframeTpl<Vector3f>>>();
+		private readonly Dictionary<string, List<KeyframeTpl<Vector3f>>> m_eulers = new Dictionary<string, List<KeyframeTpl<Vector3f>>>();
+		private readonly Dictionary<string, List<KeyframeTpl<Float>>> m_floats = new Dictionary<string, List<KeyframeTpl<Float>>>();
 
 		private readonly Version m_version;
 		private readonly Platform m_platform;
 		private readonly TransferInstructionFlags m_flags;
+
+		private Vector3Curve[] m_translationCurves;
+		private QuaternionCurve[] m_rotationCurves;
+		private Vector3Curve[] m_scaleCurves;
+		private Vector3Curve[] m_eulerCurves;
+		private FloatCurve[] m_floatCurves;
 	}
 }

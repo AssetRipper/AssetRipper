@@ -12,14 +12,14 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public TrailModule(bool _)
 		{
 			Ratio = 1.0f;
-			Lifetime = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
+			Lifetime = new MinMaxCurve(1.0f);
 			MinVertexDistance = 0.2f;
 			RibbonCount = 1;
 			DieWithParticles = true;
 			SizeAffectsWidth = true;
 			InheritParticleColor = true;
 			ColorOverLifetime = new MinMaxGradient(true);
-			WidthOverTrail = new MinMaxCurve(1.0f, 1.0f, 1.0f, 1.0f);
+			WidthOverTrail = new MinMaxCurve(1.0f);
 			ColorOverTrail = new MinMaxGradient(true);
 		}
 
@@ -50,11 +50,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public static bool IsReadSplitSubEmitterRibbons(Version version)
 		{
 			return version.IsGreaterEqual(2017, 3);
-		}
-
-		private int GetExportRibbonCount(Version version)
-		{
-			return IsReadRibbonCount(version) ? RibbonCount : 1;
 		}
 
 		public override void Read(AssetReader reader)
@@ -113,6 +108,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("widthOverTrail", WidthOverTrail.ExportYAML(container));
 			node.Add("colorOverTrail", ColorOverTrail.ExportYAML(container));
 			return node;
+		}
+
+		private int GetExportRibbonCount(Version version)
+		{
+			return IsReadRibbonCount(version) ? RibbonCount : 1;
 		}
 
 		public ParticleSystemTrailMode Mode { get; private set; }

@@ -29,8 +29,8 @@ namespace UtinyRipper.Classes.ParticleSystems
 			CollisionShape5.Read(reader);
 			Inside = (TriggerAction)reader.ReadInt32();
 			Outside = (TriggerAction)reader.ReadInt32();
-			Enter = reader.ReadInt32();
-			Exit = reader.ReadInt32();
+			Enter = (TriggerAction)reader.ReadInt32();
+			Exit = (TriggerAction)reader.ReadInt32();
 			RadiusScale = reader.ReadSingle();
 		}
 
@@ -55,16 +55,16 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("collisionShape5", CollisionShape5.ExportYAML(container));
 			node.Add("inside", (int)Inside);
 			node.Add("outside", (int)Outside);
-			node.Add("enter", Enter);
-			node.Add("exit", Exit);
+			node.Add("enter", (int)Enter);
+			node.Add("exit", (int)Exit);
 			node.Add("radiusScale", RadiusScale);
 			return node;
 		}
 
 		public TriggerAction Inside { get; private set; }
 		public TriggerAction Outside { get; private set; }
-		public int Enter { get; private set; }
-		public int Exit { get; private set; }
+		public TriggerAction Enter { get; private set; }
+		public TriggerAction Exit { get; private set; }
 		public float RadiusScale { get; private set; }
 
 		public PPtr<Component> CollisionShape0;

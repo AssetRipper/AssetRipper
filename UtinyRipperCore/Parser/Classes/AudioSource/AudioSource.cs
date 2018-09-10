@@ -256,19 +256,37 @@ namespace UtinyRipper.Classes
 
 		private AnimationCurveTpl<Float> GetRolloffCustomCurve(Version version)
 		{
-			return IsReadRolloffCustomCurve(version) ? RolloffCustomCurve : AnimationCurveTpl<Float>.Empty;
+			return IsReadRolloffCustomCurve(version) ? RolloffCustomCurve : new AnimationCurveTpl<Float>(1.0f, 0.0f, 1.0f / 3.0f);
 		}
 		private AnimationCurveTpl<Float> GetPanLevelCustomCurve(Version version)
 		{
-			return IsReadRolloffCustomCurve(version) ? PanLevelCustomCurve : AnimationCurveTpl<Float>.Empty;
+			if(IsReadRolloffCustomCurve(version))
+			{
+				return PanLevelCustomCurve;
+			}
+
+			KeyframeTpl<Float> frame = new KeyframeTpl<Float>(0.0f, 0.0f, 1.0f / 3.0f);
+			return new AnimationCurveTpl<Float>(frame);
 		}
 		private AnimationCurveTpl<Float> GetSpreadCustomCurve(Version version)
 		{
-			return IsReadRolloffCustomCurve(version) ? SpreadCustomCurve : AnimationCurveTpl<Float>.Empty;
+			if (IsReadRolloffCustomCurve(version))
+			{
+				return SpreadCustomCurve;
+			}
+
+			KeyframeTpl<Float> frame = new KeyframeTpl<Float>(0.0f, 0.0f, 1.0f / 3.0f);
+			return new AnimationCurveTpl<Float>(frame);
 		}
 		private AnimationCurveTpl<Float> GetReverbZoneMixCustomCurve(Version version)
 		{
-			return IsReadReverbZoneMixCustomCurve(version) ? ReverbZoneMixCustomCurve : AnimationCurveTpl<Float>.Empty;
+			if (IsReadReverbZoneMixCustomCurve(version))
+			{
+				return ReverbZoneMixCustomCurve;
+			}
+
+			KeyframeTpl<Float> frame = new KeyframeTpl<Float>(0.0f, 1.0f, 1.0f / 3.0f);
+			return new AnimationCurveTpl<Float>(frame);
 		}
 
 		public bool PlayOnAwake { get; private set; }

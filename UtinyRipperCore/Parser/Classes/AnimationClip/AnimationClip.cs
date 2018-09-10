@@ -14,7 +14,6 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-
 		private struct AnimationCurves
 		{
 			public IEnumerable<QuaternionCurve> RotationCurves { get; set; }
@@ -315,7 +314,7 @@ namespace UtinyRipper.Classes
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Legacy", GetIsLegacy(container.Version));
+			node.Add("m_Legacy", GetLegacy(container.Version));
 			node.Add("m_Compressed", Compressed);
 			node.Add("m_UseHighQualityCurve", UseHightQualityCurve);
 
@@ -352,12 +351,12 @@ namespace UtinyRipper.Classes
 
 			return new AnimationCurves()
 			{
-				RotationCurves = converter.Rotations.Values.Union(GetRotationCurves(File.Version)),
+				RotationCurves = converter.Rotations.Union(GetRotationCurves(File.Version)),
 				CompressedRotationCurves = GetCompressedRotationCurves(File.Version),
-				EulerCurves = converter.Eulers.Values.Union(GetEulerCurves(File.Version)),
-				PositionCurves = converter.Translations.Values.Union(GetPositionCurves(File.Version)),
-				ScaleCurves = converter.Scales.Values.Union(GetScaleCurves(File.Version)),
-				FloatCurves = converter.Floats.Values.Union(GetFloatCurves(File.Version)),
+				EulerCurves = converter.Eulers.Union(GetEulerCurves(File.Version)),
+				PositionCurves = converter.Translations.Union(GetPositionCurves(File.Version)),
+				ScaleCurves = converter.Scales.Union(GetScaleCurves(File.Version)),
+				FloatCurves = converter.Floats.Union(GetFloatCurves(File.Version)),
 				PPtrCurves = GetPPtrCurves(File.Version),
 			};
 		}
@@ -438,7 +437,7 @@ namespace UtinyRipper.Classes
 			return false;
 		}
 
-		private bool GetIsLegacy(Version version)
+		private bool GetLegacy(Version version)
 		{
 			if (IsReadLegacy(version))
 			{

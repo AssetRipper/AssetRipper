@@ -36,28 +36,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
-		private IReadOnlyList<SubEmitterData> GetExportSubEmitters(Version version)
-		{
-			if (IsReadSubEmitters(version))
-			{
-				return SubEmitters;
-			}
-			else
-			{
-				SubEmitterData[] subEmitters = new SubEmitterData[IsReadSecond(version) ? 6 : 3];
-				subEmitters[0] = new SubEmitterData(SubEmitterBirth, ParticleSystemSubEmitterType.Birth);
-				subEmitters[1] = new SubEmitterData(SubEmitterDeath, ParticleSystemSubEmitterType.Death);
-				subEmitters[2] = new SubEmitterData(SubEmitterCollision, ParticleSystemSubEmitterType.Collision);
-				if (IsReadSecond(version))
-				{
-					subEmitters[3] = new SubEmitterData(SubEmitterBirth1, ParticleSystemSubEmitterType.Birth);
-					subEmitters[4] = new SubEmitterData(SubEmitterDeath1, ParticleSystemSubEmitterType.Death);
-					subEmitters[5] = new SubEmitterData(SubEmitterCollision1, ParticleSystemSubEmitterType.Collision);
-				}
-				return subEmitters;
-			}
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -68,46 +46,64 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 			else
 			{
-				SubEmitterBirth.Read(reader);
+				List<SubEmitterData> subEmitters = new List<SubEmitterData>();
+				PPtr<ParticleSystem> subEmitterBirth = reader.Read<PPtr<ParticleSystem>>();
+				if (!subEmitterBirth.IsNull)
+				{
+					subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Birth, subEmitterBirth));
+				}
 				if (IsReadSecond(reader.Version))
 				{
-					SubEmitterBirth1.Read(reader);
+					PPtr<ParticleSystem> subEmitterBirth1 = reader.Read<PPtr<ParticleSystem>>();
+					if (!subEmitterBirth1.IsNull)
+					{
+						subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Birth, subEmitterBirth1));
+					}
 				}
-				SubEmitterDeath.Read(reader);
+
+				PPtr<ParticleSystem> subEmitterDeath = reader.Read<PPtr<ParticleSystem>>();
+				if (!subEmitterDeath.IsNull)
+				{
+					subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Death, subEmitterDeath));
+				}
 				if (IsReadSecond(reader.Version))
 				{
-					SubEmitterDeath1.Read(reader);
+					PPtr<ParticleSystem> subEmitterDeath1 = reader.Read<PPtr<ParticleSystem>>();
+					if (!subEmitterDeath1.IsNull)
+					{
+						subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Death, subEmitterDeath1));
+					}
 				}
-				SubEmitterCollision.Read(reader);
+
+				PPtr<ParticleSystem> subEmitterCollision = reader.Read<PPtr<ParticleSystem>>();
+				if (!subEmitterCollision.IsNull)
+				{
+					subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Collision, subEmitterCollision));
+				}
 				if (IsReadSecond(reader.Version))
 				{
-					SubEmitterCollision1.Read(reader);
+					PPtr<ParticleSystem> subEmitterCollision1 = reader.Read<PPtr<ParticleSystem>>();
+					if (!subEmitterCollision1.IsNull)
+					{
+						subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Collision, subEmitterCollision1));
+					}
 				}
+
+				if (subEmitters.Count == 0)
+				{
+					subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Birth, default));
+				}
+				m_subEmitters = subEmitters.ToArray();
 			}
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			if (IsReadSubEmitters(file.Version))
+			foreach (SubEmitterData subEmitter in SubEmitters)
 			{
-				foreach (SubEmitterData subEmitter in SubEmitters)
+				foreach (Object asset in subEmitter.FetchDependencies(file, isLog))
 				{
-					foreach(Object @object in subEmitter.FetchDependencies(file, isLog))
-					{
-						yield return @object;
-					}
-				}
-			}
-			else
-			{
-				yield return SubEmitterBirth.FetchDependency(file, isLog, () => nameof(SubModule), "m_SubEmitterBirth");
-				yield return SubEmitterDeath.FetchDependency(file, isLog, () => nameof(SubModule), "m_SubEmitterDeath");
-				yield return SubEmitterCollision.FetchDependency(file, isLog, () => nameof(SubModule), "m_SubEmitterCollision");
-				if (IsReadSecond(file.Version))
-				{
-					yield return SubEmitterBirth1.FetchDependency(file, isLog, () => nameof(SubModule), "m_SubEmitterBirth1");
-					yield return SubEmitterDeath1.FetchDependency(file, isLog, () => nameof(SubModule), "m_SubEmitterDeath1");
-					yield return SubEmitterCollision1.FetchDependency(file, isLog, () => nameof(SubModule), "m_SubEmitterCollision1");
+					yield return asset;
 				}
 			}
 		}
@@ -117,18 +113,11 @@ namespace UtinyRipper.Classes.ParticleSystems
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
 			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("subEmitters", GetExportSubEmitters(container.Version).ExportYAML(container));
+			node.Add("subEmitters", SubEmitters.ExportYAML(container));
 			return node;
 		}
 
 		public IReadOnlyList<SubEmitterData> SubEmitters => m_subEmitters;
-
-		public PPtr<ParticleSystem> SubEmitterBirth;
-		public PPtr<ParticleSystem> SubEmitterBirth1;
-		public PPtr<ParticleSystem> SubEmitterDeath;
-		public PPtr<ParticleSystem> SubEmitterDeath1;
-		public PPtr<ParticleSystem> SubEmitterCollision;
-		public PPtr<ParticleSystem> SubEmitterCollision1;
 
 		private SubEmitterData[] m_subEmitters;
 	}

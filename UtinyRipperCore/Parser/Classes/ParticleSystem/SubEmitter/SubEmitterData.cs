@@ -7,7 +7,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 {
 	public struct SubEmitterData : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public SubEmitterData(PPtr<ParticleSystem> emitter, ParticleSystemSubEmitterType type)
+		public SubEmitterData(ParticleSystemSubEmitterType type, PPtr<ParticleSystem> emitter)
 		{
 			Emitter = emitter;
 			Type = type;

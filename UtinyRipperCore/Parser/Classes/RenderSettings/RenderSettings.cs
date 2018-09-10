@@ -122,21 +122,21 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public static bool IsReadAmbientProbe(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(5) && flags.IsSerializeGameRelease();
+			return version.IsGreaterEqual(5) && flags.IsRelease();
 		}
 		/// <summary>
 		/// 5.0.0f1 to 5.3.0 exclusive and Release
 		/// </summary>
 		public static bool IsReadAmbientProbeInGamma(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 3) && flags.IsSerializeGameRelease();
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 3) && flags.IsRelease();
 		}
 		/// <summary>
 		/// 5.0.0 and (Release or ResourcesFile)
 		/// </summary>
 		public static bool IsReadGeneratedSkyboxReflection(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(5) &&  (flags.IsSerializeGameRelease() || flags.IsBuiltinResourcesFile());
+			return version.IsGreaterEqual(5) &&  (flags.IsRelease() || flags.IsBuiltinResources());
 		}
 		/// <summary>
 		/// 5.0.0b2 and greater

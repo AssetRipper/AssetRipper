@@ -17,7 +17,7 @@ namespace UtinyRipper.Classes.GUIStyles
 		public GUIStyleState(GUIStyleState copy)
 		{
 			Background = copy.Background;
-			TextColor = new ColorRGBAf(copy.TextColor);
+			TextColor = copy.TextColor;
 			m_scaledBackgrounds = new PPtr<Texture2D>[copy.ScaledBackgrounds.Count];
 			for(int i = 0; i < copy.ScaledBackgrounds.Count; i++)
 			{

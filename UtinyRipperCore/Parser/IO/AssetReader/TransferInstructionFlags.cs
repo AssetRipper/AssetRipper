@@ -15,7 +15,7 @@ namespace UtinyRipper
 		/// <summary>
 		/// Has this file been built for release game?
 		/// </summary>
-		SerializeGameRelease = 0x100,
+		SerializeGameRelease					= 0x100,
 		SwapEndianess							= 0x200,
 		DontReadObjectsFromDiskBeforeWriting	= 0x800,
 		SerializeMonoReload						= 0x1000,
@@ -45,19 +45,19 @@ namespace UtinyRipper
 		{
 			return (_this & TransferInstructionFlags.Unknown2) != 0;
 		}
-		public static bool IsSerializeGameRelease(this TransferInstructionFlags _this)
+		public static bool IsRelease(this TransferInstructionFlags _this)
 		{
 			return (_this & TransferInstructionFlags.SerializeGameRelease) != 0;
 		}
-		public static bool IsSerializeForPrefabSystem(this TransferInstructionFlags _this)
+		public static bool IsForPrefab(this TransferInstructionFlags _this)
 		{
 			return (_this & TransferInstructionFlags.SerializeForPrefabSystem) != 0;
 		}
-		public static bool IsBuiltinResourcesFile(this TransferInstructionFlags _this)
+		public static bool IsBuiltinResources(this TransferInstructionFlags _this)
 		{
 			return (_this & TransferInstructionFlags.IsBuiltinResourcesFile) != 0;
 		}
-		public static bool IsSerializeForInspector(this TransferInstructionFlags _this)
+		public static bool IsForInspector(this TransferInstructionFlags _this)
 		{
 			return (_this & TransferInstructionFlags.SerializeForInspector) != 0;
 		}

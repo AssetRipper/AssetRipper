@@ -9,9 +9,10 @@ namespace UtinyRipper.Classes.ParticleSystems
 		{
 		}
 
-		public InheritVelocityModule(bool _)
+		public InheritVelocityModule(float value):
+			base(value != 0.0f)
 		{
-			Curve = new MinMaxCurve(0.0f);
+			Curve = new MinMaxCurve(value);
 		}
 
 		public override void Read(AssetReader reader)

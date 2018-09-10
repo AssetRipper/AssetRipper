@@ -8,23 +8,18 @@ namespace UtinyRipper.Classes
 {
 	public struct ColorRGBA32 : IScriptStructure
 	{
-		public ColorRGBA32(ColorRGBAf rgba)
-		{
-			byte r = (byte)(rgba.R * 255.0f);
-			byte g = (byte)(rgba.G * 255.0f);
-			byte b = (byte)(rgba.B * 255.0f);
-			byte a = (byte)(rgba.A * 255.0f);
-			RGBA = unchecked((uint)(r | (g << 8) | (b << 16) | (a << 24)));
-		}
-
-		public ColorRGBA32(ColorRGBA32 copy)
-		{
-			RGBA = copy.RGBA;
-		}
-
 		public ColorRGBA32(byte r, byte g, byte b, byte a)
 		{
 			RGBA = unchecked((uint)(r | (g << 8) | (b << 16) | (a << 24)));
+		}
+
+		public static explicit operator ColorRGBA32(ColorRGBAf color)
+		{
+			byte r = (byte)(color.R * 255.0f);
+			byte g = (byte)(color.G * 255.0f);
+			byte b = (byte)(color.B * 255.0f);
+			byte a = (byte)(color.A * 255.0f);
+			return new ColorRGBA32(r, g, b, a);
 		}
 
 		private static int GetSerializedVersion(Version version)
@@ -40,7 +35,7 @@ namespace UtinyRipper.Classes
 
 		public IScriptStructure CreateCopy()
 		{
-			return new ColorRGBA32(this);
+			return this;
 		}
 
 		public void Read(AssetReader reader)

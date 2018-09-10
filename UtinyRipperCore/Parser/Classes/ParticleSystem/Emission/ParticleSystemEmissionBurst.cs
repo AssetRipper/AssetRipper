@@ -8,8 +8,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public ParticleSystemEmissionBurst(float time, int minValue, int maxValue)
 		{
 			Time = time;
-			MinValue = minValue;
-			MaxValue = maxValue;
 			CycleCount = 1;
 			RepeatInterval = 0.01f;
 			CountCurve = new MinMaxCurve(minValue, maxValue);
@@ -37,11 +35,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
-		private MinMaxCurve GetExportCountCurve(Version version)
-		{
-			return IsReadCurve(version) ? CountCurve : new MinMaxCurve(MinValue, MaxValue);
-		}
-
 		public void Read(AssetReader reader)
 		{
 			Time = reader.ReadSingle();
@@ -51,8 +44,9 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 			else
 			{
-				MinValue = reader.ReadInt32();
-				MaxValue = reader.ReadInt32();
+				int minValue = reader.ReadInt32();
+				int maxValue = reader.ReadInt32();
+				CountCurve = new MinMaxCurve(minValue, maxValue);
 			}
 			CycleCount = reader.ReadInt32();
 			RepeatInterval = reader.ReadSingle();
@@ -64,15 +58,13 @@ namespace UtinyRipper.Classes.ParticleSystems
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("time", Time);
-			node.Add("countCurve", GetExportCountCurve(container.Version).ExportYAML(container));
+			node.Add("countCurve", CountCurve.ExportYAML(container));
 			node.Add("cycleCount", CycleCount);
 			node.Add("repeatInterval", RepeatInterval);
 			return node;
 		}
 
 		public float Time { get; private set; }
-		public int MinValue { get; private set; }
-		public int MaxValue { get; private set; }
 		public int CycleCount { get; private set; }
 		public float RepeatInterval { get; private set; }
 

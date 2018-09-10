@@ -93,10 +93,10 @@ namespace UtinyRipper.Classes.ParticleSystems
 		{
 			base.Read(reader);
 			
-			Type = reader.ReadInt32();
+			Type = (ParticleSystemCollisionType)reader.ReadInt32();
 			if (IsReadCollisionMode(reader.Version))
 			{
-				CollisionMode = reader.ReadInt32();
+				CollisionMode = (ParticleSystemCollisionMode)reader.ReadInt32();
 			}
 			if (IsReadColliderForce(reader.Version))
 			{
@@ -116,9 +116,12 @@ namespace UtinyRipper.Classes.ParticleSystems
 
 			if (IsReadDampenSingle(reader.Version))
 			{
-				DampenSingle = reader.ReadSingle();
-				BounceSingle = reader.ReadSingle();
-				EnergyLossOnCollisionSingle = reader.ReadSingle();
+				float dampenSingle = reader.ReadSingle();
+				float bounceSingle = reader.ReadSingle();
+				float energyLossOnCollisionSingle = reader.ReadSingle();
+				Dampen = new MinMaxCurve(dampenSingle);
+				Bounce = new MinMaxCurve(bounceSingle);
+				EnergyLossOnCollision = new MinMaxCurve(energyLossOnCollisionSingle);
 			}
 			else
 			{
@@ -143,7 +146,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 			if (IsReadQuality(reader.Version))
 			{
-				Quality = reader.ReadInt32();
+				Quality = (ParticleSystemCollisionQuality)reader.ReadInt32();
 				VoxelSize = reader.ReadSingle();
 			}
 			if (IsReadCollisionMessages(reader.Version))
@@ -173,8 +176,8 @@ namespace UtinyRipper.Classes.ParticleSystems
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("type", Type);
-			node.Add("collisionMode", CollisionMode);
+			node.Add("type", (int)Type);
+			node.Add("collisionMode", (int)CollisionMode);
 			node.Add("colliderForce", ColliderForce);
 			node.Add("multiplyColliderForceByParticleSize", MultiplyColliderForceByParticleSize);
 			node.Add("multiplyColliderForceByParticleSpeed", MultiplyColliderForceByParticleSpeed);
@@ -185,15 +188,15 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("plane3", Plane3.ExportYAML(container));
 			node.Add("plane4", Plane4.ExportYAML(container));
 			node.Add("plane5", Plane5.ExportYAML(container));
-			node.Add("m_Dampen", GetExportDampen(container.Version).ExportYAML(container));
-			node.Add("m_Bounce", GetExportBounce(container.Version).ExportYAML(container));
-			node.Add("m_EnergyLossOnCollision", GetExportEnergyLossOnCollision(container.Version).ExportYAML(container));
+			node.Add("m_Dampen", Dampen.ExportYAML(container));
+			node.Add("m_Bounce", Bounce.ExportYAML(container));
+			node.Add("m_EnergyLossOnCollision", EnergyLossOnCollision.ExportYAML(container));
 			node.Add("minKillSpeed", MinKillSpeed);
 			node.Add("maxKillSpeed", GetExportMaxKillSpeed(container.Version));
 			node.Add("radiusScale", GetExportRadiusScale(container.Version));
 			node.Add("collidesWith", GetExportCollidesWith(container.Version).ExportYAML(container));
 			node.Add("maxCollisionShapes", GetExportMaxCollisionShapes(container.Version));
-			node.Add("quality", Quality);
+			node.Add("quality", (int)Quality);
 			node.Add("voxelSize", GetExportVoxelSize(container.Version));
 			node.Add("collisionMessages", CollisionMessages);
 			node.Add("collidesWithDynamic", GetExportCollidesWithDynamic(container.Version));
@@ -205,21 +208,9 @@ namespace UtinyRipper.Classes.ParticleSystems
 		{
 			return IsReadColliderForce(version) ? MultiplyColliderForceByCollisionAngle : true;
 		}
-		private MinMaxCurve GetExportDampen(Version version)
-		{
-			return IsReadDampenSingle(version) ? new MinMaxCurve(DampenSingle) : Dampen;
-		}
-		private MinMaxCurve GetExportBounce(Version version)
-		{
-			return IsReadDampenSingle(version) ? new MinMaxCurve(BounceSingle) : Bounce;
-		}
-		private MinMaxCurve GetExportEnergyLossOnCollision(Version version)
-		{
-			return IsReadDampenSingle(version) ? new MinMaxCurve(EnergyLossOnCollisionSingle) : EnergyLossOnCollision;
-		}
 		private float GetExportMaxKillSpeed(Version version)
 		{
-			return IsReadMaxKillSpeed(version) ? MaxKillSpeed : MinKillSpeed;
+			return IsReadMaxKillSpeed(version) ? MaxKillSpeed : 10000;
 		}
 		private float GetExportRadiusScale(Version version)
 		{
@@ -242,15 +233,12 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return IsReadCollidesWithDynamic(version) ? CollidesWithDynamic : true;
 		}
 
-		public int Type { get; private set; }
-		public int CollisionMode { get; private set; }
+		public ParticleSystemCollisionType Type { get; private set; }
+		public ParticleSystemCollisionMode CollisionMode { get; private set; }
 		public float ColliderForce { get; private set; }
 		public bool MultiplyColliderForceByParticleSize { get; private set; }
 		public bool MultiplyColliderForceByParticleSpeed { get; private set; }
 		public bool MultiplyColliderForceByCollisionAngle { get; private set; }
-		public float DampenSingle { get; private set; }
-		public float BounceSingle { get; private set; }
-		public float EnergyLossOnCollisionSingle { get; private set; }
 		public float MinKillSpeed { get; private set; }
 		public float MaxKillSpeed { get; private set; }
 		/// <summary>
@@ -258,7 +246,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 		/// </summary>
 		public float RadiusScale { get; private set; }
 		public int MaxCollisionShapes { get; private set; }
-		public int Quality { get; private set; }
+		public ParticleSystemCollisionQuality Quality { get; private set; }
 		public float VoxelSize { get; private set; }
 		public bool CollisionMessages { get; private set; }
 		public bool CollidesWithDynamic { get; private set; }

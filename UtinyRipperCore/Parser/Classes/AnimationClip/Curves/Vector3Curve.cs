@@ -1,13 +1,14 @@
-﻿using UtinyRipper.AssetExporters;
+﻿using System.Collections.Generic;
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.AnimationClips
 {
 	public struct Vector3Curve : IAssetReadable, IYAMLExportable
 	{
-		public Vector3Curve(string path)
+		public Vector3Curve(string path, IReadOnlyList<KeyframeTpl<Vector3f>> keyframes)
 		{
-			Curve = new AnimationCurveTpl<Vector3f>(true);
+			Curve = new AnimationCurveTpl<Vector3f>(keyframes);
 			Path = path;
 		}
 

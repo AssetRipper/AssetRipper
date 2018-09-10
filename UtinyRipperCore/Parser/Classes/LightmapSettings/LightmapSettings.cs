@@ -18,35 +18,35 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public static bool IsReadEnlightenSceneMapping(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(5) && flags.IsSerializeGameRelease();
+			return version.IsGreaterEqual(5) && flags.IsRelease();
 		}
 		/// <summary>
 		/// 5.0.0 and greater and Not Release
 		/// </summary>
 		public static bool IsReadGIWorkflowMode(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(5) && !flags.IsSerializeGameRelease();
+			return version.IsGreaterEqual(5) && !flags.IsRelease();
 		}
 		/// <summary>
 		/// 3.5.0 and greater and (Release or Resource)
 		/// </summary>
 		public static bool IsReadLightProbes(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(3, 5) && (flags.IsSerializeGameRelease() || flags.IsBuiltinResourcesFile());
+			return version.IsGreaterEqual(3, 5) && (flags.IsRelease() || flags.IsBuiltinResources());
 		}
 		/// <summary>
 		/// Release or Resource
 		/// </summary>
 		public static bool IsReadLightmaps(TransferInstructionFlags flags)
 		{
-			return flags.IsSerializeGameRelease() || flags.IsBuiltinResourcesFile();
+			return flags.IsRelease() || flags.IsBuiltinResources();
 		}
 		/// <summary>
 		/// 3.0.0 and greater and Release
 		/// </summary>
 		public static bool IsReadLightmapsMode(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(3) && flags.IsSerializeGameRelease();
+			return version.IsGreaterEqual(3) && flags.IsRelease();
 		}
 		/// <summary>
 		/// 3.2.0 to 5.0.0 exclusive
@@ -75,7 +75,7 @@ namespace UtinyRipper.Classes
 		public static bool IsReadLightmapEditorSettings(Version version, TransferInstructionFlags flags)
 		{
 #warning unknown version (random)
-			return version.IsGreaterEqual(2017) && !flags.IsSerializeGameRelease();
+			return version.IsGreaterEqual(2017) && !flags.IsRelease();
 		}
 		/// <summary>
 		/// Not Release
@@ -83,7 +83,7 @@ namespace UtinyRipper.Classes
 		public static bool IsReadLightingDataAsset(Version version, TransferInstructionFlags flags)
 		{
 #warning unknown version (random)
-			return version.IsGreaterEqual(2017) && !flags.IsSerializeGameRelease();
+			return version.IsGreaterEqual(2017) && !flags.IsRelease();
 		}
 		/// <summary>
 		/// 5.0.0 to  exclusive
@@ -113,7 +113,7 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		private static bool IsAlign1(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(2017) && (flags.IsSerializeGameRelease() || flags.IsBuiltinResourcesFile());
+			return version.IsGreaterEqual(2017) && (flags.IsRelease() || flags.IsBuiltinResources());
 		}
 		/// <summary>
 		/// 3.2.0 and greater

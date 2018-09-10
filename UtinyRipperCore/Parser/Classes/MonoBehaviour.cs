@@ -43,7 +43,7 @@ namespace UtinyRipper.Classes
 				yield return asset;
 			}
 
-			yield return Script.GetAsset(file);
+			yield return Script.FindAsset(file);
 			
 			if(Structure != null)
 			{

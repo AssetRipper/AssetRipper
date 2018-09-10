@@ -23,7 +23,7 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public static bool IsReadScript(TransferInstructionFlags flags)
 		{
-			return !flags.IsSerializeGameRelease();
+			return !flags.IsRelease();
 		}
 		/// <summary>
 		/// 3.4.0 and greater

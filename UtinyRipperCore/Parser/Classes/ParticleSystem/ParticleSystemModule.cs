@@ -3,8 +3,17 @@ using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.Classes.ParticleSystems
 {
-	public class ParticleSystemModule : IAssetReadable, IYAMLExportable
+	public abstract class ParticleSystemModule : IAssetReadable, IYAMLExportable
 	{
+		protected ParticleSystemModule()
+		{
+		}
+
+		protected ParticleSystemModule(bool enabled)
+		{
+			Enabled = enabled;
+		}
+
 		public virtual void Read(AssetReader reader)
 		{
 			Enabled = reader.ReadBoolean();
@@ -18,6 +27,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public bool Enabled { get; private set; }
+		public bool Enabled { get; protected set; }
 	}
 }

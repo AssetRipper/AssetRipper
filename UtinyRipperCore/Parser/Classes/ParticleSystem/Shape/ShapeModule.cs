@@ -121,7 +121,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 		}
 
 		/// <summary>
-		/// 5.6.0 and greater
+		/// Less than 2017.1.0b2
 		/// </summary>
 		private static bool IsReadRadiusFirst(Version version)
 		{
@@ -161,35 +161,6 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return 1;			
 		}
 
-		private float GetExportLength(Version version)
-		{
-			return IsReadLength(version) ? Length : 5.0f;
-		}
-		private float GetExportRadiusThickness(Version version)
-		{
-			return IsReadBoxThickness(version) ? RadiusThickness : 1.0f;
-		}
-		private float GetExportDonutRadius(Version version)
-		{
-			return IsReadBoxThickness(version) ? DonutRadius : 0.2f;
-		}
-		private Vector3f GetExportScale(Version version)
-		{
-			return IsReadBoxThickness(version) ? Scale : new Vector3f(BoxX, BoxY, BoxZ);
-		}
-		private bool GetExportUseMeshColors(Version version)
-		{
-			return IsReadUseMeshMaterialIndex(version) ? UseMeshColors : true;
-		}
-		private MultiModeParameter GetExportRadius(Version version)
-		{
-			return IsReadRadius(version) ? Radius : new MultiModeParameter(RadiusSingle);
-		}
-		private MultiModeParameter GetExportArc(Version version)
-		{
-			return IsReadRadius(version) ? Arc : new MultiModeParameter(ArcSingle);
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -197,7 +168,8 @@ namespace UtinyRipper.Classes.ParticleSystems
 			Type = (ParticleSystemShapeType)reader.ReadInt32();
 			if (IsReadRadiusSingle(reader.Version))
 			{
-				RadiusSingle = reader.ReadSingle();
+				float radius = reader.ReadSingle();
+				Radius = new MultiModeParameter(radius);
 			}
 			Angle = reader.ReadSingle();
 			if (IsReadLength(reader.Version))
@@ -206,13 +178,15 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 			if (IsReadBoxAxes(reader.Version))
 			{
-				BoxX = reader.ReadSingle();
-				BoxY = reader.ReadSingle();
-				BoxZ = reader.ReadSingle();
+				float boxX = reader.ReadSingle();
+				float boxY = reader.ReadSingle();
+				float boxZ = reader.ReadSingle();
+				Scale = Type == ParticleSystemShapeType.Box ? new Vector3f(boxX, boxY, boxZ) : Vector3f.One;
 			}
 			if (IsReadArcSingle(reader.Version))
 			{
-				ArcSingle = reader.ReadSingle();
+				float arc = reader.ReadSingle();
+				Arc = new MultiModeParameter(arc);
 			}
 			if (IsReadRadius(reader.Version))
 			{
@@ -231,7 +205,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 				Rotation.Read(reader);
 				Scale.Read(reader);
 			}
-			PlacementMode = reader.ReadInt32();
+			PlacementMode = (PlacementMode)reader.ReadInt32();
 			if (IsReadMeshMaterialIndex(reader.Version))
 			{
 				if (IsReadMeshMaterialIndexFirst(reader.Version))
@@ -261,7 +235,8 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 			if (IsReadMeshScale(reader.Version))
 			{
-				MeshScale = reader.ReadSingle();
+				float meshScale = reader.ReadSingle();
+				Scale = new Vector3f(meshScale, meshScale, meshScale);
 			}
 			if (IsReadUseMeshMaterialIndex(reader.Version))
 			{
@@ -274,7 +249,8 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 			if (IsReadRandomDirection(reader.Version))
 			{
-				RandomDirection = reader.ReadBoolean();
+				bool randomDirection = reader.ReadBoolean();
+				RandomDirectionAmount = randomDirection ? 1.0f : 0.0f;
 			}
 			reader.AlignStream(AlignType.Align4);
 
@@ -329,8 +305,8 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("donutRadius", GetExportDonutRadius(container.Version));
 			node.Add("m_Position", Position.ExportYAML(container));
 			node.Add("m_Rotation", Rotation.ExportYAML(container));
-			node.Add("m_Scale", GetExportScale(container.Version).ExportYAML(container));
-			node.Add("placementMode", PlacementMode);
+			node.Add("m_Scale", Scale.ExportYAML(container));
+			node.Add("placementMode", (int)PlacementMode);
 			node.Add("m_MeshMaterialIndex", MeshMaterialIndex);
 			node.Add("m_MeshNormalOffset", MeshNormalOffset);
 			node.Add("m_Mesh", Mesh.ExportYAML(container));
@@ -342,29 +318,57 @@ namespace UtinyRipper.Classes.ParticleSystems
 			node.Add("randomDirectionAmount", RandomDirectionAmount);
 			node.Add("sphericalDirectionAmount", SphericalDirectionAmount);
 			node.Add("randomPositionAmount", RandomPositionAmount);
-			node.Add("radius", GetExportRadius(container.Version).ExportYAML(container));
-			node.Add("arc", GetExportArc(container.Version).ExportYAML(container));
+			node.Add("radius", Radius.ExportYAML(container));
+			node.Add("arc", GetArc(container.Version).ExportYAML(container));
 			return node;
 		}
 
+		private float GetExportLength(Version version)
+		{
+			return IsReadLength(version) ? Length : 5.0f;
+		}
+		private float GetExportRadiusThickness(Version version)
+		{
+			return IsReadBoxThickness(version) ? RadiusThickness : 1.0f;
+		}
+		private float GetExportDonutRadius(Version version)
+		{
+			return IsReadBoxThickness(version) ? DonutRadius : 0.2f;
+		}
+		private bool GetExportUseMeshColors(Version version)
+		{
+			return IsReadUseMeshMaterialIndex(version) ? UseMeshColors : true;
+		}
+		private int GetTextureClipChannel(Version version)
+		{
+			return IsReadTexture(version) ? TextureClipChannel : 3;
+		}
+		private bool GetTextureColorAffectsParticles(Version version)
+		{
+			return IsReadTexture(version) ? TextureColorAffectsParticles : true;
+		}
+		private bool GetTextureAlphaAffectsParticles(Version version)
+		{
+			return IsReadTexture(version) ? TextureAlphaAffectsParticles : true;
+		}
+		private MultiModeParameter GetArc(Version version)
+		{
+			return IsReadArcSingle(version) || IsReadRadius(version) ? Arc : new MultiModeParameter(360.0f);
+		}
+
 		public ParticleSystemShapeType Type { get; private set; }
-		public float RadiusSingle { get; private set; }
 		public float Angle { get; private set; }
 		public float Length { get; private set; }
-		public float BoxX { get; private set; }
-		public float BoxY { get; private set; }
-		public float BoxZ { get; private set; }
 		public float ArcSingle { get; private set; }
 		public float RadiusThickness { get; private set; }
 		public float DonutRadius { get; private set; }
-		public int PlacementMode { get; private set; }
+		public PlacementMode PlacementMode { get; private set; }
 		public int MeshMaterialIndex { get; private set; }
 		public float MeshNormalOffset { get; private set; }
 		public float MeshScale { get; private set; }
 		public bool UseMeshMaterialIndex { get; private set; }
 		public bool UseMeshColors { get; private set; }
 		public bool AlignToDirection { get; private set; }
-		public bool RandomDirection { get; private set; }
 		public int TextureClipChannel { get; private set; }
 		public float TextureClipThreshold { get; private set; }
 		public int TextureUVChannel { get; private set; }

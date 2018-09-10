@@ -63,7 +63,7 @@ namespace UtinyRipper.Classes
 				{
 					return true;
 				}
-				return flags.IsSerializeGameRelease();
+				return flags.IsRelease();
 			}
 			return false;
 		}
@@ -72,7 +72,7 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public static bool IsReadOcclusionBakeSettings(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(3) && !flags.IsSerializeGameRelease();
+			return version.IsGreaterEqual(3) && !flags.IsRelease();
 		}
 		/// <summary>
 		/// 5.5.0 and greater
@@ -92,7 +92,7 @@ namespace UtinyRipper.Classes
 				{
 					return true;
 				}
-				return flags.IsSerializeGameRelease();
+				return flags.IsRelease();
 			}
 			return false;
 		}

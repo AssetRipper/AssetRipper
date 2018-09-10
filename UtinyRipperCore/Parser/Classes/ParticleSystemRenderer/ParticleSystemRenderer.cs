@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
+using UtinyRipper.Classes.ParticleSystemRenderers;
+using UtinyRipper.Classes.SpriteRenderers;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
 
@@ -47,13 +50,6 @@ namespace UtinyRipper.Classes
 		public static bool IsReadVertexStreamMask(Version version)
 		{
 			return version.IsGreaterEqual(5, 5) && version.IsLess(5, 6);
-		}
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		public static bool IsReadVertexStreams(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
 		}
 		
 		/// <summary>
@@ -112,17 +108,10 @@ namespace UtinyRipper.Classes
 		{
 			base.Read(reader);
 
-			if (IsModeShort(reader.Version))
-			{
-				RenderMode = reader.ReadUInt16();
-			}
-			else
-			{
-				RenderMode = reader.ReadInt32();
-			}
+			RenderMode = IsModeShort(reader.Version) ? (ParticleSystemRenderMode)reader.ReadUInt16() : (ParticleSystemRenderMode)reader.ReadInt32();
 			if (IsSortModeFirst(reader.Version))
 			{
-				SortMode = reader.ReadUInt16();
+				SortMode = (ParticleSystemSortMode)reader.ReadUInt16();
 			}
 
 			if (IsReadMinParticleSize(reader.Version))
@@ -141,27 +130,42 @@ namespace UtinyRipper.Classes
 			}
 			if (!IsSortModeFirst(reader.Version))
 			{
-				SortMode = reader.ReadInt32();
+				SortMode = (ParticleSystemSortMode)reader.ReadInt32();
 			}
 
 			if (IsReadRenderAlignment(reader.Version))
 			{
-				RenderAlignment = reader.ReadInt32();
+				RenderAlignment = (ParticleSystemRenderSpace)reader.ReadInt32();
 				Pivot.Read(reader);
 			}
+			else
+			{
+				RenderAlignment = RenderMode == ParticleSystemRenderMode.Mesh ? ParticleSystemRenderSpace.Local : ParticleSystemRenderSpace.View;
+			}
+
 			if (IsReadUseCustomVertexStreams(reader.Version))
 			{
 				UseCustomVertexStreams = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);
-			}
-			if (IsReadVertexStreamMask(reader.Version))
-			{
-				VertexStreamMask = reader.ReadInt32();
-			}
-			if (IsReadVertexStreams(reader.Version))
-			{
-				m_vertexStreams = reader.ReadByteArray();
-				reader.AlignStream(AlignType.Align4);
+
+				if (IsReadVertexStreamMask(reader.Version))
+				{
+					int vertexStreamMask = reader.ReadInt32();
+					List<byte> vertexStreams = new List<byte>(8);
+					for(byte i = 0; i < 8; i++)
+					{
+						if((vertexStreamMask & (1 << i)) != 0)
+						{
+							vertexStreams.Add(i);
+						}
+					}
+					m_vertexStreams = vertexStreams.ToArray();
+				}
+				else
+				{
+					m_vertexStreams = reader.ReadByteArray();
+					reader.AlignStream(AlignType.Align4);
+				}
 			}
 
 			Mesh.Read(reader);
@@ -173,7 +177,7 @@ namespace UtinyRipper.Classes
 			}
 			if (IsReadMaskInteraction(reader.Version))
 			{
-				MaskInteraction = reader.ReadInt32();
+				MaskInteraction = (SpriteMaskInteraction)reader.ReadInt32();
 			}
 		}
 
@@ -198,29 +202,38 @@ namespace UtinyRipper.Classes
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_RenderMode", RenderMode);
-			node.Add("m_SortMode", SortMode);
+			node.Add("m_RenderMode", (short)RenderMode);
+			node.Add("m_SortMode", (short)SortMode);
 			node.Add("m_MinParticleSize", MinParticleSize);
 			node.Add("m_MaxParticleSize", MaxParticleSize);
 			node.Add("m_CameraVelocityScale", CameraVelocityScale);
 			node.Add("m_VelocityScale", VelocityScale);
 			node.Add("m_LengthScale", LengthScale);
 			node.Add("m_SortingFudge", SortingFudge);
-			node.Add("m_NormalDirection", NormalDirection);
-			node.Add("m_RenderAlignment", RenderAlignment);
+			node.Add("m_NormalDirection", GetNormalDirection(container.Version));
+			node.Add("m_RenderAlignment", (int)RenderAlignment);
 			node.Add("m_Pivot", Pivot.ExportYAML(container));
 			node.Add("m_UseCustomVertexStreams", UseCustomVertexStreams);
-			node.Add("m_VertexStreams", IsReadVertexStreams(container.Version) ? VertexStreams.ExportYAML() : YAMLScalarNode.Empty);
+			node.Add("m_VertexStreams", GetVertexStreams(container.Version).ExportYAML());
 			node.Add("m_Mesh", Mesh.ExportYAML(container));
 			node.Add("m_Mesh1", Mesh1.ExportYAML(container));
 			node.Add("m_Mesh2", Mesh2.ExportYAML(container));
 			node.Add("m_Mesh3", Mesh3.ExportYAML(container));
-			node.Add("m_MaskInteraction", MaskInteraction);
+			node.Add("m_MaskInteraction", (int)MaskInteraction);
 			return node;
 		}
 
-		public int RenderMode { get; private set; }
-		public int SortMode { get; private set; }
+		private float GetNormalDirection(Version version)
+		{
+			return IsReadNormalDirection(version) ? NormalDirection : 1.0f;
+		}
+		private IReadOnlyList<byte> GetVertexStreams(Version version)
+		{
+			return IsReadUseCustomVertexStreams(version) ? VertexStreams : new byte[] { 0, 1, 3, 4, 5 };
+		}
+
+		public ParticleSystemRenderMode RenderMode { get; private set; }
+		public ParticleSystemSortMode SortMode { get; private set; }
 		public float MinParticleSize { get; private set; }
 		public float MaxParticleSize { get; private set; }
 		public float CameraVelocityScale { get; private set; }
@@ -228,11 +241,10 @@ namespace UtinyRipper.Classes
 		public float LengthScale { get; private set; }
 		public float SortingFudge { get; private set; }
 		public float NormalDirection { get; private set; }
-		public int RenderAlignment { get; private set; }
+		public ParticleSystemRenderSpace RenderAlignment { get; private set; }
 		public bool UseCustomVertexStreams { get; private set; }
-		public int VertexStreamMask { get; private set; }
 		public IReadOnlyList<byte> VertexStreams => m_vertexStreams;
-		public int MaskInteraction { get; private set; }
+		public SpriteMaskInteraction MaskInteraction { get; private set; }
 
 		public Vector3f Pivot;
 		public PPtr<Mesh> Mesh;

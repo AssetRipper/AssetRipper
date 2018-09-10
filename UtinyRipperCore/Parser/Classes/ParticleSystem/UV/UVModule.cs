@@ -43,26 +43,13 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2017);
 		}
 
-		private MinMaxCurve GetExportStartFrame(Version version)
-		{
-			return IsReadStartFrame(version) ? StartFrame : new MinMaxCurve(0.0f);
-		}
-		private int GetExportUvChannelMask(Version version)
-		{
-			return IsReadUvChannelMask(version) ? UvChannelMask : -1;
-		}
-		private IReadOnlyList<SpriteData> GetExportSprites(Version version)
-		{
-			return IsReadSprites(version) ? Sprites : new SpriteData[] { default };
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
 			if (IsReadMode(reader.Version))
 			{
-				Mode = reader.ReadInt32();
+				Mode = (ParticleSystemAnimationMode)reader.ReadInt32();
 			}
 			FrameOverTime.Read(reader);
 			if (IsReadStartFrame(reader.Version))
@@ -71,7 +58,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 			}
 			TilesX = reader.ReadInt32();
 			TilesY = reader.ReadInt32();
-			AnimationType = reader.ReadInt32();
+			AnimationType = (ParticleSystemAnimationType)reader.ReadInt32();
 			RowIndex = reader.ReadInt32();
 			Cycles = reader.ReadSingle();
 			if (IsReadUvChannelMask(reader.Version))
@@ -106,12 +93,12 @@ namespace UtinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add("mode", Mode);
+			node.Add("mode", (int)Mode);
 			node.Add("frameOverTime", FrameOverTime.ExportYAML(container));
 			node.Add("startFrame", GetExportStartFrame(container.Version).ExportYAML(container));
 			node.Add("tilesX", TilesX);
 			node.Add("tilesY", TilesY);
-			node.Add("animationType", AnimationType);
+			node.Add("animationType", (int)AnimationType);
 			node.Add("rowIndex", RowIndex);
 			node.Add("cycles", Cycles);
 			node.Add("uvChannelMask", GetExportUvChannelMask(container.Version));
@@ -122,10 +109,23 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public int Mode { get; private set; }
+		private MinMaxCurve GetExportStartFrame(Version version)
+		{
+			return IsReadStartFrame(version) ? StartFrame : new MinMaxCurve(0.0f);
+		}
+		private int GetExportUvChannelMask(Version version)
+		{
+			return IsReadUvChannelMask(version) ? UvChannelMask : -1;
+		}
+		private IReadOnlyList<SpriteData> GetExportSprites(Version version)
+		{
+			return IsReadSprites(version) ? Sprites : new SpriteData[] { default };
+		}
+
+		public ParticleSystemAnimationMode Mode { get; private set; }
 		public int TilesX { get; private set; }
 		public int TilesY { get; private set; }
-		public int AnimationType { get; private set; }
+		public ParticleSystemAnimationType AnimationType { get; private set; }
 		public int RowIndex { get; private set; }
 		public float Cycles { get; private set; }
 		public int UvChannelMask { get; private set; }

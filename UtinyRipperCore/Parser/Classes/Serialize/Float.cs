@@ -10,6 +10,11 @@ namespace UtinyRipper.Classes
 			Value = value;
 		}
 
+		public static implicit operator Float(float value)
+		{
+			return new Float(value);
+		}
+
 		public void Read(AssetReader reader)
 		{
 			Value = reader.ReadSingle();
