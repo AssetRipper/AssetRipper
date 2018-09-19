@@ -112,7 +112,7 @@ namespace UtinyRipper.Classes
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool IsReadBSVersion(Version version)
+		public static bool IsReadVersion(Version version)
 		{
 			return version.IsGreaterEqual(2);
 		}
@@ -246,9 +246,9 @@ namespace UtinyRipper.Classes
 				reader.AlignStream(AlignType.Align4);
 			}
 
-			if (IsReadBSVersion(reader.Version))
+			if (IsReadVersion(reader.Version))
 			{
-				BSVersion = reader.ReadStringAligned();
+				Version = reader.ReadStringAligned();
 			}
 			if (IsReadAuthToken(reader.Version))
 			{
@@ -281,8 +281,6 @@ namespace UtinyRipper.Classes
 		{
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-
-#warning TODO:
 			throw new System.NotImplementedException();
 		}
 
@@ -310,7 +308,7 @@ namespace UtinyRipper.Classes
 		public bool EnableMultipleDisplays { get; private set; }
 		public bool HasOculusPlugin { get; private set; }
 		public bool HasClusterRendering { get; private set; }
-		public string BSVersion { get; private set; } = string.Empty;
+		public string Version { get; private set; } = string.Empty;
 		public string AuthToken { get; private set; } = string.Empty;
 		public IReadOnlyDictionary<int, Hash128> RuntimeClassHashes => m_runtimeClassHashes;
 		public IReadOnlyDictionary<Hash128, Hash128> ScriptHashes => m_scriptHashes;

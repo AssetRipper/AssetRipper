@@ -144,10 +144,6 @@ namespace UtinyRipper.BundleFiles
 		/// Engine version
 		/// </summary>
 		public string PlayerVersion { get; private set; }
-		/// <summary>
-		/// Minimum revision
-		/// </summary>
-		public Version EngineVersion { get; } = new Version();
 
 		/// <summary>
 		/// Minimum number of bytes to read for streamed bundles, equal to BundleSize for normal bundles
@@ -182,6 +178,11 @@ namespace UtinyRipper.BundleFiles
 		/// UnityFS flags
 		/// </summary>
 		internal BundleFlag Flags { get; private set; }
+
+		/// <summary>
+		/// Minimum revision
+		/// </summary>
+		public Version EngineVersion;
 
 		private const string HexFASignature = "\xFA\xFA\xFA\xFA\xFA\xFA\xFA\xFA";
 

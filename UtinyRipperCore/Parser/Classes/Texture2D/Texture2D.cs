@@ -164,7 +164,7 @@ namespace UtinyRipper.Classes
 					{
 						if (res == null)
 						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because resources file '{path}' wasn't found");
+							Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{path}' wasn't found");
 							return;
 						}
 

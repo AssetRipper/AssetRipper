@@ -12,10 +12,6 @@ namespace UtinyRipper.Classes
 		public MonoScript(AssetInfo assetInfo):
 			base(assetInfo)
 		{
-			if (IsReadScript(File.Flags))
-			{
-				m_defaultReferences = new Dictionary<string, PPtr<Object>>();
-			}
 		}
 
 		/// <summary>
@@ -106,16 +102,16 @@ namespace UtinyRipper.Classes
 		{
 			if(IsReadNamespace(File.Version))
 			{
-				if (File.AssemblyManager.IsValid(AssemblyName, Namespace, Name))
+				if (File.AssemblyManager.IsValid(AssemblyName, Namespace, ClassName))
 				{
-					return File.AssemblyManager.CreateStructure(AssemblyName, Namespace, Name);
+					return File.AssemblyManager.CreateStructure(AssemblyName, Namespace, ClassName);
 				}
 			}
 			else
 			{
-				if (File.AssemblyManager.IsValid(AssemblyName, Name))
+				if (File.AssemblyManager.IsValid(AssemblyName, ClassName))
 				{
-					return File.AssemblyManager.CreateStructure(AssemblyName, Name);
+					return File.AssemblyManager.CreateStructure(AssemblyName, ClassName);
 				}
 			}
 			return null;
@@ -135,8 +131,7 @@ namespace UtinyRipper.Classes
 
 		public ScriptInfo GetScriptInfo()
 		{
-
-			return File.AssemblyManager.GetScriptInfo(AssemblyName, Name);
+			return File.AssemblyManager.GetScriptInfo(AssemblyName, ClassName);
 		}
 
 		public override void Read(AssetReader reader)

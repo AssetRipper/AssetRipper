@@ -6,5 +6,10 @@
 			base(assetInfo)
 		{
 		}
+
+		protected Motion(AssetInfo assetInfo, uint hideFlags) :
+			base(assetInfo, hideFlags)
+		{
+		}
 	}
 }

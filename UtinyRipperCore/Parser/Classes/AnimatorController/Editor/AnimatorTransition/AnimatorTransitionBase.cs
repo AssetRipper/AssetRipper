@@ -2,22 +2,32 @@
 using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
-using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public abstract class AnimatorTransitionBase : NamedObject
 	{
-		private AnimatorTransitionBase(VirtualSerializedFile file, ClassIDType classID, AnimatorController controller, IReadOnlyList<OffsetPtr<ConditionConstant>> conditions) :
-			base(file.CreateAssetInfo(classID))
+		protected AnimatorTransitionBase(AssetInfo assetInfo, ClassIDType classID, AnimatorController controller, TransitionConstant transition) :
+			this(assetInfo, classID, controller, transition.ConditionConstantArray)
 		{
-			ObjectHideFlags = 1;
+			Name = controller.TOS[transition.UserID];
+			IsExit = transition.IsExit;
+		}
 
+		protected AnimatorTransitionBase(AssetInfo assetInfo, ClassIDType classID, AnimatorController controller, SelectorTransitionConstant transition) :
+			this(assetInfo, classID, controller, transition.ConditionConstantArray)
+		{
+			IsExit = false;
+		}
+
+		private AnimatorTransitionBase(AssetInfo assetInfo, ClassIDType classID, AnimatorController controller, IReadOnlyList<OffsetPtr<ConditionConstant>> conditions) :
+			base(assetInfo, 1)
+		{
 			List<AnimatorCondition> conditionList = new List<AnimatorCondition>(conditions.Count);
 			for (int i = 0; i < conditions.Count; i++)
 			{
 				ConditionConstant conditionConstant = conditions[i].Instance;
-				if(conditionConstant.ConditionMode != AnimatorConditionMode.ExitTime)
+				if (conditionConstant.ConditionMode != AnimatorConditionMode.ExitTime)
 				{
 					AnimatorCondition condition = new AnimatorCondition(controller, conditionConstant);
 					conditionList.Add(condition);
@@ -30,20 +40,6 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 
 			Solo = false;
 			Mute = false;
-		}
-
-		protected AnimatorTransitionBase(VirtualSerializedFile file, ClassIDType classID, AnimatorController controller, TransitionConstant transition) :
-			this(file, classID, controller, transition.ConditionConstantArray)
-		{
-			Name = controller.TOS[transition.UserID];
-			IsExit = transition.IsExit;
-		}
-
-		protected AnimatorTransitionBase(VirtualSerializedFile file, ClassIDType classID, AnimatorController controller, SelectorTransitionConstant transition) :
-			this(file, classID, controller, transition.ConditionConstantArray)
-		{
-			Name = string.Empty;
-			IsExit = false;
 		}
 
 		public sealed override void Read(AssetReader reader)

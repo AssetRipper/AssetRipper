@@ -26,44 +26,41 @@ namespace UtinyRipper.AssetExporters
 			File = script.File;
 
 			// find copies in whole project and skip them
-			foreach (ISerializedFile file in script.File.Collection.Files)
+			foreach (Object asset in script.File.Collection.FetchAssets())
 			{
-				foreach(Object asset in file.FetchAssets())
+				if (asset.ClassID != ClassIDType.MonoScript)
 				{
-					if (asset.ClassID != ClassIDType.MonoScript)
+					continue;
+				}
+
+				MonoScript assetScript = (MonoScript)asset;
+				MonoScript unique = assetScript;
+				foreach (MonoScript export in m_unique)
+				{
+					if (assetScript.ClassName != export.ClassName)
 					{
 						continue;
 					}
-					
-					MonoScript assetScript = (MonoScript)asset;
-					MonoScript unique = assetScript;
-					foreach (MonoScript export in m_unique)
+					if (assetScript.Namespace != export.Namespace)
 					{
-						if (assetScript.ClassName != export.ClassName)
-						{
-							continue;
-						}
-						if (assetScript.Namespace != export.Namespace)
-						{
-							continue;
-						}
-						if (assetScript.AssemblyName != export.AssemblyName)
-						{
-							continue;
-						}
-
-						unique = export;
-						break;
+						continue;
+					}
+					if (assetScript.AssemblyName != export.AssemblyName)
+					{
+						continue;
 					}
 
-					m_scripts.Add(assetScript, unique);
-					if(assetScript == unique)
+					unique = export;
+					break;
+				}
+
+				m_scripts.Add(assetScript, unique);
+				if (assetScript == unique)
+				{
+					m_unique.Add(assetScript);
+					if (assetScript.IsScriptPresents())
 					{
-						m_unique.Add(assetScript);
-						if (assetScript.IsScriptPresents())
-						{
-							m_export.Add(assetScript);
-						}
+						m_export.Add(assetScript);
 					}
 				}
 			}
@@ -105,7 +102,7 @@ namespace UtinyRipper.AssetExporters
 			{
 				if(MonoScript.IsReadNamespace(script.File.Version))
 				{
-					int fileID = Compute(script.Namespace, script.Name);
+					int fileID = Compute(script.Namespace, script.ClassName);
 					return new ExportPointer(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 				}
 				else

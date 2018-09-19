@@ -8,18 +8,18 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class BlendTree : Motion
 	{
-		public BlendTree(VirtualSerializedFile file, AnimatorController controller, StateConstant state, int nodeIndex) :
-			base(file.CreateAssetInfo(ClassIDType.BlendTree))
+		private BlendTree(AssetInfo assetInfo, AnimatorController controller, StateConstant state, int nodeIndex) :
+			base(assetInfo, 1)
 		{
+			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 			BlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Instance;
 
-			ObjectHideFlags = 1;
 			Name = nameof(BlendTree);
 
 			m_childs = new ChildMotion[node.ChildIndices.Count];
 			for(int i = 0; i < node.ChildIndices.Count; i++)
 			{
-				m_childs[i] = new ChildMotion(file, controller, state, nodeIndex, i);
+				m_childs[i] = new ChildMotion(virtualFile, controller, state, nodeIndex, i);
 			}
 
 			BlendParameter = node.BlendEventID == uint.MaxValue ? string.Empty : controller.TOS[node.BlendEventID];
@@ -29,8 +29,11 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			UseAutomaticThresholds = false;
 			NormalizedBlendValues = node.BlendDirectData.Instance.NormalizedBlendValues;
 			BlendType = node.BlendType;
+		}
 
-			file.AddAsset(this);
+		public static BlendTree CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController controller, StateConstant state, int nodeIndex)
+		{
+			return virtualFile.CreateAsset((assetInfo) => new BlendTree(assetInfo, controller, state, nodeIndex));
 		}
 
 		public override void Read(AssetReader reader)

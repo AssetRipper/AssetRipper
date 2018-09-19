@@ -31,6 +31,13 @@ namespace UtinyRipper
 			return array;
 		}
 
+		public static Tuple<bool, string> ReadTupleBoolString(this EndianReader reader)
+		{
+			bool value1 = reader.ReadBoolean();
+			string value2 = reader.ReadString();
+			return new Tuple<bool, string>(value1, value2);
+		}
+
 		public static Tuple<char, char> ReadTupleCharChar(this EndianReader reader)
 		{
 			char value1 = Convert.ToChar(reader.ReadByte());
@@ -43,6 +50,18 @@ namespace UtinyRipper
 			char value1 = Convert.ToChar(reader.ReadByte());
 			float value2 = reader.ReadSingle();
 			return new Tuple<char, float>(value1, value2);
+		}
+
+		public static Tuple<bool, string>[] ReadTupleBoolStringArray(this EndianReader reader)
+		{
+			int count = reader.ReadInt32();
+			Tuple<bool, string>[] array = new Tuple<bool, string>[count];
+			for (int i = 0; i < count; i++)
+			{
+				Tuple<bool, string> tuple = ReadTupleBoolString(reader);
+				array[i] = tuple;
+			}
+			return array;
 		}
 
 		public static Tuple<char, float>[] ReadTupleCharFloatArray(this EndianReader reader)

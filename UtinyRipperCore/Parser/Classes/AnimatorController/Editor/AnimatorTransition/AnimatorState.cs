@@ -8,11 +8,11 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class AnimatorState : NamedObject
 	{
-		public AnimatorState(VirtualSerializedFile file, AnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f position) :
-			base(file.CreateAssetInfo(ClassIDType.AnimatorState))
+		private AnimatorState(AssetInfo assetInfo, AnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f position) :
+			base(assetInfo, 1)
 		{
-			ObjectHideFlags = 1;
-
+			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
+			
 			IReadOnlyDictionary<uint, string> TOS = controller.TOS;
 			StateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Instance;
 			StateConstant state = stateMachine.StateConstantArray[stateIndex].Instance;
@@ -26,8 +26,8 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			for(int i = 0; i < state.TransitionConstantArray.Count; i++)
 			{
 				TransitionConstant transitionConstant = state.TransitionConstantArray[i].Instance;
-				AnimatorStateTransition transition = new AnimatorStateTransition(file, controller, transitionConstant);
-				m_transitions[i] = PPtr<AnimatorStateTransition>.CreateVirtualPointer(transition);
+				AnimatorStateTransition transition = AnimatorStateTransition.CreateVirtualInstance(virtualFile, controller, transitionConstant);
+				m_transitions[i] = transition.File.CreatePPtr(transition);
 			}
 
 			m_stateMachineBehaviours = controller.GetStateBeahviours(stateMachineIndex, stateIndex);
@@ -40,15 +40,19 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			CycleOffsetParameterActive = state.CycleOffsetParamID > 0;
 			TimeParameterActive = state.TimeParamID > 0;
 
-			Motion = state.CreateMotion(file, controller, 0);
+			Motion = state.CreateMotion(virtualFile, controller, 0);
 
 			Tag = TOS[state.TagID];
 			SpeedParameter = TOS[state.SpeedParamID];
 			MirrorParameter = TOS[state.MirrorParamID];
 			CycleOffsetParameter = TOS[state.CycleOffsetParamID];
 			TimeParameter = TOS[state.TimeParamID];
+		}
 
-			file.AddAsset(this);
+		public static AnimatorState CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController controller, int stateMachineIndex,
+			int stateIndex, Vector3f position)
+		{
+			return virtualFile.CreateAsset((assetInfo) => new AnimatorState(assetInfo, controller, stateMachineIndex, stateIndex, position));
 		}
 
 		private static int GetSerializedVersion(Version version)

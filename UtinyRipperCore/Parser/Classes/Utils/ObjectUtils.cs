@@ -80,17 +80,22 @@ namespace UtinyRipper.Classes
 			return exportID;
 		}
 
-		public static EngineGUID CalculateObjectsGUID(IEnumerable<Object> asset)
+		public static EngineGUID CalculateAssetsGUID(IEnumerable<Object> assets)
 		{
 			List<uint> hashList = new List<uint>();
-			foreach (Object @object in asset)
+			foreach (Object asset in assets)
 			{
-				hashList.Add(@object.GUID.Data0);
-				hashList.Add(@object.GUID.Data1);
-				hashList.Add(@object.GUID.Data2);
-				hashList.Add(@object.GUID.Data3);
+				hashList.Add(asset.GUID.Data0);
+				hashList.Add(asset.GUID.Data1);
+				hashList.Add(asset.GUID.Data2);
+				hashList.Add(asset.GUID.Data3);
 			}
 
+			return CalculateGUID(hashList);
+		}
+
+		public static EngineGUID CalculateGUID(List<uint> hashList)
+		{
 			uint[] hashArray = hashList.ToArray();
 			byte[] buffer = new byte[hashArray.Length * sizeof(uint)];
 			Buffer.BlockCopy(hashArray, 0, buffer, 0, buffer.Length);

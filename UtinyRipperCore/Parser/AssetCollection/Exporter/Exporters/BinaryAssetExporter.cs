@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UtinyRipper.Classes;
+using UtinyRipper.SerializedFiles;
 
 using Object = UtinyRipper.Classes.Object;
 
@@ -38,7 +39,7 @@ namespace UtinyRipper.AssetExporters
 			throw new NotSupportedException();
 		}
 
-		public IExportCollection CreateCollection(Object asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
 			switch(asset.ClassID)
 			{

@@ -16,12 +16,15 @@ namespace UtinyRipper.Classes
 		{
 		}
 
-		public OcclusionCullingData(VirtualSerializedFile file):
-			this(file.CreateAssetInfo(ClassIDType.OcclusionCullingData))
+		private OcclusionCullingData(AssetInfo assetInfo, OcclusionCullingSettings cullingSetting) :
+			base(assetInfo, true)
 		{
 			Name = nameof(OcclusionCullingData);
+		}
 
-			file.AddAsset(this);
+		public static OcclusionCullingData CreateVirtualInstance(VirtualSerializedFile virtualFile, OcclusionCullingSettings cullingSetting)
+		{
+			return virtualFile.CreateAsset((assetInfo) => new OcclusionCullingData(assetInfo, cullingSetting));
 		}
 
 		/// <summary>
@@ -30,13 +33,6 @@ namespace UtinyRipper.Classes
 		public static bool IsReadStaticRenderers(TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease();
-		}
-
-		private static SceneObjectIdentifier CreateObjectID(IExportContainer container, Object asset)
-		{
-			long lid = asset == null ? 0 : container.GetExportID(asset);
-			SceneObjectIdentifier soId = new SceneObjectIdentifier(lid, 0);
-			return soId;
 		}
 
 		public void Initialize(IExportContainer container, OcclusionCullingSettings cullingSetting)
@@ -97,17 +93,14 @@ namespace UtinyRipper.Classes
 
 			// if >= 5.5.0 and Release this asset doesn't containt renderers data so we need to create it
 			List<OcclusionCullingSettings> cullingSettings = new List<OcclusionCullingSettings>();
-			foreach (ISerializedFile file in File.Collection.Files)
+			foreach (Object asset in File.Collection.FetchAssets())
 			{
-				foreach(Object asset in file.FetchAssets())
+				if (asset.ClassID == ClassIDType.OcclusionCullingSettings)
 				{
-					if(asset.ClassID == ClassIDType.OcclusionCullingSettings)
+					OcclusionCullingSettings cullingSetting = (OcclusionCullingSettings)asset;
+					if (Scenes.Any(t => t.Scene == cullingSetting.SceneGUID))
 					{
-						OcclusionCullingSettings cullingSetting = (OcclusionCullingSettings)asset;
-						if (Scenes.Any(t => t.Scene == cullingSetting.SceneGUID))
-						{
-							cullingSettings.Add(cullingSetting);
-						}
+						cullingSettings.Add(cullingSetting);
 					}
 				}
 			}
@@ -150,6 +143,13 @@ namespace UtinyRipper.Classes
 				OcclusionPortal portal = pportal.FindAsset(cullingSetting.File);
 				m_portals[scene.IndexPortals + i] = CreateObjectID(container, portal);
 			}
+		}
+
+		private static SceneObjectIdentifier CreateObjectID(IExportContainer container, Object asset)
+		{
+			long lid = asset == null ? 0 : container.GetExportID(asset);
+			SceneObjectIdentifier soId = new SceneObjectIdentifier(lid, 0);
+			return soId;
 		}
 
 		public override string ExportName => Path.Combine(AssetsKeyWord, OcclusionCullingSettings.SceneKeyWord, ClassID.ToString());

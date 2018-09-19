@@ -78,4 +78,21 @@
 		/// </summary>
 		Donut				= 17
 	}
+
+	public static class ParticleSystemShapeTypeExtensions
+	{
+		public static bool IsBoxAny(this ParticleSystemShapeType _this)
+		{
+			switch(_this)
+			{
+				case ParticleSystemShapeType.Box:
+				case ParticleSystemShapeType.BoxEdge:
+				case ParticleSystemShapeType.BoxShell:
+					return true;
+
+				default:
+					return false;
+			}
+		}
+	}
 }

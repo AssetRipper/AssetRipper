@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UtinyRipper.Classes;
 using UtinyRipper.Exporters.Scripts;
+using UtinyRipper.SerializedFiles;
 
 using Object = UtinyRipper.Classes.Object;
 
@@ -14,7 +15,7 @@ namespace UtinyRipper.AssetExporters
 			return true;
 		}
 
-		public IExportCollection CreateCollection(Object asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
 			return new ScriptExportCollection(this, (MonoScript)asset);
 		}

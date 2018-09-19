@@ -16,8 +16,8 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			{
 				throw new ArgumentNullException(nameof(motion));
 			}
-			State = new PPtr<AnimatorState>(state);
-			Motion = new PPtr<Motion>(motion);
+			State = state.File.CreatePPtr(state);
+			Motion = motion.File.CreatePPtr(motion);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

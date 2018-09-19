@@ -22,6 +22,12 @@ namespace UtinyRipper.Classes
 			}
 		}
 
+		protected Object(AssetInfo assetInfo, uint hideFlags):
+			this(assetInfo)
+		{
+			ObjectHideFlags = hideFlags;
+		}
+
 		public static bool IsReadHideFlag(TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && !flags.IsForPrefab();
@@ -101,8 +107,23 @@ namespace UtinyRipper.Classes
 		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_ObjectHideFlags", ObjectHideFlags);
+			node.Add("m_ObjectHideFlags", GetObjectHideFlags(container.Flags));
 			return node;
+		}
+
+		private uint GetObjectHideFlags(TransferInstructionFlags flags)
+		{
+			if(IsReadHideFlag(flags))
+			{
+				return ObjectHideFlags;
+			}
+			if(ClassID == ClassIDType.GameObject)
+			{
+				GameObject go = (GameObject)this;
+				int depth = go.GetRootDepth();
+				return depth > 1 ? 1u : 0u;
+			}
+			return 1;
 		}
 
 		public ISerializedFile File => m_assetInfo.File;
@@ -114,7 +135,7 @@ namespace UtinyRipper.Classes
 		
 		public EngineGUID GUID => m_assetInfo.GUID;
 
-		public uint ObjectHideFlags { get; set; }
+		public uint ObjectHideFlags { get; private set; }
 #if UNIVERSAL
 		public int InstanceID { get; private set; }
 		public long LocalIdentfierInFile { get; private set; }

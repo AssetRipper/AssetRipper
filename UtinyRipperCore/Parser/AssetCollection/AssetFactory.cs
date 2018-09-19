@@ -34,6 +34,8 @@ namespace UtinyRipper
 					return new GameObject(assetInfo);
 				case ClassIDType.Transform:
 					return new Transform(assetInfo);
+				case ClassIDType.AudioManager:
+					return new AudioManager(assetInfo);
 				case ClassIDType.Camera:
 					return new Camera(assetInfo);
 				case ClassIDType.Material:
@@ -44,6 +46,8 @@ namespace UtinyRipper
 					return new Texture2D(assetInfo);
 				case ClassIDType.OcclusionCullingSettings:
 					return new OcclusionCullingSettings(assetInfo);
+				case ClassIDType.GraphicsSettings:
+					return new GraphicsSettings(assetInfo);
 				case ClassIDType.MeshFilter:
 					return new MeshFilter(assetInfo);
 				case ClassIDType.OcclusionPortal:
@@ -58,6 +62,8 @@ namespace UtinyRipper
 					return new Rigidbody2D(assetInfo);
 				case ClassIDType.Rigidbody:
 					return new Rigidbody(assetInfo);
+				case ClassIDType.PhysicsManager:
+					return new PhysicsManager(assetInfo);
 				case ClassIDType.CircleCollider2D:
 					return new CircleCollider2D(assetInfo);
 				case ClassIDType.PolygonCollider2D:
@@ -162,6 +168,8 @@ namespace UtinyRipper
 					return new Canvas(assetInfo);
 				case ClassIDType.RectTransform:
 					return new RectTransform(assetInfo);
+				case ClassIDType.ClusterInputManager:
+					return new ClusterInputManager(assetInfo);
 				case ClassIDType.NavMeshData:
 					return new NavMeshData(assetInfo);
 				case ClassIDType.OcclusionCullingData:

@@ -7,17 +7,27 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class AnimatorTransition : AnimatorTransitionBase
 	{
-		public AnimatorTransition(VirtualSerializedFile file, AnimatorController controller, SelectorTransitionConstant transition) :
-			   base(file, ClassIDType.AnimatorTransition, controller, transition)
+		private AnimatorTransition(AssetInfo assetInfo, AnimatorController controller, SelectorTransitionConstant transition) :
+			   base(assetInfo, ClassIDType.AnimatorTransition, controller, transition)
 		{
-			file.AddAsset(this);
 		}
 
-		public AnimatorTransition(VirtualSerializedFile file, AnimatorController controller, SelectorTransitionConstant transition,
-			IReadOnlyList<AnimatorState> states) :
-			this(file, controller, transition)
+		private AnimatorTransition(AssetInfo assetInfo, AnimatorController controller, SelectorTransitionConstant transition, IReadOnlyList<AnimatorState> states) :
+			this(assetInfo, controller, transition)
 		{
-			DstState = PPtr<AnimatorState>.CreateVirtualPointer(states[transition.Destination]);
+			AnimatorState state = states[transition.Destination];
+			DstState = state.File.CreatePPtr(state);
+		}
+
+		public static AnimatorTransition CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController controller, SelectorTransitionConstant transition)
+		{
+			return virtualFile.CreateAsset((assetInfo) => new AnimatorTransition(assetInfo, controller,	transition));
+		}
+
+		public static AnimatorTransition CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController controller, SelectorTransitionConstant transition,
+			IReadOnlyList<AnimatorState> states)
+		{
+			return virtualFile.CreateAsset((assetInfo) => new AnimatorTransition(assetInfo, controller, transition, states));
 		}
 
 		private static int GetSerializedVersion(Version version)

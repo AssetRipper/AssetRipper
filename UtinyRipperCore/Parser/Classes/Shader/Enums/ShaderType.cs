@@ -4,13 +4,13 @@ namespace UtinyRipper.Classes.Shaders
 {
 	public enum ShaderType
 	{
-		None = 0,
-		Vertex,
-		Fragment,
-		Geometry,
-		Hull,
-		Domain,
-		TypeCount,
+		None		= 0,
+		Vertex		= 1,
+		Fragment	= 2,
+		Geometry	= 3,
+		Hull		= 4,
+		Domain		= 5,
+		TypeCount	= 6,
 	}
 
 	public static class ShaderTypeExtensions

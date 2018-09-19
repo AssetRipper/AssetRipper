@@ -226,7 +226,7 @@ namespace UtinyRipper.Classes
 				{
 					return default;
 				}
-				return PPtr<OcclusionCullingData>.CreateVirtualPointer(scene.OcclusionCullingData);
+				return scene.OcclusionCullingData.File.CreatePPtr(scene.OcclusionCullingData);
 			}
 			if (IsReadSceneGUID(container.Version))
 			{

@@ -1,5 +1,8 @@
 ﻿namespace UtinyRipper.Classes.Cameras
 {
+	/// <summary>
+	/// Rendering path of a Camera.
+	/// </summary>
 	public enum RenderingPath
 	{
 		UsePlayerSettings	= -1,

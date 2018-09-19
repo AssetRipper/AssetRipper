@@ -32,7 +32,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 				default:
 					throw new NotSupportedException($"Parameter type '{Type}' isn't supported");
 			}
-			DefaultController = new PPtr<AnimatorController>(controller);
+			DefaultController = controller.File.CreatePPtr(controller);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

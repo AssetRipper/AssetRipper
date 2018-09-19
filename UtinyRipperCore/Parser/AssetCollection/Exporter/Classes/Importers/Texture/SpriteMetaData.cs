@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UtinyRipper.Classes;
-using UtinyRipper.Classes.SpriteAtlases;
 using UtinyRipper.Exporter.YAML;
 
 namespace UtinyRipper.AssetExporters.Classes

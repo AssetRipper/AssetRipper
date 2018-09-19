@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 
@@ -15,7 +14,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 
 			Name = controller.TOS[layer.Binding];
 
-			StateMachine = PPtr<AnimatorStateMachine>.CreateVirtualPointer(stateMachine);
+			StateMachine = stateMachine.File.CreatePPtr(stateMachine);
 
 #warning TODO: animator
 			Mask = default;
@@ -27,7 +26,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			DefaultWeight = layer.DefaultWeight;
 			IKPass = layer.IKPass;
 			SyncedLayerAffectsTiming = layer.SyncedLayerAffectsTiming;
-			Controller = new PPtr<AnimatorController>(controller);
+			Controller = controller.File.CreatePPtr(controller);
 		}
 
 		private static int GetSerializedVersion(Version version)

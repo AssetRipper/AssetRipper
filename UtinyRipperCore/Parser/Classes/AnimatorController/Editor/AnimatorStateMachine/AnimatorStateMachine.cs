@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Exporter.YAML;
 using UtinyRipper.SerializedFiles;
@@ -9,10 +8,10 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class AnimatorStateMachine : NamedObject
 	{
-		public AnimatorStateMachine(VirtualSerializedFile file, AnimatorController controller, int stateMachineIndex) :
-			base(file.CreateAssetInfo(ClassIDType.AnimatorStateMachine))
+		private AnimatorStateMachine(AssetInfo assetInfo, AnimatorController controller, int stateMachineIndex) :
+			base(assetInfo, 1)
 		{
-			ObjectHideFlags = 1;
+			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 
 			LayerConstant layer = controller.Controller.GetLayerByStateMachineIndex(stateMachineIndex);
 			Name = controller.TOS[layer.Binding];
@@ -31,7 +30,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 				for (int x = 0; x < side && stateIndex < stateCount; x++, stateIndex++)
 				{
 					Vector3f position = new Vector3f(x * StateOffset, y * StateOffset, 0.0f);
-					AnimatorState state = new AnimatorState(file, controller, stateMachineIndex, stateIndex, position);
+					AnimatorState state = AnimatorState.CreateVirtualInstance(virtualFile, controller, stateMachineIndex, stateIndex, position);
 					ChildAnimatorState childState = new ChildAnimatorState(state, position);
 					m_childStates[stateIndex] = childState;
 					states.Add(state);
@@ -47,12 +46,12 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 				for(int j = 0; j < stateConstant.TransitionConstantArray.Count; j++)
 				{
 					long stateTransitionPath = state.Transitions[j].PathID;
-					AnimatorStateTransition transition = (AnimatorStateTransition)file.GetAsset(stateTransitionPath);
+					AnimatorStateTransition transition = (AnimatorStateTransition)virtualFile.GetAsset(stateTransitionPath);
 					TransitionConstant transitionConstant = stateConstant.TransitionConstantArray[j].Instance;
 					if (!transitionConstant.IsExit)
 					{
 						AnimatorState destState = states[transitionConstant.DestinationState];
-						transition.DstState = PPtr<AnimatorState>.CreateVirtualPointer(destState);
+						transition.DstState = destState.File.CreatePPtr(destState);
 					}
 				}
 			}
@@ -61,11 +60,11 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			for(int i = 0; i < stateMachine.AnyStateTransitionConstantArray.Count; i++)
 			{
 				TransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Instance;
-				AnimatorStateTransition transition = new AnimatorStateTransition(file, controller, transitionConstant, states);
-				m_anyStateTransitions[i] = PPtr<AnimatorStateTransition>.CreateVirtualPointer(transition);
+				AnimatorStateTransition transition = AnimatorStateTransition.CreateVirtualInstance(virtualFile, controller, transitionConstant, states);
+				m_anyStateTransitions[i] = transition.File.CreatePPtr(transition);
 			}
 
-			m_entryTransitions = stateMachine.GetEntryTransitions(file, controller, layer.Binding, states);
+			m_entryTransitions = stateMachine.GetEntryTransitions(virtualFile, controller, layer.Binding, states);
 			m_stateMachineBehaviours = new PPtr<MonoBehaviour>[0];
 			
 			AnyStatePosition = new Vector3f(0.0f, -StateOffset, 0.0f);
@@ -74,13 +73,11 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			ParentStateMachinePosition = new Vector3f(0.0f, -2.0f * StateOffset, 0.0f);
 
 			DefaultState = ChildStates.Count > 0 ? ChildStates[stateMachine.DefaultState].State : default;
-
-			file.AddAsset(this);
 		}
 
-		private static AssetInfo CreateAssetsInfo(ISerializedFile file)
+		public static AnimatorStateMachine CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController controller, int stateMachineIndex)
 		{
-			return new AssetInfo(file, 0, ClassIDType.AnimatorStateMachine);
+			return virtualFile.CreateAsset((assetInfo) => new AnimatorStateMachine(assetInfo, controller, stateMachineIndex));
 		}
 
 		private static int GetSerializedVersion(Version version)
@@ -129,10 +126,10 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 
 		private readonly Dictionary<PPtr<AnimatorStateMachine>, PPtr<AnimatorTransition>[]> m_stateMachineTransitions = new Dictionary<PPtr<AnimatorStateMachine>, PPtr<AnimatorTransition>[]>();
 
-		private ChildAnimatorState[] m_childStates;
-		private ChildAnimatorStateMachine[] m_childStateMachines;
-		private PPtr<AnimatorStateTransition>[] m_anyStateTransitions;
-		private PPtr<AnimatorTransition>[] m_entryTransitions;
-		private PPtr<MonoBehaviour>[] m_stateMachineBehaviours;
+		private readonly ChildAnimatorState[] m_childStates;
+		private readonly ChildAnimatorStateMachine[] m_childStateMachines;
+		private readonly PPtr<AnimatorStateTransition>[] m_anyStateTransitions;
+		private readonly PPtr<AnimatorTransition>[] m_entryTransitions;
+		private readonly PPtr<MonoBehaviour>[] m_stateMachineBehaviours;
 	}
 }

@@ -49,8 +49,8 @@ namespace UtinyRipper.Classes.AnimatorControllers
 						for(int i = 0; i < selector.TransitionConstantArray.Count - 1; i++)
 						{
 							SelectorTransitionConstant selectorTrans = selector.TransitionConstantArray[i].Instance;
-							AnimatorTransition transition = new AnimatorTransition(file, controller, selectorTrans, states);
-							transitions[i] = PPtr<AnimatorTransition>.CreateVirtualPointer(transition);
+							AnimatorTransition transition = AnimatorTransition.CreateVirtualInstance(file, controller, selectorTrans, states);
+							transitions[i] = transition.File.CreatePPtr(transition);
 						}
 						return transitions;
 					}

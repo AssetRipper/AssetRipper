@@ -142,7 +142,7 @@ namespace UtinyRipper.Classes
 			int hash = 61;
 			unchecked
 			{
-				hash = hash * 73 + X.GetHashCode();
+				hash = hash + 977 * X.GetHashCode();
 				hash = hash * 73 + Y.GetHashCode();
 			}
 			return hash;

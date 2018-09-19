@@ -6,9 +6,14 @@ namespace UtinyRipper
 {
 	public class AssetInfo
 	{
-		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID)
+		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID):
+			this(serializedFile, pathID, classID, new EngineGUID(Guid.NewGuid()))
 		{
-			if(serializedFile == null)
+		}
+
+		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID, EngineGUID guid)
+		{
+			if (serializedFile == null)
 			{
 				throw new ArgumentNullException(nameof(serializedFile));
 			}
@@ -16,7 +21,7 @@ namespace UtinyRipper
 
 			PathID = pathID;
 			ClassID = classID;
-			GUID = new EngineGUID(Guid.NewGuid());
+			GUID = guid;
 		}
 
 		public ISerializedFile File { get; }

@@ -363,42 +363,39 @@ namespace UtinyRipper.Classes
 		
 		private IReadOnlyDictionary<uint, string> FindTOS()
 		{
-			foreach (ISerializedFile file in File.Collection.Files)
+			foreach (Object asset in File.Collection.FetchAssets())
 			{
-				foreach (Object asset in file.FetchAssets())
+				switch (asset.ClassID)
 				{
-					switch(asset.ClassID)
-					{
-						case ClassIDType.Avatar:
+					case ClassIDType.Avatar:
+						{
+							Avatar avatar = (Avatar)asset;
+							if (ClipBindingConstant.IsAvatarMatch(avatar))
 							{
-								Avatar avatar = (Avatar)asset;
-								if(ClipBindingConstant.IsAvatarMatch(avatar))
-								{
-									return avatar.TOS;
-								}
+								return avatar.TOS;
 							}
-							break;
+						}
+						break;
 
-						case ClassIDType.Animator:
-							Animator animator = (Animator)asset;
-							if (IsAnimatorContainsClip(animator))
-							{
-								return animator.RetrieveTOS();
-							}
-							break;
+					case ClassIDType.Animator:
+						Animator animator = (Animator)asset;
+						if (IsAnimatorContainsClip(animator))
+						{
+							return animator.RetrieveTOS();
+						}
+						break;
 
-						case ClassIDType.Animation:
-							Animation animation = (Animation)asset;
-							if (IsAnimationContainsClip(animation))
-							{
-								GameObject go = animation.GameObject.GetAsset(animation.File);
-								return go.BuildTOS();
-							}
-							break;
-					}					
+					case ClassIDType.Animation:
+						Animation animation = (Animation)asset;
+						if (IsAnimationContainsClip(animation))
+						{
+							GameObject go = animation.GameObject.GetAsset(animation.File);
+							return go.BuildTOS();
+						}
+						break;
 				}
 			}
-			
+
 			return new Dictionary<uint, string>() { { 0, string.Empty } };
 		}
 

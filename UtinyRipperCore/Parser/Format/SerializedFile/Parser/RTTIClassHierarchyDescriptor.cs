@@ -75,10 +75,6 @@ namespace UtinyRipper.SerializedFiles
 		}
 
 		/// <summary>
-		/// Signature
-		/// </summary>
-		public Version Version { get; } = new Version();
-		/// <summary>
 		/// Attributes
 		/// </summary>
 		public Platform Platform { get; private set; }
@@ -87,6 +83,11 @@ namespace UtinyRipper.SerializedFiles
 		internal int Unknown { get; private set; }
 		
 		private string Name { get; }
+
+		/// <summary>
+		/// Signature
+		/// </summary>
+		public Version Version;
 
 		private RTTIBaseClassDescriptor[] m_types;
 	}

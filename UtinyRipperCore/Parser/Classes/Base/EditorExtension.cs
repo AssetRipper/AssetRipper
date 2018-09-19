@@ -10,11 +10,15 @@ namespace UtinyRipper.Classes
 		protected EditorExtension(AssetInfo assetInfo):
 			base(assetInfo)
 		{
-			PrefabInternal = new PPtr<Prefab>();
 		}
-		
+
+		protected EditorExtension(AssetInfo assetInfo, uint hideFlags):
+			base(assetInfo, hideFlags)
+		{
+		}
+
 		/// <summary>
-		/// Engine Package
+		/// Prefab
 		/// </summary>
 		public static bool IsReadPrefab(TransferInstructionFlags flags)
 		{
@@ -45,9 +49,9 @@ namespace UtinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object @object in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
 			
 			if (!PrefabParentObject.IsNull)
@@ -56,10 +60,9 @@ namespace UtinyRipper.Classes
 			}
 		}
 
-		public IPPtr<Prefab> PrefabInternal { get; set; }
-
 		private bool IsWritePrefab => ClassID != ClassIDType.Prefab;
-
+		
 		public PPtr<EditorExtension> PrefabParentObject;
+		public PPtr<Prefab> PrefabInternal;
 	}
 }

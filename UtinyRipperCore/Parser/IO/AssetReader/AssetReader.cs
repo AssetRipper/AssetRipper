@@ -90,8 +90,9 @@ namespace UtinyRipper
 			return result;
 		}
 
-		public Version Version { get; }
 		public Platform Platform { get; }
 		public TransferInstructionFlags Flags { get; }
+
+		public Version Version;
 	}
 }

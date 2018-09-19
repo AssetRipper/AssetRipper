@@ -81,9 +81,6 @@ namespace UtinyRipper.Classes
 				ReadBase(reader);
 
 				ParsedForm.Read(reader);
-#if DEBUG
-				Name = ParsedForm.Name;
-#endif
 
 				m_platforms = reader.ReadEnum32Array((t) => (GPUPlatform)t);
 				uint[] offsets = reader.ReadUInt32Array();
@@ -250,7 +247,7 @@ namespace UtinyRipper.Classes
 
 		public override string ExportExtension => "shader";
 
-		public string ShaderName => IsSerialized(File.Version) ? ParsedForm.Name : Name;
+		public override string ValidName => IsSerialized(File.Version) ? ParsedForm.Name : base.ValidName;
 
 		public IReadOnlyList<GPUPlatform> Platforms => m_platforms;
 		public IReadOnlyList<ShaderSubProgramBlob> SubProgramBlobs => m_subProgramBlobs;

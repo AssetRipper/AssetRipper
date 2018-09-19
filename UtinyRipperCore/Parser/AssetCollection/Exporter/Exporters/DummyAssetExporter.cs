@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using UtinyRipper.SerializedFiles;
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
@@ -28,7 +28,7 @@ namespace UtinyRipper.AssetExporters
 		{
 		}
 
-		public IExportCollection CreateCollection(Object asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
 			switch(asset.ClassID)
 			{

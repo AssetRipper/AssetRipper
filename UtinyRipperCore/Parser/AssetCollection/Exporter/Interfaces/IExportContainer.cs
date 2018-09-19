@@ -1,17 +1,17 @@
 ﻿using UtinyRipper.AssetExporters.Classes;
 using UtinyRipper.Classes;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.AssetExporters
 {
-	public interface IExportContainer
+	public interface IExportContainer : IAssetContainer
 	{
-		Object FindObject(int fileIndex, long pathID);
 		long GetExportID(Object asset);
 		AssetType ToExportType(ClassIDType classID);
 		ExportPointer CreateExportPointer(Object @object);
 
-		string SceneIDToString(int sceneID);
-		string TagIDToString(int tagID);
+		string SceneIndexToName(int sceneID);
+		string TagIDToName(int tagID);
 
 		IExportCollection CurrentCollection { get; }
 		Version Version { get; }

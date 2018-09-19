@@ -21,8 +21,8 @@ namespace UtinyRipper.AssetExporters
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
-			string subPath = Path.Combine(dirPath, "ProjectSettings");
-			string fileName = $"{Asset.GetType().Name}.asset";
+			string subPath = Path.Combine(dirPath, ProjectSettingsName);
+			string fileName = $"{Asset.ExportName}.asset";
 			string filePath = Path.Combine(subPath, fileName);
 
 			if (!DirectoryUtils.Exists(subPath))
@@ -47,5 +47,7 @@ namespace UtinyRipper.AssetExporters
 		{
 			throw new NotSupportedException();
 		}
+
+		protected const string ProjectSettingsName = "ProjectSettings";
 	}
 }

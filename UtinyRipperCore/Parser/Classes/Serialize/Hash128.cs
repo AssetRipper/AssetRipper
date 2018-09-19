@@ -70,13 +70,13 @@ namespace UtinyRipper.Classes
 
 		public override int GetHashCode()
 		{
-			int hash = 17;
+			int hash = 311;
 			unchecked
 			{
-				hash = hash * 31 + Data0.GetHashCode();
-				hash = hash * 31 + Data1.GetHashCode();
-				hash = hash * 31 + Data2.GetHashCode();
-				hash = hash * 31 + Data3.GetHashCode();
+				hash = hash + 709 * Data0.GetHashCode();
+				hash = hash * 443 + Data1.GetHashCode();
+				hash = hash * 269 + Data2.GetHashCode();
+				hash = hash * 653 + Data3.GetHashCode();
 			}
 			return hash;
 		}

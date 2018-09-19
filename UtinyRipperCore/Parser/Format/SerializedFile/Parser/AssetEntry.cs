@@ -72,13 +72,16 @@
 		public int DataSize { get; private set; }
 		/// <summary>
 		/// Type ID of the object, which is mapped to RTTIBaseClassDescriptor.classID.
-		/// Equal to classID if the object is not a MonoBehaviour.
+		/// Equals to classID if the object is not a MonoBehaviour.
 		/// </summary>
 		public int TypeID { get; private set; }
 		/// <summary>
 		/// Class ID of the object.
 		/// </summary>
 		public ClassIDType ClassID { get; private set; }
+		/// <summary>
+		/// Index of RTTIBaseClassDescriptor
+		/// </summary>
 		public int TypeIndex { get; private set; }
 		public short ScriptID { get; private set; }
 		public bool Unknown { get; private set; }

@@ -27,11 +27,6 @@ namespace UtinyRipper.ArchiveFiles
 			}
 		}
 
-		public void ReadSerializedFile(FileCollection collection)
-		{
-			ReadSerializedFile(collection, collection.OnRequestDependency);
-		}
-
 		public override FileEntryType EntryType { get; }
 
 		protected override bool IsSerializedFileInner

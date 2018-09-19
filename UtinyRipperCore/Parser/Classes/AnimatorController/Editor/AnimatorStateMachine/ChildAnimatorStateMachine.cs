@@ -12,7 +12,7 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			{
 				throw new ArgumentNullException(nameof(stateMachine));
 			}
-			StateMachine = PPtr<AnimatorStateMachine>.CreateVirtualPointer(stateMachine);
+			StateMachine = stateMachine.File.CreatePPtr(stateMachine);
 			Position = position;
 		}
 

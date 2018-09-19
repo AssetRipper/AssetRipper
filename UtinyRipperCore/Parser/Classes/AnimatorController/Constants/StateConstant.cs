@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.AnimatorControllers.Editor;
 using UtinyRipper.Exporter.YAML;
@@ -171,8 +170,8 @@ namespace UtinyRipper.Classes.AnimatorControllers
 				BlendTreeNodeConstant node = GetBlendTree().NodeArray[nodeIndex].Instance;
 				if (node.IsBlendTree)
 				{
-					BlendTree blendTree = new BlendTree(file, controller, this, nodeIndex);
-					return PPtr<Motion>.CreateVirtualPointer(blendTree);
+					BlendTree blendTree = BlendTree.CreateVirtualInstance(file, controller, this, nodeIndex);
+					return blendTree.File.CreatePPtr(blendTree).CastTo<Motion>();
 				}
 				else
 				{

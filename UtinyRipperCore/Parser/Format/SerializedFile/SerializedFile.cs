@@ -31,7 +31,7 @@ namespace UtinyRipper.SerializedFiles
 			{
 				throw new ArgumentNullException(nameof(scheme));
 			}
-
+#warning TODO:
 		}
 
 		private SerializedFile(IFileCollection collection, IAssemblyManager manager, string filePath, string name, TransferInstructionFlags flags)
@@ -49,7 +49,7 @@ namespace UtinyRipper.SerializedFiles
 			AssemblyManager = manager;
 			FilePath = filePath;
 			Name = FilenameUtils.FixFileIdentifier(name);
-			Flags = flags == TransferInstructionFlags.NoTransferInstructionFlags ? GetCompiledTransferFlag() : flags;
+			Flags = flags;
 
 			Header = new SerializedFileHeader(Name);
 			Metadata = new SerializedFileMetadata(Name);
@@ -62,13 +62,6 @@ namespace UtinyRipper.SerializedFiles
 			return file;
 		}
 
-		public static SerializedFile Read(byte[] data, Parameters pars)
-		{
-			SerializedFile file = new SerializedFile(pars.FileCollection, pars.AssemblyManager, pars.FilePath, pars.Name, pars.Flags);
-			file.Read(data, pars.DependencyCallback);
-			return file;
-		}
-
 		public static SerializedFile Read(Stream stream, Parameters pars)
 		{
 			SerializedFile file = new SerializedFile(pars.FileCollection, pars.AssemblyManager, pars.FilePath, pars.Name, pars.Flags);
@@ -76,9 +69,9 @@ namespace UtinyRipper.SerializedFiles
 			return file;
 		}
 
-		private static TransferInstructionFlags GetCompiledTransferFlag()
+		private static TransferInstructionFlags GetEditorTransferFlag()
 		{
-			return TransferInstructionFlags.Unknown1 | TransferInstructionFlags.SerializeGameRelease;
+			return TransferInstructionFlags.NoTransferInstructionFlags;
 		}
 
 		/// <summary>
@@ -89,19 +82,25 @@ namespace UtinyRipper.SerializedFiles
 			return generation <= FileGeneration.FG_300_342;
 		}
 
+		public Object GetAsset(long pathID)
+		{
+			Object asset = FindAsset(pathID);
+			if (asset == null)
+			{
+				throw new Exception($"Object with path ID {pathID} wasn't found");
+			}
+
+			return asset;
+		}
+
 		public Object GetAsset(int fileIndex, long pathID)
 		{
 			return FindAsset(fileIndex, pathID, false);
 		}
 
-		public Object GetAsset(long pathID)
+		public Object FindAsset(long pathID)
 		{
-			Object asset = FindAsset(pathID);
-			if(asset == null)
-			{
-				throw new Exception($"Object with path ID {pathID} wasn't found");
-			}
-
+			m_assets.TryGetValue(pathID, out Object asset);
 			return asset;
 		}
 
@@ -110,10 +109,68 @@ namespace UtinyRipper.SerializedFiles
 			return FindAsset(fileIndex, pathID, true);
 		}
 
-		public Object FindAsset(long pathID)
+		public Object FindAsset(ClassIDType classID)
 		{
-			m_assets.TryGetValue(pathID, out Object asset);
-			return asset;
+			foreach (Object asset in FetchAssets())
+			{
+				if (asset.ClassID == classID)
+				{
+					return asset;
+				}
+			}
+
+			foreach (FileIdentifier identifier in Dependencies)
+			{
+				ISerializedFile file = Collection.FindSerializedFile(identifier);
+				if (file == null)
+				{
+					continue;
+				}
+				foreach(Object asset in file.FetchAssets())
+				{
+					if (asset.ClassID == classID)
+					{
+						return asset;
+					}
+				}
+			}
+			return null;
+		}
+
+		public Object FindAsset(ClassIDType classID, string name)
+		{
+			foreach (Object asset in FetchAssets())
+			{
+				if (asset.ClassID == classID)
+				{
+					NamedObject namedAsset = (NamedObject)asset;
+					if(namedAsset.ValidName == name)
+					{
+						return asset;
+					}
+				}
+			}
+
+			foreach (FileIdentifier identifier in Dependencies)
+			{
+				ISerializedFile file = Collection.FindSerializedFile(identifier);
+				if (file == null)
+				{
+					continue;
+				}
+				foreach (Object asset in file.FetchAssets())
+				{
+					if (asset.ClassID == classID)
+					{
+						NamedObject namedAsset = (NamedObject)asset;
+						if (namedAsset.Name == name)
+						{
+							return asset;
+						}
+					}
+				}
+			}
+			return null;
 		}
 
 		public AssetEntry GetAssetEntry(long pathID)
@@ -132,6 +189,27 @@ namespace UtinyRipper.SerializedFiles
 			{
 				return info.ClassID;
 			}
+		}
+
+		public PPtr<T> CreatePPtr<T>(T asset)
+			where T: Object
+		{
+			if(asset.File == this)
+			{
+				return new PPtr<T>(0, asset.PathID);
+			}
+
+			for (int i = 0; i < Dependencies.Count; i++)
+			{
+				FileIdentifier identifier = Dependencies[i];
+				ISerializedFile file = Collection.FindSerializedFile(identifier);
+				if(asset.File == file)
+				{
+					return new PPtr<T>(i + 1, asset.PathID);
+				}
+			}
+
+			throw new Exception("Asset doesn't belong to this serialized file or its dependencies");
 		}
 
 		public IEnumerable<Object> FetchAssets()
@@ -161,18 +239,6 @@ namespace UtinyRipper.SerializedFiles
 			}
 		}
 
-		private void Read(byte[] buffer, Action<string> requestDependencyCallback)
-		{
-			using (MemoryStream memStream = new MemoryStream(buffer))
-			{
-				Read(memStream, requestDependencyCallback);
-				if (memStream.Position != buffer.Length)
-				{
-					//throw new Exception($"Read {read} but expected {m_length}");
-				}
-			}
-		}
-
 		private void Read(Stream stream, Action<string> dependencyCallback)
 		{
 			long startPosition = stream.Position;
@@ -180,8 +246,8 @@ namespace UtinyRipper.SerializedFiles
 			{
 				Header.Read(reader);
 			}
-
-			EndianType endianess = Header.Endianess ? EndianType.BigEndian : EndianType.LittleEndian;
+			
+			EndianType endianess = Header.SwapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
 			using (EndianReader reader = new EndianReader(stream, stream.Position, endianess))
 			{
 				if (IsTableAtTheEnd(Header.Generation))
@@ -194,6 +260,10 @@ namespace UtinyRipper.SerializedFiles
 				{
 					Metadata.Read(fileReader);
 				}
+
+#warning TEMP HACK
+				Flags = Platform == Platform.NoTarget ? TransferInstructionFlags.NoTransferInstructionFlags : Flags;
+				Flags |= Header.SwapEndianess ? TransferInstructionFlags.SwapEndianess : TransferInstructionFlags.NoTransferInstructionFlags;
 
 				foreach (FileIdentifier dependency in Dependencies)
 				{
@@ -212,7 +282,7 @@ namespace UtinyRipper.SerializedFiles
 					{
 						string version = versions[i];
 						Logger.Log(LogType.Debug, LogCategory.Import, $"Try parse {Name} as {version} version");
-						Version.Parse(version);
+						Metadata.Hierarchy.Version.Parse(version);
 						m_assets.Clear();
 						try
 						{
@@ -262,12 +332,12 @@ namespace UtinyRipper.SerializedFiles
 			else
 			{
 				fileIndex--;
-				if (fileIndex >= Metadata.Dependencies.Count)
+				if (fileIndex >= Dependencies.Count)
 				{
 					throw new Exception($"{nameof(SerializedFile)} with index {fileIndex} was not found in dependencies");
 				}
 
-				FileIdentifier fileRef = Metadata.Dependencies[fileIndex];
+				FileIdentifier fileRef = Dependencies[fileIndex];
 				file = Collection.FindSerializedFile(fileRef);
 			}
 
@@ -295,45 +365,42 @@ namespace UtinyRipper.SerializedFiles
 		private void ReadAssets(EndianReader reader, long startPosition)
 		{
 			HashSet<long> preloaded = new HashSet<long>();
-			using (AssetReader assetReader = new AssetReader(reader.BaseStream, Version, Platform, Flags))
+			if (SerializedFileMetadata.IsReadPreload(Header.Generation))
 			{
-				if(SerializedFileMetadata.IsReadPreload(Header.Generation))
+				foreach (ObjectPtr ptr in Metadata.Preloads)
 				{
-					foreach (ObjectPtr ptr in Metadata.Preloads)
+					if (ptr.FileID == 0)
 					{
-						if (ptr.FileID == 0)
-						{
-							AssetEntry info = Metadata.Objects[ptr.PathID];
-							ReadAsset(assetReader, info, startPosition);
-							preloaded.Add(ptr.PathID);
-						}
+						AssetEntry info = Metadata.Objects[ptr.PathID];
+						ReadAsset(reader, info, startPosition);
+						preloaded.Add(ptr.PathID);
 					}
 				}
+			}
 
-				foreach (KeyValuePair<long, AssetEntry> infoPair in Metadata.Objects)
+			foreach (KeyValuePair<long, AssetEntry> infoPair in Metadata.Objects)
+			{
+				ClassIDType classID = AssetEntryToClassIDType(infoPair.Value);
+				if (classID == ClassIDType.MonoScript)
 				{
-					ClassIDType classID = AssetEntryToClassIDType(infoPair.Value);
-					if (classID == ClassIDType.MonoScript)
+					if (!preloaded.Contains(infoPair.Key))
 					{
-						if (!preloaded.Contains(infoPair.Key))
-						{
-							ReadAsset(assetReader, infoPair.Value, startPosition);
-							preloaded.Add(infoPair.Key);
-						}
+						ReadAsset(reader, infoPair.Value, startPosition);
+						preloaded.Add(infoPair.Key);
 					}
 				}
+			}
 
-				foreach (AssetEntry info in Metadata.Objects.Values)
+			foreach (AssetEntry info in Metadata.Objects.Values)
+			{
+				if (!preloaded.Contains(info.PathID))
 				{
-					if (!preloaded.Contains(info.PathID))
-					{
-						ReadAsset(assetReader, info, startPosition);
-					}
+					ReadAsset(reader, info, startPosition);
 				}
 			}
 		}
 
-		private void ReadAsset(AssetReader reader, AssetEntry info, long startPosition)
+		private void ReadAsset(EndianReader reader, AssetEntry info, long startPosition)
 		{
 			long pathID = info.PathID;
 			ClassIDType classID = AssetEntryToClassIDType(info);
@@ -345,7 +412,7 @@ namespace UtinyRipper.SerializedFiles
 			}
 		}
 
-		private Object ReadAsset(AssetReader reader, AssetInfo assetInfo, long offset, int size)
+		private Object ReadAsset(EndianReader reader, AssetInfo assetInfo, long offset, int size)
 		{
 			Object asset = Collection.AssetFactory.CreateAsset(assetInfo);
 			if(asset == null)
@@ -366,7 +433,7 @@ namespace UtinyRipper.SerializedFiles
 #if !DEBUG
 				catch
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.General, $"Version[{reader.Version}] '{Name}'");
+					Logger.Instance.Log(LogType.Error, LogCategory.General, $"Version[{Version}] '{Name}'");
 					throw;
 				}
 #endif
@@ -379,7 +446,7 @@ namespace UtinyRipper.SerializedFiles
 			}
 			else
 			{
-				using (AssetReader alignReader = new AssetReader(reader, offset))
+				using (AssetReader alignReader = new AssetReader(reader, Version, Platform, Flags))
 				{
 #if !DEBUG
 					try
@@ -390,7 +457,7 @@ namespace UtinyRipper.SerializedFiles
 #if !DEBUG
 					catch
 					{
-						Logger.Instance.Log(LogType.Error, LogCategory.General, $"Version[{reader.Version}] '{Name}'");
+						Logger.Instance.Log(LogType.Error, LogCategory.General, $"Version[{Version}] '{Name}'");
 						throw;
 					}
 #endif
@@ -398,7 +465,7 @@ namespace UtinyRipper.SerializedFiles
 				long read = reader.BaseStream.Position - offset;
 				if (read != size)
 				{
-					throw new Exception($"Read {read} but expected {size} for asset type {asset.ClassID}. Version[{reader.Version}] '{Name}'");
+					throw new Exception($"Read {read} but expected {size} for asset type {asset.ClassID}. Version[{Version}] '{Name}'");
 				}
 			}
 			return asset;
@@ -406,14 +473,6 @@ namespace UtinyRipper.SerializedFiles
 
 		private void AddAsset(long pathID, Object asset)
 		{
-			if(!IsScene)
-			{
-				// save IsScene value for optimization purpose
-				if(asset.ClassID.IsSceneSettings())
-				{
-					IsScene = true;
-				}
-			}
 			m_assets.Add(pathID, asset);
 		}
 
@@ -436,11 +495,8 @@ namespace UtinyRipper.SerializedFiles
 		public SerializedFileMetadata Metadata { get; }
 		public Version Version => Metadata.Hierarchy.Version;
 		public Platform Platform => Metadata.Hierarchy.Platform;
-		public TransferInstructionFlags Flags { get; }
+		public TransferInstructionFlags Flags { get; private set; }
 		
-		public bool IsScene { get; private set; }
-
-		public IEnumerable<Object> Assets => m_assets.Values;
 		public IFileCollection Collection { get; }
 		public IAssemblyManager AssemblyManager { get; }
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Dependencies;

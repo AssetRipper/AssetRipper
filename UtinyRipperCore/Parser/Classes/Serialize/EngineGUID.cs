@@ -5,18 +5,7 @@ using UtinyRipper.Exporter.YAML;
 namespace UtinyRipper.Classes
 {
 	public struct EngineGUID : IAssetReadable, IYAMLExportable
-	{
-		static EngineGUID()
-		{
-			MissingReference = new EngineGUID
-			{
-				Data0 = 0xD0000000,
-				Data1 = 0x5DEADF00,
-				Data2 = 0xEADBEEF1,
-				Data3 = 0x0000000D
-			};
-		}
-		
+	{		
 		public EngineGUID(Guid guid):
 			this(guid.ToByteArray())
 		{
@@ -81,10 +70,10 @@ namespace UtinyRipper.Classes
 			int hash = 19;
 			unchecked
 			{
-				hash = hash * 31 + Data0.GetHashCode();
-				hash = hash * 31 + Data1.GetHashCode();
-				hash = hash * 31 + Data2.GetHashCode();
-				hash = hash * 31 + Data3.GetHashCode();
+				hash = hash + 31 * Data0.GetHashCode();
+				hash = hash * 479 + Data1.GetHashCode();
+				hash = hash * 593 + Data2.GetHashCode();
+				hash = hash * 347 + Data3.GetHashCode();
 			}
 			return hash;
 		}
@@ -96,6 +85,6 @@ namespace UtinyRipper.Classes
 		public uint Data2 { get; private set; }
 		public uint Data3 { get; private set; }
 
-		public static readonly EngineGUID MissingReference;
+		public static readonly EngineGUID MissingReference = new EngineGUID(0xD0000000, 0x5DEADF00, 0xEADBEEF1, 0x0000000D);
 	}
 }

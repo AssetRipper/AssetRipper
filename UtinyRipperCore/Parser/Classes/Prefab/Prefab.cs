@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.Prefabs;
 using UtinyRipper.Exporter.YAML;
@@ -12,28 +11,28 @@ namespace UtinyRipper.Classes
 		public Prefab(AssetInfo assetInfo):
 			base(assetInfo)
 		{
-			ThisPrefab = new PrefabPtr(this);
 		}
 
-		public Prefab(GameObject root) :
-			base(CreateAssetsInfo(root))
+		private Prefab(AssetInfo assetInfo, GameObject root) :
+			base(assetInfo, 1)
 		{
-			RootGameObject = new PPtr<GameObject>(root);
-			ThisPrefab = new PrefabPtr(this);
+			RootGameObject = root.File.CreatePPtr(root);
 			IsPrefabParent = true;
-			ObjectHideFlags = 1;
+#if DEBUG
+			Name = root.Name;
+#endif
 		}
 
-		private static AssetInfo CreateAssetsInfo(GameObject root)
+		public static Prefab CreateVirtualInstance(VirtualSerializedFile virtualFile, GameObject root)
 		{
-			AssetInfo assetInfo = new AssetInfo(root.File, 0, ClassIDType.Prefab);
-			if(Config.IsGenerateGUIDByContent)
+			if (Config.IsGenerateGUIDByContent)
 			{
-				assetInfo.GUID = ObjectUtils.CalculateObjectsGUID(FetchObjects(root));
+				EngineGUID guid = ObjectUtils.CalculateAssetsGUID(FetchObjects(root));
+				return virtualFile.CreateAsset(guid, (assetInfo) => new Prefab(assetInfo, root));
 			}
-			return assetInfo;
+			return virtualFile.CreateAsset((assetInfo) => new Prefab(assetInfo, root));
 		}
-		
+
 		private static IEnumerable<EditorExtension> FetchObjects(GameObject root, bool isLog = false)
 		{
 			IReadOnlyList<EditorExtension> hierarchy = root.CollectHierarchy();
@@ -53,16 +52,11 @@ namespace UtinyRipper.Classes
 		{
 			base.Read(reader);
 
+			Modification.Read(reader);
 			ParentPrefab.Read(reader);
 			RootGameObject.Read(reader);
 			IsPrefabParent = reader.ReadBoolean();
 			reader.AlignStream(AlignType.Align64);
-			throw new NotSupportedException("Currently EditorExtension's PrefabInternal field doesn't support Engine's prefabs");
-		}
-
-		public IEnumerable<EditorExtension> FetchObjects(bool isLog = false)
-		{
-			return FetchObjects(File, isLog);
 		}
 
 		public IEnumerable<EditorExtension> FetchObjects(ISerializedFile file, bool isLog = false)
@@ -73,27 +67,26 @@ namespace UtinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach (Object @object in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
 
-			if(!ParentPrefab.IsNull)
-			{
-				yield return ParentPrefab.GetAsset(file);
-			}
+			yield return ParentPrefab.GetAsset(file);
 			yield return RootGameObject.GetAsset(file);
 		}
 
-		public string GetName()
+		public string GetName(ISerializedFile file)
 		{
-			return RootGameObject.GetAsset(File).Name;
+			return RootGameObject.GetAsset(file).Name;
 		}
 
+#if DEBUG
 		public override string ToString()
 		{
-			return $"{GetName()}(Prefab)";
+			return $"{Name}(Prefab)";
 		}
+#endif
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
@@ -107,10 +100,12 @@ namespace UtinyRipper.Classes
 		}
 
 		public override string ExportExtension => "prefab";
-		
-		public InnerPPtr<Prefab> ThisPrefab { get; }
 
 		public bool IsPrefabParent { get; private set; }
+
+#if DEBUG
+		public string Name { get; private set; }
+#endif
 
 		public PrefabModification Modification;
 		public PPtr<Prefab> ParentPrefab;

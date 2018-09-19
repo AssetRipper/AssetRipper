@@ -124,9 +124,9 @@ namespace UtinyRipper
 
 			foreach (FileInfo levelFile in root.EnumerateFiles())
 			{
-				string levelName = FileMultiStream.GetFileName(levelFile.Name);
-				if (s_levelName.IsMatch(levelName))
+				if (s_levelName.IsMatch(levelFile.Name))
 				{
+					string levelName = FileMultiStream.GetFileName(levelFile.Name);
 					AddFile(files, levelName, levelFile.FullName);
 				}
 			}
@@ -210,6 +210,15 @@ namespace UtinyRipper
 				LoadDependency(dependency, filePath);
 				return true;
 			}
+
+			// really old versions contains file in this directory
+			string unityPath = Path.Combine(path, UnityName);
+			filePath = Path.Combine(unityPath, dependency);
+			if (FileUtils.Exists(filePath))
+			{
+				LoadDependency(dependency, filePath);
+				return true;
+			}
 			return false;
 		}
 
@@ -237,11 +246,12 @@ namespace UtinyRipper
 		public abstract IReadOnlyDictionary<string, string> Files { get; }
 		public abstract IReadOnlyDictionary<string, string> Assemblies { get; }
 
-		protected static readonly Regex s_levelName = new Regex($@"^level[0-9][0-9]*$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+		protected static readonly Regex s_levelName = new Regex($@"^level[0-9][0-9]*({FileMultiStream.MultifileRegPostfix}0)?$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
 		protected const string ManagedName = "Managed";
 		protected const string LibName = "lib";
 		protected const string ResourceName = "Resources";
+		protected const string UnityName = "unity";
 		protected const string StreamingName = "StreamingAssets";
 
 		protected const string MainDataName = "mainData";

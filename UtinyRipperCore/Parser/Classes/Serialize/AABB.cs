@@ -7,10 +7,10 @@ namespace UtinyRipper.Classes
 {
 	public struct AABB : IScriptStructure
 	{
-		public AABB(AABB copy)
+		public AABB(Vector3f center, Vector3f extent)
 		{
-			Center = copy.Center;
-			Extent = copy.Extent;
+			Center = center;
+			Extent = extent;
 		}
 
 		public void Read(AssetReader reader)
@@ -34,7 +34,7 @@ namespace UtinyRipper.Classes
 
 		public IScriptStructure CreateCopy()
 		{
-			return new AABB(this);
+			return this;
 		}
 
 		public IScriptStructure Base => null;

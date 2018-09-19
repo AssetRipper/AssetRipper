@@ -140,10 +140,10 @@ namespace UtinyRipper.Classes
 			int hash = 97;
 			unchecked
 			{
-				hash = hash * 53 + X.GetHashCode();
+				hash = hash + 347 * X.GetHashCode();
 				hash = hash * 53 + Y.GetHashCode();
-				hash = hash * 53 + Width.GetHashCode();
-				hash = hash * 53 + Height.GetHashCode();
+				hash = hash * 641 + Width.GetHashCode();
+				hash = hash * 557 + Height.GetHashCode();
 			}
 			return hash;
 		}

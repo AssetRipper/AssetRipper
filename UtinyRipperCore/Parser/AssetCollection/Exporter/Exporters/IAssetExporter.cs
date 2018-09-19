@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UtinyRipper.SerializedFiles;
 
 using Object = UtinyRipper.Classes.Object;
 
@@ -14,7 +15,7 @@ namespace UtinyRipper.AssetExporters
 		void Export(IExportContainer container, IEnumerable<Object> assets, string path);
 		void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback);
 
-		IExportCollection CreateCollection(Object asset);
+		IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset);
 		AssetType ToExportType(Object asset);
 		bool ToUnknownExportType(ClassIDType classID, out AssetType assetType);
 	}

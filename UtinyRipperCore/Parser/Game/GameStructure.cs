@@ -328,7 +328,7 @@ namespace UtinyRipper
 			}
 		}
 
-		public Version Version { get; } = new Version();
+		public Version Version;
 
 		private readonly HashSet<string> m_knownFiles = new HashSet<string>();
 		private readonly HashSet<string> m_knownAssemblies = new HashSet<string>();

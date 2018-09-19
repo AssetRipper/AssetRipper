@@ -7,8 +7,8 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class AnimatorStateTransition : AnimatorTransitionBase
 	{
-		public AnimatorStateTransition(VirtualSerializedFile file, AnimatorController controller, TransitionConstant transition) :
-			base(file, ClassIDType.AnimatorStateTransition, controller, transition)
+		private AnimatorStateTransition(AssetInfo assetInfo, AnimatorController controller, TransitionConstant transition) :
+			base(assetInfo, ClassIDType.AnimatorStateTransition, controller, transition)
 		{
 			TransitionDuration = transition.TransitionDuration;
 			TransitionOffset = transition.TransitionOffset;
@@ -18,18 +18,27 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 			InterruptionSource = transition.GetInterruptionSource(controller.File.Version);
 			OrderedInterruption = transition.OrderedInterruption;
 			CanTransitionToSelf = transition.CanTransitionToSelf;
-
-			file.AddAsset(this);
 		}
 
-		public AnimatorStateTransition(VirtualSerializedFile file, AnimatorController controller, TransitionConstant transition,
-			IReadOnlyList<AnimatorState> states) :
-			this(file, controller, transition)
+		private AnimatorStateTransition(AssetInfo assetInfo, AnimatorController controller, TransitionConstant transition, IReadOnlyList<AnimatorState> states) :
+			this(assetInfo, controller, transition)
 		{
 			if(!transition.IsExit)
 			{
-				DstState = PPtr<AnimatorState>.CreateVirtualPointer(states[transition.DestinationState]);
+				AnimatorState state = states[transition.DestinationState];
+				DstState = state.File.CreatePPtr(state);
 			}
+		}
+
+		public static AnimatorStateTransition CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController controller, TransitionConstant transition)
+		{
+			return virtualFile.CreateAsset((assetInfo) => new AnimatorStateTransition(assetInfo, controller, transition));
+		}
+
+		public static AnimatorStateTransition CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController controller,
+			TransitionConstant transition, IReadOnlyList<AnimatorState> states)
+		{
+			return virtualFile.CreateAsset((assetInfo) => new AnimatorStateTransition(assetInfo, controller, transition));
 		}
 
 		private static int GetSerializedVersion(Version version)

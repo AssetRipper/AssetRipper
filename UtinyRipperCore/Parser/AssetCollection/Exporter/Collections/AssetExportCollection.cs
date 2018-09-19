@@ -38,7 +38,7 @@ namespace UtinyRipper.AssetExporters
 		{
 			string subFolder = Asset.ExportName;
 			string subPath = Path.Combine(dirPath, subFolder);
-			string fileName = GetUniqueFileName(Asset, subPath);
+			string fileName = GetUniqueFileName(container.File, Asset, subPath);
 			string filePath = Path.Combine(subPath, fileName);
 
 			if (!DirectoryUtils.Exists(subPath))

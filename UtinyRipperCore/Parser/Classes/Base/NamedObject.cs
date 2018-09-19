@@ -10,25 +10,33 @@ namespace UtinyRipper.Classes
 		{
 		}
 
+		protected NamedObject(AssetInfo assetInfo, uint hideFlags) :
+			base(assetInfo, hideFlags)
+		{
+			Name = string.Empty;
+		}
+
+		protected NamedObject(AssetInfo assetInfo, bool _) :
+			base(assetInfo)
+		{
+			Name = string.Empty;
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
 			Name = reader.ReadStringAligned();
-			if(string.IsNullOrEmpty(Name))
-			{
-				Name = GetType().Name;
-			}
 		}
 
 		public override string ToString()
 		{
-			return $"{Name}({GetType().Name})";
+			return $"{ValidName}({GetType().Name})";
 		}
 
 		public override string ToLogString()
 		{
-			return $"{GetType().Name}'s({Name})[{PathID}]";
+			return $"{GetType().Name}'s({ValidName})[{PathID}]";
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -37,7 +45,18 @@ namespace UtinyRipper.Classes
 			root.Add("m_Name", Name);
 			return root;
 		}
-		
+
+		public virtual string ValidName
+		{
+			get
+			{
+				if (Name == string.Empty)
+				{
+					return GetType().Name;
+				}
+				return Name;
+			}
+		}
 		public string Name { get; protected set; }
 	}
 }

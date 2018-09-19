@@ -174,7 +174,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_Component", Components.ExportYAML(container));
 			node.Add("m_Layer", Layer);
 			node.Add("m_Name", Name);
-			node.Add("m_TagString", container.TagIDToString(Tag));
+			node.Add("m_TagString", container.TagIDToName(Tag));
 			node.Add("m_Icon", default(PPtr<Object>).ExportYAML(container));
 			node.Add("m_NavMeshLayer", 0);
 			node.Add("m_StaticEditorFlags", 0);

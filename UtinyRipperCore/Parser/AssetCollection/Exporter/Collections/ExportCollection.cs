@@ -82,29 +82,29 @@ namespace UtinyRipper.AssetExporters
 			}
 		}
 		
-		protected string GetUniqueFileName(Object @object, string dirPath)
+		protected string GetUniqueFileName(ISerializedFile file, Object asset, string dirPath)
 		{
 			string fileName;
-			switch (@object)
+			switch (asset)
 			{
 				case NamedObject named:
-					fileName = named.Name;
+					fileName = named.ValidName;
 					break;
 				case Prefab prefab:
-					fileName = prefab.GetName();
+					fileName = prefab.GetName(file);
 					break;
 				case MonoBehaviour monoBehaviour:
 					fileName = monoBehaviour.Name;
 					break;
 
 				default:
-					fileName = @object.GetType().Name;
+					fileName = asset.GetType().Name;
 					break;
 			}
 			fileName = FileNameRegex.Replace(fileName, string.Empty);
 
 			fileName = DirectoryUtils.GetMaxIndexName(dirPath, fileName);
-			fileName = $"{fileName}.{@object.ExportExtension}";
+			fileName = $"{fileName}.{asset.ExportExtension}";
 			return fileName;
 		}
 

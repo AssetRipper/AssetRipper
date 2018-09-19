@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UtinyRipper.Classes;
 using UtinyRipper.Exporter.YAML;
-
+using UtinyRipper.SerializedFiles;
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
@@ -58,17 +58,17 @@ namespace UtinyRipper.AssetExporters
 			throw new NotSupportedException();
 		}
 
-		public IExportCollection CreateCollection(Object asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
 			if (OcclusionCullingSettings.IsCompatible(asset))
 			{
-				if (asset.File.IsScene)
+				if (asset.File.Collection.IsScene(asset.File))
 				{
-					return new SceneExportCollection(this, asset.File);
+					return new SceneExportCollection(this, virtualFile, asset.File);
 				}
 				else
 				{
-					return new PrefabExportCollection(this, asset);
+					return new PrefabExportCollection(this, virtualFile, asset);
 				}
 			}
 			else
@@ -78,9 +78,16 @@ namespace UtinyRipper.AssetExporters
 					case ClassIDType.NavMeshData:
 						return new EmptyExportCollection();
 					case ClassIDType.AnimatorController:
-						return new AnimatorControllerExportCollection(this, asset);
+						return new AnimatorControllerExportCollection(this, virtualFile, asset);
+
+					case ClassIDType.AudioManager:
+					case ClassIDType.GraphicsSettings:
+					case ClassIDType.PhysicsManager:
 					case ClassIDType.TagManager:
+					case ClassIDType.ClusterInputManager:
 						return new ManagerExportCollection(this, asset);
+					case ClassIDType.BuildSettings:
+						return new BuildSettingsExportCollection(this, virtualFile, asset);
 
 					default:
 						return new AssetExportCollection(this, asset);

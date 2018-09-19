@@ -36,7 +36,7 @@ namespace UtinyRipper.Classes
 			Margin = new RectOffset(copy.Margin);
 			Padding = new RectOffset(copy.Padding);
 			Overflow = new RectOffset(copy.Overflow);
-			Font = new PPtr<Font>(copy.Font);
+			Font = copy.Font;
 			FontSize = copy.FontSize;
 			FontStyle = copy.FontStyle;
 			Alignment = copy.Alignment;
@@ -58,6 +58,13 @@ namespace UtinyRipper.Classes
 		public static bool IsBuiltIn(Version version)
 		{
 			return version.IsGreaterEqual(4);
+		}
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		private static bool IsReadFontSize(Version version)
+		{
+			return version.IsGreaterEqual(3, 0);
 		}
 
 		public IScriptStructure CreateCopy()
@@ -93,7 +100,7 @@ namespace UtinyRipper.Classes
 			if(IsBuiltIn(reader.Version))
 			{
 				FontSize = reader.ReadInt32();
-				FontStyle = reader.ReadInt32();
+				FontStyle = (FontStyle)reader.ReadInt32();
 				Alignment = (TextAnchor)reader.ReadInt32();
 				WordWrap = reader.ReadBoolean();
 				RichText = reader.ReadBoolean();
@@ -120,6 +127,11 @@ namespace UtinyRipper.Classes
 				ClipOffset.Read(reader);
 				FixedWidth = reader.ReadSingle();
 				FixedHeight = reader.ReadSingle();
+				if(IsReadFontSize(reader.Version))
+				{
+					FontSize = reader.ReadInt32();
+					FontStyle = (FontStyle)reader.ReadInt32();
+				}
 				StretchWidth = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);
 				StretchHeight = reader.ReadBoolean();
@@ -145,7 +157,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_Overflow", Overflow.ExportYAML(container));
 			node.Add("m_Font", Font.ExportYAML(container));
 			node.Add("m_FontSize", FontSize);
-			node.Add("m_FontStyle", FontStyle);
+			node.Add("m_FontStyle", (int)FontStyle);
 			node.Add("m_Alignment", (int)Alignment);
 			node.Add("m_WordWrap", WordWrap);
 			node.Add("m_RichText", RichText);
@@ -173,7 +185,7 @@ namespace UtinyRipper.Classes
 		/// </summary>
 		public string StyleName { get; private set; }
 		public int FontSize { get; private set; }
-		public int FontStyle { get; private set; }
+		public FontStyle FontStyle { get; private set; }
 		public TextAnchor Alignment { get; private set; }
 		public bool WordWrap { get; private set; }
 		public bool RichText { get; private set; }

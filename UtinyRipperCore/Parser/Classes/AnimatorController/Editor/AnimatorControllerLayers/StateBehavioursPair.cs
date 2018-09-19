@@ -18,13 +18,13 @@ namespace UtinyRipper.Classes.AnimatorControllers.Editor
 				throw new ArgumentNullException(nameof(behaviours));
 			}
 
-			State = PPtr<AnimatorState>.CreateVirtualPointer(state);
+			State = state.File.CreatePPtr(state);
 			
 			m_stateMachineBehaviours = new PPtr<MonoBehaviour>[behaviours.Length];
 			for(int i = 0; i < behaviours.Length; i++)
 			{
 				MonoBehaviour behaviour = behaviours[i];
-				PPtr<MonoBehaviour> behaviourPtr = new PPtr<MonoBehaviour>(behaviour);
+				PPtr<MonoBehaviour> behaviourPtr = behaviour.File.CreatePPtr(behaviour);
 				m_stateMachineBehaviours[i] = behaviourPtr;
 			}
 		}

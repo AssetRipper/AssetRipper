@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Security.AccessControl;
 using System.Security.Principal;
 #endif
+using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes;
 
 using Object = UtinyRipper.Classes.Object;
@@ -31,7 +32,7 @@ namespace UtinyRipper
 			Config.IsAdvancedLog = true;
 			Config.IsGenerateGUIDByContent = false;
 			Config.IsExportDependencies = false;
-			
+
 			if (args.Length == 0)
 			{
 				Console.WriteLine("No arguments");
@@ -72,6 +73,16 @@ namespace UtinyRipper
 
 				string exportPath = Path.Combine("Ripped", GameStructure.Name);
 				PrepareExportDirectory(exportPath);
+
+#if DEBUG
+				EngineAssetExporter engineExporter = new EngineAssetExporter();
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Material, engineExporter);
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, engineExporter);
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Mesh, engineExporter);
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, engineExporter);
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, engineExporter);
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, engineExporter);
+#endif
 
 				GameStructure.Export(exportPath, AssetSelector);
 				Logger.Instance.Log(LogType.Info, LogCategory.General, "Finished");

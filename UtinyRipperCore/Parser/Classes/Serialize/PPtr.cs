@@ -6,31 +6,15 @@ using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.Classes
 {
-	public struct PPtr<T> : IPPtr<T>
+	public struct PPtr<T> : IYAMLExportable, IAssetReadable
 		where T: Object
 	{
-		public PPtr(Object asset)
+		public PPtr(int fileIndex, long pathID)
 		{
-			FileIndex = 0;
-			PathID = asset.PathID;
+			FileIndex = fileIndex;
+			PathID = pathID;
 		}
-
-		public PPtr(PPtr<T> copy)
-		{
-			FileIndex = copy.FileIndex;
-			PathID = copy.PathID;
-		}
-
-		public static PPtr<T> CreateVirtualPointer(Object asset)
-		{
-			PPtr<T> ptr = new PPtr<T>()
-			{
-				FileIndex = VirtualFileIndex,
-				PathID = asset.PathID,
-			};
-			return ptr;
-		}
-
+		
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
@@ -42,24 +26,13 @@ namespace UtinyRipper.Classes
 		public PPtr<T1> CastTo<T1>()
 			where T1 : Object
 		{
-			return new PPtr<T1>()
-			{
-				FileIndex = FileIndex,
-				PathID = PathID,
-			};
+			return new PPtr<T1>(FileIndex, PathID);
 		}
 
 		public void Read(AssetReader reader)
 		{
 			FileIndex = reader.ReadInt32();
-			if (IsLongID(reader.Version))
-			{
-				PathID = reader.ReadInt64();
-			}
-			else
-			{
-				PathID = reader.ReadInt32();
-			}
+			PathID = IsLongID(reader.Version) ? reader.ReadInt64() : reader.ReadInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -106,7 +79,7 @@ namespace UtinyRipper.Classes
 			{
 				return null;
 			}
-			Object asset = container.FindObject(FileIndex, PathID);
+			Object asset = container.FindAsset(FileIndex, PathID);
 			switch (asset)
 			{
 				case null:
@@ -220,12 +193,23 @@ namespace UtinyRipper.Classes
 			return ToString();
 		}
 
+		public override int GetHashCode()
+		{
+			int hash = 149;
+			unchecked
+			{
+				hash = hash + 181 * FileIndex.GetHashCode();
+				hash = hash * 173 + PathID.GetHashCode();
+			}
+			return hash;
+		}
+
 		public bool IsValid(IExportContainer container)
 		{
 			return FindAsset(container) != null;
 		}
 
-		public bool IsVirtual => FileIndex == VirtualFileIndex;
+		public bool IsVirtual => FileIndex == VirtualSerializedFile.VirtualFileIndex;
 		public bool IsNull => PathID == 0;
 
 		/// <summary>
@@ -236,7 +220,5 @@ namespace UtinyRipper.Classes
 		/// It is acts more like a hash in some cases
 		/// </summary>
 		public long PathID { get; private set; }
-
-		public const int VirtualFileIndex = -1;
 	}
 }

@@ -181,7 +181,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 				float boxX = reader.ReadSingle();
 				float boxY = reader.ReadSingle();
 				float boxZ = reader.ReadSingle();
-				Scale = Type == ParticleSystemShapeType.Box ? new Vector3f(boxX, boxY, boxZ) : Vector3f.One;
+				Scale = Type.IsBoxAny() ? new Vector3f(boxX, boxY, boxZ) : Vector3f.One;
 			}
 			if (IsReadArcSingle(reader.Version))
 			{
@@ -297,7 +297,7 @@ namespace UtinyRipper.Classes.ParticleSystems
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
 			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("type", (int)Type);
+			node.Add("type", (int)GetType(container.Version));
 			node.Add("angle", Angle);
 			node.Add("length", GetExportLength(container.Version));
 			node.Add("boxThickness", BoxThickness.ExportYAML(container));
@@ -323,13 +323,52 @@ namespace UtinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
+		private ParticleSystemShapeType GetType(Version version)
+		{
+			if (IsReadBoxThickness(version))
+			{
+				return Type;
+			}
+			switch(Type)
+			{
+				case ParticleSystemShapeType.SphereShell:
+					return ParticleSystemShapeType.Sphere;
+				case ParticleSystemShapeType.HemisphereShell:
+					return ParticleSystemShapeType.Hemisphere;
+				case ParticleSystemShapeType.ConeShell:
+					return ParticleSystemShapeType.Cone;
+				case ParticleSystemShapeType.ConeVolumeShell:
+					return ParticleSystemShapeType.ConeVolume;
+				case ParticleSystemShapeType.CircleEdge:
+					return ParticleSystemShapeType.Circle;
+
+				default:
+					return Type;
+			}
+		}
 		private float GetExportLength(Version version)
 		{
 			return IsReadLength(version) ? Length : 5.0f;
 		}
 		private float GetExportRadiusThickness(Version version)
 		{
-			return IsReadBoxThickness(version) ? RadiusThickness : 1.0f;
+			if (IsReadBoxThickness(version))
+			{
+				return RadiusThickness;
+			}
+
+			switch(Type)
+			{
+				case ParticleSystemShapeType.SphereShell:
+				case ParticleSystemShapeType.HemisphereShell:
+				case ParticleSystemShapeType.ConeShell:
+				case ParticleSystemShapeType.ConeVolumeShell:
+				case ParticleSystemShapeType.CircleEdge:
+					return 0.0f;
+
+				default:
+					return 1.0f;
+			}
 		}
 		private float GetExportDonutRadius(Version version)
 		{

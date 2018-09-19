@@ -11,18 +11,17 @@ namespace UtinyRipper.SerializedFiles
 	{
 		public Object GetAsset(long pathID)
 		{
-			Object @object = FindAsset(pathID);
-			if (@object == null)
+			Object asset = FindAsset(pathID);
+			if (asset == null)
 			{
 				throw new Exception($"Object with path ID {pathID} wasn't found");
 			}
-
-			return @object;
+			return asset;
 		}
 
 		public Object GetAsset(int fileIndex, long pathID)
 		{
-			if (fileIndex == PPtr<Object>.VirtualFileIndex)
+			if (fileIndex == VirtualFileIndex)
 			{
 				return GetAsset(pathID);
 			}
@@ -37,11 +36,40 @@ namespace UtinyRipper.SerializedFiles
 
 		public Object FindAsset(int fileIndex, long pathID)
 		{
-			if(fileIndex == PPtr<Object>.VirtualFileIndex)
+			if(fileIndex == VirtualFileIndex)
 			{
 				return FindAsset(pathID);
 			}
 			throw new NotSupportedException();
+		}
+
+		public Object FindAsset(ClassIDType classID)
+		{
+			foreach(Object asset in FetchAssets())
+			{
+				if (asset.ClassID == classID)
+				{
+					return asset;
+				}
+			}
+			return null;
+		}
+
+		public Object FindAsset(ClassIDType classID, string name)
+		{
+			foreach (Object asset in FetchAssets())
+			{
+				if (asset.ClassID == classID)
+				{
+					NamedObject namedAsset = (NamedObject)asset;
+					if(namedAsset.ValidName == name)
+					{
+						return namedAsset;
+					}
+					return asset;
+				}
+			}
+			return null;
 		}
 
 		public AssetEntry GetAssetEntry(long pathID)
@@ -54,19 +82,39 @@ namespace UtinyRipper.SerializedFiles
 			throw new NotSupportedException();
 		}
 
+		public PPtr<T> CreatePPtr<T>(T asset)
+			where T : Object
+		{
+			if(asset.File == this)
+			{
+				return new PPtr<T>(VirtualFileIndex, asset.PathID);
+			}
+			throw new Exception($"Asset '{asset}' doesn't belong to {nameof(VirtualSerializedFile)}");
+		}
+
 		public IEnumerable<Object> FetchAssets()
 		{
 			return m_assets.Values;
 		}
-		
-		public AssetInfo CreateAssetInfo(ClassIDType classID)
+
+		public T CreateAsset<T>(Func<AssetInfo, T> instantiator)
+			where T: Object
 		{
-			return new AssetInfo(this, ++m_nextId, classID);
+			ClassIDType classID = typeof(T).ToClassIDType();
+			AssetInfo assetInfo = new AssetInfo(this, ++m_nextId, classID);
+			T instance = instantiator(assetInfo);
+			m_assets.Add(instance.PathID, instance);
+			return instance;
 		}
 
-		public void AddAsset(Object asset)
+		public T CreateAsset<T>(EngineGUID guid, Func<AssetInfo, T> instantiator)
+			where T : Object
 		{
-			m_assets.Add(asset.PathID, asset);
+			ClassIDType classID = typeof(T).ToClassIDType();
+			AssetInfo assetInfo = new AssetInfo(this, ++m_nextId, classID, guid);
+			T instance = instantiator(assetInfo);
+			m_assets.Add(instance.PathID, instance);
+			return instance;
 		}
 
 		public string Name => throw new NotSupportedException();
@@ -79,6 +127,8 @@ namespace UtinyRipper.SerializedFiles
 		public IFileCollection Collection => throw new NotSupportedException();
 		public IAssemblyManager AssemblyManager => throw new NotSupportedException();
 		public IReadOnlyList<FileIdentifier> Dependencies => throw new NotSupportedException();
+		
+		public const int VirtualFileIndex = -1;
 
 		private readonly Dictionary<long, Object> m_assets = new Dictionary<long, Object>();
 

@@ -106,6 +106,7 @@ namespace UtinyRipper
 				FilePath = filePath,
 				Name = Path.GetFileName(filePath),
 				DependencyCallback = OnRequestDependency,
+				Flags = TransferInstructionFlags.Unknown1 | TransferInstructionFlags.SerializeGameRelease,
 			};
 			SerializedFile file = SerializedFile.Load(pars);
 			AddSerializedFile(file);
@@ -141,6 +142,7 @@ namespace UtinyRipper
 				FilePath = filePath,
 				Name = fileName,
 				DependencyCallback = dependencyCallback,
+				Flags = TransferInstructionFlags.Unknown1 | TransferInstructionFlags.SerializeGameRelease,
 			};
 			SerializedFile file = SerializedFile.Read(stream, pars);
 			AddSerializedFile(file);
@@ -225,6 +227,31 @@ namespace UtinyRipper
 			AssemblyManager.Read(stream, fileName);
 		}
 
+		internal void AddSerializedFile(SerializedFile file)
+		{
+#if DEBUG
+			if (m_files.Any(t => t.Name == file.Name))
+			{
+				throw new ArgumentException($"Assets file with name '{file.Name}' already presents in collection", nameof(file));
+			}
+			if (m_files.Any(t => !t.Platform.IsCompatible(file.Platform)))
+			{
+				throw new ArgumentException($"Assets file '{file.Name}' has incompatible with other assets files platform {file.Platform} ", nameof(file));
+			}
+#endif
+
+			if (!RTTIClassHierarchyDescriptor.IsReadSignature(file.Header.Generation))
+			{
+				SetVersion(file);
+			}
+
+			m_files.Add(file);
+			if(SerializedFileIsScene(file))
+			{
+				m_scenes.Add(file);
+			}
+		}
+
 		internal void AddResourceFile(ResourcesFile resource)
 		{
 			if (m_resources.Any(t => t.Name == resource.Name))
@@ -249,12 +276,12 @@ namespace UtinyRipper
 
 			foreach (ArchiveFileEntry entry in archive.Metadata.Entries)
 			{
-				// for now archive contains only one file so we shouldn't concern about dependencies
+				// for now archive is a top level entity and contains only one file so we shouldn't concern about dependencies
 				switch (entry.EntryType)
 				{
 					case FileEntryType.Serialized:
 						{
-							entry.ReadSerializedFile(this);
+							entry.ReadSerializedFile(this, OnRequestDependency);
 						}
 						break;
 					case FileEntryType.Bundle:
@@ -278,6 +305,12 @@ namespace UtinyRipper
 		{
 			DependencyCollection depCollection = new DependencyCollection(this, web.Metadata.Entries, OnRequestDependency);
 			depCollection.ReadFiles();
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 
 		public void Unload(string filepath)
@@ -311,6 +344,7 @@ namespace UtinyRipper
 		public void UnloadAll()
 		{
 			m_files.Clear();
+			m_scenes.Clear();
 
 			foreach (ResourcesFile resource in m_resources)
 			{
@@ -321,19 +355,9 @@ namespace UtinyRipper
 			AssemblyManager.Dispose();
 		}
 
-		public ISerializedFile GetSerializedFile(FileIdentifier fileRef)
+		public ISerializedFile FindSerializedFile(FileIdentifier identifier)
 		{
-			ISerializedFile file = FindSerializedFile(fileRef);
-			if (file == null)
-			{
-				throw new Exception($"{nameof(SerializedFile)} with Name '{fileRef.AssetPath}' and FileName '{fileRef.FilePathOrigin}' was not found");
-			}
-			return file;
-		}
-
-		public ISerializedFile FindSerializedFile(FileIdentifier file)
-		{
-			return m_files.Find(file.IsFile);
+			return m_files.Find(identifier.IsFile);
 		}
 
 		public ResourcesFile FindResourcesFile(ISerializedFile ifile, string resName)
@@ -361,7 +385,39 @@ namespace UtinyRipper
 				return new ResourcesFile(stream, resPath, resName, 0, stream.Length);
 			}
 		}
-		
+
+		public T FindAsset<T>()
+			where T: Object
+		{
+			ClassIDType classID = typeof(T).ToClassIDType();
+			foreach(Object asset in FetchAssets())
+			{
+				if(asset.ClassID == classID)
+				{
+					return (T)asset;
+				}
+			}
+			return null;
+		}
+
+		public T FindAsset<T>(string name)
+			where T : NamedObject
+		{
+			ClassIDType classID = typeof(T).ToClassIDType();
+			foreach (Object asset in FetchAssets())
+			{
+				if (asset.ClassID == classID)
+				{
+					T namedAsset = (T)asset;
+					if(namedAsset.ValidName == name)
+					{
+						return namedAsset;
+					}
+				}
+			}
+			return null;
+		}
+
 		public IEnumerable<Object> FetchAssets()
 		{
 			foreach(SerializedFile file in m_files)
@@ -372,11 +428,10 @@ namespace UtinyRipper
 				}
 			}
 		}
-		
-		public void Dispose()
+
+		public bool IsScene(ISerializedFile file)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
+			return m_scenes.Contains(file);
 		}
 
 		private void Dispose(bool disposing)
@@ -388,27 +443,6 @@ namespace UtinyRipper
 			}
 		}
 
-		internal void AddSerializedFile(SerializedFile file)
-		{
-#if DEBUG
-			if(m_files.Any(t => t.Name == file.Name))
-			{
-				throw new ArgumentException($"Assets file with name '{file.Name}' already presents in collection", nameof(file));
-			}
-			if (m_files.Any(t => !t.Platform.IsCompatible(file.Platform)))
-			{
-				throw new ArgumentException($"Assets file '{file.Name}' has incompatible with other assets files platform {file.Platform} ", nameof(file));
-			}
-#endif
-
-			if (!RTTIClassHierarchyDescriptor.IsReadSignature(file.Header.Generation))
-			{
-				SetVersion(file);
-			}
-
-			m_files.Add(file);
-		}
-
 		private void SetVersion(SerializedFile file)
 		{
 			if (file.Version.IsSet)
@@ -416,18 +450,30 @@ namespace UtinyRipper
 				return;
 			}
 
-			foreach (Object asset in file.Assets)
+			foreach (Object asset in file.FetchAssets())
 			{
 				if(asset.ClassID == ClassIDType.BuildSettings)
 				{	
 					BuildSettings settings = (BuildSettings)asset;
-					file.Version.Parse(settings.BSVersion);
+					file.Metadata.Hierarchy.Version.Parse(settings.Version);
 					break;
 				}
 			}
 		}
 
-		public void OnRequestDependency(string dependency)
+		private bool SerializedFileIsScene(ISerializedFile file)
+		{
+			foreach(Object asset in file.FetchAssets())
+			{
+				if (asset.ClassID.IsSceneSettings())
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private void OnRequestDependency(string dependency)
 		{
 			foreach(SerializedFile file in Files)
 			{
@@ -465,6 +511,8 @@ namespace UtinyRipper
 
 		private readonly List<SerializedFile> m_files = new List<SerializedFile>();
 		private readonly List<ResourcesFile> m_resources = new List<ResourcesFile>();
+
+		private readonly HashSet<SerializedFile> m_scenes = new HashSet<SerializedFile>();
 
 		private readonly Action<string> m_dependencyCallback;
 		private readonly Action<string> m_assemblyCallback;

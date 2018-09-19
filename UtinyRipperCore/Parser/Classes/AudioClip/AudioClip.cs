@@ -332,7 +332,7 @@ namespace UtinyRipper.Classes
 				{
 					if (res == null)
 					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because resources file '{FSBResource.Source}' hasn't been found");
+						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{FSBResource.Source}' hasn't been found");
 						return;
 					}
 
@@ -347,7 +347,7 @@ namespace UtinyRipper.Classes
 					else
 					{
 						// I think they read data by its type for this verison, so I can't even export raw data :/
-						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because of unknown size");
+						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because of unknown size");
 					}
 				}
 			}
@@ -361,7 +361,7 @@ namespace UtinyRipper.Classes
 						{
 							if (res == null)
 							{
-								Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{Name}' because resources file '{StreamingInfo.Path}' hasn't been found");
+								Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{StreamingInfo.Path}' hasn't been found");
 								return;
 							}
 

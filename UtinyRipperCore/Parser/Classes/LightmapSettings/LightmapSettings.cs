@@ -253,16 +253,16 @@ namespace UtinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object @object in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
 
 			if (IsReadEnlightenSceneMapping(file.Version, file.Flags))
 			{
-				foreach (Object @object in EnlightenSceneMapping.FetchDependencies(file, isLog))
+				foreach (Object asset in EnlightenSceneMapping.FetchDependencies(file, isLog))
 				{
-					yield return @object;
+					yield return asset;
 				}
 			}
 			if (IsReadLightProbes(file.Version, file.Flags))
@@ -270,17 +270,17 @@ namespace UtinyRipper.Classes
 				yield return LightProbes.FetchDependency(file, isLog, ToLogString, "m_LightProbes");
 				foreach (LightmapData lightmap in Lightmaps)
 				{
-					foreach (Object @object in lightmap.FetchDependencies(file, isLog))
+					foreach (Object asset in lightmap.FetchDependencies(file, isLog))
 					{
-						yield return @object;
+						yield return asset;
 					}
 				}
 			}
 			if (IsReadLightmapEditorSettings(file.Version, file.Flags))
 			{
-				foreach (Object @object in LightmapEditorSettings.FetchDependencies(file, isLog))
+				foreach (Object asset in LightmapEditorSettings.FetchDependencies(file, isLog))
 				{
-					yield return @object;
+					yield return asset;
 				}
 			}
 			if (IsReadLightingDataAsset(file.Version, file.Flags))

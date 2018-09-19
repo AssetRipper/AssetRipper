@@ -13,7 +13,7 @@ namespace UtinyRipper.AssetExporters
 {
 	public sealed class SceneExportCollection : ExportCollection, IComparer<Object>
 	{
-		public SceneExportCollection(IAssetExporter assetExporter, ISerializedFile file)
+		public SceneExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, ISerializedFile file)
 		{
 			if (assetExporter == null)
 			{
@@ -28,49 +28,92 @@ namespace UtinyRipper.AssetExporters
 			Name = file.Name;
 			m_file = file;
 
-			foreach(Object asset in file.FetchAssets())
+			foreach (Object asset in file.FetchAssets())
 			{
-				if(OcclusionCullingSettings.IsCompatible(asset))
+				if (OcclusionCullingSettings.IsCompatible(asset))
 				{
 					AddComponent(file, asset);
 				}
 			}
 			m_cexportIDs = m_cexportIDs.OrderBy(t => t.Key, this).ToDictionary(t => t.Key, t => t.Value);
 
-			if(OcclusionCullingSettings.IsReadSceneGUID(file.Version))
+			if (OcclusionCullingSettings.IsReadSceneGUID(file.Version))
 			{
 				OcclusionCullingSettings sceneSettings = Components.Where(t => t.ClassID == ClassIDType.OcclusionCullingSettings).Select(t => (OcclusionCullingSettings)t).FirstOrDefault();
-				if (sceneSettings == null)
-				{
-					GUID = new EngineGUID(Guid.NewGuid());
-				}
-				else
+				if (sceneSettings != null)
 				{
 					GUID = sceneSettings.SceneGUID;
 				}
 			}
-			else
+			if (GUID.IsZero)
 			{
 				if (Config.IsGenerateGUIDByContent)
 				{
-					GUID = ObjectUtils.CalculateObjectsGUID(Assets);
+					GUID = ObjectUtils.CalculateAssetsGUID(Assets);
 				}
 				else
 				{
 					GUID = new EngineGUID(Guid.NewGuid());
 				}
 			}
+
+			if (OcclusionCullingSettings.IsReadPVSData(File.Version))
+			{
+				foreach (Object comp in Components)
+				{
+					if (comp.ClassID == ClassIDType.OcclusionCullingSettings)
+					{
+						OcclusionCullingSettings settings = (OcclusionCullingSettings)comp;
+						if (settings.PVSData.Count > 0)
+						{
+							m_occlusionCullingSettings = settings;
+							OcclusionCullingData = OcclusionCullingData.CreateVirtualInstance(virtualFile, settings);
+							break;
+						}
+					}
+				}
+			}
 		}
 
-		private static bool IsReadMainData(Version version)
+		public static bool IsReadMainData(Version version)
 		{
 			return version.IsLess(5, 3);
 		}
 
+		public static string SceneIndexToFileName(int index, Version version)
+		{
+			if (IsReadMainData(version))
+			{
+				if (index == 0)
+				{
+					return MainSceneName;
+				}
+				return LevelName + (index - 1).ToString();
+			}
+			return LevelName + index.ToString();
+		}
+
+		public static int FileNameToSceneIndex(string name, Version version)
+		{
+			if (IsReadMainData(version))
+			{
+				if (name == MainSceneName)
+				{
+					return 0;
+				}
+
+				string indexStr = name.Substring(LevelName.Length);
+				return int.Parse(indexStr) + 1;
+			}
+			else
+			{
+				string indexStr = name.Substring(LevelName.Length);
+				return int.Parse(indexStr);
+			}
+		}
+
 		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
-			TryInitialize(container);
-
 			string folderPath = Path.Combine(dirPath, Object.AssetsKeyWord, OcclusionCullingSettings.SceneKeyWord);
 			string sceneSubPath = GetSceneName(container);
 			string fileName = $"{sceneSubPath}.unity";
@@ -91,6 +134,7 @@ namespace UtinyRipper.AssetExporters
 			string subFolderPath = Path.Combine(folderPath, sceneName);
 			if (OcclusionCullingData != null)
 			{
+				OcclusionCullingData.Initialize(container, m_occlusionCullingSettings);
 				ExportAsset(container, OcclusionCullingData, subFolderPath);
 			}
 
@@ -162,32 +206,6 @@ namespace UtinyRipper.AssetExporters
 			ExportAsset(container, importer, asset, path, asset.Name);
 		}
 
-		private void TryInitialize(ProjectAssetContainer container)
-		{
-			if(m_initialized)
-			{
-				return;
-			}
-
-			foreach(Object comp in Components)
-			{
-				if(comp.ClassID == ClassIDType.OcclusionCullingSettings)
-				{
-					OcclusionCullingSettings settings = (OcclusionCullingSettings)comp;
-					if (OcclusionCullingSettings.IsReadPVSData(File.Version))
-					{
-						if (settings.PVSData.Count > 0)
-						{
-							OcclusionCullingData = new OcclusionCullingData(container.VirtualFile);
-							OcclusionCullingData.Initialize(container, settings);
-						}
-					}
-				}
-			}
-
-			m_initialized = true;
-		}
-
 		private void AddComponent(ISerializedFile file, Object comp)
 		{
 			m_cexportIDs.Add(comp, comp.PathID);
@@ -202,8 +220,8 @@ namespace UtinyRipper.AssetExporters
 		{
 			if(Name == MainSceneName || m_sceneNameFormat.IsMatch(Name))
 			{
-				int index = GetSceneIndex(Name, File.Version);
-				string scenePath = container.SceneIDToString(index);
+				int index = FileNameToSceneIndex(Name, File.Version);
+				string scenePath = container.SceneIndexToName(index);
 				if (scenePath.StartsWith(AssetsName, StringComparison.Ordinal))
 				{
 					string relativePath = scenePath.Substring(AssetsName.Length);
@@ -216,27 +234,6 @@ namespace UtinyRipper.AssetExporters
 				}
 			}
 			return Name;
-		}
-
-		private static int GetSceneIndex(string name, Version version)
-		{
-			if (IsReadMainData(version))
-			{
-				if (name == MainSceneName)
-				{
-					return 0;
-				}
-				else
-				{
-					string indexStr = name.Substring(LevelName.Length);
-					return int.Parse(indexStr) + 1;
-				}
-			}
-			else
-			{
-				string indexStr = name.Substring(LevelName.Length);
-				return int.Parse(indexStr);
-			}
 		}
 
 		public override IAssetExporter AssetExporter { get; }
@@ -257,7 +254,7 @@ namespace UtinyRipper.AssetExporters
 		public override string Name { get; }
 		public override ISerializedFile File => m_file;
 
-		public OcclusionCullingData OcclusionCullingData { get; private set; }
+		public OcclusionCullingData OcclusionCullingData { get; }
 		public EngineGUID GUID { get; }
 
 		private IEnumerable<Object> Components => m_cexportIDs.Keys;
@@ -270,7 +267,6 @@ namespace UtinyRipper.AssetExporters
 
 		private readonly Dictionary<Object, long> m_cexportIDs = new Dictionary<Object, long>();
 		private readonly ISerializedFile m_file;
-
-		private bool m_initialized = false;
+		private OcclusionCullingSettings m_occlusionCullingSettings;
 	}
 }

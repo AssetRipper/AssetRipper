@@ -21,7 +21,7 @@ namespace UtinyRipper.Classes.GUIStyles
 			m_scaledBackgrounds = new PPtr<Texture2D>[copy.ScaledBackgrounds.Count];
 			for(int i = 0; i < copy.ScaledBackgrounds.Count; i++)
 			{
-				m_scaledBackgrounds[i] = new PPtr<Texture2D>(copy.ScaledBackgrounds[i]);
+				m_scaledBackgrounds[i] = copy.ScaledBackgrounds[i];
 			}
 		}
 

@@ -3,238 +3,77 @@ using System.IO;
 
 namespace UtinyRipper
 {
-	public class Version
-	{		
+	public struct Version
+	{
+		public Version(int major)
+		{
+			m_data = ((ulong)major << 48) & 0xFFFFUL;
+		}
+
+		public Version(int major, int minor)
+		{
+			m_data = ((ulong)(major & 0xFFFF) << 48) | ((ulong)(minor & 0xFF) << 40);
+		}
+
+		public Version(int major, int minor, int build)
+		{
+			m_data = ((ulong)(major & 0xFFFF) << 48) | ((ulong)(minor & 0xFF) << 40) | ((ulong)(build & 0xFF) << 32);
+		}
+
+		public Version(int major, int minor, int build, VersionType type)
+		{
+			m_data = ((ulong)(major & 0xFFFF) << 48) | ((ulong)(minor & 0xFF) << 40) | ((ulong)(build & 0xFF) << 32)
+				| ((ulong)((int)type & 0xFF) << 24);
+		}
+
+		public Version(int major, int minor, int build, VersionType type, int typeNumber)
+		{
+			m_data = ((ulong)(major & 0xFFFF) << 48) | ((ulong)(minor & 0xFF) << 40) | ((ulong)(build & 0xFF) << 32)
+				| ((ulong)((int)type & 0xFF) << 24) | ((ulong)(typeNumber & 0xFF) << 16);
+		}
+
+		private Version(ulong data)
+		{
+			m_data = data;
+		}
+
 		public static bool operator ==(Version left, Version right)
 		{
-			if(ReferenceEquals(right, null))
-			{
-				return false;
-			}
-
-			if (left.Major != right.Major)
-			{
-				return false;
-			}
-			if (left.Minor != right.Minor)
-			{
-				return false;
-			}
-			if(left.Build != right.Build)
-			{
-				return false;
-			}
-			if (left.Type != right.Type)
-			{
-				return false;
-			}
-			if(left.TypeNumber != right.TypeNumber)
-			{
-				return false;
-			}
-			return true;
+			return left.m_data == right.m_data;
 		}
 
 		public static bool operator !=(Version left, Version right)
 		{
-			return !(left == right);
+			return left.m_data != right.m_data;
 		}
 
 		public static bool operator >(Version left, Version right)
 		{
-			if(left.Major > right.Major)
-			{
-				return true;
-			}
-			if(left.Major < right.Major)
-			{
-				return false;
-			}
-
-			if (left.Minor > right.Minor)
-			{
-				return true;
-			}
-			if (left.Minor < right.Minor)
-			{
-				return false;
-			}
-
-			if (left.Build > right.Build)
-			{
-				return true;
-			}
-			if (left.Build < right.Build)
-			{
-				return false;
-			}
-
-			if (left.Type > right.Type)
-			{
-				return true;
-			}
-			if (left.Type < right.Type)
-			{
-				return false;
-			}
-
-			if (left.TypeNumber > right.TypeNumber)
-			{
-				return true;
-			}
-			return false;
+			return left.m_data > right.m_data;
 		}
 
 		public static bool operator >=(Version left, Version right)
 		{
-			if (left.Major > right.Major)
-			{
-				return true;
-			}
-			if (left.Major < right.Major)
-			{
-				return false;
-			}
-
-			if (left.Minor > right.Minor)
-			{
-				return true;
-			}
-			if (left.Minor < right.Minor)
-			{
-				return false;
-			}
-
-			if (left.Build > right.Build)
-			{
-				return true;
-			}
-			if (left.Build < right.Build)
-			{
-				return false;
-			}
-
-			if (left.Type > right.Type)
-			{
-				return true;
-			}
-			if (left.Type < right.Type)
-			{
-				return false;
-			}
-
-			if (left.TypeNumber > right.TypeNumber)
-			{
-				return true;
-			}
-			if(left.TypeNumber < right.TypeNumber)
-			{
-				return false;
-			}
-			return true;
+			return left.m_data >= right.m_data;
 		}
 
 		public static bool operator <(Version left, Version right)
 		{
-			if (left.Major < right.Major)
-			{
-				return true;
-			}
-			if (left.Major > right.Major)
-			{
-				return false;
-			}
-
-			if (left.Minor < right.Minor)
-			{
-				return true;
-			}
-			if (left.Minor > right.Minor)
-			{
-				return false;
-			}
-
-			if (left.Build < right.Build)
-			{
-				return true;
-			}
-			if (left.Build > right.Build)
-			{
-				return false;
-			}
-
-			if (left.Type < right.Type)
-			{
-				return true;
-			}
-			if (left.Type > right.Type)
-			{
-				return false;
-			}
-
-			if (left.TypeNumber < right.TypeNumber)
-			{
-				return true;
-			}
-			return false;
+			return left.m_data < right.m_data;
 		}
 		
 		public static bool operator <=(Version left, Version right)
 		{
-			if (left.Major < right.Major)
-			{
-				return true;
-			}
-			if (left.Major > right.Major)
-			{
-				return false;
-			}
-
-			if (left.Minor < right.Minor)
-			{
-				return true;
-			}
-			if (left.Minor > right.Minor)
-			{
-				return false;
-			}
-
-			if (left.Build < right.Build)
-			{
-				return true;
-			}
-			if (left.Build > right.Build)
-			{
-				return false;
-			}
-
-			if (left.Type < right.Type)
-			{
-				return true;
-			}
-			if (left.Type > right.Type)
-			{
-				return false;
-			}
-
-			if (left.TypeNumber < right.TypeNumber)
-			{
-				return true;
-			}
-			if (left.TypeNumber > right.TypeNumber)
-			{
-				return false;
-			}
-			return true;
+			return left.m_data <= right.m_data;
 		}
 
 		public override bool Equals(object obj)
 		{
-			if(ReferenceEquals(obj, null))
+			if (obj is null)
 			{
 				return false;
 			}
-			if(typeof(Version) != obj.GetType())
+			if (obj.GetType() != typeof(Version))
 			{
 				return false;
 			}
@@ -243,15 +82,7 @@ namespace UtinyRipper
 
 		public override int GetHashCode()
 		{
-			int hash = Major.GetHashCode();
-			unchecked
-			{
-				hash += 17 * Minor.GetHashCode();
-				hash += 23 * Build.GetHashCode();
-				hash += 29 * (int)Type;
-				hash += 31 * TypeNumber;
-			}
-			return hash;
+			return unchecked(827 + 911 * m_data.GetHashCode());
 		}
 
 		public override string ToString()
@@ -266,27 +97,27 @@ namespace UtinyRipper
 
 		public bool IsEqual(int major)
 		{
-			return Major == major;
+			return this == From(major);
 		}
 
 		public bool IsEqual(int major, int minor)
 		{
-			return Major == major && Minor == minor;
+			return this == From(major, minor);
 		}
 
 		public bool IsEqual(int major, int minor, int build)
 		{
-			return Major == major && Minor == minor && Build == build;
+			return this == From(major, minor, build);
 		}
 
 		public bool IsEqual(int major, int minor, int build, VersionType type)
 		{
-			return Major == major && Minor == minor && Build == build && Type == type;
+			return this == From(major, minor, build, type);
 		}
 
-		public bool IsEqual(int major, int minor, int build, VersionType type, int typeNumer)
+		public bool IsEqual(int major, int minor, int build, VersionType type, int typeNumber)
 		{
-			return Major == major && Minor == minor && Build == build && Type == type && TypeNumber == typeNumer;
+			return this == new Version(major, minor, build, type, typeNumber);
 		}
 
 		public bool IsEqual(string version)
@@ -298,115 +129,27 @@ namespace UtinyRipper
 
 		public bool IsLess(int major)
 		{
-			return Major < major;
+			return this < From(major);
 		}
 
 		public bool IsLess(int major, int minor)
 		{
-			if (Major < major)
-			{
-				return true;
-			}
-			if (Major > major)
-			{
-				return false;
-			}
-			return Minor < minor;
+			return this < From(major, minor);
 		}
 
 		public bool IsLess(int major, int minor, int build)
 		{
-			if (Major < major)
-			{
-				return true;
-			}
-			if (Major > major)
-			{
-				return false;
-			}
-
-			if (Minor < minor)
-			{
-				return true;
-			}
-			if (Minor > minor)
-			{
-				return false;
-			}
-			return Build < build;
+			return this < From(major, minor, build);
 		}
 
 		public bool IsLess(int major, int minor, int build, VersionType type)
 		{
-			if (Major < major)
-			{
-				return true;
-			}
-			if (Major > major)
-			{
-				return false;
-			}
-
-			if (Minor < minor)
-			{
-				return true;
-			}
-			if (Minor > minor)
-			{
-				return false;
-			}
-
-			if (Build < build)
-			{
-				return true;
-			}
-			if (Build > build)
-			{
-				return false;
-			}
-
-			return Type < type;
+			return this < From(major, minor, build, type);
 		}
 
 		public bool IsLess(int major, int minor, int build, VersionType type, int typeNumber)
 		{
-			if (Major < major)
-			{
-				return true;
-			}
-			if (Major > major)
-			{
-				return false;
-			}
-
-			if (Minor < minor)
-			{
-				return true;
-			}
-			if (Minor > minor)
-			{
-				return false;
-			}
-
-			if (Build < build)
-			{
-				return true;
-			}
-			if (Build > build)
-			{
-				return false;
-			}
-
-			if (Type < type)
-			{
-				return true;
-			}
-			if (Type > type)
-			{
-				return false;
-			}
-
-			return TypeNumber < typeNumber;
+			return this < new Version(major, minor, build, type, typeNumber);
 		}
 
 		public bool IsLess(string version)
@@ -418,115 +161,27 @@ namespace UtinyRipper
 
 		public bool IsLessEqual(int major)
 		{
-			return Major <= major;
+			return this <= From(major);
 		}
 
 		public bool IsLessEqual(int major, int minor)
 		{
-			if (Major < major)
-			{
-				return true;
-			}
-			if (Major > major)
-			{
-				return false;
-			}
-			return Minor <= minor;
+			return this <= From(major, minor);
 		}
 
 		public bool IsLessEqual(int major, int minor, int build)
 		{
-			if (Major < major)
-			{
-				return true;
-			}
-			if (Major > major)
-			{
-				return false;
-			}
-
-			if (Minor < minor)
-			{
-				return true;
-			}
-			if (Minor > minor)
-			{
-				return false;
-			}
-			return Build <= build;
+			return this <= From(major, minor, build);
 		}
 
 		public bool IsLessEqual(int major, int minor, int build, VersionType type)
 		{
-			if (Major < major)
-			{
-				return true;
-			}
-			if (Major > major)
-			{
-				return false;
-			}
-
-			if (Minor < minor)
-			{
-				return true;
-			}
-			if (Minor > minor)
-			{
-				return false;
-			}
-
-			if (Build < build)
-			{
-				return true;
-			}
-			if (Build > build)
-			{
-				return false;
-			}
-
-			return Type <= type;
+			return this <= From(major, minor, build, type);
 		}
 
 		public bool IsLessEqual(int major, int minor, int build, VersionType type, int typeNumber)
 		{
-			if (Major < major)
-			{
-				return true;
-			}
-			if (Major > major)
-			{
-				return false;
-			}
-
-			if (Minor < minor)
-			{
-				return true;
-			}
-			if (Minor > minor)
-			{
-				return false;
-			}
-
-			if (Build < build)
-			{
-				return true;
-			}
-			if (Build > build)
-			{
-				return false;
-			}
-
-			if (Type < type)
-			{
-				return true;
-			}
-			if (Type > type)
-			{
-				return false;
-			}
-
-			return TypeNumber <= typeNumber;
+			return this <= new Version(major, minor, build, type, typeNumber);
 		}
 
 		public bool IsLessEqual(string version)
@@ -538,115 +193,27 @@ namespace UtinyRipper
 
 		public bool IsGreater(int major)
 		{
-			return Major > major;
+			return this > From(major);
 		}
 
 		public bool IsGreater(int major, int minor)
 		{
-			if(Major > major)
-			{
-				return true;
-			}
-			if(Major < major)
-			{
-				return false;
-			}
-			return Minor > minor;
+			return this > From(major, minor);
 		}
 
 		public bool IsGreater(int major, int minor, int build)
 		{
-			if (Major > major)
-			{
-				return true;
-			}
-			if (Major < major)
-			{
-				return false;
-			}
-
-			if (Minor > minor)
-			{
-				return true;
-			}
-			if (Minor < minor)
-			{
-				return false;
-			}
-			return Build > build;
+			return this > From(major, minor, build);
 		}
 
 		public bool IsGreater(int major, int minor, int build, VersionType type)
 		{
-			if (Major > major)
-			{
-				return true;
-			}
-			if (Major < major)
-			{
-				return false;
-			}
-
-			if (Minor > minor)
-			{
-				return true;
-			}
-			if (Minor < minor)
-			{
-				return false;
-			}
-
-			if (Build > build)
-			{
-				return true;
-			}
-			if (Build < build)
-			{
-				return false;
-			}
-
-			return Type > type;
+			return this > From(major, minor, build, type);
 		}
 
 		public bool IsGreater(int major, int minor, int build, VersionType type, int typeNumber)
 		{
-			if (Major > major)
-			{
-				return true;
-			}
-			if (Major < major)
-			{
-				return false;
-			}
-
-			if (Minor > minor)
-			{
-				return true;
-			}
-			if (Minor < minor)
-			{
-				return false;
-			}
-
-			if (Build > build)
-			{
-				return true;
-			}
-			if (Build < build)
-			{
-				return false;
-			}
-
-			if (Type > type)
-			{
-				return true;
-			}
-			if (Type < type)
-			{
-				return false;
-			}
-
-			return TypeNumber > typeNumber;
+			return this > new Version(major, minor, build, type, typeNumber);
 		}
 
 		public bool IsGreater(string version)
@@ -658,115 +225,27 @@ namespace UtinyRipper
 
 		public bool IsGreaterEqual(int major)
 		{
-			return Major >= major;
+			return this >= From(major);
 		}
 
 		public bool IsGreaterEqual(int major, int minor)
 		{
-			if (Major > major)
-			{
-				return true;
-			}
-			if (Major < major)
-			{
-				return false;
-			}
-			return Minor >= minor;
+			return this >= From(major, minor);
 		}
 
 		public bool IsGreaterEqual(int major, int minor, int build)
 		{
-			if (Major > major)
-			{
-				return true;
-			}
-			if (Major < major)
-			{
-				return false;
-			}
-
-			if (Minor > minor)
-			{
-				return true;
-			}
-			if (Minor < minor)
-			{
-				return false;
-			}
-			return Build >= build;
+			return this >= From(major, minor, build);
 		}
 
 		public bool IsGreaterEqual(int major, int minor, int build, VersionType type)
 		{
-			if (Major > major)
-			{
-				return true;
-			}
-			if (Major < major)
-			{
-				return false;
-			}
-
-			if (Minor > minor)
-			{
-				return true;
-			}
-			if (Minor < minor)
-			{
-				return false;
-			}
-
-			if (Build > build)
-			{
-				return true;
-			}
-			if (Build < build)
-			{
-				return false;
-			}
-
-			return Type >= type;
+			return this >= From(major, minor, build, type);
 		}
 
 		public bool IsGreaterEqual(int major, int minor, int build, VersionType type, int typeNumber)
 		{
-			if (Major > major)
-			{
-				return true;
-			}
-			if (Major < major)
-			{
-				return false;
-			}
-
-			if (Minor > minor)
-			{
-				return true;
-			}
-			if (Minor < minor)
-			{
-				return false;
-			}
-
-			if (Build > build)
-			{
-				return true;
-			}
-			if (Build < build)
-			{
-				return false;
-			}
-
-			if (Type > type)
-			{
-				return true;
-			}
-			if (Type < type)
-			{
-				return false;
-			}
-
-			return TypeNumber >= typeNumber;
+			return this >= new Version(major, minor, build, type, typeNumber);
 		}
 
 		public bool IsGreaterEqual(string version)
@@ -879,15 +358,63 @@ namespace UtinyRipper
 			}
 		}
 
-		public int Major { get; private set; }
-		public int Minor { get; private set; }
-		public int Build { get; private set; }
-		public VersionType Type { get; private set; }
-		public int TypeNumber { get; private set; }
+		private Version From(int major)
+		{
+			ulong data = ((ulong)(major & 0xFFFF) << 48) | (0x0000FFFFFFFFFFFFUL & m_data);
+			return new Version(data);
+		}
+		private Version From(int major, int minor)
+		{
+			ulong data = ((ulong)(major & 0xFFFF) << 48) | ((ulong)(minor & 0xFF) << 40) | (0x000000FFFFFFFFFFUL & m_data);
+			return new Version(data);
+		}
+		private Version From(int major, int minor, int build)
+		{
+			ulong data = ((ulong)(major & 0xFFFF) << 48) | ((ulong)(minor & 0xFF) << 40) | ((ulong)(build & 0xFF) << 32) |
+				(0x00000000FFFFFFFFUL & m_data);
+			return new Version(data);
+		}
+		private Version From(int major, int minor, int build, VersionType type)
+		{
+			ulong data = ((ulong)(major & 0xFFFF) << 48) | ((ulong)(minor & 0xFF) << 40) | ((ulong)(build & 0xFF) << 32) |
+				((ulong)((int)type & 0xFF) << 24) | (0x0000000000FFFFFFUL & m_data);
+			return new Version(data);
+		}
+		private Version From(int major, int minor, int build, VersionType type, int typeNumber)
+		{
+			ulong data = ((ulong)(major & 0xFFFF) << 48) | ((ulong)(minor & 0xFF) << 40) | ((ulong)(build & 0xFF) << 32)
+				| ((ulong)((int)type & 0xFF) << 24) | ((ulong)(typeNumber & 0xFF) << 16) | (0x000000000000FFFFUL & m_data);
+			return new Version(data);
+		}
 
-		public bool IsSet => Major != 0 || Minor != 0 || Build != 0;
+		public int Major
+		{
+			get => unchecked((int)((m_data >> 48) & 0xFFFFUL));
+			private set => m_data = ((ulong)(value & 0xFFFF) << 48) | (~(0xFFFFUL << 48) & m_data);
+		}
+		public int Minor
+		{
+			get => unchecked((int)((m_data >> 40) & 0xFFUL));
+			private set => m_data = ((ulong)(value & 0xFF) << 40) | (~(0xFFUL << 40) & m_data);
+		}
+		public int Build
+		{
+			get => unchecked((int)((m_data >> 32) & 0xFFUL));
+			private set => m_data = ((ulong)(value & 0xFF) << 32) | (~(0xFFUL << 32) & m_data);
+		}
+		public VersionType Type
+		{
+			get => (VersionType)unchecked((int)((m_data >> 24) & 0xFFUL));
+			private set => m_data = ((ulong)((int)value & 0xFF) << 24) | (~(0xFFUL << 24) & m_data);
+		}
+		public int TypeNumber
+		{
+			get => unchecked((int)((m_data >> 16) & 0xFFUL));
+			private set => m_data = ((ulong)(value & 0xFF) << 16) | (~(0xFFUL << 16) & m_data);
+		}
 
-		private readonly char[] PartSeparator = new char[] { '.' };
-		private readonly char[] ModuleSeparator = new char[] { '\n' };
+		public bool IsSet => m_data != 0;
+
+		private ulong m_data;
 	}
 }

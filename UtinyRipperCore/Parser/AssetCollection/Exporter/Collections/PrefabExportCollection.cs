@@ -1,26 +1,27 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UtinyRipper.Classes;
+using UtinyRipper.SerializedFiles;
 
 namespace UtinyRipper.AssetExporters
 {
 	public sealed class PrefabExportCollection : AssetsExportCollection, IComparer<Object>
 	{
-		public PrefabExportCollection(IAssetExporter assetExporter, Object asset) :
-			this(assetExporter, CreatePrefab(asset))
+		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, Object asset) :
+			this(assetExporter, asset.File, CreatePrefab(virtualFile, asset))
 		{
 		}
 
-		private PrefabExportCollection(IAssetExporter assetExporter, Prefab prefab) :
+		private PrefabExportCollection(IAssetExporter assetExporter, ISerializedFile file, Prefab prefab) :
 			base(assetExporter, prefab)
 		{
-			foreach (EditorExtension asset in prefab.FetchObjects())
+			m_file = file;
+			foreach (EditorExtension asset in prefab.FetchObjects(file))
 			{
 				AddAsset(asset);
 			}
 		}
 
-		private static Prefab CreatePrefab(Object asset)
+		private static Prefab CreatePrefab(VirtualSerializedFile virtualFile, Object asset)
 		{
 			GameObject go;
 			if(asset.ClassID == ClassIDType.GameObject)
@@ -32,24 +33,9 @@ namespace UtinyRipper.AssetExporters
 				Component component = (Component)asset;
 				go = component.GameObject.GetAsset(component.File);
 			}
-			GameObject root = go.GetRoot();
 
-			Prefab prefab = new Prefab(root);
-			foreach (EditorExtension comp in prefab.FetchObjects())
-			{
-				if (comp.ClassID == ClassIDType.GameObject)
-				{
-					go = (GameObject)comp;
-					int depth = go.GetRootDepth();
-					comp.ObjectHideFlags = depth > 1 ? 1u : 0u;
-				}
-				else
-				{
-					comp.ObjectHideFlags = 1;
-				}
-				comp.PrefabInternal = prefab.ThisPrefab;
-			}
-			return prefab;
+			GameObject root = go.GetRoot();
+			return Prefab.CreateVirtualInstance(virtualFile, root);
 		}
 
 		public int Compare(Object obj1, Object obj2)
@@ -96,5 +82,9 @@ namespace UtinyRipper.AssetExporters
 					return false;
 			}
 		}
+
+		public override ISerializedFile File => m_file;
+
+		private readonly ISerializedFile m_file;
 	}
 }

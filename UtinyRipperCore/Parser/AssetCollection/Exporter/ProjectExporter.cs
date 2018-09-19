@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using UtinyRipper.SerializedFiles;
 using Object = UtinyRipper.Classes.Object;
 
 namespace UtinyRipper.AssetExporters
@@ -21,15 +21,18 @@ namespace UtinyRipper.AssetExporters
 
 			OverrideExporter(ClassIDType.GameObject, YamlExporter);
 			OverrideExporter(ClassIDType.Transform, YamlExporter);
+			OverrideExporter(ClassIDType.AudioManager, YamlExporter);
 			OverrideExporter(ClassIDType.Camera, YamlExporter);
 			OverrideExporter(ClassIDType.Material, YamlExporter);
 			OverrideExporter(ClassIDType.MeshRenderer, YamlExporter);
 			OverrideExporter(ClassIDType.OcclusionCullingSettings, YamlExporter);
+			OverrideExporter(ClassIDType.GraphicsSettings, YamlExporter);
 			OverrideExporter(ClassIDType.MeshFilter, YamlExporter);
 			OverrideExporter(ClassIDType.OcclusionPortal, YamlExporter);
 			OverrideExporter(ClassIDType.Mesh, YamlExporter);
 			OverrideExporter(ClassIDType.Rigidbody2D, YamlExporter);
 			OverrideExporter(ClassIDType.Rigidbody, YamlExporter);
+			OverrideExporter(ClassIDType.PhysicsManager, YamlExporter);
 			OverrideExporter(ClassIDType.CircleCollider2D, YamlExporter);
 			OverrideExporter(ClassIDType.PolygonCollider2D, YamlExporter);
 			OverrideExporter(ClassIDType.BoxCollider2D, YamlExporter);
@@ -57,7 +60,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.SphereCollider, YamlExporter);
 			OverrideExporter(ClassIDType.CapsuleCollider, YamlExporter);
 			OverrideExporter(ClassIDType.SkinnedMeshRenderer, YamlExporter);
-			//OverrideExporter(ClassIDType.BuildSettings, YamlExporter);
+			OverrideExporter(ClassIDType.BuildSettings, YamlExporter);
 			OverrideExporter(ClassIDType.WheelCollider, YamlExporter);
 			OverrideExporter(ClassIDType.TerrainCollider, YamlExporter);
 			OverrideExporter(ClassIDType.TerrainData, YamlExporter);
@@ -72,6 +75,7 @@ namespace UtinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.CanvasRenderer, YamlExporter);
 			OverrideExporter(ClassIDType.Canvas, YamlExporter);
 			OverrideExporter(ClassIDType.RectTransform, YamlExporter);
+			OverrideExporter(ClassIDType.ClusterInputManager, YamlExporter);
 			OverrideExporter(ClassIDType.NavMeshData, YamlExporter);
 			OverrideExporter(ClassIDType.OcclusionCullingData, YamlExporter);
 			OverrideExporter(ClassIDType.Prefab, YamlExporter);
@@ -111,6 +115,7 @@ namespace UtinyRipper.AssetExporters
 
 		public void Export(string path, FileCollection fileCollection, IEnumerable<Object> assets)
 		{
+			VirtualSerializedFile virtualFile = new VirtualSerializedFile();
 			List<IExportCollection> collections = new List<IExportCollection>();
 			// speed up fetching a little bit
 			List<Object> depList = new List<Object>();
@@ -123,7 +128,7 @@ namespace UtinyRipper.AssetExporters
 				Object asset = depList[i];
 				if (!queued.Contains(asset))
 				{
-					IExportCollection collection = CreateCollection(asset);
+					IExportCollection collection = CreateCollection(virtualFile, asset);
 					foreach (Object element in collection.Assets)
 					{
 						queued.Add(element);
@@ -153,7 +158,7 @@ namespace UtinyRipper.AssetExporters
 			depSet.Clear();
 			queued.Clear();
 
-			ProjectAssetContainer container = new ProjectAssetContainer(this, fileCollection.FetchAssets(), collections);
+			ProjectAssetContainer container = new ProjectAssetContainer(this, fileCollection.FetchAssets(), virtualFile, collections);
 			foreach (IExportCollection collection in collections)
 			{
 				container.CurrentCollection = collection;
@@ -203,7 +208,7 @@ namespace UtinyRipper.AssetExporters
 			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{classID}'");
 		}
 
-		private IExportCollection CreateCollection(Object asset)
+		private IExportCollection CreateCollection(VirtualSerializedFile file, Object asset)
 		{
 			Stack<IAssetExporter> exporters = m_exporters[asset.ClassID];
 			foreach (IAssetExporter exporter in exporters)
@@ -212,7 +217,7 @@ namespace UtinyRipper.AssetExporters
 				{
 					if (asset.IsValid)
 					{
-						return exporter.CreateCollection(asset);
+						return exporter.CreateCollection(file, asset);
 					}
 					else
 					{

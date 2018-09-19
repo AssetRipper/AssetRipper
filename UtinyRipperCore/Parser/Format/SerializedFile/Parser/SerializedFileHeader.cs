@@ -44,12 +44,12 @@ namespace UtinyRipper.SerializedFiles
 			DataOffset = reader.ReadUInt32();
 			if(IsReadEndian(Generation))
 			{
-				Endianess = reader.ReadBoolean();
+				SwapEndianess = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);
 			}
 			else
 			{
-				Endianess = false;
+				SwapEndianess = false;
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace UtinyRipper.SerializedFiles
 		/// <summary>
 		/// Presumably controls the byte order of the data structure. This field is normally set to 0, which may indicate a little endian byte order.
 		/// </summary>
-		public bool Endianess { get; private set; }
+		public bool SwapEndianess { get; private set; }
 
 		private readonly string m_name;
 	}

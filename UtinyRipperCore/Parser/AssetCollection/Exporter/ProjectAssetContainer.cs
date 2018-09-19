@@ -10,17 +10,22 @@ namespace UtinyRipper.AssetExporters
 {
 	public class ProjectAssetContainer : IExportContainer
 	{
-		public ProjectAssetContainer(ProjectExporter exporter, IEnumerable<Object> assets, IReadOnlyList<IExportCollection> collections)
+		public ProjectAssetContainer(ProjectExporter exporter, IEnumerable<Object> assets, VirtualSerializedFile file, IReadOnlyList<IExportCollection> collections)
 		{
 			if(exporter == null)
 			{
 				throw new ArgumentNullException(nameof(exporter));
+			}
+			if (file == null)
+			{
+				throw new ArgumentNullException(nameof(file));
 			}
 			if (collections == null)
 			{
 				throw new ArgumentNullException(nameof(collections));
 			}
 			m_exporter = exporter;
+			VirtualFile = file;
 			m_collections = collections;
 
 			foreach (Object asset in assets)
@@ -36,11 +41,21 @@ namespace UtinyRipper.AssetExporters
 						break;
 				}
 			}
+
+			List<SceneExportCollection> scenes = new List<SceneExportCollection>();
+			foreach(IExportCollection collection in collections)
+			{
+				if(collection is SceneExportCollection scene)
+				{
+					scenes.Add(scene);
+				}
+			}
+			m_scenes = scenes.ToArray();
 		}
 
-		public Object FindObject(int fileIndex, long pathID)
+		public Object FindAsset(int fileIndex, long pathID)
 		{
-			if(fileIndex == PPtr<Object>.VirtualFileIndex)
+			if(fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
 				return VirtualFile.FindAsset(pathID);
 			}
@@ -48,6 +63,18 @@ namespace UtinyRipper.AssetExporters
 			{
 				return File.FindAsset(fileIndex, pathID);
 			}
+		}
+
+		public Object FindAsset(ClassIDType classID)
+		{
+			Object asset = VirtualFile.FindAsset(classID);
+			return asset ?? File.FindAsset(classID);
+		}
+
+		public Object FindAsset(ClassIDType classID, string name)
+		{
+			Object asset = VirtualFile.FindAsset(classID, name);
+			return asset ?? File.FindAsset(classID, name);
 		}
 
 		public long GetExportID(Object asset)
@@ -101,12 +128,36 @@ namespace UtinyRipper.AssetExporters
 			return new ExportPointer(exportID, EngineGUID.MissingReference, AssetType.Meta);
 		}
 
-		public string SceneIDToString(int sceneID)
+		public EngineGUID SceneNameToGUID(string name)
 		{
-			return m_buildSettings == null ? $"level{sceneID}" : m_buildSettings.Scenes[sceneID];
+			if(m_buildSettings == null)
+			{
+				return default;
+			}
+
+			int index = m_buildSettings.Scenes.IndexOf(name);
+			if(index == -1)
+			{
+				throw new Exception($"Scene '{name}' hasn't been found in build settings");
+			}
+
+			string fileName = SceneExportCollection.SceneIndexToFileName(index, Version);
+			foreach (SceneExportCollection scene in m_scenes)
+			{
+				if(scene.Name == fileName)
+				{
+					return scene.GUID;
+				}
+			}
+			return default;
 		}
 
-		public string TagIDToString(int tagID)
+		public string SceneIndexToName(int sceneIndex)
+		{
+			return m_buildSettings == null ? $"level{sceneIndex}" : m_buildSettings.Scenes[sceneIndex];
+		}
+
+		public string TagIDToName(int tagID)
 		{
 			const string UntaggedTag = "Untagged";
 			switch (tagID)
@@ -135,7 +186,7 @@ namespace UtinyRipper.AssetExporters
 		}
 
 		public IExportCollection CurrentCollection { get; set; }
-		public VirtualSerializedFile VirtualFile { get; } = new VirtualSerializedFile();
+		public VirtualSerializedFile VirtualFile { get; }
 		public ISerializedFile File => CurrentCollection.File;
 		public Version Version => File.Version;
 		public Platform Platform => File.Platform;
@@ -146,5 +197,6 @@ namespace UtinyRipper.AssetExporters
 
 		private BuildSettings m_buildSettings;
 		private TagManager m_tagManager;
+		private SceneExportCollection[] m_scenes;
 	}
 }

@@ -387,6 +387,7 @@ namespace UtinyRipper
 		private static readonly Regex s_splitCheck = new Regex($@".+{MultifileRegex}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 		private static readonly SplitNameComparer s_splitNameComparer = new SplitNameComparer();
 
+		public const string MultifileRegPostfix = @"\.split";
 		public const string MultifileRegex = @"\.split[0-9]+";
 
 		private readonly IReadOnlyList<Stream> m_streams;

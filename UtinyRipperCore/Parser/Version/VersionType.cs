@@ -9,6 +9,8 @@ namespace UtinyRipper
 		Base,
 		Final,
 		Patch,
+
+		MaxValue = Patch,
 	}
 
 	public static class VersionTypeExtentions
