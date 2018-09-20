@@ -154,20 +154,20 @@ namespace UtinyRipper.Classes.Meshes
 			}
 
 			Vector3f[] verts = new Vector3f[submesh.VertexCount];
-			int vertexSize = channels.Where(t => t.Stream == channel.Stream).Sum(t => t.GetStride());
+			int streamStride = channels.Where(t => t.Stream == channel.Stream).Sum(t => t.GetStride());
 			int streamOffset = GetStreamOffset(channel.Stream, channels);
 			using (MemoryStream memStream = new MemoryStream(m_data))
 			{
 				using (BinaryReader reader = new BinaryReader(memStream))
 				{
-					memStream.Position = streamOffset + submesh.FirstVertex * vertexSize + channel.Offset;
+					memStream.Position = streamOffset + submesh.FirstVertex * streamStride + channel.Offset;
 					for (int v = 0; v < submesh.VertexCount; v++)
 					{
 						float x = reader.ReadSingle();
 						float y = reader.ReadSingle();
 						float z = reader.ReadSingle();
 						verts[v] = new Vector3f(x, y, z);
-						memStream.Position += vertexSize - 12;
+						memStream.Position += streamStride - 12;
 					}
 				}
 			}
@@ -257,7 +257,7 @@ namespace UtinyRipper.Classes.Meshes
 			node.Add("m_VertexCount", VertexCount);
 			node.Add("m_Channels", GetChannels(container.Version).ExportYAML(container));
 			node.Add("m_DataSize", m_data.Length);
-			node.Add("_typelessdata", m_data.ExportYAML());
+			node.Add("_typelessdata", GetData(container.Version, container.Platform).ExportYAML());
 			return node;
 		}
 
@@ -356,6 +356,29 @@ namespace UtinyRipper.Classes.Meshes
 			}
 		}
 
+		private IReadOnlyList<byte> GetData(Version version, Platform platform)
+		{
+			if(platform == Platform.XBox360)
+			{
+				byte[] swapedData = new byte[m_data.Length];
+				using (MemoryStream destStream = new MemoryStream(swapedData))
+				{
+					using (BinaryWriter destination = new BinaryWriter(destStream))
+					{
+						using (MemoryStream sourceStream = new MemoryStream(m_data))
+						{
+							using (EndianReader source = new EndianReader(sourceStream, EndianType.BigEndian))
+							{
+								CopyChannelsData(source, destination, version);
+							}
+						}
+					}
+				}
+				return swapedData;
+			}
+			return m_data;
+		}
+
 		private BitArray CreateChannelsBits(uint channels)
 		{
 			return new BitArray(BitConverter.GetBytes(CurrentChannels));
@@ -372,7 +395,7 @@ namespace UtinyRipper.Classes.Meshes
 			{
 				StreamInfo stream = Streams[streamIndex];
 				byte offset = 0;
-				for (ChannelTypeV4 type = ChannelTypeV4.Vertex; type < channelType; type++)
+				for (ChannelTypeV4 type = 0; type < channelType; type++)
 				{
 					if(stream.IsMatch(type))
 					{
@@ -380,6 +403,96 @@ namespace UtinyRipper.Classes.Meshes
 					}
 				}
 				return new ChannelInfo((byte)streamIndex, offset, channelType.GetFormat(), channelType.GetDimention());
+			}
+		}
+
+		private void CopyChannelsData(EndianReader source, BinaryWriter destination, Version version)
+		{
+			IReadOnlyList<ChannelInfo> channels = GetChannels(version);
+			foreach (ChannelInfo channel in channels)
+			{
+				if (channel.IsSet)
+				{
+					int offset = GetStreamOffset(channel.Stream, channels) + channel.Offset;
+					source.BaseStream.Position = offset;
+					destination.BaseStream.Position = offset;
+					int streamStride = channels.Where(t => t.Stream == channel.Stream).Sum(t => t.GetStride());
+					switch (channel.Format)
+					{
+						case ChannelFormat.Float:
+							for (int i = 0; i < VertexCount; i++)
+							{
+								for (int j = 0; j < channel.Dimension; j++)
+								{
+									destination.Write(source.ReadUInt32());
+								}
+								source.BaseStream.Position += streamStride - 4 * channel.Dimension;
+								destination.BaseStream.Position = source.BaseStream.Position;
+							}
+							break;
+						case ChannelFormat.Float16:
+							for (int i = 0; i < VertexCount; i++)
+							{
+								for (int j = 0; j < channel.Dimension; j++)
+								{
+									destination.Write(source.ReadUInt16());
+								}
+								source.BaseStream.Position += streamStride - 2 * channel.Dimension;
+								destination.BaseStream.Position = source.BaseStream.Position;
+							}
+							break;
+						// color for 4.x.x version
+						//case ChannelFormat.Color:
+						case ChannelFormat.Byte:
+							if (IsReadStream(version))
+							{
+								for (int i = 0; i < VertexCount; i++)
+								{
+									destination.Write(source.ReadUInt32());
+									source.BaseStream.Position += streamStride - 4 * channel.Dimension;
+									destination.BaseStream.Position = source.BaseStream.Position;
+								}
+							}
+							else
+							{
+								for (int i = 0; i < VertexCount; i++)
+								{
+									for (int j = 0; j < channel.Dimension; j++)
+									{
+										destination.Write(source.ReadByte());
+									}
+									source.BaseStream.Position += streamStride - 1 * channel.Dimension;
+									destination.BaseStream.Position = source.BaseStream.Position;
+								}
+							}
+							break;
+						case ChannelFormat.ByteV4:
+							for (int i = 0; i < VertexCount; i++)
+							{
+								for (int j = 0; j < channel.Dimension; j++)
+								{
+									destination.Write(source.ReadByte());
+								}
+								source.BaseStream.Position += streamStride - 1 * channel.Dimension;
+								destination.BaseStream.Position = source.BaseStream.Position;
+							}
+							break;
+						case ChannelFormat.Int:
+							for (int i = 0; i < VertexCount; i++)
+							{
+								for (int j = 0; j < channel.Dimension; j++)
+								{
+									destination.Write(source.ReadUInt32());
+								}
+								source.BaseStream.Position += streamStride - 4 * channel.Dimension;
+								destination.BaseStream.Position = source.BaseStream.Position;
+							}
+							break;
+
+						default:
+							throw new NotSupportedException(channel.Format.ToString());
+					}
+				}
 			}
 		}
 
@@ -397,8 +510,8 @@ namespace UtinyRipper.Classes.Meshes
 
 			for(int i = 1; i < stream; i++)
 			{
-				int vertexSize = channels.Where(t => t.Stream == i).Sum(t => t.GetStride());
-				offset += vertexSize * VertexCount;
+				int streamStride = channels.Where(t => t.Stream == i).Sum(t => t.GetStride());
+				offset += streamStride * VertexCount;
 			}
 			return offset;
 		}

@@ -123,7 +123,7 @@ namespace UtinyRipper.Classes
 				int depth = go.GetRootDepth();
 				return depth > 1 ? 1u : 0u;
 			}
-			return 1;
+			return 0;
 		}
 
 		public ISerializedFile File => m_assetInfo.File;

@@ -24,7 +24,10 @@ namespace UtinyRipper.Classes.AnimationClips
 			Clear();
 			ProcessStreams(streamedFrames, bindings, tos);
 			ProcessDenses(clip, bindings, tos);
-			ProcessConstant(clip, bindings, tos, lastFrame);
+			if(Clip.IsReadConstantClip(m_version))
+			{
+				ProcessConstant(clip, bindings, tos, lastFrame);
+			}
 			CreateCurves();
 		}
 

@@ -274,9 +274,9 @@ namespace UtinyRipper.Classes
 			{
 				foreach (FloatCurve curve in FloatCurves)
 				{
-					foreach (Object @object in curve.FetchDependencies(file, isLog))
+					foreach (Object asset in curve.FetchDependencies(file, isLog))
 					{
-						yield return @object;
+						yield return asset;
 					}
 				}
 			}
@@ -284,26 +284,26 @@ namespace UtinyRipper.Classes
 			{
 				foreach (PPtrCurve curve in PPtrCurves)
 				{
-					foreach(Object @object in curve.FetchDependencies(file, isLog))
+					foreach(Object asset in curve.FetchDependencies(file, isLog))
 					{
-						yield return @object;
+						yield return asset;
 					}
 				}
 			}
 			if (IsReadClipBindingConstant(file.Version))
 			{
-				foreach (Object @object in ClipBindingConstant.FetchDependencies(file, isLog))
+				foreach (Object asset in ClipBindingConstant.FetchDependencies(file, isLog))
 				{
-					yield return @object;
+					yield return asset;
 				}
 			}
 			if (IsReadEvents(file.Version))
 			{
 				foreach (AnimationEvent @event in Events)
 				{
-					foreach (Object @object in @event.FetchDependencies(file, isLog))
+					foreach (Object asset in @event.FetchDependencies(file, isLog))
 					{
-						yield return @object;
+						yield return asset;
 					}
 				}
 			}
@@ -330,7 +330,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_SampleRate", SampleRate);
 			node.Add("m_WrapMode", (int)WrapMode);
 			node.Add("m_Bounds", Bounds.ExportYAML(container));
-			node.Add("m_ClipBindingConstant", ClipBindingConstant.ExportYAML(container));
+			node.Add("m_ClipBindingConstant", GetClipBindingConstant(container.Version).ExportYAML(container));
 			node.Add("m_AnimationClipSettings", MuscleClip.ExportYAML(container));
 			node.Add("m_EditorCurves", YAMLSequenceNode.Empty);
 			node.Add("m_EulerEditorCurves", YAMLSequenceNode.Empty);
@@ -426,6 +426,11 @@ namespace UtinyRipper.Classes
 			}
 			if (IsReadAnimationType(version))
 			{
+				if(!IsReadClipBindingConstant(version))
+				{
+#warning TODO: HACK:
+					return false;
+				}
 				if(AnimationType != AnimationType.Legacy)
 				{
 					return MuscleClip.Clip.IsValid(version);
@@ -491,6 +496,10 @@ namespace UtinyRipper.Classes
 		private IReadOnlyList<PPtrCurve> GetPPtrCurves(Version version)
 		{
 			return IsReadPPtrCurves(version) ? PPtrCurves : new PPtrCurve[0];
+		}
+		private AnimationClipBindingConstant GetClipBindingConstant(Version version)
+		{
+			return IsReadClipBindingConstant(version) ? ClipBindingConstant : new AnimationClipBindingConstant(true);
 		}
 
 		public override string ExportExtension => "anim";

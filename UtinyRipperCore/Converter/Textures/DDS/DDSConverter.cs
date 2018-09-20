@@ -51,53 +51,59 @@ namespace UtinyRipper.Converter.Textures.DDS
 			}
 		}
 
-		public static void ExportDDS(byte[] buffer, int offset, Stream source, DDSConvertParameters @params)
+		public static void ExportDDS(Stream source, Stream destination, DDSConvertParameters @params)
 		{
-			using (MemoryStream stream = new MemoryStream(buffer))
+			using (BinaryReader sourceReader = new BinaryReader(source))
 			{
-				stream.Position = offset;
-				ExportDDS(stream, source, @params);
+				ExportDDS(sourceReader, destination, @params);
 			}
 		}
 
-		public static void ExportDDS(Stream destination, Stream source, DDSConvertParameters @params)
+		public static void ExportDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
 		{
 			if(IsRGBA32(@params))
 			{
-				ExportRGBA32ToDDS(destination, source, @params);
+				ExportRGBA32ToDDS(sourceReader, destination, @params);
 			}
 			else if(IsARGB32(@params))
 			{
-				ExportARGB32ToDDS(destination, source, @params);
+				ExportARGB32ToDDS(sourceReader, destination, @params);
 			}
 			else if(IsRGBA16(@params))
 			{
-				ExportRGBA16ToDDS(destination, source, @params);
+				ExportRGBA16ToDDS(sourceReader, destination, @params);
 			}
 			else if(IsAlpha8(@params))
 			{
-				ExportAlpha8ToDDS(destination, source, @params);
+				ExportAlpha8ToDDS(sourceReader, destination, @params);
 			}
 			else if(IsR8(@params))
 			{
-				ExportR8ToDDS(destination, source, @params);
+				ExportR8ToDDS(sourceReader, destination, @params);
 			}
 			else if (IsR16(@params))
 			{
-				ExportR16ToDDS(destination, source, @params);
+				ExportR16ToDDS(sourceReader, destination, @params);
 			}
 			else if (IsRG16(@params))
 			{
-				ExportRG16ToDDS(destination, source, @params);
+				ExportRG16ToDDS(sourceReader, destination, @params);
 			}
 			else
 			{
 				ExportDDSHeader(destination, @params);
-				source.CopyStream(destination, @params.DataLength);
+				for (int i = 0; i < @params.DataLength; i += 2)
+				{
+					ushort value = sourceReader.ReadUInt16();
+					byte value0 = unchecked((byte)(value >> 0));
+					byte value1 = unchecked((byte)(value >> 8));
+					destination.WriteByte(value0);
+					destination.WriteByte(value1);
+				}
 			}
 		}
 
-		private static void ExportRGBA32ToDDS(Stream destination, Stream source, DDSConvertParameters @params)
+		private static void ExportRGBA32ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
 		{
 			DDSConvertParameters bgraParams = new DDSConvertParameters();
 			@params.CopyTo(bgraParams);
@@ -105,24 +111,21 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.BBitMask = 0xFF;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
+			long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
+			for (int i = 0; i < pixelCount; i++)
 			{
-				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
-				for (int i = 0; i < pixelCount; i++)
-				{
-					byte R = binReader.ReadByte();
-					byte G = binReader.ReadByte();
-					byte B = binReader.ReadByte();
-					byte A = binReader.ReadByte();
-					destination.WriteByte(B);     // B
-					destination.WriteByte(G);     // G
-					destination.WriteByte(R);     // R
-					destination.WriteByte(A);     // A
-				}
+				byte R = sourceReader.ReadByte();
+				byte G = sourceReader.ReadByte();
+				byte B = sourceReader.ReadByte();
+				byte A = sourceReader.ReadByte();
+				destination.WriteByte(B);     // B
+				destination.WriteByte(G);     // G
+				destination.WriteByte(R);     // R
+				destination.WriteByte(A);     // A
 			}
 		}
 
-		private static void ExportARGB32ToDDS(Stream destination, Stream source, DDSConvertParameters @params)
+		private static void ExportARGB32ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
 		{
 			DDSConvertParameters bgraParams = new DDSConvertParameters();
 			@params.CopyTo(bgraParams);
@@ -132,24 +135,21 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.ABitMask = 0xFF000000;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
+			long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
+			for (int i = 0; i < pixelCount; i++)
 			{
-				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
-				for (int i = 0; i < pixelCount; i++)
-				{
-					byte A = binReader.ReadByte();
-					byte R = binReader.ReadByte();
-					byte G = binReader.ReadByte();
-					byte B = binReader.ReadByte();
-					destination.WriteByte(B);     // B
-					destination.WriteByte(G);     // G
-					destination.WriteByte(R);     // R
-					destination.WriteByte(A);     // A
-				}
+				byte A = sourceReader.ReadByte();
+				byte R = sourceReader.ReadByte();
+				byte G = sourceReader.ReadByte();
+				byte B = sourceReader.ReadByte();
+				destination.WriteByte(B);     // B
+				destination.WriteByte(G);     // G
+				destination.WriteByte(R);     // R
+				destination.WriteByte(A);     // A
 			}
 		}
 
-		private static void ExportRGBA16ToDDS(Stream destination, Stream source, DDSConvertParameters @params)
+		private static void ExportRGBA16ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
 		{
 			DDSConvertParameters bgraParams = new DDSConvertParameters();
 			@params.CopyTo(bgraParams);
@@ -157,23 +157,20 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.BBitMask = 0xF;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
+			long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
+			for (int i = 0; i < pixelCount; i++)
 			{
-				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
-				for (int i = 0; i < pixelCount; i++)
-				{
-					int pixel = binReader.ReadUInt16();
-					int c1 = (0x00F0 & pixel) >> 4;     // B
-					int c2 = (0x0F00 & pixel) >> 4;     // G
-					destination.WriteByte((byte)(c1 | c2));
-					c1 = (0xF000 & pixel) >> 12;        // R
-					c2 = (0x000F & pixel) << 4;         // A
-					destination.WriteByte((byte)(c1 | c2));
-				}
+				int pixel = sourceReader.ReadUInt16();
+				int c1 = (0x00F0 & pixel) >> 4;     // B
+				int c2 = (0x0F00 & pixel) >> 4;     // G
+				destination.WriteByte((byte)(c1 | c2));
+				c1 = (0xF000 & pixel) >> 12;        // R
+				c2 = (0x000F & pixel) << 4;         // A
+				destination.WriteByte((byte)(c1 | c2));
 			}
 		}
 
-		private static void ExportAlpha8ToDDS(Stream destination, Stream source, DDSConvertParameters @params)
+		private static void ExportAlpha8ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
 		{
 			DDSConvertParameters bgraParams = new DDSConvertParameters();
 			@params.CopyTo(bgraParams);
@@ -184,21 +181,18 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.ABitMask = 0xFF000000;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
+			long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
+			for (int i = 0; i < pixelCount; i++)
 			{
-				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
-				for (int i = 0; i < pixelCount; i++)
-				{
-					byte A = binReader.ReadByte();
-					destination.WriteByte(0xFF);    // B
-					destination.WriteByte(0xFF);    // G
-					destination.WriteByte(0xFF);    // R
-					destination.WriteByte(A);       // A
-				}
+				byte A = sourceReader.ReadByte();
+				destination.WriteByte(0xFF);    // B
+				destination.WriteByte(0xFF);    // G
+				destination.WriteByte(0xFF);    // R
+				destination.WriteByte(A);       // A
 			}
 		}
 
-		private static void ExportR8ToDDS(Stream destination, Stream source, DDSConvertParameters @params)
+		private static void ExportR8ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
 		{
 			DDSConvertParameters bgraParams = new DDSConvertParameters();
 			@params.CopyTo(bgraParams);
@@ -209,21 +203,18 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.ABitMask = 0xFF000000;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
+			long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
+			for (int i = 0; i < pixelCount; i++)
 			{
-				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
-				for (int i = 0; i < pixelCount; i++)
-				{
-					byte R = binReader.ReadByte();
-					destination.WriteByte(0);	    // B
-					destination.WriteByte(0);		// G
-					destination.WriteByte(R);		// R
-					destination.WriteByte(0xFF);	// A
-				}
+				byte R = sourceReader.ReadByte();
+				destination.WriteByte(0);       // B
+				destination.WriteByte(0);       // G
+				destination.WriteByte(R);       // R
+				destination.WriteByte(0xFF);    // A
 			}
 		}
 
-		private static void ExportR16ToDDS(Stream destination, Stream source, DDSConvertParameters @params)
+		private static void ExportR16ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
 		{
 			DDSConvertParameters bgraParams = new DDSConvertParameters();
 			@params.CopyTo(bgraParams);
@@ -234,23 +225,20 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.ABitMask = 0xFF000000;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
+			long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
+			for (int i = 0; i < pixelCount; i++)
 			{
-				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
-				for (int i = 0; i < pixelCount; i++)
-				{
-					ushort pixel = binReader.ReadUInt16();
-					float f = Half.ToHalf(pixel);
-					byte R = (byte)Math.Ceiling(f * 255.0);
-					destination.WriteByte(0);       // B
-					destination.WriteByte(0);       // G
-					destination.WriteByte(R);       // R
-					destination.WriteByte(0xFF);    // A
-				}
+				ushort pixel = sourceReader.ReadUInt16();
+				float f = Half.ToHalf(pixel);
+				byte R = (byte)Math.Ceiling(f * 255.0);
+				destination.WriteByte(0);       // B
+				destination.WriteByte(0);       // G
+				destination.WriteByte(R);       // R
+				destination.WriteByte(0xFF);    // A
 			}
 		}
 
-		private static void ExportRG16ToDDS(Stream destination, Stream source, DDSConvertParameters @params)
+		private static void ExportRG16ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
 		{
 			DDSConvertParameters bgraParams = new DDSConvertParameters();
 			@params.CopyTo(bgraParams);
@@ -261,18 +249,15 @@ namespace UtinyRipper.Converter.Textures.DDS
 			bgraParams.ABitMask = 0xFF000000;
 			ExportDDSHeader(destination, bgraParams);
 
-			using (BinaryReader binReader = new BinaryReader(source, Encoding.UTF8, true))
+			long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
+			for (int i = 0; i < pixelCount; i++)
 			{
-				long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
-				for (int i = 0; i < pixelCount; i++)
-				{
-					byte R = binReader.ReadByte();
-					byte G = binReader.ReadByte();
-					destination.WriteByte(0);		// B
-					destination.WriteByte(G);		// G
-					destination.WriteByte(R);		// R
-					destination.WriteByte(0xFF);	// A
-				}
+				byte R = sourceReader.ReadByte();
+				byte G = sourceReader.ReadByte();
+				destination.WriteByte(0);       // B
+				destination.WriteByte(G);       // G
+				destination.WriteByte(R);       // R
+				destination.WriteByte(0xFF);    // A
 			}
 		}
 

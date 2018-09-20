@@ -34,7 +34,15 @@ namespace UtinyRipper.Converter.Textures.DDS
 			return depth * sizeOfPlane + height * bps + width * bpp;
 		}
 
-		public static void DecompressDXT1(Stream destination, Stream source, DDSConvertParameters @params)
+		public static void DecompressDXT1(Stream source, Stream destination, DDSConvertParameters @params)
+		{
+			using (BinaryReader sourceReader = new BinaryReader(source))
+			{
+				DecompressDXT1(sourceReader, destination, @params);
+			}
+		}
+
+		public static void DecompressDXT1(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
 		{
 			int depth = @params.BitMapDepth;
 			int width = @params.Width;
@@ -47,72 +55,72 @@ namespace UtinyRipper.Converter.Textures.DDS
 			Color8888[] colors = new Color8888[4];
 
 			long position = destination.Position;
-			using (BinaryReader reader = new BinaryReader(source, Encoding.UTF8, true))
+			for (int z = 0; z < depth; z++)
 			{
-				for (int z = 0; z < depth; z++)
+				// mirror Y
+				for (int y = height - 1; y >= 0; y -= 4)
 				{
-					// mirror Y
-					for (int y = height - 1; y >= 0; y -= 4)
+					for (int x = 0; x < width; x += 4)
 					{
-						for (int x = 0; x < width; x += 4)
+						ushort color0 = sourceReader.ReadUInt16();
+						ushort color1 = sourceReader.ReadUInt16();
+
+						uint bitMask0 = sourceReader.ReadUInt16();
+						uint bitMask1 = sourceReader.ReadUInt16();
+						uint bitMask = (bitMask0 << 0) | (bitMask1 << 16);
+
+						colors[0] = DxtcRead3bColor(color0);
+						colors[1] = DxtcRead3bColor(color1);
+
+						if (color0 > color1)
 						{
-							ushort color0 = reader.ReadUInt16();
-							ushort color1 = reader.ReadUInt16();
-							uint bitMask = reader.ReadUInt32();
+							// Four-color block: derive the other two colors.
+							// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
+							// These 2-bit codes correspond to the 2-bit fields
+							// stored in the 64-bit block.
+							colors[2].Blue = unchecked((byte)((2 * colors[0].Blue + colors[1].Blue + 1) / 3));
+							colors[2].Green = unchecked((byte)((2 * colors[0].Green + colors[1].Green + 1) / 3));
+							colors[2].Red = unchecked((byte)((2 * colors[0].Red + colors[1].Red + 1) / 3));
 
-							colors[0] = DxtcRead3bColor(color0);
-							colors[1] = DxtcRead3bColor(color1);
+							colors[2].Alpha = 0xFF;
+							colors[3].Alpha = 0xFF;
+						}
+						else
+						{
+							// Three-color block: derive the other color.
+							// 00 = color_0,  01 = color_1,  10 = color_2,
+							// 11 = transparent.
+							// These 2-bit codes correspond to the 2-bit fields 
+							// stored in the 64-bit block.
+							colors[2].Blue = unchecked((byte)((colors[0].Blue + colors[1].Blue) / 2));
+							colors[2].Green = unchecked((byte)((colors[0].Green + colors[1].Green) / 2));
+							colors[2].Red = unchecked((byte)((colors[0].Red + colors[1].Red) / 2));
 
-							if (color0 > color1)
+							colors[2].Alpha = 0xFF;
+							colors[3].Alpha = 0x0;
+						}
+
+						colors[3].Blue = unchecked((byte)((colors[0].Blue + 2 * colors[1].Blue + 1) / 3));
+						colors[3].Green = unchecked((byte)((colors[0].Green + 2 * colors[1].Green + 1) / 3));
+						colors[3].Red = unchecked((byte)((colors[0].Red + 2 * colors[1].Red + 1) / 3));
+
+						int bitIndex = 0;
+						for (int ly = 0; ly < 4; ly++)
+						{
+							for (int lx = 0; lx < 4; lx++, bitIndex++)
 							{
-								// Four-color block: derive the other two colors.
-								// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
-								// These 2-bit codes correspond to the 2-bit fields
-								// stored in the 64-bit block.
-								colors[2].Blue = unchecked((byte)((2 * colors[0].Blue + colors[1].Blue + 1) / 3));
-								colors[2].Green = unchecked((byte)((2 * colors[0].Green + colors[1].Green + 1) / 3));
-								colors[2].Red = unchecked((byte)((2 * colors[0].Red + colors[1].Red + 1) / 3));
-
-								colors[2].Alpha = 0xFF;
-								colors[3].Alpha = 0xFF;
-							}
-							else
-							{
-								// Three-color block: derive the other color.
-								// 00 = color_0,  01 = color_1,  10 = color_2,
-								// 11 = transparent.
-								// These 2-bit codes correspond to the 2-bit fields 
-								// stored in the 64-bit block.
-								colors[2].Blue = unchecked((byte)((colors[0].Blue + colors[1].Blue) / 2));
-								colors[2].Green = unchecked((byte)((colors[0].Green + colors[1].Green) / 2));
-								colors[2].Red = unchecked((byte)((colors[0].Red + colors[1].Red) / 2));
-
-								colors[2].Alpha = 0xFF;
-								colors[3].Alpha = 0x0;
-							}
-
-							colors[3].Blue = unchecked((byte)((colors[0].Blue + 2 * colors[1].Blue + 1) / 3));
-							colors[3].Green = unchecked((byte)((colors[0].Green + 2 * colors[1].Green + 1) / 3));
-							colors[3].Red = unchecked((byte)((colors[0].Red + 2 * colors[1].Red + 1) / 3));
-
-							int bitIndex = 0;
-							for (int ly = 0; ly < 4; ly++)
-							{
-								for (int lx = 0; lx < 4; lx++, bitIndex++)
+								int colorIndex = unchecked((int)((bitMask & (3 << bitIndex * 2)) >> bitIndex * 2));
+								Color8888 color = colors[colorIndex];
+								if ((x + lx) < width && (y - ly) < height && (y - ly) >= 0)
 								{
-									int colorIndex = unchecked((int)((bitMask & (3 << bitIndex * 2)) >> bitIndex * 2));
-									Color8888 color = colors[colorIndex];
-									if ((x + lx) < width && (y - ly) < height && (y - ly) >= 0)
-									{
-										// mirror Y
-										long offset = z * sizeOfPlane + (y - ly) * bps + (x + lx) * bpp;
-										destination.Position = position + offset;
+									// mirror Y
+									long offset = z * sizeOfPlane + (y - ly) * bps + (x + lx) * bpp;
+									destination.Position = position + offset;
 
-										destination.WriteByte(color.Red);
-										destination.WriteByte(color.Green);
-										destination.WriteByte(color.Blue);
-										destination.WriteByte(color.Alpha);
-									}
+									destination.WriteByte(color.Red);
+									destination.WriteByte(color.Green);
+									destination.WriteByte(color.Blue);
+									destination.WriteByte(color.Alpha);
 								}
 							}
 						}
@@ -121,7 +129,15 @@ namespace UtinyRipper.Converter.Textures.DDS
 			}
 		}
 
-		public static void DecompressDXT3(Stream destination, Stream source, DDSConvertParameters @params)
+		public static void DecompressDXT3(Stream source, Stream destination, DDSConvertParameters @params)
+		{
+			using (BinaryReader sourceReader = new BinaryReader(source))
+			{
+				DecompressDXT3(sourceReader, destination, @params);
+			}
+		}
+
+		public static void DecompressDXT3(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
 		{
 			int depth = @params.BitMapDepth;
 			int width = @params.Width;
@@ -135,76 +151,76 @@ namespace UtinyRipper.Converter.Textures.DDS
 			byte[] alphas = new byte[16];
 
 			long position = destination.Position;
-			using (BinaryReader reader = new BinaryReader(source, Encoding.UTF8, true))
+			for (int z = 0; z < depth; z++)
 			{
-				for (int z = 0; z < depth; z++)
+				// mirror Y
+				for (int y = height - 1; y >= 0; y -= 4)
 				{
-					// mirror Y
-					for (int y = height - 1; y >= 0; y -= 4)
+					for (int x = 0; x < width; x += 4)
 					{
-						for (int x = 0; x < width; x += 4)
+						for (int i = 0; i < 4; ++i)
 						{
-							for (int i = 0; i < 4; ++i)
+							ushort alpha = sourceReader.ReadUInt16();
+							alphas[i * 4 + 0] = (byte)(((alpha >> 0) & 0xF) * 0x11);
+							alphas[i * 4 + 1] = (byte)(((alpha >> 4) & 0xF) * 0x11);
+							alphas[i * 4 + 2] = (byte)(((alpha >> 8) & 0xF) * 0x11);
+							alphas[i * 4 + 3] = (byte)(((alpha >> 12) & 0xF) * 0x11);
+						}
+
+						ushort color0 = sourceReader.ReadUInt16();
+						ushort color1 = sourceReader.ReadUInt16();
+
+						uint bitMask0 = sourceReader.ReadUInt16();
+						uint bitMask1 = sourceReader.ReadUInt16();
+						uint bitMask = (bitMask0 << 0) | (bitMask1 << 16);
+
+						colors[0] = DxtcRead3bColor(color0);
+						colors[1] = DxtcRead3bColor(color1);
+
+						if (color0 > color1)
+						{
+							// Four-color block: derive the other two colors.
+							// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
+							// These 2-bit codes correspond to the 2-bit fields
+							// stored in the 64-bit block.
+							colors[2].Blue = unchecked((byte)((2 * colors[0].Blue + colors[1].Blue + 1) / 3));
+							colors[2].Green = unchecked((byte)((2 * colors[0].Green + colors[1].Green + 1) / 3));
+							colors[2].Red = unchecked((byte)((2 * colors[0].Red + colors[1].Red + 1) / 3));
+						}
+						else
+						{
+							// Three-color block: derive the other color.
+							// 00 = color_0,  01 = color_1,  10 = color_2,
+							// 11 = transparent.
+							// These 2-bit codes correspond to the 2-bit fields 
+							// stored in the 64-bit block.
+							colors[2].Blue = unchecked((byte)((colors[0].Blue + colors[1].Blue) / 2));
+							colors[2].Green = unchecked((byte)((colors[0].Green + colors[1].Green) / 2));
+							colors[2].Red = unchecked((byte)((colors[0].Red + colors[1].Red) / 2));
+						}
+
+						colors[3].Blue = unchecked((byte)((colors[0].Blue + 2 * colors[1].Blue + 1) / 3));
+						colors[3].Green = unchecked((byte)((colors[0].Green + 2 * colors[1].Green + 1) / 3));
+						colors[3].Red = unchecked((byte)((colors[0].Red + 2 * colors[1].Red + 1) / 3));
+
+						int bitIndex = 0;
+						for (int ly = 0; ly < 4; ly++)
+						{
+							for (int lx = 0; lx < 4; lx++, bitIndex++)
 							{
-								ushort alpha = reader.ReadUInt16();
-								alphas[i * 4 + 0] = (byte)(((alpha >> 0) & 0xF) * 0x11);
-								alphas[i * 4 + 1] = (byte)(((alpha >> 4) & 0xF) * 0x11);
-								alphas[i * 4 + 2] = (byte)(((alpha >> 8) & 0xF) * 0x11);
-								alphas[i * 4 + 3] = (byte)(((alpha >> 12) & 0xF) * 0x11);
-							}
-
-							ushort color0 = reader.ReadUInt16();
-							ushort color1 = reader.ReadUInt16();
-							uint bitMask = reader.ReadUInt32();
-
-							colors[0] = DxtcRead3bColor(color0);
-							colors[1] = DxtcRead3bColor(color1);
-
-							if (color0 > color1)
-							{
-								// Four-color block: derive the other two colors.
-								// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
-								// These 2-bit codes correspond to the 2-bit fields
-								// stored in the 64-bit block.
-								colors[2].Blue = unchecked((byte)((2 * colors[0].Blue + colors[1].Blue + 1) / 3));
-								colors[2].Green = unchecked((byte)((2 * colors[0].Green + colors[1].Green + 1) / 3));
-								colors[2].Red = unchecked((byte)((2 * colors[0].Red + colors[1].Red + 1) / 3));
-							}
-							else
-							{
-								// Three-color block: derive the other color.
-								// 00 = color_0,  01 = color_1,  10 = color_2,
-								// 11 = transparent.
-								// These 2-bit codes correspond to the 2-bit fields 
-								// stored in the 64-bit block.
-								colors[2].Blue = unchecked((byte)((colors[0].Blue + colors[1].Blue) / 2));
-								colors[2].Green = unchecked((byte)((colors[0].Green + colors[1].Green) / 2));
-								colors[2].Red = unchecked((byte)((colors[0].Red + colors[1].Red) / 2));
-							}
-
-							colors[3].Blue = unchecked((byte)((colors[0].Blue + 2 * colors[1].Blue + 1) / 3));
-							colors[3].Green = unchecked((byte)((colors[0].Green + 2 * colors[1].Green + 1) / 3));
-							colors[3].Red = unchecked((byte)((colors[0].Red + 2 * colors[1].Red + 1) / 3));
-
-							int bitIndex = 0;
-							for (int ly = 0; ly < 4; ly++)
-							{
-								for (int lx = 0; lx < 4; lx++, bitIndex++)
+								int colorIndex = unchecked((int)((bitMask & (3 << bitIndex * 2)) >> bitIndex * 2));
+								Color8888 color = colors[colorIndex];
+								color.Alpha = alphas[bitIndex];
+								if ((x + lx) < width && (y - ly) < height && (y - ly) >= 0)
 								{
-									int colorIndex = unchecked((int)((bitMask & (3 << bitIndex * 2)) >> bitIndex * 2));
-									Color8888 color = colors[colorIndex];
-									color.Alpha = alphas[bitIndex];
-									if ((x + lx) < width && (y - ly) < height && (y - ly) >= 0)
-									{
-										// mirror Y
-										long offset = z * sizeOfPlane + (y - ly) * bps + (x + lx) * bpp;
-										destination.Position = position + offset;
+									// mirror Y
+									long offset = z * sizeOfPlane + (y - ly) * bps + (x + lx) * bpp;
+									destination.Position = position + offset;
 
-										destination.WriteByte(color.Red);
-										destination.WriteByte(color.Green);
-										destination.WriteByte(color.Blue);
-										destination.WriteByte(color.Alpha);
-									}
+									destination.WriteByte(color.Red);
+									destination.WriteByte(color.Green);
+									destination.WriteByte(color.Blue);
+									destination.WriteByte(color.Alpha);
 								}
 							}
 						}
@@ -213,7 +229,15 @@ namespace UtinyRipper.Converter.Textures.DDS
 			}
 		}
 
-		public static void DecompressDXT5(Stream destination, Stream source, DDSConvertParameters @params)
+		public static void DecompressDXT5(Stream source, Stream destination, DDSConvertParameters @params)
+		{
+			using (BinaryReader sourceReader = new BinaryReader(source))
+			{
+				DecompressDXT5(sourceReader, destination, @params);
+			}
+		}
+
+		public static void DecompressDXT5(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
 		{
 			int depth = @params.BitMapDepth;
 			int width = @params.Width;
@@ -228,118 +252,128 @@ namespace UtinyRipper.Converter.Textures.DDS
 			byte[] alphaMask = new byte[6];
 
 			long position = destination.Position;
-			using (BinaryReader reader = new BinaryReader(source, Encoding.UTF8, true))
+			for (int z = 0; z < depth; z++)
 			{
-				for (int z = 0; z < depth; z++)
+				// mirror Y
+				for (int y = height - 1; y >= 0; y -= 4)
 				{
-					// mirror Y
-					for (int y = height - 1; y >= 0; y -= 4)
+					for (int x = 0; x < width; x += 4)
 					{
-						for (int x = 0; x < width; x += 4)
+						ushort alpha = sourceReader.ReadUInt16();
+						alphas[0] = unchecked((byte)(alpha >> 0));
+						alphas[1] = unchecked((byte)(alpha >> 8));
+
+						ushort alphaMask0 = sourceReader.ReadUInt16();
+						ushort alphaMask1 = sourceReader.ReadUInt16();
+						ushort alphaMask2 = sourceReader.ReadUInt16();
+						alphaMask[0] = unchecked((byte)(alphaMask0 >> 0));
+						alphaMask[1] = unchecked((byte)(alphaMask0 >> 8));
+						alphaMask[2] = unchecked((byte)(alphaMask1 >> 0));
+						alphaMask[3] = unchecked((byte)(alphaMask1 >> 8));
+						alphaMask[4] = unchecked((byte)(alphaMask2 >> 0));
+						alphaMask[5] = unchecked((byte)(alphaMask2 >> 8));
+
+						colors[0] = DxtcRead2bColor(sourceReader);
+						colors[1] = DxtcRead2bColor(sourceReader);
+
+						uint bitMask0 = sourceReader.ReadUInt16();
+						uint bitMask1 = sourceReader.ReadUInt16();
+						uint bitMask = (bitMask0 << 0) | (bitMask1 << 16);
+
+						// Four-color block: derive the other two colors.
+						// 00 = color_0, 01 = color_1, 10 = color_2, 11	= color_3
+						// These 2-bit codes correspond to the 2-bit fields
+						// stored in the 64-bit block.
+						colors[2].Blue = unchecked((byte)((2 * colors[0].Blue + colors[1].Blue + 1) / 3));
+						colors[2].Green = unchecked((byte)((2 * colors[0].Green + colors[1].Green + 1) / 3));
+						colors[2].Red = unchecked((byte)((2 * colors[0].Red + colors[1].Red + 1) / 3));
+
+						colors[3].Blue = unchecked((byte)((colors[0].Blue + 2 * colors[1].Blue + 1) / 3));
+						colors[3].Green = unchecked((byte)((colors[0].Green + 2 * colors[1].Green + 1) / 3));
+						colors[3].Red = unchecked((byte)((colors[0].Red + 2 * colors[1].Red + 1) / 3));
+
+						int bitIndex = 0;
+						for (int ly = 0; ly < 4; ly++)
 						{
-							alphas[0] = reader.ReadByte();
-							alphas[1] = reader.ReadByte();
-							reader.Read(alphaMask, 0, alphaMask.Length);
-
-							colors[0] = DxtcRead2bColor(reader);
-							colors[1] = DxtcRead2bColor(reader);
-							uint bitmask = reader.ReadUInt32();
-
-							// Four-color block: derive the other two colors.
-							// 00 = color_0, 01 = color_1, 10 = color_2, 11	= color_3
-							// These 2-bit codes correspond to the 2-bit fields
-							// stored in the 64-bit block.
-							colors[2].Blue = unchecked((byte)((2 * colors[0].Blue + colors[1].Blue + 1) / 3));
-							colors[2].Green = unchecked((byte)((2 * colors[0].Green + colors[1].Green + 1) / 3));
-							colors[2].Red = unchecked((byte)((2 * colors[0].Red + colors[1].Red + 1) / 3));
-
-							colors[3].Blue = unchecked((byte)((colors[0].Blue + 2 * colors[1].Blue + 1) / 3));
-							colors[3].Green = unchecked((byte)((colors[0].Green + 2 * colors[1].Green + 1) / 3));
-							colors[3].Red = unchecked((byte)((colors[0].Red + 2 * colors[1].Red + 1) / 3));
-
-							int bitIndex = 0;
-							for (int ly = 0; ly < 4; ly++)
+							for (int lx = 0; lx < 4; lx++, bitIndex++)
 							{
-								for (int lx = 0; lx < 4; lx++, bitIndex++)
+								int colorIndex = (int)((bitMask & (0x03 << bitIndex * 2)) >> bitIndex * 2);
+								Color8888 col = colors[colorIndex];
+								// only put pixels out < width or height
+								if ((x + lx) < width && (y - ly) < height && (y - ly) >= 0)
 								{
-									int colorIndex = (int)((bitmask & (0x03 << bitIndex * 2)) >> bitIndex * 2);
-									Color8888 col = colors[colorIndex];
-									// only put pixels out < width or height
-									if ((x + lx) < width && (y - ly) < height && (y - ly) >= 0)
-									{
-										// mirror Y
-										long offset = z * sizeOfPlane + (y - ly) * bps + (x + lx) * bpp;
-										destination.Position = position + offset;
+									// mirror Y
+									long offset = z * sizeOfPlane + (y - ly) * bps + (x + lx) * bpp;
+									destination.Position = position + offset;
 
-										destination.WriteByte(col.Red);
-										destination.WriteByte(col.Green);
-										destination.WriteByte(col.Blue);
-									}
+									destination.WriteByte(col.Red);
+									destination.WriteByte(col.Green);
+									destination.WriteByte(col.Blue);
 								}
 							}
+						}
 
-							// 8-alpha or 6-alpha block?
-							if (alphas[0] > alphas[1])
-							{
-								// 8-alpha block:  derive the other six alphas.
-								// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
-								alphas[2] = unchecked((ushort)((6 * alphas[0] + 1 * alphas[1] + 3) / 7)); // bit code 010
-								alphas[3] = unchecked((ushort)((5 * alphas[0] + 2 * alphas[1] + 3) / 7)); // bit code 011
-								alphas[4] = unchecked((ushort)((4 * alphas[0] + 3 * alphas[1] + 3) / 7)); // bit code 100
-								alphas[5] = unchecked((ushort)((3 * alphas[0] + 4 * alphas[1] + 3) / 7)); // bit code 101
-								alphas[6] = unchecked((ushort)((2 * alphas[0] + 5 * alphas[1] + 3) / 7)); // bit code 110
-								alphas[7] = unchecked((ushort)((1 * alphas[0] + 6 * alphas[1] + 3) / 7)); // bit code 111
-							}
-							else
-							{
-								// 6-alpha block.
-								// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
-								alphas[2] = unchecked((ushort)((4 * alphas[0] + 1 * alphas[1] + 2) / 5)); // Bit code 010
-								alphas[3] = unchecked((ushort)((3 * alphas[0] + 2 * alphas[1] + 2) / 5)); // Bit code 011
-								alphas[4] = unchecked((ushort)((2 * alphas[0] + 3 * alphas[1] + 2) / 5)); // Bit code 100
-								alphas[5] = unchecked((ushort)((1 * alphas[0] + 4 * alphas[1] + 2) / 5)); // Bit code 101
-								alphas[6] = 0x00; // Bit code 110
-								alphas[7] = 0xFF; // Bit code 111
-							}
+						// 8-alpha or 6-alpha block?
+						if (alphas[0] > alphas[1])
+						{
+							// 8-alpha block:  derive the other six alphas.
+							// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
+							alphas[2] = unchecked((ushort)((6 * alphas[0] + 1 * alphas[1] + 3) / 7)); // bit code 010
+							alphas[3] = unchecked((ushort)((5 * alphas[0] + 2 * alphas[1] + 3) / 7)); // bit code 011
+							alphas[4] = unchecked((ushort)((4 * alphas[0] + 3 * alphas[1] + 3) / 7)); // bit code 100
+							alphas[5] = unchecked((ushort)((3 * alphas[0] + 4 * alphas[1] + 3) / 7)); // bit code 101
+							alphas[6] = unchecked((ushort)((2 * alphas[0] + 5 * alphas[1] + 3) / 7)); // bit code 110
+							alphas[7] = unchecked((ushort)((1 * alphas[0] + 6 * alphas[1] + 3) / 7)); // bit code 111
+						}
+						else
+						{
+							// 6-alpha block.
+							// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
+							alphas[2] = unchecked((ushort)((4 * alphas[0] + 1 * alphas[1] + 2) / 5)); // Bit code 010
+							alphas[3] = unchecked((ushort)((3 * alphas[0] + 2 * alphas[1] + 2) / 5)); // Bit code 011
+							alphas[4] = unchecked((ushort)((2 * alphas[0] + 3 * alphas[1] + 2) / 5)); // Bit code 100
+							alphas[5] = unchecked((ushort)((1 * alphas[0] + 4 * alphas[1] + 2) / 5)); // Bit code 101
+							alphas[6] = 0x00; // Bit code 110
+							alphas[7] = 0xFF; // Bit code 111
+						}
 
-							// Note: Have to separate the next two loops,
-							// it operates on a 6-byte system.
+						// Note: Have to separate the next two loops,
+						// it operates on a 6-byte system.
 
-							// First three bytes
-							//uint bits = (uint)(alphamask[0]);
-							uint bits = unchecked((uint)((alphaMask[0]) | (alphaMask[1] << 8) | (alphaMask[2] << 16)));
-							for (int ly = 0; ly < 2; ly++)
+						// First three bytes
+						//uint bits = (uint)(alphamask[0]);
+						uint bits = unchecked((uint)((alphaMask[0]) | (alphaMask[1] << 8) | (alphaMask[2] << 16)));
+						for (int ly = 0; ly < 2; ly++)
+						{
+							for (int lx = 0; lx < 4; lx++, bits >>= 3)
 							{
-								for (int lx = 0; lx < 4; lx++, bits >>= 3)
+								// only put pixels out < width or height
+								if ((x + lx) < width && (y - ly) < height && (y - ly) >= 0)
 								{
-									// only put pixels out < width or height
-									if ((x + lx) < width && (y - ly) < height && (y - ly) >= 0)
-									{
-										byte alphaValue = unchecked((byte)alphas[bits & 0x07]);
-										// mirror Y
-										long offset = z * sizeOfPlane + (y - ly) * bps + (x + lx) * bpp + 3;
-										destination.Position = position + offset;
-										destination.WriteByte(alphaValue);
-									}
+									byte alphaValue = unchecked((byte)alphas[bits & 0x07]);
+									// mirror Y
+									long offset = z * sizeOfPlane + (y - ly) * bps + (x + lx) * bpp + 3;
+									destination.Position = position + offset;
+									destination.WriteByte(alphaValue);
 								}
 							}
+						}
 
-							// Last three bytes
-							//bits = (uint)(alphamask[3]);
-							bits = unchecked((uint)((alphaMask[3]) | (alphaMask[4] << 8) | (alphaMask[5] << 16)));
-							for (int ly = 2; ly < 4; ly++)
+						// Last three bytes
+						//bits = (uint)(alphamask[3]);
+						bits = unchecked((uint)((alphaMask[3]) | (alphaMask[4] << 8) | (alphaMask[5] << 16)));
+						for (int ly = 2; ly < 4; ly++)
+						{
+							for (int lx = 0; lx < 4; lx++, bits >>= 3)
 							{
-								for (int lx = 0; lx < 4; lx++, bits >>= 3)
+								// only put pixels out < width or height
+								if ((x + lx) < width && (y - ly) < height && (y - ly) >= 0)
 								{
-									// only put pixels out < width or height
-									if ((x + lx) < width && (y - ly) < height && (y - ly) >= 0)
-									{
-										byte alphaValue = unchecked((byte)alphas[bits & 0x07]);
-										// mirror Y
-										long offset = z * sizeOfPlane + (y - ly) * bps + (x + lx) * bpp + 3;
-										destination.Position = position + offset;
-										destination.WriteByte(alphaValue);
-									}
+									byte alphaValue = unchecked((byte)alphas[bits & 0x07]);
+									// mirror Y
+									long offset = z * sizeOfPlane + (y - ly) * bps + (x + lx) * bpp + 3;
+									destination.Position = position + offset;
+									destination.WriteByte(alphaValue);
 								}
 							}
 						}
@@ -348,17 +382,33 @@ namespace UtinyRipper.Converter.Textures.DDS
 			}
 		}
 
-		public static void DecompressRGB(Stream destination, Stream source, DDSConvertParameters @params)
+		public static void DecompressRGB(Stream source, Stream destination, DDSConvertParameters @params)
 		{
-			DecompressRGBA(destination, source, @params, false);
+			using (BinaryReader reader = new BinaryReader(source))
+			{
+				DecompressRGBA(reader, destination, @params, false);
+			}
 		}
 
-		public static void DecompressRGBA(Stream destination, Stream source, DDSConvertParameters @params)
+		public static void DecompressRGB(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
 		{
-			DecompressRGBA(destination, source, @params, true);
+			DecompressRGBA(sourceReader, destination, @params, false);
 		}
 
-		private static void DecompressRGBA(Stream destination, Stream source, DDSConvertParameters @params, bool isAlpha)
+		public static void DecompressRGBA(Stream source, Stream destination, DDSConvertParameters @params)
+		{
+			using (BinaryReader reader = new BinaryReader(source))
+			{
+				DecompressRGBA(reader, destination, @params, true);
+			}
+		}
+
+		public static void DecompressRGBA(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		{
+			DecompressRGBA(sourceReader, destination, @params, true);
+		}
+
+		private static void DecompressRGBA(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params, bool isAlpha)
 		{
 			int depth = @params.BitMapDepth;
 			int width = @params.Width;
@@ -375,38 +425,35 @@ namespace UtinyRipper.Converter.Textures.DDS
 			ColorMask aMask = ComputeMaskParams(@params.ABitMask);
 
 			long position = destination.Position;
-			using (BinaryReader reader = new BinaryReader(source, Encoding.UTF8, true))
+			for (int z = 0; z < depth; z++)
 			{
-				for(int z = 0; z < depth; z++)
+				// mirror Y
+				for (int j = height - 1; j >= 0; j--)
 				{
-					// mirror Y
-					for(int j = height - 1; j >= 0; j--)
+					long offset = z * sizeOfPlane + j * bps;
+					destination.Position = position + offset;
+
+					for (int i = 0; i < width; i++)
 					{
-						long offset = z * sizeOfPlane + j * bps;
-						destination.Position = position + offset;
+						uint pixel = ReadPixel(sourceReader, pixelSize);
+						uint pixelColor = pixel & @params.RBitMask;
+						byte red = unchecked((byte)(((pixelColor >> rMask.Shift1) * rMask.Mult) >> rMask.Shift2));
+						pixelColor = pixel & @params.GBitMask;
+						byte green = unchecked((byte)(((pixelColor >> gMask.Shift1) * gMask.Mult) >> gMask.Shift2));
+						pixelColor = pixel & @params.BBitMask;
+						byte blue = unchecked((byte)(((pixelColor >> bMask.Shift1) * bMask.Mult) >> bMask.Shift2));
 
-						for (int i = 0; i < width; i++)
+						byte alpha = 0xFF;
+						if (isAlpha)
 						{
-							uint pixel = ReadPixel(reader, pixelSize);
-							uint pixelColor = pixel & @params.RBitMask;
-							byte red = unchecked((byte)(((pixelColor >> rMask.Shift1) * rMask.Mult) >> rMask.Shift2));
-							pixelColor = pixel & @params.GBitMask;
-							byte green = unchecked((byte)(((pixelColor >> gMask.Shift1) * gMask.Mult) >> gMask.Shift2));
-							pixelColor = pixel & @params.BBitMask;
-							byte blue = unchecked((byte)(((pixelColor >> bMask.Shift1) * bMask.Mult) >> bMask.Shift2));
-
-							byte alpha = 0xFF;
-							if (isAlpha)
-							{
-								pixelColor = pixel & @params.ABitMask;
-								alpha = unchecked((byte)(((pixelColor >> aMask.Shift1) * aMask.Mult) >> aMask.Shift2));
-							}
-
-							destination.WriteByte(blue);
-							destination.WriteByte(green);
-							destination.WriteByte(red);
-							destination.WriteByte(alpha);
+							pixelColor = pixel & @params.ABitMask;
+							alpha = unchecked((byte)(((pixelColor >> aMask.Shift1) * aMask.Mult) >> aMask.Shift2));
 						}
+
+						destination.WriteByte(blue);
+						destination.WriteByte(green);
+						destination.WriteByte(red);
+						destination.WriteByte(alpha);
 					}
 				}
 			}
@@ -525,8 +572,9 @@ namespace UtinyRipper.Converter.Textures.DDS
 
 		private static Color8888 DxtcRead2bColor(BinaryReader reader)
 		{
-			byte data0 = reader.ReadByte();
-			byte data1 = reader.ReadByte();
+			ushort data = reader.ReadUInt16();
+			byte data0 = unchecked((byte)(data >> 0));
+			byte data1 = unchecked((byte)(data >> 8));
 
 			byte r = unchecked((byte)(data0 & 0x1F));
 			byte g = unchecked((byte)(((data0 & 0xE0) >> 5) | ((data1 & 0x7) << 3)));

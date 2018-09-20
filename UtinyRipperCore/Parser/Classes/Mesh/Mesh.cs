@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UtinyRipper.AssetExporters;
 using UtinyRipper.Classes.Meshes;
 using UtinyRipper.Exporter.YAML;
@@ -25,7 +26,7 @@ namespace UtinyRipper.Classes
 		/// <summary>
 		/// 2.0.0 to 3.5.0 exclusive
 		/// </summary>
-		public static bool IsReadIndicesUsage(Version version)
+		public static bool IsReadUse16bitIndices(Version version)
 		{
 			return version.IsGreaterEqual(2) && version.IsLess(3, 5);
 		}
@@ -280,7 +281,7 @@ namespace UtinyRipper.Classes
 			{
 				m_LODData = reader.ReadArray<LOD>();
 			}
-			if (IsReadIndicesUsage(reader.Version))
+			if (IsReadUse16bitIndices(reader.Version))
 			{
 				Use16bitIndices = reader.ReadInt32() > 0;
 			}
@@ -478,7 +479,7 @@ namespace UtinyRipper.Classes
 			node.Add("m_IsReadable", IsReadable);
 			node.Add("m_KeepVertices", KeepVertices);
 			node.Add("m_KeepIndices", KeepIndices);
-			node.Add("m_IndexBuffer", GetIndexBuffer(container.Version).ExportYAML());
+			node.Add("m_IndexBuffer", GetIndexBuffer(container.Version, container.Platform).ExportYAML());
 			node.Add("m_Skin", GetSkin(container.Version).ExportYAML(container));
 			node.Add("m_VertexData", GetVertexData(container.Version).ExportYAML(container));
 			node.Add("m_CompressedMesh", CompressedMesh.ExportYAML(container));
@@ -505,9 +506,18 @@ namespace UtinyRipper.Classes
 			return IsReadSubMeshes(version) ? SubMeshes : new SubMesh[0];
 		}
 
-		private IReadOnlyList<byte> GetIndexBuffer(Version version)
+		private IReadOnlyList<byte> GetIndexBuffer(Version version, Platform platform)
 		{
-			return IsReadIndexBuffer(version) ? IndexBuffer : new byte[0];
+			if(IsReadIndexBuffer(version))
+			{
+				if(platform == Platform.XBox360)
+				{
+					AlignType align = (IsReadUse16bitIndices(version) && !Use16bitIndices) ? AlignType.Align4 : AlignType.Align2;
+					return m_indexBuffer.SwapBytes(align);
+				}
+				return IndexBuffer;
+			}
+			return new byte[0];
 		}
 
 		private IReadOnlyList<BoneWeights4> GetSkin(Version version)
