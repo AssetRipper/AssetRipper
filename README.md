@@ -1,10 +1,10 @@
-# UtinyRipper
+# uTinyRipper
 **Latest build:** [![Build status](https://ci.appveyor.com/api/projects/status/yd78hqp83f7vjkwb?svg=true)](https://ci.appveyor.com/project/mafaca/utinyripper/build/artifacts)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/UtinyRipper/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 **Latest build (with converters):** [![Build status](https://ci.appveyor.com/api/projects/status/2aqvnu29q68lm3le?svg=true)](https://ci.appveyor.com/project/mafaca/utinyripperfull)
 
-Utiny Ripper is a tool for extracting assets from serialized files (*CAB-*\*, *\*.assets*, *\*.sharedAssets*, etc.) and assets bundles (*\*.unity3d*, *\*.assetbundle*, etc.) and conveting them into native Engine format.
+uTinyRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*.assets*, *\*.sharedAssets*, etc.) and assets bundles (*\*.unity3d*, *\*.assetbundle*, etc.) and conveting them into native Engine format.
 
 ## Export features
 * Prefabs (GameObjects with transform components)
@@ -37,19 +37,28 @@ Utiny Ripper is a tool for extracting assets from serialized files (*CAB-*\*, *\
   * MonoScript (Mono only)
 
 ## Structure
-Solution consist of four projects:
-* *UtinyRipperCore*
+Solution consists of five projects:
+* *uTinyRipperCore*
 
    Core library. It's designed as an single module without any third party dependencies.
-* *UtinyRipper*
+   
+* *uTinyRipperConsole*
 
    Sample console application which is designed to test Core library functionality.   
    It is command line console application. Drag and drop resource file(s) or/and folder(s) onto .exe to retrive assets. It will automaticly try to find resource dependencies, create 'Ripped' folder and extract all supported assets into created directory.
-As it is a sample application so I'm not going to improve it in any way.
+   As it is a sample application so I'm not going to improve it in any way.
 
-* *UtinyRipperNETCore* and *UtinyRipperCoreNETStandard*
+* *uTinyRipperNETCore* and *uTinyRipperCoreNETStandard*
 
    They are copies of previous two but target other platform. Those two projects are cross platform and could be lauched on Windows, Linux and Mac using .NET Core frameword runetime.
+   
+* *uTinyRipperGUI*
+
+   Basic graphic interface application. It contains some converters so additionally it exports next assets:
+   * AudioClip .wav export
+   * Texture2D .png export (with Sprites)
+   * Shader DirectX blob export
+   * References to build-in Engine assets
    
    
 

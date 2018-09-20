@@ -1,0 +1,51 @@
+﻿using System.Collections.Generic;
+using uTinyRipper.AssetExporters;
+using uTinyRipper.Exporter.YAML;
+using uTinyRipper.SerializedFiles;
+
+namespace uTinyRipper.Classes.Materials
+{
+	public struct UnityTexEnv : IAssetReadable, IYAMLExportable, IDependent
+	{
+		/// <summary>
+		/// 2.1.0 and greater
+		/// </summary>
+		private static bool IsReadVector2(Version version)
+		{
+			return version.IsGreaterEqual(2, 1);
+		}
+
+		public void Read(AssetReader reader)
+		{
+			Texture.Read(reader);
+			if (IsReadVector2(reader.Version))
+			{
+				Scale.Read2(reader);
+				Offset.Read2(reader);
+			}
+			else
+			{
+				Scale.Read(reader);
+				Offset.Read(reader);
+			}
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add("m_Texture", Texture.ExportYAML(container));
+			node.Add("m_Scale", Scale.ExportYAML2(container));
+			node.Add("m_Offset", Offset.ExportYAML2(container));
+			return node;
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield return Texture.FetchDependency(file, isLog, () => nameof(UnityTexEnv), "m_Texture");
+		}
+
+		public PPtr<Texture> Texture;
+		public Vector3f Scale;
+		public Vector3f Offset;
+	}
+}

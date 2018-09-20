@@ -1,0 +1,125 @@
+﻿namespace uTinyRipperGUI.Exporters
+{
+	public enum QFormat
+	{
+        // General formats
+        Q_FORMAT_RGBA_8UI = 1,
+        Q_FORMAT_RGBA_8I,
+        Q_FORMAT_RGB5_A1UI,
+        Q_FORMAT_RGBA_4444,
+        Q_FORMAT_RGBA_16UI,
+        Q_FORMAT_RGBA_16I,
+        Q_FORMAT_RGBA_32UI,
+        Q_FORMAT_RGBA_32I,
+
+        Q_FORMAT_PALETTE_8_RGBA_8888,
+        Q_FORMAT_PALETTE_8_RGBA_5551,
+        Q_FORMAT_PALETTE_8_RGBA_4444,
+        Q_FORMAT_PALETTE_4_RGBA_8888,
+        Q_FORMAT_PALETTE_4_RGBA_5551,
+        Q_FORMAT_PALETTE_4_RGBA_4444,
+        Q_FORMAT_PALETTE_1_RGBA_8888,
+        Q_FORMAT_PALETTE_8_RGB_888,
+        Q_FORMAT_PALETTE_8_RGB_565,
+        Q_FORMAT_PALETTE_4_RGB_888,
+        Q_FORMAT_PALETTE_4_RGB_565,
+
+        Q_FORMAT_R2_GBA10UI,
+        Q_FORMAT_RGB10_A2UI,
+        Q_FORMAT_RGB10_A2I,
+        Q_FORMAT_RGBA_F,
+        Q_FORMAT_RGBA_HF,
+
+        Q_FORMAT_RGB9_E5,   // Last five bits are exponent bits (Read following section in GLES3 spec: "3.8.17 Shared Exponent Texture Color Conversion")
+        Q_FORMAT_RGB_8UI,
+        Q_FORMAT_RGB_8I,
+        Q_FORMAT_RGB_565,
+        Q_FORMAT_RGB_16UI,
+        Q_FORMAT_RGB_16I,
+        Q_FORMAT_RGB_32UI,
+        Q_FORMAT_RGB_32I,
+
+        Q_FORMAT_RGB_F,
+        Q_FORMAT_RGB_HF,
+        Q_FORMAT_RGB_11_11_10_F,
+
+        Q_FORMAT_RG_F,
+        Q_FORMAT_RG_HF,
+        Q_FORMAT_RG_32UI,
+        Q_FORMAT_RG_32I,
+        Q_FORMAT_RG_16I,
+        Q_FORMAT_RG_16UI,
+        Q_FORMAT_RG_8I,
+        Q_FORMAT_RG_8UI,
+        Q_FORMAT_RG_S88,
+
+        Q_FORMAT_R_32UI,
+        Q_FORMAT_R_32I,
+        Q_FORMAT_R_F,
+        Q_FORMAT_R_16F,
+        Q_FORMAT_R_16I,
+        Q_FORMAT_R_16UI,
+        Q_FORMAT_R_8I,
+        Q_FORMAT_R_8UI,
+
+        Q_FORMAT_LUMINANCE_ALPHA_88,
+        Q_FORMAT_LUMINANCE_8,
+        Q_FORMAT_ALPHA_8,
+
+        Q_FORMAT_LUMINANCE_ALPHA_F,
+        Q_FORMAT_LUMINANCE_F,
+        Q_FORMAT_ALPHA_F,
+        Q_FORMAT_LUMINANCE_ALPHA_HF,
+        Q_FORMAT_LUMINANCE_HF,
+        Q_FORMAT_ALPHA_HF,
+        Q_FORMAT_DEPTH_16,
+        Q_FORMAT_DEPTH_24,
+        Q_FORMAT_DEPTH_24_STENCIL_8,
+        Q_FORMAT_DEPTH_32,
+
+        Q_FORMAT_BGR_565,
+        Q_FORMAT_BGRA_8888,
+        Q_FORMAT_BGRA_5551,
+        Q_FORMAT_BGRX_8888,
+        Q_FORMAT_BGRA_4444,
+        // Compressed formats
+        Q_FORMAT_ATITC_RGBA,
+        Q_FORMAT_ATC_RGBA_EXPLICIT_ALPHA = Q_FORMAT_ATITC_RGBA,
+        Q_FORMAT_ATITC_RGB,
+        Q_FORMAT_ATC_RGB = Q_FORMAT_ATITC_RGB,
+        Q_FORMAT_ATC_RGBA_INTERPOLATED_ALPHA,
+        Q_FORMAT_ETC1_RGB8,
+        Q_FORMAT_3DC_X,
+        Q_FORMAT_3DC_XY,
+
+        Q_FORMAT_ETC2_RGB8,
+        Q_FORMAT_ETC2_RGBA8,
+        Q_FORMAT_ETC2_RGB8_PUNCHTHROUGH_ALPHA1,
+        Q_FORMAT_ETC2_SRGB8,
+        Q_FORMAT_ETC2_SRGB8_ALPHA8,
+        Q_FORMAT_ETC2_SRGB8_PUNCHTHROUGH_ALPHA1,
+        Q_FORMAT_EAC_R_SIGNED,
+        Q_FORMAT_EAC_R_UNSIGNED,
+        Q_FORMAT_EAC_RG_SIGNED,
+        Q_FORMAT_EAC_RG_UNSIGNED,
+
+        Q_FORMAT_S3TC_DXT1_RGB,
+        Q_FORMAT_S3TC_DXT1_RGBA,
+        Q_FORMAT_S3TC_DXT3_RGBA,
+        Q_FORMAT_S3TC_DXT5_RGBA,
+
+        // YUV formats
+        Q_FORMAT_AYUV_32,
+        Q_FORMAT_I444_24,
+        Q_FORMAT_YUYV_16,
+        Q_FORMAT_UYVY_16,
+        Q_FORMAT_I420_12,
+        Q_FORMAT_YV12_12,
+        Q_FORMAT_NV21_12,
+        Q_FORMAT_NV12_12,
+
+        // ASTC Format
+        Q_FORMAT_ASTC_8,
+        Q_FORMAT_ASTC_16,
+	}
+}
