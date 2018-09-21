@@ -16,14 +16,20 @@
         <TextBlock Name="IntroText"
             Text="Drag &amp; Drop files/folders here" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="48" Foreground="#FF343434"/>
         <Button Name="ExportButton" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,150,0,0"
-                Width="120"  Height="30"  FontSize="20" 
-                Content="Export" Visibility="Hidden" Click="OnExportButtonClicked"/>
+                Width="120"  Height="30"  FontSize="18"
+                Visibility="Hidden" Click="OnExportButtonClicked">
+            <TextBlock Text="Export" Margin="0,-3,0,0"/>
+        </Button>
         <Button Name="PostExportButton" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,150,150,0"
                 Width="120"  Height="30"  FontSize="20" 
-                Content="Open folder" Visibility="Hidden" Click="OnPostExportButtonClicked"/>
+                Visibility="Hidden" Click="OnPostExportButtonClicked">
+            <TextBlock Text="Open folder" Margin="0,-3,0,0"/>
+        </Button>
         <Button Name="ResetButton" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="150,150,0,0"
                 Width="120"  Height="30"  FontSize="20" 
-                Content="Reset" Visibility="Hidden" Click="OnResetButtonClicked"/>
+                Visibility="Hidden" Click="OnResetButtonClicked">
+            <TextBlock Text="Reset" Margin="0,-3,0,0"/>
+        </Button>
 
         <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch"
                           VerticalAlignment="Top" Height="8" Background="Transparent" Margin="0,-4,0,0" />
@@ -36,11 +42,17 @@
                    ScrollViewer.CanContentScroll="True"
                    TextChanged="OnOutputTextChanged"
                  >
+            <RichTextBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="ApplicationCommands.SelectAll"/>
+                    <MenuItem Command="ApplicationCommands.Copy"/>
+                </ContextMenu>
+            </RichTextBox.ContextMenu>
             <FlowDocument>
                 <Paragraph>
                     <Run FontWeight="Bold">Output log:</Run>
-                    <LineBreak/>
-                </Paragraph>
+                    <LineBreak/>                    
+                </Paragraph>                
             </FlowDocument>
         </RichTextBox>       
     </Grid>

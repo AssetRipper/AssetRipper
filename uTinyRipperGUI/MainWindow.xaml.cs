@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -19,7 +20,7 @@ namespace uTinyRipperGUI
 	{
 		public static bool AssetSelector(Object asset)
 		{
-			return asset.ClassID == ClassIDType.Mesh;
+			return true;
 		}
 
 		public MainWindow()
@@ -29,6 +30,10 @@ namespace uTinyRipperGUI
 			Logger.Instance = new OutputLogger(OutputTextBox);
 
 			m_initialText = IntroText.Text;
+
+			string[] args = Environment.GetCommandLineArgs();
+			string[] files = args.Skip(1).ToArray();
+			ProcessInputFiles(files);
 		}
 
 		// =====================================================
@@ -40,29 +45,8 @@ namespace uTinyRipperGUI
 			if(e.Data.GetDataPresent(DataFormats.FileDrop))
 			{
 				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-				foreach (string file in files)
-				{
-					if (FileMultiStream.Exists(file))
-					{
-						continue;
-					}
-					if (DirectoryUtils.Exists(file))
-					{
-						continue;
-					}
-					Logger.Instance.Log(LogType.Warning, LogCategory.General, FileMultiStream.IsMultiFile(file) ?
-						$"File '{file}' doesn't has all parts for combining" :
-						$"Neither file nor directory with path '{file}' exists");
-					return;
-				}
-
-				ThreadPool.QueueUserWorkItem(new WaitCallback(LoadFiles), files);
-
-				IntroText.Text = "Loading files...";
-				MainGrid.AllowDrop = false;
-
-				e.Handled = true;
+				
+				e.Handled = ProcessInputFiles(files);
 			}
 		}
 		
@@ -127,6 +111,36 @@ namespace uTinyRipperGUI
 		// =====================================================
 		// Methods
 		// =====================================================
+
+		private bool ProcessInputFiles(string[] files)
+		{
+			if(files.Length == 0)
+			{
+				return false;
+			}
+
+			foreach (string file in files)
+			{
+				if (FileMultiStream.Exists(file))
+				{
+					continue;
+				}
+				if (DirectoryUtils.Exists(file))
+				{
+					continue;
+				}
+				Logger.Instance.Log(LogType.Warning, LogCategory.General, FileMultiStream.IsMultiFile(file) ?
+					$"File '{file}' doesn't has all parts for combining" :
+					$"Neither file nor directory with path '{file}' exists");
+				return false;
+			}
+
+			IntroText.Text = "Loading files...";
+			MainGrid.AllowDrop = false;
+
+			ThreadPool.QueueUserWorkItem(new WaitCallback(LoadFiles), files);
+			return true;
+		}
 
 		private void LoadFiles(object data)
 		{

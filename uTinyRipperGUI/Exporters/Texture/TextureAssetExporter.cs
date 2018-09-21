@@ -20,16 +20,16 @@ namespace uTinyRipperGUI.Exporters
 	public class TextureAssetExporter : IAssetExporter
 	{
 #warning TODO: replace to  other libs
-		[DllImport(PVRTexLibWrapperName, CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("PVRTexLibWrapper", CallingConvention = CallingConvention.Cdecl)]
 		private static extern bool DecompressPVR(byte[] buffer, IntPtr bmp, int len);
 
-		[DllImport(TextureConverterWrapperName, CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("TextureConverterWrapper", CallingConvention = CallingConvention.Cdecl)]
 		private static extern bool Ponvert(byte[] buffer, IntPtr bmp, int nWidth, int nHeight, int len, int type, int bmpsize, bool fixAlpha);
 		
-		[DllImport(TexgenpackName, CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("texgenpack", CallingConvention = CallingConvention.Cdecl)]
 		private static extern void texgenpackdecode(int texturetype, byte[] texturedata, int width, int height, IntPtr bmp, bool fixAlpha);
 		
-		[DllImport(CrunchName, CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("crunch", CallingConvention = CallingConvention.Cdecl)]
 		private static extern bool DecompressCRN(byte[] pSrcFileData, int srcFileSize, out IntPtr uncompressedData, out int uncompressedSize);
 
 		public bool IsHandle(Object asset)
@@ -547,31 +547,5 @@ namespace uTinyRipperGUI.Exporters
 					throw new NotSupportedException(format.ToString());
 			}
 		}
-
-		private const string PVRTexLibWrapperName =
-#if WIN64
-			"PVRTexLibWrapper_x64";
-#else
-			"PVRTexLibWrapper_x86";
-#endif
-		private const string TextureConverterWrapperName =
-#if WIN64
-			"TextureConverterWrapper_x64";
-#else
-			"TextureConverterWrapper_x86";
-#endif
-		private const string TexgenpackName =
-#if WIN64
-			"texgenpack_x64";
-#else
-			"texgenpack_x86";
-#endif
-		private const string CrunchName =
-#if WIN64
-			"crunch_x64";
-#else
-			"crunch_x86";
-#endif
-		
 	}
 }

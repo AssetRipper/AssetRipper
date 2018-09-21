@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 		/// </summary>
 		public static bool IsReadOrbital(Version version)
 		{
-			return version.IsGreaterEqual(2018, 2);
+			return version.IsGreaterEqual(2018, 1, 1);
 		}
 		/// <summary>
 		/// 2017.3 and greater
