@@ -21,7 +21,7 @@ namespace uTinyRipper.Classes
 			m_packedSprites = reader.ReadArray<PPtr<Sprite>>();
 			m_packedSpriteNamesToIndex = reader.ReadStringArray();
 			m_renderDataMap.Read(reader);
-			Tag = reader.ReadStringAligned();
+			Tag = reader.ReadString();
 			IsVariant = reader.ReadBoolean();
 			reader.AlignStream(AlignType.Align4);
 		}

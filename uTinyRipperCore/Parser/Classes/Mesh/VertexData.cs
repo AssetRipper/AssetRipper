@@ -250,7 +250,6 @@ namespace uTinyRipper.Classes.Meshes
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-#warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_CurrentChannels", GetCurrentChannels(container.Version));
@@ -314,7 +313,7 @@ namespace uTinyRipper.Classes.Meshes
 					channels[(int)ChannelType.Normal] = Channels[(int)ChannelTypeV4.Normal];
 					// replace ChannelFormat.Color with 1 dimention to ChannelFormat.Byte with 4 dimention
 					ChannelInfo cV4C = Channels[(int)ChannelTypeV4.Color];
-					ChannelInfo colorChannel = new ChannelInfo(cV4C.Stream, cV4C.Offset, ChannelFormat.Byte, cV4C.Dimension == 0 ? (byte)0 : (byte)4);
+					ChannelInfo colorChannel = new ChannelInfo(cV4C.Stream, cV4C.Offset, cV4C.IsSet ? ChannelFormat.Byte : 0, cV4C.IsSet ? (byte)4 : (byte)0);
 					channels[(int)ChannelType.Color] = colorChannel;
 					channels[(int)ChannelType.UV0] = Channels[(int)ChannelTypeV4.UV0];
 					channels[(int)ChannelType.UV1] = Channels[(int)ChannelTypeV4.UV1];

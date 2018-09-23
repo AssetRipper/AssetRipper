@@ -4,8 +4,8 @@
 	{
 		public void Read(AssetReader reader)
 		{
-			From = reader.ReadStringAligned();
-			To = reader.ReadStringAligned();
+			From = reader.ReadString();
+			To = reader.ReadString();
 		}
 
 		public string From { get; private set; }

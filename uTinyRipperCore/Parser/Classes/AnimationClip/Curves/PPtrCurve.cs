@@ -23,8 +23,8 @@ namespace uTinyRipper.Classes.AnimationClips
 				reader.AlignStream(AlignType.Align4);
 			}
 
-			Attribute = reader.ReadStringAligned();
-			Path = reader.ReadStringAligned();
+			Attribute = reader.ReadString();
+			Path = reader.ReadString();
 			ClassID = reader.ReadInt32();
 			Script.Read(reader);
 		}

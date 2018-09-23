@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes.Meshes
 	{
 		public void Read(AssetReader reader)
 		{
-			Name = reader.ReadStringAligned();
+			Name = reader.ReadString();
 			NameHash = reader.ReadUInt32();
 			FrameIndex = reader.ReadInt32();
 			FrameCount = reader.ReadInt32();

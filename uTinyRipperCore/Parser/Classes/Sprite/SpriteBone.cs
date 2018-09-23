@@ -4,7 +4,7 @@
 	{
 		public void Read(AssetReader reader)
 		{
-			Name = reader.ReadStringAligned();
+			Name = reader.ReadString();
 			Position.Read(reader);
 			Rotation.Read(reader);
 			Length = reader.ReadSingle();

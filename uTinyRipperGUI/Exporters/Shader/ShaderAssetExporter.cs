@@ -9,6 +9,7 @@ using uTinyRipper.Classes;
 using uTinyRipper.Classes.Shaders;
 using uTinyRipper.Classes.Shaders.Exporters;
 using uTinyRipper.SerializedFiles;
+
 using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipperGUI.Exporters

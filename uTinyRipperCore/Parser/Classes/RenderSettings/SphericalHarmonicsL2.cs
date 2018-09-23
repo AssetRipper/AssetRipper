@@ -53,7 +53,6 @@ namespace uTinyRipper.Classes.RenderSettingss
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-#warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("sh[ 0]", Sh0);
 			node.Add("sh[ 1]", Sh1);

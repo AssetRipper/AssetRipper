@@ -14,7 +14,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			Message = reader.ReadStringAligned();
+			Message = reader.ReadString();
 			IsWarning = reader.ReadBoolean();
 		}
 

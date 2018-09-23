@@ -12,7 +12,7 @@ namespace uTinyRipper
 			KeyValuePair<string, T>[] array = new KeyValuePair<string, T>[count];
 			for (int i = 0; i < count; i++)
 			{
-				string key = reader.ReadStringAligned();
+				string key = reader.ReadString();
 				T value = new T();
 				value.Read(reader);
 				KeyValuePair<string, T> kvp = new KeyValuePair<string, T>(key, value);
@@ -28,7 +28,7 @@ namespace uTinyRipper
 			KeyValuePair<string, T>[] array = new KeyValuePair<string, T>[count];
 			for (int i = 0; i < count; i++)
 			{
-				string key = reader.ReadStringAligned();
+				string key = reader.ReadString();
 				T value = valueInstantiator();
 				value.Read(reader);
 				KeyValuePair<string, T> kvp = new KeyValuePair<string, T>(key, value);
@@ -127,7 +127,7 @@ namespace uTinyRipper
 		public static Tuple<string, T> ReadTupleStringT<T>(this AssetReader reader)
 			where T : IAssetReadable, new()
 		{
-			string value = reader.ReadStringAligned();
+			string value = reader.ReadString();
 			T t = new T();
 			t.Read(reader);
 			return new Tuple<string, T>(value, t);

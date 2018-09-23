@@ -74,7 +74,7 @@ namespace uTinyRipper.Classes
 
 		public void Read(AssetReader reader)
 		{
-			StyleName = reader.ReadStringAligned();
+			StyleName = reader.ReadString();
 			Normal.Read(reader);
 			Hover.Read(reader);
 			Active.Read(reader);

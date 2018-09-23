@@ -4,7 +4,7 @@
 	{
 		public void Read(AssetReader reader)
 		{
-			DefaultName = reader.ReadStringAligned();
+			DefaultName = reader.ReadString();
 			TexDim = reader.ReadInt32();
 		}
 

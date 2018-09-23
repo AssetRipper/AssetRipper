@@ -81,9 +81,11 @@ namespace uTinyRipper.AssetExporters
 						return new AnimatorControllerExportCollection(this, virtualFile, asset);
 
 					case ClassIDType.AudioManager:
+					case ClassIDType.InputManager:
 					case ClassIDType.GraphicsSettings:
 					case ClassIDType.PhysicsManager:
 					case ClassIDType.TagManager:
+					case ClassIDType.NavMeshAreas:
 					case ClassIDType.ClusterInputManager:
 						return new ManagerExportCollection(this, asset);
 					case ClassIDType.BuildSettings:

@@ -140,11 +140,11 @@ namespace uTinyRipper.Classes
 			}
 			if (IsReadSpatializerPlugin(reader.Version))
 			{
-				SpatializerPlugin = reader.ReadStringAligned();
+				SpatializerPlugin = reader.ReadString();
 			}
 			if (IsReadAmbisonicDecoderPlugin(reader.Version))
 			{
-				AmbisonicDecoderPlugin = reader.ReadStringAligned();
+				AmbisonicDecoderPlugin = reader.ReadString();
 			}
 			if (IsReadDisableAudio(reader.Version))
 			{
@@ -162,7 +162,6 @@ namespace uTinyRipper.Classes
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-#warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_Volume", Volume);

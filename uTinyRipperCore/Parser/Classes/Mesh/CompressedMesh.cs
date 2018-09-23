@@ -75,7 +75,6 @@ namespace uTinyRipper.Classes.Meshes
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-#warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("m_Vertices", Vertices.ExportYAML(container));
 			node.Add("m_UV", UV.ExportYAML(container));

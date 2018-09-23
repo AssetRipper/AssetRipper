@@ -387,6 +387,9 @@ namespace uTinyRipper
 			return new Version(data);
 		}
 
+		public static Version MinVersion => new Version(0UL);
+		public static Version MaxVersion => new Version(ulong.MaxValue);
+
 		public int Major
 		{
 			get => unchecked((int)((m_data >> 48) & 0xFFFFUL));

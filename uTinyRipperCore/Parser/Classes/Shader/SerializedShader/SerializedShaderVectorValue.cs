@@ -8,7 +8,7 @@
 			Y.Read(reader);
 			Z.Read(reader);
 			W.Read(reader);
-			Name = reader.ReadStringAligned();
+			Name = reader.ReadString();
 		}
 
 		public bool IsZero => X.IsZero && Y.IsZero && Z.IsZero && W.IsZero;

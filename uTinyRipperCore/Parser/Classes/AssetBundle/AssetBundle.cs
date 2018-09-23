@@ -132,7 +132,7 @@ namespace uTinyRipper.Classes
 
 			if(IsReadAssetBundleName(reader.Version))
 			{
-				AssetBundleName = reader.ReadStringAligned();
+				AssetBundleName = reader.ReadString();
 				m_dependencies = reader.ReadStringArray();
 			}
 			if (IsReadIsStreamedSceneAssetBundle(reader.Version))

@@ -15,7 +15,7 @@ namespace uTinyRipper.Classes.Shaders
 
 		public void Read(AssetReader reader)
 		{
-			Name = reader.ReadStringAligned();
+			Name = reader.ReadString();
 			RtBlend0.Read(reader);
 			RtBlend1.Read(reader);
 			RtBlend2.Read(reader);

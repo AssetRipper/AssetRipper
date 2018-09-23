@@ -13,7 +13,7 @@
 
 		public void Read(AssetReader reader)
 		{
-			Source = reader.ReadStringAligned();
+			Source = reader.ReadString();
 			Offset = (long)reader.ReadUInt64();
 			if (IsReadSize(reader.Version))
 			{

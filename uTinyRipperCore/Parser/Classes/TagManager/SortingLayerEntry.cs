@@ -15,7 +15,7 @@ namespace uTinyRipper.Classes.TagManagers
 
 		public void Read(AssetReader reader)
 		{
-			Name = reader.ReadStringAligned();
+			Name = reader.ReadString();
 			if(IsReadUserID(reader.Version))
 			{
 				UserID = reader.ReadUInt32();

@@ -7,7 +7,7 @@ namespace uTinyRipper.Classes.AnimationClips
 	{
 		public void Read(AssetReader reader)
 		{
-			Path = reader.ReadStringAligned();
+			Path = reader.ReadString();
 			Times.Read(reader);
 			Values.Read(reader);
 			Slopes.Read(reader);

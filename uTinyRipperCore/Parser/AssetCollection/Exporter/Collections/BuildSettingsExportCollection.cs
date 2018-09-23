@@ -19,6 +19,10 @@ namespace uTinyRipper.AssetExporters
 		{
 			EditorBuildSettings = EditorBuildSettings.CreateVirtualInstance(virtualFile);
 			EditorSettings = EditorSettings.CreateVirtualInstance(virtualFile);
+			if (!NavMeshProjectSettings.IsReadNavMeshProjectSettings(asset.File.Version))
+			{
+				NavMeshProjectSettings = NavMeshProjectSettings.CreateVirtualInstance(virtualFile);
+			}
 		}
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)
@@ -41,7 +45,15 @@ namespace uTinyRipper.AssetExporters
 			filePath = Path.Combine(subPath, fileName);
 
 			AssetExporter.Export(container, EditorSettings, filePath);
-			
+
+			if (NavMeshProjectSettings != null)
+			{
+				fileName = $"{NavMeshProjectSettings.ExportName}.asset";
+				filePath = Path.Combine(subPath, fileName);
+
+				AssetExporter.Export(container, NavMeshProjectSettings, filePath);
+			}
+
 			fileName = $"ProjectVersion.txt";
 			filePath = Path.Combine(subPath, fileName);
 
@@ -57,7 +69,7 @@ namespace uTinyRipper.AssetExporters
 
 		public override bool IsContains(Object asset)
 		{
-			if(asset == EditorBuildSettings || asset == EditorSettings)
+			if (asset == EditorBuildSettings || asset == EditorSettings || asset == NavMeshProjectSettings)
 			{
 				return true;
 			}
@@ -81,5 +93,6 @@ namespace uTinyRipper.AssetExporters
 
 		public EditorBuildSettings EditorBuildSettings { get; }
 		public EditorSettings EditorSettings { get; }
+		public NavMeshProjectSettings NavMeshProjectSettings { get; }
 	}
 }

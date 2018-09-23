@@ -11,9 +11,9 @@ namespace uTinyRipper.Classes.Shaders
 		{
 			PropInfo.Read(reader);
 			m_subShaders = reader.ReadArray<SerializedSubShader>();
-			Name = reader.ReadStringAligned();
-			CustomEditorName = reader.ReadStringAligned();
-			FallbackName = reader.ReadStringAligned();
+			Name = reader.ReadString();
+			CustomEditorName = reader.ReadString();
+			FallbackName = reader.ReadString();
 			m_dependencies = reader.ReadArray<SerializedShaderDependency>();
 			DisableNoSubshadersMessage = reader.ReadBoolean();
 			reader.AlignStream(AlignType.Align4);

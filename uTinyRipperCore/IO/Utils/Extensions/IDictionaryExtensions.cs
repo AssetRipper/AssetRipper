@@ -22,7 +22,7 @@ namespace uTinyRipper
 			for (int i = 0; i < count; i++)
 			{
 				uint key = reader.ReadUInt32();
-				string value = reader.ReadStringAligned();
+				string value = reader.ReadString();
 				_this.Add(key, value);
 			}
 		}
@@ -32,7 +32,7 @@ namespace uTinyRipper
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = reader.ReadStringAligned();
+				string key = reader.ReadString();
 				byte value = reader.ReadByte();
 				_this.Add(key, value);
 			}
@@ -43,7 +43,7 @@ namespace uTinyRipper
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = reader.ReadStringAligned();
+				string key = reader.ReadString();
 				short value = reader.ReadInt16();
 				_this.Add(key, value);
 			}
@@ -54,7 +54,7 @@ namespace uTinyRipper
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = reader.ReadStringAligned();
+				string key = reader.ReadString();
 				ushort value = reader.ReadUInt16();
 				_this.Add(key, value);
 			}
@@ -65,7 +65,7 @@ namespace uTinyRipper
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = reader.ReadStringAligned();
+				string key = reader.ReadString();
 				int value = reader.ReadInt32();
 				_this.Add(key, value);
 			}
@@ -76,7 +76,7 @@ namespace uTinyRipper
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = reader.ReadStringAligned();
+				string key = reader.ReadString();
 				uint value = reader.ReadUInt32();
 				_this.Add(key, value);
 			}
@@ -87,7 +87,7 @@ namespace uTinyRipper
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = reader.ReadStringAligned();
+				string key = reader.ReadString();
 				long value = reader.ReadInt64();
 				_this.Add(key, value);
 			}
@@ -98,7 +98,7 @@ namespace uTinyRipper
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = reader.ReadStringAligned();
+				string key = reader.ReadString();
 				ulong value = reader.ReadUInt64();
 				_this.Add(key, value);
 			}
@@ -109,7 +109,7 @@ namespace uTinyRipper
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = reader.ReadStringAligned();
+				string key = reader.ReadString();
 				float value = reader.ReadSingle();
 				_this.Add(key, value);
 			}
@@ -120,8 +120,8 @@ namespace uTinyRipper
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				string key = reader.ReadStringAligned();
-				string value = reader.ReadStringAligned();
+				string key = reader.ReadString();
+				string value = reader.ReadString();
 				_this.Add(key, value);
 			}
 		}

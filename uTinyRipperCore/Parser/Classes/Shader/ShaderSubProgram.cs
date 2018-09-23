@@ -132,12 +132,12 @@ namespace uTinyRipper.Classes.Shaders
 				vectors.Clear();
 				matrices.Clear();
 
-				string name = reader.ReadStringAligned();
+				string name = reader.ReadString();
 				int usedSize = reader.ReadInt32();
 				int paramCount = reader.ReadInt32();
 				for (int j = 0; j < paramCount; j++)
 				{
-					string paramName = reader.ReadStringAligned();
+					string paramName = reader.ReadString();
 					ShaderParamType paramType = (ShaderParamType)reader.ReadInt32();
 					int rows = reader.ReadInt32();
 					int dimension = reader.ReadInt32();
@@ -180,7 +180,7 @@ namespace uTinyRipper.Classes.Shaders
 						vectors.Clear();
 						matrices.Clear();
 
-						string structName = reader.ReadStringAligned();
+						string structName = reader.ReadString();
 						int index = reader.ReadInt32();
 						int arraySize = reader.ReadInt32();
 						int structSize = reader.ReadInt32();
@@ -188,7 +188,7 @@ namespace uTinyRipper.Classes.Shaders
 						int strucParamCount = reader.ReadInt32();
 						for(int k = 0; k < strucParamCount; k++)
 						{
-							string paramName = reader.ReadStringAligned();
+							string paramName = reader.ReadString();
 							paramName = $"{structName}.{paramName}";
 							ShaderParamType paramType = (ShaderParamType)reader.ReadInt32();
 							int rows = reader.ReadInt32();
@@ -222,7 +222,7 @@ namespace uTinyRipper.Classes.Shaders
 			int paramGroup2Count = reader.ReadInt32();
 			for (int i = 0; i < paramGroup2Count; i++)
 			{
-				string name = reader.ReadStringAligned();
+				string name = reader.ReadString();
 				int type = reader.ReadInt32();
 				int index = reader.ReadInt32();
 				int extraValue = reader.ReadInt32();

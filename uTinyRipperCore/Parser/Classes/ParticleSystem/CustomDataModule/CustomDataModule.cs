@@ -58,35 +58,35 @@ namespace uTinyRipper.Classes.ParticleSystems
 #if UNIVERSAL
 			if (IsReadLabel(reader.Flags))
 			{
-				ColorLabel0 = reader.ReadStringAligned();
+				ColorLabel0 = reader.ReadString();
 			}
 #endif
 			Vector0_0.Read(reader);
 #if UNIVERSAL
 			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel0_0 = reader.ReadStringAligned();
+				VectorLabel0_0 = reader.ReadString();
 			}
 #endif
 			Vector0_1.Read(reader);
 #if UNIVERSAL
 			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel0_1 = reader.ReadStringAligned();
+				VectorLabel0_1 = reader.ReadString();
 			}
 #endif
 			Vector0_2.Read(reader);
 #if UNIVERSAL
 			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel0_2 = reader.ReadStringAligned();
+				VectorLabel0_2 = reader.ReadString();
 			}
 #endif
 			Vector0_3.Read(reader);
 #if UNIVERSAL
 			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel0_3 = reader.ReadStringAligned();
+				VectorLabel0_3 = reader.ReadString();
 			}
 #endif
 			Mode1 = (ParticleSystemCustomDataMode)reader.ReadInt32();
@@ -95,35 +95,35 @@ namespace uTinyRipper.Classes.ParticleSystems
 #if UNIVERSAL
 			if (IsReadLabel(reader.Flags))
 			{
-				ColorLabel1 = reader.ReadStringAligned();
+				ColorLabel1 = reader.ReadString();
 			}
 #endif
 			Vector1_0.Read(reader);
 #if UNIVERSAL
 			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel1_0 = reader.ReadStringAligned();
+				VectorLabel1_0 = reader.ReadString();
 			}
 #endif
 			Vector1_1.Read(reader);
 #if UNIVERSAL
 			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel1_1 = reader.ReadStringAligned();
+				VectorLabel1_1 = reader.ReadString();
 			}
 #endif
 			Vector1_2.Read(reader);
 #if UNIVERSAL
 			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel1_2 = reader.ReadStringAligned();
+				VectorLabel1_2 = reader.ReadString();
 			}
 #endif
 			Vector1_3.Read(reader);
 #if UNIVERSAL
 			if (IsReadLabel(reader.Flags))
 			{
-				VectorLabel1_3 = reader.ReadStringAligned();
+				VectorLabel1_3 = reader.ReadString();
 			}
 #endif
 		}

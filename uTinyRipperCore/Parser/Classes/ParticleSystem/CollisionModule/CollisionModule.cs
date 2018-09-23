@@ -173,7 +173,6 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
-#warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("type", (int)Type);

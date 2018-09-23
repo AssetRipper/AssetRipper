@@ -33,7 +33,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\Bins\Debug\</OutputPath>
+    <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <DefineConstants>TRACE;DEBUG;WIN64</DefineConstants>
     <DebugType>full</DebugType>
@@ -45,7 +45,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>..\Bins\Release\</OutputPath>
+    <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <DefineConstants>TRACE;WIN64</DefineConstants>
     <Optimize>true</Optimize>
@@ -59,7 +59,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\Bins\Debug\</OutputPath>
+    <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
@@ -71,7 +71,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\Bins\Release\</OutputPath>
+    <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
@@ -85,6 +85,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>App.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\URIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -248,6 +251,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>TextureConverterWrapper.dll</TargetPath>
     </ContentWithTargetPath>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\URIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

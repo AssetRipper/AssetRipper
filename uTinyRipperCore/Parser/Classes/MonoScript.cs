@@ -142,7 +142,7 @@ namespace uTinyRipper.Classes
 			{
 				m_defaultReferences = new Dictionary<string, PPtr<Object>>();
 
-				Script = reader.ReadStringAligned();
+				Script = reader.ReadString();
 				m_defaultReferences.Read(reader);
 				Icon.Read(reader);
 			}
@@ -162,14 +162,14 @@ namespace uTinyRipper.Classes
 
 			if (IsReadPathName(reader.Version))
 			{
-				PathName = reader.ReadStringAligned();
+				PathName = reader.ReadString();
 			}
-			ClassName = reader.ReadStringAligned();
+			ClassName = reader.ReadString();
 			if (IsReadNamespace(reader.Version))
 			{
-				Namespace = reader.ReadStringAligned();
+				Namespace = reader.ReadString();
 			}
-			AssemblyNameOrigin = reader.ReadStringAligned();
+			AssemblyNameOrigin = reader.ReadString();
 			AssemblyName = FilenameUtils.FixAssemblyName(AssemblyNameOrigin);
 			if (IsReadIsEditorScript(reader.Version))
 			{
@@ -195,7 +195,6 @@ namespace uTinyRipper.Classes
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-#warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			if (IsReadScript(container.Flags))
 			{

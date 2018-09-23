@@ -79,8 +79,9 @@ namespace uTinyRipper
 			return array;
 		}
 
-		public override string ReadStringAligned(int length)
+		public override string ReadString()
 		{
+			int length = ReadInt32();
 			byte[] buffer = ReadStringBuffer(length);
 			string result = Encoding.UTF8.GetString(buffer, 0, length);
 			if (Version.IsGreaterEqual(2, 1))

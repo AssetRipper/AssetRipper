@@ -76,7 +76,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		{
 			if (IsReadBuildTargetString(reader.Version))
 			{
-				string buildTarget = reader.ReadStringAligned();
+				string buildTarget = reader.ReadString();
 				BuildTarget = StringToBuildGroup(buildTarget);
 			}
 			else

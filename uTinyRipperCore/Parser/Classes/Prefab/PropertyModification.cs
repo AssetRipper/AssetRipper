@@ -8,8 +8,8 @@ namespace uTinyRipper.Classes.Prefabs
 		public void Read(AssetReader reader)
 		{
 			Target.Read(reader);
-			PropertyPath = reader.ReadStringAligned();
-			Value = reader.ReadStringAligned();
+			PropertyPath = reader.ReadString();
+			Value = reader.ReadString();
 			ObjectReference.Read(reader);
 		}
 

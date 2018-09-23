@@ -26,8 +26,8 @@ namespace uTinyRipper.Classes.AnimationClips
 		{
 			Time = reader.ReadSingle();
 
-			FunctionName = reader.ReadStringAligned();
-			StringParameter = reader.ReadStringAligned();
+			FunctionName = reader.ReadString();
+			StringParameter = reader.ReadString();
 			if (IsReadObjectReferenceParameter(reader.Version))
 			{
 				ObjectReferenceParameter.Read(reader);

@@ -23,9 +23,9 @@ namespace uTinyRipper.Classes.Shaders
 			HasInstancingVariant = reader.ReadBoolean();
 			reader.AlignStream(AlignType.Align4);
 
-			UseName = reader.ReadStringAligned();
-			Name = reader.ReadStringAligned();
-			TextureName = reader.ReadStringAligned();
+			UseName = reader.ReadString();
+			Name = reader.ReadString();
+			TextureName = reader.ReadString();
 			Tags.Read(reader);
 		}
 

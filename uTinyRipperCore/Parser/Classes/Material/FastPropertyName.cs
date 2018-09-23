@@ -15,7 +15,7 @@ namespace uTinyRipper.Classes.Materials
 
 		public void Read(AssetReader reader)
 		{
-			Value = reader.ReadStringAligned();
+			Value = reader.ReadString();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

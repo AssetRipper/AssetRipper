@@ -248,11 +248,11 @@ namespace uTinyRipper.Classes
 
 			if (IsReadVersion(reader.Version))
 			{
-				Version = reader.ReadStringAligned();
+				Version = reader.ReadString();
 			}
 			if (IsReadAuthToken(reader.Version))
 			{
-				AuthToken = reader.ReadStringAligned();
+				AuthToken = reader.ReadString();
 			}
 
 			if (IsReadRuntimeClassHashes(reader.Version))
@@ -279,7 +279,6 @@ namespace uTinyRipper.Classes
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-#warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			throw new System.NotImplementedException();
 		}

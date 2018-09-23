@@ -6,7 +6,7 @@
 		{
 			Offset = reader.ReadUInt32();
 			Size = reader.ReadUInt32();
-			Path = reader.ReadStringAligned();
+			Path = reader.ReadString();
 		}
 
 		public void Read(AssetReader reader, string path)

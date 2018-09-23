@@ -19,7 +19,7 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 			Script.Read(reader);
-			Name = reader.ReadStringAligned();
+			Name = reader.ReadString();
 			
 			MonoScript script = Script.FindAsset(File);
 			if (script != null)

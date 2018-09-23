@@ -82,7 +82,7 @@ namespace uTinyRipper.Classes
 				}
 				else
 				{
-					ShaderKeywords = reader.ReadStringAligned();
+					ShaderKeywords = reader.ReadString();
 				}
 			}
 

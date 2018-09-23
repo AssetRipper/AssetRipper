@@ -53,7 +53,7 @@ namespace uTinyRipper.Classes
 				m_layers = new string[32];
 				for(int i = 0; i < m_layers.Length; i++)
 				{
-					m_layers[i] = reader.ReadStringAligned();
+					m_layers[i] = reader.ReadString();
 				}
 			}
 			else

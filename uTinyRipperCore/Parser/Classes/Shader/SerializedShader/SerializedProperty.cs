@@ -9,8 +9,8 @@ namespace uTinyRipper.Classes.Shaders
 	{
 		public void Read(AssetReader reader)
 		{
-			Name = reader.ReadStringAligned();
-			Description = reader.ReadStringAligned();
+			Name = reader.ReadString();
+			Description = reader.ReadString();
 			m_attributes = reader.ReadStringArray();
 			Type = (SerializedPropertyType)reader.ReadInt32();
 			Flags = (SerializedPropertyFlag)reader.ReadUInt32();

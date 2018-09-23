@@ -4,7 +4,7 @@
 	{
 		public void Read(AssetReader reader)
 		{
-			Path = reader.ReadStringAligned();
+			Path = reader.ReadString();
 			ClassID = (ClassIDType)reader.ReadInt32();
 			Track.Read(reader);
 		}

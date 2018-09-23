@@ -15,7 +15,7 @@ namespace uTinyRipper.Classes.AnimationClips
 		public void Read(AssetReader reader)
 		{
 			Curve.Read(reader);
-			Path = reader.ReadStringAligned();
+			Path = reader.ReadString();
 		}
 		
 		public YAMLNode ExportYAML(IExportContainer container)

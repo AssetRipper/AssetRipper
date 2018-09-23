@@ -26,7 +26,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			Name = reader.ReadStringAligned();
+			Name = reader.ReadString();
 		}
 
 		public override string ToString()

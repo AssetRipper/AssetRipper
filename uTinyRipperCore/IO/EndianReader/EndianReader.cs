@@ -185,20 +185,6 @@ namespace uTinyRipper
 			byte[] buffer = ReadStringBuffer(length);
 			return Encoding.UTF8.GetString(buffer, 0, length);
 		}
-
-		public string ReadStringAligned()
-		{
-			int length = ReadInt32();
-			return ReadStringAligned(length);
-		}
-
-		public virtual string ReadStringAligned(int length)
-		{
-			byte[] buffer = ReadStringBuffer(length);
-			string result = Encoding.UTF8.GetString(buffer, 0, length);
-			AlignStream(AlignType.Align4);
-			return result;
-		}
 		
 		/// <summary>
 		/// Read C like UTF8 format zero terminated string
@@ -375,7 +361,7 @@ namespace uTinyRipper
 			string[] array = new string[count];
 			for (int i = 0; i < count; i++)
 			{
-				string value = ReadStringAligned();
+				string value = ReadString();
 				array[i] = value;
 			}
 			return array;

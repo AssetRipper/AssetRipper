@@ -463,7 +463,6 @@ namespace uTinyRipper.Classes
 		
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-#warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_SubMeshes", GetSubMeshes(container.Version).ExportYAML(container));

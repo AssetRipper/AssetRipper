@@ -5,7 +5,7 @@
 		public void Read(AssetReader reader)
 		{
 			Val = reader.ReadSingle();
-			Name = reader.ReadStringAligned();
+			Name = reader.ReadString();
 		}
 
 		public bool IsZero => Val == 0.0f;

@@ -9,12 +9,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;NET_CORE</DefineConstants>
-    <OutputPath>..\Bins\CP\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_CORE</DefineConstants>
+    <OutputPath>..\Bins\CP\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\Bins\CP\Release\</OutputPath>
+    <OutputPath>..\Bins\CP\$(Configuration)\</OutputPath>
     <DefineConstants>TRACE;NET_CORE</DefineConstants>
   </PropertyGroup>
 

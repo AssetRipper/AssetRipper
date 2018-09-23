@@ -23,6 +23,14 @@ namespace uTinyRipper.Classes.NavMeshDatas
 			Debug = default;
 		}
 
+		public NavMeshBuildSettings(float agentClimb, float cellSize) :
+			this(true)
+		{
+			AgentClimb = agentClimb;
+			ManualCellSize = 1;
+			CellSize = cellSize;
+		}
+
 		public NavMeshBuildSettings(NavMeshParams navParams) :
 			this(true)
 		{
@@ -47,9 +55,9 @@ namespace uTinyRipper.Classes.NavMeshDatas
 			{
 				return 2;
 			}
-			
-			// min version is 2nd
 			return 2;
+			// 5.6.0.Alpha.unknown
+			//return 1;
 		}
 
 		public void Read(AssetReader reader)
@@ -62,10 +70,12 @@ namespace uTinyRipper.Classes.NavMeshDatas
 			LedgeDropHeight = reader.ReadSingle();
 			MaxJumpAcrossDistance = reader.ReadSingle();
 			MinRegionArea = reader.ReadSingle();
+			// it is bool with align in 5.6 beta but there is no difference
 			ManualCellSize = reader.ReadInt32();
 			CellSize = reader.ReadSingle();
 			ManualTileSize = reader.ReadInt32();
 			TileSize = reader.ReadInt32();
+			// it is bool with align in 5.6 beta but there is no difference
 			AccuratePlacement = reader.ReadInt32();
 			if (IsReadDebug(reader.Version))
 			{

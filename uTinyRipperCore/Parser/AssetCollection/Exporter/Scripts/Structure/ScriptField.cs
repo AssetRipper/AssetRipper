@@ -188,7 +188,7 @@ namespace uTinyRipper.AssetExporters
 					}
 					else
 					{
-						Value = reader.ReadStringAligned();
+						Value = reader.ReadString();
 					}
 					break;
 

@@ -21,7 +21,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Bins\Debug\</OutputPath>
+    <OutputPath>..\Bins\$(Configuration)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;UNIVERSAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -33,7 +33,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Bins\Release\</OutputPath>
+    <OutputPath>..\Bins\$(Configuration)\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -43,7 +43,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\Bins\Debug\</OutputPath>
+    <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;UNIVERSAL</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -54,7 +54,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>..\Bins\Release\</OutputPath>
+    <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -67,7 +67,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\Bins\Debug\</OutputPath>
+    <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;UNIVERSAL</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -78,7 +78,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\Bins\Release\</OutputPath>
+    <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -283,6 +283,11 @@
     <Compile Include="Parser\Classes\GraphicsSettings\TierSettings.cs" />
     <Compile Include="Parser\Classes\GraphicsSettings\TransparencySortMode.cs" />
     <Compile Include="Parser\Classes\GUILayer.cs" />
+    <Compile Include="Parser\Classes\InputManager\InputAxesDirection.cs" />
+    <Compile Include="Parser\Classes\InputManager\InputAxis.cs" />
+    <Compile Include="Parser\Classes\InputManager\InputAxisType.cs" />
+    <Compile Include="Parser\Classes\InputManager\InputManager.cs" />
+    <Compile Include="Parser\Classes\InputManager\JoystickType.cs" />
     <Compile Include="Parser\Classes\LightingDataAsset\LightingDataAsset.cs" />
     <Compile Include="Parser\Classes\LightingDataAsset\RendererData.cs" />
     <Compile Include="Parser\Classes\LightmapParameters.cs" />
@@ -308,6 +313,8 @@
     <Compile Include="Parser\Classes\Mesh\MeshCompression.cs" />
     <Compile Include="Parser\Classes\Mesh\MeshTopology.cs" />
     <Compile Include="Parser\Classes\MonoManager.cs" />
+    <Compile Include="Parser\Classes\NavMeshProjectSettings\NavMeshAreaData.cs" />
+    <Compile Include="Parser\Classes\NavMeshProjectSettings\NavMeshProjectSettings.cs" />
     <Compile Include="Parser\Classes\ParticleSystemRenderer\ParticleSystemRenderMode.cs" />
     <Compile Include="Parser\Classes\ParticleSystemRenderer\ParticleSystemRenderSpace.cs" />
     <Compile Include="Parser\Classes\ParticleSystemRenderer\ParticleSystemSortMode.cs" />

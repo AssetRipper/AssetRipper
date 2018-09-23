@@ -8,7 +8,7 @@ namespace uTinyRipper.Classes.NewAnimationTracks
 		{
 			ByteOffset = reader.ReadInt32();
 			Curve.Read(reader);
-			AttributeName = reader.ReadStringAligned();
+			AttributeName = reader.ReadString();
 		}
 
 		public int ByteOffset { get; private set; }

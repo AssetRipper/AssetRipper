@@ -36,6 +36,8 @@ namespace uTinyRipper
 					return new Transform(assetInfo);
 				case ClassIDType.AudioManager:
 					return new AudioManager(assetInfo);
+				case ClassIDType.InputManager:
+					return new InputManager(assetInfo);
 				case ClassIDType.Camera:
 					return new Camera(assetInfo);
 				case ClassIDType.Material:
@@ -120,6 +122,8 @@ namespace uTinyRipper
 					return new NewAnimationTrack(assetInfo);
 				case ClassIDType.FlareLayer:
 					return new FlareLayer(assetInfo);
+				case ClassIDType.NavMeshAreas:
+					return new NavMeshProjectSettings(assetInfo);
 				case ClassIDType.Font:
 					return new Font(assetInfo);
 				case ClassIDType.PhysicMaterial:
@@ -154,6 +158,8 @@ namespace uTinyRipper
 					return new ParticleSystem(assetInfo);
 				case ClassIDType.ParticleSystemRenderer:
 					return new ParticleSystemRenderer(assetInfo);
+				case ClassIDType.ShaderVariantCollection:
+					return new ShaderVariantCollection(assetInfo);
 				case ClassIDType.SpriteRenderer:
 					return new SpriteRenderer(assetInfo);
 				case ClassIDType.Sprite:

@@ -22,6 +22,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.GameObject, YamlExporter);
 			OverrideExporter(ClassIDType.Transform, YamlExporter);
 			OverrideExporter(ClassIDType.AudioManager, YamlExporter);
+			OverrideExporter(ClassIDType.InputManager, YamlExporter);
 			OverrideExporter(ClassIDType.Camera, YamlExporter);
 			OverrideExporter(ClassIDType.Material, YamlExporter);
 			OverrideExporter(ClassIDType.MeshRenderer, YamlExporter);
@@ -56,6 +57,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.Animation, YamlExporter);
 			OverrideExporter(ClassIDType.MonoBehaviour, YamlExporter);
 			OverrideExporter(ClassIDType.FlareLayer, YamlExporter);
+			OverrideExporter(ClassIDType.NavMeshAreas, YamlExporter);
 			OverrideExporter(ClassIDType.PhysicMaterial, YamlExporter);
 			OverrideExporter(ClassIDType.SphereCollider, YamlExporter);
 			OverrideExporter(ClassIDType.CapsuleCollider, YamlExporter);
@@ -69,6 +71,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.NavMeshSettings, YamlExporter);
 			OverrideExporter(ClassIDType.ParticleSystem, YamlExporter);
 			OverrideExporter(ClassIDType.ParticleSystemRenderer, YamlExporter);
+			OverrideExporter(ClassIDType.ShaderVariantCollection, YamlExporter);
 			OverrideExporter(ClassIDType.SpriteRenderer, YamlExporter);
 			OverrideExporter(ClassIDType.Terrain, YamlExporter);
 			OverrideExporter(ClassIDType.AnimatorOverrideController, YamlExporter);

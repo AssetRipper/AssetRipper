@@ -7,7 +7,7 @@ namespace uTinyRipper.Classes.AvatarMasks
 	{
 		public void Read(AssetReader reader)
 		{
-			Path = reader.ReadStringAligned();
+			Path = reader.ReadString();
 			Weight = reader.ReadSingle();
 		}
 

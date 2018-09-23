@@ -27,8 +27,8 @@ namespace uTinyRipper.Classes.AnimationClips
 		public void Read(AssetReader reader)
 		{
 			Curve.Read(reader);
-			Attribute = reader.ReadStringAligned();
-			Path = reader.ReadStringAligned();
+			Attribute = reader.ReadString();
+			Path = reader.ReadString();
 			ClassID = reader.ReadInt32();
 			if (IsReadScript(reader.Version))
 			{

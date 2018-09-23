@@ -4,9 +4,9 @@
 	{
 		public void Read(AssetReader reader)
 		{
-			ClassName = reader.ReadStringAligned();
-			NameSpace = reader.ReadStringAligned();
-			AssemblyName = reader.ReadStringAligned();
+			ClassName = reader.ReadString();
+			NameSpace = reader.ReadString();
+			AssemblyName = reader.ReadString();
 			Hash = reader.ReadUInt32();
 		}
 

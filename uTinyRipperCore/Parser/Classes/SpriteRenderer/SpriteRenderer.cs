@@ -127,7 +127,6 @@ namespace uTinyRipper.Classes
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-#warning TODO: values acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("m_Sprite", Sprite.ExportYAML(container));
 			node.Add("m_Color", Color.ExportYAML(container));

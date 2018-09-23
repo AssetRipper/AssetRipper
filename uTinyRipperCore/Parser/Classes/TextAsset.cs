@@ -29,7 +29,7 @@ namespace uTinyRipper.Classes
 
 			if(IsReadPath(reader.Version))
 			{
-				PathName = reader.ReadStringAligned();
+				PathName = reader.ReadString();
 			}
 		}
 
