@@ -38,6 +38,8 @@ namespace uTinyRipper
 					return new AudioManager(assetInfo);
 				case ClassIDType.InputManager:
 					return new InputManager(assetInfo);
+				case ClassIDType.Physics2DSettings:
+					return new Physics2DSettings(assetInfo);
 				case ClassIDType.Camera:
 					return new Camera(assetInfo);
 				case ClassIDType.Material:
@@ -122,7 +124,7 @@ namespace uTinyRipper
 					return new NewAnimationTrack(assetInfo);
 				case ClassIDType.FlareLayer:
 					return new FlareLayer(assetInfo);
-				case ClassIDType.NavMeshAreas:
+				case ClassIDType.NavMeshProjectSettings:
 					return new NavMeshProjectSettings(assetInfo);
 				case ClassIDType.Font:
 					return new Font(assetInfo);
@@ -140,6 +142,8 @@ namespace uTinyRipper
 					return new AssetBundle(assetInfo);
 				case ClassIDType.WheelCollider:
 					return new WheelCollider(assetInfo);
+				case ClassIDType.NetworkManager:
+					return new NetworkManager(assetInfo);
 				case ClassIDType.PreloadData:
 					return new PreloadData(assetInfo);
 				case ClassIDType.MovieTexture:

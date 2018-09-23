@@ -23,6 +23,14 @@ namespace uTinyRipper.AssetExporters
 			{
 				NavMeshProjectSettings = NavMeshProjectSettings.CreateVirtualInstance(virtualFile);
 			}
+			if (!NetworkManager.IsReadNetworkManager(asset.File.Version))
+			{
+				NetworkManager = NetworkManager.CreateVirtualInstance(virtualFile);
+			}
+			if (!Physics2DSettings.IsReadPhysics2DSettings(asset.File.Version))
+			{
+				Physics2DSettings = Physics2DSettings.CreateVirtualInstance(virtualFile);
+			}
 		}
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)
@@ -53,6 +61,20 @@ namespace uTinyRipper.AssetExporters
 
 				AssetExporter.Export(container, NavMeshProjectSettings, filePath);
 			}
+			if (NetworkManager != null)
+			{
+				fileName = $"{NetworkManager.ExportName}.asset";
+				filePath = Path.Combine(subPath, fileName);
+
+				AssetExporter.Export(container, NetworkManager, filePath);
+			}
+			if (Physics2DSettings != null)
+			{
+				fileName = $"{Physics2DSettings.ExportName}.asset";
+				filePath = Path.Combine(subPath, fileName);
+
+				AssetExporter.Export(container, Physics2DSettings, filePath);
+			}
 
 			fileName = $"ProjectVersion.txt";
 			filePath = Path.Combine(subPath, fileName);
@@ -69,7 +91,8 @@ namespace uTinyRipper.AssetExporters
 
 		public override bool IsContains(Object asset)
 		{
-			if (asset == EditorBuildSettings || asset == EditorSettings || asset == NavMeshProjectSettings)
+			if (asset == EditorBuildSettings || asset == EditorSettings || asset == NavMeshProjectSettings || asset == NetworkManager||
+				asset == Physics2DSettings)
 			{
 				return true;
 			}
@@ -88,11 +111,25 @@ namespace uTinyRipper.AssetExporters
 				yield return Asset;
 				yield return EditorBuildSettings;
 				yield return EditorSettings;
+				if (NavMeshProjectSettings != null)
+				{
+					yield return NavMeshProjectSettings;
+				}
+				if (NetworkManager != null)
+				{
+					yield return NetworkManager;
+				}
+				if(Physics2DSettings != null)
+				{
+					yield return Physics2DSettings;
+				}
 			}
 		}
 
 		public EditorBuildSettings EditorBuildSettings { get; }
 		public EditorSettings EditorSettings { get; }
 		public NavMeshProjectSettings NavMeshProjectSettings { get; }
+		public NetworkManager NetworkManager { get; }
+		public Physics2DSettings Physics2DSettings { get; }
 	}
 }

@@ -8,7 +8,7 @@ namespace uTinyRipper.AssetExporters
 		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<string, T> _this, IExportContainer container)
 			where T: IYAMLExportable
 		{
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
 			{
 				YAMLMappingNode map = new YAMLMappingNode();
@@ -21,7 +21,7 @@ namespace uTinyRipper.AssetExporters
 		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<T, int> _this, IExportContainer container)
 			where T : IYAMLExportable
 		{
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
 			{
 				YAMLMappingNode map = new YAMLMappingNode();
@@ -43,7 +43,7 @@ namespace uTinyRipper.AssetExporters
 		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<T, float> _this, IExportContainer container)
 			where T: IYAMLExportable
 		{
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
 			{
 				YAMLMappingNode map = new YAMLMappingNode();
@@ -66,7 +66,7 @@ namespace uTinyRipper.AssetExporters
 			where T1 : IYAMLExportable
 			where T2 : IYAMLExportable
 		{
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
 			{
 				YAMLMappingNode map = new YAMLMappingNode();
@@ -85,11 +85,11 @@ namespace uTinyRipper.AssetExporters
 			return node;
 		}
 
-		public static YAMLNode ExportYAMLArrayPPtr<T1, T2>(this IReadOnlyDictionary<T1, T2[]> _this, IExportContainer container)
+		public static YAMLNode ExportYAML<T1, T2>(this IReadOnlyDictionary<T1, T2[]> _this, IExportContainer container)
 			where T1 : IYAMLExportable
 			where T2 : IYAMLExportable
 		{
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
 			{
 				YAMLMappingNode map = new YAMLMappingNode();

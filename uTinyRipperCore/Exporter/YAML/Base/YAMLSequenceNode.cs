@@ -110,53 +110,72 @@ namespace uTinyRipper.Exporter.YAML
 
 		private void StartChildren(Emitter emitter)
 		{
-			if(Style == SequenceStyle.Block)
+			switch (Style)
 			{
-				if(m_children.Count == 0)
-				{
+				case SequenceStyle.Block:
+					if (m_children.Count == 0)
+					{
+						emitter.Write('[');
+					}
+					break;
+
+				case SequenceStyle.BlockCurve:
+					if (m_children.Count == 0)
+					{
+						emitter.Write('{');
+					}
+					break;
+
+				case SequenceStyle.Flow:
 					emitter.Write('[');
-				}
-			}
-			else if (Style == SequenceStyle.Flow)
-			{
-				emitter.Write('[');
-			}
-			else if (Style == SequenceStyle.Raw)
-			{
-				if (m_children.Count == 0)
-				{
-					emitter.Write('[');
-				}
+					break;
+
+				case SequenceStyle.Raw:
+					if (m_children.Count == 0)
+					{
+						emitter.Write('[');
+					}
+					break;
 			}
 		}
 
 		private void EndChildren(Emitter emitter)
 		{
-			if (Style == SequenceStyle.Block)
+			switch (Style)
 			{
-				if (m_children.Count == 0)
-				{
-					emitter.Write(']');
-				}
-				emitter.WriteLine();
-			}
-			else if (Style == SequenceStyle.Flow)
-			{
-				emitter.WriteClose(']');
-			}
-			else if (Style == SequenceStyle.Raw)
-			{
-				if (m_children.Count == 0)
-				{
-					emitter.Write(']');
-				}
-				emitter.WriteLine();
+				case SequenceStyle.Block:
+					if (m_children.Count == 0)
+					{
+						emitter.Write(']');
+					}
+					emitter.WriteLine();
+					break;
+
+				case SequenceStyle.BlockCurve:
+					if (m_children.Count == 0)
+					{
+						emitter.WriteClose('}');
+					}
+					emitter.WriteLine();
+					break;
+
+				case SequenceStyle.Flow:
+					emitter.WriteClose(']');
+					break;
+
+				case SequenceStyle.Raw:
+					if (m_children.Count == 0)
+					{
+						emitter.Write(']');
+					}
+					emitter.WriteLine();
+					break;
 			}
 		}
 
 		private void StartChild(Emitter emitter, YAMLNode next)
 		{
-			if(Style == SequenceStyle.Block)
+			if(Style == SequenceStyle.Block || Style == SequenceStyle.BlockCurve)
 			{
 				emitter.Write('-').WriteWhitespace();
 
@@ -173,7 +192,7 @@ namespace uTinyRipper.Exporter.YAML
 
 		private void EndChild(Emitter emitter, YAMLNode next)
 		{
-			if(Style == SequenceStyle.Block)
+			if(Style.IsAnyBlock())
 			{
 				emitter.WriteLine();
 				if(next.NodeType == NodeType)
@@ -198,7 +217,7 @@ namespace uTinyRipper.Exporter.YAML
 		{
 			get
 			{
-				return Style == SequenceStyle.Block && m_children.Count > 0;
+				return Style.IsAnyBlock() && m_children.Count > 0;
 			}
 		}
 		public override bool IsIndent => false;

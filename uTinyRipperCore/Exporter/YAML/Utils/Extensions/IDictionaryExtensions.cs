@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 
 namespace uTinyRipper.Exporter.YAML
 {
@@ -27,7 +26,7 @@ namespace uTinyRipper.Exporter.YAML
 
 		public static YAMLNode ExportYAML(this IReadOnlyDictionary<string, float> _this)
 		{
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
 			{
 				YAMLMappingNode map = new YAMLMappingNode();

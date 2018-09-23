@@ -82,10 +82,12 @@ namespace uTinyRipper.AssetExporters
 
 					case ClassIDType.AudioManager:
 					case ClassIDType.InputManager:
+					case ClassIDType.Physics2DSettings:
 					case ClassIDType.GraphicsSettings:
 					case ClassIDType.PhysicsManager:
 					case ClassIDType.TagManager:
-					case ClassIDType.NavMeshAreas:
+					case ClassIDType.NavMeshProjectSettings:
+					case ClassIDType.NetworkManager:
 					case ClassIDType.ClusterInputManager:
 						return new ManagerExportCollection(this, asset);
 					case ClassIDType.BuildSettings:

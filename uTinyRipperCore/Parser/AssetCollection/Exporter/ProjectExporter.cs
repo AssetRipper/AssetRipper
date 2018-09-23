@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using uTinyRipper.SerializedFiles;
+
 using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper.AssetExporters
@@ -23,6 +24,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.Transform, YamlExporter);
 			OverrideExporter(ClassIDType.AudioManager, YamlExporter);
 			OverrideExporter(ClassIDType.InputManager, YamlExporter);
+			OverrideExporter(ClassIDType.Physics2DSettings, YamlExporter);
 			OverrideExporter(ClassIDType.Camera, YamlExporter);
 			OverrideExporter(ClassIDType.Material, YamlExporter);
 			OverrideExporter(ClassIDType.MeshRenderer, YamlExporter);
@@ -64,6 +66,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.SkinnedMeshRenderer, YamlExporter);
 			OverrideExporter(ClassIDType.BuildSettings, YamlExporter);
 			OverrideExporter(ClassIDType.WheelCollider, YamlExporter);
+			OverrideExporter(ClassIDType.NetworkManager, YamlExporter);
 			OverrideExporter(ClassIDType.TerrainCollider, YamlExporter);
 			OverrideExporter(ClassIDType.TerrainData, YamlExporter);
 			OverrideExporter(ClassIDType.OcclusionArea, YamlExporter);

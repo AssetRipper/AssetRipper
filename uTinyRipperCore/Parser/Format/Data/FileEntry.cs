@@ -136,17 +136,24 @@ namespace uTinyRipper
 		{
 			get
 			{
+				if(Name.StartsWith(GIPrefix, StringComparison.OrdinalIgnoreCase))
+				{
+					return true;
+				}
+
 				string ext = Path.GetExtension(Name);
 				switch (ext)
 				{
 					case MdbExtension:
 						return true;
 
+					// I'm not sure that prefix checks is enough so also check extensions 
 					case CawExtention:
 					case EcmExtention:
 					case SseExtention:
 					case RgbExtention:
 					case VisExtention:
+					case PosExtention:
 						return true;
 
 					default:
@@ -164,11 +171,13 @@ namespace uTinyRipper
 
 		private const string MdbExtension = ".mdb";
 		// Scene GI extensions
+		private const string GIPrefix = "gi/";
 		private const string CawExtention = ".caw";
 		private const string EcmExtention = ".ecm";
 		private const string SseExtention = ".sse";
 		private const string RgbExtention = ".rgb";
 		private const string VisExtention = ".vis";
+		private const string PosExtention = ".pos";
 
 		protected readonly long m_offset;
 		protected readonly long m_size;

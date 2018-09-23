@@ -6,23 +6,33 @@
 	public enum SequenceStyle
 	{
 		/// <summary>
-		/// The block sequence style.
+		/// The block sequence style
 		/// </summary>
 		Block,
 
 		/// <summary>
-		/// The flow sequence style.
+		/// The block sequence style but with curly braces
+		/// </summary>
+		BlockCurve,
+
+		/// <summary>
+		/// The flow sequence style
 		/// </summary>
 		Flow,
 
 		/// <summary>
-		/// SIngle line with hex data
+		/// Single line with hex data
 		/// </summary>
 		Raw,
 	}
 
 	public static class SequenceStyleExtensions
 	{
+		public static bool IsAnyBlock(this SequenceStyle _this)
+		{
+			return _this == SequenceStyle.Block || _this == SequenceStyle.BlockCurve;
+		}
+
 		/// <summary>
 		/// Get scalar style corresponding to current sequence style
 		/// </summary>

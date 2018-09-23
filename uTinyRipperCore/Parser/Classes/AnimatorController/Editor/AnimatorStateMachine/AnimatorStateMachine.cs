@@ -99,7 +99,7 @@ namespace uTinyRipper.Classes.AnimatorControllers.Editor
 			node.Add("m_ChildStateMachines", ChildStateMachines.ExportYAML(container));
 			node.Add("m_AnyStateTransitions", AnyStateTransitions.ExportYAML(container));
 			node.Add("m_EntryTransitions", EntryTransitions.ExportYAML(container));
-			node.Add("m_StateMachineTransitions", StateMachineTransitions.ExportYAMLArrayPPtr(container));
+			node.Add("m_StateMachineTransitions", StateMachineTransitions.ExportYAML(container));
 			node.Add("m_StateMachineBehaviours", StateMachineBehaviours.ExportYAML(container));
 			node.Add("m_AnyStatePosition", AnyStatePosition.ExportYAML(container));
 			node.Add("m_EntryPosition", EntryPosition.ExportYAML(container));
