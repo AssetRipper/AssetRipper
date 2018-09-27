@@ -191,7 +191,8 @@ namespace uTinyRipper.AssetExporters
 		public Version Version => File.Version;
 		public Platform Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
-		
+		public TransferInstructionFlags ExportFlags => CurrentCollection.Flags;
+
 		private readonly ProjectExporter m_exporter;
 		private readonly IReadOnlyList<IExportCollection> m_collections;
 

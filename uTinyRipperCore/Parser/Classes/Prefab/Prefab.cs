@@ -27,18 +27,18 @@ namespace uTinyRipper.Classes
 		{
 			if (Config.IsGenerateGUIDByContent)
 			{
-				EngineGUID guid = ObjectUtils.CalculateAssetsGUID(FetchObjects(root));
+				EngineGUID guid = ObjectUtils.CalculateAssetsGUID(FetchAssets(root));
 				return virtualFile.CreateAsset(guid, (assetInfo) => new Prefab(assetInfo, root));
 			}
 			return virtualFile.CreateAsset((assetInfo) => new Prefab(assetInfo, root));
 		}
 
-		private static IEnumerable<EditorExtension> FetchObjects(GameObject root, bool isLog = false)
+		private static IEnumerable<EditorExtension> FetchAssets(GameObject root, bool isLog = false)
 		{
 			IReadOnlyList<EditorExtension> hierarchy = root.CollectHierarchy();
-			foreach (EditorExtension obj in hierarchy)
+			foreach (EditorExtension asset in hierarchy)
 			{
-				yield return obj;
+				yield return asset;
 			}
 		}
 
@@ -62,7 +62,7 @@ namespace uTinyRipper.Classes
 		public IEnumerable<EditorExtension> FetchObjects(ISerializedFile file, bool isLog = false)
 		{
 			GameObject root = RootGameObject.GetAsset(file);
-			return FetchObjects(root);
+			return FetchAssets(root);
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -81,12 +81,14 @@ namespace uTinyRipper.Classes
 			return RootGameObject.GetAsset(file).Name;
 		}
 
-#if DEBUG
 		public override string ToString()
 		{
-			return $"{Name}(Prefab)";
-		}
+#if DEBUG
+			return $"{Name}({nameof(Prefab)})";
+#else
+			return nameof(Prefab);
 #endif
+		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{

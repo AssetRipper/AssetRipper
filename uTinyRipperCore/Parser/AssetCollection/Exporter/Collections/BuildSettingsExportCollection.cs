@@ -31,6 +31,10 @@ namespace uTinyRipper.AssetExporters
 			{
 				Physics2DSettings = Physics2DSettings.CreateVirtualInstance(virtualFile);
 			}
+			if (!UnityConnectSettings.IsReadUnityConnectSettings(asset.File.Version))
+			{
+				UnityConnectSettings = UnityConnectSettings.CreateVirtualInstance(virtualFile);
+			}
 		}
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)
@@ -75,6 +79,13 @@ namespace uTinyRipper.AssetExporters
 
 				AssetExporter.Export(container, Physics2DSettings, filePath);
 			}
+			if (UnityConnectSettings != null)
+			{
+				fileName = $"{UnityConnectSettings.ExportName}.asset";
+				filePath = Path.Combine(subPath, fileName);
+
+				AssetExporter.Export(container, UnityConnectSettings, filePath);
+			}
 
 			fileName = $"ProjectVersion.txt";
 			filePath = Path.Combine(subPath, fileName);
@@ -92,7 +103,7 @@ namespace uTinyRipper.AssetExporters
 		public override bool IsContains(Object asset)
 		{
 			if (asset == EditorBuildSettings || asset == EditorSettings || asset == NavMeshProjectSettings || asset == NetworkManager||
-				asset == Physics2DSettings)
+				asset == Physics2DSettings || asset == UnityConnectSettings)
 			{
 				return true;
 			}
@@ -123,6 +134,10 @@ namespace uTinyRipper.AssetExporters
 				{
 					yield return Physics2DSettings;
 				}
+				if (UnityConnectSettings != null)
+				{
+					yield return UnityConnectSettings;
+				}
 			}
 		}
 
@@ -131,5 +146,6 @@ namespace uTinyRipper.AssetExporters
 		public NavMeshProjectSettings NavMeshProjectSettings { get; }
 		public NetworkManager NetworkManager { get; }
 		public Physics2DSettings Physics2DSettings { get; }
+		public UnityConnectSettings UnityConnectSettings { get; }
 	}
 }

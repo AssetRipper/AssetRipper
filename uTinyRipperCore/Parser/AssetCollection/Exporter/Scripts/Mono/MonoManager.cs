@@ -260,17 +260,14 @@ namespace uTinyRipper.AssetExporters.Mono
 			}
 			if(type.IsArray)
 			{
-				return IsTypeValid(type.GetElementType(), arguments);
+				ArrayType array = (ArrayType)type;
+				return IsTypeValid(array.ElementType, arguments);
 			}
 			if(MonoType.IsList(type))
 			{
 				return IsListValid(type, arguments);
 			}
 
-			if(type.IsGenericParameter)
-			{
-				return true;
-			}
 			if (MonoType.IsPrime(type))
 			{
 				return true;
@@ -293,6 +290,7 @@ namespace uTinyRipper.AssetExporters.Mono
 				// this is the case only for base classes. Field types aren't checked here
 				GenericInstanceType instance = (GenericInstanceType)type;
 				Dictionary<GenericParameter, TypeReference> templateArguments = new Dictionary<GenericParameter, TypeReference>();
+				templateArguments.AddRange(arguments);
 				TypeReference template = instance.ElementType.ResolveOrDefault();
 				for (int i = 0; i < instance.GenericArguments.Count; i++)
 				{

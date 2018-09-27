@@ -110,6 +110,7 @@ namespace uTinyRipper.AssetExporters
 
 		public abstract IAssetExporter AssetExporter { get; }
 		public abstract ISerializedFile File { get; }
+		public virtual TransferInstructionFlags Flags => File.Flags;
 		public abstract IEnumerable<Object> Assets { get; }
 		public abstract string Name { get; }
 

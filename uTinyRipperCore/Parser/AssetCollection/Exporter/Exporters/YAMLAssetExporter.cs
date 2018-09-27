@@ -4,6 +4,7 @@ using System.IO;
 using uTinyRipper.Classes;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
+
 using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper.AssetExporters
@@ -80,6 +81,7 @@ namespace uTinyRipper.AssetExporters
 					case ClassIDType.AnimatorController:
 						return new AnimatorControllerExportCollection(this, virtualFile, asset);
 
+					case ClassIDType.TimeManager:
 					case ClassIDType.AudioManager:
 					case ClassIDType.InputManager:
 					case ClassIDType.Physics2DSettings:
@@ -89,6 +91,7 @@ namespace uTinyRipper.AssetExporters
 					case ClassIDType.NavMeshProjectSettings:
 					case ClassIDType.NetworkManager:
 					case ClassIDType.ClusterInputManager:
+					case ClassIDType.UnityConnectSettings:
 						return new ManagerExportCollection(this, asset);
 					case ClassIDType.BuildSettings:
 						return new BuildSettingsExportCollection(this, virtualFile, asset);

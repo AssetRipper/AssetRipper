@@ -38,6 +38,11 @@ namespace uTinyRipper
 			Dispose(false);
 		}
 
+		public override char ReadChar()
+		{
+			return (char)ReadUInt16();
+		}
+
 		public override short ReadInt16()
 		{
 			if (EndianType == EndianType.BigEndian)
@@ -239,10 +244,9 @@ namespace uTinyRipper
 		{
 			int count = ReadInt32();
 			char[] array = new char[count];
-			int read = Read(array, 0, count);
-			if (read != count)
+			for(int i = 0; i < count; i++)
 			{
-				throw new Exception($"Read {read} but expected {count}");
+				array[i] = ReadChar();
 			}
 			return array;
 		}

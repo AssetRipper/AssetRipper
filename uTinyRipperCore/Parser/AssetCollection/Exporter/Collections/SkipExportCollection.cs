@@ -64,6 +64,7 @@ namespace uTinyRipper.AssetExporters
 
 		public IAssetExporter AssetExporter { get; }
 		public ISerializedFile File => m_asset.File;
+		public TransferInstructionFlags Flags => File.Flags;
 		public IEnumerable<Object> Assets
 		{
 			get { yield return m_asset; }

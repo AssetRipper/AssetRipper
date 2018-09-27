@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Physics2DSettingss;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
 
@@ -47,11 +48,11 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(4, 5);
 		}
 		/// <summary>
-		/// 4.6.1 to 5.0.0 exclusive
+		/// 4.6.1 to 5.6.0 exclusive
 		/// </summary>
 		public static bool IsReadMinPenetrationForPenalty(Version version)
 		{
-			return version.IsLess(5) && version.IsGreaterEqual(4, 6, 1);
+			return version.IsLess(5, 6) && version.IsGreaterEqual(4, 6, 1);
 		}
 		/// <summary>
 		/// 4.5.0 and greater
@@ -59,13 +60,20 @@ namespace uTinyRipper.Classes
 		public static bool IsReadBaumgarteScale(Version version)
 		{
 			return version.IsGreaterEqual(4, 5);
-		}		
+		}
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
 		public static bool IsReadDefaultContactOffset(Version version)
 		{
 			return version.IsGreaterEqual(5, 6);
+		}
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool IsReadJobOptions(Version version)
+		{
+			return version.IsGreaterEqual(2018);
 		}
 		/// <summary>
 		/// 2017.1.0b2 and greater
@@ -89,11 +97,11 @@ namespace uTinyRipper.Classes
 			return version.IsLessEqual(4, 6) && version.IsGreaterEqual(4, 5, 3);
 		}
 		/// <summary>
-		/// 4.6.1 and greater
+		/// 4.6.1 to 2018.1 exclusive
 		/// </summary>
 		public static bool IsReadChangeStopsCallbacks(Version version)
 		{
-			return version.IsGreaterEqual(4, 6, 1);
+			return version.IsGreaterEqual(4, 6, 1) && version.IsLess(2018);
 		}
 		/// <summary>
 		/// 5.6.1 and greater
@@ -185,6 +193,10 @@ namespace uTinyRipper.Classes
 			{
 				DefaultContactOffset = reader.ReadSingle();
 			}
+			if (IsReadJobOptions(reader.Version))
+			{
+				JobOptions.Read(reader);
+			}
 			if (IsReadAutoSimulation(reader.Version))
 			{
 				AutoSimulation = reader.ReadBoolean();
@@ -269,6 +281,8 @@ namespace uTinyRipper.Classes
 			node.Add("m_LinearSleepTolerance", GetLinearSleepTolerance(container.Version));
 			node.Add("m_AngularSleepTolerance", GetAngularSleepTolerance(container.Version));
 			node.Add("m_DefaultContactOffset", GetDefaultContactOffset(container.Version));
+			// 2018
+			//node.Add("m_JobOptions", GetJobOptions(container.Version));
 			node.Add("m_AutoSimulation", GetAutoSimulation(container.Version));
 			node.Add("m_QueriesHitTriggers", QueriesHitTriggers);
 			node.Add("m_QueriesStartInColliders", GetQueriesStartInColliders(container.Version));
@@ -471,6 +485,7 @@ namespace uTinyRipper.Classes
 
 		public Vector2f Gravity;
 		public PPtr<PhysicsMaterial2D> DefaultMaterial;
+		public PhysicsJobOptions2D JobOptions;
 #if UNIVERSAL
 		public ColorRGBAf ColliderAwakeColor;
 		public ColorRGBAf ColliderAsleepColor;

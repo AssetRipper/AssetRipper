@@ -263,7 +263,7 @@ namespace uTinyRipper.AssetExporters
 		private const string LevelName = "level";
 		private const string MainSceneName = "maindata";
 
-		private static readonly Regex m_sceneNameFormat = new Regex($"^{LevelName}[1-9][0-9]+$");
+		private static readonly Regex m_sceneNameFormat = new Regex($"^{LevelName}(0|[1-9][0-9]*)$");
 
 		private readonly Dictionary<Object, long> m_cexportIDs = new Dictionary<Object, long>();
 		private readonly ISerializedFile m_file;

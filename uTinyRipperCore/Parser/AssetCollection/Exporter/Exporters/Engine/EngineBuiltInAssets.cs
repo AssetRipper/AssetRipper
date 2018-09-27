@@ -27,6 +27,25 @@ namespace uTinyRipper.AssetExporters
 		static EngineBuiltInAssets()
 		{
 			///////////////////////////////////////////////////////
+			// Icons
+			///////////////////////////////////////////////////////
+
+			m_textures.Add("EscToExit_back", default);
+			m_textures.Add("EscToExit_Text", default);
+			m_textures.Add("UnitySplash-cube", default);
+			m_textures.Add("UnitySplash-HolographicTrackingLoss", default);
+			m_textures.Add("UnityWatermark-beta", default);
+			m_textures.Add("UnityWatermark-dev", default);
+			m_textures.Add("UnityWatermark-edu", default);
+			m_textures.Add("UnityWatermarkPlugin-beta", default);
+			m_textures.Add("UnityWatermark-proto", default);
+			m_textures.Add("UnityWatermark-small", default);
+			m_textures.Add("UnityWatermark-trial", default);
+			m_textures.Add("WarningSign", default);
+
+			m_sprites.Add("UnitySplash-cube", default);
+
+			///////////////////////////////////////////////////////
 			// Current default
 			///////////////////////////////////////////////////////
 

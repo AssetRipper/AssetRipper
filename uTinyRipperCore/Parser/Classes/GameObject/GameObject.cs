@@ -45,6 +45,14 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
+		/// Release
+		/// </summary>
+		public static bool IsReadTag(TransferInstructionFlags flags)
+		{
+			return flags.IsRelease();
+		}
+
+		/// <summary>
 		/// Less than 4.0.0
 		/// In earlier versions GameObject always has IsActive as false.
 		/// </summary>
@@ -66,9 +74,21 @@ namespace uTinyRipper.Classes
 
 			Components = reader.ReadArray<ComponentPair>();
 
-			Layer = reader.ReadInt32();
+			Layer = reader.ReadUInt32();
 			Name = reader.ReadString();
-			Tag = reader.ReadUInt16();
+			if (IsReadTag(reader.Flags))
+			{
+				Tag = reader.ReadUInt16();
+			}
+#if UNIVERSAL
+			else
+			{
+				TagString = reader.ReadString();
+				Icon.Read(reader);
+				NavMeshLayer = reader.ReadUInt32();
+				StaticEditorFlags = reader.ReadUInt32();
+			}
+#endif
 			IsActive = reader.ReadBoolean();
 		}
 		
@@ -208,9 +228,18 @@ namespace uTinyRipper.Classes
 		public override string ExportExtension => throw new NotSupportedException();
 		
 		public ComponentPair[] Components { get; private set; }
-		public int Layer { get; private set; }
+		public uint Layer { get; private set; }
 		public string Name { get; private set; } = string.Empty;
 		public ushort Tag { get; private set; }
+#if UNIVERSAL
+		public string TagString { get; private set; }
+		public uint NavMeshLayer { get; private set; }
+		public uint StaticEditorFlags { get; private set; }
+#endif
 		public bool IsActive { get; private set; }
+
+#if UNIVERSAL
+		public PPtr<Texture2D> Icon;
+#endif
 	}
 }

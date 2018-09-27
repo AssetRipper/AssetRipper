@@ -296,17 +296,15 @@ namespace uTinyRipper.Classes.Shaders
 				writer.WriteIntent(5);
 			}
 
-			if(m_programData.Length == 0)
+			writer.Write("\"!!{0}", ProgramType.ToString());
+			if (m_programData.Length > 0)
 			{
-				return;
+				writer.Write("\n");
+				writer.WriteIntent(5);
+
+				ShaderTextExporter exporter = exporterInstantiator.Invoke(ProgramType);
+				exporter.Export(m_programData, writer);
 			}
-
-			writer.Write("\"!!{0}\n", ProgramType.ToString());
-			writer.WriteIntent(5);
-
-			ShaderTextExporter exporter = exporterInstantiator.Invoke(ProgramType);
-			exporter.Export(m_programData, writer);
-
 			writer.Write('"');
 		}
 		

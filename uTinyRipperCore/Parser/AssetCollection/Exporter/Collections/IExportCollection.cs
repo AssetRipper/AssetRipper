@@ -13,6 +13,7 @@ namespace uTinyRipper.AssetExporters
 		ExportPointer CreateExportPointer(Object asset, bool isLocal);
 
 		ISerializedFile File { get; }
+		TransferInstructionFlags Flags { get; }
 		IEnumerable<Object> Assets { get; }
 		string Name { get; } 
 	}

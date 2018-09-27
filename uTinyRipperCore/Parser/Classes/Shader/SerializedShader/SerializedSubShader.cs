@@ -17,7 +17,7 @@ namespace uTinyRipper.Classes.Shaders
 		public void Export(TextWriter writer, Shader shader, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
 		{
 			writer.WriteIntent(1);
-			writer.Write("Subshader {\n");
+			writer.Write("SubShader {\n");
 			if(LOD != 0)
 			{
 				writer.WriteIntent(2);

@@ -22,6 +22,7 @@ namespace uTinyRipper.AssetExporters
 
 			OverrideExporter(ClassIDType.GameObject, YamlExporter);
 			OverrideExporter(ClassIDType.Transform, YamlExporter);
+			OverrideExporter(ClassIDType.TimeManager, YamlExporter);
 			OverrideExporter(ClassIDType.AudioManager, YamlExporter);
 			OverrideExporter(ClassIDType.InputManager, YamlExporter);
 			OverrideExporter(ClassIDType.Physics2DSettings, YamlExporter);
@@ -83,6 +84,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.RectTransform, YamlExporter);
 			OverrideExporter(ClassIDType.ClusterInputManager, YamlExporter);
 			OverrideExporter(ClassIDType.NavMeshData, YamlExporter);
+			OverrideExporter(ClassIDType.UnityConnectSettings, YamlExporter);
 			OverrideExporter(ClassIDType.OcclusionCullingData, YamlExporter);
 			OverrideExporter(ClassIDType.Prefab, YamlExporter);
 			OverrideExporter(ClassIDType.AvatarMask, YamlExporter);

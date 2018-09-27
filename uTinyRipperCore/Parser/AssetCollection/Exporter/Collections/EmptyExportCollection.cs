@@ -36,6 +36,7 @@ namespace uTinyRipper.AssetExporters
 		}
 		
 		public ISerializedFile File => throw new NotSupportedException();
+		public TransferInstructionFlags Flags => throw new NotSupportedException();
 		public IEnumerable<Object> Assets
 		{
 			get { yield break; }

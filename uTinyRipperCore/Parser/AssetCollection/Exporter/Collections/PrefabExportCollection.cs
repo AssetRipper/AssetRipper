@@ -14,7 +14,8 @@ namespace uTinyRipper.AssetExporters
 		private PrefabExportCollection(IAssetExporter assetExporter, ISerializedFile file, Prefab prefab) :
 			base(assetExporter, prefab)
 		{
-			m_file = file;
+			File = file;
+			Flags = file.Flags | TransferInstructionFlags.SerializeForPrefabSystem;
 			foreach (EditorExtension asset in prefab.FetchObjects(file))
 			{
 				AddAsset(asset);
@@ -83,8 +84,7 @@ namespace uTinyRipper.AssetExporters
 			}
 		}
 
-		public override ISerializedFile File => m_file;
-
-		private readonly ISerializedFile m_file;
+		public override ISerializedFile File { get; }
+		public override TransferInstructionFlags Flags { get; }
 	}
 }

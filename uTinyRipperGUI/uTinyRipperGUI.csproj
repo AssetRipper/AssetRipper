@@ -181,6 +181,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>crunch.dll</TargetPath>
     </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Libraries\x86\crunchunity_x86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>crunchunity.dll</TargetPath>
+    </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x86\d3dcompiler_47_x86.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>d3dcompiler_47.dll</TargetPath>
@@ -218,6 +222,10 @@
     <ContentWithTargetPath Include="Libraries\x64\crunch_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>crunch.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Libraries\x64\crunchunity_x64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>crunchunity.dll</TargetPath>
     </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x64\d3dcompiler_47_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

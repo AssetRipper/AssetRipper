@@ -337,7 +337,8 @@
     <Compile Include="Parser\Classes\ParticleSystem\Trigger\TriggerAction.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\UV\ParticleSystemAnimationType.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\UV\ParticleSystemAnimationMode.cs" />
-    <Compile Include="Parser\Classes\Physics2DSettings.cs" />
+    <Compile Include="Parser\Classes\Physics2DSettings\Physics2DSettings.cs" />
+    <Compile Include="Parser\Classes\Physics2DSettings\PhysicsJobOptions2D.cs" />
     <Compile Include="Parser\Classes\PhysicsManager\BroadphaseType.cs" />
     <Compile Include="Parser\Classes\PhysicsManager\ContactPairsMode.cs" />
     <Compile Include="Parser\Classes\PhysicsManager\ContactsGeneration.cs" />
@@ -435,6 +436,7 @@
     <Compile Include="Parser\Classes\TerrainData\TreeInstance.cs" />
     <Compile Include="Parser\Classes\TerrainData\TreePrototype.cs" />
     <Compile Include="Parser\Classes\Texture2D\TextureUsageMode.cs" />
+    <Compile Include="Parser\Classes\TimeManager.cs" />
     <Compile Include="Parser\Classes\TransformAnimationTrack.cs" />
     <Compile Include="Parser\Classes\AnimationClip\WrapMode.cs" />
     <Compile Include="Parser\Classes\Base\BaseAnimationTrack.cs" />
@@ -499,6 +501,12 @@
     <Compile Include="Parser\Classes\SpriteRenderer\SpriteTileMode.cs" />
     <Compile Include="Parser\Classes\UI\Canvas\Canvas.cs" />
     <Compile Include="Parser\Classes\UI\Canvas\RenderMode.cs" />
+    <Compile Include="Parser\Classes\UnityConnectSettings\CrashReportingSettings.cs" />
+    <Compile Include="Parser\Classes\UnityConnectSettings\PerformanceReportingSettings.cs" />
+    <Compile Include="Parser\Classes\UnityConnectSettings\UnityAdsSettings.cs" />
+    <Compile Include="Parser\Classes\UnityConnectSettings\UnityAnalyticsSettings.cs" />
+    <Compile Include="Parser\Classes\UnityConnectSettings\UnityConnectSettings.cs" />
+    <Compile Include="Parser\Classes\UnityConnectSettings\UnityPurchasingSettings.cs" />
     <Compile Include="Parser\Classes\Utils\Vector3i.cs" />
     <Compile Include="Parser\Classes\WheelCollider\WheelCollider.cs" />
     <Compile Include="Parser\Classes\WheelCollider\WheelFrictionCurve.cs" />

@@ -20,31 +20,20 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Prefab
 		/// </summary>
-		public static bool IsReadPrefab(TransferInstructionFlags flags)
+		public static bool IsReadPrefabParentObject(TransferInstructionFlags flags)
 		{
-			return !flags.IsUnknown1() && !flags.IsForPrefab();
+			return !flags.IsRelease() && !flags.IsForPrefab();
 		}
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadPrefab(reader.Flags))
+			if (IsReadPrefabParentObject(reader.Flags))
 			{
 				PrefabParentObject.Read(reader);
 				PrefabInternal.Read(reader);
 			}
-		}
-
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
-		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			if (IsWritePrefab)
-			{
-				node.Add("m_PrefabParentObject", PrefabParentObject.ExportYAML(container));
-				node.Add("m_PrefabInternal", PrefabInternal.ExportYAML(container));
-			}
-			return node;
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -60,8 +49,28 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		private bool IsWritePrefab => ClassID != ClassIDType.Prefab;
-		
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		{
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add("m_PrefabParentObject", PrefabParentObject.ExportYAML(container));
+			node.Add("m_PrefabInternal", GetPrefabInternal(container).ExportYAML(container));
+			return node;
+		}
+
+		private PPtr<Prefab> GetPrefabInternal(IExportContainer container)
+		{
+			if(IsReadPrefabParentObject(container.Flags))
+			{
+				return PrefabInternal;
+			}
+			if(container.ExportFlags.IsForPrefab())
+			{
+				PrefabExportCollection prefabCollection = (PrefabExportCollection)container.CurrentCollection;
+				return prefabCollection.Asset.File.CreatePPtr((Prefab)prefabCollection.Asset);
+			}
+			return default;
+		}
+
 		public PPtr<EditorExtension> PrefabParentObject;
 		public PPtr<Prefab> PrefabInternal;
 	}

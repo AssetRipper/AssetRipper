@@ -34,7 +34,7 @@ namespace uTinyRipper.Classes
 		}
 		public static bool IsReadInstanceID(TransferInstructionFlags flags)
 		{
-			return flags.IsUnknown2();
+			return flags.IsDebug();
 		}
 
 		public void Read(byte[] buffer)
@@ -107,11 +107,11 @@ namespace uTinyRipper.Classes
 		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_ObjectHideFlags", GetObjectHideFlags(container.Flags));
+			node.Add("m_ObjectHideFlags", GetObjectHideFlags(container.Flags, container.ExportFlags));
 			return node;
 		}
 
-		private uint GetObjectHideFlags(TransferInstructionFlags flags)
+		private uint GetObjectHideFlags(TransferInstructionFlags flags, TransferInstructionFlags exportFlags)
 		{
 			if(IsReadHideFlag(flags))
 			{
@@ -123,7 +123,7 @@ namespace uTinyRipper.Classes
 				int depth = go.GetRootDepth();
 				return depth > 1 ? 1u : 0u;
 			}
-			return 0;
+			return exportFlags.IsForPrefab() ? 1u : 0u;
 		}
 
 		public ISerializedFile File => m_assetInfo.File;

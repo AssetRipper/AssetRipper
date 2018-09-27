@@ -274,7 +274,7 @@ namespace uTinyRipper.Exporter.YAML
 		public static YAMLMappingNode Empty { get; } = new YAMLMappingNode(MappingStyle.Flow);
 
 		public override YAMLNodeType NodeType => YAMLNodeType.Mapping;
-		public override bool IsMultyline => Style == MappingStyle.Block;
+		public override bool IsMultyline => Style == MappingStyle.Block && m_children.Count > 0;
 		public override bool IsIndent => Style == MappingStyle.Block;
 
 		public MappingStyle Style { get; set; }

@@ -246,7 +246,7 @@ namespace uTinyRipper
 		public abstract IReadOnlyDictionary<string, string> Files { get; }
 		public abstract IReadOnlyDictionary<string, string> Assemblies { get; }
 
-		protected static readonly Regex s_levelName = new Regex($@"^level[0-9][0-9]*({FileMultiStream.MultifileRegPostfix}0)?$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+		protected static readonly Regex s_levelName = new Regex($@"^level(0|[1-9][0-9]*)({FileMultiStream.MultifileRegPostfix}0)?$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
 		protected const string ManagedName = "Managed";
 		protected const string LibName = "lib";

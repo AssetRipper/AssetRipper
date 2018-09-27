@@ -14,6 +14,7 @@ using uTinyRipper.Converter.Textures.PVR;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
+using Version = uTinyRipper.Version;
 
 namespace uTinyRipperGUI.Exporters
 {
@@ -31,6 +32,18 @@ namespace uTinyRipperGUI.Exporters
 		
 		[DllImport("crunch", CallingConvention = CallingConvention.Cdecl)]
 		private static extern bool DecompressCRN(byte[] pSrcFileData, int srcFileSize, out IntPtr uncompressedData, out int uncompressedSize);
+
+		[DllImport("crunchunity.dll", CallingConvention = CallingConvention.Cdecl)]
+		private static extern bool DecompressUnityCRN(byte[] pSrc_file_data, int src_file_size, out IntPtr uncompressedData, out int uncompressedSize);
+
+		private static bool IsUseUnityCrunch(Version version, TextureFormat format)
+		{
+			if(version.IsGreaterEqual(2017, 3))
+			{
+				return true;
+			}
+			return format == TextureFormat.ETC_RGB4Crunched || format == TextureFormat.ETC2_RGBA8Crunched;
+		}
 
 		public bool IsHandle(Object asset)
 		{
@@ -226,14 +239,14 @@ namespace uTinyRipperGUI.Exporters
 	            case TextureFormat.DXT1Crunched:
 	            case TextureFormat.DXT5Crunched:
 				{
-					byte[] decompressed = DecompressCRN(data);
+					byte[] decompressed = DecompressCRN(texture, data);
 					return DDSToBitmap(container, texture, decompressed);
 				}
 
 	            case TextureFormat.ETC_RGB4Crunched:
 	            case TextureFormat.ETC2_RGBA8Crunched:
 	            {
-		            byte[] decompressed = DecompressCRN(data);
+		            byte[] decompressed = DecompressCRN(texture, data);
 		            using (MemoryStream dstStream = new MemoryStream())
 		            {
 			            using (MemoryStream srcStream = new MemoryStream(decompressed))
@@ -445,12 +458,14 @@ namespace uTinyRipperGUI.Exporters
 			}
 		}
 
-		private byte[] DecompressCRN(byte[] data)
+		private byte[] DecompressCRN(Texture2D texture, byte[] data)
 		{
 			IntPtr uncompressedData = default;
 			try
 			{
-				bool result = DecompressCRN(data, data.Length, out uncompressedData, out int uncompressedSize);
+				bool result = IsUseUnityCrunch(texture.File.Version, texture.TextureFormat) ?
+					DecompressUnityCRN(data, data.Length, out uncompressedData, out int uncompressedSize) :
+					DecompressCRN(data, data.Length, out uncompressedData, out uncompressedSize);
 				if (result)
 				{
 					byte[] uncompressedBytes = new byte[uncompressedSize];

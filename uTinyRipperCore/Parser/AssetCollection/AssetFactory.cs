@@ -34,6 +34,8 @@ namespace uTinyRipper
 					return new GameObject(assetInfo);
 				case ClassIDType.Transform:
 					return new Transform(assetInfo);
+				case ClassIDType.TimeManager:
+					return new TimeManager(assetInfo);
 				case ClassIDType.AudioManager:
 					return new AudioManager(assetInfo);
 				case ClassIDType.InputManager:
@@ -182,6 +184,8 @@ namespace uTinyRipper
 					return new ClusterInputManager(assetInfo);
 				case ClassIDType.NavMeshData:
 					return new NavMeshData(assetInfo);
+				case ClassIDType.UnityConnectSettings:
+					return new UnityConnectSettings(assetInfo);
 				case ClassIDType.OcclusionCullingData:
 					return new OcclusionCullingData(assetInfo);
 				case ClassIDType.SceneAsset:
