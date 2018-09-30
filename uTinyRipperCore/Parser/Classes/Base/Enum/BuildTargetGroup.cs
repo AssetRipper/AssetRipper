@@ -182,5 +182,23 @@ namespace uTinyRipper.Classes
 					throw new NotSupportedException();
 			}
 		}
+
+		public static string ToExportString(this BuildTargetGroup _this)
+		{
+			switch(_this)
+			{
+				case BuildTargetGroup.N3DS:
+					return "Nintendo 3DS";
+				case BuildTargetGroup.Switch:
+					return "Nintendo Switch";
+				case BuildTargetGroup.Metro:
+					return "Windows Store Apps";
+				case BuildTargetGroup.iOS:
+					return "iPhone";
+
+				default:
+					return _this.ToString();
+			}
+		}
 	}
 }

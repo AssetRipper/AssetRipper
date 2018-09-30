@@ -60,6 +60,8 @@ namespace uTinyRipper
 					return new OcclusionPortal(assetInfo);
 				case ClassIDType.Mesh:
 					return new Mesh(assetInfo);
+				case ClassIDType.QualitySettings:
+					return new QualitySettings(assetInfo);
 				case ClassIDType.Shader:
 					return new Shader(assetInfo);
 				case ClassIDType.TextAsset:

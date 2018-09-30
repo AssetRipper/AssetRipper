@@ -26,7 +26,6 @@ namespace uTinyRipper.Classes.GameObjects
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-#warning TODO: values to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("component", Component.ExportYAML(container));
 			return node;

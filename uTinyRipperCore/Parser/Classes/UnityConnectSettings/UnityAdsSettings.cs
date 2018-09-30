@@ -25,7 +25,7 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 			return version.IsLess(2017, 2);
 		}
 		/// <summary>
-		/// Less than ? or Not Release
+		/// Less than 2017.1 or Not Release
 		/// </summary>
 		public static bool IsReadIosGameId(Version version, TransferInstructionFlags flags)
 		{
@@ -43,7 +43,7 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 		/// </summary>
 		public static bool IsReadGameId(Version version)
 		{
-			return version.IsGreater(2017);
+			return version.IsGreaterEqual(2017);
 		}
 		
 		public void Read(AssetReader reader)

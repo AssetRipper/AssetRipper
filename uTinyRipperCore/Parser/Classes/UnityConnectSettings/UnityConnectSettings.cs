@@ -201,7 +201,6 @@ namespace uTinyRipper.Classes
 				case Platform.WebGL:
 					return true;
 
-
 				default:
 					return false;
 			}
@@ -238,6 +237,7 @@ namespace uTinyRipper.Classes
 				case Platform.MetroPlayerX86:
 				case Platform.MetroPlayerARM:
 				case Platform.WebGL:
+					return true;
 
 				default:
 					return false;
@@ -292,15 +292,36 @@ namespace uTinyRipper.Classes
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add("m_Enabled", Enabled);
 			node.Add("m_TestMode", TestMode);
-			node.Add("m_TestEventUrl", TestEventUrl);
-			node.Add("m_TestConfigUrl", TestConfigUrl);
+			node.Add("m_TestEventUrl", GetTestEventUrl(container.Version));
+			node.Add("m_TestConfigUrl", GetTestConfigUrl(container.Version));
 			node.Add("m_TestInitMode", TestInitMode);
-			node.Add("CrashReportingSettings", CrashReportingSettings.ExportYAML(container));
+			node.Add("CrashReportingSettings", GetCrashReportingSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
 			node.Add("UnityPurchasingSettings", UnityPurchasingSettings.ExportYAML(container));
-			node.Add("UnityAnalyticsSettings", UnityAnalyticsSettings.ExportYAML(container));
-			node.Add("UnityAdsSettings", UnityAdsSettings.ExportYAML(container));
+			node.Add("UnityAnalyticsSettings", GetUnityAnalyticsSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
+			node.Add("UnityAdsSettings", GetUnityAdsSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
 			node.Add("PerformanceReportingSettings", PerformanceReportingSettings.ExportYAML(container));
 			return node;
+		}
+
+		private string GetTestEventUrl(Version version)
+		{
+			return IsReadEnabled(version) ? TestEventUrl : string.Empty;
+		}
+		private string GetTestConfigUrl(Version version)
+		{
+			return IsReadEnabled(version) ? TestConfigUrl : string.Empty;
+		}
+		private CrashReportingSettings GetCrashReportingSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		{
+			return IsReadCrashReportingSettings(version, platform, flags) ? CrashReportingSettings : new CrashReportingSettings(true);
+		}
+		private UnityAnalyticsSettings GetUnityAnalyticsSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		{
+			return IsReadUnityAnalyticsSettings(version, platform, flags) ? UnityAnalyticsSettings : new UnityAnalyticsSettings(true);
+		}
+		private UnityAdsSettings GetUnityAdsSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		{
+			return IsReadUnityAdsSettings(version, platform, flags) ? UnityAdsSettings : new UnityAdsSettings(true);
 		}
 
 		public bool Enabled { get; private set; }

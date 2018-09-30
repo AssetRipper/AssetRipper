@@ -45,51 +45,145 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
+		/// Less than 3.5 or Not Prefab
+		/// </summary>
+		public static bool IsReadComponents(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsForPrefab() || version.IsLess(3, 5);
+		}
+		/// <summary>
+		/// Less than 2.1.0
+		/// </summary>
+		public static bool IsReadIsActiveFirst(Version version)
+		{
+			return version.IsLess(2, 1);
+		}
+		/// <summary>
 		/// Release
 		/// </summary>
 		public static bool IsReadTag(TransferInstructionFlags flags)
 		{
 			return flags.IsRelease();
 		}
+		/// <summary>
+		/// 3.4.0 and greater and Not Release
+		/// </summary>
+		public static bool IsReadIcon(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(3, 4);
+		}
+		/// <summary>
+		/// 3.5.0 and greater and Not Release
+		/// </summary>
+		public static bool IsReadNavMeshLayer(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(3, 5);
+		}
+		/// <summary>
+		/// 3.0.0 to 3.5.0 exclusive
+		/// </summary>
+		public static bool IsReadIsStatic(Version version)
+		{
+			return version.IsLess(3, 5) && version.IsGreaterEqual(3);
+		}
 
 		/// <summary>
-		/// Less than 4.0.0
-		/// In earlier versions GameObject always has IsActive as false.
+		/// 3.5.0 and greater
 		/// </summary>
-		private static bool IsAlwaysDeactivated(Version version)
+		private static bool IsReadIconFirst(Version version)
 		{
-#warning unknown
+			return version.IsGreaterEqual(3, 5);
+		}
+		/// <summary>
+		/// Less than 4.0.0
+		/// SerializedVersion less than 4
+		/// </summary>
+		private static bool IsActiveInherited(Version version)
+		{
 			return version.IsLess(4);
 		}
 
 		private static int GetSerializedVersion(Version version)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			return 5;
+			// unknown
+			if (Config.IsExportTopmostSerializedVersion || version.IsGreaterEqual(5, 5))
+			{
+				return 5;
+			}
+			// active state inheritance
+			if (version.IsGreaterEqual(4))
+			{
+				return 4;
+			}
+			// min is 3
+			// tag is ushort for Release, otherwise string. For later versions for yaml only string left
+			return 3;
+			// tag is string
+			//return 2;
+			// tag is ushort
+			//return 1;
 		}
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			Components = reader.ReadArray<ComponentPair>();
-
-			Layer = reader.ReadUInt32();
-			Name = reader.ReadString();
-			if (IsReadTag(reader.Flags))
+			if(IsReadComponents(reader.Version, reader.Flags))
 			{
-				Tag = reader.ReadUInt16();
+				Components = reader.ReadArray<ComponentPair>();
 			}
-#if UNIVERSAL
+
+			if (IsReadIsActiveFirst(reader.Version))
+			{
+				IsActive = reader.ReadBoolean();
+				Layer = reader.ReadUInt32();
+				Tag = reader.ReadUInt16();
+				Name = reader.ReadString();
+			}
 			else
 			{
-				TagString = reader.ReadString();
-				Icon.Read(reader);
-				NavMeshLayer = reader.ReadUInt32();
-				StaticEditorFlags = reader.ReadUInt32();
-			}
+				Layer = reader.ReadUInt32();
+				Name = reader.ReadString();
+
+				if (IsReadTag(reader.Flags))
+				{
+					Tag = reader.ReadUInt16();
+				}
+#if UNIVERSAL
+				else
+				{
+					TagString = reader.ReadString();
+				}
+				if (IsReadIcon(reader.Version, reader.Flags))
+				{
+					if (IsReadIconFirst(reader.Version))
+					{
+						Icon.Read(reader);
+					}
+				}
+				if (IsReadNavMeshLayer(reader.Version, reader.Flags))
+				{
+					NavMeshLayer = reader.ReadUInt32();
+					StaticEditorFlags = reader.ReadUInt32();
+				}
 #endif
-			IsActive = reader.ReadBoolean();
+				IsActive = reader.ReadBoolean();
+
+
+#if UNIVERSAL
+				if (IsReadIsStatic(reader.Version))
+				{
+					StaticEditorFlags = reader.ReadBoolean() ? uint.MaxValue : 0;
+				}
+				if (IsReadIcon(reader.Version, reader.Flags))
+				{
+					if (!IsReadIconFirst(reader.Version))
+					{
+						Icon.Read(reader);
+					}
+				}
+#endif
+			}
 		}
 		
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -190,15 +284,61 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Component", Components.ExportYAML(container));
+			node.Add("m_Component", GetComponents(container.Version, container.Flags).ExportYAML(container));
 			node.Add("m_Layer", Layer);
 			node.Add("m_Name", Name);
-			node.Add("m_TagString", container.TagIDToName(Tag));
-			node.Add("m_Icon", default(PPtr<Object>).ExportYAML(container));
-			node.Add("m_NavMeshLayer", 0);
-			node.Add("m_StaticEditorFlags", 0);
-			node.Add("m_IsActive", GetExportIsActive(container.Version));
+			node.Add("m_TagString", GetTagString(container));
+			node.Add("m_Icon", GetIcon().ExportYAML(container));
+			node.Add("m_NavMeshLayer", GetNavMeshLayer());
+			node.Add("m_StaticEditorFlags", GetStaticEditorFlags());
+			node.Add("m_IsActive", GetIsActive(container.Version));
 			return node;
+		}
+
+		private IReadOnlyList<ComponentPair> GetComponents(Version version, TransferInstructionFlags flags)
+		{
+			return IsReadComponents(version, flags) ? Components : new ComponentPair[0];
+		}
+		private string GetTagString(IExportContainer container)
+		{
+#if UNIVERSAL
+			if(!IsReadTag(container.Flags) && !IsReadIsActiveFirst(container.Version))
+			{
+				return TagString;
+			}
+#endif
+			return container.TagIDToName(Tag);
+		}
+		private PPtr<Texture2D> GetIcon()
+		{
+#if UNIVERSAL
+			return Icon;
+#else
+			return default;
+#endif
+		}
+		private uint GetNavMeshLayer()
+		{
+#if UNIVERSAL
+			return NavMeshLayer;
+#else
+			return 0;
+#endif
+		}
+		private uint GetStaticEditorFlags()
+		{
+#if UNIVERSAL
+			return StaticEditorFlags;
+#else
+			return 0;
+#endif
+		}
+		/// <summary>
+		/// There one is incompatible with old versions!
+		/// </summary>
+		private bool GetIsActive(Version version)
+		{
+			return IsActiveInherited(version) ? (File.Collection.IsScene(File) ? IsActive : true) : IsActive;
 		}
 
 		private void BuildTOS(GameObject parent, string parentPath, Dictionary<uint, string> tos)
@@ -217,12 +357,6 @@ namespace uTinyRipper.Classes
 
 				BuildTOS(child, path, tos);
 			}
-		}
-
-		private bool GetExportIsActive(Version version)
-		{
-#warning TODO: fix
-			return IsAlwaysDeactivated(version) ? true : IsActive;
 		}
 
 		public override string ExportExtension => throw new NotSupportedException();

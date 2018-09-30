@@ -34,6 +34,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.MeshFilter, YamlExporter);
 			OverrideExporter(ClassIDType.OcclusionPortal, YamlExporter);
 			OverrideExporter(ClassIDType.Mesh, YamlExporter);
+			OverrideExporter(ClassIDType.QualitySettings, YamlExporter);
 			OverrideExporter(ClassIDType.Rigidbody2D, YamlExporter);
 			OverrideExporter(ClassIDType.Rigidbody, YamlExporter);
 			OverrideExporter(ClassIDType.PhysicsManager, YamlExporter);

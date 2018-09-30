@@ -18,7 +18,7 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// Prefab
+		/// Not Release and Not Prefab
 		/// </summary>
 		public static bool IsReadPrefabParentObject(TransferInstructionFlags flags)
 		{
@@ -71,7 +71,13 @@ namespace uTinyRipper.Classes
 			return default;
 		}
 
+		/// <summary>
+		/// CorrespondingSourceObject later
+		/// </summary>
 		public PPtr<EditorExtension> PrefabParentObject;
+		/// <summary>
+		/// Prefab previously
+		/// </summary>
 		public PPtr<Prefab> PrefabInternal;
 	}
 }

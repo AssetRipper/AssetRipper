@@ -14,11 +14,34 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		/// <summary>
+		/// Not Prefab
+		/// </summary>
+		public static bool IsReadGameObject(TransferInstructionFlags flags)
+		{
+			return !flags.IsForPrefab();
+		}
+
+		public GameObject GetRoot()
+		{
+			GameObject go = GameObject.GetAsset(File);
+			return go.GetRoot();
+		}
+
+		public int GetRootDepth()
+		{
+			GameObject go = GameObject.GetAsset(File);
+			return go.GetRootDepth();
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			GameObject.Read(reader);
+			if(IsReadGameObject(reader.Flags))
+			{
+				GameObject.Read(reader);
+			}
 		}
 
 		public sealed override void ExportBinary(IExportContainer container, Stream stream)
@@ -37,18 +60,6 @@ namespace uTinyRipper.Classes
 			{
 				yield return GameObject.GetAsset(file);
 			}
-		}
-
-		public GameObject GetRoot()
-		{
-			GameObject go = GameObject.GetAsset(File);
-			return go.GetRoot();
-		}
-
-		public int GetRootDepth()
-		{
-			GameObject go = GameObject.GetAsset(File);
-			return go.GetRootDepth();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

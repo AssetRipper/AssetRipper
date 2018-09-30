@@ -86,6 +86,7 @@ namespace uTinyRipper.AssetExporters
 					case ClassIDType.InputManager:
 					case ClassIDType.Physics2DSettings:
 					case ClassIDType.GraphicsSettings:
+					case ClassIDType.QualitySettings:
 					case ClassIDType.PhysicsManager:
 					case ClassIDType.TagManager:
 					case ClassIDType.NavMeshProjectSettings:

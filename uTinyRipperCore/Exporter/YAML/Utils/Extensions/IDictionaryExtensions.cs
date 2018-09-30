@@ -24,6 +24,16 @@ namespace uTinyRipper.Exporter.YAML
 			return node;
 		}
 
+		public static YAMLNode ExportYAML(this IReadOnlyDictionary<string, int> _this)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			foreach (var kvp in _this)
+			{
+				node.Add(kvp.Key, kvp.Value);
+			}
+			return node;
+		}
+
 		public static YAMLNode ExportYAML(this IReadOnlyDictionary<string, float> _this)
 		{
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);

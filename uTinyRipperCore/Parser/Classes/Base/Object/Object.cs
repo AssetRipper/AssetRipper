@@ -28,13 +28,19 @@ namespace uTinyRipper.Classes
 			ObjectHideFlags = hideFlags;
 		}
 
-		public static bool IsReadHideFlag(TransferInstructionFlags flags)
+		/// <summary>
+		/// 2.0.0 and Not Release and Not Prefab
+		/// </summary>
+		public static bool IsReadHideFlag(Version version, TransferInstructionFlags flags)
 		{
-			return !flags.IsRelease() && !flags.IsForPrefab();
+			return !flags.IsRelease() && !flags.IsForPrefab() && version.IsGreaterEqual(2);
 		}
-		public static bool IsReadInstanceID(TransferInstructionFlags flags)
+		/// <summary>
+		/// 4.3.0 and greater and Debug
+		/// </summary>
+		public static bool IsReadInstanceID(Version version, TransferInstructionFlags flags)
 		{
-			return flags.IsDebug();
+			return flags.IsDebug() && version.IsGreaterEqual(4, 3);
 		}
 
 		public void Read(byte[] buffer)
@@ -55,12 +61,12 @@ namespace uTinyRipper.Classes
 
 		public virtual void Read(AssetReader reader)
 		{
-			if (IsReadHideFlag(reader.Flags))
+			if (IsReadHideFlag(reader.Version, reader.Flags))
 			{
 				ObjectHideFlags = reader.ReadUInt32();
 			}
 #if UNIVERSAL
-			if (IsReadInstanceID(reader.Flags))
+			if (IsReadInstanceID(reader.Version, reader.Flags))
 			{
 				InstanceID = reader.ReadInt32();
 				LocalIdentfierInFile = reader.ReadInt64();
@@ -107,13 +113,13 @@ namespace uTinyRipper.Classes
 		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_ObjectHideFlags", GetObjectHideFlags(container.Flags, container.ExportFlags));
+			node.Add("m_ObjectHideFlags", GetObjectHideFlags(container.Version, container.Flags, container.ExportFlags));
 			return node;
 		}
 
-		private uint GetObjectHideFlags(TransferInstructionFlags flags, TransferInstructionFlags exportFlags)
+		private uint GetObjectHideFlags(Version version, TransferInstructionFlags flags, TransferInstructionFlags exportFlags)
 		{
-			if(IsReadHideFlag(flags))
+			if(IsReadHideFlag(version, flags))
 			{
 				return ObjectHideFlags;
 			}
