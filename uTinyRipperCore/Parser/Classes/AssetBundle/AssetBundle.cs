@@ -57,27 +57,33 @@ namespace uTinyRipper.Classes
 		{
 			return version.IsGreaterEqual(5);
 		}
+		/// <summary>
+		/// 5.0.0b2
+		/// </summary>
 		public static bool IsReadIsStreamedSceneAssetBundle(Version version)
 		{
-#warning unknown
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
-		}
-		public static bool IsReadExplicitDataLayout(Version version)
-		{
-#warning unknown
-			return version.IsGreaterEqual(2017, 4);
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
 		}
 		/// <summary>
-		/// 2017.1.0b2 andgreater
+		/// 2017.3 and greater
+		/// </summary>
+		public static bool IsReadExplicitDataLayout(Version version)
+		{
+			return version.IsGreaterEqual(2017, 3);
+		}
+		/// <summary>
+		/// 2017.1.0b2 and greater
 		/// </summary>
 		public static bool IsReadPathFlags(Version version)
 		{
 			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 		}
+		/// <summary>
+		/// 2017.3 and greater
+		/// </summary>
 		public static bool IsReadSceneHashes(Version version)
 		{
-#warning unknown
-			return version.IsGreaterEqual(2017, 4);
+			return version.IsGreaterEqual(2017, 3);
 		}
 
 		private static int GetSerializedVersion(Version version)

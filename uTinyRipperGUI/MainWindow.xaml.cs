@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows;
 using uTinyRipper;
 using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes;
 using uTinyRipperGUI.Exporters;
 
 using Object = uTinyRipper.Classes.Object;

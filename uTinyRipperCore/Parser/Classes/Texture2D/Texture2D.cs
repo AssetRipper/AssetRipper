@@ -263,17 +263,11 @@ namespace uTinyRipper.Classes
 				ABitMask = DDSABitMask,
 				Caps = DDSCaps(container.Version),
 			};
-			
-			if (IsSwapBytes(container.Platform))
+
+			EndianType endianess = IsSwapBytes(container.Platform) ? EndianType.BigEndian : EndianType.LittleEndian;
+			using (EndianReader sourceReader = new EndianReader(source, endianess))
 			{
-				using (ReverseStream reverse = new ReverseStream(source, source.Position, length, true))
-				{
-					DDSConverter.ExportDDS(destination, reverse, @params);
-				}
-			}
-			else
-			{
-				DDSConverter.ExportDDS(destination, source, @params);
+				DDSConverter.ExportDDS(sourceReader, destination, @params);
 			}
 		}
 		
