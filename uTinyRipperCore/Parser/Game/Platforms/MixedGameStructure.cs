@@ -18,7 +18,7 @@ namespace uTinyRipper
 				if (FileMultiStream.Exists(path))
 				{
 					string name = FileMultiStream.GetFileName(path);
-					files.Add(name, path);
+					files[name] = path;
 					string directory = Path.GetDirectoryName(path);
 					dataPathes.Add(directory);
 				}

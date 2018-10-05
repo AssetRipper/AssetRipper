@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using uTinyRipper.AssetExporters.Mono;
 
 namespace uTinyRipper
@@ -16,6 +14,11 @@ namespace uTinyRipper
 		public static bool IsBuiltinExtra(string fileName)
 		{
 			return fileName == BuiltinExtraName1 || fileName == BuiltinExtraName2;
+		}
+
+		public static bool IsEngineGeneratedF(string fileName)
+		{
+			return fileName == EngineGeneratedF;
 		}
 
 		public static string FixFileIdentifier(string name)
@@ -99,5 +102,6 @@ namespace uTinyRipper
 		public const string DefaultResourceName2 = "unity_default_resources";
 		public const string BuiltinExtraName1 = "unity builtin extra";
 		public const string BuiltinExtraName2 = "unity_builtin_extra";
+		public const string EngineGeneratedF = "0000000000000000f000000000000000";
 	}
 }

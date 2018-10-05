@@ -157,8 +157,8 @@ namespace uTinyRipper.Classes.Sprites
 			}
 
 			MeshOutlineGenerator outlineGenerator = new MeshOutlineGenerator(vertices, triangles);
-			List<Vector2f[]> outline = outlineGenerator.GenerateOutlines();
-			outlines.AddRange(outline);
+			List<Vector2f[]> meshOutlines = outlineGenerator.GenerateOutlines();
+			outlines.AddRange(meshOutlines);
 		}
 
 		public IReadOnlyList<SpriteVertex> Vertices => m_vertices;

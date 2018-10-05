@@ -76,6 +76,10 @@ namespace uTinyRipper.AssetExporters
 			{
 				return true;
 			}
+			if (FilenameUtils.IsEngineGeneratedF(fileName))
+			{
+				return true;
+			}
 			return false;
 		}
 

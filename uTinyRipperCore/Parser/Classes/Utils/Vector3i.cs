@@ -12,6 +12,16 @@ namespace uTinyRipper.Classes
 			Z = z;
 		}
 
+		public static bool operator == (Vector3i left, Vector3i right)
+		{
+			return left.X == right.X && left.Y == right.Y && left.Z == right.Z;
+		}
+
+		public static bool operator !=(Vector3i left, Vector3i right)
+		{
+			return left.X != right.X || left.Y != right.Y || left.Z != right.Z;
+		}
+
 		public int GetValueByMember(int member)
 		{
 			member %= 3;
@@ -55,6 +65,31 @@ namespace uTinyRipper.Classes
 		public override string ToString()
 		{
 			return $"[{X}, {Y}, {Z}]";
+		}
+
+		public override bool Equals(object obj)
+		{
+			if(obj == null)
+			{
+				return false;
+			}
+			if(obj.GetType() != typeof(Vector3i))
+			{
+				return false;
+			}
+			return this == (Vector3i)obj;
+		}
+
+		public override int GetHashCode()
+		{
+			int hash = 193;
+			unchecked
+			{
+				hash = hash + 787 * X.GetHashCode();
+				hash = hash * 823 + Y.GetHashCode();
+				hash = hash * 431 + Z.GetHashCode();
+			}
+			return hash;
 		}
 
 		public int X { get; }
