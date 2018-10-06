@@ -35,12 +35,12 @@
                           VerticalAlignment="Top" Height="8" Background="Transparent" Margin="0,-4,0,0" />
         <RichTextBox Grid.Row="1"  Margin="3,3,3,3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                    Name="OutputTextBox"
-                   AcceptsReturn="True"
+                   AcceptsReturn="True" IsDocumentEnabled="true"
                    Background="#FF555555" IsReadOnly="True" FontSize="14" Foreground="White"
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                    ScrollViewer.VerticalScrollBarVisibility="Auto"
                    ScrollViewer.CanContentScroll="True"
-                   TextChanged="OnOutputTextChanged"
+                   TextChanged="OnOutputTextChanged" 
                  >
             <RichTextBox.ContextMenu>
                 <ContextMenu>

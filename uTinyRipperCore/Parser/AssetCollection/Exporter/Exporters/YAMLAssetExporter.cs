@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using uTinyRipper.Classes;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -25,7 +26,7 @@ namespace uTinyRipper.AssetExporters
 		{
 			using (FileStream fileStream = FileUtils.Open(path, FileMode.Create, FileAccess.Write))
 			{
-				using (StreamWriter streamWriter = new StreamWriter(fileStream))
+				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, Encoding.UTF8))
 				{
 					YAMLWriter writer = new YAMLWriter();
 					YAMLDocument doc = asset.ExportYAMLDocument(container);
@@ -40,7 +41,7 @@ namespace uTinyRipper.AssetExporters
 		{
 			using (FileStream fileStream = FileUtils.Open(path, FileMode.Create, FileAccess.Write))
 			{
-				using (StreamWriter streamWriter = new StreamWriter(fileStream))
+				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, Encoding.UTF8))
 				{
 					YAMLWriter writer = new YAMLWriter();
 					writer.WriteHead(streamWriter);

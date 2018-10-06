@@ -1,6 +1,6 @@
 ﻿using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
-using uTinyRipperCore.Classes.InputManagers;
+using uTinyRipper.Classes.InputManagers;
 
 namespace uTinyRipper.Classes.InputManagers
 {

@@ -269,7 +269,7 @@ namespace uTinyRipper.SerializedFiles
 				{
 					dependencyCallback?.Invoke(dependency.FilePath);
 				}
-
+				
 				if (RTTIClassHierarchyDescriptor.IsReadSignature(Header.Generation))
 				{
 					ReadAssets(reader, startPosition);
@@ -431,10 +431,9 @@ namespace uTinyRipper.SerializedFiles
 					asset.Read(data);
 				}
 #if !DEBUG
-				catch
+				catch (Exception ex)
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.General, $"Version[{Version}] '{Name}'");
-					throw;
+					throw new SerializedFileException($"Error during reading asset type {asset.ClassID}", ex, Version, Name, FilePath);
 				}
 #endif
 
@@ -455,17 +454,16 @@ namespace uTinyRipper.SerializedFiles
 						asset.Read(alignReader);
 					}
 #if !DEBUG
-					catch
+					catch (Exception ex)
 					{
-						Logger.Instance.Log(LogType.Error, LogCategory.General, $"Version[{Version}] '{Name}'");
-						throw;
+						throw new SerializedFileException($"Error during reading asset type {asset.ClassID}", ex, Version, Name, FilePath);
 					}
 #endif
 				}
 				long read = reader.BaseStream.Position - offset;
 				if (read != size)
 				{
-					throw new Exception($"Read {read} but expected {size} for asset type {asset.ClassID}. Version[{Version}] '{Name}'");
+					throw new SerializedFileException($"Read {read} but expected {size} for asset type {asset.ClassID}", Version, Name, FilePath);
 				}
 			}
 			return asset;

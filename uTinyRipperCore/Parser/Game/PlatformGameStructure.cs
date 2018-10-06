@@ -224,7 +224,7 @@ namespace uTinyRipper
 
 		protected void AddFile(IDictionary<string, string> files, string name, string path)
 		{
-			files.Add(name, path);
+			files[name] = path;
 			Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Game file '{name}' has been found");
 		}
 

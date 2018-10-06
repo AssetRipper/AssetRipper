@@ -1,4 +1,4 @@
-﻿namespace uTinyRipperCore.Classes.InputManagers
+﻿namespace uTinyRipper.Classes.InputManagers
 {
 	public enum InputAxesDirection
 	{

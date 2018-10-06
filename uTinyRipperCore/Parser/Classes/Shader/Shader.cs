@@ -197,14 +197,14 @@ namespace uTinyRipper.Classes
 		{
 			if (IsSerialized(container.Version))
 			{
-				using (StreamWriter writer = new StreamWriter(stream))
+				using (StreamWriter writer = new InvariantStreamWriter(stream, Encoding.UTF8))
 				{
 					ParsedForm.Export(writer, this, exporterInstantiator);
 				}
 			}
 			else if (IsEncoded(container.Version))
 			{
-				using (StreamWriter writer = new StreamWriter(stream))
+				using (StreamWriter writer = new InvariantStreamWriter(stream, Encoding.UTF8))
 				{
 					string header = Encoding.UTF8.GetString(Script);
 					SubProgramBlob.Export(writer, header, exporterInstantiator);

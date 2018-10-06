@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -20,12 +21,20 @@ namespace uTinyRipperGUI
 
 		public void Log(LogType type, LogCategory category, string message)
 		{
-			Application.Current.Dispatcher.InvokeAsync(() => LogInner(type, category, message));
+			if (Thread.CurrentThread == Application.Current.Dispatcher.Thread)
+			{
+				LogInner(type, category, message);
+			}
+			else
+			{
+				Application.Current.Dispatcher.Invoke(() => LogInner(type, category, message));
+			}
 		}
 
 		private void LogInner(LogType type, LogCategory category, string message)
 		{
 			TextRange rangeOfText = new TextRange(m_textBox.Document.ContentEnd, m_textBox.Document.ContentEnd);
+			message = message.Replace("\n", string.Empty);
 			rangeOfText.Text = $"{category}: {message}\r";
 			switch (type)
 			{

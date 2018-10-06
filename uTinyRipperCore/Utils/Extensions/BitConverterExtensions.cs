@@ -1,19 +1,27 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace uTinyRipper
 {
 	public static class BitConverterExtensions
 	{
+		[StructLayout(LayoutKind.Explicit)]
+		private struct FloatUIntUnion
+		{
+			[FieldOffset(0)]
+			public uint Int;
+			[FieldOffset(0)]
+			public float Float;
+		}
+
 		public static uint ToUInt32(float value)
 		{
-			byte[] bytes = BitConverter.GetBytes(value);
-			return BitConverter.ToUInt32(bytes, 0);
+			return new FloatUIntUnion { Float = value }.Int;
 		}
 
 		public static ulong ToUInt64(double value)
 		{
-			byte[] bytes = BitConverter.GetBytes(value);
-			return BitConverter.ToUInt64(bytes, 0);
+			return unchecked((ulong)BitConverter.DoubleToInt64Bits(value));
 		}
 
 		public static void GetBytes(ushort value, byte[] buffer, int offset)

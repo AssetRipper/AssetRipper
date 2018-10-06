@@ -15,6 +15,10 @@
 
 	public static class ZTestExtensions
 	{
+		public static bool IsNone(this ZTest _this)
+		{
+			return _this == ZTest.None;
+		}
 		public static bool IsLEqual(this ZTest _this)
 		{
 			return _this == ZTest.LEqual;

@@ -90,7 +90,7 @@ namespace uTinyRipper.Classes.Shaders
 				writer.WriteIntent(3);
 				writer.Write("ZClip {0}\n", ZClipValue);
 			}
-			if (!ZTestValue.IsLEqual())
+			if (!ZTestValue.IsLEqual() && !ZTestValue.IsNone())
 			{
 				writer.WriteIntent(3);
 				writer.Write("ZTest {0}\n", ZTestValue);

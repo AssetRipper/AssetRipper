@@ -47,6 +47,7 @@ namespace uTinyRipper.Classes
 			}
 
 #warning TODO: values acording to read version (current 2017.3.0f3)
+			ThreadSafeRandom random = new ThreadSafeRandom();
 			long exportID;
 			do
 			{
@@ -60,21 +61,21 @@ namespace uTinyRipper.Classes
 #endif
 				exportID = classID;
 				exportID *= 1000000000000000L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 100000000000000L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 10000000000000L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 1000000000000L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 100000000000L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 10000000000L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 1000000000L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 100000000L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 10000000L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 1000000L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 100000L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 10000L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 1000L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 100L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 10L;
-				exportID |= unchecked(RandomUtils.Next(0, 2)) * 1L;
+				exportID |= unchecked(random.Next(0, 2)) * 100000000000000L;
+				exportID |= unchecked(random.Next(0, 2)) * 10000000000000L;
+				exportID |= unchecked(random.Next(0, 2)) * 1000000000000L;
+				exportID |= unchecked(random.Next(0, 2)) * 100000000000L;
+				exportID |= unchecked(random.Next(0, 2)) * 10000000000L;
+				exportID |= unchecked(random.Next(0, 2)) * 1000000000L;
+				exportID |= unchecked(random.Next(0, 2)) * 100000000L;
+				exportID |= unchecked(random.Next(0, 2)) * 10000000L;
+				exportID |= unchecked(random.Next(0, 2)) * 1000000L;
+				exportID |= unchecked(random.Next(0, 2)) * 100000L;
+				exportID |= unchecked(random.Next(0, 2)) * 10000L;
+				exportID |= unchecked(random.Next(0, 2)) * 1000L;
+				exportID |= unchecked(random.Next(0, 2)) * 100L;
+				exportID |= unchecked(random.Next(0, 2)) * 10L;
+				exportID |= unchecked(random.Next(0, 2)) * 1L;
 			}
 			while (uniqueChecker(exportID));
 			return exportID;

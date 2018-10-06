@@ -516,7 +516,7 @@ namespace uTinyRipper.Classes
 				}
 				return IndexBuffer;
 			}
-			return new byte[0];
+			return ArrayExtensions.EmptyBytes;
 		}
 
 		private IReadOnlyList<BoneWeights4> GetSkin(Version version)

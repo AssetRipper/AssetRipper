@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.EditorBuildSettingss;
 using uTinyRipper.SerializedFiles;
@@ -103,7 +104,7 @@ namespace uTinyRipper.AssetExporters
 
 			using (FileStream file = FileUtils.Create(filePath))
 			{
-				using (StreamWriter writer = new StreamWriter(file))
+				using (StreamWriter writer = new InvariantStreamWriter(file, Encoding.UTF8))
 				{
 					writer.Write("m_EditorVersion: 2017.3.0f3");
 				}

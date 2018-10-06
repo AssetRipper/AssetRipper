@@ -330,7 +330,7 @@ namespace DotNetDxc
 
     public class DefaultDxcLib
     {
-        [DllImport(DXCompilerName, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("dxcompiler", CallingConvention = CallingConvention.StdCall)]
         internal static extern int DxcCreateInstance(
             ref Guid clsid,
             ref Guid iid,
@@ -341,13 +341,6 @@ namespace DotNetDxc
         {
             return DxcCreateInstance;
 		}
-
-		private const string DXCompilerName =
-#if WIN64
-			"dxcompiler_x64";
-#else
-			"dxcompiler_x86";
-#endif
 	}
 
 	public class HlslDxcLib

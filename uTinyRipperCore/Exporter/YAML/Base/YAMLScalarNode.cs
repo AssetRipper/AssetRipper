@@ -2,6 +2,7 @@
 
 using System;
 using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace uTinyRipper.Exporter.YAML
@@ -158,6 +159,100 @@ namespace uTinyRipper.Exporter.YAML
 			m_objectType = ScalarType.String;
 		}
 
+		public StringBuilder ToString(StringBuilder sb)
+		{
+			if (Style == ScalarStyle.Hex)
+			{
+				switch (m_objectType)
+				{
+					case ScalarType.Byte:
+						return sb.AppendHex((byte)m_value);
+					case ScalarType.Int16:
+						return sb.AppendHex((short)m_value);
+					case ScalarType.UInt16:
+						return sb.AppendHex((ushort)m_value);
+					case ScalarType.Int32:
+						return sb.AppendHex((int)m_value);
+					case ScalarType.UInt32:
+						return sb.AppendHex((uint)m_value);
+					case ScalarType.Int64:
+						return sb.AppendHex(m_value);
+					case ScalarType.UInt64:
+						return sb.AppendHex(unchecked((ulong)m_value));
+					case ScalarType.Single:
+						return sb.AppendHex((float)m_double);
+					case ScalarType.Double:
+						return sb.AppendHex(m_double);
+					case ScalarType.String:
+						return sb.Append(m_string);
+					default:
+						throw new NotImplementedException(m_objectType.ToString());
+				}
+			}
+
+			switch (m_objectType)
+			{
+				case ScalarType.UInt64:
+					return sb.Append(unchecked((ulong)m_value));
+				case ScalarType.Single:
+					return sb.Append(((float)m_double).ToString(CultureInfo.InvariantCulture));
+				case ScalarType.Double:
+					return sb.Append(m_double.ToString(CultureInfo.InvariantCulture));
+				case ScalarType.String:
+					return sb.Append(m_string);
+
+				default:
+					return sb.Append(m_value);
+			}
+		}
+
+		internal Emitter ToString(Emitter emitter)
+		{
+			if (Style == ScalarStyle.Hex)
+			{
+				switch (m_objectType)
+				{
+					case ScalarType.Byte:
+						return emitter.WriteHex((byte)m_value);
+					case ScalarType.Int16:
+						return emitter.WriteHex((short)m_value);
+					case ScalarType.UInt16:
+						return emitter.WriteHex((ushort)m_value);
+					case ScalarType.Int32:
+						return emitter.WriteHex((int)m_value);
+					case ScalarType.UInt32:
+						return emitter.WriteHex((uint)m_value);
+					case ScalarType.Int64:
+						return emitter.WriteHex(m_value);
+					case ScalarType.UInt64:
+						return emitter.WriteHex(unchecked((ulong)m_value));
+					case ScalarType.Single:
+						return emitter.WriteHex((float)m_double);
+					case ScalarType.Double:
+						return emitter.WriteHex(m_double);
+					case ScalarType.String:
+						return emitter.Write(m_string);
+					default:
+						throw new NotImplementedException(m_objectType.ToString());
+				}
+			}
+
+			switch (m_objectType)
+			{
+				case ScalarType.UInt64:
+					return emitter.Write(unchecked((ulong)m_value));
+				case ScalarType.Single:
+					return emitter.Write((float)m_double);
+				case ScalarType.Double:
+					return emitter.Write(m_double);
+				case ScalarType.String:
+					return emitter.Write(m_string);
+
+				default:
+					return emitter.Write(m_value);
+			}
+		}
+
 		internal override void Emit(Emitter emitter)
 		{
 			base.Emit(emitter);
@@ -166,18 +261,18 @@ namespace uTinyRipper.Exporter.YAML
 			{
 				case ScalarStyle.Hex:
 				case ScalarStyle.Plain:
-					emitter.Write(Value);
+					ToString(emitter);
 					break;
 
 				case ScalarStyle.SingleQuoted:
 					emitter.Write('\'');
-					emitter.Write(Value);
+					ToString(emitter);
 					emitter.Write('\'');
 					break;
 
 				case ScalarStyle.DoubleQuoted:
 					emitter.Write('"');
-					emitter.Write(Value);
+					ToString(emitter);
 					emitter.Write('"');
 					break;
 
@@ -188,15 +283,15 @@ namespace uTinyRipper.Exporter.YAML
 
 		private void UpdateStyle()
 		{
-			string value = Value;
+			string value = m_string;
 			if (s_illegal.IsMatch(value))
 			{
-				if(value.Contains("'"))
+				if (value.Contains('\''))
 				{
-					if(value.Contains("\""))
+					if (value.Contains('"'))
 					{
 						value = value.Replace("'", "''");
-						SetValue(value);
+						m_string = value;
 						Style = ScalarStyle.SingleQuoted;
 					}
 					else

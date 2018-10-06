@@ -38,7 +38,7 @@ namespace uTinyRipper.AssetExporters.Classes
 			return node;
 		}
 
-		public static readonly ExportPointer EmptyPointer = new ExportPointer(0);
+		public static ExportPointer EmptyPointer { get; } = new ExportPointer(0);
 
 		public long FileID { get; }
 		public EngineGUID GUID { get; }

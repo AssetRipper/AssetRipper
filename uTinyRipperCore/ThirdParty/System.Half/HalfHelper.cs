@@ -13,11 +13,11 @@ namespace System
     [ComVisible(false)]
     internal static class HalfHelper
     {
-        private static uint[] mantissaTable = GenerateMantissaTable();
-        private static uint[] exponentTable = GenerateExponentTable();
-        private static ushort[] offsetTable = GenerateOffsetTable();
-        private static ushort[] baseTable = GenerateBaseTable();
-        private static sbyte[] shiftTable = GenerateShiftTable();
+        private static readonly uint[] mantissaTable = GenerateMantissaTable();
+        private static readonly uint[] exponentTable = GenerateExponentTable();
+        private static readonly ushort[] offsetTable = GenerateOffsetTable();
+        private static readonly ushort[] baseTable = GenerateBaseTable();
+        private static readonly sbyte[] shiftTable = GenerateShiftTable();
 
         // Transforms the subnormal representation to a normalized one. 
         private static uint ConvertMantissa(int i)

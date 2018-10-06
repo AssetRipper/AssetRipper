@@ -52,6 +52,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <Prefer32Bit>false</Prefer32Bit>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
@@ -121,9 +122,12 @@
     <Compile Include="Converter\Textures\PVR\PVRFlag.cs" />
     <Compile Include="Converter\Textures\PVR\PVRPixelFormat.cs" />
     <Compile Include="Exporter\YAML\Base\ScalarType.cs" />
+    <Compile Include="Exporter\YAML\Utils\Extensions\EmitterExtensions.cs" />
     <Compile Include="Exporter\YAML\Utils\Extensions\IDictionaryExtensions.cs" />
+    <Compile Include="Exporter\YAML\Utils\Extensions\IReadOnlyListExtensions.cs" />
     <Compile Include="IO\EndianReader\IEndianReadable.cs" />
     <Compile Include="IO\FileMultiStream\SplitNameComparer.cs" />
+    <Compile Include="IO\InvariantStreamWriter.cs" />
     <Compile Include="IO\PartialStream.cs" />
     <Compile Include="IO\ReverseStream.cs" />
     <Compile Include="IO\FileMultiStream\FileMultiStream.cs" />
@@ -534,6 +538,7 @@
     <Compile Include="Parser\Format\Data\FileEntryType.cs" />
     <Compile Include="Parser\AssetCollection\DependencyCollection.cs" />
     <Compile Include="Parser\Format\Data\FileScheme.cs" />
+    <Compile Include="Parser\Format\SerializedFile\Exceptions\SerializedFileException.cs" />
     <Compile Include="Parser\Format\SerializedFile\IO\SerializedFileReader.cs" />
     <Compile Include="Parser\Format\SerializedFile\IO\ISerializedFileReadable.cs" />
     <Compile Include="Parser\Format\SerializedFile\ISerializedFile\IAssetContainer.cs" />
@@ -1005,6 +1010,7 @@
     <Compile Include="Utils\Extensions\IReadOnlyListExtensions.cs" />
     <Compile Include="Utils\Extensions\StreamExtensions.cs" />
     <Compile Include="Utils\Extensions\StringBuilderExtensions.cs" />
+    <Compile Include="Utils\Extensions\StringExtensions.cs" />
     <Compile Include="Utils\Extensions\TextWriterExtensions.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\Logger\ILogger.cs" />
@@ -1012,10 +1018,10 @@
     <Compile Include="Utils\Logger\Logger.cs" />
     <Compile Include="Utils\Logger\LogType.cs" />
     <Compile Include="Utils\MD4.cs" />
-    <Compile Include="Utils\RandomUtils.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoArray.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\ScriptExportArray.cs" />
     <Compile Include="Utils\RunetimeUtils.cs" />
+    <Compile Include="Utils\ThreadSafeRandom.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

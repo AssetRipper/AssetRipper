@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporters.Scripts.Mono;
 
@@ -73,7 +74,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 			using (FileStream file = FileUtils.OpenWrite(filePath))
 			{
-				using (StreamWriter writer = new StreamWriter(file))
+				using (StreamWriter writer = new InvariantStreamWriter(file, Encoding.UTF8))
 				{
 					exportType.Export(writer);
 				}

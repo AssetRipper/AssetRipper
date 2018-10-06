@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using uTinyRipper.AssetExporters.Classes;
 using uTinyRipper.Classes;
@@ -41,7 +41,7 @@ namespace uTinyRipper.AssetExporters
 			int digits = BitConverterExtensions.GetDigitsCount(value);
 			if(digits > 5)
 			{
-				throw new ArgumentException($"Value {value} for main export ID must have no more than 5 digits");
+				throw new System.ArgumentException($"Value {value} for main export ID must have no more than 5 digits");
 			}
 #endif
 			return (classID * 100000) | value;
@@ -70,7 +70,7 @@ namespace uTinyRipper.AssetExporters
 			string metaPath = $"{filePath}.meta";
 			using (FileStream fileStream = FileUtils.Open(metaPath, FileMode.Create, FileAccess.Write))
 			{
-				using (StreamWriter streamWriter = new StreamWriter(fileStream))
+				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, Encoding.UTF8))
 				{
 					YAMLWriter writer = new YAMLWriter();
 					YAMLDocument doc = meta.ExportYAMLDocument(container);

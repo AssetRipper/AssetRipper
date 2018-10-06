@@ -31,22 +31,83 @@ namespace uTinyRipper.Exporter.YAML
 			return this;
 		}
 
-		public Emitter Write(char @char)
+		public Emitter Write(char value)
 		{
 			WriteDelayed();
-			m_stream.Write(@char);
-
+			m_stream.Write(value);
 			return this;
 		}
 
-		public Emitter Write(string @string)
+		public Emitter Write(byte value)
 		{
-			if(@string != string.Empty)
+			WriteDelayed();
+			m_stream.Write(value);
+			return this;
+		}
+
+		public Emitter Write(ushort value)
+		{
+			WriteDelayed();
+			m_stream.Write(value);
+			return this;
+		}
+
+		public Emitter Write(short value)
+		{
+			WriteDelayed();
+			m_stream.Write(value);
+			return this;
+		}
+
+		public Emitter Write(uint value)
+		{
+			WriteDelayed();
+			m_stream.Write(value);
+			return this;
+		}
+
+		public Emitter Write(int value)
+		{
+			WriteDelayed();
+			m_stream.Write(value);
+			return this;
+		}
+
+		public Emitter Write(ulong value)
+		{
+			WriteDelayed();
+			m_stream.Write(value);
+			return this;
+		}
+
+		public Emitter Write(long value)
+		{
+			WriteDelayed();
+			m_stream.Write(value);
+			return this;
+		}
+
+		public Emitter Write(float value)
+		{
+			WriteDelayed();
+			m_stream.Write(value);
+			return this;
+		}
+
+		public Emitter Write(double value)
+		{
+			WriteDelayed();
+			m_stream.Write(value);
+			return this;
+		}
+
+		public Emitter Write(string value)
+		{
+			if(value != string.Empty)
 			{
 				WriteDelayed();
-				m_stream.Write(@string);
-			}
-			
+				m_stream.Write(value);
+			}			
 			return this;
 		}
 
