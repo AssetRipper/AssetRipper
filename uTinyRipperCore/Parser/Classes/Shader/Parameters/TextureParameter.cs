@@ -15,7 +15,7 @@
 			Name = name;
 			NameIndex = -1;
 			Index = index;
-			Dim = (byte)dimension;
+			Dim = unchecked((byte)dimension);
 			SamplerIndex = dimension >> 8;
 			if (SamplerIndex == 0xFFFFFF)
 			{

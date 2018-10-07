@@ -67,22 +67,22 @@ namespace Mono.Cecil.PE {
 
 		public short ReadInt16 ()
 		{
-			return (short) ReadUInt16 ();
+			return unchecked((short) ReadUInt16 ());
 		}
 
 		public uint ReadUInt32 ()
 		{
-			uint value = (uint) (buffer [position]
+			uint value = unchecked((uint) (buffer [position]
 				| (buffer [position + 1] << 8)
 				| (buffer [position + 2] << 16)
-				| (buffer [position + 3] << 24));
+				| (buffer [position + 3] << 24)));
 			position += 4;
 			return value;
 		}
 
 		public int ReadInt32 ()
 		{
-			return (int) ReadUInt32 ();
+			return unchecked((int) ReadUInt32 ());
 		}
 
 		public ulong ReadUInt64 ()
@@ -95,7 +95,7 @@ namespace Mono.Cecil.PE {
 
 		public long ReadInt64 ()
 		{
-			return (long) ReadUInt64 ();
+			return unchecked((long) ReadUInt64 ());
 		}
 
 		public uint ReadCompressedUInt32 ()

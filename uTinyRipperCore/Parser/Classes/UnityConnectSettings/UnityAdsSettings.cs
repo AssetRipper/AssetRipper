@@ -10,9 +10,9 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 			this()
 		{
 			InitializeOnStartup = true;
-#if UNIVERSAL
 			IosGameId = string.Empty;
 			AndroidGameId = string.Empty;
+#if UNIVERSAL
 			m_gameIds = new Dictionary<string, string>();
 #endif
 		}

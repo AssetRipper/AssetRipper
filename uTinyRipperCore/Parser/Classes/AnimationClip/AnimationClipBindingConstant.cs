@@ -42,7 +42,7 @@ namespace uTinyRipper.Classes.AnimationClips
 					return gb;
 				}
 			}
-			throw new ArgumentException($"Binding with index {index} wasn't found", nameof(index));
+			throw new ArgumentException($"Binding with index {index} hasn't been found", nameof(index));
 		}
 
 		public bool IsAvatarMatch(Avatar avatar)
