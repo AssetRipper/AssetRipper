@@ -29,7 +29,7 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// 2.0.0 and Not Release and Not Prefab
+		/// 2.0.0 and greater and Not Release and Not Prefab
 		/// </summary>
 		public static bool IsReadHideFlag(Version version, TransferInstructionFlags flags)
 		{

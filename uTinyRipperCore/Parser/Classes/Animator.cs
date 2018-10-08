@@ -41,18 +41,18 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5);
 		}
 		/// <summary>
-		/// 4.6.0 and greater
+		/// 4.5.3 and greater
 		/// </summary>
 		public static bool IsReadAllowConstantOptimization(Version version)
 		{
-			return version.IsGreaterEqual(4, 6);
+			return version.IsGreaterEqual(4, 5, 3);
 		}
 		/// <summary>
-		/// 4.6.0 and greater
+		/// 4.5.0 and greater
 		/// </summary>
 		public static bool IsAlignMiddle(Version version)
 		{
-			return version.IsGreaterEqual(4, 6);
+			return version.IsGreaterEqual(4, 5);
 		}
 		/// <summary>
 		/// 5.0.0 and greater
@@ -112,7 +112,6 @@ namespace uTinyRipper.Classes
 			{
 				HasTransformHierarchy = reader.ReadBoolean();
 			}
-
 			if (IsReadAllowConstantOptimization(reader.Version))
 			{
 				AllowConstantClipSamplingOptimization = reader.ReadBoolean();
@@ -125,9 +124,9 @@ namespace uTinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object @object in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
 			
 			yield return Avatar.FetchDependency(file, isLog, ToLogString, "m_Avatar");

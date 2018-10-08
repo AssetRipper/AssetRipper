@@ -14,7 +14,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			IsEnabled = reader.ReadByte();
+			IsEnabled = reader.ReadByte() == 0 ? false : true;
 			reader.AlignStream(AlignType.Align4);
 		}
 
@@ -25,6 +25,6 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public byte IsEnabled { get; private set; }
+		public bool IsEnabled { get; private set; }
 	}
 }

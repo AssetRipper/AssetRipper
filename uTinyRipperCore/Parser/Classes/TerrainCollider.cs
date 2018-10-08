@@ -13,6 +13,14 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
+		public static bool IsReadTerrainMaterial(Version version)
+		{
+			return version.IsGreaterEqual(5);
+		}
+
+		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
 		private static bool IsAlign(Version version)
@@ -57,7 +65,7 @@ namespace uTinyRipper.Classes
 
 		public PPtr<TerrainData> TerrainData;
 
-		protected override bool IsReadMaterial => true;
+		protected override bool IsReadMaterial => IsReadTerrainMaterial(File.Version);
 		protected override bool IsReadIsTrigger => false;
 	}
 }

@@ -12,6 +12,9 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		/// <summary>
+		/// 3.4.0 and greater
+		/// </summary>
 		public static bool IsReadEnabled(Version version)
 		{
 			return version.IsGreaterEqual(3, 4);
