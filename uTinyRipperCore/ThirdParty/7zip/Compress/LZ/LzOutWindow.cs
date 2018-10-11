@@ -79,9 +79,9 @@ namespace SevenZip.Compression.LZ
 
 		public void CopyBlock(uint distance, uint len)
 		{
-			uint pos = _pos - distance - 1;
+			uint pos = unchecked(_pos - distance - 1);
 			if (pos >= _windowSize)
-				pos += _windowSize;
+				pos = unchecked(pos + _windowSize);
 			for (; len > 0; len--)
 			{
 				if (pos >= _windowSize)
@@ -101,9 +101,9 @@ namespace SevenZip.Compression.LZ
 
 		public byte GetByte(uint distance)
 		{
-			uint pos = _pos - distance - 1;
+			uint pos = unchecked(_pos - distance - 1);
 			if (pos >= _windowSize)
-				pos += _windowSize;
+				pos = unchecked(pos + _windowSize);
 			return _buffer[pos];
 		}
 	}

@@ -195,8 +195,8 @@ namespace SevenZip.Compression.RangeCoder
 					result |= 1;
 				}
 				*/
-				uint t = (code - range) >> 31;
-				code -= range & (t - 1);
+				uint t = (unchecked(code - range)) >> 31;
+				code -= range & (unchecked(t - 1));
 				result = (result << 1) | (1 - t);
 
 				if (range < kTopValue)

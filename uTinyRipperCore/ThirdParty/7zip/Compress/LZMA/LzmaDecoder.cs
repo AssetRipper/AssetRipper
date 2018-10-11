@@ -72,7 +72,7 @@ namespace SevenZip.Compression.LZMA
 					do
 						symbol = (symbol << 1) | m_Decoders[symbol].Decode(rangeDecoder);
 					while (symbol < 0x100);
-					return (byte)symbol;
+					return unchecked((byte)symbol);
 				}
 
 				public byte DecodeWithMatchByte(RangeCoder.Decoder rangeDecoder, byte matchByte)
@@ -92,7 +92,7 @@ namespace SevenZip.Compression.LZMA
 						}
 					}
 					while (symbol < 0x100);
-					return (byte)symbol;
+					return unchecked((byte)symbol);
 				}
 			}
 
@@ -318,8 +318,10 @@ namespace SevenZip.Compression.LZMA
 								int numDirectBits = (int)((posSlot >> 1) - 1);
 								rep0 = ((2 | (posSlot & 1)) << numDirectBits);
 								if (posSlot < Base.kEndPosModelIndex)
+								{
 									rep0 += BitTreeDecoder.ReverseDecode(m_PosDecoders,
-											rep0 - posSlot - 1, m_RangeDecoder, numDirectBits);
+											unchecked(rep0 - posSlot - 1), m_RangeDecoder, numDirectBits);
+								}
 								else
 								{
 									rep0 += (m_RangeDecoder.DecodeDirectBits(

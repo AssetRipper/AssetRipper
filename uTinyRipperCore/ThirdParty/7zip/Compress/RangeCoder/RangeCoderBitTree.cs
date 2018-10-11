@@ -146,7 +146,7 @@ namespace SevenZip.Compression.RangeCoder
 			uint symbol = 0;
 			for (int bitIndex = 0; bitIndex < NumBitLevels; bitIndex++)
 			{
-				uint bit = Models[startIndex + m].Decode(rangeDecoder);
+				uint bit = Models[unchecked(startIndex + m)].Decode(rangeDecoder);
 				m <<= 1;
 				m += bit;
 				symbol |= (bit << bitIndex);

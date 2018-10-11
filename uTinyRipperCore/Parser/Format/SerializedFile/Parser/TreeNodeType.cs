@@ -138,13 +138,13 @@ namespace uTinyRipper.SerializedFiles
 			Type type = typeof(TreeNodeType);
 			TreeNodeType[] values = (TreeNodeType[])Enum.GetValues(type);
 			IEnumerable<FieldInfo> fields = type.GetRuntimeFields();
-			string[] typeNames = new string[values.Length];
+			Dictionary<TreeNodeType, string> typeNames = new Dictionary<TreeNodeType, string>(values.Length);
 			foreach (FieldInfo field in fields)
 			{
 				if(index > 0)
 				{
 					EnumNameAttribute name = field.GetCustomAttribute<EnumNameAttribute>();
-					typeNames[index - 1] = name == null ? values[index - 1].ToString() : name.Name;
+					typeNames.Add(values[index - 1], name == null ? values[index - 1].ToString() : name.Name);
 				}
 				index++;
 			}
@@ -153,9 +153,9 @@ namespace uTinyRipper.SerializedFiles
 
 		public static string ToTypeString(this TreeNodeType _this)
 		{
-			return s_typeNames[(int)_this];
+			return s_typeNames[_this];
 		}
 
-		private static readonly IReadOnlyList<string> s_typeNames;
+		private static readonly IReadOnlyDictionary<TreeNodeType, string> s_typeNames;
 	}
 }
