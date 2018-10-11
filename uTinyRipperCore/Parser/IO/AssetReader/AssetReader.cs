@@ -91,6 +91,11 @@ namespace uTinyRipper
 			return result;
 		}
 
+		public override string ToString()
+		{
+			return $"{nameof(AssetReader)} ({Platform} {Version})";
+		}
+
 		public Platform Platform { get; }
 		public TransferInstructionFlags Flags { get; }
 

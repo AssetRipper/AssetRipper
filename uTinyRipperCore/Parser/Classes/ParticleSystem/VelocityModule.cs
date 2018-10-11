@@ -6,11 +6,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 	public sealed class VelocityModule : ParticleSystemModule
 	{
 		/// <summary>
-		/// 2018.2 and greater
+		/// 2018.1.1 and greater
 		/// </summary>
 		public static bool IsReadOrbital(Version version)
 		{
-			return version.IsGreaterEqual(2018, 1, 1);
+			return version.IsGreaterEqual(2018);
 		}
 		/// <summary>
 		/// 2017.3 and greater

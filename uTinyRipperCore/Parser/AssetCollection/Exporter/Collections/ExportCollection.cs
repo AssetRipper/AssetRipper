@@ -70,7 +70,7 @@ namespace uTinyRipper.AssetExporters
 			string metaPath = $"{filePath}.meta";
 			using (FileStream fileStream = FileUtils.Open(metaPath, FileMode.Create, FileAccess.Write))
 			{
-				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, Encoding.UTF8))
+				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
 				{
 					YAMLWriter writer = new YAMLWriter();
 					YAMLDocument doc = meta.ExportYAMLDocument(container);

@@ -104,7 +104,7 @@ namespace uTinyRipper.AssetExporters
 
 			using (FileStream file = FileUtils.Create(filePath))
 			{
-				using (StreamWriter writer = new InvariantStreamWriter(file, Encoding.UTF8))
+				using (StreamWriter writer = new InvariantStreamWriter(file, new UTF8Encoding(false)))
 				{
 					writer.Write("m_EditorVersion: 2017.3.0f3");
 				}

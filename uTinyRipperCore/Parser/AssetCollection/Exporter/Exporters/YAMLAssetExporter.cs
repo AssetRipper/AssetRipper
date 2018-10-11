@@ -26,7 +26,7 @@ namespace uTinyRipper.AssetExporters
 		{
 			using (FileStream fileStream = FileUtils.Open(path, FileMode.Create, FileAccess.Write))
 			{
-				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, Encoding.UTF8))
+				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
 				{
 					YAMLWriter writer = new YAMLWriter();
 					YAMLDocument doc = asset.ExportYAMLDocument(container);
@@ -41,7 +41,7 @@ namespace uTinyRipper.AssetExporters
 		{
 			using (FileStream fileStream = FileUtils.Open(path, FileMode.Create, FileAccess.Write))
 			{
-				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, Encoding.UTF8))
+				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
 				{
 					YAMLWriter writer = new YAMLWriter();
 					writer.WriteHead(streamWriter);

@@ -74,7 +74,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 			using (FileStream file = FileUtils.OpenWrite(filePath))
 			{
-				using (StreamWriter writer = new InvariantStreamWriter(file, Encoding.UTF8))
+				using (StreamWriter writer = new InvariantStreamWriter(file, new UTF8Encoding(false)))
 				{
 					exportType.Export(writer);
 				}
