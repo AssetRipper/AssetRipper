@@ -156,7 +156,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Collections\ManagerExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Engine\EngineAssetExporter.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Engine\EngineBuiltInAssets.cs" />
-    <Compile Include="Parser\AssetCollection\Exporter\Exporters\Engine\EngineExportCollection.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Collections\EngineExportCollection.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\IScriptExportManager.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoAttribute.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoDelegate.cs" />

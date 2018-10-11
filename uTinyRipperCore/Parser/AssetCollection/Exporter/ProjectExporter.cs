@@ -12,7 +12,6 @@ namespace uTinyRipper.AssetExporters
 		{
 			m_fileCollection = fileCollection;
 
-			OverrideExporter(ClassIDType.MonoScript, DummyExporter);
 			OverrideExporter(ClassIDType.MonoManager, DummyExporter);
 			OverrideExporter(ClassIDType.BuildSettings, DummyExporter);
 			OverrideExporter(ClassIDType.AssetBundle, DummyExporter);
