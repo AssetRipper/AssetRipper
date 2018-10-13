@@ -44,9 +44,9 @@ namespace uTinyRipper.Classes.AnimationClips
 		{
 			foreach(PPtrKeyframe keyframe in Curve)
 			{
-				foreach (Object @object in keyframe.FetchDependencies(file, isLog))
+				foreach (Object asset in keyframe.FetchDependencies(file, isLog))
 				{
-					yield return @object;
+					yield return asset;
 				}
 			}
 			yield return Script.FetchDependency(file, isLog, () => nameof(PPtrCurve), "script");

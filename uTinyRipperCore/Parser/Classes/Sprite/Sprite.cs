@@ -202,17 +202,17 @@ namespace uTinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach (Object @object in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
 			if(!SpriteAtlas.IsNull)
 			{
 				yield return SpriteAtlas.FetchDependency(file, isLog, ToLogString, "SpriteAtlas");
 			}
-			foreach (Object @object in RD.FetchDependencies(file))
+			foreach (Object asset in RD.FetchDependencies(file))
 			{
-				yield return @object;
+				yield return asset;
 			}
 		}
 

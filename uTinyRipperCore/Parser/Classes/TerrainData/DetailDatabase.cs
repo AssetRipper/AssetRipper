@@ -63,9 +63,9 @@ namespace uTinyRipper.Classes.TerrainDatas
 		{
 			foreach (DetailPrototype prototype in DetailPrototypes)
 			{
-				foreach(Object @object in prototype.FetchDependencies(file, isLog))
+				foreach(Object asset in prototype.FetchDependencies(file, isLog))
 				{
-					yield return @object;
+					yield return asset;
 				}
 			}
 			
@@ -76,9 +76,9 @@ namespace uTinyRipper.Classes.TerrainDatas
 
 			foreach (TreePrototype prototype in TreePrototypes)
 			{
-				foreach(Object @object in prototype.FetchDependencies(file, isLog))
+				foreach(Object asset in prototype.FetchDependencies(file, isLog))
 				{
-					yield return @object;
+					yield return asset;
 				}
 			}
 

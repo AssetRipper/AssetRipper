@@ -62,10 +62,10 @@ namespace uTinyRipper.Classes.Shaders
 			}
 		}
 
-		public void Export(TextWriter writer, ShaderSubProgramBlob blob, Platform platform, bool isTier, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
+		public void Export(ShaderWriter writer, ShaderSubProgramBlob blob, bool isTier)
 		{
 			writer.WriteIntent(4);
-			writer.Write("SubProgram \"{0} ", GpuProgramType.ToGPUPlatform(platform));
+			writer.Write("SubProgram \"{0} ", GpuProgramType.ToGPUPlatform(writer.Platform));
 			if(isTier)
 			{
 				writer.Write("hw_tier{0} ", ShaderHardwareTier.ToString("00"));
@@ -73,7 +73,7 @@ namespace uTinyRipper.Classes.Shaders
 			writer.Write("\" {\n");
 			writer.WriteIntent(5);
 			
-			blob.SubPrograms[(int)BlobIndex].Export(writer, exporterInstantiator);
+			blob.SubPrograms[(int)BlobIndex].Export(writer);
 
 			writer.Write('\n');
 			writer.WriteIntent(4);

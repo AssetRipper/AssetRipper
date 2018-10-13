@@ -193,21 +193,21 @@ namespace uTinyRipper.Classes
 			ExportBinary(container, stream, DefaultShaderExporterInstantiator);
 		}
 
-		public void ExportBinary(IExportContainer container, Stream stream, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
+		public void ExportBinary(IExportContainer container, Stream stream, Func<Version, ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
 		{
 			if (IsSerialized(container.Version))
 			{
-				using (StreamWriter writer = new InvariantStreamWriter(stream, new UTF8Encoding(false)))
+				using (ShaderWriter writer = new ShaderWriter(stream, this, exporterInstantiator))
 				{
-					ParsedForm.Export(writer, this, exporterInstantiator);
+					ParsedForm.Export(writer);
 				}
 			}
 			else if (IsEncoded(container.Version))
 			{
-				using (StreamWriter writer = new InvariantStreamWriter(stream, new UTF8Encoding(false)))
+				using (ShaderWriter writer = new ShaderWriter(stream, this, exporterInstantiator))
 				{
 					string header = Encoding.UTF8.GetString(Script);
-					SubProgramBlob.Export(writer, header, exporterInstantiator);
+					SubProgramBlob.Export(writer, header);
 				}
 			}
 			else
@@ -218,9 +218,9 @@ namespace uTinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach (Object @object in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
 
 			if (IsReadDependencies(file.Version))
@@ -232,7 +232,7 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public static ShaderTextExporter DefaultShaderExporterInstantiator(ShaderGpuProgramType programType)
+		public static ShaderTextExporter DefaultShaderExporterInstantiator(Version version, ShaderGpuProgramType programType)
 		{
 			if(programType.IsGL())
 			{
@@ -240,7 +240,7 @@ namespace uTinyRipper.Classes
 			}
 			if(programType.IsMetal())
 			{
-				return new ShaderMetalExporter();
+				return new ShaderMetalExporter(version);
 			}
 			return new ShaderUnknownExporter(programType);
 		}

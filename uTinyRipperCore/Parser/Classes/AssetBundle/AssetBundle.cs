@@ -164,15 +164,15 @@ namespace uTinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object @object in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
 			foreach (AssetBundles.AssetInfo container in m_container.Select(t => t.Value))
 			{
-				foreach (Object @object in container.FetchDependencies(file, isLog))
+				foreach (Object asset in container.FetchDependencies(file, isLog))
 				{
-					yield return @object;
+					yield return asset;
 				}
 			}
 		}

@@ -8,7 +8,7 @@ namespace uTinyRipper.AssetExporters
 	{
 		long GetExportID(Object asset);
 		AssetType ToExportType(ClassIDType classID);
-		ExportPointer CreateExportPointer(Object @object);
+		ExportPointer CreateExportPointer(Object asset);
 
 		string SceneIndexToName(int sceneID);
 		string TagIDToName(int tagID);

@@ -122,7 +122,7 @@ namespace uTinyRipper.AssetExporters
 
 			if (Config.IsExportDependencies)
 			{
-				//throw new InvalidOperationException($"Object {@object} wasn't found in any export collection");
+				//throw new InvalidOperationException($"Object {asset} wasn't found in any export collection");
 			}
 			long exportID = ExportCollection.GetMainExportID(asset);
 			return new ExportPointer(exportID, EngineGUID.MissingReference, AssetType.Meta);

@@ -283,7 +283,7 @@ namespace uTinyRipper.Classes.Shaders
 			}
 		}
 		
-		public void Export(TextWriter writer, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
+		public void Export(ShaderWriter writer)
 		{
 			if(Keywords.Count > 0)
 			{
@@ -302,8 +302,7 @@ namespace uTinyRipper.Classes.Shaders
 				writer.Write("\n");
 				writer.WriteIntent(5);
 
-				ShaderTextExporter exporter = exporterInstantiator.Invoke(ProgramType);
-				exporter.Export(m_programData, writer);
+				writer.WriteShaderData(ProgramType, m_programData);
 			}
 			writer.Write('"');
 		}

@@ -47,9 +47,9 @@ namespace uTinyRipper.Classes.Materials
 		{
 			foreach(UnityTexEnv env in m_texEnvs.Values)
 			{
-				foreach(Object @object in env.FetchDependencies(file, isLog))
+				foreach(Object asset in env.FetchDependencies(file, isLog))
 				{
-					yield return @object;
+					yield return asset;
 				}
 			}
 		}

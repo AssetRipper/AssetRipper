@@ -123,9 +123,9 @@ namespace uTinyRipper.Classes
 			}
 			
 			yield return Shader.FetchDependency(file, isLog, ToLogString, "m_Shader");
-			foreach(Object @object in SavedProperties.FetchDependencies(file, isLog))
+			foreach(Object asset in SavedProperties.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
 		}
 

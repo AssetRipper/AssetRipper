@@ -103,30 +103,30 @@ namespace uTinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach (Object @object in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
 
 			yield return Scene.FetchDependency(file, isLog, ToLogString, "m_Scene");
 			foreach (LightmapData lightmapData in Lightmaps)
 			{
-				foreach (Object @object in lightmapData.FetchDependencies(file, isLog))
+				foreach (Object asset in lightmapData.FetchDependencies(file, isLog))
 				{
-					yield return @object;
+					yield return asset;
 				}
 			}
 			yield return LightProbes.FetchDependency(file, isLog, ToLogString, "m_LightProbes");
 			foreach (RendererData rendererData in LightmappedRendererData)
 			{
-				foreach (Object @object in rendererData.FetchDependencies(file, isLog))
+				foreach (Object asset in rendererData.FetchDependencies(file, isLog))
 				{
-					yield return @object;
+					yield return asset;
 				}
 			}
-			foreach (Object @object in EnlightenSceneMapping.FetchDependencies(file, isLog))
+			foreach (Object asset in EnlightenSceneMapping.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
 			foreach (PPtr<Texture> cubemap in BakedReflectionProbeCubemaps)
 			{

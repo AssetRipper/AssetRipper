@@ -32,7 +32,7 @@ namespace uTinyRipper.Classes.Shaders
 			}
 		}
 
-		public void Export(TextWriter writer, string header, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
+		public void Export(ShaderWriter writer, string header)
 		{
 			int j = 0;
 			while (true)
@@ -58,7 +58,7 @@ namespace uTinyRipper.Classes.Shaders
 					}
 				}
 
-				SubPrograms[subProgram].Export(writer, exporterInstantiator);
+				SubPrograms[subProgram].Export(writer);
 			}
 			writer.WriteString(header, j, header.Length - j);
 		}

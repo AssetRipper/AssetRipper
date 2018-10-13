@@ -83,9 +83,9 @@ namespace uTinyRipper.Classes.ParticleSystems
 		{
 			foreach (SpriteData spriteData in Sprites)
 			{
-				foreach(Object @object in spriteData.FetchDependencies(file, isLog))
+				foreach(Object asset in spriteData.FetchDependencies(file, isLog))
 				{
-					yield return @object;
+					yield return asset;
 				}
 			}
 		}

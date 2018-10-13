@@ -49,6 +49,15 @@ namespace uTinyRipper.SerializedFiles
 			{
 				string signature = reader.ReadStringZeroTerm();
 				Version.Parse(signature);
+
+#warning HACK: TEMP:
+				if (Version == new Version(5, 6, 4, VersionType.Patch, 1))
+				{
+					if (FilenameUtils.IsDefaultResource(Name))
+					{
+						Version = new Version(5, 6, 5, VersionType.Base);
+					}
+				}
 			}
 			if (IsReadAttributes(reader.Generation))
 			{

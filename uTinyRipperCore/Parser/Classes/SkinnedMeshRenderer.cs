@@ -246,9 +246,9 @@ namespace uTinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object @object in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(file, isLog))
 			{
-				yield return @object;
+				yield return asset;
 			}
 
 			if(IsReadOffscreen(file.Version))

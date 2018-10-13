@@ -14,7 +14,7 @@ namespace uTinyRipper.Classes.Shaders
 			LOD = reader.ReadInt32();
 		}
 
-		public void Export(TextWriter writer, Shader shader, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
+		public void Export(ShaderWriter writer)
 		{
 			writer.WriteIntent(1);
 			writer.Write("SubShader {\n");
@@ -26,7 +26,7 @@ namespace uTinyRipper.Classes.Shaders
 			Tags.Export(writer, 2);
 			foreach(SerializedPass pass in Passes)
 			{
-				pass.Export(writer, shader, exporterInstantiator);
+				pass.Export(writer);
 			}
 			writer.WriteIntent(1);
 			writer.Write("}\n");

@@ -29,7 +29,7 @@ namespace uTinyRipper.Classes.Shaders
 			Tags.Read(reader);
 		}
 
-		public void Export(TextWriter writer, Shader shader, Func<ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
+		public void Export(ShaderWriter writer)
 		{
 			writer.WriteIntent(2);
 			writer.Write("{0} ", Type.ToString());
@@ -54,11 +54,11 @@ namespace uTinyRipper.Classes.Shaders
 				{
 					State.Export(writer);
 
-					ProgVertex.Export(writer, shader, ShaderType.Vertex, exporterInstantiator);
-					ProgFragment.Export(writer, shader, ShaderType.Fragment, exporterInstantiator);
-					ProgGeometry.Export(writer, shader, ShaderType.Geometry, exporterInstantiator);
-					ProgHull.Export(writer, shader, ShaderType.Hull, exporterInstantiator);
-					ProgDomain.Export(writer, shader, ShaderType.Domain, exporterInstantiator);
+					ProgVertex.Export(writer, ShaderType.Vertex);
+					ProgFragment.Export(writer, ShaderType.Fragment);
+					ProgGeometry.Export(writer, ShaderType.Geometry);
+					ProgHull.Export(writer, ShaderType.Hull);
+					ProgDomain.Export(writer, ShaderType.Domain);
 
 #warning ProgramMask?
 #warning HasInstancingVariant?

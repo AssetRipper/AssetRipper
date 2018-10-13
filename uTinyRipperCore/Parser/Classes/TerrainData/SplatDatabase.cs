@@ -34,9 +34,9 @@ namespace uTinyRipper.Classes.TerrainDatas
 		{
 			foreach (SplatPrototype prototype in Splats)
 			{
-				foreach(Object @object in prototype.FetchDependencies(file, isLog))
+				foreach(Object asset in prototype.FetchDependencies(file, isLog))
 				{
-					yield return @object;
+					yield return asset;
 				}
 			}
 			

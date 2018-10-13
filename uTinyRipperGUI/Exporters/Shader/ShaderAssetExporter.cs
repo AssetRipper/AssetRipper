@@ -11,6 +11,7 @@ using uTinyRipper.Classes.Shaders.Exporters;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
+using Version = uTinyRipper.Version;
 
 namespace uTinyRipperGUI.Exporters
 {
@@ -80,13 +81,13 @@ namespace uTinyRipperGUI.Exporters
 			return true;
 		}
 
-		private static ShaderTextExporter ShaderExporterInstantiator(ShaderGpuProgramType programType)
+		private static ShaderTextExporter ShaderExporterInstantiator(Version version, ShaderGpuProgramType programType)
 		{
 			if(s_isSupported && programType.IsDX())
 			{
 				return new ShaderDXExporter();
 			}
-			return Shader.DefaultShaderExporterInstantiator(programType);
+			return Shader.DefaultShaderExporterInstantiator(version, programType);
 		}
 
 		/// <summary>

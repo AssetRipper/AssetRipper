@@ -5,7 +5,7 @@ using System.Text;
 
 namespace uTinyRipper
 {
-	public sealed class InvariantStreamWriter : StreamWriter
+	public class InvariantStreamWriter : StreamWriter
 	{
 		public InvariantStreamWriter(Stream stream):
 			base(stream)
