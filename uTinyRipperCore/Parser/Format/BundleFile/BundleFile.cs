@@ -116,11 +116,6 @@ namespace uTinyRipper.BundleFiles
 			{
 				case BundleType.UnityRaw:
 					{
-						if (Header.ChunkInfos.Count > 1)
-						{
-							throw new NotSupportedException($"Raw data with several chunks {Header.ChunkInfos.Count} isn't supported");
-						}
-
 						Metadata = new BundleMetadata(m_filePath);
 						Metadata.ReadPre530(reader);
 					}
