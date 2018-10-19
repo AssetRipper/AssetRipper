@@ -9,6 +9,7 @@ namespace uTinyRipper.Classes.AnimationClips
 		public KeyframeTpl(float time, T value, T weight):
 			this(time, value, default, default, weight)
 		{
+			TangentMode = TangentMode.FreeSmooth;
 		}
 
 		public KeyframeTpl(float time, T value, T inSlope, T outSlope, T weight)
@@ -17,9 +18,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			Value = value;
 			InSlope = inSlope;
 			OutSlope = outSlope;
-#if UNIVERSAL
-			TangentMode = TangentMode.FreeSmooth;
-#endif
+			TangentMode = TangentMode.FreeFree;
 			WeightedMode = WeightedMode.None;
 			InWeight = weight;
 			OutWeight = weight;
@@ -63,12 +62,10 @@ namespace uTinyRipper.Classes.AnimationClips
 			Value.Read(reader);
 			InSlope.Read(reader);
 			OutSlope.Read(reader);
-#if UNIVERSAL
 			if(IsReadTangentMode(reader.Version, reader.Flags))
 			{
 				TangentMode = (TangentMode)reader.ReadInt32();
 			}
-#endif
 			if(IsReadWeight(reader.Version))
 			{
 				WeightedMode = (WeightedMode)reader.ReadInt32();
@@ -87,7 +84,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			node.Add("outSlope", OutSlope.ExportYAML(container));
 			if (GetSerializedVersion(container.Version) >= 2)
 			{
-				node.Add("tangentMode", (int)GetTangentMode(container.Version, container.Flags));
+				node.Add("tangentMode", (int)TangentMode);
 			}
 			if (GetSerializedVersion(container.Version) >= 3)
 			{
@@ -98,21 +95,8 @@ namespace uTinyRipper.Classes.AnimationClips
 			return node;
 		}
 
-		private TangentMode GetTangentMode(Version version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if(IsReadTangentMode(version, flags))
-			{
-				return TangentMode;
-			}
-#endif
-			return TangentMode.FreeSmooth;
-		}
-
 		public float Time { get; private set; }
-#if UNIVERSAL
 		public TangentMode TangentMode { get; private set; }
-#endif
 		public WeightedMode WeightedMode { get; private set; }
 
 		public T Value;

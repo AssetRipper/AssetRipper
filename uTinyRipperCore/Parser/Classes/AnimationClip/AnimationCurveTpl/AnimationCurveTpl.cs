@@ -65,6 +65,18 @@ namespace uTinyRipper.Classes.AnimationClips
 			}
 		}
 
+		public AnimationCurveTpl(IReadOnlyList<KeyframeTpl<T>> keyframes, CurveLoopTypes preInfinity, CurveLoopTypes postInfinity)
+		{
+			PreInfinity = preInfinity;
+			PostInfinity = postInfinity;
+			RotationOrder = RotationOrder.OrderZXY;
+			m_curve = new KeyframeTpl<T>[keyframes.Count];
+			for (int i = 0; i < keyframes.Count; i++)
+			{
+				m_curve[i] = keyframes[i];
+			}
+		}
+
 		public AnimationCurveTpl(AnimationCurveTpl<T> copy):
 			this(copy.Curve)
 		{

@@ -182,6 +182,10 @@ namespace uTinyRipper.AssetExporters
 			{
 				return UntaggedTag;
 			}
+			if(m_tagManager.Tags.Count == 0)
+			{
+				return $"unknown_{tagID}";
+			}
 			return m_tagManager.Tags[tagID - 20000];
 		}
 

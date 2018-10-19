@@ -8,11 +8,6 @@ namespace uTinyRipper.Classes
 {
 	public struct Quaternionf : IScriptStructure
 	{
-		public Quaternionf(float value) :
-			this(value, value, value, value)
-		{
-		}
-
 		public Quaternionf(float x, float y, float z, float w)
 		{
 			X = x;
@@ -21,11 +16,53 @@ namespace uTinyRipper.Classes
 			W = w;
 		}
 
-		public Quaternionf(Quaternionf copy):
+		public Quaternionf(Quaternionf copy) :
 			this(copy.X, copy.Y, copy.Z, copy.W)
 		{
 		}
-		
+
+		public float this[int index]
+		{
+			get
+			{
+				switch(index)
+				{
+					case 0:
+						return X;
+					case 1:
+						return Y;
+					case 2:
+						return Z;
+					case 3:
+						return W;
+
+					default:
+						throw new IndexOutOfRangeException($"Index {index} is out of bound");
+				}
+			}
+			set
+			{
+				switch (index)
+				{
+					case 0:
+						X = value;
+						break;
+					case 1:
+						Y = value;
+						break;
+					case 2:
+						Z = value;
+						break;
+					case 3:
+						W = value;
+						break;
+
+					default:
+						throw new IndexOutOfRangeException($"Index {index} is out of bound");
+				}
+			}
+		}
+
 		public IScriptStructure CreateCopy()
 		{
 			return new Quaternionf(this);
@@ -107,6 +144,7 @@ namespace uTinyRipper.Classes
 		}
 
 		public static Quaternionf Zero => new Quaternionf(0.0f, 0.0f, 0.0f, 1.0f);
+		public static Quaternionf DefaultWeight => new Quaternionf(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f);
 
 		public IScriptStructure Base => null;
 		public string Namespace => ScriptType.UnityEngineName;

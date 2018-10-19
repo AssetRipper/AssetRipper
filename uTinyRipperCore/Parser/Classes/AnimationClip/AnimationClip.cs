@@ -319,7 +319,7 @@ namespace uTinyRipper.Classes
 
 			AnimationCurves curves = GetAnimationCurves(container.Version, container.Platform);
 			node.Add("m_RotationCurves", curves.RotationCurves.ExportYAML(container));
-			node.Add("m_CompressedRotationCurves", curves.RotationCurves.ExportYAML(container));
+			node.Add("m_CompressedRotationCurves", curves.CompressedRotationCurves.ExportYAML(container));
 			node.Add("m_EulerCurves", curves.EulerCurves.ExportYAML(container));
 			node.Add("m_PositionCurves", curves.PositionCurves.ExportYAML(container));
 			node.Add("m_ScaleCurves", curves.ScaleCurves.ExportYAML(container));

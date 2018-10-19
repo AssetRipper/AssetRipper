@@ -129,7 +129,7 @@ namespace uTinyRipper.Classes
 				int depth = go.GetRootDepth();
 				return depth > 1 ? 1u : 0u;
 			}
-			return exportFlags.IsForPrefab() ? 1u : 0u;
+			return exportFlags.IsForPrefab() ? 1u : ObjectHideFlags;
 		}
 
 		public ISerializedFile File => m_assetInfo.File;

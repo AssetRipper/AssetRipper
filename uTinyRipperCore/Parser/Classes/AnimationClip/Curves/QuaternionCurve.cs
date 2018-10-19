@@ -12,6 +12,12 @@ namespace uTinyRipper.Classes.AnimationClips
 			Path = path;
 		}
 
+		public QuaternionCurve(string path, AnimationCurveTpl<Quaternionf> curve)
+		{
+			Path = path;
+			Curve = curve;
+		}
+
 		public void Read(AssetReader reader)
 		{
 			Curve.Read(reader);

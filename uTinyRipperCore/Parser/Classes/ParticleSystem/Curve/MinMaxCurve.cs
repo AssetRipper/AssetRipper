@@ -27,8 +27,8 @@ namespace uTinyRipper.Classes.ParticleSystems
 			Scalar = maxValue;
 			MinScalar = minValue;
 
-			MinCurve = new AnimationCurveTpl<Float>(minCurve, 1.0f / 3.0f);
-			MaxCurve = new AnimationCurveTpl<Float>(maxCurve1, 0.0f, 1.0f, maxCurve2, 1.0f, 0.0f, 1.0f / 3.0f);
+			MinCurve = new AnimationCurveTpl<Float>(minCurve, Float.DefaultWeight);
+			MaxCurve = new AnimationCurveTpl<Float>(maxCurve1, 0.0f, 1.0f, maxCurve2, 1.0f, 0.0f, Float.DefaultWeight);
 		}
 
 		public MinMaxCurve(ParticleSystemCurveMode mode, float minValue, float maxValue, float minCurve, float maxCurve)
@@ -37,8 +37,8 @@ namespace uTinyRipper.Classes.ParticleSystems
 			MinScalar = minValue;
 			Scalar = maxValue;
 
-			MinCurve = new AnimationCurveTpl<Float>(minCurve, 1.0f / 3.0f);
-			MaxCurve = new AnimationCurveTpl<Float>(maxCurve, 1.0f / 3.0f);
+			MinCurve = new AnimationCurveTpl<Float>(minCurve, Float.DefaultWeight);
+			MaxCurve = new AnimationCurveTpl<Float>(maxCurve, Float.DefaultWeight);
 		}
 
 		/// <summary>

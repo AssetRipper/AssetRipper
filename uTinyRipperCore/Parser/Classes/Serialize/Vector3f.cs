@@ -9,11 +9,6 @@ namespace uTinyRipper.Classes
 {
 	public struct Vector3f : IScriptStructure
 	{
-		public Vector3f(float value):
-			this(value, value, value)
-		{
-		}
-
 		public Vector3f(float x, float y, float z)
 		{
 			X = x;
@@ -107,6 +102,8 @@ namespace uTinyRipper.Classes
 		public IScriptStructure Base => null;
 		public string Namespace => ScriptType.UnityEngineName;
 		public string Name => ScriptType.Vector3Name;
+
+		public static Vector3f DefaultWeight => new Vector3f(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f);
 
 		public float X { get; private set; }
 		public float Y { get; private set; }

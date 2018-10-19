@@ -25,6 +25,8 @@ namespace uTinyRipper.Classes
 			return new YAMLScalarNode(Value);
 		}
 
+		public static Float DefaultWeight => 1.0f / 3.0f;
+
 		public float Value { get; private set; }
 	}
 }
