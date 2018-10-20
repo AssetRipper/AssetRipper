@@ -22,7 +22,6 @@ namespace uTinyRipper.AssetExporters
 			m_stateMachines = new AnimatorStateMachine[stateMachinesConst.Count];
 			for (int i = 0; i < stateMachinesConst.Count; i++)
 			{
-				StateMachineConstant stateMachineConstant = stateMachinesConst[i].Instance;
 				AnimatorStateMachine stateMachine = AnimatorStateMachine.CreateVirtualInstance(virtualFile, asset, i);
 				m_stateMachines[i] = stateMachine;
 			}

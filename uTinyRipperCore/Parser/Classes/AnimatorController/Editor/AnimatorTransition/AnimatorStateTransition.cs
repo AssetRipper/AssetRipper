@@ -38,7 +38,7 @@ namespace uTinyRipper.Classes.AnimatorControllers.Editor
 		public static AnimatorStateTransition CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController controller,
 			TransitionConstant transition, IReadOnlyList<AnimatorState> states)
 		{
-			return virtualFile.CreateAsset((assetInfo) => new AnimatorStateTransition(assetInfo, controller, transition));
+			return virtualFile.CreateAsset((assetInfo) => new AnimatorStateTransition(assetInfo, controller, transition, states));
 		}
 
 		private static int GetSerializedVersion(Version version)
