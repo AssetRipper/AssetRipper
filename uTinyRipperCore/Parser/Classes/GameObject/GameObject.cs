@@ -284,14 +284,14 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Component", GetComponents(container.Version, container.Flags).ExportYAML(container));
-			node.Add("m_Layer", Layer);
-			node.Add("m_Name", Name);
-			node.Add("m_TagString", GetTagString(container));
-			node.Add("m_Icon", GetIcon().ExportYAML(container));
-			node.Add("m_NavMeshLayer", GetNavMeshLayer());
-			node.Add("m_StaticEditorFlags", GetStaticEditorFlags());
-			node.Add("m_IsActive", GetIsActive(container.Version));
+			node.Add(ComponentName, GetComponents(container.Version, container.Flags).ExportYAML(container));
+			node.Add(LayerName, Layer);
+			node.Add(NameName, Name);
+			node.Add(TagStringName, GetTagString(container));
+			node.Add(IconName, GetIcon().ExportYAML(container));
+			node.Add(NavMeshLayerName, GetNavMeshLayer());
+			node.Add(StaticEditorFlagsName, GetStaticEditorFlags());
+			node.Add(IsActiveName, GetIsActive(container.Version));
 			return node;
 		}
 
@@ -349,10 +349,7 @@ namespace uTinyRipper.Classes
 				Transform childTransform = childPtr.GetAsset(File);
 				GameObject child = childTransform.GameObject.GetAsset(File);
 				string path = parentPath != string.Empty ? parentPath + "/" + child.Name : child.Name;
-				CRC crc = new CRC();
-				byte[] pathBytes = Encoding.UTF8.GetBytes(path);
-				crc.Update(pathBytes, 0, (uint)pathBytes.Length);
-				uint pathHash = crc.GetDigest();
+				uint pathHash = CRC.CalculateDigestUTF8(path);
 				tos[pathHash] = path;
 
 				BuildTOS(child, path, tos);
@@ -371,6 +368,15 @@ namespace uTinyRipper.Classes
 		public uint StaticEditorFlags { get; private set; }
 #endif
 		public bool IsActive { get; private set; }
+
+		public const string ComponentName = "m_Component";
+		public const string LayerName = "m_Layer";
+		public const string NameName = "m_Name";
+		public const string TagStringName = "m_TagString";
+		public const string IconName = "m_Icon";
+		public const string NavMeshLayerName = "m_NavMeshLayer";
+		public const string StaticEditorFlagsName = "m_StaticEditorFlags";
+		public const string IsActiveName = "m_IsActive";
 
 #if UNIVERSAL
 		public PPtr<Texture2D> Icon;

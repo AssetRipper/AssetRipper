@@ -96,13 +96,13 @@ namespace uTinyRipper.Classes.Lights
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Type", (int)Type);
-			node.Add("m_Resolution", Resolution);
-			node.Add("m_CustomResolution", CustomResolution);
-			node.Add("m_Strength", Strength);
-			node.Add("m_Bias", Bias);
-			node.Add("m_NormalBias", NormalBias);
-			node.Add("m_NearPlane", NearPlane);
+			node.Add(TypeName, (int)Type);
+			node.Add(ResolutionName, Resolution);
+			node.Add(CustomResolutionName, CustomResolution);
+			node.Add(StrengthName, Strength);
+			node.Add(BiasName, Bias);
+			node.Add(NormalBiasName, NormalBias);
+			node.Add(NearPlaneName, NearPlane);
 			return node;
 		}
 
@@ -118,5 +118,13 @@ namespace uTinyRipper.Classes.Lights
 		public float SoftnessFade  { get; private set; }
 		public float NormalBias { get; private set; }
 		public float NearPlane { get; private set; }
+
+		public const string TypeName = "m_Type";
+		public const string ResolutionName = "m_Resolution";
+		public const string CustomResolutionName = "m_CustomResolution";
+		public const string StrengthName = "m_Strength";
+		public const string BiasName = "m_Bias";
+		public const string NormalBiasName = "m_NormalBias";
+		public const string NearPlaneName = "m_NearPlane";
 	}
 }

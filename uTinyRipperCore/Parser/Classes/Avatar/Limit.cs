@@ -35,6 +35,11 @@ namespace uTinyRipper.Classes.Avatars
 			return node;
 		}
 
+		public override string ToString()
+		{
+			return $"{Min}-{Max}";
+		}
+
 		public Vector4f Min;
 		public Vector4f Max;
 	}

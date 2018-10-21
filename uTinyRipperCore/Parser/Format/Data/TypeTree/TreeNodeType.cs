@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace uTinyRipper.SerializedFiles
+namespace uTinyRipper
 {
 	/// <summary>
 	/// Predefines types

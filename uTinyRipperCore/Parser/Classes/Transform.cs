@@ -72,15 +72,23 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_LocalRotation", LocalRotation.ExportYAML(container));
-			node.Add("m_LocalPosition", LocalPosition.ExportYAML(container));
-			node.Add("m_LocalScale", LocalScale.ExportYAML(container));
-			node.Add("m_Children", Children.ExportYAML(container));
-			node.Add("m_Father", Father.ExportYAML(container));
-			node.Add("m_RootOrder", GetSiblingIndex());
-			node.Add("m_LocalEulerAnglesHint", LocalRotation.ToEuler().ExportYAML(container));
+			node.Add(LocalRotationName, LocalRotation.ExportYAML(container));
+			node.Add(LocalPositionName, LocalPosition.ExportYAML(container));
+			node.Add(LocalScaleName, LocalScale.ExportYAML(container));
+			node.Add(ChildrenName, Children.ExportYAML(container));
+			node.Add(FatherName, Father.ExportYAML(container));
+			node.Add(RootOrderName, GetSiblingIndex());
+			node.Add(LocalEulerAnglesHintName, LocalRotation.ToEuler().ExportYAML(container));
 			return node;
 		}
+
+		public const string LocalRotationName = "m_LocalRotation";
+		public const string LocalPositionName = "m_LocalPosition";
+		public const string LocalScaleName = "m_LocalScale";
+		public const string ChildrenName = "m_Children";
+		public const string FatherName = "m_Father";
+		public const string RootOrderName = "m_RootOrder";
+		public const string LocalEulerAnglesHintName = "m_LocalEulerAnglesHint";
 
 		public IReadOnlyList<PPtr<Transform>> Children => m_children;
 

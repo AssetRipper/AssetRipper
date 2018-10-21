@@ -301,6 +301,27 @@
 		/// </summary>
 		ActivationLogComponent			= 2000,
 		
+		// =====================================
+		// Custom section
+		// =====================================
+
+		@int							= 100000,
+		@bool							= 100001,
+		@float							= 100002,
+		MonoObject						= 100003,
+		Collision						= 100004,
+		Vector3f						= 100005,
+		RootMotionData					= 100006,
+		Collision2D						= 100007,
+		AudioMixerLiveUpdateFloat		= 100008,
+		AudioMixerLiveUpdateBool		= 100009,
+		Polygon2D						= 100010,
+		@void							= 100011,
+
+		// =====================================
+		// New editor section
+		// =====================================
+
 		TilemapCollider2D				= 19719996,
 		AssetImporterLog				= 41386430,
 		Grid							= 156049354,

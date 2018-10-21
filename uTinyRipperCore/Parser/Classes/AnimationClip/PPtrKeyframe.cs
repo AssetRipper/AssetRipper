@@ -7,6 +7,12 @@ namespace uTinyRipper.Classes.AnimationClips
 {
 	public struct PPtrKeyframe : IAssetReadable, IYAMLExportable, IDependent
 	{
+		public PPtrKeyframe(float time, PPtr<Object> script)
+		{
+			Time = time;
+			Script = script;
+		}
+
 		public void Read(AssetReader reader)
 		{
 			Time = reader.ReadSingle();

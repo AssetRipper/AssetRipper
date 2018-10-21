@@ -19,7 +19,6 @@ namespace uTinyRipper.AssetExporters.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			return 4;
 		}
 		
@@ -123,7 +122,8 @@ namespace uTinyRipper.AssetExporters.Classes
 			node.Add("spritePivot", pivot.ExportYAML(container));
 			
 			node.Add("spriteBorder", default(Rectf).ExportYAML(container));
-			node.Add("spritePixelsToUnits", 100);
+			float pixelPerUnit = m_sprites.Count == 0 ? 100.0f : m_sprites[0].PixelsToUnits;
+			node.Add("spritePixelsToUnits", pixelPerUnit);
 			node.Add("alphaUsage", true);
 			node.Add("alphaIsTransparency", true);
 			node.Add("spriteTessellationDetail", -1);

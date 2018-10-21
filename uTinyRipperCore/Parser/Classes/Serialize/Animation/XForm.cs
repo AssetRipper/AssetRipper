@@ -43,6 +43,11 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
+		public override string ToString()
+		{
+			return $"T:{T} Q:{Q} S:{S}";
+		}
+
 		public Vector4f T;
 		public Vector4f Q;
 		public Vector4f S;

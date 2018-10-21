@@ -25,6 +25,7 @@ namespace uTinyRipper.AssetExporters
 		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
 		{
 			using (FileStream fileStream = FileUtils.Open(path, FileMode.Create, FileAccess.Write))
+			//using(MemoryStream fileStream = new MemoryStream())
 			{
 				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
 				{

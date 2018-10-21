@@ -21,9 +21,11 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Enabled", IsEnabled);
+			node.Add(EnabledName, IsEnabled);
 			return node;
 		}
+
+		public const string EnabledName = "m_Enabled";
 
 		public bool IsEnabled { get; private set; }
 	}

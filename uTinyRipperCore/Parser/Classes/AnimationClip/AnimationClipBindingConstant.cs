@@ -30,7 +30,7 @@ namespace uTinyRipper.Classes.AnimationClips
 				GenericBinding gb = GenericBindings[i];
 				if (gb.ClassID == ClassIDType.Transform)
 				{
-					curves += gb.BindingType.GetDimension();
+					curves += gb.TransformType.GetDimension();
 				}
 				else
 				{

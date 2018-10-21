@@ -24,6 +24,11 @@
 			}
 		}
 
+		public override string ToString()
+		{
+			return $"[{FileID}, {PathID}]";
+		}
+
 		public int FileID { get; private set; }
 		public long PathID { get; private set; }
 	}

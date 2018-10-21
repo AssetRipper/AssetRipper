@@ -62,6 +62,14 @@ namespace uTinyRipper.Classes.Avatars
 			{
 				m_humanSkeletonReverseIndexArray = reader.ReadInt32Array();
 			}
+			else
+			{
+				m_humanSkeletonReverseIndexArray = new int[AvatarSkeleton.Instance.Node.Count];
+				for (int i = 0; i < AvatarSkeleton.Instance.Node.Count; i++)
+				{
+					m_humanSkeletonReverseIndexArray[i] = m_humanSkeletonIndexArray.IndexOf(i);
+				}
+			}
 			RootMotionBoneIndex = reader.ReadInt32();
 			RootMotionBoneX.Read(reader);
 			if (IsReadRootMotionSkeleton(reader.Version))
@@ -82,7 +90,7 @@ namespace uTinyRipper.Classes.Avatars
 			node.Add("m_SkeletonNameIDArray", GetSkeletonNameIDArray(container.Version).ExportYAML(true));
 			node.Add("m_Human", Human.ExportYAML(container));
 			node.Add("m_HumanSkeletonIndexArray", HumanSkeletonIndexArray.ExportYAML(true));
-			node.Add("m_HumanSkeletonReverseIndexArray", GetHumanSkeletonReverseIndexArray(container.Version).ExportYAML(true));
+			node.Add("m_HumanSkeletonReverseIndexArray", HumanSkeletonReverseIndexArray.ExportYAML(true));
 			node.Add("m_RootMotionBoneIndex", RootMotionBoneIndex);
 			node.Add("m_RootMotionBoneX", RootMotionBoneX.ExportYAML(container));
 			node.Add("m_RootMotionSkeleton", RootMotionSkeleton.ExportYAML(container));
@@ -98,10 +106,6 @@ namespace uTinyRipper.Classes.Avatars
 		private IReadOnlyList<uint> GetSkeletonNameIDArray(Version version)
 		{
 			return IsReadDefaultPose(version) ? SkeletonNameIDArray : AvatarSkeleton.Instance.ID;
-		}
-		private IReadOnlyList<int> GetHumanSkeletonReverseIndexArray(Version version)
-		{
-			return IsReadHumanSkeletonReverseIndexArray(version) ? HumanSkeletonReverseIndexArray : new int[0];
 		}
 		private IReadOnlyList<int> GetRootMotionSkeletonIndexArray(Version version)
 		{

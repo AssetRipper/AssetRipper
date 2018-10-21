@@ -96,11 +96,11 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5);
 		}
 		/// <summary>
-		/// 2017.1.0
+		/// 2017.1.0b1 to 2017.1.0p5 exclusive
 		/// </summary>
 		public static bool IsReadFalloffTable(Version version)
 		{
-			return version.IsEqual(2017, 1, 0);
+			return version.IsGreaterEqual(2017, 1, 0) && version.IsLess(2017, 1, 0, VersionType.Patch, 5);
 		}
 		/// <summary>
 		/// 5.6.0 and greater
@@ -248,35 +248,33 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 			
-			yield return Cookie.FetchDependency(file, isLog, ToLogString, "m_Cookie");
-			yield return Flare.FetchDependency(file, isLog, ToLogString, "m_Flare");
+			yield return Cookie.FetchDependency(file, isLog, ToLogString, CookieName);
+			yield return Flare.FetchDependency(file, isLog, ToLogString, FlareName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node =  base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Type", (int)Type);
-			node.Add("m_Color", Color.ExportYAML(container));
-			node.Add("m_Intensity", Intensity);
-			node.Add("m_Range", Range);
-			node.Add("m_SpotAngle", SpotAngle);
-			node.Add("m_CookieSize", CookieSize);
-			node.Add("m_Shadows", Shadows.ExportYAML(container));
-			node.Add("m_Cookie", Cookie.ExportYAML(container));
-			node.Add("m_DrawHalo", DrawHalo);
-			node.Add("m_Flare", Flare.ExportYAML(container));
-			node.Add("m_RenderMode", (int)RenderMode);
-			node.Add("m_CullingMask", CullingMask.ExportYAML(container));
-			node.Add("m_Lightmapping", (int)Lightmapping);
-			node.Add("m_AreaSize", AreaSize.ExportYAML(container));
-			node.Add("m_BounceIntensity", BounceIntensity);
-			node.Add("m_ColorTemperature", ColorTemperature);
-			node.Add("m_UseColorTemperature", UseColorTemperature);
-#warning ???
-			node.Add("m_ShadowRadius", 0);
-			node.Add("m_ShadowAngle", 0);
+			node.Add(TypeName, (int)Type);
+			node.Add(ColorName, Color.ExportYAML(container));
+			node.Add(IntensityName, Intensity);
+			node.Add(RangeName, Range);
+			node.Add(SpotAngleName, SpotAngle);
+			node.Add(CookieSizeName, CookieSize);
+			node.Add(ShadowsName, Shadows.ExportYAML(container));
+			node.Add(CookieName, Cookie.ExportYAML(container));
+			node.Add(DrawHaloName, DrawHalo);
+			node.Add(FlareName, Flare.ExportYAML(container));
+			node.Add(RenderModeName, (int)RenderMode);
+			node.Add(CullingMaskName, CullingMask.ExportYAML(container));
+			node.Add(LightmappingName, (int)Lightmapping);
+			node.Add(AreaSizeName, AreaSize.ExportYAML(container));
+			node.Add(BounceIntensityName, BounceIntensity);
+			node.Add(ColorTemperatureName, ColorTemperature);
+			node.Add(UseColorTemperatureName, UseColorTemperature);
+			node.Add(ShadowRadiusName, 0);
+			node.Add(ShadowAngleName, 0);
 			return node;
 		}
 
@@ -298,6 +296,26 @@ namespace uTinyRipper.Classes
 		public float BounceIntensity { get; private set; }
 		public float ColorTemperature { get; private set; }
 		public bool UseColorTemperature { get; private set; }
+
+		public const string TypeName = "m_Type";
+		public const string ColorName = "m_Color";
+		public const string IntensityName = "m_Intensity";
+		public const string RangeName = "m_Range";
+		public const string SpotAngleName = "m_SpotAngle";
+		public const string CookieSizeName = "m_CookieSize";
+		public const string ShadowsName = "m_Shadows";
+		public const string CookieName = "m_Cookie";
+		public const string DrawHaloName = "m_DrawHalo";
+		public const string FlareName = "m_Flare";
+		public const string RenderModeName = "m_RenderMode";
+		public const string CullingMaskName = "m_CullingMask";
+		public const string LightmappingName = "m_Lightmapping";
+		public const string AreaSizeName = "m_AreaSize";
+		public const string BounceIntensityName = "m_BounceIntensity";
+		public const string ColorTemperatureName = "m_ColorTemperature";
+		public const string UseColorTemperatureName = "m_UseColorTemperature";
+		public const string ShadowRadiusName = "m_ShadowRadius";
+		public const string ShadowAngleName = "m_ShadowAngle";
 
 		public ColorRGBAf Color;
 		public ShadowSettings Shadows;

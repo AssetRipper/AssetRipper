@@ -19,6 +19,11 @@ namespace uTinyRipper.Classes.Avatars
 			return node;
 		}
 
+		public override string ToString()
+		{
+			return $"P:{ParentId} A:{AxesId}";
+		}
+
 		public int ParentId { get; private set; }
 		public int AxesId { get; private set; }
 	}

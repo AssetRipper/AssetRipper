@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
@@ -50,9 +51,9 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Style = MappingStyle.Flow;
-			node.Add("x", X);
-			node.Add("y", Y);
-			node.Add("z", Z);
+			node.Add(XName, X);
+			node.Add(YName, Y);
+			node.Add(ZName, Z);
 			return node;
 		}
 
@@ -60,8 +61,8 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Style = MappingStyle.Flow;
-			node.Add("x", X);
-			node.Add("y", Y);
+			node.Add(XName, X);
+			node.Add(YName, Y);
 			return node;
 		}
 
@@ -94,7 +95,7 @@ namespace uTinyRipper.Classes
 
 		public override string ToString()
 		{
-			return $"[{X:0.00}, {Y:0.00}, {Z:0.00}]";
+			return string.Format(CultureInfo.InvariantCulture, "[{0:0.00}, {1:0.00}, {2:0.00}]", X, Y, Z);
 		}
 
 		public static Vector3f One => new Vector3f(1.0f, 1.0f, 1.0f);
@@ -108,5 +109,9 @@ namespace uTinyRipper.Classes
 		public float X { get; private set; }
 		public float Y { get; private set; }
 		public float Z { get; private set; }
+
+		public const string XName = "x";
+		public const string YName = "y";
+		public const string ZName = "z";
 	}
 }

@@ -128,16 +128,16 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Sprite", Sprite.ExportYAML(container));
-			node.Add("m_Color", Color.ExportYAML(container));
-			node.Add("m_FlipX", FlipX);
-			node.Add("m_FlipY", FlipY);
-			node.Add("m_DrawMode", (int)DrawMode);
-			node.Add("m_Size", (IsReadDrawMode(container.Version) ? Size : Vector2f.One).ExportYAML(container));
-			node.Add("m_AdaptiveModeThreshold", AdaptiveModeThreshold);
-			node.Add("m_SpriteTileMode", (int)SpriteTileMode);
-			node.Add("m_WasSpriteAssigned", WasSpriteAssigned);
-			node.Add("m_MaskInteraction", (int)MaskInteraction);
+			node.Add(SpriteName, Sprite.ExportYAML(container));
+			node.Add(ColorName, Color.ExportYAML(container));
+			node.Add(FlipXName, FlipX);
+			node.Add(FlipYName, FlipY);
+			node.Add(DrawModeName, (int)DrawMode);
+			node.Add(SizeName, (IsReadDrawMode(container.Version) ? Size : Vector2f.One).ExportYAML(container));
+			node.Add(AdaptiveModeThresholdName, AdaptiveModeThreshold);
+			node.Add(SpriteTileModeName, (int)SpriteTileMode);
+			node.Add(WasSpriteAssignedName, WasSpriteAssigned);
+			node.Add(MaskInteractionName, (int)MaskInteraction);
 			return node;
 		}
 
@@ -149,6 +149,17 @@ namespace uTinyRipper.Classes
 		public bool WasSpriteAssigned { get; private set; }
 		public SpriteMaskInteraction MaskInteraction { get; private set; }
 		public SpriteSortPoint SpriteSortPoint { get; private set; }
+
+		public const string SpriteName = "m_Sprite";
+		public const string ColorName = "m_Color";
+		public const string FlipXName = "m_FlipX";
+		public const string FlipYName = "m_FlipY";
+		public const string DrawModeName = "m_DrawMode";
+		public const string SizeName = "m_Size";
+		public const string AdaptiveModeThresholdName = "m_AdaptiveModeThreshold";
+		public const string SpriteTileModeName = "m_SpriteTileMode";
+		public const string WasSpriteAssignedName = "m_WasSpriteAssigned";
+		public const string MaskInteractionName = "m_MaskInteraction";
 
 		public PPtr<Sprite> Sprite;
 		public ColorRGBAf Color;

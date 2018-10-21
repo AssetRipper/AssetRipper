@@ -364,31 +364,31 @@ namespace uTinyRipper.Classes
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Enabled", Enabled);
-			node.Add("m_CastShadows", (byte)CastShadows);
-			node.Add("m_ReceiveShadows", ReceiveShadows);
-			node.Add("m_DynamicOccludee", GetDynamicOccludee(container.Version));
-			node.Add("m_MotionVectors", (byte)GetMotionVectors(container.Version));
-			node.Add("m_LightProbeUsage", (byte)LightProbeUsage);
-			node.Add("m_ReflectionProbeUsage", (byte)GetReflectionProbeUsage(container.Version));
-			node.Add("m_Materials", Materials.ExportYAML(container));
-			node.Add("m_StaticBatchInfo", GetStaticBatchInfo(container.Version).ExportYAML(container));
-			node.Add("m_StaticBatchRoot", StaticBatchRoot.ExportYAML(container));
-			node.Add("m_ProbeAnchor", ProbeAnchor.ExportYAML(container));
-			node.Add("m_LightProbeVolumeOverride", LightProbeVolumeOverride.ExportYAML(container));
-			node.Add("m_ScaleInLightmap", GetScaleInLightmap(container.Flags));
-			node.Add("m_PreserveUVs", GetPreserveUVs(container.Flags));
-			node.Add("m_IgnoreNormalsForChartDetection", GetIgnoreNormalsForChartDetection(container.Flags));
-			node.Add("m_ImportantGI", GetImportantGI(container.Flags));
-			node.Add("m_StitchLightmapSeams", GetStitchLightmapSeams(container.Flags));
-			node.Add("m_SelectedEditorRenderState", (int)GetSelectedEditorRenderState(container.Flags));
-			node.Add("m_MinimumChartSize", GetMinimumChartSize(container.Flags));
-			node.Add("m_AutoUVMaxDistance", GetAutoUVMaxDistance(container.Flags));
-			node.Add("m_AutoUVMaxAngle", GetAutoUVMaxAngle(container.Flags));
-			node.Add("m_LightmapParameters", GetLightmapParameters(container.Flags).ExportYAML(container));
-			node.Add("m_SortingLayerID", SortingLayerID);
-			node.Add("m_SortingLayer", SortingLayer);
-			node.Add("m_SortingOrder", SortingOrder);
+			node.Add(EnabledName, Enabled);
+			node.Add(CastShadowsName, (byte)CastShadows);
+			node.Add(CastShadowsName, ReceiveShadows);
+			node.Add(DynamicOccludeeName, GetDynamicOccludee(container.Version));
+			node.Add(MotionVectorsName, (byte)GetMotionVectors(container.Version));
+			node.Add(LightProbeUsageName, (byte)LightProbeUsage);
+			node.Add(ReflectionProbeUsageName, (byte)GetReflectionProbeUsage(container.Version));
+			node.Add(MaterialsName, Materials.ExportYAML(container));
+			node.Add(StaticBatchInfoName, GetStaticBatchInfo(container.Version).ExportYAML(container));
+			node.Add(StaticBatchRootName, StaticBatchRoot.ExportYAML(container));
+			node.Add(ProbeAnchorName, ProbeAnchor.ExportYAML(container));
+			node.Add(LightProbeVolumeOverrideName, LightProbeVolumeOverride.ExportYAML(container));
+			node.Add(ScaleInLightmapName, GetScaleInLightmap(container.Flags));
+			node.Add(PreserveUVsName, GetPreserveUVs(container.Flags));
+			node.Add(IgnoreNormalsForChartDetectionName, GetIgnoreNormalsForChartDetection(container.Flags));
+			node.Add(ImportantGIName, GetImportantGI(container.Flags));
+			node.Add(StitchLightmapSeamsName, GetStitchLightmapSeams(container.Flags));
+			node.Add(SelectedEditorRenderStateName, (int)GetSelectedEditorRenderState(container.Flags));
+			node.Add(MinimumChartSizeName, GetMinimumChartSize(container.Flags));
+			node.Add(AutoUVMaxDistanceName, GetAutoUVMaxDistance(container.Flags));
+			node.Add(AutoUVMaxAngleName, GetAutoUVMaxAngle(container.Flags));
+			node.Add(LightmapParametersName, GetLightmapParameters(container.Flags).ExportYAML(container));
+			node.Add(SortingLayerIDName, SortingLayerID);
+			node.Add(SortingLayerName, SortingLayer);
+			node.Add(SortingOrderName, SortingOrder);
 			return node;
 		}
 
@@ -535,6 +535,32 @@ namespace uTinyRipper.Classes
 		public int SortingLayerID { get; private set; }
 		public short SortingLayer { get; private set; }
 		public short SortingOrder { get; private set; }
+
+		public const string EnabledName = "m_Enabled";
+		public const string CastShadowsName = "m_CastShadows";
+		public const string ReceiveShadowsName = "m_ReceiveShadows";
+		public const string DynamicOccludeeName = "m_DynamicOccludee";
+		public const string MotionVectorsName = "m_MotionVectors";
+		public const string LightProbeUsageName = "m_LightProbeUsage";
+		public const string ReflectionProbeUsageName = "m_ReflectionProbeUsage";
+		public const string MaterialsName = "m_Materials";
+		public const string StaticBatchInfoName = "m_StaticBatchInfo";
+		public const string StaticBatchRootName = "m_StaticBatchRoot";
+		public const string ProbeAnchorName = "m_ProbeAnchor";
+		public const string LightProbeVolumeOverrideName = "m_LightProbeVolumeOverride";
+		public const string ScaleInLightmapName = "m_ScaleInLightmap";
+		public const string PreserveUVsName = "m_PreserveUVs";
+		public const string IgnoreNormalsForChartDetectionName = "m_IgnoreNormalsForChartDetection";
+		public const string ImportantGIName = "m_ImportantGI";
+		public const string StitchLightmapSeamsName = "m_StitchLightmapSeams";
+		public const string SelectedEditorRenderStateName = "m_SelectedEditorRenderState";
+		public const string MinimumChartSizeName = "m_MinimumChartSize";
+		public const string AutoUVMaxDistanceName = "m_AutoUVMaxDistance";
+		public const string AutoUVMaxAngleName = "m_AutoUVMaxAngle";
+		public const string LightmapParametersName = "m_LightmapParameters";
+		public const string SortingLayerIDName = "m_SortingLayerID";
+		public const string SortingLayerName = "m_SortingLayer";
+		public const string SortingOrderName = "m_SortingOrder";
 
 		public Vector4f LightmapTilingOffset;
 		public Vector4f LightmapTilingOffsetDynamic;

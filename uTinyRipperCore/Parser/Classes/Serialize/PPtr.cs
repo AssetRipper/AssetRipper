@@ -14,7 +14,17 @@ namespace uTinyRipper.Classes
 			FileIndex = fileIndex;
 			PathID = pathID;
 		}
-		
+
+		public static bool operator ==(PPtr<T> left, PPtr<T> right)
+		{
+			return left.FileIndex == right.FileIndex && left.PathID == right.PathID;
+		}
+
+		public static bool operator !=(PPtr<T> left, PPtr<T> right)
+		{
+			return left.FileIndex != right.FileIndex || left.PathID != right.PathID;
+		}
+
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
@@ -191,6 +201,19 @@ namespace uTinyRipper.Classes
 				return $"[{classID} {PathID}({depName})]";
 			}
 			return ToString();
+		}
+
+		public override bool Equals(object obj)
+		{
+			if(obj == null)
+			{
+				return false;
+			}
+			if(obj is PPtr<T> ptr)
+			{
+				return ptr == this;
+			}
+			return false;
 		}
 
 		public override int GetHashCode()

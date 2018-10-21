@@ -24,11 +24,11 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_AnchorMin", AnchorMin.ExportYAML(container));
-			node.Add("m_AnchorMax", AnchorMax.ExportYAML(container));
-			node.Add("m_AnchoredPosition", AnchorPosition.ExportYAML(container));
-			node.Add("m_SizeDelta", SizeDelta.ExportYAML(container));
-			node.Add("m_Pivot", Pivot.ExportYAML(container));
+			node.Add(AnchorMinName, AnchorMin.ExportYAML(container));
+			node.Add(AnchorMaxName, AnchorMax.ExportYAML(container));
+			node.Add(AnchoredPositionName, AnchorPosition.ExportYAML(container));
+			node.Add(SizeDeltaName, SizeDelta.ExportYAML(container));
+			node.Add(PivotName, Pivot.ExportYAML(container));
 			return node;
 		}
 
@@ -37,5 +37,11 @@ namespace uTinyRipper.Classes
 		public Vector2f AnchorPosition;
 		public Vector2f SizeDelta;
 		public Vector2f Pivot;
+
+		public const string AnchorMinName = "m_AnchorMin";
+		public const string AnchorMaxName = "m_AnchorMax";
+		public const string AnchoredPositionName = "m_AnchoredPosition";
+		public const string SizeDeltaName = "m_SizeDelta";
+		public const string PivotName = "m_Pivot";
 	}
 }

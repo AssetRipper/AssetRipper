@@ -36,7 +36,7 @@ namespace uTinyRipper.AssetExporters
 				
 		public static bool IsEngineAsset(Object asset)
 		{
-			if(!GetEngineBuildInAsset(asset, out EngineBuiltInAsset engineAsset))
+			if(!GetEngineBuildInAsset(asset, out EngineBuiltInAsset _))
 			{
 				return false;
 			}

@@ -152,9 +152,8 @@ namespace uTinyRipper.Classes
 			{
 				return 6;
 			}
-
-#warning unknown
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Beta))
+			
+			if (version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2))
 			{
 				return 6;
 			}
@@ -344,10 +343,16 @@ namespace uTinyRipper.Classes
 		private AnimationCurves ExportGenericData()
 		{
 			IReadOnlyDictionary<uint, string> tos = FindTOS();
-
-			AnimationClipGenericConverter converter = new AnimationClipGenericConverter(File.Version, File.Platform, File.Flags);
-			converter.Process(MuscleClip.Clip, ClipBindingConstant, tos);
-
+			AnimationClipConverter.Parameters parameters = new AnimationClipConverter.Parameters
+			{
+				Clip = MuscleClip.Clip,
+				Bindings = ClipBindingConstant,
+				TOS = tos,
+				Version = File.Version,
+				Platform = File.Platform,
+				Flags = File.Flags,
+			};
+			AnimationClipConverter converter = AnimationClipConverter.Process(parameters);
 			return new AnimationCurves()
 			{
 				RotationCurves = converter.Rotations.Union(GetRotationCurves(File.Version)),
@@ -356,7 +361,7 @@ namespace uTinyRipper.Classes
 				PositionCurves = converter.Translations.Union(GetPositionCurves(File.Version)),
 				ScaleCurves = converter.Scales.Union(GetScaleCurves(File.Version)),
 				FloatCurves = converter.Floats.Union(GetFloatCurves(File.Version)),
-				PPtrCurves = GetPPtrCurves(File.Version),
+				PPtrCurves = converter.PPtrs.Union(GetPPtrCurves(File.Version)),
 			};
 		}
 		

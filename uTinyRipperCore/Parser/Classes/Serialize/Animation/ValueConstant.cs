@@ -40,6 +40,9 @@ namespace uTinyRipper.Classes
 			return node;
 		}*/
 
+		/// <summary>
+		/// Unique ID. Key in dictionary
+		/// </summary>
 		public uint ID { get; private set; }
 		public uint TypeID { get; private set; }
 		public AnimatorControllerParameterType Type { get; private set; }

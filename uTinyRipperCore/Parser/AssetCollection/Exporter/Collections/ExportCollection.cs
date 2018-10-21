@@ -69,6 +69,7 @@ namespace uTinyRipper.AssetExporters
 		{
 			string metaPath = $"{filePath}.meta";
 			using (FileStream fileStream = FileUtils.Open(metaPath, FileMode.Create, FileAccess.Write))
+			//using (MemoryStream fileStream = new MemoryStream())
 			{
 				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
 				{

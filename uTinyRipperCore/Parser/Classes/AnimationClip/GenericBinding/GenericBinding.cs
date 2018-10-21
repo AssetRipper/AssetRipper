@@ -35,8 +35,8 @@ namespace uTinyRipper.Classes.AnimationClips
 				ClassID = (ClassIDType)reader.ReadUInt16();
 			}
 
-			CustomType = reader.ReadByte();
-			IsPPtrCurve = reader.ReadByte();
+			CustomType = (BindingCustomType)reader.ReadByte();
+			IsPPtrCurve = reader.ReadByte() == 0 ? false : true;
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
@@ -50,18 +50,24 @@ namespace uTinyRipper.Classes.AnimationClips
 			node.Add("attribute", Attribute);
 			node.Add("script", Script.ExportYAML(container));
 			node.Add("classID", (int)ClassID);
-			node.Add("customType", CustomType);
+			node.Add("customType", (byte)CustomType);
 			node.Add("isPPtrCurve", IsPPtrCurve);
 			return node;
 		}
+
+		public HumanoidMuscleType GetHumanoidMuscle(Version version)
+		{
+			return ((HumanoidMuscleType)Attribute).Update(version);
+		}
 		
-		public BindingType BindingType => (BindingType)(Attribute);
+		public bool IsTransform => ClassID == ClassIDType.Transform || ClassID == ClassIDType.RectTransform && TransformType.IsValid();
+		public TransformType TransformType => unchecked((TransformType)Attribute);
 
 		public uint Path { get; private set; }
 		public uint Attribute { get; private set; }
 		public ClassIDType ClassID { get; private set; }
-		public byte CustomType { get; private set; }
-		public byte IsPPtrCurve { get; private set; }
+		public BindingCustomType CustomType { get; private set; }
+		public bool IsPPtrCurve { get; private set; }
 		
 		public PPtr<Object> Script;
 	}

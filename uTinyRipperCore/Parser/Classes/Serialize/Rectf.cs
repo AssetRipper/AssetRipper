@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -150,7 +151,7 @@ namespace uTinyRipper.Classes
 
 		public override string ToString()
 		{
-			return $"[X:{X:0.00}, Y:{Y:0.00}, W:{Width:0.00}, H:{Height:0.00}]";
+			return string.Format(CultureInfo.InvariantCulture, "[X:{0:0.00}, Y:{1:0.00}, W:{2:0.00}, H:{3:0.00}", X, Y, Width, Height);
 		}
 
 		public bool ContainsCorner(Vector2f position)

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using uTinyRipper.SerializedFiles;
 
-namespace uTinyRipper.SerializedFiles
+namespace uTinyRipper
 {
 	internal sealed class TypeTree : ISerializedFileReadable
 	{

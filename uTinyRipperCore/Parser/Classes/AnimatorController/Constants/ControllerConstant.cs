@@ -49,7 +49,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 					return i;
 				}
 			}
-			throw new ArgumentException("Layer wasn't found", nameof(layer));
+			throw new ArgumentException("Layer hasn't been found", nameof(layer));
 		}
 
 		public IReadOnlyList<OffsetPtr<LayerConstant>> LayerArray => m_layerArray;

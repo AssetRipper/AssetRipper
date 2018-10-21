@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Animators;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
 
@@ -86,11 +87,11 @@ namespace uTinyRipper.Classes
 
 			Avatar.Read(reader);
 			Controller.Read(reader);
-			CullingMode = reader.ReadInt32();
+			CullingMode = (AnimatorCullingMode)reader.ReadInt32();
 
 			if(IsReadUpdateMode(reader.Version))
 			{
-				UpdateMode = reader.ReadInt32();
+				UpdateMode = (AnimatorUpdateMode)reader.ReadInt32();
 			}
 
 			ApplyRootMotion = reader.ReadBoolean();
@@ -169,13 +170,12 @@ namespace uTinyRipper.Classes
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
 			node.Add("m_Avatar", Avatar.ExportYAML(container));
 			node.Add("m_Controller", Controller.ExportYAML(container));
-			node.Add("m_CullingMode", CullingMode);
-			node.Add("m_UpdateMode", UpdateMode);
+			node.Add("m_CullingMode", (int)CullingMode);
+			node.Add("m_UpdateMode", (int)UpdateMode);
 			node.Add("m_ApplyRootMotion", ApplyRootMotion);
 			node.Add("m_LinearVelocityBlending", LinearVelocityBlending);
 			node.Add("m_HasTransformHierarchy", HasTransformHierarchy);
@@ -183,8 +183,8 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public int CullingMode { get; private set; }
-		public int UpdateMode { get; private set; }
+		public AnimatorCullingMode CullingMode { get; private set; }
+		public AnimatorUpdateMode UpdateMode { get; private set; }
 		public bool ApplyRootMotion { get; private set; }
 		public bool AnimatePhisics { get; private set; }
 		public bool LinearVelocityBlending { get; private set; }

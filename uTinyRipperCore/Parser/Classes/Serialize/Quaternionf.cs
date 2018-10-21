@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -140,7 +141,7 @@ namespace uTinyRipper.Classes
 
 		public override string ToString()
 		{
-			return $"[{X:0.00}, {Y:0.00}, {Z:0.00}, {W:0.00}]";
+			return string.Format(CultureInfo.InvariantCulture, "[{0:0.00}, {1:0.00}, {2:0.00}, {3:0.00}]", X, Y, Z, W);
 		}
 
 		public static Quaternionf Zero => new Quaternionf(0.0f, 0.0f, 0.0f, 1.0f);

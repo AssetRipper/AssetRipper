@@ -67,12 +67,17 @@ namespace uTinyRipper.Classes.Avatars
 				m_handles = reader.ReadArray<Handle>();
 				m_colliderArray = reader.ReadArray<Collider>();
 			}
+
 			m_humanBoneIndex = reader.ReadInt32Array();
+			m_humanBoneIndex = UpdateBoneArray(m_humanBoneIndex, reader.Version);
 			m_humanBoneMass = reader.ReadSingleArray();
+			m_humanBoneMass = UpdateBoneArray(m_humanBoneMass, reader.Version);
 			if (IsReadColliderIndex(reader.Version))
 			{
 				m_colliderIndex = reader.ReadInt32Array();
+				m_colliderIndex = UpdateBoneArray(m_colliderIndex, reader.Version);
 			}
+
 			Scale = reader.ReadSingle();
 			ArmTwist = reader.ReadSingle();
 			ForeArmTwist = reader.ReadSingle();
@@ -116,6 +121,45 @@ namespace uTinyRipper.Classes.Avatars
 			node.Add("m_HasRightHand", HasRightHand);
 			node.Add("m_HasTDoF", HasTDoF);
 			return node;
+		}
+
+		private int[] UpdateBoneArray(int[] array, Version version)
+		{
+			if (!BoneTypeExtensions.IsIncludeUpperChest(version))
+			{
+				int[] fixedArray = new int[array.Length + 1];
+				BoneType bone;
+				for (bone = BoneType.Hips; bone < BoneType.UpperChest; bone++)
+				{
+					fixedArray[(int)bone] = array[(int)bone];
+				}
+				fixedArray[(int)bone] = -1;
+				for (bone = BoneType.UpperChest + 1; bone < BoneType.Last; bone++)
+				{
+					fixedArray[(int)bone] = array[(int)bone - 1];
+				}
+				return fixedArray;
+			}
+			return array;
+		}
+		private float[] UpdateBoneArray(float[] array, Version version)
+		{
+			if (!BoneTypeExtensions.IsIncludeUpperChest(version))
+			{
+				float[] fixedArray = new float[array.Length + 1];
+				BoneType bone;
+				for (bone = BoneType.Hips; bone < BoneType.UpperChest; bone++)
+				{
+					fixedArray[(int)bone] = array[(int)bone];
+				}
+				fixedArray[(int)bone] = 0.0f;
+				for (bone = BoneType.UpperChest + 1; bone < BoneType.Last; bone++)
+				{
+					fixedArray[(int)bone] = array[(int)bone - 1];
+				}
+				return fixedArray;
+			}
+			return array;
 		}
 
 		public IReadOnlyList<Handle> Handles => m_handles;

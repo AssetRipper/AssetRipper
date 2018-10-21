@@ -1,6 +1,7 @@
 ﻿using System;
+using uTinyRipper.SerializedFiles;
 
-namespace uTinyRipper.SerializedFiles
+namespace uTinyRipper
 {
 	internal sealed class TypeTreeNode
 	{

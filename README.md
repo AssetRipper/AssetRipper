@@ -15,7 +15,7 @@ uTinyRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*
 * Audio (raw only)
 * Movie textures
 * Fonts
-* AnimationClips (legacy, generic)
+* AnimationClips (legacy, generic, humanoid)
 * AnimatorControllers
 * Avatars
 * Terrains

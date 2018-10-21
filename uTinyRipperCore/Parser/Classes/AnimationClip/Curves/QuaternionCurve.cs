@@ -6,10 +6,21 @@ namespace uTinyRipper.Classes.AnimationClips
 {
 	public struct QuaternionCurve : IAssetReadable, IYAMLExportable
 	{
+		public QuaternionCurve(QuaternionCurve copy, IReadOnlyList<KeyframeTpl<Quaternionf>> keyframes) :
+			this(copy.Path, keyframes)
+		{
+		}
+
+		public QuaternionCurve(string path)
+		{
+			Path = path;
+			Curve = new AnimationCurveTpl<Quaternionf>(false);
+		}
+
 		public QuaternionCurve(string path, IReadOnlyList<KeyframeTpl<Quaternionf>> keyframes)
 		{
-			Curve = new AnimationCurveTpl<Quaternionf>(keyframes);
 			Path = path;
+			Curve = new AnimationCurveTpl<Quaternionf>(keyframes);
 		}
 
 		public QuaternionCurve(string path, AnimationCurveTpl<Quaternionf> curve)
@@ -31,6 +42,16 @@ namespace uTinyRipper.Classes.AnimationClips
 			node.Add("path", Path);
 
 			return node;
+		}
+
+		public override int GetHashCode()
+		{
+			int hash = 199;
+			unchecked
+			{
+				hash = 617 + hash * Path.GetHashCode();
+			}
+			return hash;
 		}
 
 		public string Path { get; set; }

@@ -101,6 +101,7 @@ namespace uTinyRipperGUI
 			MainGrid.AllowDrop = true;
 			PostExportButton.Visibility = Visibility.Hidden;
 			ResetButton.Visibility = Visibility.Hidden;
+			m_processingFiles = null;
 
 			GameStructure.Dispose();
 		}
@@ -175,6 +176,7 @@ namespace uTinyRipperGUI
 
 			IntroText.Text = "Loading files...";
 			MainGrid.AllowDrop = false;
+			m_processingFiles = files;
 
 			ThreadPool.QueueUserWorkItem(new WaitCallback(LoadFiles), files);
 			return true;
@@ -301,10 +303,14 @@ namespace uTinyRipperGUI
 			}
 		}
 
-		private static void PrepareExportDirectory(string path)
+		private void PrepareExportDirectory(string path)
 		{
 			string directory = Directory.GetCurrentDirectory();
-			PermissionValidator.CheckWritePermission(directory);
+			if(!PermissionValidator.CheckAccess(directory))
+			{
+				string arguments = string.Join(" ", m_processingFiles.Select(t => $"\"{t}\""));
+				PermissionValidator.RestartAsAdministrator(arguments);
+			}
 
 			if (DirectoryUtils.Exists(path))
 			{
@@ -328,5 +334,6 @@ namespace uTinyRipperGUI
 
 		private string m_initialText;
 		private string m_exportPath;
+		private string[] m_processingFiles;
 	}
 }

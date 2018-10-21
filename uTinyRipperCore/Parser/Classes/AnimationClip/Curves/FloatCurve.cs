@@ -7,13 +7,27 @@ namespace uTinyRipper.Classes.AnimationClips
 {
 	public struct FloatCurve : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public FloatCurve(string path, IReadOnlyList<KeyframeTpl<Float>> keyframes)
+		public FloatCurve(FloatCurve copy, IReadOnlyList<KeyframeTpl<Float>> keyframes):
+			this(copy.Path, copy.Attribute, copy.ClassID, copy.Script, keyframes)
 		{
-			Curve = new AnimationCurveTpl<Float>(keyframes);
-			Attribute = string.Empty;
+		}
+
+		public FloatCurve(string path, string attribute, ClassIDType classID, PPtr<MonoScript> script)
+		{
 			Path = path;
-			ClassID = 0;
-			Script = default;
+			Attribute = attribute;
+			ClassID = classID;
+			Script = script;
+			Curve = new AnimationCurveTpl<Float>(false);
+		}
+
+		public FloatCurve(string path, string attribute, ClassIDType classID, PPtr<MonoScript> script, IReadOnlyList<KeyframeTpl<Float>> keyframes)
+		{
+			Path = path;
+			Attribute = attribute;
+			ClassID = classID;
+			Script = script;
+			Curve = new AnimationCurveTpl<Float>(keyframes);
 		}
 
 		/// <summary>
@@ -29,11 +43,16 @@ namespace uTinyRipper.Classes.AnimationClips
 			Curve.Read(reader);
 			Attribute = reader.ReadString();
 			Path = reader.ReadString();
-			ClassID = reader.ReadInt32();
+			ClassID = (ClassIDType)reader.ReadInt32();
 			if (IsReadScript(reader.Version))
 			{
 				Script.Read(reader);
 			}
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield return Script.FetchDependency(file, isLog, () => nameof(FloatCurve), "script");
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -42,19 +61,14 @@ namespace uTinyRipper.Classes.AnimationClips
 			node.Add("curve", Curve.ExportYAML(container));
 			node.Add("attribute", Attribute);
 			node.Add("path", Path);
-			node.Add("classID", ClassID);
+			node.Add("classID", (int)ClassID);
 			node.Add("script", Script.ExportYAML(container));
 			return node;
-		}
-
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
-		{
-			yield return Script.FetchDependency(file, isLog, () => nameof(FloatCurve), "script");
 		}
 		
 		public string Attribute { get; private set; }
 		public string Path { get; private set; }
-		public int ClassID { get; private set; }
+		public ClassIDType ClassID { get; private set; }
 
 		public AnimationCurveTpl<Float> Curve;
 		public PPtr<MonoScript> Script;

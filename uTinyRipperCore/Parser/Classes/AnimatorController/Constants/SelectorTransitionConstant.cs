@@ -9,7 +9,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 	{
 		public void Read(AssetReader reader)
 		{
-			Destination = (int)reader.ReadUInt32();
+			Destination = unchecked((int)reader.ReadUInt32());
 			m_conditionConstantArray = reader.ReadArray<OffsetPtr<ConditionConstant>>();
 		}
 
