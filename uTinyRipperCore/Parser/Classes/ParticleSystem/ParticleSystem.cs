@@ -35,7 +35,7 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 		}
 		/// <summary>
-		/// 5.4.1 and greater
+		/// 5.4.0p4 and greater
 		/// </summary>
 		public static bool IsReadAutoRandomSeed(Version version)
 		{
@@ -114,7 +114,7 @@ namespace uTinyRipper.Classes
 			return version.IsLess(5, 5);
 		}
 		/// <summary>
-		/// Less than 5.4.1
+		/// Less than 5.4.0p4
 		/// </summary>
 		private static bool IsRandomSeedFirst(Version version)
 		{
@@ -128,11 +128,11 @@ namespace uTinyRipper.Classes
 			return version.IsLess(5, 5);
 		}
 		/// <summary>
-		/// 5.4.1 and greater
+		/// 5.4.0p4 and greater
 		/// </summary>
 		private static bool IsAlign(Version version)
 		{
-			return version.IsGreaterEqual(5, 4, 1);
+			return version.IsGreaterEqual(5, 4, 0, VersionType.Patch, 4);
 		}
 		
 		private static int GetSerializedVersion(Version version)
