@@ -2,53 +2,44 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using uTinyRipper.Classes.AnimationClips.Editor;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
 	public class AnimationClipConverter
 	{
-		private AnimationClipConverter(Version version, Platform platform, TransferInstructionFlags flags)
+		private AnimationClipConverter(AnimationClip clip)
 		{
-			m_version = version;
-			m_platform = platform;
-			m_flags = flags;
+			if(clip == null)
+			{
+				throw new ArgumentNullException(nameof(clip));
+			}
+			m_clip = clip;
+			m_customCurveResolver = new CustomCurveResolver(clip);
 		}
 
-		public struct Parameters
+		public static AnimationClipConverter Process(AnimationClip clip)
 		{
-			public Clip Clip;
-			public AnimationClipBindingConstant Bindings;
-			public IReadOnlyDictionary<uint, string> TOS { get; set; }
-			public Version Version;
-			public Platform Platform { get; set; }
-			public TransferInstructionFlags Flags { get; set; }
-		}
-
-		public static AnimationClipConverter Process(Parameters parameters)
-		{
-			Version version = parameters.Version;
-			Platform platform = parameters.Platform;
-			TransferInstructionFlags flags = parameters.Flags;
-			AnimationClipConverter converter = new AnimationClipConverter(version, platform, flags);
-			converter.ProcessInner(parameters);
+			AnimationClipConverter converter = new AnimationClipConverter(clip);
+			converter.ProcessInner();
 			return converter;
 		}
 
-		private void ProcessInner(Parameters parameters)
+		private void ProcessInner()
 		{
-			Clip clip = parameters.Clip;
-			AnimationClipBindingConstant bindings = parameters.Bindings;
-			IReadOnlyDictionary<uint, string> tos = parameters.TOS;
+			Clip clip = m_clip.MuscleClip.Clip;
+			AnimationClipBindingConstant bindings = m_clip.ClipBindingConstant;
+			IReadOnlyDictionary<uint, string> tos = m_clip.FindTOS();
 
-			IReadOnlyList<StreamedFrame> streamedFrames = clip.StreamedClip.GenerateFrames(m_version, m_platform, m_flags);
+			IReadOnlyList<StreamedFrame> streamedFrames = clip.StreamedClip.GenerateFrames(Version, Platform, Flags);
 			float lastDenseFrame = clip.DenseClip.FrameCount / clip.DenseClip.SampleRate;
 			float lastSampleFrame = streamedFrames.Count > 1 ? streamedFrames[streamedFrames.Count - 2].Time : 0.0f;
 			float lastFrame = Math.Max(lastDenseFrame, lastSampleFrame);
 			
 			ProcessStreams(streamedFrames, bindings, tos, clip.DenseClip.SampleRate);
 			ProcessDenses(clip, bindings, tos);
-			if(Clip.IsReadConstantClip(m_version))
+			if(Clip.IsReadConstantClip(Version))
 			{
 				ProcessConstant(clip, bindings, tos, lastFrame);
 			}
@@ -194,7 +185,7 @@ namespace uTinyRipper.Classes.AnimationClips
 					break;
 					
 				default:
-					string attribute = binding.CustomType.ToAttributeName(binding.Attribute);
+					string attribute = m_customCurveResolver.ToAttributeName(binding.CustomType, binding.Attribute, path);
 					if (binding.IsPPtrCurve)
 					{
 						PPtrCurve curve = new PPtrCurve(path, attribute, binding.ClassID, binding.Script.CastTo<MonoScript>());
@@ -368,26 +359,31 @@ namespace uTinyRipper.Classes.AnimationClips
 				AddFloatKeyframe(curve, time, value);
 				return;
 			}
-			throw new Exception($"Unsupported attribute {binding.Attribute} for {nameof(GameObject)}");
+			else
+			{
+				// that means that dev exported animation clip with missed component
+				FloatCurve curve = new FloatCurve(path, MissedPropertyPrefix + binding.Attribute, ClassIDType.GameObject, default);
+				AddFloatKeyframe(curve, time, value);
+			}
 		}
 
 		private void AddScriptCurve(GenericBinding binding, string path, float time, float value)
 		{
 #warning TODO:
-			FloatCurve curve = new FloatCurve(path, "script_" + binding.Attribute, ClassIDType.MonoBehaviour, binding.Script.CastTo<MonoScript>());
+			FloatCurve curve = new FloatCurve(path, ScriptPropertyPrefix + binding.Attribute, ClassIDType.MonoBehaviour, binding.Script.CastTo<MonoScript>());
 			AddFloatKeyframe(curve, time, value);
 		}
 
 		private void AddEngineCurve(GenericBinding binding, string path, float time, float value)
 		{
 #warning TODO:
-			FloatCurve curve = new FloatCurve(path, "typetree_" + binding.Attribute, binding.ClassID, default);
+			FloatCurve curve = new FloatCurve(path, TypeTreePropertyPrefix + binding.Attribute, binding.ClassID, default);
 			AddFloatKeyframe(curve, time, value);
 		}
 
 		private void AddAnimatorMuscleCurve(GenericBinding binding, string path, float time, float value)
 		{
-			FloatCurve curve = new FloatCurve(string.Empty, binding.GetHumanoidMuscle(m_version).ToAttributeString(), ClassIDType.Animator, default);
+			FloatCurve curve = new FloatCurve(string.Empty, binding.GetHumanoidMuscle(Version).ToAttributeString(), ClassIDType.Animator, default);
 			AddFloatKeyframe(curve, time, value);
 		}
 				
@@ -442,7 +438,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			}
 			else
 			{
-				return "path_" + hash;
+				return UnknownPathPrefix + hash;
 			}
 		}
 
@@ -452,7 +448,18 @@ namespace uTinyRipper.Classes.AnimationClips
 		public IReadOnlyList<Vector3Curve> Eulers => m_eulerCurves;
 		public IReadOnlyList<FloatCurve> Floats => m_floatCurves;
 		public IReadOnlyList<PPtrCurve> PPtrs => m_pptrCurves;
-		
+
+		private Version Version => m_clip.File.Version;
+		private Platform Platform => m_clip.File.Platform;
+		private TransferInstructionFlags Flags => m_clip.File.Flags;
+
+		public static readonly Regex UnknownPathRegex = new Regex($@"^{UnknownPathPrefix}[0-9]{{1,10}}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+		private const string UnknownPathPrefix = "path_";
+		private const string MissedPropertyPrefix = "missed_";
+		private const string ScriptPropertyPrefix = "script_";
+		private const string TypeTreePropertyPrefix = "typetree_";
+
 		private readonly Dictionary<Vector3Curve, List<KeyframeTpl<Vector3f>>> m_translations = new Dictionary<Vector3Curve, List<KeyframeTpl<Vector3f>>>();
 		private readonly Dictionary<QuaternionCurve, List<KeyframeTpl<Quaternionf>>> m_rotations = new Dictionary<QuaternionCurve, List<KeyframeTpl<Quaternionf>>>();
 		private readonly Dictionary<Vector3Curve, List<KeyframeTpl<Vector3f>>> m_scales = new Dictionary<Vector3Curve, List<KeyframeTpl<Vector3f>>>();
@@ -460,9 +467,8 @@ namespace uTinyRipper.Classes.AnimationClips
 		private readonly Dictionary<FloatCurve, List<KeyframeTpl<Float>>> m_floats = new Dictionary<FloatCurve, List<KeyframeTpl<Float>>>();
 		private readonly Dictionary<PPtrCurve, List<PPtrKeyframe>> m_pptrs = new Dictionary<PPtrCurve, List<PPtrKeyframe>>();
 
-		private Version m_version;
-		private Platform m_platform;
-		private TransferInstructionFlags m_flags;
+		private readonly AnimationClip m_clip;
+		private readonly CustomCurveResolver m_customCurveResolver;
 
 		private Vector3Curve[] m_translationCurves;
 		private QuaternionCurve[] m_rotationCurves;

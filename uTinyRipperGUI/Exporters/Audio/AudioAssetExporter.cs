@@ -73,7 +73,7 @@ namespace uTinyRipperGUI.Exporters
 		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
 		{
 			AudioClip audioClip = (AudioClip)asset;
-			using (FileStream fileStream = new FileStream(path, FileMode.CreateNew, FileAccess.Write))
+			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
 				if (IsSupported(audioClip))
 				{
@@ -121,7 +121,7 @@ namespace uTinyRipperGUI.Exporters
 			}
 		}
 		
-		private static void ExportAudioClip(IExportContainer container, FileStream fileStream, AudioClip clip)
+		private static void ExportAudioClip(IExportContainer container, Stream fileStream, AudioClip clip)
 		{
 			CREATESOUNDEXINFO exinfo = new CREATESOUNDEXINFO();
 			FMOD.System system = null;

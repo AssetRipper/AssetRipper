@@ -1,4 +1,5 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using SevenZip;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
 namespace uTinyRipper.Classes.Materials
@@ -11,6 +12,11 @@ namespace uTinyRipper.Classes.Materials
 		private static bool IsPlainString(Version version)
 		{
 			return version.IsGreaterEqual(2017, 3);
+		}
+
+		public bool IsCRC28Match(uint crc)
+		{
+			return CRC.Verify28DigestUTF8(Value, crc);
 		}
 
 		public void Read(AssetReader reader)
@@ -36,6 +42,15 @@ namespace uTinyRipper.Classes.Materials
 		public override int GetHashCode()
 		{
 			return Value.GetHashCode();
+		}
+
+		public override string ToString()
+		{
+			if(Value == null)
+			{
+				return base.ToString();
+			}
+			return Value;
 		}
 
 		public string Value { get; private set; }		

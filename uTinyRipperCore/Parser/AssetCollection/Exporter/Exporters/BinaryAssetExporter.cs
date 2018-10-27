@@ -22,7 +22,7 @@ namespace uTinyRipper.AssetExporters
 
 		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
 		{
-			using (FileStream fileStream = new FileStream(FileUtils.ToLongPath(path), FileMode.CreateNew, FileAccess.Write))
+			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
 				asset.ExportBinary(container, fileStream);
 			}

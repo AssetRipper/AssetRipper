@@ -342,17 +342,7 @@ namespace uTinyRipper.Classes
 
 		private AnimationCurves ExportGenericData()
 		{
-			IReadOnlyDictionary<uint, string> tos = FindTOS();
-			AnimationClipConverter.Parameters parameters = new AnimationClipConverter.Parameters
-			{
-				Clip = MuscleClip.Clip,
-				Bindings = ClipBindingConstant,
-				TOS = tos,
-				Version = File.Version,
-				Platform = File.Platform,
-				Flags = File.Flags,
-			};
-			AnimationClipConverter converter = AnimationClipConverter.Process(parameters);
+			AnimationClipConverter converter = AnimationClipConverter.Process(this);
 			return new AnimationCurves()
 			{
 				RotationCurves = converter.Rotations.Union(GetRotationCurves(File.Version)),
@@ -365,7 +355,7 @@ namespace uTinyRipper.Classes
 			};
 		}
 		
-		private IReadOnlyDictionary<uint, string> FindTOS()
+		public IReadOnlyDictionary<uint, string> FindTOS()
 		{
 			foreach (Object asset in File.Collection.FetchAssets())
 			{
@@ -403,6 +393,33 @@ namespace uTinyRipper.Classes
 			return new Dictionary<uint, string>() { { 0, string.Empty } };
 		}
 
+		public GameObject FindRoot()
+		{
+			foreach (Object asset in File.Collection.FetchAssets())
+			{
+				switch (asset.ClassID)
+				{
+					case ClassIDType.Animator:
+						Animator animator = (Animator)asset;
+						if (IsAnimatorContainsClip(animator))
+						{
+							return animator.GameObject.GetAsset(animator.File);
+						}
+						break;
+
+					case ClassIDType.Animation:
+						Animation animation = (Animation)asset;
+						if (IsAnimationContainsClip(animation))
+						{
+							return animation.GameObject.GetAsset(animation.File);
+						}
+						break;
+				}
+			}
+
+			return null;
+		}
+
 		private bool IsAnimatorContainsClip(Animator animator)
 		{
 			RuntimeAnimatorController runetime = animator.Controller.FindAsset(animator.File);
@@ -421,7 +438,6 @@ namespace uTinyRipper.Classes
 			return animation.IsContainsAnimationClip(this);
 		}
 
-#warning what about humanoid?
 		private bool IsExportGenericData(Version version)
 		{
 			if (IsReadLegacy(version))
@@ -432,7 +448,7 @@ namespace uTinyRipper.Classes
 			{
 				if(!IsReadClipBindingConstant(version))
 				{
-#warning TODO: HACK:
+#warning TODO:
 					return false;
 				}
 				if(AnimationType != AnimationType.Legacy)

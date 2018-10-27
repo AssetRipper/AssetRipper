@@ -69,6 +69,11 @@ namespace uTinyRipper.Classes
 			return 6;
 		}
 
+		public string FindPropertyNameByCRC28(uint crc)
+		{
+			return SavedProperties.FindPropertyNameByCRC28(crc);
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);

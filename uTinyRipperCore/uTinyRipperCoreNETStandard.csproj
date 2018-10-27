@@ -10,13 +10,19 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE;NET_STANDARD;UNIVERSAL</DefineConstants>
-    <OutputPath>..\Bins\CP\$(Configuration)\</OutputPath>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <OutputPath>..\Bins\CP\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\Bins\CP\$(Configuration)\</OutputPath>
     <DefineConstants>TRACE;NET_STANDARD</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Virtual|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE;NET_STANDARD;UNIVERSAL;VIRTUAL</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <OutputPath>..\Bins\CP\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

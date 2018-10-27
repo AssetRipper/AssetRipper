@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SevenZip;
+using System;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -20,6 +22,43 @@ namespace uTinyRipper.Classes.Materials
 			}
 			// min version is 2
 			return 2;
+		}
+
+		public string FindPropertyNameByCRC28(uint crc)
+		{
+			foreach (FastPropertyName property in TexEnvs.Keys)
+			{
+				string hdrName = property.Value + HDRPostfixName;
+				if(CRC.Verify28DigestUTF8(hdrName, crc))
+				{
+					return hdrName;
+				}
+				string stName = property.Value + STPostfixName;
+				if (CRC.Verify28DigestUTF8(stName, crc))
+				{
+					return stName;
+				}
+				string texelName = property.Value + TexelSizePostfixName;
+				if (CRC.Verify28DigestUTF8(texelName, crc))
+				{
+					return texelName;
+				}
+			}
+			foreach (FastPropertyName property in Floats.Keys)
+			{
+				if (property.IsCRC28Match(crc))
+				{
+					return property.Value;
+				}
+			}
+			foreach (FastPropertyName property in Colors.Keys)
+			{
+				if (property.IsCRC28Match(crc))
+				{
+					return property.Value;
+				}
+			}
+			return string.Empty;
 		}
 
 		public void Read(AssetReader reader)
@@ -57,6 +96,10 @@ namespace uTinyRipper.Classes.Materials
 		public IReadOnlyDictionary<FastPropertyName, UnityTexEnv> TexEnvs => m_texEnvs;
 		public IReadOnlyDictionary<FastPropertyName, float> Floats => m_floats;
 		public IReadOnlyDictionary<FastPropertyName, ColorRGBAf> Colors => m_colors;
+
+		private const string HDRPostfixName = "_HDR";
+		private const string STPostfixName = "_ST";
+		private const string TexelSizePostfixName = "_TexelSize";
 
 		private Dictionary<FastPropertyName, UnityTexEnv> m_texEnvs;
 		private Dictionary<FastPropertyName, float> m_floats;

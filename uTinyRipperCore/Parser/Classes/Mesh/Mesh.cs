@@ -273,6 +273,11 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		public string GetBlendShapeNameByCRC(uint crc)
+		{
+			return Shapes.GetShapeNameByCRC(File.Version, crc);
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);

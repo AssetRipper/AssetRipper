@@ -1,7 +1,6 @@
 ﻿using SevenZip;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.GameObjects;
 using uTinyRipper.Exporter.YAML;
@@ -201,6 +200,20 @@ namespace uTinyRipper.Classes
 			}
 		}
 
+		public T GetComponent<T>()
+			where T: Component
+		{
+			foreach (ComponentPair pair in Components)
+			{
+				Component comp = pair.Component.GetAsset(File);
+				if (comp is T t)
+				{
+					return t;
+				}
+			}
+			throw new Exception($"Component of type {nameof(T)} hasn't been found");
+		}
+
 		public Transform GetTransform()
 		{
 			foreach (ComponentPair pair in Components)
@@ -348,7 +361,7 @@ namespace uTinyRipper.Classes
 			{
 				Transform childTransform = childPtr.GetAsset(File);
 				GameObject child = childTransform.GameObject.GetAsset(File);
-				string path = parentPath != string.Empty ? parentPath + "/" + child.Name : child.Name;
+				string path = parentPath != string.Empty ? parentPath + Transform.PathSeparator + child.Name : child.Name;
 				uint pathHash = CRC.CalculateDigestUTF8(path);
 				tos[pathHash] = path;
 

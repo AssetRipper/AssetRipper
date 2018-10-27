@@ -69,6 +69,11 @@ namespace uTinyRipper.Classes
 			throw new Exception("Transorm hasn't been found among father's children");
 		}
 
+		public Transform FindChild(string path)
+		{
+			return FindChild(path, 0);
+		}
+
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
@@ -82,6 +87,24 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
+		private Transform FindChild(string path, int startIndex)
+		{
+			int separatorIndex = path.IndexOf(PathSeparator, startIndex);
+			string childName = separatorIndex == -1 ?
+				path.Substring(startIndex, path.Length - startIndex) :
+				path.Substring(startIndex, separatorIndex - startIndex);
+			foreach (PPtr<Transform> childPtr in m_children)
+			{
+				Transform child = childPtr.GetAsset(File);
+				GameObject childGO = child.GameObject.GetAsset(File);
+				if (childGO.Name == childName)
+				{
+					return separatorIndex == -1 ? child : child.FindChild(path, separatorIndex + 1);
+				}
+			}
+			throw new Exception($"Child {childName} hans't been found for path {path}");
+		}
+
 		public const string LocalRotationName = "m_LocalRotation";
 		public const string LocalPositionName = "m_LocalPosition";
 		public const string LocalScaleName = "m_LocalScale";
@@ -91,6 +114,8 @@ namespace uTinyRipper.Classes
 		public const string LocalEulerAnglesHintName = "m_LocalEulerAnglesHint";
 
 		public IReadOnlyList<PPtr<Transform>> Children => m_children;
+
+		public const char PathSeparator = '/';
 
 		public Quaternionf LocalRotation;
 		public Vector3f LocalPosition;

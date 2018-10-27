@@ -1,4 +1,5 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using SevenZip;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
 namespace uTinyRipper.Classes.Meshes
@@ -8,6 +9,11 @@ namespace uTinyRipper.Classes.Meshes
 	/// </summary>
 	public struct BlendShapeChannel : IAssetReadable, IYAMLExportable
 	{
+		public bool IsCRCMatch(uint crc)
+		{
+			return CRC.VerifyDigestUTF8(Name, crc);
+		}
+
 		public void Read(AssetReader reader)
 		{
 			Name = reader.ReadString();

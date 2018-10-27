@@ -16,20 +16,21 @@
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\Bins\$(Configuration)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;UNIVERSAL</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>7.2</LangVersion>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -41,10 +42,23 @@
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Virtual|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Bins\$(Configuration)\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;UNIVERSAL;VIRTUAL</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.2</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;UNIVERSAL</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.2</LangVersion>
@@ -52,7 +66,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <Prefer32Bit>false</Prefer32Bit>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
@@ -66,10 +79,24 @@
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Virtual|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;UNIVERSAL;VIRTUAL</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.2</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;UNIVERSAL</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>7.2</LangVersion>
@@ -83,6 +110,19 @@
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.2</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Virtual|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;UNIVERSAL;VIRTUAL</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>7.2</LangVersion>
     <ErrorReport>prompt</ErrorReport>
@@ -203,6 +243,7 @@
     <Compile Include="Parser\Classes\AnimationClip\ChildTrack.cs" />
     <Compile Include="Parser\Classes\AnimationClip\GenericBinding\BindingCustomType.cs" />
     <Compile Include="Parser\Classes\AnimationClip\HumanoidMuscleType.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\Utils\CustomCurveResolver.cs" />
     <Compile Include="Parser\Classes\Avatar\Bones\ArmType.cs" />
     <Compile Include="Parser\Classes\Avatar\Bones\BoneType.cs" />
     <Compile Include="Parser\Classes\Avatar\Bones\FingerDoFType.cs" />

@@ -17,6 +17,13 @@ namespace uTinyRipper
 		{
 			return Directory.CreateDirectory(ToLongPath(path));
 		}
+		
+		public static void CreateVirtualDirectory(string path)
+		{
+#if !VIRTUAL
+			CreateDirectory(path);
+#endif
+		}
 
 		public static void Delete(string path)
 		{

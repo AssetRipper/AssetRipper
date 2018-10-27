@@ -122,7 +122,7 @@ namespace uTinyRipper.AssetExporters
 
 			if (!DirectoryUtils.Exists(folderPath))
 			{
-				DirectoryUtils.CreateDirectory(folderPath);
+				DirectoryUtils.CreateVirtualDirectory(folderPath);
 			}
 
 			AssetExporter.Export(container, Components, filePath);

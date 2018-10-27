@@ -224,13 +224,21 @@ namespace uTinyRipper
 
 		protected void AddFile(IDictionary<string, string> files, string name, string path)
 		{
+			// HACK: split files duplicate name
 			files[name] = path;
 			Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Game file '{name}' has been found");
 		}
 
 		protected void AddAssetBundle(IDictionary<string, string> files, string name, string path)
 		{
-			files.Add(name, path);
+			// TEMP HACK:
+			int i = 0;
+			string uniqueName = name;
+			while(files.ContainsKey(uniqueName))
+			{
+				uniqueName = name + i++;
+			}
+			files.Add(uniqueName, path);
 			Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Asset bundle '{name}' has been found");
 		}
 

@@ -50,7 +50,7 @@ namespace uTinyRipper.AssetExporters
 
 			if (!DirectoryUtils.Exists(subPath))
 			{
-				DirectoryUtils.CreateDirectory(subPath);
+				DirectoryUtils.CreateVirtualDirectory(subPath);
 			}
 
 			BuildSettings asset = (BuildSettings)Asset;
@@ -102,9 +102,9 @@ namespace uTinyRipper.AssetExporters
 			fileName = $"ProjectVersion.txt";
 			filePath = Path.Combine(subPath, fileName);
 
-			using (FileStream file = FileUtils.Create(filePath))
+			using (Stream fileStream = FileUtils.CreateVirtualFile(filePath))
 			{
-				using (StreamWriter writer = new InvariantStreamWriter(file, new UTF8Encoding(false)))
+				using (StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
 				{
 					writer.Write("m_EditorVersion: 2017.3.0f3");
 				}

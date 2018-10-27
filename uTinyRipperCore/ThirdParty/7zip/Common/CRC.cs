@@ -75,7 +75,17 @@ namespace SevenZip
 			return new CRC(data, offset, size).Digest;
 		}
 
-		public static bool VerifyDigest(uint digest, byte[] data, int offset, int size)
+		public static bool VerifyDigestUTF8(string data, uint digest)
+		{
+			return CalculateDigestUTF8(data) == digest;
+		}
+
+		public static bool Verify28DigestUTF8(string data, uint digest)
+		{
+			return (CalculateDigestUTF8(data) & 0xFFFFFFF) == digest;
+		}
+
+		public static bool VerifyDigest(byte[] data, int offset, int size, uint digest)
 		{
 			return CalculateDigest(data, offset, size) == digest;
 		}

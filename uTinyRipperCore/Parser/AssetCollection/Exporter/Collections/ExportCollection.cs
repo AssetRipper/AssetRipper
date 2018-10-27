@@ -56,7 +56,7 @@ namespace uTinyRipper.AssetExporters
 		{
 			if (!DirectoryUtils.Exists(path))
 			{
-				DirectoryUtils.CreateDirectory(path);
+				DirectoryUtils.CreateVirtualDirectory(path);
 			}
 
 			string filePath = $"{Path.Combine(path, name)}.{asset.ExportExtension}";
@@ -68,8 +68,7 @@ namespace uTinyRipper.AssetExporters
 		protected void ExportMeta(IExportContainer container, Meta meta, string filePath)
 		{
 			string metaPath = $"{filePath}.meta";
-			using (FileStream fileStream = FileUtils.Open(metaPath, FileMode.Create, FileAccess.Write))
-			//using (MemoryStream fileStream = new MemoryStream())
+			using (Stream fileStream = FileUtils.CreateVirtualFile(metaPath))
 			{
 				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
 				{

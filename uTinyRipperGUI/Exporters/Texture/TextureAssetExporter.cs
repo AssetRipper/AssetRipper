@@ -74,7 +74,7 @@ namespace uTinyRipperGUI.Exporters
 				}
 			}
 
-			using (FileStream fileStream = new FileStream(path, FileMode.CreateNew, FileAccess.Write))
+			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
 				ExportTexture(container, fileStream, texture);
 			}
@@ -113,7 +113,7 @@ namespace uTinyRipperGUI.Exporters
 			return true;
 		}
 
-		private void ExportTexture(IExportContainer container, FileStream fileStream, Texture2D texture)
+		private void ExportTexture(IExportContainer container, Stream fileStream, Texture2D texture)
 		{
 			byte[] buffer = null;
 			if (Texture2D.IsReadStreamData(texture.File.Version))

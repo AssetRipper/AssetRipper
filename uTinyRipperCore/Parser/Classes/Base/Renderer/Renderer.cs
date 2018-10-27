@@ -185,6 +185,23 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5, 4);
 		}
 
+		public string FindMaterialPropertyNameByCRC28(uint crc)
+		{
+			foreach(PPtr<Material> materialPtr in m_materials)
+			{
+				Material material = materialPtr.FindAsset(File);
+				if(material != null)
+				{
+					string property = material.FindPropertyNameByCRC28(crc);
+					if(property != string.Empty)
+					{
+						return property;
+					}
+				}
+			}
+			return string.Empty;
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);

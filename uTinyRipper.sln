@@ -23,6 +23,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
+		Virtual|Any CPU = Virtual|Any CPU
+		Virtual|x64 = Virtual|x64
+		Virtual|x86 = Virtual|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1EC7FAF7-5D39-4868-A06F-C93018CD134F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -37,6 +40,12 @@ Global
 		{1EC7FAF7-5D39-4868-A06F-C93018CD134F}.Release|x64.Build.0 = Release|x64
 		{1EC7FAF7-5D39-4868-A06F-C93018CD134F}.Release|x86.ActiveCfg = Release|x86
 		{1EC7FAF7-5D39-4868-A06F-C93018CD134F}.Release|x86.Build.0 = Release|x86
+		{1EC7FAF7-5D39-4868-A06F-C93018CD134F}.Virtual|Any CPU.ActiveCfg = Virtual|Any CPU
+		{1EC7FAF7-5D39-4868-A06F-C93018CD134F}.Virtual|Any CPU.Build.0 = Virtual|Any CPU
+		{1EC7FAF7-5D39-4868-A06F-C93018CD134F}.Virtual|x64.ActiveCfg = Virtual|x64
+		{1EC7FAF7-5D39-4868-A06F-C93018CD134F}.Virtual|x64.Build.0 = Virtual|x64
+		{1EC7FAF7-5D39-4868-A06F-C93018CD134F}.Virtual|x86.ActiveCfg = Virtual|x86
+		{1EC7FAF7-5D39-4868-A06F-C93018CD134F}.Virtual|x86.Build.0 = Virtual|x86
 		{C9583270-6D3E-4CBF-8011-A818A7D8F3DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C9583270-6D3E-4CBF-8011-A818A7D8F3DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9583270-6D3E-4CBF-8011-A818A7D8F3DC}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -49,6 +58,9 @@ Global
 		{C9583270-6D3E-4CBF-8011-A818A7D8F3DC}.Release|x64.Build.0 = Release|Any CPU
 		{C9583270-6D3E-4CBF-8011-A818A7D8F3DC}.Release|x86.ActiveCfg = Release|Any CPU
 		{C9583270-6D3E-4CBF-8011-A818A7D8F3DC}.Release|x86.Build.0 = Release|Any CPU
+		{C9583270-6D3E-4CBF-8011-A818A7D8F3DC}.Virtual|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9583270-6D3E-4CBF-8011-A818A7D8F3DC}.Virtual|x64.ActiveCfg = Debug|Any CPU
+		{C9583270-6D3E-4CBF-8011-A818A7D8F3DC}.Virtual|x86.ActiveCfg = Debug|Any CPU
 		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Debug|x64.ActiveCfg = Debug|x64
@@ -61,6 +73,12 @@ Global
 		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Release|x64.Build.0 = Release|x64
 		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Release|x86.ActiveCfg = Release|x86
 		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Release|x86.Build.0 = Release|x86
+		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Virtual|Any CPU.ActiveCfg = Virtual|Any CPU
+		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Virtual|Any CPU.Build.0 = Virtual|Any CPU
+		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Virtual|x64.ActiveCfg = Virtual|x64
+		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Virtual|x64.Build.0 = Virtual|x64
+		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Virtual|x86.ActiveCfg = Virtual|x86
+		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Virtual|x86.Build.0 = Virtual|x86
 		{DD1242FB-7AFF-457B-8307-F20B8617CFB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DD1242FB-7AFF-457B-8307-F20B8617CFB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD1242FB-7AFF-457B-8307-F20B8617CFB9}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -73,6 +91,9 @@ Global
 		{DD1242FB-7AFF-457B-8307-F20B8617CFB9}.Release|x64.Build.0 = Release|Any CPU
 		{DD1242FB-7AFF-457B-8307-F20B8617CFB9}.Release|x86.ActiveCfg = Release|Any CPU
 		{DD1242FB-7AFF-457B-8307-F20B8617CFB9}.Release|x86.Build.0 = Release|Any CPU
+		{DD1242FB-7AFF-457B-8307-F20B8617CFB9}.Virtual|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD1242FB-7AFF-457B-8307-F20B8617CFB9}.Virtual|x64.ActiveCfg = Debug|Any CPU
+		{DD1242FB-7AFF-457B-8307-F20B8617CFB9}.Virtual|x86.ActiveCfg = Debug|Any CPU
 		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Debug|x64.ActiveCfg = Debug|x64
 		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Debug|x64.Build.0 = Debug|x64
@@ -83,6 +104,11 @@ Global
 		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Release|x64.Build.0 = Release|x64
 		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Release|x86.ActiveCfg = Release|x86
 		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Release|x86.Build.0 = Release|x86
+		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|Any CPU.ActiveCfg = Virtual|x86
+		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x64.ActiveCfg = Virtual|x64
+		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x64.Build.0 = Virtual|x64
+		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x86.ActiveCfg = Virtual|x86
+		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x86.Build.0 = Virtual|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

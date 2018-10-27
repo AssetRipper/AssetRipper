@@ -46,7 +46,7 @@ namespace uTinyRipperGUI.Exporters
 
 		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
 		{
-			using (FileStream fileStream = new FileStream(path, FileMode.CreateNew, FileAccess.Write))
+			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
 				Shader shader = (Shader)asset;
 				shader.ExportBinary(container, fileStream, ShaderExporterInstantiator);

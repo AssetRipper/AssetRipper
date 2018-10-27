@@ -11,7 +11,7 @@ namespace uTinyRipper.Classes
 				return classID;
 			}
 
-			throw new Exception($"{_this} is not Engine class type");
+			throw new Exception($"{_this} is not Engine's class type");
 		}
 	}
 }

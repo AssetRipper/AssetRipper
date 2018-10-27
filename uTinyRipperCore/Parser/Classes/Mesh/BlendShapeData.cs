@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SevenZip;
+using System;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
@@ -20,6 +22,31 @@ namespace uTinyRipper.Classes.Meshes
 		private static bool IsAlign(Version version)
 		{
 			return version.IsGreaterEqual(2017);
+		}
+
+		public string GetShapeNameByCRC(Version version, uint crc)
+		{
+			if (IsReadChannels(version))
+			{
+				foreach (BlendShapeChannel blendChannel in Channels)
+				{
+					if (blendChannel.IsCRCMatch(crc))
+					{
+						return blendChannel.Name;
+					}
+				}
+			}
+			else
+			{
+				foreach (BlendShape blendShape in Shapes)
+				{
+					if (blendShape.IsCRCMatch(crc))
+					{
+						return blendShape.Name;
+					}
+				}
+			}
+			throw new ArgumentException($"Blend shape with CRC {crc} hasn't been found");
 		}
 
 		public void Read(AssetReader reader)

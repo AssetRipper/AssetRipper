@@ -67,14 +67,14 @@ namespace uTinyRipper.Exporters.Scripts
 			string subPath = GetExportSubPath(exportType);
 			string filePath = Path.Combine(m_exportPath, subPath);
 			string directory = Path.GetDirectoryName(filePath);
-			if(!DirectoryUtils.Exists(directory))
+			if (!DirectoryUtils.Exists(directory))
 			{
-				DirectoryUtils.CreateDirectory(directory);
+				DirectoryUtils.CreateVirtualDirectory(directory);
 			}
 
-			using (FileStream file = FileUtils.OpenWrite(filePath))
+			using (Stream fileStream = FileUtils.CreateVirtualFile(filePath))
 			{
-				using (StreamWriter writer = new InvariantStreamWriter(file, new UTF8Encoding(false)))
+				using (StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
 				{
 					exportType.Export(writer);
 				}

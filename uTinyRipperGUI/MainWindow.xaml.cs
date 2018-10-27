@@ -4,15 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using uTinyRipper;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
-#if !DEBUG
 using uTinyRipper.SerializedFiles;
-#endif
 using uTinyRipperGUI.Exporters;
 
 using Object = uTinyRipper.Classes.Object;
@@ -64,7 +64,11 @@ namespace uTinyRipperGUI
 				System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog();
 				folderDialog.ShowNewFolderButton = true;
 				folderDialog.Description = $"Select export folder. New folder '{GameStructure.Name}' will be created inside selected one";
+#if VIRTUAL
+				System.Windows.Forms.DialogResult result = System.Windows.Forms.DialogResult.OK;
+#else
 				System.Windows.Forms.DialogResult result = folderDialog.ShowDialog();
+#endif
 				if (result == System.Windows.Forms.DialogResult.OK)
 				{
 					string path = Path.Combine(folderDialog.SelectedPath, GameStructure.Name);
@@ -223,6 +227,12 @@ namespace uTinyRipperGUI
 				{
 					IntroText.Text = "Files has been loaded";
 					ExportButton.Visibility = Visibility.Visible;
+
+#if VIRTUAL
+					ButtonAutomationPeer peer = new ButtonAutomationPeer(ExportButton);
+					IInvokeProvider invokeProv = peer.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
+					invokeProv.Invoke();
+#endif
 				}
 			);
 		}

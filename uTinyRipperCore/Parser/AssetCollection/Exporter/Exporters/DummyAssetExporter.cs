@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using uTinyRipper.SerializedFiles;
+
 using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper.AssetExporters

@@ -60,6 +60,15 @@ namespace uTinyRipper
 			return File.CreateText(ToLongPath(path));
 		}
 
+		public static Stream CreateVirtualFile(string path)
+		{
+#if VIRTUAL
+			return new MemoryStream();
+#else
+			return Open(path, FileMode.CreateNew, FileAccess.Write);
+#endif
+		}
+
 		public static void Delete(string path)
 		{
 			File.Delete(ToLongPath(path));

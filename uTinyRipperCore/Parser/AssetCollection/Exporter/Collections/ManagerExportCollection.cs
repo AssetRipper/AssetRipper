@@ -27,7 +27,7 @@ namespace uTinyRipper.AssetExporters
 
 			if (!DirectoryUtils.Exists(subPath))
 			{
-				DirectoryUtils.CreateDirectory(subPath);
+				DirectoryUtils.CreateVirtualDirectory(subPath);
 			}
 
 			ExportInner(container, filePath);

@@ -1,4 +1,5 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using SevenZip;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
 namespace uTinyRipper.Classes.Meshes
@@ -29,6 +30,11 @@ namespace uTinyRipper.Classes.Meshes
 		private static bool IsAlign(Version version)
 		{
 			return version.IsGreaterEqual(4, 3);
+		}
+
+		public bool IsCRCMatch(uint crc)
+		{
+			return CRC.VerifyDigestUTF8(Name, crc);
 		}
 
 		public void Read(AssetReader reader)
