@@ -71,6 +71,10 @@ namespace uTinyRipper.Classes
 
 		public Transform FindChild(string path)
 		{
+			if(path == string.Empty)
+			{
+				return this;
+			}
 			return FindChild(path, 0);
 		}
 
