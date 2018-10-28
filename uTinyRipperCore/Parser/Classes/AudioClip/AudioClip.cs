@@ -284,20 +284,27 @@ namespace uTinyRipper.Classes
 
 				if (IsStreamInt32(reader.Version))
 				{
-					Stream = reader.ReadInt32();
+					LoadType = (AudioClipLoadType)reader.ReadInt32();
 				}
 
 				if (IsReadStreamingInfo(reader.Version))
 				{
-					if (Stream == 2)
+					bool isInnerData = true;
+					if (LoadType == AudioClipLoadType.Streaming)
 					{
-						string resImageName = $"{File.Name}.resS";
-						StreamingInfo.Read(reader, resImageName);
+						using (ResourcesFile res = File.Collection.FindResourcesFile(File, StreamingFileName))
+						{
+							isInnerData = res == null;
+						}
 					}
-					else
+					if(isInnerData)
 					{
 						m_audioData = reader.ReadByteArray();
 						reader.AlignStream(AlignType.Align4);
+					}
+					else
+					{
+						StreamingInfo.Read(reader, StreamingFileName);
 					}
 				}
 				else
@@ -318,7 +325,7 @@ namespace uTinyRipper.Classes
 				{
 					if (!IsStreamInt32(reader.Version))
 					{
-						Stream = reader.ReadBoolean() ? 1 : 0;
+						LoadType = reader.ReadBoolean() ? AudioClipLoadType.CompressedInMemory : AudioClipLoadType.DecompressOnLoad;
 					}
 				}
 			}
@@ -355,21 +362,28 @@ namespace uTinyRipper.Classes
 			{
 				if (IsReadStreamingInfo(container.Version))
 				{
-					if (Stream == 2)
+					if (LoadType == AudioClipLoadType.Streaming)
 					{
-						using (ResourcesFile res = File.Collection.FindResourcesFile(File, StreamingInfo.Path))
+						if(m_audioData == null)
 						{
-							if (res == null)
+							using (ResourcesFile res = File.Collection.FindResourcesFile(File, StreamingInfo.Path))
 							{
-								Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{StreamingInfo.Path}' hasn't been found");
-								return;
-							}
+								if (res == null)
+								{
+									Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{StreamingInfo.Path}' hasn't been found");
+									return;
+								}
 
-							using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
-							{
-								resStream.Position = StreamingInfo.Offset;
-								resStream.CopyStream(stream, StreamingInfo.Size);
+								using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
+								{
+									resStream.Position = StreamingInfo.Offset;
+									resStream.CopyStream(stream, StreamingInfo.Size);
+								}
 							}
+						}
+						else
+						{
+							stream.Write(m_audioData, 0, m_audioData.Length);
 						}
 					}
 					else
@@ -461,15 +475,21 @@ namespace uTinyRipper.Classes
 				}
 				if(IsReadStreamingInfo(File.Version))
 				{
-					if(Stream == 2)
+					if(LoadType == AudioClipLoadType.Streaming)
 					{
-						return true;
+						if (m_audioData == null)
+						{
+							return true;
+						}
 					}
 				}
 				return m_audioData.Length > 0;
 			}
 		}
 
+		/// <summary>
+		/// Stream previously
+		/// </summary>
 		public AudioClipLoadType LoadType { get; private set; }
 		public int Channels { get; private set; }
 		public int BitsPerSample { get; private set; }
@@ -496,7 +516,10 @@ namespace uTinyRipper.Classes
 		public bool Legacy3D { get; private set; }
 		public bool UseHardware { get; private set; }
 		public IReadOnlyList<byte> AudioData => m_audioData;
-		public int Stream { get; private set; }
+
+		private string StreamingFileName => File.Name + "." + StreamingFileExtension;
+
+		public const string StreamingFileExtension = "resS";
 
 		public StreamedResource FSBResource;
 		public StreamingInfo StreamingInfo;

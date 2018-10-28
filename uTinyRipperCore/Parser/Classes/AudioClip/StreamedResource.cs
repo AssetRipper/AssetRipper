@@ -7,7 +7,6 @@
 		/// </summary>
 		public static bool IsReadSize(Version version)
 		{
-#warning unknown
 			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
 		}
 
