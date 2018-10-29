@@ -33,6 +33,10 @@ namespace uTinyRipper.AssetExporters.Mono
 			{
 				return false;
 			}
+			if (IsRecursive(field))
+			{
+				return false;
+			}
 
 			if (field.IsPublic)
 			{
@@ -165,6 +169,32 @@ namespace uTinyRipper.AssetExporters.Mono
 				return true;
 			}
 
+			return false;
+		}
+
+		public static bool IsRecursive(FieldDefinition field)
+		{
+			// "built in" primitive .NET types are placed into itself... it is so stupid
+			if (field.FieldType.IsPrimitive)
+			{
+				return false;
+			}
+			if (MonoType.IsString(field.FieldType))
+			{
+				return false;
+			}
+			if (MonoType.IsDelegate(field.FieldType))
+			{
+				return false;
+			}
+			if (MonoType.IsEnginePointer(field.FieldType))
+			{
+				return false;
+			}
+			if (field.DeclaringType == field.FieldType)
+			{
+				return true;
+			}
 			return false;
 		}
 
