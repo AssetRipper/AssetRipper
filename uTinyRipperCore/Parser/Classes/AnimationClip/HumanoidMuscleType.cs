@@ -79,7 +79,7 @@ namespace uTinyRipper.Classes.AnimationClips
 				const int TDoFSize = (int)TDoFBoneType.Last;
 				int delta = _this - HumanoidMuscleType.TDoFBones;
 				TDoFBoneType tdof = (TDoFBoneType)(delta / TDoFSize);
-				return $"{tdof.ToBoneType().ToAttributeString()}{GetTDoFTransformPostfix(delta % TDoFSize)}";
+				return $"{tdof.ToBoneType().ToAttributeString()}{GetTDoFTransformPostfix(delta % 3)}";
 			}
 			throw new ArgumentException(_this.ToString());
 		}
