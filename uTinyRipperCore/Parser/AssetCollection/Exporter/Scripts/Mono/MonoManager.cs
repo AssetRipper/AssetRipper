@@ -295,12 +295,6 @@ namespace uTinyRipper.AssetExporters.Mono
 				for (int i = 0; i < instance.GenericArguments.Count; i++)
 				{
 					TypeReference argument = instance.GenericArguments[i];
-					// don't check the validity of argument since it may not be used as a serialize field
-					/*if (!IsTypeValid(argument, arguments))
-					{
-						m_validTypes[type.FullName] = false;
-						return false;
-					}*/
 					templateArguments.Add(template.GenericParameters[i], argument);
 				}
 
@@ -332,15 +326,10 @@ namespace uTinyRipper.AssetExporters.Mono
 				if (field.FieldType.IsGenericInstance)
 				{
 					// generic instances aren't serializable. Exception - list
-					if (MonoType.IsList(type))
+					if (!MonoType.IsList(field.FieldType))
 					{
-						if (!IsListValid(type, arguments))
-						{
-							m_validTypes[type.FullName] = false;
-							return false;
-						}
+						continue;
 					}
-					continue;
 				}
 
 				if (!IsTypeValid(field.FieldType, arguments))

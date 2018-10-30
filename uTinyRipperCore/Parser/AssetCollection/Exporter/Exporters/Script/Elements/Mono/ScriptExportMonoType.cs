@@ -228,7 +228,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 					{
 						// if field has unknown type then consider it as serializable
 					}
-					else if (!MonoField.IsFieldTypeSerializable(field.FieldType, null))
+					else if (!MonoField.IsFieldTypeSerializable(field.DeclaringType, field.FieldType, null))
 					{
 						continue;
 					}

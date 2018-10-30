@@ -33,10 +33,6 @@ namespace uTinyRipper.AssetExporters.Mono
 			{
 				return false;
 			}
-			if (IsRecursive(field))
-			{
-				return false;
-			}
 
 			if (field.IsPublic)
 			{
@@ -53,23 +49,23 @@ namespace uTinyRipper.AssetExporters.Mono
 		{
 			if(IsSerializableModifier(field))
 			{
-				return IsFieldTypeSerializable(field.FieldType, arguments);
+				return IsFieldTypeSerializable(field.DeclaringType, field.FieldType, arguments);
 			}
 			return false;
 		}
 
-		public static bool IsFieldTypeSerializable(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		public static bool IsFieldTypeSerializable(TypeReference declaringType, TypeReference fieldType, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
 			// if it's generic parameter then get its real type
-			if (type.IsGenericParameter)
+			if (fieldType.IsGenericParameter)
 			{
-				GenericParameter parameter = (GenericParameter)type;
-				type = arguments[parameter];
+				GenericParameter parameter = (GenericParameter)fieldType;
+				fieldType = arguments[parameter];
 			}
 
-			if (type.IsArray)
+			if (fieldType.IsArray)
 			{
-				ArrayType array = (ArrayType)type;
+				ArrayType array = (ArrayType)fieldType;
 				// one dimention array only
 				if (!array.IsVector)
 				{
@@ -95,13 +91,13 @@ namespace uTinyRipper.AssetExporters.Mono
 					return false;
 				}
 				// check if element is serializable
-				return IsFieldTypeSerializable(elementType, arguments);
+				return IsFieldTypeSerializable(declaringType, elementType, arguments);
 			}
 
-			if (MonoType.IsList(type))
+			if (MonoType.IsList(fieldType))
 			{
 				// list is serialized same way as array, so check its argument
-				GenericInstanceType list = (GenericInstanceType)type;
+				GenericInstanceType list = (GenericInstanceType)fieldType;
 				TypeReference listElement = list.GenericArguments[0];
 
 				// if it's generic parameter then get its real type
@@ -122,36 +118,40 @@ namespace uTinyRipper.AssetExporters.Mono
 					return false;
 				}
 				// check if element is serializable
-				return IsFieldTypeSerializable(listElement, arguments);
+				return IsFieldTypeSerializable(declaringType, listElement, arguments);
 			}
 
-			if (type.IsPrimitive)
+			if (fieldType.IsPrimitive)
 			{
 				return true;
 			}
-			if (MonoType.IsString(type))
+			if (MonoType.IsString(fieldType))
 			{
 				return true;
 			}
-			if (MonoType.IsEngineStruct(type))
+			if (MonoType.IsEngineStruct(fieldType))
 			{
 				return true;
 			}
-			if (MonoType.IsEnginePointer(type))
+			if (MonoType.IsEnginePointer(fieldType))
 			{
 				return true;
 			}
 
-			if (type.IsGenericInstance)
+			if (IsRecursive(declaringType, fieldType))
 			{
 				return false;
 			}
-			if (MonoType.IsObject(type))
+			if (fieldType.IsGenericInstance)
+			{
+				return false;
+			}
+			if (MonoType.IsObject(fieldType))
 			{
 				return false;
 			}
 
-			TypeDefinition definition = type.Resolve();
+			TypeDefinition definition = fieldType.Resolve();
 			if (definition.IsInterface)
 			{
 				return false;
@@ -172,26 +172,15 @@ namespace uTinyRipper.AssetExporters.Mono
 			return false;
 		}
 
-		public static bool IsRecursive(FieldDefinition field)
+		public static bool IsRecursive(TypeReference declaringType, TypeReference fieldType)
 		{
 			// "built in" primitive .NET types are placed into itself... it is so stupid
-			if (field.FieldType.IsPrimitive)
+			// field.FieldType.IsPrimitive || MonoType.IsString(field.FieldType) || MonoType.IsEnginePointer(field.FieldType) => return false
+			if (MonoType.IsDelegate(fieldType))
 			{
 				return false;
 			}
-			if (MonoType.IsString(field.FieldType))
-			{
-				return false;
-			}
-			if (MonoType.IsDelegate(field.FieldType))
-			{
-				return false;
-			}
-			if (MonoType.IsEnginePointer(field.FieldType))
-			{
-				return false;
-			}
-			if (field.DeclaringType == field.FieldType)
+			if (declaringType == fieldType)
 			{
 				return true;
 			}
