@@ -269,18 +269,20 @@ namespace uTinyRipper.Classes.AnimationClips
 							return ParametersWidthMultiplier;
 						}
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					// TODO: old versions animate all properties as custom curves
+					return "LineRenderer_" + attribute;
 
 #warning TODO:
 				case BindingCustomType.TrailRenderer:
-				{
-					const string ParametersWidthMultiplier = "m_Parameters" + "." + "widthMultiplier";
-					if (attribute == CRC.CalculateDigestAscii(ParametersWidthMultiplier))
 					{
-						return ParametersWidthMultiplier;
+						const string ParametersWidthMultiplier = "m_Parameters" + "." + "widthMultiplier";
+						if (attribute == CRC.CalculateDigestAscii(ParametersWidthMultiplier))
+						{
+							return ParametersWidthMultiplier;
+						}
 					}
-				}
-				throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					// TODO: old versions animate all properties as custom curves
+					return "TrailRenderer_" + attribute;
 
 #warning TODO:
 				case BindingCustomType.PositionConstraint:
