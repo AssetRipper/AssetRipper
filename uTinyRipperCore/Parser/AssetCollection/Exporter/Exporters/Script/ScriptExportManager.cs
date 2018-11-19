@@ -40,8 +40,8 @@ namespace uTinyRipper.Exporters.Scripts
 			int index = typeName.IndexOf('<');
 			if(index >= 0)
 			{
-				typeName = typeName.Substring(0, index);
-				typeName += $".{typeName.Count(t => t == ',') + 1}";
+				string normalName = typeName.Substring(0, index);
+				typeName = normalName + $".{typeName.Count(t => t == ',') + 1}";
 			}
 			return GetExportSubPath(type.Module, type.Namespace, typeName);
 		}
