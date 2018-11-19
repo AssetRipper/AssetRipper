@@ -1,5 +1,6 @@
 ﻿using SevenZip;
 using System;
+using System.Linq;
 using uTinyRipper.Classes.Lights;
 
 namespace uTinyRipper.Classes.AnimationClips
@@ -26,20 +27,34 @@ namespace uTinyRipper.Classes.AnimationClips
 						{
 							return Prefix + attribute;
 						}
-						if (Root == null)
-						{
-							return Prefix + attribute;
-						}
-						Transform rootTransform = Root.GetTransform();
-						Transform child = rootTransform.FindChild(path);
-						SkinnedMeshRenderer skin = child.GameObject.GetAsset(child.File).GetComponent<SkinnedMeshRenderer>();
-						Mesh mesh = skin.Mesh.FindAsset(skin.File);
-						if (mesh == null)
-						{
-							return Prefix + attribute;
-						}
 
-						return Prefix + mesh.GetBlendShapeNameByCRC(attribute);
+						foreach (GameObject root in Roots)
+						{
+							Transform rootTransform = root.GetTransform();
+							Transform child = rootTransform.FindChild(path);
+							if (child == null)
+							{
+								continue;
+							}
+							SkinnedMeshRenderer skin = child.GameObject.FindAsset(child.File).GetComponent<SkinnedMeshRenderer>();
+							if(skin == null)
+							{
+								continue;
+							}
+							Mesh mesh = skin.Mesh.FindAsset(skin.File);
+							if (mesh == null)
+							{
+								continue;
+							}
+							string shapeName = mesh.FindBlendShapeNameByCRC(attribute);
+							if (shapeName == null)
+							{
+								continue;
+							}
+
+							return Prefix + shapeName;
+						}
+						return Prefix + attribute;
 					}
 
 				case BindingCustomType.Renderer:
@@ -52,44 +67,54 @@ namespace uTinyRipper.Classes.AnimationClips
 						{
 							return Prefix + attribute;
 						}
-						if (Root == null)
-						{
-							return Prefix + attribute;
-						}
-						uint crc28 = attribute & 0xFFFFFFF;
-						Transform rootTransform = Root.GetTransform();
-						Transform child = rootTransform.FindChild(path);
-						Renderer renderer = child.GameObject.GetAsset(child.File).GetComponent<Renderer>();
-						string property = renderer.FindMaterialPropertyNameByCRC28(crc28);
-						if (property == string.Empty)
-						{
-							return Prefix + attribute;
-						}
 
-						if ((attribute & 0x80000000) != 0)
+						foreach (GameObject root in Roots)
 						{
-							return Prefix + property;
-						}
-						char subProperty;
-						uint subPropIndex = (attribute >> 28) & 3;
-						bool isRgba = (attribute & 0x40000000) != 0;
-						switch (subPropIndex)
-						{
-							case 0:
-								subProperty = isRgba ? 'r' : 'x';
-								break;
-							case 1:
-								subProperty = isRgba ? 'g' : 'y';
-								break;
-							case 2:
-								subProperty = isRgba ? 'b' : 'z';
-								break;
+							Transform rootTransform = root.GetTransform();
+							Transform child = rootTransform.FindChild(path);
+							if (child == null)
+							{
+								continue;
+							}
 
-							default:
-								subProperty = isRgba ? 'a' : 'w';
-								break;
+							uint crc28 = attribute & 0xFFFFFFF;
+							Renderer renderer = child.GameObject.FindAsset(child.File).GetComponent<Renderer>();
+							if(renderer == null)
+							{
+								continue;
+							}
+							string property = renderer.FindMaterialPropertyNameByCRC28(crc28);
+							if (property == null)
+							{
+								continue;
+							}
+
+							if ((attribute & 0x80000000) != 0)
+							{
+								return Prefix + property;
+							}
+							char subProperty;
+							uint subPropIndex = (attribute >> 28) & 3;
+							bool isRgba = (attribute & 0x40000000) != 0;
+							switch (subPropIndex)
+							{
+								case 0:
+									subProperty = isRgba ? 'r' : 'x';
+									break;
+								case 1:
+									subProperty = isRgba ? 'g' : 'y';
+									break;
+								case 2:
+									subProperty = isRgba ? 'b' : 'z';
+									break;
+
+								default:
+									subProperty = isRgba ? 'a' : 'w';
+									break;
+							}
+							return Prefix + property + "." + subProperty;
 						}
-						return Prefix + property + "." + subProperty;
+						return Prefix + attribute;
 					}
 
 				case BindingCustomType.SpriteRenderer:
@@ -498,16 +523,16 @@ namespace uTinyRipper.Classes.AnimationClips
 			}
 		}
 
-		private GameObject Root
+		private GameObject[] Roots
 		{
 			get
 			{
 				if (!m_rootInited)
 				{
-					m_root = m_clip.FindRoot();
+					m_roots = m_clip.FindRoots().ToArray();
 					m_rootInited = true;
 				}
-				return m_root;
+				return m_roots;
 			}
 		}
 
@@ -515,7 +540,7 @@ namespace uTinyRipper.Classes.AnimationClips
 
 		private readonly AnimationClip m_clip = null;
 
-		private GameObject m_root = null;
+		private GameObject[] m_roots = null;
 		private bool m_rootInited = false;
 	}
 }

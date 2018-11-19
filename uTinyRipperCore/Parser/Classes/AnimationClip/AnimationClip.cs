@@ -393,7 +393,7 @@ namespace uTinyRipper.Classes
 			return new Dictionary<uint, string>() { { 0, string.Empty } };
 		}
 
-		public GameObject FindRoot()
+		public IEnumerable<GameObject> FindRoots()
 		{
 			foreach (Object asset in File.Collection.FetchAssets())
 			{
@@ -403,7 +403,7 @@ namespace uTinyRipper.Classes
 						Animator animator = (Animator)asset;
 						if (IsAnimatorContainsClip(animator))
 						{
-							return animator.GameObject.GetAsset(animator.File);
+							yield return animator.GameObject.GetAsset(animator.File);
 						}
 						break;
 
@@ -411,13 +411,13 @@ namespace uTinyRipper.Classes
 						Animation animation = (Animation)asset;
 						if (IsAnimationContainsClip(animation))
 						{
-							return animation.GameObject.GetAsset(animation.File);
+							yield return animation.GameObject.GetAsset(animation.File);
 						}
 						break;
 				}
 			}
 
-			return null;
+			yield break;
 		}
 
 		private bool IsAnimatorContainsClip(Animator animator)

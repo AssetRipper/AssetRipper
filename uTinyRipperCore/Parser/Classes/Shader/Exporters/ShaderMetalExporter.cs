@@ -11,7 +11,7 @@ namespace uTinyRipper.Classes.Shaders.Exporters
 
 		protected override void Export(BinaryReader reader, TextWriter writer)
 		{
-			if (!Shader.IsEncoded(m_version))
+			if (Shader.IsEncoded(m_version))
 			{
 				long position = reader.BaseStream.Position;
 				uint fourCC = reader.ReadUInt32();

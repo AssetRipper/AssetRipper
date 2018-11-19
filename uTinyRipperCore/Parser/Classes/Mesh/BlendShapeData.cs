@@ -24,7 +24,7 @@ namespace uTinyRipper.Classes.Meshes
 			return version.IsGreaterEqual(2017);
 		}
 
-		public string GetShapeNameByCRC(Version version, uint crc)
+		public string FindShapeNameByCRC(Version version, uint crc)
 		{
 			if (IsReadChannels(version))
 			{
@@ -46,7 +46,7 @@ namespace uTinyRipper.Classes.Meshes
 					}
 				}
 			}
-			throw new ArgumentException($"Blend shape with CRC {crc} hasn't been found");
+			return null;
 		}
 
 		public void Read(AssetReader reader)

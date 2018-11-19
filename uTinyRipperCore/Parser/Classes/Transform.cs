@@ -71,7 +71,7 @@ namespace uTinyRipper.Classes
 
 		public Transform FindChild(string path)
 		{
-			if(path == string.Empty)
+			if (path == string.Empty)
 			{
 				return this;
 			}
@@ -106,7 +106,7 @@ namespace uTinyRipper.Classes
 					return separatorIndex == -1 ? child : child.FindChild(path, separatorIndex + 1);
 				}
 			}
-			throw new Exception($"Child {childName} hans't been found for path {path}");
+			return null;
 		}
 
 		public const string LocalRotationName = "m_LocalRotation";

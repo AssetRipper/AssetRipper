@@ -58,7 +58,7 @@ namespace uTinyRipper.Classes.Materials
 					return property.Value;
 				}
 			}
-			return string.Empty;
+			return null;
 		}
 
 		public void Read(AssetReader reader)

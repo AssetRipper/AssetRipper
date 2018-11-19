@@ -21,6 +21,10 @@ namespace uTinyRipperGUI
 
 		public void Log(LogType type, LogCategory category, string message)
 		{
+			if(Application.Current == null)
+			{
+				return;
+			}
 			if (Thread.CurrentThread == Application.Current.Dispatcher.Thread)
 			{
 				LogInner(type, category, message);
