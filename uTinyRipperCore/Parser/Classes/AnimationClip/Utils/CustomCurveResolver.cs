@@ -36,7 +36,7 @@ namespace uTinyRipper.Classes.AnimationClips
 							{
 								continue;
 							}
-							SkinnedMeshRenderer skin = child.GameObject.FindAsset(child.File).GetComponent<SkinnedMeshRenderer>();
+							SkinnedMeshRenderer skin = child.GameObject.FindAsset(child.File).FindComponent<SkinnedMeshRenderer>();
 							if(skin == null)
 							{
 								continue;
@@ -78,7 +78,7 @@ namespace uTinyRipper.Classes.AnimationClips
 							}
 
 							uint crc28 = attribute & 0xFFFFFFF;
-							Renderer renderer = child.GameObject.FindAsset(child.File).GetComponent<Renderer>();
+							Renderer renderer = child.GameObject.FindAsset(child.File).FindComponent<Renderer>();
 							if(renderer == null)
 							{
 								continue;

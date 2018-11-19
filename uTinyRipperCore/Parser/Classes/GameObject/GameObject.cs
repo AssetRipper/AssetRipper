@@ -203,6 +203,17 @@ namespace uTinyRipper.Classes
 		public T GetComponent<T>()
 			where T: Component
 		{
+			T component = FindComponent<T>();
+			if (component == null)
+			{
+				throw new Exception($"Component of type {nameof(T)} hasn't been found");
+			}
+			return component;
+		}
+
+		public T FindComponent<T>()
+			where T : Component
+		{
 			foreach (ComponentPair pair in Components)
 			{
 				Component comp = pair.Component.GetAsset(File);
@@ -211,7 +222,7 @@ namespace uTinyRipper.Classes
 					return t;
 				}
 			}
-			throw new Exception($"Component of type {nameof(T)} hasn't been found");
+			return null;
 		}
 
 		public Transform GetTransform()

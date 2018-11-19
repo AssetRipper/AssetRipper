@@ -48,34 +48,26 @@ namespace uTinyRipper.Classes
 
 #warning TODO: values acording to read version (current 2017.3.0f3)
 			ThreadSafeRandom random = new ThreadSafeRandom();
-			long exportID;
+			uint classID = (uint)asset.ClassID;
+#if DEBUG
+			int length = BitConverterExtensions.GetDigitsCount(classID);
+			if (length > 4)
+			{
+				throw new NotSupportedException($"Class ID {classID} with more that 4 digits isn't supported");
+			}
+#endif
+			long prefix = classID * 1000000000000000L;
+			ulong persistentValue = 0;
+			long exportID = 0;
 			do
 			{
-				uint classID = (uint)asset.ClassID;
-#if DEBUG
-				int length = BitConverterExtensions.GetDigitsCount(classID);
-				if (length > 4)
-				{
-					throw new NotSupportedException($"Class ID {classID} with more that 4 digits isn't supported");
-				}
-#endif
-				exportID = classID;
-				exportID *= 1000000000000000L;
-				exportID |= unchecked(random.Next(0, 2)) * 100000000000000L;
-				exportID |= unchecked(random.Next(0, 2)) * 10000000000000L;
-				exportID |= unchecked(random.Next(0, 2)) * 1000000000000L;
-				exportID |= unchecked(random.Next(0, 2)) * 100000000000L;
-				exportID |= unchecked(random.Next(0, 2)) * 10000000000L;
-				exportID |= unchecked(random.Next(0, 2)) * 1000000000L;
-				exportID |= unchecked(random.Next(0, 2)) * 100000000L;
-				exportID |= unchecked(random.Next(0, 2)) * 10000000L;
-				exportID |= unchecked(random.Next(0, 2)) * 1000000L;
-				exportID |= unchecked(random.Next(0, 2)) * 100000L;
-				exportID |= unchecked(random.Next(0, 2)) * 10000L;
-				exportID |= unchecked(random.Next(0, 2)) * 1000L;
-				exportID |= unchecked(random.Next(0, 2)) * 100L;
-				exportID |= unchecked(random.Next(0, 2)) * 10L;
-				exportID |= unchecked(random.Next(0, 2)) * 1L;
+				ulong value = 0;
+				value += unchecked((uint)random.Next(0, 100000)) * 10000000000UL;
+				value += unchecked((uint)random.Next(0, 100000)) * 100000UL;
+				value += unchecked((uint)random.Next(0, 100000)) * 1UL;
+				persistentValue = unchecked(persistentValue + value);
+				exportID = prefix + (long)(persistentValue % 1000000000000000L);
+
 			}
 			while (uniqueChecker(exportID));
 			return exportID;

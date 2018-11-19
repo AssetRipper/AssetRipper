@@ -73,7 +73,7 @@ namespace uTinyRipper.Classes.AnimationClips
 				{
 					StreamedCurveKey curve = frame.Curves[curveIndex];
 					GenericBinding binding = bindings.FindBinding(curve.Index);
-					FindPreviousFrame(streamFrames, curve.Index, frameIndex, out int prevFrameIndex, out int prevCurveIndex);
+					GetPreviousFrame(streamFrames, curve.Index, frameIndex, out int prevFrameIndex, out int prevCurveIndex);
 
 					string path = GetCurvePath(tos, binding.Path);
 					if(binding.IsTransform)
@@ -81,27 +81,27 @@ namespace uTinyRipper.Classes.AnimationClips
 						int dimension = binding.TransformType.GetDimension();
 						for (int key = 0; key < dimension; key++)
 						{
-							StreamedCurveKey keyCurve = frame.Curves[curveIndex + key];
+							StreamedCurveKey keyCurve = frame.Curves[curveIndex];
 							StreamedFrame prevFrame = streamFrames[prevFrameIndex];
 							StreamedCurveKey prevKeyCurve = prevFrame.Curves[prevCurveIndex + key];
 							float deltaTime = frame.Time - prevFrame.Time;
 							curveValues[key] = keyCurve.Value;
 							inSlopeValues[key] = prevKeyCurve.CalculateNextInSlope(deltaTime, keyCurve.Value);
 							outSlopeValues[key] = keyCurve.OutSlope;
+							curveIndex = GetNextCurve(frame, curveIndex);
 						}
 
 						AddTransformCurve(frame.Time, binding.TransformType, curveValues, inSlopeValues, outSlopeValues, 0, path);
-						curveIndex += dimension;
 					}
 					else if(binding.CustomType == BindingCustomType.None)
 					{
 						AddDefaultCurve(binding, path, frame.Time, frame.Curves[curveIndex].Value);
-						curveIndex++;
+						curveIndex = GetNextCurve(frame, curveIndex);
 					}
 					else
 					{
 						AddCustomCurve(bindings, binding, path, frame.Time, frame.Curves[curveIndex].Value);
-						curveIndex++;
+						curveIndex = GetNextCurve(frame, curveIndex);
 					}
 				}
 			}
@@ -413,7 +413,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			pptrCurve.Add(pptrKey);
 		}
 
-		private void FindPreviousFrame(IReadOnlyList<StreamedFrame> streamFrames, int curveID, int currentFrame, out int frameIndex, out int curveIndex)
+		private void GetPreviousFrame(IReadOnlyList<StreamedFrame> streamFrames, int curveID, int currentFrame, out int frameIndex, out int curveIndex)
 		{
 			for (frameIndex = currentFrame - 1; frameIndex >= 0; frameIndex--)
 			{
@@ -428,6 +428,20 @@ namespace uTinyRipper.Classes.AnimationClips
 				}
 			}
 			throw new Exception($"There is no curve with index {curveID} in any of previous frames");
+		}
+
+		private int GetNextCurve(StreamedFrame frame, int currentCurve)
+		{
+			StreamedCurveKey curve = frame.Curves[currentCurve];
+			int i = currentCurve + 1;
+			for(; i < frame.Curves.Count; i++)
+			{
+				if(frame.Curves[i].Index != curve.Index)
+				{
+					return i;
+				}
+			}
+			return i;
 		}
 
 		private static string GetCurvePath(IReadOnlyDictionary<uint, string> tos, uint hash)
