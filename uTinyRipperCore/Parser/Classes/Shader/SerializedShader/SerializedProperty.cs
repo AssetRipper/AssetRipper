@@ -91,6 +91,12 @@ namespace uTinyRipper.Classes.Shaders
 						case 4:
 							writer.Write(nameof(SerializedPropertyType.Cube));
 							break;
+						case 5:
+							writer.Write("2DArray");
+							break;
+						case 6:
+							writer.Write(nameof(SerializedPropertyType.CubeArray));
+							break;
 						default:
 							throw new NotSupportedException("Texture dimension isn't supported");
 

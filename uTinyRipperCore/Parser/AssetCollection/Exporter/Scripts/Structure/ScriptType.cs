@@ -127,10 +127,13 @@ namespace uTinyRipper.AssetExporters
 				switch (name)
 				{
 					case Vector2Name:
+					case Vector2IntName:
 					case Vector3Name:
+					case Vector3IntName:
 					case Vector4Name:
 					case RectName:
 					case BoundsName:
+					case BoundsIntName:
 					case QuaternionName:
 					case Matrix4x4Name:
 					case ColorName:
@@ -337,10 +340,13 @@ namespace uTinyRipper.AssetExporters
 		private const string ListName = "List`1";
 
 		public const string Vector2Name = "Vector2";
+		public const string Vector2IntName = "Vector2Int";
 		public const string Vector3Name = "Vector3";
+		public const string Vector3IntName = "Vector3Int";
 		public const string Vector4Name = "Vector4";
 		public const string RectName = "Rect";
 		public const string BoundsName = "Bounds";
+		public const string BoundsIntName = "BoundsInt";
 		public const string QuaternionName = "Quaternion";
 		public const string Matrix4x4Name = "Matrix4x4";
 		public const string ColorName = "Color";

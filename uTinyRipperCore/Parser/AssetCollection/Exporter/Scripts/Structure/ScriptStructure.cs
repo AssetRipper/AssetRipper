@@ -50,14 +50,20 @@ namespace uTinyRipper.AssetExporters
 			{
 				case ScriptType.Vector2Name:
 					return new Vector2f();
+				case ScriptType.Vector2IntName:
+					return new Vector2i();
 				case ScriptType.Vector3Name:
 					return new Vector3f();
+				case ScriptType.Vector3IntName:
+					return new Vector3i();
 				case ScriptType.Vector4Name:
 					return new Vector4f();
 				case ScriptType.RectName:
 					return new Rectf();
 				case ScriptType.BoundsName:
 					return new AABB();
+				case ScriptType.BoundsIntName:
+					return new AABBi();
 				case ScriptType.QuaternionName:
 					return new Quaternionf();
 				case ScriptType.Matrix4x4Name:

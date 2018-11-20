@@ -8,8 +8,10 @@
 		Float		= 2,
 		Range		= 3,
 		_2D			= 4,
+		_2DArray	= 4,
 		_3D			= 4,
 		Cube		= 4,
+		CubeArray	= 4,
 	}
 
 	public static class SerializedPropertyTypeExtensions
