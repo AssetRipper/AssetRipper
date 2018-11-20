@@ -164,11 +164,11 @@ namespace uTinyRipper.Classes
 			return version.IsLessEqual(3, 5, 0);
 		}
 		/// <summary>
-		/// Less than 3.5.0
+		/// Less than 3.5.0f1
 		/// </summary>
 		public static bool IsReadCollisionTriangles(Version version)
 		{
-			return version.IsLess(3, 5);
+			return version.IsLessEqual(3, 5, 0, VersionType.Beta);
 		}
 		/// <summary>
 		/// 2.5.0 and greater
