@@ -42,7 +42,7 @@ namespace uTinyRipper.Classes.Sprites
 		public bool IsReadAtlasRectOffset(Version version)
 		{
 			return (version.IsGreaterEqual(5, 4, 5, VersionType.Patch, 1) && version.IsLess(5, 5)) ||
-				version.IsEqual(5, 5, 0, VersionType.Patch, 3) || version.IsGreaterEqual(5, 5, 3);
+				version.IsEqual(5, 5, 0, VersionType.Patch, 3) || version.IsGreaterEqual(5, 5, 2, VersionType.Patch);
 		}
 		/// <summary>
 		/// 4.5.0 and greater
