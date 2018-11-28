@@ -210,6 +210,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup Condition=" '$(Platform)' == 'x86' ">
+    <ContentWithTargetPath Include="Libraries\x86\astcenc_x86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>astcenc.dll</TargetPath>
+    </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x86\crunch_x86.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>crunch.dll</TargetPath>
@@ -252,6 +256,10 @@
     </ContentWithTargetPath>
   </ItemGroup>
   <ItemGroup Condition=" '$(Platform)' == 'x64' ">
+    <ContentWithTargetPath Include="Libraries\x64\astcenc_x64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>astcenc.dll</TargetPath>
+    </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x64\crunch_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>crunch.dll</TargetPath>
