@@ -355,7 +355,7 @@ namespace uTinyRipper
 			m_currentStream.Position = m_position - m_currentBegin;
 			return result;
 		}
-
+		
 		public override long Position
 		{
 			get => m_position;
@@ -367,7 +367,7 @@ namespace uTinyRipper
 				}
 
 				m_position = value;
-				if (value < m_currentBegin || value > m_currentEnd)
+				if (value < m_currentBegin || value >= m_currentEnd)
 				{
 					UpdateCurrentStream();
 				}
