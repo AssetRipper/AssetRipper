@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using uTinyRipper.Classes.Shaders.Exporters;
 
 namespace uTinyRipper.Classes.Shaders
 {

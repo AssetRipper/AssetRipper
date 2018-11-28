@@ -85,7 +85,7 @@ namespace uTinyRipperGUI.Exporters
 		{
 			if(s_isSupported && programType.IsDX())
 			{
-				return new ShaderDXExporter();
+				return new ShaderDXExporter(version, programType);
 			}
 			return Shader.DefaultShaderExporterInstantiator(version, programType);
 		}

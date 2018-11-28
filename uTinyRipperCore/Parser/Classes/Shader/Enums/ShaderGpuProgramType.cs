@@ -93,6 +93,21 @@ namespace uTinyRipper.Classes.Shaders
 			}
 		}
 
+		public static bool IsDX9(this ShaderGpuProgramType _this)
+		{
+			switch (_this)
+			{
+				case ShaderGpuProgramType.DX9PixelSM20:
+				case ShaderGpuProgramType.DX9PixelSM30:
+				case ShaderGpuProgramType.DX9VertexSM20:
+				case ShaderGpuProgramType.DX9VertexSM30:
+					return true;
+
+				default:
+					return false;
+			}
+		}
+
 		public static GPUPlatform ToGPUPlatform(this ShaderGpuProgramType _this, Platform platform)
 		{
 			switch(_this)
