@@ -107,11 +107,11 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(4);
 		}
 		/// <summary>
-		/// 5.6.5 to 2017 exclusive or 2017.2.1 and greater
+		/// 5.6.4p1 to 2017 exclusive or 2017.2.1 and greater
 		/// </summary>
 		public static bool IsReadUseLegacyBoundsCalculation(Version version)
 		{
-			return version.IsGreaterEqual(5, 6, 5) && version.IsLess(2017) ||
+			return version.IsGreaterEqual(5, 6, 4, VersionType.Patch) && version.IsLess(2017) ||
 				version.IsGreaterEqual(2017, 1, 3) && version.IsLess(2017, 2) ||
 				version.IsGreaterEqual(2017, 2, 0, VersionType.Patch, 2);
 		}
