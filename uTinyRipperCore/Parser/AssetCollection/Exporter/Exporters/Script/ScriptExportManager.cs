@@ -66,13 +66,14 @@ namespace uTinyRipper.Exporters.Scripts
 
 			string subPath = GetExportSubPath(exportType);
 			string filePath = Path.Combine(m_exportPath, subPath);
-			string directory = Path.GetDirectoryName(filePath);
+			string uniqueFilePath = ToUniqueFileName(filePath);
+			string directory = Path.GetDirectoryName(uniqueFilePath);
 			if (!DirectoryUtils.Exists(directory))
 			{
 				DirectoryUtils.CreateVirtualDirectory(directory);
 			}
 
-			using (Stream fileStream = FileUtils.CreateVirtualFile(filePath))
+			using (Stream fileStream = FileUtils.CreateVirtualFile(uniqueFilePath))
 			{
 				using (StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
 				{
@@ -80,7 +81,7 @@ namespace uTinyRipper.Exporters.Scripts
 				}
 			}
 			AddExportedType(exportType);
-			return filePath;
+			return uniqueFilePath;
 		}
 
 		public void ExportRest()
@@ -297,6 +298,30 @@ namespace uTinyRipper.Exporters.Scripts
 			foreach (ScriptExportType nestedType in exportType.NestedTypes)
 			{
 				AddExportedType(nestedType);
+			}
+		}
+
+		private static string ToUniqueFileName(string filePath)
+		{
+			if (File.Exists(filePath))
+			{
+				string directory = Path.GetDirectoryName(filePath);
+				string fileName = Path.GetFileNameWithoutExtension(filePath);
+				string fileExtension = Path.GetExtension(filePath);
+				for(int i = 2; i < int.MaxValue; i++)
+				{
+					string newFilePath = Path.Combine(directory, $"{fileName}.{i}{fileExtension}");
+					if (!File.Exists(newFilePath))
+					{
+						Logger.Log(LogType.Warning, LogCategory.Export, $"Found duplicate script file at {filePath}. Renamed to {newFilePath}");
+						return newFilePath;
+					}
+				}
+				throw new Exception($"Can't create unit file at {filePath}");
+			}
+			else
+			{
+				return filePath;
 			}
 		}
 
