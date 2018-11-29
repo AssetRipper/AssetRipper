@@ -27,12 +27,12 @@ namespace uTinyRipper
 
 		public static void Delete(string path)
 		{
-			Directory.Delete(ToLongPath(path));
+			Directory.Delete(ToLongPath(path, true));
 		}
 
 		public static void Delete(string path, bool recursive)
 		{
-			Directory.Delete(ToLongPath(path), recursive);
+			Directory.Delete(ToLongPath(path, true), recursive);
 		}
 
 		public static string[] GetFiles(string path)
@@ -57,17 +57,22 @@ namespace uTinyRipper
 
 		public static string ToLongPath(string path)
 		{
+			return ToLongPath(path, false);
+		}
+
+		private static string ToLongPath(string path, bool force)
+		{
 			if (path.StartsWith(LongPathPrefix, StringComparison.Ordinal))
 			{
 				return path;
 			}
 
 			string fullPath = Path.IsPathRooted(path) ? path : Path.GetFullPath(path);
-			if (fullPath.Length >= MaxDirectoryLength)
+			if (force || fullPath.Length >= MaxDirectoryLength)
 			{
-				return $@"{LongPathPrefix}{fullPath}";
+				return $"{LongPathPrefix}{fullPath}";
 			}
-			return fullPath;
+			return path;
 		}
 
 		public static string GetMaxIndexName(string dirPath, string fileName)

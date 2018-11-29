@@ -65,7 +65,7 @@ namespace uTinyRipper
 #if VIRTUAL
 			return new MemoryStream();
 #else
-			return Open(path, FileMode.CreateNew, FileAccess.Write);
+			return Open(ToLongPath(path), FileMode.CreateNew, FileAccess.Write);
 #endif
 		}
 
@@ -82,12 +82,27 @@ namespace uTinyRipper
 			}
 
 			string fullPath = Path.IsPathRooted(path) ? path : Path.GetFullPath(path);
-			if (path.LastIndexOf(Path.DirectorySeparatorChar) >= DirectoryUtils.MaxDirectoryLength ||
-				path.LastIndexOf(Path.AltDirectorySeparatorChar) >= DirectoryUtils.MaxDirectoryLength)
+			int sepIndex = fullPath.LastIndexOf(Path.DirectorySeparatorChar);
+			int asepIndex = fullPath.LastIndexOf(Path.AltDirectorySeparatorChar);
+			int index = Math.Max(sepIndex, asepIndex);
+			if (fullPath.Length - index > MaxFileNameLength)
 			{
-				return $@"{DirectoryUtils.LongPathPrefix}{fullPath}";
+				// file name is too long. need to shrink
+				fullPath = $"{DirectoryUtils.LongPathPrefix}{fullPath}";
+				string directory = Path.GetDirectoryName(fullPath);
+				string fileName = Path.GetFileNameWithoutExtension(fullPath);
+				string extension = Path.GetExtension(fullPath);
+				fileName = fileName.Substring(0, MaxFileNameLength - extension.Length - 1);
+				return Path.Combine(directory, fileName + extension);
 			}
-			return fullPath;
+			else if (index >= DirectoryUtils.MaxDirectoryLength)
+			{
+				// directory name is too long. just append prefix
+				return $"{DirectoryUtils.LongPathPrefix}{fullPath}";
+			}
+			return path;
 		}
+
+		public const int MaxFileNameLength = 256;
 	}
 }
