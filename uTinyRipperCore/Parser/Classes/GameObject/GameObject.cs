@@ -216,7 +216,8 @@ namespace uTinyRipper.Classes
 		{
 			foreach (ComponentPair pair in Components)
 			{
-				Component comp = pair.Component.GetAsset(File);
+				// component could has not impelemented asset type
+				Component comp = pair.Component.FindAsset(File);
 				if (comp is T t)
 				{
 					return t;
