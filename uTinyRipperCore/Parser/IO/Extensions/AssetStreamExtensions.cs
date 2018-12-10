@@ -5,7 +5,25 @@ namespace uTinyRipper
 {
 	public static class AssetStreamExtensions
 	{
-		public static KeyValuePair<string, T>[] ReadStringKVPArray<T>(this AssetReader reader)
+		public static KeyValuePair<T1, T2>[] ReadTTKVPArray<T1, T2>(this AssetReader reader)
+			where T1: IAssetReadable, new()
+			where T2 : IAssetReadable, new()
+		{
+			int count = reader.ReadInt32();
+			KeyValuePair<T1, T2>[] array = new KeyValuePair<T1, T2>[count];
+			for (int i = 0; i < count; i++)
+			{
+				T1 key = new T1();
+				key.Read(reader);
+				T2 value = new T2();
+				value.Read(reader);
+				KeyValuePair<T1, T2> kvp = new KeyValuePair<T1, T2>(key, value);
+				array[i] = kvp;
+			}
+			return array;
+		}
+
+		public static KeyValuePair<string, T>[] ReadStringTKVPArray<T>(this AssetReader reader)
 			where T : IAssetReadable, new()
 		{
 			int count = reader.ReadInt32();
@@ -21,7 +39,7 @@ namespace uTinyRipper
 			return array;
 		}
 
-		public static KeyValuePair<string, T>[] ReadStringKVPArray<T>(this AssetReader reader, Func<T> valueInstantiator)
+		public static KeyValuePair<string, T>[] ReadStringTKVPArray<T>(this AssetReader reader, Func<T> valueInstantiator)
 			where T : IAssetReadable
 		{
 			int count = reader.ReadInt32();

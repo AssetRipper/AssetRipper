@@ -113,7 +113,7 @@ namespace uTinyRipper.Classes
 				m_preloadTable = reader.ReadArray<PPtr<Object>>();
 			}
 
-			m_container = reader.ReadStringKVPArray<AssetBundles.AssetInfo>();
+			m_container = reader.ReadStringTKVPArray<AssetBundles.AssetInfo>();
 			MainAsset.Read(reader);
 
 			if(IsReadScriptCampatibility(reader.Version))

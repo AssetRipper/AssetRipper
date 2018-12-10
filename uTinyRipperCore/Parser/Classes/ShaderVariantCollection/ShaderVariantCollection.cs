@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.ShaderVariantCollections;
 using uTinyRipper.Exporter.YAML;
@@ -17,7 +18,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_shaders.Read(reader);
+			m_shaders = reader.ReadTTKVPArray<PPtr<Shader>, ShaderInfo>();
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -27,23 +28,36 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 
-			foreach (PPtr <Shader> shader in Shaders.Keys)
+			foreach (KeyValuePair<PPtr<Shader>, ShaderInfo> kvp in m_shaders)
 			{
-				yield return shader.FetchDependency(file, isLog, ToLogString, "m_Shaders");
+				yield return kvp.Key.FetchDependency(file, isLog, ToLogString, "m_Shaders");
 			}
+		}
+
+		public IReadOnlyDictionary<PPtr<Shader>, ShaderInfo> GetShaders()
+		{
+			Dictionary<PPtr<Shader>, ShaderInfo> shaders = new Dictionary<PPtr<Shader>, ShaderInfo>();
+			foreach (KeyValuePair<PPtr<Shader>, ShaderInfo> kvp in m_shaders)
+			{
+				if (!kvp.Key.IsNull)
+				{
+					shaders.Add(kvp.Key, kvp.Value);
+				}
+			}
+			return shaders;
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Shaders", Shaders.ExportYAML(container));
+			node.Add("m_Shaders", GetShaders().ExportYAML(container));
 			return node;
 		}
 
 		public override string ExportExtension => "shadervariants";
 
-		public IReadOnlyDictionary<PPtr<Shader>, ShaderInfo> Shaders => m_shaders;
+		public ILookup<PPtr<Shader>, ShaderInfo> Shaders => m_shaders.ToLookup(t => t.Key, t => t.Value);
 
-		private Dictionary<PPtr<Shader>, ShaderInfo> m_shaders = new Dictionary<PPtr<Shader>, ShaderInfo>();
+		private KeyValuePair<PPtr<Shader>, ShaderInfo>[] m_shaders;
 	}
 }
