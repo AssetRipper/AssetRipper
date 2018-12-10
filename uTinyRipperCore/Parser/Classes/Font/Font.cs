@@ -113,7 +113,8 @@ namespace uTinyRipper.Classes
 		{
 			return version.IsGreaterEqual(5, 6, 4, VersionType.Patch) && version.IsLess(2017) ||
 				version.IsGreaterEqual(2017, 1, 3) && version.IsLess(2017, 2) ||
-				version.IsGreaterEqual(2017, 2, 0, VersionType.Patch, 2);
+				version.IsGreaterEqual(2017, 2, 0, VersionType.Patch, 2) && version.IsLess(2017, 3) ||
+				version.IsGreaterEqual(2017, 3, 0, VersionType.Beta);
 		}
 		/// <summary>
 		/// 2018.1 and greater
