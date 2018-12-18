@@ -264,7 +264,13 @@ namespace uTinyRipper.Classes.Sprites.Utils
 				throw new ArgumentNullException(nameof(triangles));
 			}
 			m_vertices = vertices;
-			m_triangles.AddRange(triangles);
+			foreach(Vector3i triangle in triangles)
+			{
+				if(IsValidTriangle(triangle))
+				{
+					m_triangles.Add(triangle);
+				}
+			}
 		}
 
 		public List<Vector2f[]> GenerateOutlines()
@@ -325,6 +331,11 @@ namespace uTinyRipper.Classes.Sprites.Utils
 			}
 
 			return result;
+		}
+
+		private static bool IsValidTriangle(Vector3i triangle)
+		{
+			return triangle.X != triangle.Y && triangle.X != triangle.Z && triangle.Y != triangle.Z;
 		}
 		
 		private readonly IReadOnlyList<Vector3f> m_vertices;
