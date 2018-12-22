@@ -195,7 +195,9 @@ namespace uTinyRipper.AssetExporters
 		public Version Version => File.Version;
 		public Platform Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
-		public TransferInstructionFlags ExportFlags => CurrentCollection.Flags;
+		public Version ExportVersion { get; } = new Version(2017, 3, 0, VersionType.Final, 3);
+		public Platform ExportPlatform => Platform.NoTarget;
+		public TransferInstructionFlags ExportFlags => TransferInstructionFlags.NoTransferInstructionFlags | CurrentCollection.Flags;
 
 		private readonly ProjectExporter m_exporter;
 		private readonly IReadOnlyList<IExportCollection> m_collections;

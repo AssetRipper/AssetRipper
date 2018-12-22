@@ -90,6 +90,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.AvatarMask, YamlExporter);
 			OverrideExporter(ClassIDType.SceneAsset, YamlExporter);
 			OverrideExporter(ClassIDType.LightmapParameters, YamlExporter);
+			OverrideExporter(ClassIDType.SpriteAtlas, YamlExporter);
 
 			OverrideExporter(ClassIDType.Texture2D, BinExporter);
 			OverrideExporter(ClassIDType.Shader, BinExporter);

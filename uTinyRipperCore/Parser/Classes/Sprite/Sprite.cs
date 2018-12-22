@@ -125,7 +125,7 @@ namespace uTinyRipper.Classes
 					outline[i] = point + pivotShift;
 				}
 			}
-			return outlines;
+			return FixRotation(outlines);
 		}
 
 		public IReadOnlyList<IReadOnlyList<Vector2f>> GeneratePhysicsShape(Rectf rect, Vector2f pivot)
@@ -145,7 +145,7 @@ namespace uTinyRipper.Classes
 						shape[i][j] = point + pivotShift;
 					}
 				}
-				return shape;
+				return FixRotation(shape);
 			}
 			else
 			{
@@ -219,6 +219,81 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			throw new NotSupportedException();
+		}
+
+		private IReadOnlyList<IReadOnlyList<Vector2f>> FixRotation(Vector2f[][] outlines)
+		{
+			bool isPacked = RD.IsPacked;
+			SpritePackingRotation rotation = RD.PackingRotation;
+			if (IsReadRendererData(File.Version))
+			{
+				SpriteAtlas atlas = SpriteAtlas.FindAsset(File);
+				if (atlas != null)
+				{
+					SpriteAtlasData atlasData = atlas.RenderDataMap[RenderDataKey];
+					isPacked = atlasData.IsPacked;
+					rotation = atlasData.PackingRotation;
+				}
+			}
+
+			if (isPacked)
+			{
+				switch (rotation)
+				{
+					case SpritePackingRotation.FlipHorizontal:
+						{
+							foreach(Vector2f[] outline in outlines)
+							{
+								for (int i = 0; i < outline.Length; i++)
+								{
+									Vector2f vertex = outline[i];
+									outline[i] = new Vector2f(-vertex.X, vertex.Y);
+								}
+							}
+						}
+						break;
+
+					case SpritePackingRotation.FlipVertical:
+						{
+							foreach (Vector2f[] outline in outlines)
+							{
+								for (int i = 0; i < outline.Length; i++)
+								{
+									Vector2f vertex = outline[i];
+									outline[i] = new Vector2f(vertex.X, -vertex.Y);
+								}
+							}
+						}
+						break;
+
+					case SpritePackingRotation.Rotate90:
+						{
+							foreach (Vector2f[] outline in outlines)
+							{
+								for (int i = 0; i < outline.Length; i++)
+								{
+									Vector2f vertex = outline[i];
+									outline[i] = new Vector2f(vertex.Y, vertex.X);
+								}
+							}
+						}
+						break;
+
+					case SpritePackingRotation.Rotate180:
+						{
+							foreach (Vector2f[] outline in outlines)
+							{
+								for (int i = 0; i < outline.Length; i++)
+								{
+									Vector2f vertex = outline[i];
+									outline[i] = new Vector2f(-vertex.X, -vertex.Y);
+								}
+							}
+						}
+						break;
+				}
+			}
+			return outlines;
 		}
 
 		public float PixelsToUnits { get; private set; }

@@ -161,6 +161,11 @@ namespace uTinyRipper.Classes.Sprites
 			outlines.AddRange(meshOutlines);
 		}
 
+		public bool IsPacked => (SettingsRaw & 1) != 0;
+		public SpritePackingMode PackingMode => (SpritePackingMode)((SettingsRaw >> 1) & 1);
+		public SpritePackingRotation PackingRotation => (SpritePackingRotation)((SettingsRaw >> 2) & 0xF);
+		public SpriteMeshType MeshType => (SpriteMeshType)((SettingsRaw >> 6) & 0x1);
+
 		public IReadOnlyList<SpriteVertex> Vertices => m_vertices;
 		public IReadOnlyList<ushort> Indices => m_indices;
 		public IReadOnlyList<SubMesh> SubMeshes => m_subMeshes;

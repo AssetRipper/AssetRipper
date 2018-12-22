@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using uTinyRipper.Classes;
+using uTinyRipper.Classes.Sprites;
 using uTinyRipper.Classes.Textures;
 using uTinyRipper.Exporter.YAML;
 
@@ -85,48 +86,75 @@ namespace uTinyRipper.AssetExporters.Classes
 			TextureImportSettings importSettings = new TextureImportSettings(m_texture.TextureSettings);
 			node.Add("textureSettings", importSettings.ExportYAML(container));
 
-			node.Add("nPOTScale", false);
+			node.Add("nPOTScale", (int)TextureImporterNPOTScale.None);
 			node.Add("lightmap", false);
 			node.Add("compressionQuality", 50);
 
 			SpriteImportMode spriteMode;
-			switch(m_sprites.Count)
+			uint extrude;
+			SpriteMeshType meshType;
+			SpriteAlignment alignment;
+			Vector2f pivot = new Vector2f(0.5f, 0.5f);
+			Vector4f border;
+			float pixelPerUnit;
+			switch (m_sprites.Count)
 			{
 				case 0:
-					spriteMode = SpriteImportMode.Single;
+					{
+						spriteMode = SpriteImportMode.Single;
+						extrude = 1;
+						meshType = SpriteMeshType.Tight;
+						alignment = SpriteAlignment.Center;
+						pivot = new Vector2f(0.5f, 0.5f);
+						border = default;
+						pixelPerUnit = 100.0f;
+					}
 					break;
 
 				case 1:
-					Sprite sprite = m_sprites[0];
-					if(sprite.Rect == sprite.RD.TextureRect)
 					{
-						spriteMode = sprite.Name == m_texture.Name ? SpriteImportMode.Single : SpriteImportMode.Multiple;
-					}
-					else
-					{
-						spriteMode = SpriteImportMode.Multiple;
+						Sprite sprite = m_sprites[0];
+						if (sprite.Rect == sprite.RD.TextureRect)
+						{
+							spriteMode = sprite.Name == m_texture.Name ? SpriteImportMode.Single : SpriteImportMode.Multiple;
+						}
+						else
+						{
+							spriteMode = SpriteImportMode.Multiple;
+						}
+						extrude = sprite.Extrude;
+						meshType = sprite.RD.MeshType;
+						alignment = SpriteAlignment.Custom;
+						pivot = sprite.Pivot;
+						border = sprite.Border;
+						pixelPerUnit = sprite.PixelsToUnits;
 					}
 					break;
 
 				default:
-					spriteMode = SpriteImportMode.Multiple;
+					{
+						Sprite sprite = m_sprites[0];
+						spriteMode = SpriteImportMode.Multiple;
+						extrude = sprite.Extrude;
+						meshType = sprite.RD.MeshType;
+						alignment = SpriteAlignment.Center;
+						pivot = new Vector2f(0.5f, 0.5f);
+						border = default;
+						pixelPerUnit = sprite.PixelsToUnits;
+					}
 					break;
 			}
 			node.Add("spriteMode", (int)spriteMode);
+			node.Add("spriteExtrude", extrude);
+			node.Add("spriteMeshType", (int)meshType);
+			node.Add("alignment", (int)alignment);
 
-			node.Add("spriteExtrude", 1);
-			node.Add("spriteMeshType", (int)SpriteMeshType.Tight);
-			node.Add("alignment", 0);
-
-			Vector2f pivot = new Vector2f(0.5f, 0.5f);
-			node.Add("spritePivot", pivot.ExportYAML(container));
-			
-			node.Add("spriteBorder", default(Rectf).ExportYAML(container));
-			float pixelPerUnit = m_sprites.Count == 0 ? 100.0f : m_sprites[0].PixelsToUnits;
+			node.Add("spritePivot", pivot.ExportYAML(container));			
+			node.Add("spriteBorder", border.ExportYAML(container));
 			node.Add("spritePixelsToUnits", pixelPerUnit);
-			node.Add("alphaUsage", true);
+			node.Add("alphaUsage", (int)TextureImporterAlphaSource.FromInput);
 			node.Add("alphaIsTransparency", true);
-			node.Add("spriteTessellationDetail", -1);
+			node.Add("spriteTessellationDetail", -1.0f);
 
 			TextureImporterType type;
 			if (m_texture.LightmapFormat.IsNormalmap())
@@ -146,7 +174,7 @@ namespace uTinyRipper.AssetExporters.Classes
 			node.Add("compressionQualitySet", false);
 			node.Add("textureFormatSet", false);
 
-			TextureImporterPlatformSettings platform = new TextureImporterPlatformSettings();
+			TextureImporterPlatformSettings platform = new TextureImporterPlatformSettings(true);
 			TextureImporterPlatformSettings[] platforms = new TextureImporterPlatformSettings[] { platform };
 			node.Add("platformSettings", platforms.ExportYAML(container));
 

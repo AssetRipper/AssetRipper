@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.AssetExporters.Classes
+﻿namespace uTinyRipper.Classes.Sprites
 {
 	/// <summary>
 	/// Defines the type of mesh generated for a sprite.

@@ -17,6 +17,8 @@ namespace uTinyRipper.AssetExporters
 		Version Version { get; }
 		Platform Platform { get; }
 		TransferInstructionFlags Flags { get; }
+		Version ExportVersion { get; }
+		Platform ExportPlatform { get; }
 		TransferInstructionFlags ExportFlags { get; }
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -37,6 +38,15 @@ namespace uTinyRipper.AssetExporters
 
 		public static long GetMainExportID(uint classID, uint value)
 		{
+			if (classID > 100100)
+			{
+				if (value != 0)
+				{
+					throw new ArgumentException("Unique asset type with non unique modifier", nameof(value));
+				}
+				return classID;
+			}
+
 #if DEBUG
 			int digits = BitConverterExtensions.GetDigitsCount(value);
 			if(digits > 5)
@@ -110,7 +120,7 @@ namespace uTinyRipper.AssetExporters
 
 		public abstract IAssetExporter AssetExporter { get; }
 		public abstract ISerializedFile File { get; }
-		public virtual TransferInstructionFlags Flags => File.Flags;
+		public virtual TransferInstructionFlags Flags => TransferInstructionFlags.NoTransferInstructionFlags;
 		public abstract IEnumerable<Object> Assets { get; }
 		public abstract string Name { get; }
 
