@@ -158,7 +158,9 @@ namespace uTinyRipper
 					return new TerrainData(assetInfo);
 				case ClassIDType.LightmapSettings:
 					return new LightmapSettings(assetInfo);
-				case ClassIDType.OcclusionArea:
+                case ClassIDType.AudioReverbZone:
+                    return new AudioReverbZone(assetInfo);
+                case ClassIDType.OcclusionArea:
 					return new OcclusionArea(assetInfo);
 				case ClassIDType.NavMeshSettings:
 					return new NavMeshSettings(assetInfo);
@@ -199,7 +201,8 @@ namespace uTinyRipper
 				case ClassIDType.SpriteAtlas:
 					return new SpriteAtlas(assetInfo);
 
-				default:
+                default:
+					Logger.Instance.Log(LogType.Warning, LogCategory.Export, $"Asset not supported: {assetInfo.ClassID}");
 					return null;
 			}
 		}

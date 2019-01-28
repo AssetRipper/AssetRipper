@@ -183,6 +183,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\TextureImporterCompression.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\SpriteImportMode.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\TextureImporterNPOTScale.cs" />
+    <Compile Include="Parser\Classes\AudioReverbZone.cs" />
     <Compile Include="Parser\Classes\SpriteAtlas\PackingSettings.cs" />
     <Compile Include="Parser\Classes\SpriteAtlas\SpriteAtlasEditorData.cs" />
     <Compile Include="Parser\Classes\SpriteAtlas\TextureSettings.cs" />
