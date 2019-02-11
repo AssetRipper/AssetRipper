@@ -230,7 +230,7 @@ namespace uTinyRipper.AssetExporters
 					}
 					else
 					{
-						Logger.Instance.Log(LogType.Warning, LogCategory.Export, $"Can't export '{asset}' because it isn't valid");
+						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{asset}' because it isn't valid");
 						return new SkipExportCollection(exporter, asset);
 					}
 				}

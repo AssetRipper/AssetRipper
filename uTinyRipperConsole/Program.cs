@@ -87,12 +87,12 @@ namespace uTinyRipperConsole
 #endif
 
 				GameStructure.Export(exportPath, AssetSelector);
-				Logger.Instance.Log(LogType.Info, LogCategory.General, "Finished");
+				Logger.Log(LogType.Info, LogCategory.General, "Finished");
 			}
 #if !DEBUG_PROGRAM
 			catch(Exception ex)
 			{
-				Logger.Instance.Log(LogType.Error, LogCategory.General, ex.ToString());
+				Logger.Log(LogType.Error, LogCategory.General, ex.ToString());
 			}
 #endif
 		}
@@ -102,10 +102,10 @@ namespace uTinyRipperConsole
 			Version[] versions = GameStructure.FileCollection.Files.Select(t => t.Version).Distinct().ToArray();
 			if (versions.Count() > 1)
 			{
-				Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Asset collection has versions probably incompatible with each other. Here they are:");
+				Logger.Log(LogType.Warning, LogCategory.Import, $"Asset collection has versions probably incompatible with each other. Here they are:");
 				foreach (Version version in versions)
 				{
-					Logger.Instance.Log(LogType.Warning, LogCategory.Import, version.ToString());
+					Logger.Log(LogType.Warning, LogCategory.Import, version.ToString());
 				}
 			}
 		}
@@ -197,12 +197,12 @@ namespace uTinyRipperConsole
 					const int ERROR_CANCELLED = 1223;
 					if (ex.NativeErrorCode == ERROR_CANCELLED)
 					{
-						Logger.Instance.Log(LogType.Error, LogCategory.General, $"You can't export to folder {path} without Administrator permission");
+						Logger.Log(LogType.Error, LogCategory.General, $"You can't export to folder {path} without Administrator permission");
 						Console.ReadKey();
 					}
 					else
 					{
-						Logger.Instance.Log(LogType.Error, LogCategory.General, $"You have to restart application as Administator in order to export to folder {path}");
+						Logger.Log(LogType.Error, LogCategory.General, $"You have to restart application as Administator in order to export to folder {path}");
 						Console.ReadKey();
 					}
 				}

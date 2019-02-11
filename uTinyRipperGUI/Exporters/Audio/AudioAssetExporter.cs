@@ -133,14 +133,14 @@ namespace uTinyRipperGUI.Exporters
 				RESULT result = Factory.System_Create(out system);
 				if (result != RESULT.OK)
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.Export, $"Can't create factory for AudioClip {clip.Name}");
+					Logger.Log(LogType.Error, LogCategory.Export, $"Can't create factory for AudioClip {clip.Name}");
 					return;
 				}
 
 				result = system.init(1, INITFLAGS.NORMAL, IntPtr.Zero);
 				if (result != RESULT.OK)
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.Export, $"Can't init system for AudioClip {clip.Name}");
+					Logger.Log(LogType.Error, LogCategory.Export, $"Can't init system for AudioClip {clip.Name}");
 					return;
 				}
 
@@ -160,28 +160,28 @@ namespace uTinyRipperGUI.Exporters
 				result = system.createSound(data, MODE.OPENMEMORY, ref exinfo, out sound);
 				if (result != RESULT.OK)
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.Export, $"Can't create sound for AudioClip {clip.Name}");
+					Logger.Log(LogType.Error, LogCategory.Export, $"Can't create sound for AudioClip {clip.Name}");
 					return;
 				}
 
 				result = sound.getSubSound(0, out subsound);
 				if (result != RESULT.OK)
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.Export, $"Can't get subsound for AudioClip {clip.Name}");
+					Logger.Log(LogType.Error, LogCategory.Export, $"Can't get subsound for AudioClip {clip.Name}");
 					return;
 				}
 
 				result = subsound.getFormat(out SOUND_TYPE type, out SOUND_FORMAT format, out int numChannels, out int bitsPerSample);
 				if (result != RESULT.OK)
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.Export, $"Can't get format for AudioClip {clip.Name}");
+					Logger.Log(LogType.Error, LogCategory.Export, $"Can't get format for AudioClip {clip.Name}");
 					return;
 				}
 
 				result = subsound.getDefaults(out float frequency, out int priority);
 				if (result != RESULT.OK)
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.Export, $"Can't get defaults for AudioClip {clip.Name}");
+					Logger.Log(LogType.Error, LogCategory.Export, $"Can't get defaults for AudioClip {clip.Name}");
 					return;
 				}
 
@@ -189,14 +189,14 @@ namespace uTinyRipperGUI.Exporters
 				result = subsound.getLength(out uint length, TIMEUNIT.PCMBYTES);
 				if (result != RESULT.OK)
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.Export, $"Can't get length for AudioClip {clip.Name}");
+					Logger.Log(LogType.Error, LogCategory.Export, $"Can't get length for AudioClip {clip.Name}");
 					return;
 				}
 
 				result = subsound.@lock(0, length, out IntPtr ptr1, out IntPtr ptr2, out uint len1, out uint len2);
 				if (result != RESULT.OK)
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.Export, $"Can't lock for AudioClip {clip.Name}");
+					Logger.Log(LogType.Error, LogCategory.Export, $"Can't lock for AudioClip {clip.Name}");
 					return;
 				}
 
@@ -225,7 +225,7 @@ namespace uTinyRipperGUI.Exporters
 				result = subsound.unlock(ptr1, ptr2, len1, len2);
 				if (result != RESULT.OK)
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.Export, $"Can't unlock for AudioClip {clip.Name}");
+					Logger.Log(LogType.Error, LogCategory.Export, $"Can't unlock for AudioClip {clip.Name}");
 				}
 			}
 			finally

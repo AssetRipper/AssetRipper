@@ -67,7 +67,7 @@ namespace uTinyRipperGUI.Exporters
 					{
 						if (res == null)
 						{
-							Logger.Instance.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.Name}' because resources file '{resourcePath}' wasn't found");
+							Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.Name}' because resources file '{resourcePath}' wasn't found");
 							return;
 						}
 					}
@@ -266,7 +266,7 @@ namespace uTinyRipperGUI.Exporters
 	            }
 				
 				default:
-					Logger.Instance.Log(LogType.Error, LogCategory.Export, $"Unsupported texture format '{texture.TextureFormat}'");
+					Logger.Log(LogType.Error, LogCategory.Export, $"Unsupported texture format '{texture.TextureFormat}'");
 					return null;
             }
         }
