@@ -9,12 +9,15 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		public static bool IsReadRoomRolloffFactor(Version version)
+		{
+			return version.IsLess(5, 6);
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-            // All of these are 4 bytes long and Little Endian,
-            // Re-alignment should not be needed because of this.
             MinDistance = reader.ReadSingle();
             MaxDistance = reader.ReadSingle();
             ReverbPreset = reader.ReadInt32();
@@ -27,6 +30,10 @@ namespace uTinyRipper.Classes
             Reverb = reader.ReadInt32();
             ReverbDelay = reader.ReadSingle();
             HFReference = reader.ReadSingle();
+			if (IsReadRoomRolloffFactor(reader.Version))
+			{
+				RoomRolloffFactor = reader.ReadSingle();
+			}
             Diffusion = reader.ReadSingle();
             Density = reader.ReadSingle();
             LFReference = reader.ReadSingle();
@@ -35,7 +42,6 @@ namespace uTinyRipper.Classes
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-#warning TODO: serialized version according to version 2018.2.17f1
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
             node.Add("m_MinDistance", MinDistance);
             node.Add("m_MaxDistance", MaxDistance);
@@ -69,7 +75,8 @@ namespace uTinyRipper.Classes
         public int Reverb { get; private set; }
         public float ReverbDelay { get; private set; }
         public float HFReference { get; private set; }
-        public float LFReference { get; private set; }
+		public float RoomRolloffFactor { get; private set; }
+		public float LFReference { get; private set; }
         public float Diffusion { get; private set; }
         public float Density { get; private set; }
 	}

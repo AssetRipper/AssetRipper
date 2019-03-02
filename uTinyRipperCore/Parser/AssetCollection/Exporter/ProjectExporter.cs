@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.SerializedFiles;
 
@@ -72,6 +72,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.TerrainData, YamlExporter);
 			OverrideExporter(ClassIDType.OcclusionArea, YamlExporter);
 			OverrideExporter(ClassIDType.LightmapSettings, YamlExporter);
+			OverrideExporter(ClassIDType.AudioReverbZone, YamlExporter);
 			OverrideExporter(ClassIDType.NavMeshSettings, YamlExporter);
 			OverrideExporter(ClassIDType.ParticleSystem, YamlExporter);
 			OverrideExporter(ClassIDType.ParticleSystemRenderer, YamlExporter);

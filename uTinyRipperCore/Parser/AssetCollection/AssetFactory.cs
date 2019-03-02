@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.Classes;
 
@@ -158,9 +158,9 @@ namespace uTinyRipper
 					return new TerrainData(assetInfo);
 				case ClassIDType.LightmapSettings:
 					return new LightmapSettings(assetInfo);
-                case ClassIDType.AudioReverbZone:
-                    return new AudioReverbZone(assetInfo);
-                case ClassIDType.OcclusionArea:
+				case ClassIDType.AudioReverbZone:
+					return new AudioReverbZone(assetInfo);
+				case ClassIDType.OcclusionArea:
 					return new OcclusionArea(assetInfo);
 				case ClassIDType.NavMeshSettings:
 					return new NavMeshSettings(assetInfo);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.Classes.Shaders.Exporters;
@@ -71,10 +71,6 @@ namespace uTinyRipper.Classes.Shaders
 			else if (version.IsLessEqual(2018, 1))
 			{
 				return 201708220;
-			}
-			else if(version.IsLessEqual(2018, 2))
-			{
-				return 201802150;
 			}
 			else if(version.IsLessEqual(2018, 3))
 			{
