@@ -39,11 +39,11 @@ namespace uTinyRipperGUI
 				const int ERROR_CANCELLED = 1223;
 				if (ex.NativeErrorCode == ERROR_CANCELLED)
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.General, $"You can't execute desired action without Administrator permission");
+					Logger.Log(LogType.Error, LogCategory.General, $"You can't execute desired action without Administrator permission");
 				}
 				else
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.General, $"You have to restart application as Administator in order execute desired action");
+					Logger.Log(LogType.Error, LogCategory.General, $"You have to restart application as Administator in order execute desired action");
 				}
 			}
 		}

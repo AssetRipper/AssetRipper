@@ -496,7 +496,7 @@ namespace uTinyRipper
 					{
 						ReadAssembly(stream, assemblyName);
 					}
-					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
+					Logger.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
 					return;
 				}
 			}

@@ -62,7 +62,7 @@ namespace uTinyRipper
 					}
 				}
 
-				Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Dependency '{dependency}' hasn't been found");
+				Logger.Log(LogType.Warning, LogCategory.Import, $"Dependency '{dependency}' hasn't been found");
 				return false;
 			}
 			else
@@ -90,7 +90,7 @@ namespace uTinyRipper
 					}
 				}
 
-				Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
+				Logger.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
 				return false;
 			}
 			else
@@ -172,7 +172,7 @@ namespace uTinyRipper
 				{
 					PlatformStructure = new PCGameStructure(FileCollection, path);
 					pathes.Remove(path);
-					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"PC game structure has been found at '{path}'");
+					Logger.Log(LogType.Info, LogCategory.Import, $"PC game structure has been found at '{path}'");
 					return true;
 				}
 			}
@@ -187,7 +187,7 @@ namespace uTinyRipper
 				{
 					PlatformStructure = new LinuxGameStructure(FileCollection, path);
 					pathes.Remove(path);
-					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Linux game structure has been found at '{path}'");
+					Logger.Log(LogType.Info, LogCategory.Import, $"Linux game structure has been found at '{path}'");
 					return true;
 				}
 			}
@@ -202,7 +202,7 @@ namespace uTinyRipper
 				{
 					PlatformStructure = new MacGameStructure(FileCollection, path);
 					pathes.Remove(path);
-					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Mac game structure has been found at '{path}'");
+					Logger.Log(LogType.Info, LogCategory.Import, $"Mac game structure has been found at '{path}'");
 					return true;
 				}
 			}
@@ -243,11 +243,11 @@ namespace uTinyRipper
 			{
 				PlatformStructure = new AndroidGameStructure(FileCollection, androidStructure, obbStructure);
 				pathes.Remove(androidStructure);
-				Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Android game structure has been found at '{androidStructure}'");
+				Logger.Log(LogType.Info, LogCategory.Import, $"Android game structure has been found at '{androidStructure}'");
 				if (obbStructure != null)
 				{
 					pathes.Remove(obbStructure);
-					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Android obb game structure has been found at '{obbStructure}'");
+					Logger.Log(LogType.Info, LogCategory.Import, $"Android obb game structure has been found at '{obbStructure}'");
 				}
 				return true;
 			}
@@ -263,7 +263,7 @@ namespace uTinyRipper
 				{
 					PlatformStructure = new iOSGameStructure(FileCollection, path);
 					pathes.Remove(path);
-					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"iOS game structure has been found at '{path}'");
+					Logger.Log(LogType.Info, LogCategory.Import, $"iOS game structure has been found at '{path}'");
 					return true;
 				}
 			}
@@ -278,7 +278,7 @@ namespace uTinyRipper
 				{
 					PlatformStructure = new WebGLStructure(FileCollection, path);
 					pathes.Remove(path);
-					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"WebPlayer game structure has been found at '{path}'");
+					Logger.Log(LogType.Info, LogCategory.Import, $"WebPlayer game structure has been found at '{path}'");
 					return true;
 				}
 			}
@@ -293,7 +293,7 @@ namespace uTinyRipper
 				{
 					PlatformStructure = new WebPlayerStructure(FileCollection, path);
 					pathes.Remove(path);
-					Logger.Instance.Log(LogType.Info, LogCategory.Import, $"WebPlayer game structure has been found at '{path}'");
+					Logger.Log(LogType.Info, LogCategory.Import, $"WebPlayer game structure has been found at '{path}'");
 					return true;
 				}
 			}

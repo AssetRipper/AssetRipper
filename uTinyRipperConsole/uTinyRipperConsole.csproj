@@ -138,7 +138,7 @@
     <None Include="App.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UtinyRipperCore\uTinyRipperCore.csproj">
+    <ProjectReference Include="..\uTinyRipperCore\uTinyRipperCore.csproj">
       <Project>{ca9420f4-4b54-4727-91e6-cce20916d795}</Project>
       <Name>uTinyRipperCore</Name>
     </ProjectReference>

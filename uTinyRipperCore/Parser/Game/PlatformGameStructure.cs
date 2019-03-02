@@ -68,7 +68,7 @@ namespace uTinyRipper
 			if(Assemblies.TryGetValue(assemblyName, out string assemblyPath))
 			{
 				m_fileCollection.LoadAssembly(assemblyPath);
-				Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
+				Logger.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
 				return true;
 			}
 			return false;
@@ -226,7 +226,7 @@ namespace uTinyRipper
 		{
 			// HACK: split files duplicate name
 			files[name] = path;
-			Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Game file '{name}' has been found");
+			Logger.Log(LogType.Info, LogCategory.Import, $"Game file '{name}' has been found");
 		}
 
 		protected void AddAssetBundle(IDictionary<string, string> files, string name, string path)
@@ -239,13 +239,13 @@ namespace uTinyRipper
 				uniqueName = name + i++;
 			}
 			files.Add(uniqueName, path);
-			Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Asset bundle '{name}' has been found");
+			Logger.Log(LogType.Info, LogCategory.Import, $"Asset bundle '{name}' has been found");
 		}
 
 		private void LoadDependency(string name, string path)
 		{
 			m_fileCollection.Load(path);
-			Logger.Instance.Log(LogType.Info, LogCategory.Import, $"Dependency '{name}' has been loaded");
+			Logger.Log(LogType.Info, LogCategory.Import, $"Dependency '{name}' has been loaded");
 		}
 
 		public abstract string Name { get; }

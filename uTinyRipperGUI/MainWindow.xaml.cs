@@ -172,7 +172,7 @@ namespace uTinyRipperGUI
 				{
 					continue;
 				}
-				Logger.Instance.Log(LogType.Warning, LogCategory.General, FileMultiStream.IsMultiFile(file) ?
+				Logger.Log(LogType.Warning, LogCategory.General, FileMultiStream.IsMultiFile(file) ?
 					$"File '{file}' doesn't has all parts for combining" :
 					$"Neither file nor directory with path '{file}' exists");
 				return false;
@@ -202,7 +202,7 @@ namespace uTinyRipperGUI
 			{
 				Dispatcher.Invoke(() =>
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.Import, ex.ToString());
+					Logger.Log(LogType.Error, LogCategory.Import, ex.ToString());
 					AddHyperlinkText("Go to: ", "Create issue", IssuePage);
 					AddHyperlinkText("Attach file: ", ex.FileName, ex.FilePath);
 					MessageBox.Show(this, $"Please, create an issue on github page {IssuePage} with attached file '{ex.FilePath}'.",
@@ -214,7 +214,7 @@ namespace uTinyRipperGUI
 			{
 				Dispatcher.Invoke(() =>
 				{
-					Logger.Instance.Log(LogType.Error, LogCategory.Import, ex.ToString());
+					Logger.Log(LogType.Error, LogCategory.Import, ex.ToString());
 					AddHyperlinkText("Go to: ", "Create issue", IssuePage);
 					MessageBox.Show(this, $"Please, create an issue on github page {IssuePage} with attached file that cause this error.",
 						"An error during loading process has occuered!", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -266,7 +266,7 @@ namespace uTinyRipperGUI
 #if !DEBUG
 			catch (SerializedFileException ex)
 			{
-				Logger.Instance.Log(LogType.Error, LogCategory.Import, ex.ToString());
+				Logger.Log(LogType.Error, LogCategory.Import, ex.ToString());
 				Dispatcher.Invoke(() =>
 				{
 					AddHyperlinkText("Go to: ", "Create issue", IssuePage);
@@ -278,7 +278,7 @@ namespace uTinyRipperGUI
 			}
 			catch (Exception ex)
 			{
-				Logger.Instance.Log(LogType.Error, LogCategory.Import, ex.ToString());
+				Logger.Log(LogType.Error, LogCategory.Import, ex.ToString());
 				Dispatcher.Invoke(() =>
 				{
 					AddHyperlinkText("Go to: ", "Create issue", IssuePage);
@@ -288,7 +288,7 @@ namespace uTinyRipperGUI
 				return;
 			}
 #endif
-			Logger.Instance.Log(LogType.Info, LogCategory.General, "Finished!!!");
+			Logger.Log(LogType.Info, LogCategory.General, "Finished!!!");
 
 			Dispatcher.Invoke(() =>
 				{
@@ -305,10 +305,10 @@ namespace uTinyRipperGUI
 			Version[] versions = GameStructure.FileCollection.Files.Select(t => t.Version).Distinct().ToArray();
 			if (versions.Length > 1)
 			{
-				Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Asset collection has versions probably incompatible with each other. Here they are:");
+				Logger.Log(LogType.Warning, LogCategory.Import, $"Asset collection has versions probably incompatible with each other. Here they are:");
 				foreach (Version version in versions)
 				{
-					Logger.Instance.Log(LogType.Warning, LogCategory.Import, version.ToString());
+					Logger.Log(LogType.Warning, LogCategory.Import, version.ToString());
 				}
 			}
 		}

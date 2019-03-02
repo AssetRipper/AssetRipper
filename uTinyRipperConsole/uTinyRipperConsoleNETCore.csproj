@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UtinyRipperCore\uTinyRipperCoreNETStandard.csproj" />
+    <ProjectReference Include="..\uTinyRipperCore\uTinyRipperCoreNETStandard.csproj" />
   </ItemGroup>
 
 </Project>
