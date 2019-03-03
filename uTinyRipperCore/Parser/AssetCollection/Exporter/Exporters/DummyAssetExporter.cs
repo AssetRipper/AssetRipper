@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.SerializedFiles;
 
@@ -35,6 +35,7 @@ namespace uTinyRipper.AssetExporters
 			{
 				case ClassIDType.MonoManager:
 				case ClassIDType.AssetBundle:
+				case ClassIDType.ResourceManager:
 				case ClassIDType.PreloadData:
 					return new EmptyExportCollection();
 

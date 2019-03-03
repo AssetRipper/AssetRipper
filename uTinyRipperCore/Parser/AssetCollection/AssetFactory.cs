@@ -146,6 +146,8 @@ namespace uTinyRipper
 					return new AssetBundle(assetInfo);
 				case ClassIDType.WheelCollider:
 					return new WheelCollider(assetInfo);
+				case ClassIDType.ResourceManager:
+					return new ResourceManager(assetInfo);
 				case ClassIDType.NetworkManager:
 					return new NetworkManager(assetInfo);
 				case ClassIDType.PreloadData:
@@ -201,8 +203,7 @@ namespace uTinyRipper
 				case ClassIDType.SpriteAtlas:
 					return new SpriteAtlas(assetInfo);
 
-                default:
-					Logger.Instance.Log(LogType.Warning, LogCategory.Export, $"Asset not supported: {assetInfo.ClassID}");
+				default:
 					return null;
 			}
 		}

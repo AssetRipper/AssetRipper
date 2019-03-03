@@ -9,6 +9,9 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		/// <summary>
+		/// Less than 5.6.0
+		/// </summary>
 		public static bool IsReadRoomRolloffFactor(Version version)
 		{
 			return version.IsLess(5, 6);

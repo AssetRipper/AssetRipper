@@ -15,6 +15,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.MonoManager, DummyExporter);
 			OverrideExporter(ClassIDType.BuildSettings, DummyExporter);
 			OverrideExporter(ClassIDType.AssetBundle, DummyExporter);
+			OverrideExporter(ClassIDType.ResourceManager, DummyExporter);
 			OverrideExporter(ClassIDType.PreloadData, DummyExporter);
 			OverrideExporter(ClassIDType.Sprite, DummyExporter);
 			OverrideExporter(ClassIDType.SpriteAtlas, DummyExporter);
