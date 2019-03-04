@@ -25,8 +25,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_container = new Dictionary<string, PPtr<Object>>();
-			m_container.Read(reader);
+			m_container = reader.ReadStringTKVPArray<PPtr<Object>>();
 			if (IsReadDependentAssets(reader.Version, reader.Flags))
 			{
 				m_dependentAssets = reader.ReadArray<ResourceManagerDependency>();
@@ -39,9 +38,9 @@ namespace uTinyRipper.Classes
 			{
 				yield return asset;
 			}
-			foreach(PPtr<Object> asset in Container.Values)
+			foreach (KeyValuePair<string, PPtr<Object>> asset in Container)
 			{
-				yield return asset.FetchDependency(file, isLog, () => nameof(ResourceManager), ContainerName);
+				yield return asset.Value.FetchDependency(file, isLog, () => nameof(ResourceManager), ContainerName);
 			}
 			if (IsReadDependentAssets(file.Version, file.Flags))
 			{
@@ -66,13 +65,13 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public IReadOnlyDictionary<string, PPtr<Object>> Container => m_container;
+		public IReadOnlyList<KeyValuePair<string, PPtr<Object>>> Container => m_container;
 		public IReadOnlyList<ResourceManagerDependency> DependentAssets => m_dependentAssets;
 
 		public const string ContainerName = "m_Container";
 		public const string DependentAssetsName = "m_DependentAssets";
 
-		private Dictionary<string, PPtr<Object>> m_container;
+		private KeyValuePair<string, PPtr<Object>>[] m_container;
 		private ResourceManagerDependency[] m_dependentAssets;
 	}
 }

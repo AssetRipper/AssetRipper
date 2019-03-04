@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.SerializedFiles
+namespace uTinyRipper.SerializedFiles
 {
 	/// <summary>
 	/// Contains information for a block of raw serialized object data.
@@ -17,7 +17,7 @@
 		/// </summary>
 		public static bool IsReadTypeIndex(FileGeneration generation)
 		{
-			return generation >= FileGeneration.FG_550_x;
+			return generation >= FileGeneration.FG_550_2018;
 		}
 		/// <summary>
 		/// 5.0.1 to 5.4.x

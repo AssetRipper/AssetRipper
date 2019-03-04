@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.Exporter.YAML;
 
 namespace uTinyRipper.AssetExporters
@@ -31,6 +31,19 @@ namespace uTinyRipper.AssetExporters
 			where T : IYAMLExportable
 		{
 			return ExportYAML((IEnumerable<IEnumerable<T>>)_this, container);
+		}
+
+		public static YAMLNode ExportYAML<T>(this IEnumerable<KeyValuePair<string, T>> _this, IExportContainer container)
+			where T : IYAMLExportable
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
+			foreach (var kvp in _this)
+			{
+				YAMLMappingNode map = new YAMLMappingNode();
+				map.Add(kvp.Key, kvp.Value.ExportYAML(container));
+				node.Add(map);
+			}
+			return node;
 		}
 	}
 }

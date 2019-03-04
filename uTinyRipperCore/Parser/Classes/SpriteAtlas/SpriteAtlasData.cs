@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Sprites;
 using uTinyRipper.Exporter.YAML;
@@ -33,8 +33,8 @@ namespace uTinyRipper.Classes.SpriteAtlases
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			yield return Texture.FetchDependency(file, isLog, () => nameof(SpriteAtlasData), nameof(Texture));
-			yield return AlphaTexture.FetchDependency(file, isLog, () => nameof(SpriteAtlasData), nameof(AlphaTexture));
+			yield return Texture.FetchDependency(file, isLog, () => nameof(SpriteAtlasData), TextureName);
+			yield return AlphaTexture.FetchDependency(file, isLog, () => nameof(SpriteAtlasData), AlphaTextureName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.SerializedFiles
+namespace uTinyRipper.SerializedFiles
 {
 	public enum FileGeneration
 	{
@@ -14,6 +14,8 @@
 		FG_500			= 14,
 		FG_501_54		= 15,
 		FG_5unknown		= 16,
-		FG_550_x		= 17,
+		FG_550_2018		= 17,
+		FG_2019aunk		= 18,
+		FG_2019_x		= 19,
 	}
 }

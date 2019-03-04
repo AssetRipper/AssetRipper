@@ -1,4 +1,4 @@
-﻿using uTinyRipper.Classes;
+using uTinyRipper.Classes;
 
 namespace uTinyRipper.SerializedFiles
 {
@@ -17,7 +17,7 @@ namespace uTinyRipper.SerializedFiles
 		/// </summary>
 		public static bool IsReadUnknown(FileGeneration generation)
 		{
-			return generation >= FileGeneration.FG_550_x;
+			return generation >= FileGeneration.FG_550_2018;
 		}
 		/// <summary>
 		/// 5.0.0unk2 and greater
@@ -32,7 +32,7 @@ namespace uTinyRipper.SerializedFiles
 		/// </summary>
 		private static bool IsOldHashType(FileGeneration generation)
 		{
-			return generation < FileGeneration.FG_550_x;
+			return generation < FileGeneration.FG_550_2018;
 		}
 
 		public void Read(SerializedFileReader reader)

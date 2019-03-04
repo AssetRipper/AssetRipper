@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Meshes;
+using uTinyRipper.Classes.Textures;
 using uTinyRipper.Exporter.YAML;
 
 namespace uTinyRipper.Classes
@@ -190,6 +190,13 @@ namespace uTinyRipper.Classes
 		public static bool IsReadMeshMetrics(Version version)
 		{
 			return version.IsGreaterEqual(2018, 2);
+		}
+		/// <summary>
+		/// 2018.3
+		/// </summary>
+		public static bool IsReadStreamData(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
 		}
 
 		/// <summary>
@@ -454,15 +461,19 @@ namespace uTinyRipper.Classes
 				MeshUsageFlags = reader.ReadInt32();
 			}
 			
-			if(IsReadCollision(reader.Version))
+			if (IsReadCollision(reader.Version))
 			{
 				CollisionData.Read(reader);
 			}
-			if(IsReadMeshMetrics(reader.Version))
+			if (IsReadMeshMetrics(reader.Version))
 			{
 				m_meshMetrics = new float[2];
 				m_meshMetrics[0] = reader.ReadSingle();
 				m_meshMetrics[1] = reader.ReadSingle();
+			}
+			if (IsReadStreamData(reader.Version))
+			{
+				StreamData.Read(reader);
 			}
 		}
 		
@@ -501,6 +512,10 @@ namespace uTinyRipper.Classes
 			}
 #warning ???
 			node.Add("m_MeshOptimized", 0);
+			if (IsReadStreamData(container.ExportVersion))
+			{
+				node.Add("m_StreamData", StreamData.ExportYAML(container));
+			}
 			
 			return node;
 		}
@@ -596,7 +611,8 @@ namespace uTinyRipper.Classes
 		public CompressedMesh CompressedMesh;
 		public AABB LocalAABB;
 		public CollisionMeshData CollisionData;
-		
+		public StreamingInfo StreamData;
+
 		private LOD[] m_LODData;
 		private Vector2f[] m_UV;
 		private Vector2f[] m_UV1;

@@ -1,6 +1,9 @@
-﻿namespace uTinyRipper.Classes.Textures
+using uTinyRipper.AssetExporters;
+using uTinyRipper.Exporter.YAML;
+
+namespace uTinyRipper.Classes.Textures
 {
-	public struct StreamingInfo : IAssetReadable
+	public struct StreamingInfo : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -15,6 +18,19 @@
 			Offset = reader.ReadUInt32();
 			Path = path;
 		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add(OffsetName, Offset);
+			node.Add(SizeName, Size);
+			node.Add(PathName, Path);
+			return node;
+		}
+
+		public const string OffsetName = "offset";
+		public const string SizeName = "size";
+		public const string PathName = "path";
 
 		public uint Offset { get; private set; }
 		public uint Size { get; private set; }

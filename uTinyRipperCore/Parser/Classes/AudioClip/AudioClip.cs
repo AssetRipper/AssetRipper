@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters;
@@ -469,13 +469,13 @@ namespace uTinyRipper.Classes
 		{
 			get
 			{
-				if(IsReadLoadType(File.Version))
+				if (IsReadLoadType(File.Version))
 				{
 					return true;
 				}
-				if(IsReadStreamingInfo(File.Version))
+				if (IsReadStreamingInfo(File.Version))
 				{
-					if(LoadType == AudioClipLoadType.Streaming)
+					if (LoadType == AudioClipLoadType.Streaming)
 					{
 						if (m_audioData == null)
 						{
