@@ -139,10 +139,7 @@
     </ApplicationDefinition>
     <Compile Include="OutputLogger.cs" />
     <Compile Include="ThirdParty\D3DCompiler\D3DCompiler.cs" />
-    <Compile Include="ThirdParty\D3DCompiler\dia2.cs" />
     <Compile Include="ThirdParty\D3DCompiler\DotNetDxc.cs" />
-    <Compile Include="ThirdParty\D3DCompiler\HlslHost.cs" />
-    <Compile Include="ThirdParty\D3DCompiler\Tom.cs" />
     <Compile Include="ThirdParty\FMOD Studio API\fmod.cs" />
     <Compile Include="ThirdParty\FMOD Studio API\fmod_dsp.cs" />
     <Compile Include="ThirdParty\FMOD Studio API\fmod_errors.cs" />
@@ -222,14 +219,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>crunchunity.dll</TargetPath>
     </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x86\d3dcompiler_47_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>d3dcompiler_47.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x86\dxcompiler_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>dxcompiler.dll</TargetPath>
-    </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x86\fmod_x86.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>fmod.dll</TargetPath>
@@ -267,14 +256,6 @@
     <ContentWithTargetPath Include="Libraries\x64\crunchunity_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>crunchunity.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x64\d3dcompiler_47_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>d3dcompiler_47.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x64\dxcompiler_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>dxcompiler.dll</TargetPath>
     </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x64\fmod_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

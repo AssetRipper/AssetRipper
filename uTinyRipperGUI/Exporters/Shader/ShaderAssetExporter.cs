@@ -1,8 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using uTinyRipper;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
@@ -17,23 +15,6 @@ namespace uTinyRipperGUI.Exporters
 {
 	public class ShaderAssetExporter : IAssetExporter
 	{
-		static ShaderAssetExporter()
-		{
-			s_isSupported = true;
-			try
-			{
-				Assembly assembly = Assembly.GetExecutingAssembly();
-				Module module = assembly.GetModules()[0];
-				Type type = module.GetType($"{nameof(DotNetDxc)}.{nameof(DotNetDxc.DefaultDxcLib)}");
-				MethodInfo mi = type.GetMethod(nameof(DotNetDxc.DefaultDxcLib.DxcCreateInstance), BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy);
-				Marshal.Prelink(mi);
-			}
-			catch(DllNotFoundException)
-			{
-				s_isSupported = false;
-			}
-		}
-
 		public bool IsHandle(Object asset)
 		{
 			return true;
@@ -83,16 +64,12 @@ namespace uTinyRipperGUI.Exporters
 
 		private static ShaderTextExporter ShaderExporterInstantiator(Version version, ShaderGpuProgramType programType)
 		{
-			if(s_isSupported && programType.IsDX())
+			if(programType.IsDX())
 			{
 				return new ShaderDXExporter(version, programType);
 			}
 			return Shader.DefaultShaderExporterInstantiator(version, programType);
 		}
 
-		/// <summary>
-		/// DXCompiler is not supported by all OS versions
-		/// </summary>
-		private static bool s_isSupported;
 	}
 }

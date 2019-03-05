@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -16,11 +16,6 @@ namespace uTinyRipperGUI.Exporters
 		{
 			m_version = version;
 			m_programType = programType;
-		}
-
-		static ShaderDXExporter()
-		{
-			HlslDxcLib.DxcCreateInstanceFn = DefaultDxcLib.GetDxcCreateInstanceFn();
 		}
 
 		private static bool IsOffset(ShaderGpuProgramType programType)
@@ -67,23 +62,9 @@ namespace uTinyRipperGUI.Exporters
 			Marshal.FreeHGlobal(unmanagedPointer);
 		}
 
-		internal static string GetStringFromBlob(IDxcLibrary library, IDxcBlob blob)
-		{
-			unsafe
-			{
-				blob = library.GetBlobAstUf16(blob);
-				return new string(blob.GetBufferPointer(), 0, (int)(blob.GetBufferSize() / 2) - 1);
-			}
-		}
-
 		private string GetStringFromBlob(IDxcBlob blob)
 		{
-			return GetStringFromBlob(Library, blob);
-		}
-
-		internal IDxcLibrary Library
-		{
-			get { return (library ?? (library = HlslDxcLib.CreateDxcLibrary())); }
+			return Marshal.PtrToStringAnsi(blob.GetBufferPointer());
 		}
 
 		/// <summary>
@@ -93,7 +74,5 @@ namespace uTinyRipperGUI.Exporters
 
 		private readonly Version m_version;
 		private readonly ShaderGpuProgramType m_programType;
-
-		private IDxcLibrary library;
 	}
 }
