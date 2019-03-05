@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
 namespace uTinyRipper.Classes.Textures
@@ -45,18 +45,18 @@ namespace uTinyRipper.Classes.Textures
 			int version = GetSerializedVersion(container.Version);
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(version);
-			node.Add("m_FilterMode", (int)FilterMode);
-			node.Add("m_Aniso", Aniso);
-			node.Add("m_MipBias", MipBias);
+			node.Add(FilterModeName, (int)FilterMode);
+			node.Add(AnisoName, Aniso);
+			node.Add(MipBiasName, MipBias);
 			if (version == 1)
 			{
-				node.Add("m_WrapMode", (int)WrapU);
+				node.Add(WrapModeName, (int)WrapU);
 			}
 			else
 			{
-				node.Add("m_WrapU", (int)WrapU);
-				node.Add("m_WrapV", (int)WrapV);
-				node.Add("m_WrapW", (int)WrapW);
+				node.Add(WrapUName, (int)WrapU);
+				node.Add(WrapVName, (int)WrapV);
+				node.Add(WrapWName, (int)WrapW);
 			}
 			return node;
 		}
@@ -70,5 +70,13 @@ namespace uTinyRipper.Classes.Textures
 		public TextureWrapMode WrapU { get; private set; }
 		public TextureWrapMode WrapV { get; private set; }
 		public TextureWrapMode WrapW { get; private set; }
+
+		public const string FilterModeName = "m_FilterMode";
+		public const string AnisoName = "m_Aniso";
+		public const string MipBiasName = "m_MipBias";
+		public const string WrapModeName = "m_WrapMode";
+		public const string WrapUName = "m_WrapU";
+		public const string WrapVName = "m_WrapV";
+		public const string WrapWName = "m_WrapW";
 	}
 }

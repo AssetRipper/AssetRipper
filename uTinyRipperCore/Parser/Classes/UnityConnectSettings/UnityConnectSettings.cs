@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.UnityConnectSettingss;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -39,6 +39,27 @@ namespace uTinyRipper.Classes
 		/// 5.4.0 and greater
 		/// </summary>
 		public static bool IsReadEnabled(Version version)
+		{
+			return version.IsGreaterEqual(5, 4);
+		}
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		public static bool IsReadOldEventUrl(Version version)
+		{
+			return version.IsGreaterEqual(5, 4);
+		}
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadEventUrl(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
+		}
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		public static bool IsReadTestConfigUrl(Version version)
 		{
 			return version.IsGreaterEqual(5, 4);
 		}
@@ -244,6 +265,15 @@ namespace uTinyRipper.Classes
 			}
 		}
 
+		private static int GetSerializedVersion(Version version)
+		{
+			if (version.IsGreaterEqual(2018, 3))
+			{
+				return 1;
+			}
+			return 0;
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -253,8 +283,17 @@ namespace uTinyRipper.Classes
 				Enabled = reader.ReadBoolean();
 				TestMode = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);
-
+			}
+			if (IsReadOldEventUrl(reader.Version))
+			{
 				TestEventUrl = reader.ReadString();
+			}
+			if (IsReadEventUrl(reader.Version))
+			{
+				EventUrl = reader.ReadString();
+			}
+			if (IsReadTestConfigUrl(reader.Version))
+			{
 				TestConfigUrl = reader.ReadString();
 			}
 			if (IsReadTestInitMode(reader.Version))
@@ -265,6 +304,7 @@ namespace uTinyRipper.Classes
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
+
 			if (IsReadCrashReportingSettings(reader.Version, reader.Platform, reader.Flags))
 			{
 				CrashReportingSettings.Read(reader);
@@ -290,26 +330,27 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Enabled", Enabled);
-			node.Add("m_TestMode", TestMode);
-			node.Add("m_TestEventUrl", GetTestEventUrl(container.Version));
-			node.Add("m_TestConfigUrl", GetTestConfigUrl(container.Version));
-			node.Add("m_TestInitMode", TestInitMode);
-			node.Add("CrashReportingSettings", GetCrashReportingSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
-			node.Add("UnityPurchasingSettings", UnityPurchasingSettings.ExportYAML(container));
-			node.Add("UnityAnalyticsSettings", GetUnityAnalyticsSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
-			node.Add("UnityAdsSettings", GetUnityAdsSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
-			node.Add("PerformanceReportingSettings", PerformanceReportingSettings.ExportYAML(container));
+			node.ForceAddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(EnabledName, Enabled);
+			node.Add(TestModeName, TestMode);
+			node.Add(TestEventUrlName, GetTestEventUrl(container.Version));
+			node.Add(TestConfigUrlName, GetTestConfigUrl(container.Version));
+			node.Add(TestInitModeName, TestInitMode);
+			node.Add(CrashReportingSettingsName, GetCrashReportingSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
+			node.Add(UnityPurchasingSettingsName, UnityPurchasingSettings.ExportYAML(container));
+			node.Add(UnityAnalyticsSettingsName, GetUnityAnalyticsSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
+			node.Add(UnityAdsSettingsName, GetUnityAdsSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
+			node.Add(PerformanceReportingSettingsName, PerformanceReportingSettings.ExportYAML(container));
 			return node;
 		}
 
 		private string GetTestEventUrl(Version version)
 		{
-			return IsReadEnabled(version) ? TestEventUrl : string.Empty;
+			return IsReadEnabled(version) ? TestEventUrl : "https://api.uca.cloud.unity3d.com/v1/events";
 		}
 		private string GetTestConfigUrl(Version version)
 		{
-			return IsReadEnabled(version) ? TestConfigUrl : string.Empty;
+			return IsReadEnabled(version) ? TestConfigUrl : "https://config.uca.cloud.unity3d.com";
 		}
 		private CrashReportingSettings GetCrashReportingSettings(Version version, Platform platform, TransferInstructionFlags flags)
 		{
@@ -326,9 +367,27 @@ namespace uTinyRipper.Classes
 
 		public bool Enabled { get; private set; }
 		public bool TestMode { get; private set; }
+		/// <summary>
+		/// OldEventUrl since 2018.3
+		/// </summary>
 		public string TestEventUrl { get; private set; }
+		public string EventUrl { get; private set; }
+		/// <summary>
+		/// ConfigUrl since 2018.3 
+		/// </summary>
 		public string TestConfigUrl { get; private set; }
 		public int TestInitMode { get; private set; }
+
+		public const string EnabledName = "m_Enabled";
+		public const string TestModeName = "m_TestMode";
+		public const string TestEventUrlName = "m_TestEventUrl";
+		public const string TestConfigUrlName = "m_TestConfigUrl";
+		public const string TestInitModeName = "m_TestInitMode";
+		public const string CrashReportingSettingsName = "CrashReportingSettings";
+		public const string UnityPurchasingSettingsName = "UnityPurchasingSettings";
+		public const string UnityAnalyticsSettingsName = "UnityAnalyticsSettings";
+		public const string UnityAdsSettingsName = "UnityAdsSettings";
+		public const string PerformanceReportingSettingsName = "PerformanceReportingSettings";
 
 		public CrashReportingSettings CrashReportingSettings;
 		public UnityPurchasingSettings UnityPurchasingSettings;

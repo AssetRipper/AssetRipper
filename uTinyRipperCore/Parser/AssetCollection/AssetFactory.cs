@@ -124,6 +124,8 @@ namespace uTinyRipper
 					return new MonoScript(assetInfo);
 				case ClassIDType.MonoManager:
 					return new MonoManager(assetInfo);
+				case ClassIDType.Texture3D:
+					return new Texture3D(assetInfo);
 				case ClassIDType.NewAnimationTrack:
 					return new NewAnimationTrack(assetInfo);
 				case ClassIDType.FlareLayer:
@@ -192,6 +194,8 @@ namespace uTinyRipper
 					return new NavMeshData(assetInfo);
 				case ClassIDType.UnityConnectSettings:
 					return new UnityConnectSettings(assetInfo);
+				case ClassIDType.ParticleSystemForceField:
+					return new ParticleSystemForceField(assetInfo);
 				case ClassIDType.OcclusionCullingData:
 					return new OcclusionCullingData(assetInfo);
 				case ClassIDType.SceneAsset:

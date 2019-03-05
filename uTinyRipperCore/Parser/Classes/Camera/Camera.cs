@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Cameras;
 using uTinyRipper.Exporter.YAML;
@@ -17,6 +17,20 @@ namespace uTinyRipper.Classes
 		/// 2018.2 and greater
 		/// </summary>
 		public static bool IsReadProjectionMatrixMode(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadGateFitMode(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
+		}
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadFocalLength(Version version)
 		{
 			return version.IsGreaterEqual(2018, 2);
 		}
@@ -115,13 +129,21 @@ namespace uTinyRipper.Classes
 
 			ClearFlags = reader.ReadUInt32();
 			BackGroundColor.Read(reader);
-			if(IsReadProjectionMatrixMode(reader.Version))
+			if (IsReadProjectionMatrixMode(reader.Version))
 			{
 				ProjectionMatrixMode = (ProjectionMatrixMode)reader.ReadInt32();
 				SensorSize.Read(reader);
 				LensShift.Read(reader);
+			}
+			if (IsReadGateFitMode(reader.Version))
+			{
+				GateFitMode = (GateFitMode)reader.ReadInt32();
+			}
+			if (IsReadFocalLength(reader.Version))
+			{
 				FocalLength = reader.ReadSingle();
 			}
+
 			NormalizedViewPortRect.Read(reader);
 			NearClipPlane = reader.ReadSingle();
 			FarClipPlane = reader.ReadSingle();
@@ -197,11 +219,20 @@ namespace uTinyRipper.Classes
 			node.Add(ClearFlagsName, ClearFlags);
 			node.Add(BackGroundColorName, BackGroundColor.ExportYAML(container));
 
-			// 2018
-			node.Add(ProjectionMatrixModeName, (int)ProjectionMatrixMode);
-			node.Add(SensorSizeName, SensorSize.ExportYAML(container));
-			node.Add(LensShiftName, LensShift.ExportYAML(container));
-			node.Add(FocalLengthName, FocalLength);
+			if (IsReadProjectionMatrixMode(container.ExportVersion))
+			{
+				node.Add(ProjectionMatrixModeName, (int)ProjectionMatrixMode);
+				node.Add(SensorSizeName, SensorSize.ExportYAML(container));
+				node.Add(LensShiftName, LensShift.ExportYAML(container));
+			}
+			if (IsReadGateFitMode(container.ExportVersion))
+			{
+				node.Add(GateFitModeName, (int)GateFitMode);
+			}
+			if (IsReadFocalLength(container.ExportVersion))
+			{
+				node.Add(FocalLengthName, FocalLength);
+			}
 
 			node.Add(NormalizedViewPortRectName, NormalizedViewPortRect.ExportYAML(container));
 			node.Add(NearClipPlaneName, NearClipPlane);
@@ -227,6 +258,7 @@ namespace uTinyRipper.Classes
 
 		public uint ClearFlags { get; private set; }
 		public ProjectionMatrixMode ProjectionMatrixMode { get; private set; }
+		public GateFitMode GateFitMode { get; private set; }
 		public float FocalLength { get; private set; }
 		public float NearClipPlane { get; private set; }
 		public float FarClipPlane { get; private set; }
@@ -254,6 +286,7 @@ namespace uTinyRipper.Classes
 		public const string ProjectionMatrixModeName = "m_projectionMatrixMode";
 		public const string SensorSizeName = "m_SensorSize";
 		public const string LensShiftName = "m_LensShift";
+		public const string GateFitModeName = "m_GateFitMode";
 		public const string FocalLengthName = "m_FocalLength";
 		public const string NormalizedViewPortRectName = "m_NormalizedViewPortRect";
 		public const string NearClipPlaneName = "near clip plane";

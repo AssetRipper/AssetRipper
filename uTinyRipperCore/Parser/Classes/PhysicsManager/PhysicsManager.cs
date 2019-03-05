@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.PhysicsManagers;
 using uTinyRipper.Exporter.YAML;
@@ -104,6 +104,13 @@ namespace uTinyRipper.Classes
 		{
 			return version.IsGreaterEqual(2017, 3);
 		}
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadFrictionType(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
+		}
 
 		/// <summary>
 		/// 3.0.0 and greater
@@ -120,6 +127,16 @@ namespace uTinyRipper.Classes
 				return 7;
 			}
 
+			// unknown changes
+			if (version.IsGreaterEqual(2018, 3))
+			{
+				return 10;
+			}
+
+			// somewhere in 2018.3 alpha/beta
+			//return 9;
+			//return 8;
+
 			if (version.IsGreaterEqual(2017, 3))
 			{
 				return 7;
@@ -128,6 +145,7 @@ namespace uTinyRipper.Classes
 			// somewhere in 2017.3 alpha
 			//return 6;
 			//return 5;
+			// EnablePCM converted to ContactsGeneration
 			//return 4;
 
 			// SolverIterationCount renamed to DefaultSolverIterations
@@ -229,6 +247,12 @@ namespace uTinyRipper.Classes
 				WorldBounds.Read(reader);
 				WorldSubdivisions = reader.ReadInt32();
 			}
+			if (IsReadFrictionType(reader.Version))
+			{
+				FrictionType = (FrictionType)reader.ReadInt32();
+				EnableEnhancedDeterminism = reader.ReadBoolean();
+				EnableUnifiedHeightmaps = reader.ReadBoolean();
+			}
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -245,27 +269,34 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Gravity", Gravity.ExportYAML(container));
-			node.Add("m_DefaultMaterial", DefaultMaterial.ExportYAML(container));
-			node.Add("m_BounceThreshold", BounceThreshold);
-			node.Add("m_SleepThreshold", GetSleepThreshold(container.Version));
-			node.Add("m_DefaultContactOffset", GetDefaultContactOffset(container.Version));
-			node.Add("m_DefaultSolverIterations", DefaultSolverIterations);
-			node.Add("m_DefaultSolverVelocityIterations", GetDefaultSolverVelocityIterations(container.Version));
-			node.Add("m_QueriesHitBackfaces", QueriesHitBackfaces);
-			node.Add("m_QueriesHitTriggers", GetQueriesHitTriggers(container.Version));
-			node.Add("m_EnableAdaptiveForce", EnableAdaptiveForce);
-			node.Add("m_ClothInterCollisionDistance", ClothInterCollisionDistance);
-			node.Add("m_ClothInterCollisionStiffness", ClothInterCollisionStiffness);
-			node.Add("m_ContactsGeneration", (int)GetContactsGeneration(container.Version));
-			node.Add("m_LayerCollisionMatrix", GetLayerCollisionMatrix(container.Version).ExportYAML(true));
-			node.Add("m_AutoSimulation", GetAutoSimulation(container.Version));
-			node.Add("m_AutoSyncTransforms", GetAutoSyncTransforms(container.Version));
-			node.Add("m_ClothInterCollisionSettingsToggle", ClothInterCollisionSettingsToggle);
-			node.Add("m_ContactPairsMode", (int)ContactPairsMode);
-			node.Add("m_BroadphaseType", (int)BroadphaseType);
-			node.Add("m_WorldBounds", GetWorldBounds(container.Version).ExportYAML(container));
-			node.Add("m_WorldSubdivisions", GetWorldSubdivisions(container.Version));
+			node.Add(GravityName, Gravity.ExportYAML(container));
+			node.Add(DefaultMaterialName, DefaultMaterial.ExportYAML(container));
+			node.Add(BounceThresholdName, BounceThreshold);
+			node.Add(SleepThresholdName, GetSleepThreshold(container.Version));
+			node.Add(DefaultContactOffsetName, GetDefaultContactOffset(container.Version));
+			node.Add(DefaultSolverIterationsName, DefaultSolverIterations);
+			node.Add(DefaultSolverVelocityIterationsName, GetDefaultSolverVelocityIterations(container.Version));
+			node.Add(QueriesHitBackfacesName, QueriesHitBackfaces);
+			node.Add(QueriesHitTriggersName, GetQueriesHitTriggers(container.Version));
+			node.Add(EnableAdaptiveForceName, EnableAdaptiveForce);
+			node.Add(ClothInterCollisionDistanceName, ClothInterCollisionDistance);
+			node.Add(ClothInterCollisionStiffnessName, ClothInterCollisionStiffness);
+			node.Add(ContactsGenerationName, (int)GetContactsGeneration(container.Version));
+			node.Add(LayerCollisionMatrixName, GetLayerCollisionMatrix(container.Version).ExportYAML(true));
+			node.Add(AutoSimulationName, GetAutoSimulation(container.Version));
+			node.Add(AutoSyncTransformsName, GetAutoSyncTransforms(container.Version));
+			node.Add(ReuseCollisionCallbacksName, ReuseCollisionCallbacks);
+			node.Add(ClothInterCollisionSettingsToggleName, ClothInterCollisionSettingsToggle);
+			node.Add(ContactPairsModeName, (int)ContactPairsMode);
+			node.Add(BroadphaseTypeName, (int)BroadphaseType);
+			node.Add(WorldBoundsName, GetWorldBounds(container.Version).ExportYAML(container));
+			node.Add(WorldSubdivisionsName, GetWorldSubdivisions(container.Version));
+			if (IsReadFrictionType(container.ExportVersion))
+			{
+				node.Add(FrictionTypeName, (int)FrictionType);
+				node.Add(EnableEnhancedDeterminismName, EnableEnhancedDeterminism);
+				node.Add(EnableUnifiedHeightmapsName, GetEnableUnifiedHeightmaps(container.Version));
+			}
 			return node;
 		}
 
@@ -287,7 +318,11 @@ namespace uTinyRipper.Classes
 		}
 		private ContactsGeneration GetContactsGeneration(Version version)
 		{
-			return IsReadClothInterCollisionDistance(version) ? ContactsGeneration : ContactsGeneration.PersistentContactManifold;
+			if (IsReadClothInterCollisionDistance(version))
+			{
+				return ContactsGeneration;
+			}
+			return EnablePCM ? ContactsGeneration.PersistentContactManifold : ContactsGeneration.LegacyContactsGeneration;
 		}
 		private IReadOnlyList<uint> GetLayerCollisionMatrix(Version version)
 		{
@@ -322,6 +357,10 @@ namespace uTinyRipper.Classes
 		{
 			return IsReadClothInterCollisionSettingsToggle(version) ? WorldSubdivisions : 8;
 		}
+		private bool GetEnableUnifiedHeightmaps(Version version)
+		{
+			return IsReadFrictionType(version) ? EnableUnifiedHeightmaps : true;
+		}
 
 		public override string ExportName => "DynamicsManager";
 
@@ -353,10 +392,40 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<uint> LayerCollisionMatrix => m_layerCollisionMatrix;
 		public bool AutoSimulation { get; private set; }
 		public bool AutoSyncTransforms { get; private set; }
+		public bool ReuseCollisionCallbacks { get; private set; }
 		public bool ClothInterCollisionSettingsToggle { get; private set; }
 		public ContactPairsMode ContactPairsMode { get; private set; }
 		public BroadphaseType BroadphaseType { get; private set; }
 		public int WorldSubdivisions { get; private set; }
+		public FrictionType FrictionType { get; private set; }
+		public bool EnableEnhancedDeterminism { get; private set; }
+		public bool EnableUnifiedHeightmaps { get; private set; }
+
+		public const string GravityName = "m_Gravity";
+		public const string DefaultMaterialName = "m_DefaultMaterial";
+		public const string BounceThresholdName = "m_BounceThreshold";
+		public const string SleepThresholdName = "m_SleepThreshold";
+		public const string DefaultContactOffsetName = "m_DefaultContactOffset";
+		public const string DefaultSolverIterationsName = "m_DefaultSolverIterations";
+		public const string DefaultSolverVelocityIterationsName = "m_DefaultSolverVelocityIterations";
+		public const string QueriesHitBackfacesName = "m_QueriesHitBackfaces";
+		public const string QueriesHitTriggersName = "m_QueriesHitTriggers";
+		public const string EnableAdaptiveForceName = "m_EnableAdaptiveForce";
+		public const string ClothInterCollisionDistanceName = "m_ClothInterCollisionDistance";
+		public const string ClothInterCollisionStiffnessName = "m_ClothInterCollisionStiffness";
+		public const string ContactsGenerationName = "m_ContactsGeneration";
+		public const string LayerCollisionMatrixName = "m_LayerCollisionMatrix";
+		public const string AutoSimulationName = "m_AutoSimulation";
+		public const string AutoSyncTransformsName = "m_AutoSyncTransforms";
+		public const string ReuseCollisionCallbacksName = "m_ReuseCollisionCallbacks";
+		public const string ClothInterCollisionSettingsToggleName = "m_ClothInterCollisionSettingsToggle";
+		public const string ContactPairsModeName = "m_ContactPairsMode";
+		public const string BroadphaseTypeName = "m_BroadphaseType";
+		public const string WorldBoundsName = "m_WorldBounds";
+		public const string WorldSubdivisionsName = "m_WorldSubdivisions";
+		public const string FrictionTypeName = "m_FrictionType";
+		public const string EnableEnhancedDeterminismName = "m_EnableEnhancedDeterminism";
+		public const string EnableUnifiedHeightmapsName = "m_EnableUnifiedHeightmaps";
 
 		public Vector3f Gravity;
 		public PPtr<PhysicMaterial> DefaultMaterial;

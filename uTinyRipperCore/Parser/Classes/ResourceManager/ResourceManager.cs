@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.ResourceManagers;
 using uTinyRipper.Exporter.YAML;
@@ -66,6 +67,7 @@ namespace uTinyRipper.Classes
 		}
 
 		public IReadOnlyList<KeyValuePair<string, PPtr<Object>>> Container => m_container;
+		public ILookup<string, PPtr<Object>> ContainerMap => Container.ToLookup(t => t.Key, t => t.Value);
 		public IReadOnlyList<ResourceManagerDependency> DependentAssets => m_dependentAssets;
 
 		public const string ContainerName = "m_Container";

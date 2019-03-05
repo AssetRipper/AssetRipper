@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Classes.AnimationClips
+namespace uTinyRipper.Classes.AnimationClips
 {
 	public struct Clip : IAssetReadable
 	{
@@ -9,6 +9,13 @@
 		{
 			return version.IsGreaterEqual(4, 3);
 		}
+		/// <summary>
+		/// Less than 2018.3
+		/// </summary>
+		public static bool IsReadBinding(Version version)
+		{
+			return version.IsLess(2018, 3);
+		}
 
 		public void Read(AssetReader reader)
 		{
@@ -18,7 +25,10 @@
 			{
 				ConstantClip.Read(reader);
 			}
-			Binding.Read(reader);
+			if (IsReadBinding(reader.Version))
+			{
+				Binding.Read(reader);
+			}
 		}
 
 		public bool IsValid(Version version)

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -48,6 +48,13 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public static bool IsReadMeshMaterialIndex(Version version)
 		{
 			return version.IsGreaterEqual(5, 3);
+		}
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadMeshSpawn(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
 		}
 		/// <summary>
 		/// 5.3.0 and greater
@@ -137,11 +144,10 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
+			if (version.IsGreaterEqual(2018, 3))
 			{
-				return 5;
+				return 6;
 			}
-			
 			if (version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2))
 			{
 				return 5;
@@ -213,6 +219,10 @@ namespace uTinyRipper.Classes.ParticleSystems
 					MeshMaterialIndex = reader.ReadInt32();
 					MeshNormalOffset = reader.ReadSingle();
 				}
+			}
+			if (IsReadMeshSpawn(reader.Version))
+			{
+				MeshSpawn.Read(reader, false);
 			}
 			Mesh.Read(reader);
 			if (IsReadMeshRenderer(reader.Version))
@@ -295,30 +305,34 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("type", (int)GetType(container.Version));
-			node.Add("angle", Angle);
-			node.Add("length", GetExportLength(container.Version));
-			node.Add("boxThickness", BoxThickness.ExportYAML(container));
-			node.Add("radiusThickness", GetExportRadiusThickness(container.Version));
-			node.Add("donutRadius", GetExportDonutRadius(container.Version));
-			node.Add("m_Position", Position.ExportYAML(container));
-			node.Add("m_Rotation", Rotation.ExportYAML(container));
-			node.Add("m_Scale", Scale.ExportYAML(container));
-			node.Add("placementMode", (int)PlacementMode);
-			node.Add("m_MeshMaterialIndex", MeshMaterialIndex);
-			node.Add("m_MeshNormalOffset", MeshNormalOffset);
-			node.Add("m_Mesh", Mesh.ExportYAML(container));
-			node.Add("m_MeshRenderer", MeshRenderer.ExportYAML(container));
-			node.Add("m_SkinnedMeshRenderer", SkinnedMeshRenderer.ExportYAML(container));
-			node.Add("m_UseMeshMaterialIndex", UseMeshMaterialIndex);
-			node.Add("m_UseMeshColors", GetExportUseMeshColors(container.Version));
-			node.Add("alignToDirection", AlignToDirection);
-			node.Add("randomDirectionAmount", RandomDirectionAmount);
-			node.Add("sphericalDirectionAmount", SphericalDirectionAmount);
-			node.Add("randomPositionAmount", RandomPositionAmount);
-			node.Add("radius", Radius.ExportYAML(container));
-			node.Add("arc", GetArc(container.Version).ExportYAML(container));
+			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(TypeName, (int)GetType(container.Version));
+			node.Add(AngleName, Angle);
+			node.Add(LengthName, GetExportLength(container.Version));
+			node.Add(BoxThicknessName, BoxThickness.ExportYAML(container));
+			node.Add(RadiusThicknessName, GetExportRadiusThickness(container.Version));
+			node.Add(DonutRadiusName, GetExportDonutRadius(container.Version));
+			node.Add(PositionName, Position.ExportYAML(container));
+			node.Add(RotationName, Rotation.ExportYAML(container));
+			node.Add(ScaleName, Scale.ExportYAML(container));
+			node.Add(PlacementModeName, (int)PlacementMode);
+			node.Add(MeshMaterialIndexName, MeshMaterialIndex);
+			node.Add(MeshNormalOffsetName, MeshNormalOffset);
+			if (IsReadMeshSpawn(container.Version))
+			{
+				node.Add(MeshSpawnName, MeshSpawn.ExportYAML(container));
+			}
+			node.Add(MeshName, Mesh.ExportYAML(container));
+			node.Add(MeshRendererName, MeshRenderer.ExportYAML(container));
+			node.Add(SkinnedMeshRendererName, SkinnedMeshRenderer.ExportYAML(container));
+			node.Add(UseMeshMaterialIndexName, UseMeshMaterialIndex);
+			node.Add(UseMeshColorsName, GetExportUseMeshColors(container.Version));
+			node.Add(AlignToDirectionName, AlignToDirection);
+			node.Add(RandomDirectionAmountName, RandomDirectionAmount);
+			node.Add(SphericalDirectionAmountName, SphericalDirectionAmount);
+			node.Add(RandomPositionAmountName, RandomPositionAmount);
+			node.Add(RadiusName, Radius.ExportYAML(container));
+			node.Add(ArcName, GetArc(container.Version).ExportYAML(container));
 			return node;
 		}
 
@@ -417,10 +431,36 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public float SphericalDirectionAmount { get; private set; }
 		public float RandomPositionAmount { get; private set; }
 
+		public const string TypeName = "type";
+		public const string AngleName = "angle";
+		public const string LengthName = "length";
+		public const string BoxThicknessName = "boxThickness";
+		public const string RadiusThicknessName = "radiusThickness";
+		public const string DonutRadiusName = "donutRadius";
+		public const string PositionName = "m_Position";
+		public const string RotationName = "m_Rotation";
+		public const string ScaleName = "m_Scale";
+		public const string PlacementModeName = "placementMode";
+		public const string MeshMaterialIndexName = "m_MeshMaterialIndex";
+		public const string MeshNormalOffsetName = "m_MeshNormalOffset";
+		public const string MeshSpawnName = "m_MeshSpawn";
+		public const string MeshName = "m_Mesh";
+		public const string MeshRendererName = "m_MeshRenderer";
+		public const string SkinnedMeshRendererName = "m_SkinnedMeshRenderer";
+		public const string UseMeshMaterialIndexName = "m_UseMeshMaterialIndex";
+		public const string UseMeshColorsName = "m_UseMeshColors";
+		public const string AlignToDirectionName = "alignToDirection";
+		public const string RandomDirectionAmountName = "randomDirectionAmount";
+		public const string SphericalDirectionAmountName = "sphericalDirectionAmount";
+		public const string RandomPositionAmountName = "randomPositionAmount";
+		public const string RadiusName = "radius";
+		public const string ArcName = "arc";
+
 		public Vector3f BoxThickness;
 		public Vector3f Position;
 		public Vector3f Rotation;
 		public Vector3f Scale;
+		public MultiModeParameter MeshSpawn;
 		public PPtr<Mesh> Mesh;
 		public PPtr<MeshRenderer> MeshRenderer;
 		public PPtr<SkinnedMeshRenderer> SkinnedMeshRenderer;

@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
 namespace uTinyRipper.Classes
@@ -47,12 +47,12 @@ namespace uTinyRipper.Classes
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			if (IsExportImageContentsHash(container.Version))
 			{
-				node.Add("m_ImageContentsHash", ImageContentsHash.ExportYAML(container));
+				node.Add(ImageContentsHashName, ImageContentsHash.ExportYAML(container));
 			}
 			if (IsExportFallbackFormat(container.Version))
 			{
-				node.Add("m_ForcedFallbackFormat", ForcedFallbackFormat);
-				node.Add("m_DownscaleFallback", DownscaleFallback);
+				node.Add(ForcedFallbackFormatName, ForcedFallbackFormat);
+				node.Add(DownscaleFallbackName, DownscaleFallback);
 			}
 			return node;
 		}
@@ -61,5 +61,9 @@ namespace uTinyRipper.Classes
 		public bool DownscaleFallback { get; private set; }
 
 		protected virtual Hash128 ImageContentsHash => default;
+
+		public const string ImageContentsHashName = "m_ImageContentsHash";
+		public const string ForcedFallbackFormatName = "m_ForcedFallbackFormat";
+		public const string DownscaleFallbackName = "m_DownscaleFallback";
 	}
 }

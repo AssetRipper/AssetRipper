@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
@@ -59,11 +59,10 @@ namespace uTinyRipper.Classes.AnimationClips
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
+			if (version.IsGreaterEqual(5, 6))
 			{
-				return 2;
+				return 3;
 			}
-
 			if (version.IsGreaterEqual(4, 3))
 			{
 				return 2;
@@ -143,7 +142,7 @@ namespace uTinyRipper.Classes.AnimationClips
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add("m_AdditiveReferencePoseClip", default(PPtr<AnimationClip>).ExportYAML(container));
 			node.Add("m_AdditiveReferencePoseTime", 0);
 			node.Add("m_StartTime", StartTime);

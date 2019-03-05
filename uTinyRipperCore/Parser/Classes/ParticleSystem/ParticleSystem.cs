@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.ParticleSystems;
 using uTinyRipper.Exporter.YAML;
@@ -26,6 +26,13 @@ namespace uTinyRipper.Classes
 		public static bool IsReadStopAction(Version version)
 		{
 			return version.IsGreaterEqual(2017, 2);
+		}
+		/// <summary>
+		/// 2017.3 and greater
+		/// </summary>
+		public static bool IsReadCullingMode(Version version)
+		{
+			return version.IsGreaterEqual(2017, 3);
 		}
 		/// <summary>
 		/// 2017.1.0b2 and greater
@@ -137,11 +144,10 @@ namespace uTinyRipper.Classes
 		
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
+			if (version.IsGreaterEqual(2018, 3))
 			{
-				return 5;
+				return 6;
 			}
-
 			if (version.IsGreaterEqual(5, 5))
 			{
 				return 5;
@@ -178,7 +184,7 @@ namespace uTinyRipper.Classes
 			SimulationSpeed = reader.ReadSingle();
 			if (IsReadStopAction(reader.Version))
 			{
-				StopAction = reader.ReadInt32();
+				StopAction = (ParticleSystemStopAction)reader.ReadInt32();
 			}
 
 			if (IsRandomSeedFirst(reader.Version))
@@ -186,6 +192,13 @@ namespace uTinyRipper.Classes
 				RandomSeed = unchecked((int)reader.ReadUInt32());
 			}
 			
+			if (IsReadCullingMode(reader.Version))
+			{
+				CullingMode = (ParticleSystemCullingMode)reader.ReadInt32();
+				RingBufferMode = (ParticleSystemRingBufferMode)reader.ReadInt32();
+				RingBufferLoopRange.Read(reader);
+			}
+
 			Looping = reader.ReadBoolean();
 			Prewarm = reader.ReadBoolean();
 			PlayOnAwake = reader.ReadBoolean();
@@ -297,43 +310,43 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("lengthInSec", LengthInSec);
-			node.Add("simulationSpeed", SimulationSpeed);
-			node.Add("stopAction", StopAction);
-			node.Add("looping", Looping);
-			node.Add("prewarm", Prewarm);
-			node.Add("playOnAwake", PlayOnAwake);
-			node.Add("useUnscaledTime", UseUnscaledTime);
-			node.Add("autoRandomSeed", GetAutoRandomSeed(container.Version));
-			node.Add("useRigidbodyForVelocity", GetUseRigidbodyForVelocity(container.Version));
-			node.Add("startDelay", GetStartDelay(container.Version).ExportYAML(container));
-			node.Add("moveWithTransform", (int)MoveWithTransform);
-			node.Add("moveWithCustomTransform", MoveWithCustomTransform.ExportYAML(container));
-			node.Add("scalingMode", (int)GetScalingMode(container.Version));
-			node.Add("randomSeed", RandomSeed);
-			node.Add("InitialModule", InitialModule.ExportYAML(container));
-			node.Add("ShapeModule", ShapeModule.ExportYAML(container));
-			node.Add("EmissionModule", EmissionModule.ExportYAML(container));
-			node.Add("SizeModule", SizeModule.ExportYAML(container));
-			node.Add("RotationModule", RotationModule.ExportYAML(container));
-			node.Add("ColorModule", ColorModule.ExportYAML(container));
-			node.Add("UVModule", UVModule.ExportYAML(container));
-			node.Add("VelocityModule", VelocityModule.ExportYAML(container));
-			node.Add("InheritVelocityModule", GetInheritVelocityModule(container.Version).ExportYAML(container));
-			node.Add("ForceModule", ForceModule.ExportYAML(container));
-			node.Add("ExternalForcesModule", GetExternalForcesModule(container.Version).ExportYAML(container));
-			node.Add("ClampVelocityModule", ClampVelocityModule.ExportYAML(container));
-			node.Add("NoiseModule", GetNoiseModule(container.Version).ExportYAML(container));
-			node.Add("SizeBySpeedModule", SizeBySpeedModule.ExportYAML(container));
-			node.Add("RotationBySpeedModule", RotationBySpeedModule.ExportYAML(container));
-			node.Add("ColorBySpeedModule", ColorBySpeedModule.ExportYAML(container));
-			node.Add("CollisionModule", CollisionModule.ExportYAML(container));
-			node.Add("TriggerModule", GetTriggerModule(container.Version).ExportYAML(container));
-			node.Add("SubModule", SubModule.ExportYAML(container));
-			node.Add("LightsModule", GetLightsModule(container.Version).ExportYAML(container));
-			node.Add("TrailModule", GetTrailModule(container.Version).ExportYAML(container));
-			node.Add("CustomDataModule", GetCustomDataModule(container.Version).ExportYAML(container));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(LengthInSecName, LengthInSec);
+			node.Add(SimulationSpeedName, SimulationSpeed);
+			node.Add(StopActionName, (int)StopAction);
+			node.Add(LoopingName, Looping);
+			node.Add(PrewarmName, Prewarm);
+			node.Add(PlayOnAwakeName, PlayOnAwake);
+			node.Add(UseUnscaledTimeName, UseUnscaledTime);
+			node.Add(AutoRandomSeedName, GetAutoRandomSeed(container.Version));
+			node.Add(UseRigidbodyForVelocityName, GetUseRigidbodyForVelocity(container.Version));
+			node.Add(StartDelayName, GetStartDelay(container.Version).ExportYAML(container));
+			node.Add(MoveWithTransformName, (int)MoveWithTransform);
+			node.Add(MoveWithCustomTransformName, MoveWithCustomTransform.ExportYAML(container));
+			node.Add(ScalingModeName, (int)GetScalingMode(container.Version));
+			node.Add(RandomSeedName, RandomSeed);
+			node.Add(InitialModuleName, InitialModule.ExportYAML(container));
+			node.Add(ShapeModuleName, ShapeModule.ExportYAML(container));
+			node.Add(EmissionModuleName, EmissionModule.ExportYAML(container));
+			node.Add(SizeModuleName, SizeModule.ExportYAML(container));
+			node.Add(RotationModuleName, RotationModule.ExportYAML(container));
+			node.Add(ColorModuleName, ColorModule.ExportYAML(container));
+			node.Add(UVModuleName, UVModule.ExportYAML(container));
+			node.Add(VelocityModuleName, VelocityModule.ExportYAML(container));
+			node.Add(InheritVelocityModuleName, GetInheritVelocityModule(container.Version).ExportYAML(container));
+			node.Add(ForceModuleName, ForceModule.ExportYAML(container));
+			node.Add(ExternalForcesModuleName, GetExternalForcesModule(container.Version).ExportYAML(container));
+			node.Add(ClampVelocityModuleName, ClampVelocityModule.ExportYAML(container));
+			node.Add(NoiseModuleName, GetNoiseModule(container.Version).ExportYAML(container));
+			node.Add(SizeBySpeedModuleName, SizeBySpeedModule.ExportYAML(container));
+			node.Add(RotationBySpeedModuleName, RotationBySpeedModule.ExportYAML(container));
+			node.Add(ColorBySpeedModuleName, ColorBySpeedModule.ExportYAML(container));
+			node.Add(CollisionModuleName, CollisionModule.ExportYAML(container));
+			node.Add(TriggerModuleName, GetTriggerModule(container.Version).ExportYAML(container));
+			node.Add(SubModuleName, SubModule.ExportYAML(container));
+			node.Add(LightsModuleName, GetLightsModule(container.Version).ExportYAML(container));
+			node.Add(TrailModuleName, GetTrailModule(container.Version).ExportYAML(container));
+			node.Add(CustomDataModuleName, GetCustomDataModule(container.Version).ExportYAML(container));
 			return node;
 		}
 
@@ -388,7 +401,10 @@ namespace uTinyRipper.Classes
 		/// Speed previously
 		/// </summary>
 		public float SimulationSpeed { get; private set; }
-		public int StopAction { get; private set; }
+		public ParticleSystemStopAction StopAction { get; private set; }
+		public ParticleSystemCullingMode CullingMode { get; private set; }
+		public ParticleSystemRingBufferMode RingBufferMode { get; private set; }
+		public Vector2f RingBufferLoopRange { get; private set; }
 		public bool Looping { get; private set; }
 		public bool Prewarm { get; private set; }
 		public bool PlayOnAwake { get; private set; }
@@ -420,7 +436,44 @@ namespace uTinyRipper.Classes
 		public LightsModule LightsModule { get; } = new LightsModule();
 		public TrailModule TrailModule { get; } = new TrailModule();
 		public CustomDataModule CustomDataModule { get; } = new CustomDataModule();
-		
+
+		public const string LengthInSecName = "lengthInSec";
+		public const string SimulationSpeedName = "simulationSpeed";
+		public const string StopActionName = "stopAction";
+		public const string LoopingName = "looping";
+		public const string PrewarmName = "prewarm";
+		public const string PlayOnAwakeName = "playOnAwake";
+		public const string UseUnscaledTimeName = "useUnscaledTime";
+		public const string AutoRandomSeedName = "autoRandomSeed";
+		public const string UseRigidbodyForVelocityName = "useRigidbodyForVelocity";
+		public const string StartDelayName = "startDelay";
+		public const string MoveWithTransformName = "moveWithTransform";
+		public const string MoveWithCustomTransformName = "moveWithCustomTransform";
+		public const string ScalingModeName = "scalingMode";
+		public const string RandomSeedName = "randomSeed";
+		public const string InitialModuleName = "InitialModule";
+		public const string ShapeModuleName = "ShapeModule";
+		public const string EmissionModuleName = "EmissionModule";
+		public const string SizeModuleName = "SizeModule";
+		public const string RotationModuleName = "RotationModule";
+		public const string ColorModuleName = "ColorModule";
+		public const string UVModuleName = "UVModule";
+		public const string VelocityModuleName = "VelocityModule";
+		public const string InheritVelocityModuleName = "InheritVelocityModule";
+		public const string ForceModuleName = "ForceModule";
+		public const string ExternalForcesModuleName = "ExternalForcesModule";
+		public const string ClampVelocityModuleName = "ClampVelocityModule";
+		public const string NoiseModuleName = "NoiseModule";
+		public const string SizeBySpeedModuleName = "SizeBySpeedModule";
+		public const string RotationBySpeedModuleName = "RotationBySpeedModule";
+		public const string ColorBySpeedModuleName = "ColorBySpeedModule";
+		public const string CollisionModuleName = "CollisionModule";
+		public const string TriggerModuleName = "TriggerModule";
+		public const string SubModuleName = "SubModule";
+		public const string LightsModuleName = "LightsModule";
+		public const string TrailModuleName = "TrailModule";
+		public const string CustomDataModuleName = "CustomDataModule";
+
 		public MinMaxCurve StartDelay;
 		public PPtr<Transform> MoveWithCustomTransform;
 	}

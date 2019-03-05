@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AnimationClips;
@@ -124,6 +124,13 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(4, 3);
 		}
 		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadHasGenericRootTransform(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
+		}
+		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
 		public static bool IsReadEvents(Version version)
@@ -148,11 +155,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 6;
-			}
-			
 			if (version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2))
 			{
 				return 6;
@@ -252,6 +254,13 @@ namespace uTinyRipper.Classes
 				ClipBindingConstant.Read(reader);
 			}
 
+			if (IsReadHasGenericRootTransform(reader.Version))
+			{
+				HasGenericRootTransform = reader.ReadBoolean();
+				HasMotionFloatCurves = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
+			}
+
 			if (IsReadEvents(reader.Version))
 			{
 				m_events = reader.ReadArray<AnimationEvent>();
@@ -311,7 +320,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add("m_Legacy", GetLegacy(container.Version));
 			node.Add("m_Compressed", Compressed);
 			node.Add("m_UseHighQualityCurve", UseHightQualityCurve);
@@ -332,8 +341,8 @@ namespace uTinyRipper.Classes
 			node.Add("m_AnimationClipSettings", MuscleClip.ExportYAML(container));
 			node.Add("m_EditorCurves", YAMLSequenceNode.Empty);
 			node.Add("m_EulerEditorCurves", YAMLSequenceNode.Empty);
-			node.Add("m_HasGenericRootTransform", false);
-			node.Add("m_HasMotionFloatCurves", false);
+			node.Add("m_HasGenericRootTransform", HasGenericRootTransform);
+			node.Add("m_HasMotionFloatCurves", HasMotionFloatCurves);
 			node.Add("m_GenerateMotionCurves", false);
 			node.Add("m_Events", IsReadEvents(container.Version) ? m_events.ExportYAML(container) : YAMLSequenceNode.Empty);
 			
@@ -540,6 +549,8 @@ namespace uTinyRipper.Classes
 		public float SampleRate { get; private set; }
 		public WrapMode WrapMode { get; private set; }
 		public uint MuscleClipSize { get; private set; }
+		public bool HasGenericRootTransform { get; private set; }
+		public bool HasMotionFloatCurves { get; private set; }
 		public IReadOnlyList<AnimationEvent> Events => m_events;
 				
 		public AABB Bounds;

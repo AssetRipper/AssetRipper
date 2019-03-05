@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
@@ -38,11 +38,6 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 4;
-			}
-			
 			if (version.IsGreaterEqual(5, 6))
 			{
 				return 4;
@@ -139,16 +134,21 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("rateOverTime", RateOverTime.ExportYAML(container));
-			node.Add("rateOverDistance", RateOverDistance.ExportYAML(container));
-			node.Add("m_BurstCount", BurstCount);
-			node.Add("m_Bursts", Bursts.ExportYAML(container));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(RateOverTimeName, RateOverTime.ExportYAML(container));
+			node.Add(RateOverDistanceName, RateOverDistance.ExportYAML(container));
+			node.Add(BurstCountName, BurstCount);
+			node.Add(BurstsName, Bursts.ExportYAML(container));
 			return node;
 		}
 
 		public int BurstCount { get; private set; }
 		public IReadOnlyList<ParticleSystemEmissionBurst> Bursts => m_bursts;
+
+		public const string RateOverTimeName = "rateOverTime";
+		public const string RateOverDistanceName = "rateOverDistance";
+		public const string BurstCountName = "m_BurstCount";
+		public const string BurstsName = "m_Bursts";
 
 		/// <summary>
 		/// Rate previously

@@ -184,6 +184,16 @@
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\SpriteImportMode.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\TextureImporterNPOTScale.cs" />
     <Compile Include="Parser\Classes\AudioReverbZone.cs" />
+    <Compile Include="Parser\Classes\Camera\GateFitMode.cs" />
+    <Compile Include="Parser\Classes\ParticleSystemForceField\ParticleSystemForceField.cs" />
+    <Compile Include="Parser\Classes\ParticleSystemForceField\ParticleSystemForceFieldParameters.cs" />
+    <Compile Include="Parser\Classes\ParticleSystemForceField\ParticleSystemForceFieldShape.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ParticleSystemCullingMode.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ParticleSystemRingBufferMode.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\ParticleSystemStopAction.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\TrailModule\ParticleSystemTrailTextureMode.cs" />
+    <Compile Include="Parser\Classes\ParticleSystem\UV\ParticleSystemAnimationTimeMode.cs" />
+    <Compile Include="Parser\Classes\PhysicsManager\FrictionType.cs" />
     <Compile Include="Parser\Classes\ResourceManager\ResourceManager.cs" />
     <Compile Include="Parser\Classes\ResourceManager\ResourceManagerDependency.cs" />
     <Compile Include="Parser\Classes\SpriteAtlas\PackingSettings.cs" />
@@ -520,6 +530,7 @@
     <Compile Include="Parser\Classes\TerrainData\TreeInstance.cs" />
     <Compile Include="Parser\Classes\TerrainData\TreePrototype.cs" />
     <Compile Include="Parser\Classes\Texture2D\TextureUsageMode.cs" />
+    <Compile Include="Parser\Classes\Texture3D.cs" />
     <Compile Include="Parser\Classes\TimeManager.cs" />
     <Compile Include="Parser\Classes\TransformAnimationTrack.cs" />
     <Compile Include="Parser\Classes\AnimationClip\WrapMode.cs" />
@@ -1093,5 +1104,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -60,6 +60,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.Light, YamlExporter);
 			OverrideExporter(ClassIDType.Animation, YamlExporter);
 			OverrideExporter(ClassIDType.MonoBehaviour, YamlExporter);
+			OverrideExporter(ClassIDType.Texture3D, YamlExporter);
 			OverrideExporter(ClassIDType.FlareLayer, YamlExporter);
 			OverrideExporter(ClassIDType.NavMeshAreas, YamlExporter);
 			OverrideExporter(ClassIDType.PhysicMaterial, YamlExporter);
@@ -87,6 +88,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.ClusterInputManager, YamlExporter);
 			OverrideExporter(ClassIDType.NavMeshData, YamlExporter);
 			OverrideExporter(ClassIDType.UnityConnectSettings, YamlExporter);
+			OverrideExporter(ClassIDType.ParticleSystemForceField, YamlExporter);
 			OverrideExporter(ClassIDType.OcclusionCullingData, YamlExporter);
 			OverrideExporter(ClassIDType.Prefab, YamlExporter);
 			OverrideExporter(ClassIDType.AvatarMask, YamlExporter);

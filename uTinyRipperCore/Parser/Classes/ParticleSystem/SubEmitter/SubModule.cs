@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -112,11 +112,13 @@ namespace uTinyRipper.Classes.ParticleSystems
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
 			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("subEmitters", SubEmitters.ExportYAML(container));
+			node.Add(SubEmittersName, SubEmitters.ExportYAML(container));
 			return node;
 		}
 
 		public IReadOnlyList<SubEmitterData> SubEmitters => m_subEmitters;
+
+		public const string SubEmittersName = "subEmitters";
 
 		private SubEmitterData[] m_subEmitters;
 	}

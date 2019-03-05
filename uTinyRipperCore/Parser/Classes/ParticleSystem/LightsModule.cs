@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -45,15 +45,15 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add("ratio", Ratio);
-			node.Add("light", Light.ExportYAML(container));
-			node.Add("randomDistribution", RandomDistribution);
-			node.Add("color", Color);
-			node.Add("range", Range);
-			node.Add("intensity", Intensity);
-			node.Add("rangeCurve", RangeCurve.ExportYAML(container));
-			node.Add("intensityCurve", IntensityCurve.ExportYAML(container));
-			node.Add("maxLights", MaxLights);
+			node.Add(RatioName, Ratio);
+			node.Add(LightName, Light.ExportYAML(container));
+			node.Add(RandomDistributionName, RandomDistribution);
+			node.Add(ColorName, Color);
+			node.Add(RangeName, Range);
+			node.Add(IntensityName, Intensity);
+			node.Add(RangeCurveName, RangeCurve.ExportYAML(container));
+			node.Add(IntensityCurveName, IntensityCurve.ExportYAML(container));
+			node.Add(MaxLightsName, MaxLights);
 			return node;
 		}
 
@@ -63,6 +63,16 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public bool Range { get; private set; }
 		public bool Intensity { get; private set; }
 		public int MaxLights { get; private set; }
+
+		public const string RatioName = "ratio";
+		public const string LightName = "light";
+		public const string RandomDistributionName = "randomDistribution";
+		public const string ColorName = "color";
+		public const string RangeName = "range";
+		public const string IntensityName = "intensity";
+		public const string RangeCurveName = "rangeCurve";
+		public const string IntensityCurveName = "intensityCurve";
+		public const string MaxLightsName = "maxLights";
 
 		public PPtr<Light> Light;
 		public MinMaxCurve RangeCurve;

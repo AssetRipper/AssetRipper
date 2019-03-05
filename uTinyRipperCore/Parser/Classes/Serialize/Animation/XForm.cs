@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
 namespace uTinyRipper.Classes
@@ -15,7 +15,7 @@ namespace uTinyRipper.Classes
 
 		public void Read(AssetReader reader)
 		{
-			if(IsVector3(reader.Version))
+			if (IsVector3(reader.Version))
 			{
 				T.Read3(reader);
 			}

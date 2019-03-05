@@ -5,6 +5,12 @@ namespace uTinyRipper.Classes.Textures
 {
 	public struct StreamingInfo : IAssetReadable, IYAMLExportable
 	{
+		public StreamingInfo(bool _):
+			this()
+		{
+			Path = string.Empty;
+		}
+
 		public void Read(AssetReader reader)
 		{
 			Offset = reader.ReadUInt32();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
@@ -217,6 +217,7 @@ namespace uTinyRipper.Classes
 
 		protected sealed override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
+			// TODO: NotImplemenetedException?
 			throw new NotSupportedException();
 		}
 

@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
 namespace uTinyRipper.Classes.ParticleSystems
@@ -13,9 +13,25 @@ namespace uTinyRipper.Classes.ParticleSystems
 			Speed = new MinMaxCurve(1.0f);
 		}
 
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsConditionalValue(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
+		}
+
 		public void Read(AssetReader reader)
 		{
-			Value = reader.ReadSingle();
+			Read(reader, true);
+		}
+
+		public void Read(AssetReader reader, bool readValue)
+		{
+			if (!IsConditionalValue(reader.Version) || readValue)
+			{
+				Value = reader.ReadSingle();
+			}
 			Mode = (ParticleSystemShapeMultiModeValue)reader.ReadInt32();
 			Spread = reader.ReadSingle();
 			Speed.Read(reader);

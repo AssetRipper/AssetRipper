@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
@@ -149,6 +149,13 @@ namespace uTinyRipper.Classes.QualitySettingss
 			return version.IsGreaterEqual(5, 3);
 		}
 		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadAsyncUploadPersistentBuffer(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
+		}
+		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
 		public static bool IsReadResolutionScalingFixedDPIFactor(Version version)
@@ -173,8 +180,13 @@ namespace uTinyRipper.Classes.QualitySettingss
 		
 		private static int GetSerializedVersion(Version version)
 		{
+			if (Config.IsExportTopmostSerializedVersion)
+			{
+				return 2;
+			}
+
 			// SyncToVBL has been removed
-			if (Config.IsExportTopmostSerializedVersion || version.IsGreaterEqual(3, 4))
+			if (version.IsGreaterEqual(3, 4))
 			{
 				return 2;
 			}
@@ -362,6 +374,11 @@ namespace uTinyRipper.Classes.QualitySettingss
 				AsyncUploadTimeSlice = reader.ReadInt32();
 				AsyncUploadBufferSize = reader.ReadInt32();
 			}
+			if (IsReadAsyncUploadPersistentBuffer(reader.Version))
+			{
+				AsyncUploadPersistentBuffer = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
+			}
 			if (IsReadResolutionScalingFixedDPIFactor(reader.Version))
 			{
 				ResolutionScalingFixedDPIFactor = reader.ReadSingle();
@@ -383,40 +400,46 @@ namespace uTinyRipper.Classes.QualitySettingss
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("name", Name);
-			node.Add("pixelLightCount", PixelLightCount);
-			node.Add("shadows", (int)Shadows);
-			node.Add("shadowResolution", (int)ShadowResolution);
-			node.Add("shadowProjection", (int)ShadowProjection);
-			node.Add("shadowCascades", (int)ShadowCascades);
-			node.Add("shadowDistance", ShadowDistance);
-			node.Add("shadowNearPlaneOffset", ShadowNearPlaneOffset);
-			node.Add("shadowCascade2Split", ShadowCascade2Split);
-			node.Add("shadowCascade4Split", ShadowCascade4Split.ExportYAML(container));
-			node.Add("shadowmaskMode", (int)ShadowmaskMode);
-			node.Add("blendWeights", (int)BlendWeights);
-			node.Add("textureQuality", (int)TextureQuality);
-			node.Add("anisotropicTextures", (int)AnisotropicTextures);
-			node.Add("antiAliasing", (int)AntiAliasing);
-			node.Add("softParticles", SoftParticles);
-			node.Add("softVegetation", SoftVegetation);
-			node.Add("realtimeReflectionProbes", RealtimeReflectionProbes);
-			node.Add("billboardsFaceCameraPosition", BillboardsFaceCameraPosition);
-			node.Add("vSyncCount", (int)VSyncCount);
-			node.Add("lodBias", LodBias);
-			node.Add("maximumLODLevel", MaximumLODLevel);
-			// 2018
-			//node.Add("streamingMipmapsActive", StreamingMipmapsActive);
-			//node.Add("streamingMipmapsAddAllCameras", StreamingMipmapsAddAllCameras);
-			//node.Add("streamingMipmapsMemoryBudget", StreamingMipmapsMemoryBudget);
-			//node.Add("streamingMipmapsRenderersPerFrame", StreamingMipmapsRenderersPerFrame);
-			//node.Add("streamingMipmapsMaxLevelReduction", StreamingMipmapsMaxLevelReduction);
-			//node.Add("streamingMipmapsMaxFileIORequests", StreamingMipmapsMaxFileIORequests);
-			node.Add("particleRaycastBudget", ParticleRaycastBudget);
-			node.Add("asyncUploadTimeSlice", AsyncUploadTimeSlice);
-			node.Add("asyncUploadBufferSize", AsyncUploadBufferSize);
-			node.Add("resolutionScalingFixedDPIFactor", ResolutionScalingFixedDPIFactor);
-			node.Add("excludedTargetPlatforms", GetExcludedTargetPlatforms(container.Version, container.Flags).ExportYAML());
+			node.Add(NameName, Name);
+			node.Add(PixelLightCountName, PixelLightCount);
+			node.Add(ShadowsName, (int)Shadows);
+			node.Add(ShadowResolutionName, (int)ShadowResolution);
+			node.Add(ShadowProjectionName, (int)ShadowProjection);
+			node.Add(ShadowCascadesName, (int)ShadowCascades);
+			node.Add(ShadowDistanceName, ShadowDistance);
+			node.Add(ShadowNearPlaneOffsetName, ShadowNearPlaneOffset);
+			node.Add(ShadowCascade2SplitName, ShadowCascade2Split);
+			node.Add(ShadowCascade4SplitName, ShadowCascade4Split.ExportYAML(container));
+			node.Add(ShadowmaskModeName, (int)ShadowmaskMode);
+			node.Add(BlendWeightsName, (int)BlendWeights);
+			node.Add(TextureQualityName, (int)TextureQuality);
+			node.Add(AnisotropicTexturesName, (int)AnisotropicTextures);
+			node.Add(AntiAliasingName, (int)AntiAliasing);
+			node.Add(SoftParticlesName, SoftParticles);
+			node.Add(SoftVegetationName, SoftVegetation);
+			node.Add(RealtimeReflectionProbesName, RealtimeReflectionProbes);
+			node.Add(BillboardsFaceCameraPositionName, BillboardsFaceCameraPosition);
+			node.Add(VSyncCountName, (int)VSyncCount);
+			node.Add(LodBiasName, LodBias);
+			node.Add(MaximumLODLevelName, MaximumLODLevel);
+			if (IsReadStreamingMipmapsActive(container.ExportVersion))
+			{
+				node.Add(StreamingMipmapsActiveName, StreamingMipmapsActive);
+				node.Add(StreamingMipmapsAddAllCamerasName, GetStreamingMipmapsAddAllCameras(container.Version));
+				node.Add(StreamingMipmapsMemoryBudgetName, GetStreamingMipmapsMemoryBudget(container.Version));
+				node.Add(StreamingMipmapsRenderersPerFrameName, GetStreamingMipmapsRenderersPerFrame(container.Version));
+				node.Add(StreamingMipmapsMaxLevelReductionName, GetStreamingMipmapsMaxLevelReduction(container.Version));
+				node.Add(StreamingMipmapsMaxFileIORequestsName, GetStreamingMipmapsMaxFileIORequests(container.Version));
+			}
+			node.Add(ParticleRaycastBudgetName, ParticleRaycastBudget);
+			node.Add(AsyncUploadTimeSliceName, AsyncUploadTimeSlice);
+			node.Add(AsyncUploadBufferSizeName, AsyncUploadBufferSize);
+			if (IsReadAsyncUploadPersistentBuffer(container.ExportVersion))
+			{
+				node.Add(AsyncUploadPersistentBufferName, AsyncUploadPersistentBuffer);
+			}
+			node.Add(ResolutionScalingFixedDPIFactorName, ResolutionScalingFixedDPIFactor);
+			node.Add(ExcludedTargetPlatformsName, GetExcludedTargetPlatforms(container.Version, container.Flags).ExportYAML());
 			return node;
 		}
 
@@ -429,6 +452,26 @@ namespace uTinyRipper.Classes.QualitySettingss
 			}
 #endif
 			return new string[0];
+		}
+		private bool GetStreamingMipmapsAddAllCameras(Version version)
+		{
+			return IsReadStreamingMipmapsActive(version) ? StreamingMipmapsAddAllCameras : true;
+		}
+		private float GetStreamingMipmapsMemoryBudget(Version version)
+		{
+			return IsReadStreamingMipmapsActive(version) ? StreamingMipmapsMemoryBudget : 512.0f;
+		}
+		private int GetStreamingMipmapsRenderersPerFrame(Version version)
+		{
+			return IsReadStreamingMipmapsActive(version) ? StreamingMipmapsRenderersPerFrame : 512;
+		}
+		private int GetStreamingMipmapsMaxLevelReduction(Version version)
+		{
+			return IsReadStreamingMipmapsActive(version) ? StreamingMipmapsMaxLevelReduction : 2;
+		}
+		private int GetStreamingMipmapsMaxFileIORequests(Version version)
+		{
+			return IsReadStreamingMipmapsActive(version) ? StreamingMipmapsMaxFileIORequests : 1024;
 		}
 
 		public string Name { get; set; }
@@ -462,10 +505,46 @@ namespace uTinyRipper.Classes.QualitySettingss
 		public int ParticleRaycastBudget { get; set; }
 		public int AsyncUploadTimeSlice { get; set; }
 		public int AsyncUploadBufferSize { get; set; }
+		public bool AsyncUploadPersistentBuffer { get; set; }
 		public float ResolutionScalingFixedDPIFactor { get; set; }
 #if UNIVERSAL
 		public IReadOnlyList<string> ExcludedTargetPlatforms => m_excludedTargetPlatforms;
 #endif
+
+		public const string NameName = "name";
+		public const string PixelLightCountName = "pixelLightCount";
+		public const string ShadowsName = "shadows";
+		public const string ShadowResolutionName = "shadowResolution";
+		public const string ShadowProjectionName = "shadowProjection";
+		public const string ShadowCascadesName = "shadowCascades";
+		public const string ShadowDistanceName = "shadowDistance";
+		public const string ShadowNearPlaneOffsetName = "shadowNearPlaneOffset";
+		public const string ShadowCascade2SplitName = "shadowCascade2Split";
+		public const string ShadowCascade4SplitName = "shadowCascade4Split";
+		public const string ShadowmaskModeName = "shadowmaskMode";
+		public const string BlendWeightsName = "blendWeights";
+		public const string TextureQualityName = "textureQuality";
+		public const string AnisotropicTexturesName = "anisotropicTextures";
+		public const string AntiAliasingName = "antiAliasing";
+		public const string SoftParticlesName = "softParticles";
+		public const string SoftVegetationName = "softVegetation";
+		public const string RealtimeReflectionProbesName = "realtimeReflectionProbes";
+		public const string BillboardsFaceCameraPositionName = "billboardsFaceCameraPosition";
+		public const string VSyncCountName = "vSyncCount";
+		public const string LodBiasName = "lodBias";
+		public const string MaximumLODLevelName = "maximumLODLevel";
+		public const string StreamingMipmapsActiveName = "streamingMipmapsActive";
+		public const string StreamingMipmapsAddAllCamerasName = "streamingMipmapsAddAllCameras";
+		public const string StreamingMipmapsMemoryBudgetName = "streamingMipmapsMemoryBudget";
+		public const string StreamingMipmapsRenderersPerFrameName = "streamingMipmapsRenderersPerFrame";
+		public const string StreamingMipmapsMaxLevelReductionName = "streamingMipmapsMaxLevelReduction";
+		public const string StreamingMipmapsMaxFileIORequestsName = "streamingMipmapsMaxFileIORequests";
+		public const string ParticleRaycastBudgetName = "particleRaycastBudget";
+		public const string AsyncUploadTimeSliceName = "asyncUploadTimeSlice";
+		public const string AsyncUploadBufferSizeName = "asyncUploadBufferSize";
+		public const string AsyncUploadPersistentBufferName = "asyncUploadPersistentBuffer";
+		public const string ResolutionScalingFixedDPIFactorName = "resolutionScalingFixedDPIFactor";
+		public const string ExcludedTargetPlatformsName = "excludedTargetPlatforms";
 
 		public Vector3f ShadowCascade4Split;
 

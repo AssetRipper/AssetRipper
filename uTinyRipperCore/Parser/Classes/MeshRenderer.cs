@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -37,10 +37,12 @@ namespace uTinyRipper.Classes
 
 			if(!AdditionalVertexStreams.IsNull)
 			{
-				yield return AdditionalVertexStreams.FetchDependency(file, isLog, ToLogString, "m_AdditionalVertexStreams");
+				yield return AdditionalVertexStreams.FetchDependency(file, isLog, ToLogString, AdditionalVertexStreamsName);
 			}
 		}
-		
+
+		public const string AdditionalVertexStreamsName = "m_AdditionalVertexStreams";
+
 		public PPtr<Mesh> AdditionalVertexStreams;
 	}
 }

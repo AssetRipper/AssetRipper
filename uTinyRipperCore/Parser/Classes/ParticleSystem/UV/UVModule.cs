@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -15,11 +15,25 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2017);
 		}
 		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadTimeMode(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
+		}
+		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
 		public static bool IsReadStartFrame(Version version)
 		{
 			return version.IsGreaterEqual(5, 4);
+		}
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadSpeedRange(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
 		}
 		/// <summary>
 		/// 5.4.0 and greater
@@ -43,6 +57,14 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2017);
 		}
 
+		/// <summary>
+		/// Less than 2018.3
+		/// </summary>
+		private static bool IsReadFlipUFirst(Version version)
+		{
+			return version.IsLess(2018, 3);
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -51,10 +73,19 @@ namespace uTinyRipper.Classes.ParticleSystems
 			{
 				Mode = (ParticleSystemAnimationMode)reader.ReadInt32();
 			}
+			if (IsReadTimeMode(reader.Version))
+			{
+				TimeMode = (ParticleSystemAnimationTimeMode)reader.ReadInt32();
+				FPS = reader.ReadSingle();
+			}
 			FrameOverTime.Read(reader);
 			if (IsReadStartFrame(reader.Version))
 			{
 				StartFrame.Read(reader);
+			}
+			if (IsReadSpeedRange(reader.Version))
+			{
+				SpeedRange.Read(reader);
 			}
 			TilesX = reader.ReadInt32();
 			TilesY = reader.ReadInt32();
@@ -67,8 +98,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 			if (IsReadFlipU(reader.Version))
 			{
-				FlipU = reader.ReadSingle();
-				FlipV = reader.ReadSingle();
+				if (IsReadFlipUFirst(reader.Version))
+				{
+					FlipU = reader.ReadSingle();
+					FlipV = reader.ReadSingle();
+				}
 			}
 			RandomRow = reader.ReadBoolean();
 			reader.AlignStream(AlignType.Align4);
@@ -76,6 +110,14 @@ namespace uTinyRipper.Classes.ParticleSystems
 			if (IsReadSprites(reader.Version))
 			{
 				m_sprites = reader.ReadArray<SpriteData>();
+			}
+			if (IsReadFlipU(reader.Version))
+			{
+				if (!IsReadFlipUFirst(reader.Version))
+				{
+					FlipU = reader.ReadSingle();
+					FlipV = reader.ReadSingle();
+				}
 			}
 		}
 
@@ -94,8 +136,17 @@ namespace uTinyRipper.Classes.ParticleSystems
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
 			node.Add("mode", (int)Mode);
+			if (IsReadTimeMode(container.ExportVersion))
+			{
+				node.Add("timeMode", (int)TimeMode);
+				node.Add("fps", FPS);
+			}
 			node.Add("frameOverTime", FrameOverTime.ExportYAML(container));
 			node.Add("startFrame", GetExportStartFrame(container.Version).ExportYAML(container));
+			if (IsReadSpeedRange(container.ExportVersion))
+			{
+				node.Add("speedRange", SpeedRange.ExportYAML(container));
+			}
 			node.Add("tilesX", TilesX);
 			node.Add("tilesY", TilesY);
 			node.Add("animationType", (int)AnimationType);
@@ -123,6 +174,8 @@ namespace uTinyRipper.Classes.ParticleSystems
 		}
 
 		public ParticleSystemAnimationMode Mode { get; private set; }
+		public ParticleSystemAnimationTimeMode TimeMode { get; private set; }
+		public float FPS { get; private set; }
 		public int TilesX { get; private set; }
 		public int TilesY { get; private set; }
 		public ParticleSystemAnimationType AnimationType { get; private set; }
@@ -136,6 +189,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		public MinMaxCurve FrameOverTime;
 		public MinMaxCurve StartFrame;
+		public Vector2f SpeedRange;
 
 		private SpriteData[] m_sprites;
 	}

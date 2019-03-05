@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
@@ -31,6 +31,13 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(4);
 		}
 		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadShadowBias(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
+		}
+		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
 		public static bool IsReadRenderAlignment(Version version)
@@ -38,11 +45,39 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5, 3);
 		}
 		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadFlip(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
+		}
+		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
 		public static bool IsReadUseCustomVertexStreams(Version version)
 		{
 			return version.IsGreaterEqual(5, 5);
+		}
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool IsReadEnableGPUInstancing(Version version)
+		{
+			return version.IsGreaterEqual(2018);
+		}
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadApplyActiveColorSpace(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadAllowRoll(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
 		}
 		/// <summary>
 		/// 5.5.0 to 5.6.0 exclusive
@@ -84,11 +119,16 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
+			// m_ApplyActiveColorSpace previous value is false
+			if (version.IsGreaterEqual(2018, 2))
 			{
-				return 4;
+				return 6;
 			}
-
+			// EnableGPUInstancing previous value is false
+			if (version.IsGreaterEqual(2018))
+			{
+				return 5;
+			}
 			if (version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2))
 			{
 				return 4;
@@ -128,6 +168,10 @@ namespace uTinyRipper.Classes
 			{
 				NormalDirection = reader.ReadSingle();
 			}
+			if (IsReadShadowBias(reader.Version))
+			{
+				ShadowBias = reader.ReadSingle();
+			}
 			if (!IsSortModeFirst(reader.Version))
 			{
 				SortMode = (ParticleSystemSortMode)reader.ReadInt32();
@@ -142,10 +186,26 @@ namespace uTinyRipper.Classes
 			{
 				RenderAlignment = RenderMode == ParticleSystemRenderMode.Mesh ? ParticleSystemRenderSpace.Local : ParticleSystemRenderSpace.View;
 			}
+			if (IsReadFlip(reader.Version))
+			{
+				Flip.Read(reader);
+			}
 
 			if (IsReadUseCustomVertexStreams(reader.Version))
 			{
 				UseCustomVertexStreams = reader.ReadBoolean();
+				if (IsReadEnableGPUInstancing(reader.Version))
+				{
+					EnableGPUInstancing = reader.ReadBoolean();
+				}
+				if (IsReadApplyActiveColorSpace(reader.Version))
+				{
+					ApplyActiveColorSpace = reader.ReadBoolean();
+				}
+				if (IsReadAllowRoll(reader.Version))
+				{
+					AllowRoll = reader.ReadBoolean();
+				}
 				reader.AlignStream(AlignType.Align4);
 
 				if (IsReadVertexStreamMask(reader.Version))
@@ -188,37 +248,37 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 			
-			yield return Mesh.FetchDependency(file, isLog, ToLogString, "m_Mesh");
+			yield return Mesh.FetchDependency(file, isLog, ToLogString, MeshName);
 			if (IsReadMeshes(file.Version))
 			{
-				yield return Mesh1.FetchDependency(file, isLog, ToLogString, "m_Mesh1");
-				yield return Mesh2.FetchDependency(file, isLog, ToLogString, "m_Mesh2");
-				yield return Mesh3.FetchDependency(file, isLog, ToLogString, "m_Mesh3");
+				yield return Mesh1.FetchDependency(file, isLog, ToLogString, Mesh1Name);
+				yield return Mesh2.FetchDependency(file, isLog, ToLogString, Mesh2Name);
+				yield return Mesh3.FetchDependency(file, isLog, ToLogString, Mesh3Name);
 			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_RenderMode", (short)RenderMode);
-			node.Add("m_SortMode", (short)SortMode);
-			node.Add("m_MinParticleSize", MinParticleSize);
-			node.Add("m_MaxParticleSize", MaxParticleSize);
-			node.Add("m_CameraVelocityScale", CameraVelocityScale);
-			node.Add("m_VelocityScale", VelocityScale);
-			node.Add("m_LengthScale", LengthScale);
-			node.Add("m_SortingFudge", SortingFudge);
-			node.Add("m_NormalDirection", GetNormalDirection(container.Version));
-			node.Add("m_RenderAlignment", (int)RenderAlignment);
-			node.Add("m_Pivot", Pivot.ExportYAML(container));
-			node.Add("m_UseCustomVertexStreams", UseCustomVertexStreams);
-			node.Add("m_VertexStreams", GetVertexStreams(container.Version).ExportYAML());
-			node.Add("m_Mesh", Mesh.ExportYAML(container));
-			node.Add("m_Mesh1", Mesh1.ExportYAML(container));
-			node.Add("m_Mesh2", Mesh2.ExportYAML(container));
-			node.Add("m_Mesh3", Mesh3.ExportYAML(container));
-			node.Add("m_MaskInteraction", (int)MaskInteraction);
+			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(RenderModeName, (short)RenderMode);
+			node.Add(SortModeName, (short)SortMode);
+			node.Add(MinParticleSizeName, MinParticleSize);
+			node.Add(MaxParticleSizeName, MaxParticleSize);
+			node.Add(CameraVelocityScaleName, CameraVelocityScale);
+			node.Add(VelocityScaleName, VelocityScale);
+			node.Add(LengthScaleName, LengthScale);
+			node.Add(SortingFudgeName, SortingFudge);
+			node.Add(NormalDirectionName, GetNormalDirection(container.Version));
+			node.Add(RenderAlignmentName, (int)RenderAlignment);
+			node.Add(PivotName, Pivot.ExportYAML(container));
+			node.Add(UseCustomVertexStreamsName, UseCustomVertexStreams);
+			node.Add(VertexStreamsName, GetVertexStreams(container.Version).ExportYAML());
+			node.Add(MeshName, Mesh.ExportYAML(container));
+			node.Add(Mesh1Name, Mesh1.ExportYAML(container));
+			node.Add(Mesh2Name, Mesh2.ExportYAML(container));
+			node.Add(Mesh3Name, Mesh3.ExportYAML(container));
+			node.Add(MaskInteractionName, (int)MaskInteraction);
 			return node;
 		}
 
@@ -240,12 +300,36 @@ namespace uTinyRipper.Classes
 		public float LengthScale { get; private set; }
 		public float SortingFudge { get; private set; }
 		public float NormalDirection { get; private set; }
+		public float ShadowBias { get; private set; }
 		public ParticleSystemRenderSpace RenderAlignment { get; private set; }
 		public bool UseCustomVertexStreams { get; private set; }
+		public bool EnableGPUInstancing { get; private set; }
+		public bool ApplyActiveColorSpace { get; private set; }
+		public bool AllowRoll { get; private set; }
 		public IReadOnlyList<byte> VertexStreams => m_vertexStreams;
 		public SpriteMaskInteraction MaskInteraction { get; private set; }
 
+		public const string RenderModeName = "m_RenderMode";
+		public const string SortModeName = "m_SortMode";
+		public const string MinParticleSizeName = "m_MinParticleSize";
+		public const string MaxParticleSizeName = "m_MaxParticleSize";
+		public const string CameraVelocityScaleName = "m_CameraVelocityScale";
+		public const string VelocityScaleName = "m_VelocityScale";
+		public const string LengthScaleName = "m_LengthScale";
+		public const string SortingFudgeName = "m_SortingFudge";
+		public const string NormalDirectionName = "m_NormalDirection";
+		public const string RenderAlignmentName = "m_RenderAlignment";
+		public const string PivotName = "m_Pivot";
+		public const string UseCustomVertexStreamsName = "m_UseCustomVertexStreams";
+		public const string VertexStreamsName = "m_VertexStreams";
+		public const string MeshName = "m_Mesh";
+		public const string Mesh1Name = "m_Mesh1";
+		public const string Mesh2Name = "m_Mesh2";
+		public const string Mesh3Name = "m_Mesh3";
+		public const string MaskInteractionName = "m_MaskInteraction";
+
 		public Vector3f Pivot;
+		public Vector3f Flip;
 		public PPtr<Mesh> Mesh;
 		public PPtr<Mesh> Mesh1;
 		public PPtr<Mesh> Mesh2;

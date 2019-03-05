@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.LightmapSettingss;
 using uTinyRipper.Exporter.YAML;
@@ -293,12 +293,12 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_GIWorkflowMode", GetExportGIWorkflowMode(container.Version, container.Flags));
-			node.Add("m_GISettings", GetExportGISettings(container.Version).ExportYAML(container));
-			node.Add("m_LightmapEditorSettings", GetExportLightmapEditorSettings(container.Version, container.Flags).ExportYAML(container));
-#warning is that possible to somehow create LightingDataAsset with Release data?
-			node.Add("m_LightingDataAsset", LightingDataAsset.ExportYAML(container));
-			node.Add("m_UseShadowmask", GetExportUseShadowmask(container.Version));
+			node.Add(GIWorkflowModeName, GetExportGIWorkflowMode(container.Version, container.Flags));
+			node.Add(GISettingsName, GetExportGISettings(container.Version).ExportYAML(container));
+			node.Add(LightmapEditorSettingsName, GetExportLightmapEditorSettings(container.Version, container.Flags).ExportYAML(container));
+#warning is it possible to somehow create LightingDataAsset with Release data?
+			node.Add(LightingDataAssetName, LightingDataAsset.ExportYAML(container));
+			node.Add(UseShadowmaskName, GetExportUseShadowmask(container.Version));
 			return node;
 		}
 
@@ -329,6 +329,12 @@ namespace uTinyRipper.Classes
 		/// ShadowMaskMode previously
 		/// </summary>
 		public bool UseShadowmask { get; private set; }
+
+		public const string GIWorkflowModeName = "m_GIWorkflowMode";
+		public const string GISettingsName = "m_GISettings";
+		public const string LightmapEditorSettingsName = "m_LightmapEditorSettings";
+		public const string LightingDataAssetName = "m_LightingDataAsset";
+		public const string UseShadowmaskName = "m_UseShadowmask";
 
 		public EnlightenSceneMapping EnlightenSceneMapping;
 		public PPtr<LightProbes> LightProbes;

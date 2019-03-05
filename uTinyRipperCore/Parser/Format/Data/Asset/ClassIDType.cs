@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper
+namespace uTinyRipper
 {
 	public enum ClassIDType
 	{
@@ -234,6 +234,7 @@
 		AvatarMask1						= 319,
 		VideoPlayer						= 328,
 		VideoClip						= 329,
+		ParticleSystemForceField		= 330,
 		OcclusionCullingData			= 363,
 
 		// =====================================

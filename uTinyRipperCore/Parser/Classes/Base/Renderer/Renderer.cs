@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.MeshRenderers;
 using uTinyRipper.Classes.Renderers;
@@ -34,6 +34,13 @@ namespace uTinyRipper.Classes
 		public static bool IsReadRenderingLayerMask(Version version)
 		{
 			return version.IsGreaterEqual(2018);
+		}
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadRendererPriority(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
 		}
 		/// <summary>
 		/// 2.1.0 and greater
@@ -217,7 +224,7 @@ namespace uTinyRipper.Classes
 
 			CastShadows = (ShadowCastingMode)reader.ReadByte();
 			ReceiveShadows = reader.ReadByte();
-			if(IsReadDynamicOccludee(reader.Version))
+			if (IsReadDynamicOccludee(reader.Version))
 			{
 				DynamicOccludee = reader.ReadByte();
 			}
@@ -243,6 +250,10 @@ namespace uTinyRipper.Classes
 			if (IsReadRenderingLayerMask(reader.Version))
 			{
 				RenderingLayerMask = reader.ReadUInt32();
+			}
+			if (IsReadRendererPriority(reader.Version))
+			{
+				RendererPriority = reader.ReadInt32();
 			}
 
 			if (IsReadLightmapIndex(reader.Version, reader.Flags))
@@ -391,6 +402,14 @@ namespace uTinyRipper.Classes
 			node.Add(MotionVectorsName, (byte)GetMotionVectors(container.Version));
 			node.Add(LightProbeUsageName, (byte)LightProbeUsage);
 			node.Add(ReflectionProbeUsageName, (byte)GetReflectionProbeUsage(container.Version));
+			if (IsReadRenderingLayerMask(container.ExportVersion))
+			{
+				node.Add(RenderingLayerMaskName, GetRenderingLayerMask(container.Version));
+			}
+			if (IsReadRendererPriority(container.ExportVersion))
+			{
+				node.Add(RendererPriorityName, RendererPriority);
+			}
 			node.Add(MaterialsName, Materials.ExportYAML(container));
 			node.Add(StaticBatchInfoName, GetStaticBatchInfo(container.Version).ExportYAML(container));
 			node.Add(StaticBatchRootName, StaticBatchRoot.ExportYAML(container));
@@ -423,6 +442,10 @@ namespace uTinyRipper.Classes
 		private ReflectionProbeUsage GetReflectionProbeUsage(Version version)
 		{
 			return IsReadReflectUsage(version) ? ReflectionProbeUsage : ReflectionProbeUsage.BlendProbes;
+		}
+		private uint GetRenderingLayerMask(Version version)
+		{
+			return IsReadRenderingLayerMask(version) ? RenderingLayerMask : 1;
 		}
 		private StaticBatchInfo GetStaticBatchInfo(Version version)
 		{
@@ -535,6 +558,7 @@ namespace uTinyRipper.Classes
 		public LightProbeUsage LightProbeUsage { get; private set; }
 		public ReflectionProbeUsage ReflectionProbeUsage { get; private set; }
 		public uint RenderingLayerMask { get; private set; }
+		public int RendererPriority { get; private set; }
 		public ushort LightmapIndex { get; private set; }
 		public ushort LightmapIndexDynamic { get; private set; }
 		public IReadOnlyList<PPtr<Material>> Materials => m_materials;
@@ -563,6 +587,8 @@ namespace uTinyRipper.Classes
 		public const string MotionVectorsName = "m_MotionVectors";
 		public const string LightProbeUsageName = "m_LightProbeUsage";
 		public const string ReflectionProbeUsageName = "m_ReflectionProbeUsage";
+		public const string RenderingLayerMaskName = "m_RenderingLayerMask";
+		public const string RendererPriorityName = "m_RendererPriority";
 		public const string MaterialsName = "m_Materials";
 		public const string StaticBatchInfoName = "m_StaticBatchInfo";
 		public const string StaticBatchRootName = "m_StaticBatchRoot";
