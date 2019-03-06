@@ -28,11 +28,11 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(2017, 2);
 		}
 		/// <summary>
-		/// 2017.3 and greater
+		/// 2018.3 and greater
 		/// </summary>
 		public static bool IsReadCullingMode(Version version)
 		{
-			return version.IsGreaterEqual(2017, 3);
+			return version.IsGreaterEqual(2018, 3);
 		}
 		/// <summary>
 		/// 2017.1.0b2 and greater
