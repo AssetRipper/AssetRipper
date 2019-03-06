@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -62,7 +62,7 @@ namespace uTinyRipper.AssetExporters
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
-			if (OcclusionCullingSettings.IsCompatible(asset))
+			if (OcclusionCullingSettings.IsSceneCompatible(asset))
 			{
 				if (asset.File.Collection.IsScene(asset.File))
 				{
@@ -97,6 +97,20 @@ namespace uTinyRipper.AssetExporters
 						return new ManagerExportCollection(this, asset);
 					case ClassIDType.BuildSettings:
 						return new BuildSettingsExportCollection(this, virtualFile, asset);
+
+					case ClassIDType.MonoBehaviour:
+						{
+							MonoBehaviour monoBehaviour = (MonoBehaviour)asset;
+							if (monoBehaviour.IsScriptableObject())
+							{
+								return new AssetExportCollection(this, asset);
+							}
+							else
+							{
+								// such MonoBehaviours as StateMachineBehaviour in AimatorController
+								return new EmptyExportCollection();
+							}
+						}
 
 					default:
 						return new AssetExportCollection(this, asset);

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.CompositeCollider2Ds;
 using uTinyRipper.Classes.PolygonCollider2Ds;
@@ -47,12 +47,12 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_GeometryType", (int)GeometryType);
-			node.Add("m_GenerationType", (int)GenerationType);
-			node.Add("m_EdgeRadius", EdgeRadius);
-			node.Add("m_ColliderPaths", ColliderPaths.ExportYAML(container));
-			node.Add("m_CompositePaths", CompositePaths.ExportYAML(container));
-			node.Add("m_VertexDistance", VertexDistance);
+			node.Add(GeometryTypeName, (int)GeometryType);
+			node.Add(GenerationTypeName, (int)GenerationType);
+			node.Add(EdgeRadiusName, EdgeRadius);
+			node.Add(ColliderPathsName, ColliderPaths.ExportYAML(container));
+			node.Add(CompositePathsName, CompositePaths.ExportYAML(container));
+			node.Add(VertexDistanceName, VertexDistance);
 			return node;
 		}
 		
@@ -61,6 +61,13 @@ namespace uTinyRipper.Classes
 		public float EdgeRadius {get; private set; }
 		public IReadOnlyList<SubCollider> ColliderPaths => m_colliderPaths;
 		public float VertexDistance { get; private set; }
+
+		public const string GeometryTypeName = "m_GeometryType";
+		public const string GenerationTypeName = "m_GenerationType";
+		public const string EdgeRadiusName = "m_EdgeRadius";
+		public const string ColliderPathsName = "m_ColliderPaths";
+		public const string CompositePathsName = "m_CompositePaths";
+		public const string VertexDistanceName = "m_VertexDistance";
 
 		public Polygon2D CompositePaths;
 

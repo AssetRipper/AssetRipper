@@ -122,11 +122,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 7;
-			}
-
 			// unknown changes
 			if (version.IsGreaterEqual(2018, 3))
 			{
@@ -268,7 +263,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(GravityName, Gravity.ExportYAML(container));
 			node.Add(DefaultMaterialName, DefaultMaterial.ExportYAML(container));
 			node.Add(BounceThresholdName, BounceThreshold);

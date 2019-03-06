@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters.Classes;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.AnimatorControllers;
@@ -26,6 +26,7 @@ namespace uTinyRipper.AssetExporters
 				m_stateMachines[i] = stateMachine;
 			}
 
+#warning TODO: export MonoBehaviours
 			for (int i = 0; i < StateMachines.Count; i++)
 			{
 				AnimatorStateMachine stateMachine = StateMachines[i];

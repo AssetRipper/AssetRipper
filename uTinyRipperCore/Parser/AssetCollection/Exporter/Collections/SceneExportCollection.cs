@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,7 +30,7 @@ namespace uTinyRipper.AssetExporters
 
 			foreach (Object asset in file.FetchAssets())
 			{
-				if (OcclusionCullingSettings.IsCompatible(asset))
+				if (OcclusionCullingSettings.IsSceneCompatible(asset))
 				{
 					AddComponent(file, asset);
 				}

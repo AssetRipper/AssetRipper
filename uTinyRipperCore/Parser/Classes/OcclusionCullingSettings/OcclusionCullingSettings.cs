@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.OcclusionCullingSettingses;
 using uTinyRipper.Exporter.YAML;
@@ -16,7 +16,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 		
-		public static bool IsCompatible(Object asset)
+		public static bool IsSceneCompatible(Object asset)
 		{
 			if (asset.ClassID == ClassIDType.GameObject)
 			{
@@ -29,7 +29,7 @@ namespace uTinyRipper.Classes
 			if (asset.ClassID == ClassIDType.MonoBehaviour)
 			{
 				MonoBehaviour monoBeh = (MonoBehaviour)asset;
-				if (monoBeh.IsScriptableObject())
+				if (!monoBeh.IsSceneObject())
 				{
 					return false;
 				}

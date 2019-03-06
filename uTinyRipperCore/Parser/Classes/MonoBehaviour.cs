@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
@@ -59,23 +59,28 @@ namespace uTinyRipper.Classes
 			return $"{Name}({nameof(MonoBehaviour)})";
 		}
 
+		/// <summary>
+		/// Whether this MonoBeh belongs to scene/prefab hierarchy or not
+		/// </summary>
+		public bool IsSceneObject()
+		{
+			// TODO: find out why GameObject may has value like PPtr(0, 894) but such game object doesn't exists
+			return GameObject.FindAsset(File) != null;
+		}
+
 		public bool IsScriptableObject()
 		{
-			if(!GameObject.IsNull)
+			return Name != string.Empty;
+			/*IScriptStructure structure = Structure;
+			while (structure != null)
 			{
-				return false;
-			}
-
-			IScriptStructure structure = Structure;
-			while(structure != null)
-			{
-				if(ScriptType.IsScriptableObject(structure.Namespace, structure.Name))
+				if (ScriptType.IsScriptableObject(structure.Namespace, structure.Name))
 				{
 					return true;
 				}
 				structure = structure.Base;
 			}
-			return false;
+			return false;*/
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -91,18 +96,6 @@ namespace uTinyRipper.Classes
 				node.Concatenate(structureNode);
 			}
 			return node;
-		}
-
-		public override bool IsValid
-		{
-			get
-			{
-				if(GameObject.IsNull)
-				{
-					return IsScriptableObject();
-				}
-				return true;
-			}
 		}
 
 		public override string ExportName => Path.Combine(AssetsKeyWord, "ScriptableObject");

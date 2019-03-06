@@ -36,6 +36,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.Mesh, YamlExporter);
 			OverrideExporter(ClassIDType.QualitySettings, YamlExporter);
 			OverrideExporter(ClassIDType.Rigidbody2D, YamlExporter);
+			OverrideExporter(ClassIDType.Collider2D, YamlExporter);
 			OverrideExporter(ClassIDType.Rigidbody, YamlExporter);
 			OverrideExporter(ClassIDType.PhysicsManager, YamlExporter);
 			OverrideExporter(ClassIDType.CircleCollider2D, YamlExporter);

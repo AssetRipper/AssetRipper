@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -7,10 +7,26 @@ namespace uTinyRipper.Classes.CompositeCollider2Ds
 {
 	public struct SubCollider : IAssetReadable, IYAMLExportable, IDependent
 	{
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		private static bool IsReadDoubleColliderPath(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
+		}
+
 		public void Read(AssetReader reader)
 		{
 			Collider.Read(reader);
-			m_colliderPaths = reader.ReadArray<IntPoint>();
+			if (IsReadDoubleColliderPath(reader.Version))
+			{
+				m_colliderPaths = reader.ReadArrayDouble<IntPoint>();
+			}
+			else
+			{
+				IntPoint[] colliderPaths = reader.ReadArray<IntPoint>();
+				m_colliderPaths = new IntPoint[][] { colliderPaths };
+			}
 			reader.AlignStream(AlignType.Align4);
 		}
 
@@ -23,13 +39,21 @@ namespace uTinyRipper.Classes.CompositeCollider2Ds
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("m_Collider", Collider.ExportYAML(container));
-			node.Add("m_ColliderPaths", ColliderPaths.ExportYAML(container));
+			if (IsReadDoubleColliderPath(container.ExportVersion))
+			{
+				node.Add("m_ColliderPaths", ColliderPaths.ExportYAML(container));
+			}
+			else
+			{
+				IReadOnlyList<IntPoint> colliderPaths = ColliderPaths.Count == 0 ? new IntPoint[0] : ColliderPaths[0];
+				node.Add("m_ColliderPaths", colliderPaths.ExportYAML(container));
+			}
 			return node;
 		}
 
 		public PPtr<Collider2D> Collider;
-		public IReadOnlyList<IntPoint> ColliderPaths => m_colliderPaths;
+		public IReadOnlyList<IReadOnlyList<IntPoint>> ColliderPaths => m_colliderPaths;
 
-		private IntPoint[] m_colliderPaths;
+		private IntPoint[][] m_colliderPaths;
 	}
 }
