@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.MeshColliders;
 using uTinyRipper.Exporter.YAML;
@@ -28,11 +28,11 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(2017, 3);
 		}
 		/// <summary>
-		/// 5.5.0 and greater
+		/// 5.5.0 to 2018.3 exclusive
 		/// </summary>
 		public static bool IsReadSkinWidth(Version version)
 		{
-			return version.IsGreaterEqual(5, 5);
+			return version.IsGreaterEqual(5, 5) && version.IsLess(2018, 3);
 		}
 		/// <summary>
 		/// 5.5.0 to 2017.3 exclusive
@@ -59,11 +59,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 3;
-			}
-
 			if (version.IsGreaterEqual(2017, 3))
 			{
 				return 3;
@@ -118,17 +113,17 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 			
-			yield return Mesh.FetchDependency(file, isLog, ToLogString, "m_Mesh");
+			yield return Mesh.FetchDependency(file, isLog, ToLogString, MeshName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Convex", Convex);
-			node.Add("m_CookingOptions", (int)GetCookingOptions(container.Version));
-			node.Add("m_SkinWidth", GetSkinWidth(container.Version));
-			node.Add("m_Mesh", Mesh.ExportYAML(container));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(ConvexName, Convex);
+			node.Add(CookingOptionsName, (int)GetCookingOptions(container.Version));
+			node.Add(SkinWidthName, GetSkinWidth(container.Version));
+			node.Add(MeshName, Mesh.ExportYAML(container));
 			return node;
 		}
 
@@ -160,6 +155,11 @@ namespace uTinyRipper.Classes
 		public bool InflateMesh { get; private set; }
 		public MeshColliderCookingOptions CookingOptions { get; private set; }
 		public float SkinWidth { get; private set; }
+
+		public const string ConvexName = "m_Convex";
+		public const string CookingOptionsName = "m_CookingOptions";
+		public const string SkinWidthName = "m_SkinWidth";
+		public const string MeshName = "m_Mesh";
 
 		public PPtr<Mesh> Mesh;
 
