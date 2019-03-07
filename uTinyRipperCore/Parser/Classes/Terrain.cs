@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Renderers;
+using uTinyRipper.Classes.Terrains;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
 
@@ -29,6 +31,13 @@ namespace uTinyRipper.Classes
 			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
 		}
 		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadDrawInstanced(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
+		}
+		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
 		public static bool IsReadReflectionProbeUsage(Version version)
@@ -51,14 +60,31 @@ namespace uTinyRipper.Classes
 #warning unknown
 			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
 		}
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadPreserveTreePrototypeLayers(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
+		public static bool IsReadDynamicUVST(Version version)
+		{
+#warning unknown
+			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+		}
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadGroupingID(Version version)
+		{
+			return version.IsGreaterEqual(2018, 3);
+		}
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 3;
-			}
-
 #warning unknown
 			if (version.IsGreater(5, 0, 0, VersionType.Beta, 2))
 			{
@@ -91,13 +117,17 @@ namespace uTinyRipper.Classes
 			{
 				DrawHeightmap = reader.ReadBoolean();
 			}
+			if (IsReadDrawInstanced(reader.Version))
+			{
+				DrawInstanced = reader.ReadBoolean();
+			}
 			DrawTreesAndFoliage = reader.ReadBoolean();
 			reader.AlignStream(AlignType.Align4);
 
 			if (IsReadReflectionProbeUsage(reader.Version))
 			{
-				ReflectionProbeUsage = reader.ReadInt32();
-				MaterialType = reader.ReadInt32();
+				ReflectionProbeUsage = (ReflectionProbeUsage)reader.ReadInt32();
+				MaterialType = (MaterialType)reader.ReadInt32();
 				LegacySpecular.Read(reader);
 				LegacyShininess = reader.ReadSingle();
 			}
@@ -111,7 +141,7 @@ namespace uTinyRipper.Classes
 			LightmapIndexDynamic = reader.ReadUInt16();
 			LightmapTilingOffset.Read(reader);
 			LightmapTilingOffsetDynamic.Read(reader);
-			if(IsReadExplicitProbeSetHash(reader.Version))
+			if (IsReadExplicitProbeSetHash(reader.Version))
 			{
 				ExplicitProbeSetHash.Read(reader);
 			}
@@ -119,10 +149,22 @@ namespace uTinyRipper.Classes
 			if (IsReadBakeLightProbesForTrees(reader.Version))
 			{
 				BakeLightProbesForTrees = reader.ReadBoolean();
+			}
+			if (IsReadPreserveTreePrototypeLayers(reader.Version))
+			{
+				PreserveTreePrototypeLayers = reader.ReadBoolean();
+			}
+			if (IsReadDynamicUVST(reader.Version))
+			{
 				reader.AlignStream(AlignType.Align4);
-			
+
 				DynamicUVST.Read(reader);
 				ChunkDynamicUVST.Read(reader);
+			}
+			if (IsReadGroupingID(reader.Version))
+			{
+				GroupingID = reader.ReadInt32();
+				AllowAutoConnect = reader.ReadBoolean();
 			}
 		}
 
@@ -133,37 +175,51 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 
-			yield return TerrainData.FetchDependency(file, isLog, ToLogString, "m_TerrainData");
-			yield return MaterialTemplate.FetchDependency(file, isLog, ToLogString, "m_MaterialTemplate");
+			yield return TerrainData.FetchDependency(file, isLog, ToLogString, TerrainDataName);
+			yield return MaterialTemplate.FetchDependency(file, isLog, ToLogString, MaterialTemplateName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_TerrainData", TerrainData.ExportYAML(container));
-			node.Add("m_TreeDistance", TreeDistance);
-			node.Add("m_TreeBillboardDistance", TreeBillboardDistance);
-			node.Add("m_TreeCrossFadeLength", TreeCrossFadeLength);
-			node.Add("m_TreeMaximumFullLODCount", TreeMaximumFullLODCount);
-			node.Add("m_DetailObjectDistance", DetailObjectDistance);
-			node.Add("m_DetailObjectDensity", DetailObjectDensity);
-			node.Add("m_HeightmapPixelError", HeightmapPixelError);
-			node.Add("m_SplatMapDistance", SplatMapDistance);
-			node.Add("m_HeightmapMaximumLOD", HeightmapMaximumLOD);
-			node.Add("m_CastShadows", CastShadows);
-			node.Add("m_DrawHeightmap", DrawHeightmap);
-			node.Add("m_DrawTreesAndFoliage", DrawTreesAndFoliage);
-			node.Add("m_ReflectionProbeUsage", ReflectionProbeUsage);
-			node.Add("m_MaterialType", MaterialType);
-			node.Add("m_LegacySpecular", LegacySpecular.ExportYAML(container));
-			node.Add("m_LegacyShininess", LegacyShininess);
-			node.Add("m_MaterialTemplate", MaterialTemplate.ExportYAML(container));
-			node.Add("m_BakeLightProbesForTrees", BakeLightProbesForTrees);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(TerrainDataName, TerrainData.ExportYAML(container));
+			node.Add(TreeDistanceName, TreeDistance);
+			node.Add(TreeBillboardDistanceName, TreeBillboardDistance);
+			node.Add(TreeCrossFadeLengthName, TreeCrossFadeLength);
+			node.Add(TreeMaximumFullLODCountName, TreeMaximumFullLODCount);
+			node.Add(DetailObjectDistanceName, DetailObjectDistance);
+			node.Add(DetailObjectDensityName, DetailObjectDensity);
+			node.Add(HeightmapPixelErrorName, HeightmapPixelError);
+			node.Add(SplatMapDistanceName, SplatMapDistance);
+			node.Add(HeightmapMaximumLODName, HeightmapMaximumLOD);
+			node.Add(CastShadowsName, CastShadows);
+			node.Add(DrawHeightmapName, DrawHeightmap);
+			if (IsReadDrawInstanced(container.ExportVersion))
+			{
+				node.Add(DrawInstancedName, DrawInstanced);
+			}
+			node.Add(DrawTreesAndFoliageName, DrawTreesAndFoliage);
+			node.Add(ReflectionProbeUsageName, (int)ReflectionProbeUsage);
+			node.Add(MaterialTypeName, (int)MaterialType);
+			node.Add(LegacySpecularName, LegacySpecular.ExportYAML(container));
+			node.Add(LegacyShininessName, LegacyShininess);
+			node.Add(MaterialTemplateName, MaterialTemplate.ExportYAML(container));
+			node.Add(BakeLightProbesForTreesName, BakeLightProbesForTrees);
+			if (IsReadPreserveTreePrototypeLayers(container.ExportVersion))
+			{
+				node.Add(PreserveTreePrototypeLayersName, PreserveTreePrototypeLayers);
+			}
 #warning TODO: get lightmap by index and fill those values
-			node.Add("m_ScaleInLightmap", 0.0512f);
-			node.Add("m_LightmapParameters", default(PPtr<Object>).ExportYAML(container));
+			node.Add(ScaleInLightmapName, 0.0512f);
+			node.Add(LightmapParametersName, default(PPtr<Object>).ExportYAML(container));
+			if (IsReadGroupingID(container.ExportVersion))
+			{
+				node.Add(GroupingIDName, GroupingID);
+				node.Add(AllowAutoConnectName, AllowAutoConnect);
+			}
 			return node;
+
 		}
 
 		public byte Enabled { get; private set; }
@@ -178,15 +234,45 @@ namespace uTinyRipper.Classes
 		public int HeightmapMaximumLOD { get; private set; }
 		public bool CastShadows { get; private set; }
 		public bool DrawHeightmap { get; private set; }
+		public bool DrawInstanced { get; private set; }
 		public bool DrawTreesAndFoliage { get; private set; }
-		public int ReflectionProbeUsage { get; private set; }
-		public int MaterialType { get; private set; }
+		public ReflectionProbeUsage ReflectionProbeUsage { get; private set; }
+		public MaterialType MaterialType { get; private set; }
 		public float LegacyShininess { get; private set; }
 		public bool UseDefaultSmoothness { get; private set; }
 		public float DefaultSmoothness { get; private set; }
 		public ushort LightmapIndex { get; private set; }
 		public ushort LightmapIndexDynamic { get; private set; }
 		public bool BakeLightProbesForTrees { get; private set; }
+		public bool PreserveTreePrototypeLayers { get; private set; }
+		public int GroupingID { get; private set; }
+		public bool AllowAutoConnect { get; private set; }
+
+		public const string TerrainDataName = "m_TerrainData";
+		public const string TreeDistanceName = "m_TreeDistance";
+		public const string TreeBillboardDistanceName = "m_TreeBillboardDistance";
+		public const string TreeCrossFadeLengthName = "m_TreeCrossFadeLength";
+		public const string TreeMaximumFullLODCountName = "m_TreeMaximumFullLODCount";
+		public const string DetailObjectDistanceName = "m_DetailObjectDistance";
+		public const string DetailObjectDensityName = "m_DetailObjectDensity";
+		public const string HeightmapPixelErrorName = "m_HeightmapPixelError";
+		public const string SplatMapDistanceName = "m_SplatMapDistance";
+		public const string HeightmapMaximumLODName = "m_HeightmapMaximumLOD";
+		public const string CastShadowsName = "m_CastShadows";
+		public const string DrawHeightmapName = "m_DrawHeightmap";
+		public const string DrawInstancedName = "m_DrawInstanced";
+		public const string DrawTreesAndFoliageName = "m_DrawTreesAndFoliage";
+		public const string ReflectionProbeUsageName = "m_ReflectionProbeUsage";
+		public const string MaterialTypeName = "m_MaterialType";
+		public const string LegacySpecularName = "m_LegacySpecular";
+		public const string LegacyShininessName = "m_LegacyShininess";
+		public const string MaterialTemplateName = "m_MaterialTemplate";
+		public const string BakeLightProbesForTreesName = "m_BakeLightProbesForTrees";
+		public const string PreserveTreePrototypeLayersName = "m_PreserveTreePrototypeLayers";
+		public const string ScaleInLightmapName = "m_ScaleInLightmap";
+		public const string LightmapParametersName = "m_LightmapParameters";
+		public const string GroupingIDName = "m_GroupingID";
+		public const string AllowAutoConnectName = "m_AllowAutoConnect";
 
 		public PPtr<TerrainData> TerrainData;
 		public ColorRGBA32 LegacySpecular;

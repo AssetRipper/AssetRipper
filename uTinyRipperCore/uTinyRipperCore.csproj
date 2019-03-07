@@ -518,11 +518,13 @@
     <Compile Include="Parser\Classes\Sprite\Utils\MeshOutlineGenerator.cs" />
     <Compile Include="Parser\Classes\TagManager\SortingLayerEntry.cs" />
     <Compile Include="Parser\Classes\TagManager\TagManager.cs" />
-    <Compile Include="Parser\Classes\Terrain.cs" />
+    <Compile Include="Parser\Classes\Terrain\MaterialType.cs" />
+    <Compile Include="Parser\Classes\Terrain\Terrain.cs" />
     <Compile Include="Parser\Classes\TerrainCollider.cs" />
     <Compile Include="Parser\Classes\TerrainData\DetailDatabase.cs" />
     <Compile Include="Parser\Classes\TerrainData\DetailPatch.cs" />
     <Compile Include="Parser\Classes\TerrainData\DetailPrototype.cs" />
+    <Compile Include="Parser\Classes\TerrainData\DetailRenderMode.cs" />
     <Compile Include="Parser\Classes\TerrainData\Heightmap.cs" />
     <Compile Include="Parser\Classes\TerrainData\Shift.cs" />
     <Compile Include="Parser\Classes\TerrainData\SplatDatabase.cs" />
@@ -530,6 +532,7 @@
     <Compile Include="Parser\Classes\TerrainData\TerrainData.cs" />
     <Compile Include="Parser\Classes\TerrainData\TreeInstance.cs" />
     <Compile Include="Parser\Classes\TerrainData\TreePrototype.cs" />
+    <Compile Include="Parser\Classes\TerrainLayer.cs" />
     <Compile Include="Parser\Classes\Texture2D\TextureUsageMode.cs" />
     <Compile Include="Parser\Classes\Texture3D.cs" />
     <Compile Include="Parser\Classes\TimeManager.cs" />

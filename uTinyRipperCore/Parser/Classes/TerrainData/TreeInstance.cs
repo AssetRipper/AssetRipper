@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
 namespace uTinyRipper.Classes.TerrainDatas
@@ -30,13 +30,13 @@ namespace uTinyRipper.Classes.TerrainDatas
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("position", Position.ExportYAML(container));
-			node.Add("widthScale", WidthScale);
-			node.Add("heightScale", HeightScale);
-			node.Add("rotation", Rotation);
-			node.Add("color", Color.ExportYAML(container));
-			node.Add("lightmapColor", LightmapColor.ExportYAML(container));
-			node.Add("index", Index);
+			node.Add(PositionName, Position.ExportYAML(container));
+			node.Add(WidthScaleName, WidthScale);
+			node.Add(HeightScaleName, HeightScale);
+			node.Add(RotationName, Rotation);
+			node.Add(ColorName, Color.ExportYAML(container));
+			node.Add(LightmapColorName, LightmapColor.ExportYAML(container));
+			node.Add(IndexName, Index);
 			return node;
 		}
 
@@ -44,6 +44,14 @@ namespace uTinyRipper.Classes.TerrainDatas
 		public float HeightScale { get; private set; }
 		public float Rotation { get; private set; }
 		public int Index { get; private set; }
+
+		public const string PositionName = "position";
+		public const string WidthScaleName = "widthScale";
+		public const string HeightScaleName = "heightScale";
+		public const string RotationName = "rotation";
+		public const string ColorName = "color";
+		public const string LightmapColorName = "lightmapColor";
+		public const string IndexName = "index";
 
 		public Vector3f Position;
 		public ColorRGBA32 Color;

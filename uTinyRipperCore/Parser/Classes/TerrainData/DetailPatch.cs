@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
@@ -18,14 +18,18 @@ namespace uTinyRipper.Classes.TerrainDatas
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("bounds", Bounds.ExportYAML(container));
-			node.Add("layerIndices", LayerIndices.ExportYAML());
-			node.Add("numberOfObjects", NumberOfObjects.ExportYAML());
+			node.Add(BoundsName, Bounds.ExportYAML(container));
+			node.Add(LayerIndicesName, LayerIndices.ExportYAML());
+			node.Add(NumberOfObjectsName, NumberOfObjects.ExportYAML());
 			return node;
 		}
 
 		public IReadOnlyList<byte> LayerIndices => m_layerIndices;
 		public IReadOnlyList<byte> NumberOfObjects => m_numberOfObjects;
+
+		public const string BoundsName = "bounds";
+		public const string LayerIndicesName = "layerIndices";
+		public const string NumberOfObjectsName = "numberOfObjects";
 
 		public AABB Bounds;
 

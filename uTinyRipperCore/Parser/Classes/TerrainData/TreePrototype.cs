@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -21,12 +21,15 @@ namespace uTinyRipper.Classes.TerrainDatas
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("prefab", Prefab.ExportYAML(container));
-			node.Add("bendFactor", BendFactor);
+			node.Add(PrefabName, Prefab.ExportYAML(container));
+			node.Add(BendFactorName, BendFactor);
 			return node;
 		}
 
 		public float BendFactor { get; private set; }
+
+		public const string PrefabName = "prefab";
+		public const string BendFactorName = "bendFactor";
 
 		public PPtr<GameObject> Prefab;
 	}

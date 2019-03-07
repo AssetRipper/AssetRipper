@@ -357,6 +357,7 @@ namespace uTinyRipper
 		RotationConstraint				= 1818360609,
 		ScaleConstraint					= 1818360610,
 		Tilemap							= 1839735485,
+		TerrainLayer					= 1953259897,
 		SpriteShapeRenderer				= 1971053207,
 		LocalizationAsset				= 2083778819,
 		ScriptedImporter				= 2089858483,

@@ -206,6 +206,8 @@ namespace uTinyRipper
 					return new LightingDataAsset(assetInfo);
 				case ClassIDType.SpriteAtlas:
 					return new SpriteAtlas(assetInfo);
+				case ClassIDType.TerrainLayer:
+					return new TerrainLayer(assetInfo);
 
 				default:
 					return null;

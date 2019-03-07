@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.TerrainDatas;
 using uTinyRipper.Exporter.YAML;
@@ -56,18 +56,23 @@ namespace uTinyRipper.Classes
 			
 			if (IsReadLightmap(file.Version))
 			{
-				yield return Lightmap.FetchDependency(file, isLog, ToLogString, "m_Lightmap");
+				yield return Lightmap.FetchDependency(file, isLog, ToLogString, LightmapName);
 			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_SplatDatabase", SplatDatabase.ExportYAML(container));
-			node.Add("m_DetailDatabase", DetailDatabase.ExportYAML(container));
-			node.Add("m_Heightmap", Heightmap.ExportYAML(container));
+			node.Add(SplatDatabaseName, SplatDatabase.ExportYAML(container));
+			node.Add(DetailDatabaseName, DetailDatabase.ExportYAML(container));
+			node.Add(HeightmapName, Heightmap.ExportYAML(container));
 			return node;
 		}
+
+		public const string SplatDatabaseName = "m_SplatDatabase";
+		public const string DetailDatabaseName = "m_DetailDatabase";
+		public const string HeightmapName = "m_Heightmap";
+		public const string LightmapName = "m_Lightmap";
 
 		public SplatDatabase SplatDatabase;
 		public DetailDatabase DetailDatabase;

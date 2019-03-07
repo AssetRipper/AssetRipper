@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -39,11 +39,10 @@ namespace uTinyRipper.Classes.TerrainDatas
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
+			if (version.IsGreaterEqual(2018, 3))
 			{
-				return 2;
+				return 3;
 			}
-
 			if (version.IsGreaterEqual(5, 5))
 			{
 				return 2;
@@ -92,15 +91,15 @@ namespace uTinyRipper.Classes.TerrainDatas
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Heights", Heights.ExportYAML(true));
-			node.Add("m_PrecomputedError", PrecomputedError.ExportYAML());
-			node.Add("m_MinMaxPatchHeights", MinMaxPatchHeights.ExportYAML());
-			node.Add("m_Width", Width);
-			node.Add("m_Height", Height);
-			node.Add("m_Thickness", Thickness);
-			node.Add("m_Levels", Levels);
-			node.Add("m_Scale", Scale.ExportYAML(container));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(HeightsName, Heights.ExportYAML(true));
+			node.Add(PrecomputedErrorName, PrecomputedError.ExportYAML());
+			node.Add(MinMaxPatchHeightsName, MinMaxPatchHeights.ExportYAML());
+			node.Add(WidthName, Width);
+			node.Add(HeightName, Height);
+			node.Add(ThicknessName, Thickness);
+			node.Add(LevelsName, Levels);
+			node.Add(ScaleName, Scale.ExportYAML(container));
 			return node;
 		}
 
@@ -112,6 +111,15 @@ namespace uTinyRipper.Classes.TerrainDatas
 		public int Height { get; private set; }
 		public float Thickness { get; private set; }
 		public int Levels { get; private set; }
+
+		public const string HeightsName = "m_Heights";
+		public const string PrecomputedErrorName = "m_PrecomputedError";
+		public const string MinMaxPatchHeightsName = "m_MinMaxPatchHeights";
+		public const string WidthName = "m_Width";
+		public const string HeightName = "m_Height";
+		public const string ThicknessName = "m_Thickness";
+		public const string LevelsName = "m_Levels";
+		public const string ScaleName = "m_Scale";
 
 		public PPtr<PhysicMaterial> DefaultPhysicMaterial;
 		public Vector3f Scale;

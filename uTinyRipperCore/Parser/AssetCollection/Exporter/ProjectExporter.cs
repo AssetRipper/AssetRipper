@@ -19,6 +19,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(ClassIDType.PreloadData, DummyExporter);
 			OverrideExporter(ClassIDType.Sprite, DummyExporter);
 			OverrideExporter(ClassIDType.SpriteAtlas, DummyExporter);
+			OverrideExporter(ClassIDType.TerrainLayer, DummyExporter);
 
 			OverrideExporter(ClassIDType.GameObject, YamlExporter);
 			OverrideExporter(ClassIDType.Transform, YamlExporter);

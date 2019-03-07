@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -17,11 +17,6 @@ namespace uTinyRipper.Classes.TerrainDatas
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			// this is min version
 			return 2;
 		}
@@ -43,7 +38,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 				GrayscaleLighting = reader.ReadInt32();
 			}
 			LightmapFactor = reader.ReadSingle();
-			RenderMode = reader.ReadInt32();
+			RenderMode = (DetailRenderMode)reader.ReadInt32();
 			UsePrototypeMesh = reader.ReadInt32();
 		}
 
@@ -56,20 +51,20 @@ namespace uTinyRipper.Classes.TerrainDatas
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("prototype", Prototype.ExportYAML(container));
-			node.Add("prototypeTexture", PrototypeTexture.ExportYAML(container));
-			node.Add("minWidth", MinWidth);
-			node.Add("maxWidth", MaxWidth);
-			node.Add("minHeight", MinHeight);
-			node.Add("maxHeight", MaxHeight);
-			node.Add("noiseSpread", NoiseSpread);
-			node.Add("bendFactor", BendFactor);
-			node.Add("healthyColor", HealthyColor.ExportYAML(container));
-			node.Add("dryColor", DryColor.ExportYAML(container));
-			node.Add("lightmapFactor", LightmapFactor);
-			node.Add("renderMode", RenderMode);
-			node.Add("usePrototypeMesh", UsePrototypeMesh);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(PrototypeName, Prototype.ExportYAML(container));
+			node.Add(PrototypeTextureName, PrototypeTexture.ExportYAML(container));
+			node.Add(MinWidthName, MinWidth);
+			node.Add(MaxWidthName, MaxWidth);
+			node.Add(MinHeightName, MinHeight);
+			node.Add(MaxHeightName, MaxHeight);
+			node.Add(NoiseSpreadName, NoiseSpread);
+			node.Add(BendFactorName, BendFactor);
+			node.Add(HealthyColorName, HealthyColor.ExportYAML(container));
+			node.Add(DryColorName, DryColor.ExportYAML(container));
+			node.Add(LightmapFactorName, LightmapFactor);
+			node.Add(RenderModeName, (int)RenderMode);
+			node.Add(UsePrototypeMeshName, UsePrototypeMesh);
 			return node;
 		}
 
@@ -81,8 +76,22 @@ namespace uTinyRipper.Classes.TerrainDatas
 		public float BendFactor { get; private set; }
 		public int GrayscaleLighting { get; private set; }
 		public float LightmapFactor { get; private set; }
-		public int RenderMode { get; private set; }
+		public DetailRenderMode RenderMode { get; private set; }
 		public int UsePrototypeMesh { get; private set; }
+
+		public const string PrototypeName = "prototype";
+		public const string PrototypeTextureName = "prototypeTexture";
+		public const string MinWidthName = "minWidth";
+		public const string MaxWidthName = "maxWidth";
+		public const string MinHeightName = "minHeight";
+		public const string MaxHeightName = "maxHeight";
+		public const string NoiseSpreadName = "noiseSpread";
+		public const string BendFactorName = "bendFactor";
+		public const string HealthyColorName = "healthyColor";
+		public const string DryColorName = "dryColor";
+		public const string LightmapFactorName = "lightmapFactor";
+		public const string RenderModeName = "renderMode";
+		public const string UsePrototypeMeshName = "usePrototypeMesh";
 
 		public PPtr<GameObject> Prototype;
 		public PPtr<Texture2D> PrototypeTexture;
