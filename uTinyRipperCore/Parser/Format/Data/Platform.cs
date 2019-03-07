@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper
+namespace uTinyRipper
 {
 	public enum Platform : uint
 	{
@@ -142,13 +142,32 @@
 				return true;
 			}
 
-			switch (comp)
+			if (_this.IsStandalone())
+			{
+				if (comp.IsStandalone())
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public static bool IsStandalone(this Platform _this)
+		{
+			switch(_this)
 			{
 				case Platform.StandaloneWinPlayer:
 				case Platform.StandaloneWin64Player:
-					return comp == Platform.StandaloneWinPlayer || comp == Platform.StandaloneWin64Player;
+				case Platform.StandaloneLinux:
+				case Platform.StandaloneLinux64:
+				case Platform.StandaloneLinuxUniversal:
+				case Platform.StandaloneOSXIntel:
+				case Platform.StandaloneOSXIntel64:
+				case Platform.StandaloneOSXPPC:
+				case Platform.StandaloneOSXUniversal:
+					return true;
 			}
-
 			return false;
 		}
 	}

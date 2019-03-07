@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace uTinyRipper.Classes.Shaders
 {
@@ -185,6 +185,9 @@ namespace uTinyRipper.Classes.Shaders
 
 						case Platform.StandaloneWinPlayer:
 						case Platform.StandaloneWin64Player:
+						case Platform.StandaloneLinux:
+						case Platform.StandaloneLinux64:
+						case Platform.StandaloneLinuxUniversal:
 						case Platform.Android:
 							return GPUPlatform.vulkan;
 
