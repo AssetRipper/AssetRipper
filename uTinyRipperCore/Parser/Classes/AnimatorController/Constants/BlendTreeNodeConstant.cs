@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using uTinyRipper.AssetExporters;
@@ -45,12 +45,11 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			return version.IsGreaterEqual(5);
 		}
 		/// <summary>
-		/// Less than 5.0.0
+		/// 4.5.2 to 5.0.0 exclusive
 		/// </summary>
 		public static bool IsReadClipIndex(Version version)
 		{
-#warning TODO: unknown start version
-			return version.IsGreaterEqual(4, 5, 5) && version.IsLess(5);
+			return version.IsGreaterEqual(4, 5, 2) && version.IsLess(5);
 		}
 		/// <summary>
 		/// 4.1.3 and greater
@@ -88,7 +87,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			}
 
 			ClipID = reader.ReadUInt32();
-			if(IsReadClipIndex(reader.Version))
+			if (IsReadClipIndex(reader.Version))
 			{
 				ClipIndex = reader.ReadUInt32();
 			}
