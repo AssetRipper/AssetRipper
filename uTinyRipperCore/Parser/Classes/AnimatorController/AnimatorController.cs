@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AnimatorControllers;
 using uTinyRipper.Classes.AnimatorControllers.Editor;
@@ -40,11 +40,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 5;
-			}
-			
 #warning unknown
 			if (version.IsGreater(5, 0, 0, VersionType.Beta))
 			{
@@ -175,9 +170,9 @@ namespace uTinyRipper.Classes
 			}
 
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_AnimatorParameters", @params.ExportYAML(container));
-			node.Add("m_AnimatorLayers", layers.ExportYAML(container));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(AnimatorParametersName, @params.ExportYAML(container));
+			node.Add(AnimatorLayersName, layers.ExportYAML(container));
 			return node;
 		}
 
@@ -188,6 +183,9 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<PPtr<AnimationClip>> AnimationClips => m_animationClips;
 		public IReadOnlyList<PPtr<MonoBehaviour>> StateMachineBehaviours => m_stateMachineBehaviours;
 		public bool MultiThreadedStateMachine { get; private set; }
+
+		public const string AnimatorParametersName = "m_AnimatorParameters";
+		public const string AnimatorLayersName = "m_AnimatorLayers";
 
 		public ControllerConstant Controller;
 		public StateMachineBehaviourVectorDescription StateMachineBehaviourVectorDescription;

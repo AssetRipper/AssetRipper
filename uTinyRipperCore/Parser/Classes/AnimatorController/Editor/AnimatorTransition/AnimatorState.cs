@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
@@ -14,6 +14,13 @@ namespace uTinyRipper.Classes.AnimatorControllers.Editor
 			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 			
 			IReadOnlyDictionary<uint, string> TOS = controller.TOS;
+			if (!TOS.ContainsKey(0))
+			{
+				Dictionary<uint, string> tos = new Dictionary<uint, string>();
+				tos.Add(0, string.Empty);
+				tos.AddRange(controller.TOS);
+				TOS = tos;
+			}
 			StateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Instance;
 			StateConstant state = stateMachine.StateConstantArray[stateIndex].Instance;
 
