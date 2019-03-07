@@ -196,6 +196,7 @@
     <Compile Include="Parser\Classes\PhysicsManager\FrictionType.cs" />
     <Compile Include="Parser\Classes\ResourceManager\ResourceManager.cs" />
     <Compile Include="Parser\Classes\ResourceManager\ResourceManagerDependency.cs" />
+    <Compile Include="Parser\Classes\Serialize\PropertyName.cs" />
     <Compile Include="Parser\Classes\SpriteAtlas\PackingSettings.cs" />
     <Compile Include="Parser\Classes\SpriteAtlas\SpriteAtlasEditorData.cs" />
     <Compile Include="Parser\Classes\SpriteAtlas\TextureSettings.cs" />

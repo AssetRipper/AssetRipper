@@ -237,12 +237,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-#warning update version:
-				return 8;
-			}
-
 			if (version.IsGreaterEqual(2018, 2))
 			{
 				return 9;
@@ -382,7 +376,7 @@ namespace uTinyRipper.Classes
 				}
 			}
 
-			if(IsReadSkin(reader.Version))
+			if (IsReadSkin(reader.Version))
 			{
 				m_skin = reader.ReadArray<BoneWeights4>();
 			}
@@ -480,43 +474,43 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_SubMeshes", GetSubMeshes(container.Version).ExportYAML(container));
-			node.Add("m_Shapes", Shapes.ExportYAML(container));
-			node.Add("m_BindPose", IsReadBindPoses(container.Version) ? BindPoses.ExportYAML(container) : YAMLSequenceNode.Empty);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(SubMeshesName, GetSubMeshes(container.Version).ExportYAML(container));
+			node.Add(ShapesName, Shapes.ExportYAML(container));
+			node.Add(BindPoseName, IsReadBindPoses(container.Version) ? BindPoses.ExportYAML(container) : YAMLSequenceNode.Empty);
 #warning TODO?
-			node.Add("m_BoneNames", YAMLSequenceNode.Empty);
-			node.Add("m_BoneNameHashes", IsReadBoneNameHashes(container.Version) ? BoneNameHashes.ExportYAML(false) : YAMLSequenceNode.Empty);
+			node.Add(BoneNamesName, YAMLSequenceNode.Empty);
+			node.Add(BoneNameHashesName, IsReadBoneNameHashes(container.Version) ? BoneNameHashes.ExportYAML(false) : YAMLSequenceNode.Empty);
 #warning TODO?
-			node.Add("m_RootBoneName", YAMLScalarNode.Empty);
-			node.Add("m_RootBoneNameHash", RootBoneNameHash);
-			node.Add("m_MeshCompression", (byte)MeshCompression);
-			node.Add("m_IsReadable", IsReadable);
-			node.Add("m_KeepVertices", KeepVertices);
-			node.Add("m_KeepIndices", KeepIndices);
-			node.Add("m_IndexBuffer", GetIndexBuffer(container.Version, container.Platform).ExportYAML());
-			node.Add("m_Skin", GetSkin(container.Version).ExportYAML(container));
-			node.Add("m_VertexData", GetVertexData(container.Version).ExportYAML(container));
-			node.Add("m_CompressedMesh", CompressedMesh.ExportYAML(container));
-			node.Add("m_LocalAABB", LocalAABB.ExportYAML(container));
-			node.Add("m_MeshUsageFlags", MeshUsageFlags);
+			node.Add(RootBoneNameName, YAMLScalarNode.Empty);
+			node.Add(RootBoneNameHashName, RootBoneNameHash);
+			node.Add(MeshCompressionName, (byte)MeshCompression);
+			node.Add(IsReadableName, IsReadable);
+			node.Add(KeepVerticesName, KeepVertices);
+			node.Add(KeepIndicesName, KeepIndices);
+			node.Add(IndexBufferName, GetIndexBuffer(container.Version, container.Platform).ExportYAML());
+			node.Add(SkinName, GetSkin(container.Version).ExportYAML(container));
+			node.Add(VertexDataName, GetVertexData(container.Version).ExportYAML(container));
+			node.Add(CompressedMeshName, CompressedMesh.ExportYAML(container));
+			node.Add(LocalAABBName, LocalAABB.ExportYAML(container));
+			node.Add(MeshUsageFlagsName, MeshUsageFlags);
 			if (IsReadCollision(container.Version))
 			{
-				node.Add("m_BakedConvexCollisionMesh", CollisionData.BakedConvexCollisionMesh.ExportYAML());
-				node.Add("m_BakedTriangleCollisionMesh", CollisionData.BakedTriangleCollisionMesh.ExportYAML());
+				node.Add(BakedConvexCollisionMeshName, CollisionData.BakedConvexCollisionMesh.ExportYAML());
+				node.Add(BakedTriangleCollisionMeshName, CollisionData.BakedTriangleCollisionMesh.ExportYAML());
 			}
 			else
 			{
-				node.Add("m_BakedConvexCollisionMesh", ArrayExtensions.EmptyBytes.ExportYAML());
-				node.Add("m_BakedTriangleCollisionMesh", ArrayExtensions.EmptyBytes.ExportYAML());
+				node.Add(BakedConvexCollisionMeshName, ArrayExtensions.EmptyBytes.ExportYAML());
+				node.Add(BakedTriangleCollisionMeshName, ArrayExtensions.EmptyBytes.ExportYAML());
 			}
 #warning ???
-			node.Add("m_MeshOptimized", 0);
+			node.Add(MeshOptimizedName, 0);
 			if (IsReadStreamData(container.ExportVersion))
 			{
-				node.Add("m_StreamData", StreamData.ExportYAML(container));
+				node.Add(StreamDataName, StreamData.ExportYAML(container));
 			}
-			
+
 			return node;
 		}
 
@@ -605,6 +599,28 @@ namespace uTinyRipper.Classes
 		public int IndexFormat { get; private set; }
 		public int CollisionVertexCount { get; private set; }
 		public int MeshUsageFlags { get; private set; }
+
+		public const string SubMeshesName = "m_SubMeshes";
+		public const string ShapesName = "m_Shapes";
+		public const string BindPoseName = "m_BindPose";
+		public const string BoneNamesName = "m_BoneNames";
+		public const string BoneNameHashesName = "m_BoneNameHashes";
+		public const string RootBoneNameName = "m_RootBoneName";
+		public const string RootBoneNameHashName = "m_RootBoneNameHash";
+		public const string MeshCompressionName = "m_MeshCompression";
+		public const string IsReadableName = "m_IsReadable";
+		public const string KeepVerticesName = "m_KeepVertices";
+		public const string KeepIndicesName = "m_KeepIndices";
+		public const string IndexBufferName = "m_IndexBuffer";
+		public const string SkinName = "m_Skin";
+		public const string VertexDataName = "m_VertexData";
+		public const string CompressedMeshName = "m_CompressedMesh";
+		public const string LocalAABBName = "m_LocalAABB";
+		public const string MeshUsageFlagsName = "m_MeshUsageFlags";
+		public const string BakedConvexCollisionMeshName = "m_BakedConvexCollisionMesh";
+		public const string BakedTriangleCollisionMeshName = "m_BakedTriangleCollisionMesh";
+		public const string MeshOptimizedName = "m_MeshOptimized";
+		public const string StreamDataName = "m_StreamData";
 
 		public BlendShapeData Shapes;
 		public VertexData VertexData;

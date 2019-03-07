@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.AnimationClips;
@@ -82,6 +82,9 @@ namespace uTinyRipper.AssetExporters
 					return new RectOffset();
 				case ScriptType.GUIStyleName:
 					return new GUIStyle(true);
+
+				case ScriptType.PropertyNameName:
+					return new PropertyName();
 
 				default:
 					throw new NotImplementedException(name);

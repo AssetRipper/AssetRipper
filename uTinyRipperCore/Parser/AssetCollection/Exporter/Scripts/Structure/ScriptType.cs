@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace uTinyRipper.AssetExporters
 {
@@ -144,9 +144,16 @@ namespace uTinyRipper.AssetExporters
 					case RectOffsetName:
 					case GUIStyleName:
 						return true;
+
+					case PropertyNameName:
+						return true;
 				}
 			}
 			return false;
+		}
+		public static bool IsExposedReference(string @namespace, string name)
+		{
+			return @namespace == UnityEngineName && name == ExposedReferenceName;
 		}
 
 		public static bool IsPrime(string @namespace, string name)
@@ -181,6 +188,11 @@ namespace uTinyRipper.AssetExporters
 			}
 
 			return false;
+		}
+
+		public static bool IsSerializableGeneric(string @namespace, string name)
+		{
+			return IsList(@namespace, name) || IsExposedReference(@namespace, name);
 		}
 
 		public static string ToPrimitiveString(string name)
@@ -338,6 +350,7 @@ namespace uTinyRipper.AssetExporters
 		private const string CStringName = "string";
 		private const string MulticastDelegateName = "MulticastDelegate";
 		private const string ListName = "List`1";
+		private const string ExposedReferenceName = "ExposedReference`1";
 
 		public const string Vector2Name = "Vector2";
 		public const string Vector2IntName = "Vector2Int";
@@ -356,6 +369,7 @@ namespace uTinyRipper.AssetExporters
 		public const string GradientName = "Gradient";
 		public const string RectOffsetName = "RectOffset";
 		public const string GUIStyleName = "GUIStyle";
+		public const string PropertyNameName = "PropertyName";
 
 		private const string ScriptableObjectName = "ScriptableObject";
 		private const string ComponentName = "Component";

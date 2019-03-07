@@ -1,4 +1,4 @@
-﻿using Mono.Cecil;
+using Mono.Cecil;
 using System.Collections.Generic;
 
 namespace uTinyRipper.AssetExporters.Mono
@@ -66,6 +66,10 @@ namespace uTinyRipper.AssetExporters.Mono
 		{
 			return IsEngineStruct(type.Namespace, type.Name);
 		}
+		public static bool IsExposedReference(TypeReference type)
+		{
+			return IsExposedReference(type.Namespace, type.Name);
+		}
 
 		public static bool IsPrime(TypeReference type)
 		{
@@ -74,6 +78,11 @@ namespace uTinyRipper.AssetExporters.Mono
 		public static bool IsMonoPrime(TypeReference type)
 		{
 			return IsMonoPrime(type.Namespace, type.Name);
+		}
+
+		public static bool IsSerializableGeneric(TypeReference type)
+		{
+			return IsList(type) || IsExposedReference(type);
 		}
 
 		public static bool IsEnginePointer(TypeReference type)

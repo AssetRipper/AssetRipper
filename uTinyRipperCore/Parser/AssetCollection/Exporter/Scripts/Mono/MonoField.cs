@@ -1,4 +1,4 @@
-﻿using Mono.Cecil;
+using Mono.Cecil;
 using System.Collections.Generic;
 
 namespace uTinyRipper.AssetExporters.Mono
@@ -85,8 +85,8 @@ namespace uTinyRipper.AssetExporters.Mono
 				{
 					return false;
 				}
-				// array of lists isn't serializable
-				if (MonoType.IsList(elementType))
+				// array of generics isn't serializable
+				if (MonoType.IsSerializableGeneric(elementType))
 				{
 					return false;
 				}
@@ -94,31 +94,31 @@ namespace uTinyRipper.AssetExporters.Mono
 				return IsFieldTypeSerializable(declaringType, elementType, arguments);
 			}
 
-			if (MonoType.IsList(fieldType))
+			if (MonoType.IsSerializableGeneric(fieldType))
 			{
-				// list is serialized same way as array, so check its argument
-				GenericInstanceType list = (GenericInstanceType)fieldType;
-				TypeReference listElement = list.GenericArguments[0];
+				// generic is serialized same way as array, so check its argument
+				GenericInstanceType generic = (GenericInstanceType)fieldType;
+				TypeReference genericElement = generic.GenericArguments[0];
 
 				// if it's generic parameter then get its real type
-				if (listElement.IsGenericParameter)
+				if (genericElement.IsGenericParameter)
 				{
-					GenericParameter parameter = (GenericParameter)listElement;
-					listElement = arguments[parameter];
+					GenericParameter parameter = (GenericParameter)genericElement;
+					genericElement = arguments[parameter];
 				}
 
-				// list of arrays isn't serializable
-				if (listElement.IsArray)
+				// generic of arrays isn't serializable
+				if (genericElement.IsArray)
 				{
 					return false;
 				}
-				// list of lists isn't serializable
-				if (MonoType.IsList(listElement))
+				// generic of generic isn't serializable
+				if (MonoType.IsSerializableGeneric(genericElement))
 				{
 					return false;
 				}
 				// check if element is serializable
-				return IsFieldTypeSerializable(declaringType, listElement, arguments);
+				return IsFieldTypeSerializable(declaringType, genericElement, arguments);
 			}
 
 			if (fieldType.IsPrimitive)

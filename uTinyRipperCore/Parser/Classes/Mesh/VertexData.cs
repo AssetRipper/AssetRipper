@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -132,11 +132,6 @@ namespace uTinyRipper.Classes.Meshes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 1;
-			}
-
 			if (version.IsGreaterEqual(2018))
 			{
 				return 2;
@@ -251,12 +246,12 @@ namespace uTinyRipper.Classes.Meshes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_CurrentChannels", GetCurrentChannels(container.Version));
-			node.Add("m_VertexCount", VertexCount);
-			node.Add("m_Channels", GetChannels(container.Version).ExportYAML(container));
-			node.Add("m_DataSize", m_data.Length);
-			node.Add("_typelessdata", GetData(container.Version, container.Platform).ExportYAML());
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(CurrentChannelsName, GetCurrentChannels(container.Version));
+			node.Add(VertexCountName, VertexCount);
+			node.Add(ChannelsName, GetChannels(container.Version).ExportYAML(container));
+			node.Add(DataSizeName, m_data.Length);
+			node.Add(TypelessdataName, GetData(container.Version, container.Platform).ExportYAML());
 			return node;
 		}
 
@@ -522,6 +517,12 @@ namespace uTinyRipper.Classes.Meshes
 		public IReadOnlyList<ChannelInfo> Channels => m_channels;
 		public IReadOnlyList<StreamInfo> Streams => m_streams;
 		public IReadOnlyList<byte> Data => m_data;
+
+		public const string CurrentChannelsName = "m_CurrentChannels";
+		public const string VertexCountName = "m_VertexCount";
+		public const string ChannelsName = "m_Channels";
+		public const string DataSizeName = "m_DataSize";
+		public const string TypelessdataName = "_typelessdata";
 
 		private ChannelInfo[] m_channels;
 		private StreamInfo[] m_streams;
