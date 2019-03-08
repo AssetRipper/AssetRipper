@@ -86,10 +86,10 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_EditorHideFlags", false);
-			node.Add("m_Script", Script.ExportYAML(container));
-			node.Add("m_Name", Name);
-			node.Add("m_EditorClassIdentifier", string.Empty);
+			node.Add(EditorHideFlagsName, false);
+			node.Add(ScriptName, Script.ExportYAML(container));
+			node.Add(NameName, Name);
+			node.Add(EditorClassIdentifierName, string.Empty);
 			if (Structure != null)
 			{
 				YAMLMappingNode structureNode = (YAMLMappingNode)Structure.ExportYAML(container);
@@ -100,9 +100,15 @@ namespace uTinyRipper.Classes
 
 		public override string ExportName => Path.Combine(AssetsKeyWord, "ScriptableObject");
 		public override string ExportExtension => AssetExtension;
+		public override bool IsValid => true;
 
 		public string Name { get; private set; }
 		public ScriptStructure Structure { get; private set; }
+
+		public const string EditorHideFlagsName = "m_EditorHideFlags";
+		public const string ScriptName = "m_Script";
+		public const string NameName = "m_Name";
+		public const string EditorClassIdentifierName = "m_EditorClassIdentifier";
 
 		public PPtr<MonoScript> Script;
 	}
