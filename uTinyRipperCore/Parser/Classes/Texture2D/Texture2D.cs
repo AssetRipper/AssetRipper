@@ -468,7 +468,7 @@ namespace uTinyRipper.Classes
 						return 0xF000;
 
 					case TextureFormat.RGB24:
-						return 0xFF0000;
+						return 0x0000FF;
 						
 					case TextureFormat.RGB565:
 						return 0xF800;
@@ -562,8 +562,8 @@ namespace uTinyRipper.Classes
 						return 0x00F0;
 
 					case TextureFormat.RGB24:
-						return 0x0000FF;
-						
+						return 0xFF0000;
+
 					case TextureFormat.RGB565:
 						return 0x001F;
 
