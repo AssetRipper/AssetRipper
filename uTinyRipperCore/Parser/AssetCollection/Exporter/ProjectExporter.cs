@@ -8,6 +8,12 @@ namespace uTinyRipper.AssetExporters
 {
 	public class ProjectExporter
 	{
+		public event Action EventExportPreparationStarted;
+		public event Action EventExportPreparationFinished;
+		public event Action EventExportStarted;
+		public event Action<int, int> EventExportProgressUpdated;
+		public event Action EventExportFinished;
+
 		public ProjectExporter(IFileCollection fileCollection)
 		{
 			m_fileCollection = fileCollection;
@@ -130,6 +136,7 @@ namespace uTinyRipper.AssetExporters
 
 		public void Export(string path, FileCollection fileCollection, IEnumerable<Object> assets)
 		{
+			EventExportPreparationStarted?.Invoke();
 			VirtualSerializedFile virtualFile = new VirtualSerializedFile();
 			List<IExportCollection> collections = new List<IExportCollection>();
 			// speed up fetching a little bit
@@ -172,17 +179,22 @@ namespace uTinyRipper.AssetExporters
 			depList.Clear();
 			depSet.Clear();
 			queued.Clear();
+			EventExportPreparationFinished?.Invoke();
 
+			EventExportStarted?.Invoke();
 			ProjectAssetContainer container = new ProjectAssetContainer(this, fileCollection.FetchAssets(), virtualFile, collections);
-			foreach (IExportCollection collection in collections)
+			for (int i = 0; i < collections.Count; i++)
 			{
+				IExportCollection collection = collections[i];
 				container.CurrentCollection = collection;
 				bool isExported = collection.Export(container, path);
 				if (isExported)
 				{
 					Logger.Log(LogType.Info, LogCategory.Export, $"'{collection.Name}' exported");
 				}
+				EventExportProgressUpdated?.Invoke(i, collections.Count);
 			}
+			EventExportFinished?.Invoke();
 		}
 
 		public AssetType ToExportType(ClassIDType classID)

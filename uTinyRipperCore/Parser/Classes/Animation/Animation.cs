@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using uTinyRipper.AssetExporters;
@@ -55,11 +55,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 3;
-			}
-
 			if (version.IsGreaterEqual(3, 4))
 			{
 				return 3;
@@ -147,7 +142,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add("m_Animation", DefaultAnimation.ExportYAML(container));
 			node.Add("m_Animations", Animations.ExportYAML(container));
 			node.Add("m_WrapMode", (int)WrapMode);

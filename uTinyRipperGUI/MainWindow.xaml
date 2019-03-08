@@ -31,6 +31,9 @@
             <TextBlock Text="Reset" Margin="0,-3,0,0"/>
         </Button>
 
+        <TextBlock Name="StatusText" VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                   Text="Status: idle" 
+                   FontSize="14" Foreground="#FF343434" Margin="10,0,0,4"/>
         <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch"
                           VerticalAlignment="Top" Height="8" Background="Transparent" Margin="0,-4,0,0" />
         <RichTextBox Grid.Row="1"  Margin="3,3,3,3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
@@ -46,6 +49,7 @@
                 <ContextMenu>
                     <MenuItem Command="ApplicationCommands.SelectAll"/>
                     <MenuItem Command="ApplicationCommands.Copy"/>
+                    <MenuItem Header="Clear" Click="OnClearOutputTextClicked"/>
                 </ContextMenu>
             </RichTextBox.ContextMenu>
             <FlowDocument>
