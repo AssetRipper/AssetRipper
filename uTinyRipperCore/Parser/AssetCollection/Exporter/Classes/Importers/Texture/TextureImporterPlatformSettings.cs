@@ -1,4 +1,4 @@
-﻿using uTinyRipper.Classes;
+using uTinyRipper.Classes;
 using uTinyRipper.Classes.Textures;
 using uTinyRipper.Exporter.YAML;
 
@@ -10,12 +10,12 @@ namespace uTinyRipper.AssetExporters.Classes
 		{
 		}
 
-		public TextureImporterPlatformSettings(bool _)
+		public TextureImporterPlatformSettings(TextureFormat textureFormat)
 		{
 			BuildTarget = DefaultTexturePlatformName;
 			MaxTextureSize = 2048;
 			ResizeAlgorithm = TextureResizeAlgorithm.Mitchell;
-			TextureFormat = TextureFormat.Automatic;
+			TextureFormat = textureFormat;
 			TextureCompression = TextureImporterCompression.Uncompressed;
 			CompressionQuality = 50;
 			CrunchedCompression = false;

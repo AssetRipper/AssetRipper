@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.AssetExporters.Classes;
+using uTinyRipper.Classes.Textures;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
 
@@ -81,7 +82,7 @@ namespace uTinyRipper.Classes.SpriteAtlases
 				else
 				{
 					TextureImporterPlatformSettings[] settings = new TextureImporterPlatformSettings[m_platformSettings.Length + 1];
-					settings[0] = new TextureImporterPlatformSettings(true);
+					settings[0] = new TextureImporterPlatformSettings(TextureFormat.Automatic);
 					Array.Copy(m_platformSettings, 0, settings, 1, m_platformSettings.Length);
 					return settings;
 				}

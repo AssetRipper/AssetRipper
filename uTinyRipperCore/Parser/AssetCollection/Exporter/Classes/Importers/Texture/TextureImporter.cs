@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Sprites;
@@ -174,7 +174,7 @@ namespace uTinyRipper.AssetExporters.Classes
 			node.Add("compressionQualitySet", false);
 			node.Add("textureFormatSet", false);
 
-			TextureImporterPlatformSettings platform = new TextureImporterPlatformSettings(true);
+			TextureImporterPlatformSettings platform = new TextureImporterPlatformSettings(m_texture.TextureFormat.ToDefaultFormat());
 			TextureImporterPlatformSettings[] platforms = new TextureImporterPlatformSettings[] { platform };
 			node.Add("platformSettings", platforms.ExportYAML(container));
 

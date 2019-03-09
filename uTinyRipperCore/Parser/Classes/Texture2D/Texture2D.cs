@@ -364,6 +364,7 @@ namespace uTinyRipper.Classes
 					case TextureFormat.BGRA32:
 						return DDPFFlags.DDPF_RGB | DDPFFlags.DDPF_ALPHAPIXELS;
 
+					case TextureFormat.R8:
 					case TextureFormat.R16:
 					case TextureFormat.RGB24:
 					case TextureFormat.RGB565:
@@ -427,6 +428,7 @@ namespace uTinyRipper.Classes
 					case TextureFormat.RGB24:
 						return 24;
 
+					case TextureFormat.R8:
 					case TextureFormat.Alpha8:
 						return 8;
 

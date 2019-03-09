@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace uTinyRipper.Classes.Textures
 {
@@ -342,6 +342,15 @@ namespace uTinyRipper.Classes.Textures
 				default:
 					throw new NotSupportedException($"Unsupported texture format {_this}");
 			}
+		}
+
+		public static TextureFormat ToDefaultFormat(this TextureFormat _this)
+		{
+			if (_this == TextureFormat.R8)
+			{
+				return _this;
+			}
+			return TextureFormat.Automatic;
 		}
 	}
 }
