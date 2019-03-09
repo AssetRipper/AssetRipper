@@ -118,15 +118,18 @@ namespace uTinyRipper.AssetExporters.Mono
 
 		public static bool IsSerializableGeneric(TypeReference type)
 		{
-			if (IsBuiltinGeneric(type))
+			if (type.IsGenericInstance)
 			{
-				return true;
-			}
+				if (IsBuiltinGeneric(type))
+				{
+					return true;
+				}
 
-			TypeDefinition definition = type.Resolve();
-			if (definition.IsEnum)
-			{
-				return true;
+				TypeDefinition definition = type.Resolve();
+				if (definition.IsEnum)
+				{
+					return true;
+				}
 			}
 			return false;
 		}
