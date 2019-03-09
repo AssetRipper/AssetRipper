@@ -80,7 +80,7 @@ namespace uTinyRipper.AssetExporters.Mono
 			return IsMonoPrime(type.Namespace, type.Name);
 		}
 
-		public static bool IsSerializableGeneric(TypeReference type)
+		public static bool IsBuiltinGeneric(TypeReference type)
 		{
 			return IsList(type) || IsExposedReference(type);
 		}
@@ -112,6 +112,21 @@ namespace uTinyRipper.AssetExporters.Mono
 				{
 					return true;
 				}
+			}
+			return false;
+		}
+
+		public static bool IsSerializableGeneric(TypeReference type)
+		{
+			if (IsBuiltinGeneric(type))
+			{
+				return true;
+			}
+
+			TypeDefinition definition = type.Resolve();
+			if (definition.IsEnum)
+			{
+				return true;
 			}
 			return false;
 		}

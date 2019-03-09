@@ -1,4 +1,4 @@
-﻿using Mono.Cecil;
+using Mono.Cecil;
 using System;
 
 namespace uTinyRipper.Exporters.Scripts.Mono

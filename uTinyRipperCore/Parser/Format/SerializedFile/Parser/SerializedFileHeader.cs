@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace uTinyRipper.SerializedFiles
 {
@@ -31,11 +31,7 @@ namespace uTinyRipper.SerializedFiles
 			{
 				throw new Exception($"Invalid metadata size {MetadataSize} for asset file {m_name}");
 			}
-			FileSize = reader.ReadInt32();
-			if (FileSize <= 0)
-			{
-				throw new Exception($"Invalid data size {FileSize} for asset file {m_name}");
-			}
+			FileSize = reader.ReadUInt32();
 			Generation = (FileGeneration)reader.ReadInt32();
 			if (!Enum.IsDefined(typeof(FileGeneration), Generation))
 			{
@@ -60,7 +56,7 @@ namespace uTinyRipper.SerializedFiles
 		/// <summary>
 		/// Size of the whole file
 		/// </summary>
-		public int FileSize { get; private set; }
+		public uint FileSize { get; private set; }
 		/// <summary>
 		/// File format version. The number is required for backward compatibility and is normally incremented after the file format has been changed in a major update
 		/// </summary>

@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+
 namespace uTinyRipper.Exporters.Scripts
 {
 	public abstract class ScriptExportArray : ScriptExportType
@@ -9,7 +10,7 @@ namespace uTinyRipper.Exporters.Scripts
 			Element.GetTypeNamespaces(namespaces);
 		}
 
-		public sealed override string ClearName => Element.ClearName;
+		public sealed override string CleanNestedName => Element.CleanNestedName;
 
 		public sealed override ScriptExportType DeclaringType => Element.DeclaringType;
 		public sealed override ScriptExportType Base => Element.Base;

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters;
 
@@ -35,7 +35,7 @@ namespace uTinyRipper.Exporters.Scripts
 			writer.WriteIntent(intent);
 			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", TypeName);
 
-			if (Base != null && !ScriptType.IsBasic(Base.Namespace, Base.Name))
+			if (Base != null && !ScriptType.IsBasic(Base.Namespace, Base.NestedName))
 			{
 				writer.Write(" : {0}", Base.GetTypeNestedName(DeclaringType));
 			}
@@ -76,7 +76,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 		public virtual void GetTypeNamespaces(ICollection<string> namespaces)
 		{
-			if (ScriptType.IsCPrimitive(Namespace, ClearName))
+			if (ScriptType.IsCPrimitive(Namespace, CleanNestedName))
 			{
 				return;
 			}
@@ -111,7 +111,7 @@ namespace uTinyRipper.Exporters.Scripts
 				case "audio":
 				case "light":
 				case "collider":
-					return ScriptType.IsComponent(Namespace, Name);
+					return ScriptType.IsComponent(Namespace, NestedName);
 			}
 			return false;
 		}
@@ -120,11 +120,11 @@ namespace uTinyRipper.Exporters.Scripts
 		{
 			if(relativeType == null)
 			{
-				return Name;
+				return NestedName;
 			}
-			if (ScriptType.IsEngineObject(Namespace, Name))
+			if (ScriptType.IsEngineObject(Namespace, NestedName))
 			{
-				return $"{Namespace}.{Name}";
+				return $"{Namespace}.{NestedName}";
 			}
 			if (DeclaringType == null)
 			{
@@ -135,7 +135,7 @@ namespace uTinyRipper.Exporters.Scripts
 				return TypeName;
 			}
 
-			string declaringName = DeclaringType.GetTypeNestedName(relativeType);
+			string declaringName = NestType.GetTypeNestedName(relativeType);
 			return $"{declaringName}.{TypeName}";
 		}
 
@@ -186,7 +186,7 @@ namespace uTinyRipper.Exporters.Scripts
 		{
 			if(Namespace == ScriptType.UnityEngineName)
 			{
-				switch (ClearName)
+				switch (CleanNestedName)
 				{
 					case "NavMeshAgent":
 					case "OffMeshLink":
@@ -197,14 +197,21 @@ namespace uTinyRipper.Exporters.Scripts
 		}
 
 		public abstract string FullName { get; }
-		public abstract string Name { get; }
+		public abstract string NestedName { get; }
+		public abstract string CleanNestedName { get; }
 		public abstract string TypeName { get; }
-		public abstract string ClearName { get; }
 		public abstract string Namespace { get; }
 		public abstract string Module { get; }
 		public virtual bool IsEnum => false;
 
+		/// <summary>
+		/// ex. GenericClass<T>.NestedType
+		/// </summary>
 		public abstract ScriptExportType DeclaringType { get; }
+		/// <summary>
+		/// ex. GenericClass<double>.NestedType
+		/// </summary>
+		public virtual ScriptExportType NestType => DeclaringType;
 		public abstract ScriptExportType Base { get; }
 
 		public IReadOnlyList<ScriptExportType> NestedTypes => m_nestedTypes;

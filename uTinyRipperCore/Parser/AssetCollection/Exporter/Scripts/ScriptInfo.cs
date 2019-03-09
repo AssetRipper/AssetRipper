@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace uTinyRipper.AssetExporters
 {
@@ -25,7 +25,7 @@ namespace uTinyRipper.AssetExporters
 
 		public static bool operator ==(ScriptInfo left, ScriptInfo right)
 		{
-			if(left.Assembly != right.Assembly)
+			if (left.Assembly != right.Assembly)
 			{
 				return false;
 			}

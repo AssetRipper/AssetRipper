@@ -1,4 +1,4 @@
-﻿using Mono.Cecil;
+using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 
@@ -19,8 +19,8 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			
 			Type = @delegate;
 
-			Name = ScriptExportMonoType.GetName(Type);
-			Module = ScriptExportMonoType.GetModule(Type);
+			NestedName = ScriptExportMonoType.GetNestedName(Type);
+			Module = ScriptExportMonoType.GetModuleName(Type);
 			FullName = ScriptExportMonoType.GetFullName(Type, Module);
 		}
 
@@ -75,7 +75,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		}
 
 		public override string FullName { get; }
-		public override string Name { get; }
+		public override string NestedName { get; }
 		public override string TypeName => Type.Name;
 		public override string Namespace => DeclaringType == null ? Type.Namespace : DeclaringType.Namespace;
 		public override string Module { get; }

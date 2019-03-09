@@ -38,7 +38,7 @@ namespace uTinyRipper.SerializedFiles
 			{
 				PathID = reader.ReadInt32();
 			}
-			DataOffset = reader.ReadInt32();
+			DataOffset = reader.ReadUInt32();
 			DataSize = reader.ReadInt32();
 			if (IsReadTypeIndex(reader.Generation))
 			{
@@ -65,7 +65,7 @@ namespace uTinyRipper.SerializedFiles
 		/// Offset to the object data.
 		/// Add to SerializedFileHeader.dataOffset to get the absolute offset within the serialized file.
 		/// </summary>
-		public int DataOffset { get; private set; }
+		public uint DataOffset { get; private set; }
 		/// <summary>
 		/// Size of the object data.
 		/// </summary>

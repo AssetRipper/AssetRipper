@@ -1,4 +1,4 @@
-﻿using Mono.Cecil;
+using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -251,21 +251,27 @@ namespace uTinyRipper.AssetExporters.Mono
 			return null;
 		}
 
+		/// <summary>
+		/// Is it possible to properly restore serializable layout for specified type
+		/// </summary>
+		/// <param name="type">Type to check</param>
+		/// <param name="arguments">Generic arguments for checking type</param>
+		/// <returns>Is type valid for serialization</returns>
 		private bool IsTypeValid(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
-			if(type.IsGenericParameter)
+			if (type.IsGenericParameter)
 			{
 				GenericParameter parameter = (GenericParameter)type;
 				return IsTypeValid(arguments[parameter], arguments);
 			}
-			if(type.IsArray)
+			if (type.IsArray)
 			{
 				ArrayType array = (ArrayType)type;
 				return IsTypeValid(array.ElementType, arguments);
 			}
-			if(MonoType.IsList(type))
+			if (MonoType.IsBuiltinGeneric(type))
 			{
-				return IsListValid(type, arguments);
+				return IsBuiltinGenericValid(type, arguments);
 			}
 
 			if (MonoType.IsPrime(type))
@@ -277,6 +283,7 @@ namespace uTinyRipper.AssetExporters.Mono
 				return false;
 			}
 
+			// for recursive fields and generic parameters
 			if (m_validTypes.TryGetValue(type.FullName, out bool isValid))
 			{
 				return isValid;
@@ -302,12 +309,12 @@ namespace uTinyRipper.AssetExporters.Mono
 			}
 
 			TypeDefinition definition = type.Resolve();
-			if(definition == null)
+			if (definition == null)
 			{
 				m_validTypes[type.FullName] = false;
 				return false;
 			}
-			if(definition.IsInterface)
+			if (definition.IsInterface)
 			{
 				return true;
 			}
@@ -319,14 +326,20 @@ namespace uTinyRipper.AssetExporters.Mono
 
 			foreach (FieldDefinition field in definition.Fields)
 			{
-				if(!MonoField.IsSerializableModifier(field))
+				if (!MonoField.IsSerializableModifier(field))
 				{
 					continue;
 				}
 				if (field.FieldType.IsGenericInstance)
 				{
-					// generic instances aren't serializable. Exception - list
-					if (!MonoType.IsList(field.FieldType))
+					// it isn't possible to check whether generic instance is serializable or not without resolving its definition
+					if (field.FieldType.Module == null)
+					{
+						m_validTypes[type.FullName] = false;
+						return false;
+					}
+					// generic instances aren't serializable (except special one)
+					if (!MonoType.IsSerializableGeneric(field.FieldType))
 					{
 						continue;
 					}
@@ -341,7 +354,7 @@ namespace uTinyRipper.AssetExporters.Mono
 			return true;
 		}
 
-		private bool IsListValid(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		private bool IsBuiltinGenericValid(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
 			GenericInstanceType list = (GenericInstanceType)type;
 			TypeReference element = list.GenericArguments[0];

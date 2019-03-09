@@ -34,7 +34,7 @@ namespace uTinyRipper.Classes
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-			return new YAMLScalarNode($"Unknown_{ID}");
+			return new YAMLScalarNode(ID == 0 ? string.Empty : $"Unknown_{unchecked((uint)ID)}");
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

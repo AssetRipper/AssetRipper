@@ -1,4 +1,4 @@
-﻿using Mono.Cecil;
+using Mono.Cecil;
 using System;
 using System.IO;
 
@@ -15,7 +15,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			
 			Attribute = attribute;
 
-			Module = ScriptExportMonoType.GetModule(Attribute.AttributeType);
+			Module = ScriptExportMonoType.GetModuleName(Attribute.AttributeType);
 			FullName = ToFullName(Attribute, Module);
 		}
 

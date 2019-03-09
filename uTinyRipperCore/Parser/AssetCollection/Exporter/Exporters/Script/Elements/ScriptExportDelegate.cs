@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -9,7 +9,7 @@ namespace uTinyRipper.Exporters.Scripts
 		public sealed override void Export(TextWriter writer, int intent)
 		{
 			writer.WriteIntent(intent);
-			writer.Write("{0} delegate {1} {2}(", Keyword, Return.Name, TypeName);
+			writer.Write("{0} delegate {1} {2}(", Keyword, Return.NestedName, TypeName);
 			for (int i = 0; i < Parameters.Count; i++)
 			{
 				ScriptExportParameter parameter = Parameters[i];
@@ -37,7 +37,7 @@ namespace uTinyRipper.Exporters.Scripts
 			throw new NotSupportedException();
 		}
 
-		public sealed override string ClearName => Name;
+		public sealed override string CleanNestedName => NestedName;
 
 		public sealed override ScriptExportType Base => null;
 		public sealed override IReadOnlyList<ScriptExportField> Fields { get; } = new ScriptExportField[0];

@@ -1,4 +1,4 @@
-﻿using Mono.Cecil;
+using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -36,7 +36,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 		private static string GetExportSubPath(ScriptExportType type)
 		{
-			string typeName = type.Name;
+			string typeName = type.NestedName;
 			int index = typeName.IndexOf('<');
 			if(index >= 0)
 			{
@@ -139,7 +139,7 @@ namespace uTinyRipper.Exporters.Scripts
 			{
 				return RetrieveGeneric(type);
 			}
-			if(type.IsGenericParameter)
+			if (type.IsGenericParameter)
 			{
 				return CreateType(type, false);
 			}

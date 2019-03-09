@@ -16,7 +16,7 @@ using Mono.Cecil;
 
 namespace Mono.Collections.Generic {
 
-	public class Collection<T> : IList<T>, IList {
+	public class Collection<T> : IList<T>, IList, IReadOnlyList<T> {
 
 		internal T [] items;
 		internal int size;

@@ -390,7 +390,7 @@ namespace uTinyRipperGUI
 
 		private void OnExportFinished()
 		{
-			Dispatcher.Invoke(() => StatusText.Text = "Status: export finished");
+			Dispatcher.InvokeAsync(() => StatusText.Text = "Status: export finished");
 		}
 
 		private GameStructure GameStructure

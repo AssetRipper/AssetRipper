@@ -1102,6 +1102,7 @@
     <Compile Include="Utils\MD4.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoArray.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Exporters\Script\Elements\ScriptExportArray.cs" />
+    <Compile Include="Utils\MonoUtils.cs" />
     <Compile Include="Utils\RunetimeUtils.cs" />
     <Compile Include="Utils\ThreadSafeRandom.cs" />
   </ItemGroup>

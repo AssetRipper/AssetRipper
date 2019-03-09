@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace uTinyRipper.Exporters.Scripts
@@ -23,7 +23,8 @@ namespace uTinyRipper.Exporters.Scripts
 			Template.GetUsedNamespaces(namespaces);
 		}
 
-		public sealed override string ClearName => Template.ClearName;
+		public sealed override string CleanNestedName => Template.CleanNestedName;
+		public sealed override bool IsEnum => Template.IsEnum;
 
 		public sealed override ScriptExportType DeclaringType => Template.DeclaringType;
 		public abstract ScriptExportType Template { get; } 

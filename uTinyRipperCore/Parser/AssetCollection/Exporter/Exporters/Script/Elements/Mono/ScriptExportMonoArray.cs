@@ -1,4 +1,4 @@
-﻿using Mono.Cecil;
+using Mono.Cecil;
 using System;
 
 namespace uTinyRipper.Exporters.Scripts.Mono
@@ -18,9 +18,9 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 			Type = type;
 
-			TypeName = ScriptExportMonoType.GetTypeName(Type);
-			Name = ScriptExportMonoType.GetName(Type, TypeName);
-			Module = ScriptExportMonoType.GetModule(Type);
+			TypeName = ScriptExportMonoType.GetName(Type);
+			NestedName = ScriptExportMonoType.GetNestedName(Type, TypeName);
+			Module = ScriptExportMonoType.GetModuleName(Type);
 			FullName = ScriptExportMonoType.GetFullName(Type, Module);
 		}
 		
@@ -38,7 +38,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		public override ScriptExportType Element => m_element;
 
 		public override string FullName { get; }
-		public override string Name { get; }
+		public override string NestedName { get; }
 		public override string TypeName { get; }
 		public override string Namespace => Element.Namespace;
 		public override string Module { get; }

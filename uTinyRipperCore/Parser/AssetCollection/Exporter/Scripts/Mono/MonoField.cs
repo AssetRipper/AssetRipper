@@ -47,7 +47,7 @@ namespace uTinyRipper.AssetExporters.Mono
 
 		public static bool IsSerializable(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
-			if(IsSerializableModifier(field))
+			if (IsSerializableModifier(field))
 			{
 				return IsFieldTypeSerializable(field.DeclaringType, field.FieldType, arguments);
 			}
@@ -94,7 +94,7 @@ namespace uTinyRipper.AssetExporters.Mono
 				return IsFieldTypeSerializable(declaringType, elementType, arguments);
 			}
 
-			if (MonoType.IsSerializableGeneric(fieldType))
+			if (MonoType.IsBuiltinGeneric(fieldType))
 			{
 				// generic is serialized same way as array, so check its argument
 				GenericInstanceType generic = (GenericInstanceType)fieldType;
@@ -112,8 +112,8 @@ namespace uTinyRipper.AssetExporters.Mono
 				{
 					return false;
 				}
-				// generic of generic isn't serializable
-				if (MonoType.IsSerializableGeneric(genericElement))
+				// generic of buildin generics isn't serializable
+				if (MonoType.IsBuiltinGeneric(genericElement))
 				{
 					return false;
 				}
@@ -144,7 +144,7 @@ namespace uTinyRipper.AssetExporters.Mono
 			}
 			if (fieldType.IsGenericInstance)
 			{
-				return false;
+				return MonoType.IsSerializableGeneric(fieldType);
 			}
 			if (MonoType.IsObject(fieldType))
 			{
@@ -156,7 +156,7 @@ namespace uTinyRipper.AssetExporters.Mono
 			{
 				return false;
 			}
-			if(MonoType.IsCompilerGenerated(definition))
+			if (MonoType.IsCompilerGenerated(definition))
 			{
 				return false;
 			}
@@ -205,7 +205,7 @@ namespace uTinyRipper.AssetExporters.Mono
 			foreach (CustomAttribute attribute in field.CustomAttributes)
 			{
 				TypeReference type = attribute.AttributeType;
-				if(IsSerializeFieldAttrribute(type.Namespace, type.Name))
+				if (IsSerializeFieldAttrribute(type.Namespace, type.Name))
 				{
 					return true;
 				}

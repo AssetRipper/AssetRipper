@@ -1,4 +1,4 @@
-﻿using SevenZip;
+using SevenZip;
 using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
@@ -37,7 +37,7 @@ namespace uTinyRipper.Classes
 
 			foreach (PPtr<Transform> pchild in transform.Children)
 			{
-				Transform child = pchild.GetAsset(root.File);
+				Transform child = pchild.GetAsset(transform.File);
 				GameObject childGO = child.GameObject.GetAsset(root.File);
 				CollectHierarchy(childGO, heirarchy);
 			}

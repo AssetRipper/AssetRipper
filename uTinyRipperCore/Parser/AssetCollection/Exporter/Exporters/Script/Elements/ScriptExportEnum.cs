@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace uTinyRipper.Exporters.Scripts
@@ -27,7 +27,6 @@ namespace uTinyRipper.Exporters.Scripts
 			throw new NotSupportedException();
 		}
 
-		public sealed override string ClearName => Name;
 		public sealed override bool IsEnum => true;
 
 		public sealed override ScriptExportType Base => null;

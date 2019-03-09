@@ -1,6 +1,7 @@
-﻿using Mono.Cecil;
+using Mono.Cecil;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.AssetExporters.Mono;
 
@@ -21,21 +22,20 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 				Definition = type.Resolve();
 			}
 
-			TypeName = GetTypeName(Type);
-			Name = GetName(Type, TypeName);
-			int index = Name.IndexOf('<');
-			ClearName = index == -1 ? Name : Name.Substring(0, index);
-			Module = GetModule(Type);
+			TypeName = GetName(Type);
+			NestedName = GetNestedName(Type, TypeName);
+			CleanNestedName = ToCleanName(NestedName);
+			Module = GetModuleName(Type);
 			FullName = GetFullName(Type, Module);
 		}
 
-		public static string GetName(TypeReference type)
+		public static string GetNestedName(TypeReference type)
 		{
-			string typeName = GetTypeName(type);
-			return GetName(type, typeName);
+			string typeName = GetName(type);
+			return GetNestedName(type, typeName);
 		}
 
-		public static string GetName(TypeReference type, string typeName)
+		public static string GetNestedName(TypeReference type, string typeName)
 		{
 			if (type.IsGenericParameter)
 			{
@@ -43,77 +43,83 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			}
 			if (type.IsNested)
 			{
-				string declaringName = GetName(type.DeclaringType);
+				string declaringName;
+				if (type.IsGenericInstance)
+				{
+					GenericInstanceType generic = (GenericInstanceType)type;
+					int argumentCount = MonoUtils.GetGenericArgumentCount(generic);
+					List<TypeReference> genericArguments = new List<TypeReference>(generic.GenericArguments.Count - argumentCount);
+					for (int i = 0; i < generic.GenericArguments.Count - argumentCount; i++)
+					{
+						genericArguments.Add(generic.GenericArguments[i]);
+					}
+					declaringName = GetNestedGenericName(type.DeclaringType, genericArguments);
+				}
+				else if(type.HasGenericParameters)
+				{
+					List<TypeReference> genericArguments = new List<TypeReference>(type.GenericParameters);
+					declaringName = GetNestedGenericName(type.DeclaringType, genericArguments);
+				}
+				else
+				{
+					declaringName = GetNestedName(type.DeclaringType);
+				}
 				return $"{declaringName}.{typeName}";
 			}
 			return typeName;
 		}
 
-		public static string GetTypeName(TypeReference type)
+		public static string ToCleanName(string name)
+		{
+			int openIndex = name.IndexOf('<');
+			if (openIndex == -1)
+			{
+				return name;
+			}
+			string firstPart = name.Substring(0, openIndex);
+			int closeIndex = name.IndexOf('>');
+			string secondPart = name.Substring(closeIndex + 1, name.Length - (closeIndex + 1));
+			return firstPart + ToCleanName(secondPart);
+		}
+
+		public static string GetName(TypeReference type)
 		{
 			if (MonoType.IsCPrimitive(type))
 			{
 				return ScriptType.ToCPrimitiveString(type.Name);
 			}
 
-			string name = type.Name;
 			if (type.IsGenericInstance)
 			{
 				GenericInstanceType generic = (GenericInstanceType)type;
-				int index = name.IndexOf('`');
-				name = name.Substring(0, index);
-				name += '<';
-				for (int i = 0; i < generic.GenericArguments.Count; i++)
-				{
-					TypeReference arg = generic.GenericArguments[i];
-					name += GetArgumentName(arg);
-					if (i < generic.GenericArguments.Count - 1)
-					{
-						name += ", ";
-					}
-				}
-				name += '>';
+				return GetGenericInstanceName(generic);
 			}
 			else if (type.HasGenericParameters)
 			{
-				// TypeReference names parameters as <!0,!1> (!index) but TypeDefinition names them as <T1,T2> (RealParameterName)
-				type = type.ResolveOrDefault();
-				int index = name.IndexOf('`');
-				name = name.Substring(0, index);
-				name += '<';
-				for (int i = 0; i < type.GenericParameters.Count; i++)
-				{
-					GenericParameter par = type.GenericParameters[i];
-					name += GetArgumentName(par);
-					if (i < type.GenericParameters.Count - 1)
-					{
-						name += ", ";
-					}
-				}
-				name += '>';
+				return GetGenericTypeName(type);
 			}
 			else if (type.IsArray)
 			{
 				ArrayType array = (ArrayType)type;
-				name = GetTypeName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
+				return GetName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
 			}
-			return name;
+			return type.Name;
 		}
 
 		public static string GetFullName(TypeReference type)
 		{
-			string module = GetModule(type);
+			string module = GetModuleName(type);
 			return GetFullName(type, module);
 		}
 
 		public static string GetFullName(TypeReference type, string module)
 		{
-			string name = GetName(type);
+			string name = GetNestedName(type);
 			string fullName = $"{type.Namespace}.{name}";
 			return ScriptExportManager.ToFullName(module, fullName);
 		}
 
-		public static string GetModule(TypeReference type)
+		public static string GetModuleName(TypeReference type)
 		{
 			return AssemblyManager.ToAssemblyName(type.Scope.Name);
 		}
@@ -147,14 +153,79 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			return HasMember(definition.BaseType, name);
 		}
 
+		private static string GetNestedGenericName(TypeReference type, List<TypeReference> genericArguments)
+		{
+			string name = type.Name;
+			if (type.HasGenericParameters)
+			{
+				name = GetGenericTypeName(type, genericArguments);
+				int argumentCount = MonoUtils.GetGenericParameterCount(type);
+				genericArguments.RemoveRange(genericArguments.Count - argumentCount, argumentCount);
+			}
+			if (type.IsNested)
+			{
+				string declaringName = GetNestedGenericName(type.DeclaringType, genericArguments);
+				return $"{declaringName}.{name}";
+			}
+			else
+			{
+				return name;
+			}
+		}
+
+		private static string GetGenericTypeName(TypeReference genericType)
+		{
+			// TypeReference contain parameters with "<!0,!1> (!index)" name but TypeDefinition's name is "<T1,T2> (RealParameterName)"
+			genericType = genericType.ResolveOrDefault();
+			return GetGenericName(genericType, genericType.GenericParameters);
+		}
+
+		private static string GetGenericTypeName(TypeReference genericType, IReadOnlyList<TypeReference> genericArguments)
+		{
+			genericType = genericType.ResolveOrDefault();
+			return GetGenericName(genericType, genericArguments);
+		}
+
+		private static string GetGenericInstanceName(GenericInstanceType genericInstance)
+		{
+			return GetGenericName(genericInstance.ElementType, genericInstance.GenericArguments);
+		}
+
+		private static string GetGenericName(TypeReference genericType, IReadOnlyList<TypeReference> genericArguments)
+		{
+			string name = genericType.Name;
+			int argumentCount = MonoUtils.GetGenericParameterCount(genericType);
+			if (argumentCount == 0)
+			{
+				// nested class/enum (of generic class) is generic instance but it doesn't has '`' symbol in its name
+				return name;
+			}
+
+			int index = name.IndexOf('`');
+			StringBuilder sb = new StringBuilder(genericType.Name, 0, index, 50 + index);
+			sb.Append('<');
+			for (int i = genericArguments.Count - argumentCount; i < genericArguments.Count; i++)
+			{
+				TypeReference arg = genericArguments[i];
+				string argumentName = GetArgumentName(arg);
+				sb.Append(argumentName);
+				if (i < genericArguments.Count - 1)
+				{
+					sb.Append(", ");
+				}
+			}
+			sb.Append('>');
+			return sb.ToString();
+		}
+
 		private static string GetArgumentName(TypeReference type)
 		{
-			if(MonoType.IsEngineObject(type))
+			if (MonoType.IsEngineObject(type))
 			{
 				return $"{type.Namespace}.{type.Name}";
 			}
 
-			return GetName(type);
+			return GetNestedName(type);
 		}
 
 		public override void Init(IScriptExportManager manager)
@@ -166,7 +237,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 			m_fields = CreateFields(manager);
 
-			if(Type.IsNested)
+			if (Type.IsNested)
 			{
 				m_declaringType = manager.RetrieveType(Type.DeclaringType);
 				if (!Type.IsGenericParameter)
@@ -178,7 +249,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 				
 		public override void GetUsedNamespaces(ICollection<string> namespaces)
 		{
-			if(Definition != null)
+			if (Definition != null)
 			{
 				if (Definition.IsSerializable)
 				{
@@ -208,7 +279,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			List<ScriptExportField> fields = new List<ScriptExportField>();
 			foreach (FieldDefinition field in Definition.Fields)
 			{
-				if(!MonoField.IsSerializableModifier(field))
+				if (!MonoField.IsSerializableModifier(field))
 				{
 					continue;
 				}
@@ -265,9 +336,9 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		}
 
 		public override string FullName { get; }
-		public override string Name { get; }
+		public override string NestedName { get; }
+		public override string CleanNestedName { get; }
 		public override string TypeName { get; }
-		public override string ClearName { get; }
 		public override string Namespace => DeclaringType == null ? Type.Namespace : DeclaringType.Namespace;
 		public override string Module { get; }
 
