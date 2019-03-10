@@ -76,6 +76,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.CapsuleCollider);
 			OverrideYamlExporter(ClassIDType.SkinnedMeshRenderer);
 			OverrideYamlExporter(ClassIDType.BuildSettings);
+			OverrideYamlExporter(ClassIDType.CharacterController);
 			OverrideYamlExporter(ClassIDType.WheelCollider);
 			OverrideYamlExporter(ClassIDType.NetworkManager);
 			OverrideYamlExporter(ClassIDType.TerrainCollider);

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -61,7 +61,7 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 			
-			yield return Material.FetchDependency(file, isLog, ToLogString, "m_Material");
+			yield return Material.FetchDependency(file, isLog, ToLogString, MaterialName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -69,18 +69,27 @@ namespace uTinyRipper.Classes
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			if (IsReadMaterial)
 			{
-				node.Add("m_Material", Material.ExportYAML(container));
+				node.Add(MaterialName, Material.ExportYAML(container));
 			}
 			if (IsReadIsTrigger)
 			{
-				node.Add("m_IsTrigger", IsTrigger);
+				node.Add(IsTriggerName, IsTrigger);
 			}
-			node.Add("m_Enabled", Enabled);
+			node.Add(EnabledName, Enabled);
 			return node;
+		}
+
+		protected void ReadComponent(AssetReader reader)
+		{
+			base.Read(reader);
 		}
 		
 		public bool IsTrigger { get; private set; }
 		public bool Enabled { get; private set; }
+
+		public const string MaterialName = "m_Material";
+		public const string IsTriggerName = "m_IsTrigger";
+		public const string EnabledName = "m_Enabled";
 
 		public PPtr<PhysicMaterial> Material;
 

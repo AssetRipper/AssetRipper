@@ -144,6 +144,8 @@ namespace uTinyRipper
 					return new SkinnedMeshRenderer(assetInfo);
 				case ClassIDType.BuildSettings:
 					return new BuildSettings(assetInfo);
+				case ClassIDType.CharacterController:
+					return new CharacterController(assetInfo);
 				case ClassIDType.AssetBundle:
 					return new AssetBundle(assetInfo);
 				case ClassIDType.WheelCollider:
