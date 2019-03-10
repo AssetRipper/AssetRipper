@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.SpriteRenderers;
 using uTinyRipper.Exporter.YAML;
@@ -28,7 +28,7 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5, 6);
 		}
 		/// <summary>
-		/// 5.6.2 to 5.6.x
+		/// 5.6.1p2 to 5.6.x
 		/// 2017.1.0b5 and greater
 		/// </summary>
 		public static bool IsReadWasSpriteAssigned(Version version)
@@ -39,7 +39,7 @@ namespace uTinyRipper.Classes
 			}
 			else
 			{
-				return version.IsGreaterEqual(5, 6, 2);
+				return version.IsGreaterEqual(5, 6, 1, VersionType.Patch, 2);
 			}
 		}
 		/// <summary>
