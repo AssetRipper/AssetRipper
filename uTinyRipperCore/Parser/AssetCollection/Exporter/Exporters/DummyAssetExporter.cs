@@ -8,6 +8,12 @@ namespace uTinyRipper.AssetExporters
 {
 	internal class DummyAssetExporter : IAssetExporter
 	{
+		public void SetUpClassType(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
+		{
+			m_emptyTypes[classType] = isEmptyCollection;
+			m_metaTypes[classType] = isMetaType;
+		}
+
 		public bool IsHandle(Object asset)
 		{
 			return true;
@@ -31,16 +37,20 @@ namespace uTinyRipper.AssetExporters
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
-			switch(asset.ClassID)
+			if (m_metaTypes.TryGetValue(asset.ClassID, out bool isEmptyCollection))
 			{
-				case ClassIDType.MonoManager:
-				case ClassIDType.AssetBundle:
-				case ClassIDType.ResourceManager:
-				case ClassIDType.PreloadData:
+				if (isEmptyCollection)
+				{
 					return new EmptyExportCollection();
-
-				default:
+				}
+				else
+				{
 					return new SkipExportCollection(this, asset);
+				}
+			}
+			else
+			{
+				throw new NotSupportedException(asset.ClassID.ToString());
 			}
 		}
 
@@ -52,22 +62,18 @@ namespace uTinyRipper.AssetExporters
 
 		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
 		{
-			switch (classID)
+			if (m_metaTypes.TryGetValue(classID, out bool isMetaType))
 			{
-				case ClassIDType.AnimatorController:
-				case ClassIDType.MonoBehaviour:
-					assetType = AssetType.Serialized;
-					break;
-
-				case ClassIDType.MonoScript:
-				case ClassIDType.Sprite:
-					assetType = AssetType.Meta;
-					break;
-
-				default:
-					throw new NotSupportedException(classID.ToString());
+				assetType = isMetaType ? AssetType.Meta : AssetType.Serialized;
+				return true;
 			}
-			return true;
+			else
+			{
+				throw new NotSupportedException(classID.ToString());
+			}
 		}
+
+		private readonly Dictionary<ClassIDType, bool> m_emptyTypes = new Dictionary<ClassIDType, bool>();
+		private readonly Dictionary<ClassIDType, bool> m_metaTypes = new Dictionary<ClassIDType, bool>();
 	}
 }
