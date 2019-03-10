@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters.Classes;
 using uTinyRipper.Classes;
@@ -79,14 +79,15 @@ namespace uTinyRipper.AssetExporters
 
 		public long GetExportID(Object asset)
 		{
-			if (CurrentCollection.IsContains(asset))
+			if (m_cacheCollection.IsContains(asset))
 			{
-				return CurrentCollection.GetExportID(asset);
+				return m_cacheCollection.GetExportID(asset);
 			}
 			foreach (IExportCollection collection in m_collections)
 			{
 				if (collection.IsContains(asset))
 				{
+					m_cacheCollection = collection;
 					return collection.GetExportID(asset);
 				}
 			}
@@ -108,15 +109,16 @@ namespace uTinyRipper.AssetExporters
 
 		public ExportPointer CreateExportPointer(Object asset)
 		{
-			if (CurrentCollection.IsContains(asset))
+			if (m_cacheCollection.IsContains(asset))
 			{
-				return CurrentCollection.CreateExportPointer(asset, true);
+				return m_cacheCollection.CreateExportPointer(asset, m_cacheCollection == CurrentCollection);
 			}
 			foreach (IExportCollection collection in m_collections)
 			{
 				if (collection.IsContains(asset))
 				{
-					return collection.CreateExportPointer(asset, false);
+					m_cacheCollection = collection;
+					return collection.CreateExportPointer(asset, collection == CurrentCollection);
 				}
 			}
 
@@ -189,7 +191,11 @@ namespace uTinyRipper.AssetExporters
 			return m_tagManager.Tags[tagID - 20000];
 		}
 
-		public IExportCollection CurrentCollection { get; set; }
+		public IExportCollection CurrentCollection
+		{
+			get => m_currentCollection;
+			set => m_currentCollection = m_cacheCollection = value;
+		}
 		public VirtualSerializedFile VirtualFile { get; }
 		public ISerializedFile File => CurrentCollection.File;
 		public Version Version => File.Version;
@@ -202,6 +208,9 @@ namespace uTinyRipper.AssetExporters
 		private readonly ProjectExporter m_exporter;
 		private readonly IReadOnlyList<IExportCollection> m_collections;
 
+		private IExportCollection m_currentCollection;
+#warning: TODO: replace with Dictionary<Asset, Collection> ?
+		private IExportCollection m_cacheCollection;
 		private BuildSettings m_buildSettings;
 		private TagManager m_tagManager;
 		private SceneExportCollection[] m_scenes;

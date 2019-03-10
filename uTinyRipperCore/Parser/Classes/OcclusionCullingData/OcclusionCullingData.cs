@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -98,7 +98,7 @@ namespace uTinyRipper.Classes
 				if (asset.ClassID == ClassIDType.OcclusionCullingSettings)
 				{
 					OcclusionCullingSettings cullingSetting = (OcclusionCullingSettings)asset;
-					if (Scenes.Any(t => t.Scene == cullingSetting.SceneGUID))
+					if (cullingSetting.OcclusionCullingData.IsAsset(cullingSetting.File, this))
 					{
 						cullingSettings.Add(cullingSetting);
 					}
