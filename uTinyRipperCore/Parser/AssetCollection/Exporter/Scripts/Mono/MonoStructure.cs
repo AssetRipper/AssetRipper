@@ -1,17 +1,17 @@
-﻿using Mono.Cecil;
+using Mono.Cecil;
 using System.Collections.Generic;
 
 namespace uTinyRipper.AssetExporters.Mono
 {
 	public sealed class MonoStructure : ScriptStructure
 	{
-		internal MonoStructure(TypeDefinition type):
-			this(type, s_emptyArguments)
+		internal MonoStructure(MonoManager manager, TypeDefinition type):
+			this(manager, type, s_emptyArguments)
 		{
 		}
 
-		internal MonoStructure(TypeDefinition type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
-			base(type.Namespace, type.Name, CreateBase(type, arguments), CreateFields(type, arguments))
+		internal MonoStructure(MonoManager manager, TypeDefinition type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
+			base(type.Namespace, type.Name, CreateBase(manager, type, arguments), CreateFields(manager, type, arguments))
 		{
 		}
 
@@ -20,7 +20,7 @@ namespace uTinyRipper.AssetExporters.Mono
 		{
 		}
 
-		private static IScriptStructure CreateBase(TypeDefinition type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		private static IScriptStructure CreateBase(MonoManager manager, TypeDefinition type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
 			if (MonoType.IsPrime(type.BaseType))
 			{
@@ -43,14 +43,14 @@ namespace uTinyRipper.AssetExporters.Mono
 					templateArguments.Add(parameter, argument.Resolve());
 				}
 
-				return new MonoStructure(template, templateArguments);
+				return new MonoStructure(manager, template, templateArguments);
 			}
 
 			TypeDefinition definition = type.BaseType.Resolve();
-			return new MonoStructure(definition);
+			return new MonoStructure(manager, definition);
 		}
 
-		private static IEnumerable<IScriptField> CreateFields(TypeDefinition type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		private static IEnumerable<IScriptField> CreateFields(MonoManager manager, TypeDefinition type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
 			List<IScriptField> fields = new List<IScriptField>();
 			foreach (FieldDefinition field in type.Fields)
@@ -60,7 +60,7 @@ namespace uTinyRipper.AssetExporters.Mono
 					continue;
 				}
 
-				MonoField monoField = new MonoField(field, arguments);
+				MonoField monoField = new MonoField(manager, field, arguments);
 				fields.Add(monoField);
 			}
 			return fields;

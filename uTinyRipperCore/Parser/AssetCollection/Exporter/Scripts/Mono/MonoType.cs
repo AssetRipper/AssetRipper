@@ -5,9 +5,17 @@ namespace uTinyRipper.AssetExporters.Mono
 {
 	public class MonoType : ScriptType
 	{
-		internal MonoType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
-			base(GetPrimitiveType(type, arguments), CreateComplexType(type, arguments))
+		internal MonoType(MonoManager manager, TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
+			base(GetPrimitiveType(type, arguments))
 		{
+			string uniqueName = GetUniqueName(type);
+			manager.AssemblyManager.AddScriptType(uniqueName, this);
+			ComplexType = CreateComplexType(manager, type, arguments);
+		}
+
+		public static string GetUniqueName(TypeReference type)
+		{
+			return $"[{type.Module.Name}]{type.FullName}";
 		}
 
 		public static bool IsPrimitive(TypeReference type)
@@ -134,64 +142,6 @@ namespace uTinyRipper.AssetExporters.Mono
 			return false;
 		}
 
-		private static PrimitiveType GetPrimitiveType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
-		{
-			type = GetElementType(type, arguments);
-			return ToPrimitiveType(type);
-		}
-
-		private static IScriptStructure CreateComplexType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
-		{
-			type = GetElementType(type, arguments);
-			if (IsEngineStruct(type))
-			{
-				return ScriptStructure.EngineTypeToScriptStructure(type.Name);
-			}
-
-			PrimitiveType primType = ToPrimitiveType(type);
-			if (primType == PrimitiveType.Complex)
-			{
-				if (IsEnginePointer(type))
-				{
-					return new ScriptPointer(type);
-				}
-				else
-				{
-					return new MonoStructure(type.Resolve(), arguments);
-				}
-			}
-			else
-			{
-				return null;
-			}
-		}
-
-		private static TypeReference GetElementType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
-		{
-			if (type.IsGenericParameter)
-			{
-				GenericParameter parameter = (GenericParameter)type;
-				type = arguments[parameter];
-			}
-
-			if (type.IsArray)
-			{
-				type = type.GetElementType();
-			}
-			else if (IsList(type))
-			{
-				GenericInstanceType generic = (GenericInstanceType)type;
-				type = generic.GenericArguments[0];
-			}
-
-			if (type.IsGenericParameter)
-			{
-				GenericParameter parameter = (GenericParameter)type;
-				type = arguments[parameter];
-			}
-			return type;
-		}
-
 		private static PrimitiveType ToPrimitiveType(TypeReference type)
 		{
 			TypeDefinition definition = type.Resolve();
@@ -209,6 +159,61 @@ namespace uTinyRipper.AssetExporters.Mono
 
 			return ToPrimitiveType(type.Namespace, type.Name);
 		}
+
+		private static PrimitiveType GetPrimitiveType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		{
+			TypeReference elementType = GetElementType(type, arguments);
+			return ToPrimitiveType(elementType);
+		}
+
+		private static IScriptStructure CreateComplexType(MonoManager manager, TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		{
+			TypeReference elementType = GetElementType(type, arguments);
+			if (IsEngineStruct(elementType))
+			{
+				return ScriptStructure.EngineTypeToScriptStructure(elementType.Name);
+			}
+
+			PrimitiveType primType = ToPrimitiveType(elementType);
+			if (primType != PrimitiveType.Complex)
+			{
+				return null;
+			}
+
+			if (IsEnginePointer(elementType))
+			{
+				return new ScriptPointer(elementType);
+			}
+			else
+			{
+				return new MonoStructure(manager, elementType.Resolve(), arguments);
+			}
+		}
+
+		private static TypeReference GetElementType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		{
+			if (type.IsGenericParameter)
+			{
+				GenericParameter parameter = (GenericParameter)type;
+				type = arguments[parameter];
+			}
+
+			if (type.IsArray)
+			{
+				type = type.GetElementType();
+				return GetElementType(type, arguments);
+			}
+			if (IsList(type))
+			{
+				GenericInstanceType generic = (GenericInstanceType)type;
+				type = generic.GenericArguments[0];
+				return GetElementType(type, arguments);
+			}
+
+			return type;
+		}
+
+		public override IScriptStructure ComplexType { get; }
 
 		private const string EnumValueFieldName = "value__";
 	}

@@ -42,5 +42,28 @@ namespace uTinyRipper
 			}
 			return count;
 		}
+
+		public static GenericInstanceType ReplaceGenericParameters(GenericInstanceType genericInstance, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		{
+			GenericInstanceType newInstance = new GenericInstanceType(genericInstance.ElementType);
+			foreach (TypeReference argument in genericInstance.GenericArguments)
+			{
+				TypeReference newArgument = argument.IsGenericParameter ? arguments[(GenericParameter)argument] : argument;
+				newInstance.GenericArguments.Add(newArgument);
+			}
+			return newInstance;
+		}
+
+		public static bool HasGenericParameters(GenericInstanceType genericInstance)
+		{
+			foreach (TypeReference argument in genericInstance.GenericArguments)
+			{
+				if (argument.IsGenericParameter)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 }

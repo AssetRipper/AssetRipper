@@ -2,21 +2,11 @@ using System;
 
 namespace uTinyRipper.AssetExporters
 {
-	public class ScriptType
+	public abstract class ScriptType
 	{
-		public ScriptType(PrimitiveType type):
-			this(type, null)
+		public ScriptType(PrimitiveType type)
 		{
-		}
-
-		public ScriptType(PrimitiveType type, IScriptStructure complexType)
-		{
-			if(Type == PrimitiveType.Complex && complexType == null)
-			{
-				throw new ArgumentNullException(nameof(complexType));
-			}
 			Type = type;
-			ComplexType = complexType;
 		}
 
 		public static bool IsPrimitive(string @namespace, string name)
@@ -310,7 +300,7 @@ namespace uTinyRipper.AssetExporters
 		}
 
 		public PrimitiveType Type { get; }
-		public IScriptStructure ComplexType { get; }
+		public abstract IScriptStructure ComplexType { get; }
 
 		public const string SystemName = "System";
 		public const string SystemCollectionGenericName = "System.Collections.Generic";

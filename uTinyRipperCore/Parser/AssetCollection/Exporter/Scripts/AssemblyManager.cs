@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters.Mono;
 using uTinyRipper.Exporters.Scripts;
@@ -136,6 +137,21 @@ namespace uTinyRipper.AssetExporters
 			return m_manager.GetScriptInfo(assembly, name);
 		}
 
+		internal void InvokeRequestAssemblyCallback(string assemblyName)
+		{
+			m_requestAssemblyCallback.Invoke(assemblyName);
+		}
+
+		internal void AddScriptType(string uniqueName, ScriptType scriptType)
+		{
+			m_scriptTypes.Add(uniqueName, scriptType);
+		}
+
+		internal bool TryGetScriptType(string uniqueName, out ScriptType scriptType)
+		{
+			return m_scriptTypes.TryGetValue(uniqueName, out scriptType);
+		}
+
 		public void Dispose()
 		{
 			Dispose(true);
@@ -155,22 +171,11 @@ namespace uTinyRipper.AssetExporters
 			get => m_manager == null ? ScriptingBackEnd.Unknown : m_manager.ScriptingBackEnd;
 			set
 			{
-				if(ScriptingBackEnd == value)
+				if (ScriptingBackEnd == value)
 				{
 					return;
 				}
-
-				if(value == ScriptingBackEnd.Unknown)
-				{
-					if (ScriptingBackEnd != ScriptingBackEnd.Unknown)
-					{
-						m_manager.Dispose();
-						m_manager = null;
-					}
-					return;
-				}
-
-				if(ScriptingBackEnd != ScriptingBackEnd.Unknown)
+				if (ScriptingBackEnd != ScriptingBackEnd.Unknown)
 				{
 					throw new Exception("Scripting backend is already set");
 				}
@@ -178,7 +183,7 @@ namespace uTinyRipper.AssetExporters
 				switch (value)
 				{
 					case ScriptingBackEnd.Mono:
-						m_manager = new MonoManager(m_requestAssemblyCallback);
+						m_manager = new MonoManager(this);
 						break;
 
 					default:
@@ -190,5 +195,7 @@ namespace uTinyRipper.AssetExporters
 		private event Action<string> m_requestAssemblyCallback;
 
 		private IAssemblyManager m_manager;
+		private Dictionary<string, ScriptType> m_scriptTypes = new Dictionary<string, ScriptType>();
+
 	}
 }

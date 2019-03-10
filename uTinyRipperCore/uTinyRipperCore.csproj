@@ -183,6 +183,7 @@
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\TextureImporterCompression.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\SpriteImportMode.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Classes\Importers\Texture\TextureImporterNPOTScale.cs" />
+    <Compile Include="Parser\AssetCollection\Exporter\Scripts\Mono\MonoSerializableScope.cs" />
     <Compile Include="Parser\Classes\AudioReverbZone.cs" />
     <Compile Include="Parser\Classes\Camera\GateFitMode.cs" />
     <Compile Include="Parser\Classes\CharacterController.cs" />

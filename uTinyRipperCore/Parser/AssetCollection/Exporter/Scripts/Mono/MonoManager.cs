@@ -8,13 +8,9 @@ namespace uTinyRipper.AssetExporters.Mono
 {
 	internal sealed class MonoManager : IAssemblyManager, IAssemblyResolver
 	{
-		public MonoManager(Action<string> requestAssemblyCallback)
+		public MonoManager(AssemblyManager assemblyManager)
 		{
-			if(requestAssemblyCallback == null)
-			{
-				throw new ArgumentNullException(nameof(requestAssemblyCallback));
-			}
-			m_requestAssemblyCallback = requestAssemblyCallback;
+			AssemblyManager = assemblyManager ?? throw new ArgumentNullException(nameof(assemblyManager));
 		}
 
 		~MonoManager()
@@ -112,7 +108,7 @@ namespace uTinyRipper.AssetExporters.Mono
 			{
 				throw new ArgumentException($"Can't find type {name}[{assembly}]");
 			}
-			return new MonoStructure(type);
+			return new MonoStructure(this, type);
 		}
 
 		public ScriptStructure CreateStructure(string assembly, string @namespace, string name)
@@ -122,7 +118,7 @@ namespace uTinyRipper.AssetExporters.Mono
 			{
 				throw new ArgumentException($"Can't find type {@namespace}.{name}[{assembly}]");
 			}
-			return new MonoStructure(type);
+			return new MonoStructure(this, type);
 		}
 
 		public ScriptExportType CreateExportType(ScriptExportManager exportManager, string assembly, string name)
@@ -186,6 +182,29 @@ namespace uTinyRipper.AssetExporters.Mono
 			GC.SuppressFinalize(this);
 		}
 
+#warning TODO: max depth level 7
+		public ScriptType GetScriptType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		{
+			if (type.IsGenericInstance)
+			{
+				GenericInstanceType genericInstance = (GenericInstanceType)type;
+				if (MonoUtils.HasGenericParameters(genericInstance))
+				{
+					type = MonoUtils.ReplaceGenericParameters(genericInstance, arguments);
+				}
+			}
+
+			string uniqueName = MonoType.GetUniqueName(type);
+			if (AssemblyManager.TryGetScriptType(uniqueName, out ScriptType scriptType))
+			{
+				return scriptType;
+			}
+			else
+			{
+				return new MonoType(this, type, arguments);
+			}
+		}
+
 		private void Dispose(bool disposing)
 		{
 			foreach (AssemblyDefinition assembly in m_assemblies.Values)
@@ -201,7 +220,7 @@ namespace uTinyRipper.AssetExporters.Mono
 				return assembly;
 			}
 
-			m_requestAssemblyCallback.Invoke(name);
+			AssemblyManager.InvokeRequestAssemblyCallback(name);
 			if (m_assemblies.TryGetValue(name, out assembly))
 			{
 				return assembly;
@@ -294,7 +313,6 @@ namespace uTinyRipper.AssetExporters.Mono
 
 			if (type.IsGenericInstance)
 			{
-				// this is the case only for base classes. Field types aren't checked here
 				GenericInstanceType instance = (GenericInstanceType)type;
 				Dictionary<GenericParameter, TypeReference> templateArguments = new Dictionary<GenericParameter, TypeReference>();
 				templateArguments.AddRange(arguments);
@@ -330,7 +348,7 @@ namespace uTinyRipper.AssetExporters.Mono
 				{
 					continue;
 				}
-				if (field.FieldType.IsGenericInstance)
+				/*if (field.FieldType.IsGenericInstance)
 				{
 					// it isn't possible to check whether generic instance is serializable or not without resolving its definition
 					if (field.FieldType.Module == null)
@@ -343,7 +361,7 @@ namespace uTinyRipper.AssetExporters.Mono
 					{
 						continue;
 					}
-				}
+				}*/
 
 				if (!IsTypeValid(field.FieldType, arguments))
 				{
@@ -367,13 +385,13 @@ namespace uTinyRipper.AssetExporters.Mono
 			set => throw new NotSupportedException();
 		}
 
+		public AssemblyManager AssemblyManager { get; }
+
 		private static readonly IReadOnlyDictionary<GenericParameter, TypeReference> s_emptyArguments = new Dictionary<GenericParameter, TypeReference>();
 
 		public const string AssemblyExtension = ".dll";
 
 		private readonly Dictionary<string, AssemblyDefinition> m_assemblies = new Dictionary<string, AssemblyDefinition>();
 		private readonly Dictionary<string, bool> m_validTypes = new Dictionary<string, bool>();
-
-		private event Action<string> m_requestAssemblyCallback;
 	}
 }

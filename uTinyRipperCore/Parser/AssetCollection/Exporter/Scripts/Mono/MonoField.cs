@@ -5,8 +5,8 @@ namespace uTinyRipper.AssetExporters.Mono
 {
 	public sealed class MonoField : ScriptField
 	{
-		internal MonoField(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
-			base(new MonoType(field.FieldType, arguments), IsArrayType(field.FieldType), field.Name)
+		internal MonoField(MonoManager manager, FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
+			base(manager.GetScriptType(field.FieldType, arguments), IsArrayType(field.FieldType), field.Name)
 		{
 		}
 		
@@ -49,18 +49,21 @@ namespace uTinyRipper.AssetExporters.Mono
 		{
 			if (IsSerializableModifier(field))
 			{
-				return IsFieldTypeSerializable(field.DeclaringType, field.FieldType, arguments);
+				MonoSerializableScope scope = new MonoSerializableScope(field, arguments);
+				return IsFieldTypeSerializable(scope);
 			}
 			return false;
 		}
 
-		public static bool IsFieldTypeSerializable(TypeReference declaringType, TypeReference fieldType, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		public static bool IsFieldTypeSerializable(MonoSerializableScope scope)
 		{
+			TypeReference fieldType = scope.FieldType;
+
 			// if it's generic parameter then get its real type
 			if (fieldType.IsGenericParameter)
 			{
 				GenericParameter parameter = (GenericParameter)fieldType;
-				fieldType = arguments[parameter];
+				fieldType = scope.Arguments[parameter];
 			}
 
 			if (fieldType.IsArray)
@@ -77,7 +80,7 @@ namespace uTinyRipper.AssetExporters.Mono
 				if (elementType.IsGenericParameter)
 				{
 					GenericParameter parameter = (GenericParameter)elementType;
-					elementType = arguments[parameter];
+					elementType = scope.Arguments[parameter];
 				}
 
 				// array of arrays isn't serializable
@@ -90,35 +93,37 @@ namespace uTinyRipper.AssetExporters.Mono
 				{
 					return false;
 				}
-				// check if element is serializable
-				return IsFieldTypeSerializable(declaringType, elementType, arguments);
+				// check if array element is serializable
+				MonoSerializableScope elementScope = new MonoSerializableScope(scope.DeclaringType, elementType, true, scope.Arguments);
+				return IsFieldTypeSerializable(elementScope);
 			}
 
-			if (MonoType.IsBuiltinGeneric(fieldType))
+			if (MonoType.IsList(fieldType))
 			{
-				// generic is serialized same way as array, so check its argument
-				GenericInstanceType generic = (GenericInstanceType)fieldType;
-				TypeReference genericElement = generic.GenericArguments[0];
+				// list is serialized same way as array, so check its argument
+				GenericInstanceType list = (GenericInstanceType)fieldType;
+				TypeReference listElement = list.GenericArguments[0];
 
 				// if it's generic parameter then get its real type
-				if (genericElement.IsGenericParameter)
+				if (listElement.IsGenericParameter)
 				{
-					GenericParameter parameter = (GenericParameter)genericElement;
-					genericElement = arguments[parameter];
+					GenericParameter parameter = (GenericParameter)listElement;
+					listElement = scope.Arguments[parameter];
 				}
 
-				// generic of arrays isn't serializable
-				if (genericElement.IsArray)
+				// list of arrays isn't serializable
+				if (listElement.IsArray)
 				{
 					return false;
 				}
-				// generic of buildin generics isn't serializable
-				if (MonoType.IsBuiltinGeneric(genericElement))
+				// list of buildin generics isn't serializable
+				if (MonoType.IsBuiltinGeneric(listElement))
 				{
 					return false;
 				}
-				// check if element is serializable
-				return IsFieldTypeSerializable(declaringType, genericElement, arguments);
+				// check if list element is serializable
+				MonoSerializableScope elementScope = new MonoSerializableScope(scope.DeclaringType, listElement, true, scope.Arguments);
+				return IsFieldTypeSerializable(elementScope);
 			}
 
 			if (fieldType.IsPrimitive)
@@ -138,7 +143,7 @@ namespace uTinyRipper.AssetExporters.Mono
 				return true;
 			}
 
-			if (IsRecursive(declaringType, fieldType))
+			if (MonoType.IsObject(fieldType))
 			{
 				return false;
 			}
@@ -146,9 +151,9 @@ namespace uTinyRipper.AssetExporters.Mono
 			{
 				return MonoType.IsSerializableGeneric(fieldType);
 			}
-			if (MonoType.IsObject(fieldType))
+			if (IsRecursive(scope.DeclaringType, fieldType))
 			{
-				return false;
+				return scope.IsArrayElement;
 			}
 
 			TypeDefinition definition = fieldType.Resolve();
