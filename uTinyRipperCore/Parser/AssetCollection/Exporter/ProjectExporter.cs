@@ -81,13 +81,14 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.NetworkManager);
 			OverrideYamlExporter(ClassIDType.TerrainCollider);
 			OverrideYamlExporter(ClassIDType.TerrainData);
-			OverrideYamlExporter(ClassIDType.OcclusionArea);
 			OverrideYamlExporter(ClassIDType.LightmapSettings);
 			OverrideYamlExporter(ClassIDType.AudioReverbZone);
+			OverrideYamlExporter(ClassIDType.OcclusionArea);
 			OverrideYamlExporter(ClassIDType.NavMeshSettings);
 			OverrideYamlExporter(ClassIDType.ParticleSystem);
 			OverrideYamlExporter(ClassIDType.ParticleSystemRenderer);
 			OverrideYamlExporter(ClassIDType.ShaderVariantCollection);
+			OverrideYamlExporter(ClassIDType.LODGroup);
 			OverrideYamlExporter(ClassIDType.SpriteRenderer);
 			OverrideYamlExporter(ClassIDType.Terrain);
 			OverrideYamlExporter(ClassIDType.AnimatorOverrideController);

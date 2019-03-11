@@ -85,7 +85,7 @@ namespace uTinyRipper.Classes
 		}
 		
 		public bool IsTrigger { get; private set; }
-		public bool Enabled { get; private set; }
+		public bool Enabled { get; protected set; }
 
 		public const string MaterialName = "m_Material";
 		public const string IsTriggerName = "m_IsTrigger";

@@ -187,6 +187,10 @@
     <Compile Include="Parser\Classes\AudioReverbZone.cs" />
     <Compile Include="Parser\Classes\Camera\GateFitMode.cs" />
     <Compile Include="Parser\Classes\CharacterController.cs" />
+    <Compile Include="Parser\Classes\LODGroup\LOD.cs" />
+    <Compile Include="Parser\Classes\LODGroup\LODFadeMode.cs" />
+    <Compile Include="Parser\Classes\LODGroup\LODGroup.cs" />
+    <Compile Include="Parser\Classes\LODGroup\LODRenderer.cs" />
     <Compile Include="Parser\Classes\ParticleSystemForceField\ParticleSystemForceField.cs" />
     <Compile Include="Parser\Classes\ParticleSystemForceField\ParticleSystemForceFieldParameters.cs" />
     <Compile Include="Parser\Classes\ParticleSystemForceField\ParticleSystemForceFieldShape.cs" />

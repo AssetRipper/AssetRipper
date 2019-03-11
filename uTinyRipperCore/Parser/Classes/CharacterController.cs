@@ -37,6 +37,7 @@ namespace uTinyRipper.Classes
 			else
 			{
 				ReadComponent(reader);
+				Enabled = true;
 			}
 
 			Height = reader.ReadSingle();

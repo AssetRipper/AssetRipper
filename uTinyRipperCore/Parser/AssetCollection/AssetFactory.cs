@@ -176,6 +176,8 @@ namespace uTinyRipper
 					return new ParticleSystemRenderer(assetInfo);
 				case ClassIDType.ShaderVariantCollection:
 					return new ShaderVariantCollection(assetInfo);
+				case ClassIDType.LODGroup:
+					return new LODGroup(assetInfo);
 				case ClassIDType.SpriteRenderer:
 					return new SpriteRenderer(assetInfo);
 				case ClassIDType.Sprite:

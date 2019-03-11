@@ -116,7 +116,7 @@ namespace uTinyRipper.AssetExporters
 
 		public virtual void Read(AssetReader reader)
 		{
-			if(Base != null)
+			if (Base != null)
 			{
 				Base.Read(reader);
 			}

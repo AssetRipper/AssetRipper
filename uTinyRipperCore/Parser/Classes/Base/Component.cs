@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters;
@@ -65,13 +65,15 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_GameObject", GameObject.ExportYAML(container));
+			node.Add(GameObjectName, GameObject.ExportYAML(container));
 			return node;
 		}
 
 		public override bool IsValid => !GameObject.IsNull;
 
 		public override string ExportExtension => throw new NotSupportedException();
+
+		public const string GameObjectName = "m_GameObject";
 
 		public PPtr<GameObject> GameObject;
 	}
