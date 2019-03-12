@@ -169,6 +169,8 @@
     <Compile Include="IO\Endian\EndianType.cs" />
     <Compile Include="IO\Endian\Reader\EndianReader.cs" />
     <Compile Include="IO\Endian\Reader\IEndianReadable.cs" />
+    <Compile Include="IO\Endian\Writer\EndianWriter.cs" />
+    <Compile Include="IO\Endian\Writer\IEndianWritable.cs" />
     <Compile Include="IO\FileMultiStream\SplitNameComparer.cs" />
     <Compile Include="IO\InvariantStreamWriter.cs" />
     <Compile Include="IO\PartialStream.cs" />
@@ -659,6 +661,8 @@
     <Compile Include="Parser\Game\Platforms\WebGLStructure.cs" />
     <Compile Include="Parser\Game\Platforms\WebPlayerStructure.cs" />
     <Compile Include="Parser\IO\Asset\TransferInstructionFlags.cs" />
+    <Compile Include="Parser\IO\Asset\Writer\AssetWriter.cs" />
+    <Compile Include="Parser\IO\Asset\Writer\IAssetWritable.cs" />
     <Compile Include="Parser\IO\Extensions\IDictionaryExtensions.cs" />
     <Compile Include="Parser\IO\Extensions\AssetStreamExtensions.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Utils\Extensions\IEnumerableExtensions.cs" />
