@@ -42,6 +42,13 @@ namespace uTinyRipper.Classes
 		{
 			return version.IsGreaterEqual(5, 1);
 		}
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
+		private static bool IsAlign2(Version version)
+		{
+			return version.IsGreaterEqual(5);
+		}
 
 		/// <summary>
 		/// 5.1.0 and greater
@@ -82,7 +89,10 @@ namespace uTinyRipper.Classes
 			
 			m_lods = reader.ReadArray<LOD>();
 			Enabled = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			if (IsAlign2(reader.Version))
+			{
+				reader.AlignStream(AlignType.Align4);
+			}
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
