@@ -1,3 +1,5 @@
+//#define STREAMING_INPUT
+
 using System;
 using System.IO;
 
@@ -10,7 +12,7 @@ namespace uTinyRipper
 			ReadToken,
 			ReadExLiteralLength,
 			CopyLiteral,
-			ReadOffset,
+			ReadMatch,
 			ReadExMatchLength,
 			CopyMatch,
 
@@ -33,7 +35,7 @@ namespace uTinyRipper
 			}
 
 			m_baseStream = new MemoryStream(buffer);
-			m_inputLength = length;
+			m_inputLeft = length;
 			m_phase = DecodePhase.ReadToken;
 		}
 
@@ -42,7 +44,7 @@ namespace uTinyRipper
 		/// </summary>
 		/// <param name="baseStream">Stream with compressed data</param>
 		public Lz4DecodeStream(Stream baseStream, bool leaveOpen = true) :
-			this(baseStream, baseStream.Length - baseStream.Position, leaveOpen)
+			this(baseStream, baseStream.Length, leaveOpen)
 		{
 		}
 
@@ -53,17 +55,17 @@ namespace uTinyRipper
 		/// <param name="compressedSize">Amount of comprassed data</param>
 		public Lz4DecodeStream(Stream baseStream, long compressedSize, bool leaveOpen = true)
 		{
-			if(baseStream == null)
+			if (baseStream == null)
 			{
 				throw new ArgumentNullException(nameof(baseStream));
 			}
-			if(compressedSize <= 0)
+			if (compressedSize <= 0)
 			{
 				throw new ArgumentException($"Compress length {compressedSize} must be greater then 0");
 			}
 
 			m_baseStream = baseStream;
-			m_inputLength = compressedSize;
+			m_inputLeft = compressedSize;
 			m_phase = DecodePhase.ReadToken;
 			m_leaveOpen = leaveOpen;
 		}
@@ -87,69 +89,149 @@ namespace uTinyRipper
 			using (MemoryStream stream = new MemoryStream(buffer))
 			{
 				stream.Position = offset;
-				return unchecked((int)Read(stream, count));
+				return (int)Read(stream, (long)count);
 			}
 		}
-		
+
 		public long Read(Stream stream, long count)
 		{
-			if(stream == null)
+			if (stream == null)
 			{
 				throw new ArgumentNullException(nameof(stream));
 			}
-			if(count <= 0)
+			if (count <= 0)
 			{
 				throw new ArgumentException(nameof(count));
 			}
-			
+
 			long readLeft = count;
-			bool processing = true;
-			while (processing)
+			while (true)
 			{
 				switch (m_phase)
 				{
 					case DecodePhase.ReadToken:
-						ReadToken();
-						break;
+						{
+							int token = ReadInputByte();
+
+							m_literalLength = token >> 4;
+							m_matchLength = (token & 0xF) + 4;
+							if (m_literalLength == 0)
+							{
+								goto case DecodePhase.ReadMatch;
+							}
+							if (m_literalLength == 0xF)
+							{
+								goto case DecodePhase.ReadExLiteralLength;
+							}
+							goto case DecodePhase.CopyLiteral;
+						}
 
 					case DecodePhase.ReadExLiteralLength:
-						ReadExLiteralLength();
-						break;
+						{
+							int exLiteralLength;
+							do
+							{
+								exLiteralLength = ReadInputByte();
+								m_literalLength += exLiteralLength;
+							} while (exLiteralLength == byte.MaxValue);
+							goto case DecodePhase.CopyLiteral;
+						}
 
 					case DecodePhase.CopyLiteral:
-						CopyLiteral(stream, ref readLeft);
-						break;
+						{
+							if (m_literalLength >= readLeft)
+							{
+								Write(stream, (int)readLeft);
+								m_literalLength -= (int)readLeft;
+								readLeft = 0;
+								m_phase = DecodePhase.CopyLiteral;
+								goto case DecodePhase.Finish;
+							}
 
-					case DecodePhase.ReadOffset:
-						ReadOffset();
-						break;
+							Write(stream, m_literalLength);
+							readLeft -= m_literalLength;
+							goto case DecodePhase.ReadMatch;
+						}
+
+					case DecodePhase.ReadMatch:
+						{
+							m_matchDestination = ReadInputInt16();
+							if (m_matchLength == 0xF + 4)
+							{
+								goto case DecodePhase.ReadExMatchLength;
+							}
+							goto case DecodePhase.CopyMatch;
+						}
 
 					case DecodePhase.ReadExMatchLength:
-						ReadExMatchLength();
-						break;
+						{
+							int exMatchLength;
+							do
+							{
+								exMatchLength = ReadInputByte();
+								m_matchLength += exMatchLength;
+							} while (exMatchLength == byte.MaxValue);
+							goto case DecodePhase.CopyMatch;
+						}
 
 					case DecodePhase.CopyMatch:
-						CopyMatch(stream, ref readLeft, count);
-						break;
+						{
+							int toCopyTotal = m_matchLength < readLeft ? m_matchLength : (int)readLeft;
+							while (toCopyTotal > 0)
+							{
+								int srcPosition = (m_decodeBufferPosition - m_matchDestination) & DecodeBufferMask;
+								int srcAvailable = DecodeBufferCapacity - srcPosition;
+								int destAvailable = DecodeBufferCapacity - m_decodeBufferPosition;
+								int available = srcAvailable < destAvailable ? srcAvailable : destAvailable;
+								int toCopy = toCopyTotal < available ? toCopyTotal : available;
+								int delta = m_decodeBufferPosition - srcPosition;
+								if (delta > 0 && delta < toCopy)
+								{
+									for (int i = 0; i < toCopy; i++)
+									{
+										m_decodeBuffer[m_decodeBufferPosition++] = m_decodeBuffer[srcPosition++];
+									}
+								}
+								else
+								{
+									Buffer.BlockCopy(m_decodeBuffer, srcPosition, m_decodeBuffer, m_decodeBufferPosition, toCopy);
+									m_decodeBufferPosition += toCopy;
+								}
+
+								toCopyTotal -= toCopy;
+								m_matchLength -= toCopy;
+								readLeft -= toCopy;
+
+								if (m_decodeBufferPosition == DecodeBufferCapacity)
+								{
+									FillOutputStream(stream);
+								}
+							}
+
+							if (readLeft == 0)
+							{
+								goto case DecodePhase.Finish;
+							}
+							goto case DecodePhase.ReadToken;
+						}
 
 					case DecodePhase.Finish:
-						Finish(stream, readLeft, count);
-						processing = false;
-						break;
+						{
+							FillOutputStream(stream);
+							return count - readLeft;
+						}
 
 					default:
 						throw new Exception($"Unknonw decode phase {m_phase}");
 				}
 			}
-			
-			return count - readLeft;
 		}
 
 		public override void Write(byte[] buffer, int offset, int count)
 		{
 			throw new NotSupportedException();
 		}
-		
+
 		public override void SetLength(long value)
 		{
 			throw new NotSupportedException();
@@ -157,185 +239,20 @@ namespace uTinyRipper
 
 		protected override void Dispose(bool disposing)
 		{
-			if(!m_leaveOpen)
+			if (!m_leaveOpen)
 			{
 				m_baseStream.Dispose();
 			}
 			base.Dispose(disposing);
 		}
 
-		private void ReadToken()
-		{
-			int token = ReadInputByte();
-
-			m_literalLength = token >> 4;
-			m_matchLength = (token & 0xF) + 4;
-
-			switch(m_literalLength)
-			{
-				case 0:
-					m_phase = DecodePhase.ReadOffset;
-					break;
-
-				case 0xF:
-					m_phase = DecodePhase.ReadExLiteralLength;
-					break;
-
-				default:
-					m_phase = DecodePhase.CopyLiteral;
-					break;
-			}
-		}
-
-		private void ReadExLiteralLength()
-		{
-			int exLiteralLength = ReadInputByte();
-			m_literalLength += exLiteralLength;
-			if(exLiteralLength == byte.MaxValue)
-			{
-				m_phase = DecodePhase.ReadExLiteralLength;
-			}
-			else
-			{
-				m_phase = DecodePhase.CopyLiteral;
-			}
-		}
-
-		private void CopyLiteral(Stream stream, ref long readLeft)
-		{
-			int readCount = m_literalLength < readLeft ? m_literalLength : unchecked((int)readLeft);
-			if(readCount != 0)
-			{
-				int read = ReadInput(stream, readCount);
-
-				readLeft -= read;
-
-				m_literalLength -= read;
-				if(m_literalLength != 0)
-				{
-					m_phase = DecodePhase.CopyLiteral;
-					return;
-				}
-			}
-
-			if (readLeft == 0)
-			{
-				m_phase = DecodePhase.Finish;
-			}
-			else
-			{
-				m_phase = DecodePhase.ReadOffset;
-			}
-		}
-
-		private void ReadOffset()
-		{
-			m_matchDestination = ReadInputInt16();
-			if(m_matchLength == 15 + 4)
-			{
-				m_phase = DecodePhase.ReadExMatchLength;
-			}
-			else
-			{
-				m_phase = DecodePhase.CopyMatch;
-			}
-		}
-
-		private void ReadExMatchLength()
-		{
-			int exMatchLength = ReadInputByte();
-			m_matchLength += exMatchLength;
-			if(exMatchLength == byte.MaxValue)
-			{
-				m_phase = DecodePhase.ReadExMatchLength;
-			}
-			else
-			{
-				m_phase = DecodePhase.CopyMatch;
-			}
-		}
-
-		private void CopyMatch(Stream stream, ref long readLeft, long count)
-		{
-			int readCount = m_matchLength < readLeft ? m_matchLength : unchecked((int)readLeft);
-			if (readCount != 0)
-			{
-				long read = count - readLeft;
-				long decodeCount = m_matchDestination - read;
-				if(decodeCount > 0)
-				{
-					//offset is fairly far back, we need to pull from the buffer
-					int source = m_decodeBufferPos - unchecked((int)decodeCount);
-					if(source < 0)
-					{
-						source += DecodeBufferLength;
-					}
-					int destCount = decodeCount < readCount ? unchecked((int)decodeCount) : readCount;
-					for(int i = 0; i < destCount; i++)
-					{
-						stream.WriteByte(m_decodeBuffer[source & DecodeBufferMask]);
-						source++;
-					}
-				}
-				else
-				{
-					decodeCount = 0;
-				}
-				
-				long srcPosition = stream.Position - m_matchDestination;
-				long destPosition = stream.Position;
-				for(int i = unchecked((int)decodeCount); i < readCount; i ++)
-				{
-					stream.Position = srcPosition;
-					byte matchValue = (byte)stream.ReadByte();
-					stream.Position = destPosition;
-					stream.WriteByte(matchValue);
-					srcPosition++;
-					destPosition++;
-				}
-
-				readLeft -= readCount;
-				m_matchLength -= readCount;
-			}
-
-			if (readLeft == 0)
-			{
-				m_phase = DecodePhase.Finish;
-			}
-			else
-			{
-				m_phase = DecodePhase.ReadToken;
-			}
-		}
-
-		private void Finish(Stream stream, long readLeft, long count)
-		{
-			long read = count - readLeft;
-			int toBuffer = read < DecodeBufferLength ? unchecked((int)read) : DecodeBufferLength;
-
-			stream.Position -= toBuffer;
-			if(toBuffer == DecodeBufferLength)
-			{
-				stream.Read(m_decodeBuffer, 0, DecodeBufferLength);
-				m_decodeBufferPos = 0;
-			}
-			else
-			{
-				int decodePosition = m_decodeBufferPos;
-				for(int i = 0; i < toBuffer; i++)
-				{
-					m_decodeBuffer[decodePosition & DecodeBufferMask] = (byte)stream.ReadByte();
-					decodePosition++;
-				}
-				stream.Position -= toBuffer;
-
-				m_decodeBufferPos = decodePosition & DecodeBufferMask;
-			}
-		}
+		// =====================================
+		// Buffer processing
+		// =====================================
 
 		private int ReadInputByte()
 		{
-			if (m_inputBufferPosition == m_inputBufferEnd)
+			if (m_inputBufferPosition == InputBufferCapacity)
 			{
 				FillInputBuffer();
 			}
@@ -345,14 +262,13 @@ namespace uTinyRipper
 
 		private int ReadInputInt16()
 		{
-			if (m_inputBufferPosition == m_inputBufferEnd)
+			int available = InputBufferCapacity - m_inputBufferPosition;
+			if (available == 0)
 			{
 				FillInputBuffer();
 			}
-
-			if(m_inputBufferEnd - m_inputBufferPosition == 1)
+			else if (available == 1)
 			{
-				// read last byte and refill
 				m_inputBuffer[0] = m_inputBuffer[m_inputBufferPosition];
 				FillInputBuffer(1);
 			}
@@ -362,60 +278,63 @@ namespace uTinyRipper
 			return ret;
 		}
 
-		private int ReadInput(Stream stream, int count)
+		private void Write(Stream stream, int count)
 		{
-			int readLeft = count;
-			int read = FillBuffer(stream, count);
-			readLeft -= read;
-
-			if (readLeft != 0)
+			while (count > 0)
 			{
-				if (readLeft >= InputChunkSize)
-				{
-					int readCount = readLeft < m_inputLength ? readLeft : unchecked((int)m_inputLength);
-					m_baseStream.CopyStream(stream, readCount);
-					readLeft -= readCount;
-					m_inputLength -= readCount;
-				}
-				else
+				if (m_inputBufferPosition == InputBufferCapacity)
 				{
 					FillInputBuffer();
-					read = FillBuffer(stream, readLeft);
-					readLeft -= read;
+				}
+
+				int srcAvailable = InputBufferCapacity - m_inputBufferPosition;
+				int destAvailable = DecodeBufferCapacity - m_decodeBufferPosition;
+				int available = srcAvailable < destAvailable ? srcAvailable : destAvailable;
+				int toWrite = count < available ? count : available;
+				Buffer.BlockCopy(m_inputBuffer, m_inputBufferPosition, m_decodeBuffer, m_decodeBufferPosition, toWrite);
+				count -= toWrite;
+				m_inputBufferPosition += toWrite;
+				m_decodeBufferPosition += toWrite;
+
+				if (m_decodeBufferPosition == DecodeBufferCapacity)
+				{
+					FillOutputStream(stream);
 				}
 			}
-
-			return count - readLeft;
 		}
 
 		private void FillInputBuffer(int offset = 0)
 		{
-			int count = InputChunkSize < m_inputLength ? InputChunkSize : unchecked((int)m_inputLength);
-			count -= offset;
-			int read = m_baseStream.Read(m_inputBuffer, offset, count);
-			if (read == 0)
-			{
-#warning replace this place to m_phase = Finish for partial reading
-				throw new Exception("No data left");
-			}
-			if(read != count)
-			{
-				throw new Exception("Unable to read enough data");
-			}
-
-			m_inputLength -= read;
+			int available = InputBufferCapacity - offset;
+			int count = available < m_inputLeft ? available : (int)m_inputLeft;
 
 			m_inputBufferPosition = 0;
-			m_inputBufferEnd = read + offset;
+			while (count > 0)
+			{
+				int read = m_baseStream.Read(m_inputBuffer, offset, count);
+				if (read == 0)
+				{
+#if STREAMING_INPUT
+#error TODO: set processing to false and go to finish
+#else
+					throw new Exception("No data left");
+#endif
+				}
+				count -= read;
+				m_inputLeft -= read;
+				offset += read;
+			}
 		}
 
-		private int FillBuffer(Stream stream, int count)
+		private void FillOutputStream(Stream stream)
 		{
-			int inputBufferLength = m_inputBufferEnd - m_inputBufferPosition;
-			int inputLeft = count < inputBufferLength ? count : inputBufferLength;
-			stream.Write(m_inputBuffer, m_inputBufferPosition, inputLeft);
-			m_inputBufferPosition += inputLeft;
-			return inputLeft;
+			int toWriteTotal = m_decodeBufferPosition - m_decodeBufferStart;
+			int toEnd = DecodeBufferCapacity - m_decodeBufferStart;
+			int toWrite = toEnd < toWriteTotal ? toEnd : toWriteTotal;
+			stream.Write(m_decodeBuffer, m_decodeBufferStart, toWrite);
+			stream.Write(m_decodeBuffer, 0, toWriteTotal - toWrite);
+			m_decodeBufferPosition = m_decodeBufferPosition & DecodeBufferMask;
+			m_decodeBufferStart = m_decodeBufferPosition;
 		}
 
 		public override bool CanSeek => false;
@@ -429,26 +348,27 @@ namespace uTinyRipper
 			set => throw new NotSupportedException();
 		}
 
-		private const int InputChunkSize = 128;
-		private const int DecodeBufferLength = 0x10000;
+		private const int InputBufferCapacity = 4096;
+		private const int DecodeBufferCapacity = 0x10000;
 		private const int DecodeBufferMask = 0xFFFF;
 
-		private readonly byte[] m_inputBuffer = new byte[InputChunkSize];
-		private readonly byte[] m_decodeBuffer = new byte[DecodeBufferLength];
+		private readonly byte[] m_inputBuffer = new byte[InputBufferCapacity];
+		private readonly byte[] m_decodeBuffer = new byte[DecodeBufferCapacity];
 
 		private readonly Stream m_baseStream;
 		private readonly bool m_leaveOpen;
 
-		private DecodePhase m_phase;
-		private long m_inputLength = 0;
-		private int m_inputBufferPosition = 0;
-		private int m_inputBufferEnd = 0;
-		private int m_decodeBufferPos;
+		private long m_inputLeft = 0;
+		private int m_inputBufferPosition = InputBufferCapacity;
+		private int m_decodeBufferPosition = 0;
 
-		//state within interruptable phases and across phase boundaries is
-		//kept here - again, so that we can punt out and restart freely
+		/// <summary>
+		/// State within interruptable phases and across phase boundaries is kept here - again, so that we can punt out and restart freely
+		/// </summary>
+		private DecodePhase m_phase;
 		private int m_literalLength;
 		private int m_matchLength;
 		private int m_matchDestination;
+		private int m_decodeBufferStart;
 	}
 }
