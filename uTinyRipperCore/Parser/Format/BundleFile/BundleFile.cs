@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -204,7 +204,7 @@ namespace uTinyRipper.BundleFiles
 					{
 						using (MemoryStream metaStream = new MemoryStream(new byte[Header.MetadataDecompressedSize]))
 						{
-							using (Lz4Stream lzStream = new Lz4Stream(bundleStream, Header.MetadataCompressedSize))
+							using (Lz4DecodeStream lzStream = new Lz4DecodeStream(bundleStream, Header.MetadataCompressedSize))
 							{
 								long read = lzStream.Read(metaStream, Header.MetadataDecompressedSize);
 								metaStream.Position = 0;
@@ -319,7 +319,7 @@ namespace uTinyRipper.BundleFiles
 										case BundleCompressType.LZ4:
 										case BundleCompressType.LZ4HZ:
 											blockStream.Move(CreateStream(block.DecompressedSize));
-											using (Lz4Stream lzStream = new Lz4Stream(bundleStream, block.CompressedSize))
+											using (Lz4DecodeStream lzStream = new Lz4DecodeStream(bundleStream, block.CompressedSize))
 											{
 												long read = lzStream.Read(blockStream, block.DecompressedSize);
 												if (read != block.DecompressedSize)

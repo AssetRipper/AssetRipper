@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace uTinyRipper
 {
-	public class Lz4Stream : Stream
+	public class Lz4DecodeStream : Stream
 	{
 		private enum DecodePhase
 		{
@@ -17,7 +17,7 @@ namespace uTinyRipper
 			Finish,
 		}
 
-		public Lz4Stream(byte[] buffer, long offset, long length)
+		public Lz4DecodeStream(byte[] buffer, long offset, long length)
 		{
 			if (buffer == null || buffer.Length == 0)
 			{
@@ -41,7 +41,7 @@ namespace uTinyRipper
 		/// Whole base stream is compressed data
 		/// </summary>
 		/// <param name="baseStream">Stream with compressed data</param>
-		public Lz4Stream(Stream baseStream, bool leaveOpen = true) :
+		public Lz4DecodeStream(Stream baseStream, bool leaveOpen = true) :
 			this(baseStream, baseStream.Length - baseStream.Position, leaveOpen)
 		{
 		}
@@ -51,7 +51,7 @@ namespace uTinyRipper
 		/// </summary>
 		/// <param name="baseStream">Stream with compressed data</param>
 		/// <param name="compressedSize">Amount of comprassed data</param>
-		public Lz4Stream(Stream baseStream, long compressedSize, bool leaveOpen = true)
+		public Lz4DecodeStream(Stream baseStream, long compressedSize, bool leaveOpen = true)
 		{
 			if(baseStream == null)
 			{
@@ -68,7 +68,7 @@ namespace uTinyRipper
 			m_leaveOpen = leaveOpen;
 		}
 
-		~Lz4Stream()
+		~Lz4DecodeStream()
 		{
 			Dispose(false);
 		}

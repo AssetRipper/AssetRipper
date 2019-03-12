@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters;
@@ -100,7 +100,7 @@ namespace uTinyRipper.Classes
 
 						memStream.Position = offset;
 						byte[] decompressedBuffer = new byte[decompressedLength];
-						using (Lz4Stream lz4Stream = new Lz4Stream(memStream, (int)compressedLength))
+						using (Lz4DecodeStream lz4Stream = new Lz4DecodeStream(memStream, (int)compressedLength))
 						{
 							int read = lz4Stream.Read(decompressedBuffer, 0, decompressedBuffer.Length);
 							if (read != decompressedLength)
@@ -139,7 +139,7 @@ namespace uTinyRipper.Classes
 						byte[] decompressedBuffer = new byte[decompressedSize];
 						using (MemoryStream memStream = new MemoryStream(subProgramBlob))
 						{
-							using (Lz4Stream lz4Stream = new Lz4Stream(memStream))
+							using (Lz4DecodeStream lz4Stream = new Lz4DecodeStream(memStream))
 							{
 								int read = lz4Stream.Read(decompressedBuffer, 0, decompressedBuffer.Length);
 								if (read != decompressedSize)

@@ -692,7 +692,7 @@
     <Compile Include="IO\EndianReader\AlignType.cs" />
     <Compile Include="IO\EndianReader\EndianReader.cs" />
     <Compile Include="IO\EndianReader\EndianType.cs" />
-    <Compile Include="IO\Lz4Stream.cs" />
+    <Compile Include="IO\Lz4\Lz4DecodeStream.cs" />
     <Compile Include="IO\Utils\Extensions\IDictionaryIOExtensions.cs" />
     <Compile Include="IO\Utils\SevenZipHelper.cs" />
     <Compile Include="Parser\AssetCollection\FileCollection.cs" />
