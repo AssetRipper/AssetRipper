@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
@@ -33,29 +33,29 @@ namespace uTinyRipper.Classes.LightmapSettingss
 
 		public void Read(AssetReader reader)
 		{
-			m_renderers = reader.ReadArray<EnlightenRendererInformation>();
+			m_renderers = reader.ReadAssetArray<EnlightenRendererInformation>();
 			if(IsAlign(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
-			m_systems = reader.ReadArray<EnlightenSystemInformation>();
+			m_systems = reader.ReadAssetArray<EnlightenSystemInformation>();
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
 			if (IsReadProbesets(reader.Version))
 			{
-				m_probesets = reader.ReadArray<Hash128>();
+				m_probesets = reader.ReadAssetArray<Hash128>();
 				reader.AlignStream(AlignType.Align4);
 			}
-			m_systemAtlases = reader.ReadArray<EnlightenSystemAtlasInformation>();
+			m_systemAtlases = reader.ReadAssetArray<EnlightenSystemAtlasInformation>();
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
 			if(IsReadTerrainChunks(reader.Version))
 			{
-				m_terrainChunks = reader.ReadArray<EnlightenTerrainChunksInformation>();
+				m_terrainChunks = reader.ReadAssetArray<EnlightenTerrainChunksInformation>();
 				if (IsAlign(reader.Version))
 				{
 					reader.AlignStream(AlignType.Align4);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		public void Read(AssetReader reader)
 		{
 			Destination = unchecked((int)reader.ReadUInt32());
-			m_conditionConstantArray = reader.ReadArray<OffsetPtr<ConditionConstant>>();
+			m_conditionConstantArray = reader.ReadAssetArray<OffsetPtr<ConditionConstant>>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

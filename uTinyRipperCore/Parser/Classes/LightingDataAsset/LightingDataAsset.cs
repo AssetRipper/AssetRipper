@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters;
@@ -65,30 +65,30 @@ namespace uTinyRipper.Classes
 			Scene.Read(reader);
 			if(IsReadLightmaps(reader.Flags))
 			{
-				m_lightmaps = reader.ReadArray<LightmapData>();
+				m_lightmaps = reader.ReadAssetArray<LightmapData>();
 				reader.AlignStream(AlignType.Align4);
 
 				LightProbes.Read(reader);
 				LightmapsMode = reader.ReadInt32();
 				BakedAmbientProbeInLinear.Read(reader);
-				m_lightmappedRendererData = reader.ReadArray<RendererData>();
+				m_lightmappedRendererData = reader.ReadAssetArray<RendererData>();
 				reader.AlignStream(AlignType.Align4);
 
-				m_lightmappedRendererDataIDs = reader.ReadArray<SceneObjectIdentifier>();
+				m_lightmappedRendererDataIDs = reader.ReadAssetArray<SceneObjectIdentifier>();
 				reader.AlignStream(AlignType.Align4);
 
 				EnlightenSceneMapping.Read(reader);
-				m_enlightenSceneMappingRendererIDs = reader.ReadArray<SceneObjectIdentifier>();
+				m_enlightenSceneMappingRendererIDs = reader.ReadAssetArray<SceneObjectIdentifier>();
 				reader.AlignStream(AlignType.Align4);
 
-				m_lights = reader.ReadArray<SceneObjectIdentifier>();
+				m_lights = reader.ReadAssetArray<SceneObjectIdentifier>();
 				reader.AlignStream(AlignType.Align4);
 
-				m_lightBakingOutputs = reader.ReadArray<LightBakingOutput>();
+				m_lightBakingOutputs = reader.ReadAssetArray<LightBakingOutput>();
 				reader.AlignStream(AlignType.Align4);
 
-				m_bakedReflectionProbeCubemaps = reader.ReadArray<PPtr<Texture>>();
-				m_bakedReflectionProbes = reader.ReadArray<SceneObjectIdentifier>();
+				m_bakedReflectionProbeCubemaps = reader.ReadAssetArray<PPtr<Texture>>();
+				m_bakedReflectionProbes = reader.ReadAssetArray<SceneObjectIdentifier>();
 				reader.AlignStream(AlignType.Align4);
 
 				if (IsReadEnlightenData(reader.Flags))

@@ -41,10 +41,10 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		public void Read(AssetReader reader)
 		{
 			TextureSettings.Read(reader);
-			m_platformSettings = reader.ReadArray<TextureImporterPlatformSettings>();
+			m_platformSettings = reader.ReadAssetArray<TextureImporterPlatformSettings>();
 			PackingSettings.Read(reader);
 			VariantMultiplier = reader.ReadSingle();
-			m_packables = reader.ReadArray<PPtr<Object>>();
+			m_packables = reader.ReadAssetArray<PPtr<Object>>();
 			BindAsDefault = reader.ReadBoolean();
 			reader.AlignStream(AlignType.Align4);
 			

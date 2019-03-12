@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 
@@ -22,26 +22,55 @@ namespace uTinyRipper
 			Flags = flags;
 		}
 
-		public AssetReader(AssetReader reader, long alignPosition) :
-			base(reader, alignPosition)
+		public override char ReadChar()
 		{
-			Version = reader.Version;
-			Platform = reader.Platform;
-			Flags = reader.Flags;
+			FillInnerBuffer(sizeof(char));
+			return (char)BufferToUInt16();
 		}
 
-		public T Read<T>()
-			where T: IAssetReadable, new()
+		public override string ReadString()
+		{
+			FillInnerBuffer(sizeof(int));
+			int length = BufferToInt32();
+
+			byte[] buffer = ReadStringBuffer(length);
+			string result = Encoding.UTF8.GetString(buffer, 0, length);
+			if (Version.IsGreaterEqual(2, 1))
+			{
+				AlignStream(AlignType.Align4);
+			}
+			return result;
+		}
+
+		public override int Read(char[] buffer, int index, int count)
+		{
+			count += index;
+			while (index < count)
+			{
+				int toRead = Math.Min((count - index) * sizeof(char), BufferSize);
+				FillInnerBuffer(toRead);
+				for (int i = 0; i < toRead; i += sizeof(char), index++)
+				{
+					buffer[index] = (char)BufferToUInt16(i);
+				}
+			}
+			return count;
+		}
+
+		public T ReadAsset<T>()
+			where T : IAssetReadable, new()
 		{
 			T t = new T();
 			t.Read(this);
 			return t;
 		}
 
-		public new T[] ReadArray<T>()
+		public T[] ReadAssetArray<T>()
 			where T : IAssetReadable, new()
 		{
-			int count = ReadInt32();
+			FillInnerBuffer(sizeof(int));
+			int count = BufferToInt32();
+
 			T[] array = new T[count];
 			for (int i = 0; i < count; i++)
 			{
@@ -52,43 +81,19 @@ namespace uTinyRipper
 			return array;
 		}
 
-		public T[][] ReadArrayDouble<T>()
+		public T[][] ReadAssetArrayArray<T>()
 			where T : IAssetReadable, new()
 		{
-			int count = ReadInt32();
+			FillInnerBuffer(sizeof(int));
+			int count = BufferToInt32();
+
 			T[][] array = new T[count][];
 			for (int i = 0; i < count; i++)
 			{
-				T[] innerArray = ReadArray<T>();
+				T[] innerArray = ReadAssetArray<T>();
 				array[i] = innerArray;
 			}
 			return array;
-		}
-
-		public T[] ReadArray<T>(Func<T> instantiator)
-			where T : IAssetReadable
-		{
-			int count = ReadInt32();
-			T[] array = new T[count];
-			for (int i = 0; i < count; i++)
-			{
-				T instance = instantiator();
-				instance.Read(this);
-				array[i] = instance;
-			}
-			return array;
-		}
-
-		public override string ReadString()
-		{
-			int length = ReadInt32();
-			byte[] buffer = ReadStringBuffer(length);
-			string result = Encoding.UTF8.GetString(buffer, 0, length);
-			if (Version.IsGreaterEqual(2, 1))
-			{
-				AlignStream(AlignType.Align4);
-			}
-			return result;
 		}
 
 		public override string ToString()

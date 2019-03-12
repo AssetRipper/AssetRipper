@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
@@ -8,8 +8,8 @@ namespace uTinyRipper.Classes.LightProbess
 	{
 		public void Read(AssetReader reader)
 		{
-			m_tetrahedra = reader.ReadArray<Tetrahedron>();
-			m_hullRays = reader.ReadArray<Vector3f>();
+			m_tetrahedra = reader.ReadAssetArray<Tetrahedron>();
+			m_hullRays = reader.ReadAssetArray<Vector3f>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

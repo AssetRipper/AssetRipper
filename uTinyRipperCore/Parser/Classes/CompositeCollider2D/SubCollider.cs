@@ -20,11 +20,11 @@ namespace uTinyRipper.Classes.CompositeCollider2Ds
 			Collider.Read(reader);
 			if (IsReadDoubleColliderPath(reader.Version))
 			{
-				m_colliderPaths = reader.ReadArrayDouble<IntPoint>();
+				m_colliderPaths = reader.ReadAssetArrayArray<IntPoint>();
 			}
 			else
 			{
-				IntPoint[] colliderPaths = reader.ReadArray<IntPoint>();
+				IntPoint[] colliderPaths = reader.ReadAssetArray<IntPoint>();
 				m_colliderPaths = new IntPoint[][] { colliderPaths };
 			}
 			reader.AlignStream(AlignType.Align4);

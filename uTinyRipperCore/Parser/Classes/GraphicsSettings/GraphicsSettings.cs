@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.AssetExporters.Classes;
 using uTinyRipper.Classes.Cameras;
@@ -334,12 +334,12 @@ namespace uTinyRipper.Classes
 
 			if(IsReadAlwaysIncludedShaders(reader.Version))
 			{
-				m_alwaysIncludedShaders = reader.ReadArray<PPtr<Shader>>();
+				m_alwaysIncludedShaders = reader.ReadAssetArray<PPtr<Shader>>();
 			}
 
 			if (IsReadPreloadedShaders(reader.Version))
 			{
-				m_preloadedShaders = reader.ReadArray<PPtr<ShaderVariantCollection>>();
+				m_preloadedShaders = reader.ReadAssetArray<PPtr<ShaderVariantCollection>>();
 			}
 			if (IsReadSpritesDefaultMaterial(reader.Version))
 			{
@@ -359,14 +359,14 @@ namespace uTinyRipper.Classes
 					if (IsReadPlatformSettingsTiers(reader.Version))
 					{
 						m_platformSettings = new PlatformShaderSettings[3];
-						m_platformSettings[0] = reader.Read<PlatformShaderSettings>();
-						m_platformSettings[1] = reader.Read<PlatformShaderSettings>();
-						m_platformSettings[2] = reader.Read<PlatformShaderSettings>();
+						m_platformSettings[0] = reader.ReadAsset<PlatformShaderSettings>();
+						m_platformSettings[1] = reader.ReadAsset<PlatformShaderSettings>();
+						m_platformSettings[2] = reader.ReadAsset<PlatformShaderSettings>();
 					}
 					else
 					{
 						m_platformSettings = new PlatformShaderSettings[1];
-						m_platformSettings[0] = reader.Read<PlatformShaderSettings>();
+						m_platformSettings[0] = reader.ReadAsset<PlatformShaderSettings>();
 					}
 				}
 				else
@@ -374,9 +374,9 @@ namespace uTinyRipper.Classes
 					if(IsReadStaticTierGraphicsSettings(reader.Version, reader.Flags))
 					{
 						m_tierGraphicSettings = new TierGraphicsSettings[3];
-						m_tierGraphicSettings[0] = reader.Read<TierGraphicsSettings>();
-						m_tierGraphicSettings[1] = reader.Read<TierGraphicsSettings>();
-						m_tierGraphicSettings[2] = reader.Read<TierGraphicsSettings>();
+						m_tierGraphicSettings[0] = reader.ReadAsset<TierGraphicsSettings>();
+						m_tierGraphicSettings[1] = reader.ReadAsset<TierGraphicsSettings>();
+						m_tierGraphicSettings[2] = reader.ReadAsset<TierGraphicsSettings>();
 					}
 				}
 			}
@@ -391,7 +391,7 @@ namespace uTinyRipper.Classes
 				}
 				if (IsReadTierSettings(reader.Version))
 				{
-					m_tierSettings = reader.ReadArray<TierSettings>();
+					m_tierSettings = reader.ReadAssetArray<TierSettings>();
 				}
 
 				if (IsReadLightmapStripping(reader.Version))
@@ -468,7 +468,7 @@ namespace uTinyRipper.Classes
 
 				if (IsReadAlbedoSwatchInfos(reader.Version))
 				{
-					m_albedoSwatchInfos = reader.ReadArray<AlbedoSwatchInfo>();
+					m_albedoSwatchInfos = reader.ReadAssetArray<AlbedoSwatchInfo>();
 				}
 			}
 			else
@@ -476,7 +476,7 @@ namespace uTinyRipper.Classes
 			{
 				if(IsReadShaderDefinesPerShaderCompiler(reader.Version))
 				{
-					m_shaderDefinesPerShaderCompiler = reader.ReadArray<PlatformShaderDefines>();
+					m_shaderDefinesPerShaderCompiler = reader.ReadAssetArray<PlatformShaderDefines>();
 				}
 			}
 

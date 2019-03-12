@@ -32,7 +32,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			{
 				InfluenceFilter = reader.ReadInt32();
 				InfluenceMask.Read(reader);
-				m_influenceList = reader.ReadArray<PPtr<ParticleSystemForceField>>();
+				m_influenceList = reader.ReadAssetArray<PPtr<ParticleSystemForceField>>();
 			}
 		}
 

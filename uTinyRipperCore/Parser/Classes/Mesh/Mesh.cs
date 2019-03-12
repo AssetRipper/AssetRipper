@@ -285,7 +285,7 @@ namespace uTinyRipper.Classes
 
 			if (IsReadLODData(reader.Version))
 			{
-				m_LODData = reader.ReadArray<LOD>();
+				m_LODData = reader.ReadAssetArray<LOD>();
 			}
 			if (IsReadUse16bitIndices(reader.Version))
 			{
@@ -301,7 +301,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsReadSubMeshes(reader.Version))
 			{
-				m_subMeshes = reader.ReadArray<SubMesh>();
+				m_subMeshes = reader.ReadAssetArray<SubMesh>();
 			}
 			
 			if(IsReadBlendShapes(reader.Version))
@@ -310,7 +310,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsReadBindPosesFirst(reader.Version))
 			{
-				m_bindPoses = reader.ReadArray<Matrix4x4f>();
+				m_bindPoses = reader.ReadAssetArray<Matrix4x4f>();
 			}
 			if (IsReadBoneNameHashes(reader.Version))
 			{
@@ -367,24 +367,24 @@ namespace uTinyRipper.Classes
 				{
 					if(MeshCompression != 0)
 					{
-						m_vertices = reader.ReadArray<Vector3f>();
+						m_vertices = reader.ReadAssetArray<Vector3f>();
 					}
 				}
 				else
 				{
-					m_vertices = reader.ReadArray<Vector3f>();
+					m_vertices = reader.ReadAssetArray<Vector3f>();
 				}
 			}
 
 			if (IsReadSkin(reader.Version))
 			{
-				m_skin = reader.ReadArray<BoneWeights4>();
+				m_skin = reader.ReadAssetArray<BoneWeights4>();
 			}
 			if (IsReadBindPoses(reader.Version))
 			{
 				if (!IsReadBindPosesFirst(reader.Version))
 				{
-					m_bindPoses = reader.ReadArray<Matrix4x4f>();
+					m_bindPoses = reader.ReadAssetArray<Matrix4x4f>();
 				}
 			}
 			
@@ -402,29 +402,29 @@ namespace uTinyRipper.Classes
 					}
 					else
 					{
-						m_UV = reader.ReadArray<Vector2f>();
-						m_UV1 = reader.ReadArray<Vector2f>();
-						m_tangents = reader.ReadArray<Vector4f>();
-						m_normals = reader.ReadArray<Vector3f>();
-						m_colors = reader.ReadArray<ColorRGBA32>();
+						m_UV = reader.ReadAssetArray<Vector2f>();
+						m_UV1 = reader.ReadAssetArray<Vector2f>();
+						m_tangents = reader.ReadAssetArray<Vector4f>();
+						m_normals = reader.ReadAssetArray<Vector3f>();
+						m_colors = reader.ReadAssetArray<ColorRGBA32>();
 					}
 				}
 			}
 			else
 			{
-				m_UV = reader.ReadArray<Vector2f>();
+				m_UV = reader.ReadAssetArray<Vector2f>();
 				if (IsReadUV1(reader.Version))
 				{
-					m_UV1 = reader.ReadArray<Vector2f>();
+					m_UV1 = reader.ReadAssetArray<Vector2f>();
 				}
 				if (IsReadTangentSpace(reader.Version))
 				{
-					m_tangentSpace = reader.ReadArray<Tangent>();
+					m_tangentSpace = reader.ReadAssetArray<Tangent>();
 				}
 				else
 				{
-					m_tangents = reader.ReadArray<Vector4f>();
-					m_normals = reader.ReadArray<Vector3f>();
+					m_tangents = reader.ReadAssetArray<Vector4f>();
+					m_normals = reader.ReadAssetArray<Vector3f>();
 				}
 			}
 			if (IsReadAlign(reader.Version))
@@ -442,7 +442,7 @@ namespace uTinyRipper.Classes
 			{
 				if (!IsReadVertexData(reader.Version))
 				{
-					m_colors = reader.ReadArray<ColorRGBA32>();
+					m_colors = reader.ReadAssetArray<ColorRGBA32>();
 				}
 			}
 			if (IsReadCollisionTriangles(reader.Version))

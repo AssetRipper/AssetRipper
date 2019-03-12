@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
@@ -27,7 +27,7 @@ namespace uTinyRipper.Classes
 			{
 				EdgeRadius = reader.ReadSingle();
 			}
-			m_points = reader.ReadArray<Vector2f>();
+			m_points = reader.ReadAssetArray<Vector2f>();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

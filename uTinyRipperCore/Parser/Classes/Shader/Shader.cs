@@ -175,11 +175,11 @@ namespace uTinyRipper.Classes
 			
 			if (IsReadDependencies(reader.Version))
 			{
-				m_dependencies = reader.ReadArray<PPtr<Shader>>();
+				m_dependencies = reader.ReadAssetArray<PPtr<Shader>>();
 			}
 			if(IsReadNonModifiableTextures(reader.Version))
 			{
-				m_nonModifiableTextures = reader.ReadArray<PPtr<Texture>>();
+				m_nonModifiableTextures = reader.ReadAssetArray<PPtr<Texture>>();
 			}
 			if (IsReadShaderIsBaked(reader.Version))
 			{

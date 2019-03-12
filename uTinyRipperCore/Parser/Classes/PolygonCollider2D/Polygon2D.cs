@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
@@ -8,7 +8,7 @@ namespace uTinyRipper.Classes.PolygonCollider2Ds
 	{
 		public void Read(AssetReader reader)
 		{
-			m_paths = reader.ReadArrayDouble<Vector2f>();
+			m_paths = reader.ReadAssetArrayArray<Vector2f>();
 			reader.AlignStream(AlignType.Align4);
 		}
 

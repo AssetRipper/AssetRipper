@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
@@ -83,7 +83,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public void Read(AssetReader reader)
 		{
-			m_conditionConstantArray = reader.ReadArray<OffsetPtr<ConditionConstant>>();
+			m_conditionConstantArray = reader.ReadAssetArray<OffsetPtr<ConditionConstant>>();
 			DestinationState = (int)reader.ReadUInt32();
 			if(IsReadPathID(reader.Version))
 			{

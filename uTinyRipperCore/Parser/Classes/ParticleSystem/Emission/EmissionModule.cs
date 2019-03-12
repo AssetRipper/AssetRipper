@@ -127,7 +127,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				BurstCount = reader.ReadInt32();
 				reader.AlignStream(AlignType.Align4);
 
-				m_bursts = reader.ReadArray<ParticleSystemEmissionBurst>();
+				m_bursts = reader.ReadAssetArray<ParticleSystemEmissionBurst>();
 			}
 		}
 

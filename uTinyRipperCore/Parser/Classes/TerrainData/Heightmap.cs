@@ -59,7 +59,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 			}
 			if (IsReadShifts(reader.Version))
 			{
-				m_shifts = reader.ReadArray<Shift>();
+				m_shifts = reader.ReadAssetArray<Shift>();
 				reader.AlignStream(AlignType.Align4);
 			}
 

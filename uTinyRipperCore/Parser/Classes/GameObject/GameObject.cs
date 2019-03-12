@@ -129,7 +129,7 @@ namespace uTinyRipper.Classes
 
 			if(IsReadComponents(reader.Version, reader.Flags))
 			{
-				Components = reader.ReadArray<ComponentPair>();
+				Components = reader.ReadAssetArray<ComponentPair>();
 			}
 
 			if (IsReadIsActiveFirst(reader.Version))

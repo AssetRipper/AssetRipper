@@ -42,47 +42,47 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 			if (IsReadSubEmitters(reader.Version))
 			{
-				m_subEmitters = reader.ReadArray<SubEmitterData>();
+				m_subEmitters = reader.ReadAssetArray<SubEmitterData>();
 			}
 			else
 			{
 				List<SubEmitterData> subEmitters = new List<SubEmitterData>();
-				PPtr<ParticleSystem> subEmitterBirth = reader.Read<PPtr<ParticleSystem>>();
+				PPtr<ParticleSystem> subEmitterBirth = reader.ReadAsset<PPtr<ParticleSystem>>();
 				if (!subEmitterBirth.IsNull)
 				{
 					subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Birth, subEmitterBirth));
 				}
 				if (IsReadSecond(reader.Version))
 				{
-					PPtr<ParticleSystem> subEmitterBirth1 = reader.Read<PPtr<ParticleSystem>>();
+					PPtr<ParticleSystem> subEmitterBirth1 = reader.ReadAsset<PPtr<ParticleSystem>>();
 					if (!subEmitterBirth1.IsNull)
 					{
 						subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Birth, subEmitterBirth1));
 					}
 				}
 
-				PPtr<ParticleSystem> subEmitterDeath = reader.Read<PPtr<ParticleSystem>>();
+				PPtr<ParticleSystem> subEmitterDeath = reader.ReadAsset<PPtr<ParticleSystem>>();
 				if (!subEmitterDeath.IsNull)
 				{
 					subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Death, subEmitterDeath));
 				}
 				if (IsReadSecond(reader.Version))
 				{
-					PPtr<ParticleSystem> subEmitterDeath1 = reader.Read<PPtr<ParticleSystem>>();
+					PPtr<ParticleSystem> subEmitterDeath1 = reader.ReadAsset<PPtr<ParticleSystem>>();
 					if (!subEmitterDeath1.IsNull)
 					{
 						subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Death, subEmitterDeath1));
 					}
 				}
 
-				PPtr<ParticleSystem> subEmitterCollision = reader.Read<PPtr<ParticleSystem>>();
+				PPtr<ParticleSystem> subEmitterCollision = reader.ReadAsset<PPtr<ParticleSystem>>();
 				if (!subEmitterCollision.IsNull)
 				{
 					subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Collision, subEmitterCollision));
 				}
 				if (IsReadSecond(reader.Version))
 				{
-					PPtr<ParticleSystem> subEmitterCollision1 = reader.Read<PPtr<ParticleSystem>>();
+					PPtr<ParticleSystem> subEmitterCollision1 = reader.ReadAsset<PPtr<ParticleSystem>>();
 					if (!subEmitterCollision1.IsNull)
 					{
 						subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Collision, subEmitterCollision1));

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
@@ -64,8 +64,8 @@ namespace uTinyRipper.Classes.Avatars
 			RightHand.Read(reader);
 			if(IsReadHandles(reader.Version))
 			{
-				m_handles = reader.ReadArray<Handle>();
-				m_colliderArray = reader.ReadArray<Collider>();
+				m_handles = reader.ReadAssetArray<Handle>();
+				m_colliderArray = reader.ReadAssetArray<Collider>();
 			}
 
 			m_humanBoneIndex = reader.ReadInt32Array();

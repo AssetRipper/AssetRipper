@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace uTinyRipper.Classes.Shaders
 {
@@ -12,7 +12,7 @@ namespace uTinyRipper.Classes.Shaders
 
 		public void Read(AssetReader reader)
 		{
-			m_channels = reader.ReadArray<ShaderBindChannel>();
+			m_channels = reader.ReadAssetArray<ShaderBindChannel>();
 			reader.AlignStream(AlignType.Align4);
 			SourceMap = reader.ReadInt32();
 		}

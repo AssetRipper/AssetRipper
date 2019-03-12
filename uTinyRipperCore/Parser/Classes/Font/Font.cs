@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters;
@@ -242,7 +242,7 @@ namespace uTinyRipper.Classes
 			{
 				DefaultMaterial.Read(reader);
 			}
-			m_characterRects = reader.ReadArray<CharacterInfo>();
+			m_characterRects = reader.ReadAssetArray<CharacterInfo>();
 			if (!IsReadFontImpl(reader.Version))
 			{
 				Texture.Read(reader);
@@ -307,7 +307,7 @@ namespace uTinyRipper.Classes
 
 			if (IsReadFallbackFonts(reader.Version))
 			{
-				m_fallbackFonts = reader.ReadArray<PPtr<Font>>();
+				m_fallbackFonts = reader.ReadAssetArray<PPtr<Font>>();
 				reader.AlignStream(AlignType.Align4);
 
 				FontRenderingMode = (FontRenderingMode)reader.ReadInt32();

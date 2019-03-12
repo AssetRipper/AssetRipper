@@ -55,11 +55,11 @@ namespace uTinyRipper.Classes
 			m_PVSData = reader.ReadByteArray();
 			reader.AlignStream(AlignType.Align4);
 
-			m_scenes = reader.ReadArray<OcclusionScene>();
+			m_scenes = reader.ReadAssetArray<OcclusionScene>();
 			if (IsReadStaticRenderers(reader.Flags))
 			{
-				m_staticRenderers = reader.ReadArray<SceneObjectIdentifier>();
-				m_portals = reader.ReadArray<SceneObjectIdentifier>();
+				m_staticRenderers = reader.ReadAssetArray<SceneObjectIdentifier>();
+				m_portals = reader.ReadAssetArray<SceneObjectIdentifier>();
 			}
 		}
 

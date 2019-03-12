@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
@@ -8,10 +8,10 @@ namespace uTinyRipper.Classes.NavMeshDatas
 	{
 		public void Read(AssetReader reader)
 		{
-			m_vertices = reader.ReadArray<Vector3f>();
+			m_vertices = reader.ReadAssetArray<Vector3f>();
 			m_indices = reader.ReadInt32Array();
 			Bounds.Read(reader);
-			m_nodes = reader.ReadArray<HeightMeshBVNode>();
+			m_nodes = reader.ReadAssetArray<HeightMeshBVNode>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

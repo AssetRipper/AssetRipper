@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.SpriteAtlases;
@@ -35,10 +35,10 @@ namespace uTinyRipper.Classes
 
 			if (IsReadEditorData(reader.Flags))
 			{
-				EditorData = reader.Read<SpriteAtlasEditorData>();
+				EditorData = reader.ReadAsset<SpriteAtlasEditorData>();
 				MasterAtlas.Read(reader);
 			}
-			m_packedSprites = reader.ReadArray<PPtr<Sprite>>();
+			m_packedSprites = reader.ReadAssetArray<PPtr<Sprite>>();
 			m_packedSpriteNamesToIndex = reader.ReadStringArray();
 			if (IsReadRenderDataMap(reader.Flags))
 			{

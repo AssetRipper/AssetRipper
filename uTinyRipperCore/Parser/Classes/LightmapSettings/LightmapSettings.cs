@@ -197,7 +197,7 @@ namespace uTinyRipper.Classes
 			}
 			if(IsReadLightmaps(reader.Flags))
 			{
-				m_lightmaps = reader.ReadArray<LightmapData>();
+				m_lightmaps = reader.ReadAssetArray<LightmapData>();
 			}
 			if (IsAlign1(reader.Version, reader.Flags))
 			{

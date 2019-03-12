@@ -268,7 +268,7 @@ namespace uTinyRipper.Classes
 
 			if (IsReadMaterialFirst(reader.Version))
 			{
-				m_materials = reader.ReadArray<PPtr<Material>>();
+				m_materials = reader.ReadAssetArray<PPtr<Material>>();
 			}
 
 			if (IsReadLightmapTilingOffset(reader.Version, reader.Flags))
@@ -282,7 +282,7 @@ namespace uTinyRipper.Classes
 
 			if (!IsReadMaterialFirst(reader.Version))
 			{
-				m_materials = reader.ReadArray<PPtr<Material>>();
+				m_materials = reader.ReadAssetArray<PPtr<Material>>();
 			}
 
 			if (IsReadSubsetIndices(reader.Version))

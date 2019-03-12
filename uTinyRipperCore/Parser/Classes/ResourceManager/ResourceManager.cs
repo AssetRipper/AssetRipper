@@ -29,7 +29,7 @@ namespace uTinyRipper.Classes
 			m_container = reader.ReadStringTKVPArray<PPtr<Object>>();
 			if (IsReadDependentAssets(reader.Version, reader.Flags))
 			{
-				m_dependentAssets = reader.ReadArray<ResourceManagerDependency>();
+				m_dependentAssets = reader.ReadAssetArray<ResourceManagerDependency>();
 			}
 		}
 

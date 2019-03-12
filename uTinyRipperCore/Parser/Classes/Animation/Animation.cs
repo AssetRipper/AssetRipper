@@ -77,7 +77,7 @@ namespace uTinyRipper.Classes
 			}
 			else
 			{
-				m_animations = reader.ReadArray<PPtr<AnimationClip>>();
+				m_animations = reader.ReadAssetArray<PPtr<AnimationClip>>();
 			}
 			WrapMode = (WrapMode)reader.ReadInt32();
 			PlayAutomatically = reader.ReadBoolean();

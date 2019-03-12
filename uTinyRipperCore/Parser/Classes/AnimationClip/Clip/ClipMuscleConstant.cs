@@ -110,7 +110,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			{
 				m_additionalCurveIndexArray = reader.ReadInt32Array();
 			}
-			m_valueArrayDelta = reader.ReadArray<ValueDelta>();
+			m_valueArrayDelta = reader.ReadAssetArray<ValueDelta>();
 
 			if(IsReadValueArrayReferencePose(reader.Version))
 			{

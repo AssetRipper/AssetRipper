@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AnimatorOverrideControllers;
 using uTinyRipper.Exporter.YAML;
@@ -18,7 +18,7 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 			Controller.Read(reader);
-			m_clips = reader.ReadArray<AnimationClipOverride>();
+			m_clips = reader.ReadAssetArray<AnimationClipOverride>();
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

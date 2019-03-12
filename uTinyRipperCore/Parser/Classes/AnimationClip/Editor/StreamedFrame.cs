@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace uTinyRipper.Classes.AnimationClips.Editor
 {
@@ -7,7 +7,7 @@ namespace uTinyRipper.Classes.AnimationClips.Editor
 		public void Read(AssetReader reader)
 		{
 			Time = reader.ReadSingle();
-			m_curves = reader.ReadArray<StreamedCurveKey>();
+			m_curves = reader.ReadAssetArray<StreamedCurveKey>();
 		}
 
 		public float Time { get; set; }

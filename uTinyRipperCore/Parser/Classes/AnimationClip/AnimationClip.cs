@@ -183,7 +183,7 @@ namespace uTinyRipper.Classes
 			{
 				m_classIDToTrack = new Dictionary<int, PPtr<BaseAnimationTrack>>();
 				m_classIDToTrack.Read(reader);
-				m_childTracks = reader.ReadArray<ChildTrack>();
+				m_childTracks = reader.ReadAssetArray<ChildTrack>();
 			}
 
 			if (IsReadAnimationType(reader.Version))
@@ -210,25 +210,25 @@ namespace uTinyRipper.Classes
 
 			if (IsReadCurves(reader.Version))
 			{
-				m_rotationCurves = reader.ReadArray<QuaternionCurve>();
+				m_rotationCurves = reader.ReadAssetArray<QuaternionCurve>();
 			}
 			if (IsReadCompressedRotationCurves(reader.Version))
 			{
-				m_compressedRotationCurves = reader.ReadArray<CompressedAnimationCurve>();
+				m_compressedRotationCurves = reader.ReadAssetArray<CompressedAnimationCurve>();
 			}
 			if (IsReadEulerCurves(reader.Version))
 			{
-				m_eulerCurves = reader.ReadArray<Vector3Curve>();
+				m_eulerCurves = reader.ReadAssetArray<Vector3Curve>();
 			}
 			if (IsReadCurves(reader.Version))
 			{
-				m_positionCurves = reader.ReadArray<Vector3Curve>();
-				m_scaleCurves = reader.ReadArray<Vector3Curve>();
-				m_floatCurves = reader.ReadArray<FloatCurve>();
+				m_positionCurves = reader.ReadAssetArray<Vector3Curve>();
+				m_scaleCurves = reader.ReadAssetArray<Vector3Curve>();
+				m_floatCurves = reader.ReadAssetArray<FloatCurve>();
 			}
 			if (IsReadPPtrCurves(reader.Version))
 			{
-				m_PPtrCurves = reader.ReadArray<PPtrCurve>();
+				m_PPtrCurves = reader.ReadAssetArray<PPtrCurve>();
 			}
 
 			if (IsReadSampleRate(reader.Version))
@@ -263,7 +263,7 @@ namespace uTinyRipper.Classes
 
 			if (IsReadEvents(reader.Version))
 			{
-				m_events = reader.ReadArray<AnimationEvent>();
+				m_events = reader.ReadAssetArray<AnimationEvent>();
 			}
 			if (IsAlign(reader.Version))
 			{

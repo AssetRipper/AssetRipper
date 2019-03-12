@@ -1,4 +1,4 @@
-﻿using SevenZip;
+using SevenZip;
 using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
@@ -53,9 +53,9 @@ namespace uTinyRipper.Classes.Meshes
 		{
 			if (IsReadChannels(reader.Version))
 			{
-				m_vertices = reader.ReadArray<BlendShapeVertex>();
-				m_shapes = reader.ReadArray<BlendShape>();
-				m_channels = reader.ReadArray<BlendShapeChannel>();
+				m_vertices = reader.ReadAssetArray<BlendShapeVertex>();
+				m_shapes = reader.ReadAssetArray<BlendShape>();
+				m_channels = reader.ReadAssetArray<BlendShapeChannel>();
 				if (IsAlign(reader.Version))
 				{
 					reader.AlignStream(AlignType.Align4);
@@ -65,9 +65,9 @@ namespace uTinyRipper.Classes.Meshes
 			}
 			else
 			{
-				m_shapes = reader.ReadArray<BlendShape>();
+				m_shapes = reader.ReadAssetArray<BlendShape>();
 				reader.AlignStream(AlignType.Align4);
-				m_vertices = reader.ReadArray<BlendShapeVertex>();
+				m_vertices = reader.ReadAssetArray<BlendShapeVertex>();
 			}
 		}
 

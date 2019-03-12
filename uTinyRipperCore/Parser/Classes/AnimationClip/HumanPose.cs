@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
@@ -31,7 +31,7 @@ namespace uTinyRipper.Classes.AnimationClips
 				LookAtPosition.Read(reader);
 			}
 			LookAtWeight.Read(reader);
-			m_goalArray = reader.ReadArray<HumanGoal>();
+			m_goalArray = reader.ReadAssetArray<HumanGoal>();
 			LeftHandPose.Read(reader);
 			RightHandPose.Read(reader);
 			m_doFArray = reader.ReadSingleArray();
@@ -44,7 +44,7 @@ namespace uTinyRipper.Classes.AnimationClips
 				}
 				else
 				{
-					m_TDoFArray = reader.ReadArray<Vector4f>();
+					m_TDoFArray = reader.ReadAssetArray<Vector4f>();
 				}
 			}
 		}

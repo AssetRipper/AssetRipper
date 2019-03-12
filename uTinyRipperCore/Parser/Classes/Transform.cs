@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
@@ -20,7 +20,7 @@ namespace uTinyRipper.Classes
 			LocalRotation.Read(reader);
 			LocalPosition.Read(reader);
 			LocalScale.Read(reader);
-			m_children = reader.ReadArray<PPtr<Transform>>();
+			m_children = reader.ReadAssetArray<PPtr<Transform>>();
 			Father.Read(reader);
 		}
 

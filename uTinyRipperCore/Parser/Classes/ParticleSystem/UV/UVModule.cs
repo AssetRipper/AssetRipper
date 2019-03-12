@@ -109,7 +109,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 			if (IsReadSprites(reader.Version))
 			{
-				m_sprites = reader.ReadArray<SpriteData>();
+				m_sprites = reader.ReadAssetArray<SpriteData>();
 			}
 			if (IsReadFlipU(reader.Version))
 			{

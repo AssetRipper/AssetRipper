@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.NavMeshDatas;
@@ -47,7 +47,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_navMeshTiles = reader.ReadArray<NavMeshTileData>();
+			m_navMeshTiles = reader.ReadAssetArray<NavMeshTileData>();
 			if (IsReadNavMeshParams(reader.Version))
 			{
 				NavMeshParams.Read(reader);
@@ -56,9 +56,9 @@ namespace uTinyRipper.Classes
 			{
 				NavMeshBuildSettings.Read(reader);
 			}
-			m_heightmaps = reader.ReadArray<HeightmapData>();
-			m_heightMeshes = reader.ReadArray<HeightMeshData>();
-			m_offMeshLinks = reader.ReadArray<AutoOffMeshLinkData>();
+			m_heightmaps = reader.ReadAssetArray<HeightmapData>();
+			m_heightMeshes = reader.ReadAssetArray<HeightMeshData>();
+			m_offMeshLinks = reader.ReadAssetArray<AutoOffMeshLinkData>();
 			if (IsReadSourceBounds(reader.Version))
 			{
 				SourceBounds.Read(reader);

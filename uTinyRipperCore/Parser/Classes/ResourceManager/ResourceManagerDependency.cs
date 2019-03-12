@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes.ResourceManagers
 		public void Read(AssetReader reader)
 		{
 			Object.Read(reader);
-			m_dependencies = reader.ReadArray<PPtr<Object>>();
+			m_dependencies = reader.ReadAssetArray<PPtr<Object>>();
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

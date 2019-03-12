@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
@@ -68,7 +68,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_scripts = reader.ReadArray<PPtr<MonoScript>>();
+			m_scripts = reader.ReadAssetArray<PPtr<MonoScript>>();
 			if(IsReadHasCompileErrors(reader.Version))
 			{
 				HasCompileErrors = reader.ReadBoolean();

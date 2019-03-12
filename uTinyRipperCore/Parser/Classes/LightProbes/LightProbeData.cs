@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
@@ -27,8 +27,8 @@ namespace uTinyRipper.Classes.LightProbess
 			Tetrahedralization.Read(reader);
 			if(IsReadProbeSets(reader.Version))
 			{
-				m_probeSets = reader.ReadArray<ProbeSetIndex>();
-				m_positions = reader.ReadArray<Vector3f>();
+				m_probeSets = reader.ReadAssetArray<ProbeSetIndex>();
+				m_positions = reader.ReadAssetArray<Vector3f>();
 			}
 			if(IsReadNonTetrahedralizedProbeSetIndexMap(reader.Version))
 			{
