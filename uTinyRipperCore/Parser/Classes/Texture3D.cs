@@ -208,7 +208,7 @@ namespace uTinyRipper.Classes
 				{
 					if (m_imageData.Length != 0)
 					{
-						throw new Exception("Texture3D contains data and resource path");
+						throw new Exception("Texture3D contains both data and resource path");
 					}
 
 					using (ResourcesFile res = File.Collection.FindResourcesFile(File, path))
