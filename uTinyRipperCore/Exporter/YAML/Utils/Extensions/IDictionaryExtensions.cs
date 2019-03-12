@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace uTinyRipper.Exporter.YAML
 {
@@ -9,7 +9,7 @@ namespace uTinyRipper.Exporter.YAML
 			YAMLMappingNode node = new YAMLMappingNode();
 			foreach (var kvp in _this)
 			{
-				node.Add(kvp.Key.ToString(), kvp.Value);
+				node.Add(kvp.Key, kvp.Value);
 			}
 			return node;
 		}

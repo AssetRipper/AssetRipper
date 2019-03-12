@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace uTinyRipper.Exporter.YAML
@@ -12,6 +12,30 @@ namespace uTinyRipper.Exporter.YAML
 		public YAMLMappingNode(MappingStyle style)
 		{
 			Style = style;
+		}
+
+		public void Add(int key, string value)
+		{
+			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			Add(key, valueNode);
+		}
+
+		public void Add(int key, YAMLNode value)
+		{
+			YAMLScalarNode keyNode = new YAMLScalarNode(key);
+			InsertEnd(keyNode, value);
+		}
+
+		public void Add(uint key, string value)
+		{
+			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			Add(key, valueNode);
+		}
+
+		public void Add(uint key, YAMLNode value)
+		{
+			YAMLScalarNode keyNode = new YAMLScalarNode(key);
+			InsertEnd(keyNode, value);
 		}
 
 		public void Add(string key, bool value)
@@ -73,7 +97,7 @@ namespace uTinyRipper.Exporter.YAML
 			YAMLScalarNode valueNode = new YAMLScalarNode(value);
 			Add(key, valueNode);
 		}
-		
+
 		public void Add(string key, YAMLNode value)
 		{
 			YAMLScalarNode keyNode = new YAMLScalarNode(key);
@@ -152,7 +176,7 @@ namespace uTinyRipper.Exporter.YAML
 
 		public void Concatenate(YAMLMappingNode map)
 		{
-			foreach(KeyValuePair<YAMLNode, YAMLNode> child in map.m_children)
+			foreach (KeyValuePair<YAMLNode, YAMLNode> child in map.m_children)
 			{
 				Add(child.Key, child.Value);
 			}
@@ -169,7 +193,7 @@ namespace uTinyRipper.Exporter.YAML
 			YAMLScalarNode keyNode = new YAMLScalarNode(key);
 			InsertBegin(keyNode, value);
 		}
-		
+
 		public void InsertBegin(YAMLNode key, YAMLNode value)
 		{
 			if (value == null)
@@ -200,9 +224,9 @@ namespace uTinyRipper.Exporter.YAML
 
 		private void StartChildren(Emitter emitter)
 		{
-			if(Style == MappingStyle.Block)
+			if (Style == MappingStyle.Block)
 			{
-				if(m_children.Count == 0)
+				if (m_children.Count == 0)
 				{
 					emitter.Write('{');
 				}
@@ -232,14 +256,14 @@ namespace uTinyRipper.Exporter.YAML
 		private void StartTransition(Emitter emitter, YAMLNode next)
 		{
 			emitter.Write(':').WriteWhitespace();
-			if(Style == MappingStyle.Block)
+			if (Style == MappingStyle.Block)
 			{
 				if (next.IsMultyline)
 				{
 					emitter.WriteLine();
 				}
 			}
-			if(next.IsIndent)
+			if (next.IsIndent)
 			{
 				emitter.IncreaseIntent();
 			}
@@ -278,7 +302,7 @@ namespace uTinyRipper.Exporter.YAML
 		public override bool IsIndent => Style == MappingStyle.Block;
 
 		public MappingStyle Style { get; set; }
-		
+
 		private readonly List<KeyValuePair<YAMLNode, YAMLNode>> m_children = new List<KeyValuePair<YAMLNode, YAMLNode>>();
 	}
 }

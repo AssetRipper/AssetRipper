@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace uTinyRipper
@@ -10,9 +10,21 @@ namespace uTinyRipper
 			byte[] buffer = new byte[BufferSize];
 			while (true)
 			{
-				int read = _this.Read(buffer, 0, BufferSize);
-				dstStream.Write(buffer, 0, read);
-				if (read != BufferSize)
+				int offset = 0;
+				int count = BufferSize;
+				int toWrite = 0;
+
+				int read = 0;
+				do
+				{
+					read = _this.Read(buffer, offset, count);
+					offset += read;
+					count -= read;
+					toWrite += read;
+				} while (read != 0);
+
+				dstStream.Write(buffer, 0, toWrite);
+				if (toWrite != BufferSize)
 				{
 					return;
 				}
@@ -25,12 +37,19 @@ namespace uTinyRipper
 			for (long left = size; left > 0; left -= BufferSize)
 			{
 				int toRead = BufferSize < left ? BufferSize : (int)left;
-				int read = _this.Read(buffer, 0, toRead);
-				if(read != toRead)
+				int offset = 0;
+				int count = toRead;
+				while (count > 0)
 				{
-					throw new Exception($"Read {read} but expected {toRead}");
+					int read = _this.Read(buffer, offset, count);
+					if (read == 0)
+					{
+						throw new Exception($"No data left");
+					}
+					offset += read;
+					count -= read;
 				}
-				dstStream.Write(buffer, 0, read);
+				dstStream.Write(buffer, 0, toRead);
 			}
 		}
 
