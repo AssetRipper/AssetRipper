@@ -165,7 +165,10 @@
     <Compile Include="Exporter\YAML\Utils\Extensions\EmitterExtensions.cs" />
     <Compile Include="Exporter\YAML\Utils\Extensions\IDictionaryExtensions.cs" />
     <Compile Include="Exporter\YAML\Utils\Extensions\IReadOnlyListExtensions.cs" />
-    <Compile Include="IO\EndianReader\IEndianReadable.cs" />
+    <Compile Include="IO\Endian\AlignType.cs" />
+    <Compile Include="IO\Endian\EndianType.cs" />
+    <Compile Include="IO\Endian\Reader\EndianReader.cs" />
+    <Compile Include="IO\Endian\Reader\IEndianReadable.cs" />
     <Compile Include="IO\FileMultiStream\SplitNameComparer.cs" />
     <Compile Include="IO\InvariantStreamWriter.cs" />
     <Compile Include="IO\PartialStream.cs" />
@@ -655,11 +658,11 @@
     <Compile Include="Parser\Game\PlatformGameStructure.cs" />
     <Compile Include="Parser\Game\Platforms\WebGLStructure.cs" />
     <Compile Include="Parser\Game\Platforms\WebPlayerStructure.cs" />
-    <Compile Include="Parser\IO\AssetReader\TransferInstructionFlags.cs" />
+    <Compile Include="Parser\IO\Asset\TransferInstructionFlags.cs" />
     <Compile Include="Parser\IO\Extensions\IDictionaryExtensions.cs" />
     <Compile Include="Parser\IO\Extensions\AssetStreamExtensions.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Utils\Extensions\IEnumerableExtensions.cs" />
-    <Compile Include="Parser\IO\AssetReader\AssetReader.cs" />
+    <Compile Include="Parser\IO\Asset\Reader\AssetReader.cs" />
     <Compile Include="IO\Utils\Extensions\EndianStreamExtensions.cs" />
     <Compile Include="IO\Utils\Extensions\IListExtensions.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\ProjectExporter.cs" />
@@ -689,9 +692,6 @@
     <Compile Include="Parser\AssetCollection\Exporter\Interfaces\IYAMLExportable.cs" />
     <Compile Include="Parser\AssetCollection\Exporter\Utils\Extensions\IDictionaryExtensions.cs" />
     <Compile Include="Exporter\YAML\Utils\Extensions\IEnumerableExtensions.cs" />
-    <Compile Include="IO\EndianReader\AlignType.cs" />
-    <Compile Include="IO\EndianReader\EndianReader.cs" />
-    <Compile Include="IO\EndianReader\EndianType.cs" />
     <Compile Include="IO\Lz4\Lz4DecodeStream.cs" />
     <Compile Include="IO\Utils\Extensions\IDictionaryIOExtensions.cs" />
     <Compile Include="IO\Utils\SevenZipHelper.cs" />
@@ -911,7 +911,7 @@
     <Compile Include="Parser\Classes\Base\NamedObject.cs" />
     <Compile Include="Parser\Classes\Serialize\AABB.cs" />
     <Compile Include="Parser\Classes\Serialize\Float.cs" />
-    <Compile Include="Parser\IO\AssetReader\IAssetReadable.cs" />
+    <Compile Include="Parser\IO\Asset\Reader\IAssetReadable.cs" />
     <Compile Include="Parser\Classes\Serialize\PackedQuatVector.cs" />
     <Compile Include="Parser\Classes\Serialize\PackedFloatVector.cs" />
     <Compile Include="Parser\Classes\Serialize\PackedIntVector.cs" />
