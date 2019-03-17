@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.Exporter.YAML;
 
 namespace uTinyRipper.Classes
@@ -42,7 +42,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode root = base.ExportYAMLRoot(container);
-			root.Add("m_Name", Name);
+			root.Add(NameName, Name);
 			return root;
 		}
 
@@ -58,5 +58,7 @@ namespace uTinyRipper.Classes
 			}
 		}
 		public string Name { get; protected set; }
+
+		public const string NameName = "m_Name";
 	}
 }

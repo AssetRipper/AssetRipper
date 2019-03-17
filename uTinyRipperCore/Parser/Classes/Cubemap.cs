@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using uTinyRipper.AssetExporters;
+using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -43,12 +45,21 @@ namespace uTinyRipper.Classes
 			{
 				foreach(PPtr<Texture2D> texture in m_sourceTextures)
 				{
-					yield return texture.FetchDependency(file, isLog, ToLogString, "sourceTextures");
+					yield return texture.FetchDependency(file, isLog, ToLogString, SourceTexturesName);
 				}
 			}
 		}
 
+		protected sealed override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		{
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add(SourceTexturesName, SourceTextures.ExportYAML(container));
+			return node;
+		}
+
 		public IReadOnlyList<PPtr<Texture2D>> SourceTextures => m_sourceTextures;
+
+		public const string SourceTexturesName = "m_SourceTextures";
 
 		private PPtr<Texture2D>[] m_sourceTextures;
 	}

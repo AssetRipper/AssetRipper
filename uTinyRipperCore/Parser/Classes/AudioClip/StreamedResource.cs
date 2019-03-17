@@ -1,6 +1,9 @@
-﻿namespace uTinyRipper.Classes.AudioClips
+using uTinyRipper.AssetExporters;
+using uTinyRipper.Exporter.YAML;
+
+namespace uTinyRipper.Classes.AudioClips
 {
-	public struct StreamedResource : IAssetReadable
+	public struct StreamedResource : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// Greater than 5.0.0b1
@@ -24,8 +27,21 @@
 			}
 		}
 
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add(SourceName, Source);
+			node.Add(OffsetName, Offset);
+			node.Add(SizeName, Size);
+			return node;
+		}
+
 		public string Source { get; private set; }
 		public long Offset { get; private set; }
 		public long Size { get; private set; }
+
+		public const string SourceName = "m_Source";
+		public const string OffsetName = "m_Offset";
+		public const string SizeName = "m_Size";
 	}
 }
