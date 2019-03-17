@@ -4,9 +4,9 @@ using uTinyRipper;
 
 namespace uTinyRipperGUI.TextureContainers.PVR
 {
-	public static class PVRConverter
+	public static class PVRContainer
 	{
-		public static void ExportPVRHeader(Stream destination, PVRConvertParameters @params)
+		public static void ExportPVRHeader(Stream destination, PVRContainerParameters @params)
 		{
 			using (BinaryWriter binWriter = new BinaryWriter(destination, Encoding.UTF8, true))
 			{
@@ -25,7 +25,7 @@ namespace uTinyRipperGUI.TextureContainers.PVR
 			}
 		}
 
-		public static void ExportPVR(Stream destination, Stream source, PVRConvertParameters @params)
+		public static void ExportPVR(Stream destination, Stream source, PVRContainerParameters @params)
 		{
 			ExportPVRHeader(destination, @params);
 			source.CopyStream(destination, @params.DataLength);

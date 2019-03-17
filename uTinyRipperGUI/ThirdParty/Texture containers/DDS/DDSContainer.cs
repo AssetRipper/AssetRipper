@@ -4,9 +4,9 @@ using System.Text;
 
 namespace uTinyRipperGUI.TextureContainers.DDS
 {
-	public static class DDSConverter
+	public static class DDSContainer
 	{
-		public static void ExportDDSHeader(byte[] buffer, int offset, DDSConvertParameters @params)
+		public static void ExportDDSHeader(byte[] buffer, int offset, DDSContainerParameters @params)
 		{
 			using (MemoryStream stream = new MemoryStream(buffer))
 			{
@@ -15,7 +15,7 @@ namespace uTinyRipperGUI.TextureContainers.DDS
 			}
 		}
 
-		public static void ExportDDSHeader(Stream destination, DDSConvertParameters @params)
+		public static void ExportDDSHeader(Stream destination, DDSContainerParameters @params)
 		{
 			using (BinaryWriter binWriter = new BinaryWriter(destination, Encoding.UTF8, true))
 			{
@@ -51,7 +51,7 @@ namespace uTinyRipperGUI.TextureContainers.DDS
 			}
 		}
 
-		public static void ExportDDS(Stream source, Stream destination, DDSConvertParameters @params)
+		public static void ExportDDS(Stream source, Stream destination, DDSContainerParameters @params)
 		{
 			using (BinaryReader sourceReader = new BinaryReader(source))
 			{
@@ -59,7 +59,7 @@ namespace uTinyRipperGUI.TextureContainers.DDS
 			}
 		}
 
-		public static void ExportDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		public static void ExportDDS(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
 			if(IsRGBA32(@params))
 			{
@@ -103,9 +103,9 @@ namespace uTinyRipperGUI.TextureContainers.DDS
 			}
 		}
 
-		private static void ExportRGBA32ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		private static void ExportRGBA32ToDDS(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
-			DDSConvertParameters bgraParams = new DDSConvertParameters();
+			DDSContainerParameters bgraParams = new DDSContainerParameters();
 			@params.CopyTo(bgraParams);
 			bgraParams.RBitMask = 0xFF0000;
 			bgraParams.BBitMask = 0xFF;
@@ -125,9 +125,9 @@ namespace uTinyRipperGUI.TextureContainers.DDS
 			}
 		}
 
-		private static void ExportARGB32ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		private static void ExportARGB32ToDDS(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
-			DDSConvertParameters bgraParams = new DDSConvertParameters();
+			DDSContainerParameters bgraParams = new DDSContainerParameters();
 			@params.CopyTo(bgraParams);
 			bgraParams.RBitMask = 0xFF0000;
 			bgraParams.GBitMask = 0xFF00;
@@ -149,9 +149,9 @@ namespace uTinyRipperGUI.TextureContainers.DDS
 			}
 		}
 
-		private static void ExportRGBA16ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		private static void ExportRGBA16ToDDS(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
-			DDSConvertParameters bgraParams = new DDSConvertParameters();
+			DDSContainerParameters bgraParams = new DDSContainerParameters();
 			@params.CopyTo(bgraParams);
 			bgraParams.RBitMask = 0xF00;
 			bgraParams.BBitMask = 0xF;
@@ -170,9 +170,9 @@ namespace uTinyRipperGUI.TextureContainers.DDS
 			}
 		}
 
-		private static void ExportAlpha8ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		private static void ExportAlpha8ToDDS(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
-			DDSConvertParameters bgraParams = new DDSConvertParameters();
+			DDSContainerParameters bgraParams = new DDSContainerParameters();
 			@params.CopyTo(bgraParams);
 			bgraParams.RGBBitCount = 32;
 			bgraParams.RBitMask = 0xFF0000;
@@ -192,9 +192,9 @@ namespace uTinyRipperGUI.TextureContainers.DDS
 			}
 		}
 
-		private static void ExportR8ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		private static void ExportR8ToDDS(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
-			DDSConvertParameters bgraParams = new DDSConvertParameters();
+			DDSContainerParameters bgraParams = new DDSContainerParameters();
 			@params.CopyTo(bgraParams);
 			bgraParams.RGBBitCount = 32;
 			bgraParams.RBitMask = 0xFF0000;
@@ -214,9 +214,9 @@ namespace uTinyRipperGUI.TextureContainers.DDS
 			}
 		}
 
-		private static void ExportR16ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		private static void ExportR16ToDDS(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
-			DDSConvertParameters bgraParams = new DDSConvertParameters();
+			DDSContainerParameters bgraParams = new DDSContainerParameters();
 			@params.CopyTo(bgraParams);
 			bgraParams.RGBBitCount = 32;
 			bgraParams.RBitMask = 0xFF0000;
@@ -238,9 +238,9 @@ namespace uTinyRipperGUI.TextureContainers.DDS
 			}
 		}
 
-		private static void ExportRG16ToDDS(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		private static void ExportRG16ToDDS(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
-			DDSConvertParameters bgraParams = new DDSConvertParameters();
+			DDSContainerParameters bgraParams = new DDSContainerParameters();
 			@params.CopyTo(bgraParams);
 			bgraParams.RGBBitCount = 32;
 			bgraParams.RBitMask = 0xFF0000;
@@ -261,37 +261,37 @@ namespace uTinyRipperGUI.TextureContainers.DDS
 			}
 		}
 
-		private static bool IsRGBA32(DDSConvertParameters @params)
+		private static bool IsRGBA32(DDSContainerParameters @params)
 		{
 			return @params.RBitMask == 0xFF && @params.GBitMask == 0xFF00 && @params.BBitMask == 0xFF0000 && @params.ABitMask == 0xFF000000;
 		}
 
-		private static bool IsARGB32(DDSConvertParameters @params)
+		private static bool IsARGB32(DDSContainerParameters @params)
 		{
 			return @params.RBitMask == 0xFF00 && @params.GBitMask == 0xFF0000 && @params.BBitMask == 0xFF000000 && @params.ABitMask == 0xFF;
 		}
 
-		private static bool IsRGBA16(DDSConvertParameters @params)
+		private static bool IsRGBA16(DDSContainerParameters @params)
 		{
 			return @params.RBitMask == 0xF000 && @params.GBitMask == 0xF00 && @params.BBitMask == 0xF0 && @params.ABitMask == 0xF;
 		}
 
-		private static bool IsAlpha8(DDSConvertParameters @params)
+		private static bool IsAlpha8(DDSContainerParameters @params)
 		{
 			return @params.RBitMask == 0 && @params.GBitMask == 0 && @params.BBitMask == 0 && @params.ABitMask == 0xFF;
 		}
 
-		private static bool IsR8(DDSConvertParameters @params)
+		private static bool IsR8(DDSContainerParameters @params)
 		{
 			return @params.RBitMask == 0xFF && @params.GBitMask == 0 && @params.BBitMask == 0 && @params.ABitMask == 0;
 		}
 
-		private static bool IsR16(DDSConvertParameters @params)
+		private static bool IsR16(DDSContainerParameters @params)
 		{
 			return @params.RBitMask == 0xFFFF && @params.GBitMask == 0 && @params.BBitMask == 0 && @params.ABitMask == 0;
 		}
 
-		private static bool IsRG16(DDSConvertParameters @params)
+		private static bool IsRG16(DDSContainerParameters @params)
 		{
 			return @params.RBitMask == 0xFF && @params.GBitMask == 0xFF00 && @params.BBitMask == 0 && @params.ABitMask == 0;
 		}

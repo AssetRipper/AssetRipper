@@ -4,9 +4,9 @@ using uTinyRipper;
 
 namespace uTinyRipperGUI.TextureContainers.KTX
 {
-	public static class KTXConverter
+	public static class KTXContainer
 	{
-		public static void ExportKXTHeader(Stream destination, KTXConvertParameters @params)
+		public static void ExportKXTHeader(Stream destination, KTXContainerParameters @params)
 		{
 			using (BinaryWriter binWriter = new BinaryWriter(destination, Encoding.UTF8, true))
 			{
@@ -28,7 +28,7 @@ namespace uTinyRipperGUI.TextureContainers.KTX
 			}
 		}
 
-		public static void ExportKXT(Stream destination, Stream source, KTXConvertParameters @params)
+		public static void ExportKXT(Stream destination, Stream source, KTXContainerParameters @params)
 		{
 			ExportKXTHeader(destination, @params);
 			source.CopyStream(destination, @params.DataLength);

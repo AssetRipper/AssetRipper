@@ -1,8 +1,8 @@
 namespace uTinyRipperGUI.TextureContainers.DDS
 {
-	public class DDSConvertParameters
+	public class DDSContainerParameters
 	{
-		public void CopyTo(DDSConvertParameters dest)
+		public void CopyTo(DDSContainerParameters dest)
 		{
 			dest.DataLength = DataLength;
 			dest.MipMapCount = MipMapCount;

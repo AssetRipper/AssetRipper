@@ -1,6 +1,6 @@
 namespace uTinyRipperGUI.TextureContainers.KTX
 {
-	public struct KTXConvertParameters
+	public struct KTXContainerParameters
 	{
 		public long DataLength { get; set; }
 		public KTXInternalFormat InternalFormat { get; set; }

@@ -44,7 +44,7 @@ namespace uTinyRipperGUI.Exporters
 
 		public static Bitmap DDSTextureToBitmap(Texture2D texture, byte[] data)
 		{
-			DDSConvertParameters @params = new DDSConvertParameters()
+			DDSContainerParameters @params = new DDSContainerParameters()
 			{
 				DataLength = data.LongLength,
 				MipMapCount = texture.MipCount,
@@ -96,7 +96,7 @@ namespace uTinyRipperGUI.Exporters
 		{
 			using (MemoryStream dstStream = new MemoryStream())
 			{
-				PVRConvertParameters @params = new PVRConvertParameters
+				PVRContainerParameters @params = new PVRContainerParameters
 				{
 					DataLength = data.Length,
 					PixelFormat = texture.PVRPixelFormat(),
@@ -106,7 +106,7 @@ namespace uTinyRipperGUI.Exporters
 				};
 				using (MemoryStream srcStream = new MemoryStream(data))
 				{
-					PVRConverter.ExportPVR(dstStream, srcStream, @params);
+					PVRContainer.ExportPVR(dstStream, srcStream, @params);
 				}
 				return PVRToBitmap(dstStream.ToArray(), texture.Width, texture.Height);
 			}
@@ -119,7 +119,7 @@ namespace uTinyRipperGUI.Exporters
 			{
 				using (MemoryStream srcStream = new MemoryStream(decompressed))
 				{
-					PVRConvertParameters @params = new PVRConvertParameters
+					PVRContainerParameters @params = new PVRContainerParameters
 					{
 						DataLength = decompressed.Length,
 						PixelFormat = texture.PVRPixelFormat(),
@@ -127,7 +127,7 @@ namespace uTinyRipperGUI.Exporters
 						Height = texture.Height,
 						MipMapCount = texture.MipCount,
 					};
-					PVRConverter.ExportPVR(dstStream, srcStream, @params);
+					PVRContainer.ExportPVR(dstStream, srcStream, @params);
 				}
 				return PVRTextureToBitmap(texture, dstStream.ToArray());
 			}
@@ -236,7 +236,7 @@ namespace uTinyRipperGUI.Exporters
 			}
 		}
 
-		private static void DecompressDDS(BinaryReader reader, Stream destination, DDSConvertParameters @params)
+		private static void DecompressDDS(BinaryReader reader, Stream destination, DDSContainerParameters @params)
 		{
 			if (@params.PixelFormatFlags.IsFourCC())
 			{

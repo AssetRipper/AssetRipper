@@ -79,7 +79,7 @@ namespace uTinyRipperGUI.Exporters
 
 		public static void ExportDDS(Texture2D texture, Stream destination, Stream source, long length)
 		{
-			DDSConvertParameters @params = new DDSConvertParameters()
+			DDSContainerParameters @params = new DDSContainerParameters()
 			{
 				DataLength = length,
 				MipMapCount = texture.MipCount,
@@ -99,13 +99,13 @@ namespace uTinyRipperGUI.Exporters
 			EndianType endianess = Texture2D.IsSwapBytes(texture.File.Platform, texture.TextureFormat) ? EndianType.BigEndian : EndianType.LittleEndian;
 			using (EndianReader sourceReader = new EndianReader(source, endianess))
 			{
-				DDSConverter.ExportDDS(sourceReader, destination, @params);
+				DDSContainer.ExportDDS(sourceReader, destination, @params);
 			}
 		}
 
 		public static void ExportPVR(Texture2D texture, Stream writer, Stream reader, long length)
 		{
-			PVRConvertParameters @params = new PVRConvertParameters()
+			PVRContainerParameters @params = new PVRContainerParameters()
 			{
 				DataLength = length,
 				PixelFormat = texture.PVRPixelFormat(),
@@ -113,12 +113,12 @@ namespace uTinyRipperGUI.Exporters
 				Height = texture.Height,
 				MipMapCount = texture.MipCount,
 			};
-			PVRConverter.ExportPVR(writer, reader, @params);
+			PVRContainer.ExportPVR(writer, reader, @params);
 		}
 
 		public static void ExportKTX(Texture2D texture, Stream writer, Stream reader, long length)
 		{
-			KTXConvertParameters @params = new KTXConvertParameters()
+			KTXContainerParameters @params = new KTXContainerParameters()
 			{
 				DataLength = length,
 				InternalFormat = texture.KTXInternalFormat(),
@@ -126,7 +126,7 @@ namespace uTinyRipperGUI.Exporters
 				Width = texture.Width,
 				Height = texture.Height,
 			};
-			KTXConverter.ExportKXT(writer, reader, @params);
+			KTXContainer.ExportKXT(writer, reader, @params);
 		}
 	}
 }

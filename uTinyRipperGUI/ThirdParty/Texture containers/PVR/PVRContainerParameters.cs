@@ -1,6 +1,6 @@
 namespace uTinyRipperGUI.TextureContainers.PVR
 {
-	public struct PVRConvertParameters
+	public struct PVRContainerParameters
 	{
 		public long DataLength { get; set; }
 		public PVRPixelFormat PixelFormat { get; set; }

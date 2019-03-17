@@ -21,7 +21,7 @@ namespace uTinyRipperGUI.TextureConverters
 			public int Mult { get; set; }
 		}
 
-		public static long GetDecompressedSize(DDSConvertParameters @params)
+		public static long GetDecompressedSize(DDSContainerParameters @params)
 		{
 			int width = @params.Width;
 			int height = @params.Height;
@@ -34,7 +34,7 @@ namespace uTinyRipperGUI.TextureConverters
 			return depth * sizeOfPlane + height * bps + width * bpp;
 		}
 
-		public static void DecompressDXT1(Stream source, Stream destination, DDSConvertParameters @params)
+		public static void DecompressDXT1(Stream source, Stream destination, DDSContainerParameters @params)
 		{
 			using (BinaryReader sourceReader = new BinaryReader(source))
 			{
@@ -42,7 +42,7 @@ namespace uTinyRipperGUI.TextureConverters
 			}
 		}
 
-		public static void DecompressDXT1(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		public static void DecompressDXT1(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
 			int depth = @params.BitMapDepth;
 			int width = @params.Width;
@@ -129,7 +129,7 @@ namespace uTinyRipperGUI.TextureConverters
 			}
 		}
 
-		public static void DecompressDXT3(Stream source, Stream destination, DDSConvertParameters @params)
+		public static void DecompressDXT3(Stream source, Stream destination, DDSContainerParameters @params)
 		{
 			using (BinaryReader sourceReader = new BinaryReader(source))
 			{
@@ -137,7 +137,7 @@ namespace uTinyRipperGUI.TextureConverters
 			}
 		}
 
-		public static void DecompressDXT3(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		public static void DecompressDXT3(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
 			int depth = @params.BitMapDepth;
 			int width = @params.Width;
@@ -229,7 +229,7 @@ namespace uTinyRipperGUI.TextureConverters
 			}
 		}
 
-		public static void DecompressDXT5(Stream source, Stream destination, DDSConvertParameters @params)
+		public static void DecompressDXT5(Stream source, Stream destination, DDSContainerParameters @params)
 		{
 			using (BinaryReader sourceReader = new BinaryReader(source))
 			{
@@ -237,7 +237,7 @@ namespace uTinyRipperGUI.TextureConverters
 			}
 		}
 
-		public static void DecompressDXT5(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		public static void DecompressDXT5(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
 			int depth = @params.BitMapDepth;
 			int width = @params.Width;
@@ -382,7 +382,7 @@ namespace uTinyRipperGUI.TextureConverters
 			}
 		}
 
-		public static void DecompressRGB(Stream source, Stream destination, DDSConvertParameters @params)
+		public static void DecompressRGB(Stream source, Stream destination, DDSContainerParameters @params)
 		{
 			using (BinaryReader reader = new BinaryReader(source))
 			{
@@ -390,12 +390,12 @@ namespace uTinyRipperGUI.TextureConverters
 			}
 		}
 
-		public static void DecompressRGB(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		public static void DecompressRGB(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
 			DecompressRGBA(sourceReader, destination, @params, false);
 		}
 
-		public static void DecompressRGBA(Stream source, Stream destination, DDSConvertParameters @params)
+		public static void DecompressRGBA(Stream source, Stream destination, DDSContainerParameters @params)
 		{
 			using (BinaryReader reader = new BinaryReader(source))
 			{
@@ -403,12 +403,12 @@ namespace uTinyRipperGUI.TextureConverters
 			}
 		}
 
-		public static void DecompressRGBA(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params)
+		public static void DecompressRGBA(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
 			DecompressRGBA(sourceReader, destination, @params, true);
 		}
 
-		private static void DecompressRGBA(BinaryReader sourceReader, Stream destination, DDSConvertParameters @params, bool isAlpha)
+		private static void DecompressRGBA(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params, bool isAlpha)
 		{
 			int depth = @params.BitMapDepth;
 			int width = @params.Width;
@@ -459,7 +459,7 @@ namespace uTinyRipperGUI.TextureConverters
 			}
 		}
 
-		private static int GetRGBABytesPerPixel(DDSConvertParameters @params)
+		private static int GetRGBABytesPerPixel(DDSContainerParameters @params)
 		{
 			if(@params.PixelFormatFlags.IsFourCC())
 			{
@@ -482,7 +482,7 @@ namespace uTinyRipperGUI.TextureConverters
 			}
 		}
 
-		private static int GetBytesPerPixel(DDSConvertParameters @params)
+		private static int GetBytesPerPixel(DDSContainerParameters @params)
 		{
 			if (@params.PixelFormatFlags.IsFourCC())
 			{
@@ -527,7 +527,7 @@ namespace uTinyRipperGUI.TextureConverters
 			}
 		}
 
-		private static int GetBytesPerColor(DDSConvertParameters @params)
+		private static int GetBytesPerColor(DDSContainerParameters @params)
 		{
 			if (@params.PixelFormatFlags.IsFourCC())
 			{
