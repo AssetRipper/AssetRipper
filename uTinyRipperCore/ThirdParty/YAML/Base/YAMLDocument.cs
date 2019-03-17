@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace uTinyRipper.Exporter.YAML
+namespace uTinyRipper.YAML
 {
 	public sealed class YAMLDocument
 	{

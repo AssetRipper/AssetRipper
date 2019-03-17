@@ -1,5 +1,5 @@
 ﻿using System;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 using Object = uTinyRipper.Classes.Object;
 

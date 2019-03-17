@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.NavMeshDatas;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes

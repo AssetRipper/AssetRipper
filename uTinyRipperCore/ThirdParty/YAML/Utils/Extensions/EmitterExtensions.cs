@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Exporter.YAML
+namespace uTinyRipper.YAML
 {
 	internal static class EmitterExtensions
 	{

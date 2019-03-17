@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Exporter.YAML
+namespace uTinyRipper.YAML
 {
 	/// <summary>
 	/// Specifies the style of a mapping.

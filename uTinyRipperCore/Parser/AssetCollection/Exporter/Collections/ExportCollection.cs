@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using uTinyRipper.AssetExporters.Classes;
 using uTinyRipper.Classes;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;

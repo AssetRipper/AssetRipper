@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace uTinyRipper.Exporter.YAML
+namespace uTinyRipper.YAML
 {
 	public static class IDictionaryExtensions
 	{

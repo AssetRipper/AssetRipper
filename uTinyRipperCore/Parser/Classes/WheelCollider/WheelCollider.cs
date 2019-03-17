@@ -1,7 +1,7 @@
 ﻿using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.PhysicMaterials;
 using uTinyRipper.Classes.WheelColliders;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {

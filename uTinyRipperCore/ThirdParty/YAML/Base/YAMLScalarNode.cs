@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace uTinyRipper.Exporter.YAML
+namespace uTinyRipper.YAML
 {
 	public sealed class YAMLScalarNode : YAMLNode
 	{

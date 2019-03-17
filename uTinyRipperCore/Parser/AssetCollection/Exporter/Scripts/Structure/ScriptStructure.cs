@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.AnimationClips;
 using uTinyRipper.Classes.ParticleSystems;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;

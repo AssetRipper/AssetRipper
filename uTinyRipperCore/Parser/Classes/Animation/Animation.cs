@@ -4,7 +4,7 @@ using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AnimationClips;
 using uTinyRipper.Classes.Animations;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes

@@ -1,5 +1,5 @@
 ﻿//using UtinyRipper.AssetExporters;
-//using UtinyRipper.Exporter.YAML;
+//using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {

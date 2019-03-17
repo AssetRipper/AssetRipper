@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Textures;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {

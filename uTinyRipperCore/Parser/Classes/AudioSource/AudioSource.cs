@@ -2,7 +2,7 @@
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AnimationClips;
 using uTinyRipper.Classes.AudioSources;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes

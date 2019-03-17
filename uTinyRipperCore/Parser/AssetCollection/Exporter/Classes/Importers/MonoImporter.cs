@@ -2,7 +2,7 @@
 using uTinyRipper.AssetExporters;
 using uTinyRipper.AssetExporters.Classes;
 using uTinyRipper.Classes;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Importers
 {

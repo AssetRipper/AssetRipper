@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.Exporters.Scripts;
 using uTinyRipper.SerializedFiles;
 

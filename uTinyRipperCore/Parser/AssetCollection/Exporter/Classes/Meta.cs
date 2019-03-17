@@ -1,6 +1,6 @@
 ﻿using System;
 using uTinyRipper.Classes;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 using DateTime = System.DateTime;
 

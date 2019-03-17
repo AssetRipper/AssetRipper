@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace uTinyRipper.Exporter.YAML
+namespace uTinyRipper.YAML
 {
 	public sealed class YAMLMappingNode : YAMLNode
 	{

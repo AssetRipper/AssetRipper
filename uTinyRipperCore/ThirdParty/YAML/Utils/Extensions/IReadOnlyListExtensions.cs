@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace uTinyRipper.Exporter.YAML
+namespace uTinyRipper.YAML
 {
 	public static class IReadOnlyListExtensions
 	{

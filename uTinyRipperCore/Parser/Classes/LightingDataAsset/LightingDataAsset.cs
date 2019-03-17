@@ -7,7 +7,7 @@ using uTinyRipper.Classes.LightmapSettingss;
 using uTinyRipper.Classes.Lights;
 using uTinyRipper.Classes.OcclusionCullingDatas;
 using uTinyRipper.Classes.RenderSettingss;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
