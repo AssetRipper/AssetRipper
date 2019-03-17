@@ -1,4 +1,4 @@
-﻿#if DEBUG
+#if DEBUG
 #define DEBUG_PROGRAM
 #endif
 
@@ -75,6 +75,8 @@ namespace uTinyRipperConsole
 
 				string exportPath = Path.Combine("Ripped", GameStructure.Name);
 				PrepareExportDirectory(exportPath);
+
+				GameStructure.FileCollection.Exporter.OverrideBinaryExporter(ClassIDType.TextAsset);
 
 #if DEBUG
 				EngineAssetExporter engineExporter = new EngineAssetExporter();

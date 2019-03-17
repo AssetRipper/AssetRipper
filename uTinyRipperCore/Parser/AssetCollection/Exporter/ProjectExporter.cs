@@ -36,12 +36,14 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.Camera);
 			OverrideYamlExporter(ClassIDType.Material);
 			OverrideYamlExporter(ClassIDType.MeshRenderer);
+			OverrideYamlExporter(ClassIDType.Texture2D);
 			OverrideYamlExporter(ClassIDType.OcclusionCullingSettings);
 			OverrideYamlExporter(ClassIDType.GraphicsSettings);
 			OverrideYamlExporter(ClassIDType.MeshFilter);
 			OverrideYamlExporter(ClassIDType.OcclusionPortal);
 			OverrideYamlExporter(ClassIDType.Mesh);
 			OverrideYamlExporter(ClassIDType.QualitySettings);
+			OverrideYamlExporter(ClassIDType.TextAsset);
 			OverrideYamlExporter(ClassIDType.Rigidbody2D);
 			OverrideYamlExporter(ClassIDType.Collider2D);
 			OverrideYamlExporter(ClassIDType.Rigidbody);
@@ -60,6 +62,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.AudioListener);
 			OverrideYamlExporter(ClassIDType.AudioSource);
 			OverrideYamlExporter(ClassIDType.RenderTexture);
+			OverrideYamlExporter(ClassIDType.Cubemap);
 			OverrideYamlExporter(ClassIDType.Avatar);
 			OverrideYamlExporter(ClassIDType.AnimatorController);
 			OverrideYamlExporter(ClassIDType.GUILayer);
@@ -106,11 +109,8 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.LightmapParameters);
 			OverrideYamlExporter(ClassIDType.SpriteAtlas);
 
-			OverrideBinaryExporter(ClassIDType.Texture2D);
 			OverrideBinaryExporter(ClassIDType.Shader);
-			OverrideBinaryExporter(ClassIDType.TextAsset);
 			OverrideBinaryExporter(ClassIDType.AudioClip);
-			OverrideBinaryExporter(ClassIDType.Cubemap);
 			OverrideBinaryExporter(ClassIDType.Font);
 			OverrideBinaryExporter(ClassIDType.MovieTexture);
 

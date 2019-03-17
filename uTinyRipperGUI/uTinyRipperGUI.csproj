@@ -137,12 +137,39 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="Exporters\Texture\TextureConverter.cs" />
+    <Compile Include="Exporters\Texture\Texture2DExtensions.cs" />
+    <Compile Include="Exporters\Texture\TextureFormatExtensions.cs" />
     <Compile Include="OutputLogger.cs" />
     <Compile Include="ThirdParty\D3DCompiler\D3DCompiler.cs" />
     <Compile Include="ThirdParty\D3DCompiler\DotNetDxc.cs" />
     <Compile Include="ThirdParty\FMOD Studio API\fmod.cs" />
     <Compile Include="ThirdParty\FMOD Studio API\fmod_dsp.cs" />
     <Compile Include="ThirdParty\FMOD Studio API\fmod_errors.cs" />
+    <Compile Include="ThirdParty\Texture containers\ContainerType.cs" />
+    <Compile Include="ThirdParty\Texture containers\DDS\DDPFFlags.cs" />
+    <Compile Include="ThirdParty\Texture containers\DDS\DDSCaps2Flags.cs" />
+    <Compile Include="ThirdParty\Texture containers\DDS\DDSCapsFlags.cs" />
+    <Compile Include="ThirdParty\Texture containers\DDS\DDSConverter.cs" />
+    <Compile Include="ThirdParty\Texture containers\DDS\DDSConvertParameters.cs" />
+    <Compile Include="Exporters\Texture\TextureContainer.cs" />
+    <Compile Include="ThirdParty\Texture converters\DDSDecompressor.cs" />
+    <Compile Include="ThirdParty\Texture containers\DDS\DDSDFlags.cs" />
+    <Compile Include="ThirdParty\Texture containers\DDS\DDSFourCCType.cs" />
+    <Compile Include="ThirdParty\Texture containers\DDS\DDSPixelFormat.cs" />
+    <Compile Include="ThirdParty\Texture containers\DDS\DXGIFormat.cs" />
+    <Compile Include="ThirdParty\Texture containers\KTX\KTXBaseInternalFormat.cs" />
+    <Compile Include="ThirdParty\Texture containers\KTX\KTXConverter.cs" />
+    <Compile Include="ThirdParty\Texture containers\KTX\KTXConvertParameters.cs" />
+    <Compile Include="ThirdParty\Texture containers\KTX\KTXFormat.cs" />
+    <Compile Include="ThirdParty\Texture containers\KTX\KTXInternalFormat.cs" />
+    <Compile Include="ThirdParty\Texture containers\KTX\KTXType.cs" />
+    <Compile Include="ThirdParty\Texture containers\PVR\PVRChannelType.cs" />
+    <Compile Include="ThirdParty\Texture containers\PVR\PVRColourSpace.cs" />
+    <Compile Include="ThirdParty\Texture containers\PVR\PVRConverter.cs" />
+    <Compile Include="ThirdParty\Texture containers\PVR\PVRConvertParameters.cs" />
+    <Compile Include="ThirdParty\Texture containers\PVR\PVRFlag.cs" />
+    <Compile Include="ThirdParty\Texture containers\PVR\PVRPixelFormat.cs" />
     <Compile Include="Utils\PermissionValidator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

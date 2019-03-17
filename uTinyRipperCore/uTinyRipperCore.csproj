@@ -140,27 +140,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\EnumNameAttribute.cs" />
-    <Compile Include="Converter\Textures\DDS\DDPFFlags.cs" />
-    <Compile Include="Converter\Textures\DDS\DDSCaps2Flags.cs" />
-    <Compile Include="Converter\Textures\DDS\DDSCapsFlags.cs" />
-    <Compile Include="Converter\Textures\DDS\DDSConverter.cs" />
-    <Compile Include="Converter\Textures\DDS\DDSConvertParameters.cs" />
-    <Compile Include="Converter\Textures\DDS\DDSDecompressor.cs" />
-    <Compile Include="Converter\Textures\DDS\DDSFourCCType.cs" />
-    <Compile Include="Converter\Textures\DDS\DDSPixelFormat.cs" />
-    <Compile Include="Converter\Textures\DDS\DXGIFormat.cs" />
-    <Compile Include="Converter\Textures\KTX\KTXBaseInternalFormat.cs" />
-    <Compile Include="Converter\Textures\KTX\KTXFormat.cs" />
-    <Compile Include="Converter\Textures\KTX\KTXInternalFormat.cs" />
-    <Compile Include="Converter\Textures\KTX\KTXConverter.cs" />
-    <Compile Include="Converter\Textures\KTX\KTXConvertParameters.cs" />
-    <Compile Include="Converter\Textures\KTX\KTXType.cs" />
-    <Compile Include="Converter\Textures\PVR\PVRChannelType.cs" />
-    <Compile Include="Converter\Textures\PVR\PVRColourSpace.cs" />
-    <Compile Include="Converter\Textures\PVR\PVRConverter.cs" />
-    <Compile Include="Converter\Textures\PVR\PVRConvertParameters.cs" />
-    <Compile Include="Converter\Textures\PVR\PVRFlag.cs" />
-    <Compile Include="Converter\Textures\PVR\PVRPixelFormat.cs" />
     <Compile Include="ThirdParty\YAML\Base\ScalarType.cs" />
     <Compile Include="ThirdParty\YAML\Utils\Extensions\EmitterExtensions.cs" />
     <Compile Include="ThirdParty\YAML\Utils\Extensions\IDictionaryExtensions.cs" />
@@ -803,8 +782,6 @@
     <Compile Include="Parser\Classes\SpriteAtlas\SpriteAtlas.cs" />
     <Compile Include="Parser\Classes\Sprite\SpriteRenderData.cs" />
     <Compile Include="Parser\Classes\Sprite\SpriteVertex.cs" />
-    <Compile Include="Parser\Classes\Texture2D\ContainerType.cs" />
-    <Compile Include="Converter\Textures\DDS\DDSDFlags.cs" />
     <Compile Include="Parser\Classes\Texture2D\FilterMode.cs" />
     <Compile Include="Parser\Classes\Texture2D\TextureSettings.cs" />
     <Compile Include="Parser\Classes\Texture2D\StreamingInfo.cs" />

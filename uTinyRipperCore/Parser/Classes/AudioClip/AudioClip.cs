@@ -535,7 +535,9 @@ namespace uTinyRipper.Classes
 		public bool PreloadAudioData { get; private set; }
 		public bool LoadInBackground { get; private set; }
 		public AudioCompressionFormat CompressionFormat { get; private set; }
+#if UNIVERSAL
 		public AudioCompressionFormat EditorCompressionFormat { get; private set; }
+#endif
 
 		public bool DecompressOnLoad { get; private set; }
 		public FMODSoundFormat Format { get; private set; }
