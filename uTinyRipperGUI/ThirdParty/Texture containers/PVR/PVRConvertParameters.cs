@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Converter.Textures.PVR
+namespace uTinyRipperGUI.TextureContainers.PVR
 {
 	public struct PVRConvertParameters
 	{

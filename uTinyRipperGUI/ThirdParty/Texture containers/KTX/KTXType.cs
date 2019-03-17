@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Converter.Textures.KTX
+namespace uTinyRipperGUI.TextureContainers.KTX
 {
 	public enum KTXType : uint
 	{

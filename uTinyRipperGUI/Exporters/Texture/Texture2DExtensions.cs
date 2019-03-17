@@ -1,13 +1,13 @@
 using System;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Textures;
-using uTinyRipper.Converter.Textures.DDS;
-using uTinyRipper.Converter.Textures.KTX;
-using uTinyRipper.Converter.Textures.PVR;
+using uTinyRipperGUI.TextureContainers.DDS;
+using uTinyRipperGUI.TextureContainers.KTX;
+using uTinyRipperGUI.TextureContainers.PVR;
 
-using KTXFormat = uTinyRipper.Converter.Textures.KTX.KTXInternalFormat;
-using KTXBaseFormat = uTinyRipper.Converter.Textures.KTX.KTXBaseInternalFormat;
-using PVRFormat = uTinyRipper.Converter.Textures.PVR.PVRPixelFormat;
+using KTXFormat = uTinyRipperGUI.TextureContainers.KTX.KTXInternalFormat;
+using KTXBaseFormat = uTinyRipperGUI.TextureContainers.KTX.KTXBaseInternalFormat;
+using PVRFormat = uTinyRipperGUI.TextureContainers.PVR.PVRPixelFormat;
 
 namespace uTinyRipperGUI.Exporters
 {

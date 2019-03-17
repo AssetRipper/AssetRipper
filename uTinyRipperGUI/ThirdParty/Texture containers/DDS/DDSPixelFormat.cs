@@ -1,6 +1,6 @@
-﻿using System.IO;
+using System.IO;
 
-namespace uTinyRipper.Converter.Textures.DDS
+namespace uTinyRipperGUI.TextureContainers.DDS
 {
 	public struct DDSPixelFormat
 	{

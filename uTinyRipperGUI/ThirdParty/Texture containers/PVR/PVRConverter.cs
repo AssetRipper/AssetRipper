@@ -1,7 +1,8 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
+using uTinyRipper;
 
-namespace uTinyRipper.Converter.Textures.PVR
+namespace uTinyRipperGUI.TextureContainers.PVR
 {
 	public static class PVRConverter
 	{

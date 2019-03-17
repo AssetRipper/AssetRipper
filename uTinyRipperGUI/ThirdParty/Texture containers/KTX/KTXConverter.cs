@@ -1,7 +1,8 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
+using uTinyRipper;
 
-namespace uTinyRipper.Converter.Textures.KTX
+namespace uTinyRipperGUI.TextureContainers.KTX
 {
 	public static class KTXConverter
 	{

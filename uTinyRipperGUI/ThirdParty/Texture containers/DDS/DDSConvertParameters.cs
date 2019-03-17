@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Converter.Textures.DDS
+namespace uTinyRipperGUI.TextureContainers.DDS
 {
 	public class DDSConvertParameters
 	{

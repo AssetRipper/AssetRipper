@@ -1,5 +1,6 @@
 using System;
 using uTinyRipper.Classes.Textures;
+using uTinyRipperGUI.TextureContainers;
 
 namespace uTinyRipperGUI.Exporters
 {

@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 
-namespace uTinyRipper.Converter.Textures.DDS
+namespace uTinyRipperGUI.TextureContainers.DDS
 {
 	public static class DDSConverter
 	{

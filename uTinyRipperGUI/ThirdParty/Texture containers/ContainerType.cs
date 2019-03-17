@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Classes.Textures
+namespace uTinyRipperGUI.TextureContainers
 {
 	public enum ContainerType
 	{

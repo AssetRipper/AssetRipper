@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace uTinyRipper.Converter.Textures.PVR
+namespace uTinyRipperGUI.TextureContainers.PVR
 {
 	[Flags]
 	public enum PVRFlag : uint

@@ -2,10 +2,10 @@ using System;
 using System.IO;
 using uTinyRipper;
 using uTinyRipper.Classes;
-using uTinyRipper.Classes.Textures;
-using uTinyRipper.Converter.Textures.DDS;
-using uTinyRipper.Converter.Textures.KTX;
-using uTinyRipper.Converter.Textures.PVR;
+using uTinyRipperGUI.TextureContainers;
+using uTinyRipperGUI.TextureContainers.DDS;
+using uTinyRipperGUI.TextureContainers.KTX;
+using uTinyRipperGUI.TextureContainers.PVR;
 
 namespace uTinyRipperGUI.Exporters
 {

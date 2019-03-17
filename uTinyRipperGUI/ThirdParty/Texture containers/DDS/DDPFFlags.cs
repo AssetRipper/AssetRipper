@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace uTinyRipper.Converter.Textures.DDS
+namespace uTinyRipperGUI.TextureContainers.DDS
 {
 	[Flags]
 	public enum DDPFFlags : uint
