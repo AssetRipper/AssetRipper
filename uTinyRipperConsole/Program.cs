@@ -76,7 +76,7 @@ namespace uTinyRipperConsole
 				string exportPath = Path.Combine("Ripped", GameStructure.Name);
 				PrepareExportDirectory(exportPath);
 
-				GameStructure.FileCollection.Exporter.OverrideBinaryExporter(ClassIDType.TextAsset);
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter());
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, new FontAssetExporter());
 
 #if DEBUG

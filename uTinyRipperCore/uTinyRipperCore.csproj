@@ -142,6 +142,8 @@
     <Compile Include="Attributes\EnumNameAttribute.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\Font\FontAssetExporter.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\Font\FontExportCollection.cs" />
+    <Compile Include="Parser\FileCollection\Exporter\Exporters\TextAsset\TextAssetExportCollection.cs" />
+    <Compile Include="Parser\FileCollection\Exporter\Exporters\TextAsset\TextAssetExporter.cs" />
     <Compile Include="ThirdParty\YAML\Base\ScalarType.cs" />
     <Compile Include="ThirdParty\YAML\Utils\Extensions\EmitterExtensions.cs" />
     <Compile Include="ThirdParty\YAML\Utils\Extensions\IDictionaryExtensions.cs" />

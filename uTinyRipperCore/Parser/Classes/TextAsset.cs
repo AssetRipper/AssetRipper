@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
@@ -52,9 +51,6 @@ namespace uTinyRipper.Classes
 			node.Add(ScriptName, Script.ExportYAML());
 			return node;
 		}
-
-#warning TODO:
-		public override string ExportExtension => "bytes";
 
 		public byte[] Script { get; private set; }
 		public string PathName { get; private set; } = string.Empty;
