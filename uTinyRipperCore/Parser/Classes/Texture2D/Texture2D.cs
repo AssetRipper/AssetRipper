@@ -118,6 +118,56 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		public bool CheckAssetIntegrity()
+		{
+			if (IsReadStreamData(File.Version))
+			{
+				string resourcePath = StreamData.Path;
+				if (resourcePath == string.Empty)
+				{
+					return true;
+				}
+
+				using (ResourcesFile res = File.Collection.FindResourcesFile(File, resourcePath))
+				{
+					return res != null;
+				}
+			}
+			return true;
+		}
+
+		public IReadOnlyList<byte> GetImageData(Version version)
+		{
+			if (IsReadStreamData(version))
+			{
+				string path = StreamData.Path;
+				if (path != string.Empty)
+				{
+					if (m_imageData.Length != 0)
+					{
+						throw new Exception("Texture2D contains both data and resource path");
+					}
+
+					using (ResourcesFile res = File.Collection.FindResourcesFile(File, path))
+					{
+						if (res != null)
+						{
+							using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
+							{
+								resStream.Position = StreamData.Offset;
+								using (BinaryReader reader = new BinaryReader(resStream))
+								{
+									return reader.ReadBytes((int)StreamData.Size);
+								}
+							}
+						}
+					}
+				}
+			}
+
+			return m_imageData;
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -228,7 +278,7 @@ namespace uTinyRipper.Classes
 			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
 			node.Add(LightmapFormatName, (int)LightmapFormat);
 			node.Add(ColorSpaceName, (int)ColorSpace);
-			IReadOnlyList<byte> imageData = GetImageData(container.Version);
+			IReadOnlyList<byte> imageData = GetExportImageData(container.Version);
 			node.Add(ImageDataName, imageData.Count);
 			node.Add(TypelessdataName, imageData.ExportYAML());
 			StreamingInfo streamData = new StreamingInfo(true);
@@ -244,41 +294,17 @@ namespace uTinyRipper.Classes
 			return true;
 #endif
 		}
-
-		public IReadOnlyList<byte> GetImageData(Version version)
+		private IReadOnlyList<byte> GetExportImageData(Version version)
 		{
-			if (IsReadStreamData(version))
+			if (CheckAssetIntegrity())
 			{
-				string path = StreamData.Path;
-				if (path != string.Empty)
-				{
-					if (m_imageData.Length != 0)
-					{
-						throw new Exception("Texture2D contains both data and resource path");
-					}
-
-					using (ResourcesFile res = File.Collection.FindResourcesFile(File, path))
-					{
-						if (res == null)
-						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"Can't get '{ValidName}' because resources file '{path}' wasn't found");
-						}
-						else
-						{
-							using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
-							{
-								resStream.Position = StreamData.Offset;
-								using (BinaryReader reader = new BinaryReader(resStream))
-								{
-									return reader.ReadBytes((int)StreamData.Size);
-								}
-							}
-						}
-					}
-				}
+				return GetImageData(version);
 			}
-
-			return m_imageData;
+			else
+			{
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{StreamData.Path}' wasn't found");
+				return new byte[0];
+			}
 		}
 
 		public bool IsValidData

@@ -135,20 +135,10 @@ namespace uTinyRipperGUI.Exporters
 		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
 		{
 			Texture2D texture = (Texture2D)asset;
-			if (Texture2D.IsReadStreamData(texture.File.Version))
+			if (!texture.CheckAssetIntegrity())
 			{
-				string resourcePath = texture.StreamData.Path;
-				if (resourcePath != string.Empty)
-				{
-					using (ResourcesFile res = texture.File.Collection.FindResourcesFile(texture.File, resourcePath))
-					{
-						if (res == null)
-						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.Name}' because resources file '{resourcePath}' wasn't found");
-							return;
-						}
-					}
-				}
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.Name}' because resources file '{texture.StreamData.Path}' wasn't found");
+				return;
 			}
 
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))

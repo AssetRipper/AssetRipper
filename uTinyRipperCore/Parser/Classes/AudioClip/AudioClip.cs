@@ -176,14 +176,9 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				// topmost engine version doesn't conatain any serialized versions
-				return 1;
-			}
-
 			if (version.IsGreaterEqual(5))
 			{
+				// old AudioClip asset format isn't compatible with new Engine version
 				return 1;
 			}
 			if (version.IsGreaterEqual(3, 5))
@@ -196,6 +191,19 @@ namespace uTinyRipper.Classes
 			}
 			// min version is 2nd
 			return 2;
+		}
+
+		public bool CheckAssetIntegrity()
+		{
+			if (IsReadLoadType(File.Version))
+			{
+				using (ResourcesFile res = File.Collection.FindResourcesFile(File, FSBResource.Source))
+				{
+					return res != null;
+				}
+			}
+
+			return true;
 		}
 
 		public override void Read(AssetReader reader)
@@ -420,6 +428,7 @@ namespace uTinyRipper.Classes
 		{
 			throw new NotSupportedException();
 			/*YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(container.ExportVersion);
 			node.Add(LoadTypeName, (int)LoadType);
 			node.Add(ChannelsName, Channels);
 			node.Add(FrequencyName, Frequency);
