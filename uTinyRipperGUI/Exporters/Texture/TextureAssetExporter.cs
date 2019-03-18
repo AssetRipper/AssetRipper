@@ -15,44 +15,24 @@ namespace uTinyRipperGUI.Exporters
 {
 	public class TextureAssetExporter : IAssetExporter
 	{
-		public static void ExportTexture(Texture2D texture, Stream exportStream)
+		public static bool ExportTexture(IExportContainer container, Texture2D texture, Stream exportStream)
 		{
-			byte[] buffer = null;
-			if (Texture2D.IsReadStreamData(texture.File.Version))
+			byte[] buffer = (byte[])texture.GetImageData(container.Version);
+			if (buffer.Length == 0)
 			{
-				string path = texture.StreamData.Path;
-				if (path == string.Empty)
-				{
-					buffer = (byte[])texture.ImageData;
-				}
-				else
-				{
-					if (texture.ImageData.Count != 0)
-					{
-						throw new Exception("Texture contains data and resource path");
-					}
-
-					using (ResourcesFile res = texture.File.Collection.FindResourcesFile(texture.File, path))
-					{
-						using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
-						{
-							resStream.Position = texture.StreamData.Offset;
-							buffer = new byte[texture.StreamData.Size];
-							resStream.Read(buffer, 0, buffer.Length);
-						}
-					}
-				}
-			}
-			else
-			{
-				buffer = (byte[])texture.ImageData;
+				return false;
 			}
 
 			using (Bitmap bitmap = ConvertToBitmap(texture, buffer))
 			{
-				if (bitmap != null)
+				if (bitmap == null)
+				{
+					return false;
+				}
+				else
 				{
 					bitmap.Save(exportStream, ImageFormat.Png);
+					return true;
 				}
 			}
 		}
@@ -173,7 +153,11 @@ namespace uTinyRipperGUI.Exporters
 
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
-				ExportTexture(texture, fileStream);
+				bool result = ExportTexture(container, texture, fileStream);
+				if (!result)
+				{
+					Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
+				}
 			}
 
 			callback?.Invoke(container, asset, path);

@@ -245,7 +245,7 @@ namespace uTinyRipper.Classes
 #endif
 		}
 
-		private IReadOnlyList<byte> GetImageData(Version version)
+		public IReadOnlyList<byte> GetImageData(Version version)
 		{
 			if (IsReadStreamData(version))
 			{
@@ -261,7 +261,7 @@ namespace uTinyRipper.Classes
 					{
 						if (res == null)
 						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{path}' wasn't found");
+							Logger.Log(LogType.Warning, LogCategory.Export, $"Can't get '{ValidName}' because resources file '{path}' wasn't found");
 						}
 						else
 						{

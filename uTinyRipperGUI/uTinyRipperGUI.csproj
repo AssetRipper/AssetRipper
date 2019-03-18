@@ -137,6 +137,7 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="Exporters\Audio\AudioConverter.cs" />
     <Compile Include="Exporters\Texture\TextureConverter.cs" />
     <Compile Include="Exporters\Texture\Texture2DExtensions.cs" />
     <Compile Include="Exporters\Texture\TextureFormatExtensions.cs" />
