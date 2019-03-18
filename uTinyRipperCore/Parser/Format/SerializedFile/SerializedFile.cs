@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Assembly;
 using uTinyRipper.Classes;
 
 using Object = uTinyRipper.Classes.Object;

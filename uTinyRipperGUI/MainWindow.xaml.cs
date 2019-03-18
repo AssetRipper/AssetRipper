@@ -263,13 +263,13 @@ namespace uTinyRipperGUI
 			PrepareExportDirectory(m_exportPath);
 
 			GameStructure.FileCollection.Exporter.OverrideBinaryExporter(ClassIDType.TextAsset);
-
 			TextureAssetExporter textureExporter = new TextureAssetExporter();
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, textureExporter);
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter());
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter());
+			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, new FontAssetExporter());
 
 			EngineAssetExporter engineExporter = new EngineAssetExporter();
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Material, engineExporter);

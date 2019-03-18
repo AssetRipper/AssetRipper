@@ -38,7 +38,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			if(IsReadGameObject(reader.Flags))
+			//if (IsReadGameObject(reader.Flags))
 			{
 				GameObject.Read(reader);
 			}
@@ -68,8 +68,6 @@ namespace uTinyRipper.Classes
 			node.Add(GameObjectName, GameObject.ExportYAML(container));
 			return node;
 		}
-
-		public override bool IsValid => !GameObject.IsNull;
 
 		public override string ExportExtension => throw new NotSupportedException();
 

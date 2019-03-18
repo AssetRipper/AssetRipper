@@ -52,7 +52,8 @@ namespace uTinyRipper.Classes
 			node.Add(ScriptName, Script.ExportYAML());
 			return node;
 		}
-		
+
+#warning TODO:
 		public override string ExportExtension => "bytes";
 
 		public byte[] Script { get; private set; }

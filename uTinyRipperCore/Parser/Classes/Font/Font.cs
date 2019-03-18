@@ -122,7 +122,7 @@ namespace uTinyRipper.Classes
 		public static bool IsReadShouldRoundAdvanceValue(Version version)
 		{
 			return version.IsGreaterEqual(2018, 1);
-		}		
+		}
 
 		/// <summary>
 		/// 5.5.0 and greater
@@ -155,11 +155,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 5;
-			}
-
 			if (version.IsGreaterEqual(5, 4))
 			{
 				return 5;
@@ -271,7 +266,7 @@ namespace uTinyRipper.Classes
 				PixelScale = reader.ReadSingle();
 				reader.AlignStream(AlignType.Align4);
 			}
-			
+
 			if (IsReadGridFont(reader.Version))
 			{
 				if (!IsGridFontFirst(reader.Version))
@@ -317,7 +312,7 @@ namespace uTinyRipper.Classes
 			{
 				UseLegacyBoundsCalculation = reader.ReadBoolean();
 			}
-			if(IsReadShouldRoundAdvanceValue(reader.Version))
+			if (IsReadShouldRoundAdvanceValue(reader.Version))
 			{
 				ShouldRoundAdvanceValue = reader.ReadBoolean();
 			}
@@ -340,31 +335,69 @@ namespace uTinyRipper.Classes
 			{
 				yield return asset;
 			}
-			
-			yield return DefaultMaterial.FetchDependency(file, isLog, ToLogString, "m_DefaultMaterial");
-			yield return Texture.FetchDependency(file, isLog, ToLogString, "m_Texture");
+
+			yield return DefaultMaterial.FetchDependency(file, isLog, ToLogString, DefaultMaterialName);
+			yield return Texture.FetchDependency(file, isLog, ToLogString, TextureName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			throw new NotSupportedException();
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(LineSpacingName, LineSpacing);
+			node.Add(DefaultMaterialName, DefaultMaterial.ExportYAML(container));
+			node.Add(FontSizeName, FontSize);
+			node.Add(TextureName, Texture.ExportYAML(container));
+			node.Add(AsciiStartOffsetName, AsciiStartOffset);
+			node.Add(TrackingName, GetTracking(container.Version));
+			node.Add(CharacterSpacingName, CharacterSpacing);
+			node.Add(CharacterPaddingName, GetCharacterPadding(container.Version));
+			node.Add(ConvertCaseName, ConvertCase);
+			node.Add(CharacterRectsName, CharacterRects.ExportYAML(container));
+			node.Add(KerningValuesName, KerningValues.ExportYAML(container));
+			node.Add(PixelScaleName, GetPixelScale(container.Version));
+			node.Add(FontDataName, GetFontData(container.Version).ExportYAML());
+			node.Add(AscentName, Ascent);
+			node.Add(DescentName, Descent);
+			node.Add(DefaultStyleName, (int)DefaultStyle);
+			node.Add(FontNamesName, GetFontNames(container.Version).ExportYAML());
+			node.Add(FallbackFontsName, GetFallbackFonts(container.Version).ExportYAML(container));
+			node.Add(FontRenderingModeName, (int)FontRenderingMode);
+			node.Add(UseLegacyBoundsCalculationName, UseLegacyBoundsCalculation);
+			node.Add(ShouldRoundAdvanceValueName, GetShouldRoundAdvanceValue(container.Version));
+			return node;
 		}
 
-		public override bool IsValid => m_fontData != null && m_fontData.Length > 0;
-
-		public override string ExportExtension
+		private float GetTracking(Version version)
 		{
-			get
-			{
-				uint type = BitConverter.ToUInt32(m_fontData, 0);
-				// OTTO ASCII
-				if (type == 0x4F54544F)
-				{
-					return "otf";
-				}
-				return "ttf";
-			}
+			return IsReadTracking(version) ? Tracking : 1.0f;
 		}
+		private int GetCharacterPadding(Version version)
+		{
+			return IsReadCharacterSpacing(version) ? CharacterPadding : 1;
+		}
+		private float GetPixelScale(Version version)
+		{
+			return IsReadPixelScale(version) ? PixelScale : 0.1f;
+		}
+		private IReadOnlyList<byte> GetFontData(Version version)
+		{
+			return IsReadFontData(version) ? FontData : new byte[0];
+		}
+		private IReadOnlyList<string> GetFontNames(Version version)
+		{
+			return IsReadDefaultStyle(version) ? FontNames : new string[] { Name };
+		}
+		private IReadOnlyList<PPtr<Font>> GetFallbackFonts(Version version)
+		{
+			return IsReadFallbackFonts(version) ? FallbackFonts : new PPtr<Font>[0];
+		}
+		private bool GetShouldRoundAdvanceValue(Version version)
+		{
+			return IsReadShouldRoundAdvanceValue(version) ? ShouldRoundAdvanceValue : true;
+		}
+
+		public bool IsValidData => m_fontData != null && m_fontData.Length > 0;
 
 		public int AsciiStartOffset { get; private set; }
 		public int FontCountX { get; private set; }
@@ -392,6 +425,28 @@ namespace uTinyRipper.Classes
 		public FontRenderingMode FontRenderingMode { get; private set; }
 		public bool UseLegacyBoundsCalculation { get; private set; }
 		public bool ShouldRoundAdvanceValue { get; private set; }
+
+		public const string LineSpacingName = "m_LineSpacing";
+		public const string DefaultMaterialName = "m_DefaultMaterial";
+		public const string FontSizeName = "m_FontSize";
+		public const string TextureName = "m_Texture";
+		public const string AsciiStartOffsetName = "m_AsciiStartOffset";
+		public const string TrackingName = "m_Tracking";
+		public const string CharacterSpacingName = "m_CharacterSpacing";
+		public const string CharacterPaddingName = "m_CharacterPadding";
+		public const string ConvertCaseName = "m_ConvertCase";
+		public const string CharacterRectsName = "m_CharacterRects";
+		public const string KerningValuesName = "m_KerningValues";
+		public const string PixelScaleName = "m_PixelScale";
+		public const string FontDataName = "m_FontData";
+		public const string AscentName = "m_Ascent";
+		public const string DescentName = "m_Descent";
+		public const string DefaultStyleName = "m_DefaultStyle";
+		public const string FontNamesName = "m_FontNames";
+		public const string FallbackFontsName = "m_FallbackFonts";
+		public const string FontRenderingModeName = "m_FontRenderingMode";
+		public const string UseLegacyBoundsCalculationName = "m_UseLegacyBoundsCalculation";
+		public const string ShouldRoundAdvanceValueName = "m_ShouldRoundAdvanceValue";
 
 		public PPtr<Material> DefaultMaterial;
 		public PPtr<Texture> Texture;

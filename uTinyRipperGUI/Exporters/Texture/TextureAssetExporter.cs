@@ -139,6 +139,11 @@ namespace uTinyRipperGUI.Exporters
 
 		public bool IsHandle(Object asset)
 		{
+			if (asset.ClassID == ClassIDType.Texture2D)
+			{
+				Texture2D texture = (Texture2D)asset;
+				return texture.IsValidData;
+			}
 			return true;
 		}
 

@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.AssetExporters.Mono;
+using uTinyRipper.Assembly;
+using uTinyRipper.Assembly.Mono;
 
 namespace uTinyRipper
 {

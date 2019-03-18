@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using uTinyRipper.Assembly;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.GUIStyles;
 using uTinyRipper.YAML;

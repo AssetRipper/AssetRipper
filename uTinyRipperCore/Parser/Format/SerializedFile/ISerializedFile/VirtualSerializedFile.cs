@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Assembly;
 using uTinyRipper.Classes;
 
 using Object = uTinyRipper.Classes.Object;

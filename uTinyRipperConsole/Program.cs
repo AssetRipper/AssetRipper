@@ -77,6 +77,7 @@ namespace uTinyRipperConsole
 				PrepareExportDirectory(exportPath);
 
 				GameStructure.FileCollection.Exporter.OverrideBinaryExporter(ClassIDType.TextAsset);
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, new FontAssetExporter());
 
 #if DEBUG
 				EngineAssetExporter engineExporter = new EngineAssetExporter();

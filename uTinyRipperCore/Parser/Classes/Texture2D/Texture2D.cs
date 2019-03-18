@@ -281,7 +281,7 @@ namespace uTinyRipper.Classes
 			return m_imageData;
 		}
 
-		public override bool IsValid
+		public bool IsValidData
 		{
 			get
 			{

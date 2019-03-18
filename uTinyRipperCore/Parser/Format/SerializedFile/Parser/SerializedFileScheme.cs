@@ -1,5 +1,5 @@
-﻿using System;
-using uTinyRipper.AssetExporters;
+using System;
+using uTinyRipper.Assembly;
 
 namespace uTinyRipper.SerializedFiles
 {

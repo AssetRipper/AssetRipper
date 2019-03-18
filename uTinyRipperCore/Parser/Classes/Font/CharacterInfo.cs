@@ -1,6 +1,9 @@
-﻿namespace uTinyRipper.Classes.Fonts
+using uTinyRipper.AssetExporters;
+using uTinyRipper.YAML;
+
+namespace uTinyRipper.Classes.Fonts
 {
-	public struct CharacterInfo : IAssetReadable
+	public struct CharacterInfo : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 1.6.0 and greater
@@ -33,11 +36,6 @@
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(1, 6))
 			{
 				return 2;
@@ -69,10 +67,28 @@
 			}
 		}
 
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(IndexName, Index);
+			node.Add(UVName, UV.ExportYAML(container));
+			node.Add(VertName, Vert.ExportYAML(container));
+			node.Add(AdvanceName, Advance);
+			node.Add(FlippedName, Flipped);
+			return node;
+		}
+
 		public int Index { get; private set; }
 		public float Width  { get; private set; }
 		public float Advance { get; private set; }
 		public bool Flipped { get; private set; }
+
+		public const string IndexName = "index";
+		public const string UVName = "uv";
+		public const string VertName = "vert";
+		public const string AdvanceName = "advance";
+		public const string FlippedName = "flipped";
 
 		public Rectf UV;
 		public Rectf Vert;
