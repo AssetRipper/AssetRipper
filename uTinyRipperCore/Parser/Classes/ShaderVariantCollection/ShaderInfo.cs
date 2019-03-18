@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.ShaderVariantCollections
 {
@@ -8,7 +8,7 @@ namespace uTinyRipper.Classes.ShaderVariantCollections
 	{
 		public void Read(AssetReader reader)
 		{
-			m_variants = reader.ReadArray<VariantInfo>();
+			m_variants = reader.ReadAssetArray<VariantInfo>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

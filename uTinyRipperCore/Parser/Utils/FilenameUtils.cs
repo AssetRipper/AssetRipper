@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.IO;
-using uTinyRipper.AssetExporters.Mono;
+using uTinyRipper.Assembly.Mono;
 
 namespace uTinyRipper
 {

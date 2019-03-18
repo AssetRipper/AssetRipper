@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AssetBundles;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -110,7 +110,7 @@ namespace uTinyRipper.Classes
 
 			if (IsReadPreloadTable(reader.Version))
 			{
-				m_preloadTable = reader.ReadArray<PPtr<Object>>();
+				m_preloadTable = reader.ReadAssetArray<PPtr<Object>>();
 			}
 
 			m_container = reader.ReadStringTKVPArray<AssetBundles.AssetInfo>();
@@ -118,7 +118,7 @@ namespace uTinyRipper.Classes
 
 			if(IsReadScriptCampatibility(reader.Version))
 			{
-				m_scriptCampatibility = reader.ReadArray<AssetBundleScriptInfo>();
+				m_scriptCampatibility = reader.ReadAssetArray<AssetBundleScriptInfo>();
 			}
 			if (IsReadClassCampatibility(reader.Version))
 			{

@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
 {
@@ -9,7 +9,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 	{
 		public void Read(AssetReader reader)
 		{
-			m_transitionConstantArray = reader.ReadArray<OffsetPtr<SelectorTransitionConstant>>();
+			m_transitionConstantArray = reader.ReadAssetArray<OffsetPtr<SelectorTransitionConstant>>();
 			FullPathID = reader.ReadUInt32();
 			IsEntry = reader.ReadBoolean();
 			reader.AlignStream(AlignType.Align4);

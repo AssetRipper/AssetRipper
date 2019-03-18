@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -35,7 +35,7 @@ namespace uTinyRipper.BundleFiles
 
 		public static bool IsBundleFile(Stream stream)
 		{
-			using (EndianReader reader = new EndianReader(stream, stream.Position, EndianType.BigEndian))
+			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian, stream.Position))
 			{
 				bool isBundle = false;
 				long position = reader.BaseStream.Position;
@@ -95,7 +95,7 @@ namespace uTinyRipper.BundleFiles
 
 		private void Read(SmartStream stream)
 		{
-			using (EndianReader reader = new EndianReader(stream, stream.Position, EndianType.BigEndian))
+			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian, stream.Position))
 			{
 				long position = reader.BaseStream.Position;
 				Header.Read(reader);
@@ -166,7 +166,7 @@ namespace uTinyRipper.BundleFiles
 
 						// unknown 0x10
 						bundleStream.Position += 0x10;
-						blockInfos = reader.ReadArray<BlockInfo>();
+						blockInfos = reader.ReadEndianArray<BlockInfo>();
 						Metadata = new BundleMetadata(m_filePath);
 						Metadata.Read530(reader, bundleStream);
 					
@@ -186,7 +186,7 @@ namespace uTinyRipper.BundleFiles
 							{
 								// unknown 0x10
 								metaReader.BaseStream.Position += 0x10;
-								blockInfos = metaReader.ReadArray<BlockInfo>();
+								blockInfos = metaReader.ReadEndianArray<BlockInfo>();
 								Metadata = new BundleMetadata(m_filePath);
 								Metadata.Read530(metaReader, bundleStream);
 							}
@@ -204,7 +204,7 @@ namespace uTinyRipper.BundleFiles
 					{
 						using (MemoryStream metaStream = new MemoryStream(new byte[Header.MetadataDecompressedSize]))
 						{
-							using (Lz4Stream lzStream = new Lz4Stream(bundleStream, Header.MetadataCompressedSize))
+							using (Lz4DecodeStream lzStream = new Lz4DecodeStream(bundleStream, Header.MetadataCompressedSize))
 							{
 								long read = lzStream.Read(metaStream, Header.MetadataDecompressedSize);
 								metaStream.Position = 0;
@@ -219,7 +219,7 @@ namespace uTinyRipper.BundleFiles
 							{
 								// unknown 0x10
 								metaReader.BaseStream.Position += 0x10;
-								blockInfos = metaReader.ReadArray<BlockInfo>();
+								blockInfos = metaReader.ReadEndianArray<BlockInfo>();
 								Metadata = new BundleMetadata(m_filePath);
 								Metadata.Read530(metaReader, bundleStream);
 							}
@@ -319,7 +319,7 @@ namespace uTinyRipper.BundleFiles
 										case BundleCompressType.LZ4:
 										case BundleCompressType.LZ4HZ:
 											blockStream.Move(CreateStream(block.DecompressedSize));
-											using (Lz4Stream lzStream = new Lz4Stream(bundleStream, block.CompressedSize))
+											using (Lz4DecodeStream lzStream = new Lz4DecodeStream(bundleStream, block.CompressedSize))
 											{
 												long read = lzStream.Read(blockStream, block.DecompressedSize);
 												if (read != block.DecompressedSize)

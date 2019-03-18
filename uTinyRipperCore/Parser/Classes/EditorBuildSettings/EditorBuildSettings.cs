@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.EditorBuildSettingss;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -64,7 +64,7 @@ namespace uTinyRipper.Classes
 
 			if (IsReadScenes(reader.Version))
 			{
-				m_scenes = reader.ReadArray<Scene>();
+				m_scenes = reader.ReadAssetArray<Scene>();
 			}
 			else
 			{

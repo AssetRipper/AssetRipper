@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.ResourceManagers
@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes.ResourceManagers
 		public void Read(AssetReader reader)
 		{
 			Object.Read(reader);
-			m_dependencies = reader.ReadArray<PPtr<Object>>();
+			m_dependencies = reader.ReadAssetArray<PPtr<Object>>();
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

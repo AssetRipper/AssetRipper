@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.OcclusionCullingDatas;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -55,11 +55,11 @@ namespace uTinyRipper.Classes
 			m_PVSData = reader.ReadByteArray();
 			reader.AlignStream(AlignType.Align4);
 
-			m_scenes = reader.ReadArray<OcclusionScene>();
+			m_scenes = reader.ReadAssetArray<OcclusionScene>();
 			if (IsReadStaticRenderers(reader.Flags))
 			{
-				m_staticRenderers = reader.ReadArray<SceneObjectIdentifier>();
-				m_portals = reader.ReadArray<SceneObjectIdentifier>();
+				m_staticRenderers = reader.ReadAssetArray<SceneObjectIdentifier>();
+				m_portals = reader.ReadAssetArray<SceneObjectIdentifier>();
 			}
 		}
 

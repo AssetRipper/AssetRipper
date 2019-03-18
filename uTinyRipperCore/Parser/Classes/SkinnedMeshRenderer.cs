@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -205,7 +205,7 @@ namespace uTinyRipper.Classes
 				Animation.Read(reader);
 			}
 
-			m_bones = reader.ReadArray<PPtr<Transform>>();
+			m_bones = reader.ReadAssetArray<PPtr<Transform>>();
 			if (IsAlignBones(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
@@ -218,7 +218,7 @@ namespace uTinyRipper.Classes
 
 			if(IsReadBindPose(reader.Version))
 			{
-				m_bindPose = reader.ReadArray<Matrix4x4f>();
+				m_bindPose = reader.ReadAssetArray<Matrix4x4f>();
 			}
 			if (IsReadCurrentPose(reader.Version))
 			{

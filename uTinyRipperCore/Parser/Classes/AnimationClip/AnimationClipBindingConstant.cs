@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.AnimationClips
@@ -59,13 +59,13 @@ namespace uTinyRipper.Classes.AnimationClips
 
 		public void Read(AssetReader reader)
 		{
-			m_genericBindings = reader.ReadArray<GenericBinding>();
+			m_genericBindings = reader.ReadAssetArray<GenericBinding>();
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
 
-			m_pptrCurveMapping = reader.ReadArray<PPtr<Object>>();
+			m_pptrCurveMapping = reader.ReadAssetArray<PPtr<Object>>();
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);

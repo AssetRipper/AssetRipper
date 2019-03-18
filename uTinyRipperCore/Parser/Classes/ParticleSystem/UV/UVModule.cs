@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.ParticleSystems
@@ -109,7 +109,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 			if (IsReadSprites(reader.Version))
 			{
-				m_sprites = reader.ReadArray<SpriteData>();
+				m_sprites = reader.ReadAssetArray<SpriteData>();
 			}
 			if (IsReadFlipU(reader.Version))
 			{

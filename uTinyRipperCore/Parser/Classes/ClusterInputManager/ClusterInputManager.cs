@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.ClusterInputManagers;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -16,7 +16,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_inputs = reader.ReadArray<ClusterInput>();
+			m_inputs = reader.ReadAssetArray<ClusterInput>();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

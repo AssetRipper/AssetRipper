@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
 {
@@ -43,26 +43,26 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 			if (IsReadVectorValues(reader.Version))
 			{
-				m_vectorValues = reader.ReadArray<Vector4f>();
+				m_vectorValues = reader.ReadAssetArray<Vector4f>();
 			}
 			else
 			{
 				if(IsVector4(reader.Version))
 				{
-					m_position4Values = reader.ReadArray<Vector4f>();
+					m_position4Values = reader.ReadAssetArray<Vector4f>();
 				}
 				else
 				{
-					m_position3Values = reader.ReadArray<Vector3f>();
+					m_position3Values = reader.ReadAssetArray<Vector3f>();
 				}
-				m_quaternionValues = reader.ReadArray<Quaternionf>();
+				m_quaternionValues = reader.ReadAssetArray<Quaternionf>();
 				if (IsVector4(reader.Version))
 				{
-					m_scale4Values = reader.ReadArray<Vector4f>();
+					m_scale4Values = reader.ReadAssetArray<Vector4f>();
 				}
 				else
 				{
-					m_scale3Values = reader.ReadArray<Vector3f>();
+					m_scale3Values = reader.ReadAssetArray<Vector3f>();
 				}
 			}
 

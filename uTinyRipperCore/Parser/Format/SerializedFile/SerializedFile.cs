@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Assembly;
 using uTinyRipper.Classes;
 
 using Object = uTinyRipper.Classes.Object;
@@ -242,13 +242,13 @@ namespace uTinyRipper.SerializedFiles
 		private void Read(Stream stream, Action<string> dependencyCallback)
 		{
 			long startPosition = stream.Position;
-			using (EndianReader reader = new EndianReader(stream, stream.Position, EndianType.BigEndian))
+			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian, stream.Position))
 			{
 				Header.Read(reader);
 			}
 			
 			EndianType endianess = Header.SwapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
-			using (EndianReader reader = new EndianReader(stream, stream.Position, endianess))
+			using (EndianReader reader = new EndianReader(stream, endianess, stream.Position))
 			{
 				if (IsTableAtTheEnd(Header.Generation))
 				{

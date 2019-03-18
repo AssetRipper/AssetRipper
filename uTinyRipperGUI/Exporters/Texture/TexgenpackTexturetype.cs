@@ -1,4 +1,4 @@
-﻿namespace uTinyRipperGUI.Exporters
+namespace uTinyRipperGUI.Exporters
 {
 	public enum TexgenpackTexturetype
 	{

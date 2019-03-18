@@ -4,7 +4,7 @@ using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AnimationClips;
 using uTinyRipper.Classes.Animations;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -77,7 +77,7 @@ namespace uTinyRipper.Classes
 			}
 			else
 			{
-				m_animations = reader.ReadArray<PPtr<AnimationClip>>();
+				m_animations = reader.ReadAssetArray<PPtr<AnimationClip>>();
 			}
 			WrapMode = (WrapMode)reader.ReadInt32();
 			PlayAutomatically = reader.ReadBoolean();

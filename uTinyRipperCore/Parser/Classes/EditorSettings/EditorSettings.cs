@@ -1,6 +1,6 @@
 ﻿using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.EditorSettingss;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes

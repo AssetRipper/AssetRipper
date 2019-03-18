@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace uTinyRipper.BundleFiles
@@ -112,7 +112,7 @@ namespace uTinyRipper.BundleFiles
 			MinimumStreamedBytes = reader.ReadUInt32();
 			HeaderSize = reader.ReadInt32();
 			TotalChunkCount = reader.ReadInt32();
-			m_chunkInfos = reader.ReadArray<ChunkInfo>();
+			m_chunkInfos = reader.ReadEndianArray<ChunkInfo>();
 			if (IsReadBundleSize(Generation))
 			{
 				BundleSize = reader.ReadUInt32();

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.CompositeCollider2Ds;
 using uTinyRipper.Classes.PolygonCollider2Ds;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -21,7 +21,7 @@ namespace uTinyRipper.Classes
 			GeometryType = (GeometryType)reader.ReadInt32();
 			GenerationType = (GenerationType)reader.ReadInt32();
 			EdgeRadius = reader.ReadSingle();
-			m_colliderPaths = reader.ReadArray<SubCollider>();
+			m_colliderPaths = reader.ReadAssetArray<SubCollider>();
 			reader.AlignStream(AlignType.Align4);
 
 			CompositePaths.Read(reader);

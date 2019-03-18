@@ -1,9 +1,6 @@
-﻿using FMOD;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
 using uTinyRipper;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
@@ -16,6 +13,21 @@ namespace uTinyRipperGUI.Exporters
 {
 	public class AudioAssetExporter : IAssetExporter
 	{
+		public static bool ExportAudio(IExportContainer container, AudioClip audioClip, Stream exportStream)
+		{
+			using (MemoryStream memStream = new MemoryStream())
+			{
+				audioClip.ExportBinary(container, memStream);
+				if (memStream.Length == 0)
+				{
+					return false;
+				}
+
+				byte[] data = memStream.ToArray();
+				return AudioConverter.ConvertToWav(data, exportStream);
+			}
+		}
+
 		public static bool IsSupported(AudioClip audioClip)
 		{
 			if (AudioClip.IsReadType(audioClip.File.Version))
@@ -77,7 +89,11 @@ namespace uTinyRipperGUI.Exporters
 			{
 				if (IsSupported(audioClip))
 				{
-					ExportAudioClip(container, fileStream, audioClip);
+					bool result = ExportAudio(container, audioClip, fileStream);
+					if (!result)
+					{
+						Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{audioClip.Name}' to wav");
+					}
 				}
 				else
 				{
@@ -118,130 +134,6 @@ namespace uTinyRipperGUI.Exporters
 			else
 			{
 				return audioClip.CompressionFormat.ToString();
-			}
-		}
-		
-		private static void ExportAudioClip(IExportContainer container, Stream fileStream, AudioClip clip)
-		{
-			CREATESOUNDEXINFO exinfo = new CREATESOUNDEXINFO();
-			FMOD.System system = null;
-			Sound sound = null;
-			Sound subsound = null;
-
-			try
-			{
-				RESULT result = Factory.System_Create(out system);
-				if (result != RESULT.OK)
-				{
-					Logger.Log(LogType.Error, LogCategory.Export, $"Can't create factory for AudioClip {clip.Name}");
-					return;
-				}
-
-				result = system.init(1, INITFLAGS.NORMAL, IntPtr.Zero);
-				if (result != RESULT.OK)
-				{
-					Logger.Log(LogType.Error, LogCategory.Export, $"Can't init system for AudioClip {clip.Name}");
-					return;
-				}
-
-				byte[] data;
-				using (MemoryStream memStream = new MemoryStream())
-				{
-					clip.ExportBinary(container, memStream);
-					data = memStream.ToArray();
-				}
-				if (data.Length == 0)
-				{
-					return;
-				}
-			
-				exinfo.cbsize = Marshal.SizeOf(exinfo);
-				exinfo.length = (uint)data.Length;
-				result = system.createSound(data, MODE.OPENMEMORY, ref exinfo, out sound);
-				if (result != RESULT.OK)
-				{
-					Logger.Log(LogType.Error, LogCategory.Export, $"Can't create sound for AudioClip {clip.Name}");
-					return;
-				}
-
-				result = sound.getSubSound(0, out subsound);
-				if (result != RESULT.OK)
-				{
-					Logger.Log(LogType.Error, LogCategory.Export, $"Can't get subsound for AudioClip {clip.Name}");
-					return;
-				}
-
-				result = subsound.getFormat(out SOUND_TYPE type, out SOUND_FORMAT format, out int numChannels, out int bitsPerSample);
-				if (result != RESULT.OK)
-				{
-					Logger.Log(LogType.Error, LogCategory.Export, $"Can't get format for AudioClip {clip.Name}");
-					return;
-				}
-
-				result = subsound.getDefaults(out float frequency, out int priority);
-				if (result != RESULT.OK)
-				{
-					Logger.Log(LogType.Error, LogCategory.Export, $"Can't get defaults for AudioClip {clip.Name}");
-					return;
-				}
-
-				int sampleRate = (int)frequency;
-				result = subsound.getLength(out uint length, TIMEUNIT.PCMBYTES);
-				if (result != RESULT.OK)
-				{
-					Logger.Log(LogType.Error, LogCategory.Export, $"Can't get length for AudioClip {clip.Name}");
-					return;
-				}
-
-				result = subsound.@lock(0, length, out IntPtr ptr1, out IntPtr ptr2, out uint len1, out uint len2);
-				if (result != RESULT.OK)
-				{
-					Logger.Log(LogType.Error, LogCategory.Export, $"Can't lock for AudioClip {clip.Name}");
-					return;
-				}
-
-				using (BinaryWriter writer = new BinaryWriter(fileStream))
-				{
-					writer.Write(Encoding.UTF8.GetBytes("RIFF"));
-					writer.Write(len1 + 36);
-					writer.Write(Encoding.UTF8.GetBytes("WAVEfmt "));
-					writer.Write(16);
-					writer.Write((short)1);
-					writer.Write((short)numChannels);
-					writer.Write(sampleRate);
-					writer.Write(sampleRate * numChannels * bitsPerSample / 8);
-					writer.Write((short)(numChannels * bitsPerSample / 8));
-					writer.Write((short)bitsPerSample);
-					writer.Write(Encoding.UTF8.GetBytes("data"));
-					writer.Write(len1);
-
-					for (int i = 0; i < len1; i++)
-					{
-						byte value = Marshal.ReadByte(ptr1, i);
-						writer.Write(value);
-					}
-				}
-
-				result = subsound.unlock(ptr1, ptr2, len1, len2);
-				if (result != RESULT.OK)
-				{
-					Logger.Log(LogType.Error, LogCategory.Export, $"Can't unlock for AudioClip {clip.Name}");
-				}
-			}
-			finally
-			{
-				if (subsound != null)
-				{
-					subsound.release();
-				}
-				if (sound != null)
-				{
-					sound.release();
-				}
-				if (system != null)
-				{
-					system.release();
-				}
 			}
 		}
 	}

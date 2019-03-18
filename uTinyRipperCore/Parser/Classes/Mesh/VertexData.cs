@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Meshes
 {
@@ -218,7 +218,7 @@ namespace uTinyRipper.Classes.Meshes
 
 			if (IsReadChannels(reader.Version))
 			{
-				m_channels = reader.ReadArray<ChannelInfo>();
+				m_channels = reader.ReadAssetArray<ChannelInfo>();
 				reader.AlignStream(AlignType.Align4);
 			}
 			if (IsReadStream(reader.Version))
@@ -235,7 +235,7 @@ namespace uTinyRipper.Classes.Meshes
 				}
 				else
 				{
-					m_streams = reader.ReadArray<StreamInfo>();
+					m_streams = reader.ReadAssetArray<StreamInfo>();
 				}
 			}
 

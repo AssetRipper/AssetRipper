@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace uTinyRipper.Classes.Shaders
 {
@@ -25,11 +25,11 @@ namespace uTinyRipper.Classes.Shaders
 		public void Read(AssetReader reader)
 		{
 			NameIndex = reader.ReadInt32();
-			m_matrixParams = reader.ReadArray<MatrixParameter>();
-			m_vectorParams = reader.ReadArray<VectorParameter>();
+			m_matrixParams = reader.ReadAssetArray<MatrixParameter>();
+			m_vectorParams = reader.ReadAssetArray<VectorParameter>();
 			if(IsReadStructParams(reader.Version))
 			{
-				m_structParams = reader.ReadArray<StructParameter>();
+				m_structParams = reader.ReadAssetArray<StructParameter>();
 			}
 			Size = reader.ReadInt32();
 		}

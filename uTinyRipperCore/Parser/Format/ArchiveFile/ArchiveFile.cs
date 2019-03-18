@@ -1,4 +1,4 @@
-﻿using Brotli;
+using Brotli;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -37,7 +37,7 @@ namespace uTinyRipper.ArchiveFiles
 
 		public static bool IsArchiveFile(Stream baseStream)
 		{
-			using (EndianReader reader = new EndianReader(baseStream, baseStream.Position, EndianType.BigEndian))
+			using (EndianReader reader = new EndianReader(baseStream, EndianType.BigEndian, baseStream.Position))
 			{
 				long position = reader.BaseStream.Position;
 				if (reader.BaseStream.Length - position >= 2)
@@ -109,7 +109,7 @@ namespace uTinyRipper.ArchiveFiles
 
 		private void Read(Stream stream)
 		{
-			using (EndianReader reader = new EndianReader(stream, stream.Position, EndianType.BigEndian))
+			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian, stream.Position))
 			{
 				ulong magic = reader.ReadUInt16();
 				reader.BaseStream.Position -= 2;

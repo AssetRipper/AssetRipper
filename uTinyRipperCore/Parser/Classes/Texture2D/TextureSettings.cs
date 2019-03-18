@@ -1,5 +1,5 @@
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Textures
 {
@@ -15,11 +15,6 @@ namespace uTinyRipper.Classes.Textures
 
 		public static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(2017))
 			{
 				return 2;
@@ -42,21 +37,20 @@ namespace uTinyRipper.Classes.Textures
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-			int version = GetSerializedVersion(container.Version);
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(version);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(FilterModeName, (int)FilterMode);
 			node.Add(AnisoName, Aniso);
 			node.Add(MipBiasName, MipBias);
-			if (version == 1)
-			{
-				node.Add(WrapModeName, (int)WrapU);
-			}
-			else
+			if (IsReadWraps(container.ExportVersion))
 			{
 				node.Add(WrapUName, (int)WrapU);
 				node.Add(WrapVName, (int)WrapV);
 				node.Add(WrapWName, (int)WrapW);
+			}
+			else
+			{
+				node.Add(WrapModeName, (int)WrapU);
 			}
 			return node;
 		}

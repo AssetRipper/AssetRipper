@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
+using uTinyRipper.Assembly;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -100,7 +101,6 @@ namespace uTinyRipper.Classes
 
 		public override string ExportName => Path.Combine(AssetsKeyWord, "ScriptableObject");
 		public override string ExportExtension => AssetExtension;
-		public override bool IsValid => true;
 
 		public string Name { get; private set; }
 		public ScriptStructure Structure { get; private set; }

@@ -1,5 +1,5 @@
-﻿using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.AssetExporters;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.GraphicsSettingss
 {
@@ -90,7 +90,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 
 			if (IsReadPlatfromSettings(reader.Version))
 			{
-				PlatformShaderSettings settings = reader.Read<PlatformShaderSettings>();
+				PlatformShaderSettings settings = reader.ReadAsset<PlatformShaderSettings>();
 				Settings = new TierGraphicsSettingsEditor(settings, reader.Version, reader.Flags);
 			}
 			else

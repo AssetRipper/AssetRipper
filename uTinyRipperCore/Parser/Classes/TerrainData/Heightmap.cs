@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.TerrainDatas
@@ -59,7 +59,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 			}
 			if (IsReadShifts(reader.Version))
 			{
-				m_shifts = reader.ReadArray<Shift>();
+				m_shifts = reader.ReadAssetArray<Shift>();
 				reader.AlignStream(AlignType.Align4);
 			}
 

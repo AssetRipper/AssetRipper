@@ -1,6 +1,6 @@
 ﻿using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.CapsuleCollider2Ds;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {

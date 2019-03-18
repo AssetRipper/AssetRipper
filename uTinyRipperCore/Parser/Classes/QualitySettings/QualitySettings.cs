@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.QualitySettingss;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -117,32 +117,32 @@ namespace uTinyRipper.Classes
 			CurrentQuality = reader.ReadInt32();
 			if(IsReadQualitySettingArray(reader.Version))
 			{
-				m_qualitySettings = reader.ReadArray<QualitySetting>();
+				m_qualitySettings = reader.ReadAssetArray<QualitySetting>();
 			}
 			else
 			{
 				m_qualitySettings = new QualitySetting[6];
-				QualitySetting fastest = reader.Read<QualitySetting>();
+				QualitySetting fastest = reader.ReadAsset<QualitySetting>();
 				fastest.Name = nameof(QualityLevel.Fastest);
 				m_qualitySettings[(int)QualityLevel.Fastest] = fastest;
 
-				QualitySetting fast = reader.Read<QualitySetting>();
+				QualitySetting fast = reader.ReadAsset<QualitySetting>();
 				fast.Name = nameof(QualityLevel.Fast);
 				m_qualitySettings[(int)QualityLevel.Fast] = fast;
 
-				QualitySetting simple = reader.Read<QualitySetting>();
+				QualitySetting simple = reader.ReadAsset<QualitySetting>();
 				simple.Name = nameof(QualityLevel.Simple);
 				m_qualitySettings[(int)QualityLevel.Simple] = simple;
 
-				QualitySetting good = reader.Read<QualitySetting>();
+				QualitySetting good = reader.ReadAsset<QualitySetting>();
 				good.Name = nameof(QualityLevel.Good);
 				m_qualitySettings[(int)QualityLevel.Good] = good;
 
-				QualitySetting beautiful = reader.Read<QualitySetting>();
+				QualitySetting beautiful = reader.ReadAsset<QualitySetting>();
 				beautiful.Name = nameof(QualityLevel.Beautiful);
 				m_qualitySettings[(int)QualityLevel.Beautiful] = beautiful;
 
-				QualitySetting fantastic = reader.Read<QualitySetting>();
+				QualitySetting fantastic = reader.ReadAsset<QualitySetting>();
 				fantastic.Name = nameof(QualityLevel.Fantastic);
 				m_qualitySettings[(int)QualityLevel.Fantastic] = fantastic;
 			}
@@ -191,7 +191,7 @@ namespace uTinyRipper.Classes
 
 			if (IsReadWebPlayer(reader.Version))
 			{
-				QualitySetting webPlayer = reader.Read<QualitySetting>();
+				QualitySetting webPlayer = reader.ReadAsset<QualitySetting>();
 				webPlayer.Name = "WebPlayer";
 			}
 

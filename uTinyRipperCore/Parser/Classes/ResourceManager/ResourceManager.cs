@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.ResourceManagers;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -29,7 +29,7 @@ namespace uTinyRipper.Classes
 			m_container = reader.ReadStringTKVPArray<PPtr<Object>>();
 			if (IsReadDependentAssets(reader.Version, reader.Flags))
 			{
-				m_dependentAssets = reader.ReadArray<ResourceManagerDependency>();
+				m_dependentAssets = reader.ReadAssetArray<ResourceManagerDependency>();
 			}
 		}
 

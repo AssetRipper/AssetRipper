@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace uTinyRipper
@@ -37,7 +37,7 @@ namespace uTinyRipper
 
 		public override int Read(byte[] buffer, int offset, int count)
 		{
-			count = Math.Min(count, (Length - Position).ToClosestInt());
+			count = unchecked((int)Math.Min(count, Length - Position));
 			count = Math.Max(count, 0);
 			int read = m_stream.Read(buffer, offset, count);
 			return read;

@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -9,7 +9,7 @@ namespace uTinyRipper.Classes
 	{
 		public void Read(AssetReader reader)
 		{
-			m_valueArray = reader.ReadArray<ValueConstant>();
+			m_valueArray = reader.ReadAssetArray<ValueConstant>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

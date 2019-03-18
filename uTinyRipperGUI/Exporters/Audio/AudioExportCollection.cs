@@ -1,4 +1,3 @@
-﻿using System.IO;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
 
@@ -11,18 +10,10 @@ namespace uTinyRipperGUI.Exporters
 		{
 		}
 
-		protected override string ExportInner(ProjectAssetContainer container, string filePath)
+		protected override string GetExportExtension(Object asset)
 		{
-			AudioClip audioClip = (AudioClip)Asset;
-			if (AudioAssetExporter.IsSupported(audioClip))
-			{
-				string dir = Path.GetDirectoryName(filePath);
-				string newName = $"{Path.GetFileNameWithoutExtension(filePath)}.wav";
-				filePath = Path.Combine(dir, newName);
-			}
-
-			AssetExporter.Export(container, Asset, filePath);
-			return filePath;
+			AudioClip audioClip = (AudioClip)asset;
+			return AudioAssetExporter.IsSupported(audioClip) ? "wav" : audioClip.ExportExtension;
 		}
 	}
 }

@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AnimatorControllers.Editor;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.AnimatorControllers
@@ -19,11 +19,11 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public void Read(AssetReader reader)
 		{
-			m_stateConstantArray = reader.ReadArray<OffsetPtr<StateConstant>>();
-			m_anyStateTransitionConstantArray = reader.ReadArray<OffsetPtr<TransitionConstant>>();
+			m_stateConstantArray = reader.ReadAssetArray<OffsetPtr<StateConstant>>();
+			m_anyStateTransitionConstantArray = reader.ReadAssetArray<OffsetPtr<TransitionConstant>>();
 			if(IsReadConstantArray(reader.Version))
 			{
-				m_selectorStateConstantArray = reader.ReadArray<OffsetPtr<SelectorStateConstant>>();
+				m_selectorStateConstantArray = reader.ReadAssetArray<OffsetPtr<SelectorStateConstant>>();
 			}
 
 			DefaultState = (int)reader.ReadUInt32();

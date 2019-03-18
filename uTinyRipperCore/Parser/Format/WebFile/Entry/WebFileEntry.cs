@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.IO;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Assembly;
 using uTinyRipper.BundleFiles;
 
 namespace uTinyRipper.WebFiles

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.Classes.NewAnimationTracks;
 
 namespace uTinyRipper.Classes
@@ -14,7 +14,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_curves = reader.ReadArray<Channel>();
+			m_curves = reader.ReadAssetArray<Channel>();
 			AClassID = (ClassIDType)reader.ReadInt32();
 		}
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,12 +22,14 @@ namespace uTinyRipper
 				}
 				if (!stream.CanSeek)
 				{
-					throw new Exception($"Stream {stream} can't seek");
+					throw new Exception($"Stream {stream} isn't seekable");
 				}
 			}
 
-			m_streams = streams;
+			m_streams = streams.ToArray();
 			Length = streams.Sum(t => t.Length);
+			CanRead = m_streams.All(t => t.CanRead);
+			CanWrite = m_streams.All(t => t.CanWrite);
 			UpdateCurrentStream();
 		}
 
@@ -103,10 +105,10 @@ namespace uTinyRipper
 				SplitPathWithoutExtension(path, out string directory, out string file);
 				return GetFiles(directory, file);
 			}
-			
+
 			if (FileUtils.Exists(path))
 			{
-				return new [] { path };
+				return new[] { path };
 			}
 			return new string[0];
 		}
@@ -121,7 +123,7 @@ namespace uTinyRipper
 		{
 			string filePath = Path.Combine(dirPath, fileName);
 			string splitFilePath = filePath + ".split";
-				
+
 			string[] splitFiles = GetFiles(dirPath, fileName);
 			if (splitFiles.Length == 0)
 			{
@@ -154,7 +156,7 @@ namespace uTinyRipper
 		{
 			string filePath = Path.Combine(dirPath, fileName);
 			string splitFilePath = filePath + ".split";
-				
+
 			string[] splitFiles = GetFiles(dirPath, fileName);
 			for (int i = 0; i < splitFiles.Length; i++)
 			{
@@ -190,7 +192,7 @@ namespace uTinyRipper
 				throw;
 			}
 		}
-		
+
 		private static void SplitPath(string path, out string directory, out string file)
 		{
 			directory = Path.GetDirectoryName(path);
@@ -215,10 +217,7 @@ namespace uTinyRipper
 
 		public override void Flush()
 		{
-			if (m_currentStream != null)
-			{
-				m_currentStream.Flush();
-			}
+			m_currentStream.Flush();
 		}
 
 		public override long Seek(long offset, SeekOrigin origin)
@@ -246,48 +245,41 @@ namespace uTinyRipper
 		public override int ReadByte()
 		{
 			int value = m_currentStream.ReadByte();
-			m_position++;
-			if (m_position == m_currentEnd)
+			if (value >= 0)
 			{
-				UpdateCurrentStream();
+				m_position++;
+				if (m_position == m_currentEnd)
+				{
+					UpdateCurrentStream();
+				}
 			}
 			return value;
 		}
 
 		public override int Read(byte[] buffer, int offset, int count)
 		{
-			int totalRead = 0;
-			while (true)
+			long available = m_currentEnd - m_position;
+			int toRead = count < available ? count : (int)available;
+
+			int left = toRead;
+			while (left > 0)
 			{
-				int curCount = count;
-				if (curCount > m_currentEnd - m_position)
+				int read = m_currentStream.Read(buffer, offset, left);
+				if (read == 0)
 				{
-					curCount = unchecked((int)(m_currentEnd - m_position));
+					throw new Exception("Unexpected end of file reached");
 				}
-				int read = m_currentStream.Read(buffer, offset, curCount);
-				totalRead += read;
+
+				offset += read;
+				left -= read;
 				m_position += read;
-				if (m_position == m_currentEnd)
-				{
-					bool isUpdated = UpdateCurrentStream();
-					if (!isUpdated)
-					{
-						return totalRead;
-					}
-				}
-
-				if (read != curCount)
-				{
-					return totalRead;
-				}
-
-				offset += curCount;
-				count -= curCount;
-				if (count == 0)
-				{
-					return totalRead;
-				}
 			}
+			if (m_position == m_currentEnd)
+			{
+				UpdateCurrentStream();
+			}
+
+			return toRead;
 		}
 
 		public override void WriteByte(byte value)
@@ -302,26 +294,19 @@ namespace uTinyRipper
 
 		public override void Write(byte[] buffer, int offset, int count)
 		{
-			while (true)
+			while (count > 0)
 			{
-				int curCount = count;
-				if (curCount > m_currentEnd - m_position)
-				{
-					curCount = unchecked((int)(m_currentEnd - m_position));
-				}
-				m_currentStream.Write(buffer, offset, curCount);
-				m_position += curCount;
+				long available = m_currentEnd - m_position;
+				int toWrite = count < available ? count : (int)available;
+				m_currentStream.Write(buffer, offset, toWrite);
+				m_position += toWrite;
 				if (m_position == m_currentEnd)
 				{
 					UpdateCurrentStream();
 				}
 
-				offset += curCount;
-				count -= curCount;
-				if (count == 0)
-				{
-					return;
-				}
+				offset += toWrite;
+				count -= toWrite;
 			}
 		}
 
@@ -334,28 +319,25 @@ namespace uTinyRipper
 			base.Dispose(disposing);
 		}
 
-		private bool UpdateCurrentStream()
+		private void UpdateCurrentStream()
 		{
-			bool result = false;
 			m_currentBegin = 0;
-			for(int i = 0; i < m_streams.Count; i++)
+			m_currentEnd = 0;
+			for (int i = 0; i < m_streams.Count; i++)
 			{
 				m_currentStream = m_streams[i];
 				m_currentEnd = m_currentBegin + m_currentStream.Length;
-				if (m_currentBegin <= m_position && m_currentEnd > m_position)
+				if (m_currentEnd > m_position)
 				{
 					m_currentStream.Position = m_position - m_currentBegin;
-					result = true;
-					break;
+					return;
 				}
 
 				m_currentBegin += m_currentStream.Length;
 			}
-			m_currentEnd = m_currentBegin + m_currentStream.Length;
-			m_currentStream.Position = m_position - m_currentBegin;
-			return result;
+			m_currentBegin -= m_currentStream.Length;
 		}
-		
+
 		public override long Position
 		{
 			get => m_position;
@@ -380,10 +362,10 @@ namespace uTinyRipper
 
 		public override long Length { get; }
 
-		public override bool CanRead => m_streams.All(t => t.CanRead);
-		public override bool CanWrite => m_streams.All(t => t.CanWrite);
+		public override bool CanRead { get; }
+		public override bool CanWrite { get; }
 		public override bool CanSeek => true;
-		
+
 		private static readonly Regex s_splitCheck = new Regex($@".+{MultifileRegex}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 		private static readonly SplitNameComparer s_splitNameComparer = new SplitNameComparer();
 

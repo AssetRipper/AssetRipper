@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.TagManagers;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -62,7 +62,7 @@ namespace uTinyRipper.Classes
 			}
 			if(IsReadSortingLayers(reader.Version))
 			{
-				m_sortingLayers = reader.ReadArray<SortingLayerEntry>();
+				m_sortingLayers = reader.ReadAssetArray<SortingLayerEntry>();
 			}
 		}
 

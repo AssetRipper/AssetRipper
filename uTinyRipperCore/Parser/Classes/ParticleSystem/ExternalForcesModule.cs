@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.ParticleSystems
 {
@@ -32,7 +32,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			{
 				InfluenceFilter = reader.ReadInt32();
 				InfluenceMask.Read(reader);
-				m_influenceList = reader.ReadArray<PPtr<ParticleSystemForceField>>();
+				m_influenceList = reader.ReadAssetArray<PPtr<ParticleSystemForceField>>();
 			}
 		}
 

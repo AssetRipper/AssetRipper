@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.OcclusionCullingSettingses;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -145,11 +145,11 @@ namespace uTinyRipper.Classes
 			}
 			if (IsReadStaticRenderers(reader.Version, reader.Flags))
 			{
-				m_staticRenderers = reader.ReadArray<PPtr<Renderer>>();
+				m_staticRenderers = reader.ReadAssetArray<PPtr<Renderer>>();
 			}
 			if (IsReadPortals(reader.Version, reader.Flags))
 			{
-				m_portals = reader.ReadArray<PPtr<OcclusionPortal>>();
+				m_portals = reader.ReadAssetArray<PPtr<OcclusionPortal>>();
 			}
 
 			if (IsReadOcclusionBakeSettings(reader.Version, reader.Flags))

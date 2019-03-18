@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Avatars;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {

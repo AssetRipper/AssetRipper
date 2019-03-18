@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.LODGroups;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -87,7 +87,7 @@ namespace uTinyRipper.Classes
 				reader.AlignStream(AlignType.Align4);
 			}
 			
-			m_lods = reader.ReadArray<LOD>();
+			m_lods = reader.ReadAssetArray<LOD>();
 			Enabled = reader.ReadBoolean();
 			if (IsAlign2(reader.Version))
 			{

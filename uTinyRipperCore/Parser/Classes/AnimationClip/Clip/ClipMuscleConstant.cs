@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
@@ -110,7 +110,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			{
 				m_additionalCurveIndexArray = reader.ReadInt32Array();
 			}
-			m_valueArrayDelta = reader.ReadArray<ValueDelta>();
+			m_valueArrayDelta = reader.ReadAssetArray<ValueDelta>();
 
 			if(IsReadValueArrayReferencePose(reader.Version))
 			{

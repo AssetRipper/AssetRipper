@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AudioMixers
 {
@@ -15,13 +15,13 @@ namespace uTinyRipper.Classes.AudioMixers
 
 		public void Read(AssetReader reader)
 		{
-			m_groups = reader.ReadArray<GroupConstant>();
-			m_groupGUIDs = reader.ReadArray<EngineGUID>();
-			m_effects = reader.ReadArray<EffectConstant>();
-			m_effectGUIDs = reader.ReadArray<EngineGUID>();
+			m_groups = reader.ReadAssetArray<GroupConstant>();
+			m_groupGUIDs = reader.ReadAssetArray<EngineGUID>();
+			m_effects = reader.ReadAssetArray<EffectConstant>();
+			m_effectGUIDs = reader.ReadAssetArray<EngineGUID>();
 			NumSideChainBuffers = reader.ReadUInt32();
-			m_snapshots = reader.ReadArray<SnapshotConstant>();
-			m_snapshotGUIDs = reader.ReadArray<EngineGUID>();
+			m_snapshots = reader.ReadAssetArray<SnapshotConstant>();
+			m_snapshotGUIDs = reader.ReadAssetArray<EngineGUID>();
 			//m_groupNameBuffer = stream.ReadArray<char>();
 			reader.AlignStream(AlignType.Align4);
 			

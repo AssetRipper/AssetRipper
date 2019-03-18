@@ -4,7 +4,7 @@ using System.IO;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AudioClips;
 using uTinyRipper.Classes.Textures;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -37,7 +37,7 @@ namespace uTinyRipper.Classes
 		{
 			return version.IsGreater(2017);
 		}
-		
+
 		/// <summary>
 		/// 5.0.0b1
 		/// </summary>
@@ -53,6 +53,13 @@ namespace uTinyRipper.Classes
 		{
 #warning unknown
 			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+		}
+		/// <summary>
+		/// Not Release
+		/// </summary>
+		public static bool IsReadEditorResource(TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease();
 		}
 
 		/// <summary>
@@ -169,14 +176,9 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				// topmost engine version doesn't conatain any serialized versions
-				return 1;
-			}
-			
 			if (version.IsGreaterEqual(5))
 			{
+				// old AudioClip asset format isn't compatible with new Engine version
 				return 1;
 			}
 			if (version.IsGreaterEqual(3, 5))
@@ -191,10 +193,23 @@ namespace uTinyRipper.Classes
 			return 2;
 		}
 
+		public bool CheckAssetIntegrity()
+		{
+			if (IsReadLoadType(File.Version))
+			{
+				using (ResourcesFile res = File.Collection.FindResourcesFile(File, FSBResource.Source))
+				{
+					return res != null;
+				}
+			}
+
+			return true;
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			if (IsReadLoadType(reader.Version))
 			{
 				LoadType = (AudioClipLoadType)reader.ReadInt32();
@@ -202,7 +217,7 @@ namespace uTinyRipper.Classes
 				Frequency = reader.ReadInt32();
 				BitsPerSample = reader.ReadInt32();
 				Length = reader.ReadSingle();
-				
+
 				if (IsReadIsTrackerFormat(reader.Version))
 				{
 					IsTrackerFormat = reader.ReadBoolean();
@@ -245,6 +260,17 @@ namespace uTinyRipper.Classes
 					CompressionFormat = (AudioCompressionFormat)reader.ReadInt32();
 				}
 				reader.AlignStream(AlignType.Align4);
+
+#if UNIVERSAL
+				if (IsReadEditorResource(reader.Flags))
+				{
+					EditorResource.Read(reader);
+					if (IsReadCompressionFormat(reader.Version))
+					{
+						EditorCompressionFormat = (AudioCompressionFormat)reader.ReadInt32();
+					}
+				}
+#endif
 			}
 			else
 			{
@@ -264,7 +290,7 @@ namespace uTinyRipper.Classes
 					Frequency = reader.ReadInt32();
 					Size = reader.ReadInt32();
 				}
-			
+
 				if (IsReadDecompressOnLoadSecond(reader.Version))
 				{
 					DecompressOnLoad = reader.ReadBoolean();
@@ -297,7 +323,7 @@ namespace uTinyRipper.Classes
 							isInnerData = res == null;
 						}
 					}
-					if(isInnerData)
+					if (isInnerData)
 					{
 						m_audioData = reader.ReadByteArray();
 						reader.AlignStream(AlignType.Align4);
@@ -364,7 +390,7 @@ namespace uTinyRipper.Classes
 				{
 					if (LoadType == AudioClipLoadType.Streaming)
 					{
-						if(m_audioData == null)
+						if (m_audioData == null)
 						{
 							using (ResourcesFile res = File.Collection.FindResourcesFile(File, StreamingInfo.Path))
 							{
@@ -401,6 +427,24 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			throw new NotSupportedException();
+			/*YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(container.ExportVersion);
+			node.Add(LoadTypeName, (int)LoadType);
+			node.Add(ChannelsName, Channels);
+			node.Add(FrequencyName, Frequency);
+			node.Add(BitsPerSampleName, BitsPerSample);
+			node.Add(LengthName, Length);
+			node.Add(IsTrackerFormatName, IsTrackerFormat);
+			node.Add(AmbisonicName, Ambisonic);
+			node.Add(SubsoundIndexName, SubsoundIndex);
+			node.Add(PreloadAudioDataName, PreloadAudioData);
+			node.Add(LoadInBackgroundName, LoadInBackground);
+			node.Add(Legacy3DName, Legacy3D);
+			node.Add(ResourceName, FSBResource.ExportYAML(container));
+			node.Add(CompressionFormatName, (int)CompressionFormat);
+			node.Add(EditorResourceName, EditorResource.ExportYAML(container));
+			node.Add(EditorCompressionFormatName, (int)EditorCompressionFormat);
+			return node;*/
 		}
 
 		public override string ExportExtension
@@ -500,6 +544,9 @@ namespace uTinyRipper.Classes
 		public bool PreloadAudioData { get; private set; }
 		public bool LoadInBackground { get; private set; }
 		public AudioCompressionFormat CompressionFormat { get; private set; }
+#if UNIVERSAL
+		public AudioCompressionFormat EditorCompressionFormat { get; private set; }
+#endif
 
 		public bool DecompressOnLoad { get; private set; }
 		public FMODSoundFormat Format { get; private set; }
@@ -521,7 +568,26 @@ namespace uTinyRipper.Classes
 
 		public const string StreamingFileExtension = "resS";
 
+		public const string LoadTypeName = "m_LoadType";
+		public const string ChannelsName = "m_Channels";
+		public const string FrequencyName = "m_Frequency";
+		public const string BitsPerSampleName = "m_BitsPerSample";
+		public const string LengthName = "m_Length";
+		public const string IsTrackerFormatName = "m_IsTrackerFormat";
+		public const string AmbisonicName = "m_Ambisonic";
+		public const string SubsoundIndexName = "m_SubsoundIndex";
+		public const string PreloadAudioDataName = "m_PreloadAudioData";
+		public const string LoadInBackgroundName = "m_LoadInBackground";
+		public const string Legacy3DName = "m_Legacy3D";
+		public const string ResourceName = "m_Resource";
+		public const string CompressionFormatName = "m_CompressionFormat";
+		public const string EditorResourceName = "m_EditorResource";
+		public const string EditorCompressionFormatName = "m_EditorCompressionFormat";
+
 		public StreamedResource FSBResource;
+#if UNIVERSAL
+		public StreamedResource EditorResource;
+#endif
 		public StreamingInfo StreamingInfo;
 
 		private byte[] m_audioData;

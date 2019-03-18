@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System;
@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes.Shaders
     {
         public void Read(AssetReader reader)
         {
-            m_subPrograms = reader.ReadArray<SerializedSubProgram>();
+          m_subPrograms = reader.ReadAssetArray<SerializedSubProgram>();
         }
         Dictionary<ShaderGpuProgramType, int> GetIsTierLookup(IReadOnlyList<SerializedSubProgram> subPrograms)
         {

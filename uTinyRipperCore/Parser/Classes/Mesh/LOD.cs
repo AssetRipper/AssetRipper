@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace uTinyRipper.Classes.Meshes
 {
@@ -6,7 +6,7 @@ namespace uTinyRipper.Classes.Meshes
 	{
 		public void Read(AssetReader reader)
 		{
-			m_meshData = reader.ReadArray<MeshData>();
+			m_meshData = reader.ReadAssetArray<MeshData>();
 			VertexCount = reader.ReadInt32();
 			NewVertexStart = reader.ReadInt32();
 			MeshError = reader.ReadSingle();

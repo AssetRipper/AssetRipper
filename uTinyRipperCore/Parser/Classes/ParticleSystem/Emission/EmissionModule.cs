@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.ParticleSystems
 {
@@ -127,7 +127,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				BurstCount = reader.ReadInt32();
 				reader.AlignStream(AlignType.Align4);
 
-				m_bursts = reader.ReadArray<ParticleSystemEmissionBurst>();
+				m_bursts = reader.ReadAssetArray<ParticleSystemEmissionBurst>();
 			}
 		}
 

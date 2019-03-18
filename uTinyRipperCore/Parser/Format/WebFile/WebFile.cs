@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -36,7 +36,7 @@ namespace uTinyRipper.WebFiles
 
 		public static bool IsWebFile(Stream stream)
 		{
-			using (EndianReader reader = new EndianReader(stream, stream.Position, EndianType.BigEndian))
+			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian, stream.Position))
 			{
 				long position = reader.BaseStream.Position;
 				long maxLengthLong = reader.BaseStream.Length - position;
@@ -98,7 +98,7 @@ namespace uTinyRipper.WebFiles
 
 		private void Read(SmartStream stream)
 		{
-			using (EndianReader reader = new EndianReader(stream, stream.Position, EndianType.LittleEndian))
+			using (EndianReader reader = new EndianReader(stream, EndianType.LittleEndian, stream.Position))
 			{
 				ReadMetadata(reader);
 			}

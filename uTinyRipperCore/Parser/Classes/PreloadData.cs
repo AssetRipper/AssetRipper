@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -32,7 +32,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_assets = reader.ReadArray<PPtr<Object>>();
+			m_assets = reader.ReadAssetArray<PPtr<Object>>();
 			if(IsReadDependencies(reader.Version))
 			{
 				m_dependencies = reader.ReadStringArray();

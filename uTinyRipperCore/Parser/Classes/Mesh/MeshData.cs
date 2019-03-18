@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace uTinyRipper.Classes.Meshes
 {
@@ -6,7 +6,7 @@ namespace uTinyRipper.Classes.Meshes
 	{
 		public void Read(AssetReader reader)
 		{
-			m_faces = reader.ReadArray<Face>();
+			m_faces = reader.ReadAssetArray<Face>();
 			m_strips = reader.ReadUInt16Array();
 		}
 		

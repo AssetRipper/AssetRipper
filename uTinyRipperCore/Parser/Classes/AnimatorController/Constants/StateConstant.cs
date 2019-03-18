@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AnimatorControllers.Editor;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.AnimatorControllers
@@ -77,14 +77,14 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public void Read(AssetReader reader)
 		{
-			m_transitionConstantArray = reader.ReadArray<OffsetPtr<TransitionConstant>>();
+			m_transitionConstantArray = reader.ReadAssetArray<OffsetPtr<TransitionConstant>>();
 			m_blendTreeConstantIndexArray = reader.ReadInt32Array();
 			if(IsReadLeafInfo(reader.Version))
 			{
-				m_leafInfoArray = reader.ReadArray<LeafInfoConstant>();
+				m_leafInfoArray = reader.ReadAssetArray<LeafInfoConstant>();
 			}
 
-			m_blendTreeConstantArray = reader.ReadArray<OffsetPtr<BlendTreeConstant>>();
+			m_blendTreeConstantArray = reader.ReadAssetArray<OffsetPtr<BlendTreeConstant>>();
 			NameID = reader.ReadUInt32();
 			if (IsReadPathID(reader.Version))
 			{

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.Classes.Meshes;
 using uTinyRipper.Classes.Sprites.Utils;
@@ -93,13 +93,13 @@ namespace uTinyRipper.Classes.Sprites
 
 			if (IsReadVertices(reader.Version))
 			{
-				m_vertices = reader.ReadArray<SpriteVertex>();
+				m_vertices = reader.ReadAssetArray<SpriteVertex>();
 				m_indices = reader.ReadUInt16Array();
 				reader.AlignStream(AlignType.Align4);
 			}
 			else
 			{
-				m_subMeshes = reader.ReadArray<SubMesh>();
+				m_subMeshes = reader.ReadAssetArray<SubMesh>();
 				m_indexBuffer = reader.ReadByteArray();
 				reader.AlignStream(AlignType.Align4);
 
@@ -107,11 +107,11 @@ namespace uTinyRipper.Classes.Sprites
 			}
 			if (IsReadBindpose(reader.Version))
 			{
-				m_bindpose = reader.ReadArray<Matrix4x4f>();
+				m_bindpose = reader.ReadAssetArray<Matrix4x4f>();
 			}
 			if(IsReadSourceSkin(reader.Version))
 			{
-				m_sourceSkin = reader.ReadArray<BoneWeights4>();
+				m_sourceSkin = reader.ReadAssetArray<BoneWeights4>();
 			}
 
 			TextureRect.Read(reader);

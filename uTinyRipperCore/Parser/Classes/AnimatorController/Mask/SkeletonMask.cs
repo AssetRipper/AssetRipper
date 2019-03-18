@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
 {
@@ -9,7 +9,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 	{
 		public void Read(AssetReader reader)
 		{
-			m_data = reader.ReadArray<SkeletonMaskElement>();
+			m_data = reader.ReadAssetArray<SkeletonMaskElement>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

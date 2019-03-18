@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.AssetExporters.Classes;
 using uTinyRipper.Classes.Textures;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.SpriteAtlases
@@ -41,10 +41,10 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		public void Read(AssetReader reader)
 		{
 			TextureSettings.Read(reader);
-			m_platformSettings = reader.ReadArray<TextureImporterPlatformSettings>();
+			m_platformSettings = reader.ReadAssetArray<TextureImporterPlatformSettings>();
 			PackingSettings.Read(reader);
 			VariantMultiplier = reader.ReadSingle();
-			m_packables = reader.ReadArray<PPtr<Object>>();
+			m_packables = reader.ReadAssetArray<PPtr<Object>>();
 			BindAsDefault = reader.ReadBoolean();
 			reader.AlignStream(AlignType.Align4);
 			

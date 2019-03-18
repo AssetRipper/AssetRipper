@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -20,7 +20,7 @@ namespace uTinyRipper.Classes
 
 			AudioMixer.Read(reader);
 			GroupID.Read(reader);
-			m_children = reader.ReadArray<PPtr<AudioMixerGroup>>();
+			m_children = reader.ReadAssetArray<PPtr<AudioMixerGroup>>();
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

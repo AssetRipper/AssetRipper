@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.LODGroups
@@ -33,7 +33,7 @@ namespace uTinyRipper.Classes.LODGroups
 			{
 				FadeTransitionWidth = reader.ReadSingle();
 			}
-			m_renderers = reader.ReadArray<LODRenderer>();
+			m_renderers = reader.ReadAssetArray<LODRenderer>();
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

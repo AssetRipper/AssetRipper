@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AvatarMasks;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -17,7 +17,7 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 			m_mask = reader.ReadUInt32Array();
-			m_elements = reader.ReadArray<TransformMaskElement>();
+			m_elements = reader.ReadAssetArray<TransformMaskElement>();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

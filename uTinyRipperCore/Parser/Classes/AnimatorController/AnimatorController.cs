@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AnimatorControllers;
 using uTinyRipper.Classes.AnimatorControllers.Editor;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -69,12 +69,12 @@ namespace uTinyRipper.Classes
 			Controller.Read(reader);
 			m_TOS.Clear();
 			m_TOS.Read(reader);
-			m_animationClips = reader.ReadArray<PPtr<AnimationClip>>();
+			m_animationClips = reader.ReadAssetArray<PPtr<AnimationClip>>();
 
 			if (IsReadStateMachineBehaviourVectorDescription(reader.Version))
 			{
 				StateMachineBehaviourVectorDescription.Read(reader);
-				m_stateMachineBehaviours = reader.ReadArray<PPtr<MonoBehaviour>>();
+				m_stateMachineBehaviours = reader.ReadAssetArray<PPtr<MonoBehaviour>>();
 			}
 
 			if (!IsAlignMultiThreadedStateMachine(reader.Version))

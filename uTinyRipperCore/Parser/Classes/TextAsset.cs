@@ -1,7 +1,6 @@
-﻿using System;
 using System.IO;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -48,12 +47,14 @@ namespace uTinyRipper.Classes
 
 		protected sealed override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			throw new NotSupportedException();
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add(ScriptName, Script.ExportYAML());
+			return node;
 		}
-		
-		public override string ExportExtension => "bytes";
 
 		public byte[] Script { get; private set; }
 		public string PathName { get; private set; } = string.Empty;
+
+		public const string ScriptName = "m_Script";
 	}
 }

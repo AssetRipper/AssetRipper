@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.NavMeshDatas;
 using uTinyRipper.Classes.NavMeshProjectSettingss;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -89,17 +89,17 @@ namespace uTinyRipper.Classes
 				m_areas = new NavMeshAreaData[32];
 				for (int i = 0; i < 32; i++)
 				{
-					m_areas[i] = reader.Read<NavMeshAreaData>();
+					m_areas[i] = reader.ReadAsset<NavMeshAreaData>();
 				}
 			}
 			else
 			{
-				m_areas = reader.ReadArray<NavMeshAreaData>();
+				m_areas = reader.ReadAssetArray<NavMeshAreaData>();
 			}
 			if (IsReadLastAgentTypeID(reader.Version))
 			{
 				LastAgentTypeID = reader.ReadInt32();
-				m_settings = reader.ReadArray<NavMeshBuildSettings>();
+				m_settings = reader.ReadAssetArray<NavMeshBuildSettings>();
 				m_settingNames = reader.ReadStringArray();
 			}
 		}

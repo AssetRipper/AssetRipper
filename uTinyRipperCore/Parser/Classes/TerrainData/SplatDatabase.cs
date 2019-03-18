@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.TerrainDatas
@@ -36,13 +36,13 @@ namespace uTinyRipper.Classes.TerrainDatas
 		{
 			if (IsReadTerrainLayers(reader.Version))
 			{
-				m_terrainLayers = reader.ReadArray<PPtr<TerrainLayer>>();
+				m_terrainLayers = reader.ReadAssetArray<PPtr<TerrainLayer>>();
 			}
 			else
 			{
-				m_splats = reader.ReadArray<SplatPrototype>();
+				m_splats = reader.ReadAssetArray<SplatPrototype>();
 			}
-			m_alphaTextures = reader.ReadArray<PPtr<Texture2D>>();
+			m_alphaTextures = reader.ReadAssetArray<PPtr<Texture2D>>();
 			AlphamapResolution = reader.ReadInt32();
 			BaseMapResolution = reader.ReadInt32();
 			if (IsReadColorSpace(reader.Version))

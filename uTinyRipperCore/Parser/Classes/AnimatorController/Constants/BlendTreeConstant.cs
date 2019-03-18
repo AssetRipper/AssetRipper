@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
 {
@@ -17,7 +17,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public void Read(AssetReader reader)
 		{
-			m_nodeArray = reader.ReadArray<OffsetPtr<BlendTreeNodeConstant>>();
+			m_nodeArray = reader.ReadAssetArray<OffsetPtr<BlendTreeNodeConstant>>();
 			if (IsReadBlendEventArrayConstant(reader.Version))
 			{
 				BlendEventArrayConstant.Read(reader);

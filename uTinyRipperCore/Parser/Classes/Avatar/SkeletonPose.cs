@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Avatars
 {
@@ -8,7 +8,7 @@ namespace uTinyRipper.Classes.Avatars
 	{
 		public void Read(AssetReader reader)
 		{
-			m_x = reader.ReadArray<XForm>();
+			m_x = reader.ReadAssetArray<XForm>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AudioMixers;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -25,7 +25,7 @@ namespace uTinyRipper.Classes
 
 			OutputGroup.Read(reader);
 			MasterGroup.Read(reader);
-			m_snapshots = reader.ReadArray<PPtr<AudioMixerSnapshot>>();
+			m_snapshots = reader.ReadAssetArray<PPtr<AudioMixerSnapshot>>();
 			StartSnapshot.Read(reader);
 			SuspendThreshold = reader.ReadSingle();
 			EnableSuspend = reader.ReadBoolean();

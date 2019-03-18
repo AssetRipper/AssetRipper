@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.LightmapSettingss;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -197,7 +197,7 @@ namespace uTinyRipper.Classes
 			}
 			if(IsReadLightmaps(reader.Flags))
 			{
-				m_lightmaps = reader.ReadArray<LightmapData>();
+				m_lightmaps = reader.ReadAssetArray<LightmapData>();
 			}
 			if (IsAlign1(reader.Version, reader.Flags))
 			{

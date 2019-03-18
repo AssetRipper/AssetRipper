@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.InputManagers;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -35,7 +35,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_axes = reader.ReadArray<InputAxis>();
+			m_axes = reader.ReadAssetArray<InputAxis>();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

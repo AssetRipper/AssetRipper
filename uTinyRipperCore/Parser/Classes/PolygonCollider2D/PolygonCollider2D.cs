@@ -1,7 +1,7 @@
 ﻿using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.BoxCollider2Ds;
 using uTinyRipper.Classes.PolygonCollider2Ds;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {

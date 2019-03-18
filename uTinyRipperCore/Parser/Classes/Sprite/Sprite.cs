@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.SpriteAtlases;
 using uTinyRipper.Classes.Sprites;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
@@ -190,13 +190,13 @@ namespace uTinyRipper.Classes
 				m_physicsShape = new Vector2f[count][];
 				for (int i = 0; i < count; i++)
 				{
-					m_physicsShape[i] = reader.ReadArray<Vector2f>();
+					m_physicsShape[i] = reader.ReadAssetArray<Vector2f>();
 				}
 			}
 
 			if(IsReadBones(reader.Version))
 			{
-				m_bones = reader.ReadArray<SpriteBone>();
+				m_bones = reader.ReadAssetArray<SpriteBone>();
 			}
 		}
 

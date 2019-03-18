@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Prefabs
 {
@@ -9,8 +9,8 @@ namespace uTinyRipper.Classes.Prefabs
 		public void Read(AssetReader reader)
 		{
 			TransformParent.Read(reader);
-			m_modifications = reader.ReadArray<PropertyModification>();
-			m_removedComponents = reader.ReadArray<PPtr<Object>>();
+			m_modifications = reader.ReadAssetArray<PropertyModification>();
+			m_removedComponents = reader.ReadAssetArray<PPtr<Object>>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

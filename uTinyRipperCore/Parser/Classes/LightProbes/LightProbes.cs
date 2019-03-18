@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.LightProbess;
 using uTinyRipper.Classes.RenderSettingss;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -49,11 +49,11 @@ namespace uTinyRipper.Classes
 
 			if(IsReadBakedPositions(reader.Version))
 			{
-				m_bakedPositions = reader.ReadArray<Vector3f>();
+				m_bakedPositions = reader.ReadAssetArray<Vector3f>();
 			}
 			if(IsReadBakedCoefficientsFirst(reader.Version))
 			{
-				m_bakedCoefficients = reader.ReadArray<SphericalHarmonicsL2>();
+				m_bakedCoefficients = reader.ReadAssetArray<SphericalHarmonicsL2>();
 			}
 
 			Data.Read(reader);
@@ -61,16 +61,16 @@ namespace uTinyRipper.Classes
 			{
 				if(IsReadBakedCoefficients11(reader.Version))
 				{
-					m_bakedCoefficients11 = reader.ReadArray<SHCoefficientsBaked>();
+					m_bakedCoefficients11 = reader.ReadAssetArray<SHCoefficientsBaked>();
 				}
 				else
 				{
-					m_bakedCoefficients = reader.ReadArray<SphericalHarmonicsL2>();
+					m_bakedCoefficients = reader.ReadAssetArray<SphericalHarmonicsL2>();
 				}
 			}
 			if(IsReadBakedLightOcclusion(reader.Version))
 			{
-				m_bakedLightOcclusion = reader.ReadArray<LightProbeOcclusion>();
+				m_bakedLightOcclusion = reader.ReadAssetArray<LightProbeOcclusion>();
 			}
 		}
 

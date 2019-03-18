@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.Classes.Shaders.Exporters;
@@ -44,17 +44,17 @@ namespace uTinyRipper.Classes.Shaders
 			GpuProgramType = (ShaderGpuProgramType)reader.ReadByte();
 			reader.AlignStream(AlignType.Align4);
 
-			m_vectorParams = reader.ReadArray<VectorParameter>();
-			m_matrixParams = reader.ReadArray<MatrixParameter>();
-			m_textureParams = reader.ReadArray<TextureParameter>();
-			m_bufferParams = reader.ReadArray<BufferBinding>();
-			m_constantBuffers = reader.ReadArray<ConstantBuffer>();
-			m_constantBufferBindings = reader.ReadArray<BufferBinding>();
-			m_UAVParams = reader.ReadArray<UAVParameter>();
+			m_vectorParams = reader.ReadAssetArray<VectorParameter>();
+			m_matrixParams = reader.ReadAssetArray<MatrixParameter>();
+			m_textureParams = reader.ReadAssetArray<TextureParameter>();
+			m_bufferParams = reader.ReadAssetArray<BufferBinding>();
+			m_constantBuffers = reader.ReadAssetArray<ConstantBuffer>();
+			m_constantBufferBindings = reader.ReadAssetArray<BufferBinding>();
+			m_UAVParams = reader.ReadAssetArray<UAVParameter>();
 
 			if(IsReadSamplers(reader.Version))
 			{
-				m_samplers = reader.ReadArray<SamplerParameter>();
+				m_samplers = reader.ReadAssetArray<SamplerParameter>();
 			}
 			if(IsReadShaderRequirements(reader.Version))
 			{

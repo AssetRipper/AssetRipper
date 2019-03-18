@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporter.YAML;
+using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.TerrainDatas
@@ -33,11 +33,11 @@ namespace uTinyRipper.Classes.TerrainDatas
 
 		public void Read(AssetReader reader)
 		{
-			m_patches = reader.ReadArray<DetailPatch>();
-			m_detailPrototypes = reader.ReadArray<DetailPrototype>();
+			m_patches = reader.ReadAssetArray<DetailPatch>();
+			m_detailPrototypes = reader.ReadAssetArray<DetailPrototype>();
 			PatchCount = reader.ReadInt32();
 			PatchSamples = reader.ReadInt32();
-			m_randomRotations = reader.ReadArray<Vector3f>();
+			m_randomRotations = reader.ReadAssetArray<Vector3f>();
 			if (IsReadAtlasTexture(reader.Version))
 			{
 				AtlasTexture.Read(reader);
@@ -46,11 +46,11 @@ namespace uTinyRipper.Classes.TerrainDatas
 			WavingGrassStrength = reader.ReadSingle();
 			WavingGrassAmount = reader.ReadSingle();
 			WavingGrassSpeed = reader.ReadSingle();
-			m_treeInstances = reader.ReadArray<TreeInstance>();
-			m_treePrototypes = reader.ReadArray<TreePrototype>();
+			m_treeInstances = reader.ReadAssetArray<TreeInstance>();
+			m_treePrototypes = reader.ReadAssetArray<TreePrototype>();
 			if (IsReadPreloadTextureAtlasData(reader.Version))
 			{
-				m_preloadTextureAtlasData = reader.ReadArray<PPtr<Texture2D>>();
+				m_preloadTextureAtlasData = reader.ReadAssetArray<PPtr<Texture2D>>();
 			}
 		}
 

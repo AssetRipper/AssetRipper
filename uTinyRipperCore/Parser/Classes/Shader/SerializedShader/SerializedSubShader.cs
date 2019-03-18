@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.Classes.Shaders.Exporters;
@@ -9,7 +9,7 @@ namespace uTinyRipper.Classes.Shaders
 	{
 		public void Read(AssetReader reader)
 		{
-			m_passes = reader.ReadArray<SerializedPass>();
+			m_passes = reader.ReadAssetArray<SerializedPass>();
 			Tags.Read(reader);
 			LOD = reader.ReadInt32();
 		}

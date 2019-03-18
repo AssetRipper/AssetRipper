@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using System.Collections.Generic;
+using uTinyRipper.Assembly;
 using uTinyRipper.Classes;
 
 namespace uTinyRipper.SerializedFiles
