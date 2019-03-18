@@ -83,6 +83,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.CharacterController);
 			OverrideYamlExporter(ClassIDType.WheelCollider);
 			OverrideYamlExporter(ClassIDType.NetworkManager);
+			OverrideYamlExporter(ClassIDType.MovieTexture);
 			OverrideYamlExporter(ClassIDType.TerrainCollider);
 			OverrideYamlExporter(ClassIDType.TerrainData);
 			OverrideYamlExporter(ClassIDType.LightmapSettings);
@@ -112,7 +113,6 @@ namespace uTinyRipper.AssetExporters
 
 			OverrideBinaryExporter(ClassIDType.Shader);
 			OverrideBinaryExporter(ClassIDType.AudioClip);
-			OverrideBinaryExporter(ClassIDType.MovieTexture);
 
 			OverrideExporter(ClassIDType.MonoScript, ScriptExporter);
 		}

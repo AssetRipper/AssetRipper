@@ -270,6 +270,7 @@ namespace uTinyRipperGUI
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter());
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter());
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, new FontAssetExporter());
+			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.MovieTexture, new MovieTextureAssetExporter());
 
 			EngineAssetExporter engineExporter = new EngineAssetExporter();
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Material, engineExporter);
