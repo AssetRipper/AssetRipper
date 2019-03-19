@@ -159,6 +159,27 @@ namespace uTinyRipper.AssetExporters
 			return m_buildSettings == null ? $"level{sceneIndex}" : m_buildSettings.Scenes[sceneIndex];
 		}
 
+		public bool IsSceneDuplicate(int sceneIndex)
+		{
+			if (m_buildSettings == null)
+			{
+				return false;
+			}
+
+			string sceneName = m_buildSettings.Scenes[sceneIndex];
+			for (int i = 0; i < m_buildSettings.Scenes.Count; i++)
+			{
+				if (m_buildSettings.Scenes[i] == sceneName)
+				{
+					if (i != sceneIndex)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
 		public string TagIDToName(int tagID)
 		{
 			const string UntaggedTag = "Untagged";

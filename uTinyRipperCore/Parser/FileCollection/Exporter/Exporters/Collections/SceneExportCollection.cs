@@ -118,8 +118,17 @@ namespace uTinyRipper.AssetExporters
 			string sceneSubPath = GetSceneName(container);
 			string fileName = $"{sceneSubPath}.unity";
 			string filePath = Path.Combine(folderPath, fileName);
-			folderPath = Path.GetDirectoryName(filePath);
 
+			if (IsDuplicate(container))
+			{
+				if (FileUtils.Exists(filePath))
+				{
+					Logger.Log(LogType.Warning, LogCategory.Export, $"Duplicate scene '{sceneSubPath}' has been found. Skipping");
+					return false;
+				}
+			}
+
+			folderPath = Path.GetDirectoryName(filePath);
 			if (!DirectoryUtils.Exists(folderPath))
 			{
 				DirectoryUtils.CreateVirtualDirectory(folderPath);
@@ -218,7 +227,7 @@ namespace uTinyRipper.AssetExporters
 
 		private string GetSceneName(IExportContainer container)
 		{
-			if(Name == MainSceneName || m_sceneNameFormat.IsMatch(Name))
+			if (IsSceneName)
 			{
 				int index = FileNameToSceneIndex(Name, File.Version);
 				string scenePath = container.SceneIndexToName(index);
@@ -235,6 +244,18 @@ namespace uTinyRipper.AssetExporters
 			}
 			return Name;
 		}
+
+		private bool IsDuplicate(IExportContainer container)
+		{
+			if (IsSceneName)
+			{
+				int index = FileNameToSceneIndex(Name, File.Version);
+				return container.IsSceneDuplicate(index);
+			}
+			return false;
+		}
+
+		private bool IsSceneName => Name == MainSceneName || s_sceneNameFormat.IsMatch(Name);
 
 		public override IAssetExporter AssetExporter { get; }
 		public override IEnumerable<Object> Assets
@@ -263,7 +284,7 @@ namespace uTinyRipper.AssetExporters
 		private const string LevelName = "level";
 		private const string MainSceneName = "maindata";
 
-		private static readonly Regex m_sceneNameFormat = new Regex($"^{LevelName}(0|[1-9][0-9]*)$");
+		private static readonly Regex s_sceneNameFormat = new Regex($"^{LevelName}(0|[1-9][0-9]*)$");
 
 		private readonly Dictionary<Object, long> m_cexportIDs = new Dictionary<Object, long>();
 		private readonly ISerializedFile m_file;

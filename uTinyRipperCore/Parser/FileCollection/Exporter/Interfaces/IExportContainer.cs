@@ -1,9 +1,10 @@
-﻿using uTinyRipper.AssetExporters.Classes;
+using uTinyRipper.AssetExporters.Classes;
 using uTinyRipper.Classes;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.AssetExporters
 {
+#warning TODO: remove
 	public interface IExportContainer : IAssetContainer
 	{
 		long GetExportID(Object asset);
@@ -11,6 +12,7 @@ namespace uTinyRipper.AssetExporters
 		ExportPointer CreateExportPointer(Object asset);
 
 		string SceneIndexToName(int sceneID);
+		bool IsSceneDuplicate(int sceneID);
 		string TagIDToName(int tagID);
 
 		IExportCollection CurrentCollection { get; }
