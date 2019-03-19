@@ -222,6 +222,8 @@ namespace uTinyRipper.AssetExporters
 				// abstract objects
 				case ClassIDType.Object:
 					return AssetType.Meta;
+				case ClassIDType.Renderer:
+					return AssetType.Serialized;
 				case ClassIDType.Texture:
 					classID = ClassIDType.Texture2D;
 					break;
