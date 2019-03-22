@@ -76,7 +76,7 @@ namespace uTinyRipper.Classes
 
 		public override void Read(AssetReader reader)
 		{
-			if(IsSerialized(reader.Version))
+			if (IsSerialized(reader.Version))
 			{
 				ReadBase(reader);
 
@@ -125,7 +125,7 @@ namespace uTinyRipper.Classes
 			{
 				base.Read(reader);
 				
-				if(IsEncoded(reader.Version))
+				if (IsEncoded(reader.Version))
 				{
 					uint decompressedSize = reader.ReadUInt32();
 					int comressedSize = reader.ReadInt32();
@@ -177,15 +177,18 @@ namespace uTinyRipper.Classes
 			{
 				m_dependencies = reader.ReadAssetArray<PPtr<Shader>>();
 			}
-			if(IsReadNonModifiableTextures(reader.Version))
+			if (IsReadNonModifiableTextures(reader.Version))
 			{
-				m_nonModifiableTextures = reader.ReadAssetArray<PPtr<Texture>>();
+				m_nonModifiableTextures = new Dictionary<string, PPtr<Texture>>();
+				m_nonModifiableTextures.Read(reader);
 			}
 			if (IsReadShaderIsBaked(reader.Version))
 			{
 				ShaderIsBaked = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);
 			}
+			// editor DefaultTextures
+			// editor CompileInfo
 		}
 
 		public override void ExportBinary(IExportContainer container, Stream stream)
@@ -252,7 +255,7 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<GPUPlatform> Platforms => m_platforms;
 		public IReadOnlyList<ShaderSubProgramBlob> SubProgramBlobs => m_subProgramBlobs;
 		public IReadOnlyList<PPtr<Shader>> Dependencies => m_dependencies;
-		public IReadOnlyList<PPtr<Texture>> NonModifiableTextures => m_nonModifiableTextures;
+		public IReadOnlyDictionary<string, PPtr<Texture>> NonModifiableTextures => m_nonModifiableTextures;
 		public bool ShaderIsBaked { get; private set; }
 		
 		public SerializedShader ParsedForm;
@@ -264,6 +267,6 @@ namespace uTinyRipper.Classes
 		private GPUPlatform[] m_platforms;
 		private ShaderSubProgramBlob[] m_subProgramBlobs;
 		private PPtr<Shader>[] m_dependencies;
-		private PPtr<Texture>[] m_nonModifiableTextures;
+		private Dictionary<string, PPtr<Texture>> m_nonModifiableTextures;
 	}
 }
