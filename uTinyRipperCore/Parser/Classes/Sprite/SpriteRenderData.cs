@@ -37,12 +37,35 @@ namespace uTinyRipper.Classes.Sprites
 			return version.IsEqual(2018, 1);
 		}
 		/// <summary>
-		/// 5.4.5p1 to 5.5.0 exclusive or 5.5.0p3 or 5.5.3 and greater
+		/// 5.x.x (mess) and greater
 		/// </summary>
 		public bool IsReadAtlasRectOffset(Version version)
 		{
-			return (version.IsGreaterEqual(5, 4, 5, VersionType.Patch, 1) && version.IsLess(5, 5)) ||
-				version.IsEqual(5, 5, 0, VersionType.Patch, 3) || version.IsGreaterEqual(5, 5, 2, VersionType.Patch);
+			if (version.IsGreaterEqual(5, 4, 5, VersionType.Patch, 1))
+			{
+				if (version.IsGreaterEqual(5, 5, 6, VersionType.Beta, 7))
+				{
+					return true;
+				}
+				if (version.IsGreaterEqual(5, 5, 2, VersionType.Patch))
+				{
+					if (version.IsGreaterEqual(5, 5, 6))
+					{
+						return false;
+					}
+					return true;
+				}
+				if (version.IsGreaterEqual(5, 5, 0, VersionType.Patch, 3))
+				{
+					return true;
+				}
+				if (version.IsGreaterEqual(5, 5))
+				{
+					return false;
+				}
+				return true;
+			}
+			return false;
 		}
 		/// <summary>
 		/// 4.5.0 and greater
@@ -61,7 +84,7 @@ namespace uTinyRipper.Classes.Sprites
 		
 		public Vector2f[][] GenerateOutline(Version version)
 		{
-			if(IsReadVertices(version))
+			if (IsReadVertices(version))
 			{
 				Vector2f[][] outline = new Vector2f[1][];
 				outline[0] = new Vector2f[Vertices.Count];
@@ -109,23 +132,23 @@ namespace uTinyRipper.Classes.Sprites
 			{
 				m_bindpose = reader.ReadAssetArray<Matrix4x4f>();
 			}
-			if(IsReadSourceSkin(reader.Version))
+			if (IsReadSourceSkin(reader.Version))
 			{
 				m_sourceSkin = reader.ReadAssetArray<BoneWeights4>();
 			}
 
 			TextureRect.Read(reader);
 			TextureRectOffset.Read(reader);
-			if(IsReadAtlasRectOffset(reader.Version))
+			if (IsReadAtlasRectOffset(reader.Version))
 			{
 				AtlasRectOffset.Read(reader);
 			}
 			SettingsRaw = reader.ReadUInt32();
-			if(IsReadUVTransform(reader.Version))
+			if (IsReadUVTransform(reader.Version))
 			{
 				UVTransform.Read(reader);
 			}
-			if(IsReadDownscaleMultiplier(reader.Version))
+			if (IsReadDownscaleMultiplier(reader.Version))
 			{
 				DownscaleMultiplier = reader.ReadSingle();
 			}
@@ -155,7 +178,6 @@ namespace uTinyRipper.Classes.Sprites
 					}
 				}
 			}
-
 			MeshOutlineGenerator outlineGenerator = new MeshOutlineGenerator(vertices, triangles);
 			List<Vector2f[]> meshOutlines = outlineGenerator.GenerateOutlines();
 			outlines.AddRange(meshOutlines);

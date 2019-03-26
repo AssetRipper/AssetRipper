@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Meshes
@@ -37,11 +37,6 @@ namespace uTinyRipper.Classes.Meshes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(4))
 			{
 				return 2;
@@ -67,15 +62,15 @@ namespace uTinyRipper.Classes.Meshes
 			IndexCount = (int)reader.ReadUInt32();
 			Topology = (MeshTopology)reader.ReadUInt32();
 
-			if(IsReadTriangleCount(reader.Version))
+			if (IsReadTriangleCount(reader.Version))
 			{
 				TriangleCount = (int)reader.ReadUInt32();
 			}
-			if(IsReadBaseVertex(reader.Version))
+			if (IsReadBaseVertex(reader.Version))
 			{
 				BaseVertex = reader.ReadUInt32();
 			}
-			if(IsReadVertex(reader.Version))
+			if (IsReadVertex(reader.Version))
 			{
 				FirstVertex = reader.ReadUInt32();
 				VertexCount = reader.ReadUInt32();
@@ -86,13 +81,13 @@ namespace uTinyRipper.Classes.Meshes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("firstByte", FirstByte);
-			node.Add("indexCount", IndexCount);
-			node.Add("topology", (uint)GetTopology(container.Version));
-			node.Add("firstVertex", FirstVertex);
-			node.Add("vertexCount", VertexCount);
-			node.Add("localAABB", LocalAABB.ExportYAML(container));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(FirstByteName, FirstByte);
+			node.Add(IndexCountName, IndexCount);
+			node.Add(TopologyName, (uint)GetTopology(container.Version));
+			node.Add(FirstVertexName, FirstVertex);
+			node.Add(VertexCountName, VertexCount);
+			node.Add(LocalAABBName, LocalAABB.ExportYAML(container));
 			return node;
 		}
 
@@ -106,6 +101,13 @@ namespace uTinyRipper.Classes.Meshes
 		public uint BaseVertex { get; private set; }
 		public uint FirstVertex { get; private set; }
 		public uint VertexCount { get; private set; }
+
+		public const string FirstByteName = "firstByte";
+		public const string IndexCountName = "indexCount";
+		public const string TopologyName = "topology";
+		public const string FirstVertexName = "firstVertex";
+		public const string VertexCountName = "vertexCount";
+		public const string LocalAABBName = "localAABB";
 
 		public AABB LocalAABB;
 	}

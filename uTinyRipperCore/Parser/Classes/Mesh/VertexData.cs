@@ -210,7 +210,7 @@ namespace uTinyRipper.Classes.Meshes
 
 		public void Read(AssetReader reader)
 		{
-			if(IsReadCurrentChannels(reader.Version))
+			if (IsReadCurrentChannels(reader.Version))
 			{
 				CurrentChannels = reader.ReadUInt32();
 			}

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 
@@ -35,10 +35,10 @@ namespace uTinyRipper.Classes.Meshes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("stream", Stream);
-			node.Add("offset", Offset);
-			node.Add("format", (byte)Format);
-			node.Add("dimension", Dimension);
+			node.Add(StreamName, Stream);
+			node.Add(OffsetName, Offset);
+			node.Add(FormatName, (byte)Format);
+			node.Add(DimensionName, Dimension);
 			return node;
 		}
 
@@ -53,5 +53,10 @@ namespace uTinyRipper.Classes.Meshes
 		public byte Offset { get; private set; }
 		public ChannelFormat Format { get; private set; }
 		public byte Dimension { get; private set; }
+
+		public const string StreamName = "stream";
+		public const string OffsetName = "offset";
+		public const string FormatName = "format";
+		public const string DimensionName = "dimension";
 	}
 }
