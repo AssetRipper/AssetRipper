@@ -41,6 +41,10 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			{
 				return typeName;
 			}
+			if (type.IsArray)
+			{
+				return GetNestedName(type.GetElementType(), typeName);
+			}
 			if (type.IsNested)
 			{
 				string declaringName;
