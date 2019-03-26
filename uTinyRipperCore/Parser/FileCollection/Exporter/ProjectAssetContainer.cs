@@ -43,8 +43,13 @@ namespace uTinyRipper.AssetExporters
 			}
 
 			List<SceneExportCollection> scenes = new List<SceneExportCollection>();
-			foreach(IExportCollection collection in collections)
+			foreach (IExportCollection collection in collections)
 			{
+				foreach (Object asset in collection.Assets)
+				{
+#warning TODO: unique asset:collection (m_assetCollections.Add)
+					m_assetCollections[asset] = collection;
+				}
 				if(collection is SceneExportCollection scene)
 				{
 					scenes.Add(scene);
@@ -79,17 +84,9 @@ namespace uTinyRipper.AssetExporters
 
 		public long GetExportID(Object asset)
 		{
-			if (m_cacheCollection.IsContains(asset))
+			if (m_assetCollections.TryGetValue(asset, out IExportCollection collection))
 			{
-				return m_cacheCollection.GetExportID(asset);
-			}
-			foreach (IExportCollection collection in m_collections)
-			{
-				if (collection.IsContains(asset))
-				{
-					m_cacheCollection = collection;
-					return collection.GetExportID(asset);
-				}
+				return collection.GetExportID(asset);
 			}
 
 			if (Config.IsExportDependencies)
@@ -109,17 +106,9 @@ namespace uTinyRipper.AssetExporters
 
 		public ExportPointer CreateExportPointer(Object asset)
 		{
-			if (m_cacheCollection.IsContains(asset))
+			if (m_assetCollections.TryGetValue(asset, out IExportCollection collection))
 			{
-				return m_cacheCollection.CreateExportPointer(asset, m_cacheCollection == CurrentCollection);
-			}
-			foreach (IExportCollection collection in m_collections)
-			{
-				if (collection.IsContains(asset))
-				{
-					m_cacheCollection = collection;
-					return collection.CreateExportPointer(asset, collection == CurrentCollection);
-				}
+				return collection.CreateExportPointer(asset, collection == CurrentCollection);
 			}
 
 			if (Config.IsExportDependencies)
@@ -212,11 +201,7 @@ namespace uTinyRipper.AssetExporters
 			return m_tagManager.Tags[tagID - 20000];
 		}
 
-		public IExportCollection CurrentCollection
-		{
-			get => m_currentCollection;
-			set => m_currentCollection = m_cacheCollection = value;
-		}
+		public IExportCollection CurrentCollection { get; set; }
 		public VirtualSerializedFile VirtualFile { get; }
 		public ISerializedFile File => CurrentCollection.File;
 		public Version Version => File.Version;
@@ -228,10 +213,8 @@ namespace uTinyRipper.AssetExporters
 
 		private readonly ProjectExporter m_exporter;
 		private readonly IReadOnlyList<IExportCollection> m_collections;
+		private readonly Dictionary<Object, IExportCollection> m_assetCollections = new Dictionary<Object, IExportCollection>();
 
-		private IExportCollection m_currentCollection;
-#warning: TODO: replace with Dictionary<Asset, Collection> ?
-		private IExportCollection m_cacheCollection;
 		private BuildSettings m_buildSettings;
 		private TagManager m_tagManager;
 		private SceneExportCollection[] m_scenes;
