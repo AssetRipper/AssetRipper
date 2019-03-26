@@ -583,25 +583,27 @@ namespace uTinyRipper
 			}
 		}
 
-		protected byte[] ReadStringBuffer(int length)
+		protected byte[] ReadStringBuffer(int size)
 		{
-			if (m_buffer.Length >= length)
+			if (m_buffer.Length >= size)
 			{
-				FillInnerBuffer(length);
+				FillInnerBuffer(size);
 				return m_buffer;
 			}
 			else
 			{
-				byte[] buffer = new byte[length];
-				int index = 0;
-				while (index < length)
+				byte[] buffer = new byte[size];
+				int offset = 0;
+				int count = size;
+				while (count > 0)
 				{
-					int toRead = length - index;
-					int read = Read(m_buffer, index, toRead);
+					int read = Read(buffer, offset, count);
 					if (read == 0)
 					{
-						throw new Exception($"End of stream. Read {read} but expected {toRead}");
+						throw new Exception($"End of stream. Read {offset}, expected {size} bytes");
 					}
+					offset += read;
+					count -= read;
 				}
 				return buffer;
 			}
