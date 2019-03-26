@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
@@ -7,39 +7,75 @@ namespace uTinyRipper.Classes.AnimatorControllers.Editor
 {
 	public abstract class AnimatorTransitionBase : NamedObject
 	{
-		protected AnimatorTransitionBase(AssetInfo assetInfo, ClassIDType classID, AnimatorController controller, TransitionConstant transition) :
-			this(assetInfo, classID, controller, transition.ConditionConstantArray)
+		public abstract class BaseParameters
 		{
-			Name = controller.TOS[transition.UserID];
-			IsExit = transition.IsExit;
+			public AnimatorState GetDestinationState()
+			{
+				return GetDestinationState(DestinationState);
+			}
+			
+			private AnimatorState GetDestinationState(int destinationState)
+			{
+				if (destinationState == -1)
+				{
+					return null;
+				}
+				else if (destinationState >= 30000)
+				{
+					// Entry and Exit states
+					int stateIndex = destinationState % 30000;
+					if (stateIndex == 0 || stateIndex == 1)
+					{
+						// base layer node. Default value is valid
+						return null;
+					}
+					else
+					{
+						SelectorStateConstant selectorState = StateMachine.SelectorStateConstantArray[stateIndex].Instance;
+						// HACK: take default Entry destination. TODO: child StateMachines
+						SelectorTransitionConstant selectorTransition = selectorState.TransitionConstantArray[selectorState.TransitionConstantArray.Count - 1].Instance;
+						return GetDestinationState(selectorTransition.Destination);
+					}
+				}
+				else
+				{
+					return States[destinationState];
+				}
+			}
+
+			public abstract string Name { get; }
+			public abstract bool IsExit { get; }
+			public abstract int DestinationState { get; }
+			public StateMachineConstant StateMachine { get; set; }
+			public IReadOnlyList<AnimatorState> States { get; set; }
+			public IReadOnlyDictionary<uint, string> TOS { get; set; }
+			public abstract IReadOnlyList<OffsetPtr<ConditionConstant>> ConditionConstants { get; }
 		}
 
-		protected AnimatorTransitionBase(AssetInfo assetInfo, ClassIDType classID, AnimatorController controller, SelectorTransitionConstant transition) :
-			this(assetInfo, classID, controller, transition.ConditionConstantArray)
-		{
-			IsExit = false;
-		}
-
-		private AnimatorTransitionBase(AssetInfo assetInfo, ClassIDType classID, AnimatorController controller, IReadOnlyList<OffsetPtr<ConditionConstant>> conditions) :
+		protected AnimatorTransitionBase(AssetInfo assetInfo, ClassIDType classID, BaseParameters parameters) :
 			base(assetInfo, 1)
 		{
-			List<AnimatorCondition> conditionList = new List<AnimatorCondition>(conditions.Count);
-			for (int i = 0; i < conditions.Count; i++)
+			List<AnimatorCondition> conditionList = new List<AnimatorCondition>(parameters.ConditionConstants.Count);
+			for (int i = 0; i < parameters.ConditionConstants.Count; i++)
 			{
-				ConditionConstant conditionConstant = conditions[i].Instance;
+				ConditionConstant conditionConstant = parameters.ConditionConstants[i].Instance;
 				if (conditionConstant.ConditionMode != AnimatorConditionMode.ExitTime)
 				{
-					AnimatorCondition condition = new AnimatorCondition(controller, conditionConstant);
+					AnimatorCondition condition = new AnimatorCondition(conditionConstant, parameters.TOS);
 					conditionList.Add(condition);
 				}
 			}
 			m_conditions = conditionList.ToArray();
 
+			AnimatorState state = parameters.GetDestinationState();
 			DstStateMachine = default;
-			DstState = default;
+			DstState = state == null ? default : state.File.CreatePPtr(state);
 
+			Name = parameters.Name;
 			Solo = false;
 			Mute = false;
+			IsExit = parameters.IsExit;
+
 		}
 
 		public sealed override void Read(AssetReader reader)

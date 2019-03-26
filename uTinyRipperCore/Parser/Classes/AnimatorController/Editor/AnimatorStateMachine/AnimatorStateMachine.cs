@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
@@ -36,6 +36,7 @@ namespace uTinyRipper.Classes.AnimatorControllers.Editor
 					states.Add(state);
 				}
 			}
+#warning TODO: child StateMachines
 			m_childStateMachines = new ChildAnimatorStateMachine[stateMachineCount];
 
 			// set destination state for transitions here because all states has become valid only now
@@ -43,28 +44,48 @@ namespace uTinyRipper.Classes.AnimatorControllers.Editor
 			{
 				AnimatorState state = states[i];
 				StateConstant stateConstant = stateMachine.StateConstantArray[i].Instance;
-				for(int j = 0; j < stateConstant.TransitionConstantArray.Count; j++)
+				PPtr<AnimatorStateTransition>[] transitions = new PPtr<AnimatorStateTransition>[stateConstant.TransitionConstantArray.Count];
+				for (int j = 0; j < stateConstant.TransitionConstantArray.Count; j++)
 				{
-					long stateTransitionPath = state.Transitions[j].PathID;
-					AnimatorStateTransition transition = (AnimatorStateTransition)virtualFile.GetAsset(stateTransitionPath);
 					TransitionConstant transitionConstant = stateConstant.TransitionConstantArray[j].Instance;
-					if (!transitionConstant.IsExit)
+					AnimatorStateTransition.Parameters parameters = new AnimatorStateTransition.Parameters
 					{
-						AnimatorState destState = states[transitionConstant.DestinationState];
-						transition.DstState = destState.File.CreatePPtr(destState);
-					}
+						StateMachine = stateMachine,
+						States = states,
+						TOS = controller.TOS,
+						Transition = transitionConstant,
+						Version = controller.File.Version,
+					};
+					AnimatorStateTransition transition = AnimatorStateTransition.CreateVirtualInstance(virtualFile, parameters);
+					transitions[j] = transition.File.CreatePPtr(transition);
 				}
+				state.Transitions = transitions;
 			}
 
 			m_anyStateTransitions = new PPtr<AnimatorStateTransition>[stateMachine.AnyStateTransitionConstantArray.Count];
-			for(int i = 0; i < stateMachine.AnyStateTransitionConstantArray.Count; i++)
+			for (int i = 0; i < stateMachine.AnyStateTransitionConstantArray.Count; i++)
 			{
 				TransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Instance;
-				AnimatorStateTransition transition = AnimatorStateTransition.CreateVirtualInstance(virtualFile, controller, transitionConstant, states);
+				AnimatorStateTransition.Parameters parameters = new AnimatorStateTransition.Parameters
+				{
+					StateMachine = stateMachine,
+					States = states,
+					TOS = controller.TOS,
+					Transition = transitionConstant,
+					Version = controller.File.Version,
+				};
+				AnimatorStateTransition transition = AnimatorStateTransition.CreateVirtualInstance(virtualFile, parameters);
 				m_anyStateTransitions[i] = transition.File.CreatePPtr(transition);
 			}
 
-			m_entryTransitions = stateMachine.GetEntryTransitions(virtualFile, controller, layer.Binding, states);
+			StateMachineConstant.Parameters stateParameters = new StateMachineConstant.Parameters
+			{
+				ID = layer.Binding,
+				States = states,
+				TOS = controller.TOS,
+				Version = controller.File.Version,
+			};
+			m_entryTransitions = stateMachine.CreateEntryTransitions(virtualFile, stateParameters);
 			m_stateMachineBehaviours = new PPtr<MonoBehaviour>[0];
 			
 			AnyStatePosition = new Vector3f(0.0f, -StateOffset, 0.0f);
@@ -95,17 +116,17 @@ namespace uTinyRipper.Classes.AnimatorControllers.Editor
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_ChildStates", ChildStates.ExportYAML(container));
-			node.Add("m_ChildStateMachines", ChildStateMachines.ExportYAML(container));
-			node.Add("m_AnyStateTransitions", AnyStateTransitions.ExportYAML(container));
-			node.Add("m_EntryTransitions", EntryTransitions.ExportYAML(container));
-			node.Add("m_StateMachineTransitions", StateMachineTransitions.ExportYAML(container));
-			node.Add("m_StateMachineBehaviours", StateMachineBehaviours.ExportYAML(container));
-			node.Add("m_AnyStatePosition", AnyStatePosition.ExportYAML(container));
-			node.Add("m_EntryPosition", EntryPosition.ExportYAML(container));
-			node.Add("m_ExitPosition", ExitPosition.ExportYAML(container));
-			node.Add("m_ParentStateMachinePosition", ParentStateMachinePosition.ExportYAML(container));
-			node.Add("m_DefaultState", DefaultState.ExportYAML(container));
+			node.Add(ChildStatesName, ChildStates.ExportYAML(container));
+			node.Add(ChildStateMachinesName, ChildStateMachines.ExportYAML(container));
+			node.Add(AnyStateTransitionsName, AnyStateTransitions.ExportYAML(container));
+			node.Add(EntryTransitionsName, EntryTransitions.ExportYAML(container));
+			node.Add(StateMachineTransitionsName, StateMachineTransitions.ExportYAML(container));
+			node.Add(StateMachineBehavioursName, StateMachineBehaviours.ExportYAML(container));
+			node.Add(AnyStatePositionName, AnyStatePosition.ExportYAML(container));
+			node.Add(EntryPositionName, EntryPosition.ExportYAML(container));
+			node.Add(ExitPositionName, ExitPosition.ExportYAML(container));
+			node.Add(ParentStateMachinePositionName, ParentStateMachinePosition.ExportYAML(container));
+			node.Add(DefaultStateName, DefaultState.ExportYAML(container));
 			return node;
 		}
 
@@ -121,6 +142,18 @@ namespace uTinyRipper.Classes.AnimatorControllers.Editor
 		public Vector3f ExitPosition;
 		public Vector3f ParentStateMachinePosition;
 		public PPtr<AnimatorState> DefaultState;
+
+		public const string ChildStatesName = "m_ChildStates";
+		public const string ChildStateMachinesName = "m_ChildStateMachines";
+		public const string AnyStateTransitionsName = "m_AnyStateTransitions";
+		public const string EntryTransitionsName = "m_EntryTransitions";
+		public const string StateMachineTransitionsName = "m_StateMachineTransitions";
+		public const string StateMachineBehavioursName = "m_StateMachineBehaviours";
+		public const string AnyStatePositionName = "m_AnyStatePosition";
+		public const string EntryPositionName = "m_EntryPosition";
+		public const string ExitPositionName = "m_ExitPosition";
+		public const string ParentStateMachinePositionName = "m_ParentStateMachinePosition";
+		public const string DefaultStateName = "m_DefaultState";
 
 		private const float StateOffset = 250.0f; 
 

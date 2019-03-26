@@ -28,14 +28,8 @@ namespace uTinyRipper.Classes.AnimatorControllers.Editor
 
 			Speed = state.Speed;
 			CycleOffset = state.CycleOffset;
-			
-			m_transitions = new PPtr<AnimatorStateTransition>[state.TransitionConstantArray.Count];
-			for(int i = 0; i < state.TransitionConstantArray.Count; i++)
-			{
-				TransitionConstant transitionConstant = state.TransitionConstantArray[i].Instance;
-				AnimatorStateTransition transition = AnimatorStateTransition.CreateVirtualInstance(virtualFile, controller, transitionConstant);
-				m_transitions[i] = transition.File.CreatePPtr(transition);
-			}
+
+			// skip Transitions because not all state exists right now
 
 			m_stateMachineBehaviours = controller.GetStateBeahviours(stateMachineIndex, stateIndex);
 			Position = position;
@@ -102,7 +96,7 @@ namespace uTinyRipper.Classes.AnimatorControllers.Editor
 
 		public float Speed { get; private set; }
 		public float CycleOffset { get; private set; }
-		public IReadOnlyList<PPtr<AnimatorStateTransition>> Transitions => m_transitions;
+		public IReadOnlyList<PPtr<AnimatorStateTransition>> Transitions { get; set; }
 		public IReadOnlyList<PPtr<MonoBehaviour>> StateMachineBehaviours => m_stateMachineBehaviours;
 		public bool IKOnFeet { get; private set; }
 		public bool WriteDefaultValues { get; private set; }
@@ -120,7 +114,6 @@ namespace uTinyRipper.Classes.AnimatorControllers.Editor
 		public Vector3f Position;
 		public PPtr<Motion> Motion;
 
-		private PPtr<AnimatorStateTransition>[] m_transitions;
 		private PPtr<MonoBehaviour>[] m_stateMachineBehaviours;
 	}
 }

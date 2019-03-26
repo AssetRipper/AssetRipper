@@ -152,7 +152,6 @@ namespace uTinyRipper.Classes
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			AnimatorControllerExportCollection collection = (AnimatorControllerExportCollection)container.CurrentCollection;
 
 			AnimatorControllerParameter[] @params = new AnimatorControllerParameter[Controller.Values.Instance.ValueArray.Count];

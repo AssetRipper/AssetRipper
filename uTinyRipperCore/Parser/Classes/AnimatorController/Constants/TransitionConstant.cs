@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.AnimatorControllers.Editor;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
@@ -27,58 +28,6 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		public static bool IsCanTransitionToSelf(Version version)
 		{
 			return version.IsGreaterEqual(4, 5);
-		}
-		
-		public bool GetHasFixedDuration(Version version)
-		{
-			return IsReadAtomic(version) ? true : HasFixedDuration;
-		}
-		public TransitionInterruptionSource GetInterruptionSource(Version version)
-		{
-			if(IsReadAtomic(version))
-			{
-				return Atomic ? TransitionInterruptionSource.None : TransitionInterruptionSource.Destination;
-			}
-			else
-			{
-				return InterruptionSource;
-			}
-		}
-		public float GetExitTime(Version version)
-		{
-			if (IsReadAtomic(version))
-			{
-				foreach (OffsetPtr<ConditionConstant> conditionPtr in ConditionConstantArray)
-				{
-					if (conditionPtr.Instance.ConditionMode == AnimatorConditionMode.ExitTime)
-					{
-						return conditionPtr.Instance.ExitTime;
-					}
-				}
-				return 1.0f;
-			}
-			else
-			{
-				return ExitTime;
-			}
-		}
-		public bool GetHasExitTime(Version version)
-		{
-			if(IsReadAtomic(version))
-			{
-				foreach(OffsetPtr<ConditionConstant> conditionPtr in ConditionConstantArray)
-				{
-					if(conditionPtr.Instance.ConditionMode == AnimatorConditionMode.ExitTime)
-					{
-						return true;
-					}
-				}
-				return false;
-			}
-			else
-			{
-				return HasExitTime;
-			}
 		}
 
 		public void Read(AssetReader reader)
@@ -118,6 +67,61 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			throw new NotSupportedException();
+		}
+
+		public bool GetHasFixedDuration(Version version)
+		{
+			return IsReadAtomic(version) ? true : HasFixedDuration;
+		}
+
+		public TransitionInterruptionSource GetInterruptionSource(Version version)
+		{
+			if (IsReadAtomic(version))
+			{
+				return Atomic ? TransitionInterruptionSource.None : TransitionInterruptionSource.Destination;
+			}
+			else
+			{
+				return InterruptionSource;
+			}
+		}
+
+		public float GetExitTime(Version version)
+		{
+			if (IsReadAtomic(version))
+			{
+				foreach (OffsetPtr<ConditionConstant> conditionPtr in ConditionConstantArray)
+				{
+					if (conditionPtr.Instance.ConditionMode == AnimatorConditionMode.ExitTime)
+					{
+						return conditionPtr.Instance.ExitTime;
+					}
+				}
+				return 1.0f;
+			}
+			else
+			{
+				return ExitTime;
+			}
+		}
+
+		public bool GetHasExitTime(Version version)
+		{
+			if (IsReadAtomic(version))
+			{
+				foreach (OffsetPtr<ConditionConstant> conditionPtr in ConditionConstantArray)
+				{
+					if (conditionPtr.Instance.ConditionMode == AnimatorConditionMode.ExitTime)
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+			else
+			{
+				return HasExitTime;
+			}
 		}
 
 		public bool IsExit => DestinationState >= 30000;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.AnimatorControllers.Editor;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
