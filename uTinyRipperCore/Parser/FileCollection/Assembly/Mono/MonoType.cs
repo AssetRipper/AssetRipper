@@ -6,7 +6,7 @@ namespace uTinyRipper.Assembly.Mono
 	public class MonoType : ScriptType
 	{
 		internal MonoType(MonoManager manager, TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
-			base(GetPrimitiveType(type, arguments))
+			base(ToPrimitiveType(type))
 		{
 			string uniqueName = GetUniqueName(type);
 			manager.AssemblyManager.AddScriptType(uniqueName, this);
@@ -142,6 +142,37 @@ namespace uTinyRipper.Assembly.Mono
 			return false;
 		}
 
+		internal static TypeReference GetElementType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		{
+			if (type.IsGenericParameter)
+			{
+				GenericParameter parameter = (GenericParameter)type;
+				type = arguments[parameter];
+			}
+			if (type.IsGenericInstance)
+			{
+				GenericInstanceType genericInstance = (GenericInstanceType)type;
+				if (MonoUtils.HasGenericParameters(genericInstance))
+				{
+					type = MonoUtils.ReplaceGenericParameters(genericInstance, arguments);
+				}
+			}
+
+			if (type.IsArray)
+			{
+				type = type.GetElementType();
+				return GetElementType(type, arguments);
+			}
+			if (IsList(type))
+			{
+				GenericInstanceType generic = (GenericInstanceType)type;
+				type = generic.GenericArguments[0];
+				return GetElementType(type, arguments);
+			}
+
+			return type;
+		}
+
 		private static PrimitiveType ToPrimitiveType(TypeReference type)
 		{
 			TypeDefinition definition = type.Resolve();
@@ -160,57 +191,27 @@ namespace uTinyRipper.Assembly.Mono
 			return ToPrimitiveType(type.Namespace, type.Name);
 		}
 
-		private static PrimitiveType GetPrimitiveType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
-		{
-			TypeReference elementType = GetElementType(type, arguments);
-			return ToPrimitiveType(elementType);
-		}
-
 		private static IScriptStructure CreateComplexType(MonoManager manager, TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
-			TypeReference elementType = GetElementType(type, arguments);
-			if (IsEngineStruct(elementType))
+			if (IsEngineStruct(type))
 			{
-				return ScriptStructure.EngineTypeToScriptStructure(elementType.Name);
+				return ScriptStructure.EngineTypeToScriptStructure(type.Name);
 			}
 
-			PrimitiveType primType = ToPrimitiveType(elementType);
+			PrimitiveType primType = ToPrimitiveType(type);
 			if (primType != PrimitiveType.Complex)
 			{
 				return null;
 			}
 
-			if (IsEnginePointer(elementType))
+			if (IsEnginePointer(type))
 			{
-				return new ScriptPointer(elementType);
+				return new ScriptPointer(type);
 			}
 			else
 			{
-				return new MonoStructure(manager, elementType.Resolve(), arguments);
+				return new MonoStructure(manager, type.Resolve(), arguments);
 			}
-		}
-
-		private static TypeReference GetElementType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
-		{
-			if (type.IsGenericParameter)
-			{
-				GenericParameter parameter = (GenericParameter)type;
-				type = arguments[parameter];
-			}
-
-			if (type.IsArray)
-			{
-				type = type.GetElementType();
-				return GetElementType(type, arguments);
-			}
-			if (IsList(type))
-			{
-				GenericInstanceType generic = (GenericInstanceType)type;
-				type = generic.GenericArguments[0];
-				return GetElementType(type, arguments);
-			}
-
-			return type;
 		}
 
 		public override IScriptStructure ComplexType { get; }

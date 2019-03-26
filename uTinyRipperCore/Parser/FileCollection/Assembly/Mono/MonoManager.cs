@@ -185,23 +185,15 @@ namespace uTinyRipper.Assembly.Mono
 #warning TODO: max depth level 7
 		public ScriptType GetScriptType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
-			if (type.IsGenericInstance)
-			{
-				GenericInstanceType genericInstance = (GenericInstanceType)type;
-				if (MonoUtils.HasGenericParameters(genericInstance))
-				{
-					type = MonoUtils.ReplaceGenericParameters(genericInstance, arguments);
-				}
-			}
-
-			string uniqueName = MonoType.GetUniqueName(type);
+			TypeReference elementType = MonoType.GetElementType(type, arguments);
+			string uniqueName = MonoType.GetUniqueName(elementType);
 			if (AssemblyManager.TryGetScriptType(uniqueName, out ScriptType scriptType))
 			{
 				return scriptType;
 			}
 			else
 			{
-				return new MonoType(this, type, arguments);
+				return new MonoType(this, elementType, arguments);
 			}
 		}
 

@@ -72,16 +72,6 @@ namespace uTinyRipper.Classes
 		public bool IsScriptableObject()
 		{
 			return Name != string.Empty;
-			/*IScriptStructure structure = Structure;
-			while (structure != null)
-			{
-				if (ScriptType.IsScriptableObject(structure.Namespace, structure.Name))
-				{
-					return true;
-				}
-				structure = structure.Base;
-			}
-			return false;*/
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
