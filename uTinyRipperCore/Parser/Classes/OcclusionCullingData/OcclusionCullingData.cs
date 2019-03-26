@@ -105,13 +105,10 @@ namespace uTinyRipper.Classes
 				}
 			}
 
-			int maxRenderer = Scenes.Max(j => j.IndexRenderers);
-			OcclusionScene rscene = Scenes.First(t => t.IndexRenderers == maxRenderer);
-			m_staticRenderers = new SceneObjectIdentifier[rscene.IndexRenderers + rscene.SizeRenderers];
-
-			int maxPortal = Scenes.Max(j => j.IndexPortals);
-			OcclusionScene pscene = Scenes.First(t => t.IndexPortals == maxPortal);
-			m_portals = new SceneObjectIdentifier[pscene.IndexPortals + pscene.SizePortals];
+			int maxRenderer = Scenes.Max(j => j.IndexRenderers + j.SizeRenderers);
+			m_staticRenderers = new SceneObjectIdentifier[maxRenderer];
+			int maxPortal = Scenes.Max(j => j.IndexPortals + j.SizePortals);
+			m_portals = new SceneObjectIdentifier[maxPortal];
 
 			foreach(OcclusionCullingSettings cullingSetting in cullingSettings)
 			{
