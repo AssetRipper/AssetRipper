@@ -3579,7 +3579,7 @@ namespace Mono.Cecil {
 			case ElementType.Boolean:
 				return ReadByte () == 1;
 			case ElementType.I1:
-				return (sbyte) ReadByte ();
+				return unchecked((sbyte) ReadByte ());
 			case ElementType.U1:
 				return ReadByte ();
 			case ElementType.Char:
