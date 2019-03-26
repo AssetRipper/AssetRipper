@@ -15,7 +15,7 @@ namespace uTinyRipper.Classes
 			base(assetInfo)
 		{
 		}
-		
+
 		/// <summary>
 		/// Less than 2.0.0
 		/// </summary>
@@ -303,8 +303,8 @@ namespace uTinyRipper.Classes
 			{
 				m_subMeshes = reader.ReadAssetArray<SubMesh>();
 			}
-			
-			if(IsReadBlendShapes(reader.Version))
+
+			if (IsReadBlendShapes(reader.Version))
 			{
 				Shapes.Read(reader);
 			}
@@ -322,11 +322,11 @@ namespace uTinyRipper.Classes
 			{
 				MeshCompression = (MeshCompression)reader.ReadByte();
 			}
-			if(IsReadStreamCompression(reader.Version))
+			if (IsReadStreamCompression(reader.Version))
 			{
 				StreamCompression = reader.ReadByte();
 			}
-			if(IsReadIsReadable(reader.Version))
+			if (IsReadIsReadable(reader.Version))
 			{
 				IsReadable = reader.ReadBoolean();
 				KeepVertices = reader.ReadBoolean();
@@ -341,7 +341,7 @@ namespace uTinyRipper.Classes
 			{
 				if (IsReadIndexFormatCondition(reader.Version))
 				{
-					if(MeshCompression == 0)
+					if (MeshCompression == 0)
 					{
 						IndexFormat = reader.ReadInt32();
 					}
@@ -360,12 +360,12 @@ namespace uTinyRipper.Classes
 					reader.AlignStream(AlignType.Align4);
 				}
 			}
-			
+
 			if (IsReadVertices(reader.Version))
 			{
 				if (IsReadVertexData(reader.Version))
 				{
-					if(MeshCompression != 0)
+					if (MeshCompression != 0)
 					{
 						m_vertices = reader.ReadAssetArray<Vector3f>();
 					}
@@ -387,7 +387,7 @@ namespace uTinyRipper.Classes
 					m_bindPoses = reader.ReadAssetArray<Matrix4x4f>();
 				}
 			}
-			
+
 			if (IsReadVertexData(reader.Version))
 			{
 				if (IsReadOnlyVertexData(reader.Version))
@@ -454,7 +454,7 @@ namespace uTinyRipper.Classes
 			{
 				MeshUsageFlags = reader.ReadInt32();
 			}
-			
+
 			if (IsReadCollision(reader.Version))
 			{
 				CollisionData.Read(reader);
@@ -470,13 +470,13 @@ namespace uTinyRipper.Classes
 				StreamData.Read(reader);
 			}
 		}
-		
+
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(SubMeshesName, GetSubMeshes(container.Version).ExportYAML(container));
-			node.Add(ShapesName, Shapes.ExportYAML(container));
+			node.Add(ShapesName, GetShapes(container.Version).ExportYAML(container));
 			node.Add(BindPoseName, IsReadBindPoses(container.Version) ? BindPoses.ExportYAML(container) : YAMLSequenceNode.Empty);
 #warning TODO?
 			node.Add(BoneNamesName, YAMLSequenceNode.Empty);
@@ -512,6 +512,11 @@ namespace uTinyRipper.Classes
 			}
 
 			return node;
+		}
+
+		private BlendShapeData GetShapes(Version version)
+		{
+			return IsReadBlendShapes(version) ? Shapes : new BlendShapeData(true);
 		}
 
 		private IReadOnlyList<SubMesh> GetSubMeshes(Version version)

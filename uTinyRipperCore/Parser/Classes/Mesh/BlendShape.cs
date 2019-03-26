@@ -1,4 +1,4 @@
-﻿using SevenZip;
+using SevenZip;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 
@@ -61,10 +61,10 @@ namespace uTinyRipper.Classes.Meshes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("firstVertex", FirstVertex);
-			node.Add("vertexCount", VertexCount);
-			node.Add("hasNormals", HasNormals);
-			node.Add("hasTangents", HasTangents);
+			node.Add(FirstVertexName, FirstVertex);
+			node.Add(VertexCountName, VertexCount);
+			node.Add(HasNormalsName, HasNormals);
+			node.Add(HasTangentsName, HasTangents);
 			return node;
 		}
 
@@ -73,6 +73,11 @@ namespace uTinyRipper.Classes.Meshes
 		public uint VertexCount { get; private set; }
 		public bool HasNormals { get; private set; }
 		public bool HasTangents { get; private set; }
+
+		public const string FirstVertexName = "firstVertex";
+		public const string VertexCountName = "vertexCount";
+		public const string HasNormalsName = "hasNormals";
+		public const string HasTangentsName = "hasTangents";
 
 		public Vector3f AabbMinDelta;
 		public Vector3f AabbMaxDelta;
