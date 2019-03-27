@@ -23,8 +23,8 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Center", Center.ExportYAML(container));
-			node.Add("m_Extent", Extent.ExportYAML(container));
+			node.Add(CenterName, Center.ExportYAML(container));
+			node.Add(ExtentName, Extent.ExportYAML(container));
 			return node;
 		}
 
@@ -38,9 +38,17 @@ namespace uTinyRipper.Classes
 			return this;
 		}
 
+		public override string ToString()
+		{
+			return $"C:{Center} E:{Extent}";
+		}
+
 		public IScriptStructure Base => null;
 		public string Namespace => ScriptType.UnityEngineName;
 		public string Name => ScriptType.BoundsName;
+
+		public const string CenterName = "m_Center";
+		public const string ExtentName = "m_Extent";
 
 		public Vector3f Center;
 		public Vector3f Extent;

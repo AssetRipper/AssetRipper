@@ -250,7 +250,7 @@ namespace uTinyRipper
 				m_position++;
 				if (m_position == m_currentEnd)
 				{
-					UpdateCurrentStream();
+					NextStream();
 				}
 			}
 			return value;
@@ -258,28 +258,14 @@ namespace uTinyRipper
 
 		public override int Read(byte[] buffer, int offset, int count)
 		{
-			long available = m_currentEnd - m_position;
-			int toRead = count < available ? count : (int)available;
-
-			int left = toRead;
-			while (left > 0)
-			{
-				int read = m_currentStream.Read(buffer, offset, left);
-				if (read == 0)
-				{
-					throw new Exception("Unexpected end of file reached");
-				}
-
-				offset += read;
-				left -= read;
-				m_position += read;
-			}
+			int read = m_currentStream.Read(buffer, offset, count);
+			m_position += read;
 			if (m_position == m_currentEnd)
 			{
-				UpdateCurrentStream();
+				NextStream();
 			}
 
-			return toRead;
+			return read;
 		}
 
 		public override void WriteByte(byte value)
@@ -288,7 +274,7 @@ namespace uTinyRipper
 			m_position++;
 			if (m_position == m_currentEnd)
 			{
-				UpdateCurrentStream();
+				NextStream();
 			}
 		}
 
@@ -302,7 +288,7 @@ namespace uTinyRipper
 				m_position += toWrite;
 				if (m_position == m_currentEnd)
 				{
-					UpdateCurrentStream();
+					NextStream();
 				}
 
 				offset += toWrite;
@@ -319,13 +305,26 @@ namespace uTinyRipper
 			base.Dispose(disposing);
 		}
 
+		private void NextStream()
+		{
+			int nextStreamIndex = m_streamIndex + 1;
+			if (nextStreamIndex < m_streams.Count)
+			{
+				m_currentBegin += m_currentStream.Length;
+				m_streamIndex = nextStreamIndex;
+				m_currentStream = m_streams[m_streamIndex];
+				m_currentEnd += m_currentStream.Length;
+			}
+		}
+
 		private void UpdateCurrentStream()
 		{
 			m_currentBegin = 0;
 			m_currentEnd = 0;
 			for (int i = 0; i < m_streams.Count; i++)
 			{
-				m_currentStream = m_streams[i];
+				m_streamIndex = i;
+				m_currentStream = m_streams[m_streamIndex];
 				m_currentEnd = m_currentBegin + m_currentStream.Length;
 				if (m_currentEnd > m_position)
 				{
@@ -375,6 +374,7 @@ namespace uTinyRipper
 		private readonly IReadOnlyList<Stream> m_streams;
 
 		private Stream m_currentStream;
+		private int m_streamIndex;
 		private long m_position;
 		private long m_currentBegin;
 		private long m_currentEnd;

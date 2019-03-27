@@ -165,7 +165,7 @@ namespace uTinyRipper
 		public int Read(short[] buffer, int index, int count)
 		{
 			int byteIndex = 0;
-			int byteCount = count * sizeof(ushort);
+			int byteCount = count * sizeof(short);
 			int first = index;
 			int last = index + count;
 			while (index < last)
@@ -173,7 +173,7 @@ namespace uTinyRipper
 				int left = byteCount - byteIndex;
 				int toRead = left < BufferSize ? left : BufferSize;
 				int read = Read(m_buffer, 0, toRead);
-				for (int i = 0; i < read; i += sizeof(ushort), index++)
+				for (int i = 0; i < read; i += sizeof(short), index++)
 				{
 					buffer[index] = unchecked((short)BufferToUInt16(i));
 				}
@@ -359,8 +359,17 @@ namespace uTinyRipper
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
 
+			int index = 0;
 			bool[] array = new bool[count];
-			Read(array, 0, count);
+			while (index < count)
+			{
+				int read = Read(array, index, count - index);
+				if (read == 0)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+				}
+				index += read;
+			}
 			return array;
 		}
 
@@ -369,17 +378,16 @@ namespace uTinyRipper
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
 
+			int index = 0;
 			char[] array = new char[count];
-			int offset = 0;
-			while (count > 0)
+			while (index < count)
 			{
-				int read = Read(array, offset, count);
+				int read = Read(array, index, count - index);
 				if (read == 0)
 				{
-					throw new Exception($"End of stream. Read {offset} but expected {array.Length}");
+					throw new Exception($"End of stream. Read {index}, expected {count} elements");
 				}
-				offset += read;
-				count -= read;
+				index += read;
 			}
 			return array;
 		}
@@ -389,17 +397,16 @@ namespace uTinyRipper
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
 
+			int index = 0;
 			byte[] array = new byte[count];
-			int offset = 0;
-			while (count > 0)
+			while (index < count)
 			{
-				int read = Read(array, offset, count);
+				int read = Read(array, index, count - index);
 				if (read == 0)
 				{
-					throw new Exception($"End of stream. Read {offset} but expected {array.Length}");
+					throw new Exception($"End of stream. Read {index}, expected {count} elements");
 				}
-				offset += read;
-				count -= read;
+				index += read;
 			}
 			return array;
 		}
@@ -409,8 +416,17 @@ namespace uTinyRipper
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
 
+			int index = 0;
 			short[] array = new short[count];
-			Read(array, 0, count);
+			while (index < count)
+			{
+				int read = Read(array, index, count - index);
+				if (read == 0)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+				}
+				index += read;
+			}
 			return array;
 		}
 
@@ -419,8 +435,17 @@ namespace uTinyRipper
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
 
+			int index = 0;
 			ushort[] array = new ushort[count];
-			Read(array, 0, count);
+			while (index < count)
+			{
+				int read = Read(array, index, count - index);
+				if (read == 0)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+				}
+				index += read;
+			}
 			return array;
 		}
 
@@ -429,8 +454,17 @@ namespace uTinyRipper
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
 
+			int index = 0;
 			int[] array = new int[count];
-			Read(array, 0, count);
+			while (index < count)
+			{
+				int read = Read(array, index, count - index);
+				if (read == 0)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+				}
+				index += read;
+			}
 			return array;
 		}
 
@@ -439,8 +473,17 @@ namespace uTinyRipper
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
 
+			int index = 0;
 			uint[] array = new uint[count];
-			Read(array, 0, count);
+			while (index < count)
+			{
+				int read = Read(array, index, count - index);
+				if (read == 0)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+				}
+				index += read;
+			}
 			return array;
 		}
 
@@ -449,8 +492,17 @@ namespace uTinyRipper
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
 
+			int index = 0;
 			long[] array = new long[count];
-			Read(array, 0, count);
+			while (index < count)
+			{
+				int read = Read(array, index, count - index);
+				if (read == 0)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+				}
+				index += read;
+			}
 			return array;
 		}
 
@@ -459,8 +511,17 @@ namespace uTinyRipper
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
 
+			int index = 0;
 			ulong[] array = new ulong[count];
-			Read(array, 0, count);
+			while (index < count)
+			{
+				int read = Read(array, index, count - index);
+				if (read == 0)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+				}
+				index += read;
+			}
 			return array;
 		}
 
@@ -469,8 +530,17 @@ namespace uTinyRipper
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
 
+			int index = 0;
 			float[] array = new float[count];
-			Read(array, 0, count);
+			while (index < count)
+			{
+				int read = Read(array, index, count - index);
+				if (read == 0)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+				}
+				index += read;
+			}
 			return array;
 		}
 
@@ -479,8 +549,17 @@ namespace uTinyRipper
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
 
+			int index = 0;
 			double[] array = new double[count];
-			Read(array, 0, count);
+			while (index < count)
+			{
+				int read = Read(array, index, count - index);
+				if (read == 0)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+				}
+				index += read;
+			}
 			return array;
 		}
 

@@ -190,7 +190,7 @@ namespace uTinyRipper.Classes
 			{
 				AnimationType = (AnimationType)reader.ReadInt32();
 			}
-			if(IsReadLegacy(reader.Version))
+			if (IsReadLegacy(reader.Version))
 			{
 				Legacy = reader.ReadBoolean();
 			}
@@ -273,7 +273,7 @@ namespace uTinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(file, isLog))
 			{
 				yield return asset;
 			}
@@ -292,7 +292,7 @@ namespace uTinyRipper.Classes
 			{
 				foreach (PPtrCurve curve in PPtrCurves)
 				{
-					foreach(Object asset in curve.FetchDependencies(file, isLog))
+					foreach (Object asset in curve.FetchDependencies(file, isLog))
 					{
 						yield return asset;
 					}
@@ -321,31 +321,31 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_Legacy", GetLegacy(container.Version));
-			node.Add("m_Compressed", Compressed);
-			node.Add("m_UseHighQualityCurve", UseHightQualityCurve);
+			node.Add(LegacyName, GetLegacy(container.Version));
+			node.Add(CompressedName, Compressed);
+			node.Add(UseHighQualityCurveName, UseHightQualityCurve);
 
 			AnimationCurves curves = GetAnimationCurves(container.Version, container.Platform);
-			node.Add("m_RotationCurves", curves.RotationCurves.ExportYAML(container));
-			node.Add("m_CompressedRotationCurves", curves.CompressedRotationCurves.ExportYAML(container));
-			node.Add("m_EulerCurves", curves.EulerCurves.ExportYAML(container));
-			node.Add("m_PositionCurves", curves.PositionCurves.ExportYAML(container));
-			node.Add("m_ScaleCurves", curves.ScaleCurves.ExportYAML(container));
-			node.Add("m_FloatCurves", curves.FloatCurves.ExportYAML(container));
-			node.Add("m_PPtrCurves", curves.PPtrCurves.ExportYAML(container));
+			node.Add(RotationCurvesName, curves.RotationCurves.ExportYAML(container));
+			node.Add(CompressedRotationCurvesName, curves.CompressedRotationCurves.ExportYAML(container));
+			node.Add(EulerCurvesName, curves.EulerCurves.ExportYAML(container));
+			node.Add(PositionCurvesName, curves.PositionCurves.ExportYAML(container));
+			node.Add(ScaleCurvesName, curves.ScaleCurves.ExportYAML(container));
+			node.Add(FloatCurvesName, curves.FloatCurves.ExportYAML(container));
+			node.Add(PPtrCurvesName, curves.PPtrCurves.ExportYAML(container));
 
-			node.Add("m_SampleRate", SampleRate);
-			node.Add("m_WrapMode", (int)WrapMode);
-			node.Add("m_Bounds", Bounds.ExportYAML(container));
-			node.Add("m_ClipBindingConstant", GetClipBindingConstant(container.Version).ExportYAML(container));
-			node.Add("m_AnimationClipSettings", MuscleClip.ExportYAML(container));
-			node.Add("m_EditorCurves", YAMLSequenceNode.Empty);
-			node.Add("m_EulerEditorCurves", YAMLSequenceNode.Empty);
-			node.Add("m_HasGenericRootTransform", HasGenericRootTransform);
-			node.Add("m_HasMotionFloatCurves", HasMotionFloatCurves);
-			node.Add("m_GenerateMotionCurves", false);
-			node.Add("m_Events", IsReadEvents(container.Version) ? m_events.ExportYAML(container) : YAMLSequenceNode.Empty);
-			
+			node.Add(SampleRateName, SampleRate);
+			node.Add(WrapModeName, (int)WrapMode);
+			node.Add(BoundsName, Bounds.ExportYAML(container));
+			node.Add(ClipBindingConstantName, GetClipBindingConstant(container.Version).ExportYAML(container));
+			node.Add(AnimationClipSettingsName, MuscleClip.ExportYAML(container));
+			node.Add(EditorCurvesName, YAMLSequenceNode.Empty);
+			node.Add(EulerEditorCurvesName, YAMLSequenceNode.Empty);
+			node.Add(HasGenericRootTransformName, HasGenericRootTransform);
+			node.Add(HasMotionFloatCurvesName, HasMotionFloatCurves);
+			node.Add(GenerateMotionCurvesName, false);
+			node.Add(EventsName, IsReadEvents(container.Version) ? m_events.ExportYAML(container) : YAMLSequenceNode.Empty);
+
 			return node;
 		}
 
@@ -552,7 +552,29 @@ namespace uTinyRipper.Classes
 		public bool HasGenericRootTransform { get; private set; }
 		public bool HasMotionFloatCurves { get; private set; }
 		public IReadOnlyList<AnimationEvent> Events => m_events;
-				
+
+		public const string LegacyName = "m_Legacy";
+		public const string CompressedName = "m_Compressed";
+		public const string UseHighQualityCurveName = "m_UseHighQualityCurve";
+		public const string RotationCurvesName = "m_RotationCurves";
+		public const string CompressedRotationCurvesName = "m_CompressedRotationCurves";
+		public const string EulerCurvesName = "m_EulerCurves";
+		public const string PositionCurvesName = "m_PositionCurves";
+		public const string ScaleCurvesName = "m_ScaleCurves";
+		public const string FloatCurvesName = "m_FloatCurves";
+		public const string PPtrCurvesName = "m_PPtrCurves";
+		public const string SampleRateName = "m_SampleRate";
+		public const string WrapModeName = "m_WrapMode";
+		public const string BoundsName = "m_Bounds";
+		public const string ClipBindingConstantName = "m_ClipBindingConstant";
+		public const string AnimationClipSettingsName = "m_AnimationClipSettings";
+		public const string EditorCurvesName = "m_EditorCurves";
+		public const string EulerEditorCurvesName = "m_EulerEditorCurves";
+		public const string HasGenericRootTransformName = "m_HasGenericRootTransform";
+		public const string HasMotionFloatCurvesName = "m_HasMotionFloatCurves";
+		public const string GenerateMotionCurvesName = "m_GenerateMotionCurves";
+		public const string EventsName = "m_Events";
+
 		public AABB Bounds;
 		public ClipMuscleConstant MuscleClip;
 		public AnimationClipBindingConstant ClipBindingConstant;
