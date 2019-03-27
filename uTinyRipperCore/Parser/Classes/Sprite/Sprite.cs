@@ -60,13 +60,13 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if(Config.IsExportTopmostSerializedVersion)
+			if (Config.IsExportTopmostSerializedVersion)
 			{
 				// return 2;
 				return 1;
 			}
 
-			if(version.IsGreaterEqual(2018))
+			if (version.IsGreaterEqual(2018))
 			{
 				return 2;
 			}
@@ -76,7 +76,7 @@ namespace uTinyRipper.Classes
 		public void GetExportPosition(out Rectf rect, out Vector2f pivot, out Vector4f border)
 		{
 			SpriteAtlas atlas = null;
-			if(IsReadRendererData(File.Version))
+			if (IsReadRendererData(File.Version))
 			{
 				atlas = SpriteAtlas.FindAsset(File);
 			}
@@ -130,7 +130,7 @@ namespace uTinyRipper.Classes
 
 		public IReadOnlyList<IReadOnlyList<Vector2f>> GeneratePhysicsShape(Rectf rect, Vector2f pivot)
 		{
-			if(IsReadPhysicsShape(File.Version))
+			if (IsReadPhysicsShape(File.Version))
 			{
 				Vector2f[][] shape = new Vector2f[PhysicsShape.Count][];
 				float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
@@ -139,7 +139,7 @@ namespace uTinyRipper.Classes
 				for (int i = 0; i < PhysicsShape.Count; i++)
 				{
 					shape[i] = new Vector2f[PhysicsShape[i].Count];
-					for(int j = 0; j < PhysicsShape[i].Count; j++)
+					for (int j = 0; j < PhysicsShape[i].Count; j++)
 					{
 						Vector2f point = PhysicsShape[i][j] * PixelsToUnits;
 						shape[i][j] = point + pivotShift;
@@ -159,23 +159,23 @@ namespace uTinyRipper.Classes
 
 			Rect.Read(reader);
 			Offset.Read(reader);
-			if(IsReadBorder(reader.Version))
+			if (IsReadBorder(reader.Version))
 			{
 				Border.Read(reader);
 			}
 			PixelsToUnits = reader.ReadSingle();
-			if(IsReadPivot(reader.Version))
+			if (IsReadPivot(reader.Version))
 			{
 				Pivot.Read(reader);
 			}
 			Extrude = reader.ReadUInt32();
-			if(IsReadPolygon(reader.Version))
+			if (IsReadPolygon(reader.Version))
 			{
 				IsPolygon = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);
 			}
 
-			if(IsReadRendererData(reader.Version))
+			if (IsReadRendererData(reader.Version))
 			{
 				RenderDataKey = reader.ReadTupleTLong<EngineGUID>();
 				m_atlasTags = reader.ReadStringArray();
@@ -184,7 +184,7 @@ namespace uTinyRipper.Classes
 			RD.Read(reader);
 			reader.AlignStream(AlignType.Align4);
 
-			if(IsReadPhysicsShape(reader.Version))
+			if (IsReadPhysicsShape(reader.Version))
 			{
 				int count = reader.ReadInt32();
 				m_physicsShape = new Vector2f[count][];
@@ -194,7 +194,7 @@ namespace uTinyRipper.Classes
 				}
 			}
 
-			if(IsReadBones(reader.Version))
+			if (IsReadBones(reader.Version))
 			{
 				m_bones = reader.ReadAssetArray<SpriteBone>();
 			}
@@ -206,7 +206,7 @@ namespace uTinyRipper.Classes
 			{
 				yield return asset;
 			}
-			if(!SpriteAtlas.IsNull)
+			if (!SpriteAtlas.IsNull)
 			{
 				yield return SpriteAtlas.FetchDependency(file, isLog, ToLogString, "SpriteAtlas");
 			}
