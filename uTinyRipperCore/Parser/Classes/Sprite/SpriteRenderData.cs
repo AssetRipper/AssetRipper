@@ -43,13 +43,13 @@ namespace uTinyRipper.Classes.Sprites
 		{
 			if (version.IsGreaterEqual(5, 4, 5, VersionType.Patch, 1))
 			{
-				if (version.IsGreaterEqual(5, 5, 6, VersionType.Beta, 7))
+				if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 7))
 				{
 					return true;
 				}
 				if (version.IsGreaterEqual(5, 5, 2, VersionType.Patch))
 				{
-					if (version.IsGreaterEqual(5, 5, 6))
+					if (version.IsGreaterEqual(5, 6))
 					{
 						return false;
 					}
