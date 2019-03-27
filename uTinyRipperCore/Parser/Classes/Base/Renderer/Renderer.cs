@@ -128,11 +128,22 @@ namespace uTinyRipper.Classes
 			return !flags.IsRelease();
 		}
 		/// <summary>
-		/// 4.5.0 and greater
+		/// 4.5.0 and greater but exluding 5.6.0b
 		/// </summary>
 		public static bool IsReadSortingLayerID(Version version)
 		{
-			return version.IsGreaterEqual(4, 5);
+			if (version.IsGreaterEqual(4, 5))
+			{
+				if (version.IsLess(5, 6))
+				{
+					return true;
+				}
+				if (version.IsGreater(5, 6, 0, VersionType.Beta))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 		/// <summary>
 		/// 4.3.x or 5.6.0 and greater
