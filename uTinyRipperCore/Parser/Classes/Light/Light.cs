@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Lights;
@@ -110,6 +110,13 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5, 6);
 		}
 		/// <summary>
+		/// 5.6.0b10 and greater
+		/// </summary>
+		public static bool IsReadUseColorTemperature(Version version)
+		{
+			return version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 10);
+		}
+		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
 		private static bool IsAlign(Version version)
@@ -119,11 +126,6 @@ namespace uTinyRipper.Classes
 		
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 8;
-			}
-
 			if (version.IsGreaterEqual(5, 6))
 			{
 				return 8;
@@ -217,7 +219,7 @@ namespace uTinyRipper.Classes
 			{
 				Lightmapping = (LightmappingMode)reader.ReadInt32();
 			}
-			if(IsReadLightShadowCasterMode(reader.Version))
+			if (IsReadLightShadowCasterMode(reader.Version))
 			{
 				LightShadowCasterMode = (LightShadowCasterMode)reader.ReadInt32();
 			}
@@ -229,13 +231,16 @@ namespace uTinyRipper.Classes
 			{
 				BounceIntensity = reader.ReadSingle();
 			}
-			if(IsReadFalloffTable(reader.Version))
+			if (IsReadFalloffTable(reader.Version))
 			{
 				FalloffTable.Read(reader);
 			}
 			if (IsReadColorTemperature(reader.Version))
 			{
 				ColorTemperature = reader.ReadSingle();
+			}
+			if (IsReadUseColorTemperature(reader.Version))
+			{
 				UseColorTemperature = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);
 			}
@@ -255,7 +260,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node =  base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(TypeName, (int)Type);
 			node.Add(ColorName, Color.ExportYAML(container));
 			node.Add(IntensityName, Intensity);
@@ -291,9 +296,12 @@ namespace uTinyRipper.Classes
 		public LightmappingMode Lightmapping { get; private set; }
 		public LightShadowCasterMode LightShadowCasterMode { get; private set; }
 		/// <summary>
-		/// IndirectIntensity in 5.0.0beta
+		/// IndirectIntensity in 5.0.0 beta
 		/// </summary>
 		public float BounceIntensity { get; private set; }
+		/// <summary>
+		/// CCT in 5.6.0 beta
+		/// </summary>
 		public float ColorTemperature { get; private set; }
 		public bool UseColorTemperature { get; private set; }
 
