@@ -52,11 +52,11 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(2018, 3);
 		}
 		/// <summary>
-		/// 5.5.0 and greater
+		/// 5.5.0b11 and greater
 		/// </summary>
 		public static bool IsReadUseCustomVertexStreams(Version version)
 		{
-			return version.IsGreaterEqual(5, 5);
+			return version.IsGreaterEqual(5, 5, 0, VersionType.Beta, 11);
 		}
 		/// <summary>
 		/// 2018.1 and greater
@@ -85,6 +85,13 @@ namespace uTinyRipper.Classes
 		public static bool IsReadVertexStreamMask(Version version)
 		{
 			return version.IsGreaterEqual(5, 5) && version.IsLess(5, 6);
+		}
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
+		public static bool IsReadVertexStreams(Version version)
+		{
+			return version.IsGreaterEqual(5, 6);
 		}
 		
 		/// <summary>
@@ -208,24 +215,24 @@ namespace uTinyRipper.Classes
 				}
 				reader.AlignStream(AlignType.Align4);
 
-				if (IsReadVertexStreamMask(reader.Version))
+			}
+			if (IsReadVertexStreamMask(reader.Version))
+			{
+				int vertexStreamMask = reader.ReadInt32();
+				List<byte> vertexStreams = new List<byte>(8);
+				for (byte i = 0; i < 8; i++)
 				{
-					int vertexStreamMask = reader.ReadInt32();
-					List<byte> vertexStreams = new List<byte>(8);
-					for(byte i = 0; i < 8; i++)
+					if ((vertexStreamMask & (1 << i)) != 0)
 					{
-						if((vertexStreamMask & (1 << i)) != 0)
-						{
-							vertexStreams.Add(i);
-						}
+						vertexStreams.Add(i);
 					}
-					m_vertexStreams = vertexStreams.ToArray();
 				}
-				else
-				{
-					m_vertexStreams = reader.ReadByteArray();
-					reader.AlignStream(AlignType.Align4);
-				}
+				m_vertexStreams = vertexStreams.ToArray();
+			}
+			if (IsReadVertexStreams(reader.Version))
+			{
+				m_vertexStreams = reader.ReadByteArray();
+				reader.AlignStream(AlignType.Align4);
 			}
 
 			Mesh.Read(reader);

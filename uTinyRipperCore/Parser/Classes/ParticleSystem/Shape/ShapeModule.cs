@@ -71,11 +71,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2018, 2);
 		}
 		/// <summary>
-		/// 5.5.0 to 2017.1.0b1
+		/// 5.5.0b11 to 2017.1.0b1
 		/// </summary>
 		public static bool IsReadMeshScale(Version version)
 		{
-			return version.IsGreaterEqual(5, 5) && version.IsLessEqual(2017, 1, 0, VersionType.Beta, 1);
+			return version.IsGreaterEqual(5, 5, 0, VersionType.Beta, 11) && version.IsLessEqual(2017, 1, 0, VersionType.Beta, 1);
 		}
 		/// <summary>
 		/// 5.3.0 and greater
@@ -92,11 +92,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(5, 5);
 		}
 		/// <summary>
-		/// Less than 5.5.0
+		/// Less than 5.5.0b11
 		/// </summary>
 		public static bool IsReadRandomDirection(Version version)
 		{
-			return version.IsLess(5, 5);
+			return version.IsLess(5, 5, 0, VersionType.Beta, 11);
 		}
 		/// <summary>
 		/// 2018.1 and greater
@@ -106,11 +106,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(2018, 1);
 		}
 		/// <summary>
-		/// 5.5.0 and greater
+		/// 5.5.0b11 and greater
 		/// </summary>
 		public static bool IsReadRandomDirectionAmount(Version version)
 		{
-			return version.IsGreaterEqual(5, 5);
+			return version.IsGreaterEqual(5, 5, 0, VersionType.Beta, 11);
 		}
 		/// <summary>
 		/// 2017.1.0b2 and greater
