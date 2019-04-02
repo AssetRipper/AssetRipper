@@ -198,6 +198,9 @@ namespace uTinyRipper.Assembly
 				case CharName:
 				case CCharName:
 					return CCharName;
+				case SByteName:
+				case CSByteName:
+					return CSByteName;
 				case ByteName:
 				case CByteName:
 					return CByteName;
@@ -259,6 +262,8 @@ namespace uTinyRipper.Assembly
 						return PrimitiveType.Bool;
 					case CharName:
 						return PrimitiveType.Char;
+					case SByteName:
+						return PrimitiveType.SByte;
 					case ByteName:
 						return PrimitiveType.Byte;
 					case Int16Name:
@@ -318,6 +323,8 @@ namespace uTinyRipper.Assembly
 		private const string BoolName = "bool";
 		private const string CharName = "Char";
 		private const string CCharName = "char";
+		private const string SByteName = "SByte";
+		private const string CSByteName = "sbyte";
 		private const string ByteName = "Byte";
 		private const string CByteName = "byte";
 		private const string Int16Name = "Int16";

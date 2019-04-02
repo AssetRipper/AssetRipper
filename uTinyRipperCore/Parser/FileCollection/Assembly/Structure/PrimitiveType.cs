@@ -5,6 +5,7 @@ namespace uTinyRipper.Assembly
 		Void,
 		Bool,
 		Char,
+		SByte,
 		Byte,
 		Short,
 		UShort,

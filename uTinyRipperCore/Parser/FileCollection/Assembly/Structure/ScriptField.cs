@@ -68,18 +68,6 @@ namespace uTinyRipper.Assembly
 					reader.AlignStream(AlignType.Align4);
 					break;
 
-				case PrimitiveType.Byte:
-					if (IsArray)
-					{
-						Value = reader.ReadByteArray();
-					}
-					else
-					{
-						Value = reader.ReadByte();
-					}
-					reader.AlignStream(AlignType.Align4);
-					break;
-
 				case PrimitiveType.Char:
 					if (IsArray)
 					{
@@ -88,6 +76,30 @@ namespace uTinyRipper.Assembly
 					else
 					{
 						Value = reader.ReadChar();
+					}
+					reader.AlignStream(AlignType.Align4);
+					break;
+
+				case PrimitiveType.SByte:
+					if (IsArray)
+					{
+						Value = reader.ReadByteArray();
+					}
+					else
+					{
+						Value = reader.ReadSByte();
+					}
+					reader.AlignStream(AlignType.Align4);
+					break;
+
+				case PrimitiveType.Byte:
+					if (IsArray)
+					{
+						Value = reader.ReadByteArray();
+					}
+					else
+					{
+						Value = reader.ReadByte();
 					}
 					reader.AlignStream(AlignType.Align4);
 					break;
@@ -242,6 +254,11 @@ namespace uTinyRipper.Assembly
 								char[] array = (char[])Value;
 								return array.ExportYAML();
 							}
+						case PrimitiveType.SByte:
+							{
+								byte[] array = (byte[])Value;
+								return array.ExportYAML();
+							}
 						case PrimitiveType.Byte:
 							{
 								byte[] array = (byte[])Value;
@@ -312,6 +329,8 @@ namespace uTinyRipper.Assembly
 							return new YAMLScalarNode((bool)Value);
 						case PrimitiveType.Char:
 							return new YAMLScalarNode((int)(char)Value);
+						case PrimitiveType.SByte:
+							return new YAMLScalarNode((sbyte)Value);
 						case PrimitiveType.Byte:
 							return new YAMLScalarNode((byte)Value);
 						case PrimitiveType.Short:
