@@ -282,7 +282,9 @@ namespace uTinyRipper.Assembly.Mono
 			}
 			if (MonoType.IsBuiltinGeneric(type))
 			{
-				return IsBuiltinGenericValid(type, arguments);
+				GenericInstanceType generic = (GenericInstanceType)type;
+				TypeReference element = generic.GenericArguments[0];
+				return IsTypeValid(element, arguments);
 			}
 
 			if (MonoType.IsPrime(type))
@@ -340,20 +342,6 @@ namespace uTinyRipper.Assembly.Mono
 				{
 					continue;
 				}
-				/*if (field.FieldType.IsGenericInstance)
-				{
-					// it isn't possible to check whether generic instance is serializable or not without resolving its definition
-					if (field.FieldType.Module == null)
-					{
-						m_validTypes[type.FullName] = false;
-						return false;
-					}
-					// generic instances aren't serializable (except special one)
-					if (!MonoType.IsSerializableGeneric(field.FieldType))
-					{
-						continue;
-					}
-				}*/
 
 				if (!IsTypeValid(field.FieldType, arguments))
 				{
@@ -364,13 +352,6 @@ namespace uTinyRipper.Assembly.Mono
 			return true;
 		}
 
-		private bool IsBuiltinGenericValid(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
-		{
-			GenericInstanceType list = (GenericInstanceType)type;
-			TypeReference element = list.GenericArguments[0];
-			return IsTypeValid(element, arguments);
-		}
-		
 		public ScriptingBackEnd ScriptingBackEnd
 		{
 			get => ScriptingBackEnd.Mono;

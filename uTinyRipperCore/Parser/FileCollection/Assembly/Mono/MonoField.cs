@@ -161,6 +161,10 @@ namespace uTinyRipper.Assembly.Mono
 			{
 				return false;
 			}
+			if (definition.IsAbstract)
+			{
+				return false;
+			}
 			if (MonoType.IsCompilerGenerated(definition))
 			{
 				return false;
