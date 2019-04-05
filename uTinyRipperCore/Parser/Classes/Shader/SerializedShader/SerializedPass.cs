@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.Classes.Shaders.Exporters;
@@ -31,7 +31,7 @@ namespace uTinyRipper.Classes.Shaders
 
 		public void Export(ShaderWriter writer)
 		{
-			writer.WriteIntent(2);
+			writer.WriteIndent(2);
 			writer.Write("{0} ", Type.ToString());
 
 			if (Type == SerializedPassType.UsePass)
@@ -46,7 +46,7 @@ namespace uTinyRipper.Classes.Shaders
 				{
 					if(TextureName != string.Empty)
 					{
-						writer.WriteIntent(3);
+						writer.WriteIndent(3);
 						writer.Write("\"{0}\"\n", TextureName);
 					}
 				}
@@ -68,7 +68,7 @@ namespace uTinyRipper.Classes.Shaders
 					throw new NotSupportedException($"Unsupported pass type {Type}");
 				}
 
-				writer.WriteIntent(2);
+				writer.WriteIndent(2);
 				writer.Write("}\n");
 			}
 		}

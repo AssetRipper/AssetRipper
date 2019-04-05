@@ -283,7 +283,7 @@ namespace uTinyRipper.Classes.Shaders
 			}
 		}
 		
-		public void Export(ShaderWriter writer)
+		public void Export(ShaderWriter writer, ShaderType type)
 		{
 			if(Keywords.Count > 0)
 			{
@@ -293,16 +293,16 @@ namespace uTinyRipper.Classes.Shaders
 					writer.Write("\"{0}\" ", keyword);
 				}
 				writer.Write("}\n");
-				writer.WriteIntent(5);
+				writer.WriteIndent(5);
 			}
 
-			writer.Write("\"!!{0}", ProgramType.ToString());
+			writer.Write("\"!!{0}", ProgramType.ToShaderName(writer.Platform, type));
 			if (m_programData.Length > 0)
 			{
 				writer.Write("\n");
-				writer.WriteIntent(5);
+				writer.WriteIndent(5);
 
-				writer.WriteShaderData(ProgramType, m_programData);
+				writer.WriteShaderData(ProgramType.ToGPUPlatform(writer.Platform), m_programData);
 			}
 			writer.Write('"');
 		}

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using uTinyRipper.Classes;
@@ -9,7 +9,7 @@ namespace uTinyRipper
 {
 	public class ShaderWriter : InvariantStreamWriter
 	{
-		public ShaderWriter(Stream stream, Shader shader, Func<Version, ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator) :
+		public ShaderWriter(Stream stream, Shader shader, Func<Version, GPUPlatform, ShaderTextExporter> exporterInstantiator) :
 			base(stream, new UTF8Encoding(false), 4096, true)
 		{
 			if(shader == null)
@@ -25,9 +25,9 @@ namespace uTinyRipper
 			m_exporterInstantiator = exporterInstantiator;
 		}
 
-		public void WriteShaderData(ShaderGpuProgramType programType, byte[] shaderData)
+		public void WriteShaderData(GPUPlatform graphicApi, byte[] shaderData)
 		{
-			ShaderTextExporter exporter = m_exporterInstantiator.Invoke(Shader.File.Version, programType);
+			ShaderTextExporter exporter = m_exporterInstantiator.Invoke(Shader.File.Version, graphicApi);
 			exporter.Export(shaderData, this);
 		}
 		
@@ -35,6 +35,6 @@ namespace uTinyRipper
 		public Version Version => Shader.File.Version;
 		public Platform Platform => Shader.File.Platform;
 
-		private readonly Func<Version, ShaderGpuProgramType, ShaderTextExporter> m_exporterInstantiator;
+		private readonly Func<Version, GPUPlatform, ShaderTextExporter> m_exporterInstantiator;
 	}
 }

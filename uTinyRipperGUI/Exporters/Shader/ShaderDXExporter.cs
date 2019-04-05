@@ -12,15 +12,15 @@ namespace uTinyRipperGUI.Exporters
 {
 	public class ShaderDXExporter : ShaderTextExporter
 	{
-		public ShaderDXExporter(Version version, ShaderGpuProgramType programType)
+		public ShaderDXExporter(Version version, GPUPlatform graphicApi)
 		{
 			m_version = version;
-			m_programType = programType;
+			m_graphicApi = graphicApi;
 		}
 
-		private static bool IsOffset(ShaderGpuProgramType programType)
+		private static bool IsOffset(GPUPlatform graphicApi)
 		{
-			return !programType.IsDX9();
+			return graphicApi != GPUPlatform.d3d9;
 		}
 
 		private static bool IsOffset5(Version version)
@@ -31,7 +31,7 @@ namespace uTinyRipperGUI.Exporters
 		public override void Export(byte[] shaderData, TextWriter writer)
 		{
 			int offset = 0;
-			if (IsOffset(m_programType))
+			if (IsOffset(m_graphicApi))
 			{
 				offset = IsOffset5(m_version) ? 5 : 6;
 				uint fourCC = BitConverter.ToUInt32(shaderData, offset);
@@ -73,6 +73,6 @@ namespace uTinyRipperGUI.Exporters
 		private const uint DXBCFourCC = 0x43425844;
 
 		private readonly Version m_version;
-		private readonly ShaderGpuProgramType m_programType;
+		private readonly GPUPlatform m_graphicApi;
 	}
 }

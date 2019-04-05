@@ -68,7 +68,7 @@ If you want to build solution you need:
 
  \- .NET Framework 4.5.0 or .NET Standard 1.3 + .NET Core 1.0 SDK
 
- \- Compiler with C# 7.2 syntax support (Visual Studio 2017)
+ \- Compiler with C# 7.3 syntax support (Visual Studio 2017)
 
 
 If you want only to run binaries of sample project you need to install:

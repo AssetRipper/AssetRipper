@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.IO;
 
 namespace uTinyRipper.Classes.Shaders
@@ -60,12 +60,12 @@ namespace uTinyRipper.Classes.Shaders
 		{
 			if (Name != string.Empty)
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("Name \"{0}\"\n", Name);
 			}
 			if (LOD != 0)
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("LOD {0}\n", LOD);
 			}
 			Tags.Export(writer, 3);
@@ -81,53 +81,53 @@ namespace uTinyRipper.Classes.Shaders
 
 			if (AlphaToMaskValue)
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("AlphaToMask On\n");
 			}
 
 			if (!ZClipValue.IsOn())
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("ZClip {0}\n", ZClipValue);
 			}
 			if (!ZTestValue.IsLEqual() && !ZTestValue.IsNone())
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("ZTest {0}\n", ZTestValue);
 			}
 			if (!ZWriteValue.IsOn())
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("ZWrite {0}\n", ZWriteValue);
 			}
 			if (!CullingValue.IsBack())
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("Cull {0}\n", CullingValue);
 			}
 			if (!OffsetFactor.IsZero || !OffsetUnits.IsZero)
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("Offset {0}, {1}\n", OffsetFactor.Val, OffsetUnits.Val);
 			}
 
 			if (!StencilRef.IsZero || !StencilReadMask.IsMax || !StencilWriteMask.IsMax || !StencilOp.IsDefault || !StencilOpFront.IsDefault || !StencilOpBack.IsDefault)
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("Stencil {\n");
 				if(!StencilRef.IsZero)
 				{
-					writer.WriteIntent(4);
+					writer.WriteIndent(4);
 					writer.Write("Ref {0}\n", StencilRef.Val);
 				}
 				if(!StencilReadMask.IsMax)
 				{
-					writer.WriteIntent(4);
+					writer.WriteIndent(4);
 					writer.Write("ReadMask {0}\n", StencilReadMask.Val);
 				}
 				if(!StencilWriteMask.IsMax)
 				{
-					writer.WriteIntent(4);
+					writer.WriteIndent(4);
 					writer.Write("WriteMask {0}\n", StencilWriteMask.Val);
 				}
 				if(!StencilOp.IsDefault)
@@ -142,22 +142,22 @@ namespace uTinyRipper.Classes.Shaders
 				{
 					StencilOpBack.Export(writer, StencilType.Back);
 				}
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("}\n");
 			}
 			
 			if(!FogMode.IsUnknown() || !FogColor.IsZero || !FogDensity.IsZero || !FogStart.IsZero || !FogEnd.IsZero)
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("Fog {\n");
 				if(!FogMode.IsUnknown())
 				{
-					writer.WriteIntent(4);
+					writer.WriteIndent(4);
 					writer.Write("Mode {0}\n", FogMode);
 				}
 				if (!FogColor.IsZero)
 				{
-					writer.WriteIntent(4);
+					writer.WriteIndent(4);
 					writer.Write("Color ({0},{1},{2},{3})\n",
 						FogColor.X.Val.ToString(CultureInfo.InvariantCulture),
 						FogColor.Y.Val.ToString(CultureInfo.InvariantCulture),
@@ -166,26 +166,26 @@ namespace uTinyRipper.Classes.Shaders
 				}
 				if (!FogDensity.IsZero)
 				{
-					writer.WriteIntent(4);
+					writer.WriteIndent(4);
 					writer.Write("Density {0}\n", FogDensity.Val.ToString(CultureInfo.InvariantCulture));
 				}
 				if (!FogStart.IsZero ||!FogEnd.IsZero)
 				{
-					writer.WriteIntent(4);
+					writer.WriteIndent(4);
 					writer.Write("Range {0}, {1}\n",
 						FogStart.Val.ToString(CultureInfo.InvariantCulture),
 						FogEnd.Val.ToString(CultureInfo.InvariantCulture));
 				}
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("}\n");
 			}
 
 			if(Lighting)
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("Lighting {0}\n", LightingValue);
 			}
-			writer.WriteIntent(3);
+			writer.WriteIndent(3);
 			writer.Write("GpuProgramID {0}\n", GpuProgramID);
 		}
 

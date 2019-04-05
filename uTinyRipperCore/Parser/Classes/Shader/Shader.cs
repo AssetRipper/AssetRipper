@@ -196,7 +196,7 @@ namespace uTinyRipper.Classes
 			ExportBinary(container, stream, DefaultShaderExporterInstantiator);
 		}
 
-		public void ExportBinary(IExportContainer container, Stream stream, Func<Version, ShaderGpuProgramType, ShaderTextExporter> exporterInstantiator)
+		public void ExportBinary(IExportContainer container, Stream stream, Func<Version, GPUPlatform, ShaderTextExporter> exporterInstantiator)
 		{
 			if (IsSerialized(container.Version))
 			{
@@ -235,17 +235,22 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public static ShaderTextExporter DefaultShaderExporterInstantiator(Version version, ShaderGpuProgramType programType)
+		public static ShaderTextExporter DefaultShaderExporterInstantiator(Version version, GPUPlatform graphicApi)
 		{
-			if(programType.IsGL())
+			switch (graphicApi)
 			{
-				return new ShaderGLESExporter();
+				case GPUPlatform.openGL:
+				case GPUPlatform.gles:
+				case GPUPlatform.gles3:
+				case GPUPlatform.glcore:
+					return new ShaderGLESExporter();
+
+				case GPUPlatform.metal:
+					return new ShaderMetalExporter(version);
+
+				default:
+					return new ShaderUnknownExporter(graphicApi);
 			}
-			if(programType.IsMetal())
-			{
-				return new ShaderMetalExporter(version);
-			}
-			return new ShaderUnknownExporter(programType);
 		}
 
 		public override string ExportExtension => "shader";

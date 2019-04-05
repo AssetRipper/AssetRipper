@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -23,7 +23,7 @@ namespace uTinyRipper.Classes.Shaders
 
 		public void Export(TextWriter writer)
 		{
-			writer.WriteIntent(2);
+			writer.WriteIndent(2);
 			foreach(string attribute in Attributes)
 			{
 				writer.Write("[{0}] ", attribute);

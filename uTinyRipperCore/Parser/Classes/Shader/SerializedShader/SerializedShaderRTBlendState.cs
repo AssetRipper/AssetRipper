@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 
 namespace uTinyRipper.Classes.Shaders
 {
@@ -19,7 +19,7 @@ namespace uTinyRipper.Classes.Shaders
 		{
 			if (!SrcBlendValue.IsOne() || !DestBlendValue.IsZero() || !SrcBlendAlphaValue.IsOne() || !DestBlendAlphaValue.IsZero())
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("Blend ");
 				if(index != -1)
 				{
@@ -35,7 +35,7 @@ namespace uTinyRipper.Classes.Shaders
 
 			if(!BlendOpValue.IsAdd() || !BlendOpAlphaValue.IsAdd())
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("BlendOp ");
 				if(index != -1)
 				{
@@ -51,7 +51,7 @@ namespace uTinyRipper.Classes.Shaders
 			
 			if(!ColMaskValue.IsRBGA())
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("ColorMask ");
 				if (ColMaskValue.IsNone())
 				{

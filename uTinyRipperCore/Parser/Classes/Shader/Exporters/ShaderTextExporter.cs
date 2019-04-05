@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 
 namespace uTinyRipper.Classes.Shaders.Exporters
 {
@@ -27,7 +27,7 @@ namespace uTinyRipper.Classes.Shaders.Exporters
 						break;
 					}
 					writer.Write(c);
-					writer.WriteIntent(5);
+					writer.WriteIndent(ExpectedIndent);
 				}
 				else
 				{
@@ -35,5 +35,7 @@ namespace uTinyRipper.Classes.Shaders.Exporters
 				}
 			}
 		}
+
+		protected const int ExpectedIndent = 5;
 	}
 }

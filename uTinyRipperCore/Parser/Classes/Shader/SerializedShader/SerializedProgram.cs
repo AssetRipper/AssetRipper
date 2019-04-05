@@ -13,7 +13,7 @@ namespace uTinyRipper.Classes.Shaders
 		{
 			if (SubPrograms.Count > 0)
 			{
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("Program \"{0}\" {{\n", type.ToProgramTypeString());
 				HashSet<ShaderGpuProgramType> isTierLookup = GetIsTierLookup(SubPrograms);
 				foreach (SerializedSubProgram subProgram in SubPrograms)
@@ -23,9 +23,9 @@ namespace uTinyRipper.Classes.Shaders
 					int index = writer.Shader.Platforms.IndexOf(platform);
 					ShaderSubProgramBlob blob = writer.Shader.SubProgramBlobs[index];
 					bool isTier = isTierLookup.Contains(subProgram.GpuProgramType);
-					subProgram.Export(writer, blob, isTier);
+					subProgram.Export(writer, blob, type, isTier);
 				}
-				writer.WriteIntent(3);
+				writer.WriteIndent(3);
 				writer.Write("}\n");
 			}
 		}

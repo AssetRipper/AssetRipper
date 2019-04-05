@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace uTinyRipper.Classes.Shaders
@@ -56,7 +56,8 @@ namespace uTinyRipper.Classes.Shaders
 					}
 				}
 
-				SubPrograms[subProgram].Export(writer);
+				// we don't know about shader type so pass vertex
+				SubPrograms[subProgram].Export(writer, ShaderType.Vertex);
 			}
 			writer.WriteString(header, j, header.Length - j);
 		}

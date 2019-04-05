@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 
 namespace uTinyRipper.Exporters.Scripts
@@ -9,7 +9,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 		public void Export(TextWriter writer, int intent)
 		{
-			writer.WriteIntent(intent);
+			writer.WriteIndent(intent);
 			writer.WriteLine("[{0}]", Name);
 		}
 

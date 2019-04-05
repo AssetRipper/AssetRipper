@@ -28,11 +28,11 @@ namespace uTinyRipper.Exporters.Scripts
 		{
 			if (IsSerializable)
 			{
-				writer.WriteIntent(intent);
+				writer.WriteIndent(intent);
 				writer.WriteLine("[{0}]", ScriptExportAttribute.SerializableName);
 			}
 
-			writer.WriteIntent(intent);
+			writer.WriteIndent(intent);
 			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", TypeName);
 
 			if (Base != null && !ScriptType.IsBasic(Base.Namespace, Base.NestedName))
@@ -41,7 +41,7 @@ namespace uTinyRipper.Exporters.Scripts
 			}
 			writer.WriteLine();
 
-			writer.WriteIntent(intent++);
+			writer.WriteIndent(intent++);
 			writer.WriteLine('{');
 
 			foreach (ScriptExportType nestedType in NestedTypes)
@@ -70,7 +70,7 @@ namespace uTinyRipper.Exporters.Scripts
 				field.Export(writer, intent);
 			}
 
-			writer.WriteIntent(--intent);
+			writer.WriteIndent(--intent);
 			writer.WriteLine('}');
 		}
 

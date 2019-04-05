@@ -29,13 +29,13 @@ namespace uTinyRipper.Classes.Shaders
 
 			if(FallbackName != string.Empty)
 			{
-				writer.WriteIntent(1);
+				writer.WriteIndent(1);
 				writer.Write("Fallback \"{0}\"\n", FallbackName);
 			}
 
 			if (CustomEditorName != string.Empty)
 			{
-				writer.WriteIntent(1);
+				writer.WriteIndent(1);
 				writer.Write("CustomEditor \"{0}\"\n", CustomEditorName);
 			}
 

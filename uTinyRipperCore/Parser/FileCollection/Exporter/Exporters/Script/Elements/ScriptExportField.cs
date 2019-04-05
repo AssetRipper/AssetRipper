@@ -16,7 +16,7 @@ namespace uTinyRipper.Exporters.Scripts
 				Attribute.Export(writer, intent);
 			}
 
-			writer.WriteIntent(intent);
+			writer.WriteIndent(intent);
 			writer.Write("{0} ", Keyword);
 			if(IsNew)
 			{
@@ -32,7 +32,7 @@ namespace uTinyRipper.Exporters.Scripts
 		{
 			if (Type.IsEnum)
 			{
-				writer.WriteIntent(intent);
+				writer.WriteIndent(intent);
 				writer.WriteLine("{0} = {1},", Name, Constant);
 			}
 			else

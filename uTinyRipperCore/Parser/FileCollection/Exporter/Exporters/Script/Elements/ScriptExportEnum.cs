@@ -7,10 +7,10 @@ namespace uTinyRipper.Exporters.Scripts
 	{
 		public sealed override void Export(TextWriter writer, int intent)
 		{
-			writer.WriteIntent(intent);
+			writer.WriteIndent(intent);
 			writer.WriteLine("{0} enum {1}", Keyword, TypeName);
 
-			writer.WriteIntent(intent++);
+			writer.WriteIndent(intent++);
 			writer.WriteLine('{');
 			
 			foreach (ScriptExportField field in Fields)
@@ -18,7 +18,7 @@ namespace uTinyRipper.Exporters.Scripts
 				field.ExportEnum(writer, intent);
 			}
 
-			writer.WriteIntent(--intent);
+			writer.WriteIndent(--intent);
 			writer.WriteLine('}');
 		}
 

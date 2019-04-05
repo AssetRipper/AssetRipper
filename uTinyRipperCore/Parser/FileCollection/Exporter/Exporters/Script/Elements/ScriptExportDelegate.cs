@@ -8,7 +8,7 @@ namespace uTinyRipper.Exporters.Scripts
 	{
 		public sealed override void Export(TextWriter writer, int intent)
 		{
-			writer.WriteIntent(intent);
+			writer.WriteIndent(intent);
 			writer.Write("{0} delegate {1} {2}(", Keyword, Return.NestedName, TypeName);
 			for (int i = 0; i < Parameters.Count; i++)
 			{

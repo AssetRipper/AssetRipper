@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 
 namespace uTinyRipper.Classes.Shaders
@@ -16,7 +16,7 @@ namespace uTinyRipper.Classes.Shaders
 		{
 			if(Tags.Count != 0)
 			{
-				writer.WriteIntent(intent);
+				writer.WriteIndent(intent);
 				writer.Write("Tags { ");
 				foreach(var kvp in Tags)
 				{

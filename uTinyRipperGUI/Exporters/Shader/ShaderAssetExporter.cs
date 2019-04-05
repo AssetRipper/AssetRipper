@@ -62,13 +62,21 @@ namespace uTinyRipperGUI.Exporters
 			return true;
 		}
 
-		private static ShaderTextExporter ShaderExporterInstantiator(Version version, ShaderGpuProgramType programType)
+		private static ShaderTextExporter ShaderExporterInstantiator(Version version, GPUPlatform graphicApi)
 		{
-			if(programType.IsDX())
+			switch (graphicApi)
 			{
-				return new ShaderDXExporter(version, programType);
+				case GPUPlatform.d3d9:
+				case GPUPlatform.d3d11_9x:
+				case GPUPlatform.d3d11:
+					return new ShaderDXExporter(version, graphicApi);
+
+				case GPUPlatform.vulkan:
+					return new ShaderVulkanExporter();
+
+				default:
+					return Shader.DefaultShaderExporterInstantiator(version, graphicApi);
 			}
-			return Shader.DefaultShaderExporterInstantiator(version, programType);
 		}
 
 	}

@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 
 namespace uTinyRipper.Classes.Shaders
 {
@@ -14,13 +14,13 @@ namespace uTinyRipper.Classes.Shaders
 
 		public void Export(TextWriter writer, StencilType type)
 		{
-			writer.WriteIntent(4);
+			writer.WriteIndent(4);
 			writer.Write("Comp{0} {1}\n", type.ToSuffixString(), CompValue);
-			writer.WriteIntent(4);
+			writer.WriteIndent(4);
 			writer.Write("Pass{0} {1}\n", type.ToSuffixString(), PassValue);
-			writer.WriteIntent(4);
+			writer.WriteIndent(4);
 			writer.Write("Fail{0} {1}\n", type.ToSuffixString(), FailValue);
-			writer.WriteIntent(4);
+			writer.WriteIndent(4);
 			writer.Write("ZFail{0} {1}\n", type.ToSuffixString(), ZFailValue);
 		}
 

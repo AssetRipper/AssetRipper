@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 
 namespace uTinyRipper
 {
@@ -12,7 +12,7 @@ namespace uTinyRipper
 			}
 		}
 
-		public static void WriteIntent(this TextWriter writer, int count)
+		public static void WriteIndent(this TextWriter writer, int count)
 		{
 			for (int i = 0; i < count; i++)
 			{

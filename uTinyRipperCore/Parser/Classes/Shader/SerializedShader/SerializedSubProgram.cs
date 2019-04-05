@@ -62,21 +62,21 @@ namespace uTinyRipper.Classes.Shaders
 			}
 		}
 
-		public void Export(ShaderWriter writer, ShaderSubProgramBlob blob, bool isTier)
+		public void Export(ShaderWriter writer, ShaderSubProgramBlob blob, ShaderType type, bool isTier)
 		{
-			writer.WriteIntent(4);
+			writer.WriteIndent(4);
 			writer.Write("SubProgram \"{0} ", GpuProgramType.ToGPUPlatform(writer.Platform));
 			if(isTier)
 			{
 				writer.Write("hw_tier{0} ", ShaderHardwareTier.ToString("00"));
 			}
 			writer.Write("\" {\n");
-			writer.WriteIntent(5);
+			writer.WriteIndent(5);
 			
-			blob.SubPrograms[(int)BlobIndex].Export(writer);
+			blob.SubPrograms[(int)BlobIndex].Export(writer, type);
 
 			writer.Write('\n');
-			writer.WriteIntent(4);
+			writer.WriteIndent(4);
 			writer.Write("}\n");
 		}
 

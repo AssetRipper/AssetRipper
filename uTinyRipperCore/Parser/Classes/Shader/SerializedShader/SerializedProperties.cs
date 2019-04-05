@@ -12,13 +12,13 @@ namespace uTinyRipper.Classes.Shaders
 
 		public void Export(TextWriter writer)
 		{
-			writer.WriteIntent(1);
+			writer.WriteIndent(1);
 			writer.Write("Properties {\n");
 			foreach(SerializedProperty prop in Props)
 			{
 				prop.Export(writer);
 			}
-			writer.WriteIntent(1);
+			writer.WriteIndent(1);
 			writer.Write("}\n");
 		}
 
