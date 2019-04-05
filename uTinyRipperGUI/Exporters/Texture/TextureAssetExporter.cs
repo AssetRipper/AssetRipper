@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using uTinyRipper;
@@ -23,7 +22,7 @@ namespace uTinyRipperGUI.Exporters
 				return false;
 			}
 
-			using (Bitmap bitmap = ConvertToBitmap(texture, buffer))
+			using (DirectBitmap bitmap = ConvertToBitmap(texture, buffer))
 			{
 				if (bitmap == null)
 				{
@@ -31,13 +30,13 @@ namespace uTinyRipperGUI.Exporters
 				}
 				else
 				{
-					bitmap.Save(exportStream, ImageFormat.Png);
+					bitmap.Bitmap.Save(exportStream, ImageFormat.Png);
 					return true;
 				}
 			}
 		}
 
-		private static Bitmap ConvertToBitmap(Texture2D texture, byte[] data)
+		private static DirectBitmap ConvertToBitmap(Texture2D texture, byte[] data)
 		{
 			switch (texture.TextureFormat)
 			{
@@ -66,6 +65,10 @@ namespace uTinyRipperGUI.Exporters
 				case TextureFormat.ETC2_RGB:
 				case TextureFormat.ETC2_RGBA1:
 				case TextureFormat.ETC2_RGBA8:
+				case TextureFormat.ETC_RGB4_3DS:
+				case TextureFormat.ETC_RGBA8_3DS:
+					return TextureConverter.PVRTextureToBitmap(texture, data);
+
 				case TextureFormat.ASTC_RGB_4x4:
 				case TextureFormat.ASTC_RGB_5x5:
 				case TextureFormat.ASTC_RGB_6x6:
@@ -78,9 +81,7 @@ namespace uTinyRipperGUI.Exporters
 				case TextureFormat.ASTC_RGBA_8x8:
 				case TextureFormat.ASTC_RGBA_10x10:
 				case TextureFormat.ASTC_RGBA_12x12:
-				case TextureFormat.ETC_RGB4_3DS:
-				case TextureFormat.ETC_RGBA8_3DS:
-					return TextureConverter.PVRTextureToBitmap(texture, data);
+					return TextureConverter.ASTCTextureToBitmap(texture, data);
 
 				case TextureFormat.RHalf:
 				case TextureFormat.RGHalf:

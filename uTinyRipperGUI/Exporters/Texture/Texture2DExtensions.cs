@@ -501,5 +501,38 @@ namespace uTinyRipperGUI.Exporters
 					throw new NotSupportedException();
 			}
 		}
+
+		public static int ASTCBlockSize(this Texture2D _this)
+		{
+			switch (_this.TextureFormat)
+			{
+				case TextureFormat.ASTC_RGB_4x4:
+				case TextureFormat.ASTC_RGBA_4x4:
+					return 4;
+
+				case TextureFormat.ASTC_RGB_5x5:
+				case TextureFormat.ASTC_RGBA_5x5:
+					return 5;
+
+				case TextureFormat.ASTC_RGB_6x6:
+				case TextureFormat.ASTC_RGBA_6x6:
+					return 6;
+
+				case TextureFormat.ASTC_RGB_8x8:
+				case TextureFormat.ASTC_RGBA_8x8:
+					return 8;
+
+				case TextureFormat.ASTC_RGB_10x10:
+				case TextureFormat.ASTC_RGBA_10x10:
+					return 10;
+
+				case TextureFormat.ASTC_RGB_12x12:
+				case TextureFormat.ASTC_RGBA_12x12:
+					return 12;
+
+				default:
+					throw new NotSupportedException(_this.TextureFormat.ToString());
+			}
+		}
 	}
 }

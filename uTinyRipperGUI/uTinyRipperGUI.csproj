@@ -168,6 +168,7 @@
     <Compile Include="ThirdParty\Texture containers\DDS\DDSContainer.cs" />
     <Compile Include="ThirdParty\Texture containers\DDS\DDSContainerParameters.cs" />
     <Compile Include="Exporters\Texture\TextureContainer.cs" />
+    <Compile Include="ThirdParty\Texture converters\ASTCDecoder.cs" />
     <Compile Include="ThirdParty\Texture converters\DDSDecompressor.cs" />
     <Compile Include="ThirdParty\Texture containers\DDS\DDSDFlags.cs" />
     <Compile Include="ThirdParty\Texture containers\DDS\DDSFourCCType.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="ThirdParty\Texture containers\PVR\PVRContainerParameters.cs" />
     <Compile Include="ThirdParty\Texture containers\PVR\PVRFlag.cs" />
     <Compile Include="ThirdParty\Texture containers\PVR\PVRPixelFormat.cs" />
+    <Compile Include="Utils\DirectBitmap.cs" />
     <Compile Include="Utils\PermissionValidator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -249,10 +251,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup Condition=" '$(Platform)' == 'x86' ">
-    <ContentWithTargetPath Include="Libraries\x86\astcenc_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>astcenc.dll</TargetPath>
-    </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x86\crunch_x86.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>crunch.dll</TargetPath>
@@ -287,10 +285,6 @@
     </ContentWithTargetPath>
   </ItemGroup>
   <ItemGroup Condition=" '$(Platform)' == 'x64' ">
-    <ContentWithTargetPath Include="Libraries\x64\astcenc_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>astcenc.dll</TargetPath>
-    </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x64\crunch_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>crunch.dll</TargetPath>
