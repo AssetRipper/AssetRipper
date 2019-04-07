@@ -1,28 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace Astc
 {
-	public sealed class AstcDecoder
+	public static class AstcDecoder
 	{
-		private class BlockData
+		private unsafe struct BlockData
 		{
-			public BlockData()
-			{
-				endpoints = new int[4][];
-				for (int i = 0; i < 4; i++)
-				{
-					endpoints[i] = new int[8];
-				}
-
-				weights = new int[144][];
-				for (int i = 0; i < 144; i++)
-				{
-					weights[i] = new int[2];
-				}
-			}
-
 			public int bw;
 			public int bh;
 			public int width;
@@ -32,12 +16,12 @@ namespace Astc
 			public int plane_selector;
 			public int weight_range;
 			public int weight_num; // max: 120
-			public int[] cem = new int[4];
+			public fixed int cem[4];
 			public int cem_range;
 			public int endpoint_value_num; // max: 32
-			public int[][] endpoints;
-			public int[][] weights;
-			public int[] partition = new int[144];
+			public fixed int endpoints[4 * 8];
+			public fixed int weights[144 * 2];
+			public fixed int partition[144];
 		}
 
 		private struct IntSeqData
@@ -46,18 +30,17 @@ namespace Astc
 			public int nonbits;
 		}
 
-		public byte[] DecodeASTC(byte[] input, int width, int height, int blockWidth, int blockHeight)
+		public static byte[] DecodeASTC(byte[] input, int width, int height, int blockWidth, int blockHeight)
 		{
 			byte[] output = new byte[width * height * 4];
 			DecodeASTC(input, width, height, blockWidth, blockHeight, output);
 			return output;
 		}
 
-		public void DecodeASTC(byte[] input, int width, int height, int blockWidth, int blockHeight, byte[] output)
+		public unsafe static void DecodeASTC(byte[] input, int width, int height, int blockWidth, int blockHeight, byte[] output)
 		{
 			const int BlockLength = 16;
 
-			int inputOffset = 0;
 			int width4 = width * 4;
 			int blockWidth4 = blockWidth * 4;
 			int blockCountWidth = (width + blockWidth - 1) / blockWidth;
@@ -66,25 +49,29 @@ namespace Astc
 			int clenLast4 = clenLast * 4;
 			uint[] blockBuffer = new uint[blockWidth * blockHeight];
 
-			for (int t = 0; t < blockCountHeight; t++)
+			fixed (byte* inputPtr = input)
 			{
-				for (int s = 0; s < blockCountWidth; s++, inputOffset += BlockLength)
+				byte* ptr = inputPtr;
+				for (int t = 0; t < blockCountHeight; t++)
 				{
-					DecodeBlock(input, inputOffset, blockWidth, blockHeight, blockBuffer);
-					int clen = s < blockCountWidth - 1 ? blockWidth4 : clenLast4;
-					for (int i = 0, y = height - t * blockHeight - 1; i < blockHeight && y >= 0; i++, y--)
+					for (int s = 0; s < blockCountWidth; s++, ptr += BlockLength)
 					{
-						Buffer.BlockCopy(blockBuffer, i * blockWidth4, output, y * width4 + s * blockWidth4, clen);
+						DecodeBlock(ptr, blockWidth, blockHeight, blockBuffer);
+						int clen = s < blockCountWidth - 1 ? blockWidth4 : clenLast4;
+						for (int i = 0, y = height - t * blockHeight - 1; i < blockHeight && y >= 0; i++, y--)
+						{
+							Buffer.BlockCopy(blockBuffer, i * blockWidth4, output, y * width4 + s * blockWidth4, clen);
+						}
 					}
 				}
 			}
 		}
 
-		private void DecodeBlock(byte[] input, int ioff, int blockWidth, int blockHeight, uint[] output)
+		private unsafe static void DecodeBlock(byte* input, int blockWidth, int blockHeight, uint[] output)
 		{
-			if (input[ioff] == 0xfc && (input[ioff + 1] & 1) == 1)
+			if (input[0] == 0xfc && (input[1] & 1) == 1)
 			{
-				uint c = Color(input[ioff + 9], input[ioff + 11], input[ioff + 13], input[ioff + 15]);
+				uint c = Color(input[9], input[11], input[13], input[15]);
 				for (int i = 0; i < blockWidth * blockHeight; i++)
 				{
 					output[i] = c;
@@ -92,197 +79,201 @@ namespace Astc
 			}
 			else
 			{
-				m_blockData.bw = blockWidth;
-				m_blockData.bh = blockHeight;
-				DecodeBlockParameters(input, ioff, m_blockData);
-				DecodeEndpoints(input, ioff, m_blockData);
-				DecodeWeights(input, ioff, m_blockData);
-				if (m_blockData.part_num > 1)
+				BlockData blockData = new BlockData();
+				blockData.bw = blockWidth;
+				blockData.bh = blockHeight;
+				BlockData* blockPtr = &blockData;
+				DecodeBlockParameters(input, blockPtr);
+				DecodeEndpoints(input, blockPtr);
+				DecodeWeights(input, blockPtr);
+				if (blockData.part_num > 1)
 				{
-					SelectPartition(input, ioff, m_blockData);
+					SelectPartition(input, blockPtr);
 				}
-				ApplicateColor(m_blockData, output);
+				ApplicateColor(blockPtr, output);
 			}
 		}
 
-		private static void DecodeBlockParameters(byte[] input, int ioff, BlockData block_data)
+		private unsafe static void DecodeBlockParameters(byte* input, BlockData* pBlock)
 		{
-			block_data.dual_plane = (input[ioff + 1] & 4) >> 2;
-			block_data.weight_range = (input[ioff + 0] >> 4 & 1) | (input[ioff + 1] << 2 & 8);
+			pBlock->dual_plane = (input[1] & 4) >> 2;
+			pBlock->weight_range = (input[0] >> 4 & 1) | (input[1] << 2 & 8);
 
-			if ((input[ioff] & 3) != 0)
+			if ((input[0] & 3) != 0)
 			{
-				block_data.weight_range |= input[ioff] << 1 & 6;
-				switch (input[ioff] & 0xc)
+				pBlock->weight_range |= input[0] << 1 & 6;
+				switch (input[0] & 0xc)
 				{
 					case 0:
-						block_data.width = (BitConverter.ToInt32(input, ioff) >> 7 & 3) + 4;
-						block_data.height = (input[ioff] >> 5 & 3) + 2;
+						pBlock->width = (*((int*)input) >> 7 & 3) + 4;
+						pBlock->height = (input[0] >> 5 & 3) + 2;
 						break;
 					case 4:
-						block_data.width = (BitConverter.ToInt32(input, ioff) >> 7 & 3) + 8;
-						block_data.height = (input[ioff] >> 5 & 3) + 2;
+						pBlock->width = (*((int*)input) >> 7 & 3) + 8;
+						pBlock->height = (input[0] >> 5 & 3) + 2;
 						break;
 					case 8:
-						block_data.width = (input[ioff] >> 5 & 3) + 2;
-						block_data.height = (BitConverter.ToInt32(input, ioff) >> 7 & 3) + 8;
+						pBlock->width = (input[0] >> 5 & 3) + 2;
+						pBlock->height = (*((int*)input) >> 7 & 3) + 8;
 						break;
 					case 12:
-						if ((input[ioff + 1] & 1) != 0)
+						if ((input[1] & 1) != 0)
 						{
-							block_data.width = (input[ioff] >> 7 & 1) + 2;
-							block_data.height = (input[ioff] >> 5 & 3) + 2;
+							pBlock->width = (input[0] >> 7 & 1) + 2;
+							pBlock->height = (input[0] >> 5 & 3) + 2;
 						}
 						else
 						{
-							block_data.width = (input[ioff] >> 5 & 3) + 2;
-							block_data.height = (input[ioff] >> 7 & 1) + 6;
+							pBlock->width = (input[0] >> 5 & 3) + 2;
+							pBlock->height = (input[0] >> 7 & 1) + 6;
 						}
 						break;
 				}
 			}
 			else
 			{
-				block_data.weight_range |= input[ioff] >> 1 & 6;
-				switch (BitConverter.ToInt32(input, ioff) & 0x180)
+				pBlock->weight_range |= input[0] >> 1 & 6;
+				switch ((*((int*)input)) & 0x180)
 				{
 					case 0:
-						block_data.width = 12;
-						block_data.height = (input[ioff] >> 5 & 3) + 2;
+						pBlock->width = 12;
+						pBlock->height = (input[0] >> 5 & 3) + 2;
 						break;
 					case 0x80:
-						block_data.width = (input[ioff] >> 5 & 3) + 2;
-						block_data.height = 12;
+						pBlock->width = (input[0] >> 5 & 3) + 2;
+						pBlock->height = 12;
 						break;
 					case 0x100:
-						block_data.width = (input[ioff] >> 5 & 3) + 6;
-						block_data.height = (input[ioff + 1] >> 1 & 3) + 6;
-						block_data.dual_plane = 0;
-						block_data.weight_range &= 7;
+						pBlock->width = (input[0] >> 5 & 3) + 6;
+						pBlock->height = (input[1] >> 1 & 3) + 6;
+						pBlock->dual_plane = 0;
+						pBlock->weight_range &= 7;
 						break;
 					case 0x180:
-						block_data.width = (input[ioff] & 0x20) != 0 ? 10 : 6;
-						block_data.height = (input[ioff] & 0x20) != 0 ? 6 : 10;
+						pBlock->width = (input[0] & 0x20) != 0 ? 10 : 6;
+						pBlock->height = (input[0] & 0x20) != 0 ? 6 : 10;
 						break;
 				}
 			}
 
-			block_data.part_num = (input[ioff + 1] >> 3 & 3) + 1;
+			pBlock->part_num = (input[1] >> 3 & 3) + 1;
 
-			block_data.weight_num = block_data.width * block_data.height;
-			if (block_data.dual_plane != 0)
-				block_data.weight_num *= 2;
+			pBlock->weight_num = pBlock->width * pBlock->height;
+			if (pBlock->dual_plane != 0)
+				pBlock->weight_num *= 2;
 
 			int weight_bits, config_bits, cem_base = 0;
 
-			switch (WeightPrecTableA[block_data.weight_range])
+			switch (WeightPrecTableA[pBlock->weight_range])
 			{
 				case 3:
-					weight_bits = block_data.weight_num * WeightPrecTableB[block_data.weight_range] + (block_data.weight_num * 8 + 4) / 5;
+					weight_bits = pBlock->weight_num * WeightPrecTableB[pBlock->weight_range] + (pBlock->weight_num * 8 + 4) / 5;
 					break;
 				case 5:
-					weight_bits = block_data.weight_num * WeightPrecTableB[block_data.weight_range] + (block_data.weight_num * 7 + 2) / 3;
+					weight_bits = pBlock->weight_num * WeightPrecTableB[pBlock->weight_range] + (pBlock->weight_num * 7 + 2) / 3;
 					break;
 				default:
-					weight_bits = block_data.weight_num * WeightPrecTableB[block_data.weight_range];
+					weight_bits = pBlock->weight_num * WeightPrecTableB[pBlock->weight_range];
 					break;
 			}
 
-			if (block_data.part_num == 1)
+			if (pBlock->part_num == 1)
 			{
-				block_data.cem[0] = BitConverter.ToInt32(input, ioff + 1) >> 5 & 0xf;
+				pBlock->cem[0] = *((int*)(input + 1)) >> 5 & 0xf;
 				config_bits = 17;
 			}
 			else
 			{
-				cem_base = BitConverter.ToInt32(input, ioff + 2) >> 7 & 3;
+				cem_base = *((int*)(input + 2)) >> 7 & 3;
 				if (cem_base == 0)
 				{
-					int cem = input[ioff + 3] >> 1 & 0xf;
-					for (int i = 0; i < block_data.part_num; i++)
+					int cem = input[3] >> 1 & 0xf;
+					for (int i = 0; i < pBlock->part_num; i++)
 					{
-						block_data.cem[i] = cem;
+						pBlock->cem[i] = cem;
 					}
 					config_bits = 29;
 				}
 				else
 				{
-					for (int i = 0; i < block_data.part_num; i++)
+					for (int i = 0; i < pBlock->part_num; i++)
 					{
-						block_data.cem[i] = ((input[ioff + 3] >> (i + 1) & 1) + cem_base - 1) << 2;
+						pBlock->cem[i] = ((input[3] >> (i + 1) & 1) + cem_base - 1) << 2;
 					}
-					switch (block_data.part_num)
+					switch (pBlock->part_num)
 					{
 						case 2:
-							block_data.cem[0] |= input[ioff + 3] >> 3 & 3;
-							block_data.cem[1] |= GetBits(input, ioff, 126 - weight_bits, 2);
+							pBlock->cem[0] |= input[3] >> 3 & 3;
+							pBlock->cem[1] |= GetBits(input, 126 - weight_bits, 2);
 							break;
 						case 3:
-							block_data.cem[0] |= input[ioff + 3] >> 4 & 1;
-							block_data.cem[0] |= GetBits(input, ioff, 122 - weight_bits, 2) & 2;
-							block_data.cem[1] |= GetBits(input, ioff, 124 - weight_bits, 2);
-							block_data.cem[2] |= GetBits(input, ioff, 126 - weight_bits, 2);
+							pBlock->cem[0] |= input[3] >> 4 & 1;
+							pBlock->cem[0] |= GetBits(input, 122 - weight_bits, 2) & 2;
+							pBlock->cem[1] |= GetBits(input, 124 - weight_bits, 2);
+							pBlock->cem[2] |= GetBits(input, 126 - weight_bits, 2);
 							break;
 						case 4:
 							for (int i = 0; i < 4; i++)
 							{
-								block_data.cem[i] |= GetBits(input, ioff, 120 + i * 2 - weight_bits, 2);
+								pBlock->cem[i] |= GetBits(input, 120 + i * 2 - weight_bits, 2);
 							}
 							break;
 					}
-					config_bits = 25 + block_data.part_num * 3;
+					config_bits = 25 + pBlock->part_num * 3;
 				}
 			}
 
-			if (block_data.dual_plane != 0)
+			if (pBlock->dual_plane != 0)
 			{
 				config_bits += 2;
-				block_data.plane_selector = GetBits(input, ioff, cem_base != 0 ? 130 - weight_bits - block_data.part_num * 3 : 126 - weight_bits, 2);
+				pBlock->plane_selector = GetBits(input, cem_base != 0 ? 130 - weight_bits - pBlock->part_num * 3 : 126 - weight_bits, 2);
 			}
 
 			int remain_bits = 128 - config_bits - weight_bits;
 
-			block_data.endpoint_value_num = 0;
-			for (int i = 0; i < block_data.part_num; i++)
+			pBlock->endpoint_value_num = 0;
+			for (int i = 0; i < pBlock->part_num; i++)
 			{
-				block_data.endpoint_value_num += (block_data.cem[i] >> 1 & 6) + 2;
+				pBlock->endpoint_value_num += (pBlock->cem[i] >> 1 & 6) + 2;
 			}
 
-			for (int i = 0, endpoint_bits; i < CemTableA.Count; i++)
+			for (int i = 0, endpoint_bits; i < CemTableA.Length; i++)
 			{
 				switch (CemTableA[i])
 				{
 					case 3:
-						endpoint_bits = block_data.endpoint_value_num * CemTableB[i] + (block_data.endpoint_value_num * 8 + 4) / 5;
+						endpoint_bits = pBlock->endpoint_value_num * CemTableB[i] + (pBlock->endpoint_value_num * 8 + 4) / 5;
 						break;
 					case 5:
-						endpoint_bits = block_data.endpoint_value_num * CemTableB[i] + (block_data.endpoint_value_num * 7 + 2) / 3;
+						endpoint_bits = pBlock->endpoint_value_num * CemTableB[i] + (pBlock->endpoint_value_num * 7 + 2) / 3;
 						break;
 					default:
-						endpoint_bits = block_data.endpoint_value_num * CemTableB[i];
+						endpoint_bits = pBlock->endpoint_value_num * CemTableB[i];
 						break;
 				}
 
 				if (endpoint_bits <= remain_bits)
 				{
-					block_data.cem_range = i;
+					pBlock->cem_range = i;
 					break;
 				}
 			}
 		}
 
-		private void DecodeEndpoints(byte[] input, int ioff, BlockData data)
+		private unsafe static void DecodeEndpoints(byte* input, BlockData* pBlock)
 		{
-			DecodeIntseq(input, ioff, data.part_num == 1 ? 17 : 29, CemTableA[data.cem_range], CemTableB[data.cem_range], data.endpoint_value_num, false, m_epSeq);
+			IntSeqData* epSeq = stackalloc IntSeqData[32];
+			DecodeIntseq(input, pBlock->part_num == 1 ? 17 : 29, CemTableA[pBlock->cem_range], CemTableB[pBlock->cem_range], pBlock->endpoint_value_num, false, epSeq);
 
-			switch (CemTableA[data.cem_range])
+			int* ev = stackalloc int[32];
+			switch (CemTableA[pBlock->cem_range])
 			{
 				case 3:
-					for (int i = 0, b = 0, c = DETritsTable[CemTableB[data.cem_range]]; i < data.endpoint_value_num; i++)
+					for (int i = 0, b = 0, c = DETritsTable[CemTableB[pBlock->cem_range]]; i < pBlock->endpoint_value_num; i++)
 					{
-						int a = (m_epSeq[i].bits & 1) * 0x1ff;
-						int x = m_epSeq[i].bits >> 1;
-						switch (CemTableB[data.cem_range])
+						int a = (epSeq[i].bits & 1) * 0x1ff;
+						int x = epSeq[i].bits >> 1;
+						switch (CemTableB[pBlock->cem_range])
 						{
 							case 1:
 								b = 0;
@@ -303,16 +294,16 @@ namespace Astc
 								b = x << 4 | x >> 4;
 								break;
 						}
-						m_ev[i] = (a & 0x80) | ((m_epSeq[i].nonbits * c + b) ^ a) >> 2;
+						ev[i] = (a & 0x80) | ((epSeq[i].nonbits * c + b) ^ a) >> 2;
 					}
 					break;
 
 				case 5:
-					for (int i = 0, b = 0, c = DEQuintsTable[CemTableB[data.cem_range]]; i < data.endpoint_value_num; i++)
+					for (int i = 0, b = 0, c = DEQuintsTable[CemTableB[pBlock->cem_range]]; i < pBlock->endpoint_value_num; i++)
 					{
-						int a = (m_epSeq[i].bits & 1) * 0x1ff;
-						int x = m_epSeq[i].bits >> 1;
-						switch (CemTableB[data.cem_range])
+						int a = (epSeq[i].bits & 1) * 0x1ff;
+						int x = epSeq[i].bits >> 1;
+						switch (CemTableB[pBlock->cem_range])
 						{
 							case 1:
 								b = 0;
@@ -330,109 +321,109 @@ namespace Astc
 								b = x << 5 | x >> 3;
 								break;
 						}
-						m_ev[i] = (a & 0x80) | ((m_epSeq[i].nonbits * c + b) ^ a) >> 2;
+						ev[i] = (a & 0x80) | ((epSeq[i].nonbits * c + b) ^ a) >> 2;
 					}
 					break;
 
 				default:
-					switch (CemTableB[data.cem_range])
+					switch (CemTableB[pBlock->cem_range])
 					{
 						case 1:
-							for (int i = 0; i < data.endpoint_value_num; i++)
-								m_ev[i] = m_epSeq[i].bits * 0xff;
+							for (int i = 0; i < pBlock->endpoint_value_num; i++)
+								ev[i] = epSeq[i].bits * 0xff;
 							break;
 						case 2:
-							for (int i = 0; i < data.endpoint_value_num; i++)
-								m_ev[i] = m_epSeq[i].bits * 0x55;
+							for (int i = 0; i < pBlock->endpoint_value_num; i++)
+								ev[i] = epSeq[i].bits * 0x55;
 							break;
 						case 3:
-							for (int i = 0; i < data.endpoint_value_num; i++)
-								m_ev[i] = m_epSeq[i].bits << 5 | m_epSeq[i].bits << 2 | m_epSeq[i].bits >> 1;
+							for (int i = 0; i < pBlock->endpoint_value_num; i++)
+								ev[i] = epSeq[i].bits << 5 | epSeq[i].bits << 2 | epSeq[i].bits >> 1;
 							break;
 						case 4:
-							for (int i = 0; i < data.endpoint_value_num; i++)
-								m_ev[i] = m_epSeq[i].bits << 4 | m_epSeq[i].bits;
+							for (int i = 0; i < pBlock->endpoint_value_num; i++)
+								ev[i] = epSeq[i].bits << 4 | epSeq[i].bits;
 							break;
 						case 5:
-							for (int i = 0; i < data.endpoint_value_num; i++)
-								m_ev[i] = m_epSeq[i].bits << 3 | m_epSeq[i].bits >> 2;
+							for (int i = 0; i < pBlock->endpoint_value_num; i++)
+								ev[i] = epSeq[i].bits << 3 | epSeq[i].bits >> 2;
 							break;
 						case 6:
-							for (int i = 0; i < data.endpoint_value_num; i++)
-								m_ev[i] = m_epSeq[i].bits << 2 | m_epSeq[i].bits >> 4;
+							for (int i = 0; i < pBlock->endpoint_value_num; i++)
+								ev[i] = epSeq[i].bits << 2 | epSeq[i].bits >> 4;
 							break;
 						case 7:
-							for (int i = 0; i < data.endpoint_value_num; i++)
-								m_ev[i] = m_epSeq[i].bits << 1 | m_epSeq[i].bits >> 6;
+							for (int i = 0; i < pBlock->endpoint_value_num; i++)
+								ev[i] = epSeq[i].bits << 1 | epSeq[i].bits >> 6;
 							break;
 						case 8:
-							for (int i = 0; i < data.endpoint_value_num; i++)
-								m_ev[i] = m_epSeq[i].bits;
+							for (int i = 0; i < pBlock->endpoint_value_num; i++)
+								ev[i] = epSeq[i].bits;
 							break;
 					}
 					break;
 			}
 
-			int v = 0;
-			for (int cem = 0; cem < data.part_num; v += (data.cem[cem] / 4 + 1) * 2, cem++)
-			{
-				switch (data.cem[cem])
+			int* v = ev;
+			for (int cem = 0, cemOff = 0; cem < pBlock->part_num; v += (pBlock->cem[cem] / 4 + 1) * 2, cem++, cemOff += 8)
+			{				
+				switch (pBlock->cem[cem])
 				{
 					case 0:
-						SetEndpoint(data.endpoints[cem], m_ev[v], m_ev[v], m_ev[v], 255, m_ev[v + 1], m_ev[v + 1], m_ev[v + 1], 255);
+						SetEndpoint(&pBlock->endpoints[cemOff], v[0], v[0], v[0], 255, v[1], v[1], v[1], 255);
 						break;
 					case 1:
 						{
-							int l0 = (m_ev[v] >> 2) | (m_ev[v + 1] & 0xc0);
-							int l1 = Clamp(l0 + (m_ev[v + 1] & 0x3f));
-							SetEndpoint(data.endpoints[cem], l0, l0, l0, 255, l1, l1, l1, 255);
+							int l0 = (v[0] >> 2) | (v[1] & 0xc0);
+							int l1 = Clamp(l0 + (v[1] & 0x3f));
+							SetEndpoint(&pBlock->endpoints[cemOff], l0, l0, l0, 255, l1, l1, l1, 255);
 						}
 						break;
 					case 4:
-						SetEndpoint(data.endpoints[cem], m_ev[v], m_ev[v], m_ev[v], m_ev[v + 2], m_ev[v + 1], m_ev[v + 1], m_ev[v + 1], m_ev[v + 3]);
+						SetEndpoint(&pBlock->endpoints[cemOff], v[0], v[0], v[0], v[2], v[1], v[1], v[1], v[3]);
 						break;
 					case 5:
-						BitTransferSigned(m_ev, v + 1, v + 0);
-						BitTransferSigned(m_ev, v + 3, v + 2);
-						m_ev[v + 1] += m_ev[v + 0];
-						SetEndpointClamp(data.endpoints[cem], m_ev[v], m_ev[v], m_ev[v], m_ev[v + 2], m_ev[v + 1], m_ev[v + 1], m_ev[v + 1], m_ev[v + 2] + m_ev[v + 3]);
+						BitTransferSigned(&v[1], &v[0]);
+						BitTransferSigned(&v[3], &v[2]);
+						v[1] += v[0];
+						SetEndpointClamp(&pBlock->endpoints[cemOff], v[0], v[0], v[0], v[2], v[1], v[1], v[1], v[2] + v[3]);
 						break;
 					case 6:
-						SetEndpoint(data.endpoints[cem], m_ev[v] * m_ev[v + 3] >> 8, m_ev[v + 1] * m_ev[v + 3] >> 8, m_ev[v + 2] * m_ev[v + 3] >> 8, 255, m_ev[v], m_ev[v + 1], m_ev[v + 2], 255);
+						SetEndpoint(&pBlock->endpoints[cemOff], v[0] * v[3] >> 8, v[1] * v[3] >> 8, v[2] * v[3] >> 8, 255, v[0], v[1], v[2], 255);
 						break;
 					case 8:
-						if (m_ev[v] + m_ev[v + 2] + m_ev[v + 4] <= m_ev[v + 1] + m_ev[v + 3] + m_ev[v + 5])
-							SetEndpoint(data.endpoints[cem], m_ev[v], m_ev[v + 2], m_ev[v + 4], 255, m_ev[v + 1], m_ev[v + 3], m_ev[v + 5], 255);
+						if (v[0] + v[2] + v[4] <= v[1] + v[3] + v[5])
+							SetEndpoint(&pBlock->endpoints[cemOff], v[0], v[2], v[4], 255, v[1], v[3], v[5], 255);
 						else
-							SetEndpointBlue(data.endpoints[cem], m_ev[v + 1], m_ev[v + 3], m_ev[v + 5], 255, m_ev[v + 0], m_ev[v + 2], m_ev[v + 4], 255);
+							SetEndpointBlue(&pBlock->endpoints[cemOff], v[1], v[3], v[5], 255, v[0], v[2], v[4], 255);
 						break;
 					case 9:
-						BitTransferSigned(m_ev, v + 1, v + 0);
-						BitTransferSigned(m_ev, v + 3, v + 2);
-						BitTransferSigned(m_ev, v + 5, v + 4);
-						if (m_ev[v + 1] + m_ev[v + 3] + m_ev[v + 5] >= 0)
-							SetEndpointClamp(data.endpoints[cem], m_ev[v], m_ev[v + 2], m_ev[v + 4], 255, m_ev[v + 0] + m_ev[v + 1], m_ev[v + 2] + m_ev[v + 3], m_ev[v + 4] + m_ev[v + 5], 255);
+						BitTransferSigned(&v[1], &v[0]);
+						BitTransferSigned(&v[3], &v[2]);
+						BitTransferSigned(&v[5], &v[4]);
+						if (v[1] + v[3] + v[5] >= 0)
+							SetEndpointClamp(&pBlock->endpoints[cemOff], v[0], v[2], v[4], 255, v[0] + v[1], v[2] + v[3], v[4] + v[5], 255);
 						else
-							SetEndpointBlueClamp(data.endpoints[cem], m_ev[v] + m_ev[v + 1], m_ev[v + 2] + m_ev[v + 3], m_ev[v + 4] + m_ev[v + 5], 255, m_ev[v], m_ev[v + 2], m_ev[v + 4], 255);
+							SetEndpointBlueClamp(&pBlock->endpoints[cemOff], v[0] + v[1], v[2] + v[3], v[4] + v[5], 255, v[0], v[2], v[4], 255);
 						break;
 					case 10:
-						SetEndpoint(data.endpoints[cem], m_ev[v] * m_ev[v + 3] >> 8, m_ev[v + 1] * m_ev[v + 3] >> 8, m_ev[v + 2] * m_ev[v + 3] >> 8, m_ev[v + 4], m_ev[v], m_ev[v + 1], m_ev[v + 2], m_ev[v + 5]);
+						SetEndpoint(&pBlock->endpoints[cemOff], v[0] * v[3] >> 8, v[1] * v[3] >> 8, v[2] * v[3] >> 8, v[4], v[0], v[1], v[2], v[5]);
 						break;
 					case 12:
-						if (m_ev[v] + m_ev[v + 2] + m_ev[v + 4] <= m_ev[v + 1] + m_ev[v + 3] + m_ev[v + 5])
-							SetEndpoint(data.endpoints[cem], m_ev[v], m_ev[v + 2], m_ev[v + 4], m_ev[v + 6], m_ev[v + 1], m_ev[v + 3], m_ev[v + 5], m_ev[v + 7]);
+						if (v[0] + v[2] + v[4] <= v[1] + v[3] + v[5])
+							SetEndpoint(&pBlock->endpoints[cemOff], v[0], v[2], v[4], v[6], v[1], v[3], v[5], v[7]);
 						else
-							SetEndpointBlue(data.endpoints[cem], m_ev[v + 1], m_ev[v + 3], m_ev[v + 5], m_ev[v + 7], m_ev[v], m_ev[v + 2], m_ev[v + 4], m_ev[v + 6]);
+							SetEndpointBlue(&pBlock->endpoints[cemOff], v[1], v[3], v[5], v[7], v[0], v[2], v[4], v[6]);
 						break;
 					case 13:
-						BitTransferSigned(m_ev, v + 1, v + 0);
-						BitTransferSigned(m_ev, v + 3, v + 2);
-						BitTransferSigned(m_ev, v + 5, v + 4);
-						BitTransferSigned(m_ev, v + 7, v + 6);
-						if (m_ev[v + 1] + m_ev[v + 3] + m_ev[v + 5] >= 0)
-							SetEndpointClamp(data.endpoints[cem], m_ev[v], m_ev[v + 2], m_ev[v + 4], m_ev[v + 6], m_ev[v] + m_ev[v + 1], m_ev[v + 2] + m_ev[v + 3], m_ev[v + 4] + m_ev[v + 5], m_ev[v + 6] + m_ev[v + 7]);
+						BitTransferSigned(&v[1], &v[0]);
+						BitTransferSigned(&v[3], &v[2]);
+						BitTransferSigned(&v[5], &v[4]);
+						BitTransferSigned(&v[7], &v[6]);
+						if (v[1] + v[3] + v[5] >= 0)
+							SetEndpointClamp(&pBlock->endpoints[cemOff], v[0], v[2], v[4], v[6], v[0] + v[1], v[2] + v[3], v[4] + v[5], v[6] + v[7]);
 						else
-							SetEndpointBlueClamp(data.endpoints[cem], m_ev[v] + m_ev[v + 1], m_ev[v + 2] + m_ev[v + 3], m_ev[v + 4] + m_ev[v + 5], m_ev[v + 6] + m_ev[v + 7], m_ev[v], m_ev[v + 2], m_ev[v + 4], m_ev[v + 6]);
+							SetEndpointBlueClamp(&pBlock->endpoints[cemOff], v[0] + v[1], v[2] + v[3], v[4] + v[5], v[6] + v[7], v[0], v[2], v[4], v[6]);
 						break;
 					default:
 						throw new Exception("Unsupported ASTC format");
@@ -440,125 +431,127 @@ namespace Astc
 			}
 		}
 
-		private void DecodeWeights(byte[] input, int ioff, BlockData data)
+		private unsafe static void DecodeWeights(byte* input, BlockData* block)
 		{
-			DecodeIntseq(input, ioff, 128, WeightPrecTableA[data.weight_range], WeightPrecTableB[data.weight_range], data.weight_num, true, m_wSeq);
-
-			if (WeightPrecTableA[data.weight_range] == 0)
+			IntSeqData* wSeq = stackalloc IntSeqData[128];
+			DecodeIntseq(input, 128, WeightPrecTableA[block->weight_range], WeightPrecTableB[block->weight_range], block->weight_num, true, wSeq);
+			
+			int* wv = stackalloc int[128];
+			if (WeightPrecTableA[block->weight_range] == 0)
 			{
-				switch (WeightPrecTableB[data.weight_range])
+				switch (WeightPrecTableB[block->weight_range])
 				{
 					case 1:
-						for (int i = 0; i < data.weight_num; i++)
-							m_wv[i] = m_wSeq[i].bits != 0 ? 63 : 0;
+						for (int i = 0; i < block->weight_num; i++)
+							wv[i] = wSeq[i].bits != 0 ? 63 : 0;
 						break;
 					case 2:
-						for (int i = 0; i < data.weight_num; i++)
-							m_wv[i] = m_wSeq[i].bits << 4 | m_wSeq[i].bits << 2 | m_wSeq[i].bits;
+						for (int i = 0; i < block->weight_num; i++)
+							wv[i] = wSeq[i].bits << 4 | wSeq[i].bits << 2 | wSeq[i].bits;
 						break;
 					case 3:
-						for (int i = 0; i < data.weight_num; i++)
-							m_wv[i] = m_wSeq[i].bits << 3 | m_wSeq[i].bits;
+						for (int i = 0; i < block->weight_num; i++)
+							wv[i] = wSeq[i].bits << 3 | wSeq[i].bits;
 						break;
 					case 4:
-						for (int i = 0; i < data.weight_num; i++)
-							m_wv[i] = m_wSeq[i].bits << 2 | m_wSeq[i].bits >> 2;
+						for (int i = 0; i < block->weight_num; i++)
+							wv[i] = wSeq[i].bits << 2 | wSeq[i].bits >> 2;
 						break;
 					case 5:
-						for (int i = 0; i < data.weight_num; i++)
-							m_wv[i] = m_wSeq[i].bits << 1 | m_wSeq[i].bits >> 4;
+						for (int i = 0; i < block->weight_num; i++)
+							wv[i] = wSeq[i].bits << 1 | wSeq[i].bits >> 4;
 						break;
 				}
-				for (int i = 0; i < data.weight_num; i++)
+				for (int i = 0; i < block->weight_num; i++)
 				{
-					if (m_wv[i] > 32)
+					if (wv[i] > 32)
 					{
-						++m_wv[i];
+						++wv[i];
 					}
 				}
 			}
-			else if (WeightPrecTableB[data.weight_range] == 0)
+			else if (WeightPrecTableB[block->weight_range] == 0)
 			{
-				int s = WeightPrecTableA[data.weight_range] == 3 ? 32 : 16;
-				for (int i = 0; i < data.weight_num; i++)
+				int s = WeightPrecTableA[block->weight_range] == 3 ? 32 : 16;
+				for (int i = 0; i < block->weight_num; i++)
 				{
-					m_wv[i] = m_wSeq[i].nonbits * s;
+					wv[i] = wSeq[i].nonbits * s;
 				}
 			}
 			else
 			{
-				if (WeightPrecTableA[data.weight_range] == 3)
+				if (WeightPrecTableA[block->weight_range] == 3)
 				{
-					switch (WeightPrecTableB[data.weight_range])
+					switch (WeightPrecTableB[block->weight_range])
 					{
 						case 1:
-							for (int i = 0; i < data.weight_num; i++)
+							for (int i = 0; i < block->weight_num; i++)
 							{
-								m_wv[i] = m_wSeq[i].nonbits * 50;
+								wv[i] = wSeq[i].nonbits * 50;
 							}
 							break;
 						case 2:
-							for (int i = 0; i < data.weight_num; i++)
+							for (int i = 0; i < block->weight_num; i++)
 							{
-								m_wv[i] = m_wSeq[i].nonbits * 23;
-								if ((m_wSeq[i].bits & 2) != 0)
+								wv[i] = wSeq[i].nonbits * 23;
+								if ((wSeq[i].bits & 2) != 0)
 								{
-									m_wv[i] += 0b1000101;
+									wv[i] += 0b1000101;
 								}
 							}
 							break;
 						case 3:
-							for (int i = 0; i < data.weight_num; i++)
+							for (int i = 0; i < block->weight_num; i++)
 							{
-								m_wv[i] = m_wSeq[i].nonbits * 11 + ((m_wSeq[i].bits << 4 | m_wSeq[i].bits >> 1) & 0b1100011);
+								wv[i] = wSeq[i].nonbits * 11 + ((wSeq[i].bits << 4 | wSeq[i].bits >> 1) & 0b1100011);
 							}
 							break;
 					}
 				}
-				else if (WeightPrecTableA[data.weight_range] == 5)
+				else if (WeightPrecTableA[block->weight_range] == 5)
 				{
-					switch (WeightPrecTableB[data.weight_range])
+					switch (WeightPrecTableB[block->weight_range])
 					{
 						case 1:
-							for (int i = 0; i < data.weight_num; i++)
-								m_wv[i] = m_wSeq[i].nonbits * 28;
+							for (int i = 0; i < block->weight_num; i++)
+								wv[i] = wSeq[i].nonbits * 28;
 							break;
 						case 2:
-							for (int i = 0; i < data.weight_num; i++)
+							for (int i = 0; i < block->weight_num; i++)
 							{
-								m_wv[i] = m_wSeq[i].nonbits * 13;
-								if ((m_wSeq[i].bits & 2) != 0)
+								wv[i] = wSeq[i].nonbits * 13;
+								if ((wSeq[i].bits & 2) != 0)
 								{
-									m_wv[i] += 0b1000010;
+									wv[i] += 0b1000010;
 								}
 							}
 							break;
 					}
 				}
-				for (int i = 0; i < data.weight_num; i++)
+				for (int i = 0; i < block->weight_num; i++)
 				{
-					int a = (m_wSeq[i].bits & 1) * 0x7f;
-					m_wv[i] = (a & 0x20) | ((m_wv[i] ^ a) >> 2);
-					if (m_wv[i] > 32)
+					int a = (wSeq[i].bits & 1) * 0x7f;
+					wv[i] = (a & 0x20) | ((wv[i] ^ a) >> 2);
+					if (wv[i] > 32)
 					{
-						++m_wv[i];
+						++wv[i];
 					}
 				}
 			}
 
-			int ds = (1024 + data.bw / 2) / (data.bw - 1);
-			int dt = (1024 + data.bh / 2) / (data.bh - 1);
-			int pn = data.dual_plane != 0 ? 2 : 1;
+			int ds = (1024 + block->bw / 2) / (block->bw - 1);
+			int dt = (1024 + block->bh / 2) / (block->bh - 1);
+			int pn = block->dual_plane != 0 ? 2 : 1;
 
-			for (int t = 0, i = 0; t < data.bh; t++)
+			for (int t = 0, i = 0; t < block->bh; t++)
 			{
-				for (int s = 0; s < data.bw; s++, i++)
+				for (int s = 0; s < block->bw; s++, i++)
 				{
-					int gs = (ds * s * (data.width - 1) + 32) >> 6;
-					int gt = (dt * t * (data.height - 1) + 32) >> 6;
+					int gs = (ds * s * (block->width - 1) + 32) >> 6;
+					int gt = (dt * t * (block->height - 1) + 32) >> 6;
 					int fs = gs & 0xf;
 					int ft = gt & 0xf;
-					int v = (gs >> 4) + (gt >> 4) * data.width;
+					int v = (gs >> 4) + (gt >> 4) * block->width;
 					int w11 = (fs * ft + 8) >> 4;
 					int w10 = ft - w11;
 					int w01 = fs - w11;
@@ -566,20 +559,20 @@ namespace Astc
 
 					for (int p = 0; p < pn; p++)
 					{
-						int p00 = m_wv[v * pn + p];
-						int p01 = m_wv[(v + 1) * pn + p];
-						int p10 = m_wv[(v + data.width) * pn + p];
-						int p11 = m_wv[(v + data.width + 1) * pn + p];
-						data.weights[i][p] = (p00 * w00 + p01 * w01 + p10 * w10 + p11 * w11 + 8) >> 4;
+						int p00 = wv[v * pn + p];
+						int p01 = wv[(v + 1) * pn + p];
+						int p10 = wv[(v + block->width) * pn + p];
+						int p11 = wv[(v + block->width + 1) * pn + p];
+						block->weights[i * 2 + p] = (p00 * w00 + p01 * w01 + p10 * w10 + p11 * w11 + 8) >> 4;
 					}
 				}
 			}
 		}
 
-		private void SelectPartition(byte[] input, int ioff, BlockData data)
+		private unsafe static void SelectPartition(byte* input, BlockData* block)
 		{
-			bool small_block = data.bw * data.bh < 31;
-			int seed = (BitConverter.ToInt32(input, ioff) >> 13 & 0x3ff) | (data.part_num - 1) << 10;
+			bool small_block = block->bw * block->bh < 31;
+			int seed = (*((int*)input) >> 13 & 0x3ff) | (block->part_num - 1) << 10;
 
 			uint rnum;
 			unchecked
@@ -596,119 +589,122 @@ namespace Astc
 				rnum ^= rnum << 6;
 				rnum ^= rnum >> 17;
 			}
-
+			
+			int* seeds = stackalloc int[8];
 			for (int i = 0; i < 8; i++)
 			{
-				m_seeds[i] = (int)((rnum >> (i * 4)) & 0xF);
-				m_seeds[i] *= m_seeds[i];
+				seeds[i] = (int)((rnum >> (i * 4)) & 0xF);
+				seeds[i] *= seeds[i];
 			}
 
-			m_sh[0] = (seed & 2) != 0 ? 4 : 5;
-			m_sh[1] = data.part_num == 3 ? 6 : 5;
+
+			int* sh = stackalloc int[2];
+			sh[0] = (seed & 2) != 0 ? 4 : 5;
+			sh[1] = block->part_num == 3 ? 6 : 5;
 
 			if ((seed & 1) != 0)
 			{
 				for (int i = 0; i < 8; i++)
 				{
-					m_seeds[i] >>= m_sh[i % 2];
+					seeds[i] >>= sh[i % 2];
 				}
 			}
 			else
 			{
 				for (int i = 0; i < 8; i++)
 				{
-					m_seeds[i] >>= m_sh[1 - i % 2];
+					seeds[i] >>= sh[1 - i % 2];
 				}
 			}
 
 			if (small_block)
 			{
-				for (int t = 0, i = 0; t < data.bh; t++)
+				for (int t = 0, i = 0; t < block->bh; t++)
 				{
-					for (int s = 0; s < data.bw; s++, i++)
+					for (int s = 0; s < block->bw; s++, i++)
 					{
 						int x = s << 1;
 						int y = t << 1;
-						int a = (int)((m_seeds[0] * x + m_seeds[1] * y + (rnum >> 14)) & 0x3f);
-						int b = (int)((m_seeds[2] * x + m_seeds[3] * y + (rnum >> 10)) & 0x3f);
-						int c = (int)(data.part_num < 3 ? 0 : (m_seeds[4] * x + m_seeds[5] * y + (rnum >> 6)) & 0x3f);
-						int d = (int)(data.part_num < 4 ? 0 : (m_seeds[6] * x + m_seeds[7] * y + (rnum >> 2)) & 0x3f);
-						data.partition[i] = (a >= b && a >= c && a >= d) ? 0 : (b >= c && b >= d) ? 1 : (c >= d) ? 2 : 3;
+						int a = (int)((seeds[0] * x + seeds[1] * y + (rnum >> 14)) & 0x3f);
+						int b = (int)((seeds[2] * x + seeds[3] * y + (rnum >> 10)) & 0x3f);
+						int c = (int)(block->part_num < 3 ? 0 : (seeds[4] * x + seeds[5] * y + (rnum >> 6)) & 0x3f);
+						int d = (int)(block->part_num < 4 ? 0 : (seeds[6] * x + seeds[7] * y + (rnum >> 2)) & 0x3f);
+						block->partition[i] = (a >= b && a >= c && a >= d) ? 0 : (b >= c && b >= d) ? 1 : (c >= d) ? 2 : 3;
 					}
 				}
 			}
 			else
 			{
-				for (int y = 0, i = 0; y < data.bh; y++)
+				for (int y = 0, i = 0; y < block->bh; y++)
 				{
-					for (int x = 0; x < data.bw; x++, i++)
+					for (int x = 0; x < block->bw; x++, i++)
 					{
-						int a = (int)((m_seeds[0] * x + m_seeds[1] * y + (rnum >> 14)) & 0x3f);
-						int b = (int)((m_seeds[2] * x + m_seeds[3] * y + (rnum >> 10)) & 0x3f);
-						int c = (int)(data.part_num < 3 ? 0 : (m_seeds[4] * x + m_seeds[5] * y + (rnum >> 6)) & 0x3f);
-						int d = (int)(data.part_num < 4 ? 0 : (m_seeds[6] * x + m_seeds[7] * y + (rnum >> 2)) & 0x3f);
-						data.partition[i] = (a >= b && a >= c && a >= d) ? 0 : (b >= c && b >= d) ? 1 : (c >= d) ? 2 : 3;
+						int a = (int)((seeds[0] * x + seeds[1] * y + (rnum >> 14)) & 0x3f);
+						int b = (int)((seeds[2] * x + seeds[3] * y + (rnum >> 10)) & 0x3f);
+						int c = (int)(block->part_num < 3 ? 0 : (seeds[4] * x + seeds[5] * y + (rnum >> 6)) & 0x3f);
+						int d = (int)(block->part_num < 4 ? 0 : (seeds[6] * x + seeds[7] * y + (rnum >> 2)) & 0x3f);
+						block->partition[i] = (a >= b && a >= c && a >= d) ? 0 : (b >= c && b >= d) ? 1 : (c >= d) ? 2 : 3;
 					}
 				}
 			}
 		}
 
-		private void ApplicateColor(BlockData data, uint[] output)
+		private unsafe static void ApplicateColor(BlockData* block, uint[] output)
 		{
-			if (data.dual_plane != 0)
+			if (block->dual_plane != 0)
 			{
-				m_ps[0] = m_ps[1] = m_ps[2] = m_ps[3] = 0;
-				m_ps[data.plane_selector] = 1;
-				if (data.part_num > 1)
+				int* ps = stackalloc int[] { 0, 0, 0, 0 };
+				ps[block->plane_selector] = 1;
+				if (block->part_num > 1)
 				{
-					for (int i = 0; i < data.bw * data.bh; i++)
+					for (int i = 0; i < block->bw * block->bh; i++)
 					{
-						int p = data.partition[i];
-						byte r = SelectColor(data.endpoints[p][0], data.endpoints[p][4], data.weights[i][m_ps[0]]);
-						byte g = SelectColor(data.endpoints[p][1], data.endpoints[p][5], data.weights[i][m_ps[1]]);
-						byte b = SelectColor(data.endpoints[p][2], data.endpoints[p][6], data.weights[i][m_ps[2]]);
-						byte a = SelectColor(data.endpoints[p][3], data.endpoints[p][7], data.weights[i][m_ps[3]]);
+						int p = block->partition[i];
+						byte r = SelectColor(block->endpoints[p * 8 + 0], block->endpoints[p * 8 + 4], block->weights[i * 2 + ps[0]]);
+						byte g = SelectColor(block->endpoints[p * 8 + 1], block->endpoints[p * 8 + 5], block->weights[i * 2 + ps[1]]);
+						byte b = SelectColor(block->endpoints[p * 8 + 2], block->endpoints[p * 8 + 6], block->weights[i * 2 + ps[2]]);
+						byte a = SelectColor(block->endpoints[p * 8 + 3], block->endpoints[p * 8 + 7], block->weights[i * 2 + ps[3]]);
 						output[i] = Color(r, g, b, a);
 					}
 				}
 				else
 				{
-					for (int i = 0; i < data.bw * data.bh; i++)
+					for (int i = 0; i < block->bw * block->bh; i++)
 					{
-						byte r = SelectColor(data.endpoints[0][0], data.endpoints[0][4], data.weights[i][m_ps[0]]);
-						byte g = SelectColor(data.endpoints[0][1], data.endpoints[0][5], data.weights[i][m_ps[1]]);
-						byte b = SelectColor(data.endpoints[0][2], data.endpoints[0][6], data.weights[i][m_ps[2]]);
-						byte a = SelectColor(data.endpoints[0][3], data.endpoints[0][7], data.weights[i][m_ps[3]]);
+						byte r = SelectColor(block->endpoints[0], block->endpoints[4], block->weights[i * 2 + ps[0]]);
+						byte g = SelectColor(block->endpoints[1], block->endpoints[5], block->weights[i * 2 + ps[1]]);
+						byte b = SelectColor(block->endpoints[2], block->endpoints[6], block->weights[i * 2 + ps[2]]);
+						byte a = SelectColor(block->endpoints[3], block->endpoints[7], block->weights[i * 2 + ps[3]]);
 						output[i] = Color(r, g, b, a);
 					}
 				}
 			}
-			else if (data.part_num > 1)
+			else if (block->part_num > 1)
 			{
-				for (int i = 0; i < data.bw * data.bh; i++)
+				for (int i = 0; i < block->bw * block->bh; i++)
 				{
-					int p = data.partition[i];
-					byte r = SelectColor(data.endpoints[p][0], data.endpoints[p][4], data.weights[i][0]);
-					byte g = SelectColor(data.endpoints[p][1], data.endpoints[p][5], data.weights[i][0]);
-					byte b = SelectColor(data.endpoints[p][2], data.endpoints[p][6], data.weights[i][0]);
-					byte a = SelectColor(data.endpoints[p][3], data.endpoints[p][7], data.weights[i][0]);
+					int p = block->partition[i];
+					byte r = SelectColor(block->endpoints[p * 8 + 0], block->endpoints[p * 8 + 4], block->weights[i * 2]);
+					byte g = SelectColor(block->endpoints[p * 8 + 1], block->endpoints[p * 8 + 5], block->weights[i * 2]);
+					byte b = SelectColor(block->endpoints[p * 8 + 2], block->endpoints[p * 8 + 6], block->weights[i * 2]);
+					byte a = SelectColor(block->endpoints[p * 8 + 3], block->endpoints[p * 8 + 7], block->weights[i * 2]);
 					output[i] = Color(r, g, b, a);
 				}
 			}
 			else
 			{
-				for (int i = 0; i < data.bw * data.bh; i++)
+				for (int i = 0; i < block->bw * block->bh; i++)
 				{
-					byte r = SelectColor(data.endpoints[0][0], data.endpoints[0][4], data.weights[i][0]);
-					byte g = SelectColor(data.endpoints[0][1], data.endpoints[0][5], data.weights[i][0]);
-					byte b = SelectColor(data.endpoints[0][2], data.endpoints[0][6], data.weights[i][0]);
-					byte a = SelectColor(data.endpoints[0][3], data.endpoints[0][7], data.weights[i][0]);
+					byte r = SelectColor(block->endpoints[0], block->endpoints[4], block->weights[i * 2]);
+					byte g = SelectColor(block->endpoints[1], block->endpoints[5], block->weights[i * 2]);
+					byte b = SelectColor(block->endpoints[2], block->endpoints[6], block->weights[i * 2]);
+					byte a = SelectColor(block->endpoints[3], block->endpoints[7], block->weights[i * 2]);
 					output[i] = Color(r, g, b, a);
 				}
 			}
 		}
 
-		private static void DecodeIntseq(byte[] input, int ioff, int offset, int a, int b, int count, bool reverse, IntSeqData[] _out)
+		private unsafe static void DecodeIntseq(byte* input, int offset, int a, int b, int count, bool reverse, IntSeqData* _out)
 		{
 			if (count <= 0)
 				return;
@@ -728,14 +724,14 @@ namespace Astc
 					for (int i = 0, p = offset; i < block_count; i++, p -= block_size)
 					{
 						int now_size = (i < block_count - 1) ? block_size : last_block_size;
-						ulong d = BitReverseU64(GetBits64(input, ioff, p - now_size, now_size), now_size);
+						ulong d = BitReverseU64(GetBits64(input, p - now_size, now_size), now_size);
 						int x = (int)((d >> b & 3) | (d >> b * 2 & 0xc) | (d >> b * 3 & 0x10) | (d >> b * 4 & 0x60) | (d >> b * 5 & 0x80));
 						for (int j = 0; j < 5 && n < count; j++, n++)
 						{
 							_out[n] = new IntSeqData()
 							{
 								bits = (int)(d >> (DImt[j] + b * j)) & mask,
-								nonbits = DITritsTable[j][x],
+								nonbits = DITritsTable[j, x],
 							};
 						}
 					}
@@ -744,14 +740,14 @@ namespace Astc
 				{
 					for (int i = 0, p = offset; i < block_count; i++, p += block_size)
 					{
-						ulong d = GetBits64(input, ioff, p, (i < block_count - 1) ? block_size : last_block_size);
+						ulong d = GetBits64(input, p, (i < block_count - 1) ? block_size : last_block_size);
 						int x = (int)((d >> b & 3) | (d >> b * 2 & 0xc) | (d >> b * 3 & 0x10) | (d >> b * 4 & 0x60) | (d >> b * 5 & 0x80));
 						for (int j = 0; j < 5 && n < count; j++, n++)
 						{
 							_out[n] = new IntSeqData()
 							{
 								bits = unchecked((int)(d >> (DImt[j] + b * j))) & mask,
-								nonbits = DITritsTable[j][x],
+								nonbits = DITritsTable[j, x],
 							};
 						}
 					}
@@ -770,14 +766,14 @@ namespace Astc
 					for (int i = 0, p = offset; i < block_count; i++, p -= block_size)
 					{
 						int now_size = (i < block_count - 1) ? block_size : last_block_size;
-						ulong d = BitReverseU64(GetBits64(input, ioff, p - now_size, now_size), now_size);
+						ulong d = BitReverseU64(GetBits64(input, p - now_size, now_size), now_size);
 						int x = (int)((d >> b & 7) | (d >> b * 2 & 0x18) | (d >> b * 3 & 0x60));
 						for (int j = 0; j < 3 && n < count; j++, n++)
 						{
 							_out[n] = new IntSeqData()
 							{
 								bits = (int)d >> (DImq[j] + b * j) & mask,
-								nonbits = DIQuintsTable[j][x],
+								nonbits = DIQuintsTable[j, x],
 							};
 						}
 					}
@@ -786,14 +782,14 @@ namespace Astc
 				{
 					for (int i = 0, p = offset; i < block_count; i++, p += block_size)
 					{
-						ulong d = GetBits64(input, ioff, p, (i < block_count - 1) ? block_size : last_block_size);
+						ulong d = GetBits64(input, p, (i < block_count - 1) ? block_size : last_block_size);
 						int x = (int)((d >> b & 7) | (d >> b * 2 & 0x18) | (d >> b * 3 & 0x60));
 						for (int j = 0; j < 3 && n < count; j++, n++)
 						{
 							_out[n] = new IntSeqData()
 							{
 								bits = (int)d >> (DImq[j] + b * j) & mask,
-								nonbits = DIQuintsTable[j][x],
+								nonbits = DIQuintsTable[j, x],
 							};
 						}
 					}
@@ -807,7 +803,7 @@ namespace Astc
 					{
 						_out[n] = new IntSeqData()
 						{
-							bits = BitReverseU8((byte)GetBits(input, ioff, p, b), b),
+							bits = BitReverseU8((byte)GetBits(input, p, b), b),
 							nonbits = 0,
 						};
 					}
@@ -818,7 +814,7 @@ namespace Astc
 					{
 						_out[n] = new IntSeqData()
 						{
-							bits = GetBits(input, ioff, p, b),
+							bits = GetBits(input, p, b),
 							nonbits = 0,
 						};
 					}
@@ -858,25 +854,25 @@ namespace Astc
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static int GetBits(byte[] input, int ioff, int bit, int len)
+		private unsafe static int GetBits(byte* input, int bit, int len)
 		{
-			return (BitConverter.ToInt32(input, ioff + bit / 8) >> (bit % 8)) & ((1 << len) - 1);
+			return (*((int*)(input + bit / 8)) >> (bit % 8)) & ((1 << len) - 1);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static ulong GetBits64(byte[] input, int ioff, int bit, int len)
+		private unsafe static ulong GetBits64(byte* input, int bit, int len)
 		{
 			ulong mask = len == 64 ? 0xffffffffffffffff : (1UL << len) - 1;
 			if (len < 1)
 				return 0;
 			else if (bit >= 64)
-				return BitConverter.ToUInt64(input, ioff + 8) >> (bit - 64) & mask;
+				return *((ulong*)(input + 8)) >> (bit - 64) & mask;
 			else if (bit <= 0)
-				return BitConverter.ToUInt64(input, ioff) << -bit & mask;
+				return *((ulong*)input) << -bit & mask;
 			else if (bit + len <= 64)
-				return BitConverter.ToUInt64(input, ioff) >> bit & mask;
+				return *((ulong*)input) >> bit & mask;
 			else
-				return (BitConverter.ToUInt64(input, ioff) >> bit | BitConverter.ToUInt64(input, ioff + 8) << (64 - bit)) & mask;
+				return (*((ulong*)input) >> bit | *((ulong*)(input + 8)) << (64 - bit)) & mask;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -886,26 +882,16 @@ namespace Astc
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static void BitTransferSigned(int[] buffer, int index1, int index2)
+		private static unsafe void BitTransferSigned(int* a, int* b)
 		{
-			int value1 = buffer[index1];
-			int value2 = buffer[index2];
-			BitTransferSigned(ref value1, ref value2);
-			buffer[index1] = value1;
-			buffer[index2] = value2;
+			*b = (*b >> 1) | (*a & 0x80);
+			*a = (*a >> 1) & 0x3f;
+			if ((*a & 0x20) != 0)
+				*a -= 0x40;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static void BitTransferSigned(ref int a, ref int b)
-		{
-			b = (b >> 1) | (a & 0x80);
-			a = (a >> 1) & 0x3f;
-			if ((a & 0x20) != 0)
-				a -= 0x40;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static void SetEndpoint(int[] endpoint, int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2)
+		private unsafe static void SetEndpoint(int* endpoint, int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2)
 		{
 			endpoint[0] = r1;
 			endpoint[1] = g1;
@@ -918,7 +904,7 @@ namespace Astc
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static void SetEndpointClamp(int[] endpoint, int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2)
+		private unsafe static void SetEndpointClamp(int* endpoint, int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2)
 		{
 			endpoint[0] = Clamp(r1);
 			endpoint[1] = Clamp(g1);
@@ -931,7 +917,7 @@ namespace Astc
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static void SetEndpointBlue(int[] endpoint, int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2)
+		private unsafe static void SetEndpointBlue(int* endpoint, int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2)
 		{
 			endpoint[0] = (r1 + b1) >> 1;
 			endpoint[1] = (g1 + b1) >> 1;
@@ -944,7 +930,7 @@ namespace Astc
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static void SetEndpointBlueClamp(int[] endpoint, int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2)
+		private unsafe static void SetEndpointBlueClamp(int* endpoint, int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2)
 		{
 			endpoint[0] = Clamp((r1 + b1) >> 1);
 			endpoint[1] = Clamp((g1 + b1) >> 1);
@@ -962,7 +948,7 @@ namespace Astc
 			return (byte)(((((v0 << 8 | v0) * (64 - weight) + (v1 << 8 | v1) * weight + 32) >> 6) * 255 + 32768) / 65536);
 		}
 
-		private static readonly IReadOnlyList<byte> BitReverseTable = new byte[]
+		private static readonly byte[] BitReverseTable = new byte[]
 		{
 			0x00, 0x80, 0x40, 0xC0, 0x20, 0xA0, 0x60, 0xE0, 0x10, 0x90, 0x50, 0xD0, 0x30, 0xB0, 0x70, 0xF0,
 			0x08, 0x88, 0x48, 0xC8, 0x28, 0xA8, 0x68, 0xE8, 0x18, 0x98, 0x58, 0xD8, 0x38, 0xB8, 0x78, 0xF8,
@@ -982,39 +968,30 @@ namespace Astc
 			0x0F, 0x8F, 0x4F, 0xCF, 0x2F, 0xAF, 0x6F, 0xEF, 0x1F, 0x9F, 0x5F, 0xDF, 0x3F, 0xBF, 0x7F, 0xFF
 		};
 
-		private static readonly IReadOnlyList<int> WeightPrecTableA = new int[] { 0, 0, 0, 3, 0, 5, 3, 0, 0, 0, 5, 3, 0, 5, 3, 0 };
-		private static readonly IReadOnlyList<int> WeightPrecTableB = new int[] { 0, 0, 1, 0, 2, 0, 1, 3, 0, 0, 1, 2, 4, 2, 3, 5 };
+		private static readonly int[] WeightPrecTableA = new int[] { 0, 0, 0, 3, 0, 5, 3, 0, 0, 0, 5, 3, 0, 5, 3, 0 };
+		private static readonly int[] WeightPrecTableB = new int[] { 0, 0, 1, 0, 2, 0, 1, 3, 0, 0, 1, 2, 4, 2, 3, 5 };
 
-		private static readonly IReadOnlyList<int> CemTableA = new int[] { 0, 3, 5, 0, 3, 5, 0, 3, 5, 0, 3, 5, 0, 3, 5, 0, 3, 0, 0 };
-		private static readonly IReadOnlyList<int> CemTableB = new int[] { 8, 6, 5, 7, 5, 4, 6, 4, 3, 5, 3, 2, 4, 2, 1, 3, 1, 2, 1 };
+		private static readonly int[] CemTableA = new int[] { 0, 3, 5, 0, 3, 5, 0, 3, 5, 0, 3, 5, 0, 3, 5, 0, 3, 0, 0 };
+		private static readonly int[] CemTableB = new int[] { 8, 6, 5, 7, 5, 4, 6, 4, 3, 5, 3, 2, 4, 2, 1, 3, 1, 2, 1 };
 
-		private static readonly IReadOnlyList<int> DImt = new int[] { 0, 2, 4, 5, 7 };
-		private static readonly IReadOnlyList<int> DImq = new int[] { 0, 3, 5 };
-		private static readonly int[][] DITritsTable =
+		private static readonly int[] DImt = new int[] { 0, 2, 4, 5, 7 };
+		private static readonly int[] DImq = new int[] { 0, 3, 5 };
+		private static readonly int[,] DITritsTable =
 		{
-			new int[] {0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 1, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 1, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2},
-			new int[] {0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 2, 2, 2, 0, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 2, 2, 2, 0, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 2, 2, 2, 1, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 2, 2, 2, 1},
-			new int[] {0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2},
-			new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2},
-			new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}
+			{0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 1, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 1, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2, 0, 1, 2, 2},
+			{0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 2, 2, 2, 0, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 2, 2, 2, 0, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 2, 2, 2, 1, 0, 0, 0, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 2, 2, 2, 1},
+			{0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}
 		};
-		private static readonly int[][] DIQuintsTable =
+		private static readonly int[,] DIQuintsTable =
 		{
-			new int[] {0, 1, 2, 3, 4, 0, 4, 4, 0, 1, 2, 3, 4, 1, 4, 4, 0, 1, 2, 3, 4, 2, 4, 4, 0, 1, 2, 3, 4, 3, 4, 4, 0, 1, 2, 3, 4, 0, 4, 0, 0, 1, 2, 3, 4, 1, 4, 1, 0, 1, 2, 3, 4, 2, 4, 2, 0, 1, 2, 3, 4, 3, 4, 3, 0, 1, 2, 3, 4, 0, 2, 3, 0, 1, 2, 3, 4, 1, 2, 3, 0, 1, 2, 3, 4, 2, 2, 3, 0, 1, 2, 3, 4, 3, 2, 3, 0, 1, 2, 3, 4, 0, 0, 1, 0, 1, 2, 3, 4, 1, 0, 1, 0, 1, 2, 3, 4, 2, 0, 1, 0, 1, 2, 3, 4, 3, 0, 1},
-			new int[] {0, 0, 0, 0, 0, 4, 4, 4, 1, 1, 1, 1, 1, 4, 4, 4, 2, 2, 2, 2, 2, 4, 4, 4, 3, 3, 3, 3, 3, 4, 4, 4, 0, 0, 0, 0, 0, 4, 0, 4, 1, 1, 1, 1, 1, 4, 1, 4, 2, 2, 2, 2, 2, 4, 2, 4, 3, 3, 3, 3, 3, 4, 3, 4, 0, 0, 0, 0, 0, 4, 0, 0, 1, 1, 1, 1, 1, 4, 1, 1, 2, 2, 2, 2, 2, 4, 2, 2, 3, 3, 3, 3, 3, 4, 3, 3, 0, 0, 0, 0, 0, 4, 0, 0, 1, 1, 1, 1, 1, 4, 1, 1, 2, 2, 2, 2, 2, 4, 2, 2, 3, 3, 3, 3, 3, 4, 3, 3},
-			new int[] {0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 4, 0, 0, 0, 0, 0, 0, 2, 4, 0, 0, 0, 0, 0, 0, 3, 4, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 4, 4, 2, 2, 2, 2, 2, 2, 4, 4, 2, 2, 2, 2, 2, 2, 4, 4, 2, 2, 2, 2, 2, 2, 4, 4, 2, 2, 2, 2, 2, 2, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4}
+			{0, 1, 2, 3, 4, 0, 4, 4, 0, 1, 2, 3, 4, 1, 4, 4, 0, 1, 2, 3, 4, 2, 4, 4, 0, 1, 2, 3, 4, 3, 4, 4, 0, 1, 2, 3, 4, 0, 4, 0, 0, 1, 2, 3, 4, 1, 4, 1, 0, 1, 2, 3, 4, 2, 4, 2, 0, 1, 2, 3, 4, 3, 4, 3, 0, 1, 2, 3, 4, 0, 2, 3, 0, 1, 2, 3, 4, 1, 2, 3, 0, 1, 2, 3, 4, 2, 2, 3, 0, 1, 2, 3, 4, 3, 2, 3, 0, 1, 2, 3, 4, 0, 0, 1, 0, 1, 2, 3, 4, 1, 0, 1, 0, 1, 2, 3, 4, 2, 0, 1, 0, 1, 2, 3, 4, 3, 0, 1},
+			{0, 0, 0, 0, 0, 4, 4, 4, 1, 1, 1, 1, 1, 4, 4, 4, 2, 2, 2, 2, 2, 4, 4, 4, 3, 3, 3, 3, 3, 4, 4, 4, 0, 0, 0, 0, 0, 4, 0, 4, 1, 1, 1, 1, 1, 4, 1, 4, 2, 2, 2, 2, 2, 4, 2, 4, 3, 3, 3, 3, 3, 4, 3, 4, 0, 0, 0, 0, 0, 4, 0, 0, 1, 1, 1, 1, 1, 4, 1, 1, 2, 2, 2, 2, 2, 4, 2, 2, 3, 3, 3, 3, 3, 4, 3, 3, 0, 0, 0, 0, 0, 4, 0, 0, 1, 1, 1, 1, 1, 4, 1, 1, 2, 2, 2, 2, 2, 4, 2, 2, 3, 3, 3, 3, 3, 4, 3, 3},
+			{0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 4, 0, 0, 0, 0, 0, 0, 2, 4, 0, 0, 0, 0, 0, 0, 3, 4, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 4, 4, 2, 2, 2, 2, 2, 2, 4, 4, 2, 2, 2, 2, 2, 2, 4, 4, 2, 2, 2, 2, 2, 2, 4, 4, 2, 2, 2, 2, 2, 2, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4}
 		};
 
-		private static readonly IReadOnlyList<int> DETritsTable = new int[] { 0, 204, 93, 44, 22, 11, 5 };
-		private static readonly IReadOnlyList<int> DEQuintsTable = new int[] { 0, 113, 54, 26, 13, 6 };
-
-		private readonly BlockData m_blockData = new BlockData();
-		private readonly IntSeqData[] m_epSeq = new IntSeqData[32];
-		private readonly int[] m_ev = new int[32];
-		private readonly IntSeqData[] m_wSeq = new IntSeqData[128];
-		private readonly int[] m_wv = new int[128];
-		private readonly int[] m_seeds = new int[8];
-		private readonly int[] m_ps = new int[4];
-		private readonly int[] m_sh = new int[2];
+		private static readonly int[] DETritsTable = new int[] { 0, 204, 93, 44, 22, 11, 5 };
+		private static readonly int[] DEQuintsTable = new int[] { 0, 113, 54, 26, 13, 6 };
 	}
 }

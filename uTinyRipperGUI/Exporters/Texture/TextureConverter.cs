@@ -162,8 +162,7 @@ namespace uTinyRipperGUI.Exporters
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
-				AstcDecoder decoder = new AstcDecoder();
-				decoder.DecodeASTC(data, width, height, blockSize, blockSize, bitmap.Bits);
+				AstcDecoder.DecodeASTC(data, width, height, blockSize, blockSize, bitmap.Bits);
 				return bitmap;
 			}
 			catch
