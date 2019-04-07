@@ -56,6 +56,8 @@ namespace uTinyRipperGUI.Exporters
 				case TextureFormat.RGB565:
 					return TextureConverter.DDSTextureToBitmap(texture, data);
 
+				case TextureFormat.YUY2:
+					return TextureConverter.YUY2TextureToBitmap(texture, data);
 
 				case TextureFormat.PVRTC_RGB2:
 				case TextureFormat.PVRTC_RGBA2:
@@ -63,7 +65,6 @@ namespace uTinyRipperGUI.Exporters
 				case TextureFormat.PVRTC_RGBA4:
 					return TextureConverter.PVRTCTextureToBitmap(texture, data);
 
-				case TextureFormat.YUY2:
 				case TextureFormat.ETC_RGB4:
 				case TextureFormat.ETC2_RGB:
 				case TextureFormat.ETC2_RGBA1:

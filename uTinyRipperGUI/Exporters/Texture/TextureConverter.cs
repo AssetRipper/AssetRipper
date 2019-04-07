@@ -12,6 +12,7 @@ using uTinyRipperGUI.TextureContainers.DDS;
 using uTinyRipperGUI.TextureContainers.KTX;
 using uTinyRipperGUI.TextureContainers.PVR;
 using uTinyRipperGUI.TextureConverters;
+using Yuy2;
 using Version = uTinyRipper.Version;
 
 namespace uTinyRipperGUI.Exporters
@@ -132,6 +133,23 @@ namespace uTinyRipperGUI.Exporters
 					PVRContainer.ExportPVR(dstStream, srcStream, @params);
 				}
 				return PVRTextureToBitmap(texture, dstStream.ToArray());
+			}
+		}
+
+		public static DirectBitmap YUY2TextureToBitmap(Texture2D texture, byte[] data)
+		{
+			int width = texture.Width;
+			int height = texture.Height;
+			DirectBitmap bitmap = new DirectBitmap(width, height);
+			try
+			{
+				Yuy2Decoder.DecompressYUY2(data, width, height, bitmap.Bits);
+				return bitmap;
+			}
+			catch
+			{
+				bitmap.Dispose();
+				throw;
 			}
 		}
 
