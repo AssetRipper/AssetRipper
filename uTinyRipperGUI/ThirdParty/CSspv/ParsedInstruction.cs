@@ -179,10 +179,6 @@ namespace SpirV
 			Operand varyingOperand = null;
 
 			for (; currentWord < Words.Count;) {
-				if (currentOperand >= Instruction.Operands.Count)
-				{
-					int j = 2;
-				}
 				var operand = Instruction.Operands [currentOperand];
 
 				operand.Type.ReadValue (Words.Skip (currentWord).ToList (),

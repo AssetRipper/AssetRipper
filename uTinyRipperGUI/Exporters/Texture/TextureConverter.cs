@@ -1,4 +1,5 @@
 using Astc;
+using Pvrtc;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -131,6 +132,25 @@ namespace uTinyRipperGUI.Exporters
 					PVRContainer.ExportPVR(dstStream, srcStream, @params);
 				}
 				return PVRTextureToBitmap(texture, dstStream.ToArray());
+			}
+		}
+
+		public static DirectBitmap PVRTCTextureToBitmap(Texture2D texture, byte[] data)
+		{
+			int width = texture.Width;
+			int height = texture.Height;
+			int bitCount = texture.PVRTCBitCount();
+			DirectBitmap bitmap = new DirectBitmap(width, height);
+			try
+			{
+				PvrtcDecoder.DecompressPVRTC(data, width, height, bitmap.Bits, bitCount == 2);
+				bitmap.Bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+				return bitmap;
+			}
+			catch
+			{
+				bitmap.Dispose();
+				throw;
 			}
 		}
 

@@ -502,6 +502,23 @@ namespace uTinyRipperGUI.Exporters
 			}
 		}
 
+		public static int PVRTCBitCount(this Texture2D _this)
+		{
+			switch (_this.TextureFormat)
+			{
+				case TextureFormat.PVRTC_RGB2:
+				case TextureFormat.PVRTC_RGBA2:
+					return 2;
+
+				case TextureFormat.PVRTC_RGB4:
+				case TextureFormat.PVRTC_RGBA4:
+					return 4;
+
+				default:
+					throw new NotSupportedException(_this.TextureFormat.ToString());
+			}
+		}
+
 		public static int ASTCBlockSize(this Texture2D _this)
 		{
 			switch (_this.TextureFormat)
