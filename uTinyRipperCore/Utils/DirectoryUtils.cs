@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -75,39 +75,50 @@ namespace uTinyRipper
 			return path;
 		}
 
-		public static string GetMaxIndexName(string dirPath, string fileName)
+		public static string GetUniqueName(string dirPath, string fileName)
 		{
+			dirPath = ToLongPath(dirPath);
 			if (!Directory.Exists(dirPath))
 			{
 				return fileName;
 			}
 
-			if (fileName.Length > 245)
+			string filePath = Path.Combine(dirPath, fileName);
+			if (!File.Exists(filePath))
 			{
-				fileName = fileName.Substring(0, 245);
+				return fileName;
 			}
-			string escapeFileName = Regex.Escape(fileName);
-			Regex regex = new Regex($@"(?i)^{escapeFileName}(_[\d]+)?\.[^\.]+$");
+
+			string name = Path.GetFileNameWithoutExtension(fileName);
+			string ext = Path.GetExtension(fileName);
+			if (name.Length > 245)
+			{
+				name = name.Substring(0, 245);
+			}
+
+			string escapedName = Regex.Escape(name);
 			List<string> files = new List<string>();
 			DirectoryInfo dirInfo = new DirectoryInfo(ToLongPath(dirPath));
-			foreach(FileInfo fileInfo in dirInfo.EnumerateFiles())
+			Regex regex = new Regex($@"(?i)^{escapedName}(_[\d]+)?\.[^\.]+$");
+			foreach (FileInfo fileInfo in dirInfo.EnumerateFiles($"{name}_*{ext}"))
 			{
-				if(regex.IsMatch(fileInfo.Name))
+				if (regex.IsMatch(fileInfo.Name))
 				{
 					files.Add(fileInfo.Name.ToLower());
 				}
 			}
 			if (files.Count == 0)
 			{
-				return fileName;
+				return $"{name}_0{ext}";
 			}
 
+			string lowName = name.ToLower();
 			for (int i = 1; i < int.MaxValue; i++)
 			{
-				string newName = $"{fileName}_{i}.".ToLower();
+				string newName = $"{lowName}_{i}.";
 				if (files.All(t => !t.StartsWith(newName, StringComparison.Ordinal)))
 				{
-					return $"{fileName}_{i}";
+					return $"{name}_{i}{ext}";
 				}
 			}
 			throw new Exception($"Can't generate unique name for file {fileName} in directory {dirPath}");

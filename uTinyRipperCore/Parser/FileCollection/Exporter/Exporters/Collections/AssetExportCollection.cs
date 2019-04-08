@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters.Classes;
@@ -46,7 +46,7 @@ namespace uTinyRipper.AssetExporters
 				DirectoryUtils.CreateVirtualDirectory(subPath);
 			}
 
-			filePath = ExportInner(container, filePath);
+			ExportInner(container, filePath);
 			Meta meta = new Meta(MetaImporter, Asset.GUID);
 			ExportMeta(container, meta, filePath);
 			return true;
@@ -74,10 +74,9 @@ namespace uTinyRipper.AssetExporters
 				new ExportPointer(exportID, Asset.GUID, AssetExporter.ToExportType(Asset));
 		}
 
-		protected virtual string ExportInner(ProjectAssetContainer container, string filePath)
+		protected virtual void ExportInner(ProjectAssetContainer container, string filePath)
 		{
 			AssetExporter.Export(container, Asset, filePath);
-			return filePath;
 		}
 
 		public override IAssetExporter AssetExporter { get; }

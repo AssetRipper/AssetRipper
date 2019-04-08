@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters.Classes;
 using uTinyRipper.Classes;
 
@@ -34,10 +34,9 @@ namespace uTinyRipper.AssetExporters
 			return m_exportIDs[asset];
 		}
 
-		protected override string ExportInner(ProjectAssetContainer container, string filePath)
+		protected override void ExportInner(ProjectAssetContainer container, string filePath)
 		{
 			AssetExporter.Export(container, Assets, filePath);
-			return filePath;
 		}
 
 		public override IEnumerable<Object> Assets

@@ -113,8 +113,8 @@ namespace uTinyRipper.AssetExporters
 			}
 			fileName = FileNameRegex.Replace(fileName, string.Empty);
 
-			fileName = DirectoryUtils.GetMaxIndexName(dirPath, fileName);
 			fileName = $"{fileName}.{GetExportExtension(asset)}";
+			fileName = DirectoryUtils.GetUniqueName(dirPath, fileName);
 			return fileName;
 		}
 

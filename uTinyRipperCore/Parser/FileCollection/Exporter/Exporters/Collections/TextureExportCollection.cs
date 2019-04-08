@@ -75,16 +75,18 @@ namespace uTinyRipper.AssetExporters
 			}
 		}
 
-		protected override string ExportInner(ProjectAssetContainer container, string filePath)
+		protected override void ExportInner(ProjectAssetContainer container, string filePath)
 		{
-			if(m_convert)
-			{
-				string dirPath = Path.GetDirectoryName(filePath);
-				string fileName = Path.GetFileNameWithoutExtension(filePath);
-				filePath = $"{Path.Combine(dirPath, fileName)}.png";
-			}
 			AssetExporter.Export(container, Asset, filePath);
-			return filePath;
+		}
+
+		protected override string GetExportExtension(Object asset)
+		{
+			if (m_convert)
+			{
+				return "png";
+			}
+			return base.GetExportExtension(asset);
 		}
 
 		protected override long GenerateExportID(Object asset)
