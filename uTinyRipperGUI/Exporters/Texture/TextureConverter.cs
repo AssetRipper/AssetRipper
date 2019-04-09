@@ -19,10 +19,6 @@ namespace uTinyRipperGUI.Exporters
 {
 	public static class TextureConverter
 	{
-#warning TODO: replace to  other libs
-		[DllImport("PVRTexLibWrapper", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool DecompressPVR(byte[] buffer, IntPtr bmp, int len);
-
 		[DllImport("TextureConverterWrapper", CallingConvention = CallingConvention.Cdecl)]
 		private static extern bool Ponvert(byte[] buffer, IntPtr bmp, int nWidth, int nHeight, int len, int type, int bmpsize, bool fixAlpha);
 
@@ -232,30 +228,6 @@ namespace uTinyRipperGUI.Exporters
 				texgenpackdecode((int)ToTexgenpackTexturetype(texture.TextureFormat), data, texture.Width, texture.Height, bitmap.BitsPtr, fixAlpha);
 				bitmap.Bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
 				return bitmap;
-			}
-			catch
-			{
-				bitmap.Dispose();
-				throw;
-			}
-		}
-
-		public static DirectBitmap PVRToBitmap(byte[] data, int width, int height)
-		{
-			DirectBitmap bitmap = new DirectBitmap(width, height);
-			try
-			{
-				int len = Math.Abs(bitmap.Stride) * bitmap.Height;
-				if (DecompressPVR(data, bitmap.BitsPtr, len))
-				{
-					bitmap.Bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
-					return bitmap;
-				}
-				else
-				{
-					bitmap.Dispose();
-					return null;
-				}
 			}
 			catch
 			{

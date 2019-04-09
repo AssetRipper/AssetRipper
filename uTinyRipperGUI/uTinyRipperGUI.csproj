@@ -266,14 +266,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>fmod.dll</TargetPath>
     </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x86\PVRTexLib.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>PVRTexLib.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x86\PVRTexLibWrapper_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>PVRTexLibWrapper.dll</TargetPath>
-    </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x86\texgenpack_x86.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>texgenpack.dll</TargetPath>
@@ -299,14 +291,6 @@
     <ContentWithTargetPath Include="Libraries\x64\fmod_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>fmod.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x64\PVRTexLib.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>PVRTexLib.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x64\PVRTexLibWrapper_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>PVRTexLibWrapper.dll</TargetPath>
     </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
