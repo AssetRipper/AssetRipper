@@ -186,6 +186,7 @@
     <Compile Include="ThirdParty\Texture containers\PVR\PVRContainerParameters.cs" />
     <Compile Include="ThirdParty\Texture containers\PVR\PVRFlag.cs" />
     <Compile Include="ThirdParty\Texture containers\PVR\PVRPixelFormat.cs" />
+    <Compile Include="ThirdParty\Texture converters\EtcDecoder.cs" />
     <Compile Include="ThirdParty\Texture converters\PvrtcDecoder.cs" />
     <Compile Include="ThirdParty\Texture converters\Yuy2Decoder.cs" />
     <Compile Include="Utils\DirectBitmap.cs" />

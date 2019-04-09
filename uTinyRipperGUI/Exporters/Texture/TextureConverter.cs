@@ -1,4 +1,5 @@
 using Astc;
+using Etc;
 using Pvrtc;
 using System;
 using System.Drawing;
@@ -96,43 +97,51 @@ namespace uTinyRipperGUI.Exporters
 
 		public static DirectBitmap PVRTextureToBitmap(Texture2D texture, byte[] data)
 		{
-			using (MemoryStream dstStream = new MemoryStream())
+			int width = texture.Width;
+			int height = texture.Height;
+			DirectBitmap bitmap = new DirectBitmap(width, height);
+			try
 			{
-				PVRContainerParameters @params = new PVRContainerParameters
+				switch (texture.TextureFormat)
 				{
-					DataLength = data.Length,
-					PixelFormat = texture.PVRPixelFormat(),
-					Width = texture.Width,
-					Height = texture.Height,
-					MipMapCount = texture.MipCount,
-				};
-				using (MemoryStream srcStream = new MemoryStream(data))
-				{
-					PVRContainer.ExportPVR(dstStream, srcStream, @params);
+					case TextureFormat.ETC_RGB4:
+					case TextureFormat.ETC_RGB4_3DS:
+					case TextureFormat.ETC_RGB4Crunched:
+						EtcDecoder.DecompressETC(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.ETC2_RGB:
+						EtcDecoder.DecompressETC2(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.ETC2_RGBA1:
+						EtcDecoder.DecompressETC2A1(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.ETC2_RGBA8:
+					case TextureFormat.ETC_RGBA8_3DS:
+					case TextureFormat.ETC2_RGBA8Crunched:
+						EtcDecoder.DecompressETC2A8(data, width, height, bitmap.Bits);
+						break;
+
+					default:
+						throw new Exception(texture.TextureFormat.ToString());
+
 				}
-				return PVRToBitmap(dstStream.ToArray(), texture.Width, texture.Height);
+				bitmap.Bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+				return bitmap;
+			}
+			catch
+			{
+				bitmap.Dispose();
+				throw;
 			}
 		}
 
 		public static DirectBitmap PVRCrunchedTextureToBitmap(Texture2D texture, byte[] data)
 		{
 			byte[] decompressed = DecompressCrunch(texture, data);
-			using (MemoryStream dstStream = new MemoryStream())
-			{
-				using (MemoryStream srcStream = new MemoryStream(decompressed))
-				{
-					PVRContainerParameters @params = new PVRContainerParameters
-					{
-						DataLength = decompressed.Length,
-						PixelFormat = texture.PVRPixelFormat(),
-						Width = texture.Width,
-						Height = texture.Height,
-						MipMapCount = texture.MipCount,
-					};
-					PVRContainer.ExportPVR(dstStream, srcStream, @params);
-				}
-				return PVRTextureToBitmap(texture, dstStream.ToArray());
-			}
+			return PVRTextureToBitmap(texture, decompressed);
 		}
 
 		public static DirectBitmap YUY2TextureToBitmap(Texture2D texture, byte[] data)
