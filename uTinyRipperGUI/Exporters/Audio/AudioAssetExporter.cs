@@ -13,14 +13,14 @@ namespace uTinyRipperGUI.Exporters
 {
 	public class AudioAssetExporter : IAssetExporter
 	{
-		public static bool ExportAudio(IExportContainer container, AudioClip audioClip, Stream exportStream)
+		public static byte[] ExportAudio(AudioClip audioClip)
 		{
 			byte[] data = audioClip.GetData();
 			if (data.Length == 0)
 			{
-				return false;
+				return null;
 			}
-			return AudioConverter.ConvertToWav(data, exportStream);
+			return AudioConverter.ConvertToWav(data);
 		}
 
 		public static bool IsSupported(AudioClip audioClip)
@@ -85,11 +85,13 @@ namespace uTinyRipperGUI.Exporters
 			{
 				if (IsSupported(audioClip))
 				{
-					if (!ExportAudio(container, audioClip, fileStream))
+					byte[] data = ExportAudio(audioClip);
+					if (data == null)
 					{
 						Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{audioClip.ValidName}' to wav");
 						return false;
 					}
+					fileStream.Write(data, 0, data.Length);
 				}
 				else
 				{
