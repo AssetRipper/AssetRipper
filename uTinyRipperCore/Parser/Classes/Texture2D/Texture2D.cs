@@ -136,36 +136,44 @@ namespace uTinyRipper.Classes
 			return true;
 		}
 
-		public IReadOnlyList<byte> GetImageData(Version version)
+		public IReadOnlyList<byte> GetImageData()
 		{
-			if (IsReadStreamData(version))
+			byte[] data = m_imageData;
+			if (IsReadStreamData(File.Version))
 			{
-				string path = StreamData.Path;
-				if (path != string.Empty)
+				if (StreamData.Path != string.Empty)
 				{
 					if (m_imageData.Length != 0)
 					{
-						throw new Exception("Texture2D contains both data and resource path");
+						throw new Exception($"Texture '{ValidName}' contains both data and resource path");
 					}
 
-					using (ResourcesFile res = File.Collection.FindResourcesFile(File, path))
+					using (ResourcesFile res = File.Collection.FindResourcesFile(File, StreamData.Path))
 					{
 						if (res != null)
 						{
+							data = new byte[StreamData.Size];
 							using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
 							{
 								resStream.Position = StreamData.Offset;
-								using (BinaryReader reader = new BinaryReader(resStream))
-								{
-									return reader.ReadBytes((int)StreamData.Size);
-								}
+								resStream.ReadBuffer(data, 0, data.Length);
 							}
 						}
 					}
 				}
 			}
 
-			return m_imageData;
+			if (IsSwapBytes(File.Platform, TextureFormat))
+			{
+				for (int i = 0; i < data.Length; i += 2)
+				{
+					byte b = data[i];
+					data[i] = data[i + 1];
+					data[i + 1] = b;
+				}
+			}
+
+			return data;
 		}
 
 		public override void Read(AssetReader reader)
@@ -278,7 +286,7 @@ namespace uTinyRipper.Classes
 			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
 			node.Add(LightmapFormatName, (int)LightmapFormat);
 			node.Add(ColorSpaceName, (int)ColorSpace);
-			IReadOnlyList<byte> imageData = GetExportImageData(container.Version);
+			IReadOnlyList<byte> imageData = GetExportImageData();
 			node.Add(ImageDataName, imageData.Count);
 			node.Add(TypelessdataName, imageData.ExportYAML());
 			StreamingInfo streamData = new StreamingInfo(true);
@@ -294,11 +302,11 @@ namespace uTinyRipper.Classes
 			return true;
 #endif
 		}
-		private IReadOnlyList<byte> GetExportImageData(Version version)
+		private IReadOnlyList<byte> GetExportImageData()
 		{
 			if (CheckAssetIntegrity())
 			{
-				return GetImageData(version);
+				return GetImageData();
 			}
 			else
 			{

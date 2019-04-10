@@ -168,7 +168,7 @@
     <Compile Include="ThirdParty\Texture containers\DDS\DDSContainer.cs" />
     <Compile Include="ThirdParty\Texture containers\DDS\DDSContainerParameters.cs" />
     <Compile Include="Exporters\Texture\TextureContainer.cs" />
-    <Compile Include="ThirdParty\Texture converters\ASTCDecoder.cs" />
+    <Compile Include="ThirdParty\Texture converters\AstcDecoder.cs" />
     <Compile Include="ThirdParty\Texture converters\DDSDecompressor.cs" />
     <Compile Include="ThirdParty\Texture containers\DDS\DDSDFlags.cs" />
     <Compile Include="ThirdParty\Texture containers\DDS\DDSFourCCType.cs" />
@@ -186,6 +186,7 @@
     <Compile Include="ThirdParty\Texture containers\PVR\PVRContainerParameters.cs" />
     <Compile Include="ThirdParty\Texture containers\PVR\PVRFlag.cs" />
     <Compile Include="ThirdParty\Texture containers\PVR\PVRPixelFormat.cs" />
+    <Compile Include="ThirdParty\Texture converters\DxtDecoder.cs" />
     <Compile Include="ThirdParty\Texture converters\EtcDecoder.cs" />
     <Compile Include="ThirdParty\Texture converters\PvrtcDecoder.cs" />
     <Compile Include="ThirdParty\Texture converters\Yuy2Decoder.cs" />

@@ -15,7 +15,7 @@ namespace uTinyRipperGUI.Exporters
 	{
 		public static byte[] ExportAudio(AudioClip audioClip)
 		{
-			byte[] data = audioClip.GetData();
+			byte[] data = (byte[])audioClip.GetAudioData();
 			if (data.Length == 0)
 			{
 				return null;

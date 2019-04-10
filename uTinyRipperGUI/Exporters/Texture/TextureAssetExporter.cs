@@ -16,7 +16,7 @@ namespace uTinyRipperGUI.Exporters
 	{
 		public static bool ExportTexture(IExportContainer container, Texture2D texture, Stream exportStream)
 		{
-			byte[] buffer = (byte[])texture.GetImageData(container.Version);
+			byte[] buffer = (byte[])texture.GetImageData();
 			if (buffer.Length == 0)
 			{
 				return false;
@@ -43,6 +43,8 @@ namespace uTinyRipperGUI.Exporters
 				case TextureFormat.DXT1:
 				case TextureFormat.DXT3:
 				case TextureFormat.DXT5:
+					return TextureConverter.DXTTextureToBitmap(texture, data);
+
 				case TextureFormat.Alpha8:
 				case TextureFormat.ARGB4444:
 				case TextureFormat.RGB24:
@@ -110,7 +112,7 @@ namespace uTinyRipperGUI.Exporters
 
 				case TextureFormat.DXT1Crunched:
 				case TextureFormat.DXT5Crunched:
-					return TextureConverter.DDSCrunchedTextureToBitmap(texture, data);
+					return TextureConverter.DXTCrunchedTextureToBitmap(texture, data);
 
 				case TextureFormat.ETC_RGB4Crunched:
 				case TextureFormat.ETC2_RGBA8Crunched:

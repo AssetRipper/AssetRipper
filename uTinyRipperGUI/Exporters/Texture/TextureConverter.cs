@@ -1,4 +1,5 @@
 using Astc;
+using Dxt;
 using Etc;
 using Pvrtc;
 using System;
@@ -40,6 +41,48 @@ namespace uTinyRipperGUI.Exporters
 			return format == TextureFormat.ETC_RGB4Crunched || format == TextureFormat.ETC2_RGBA8Crunched;
 		}
 
+		public static DirectBitmap DXTTextureToBitmap(Texture2D texture, byte[] data)
+		{
+			int width = texture.Width;
+			int height = texture.Height;
+			DirectBitmap bitmap = new DirectBitmap(width, height);
+			try
+			{
+				switch (texture.TextureFormat)
+				{
+					case TextureFormat.DXT1:
+					case TextureFormat.DXT1Crunched:
+						DxtDecoder.DecompressDXT1(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.DXT3:
+						DxtDecoder.DecompressDXT3(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.DXT5:
+					case TextureFormat.DXT5Crunched:
+						DxtDecoder.DecompressDXT5(data, width, height, bitmap.Bits);
+						break;
+
+					default:
+						throw new Exception(texture.TextureFormat.ToString());
+
+				}
+				bitmap.Bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+				return bitmap;
+			}
+			catch
+			{
+				bitmap.Dispose();
+				throw;
+			}
+		}
+
+		public static DirectBitmap DXTCrunchedTextureToBitmap(Texture2D texture, byte[] data)
+		{
+			byte[] decompressed = DecompressCrunch(texture, data);
+			return DXTTextureToBitmap(texture, decompressed);
+		}
 
 		public static DirectBitmap DDSTextureToBitmap(Texture2D texture, byte[] data)
 		{
@@ -69,8 +112,7 @@ namespace uTinyRipperGUI.Exporters
 				{
 					using (MemoryStream source = new MemoryStream(data))
 					{
-						EndianType endianess = Texture2D.IsSwapBytes(texture.File.Platform, texture.TextureFormat) ? EndianType.BigEndian : EndianType.LittleEndian;
-						using (EndianReader sourceReader = new EndianReader(source, endianess))
+						using (EndianReader sourceReader = new EndianReader(source))
 						{
 							DecompressDDS(sourceReader, destination, @params);
 						}
@@ -83,12 +125,6 @@ namespace uTinyRipperGUI.Exporters
 				bitmap.Dispose();
 				throw;
 			}
-		}
-
-		public static DirectBitmap DDSCrunchedTextureToBitmap(Texture2D texture, byte[] data)
-		{
-			byte[] decompressed = DecompressCrunch(texture, data);
-			return DDSTextureToBitmap(texture, decompressed);
 		}
 
 		public static DirectBitmap PVRTextureToBitmap(Texture2D texture, byte[] data)

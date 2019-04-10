@@ -5,6 +5,21 @@ namespace uTinyRipper
 {
 	public static class StreamExtensions
 	{
+		public static void ReadBuffer(this Stream _this, byte[] buffer, int offset, int count)
+		{
+			do
+			{
+				int read = _this.Read(buffer, offset, count);
+				if (read == 0)
+				{
+
+				}
+				offset += read;
+				count -= read;
+			}
+			while (count > 0);
+		}
+
 		public static void CopyStream(this Stream _this, Stream dstStream)
 		{
 			byte[] buffer = new byte[BufferSize];

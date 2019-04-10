@@ -218,7 +218,7 @@ namespace uTinyRipper.Classes
 			return true;
 		}
 
-		public byte[] GetData()
+		public IReadOnlyList<byte> GetAudioData()
 		{
 			if (IsReadLoadType(File.Version))
 			{
@@ -235,7 +235,7 @@ namespace uTinyRipper.Classes
 						using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
 						{
 							resStream.Position = FSBResource.Offset;
-							resStream.Read(data, 0, data.Length);
+							resStream.ReadBuffer(data, 0, data.Length);
 						}
 						return data;
 					}
@@ -264,7 +264,7 @@ namespace uTinyRipper.Classes
 								using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
 								{
 									resStream.Position = StreamingInfo.Offset;
-									resStream.Read(data, 0, data.Length);
+									resStream.ReadBuffer(data, 0, data.Length);
 								}
 								return data;
 							}
