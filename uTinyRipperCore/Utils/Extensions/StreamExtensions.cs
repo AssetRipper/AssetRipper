@@ -12,7 +12,7 @@ namespace uTinyRipper
 				int read = _this.Read(buffer, offset, count);
 				if (read == 0)
 				{
-
+					throw new Exception($"No data left");
 				}
 				offset += read;
 				count -= read;

@@ -281,13 +281,13 @@ namespace uTinyRipper.BundleFiles
 						}
 					}
 
-					if(isCompressed)
+					long entryOffset = entry.Offset - decompressedOffset;
+					if (isCompressed)
 					{
 						// well, at leat one block is compressed so we should copy data of current entry to separate stream
 						using (SmartStream entryStream = CreateStream(entry.Size))
 						{
 							long left = entry.Size;
-							long entryOffset = entry.Offset - decompressedOffset;
 							bundleStream.Position = dataOffset + compressedOffset;
 
 							// copy data of all blocks used by current entry to created stream
@@ -360,7 +360,7 @@ namespace uTinyRipper.BundleFiles
 					else
 					{
 						// no compressed blocks was found so we can use original bundle stream
-						newEntries[ei] = new BundleFileEntry(entry, dataOffset + entry.Offset);
+						newEntries[ei] = new BundleFileEntry(entry, dataOffset + compressedOffset + entryOffset);
 					}
 				}
 			}

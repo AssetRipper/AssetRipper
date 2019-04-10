@@ -81,19 +81,23 @@ namespace uTinyRipperGUI.Exporters
 				return false;
 			}
 
-			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
+			if (IsSupported(audioClip))
 			{
-				if (IsSupported(audioClip))
+				byte[] data = ExportAudio(audioClip);
+				if (data == null)
 				{
-					byte[] data = ExportAudio(audioClip);
-					if (data == null)
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{audioClip.ValidName}' to wav");
-						return false;
-					}
+					Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{audioClip.ValidName}' to wav");
+					return false;
+				}
+
+				using (Stream fileStream = FileUtils.CreateVirtualFile(path))
+				{
 					fileStream.Write(data, 0, data.Length);
 				}
-				else
+			}
+			else
+			{
+				using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 				{
 					audioClip.ExportBinary(container, fileStream);
 				}
