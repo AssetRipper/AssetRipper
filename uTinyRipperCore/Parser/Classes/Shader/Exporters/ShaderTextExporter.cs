@@ -2,7 +2,7 @@ using System.IO;
 
 namespace uTinyRipper.Classes.Shaders.Exporters
 {
-	public abstract class ShaderTextExporter
+	public class ShaderTextExporter
 	{
 		public virtual void Export(byte[] shaderData, TextWriter writer)
 		{

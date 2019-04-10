@@ -112,6 +112,9 @@ namespace uTinyRipper.Classes.Shaders
 		{
 			switch(_this)
 			{
+				case ShaderGpuProgramType.Unknown:
+					return GPUPlatform.unknown;
+
 				case ShaderGpuProgramType.GLES:
 					return GPUPlatform.gles;
 
@@ -211,6 +214,9 @@ namespace uTinyRipper.Classes.Shaders
 		{
 			switch (_this)
 			{
+				case ShaderGpuProgramType.Unknown:
+					return nameof(ShaderGpuProgramType.Unknown);
+
 				case ShaderGpuProgramType.GLES:
 					return "!!GLES";
 				case ShaderGpuProgramType.GLES3:

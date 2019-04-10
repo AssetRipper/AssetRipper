@@ -239,6 +239,9 @@ namespace uTinyRipper.Classes
 		{
 			switch (graphicApi)
 			{
+				case GPUPlatform.unknown:
+					return new ShaderTextExporter();
+
 				case GPUPlatform.openGL:
 				case GPUPlatform.gles:
 				case GPUPlatform.gles3:
