@@ -2,7 +2,6 @@ using FMOD;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace uTinyRipperGUI.Exporters
 {
@@ -70,9 +69,9 @@ namespace uTinyRipperGUI.Exporters
 
 						using (BinaryWriter writer = new BinaryWriter(exportStream))
 						{
-							writer.Write(Encoding.UTF8.GetBytes("RIFF"));
-							writer.Write(len1 + 36);
-							writer.Write(Encoding.UTF8.GetBytes("WAVEfmt "));
+							writer.Write(RiffFourCC);
+							writer.Write(36 + len1);
+							writer.Write(WaveEightCC);
 							writer.Write(16);
 							writer.Write((short)1);
 							writer.Write((short)numChannels);
@@ -80,7 +79,7 @@ namespace uTinyRipperGUI.Exporters
 							writer.Write(sampleRate * numChannels * bitsPerSample / 8);
 							writer.Write((short)(numChannels * bitsPerSample / 8));
 							writer.Write((short)bitsPerSample);
-							writer.Write(Encoding.UTF8.GetBytes("data"));
+							writer.Write(DataFourCC);
 							writer.Write(len1);
 
 							for (int i = 0; i < len1; i++)
@@ -108,5 +107,18 @@ namespace uTinyRipperGUI.Exporters
 				system.release();
 			}
 		}
+
+		/// <summary>
+		/// 'RIFF' ascii
+		/// </summary>
+		private const uint RiffFourCC = 0x46464952;
+		/// <summary>
+		/// 'WAVEfmt ' ascii
+		/// </summary>
+		private const ulong WaveEightCC = 0x20746D6645564157;
+		/// <summary>
+		/// 'data' ascii
+		/// </summary>
+		private const uint DataFourCC = 0x61746164;
 	}
 }

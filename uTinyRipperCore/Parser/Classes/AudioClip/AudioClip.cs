@@ -202,8 +202,77 @@ namespace uTinyRipper.Classes
 					return res != null;
 				}
 			}
-
+			else if (IsReadStreamingInfo(File.Version))
+			{
+				if (LoadType == AudioClipLoadType.Streaming)
+				{
+					if (m_audioData == null)
+					{
+						using (ResourcesFile res = File.Collection.FindResourcesFile(File, StreamingInfo.Path))
+						{
+							return res != null;
+						}
+					}
+				}
+			}
 			return true;
+		}
+
+		public byte[] GetData()
+		{
+			if (IsReadLoadType(File.Version))
+			{
+				using (ResourcesFile res = File.Collection.FindResourcesFile(File, FSBResource.Source))
+				{
+					if (res == null)
+					{
+						return new byte[0];
+					}
+
+					if (StreamedResource.IsReadSize(File.Version))
+					{
+						byte[] data = new byte[FSBResource.Size];
+						using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
+						{
+							resStream.Position = FSBResource.Offset;
+							resStream.Read(data, 0, data.Length);
+						}
+						return data;
+					}
+					else
+					{
+						return new byte[0];
+					}
+				}
+			}
+			else
+			{
+				if (IsReadStreamingInfo(File.Version))
+				{
+					if (LoadType == AudioClipLoadType.Streaming)
+					{
+						if (m_audioData == null)
+						{
+							using (ResourcesFile res = File.Collection.FindResourcesFile(File, StreamingInfo.Path))
+							{
+								if (res == null)
+								{
+									return new byte[0];
+								}
+
+								byte[] data = new byte[FSBResource.Size];
+								using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
+								{
+									resStream.Position = StreamingInfo.Offset;
+									resStream.Read(data, 0, data.Length);
+								}
+								return data;
+							}
+						}
+					}
+				}
+				return m_audioData;
+			}
 		}
 
 		public override void Read(AssetReader reader)

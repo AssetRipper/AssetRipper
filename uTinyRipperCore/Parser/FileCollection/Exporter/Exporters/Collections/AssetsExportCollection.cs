@@ -34,9 +34,9 @@ namespace uTinyRipper.AssetExporters
 			return m_exportIDs[asset];
 		}
 
-		protected override void ExportInner(ProjectAssetContainer container, string filePath)
+		protected override bool ExportInner(ProjectAssetContainer container, string filePath)
 		{
-			AssetExporter.Export(container, Assets, filePath);
+			return AssetExporter.Export(container, Assets, filePath);
 		}
 
 		public override IEnumerable<Object> Assets

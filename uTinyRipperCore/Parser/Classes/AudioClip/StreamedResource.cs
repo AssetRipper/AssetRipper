@@ -10,6 +10,7 @@ namespace uTinyRipper.Classes.AudioClips
 		/// </summary>
 		public static bool IsReadSize(Version version)
 		{
+#warning unknown beta version
 			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
 		}
 

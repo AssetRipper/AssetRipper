@@ -13,29 +13,30 @@ using Version = uTinyRipper.Version;
 
 namespace uTinyRipperGUI.Exporters
 {
-	public class ShaderAssetExporter : IAssetExporter
+	public sealed class ShaderAssetExporter : IAssetExporter
 	{
 		public bool IsHandle(Object asset)
 		{
 			return true;
 		}
 
-		public void Export(IExportContainer container, Object asset, string path)
-		{
-			Export(container, asset, path, null);
-		}
-
-		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		public bool Export(IExportContainer container, Object asset, string path)
 		{
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
 				Shader shader = (Shader)asset;
 				shader.ExportBinary(container, fileStream, ShaderExporterInstantiator);
 			}
+			return true;
+		}
+
+		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		{
+			Export(container, asset, path);
 			callback?.Invoke(container, asset, path);
 		}
 
-		public void Export(IExportContainer container, IEnumerable<Object> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
 			throw new NotSupportedException();
 		}

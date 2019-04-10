@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using uTinyRipper.AssetExporters.Classes;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.SpriteAtlases;
@@ -75,9 +74,9 @@ namespace uTinyRipper.AssetExporters
 			}
 		}
 
-		protected override void ExportInner(ProjectAssetContainer container, string filePath)
+		protected override bool ExportInner(ProjectAssetContainer container, string filePath)
 		{
-			AssetExporter.Export(container, Asset, filePath);
+			return AssetExporter.Export(container, Asset, filePath);
 		}
 
 		protected override string GetExportExtension(Object asset)

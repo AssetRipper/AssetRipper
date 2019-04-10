@@ -15,17 +15,12 @@ namespace uTinyRipperGUI.Exporters
 	{
 		public static bool ExportAudio(IExportContainer container, AudioClip audioClip, Stream exportStream)
 		{
-			using (MemoryStream memStream = new MemoryStream())
+			byte[] data = audioClip.GetData();
+			if (data.Length == 0)
 			{
-				audioClip.ExportBinary(container, memStream);
-				if (memStream.Length == 0)
-				{
-					return false;
-				}
-
-				byte[] data = memStream.ToArray();
-				return AudioConverter.ConvertToWav(data, exportStream);
+				return false;
 			}
+			return AudioConverter.ConvertToWav(data, exportStream);
 		}
 
 		public static bool IsSupported(AudioClip audioClip)
@@ -77,22 +72,23 @@ namespace uTinyRipperGUI.Exporters
 			return new AudioExportCollection(this, (AudioClip)asset);
 		}
 
-		public void Export(IExportContainer container, Object asset, string path)
-		{
-			Export(container, asset, path, null);
-		}
-
-		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		public bool Export(IExportContainer container, Object asset, string path)
 		{
 			AudioClip audioClip = (AudioClip)asset;
+			if (!audioClip.CheckAssetIntegrity())
+			{
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{audioClip.Name}' because resources file hasn't been found");
+				return false;
+			}
+
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
 				if (IsSupported(audioClip))
 				{
-					bool result = ExportAudio(container, audioClip, fileStream);
-					if (!result)
+					if (!ExportAudio(container, audioClip, fileStream))
 					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{audioClip.Name}' to wav");
+						Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{audioClip.ValidName}' to wav");
+						return false;
 					}
 				}
 				else
@@ -100,10 +96,18 @@ namespace uTinyRipperGUI.Exporters
 					audioClip.ExportBinary(container, fileStream);
 				}
 			}
-			callback?.Invoke(container, asset, path);
+			return true;
 		}
 
-		public void Export(IExportContainer container, IEnumerable<Object> assets, string path)
+		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		{
+			if (Export(container, asset, path))
+			{
+				callback?.Invoke(container, asset, path);
+			}
+		}
+
+		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
 			throw new NotSupportedException();
 		}

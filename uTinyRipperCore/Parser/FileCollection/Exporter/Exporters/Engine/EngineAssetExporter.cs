@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.SerializedFiles;
 
@@ -18,7 +18,7 @@ namespace uTinyRipper.AssetExporters
 			return new EngineExportCollection(asset);
 		}
 
-		public void Export(IExportContainer container, Object asset, string path)
+		public bool Export(IExportContainer container, Object asset, string path)
 		{
 			throw new NotSupportedException();
 		}
@@ -28,7 +28,7 @@ namespace uTinyRipper.AssetExporters
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<Object> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
 			throw new NotSupportedException();
 		}

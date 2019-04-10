@@ -132,33 +132,33 @@ namespace uTinyRipperGUI.Exporters
 			return true;
 		}
 
-		public void Export(IExportContainer container, Object asset, string path)
-		{
-			Export(container, asset, path, null);
-		}
-
-		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		public bool Export(IExportContainer container, Object asset, string path)
 		{
 			Texture2D texture = (Texture2D)asset;
 			if (!texture.CheckAssetIntegrity())
 			{
-				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.Name}' because resources file '{texture.StreamData.Path}' wasn't found");
-				return;
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.Name}' because resources file '{texture.StreamData.Path}' hasn't been found");
+				return false;
 			}
 
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
-				bool result = ExportTexture(container, texture, fileStream);
-				if (!result)
+				if (!ExportTexture(container, texture, fileStream))
 				{
 					Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
+					return false;
 				}
 			}
+			return true;
+		}
 
+		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		{
+			Export(container, asset, path);
 			callback?.Invoke(container, asset, path);
 		}
 
-		public void Export(IExportContainer container, IEnumerable<Object> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
 			throw new NotSupportedException();
 		}

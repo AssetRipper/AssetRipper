@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using uTinyRipper.Classes;
 using uTinyRipper.Exporters.Scripts;
@@ -20,19 +20,20 @@ namespace uTinyRipper.AssetExporters
 			return new ScriptExportCollection(this, (MonoScript)asset);
 		}
 
-		public void Export(IExportContainer container, Object asset, string path)
+		public bool Export(IExportContainer container, Object asset, string path)
 		{
-			Export(container, asset, path);
+			throw new NotSupportedException("Need to export all scripts at once");
 		}
 
 		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
 		{
-			throw new NotSupportedException("You have to export all script at once");
+			throw new NotSupportedException("Need to export all scripts at once");
 		}
 
-		public void Export(IExportContainer container, IEnumerable<Object> assets, string dirPath)
+		public bool Export(IExportContainer container, IEnumerable<Object> assets, string dirPath)
 		{
 			Export(container, assets, dirPath, null);
+			return true;
 		}
 
 		public void Export(IExportContainer container, IEnumerable<Object> assets, string dirPath, Action<IExportContainer, Object, string> callback)

@@ -17,12 +17,7 @@ namespace uTinyRipper.AssetExporters
 			return true;
 		}
 
-		public void Export(IExportContainer container, Object asset, string path)
-		{
-			Export(container, asset, path, null);
-		}
-		
-		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		public bool Export(IExportContainer container, Object asset, string path)
 		{
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
@@ -34,10 +29,16 @@ namespace uTinyRipper.AssetExporters
 					writer.Write(streamWriter);
 				}
 			}
+			return true;
+		}
+		
+		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		{
+			Export(container, asset, path);
 			callback?.Invoke(container, asset, path);
 		}
 
-		public void Export(IExportContainer container, IEnumerable<Object> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
@@ -53,11 +54,12 @@ namespace uTinyRipper.AssetExporters
 					writer.WriteTail(streamWriter);
 				}
 			}
+			return true;
 		}
 
 		public void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback)
 		{
-			throw new NotSupportedException();
+			throw new NotSupportedException("YAML supports only single file export");
 		}
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
