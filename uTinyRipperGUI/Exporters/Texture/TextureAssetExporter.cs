@@ -73,7 +73,7 @@ namespace uTinyRipperGUI.Exporters
 				case TextureFormat.ETC2_RGBA8:
 				case TextureFormat.ETC_RGB4_3DS:
 				case TextureFormat.ETC_RGBA8_3DS:
-					return TextureConverter.PVRTextureToBitmap(texture, data);
+					return TextureConverter.ETCTextureToBitmap(texture, data);
 
 				case TextureFormat.ASTC_RGB_4x4:
 				case TextureFormat.ASTC_RGB_5x5:

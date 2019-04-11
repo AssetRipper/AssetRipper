@@ -127,7 +127,7 @@ namespace uTinyRipperGUI.Exporters
 			}
 		}
 
-		public static DirectBitmap PVRTextureToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap ETCTextureToBitmap(Texture2D texture, byte[] data)
 		{
 			int width = texture.Width;
 			int height = texture.Height;
@@ -173,7 +173,7 @@ namespace uTinyRipperGUI.Exporters
 		public static DirectBitmap PVRCrunchedTextureToBitmap(Texture2D texture, byte[] data)
 		{
 			byte[] decompressed = DecompressCrunch(texture, data);
-			return PVRTextureToBitmap(texture, decompressed);
+			return ETCTextureToBitmap(texture, decompressed);
 		}
 
 		public static DirectBitmap YUY2TextureToBitmap(Texture2D texture, byte[] data)
