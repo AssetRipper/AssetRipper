@@ -89,7 +89,24 @@ namespace uTinyRipper
 			using (MemoryStream stream = new MemoryStream(buffer))
 			{
 				stream.Position = offset;
-				return (int)Read(stream, (long)count);
+				return (int)Read(stream, count);
+			}
+		}
+
+		public void ReadBuffer(byte[] buffer, int offset, int count)
+		{
+			using (MemoryStream stream = new MemoryStream(buffer))
+			{
+				stream.Position = offset;
+				int read = (int)Read(stream, count);
+				if (read != count)
+				{
+					throw new Exception($"Unexpected end of input stream. Read {read} but expected {count}");
+				}
+				if (IsDataLeft)
+				{
+					throw new Exception($"Some data left");
+				}
 			}
 		}
 
@@ -210,6 +227,7 @@ namespace uTinyRipper
 
 							if (readLeft == 0)
 							{
+								m_phase = DecodePhase.CopyMatch;
 								goto case DecodePhase.Finish;
 							}
 							goto case DecodePhase.ReadToken;
@@ -320,9 +338,9 @@ namespace uTinyRipper
 					throw new Exception("No data left");
 #endif
 				}
+				offset += read;
 				count -= read;
 				m_inputLeft -= read;
-				offset += read;
 			}
 		}
 
@@ -336,6 +354,8 @@ namespace uTinyRipper
 			m_decodeBufferPosition = m_decodeBufferPosition & DecodeBufferMask;
 			m_decodeBufferStart = m_decodeBufferPosition;
 		}
+
+		public bool IsDataLeft => m_phase == DecodePhase.CopyLiteral ? (m_literalLength != 0) : (m_matchLength != 0);
 
 		public override bool CanSeek => false;
 		public override bool CanRead => true;

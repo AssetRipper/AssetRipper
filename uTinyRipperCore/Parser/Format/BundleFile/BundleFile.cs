@@ -209,7 +209,7 @@ namespace uTinyRipper.BundleFiles
 								long read = lzStream.Read(metaStream, Header.MetadataDecompressedSize);
 								metaStream.Position = 0;
 							
-								if(read != Header.MetadataDecompressedSize)
+								if(read != Header.MetadataDecompressedSize || lzStream.IsDataLeft)
 								{
 									throw new Exception($"Read {read} but expected {Header.MetadataDecompressedSize}");
 								}
@@ -322,7 +322,7 @@ namespace uTinyRipper.BundleFiles
 											using (Lz4DecodeStream lzStream = new Lz4DecodeStream(bundleStream, block.CompressedSize))
 											{
 												long read = lzStream.Read(blockStream, block.DecompressedSize);
-												if (read != block.DecompressedSize)
+												if (read != block.DecompressedSize || lzStream.IsDataLeft)
 												{
 													throw new Exception($"Read {read} but expected {block.CompressedSize}");
 												}

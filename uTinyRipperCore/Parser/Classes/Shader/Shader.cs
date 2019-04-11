@@ -25,7 +25,7 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5, 5);
 		}
 		/// <summary>
-		/// 5.3.0 to 5.4.x
+		/// 5.3.0 to 5.4.0
 		/// </summary>
 		public static bool IsEncoded(Version version)
 		{
@@ -102,11 +102,7 @@ namespace uTinyRipper.Classes
 						byte[] decompressedBuffer = new byte[decompressedLength];
 						using (Lz4DecodeStream lz4Stream = new Lz4DecodeStream(memStream, (int)compressedLength))
 						{
-							int read = lz4Stream.Read(decompressedBuffer, 0, decompressedBuffer.Length);
-							if (read != decompressedLength)
-							{
-								throw new Exception($"Can't properly decode shader blob. Read {read} but expected {decompressedLength}");
-							}
+							lz4Stream.ReadBuffer(decompressedBuffer, 0, decompressedBuffer.Length);
 						}
 
 						using (MemoryStream blobMem = new MemoryStream(decompressedBuffer))
@@ -129,23 +125,17 @@ namespace uTinyRipper.Classes
 				{
 					uint decompressedSize = reader.ReadUInt32();
 					int comressedSize = reader.ReadInt32();
-
-					byte[] subProgramBlob = new byte[comressedSize];
-					reader.Read(subProgramBlob, 0, comressedSize);
-					reader.AlignStream(AlignType.Align4);
-
 					if (comressedSize > 0 && decompressedSize > 0)
 					{
+						byte[] subProgramBlob = new byte[comressedSize];
+						reader.ReadBuffer(subProgramBlob, 0, comressedSize);
+
 						byte[] decompressedBuffer = new byte[decompressedSize];
 						using (MemoryStream memStream = new MemoryStream(subProgramBlob))
 						{
 							using (Lz4DecodeStream lz4Stream = new Lz4DecodeStream(memStream))
 							{
-								int read = lz4Stream.Read(decompressedBuffer, 0, decompressedBuffer.Length);
-								if (read != decompressedSize)
-								{
-									throw new Exception($"Can't properly decode sub porgram blob. Read {read} but expected {decompressedSize}");
-								}
+								lz4Stream.ReadBuffer(decompressedBuffer, 0, decompressedBuffer.Length);
 							}
 						}
 
@@ -157,6 +147,7 @@ namespace uTinyRipper.Classes
 							}
 						}
 					}
+					reader.AlignStream(AlignType.Align4);
 				}
 
 				if (IsReadFallback(reader.Version))

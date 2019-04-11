@@ -1076,6 +1076,7 @@
     <Compile Include="ThirdParty\System.Half\HalfHelper.cs" />
     <Compile Include="Parser\Utils\FilenameUtils.cs" />
     <Compile Include="Utils\DirectoryUtils.cs" />
+    <Compile Include="Utils\Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Utils\Extensions\BitArrayExtensions.cs" />
     <Compile Include="Utils\Extensions\BitConverterExtensions.cs" />
     <Compile Include="Utils\Extensions\ByteArrayExtensions.cs" />
