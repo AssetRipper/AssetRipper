@@ -50,12 +50,12 @@ namespace uTinyRipperGUI.Exporters
 				case TextureFormat.RGB24:
 				case TextureFormat.RGBA32:
 				case TextureFormat.ARGB32:
+				case TextureFormat.RGB565:
 				case TextureFormat.R16:
 				case TextureFormat.RGBA4444:
 				case TextureFormat.BGRA32:
 				case TextureFormat.RG16:
 				case TextureFormat.R8:
-				case TextureFormat.RGB565:
 					return TextureConverter.DDSTextureToBitmap(texture, data);
 
 				case TextureFormat.YUY2:

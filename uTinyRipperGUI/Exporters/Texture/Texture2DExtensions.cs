@@ -58,6 +58,7 @@ namespace uTinyRipperGUI.Exporters
 				case TextureFormat.R16:
 				case TextureFormat.RGB24:
 				case TextureFormat.RGB565:
+				case TextureFormat.RG16:
 					return DDPFFlags.DDPF_RGB;
 
 				case TextureFormat.DXT1:
@@ -117,7 +118,8 @@ namespace uTinyRipperGUI.Exporters
 					return 8;
 
 				case TextureFormat.R16:
-					return 32;
+				case TextureFormat.RG16:
+					return 16;
 
 				case TextureFormat.RGB565:
 					return 16;
