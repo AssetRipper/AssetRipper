@@ -2,7 +2,7 @@ namespace Smolv
 {
 	public struct OpData
 	{
-		public OpData(byte hasResult, byte hasType, byte deltaFromResult, byte varrest)
+		public OpData(byte hasResult, byte hasType, sbyte deltaFromResult, byte varrest)
 		{
 			this.hasResult = hasResult;
 			this.hasType = hasType;
@@ -21,13 +21,13 @@ namespace Smolv
 		/// <summary>
 		/// How many words after (optional) type+result to write out as deltas from result?
 		/// </summary>
-		public byte deltaFromResult;
+		public sbyte deltaFromResult;
 		/// <summary>
 		/// Should the rest of words be written in varint encoding?
 		/// </summary>
 		public byte varrest;
 
-		public static readonly OpData[] SpirvOpData = 
+		public static readonly OpData[] SpirvOpData =
 		{
 			new OpData(0, 0, 0, 0), // Nop
 			new OpData(1, 1, 0, 0), // Undef
@@ -253,8 +253,8 @@ namespace Smolv
 			new OpData(0, 0, 0, 0), // EndStreamPrimitive
 			new OpData(1, 1, 0, 0), // #222
 			new OpData(1, 1, 0, 0), // #223
-			new OpData(0, 0, 3, 0), // ControlBarrier
-			new OpData(0, 0, 2, 0), // MemoryBarrier
+			new OpData(0, 0, -3, 0), // ControlBarrier
+			new OpData(0, 0, -2, 0), // MemoryBarrier
 			new OpData(1, 1, 0, 0), // #226
 			new OpData(1, 1, 0, 0), // AtomicLoad
 			new OpData(0, 0, 0, 0), // AtomicStore
@@ -275,11 +275,11 @@ namespace Smolv
 			new OpData(1, 1, 0, 0), // #243
 			new OpData(1, 1, 0, 0), // #244
 			new OpData(1, 1, 0, 0), // Phi
-			new OpData(0, 0, 2, 1), // LoopMerge
-			new OpData(0, 0, 1, 1), // SelectionMerge
+			new OpData(0, 0, -2, 1), // LoopMerge
+			new OpData(0, 0, -1, 1), // SelectionMerge
 			new OpData(1, 0, 0, 0), // Label
-			new OpData(0, 0, 1, 0), // Branch
-			new OpData(0, 0, 3, 1), // BranchConditional
+			new OpData(0, 0, -1, 0), // Branch
+			new OpData(0, 0, -3, 1), // BranchConditional
 			new OpData(0, 0, 0, 0), // Switch
 			new OpData(0, 0, 0, 0), // Kill
 			new OpData(0, 0, 0, 0), // Return
@@ -358,7 +358,7 @@ namespace Smolv
 			new OpData(1, 1, 0, 0), // GetKernelMaxNumSubgroups
 			new OpData(1, 1, 0, 0), // TypeNamedBarrier
 			new OpData(1, 1, 0, 1), // NamedBarrierInitialize
-			new OpData(0, 0, 2, 1), // MemoryNamedBarrier
+			new OpData(0, 0, -2, 1), // MemoryNamedBarrier
 			new OpData(1, 1, 0, 0), // ModuleProcessed
 		};
 	};
