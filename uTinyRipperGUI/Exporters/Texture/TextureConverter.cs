@@ -5,16 +5,12 @@ using Pvrtc;
 using Rgb;
 using System;
 using System.Drawing;
-using System.IO;
 using System.Runtime.InteropServices;
-using uTinyRipper;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Textures;
-using uTinyRipperGUI.TextureContainers.DDS;
 using uTinyRipperGUI.TextureContainers.KTX;
-using uTinyRipperGUI.TextureContainers.PVR;
-using uTinyRipperGUI.TextureConverters;
 using Yuy2;
+
 using Version = uTinyRipper.Version;
 
 namespace uTinyRipperGUI.Exporters
@@ -284,46 +280,6 @@ namespace uTinyRipperGUI.Exporters
 			{
 				bitmap.Dispose();
 				throw;
-			}
-		}
-
-		private static void DecompressDDS(BinaryReader reader, Stream destination, DDSContainerParameters @params)
-		{
-			if (@params.PixelFormatFlags.IsFourCC())
-			{
-				switch (@params.FourCC)
-				{
-					case DDSFourCCType.DXT1:
-						DDSDecompressor.DecompressDXT1(reader, destination, @params);
-						break;
-					case DDSFourCCType.DXT3:
-						DDSDecompressor.DecompressDXT3(reader, destination, @params);
-						break;
-					case DDSFourCCType.DXT5:
-						DDSDecompressor.DecompressDXT5(reader, destination, @params);
-						break;
-
-					default:
-						throw new NotImplementedException(@params.FourCC.ToString());
-				}
-			}
-			else
-			{
-				if (@params.PixelFormatFlags.IsLuminace())
-				{
-					throw new NotSupportedException("Luminace isn't supported");
-				}
-				else
-				{
-					if (@params.PixelFormatFlags.IsAlphaPixels())
-					{
-						DDSDecompressor.DecompressRGBA(reader, destination, @params);
-					}
-					else
-					{
-						DDSDecompressor.DecompressRGB(reader, destination, @params);
-					}
-				}
 			}
 		}
 
