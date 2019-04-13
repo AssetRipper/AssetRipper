@@ -89,6 +89,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.LightmapSettings);
 			OverrideYamlExporter(ClassIDType.AudioReverbZone);
 			OverrideYamlExporter(ClassIDType.OcclusionArea);
+			OverrideYamlExporter(ClassIDType.NavMeshAgent);
 			OverrideYamlExporter(ClassIDType.NavMeshSettings);
 			OverrideYamlExporter(ClassIDType.ParticleSystem);
 			OverrideYamlExporter(ClassIDType.ParticleSystemRenderer);

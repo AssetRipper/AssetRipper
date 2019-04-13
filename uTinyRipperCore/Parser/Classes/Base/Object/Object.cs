@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.AssetExporters;
@@ -113,7 +113,7 @@ namespace uTinyRipper.Classes
 		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_ObjectHideFlags", GetObjectHideFlags(container.Version, container.Flags, container.ExportFlags));
+			node.Add(ObjectHideFlagsName, GetObjectHideFlags(container.Version, container.Flags, container.ExportFlags));
 			return node;
 		}
 
@@ -146,6 +146,8 @@ namespace uTinyRipper.Classes
 		public int InstanceID { get; private set; }
 		public long LocalIdentfierInFile { get; private set; }
 #endif
+
+		public const string ObjectHideFlagsName = "m_ObjectHideFlags";
 
 		public const string AssetsKeyWord = "Assets";
 		protected const string AssetExtension = "asset";

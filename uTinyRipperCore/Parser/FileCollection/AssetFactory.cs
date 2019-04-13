@@ -168,6 +168,8 @@ namespace uTinyRipper
 					return new AudioReverbZone(assetInfo);
 				case ClassIDType.OcclusionArea:
 					return new OcclusionArea(assetInfo);
+				case ClassIDType.NavMeshAgent:
+					return new NavMeshAgent(assetInfo);
 				case ClassIDType.NavMeshSettings:
 					return new NavMeshSettings(assetInfo);
 				case ClassIDType.ParticleSystem:

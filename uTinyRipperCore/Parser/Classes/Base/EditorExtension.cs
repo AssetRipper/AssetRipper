@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
@@ -52,8 +52,8 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_PrefabParentObject", PrefabParentObject.ExportYAML(container));
-			node.Add("m_PrefabInternal", GetPrefabInternal(container).ExportYAML(container));
+			node.Add(PrefabParentObjectName, PrefabParentObject.ExportYAML(container));
+			node.Add(PrefabInternalName, GetPrefabInternal(container).ExportYAML(container));
 			return node;
 		}
 
@@ -70,6 +70,9 @@ namespace uTinyRipper.Classes
 			}
 			return default;
 		}
+
+		public const string PrefabParentObjectName = "m_PrefabParentObject";
+		public const string PrefabInternalName = "m_PrefabInternal";
 
 		/// <summary>
 		/// CorrespondingSourceObject later
