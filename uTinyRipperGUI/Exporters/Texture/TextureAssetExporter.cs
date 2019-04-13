@@ -56,7 +56,7 @@ namespace uTinyRipperGUI.Exporters
 				case TextureFormat.BGRA32:
 				case TextureFormat.RG16:
 				case TextureFormat.R8:
-					return TextureConverter.DDSTextureToBitmap(texture, data);
+					return TextureConverter.RGBTextureToBitmap(texture, data);
 
 				case TextureFormat.YUY2:
 					return TextureConverter.YUY2TextureToBitmap(texture, data);
@@ -116,7 +116,7 @@ namespace uTinyRipperGUI.Exporters
 
 				case TextureFormat.ETC_RGB4Crunched:
 				case TextureFormat.ETC2_RGBA8Crunched:
-					return TextureConverter.PVRCrunchedTextureToBitmap(texture, data);
+					return TextureConverter.ETCCrunchedTextureToBitmap(texture, data);
 
 				default:
 					Logger.Log(LogType.Error, LogCategory.Export, $"Unsupported texture format '{texture.TextureFormat}'");

@@ -189,6 +189,7 @@
     <Compile Include="ThirdParty\Texture converters\DxtDecoder.cs" />
     <Compile Include="ThirdParty\Texture converters\EtcDecoder.cs" />
     <Compile Include="ThirdParty\Texture converters\PvrtcDecoder.cs" />
+    <Compile Include="ThirdParty\Texture converters\RgbConverter.cs" />
     <Compile Include="ThirdParty\Texture converters\Yuy2Decoder.cs" />
     <Compile Include="Utils\DirectBitmap.cs" />
     <Compile Include="Utils\PermissionValidator.cs" />

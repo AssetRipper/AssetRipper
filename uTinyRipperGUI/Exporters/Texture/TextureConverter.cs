@@ -2,6 +2,7 @@ using Astc;
 using Dxt;
 using Etc;
 using Pvrtc;
+using Rgb;
 using System;
 using System.Drawing;
 using System.IO;
@@ -84,41 +85,55 @@ namespace uTinyRipperGUI.Exporters
 			return DXTTextureToBitmap(texture, decompressed);
 		}
 
-		public static DirectBitmap DDSTextureToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap RGBTextureToBitmap(Texture2D texture, byte[] data)
 		{
-			DDSContainerParameters @params = new DDSContainerParameters()
-			{
-				DataLength = data.LongLength,
-				MipMapCount = texture.MipCount,
-				Width = texture.Width,
-				Height = texture.Height,
-				IsPitchOrLinearSize = texture.DDSIsPitchOrLinearSize(),
-				PixelFormatFlags = texture.DDSPixelFormatFlags(),
-				FourCC = (DDSFourCCType)texture.DDSFourCC(),
-				RGBBitCount = texture.DDSRGBBitCount(),
-				RBitMask = texture.DDSRBitMask(),
-				GBitMask = texture.DDSGBitMask(),
-				BBitMask = texture.DDSBBitMask(),
-				ABitMask = texture.DDSABitMask(),
-				Caps = texture.DDSCaps(),
-			};
-
-			int width = @params.Width;
-			int height = @params.Height;
+			int width = texture.Width;
+			int height = texture.Height;
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
-				using (MemoryStream destination = new MemoryStream(bitmap.Bits))
+				switch (texture.TextureFormat)
 				{
-					using (MemoryStream source = new MemoryStream(data))
-					{
-						using (EndianReader sourceReader = new EndianReader(source))
-						{
-							DecompressDDS(sourceReader, destination, @params);
-						}
-					}
-					return bitmap;
+					case TextureFormat.Alpha8:
+						RgbConverter.A8ToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.ARGB4444:
+						RgbConverter.ARGB16ToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.RGB24:
+						RgbConverter.RGB24ToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.RGBA32:
+						RgbConverter.RGBA32ToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.ARGB32:
+						RgbConverter.ARGB32ToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.RGB565:
+						RgbConverter.RGB16ToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.R16:
+						RgbConverter.R16ToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.RGBA4444:
+						RgbConverter.RGBA16ToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.BGRA32:
+						Buffer.BlockCopy(data, 0, bitmap.Bits, 0, bitmap.Bits.Length);
+						break;
+					case TextureFormat.RG16:
+						RgbConverter.RG16ToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.R8:
+						RgbConverter.R8ToBGRA32(data, width, height, bitmap.Bits);
+						break;
+
+					default:
+						throw new Exception(texture.TextureFormat.ToString());
+
 				}
+				bitmap.Bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+				return bitmap;
 			}
 			catch
 			{
@@ -170,7 +185,7 @@ namespace uTinyRipperGUI.Exporters
 			}
 		}
 
-		public static DirectBitmap PVRCrunchedTextureToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap ETCCrunchedTextureToBitmap(Texture2D texture, byte[] data)
 		{
 			byte[] decompressed = DecompressCrunch(texture, data);
 			return ETCTextureToBitmap(texture, decompressed);
