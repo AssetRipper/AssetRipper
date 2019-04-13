@@ -71,17 +71,26 @@ namespace uTinyRipper.Classes
 			node.Add(RadiusName, Radius);
 			node.Add(SpeedName, Speed);
 			node.Add(AccelerationName, Acceleration);
-			node.Add(AvoidancePriorityName, AvoidancePriority);
+			node.Add(AvoidancePriorityName, GetAvoidancePriority(container.Version));
 			node.Add(AngularSpeedName, AngularSpeed);
 			node.Add(StoppingDistanceName, StoppingDistance);
 			node.Add(AutoTraverseOffMeshLinkName, AutoTraverseOffMeshLink);
-			node.Add(AutoBrakingName, AutoBraking);
+			node.Add(AutoBrakingName, GetAutoBraking(container.Version));
 			node.Add(AutoRepathName, AutoRepath);
 			node.Add(HeightName, Height);
 			node.Add(BaseOffsetName, BaseOffset);
 			node.Add(WalkableMaskName, WalkableMask);
 			node.Add(ObstacleAvoidanceTypeName, (int)ObstacleAvoidanceType);
 			return node;
+		}
+
+		private float GetAvoidancePriority(Version version)
+		{
+			return IsReadAvoidancePriority(version) ? AvoidancePriority : 50.0f;
+		}
+		private bool GetAutoBraking(Version version)
+		{
+			return IsReadAutoBraking(version) ? AutoBraking : true;
 		}
 
 		public int AgentTypeID { get; private set; }
