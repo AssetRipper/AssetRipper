@@ -31,11 +31,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(5, 6))
 			{
 				return 2;
@@ -87,16 +82,16 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_NavMeshTiles", NavMeshTiles.ExportYAML(container));
-			node.Add("m_NavMeshBuildSettings", GetExportNavMeshBuildSettings(container.Version).ExportYAML(container));
-			node.Add("m_Heightmaps", Heightmaps.ExportYAML(container));
-			node.Add("m_HeightMeshes", HeightMeshes.ExportYAML(container));
-			node.Add("m_OffMeshLinks", OffMeshLinks.ExportYAML(container));
-			node.Add("m_SourceBounds", SourceBounds.ExportYAML(container));
-			node.Add("m_Rotation", GetExportRotation(container.Version).ExportYAML(container));
-			node.Add("m_Position", Position.ExportYAML(container));
-			node.Add("m_AgentTypeID", AgentTypeID);
+			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(NavMeshTilesName, NavMeshTiles.ExportYAML(container));
+			node.Add(NavMeshBuildSettingsName, GetExportNavMeshBuildSettings(container.Version).ExportYAML(container));
+			node.Add(HeightmapsName, Heightmaps.ExportYAML(container));
+			node.Add(HeightMeshesName, HeightMeshes.ExportYAML(container));
+			node.Add(OffMeshLinksName, OffMeshLinks.ExportYAML(container));
+			node.Add(SourceBoundsName, SourceBounds.ExportYAML(container));
+			node.Add(RotationName, GetExportRotation(container.Version).ExportYAML(container));
+			node.Add(PositionName, Position.ExportYAML(container));
+			node.Add(AgentTypeIDName, AgentTypeID);
 			return node;
 		}
 
@@ -116,6 +111,16 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<HeightMeshData> HeightMeshes => m_heightMeshes;
 		public IReadOnlyList<AutoOffMeshLinkData> OffMeshLinks => m_offMeshLinks;
 		public int AgentTypeID { get; private set; }
+
+		public const string NavMeshTilesName = "m_NavMeshTiles";
+		public const string NavMeshBuildSettingsName = "m_NavMeshBuildSettings";
+		public const string HeightmapsName = "m_Heightmaps";
+		public const string HeightMeshesName = "m_HeightMeshes";
+		public const string OffMeshLinksName = "m_OffMeshLinks";
+		public const string SourceBoundsName = "m_SourceBounds";
+		public const string RotationName = "m_Rotation";
+		public const string PositionName = "m_Position";
+		public const string AgentTypeIDName = "m_AgentTypeID";
 
 		public NavMeshParams NavMeshParams;
 		public NavMeshBuildSettings NavMeshBuildSettings;

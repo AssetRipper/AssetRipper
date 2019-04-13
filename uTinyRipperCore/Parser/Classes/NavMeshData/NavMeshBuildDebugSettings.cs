@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.NavMeshDatas
@@ -14,9 +14,11 @@ namespace uTinyRipper.Classes.NavMeshDatas
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Flags", Flags);
+			node.Add(FlagsName, Flags);
 			return node;
 		}
+
+		public const string FlagsName = "m_Flags";
 
 		public byte Flags { get; private set; }
 	}

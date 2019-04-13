@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 
@@ -26,12 +26,15 @@ namespace uTinyRipper.Classes.NavMeshDatas
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_MeshData", MeshData.ExportYAML());
-			node.Add("m_Hash", Hash.ExportYAML(container));
+			node.Add(MeshDataName, MeshData.ExportYAML());
+			node.Add(HashName, Hash.ExportYAML(container));
 			return node;
 		}
 
 		public IReadOnlyList<byte> MeshData => m_meshData;
+
+		public const string MeshDataName = "m_MeshData";
+		public const string HashName = "m_Hash";
 
 		public Hash128 Hash;
 

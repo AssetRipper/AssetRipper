@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.NavMeshDatas
@@ -18,12 +18,12 @@ namespace uTinyRipper.Classes.NavMeshDatas
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Start", Start.ExportYAML(container));
-			node.Add("m_End", End.ExportYAML(container));
-			node.Add("m_Radius", Radius);
-			node.Add("m_LinkType", LinkType);
-			node.Add("m_Area", Area);
-			node.Add("m_LinkDirection", LinkDirection);
+			node.Add(StartName, Start.ExportYAML(container));
+			node.Add(EndName, End.ExportYAML(container));
+			node.Add(RadiusName, Radius);
+			node.Add(LinkTypeName, LinkType);
+			node.Add(AreaName, Area);
+			node.Add(LinkDirectionName, LinkDirection);
 			return node;
 		}
 
@@ -31,6 +31,13 @@ namespace uTinyRipper.Classes.NavMeshDatas
 		public ushort LinkType { get; private set; }
 		public byte Area { get; private set; }
 		public byte LinkDirection { get; private set; }
+
+		public const string StartName = "m_Start";
+		public const string EndName = "m_End";
+		public const string RadiusName = "m_Radius";
+		public const string LinkTypeName = "m_LinkType";
+		public const string AreaName = "m_Area";
+		public const string LinkDirectionName = "m_LinkDirection";
 
 		public Vector3f Start;
 		public Vector3f End;
