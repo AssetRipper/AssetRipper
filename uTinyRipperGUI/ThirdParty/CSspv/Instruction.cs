@@ -1,51 +1,51 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SpirV
 {
 	public enum OperandQuantifier
 	{
-		// 1
+		/// <summary>
+		/// 1
+		/// </summary>
 		Default,
-		// 0 or 1
+		/// <summary>
+		/// 0 or 1
+		/// </summary>
 		Optional,
-		// 0+
+		/// <summary>
+		/// 0+
+		/// </summary>
 		Varying
 	}
 
 	public class Operand
 	{
-		public string Name { get; }
-		public OperandType Type { get; }
-		public OperandQuantifier Quantifier { get; }
-		
 		public Operand(OperandType kind, string name, OperandQuantifier quantifier)
 		{
 			Name = name;
 			Type = kind;
 			Quantifier = quantifier;
 		}
+
+		public string Name { get; }
+		public OperandType Type { get; }
+		public OperandQuantifier Quantifier { get; }
 	}
 
 	public class Instruction
 	{
-		public string Name { get; }
-
-		public IList<Operand> Operands
-		{
-			get;
-		}
-
 		public Instruction (string name)
 			: this (name, new List<Operand> ())
 		{
 		}
 
-		public Instruction (string name, IList<Operand> operands)
+		public Instruction (string name, IReadOnlyList<Operand> operands)
 		{
 			Operands = operands;
 			Name = name;
 		}
+
+		public string Name { get; }
+		public IReadOnlyList<Operand> Operands { get; }
 	}
 }
