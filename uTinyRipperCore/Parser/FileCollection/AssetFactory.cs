@@ -180,6 +180,8 @@ namespace uTinyRipper
 					return new ShaderVariantCollection(assetInfo);
 				case ClassIDType.LODGroup:
 					return new LODGroup(assetInfo);
+				case ClassIDType.NavMeshObstacle:
+					return new NavMeshObstacle(assetInfo);
 				case ClassIDType.SpriteRenderer:
 					return new SpriteRenderer(assetInfo);
 				case ClassIDType.Sprite:
