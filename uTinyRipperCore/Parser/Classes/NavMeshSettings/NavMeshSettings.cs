@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.NavMeshDatas;
 using uTinyRipper.YAML;
 
@@ -33,14 +33,14 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_BuildSettings", GetExportNavMeshBuildSettings(container).ExportYAML(container));
-			node.Add("m_NavMeshData", NavMeshData.ExportYAML(container));
+			node.Add(BuildSettingsName, GetExportNavMeshBuildSettings(container).ExportYAML(container));
+			node.Add(NavMeshDataName, NavMeshData.ExportYAML(container));
 			return node;
 		}
 
 		private NavMeshBuildSettings GetExportNavMeshBuildSettings(IExportContainer container)
 		{
-			if(IsReadBuildSettings(container.Flags))
+			if (IsReadBuildSettings(container.Flags))
 			{
 				return BuildSettings;
 			}
@@ -64,6 +64,9 @@ namespace uTinyRipper.Classes
 				}
 			}
 		}
+
+		public const string BuildSettingsName = "m_BuildSettings";
+		public const string NavMeshDataName = "m_NavMeshData";
 
 		public NavMeshBuildSettings BuildSettings;
 		public PPtr<NavMeshData> NavMeshData;

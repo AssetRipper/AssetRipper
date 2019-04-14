@@ -9,7 +9,7 @@ namespace uTinyRipper.Classes
 {
 	/// <summary>
 	/// NavMeshAreas previously
-	/// NavMeshLayers event earlier
+	/// NavMeshLayers even earlier
 	/// </summary>
 	public sealed class NavMeshProjectSettings : GlobalGameManager
 	{
@@ -57,20 +57,10 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		private static bool IsReadStaticAreas(Version version)
 		{
-			return ToSerializedVersion(version) < 2;
+			return GetSerializedVersion(version) < 2;
 		}
 
 		private static int GetSerializedVersion(Version version)
-		{
-			// NavMeshLayerData with individual names converted to dynamic array of NavMeshAreaData
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-			return ToSerializedVersion(version);
-		}
-
-		private static int ToSerializedVersion(Version version)
 		{
 			// NavMeshLayerData with individual names converted to dynamic array of NavMeshAreaData
 			if (version.IsGreaterEqual(5))
@@ -107,11 +97,11 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("areas", Areas.ExportYAML(container));
-			node.Add("m_LastAgentTypeID", GetLastAgentTypeID(container.Version));
-			node.Add("m_Settings", GetSettings(container.Version).ExportYAML(container));
-			node.Add("m_SettingNames", GetSettingNames(container.Version).ExportYAML());
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(AreasName, Areas.ExportYAML(container));
+			node.Add(LastAgentTypeIDName, GetLastAgentTypeID(container.Version));
+			node.Add(SettingsName, GetSettings(container.Version).ExportYAML(container));
+			node.Add(SettingNamesName, GetSettingNames(container.Version).ExportYAML());
 			return node;
 		}
 
@@ -134,6 +124,11 @@ namespace uTinyRipper.Classes
 		public int LastAgentTypeID { get; private set; }
 		public IReadOnlyList<NavMeshBuildSettings> Settings => m_settings;
 		public IReadOnlyList<string> SettingNames => m_settingNames;
+
+		public const string AreasName = "areas";
+		public const string LastAgentTypeIDName = "m_LastAgentTypeID";
+		public const string SettingsName = "m_Settings";
+		public const string SettingNamesName = "m_SettingNames";
 
 		private NavMeshAreaData[] m_areas;
 		private NavMeshBuildSettings[] m_settings;
