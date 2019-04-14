@@ -22,14 +22,14 @@ namespace uTinyRipper.AssetExporters.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
+			// TODO:
 			return 2;
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add("sprites", Sprites.ExportYAML(container));
 			node.Add("outline", Outline.ExportYAML(container));
 			node.Add("physicsShape", PhysicsShape.ExportYAML(container));

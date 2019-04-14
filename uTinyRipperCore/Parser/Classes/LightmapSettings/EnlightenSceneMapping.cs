@@ -15,12 +15,12 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			return version.IsGreaterEqual(5, 3);
 		}
 		/// <summary>
-		/// Greater than 5.0.0b1
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadTerrainChunks(Version version)
 		{
-#warning unknown
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 
 		/// <summary>

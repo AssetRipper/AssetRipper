@@ -28,9 +28,8 @@ namespace uTinyRipper.Classes.Physics2DSettingss
 
 		private static int GetSerializedVersion(Version version)
 		{
-#warning TODO: unknown beta version
 			// m_UseMultithreading renamed to useMultithreading, m_UseConsistencySorting to useConsistencySorting
-			if (Config.IsExportTopmostSerializedVersion || version.IsGreaterEqual(2018, 1, 0, VersionType.Beta, 3))
+			if (version.IsGreaterEqual(2018, 1, 0, VersionType.Beta, 11))
 			{
 				return 2;
 			}
@@ -63,7 +62,7 @@ namespace uTinyRipper.Classes.Physics2DSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add("useMultithreading", UseMultithreading);
 			node.Add("useConsistencySorting", UseConsistencySorting);
 			node.Add("m_InterpolationPosesPerJob", InterpolationPosesPerJob);

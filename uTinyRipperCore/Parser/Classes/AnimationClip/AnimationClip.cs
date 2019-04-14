@@ -455,12 +455,12 @@ namespace uTinyRipper.Classes
 			}
 			if (IsReadAnimationType(version))
 			{
-				if(!IsReadClipBindingConstant(version))
+				if (!IsReadClipBindingConstant(version))
 				{
 #warning TODO:
 					return false;
 				}
-				if(AnimationType != AnimationType.Legacy)
+				if (AnimationType != AnimationType.Legacy)
 				{
 					return MuscleClip.Clip.IsValid(version);
 				}

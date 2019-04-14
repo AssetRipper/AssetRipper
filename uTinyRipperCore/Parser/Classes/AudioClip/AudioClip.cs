@@ -23,12 +23,12 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5);
 		}
 		/// <summary>
-		/// Greater than 5.0.0b1
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadIsTrackerFormat(Version version)
 		{
-#warning unknown
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
 		/// 2017.1 and greater
@@ -39,20 +39,20 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// 5.0.0b1
+		/// 5.0.0b
 		/// </summary>
 		public static bool IsReadAudioClipFlags(Version version)
 		{
-#warning unknown
-			return version.IsEqual(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsEqual(5, 0, 0, VersionType.Beta);
 		}
 		/// <summary>
-		/// Greater than 5.0.0b1
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadCompressionFormat(Version version)
 		{
-#warning unknown
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
 		/// Not Release
@@ -70,12 +70,12 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(2) && version.IsLess(3);
 		}
 		/// <summary>
-		/// 2.6.0 to 5.0.0b1
+		/// 2.6.0 to 5.0.0b
 		/// </summary>
 		public static bool IsReadType(Version version)
 		{
-#warning unknown top version
-			return version.IsGreaterEqual(2, 6) && version.IsLessEqual(5, 0, 0, VersionType.Beta, 1);
+			// unknown top version
+			return version.IsGreaterEqual(2, 6) && version.IsLessEqual(5, 0, 0, VersionType.Beta);
 		}
 		/// <summary>
 		/// Less than 2.6.0
@@ -114,21 +114,21 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// 5.0.0b1
+		/// 5.0.0b
 		/// </summary>
 		private static bool IsReadFSBResourceFirst(Version version)
 		{
-#warning unknown
-			return version.IsEqual(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsEqual(5, 0, 0, VersionType.Beta);
 		}
 
 		/// <summary>
-		/// Greater than 5.0.0b1
+		/// 5.0.0f1 and greater
 		/// </summary>
 		private static bool IsAlignTrackerFormat(Version version)
 		{
-#warning unknown
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 
 		/// <summary>

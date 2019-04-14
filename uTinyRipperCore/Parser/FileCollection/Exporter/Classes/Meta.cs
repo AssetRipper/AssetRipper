@@ -25,7 +25,7 @@ namespace uTinyRipper.AssetExporters.Classes
 
 		private static int GetFileFormatVersion(Version version)
 		{
-#warning TODO: file version acording to read version (current 2017.3.0f3)
+			// TODO:
 			return 2;
 		}
 
@@ -33,7 +33,7 @@ namespace uTinyRipper.AssetExporters.Classes
 		{
 			YAMLDocument document = new YAMLDocument();
 			YAMLMappingNode root = document.CreateMappingRoot();
-			root.Add("fileFormatVersion", GetFileFormatVersion(container.Version));
+			root.Add("fileFormatVersion", GetFileFormatVersion(container.ExportVersion));
 			root.Add("guid", m_guid.ExportYAML(container));
 			long cplusTick = (DateTime.Now.Ticks - 0x089f7ff5f7b58000) / 10000000;
 			root.Add("timeCreated", cplusTick);

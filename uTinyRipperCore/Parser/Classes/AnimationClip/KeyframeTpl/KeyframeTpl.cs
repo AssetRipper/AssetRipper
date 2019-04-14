@@ -31,20 +31,16 @@ namespace uTinyRipper.Classes.AnimationClips
 		{
 			return version.IsGreaterEqual(2018);
 		}
+		/// <summary>
+		/// 5.5.0 and greater and Debug
+		/// </summary>
 		public static bool IsReadTangentMode(Version version, TransferInstructionFlags flags)
 		{
-			return GetSerializedVersion(version) >= 2 && !flags.IsRelease();
+			return version.IsGreaterEqual(5, 5) && flags.IsDebug();
 		}
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-#warning TODO: 2018
-				//return 3;
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(2018))
 			{
 				return 3;
@@ -62,11 +58,11 @@ namespace uTinyRipper.Classes.AnimationClips
 			Value.Read(reader);
 			InSlope.Read(reader);
 			OutSlope.Read(reader);
-			if(IsReadTangentMode(reader.Version, reader.Flags))
+			if (IsReadTangentMode(reader.Version, reader.Flags))
 			{
 				TangentMode = (TangentMode)reader.ReadInt32();
 			}
-			if(IsReadWeight(reader.Version))
+			if (IsReadWeight(reader.Version))
 			{
 				WeightedMode = (WeightedMode)reader.ReadInt32();
 				InWeight.Read(reader);
@@ -77,16 +73,16 @@ namespace uTinyRipper.Classes.AnimationClips
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add("time", Time);
 			node.Add("value", Value.ExportYAML(container));
 			node.Add("inSlope", InSlope.ExportYAML(container));
 			node.Add("outSlope", OutSlope.ExportYAML(container));
-			if (GetSerializedVersion(container.Version) >= 2)
+			if (IsReadTangentMode(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add("tangentMode", (int)TangentMode);
 			}
-			if (GetSerializedVersion(container.Version) >= 3)
+			if (IsReadWeight(container.ExportVersion))
 			{
 				node.Add("weightedMode", (int)WeightedMode);
 				node.Add("inWeight", InWeight.ExportYAML(container));

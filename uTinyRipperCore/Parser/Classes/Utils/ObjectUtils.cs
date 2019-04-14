@@ -46,7 +46,6 @@ namespace uTinyRipper.Classes
 				throw new ArgumentNullException(nameof(asset));
 			}
 
-#warning TODO: values acording to read version (current 2017.3.0f3)
 			ThreadSafeRandom random = new ThreadSafeRandom();
 			uint classID = (uint)asset.ClassID;
 #if DEBUG
@@ -58,6 +57,7 @@ namespace uTinyRipper.Classes
 #endif
 			long prefix = classID * 1000000000000000L;
 			ulong persistentValue = 0;
+#warning TODO: depending on the export version exportID should has random or ordered value
 			long exportID = 0;
 			do
 			{

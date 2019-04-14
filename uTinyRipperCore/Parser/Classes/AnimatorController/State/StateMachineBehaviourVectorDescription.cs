@@ -5,12 +5,12 @@ namespace uTinyRipper.Classes.AnimatorControllers
 	public struct StateMachineBehaviourVectorDescription : IAssetReadable
 	{
 		/// <summary>
-		/// Greater than 5.0.0b1
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadStateMachineBehaviourIndices(Version version)
 		{
-#warning unknown
-			return version.IsGreater(5, 0, 0, VersionType.Beta);
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 
 		public void Read(AssetReader reader)

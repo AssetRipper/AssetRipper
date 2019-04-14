@@ -65,7 +65,7 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
+			// TODO:
 			return 6;
 		}
 
@@ -136,8 +136,9 @@ namespace uTinyRipper.Classes
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
+#warning TODO:
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
+			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add("m_Shader", Shader.ExportYAML(container));
 			node.Add("m_ShaderKeywords", IsReadKeywords(container.Version) ? (IsKeywordsArray(container.Version) ? string.Join(" ", m_shaderKeywordsArray) : ShaderKeywords) : string.Empty);
 			node.Add("m_LightmapFlags", LightmapFlags);
@@ -145,7 +146,6 @@ namespace uTinyRipper.Classes
 			node.Add("m_DoubleSidedGI", DoubleSidedGI);
 			node.Add("m_CustomRenderQueue", CustomRenderQueue);
 			node.Add("stringTagMap", IsReadStringTagMap(container.Version) ? StringTagMap.ExportYAML() : YAMLMappingNode.Empty);
-#warning TODO: untested
 			node.Add("disabledShaderPasses", IsReadDisabledShaderPasses(container.Version) ? DisabledShaderPasses.ExportYAML() : YAMLSequenceNode.Empty);
 			node.Add("m_SavedProperties", SavedProperties.ExportYAML(container));
 			return node;

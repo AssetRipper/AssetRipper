@@ -37,14 +37,14 @@ namespace uTinyRipper.Classes.AnimatorControllers.Editor
 
 		private static int GetSerializedVersion(Version version)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
+			// TODO:
 			return 3;
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(TransitionDurationName, TransitionDuration);
 			node.Add(TransitionOffsetName, TransitionOffset);
 			node.Add(ExitTimeName, ExitTime);

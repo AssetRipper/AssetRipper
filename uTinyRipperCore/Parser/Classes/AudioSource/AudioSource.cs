@@ -82,12 +82,12 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(3);
 		}
 		/// <summary>
-		/// 5.0.0b1 and greater
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadReverbZoneMixCustomCurve(Version version)
 		{
-#warning: unknown
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 
 		/// <summary>
@@ -114,11 +114,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 4;
-			}
-
 			if (version.IsGreaterEqual(5))
 			{
 				return 4;
@@ -226,9 +221,8 @@ namespace uTinyRipper.Classes
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add("OutputAudioMixerGroup", OutputAudioMixerGroup.ExportYAML(container));
 			node.Add("m_audioClip", AudioClip.ExportYAML(container));
 			node.Add("m_PlayOnAwake", PlayOnAwake);

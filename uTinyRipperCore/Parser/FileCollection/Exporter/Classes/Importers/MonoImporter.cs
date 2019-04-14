@@ -19,19 +19,13 @@ namespace uTinyRipper.Importers
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if(Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
-#warning TODO: value acording to read version (current 2017.3.0f3)
+			// TODO:
 			return 2;
 		}
 
 		protected override void ExportYAMLInner(IExportContainer container, YAMLMappingNode node)
 		{
-#warning TODO: value acording to read version (current 2017.3.0f3)
-			node.AddSerializedVersion(2);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add("defaultReferences", YAMLSequenceNode.Empty);
 			node.Add("executionOrder", m_script.ExecutionOrder);
 

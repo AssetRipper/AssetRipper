@@ -31,12 +31,9 @@ namespace uTinyRipper.Classes.LightmapSettingss
 				return 2;
 			}
 
-#warning unknown
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 1))
-			{
-				return 2;
-			}
-			return 1;
+			return 2;
+			// unknown (5.0.0a) version
+			//return 1;
 		}
 
 		public void Read(AssetReader reader)

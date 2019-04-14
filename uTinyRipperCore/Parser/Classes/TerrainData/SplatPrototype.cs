@@ -38,12 +38,12 @@ namespace uTinyRipper.Classes.TerrainDatas
 			return version.IsGreaterEqual(3);
 		}
 		/// <summary>
-		/// Greater than 5.0.0b1
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadSpecularMetallic(Version version)
 		{
-#warning unknown
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
 		/// 5.0.1 and greater

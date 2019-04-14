@@ -130,24 +130,18 @@ namespace uTinyRipper.Classes
 				return 11;
 			}
 
-#warning unknown
-			if (version.IsGreaterEqual(2017, 0, 0, VersionType.Beta))
+			if (version.IsGreaterEqual(2017))
 			{
 				return 11;
 			}
-			if (version.IsGreaterEqual(2017))
-			{
-				return 10;
-			}
+			// unknown (alpha) version
+			//return 10;
 			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2))
 			{
 				return 9;
 			}
-#warning unknown
-			/*if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, ))
-			{
-				return 8;
-			}*/
+			// unknown (5.6.0b1-2) version
+			//return 8;
 			if (version.IsGreaterEqual(5, 4))
 			{
 				return 7;
@@ -156,25 +150,20 @@ namespace uTinyRipper.Classes
 			{
 				return 6;
 			}
-#warning unknown
-			if (version.IsGreater(5, 0, 0, VersionType.Beta))
+			// unknown version
+			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
 			{
 				return 5;
 			}
-#warning unknown
-			if (version.IsGreater(5, 0, 0, VersionType.Beta, 1))
-			{
-				return 4;
-			}
-#warning unknown
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Beta))
+			// unknown (beta) version
+			// return 4;
+			if (version.IsGreaterEqual(5))
 			{
 				return 3;
 			}
-			if (version.IsGreaterEqual(5))
-			{
-				return 2;
-			}
+			// unknown (alpha) version
+			// return 2;
+
 			return 1;
 		}
 

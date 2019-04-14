@@ -250,8 +250,10 @@ namespace uTinyRipper.Classes
 			node.Add("m_ProjectGenerationRootNamespace", GetProjectGenerationRootNamespace(container.Version));
 			node.Add("m_UserGeneratedProjectSuffix", GetUserGeneratedProjectSuffix(container.Version));
 			node.Add("m_CollabEditorSettings", GetCollabEditorSettings(container.Version).ExportYAML(container));
-#warning TODO: 2018
-			//node.Add("m_EnableTextureStreamingInPlayMode", GetEnableTextureStreamingInPlayMode(container.Version));
+			if (IsReadEnableTextureStreamingInPlayMode(container.ExportVersion))
+			{
+				node.Add("m_EnableTextureStreamingInPlayMode", GetEnableTextureStreamingInPlayMode(container.Version));
+			}
 			return node;
 		}
 

@@ -171,8 +171,8 @@ namespace uTinyRipper.Classes.Shaders
 							return GPUPlatform.xbox360;
 						case Platform.XboxOne:
 							return GPUPlatform.xboxone;
-#warning TODO:
-							//return GPUPlatform.xboxone_d3d12;
+						// TODO:
+						//return GPUPlatform.xboxone_d3d12;
 
 						case Platform.WiiU:
 							return GPUPlatform.wiiu;

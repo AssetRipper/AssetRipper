@@ -26,8 +26,8 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool IsReadMultiThreadedStateMachine(Version version)
 		{
-#warning unknown
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1) && version.IsLess(5, 2) || version.IsGreaterEqual(5, 4);
+			// unknown start version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 2) || version.IsGreaterEqual(5, 4);
 		}
 
 		/// <summary>
@@ -40,16 +40,16 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-#warning unknown
-			if (version.IsGreater(5, 0, 0, VersionType.Beta))
+			// unknown version
+			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
 			{
 				return 5;
 			}
-			if (version.IsEqual(5, 0, 0, VersionType.Beta))
+			// unknown version
+			if (version.IsGreaterEqual(5, 0, 0, VersionType.Beta))
 			{
 				return 4;
 			}
-#warning unknown
 			if (version.IsGreaterEqual(5))
 			{
 				return 3;

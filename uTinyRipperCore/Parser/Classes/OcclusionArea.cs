@@ -32,17 +32,9 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
-#warning unknown
-			if (version.IsGreater(3, 0, 0, VersionType.Beta))
-			{
-				return 2;
-			}
-			return 1;
+			return 2;
+			// unknown (beta) version
+			//return 1;
 		}
 
 		public override void Read(AssetReader reader)
@@ -67,7 +59,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add("m_Size", Size.ExportYAML(container));
 			node.Add("m_Center", Center.ExportYAML(container));
 			node.Add("m_IsViewVolume", IsViewVolume);

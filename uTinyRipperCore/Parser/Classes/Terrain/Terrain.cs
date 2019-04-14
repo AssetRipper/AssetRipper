@@ -15,20 +15,20 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// 5.0.0b1 to 5.0.1 exclusive
+		/// 5.0.0f1 to 5.0.1 exclusive
 		/// </summary>
 		public static bool IsReadDefaultSmoothness(Version version)
 		{
-#warning unknown bottom version
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1) && version.IsLess(5, 0, 1);
+			// unknown bottom version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 0, 1);
 		}
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadDrawHeightmap(Version version)
 		{
-#warning unknown
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
 		/// 2018.3 and greater
@@ -38,12 +38,12 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(2018, 3);
 		}
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadReflectionProbeUsage(Version version)
 		{
-#warning unknown
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
 		/// 2017.2 and greater
@@ -53,12 +53,12 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(2017, 2);
 		}
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadBakeLightProbesForTrees(Version version)
 		{
-#warning unknown
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
 		/// 2018.2 and greater
@@ -68,12 +68,12 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(2018, 2);
 		}
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadDynamicUVST(Version version)
 		{
-#warning unknown
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
 		/// 2018.3 and greater
@@ -85,16 +85,13 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-#warning unknown
-			if (version.IsGreater(5, 0, 0, VersionType.Beta, 2))
+			// unknown version
+			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
 			{
 				return 3;
 			}
-#warning unknown
-			if (version.IsGreater(5, 0, 0, VersionType.Beta, 1))
-			{
-				return 2;
-			}
+			// unknown (beta) version
+			// return 2;
 			return 1;
 		}
 
@@ -222,7 +219,6 @@ namespace uTinyRipper.Classes
 
 		}
 
-		public byte Enabled { get; private set; }
 		public float TreeDistance { get; private set; }
 		public float TreeBillboardDistance { get; private set; }
 		public float TreeCrossFadeLength { get; private set; }

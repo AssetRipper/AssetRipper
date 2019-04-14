@@ -10,7 +10,7 @@ namespace uTinyRipper.SerializedFiles
 			Generation = generation;
 		}
 
-		public new T[] ReadArray<T>()
+		public T[] ReadArray<T>()
 			where T : ISerializedFileReadable, new()
 		{
 			int count = ReadInt32();

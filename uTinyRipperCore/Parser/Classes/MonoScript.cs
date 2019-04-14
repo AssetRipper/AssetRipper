@@ -61,12 +61,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-#warning update version:
-				return 4;
-			}
-			
 			if(version.IsGreaterEqual(2018, 2))
 			{
 				return 5;
@@ -75,15 +69,12 @@ namespace uTinyRipper.Classes
 			{
 				return 4;
 			}
-#warning unknown:
-			if (version.IsGreater(3, 0, 0, VersionType.Beta, 1))
+			if (version.IsGreaterEqual(3))
 			{
 				return 3;
 			}
-			if (version.IsGreaterEqual(3))
-			{
-				return 2;
-			}
+			// unknown (beta) version
+			// return 2;
 			return 1;
 		}
 

@@ -24,13 +24,10 @@ namespace uTinyRipper.Classes.Shaders
 				case ShaderType.Fragment:
 					return "fp";
 				case ShaderType.Geometry:
-#warning untested
 					return "gp";
 				case ShaderType.Hull:
-#warning untested
 					return "hp";
 				case ShaderType.Domain:
-#warning untested
 					return "dp";
 
 				default:

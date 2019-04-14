@@ -96,11 +96,6 @@ namespace uTinyRipper.Classes.AnimationClips
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(2, 1))
 			{
 				return 2;
@@ -128,9 +123,8 @@ namespace uTinyRipper.Classes.AnimationClips
 		
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-#warning TODO: value acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add("m_Curve", Curve.ExportYAML(container));
 			node.Add("m_PreInfinity", (int)PreInfinity);
 			node.Add("m_PostInfinity", (int)PostInfinity);

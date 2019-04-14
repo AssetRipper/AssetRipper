@@ -35,15 +35,13 @@ namespace uTinyRipper.Classes.Avatars
 				return 3;
 			}
 			
-#warning unknown
-			if (version.IsGreaterEqual(4, 3, 0, VersionType.Beta, 1))
+			if (version.IsGreater(4, 3))
 			{
 				return 3;
 			}
-			if (version.IsGreater(4, 3))
-			{
-				return 2;
-			}
+			// unknown (alpha) version
+			//return 2;
+
 			return 1;
 		}
 

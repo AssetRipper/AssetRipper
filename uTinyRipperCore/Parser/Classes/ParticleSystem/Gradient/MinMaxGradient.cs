@@ -33,11 +33,6 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-			
 			if (version.IsGreaterEqual(5, 4))
 			{
 				return 2;
@@ -77,9 +72,8 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-#warning TODO: value acording to read version (current 2017.3.0f3)
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add("minMaxState", (ushort)MinMaxState);
 			node.Add("minColor", MinColor.ExportYAML(container));
 			node.Add("maxColor", MaxColor.ExportYAML(container));

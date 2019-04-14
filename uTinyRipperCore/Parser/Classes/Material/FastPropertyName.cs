@@ -26,17 +26,16 @@ namespace uTinyRipper.Classes.Materials
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
-			//if(IsPlainString)
+			if (IsPlainString(container.ExportVersion))
 			{
 				return new YAMLScalarNode(Value);
 			}
-			/*else
+			else
 			{
 				YAMLMappingNode node = new YAMLMappingNode();
 				node.Add("name", Value);
 				return node;
-			}*/
+			}
 		}
 
 		public override int GetHashCode()

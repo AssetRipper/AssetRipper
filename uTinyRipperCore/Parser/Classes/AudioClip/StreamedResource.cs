@@ -6,12 +6,12 @@ namespace uTinyRipper.Classes.AudioClips
 	public struct StreamedResource : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
-		/// Greater than 5.0.0b1
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadSize(Version version)
 		{
-#warning unknown beta version
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 
 		public void Read(AssetReader reader)

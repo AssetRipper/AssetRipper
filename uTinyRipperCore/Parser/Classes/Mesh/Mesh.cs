@@ -241,15 +241,12 @@ namespace uTinyRipper.Classes
 			{
 				return 9;
 			}
-#warning unknown
-			if (version.IsGreater(4, 0, 0, VersionType.Beta, 1))
+			if (version.IsGreaterEqual(4, 0, 0))
 			{
 				return 8;
 			}
-			if (version.IsGreaterEqual(4, 0, 0))
-			{
-				return 7;
-			}
+			// unknown (4.0.0b) version
+			// return 7;
 			if (version.IsGreaterEqual(3, 5))
 			{
 				return 6;
@@ -258,15 +255,12 @@ namespace uTinyRipper.Classes
 			{
 				return 5;
 			}
-#warning unknown
-			if (version.IsGreater(2, 6, 0, VersionType.Beta))
+			if (version.IsGreaterEqual(2, 6))
 			{
 				return 4;
 			}
-			if (version.IsGreaterEqual(2, 6))
-			{
-				return 3;
-			}
+			// unknown (2.6.0b) version
+			// return 3;
 			if (version.IsGreaterEqual(2))
 			{
 				return 2;
@@ -473,15 +467,14 @@ namespace uTinyRipper.Classes
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
+#warning TODO
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(SubMeshesName, GetSubMeshes(container.Version).ExportYAML(container));
 			node.Add(ShapesName, GetShapes(container.Version).ExportYAML(container));
 			node.Add(BindPoseName, IsReadBindPoses(container.Version) ? BindPoses.ExportYAML(container) : YAMLSequenceNode.Empty);
-#warning TODO?
 			node.Add(BoneNamesName, YAMLSequenceNode.Empty);
 			node.Add(BoneNameHashesName, IsReadBoneNameHashes(container.Version) ? BoneNameHashes.ExportYAML(false) : YAMLSequenceNode.Empty);
-#warning TODO?
 			node.Add(RootBoneNameName, YAMLScalarNode.Empty);
 			node.Add(RootBoneNameHashName, RootBoneNameHash);
 			node.Add(MeshCompressionName, (byte)MeshCompression);
@@ -504,7 +497,6 @@ namespace uTinyRipper.Classes
 				node.Add(BakedConvexCollisionMeshName, ArrayExtensions.EmptyBytes.ExportYAML());
 				node.Add(BakedTriangleCollisionMeshName, ArrayExtensions.EmptyBytes.ExportYAML());
 			}
-#warning ???
 			node.Add(MeshOptimizedName, 0);
 			if (IsReadStreamData(container.ExportVersion))
 			{

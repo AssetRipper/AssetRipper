@@ -38,12 +38,12 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5);
 		}
 		/// <summary>
-		/// 5.0.0b1
+		/// 5.0.0b
 		/// </summary>
 		public static bool IsReadAmbientSkyboxLight(Version version)
 		{
-#warning unknown
-			return version.IsEqual(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsEqual(5, 0, 0, VersionType.Beta);
 		}
 		/// <summary>
 		/// 5.0.0 and greater
@@ -53,12 +53,12 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5);
 		}
 		/// <summary>
-		/// 5.0.0b1
+		/// 5.0.0b
 		/// </summary>
 		public static bool IsReadCreateAmbientLight(Version version)
 		{
-#warning unknown
-			return version.IsEqual(5, 0, 0, VersionType.Beta, 1);
+			// unknown version
+			return version.IsEqual(5, 0, 0, VersionType.Beta);
 		}
 		/// <summary>
 		/// 5.6.0 and greater
@@ -107,7 +107,7 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool IsReadDefaultReflectionResolution(Version version)
 		{
-#warning unknown
+			// unknown version
 			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
@@ -139,12 +139,12 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5) &&  (flags.IsRelease() || flags.IsBuiltinResources());
 		}
 		/// <summary>
-		/// 5.0.0b2 and greater
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadSun(Version version)
 		{
-#warning unknown
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
 		/// 5.4.0 and greater
@@ -162,12 +162,12 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// Less than 5.0.0b2
+		/// Less than 5.0.0f1
 		/// </summary>
 		private static bool IsReadAmbientProbeFirst(Version version)
 		{
-#warning unknown
-			return version.IsLess(5, 0, 0, VersionType.Beta, 2);
+			// unknown version
+			return version.IsLess(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
 		/// 2.1.0 and greater
@@ -197,24 +197,17 @@ namespace uTinyRipper.Classes
 			{
 				return 7;
 			}
-#warning unknown
+			// unknown version
 			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
 			{
 				return 6;
 			}
-			/* unknown
-			if (version.IsGreaterEqual())
-			{
-				return 5;
-			}
-			if (version.IsGreaterEqual())
-			{
-				return 4;
-			}
-			if (version.IsGreaterEqual())
-			{
-				return 3;
-			}*/
+			// unknown (beta) version
+			// return 5;
+			// unknown (beta) version
+			// return 4;
+			// unknown (beta) version
+			// return 3;
 			if (version.IsGreaterEqual(5))
 			{
 				return 2;

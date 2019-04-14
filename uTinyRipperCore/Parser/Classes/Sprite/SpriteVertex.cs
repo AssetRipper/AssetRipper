@@ -15,7 +15,7 @@ namespace uTinyRipper.Classes.Sprites
 
 		private static int GetSerializedVersion(Version version)
 		{
-#warning TODO: serialized version acording to read version (current 2017.3.0f3)
+			// TODO:
 			return 2;
 		}
 
@@ -31,12 +31,12 @@ namespace uTinyRipper.Classes.Sprites
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add("pos", Position.ExportYAML(container));
-			/*if(IsReadUV)
+			if (IsReadUV(container.ExportVersion))
 			{
-				node.Add("uv", UV.ExportYAML());
-			}*/
+				node.Add("uv", UV.ExportYAML(container));
+			}
 			return node;
 		}
 
