@@ -166,6 +166,8 @@ namespace uTinyRipper
 					return new LightmapSettings(assetInfo);
 				case ClassIDType.AudioReverbZone:
 					return new AudioReverbZone(assetInfo);
+				case ClassIDType.OffMeshLink:
+					return new OffMeshLink(assetInfo);
 				case ClassIDType.OcclusionArea:
 					return new OcclusionArea(assetInfo);
 				case ClassIDType.NavMeshObsolete:

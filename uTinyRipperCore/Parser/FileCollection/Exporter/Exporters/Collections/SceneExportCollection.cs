@@ -152,7 +152,7 @@ namespace uTinyRipper.AssetExporters
 
 		public override bool IsContains(Object asset)
 		{
-			if(asset == OcclusionCullingData)
+			if (asset == OcclusionCullingData)
 			{
 				return true;
 			}
@@ -187,7 +187,7 @@ namespace uTinyRipper.AssetExporters
 
 			if (obj1.ClassID.IsSceneSettings())
 			{
-				if(obj2.ClassID.IsSceneSettings())
+				if (obj2.ClassID.IsSceneSettings())
 				{
 					return obj1.ClassID < obj2.ClassID ? -1 : 1;
 				}
@@ -262,11 +262,11 @@ namespace uTinyRipper.AssetExporters
 		{
 			get
 			{
-				foreach(Object asset in Components)
+				foreach (Object asset in Components)
 				{
 					yield return asset;
 				}
-				if(OcclusionCullingData != null)
+				if (OcclusionCullingData != null)
 				{
 					yield return OcclusionCullingData;
 				}
@@ -288,6 +288,6 @@ namespace uTinyRipper.AssetExporters
 
 		private readonly Dictionary<Object, long> m_cexportIDs = new Dictionary<Object, long>();
 		private readonly ISerializedFile m_file;
-		private OcclusionCullingSettings m_occlusionCullingSettings;
+		private readonly OcclusionCullingSettings m_occlusionCullingSettings;
 	}
 }
