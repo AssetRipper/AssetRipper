@@ -14,19 +14,19 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			IsEnabled = reader.ReadByte() == 0 ? false : true;
+			Enabled = reader.ReadByte() == 0 ? false : true;
 			reader.AlignStream(AlignType.Align4);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(EnabledName, IsEnabled);
+			node.Add(EnabledName, Enabled);
 			return node;
 		}
 
 		public const string EnabledName = "m_Enabled";
 
-		public bool IsEnabled { get; private set; }
+		public bool Enabled { get; private set; }
 	}
 }
