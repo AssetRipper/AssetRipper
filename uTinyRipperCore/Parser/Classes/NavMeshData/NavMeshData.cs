@@ -107,7 +107,7 @@ namespace uTinyRipper.Classes
 			return IsReadSourceBounds(version) ? Rotation : Quaternionf.Zero;
 		}
 
-		public override string ExportName => Path.Combine(AssetsKeyWord, OcclusionCullingSettings.SceneKeyWord, ClassID.ToString());
+		public override string ExportName => Path.Combine(AssetsKeyWord, OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
 
 		public IReadOnlyList<NavMeshTileData> NavMeshTiles => m_navMeshTiles;
 		public IReadOnlyList<HeightmapData> Heightmaps => m_heightmaps;

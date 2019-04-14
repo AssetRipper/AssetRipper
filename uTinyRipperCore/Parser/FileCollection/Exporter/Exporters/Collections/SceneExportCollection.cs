@@ -114,7 +114,7 @@ namespace uTinyRipper.AssetExporters
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
-			string folderPath = Path.Combine(dirPath, Object.AssetsKeyWord, OcclusionCullingSettings.SceneKeyWord);
+			string folderPath = Path.Combine(dirPath, Object.AssetsKeyWord, OcclusionCullingSettings.SceneKeyword);
 			string sceneSubPath = GetSceneName(container);
 			string fileName = $"{sceneSubPath}.unity";
 			string filePath = Path.Combine(folderPath, fileName);

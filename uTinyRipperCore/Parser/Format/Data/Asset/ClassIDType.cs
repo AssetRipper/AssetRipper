@@ -1,5 +1,6 @@
 namespace uTinyRipper
 {
+	// Since some output is based on string representation renamed values has negative index
 	public enum ClassIDType
 	{
 		Object							= 0,
@@ -30,10 +31,10 @@ namespace uTinyRipper
 		ParticleRenderer				= 26,
 		Texture							= 27,
 		Texture2D						= 28,
-		Scene							= 29,
-		SceneSettings					= 29,
+		Scene							= -29,
+		SceneSettings					= -29,
 		OcclusionCullingSettings		= 29,
-		RenderManager					= 30,
+		RenderManager					= -30,
 		GraphicsSettings				= 30,
 		PipelineManager					= 31,
 		MeshFilter						= 33,
@@ -57,7 +58,7 @@ namespace uTinyRipper
 		PhysicsMaterial2D				= 62,
 		MeshCollider					= 64,
 		BoxCollider						= 65,
-		SpriteCollider2D				= 66,
+		SpriteCollider2D				= -66,
 		CompositeCollider2D				= 66,
 		EdgeCollider2D					= 68,
 		CapsuleCollider2D				= 70,
@@ -100,8 +101,8 @@ namespace uTinyRipper
 		LensFlare						= 123,
 		FlareLayer						= 124,
 		HaloLayer						= 125,
-		NavMeshLayers					= 126,
-		NavMeshAreas					= 126,
+		NavMeshLayers					= -126,
+		NavMeshAreas					= -126,
 		NavMeshProjectSettings			= 126,
 		HaloManager						= 127,
 		Font							= 128,
@@ -158,7 +159,7 @@ namespace uTinyRipper
 		OffMeshLink						= 191,
 		OcclusionArea					= 192,
 		Tree							= 193,
-		NavMesh							= 194,
+		NavMesh							= -194,
 		NavMeshObsolete					= 194,
 		NavMeshAgent					= 195,
 		NavMeshSettings					= 196,
@@ -282,7 +283,7 @@ namespace uTinyRipper
 		AnimatorTransitionBase			= 1111,
 		SubstanceImporter				= 1112,
 		LightmapParameters				= 1113,
-		LightmapSnapshot				= 1120,
+		LightmapSnapshot				= -1120,
 		LightingDataAsset				= 1120,
 		GISRaster						= 1121,
 		GISRasterImporter				= 1122,
