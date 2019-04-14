@@ -79,8 +79,6 @@ namespace uTinyRipper.AssetExporters
 			{
 				switch (asset.ClassID)
 				{
-					case ClassIDType.NavMeshData:
-						return new EmptyExportCollection();
 					case ClassIDType.AnimatorController:
 						return new AnimatorControllerExportCollection(this, virtualFile, asset);
 
