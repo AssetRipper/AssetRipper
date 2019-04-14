@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\EnumNameAttribute.cs" />
+    <Compile Include="Parser\Classes\CanvasGroup.cs" />
     <Compile Include="Parser\Classes\NavMesh.cs" />
     <Compile Include="Parser\Classes\NavMeshAgent\NavMeshAgent.cs" />
     <Compile Include="Parser\Classes\NavMeshAgent\ObstacleAvoidanceType.cs" />

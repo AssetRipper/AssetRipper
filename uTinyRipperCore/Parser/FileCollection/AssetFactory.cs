@@ -200,6 +200,8 @@ namespace uTinyRipper
 					return new Canvas(assetInfo);
 				case ClassIDType.RectTransform:
 					return new RectTransform(assetInfo);
+				case ClassIDType.CanvasGroup:
+					return new CanvasGroup(assetInfo);
 				case ClassIDType.ClusterInputManager:
 					return new ClusterInputManager(assetInfo);
 				case ClassIDType.NavMeshData:

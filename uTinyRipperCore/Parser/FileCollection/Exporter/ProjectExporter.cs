@@ -104,6 +104,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.CanvasRenderer);
 			OverrideYamlExporter(ClassIDType.Canvas);
 			OverrideYamlExporter(ClassIDType.RectTransform);
+			OverrideYamlExporter(ClassIDType.CanvasGroup);
 			OverrideYamlExporter(ClassIDType.ClusterInputManager);
 			OverrideYamlExporter(ClassIDType.NavMeshData);
 			OverrideYamlExporter(ClassIDType.UnityConnectSettings);
