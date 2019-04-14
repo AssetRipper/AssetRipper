@@ -142,6 +142,7 @@
     <Compile Include="Attributes\EnumNameAttribute.cs" />
     <Compile Include="Parser\Classes\Base\GUIElement.cs" />
     <Compile Include="Parser\Classes\CanvasGroup.cs" />
+    <Compile Include="Parser\Classes\GUITexture.cs" />
     <Compile Include="Parser\Classes\GUIText\GUIText.cs" />
     <Compile Include="Parser\Classes\GUIText\TextAlignment.cs" />
     <Compile Include="Parser\Classes\GUIText\TextAnchor.cs" />

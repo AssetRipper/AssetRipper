@@ -134,6 +134,8 @@ namespace uTinyRipper
 					return new NavMeshProjectSettings(assetInfo);
 				case ClassIDType.Font:
 					return new Font(assetInfo);
+				case ClassIDType.GUITexture:
+					return new GUITexture(assetInfo);
 				case ClassIDType.GUIText:
 					return new GUIText(assetInfo);
 				case ClassIDType.PhysicMaterial:
