@@ -190,6 +190,8 @@ namespace uTinyRipper
 					return new LODGroup(assetInfo);
 				case ClassIDType.NavMeshObstacle:
 					return new NavMeshObstacle(assetInfo);
+				case ClassIDType.SortingGroup:
+					return new SortingGroup(assetInfo);
 				case ClassIDType.SpriteRenderer:
 					return new SpriteRenderer(assetInfo);
 				case ClassIDType.Sprite:

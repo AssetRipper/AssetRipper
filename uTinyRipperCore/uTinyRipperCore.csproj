@@ -152,6 +152,7 @@
     <Compile Include="Parser\Classes\NavMeshObstacle\NavMeshObstacle.cs" />
     <Compile Include="Parser\Classes\NavMeshObstacle\NavMeshObstacleShape.cs" />
     <Compile Include="Parser\Classes\OffMeshLink.cs" />
+    <Compile Include="Parser\Classes\SortingGroup.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\Font\FontAssetExporter.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\Font\FontExportCollection.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\MovieTexture\MovieTextureAssetExporter.cs" />
