@@ -7,6 +7,9 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
+	/// <summary>
+	/// Successor of NavMesh
+	/// </summary>
 	public sealed class NavMeshData : NamedObject
 	{
 		public NavMeshData(AssetInfo assetInfo):

@@ -8,6 +8,9 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
+	/// <summary>
+	/// RenderManager previously
+	/// </summary>
 	public sealed class GraphicsSettings : GlobalGameManager
 	{
 		public GraphicsSettings(AssetInfo assetInfo):

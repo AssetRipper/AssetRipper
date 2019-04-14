@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.LightingDataAssets;
 using uTinyRipper.Classes.LightmapSettingss;
@@ -12,6 +11,9 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
+	/// <summary>
+	/// LightmapSnapshot previously
+	/// </summary>
 	public sealed class LightingDataAsset : NamedObject
 	{
 		public LightingDataAsset(AssetInfo assetInfo):

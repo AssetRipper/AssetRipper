@@ -30,13 +30,10 @@ namespace uTinyRipper
 		ParticleRenderer				= 26,
 		Texture							= 27,
 		Texture2D						= 28,
-		/// <summary>
-		/// SceneSettings/Scene previously
-		/// </summary>
+		Scene							= 29,
+		SceneSettings					= 29,
 		OcclusionCullingSettings		= 29,
-		/// <summary>
-		/// RenderManager previously
-		/// </summary>
+		RenderManager					= 30,
 		GraphicsSettings				= 30,
 		PipelineManager					= 31,
 		MeshFilter						= 33,
@@ -60,9 +57,7 @@ namespace uTinyRipper
 		PhysicsMaterial2D				= 62,
 		MeshCollider					= 64,
 		BoxCollider						= 65,
-		/// <summary>
-		/// SpriteCollider2D previously
-		/// </summary>
+		SpriteCollider2D				= 66,
 		CompositeCollider2D				= 66,
 		EdgeCollider2D					= 68,
 		CapsuleCollider2D				= 70,
@@ -163,6 +158,7 @@ namespace uTinyRipper
 		OffMeshLink						= 191,
 		OcclusionArea					= 192,
 		Tree							= 193,
+		NavMesh							= 194,
 		NavMeshObsolete					= 194,
 		NavMeshAgent					= 195,
 		NavMeshSettings					= 196,
@@ -286,9 +282,7 @@ namespace uTinyRipper
 		AnimatorTransitionBase			= 1111,
 		SubstanceImporter				= 1112,
 		LightmapParameters				= 1113,
-		/// <summary>
-		/// LightmapSnapshot previously
-		/// </summary>
+		LightmapSnapshot				= 1120,
 		LightingDataAsset				= 1120,
 		GISRaster						= 1121,
 		GISRasterImporter				= 1122,

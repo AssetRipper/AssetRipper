@@ -7,6 +7,9 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
+	/// <summary>
+	/// SpriteCollider2D previously
+	/// </summary>
 	public sealed class CompositeCollider2D : Collider2D
 	{
 		public CompositeCollider2D(AssetInfo assetInfo):
