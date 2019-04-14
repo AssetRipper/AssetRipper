@@ -152,6 +152,12 @@
     <Compile Include="Parser\Classes\NavMeshObstacle\NavMeshObstacle.cs" />
     <Compile Include="Parser\Classes\NavMeshObstacle\NavMeshObstacleShape.cs" />
     <Compile Include="Parser\Classes\OffMeshLink.cs" />
+    <Compile Include="Parser\Classes\ReflectionProbe\ReflectionProbe.cs" />
+    <Compile Include="Parser\Classes\ReflectionProbe\ReflectionProbeClearFlags.cs" />
+    <Compile Include="Parser\Classes\ReflectionProbe\ReflectionProbeMode.cs" />
+    <Compile Include="Parser\Classes\ReflectionProbe\ReflectionProbeRefreshMode.cs" />
+    <Compile Include="Parser\Classes\ReflectionProbe\ReflectionProbeTimeSlicingMode.cs" />
+    <Compile Include="Parser\Classes\ReflectionProbe\ReflectionProbeType.cs" />
     <Compile Include="Parser\Classes\Skybox.cs" />
     <Compile Include="Parser\Classes\SortingGroup.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\Font\FontAssetExporter.cs" />

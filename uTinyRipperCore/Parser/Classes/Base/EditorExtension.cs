@@ -29,11 +29,13 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
+#if UNIVERSAL
 			if (IsReadPrefabParentObject(reader.Flags))
 			{
 				PrefabParentObject.Read(reader);
 				PrefabInternal.Read(reader);
 			}
+#endif
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -42,28 +44,39 @@ namespace uTinyRipper.Classes
 			{
 				yield return asset;
 			}
-			
-			if (!PrefabParentObject.IsNull)
-			{
-				yield return PrefabParentObject.GetAsset(file);
-			}
+
+#if UNIVERSAL
+			yield return PrefabParentObject.FetchDependency(file);
+#endif
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(PrefabParentObjectName, PrefabParentObject.ExportYAML(container));
+			node.Add(PrefabParentObjectName, GetPrefabParentObject(container.Flags).ExportYAML(container));
 			node.Add(PrefabInternalName, GetPrefabInternal(container).ExportYAML(container));
 			return node;
 		}
 
+		private PPtr<EditorExtension> GetPrefabParentObject(TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadPrefabParentObject(flags))
+			{
+				return PrefabParentObject;
+			}
+#endif
+			return default;
+		}
 		private PPtr<Prefab> GetPrefabInternal(IExportContainer container)
 		{
-			if(IsReadPrefabParentObject(container.Flags))
+#if UNIVERSAL
+			if (IsReadPrefabParentObject(container.Flags))
 			{
 				return PrefabInternal;
 			}
-			if(container.ExportFlags.IsForPrefab())
+#endif
+			if (container.ExportFlags.IsForPrefab())
 			{
 				PrefabExportCollection prefabCollection = (PrefabExportCollection)container.CurrentCollection;
 				return prefabCollection.Asset.File.CreatePPtr((Prefab)prefabCollection.Asset);
@@ -73,7 +86,11 @@ namespace uTinyRipper.Classes
 
 		public const string PrefabParentObjectName = "m_PrefabParentObject";
 		public const string PrefabInternalName = "m_PrefabInternal";
+		public const string CorrespondingSourceObjectName = "m_CorrespondingSourceObject";
+		public const string PrefabInstanceName = "m_PrefabInstance";
+		public const string PrefabAssetName = "m_PrefabAsset";
 
+#if UNIVERSAL
 		/// <summary>
 		/// CorrespondingSourceObject later
 		/// </summary>
@@ -82,5 +99,6 @@ namespace uTinyRipper.Classes
 		/// Prefab previously
 		/// </summary>
 		public PPtr<Prefab> PrefabInternal;
+#endif
 	}
 }

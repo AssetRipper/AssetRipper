@@ -285,7 +285,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsReadLightingDataAsset(file.Version, file.Flags))
 			{
-				yield return LightingDataAsset.FetchDependency(file, isLog, ToLogString, "m_LightingDataAsset");
+				yield return LightingDataAsset.FetchDependency(file, isLog, ToLogString, LightingDataAssetName);
 			}
 		}
 

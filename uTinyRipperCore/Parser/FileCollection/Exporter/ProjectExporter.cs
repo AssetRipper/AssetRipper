@@ -103,6 +103,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.NavMeshObstacle);
 			OverrideYamlExporter(ClassIDType.SortingGroup);
 			OverrideYamlExporter(ClassIDType.SpriteRenderer);
+			OverrideYamlExporter(ClassIDType.ReflectionProbe);
 			OverrideYamlExporter(ClassIDType.Terrain);
 			OverrideYamlExporter(ClassIDType.AnimatorOverrideController);
 			OverrideYamlExporter(ClassIDType.CanvasRenderer);

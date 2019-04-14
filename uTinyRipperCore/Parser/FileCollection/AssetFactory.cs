@@ -198,6 +198,8 @@ namespace uTinyRipper
 					return new SpriteRenderer(assetInfo);
 				case ClassIDType.Sprite:
 					return new Sprite(assetInfo);
+				case ClassIDType.ReflectionProbe:
+					return new ReflectionProbe(assetInfo);
 				case ClassIDType.Terrain:
 					return new Terrain(assetInfo);
 				case ClassIDType.AnimatorOverrideController:
