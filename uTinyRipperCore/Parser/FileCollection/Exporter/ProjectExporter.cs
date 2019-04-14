@@ -75,6 +75,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.FlareLayer);
 			OverrideYamlExporter(ClassIDType.NavMeshProjectSettings);
 			OverrideYamlExporter(ClassIDType.Font);
+			OverrideYamlExporter(ClassIDType.GUIText);
 			OverrideYamlExporter(ClassIDType.PhysicMaterial);
 			OverrideYamlExporter(ClassIDType.SphereCollider);
 			OverrideYamlExporter(ClassIDType.CapsuleCollider);

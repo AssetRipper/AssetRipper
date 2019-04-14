@@ -57,6 +57,8 @@ namespace uTinyRipper.Classes
 			yield break;
 		}
 
+		public static ColorRGBA32 White => new ColorRGBA32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
+
 		public IScriptStructure Base => null;
 		public string Namespace => ScriptType.UnityEngineName;
 		public string Name => ScriptType.Color32Name;

@@ -140,7 +140,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\EnumNameAttribute.cs" />
+    <Compile Include="Parser\Classes\Base\GUIElement.cs" />
     <Compile Include="Parser\Classes\CanvasGroup.cs" />
+    <Compile Include="Parser\Classes\GUIText\GUIText.cs" />
+    <Compile Include="Parser\Classes\GUIText\TextAlignment.cs" />
+    <Compile Include="Parser\Classes\GUIText\TextAnchor.cs" />
     <Compile Include="Parser\Classes\NavMesh.cs" />
     <Compile Include="Parser\Classes\NavMeshAgent\NavMeshAgent.cs" />
     <Compile Include="Parser\Classes\NavMeshAgent\ObstacleAvoidanceType.cs" />
@@ -444,11 +448,9 @@
     <Compile Include="Parser\Classes\Serialize\AABBi.cs" />
     <Compile Include="Parser\Classes\Serialize\DateTime.cs" />
     <Compile Include="Parser\Classes\Serialize\FixedBitset.cs" />
-    <Compile Include="Parser\Classes\Serialize\GUIStyle\FontStyle.cs" />
     <Compile Include="Parser\Classes\Serialize\GUIStyle\GUIStyle.cs" />
     <Compile Include="Parser\Classes\Serialize\GUIStyle\GUIStyleState.cs" />
     <Compile Include="Parser\Classes\Serialize\GUIStyle\ImagePosition.cs" />
-    <Compile Include="Parser\Classes\Serialize\GUIStyle\TextAnchor.cs" />
     <Compile Include="Parser\Classes\Serialize\GUIStyle\TextClipping.cs" />
     <Compile Include="Parser\Classes\Serialize\LayerMask.cs" />
     <Compile Include="Parser\Classes\Serialize\Matrix3x4f.cs" />

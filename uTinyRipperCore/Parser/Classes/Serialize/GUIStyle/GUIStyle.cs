@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using uTinyRipper.Assembly;
 using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Fonts;
 using uTinyRipper.Classes.GUIStyles;
-using uTinyRipper.YAML;
+using uTinyRipper.Classes.GUITexts;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -85,7 +87,7 @@ namespace uTinyRipper.Classes
 			OnActive.Read(reader);
 			OnFocused.Read(reader);
 			Border.Read(reader);
-			if(IsBuiltIn(reader.Version))
+			if (IsBuiltIn(reader.Version))
 			{
 				Margin.Read(reader);
 				Padding.Read(reader);
@@ -98,7 +100,7 @@ namespace uTinyRipper.Classes
 			Overflow.Read(reader);
 			Font.Read(reader);
 
-			if(IsBuiltIn(reader.Version))
+			if (IsBuiltIn(reader.Version))
 			{
 				FontSize = reader.ReadInt32();
 				FontStyle = (FontStyle)reader.ReadInt32();
@@ -128,7 +130,7 @@ namespace uTinyRipper.Classes
 				ClipOffset.Read(reader);
 				FixedWidth = reader.ReadSingle();
 				FixedHeight = reader.ReadSingle();
-				if(IsReadFontSize(reader.Version))
+				if (IsReadFontSize(reader.Version))
 				{
 					FontSize = reader.ReadInt32();
 					FontStyle = (FontStyle)reader.ReadInt32();

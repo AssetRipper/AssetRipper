@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Classes.GUIStyles
+﻿namespace uTinyRipper.Classes.GUITexts
 {
 	public enum TextAnchor
 	{
