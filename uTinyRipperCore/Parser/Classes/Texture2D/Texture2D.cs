@@ -57,7 +57,7 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool IsReadAlphaIsTransparency(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(4, 2) && !flags.IsRelease();
+			return !flags.IsRelease() && version.IsGreaterEqual(4, 2);
 		}
 		/// <summary>
 		/// 3.0.0 and greater
@@ -101,11 +101,21 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// Less than 5.0.0
+		/// <para>0 - less than 5.0.0</para>
+		/// <para>1 - less than 2018.2</para>
+		/// <para>2 - 2018.2 and greater</para>
 		/// </summary>
-		private static bool IsReadAlphaIsTransparencyFirst(Version version)
+		private static int GetAlphaIsTransparencyPosition(Version version)
 		{
-			return version.IsLess(5);
+			if (version.IsLess(5))
+			{
+				return 0;
+			}
+			if (version.IsLess(2018, 2))
+			{
+				return 1;
+			}
+			return 2;
 		}
 
 		private static int GetSerializedVersion(Version version)
@@ -183,7 +193,7 @@ namespace uTinyRipper.Classes
 #if UNIVERSAL
 			if (IsReadAlphaIsTransparency(reader.Version, reader.Flags))
 			{
-				if (IsReadAlphaIsTransparencyFirst(reader.Version))
+				if (GetAlphaIsTransparencyPosition(reader.Version) == 0)
 				{
 					AlphaIsTransparency = reader.ReadBoolean();
 					reader.AlignStream(AlignType.Align4);
@@ -225,22 +235,29 @@ namespace uTinyRipper.Classes
 			{
 				StreamingMipmaps = reader.ReadBoolean();
 			}
+#if UNIVERSAL
+			if (IsReadAlphaIsTransparency(reader.Version, reader.Flags))
+			{
+				if (GetAlphaIsTransparencyPosition(reader.Version) == 1)
+				{
+					AlphaIsTransparency = reader.ReadBoolean();
+				}
+			}
+#endif
 			reader.AlignStream(AlignType.Align4);
 
 			if (IsReadStreamingMipmapsPriority(reader.Version))
 			{
 				StreamingMipmapsPriority = reader.ReadInt32();
-			}
 #if UNIVERSAL
-			if (IsReadAlphaIsTransparency(reader.Version, reader.Flags))
-			{
-				if (!IsReadAlphaIsTransparencyFirst(reader.Version))
+				if (GetAlphaIsTransparencyPosition(reader.Version) == 2)
 				{
 					AlphaIsTransparency = reader.ReadBoolean();
-					reader.AlignStream(AlignType.Align4);
 				}
-			}
 #endif
+				reader.AlignStream(AlignType.Align4);
+			}
+
 			ImageCount = reader.ReadInt32();
 			TextureDimension = (TextureDimension)reader.ReadInt32();
 			TextureSettings.Read(reader);
