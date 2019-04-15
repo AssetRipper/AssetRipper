@@ -99,7 +99,7 @@ namespace uTinyRipper.AssetExporters
 			}
 
 			MonoScript script = m_scripts[asset];
-			if(s_unityEngine.IsMatch(script.AssemblyName))
+			if (!MonoScript.IsReadAssemblyName(script.File.Version, script.File.Flags) || s_unityEngine.IsMatch(script.AssemblyName))
 			{
 				if(MonoScript.IsReadNamespace(script.File.Version))
 				{
