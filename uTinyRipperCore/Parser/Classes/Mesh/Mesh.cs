@@ -192,7 +192,14 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(2018, 2);
 		}
 		/// <summary>
-		/// 2018.3
+		/// 3.5.0 and greater and Not Release
+		/// </summary>
+		public static bool IsReadMeshOptimized(Version version, TransferInstructionFlags flags)
+		{
+			return version.IsGreaterEqual(3, 5) && !flags.IsRelease();
+		}
+		/// <summary>
+		/// 2018.3 and greater
 		/// </summary>
 		public static bool IsReadStreamData(Version version)
 		{
@@ -459,8 +466,15 @@ namespace uTinyRipper.Classes
 				m_meshMetrics[0] = reader.ReadSingle();
 				m_meshMetrics[1] = reader.ReadSingle();
 			}
+#if UNIVERSAL
+			if (IsReadMeshOptimized(reader.Version, reader.Flags))
+			{
+				MeshOptimized = reader.ReadBoolean();
+			}
+#endif
 			if (IsReadStreamData(reader.Version))
 			{
+				reader.AlignStream(AlignType.Align4);
 				StreamData.Read(reader);
 			}
 		}
@@ -497,7 +511,7 @@ namespace uTinyRipper.Classes
 				node.Add(BakedConvexCollisionMeshName, ArrayExtensions.EmptyBytes.ExportYAML());
 				node.Add(BakedTriangleCollisionMeshName, ArrayExtensions.EmptyBytes.ExportYAML());
 			}
-			node.Add(MeshOptimizedName, 0);
+			node.Add(MeshOptimizedName, GetMeshOptimized(container.Version, container.Flags));
 			if (IsReadStreamData(container.ExportVersion))
 			{
 				node.Add(StreamDataName, StreamData.ExportYAML(container));
@@ -568,6 +582,17 @@ namespace uTinyRipper.Classes
 			}
 		}
 
+		private bool GetMeshOptimized(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadMeshOptimized(version, flags))
+			{
+				return MeshOptimized;
+			}
+#endif
+			return false;
+		}
+
 		public IReadOnlyList<LOD> LODData => m_LODData;
 		public IReadOnlyList<Vector3f> Vertices => m_vertices;
 		public IReadOnlyList<Vector2f> UV => m_UV;
@@ -596,6 +621,9 @@ namespace uTinyRipper.Classes
 		public int IndexFormat { get; private set; }
 		public int CollisionVertexCount { get; private set; }
 		public int MeshUsageFlags { get; private set; }
+#if UNIVERSAL
+		public bool MeshOptimized { get; private set; }
+#endif
 
 		public const string SubMeshesName = "m_SubMeshes";
 		public const string ShapesName = "m_Shapes";
