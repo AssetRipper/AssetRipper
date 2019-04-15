@@ -197,5 +197,15 @@ namespace uTinyRipper.YAML
 			}
 			return node;
 		}
+
+		public static YAMLNode ExportYAML(this IEnumerable<IEnumerable<string>> _this)
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			foreach (IEnumerable<string> export in _this)
+			{
+				node.Add(export.ExportYAML());
+			}
+			return node;
+		}
 	}
 }

@@ -43,6 +43,7 @@ namespace uTinyRipper
 		Skybox							= 45,
 		QualitySettings					= 47,
 		Shader							= 48,
+		Script							= -49,
 		TextAsset						= 49,
 		Rigidbody2D						= 50,
 		Physics2DManager				= 51,

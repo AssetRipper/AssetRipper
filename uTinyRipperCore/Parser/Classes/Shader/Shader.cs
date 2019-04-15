@@ -7,6 +7,7 @@ using uTinyRipper.Classes.Shaders;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.Classes.Shaders.Exporters;
 using System.Text;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -72,6 +73,27 @@ namespace uTinyRipper.Classes
 		public static bool IsReadShaderIsBaked(Version version)
 		{
 			return version.IsGreaterEqual(4);
+		}
+		/// <summary>
+		/// 3.4.0 to 5.5.0 exclusive and Not Release
+		/// </summary>
+		public static bool IsReadErrors(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(3, 4) && version.IsLess(5, 5);
+		}
+		/// <summary>
+		/// 4.2.0 and greater and Not Release
+		/// </summary>
+		public static bool IsReadDefaultTextures(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(4, 2);
+		}
+		/// <summary>
+		/// 4.5.0 and greater and Not Release and Not Buildin
+		/// </summary>
+		public static bool IsReadCompileInfo(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && !flags.IsBuiltinResources() && version.IsGreaterEqual(4, 5);
 		}
 
 		public override void Read(AssetReader reader)
@@ -178,8 +200,20 @@ namespace uTinyRipper.Classes
 				ShaderIsBaked = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);
 			}
-			// editor DefaultTextures
-			// editor CompileInfo
+
+			if (IsReadErrors(reader.Version, reader.Flags))
+			{
+				m_errors = reader.ReadAssetArray<ShaderError>();
+			}
+			if (IsReadDefaultTextures(reader.Version, reader.Flags))
+			{
+				m_defaultTextures = new Dictionary<string, PPtr<Texture>>();
+				m_defaultTextures.Read(reader);
+			}
+			if (IsReadCompileInfo(reader.Version, reader.Flags))
+			{
+				CompileInfo.Read(reader);
+			}
 		}
 
 		public override void ExportBinary(IExportContainer container, Stream stream)
@@ -247,6 +281,11 @@ namespace uTinyRipper.Classes
 			}
 		}
 
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		{
+			throw new NotSupportedException();
+		}
+
 		public override string ExportExtension => "shader";
 
 		public override string ValidName => IsSerialized(File.Version) ? ParsedForm.Name : base.ValidName;
@@ -256,16 +295,29 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<PPtr<Shader>> Dependencies => m_dependencies;
 		public IReadOnlyDictionary<string, PPtr<Texture>> NonModifiableTextures => m_nonModifiableTextures;
 		public bool ShaderIsBaked { get; private set; }
-		
+#if UNIVERSAL
+		public IReadOnlyList<ShaderError> Errors => m_errors;
+		public IReadOnlyDictionary<string, PPtr<Texture>> DefaultTextures => m_defaultTextures;
+#endif
+
+		public const string ErrorsName = "errors";
+
 		public SerializedShader ParsedForm;
 		public ShaderSubProgramBlob SubProgramBlob;
 		public PPtr<Shader> Fallback;
 		public UnityPropertySheet DefaultProperties;
 		public UnityPropertySheet StaticProperties;
-		
+#if UNIVERSAL
+		public ShaderCompilationInfo CompileInfo;
+#endif
+
 		private GPUPlatform[] m_platforms;
 		private ShaderSubProgramBlob[] m_subProgramBlobs;
 		private PPtr<Shader>[] m_dependencies;
 		private Dictionary<string, PPtr<Texture>> m_nonModifiableTextures;
+#if UNIVERSAL
+		private ShaderError[] m_errors;
+		private Dictionary<string, PPtr<Texture>> m_defaultTextures;
+#endif
 	}
 }

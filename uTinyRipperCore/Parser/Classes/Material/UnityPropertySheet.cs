@@ -11,12 +11,7 @@ namespace uTinyRipper.Classes.Materials
 	{
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 3;
-			}
-
-			if(version.IsGreaterEqual(2017, 3))
+			if (version.IsGreaterEqual(2017, 3))
 			{
 				return 3;
 			}
@@ -29,7 +24,7 @@ namespace uTinyRipper.Classes.Materials
 			foreach (FastPropertyName property in TexEnvs.Keys)
 			{
 				string hdrName = property.Value + HDRPostfixName;
-				if(CRC.Verify28DigestUTF8(hdrName, crc))
+				if (CRC.Verify28DigestUTF8(hdrName, crc))
 				{
 					return hdrName;
 				}
@@ -75,10 +70,10 @@ namespace uTinyRipper.Classes.Materials
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_TexEnvs", m_texEnvs.ExportYAML(container));
-			node.Add("m_Floats", m_floats.ExportYAML(container));
-			node.Add("m_Colors", m_colors.ExportYAML(container));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(TexEnvsName, m_texEnvs.ExportYAML(container));
+			node.Add(FloatsName, m_floats.ExportYAML(container));
+			node.Add(ColorsName, m_colors.ExportYAML(container));
 			return node;
 		}
 
@@ -96,6 +91,10 @@ namespace uTinyRipper.Classes.Materials
 		public IReadOnlyDictionary<FastPropertyName, UnityTexEnv> TexEnvs => m_texEnvs;
 		public IReadOnlyDictionary<FastPropertyName, float> Floats => m_floats;
 		public IReadOnlyDictionary<FastPropertyName, ColorRGBAf> Colors => m_colors;
+
+		public const string TexEnvsName = "m_TexEnvs";
+		public const string FloatsName = "m_Floats";
+		public const string ColorsName = "m_Colors";
 
 		private const string HDRPostfixName = "_HDR";
 		private const string STPostfixName = "_ST";

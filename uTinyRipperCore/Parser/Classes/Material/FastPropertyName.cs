@@ -33,7 +33,7 @@ namespace uTinyRipper.Classes.Materials
 			else
 			{
 				YAMLMappingNode node = new YAMLMappingNode();
-				node.Add("name", Value);
+				node.Add(NameName, Value);
 				return node;
 			}
 		}
@@ -52,6 +52,8 @@ namespace uTinyRipper.Classes.Materials
 			return Value;
 		}
 
-		public string Value { get; private set; }		
+		public string Value { get; private set; }
+
+		public const string NameName = "name";
 	}
 }

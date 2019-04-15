@@ -4,6 +4,9 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
+	/// <summary>
+	/// Script previously
+	/// </summary>
 	public class TextAsset : NamedObject
 	{
 		public TextAsset(AssetInfo assetInfo):

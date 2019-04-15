@@ -159,6 +159,10 @@
     <Compile Include="Parser\Classes\ReflectionProbe\ReflectionProbeRefreshMode.cs" />
     <Compile Include="Parser\Classes\ReflectionProbe\ReflectionProbeTimeSlicingMode.cs" />
     <Compile Include="Parser\Classes\ReflectionProbe\ReflectionProbeType.cs" />
+    <Compile Include="Parser\Classes\Shader\KeywordTargetInfo.cs" />
+    <Compile Include="Parser\Classes\Shader\ShaderCompilationInfo.cs" />
+    <Compile Include="Parser\Classes\Shader\ShaderError.cs" />
+    <Compile Include="Parser\Classes\Shader\ShaderSnippet.cs" />
     <Compile Include="Parser\Classes\Skybox.cs" />
     <Compile Include="Parser\Classes\SortingGroup.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\Font\FontAssetExporter.cs" />
@@ -167,9 +171,10 @@
     <Compile Include="Parser\FileCollection\Exporter\Exporters\MovieTexture\MovieTextureExportCollection.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\TextAsset\TextAssetExportCollection.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\TextAsset\TextAssetExporter.cs" />
+    <Compile Include="Parser\IO\Extensions\EndianReaderExtensions.cs" />
     <Compile Include="ThirdParty\YAML\Base\ScalarType.cs" />
     <Compile Include="ThirdParty\YAML\Utils\Extensions\EmitterExtensions.cs" />
-    <Compile Include="ThirdParty\YAML\Utils\Extensions\IDictionaryExtensions.cs" />
+    <Compile Include="ThirdParty\YAML\Utils\Extensions\IReadOnlyDictionaryExtensions.cs" />
     <Compile Include="ThirdParty\YAML\Utils\Extensions\IReadOnlyListExtensions.cs" />
     <Compile Include="IO\Endian\AlignType.cs" />
     <Compile Include="IO\Endian\EndianType.cs" />

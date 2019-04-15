@@ -30,19 +30,23 @@ namespace uTinyRipper.Classes.Materials
 			}
 		}
 
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield return Texture.FetchDependency(file, isLog, () => nameof(UnityTexEnv), TextureName);
+		}
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Texture", Texture.ExportYAML(container));
-			node.Add("m_Scale", Scale.ExportYAML2(container));
-			node.Add("m_Offset", Offset.ExportYAML2(container));
+			node.Add(TextureName, Texture.ExportYAML(container));
+			node.Add(ScaleName, Scale.ExportYAML2(container));
+			node.Add(OffsetName, Offset.ExportYAML2(container));
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
-		{
-			yield return Texture.FetchDependency(file, isLog, () => nameof(UnityTexEnv), "m_Texture");
-		}
+		public const string TextureName = "m_Texture";
+		public const string ScaleName = "m_Scale";
+		public const string OffsetName = "m_Offset";
 
 		public PPtr<Texture> Texture;
 		public Vector3f Scale;

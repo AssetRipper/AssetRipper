@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace uTinyRipper.YAML
 {
-	public static class IDictionaryExtensions
+	public static class IReadOnlyDictionaryExtensions
 	{
 		public static YAMLNode ExportYAML(this IReadOnlyDictionary<uint, string> _this)
 		{

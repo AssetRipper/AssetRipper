@@ -6,6 +6,19 @@ namespace uTinyRipper.AssetExporters
 {
 	public static class IDictionaryExtensions
 	{
+		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<int, T> _this, IExportContainer container)
+			where T : IYAMLExportable
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
+			foreach (var kvp in _this)
+			{
+				YAMLMappingNode map = new YAMLMappingNode();
+				map.Add(kvp.Key, kvp.Value.ExportYAML(container));
+				node.Add(map);
+			}
+			return node;
+		}
+
 		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<string, T> _this, IExportContainer container)
 			where T: IYAMLExportable
 		{
