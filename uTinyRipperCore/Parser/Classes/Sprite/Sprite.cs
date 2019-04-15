@@ -37,11 +37,25 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5, 3);
 		}
 		/// <summary>
+		/// Not Release
+		/// </summary>
+		public static bool IsReadAtlasName(TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease();
+		}
+		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
 		public static bool IsReadRendererData(Version version)
 		{
 			return version.IsGreaterEqual(2017);
+		}
+		/// <summary>
+		/// Not Release
+		/// </summary>
+		public static bool IsReadAtlasRD(TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease();
 		}
 		/// <summary>
 		/// 2017.1 and greater
@@ -56,6 +70,13 @@ namespace uTinyRipper.Classes
 		public static bool IsReadBones(Version version)
 		{
 			return version.IsGreaterEqual(2018);
+		}
+		/// <summary>
+		/// and greater and Not Release
+		/// </summary>
+		public static bool IsReadSpriteID(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(2018);
 		}
 
 		private static int GetSerializedVersion(Version version)
@@ -174,6 +195,13 @@ namespace uTinyRipper.Classes
 				IsPolygon = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);
 			}
+#if UNIVERSAL
+			if (IsReadAtlasName(reader.Flags))
+			{
+				AtlasName = reader.ReadString();
+				PackingTag = reader.ReadString();
+			}
+#endif
 
 			if (IsReadRendererData(reader.Version))
 			{
@@ -182,6 +210,10 @@ namespace uTinyRipper.Classes
 				SpriteAtlas.Read(reader);
 			}
 			RD.Read(reader);
+			if (IsReadAtlasRD(reader.Flags))
+			{
+				AtlasRD.Read(reader);
+			}
 			reader.AlignStream(AlignType.Align4);
 
 			if (IsReadPhysicsShape(reader.Version))
@@ -197,6 +229,10 @@ namespace uTinyRipper.Classes
 			if (IsReadBones(reader.Version))
 			{
 				m_bones = reader.ReadAssetArray<SpriteBone>();
+			}
+			if (IsReadSpriteID(reader.Version, reader.Flags))
+			{
+				SpriteID = reader.ReadString();
 			}
 		}
 
@@ -299,9 +335,16 @@ namespace uTinyRipper.Classes
 		public float PixelsToUnits { get; private set; }
 		public uint Extrude { get; private set; }
 		public bool IsPolygon { get; private set; }
+#if UNIVERSAL
+		public string AtlasName { get; private set; }
+		public string PackingTag { get; private set; }
+#endif
 		public IReadOnlyList<string> AtlasTags => m_atlasTags;
 		public IReadOnlyList<IReadOnlyList<Vector2f>> PhysicsShape => m_physicsShape;
 		public IReadOnlyList<SpriteBone> Bones => m_bones;
+#if UNIVERSAL
+		public string SpriteID { get; private set; }
+#endif
 
 		public Rectf Rect;
 		public Vector2f Offset;
@@ -310,6 +353,9 @@ namespace uTinyRipper.Classes
 		public Tuple<EngineGUID, long> RenderDataKey;
 		public PPtr<SpriteAtlas> SpriteAtlas;
 		public SpriteRenderData RD;
+#if UNIVERSAL
+		public SpriteRenderData AtlasRD;
+#endif
 
 		private string[] m_atlasTags;
 		private Vector2f[][] m_physicsShape;
