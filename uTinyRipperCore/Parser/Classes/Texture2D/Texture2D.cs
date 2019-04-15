@@ -250,9 +250,12 @@ namespace uTinyRipper.Classes
 			{
 				StreamingMipmapsPriority = reader.ReadInt32();
 #if UNIVERSAL
-				if (GetAlphaIsTransparencyPosition(reader.Version) == 2)
+				if (IsReadAlphaIsTransparency(reader.Version, reader.Flags))
 				{
-					AlphaIsTransparency = reader.ReadBoolean();
+					if (GetAlphaIsTransparencyPosition(reader.Version) == 2)
+					{
+						AlphaIsTransparency = reader.ReadBoolean();
+					}
 				}
 #endif
 				reader.AlignStream(AlignType.Align4);
