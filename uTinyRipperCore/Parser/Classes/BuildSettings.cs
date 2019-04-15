@@ -257,10 +257,15 @@ namespace uTinyRipper.Classes
 
 			if (IsReadRuntimeClassHashes(reader.Version))
 			{
+				m_runtimeClassHashes = new Dictionary<int, Hash128>();
 				if (IsRuntimeClassHashesUInt32(reader.Version))
 				{
-					m_runtimeClassHashesUInt32 = new Dictionary<int, uint>();
-					m_runtimeClassHashesUInt32.Read(reader);
+					Dictionary<int, uint> runtimeClassHashes = new Dictionary<int, uint>();
+					runtimeClassHashes.Read(reader);
+					foreach (KeyValuePair<int, uint> kvp in runtimeClassHashes)
+					{
+						m_runtimeClassHashes.Add(kvp.Key, new Hash128(kvp.Value));
+					}
 				}
 				else
 				{
@@ -269,6 +274,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsReadScriptHashes(reader.Version))
 			{
+				m_scriptHashes = new Dictionary<Hash128, Hash128>();
 				m_scriptHashes.Read(reader);
 			}
 			if (IsReadGraphicsAPIs(reader.Version))
@@ -279,7 +285,6 @@ namespace uTinyRipper.Classes
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			throw new System.NotImplementedException();
 		}
 
@@ -315,14 +320,12 @@ namespace uTinyRipper.Classes
 
 		public EngineGUID BuildGUID;
 
-		private readonly Dictionary<int, Hash128> m_runtimeClassHashes = new Dictionary<int, Hash128>();
-		private readonly Dictionary<Hash128, Hash128> m_scriptHashes = new Dictionary<Hash128, Hash128>();
-
 		private string[] m_scenes;
 		private string[] m_preloadedPlugins;
 		private string[] m_enabledVRDevices;
 		private string[] m_buildTags;
-		private Dictionary<int, uint> m_runtimeClassHashesUInt32;
+		private Dictionary<int, Hash128> m_runtimeClassHashes;
+		private Dictionary<Hash128, Hash128> m_scriptHashes;
 		private int[] m_graphicsAPIs;
 	}
 }

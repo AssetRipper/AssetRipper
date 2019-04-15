@@ -26,11 +26,11 @@ namespace uTinyRipper
 			name = name.ToLowerInvariant();
 			name = FixDependencyName(name);
 			name = FixResourcePath(name);
-			if(IsDefaultResource(name))
+			if (IsDefaultResource(name))
 			{
 				name = DefaultResourceName1;
 			}
-			else if(IsBuiltinExtra(name))
+			else if (IsBuiltinExtra(name))
 			{
 				name = BuiltinExtraName1;
 			}
@@ -66,7 +66,7 @@ namespace uTinyRipper
 			{
 				assembly = $"Assembly - {assembly}";
 			}
-			if(assembly.EndsWith(MonoManager.AssemblyExtension))
+			if (assembly.EndsWith(MonoManager.AssemblyExtension))
 			{
 				assembly = assembly.Substring(0, assembly.Length - MonoManager.AssemblyExtension.Length);
 			}
@@ -81,7 +81,7 @@ namespace uTinyRipper
 
 		private static bool IsAssemblyIdentifier(string assembly)
 		{
-			switch(assembly)
+			switch (assembly)
 			{
 				case "Boo":
 				case "Boo - first pass":

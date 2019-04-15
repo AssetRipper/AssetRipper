@@ -25,6 +25,13 @@ namespace uTinyRipper.Classes
 		{
 			return !flags.IsRelease() && !flags.IsForPrefab();
 		}
+		/// <summary>
+		/// 2018.3 and Not Release and Not Prefab
+		/// </summary>
+		public static bool IsReadPrefabAsset(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && !flags.IsForPrefab() && version.IsGreaterEqual(2018, 3);
+		}
 
 		public override void Read(AssetReader reader)
 		{
@@ -35,6 +42,10 @@ namespace uTinyRipper.Classes
 			{
 				PrefabParentObject.Read(reader);
 				PrefabInternal.Read(reader);
+			}
+			if (IsReadPrefabAsset(reader.Version, reader.Flags))
+			{
+				PrefabAsset.Read(reader);
 			}
 #endif
 		}
@@ -85,21 +96,27 @@ namespace uTinyRipper.Classes
 			return default;
 		}
 
-		public const string PrefabParentObjectName = "m_PrefabParentObject";
-		public const string PrefabInternalName = "m_PrefabInternal";
 		public const string CorrespondingSourceObjectName = "m_CorrespondingSourceObject";
+		public const string CorrespondingObjectFromSourceName = "m_CorrespondingObjectFromSource";
+		public const string PrefabParentObjectName = "m_PrefabParentObject";
 		public const string PrefabInstanceName = "m_PrefabInstance";
+		public const string PrefabInternalName = "m_PrefabInternal";
+		public const string PrefabName = "m_Prefab";
 		public const string PrefabAssetName = "m_PrefabAsset";
+		//public const string ExtensionPtrName = "m_ExtensionPtr";
 
 #if UNIVERSAL
 		/// <summary>
 		/// CorrespondingSourceObject later
+		/// CorrespondingObjectFromSource later
 		/// </summary>
 		public PPtr<EditorExtension> PrefabParentObject;
 		/// <summary>
+		/// PrefabInstance later
 		/// Prefab previously
 		/// </summary>
 		public PPtr<Prefab> PrefabInternal;
+		public PPtr<Object> PrefabAsset;
 #endif
 	}
 }

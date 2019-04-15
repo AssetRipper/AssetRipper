@@ -7,6 +7,9 @@ using uTinyRipper.Classes.Objects;
 
 namespace uTinyRipper.Classes
 {
+	/// <summary>
+	/// PrefabInstance later
+	/// </summary>
 	public sealed class Prefab : Object
 	{
 		public Prefab(AssetInfo assetInfo):
@@ -111,6 +114,11 @@ namespace uTinyRipper.Classes
 #endif
 
 		public PrefabModification Modification;
+		/// <summary>
+		/// SourcePrefab later
+		/// Prefab previously
+		/// Father previously
+		/// </summary>
 		public PPtr<Prefab> ParentPrefab;
 		public PPtr<GameObject> RootGameObject;
 	}

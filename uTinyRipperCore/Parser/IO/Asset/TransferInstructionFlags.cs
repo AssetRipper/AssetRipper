@@ -15,7 +15,7 @@ namespace uTinyRipper
 		BuildPlayerOnlySerializeBuildProperties	= 0x40,
 		Workaround35MeshSerializationFuckup		= 0x80,
 		/// <summary>
-		/// Has this file been built for release game?
+		/// Has this file been built for release game
 		/// </summary>
 		SerializeGameRelease					= 0x100,
 		SwapEndianess							= 0x200,
@@ -24,7 +24,7 @@ namespace uTinyRipper
 		SerializeMonoReload						= 0x1000,
 		DontRequireAllMetaFlags					= 0x2000,
 		/// <summary>
-		/// Is prefab's format read?
+		/// Is prefab's format read
 		/// </summary>
 		SerializeForPrefabSystem				= 0x4000,
 		WarnAboutLeakedObjects					= 0x8000,

@@ -32,11 +32,11 @@ namespace uTinyRipper.Classes.AnimationClips
 			return version.IsGreaterEqual(2018);
 		}
 		/// <summary>
-		/// 5.5.0 and greater and Debug
+		/// 5.5.0 and greater and Not Release
 		/// </summary>
 		public static bool IsReadTangentMode(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(5, 5) && flags.IsDebug();
+			return version.IsGreaterEqual(5, 5) && !flags.IsRelease();
 		}
 
 		private static int GetSerializedVersion(Version version)

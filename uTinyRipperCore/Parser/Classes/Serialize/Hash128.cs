@@ -6,6 +6,19 @@ namespace uTinyRipper.Classes
 {
 	public struct Hash128 : IAssetReadable, ISerializedFileReadable, IYAMLExportable
 	{
+		public Hash128(uint v):
+			this(v, 0, 0, 0)
+		{
+		}
+
+		public Hash128(uint v0, uint v1, uint v2, uint v3)
+		{
+			Data0 = v0;
+			Data1 = v1;
+			Data2 = v2;
+			Data3 = v3;
+		}
+
 		private static int GetSerializedVersion(Version version)
 		{
 			if (Config.IsExportTopmostSerializedVersion)

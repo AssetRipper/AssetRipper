@@ -30,11 +30,11 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// 2.0.0 and greater and Debug and Not Prefab
+		/// 2.0.0 and greater and Not Release and Not Prefab
 		/// </summary>
 		public static bool IsReadHideFlag(Version version, TransferInstructionFlags flags)
 		{
-			return flags.IsDebug() && !flags.IsForPrefab() && version.IsGreaterEqual(2);
+			return !flags.IsRelease() && !flags.IsForPrefab() && version.IsGreaterEqual(2);
 		}
 		/// <summary>
 		/// 4.3.0 and greater and Debug
