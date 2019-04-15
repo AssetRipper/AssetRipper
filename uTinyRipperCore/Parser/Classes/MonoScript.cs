@@ -16,18 +16,26 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// Not Release
+		/// ? and greater and Not Release
 		/// </summary>
-		public static bool IsReadScript(TransferInstructionFlags flags)
+		public static bool IsReadScript(Version version, TransferInstructionFlags flags)
 		{
-			return !flags.IsRelease();
+			// unknown version
+			return !flags.IsRelease()/* && version.IsGreaterEqual()*/;
 		}
 		/// <summary>
-		/// 2.5.0 and greater and Not Release
+		/// 1.5.0 to 2.6.0 and Not Release
+		/// </summary>
+		public static bool IsReadDefaultProperties(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(1, 5) && version.IsLess(2, 6);
+		}
+		/// <summary>
+		/// 2.6.0 and greater and Not Release
 		/// </summary>
 		public static bool IsReadDefaultReferences(Version version, TransferInstructionFlags flags)
 		{
-			return !flags.IsRelease() && version.IsGreaterEqual(2, 5);
+			return !flags.IsRelease() && version.IsGreaterEqual(2, 6);
 		}
 		/// <summary>
 		/// 3.4.0 and greater and Not Release
@@ -35,6 +43,13 @@ namespace uTinyRipper.Classes
 		public static bool IsReadIcon(Version version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(3, 4);
+		}
+		/// <summary>
+		/// 3.4.0 to 5.0.0 and Not Release
+		/// </summary>
+		public static bool IsREadEditorGraphData(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(3, 4) && version.IsLess(5);
 		}
 		/// <summary>
 		/// 3.4.0 and greater
@@ -163,11 +178,15 @@ namespace uTinyRipper.Classes
 		{
 			ReadBase(reader);
 
-			// unknown version
-			if (IsReadScript(reader.Flags))
+#if UNIVERSAL
+			if (IsReadScript(reader.Version, reader.Flags))
 			{
 				Script = reader.ReadByteArray();
 				reader.AlignStream(AlignType.Align4);
+			}
+			if (IsReadDefaultProperties(reader.Version, reader.Flags))
+			{
+				DefaultProperties.Read(reader);
 			}
 			if (IsReadDefaultReferences(reader.Version, reader.Flags))
 			{
@@ -178,8 +197,11 @@ namespace uTinyRipper.Classes
 			{
 				Icon.Read(reader);
 			}
-			// TODO: 3.4.0 - 
-			// PPtr<MonoBehaviour> m_EditorGraphData
+			if (IsREadEditorGraphData(reader.Version, reader.Flags))
+			{
+				EditorGraphData.Read(reader);
+			}
+#endif
 
 			if (IsReadExecutionOrder(reader.Version))
 			{
@@ -224,34 +246,87 @@ namespace uTinyRipper.Classes
 			{
 				yield return asset;
 			}
-			if(IsReadScript(file.Flags))
+
+			if (IsReadDefaultProperties(file.Version, file.Flags))
+			{
+				yield return DefaultProperties.FetchDependency(file, isLog, ToLogString, DefaultReferencesName);
+			}
+			if (IsReadDefaultReferences(file.Version, file.Flags))
 			{
 				foreach (PPtr<Object> reference in DefaultReferences.Values)
 				{
-					yield return reference.FetchDependency(file, isLog, ToLogString, "DefaultReferences");
+					yield return reference.FetchDependency(file, isLog, ToLogString, DefaultReferencesName);
 				}
-				yield return Icon.FetchDependency(file, isLog, ToLogString, "m_Icon");
+			}
+			if (IsReadIcon(file.Version, file.Flags))
+			{
+				yield return Icon.FetchDependency(file, isLog, ToLogString, IconName);
 			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = ExportBaseYAMLRoot(container);
-			node.Add(ScriptName, Script.ExportYAML());
-			node.Add(DefaultReferencesName, DefaultReferences.ExportYAML(container));
-			node.Add(IconName, Icon.ExportYAML(container));
+			node.Add(ScriptName, GetScript(container.Version, container.Flags).ExportYAML());
+			node.Add(DefaultReferencesName, GetDefaultReferences(container.Version, container.Flags).ExportYAML(container));
+			node.Add(IconName, GetIcon(container.Version, container.Flags).ExportYAML(container));
 			node.Add(ExecutionOrderName, ExecutionOrder);
 			node.Add(ClassNameName, ClassName);
-			node.Add(NamespaceName, IsReadNamespace(container.Version) ? Namespace : string.Empty);
-			node.Add(AssemblyNameName, AssemblyNameOrigin);
+			node.Add(NamespaceName, GetNamespace(container.Version));
+			node.Add(AssemblyNameName, GetAssemblyName(container.Version, container.Flags));
 			node.Add(IsEditorScriptName, IsEditorScript);
 			return node;
+		}
+
+		private IReadOnlyList<byte> GetScript(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadScript(version, flags))
+			{
+				return Script;
+			}
+#endif
+			return new byte[0];
+		}
+
+		private IReadOnlyDictionary<string, PPtr<Object>> GetDefaultReferences(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadDefaultReferences(version, flags))
+			{
+				return DefaultReferences;
+			}
+#endif
+			return new Dictionary<string, PPtr<Object>>(0);
+		}
+
+		private PPtr<Object> GetIcon(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadIcon(version, flags))
+			{
+				return Icon;
+			}
+#endif
+			return default;
+		}
+
+		private string GetNamespace(Version version)
+		{
+			return IsReadNamespace(version) ? Namespace : string.Empty;
+		}
+
+		private string GetAssemblyName(Version version, TransferInstructionFlags flags)
+		{
+			return IsReadAssemblyName(version, flags) ? AssemblyNameOrigin : string.Empty;
 		}
 
 		public override string ExportName => Path.Combine(AssetsKeyWord, "Scripts");
 		public override string ExportExtension => "cs";
 
+#if UNIVERSAL
 		public IReadOnlyDictionary<string, PPtr<Object>> DefaultReferences => m_defaultReferences;
+#endif
 		public int ExecutionOrder { get; private set; }
 		public string ClassName { get; private set; }
 		public string Namespace { get; private set; }
@@ -262,6 +337,7 @@ namespace uTinyRipper.Classes
 		public string AssemblyNameOrigin { get; private set; }
 		public bool IsEditorScript { get; private set; }
 
+		public const string DefaultPropertiesName = "m_DefaultProperties";
 		public const string DefaultReferencesName = "m_DefaultReferences";
 		public const string IconName = "m_Icon";
 		public const string ExecutionOrderName = "m_ExecutionOrder";
@@ -270,9 +346,18 @@ namespace uTinyRipper.Classes
 		public const string AssemblyNameName = "m_AssemblyName";
 		public const string IsEditorScriptName = "m_IsEditorScript";
 
+#if UNIVERSAL
+		public PPtr<MonoBehaviour> DefaultProperties;
 		public PPtr<Object> Icon;
+		/// <summary>
+		/// PPtr<MonoBehaviour> previously
+		/// </summary>
+		public PPtr<Object> EditorGraphData;
+#endif
 		public Hash128 PropertiesHash;
 
+#if UNIVERSAL
 		private Dictionary<string, PPtr<Object>> m_defaultReferences;
+#endif
 	}
 }
