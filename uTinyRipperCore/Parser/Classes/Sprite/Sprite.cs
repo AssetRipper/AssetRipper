@@ -210,10 +210,12 @@ namespace uTinyRipper.Classes
 				SpriteAtlas.Read(reader);
 			}
 			RD.Read(reader);
+#if UNIVERSAL
 			if (IsReadAtlasRD(reader.Flags))
 			{
 				AtlasRD.Read(reader);
 			}
+#endif
 			reader.AlignStream(AlignType.Align4);
 
 			if (IsReadPhysicsShape(reader.Version))
@@ -230,10 +232,12 @@ namespace uTinyRipper.Classes
 			{
 				m_bones = reader.ReadAssetArray<SpriteBone>();
 			}
+#if UNIVERSAL
 			if (IsReadSpriteID(reader.Version, reader.Flags))
 			{
 				SpriteID = reader.ReadString();
 			}
+#endif
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

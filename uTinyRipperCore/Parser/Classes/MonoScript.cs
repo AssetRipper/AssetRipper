@@ -247,6 +247,7 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 
+#if UNIVERSAL
 			if (IsReadDefaultProperties(file.Version, file.Flags))
 			{
 				yield return DefaultProperties.FetchDependency(file, isLog, ToLogString, DefaultReferencesName);
@@ -262,6 +263,7 @@ namespace uTinyRipper.Classes
 			{
 				yield return Icon.FetchDependency(file, isLog, ToLogString, IconName);
 			}
+#endif
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

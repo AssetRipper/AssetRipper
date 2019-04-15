@@ -201,6 +201,7 @@ namespace uTinyRipper.Classes
 				reader.AlignStream(AlignType.Align4);
 			}
 
+#if UNIVERSAL
 			if (IsReadErrors(reader.Version, reader.Flags))
 			{
 				m_errors = reader.ReadAssetArray<ShaderError>();
@@ -214,6 +215,7 @@ namespace uTinyRipper.Classes
 			{
 				CompileInfo.Read(reader);
 			}
+#endif
 		}
 
 		public override void ExportBinary(IExportContainer container, Stream stream)
