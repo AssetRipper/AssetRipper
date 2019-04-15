@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.Assembly;
 using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Objects;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.YAML;
 
@@ -14,14 +15,35 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		public static bool IsReadEditorHideFlags(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease();
+		}
+		public static bool IsReadEditorClassIdentifier(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease();
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			long position = reader.BaseStream.Position;
 			base.Read(reader);
 
+#if UNIVERSAL
+			if (IsReadEditorHideFlags(reader.Version, reader.Flags))
+			{
+				EditorHideFlags = (HideFlags)reader.ReadUInt32();
+			}
+#endif
 			Script.Read(reader);
 			Name = reader.ReadString();
-			
+#if UNIVERSAL
+			if (IsReadEditorClassIdentifier(reader.Version, reader.Flags))
+			{
+				EditorClassIdentifier = reader.ReadString();
+			}
+#endif
+
 			MonoScript script = Script.FindAsset(File);
 			if (script != null)
 			{
@@ -77,10 +99,10 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(EditorHideFlagsName, false);
+			node.Add(EditorHideFlagsName, (uint)GetEditorHideFlags(container.Version, container.Flags));
 			node.Add(ScriptName, Script.ExportYAML(container));
 			node.Add(NameName, Name);
-			node.Add(EditorClassIdentifierName, string.Empty);
+			node.Add(EditorClassIdentifierName, GetEditorClassIdentifier(container.Version, container.Flags));
 			if (Structure != null)
 			{
 				YAMLMappingNode structureNode = (YAMLMappingNode)Structure.ExportYAML(container);
@@ -89,11 +111,38 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
+		private HideFlags GetEditorHideFlags(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadEditorHideFlags(version, flags))
+			{
+				return EditorHideFlags;
+			}
+#endif
+			return HideFlags.None;
+		}
+		private string GetEditorClassIdentifier(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadEditorClassIdentifier(version, flags))
+			{
+				return EditorClassIdentifier;
+			}
+#endif
+			return string.Empty;
+		}
+
 		public override string ExportName => Path.Combine(AssetsKeyWord, "ScriptableObject");
 		public override string ExportExtension => AssetExtension;
 
+#if UNIVERSAL
+		public HideFlags EditorHideFlags { get; private set; }
+#endif
 		public string Name { get; private set; }
 		public ScriptStructure Structure { get; private set; }
+#if UNIVERSAL
+		public string EditorClassIdentifier { get; private set; }
+#endif
 
 		public const string EditorHideFlagsName = "m_EditorHideFlags";
 		public const string ScriptName = "m_Script";
