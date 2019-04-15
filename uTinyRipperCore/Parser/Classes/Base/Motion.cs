@@ -1,4 +1,6 @@
-﻿namespace uTinyRipper.Classes
+﻿using uTinyRipper.Classes.Objects;
+
+namespace uTinyRipper.Classes
 {
 	public abstract class Motion : NamedObject
 	{
@@ -7,7 +9,7 @@
 		{
 		}
 
-		protected Motion(AssetInfo assetInfo, uint hideFlags) :
+		protected Motion(AssetInfo assetInfo, HideFlags hideFlags) :
 			base(assetInfo, hideFlags)
 		{
 		}

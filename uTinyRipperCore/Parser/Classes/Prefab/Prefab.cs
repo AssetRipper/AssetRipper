@@ -3,6 +3,7 @@ using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Prefabs;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.Classes.Objects;
 
 namespace uTinyRipper.Classes
 {
@@ -14,7 +15,7 @@ namespace uTinyRipper.Classes
 		}
 
 		private Prefab(AssetInfo assetInfo, GameObject root) :
-			base(assetInfo, 1)
+			base(assetInfo, HideFlags.HideInHierarchy)
 		{
 			RootGameObject = root.File.CreatePPtr(root);
 			IsPrefabParent = true;

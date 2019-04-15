@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.Classes.Objects;
 
 namespace uTinyRipper.Classes
 {
@@ -12,7 +13,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		protected EditorExtension(AssetInfo assetInfo, uint hideFlags):
+		protected EditorExtension(AssetInfo assetInfo, HideFlags hideFlags):
 			base(assetInfo, hideFlags)
 		{
 		}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Objects;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers.Editor
@@ -53,7 +54,7 @@ namespace uTinyRipper.Classes.AnimatorControllers.Editor
 		}
 
 		protected AnimatorTransitionBase(AssetInfo assetInfo, ClassIDType classID, BaseParameters parameters) :
-			base(assetInfo, 1)
+			base(assetInfo, HideFlags.HideInHierarchy)
 		{
 			List<AnimatorCondition> conditionList = new List<AnimatorCondition>(parameters.ConditionConstants.Count);
 			for (int i = 0; i < parameters.ConditionConstants.Count; i++)

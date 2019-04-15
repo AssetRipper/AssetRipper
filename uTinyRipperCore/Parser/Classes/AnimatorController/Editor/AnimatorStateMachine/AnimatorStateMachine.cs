@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.Classes.Objects;
 
 namespace uTinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class AnimatorStateMachine : NamedObject
 	{
 		private AnimatorStateMachine(AssetInfo assetInfo, AnimatorController controller, int stateMachineIndex) :
-			base(assetInfo, 1)
+			base(assetInfo, HideFlags.HideInHierarchy)
 		{
 			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 

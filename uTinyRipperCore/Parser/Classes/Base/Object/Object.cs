@@ -4,6 +4,7 @@ using System.IO;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.Classes.Objects;
 
 namespace uTinyRipper.Classes
 {
@@ -22,18 +23,18 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		protected Object(AssetInfo assetInfo, uint hideFlags):
+		protected Object(AssetInfo assetInfo, HideFlags hideFlags):
 			this(assetInfo)
 		{
 			ObjectHideFlags = hideFlags;
 		}
 
 		/// <summary>
-		/// 2.0.0 and greater and Not Release and Not Prefab
+		/// 2.0.0 and greater and Debug and Not Prefab
 		/// </summary>
 		public static bool IsReadHideFlag(Version version, TransferInstructionFlags flags)
 		{
-			return !flags.IsRelease() && !flags.IsForPrefab() && version.IsGreaterEqual(2);
+			return flags.IsDebug() && !flags.IsForPrefab() && version.IsGreaterEqual(2);
 		}
 		/// <summary>
 		/// 4.3.0 and greater and Debug
@@ -63,7 +64,7 @@ namespace uTinyRipper.Classes
 		{
 			if (IsReadHideFlag(reader.Version, reader.Flags))
 			{
-				ObjectHideFlags = reader.ReadUInt32();
+				ObjectHideFlags = (HideFlags)reader.ReadUInt32();
 			}
 #if UNIVERSAL
 			if (IsReadInstanceID(reader.Version, reader.Flags))
@@ -113,23 +114,23 @@ namespace uTinyRipper.Classes
 		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(ObjectHideFlagsName, GetObjectHideFlags(container.Version, container.Flags, container.ExportFlags));
+			node.Add(ObjectHideFlagsName, (uint)GetObjectHideFlags(container.Version, container.Flags, container.ExportFlags));
 			return node;
 		}
 
-		private uint GetObjectHideFlags(Version version, TransferInstructionFlags flags, TransferInstructionFlags exportFlags)
+		private HideFlags GetObjectHideFlags(Version version, TransferInstructionFlags flags, TransferInstructionFlags exportFlags)
 		{
-			if(IsReadHideFlag(version, flags))
+			if (IsReadHideFlag(version, flags))
 			{
 				return ObjectHideFlags;
 			}
-			if(ClassID == ClassIDType.GameObject)
+			if (ClassID == ClassIDType.GameObject)
 			{
 				GameObject go = (GameObject)this;
 				int depth = go.GetRootDepth();
-				return depth > 1 ? 1u : 0u;
+				return depth > 1 ? HideFlags.HideInHierarchy : HideFlags.None;
 			}
-			return exportFlags.IsForPrefab() ? 1u : ObjectHideFlags;
+			return exportFlags.IsForPrefab() ? HideFlags.HideInHierarchy : ObjectHideFlags;
 		}
 
 		public ISerializedFile File => m_assetInfo.File;
@@ -141,7 +142,7 @@ namespace uTinyRipper.Classes
 		
 		public EngineGUID GUID => m_assetInfo.GUID;
 
-		public uint ObjectHideFlags { get; private set; }
+		public HideFlags ObjectHideFlags { get; private set; }
 #if UNIVERSAL
 		public int InstanceID { get; private set; }
 		public long LocalIdentfierInFile { get; private set; }

@@ -1,4 +1,5 @@
 using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Objects;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -10,7 +11,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		protected NamedObject(AssetInfo assetInfo, uint hideFlags) :
+		protected NamedObject(AssetInfo assetInfo, HideFlags hideFlags) :
 			base(assetInfo, hideFlags)
 		{
 			Name = string.Empty;

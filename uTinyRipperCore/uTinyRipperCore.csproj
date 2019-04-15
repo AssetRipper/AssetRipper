@@ -141,6 +141,7 @@
   <ItemGroup>
     <Compile Include="Attributes\EnumNameAttribute.cs" />
     <Compile Include="Parser\Classes\Base\GUIElement.cs" />
+    <Compile Include="Parser\Classes\Base\Object\HideFlags.cs" />
     <Compile Include="Parser\Classes\CanvasGroup.cs" />
     <Compile Include="Parser\Classes\GUITexture.cs" />
     <Compile Include="Parser\Classes\GUIText\GUIText.cs" />

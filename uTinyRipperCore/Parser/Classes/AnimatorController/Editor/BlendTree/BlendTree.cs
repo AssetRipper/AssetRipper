@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.Classes.Objects;
 
 namespace uTinyRipper.Classes.AnimatorControllers.Editor
 {
 	public sealed class BlendTree : Motion
 	{
 		private BlendTree(AssetInfo assetInfo, AnimatorController controller, StateConstant state, int nodeIndex) :
-			base(assetInfo, 1)
+			base(assetInfo, HideFlags.HideInHierarchy)
 		{
 			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 			BlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Instance;
