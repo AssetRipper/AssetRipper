@@ -28,13 +28,13 @@ namespace uTinyRipper.AssetExporters.Classes
 			base.ExportYAMLPreInner(container, node);
 
 			YAMLMappingNode fileNode = YAMLMappingNode.Empty;
-			if(m_sprites.Count > 0)
+			if (m_sprites.Count > 0)
 			{
 				fileNode = new YAMLMappingNode();
-				foreach(Sprite sprite in m_sprites)
+				foreach (Sprite sprite in m_sprites)
 				{
 					long exportID = container.GetExportID(sprite);
-					fileNode.Add(exportID.ToString(), sprite.Name);
+					fileNode.Add(exportID, sprite.Name);
 				}
 			}
 			node.Add("fileIDToRecycleName", fileNode);

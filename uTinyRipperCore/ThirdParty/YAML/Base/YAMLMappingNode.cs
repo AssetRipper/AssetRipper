@@ -38,6 +38,18 @@ namespace uTinyRipper.YAML
 			InsertEnd(keyNode, value);
 		}
 
+		public void Add(long key, string value)
+		{
+			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			Add(key, valueNode);
+		}
+
+		public void Add(long key, YAMLNode value)
+		{
+			YAMLScalarNode keyNode = new YAMLScalarNode(key);
+			InsertEnd(keyNode, value);
+		}
+
 		public void Add(string key, bool value)
 		{
 			YAMLScalarNode valueNode = new YAMLScalarNode(value);

@@ -47,7 +47,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 3.4.0 to 5.0.0 and Not Release
 		/// </summary>
-		public static bool IsREadEditorGraphData(Version version, TransferInstructionFlags flags)
+		public static bool IsReadEditorGraphData(Version version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(3, 4) && version.IsLess(5);
 		}
@@ -197,7 +197,7 @@ namespace uTinyRipper.Classes
 			{
 				Icon.Read(reader);
 			}
-			if (IsREadEditorGraphData(reader.Version, reader.Flags))
+			if (IsReadEditorGraphData(reader.Version, reader.Flags))
 			{
 				EditorGraphData.Read(reader);
 			}
