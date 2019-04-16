@@ -82,7 +82,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Virtual|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;UNIVERSAL;VIRTUAL</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;VIRTUAL</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\EnumNameAttribute.cs" />
+    <Compile Include="Parser\Classes\AnimationClip\AnimationClipSettings.cs" />
     <Compile Include="Parser\Classes\Base\GUIElement.cs" />
     <Compile Include="Parser\Classes\Base\Object\HideFlags.cs" />
     <Compile Include="Parser\Classes\CanvasGroup.cs" />

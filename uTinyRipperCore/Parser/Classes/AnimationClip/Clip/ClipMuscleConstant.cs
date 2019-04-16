@@ -4,7 +4,7 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
-	public struct ClipMuscleConstant : IAssetReadable, IYAMLExportable
+	public class ClipMuscleConstant : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 5.5.0 and greater
@@ -141,27 +141,7 @@ namespace uTinyRipper.Classes.AnimationClips
 		
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add(AdditiveReferencePoseClipName, default(PPtr<AnimationClip>).ExportYAML(container));
-			node.Add(AdditiveReferencePoseTimeName, 0);
-			node.Add(StartTimeName, StartTime);
-			node.Add(StopTimeName, StopTime);
-			node.Add(OrientationOffsetYName, OrientationOffsetY);
-			node.Add(LevelName, Level);
-			node.Add(CycleOffsetName, CycleOffset);
-			node.Add(HasAdditiveReferencePoseName, false);
-			node.Add(LoopTimeName, LoopTime);
-			node.Add(LoopBlendName, LoopBlend);
-			node.Add(LoopBlendOrientationName, LoopBlendOrientation);
-			node.Add(LoopBlendPositionYName, LoopBlendPositionY);
-			node.Add(LoopBlendPositionXZName, LoopBlendPositionXZ);
-			node.Add(KeepOriginalOrientationName, KeepOriginalOrientation);
-			node.Add(KeepOriginalPositionYName, KeepOriginalPositionY);
-			node.Add(KeepOriginalPositionXZName, KeepOriginalPositionXZ);
-			node.Add(HeightFromFeetName, HeightFromFeet);
-			node.Add(MirrorName, 0);
-			return node;
+			throw new System.NotImplementedException();
 		}
 		
 		public float StartTime { get; private set; }

@@ -40,30 +40,41 @@ namespace uTinyRipper.Classes.AnimationClips
 			MessageOptions = reader.ReadInt32();
 		}
 
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield return ObjectReferenceParameter.FetchDependency(file, isLog, () => nameof(AnimationEvent), ObjectReferenceParameterName);
+		}
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("time", Time);
-			node.Add("functionName", FunctionName);
-			node.Add("data", StringParameter);
-			node.Add("objectReferenceParameter", ObjectReferenceParameter.ExportYAML(container));
-			node.Add("floatParameter", FloatParameter);
-			node.Add("intParameter", IntParameter);
-			node.Add("messageOptions", MessageOptions);
+			node.Add(TimeName, Time);
+			node.Add(FunctionNameName, FunctionName);
+			node.Add(DataName, StringParameter);
+			node.Add(ObjectReferenceParameterName, ObjectReferenceParameter.ExportYAML(container));
+			node.Add(FloatParameterName, FloatParameter);
+			node.Add(IntParameterName, IntParameter);
+			node.Add(MessageOptionsName, MessageOptions);
 			return node;
-		}
-
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
-		{
-			yield return ObjectReferenceParameter.FetchDependency(file, isLog, () => nameof(AnimationEvent), "objectReferenceParameter");
 		}
 
 		public float Time { get; private set; }
 		public string FunctionName { get; private set; }
+		/// <summary>
+		/// Data
+		/// </summary>
 		public string StringParameter { get; private set; }
 		public float FloatParameter { get; private set; }
 		public int IntParameter { get; private set; }
 		public int MessageOptions { get; private set; }
+
+		public const string TimeName = "time";
+		public const string FunctionNameName = "functionName";
+		public const string DataName = "data";
+		public const string ObjectReferenceParameterName = "objectReferenceParameter";
+		public const string FloatParameterName = "floatParameter";
+		public const string IntParameterName = "intParameter";
+		public const string MessageOptionsName = "messageOptions";
 
 		public PPtr<Object> ObjectReferenceParameter;
 	}

@@ -28,9 +28,17 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Less than 2.0.0
 		/// </summary>
-		public static bool IsReadClassIDToTrack(Version version)
+		public static bool IsReadClassIDToTrack(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsLess(2);
+			if (version.IsGreaterEqual(2, 6))
+			{
+				return false;
+			}
+			if (version.IsGreaterEqual(2))
+			{
+				return !flags.IsRelease();
+			}
+			return true;
 		}
 		/// <summary>
 		/// 4.0.0 to 5.0.0 exclusive
@@ -110,11 +118,11 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(3, 4);
 		}
 		/// <summary>
-		/// 4.0.0 and greater
+		/// 4.0.0 and greater and Release
 		/// </summary>
-		public static bool IsReadMuscleClipSize(Version version)
+		public static bool IsReadMuscleClip(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(4);
+			return version.IsGreaterEqual(4) && flags.IsRelease();
 		}
 		/// <summary>
 		/// 4.3.0 and greater
@@ -124,11 +132,50 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(4, 3);
 		}
 		/// <summary>
-		/// 2018.3 and greater
+		/// 4.0.0 and Not Release
 		/// </summary>
-		public static bool IsReadHasGenericRootTransform(Version version)
+		public static bool IsReadAnimationClipSettings(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(2018, 3);
+			return !flags.IsRelease() && version.IsGreaterEqual(4);
+		}
+		/// <summary>
+		/// 2.6.0 and greater and Not Release
+		/// </summary>
+		public static bool IsReadEditorCurves(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(2, 6);
+		}
+		/// <summary>
+		/// <para>5.0.0 and greater and Not Release</para>
+		/// <para>2018.3 and greater</para>
+		/// </summary>
+		public static bool IsReadHasGenericRootTransform(Version version, TransferInstructionFlags flags)
+		{
+			if (flags.IsRelease())
+			{
+				return version.IsGreaterEqual(2018, 3);
+			}
+			return version.IsGreaterEqual(5);
+		}
+		/// <summary>
+		/// <para>5.0.0f1 and greater and Not Release</para>
+		/// <para>2018.3 and greater</para>
+		/// </summary>
+		public static bool IsReadHasMotionFloatCurves(Version version, TransferInstructionFlags flags)
+		{
+			if (flags.IsRelease())
+			{
+				return version.IsGreaterEqual(2018, 3);
+			}
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		}
+		/// <summary>
+		/// 5.0.0 to 2018.3 exclusive and Not Release
+		/// </summary>
+		public static bool IsReadGenerateMotionCurves(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(5) && version.IsLess(2018, 3);
 		}
 		/// <summary>
 		/// 2.1.0 and greater
@@ -136,6 +183,13 @@ namespace uTinyRipper.Classes
 		public static bool IsReadEvents(Version version)
 		{
 			return version.IsGreaterEqual(2, 1);
+		}
+		/// <summary>
+		/// 2.1.0 to 2.6.0 exclusive and Not Release
+		/// </summary>
+		public static bool IsReadRuntimeEvents(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(2, 1) && version.IsLess(2, 6);
 		}
 
 		/// <summary>
@@ -179,7 +233,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			if (IsReadClassIDToTrack(reader.Version))
+			if (IsReadClassIDToTrack(reader.Version, reader.Flags))
 			{
 				m_classIDToTrack = new Dictionary<int, PPtr<BaseAnimationTrack>>();
 				m_classIDToTrack.Read(reader);
@@ -244,20 +298,45 @@ namespace uTinyRipper.Classes
 			{
 				Bounds.Read(reader);
 			}
-			if (IsReadMuscleClipSize(reader.Version))
+			if (IsReadMuscleClip(reader.Version, reader.Flags))
 			{
 				MuscleClipSize = reader.ReadUInt32();
+				MuscleClip = new ClipMuscleConstant();
 				MuscleClip.Read(reader);
 			}
 			if (IsReadClipBindingConstant(reader.Version))
 			{
 				ClipBindingConstant.Read(reader);
 			}
+#if UNIVERSAL
+			if (IsReadAnimationClipSettings(reader.Version, reader.Flags))
+			{
+				AnimationClipSettings = new AnimationClipSettings();
+				AnimationClipSettings.Read(reader);
+			}
+			if (IsReadEditorCurves(reader.Version, reader.Flags))
+			{
+				m_editorCurves = reader.ReadAssetArray<FloatCurve>();
+				m_eulerEditorCurves = reader.ReadAssetArray<FloatCurve>();
+			}
+#endif
 
-			if (IsReadHasGenericRootTransform(reader.Version))
+			if (IsReadHasGenericRootTransform(reader.Version, reader.Flags))
 			{
 				HasGenericRootTransform = reader.ReadBoolean();
+			}
+			if (IsReadHasMotionFloatCurves(reader.Version, reader.Flags))
+			{
 				HasMotionFloatCurves = reader.ReadBoolean();
+			}
+#if UNIVERSAL
+			if (IsReadGenerateMotionCurves(reader.Version, reader.Flags))
+			{
+				GenerateMotionCurves = reader.ReadBoolean();
+			}
+#endif
+			if (IsReadHasGenericRootTransform(reader.Version, reader.Flags))
+			{
 				reader.AlignStream(AlignType.Align4);
 			}
 
@@ -269,6 +348,13 @@ namespace uTinyRipper.Classes
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
+
+#if UNIVERSAL
+			if (IsReadRuntimeEvents(reader.Version, reader.Flags))
+			{
+				m_runetimeEvents = reader.ReadAssetArray<AnimationEvent>();
+			}
+#endif
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -278,6 +364,20 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 
+			if (IsReadClassIDToTrack(file.Version, file.Flags))
+			{
+				foreach (KeyValuePair<int, PPtr<BaseAnimationTrack>> kvp in ClassIDToTrack)
+				{
+					yield return kvp.Value.FetchDependency(file, isLog, () => ValidName, ClassIDToTrackName);
+				}
+				foreach (ChildTrack track in ChildTracks)
+				{
+					foreach (Object asset in track.FetchDependencies(file, isLog))
+					{
+						yield return asset;
+					}
+				}
+			}
 			if (IsReadCurves(file.Version))
 			{
 				foreach (FloatCurve curve in FloatCurves)
@@ -305,6 +405,32 @@ namespace uTinyRipper.Classes
 					yield return asset;
 				}
 			}
+#if UNIVERSAL
+			if (IsReadAnimationClipSettings(file.Version, file.Flags))
+			{
+				foreach (Object asset in AnimationClipSettings.FetchDependencies(file, isLog))
+				{
+					yield return asset;
+				}
+			}
+			if (IsReadEditorCurves(file.Version, file.Flags))
+			{
+				foreach (FloatCurve editorCurve in EditorCurves)
+				{
+					foreach (Object asset in editorCurve.FetchDependencies(file, isLog))
+					{
+						yield return asset;
+					}
+				}
+				foreach (FloatCurve eulerEditorCurve in EulerEditorCurves)
+				{
+					foreach (Object asset in eulerEditorCurve.FetchDependencies(file, isLog))
+					{
+						yield return asset;
+					}
+				}
+			}
+#endif
 			if (IsReadEvents(file.Version))
 			{
 				foreach (AnimationEvent @event in Events)
@@ -325,7 +451,7 @@ namespace uTinyRipper.Classes
 			node.Add(CompressedName, Compressed);
 			node.Add(UseHighQualityCurveName, UseHightQualityCurve);
 
-			AnimationCurves curves = GetAnimationCurves(container.Version, container.Platform);
+			AnimationCurves curves = GetAnimationCurves(container.Version, container.Flags);
 			node.Add(RotationCurvesName, curves.RotationCurves.ExportYAML(container));
 			node.Add(CompressedRotationCurvesName, curves.CompressedRotationCurves.ExportYAML(container));
 			node.Add(EulerCurvesName, curves.EulerCurves.ExportYAML(container));
@@ -338,13 +464,13 @@ namespace uTinyRipper.Classes
 			node.Add(WrapModeName, (int)WrapMode);
 			node.Add(BoundsName, Bounds.ExportYAML(container));
 			node.Add(ClipBindingConstantName, GetClipBindingConstant(container.Version).ExportYAML(container));
-			node.Add(AnimationClipSettingsName, MuscleClip.ExportYAML(container));
-			node.Add(EditorCurvesName, YAMLSequenceNode.Empty);
-			node.Add(EulerEditorCurvesName, YAMLSequenceNode.Empty);
+			node.Add(AnimationClipSettingsName, GetAnimationClipSettings(container.Version, container.Flags).ExportYAML(container));
+			node.Add(EditorCurvesName, GetEditorCurves(container.Version, container.Flags).ExportYAML(container));
+			node.Add(EulerEditorCurvesName, GetEulerEditorCurves(container.Version, container.Flags).ExportYAML(container));
 			node.Add(HasGenericRootTransformName, HasGenericRootTransform);
 			node.Add(HasMotionFloatCurvesName, HasMotionFloatCurves);
-			node.Add(GenerateMotionCurvesName, false);
-			node.Add(EventsName, IsReadEvents(container.Version) ? m_events.ExportYAML(container) : YAMLSequenceNode.Empty);
+			node.Add(GenerateMotionCurvesName, GetGenerateMotionCurves(container.Version, container.Flags));
+			node.Add(EventsName, GetEvents(container.Version).ExportYAML(container));
 
 			return node;
 		}
@@ -447,11 +573,15 @@ namespace uTinyRipper.Classes
 			return animation.IsContainsAnimationClip(this);
 		}
 
-		private bool IsExportGenericData(Version version)
+		private bool IsExportGenericData(Version version, TransferInstructionFlags flags)
 		{
 			if (IsReadLegacy(version))
 			{
-				return MuscleClip.Clip.IsValid(version);
+				if (IsReadMuscleClip(version, flags))
+				{
+					return MuscleClip.Clip.IsValid(version);
+				}
+				return false;
 			}
 			if (IsReadAnimationType(version))
 			{
@@ -460,9 +590,12 @@ namespace uTinyRipper.Classes
 #warning TODO:
 					return false;
 				}
-				if (AnimationType != AnimationType.Legacy)
+				if (IsReadMuscleClip(version, flags))
 				{
-					return MuscleClip.Clip.IsValid(version);
+					if (AnimationType != AnimationType.Legacy)
+					{
+						return MuscleClip.Clip.IsValid(version);
+					}
 				}
 			}
 			return false;
@@ -477,9 +610,9 @@ namespace uTinyRipper.Classes
 			return AnimationType == AnimationType.Legacy;
 		}
 
-		private AnimationCurves GetAnimationCurves(Version version, Platform platform)
+		private AnimationCurves GetAnimationCurves(Version version, TransferInstructionFlags flags)
 		{
-			if (IsExportGenericData(version))
+			if (IsExportGenericData(version, flags))
 			{
 				return ExportGenericData();
 			}
@@ -530,6 +663,50 @@ namespace uTinyRipper.Classes
 		{
 			return IsReadClipBindingConstant(version) ? ClipBindingConstant : new AnimationClipBindingConstant(true);
 		}
+		private AnimationClipSettings GetAnimationClipSettings(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadAnimationClipSettings(version, flags))
+			{
+				return AnimationClipSettings;
+			}
+#endif
+			return IsReadMuscleClip(version, flags) ? new AnimationClipSettings(MuscleClip) : new AnimationClipSettings(true);
+		}
+		private IReadOnlyList<FloatCurve> GetEditorCurves(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadEditorCurves(version, flags))
+			{
+				return EditorCurves;
+			}
+#endif
+			return new FloatCurve[0];
+		}
+		private IReadOnlyList<FloatCurve> GetEulerEditorCurves(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadEditorCurves(version, flags))
+			{
+				return EulerEditorCurves;
+			}
+#endif
+			return new FloatCurve[0];
+		}
+		private bool GetGenerateMotionCurves(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadGenerateMotionCurves(version, flags))
+			{
+				return GenerateMotionCurves;
+			}
+#endif
+			return false;
+		}
+		private IReadOnlyList<AnimationEvent> GetEvents(Version version)
+		{
+			return IsReadEvents(version) ? m_events : new AnimationEvent[0];
+		}
 
 		public override string ExportExtension => "anim";
 
@@ -549,10 +726,21 @@ namespace uTinyRipper.Classes
 		public float SampleRate { get; private set; }
 		public WrapMode WrapMode { get; private set; }
 		public uint MuscleClipSize { get; private set; }
+		public ClipMuscleConstant MuscleClip { get; private set; }
+#if UNIVERSAL
+		public AnimationClipSettings AnimationClipSettings { get; private set; }
+		private IReadOnlyList<FloatCurve> EditorCurves => m_editorCurves;
+		private IReadOnlyList<FloatCurve> EulerEditorCurves => m_eulerEditorCurves;
+#endif
 		public bool HasGenericRootTransform { get; private set; }
 		public bool HasMotionFloatCurves { get; private set; }
+#if UNIVERSAL
+		public bool GenerateMotionCurves { get; private set; }
+#endif
 		public IReadOnlyList<AnimationEvent> Events => m_events;
 
+		public const string ClassIDToTrackName = "m_ClassIDToTrack";
+		public const string ChildTracksName = "m_ChildTracks";
 		public const string LegacyName = "m_Legacy";
 		public const string CompressedName = "m_Compressed";
 		public const string UseHighQualityCurveName = "m_UseHighQualityCurve";
@@ -576,9 +764,8 @@ namespace uTinyRipper.Classes
 		public const string EventsName = "m_Events";
 
 		public AABB Bounds;
-		public ClipMuscleConstant MuscleClip;
 		public AnimationClipBindingConstant ClipBindingConstant;
-		
+
 		private Dictionary<int, PPtr<BaseAnimationTrack>> m_classIDToTrack;
 		private ChildTrack[] m_childTracks;
 		private QuaternionCurve[] m_rotationCurves;
@@ -588,6 +775,13 @@ namespace uTinyRipper.Classes
 		private Vector3Curve[] m_scaleCurves;
 		private FloatCurve[] m_floatCurves;
 		private PPtrCurve[] m_PPtrCurves;
+#if UNIVERSAL
+		private FloatCurve[] m_editorCurves;
+		private FloatCurve[] m_eulerEditorCurves;
+#endif
 		private AnimationEvent[] m_events;
+#if UNIVERSAL
+		private AnimationEvent[] m_runetimeEvents;
+#endif
 	}
 }
