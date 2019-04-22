@@ -29,7 +29,7 @@ namespace uTinyRipper.Classes
 			if (asset.ClassID == ClassIDType.MonoBehaviour)
 			{
 				MonoBehaviour monoBeh = (MonoBehaviour)asset;
-				if (!monoBeh.IsSceneObject())
+				if (!monoBeh.IsSceneObject)
 				{
 					return false;
 				}

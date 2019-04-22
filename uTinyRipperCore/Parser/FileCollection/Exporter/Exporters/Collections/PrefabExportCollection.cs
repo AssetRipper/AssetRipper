@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
-using uTinyRipper.Classes;
+﻿using uTinyRipper.Classes;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.AssetExporters
 {
-	public sealed class PrefabExportCollection : AssetsExportCollection, IComparer<Object>
+	public sealed class PrefabExportCollection : AssetsExportCollection
 	{
 		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, Object asset) :
-			this(assetExporter, asset.File, CreatePrefab(virtualFile, asset))
+			this(assetExporter, virtualFile, GetAssetRoot(asset))
+		{
+		}
+
+		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, GameObject root) :
+			this(assetExporter, root.File, Prefab.CreateVirtualInstance(virtualFile, root))
 		{
 		}
 
@@ -21,10 +25,20 @@ namespace uTinyRipper.AssetExporters
 			}
 		}
 
-		private static Prefab CreatePrefab(VirtualSerializedFile virtualFile, Object asset)
+		public static bool IsValidAsset(Object asset)
+		{
+			if (asset.ClassID == ClassIDType.GameObject)
+			{
+				return true;
+			}
+			Component component = (Component)asset;
+			return component.GameObject.FindAsset(component.File) != null;
+		}
+
+		private static GameObject GetAssetRoot(Object asset)
 		{
 			GameObject go;
-			if(asset.ClassID == ClassIDType.GameObject)
+			if (asset.ClassID == ClassIDType.GameObject)
 			{
 				go = (GameObject)asset;
 			}
@@ -34,55 +48,8 @@ namespace uTinyRipper.AssetExporters
 				go = component.GameObject.GetAsset(component.File);
 			}
 
-			GameObject root = go.GetRoot();
-			return Prefab.CreateVirtualInstance(virtualFile, root);
+			return go.GetRoot();
 		}
-
-		public int Compare(Object obj1, Object obj2)
-		{
-			if (obj1.ClassID == obj2.ClassID)
-			{
-				return 0;
-			}
-
-			if (IsCoreComponent(obj1))
-			{
-				if (IsCoreComponent(obj2))
-				{
-					return obj1.ClassID < obj2.ClassID ? -1 : 1;
-				}
-				else
-				{
-					return -1;
-				}
-			}
-			else
-			{
-				if (IsCoreComponent(obj2))
-				{
-					return 1;
-				}
-				else
-				{
-					return 0;
-				}
-			}
-		}
-		
-		private static bool IsCoreComponent(Object component)
-		{
-			switch (component.ClassID)
-			{
-				case ClassIDType.GameObject:
-				case ClassIDType.Transform:
-				case ClassIDType.RectTransform:
-					return true;
-
-				default:
-					return false;
-			}
-		}
-
 		public override ISerializedFile File { get; }
 		public override TransferInstructionFlags Flags => base.Flags | TransferInstructionFlags.SerializeForPrefabSystem;
 	}

@@ -39,8 +39,7 @@ namespace uTinyRipper.Classes
 
 		private static IEnumerable<EditorExtension> FetchAssets(GameObject root, bool isLog = false)
 		{
-			IReadOnlyList<EditorExtension> hierarchy = root.CollectHierarchy();
-			foreach (EditorExtension asset in hierarchy)
+			foreach (EditorExtension asset in root.FetchHierarchy())
 			{
 				yield return asset;
 			}

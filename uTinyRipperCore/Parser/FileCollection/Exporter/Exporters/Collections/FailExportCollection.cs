@@ -8,9 +8,9 @@ using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper.AssetExporters
 {
-	public sealed class SkipExportCollection : IExportCollection
+	public class FailExportCollection : IExportCollection
 	{
-		public SkipExportCollection(IAssetExporter assetExporter, Object asset)
+		public FailExportCollection(IAssetExporter assetExporter, Object asset)
 		{
 			if (assetExporter == null)
 			{
@@ -27,6 +27,7 @@ namespace uTinyRipper.AssetExporters
 
 		public bool Export(ProjectAssetContainer container, string dirPath)
 		{
+			Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to export asset {Name}");
 			return false;
 		}
 
@@ -68,7 +69,7 @@ namespace uTinyRipper.AssetExporters
 		{
 			get { yield return m_asset; }
 		}
-		public string Name => m_asset.GetType().Name;
+		public string Name => m_asset is NamedObject namedAsset ? namedAsset.ValidName : m_asset.GetType().Name;
 		public IAssetImporter MetaImporter => throw new NotSupportedException();
 
 		private readonly Object m_asset;

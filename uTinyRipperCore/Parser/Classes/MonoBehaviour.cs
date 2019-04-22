@@ -82,20 +82,6 @@ namespace uTinyRipper.Classes
 			return $"{Name}({nameof(MonoBehaviour)})";
 		}
 
-		/// <summary>
-		/// Whether this MonoBeh belongs to scene/prefab hierarchy or not
-		/// </summary>
-		public bool IsSceneObject()
-		{
-			// TODO: find out why GameObject may has value like PPtr(0, 894) but such game object doesn't exists
-			return GameObject.FindAsset(File) != null;
-		}
-
-		public bool IsScriptableObject()
-		{
-			return Name != string.Empty;
-		}
-
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
@@ -134,6 +120,13 @@ namespace uTinyRipper.Classes
 
 		public override string ExportName => Path.Combine(AssetsKeyWord, "ScriptableObject");
 		public override string ExportExtension => AssetExtension;
+
+		/// <summary>
+		/// Whether this MonoBeh belongs to scene/prefab hierarchy or not
+		/// </summary>
+		// TODO: find out why GameObject may has value like PPtr(0, 894) but such game object doesn't exists
+		public bool IsSceneObject => !GameObject.IsNull;
+		public bool IsScriptableObject => Name != string.Empty;
 
 #if UNIVERSAL
 		public HideFlags EditorHideFlags { get; private set; }

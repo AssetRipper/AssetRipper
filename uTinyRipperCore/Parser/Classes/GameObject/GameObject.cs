@@ -15,9 +15,9 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		private static void CollectHierarchy(GameObject root, List<EditorExtension> heirarchy)
+		private static IEnumerable<EditorExtension> FetchHierarchy(GameObject root)
 		{
-			heirarchy.Add(root);
+			yield return root;
 
 			Transform transform = null;
 			foreach (ComponentPair cpair in root.Components)
@@ -28,7 +28,7 @@ namespace uTinyRipper.Classes
 					continue;
 				}
 
-				heirarchy.Add(component);
+				yield return component;
 				if (component.ClassID.IsTransform())
 				{
 					transform = (Transform)component;
@@ -39,7 +39,10 @@ namespace uTinyRipper.Classes
 			{
 				Transform child = pchild.GetAsset(transform.File);
 				GameObject childGO = child.GameObject.GetAsset(root.File);
-				CollectHierarchy(childGO, heirarchy);
+				foreach (EditorExtension childElement in FetchHierarchy(childGO))
+				{
+					yield return childElement;
+				}
 			}
 		}
 
@@ -279,12 +282,20 @@ namespace uTinyRipper.Classes
 			}
 			return depth;
 		}
-		
-		public IReadOnlyList<EditorExtension> CollectHierarchy()
+
+		public IEnumerable<EditorExtension> FetchHierarchy()
 		{
-			List<EditorExtension> heirarchy = new List<EditorExtension>();
-			CollectHierarchy(this, heirarchy);
-			return heirarchy;
+			foreach (EditorExtension element in FetchHierarchy(this))
+			{
+				yield return element;
+			}
+		}
+
+		public List<EditorExtension> CollectHierarchy()
+		{
+			List<EditorExtension> hierarchy = new List<EditorExtension>();
+			hierarchy.AddRange(FetchHierarchy(this));
+			return hierarchy;
 		}
 
 		public IReadOnlyDictionary<uint, string> BuildTOS()

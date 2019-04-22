@@ -57,7 +57,7 @@ namespace uTinyRipper.AssetExporters
 			Texture2D texture = asset.RD.Texture.FindAsset(asset.File);
 			if (texture == null)
 			{
-				return new SkipExportCollection(assetExporter, asset);
+				return new FailExportCollection(assetExporter, asset);
 			}
 			return new TextureExportCollection(assetExporter, texture, true);
 		}

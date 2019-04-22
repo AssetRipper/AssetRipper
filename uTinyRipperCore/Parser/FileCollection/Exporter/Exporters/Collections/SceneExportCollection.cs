@@ -32,7 +32,7 @@ namespace uTinyRipper.AssetExporters
 			{
 				if (OcclusionCullingSettings.IsSceneCompatible(asset))
 				{
-					AddComponent(file, asset);
+					m_cexportIDs.Add(asset, asset.PathID);
 				}
 			}
 			m_cexportIDs = m_cexportIDs.OrderBy(t => t.Key, this).ToDictionary(t => t.Key, t => t.Value);
@@ -213,11 +213,6 @@ namespace uTinyRipper.AssetExporters
 		{
 			NativeFormatImporter importer = new NativeFormatImporter(asset);
 			ExportAsset(container, importer, asset, path, asset.Name);
-		}
-
-		private void AddComponent(ISerializedFile file, Object comp)
-		{
-			m_cexportIDs.Add(comp, comp.PathID);
 		}
 
 		private bool IsComponent(Object asset)

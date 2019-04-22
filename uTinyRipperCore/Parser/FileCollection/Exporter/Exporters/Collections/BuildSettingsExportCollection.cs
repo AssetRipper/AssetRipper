@@ -114,12 +114,26 @@ namespace uTinyRipper.AssetExporters
 
 		public override bool IsContains(Object asset)
 		{
-			if (asset == EditorBuildSettings || asset == EditorSettings || asset == NavMeshProjectSettings || asset == NetworkManager||
-				asset == Physics2DSettings || asset == UnityConnectSettings || asset == QualitySettings)
+			switch (asset.ClassID)
 			{
-				return true;
+				case ClassIDType.EditorBuildSettings:
+					return asset == EditorBuildSettings;
+				case ClassIDType.EditorSettings:
+					return asset == EditorSettings;
+				case ClassIDType.NavMeshProjectSettings:
+					return asset == NavMeshProjectSettings;
+				case ClassIDType.NetworkManager:
+					return asset == Physics2DSettings;
+				case ClassIDType.Physics2DSettings:
+					return asset == EditorBuildSettings;
+				case ClassIDType.UnityConnectSettings:
+					return asset == UnityConnectSettings;
+				case ClassIDType.QualitySettings:
+					return asset == QualitySettings;
+
+				default:
+					return base.IsContains(asset);
 			}
-			return base.IsContains(asset);
 		}
 
 		public override long GetExportID(Object asset)

@@ -70,9 +70,13 @@ namespace uTinyRipper.AssetExporters
 				{
 					return new SceneExportCollection(this, virtualFile, asset.File);
 				}
-				else
+				else if (PrefabExportCollection.IsValidAsset(asset))
 				{
 					return new PrefabExportCollection(this, virtualFile, asset);
+				}
+				else
+				{
+					return new FailExportCollection(this, asset);
 				}
 			}
 			else
@@ -101,7 +105,7 @@ namespace uTinyRipper.AssetExporters
 					case ClassIDType.MonoBehaviour:
 						{
 							MonoBehaviour monoBehaviour = (MonoBehaviour)asset;
-							if (monoBehaviour.IsScriptableObject())
+							if (monoBehaviour.IsScriptableObject)
 							{
 								return new AssetExportCollection(this, asset);
 							}
