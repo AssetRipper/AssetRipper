@@ -183,17 +183,25 @@ namespace uTinyRipper.Assembly.Mono
 		}
 
 #warning TODO: max depth level 7
-		public ScriptType GetScriptType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		public ScriptType GetSerializableType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
-			TypeReference elementType = MonoType.GetElementType(type, arguments);
-			string uniqueName = MonoType.GetUniqueName(elementType);
-			if (AssemblyManager.TryGetScriptType(uniqueName, out ScriptType scriptType))
+			if (type.IsGenericParameter)
 			{
-				return scriptType;
+				throw new ArgumentException(nameof(type));
+			}
+			if (MonoField.IsSerializableArray(type))
+			{
+				throw new ArgumentException(nameof(type));
+			}
+
+			string uniqueName = MonoType.GetUniqueName(type);
+			if (AssemblyManager.TryGetSerializableType(uniqueName, out ScriptType serializableType))
+			{
+				return serializableType;
 			}
 			else
 			{
-				return new MonoType(this, elementType, arguments);
+				return new MonoType(this, type, arguments);
 			}
 		}
 

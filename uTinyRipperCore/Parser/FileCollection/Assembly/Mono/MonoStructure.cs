@@ -27,7 +27,7 @@ namespace uTinyRipper.Assembly.Mono
 				return null;
 			}
 
-			if(type.BaseType.IsGenericInstance)
+			if (type.BaseType.IsGenericInstance)
 			{
 				Dictionary<GenericParameter, TypeReference> templateArguments = new Dictionary<GenericParameter, TypeReference>();
 				GenericInstanceType instance = (GenericInstanceType)type.BaseType;
@@ -36,11 +36,11 @@ namespace uTinyRipper.Assembly.Mono
 				{
 					GenericParameter parameter = template.GenericParameters[i];
 					TypeReference argument = instance.GenericArguments[i];
-					if(argument.IsGenericParameter)
+					if (argument.ContainsGenericParameter)
 					{
-						argument = arguments[(GenericParameter)argument];
+						argument = MonoUtils.ResolveGenericParameter(argument, arguments);
 					}
-					templateArguments.Add(parameter, argument.Resolve());
+					templateArguments.Add(parameter, argument);
 				}
 
 				return new MonoStructure(manager, template, templateArguments);

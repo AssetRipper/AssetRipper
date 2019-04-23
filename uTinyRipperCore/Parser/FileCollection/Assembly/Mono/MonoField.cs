@@ -6,7 +6,8 @@ namespace uTinyRipper.Assembly.Mono
 	public sealed class MonoField : ScriptField
 	{
 		internal MonoField(MonoManager manager, FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
-			base(manager.GetScriptType(field.FieldType, arguments), IsArrayType(field.FieldType), field.Name)
+			base(manager.GetSerializableType(GetSerializedElementType(field.FieldType, arguments), arguments),
+				IsSerializableArray(field.FieldType, arguments), field.Name)
 		{
 		}
 		
@@ -209,6 +210,11 @@ namespace uTinyRipper.Assembly.Mono
 			return false;
 		}
 
+		public static bool IsSerializableArray(TypeReference type)
+		{
+			return type.IsArray || MonoType.IsList(type);
+		}
+
 		private static bool HasSerializeFieldAttribute(FieldDefinition field)
 		{
 			foreach (CustomAttribute attribute in field.CustomAttributes)
@@ -222,9 +228,27 @@ namespace uTinyRipper.Assembly.Mono
 			return false;
 		}
 
-		private static bool IsArrayType(TypeReference type)
+		private static TypeReference GetSerializedElementType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
-			return type.IsArray || MonoType.IsList(type);
+			TypeReference resolvedType = type.ContainsGenericParameter ? MonoUtils.ResolveGenericParameter(type, arguments) : type;
+			if (resolvedType.IsArray)
+			{
+				ArrayType array = (ArrayType)resolvedType;
+				return array.ElementType;
+			}
+			if (MonoType.IsList(resolvedType))
+			{
+				GenericInstanceType generic = (GenericInstanceType)resolvedType;
+				return generic.GenericArguments[0];
+			}
+
+			return resolvedType;
+		}
+
+		private static bool IsSerializableArray(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		{
+			TypeReference resolvedType = type.ContainsGenericParameter ? MonoUtils.ResolveGenericParameter(type, arguments) : type;
+			return IsSerializableArray(resolvedType);
 		}
 
 		public override IScriptField CreateCopy()

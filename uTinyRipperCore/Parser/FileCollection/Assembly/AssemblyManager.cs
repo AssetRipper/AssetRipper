@@ -142,14 +142,14 @@ namespace uTinyRipper.Assembly
 			m_requestAssemblyCallback.Invoke(assemblyName);
 		}
 
-		internal void AddScriptType(string uniqueName, ScriptType scriptType)
+		internal void AddSerializableType(string uniqueName, ScriptType scriptType)
 		{
-			m_scriptTypes.Add(uniqueName, scriptType);
+			m_serializableTypes.Add(uniqueName, scriptType);
 		}
 
-		internal bool TryGetScriptType(string uniqueName, out ScriptType scriptType)
+		internal bool TryGetSerializableType(string uniqueName, out ScriptType scriptType)
 		{
-			return m_scriptTypes.TryGetValue(uniqueName, out scriptType);
+			return m_serializableTypes.TryGetValue(uniqueName, out scriptType);
 		}
 
 		public void Dispose()
@@ -195,7 +195,7 @@ namespace uTinyRipper.Assembly
 		private event Action<string> m_requestAssemblyCallback;
 
 		private IAssemblyManager m_manager;
-		private Dictionary<string, ScriptType> m_scriptTypes = new Dictionary<string, ScriptType>();
+		private Dictionary<string, ScriptType> m_serializableTypes = new Dictionary<string, ScriptType>();
 
 	}
 }

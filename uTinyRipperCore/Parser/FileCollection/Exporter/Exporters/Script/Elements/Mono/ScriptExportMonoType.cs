@@ -292,7 +292,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 				{
 					// if field has unknown type then consider it as serializable
 				}
-				else if (IsContainsGenericParameter(field.FieldType))
+				else if (field.FieldType.ContainsGenericParameter)
 				{
 					// if field type has generic parameter then consider it as serializable
 				}

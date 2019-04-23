@@ -9,7 +9,7 @@ namespace uTinyRipper.Assembly.Mono
 			base(ToPrimitiveType(type))
 		{
 			string uniqueName = GetUniqueName(type);
-			manager.AssemblyManager.AddScriptType(uniqueName, this);
+			manager.AssemblyManager.AddSerializableType(uniqueName, this);
 			ComplexType = CreateComplexType(manager, type, arguments);
 		}
 
@@ -140,37 +140,6 @@ namespace uTinyRipper.Assembly.Mono
 				}
 			}
 			return false;
-		}
-
-		internal static TypeReference GetElementType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
-		{
-			if (type.IsGenericParameter)
-			{
-				GenericParameter parameter = (GenericParameter)type;
-				type = arguments[parameter];
-			}
-			if (type.IsGenericInstance)
-			{
-				GenericInstanceType genericInstance = (GenericInstanceType)type;
-				if (MonoUtils.HasGenericParameters(genericInstance))
-				{
-					type = MonoUtils.ReplaceGenericParameters(genericInstance, arguments);
-				}
-			}
-
-			if (type.IsArray)
-			{
-				type = type.GetElementType();
-				return GetElementType(type, arguments);
-			}
-			if (IsList(type))
-			{
-				GenericInstanceType generic = (GenericInstanceType)type;
-				type = generic.GenericArguments[0];
-				return GetElementType(type, arguments);
-			}
-
-			return type;
 		}
 
 		private static PrimitiveType ToPrimitiveType(TypeReference type)

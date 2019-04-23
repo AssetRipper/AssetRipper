@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.AnimationClips;
 using uTinyRipper.Classes.ParticleSystems;
@@ -7,7 +9,6 @@ using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
-using uTinyRipper.AssetExporters;
 
 namespace uTinyRipper.Assembly
 {
@@ -22,7 +23,7 @@ namespace uTinyRipper.Assembly
 			}
 
 			Base = @base;
-			m_fields.AddRange(fields);
+			m_fields = fields.ToArray();
 		}
 
 		protected ScriptStructure(string @namespace, string name)
@@ -175,6 +176,6 @@ namespace uTinyRipper.Assembly
 		public string Namespace { get; }
 		public string Name { get; }
 
-		private readonly List<IScriptField> m_fields = new List<IScriptField>();
+		private readonly IScriptField[] m_fields;
 	}
 }
