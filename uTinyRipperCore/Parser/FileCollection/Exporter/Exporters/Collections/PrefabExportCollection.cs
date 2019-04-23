@@ -1,4 +1,6 @@
-﻿using uTinyRipper.Classes;
+﻿using System.Collections.Generic;
+using System.Linq;
+using uTinyRipper.Classes;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.AssetExporters
@@ -18,7 +20,6 @@ namespace uTinyRipper.AssetExporters
 		private PrefabExportCollection(IAssetExporter assetExporter, ISerializedFile file, Prefab prefab) :
 			base(assetExporter, prefab)
 		{
-			File = file;
 			foreach (EditorExtension asset in prefab.FetchObjects(file))
 			{
 				AddAsset(asset);
@@ -50,7 +51,26 @@ namespace uTinyRipper.AssetExporters
 
 			return go.GetRoot();
 		}
-		public override ISerializedFile File { get; }
+		public override ISerializedFile File => m_file;
 		public override TransferInstructionFlags Flags => base.Flags | TransferInstructionFlags.SerializeForPrefabSystem;
+
+		// TODO: HACK: prefab's assets may be stored in different files
+		// Need to find a way to set a file for current asset nicely
+		public override IEnumerable<Object> Assets
+		{
+			get
+			{
+				m_file = m_exportIDs.Keys.First().File;
+				yield return Asset;
+
+				foreach (Object asset in m_exportIDs.Keys)
+				{
+					m_file = asset.File;
+					yield return asset;
+				}
+			}
+		}
+
+		private ISerializedFile m_file;
 	}
 }
