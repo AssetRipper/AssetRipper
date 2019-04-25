@@ -201,9 +201,16 @@ namespace uTinyRipper.Classes.Shaders
 							throw new NotSupportedException($"Unsupported console platform {platform}");
 					}
 
+				// TODO: unknown
 				case ShaderGpuProgramType.PSVertex:
 				case ShaderGpuProgramType.PSPixel:
-					return GPUPlatform.ps4;
+					{
+						if (platform == Platform.Switch)
+						{
+							return GPUPlatform.@switch;
+						}
+						return GPUPlatform.ps4;
+					}
 
 				default:
 					throw new NotSupportedException($"Unsupported gpu program type {_this}");
