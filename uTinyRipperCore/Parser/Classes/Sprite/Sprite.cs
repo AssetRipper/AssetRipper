@@ -94,13 +94,8 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
-		public void GetExportPosition(out Rectf rect, out Vector2f pivot, out Vector4f border)
+		public void GetExportPosition(SpriteAtlas atlas, out Rectf rect, out Vector2f pivot, out Vector4f border)
 		{
-			SpriteAtlas atlas = null;
-			if (IsReadRendererData(File.Version))
-			{
-				atlas = SpriteAtlas.FindAsset(File);
-			}
 			Vector2f rectOffset;
 			if (atlas == null)
 			{
@@ -131,10 +126,9 @@ namespace uTinyRipper.Classes
 			border = new Vector4f(borderL, borderB, borderR, borderT);
 		}
 
-		public IReadOnlyList<IReadOnlyList<Vector2f>> GenerateOutline(Rectf rect, Vector2f pivot)
+		public IReadOnlyList<IReadOnlyList<Vector2f>> GenerateOutline(SpriteAtlas atlas, Rectf rect, Vector2f pivot)
 		{
 			Vector2f[][] outlines = RD.GenerateOutline(File.Version);
-			Vector2f center = RD.TextureRect.Center;
 			float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
 			float pivotShiftY = rect.Height * pivot.Y - rect.Height * 0.5f;
 			Vector2f pivotShift = new Vector2f(pivotShiftX, pivotShiftY);
@@ -146,10 +140,10 @@ namespace uTinyRipper.Classes
 					outline[i] = point + pivotShift;
 				}
 			}
-			return FixRotation(outlines);
+			return FixRotation(atlas, outlines);
 		}
 
-		public IReadOnlyList<IReadOnlyList<Vector2f>> GeneratePhysicsShape(Rectf rect, Vector2f pivot)
+		public IReadOnlyList<IReadOnlyList<Vector2f>> GeneratePhysicsShape(SpriteAtlas atlas, Rectf rect, Vector2f pivot)
 		{
 			if (IsReadPhysicsShape(File.Version))
 			{
@@ -166,7 +160,7 @@ namespace uTinyRipper.Classes
 						shape[i][j] = point + pivotShift;
 					}
 				}
-				return FixRotation(shape);
+				return FixRotation(atlas, shape);
 			}
 			else
 			{
@@ -261,19 +255,15 @@ namespace uTinyRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		private IReadOnlyList<IReadOnlyList<Vector2f>> FixRotation(Vector2f[][] outlines)
+		private IReadOnlyList<IReadOnlyList<Vector2f>> FixRotation(SpriteAtlas atlas, Vector2f[][] outlines)
 		{
 			bool isPacked = RD.IsPacked;
 			SpritePackingRotation rotation = RD.PackingRotation;
-			if (IsReadRendererData(File.Version))
+			if (atlas != null)
 			{
-				SpriteAtlas atlas = SpriteAtlas.FindAsset(File);
-				if (atlas != null)
-				{
-					SpriteAtlasData atlasData = atlas.RenderDataMap[RenderDataKey];
-					isPacked = atlasData.IsPacked;
-					rotation = atlasData.PackingRotation;
-				}
+				SpriteAtlasData atlasData = atlas.RenderDataMap[RenderDataKey];
+				isPacked = atlasData.IsPacked;
+				rotation = atlasData.PackingRotation;
 			}
 
 			if (isPacked)

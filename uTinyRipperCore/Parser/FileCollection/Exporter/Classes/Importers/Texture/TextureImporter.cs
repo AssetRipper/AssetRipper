@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Sprites;
 using uTinyRipper.Classes.Textures;
@@ -31,7 +32,7 @@ namespace uTinyRipper.AssetExporters.Classes
 			if (m_sprites.Count > 0)
 			{
 				fileNode = new YAMLMappingNode();
-				foreach (Sprite sprite in m_sprites)
+				foreach (Sprite sprite in m_sprites.Keys)
 				{
 					long exportID = container.GetExportID(sprite);
 					fileNode.Add(exportID, sprite.Name);
@@ -43,11 +44,12 @@ namespace uTinyRipper.AssetExporters.Classes
 		protected override void ExportYAMLInner(IExportContainer container, YAMLMappingNode node)
 		{
 			base.ExportYAMLInner(container, node);
-			
+
+			int index = 0;
 			SpriteMetaData[] sprites = new SpriteMetaData[m_sprites.Count];
-			for (int i = 0; i < m_sprites.Count; i++)
+			foreach (KeyValuePair<Sprite, SpriteAtlas> kvp in m_sprites)
 			{
-				sprites[i] = new SpriteMetaData(m_sprites[i]);
+				sprites[index++] = new SpriteMetaData(kvp.Key, kvp.Value);
 			}
 
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
@@ -94,7 +96,7 @@ namespace uTinyRipper.AssetExporters.Classes
 			uint extrude;
 			SpriteMeshType meshType;
 			SpriteAlignment alignment;
-			Vector2f pivot = new Vector2f(0.5f, 0.5f);
+			Vector2f pivot;
 			Vector4f border;
 			float pixelPerUnit;
 			switch (m_sprites.Count)
@@ -113,7 +115,7 @@ namespace uTinyRipper.AssetExporters.Classes
 
 				case 1:
 					{
-						Sprite sprite = m_sprites[0];
+						Sprite sprite = m_sprites.Keys.First();
 						if (sprite.Rect == sprite.RD.TextureRect)
 						{
 							spriteMode = sprite.Name == m_texture.Name ? SpriteImportMode.Single : SpriteImportMode.Multiple;
@@ -133,7 +135,7 @@ namespace uTinyRipper.AssetExporters.Classes
 
 				default:
 					{
-						Sprite sprite = m_sprites[0];
+						Sprite sprite = m_sprites.Keys.First();
 						spriteMode = SpriteImportMode.Multiple;
 						extrude = sprite.Extrude;
 						meshType = sprite.RD.MeshType;
@@ -201,12 +203,12 @@ namespace uTinyRipper.AssetExporters.Classes
 
 		public override string Name => nameof(TextureImporter);
 		
-		public IReadOnlyList<Sprite> Sprites
+		public IReadOnlyDictionary<Sprite, SpriteAtlas> Sprites
 		{
 			set => m_sprites = value ?? throw new ArgumentNullException();
 		}
 
 		private Texture2D m_texture;
-		private IReadOnlyList<Sprite> m_sprites;
+		private IReadOnlyDictionary<Sprite, SpriteAtlas> m_sprites;
 	}
 }

@@ -6,17 +6,17 @@ namespace uTinyRipper.AssetExporters.Classes
 {
 	public class SpriteMetaData : IYAMLExportable
 	{
-		public SpriteMetaData(Sprite sprite)
+		public SpriteMetaData(Sprite sprite, SpriteAtlas atlas)
 		{
 			Name = sprite.Name;
 			Alignment = SpriteAlignment.Custom;
 
-			sprite.GetExportPosition(out Rectf rect, out Vector2f pivot, out Vector4f border);
+			sprite.GetExportPosition(atlas, out Rectf rect, out Vector2f pivot, out Vector4f border);
 			Rect = rect;
 			Pivot = pivot;
 			Border = border;
-			Outline = sprite.GenerateOutline(Rect, Pivot);
-			PhysicsShape = sprite.GeneratePhysicsShape(Rect, Pivot);
+			Outline = sprite.GenerateOutline(atlas, Rect, Pivot);
+			PhysicsShape = sprite.GeneratePhysicsShape(atlas, Rect, Pivot);
 			TessellationDetail = 0;
 		}
 

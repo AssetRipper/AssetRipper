@@ -7,6 +7,7 @@ namespace uTinyRipper.AssetExporters
 {
 	public class TextureExportCollection : AssetsExportCollection
 	{
+#warning TODO: optimize (now it is suuuuuuuuper slow)
 		public TextureExportCollection(IAssetExporter assetExporter, Texture2D texture, bool convert):
 			base(assetExporter, texture, CreateImporter(texture, convert))
 		{
@@ -14,7 +15,7 @@ namespace uTinyRipper.AssetExporters
 			if (convert)
 			{
 				TextureImporter textureImporter = (TextureImporter)MetaImporter;
-				List<Sprite> sprites = new List<Sprite>();
+				Dictionary<Sprite, SpriteAtlas> sprites = new Dictionary<Sprite, SpriteAtlas>();
 				foreach (Object asset in texture.File.Collection.FetchAssets())
 				{
 					switch (asset.ClassID)
@@ -24,7 +25,8 @@ namespace uTinyRipper.AssetExporters
 								Sprite sprite = (Sprite)asset;
 								if (sprite.RD.Texture.IsAsset(sprite.File, texture))
 								{
-									sprites.Add(sprite);
+									SpriteAtlas atlas = Sprite.IsReadRendererData(sprite.File.Version) ? sprite.SpriteAtlas.FindAsset(sprite.File) : null;
+									sprites.Add(sprite, atlas);
 									AddAsset(sprite);
 								}
 							}
@@ -32,17 +34,19 @@ namespace uTinyRipper.AssetExporters
 
 						case ClassIDType.SpriteAtlas:
 							{
-								int index = 0;
 								SpriteAtlas atlas = (SpriteAtlas)asset;
-								foreach (SpriteAtlasData atlasData in atlas.RenderDataMap.Values)
+								foreach (PPtr<Sprite> spritePtr in atlas.PackedSprites)
 								{
-									if (atlasData.Texture.IsAsset(atlas.File, texture))
+									Sprite sprite = spritePtr.FindAsset(atlas.File);
+									if (sprite != null)
 									{
-										Sprite sprite = atlas.PackedSprites[index].GetAsset(atlas.File);
-										sprites.Add(sprite);
-										AddAsset(sprite);
+										SpriteAtlasData atlasData = atlas.RenderDataMap[sprite.RenderDataKey];
+										if (atlasData.Texture.IsAsset(atlas.File, texture))
+										{
+											sprites.Add(sprite, atlas);
+											AddAsset(sprite);
+										}
 									}
-									index++;
 								}
 							}
 							break;
