@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace uTinyRipper
 {
@@ -17,7 +14,7 @@ namespace uTinyRipper
 		{
 			return Directory.CreateDirectory(ToLongPath(path));
 		}
-		
+
 		public static void CreateVirtualDirectory(string path)
 		{
 #if !VIRTUAL
@@ -73,55 +70,6 @@ namespace uTinyRipper
 				return $"{LongPathPrefix}{fullPath}";
 			}
 			return path;
-		}
-
-		public static string GetUniqueName(string dirPath, string fileName)
-		{
-			dirPath = ToLongPath(dirPath);
-			if (!Directory.Exists(dirPath))
-			{
-				return fileName;
-			}
-
-			string filePath = Path.Combine(dirPath, fileName);
-			if (!File.Exists(filePath))
-			{
-				return fileName;
-			}
-
-			string name = Path.GetFileNameWithoutExtension(fileName);
-			string ext = Path.GetExtension(fileName);
-			if (name.Length > 245)
-			{
-				name = name.Substring(0, 245);
-			}
-
-			string escapedName = Regex.Escape(name);
-			List<string> files = new List<string>();
-			DirectoryInfo dirInfo = new DirectoryInfo(ToLongPath(dirPath));
-			Regex regex = new Regex($@"(?i)^{escapedName}(_[\d]+)?\.[^\.]+$");
-			foreach (FileInfo fileInfo in dirInfo.EnumerateFiles($"{name}_*{ext}"))
-			{
-				if (regex.IsMatch(fileInfo.Name))
-				{
-					files.Add(fileInfo.Name.ToLower());
-				}
-			}
-			if (files.Count == 0)
-			{
-				return $"{name}_0{ext}";
-			}
-
-			string lowName = name.ToLower();
-			for (int i = 1; i < int.MaxValue; i++)
-			{
-				string newName = $"{lowName}_{i}.";
-				if (files.All(t => !t.StartsWith(newName, StringComparison.Ordinal)))
-				{
-					return $"{name}_{i}{ext}";
-				}
-			}
-			throw new Exception($"Can't generate unique name for file {fileName} in directory {dirPath}");
 		}
 
 		public const string LongPathPrefix = @"\\?\";
