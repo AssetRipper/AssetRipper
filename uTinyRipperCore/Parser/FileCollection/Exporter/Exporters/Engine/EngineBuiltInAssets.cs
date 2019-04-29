@@ -210,9 +210,9 @@ namespace uTinyRipper.AssetExporters
 			m_shaders.Add("Hidden/Internal-GUITexture", new EngineBuiltInAsset(9002, true));
 			m_shaders.Add("Hidden/Internal-GUITextureBlit", new EngineBuiltInAsset(9003, true));
 			m_shaders.Add("Hidden/Internal-GUIRoundedRect", new EngineBuiltInAsset(9004, true));
-			m_shaders.Add("Hidden/TerrainEngine/Details/Vertexlit", new EngineBuiltInAsset(10500, true));
-			m_shaders.Add("Hidden/TerrainEngine/Details/WavingDoublePass", new EngineBuiltInAsset(10501, true));
-			m_shaders.Add("Hidden/TerrainEngine/Details/BillboardWavingDoublePass", new EngineBuiltInAsset(10502, true));
+			m_shaders.Add(TerrainVertexLit, new EngineBuiltInAsset(10500, true));
+			m_shaders.Add(TerrainWavingDoublePass, new EngineBuiltInAsset(10501, true));
+			m_shaders.Add(TerrainBillboardWavingDoublePass, new EngineBuiltInAsset(10502, true));
 			m_shaders.Add("Hidden/TerrainEngine/Splatmap/Diffuse-AddPass", new EngineBuiltInAsset(10503, true));
 			m_shaders.Add("Nature/Terrain/Diffuse", new EngineBuiltInAsset(10505, true));
 			m_shaders.Add("Hidden/TerrainEngine/BillboardTree", new EngineBuiltInAsset(10507, true));
@@ -445,7 +445,10 @@ namespace uTinyRipper.AssetExporters
 		public static IReadOnlyDictionary<string, EngineBuiltInAsset> LightmapParams => m_lightmapParams;
 
 		public const string FontMaterialName = "Font Material";
-		
+		public const string TerrainVertexLit = "Hidden/TerrainEngine/Details/Vertexlit";
+		public const string TerrainWavingDoublePass = "Hidden/TerrainEngine/Details/WavingDoublePass";
+		public const string TerrainBillboardWavingDoublePass = "Hidden/TerrainEngine/Details/BillboardWavingDoublePass";
+
 		public static readonly EngineGUID EGUID = new EngineGUID(0x00000000, 0xE0000000, 0x00000000, 0x00000000);
 		public static readonly EngineGUID FGUID = new EngineGUID(0x00000000, 0xF0000000, 0x00000000, 0x00000000);
 

@@ -16,6 +16,13 @@ namespace uTinyRipper.Classes.Sprites
 			return version.IsGreaterEqual(5, 2);
 		}
 		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool IsReadSecondaryTextures(Version version)
+		{
+			return version.IsGreaterEqual(2019);
+		}		
+		/// <summary>
 		/// Less than 5.6.0
 		/// </summary>
 		public static bool IsReadVertices(Version version)
@@ -117,6 +124,10 @@ namespace uTinyRipper.Classes.Sprites
 			{
 				AlphaTexture.Read(reader);
 			}
+			if (IsReadSecondaryTextures(reader.Version))
+			{
+				m_secondaryTextures = reader.ReadAssetArray<SecondarySpriteTexture>();
+			}
 
 			if (IsReadVertices(reader.Version))
 			{
@@ -162,6 +173,17 @@ namespace uTinyRipper.Classes.Sprites
 		{
 			yield return Texture.FetchDependency(file, isLog, () => nameof(SpriteRenderData), "Texture");
 			yield return AlphaTexture.FetchDependency(file, isLog, () => nameof(SpriteRenderData), "AlphaTexture");
+
+			if (IsReadSecondaryTextures(file.Version))
+			{
+				foreach (SecondarySpriteTexture secondaryTexture in SecondaryTextures)
+				{
+					foreach (Object asset in secondaryTexture.FetchDependencies(file, isLog))
+					{
+						yield return asset;
+					}
+				}
+			}
 		}
 
 		private void VerticesToOutline(List<Vector2f[]> outlines, Vector3f[] vertices, SubMesh submesh)
@@ -192,6 +214,7 @@ namespace uTinyRipper.Classes.Sprites
 		public SpritePackingRotation PackingRotation => (SpritePackingRotation)((SettingsRaw >> 2) & 0xF);
 		public SpriteMeshType MeshType => (SpriteMeshType)((SettingsRaw >> 6) & 0x1);
 
+		public IReadOnlyList<SecondarySpriteTexture> SecondaryTextures => m_secondaryTextures;
 		public IReadOnlyList<SpriteVertex> Vertices => m_vertices;
 		public IReadOnlyList<ushort> Indices => m_indices;
 		public IReadOnlyList<SubMesh> SubMeshes => m_subMeshes;
@@ -209,6 +232,7 @@ namespace uTinyRipper.Classes.Sprites
 		public Vector2f AtlasRectOffset;
 		public Vector4f UVTransform;
 
+		private SecondarySpriteTexture[] m_secondaryTextures;
 		private SpriteVertex[] m_vertices;
 		private ushort[] m_indices;
 		private SubMesh[] m_subMeshes;

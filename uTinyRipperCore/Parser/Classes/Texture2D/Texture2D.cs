@@ -132,16 +132,7 @@ namespace uTinyRipper.Classes
 		{
 			if (IsReadStreamData(File.Version))
 			{
-				string resourcePath = StreamData.Path;
-				if (resourcePath == string.Empty)
-				{
-					return true;
-				}
-
-				using (ResourcesFile res = File.Collection.FindResourcesFile(File, resourcePath))
-				{
-					return res != null;
-				}
+				StreamData.CheckIntegrity(File);
 			}
 			return true;
 		}
@@ -151,25 +142,9 @@ namespace uTinyRipper.Classes
 			byte[] data = m_imageData;
 			if (IsReadStreamData(File.Version))
 			{
-				if (StreamData.Path != string.Empty)
+				if (StreamData.IsValid)
 				{
-					if (m_imageData.Length != 0)
-					{
-						throw new Exception($"Texture '{ValidName}' contains both data and resource path");
-					}
-
-					using (ResourcesFile res = File.Collection.FindResourcesFile(File, StreamData.Path))
-					{
-						if (res != null)
-						{
-							data = new byte[StreamData.Size];
-							using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
-							{
-								resStream.Position = StreamData.Offset;
-								resStream.ReadBuffer(data, 0, data.Length);
-							}
-						}
-					}
+					data = StreamData.GetContent(File) ?? m_imageData;
 				}
 			}
 
@@ -328,11 +303,9 @@ namespace uTinyRipper.Classes
 			{
 				return GetImageData();
 			}
-			else
-			{
-				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{StreamData.Path}' wasn't found");
-				return new byte[0];
-			}
+
+			Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{StreamData.Path}' wasn't found");
+			return new byte[0];
 		}
 
 		public bool IsValidData

@@ -42,6 +42,13 @@ namespace uTinyRipper.Classes.Shaders
 			return version.IsLess(5, 5);
 		}
 		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool IsReadForceSyncCompilation(Version version)
+		{
+			return version.IsLess(2019);
+		}
+		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
 		public static bool IsReadLanguage(Version version)
@@ -54,6 +61,13 @@ namespace uTinyRipper.Classes.Shaders
 		public static bool IsReadKeywordCombinations(Version version)
 		{
 			return version.IsLess(5);
+		}
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool IsReadVariantsUserLocal(Version version)
+		{
+			return version.IsGreaterEqual(2019);
 		}
 		/// <summary>
 		/// 5.0.0 to 5.6.0 exclusive
@@ -87,6 +101,11 @@ namespace uTinyRipper.Classes.Shaders
 
 		private static int GetSerializedVersion(Version version)
 		{
+			// VariantsUsers has been renamed to VariantsUserGlobals
+			if (version.IsGreaterEqual(3))
+			{
+				return 3;
+			}
 			// IsGLSL has been converted to Language
 			if (version.IsGreaterEqual(5, 5))
 			{
@@ -127,6 +146,10 @@ namespace uTinyRipper.Classes.Shaders
 				Language = IsGLSL ? 1 : 0;
 			}
 			FromOther = reader.ReadBoolean();
+			if (IsReadForceSyncCompilation(reader.Version))
+			{
+				ForceSyncCompilation = reader.ReadBoolean();
+			}
 			reader.AlignStream(AlignType.Align4);
 
 			if (IsReadLanguage(reader.Version))
@@ -145,12 +168,22 @@ namespace uTinyRipper.Classes.Shaders
 			}
 			else
 			{
-				m_variantsUser0 = reader.ReadStringArrayArray();
-				m_variantsUser1 = reader.ReadStringArrayArray();
-				m_variantsUser2 = reader.ReadStringArrayArray();
-				m_variantsUser3 = reader.ReadStringArrayArray();
-				m_variantsUser4 = reader.ReadStringArrayArray();
-				m_variantsUser5 = reader.ReadStringArrayArray();
+				m_variantsUserGlobal0 = reader.ReadStringArrayArray();
+				m_variantsUserGlobal1 = reader.ReadStringArrayArray();
+				m_variantsUserGlobal2 = reader.ReadStringArrayArray();
+				m_variantsUserGlobal3 = reader.ReadStringArrayArray();
+				m_variantsUserGlobal4 = reader.ReadStringArrayArray();
+				m_variantsUserGlobal5 = reader.ReadStringArrayArray();
+
+				if (IsReadVariantsUserLocal(reader.Version))
+				{
+					m_variantsUserLocal0 = reader.ReadStringArrayArray();
+					m_variantsUserLocal1 = reader.ReadStringArrayArray();
+					m_variantsUserLocal2 = reader.ReadStringArrayArray();
+					m_variantsUserLocal3 = reader.ReadStringArrayArray();
+					m_variantsUserLocal4 = reader.ReadStringArrayArray();
+					m_variantsUserLocal5 = reader.ReadStringArrayArray();
+				}
 
 				m_variantsBuiltin0 = reader.ReadStringArrayArray();
 				m_variantsBuiltin1 = reader.ReadStringArrayArray();
@@ -203,6 +236,10 @@ namespace uTinyRipper.Classes.Shaders
 			node.Add(IncludesHashName, IncludesHash.ExportYAML(container));
 			node.Add(CodeHashName, CodeHash.ExportYAML(container));
 			node.Add(FromOtherName, FromOther);
+			if (IsReadForceSyncCompilation(container.ExportVersion))
+			{
+				node.Add(ForceSyncCompilationName, ForceSyncCompilation);
+			}
 			node.Add(LanguageName, Language);
 			node.Add(VariantsUser0Name, GetVariantsUser0(container.Version).ExportYAML());
 			node.Add(VariantsUser1Name, GetVariantsUser1(container.Version).ExportYAML());
@@ -225,27 +262,27 @@ namespace uTinyRipper.Classes.Shaders
 
 		private string[][] GetVariantsUser0(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUser0;
+			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUserGlobal0;
 		}
 		private string[][] GetVariantsUser1(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUser1;
+			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUserGlobal1;
 		}
 		private string[][] GetVariantsUser2(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUser2;
+			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUserGlobal2;
 		}
 		private string[][] GetVariantsUser3(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUser3;
+			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUserGlobal3;
 		}
 		private string[][] GetVariantsUser4(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUser4;
+			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUserGlobal4;
 		}
 		private string[][] GetVariantsUser5(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUser5;
+			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUserGlobal5;
 		}
 		private string[][] GetVariantsBuiltin0(Version version)
 		{
@@ -317,19 +354,57 @@ namespace uTinyRipper.Classes.Shaders
 		public uint TypesMask { get; private set; }
 		public int Target { get; private set; }
 		public bool FromOther { get; private set; }
+		public bool ForceSyncCompilation { get; private set; }
 		public int Language { get; private set; }
-		public IReadOnlyList<IReadOnlyList<string>> VariantsUser0 => m_variantsUser0;
-		public IReadOnlyList<IReadOnlyList<string>> VariantsUser1 => m_variantsUser1;
-		public IReadOnlyList<IReadOnlyList<string>> VariantsUser2 => m_variantsUser2;
-		public IReadOnlyList<IReadOnlyList<string>> VariantsUser3 => m_variantsUser3;
-		public IReadOnlyList<IReadOnlyList<string>> VariantsUser4 => m_variantsUser4;
-		public IReadOnlyList<IReadOnlyList<string>> VariantsUser5 => m_variantsUser5;
+
+		public IReadOnlyList<IReadOnlyList<string>> KeywordCombinations0 => m_keywordCombinations0;
+		public IReadOnlyList<IReadOnlyList<string>> KeywordCombinations1 => m_keywordCombinations1;
+		public IReadOnlyList<IReadOnlyList<string>> KeywordCombinations2 => m_keywordCombinations2;
+		public IReadOnlyList<IReadOnlyList<string>> KeywordCombinations3 => m_keywordCombinations3;
+		public IReadOnlyList<IReadOnlyList<string>> KeywordCombinations4 => m_keywordCombinations4;
+		public IReadOnlyList<IReadOnlyList<string>> KeywordCombinations5 => m_keywordCombinations5;
+		/// <summary>
+		/// VariantsUser0 previously
+		/// </summary>
+		public IReadOnlyList<IReadOnlyList<string>> VariantsUserGlobal0 => m_variantsUserGlobal0;
+		/// <summary>
+		/// VariantsUser1 previously
+		/// </summary>
+		public IReadOnlyList<IReadOnlyList<string>> VariantsUserGlobal1 => m_variantsUserGlobal1;
+		/// <summary>
+		/// VariantsUser2 previously
+		/// </summary>
+		public IReadOnlyList<IReadOnlyList<string>> VariantsUserGlobal2 => m_variantsUserGlobal2;
+		/// <summary>
+		/// VariantsUser3 previously
+		/// </summary>
+		public IReadOnlyList<IReadOnlyList<string>> VariantsUserGlobal3 => m_variantsUserGlobal3;
+		/// <summary>
+		/// VariantsUser4 previously
+		/// </summary>
+		public IReadOnlyList<IReadOnlyList<string>> VariantsUserGlobal4 => m_variantsUserGlobal4;
+		/// <summary>
+		/// VariantsUser5 previously
+		/// </summary>
+		public IReadOnlyList<IReadOnlyList<string>> VariantsUserGlobal5 => m_variantsUserGlobal5;
+		public IReadOnlyList<IReadOnlyList<string>> VariantsUserLocal0 => m_variantsUserLocal0;
+		public IReadOnlyList<IReadOnlyList<string>> VariantsUserLocal1 => m_variantsUserLocal1;
+		public IReadOnlyList<IReadOnlyList<string>> VariantsUserLocal2 => m_variantsUserLocal2;
+		public IReadOnlyList<IReadOnlyList<string>> VariantsUserLocal3 => m_variantsUserLocal3;
+		public IReadOnlyList<IReadOnlyList<string>> VariantsUserLocal4 => m_variantsUserLocal4;
+		public IReadOnlyList<IReadOnlyList<string>> VariantsUserLocal5 => m_variantsUserLocal5;
 		public IReadOnlyList<IReadOnlyList<string>> VariantsBuiltin0 => m_variantsBuiltin0;
 		public IReadOnlyList<IReadOnlyList<string>> VariantsBuiltin1 => m_variantsBuiltin1;
 		public IReadOnlyList<IReadOnlyList<string>> VariantsBuiltin2 => m_variantsBuiltin2;
 		public IReadOnlyList<IReadOnlyList<string>> VariantsBuiltin3 => m_variantsBuiltin3;
 		public IReadOnlyList<IReadOnlyList<string>> VariantsBuiltin4 => m_variantsBuiltin4;
 		public IReadOnlyList<IReadOnlyList<string>> VariantsBuiltin5 => m_variantsBuiltin5;
+		public IReadOnlyList<IReadOnlyList<string>> TargetVariants0 => m_targetVariants0;
+		public IReadOnlyList<IReadOnlyList<string>> TargetVariants1 => m_targetVariants1;
+		public IReadOnlyList<IReadOnlyList<string>> TargetVariants2 => m_targetVariants2;
+		public IReadOnlyList<IReadOnlyList<string>> TargetVariants3 => m_targetVariants3;
+		public IReadOnlyList<IReadOnlyList<string>> TargetVariants4 => m_targetVariants4;
+		public IReadOnlyList<IReadOnlyList<string>> TargetVariants5 => m_targetVariants5;
 		public int BaseRequirements { get; private set; }
 		public IReadOnlyList<KeywordTargetInfo> KeywordTargetInfo => m_keywordTargetInfo;
 		public string NonStrippedUserKeywords { get; private set; }
@@ -346,6 +421,7 @@ namespace uTinyRipper.Classes.Shaders
 		public const string TargetName = "m_Target";
 		public const string IsGLSLName = "m_IsGLSL";
 		public const string FromOtherName = "m_FromOther";
+		public const string ForceSyncCompilationName = "m_ForceSyncCompilation";
 		public const string LanguageName = "m_Language";		
 		public const string KeywordCombinations0Name = "m_KeywordCombinations[0]";
 		public const string KeywordCombinations1Name = "m_KeywordCombinations[1]";
@@ -365,6 +441,18 @@ namespace uTinyRipper.Classes.Shaders
 		public const string VariantsUser3Name = "m_VariantsUser3";
 		public const string VariantsUser4Name = "m_VariantsUser4";
 		public const string VariantsUser5Name = "m_VariantsUser5";
+		public const string VariantsUserGlobal0Name = "m_VariantsUserGlobal0";
+		public const string VariantsUserGlobal1Name = "m_VariantsUserGlobal1";
+		public const string VariantsUserGlobal2Name = "m_VariantsUserGlobal2";
+		public const string VariantsUserGlobal3Name = "m_VariantsUserGlobal3";
+		public const string VariantsUserGlobal4Name = "m_VariantsUserGlobal4";
+		public const string VariantsUserGlobal5Name = "m_VariantsUserGlobal5";
+		public const string VariantsUserLocal0Name = "m_VariantsUserLocal0";
+		public const string VariantsUserLocal1Name = "m_VariantsUserLocal1";
+		public const string VariantsUserLocal2Name = "m_VariantsUserLocal2";
+		public const string VariantsUserLocal3Name = "m_VariantsUserLocal3";
+		public const string VariantsUserLocal4Name = "m_VariantsUserLocal4";
+		public const string VariantsUserLocal5Name = "m_VariantsUserLocal5";
 		public const string VariantsBuiltin0Name = "m_VariantsBuiltin0";
 		public const string VariantsBuiltin1Name = "m_VariantsBuiltin1";
 		public const string VariantsBuiltin2Name = "m_VariantsBuiltin2";
@@ -385,12 +473,18 @@ namespace uTinyRipper.Classes.Shaders
 		private string[][] m_keywordCombinations3;
 		private string[][] m_keywordCombinations4;
 		private string[][] m_keywordCombinations5;
-		private string[][] m_variantsUser0;
-		private string[][] m_variantsUser1;
-		private string[][] m_variantsUser2;
-		private string[][] m_variantsUser3;
-		private string[][] m_variantsUser4;
-		private string[][] m_variantsUser5;
+		private string[][] m_variantsUserGlobal0;
+		private string[][] m_variantsUserGlobal1;
+		private string[][] m_variantsUserGlobal2;
+		private string[][] m_variantsUserGlobal3;
+		private string[][] m_variantsUserGlobal4;
+		private string[][] m_variantsUserGlobal5;
+		private string[][] m_variantsUserLocal0;
+		private string[][] m_variantsUserLocal1;
+		private string[][] m_variantsUserLocal2;
+		private string[][] m_variantsUserLocal3;
+		private string[][] m_variantsUserLocal4;
+		private string[][] m_variantsUserLocal5;
 		private string[][] m_variantsBuiltin0;
 		private string[][] m_variantsBuiltin1;
 		private string[][] m_variantsBuiltin2;

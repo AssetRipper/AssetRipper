@@ -50,11 +50,11 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(3) && version.IsLess(4);
 		}
 		/// <summary>
-		/// 3.5.0 to 4.0.0 exclusive
+		/// 3.5.0 to 4.0.0 exclusive or 2019.1 and greater
 		/// </summary>
 		public static bool IsReadColorSpace(Version version)
 		{
-			return version.IsGreaterEqual(3, 5) && version.IsLess(4);
+			return version.IsGreaterEqual(2019) || version.IsGreaterEqual(3, 5) && version.IsLess(4);
 		}
 		/// <summary>
 		/// 5.6.0 and greater
@@ -64,16 +64,20 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5, 6);
 		}
 
-		private static int GetSerializedVersion(Version version)
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		private static bool IsReadColorSpaceFirst(Version version)
 		{
-			// MipMap converted to MipCount
-			if (version.IsGreaterEqual(5, 2))
-			{
-				return 2;
-			}
-			return 1;
+			return version.IsGreaterEqual(2019);
 		}
-
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		private static bool IsReadFormatFirst(Version version)
+		{
+			return version.IsGreaterEqual(2019);
+		}
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
@@ -103,9 +107,36 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5, 4);
 		}
 
+		private static int GetSerializedVersion(Version version)
+		{
+			// ColorSpace has been added which affects on Format
+			if (version.IsGreaterEqual(2019))
+			{
+				return 3;
+			}
+			// MipMap converted to MipCount
+			if (version.IsGreaterEqual(5, 2))
+			{
+				return 2;
+			}
+			return 1;
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
+
+			if (IsReadColorSpace(reader.Version))
+			{
+				if (IsReadColorSpaceFirst(reader.Version))
+				{
+					ColorSpace = (ColorSpace)reader.ReadInt32();
+				}
+			}
+			if (IsReadFormatFirst(reader.Version))
+			{
+				Format = (TextureFormat)reader.ReadInt32();
+			}
 
 			Width = reader.ReadInt32();
 			Height = reader.ReadInt32();
@@ -117,7 +148,10 @@ namespace uTinyRipper.Classes
 			{
 				DataSize = reader.ReadInt32();
 			}
-			Format = (TextureFormat)reader.ReadInt32();
+			if (!IsReadFormatFirst(reader.Version))
+			{
+				Format = (TextureFormat)reader.ReadInt32();
+			}
 
 			if (IsBoolMinMap(reader.Version))
 			{
@@ -169,7 +203,10 @@ namespace uTinyRipper.Classes
 			}
 			if (IsReadColorSpace(reader.Version))
 			{
-				ColorSpace = (ColorSpace)reader.ReadInt32();
+				if (!IsReadColorSpaceFirst(reader.Version))
+				{
+					ColorSpace = (ColorSpace)reader.ReadInt32();
+				}
 			}
 
 			m_imageData = reader.ReadByteArray();
@@ -183,10 +220,14 @@ namespace uTinyRipper.Classes
 		protected sealed override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			if (IsReadColorSpace(container.ExportVersion))
+			{
+				node.Add(ColorSpaceName, (int)ColorSpace);
+			}
+			node.Add(FormatName, (int)Format);
 			node.Add(WidthName, Width);
 			node.Add(HeightName, Height);
 			node.Add(DepthName, Depth);
-			node.Add(FormatName, (int)Format);
 			node.Add(MipCountName, MipCount);
 			node.Add(DataSizeName, DataSize);
 			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
@@ -201,40 +242,21 @@ namespace uTinyRipper.Classes
 
 		private IReadOnlyList<byte> GetImageData(Version version)
 		{
-			if (IsReadStreamData(version))
+			if (IsReadStreamData(version) && StreamData.IsValid)
 			{
-				string path = StreamData.Path;
-				if (path != string.Empty)
+				byte[] data = StreamData.GetContent(File);
+				if (data == null)
 				{
-					if (m_imageData.Length != 0)
-					{
-						throw new Exception("Texture3D contains both data and resource path");
-					}
-
-					using (ResourcesFile res = File.Collection.FindResourcesFile(File, path))
-					{
-						if (res == null)
-						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{path}' wasn't found");
-						}
-						else
-						{
-							using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
-							{
-								resStream.Position = StreamData.Offset;
-								using (BinaryReader reader = new BinaryReader(resStream))
-								{
-									return reader.ReadBytes((int)StreamData.Size);
-								}
-							}
-						}
-					}
+					Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{StreamData.Path}' wasn't found");
+					return m_imageData;
 				}
+				return data;
 			}
 
 			return m_imageData;
 		}
 
+		public ColorSpace ColorSpace { get; private set; }
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 		/// <summary>
@@ -255,14 +277,14 @@ namespace uTinyRipper.Classes
 		public int ImageCount { get; private set; }
 		public TextureDimension TextureDimension { get; private set; }
 		public TextureUsageMode LightmapFormat { get; private set; }
-		public ColorSpace ColorSpace { get; private set; }
 		public IReadOnlyCollection<byte> ImageData => m_imageData;
 
+		public const string ColorSpaceName = "m_ColorSpace";
+		public const string FormatName = "m_Format";
 		public const string WidthName = "m_Width";
 		public const string HeightName = "m_Height";
 		public const string DepthName = "m_Depth";
 		public const string CompleteImageSizeName = "m_CompleteImageSize";
-		public const string FormatName = "m_Format";
 		public const string TextureFormatName = "m_TextureFormat";
 		public const string MipMapName = "m_MipMap";
 		public const string MipCountName = "m_MipCount";

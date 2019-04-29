@@ -69,6 +69,13 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(2017, 3);
 		}
 		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool IsReadEnableCompatibleFormat(Version version)
+		{
+			return version.IsGreaterEqual(2019);
+		}
+		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
 		public static bool IsReadDimension(Version version)
@@ -90,7 +97,21 @@ namespace uTinyRipper.Classes
 		{
 			return version.IsGreaterEqual(2, 1);
 		}
-		
+
+		private static int GetSerializedVersion(Version version)
+		{
+			// unknown
+			if (version.IsGreaterEqual(2019))
+			{
+				return 3;
+			}
+
+			// Added EnableCompatibleFormat which changes the way Formats values are set
+			// return 2;
+
+			return 1;
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -141,6 +162,10 @@ namespace uTinyRipper.Classes
 				UseDynamicScale = reader.ReadBoolean();
 				BindMS = reader.ReadBoolean();
 			}
+			if (IsReadEnableCompatibleFormat(reader.Version))
+			{
+				EnableCompatibleFormat = reader.ReadBoolean();
+			}
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
@@ -157,20 +182,30 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Width", Width);
-			node.Add("m_Height", Height);
-			node.Add("m_AntiAliasing", AntiAliasing);
-			node.Add("m_DepthFormat", DepthFormat);
-			node.Add("m_ColorFormat", (int)ColorFormat);
-			node.Add("m_MipMap", MipMap);
-			node.Add("m_GenerateMips", GenerateMips);
-			node.Add("m_SRGB", SRGB);
-			node.Add("m_UseDynamicScale", UseDynamicScale);
-			node.Add("m_BindMS", BindMS);
-			node.Add("m_TextureSettings", TextureSettings.ExportYAML(container));
-			node.Add("m_Dimension", Dimension);
-			node.Add("m_VolumeDepth", VolumeDepth);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(WidthName, Width);
+			node.Add(HeightName, Height);
+			node.Add(AntiAliasingName, AntiAliasing);
+			node.Add(DepthFormatName, DepthFormat);
+			node.Add(ColorFormatName, (int)ColorFormat);
+			node.Add(MipMapName, MipMap);
+			node.Add(GenerateMipsName, GenerateMips);
+			node.Add(SRGBName, SRGB);
+			node.Add(UseDynamicScaleName, UseDynamicScale);
+			node.Add(BindMSName, BindMS);
+			if (IsReadEnableCompatibleFormat(container.ExportVersion))
+			{
+				node.Add(EnableCompatibleFormatName, GetEnableCompatibleFormat(container.Version));
+			}
+			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
+			node.Add(DimensionName, Dimension);
+			node.Add(VolumeDepthName, VolumeDepth);
 			return node;
+		}
+
+		private bool GetEnableCompatibleFormat(Version version)
+		{
+			return IsReadEnableCompatibleFormat(version) ? EnableCompatibleFormat : true;
 		}
 
 		public override string ExportExtension => "renderTexture";
@@ -190,8 +225,24 @@ namespace uTinyRipper.Classes
 		public bool SRGB { get; private set; }
 		public bool UseDynamicScale { get; private set; }
 		public bool BindMS { get; private set; }
+		public bool EnableCompatibleFormat { get; private set; }
 		public int Dimension { get; private set; }
 		public int VolumeDepth { get; private set; }
+
+		public const string WidthName = "m_Width";
+		public const string HeightName = "m_Height";
+		public const string AntiAliasingName = "m_AntiAliasing";
+		public const string DepthFormatName = "m_DepthFormat";
+		public const string ColorFormatName = "m_ColorFormat";
+		public const string MipMapName = "m_MipMap";
+		public const string GenerateMipsName = "m_GenerateMips";
+		public const string SRGBName = "m_SRGB";
+		public const string UseDynamicScaleName = "m_UseDynamicScale";
+		public const string BindMSName = "m_BindMS";
+		public const string EnableCompatibleFormatName = "m_EnableCompatibleFormat";
+		public const string TextureSettingsName = "m_TextureSettings";
+		public const string DimensionName = "m_Dimension";
+		public const string VolumeDepthName = "m_VolumeDepth";
 
 		public TextureSettings TextureSettings;
 	}

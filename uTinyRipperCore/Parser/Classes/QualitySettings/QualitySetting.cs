@@ -177,14 +177,17 @@ namespace uTinyRipper.Classes.QualitySettingss
 		{
 			return version.IsGreaterEqual(2, 1);
 		}
-		
+
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		private bool IsSkinWeightsName(Version version)
+		{
+			return version.IsGreaterEqual(2019);
+		}
+
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			// SyncToVBL has been removed
 			if (version.IsGreaterEqual(3, 4))
 			{
@@ -316,7 +319,7 @@ namespace uTinyRipper.Classes.QualitySettingss
 				ShadowmaskMode = (ShadowmaskMode)reader.ReadInt32();
 			}
 
-			BlendWeights = (BlendWeights)reader.ReadInt32();
+			SkinWeights = (SkinWeights)reader.ReadInt32();
 			TextureQuality = (TextureQuality)reader.ReadInt32();
 			AnisotropicTextures = (AnisotropicFiltering)reader.ReadInt32();
 			AntiAliasing = (AntiAliasing)reader.ReadInt32();
@@ -399,7 +402,7 @@ namespace uTinyRipper.Classes.QualitySettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(NameName, Name);
 			node.Add(PixelLightCountName, PixelLightCount);
 			node.Add(ShadowsName, (int)Shadows);
@@ -411,7 +414,7 @@ namespace uTinyRipper.Classes.QualitySettingss
 			node.Add(ShadowCascade2SplitName, ShadowCascade2Split);
 			node.Add(ShadowCascade4SplitName, ShadowCascade4Split.ExportYAML(container));
 			node.Add(ShadowmaskModeName, (int)ShadowmaskMode);
-			node.Add(BlendWeightsName, (int)BlendWeights);
+			node.Add(IsSkinWeightsName(container.ExportVersion) ? SkinWeightsName : BlendWeightsName, (int)SkinWeights);
 			node.Add(TextureQualityName, (int)TextureQuality);
 			node.Add(AnisotropicTexturesName, (int)AnisotropicTextures);
 			node.Add(AntiAliasingName, (int)AntiAliasing);
@@ -484,7 +487,10 @@ namespace uTinyRipper.Classes.QualitySettingss
 		public float ShadowNearPlaneOffset { get; set; }
 		public float ShadowCascade2Split { get; set; }
 		public ShadowmaskMode ShadowmaskMode { get; set; }
-		public BlendWeights BlendWeights { get; set; }
+		/// <summary>
+		/// BlendWeights previously
+		/// </summary>
+		public SkinWeights SkinWeights { get; set; }
 		public TextureQuality TextureQuality { get; set; }
 		public AnisotropicFiltering AnisotropicTextures { get; set; }
 		public AntiAliasing AntiAliasing { get; set; }
@@ -523,6 +529,7 @@ namespace uTinyRipper.Classes.QualitySettingss
 		public const string ShadowCascade4SplitName = "shadowCascade4Split";
 		public const string ShadowmaskModeName = "shadowmaskMode";
 		public const string BlendWeightsName = "blendWeights";
+		public const string SkinWeightsName = "skinWeights";
 		public const string TextureQualityName = "textureQuality";
 		public const string AnisotropicTexturesName = "anisotropicTextures";
 		public const string AntiAliasingName = "antiAliasing";

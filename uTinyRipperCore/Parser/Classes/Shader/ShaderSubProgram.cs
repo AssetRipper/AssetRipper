@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using uTinyRipper.Classes.Shaders.Exporters;
 
 namespace uTinyRipper.Classes.Shaders
 {
 	public struct ShaderSubProgram : IAssetReadable
 	{
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool IsReadLocalKeywords(Version version)
+		{
+			return version.IsGreaterEqual(2019);
+		}
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
@@ -72,13 +77,13 @@ namespace uTinyRipper.Classes.Shaders
 			{
 				return 201708220;
 			}
-			else if(version.IsLessEqual(2018, 3))
+			else if (version.IsLessEqual(2018, 3))
 			{
 				return 201802150;
 			}
 			else
 			{
-				throw new NotSupportedException($"No magic number for version {version}");
+				return 201806140;
 			}
 		}
 
@@ -94,12 +99,16 @@ namespace uTinyRipper.Classes.Shaders
 			int unknown1 = reader.ReadInt32();
 			int unknown2 = reader.ReadInt32();
 			int unknown3 = reader.ReadInt32();
-			if(IsReadUnknown4(reader.Version))
+			if (IsReadUnknown4(reader.Version))
 			{
 				int unknown4 = reader.ReadInt32();
 			}
 
-			m_keywords = reader.ReadStringArray();
+			m_globalKeywords = reader.ReadStringArray();
+			if (IsReadLocalKeywords(reader.Version))
+			{
+				m_localKeywords = reader.ReadStringArray();
+			}
 			m_programData = reader.ReadByteArray();
 			reader.AlignStream(AlignType.Align4);
 
@@ -175,7 +184,7 @@ namespace uTinyRipper.Classes.Shaders
 				if (IsReadStructParameters(reader.Version))
 				{
 					int structCount = reader.ReadInt32();
-					for(int j = 0; j < structCount; j++)
+					for (int j = 0; j < structCount; j++)
 					{
 						vectors.Clear();
 						matrices.Clear();
@@ -186,7 +195,7 @@ namespace uTinyRipper.Classes.Shaders
 						int structSize = reader.ReadInt32();
 
 						int strucParamCount = reader.ReadInt32();
-						for(int k = 0; k < strucParamCount; k++)
+						for (int k = 0; k < strucParamCount; k++)
 						{
 							string paramName = reader.ReadString();
 							paramName = $"{structName}.{paramName}";
@@ -251,12 +260,12 @@ namespace uTinyRipper.Classes.Shaders
 					BufferBinding buffer = new BufferBinding(name, index);
 					buffers.Add(buffer);
 				}
-				else if(type == 3 && IsReadUAVParameters(reader.Version))
+				else if (type == 3 && IsReadUAVParameters(reader.Version))
 				{
 					UAVParameter uav = new UAVParameter(name, index, extraValue);
 					uavs.Add(uav);
 				}
-				else if(type == 4 && IsReadSamplerParameters(reader.Version))
+				else if (type == 4 && IsReadSamplerParameters(reader.Version))
 				{
 					SamplerParameter sampler = new SamplerParameter((uint)extraValue, index);
 					samplers.Add(sampler);
@@ -268,29 +277,36 @@ namespace uTinyRipper.Classes.Shaders
 			}
 			m_textureParameters = textures.ToArray();
 			m_bufferParameters = buffers.ToArray();
-			if(IsReadUAVParameters(reader.Version))
+			if (IsReadUAVParameters(reader.Version))
 			{
 				m_UAVParameters = uavs.ToArray();
 			}
-			if(IsReadSamplerParameters(reader.Version))
+			if (IsReadSamplerParameters(reader.Version))
 			{
 				m_samplerParameters = samplers.ToArray();
 			}
 			m_constantBufferBindings = constBindings.ToArray();
-			if(IsReadStructParameters(reader.Version))
+			if (IsReadStructParameters(reader.Version))
 			{
 				m_structParameters = structs.ToArray();
 			}
 		}
-		
+
 		public void Export(ShaderWriter writer, ShaderType type)
 		{
-			if(Keywords.Count > 0)
+			if (GlobalKeywords.Count > 0)
 			{
 				writer.Write("Keywords { ");
-				foreach(string keyword in Keywords)
+				foreach (string keyword in GlobalKeywords)
 				{
 					writer.Write("\"{0}\" ", keyword);
+				}
+				if (IsReadLocalKeywords(writer.Version))
+				{
+					foreach (string keyword in LocalKeywords)
+					{
+						writer.Write("\"{0}\" ", keyword);
+					}
 				}
 				writer.Write("}\n");
 				writer.WriteIndent(5);
@@ -306,22 +322,28 @@ namespace uTinyRipper.Classes.Shaders
 			}
 			writer.Write('"');
 		}
-		
+
 		public ShaderGpuProgramType ProgramType { get; private set; }
-		public IReadOnlyList<string> Keywords => m_keywords;
+		/// <summary>
+		/// Keywords previously
+		/// </summary>
+		public IReadOnlyList<string> GlobalKeywords => m_globalKeywords;
+		public IReadOnlyList<string> LocalKeywords => m_localKeywords;
 		public IReadOnlyList<byte> ProgramData => m_programData;
 		public IReadOnlyList<VectorParameter> VectorParameters => m_vectorParameters;
 		public IReadOnlyList<MatrixParameter> MatrixParameters => m_matrixParameters;
 		public IReadOnlyList<TextureParameter> TextureParameters => m_textureParameters;
 		public IReadOnlyList<BufferBinding> BufferParameters => m_bufferParameters;
 		public IReadOnlyList<UAVParameter> UAVParameters => m_UAVParameters;
+		public IReadOnlyList<SamplerParameter> SamplerParameters => m_samplerParameters;
 		public IReadOnlyList<ConstantBuffer> ConstantBuffers => m_constantBuffers;
 		public IReadOnlyList<BufferBinding> ConstantBufferBindings => m_constantBufferBindings;
 		public IReadOnlyList<StructParameter> StructParameters => m_structParameters;
 
 		public ParserBindChannels BindChannels;
 
-		private string[] m_keywords;
+		private string[] m_globalKeywords;
+		private string[] m_localKeywords;
 		private byte[] m_programData;
 		private VectorParameter[] m_vectorParameters;
 		private MatrixParameter[] m_matrixParameters;

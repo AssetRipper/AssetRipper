@@ -80,6 +80,8 @@ namespace uTinyRipper.Classes
 			yield break;
 		}
 
+		public static Matrix4x4f Identity => new Matrix4x4f { E00 = 1.0f, E11 = 1.0f, E22 = 1.0f, E33 = 1.0f };
+
 		public IScriptStructure Base => null;
 		public string Namespace => ScriptType.UnityEngineName;
 		public string Name => ScriptType.Matrix4x4Name;

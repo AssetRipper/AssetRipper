@@ -2,8 +2,9 @@
 {
 	/// <summary>
 	/// How many bones affect each vertex.
+	/// BlendWeights previously
 	/// </summary>
-	public enum BlendWeights
+	public enum SkinWeights
 	{
 		/// <summary>
 		/// One bone affects each vertex.
@@ -16,6 +17,10 @@
 		/// <summary>
 		/// Four bones affect each vertex.
 		/// </summary>
-		FourBones	= 4
+		FourBones	= 4,
+		/// <summary>
+		/// An unlimited number of bones affect each vertex
+		/// </summary>
+		Unlimited	= 255,
 	}
 }

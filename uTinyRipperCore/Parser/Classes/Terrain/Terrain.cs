@@ -15,12 +15,11 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// 5.0.0f1 to 5.0.1 exclusive
+		/// 2019.1 and greater
 		/// </summary>
-		public static bool IsReadDefaultSmoothness(Version version)
+		public static bool IsReadShadowCastingMode(Version version)
 		{
-			// unknown bottom version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 0, 1);
+			return version.IsGreaterEqual(2019);
 		}
 		/// <summary>
 		/// 5.0.0f1 and greater
@@ -46,11 +45,26 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
-		/// 2017.2 and greater
+		/// 5.0.0f1 to 5.0.1 exclusive
 		/// </summary>
-		public static bool IsReadExplicitProbeSetHash(Version version)
+		public static bool IsReadDefaultSmoothness(Version version)
 		{
-			return version.IsGreaterEqual(2017, 2);
+			// unknown bottom version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 0, 1);
+		}
+		/// <summary>
+		/// Release
+		/// </summary>
+		public static bool IsReadLightmapIndex(TransferInstructionFlags flags)
+		{
+			return flags.IsRelease();
+		}
+		/// <summary>
+		/// 2017.2 and greater and Release
+		/// </summary>
+		public static bool IsReadExplicitProbeSetHash(Version version, TransferInstructionFlags flags)
+		{
+			return version.IsGreaterEqual(2017, 2) && flags.IsRelease();
 		}
 		/// <summary>
 		/// 5.0.0f1 and greater
@@ -68,12 +82,27 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(2018, 2);
 		}
 		/// <summary>
-		/// 5.0.0f1 and greater
+		/// 2019.1 and greater and Not Release
 		/// </summary>
-		public static bool IsReadDynamicUVST(Version version)
+		public static bool IsReadDeringLightProbesForTrees(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(2019);
+		}
+		/// <summary>
+		/// 5.0.0f1 and greater and Release
+		/// </summary>
+		public static bool IsReadDynamicUVST(Version version, TransferInstructionFlags flags)
 		{
 			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && flags.IsRelease();
+		}
+		/// <summary>
+		/// Not Release
+		/// </summary>
+		public static bool IsReadScaleInLightmap(TransferInstructionFlags flags)
+		{
+			// unknown version
+			return !flags.IsRelease();
 		}
 		/// <summary>
 		/// 2018.3 and greater
@@ -83,8 +112,22 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(2018, 3);
 		}
 
+		/// <summary>
+		/// 5.0.0f1 and greater
+		/// </summary>
+		private static bool IsAlign(Version version)
+		{
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		}
+
 		private static int GetSerializedVersion(Version version)
 		{
+			// CastShadows has been converted to ShadowCastingMode
+			if (version.IsGreaterEqual(2019))
+			{
+				return 4;
+			}
 			// unknown version
 			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
 			{
@@ -109,7 +152,15 @@ namespace uTinyRipper.Classes
 			HeightmapPixelError = reader.ReadSingle();
 			SplatMapDistance = reader.ReadSingle();
 			HeightmapMaximumLOD = reader.ReadInt32();
-			CastShadows = reader.ReadBoolean();
+			if (IsReadShadowCastingMode(reader.Version))
+			{
+				ShadowCastingMode = (ShadowCastingMode)reader.ReadInt32();
+			}
+			else
+			{
+				bool CastShadows = reader.ReadBoolean();
+				ShadowCastingMode = CastShadows ? ShadowCastingMode.TwoSided : ShadowCastingMode.Off;
+			}
 			if (IsReadDrawHeightmap(reader.Version))
 			{
 				DrawHeightmap = reader.ReadBoolean();
@@ -134,11 +185,14 @@ namespace uTinyRipper.Classes
 				DefaultSmoothness = reader.ReadSingle();
 			}
 			MaterialTemplate.Read(reader);
-			LightmapIndex = reader.ReadUInt16();
-			LightmapIndexDynamic = reader.ReadUInt16();
-			LightmapTilingOffset.Read(reader);
-			LightmapTilingOffsetDynamic.Read(reader);
-			if (IsReadExplicitProbeSetHash(reader.Version))
+			if (IsReadLightmapIndex(reader.Flags))
+			{
+				LightmapIndex = reader.ReadUInt16();
+				LightmapIndexDynamic = reader.ReadUInt16();
+				LightmapTilingOffset.Read(reader);
+				LightmapTilingOffsetDynamic.Read(reader);
+			}
+			if (IsReadExplicitProbeSetHash(reader.Version, reader.Flags))
 			{
 				ExplicitProbeSetHash.Read(reader);
 			}
@@ -151,12 +205,26 @@ namespace uTinyRipper.Classes
 			{
 				PreserveTreePrototypeLayers = reader.ReadBoolean();
 			}
-			if (IsReadDynamicUVST(reader.Version))
+			if (IsReadDeringLightProbesForTrees(reader.Version, reader.Flags))
+			{
+				DeringLightProbesForTrees = reader.ReadBoolean();
+			}
+			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
-
+			}
+#if UNIVERSAL
+			if (IsReadScaleInLightmap(reader.Flags))
+			{
+				ScaleInLightmap = reader.ReadSingle();
+				LightmapParameters.Read(reader);
+			}
+#endif
+			if (IsReadDynamicUVST(reader.Version, reader.Flags))
+			{
 				DynamicUVST.Read(reader);
 				ChunkDynamicUVST.Read(reader);
+				reader.AlignStream(AlignType.Align4);
 			}
 			if (IsReadGroupingID(reader.Version))
 			{
@@ -190,7 +258,14 @@ namespace uTinyRipper.Classes
 			node.Add(HeightmapPixelErrorName, HeightmapPixelError);
 			node.Add(SplatMapDistanceName, SplatMapDistance);
 			node.Add(HeightmapMaximumLODName, HeightmapMaximumLOD);
-			node.Add(CastShadowsName, CastShadows);
+			if (IsReadShadowCastingMode(container.ExportVersion))
+			{
+				node.Add(ShadowCastingModeName, (int)ShadowCastingMode);
+			}
+			else
+			{
+				node.Add(CastShadowsName, CastShadows);
+			}
 			node.Add(DrawHeightmapName, DrawHeightmap);
 			if (IsReadDrawInstanced(container.ExportVersion))
 			{
@@ -207,16 +282,44 @@ namespace uTinyRipper.Classes
 			{
 				node.Add(PreserveTreePrototypeLayersName, PreserveTreePrototypeLayers);
 			}
+			if (IsReadDeringLightProbesForTrees(container.ExportVersion, container.ExportFlags))
+			{
+				node.Add(DeringLightProbesForTreesName, GetDeringLightProbesForTrees(container.Version, container.Flags));
+			}
 #warning TODO: get lightmap by index and fill those values
-			node.Add(ScaleInLightmapName, 0.0512f);
-			node.Add(LightmapParametersName, default(PPtr<Object>).ExportYAML(container));
+			node.Add(ScaleInLightmapName, GetScaleInLightmap(container.Flags));
+			node.Add(LightmapParametersName, GetLightmapParameters(container.Flags).ExportYAML(container));
 			if (IsReadGroupingID(container.ExportVersion))
 			{
 				node.Add(GroupingIDName, GroupingID);
 				node.Add(AllowAutoConnectName, AllowAutoConnect);
 			}
 			return node;
+		}
 
+		private bool GetDeringLightProbesForTrees(Version version, TransferInstructionFlags flags)
+		{
+			return IsReadDeringLightProbesForTrees(version, flags) ? DeringLightProbesForTrees : true;
+		}
+		private float GetScaleInLightmap(TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadScaleInLightmap(flags))
+			{
+				return ScaleInLightmap;
+			}
+#endif
+			return 0.0512f;
+		}
+		private PPtr<LightmapParameters> GetLightmapParameters(TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadScaleInLightmap(flags))
+			{
+				return LightmapParameters;
+			}
+#endif
+			return default;
 		}
 
 		public float TreeDistance { get; private set; }
@@ -228,7 +331,8 @@ namespace uTinyRipper.Classes
 		public float HeightmapPixelError { get; private set; }
 		public float SplatMapDistance { get; private set; }
 		public int HeightmapMaximumLOD { get; private set; }
-		public bool CastShadows { get; private set; }
+		public bool CastShadows => ShadowCastingMode != ShadowCastingMode.Off;
+		public ShadowCastingMode ShadowCastingMode { get; private set; }
 		public bool DrawHeightmap { get; private set; }
 		public bool DrawInstanced { get; private set; }
 		public bool DrawTreesAndFoliage { get; private set; }
@@ -241,6 +345,10 @@ namespace uTinyRipper.Classes
 		public ushort LightmapIndexDynamic { get; private set; }
 		public bool BakeLightProbesForTrees { get; private set; }
 		public bool PreserveTreePrototypeLayers { get; private set; }
+		public bool DeringLightProbesForTrees { get; private set; }
+#if UNIVERSAL
+		public float ScaleInLightmap { get; private set; }
+#endif
 		public int GroupingID { get; private set; }
 		public bool AllowAutoConnect { get; private set; }
 
@@ -255,6 +363,7 @@ namespace uTinyRipper.Classes
 		public const string SplatMapDistanceName = "m_SplatMapDistance";
 		public const string HeightmapMaximumLODName = "m_HeightmapMaximumLOD";
 		public const string CastShadowsName = "m_CastShadows";
+		public const string ShadowCastingModeName = "m_ShadowCastingMode";
 		public const string DrawHeightmapName = "m_DrawHeightmap";
 		public const string DrawInstancedName = "m_DrawInstanced";
 		public const string DrawTreesAndFoliageName = "m_DrawTreesAndFoliage";
@@ -265,6 +374,7 @@ namespace uTinyRipper.Classes
 		public const string MaterialTemplateName = "m_MaterialTemplate";
 		public const string BakeLightProbesForTreesName = "m_BakeLightProbesForTrees";
 		public const string PreserveTreePrototypeLayersName = "m_PreserveTreePrototypeLayers";
+		public const string DeringLightProbesForTreesName = "m_DeringLightProbesForTrees";
 		public const string ScaleInLightmapName = "m_ScaleInLightmap";
 		public const string LightmapParametersName = "m_LightmapParameters";
 		public const string GroupingIDName = "m_GroupingID";
@@ -276,6 +386,9 @@ namespace uTinyRipper.Classes
 		public Vector4f LightmapTilingOffset;
 		public Vector4f LightmapTilingOffsetDynamic;
 		public Hash128 ExplicitProbeSetHash;
+#if UNIVERSAL
+		public PPtr<LightmapParameters> LightmapParameters;
+#endif
 		public Vector4f DynamicUVST;
 		public Vector4f ChunkDynamicUVST;
 	}

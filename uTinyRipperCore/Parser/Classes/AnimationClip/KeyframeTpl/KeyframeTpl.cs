@@ -74,19 +74,19 @@ namespace uTinyRipper.Classes.AnimationClips
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("time", Time);
-			node.Add("value", Value.ExportYAML(container));
-			node.Add("inSlope", InSlope.ExportYAML(container));
-			node.Add("outSlope", OutSlope.ExportYAML(container));
+			node.Add(TimeName, Time);
+			node.Add(ValueName, Value.ExportYAML(container));
+			node.Add(InSlopeName, InSlope.ExportYAML(container));
+			node.Add(OutSlopeName, OutSlope.ExportYAML(container));
 			if (IsReadTangentMode(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add("tangentMode", (int)TangentMode);
+				node.Add(TangentModeName, (int)TangentMode);
 			}
 			if (IsReadWeight(container.ExportVersion))
 			{
-				node.Add("weightedMode", (int)WeightedMode);
-				node.Add("inWeight", InWeight.ExportYAML(container));
-				node.Add("outWeight", OutWeight.ExportYAML(container));
+				node.Add(WeightedModeName, (int)WeightedMode);
+				node.Add(InWeightName, InWeight.ExportYAML(container));
+				node.Add(OutWeightName, OutWeight.ExportYAML(container));
 			}
 			return node;
 		}
@@ -94,6 +94,15 @@ namespace uTinyRipper.Classes.AnimationClips
 		public float Time { get; private set; }
 		public TangentMode TangentMode { get; private set; }
 		public WeightedMode WeightedMode { get; private set; }
+
+		public const string TimeName = "time";
+		public const string ValueName = "value";
+		public const string InSlopeName = "inSlope";
+		public const string OutSlopeName = "outSlope";
+		public const string TangentModeName = "tangentMode";
+		public const string WeightedModeName = "weightedMode";
+		public const string InWeightName = "inWeight";
+		public const string OutWeightName = "outWeight";
 
 		public T Value;
 		public T InSlope;

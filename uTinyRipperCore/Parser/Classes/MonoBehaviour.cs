@@ -17,10 +17,19 @@ namespace uTinyRipper.Classes
 
 		public static bool IsReadEditorHideFlags(Version version, TransferInstructionFlags flags)
 		{
+#warning unknown version
 			return !flags.IsRelease();
+		}
+		/// <summary>
+		/// 2019.1 to 2019.1.0b4 exclusive and Not Release
+		/// </summary>
+		public static bool IsReadGeneratorAsset(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(2019) && version.IsLess(2019, 1, 0, VersionType.Beta, 4);
 		}
 		public static bool IsReadEditorClassIdentifier(Version version, TransferInstructionFlags flags)
 		{
+#warning unknown version
 			return !flags.IsRelease();
 		}
 
@@ -33,6 +42,10 @@ namespace uTinyRipper.Classes
 			if (IsReadEditorHideFlags(reader.Version, reader.Flags))
 			{
 				EditorHideFlags = (HideFlags)reader.ReadUInt32();
+			}
+			if (IsReadGeneratorAsset(reader.Version, reader.Flags))
+			{
+				GeneratorAsset.Read(reader);
 			}
 #endif
 			Script.Read(reader);
@@ -66,6 +79,9 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 
+#if UNIVERSAL
+			yield return GeneratorAsset.FindAsset(file);
+#endif
 			yield return Script.FindAsset(file);
 			
 			if(Structure != null)
@@ -86,6 +102,10 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add(EditorHideFlagsName, (uint)GetEditorHideFlags(container.Version, container.Flags));
+			if (IsReadGeneratorAsset(container.ExportVersion, container.ExportFlags))
+			{
+				node.Add(GeneratorAssetName, GetGeneratorAsset(container.Version, container.Flags).ExportYAML(container));
+			}
 			node.Add(ScriptName, Script.ExportYAML(container));
 			node.Add(NameName, Name);
 			node.Add(EditorClassIdentifierName, GetEditorClassIdentifier(container.Version, container.Flags));
@@ -106,6 +126,16 @@ namespace uTinyRipper.Classes
 			}
 #endif
 			return HideFlags.None;
+		}
+		private PPtr<Object> GetGeneratorAsset(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadGeneratorAsset(version, flags))
+			{
+				return GeneratorAsset;
+			}
+#endif
+			return default;
 		}
 		private string GetEditorClassIdentifier(Version version, TransferInstructionFlags flags)
 		{
@@ -138,10 +168,14 @@ namespace uTinyRipper.Classes
 #endif
 
 		public const string EditorHideFlagsName = "m_EditorHideFlags";
+		public const string GeneratorAssetName = "m_GeneratorAsset";
 		public const string ScriptName = "m_Script";
 		public const string NameName = "m_Name";
 		public const string EditorClassIdentifierName = "m_EditorClassIdentifier";
 
+#if UNIVERSAL
+		public PPtr<Object> GeneratorAsset;
+#endif
 		public PPtr<MonoScript> Script;
 	}
 }

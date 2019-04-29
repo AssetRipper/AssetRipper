@@ -21,6 +21,20 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(2018, 2);
 		}
 		/// <summary>
+		/// 2019.1 and greater and Not Release
+		/// </summary>
+		public static bool IsReadFOVAxisMode(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(2019);
+		}
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadSensorSize(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
 		public static bool IsReadGateFitMode(Version version)
@@ -106,9 +120,23 @@ namespace uTinyRipper.Classes
 		}
 		
 		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		private static bool IsReadGateFitModeFirst(Version version)
+		{
+			return version.IsGreaterEqual(2019);
+		}
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		private static bool IsAlign1(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
+		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version)
+		private static bool IsAlign2(Version version)
 		{
 			return version.IsGreaterEqual(4, 5);
 		}
@@ -132,12 +160,35 @@ namespace uTinyRipper.Classes
 			if (IsReadProjectionMatrixMode(reader.Version))
 			{
 				ProjectionMatrixMode = (ProjectionMatrixMode)reader.ReadInt32();
+			}
+			if (IsReadGateFitMode(reader.Version))
+			{
+				if (IsReadGateFitModeFirst(reader.Version))
+				{
+					GateFitMode = (GateFitMode)reader.ReadInt32();
+				}
+			}
+#if UNIVERSAL
+			if (IsReadFOVAxisMode(reader.Version, reader.Flags))
+			{
+				FOVAxisMode = (FieldOfViewAxis)reader.ReadInt32();
+			}
+#endif
+			if (IsAlign1(reader.Version))
+			{
+				reader.AlignStream(AlignType.Align4);
+			}
+			if (IsReadSensorSize(reader.Version))
+			{
 				SensorSize.Read(reader);
 				LensShift.Read(reader);
 			}
 			if (IsReadGateFitMode(reader.Version))
 			{
-				GateFitMode = (GateFitMode)reader.ReadInt32();
+				if (!IsReadGateFitModeFirst(reader.Version))
+				{
+					GateFitMode = (GateFitMode)reader.ReadInt32();
+				}
 			}
 			if (IsReadFocalLength(reader.Version))
 			{
@@ -187,7 +238,7 @@ namespace uTinyRipper.Classes
 			{
 				OcclusionCulling = reader.ReadBoolean();
 			}
-			if (IsAlign(reader.Version))
+			if (IsAlign2(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
@@ -222,6 +273,13 @@ namespace uTinyRipper.Classes
 			if (IsReadProjectionMatrixMode(container.ExportVersion))
 			{
 				node.Add(ProjectionMatrixModeName, (int)ProjectionMatrixMode);
+			}
+			if (IsReadFOVAxisMode(container.ExportVersion, container.ExportFlags))
+			{
+				node.Add(FOVAxisModeName, (int)GetFOVAxisMode(container.Version, container.Flags));
+			}
+			if (IsReadSensorSize(container.ExportVersion))
+			{
 				node.Add(SensorSizeName, SensorSize.ExportYAML(container));
 				node.Add(LensShiftName, LensShift.ExportYAML(container));
 			}
@@ -256,9 +314,23 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
+		private FieldOfViewAxis GetFOVAxisMode(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadFOVAxisMode(version, flags))
+			{
+				return FOVAxisMode;
+			}
+#endif
+			return FieldOfViewAxis.Vertical;
+		}
+
 		public uint ClearFlags { get; private set; }
 		public ProjectionMatrixMode ProjectionMatrixMode { get; private set; }
 		public GateFitMode GateFitMode { get; private set; }
+#if UNIVERSAL
+		public FieldOfViewAxis FOVAxisMode { get; private set; }
+#endif
 		public float FocalLength { get; private set; }
 		public float NearClipPlane { get; private set; }
 		public float FarClipPlane { get; private set; }
@@ -284,6 +356,7 @@ namespace uTinyRipper.Classes
 		public const string ClearFlagsName = "m_ClearFlags";
 		public const string BackGroundColorName = "m_BackGroundColor";
 		public const string ProjectionMatrixModeName = "m_projectionMatrixMode";
+		public const string FOVAxisModeName = "m_FOVAxisMode";
 		public const string SensorSizeName = "m_SensorSize";
 		public const string LensShiftName = "m_LensShift";
 		public const string GateFitModeName = "m_GateFitMode";

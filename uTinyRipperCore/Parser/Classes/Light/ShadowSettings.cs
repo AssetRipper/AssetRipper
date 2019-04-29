@@ -54,6 +54,13 @@ namespace uTinyRipper.Classes.Lights
 		{
 			return version.IsGreaterEqual(5, 3);
 		}
+		/// <summary>
+		/// 2019.1.0b4 and greater
+		/// </summary>
+		public static bool IsReadCullingMatrixOverride(Version version)
+		{
+			return version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 4);
+		}
 
 		public void Read(AssetReader reader)
 		{
@@ -90,6 +97,12 @@ namespace uTinyRipper.Classes.Lights
 			{
 				NearPlane = reader.ReadSingle();
 			}
+			if (IsReadCullingMatrixOverride(reader.Version))
+			{
+				CullingMatrixOverride.Read(reader);
+				UseCullingMatrixOverride = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
+			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -102,7 +115,17 @@ namespace uTinyRipper.Classes.Lights
 			node.Add(BiasName, Bias);
 			node.Add(NormalBiasName, NormalBias);
 			node.Add(NearPlaneName, NearPlane);
+			if (IsReadCullingMatrixOverride(container.ExportVersion))
+			{
+				node.Add(CullingMatrixOverrideName, GetCullingMatrixOverride(container.Version).ExportYAML(container));
+				node.Add(UseCullingMatrixOverrideName, UseCullingMatrixOverride);
+			}
 			return node;
+		}
+
+		private Matrix4x4f GetCullingMatrixOverride(Version version)
+		{
+			return IsReadCullingMatrixOverride(version) ? CullingMatrixOverride : Matrix4x4f.Identity;
 		}
 
 		public LightShadows Type { get; private set; }
@@ -117,7 +140,8 @@ namespace uTinyRipper.Classes.Lights
 		public float SoftnessFade  { get; private set; }
 		public float NormalBias { get; private set; }
 		public float NearPlane { get; private set; }
-
+		public bool UseCullingMatrixOverride { get; private set; }
+		
 		public const string TypeName = "m_Type";
 		public const string ResolutionName = "m_Resolution";
 		public const string CustomResolutionName = "m_CustomResolution";
@@ -125,5 +149,9 @@ namespace uTinyRipper.Classes.Lights
 		public const string BiasName = "m_Bias";
 		public const string NormalBiasName = "m_NormalBias";
 		public const string NearPlaneName = "m_NearPlane";
+		public const string CullingMatrixOverrideName = "m_CullingMatrixOverride";
+		public const string UseCullingMatrixOverrideName = "m_UseCullingMatrixOverride";
+
+		public Matrix4x4f CullingMatrixOverride { get; private set; }
 	}
 }

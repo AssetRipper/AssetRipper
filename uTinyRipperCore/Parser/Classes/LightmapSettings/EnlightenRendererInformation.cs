@@ -21,7 +21,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			DynamicLightmapSTInSystem.Read(reader);
 			SystemId = reader.ReadInt32();
 			InstanceHash.Read(reader);
-			if(IsReadGeometryHash(reader.Flags))
+			if (IsReadGeometryHash(reader.Flags))
 			{
 				GeometryHash.Read(reader);
 			}
@@ -29,21 +29,27 @@ namespace uTinyRipper.Classes.LightmapSettingss
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			yield return Renderer.FetchDependency(file, isLog, () => nameof(EnlightenRendererInformation), "renderer");
+			yield return Renderer.FetchDependency(file, isLog, () => nameof(EnlightenRendererInformation), RendererName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("renderer", Renderer.ExportYAML(container));
-			node.Add("dynamicLightmapSTInSystem", DynamicLightmapSTInSystem.ExportYAML(container));
-			node.Add("systemId", SystemId);
-			node.Add("instanceHash", InstanceHash.ExportYAML(container));
-			node.Add("geometryHash", GeometryHash.ExportYAML(container));
+			node.Add(RendererName, Renderer.ExportYAML(container));
+			node.Add(DynamicLightmapSTInSystemName, DynamicLightmapSTInSystem.ExportYAML(container));
+			node.Add(SystemIdName, SystemId);
+			node.Add(InstanceHashName, InstanceHash.ExportYAML(container));
+			node.Add(GeometryHashName, GeometryHash.ExportYAML(container));
 			return node;
 		}
 
 		public int SystemId { get; private set; }
+
+		public const string RendererName = "renderer";
+		public const string DynamicLightmapSTInSystemName = "dynamicLightmapSTInSystem";
+		public const string SystemIdName = "systemId";
+		public const string InstanceHashName = "instanceHash";
+		public const string GeometryHashName = "geometryHash";
 
 		public PPtr<Object> Renderer;
 		public Vector4f DynamicLightmapSTInSystem;

@@ -14,7 +14,7 @@ namespace uTinyRipperGUI.Exporters
 {
 	public class TextureAssetExporter : IAssetExporter
 	{
-		public static bool ExportTexture(IExportContainer container, Texture2D texture, Stream exportStream)
+		public static bool ExportTexture(Texture2D texture, Stream exportStream)
 		{
 			byte[] buffer = (byte[])texture.GetImageData();
 			if (buffer.Length == 0)
@@ -145,7 +145,7 @@ namespace uTinyRipperGUI.Exporters
 
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
-				if (!ExportTexture(container, texture, fileStream))
+				if (!ExportTexture(texture, fileStream))
 				{
 					Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
 					return false;

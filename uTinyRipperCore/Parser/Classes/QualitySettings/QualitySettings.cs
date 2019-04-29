@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.QualitySettingss;
-using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -69,7 +69,7 @@ namespace uTinyRipper.Classes
 		{
 			return flags.IsRelease() && version.IsGreaterEqual(3, 5);
 		}
-		
+
 		private static int GetSerializedVersion(Version version)
 		{
 			// static PlatformDefaultQuality has been replaced by dictionary
@@ -115,7 +115,7 @@ namespace uTinyRipper.Classes
 				m_perPlatformDefaultQuality[BuildTargetGroup.iOS.ToExportString()] = (int)defaultMobileQuality;
 			}
 			CurrentQuality = reader.ReadInt32();
-			if(IsReadQualitySettingArray(reader.Version))
+			if (IsReadQualitySettingArray(reader.Version))
 			{
 				m_qualitySettings = reader.ReadAssetArray<QualitySetting>();
 			}
@@ -196,7 +196,7 @@ namespace uTinyRipper.Classes
 			}
 
 #if UNIVERSAL
-			if(IsReadPerPlatformDefaultQuality(reader.Version, reader.Flags))
+			if (IsReadPerPlatformDefaultQuality(reader.Version, reader.Flags))
 			{
 				m_perPlatformDefaultQuality = new Dictionary<string, int>();
 				m_perPlatformDefaultQuality.Read(reader);
@@ -212,9 +212,9 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_CurrentQuality", CurrentQuality);
-			node.Add("m_QualitySettings", QualitySettingss.ExportYAML(container));
-			node.Add("m_PerPlatformDefaultQuality", GetPerPlatformDefaultQuality(container.Version, container.Flags).ExportYAML());
+			node.Add(CurrentQualityName, CurrentQuality);
+			node.Add(QualitySettingsName, QualitySettingss.ExportYAML(container));
+			node.Add(PerPlatformDefaultQualityName, GetPerPlatformDefaultQuality(container.Version, container.Flags).ExportYAML());
 			return node;
 		}
 
@@ -259,7 +259,7 @@ namespace uTinyRipper.Classes
 			setting.Name = "Very Low";
 			setting.ShadowCascades = ShadowCascades.NoCascades;
 			setting.ShadowDistance = 15;
-			setting.BlendWeights = BlendWeights.OneBone;
+			setting.SkinWeights = SkinWeights.OneBone;
 			setting.TextureQuality = TextureQuality.HalfRes;
 			setting.LodBias = 0.3f;
 			setting.ParticleRaycastBudget = 4;
@@ -272,7 +272,7 @@ namespace uTinyRipper.Classes
 			setting.Name = "Low";
 			setting.ShadowCascades = ShadowCascades.NoCascades;
 			setting.ShadowDistance = 20;
-			setting.BlendWeights = BlendWeights.TwoBones;
+			setting.SkinWeights = SkinWeights.TwoBones;
 			setting.LodBias = 0.4f;
 			setting.ParticleRaycastBudget = 16;
 			return setting;
@@ -286,7 +286,7 @@ namespace uTinyRipper.Classes
 			setting.Shadows = ShadowQuality.HardOnly;
 			setting.ShadowCascades = ShadowCascades.NoCascades;
 			setting.ShadowDistance = 20;
-			setting.BlendWeights = BlendWeights.TwoBones;
+			setting.SkinWeights = SkinWeights.TwoBones;
 			setting.AnisotropicTextures = AnisotropicFiltering.Enable;
 			setting.VSyncCount = VSyncCount.EveryVBlank;
 			setting.LodBias = 0.7f;
@@ -303,7 +303,7 @@ namespace uTinyRipper.Classes
 			setting.ShadowResolution = ShadowResolution.Medium;
 			setting.ShadowCascades = ShadowCascades.TwoCascades;
 			setting.ShadowDistance = 40;
-			setting.BlendWeights = BlendWeights.TwoBones;
+			setting.SkinWeights = SkinWeights.TwoBones;
 			setting.AnisotropicTextures = AnisotropicFiltering.Enable;
 			setting.AntiAliasing = AntiAliasing._2X;
 			setting.SoftVegetation = true;
@@ -323,7 +323,7 @@ namespace uTinyRipper.Classes
 			setting.ShadowCascades = ShadowCascades.TwoCascades;
 			setting.ShadowDistance = 40;
 			setting.ShadowmaskMode = ShadowmaskMode.DistanceShadowmask;
-			setting.BlendWeights = BlendWeights.FourBones;
+			setting.SkinWeights = SkinWeights.FourBones;
 			setting.AnisotropicTextures = AnisotropicFiltering.Enable;
 			setting.AntiAliasing = AntiAliasing._4X;
 			setting.SoftParticles = true;
@@ -346,7 +346,7 @@ namespace uTinyRipper.Classes
 			setting.ShadowCascades = ShadowCascades.FourCascades;
 			setting.ShadowDistance = 150;
 			setting.ShadowmaskMode = ShadowmaskMode.DistanceShadowmask;
-			setting.BlendWeights = BlendWeights.FourBones;
+			setting.SkinWeights = SkinWeights.FourBones;
 			setting.AnisotropicTextures = AnisotropicFiltering.Enable;
 			setting.AntiAliasing = AntiAliasing._4X;
 			setting.SoftParticles = true;
@@ -364,10 +364,14 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public int CurrentQuality { get; private set; }
 		public IReadOnlyList<QualitySetting> QualitySettingss => m_qualitySettings;
-		public IReadOnlyDictionary<string,int> PerPlatformDefaultQuality => m_perPlatformDefaultQuality;
+		public IReadOnlyDictionary<string, int> PerPlatformDefaultQuality => m_perPlatformDefaultQuality;
 		public int StrippedMaximumLODLevel { get; private set; }
 
+		public const string CurrentQualityName = "m_CurrentQuality";
+		public const string QualitySettingsName = "m_QualitySettings";
+		public const string PerPlatformDefaultQualityName = "m_PerPlatformDefaultQuality";
+
 		private QualitySetting[] m_qualitySettings;
-		private Dictionary<string,int> m_perPlatformDefaultQuality;
+		private Dictionary<string, int> m_perPlatformDefaultQuality;
 	}
 }

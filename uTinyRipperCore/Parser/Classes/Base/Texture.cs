@@ -15,7 +15,7 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool IsReadImageContentsHash(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(5) && !flags.IsRelease();
+			return !flags.IsRelease() && version.IsGreaterEqual(5);
 		}
 		/// <summary>
 		/// 2017.3 and greater

@@ -15,54 +15,8 @@ namespace uTinyRipper.Classes.Meshes
 		Tangent		= 5,
 	}
 
-	public static class ChannelTypeV3Extensions
+	public static class ChannelTypeV4Extensions
 	{
-		public static ChannelFormat GetFormat(this ChannelTypeV4 _this)
-		{
-			switch (_this)
-			{
-				case ChannelTypeV4.Vertex:
-				case ChannelTypeV4.Normal:
-					return ChannelFormat.Float;
-
-				case ChannelTypeV4.Color:
-					return ChannelFormat.Color;
-
-				case ChannelTypeV4.UV0:
-				case ChannelTypeV4.UV1:
-					return ChannelFormat.Float;
-
-				case ChannelTypeV4.Tangent:
-					return ChannelFormat.Float;
-
-				default:
-					throw new Exception($"Unsupported channel type {_this}");
-			}
-		}
-
-		public static byte GetDimention(this ChannelTypeV4 _this)
-		{
-			switch (_this)
-			{
-				case ChannelTypeV4.Vertex:
-				case ChannelTypeV4.Normal:
-					return 3;
-
-				case ChannelTypeV4.Color:
-					return 4;
-
-				case ChannelTypeV4.UV0:
-				case ChannelTypeV4.UV1:
-					return 2;
-
-				case ChannelTypeV4.Tangent:
-					return 4;
-
-				default:
-					throw new Exception($"Unsupported channel type {_this}");
-			}
-		}
-
 		public static ChannelType ToChannelType(this ChannelTypeV4 _this)
 		{
 			switch(_this)
@@ -72,7 +26,7 @@ namespace uTinyRipper.Classes.Meshes
 				case ChannelTypeV4.Normal:
 					return ChannelType.Normal;
 				case ChannelTypeV4.Color:
-					return ChannelType.Color;
+					return ChannelType.Color4;
 				case ChannelTypeV4.UV0:
 					return ChannelType.UV0;
 				case ChannelTypeV4.UV1:
@@ -83,13 +37,6 @@ namespace uTinyRipper.Classes.Meshes
 				default:
 					throw new Exception($"Unsupported channel type {_this}");
 			}
-		}
-
-		public static byte GetStride(this ChannelTypeV4 _this)
-		{
-			ChannelFormat format = _this.GetFormat();
-			int dimention = _this.GetDimention();
-			return ChannelInfo.CalculateStride(format, dimention);
 		}
 	}
 }

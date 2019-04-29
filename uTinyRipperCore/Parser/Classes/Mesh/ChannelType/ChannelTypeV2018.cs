@@ -25,75 +25,6 @@ namespace uTinyRipper.Classes.Meshes
 
 	public static class ChannelTypeV2018Extensions
 	{
-		public static ChannelFormat GetFormat(this ChannelTypeV2018 _this)
-		{
-			switch (_this)
-			{
-				case ChannelTypeV2018.Vertex:
-				case ChannelTypeV2018.Normal:
-					return ChannelFormat.Float;
-
-				case ChannelTypeV2018.Tangent:
-					return ChannelFormat.Float;
-
-				case ChannelTypeV2018.Color:
-					return ChannelFormat.Color;
-
-				case ChannelTypeV2018.UV0:
-				case ChannelTypeV2018.UV1:
-				case ChannelTypeV2018.UV2:
-				case ChannelTypeV2018.UV3:
-				case ChannelTypeV2018.UV4:
-				case ChannelTypeV2018.UV5:
-				case ChannelTypeV2018.UV6:
-				case ChannelTypeV2018.UV7:
-					return ChannelFormat.Float;
-
-				case ChannelTypeV2018.SkinWeight:
-					return ChannelFormat.Float;
-				case ChannelTypeV2018.SkinBoneIndex:
-					return ChannelFormat.Int;
-
-				default:
-					throw new Exception($"Unsupported channel type {_this}");
-			}
-		}
-
-		public static byte GetDimention(this ChannelTypeV2018 _this)
-		{
-			switch (_this)
-			{
-				case ChannelTypeV2018.Vertex:
-				case ChannelTypeV2018.Normal:
-					return 3;
-
-				case ChannelTypeV2018.Tangent:
-					return 4;
-
-				case ChannelTypeV2018.Color:
-					return 4;
-
-				case ChannelTypeV2018.UV0:
-				case ChannelTypeV2018.UV1:
-				case ChannelTypeV2018.UV2:
-				case ChannelTypeV2018.UV3:
-				case ChannelTypeV2018.UV4:
-				case ChannelTypeV2018.UV5:
-				case ChannelTypeV2018.UV6:
-				case ChannelTypeV2018.UV7:
-					return 2;
-
-				case ChannelTypeV2018.SkinWeight:
-					return 4;
-
-				case ChannelTypeV2018.SkinBoneIndex:
-					return 4;
-
-				default:
-					throw new Exception($"Unsupported channel type {_this}");
-			}
-		}
-
 		public static ChannelType ToChannelType(this ChannelTypeV2018 _this)
 		{
 			switch (_this)
@@ -114,17 +45,22 @@ namespace uTinyRipper.Classes.Meshes
 					return ChannelType.UV2;
 				case ChannelTypeV2018.UV3:
 					return ChannelType.UV3;
+				case ChannelTypeV2018.UV4:
+					return ChannelType.UV4;
+				case ChannelTypeV2018.UV5:
+					return ChannelType.UV5;
+				case ChannelTypeV2018.UV6:
+					return ChannelType.UV6;
+				case ChannelTypeV2018.UV7:
+					return ChannelType.UV7;
+				case ChannelTypeV2018.SkinWeight:
+					return ChannelType.SkinWeight;
+				case ChannelTypeV2018.SkinBoneIndex:
+					return ChannelType.SkinBoneIndex;
 
 				default:
 					throw new Exception($"Unsupported channel type {_this}");
 			}
-		}
-
-		public static byte GetStride(this ChannelTypeV2018 _this)
-		{
-			ChannelFormat format = _this.GetFormat();
-			int dimention = _this.GetDimention();
-			return ChannelInfo.CalculateStride(format, dimention);
 		}
 	}
 }
