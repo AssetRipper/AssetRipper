@@ -57,7 +57,7 @@ namespace uTinyRipper
 			return ToLongPath(path, false);
 		}
 
-		private static string ToLongPath(string path, bool force)
+		public static string ToLongPath(string path, bool force)
 		{
 			if (path.StartsWith(LongPathPrefix, StringComparison.Ordinal))
 			{

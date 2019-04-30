@@ -68,7 +68,7 @@ namespace uTinyRipper
 #if VIRTUAL
 			return new MemoryStream();
 #else
-			return Open(ToLongPath(path), FileMode.CreateNew, FileAccess.Write);
+			return Open(path, FileMode.CreateNew, FileAccess.Write);
 #endif
 		}
 
@@ -98,9 +98,9 @@ namespace uTinyRipper
 				fileName = fileName.Substring(0, MaxFileNameLength - extension.Length - 1);
 				return Path.Combine(directory, fileName + extension);
 			}
-			else if (index >= DirectoryUtils.MaxDirectoryLength)
+			else if (fullPath.Length >= MaxFilePathLength)
 			{
-				// directory name is too long. just add a prefix
+				// name is ok but whole path is too long. just add a prefix
 				return $"{DirectoryUtils.LongPathPrefix}{fullPath}";
 			}
 			return path;
@@ -122,14 +122,15 @@ namespace uTinyRipper
 
 			string name = Path.GetFileNameWithoutExtension(fileName);
 			string ext = Path.GetExtension(fileName);
-			if (name.Length > 245)
+			int maxLength = MaxFileNameLength - ext.Length - 4;
+			if (name.Length > maxLength)
 			{
-				name = name.Substring(0, 245);
+				name = name.Substring(0, maxLength);
 			}
 
 			string escapedName = Regex.Escape(name);
 			List<string> files = new List<string>();
-			DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
+			DirectoryInfo dirInfo = new DirectoryInfo(DirectoryUtils.ToLongPath(dirPath, true));
 			Regex regex = new Regex($@"(?i)^{escapedName}(_[\d]+)?\.[^\.]+$");
 			foreach (FileInfo fileInfo in dirInfo.EnumerateFiles($"{name}_*{ext}"))
 			{
@@ -156,5 +157,6 @@ namespace uTinyRipper
 		}
 
 		public const int MaxFileNameLength = 256;
+		public const int MaxFilePathLength = 260;
 	}
 }
