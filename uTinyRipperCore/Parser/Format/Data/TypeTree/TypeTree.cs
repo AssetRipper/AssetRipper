@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper
@@ -60,6 +61,37 @@ namespace uTinyRipper
 				ReadTreeNode(reader, nodes, (byte)(depth + 1));
 			}
 		}
+
+		public override string ToString()
+		{
+			if (Nodes == null)
+			{
+				return base.ToString();
+			}
+
+			return Nodes[0].ToString();
+		}
+
+		public StringBuilder ToString(StringBuilder sb)
+		{
+			foreach (TypeTreeNode node in Nodes)
+			{
+				node.ToString(sb).AppendLine();
+			}
+			return sb;
+		}
+
+#if DEBUG
+		public string Dump
+		{
+			get
+			{
+				StringBuilder sb = new StringBuilder();
+				ToString(sb);
+				return sb.ToString();
+			}
+		}
+#endif
 
 		public IReadOnlyList<TypeTreeNode> Nodes => m_nodes;
 

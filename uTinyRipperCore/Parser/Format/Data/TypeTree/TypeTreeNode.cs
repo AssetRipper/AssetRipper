@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper
@@ -73,6 +74,18 @@ namespace uTinyRipper
 			{
 				return $"{Type} {Name}";
 			}
+		}
+
+		public StringBuilder ToString(StringBuilder sb)
+		{
+			sb.Append('\t', Depth).Append(Type).Append(' ').Append(Name);
+			sb.AppendFormat(" // ByteSize{0}{1:x}{2}, Index{3}{4:x}{5}, Version{6}{7:x}{8}, IsArray{{{9}}}, MetaFlag{10}{11:x}{12}",
+					"{", unchecked((uint)ByteSize), "}",
+					"{", Index, "}",
+					"{", Version, "}",
+					IsArray ? 1 : 0,
+					"{", MetaFlag, "}");
+			return sb;
 		}
 
 		public const int NodeSize = 24;
