@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Materials;
-using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -35,11 +35,11 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(4, 3);
 		}
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadLightmapFlags(Version version)
 		{
-			return version.IsGreaterEqual(5);
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
 		/// 5.6.0 and greater
@@ -77,11 +77,11 @@ namespace uTinyRipper.Classes
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			Shader.Read(reader);
-			if(IsReadKeywords(reader.Version))
+			if (IsReadKeywords(reader.Version))
 			{
-				if(IsKeywordsArray(reader.Version))
+				if (IsKeywordsArray(reader.Version))
 				{
 					m_shaderKeywordsArray = reader.ReadStringArray();
 				}
@@ -91,7 +91,7 @@ namespace uTinyRipper.Classes
 				}
 			}
 
-			if(IsReadLightmapFlags(reader.Version))
+			if (IsReadLightmapFlags(reader.Version))
 			{
 				LightmapFlags = reader.ReadUInt32();
 				if (IsReadOtherFlags(reader.Version))
@@ -122,13 +122,13 @@ namespace uTinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(file, isLog))
 			{
 				yield return asset;
 			}
-			
+
 			yield return Shader.FetchDependency(file, isLog, ToLogString, "m_Shader");
-			foreach(Object asset in SavedProperties.FetchDependencies(file, isLog))
+			foreach (Object asset in SavedProperties.FetchDependencies(file, isLog))
 			{
 				yield return asset;
 			}
@@ -150,7 +150,7 @@ namespace uTinyRipper.Classes
 			node.Add("m_SavedProperties", SavedProperties.ExportYAML(container));
 			return node;
 		}
-		
+
 		public override string ExportExtension => "mat";
 
 		public IReadOnlyList<string> ShaderKeywordsArray => m_shaderKeywordsArray;
