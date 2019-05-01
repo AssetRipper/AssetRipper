@@ -32,7 +32,7 @@ namespace uTinyRipper
 				}
 					
 				m_nodes = new TypeTreeNode[nodesCount];
-				long stringPosition = reader.BaseStream.Position + nodesCount * TypeTreeNode.NodeSize;
+				long stringPosition = reader.BaseStream.Position + nodesCount * TypeTreeNode.GetNodeSize(reader.Generation);
 				for (int i = 0; i < nodesCount; i++)
 				{
 					TypeTreeNode node = new TypeTreeNode();

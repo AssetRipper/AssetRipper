@@ -3,7 +3,7 @@ namespace uTinyRipper.SerializedFiles
 	/// <summary>
 	/// Contains information for a block of raw serialized object data.
 	/// </summary>
-	public class AssetEntry : ISerializedFileReadable
+	public class AssetEntry
 	{
 		/// <summary>
 		/// 5.0.0 and greater
@@ -27,7 +27,7 @@ namespace uTinyRipper.SerializedFiles
 			return generation >= FileGeneration.FG_501_54 &&  generation <= FileGeneration.FG_5unknown;
 		}
 
-		public void Read(SerializedFileReader reader)
+		public void Read(SerializedFileReader reader, RTTIClassHierarchyDescriptor heirarchy)
 		{
 			if (IsReadLongID(reader.Generation))
 			{
@@ -42,7 +42,11 @@ namespace uTinyRipper.SerializedFiles
 			DataSize = reader.ReadInt32();
 			if (IsReadTypeIndex(reader.Generation))
 			{
-				TypeIndex = reader.ReadInt32();
+				int TypeIndex = reader.ReadInt32();
+				RTTIBaseClassDescriptor type = heirarchy.Types[TypeIndex];
+				TypeID = type.ClassID == ClassIDType.MonoBehaviour ? (-type.ScriptID - 1) : (int)type.ClassID;
+				ClassID = type.ClassID;
+				ScriptID = type.ScriptID;
 			}
 			else
 			{
@@ -52,7 +56,7 @@ namespace uTinyRipper.SerializedFiles
 			}
 			if (IsReadUnknown(reader.Generation))
 			{
-				Unknown = reader.ReadBoolean();
+				IsStripped = reader.ReadBoolean();
 			}
 		}
 
@@ -79,11 +83,7 @@ namespace uTinyRipper.SerializedFiles
 		/// Class ID of the object.
 		/// </summary>
 		public ClassIDType ClassID { get; private set; }
-		/// <summary>
-		/// Index of RTTIBaseClassDescriptor
-		/// </summary>
-		public int TypeIndex { get; private set; }
 		public short ScriptID { get; private set; }
-		public bool Unknown { get; private set; }
+		public bool IsStripped { get; private set; }
 	}
 }

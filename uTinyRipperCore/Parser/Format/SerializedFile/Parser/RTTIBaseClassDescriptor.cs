@@ -15,7 +15,7 @@ namespace uTinyRipper.SerializedFiles
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool IsReadUnknown(FileGeneration generation)
+		public static bool IsReadScriptType(FileGeneration generation)
 		{
 			return generation >= FileGeneration.FG_550_2018;
 		}
@@ -27,38 +27,30 @@ namespace uTinyRipper.SerializedFiles
 			return generation >= FileGeneration.FG_500aunk2;
 		}
 
-		/// <summary>
-		/// Less than 5.5.0
-		/// </summary>
-		private static bool IsOldHashType(FileGeneration generation)
-		{
-			return generation < FileGeneration.FG_550_2018;
-		}
-
 		public void Read(SerializedFileReader reader)
 		{
 			ClassID = (ClassIDType)reader.ReadInt32();
-			if (IsReadUnknown(reader.Generation))
+			if (IsReadScriptType(reader.Generation))
 			{
-				Unknown = reader.ReadByte();
+				IsStrippedType = reader.ReadBoolean();
 				ScriptID = reader.ReadInt16();
+			}
+			else
+			{
+				// For old version it specifies ClassIDType or -ScriptID for MonoBehaviour
+				int uniqueTypeID = (int)ClassID;
+				if (uniqueTypeID < 0)
+				{
+					ClassID = ClassIDType.MonoBehaviour;
+					ScriptID = (short)(-uniqueTypeID - 1);
+				}
 			}
 
 			if (IsReadHash(reader.Generation))
 			{
-				if (IsOldHashType(reader.Generation))
+				if (ClassID == ClassIDType.MonoBehaviour)
 				{
-					if ((int)ClassID <= -1)
-					{
-						ScriptHash.Read(reader);
-					}
-				}
-				else
-				{
-					if (ClassID == ClassIDType.MonoBehaviour)
-					{
-						ScriptHash.Read(reader);
-					}
+					ScriptHash.Read(reader);
 				}
 				TypeHash.Read(reader);
 			}
@@ -75,11 +67,11 @@ namespace uTinyRipper.SerializedFiles
 			return ClassID.ToString();
 		}
 
-		/// <summary>
-		/// The ID of the class. Only one type tree per class ID is allowed. Can be used as a key for a map.
-		/// </summary>
 		public ClassIDType ClassID { get; private set; }
-		public byte Unknown { get; private set; }
+		public bool IsStrippedType { get; private set; }
+		/// <summary>
+		/// For MonoBehaviours specifies script type
+		/// </summary>
 		public short ScriptID { get; private set; }
 		/// <summary>
 		/// The type of the class.

@@ -15,6 +15,19 @@ namespace uTinyRipper
 			Depth = depth;
 		}
 
+		public static int GetNodeSize(FileGeneration generation)
+		{
+			return IsReadUnknown(generation) ? 32 : 24;
+		}
+
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool IsReadUnknown(FileGeneration generation)
+		{
+			return generation >= FileGeneration.FG_2019_x;
+		}
+
 		public void Read(SerializedFileReader reader)
 		{
 			Type = reader.ReadStringZeroTerm();
@@ -36,6 +49,11 @@ namespace uTinyRipper
 			ByteSize = reader.ReadInt32();
 			Index = reader.ReadInt32();
 			MetaFlag = reader.ReadUInt32();
+			if (IsReadUnknown(reader.Generation))
+			{
+				Unknown1 = reader.ReadUInt32();
+				Unknown2 = reader.ReadUInt32();
+			}
 
 			Type = ReadString(reader, stringPosition, type);
 			Name = ReadString(reader, stringPosition, name);
@@ -88,8 +106,6 @@ namespace uTinyRipper
 			return sb;
 		}
 
-		public const int NodeSize = 24;
-
 		/// <summary>
 		/// Field type version, starts with 1 and is incremented after the type information has been significantly updated in a new release.
 		/// Equal to serializedVersion in YAML format files
@@ -125,5 +141,7 @@ namespace uTinyRipper
 		/// Metaflags of the field. Purpose is mostly unknown.
 		/// </summary>
 		public uint MetaFlag { get; private set; }
+		public uint Unknown1 { get; private set; }
+		public uint Unknown2 { get; private set; }
 	}
 }

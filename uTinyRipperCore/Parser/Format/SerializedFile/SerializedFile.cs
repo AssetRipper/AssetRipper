@@ -180,15 +180,7 @@ namespace uTinyRipper.SerializedFiles
 
 		public ClassIDType GetClassID(long pathID)
 		{
-			AssetEntry info = Metadata.Objects[pathID];
-			if (AssetEntry.IsReadTypeIndex(Header.Generation))
-			{
-				return Metadata.Hierarchy.Types[info.TypeIndex].ClassID;
-			}
-			else
-			{
-				return info.ClassID;
-			}
+			return Metadata.Objects[pathID].ClassID;
 		}
 
 		public PPtr<T> CreatePPtr<T>(T asset)
@@ -380,8 +372,7 @@ namespace uTinyRipper.SerializedFiles
 
 			foreach (KeyValuePair<long, AssetEntry> infoPair in Metadata.Objects)
 			{
-				ClassIDType classID = AssetEntryToClassIDType(infoPair.Value);
-				if (classID == ClassIDType.MonoScript)
+				if (infoPair.Value.ClassID == ClassIDType.MonoScript)
 				{
 					if (!preloaded.Contains(infoPair.Key))
 					{
@@ -402,13 +393,11 @@ namespace uTinyRipper.SerializedFiles
 
 		private void ReadAsset(EndianReader reader, AssetEntry info, long startPosition)
 		{
-			long pathID = info.PathID;
-			ClassIDType classID = AssetEntryToClassIDType(info);
-			AssetInfo assetInfo = new AssetInfo(this, pathID, classID);
+			AssetInfo assetInfo = new AssetInfo(this, info.PathID, info.ClassID);
 			Object asset = ReadAsset(reader, assetInfo, startPosition + Header.DataOffset + info.DataOffset, info.DataSize);
 			if (asset != null)
 			{
-				AddAsset(pathID, asset);
+				AddAsset(info.PathID, asset);
 			}
 		}
 
@@ -472,19 +461,6 @@ namespace uTinyRipper.SerializedFiles
 		private void AddAsset(long pathID, Object asset)
 		{
 			m_assets.Add(pathID, asset);
-		}
-
-		private ClassIDType AssetEntryToClassIDType(AssetEntry info)
-		{
-			if (AssetEntry.IsReadTypeIndex(Header.Generation))
-			{
-				RTTIBaseClassDescriptor typemeta = Metadata.Hierarchy.Types[info.TypeIndex];
-				return typemeta.ClassID;
-			}
-			else
-			{
-				return info.ClassID;
-			}
 		}
 
 		public string Name { get; }

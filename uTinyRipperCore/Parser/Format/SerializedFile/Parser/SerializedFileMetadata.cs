@@ -33,7 +33,7 @@ namespace uTinyRipper.SerializedFiles
 			for (int i = 0; i < count; i++)
 			{
 				AssetEntry objectInfo = new AssetEntry();
-				objectInfo.Read(reader);
+				objectInfo.Read(reader, Hierarchy);
 				m_objects.Add(objectInfo.PathID, objectInfo);
 			}
 
