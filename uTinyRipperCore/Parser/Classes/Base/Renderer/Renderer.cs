@@ -48,7 +48,7 @@ namespace uTinyRipper.Classes
 		public static bool IsReadLightmapIndex(Version version, TransferInstructionFlags flags)
 		{
 #warning TODO: separate by version
-			return version.IsGreaterEqual(2, 1) && (flags.IsRelease() || flags.IsForInspector());
+			return version.IsGreaterEqual(2, 1) && flags.IsRelease();
 		}
 		/// <summary>
 		/// 5.0.0 and greater
@@ -56,7 +56,7 @@ namespace uTinyRipper.Classes
 		public static bool IsReadLightmapIndexDynamic(Version version, TransferInstructionFlags flags)
 		{
 #warning TODO: separate by version
-			return version.IsGreaterEqual(5) && (flags.IsRelease() || flags.IsForInspector());
+			return version.IsGreaterEqual(5) && flags.IsRelease();
 		}
 		/// <summary>
 		/// 2.1.0 and greater
@@ -64,7 +64,7 @@ namespace uTinyRipper.Classes
 		public static bool IsReadLightmapTilingOffset(Version version, TransferInstructionFlags flags)
 		{
 #warning TODO: separate by version
-			return version.IsGreaterEqual(2, 1) && (flags.IsRelease() || flags.IsForInspector());
+			return version.IsGreaterEqual(2, 1) && flags.IsRelease();
 		}
 		/// <summary>
 		/// 5.0.0 and greater
@@ -72,7 +72,7 @@ namespace uTinyRipper.Classes
 		public static bool IsReadLightmapTilingOffsetDynamic(Version version, TransferInstructionFlags flags)
 		{
 #warning TODO: separate by version
-			return version.IsGreaterEqual(5) && (flags.IsRelease() || flags.IsForInspector());
+			return version.IsGreaterEqual(5) && flags.IsRelease();
 		}
 		/// <summary>
 		/// 3.0.0 to 5.5.0

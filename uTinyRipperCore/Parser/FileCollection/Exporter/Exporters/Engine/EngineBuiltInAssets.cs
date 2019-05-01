@@ -741,6 +741,7 @@ namespace uTinyRipper.AssetExporters
 		public const string TerrainWavingDoublePass = "Hidden/TerrainEngine/Details/WavingDoublePass";
 		public const string TerrainBillboardWavingDoublePass = "Hidden/TerrainEngine/Details/BillboardWavingDoublePass";
 
+		public static readonly EngineGUID DGUID = new EngineGUID(0x00000000, 0xD0000000, 0x00000000, 0x00000000);
 		public static readonly EngineGUID EGUID = new EngineGUID(0x00000000, 0xE0000000, 0x00000000, 0x00000000);
 		public static readonly EngineGUID FGUID = new EngineGUID(0x00000000, 0xF0000000, 0x00000000, 0x00000000);
 

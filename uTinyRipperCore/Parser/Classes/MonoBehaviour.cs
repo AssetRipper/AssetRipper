@@ -48,8 +48,10 @@ namespace uTinyRipper.Classes
 				GeneratorAsset.Read(reader);
 			}
 #endif
+
 			Script.Read(reader);
 			Name = reader.ReadString();
+
 #if UNIVERSAL
 			if (IsReadEditorClassIdentifier(reader.Version, reader.Flags))
 			{

@@ -202,21 +202,23 @@ namespace uTinyRipper.Classes.Meshes
 			{
 				using (BinaryReader reader = new BinaryReader(memStream))
 				{
+					float[] weights = new float[Math.Max(Math.Min((int)weightChannel.Dimension, 4), 4)];
+					int[] indices = new int[Math.Max(Math.Min((int)boneIndexChannel.Dimension, 4), 4)];
 					for (int v = 0; v < VertexCount; v++)
 					{
 						memStream.Position = weightStreamOffset + v * weightVertexSize + weightChannel.Offset;
-						float w0 = reader.ReadSingle();
-						float w1 = reader.ReadSingle();
-						float w2 = reader.ReadSingle();
-						float w3 = reader.ReadSingle();
+						for (int i = 0; i < weightChannel.Dimension; i++)
+						{
+							weights[i] = reader.ReadSingle();
+						}
 
 						memStream.Position = boneIndexStreamOffset + v * boneIndexVertexSize + boneIndexChannel.Offset;
-						int i0 = reader.ReadInt32();
-						int i1 = reader.ReadInt32();
-						int i2 = reader.ReadInt32();
-						int i3 = reader.ReadInt32();
+						for (int i = 0; i < weightChannel.Dimension; i++)
+						{
+							indices[i] = reader.ReadInt32();
+						}
 
-						skin[v] = new BoneWeights4(w0, w1, w2, w3, i0, i1, i2, i3);
+						skin[v] = new BoneWeights4(weights[0], weights[1], weights[2], weights[3], indices[0], indices[1], indices[2], indices[3]);
 					}
 				}
 			}

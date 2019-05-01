@@ -13,6 +13,21 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		/// <summary>
+		/// 4.5.0 and greater and Not Release
+		/// </summary>
+		public static bool IsReadRootOrder(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(4, 5);
+		}
+		/// <summary>
+		/// 5.0.0 and greater and Not Release
+		/// </summary>
+		public static bool IsReadLocalEulerAnglesHint(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(5);
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -22,6 +37,16 @@ namespace uTinyRipper.Classes
 			LocalScale.Read(reader);
 			m_children = reader.ReadAssetArray<PPtr<Transform>>();
 			Father.Read(reader);
+#if UNIVERSAL
+			if (IsReadRootOrder(reader.Version, reader.Flags))
+			{
+				RootOrder = reader.ReadInt32();
+			}
+			if (IsReadLocalEulerAnglesHint(reader.Version, reader.Flags))
+			{
+				LocalEulerAnglesHint.Read(reader);
+			}
+#endif
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -86,9 +111,30 @@ namespace uTinyRipper.Classes
 			node.Add(LocalScaleName, LocalScale.ExportYAML(container));
 			node.Add(ChildrenName, Children.ExportYAML(container));
 			node.Add(FatherName, Father.ExportYAML(container));
-			node.Add(RootOrderName, GetSiblingIndex());
-			node.Add(LocalEulerAnglesHintName, LocalRotation.ToEuler().ExportYAML(container));
+			node.Add(RootOrderName, GetRootOrder(container.Version, container.Flags));
+			node.Add(LocalEulerAnglesHintName, GetLocalEulerAnglesHint(container.Version, container.Flags).ExportYAML(container));
 			return node;
+		}
+
+		private int GetRootOrder(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadRootOrder(version, flags))
+			{
+				return RootOrder;
+			}
+#endif
+			return GetSiblingIndex();
+		}
+		private Vector3f GetLocalEulerAnglesHint(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadLocalEulerAnglesHint(version, flags))
+			{
+				return LocalEulerAnglesHint;
+			}
+#endif
+			return LocalRotation.ToEuler();
 		}
 
 		private Transform FindChild(string path, int startIndex)
@@ -118,6 +164,10 @@ namespace uTinyRipper.Classes
 		public const string LocalEulerAnglesHintName = "m_LocalEulerAnglesHint";
 
 		public IReadOnlyList<PPtr<Transform>> Children => m_children;
+#if UNIVERSAL
+		public int RootOrder { get; private set; }
+		public Vector3f LocalEulerAnglesHint { get; private set; }
+#endif
 
 		public const char PathSeparator = '/';
 

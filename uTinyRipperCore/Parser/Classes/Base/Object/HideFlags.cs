@@ -1,8 +1,11 @@
-﻿namespace uTinyRipper.Classes.Objects
+﻿using System;
+
+namespace uTinyRipper.Classes.Objects
 {
 	/// <summary>
 	/// Bit mask that controls object destruction, saving and visibility in inspectors.
 	/// </summary>
+	[Flags]
 	public enum HideFlags
 	{
 		/// <summary>

@@ -42,6 +42,13 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5);
 		}
 		/// <summary>
+		/// 5.0.0 and greater and Not Release
+		/// </summary>
+		public static bool IsReadWarningMessage(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(5);
+		}
+		/// <summary>
 		/// 4.5.3 and greater
 		/// </summary>
 		public static bool IsReadAllowConstantOptimization(Version version)
@@ -49,27 +56,30 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(4, 5, 3);
 		}
 		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool IsReadKeepAnimatorControllerStateOnDisable(Version version)
+		{
+			return version.IsGreaterEqual(2018);
+		}
+
+		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool IsAlignMiddle(Version version)
+		private static bool IsAlignMiddle(Version version)
 		{
 			return version.IsGreaterEqual(4, 5);
 		}
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsAlignEnd(Version version)
+		private static bool IsAlignEnd(Version version)
 		{
 			return version.IsGreaterEqual(5);
 		}
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 3;
-			}
-
 			if (version.IsGreaterEqual(4, 5))
 			{
 				return 3;
@@ -108,7 +118,14 @@ namespace uTinyRipper.Classes
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
-			
+
+#if UNIVERSAL
+			if (IsReadWarningMessage(reader.Version, reader.Flags))
+			{
+				WarningMessage = reader.ReadString();
+			}
+#endif
+
 			if(IsReadHasTransformHierarchy(reader.Version))
 			{
 				HasTransformHierarchy = reader.ReadBoolean();
@@ -116,6 +133,10 @@ namespace uTinyRipper.Classes
 			if (IsReadAllowConstantOptimization(reader.Version))
 			{
 				AllowConstantClipSamplingOptimization = reader.ReadBoolean();
+			}
+			if (IsReadKeepAnimatorControllerStateOnDisable(reader.Version))
+			{
+				KeepAnimatorControllerStateOnDisable = reader.ReadBoolean();
 			}
 			if (IsAlignEnd(reader.Version))
 			{
@@ -130,8 +151,8 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 			
-			yield return Avatar.FetchDependency(file, isLog, ToLogString, "m_Avatar");
-			yield return Controller.FetchDependency(file, isLog, ToLogString, "m_Controller");
+			yield return Avatar.FetchDependency(file, isLog, ToLogString, AvatarName);
+			yield return Controller.FetchDependency(file, isLog, ToLogString, ControllerName);
 		}
 
 		public IReadOnlyDictionary<uint, string> RetrieveTOS()
@@ -171,16 +192,35 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Avatar", Avatar.ExportYAML(container));
-			node.Add("m_Controller", Controller.ExportYAML(container));
-			node.Add("m_CullingMode", (int)CullingMode);
-			node.Add("m_UpdateMode", (int)UpdateMode);
-			node.Add("m_ApplyRootMotion", ApplyRootMotion);
-			node.Add("m_LinearVelocityBlending", LinearVelocityBlending);
-			node.Add("m_HasTransformHierarchy", HasTransformHierarchy);
-			node.Add("m_AllowConstantClipSamplingOptimization", AllowConstantClipSamplingOptimization);
+			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(AvatarName, Avatar.ExportYAML(container));
+			node.Add(ControllerName, Controller.ExportYAML(container));
+			node.Add(CullingModeName, (int)CullingMode);
+			node.Add(UpdateModeName, (int)UpdateMode);
+			node.Add(ApplyRootMotionName, ApplyRootMotion);
+			node.Add(LinearVelocityBlendingName, LinearVelocityBlending);
+			if (IsReadWarningMessage(container.ExportVersion, container.ExportFlags))
+			{
+				node.Add(WarningMessageName, GetWarningMessage(container.ExportVersion, container.ExportFlags));
+			}
+			node.Add(HasTransformHierarchyName, HasTransformHierarchy);
+			node.Add(AllowConstantClipSamplingOptimizationName, AllowConstantClipSamplingOptimization);
+			if (IsReadKeepAnimatorControllerStateOnDisable(container.ExportVersion))
+			{
+				node.Add(KeepAnimatorControllerStateOnDisableName, KeepAnimatorControllerStateOnDisable);
+			}
 			return node;
+		}
+
+		private string GetWarningMessage(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadWarningMessage(version, flags))
+			{
+				return WarningMessage;
+			}
+#endif
+			return string.Empty;
 		}
 
 		public AnimatorCullingMode CullingMode { get; private set; }
@@ -188,9 +228,24 @@ namespace uTinyRipper.Classes
 		public bool ApplyRootMotion { get; private set; }
 		public bool AnimatePhisics { get; private set; }
 		public bool LinearVelocityBlending { get; private set; }
+#if UNIVERSAL
+		public string WarningMessage { get; private set; }
+#endif
 		public bool HasTransformHierarchy { get; private set; }
 		public bool AllowConstantClipSamplingOptimization { get; private set; }
-		
+		public bool KeepAnimatorControllerStateOnDisable { get; private set; }
+
+		public const string AvatarName = "m_Avatar";
+		public const string ControllerName = "m_Controller";
+		public const string CullingModeName = "m_CullingMode";
+		public const string UpdateModeName = "m_UpdateMode";
+		public const string ApplyRootMotionName = "m_ApplyRootMotion";
+		public const string LinearVelocityBlendingName = "m_LinearVelocityBlending";
+		public const string WarningMessageName = "m_WarningMessage";
+		public const string HasTransformHierarchyName = "m_HasTransformHierarchy";
+		public const string AllowConstantClipSamplingOptimizationName = "m_AllowConstantClipSamplingOptimization";
+		public const string KeepAnimatorControllerStateOnDisableName = "m_KeepAnimatorControllerStateOnDisable";
+
 		public PPtr<Avatar> Avatar;
 		public PPtr<RuntimeAnimatorController> Controller;
 	}

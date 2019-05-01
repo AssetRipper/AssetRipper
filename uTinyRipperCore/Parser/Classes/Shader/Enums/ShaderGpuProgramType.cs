@@ -186,6 +186,7 @@ namespace uTinyRipper.Classes.Shaders
 						case Platform.Flash:
 							return GPUPlatform.flash;
 
+						case Platform.NoTarget:
 						case Platform.StandaloneWinPlayer:
 						case Platform.StandaloneWin64Player:
 						case Platform.StandaloneLinux:
