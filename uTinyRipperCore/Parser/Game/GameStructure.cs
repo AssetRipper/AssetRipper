@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using uTinyRipper.AssetExporters;
 using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper
@@ -40,7 +40,13 @@ namespace uTinyRipper
 
 		public void Export(string exportPath, Func<Object, bool> filter)
 		{
-			FileCollection.Exporter.Export(exportPath, FileCollection, FileCollection.FetchAssets().Where(t => filter(t)));
+			ExportOptions options = new ExportOptions()
+			{
+				Version = new Version(2017, 3, 0, VersionType.Final, 3),
+				Platform = Platform.NoTarget,
+				Flags = TransferInstructionFlags.NoTransferInstructionFlags,
+			};
+			FileCollection.Exporter.Export(exportPath, FileCollection, FileCollection.FetchAssets().Where(t => filter(t)), options);
 		}
 		
 		public bool RequestDependency(string dependency)

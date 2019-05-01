@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using uTinyRipper.Classes;
 
@@ -5,21 +6,86 @@ namespace uTinyRipper.AssetExporters
 {
 	public struct EngineBuiltInAsset
 	{
-		public EngineBuiltInAsset(uint exportID, bool isDefault)
+		public EngineBuiltInAsset(uint exportID, bool isF)
 		{
 			ExportID = exportID;
-			m_isDefault = isDefault;
+			m_isF = isF;
 		}
 
-		public bool IsValid => ExportID != 0;
-		public EngineGUID GUID => m_isDefault ? EngineBuiltInAssets.FGUID : EngineBuiltInAssets.EGUID;
+		public EngineGUID GUID => m_isF ? EngineBuiltInAssets.FGUID : EngineBuiltInAssets.EGUID;
 
+		public bool IsValid => ExportID != 0;
 		public uint ExportID { get; }
 
 		/// <summary>
 		///  Is assets located in DefaultResources file
 		/// </summary>
-		private readonly bool m_isDefault;
+		private readonly bool m_isF;
+	}
+
+	internal struct EngineBuiltInAssetInfo
+	{
+		public EngineBuiltInAssetInfo(Version version, EngineBuiltInAsset asset)
+		{
+			KeyValuePair<Version, EngineBuiltInAsset> kvp = new KeyValuePair<Version, EngineBuiltInAsset>(version, asset);
+			m_variations = new List<KeyValuePair<Version, EngineBuiltInAsset>>(1);
+			m_variations.Add(kvp);
+		}
+
+		public void AddVariation(Version version, EngineBuiltInAsset asset)
+		{
+			KeyValuePair<Version, EngineBuiltInAsset> kvp = new KeyValuePair<Version, EngineBuiltInAsset>(version, asset);
+			for (int i = 0; i < m_variations.Count; i++)
+			{
+				Version key = m_variations[i].Key;
+				if (key < version)
+				{
+					m_variations.Insert(i, kvp);
+					return;
+				}
+			}
+			m_variations.Add(kvp);
+		}
+
+		public bool ContainsAsset(Version version)
+		{
+			foreach (KeyValuePair<Version, EngineBuiltInAsset> kvp in m_variations)
+			{
+				if (version >= kvp.Key)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public EngineBuiltInAsset GetAsset(Version version)
+		{
+			foreach (KeyValuePair<Version, EngineBuiltInAsset> kvp in m_variations)
+			{
+				if (version >= kvp.Key)
+				{
+					return kvp.Value;
+				}
+			}
+			throw new Exception($"There is no asset for {version} version");
+		}
+
+		public bool TryGetAsset(Version version, out EngineBuiltInAsset asset)
+		{
+			foreach (KeyValuePair<Version, EngineBuiltInAsset> kvp in m_variations)
+			{
+				if (version >= kvp.Key)
+				{
+					asset = kvp.Value;
+					return true;
+				}
+			}
+			asset = default;
+			return false;
+		}
+
+		private readonly List<KeyValuePair<Version, EngineBuiltInAsset>> m_variations;
 	}
 
 	public static class EngineBuiltInAssets
@@ -27,424 +93,650 @@ namespace uTinyRipper.AssetExporters
 		static EngineBuiltInAssets()
 		{
 			///////////////////////////////////////////////////////
-			// Icons
+			// New extra
 			///////////////////////////////////////////////////////
 
-			m_textures.Add("EscToExit_back", default);
-			m_textures.Add("EscToExit_Text", default);
-			m_textures.Add("UnitySplash-cube", default);
-			m_textures.Add("UnitySplash-HolographicTrackingLoss", default);
-			m_textures.Add("UnityWatermark-beta", default);
-			m_textures.Add("UnityWatermark-dev", default);
-			m_textures.Add("UnityWatermark-edu", default);
-			m_textures.Add("UnityWatermarkPlugin-beta", default);
-			m_textures.Add("UnityWatermark-proto", default);
-			m_textures.Add("UnityWatermark-small", default);
-			m_textures.Add("UnityWatermark-trial", default);
-			m_textures.Add("WarningSign", default);
-
-			m_sprites.Add("UnitySplash-cube", default);
+			AddShader("Autodesk Interactive", 47, true);
+			AddShader("Legacy Shaders/Particles/Additive", 200, true);
+			AddShader("Legacy Shaders/Particles/~Additive-Multiply", 201, true);
+			AddShader("Legacy Shaders/Particles/Additive (Soft)", 202, true);
+			AddShader("Legacy Shaders/Particles/Alpha Blended", 203, true);
+			AddShader("Legacy Shaders/Particles/Multiply", 205, true);
+			AddShader("Legacy Shaders/Particles/Multiply (Double)", 206, true);
+			AddShader("Legacy Shaders/Particles/Alpha Blended Premultiply", 207, true);
+			AddShader("Legacy Shaders/Particles/VertexLit Blended", 208, true);
+			AddShader("Legacy Shaders/Particles/Anim Alpha Blended", 209, true);
+			AddShader("Mobile/Bumped Specular (1 Directional Realtime Light)", 10706, true);
+			AddShader("Hidden/VideoComposite", new Version(2019), 16000, true);
+			AddShader("Hidden/VideoDecode", new Version(2019), 16001, true);
+			AddShader("Hidden/VideoDecodeOSX", new Version(2019), 16002, true);
+			AddShader("Hidden/VideoDecodeAndroid", new Version(2019), 16003, true);
+			AddShader("Hidden/VideoDecodeML", new Version(2019), 16004, true);
 
 			///////////////////////////////////////////////////////
 			// Current default
 			///////////////////////////////////////////////////////
 
-			m_materials.Add(FontMaterialName, new EngineBuiltInAsset(10100, true));
-			m_materials.Add("FrameDebuggerRenderTargetDisplay", new EngineBuiltInAsset(10756, true));
+			AddMaterial(FontMaterialName, 10100, true);
+			AddMaterial("FrameDebuggerRenderTargetDisplay", 10756, true);
 
-			m_textures.Add("Soft", new EngineBuiltInAsset(10001, false));
-			m_textures.Add("Font Texture", new EngineBuiltInAsset(10103, false));
-			m_textures.Add("box", new EngineBuiltInAsset(11001, true));
-			m_textures.Add("button active", new EngineBuiltInAsset(11002, true));
-			m_textures.Add("button hover", new EngineBuiltInAsset(11003, true));
-			m_textures.Add("button on hover", new EngineBuiltInAsset(11004, true));
-			m_textures.Add("button on", new EngineBuiltInAsset(11005, true));
-			m_textures.Add("button", new EngineBuiltInAsset(11006, true));
-			m_textures.Add("horizontal scrollbar thumb", new EngineBuiltInAsset(11007, true));
-			m_textures.Add("horizontal scrollbar", new EngineBuiltInAsset(11008, true));
-			m_textures.Add("horizontalslider", new EngineBuiltInAsset(11009, true));
-			m_textures.Add("slider thumb active", new EngineBuiltInAsset(11010, true));
-			m_textures.Add("slider thumb", new EngineBuiltInAsset(11011, true));
-			m_textures.Add("slidert humb hover", new EngineBuiltInAsset(11012, true));
-			m_textures.Add("toggle active", new EngineBuiltInAsset(11013, true));
-			m_textures.Add("toggle hover", new EngineBuiltInAsset(11014, true));
-			m_textures.Add("toggle on hover", new EngineBuiltInAsset(11015, true));
-			m_textures.Add("toggle on", new EngineBuiltInAsset(11016, true));
-			m_textures.Add("toggle on active", new EngineBuiltInAsset(11017, true));
-			m_textures.Add("toggle", new EngineBuiltInAsset(11018, true));
-			m_textures.Add("vertical scrollbar thumb", new EngineBuiltInAsset(11019, true));
-			m_textures.Add("vertical scrollbar", new EngineBuiltInAsset(11020, true));
-			m_textures.Add("verticalslider", new EngineBuiltInAsset(11021, true));
-			m_textures.Add("window on", new EngineBuiltInAsset(11022, true));
-			m_textures.Add("window", new EngineBuiltInAsset(11023, true));
-			m_textures.Add("textfield", new EngineBuiltInAsset(11024, true));
-			m_textures.Add("textfield on", new EngineBuiltInAsset(11025, true));
-			m_textures.Add("textfield hover", new EngineBuiltInAsset(11026, true));
+			AddTexture("Soft", 10001, false);
+			AddTexture("Font Texture", 10103, false);
+			AddTexture("UnityWatermark-small", 10400, false);
+			AddTexture("EscToExit_back", 10401, false);
+			AddTexture("EscToExit_Text", 10402, false);
+			AddTexture("UnitySplash-cube", 10403, false);
+			AddTexture("UnityWatermark-trial-big", 10406, false);
+			AddTexture("UnityWatermark-trial", 10407, false);
+			AddTexture("UnityWatermark-beta", 10408, false);
+			AddTexture("UnityWatermark-edu", 10409, false);
+			AddTexture("UnityWatermark-dev", 10410, false);
+			AddTexture("WarningSign", 10411, false);
+			AddTexture("UnityWatermark-proto", 10413, false);
+			AddTexture("UnityWatermarkPlugin-beta", 10414, false);
+			AddTexture("box", 11001, false);
+			AddTexture("button active", 11002, false);
+			AddTexture("button hover", 11003, false);
+			AddTexture("button on hover", 11004, false);
+			AddTexture("button on", 11005, false);
+			AddTexture("button", 11006, false);
+			AddTexture("horizontal scrollbar thumb", 11007, false);
+			AddTexture("horizontal scrollbar", 11008, false);
+			AddTexture("horizontalslider", 11009, false);
+			AddTexture("slider thumb active", 11010, false);
+			AddTexture("slider thumb", 11011, false);
+			AddTexture("slidert humb hover", 11012, false);
+			AddTexture("toggle active", 11013, false);
+			AddTexture("toggle hover", 11014, false);
+			AddTexture("toggle on hover", 11015, false);
+			AddTexture("toggle on", 11016, false);
+			AddTexture("toggle on active", 11017, false);
+			AddTexture("toggle", 11018, false);
+			AddTexture("vertical scrollbar thumb", 11019, false);
+			AddTexture("vertical scrollbar", 11020, false);
+			AddTexture("verticalslider", 11021, false);
+			AddTexture("window on", 11022, false);
+			AddTexture("window", 11023, false);
+			AddTexture("textfield", 11024, false);
+			AddTexture("textfield on", 11025, false);
+			AddTexture("textfield hover", 11026, false);
+			AddTexture("UnitySplash-HolographicTrackingLoss", 15000, false);
 
-			m_meshes.Add("pSphere1", new EngineBuiltInAsset(10200, false));
-			m_meshes.Add("Cube", new EngineBuiltInAsset(10202, false));
-			m_meshes.Add("pCylinder1", new EngineBuiltInAsset(10203, false));
-			m_meshes.Add("pPlane1", new EngineBuiltInAsset(10204, false));
-			m_meshes.Add("polySurface2", new EngineBuiltInAsset(10205, false));
-			m_meshes.Add("Cylinder", new EngineBuiltInAsset(10206, false));
-			m_meshes.Add("Sphere", new EngineBuiltInAsset(10207, false));
-			m_meshes.Add("Capsule", new EngineBuiltInAsset(10208, false));
-			m_meshes.Add("Plane", new EngineBuiltInAsset(10209, false));
-			m_meshes.Add("Quad", new EngineBuiltInAsset(10210, false));
-			m_meshes.Add("Icosphere", new EngineBuiltInAsset(10211, false));
-			m_meshes.Add("icosahedron", new EngineBuiltInAsset(10212, false));
-			m_meshes.Add("pyramid", new EngineBuiltInAsset(10213, false));
+			AddMesh("pSphere1", 10200, false);
+			AddMesh("Cube", 10202, false);
+			AddMesh("pCylinder1", 10203, false);
+			AddMesh("pPlane1", 10204, false);
+			AddMesh("polySurface2", 10205, false);
+			AddMesh("Cylinder", 10206, false);
+			AddMesh("Sphere", 10207, false);
+			AddMesh("Capsule", 10208, false);
+			AddMesh("Plane", 10209, false);
+			AddMesh("Quad", 10210, false);
+			AddMesh("Icosphere", 10211, false);
+			AddMesh("icosahedron", 10212, false);
+			AddMesh("pyramid", 10213, false);
 
-			m_fonts.Add("Arial", new EngineBuiltInAsset(10102, false));
+			AddFont("Arial", 10102, false);
 
-			m_shaders.Add("Hidden/InternalErrorShader", new EngineBuiltInAsset(17, true));
-			m_shaders.Add("Hidden/InternalClear", new EngineBuiltInAsset(68, false));
-			m_shaders.Add("Hidden/Internal-Colored", new EngineBuiltInAsset(69, false));
-			m_shaders.Add("GUI/Text Shader", new EngineBuiltInAsset(10101, false));
-			m_shaders.Add("Hidden/FrameDebuggerRenderTargetDisplay", new EngineBuiltInAsset(10755, false));
+			AddShader("Hidden/InternalErrorShader", 17, true);
+			AddShader("Hidden/InternalClear", 68, false);
+			AddShader("Hidden/Internal-Colored", 69, false);
+			AddShader("GUI/Text Shader", 10101, false);
+			AddShader("Hidden/FrameDebuggerRenderTargetDisplay", 10755, false);
+
+			AddSprite("UnitySplash-cube", 10404, false);
 
 			///////////////////////////////////////////////////////
 			// Current extra
 			///////////////////////////////////////////////////////
 
-			m_materials.Add("Default-Particle", new EngineBuiltInAsset(10301, true));
-			m_materials.Add("Default-Diffuse", new EngineBuiltInAsset(10302, true));
-			m_materials.Add("Default-Material", new EngineBuiltInAsset(10303, true));
-			m_materials.Add("Default-Skybox", new EngineBuiltInAsset(10304, true));
-			m_materials.Add("Default-Line", new EngineBuiltInAsset(10306, true));
-			m_materials.Add("Sprites-Default", new EngineBuiltInAsset(10754, false));
-			m_materials.Add("Sprites-Mask", new EngineBuiltInAsset(10758, false));
-			m_materials.Add("SpatialMappingOcclusion", new EngineBuiltInAsset(15302, true));
-			m_materials.Add("SpatialMappingWireframe", new EngineBuiltInAsset(15303, true));
+			AddMaterial("Default-Particle", 10301, true);
+			AddMaterial("Default-Diffuse", 10302, true);
+			AddMaterial("Default-Material", 10303, true);
+			AddMaterial("Default-Skybox", 10304, true);
+			AddMaterial("Default-Line", 10306, true);
+			AddMaterial("Default-ParticleSystem", 10308, true);
+			AddMaterial("Sprites-Default", 10754, false);
+			AddMaterial("Sprites-Mask", 10758, false);
+			AddMaterial("SpatialMappingOcclusion", 15302, true);
+			AddMaterial("SpatialMappingWireframe", 15303, true);
 
-			m_textures.Add("Default-Particle", new EngineBuiltInAsset(10300, true));
-			m_textures.Add("Default-Checker", new EngineBuiltInAsset(10305, true));
-			m_textures.Add("Checkmark", new EngineBuiltInAsset(10900, true));
-			m_textures.Add("UISprite", new EngineBuiltInAsset(10904, true));
-			m_textures.Add("Background", new EngineBuiltInAsset(10906, true));
-			m_textures.Add("InputFieldBackground", new EngineBuiltInAsset(10910, true));
-			m_textures.Add("Knob", new EngineBuiltInAsset(10912, true));
-			m_textures.Add("DropdownArrow", new EngineBuiltInAsset(10914, true));
-			m_textures.Add("UIMask", new EngineBuiltInAsset(10916, true));
+			AddTexture("Default-Particle", 10300, true);
+			AddTexture("Default-Checker", 10305, true);
+			AddTexture("Default-ParticleSystem", 10307, true);
+			AddTexture("Default-Checker-Gray", 10309, true);
+			AddTexture("Checkmark", 10900, true);
+			AddTexture("UISprite", 10904, true);
+			AddTexture("Background", 10906, true);
+			AddTexture("InputFieldBackground", 10910, true);
+			AddTexture("Knob", 10912, true);
+			AddTexture("DropdownArrow", 10914, true);
+			AddTexture("UIMask", 10916, true);
 
-			m_shaders.Add("Legacy Shaders/Diffuse Fast", new EngineBuiltInAsset(1, true));
-			m_shaders.Add("Legacy Shaders/Bumped Diffuse", new EngineBuiltInAsset(2, true));
-			m_shaders.Add("Legacy Shaders/Specular", new EngineBuiltInAsset(3, true));
-			m_shaders.Add("Legacy Shaders/Bumped Specular", new EngineBuiltInAsset(4, true));
-			m_shaders.Add("Legacy Shaders/Diffuse Detail", new EngineBuiltInAsset(5, true));
-			m_shaders.Add("Legacy Shaders/VertexLit", new EngineBuiltInAsset(6, true));
-			m_shaders.Add("Legacy Shaders/Diffuse", new EngineBuiltInAsset(7, true));
-			m_shaders.Add("Legacy Shaders/Parallax Diffuse", new EngineBuiltInAsset(8, true));
-			m_shaders.Add("Legacy Shaders/Parallax Specular", new EngineBuiltInAsset(9, true));
-			m_shaders.Add("Legacy Shaders/Self-Illumin/Diffuse", new EngineBuiltInAsset(10, true));
-			m_shaders.Add("Legacy Shaders/Self-Illumin/Bumped Diffuse", new EngineBuiltInAsset(11, true));
-			m_shaders.Add("Legacy Shaders/Self-Illumin/Specular", new EngineBuiltInAsset(12, true));
-			m_shaders.Add("Legacy Shaders/Self-Illumin/Bumped Specular", new EngineBuiltInAsset(13, true));
-			m_shaders.Add("Legacy Shaders/Self-Illumin/VertexLit", new EngineBuiltInAsset(14, true));
-			m_shaders.Add("Legacy Shaders/Self-Illumin/Parallax Diffuse", new EngineBuiltInAsset(15, true));
-			m_shaders.Add("Legacy Shaders/Self-Illumin/Parallax Specular", new EngineBuiltInAsset(16, true));
-			m_shaders.Add("Hidden/Internal-StencilWrite", new EngineBuiltInAsset(19, true));
-			m_shaders.Add("Legacy Shaders/Reflective/Diffuse", new EngineBuiltInAsset(20, true));
-			m_shaders.Add("Legacy Shaders/Reflective/Bumped Diffuse", new EngineBuiltInAsset(21, true));
-			m_shaders.Add("Legacy Shaders/Reflective/Specular", new EngineBuiltInAsset(22, true));
-			m_shaders.Add("Legacy Shaders/Reflective/Bumped Specular", new EngineBuiltInAsset(23, true));
-			m_shaders.Add("Legacy Shaders/Reflective/VertexLit", new EngineBuiltInAsset(24, true));
-			m_shaders.Add("Legacy Shaders/Reflective/Bumped Unlit", new EngineBuiltInAsset(25, true));
-			m_shaders.Add("Legacy Shaders/Reflective/Bumped VertexLit", new EngineBuiltInAsset(26, true));
-			m_shaders.Add("Legacy Shaders/Reflective/Parallax Diffuse", new EngineBuiltInAsset(27, true));
-			m_shaders.Add("Legacy Shaders/Reflective/Parallax Specular", new EngineBuiltInAsset(28, true));
-			m_shaders.Add("Legacy Shaders/Transparent/Diffuse", new EngineBuiltInAsset(30, true));
-			m_shaders.Add("Legacy Shaders/Transparent/Bumped Diffuse", new EngineBuiltInAsset(31, true));
-			m_shaders.Add("Legacy Shaders/Transparent/Specular", new EngineBuiltInAsset(32, true));
-			m_shaders.Add("Legacy Shaders/Transparent/Bumped Specular", new EngineBuiltInAsset(33, true));
-			m_shaders.Add("Legacy Shaders/Transparent/VertexLit", new EngineBuiltInAsset(34, true));
-			m_shaders.Add("Legacy Shaders/Transparent/Parallax Diffuse", new EngineBuiltInAsset(35, true));
-			m_shaders.Add("Legacy Shaders/Transparent/Parallax Specular", new EngineBuiltInAsset(36, true));
-			m_shaders.Add("Legacy Shaders/Lightmapped/VertexLit", new EngineBuiltInAsset(40, true));
-			m_shaders.Add("Legacy Shaders/Lightmapped/Diffuse", new EngineBuiltInAsset(41, true));
-			m_shaders.Add("Legacy Shaders/Lightmapped/Bumped Diffuse", new EngineBuiltInAsset(42, true));
-			m_shaders.Add("Legacy Shaders/Lightmapped/Specular", new EngineBuiltInAsset(43, true));
-			m_shaders.Add("Legacy Shaders/Lightmapped/Bumped Specular", new EngineBuiltInAsset(44, true));
-			m_shaders.Add("Standard (Specular setup)", new EngineBuiltInAsset(45, true));
-			m_shaders.Add("Standard", new EngineBuiltInAsset(46, true));
-			m_shaders.Add("Standard (Roughness setup)", new EngineBuiltInAsset(47, true));
-			m_shaders.Add("Legacy Shaders/Transparent/Cutout/VertexLit", new EngineBuiltInAsset(50, true));
-			m_shaders.Add("Legacy Shaders/Transparent/Cutout/Diffuse", new EngineBuiltInAsset(51, true));
-			m_shaders.Add("Legacy Shaders/Transparent/Cutout/Bumped Diffuse", new EngineBuiltInAsset(52, true));
-			m_shaders.Add("Legacy Shaders/Transparent/Cutout/Specular", new EngineBuiltInAsset(53, true));
-			m_shaders.Add("Legacy Shaders/Transparent/Cutout/Bumped Specular", new EngineBuiltInAsset(54, true));
-			m_shaders.Add("Hidden/Internal-DepthNormalsTexture", new EngineBuiltInAsset(62, true));
-			m_shaders.Add("Hidden/Internal-PrePassLighting", new EngineBuiltInAsset(63, true));
-			m_shaders.Add("Hidden/Internal-ScreenSpaceShadows", new EngineBuiltInAsset(64, true));
-			m_shaders.Add("Hidden/Internal-CombineDepthNormals", new EngineBuiltInAsset(65, true));
-			m_shaders.Add("Hidden/BlitCopy", new EngineBuiltInAsset(66, true));
-			m_shaders.Add("Hidden/BlitCopyDepth", new EngineBuiltInAsset(67, true));
-			m_shaders.Add("Hidden/ConvertTexture", new EngineBuiltInAsset(68, true));
-			m_shaders.Add("Hidden/Internal-DeferredShading", new EngineBuiltInAsset(69, true));
-			m_shaders.Add("Hidden/Internal-DeferredReflections", new EngineBuiltInAsset(74, true));
-			m_shaders.Add("Hidden/Internal-MotionVectors", new EngineBuiltInAsset(75, true));
-			m_shaders.Add("Legacy Shaders/Decal", new EngineBuiltInAsset(100, true));
-			m_shaders.Add("FX/Flare", new EngineBuiltInAsset(101, true));
-			m_shaders.Add("Hidden/Internal-Flare", new EngineBuiltInAsset(102, true));
-			m_shaders.Add("Skybox/Cubemap", new EngineBuiltInAsset(103, true));
-			m_shaders.Add("Skybox/6 Sided", new EngineBuiltInAsset(104, true));
-			m_shaders.Add("Hidden/Internal-Halo", new EngineBuiltInAsset(105, true));
-			m_shaders.Add("Skybox/Procedural", new EngineBuiltInAsset(106, true));
-			m_shaders.Add("Hidden/BlitCopyWithDepth", new EngineBuiltInAsset(107, true));
-			m_shaders.Add("Skybox/Panoramic", new EngineBuiltInAsset(108, true));
-			m_shaders.Add("Hidden/BlitToDepth", new EngineBuiltInAsset(109, true));
-			m_shaders.Add("Hidden/BlitToDepth_MSAA", new EngineBuiltInAsset(110, true));
-			m_shaders.Add("Particles/Additive", new EngineBuiltInAsset(200, true));
-			m_shaders.Add("Particles/~Additive-Multiply", new EngineBuiltInAsset(201, true));
-			m_shaders.Add("Particles/Additive (Soft)", new EngineBuiltInAsset(202, true));
-			m_shaders.Add("Particles/Alpha Blended", new EngineBuiltInAsset(203, true));
-			m_shaders.Add("Particles/Multiply", new EngineBuiltInAsset(205, true));
-			m_shaders.Add("Particles/Multiply (Double)", new EngineBuiltInAsset(206, true));
-			m_shaders.Add("Particles/Alpha Blended Premultiply", new EngineBuiltInAsset(207, true));
-			m_shaders.Add("Particles/VertexLit Blended", new EngineBuiltInAsset(208, true));
-			m_shaders.Add("Particles/Anim Alpha Blended", new EngineBuiltInAsset(209, true));
-			m_shaders.Add("Particles/Standard Surface", new EngineBuiltInAsset(210, true));
-			m_shaders.Add("Particles/Standard Unlit", new EngineBuiltInAsset(211, true));
-			m_shaders.Add("Hidden/Internal-GUITextureClip", new EngineBuiltInAsset(9000, true));
-			m_shaders.Add("Hidden/Internal-GUITextureClipText", new EngineBuiltInAsset(9001, true));
-			m_shaders.Add("Hidden/Internal-GUITexture", new EngineBuiltInAsset(9002, true));
-			m_shaders.Add("Hidden/Internal-GUITextureBlit", new EngineBuiltInAsset(9003, true));
-			m_shaders.Add("Hidden/Internal-GUIRoundedRect", new EngineBuiltInAsset(9004, true));
-			m_shaders.Add(TerrainVertexLit, new EngineBuiltInAsset(10500, true));
-			m_shaders.Add(TerrainWavingDoublePass, new EngineBuiltInAsset(10501, true));
-			m_shaders.Add(TerrainBillboardWavingDoublePass, new EngineBuiltInAsset(10502, true));
-			m_shaders.Add("Hidden/TerrainEngine/Splatmap/Diffuse-AddPass", new EngineBuiltInAsset(10503, true));
-			m_shaders.Add("Nature/Terrain/Diffuse", new EngineBuiltInAsset(10505, true));
-			m_shaders.Add("Hidden/TerrainEngine/BillboardTree", new EngineBuiltInAsset(10507, true));
-			m_shaders.Add("Hidden/Nature/Tree Soft Occlusion Bark Rendertex", new EngineBuiltInAsset(10508, true));
-			m_shaders.Add("Nature/Tree Soft Occlusion Bark", new EngineBuiltInAsset(10509, true));
-			m_shaders.Add("Hidden/Nature/Tree Soft Occlusion Leaves Rendertex", new EngineBuiltInAsset(10510, true));
-			m_shaders.Add("Nature/Tree Soft Occlusion Leaves", new EngineBuiltInAsset(10511, true));
-			m_shaders.Add("Legacy Shaders/Transparent/Cutout/Soft Edge Unlit", new EngineBuiltInAsset(10512, true));
-			m_shaders.Add("Hidden/TerrainEngine/CameraFacingBillboardTree", new EngineBuiltInAsset(10513, true));
-			m_shaders.Add("Nature/Tree Creator Bark", new EngineBuiltInAsset(10600, true));
-			m_shaders.Add("Nature/Tree Creator Leaves", new EngineBuiltInAsset(10601, true));
-			m_shaders.Add("Hidden/Nature/Tree Creator Bark Rendertex", new EngineBuiltInAsset(10602, true));
-			m_shaders.Add("Hidden/Nature/Tree Creator Leaves Rendertex", new EngineBuiltInAsset(10603, true));
-			m_shaders.Add("Hidden/Nature/Tree Creator Bark Optimized", new EngineBuiltInAsset(10604, true));
-			m_shaders.Add("Hidden/Nature/Tree Creator Leaves Optimized", new EngineBuiltInAsset(10605, true));
-			m_shaders.Add("Nature/Tree Creator Leaves Fast", new EngineBuiltInAsset(10606, true));
-			m_shaders.Add("Hidden/Nature/Tree Creator Leaves Fast Optimized", new EngineBuiltInAsset(10607, true));
-			m_shaders.Add("Nature/Terrain/Specular", new EngineBuiltInAsset(10620, true));
-			m_shaders.Add("Hidden/TerrainEngine/Splatmap/Specular-AddPass", new EngineBuiltInAsset(10621, true));
-			m_shaders.Add("Hidden/TerrainEngine/Splatmap/Specular-Base", new EngineBuiltInAsset(10622, true));
-			m_shaders.Add("Nature/Terrain/Standard", new EngineBuiltInAsset(10623, true));
-			m_shaders.Add("Hidden/TerrainEngine/Splatmap/Standard-AddPass", new EngineBuiltInAsset(10624, true));
-			m_shaders.Add("Hidden/TerrainEngine/Splatmap/Standard-Base", new EngineBuiltInAsset(10625, true));
-			m_shaders.Add("Mobile/Skybox", new EngineBuiltInAsset(10700, true));
-			m_shaders.Add("Mobile/VertexLit", new EngineBuiltInAsset(10701, true));
-			m_shaders.Add("Mobile/Diffuse", new EngineBuiltInAsset(10703, true));
-			m_shaders.Add("Mobile/Bumped Diffuse", new EngineBuiltInAsset(10704, true));
-			m_shaders.Add("Mobile/Bumped Specular", new EngineBuiltInAsset(10705, true));
-			m_shaders.Add("Mobile/Bumped Specular (1 Directional Light)", new EngineBuiltInAsset(10706, true));
-			m_shaders.Add("Mobile/VertexLit (Only Directional Lights)", new EngineBuiltInAsset(10707, true));
-			m_shaders.Add("Mobile/Unlit (Supports Lightmap)", new EngineBuiltInAsset(10708, true));
-			m_shaders.Add("Mobile/Particles/Additive", new EngineBuiltInAsset(10720, true));
-			m_shaders.Add("Mobile/Particles/Alpha Blended", new EngineBuiltInAsset(10721, true));
-			m_shaders.Add("Mobile/Particles/VertexLit Blended", new EngineBuiltInAsset(10722, true));
-			m_shaders.Add("Mobile/Particles/Multiply", new EngineBuiltInAsset(10723, true));
-			m_shaders.Add("Unlit/Transparent", new EngineBuiltInAsset(10750, true));
-			m_shaders.Add("Unlit/Transparent Cutout", new EngineBuiltInAsset(10751, true));
-			m_shaders.Add("Unlit/Texture", new EngineBuiltInAsset(10752, true));
-			m_shaders.Add("Sprites/Default", new EngineBuiltInAsset(10753, true));
-			m_shaders.Add("Unlit/Color", new EngineBuiltInAsset(10755, true));
-			m_shaders.Add("Sprites/Mask", new EngineBuiltInAsset(10757, true));
-			m_shaders.Add("UI/Unlit/Transparent", new EngineBuiltInAsset(10760, true));
-			m_shaders.Add("UI/Unlit/Detail", new EngineBuiltInAsset(10761, true));
-			m_shaders.Add("UI/Unlit/Text", new EngineBuiltInAsset(10762, true));
-			m_shaders.Add("UI/Unlit/Text Detail", new EngineBuiltInAsset(10763, true));
-			m_shaders.Add("UI/Lit/Transparent", new EngineBuiltInAsset(10764, true));
-			m_shaders.Add("UI/Lit/Bumped", new EngineBuiltInAsset(10765, true));
-			m_shaders.Add("UI/Lit/Detail", new EngineBuiltInAsset(10766, true));
-			m_shaders.Add("UI/Lit/Refraction", new EngineBuiltInAsset(10767, true));
-			m_shaders.Add("UI/Lit/Refraction Detail", new EngineBuiltInAsset(10768, true));
-			m_shaders.Add("UI/Default", new EngineBuiltInAsset(10770, true));
-			m_shaders.Add("UI/Default Font", new EngineBuiltInAsset(10782, true));
-			m_shaders.Add("UI/DefaultETC1", new EngineBuiltInAsset(10783, true));
-			m_shaders.Add("Hidden/UI/CompositeOverdraw", new EngineBuiltInAsset(10784, true));
-			m_shaders.Add("Hidden/UI/Overdraw", new EngineBuiltInAsset(10785, true));
-			m_shaders.Add("Sprites/Diffuse", new EngineBuiltInAsset(10800, true));
-			m_shaders.Add("Nature/SpeedTree", new EngineBuiltInAsset(14000, true));
-			m_shaders.Add("Nature/SpeedTree Billboard", new EngineBuiltInAsset(14001, true));
-			m_shaders.Add("Hidden/GIDebug/TextureUV", new EngineBuiltInAsset(15100, true));
-			m_shaders.Add("Hidden/GIDebug/ShowLightMask", new EngineBuiltInAsset(15101, true));
-			m_shaders.Add("Hidden/GIDebug/UV1sAsPositions", new EngineBuiltInAsset(15102, true));
-			m_shaders.Add("Hidden/GIDebug/VertexColors", new EngineBuiltInAsset(15103, true));
-			m_shaders.Add("Hidden/CubeBlur", new EngineBuiltInAsset(15104, true));
-			m_shaders.Add("Hidden/CubeCopy", new EngineBuiltInAsset(15105, true));
-			m_shaders.Add("Hidden/CubeBlend", new EngineBuiltInAsset(15106, true));
-			m_shaders.Add("VR/SpatialMapping/Occlusion", new EngineBuiltInAsset(15300, true));
-			m_shaders.Add("VR/SpatialMapping/Wireframe", new EngineBuiltInAsset(15301, true));
-			m_shaders.Add("Hidden/VR/BlitTexArraySlice", new EngineBuiltInAsset(15304, true));
-			m_shaders.Add("Hidden/VR/Internal-VRDistortion", new EngineBuiltInAsset(15305, true));
-			m_shaders.Add("Hidden/VR/BlitTexArraySliceToDepth", new EngineBuiltInAsset(15306, true));
-			m_shaders.Add("Hidden/VR/BlitTexArraySliceToDepth_MSAA", new EngineBuiltInAsset(15307, true));
-			m_shaders.Add("Hidden/VR/ClippingMask", new EngineBuiltInAsset(15310, true));
-			m_shaders.Add("Hidden/VR/VideoBackground", new EngineBuiltInAsset(15311, true));
-			m_shaders.Add("AR/TangoARRender", new EngineBuiltInAsset(15401, true));
-			m_shaders.Add("Hidden/VideoDecode", new EngineBuiltInAsset(16000, true));
-			m_shaders.Add("Hidden/VideoDecodeOSX", new EngineBuiltInAsset(16001, true));
-			m_shaders.Add("Hidden/VideoDecodeAndroid", new EngineBuiltInAsset(16002, true));
-			m_shaders.Add("Hidden/Compositing", new EngineBuiltInAsset(17000, true));
+			AddShader("Legacy Shaders/Diffuse Fast", 1, true);
+			AddShader("Legacy Shaders/Bumped Diffuse", 2, true);
+			AddShader("Legacy Shaders/Specular", 3, true);
+			AddShader("Legacy Shaders/Bumped Specular", 4, true);
+			AddShader("Legacy Shaders/Diffuse Detail", 5, true);
+			AddShader("Legacy Shaders/VertexLit", 6, true);
+			AddShader(LegacyDiffuse, 7, true);
+			AddShader("Legacy Shaders/Parallax Diffuse", 8, true);
+			AddShader("Legacy Shaders/Parallax Specular", 9, true);
+			AddShader("Legacy Shaders/Self-Illumin/Diffuse", 10, true);
+			AddShader("Legacy Shaders/Self-Illumin/Bumped Diffuse", 11, true);
+			AddShader("Legacy Shaders/Self-Illumin/Specular", 12, true);
+			AddShader("Legacy Shaders/Self-Illumin/Bumped Specular", 13, true);
+			AddShader("Legacy Shaders/Self-Illumin/VertexLit", 14, true);
+			AddShader("Legacy Shaders/Self-Illumin/Parallax Diffuse", 15, true);
+			AddShader("Legacy Shaders/Self-Illumin/Parallax Specular", 16, true);
+			AddShader("Hidden/Internal-StencilWrite", 19, true);
+			AddShader("Legacy Shaders/Reflective/Diffuse", 20, true);
+			AddShader("Legacy Shaders/Reflective/Bumped Diffuse", 21, true);
+			AddShader("Legacy Shaders/Reflective/Specular", 22, true);
+			AddShader("Legacy Shaders/Reflective/Bumped Specular", 23, true);
+			AddShader("Legacy Shaders/Reflective/VertexLit", 24, true);
+			AddShader("Legacy Shaders/Reflective/Bumped Unlit", 25, true);
+			AddShader("Legacy Shaders/Reflective/Bumped VertexLit", 26, true);
+			AddShader("Legacy Shaders/Reflective/Parallax Diffuse", 27, true);
+			AddShader("Legacy Shaders/Reflective/Parallax Specular", 28, true);
+			AddShader("Legacy Shaders/Transparent/Diffuse", 30, true);
+			AddShader("Legacy Shaders/Transparent/Bumped Diffuse", 31, true);
+			AddShader("Legacy Shaders/Transparent/Specular", 32, true);
+			AddShader("Legacy Shaders/Transparent/Bumped Specular", 33, true);
+			AddShader("Legacy Shaders/Transparent/VertexLit", 34, true);
+			AddShader("Legacy Shaders/Transparent/Parallax Diffuse", 35, true);
+			AddShader("Legacy Shaders/Transparent/Parallax Specular", 36, true);
+			AddShader("Legacy Shaders/Lightmapped/VertexLit", 40, true);
+			AddShader("Legacy Shaders/Lightmapped/Diffuse", 41, true);
+			AddShader("Legacy Shaders/Lightmapped/Bumped Diffuse", 42, true);
+			AddShader("Legacy Shaders/Lightmapped/Specular", 43, true);
+			AddShader("Legacy Shaders/Lightmapped/Bumped Specular", 44, true);
+			AddShader("Standard (Specular setup)", 45, true);
+			AddShader("Standard", 46, true);
+			AddShader("Standard (Roughness setup)", 47, true);
+			AddShader("Legacy Shaders/Transparent/Cutout/VertexLit", 50, true);
+			AddShader("Legacy Shaders/Transparent/Cutout/Diffuse", 51, true);
+			AddShader("Legacy Shaders/Transparent/Cutout/Bumped Diffuse", 52, true);
+			AddShader("Legacy Shaders/Transparent/Cutout/Specular", 53, true);
+			AddShader("Legacy Shaders/Transparent/Cutout/Bumped Specular", 54, true);
+			AddShader("Hidden/Internal-DepthNormalsTexture", 62, true);
+			AddShader("Hidden/Internal-PrePassLighting", 63, true);
+			AddShader("Hidden/Internal-ScreenSpaceShadows", 64, true);
+			AddShader("Hidden/Internal-CombineDepthNormals", 65, true);
+			AddShader("Hidden/BlitCopy", 66, true);
+			AddShader("Hidden/BlitCopyDepth", 67, true);
+			AddShader("Hidden/ConvertTexture", 68, true);
+			AddShader("Hidden/Internal-DeferredShading", 69, true);
+			AddShader("Hidden/Internal-DeferredReflections", 74, true);
+			AddShader("Hidden/Internal-MotionVectors", 75, true);
+			AddShader("Legacy Shaders/Decal", 100, true);
+			AddShader("FX/Flare", 101, true);
+			AddShader("Hidden/Internal-Flare", 102, true);
+			AddShader("Skybox/Cubemap", 103, true);
+			AddShader("Skybox/6 Sided", 104, true);
+			AddShader("Hidden/Internal-Halo", 105, true);
+			AddShader("Skybox/Procedural", 106, true);
+			AddShader("Hidden/BlitCopyWithDepth", 107, true);
+			AddShader("Skybox/Panoramic", 108, true);
+			AddShader("Hidden/BlitToDepth", 109, true);
+			AddShader("Hidden/BlitToDepth_MSAA", 110, true);
+			AddShader("Particles/Additive", 200, true);
+			AddShader("Particles/~Additive-Multiply", 201, true);
+			AddShader("Particles/Additive (Soft)", 202, true);
+			AddShader("Particles/Alpha Blended", 203, true);
+			AddShader("Particles/Multiply", 205, true);
+			AddShader("Particles/Multiply (Double)", 206, true);
+			AddShader("Particles/Alpha Blended Premultiply", 207, true);
+			AddShader("Particles/VertexLit Blended", 208, true);
+			AddShader("Particles/Anim Alpha Blended", 209, true);
+			AddShader("Particles/Standard Surface", 210, true);
+			AddShader("Particles/Standard Unlit", 211, true);
+			AddShader("Hidden/Internal-GUITextureClip", 9000, true);
+			AddShader("Hidden/Internal-GUITextureClipText", 9001, true);
+			AddShader("Hidden/Internal-GUITexture", 9002, true);
+			AddShader("Hidden/Internal-GUITextureBlit", 9003, true);
+			AddShader("Hidden/Internal-GUIRoundedRect", 9004, true);
+			AddShader("Hidden/Internal-UIRDefault", 9005, true);
+			AddShader("Hidden/Internal-UIRAtlasBlitCopy", 9006, true);
+			AddShader("Hidden/Nature/Terrain/Utilities", 10490, true);
+			AddShader("Hidden/TerrainEngine/Details/Vertexlit", 10500, true);
+			AddShader("Hidden/TerrainEngine/Details/WavingDoublePass", 10501, true);
+			AddShader("Hidden/TerrainEngine/Details/BillboardWavingDoublePass", 10502, true);
+			AddShader("Hidden/TerrainEngine/Splatmap/Diffuse-AddPass", 10503, true);
+			AddShader("Hidden/TerrainEngine/Splatmap/Diffuse-Base", 10504, true);
+			AddShader("Nature/Terrain/Diffuse", 10505, true);
+			AddShader("Hidden/TerrainEngine/Splatmap/Diffuse-BaseGen", 10506, true);
+			AddShader("Hidden/TerrainEngine/BillboardTree", 10507, true);
+			AddShader("Hidden/Nature/Tree Soft Occlusion Bark Rendertex", 10508, true);
+			AddShader("Nature/Tree Soft Occlusion Bark", 10509, true);
+			AddShader("Hidden/Nature/Tree Soft Occlusion Leaves Rendertex", 10510, true);
+			AddShader("Nature/Tree Soft Occlusion Leaves", 10511, true);
+			AddShader("Legacy Shaders/Transparent/Cutout/Soft Edge Unlit", 10512, true);
+			AddShader("Hidden/TerrainEngine/CameraFacingBillboardTree", 10513, true);
+			AddShader("Nature/Tree Creator Bark", 10600, true);
+			AddShader("Nature/Tree Creator Leaves", 10601, true);
+			AddShader("Hidden/Nature/Tree Creator Bark Rendertex", 10602, true);
+			AddShader("Hidden/Nature/Tree Creator Leaves Rendertex", 10603, true);
+			AddShader("Hidden/Nature/Tree Creator Bark Optimized", 10604, true);
+			AddShader("Hidden/Nature/Tree Creator Leaves Optimized", 10605, true);
+			AddShader("Nature/Tree Creator Leaves Fast", 10606, true);
+			AddShader("Hidden/Nature/Tree Creator Leaves Fast Optimized", 10607, true);
+			AddShader("Hidden/Nature/Tree Creator Albedo Rendertex", 10608, true);
+			AddShader("Hidden/Nature/Tree Creator Normal Rendertex", 10609, true);
+			AddShader("Nature/Terrain/Specular", 10620, true);
+			AddShader("Hidden/TerrainEngine/Splatmap/Specular-AddPass", 10621, true);
+			AddShader("Hidden/TerrainEngine/Splatmap/Specular-Base", 10622, true);
+			AddShader("Nature/Terrain/Standard", 10623, true);
+			AddShader("Hidden/TerrainEngine/Splatmap/Standard-AddPass", 10624, true);
+			AddShader("Hidden/TerrainEngine/Splatmap/Standard-Base", 10625, true);
+			AddShader("Hidden/TerrainEngine/Splatmap/Standard-BaseGen", 10626, true);
+			AddShader("Mobile/Skybox", 10700, true);
+			AddShader("Mobile/VertexLit", 10701, true);
+			AddShader("Mobile/Diffuse", 10703, true);
+			AddShader("Mobile/Bumped Diffuse", 10704, true);
+			AddShader("Mobile/Bumped Specular", 10705, true);
+			AddShader("Mobile/Bumped Specular (1 Directional Light)", 10706, true);
+			AddShader("Mobile/VertexLit (Only Directional Lights)", 10707, true);
+			AddShader("Mobile/Unlit (Supports Lightmap)", 10708, true);
+			AddShader("Mobile/Particles/Additive", 10720, true);
+			AddShader("Mobile/Particles/Alpha Blended", 10721, true);
+			AddShader("Mobile/Particles/VertexLit Blended", 10722, true);
+			AddShader("Mobile/Particles/Multiply", 10723, true);
+			AddShader("Unlit/Transparent", 10750, true);
+			AddShader("Unlit/Transparent Cutout", 10751, true);
+			AddShader("Unlit/Texture", 10752, true);
+			AddShader(SpriteDefault, 10753, true);
+			AddShader("Unlit/Color", 10755, true);
+			AddShader("Sprites/Mask", 10757, true);
+			AddShader("UI/Unlit/Transparent", 10760, true);
+			AddShader("UI/Unlit/Detail", 10761, true);
+			AddShader("UI/Unlit/Text", 10762, true);
+			AddShader("UI/Unlit/Text Detail", 10763, true);
+			AddShader("UI/Lit/Transparent", 10764, true);
+			AddShader("UI/Lit/Bumped", 10765, true);
+			AddShader("UI/Lit/Detail", 10766, true);
+			AddShader("UI/Lit/Refraction", 10767, true);
+			AddShader("UI/Lit/Refraction Detail", 10768, true);
+			AddShader(UIDefault, 10770, true);
+			AddShader("UI/Default Font", 10782, true);
+			AddShader("UI/DefaultETC1", 10783, true);
+			AddShader("Hidden/UI/CompositeOverdraw", 10784, true);
+			AddShader("Hidden/UI/Overdraw", 10785, true);
+			AddShader("Sprites/Diffuse", 10800, true);
+			AddShader("Nature/SpeedTree", 14000, true);
+			AddShader("Nature/SpeedTree Billboard", 14001, true);
+			AddShader("Nature/SpeedTree8", 14002, true);
+			AddShader("Hidden/GIDebug/TextureUV", 15100, true);
+			AddShader("Hidden/GIDebug/ShowLightMask", 15101, true);
+			AddShader("Hidden/GIDebug/UV1sAsPositions", 15102, true);
+			AddShader("Hidden/GIDebug/VertexColors", 15103, true);
+			AddShader(CubeBlur, 15104, true);
+			AddShader(CubeCopy, 15105, true);
+			AddShader(CubeBlend, 15106, true);
+			AddShader("VR/SpatialMapping/Occlusion", 15300, true);
+			AddShader("VR/SpatialMapping/Wireframe", 15301, true);
+			AddShader("Hidden/VR/BlitTexArraySlice", 15304, true);
+			AddShader("Hidden/VR/Internal-VRDistortion", 15305, true);
+			AddShader("Hidden/VR/BlitTexArraySliceToDepth", 15306, true);
+			AddShader("Hidden/VR/BlitTexArraySliceToDepth_MSAA", 15307, true);
+			AddShader("Hidden/Internal-ODSWorldTexture", 15308, true);
+			AddShader("Hidden/Internal-CubemapToEquirect", 15309, true);
+			AddShader("Hidden/VR/ClippingMask", 15310, true);
+			AddShader("Hidden/VR/VideoBackground", 15311, true);
+			AddShader("Hidden/VR/BlitFromTex2DToTexArraySlice", 15312, true);
+			AddShader("AR/TangoARRender", 15401, true);
+			AddShader("Hidden/VideoDecode", 16000, true);
+			AddShader("Hidden/VideoDecodeOSX", 16001, true);
+			AddShader("Hidden/VideoDecodeAndroid", 16002, true);
+			AddShader("Hidden/Compositing", 17000, true);
+			AddShader("Hidden/TerrainEngine/PaintHeight", 18000, true);
+			AddShader("Hidden/TerrainEngine/GenerateNormalmap", 18002, true);
+			AddShader("Hidden/TerrainEngine/TerrainLayerUtils", 18003, true);
+			AddShader("Hidden/TerrainEngine/BrushPreview", 18004, true);
+			AddShader("Hidden/TerrainEngine/CrossBlendNeighbors", 18005, true);
 
-			m_sprites.Add("Checkmark", new EngineBuiltInAsset(10901, true));
-			m_sprites.Add("UISprite", new EngineBuiltInAsset(10905, true));
-			m_sprites.Add("Background", new EngineBuiltInAsset(10907, true));
-			m_sprites.Add("InputFieldBackground", new EngineBuiltInAsset(10911, true));
-			m_sprites.Add("Knob", new EngineBuiltInAsset(10913, true));
-			m_sprites.Add("DropdownArrow", new EngineBuiltInAsset(10915, true));
-			m_sprites.Add("UIMask", new EngineBuiltInAsset(10917, true));
+			AddSprite("Checkmark", 10901, true);
+			AddSprite("UISprite", 10905, true);
+			AddSprite("Background", 10907, true);
+			AddSprite("InputFieldBackground", 10911, true);
+			AddSprite("Knob", 10913, true);
+			AddSprite("DropdownArrow", 10915, true);
+			AddSprite("UIMask", 10917, true);
 			
-			m_lightmapParams.Add("Default-HighResolution", new EngineBuiltInAsset(15200, true));
-			m_lightmapParams.Add("Default-LowResolution", new EngineBuiltInAsset(15201, true));
-			m_lightmapParams.Add("Default-VeryLowResolution", new EngineBuiltInAsset(15203, true));
-			m_lightmapParams.Add("Default-Medium", new EngineBuiltInAsset(15204, true));
+			AddLightmapParams("Default-HighResolution", 15200, true);
+			AddLightmapParams("Default-LowResolution", 15201, true);
+			AddLightmapParams("Default-VeryLowResolution", 15203, true);
+			AddLightmapParams("Default-Medium", 15204, true);
 
 			///////////////////////////////////////////////////////
 			// Old default
 			///////////////////////////////////////////////////////
 			
-			m_shaders.Add("Internal-ErrorShader", new EngineBuiltInAsset(17, true));
-			m_shaders.Add("Shadow-ScreenBlur", new EngineBuiltInAsset(60, false));
-			m_shaders.Add("Camera-DepthTexture", new EngineBuiltInAsset(61, false));
-			m_shaders.Add("Camera-DepthNormalTexture", new EngineBuiltInAsset(62, false));
-			m_shaders.Add("Internal-PrePassLighting", new EngineBuiltInAsset(63, false));
-			m_shaders.Add("Internal-PrePassCollectShadows", new EngineBuiltInAsset(64, false));
-			m_shaders.Add("Internal-CombineDepthNormals", new EngineBuiltInAsset(65, false));
-			m_shaders.Add("Internal-BlitCopy", new EngineBuiltInAsset(66, false));
-			m_shaders.Add("Shadow-ScreenBlurRotated", new EngineBuiltInAsset(67, false));
-			m_shaders.Add("Internal-Clear", new EngineBuiltInAsset(68, false));
-			m_shaders.Add("Internal-Flare", new EngineBuiltInAsset(102, true));
-			m_shaders.Add("Internal-Halo", new EngineBuiltInAsset(105, true));
-			m_shaders.Add("Internal-GUITextureClip", new EngineBuiltInAsset(9000, true));
-			m_shaders.Add("Internal-GUITextureClipText", new EngineBuiltInAsset(9001, true));
-			m_shaders.Add("Internal-GUITexture", new EngineBuiltInAsset(9002, true));
-			m_shaders.Add("Internal-GUITextureBlit", new EngineBuiltInAsset(9003, true));
-			m_shaders.Add("Font", new EngineBuiltInAsset(10101, false));
-			m_shaders.Add("Sprites-Default", new EngineBuiltInAsset(10753, true));
+			AddShader("Internal-ErrorShader", 17, true);
+			AddShader("Shadow-ScreenBlur", 60, false);
+			AddShader("Camera-DepthTexture", 61, false);
+			AddShader("Camera-DepthNormalTexture", 62, false);
+			AddShader("Internal-PrePassLighting", 63, false);
+			AddShader("Internal-PrePassCollectShadows", 64, false);
+			AddShader("Internal-CombineDepthNormals", 65, false);
+			AddShader("Internal-BlitCopy", 66, false);
+			AddShader("Shadow-ScreenBlurRotated", 67, false);
+			AddShader("Internal-Clear", 68, false);
+			AddShader("Internal-Flare", 102, true);
+			AddShader("Internal-Halo", 105, true);
+			AddShader("Internal-GUITextureClip", 9000, true);
+			AddShader("Internal-GUITextureClipText", 9001, true);
+			AddShader("Internal-GUITexture", 9002, true);
+			AddShader("Internal-GUITextureBlit", 9003, true);
+			AddShader("Font", 10101, false);
+			AddShader("Sprites-Default", 10753, true);
 
 			///////////////////////////////////////////////////////
 			// Old Extra
 			///////////////////////////////////////////////////////
 			
-			m_shaders.Add("Normal-DiffuseFast", new EngineBuiltInAsset(1, true));
-			m_shaders.Add("Normal-Bumped", new EngineBuiltInAsset(2, true));
-			m_shaders.Add("Normal-Glossy", new EngineBuiltInAsset(3, true));
-			m_shaders.Add("Normal-BumpSpec", new EngineBuiltInAsset(4, true));
-			m_shaders.Add("Normal-DiffuseDetail", new EngineBuiltInAsset(5, true));
-			m_shaders.Add("Normal-VertexLit", new EngineBuiltInAsset(6, true));
-			m_shaders.Add("Normal-Diffuse", new EngineBuiltInAsset(7, true));
-			m_shaders.Add("Normal-Parallax", new EngineBuiltInAsset(8, true));
-			m_shaders.Add("Normal-ParallaxSpec", new EngineBuiltInAsset(9, true));
-			m_shaders.Add("Illumin-Diffuse", new EngineBuiltInAsset(10, true));
-			m_shaders.Add("Illumin-Bumped", new EngineBuiltInAsset(11, true));
-			m_shaders.Add("Illumin-Glossy", new EngineBuiltInAsset(12, true));
-			m_shaders.Add("Illumin-BumpSpec", new EngineBuiltInAsset(13, true));
-			m_shaders.Add("Illumin-VertexLit", new EngineBuiltInAsset(14, true));
-			m_shaders.Add("Illumin-Parallax", new EngineBuiltInAsset(15, true));
-			m_shaders.Add("Illumin-ParallaxSpec", new EngineBuiltInAsset(16, true));
-			m_shaders.Add("Reflect-Diffuse", new EngineBuiltInAsset(20, true));
-			m_shaders.Add("Reflect-Bumped", new EngineBuiltInAsset(21, true));
-			m_shaders.Add("Reflect-Glossy", new EngineBuiltInAsset(22, true));
-			m_shaders.Add("Reflect-BumpSpec", new EngineBuiltInAsset(23, true));
-			m_shaders.Add("Reflect-VertexLit", new EngineBuiltInAsset(24, true));
-			m_shaders.Add("Reflect-BumpNolight", new EngineBuiltInAsset(25, true));
-			m_shaders.Add("Reflect-BumpVertexLit", new EngineBuiltInAsset(26, true));
-			m_shaders.Add("Reflect-Parallax", new EngineBuiltInAsset(27, true));
-			m_shaders.Add("Reflect-ParallaxSpec", new EngineBuiltInAsset(28, true));
-			m_shaders.Add("Alpha-Diffuse", new EngineBuiltInAsset(30, true));
-			m_shaders.Add("Alpha-Bumped", new EngineBuiltInAsset(31, true));
-			m_shaders.Add("Alpha-Glossy", new EngineBuiltInAsset(32, true));
-			m_shaders.Add("Alpha-BumpSpec", new EngineBuiltInAsset(33, true));
-			m_shaders.Add("Alpha-VertexLit", new EngineBuiltInAsset(34, true));
-			m_shaders.Add("Alpha-Parallax", new EngineBuiltInAsset(35, true));
-			m_shaders.Add("Alpha-ParallaxSpec", new EngineBuiltInAsset(36, true));
-			m_shaders.Add("Lightmap-VertexLit", new EngineBuiltInAsset(40, true));
-			m_shaders.Add("Lightmap-Diffuse", new EngineBuiltInAsset(41, true));
-			m_shaders.Add("Lightmap-Bumped", new EngineBuiltInAsset(42, true));
-			m_shaders.Add("Lightmap-Glossy", new EngineBuiltInAsset(43, true));
-			m_shaders.Add("Lightmap-BumpSpec", new EngineBuiltInAsset(44, true));
-			m_shaders.Add("AlphaTest-VertexLit", new EngineBuiltInAsset(50, true));
-			m_shaders.Add("AlphaTest-Diffuse", new EngineBuiltInAsset(51, true));
-			m_shaders.Add("AlphaTest-Bumped", new EngineBuiltInAsset(52, true));
-			m_shaders.Add("AlphaTest-Glossy", new EngineBuiltInAsset(53, true));
-			m_shaders.Add("AlphaTest-BumpSpec", new EngineBuiltInAsset(54, true));
-			//m_shaders.Add("Shader", new EngineBuildInAsset(100, true));
-			m_shaders.Add("Flare", new EngineBuiltInAsset(101, true));
-			m_shaders.Add("skybox cubed", new EngineBuiltInAsset(103, true));
-			m_shaders.Add("Skybox", new EngineBuiltInAsset(104, true));
-			m_shaders.Add("Particle Add", new EngineBuiltInAsset(200, true));
-			m_shaders.Add("Particle AddMultiply", new EngineBuiltInAsset(201, true));
-			m_shaders.Add("Particle AddSmooth", new EngineBuiltInAsset(202, true));
-			m_shaders.Add("Particle Alpha Blend", new EngineBuiltInAsset(203, true));
-			m_shaders.Add("Particle Multiply", new EngineBuiltInAsset(205, true));
-			m_shaders.Add("Particle MultiplyDouble", new EngineBuiltInAsset(206, true));
-			m_shaders.Add("Particle Premultiply Blend", new EngineBuiltInAsset(207, true));
-			m_shaders.Add("Particle VertexLit Blended", new EngineBuiltInAsset(208, true));
-			m_shaders.Add("VertexLit", new EngineBuiltInAsset(10500, true));
-			m_shaders.Add("WavingGrass", new EngineBuiltInAsset(10501, true));
-			m_shaders.Add("WavingGrassBillboard", new EngineBuiltInAsset(10502, true));
-			m_shaders.Add("AddPass", new EngineBuiltInAsset(10503, true));
-			m_shaders.Add("FirstPass", new EngineBuiltInAsset(10505, true));
-			m_shaders.Add("BillboardTree", new EngineBuiltInAsset(10507, true));
-			m_shaders.Add("TreeSoftOcclusionBarkRendertex", new EngineBuiltInAsset(10508, true));
-			m_shaders.Add("TreeSoftOcclusionBark", new EngineBuiltInAsset(10509, true));
-			m_shaders.Add("TreeSoftOcclusionLeavesRendertex", new EngineBuiltInAsset(10510, true));
-			m_shaders.Add("TreeSoftOcclusionLeaves", new EngineBuiltInAsset(10511, true));
-			m_shaders.Add("AlphaTest-SoftEdgeUnlit", new EngineBuiltInAsset(10512, true));
-			m_shaders.Add("TreeCreatorBark", new EngineBuiltInAsset(10600, true));
-			m_shaders.Add("TreeCreatorLeaves", new EngineBuiltInAsset(10601, true));
-			m_shaders.Add("TreeCreatorBarkRendertex", new EngineBuiltInAsset(10602, true));
-			m_shaders.Add("TreeCreatorLeavesRendertex", new EngineBuiltInAsset(10603, true));
-			m_shaders.Add("TreeCreatorBarkOptimized", new EngineBuiltInAsset(10604, true));
-			m_shaders.Add("TreeCreatorLeavesOptimized", new EngineBuiltInAsset(10605, true));
-			m_shaders.Add("TreeCreatorLeavesFast", new EngineBuiltInAsset(10606, true));
-			m_shaders.Add("TreeCreatorLeavesFastOptimized", new EngineBuiltInAsset(10607, true));
-			m_shaders.Add("TerrBumpFirstPass", new EngineBuiltInAsset(10620, true));
-			m_shaders.Add("TerrBumpAddPass", new EngineBuiltInAsset(10621, true));
-			m_shaders.Add("Mobile-Skybox", new EngineBuiltInAsset(10700, true));
-			m_shaders.Add("Mobile-VertexLit", new EngineBuiltInAsset(10701, true));
-			m_shaders.Add("Mobile-Diffuse", new EngineBuiltInAsset(10703, true));
-			m_shaders.Add("Mobile-Bumped", new EngineBuiltInAsset(10704, true));
-			m_shaders.Add("Mobile-BumpSpec", new EngineBuiltInAsset(10705, true));
-			m_shaders.Add("Mobile-BumpSpec-1DirectionalLight", new EngineBuiltInAsset(10706, true));
-			m_shaders.Add("Mobile-VertexLit-OnlyDirectionalLights", new EngineBuiltInAsset(10707, true));
-			m_shaders.Add("Mobile-Lightmap-Unlit", new EngineBuiltInAsset(10708, true));
-			m_shaders.Add("Mobile-Particle-Add", new EngineBuiltInAsset(10720, true));
-			m_shaders.Add("Mobile-Particle-Alpha", new EngineBuiltInAsset(10721, true));
-			m_shaders.Add("Mobile-Particle-Alpha-VertexLit", new EngineBuiltInAsset(10722, true));
-			m_shaders.Add("Mobile-Particle-Multiply", new EngineBuiltInAsset(10723, true));
-			m_shaders.Add("Unlit-Alpha", new EngineBuiltInAsset(10750, true));
-			m_shaders.Add("Unlit-AlphaTest", new EngineBuiltInAsset(10751, true));
-			m_shaders.Add("Unlit-Normal", new EngineBuiltInAsset(10752, true));
-			m_shaders.Add("UI-Unlit-Transparent", new EngineBuiltInAsset(10760, true));
-			m_shaders.Add("UI-Unlit-Detail", new EngineBuiltInAsset(10761, true));
-			m_shaders.Add("UI-Unlit-Text", new EngineBuiltInAsset(10762, true));
-			m_shaders.Add("UI-Unlit-TextDetail", new EngineBuiltInAsset(10763, true));
-			m_shaders.Add("UI-Lit-Transparent", new EngineBuiltInAsset(10764, true));
-			m_shaders.Add("UI-Lit-Bumped", new EngineBuiltInAsset(10765, true));
-			m_shaders.Add("UI-Lit-Detail", new EngineBuiltInAsset(10766, true));
-			m_shaders.Add("UI-Lit-Refraction(ProOnly)", new EngineBuiltInAsset(10767, true));
-			m_shaders.Add("UI-Lit-RefractionDetail(ProOnly)", new EngineBuiltInAsset(10768, true));
-			m_shaders.Add("UI-Default", new EngineBuiltInAsset(10770, true));
-			m_shaders.Add("UI-DefaultFont", new EngineBuiltInAsset(10782, true));
-			m_shaders.Add("Sprites-Diffuse", new EngineBuiltInAsset(10800, true));
+			AddShader("Normal-DiffuseFast", 1, true);
+			AddShader("Normal-Bumped", 2, true);
+			AddShader("Normal-Glossy", 3, true);
+			AddShader("Normal-BumpSpec", 4, true);
+			AddShader("Normal-DiffuseDetail", 5, true);
+			AddShader("Normal-VertexLit", 6, true);
+			AddShader("Normal-Diffuse", 7, true);
+			AddShader("Normal-Parallax", 8, true);
+			AddShader("Normal-ParallaxSpec", 9, true);
+			AddShader("Illumin-Diffuse", 10, true);
+			AddShader("Illumin-Bumped", 11, true);
+			AddShader("Illumin-Glossy", 12, true);
+			AddShader("Illumin-BumpSpec", 13, true);
+			AddShader("Illumin-VertexLit", 14, true);
+			AddShader("Illumin-Parallax", 15, true);
+			AddShader("Illumin-ParallaxSpec", 16, true);
+			AddShader("Reflect-Diffuse", 20, true);
+			AddShader("Reflect-Bumped", 21, true);
+			AddShader("Reflect-Glossy", 22, true);
+			AddShader("Reflect-BumpSpec", 23, true);
+			AddShader("Reflect-VertexLit", 24, true);
+			AddShader("Reflect-BumpNolight", 25, true);
+			AddShader("Reflect-BumpVertexLit", 26, true);
+			AddShader("Reflect-Parallax", 27, true);
+			AddShader("Reflect-ParallaxSpec", 28, true);
+			AddShader("Alpha-Diffuse", 30, true);
+			AddShader("Alpha-Bumped", 31, true);
+			AddShader("Alpha-Glossy", 32, true);
+			AddShader("Alpha-BumpSpec", 33, true);
+			AddShader("Alpha-VertexLit", 34, true);
+			AddShader("Alpha-Parallax", 35, true);
+			AddShader("Alpha-ParallaxSpec", 36, true);
+			AddShader("Lightmap-VertexLit", 40, true);
+			AddShader("Lightmap-Diffuse", 41, true);
+			AddShader("Lightmap-Bumped", 42, true);
+			AddShader("Lightmap-Glossy", 43, true);
+			AddShader("Lightmap-BumpSpec", 44, true);
+			AddShader("AlphaTest-VertexLit", 50, true);
+			AddShader("AlphaTest-Diffuse", 51, true);
+			AddShader("AlphaTest-Bumped", 52, true);
+			AddShader("AlphaTest-Glossy", 53, true);
+			AddShader("AlphaTest-BumpSpec", 54, true);
+			//AddShader("Shader", new EngineBuildInAsset(100, true);
+			AddShader("Flare", 101, true);
+			AddShader("skybox cubed", 103, true);
+			AddShader("Skybox", 104, true);
+			AddShader("Particle Add", 200, true);
+			AddShader("Particle AddMultiply", 201, true);
+			AddShader("Particle AddSmooth", 202, true);
+			AddShader("Particle Alpha Blend", 203, true);
+			AddShader("Particle Multiply", 205, true);
+			AddShader("Particle MultiplyDouble", 206, true);
+			AddShader("Particle Premultiply Blend", 207, true);
+			AddShader("Particle VertexLit Blended", 208, true);
+			AddShader("VertexLit", 10500, true);
+			AddShader("WavingGrass", 10501, true);
+			AddShader("WavingGrassBillboard", 10502, true);
+			AddShader("AddPass", 10503, true);
+			AddShader("FirstPass", 10505, true);
+			AddShader("BillboardTree", 10507, true);
+			AddShader("TreeSoftOcclusionBarkRendertex", 10508, true);
+			AddShader("TreeSoftOcclusionBark", 10509, true);
+			AddShader("TreeSoftOcclusionLeavesRendertex", 10510, true);
+			AddShader("TreeSoftOcclusionLeaves", 10511, true);
+			AddShader("AlphaTest-SoftEdgeUnlit", 10512, true);
+			AddShader("TreeCreatorBark", 10600, true);
+			AddShader("TreeCreatorLeaves", 10601, true);
+			AddShader("TreeCreatorBarkRendertex", 10602, true);
+			AddShader("TreeCreatorLeavesRendertex", 10603, true);
+			AddShader("TreeCreatorBarkOptimized", 10604, true);
+			AddShader("TreeCreatorLeavesOptimized", 10605, true);
+			AddShader("TreeCreatorLeavesFast", 10606, true);
+			AddShader("TreeCreatorLeavesFastOptimized", 10607, true);
+			AddShader("TerrBumpFirstPass", 10620, true);
+			AddShader("TerrBumpAddPass", 10621, true);
+			AddShader("Mobile-Skybox", 10700, true);
+			AddShader("Mobile-VertexLit", 10701, true);
+			AddShader("Mobile-Diffuse", 10703, true);
+			AddShader("Mobile-Bumped", 10704, true);
+			AddShader("Mobile-BumpSpec", 10705, true);
+			AddShader("Mobile-BumpSpec-1DirectionalLight", 10706, true);
+			AddShader("Mobile-VertexLit-OnlyDirectionalLights", 10707, true);
+			AddShader("Mobile-Lightmap-Unlit", 10708, true);
+			AddShader("Mobile-Particle-Add", 10720, true);
+			AddShader("Mobile-Particle-Alpha", 10721, true);
+			AddShader("Mobile-Particle-Alpha-VertexLit", 10722, true);
+			AddShader("Mobile-Particle-Multiply", 10723, true);
+			AddShader("Unlit-Alpha", 10750, true);
+			AddShader("Unlit-AlphaTest", 10751, true);
+			AddShader("Unlit-Normal", 10752, true);
+			AddShader("UI-Unlit-Transparent", 10760, true);
+			AddShader("UI-Unlit-Detail", 10761, true);
+			AddShader("UI-Unlit-Text", 10762, true);
+			AddShader("UI-Unlit-TextDetail", 10763, true);
+			AddShader("UI-Lit-Transparent", 10764, true);
+			AddShader("UI-Lit-Bumped", 10765, true);
+			AddShader("UI-Lit-Detail", 10766, true);
+			AddShader("UI-Lit-Refraction(ProOnly)", 10767, true);
+			AddShader("UI-Lit-RefractionDetail(ProOnly)", 10768, true);
+			AddShader("UI-Default", 10770, true);
+			AddShader("UI-DefaultFont", 10782, true);
+			AddShader("Sprites-Diffuse", 10800, true);
 		}
 
-		public static IReadOnlyDictionary<string, EngineBuiltInAsset> Materials => m_materials;
-		public static IReadOnlyDictionary<string, EngineBuiltInAsset> Textures => m_textures;
-		public static IReadOnlyDictionary<string, EngineBuiltInAsset> Meshes => m_meshes;
-		public static IReadOnlyDictionary<string, EngineBuiltInAsset> Shaders => m_shaders;
-		public static IReadOnlyDictionary<string, EngineBuiltInAsset> Fonts => m_fonts;
-		public static IReadOnlyDictionary<string, EngineBuiltInAsset> Sprites => m_sprites;
-		public static IReadOnlyDictionary<string, EngineBuiltInAsset> LightmapParams => m_lightmapParams;
+		public static bool ContainsMaterial(string name, Version version)
+		{
+			return ContainsAsset(m_materials, name, version);
+		}
+		public static bool ContainsTexture(string name, Version version)
+		{
+			return ContainsAsset(m_textures, name, version);
+		}
+		public static bool ContainsMesh(string name, Version version)
+		{
+			return ContainsAsset(m_meshes, name, version);
+		}
+		public static bool ContainsFont(string name, Version version)
+		{
+			return ContainsAsset(m_fonts, name, version);
+		}
+		public static bool ContainsShader(string name, Version version)
+		{
+			return ContainsAsset(m_shaders, name, version);
+		}
+		public static bool ContainsSprite(string name, Version version)
+		{
+			return ContainsAsset(m_sprites, name, version);
+		}
+		public static bool ContainsLightmapParams(string name, Version version)
+		{
+			return ContainsAsset(m_lightmapParams, name, version);
+		}
+
+		public static EngineBuiltInAsset GetMaterial(string name, Version version)
+		{
+			return m_materials[name].GetAsset(version);
+		}
+		public static bool TryGetMaterial(string name, Version version, out EngineBuiltInAsset asset)
+		{
+			return TryGetAsset(m_materials, name, version, out asset);
+		}
+		public static EngineBuiltInAsset GetTexture(string name, Version version)
+		{
+			return m_textures[name].GetAsset(version);
+		}
+		public static bool TryGetTexture(string name, Version version, out EngineBuiltInAsset asset)
+		{
+			return TryGetAsset(m_textures, name, version, out asset);
+		}
+		public static EngineBuiltInAsset GetMesh(string name, Version version)
+		{
+			return m_meshes[name].GetAsset(version);
+		}
+		public static bool TryGetMesh(string name, Version version, out EngineBuiltInAsset asset)
+		{
+			return TryGetAsset(m_meshes, name, version, out asset);
+		}
+		public static EngineBuiltInAsset GetFont(string name, Version version)
+		{
+			return m_fonts[name].GetAsset(version);
+		}
+		public static bool TryGetFont(string name, Version version, out EngineBuiltInAsset asset)
+		{
+			return TryGetAsset(m_fonts, name, version, out asset);
+		}
+		public static EngineBuiltInAsset GetShader(string name, Version version)
+		{
+			return m_shaders[name].GetAsset(version);
+		}
+		public static bool TryGetShader(string name, Version version, out EngineBuiltInAsset asset)
+		{
+			return TryGetAsset(m_shaders, name, version, out asset);
+		}
+		public static EngineBuiltInAsset GetSprite(string name, Version version)
+		{
+			return m_sprites[name].GetAsset(version);
+		}
+		public static bool TryGetSprite(string name, Version version, out EngineBuiltInAsset asset)
+		{
+			return TryGetAsset(m_sprites, name, version, out asset);
+		}
+		public static EngineBuiltInAsset GetLightmapParams(string name, Version version)
+		{
+			return m_lightmapParams[name].GetAsset(version);
+		}
+		public static bool TryGetLightmapParams(string name, Version version, out EngineBuiltInAsset asset)
+		{
+			return TryGetAsset(m_lightmapParams, name, version, out asset);
+		}
+
+		private static void AddMaterial(string name, uint exportID, bool isF)
+		{
+			AddMaterial(name, default, exportID, isF);
+		}
+		private static void AddMaterial(string name, Version version, uint exportID, bool isF)
+		{
+			AddAsset(m_materials, name, version, exportID, isF);
+		}
+
+		private static void AddTexture(string name, uint exportID, bool isF)
+		{
+			AddTexture(name, default, exportID, isF);
+		}
+		private static void AddTexture(string name, Version version, uint exportID, bool isF)
+		{
+			AddAsset(m_textures, name, version, exportID, isF);
+		}
+
+		private static void AddMesh(string name, uint exportID, bool isF)
+		{
+			AddMesh(name, default, exportID, isF);
+		}
+		private static void AddMesh(string name, Version version, uint exportID, bool isF)
+		{
+			AddAsset(m_meshes, name, version, exportID, isF);
+		}
+
+		private static void AddFont(string name, uint exportID, bool isF)
+		{
+			AddFont(name, default, exportID, isF);
+		}
+		private static void AddFont(string name, Version version, uint exportID, bool isF)
+		{
+			AddAsset(m_fonts, name, version, exportID, isF);
+		}
+
+		private static void AddShader(string name, uint exportID, bool isF)
+		{
+			AddShader(name, default, exportID, isF);
+		}
+		private static void AddShader(string name, Version version, uint exportID, bool isF)
+		{
+			AddAsset(m_shaders, name, version, exportID, isF);
+		}
+
+		private static void AddSprite(string name, uint exportID, bool isF)
+		{
+			AddSprite(name, default, exportID, isF);
+		}
+		private static void AddSprite(string name, Version version, uint exportID, bool isF)
+		{
+			AddAsset(m_sprites, name, version, exportID, isF);
+		}
+
+		private static void AddLightmapParams(string name, uint exportID, bool isF)
+		{
+			AddLightmapParams(name, default, exportID, isF);
+		}
+		private static void AddLightmapParams(string name, Version version, uint exportID, bool isF)
+		{
+			AddAsset(m_lightmapParams, name, version, exportID, isF);
+		}
+
+		private static bool ContainsAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, Version version)
+		{
+			if (lookup.TryGetValue(name, out EngineBuiltInAssetInfo info))
+			{
+				return info.ContainsAsset(version);
+			}
+			return false;
+		}
+
+		private static bool TryGetAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, Version version, out EngineBuiltInAsset asset)
+		{
+			if (lookup.TryGetValue(name, out EngineBuiltInAssetInfo info))
+			{
+				return info.TryGetAsset(version, out asset);
+			}
+			asset = default;
+			return false;
+		}
+
+		private static void AddAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, Version version, uint exportID, bool isF)
+		{
+			EngineBuiltInAsset asset = new EngineBuiltInAsset(exportID, isF);
+			if (lookup.TryGetValue(name, out EngineBuiltInAssetInfo assetInfo))
+			{
+				assetInfo.AddVariation(version, asset);
+			}
+			else
+			{
+				assetInfo = new EngineBuiltInAssetInfo(version, asset);
+				lookup.Add(name, assetInfo);
+			}
+		}
+
+		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> Materials => m_materials;
+		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> Textures => m_textures;
+		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> Meshes => m_meshes;
+		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> Shaders => m_shaders;
+		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> Fonts => m_fonts;
+		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> Sprites => m_sprites;
+		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> LightmapParams => m_lightmapParams;
 
 		public const string FontMaterialName = "Font Material";
+
+		public const string LegacyDiffuse = "Legacy Shaders/Diffuse";
+		public const string SpriteDefault = "Sprites/Default";
+		public const string UIDefault = "UI/Default";
+		public const string CubeBlur = "Hidden/CubeBlur";
+		public const string CubeCopy = "Hidden/CubeCopy";
+		public const string CubeBlend = "Hidden/CubeBlend";
 		public const string TerrainVertexLit = "Hidden/TerrainEngine/Details/Vertexlit";
 		public const string TerrainWavingDoublePass = "Hidden/TerrainEngine/Details/WavingDoublePass";
 		public const string TerrainBillboardWavingDoublePass = "Hidden/TerrainEngine/Details/BillboardWavingDoublePass";
@@ -452,12 +744,12 @@ namespace uTinyRipper.AssetExporters
 		public static readonly EngineGUID EGUID = new EngineGUID(0x00000000, 0xE0000000, 0x00000000, 0x00000000);
 		public static readonly EngineGUID FGUID = new EngineGUID(0x00000000, 0xF0000000, 0x00000000, 0x00000000);
 
-		private static Dictionary<string, EngineBuiltInAsset> m_materials = new Dictionary<string, EngineBuiltInAsset>();
-		private static Dictionary<string, EngineBuiltInAsset> m_textures = new Dictionary<string, EngineBuiltInAsset>();
-		private static Dictionary<string, EngineBuiltInAsset> m_meshes = new Dictionary<string, EngineBuiltInAsset>();
-		private static Dictionary<string, EngineBuiltInAsset> m_shaders = new Dictionary<string, EngineBuiltInAsset>();
-		private static Dictionary<string, EngineBuiltInAsset> m_fonts = new Dictionary<string, EngineBuiltInAsset>();
-		private static Dictionary<string, EngineBuiltInAsset> m_sprites = new Dictionary<string, EngineBuiltInAsset>();
-		private static Dictionary<string, EngineBuiltInAsset> m_lightmapParams = new Dictionary<string, EngineBuiltInAsset>();
+		private static Dictionary<string, EngineBuiltInAssetInfo> m_materials = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static Dictionary<string, EngineBuiltInAssetInfo> m_textures = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static Dictionary<string, EngineBuiltInAssetInfo> m_meshes = new Dictionary<string, EngineBuiltInAssetInfo> ();
+		private static Dictionary<string, EngineBuiltInAssetInfo> m_shaders = new Dictionary<string, EngineBuiltInAssetInfo> ();
+		private static Dictionary<string, EngineBuiltInAssetInfo> m_fonts = new Dictionary<string, EngineBuiltInAssetInfo> ();
+		private static Dictionary<string, EngineBuiltInAssetInfo> m_sprites = new Dictionary<string, EngineBuiltInAssetInfo> ();
+		private static Dictionary<string, EngineBuiltInAssetInfo> m_lightmapParams = new Dictionary<string, EngineBuiltInAssetInfo> ();
 	}
 }

@@ -649,12 +649,12 @@ namespace uTinyRipper.Classes
 				}
 			}
 
-			ExportShaderPointer(container, node, shaderNames, "Legacy Shaders/Diffuse");
-			ExportShaderPointer(container, node, shaderNames, "Hidden/CubeBlur");
-			ExportShaderPointer(container, node, shaderNames, "Hidden/CubeCopy");
-			ExportShaderPointer(container, node, shaderNames, "Hidden/CubeBlend");
-			ExportShaderPointer(container, node, shaderNames, "Sprites/Default");
-			ExportShaderPointer(container, node, shaderNames, "UI/Default");
+			ExportShaderPointer(container, node, shaderNames, EngineBuiltInAssets.LegacyDiffuse);
+			ExportShaderPointer(container, node, shaderNames, EngineBuiltInAssets.CubeBlur);
+			ExportShaderPointer(container, node, shaderNames, EngineBuiltInAssets.CubeCopy);
+			ExportShaderPointer(container, node, shaderNames, EngineBuiltInAssets.CubeBlend);
+			ExportShaderPointer(container, node, shaderNames, EngineBuiltInAssets.SpriteDefault);
+			ExportShaderPointer(container, node, shaderNames, EngineBuiltInAssets.UIDefault);
 			return node;
 		}
 		private IReadOnlyList<PPtr<ShaderVariantCollection>> GetPreloadedShaders(Version version)
@@ -862,7 +862,7 @@ namespace uTinyRipper.Classes
 		{
 			if (!shaderNames.Contains(name))
 			{
-				EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.Shaders[name];
+				EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(name, container.ExportVersion);
 				ExportPointer pointer = new ExportPointer(buildInAsset.ExportID, buildInAsset.GUID, AssetType.Internal);
 				node.Add(pointer.ExportYAML(container));
 			}

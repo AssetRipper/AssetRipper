@@ -12,7 +12,7 @@ namespace uTinyRipper.AssetExporters
 {
 	public class YAMLAssetExporter : IAssetExporter
 	{
-		public bool IsHandle(Object asset)
+		public bool IsHandle(Object asset, ExportOptions options)
 		{
 			return true;
 		}

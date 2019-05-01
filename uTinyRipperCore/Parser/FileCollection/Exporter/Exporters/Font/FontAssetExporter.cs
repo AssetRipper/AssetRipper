@@ -5,7 +5,7 @@ namespace uTinyRipper.AssetExporters
 {
 	public sealed class FontAssetExporter : BinaryAssetExporter
 	{
-		public override bool IsHandle(Object asset)
+		public override bool IsHandle(Object asset, ExportOptions options)
 		{
 			Font font = (Font)asset;
 			return font.IsValidData;

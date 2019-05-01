@@ -158,15 +158,15 @@ namespace uTinyRipper.AssetExporters
 			OverrideExporter(classType, BinExporter);
 		}
 
-		public void Export(string path, FileCollection fileCollection, Object asset)
+		public void Export(string path, FileCollection fileCollection, Object asset, ExportOptions options)
 		{
-			Export(path, fileCollection, new Object[] { asset });
+			Export(path, fileCollection, new Object[] { asset }, options);
 		}
 
-		public void Export(string path, FileCollection fileCollection, IEnumerable<Object> assets)
+		public void Export(string path, FileCollection fileCollection, IEnumerable<Object> assets, ExportOptions options)
 		{
 			EventExportPreparationStarted?.Invoke();
-			VirtualSerializedFile virtualFile = new VirtualSerializedFile();
+			VirtualSerializedFile virtualFile = new VirtualSerializedFile(options);
 			List<IExportCollection> collections = new List<IExportCollection>();
 			// speed up fetching a little bit
 			List<Object> depList = new List<Object>();
@@ -179,7 +179,7 @@ namespace uTinyRipper.AssetExporters
 				Object asset = depList[i];
 				if (!queued.Contains(asset))
 				{
-					IExportCollection collection = CreateCollection(virtualFile, asset);
+					IExportCollection collection = CreateCollection(virtualFile, asset, options);
 					foreach (Object element in collection.Assets)
 					{
 						queued.Add(element);
@@ -211,7 +211,7 @@ namespace uTinyRipper.AssetExporters
 			EventExportPreparationFinished?.Invoke();
 
 			EventExportStarted?.Invoke();
-			ProjectAssetContainer container = new ProjectAssetContainer(this, fileCollection.FetchAssets(), virtualFile, collections);
+			ProjectAssetContainer container = new ProjectAssetContainer(this, virtualFile, fileCollection.FetchAssets(), collections, options);
 			for (int i = 0; i < collections.Count; i++)
 			{
 				IExportCollection collection = collections[i];
@@ -266,12 +266,12 @@ namespace uTinyRipper.AssetExporters
 			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{classID}'");
 		}
 
-		private IExportCollection CreateCollection(VirtualSerializedFile file, Object asset)
+		private IExportCollection CreateCollection(VirtualSerializedFile file, Object asset, ExportOptions options)
 		{
 			Stack<IAssetExporter> exporters = m_exporters[asset.ClassID];
 			foreach (IAssetExporter exporter in exporters)
 			{
-				if (exporter.IsHandle(asset))
+				if (exporter.IsHandle(asset, options))
 				{
 					return exporter.CreateCollection(file, asset);
 				}

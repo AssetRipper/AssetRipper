@@ -10,7 +10,8 @@ namespace uTinyRipper.AssetExporters
 {
 	public class ProjectAssetContainer : IExportContainer
 	{
-		public ProjectAssetContainer(ProjectExporter exporter, IEnumerable<Object> assets, VirtualSerializedFile file, IReadOnlyList<IExportCollection> collections)
+		public ProjectAssetContainer(ProjectExporter exporter, VirtualSerializedFile file, IEnumerable<Object> assets,
+			IReadOnlyList<IExportCollection> collections, ExportOptions options)
 		{
 			if(exporter == null)
 			{
@@ -26,7 +27,10 @@ namespace uTinyRipper.AssetExporters
 			}
 			m_exporter = exporter;
 			VirtualFile = file;
-			m_collections = collections;
+
+			ExportVersion = options.Version;
+			ExportPlatform = options.Platform;
+			m_exportFlags = options.Flags;
 
 			foreach (Object asset in assets)
 			{
@@ -207,16 +211,16 @@ namespace uTinyRipper.AssetExporters
 		public Version Version => File.Version;
 		public Platform Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
-		public Version ExportVersion { get; } = new Version(2017, 3, 0, VersionType.Final, 3);
-		public Platform ExportPlatform => Platform.NoTarget;
-		public TransferInstructionFlags ExportFlags => TransferInstructionFlags.NoTransferInstructionFlags | CurrentCollection.Flags;
+		public Version ExportVersion { get; }
+		public Platform ExportPlatform { get; }
+		public TransferInstructionFlags ExportFlags => m_exportFlags | CurrentCollection.Flags;
 
 		private readonly ProjectExporter m_exporter;
-		private readonly IReadOnlyList<IExportCollection> m_collections;
 		private readonly Dictionary<Object, IExportCollection> m_assetCollections = new Dictionary<Object, IExportCollection>();
 
-		private BuildSettings m_buildSettings;
-		private TagManager m_tagManager;
-		private SceneExportCollection[] m_scenes;
+		private readonly BuildSettings m_buildSettings;
+		private readonly TagManager m_tagManager;
+		private readonly SceneExportCollection[] m_scenes;
+		private readonly TransferInstructionFlags m_exportFlags;
 	}
 }

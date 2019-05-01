@@ -124,7 +124,7 @@ namespace uTinyRipperGUI.Exporters
 			}
 		}
 
-		public bool IsHandle(Object asset)
+		public bool IsHandle(Object asset, ExportOptions options)
 		{
 			if (asset.ClassID == ClassIDType.Texture2D)
 			{

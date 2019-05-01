@@ -10,7 +10,7 @@ namespace uTinyRipper.AssetExporters
 {
 	public class EngineExportCollection : IExportCollection
 	{
-		public EngineExportCollection(Object asset)
+		public EngineExportCollection(Object asset, Version version)
 		{
 			if (asset == null)
 			{
@@ -18,11 +18,12 @@ namespace uTinyRipper.AssetExporters
 			}
 
 			File = asset.File;
+			m_version = version;
 			if (IsEngineFile(asset.File.Name))
 			{
 				foreach (Object builtInAsset in File.FetchAssets())
 				{
-					if (IsEngineAsset(builtInAsset))
+					if (IsEngineAsset(builtInAsset, version))
 					{
 						m_assets.Add(builtInAsset);
 					}
@@ -33,10 +34,10 @@ namespace uTinyRipper.AssetExporters
 				m_assets.Add(asset);
 			}
 		}
-				
-		public static bool IsEngineAsset(Object asset)
+
+		public static bool IsEngineAsset(Object asset, Version version)
 		{
-			if (!GetEngineBuildInAsset(asset, out EngineBuiltInAsset _))
+			if (!GetEngineBuildInAsset(asset, version, out EngineBuiltInAsset _))
 			{
 				return false;
 			}
@@ -59,7 +60,7 @@ namespace uTinyRipper.AssetExporters
 						{
 							return true;
 						}
-						return IsEngineAsset(shader);
+						return IsEngineAsset(shader, version);
 					}
 
 				case ClassIDType.Shader:
@@ -87,14 +88,14 @@ namespace uTinyRipper.AssetExporters
 			return false;
 		}
 
-		private static bool GetEngineBuildInAsset(Object asset, out EngineBuiltInAsset engineAsset)
+		private static bool GetEngineBuildInAsset(Object asset, Version version, out EngineBuiltInAsset engineAsset)
 		{
 			switch (asset.ClassID)
 			{
 				case ClassIDType.Material:
 					{
 						Material material = (Material)asset;
-						if(EngineBuiltInAssets.Materials.TryGetValue(material.Name, out engineAsset))
+						if (EngineBuiltInAssets.TryGetMaterial(material.Name, version, out engineAsset))
 						{
 							return true;
 						}
@@ -104,7 +105,7 @@ namespace uTinyRipper.AssetExporters
 				case ClassIDType.Texture2D:
 					{
 						Texture2D texture = (Texture2D)asset;
-						if (EngineBuiltInAssets.Textures.TryGetValue(texture.Name, out engineAsset))
+						if (EngineBuiltInAssets.TryGetTexture(texture.Name, version, out engineAsset))
 						{
 							return true;
 						}
@@ -114,7 +115,7 @@ namespace uTinyRipper.AssetExporters
 				case ClassIDType.Mesh:
 					{
 						Mesh mesh = (Mesh)asset;
-						if (EngineBuiltInAssets.Meshes.TryGetValue(mesh.Name, out engineAsset))
+						if (EngineBuiltInAssets.TryGetMesh(mesh.Name, version, out engineAsset))
 						{
 							return true;
 						}
@@ -124,7 +125,7 @@ namespace uTinyRipper.AssetExporters
 				case ClassIDType.Shader:
 					{
 						Shader shader = (Shader)asset;
-						if (EngineBuiltInAssets.Shaders.TryGetValue(shader.ValidName, out engineAsset))
+						if (EngineBuiltInAssets.TryGetShader(shader.ValidName, version, out engineAsset))
 						{
 							return true;
 						}
@@ -134,7 +135,7 @@ namespace uTinyRipper.AssetExporters
 				case ClassIDType.Font:
 					{
 						Font font = (Font)asset;
-						if (EngineBuiltInAssets.Fonts.TryGetValue(font.Name, out engineAsset))
+						if (EngineBuiltInAssets.TryGetFont(font.Name, version, out engineAsset))
 						{
 							return true;
 						}
@@ -144,7 +145,7 @@ namespace uTinyRipper.AssetExporters
 				case ClassIDType.Sprite:
 					{
 						Sprite sprite = (Sprite)asset;
-						if (EngineBuiltInAssets.Sprites.TryGetValue(sprite.Name, out engineAsset))
+						if (EngineBuiltInAssets.TryGetSprite(sprite.Name, version, out engineAsset))
 						{
 							return true;
 						}
@@ -154,7 +155,7 @@ namespace uTinyRipper.AssetExporters
 				case ClassIDType.LightmapParameters:
 					{
 						LightmapParameters lightParams = (LightmapParameters)asset;
-						if (EngineBuiltInAssets.LightmapParams.TryGetValue(lightParams.Name, out engineAsset))
+						if (EngineBuiltInAssets.TryGetLightmapParams(lightParams.Name, version, out engineAsset))
 						{
 							return true;
 						}
@@ -177,21 +178,17 @@ namespace uTinyRipper.AssetExporters
 
 		public long GetExportID(Object asset)
 		{
-			GetEngineBuildInAsset(asset, out EngineBuiltInAsset engneAsset);
-			if(!engneAsset.IsValid)
-			{
-				throw new NotImplementedException($"Unknown ExportID for asset {asset.ToLogString()} from file {asset.File.Name}");
-			}
+			GetEngineBuildInAsset(asset, m_version, out EngineBuiltInAsset engneAsset);
 			return engneAsset.ExportID;
 		}
 
 		public ExportPointer CreateExportPointer(Object asset, bool isLocal)
 		{
-			if(isLocal)
+			if (isLocal)
 			{
 				throw new NotSupportedException();
 			}
-			GetEngineBuildInAsset(asset, out EngineBuiltInAsset engneAsset);
+			GetEngineBuildInAsset(asset, m_version, out EngineBuiltInAsset engneAsset);
 			if (!engneAsset.IsValid)
 			{
 				throw new NotImplementedException($"Unknown ExportID for asset {asset.ToLogString()} from file {asset.File.Name}");
@@ -207,5 +204,7 @@ namespace uTinyRipper.AssetExporters
 		public string Name => "Engine 2017.3.0f3";
 
 		private readonly HashSet<Object> m_assets = new HashSet<Object>();
+
+		private readonly Version m_version;
 	}
 }

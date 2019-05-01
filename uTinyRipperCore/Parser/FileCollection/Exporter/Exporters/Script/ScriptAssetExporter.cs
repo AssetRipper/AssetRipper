@@ -10,7 +10,7 @@ namespace uTinyRipper.AssetExporters
 {
 	public class ScriptAssetExporter : IAssetExporter
 	{
-		public bool IsHandle(Object asset)
+		public bool IsHandle(Object asset, ExportOptions options)
 		{
 			return true;
 		}

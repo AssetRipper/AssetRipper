@@ -10,7 +10,7 @@ namespace uTinyRipper.AssetExporters
 {
 	public class BinaryAssetExporter : IAssetExporter
 	{
-		public virtual bool IsHandle(Object asset)
+		public virtual bool IsHandle(Object asset, ExportOptions options)
 		{
 			return true;
 		}

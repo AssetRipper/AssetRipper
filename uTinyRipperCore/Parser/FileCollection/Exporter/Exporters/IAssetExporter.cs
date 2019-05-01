@@ -8,7 +8,7 @@ namespace uTinyRipper.AssetExporters
 {
 	public interface IAssetExporter
 	{
-		bool IsHandle(Object asset);
+		bool IsHandle(Object asset, ExportOptions options);
 
 		bool Export(IExportContainer container, Object asset, string path);
 		void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback);

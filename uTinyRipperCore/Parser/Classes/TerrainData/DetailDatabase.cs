@@ -133,7 +133,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 				return DetailBillboardShader.ExportYAML(container);
 			}
 
-			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.Shaders[EngineBuiltInAssets.TerrainBillboardWavingDoublePass];
+			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(EngineBuiltInAssets.TerrainBillboardWavingDoublePass, container.ExportVersion);
 			ExportPointer pointer = new ExportPointer(buildInAsset.ExportID, buildInAsset.GUID, AssetType.Internal);
 			return pointer.ExportYAML(container);
 		}
@@ -144,7 +144,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 				return DetailMeshLitShader.ExportYAML(container);
 			}
 
-			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.Shaders[EngineBuiltInAssets.TerrainVertexLit];
+			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(EngineBuiltInAssets.TerrainVertexLit, container.ExportVersion);
 			ExportPointer pointer = new ExportPointer(buildInAsset.ExportID, buildInAsset.GUID, AssetType.Internal);
 			return pointer.ExportYAML(container);
 		}
@@ -155,7 +155,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 				return DetailMeshGrassShader.ExportYAML(container);
 			}
 
-			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.Shaders[EngineBuiltInAssets.TerrainWavingDoublePass];
+			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(EngineBuiltInAssets.TerrainWavingDoublePass, container.ExportVersion);
 			ExportPointer pointer = new ExportPointer(buildInAsset.ExportID, buildInAsset.GUID, AssetType.Internal);
 			return pointer.ExportYAML(container);
 		}

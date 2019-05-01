@@ -14,7 +14,7 @@ namespace uTinyRipper.AssetExporters
 			m_metaTypes[classType] = isMetaType;
 		}
 
-		public bool IsHandle(Object asset)
+		public bool IsHandle(Object asset, ExportOptions options)
 		{
 			return true;
 		}

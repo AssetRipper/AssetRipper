@@ -8,14 +8,14 @@ namespace uTinyRipper.AssetExporters
 {
 	public class EngineAssetExporter : IAssetExporter
 	{
-		public bool IsHandle(Object asset)
+		public bool IsHandle(Object asset, ExportOptions options)
 		{
-			return EngineExportCollection.IsEngineAsset(asset);
+			return EngineExportCollection.IsEngineAsset(asset, options.Version);
 		}
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
-			return new EngineExportCollection(asset);
+			return new EngineExportCollection(asset, virtualFile.Version);
 		}
 
 		public bool Export(IExportContainer container, Object asset, string path)

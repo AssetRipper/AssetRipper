@@ -7,7 +7,7 @@ namespace uTinyRipper
 	{
 		public Version(int major)
 		{
-			m_data = ((ulong)major << 48) & 0xFFFFUL;
+			m_data = ((ulong)(major & 0xFFFF) << 48);
 		}
 
 		public Version(int major, int minor)

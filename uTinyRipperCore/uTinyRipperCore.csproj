@@ -195,6 +195,7 @@
     <Compile Include="Parser\FileCollection\Exporter\Exporters\MovieTexture\MovieTextureExportCollection.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\TextAsset\TextAssetExportCollection.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\TextAsset\TextAssetExporter.cs" />
+    <Compile Include="Parser\FileCollection\Exporter\ExportOptions.cs" />
     <Compile Include="Parser\IO\Extensions\EndianReaderExtensions.cs" />
     <Compile Include="ThirdParty\YAML\Base\ScalarType.cs" />
     <Compile Include="ThirdParty\YAML\Utils\Extensions\EmitterExtensions.cs" />

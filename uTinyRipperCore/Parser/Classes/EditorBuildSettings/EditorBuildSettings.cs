@@ -57,6 +57,7 @@ namespace uTinyRipper.Classes
 				throw new ArgumentNullException(nameof(scenes));
 			}
 			m_scenes = scenes.ToArray();
+			m_configObjects = new Dictionary<string, PPtr<Object>>();
 		}
 
 		public override void Read(AssetReader reader)
@@ -83,10 +84,10 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Scenes", Scenes.ExportYAML(container));
+			node.Add(ScenesName, Scenes.ExportYAML(container));
 			if (IsReadConfigObjects(container.ExportVersion))
 			{
-				node.Add("m_configObjects", GetConfigObjects(container.Version).ExportYAML(container));
+				node.Add(ConfigObjectsName, GetConfigObjects(container.Version).ExportYAML(container));
 			}
 			return node;
 		}
@@ -98,6 +99,9 @@ namespace uTinyRipper.Classes
 
 		public IReadOnlyList<Scene> Scenes => m_scenes;
 		public IReadOnlyDictionary<string, PPtr<Object>> ConfigObjects => m_configObjects;
+
+		public const string ScenesName = "m_Scenes";
+		public const string ConfigObjectsName = "m_configObjects";
 
 		private Scene[] m_scenes;
 		private Dictionary<string, PPtr<Object>> m_configObjects;
