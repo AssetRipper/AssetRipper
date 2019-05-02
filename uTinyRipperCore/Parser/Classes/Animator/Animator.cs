@@ -201,7 +201,7 @@ namespace uTinyRipper.Classes
 			node.Add(LinearVelocityBlendingName, LinearVelocityBlending);
 			if (IsReadWarningMessage(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(WarningMessageName, GetWarningMessage(container.ExportVersion, container.ExportFlags));
+				node.Add(WarningMessageName, GetWarningMessage(container.Version, container.Flags));
 			}
 			node.Add(HasTransformHierarchyName, HasTransformHierarchy);
 			node.Add(AllowConstantClipSamplingOptimizationName, AllowConstantClipSamplingOptimization);
