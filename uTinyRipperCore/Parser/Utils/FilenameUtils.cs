@@ -6,10 +6,26 @@ namespace uTinyRipper
 {
 	public static class FilenameUtils
 	{
+		public static bool IsEngineResource(string fileName)
+		{
+#if UNIVERSAL
+			return IsDefaultResource(fileName) || IsEditorResource(fileName);
+#else
+			return IsDefaultResource(fileName);
+#endif
+		}
+
 		public static bool IsDefaultResource(string fileName)
 		{
 			return fileName == DefaultResourceName1 || fileName == DefaultResourceName2;
 		}
+
+#if UNIVERSAL
+		public static bool IsEditorResource(string fileName)
+		{
+			return fileName == EditorResourceName;
+		}
+#endif
 
 		public static bool IsBuiltinExtra(string fileName)
 		{
@@ -100,6 +116,7 @@ namespace uTinyRipper
 		public const string ResourcesFolder = "resources/";
 		public const string DefaultResourceName1 = "unity default resources";
 		public const string DefaultResourceName2 = "unity_default_resources";
+		public const string EditorResourceName = "unity editor resources";
 		public const string BuiltinExtraName1 = "unity builtin extra";
 		public const string BuiltinExtraName2 = "unity_builtin_extra";
 		public const string EngineGeneratedF = "0000000000000000f000000000000000";

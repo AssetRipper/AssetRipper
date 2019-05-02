@@ -107,7 +107,7 @@ namespace uTinyRipper
 				FilePath = filePath,
 				Name = Path.GetFileName(filePath),
 				DependencyCallback = OnRequestDependency,
-				Flags = TransferInstructionFlags.LoadAndUnloadAssetsDuringBuild | TransferInstructionFlags.SerializeGameRelease,
+				Flags = TransferInstructionFlags.SerializeGameRelease,
 			};
 			SerializedFile file = SerializedFile.Load(pars);
 			AddSerializedFile(file);
@@ -143,7 +143,7 @@ namespace uTinyRipper
 				FilePath = filePath,
 				Name = fileName,
 				DependencyCallback = dependencyCallback,
-				Flags = TransferInstructionFlags.LoadAndUnloadAssetsDuringBuild | TransferInstructionFlags.SerializeGameRelease,
+				Flags = TransferInstructionFlags.SerializeGameRelease,
 			};
 			SerializedFile file = SerializedFile.Read(stream, pars);
 			AddSerializedFile(file);

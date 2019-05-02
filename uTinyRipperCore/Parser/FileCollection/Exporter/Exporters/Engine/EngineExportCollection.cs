@@ -37,7 +37,7 @@ namespace uTinyRipper.AssetExporters
 
 		public static bool IsEngineAsset(Object asset, Version version)
 		{
-			if (!GetEngineBuildInAsset(asset, version, out EngineBuiltInAsset _))
+			if (!GetEngineBuildInAsset(asset, version, out EngineBuiltInAsset builtinAsset))
 			{
 				return false;
 			}
@@ -63,8 +63,25 @@ namespace uTinyRipper.AssetExporters
 						return IsEngineAsset(shader, version);
 					}
 
+				case ClassIDType.Texture2D:
+					{
+						Texture2D texture = (Texture2D)asset;
+						return builtinAsset.Parameter == texture.CompleteImageSize;
+					}
+
 				case ClassIDType.Shader:
 					return true;
+
+				case ClassIDType.Sprite:
+					{
+						Sprite sprite = (Sprite)asset;
+						Texture2D texture = sprite.RD.Texture.FindAsset(sprite.File);
+						if (texture == null)
+						{
+							return false;
+						}
+						return IsEngineAsset(texture, version);
+					}
 
 				default:
 					return false;
@@ -158,6 +175,19 @@ namespace uTinyRipper.AssetExporters
 						if (EngineBuiltInAssets.TryGetLightmapParams(lightParams.Name, version, out engineAsset))
 						{
 							return true;
+						}
+					}
+					break;
+
+				case ClassIDType.MonoBehaviour:
+					{
+						MonoBehaviour behaviour = (MonoBehaviour)asset;
+						if (behaviour.Name != string.Empty)
+						{
+							if (EngineBuiltInAssets.TryGetBehaviour(behaviour.Name, version, out engineAsset))
+							{
+								return true;
+							}
 						}
 					}
 					break;

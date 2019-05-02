@@ -255,6 +255,10 @@ namespace uTinyRipper.SerializedFiles
 
 #warning TEMP HACK
 				Flags = Platform == Platform.NoTarget ? TransferInstructionFlags.NoTransferInstructionFlags : Flags;
+				if (FilenameUtils.IsEngineResource(Name))
+				{
+					Flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
+				}
 				Flags |= Header.SwapEndianess ? TransferInstructionFlags.SwapEndianess : TransferInstructionFlags.NoTransferInstructionFlags;
 
 				foreach (FileIdentifier dependency in Dependencies)

@@ -13,7 +13,7 @@ namespace uTinyRipper.Exporters.Scripts
 	{
 		public ScriptExportManager(string exportPath)
 		{
-			if(string.IsNullOrEmpty(exportPath))
+			if (string.IsNullOrEmpty(exportPath))
 			{
 				throw new ArgumentNullException(nameof(exportPath));
 			}
@@ -38,7 +38,7 @@ namespace uTinyRipper.Exporters.Scripts
 		{
 			string typeName = type.NestedName;
 			int index = typeName.IndexOf('<');
-			if(index >= 0)
+			if (index >= 0)
 			{
 				string normalName = typeName.Substring(0, index);
 				typeName = normalName + $".{typeName.Count(t => t == ',') + 1}";
@@ -88,7 +88,7 @@ namespace uTinyRipper.Exporters.Scripts
 		{
 			foreach (ScriptExportType type in m_types.Values)
 			{
-				if(type.DeclaringType != null)
+				if (type.DeclaringType != null)
 				{
 					continue;
 				}
@@ -102,7 +102,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 			foreach (ScriptExportEnum @enum in m_enums.Values)
 			{
-				if(@enum.DeclaringType != null)
+				if (@enum.DeclaringType != null)
 				{
 					continue;
 				}
@@ -128,7 +128,7 @@ namespace uTinyRipper.Exporters.Scripts
 				Export(@delegate);
 			}
 		}
-		
+
 		public ScriptExportType RetrieveType(TypeReference type)
 		{
 			if (type.IsArray)
@@ -147,7 +147,7 @@ namespace uTinyRipper.Exporters.Scripts
 			if (type.Module != null)
 			{
 				TypeDefinition definition = type.Resolve();
-				if(definition != null)
+				if (definition != null)
 				{
 					if (definition.IsEnum)
 					{
@@ -235,7 +235,7 @@ namespace uTinyRipper.Exporters.Scripts
 		private ScriptExportType CreateType(TypeReference type, bool isUnique = true)
 		{
 			ScriptExportType exportType = new ScriptExportMonoType(type);
-			if(isUnique)
+			if (isUnique)
 			{
 				m_types.Add(exportType.FullName, exportType);
 			}
@@ -303,15 +303,15 @@ namespace uTinyRipper.Exporters.Scripts
 
 		private static string ToUniqueFileName(string filePath)
 		{
-			if (File.Exists(filePath))
+			if (FileUtils.Exists(filePath))
 			{
 				string directory = Path.GetDirectoryName(filePath);
 				string fileName = Path.GetFileNameWithoutExtension(filePath);
 				string fileExtension = Path.GetExtension(filePath);
-				for(int i = 2; i < int.MaxValue; i++)
+				for (int i = 2; i < int.MaxValue; i++)
 				{
 					string newFilePath = Path.Combine(directory, $"{fileName}.{i}{fileExtension}");
-					if (!File.Exists(newFilePath))
+					if (!FileUtils.Exists(newFilePath))
 					{
 						Logger.Log(LogType.Warning, LogCategory.Export, $"Found duplicate script file at {filePath}. Renamed to {newFilePath}");
 						return newFilePath;
@@ -341,9 +341,10 @@ namespace uTinyRipper.Exporters.Scripts
 
 		private static bool IsDotNetLibrary(string module)
 		{
-			switch(module)
+			switch (module)
 			{
 				case MSCoreLibName:
+				case NetStandardName:
 				case SystemName:
 				case CLRName:
 					return true;
@@ -384,6 +385,7 @@ namespace uTinyRipper.Exporters.Scripts
 		public IEnumerable<ScriptExportDelegate> Delegates => m_delegates.Values;
 
 		private const string MSCoreLibName = "mscorlib";
+		private const string NetStandardName = "netstandard";
 		private const string SystemName = "System";
 		private const string CLRName = "CommonLanguageRuntimeLibrary";
 		private const string UnityEngineName = "UnityEngine";

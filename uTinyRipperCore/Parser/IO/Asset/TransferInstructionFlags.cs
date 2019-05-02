@@ -45,10 +45,6 @@ namespace uTinyRipper
 
 	public static class TransferInstructionFlagsExtensions
 	{
-		public static bool IsLoadUnload(this TransferInstructionFlags _this)
-		{
-			return (_this & TransferInstructionFlags.LoadAndUnloadAssetsDuringBuild) != 0;
-		}
 		public static bool IsDebug(this TransferInstructionFlags _this)
 		{
 			return (_this & TransferInstructionFlags.SerializeDebugProperties) != 0;
@@ -64,10 +60,6 @@ namespace uTinyRipper
 		public static bool IsBuiltinResources(this TransferInstructionFlags _this)
 		{
 			return (_this & TransferInstructionFlags.IsBuiltinResourcesFile) != 0;
-		}
-		public static bool IsForInspector(this TransferInstructionFlags _this)
-		{
-			return (_this & TransferInstructionFlags.SerializeForInspector) != 0;
 		}
 	}
 }

@@ -6,9 +6,10 @@ namespace uTinyRipper.AssetExporters
 {
 	public struct EngineBuiltInAsset
 	{
-		public EngineBuiltInAsset(uint exportID, bool isF)
+		public EngineBuiltInAsset(uint exportID, uint parameter, bool isF)
 		{
 			ExportID = exportID;
+			Parameter = parameter;
 			m_isF = isF;
 		}
 
@@ -16,6 +17,7 @@ namespace uTinyRipper.AssetExporters
 
 		public bool IsValid => ExportID != 0;
 		public uint ExportID { get; }
+		public uint Parameter { get; }
 
 		/// <summary>
 		///  Is assets located in DefaultResources file
@@ -206,7 +208,7 @@ namespace uTinyRipper.AssetExporters
 			AddTexture("Default-ParticleSystem", 10307, true);
 			AddTexture("Default-Checker-Gray", 10309, true);
 			AddTexture("Checkmark", 10900, true);
-			AddTexture("UISprite", 10904, true);
+			AddTexture("UISprite", Version.MinVersion, 10904, 5460, true);
 			AddTexture("Background", 10906, true);
 			AddTexture("InputFieldBackground", 10910, true);
 			AddTexture("Knob", 10912, true);
@@ -408,10 +410,12 @@ namespace uTinyRipper.AssetExporters
 			AddLightmapParams("Default-VeryLowResolution", 15203, true);
 			AddLightmapParams("Default-Medium", 15204, true);
 
+			AddBehaviour("GameSkin", 11000, false);
+
 			///////////////////////////////////////////////////////
 			// Old default
 			///////////////////////////////////////////////////////
-			
+
 			AddShader("Internal-ErrorShader", 17, true);
 			AddShader("Shadow-ScreenBlur", 60, false);
 			AddShader("Camera-DepthTexture", 61, false);
@@ -567,6 +571,10 @@ namespace uTinyRipper.AssetExporters
 		{
 			return ContainsAsset(m_lightmapParams, name, version);
 		}
+		public static bool ContainsBehaviour(string name, Version version)
+		{
+			return ContainsAsset(m_behaviours, name, version);
+		}
 
 		public static EngineBuiltInAsset GetMaterial(string name, Version version)
 		{
@@ -624,68 +632,89 @@ namespace uTinyRipper.AssetExporters
 		{
 			return TryGetAsset(m_lightmapParams, name, version, out asset);
 		}
+		public static EngineBuiltInAsset GetBehaviour(string name, Version version)
+		{
+			return m_behaviours[name].GetAsset(version);
+		}
+		public static bool TryGetBehaviour(string name, Version version, out EngineBuiltInAsset asset)
+		{
+			return TryGetAsset(m_behaviours, name, version, out asset);
+		}
 
 		private static void AddMaterial(string name, uint exportID, bool isF)
 		{
-			AddMaterial(name, default, exportID, isF);
+			AddMaterial(name, Version.MinVersion, exportID, isF);
 		}
 		private static void AddMaterial(string name, Version version, uint exportID, bool isF)
 		{
-			AddAsset(m_materials, name, version, exportID, isF);
+			AddAsset(m_materials, name, version, exportID, 0, isF);
 		}
 
 		private static void AddTexture(string name, uint exportID, bool isF)
 		{
-			AddTexture(name, default, exportID, isF);
+			AddTexture(name, Version.MinVersion, exportID, isF);
 		}
 		private static void AddTexture(string name, Version version, uint exportID, bool isF)
 		{
-			AddAsset(m_textures, name, version, exportID, isF);
+			AddAsset(m_textures, name, version, exportID, 0, isF);
+		}
+		private static void AddTexture(string name, Version version, uint exportID, uint param, bool isF)
+		{
+			AddAsset(m_textures, name, version, exportID, param, isF);
 		}
 
 		private static void AddMesh(string name, uint exportID, bool isF)
 		{
-			AddMesh(name, default, exportID, isF);
+			AddMesh(name, Version.MinVersion, exportID, isF);
 		}
 		private static void AddMesh(string name, Version version, uint exportID, bool isF)
 		{
-			AddAsset(m_meshes, name, version, exportID, isF);
+			AddAsset(m_meshes, name, version, exportID, 0, isF);
 		}
 
 		private static void AddFont(string name, uint exportID, bool isF)
 		{
-			AddFont(name, default, exportID, isF);
+			AddFont(name, Version.MinVersion, exportID, isF);
 		}
 		private static void AddFont(string name, Version version, uint exportID, bool isF)
 		{
-			AddAsset(m_fonts, name, version, exportID, isF);
+			AddAsset(m_fonts, name, version, exportID, 0, isF);
 		}
 
 		private static void AddShader(string name, uint exportID, bool isF)
 		{
-			AddShader(name, default, exportID, isF);
+			AddShader(name, Version.MinVersion, exportID, isF);
 		}
 		private static void AddShader(string name, Version version, uint exportID, bool isF)
 		{
-			AddAsset(m_shaders, name, version, exportID, isF);
+			AddAsset(m_shaders, name, version, exportID, 0, isF);
 		}
 
 		private static void AddSprite(string name, uint exportID, bool isF)
 		{
-			AddSprite(name, default, exportID, isF);
+			AddSprite(name, Version.MinVersion, exportID, isF);
 		}
 		private static void AddSprite(string name, Version version, uint exportID, bool isF)
 		{
-			AddAsset(m_sprites, name, version, exportID, isF);
+			AddAsset(m_sprites, name, version, exportID, 0, isF);
 		}
 
 		private static void AddLightmapParams(string name, uint exportID, bool isF)
 		{
-			AddLightmapParams(name, default, exportID, isF);
+			AddLightmapParams(name, Version.MinVersion, exportID, isF);
 		}
 		private static void AddLightmapParams(string name, Version version, uint exportID, bool isF)
 		{
-			AddAsset(m_lightmapParams, name, version, exportID, isF);
+			AddAsset(m_lightmapParams, name, version, exportID, 0, isF);
+		}
+
+		private static void AddBehaviour(string name, uint exportID, bool isF)
+		{
+			AddBehaviour(name, Version.MinVersion, exportID, isF);
+		}
+		private static void AddBehaviour(string name, Version version, uint exportID, bool isF)
+		{
+			AddAsset(m_behaviours, name, version, exportID, 0, isF);
 		}
 
 		private static bool ContainsAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, Version version)
@@ -707,9 +736,9 @@ namespace uTinyRipper.AssetExporters
 			return false;
 		}
 
-		private static void AddAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, Version version, uint exportID, bool isF)
+		private static void AddAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, Version version, uint exportID, uint param, bool isF)
 		{
-			EngineBuiltInAsset asset = new EngineBuiltInAsset(exportID, isF);
+			EngineBuiltInAsset asset = new EngineBuiltInAsset(exportID, param, isF);
 			if (lookup.TryGetValue(name, out EngineBuiltInAssetInfo assetInfo))
 			{
 				assetInfo.AddVariation(version, asset);
@@ -720,14 +749,6 @@ namespace uTinyRipper.AssetExporters
 				lookup.Add(name, assetInfo);
 			}
 		}
-
-		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> Materials => m_materials;
-		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> Textures => m_textures;
-		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> Meshes => m_meshes;
-		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> Shaders => m_shaders;
-		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> Fonts => m_fonts;
-		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> Sprites => m_sprites;
-		//public static IReadOnlyDictionary<string, EngineBuiltInAsset> LightmapParams => m_lightmapParams;
 
 		public const string FontMaterialName = "Font Material";
 
@@ -752,5 +773,6 @@ namespace uTinyRipper.AssetExporters
 		private static Dictionary<string, EngineBuiltInAssetInfo> m_fonts = new Dictionary<string, EngineBuiltInAssetInfo> ();
 		private static Dictionary<string, EngineBuiltInAssetInfo> m_sprites = new Dictionary<string, EngineBuiltInAssetInfo> ();
 		private static Dictionary<string, EngineBuiltInAssetInfo> m_lightmapParams = new Dictionary<string, EngineBuiltInAssetInfo> ();
+		private static Dictionary<string, EngineBuiltInAssetInfo> m_behaviours = new Dictionary<string, EngineBuiltInAssetInfo>();
 	}
 }

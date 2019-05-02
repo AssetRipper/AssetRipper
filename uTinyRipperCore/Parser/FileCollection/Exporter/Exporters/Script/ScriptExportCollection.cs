@@ -69,7 +69,7 @@ namespace uTinyRipper.AssetExporters
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
-			if(m_export.Count == 0)
+			if (m_export.Count == 0)
 			{
 				return false;
 			}
@@ -93,7 +93,7 @@ namespace uTinyRipper.AssetExporters
 
 		public override ExportPointer CreateExportPointer(Object asset, bool isLocal)
 		{
-			if(isLocal)
+			if (isLocal)
 			{
 				throw new NotSupportedException();
 			}
@@ -101,7 +101,7 @@ namespace uTinyRipper.AssetExporters
 			MonoScript script = m_scripts[asset];
 			if (!MonoScript.IsReadAssemblyName(script.File.Version, script.File.Flags) || s_unityEngine.IsMatch(script.AssemblyName))
 			{
-				if(MonoScript.IsReadNamespace(script.File.Version))
+				if (MonoScript.IsReadNamespace(script.File.Version))
 				{
 					int fileID = Compute(script.Namespace, script.ClassName);
 					return new ExportPointer(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
