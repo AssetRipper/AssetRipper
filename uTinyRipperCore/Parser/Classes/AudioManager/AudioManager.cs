@@ -81,7 +81,14 @@ namespace uTinyRipper.Classes
 		{
 			return version.IsGreaterEqual(5, 3, 6);
 		}
-		
+		/// <summary>
+		/// 2019.1.1 and greater
+		/// </summary>
+		public static bool IsReadRequestedDSPBufferSize(Version version)
+		{
+			return version.IsGreaterEqual(2019, 1, 1);
+		}
+
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
@@ -95,6 +102,17 @@ namespace uTinyRipper.Classes
 		private static bool IsAlign(Version version)
 		{
 			return version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		}
+
+
+		private static int GetSerializedVersion(Version version)
+		{
+			// RequestedDSPBufferSize has been added
+			if (version.IsGreaterEqual(2019, 1, 1))
+			{
+				return 2;
+			}
+			return 1;
 		}
 
 		public override void Read(AssetReader reader)
@@ -158,24 +176,33 @@ namespace uTinyRipper.Classes
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
+
+			if (IsReadRequestedDSPBufferSize(reader.Version))
+			{
+				RequestedDSPBufferSize = reader.ReadInt32();
+			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Volume", Volume);
-			node.Add("Rolloff Scale", RolloffScale);
-			node.Add("Doppler Factor", DopplerFactor);
-			node.Add("Default Speaker Mode", (int)DefaultSpeakerMode);
-			node.Add("m_SampleRate", SampleRate);
-			node.Add("m_DSPBufferSize", DSPBufferSize);
-			node.Add("m_VirtualVoiceCount", GetVirtualVoiceCount(container.Version));
-			node.Add("m_RealVoiceCount", GetRealVoiceCount(container.Version));
-			node.Add("m_SpatializerPlugin", GetSpatializerPlugin(container.Version));
-			node.Add("m_AmbisonicDecoderPlugin", GetAmbisonicDecoderPlugin(container.Version));
-			node.Add("m_DisableAudio", DisableAudio);
-			node.Add("m_VirtualizeEffects", GetVirtualizeEffects(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.Add(VolumeName, Volume);
+			node.Add(RolloffScaleName, RolloffScale);
+			node.Add(DopplerFactorName, DopplerFactor);
+			node.Add(DefaultSpeakerModeName, (int)DefaultSpeakerMode);
+			node.Add(SampleRateName, SampleRate);
+			node.Add(DSPBufferSizeName, DSPBufferSize);
+			node.Add(VirtualVoiceCountName, GetVirtualVoiceCount(container.Version));
+			node.Add(RealVoiceCountName, GetRealVoiceCount(container.Version));
+			node.Add(SpatializerPluginName, GetSpatializerPlugin(container.Version));
+			node.Add(AmbisonicDecoderPluginName, GetAmbisonicDecoderPlugin(container.Version));
+			node.Add(DisableAudioName, DisableAudio);
+			node.Add(VirtualizeEffectsName, GetVirtualizeEffects(container.Version));
+			if (IsReadRequestedDSPBufferSize(container.ExportVersion))
+			{
+				node.Add(RequestedDSPBufferSizeName, GetRequestedDSPBufferSize(container.Version));
+			}
 			return node;
 		}
 
@@ -199,6 +226,10 @@ namespace uTinyRipper.Classes
 		{
 			return IsReadVirtualizeEffects(version) ? VirtualizeEffects : true;
 		}
+		private int GetRequestedDSPBufferSize(Version version)
+		{
+			return IsReadRequestedDSPBufferSize(version) ? RequestedDSPBufferSize : DSPBufferSize;
+		}
 
 		public float Volume { get; private set; }
 		public float RolloffScale { get; private set; }
@@ -219,5 +250,20 @@ namespace uTinyRipper.Classes
 		public string AmbisonicDecoderPlugin { get; private set; }
 		public bool DisableAudio { get; private set; }
 		public bool VirtualizeEffects { get; private set; }
+		public int RequestedDSPBufferSize { get; private set; }
+
+		public const string VolumeName = "m_Volume";
+		public const string RolloffScaleName = "Rolloff Scale";
+		public const string DopplerFactorName = "Doppler Factor";
+		public const string DefaultSpeakerModeName = "Default Speaker Mode";
+		public const string SampleRateName = "m_SampleRate";
+		public const string DSPBufferSizeName = "m_DSPBufferSize";
+		public const string VirtualVoiceCountName = "m_VirtualVoiceCount";
+		public const string RealVoiceCountName = "m_RealVoiceCount";
+		public const string SpatializerPluginName = "m_SpatializerPlugin";
+		public const string AmbisonicDecoderPluginName = "m_AmbisonicDecoderPlugin";
+		public const string DisableAudioName = "m_DisableAudio";
+		public const string VirtualizeEffectsName = "m_VirtualizeEffects";
+		public const string RequestedDSPBufferSizeName = "m_RequestedDSPBufferSize";
 	}
 }
