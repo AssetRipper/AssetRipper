@@ -577,11 +577,11 @@ namespace uTinyRipper.Classes
 		}
 		private IReadOnlyList<byte> GetIndexBuffer(Version version, Platform platform)
 		{
-			if(IsReadIndexBuffer(version))
+			if (IsReadIndexBuffer(version))
 			{
-				if(platform == Platform.XBox360)
+				if (platform == Platform.XBox360)
 				{
-					AlignType align = (IsReadUse16bitIndices(version) && !Use16bitIndices) ? AlignType.Align4 : AlignType.Align2;
+					AlignType align = (IsReadUse16bitIndices(version) && Use16bitIndices) ? AlignType.Align2 : AlignType.Align4;
 					return m_indexBuffer.SwapBytes(align);
 				}
 				return IndexBuffer;
@@ -591,7 +591,7 @@ namespace uTinyRipper.Classes
 
 		private IReadOnlyList<BoneWeights4> GetSkin(Version version)
 		{
-			if(IsReadSkin(version))
+			if (IsReadSkin(version))
 			{
 				return Skin;
 			}

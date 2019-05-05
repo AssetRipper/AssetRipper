@@ -132,7 +132,7 @@ namespace uTinyRipper.Classes
 		{
 			if (IsReadStreamData(File.Version))
 			{
-				StreamData.CheckIntegrity(File);
+				return StreamData.CheckIntegrity(File);
 			}
 			return true;
 		}

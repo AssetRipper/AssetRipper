@@ -313,6 +313,7 @@ namespace uTinyRipper
 				m_currentBegin += m_currentStream.Length;
 				m_streamIndex = nextStreamIndex;
 				m_currentStream = m_streams[m_streamIndex];
+				m_currentStream.Position = 0;
 				m_currentEnd += m_currentStream.Length;
 			}
 		}
@@ -335,6 +336,7 @@ namespace uTinyRipper
 				m_currentBegin += m_currentStream.Length;
 			}
 			m_currentBegin -= m_currentStream.Length;
+			m_currentStream.Position = m_position - m_currentBegin;
 		}
 
 		public override long Position
