@@ -284,6 +284,7 @@ namespace uTinyRipper
 		SpeedTreeImporter				= 1110,
 		AnimatorTransitionBase			= 1111,
 		SubstanceImporter				= 1112,
+		EnlightenSystemBuildParameters	= -1113,
 		LightmapParameters				= 1113,
 		LightmapSnapshot				= -1120,
 		LightingDataAsset				= 1120,

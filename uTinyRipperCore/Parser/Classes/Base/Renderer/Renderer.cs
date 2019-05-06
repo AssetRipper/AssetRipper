@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.MeshRenderers;
 using uTinyRipper.Classes.Renderers;
-using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -47,32 +47,76 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool IsReadLightmapIndex(Version version, TransferInstructionFlags flags)
 		{
-#warning TODO: separate by version
-			return version.IsGreaterEqual(2, 1) && flags.IsRelease();
+			if (version.IsGreaterEqual(2, 1))
+			{
+				if (flags.IsRelease())
+				{
+					return true;
+				}
+				// unknown version
+				if (version.IsLess(5, 0, 0, VersionType.Final))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
 		public static bool IsReadLightmapIndexDynamic(Version version, TransferInstructionFlags flags)
 		{
-#warning TODO: separate by version
-			return version.IsGreaterEqual(5) && flags.IsRelease();
+			if (version.IsGreaterEqual(5))
+			{
+				if (flags.IsRelease())
+				{
+					return true;
+				}
+				// unknown version
+				if (version.IsLess(5, 0, 0, VersionType.Final))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
 		public static bool IsReadLightmapTilingOffset(Version version, TransferInstructionFlags flags)
 		{
-#warning TODO: separate by version
-			return version.IsGreaterEqual(2, 1) && flags.IsRelease();
+			if (version.IsGreaterEqual(2, 1))
+			{
+				if (flags.IsRelease())
+				{
+					return true;
+				}
+				// unknown version
+				if (version.IsLess(5, 0, 0, VersionType.Final))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
 		public static bool IsReadLightmapTilingOffsetDynamic(Version version, TransferInstructionFlags flags)
 		{
-#warning TODO: separate by version
-			return version.IsGreaterEqual(5) && flags.IsRelease();
+			if (version.IsGreaterEqual(5))
+			{
+				if (flags.IsRelease())
+				{
+					return true;
+				}
+				// unknown version
+				if (version.IsLess(5, 0, 0, VersionType.Final))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 		/// <summary>
 		/// 3.0.0 to 5.5.0
@@ -89,7 +133,7 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5, 5);
 		}
 		/// <summary>
-		/// 3.0.0
+		/// 3.0.0 and greater
 		/// </summary>
 		public static bool IsReadStaticBatchRoot(Version version)
 		{
@@ -103,11 +147,18 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(3, 5) && version.IsLess(5, 4);
 		}
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.0.0bx
+		/// </summary>
+		public static bool IsReadUseReflectionProbes(Version version)
+		{
+			return version.IsEqual(5, 0, 0, VersionType.Beta);
+		}
+		/// <summary>
+		/// 5.0.0f1 and greater
 		/// </summary>
 		public static bool IsReadReflectUsage(Version version)
 		{
-			return version.IsGreaterEqual(5, 0);
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
 		/// 3.5.0 and greater
@@ -123,9 +174,75 @@ namespace uTinyRipper.Classes
 		{
 			return version.IsGreaterEqual(5, 4);
 		}
-		public static bool IsReadScaleInLightmap(TransferInstructionFlags flags)
+		/// <summary>
+		/// 3.0.0 and greater and Not Release
+		/// </summary>
+		public static bool IsReadScaleInLightmap(Version version, TransferInstructionFlags flags)
 		{
-			return !flags.IsRelease();
+			return !flags.IsRelease() && version.IsGreaterEqual(3);
+		}
+		/// <summary>
+		/// 5.0.0f1 and greater and Not Release
+		/// </summary>
+		public static bool IsReadPreserveUVs(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		}
+		/// <summary>
+		/// 5.2.3 and greater and Not Release
+		/// </summary>
+		public static bool IsReadIgnoreNormalsForChartDetection(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(5, 2, 3);
+		}
+		/// <summary>
+		/// 5.0.0f1 and greater and Not Release
+		/// </summary>
+		public static bool IsReadImportantGI(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		}
+		/// <summary>
+		/// 5.4.x and Not Release
+		/// </summary>
+		public static bool IsReadSelectedWireframeHidden(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsEqual(5, 4);
+		}
+		/// <summary>
+		/// 2017.2 and greater and Not Release
+		/// </summary>
+		public static bool IsReadStitchLightmapSeams(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(2017, 2);
+		}
+		/// <summary>
+		/// 5.5.0 and greater and Not Release
+		/// </summary>
+		public static bool IsReadSelectedEditorRenderState(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(5, 5);
+		}
+		/// <summary>
+		/// 5.2.3 and greater and Not Release
+		/// </summary>
+		public static bool IsReadMinimumChartSize(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(5, 2, 3);
+		}
+		/// <summary>
+		/// 5.0.0 and greater and Not Release 
+		/// </summary>
+		public static bool IsReadAutoUVMaxDistance(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(5);
+		}
+		/// <summary>
+		/// 5.0.0bx and Not Release 
+		/// </summary>
+		public static bool IsReadGIBackfaceCull(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsEqual(5, 0, 0, VersionType.Beta);
 		}
 		/// <summary>
 		/// 4.5.0 and greater but exluding 5.6.0b
@@ -159,20 +276,13 @@ namespace uTinyRipper.Classes
 		{
 			return version.IsGreaterEqual(4, 3);
 		}
-		
+
 		/// <summary>
-		/// 5.0.0 to 5.3.x
+		/// 5.0.0 and greater
 		/// </summary>
-		private static bool IsAlignEnabled(Version version)
+		private static bool IsLightmapIndexShort(Version version)
 		{
-			return version.IsGreaterEqual(5) && version.IsLess(5, 4);
-		}
-		/// <summary>
-		/// Less 5.0.0
-		/// </summary>
-		private static bool IsByteLightIndex(Version version)
-		{
-			return version.IsLess(5);
+			return version.IsGreaterEqual(5);
 		}
 		/// <summary>
 		/// Less than 3.0.0
@@ -182,33 +292,57 @@ namespace uTinyRipper.Classes
 			return version.IsLess(3);
 		}
 		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		private static bool IsReadReflectUsageFirst(Version version)
+		{
+			return version.IsGreaterEqual(5, 4);
+		}
+		/// <summary>
+		/// 2.6.0 and greater
+		/// </summary>
+		private static bool IsLightmapTilingOffsetV4(Version version)
+		{
+			return version.IsGreaterEqual(2, 6);
+		}
+
+		/// <summary>
+		/// 5.0.0 to 5.3.x
+		/// </summary>
+		private static bool IsAlign1(Version version)
+		{
+			// unknown lower version
+			return version.IsGreaterEqual(5) && version.IsLess(5, 4);
+		}
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
+		private static bool IsAlign2(Version version)
+		{
+			// unknown lower version
+			return version.IsGreaterEqual(5);
+		}
+		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		private static bool IsAlignLightProbe(Version version)
+		private static bool IsAlign3(Version version)
 		{
 			return version.IsGreaterEqual(4, 3);
 		}
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		private static bool IsAlignSortingOrder(Version version)
+		private static bool IsAlign4(Version version)
 		{
 			return version.IsGreaterEqual(4, 5);
-		}
-		/// <summary>
-		/// 5.4.0 and greater
-		/// </summary>
-		public static bool IsReadReflectUsageFirst(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
 		}
 
 		public string FindMaterialPropertyNameByCRC28(uint crc)
 		{
-			foreach(PPtr<Material> materialPtr in m_materials)
+			foreach (PPtr<Material> materialPtr in m_materials)
 			{
 				Material material = materialPtr.FindAsset(File);
-				if(material == null)
+				if (material == null)
 				{
 					continue;
 				}
@@ -228,7 +362,7 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 			Enabled = reader.ReadBoolean();
-			if (IsAlignEnabled(reader.Version))
+			if (IsAlign1(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
@@ -239,11 +373,6 @@ namespace uTinyRipper.Classes
 			{
 				DynamicOccludee = reader.ReadByte();
 			}
-			if (IsAlignEnabled(reader.Version))
-			{
-				reader.AlignStream(AlignType.Align4);
-			}
-
 			if (IsReadMotionVector(reader.Version))
 			{
 				MotionVectors = (MotionVectorGenerationMode)reader.ReadByte();
@@ -254,8 +383,11 @@ namespace uTinyRipper.Classes
 				if (IsReadReflectUsageFirst(reader.Version))
 				{
 					ReflectionProbeUsage = (ReflectionProbeUsage)reader.ReadByte();
-					reader.AlignStream(AlignType.Align4);
 				}
+			}
+			if (IsAlign2(reader.Version))
+			{
+				reader.AlignStream(AlignType.Align4);
 			}
 
 			if (IsReadRenderingLayerMask(reader.Version))
@@ -269,9 +401,8 @@ namespace uTinyRipper.Classes
 
 			if (IsReadLightmapIndex(reader.Version, reader.Flags))
 			{
-				LightmapIndex = IsByteLightIndex(reader.Version) ? reader.ReadByte() : reader.ReadUInt16();
+				LightmapIndex = IsLightmapIndexShort(reader.Version) ? reader.ReadUInt16() : reader.ReadByte();
 			}
-
 			if (IsReadLightmapIndexDynamic(reader.Version, reader.Flags))
 			{
 				LightmapIndexDynamic = reader.ReadUInt16();
@@ -284,7 +415,14 @@ namespace uTinyRipper.Classes
 
 			if (IsReadLightmapTilingOffset(reader.Version, reader.Flags))
 			{
-				LightmapTilingOffset.Read(reader);
+				if (IsLightmapTilingOffsetV4(reader.Version))
+				{
+					LightmapTilingOffset.Read(reader);
+				}
+				else
+				{
+					LightmapTilingOffset.Read3(reader);
+				}
 			}
 			if (IsReadLightmapTilingOffsetDynamic(reader.Version, reader.Flags))
 			{
@@ -296,15 +434,14 @@ namespace uTinyRipper.Classes
 				m_materials = reader.ReadAssetArray<PPtr<Material>>();
 			}
 
-			if (IsReadSubsetIndices(reader.Version))
-			{
-				m_subsetIndices = reader.ReadUInt32Array();
-			}
 			if (IsReadStaticBatchInfo(reader.Version))
 			{
 				StaticBatchInfo.Read(reader);
 			}
-
+			else if (IsReadSubsetIndices(reader.Version))
+			{
+				m_subsetIndices = reader.ReadUInt32Array();
+			}
 			if (IsReadStaticBatchRoot(reader.Version))
 			{
 				StaticBatchRoot.Read(reader);
@@ -312,7 +449,16 @@ namespace uTinyRipper.Classes
 
 			if (IsReadUseLight(reader.Version))
 			{
-				UseLightProbes = reader.ReadBoolean();
+				bool UseLightProbes = reader.ReadBoolean();
+				LightProbeUsage = UseLightProbes ? LightProbeUsage.BlendProbes : LightProbeUsage.Off;
+			}
+			if (IsReadUseReflectionProbes(reader.Version))
+			{
+				bool UseReflectionProbes = reader.ReadBoolean();
+				ReflectionProbeUsage = UseReflectionProbes ? ReflectionProbeUsage.Simple : ReflectionProbeUsage.Off;
+			}
+			if (IsReadUseLight(reader.Version))
+			{
 				reader.AlignStream(AlignType.Align4);
 			}
 			if (IsReadReflectUsage(reader.Version))
@@ -332,24 +478,52 @@ namespace uTinyRipper.Classes
 				LightProbeVolumeOverride.Read(reader);
 			}
 #if UNIVERSAL
-			if (IsReadScaleInLightmap(reader.Flags))
+			if (IsReadScaleInLightmap(reader.Version, reader.Flags))
 			{
-#warning TODO: separate by version
 				ScaleInLightmap = reader.ReadSingle();
+			}
+			if (IsReadPreserveUVs(reader.Version, reader.Flags))
+			{
 				PreserveUVs = reader.ReadBoolean();
+			}
+			if (IsReadIgnoreNormalsForChartDetection(reader.Version, reader.Flags))
+			{
 				IgnoreNormalsForChartDetection = reader.ReadBoolean();
+			}
+			if (IsReadImportantGI(reader.Version, reader.Flags))
+			{
 				ImportantGI = reader.ReadBoolean();
+			}
+			if (IsReadSelectedWireframeHidden(reader.Version, reader.Flags))
+			{
+				SelectedWireframeHidden = reader.ReadBoolean();
+			}
+			if (IsReadStitchLightmapSeams(reader.Version, reader.Flags))
+			{
 				StitchLightmapSeams = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);
-
+			}
+			if (IsReadSelectedEditorRenderState(reader.Version, reader.Flags))
+			{
 				SelectedEditorRenderState = (EditorSelectedRenderState)reader.ReadInt32();
+			}
+			if (IsReadMinimumChartSize(reader.Version, reader.Flags))
+			{
 				MinimumChartSize = reader.ReadInt32();
+			}
+			if (IsReadAutoUVMaxDistance(reader.Version, reader.Flags))
+			{
 				AutoUVMaxDistance = reader.ReadSingle();
 				AutoUVMaxAngle = reader.ReadSingle();
 				LightmapParameters.Read(reader);
 			}
+			if (IsReadGIBackfaceCull(reader.Version, reader.Flags))
+			{
+				GIBackfaceCull = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
+			}
 #endif
-			if (IsAlignLightProbe(reader.Version))
+			if (IsAlign3(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
@@ -366,7 +540,7 @@ namespace uTinyRipper.Classes
 			{
 				SortingOrder = reader.ReadInt16();
 			}
-			if (IsAlignSortingOrder(reader.Version))
+			if (IsAlign4(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
@@ -374,7 +548,7 @@ namespace uTinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(file, isLog))
 			{
 				yield return asset;
 			}
@@ -387,11 +561,11 @@ namespace uTinyRipper.Classes
 			{
 				yield return StaticBatchRoot.GetAsset(file);
 			}
-			if(!ProbeAnchor.IsNull)
+			if (!ProbeAnchor.IsNull)
 			{
 				yield return ProbeAnchor.GetAsset(file);
 			}
-			if(!LightProbeVolumeOverride.IsNull)
+			if (!LightProbeVolumeOverride.IsNull)
 			{
 				yield return LightProbeVolumeOverride.GetAsset(file);
 			}
@@ -425,16 +599,16 @@ namespace uTinyRipper.Classes
 			node.Add(StaticBatchRootName, StaticBatchRoot.ExportYAML(container));
 			node.Add(ProbeAnchorName, ProbeAnchor.ExportYAML(container));
 			node.Add(LightProbeVolumeOverrideName, LightProbeVolumeOverride.ExportYAML(container));
-			node.Add(ScaleInLightmapName, GetScaleInLightmap(container.Flags));
-			node.Add(PreserveUVsName, GetPreserveUVs(container.Flags));
-			node.Add(IgnoreNormalsForChartDetectionName, GetIgnoreNormalsForChartDetection(container.Flags));
-			node.Add(ImportantGIName, GetImportantGI(container.Flags));
-			node.Add(StitchLightmapSeamsName, GetStitchLightmapSeams(container.Flags));
-			node.Add(SelectedEditorRenderStateName, (int)GetSelectedEditorRenderState(container.Flags));
-			node.Add(MinimumChartSizeName, GetMinimumChartSize(container.Flags));
-			node.Add(AutoUVMaxDistanceName, GetAutoUVMaxDistance(container.Flags));
-			node.Add(AutoUVMaxAngleName, GetAutoUVMaxAngle(container.Flags));
-			node.Add(LightmapParametersName, GetLightmapParameters(container.Flags).ExportYAML(container));
+			node.Add(ScaleInLightmapName, GetScaleInLightmap(container.Version, container.Flags));
+			node.Add(PreserveUVsName, GetPreserveUVs(container.Version, container.Flags));
+			node.Add(IgnoreNormalsForChartDetectionName, GetIgnoreNormalsForChartDetection(container.Version, container.Flags));
+			node.Add(ImportantGIName, GetImportantGI(container.Version, container.Flags));
+			node.Add(StitchLightmapSeamsName, GetStitchLightmapSeams(container.Version, container.Flags));
+			node.Add(SelectedEditorRenderStateName, (int)GetSelectedEditorRenderState(container.Version, container.Flags));
+			node.Add(MinimumChartSizeName, GetMinimumChartSize(container.Version, container.Flags));
+			node.Add(AutoUVMaxDistanceName, GetAutoUVMaxDistance(container.Version, container.Flags));
+			node.Add(AutoUVMaxAngleName, GetAutoUVMaxAngle(container.Version, container.Flags));
+			node.Add(LightmapParametersName, GetLightmapParameters().ExportYAML(container));
 			node.Add(SortingLayerIDName, SortingLayerID);
 			node.Add(SortingLayerName, SortingLayer);
 			node.Add(SortingOrderName, SortingOrder);
@@ -459,99 +633,107 @@ namespace uTinyRipper.Classes
 		}
 		private StaticBatchInfo GetStaticBatchInfo(Version version)
 		{
-			return IsReadSubsetIndices(version) ? new StaticBatchInfo(SubsetIndices) : StaticBatchInfo;
+			if (IsReadSubsetIndices(version))
+			{
+				return StaticBatchInfo;
+			}
+			else if (IsReadSubsetIndices(version))
+			{
+				return new StaticBatchInfo(SubsetIndices);
+			}
+			return default; 
 		}
-		private float GetScaleInLightmap(TransferInstructionFlags flags)
+		private float GetScaleInLightmap(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if(IsReadScaleInLightmap(flags))
+			if (IsReadScaleInLightmap(version, flags))
 			{
 				return ScaleInLightmap;
 			}
 #endif
 			return 1.0f;
 		}
-		private bool GetPreserveUVs(TransferInstructionFlags flags)
+		private bool GetPreserveUVs(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if(IsReadScaleInLightmap(flags))
+			if (IsReadPreserveUVs(version, flags))
 			{
 				return PreserveUVs;
 			}
 #endif
 			return false;
 		}
-		private bool GetIgnoreNormalsForChartDetection(TransferInstructionFlags flags)
+		private bool GetIgnoreNormalsForChartDetection(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if(IsReadScaleInLightmap(flags))
+			if (IsReadIgnoreNormalsForChartDetection(version, flags))
 			{
 				return IgnoreNormalsForChartDetection;
 			}
 #endif
 			return false;
 		}
-		private bool GetImportantGI(TransferInstructionFlags flags)
+		private bool GetImportantGI(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if(IsReadScaleInLightmap(flags))
+			if (IsReadImportantGI(version, flags))
 			{
 				return ImportantGI;
 			}
 #endif
 			return false;
 		}
-		private bool GetStitchLightmapSeams(TransferInstructionFlags flags)
+		private bool GetStitchLightmapSeams(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if(IsReadScaleInLightmap(flags))
+			if (IsReadStitchLightmapSeams(version, flags))
 			{
 				return StitchLightmapSeams;
 			}
 #endif
 			return false;
-		}		
-		private EditorSelectedRenderState GetSelectedEditorRenderState(TransferInstructionFlags flags)
+		}
+		private EditorSelectedRenderState GetSelectedEditorRenderState(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if(IsReadScaleInLightmap(flags))
+			if (IsReadSelectedEditorRenderState(version, flags))
 			{
 				return SelectedEditorRenderState;
 			}
 #endif
 			return (EditorSelectedRenderState)3;
 		}
-		private int GetMinimumChartSize(TransferInstructionFlags flags)
+		private int GetMinimumChartSize(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadScaleInLightmap(flags))
+			if (IsReadMinimumChartSize(version, flags))
 			{
 				return MinimumChartSize;
 			}
 #endif
 			return 4;
 		}
-		private float GetAutoUVMaxDistance(TransferInstructionFlags flags)
+		private float GetAutoUVMaxDistance(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadScaleInLightmap(flags))
+			if (IsReadAutoUVMaxDistance(version, flags))
 			{
 				return AutoUVMaxDistance;
 			}
 #endif
 			return 0.5f;
 		}
-		private float GetAutoUVMaxAngle(TransferInstructionFlags flags)
+		private float GetAutoUVMaxAngle(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadScaleInLightmap(flags))
+			if (IsReadAutoUVMaxDistance(version, flags))
 			{
 				return AutoUVMaxAngle;
 			}
 #endif
 			return 89.0f;
 		}
-		private PPtr<LightmapParameters> GetLightmapParameters(TransferInstructionFlags flags)
+		private PPtr<LightmapParameters> GetLightmapParameters()
 		{
 #if UNIVERSAL
 			return LightmapParameters;
@@ -565,7 +747,9 @@ namespace uTinyRipper.Classes
 		public byte ReceiveShadows { get; private set; }
 		public byte DynamicOccludee { get; private set; }
 		public MotionVectorGenerationMode MotionVectors { get; private set; }
+		public bool UseLightProbes => LightProbeUsage != LightProbeUsage.Off;
 		public LightProbeUsage LightProbeUsage { get; private set; }
+		public bool UseReflectionProbes => ReflectionProbeUsage != ReflectionProbeUsage.Off;
 		public ReflectionProbeUsage ReflectionProbeUsage { get; private set; }
 		public uint RenderingLayerMask { get; private set; }
 		public int RendererPriority { get; private set; }
@@ -573,18 +757,19 @@ namespace uTinyRipper.Classes
 		public ushort LightmapIndexDynamic { get; private set; }
 		public IReadOnlyList<PPtr<Material>> Materials => m_materials;
 		public IReadOnlyList<uint> SubsetIndices => m_subsetIndices;
-		public bool UseLightProbes { get; private set; }
 #if UNIVERSAL
 		public float ScaleInLightmap { get; private set; }
 		public bool PreserveUVs { get; private set; }
 		public bool IgnoreNormalsForChartDetection { get; private set; }
 		public bool ImportantGI { get; private set; }
+		public bool SelectedWireframeHidden { get; private set; }
 		public bool StitchLightmapSeams { get; private set; }
 
 		public EditorSelectedRenderState SelectedEditorRenderState { get; private set; }
 		public int MinimumChartSize { get; private set; }
 		public float AutoUVMaxDistance { get; private set; }
 		public float AutoUVMaxAngle { get; private set; }
+		public bool GIBackfaceCull { get; private set; }
 #endif
 		public int SortingLayerID { get; private set; }
 		public short SortingLayer { get; private set; }
@@ -595,6 +780,7 @@ namespace uTinyRipper.Classes
 		public const string ReceiveShadowsName = "m_ReceiveShadows";
 		public const string DynamicOccludeeName = "m_DynamicOccludee";
 		public const string MotionVectorsName = "m_MotionVectors";
+		public const string UseLightProbesName = "m_UseLightProbes";
 		public const string LightProbeUsageName = "m_LightProbeUsage";
 		public const string ReflectionProbeUsageName = "m_ReflectionProbeUsage";
 		public const string RenderingLayerMaskName = "m_RenderingLayerMask";
@@ -608,6 +794,7 @@ namespace uTinyRipper.Classes
 		public const string PreserveUVsName = "m_PreserveUVs";
 		public const string IgnoreNormalsForChartDetectionName = "m_IgnoreNormalsForChartDetection";
 		public const string ImportantGIName = "m_ImportantGI";
+		public const string SelectedWireframeHiddenName = "m_SelectedWireframeHidden";
 		public const string StitchLightmapSeamsName = "m_StitchLightmapSeams";
 		public const string SelectedEditorRenderStateName = "m_SelectedEditorRenderState";
 		public const string MinimumChartSizeName = "m_MinimumChartSize";
@@ -628,6 +815,9 @@ namespace uTinyRipper.Classes
 		public PPtr<Transform> ProbeAnchor;
 		public PPtr<GameObject> LightProbeVolumeOverride;
 #if UNIVERSAL
+		/// <summary>
+		/// EnlightenSystemBuildParameters previously
+		/// </summary>
 		public PPtr<LightmapParameters> LightmapParameters;
 #endif
 

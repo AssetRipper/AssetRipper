@@ -5,7 +5,7 @@ namespace uTinyRipper.Classes
 {
 	public sealed class MeshRenderer : Renderer
 	{
-		public MeshRenderer(AssetInfo assetInfo):
+		public MeshRenderer(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -21,7 +21,7 @@ namespace uTinyRipper.Classes
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			if (IsReadVertex(reader.Version, reader.Flags))
 			{
 				AdditionalVertexStreams.Read(reader);
@@ -30,12 +30,12 @@ namespace uTinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(file, isLog))
 			{
 				yield return asset;
 			}
 
-			if(!AdditionalVertexStreams.IsNull)
+			if (!AdditionalVertexStreams.IsNull)
 			{
 				yield return AdditionalVertexStreams.FetchDependency(file, isLog, ToLogString, AdditionalVertexStreamsName);
 			}

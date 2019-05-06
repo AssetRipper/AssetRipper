@@ -186,7 +186,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(VolumeName, Volume);
 			node.Add(RolloffScaleName, RolloffScale);
 			node.Add(DopplerFactorName, DopplerFactor);
