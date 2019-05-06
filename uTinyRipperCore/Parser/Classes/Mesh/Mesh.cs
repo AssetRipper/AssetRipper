@@ -526,6 +526,7 @@ namespace uTinyRipper.Classes
 			node.Add(IsReadableName, IsReadable);
 			node.Add(KeepVerticesName, KeepVertices);
 			node.Add(KeepIndicesName, KeepIndices);
+			node.Add(IndexFormatName, (int)IndexFormat);
 			node.Add(IndexBufferName, GetIndexBuffer(container.Version, container.Platform).ExportYAML());
 			node.Add(SkinName, GetSkin(container.Version).ExportYAML(container));
 			node.Add(VertexDataName, GetVertexData(container.Version).ExportYAML(container));
@@ -713,6 +714,7 @@ namespace uTinyRipper.Classes
 		public const string IsReadableName = "m_IsReadable";
 		public const string KeepVerticesName = "m_KeepVertices";
 		public const string KeepIndicesName = "m_KeepIndices";
+		public const string IndexFormatName = "m_IndexFormat";
 		public const string IndexBufferName = "m_IndexBuffer";
 		public const string SkinName = "m_Skin";
 		public const string VertexDataName = "m_VertexData";
