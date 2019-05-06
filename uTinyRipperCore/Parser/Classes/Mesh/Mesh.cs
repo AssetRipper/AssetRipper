@@ -515,7 +515,7 @@ namespace uTinyRipper.Classes
 			node.Add(SubMeshesName, GetSubMeshes(container.Version).ExportYAML(container));
 			node.Add(ShapesName, GetShapes(container.Version).ExportYAML(container));
 			node.Add(BindPoseName, GetBindPoses(container.Version).ExportYAML(container));
-			node.Add(BoneNameHashesName, GetBoneNameHashes(container.Version).ExportYAML(false));
+			node.Add(BoneNameHashesName, GetBoneNameHashes(container.Version).ExportYAML(true));
 			node.Add(RootBoneNameHashName, RootBoneNameHash);
 			if (IsReadBonesAABB(container.ExportVersion))
 			{

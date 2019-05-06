@@ -27,14 +27,6 @@ namespace uTinyRipper.Classes.Meshes
 			return version.IsGreaterEqual(2017, 3);
 		}
 
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsNewTopologyFormat(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-
 		private static int GetSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(4))
@@ -46,7 +38,7 @@ namespace uTinyRipper.Classes.Meshes
 
 		public MeshTopology GetTopology(Version version)
 		{
-			if (IsNewTopologyFormat(version))
+			if (GetSerializedVersion(version) >= 2)
 			{
 				return Topology;
 			}
@@ -85,6 +77,7 @@ namespace uTinyRipper.Classes.Meshes
 			node.Add(FirstByteName, FirstByte);
 			node.Add(IndexCountName, IndexCount);
 			node.Add(TopologyName, (uint)GetTopology(container.Version));
+			node.Add(BaseVertexName, BaseVertex);
 			node.Add(FirstVertexName, FirstVertex);
 			node.Add(VertexCountName, VertexCount);
 			node.Add(LocalAABBName, LocalAABB.ExportYAML(container));
@@ -94,7 +87,7 @@ namespace uTinyRipper.Classes.Meshes
 		public int FirstByte { get; private set; }
 		public int IndexCount { get; private set; }
 		/// <summary>
-		/// isTriStrip previously
+		/// IsTriStrip previously
 		/// </summary>
 		public MeshTopology Topology { get; private set; }
 		public int TriangleCount { get; private set; }
@@ -105,6 +98,7 @@ namespace uTinyRipper.Classes.Meshes
 		public const string FirstByteName = "firstByte";
 		public const string IndexCountName = "indexCount";
 		public const string TopologyName = "topology";
+		public const string BaseVertexName = "baseVertex";
 		public const string FirstVertexName = "firstVertex";
 		public const string VertexCountName = "vertexCount";
 		public const string LocalAABBName = "localAABB";
