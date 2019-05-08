@@ -83,8 +83,8 @@ namespace uTinyRipper
 		{
 			if (IsMultiFile(path))
 			{
-				SplitPathWithoutExtension(path, out string directory, out string file);
-				return Path.Combine(directory, file);
+				int index = path.LastIndexOf('.');
+				return path.Substring(0, index);
 			}
 			return path;
 		}
@@ -367,11 +367,10 @@ namespace uTinyRipper
 		public override bool CanWrite { get; }
 		public override bool CanSeek => true;
 
-		private static readonly Regex s_splitCheck = new Regex($@".+{MultifileRegex}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+		private static readonly Regex s_splitCheck = new Regex($@".+{MultifileRegPostfix}[0-9]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 		private static readonly SplitNameComparer s_splitNameComparer = new SplitNameComparer();
 
 		public const string MultifileRegPostfix = @"\.split";
-		public const string MultifileRegex = @"\.split[0-9]+";
 
 		private readonly IReadOnlyList<Stream> m_streams;
 

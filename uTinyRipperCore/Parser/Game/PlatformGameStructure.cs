@@ -202,8 +202,7 @@ namespace uTinyRipper
 
 		protected void AddFile(IDictionary<string, string> files, string name, string path)
 		{
-#warning HACK: split files duplicate name
-			files[name] = path;
+			files.Add(name, path);
 			Logger.Log(LogType.Info, LogCategory.Import, $"Game file '{name}' has been found");
 		}
 
