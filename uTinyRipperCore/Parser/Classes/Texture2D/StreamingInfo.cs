@@ -18,29 +18,24 @@ namespace uTinyRipper.Classes.Textures
 			{
 				return true;
 			}
-			using (ResourcesFile res = file.Collection.FindResourcesFile(file, Path))
-			{
-				return res != null;
-			}
+			return file.Collection.FindResourceFile(Path) != null;
 		}
 
 		public byte[] GetContent(ISerializedFile file)
 		{
-			using (ResourcesFile res = file.Collection.FindResourcesFile(file, Path))
+			IResourceFile res = file.Collection.FindResourceFile(Path);
+			if (res == null)
 			{
-				if (res == null)
-				{
-					return null;
-				}
-
-				byte[] data = new byte[Size];
-				using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
-				{
-					resStream.Position = Offset;
-					resStream.ReadBuffer(data, 0, data.Length);
-				}
-				return data;
+				return null;
 			}
+
+			byte[] data = new byte[Size];
+			using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
+			{
+				resStream.Position = Offset;
+				resStream.ReadBuffer(data, 0, data.Length);
+			}
+			return data;
 		}
 
 		public void Read(AssetReader reader)

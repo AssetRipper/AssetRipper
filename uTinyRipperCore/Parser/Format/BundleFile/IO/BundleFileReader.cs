@@ -1,26 +1,26 @@
 ﻿using System;
 using System.IO;
 
-namespace uTinyRipper.SerializedFiles
+namespace uTinyRipper.BundleFiles
 {
-	public sealed class SerializedFileReader : EndianReader
+	public sealed class BundleFileReader : EndianReader
 	{
-		public SerializedFileReader(Stream stream, EndianType endianess, FileGeneration generation) :
+		public BundleFileReader(Stream stream, EndianType endianess, BundleGeneration generation) :
 			base(stream, endianess)
 		{
 			Generation = generation;
 		}
 
-		public T ReadSerialized<T>()
-			where T : ISerializedFileReadable, new()
+		public T ReadBundle<T>()
+			where T : IBundleFileReadable, new()
 		{
 			T t = new T();
 			t.Read(this);
 			return t;
 		}
 
-		public T[] ReadSerializedArray<T>()
-			where T : ISerializedFileReadable, new()
+		public T[] ReadBundleArray<T>()
+			where T : IBundleFileReadable, new()
 		{
 			int count = ReadInt32();
 			T[] array = new T[count];
@@ -32,9 +32,9 @@ namespace uTinyRipper.SerializedFiles
 			}
 			return array;
 		}
-		
-		public T[] ReadSerializedArray<T>(Func<T> instantiator)
-			where T : ISerializedFileReadable
+
+		public T[] ReadBundleArray<T>(Func<T> instantiator)
+			where T : IBundleFileReadable
 		{
 			int count = ReadInt32();
 			T[] array = new T[count];
@@ -47,6 +47,6 @@ namespace uTinyRipper.SerializedFiles
 			return array;
 		}
 
-		public FileGeneration Generation { get; }
+		public BundleGeneration Generation { get; }
 	}
 }

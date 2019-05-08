@@ -1,7 +1,8 @@
-﻿using SevenZip;
+using SevenZip;
 using System;
 using System.Linq;
 using uTinyRipper.Classes.Lights;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.AnimationClips
 {

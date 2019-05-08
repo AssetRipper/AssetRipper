@@ -6,8 +6,7 @@ namespace uTinyRipper
 {
 	internal sealed class WebGLStructure : PlatformGameStructure
 	{
-		public WebGLStructure(FileCollection collection, string rootPath) :
-			   base(collection)
+		public WebGLStructure(string rootPath)
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
@@ -85,7 +84,6 @@ namespace uTinyRipper
 			Files = files;
 
 			Assemblies = new Dictionary<string, string>();
-			//m_fileCollection.AssemblyManager.ScriptingBackEnd = ScriptingBackEnd.Il2Cpp;
 		}
 
 		public static bool IsWebGLStructure(string path)

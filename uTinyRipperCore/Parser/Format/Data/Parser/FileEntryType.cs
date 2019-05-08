@@ -2,10 +2,10 @@
 {
 	public enum FileEntryType
 	{
-		Unknown,
-		Resource,
 		Serialized,
 		Bundle,
+		Archive,
 		Web,
+		Resource,
 	}
 }

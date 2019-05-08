@@ -6,8 +6,7 @@ namespace uTinyRipper
 {
 	internal sealed class LinuxGameStructure : PlatformGameStructure
 	{
-		public LinuxGameStructure(FileCollection collection, string rootPath) :
-			base(collection)
+		public LinuxGameStructure(string rootPath)
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
@@ -36,7 +35,6 @@ namespace uTinyRipper
 			Dictionary<string, string> assemblies = new Dictionary<string, string>();
 			CollectMainAssemblies(dataDirectory, assemblies);
 			Assemblies = assemblies;
-			SetScriptingBackend();
 		}
 
 		public static bool IsLinuxStructure(string path)

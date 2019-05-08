@@ -4,13 +4,18 @@
 	/// Contains compression information about block
 	/// Block is a similar to chunk structure that contains data blob but without file entries
 	/// </summary>
-	internal struct BlockInfo : IEndianReadable
+	internal struct BlockInfo : IBundleFileReadable
 	{
-		public void Read(EndianReader stream)
+		public void Read(BundleFileReader reader)
 		{
-			DecompressedSize = stream.ReadUInt32();
-			CompressedSize = stream.ReadUInt32();
-			Flags = (BundleFlag)stream.ReadUInt16();
+			DecompressedSize = reader.ReadUInt32();
+			CompressedSize = reader.ReadUInt32();
+			Flags = (BundleFlag)reader.ReadUInt16();
+		}
+
+		public override string ToString()
+		{
+			return $"C:{CompressedSize} D:{DecompressedSize} F:{Flags}";
 		}
 
 		public uint DecompressedSize { get; private set; }

@@ -7,8 +7,7 @@ namespace uTinyRipper
 {
 	internal class MixedGameStructure : PlatformGameStructure
 	{
-		public MixedGameStructure(FileCollection collection, IEnumerable<string> pathes) :
-			base(collection)
+		public MixedGameStructure(IEnumerable<string> pathes)
 		{
 			Dictionary<string, string> files = new Dictionary<string, string>();
 			Dictionary<string, string> assemblies = new Dictionary<string, string>();
@@ -41,7 +40,6 @@ namespace uTinyRipper
 			DataPathes = dataPathes.ToArray();
 			Files = files;
 			Assemblies = assemblies;
-			SetScriptingBackend();
 			Name = Files.First().Key;
 		}
 

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using uTinyRipper.SerializedFiles;
 
-namespace uTinyRipper
+namespace uTinyRipper.SerializedFiles
 {
 	internal sealed class TypeTree : ISerializedFileReadable
 	{
@@ -30,22 +29,23 @@ namespace uTinyRipper
 				{
 					throw new Exception($"Invalid type tree's string size {stringSize}");
 				}
-					
-				m_nodes = new TypeTreeNode[nodesCount];
+
+				TypeTreeNode[] nodes = new TypeTreeNode[nodesCount];
 				long stringPosition = reader.BaseStream.Position + nodesCount * TypeTreeNode.GetNodeSize(reader.Generation);
 				for (int i = 0; i < nodesCount; i++)
 				{
 					TypeTreeNode node = new TypeTreeNode();
 					node.Read(reader, stringPosition);
-					m_nodes[i] = node;
+					nodes[i] = node;
 				}
+				Nodes = nodes;
 				reader.BaseStream.Position += stringSize;
 			}
 			else
 			{
 				List<TypeTreeNode> nodes = new List<TypeTreeNode>();
 				ReadTreeNode(reader, nodes, 0);
-				m_nodes = nodes.ToArray();
+				Nodes = nodes.ToArray();
 			}
 		}
 
@@ -93,8 +93,6 @@ namespace uTinyRipper
 		}
 #endif
 
-		public IReadOnlyList<TypeTreeNode> Nodes => m_nodes;
-
-		private TypeTreeNode[] m_nodes;
+		public IReadOnlyList<TypeTreeNode> Nodes { get; private set; }
 	}
 }

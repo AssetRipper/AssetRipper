@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using uTinyRipper.Classes;
 using uTinyRipper.SerializedFiles;
 
@@ -7,7 +7,7 @@ namespace uTinyRipper
 	public interface IFileCollection
 	{
 		ISerializedFile FindSerializedFile(FileIdentifier identifier);
-		ResourcesFile FindResourcesFile(ISerializedFile file, string fileName);
+		IResourceFile FindResourceFile(string fileName);
 
 		T FindAsset<T>()
 			where T: Object;

@@ -29,19 +29,20 @@ namespace uTinyRipper.SerializedFiles
 			Hierarchy.Read(reader);
 
 			int count = reader.ReadInt32();
-			m_objects = new Dictionary<long, AssetEntry>(count);
+			Dictionary<long, AssetEntry> entries = new Dictionary<long, AssetEntry>(count);
 			for (int i = 0; i < count; i++)
 			{
-				AssetEntry objectInfo = new AssetEntry();
-				objectInfo.Read(reader, Hierarchy);
-				m_objects.Add(objectInfo.PathID, objectInfo);
+				AssetEntry entry = new AssetEntry();
+				entry.Read(reader, Hierarchy);
+				entries.Add(entry.PathID, entry);
 			}
+			Entries = entries;
 
 			if (IsReadPreload(reader.Generation))
 			{
-				m_preloads = reader.ReadArray<ObjectPtr>();
+				Preloads = reader.ReadSerializedArray<ObjectPtr>();
 			}
-			m_dependencies = reader.ReadArray<FileIdentifier>();
+			Dependencies = reader.ReadSerializedArray<FileIdentifier>();
 			if (IsReadUnknown(reader.Generation))
 			{
 				Unknown = reader.ReadStringZeroTerm();
@@ -49,13 +50,9 @@ namespace uTinyRipper.SerializedFiles
 		}
 
 		public RTTIClassHierarchyDescriptor Hierarchy { get; }
-		public IReadOnlyDictionary<long, AssetEntry> Objects => m_objects;
-		public IReadOnlyList<ObjectPtr> Preloads => m_preloads;
-		public IReadOnlyList<FileIdentifier> Dependencies => m_dependencies;
+		public IReadOnlyDictionary<long, AssetEntry> Entries { get; private set; }
+		public IReadOnlyList<ObjectPtr> Preloads { get; private set; }
+		public IReadOnlyList<FileIdentifier> Dependencies { get; private set; }
 		public string Unknown { get; private set; }
-		
-		private Dictionary<long, AssetEntry> m_objects;
-		private ObjectPtr[] m_preloads;
-		private FileIdentifier[] m_dependencies;
 	}
 }

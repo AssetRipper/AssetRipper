@@ -16,6 +16,31 @@ namespace uTinyRipper.SerializedFiles
 			m_name = name;
 		}
 
+		public static bool IsSerializedFileHeader(EndianReader reader)
+		{
+			const int CheckSize = sizeof(int) * 3;
+			if (reader.BaseStream.Position + CheckSize > reader.BaseStream.Length)
+			{
+				return false;
+			}
+			int metadataSize = reader.ReadInt32();
+			if (metadataSize <= 0)
+			{
+				return false;
+			}
+			uint fileSize = reader.ReadUInt32();
+			if (fileSize <= 0)
+			{
+				return false;
+			}
+			int generation = reader.ReadInt32();
+			if (!Enum.IsDefined(typeof(FileGeneration), generation))
+			{
+				return false;
+			}
+			return true;
+		}
+
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
@@ -38,7 +63,7 @@ namespace uTinyRipper.SerializedFiles
 				throw new Exception($"Unsupported file generation {Generation} for asset file '{m_name}'");
 			}
 			DataOffset = reader.ReadUInt32();
-			if(IsReadEndian(Generation))
+			if (IsReadEndian(Generation))
 			{
 				SwapEndianess = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);

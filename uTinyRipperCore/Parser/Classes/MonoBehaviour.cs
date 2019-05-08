@@ -71,7 +71,7 @@ namespace uTinyRipper.Classes
 			}
 
 			AssetEntry info = File.GetAssetEntry(PathID);
-			reader.BaseStream.Position = position + info.DataSize;
+			reader.BaseStream.Position = position + info.Size;
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)

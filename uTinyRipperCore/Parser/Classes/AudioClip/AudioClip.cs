@@ -343,14 +343,7 @@ namespace uTinyRipper.Classes
 
 				if (IsReadStreamingInfo(reader.Version))
 				{
-					bool isInnerData = true;
-					if (LoadType == AudioClipLoadType.Streaming)
-					{
-						using (ResourcesFile res = File.Collection.FindResourcesFile(File, StreamingFileName))
-						{
-							isInnerData = res == null;
-						}
-					}
+					bool isInnerData = LoadType == AudioClipLoadType.Streaming ? File.Collection.FindResourceFile(StreamingFileName) == null : true;
 					if (isInnerData)
 					{
 						m_audioData = reader.ReadByteArray();

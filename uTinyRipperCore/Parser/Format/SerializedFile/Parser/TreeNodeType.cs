@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace uTinyRipper
+namespace uTinyRipper.SerializedFiles
 {
 	/// <summary>
 	/// Predefines types

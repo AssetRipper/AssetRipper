@@ -26,33 +26,29 @@ namespace uTinyRipper.Classes.AudioClips
 				// I think they read data by its type for this verison, so I can't even export raw data :/
 				return false;
 			}
-			using (ResourcesFile res = file.Collection.FindResourcesFile(file, Source))
-			{
-				return res != null;
-			}
+
+			return file.Collection.FindResourceFile(Source) != null;
 		}
 
 		public byte[] GetContent(ISerializedFile file)
 		{
-			using (ResourcesFile res = file.Collection.FindResourcesFile(file, Source))
+			IResourceFile res = file.Collection.FindResourceFile(Source);
+			if (res == null)
 			{
-				if (res == null)
-				{
-					return null;
-				}
-				if (Size == 0)
-				{
-					return null;
-				}
-
-				byte[] data = new byte[Size];
-				using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
-				{
-					resStream.Position = Offset;
-					resStream.ReadBuffer(data, 0, data.Length);
-				}
-				return data;
+				return null;
 			}
+			if (Size == 0)
+			{
+				return null;
+			}
+
+			byte[] data = new byte[Size];
+			using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
+			{
+				resStream.Position = Offset;
+				resStream.ReadBuffer(data, 0, data.Length);
+			}
+			return data;
 		}
 
 		public void Read(AssetReader reader)

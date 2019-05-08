@@ -7,8 +7,7 @@ namespace uTinyRipper
 {
 	internal sealed class WebPlayerStructure : PlatformGameStructure
 	{
-		public WebPlayerStructure(FileCollection collection, string rootPath) :
-			base(collection)
+		public WebPlayerStructure(string rootPath)
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
@@ -36,7 +35,6 @@ namespace uTinyRipper
 			Dictionary<string, string> assemblies = new Dictionary<string, string>();
 			CollectMainAssemblies(m_root, assemblies);
 			Assemblies = assemblies;
-			m_fileCollection.AssemblyManager.ScriptingBackEnd = ScriptingBackEnd.Mono;
 		}
 
 		public static bool IsWebPlayerStructure(string path)
@@ -66,6 +64,11 @@ namespace uTinyRipper
 			}
 			name = null;
 			return false;
+		}
+
+		public override ScriptingBackEnd GetScriptingBackend()
+		{
+			return ScriptingBackEnd.Mono;
 		}
 
 		public override string Name { get; }

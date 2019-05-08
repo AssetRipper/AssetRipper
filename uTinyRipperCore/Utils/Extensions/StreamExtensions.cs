@@ -68,6 +68,6 @@ namespace uTinyRipper
 			}
 		}
 
-		private const int BufferSize = 4096;
+		private const int BufferSize = 81920;
 	}
 }

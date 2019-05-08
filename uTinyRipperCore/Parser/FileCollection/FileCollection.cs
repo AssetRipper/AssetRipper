@@ -7,6 +7,7 @@ using uTinyRipper.Assembly;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.BundleFiles;
 using uTinyRipper.Classes;
+using uTinyRipper.ResourceFiles;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.WebFiles;
 
@@ -15,11 +16,10 @@ using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper
 {
-	public sealed class FileCollection : IFileCollection, IDisposable
+	public sealed class FileCollection : FileList, IFileCollection, IDisposable
 	{
 		public struct Parameters
 		{
-			public Action<string> RequestDependencyCallback { get; set; }
 			public Action<string> RequestAssemblyCallback { get; set; }
 			public Func<string, string> RequestResourceCallback { get; set; }
 		}
@@ -33,7 +33,6 @@ namespace uTinyRipper
 		public FileCollection(Parameters pars) :
 			this()
 		{
-			m_dependencyCallback = pars.RequestDependencyCallback;
 			m_assemblyCallback = pars.RequestAssemblyCallback;
 			m_resourceCallback = pars.RequestResourceCallback;
 		}
@@ -43,179 +42,33 @@ namespace uTinyRipper
 			Dispose(false);
 		}
 
-		public void Load(string filePath)
+		public static FileScheme LoadScheme(string filePath, string fileName)
 		{
-			if (BundleFile.IsBundleFile(filePath))
+			using (SmartStream stream = SmartStream.OpenRead(filePath))
 			{
-				LoadBundleFile(filePath);
-			}
-			else if(ArchiveFile.IsArchiveFile(filePath))
-			{
-				LoadArchiveFile(filePath);
-			}
-			else if (WebFile.IsWebFile(filePath))
-			{
-				LoadWebFile(filePath);
-			}
-			else
-			{
-				LoadSerializedFile(filePath);
+				return ReadScheme(stream, 0, stream.Length, filePath, fileName);
 			}
 		}
 
-		public void Load(IReadOnlyCollection<string> filePathes)
+		public static FileScheme ReadScheme(SmartStream stream, long offset, long size, string filePath, string fileName)
 		{
-			foreach (string file in filePathes)
+			if (BundleFile.IsBundleFile(stream, offset, size))
 			{
-				Load(file);
+				return BundleFile.ReadScheme(stream, offset, size, filePath, fileName);
 			}
-		}
-
-		public void Read(SmartStream stream, string filePath)
-		{
-			if (BundleFile.IsBundleFile(stream))
+			if (ArchiveFile.IsArchiveFile(stream, offset, size))
 			{
-				ReadBundleFile(stream, filePath);
+				return ArchiveFile.ReadScheme(stream, offset, size, filePath, fileName);
 			}
-			else if (ArchiveFile.IsArchiveFile(stream))
+			if (WebFile.IsWebFile(stream, offset, size))
 			{
-				ReadArchiveFile(stream, filePath);
+				return WebFile.ReadScheme(stream, offset, size, filePath, fileName);
 			}
-			else if (WebFile.IsWebFile(stream))
+			if (SerializedFile.IsSerializedFile(stream, offset, size))
 			{
-				ReadWebFile(stream, filePath);
+				return SerializedFile.ReadScheme(stream, offset, size, filePath, fileName);
 			}
-			else
-			{
-				string fileName = Path.GetFileName(filePath);
-				ReadSerializedFile(stream, filePath, fileName, OnRequestDependency);
-			}
-		}
-
-		internal void ReadResourceFile(SmartStream stream, string filePath, string fileName, long offset, long size)
-		{
-			ResourcesFile resource = new ResourcesFile(stream, filePath, fileName, offset, size);
-			AddResourceFile(resource);
-		}
-
-		public void LoadSerializedFile(string filePath)
-		{
-			SerializedFile.Parameters pars = new SerializedFile.Parameters()
-			{
-				FileCollection = this,
-				AssemblyManager = AssemblyManager,
-				FilePath = filePath,
-				Name = Path.GetFileName(filePath),
-				DependencyCallback = OnRequestDependency,
-				Flags = TransferInstructionFlags.SerializeGameRelease,
-			};
-			SerializedFile file = SerializedFile.Load(pars);
-			AddSerializedFile(file);
-		}
-
-		public void LoadSerializedFile(string filePath, TransferInstructionFlags flags)
-		{
-			SerializedFile.Parameters pars = new SerializedFile.Parameters()
-			{
-				FileCollection = this,
-				AssemblyManager = AssemblyManager,
-				FilePath = filePath,
-				Name = Path.GetFileName(filePath),
-				DependencyCallback = OnRequestDependency,
-				Flags = flags,
-			};
-			SerializedFile file = SerializedFile.Load(pars);
-			AddSerializedFile(file);
-		}
-
-		public void ReadSerializedFile(Stream stream, string filePath)
-		{
-			string fileName = Path.GetFileName(filePath);
-			ReadSerializedFile(stream, filePath, fileName, OnRequestDependency);
-		}
-
-		internal void ReadSerializedFile(Stream stream, string filePath, string fileName, Action<string> dependencyCallback)
-		{
-			SerializedFile.Parameters pars = new SerializedFile.Parameters()
-			{
-				FileCollection = this,
-				AssemblyManager = AssemblyManager,
-				FilePath = filePath,
-				Name = fileName,
-				DependencyCallback = dependencyCallback,
-				Flags = TransferInstructionFlags.SerializeGameRelease,
-			};
-			SerializedFile file = SerializedFile.Read(stream, pars);
-			AddSerializedFile(file);
-		}
-
-		public void ReadSerializedFile(Stream stream, string filePath, TransferInstructionFlags flags)
-		{
-			string fileName = Path.GetFileName(filePath);
-			ReadSerializedFile(stream, fileName, filePath, flags);
-		}
-
-		internal void ReadSerializedFile(Stream stream, string filePath, string fileName, TransferInstructionFlags flags)
-		{
-			SerializedFile.Parameters pars = new SerializedFile.Parameters()
-			{
-				FileCollection = this,
-				AssemblyManager = AssemblyManager,
-				FilePath = filePath,
-				Name = fileName,
-				DependencyCallback = OnRequestDependency,
-				Flags = flags,
-			};
-			SerializedFile file = SerializedFile.Load(pars);
-			AddSerializedFile(file);
-		}
-
-		public void LoadBundleFile(string bundlePath)
-		{
-			using (BundleFile bundle = BundleFile.Load(bundlePath))
-			{
-				AddBundleFile(bundle);
-			}
-		}
-
-		public void ReadBundleFile(SmartStream stream, string bundlePath)
-		{
-			using (BundleFile bundle = BundleFile.Read(stream, bundlePath))
-			{
-				AddBundleFile(bundle);
-			}
-		}
-
-		public void LoadArchiveFile(string filePath)
-		{
-			using (ArchiveFile archive = ArchiveFile.Load(filePath))
-			{
-				AddArchiveFile(archive);
-			}
-		}
-
-		public void ReadArchiveFile(SmartStream stream, string archivePath)
-		{
-			using (ArchiveFile archive = ArchiveFile.Read(stream, archivePath))
-			{
-				AddArchiveFile(archive);
-			}
-		}
-
-		public void LoadWebFile(string webPath)
-		{
-			using (WebFile web = WebFile.Load(webPath))
-			{
-				AddWebFile(web);
-			}
-		}
-
-		public void ReadWebFile(SmartStream stream, string webPath)
-		{
-			using (WebFile web = WebFile.Read(stream, webPath))
-			{
-				AddWebFile(web);
-			}
+			return ResourceFile.ReadScheme(stream, offset, size, filePath, fileName);
 		}
 
 		public void LoadAssembly(string filePath)
@@ -228,172 +81,47 @@ namespace uTinyRipper
 			AssemblyManager.Read(stream, fileName);
 		}
 
-		internal void AddSerializedFile(SerializedFile file)
-		{
-#if DEBUG
-			if (m_files.Any(t => t.Name == file.Name))
-			{
-				throw new ArgumentException($"Assets file with name '{file.Name}' already presents in collection", nameof(file));
-			}
-			if (m_files.Any(t => !t.Platform.IsCompatible(file.Platform)))
-			{
-				throw new ArgumentException($"Assets file '{file.Name}' has incompatible with other assets files platform {file.Platform} ", nameof(file));
-			}
-#endif
-
-			if (!RTTIClassHierarchyDescriptor.IsReadSignature(file.Header.Generation))
-			{
-				SetVersion(file);
-			}
-
-			m_files.Add(file);
-			if(SerializedFileIsScene(file))
-			{
-				m_scenes.Add(file);
-			}
-		}
-
-		internal void AddResourceFile(ResourcesFile resource)
-		{
-			if (m_resources.Any(t => t.Name == resource.Name))
-			{
-				throw new ArgumentException($"Resource file with name '{resource.Name}' already presents in collection", nameof(resource));
-			}
-			m_resources.Add(resource);
-		}
-
-		internal void AddBundleFile(BundleFile bundle)
-		{
-			DependencyCollection depCollection = new DependencyCollection(this, bundle.Metadata.Entries, OnRequestDependency);
-			depCollection.ReadFiles();
-		}
-
-		internal void AddArchiveFile(ArchiveFile archive)
-		{
-			if (archive.Metadata.Entries.Count > 1)
-			{
-				throw new NotSupportedException("More than one file for archive isn't supported");
-			}
-
-			foreach (ArchiveFileEntry entry in archive.Metadata.Entries)
-			{
-				// for now archive is a top level entity and contains only one file so we shouldn't concern about dependencies
-				switch (entry.EntryType)
-				{
-					case FileEntryType.Serialized:
-						{
-							entry.ReadSerializedFile(this, OnRequestDependency);
-						}
-						break;
-					case FileEntryType.Bundle:
-						{
-							entry.ReadBundleFile(this);
-						}
-						break;
-					case FileEntryType.Web:
-						{
-							entry.ReadWebFile(this);
-						}
-						break;
-
-					default:
-						throw new Exception($"Unsupported file '{entry.Name}' inside archive '{entry.FilePath}'");
-				}
-			}
-		}
-
-		internal void AddWebFile(WebFile web)
-		{
-			DependencyCollection depCollection = new DependencyCollection(this, web.Metadata.Entries, OnRequestDependency);
-			depCollection.ReadFiles();
-		}
-
 		public void Dispose()
 		{
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
 
-		public void Unload(string filepath)
-		{
-			for(int i = 0; i > m_files.Count; i++)
-			{
-				SerializedFile file = m_files[i];
-				if(file.FilePath == filepath)
-				{
-					m_files.RemoveAt(i);
-					i--;
-				}
-			}
-			for (int i = 0; i > m_resources.Count; i++)
-			{
-				ResourcesFile file = m_resources[i];
-				if (file.FilePath.StartsWith(filepath, StringComparison.Ordinal))
-				{
-					file.Dispose();
-					m_resources.RemoveAt(i);
-					i--;
-				}
-			}
-		}
-
-		public void UnloadAssembly(string name)
-		{
-			AssemblyManager.Unload(name);
-		}
-
-		public void UnloadAll()
-		{
-			m_files.Clear();
-			m_scenes.Clear();
-
-			foreach (ResourcesFile resource in m_resources)
-			{
-				resource.Dispose();
-			}
-			m_resources.Clear();
-
-			AssemblyManager.Dispose();
-		}
-
 		public ISerializedFile FindSerializedFile(FileIdentifier identifier)
 		{
-			return m_files.Find(identifier.IsFile);
+			m_files.TryGetValue(identifier.FilePath, out SerializedFile file);
+			return file;
 		}
 
-		public ResourcesFile FindResourcesFile(ISerializedFile ifile, string resName)
+		public IResourceFile FindResourceFile(string resName)
 		{
-			SerializedFile file = (SerializedFile)ifile;
-			resName = FilenameUtils.FixResourcePath(resName);
-
-			// check asset bundles / web files
-			string filePath = file.FilePath;
-			foreach (ResourcesFile res in m_resources)
+			string fixedName = FilenameUtils.FixResourcePath(resName);
+			if (m_resources.TryGetValue(fixedName, out ResourceFile file))
 			{
-				if(res.FilePath == filePath && res.Name == resName)
-				{
-					return res.CreateReference();
-				}
+				return file;
 			}
 
-			string resPath = m_resourceCallback?.Invoke(resName);
-			if(resPath == null)
+			string resPath = m_resourceCallback?.Invoke(fixedName);
+			if (resPath == null)
 			{
+				m_resources.Add(fixedName, null);
 				return null;
 			}
-			using (SmartStream stream = SmartStream.OpenRead(resPath))
+
+			using (ResourceFileScheme scheme = ResourceFile.LoadScheme(resPath, resName))
 			{
-				return new ResourcesFile(stream, resPath, resName, 0, stream.Length);
+				AddFile(scheme, this, AssemblyManager);
 			}
+			return m_resources[fixedName];
 		}
 
 		public T FindAsset<T>()
-			where T: Object
+			where T : Object
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
-			foreach(Object asset in FetchAssets())
+			foreach (Object asset in FetchAssets())
 			{
-				if(asset.ClassID == classID)
+				if (asset.ClassID == classID)
 				{
 					return (T)asset;
 				}
@@ -410,7 +138,7 @@ namespace uTinyRipper
 				if (asset.ClassID == classID)
 				{
 					T namedAsset = (T)asset;
-					if(namedAsset.ValidName == name)
+					if (namedAsset.ValidName == name)
 					{
 						return namedAsset;
 					}
@@ -421,9 +149,9 @@ namespace uTinyRipper
 
 		public IEnumerable<Object> FetchAssets()
 		{
-			foreach(SerializedFile file in m_files)
+			foreach (SerializedFile file in m_files.Values)
 			{
-				foreach(Object asset in file.FetchAssets())
+				foreach (Object asset in file.FetchAssets())
 				{
 					yield return asset;
 				}
@@ -435,30 +163,61 @@ namespace uTinyRipper
 			return m_scenes.Contains(file);
 		}
 
-		private void Dispose(bool disposing)
+		protected override void OnSerializedFileAdded(SerializedFile file)
 		{
-			AssemblyManager.Dispose();
-			foreach (ResourcesFile res in m_resources)
+			//SetVersion(file);
+
+			if (m_files.ContainsKey(file.Name))
 			{
-				res.Dispose();
+				throw new ArgumentException($"{nameof(SerializedFile)} with name '{file.Name}' already presents in the collection", nameof(file));
+			}
+			/*if (file.Platform != Platform)
+			{
+				throw new ArgumentException($"{nameof(SerializedFile)} '{file.Name}' is incompatible with platform of other asset files {file.Platform} ", nameof(file));
+			}
+			if (file.Version != Version)
+			{
+				throw new ArgumentException($"{nameof(SerializedFile)} '{file.Name}' is incompatible with version of other asset files {file.Platform} ", nameof(file));
+			}*/
+
+			m_files.Add(file.Name, file);
+			if (SerializedFileIsScene(file))
+			{
+				m_scenes.Add(file);
 			}
 		}
 
-		private void SetVersion(SerializedFile file)
+		protected override void OnFileListAdded(FileList list)
 		{
-			if (file.Version.IsSet)
+			foreach (SerializedFile file in list.SerializedFiles)
 			{
-				return;
+				OnSerializedFileAdded(file);
 			}
-
-			foreach (Object asset in file.FetchAssets())
+			foreach (ResourceFile file in list.ResourceFiles)
 			{
-				if(asset.ClassID == ClassIDType.BuildSettings)
-				{	
-					BuildSettings settings = (BuildSettings)asset;
-					file.Metadata.Hierarchy.Version.Parse(settings.Version);
-					break;
-				}
+				OnResourceFileAdded(file);
+			}
+			foreach (FileList nestedList in list.FileLists)
+			{
+				OnFileListAdded(nestedList);
+			}
+		}
+
+		protected override void OnResourceFileAdded(ResourceFile file)
+		{
+			if (m_resources.ContainsKey(file.Name))
+			{
+				throw new ArgumentException($"{nameof(ResourceFile)} with name '{file.Name}' already presents in the collection", nameof(file));
+			}
+			m_resources.Add(file.Name, file);
+		}
+
+		private void Dispose(bool disposing)
+		{
+			AssemblyManager.Dispose();
+			foreach (ResourceFile res in m_resources.Values)
+			{
+				res.Dispose();
 			}
 		}
 
@@ -474,22 +233,10 @@ namespace uTinyRipper
 			return false;
 		}
 
-		private void OnRequestDependency(string dependency)
-		{
-			foreach(SerializedFile file in Files)
-			{
-				if (file.Name == dependency)
-				{
-					return;
-				}
-			}
-			m_dependencyCallback?.Invoke(dependency);
-		}
-
 		private void OnRequestAssembly(string assembly)
 		{
 			string assemblyName = $"{assembly}{MonoManager.AssemblyExtension}";
-			foreach (ResourcesFile file in m_resources)
+			foreach (ResourceFile file in m_resources.Values)
 			{
 				if (file.Name == assemblyName)
 				{
@@ -498,24 +245,30 @@ namespace uTinyRipper
 						ReadAssembly(stream, assemblyName);
 					}
 					Logger.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
+
+					m_resources.Remove(assemblyName);
+					file.Dispose();
 					return;
 				}
 			}
 
 			m_assemblyCallback?.Invoke(assembly);
 		}
-		
+
+		//public Version Version { get; }
+		//public Platform Platform { get; }
+		//public TransferInstructionFlags Flags { get; }
+
 		public ProjectExporter Exporter { get; }
 		public AssetFactory AssetFactory { get; } = new AssetFactory();
-		public IReadOnlyList<ISerializedFile> Files => m_files;
+		public IEnumerable<ISerializedFile> Files => m_files.Values;
 		public IAssemblyManager AssemblyManager { get; }
 
-		private readonly List<SerializedFile> m_files = new List<SerializedFile>();
-		private readonly List<ResourcesFile> m_resources = new List<ResourcesFile>();
+		private readonly Dictionary<string, SerializedFile> m_files = new Dictionary<string, SerializedFile>();
+		private readonly Dictionary<string, ResourceFile> m_resources = new Dictionary<string, ResourceFile>();
 
 		private readonly HashSet<SerializedFile> m_scenes = new HashSet<SerializedFile>();
 
-		private readonly Action<string> m_dependencyCallback;
 		private readonly Action<string> m_assemblyCallback;
 		private readonly Func<string, string> m_resourceCallback;
 	}

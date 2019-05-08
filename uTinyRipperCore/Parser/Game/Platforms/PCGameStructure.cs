@@ -6,8 +6,7 @@ namespace uTinyRipper
 {
 	internal class PCGameStructure : PlatformGameStructure
 	{
-		public PCGameStructure(FileCollection collection, string rootPath):
-			base(collection)
+		public PCGameStructure(string rootPath)
 		{
 			if(string.IsNullOrEmpty(rootPath))
 			{
@@ -36,7 +35,6 @@ namespace uTinyRipper
 			Dictionary<string, string> assemblies = new Dictionary<string, string>();
 			CollectMainAssemblies(dataDirectory, assemblies);
 			Assemblies = assemblies;
-			SetScriptingBackend();
 		}
 
 		public static bool IsPCStructure(string path)

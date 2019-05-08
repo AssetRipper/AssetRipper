@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace uTinyRipper.BundleFiles
@@ -30,14 +30,23 @@ namespace uTinyRipper.BundleFiles
 					type = BundleType.UnityFS;
 					return true;
 
-				case HexFASignature:
-					type = BundleType.HexFA;
-					return true;
-
 				default:
 					type = default;
 					return false;
 			}
+		}
+
+		internal static bool IsBundleHeader(EndianReader reader)
+		{
+			const int MaxLength = 0x20;
+			if (reader.BaseStream.Length >= MaxLength)
+			{
+				if (reader.ReadStringZeroTerm(MaxLength, out string signature))
+				{
+					return TryParseSignature(signature, out BundleType _);
+				}
+			}
+			return false;
 		}
 
 		/// <summary>
@@ -70,7 +79,6 @@ namespace uTinyRipper.BundleFiles
 			{
 				case BundleType.UnityRaw:
 				case BundleType.UnityWeb:
-				case BundleType.HexFA:
 					ReadRawWeb(reader);
 					break;
 
@@ -112,7 +120,7 @@ namespace uTinyRipper.BundleFiles
 			MinimumStreamedBytes = reader.ReadUInt32();
 			HeaderSize = reader.ReadInt32();
 			TotalChunkCount = reader.ReadInt32();
-			m_chunkInfos = reader.ReadEndianArray<ChunkInfo>();
+			ChunkInfos = reader.ReadEndianArray<ChunkInfo>();
 			if (IsReadBundleSize(Generation))
 			{
 				BundleSize = reader.ReadUInt32();
@@ -156,7 +164,7 @@ namespace uTinyRipper.BundleFiles
 		/// <summary>
 		/// LZMA chunks info
 		/// </summary>
-		internal IReadOnlyList<ChunkInfo> ChunkInfos => m_chunkInfos;
+		internal IReadOnlyList<ChunkInfo> ChunkInfos { get; private set; }
 		/// <summary>
 		/// Size of the header
 		/// </summary>
@@ -183,9 +191,5 @@ namespace uTinyRipper.BundleFiles
 		/// Minimum revision
 		/// </summary>
 		public Version EngineVersion;
-
-		private const string HexFASignature = "\xFA\xFA\xFA\xFA\xFA\xFA\xFA\xFA";
-
-		private ChunkInfo[] m_chunkInfos;
 	}
 }

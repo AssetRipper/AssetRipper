@@ -4,8 +4,6 @@
 	{
 		UnityRaw,
 		UnityWeb,
-#warning is it official?
-		HexFA,
 		UnityFS,
 	}
 }

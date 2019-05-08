@@ -175,10 +175,6 @@ namespace uTinyRipper.Assembly
 				{
 					return;
 				}
-				if (ScriptingBackEnd != ScriptingBackEnd.Unknown)
-				{
-					throw new Exception("Scripting backend is already set");
-				}
 
 				switch (value)
 				{

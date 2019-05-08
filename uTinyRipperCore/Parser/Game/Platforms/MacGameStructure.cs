@@ -6,8 +6,7 @@ namespace uTinyRipper
 {
 	internal sealed class MacGameStructure : PlatformGameStructure
 	{
-		public MacGameStructure(FileCollection collection, string rootPath):
-			base(collection)
+		public MacGameStructure(string rootPath)
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
@@ -43,7 +42,6 @@ namespace uTinyRipper
 			Dictionary<string, string> assemblies = new Dictionary<string, string>();
 			CollectMainAssemblies(dataDirectory, assemblies);
 			Assemblies = assemblies;
-			SetScriptingBackend();
 		}
 
 		public static bool IsMacStructure(string path)

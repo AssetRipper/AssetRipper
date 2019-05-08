@@ -6,13 +6,12 @@ namespace uTinyRipper
 {
 	internal class AndroidGameStructure : PlatformGameStructure
 	{
-		public AndroidGameStructure(FileCollection collection, string rootPath) :
-			this(collection, rootPath, string.Empty)
+		public AndroidGameStructure(string rootPath) :
+			this(rootPath, string.Empty)
 		{
 		}
 
-		public AndroidGameStructure(FileCollection collection, string rootPath, string obbPath) :
-			base(collection)
+		public AndroidGameStructure(string rootPath, string obbPath)
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
@@ -62,7 +61,6 @@ namespace uTinyRipper
 			Dictionary<string, string> assemblies = new Dictionary<string, string>();
 			CollectMainAssemblies(apkDataDirectory, assemblies);
 			Assemblies = assemblies;
-			SetScriptingBackend();
 		}
 		
 		public static bool IsAndroidStructure(string path)

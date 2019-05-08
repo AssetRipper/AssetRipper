@@ -10,21 +10,11 @@ namespace uTinyRipper
 {
 	public abstract class PlatformGameStructure
 	{
-		public PlatformGameStructure(FileCollection collection)
+		public string RequestDependency(string dependency)
 		{
-			if(collection == null)
+			if (Files.TryGetValue(dependency, out string dependencyPath))
 			{
-				throw new ArgumentNullException(nameof(collection));
-			}
-			m_fileCollection = collection;
-		}
-		
-		public bool RequestDependency(string dependency)
-		{
-			if(Files.TryGetValue(dependency, out string dependencyPath))
-			{
-				LoadDependency(dependency, dependencyPath);
-				return true;
+				return dependencyPath;
 			}
 
 			foreach (string dataPath in DataPathes)
@@ -32,73 +22,57 @@ namespace uTinyRipper
 				string filePath = Path.Combine(dataPath, dependency);
 				if (FileMultiStream.Exists(filePath))
 				{
-					LoadDependency(dependency, filePath);
-					return true;
+					return filePath;
 				}
 
 				if (FilenameUtils.IsDefaultResource(dependency))
 				{
-					if (LoadEngineDependency(dataPath, FilenameUtils.DefaultResourceName1))
-					{
-						return true;
-					}
-					if (LoadEngineDependency(dataPath, FilenameUtils.DefaultResourceName2))
-					{
-						return true;
-					}
+					return FindEngineDependency(dataPath, FilenameUtils.DefaultResourceName1) ??
+						FindEngineDependency(dataPath, FilenameUtils.DefaultResourceName2);
 				}
 				else if (FilenameUtils.IsBuiltinExtra(dependency))
 				{
-					if (LoadEngineDependency(dataPath, FilenameUtils.BuiltinExtraName1))
-					{
-						return true;
-					}
-					if (LoadEngineDependency(dataPath, FilenameUtils.BuiltinExtraName2))
-					{
-						return true;
-					}
+					return FindEngineDependency(dataPath, FilenameUtils.BuiltinExtraName1) ??
+						FindEngineDependency(dataPath, FilenameUtils.BuiltinExtraName2);
 				}
 			}
-			return false;
+			return null;
 		}
 
-		public bool RequestAssembly(string assembly)
+		public string RequestAssembly(string assembly)
 		{
 			string assemblyName = $"{assembly}{MonoManager.AssemblyExtension}";
-			if(Assemblies.TryGetValue(assemblyName, out string assemblyPath))
+			if (Assemblies.TryGetValue(assemblyName, out string assemblyPath))
 			{
-				m_fileCollection.LoadAssembly(assemblyPath);
-				Logger.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
-				return true;
+				return assemblyPath;
 			}
-			return false;
+			return null;
 		}
 
-		public bool RequestResource(string resource, out string path)
+		public string RequestResource(string resource)
 		{
 			foreach (string dataPath in DataPathes)
 			{
-				path = Path.Combine(dataPath, resource);
-				if(FileMultiStream.Exists(path))
+				string path = Path.Combine(dataPath, resource);
+				if (FileMultiStream.Exists(path))
 				{
-					return true;
+					return path;
 				}
 			}
-			path = null;
-			return false;
+			return null;
 		}
 
-		protected void SetScriptingBackend()
+		public virtual ScriptingBackEnd GetScriptingBackend()
 		{
-			if(Assemblies.Count == 0)
+			if (Assemblies.Count == 0)
 			{
-				return;
+				return ScriptingBackEnd.Unknown;
 			}
 
 			string assemblyPath = Assemblies.First().Value;
-			if(MonoManager.IsMonoAssembly(assemblyPath))
+			if (MonoManager.IsMonoAssembly(assemblyPath))
 			{
-				m_fileCollection.AssemblyManager.ScriptingBackEnd = ScriptingBackEnd.Mono;
+				return ScriptingBackEnd.Mono;
 			}
 			else
 			{
@@ -108,6 +82,13 @@ namespace uTinyRipper
 
 		protected void CollectGameFiles(DirectoryInfo root, IDictionary<string, string> files)
 		{
+			const string DataBundleName = DataName + AssetBundleExtension;
+			string dataBundlePath = Path.Combine(root.FullName, DataBundleName);
+			if (FileMultiStream.Exists(dataBundlePath))
+			{
+				AddAssetBundle(files, DataBundleName, dataBundlePath);
+			}
+
 			string filePath = Path.Combine(root.FullName, GlobalGameManagerName);
 			if (FileMultiStream.Exists(filePath))
 			{
@@ -141,12 +122,12 @@ namespace uTinyRipper
 				CollectAssetBundlesRecursivly(root, files);
 			}
 		}
-		
+
 		protected void CollectAssetBundles(DirectoryInfo root, IDictionary<string, string> files)
 		{
-			foreach(FileInfo file in root.EnumerateFiles())
+			foreach (FileInfo file in root.EnumerateFiles())
 			{
-				if(file.Extension == AssetBundleExtension)
+				if (file.Extension == AssetBundleExtension)
 				{
 					string name = Path.GetFileNameWithoutExtension(file.Name).ToLowerInvariant();
 					AddAssetBundle(files, name, file.FullName);
@@ -167,7 +148,7 @@ namespace uTinyRipper
 		{
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
-				if(AssemblyManager.IsAssembly(file.Name))
+				if (AssemblyManager.IsAssembly(file.Name))
 				{
 					assemblies.Add(file.Name, file.FullName);
 				}
@@ -194,21 +175,19 @@ namespace uTinyRipper
 			}
 		}
 
-		private bool LoadEngineDependency(string path, string dependency)
+		private string FindEngineDependency(string path, string dependency)
 		{
 			string filePath = Path.Combine(path, dependency);
 			if (FileUtils.Exists(filePath))
 			{
-				LoadDependency(dependency, filePath);
-				return true;
+				return filePath;
 			}
 
 			string resourcePath = Path.Combine(path, ResourceName);
 			filePath = Path.Combine(resourcePath, dependency);
 			if (FileUtils.Exists(filePath))
 			{
-				LoadDependency(dependency, filePath);
-				return true;
+				return filePath;
 			}
 
 			// really old versions contains file in this directory
@@ -216,36 +195,29 @@ namespace uTinyRipper
 			filePath = Path.Combine(unityPath, dependency);
 			if (FileUtils.Exists(filePath))
 			{
-				LoadDependency(dependency, filePath);
-				return true;
+				return filePath;
 			}
-			return false;
+			return null;
 		}
 
 		protected void AddFile(IDictionary<string, string> files, string name, string path)
 		{
-			// HACK: split files duplicate name
+#warning HACK: split files duplicate name
 			files[name] = path;
 			Logger.Log(LogType.Info, LogCategory.Import, $"Game file '{name}' has been found");
 		}
 
 		protected void AddAssetBundle(IDictionary<string, string> files, string name, string path)
 		{
-			// TEMP HACK:
+#warning TEMP HACK:
 			int i = 0;
 			string uniqueName = name;
-			while(files.ContainsKey(uniqueName))
+			while (files.ContainsKey(uniqueName))
 			{
 				uniqueName = name + i++;
 			}
 			files.Add(uniqueName, path);
 			Logger.Log(LogType.Info, LogCategory.Import, $"Asset bundle '{name}' has been found");
-		}
-
-		private void LoadDependency(string name, string path)
-		{
-			m_fileCollection.Load(path);
-			Logger.Log(LogType.Info, LogCategory.Import, $"Dependency '{name}' has been loaded");
 		}
 
 		public abstract string Name { get; }
@@ -262,12 +234,11 @@ namespace uTinyRipper
 		protected const string UnityName = "unity";
 		protected const string StreamingName = "StreamingAssets";
 
+		protected const string DataName = "data";
 		protected const string MainDataName = "mainData";
 		protected const string GlobalGameManagerName = "globalgamemanagers";
 		protected const string LevelPrefix = "level";
 
 		protected const string AssetBundleExtension = ".unity3d";
-
-		protected readonly FileCollection m_fileCollection;
 	}
 }

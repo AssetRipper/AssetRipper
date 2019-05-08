@@ -28,14 +28,13 @@ namespace uTinyRipperGUI.Exporters
 						throw new Exception("Texture contains data and resource path");
 					}
 
-					using (ResourcesFile res = texture.File.Collection.FindResourcesFile(texture.File, path))
+					IResourceFile res = texture.File.Collection.FindResourceFile(path);
+					if (res == null)
 					{
-						if (res == null)
-						{
-							Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.ValidName}' because resources file '{path}' wasn't found");
-							return;
-						}
-
+						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.ValidName}' because resources file '{path}' wasn't found");
+					}
+					else
+					{
 						using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
 						{
 							resStream.Position = texture.StreamData.Offset;
