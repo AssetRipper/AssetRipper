@@ -259,6 +259,8 @@ namespace uTinyRipper
 		//public Platform Platform { get; }
 		//public TransferInstructionFlags Flags { get; }
 
+		public override string Name => nameof(FileCollection);
+
 		public ProjectExporter Exporter { get; }
 		public AssetFactory AssetFactory { get; } = new AssetFactory();
 		public IEnumerable<ISerializedFile> Files => m_files.Values;

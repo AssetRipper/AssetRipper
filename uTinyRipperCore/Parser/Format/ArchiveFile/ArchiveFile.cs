@@ -12,6 +12,8 @@ namespace uTinyRipper.ArchiveFiles
 				throw new ArgumentNullException(nameof(scheme));
 			}
 
+			Name = scheme.Name;
+
 			Header = scheme.Header;
 		}
 
@@ -61,6 +63,8 @@ namespace uTinyRipper.ArchiveFiles
 		{
 			return ArchiveFileScheme.ReadScheme(stream, offset, size, filePath, fileName);
 		}
+
+		public override string Name { get; }
 
 		public ArchiveHeader Header { get; private set; }
 

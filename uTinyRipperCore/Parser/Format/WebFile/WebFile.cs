@@ -12,6 +12,8 @@ namespace uTinyRipper.WebFiles
 				throw new ArgumentNullException(nameof(scheme));
 			}
 
+			Name = scheme.Name;
+
 			Header = scheme.Header;
 			Metadata = scheme.Metadata;
 		}
@@ -62,6 +64,8 @@ namespace uTinyRipper.WebFiles
 		{
 			return WebFileScheme.ReadScheme(stream, offset, size, filePath, fileName);
 		}
+
+		public override string Name { get; }
 
 		public WebHeader Header { get; private set; }
 		public WebMetadata Metadata { get; private set; }

@@ -13,7 +13,7 @@ namespace uTinyRipper
 	{
 		internal void AddFile(FileScheme scheme, IFileCollection collection, IAssemblyManager manager)
 		{
-			switch(scheme.SchemeType)
+			switch (scheme.SchemeType)
 			{
 				case FileEntryType.Serialized:
 					{
@@ -76,6 +76,8 @@ namespace uTinyRipper
 		protected virtual void OnResourceFileAdded(ResourceFile resource)
 		{
 		}
+
+		public abstract string Name { get; }
 
 		public IReadOnlyList<SerializedFile> SerializedFiles => m_serializedFiles;
 		public IReadOnlyList<FileList> FileLists => m_fileLists;

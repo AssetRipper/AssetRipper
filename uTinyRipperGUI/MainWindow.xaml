@@ -4,39 +4,94 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:uTinyRipperGUI"
+		xmlns:control = "clr-namespace:uTinyRipperGUI.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1000">
+        Title="MainWindow" Height="700" Width="1000" MinHeight="300" MinWidth="500">
     
-    <Grid  Name="MainGrid" Background="SlateGray" Drop="OnDataDroped" AllowDrop="true">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="150" MinHeight="50"/>
+	
+    <Grid Name="MainGrid" Background="#FF363636" Drop="OnDataDroped" AllowDrop="true">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="4"/>
+			<RowDefinition Height="150" MinHeight="50"/>
+			<RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+		
+		<Menu Grid.Row="0" Background="#FF363636">
+			<Menu.Resources>
+				<Style x:Key="{x:Static ToolBar.SeparatorStyleKey}" TargetType="{x:Type Separator}">
+					<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+					<Setter Property="Margin" Value="0,2,0,2"/>
+					<Setter Property="Focusable" Value="false"/>
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="{x:Type Separator}">
+								<Border BorderBrush="{TemplateBinding BorderBrush}" 
+										BorderThickness="{TemplateBinding BorderThickness}" 
+										Background="{TemplateBinding Background}" 
+										Height="1" 
+										SnapsToDevicePixels="true"/>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</Menu.Resources>
 
-        <TextBlock Name="IntroText"
-            Text="Drag &amp; Drop files/folders here" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="48" Foreground="#FF343434"/>
-        <Button Name="ExportButton" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,150,0,0"
-                Width="120"  Height="30"  FontSize="18"
-                Visibility="Hidden" Click="OnExportButtonClicked">
-            <TextBlock Text="Export" Margin="0,-3,0,0"/>
-        </Button>
-        <Button Name="PostExportButton" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,150,150,0"
-                Width="120"  Height="30"  FontSize="20" 
-                Visibility="Hidden" Click="OnPostExportButtonClicked">
-            <TextBlock Text="Open folder" Margin="0,-3,0,0"/>
-        </Button>
-        <Button Name="ResetButton" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="150,150,0,0"
-                Width="120"  Height="30"  FontSize="20" 
-                Visibility="Hidden" Click="OnResetButtonClicked">
-            <TextBlock Text="Reset" Margin="0,-3,0,0"/>
-        </Button>
+			<MenuItem Header="_File" Foreground="White">
+				<MenuItem Header="_Add..." Background="#FF272727"/>
+				<MenuItem Header="_Open" Background="#FF272727">
+					<MenuItem Header="Android" Background="#FF272727"/>
+					<MenuItem Header="iOS" Background="#FF272727"/>
+					<MenuItem Header="Window" Background="#FF272727"/>
+					<MenuItem Header="Mac" Background="#FF272727"/>
+					<MenuItem Header="Linux" Background="#FF272727"/>
+					<MenuItem Header="WebPlayer" Background="#FF272727"/>
+					<MenuItem Header="WebGL" Background="#FF272727"/>
+					<MenuItem Header="Asset Bundles" Background="#FF272727"/>
+				</MenuItem>
+				<Separator Background="#FF272727"/>
+				<!--Background="#FF272727" Foreground="White"-->
+				<MenuItem Header="_Exit" InputGestureText="Alt+F4" Background="#FF272727"/>
+			</MenuItem>
+		</Menu>
 
-        <TextBlock Name="StatusText" VerticalAlignment="Bottom" HorizontalAlignment="Left"
-                   Text="Status: idle" 
-                   FontSize="14" Foreground="#FF343434" Margin="10,0,0,4"/>
-        <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch"
-                          VerticalAlignment="Top" Height="8" Background="Transparent" Margin="0,-4,0,0" />
-        <RichTextBox Grid.Row="1"  Margin="3,3,3,3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="200" MinWidth="150" />
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<control:FileView Grid.Column="0" x:Name="Fileview" Background="#FF474747" Visibility="Visible"/>
+			<GridSplitter Grid.Column="1" Name="FilesViewSplitter" Width="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+						  Background="Transparent" ResizeDirection="Columns" Visibility="Visible"/>
+
+			<Grid Grid.Column="2">
+				<TextBlock Name="IntroText" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="48" Foreground="White"
+						Text="Drag &amp; Drop files/folders here" />
+				<Button Name="ExportButton" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,150,0,0"
+						Width="120"  Height="30"  FontSize="18" Visibility="Hidden"
+						Click="OnExportButtonClicked">
+					<TextBlock Text="Export" Margin="0,-3,0,0"/>
+				</Button>
+				<Button Name="PostExportButton" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,150,150,0"
+						Width="120"  Height="30"  FontSize="20" 
+						Visibility="Hidden" Click="OnPostExportButtonClicked">
+					<TextBlock Text="Open folder" Margin="0,-3,0,0"/>
+				</Button>
+				<Button Name="ResetButton" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="150,150,0,0"
+						Width="120"  Height="30"  FontSize="20" 
+						Visibility="Hidden" Click="OnResetButtonClicked">
+					<TextBlock Text="Reset" Margin="0,-3,0,0"/>
+				</Button>
+			</Grid>
+		</Grid>
+
+		<GridSplitter Grid.Row="2" ResizeDirection="Rows" HorizontalAlignment="Stretch"  Background="Transparent" />
+		
+		<Grid Grid.Row="3" >
+			<RichTextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                    Name="OutputTextBox"
                    AcceptsReturn="True" IsDocumentEnabled="true"
                    Background="#FF555555" IsReadOnly="True" FontSize="14" Foreground="White"
@@ -45,20 +100,28 @@
                    ScrollViewer.CanContentScroll="True"
                    TextChanged="OnOutputTextChanged" 
                  >
-            <RichTextBox.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Command="ApplicationCommands.SelectAll"/>
-                    <MenuItem Command="ApplicationCommands.Copy"/>
-                    <MenuItem Header="Clear" Click="OnClearOutputTextClicked"/>
-                </ContextMenu>
-            </RichTextBox.ContextMenu>
-            <FlowDocument>
-                <Paragraph>
-                    <Run FontWeight="Bold">Output log:</Run>
-                    <LineBreak/>                    
-                </Paragraph>                
-            </FlowDocument>
-        </RichTextBox>       
-    </Grid>
-    
+				<RichTextBox.ContextMenu>
+					<ContextMenu>
+						<MenuItem Command="ApplicationCommands.SelectAll"/>
+						<MenuItem Command="ApplicationCommands.Copy"/>
+						<MenuItem Header="Clear" Click="OnClearOutputTextClicked"/>
+					</ContextMenu>
+				</RichTextBox.ContextMenu>
+				<FlowDocument>
+					<Paragraph>
+						<Run FontWeight="Bold">Output log:</Run>
+						<LineBreak/>
+					</Paragraph>
+				</FlowDocument>
+			</RichTextBox>
+		</Grid>
+
+		<StatusBar Grid.Row="4" Background="#FF2B2B2B">
+			<TextBlock Name="StatusText" FontSize="14" Foreground="White" Text="Status: idle" />
+			<StatusBarItem HorizontalAlignment="Right" Margin="0,0,4,0">
+				<ProgressBar Name="Progress" Value="50" Width="90" Height="16" Visibility="Hidden"/>
+			</StatusBarItem>
+		</StatusBar>
+	</Grid>
+
 </Window>

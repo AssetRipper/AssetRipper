@@ -12,6 +12,8 @@ namespace uTinyRipper.BundleFiles
 				throw new ArgumentNullException(nameof(scheme));
 			}
 
+			Name = scheme.Name;
+
 			Header = scheme.Header;
 			Metadata = scheme.Metadata;
 		}
@@ -62,6 +64,8 @@ namespace uTinyRipper.BundleFiles
 		{
 			return BundleFileScheme.ReadScheme(stream, offset, size, filePath, fileName);
 		}
+
+		public override string Name { get; }
 
 		public BundleHeader Header { get; } = new BundleHeader();
 		public BundleMetadata Metadata { get; private set; }

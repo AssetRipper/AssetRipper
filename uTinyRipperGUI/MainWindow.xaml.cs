@@ -46,100 +46,6 @@ namespace uTinyRipperGUI
 		}
 
 		// =====================================================
-		// Callbacks
-		// =====================================================
-
-		private void OnDataDroped(object sender, DragEventArgs e)
-		{
-			if(e.Data.GetDataPresent(DataFormats.FileDrop))
-			{
-				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-				
-				e.Handled = ProcessInputFiles(files);
-			}
-		}
-		
-		private void OnExportButtonClicked(object sender, RoutedEventArgs e)
-		{
-			while(true)
-			{
-				System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog();
-				folderDialog.ShowNewFolderButton = true;
-				folderDialog.Description = $"Select export folder. New folder '{GameStructure.Name}' will be created inside selected one";
-#if VIRTUAL
-				System.Windows.Forms.DialogResult result = System.Windows.Forms.DialogResult.OK;
-#else
-				System.Windows.Forms.DialogResult result = folderDialog.ShowDialog();
-#endif
-				if (result == System.Windows.Forms.DialogResult.OK)
-				{
-					string path = Path.Combine(folderDialog.SelectedPath, GameStructure.Name);
-					if (Directory.Exists(path))
-					{
-						if (Directory.EnumerateFiles(path).Any())
-						{
-							MessageBoxResult mbresult = MessageBox.Show(this, "There are files inside selected folder. They will be deleted.",
-								"Are you sure?", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-							if (mbresult == MessageBoxResult.Cancel)
-							{
-								continue;
-							}
-						}
-					}
-
-					IntroText.Text = "Exporting assets...";
-					ExportButton.Visibility = Visibility.Hidden;
-
-					ThreadPool.QueueUserWorkItem(new WaitCallback(ExportFiles), path);
-				}
-				break;
-			}
-		}
-
-		private void OnPostExportButtonClicked(object sender, RoutedEventArgs e)
-		{
-			OpenExplorerSelectFile(m_exportPath);
-		}
-
-		private void OnResetButtonClicked(object sender, RoutedEventArgs e)
-		{
-			IntroText.Text = m_initialIntroText;
-			StatusText.Text = m_initialStatusText;
-			MainGrid.AllowDrop = true;
-			PostExportButton.Visibility = Visibility.Hidden;
-			ResetButton.Visibility = Visibility.Hidden;
-			m_processingFiles = null;
-
-			GameStructure.Dispose();
-		}
-
-		private void OnOutputTextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-		{
-			if (OutputTextBox.VerticalOffset == 0.0f && OutputTextBox.ViewportHeight >= OutputTextBox.ExtentHeight ||
-				OutputTextBox.VerticalOffset + OutputTextBox.ViewportHeight == OutputTextBox.ExtentHeight)
-			{
-				OutputTextBox.ScrollToEnd();
-			}
-		}
-
-		private void OnHyperlinkClicked(object sender, RequestNavigateEventArgs e)
-		{
-			if(e.Uri.IsFile)
-			{
-				OpenExplorerSelectFile(e.Uri.ToString());
-			}
-			else
-			{
-				Process.Start("explorer.exe", e.Uri.ToString());
-			}
-		}
-
-		private void OnClearOutputTextClicked(object sender, RoutedEventArgs e)
-		{
-			ClearConsole();
-		}
-
-		// =====================================================
 		// Visualization
 		// =====================================================
 
@@ -248,6 +154,9 @@ namespace uTinyRipperGUI
 					IntroText.Text = "Files has been loaded";
 					ExportButton.Visibility = Visibility.Visible;
 
+					Fileview.AddItem(GameStructure.FileCollection);
+					Fileview.Refresh();
+
 #if VIRTUAL
 					ButtonAutomationPeer peer = new ButtonAutomationPeer(ExportButton);
 					IInvokeProvider invokeProv = peer.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
@@ -352,6 +261,10 @@ namespace uTinyRipperGUI
 			}
 		}
 
+		// =====================================================
+		// Callbacks
+		// =====================================================
+
 		private static void OpenExplorerSelectFile(string path)
 		{
 			string argument = $"/e, /select, \"{path}\"";
@@ -384,18 +297,130 @@ namespace uTinyRipperGUI
 
 		private void OnExportStarted()
 		{
-			Dispatcher.Invoke(() => StatusText.Text = "Status: exporting...");
+			Dispatcher.Invoke(() =>
+			{
+				StatusText.Text = "Status: exporting...";
+				Progress.Value = 0.0;
+				Progress.Visibility = Visibility.Visible;
+			});
 		}
 
 		private void OnExportProgressUpdated(int index, int count)
 		{
-			Dispatcher.InvokeAsync(() => StatusText.Text = $"Status: exporting... {index}/{count} - {((float)index / (float)count) * 100.0f:0.00}%");
+			Dispatcher.InvokeAsync(() =>
+			{
+				double progress = ((double)index / count) * 100.0;
+				StatusText.Text = $"Status: exporting... {index}/{count} - {progress:0.00}%";
+				Progress.Value = progress;
+			});
 		}
 
 		private void OnExportFinished()
 		{
-			Dispatcher.InvokeAsync(() => StatusText.Text = "Status: export finished");
+			Dispatcher.InvokeAsync(() =>
+			{
+				StatusText.Text = "Status: export finished";
+				Progress.Visibility = Visibility.Hidden;
+			});
 		}
+
+		// =====================================================
+		// Form callbacks
+		// =====================================================
+
+		private void OnDataDroped(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+			{
+				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				e.Handled = ProcessInputFiles(files);
+			}
+		}
+
+		private void OnExportButtonClicked(object sender, RoutedEventArgs e)
+		{
+			while (true)
+			{
+				System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog();
+				folderDialog.ShowNewFolderButton = true;
+				folderDialog.Description = $"Select export folder. New folder '{GameStructure.Name}' will be created inside selected one";
+#if VIRTUAL
+				System.Windows.Forms.DialogResult result = System.Windows.Forms.DialogResult.OK;
+#else
+				System.Windows.Forms.DialogResult result = folderDialog.ShowDialog();
+#endif
+				if (result == System.Windows.Forms.DialogResult.OK)
+				{
+					string path = Path.Combine(folderDialog.SelectedPath, GameStructure.Name);
+					if (Directory.Exists(path))
+					{
+						if (Directory.EnumerateFiles(path).Any())
+						{
+							MessageBoxResult mbresult = MessageBox.Show(this, "There are files inside selected folder. They will be deleted.",
+								"Are you sure?", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+							if (mbresult == MessageBoxResult.Cancel)
+							{
+								continue;
+							}
+						}
+					}
+
+					IntroText.Text = "Exporting assets...";
+					ExportButton.Visibility = Visibility.Hidden;
+
+					ThreadPool.QueueUserWorkItem(new WaitCallback(ExportFiles), path);
+				}
+				break;
+			}
+		}
+
+		private void OnPostExportButtonClicked(object sender, RoutedEventArgs e)
+		{
+			OpenExplorerSelectFile(m_exportPath);
+		}
+
+		private void OnResetButtonClicked(object sender, RoutedEventArgs e)
+		{
+			Fileview.Clear();
+			IntroText.Text = m_initialIntroText;
+			StatusText.Text = m_initialStatusText;
+			MainGrid.AllowDrop = true;
+			PostExportButton.Visibility = Visibility.Hidden;
+			ResetButton.Visibility = Visibility.Hidden;
+			m_processingFiles = null;
+
+			GameStructure.Dispose();
+		}
+
+		private void OnOutputTextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+		{
+			if (OutputTextBox.VerticalOffset == 0.0f && OutputTextBox.ViewportHeight >= OutputTextBox.ExtentHeight ||
+				OutputTextBox.VerticalOffset + OutputTextBox.ViewportHeight == OutputTextBox.ExtentHeight)
+			{
+				OutputTextBox.ScrollToEnd();
+			}
+		}
+
+		private void OnHyperlinkClicked(object sender, RequestNavigateEventArgs e)
+		{
+			if (e.Uri.IsFile)
+			{
+				OpenExplorerSelectFile(e.Uri.ToString());
+			}
+			else
+			{
+				Process.Start("explorer.exe", e.Uri.ToString());
+			}
+		}
+
+		private void OnClearOutputTextClicked(object sender, RoutedEventArgs e)
+		{
+			ClearConsole();
+		}
+
+		// =====================================================
+		// Properties
+		// =====================================================
 
 		private GameStructure GameStructure
 		{
@@ -425,6 +450,7 @@ namespace uTinyRipperGUI
 				}
 			}
 		}
+
 
 		private const string IssuePage = "https://github.com/mafaca/UtinyRipper/issues";
 

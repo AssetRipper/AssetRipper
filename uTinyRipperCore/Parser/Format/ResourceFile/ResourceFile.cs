@@ -1,8 +1,7 @@
 using System;
 using System.IO;
-using uTinyRipper.ResourceFiles;
 
-namespace uTinyRipper
+namespace uTinyRipper.ResourceFiles
 {
 	public class ResourceFile : IResourceFile, IDisposable
 	{
