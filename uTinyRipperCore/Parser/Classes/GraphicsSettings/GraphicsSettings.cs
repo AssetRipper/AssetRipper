@@ -863,8 +863,7 @@ namespace uTinyRipper.Classes
 			if (!shaderNames.Contains(name))
 			{
 				EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(name, container.ExportVersion);
-				ExportPointer pointer = new ExportPointer(buildInAsset.ExportID, buildInAsset.GUID, AssetType.Internal);
-				node.Add(pointer.ExportYAML(container));
+				node.Add(buildInAsset.ToExportPointer().ExportYAML(container));
 			}
 		}
 

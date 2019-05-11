@@ -16,6 +16,7 @@ namespace uTinyRipper.SerializedFiles
 		FG_5unknown		= 16,
 		FG_550_2018		= 17,
 		FG_2019aunk		= 18,
-		FG_2019_x		= 19,
+		FG_20191		= 19,
+		FG_20192_x		= 20,
 	}
 }

@@ -134,8 +134,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 			}
 
 			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(EngineBuiltInAssets.TerrainBillboardWavingDoublePass, container.ExportVersion);
-			ExportPointer pointer = new ExportPointer(buildInAsset.ExportID, buildInAsset.GUID, AssetType.Internal);
-			return pointer.ExportYAML(container);
+			return buildInAsset.ToExportPointer().ExportYAML(container);
 		}
 		private YAMLNode ExportDetailMeshLitShader(IExportContainer container)
 		{
@@ -145,8 +144,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 			}
 
 			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(EngineBuiltInAssets.TerrainVertexLit, container.ExportVersion);
-			ExportPointer pointer = new ExportPointer(buildInAsset.ExportID, buildInAsset.GUID, AssetType.Internal);
-			return pointer.ExportYAML(container);
+			return buildInAsset.ToExportPointer().ExportYAML(container);
 		}
 		private YAMLNode ExportDetailMeshGrassShader(IExportContainer container)
 		{
@@ -156,8 +154,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 			}
 
 			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(EngineBuiltInAssets.TerrainWavingDoublePass, container.ExportVersion);
-			ExportPointer pointer = new ExportPointer(buildInAsset.ExportID, buildInAsset.GUID, AssetType.Internal);
-			return pointer.ExportYAML(container);
+			return buildInAsset.ToExportPointer().ExportYAML(container);
 		}
 
 		public IReadOnlyList<DetailPatch> Patches => m_patches;

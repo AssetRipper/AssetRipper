@@ -27,6 +27,13 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(4, 2);
 		}
 		/// <summary>
+		/// 2019.2 and greater
+		/// </summary>
+		public static bool IsReadMipCount(Version version)
+		{
+			return version.IsGreaterEqual(2019, 2);
+		}
+		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
 		public static bool IsReadColorFormat(Version version)
@@ -129,6 +136,10 @@ namespace uTinyRipper.Classes
 			{
 				AntiAliasing = reader.ReadInt32();
 			}
+			if (IsReadMipCount(reader.Version))
+			{
+				MipCount = reader.ReadInt32();
+			}
 			DepthFormat = reader.ReadInt32();
 			if (IsReadColorFormat(reader.Version))
 			{
@@ -186,6 +197,10 @@ namespace uTinyRipper.Classes
 			node.Add(WidthName, Width);
 			node.Add(HeightName, Height);
 			node.Add(AntiAliasingName, AntiAliasing);
+			if (IsReadMipCount(container.ExportVersion))
+			{
+				node.Add(MipCountName, MipCount);
+			}
 			node.Add(DepthFormatName, DepthFormat);
 			node.Add(ColorFormatName, (int)ColorFormat);
 			node.Add(MipMapName, MipMap);
@@ -214,6 +229,7 @@ namespace uTinyRipper.Classes
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 		public int AntiAliasing { get; private set; }
+		public int MipCount { get; private set; }
 		/// <summary>
 		/// Depth previously
 		/// </summary>
@@ -232,6 +248,7 @@ namespace uTinyRipper.Classes
 		public const string WidthName = "m_Width";
 		public const string HeightName = "m_Height";
 		public const string AntiAliasingName = "m_AntiAliasing";
+		public const string MipCountName = "m_MipCount";
 		public const string DepthFormatName = "m_DepthFormat";
 		public const string ColorFormatName = "m_ColorFormat";
 		public const string MipMapName = "m_MipMap";

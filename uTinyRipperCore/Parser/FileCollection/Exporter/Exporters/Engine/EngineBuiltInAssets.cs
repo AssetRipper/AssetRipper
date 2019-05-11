@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using uTinyRipper.AssetExporters.Classes;
 using uTinyRipper.Classes;
 
 namespace uTinyRipper.AssetExporters
@@ -11,6 +12,11 @@ namespace uTinyRipper.AssetExporters
 			ExportID = exportID;
 			Parameter = parameter;
 			m_isF = isF;
+		}
+
+		public ExportPointer ToExportPointer()
+		{
+			return new ExportPointer(ExportID, GUID, AssetType.Internal);
 		}
 
 		public EngineGUID GUID => m_isF ? EngineBuiltInAssets.FGUID : EngineBuiltInAssets.EGUID;
@@ -198,6 +204,9 @@ namespace uTinyRipper.AssetExporters
 			AddMaterial("Default-Skybox", 10304, true);
 			AddMaterial("Default-Line", 10306, true);
 			AddMaterial("Default-ParticleSystem", 10308, true);
+			AddMaterial(DefaultTerrainDiffuseName, 10650, true);
+			AddMaterial(DefaultTerrainSpecularName, 10651, true);
+			AddMaterial(DefaultTerrainStandardName, 10652, true);
 			AddMaterial("Sprites-Default", 10754, false);
 			AddMaterial("Sprites-Mask", 10758, false);
 			AddMaterial("SpatialMappingOcclusion", 15302, true);
@@ -396,6 +405,8 @@ namespace uTinyRipper.AssetExporters
 			AddShader("Hidden/TerrainEngine/TerrainLayerUtils", 18003, true);
 			AddShader("Hidden/TerrainEngine/BrushPreview", 18004, true);
 			AddShader("Hidden/TerrainEngine/CrossBlendNeighbors", 18005, true);
+			AddShader("Hidden/TextCore/Distance Field", 19010, true);
+			AddShader("Hidden/TextCore/Distance Field SSD", 19011, true);
 
 			AddSprite("Checkmark", 10901, true);
 			AddSprite("UISprite", 10905, true);
@@ -751,6 +762,9 @@ namespace uTinyRipper.AssetExporters
 		}
 
 		public const string FontMaterialName = "Font Material";
+		public const string DefaultTerrainDiffuseName = "Default-Terrain-Diffuse";
+		public const string DefaultTerrainSpecularName = "Default-Terrain-Specular";
+		public const string DefaultTerrainStandardName = "Default-Terrain-Standard";
 
 		public const string LegacyDiffuse = "Legacy Shaders/Diffuse";
 		public const string SpriteDefault = "Sprites/Default";

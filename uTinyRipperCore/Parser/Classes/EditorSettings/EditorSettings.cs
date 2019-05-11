@@ -134,19 +134,38 @@ namespace uTinyRipper.Classes
 		{
 			return version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 6);
 		}
-
+		/// <summary>
+		/// 2019.2 and greater
+		/// </summary>
+		public static bool IsReadShowLightmapResolutionOverlay(Version version)
+		{
+			return version.IsGreaterEqual(2019, 2);
+		}
+		
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		private static bool IsAlign(Version version)
+		private static bool IsAlign1(Version version)
 		{
 			return version.IsGreaterEqual(2018, 2);
+		}
+		/// <summary>
+		/// 2019.2 and greater
+		/// </summary>
+		private static bool IsAlign2(Version version)
+		{
+			return version.IsGreaterEqual(2019, 2);
 		}
 
 		private static int GetSerializedVersion(Version version)
 		{
+			// 'asmref' has been added to default ProjectGenerationIncludedExtensions
+			if (version.IsGreaterEqual(2019, 2))
+			{
+				return 8;
+			}
 			// LineEndingsForNewScripts default value changed (Unix to OSNative)
-			if (Config.IsExportTopmostSerializedVersion || version.IsGreaterEqual(2017, 3))
+			if (version.IsGreaterEqual(2017, 3))
 			{
 				return 7;
 			}
@@ -285,7 +304,16 @@ namespace uTinyRipper.Classes
 			{
 				AsyncShaderCompilation = reader.ReadBoolean();
 			}
-			if (IsAlign(reader.Version))
+			if (IsAlign1(reader.Version))
+			{
+				reader.AlignStream(AlignType.Align4);
+			}
+
+			if (IsReadShowLightmapResolutionOverlay(reader.Version))
+			{
+				ShowLightmapResolutionOverlay = reader.ReadBoolean();
+			}
+			if (IsAlign2(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
@@ -294,7 +322,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(ExternalVersionControlSupportName, ExternalVersionControlSupport);
 			node.Add(SerializationModeName, (int)SerializationMode);
 			node.Add(LineEndingsForNewScriptsName, (int)LineEndingsForNewScripts);
@@ -329,6 +357,10 @@ namespace uTinyRipper.Classes
 			{
 				node.Add(AsyncShaderCompilationName, GetAsyncShaderCompilation(container.Version));
 			}
+			if (IsReadShowLightmapResolutionOverlay(container.ExportVersion))
+			{
+				node.Add(ShowLightmapResolutionOverlayName, GetShowLightmapResolutionOverlay(container.Version));
+			}
 			return node;
 		}
 
@@ -354,7 +386,8 @@ namespace uTinyRipper.Classes
 		}
 		private string GetProjectGenerationIncludedExtensions(Version version)
 		{
-			return IsReadProjectGenerationIncludedExtensions(version) ? ProjectGenerationIncludedExtensions : DefaultExtensions;
+			string exts = IsReadProjectGenerationIncludedExtensions(version) ? ProjectGenerationIncludedExtensions : DefaultExtensions;
+			return GetSerializedVersion(version) < 8 ? exts : $"{exts};{AsmrefExtension}";
 		}
 		private string GetProjectGenerationRootNamespace(Version version)
 		{
@@ -380,6 +413,10 @@ namespace uTinyRipper.Classes
 		{
 			return IsReadAsyncShaderCompilation(version) ? AsyncShaderCompilation : true;
 		}
+		private bool GetShowLightmapResolutionOverlay(Version version)
+		{
+			return IsReadShowLightmapResolutionOverlay(version) ? ShowLightmapResolutionOverlay : true;
+		}
 
 		public string ExternalVersionControlSupport { get; private set; }
 		public SerializationMode SerializationMode { get; private set; }
@@ -399,6 +436,7 @@ namespace uTinyRipper.Classes
 		public bool EnableTextureStreamingInEditMode { get; private set; }
 		public bool EnableTextureStreamingInPlayMode { get; private set; }
 		public bool AsyncShaderCompilation { get; private set; }
+		public bool ShowLightmapResolutionOverlay { get; private set; }
 
 		public const string ExternalVersionControlSupportName = "m_ExternalVersionControlSupport";
 		public const string SerializationModeName = "m_SerializationMode";
@@ -419,12 +457,14 @@ namespace uTinyRipper.Classes
 		public const string EnableTextureStreamingInEditModeName = "m_EnableTextureStreamingInEditMode";
 		public const string EnableTextureStreamingInPlayModeName = "m_EnableTextureStreamingInPlayMode";
 		public const string AsyncShaderCompilationName = "m_AsyncShaderCompilation";
+		public const string ShowLightmapResolutionOverlayName = "m_ShowLightmapResolutionOverlay";
 
 		public PPtr<SceneAsset> PrefabRegularEnvironment;
 		public PPtr<SceneAsset> PrefabUIEnvironment;
 		public CollabEditorSettings CollabEditorSettings;
 
 		private const string DefaultExtensions = "txt;xml;fnt;cd;asmdef;rsp";
+		private const string AsmrefExtension = "asmref";
 		private const string HiddenMeta = "Hidden Meta Files";
 		private const string VisibleMeta = "Visible Meta Files";
 	}

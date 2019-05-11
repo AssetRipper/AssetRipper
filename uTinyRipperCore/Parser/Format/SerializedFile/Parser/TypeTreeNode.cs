@@ -24,7 +24,7 @@ namespace uTinyRipper.SerializedFiles
 		/// </summary>
 		public static bool IsReadUnknown(FileGeneration generation)
 		{
-			return generation >= FileGeneration.FG_2019_x;
+			return generation >= FileGeneration.FG_20191;
 		}
 
 		public void Read(SerializedFileReader reader)

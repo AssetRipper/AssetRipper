@@ -4,6 +4,7 @@ using uTinyRipper.Classes.Renderers;
 using uTinyRipper.Classes.Terrains;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.AssetExporters.Classes;
 
 namespace uTinyRipper.Classes
 {
@@ -43,6 +44,14 @@ namespace uTinyRipper.Classes
 		{
 			// unknown version
 			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		}
+		/// <summary>
+		/// 5.0.0f1 to 2019.2 exclusive
+		/// </summary>
+		public static bool IsReadMaterialType(Version version)
+		{
+			// unknown bottom version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(2019, 2);
 		}
 		/// <summary>
 		/// 5.0.0f1 to 5.0.1 exclusive
@@ -123,6 +132,11 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
+			// MaterialType has been replaced by actual shaders
+			if (version.IsGreaterEqual(2019, 2))
+			{
+				return 5;
+			}
 			// CastShadows has been converted to ShadowCastingMode
 			if (version.IsGreaterEqual(2019))
 			{
@@ -175,6 +189,9 @@ namespace uTinyRipper.Classes
 			if (IsReadReflectionProbeUsage(reader.Version))
 			{
 				ReflectionProbeUsage = (ReflectionProbeUsage)reader.ReadInt32();
+			}
+			if (IsReadMaterialType(reader.Version))
+			{
 				MaterialType = (MaterialType)reader.ReadInt32();
 				LegacySpecular.Read(reader);
 				LegacyShininess = reader.ReadSingle();
@@ -273,10 +290,13 @@ namespace uTinyRipper.Classes
 			}
 			node.Add(DrawTreesAndFoliageName, DrawTreesAndFoliage);
 			node.Add(ReflectionProbeUsageName, (int)ReflectionProbeUsage);
-			node.Add(MaterialTypeName, (int)MaterialType);
-			node.Add(LegacySpecularName, LegacySpecular.ExportYAML(container));
-			node.Add(LegacyShininessName, LegacyShininess);
-			node.Add(MaterialTemplateName, MaterialTemplate.ExportYAML(container));
+			if (IsReadMaterialType(container.ExportVersion))
+			{
+				node.Add(MaterialTypeName, (int)GetMaterialType(container.Version));
+				node.Add(LegacySpecularName, LegacySpecular.ExportYAML(container));
+				node.Add(LegacyShininessName, LegacyShininess);
+			}
+			node.Add(MaterialTemplateName, ExportMaterialTemplate(container));
 			node.Add(BakeLightProbesForTreesName, BakeLightProbesForTrees);
 			if (IsReadPreserveTreePrototypeLayers(container.ExportVersion))
 			{
@@ -297,6 +317,43 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
+		private MaterialType GetMaterialType(Version version)
+		{
+			if (GetSerializedVersion(version) > 2)
+			{
+				return MaterialType;
+			}
+			return MaterialType == MaterialType.BuiltInStandard ? MaterialType.BuiltInLegacyDiffuse : MaterialType.Custom;
+		}
+		private YAMLNode ExportMaterialTemplate(IExportContainer container)
+		{
+			if (GetSerializedVersion(container.ExportVersion) < 5)
+			{
+				return MaterialTemplate.ExportYAML(container);
+			}
+			if (GetSerializedVersion(container.Version) >= 5)
+			{
+				return MaterialTemplate.ExportYAML(container);
+			}
+
+			MaterialType type = GetMaterialType(container.Version);
+			if (type == MaterialType.BuiltInStandard)
+			{
+				EngineBuiltInAsset asset = EngineBuiltInAssets.GetMaterial(EngineBuiltInAssets.DefaultTerrainStandardName, container.ExportVersion);
+				return asset.ToExportPointer().ExportYAML(container);
+			}
+			if (type == MaterialType.BuiltInLegacyDiffuse)
+			{
+				EngineBuiltInAsset asset = EngineBuiltInAssets.GetMaterial(EngineBuiltInAssets.DefaultTerrainDiffuseName, container.ExportVersion);
+				return asset.ToExportPointer().ExportYAML(container);
+			}
+			if (type == MaterialType.BuiltInLegacySpecular)
+			{
+				EngineBuiltInAsset asset = EngineBuiltInAssets.GetMaterial(EngineBuiltInAssets.DefaultTerrainSpecularName, container.ExportVersion);
+				return asset.ToExportPointer().ExportYAML(container);
+			}
+			return MaterialTemplate.ExportYAML(container);
+		}
 		private bool GetDeringLightProbesForTrees(Version version, TransferInstructionFlags flags)
 		{
 			return IsReadDeringLightProbesForTrees(version, flags) ? DeringLightProbesForTrees : true;

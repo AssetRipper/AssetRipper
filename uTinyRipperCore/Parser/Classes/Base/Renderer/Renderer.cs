@@ -182,6 +182,13 @@ namespace uTinyRipper.Classes
 			return !flags.IsRelease() && version.IsGreaterEqual(3);
 		}
 		/// <summary>
+		/// 2019.2 and greater and Not Release
+		/// </summary>
+		public static bool IsReadReceiveGI(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(2019, 2);
+		}
+		/// <summary>
 		/// 5.0.0f1 and greater and Not Release
 		/// </summary>
 		public static bool IsReadPreserveUVs(Version version, TransferInstructionFlags flags)
@@ -482,6 +489,10 @@ namespace uTinyRipper.Classes
 			{
 				ScaleInLightmap = reader.ReadSingle();
 			}
+			if (IsReadReceiveGI(reader.Version, reader.Flags))
+			{
+				ReceiveGI = (ReceiveGI)reader.ReadInt32();
+			}
 			if (IsReadPreserveUVs(reader.Version, reader.Flags))
 			{
 				PreserveUVs = reader.ReadBoolean();
@@ -600,6 +611,10 @@ namespace uTinyRipper.Classes
 			node.Add(ProbeAnchorName, ProbeAnchor.ExportYAML(container));
 			node.Add(LightProbeVolumeOverrideName, LightProbeVolumeOverride.ExportYAML(container));
 			node.Add(ScaleInLightmapName, GetScaleInLightmap(container.Version, container.Flags));
+			if (IsReadReceiveGI(container.ExportVersion, container.ExportFlags))
+			{
+				node.Add(ReceiveGIName, (int)GetReceiveGI(container.Version, container.Flags));
+			}
 			node.Add(PreserveUVsName, GetPreserveUVs(container.Version, container.Flags));
 			node.Add(IgnoreNormalsForChartDetectionName, GetIgnoreNormalsForChartDetection(container.Version, container.Flags));
 			node.Add(ImportantGIName, GetImportantGI(container.Version, container.Flags));
@@ -652,6 +667,16 @@ namespace uTinyRipper.Classes
 			}
 #endif
 			return 1.0f;
+		}
+		private ReceiveGI GetReceiveGI(Version version, TransferInstructionFlags flags)
+		{
+#if UNIVERSAL
+			if (IsReadReceiveGI(version, flags))
+			{
+				return ReceiveGI;
+			}
+#endif
+			return ReceiveGI.Lightmaps;
 		}
 		private bool GetPreserveUVs(Version version, TransferInstructionFlags flags)
 		{
@@ -759,6 +784,7 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<uint> SubsetIndices => m_subsetIndices;
 #if UNIVERSAL
 		public float ScaleInLightmap { get; private set; }
+		public ReceiveGI ReceiveGI { get; private set; }
 		public bool PreserveUVs { get; private set; }
 		public bool IgnoreNormalsForChartDetection { get; private set; }
 		public bool ImportantGI { get; private set; }
@@ -791,6 +817,7 @@ namespace uTinyRipper.Classes
 		public const string ProbeAnchorName = "m_ProbeAnchor";
 		public const string LightProbeVolumeOverrideName = "m_LightProbeVolumeOverride";
 		public const string ScaleInLightmapName = "m_ScaleInLightmap";
+		public const string ReceiveGIName = "m_ReceiveGI";
 		public const string PreserveUVsName = "m_PreserveUVs";
 		public const string IgnoreNormalsForChartDetectionName = "m_IgnoreNormalsForChartDetection";
 		public const string ImportantGIName = "m_ImportantGI";

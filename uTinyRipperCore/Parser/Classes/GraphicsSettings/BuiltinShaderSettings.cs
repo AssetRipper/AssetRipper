@@ -33,8 +33,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(ModeName, (int)BuiltinShaderMode.Builtin);
 			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(shaderName, container.ExportVersion);
-			ExportPointer pointer = new ExportPointer(buildInAsset.ExportID, buildInAsset.GUID, AssetType.Internal);
-			node.Add(ShaderName, pointer.ExportYAML(container));
+			node.Add(ShaderName, buildInAsset.ToExportPointer().ExportYAML(container));
 			return node;
 		}
 

@@ -76,8 +76,13 @@ namespace uTinyRipper.SerializedFiles
 			}
 
 #warning TEMP HACK
-			Flags &= Metadata.Hierarchy.Platform == Platform.NoTarget ? ~DefaultFlags : ~TransferInstructionFlags.NoTransferInstructionFlags;
+			Flags = Metadata.Hierarchy.Platform == Platform.NoTarget ? TransferInstructionFlags.NoTransferInstructionFlags : Flags;
+			if (FilenameUtils.IsEngineResource(Name))
+			{
+				Flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
+			}
 			Flags |= Header.SwapEndianess ? TransferInstructionFlags.SwapEndianess : TransferInstructionFlags.NoTransferInstructionFlags;
+
 		}
 
 		public TransferInstructionFlags Flags { get; private set; }

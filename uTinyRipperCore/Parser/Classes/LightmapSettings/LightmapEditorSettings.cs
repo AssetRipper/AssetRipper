@@ -52,6 +52,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			PVRFilteringAtrousPositionSigmaAO = 1.0f;
 			ShowResolutionOverlay = true;
 			ExportTrainingData = false;
+			TrainingDataDestination = TrainingDataName;
 		}
 
 		/// <summary>
@@ -76,6 +77,13 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			return version.IsGreaterEqual(2019);
 		}
 		/// <summary>
+		/// Less than 2019.2
+		/// </summary>
+		public static bool IsReadShowResolutionOverlay(Version version)
+		{
+			return version.IsLess(2019, 2);
+		}
+		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
 		public static bool IsReadPVREnvironmentMIS(Version version)
@@ -88,6 +96,13 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		public static bool IsReadExportTrainingData(Version version)
 		{
 			return version.IsGreaterEqual(2019);
+		}
+		/// <summary>
+		/// 2019.2 and greater
+		/// </summary>
+		public static bool IsReadTrainingDataDestination(Version version)
+		{
+			return version.IsGreaterEqual(2019, 2);
 		}
 
 		private static int GetSerializedVersion(Version version)
@@ -225,13 +240,20 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			PVRFilteringAtrousPositionSigmaDirect = reader.ReadSingle();
 			PVRFilteringAtrousPositionSigmaIndirect = reader.ReadSingle();
 			PVRFilteringAtrousPositionSigmaAO = reader.ReadSingle();
-			ShowResolutionOverlay = reader.ReadBoolean();
+			if (IsReadShowResolutionOverlay(reader.Version))
+			{
+				ShowResolutionOverlay = reader.ReadBoolean();
+			}
 			reader.AlignStream(AlignType.Align4);
 
 			if (IsReadExportTrainingData(reader.Version))
 			{
 				ExportTrainingData = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);
+			}
+			if (IsReadTrainingDataDestination(reader.Version))
+			{
+				TrainingDataDestination = reader.ReadString();
 			}
 		}
 
@@ -303,10 +325,17 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			node.Add(PVRFilteringAtrousPositionSigmaDirectName, PVRFilteringAtrousPositionSigmaDirect);
 			node.Add(PVRFilteringAtrousPositionSigmaIndirectName, PVRFilteringAtrousPositionSigmaIndirect);
 			node.Add(PVRFilteringAtrousPositionSigmaAOName, PVRFilteringAtrousPositionSigmaAO);
-			node.Add(ShowResolutionOverlayName, ShowResolutionOverlay);
+			if (IsReadShowResolutionOverlay(container.ExportVersion))
+			{
+				node.Add(ShowResolutionOverlayName, ShowResolutionOverlay);
+			}
 			if (IsReadExportTrainingData(container.ExportVersion))
 			{
 				node.Add(ExportTrainingDataName, ExportTrainingData);
+			}
+			if (IsReadTrainingDataDestination(container.ExportVersion))
+			{
+				node.Add(TrainingDataDestinationName, GetTrainingDataDestination(container.Version));
 			}
 			return node;
 		}
@@ -401,6 +430,10 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			}
 			return PVRFilteringGaussRadiusAO;
 		}
+		private string GetTrainingDataDestination(Version version)
+		{
+			return IsReadTrainingDataDestination(version) ? TrainingDataDestination : TrainingDataName;
+		}
 
 		public float Resolution { get; private set; }
 		public float BakeResolution { get; private set; }
@@ -445,6 +478,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		public float PVRFilteringAtrousPositionSigmaAO { get; private set; }
 		public bool ShowResolutionOverlay { get; private set; }
 		public bool ExportTrainingData { get; private set; }
+		public string TrainingDataDestination { get; private set; }
 
 		public const string ResolutionName = "m_Resolution";
 		public const string BakeResolutionName = "m_BakeResolution";
@@ -489,5 +523,8 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		public const string PVRFilteringAtrousPositionSigmaAOName = "m_PVRFilteringAtrousPositionSigmaAO";
 		public const string ShowResolutionOverlayName = "m_ShowResolutionOverlay";
 		public const string ExportTrainingDataName = "m_ExportTrainingData";
+		public const string TrainingDataDestinationName = "m_TrainingDataDestination";
+
+		private const string TrainingDataName = "TrainingData";
 	}
 }

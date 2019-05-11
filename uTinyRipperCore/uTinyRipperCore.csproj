@@ -147,6 +147,7 @@
     <Compile Include="Parser\Classes\Avatar\SkeletonBoneLimit.cs" />
     <Compile Include="Parser\Classes\Base\GUIElement.cs" />
     <Compile Include="Parser\Classes\Base\Object\HideFlags.cs" />
+    <Compile Include="Parser\Classes\Base\Renderer\ReceiveGI.cs" />
     <Compile Include="Parser\Classes\Camera\FieldOfViewAxis.cs" />
     <Compile Include="Parser\Classes\CanvasGroup.cs" />
     <Compile Include="Parser\Classes\GUITexture.cs" />
