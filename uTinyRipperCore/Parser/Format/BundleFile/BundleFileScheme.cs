@@ -202,10 +202,10 @@ namespace uTinyRipper.BundleFiles
 			switch (Header.Type)
 			{
 				case BundleType.UnityRaw:
-					baseOffset = 0;
+					baseOffset = Header.HeaderSize;
 					break;
 				case BundleType.UnityWeb:
-					baseOffset = Header.MetadataDecompressedSize;
+					baseOffset = 0;
 					break;
 
 				default:
