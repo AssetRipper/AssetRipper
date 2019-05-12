@@ -401,7 +401,7 @@ namespace uTinyRipper.SerializedFiles
 #if !DEBUG
 				catch (Exception ex)
 				{
-					throw new SerializedFileException($"Error during reading asset type {asset.ClassID}", ex, Version, Name, FilePath);
+					throw new SerializedFileException($"Error during reading of asset type {asset.ClassID}", ex, Version, Platform, asset.ClassID, Name, FilePath);
 				}
 #endif
 
@@ -422,13 +422,13 @@ namespace uTinyRipper.SerializedFiles
 #if !DEBUG
 				catch (Exception ex)
 				{
-					throw new SerializedFileException($"Error during reading asset type {asset.ClassID}", ex, Version, Name, FilePath);
+					throw new SerializedFileException($"Error during reading of asset type {asset.ClassID}", ex, Version, Platform, asset.ClassID, Name, FilePath);
 				}
 #endif
 				long read = reader.BaseStream.Position - offset;
 				if (read != size)
 				{
-					throw new SerializedFileException($"Read {read} but expected {size} for asset type {asset.ClassID}", Version, Name, FilePath);
+					throw new SerializedFileException($"Read {read} but expected {size} for asset type {asset.ClassID}", Version, Platform, asset.ClassID, Name, FilePath);
 				}
 			}
 			return asset;

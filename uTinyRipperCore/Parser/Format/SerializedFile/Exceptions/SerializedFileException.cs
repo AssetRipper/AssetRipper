@@ -5,7 +5,7 @@ namespace uTinyRipper.SerializedFiles
 {
 	public sealed class SerializedFileException : Exception
 	{
-		public SerializedFileException(string message, Version version, string fileName, string filePath):
+		public SerializedFileException(string message, Version version, Platform platform, ClassIDType assetType, string fileName, string filePath):
 			base(message)
 		{
 			if (string.IsNullOrEmpty(fileName))
@@ -18,11 +18,13 @@ namespace uTinyRipper.SerializedFiles
 			}
 
 			Version = version;
+			Platform = platform;
+			AssetType = assetType;
 			FileName = fileName;
 			FilePath = filePath;
 		}
 
-		public SerializedFileException(string message, Exception innerException, Version version, string fileName, string filePath):
+		public SerializedFileException(string message, Exception innerException, Version version, Platform platform, ClassIDType assetType, string fileName, string filePath):
 			base(message, innerException)
 		{
 			if (string.IsNullOrEmpty(fileName))
@@ -35,6 +37,8 @@ namespace uTinyRipper.SerializedFiles
 			}
 
 			Version = version;
+			Platform = platform;
+			AssetType = assetType;
 			FileName = fileName;
 			FilePath = filePath;
 		}
@@ -44,8 +48,10 @@ namespace uTinyRipper.SerializedFiles
 			StringBuilder sb = new StringBuilder();
 			sb.Append("SerializedFileException:");
 			sb.Append(" v:").Append(Version.ToString());
-			sb.Append(" n:").Append(FileName);
-			sb.Append(" p:").Append(FilePath).AppendLine();
+			sb.Append(" p:").Append(Platform.ToString());
+			sb.Append(" t:").Append(AssetType.ToString());
+			sb.Append(" n:").Append(FileName).AppendLine();
+			sb.Append("Path:").Append(FilePath).AppendLine();
 			sb.Append("Message: ").Append(Message).AppendLine();
 			if(InnerException != null)
 			{
@@ -56,6 +62,8 @@ namespace uTinyRipper.SerializedFiles
 		}
 
 		public Version Version { get; }
+		public Platform Platform { get; }
+		public ClassIDType AssetType { get; }
 		public string FileName { get; }
 		public string FilePath { get; }
 	}

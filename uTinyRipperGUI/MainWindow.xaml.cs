@@ -4,16 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using System.Windows.Automation.Peers;
-using System.Windows.Automation.Provider;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Navigation;
 using uTinyRipper;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes;
 using uTinyRipper.SerializedFiles;
 using uTinyRipperGUI.Exporters;
+using uTinyRipperGUI.Windows;
 
 using Object = uTinyRipper.Classes.Object;
 using Version = uTinyRipper.Version;
@@ -35,35 +30,21 @@ namespace uTinyRipperGUI
 			InitializeComponent();
 
 			m_initialIntroText = IntroText.Text;
-			m_initialStatusText = StatusText.Text;
+			m_initialStatusText = (string)StatusText.Content;
 
 			string[] args = Environment.GetCommandLineArgs();
 			string[] files = args.Skip(1).ToArray();
 			ProcessInputFiles(files);
 		}
 
-		// =====================================================
-		// Visualization
-		// =====================================================
-
-		private void AddHyperlinkToConsole(string message, string linkName, string linkURL)
+		public static void OpenExplorerSelectFile(string path)
 		{
-			/*TextRange rangeOfText = new TextRange(OutputTextBox.Document.ContentEnd, OutputTextBox.Document.ContentEnd);
-			rangeOfText.Text = message;
-			rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.White);
-			rangeOfText.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
+			string argument = $"/e, /select, \"{path}\"";
 
-			rangeOfText = new TextRange(OutputTextBox.Document.ContentEnd, OutputTextBox.Document.ContentEnd);
-			rangeOfText.Text = linkName;
-			rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Blue);
-
-			Hyperlink link = new Hyperlink(rangeOfText.Start, rangeOfText.End);
-			link.IsEnabled = true;
-			link.NavigateUri = new Uri(linkURL);
-			link.RequestNavigate += OnHyperlinkClicked;
-
-			rangeOfText = new TextRange(OutputTextBox.Document.ContentEnd, OutputTextBox.Document.ContentEnd);
-			rangeOfText.Text = "\r";*/
+			ProcessStartInfo info = new ProcessStartInfo();
+			info.FileName = "explorer";
+			info.Arguments = argument;
+			Process.Start(info);
 		}
 
 		// =====================================================
@@ -72,7 +53,7 @@ namespace uTinyRipperGUI
 
 		private bool ProcessInputFiles(string[] files)
 		{
-			if(files.Length == 0)
+			if (files.Length == 0)
 			{
 				return false;
 			}
@@ -105,40 +86,27 @@ namespace uTinyRipperGUI
 		{
 			string[] files = (string[])data;
 
-#if !DEBUG
+//#if !DEBUG
 			try
-#endif
+//#endif
 			{
 				OnImportStarted();
 				GameStructure = GameStructure.Load(files);
 				Validate();
 				OnImportFinished();
 			}
-#if !DEBUG
-			catch(SerializedFileException ex)
+//#if !DEBUG
+			catch (SerializedFileException ex)
 			{
-				Dispatcher.Invoke(() =>
-				{
-					Logger.Log(LogType.Error, LogCategory.Import, ex.ToString());
-					AddHyperlinkToConsole("Go to: ", "Create issue", IssuePage);
-					AddHyperlinkToConsole("Attach file: ", ex.FileName, ex.FilePath);
-					MessageBox.Show(this, $"Please, create an issue on github page {IssuePage} with attached file '{ex.FilePath}'.",
-						"An error during loading process has occuered!", MessageBoxButton.OK, MessageBoxImage.Error);
-				});
+				ReportCrash(ex);
 				return;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
-				Dispatcher.Invoke(() =>
-				{
-					Logger.Log(LogType.Error, LogCategory.Import, ex.ToString());
-					AddHyperlinkToConsole("Go to: ", "Create issue", IssuePage);
-					MessageBox.Show(this, $"Please, create an issue on github page {IssuePage} with attached file that cause this error.",
-						"An error during loading process has occuered!", MessageBoxButton.OK, MessageBoxImage.Error);
-				});
+				ReportCrash(ex);
 				return;
 			}
-#endif
+//#endif
 
 			Dispatcher.Invoke(() =>
 				{
@@ -190,25 +158,12 @@ namespace uTinyRipperGUI
 #if !DEBUG
 			catch (SerializedFileException ex)
 			{
-				Logger.Log(LogType.Error, LogCategory.Import, ex.ToString());
-				Dispatcher.Invoke(() =>
-				{
-					AddHyperlinkToConsole("Go to: ", "Create issue", IssuePage);
-					AddHyperlinkToConsole("Attach file: ", ex.FileName, ex.FilePath);
-					MessageBox.Show(this, $"Please, create an issue on github page {IssuePage} with attached file '{ex.FilePath}'.",
-						"An error during export process has occuered!", MessageBoxButton.OK, MessageBoxImage.Error);
-				});
+				ReportCrash(ex);
 				return;
 			}
 			catch (Exception ex)
 			{
-				Logger.Log(LogType.Error, LogCategory.Import, ex.ToString());
-				Dispatcher.Invoke(() =>
-				{
-					AddHyperlinkToConsole("Go to: ", "Create issue", IssuePage);
-					MessageBox.Show(this, $"Please, create an issue on github page {IssuePage} with attached file that cause this error.",
-						"An error during loading process has occuered!", MessageBoxButton.OK, MessageBoxImage.Error);
-				});
+				ReportCrash(ex);
 				return;
 			}
 #endif
@@ -240,7 +195,7 @@ namespace uTinyRipperGUI
 		private void PrepareExportDirectory(string path)
 		{
 			string directory = Directory.GetCurrentDirectory();
-			if(!PermissionValidator.CheckAccess(directory))
+			if (!PermissionValidator.CheckAccess(directory))
 			{
 				string arguments = string.Join(" ", m_processingFiles.Select(t => $"\"{t}\""));
 				PermissionValidator.RestartAsAdministrator(arguments);
@@ -252,45 +207,68 @@ namespace uTinyRipperGUI
 			}
 		}
 
+		private void ReportCrash(SerializedFileException ex)
+		{
+			ReportCrash(ex.ToString());
+			Dispatcher.InvokeAsync(() =>
+			{
+				BugReportWindow window = new BugReportWindow();
+				window.Owner = this;
+				window.Fill(ex);
+				window.ShowDialog();
+			});
+		}
+
+		private void ReportCrash(Exception ex)
+		{
+			ReportCrash(ex.ToString());
+			Dispatcher.InvokeAsync(() =>
+			{
+				BugReportWindow window = new BugReportWindow();
+				window.Owner = this;
+				window.Fill(ex);
+				window.ShowDialog();
+			});
+		}
+
+		private void ReportCrash(string error)
+		{
+			Dispatcher.Invoke(() =>
+			{
+				StatusText.Content = "crashed";
+				Logger.Log(LogType.Error, LogCategory.Import, error);
+			});
+		}
+
 		// =====================================================
 		// Callbacks
 		// =====================================================
 
-		private static void OpenExplorerSelectFile(string path)
-		{
-			string argument = $"/e, /select, \"{path}\"";
-
-			ProcessStartInfo info = new ProcessStartInfo();
-			info.FileName = "explorer";
-			info.Arguments = argument;
-			Process.Start(info);
-		}
-
 		private void OnImportStarted()
 		{
-			Dispatcher.Invoke(() => StatusText.Text = "Status: importing...");
+			Dispatcher.Invoke(() => StatusText.Content = "importing...");
 		}
 
 		private void OnImportFinished()
 		{
-			Dispatcher.Invoke(() => StatusText.Text = "Status: import finished");
+			Dispatcher.Invoke(() => StatusText.Content = "import finished");
 		}
 
 		private void OnExportPreparationStarted()
 		{
-			Dispatcher.Invoke(() => StatusText.Text = "Status: analyzing assets...");
+			Dispatcher.Invoke(() => StatusText.Content = "analyzing assets...");
 		}
 
 		private void OnExportPreparationFinished()
 		{
-			Dispatcher.Invoke(() => StatusText.Text = "Status: analysis finished");
+			Dispatcher.Invoke(() => StatusText.Content = "analysis finished");
 		}
 
 		private void OnExportStarted()
 		{
 			Dispatcher.Invoke(() =>
 			{
-				StatusText.Text = "Status: exporting...";
+				StatusText.Content = "exporting...";
 				Progress.Value = 0.0;
 				Progress.Visibility = Visibility.Visible;
 			});
@@ -301,7 +279,7 @@ namespace uTinyRipperGUI
 			Dispatcher.InvokeAsync(() =>
 			{
 				double progress = ((double)index / count) * 100.0;
-				StatusText.Text = $"Status: exporting... {index}/{count} - {progress:0.00}%";
+				StatusText.Content = $"exporting... {index}/{count} - {progress:0.00}%";
 				Progress.Value = progress;
 			});
 		}
@@ -310,7 +288,7 @@ namespace uTinyRipperGUI
 		{
 			Dispatcher.InvokeAsync(() =>
 			{
-				StatusText.Text = "Status: export finished";
+				StatusText.Content = "export finished";
 				Progress.Visibility = Visibility.Hidden;
 			});
 		}
@@ -318,6 +296,13 @@ namespace uTinyRipperGUI
 		// =====================================================
 		// Form callbacks
 		// =====================================================
+
+		private void OnReportBugClicked(object sender, RoutedEventArgs e)
+		{
+			BugReportWindow window = new BugReportWindow();
+			window.Owner = this;
+			window.ShowDialog();
+		}
 
 		private void OnDataDroped(object sender, DragEventArgs e)
 		{
@@ -374,7 +359,7 @@ namespace uTinyRipperGUI
 		{
 			Fileview.Clear();
 			IntroText.Text = m_initialIntroText;
-			StatusText.Text = m_initialStatusText;
+			StatusText.Content = m_initialStatusText;
 			MainGrid.AllowDrop = true;
 			PostExportButton.Visibility = Visibility.Hidden;
 			ResetButton.Visibility = Visibility.Hidden;
@@ -382,18 +367,6 @@ namespace uTinyRipperGUI
 
 			GameStructure.Dispose();
 		}
-
-		/*private void OnHyperlinkClicked(object sender, RequestNavigateEventArgs e)
-		{
-			if (e.Uri.IsFile)
-			{
-				OpenExplorerSelectFile(e.Uri.ToString());
-			}
-			else
-			{
-				Process.Start("explorer.exe", e.Uri.ToString());
-			}
-		}*/
 
 		// =====================================================
 		// Properties
@@ -428,12 +401,9 @@ namespace uTinyRipperGUI
 			}
 		}
 
-
-		private const string IssuePage = "https://github.com/mafaca/UtinyRipper/issues";
-
 		private GameStructure m_gameStructure;
-		private string m_initialIntroText;
-		private string m_initialStatusText;
+		private readonly string m_initialIntroText;
+		private readonly string m_initialStatusText;
 		private string m_exportPath;
 		private string[] m_processingFiles;
 	}

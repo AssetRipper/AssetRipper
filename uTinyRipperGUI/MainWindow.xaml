@@ -7,9 +7,8 @@
 		xmlns:control = "clr-namespace:uTinyRipperGUI.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1000" MinHeight="300" MinWidth="500">
-    
-	
-    <Grid Name="MainGrid" Background="#FF363636" Drop="OnDataDroped" AllowDrop="true">
+
+	<Grid Name="MainGrid" Background="#FF363636" Drop="OnDataDroped" AllowDrop="true">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
@@ -54,6 +53,15 @@
 				<!--Background="#FF272727" Foreground="White"-->
 				<MenuItem Header="_Exit" InputGestureText="Alt+F4" Background="#FF272727"/>
 			</MenuItem>
+
+			<MenuItem Header="_Help" Foreground="White">
+				<MenuItem Header="_Check for Updates" Background="#FF272727"/>
+				<MenuItem Header="_Report a bug" Background="#FF272727"
+						  Click="OnReportBugClicked"/>
+				<Separator Background="#FF272727"/>
+				<MenuItem Header="_About" Background="#FF272727"/>
+			</MenuItem>
+
 		</Menu>
 
 		<Grid Grid.Row="1">
@@ -93,8 +101,19 @@
 		<GridSplitter Grid.Row="2" ResizeDirection="Rows" Height="16" Margin="0,2,0,0"
 					  VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="Transparent" />
 
-		<StatusBar Grid.Row="3" Background="#FF2B2B2B">
-			<TextBlock Name="StatusText" FontSize="14" Foreground="White" Text="Status: idle" />
+		<StatusBar Grid.Row="3" Background="#FF2B2B2B">	
+			<Grid Height="16" >
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+
+				<Label Grid.Column="0" FontSize="14" Foreground="White" Padding="0" Content="Status: "
+					   VerticalContentAlignment="Center" Margin="0,-2,0,2" />
+				<Label Grid.Column="1" Name="StatusText" FontSize="14" Foreground="White" Padding="0,0" Content="idle"
+					   VerticalContentAlignment="Center" Margin="0,-2,0,2"/>
+			</Grid>
+			
 			<StatusBarItem HorizontalAlignment="Right" Margin="0,0,4,0">
 				<ProgressBar Name="Progress" Value="50" Width="90" Height="16" Visibility="Hidden"/>
 			</StatusBarItem>
