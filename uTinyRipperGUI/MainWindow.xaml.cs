@@ -34,11 +34,8 @@ namespace uTinyRipperGUI
 		{
 			InitializeComponent();
 
-			Logger.Instance = new OutputLogger(OutputTextBox);
-
 			m_initialIntroText = IntroText.Text;
 			m_initialStatusText = StatusText.Text;
-			m_outputContentStart = new TextRange(OutputTextBox.Document.Blocks.FirstBlock.ElementEnd, OutputTextBox.Document.Blocks.FirstBlock.ElementEnd);
 
 			string[] args = Environment.GetCommandLineArgs();
 			string[] files = args.Skip(1).ToArray();
@@ -51,7 +48,7 @@ namespace uTinyRipperGUI
 
 		private void AddHyperlinkToConsole(string message, string linkName, string linkURL)
 		{
-			TextRange rangeOfText = new TextRange(OutputTextBox.Document.ContentEnd, OutputTextBox.Document.ContentEnd);
+			/*TextRange rangeOfText = new TextRange(OutputTextBox.Document.ContentEnd, OutputTextBox.Document.ContentEnd);
 			rangeOfText.Text = message;
 			rangeOfText.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.White);
 			rangeOfText.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
@@ -66,13 +63,7 @@ namespace uTinyRipperGUI
 			link.RequestNavigate += OnHyperlinkClicked;
 
 			rangeOfText = new TextRange(OutputTextBox.Document.ContentEnd, OutputTextBox.Document.ContentEnd);
-			rangeOfText.Text = "\r";
-		}
-
-		private void ClearConsole()
-		{
-			TextRange range = new TextRange(m_outputContentStart.Start, OutputTextBox.Document.ContentEnd);
-			range.Text = string.Empty;
+			rangeOfText.Text = "\r";*/
 		}
 
 		// =====================================================
@@ -392,16 +383,7 @@ namespace uTinyRipperGUI
 			GameStructure.Dispose();
 		}
 
-		private void OnOutputTextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-		{
-			if (OutputTextBox.VerticalOffset == 0.0f && OutputTextBox.ViewportHeight >= OutputTextBox.ExtentHeight ||
-				OutputTextBox.VerticalOffset + OutputTextBox.ViewportHeight == OutputTextBox.ExtentHeight)
-			{
-				OutputTextBox.ScrollToEnd();
-			}
-		}
-
-		private void OnHyperlinkClicked(object sender, RequestNavigateEventArgs e)
+		/*private void OnHyperlinkClicked(object sender, RequestNavigateEventArgs e)
 		{
 			if (e.Uri.IsFile)
 			{
@@ -411,12 +393,7 @@ namespace uTinyRipperGUI
 			{
 				Process.Start("explorer.exe", e.Uri.ToString());
 			}
-		}
-
-		private void OnClearOutputTextClicked(object sender, RoutedEventArgs e)
-		{
-			ClearConsole();
-		}
+		}*/
 
 		// =====================================================
 		// Properties
@@ -457,7 +434,6 @@ namespace uTinyRipperGUI
 		private GameStructure m_gameStructure;
 		private string m_initialIntroText;
 		private string m_initialStatusText;
-		private TextRange m_outputContentStart;
 		private string m_exportPath;
 		private string[] m_processingFiles;
 	}

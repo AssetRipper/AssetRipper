@@ -137,6 +137,9 @@
     <Compile Include="Controls\FileView.xaml.cs">
       <DependentUpon>FileView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\OutputView.xaml.cs">
+      <DependentUpon>OutputView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Exporters\Audio\AudioConverter.cs" />
     <Compile Include="Exporters\Shader\ShaderVulkanExporter.cs" />
     <Compile Include="Exporters\Texture\TextureConverter.cs" />
@@ -194,6 +197,9 @@
     <Compile Include="Utils\PermissionValidator.cs" />
     <Page Include="Controls\FileView.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\OutputView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">

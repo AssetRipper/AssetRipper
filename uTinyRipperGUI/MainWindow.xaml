@@ -13,8 +13,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="4"/>
-			<RowDefinition Height="150" MinHeight="50"/>
+			<RowDefinition Height="150" MinHeight="20"/>
 			<RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 		
@@ -50,6 +49,7 @@
 					<MenuItem Header="WebGL" Background="#FF272727"/>
 					<MenuItem Header="Asset Bundles" Background="#FF272727"/>
 				</MenuItem>
+				<MenuItem Header="_Reset" Background="#FF272727"/>
 				<Separator Background="#FF272727"/>
 				<!--Background="#FF272727" Foreground="White"-->
 				<MenuItem Header="_Exit" InputGestureText="Alt+F4" Background="#FF272727"/>
@@ -64,7 +64,8 @@
 			</Grid.ColumnDefinitions>
 
 			<control:FileView Grid.Column="0" x:Name="Fileview" Background="#FF474747" Visibility="Visible"/>
-			<GridSplitter Grid.Column="1" Name="FilesViewSplitter" Width="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+			<GridSplitter Grid.Column="1" Name="FilesViewSplitter" Width="4" Margin="-2,0,0,0"
+						  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
 						  Background="Transparent" ResizeDirection="Columns" Visibility="Visible"/>
 
 			<Grid Grid.Column="2">
@@ -88,35 +89,11 @@
 			</Grid>
 		</Grid>
 
-		<GridSplitter Grid.Row="2" ResizeDirection="Rows" HorizontalAlignment="Stretch"  Background="Transparent" />
-		
-		<Grid Grid.Row="3" >
-			<RichTextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
-                   Name="OutputTextBox"
-                   AcceptsReturn="True" IsDocumentEnabled="true"
-                   Background="#FF555555" IsReadOnly="True" FontSize="14" Foreground="White"
-                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                   ScrollViewer.CanContentScroll="True"
-                   TextChanged="OnOutputTextChanged" 
-                 >
-				<RichTextBox.ContextMenu>
-					<ContextMenu>
-						<MenuItem Command="ApplicationCommands.SelectAll"/>
-						<MenuItem Command="ApplicationCommands.Copy"/>
-						<MenuItem Header="Clear" Click="OnClearOutputTextClicked"/>
-					</ContextMenu>
-				</RichTextBox.ContextMenu>
-				<FlowDocument>
-					<Paragraph>
-						<Run FontWeight="Bold">Output log:</Run>
-						<LineBreak/>
-					</Paragraph>
-				</FlowDocument>
-			</RichTextBox>
-		</Grid>
+		<control:OutputView Grid.Row="2" x:Name="OutputView" Background="#FF555555"/>
+		<GridSplitter Grid.Row="2" ResizeDirection="Rows" Height="16" Margin="0,2,0,0"
+					  VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="Transparent" />
 
-		<StatusBar Grid.Row="4" Background="#FF2B2B2B">
+		<StatusBar Grid.Row="3" Background="#FF2B2B2B">
 			<TextBlock Name="StatusText" FontSize="14" Foreground="White" Text="Status: idle" />
 			<StatusBarItem HorizontalAlignment="Right" Margin="0,0,4,0">
 				<ProgressBar Name="Progress" Value="50" Width="90" Height="16" Visibility="Hidden"/>
