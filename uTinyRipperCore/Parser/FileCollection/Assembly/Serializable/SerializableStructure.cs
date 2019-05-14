@@ -11,60 +11,60 @@ using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper.Assembly
 {
-	public class ScriptStructure : IScriptStructure
+	public class SerializableStructure : ISerializableStructure
 	{
-		internal ScriptStructure(ScriptType type, ScriptStructure @base, IReadOnlyList<ScriptField> fields)
+		internal SerializableStructure(SerializableType type, SerializableStructure @base, IReadOnlyList<SerializableField> fields)
 		{
 			Type = type ?? throw new ArgumentNullException(nameof(type));
 			Base = @base;
 			Fields = fields ?? throw new ArgumentNullException(nameof(fields));
 		}
 
-		protected ScriptStructure(ScriptStructure copy) :
+		protected SerializableStructure(SerializableStructure copy) :
 			this(copy.Type, CreateBase(copy), CreateFields(copy))
 		{
 		}
 		
-		public static IScriptStructure EngineTypeToScriptStructure(string name)
+		public static ISerializableStructure EngineTypeToScriptStructure(string name)
 		{
 			switch (name)
 			{
-				case ScriptType.Vector2Name:
+				case SerializableType.Vector2Name:
 					return new Vector2f();
-				case ScriptType.Vector2IntName:
+				case SerializableType.Vector2IntName:
 					return new Vector2i();
-				case ScriptType.Vector3Name:
+				case SerializableType.Vector3Name:
 					return new Vector3f();
-				case ScriptType.Vector3IntName:
+				case SerializableType.Vector3IntName:
 					return new Vector3i();
-				case ScriptType.Vector4Name:
+				case SerializableType.Vector4Name:
 					return new Vector4f();
-				case ScriptType.RectName:
+				case SerializableType.RectName:
 					return new Rectf();
-				case ScriptType.BoundsName:
+				case SerializableType.BoundsName:
 					return new AABB();
-				case ScriptType.BoundsIntName:
+				case SerializableType.BoundsIntName:
 					return new AABBi();
-				case ScriptType.QuaternionName:
+				case SerializableType.QuaternionName:
 					return new Quaternionf();
-				case ScriptType.Matrix4x4Name:
+				case SerializableType.Matrix4x4Name:
 					return new Matrix4x4f();
-				case ScriptType.ColorName:
+				case SerializableType.ColorName:
 					return new ColorRGBAf();
-				case ScriptType.Color32Name:
+				case SerializableType.Color32Name:
 					return new ColorRGBA32();
-				case ScriptType.LayerMaskName:
+				case SerializableType.LayerMaskName:
 					return new LayerMask();
-				case ScriptType.AnimationCurveName:
+				case SerializableType.AnimationCurveName:
 					return new AnimationCurveTpl<Float>(true);
-				case ScriptType.GradientName:
+				case SerializableType.GradientName:
 					return new Gradient();
-				case ScriptType.RectOffsetName:
+				case SerializableType.RectOffsetName:
 					return new RectOffset();
-				case ScriptType.GUIStyleName:
+				case SerializableType.GUIStyleName:
 					return new GUIStyle(true);
 
-				case ScriptType.PropertyNameName:
+				case SerializableType.PropertyNameName:
 					return new PropertyName();
 
 				default:
@@ -72,30 +72,30 @@ namespace uTinyRipper.Assembly
 			}
 		}
 
-		protected static ScriptStructure CreateBase(ScriptStructure copy)
+		protected static SerializableStructure CreateBase(SerializableStructure copy)
 		{
 			if (copy.Base == null)
 			{
 				return null;
 			}
 
-			return (ScriptStructure)copy.Base.CreateDuplicate();
+			return (SerializableStructure)copy.Base.CreateDuplicate();
 		}
 
-		protected static List<ScriptField> CreateFields(ScriptStructure copy)
+		protected static List<SerializableField> CreateFields(SerializableStructure copy)
 		{
-			List<ScriptField> fields = new List<ScriptField>();
-			foreach (ScriptField field in copy.Fields)
+			List<SerializableField> fields = new List<SerializableField>();
+			foreach (SerializableField field in copy.Fields)
 			{
-				ScriptField fieldCopy = field.CreateCopy();
+				SerializableField fieldCopy = field.CreateCopy();
 				fields.Add(fieldCopy);
 			}
 			return fields;
 		}
 
-		public virtual IScriptStructure CreateDuplicate()
+		public virtual ISerializableStructure CreateDuplicate()
 		{
-			return new ScriptStructure(this);
+			return new SerializableStructure(this);
 		}
 
 		public virtual void Read(AssetReader reader)
@@ -105,7 +105,7 @@ namespace uTinyRipper.Assembly
 				Base.Read(reader);
 			}
 
-			foreach (ScriptField field in Fields)
+			foreach (SerializableField field in Fields)
 			{
 				field.Read(reader);
 			}
@@ -114,7 +114,7 @@ namespace uTinyRipper.Assembly
 		public virtual YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = Base == null ? new YAMLMappingNode() : (YAMLMappingNode)Base.ExportYAML(container);
-			foreach (ScriptField field in Fields)
+			foreach (SerializableField field in Fields)
 			{
 				node.Add(field.Name, field.ExportYAML(container));
 			}
@@ -131,7 +131,7 @@ namespace uTinyRipper.Assembly
 				}
 			}
 
-			foreach (ScriptField field in Fields)
+			foreach (SerializableField field in Fields)
 			{
 				foreach (Object asset in field.FetchDependencies(file, isLog))
 				{
@@ -190,8 +190,8 @@ namespace uTinyRipper.Assembly
 			}
 		}
 
-		public ScriptType Type { get; }
-		public ScriptStructure Base { get; }
-		public IReadOnlyList<ScriptField> Fields { get; }
+		public SerializableType Type { get; }
+		public SerializableStructure Base { get; }
+		public IReadOnlyList<SerializableField> Fields { get; }
 	}
 }

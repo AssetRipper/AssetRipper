@@ -3,9 +3,9 @@ using uTinyRipper.Classes;
 
 namespace uTinyRipper.Assembly
 {
-	public interface IScriptStructure : IAssetReadable, IYAMLExportable, IDependent
+	public interface ISerializableStructure : IAssetReadable, IYAMLExportable, IDependent
 	{
-		IScriptStructure CreateDuplicate();
+		ISerializableStructure CreateDuplicate();
 		//int CalculateSize(int depth);
 	}
 }

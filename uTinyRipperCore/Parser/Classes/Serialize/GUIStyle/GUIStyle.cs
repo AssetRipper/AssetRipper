@@ -9,7 +9,7 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
-	public struct GUIStyle : IScriptStructure
+	public struct GUIStyle : ISerializableStructure
 	{
 		public GUIStyle(bool _):
 			this()
@@ -39,7 +39,7 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(3, 0);
 		}
 
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new GUIStyle();
 		}

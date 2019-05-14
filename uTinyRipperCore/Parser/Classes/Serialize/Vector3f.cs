@@ -9,7 +9,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct Vector3f : IScriptStructure
+	public struct Vector3f : ISerializableStructure
 	{
 		public Vector3f(float x, float y, float z)
 		{
@@ -18,7 +18,7 @@ namespace uTinyRipper.Classes
 			Z = z;
 		}
 
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new Vector3f();
 		}

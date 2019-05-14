@@ -2,9 +2,9 @@ using System;
 
 namespace uTinyRipper.Assembly
 {
-	public struct ScriptInfo
+	public struct ScriptIdentifier
 	{
-		public ScriptInfo(string assembly, string @namespace, string name)
+		public ScriptIdentifier(string assembly, string @namespace, string name)
 		{
 			if (string.IsNullOrEmpty(assembly))
 			{
@@ -23,7 +23,17 @@ namespace uTinyRipper.Assembly
 			Name = name;
 		}
 
-		public static bool operator ==(ScriptInfo left, ScriptInfo right)
+		public static string ToUniqueName(string assembly, string @namespace, string name)
+		{
+			return @namespace == string.Empty ? $"[{assembly}]{name}" : $"[{assembly}]{@namespace}.{name}";
+		}
+
+		public static string ToUniqueName(string assembly, string fullName)
+		{
+			return $"[{assembly}]{fullName}";
+		}
+
+		public static bool operator ==(ScriptIdentifier left, ScriptIdentifier right)
 		{
 			if (left.Assembly != right.Assembly)
 			{
@@ -40,7 +50,7 @@ namespace uTinyRipper.Assembly
 			return true;
 		}
 
-		public static bool operator !=(ScriptInfo left, ScriptInfo right)
+		public static bool operator !=(ScriptIdentifier left, ScriptIdentifier right)
 		{
 			if (left.Assembly != right.Assembly)
 			{
@@ -63,11 +73,11 @@ namespace uTinyRipper.Assembly
 			{
 				return false;
 			}
-			if (obj.GetType() != typeof(ScriptInfo))
+			if (obj.GetType() != typeof(ScriptIdentifier))
 			{
 				return false;
 			}
-			return this == (ScriptInfo)obj;
+			return this == (ScriptIdentifier)obj;
 		}
 
 		public override int GetHashCode()
@@ -81,6 +91,14 @@ namespace uTinyRipper.Assembly
 			}
 			return hash;
 		}
+
+		public override string ToString()
+		{
+			return IsDefault ? base.ToString() : (Namespace == string.Empty ? $"{Name}" : $"{Namespace}.{Name}");
+		}
+
+		public bool IsDefault => Name == null;
+		public string UniqueName => ToUniqueName(Assembly, Namespace, Name);
 
 		public string Assembly { get; }
 		public string Namespace { get; }

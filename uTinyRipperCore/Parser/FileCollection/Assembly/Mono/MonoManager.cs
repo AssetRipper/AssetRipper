@@ -71,29 +71,14 @@ namespace uTinyRipper.Assembly.Mono
 			return m_assemblies.ContainsKey(assembly);
 		}
 
-		public bool IsPresent(string assembly, string name)
+		public bool IsPresent(ScriptIdentifier scriptID)
 		{
-			return FindType(assembly, name) != null;
+			return FindType(scriptID.Assembly, scriptID.Namespace, scriptID.Name) != null;
 		}
 
-		public bool IsPresent(string assembly, string @namespace, string name)
+		public bool IsValid(ScriptIdentifier scriptID)
 		{
-			return FindType(assembly, @namespace, name) != null;
-		}
-
-		public bool IsValid(string assembly, string name)
-		{
-			TypeDefinition type = FindType(assembly, name);
-			if(type == null)
-			{
-				return false;
-			}
-			return IsTypeValid(type, s_emptyArguments);
-		}
-
-		public bool IsValid(string assembly, string @namespace, string name)
-		{
-			TypeDefinition type = FindType(assembly, @namespace, name);
+			TypeDefinition type = FindType(scriptID);
 			if (type == null)
 			{
 				return false;
@@ -101,54 +86,44 @@ namespace uTinyRipper.Assembly.Mono
 			return IsTypeValid(type, s_emptyArguments);
 		}
 
-		public ScriptType GetBehaviourType(string assembly, string name)
+		public SerializableType GetSerializableType(ScriptIdentifier scriptID)
 		{
-			TypeDefinition type = FindType(assembly, name);
+			TypeDefinition type = FindType(scriptID);
 			if (type == null)
 			{
-				throw new ArgumentException($"Can't find type {name}[{assembly}]");
+				throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
 			}
 			return new MonoType(this, type);
 		}
 
-		public ScriptType GetBehaviourType(string assembly, string @namespace, string name)
+		public ScriptExportType GetExportType(ScriptExportManager exportManager, ScriptIdentifier scriptID)
 		{
-			TypeDefinition type = FindType(assembly, @namespace, name);
+			TypeDefinition type = FindType(scriptID);
 			if (type == null)
 			{
-				throw new ArgumentException($"Can't find type {@namespace}.{name}[{assembly}]");
-			}
-			return new MonoType(this, type);
-		}
-
-		public ScriptExportType GetExportType(ScriptExportManager exportManager, string assembly, string name)
-		{
-			TypeDefinition type = FindType(assembly, name);
-			if (type == null)
-			{
-				throw new ArgumentException($"Can't find type {name}[{assembly}]");
+				throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
 			}
 			return exportManager.RetrieveType(type);
 		}
 
-		public ScriptExportType GetExportType(ScriptExportManager exportManager, string assembly, string @namespace, string name)
-		{
-			TypeDefinition type = FindType(assembly, @namespace, name);
-			if (type == null)
-			{
-				throw new ArgumentException($"Can't find type {@namespace}.{name}[{assembly}]");
-			}
-			return exportManager.RetrieveType(type);
-		}
-
-		public ScriptInfo GetScriptInfo(string assembly, string name)
+		public ScriptIdentifier GetScriptID(string assembly, string name)
 		{
 			TypeDefinition type = FindType(assembly, name);
 			if (type == null)
 			{
 				return default;
 			}
-			return new ScriptInfo(type.Scope.Name, type.Namespace, type.Name);
+			return new ScriptIdentifier(type.Scope.Name, type.Namespace, type.Name);
+		}
+
+		public ScriptIdentifier GetScriptID(string assembly, string @namespace, string name)
+		{
+			TypeDefinition type = FindType(assembly, @namespace, name);
+			if (type == null)
+			{
+				return default;
+			}
+			return new ScriptIdentifier(assembly, type.Namespace, type.Name);
 		}
 
 		public AssemblyDefinition Resolve(AssemblyNameReference name)
@@ -182,7 +157,7 @@ namespace uTinyRipper.Assembly.Mono
 			GC.SuppressFinalize(this);
 		}
 
-		public ScriptType GetSerializableType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		public SerializableType GetSerializableType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
 			if (type.IsGenericParameter)
 			{
@@ -194,7 +169,7 @@ namespace uTinyRipper.Assembly.Mono
 			}
 
 			string uniqueName = MonoType.GetUniqueName(type);
-			if (AssemblyManager.TryGetSerializableType(uniqueName, out ScriptType serializableType))
+			if (AssemblyManager.TryGetSerializableType(uniqueName, out SerializableType serializableType))
 			{
 				return serializableType;
 			}
@@ -265,6 +240,11 @@ namespace uTinyRipper.Assembly.Mono
 				}
 			}
 			return null;
+		}
+
+		private TypeDefinition FindType(ScriptIdentifier scriptID)
+		{
+			return FindType(scriptID.Assembly, scriptID.Namespace, scriptID.Name);
 		}
 
 		/// <summary>

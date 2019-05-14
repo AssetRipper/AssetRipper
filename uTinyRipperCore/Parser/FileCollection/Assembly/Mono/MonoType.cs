@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace uTinyRipper.Assembly.Mono
 {
-	public class MonoType : ScriptType
+	public class MonoType : SerializableType
 	{
 		internal MonoType(MonoManager manager, TypeReference type) :
 			this(manager, type, s_emptyArguments)
@@ -30,7 +30,8 @@ namespace uTinyRipper.Assembly.Mono
 
 		public static string GetUniqueName(TypeReference type)
 		{
-			return $"[{type.Module.Name}]{type.FullName}";
+			string assembly = FilenameUtils.FixAssemblyEndian(type.Module.Name);
+			return ScriptIdentifier.ToUniqueName(assembly, type.FullName);
 		}
 
 		public static bool IsPrimitive(TypeReference type)
@@ -181,7 +182,7 @@ namespace uTinyRipper.Assembly.Mono
 			return MonoField.IsSerializableArray(resolvedType);
 		}
 
-		private static ScriptType GetBaseType(MonoManager manager, TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		private static SerializableType GetBaseType(MonoManager manager, TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
 			TypeDefinition definition = type.Resolve();
 			if (IsObject(definition.BaseType))
@@ -222,7 +223,7 @@ namespace uTinyRipper.Assembly.Mono
 				if (MonoField.IsSerializable(field, arguments))
 				{
 					TypeReference fieldType = GetSerializedElementType(field.FieldType, arguments);
-					ScriptType scriptType = manager.GetSerializableType(fieldType, arguments);
+					SerializableType scriptType = manager.GetSerializableType(fieldType, arguments);
 					bool isArray = IsSerializableArray(field.FieldType, arguments);
 					Field fieldStruc = new Field(scriptType, isArray, field.Name);
 					fields.Add(fieldStruc);

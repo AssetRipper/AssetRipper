@@ -82,9 +82,15 @@ namespace uTinyRipper
 			{
 				assembly = $"Assembly - {assembly}";
 			}
-			if (assembly.EndsWith(MonoManager.AssemblyExtension))
+			assembly = FixAssemblyEndian(assembly);
+			return assembly;
+		}
+
+		public static string FixAssemblyEndian(string assembly)
+		{
+			if (assembly.EndsWith(MonoManager.AssemblyExtension, StringComparison.Ordinal))
 			{
-				assembly = assembly.Substring(0, assembly.Length - MonoManager.AssemblyExtension.Length);
+				return assembly.Substring(0, assembly.Length - MonoManager.AssemblyExtension.Length);
 			}
 			return assembly;
 		}

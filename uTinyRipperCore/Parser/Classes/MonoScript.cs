@@ -128,50 +128,35 @@ namespace uTinyRipper.Classes
 
 		public bool IsScriptPresents()
 		{
-			if (IsReadNamespace(File.Version))
-			{
-				return File.AssemblyManager.IsPresent(AssemblyName, Namespace, ClassName);
-			}
-			else
-			{
-				return File.AssemblyManager.IsPresent(AssemblyName, ClassName);
-			}
+			ScriptIdentifier scriptID = IsReadNamespace(File.Version) ?
+				File.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
+				File.AssemblyManager.GetScriptID(AssemblyName, ClassName);
+			return File.AssemblyManager.IsPresent(scriptID);
 		}
 
-		public ScriptType GetBehaviourType()
+		public SerializableType GetBehaviourType()
 		{
-			if (IsReadNamespace(File.Version))
+			ScriptIdentifier scriptID = IsReadNamespace(File.Version) ?
+				File.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
+				File.AssemblyManager.GetScriptID(AssemblyName, ClassName);
+			if (File.AssemblyManager.IsValid(scriptID))
 			{
-				if (File.AssemblyManager.IsValid(AssemblyName, Namespace, ClassName))
-				{
-					return File.AssemblyManager.GetBehaviourType(AssemblyName, Namespace, ClassName);
-				}
-			}
-			else
-			{
-				if (File.AssemblyManager.IsValid(AssemblyName, ClassName))
-				{
-					return File.AssemblyManager.GetBehaviourType(AssemblyName, ClassName);
-				}
+				return File.AssemblyManager.GetSerializableType(scriptID);
 			}
 			return null;
 		}
 
 		public ScriptExportType GetExportType(ScriptExportManager exportManager)
 		{
-			if (IsReadNamespace(File.Version))
-			{
-				return File.AssemblyManager.GetExportType(exportManager, AssemblyName, Namespace, ClassName);
-			}
-			else
-			{
-				return File.AssemblyManager.GetExportType(exportManager, AssemblyName, ClassName);
-			}
+			ScriptIdentifier scriptID = IsReadNamespace(File.Version) ?
+				File.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
+				File.AssemblyManager.GetScriptID(AssemblyName, ClassName);
+			return File.AssemblyManager.GetExportType(exportManager, scriptID);
 		}
 
-		public ScriptInfo GetScriptInfo()
+		public ScriptIdentifier GetScriptID()
 		{
-			return File.AssemblyManager.GetScriptInfo(AssemblyName, ClassName);
+			return File.AssemblyManager.GetScriptID(AssemblyName, ClassName);
 		}
 
 		public override void Read(AssetReader reader)

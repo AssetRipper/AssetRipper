@@ -8,7 +8,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct Quaternionf : IScriptStructure
+	public struct Quaternionf : ISerializableStructure
 	{
 		public Quaternionf(float x, float y, float z, float w)
 		{
@@ -60,7 +60,7 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new Quaternionf();
 		}

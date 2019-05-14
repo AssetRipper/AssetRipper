@@ -7,7 +7,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct Rectf : IScriptStructure
+	public struct Rectf : ISerializableStructure
 	{
 		private static int GetSerializedVersion(Version version)
 		{
@@ -90,7 +90,7 @@ namespace uTinyRipper.Classes
 			return result;
 		}
 
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new Rectf();
 		}

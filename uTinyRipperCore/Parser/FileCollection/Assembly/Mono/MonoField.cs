@@ -192,7 +192,7 @@ namespace uTinyRipper.Assembly.Mono
 			foreach (CustomAttribute attribute in field.CustomAttributes)
 			{
 				TypeReference type = attribute.AttributeType;
-				if (ScriptField.IsCompilerGeneratedAttrribute(type.Namespace, type.Name))
+				if (SerializableField.IsCompilerGeneratedAttrribute(type.Namespace, type.Name))
 				{
 					return true;
 				}
@@ -210,7 +210,7 @@ namespace uTinyRipper.Assembly.Mono
 			foreach (CustomAttribute attribute in field.CustomAttributes)
 			{
 				TypeReference type = attribute.AttributeType;
-				if (ScriptField.IsSerializeFieldAttrribute(type.Namespace, type.Name))
+				if (SerializableField.IsSerializeFieldAttrribute(type.Namespace, type.Name))
 				{
 					return true;
 				}

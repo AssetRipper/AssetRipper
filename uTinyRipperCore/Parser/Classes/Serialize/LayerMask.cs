@@ -6,7 +6,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct LayerMask : IScriptStructure
+	public struct LayerMask : ISerializableStructure
 	{
 		private static int GetSerializedVersion(Version version)
 		{
@@ -14,7 +14,7 @@ namespace uTinyRipper.Classes
 			return 2;
 		}
 
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new LayerMask();
 		}

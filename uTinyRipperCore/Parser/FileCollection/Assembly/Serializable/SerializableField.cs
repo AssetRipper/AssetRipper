@@ -9,9 +9,9 @@ using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper.Assembly
 {
-	public sealed class ScriptField
+	public sealed class SerializableField
 	{
-		public ScriptField(PrimitiveType type, IScriptStructure complex, bool isArray, string name)
+		public SerializableField(PrimitiveType type, ISerializableStructure complex, bool isArray, string name)
 		{
 			Type = type;
 			ComplexType = (type == PrimitiveType.Complex && complex == null) ? throw new ArgumentNullException(nameof(complex)) : complex;
@@ -19,32 +19,32 @@ namespace uTinyRipper.Assembly
 			Name = name ?? throw new ArgumentNullException(nameof(name));
 		}
 
-		private ScriptField(ScriptField copy) :
+		private SerializableField(SerializableField copy) :
 			this(copy.Type, copy.ComplexType, copy.IsArray, copy.Name)
 		{
 		}
 
 		public static bool IsCompilerGeneratedAttrribute(string @namespace, string name)
 		{
-			if (@namespace == ScriptType.CompilerServicesNamespace)
+			if (@namespace == SerializableType.CompilerServicesNamespace)
 			{
-				return name == ScriptType.CompilerGeneratedName;
+				return name == SerializableType.CompilerGeneratedName;
 			}
 			return false;
 		}
 
 		public static bool IsSerializeFieldAttrribute(string @namespace, string name)
 		{
-			if (@namespace == ScriptType.UnityEngineNamespace)
+			if (@namespace == SerializableType.UnityEngineNamespace)
 			{
 				return name == SerializeFieldName;
 			}
 			return false;
 		}
 
-		public ScriptField CreateCopy()
+		public SerializableField CreateCopy()
 		{
-			return new ScriptField(this);
+			return new SerializableField(this);
 		}
 
 		public void Read(AssetReader reader)
@@ -204,10 +204,10 @@ namespace uTinyRipper.Assembly
 					if (IsArray)
 					{
 						int count = reader.ReadInt32();
-						IScriptStructure[] structures = new IScriptStructure[count];
+						ISerializableStructure[] structures = new ISerializableStructure[count];
 						for (int i = 0; i < count; i++)
 						{
-							IScriptStructure structure = ComplexType.CreateDuplicate();
+							ISerializableStructure structure = ComplexType.CreateDuplicate();
 							structure.Read(reader);
 							structures[i] = structure;
 						}
@@ -215,7 +215,7 @@ namespace uTinyRipper.Assembly
 					}
 					else
 					{
-						IScriptStructure structure = ComplexType.CreateDuplicate();
+						ISerializableStructure structure = ComplexType.CreateDuplicate();
 						structure.Read(reader);
 						Value = structure;
 					}
@@ -232,7 +232,7 @@ namespace uTinyRipper.Assembly
 			{
 				if (Type == PrimitiveType.Complex)
 				{
-					IEnumerable<IScriptStructure> structures = (IEnumerable<IScriptStructure>)Value;
+					IEnumerable<ISerializableStructure> structures = (IEnumerable<ISerializableStructure>)Value;
 					return structures.ExportYAML(container);
 				}
 				else
@@ -313,7 +313,7 @@ namespace uTinyRipper.Assembly
 			{
 				if (Type == PrimitiveType.Complex)
 				{
-					IScriptStructure structure = (IScriptStructure)Value;
+					ISerializableStructure structure = (ISerializableStructure)Value;
 					return structure.ExportYAML(container);
 				}
 				else
@@ -359,8 +359,8 @@ namespace uTinyRipper.Assembly
 			{
 				if (IsArray)
 				{
-					IEnumerable<IScriptStructure> structures = (IEnumerable<IScriptStructure>)Value;
-					foreach (IScriptStructure structure in structures)
+					IEnumerable<ISerializableStructure> structures = (IEnumerable<ISerializableStructure>)Value;
+					foreach (ISerializableStructure structure in structures)
 					{
 						foreach (Object asset in structure.FetchDependencies(file, isLog))
 						{
@@ -370,7 +370,7 @@ namespace uTinyRipper.Assembly
 				}
 				else
 				{
-					IScriptStructure structure = (IScriptStructure)Value;
+					ISerializableStructure structure = (ISerializableStructure)Value;
 					foreach (Object asset in structure.FetchDependencies(file, isLog))
 					{
 						yield return asset;
@@ -390,7 +390,7 @@ namespace uTinyRipper.Assembly
 		public string Name { get; }
 		public object Value { get; private set; }
 
-		private IScriptStructure ComplexType { get; }
+		private ISerializableStructure ComplexType { get; }
 
 		private const string SerializeFieldName = "SerializeField";
 	}

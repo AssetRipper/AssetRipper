@@ -35,7 +35,7 @@ namespace uTinyRipper.Exporters.Scripts
 			writer.WriteIndent(intent);
 			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", TypeName);
 
-			if (Base != null && !ScriptType.IsBasic(Base.Namespace, Base.NestedName))
+			if (Base != null && !SerializableType.IsBasic(Base.Namespace, Base.NestedName))
 			{
 				writer.Write(" : {0}", Base.GetTypeNestedName(DeclaringType));
 			}
@@ -76,7 +76,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 		public virtual void GetTypeNamespaces(ICollection<string> namespaces)
 		{
-			if (ScriptType.IsCPrimitive(Namespace, CleanNestedName))
+			if (SerializableType.IsCPrimitive(Namespace, CleanNestedName))
 			{
 				return;
 			}
@@ -111,7 +111,7 @@ namespace uTinyRipper.Exporters.Scripts
 				case "audio":
 				case "light":
 				case "collider":
-					return ScriptType.IsComponent(Namespace, NestedName);
+					return SerializableType.IsComponent(Namespace, NestedName);
 			}
 			return false;
 		}
@@ -122,7 +122,7 @@ namespace uTinyRipper.Exporters.Scripts
 			{
 				return NestedName;
 			}
-			if (ScriptType.IsEngineObject(Namespace, NestedName))
+			if (SerializableType.IsEngineObject(Namespace, NestedName))
 			{
 				return $"{Namespace}.{NestedName}";
 			}
@@ -184,13 +184,13 @@ namespace uTinyRipper.Exporters.Scripts
 
 		private string ExportNamespace()
 		{
-			if(Namespace == ScriptType.UnityEngineNamespace)
+			if(Namespace == SerializableType.UnityEngineNamespace)
 			{
 				switch (CleanNestedName)
 				{
 					case "NavMeshAgent":
 					case "OffMeshLink":
-						return $"{ScriptType.UnityEngineNamespace}.AI";
+						return $"{SerializableType.UnityEngineNamespace}.AI";
 				}
 			}
 			return Namespace;

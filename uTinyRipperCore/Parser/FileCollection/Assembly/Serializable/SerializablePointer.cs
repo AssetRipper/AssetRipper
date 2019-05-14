@@ -8,16 +8,16 @@ using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper.Assembly
 {
-	public sealed class ScriptPointer : ScriptStructure
+	public sealed class SerializablePointer : SerializableStructure
 	{
-		public ScriptPointer(ScriptType type):
+		public SerializablePointer(SerializableType type):
 			base(type, null, EmptyFields)
 		{
 		}
 
-		public override IScriptStructure CreateDuplicate()
+		public override ISerializableStructure CreateDuplicate()
 		{
-			return new ScriptPointer(Type);
+			return new SerializablePointer(Type);
 		}
 
 		public override void Read(AssetReader reader)
@@ -37,6 +37,6 @@ namespace uTinyRipper.Assembly
 
 		public PPtr<Object> Pointer;
 
-		private static readonly ScriptField[] EmptyFields = new ScriptField[0];
+		private static readonly SerializableField[] EmptyFields = new SerializableField[0];
 	}
 }

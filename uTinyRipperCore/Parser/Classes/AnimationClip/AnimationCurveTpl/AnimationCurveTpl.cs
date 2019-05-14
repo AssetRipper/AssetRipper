@@ -6,7 +6,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
-	public struct AnimationCurveTpl<T> : IScriptStructure
+	public struct AnimationCurveTpl<T> : ISerializableStructure
 		where T : struct, IAssetReadable, IYAMLExportable
 	{
 		public AnimationCurveTpl(bool init)
@@ -95,7 +95,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			return 1;
 		}
 
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new AnimationCurveTpl<T>();
 		}

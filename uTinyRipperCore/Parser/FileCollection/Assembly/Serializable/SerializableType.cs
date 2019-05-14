@@ -3,12 +3,11 @@ using System.Collections.Generic;
 
 namespace uTinyRipper.Assembly
 {
-#warning TODO: rename
-	public abstract class ScriptType
+	public abstract class SerializableType
 	{
 		public struct Field
 		{
-			public Field(ScriptType type, bool isArray, string name)
+			public Field(SerializableType type, bool isArray, string name)
 			{
 				Type = type;
 				IsArray = isArray;
@@ -20,12 +19,12 @@ namespace uTinyRipper.Assembly
 				return Type == null ? base.ToString() : (IsArray ? $"{Type}[] {Name}" : $"{Type} {Name}");
 			}
 
-			public ScriptType Type { get; }
+			public SerializableType Type { get; }
 			public bool IsArray { get; }
 			public string Name { get; }
 		}
 
-		public ScriptType(string @namespace, PrimitiveType type, string name, ScriptType @base)
+		public SerializableType(string @namespace, PrimitiveType type, string name, SerializableType @base)
 		{
 			Namespace = @namespace ?? throw new ArgumentNullException(nameof(@namespace));
 			Type = type;
@@ -311,7 +310,7 @@ namespace uTinyRipper.Assembly
 			return PrimitiveType.Complex;
 		}
 
-		public ScriptStructure CreateBehaviourStructure()
+		public SerializableStructure CreateBehaviourStructure()
 		{
 			return ForceCreateComplexStructure(this, 0);
 		}
@@ -338,25 +337,25 @@ namespace uTinyRipper.Assembly
 			return Namespace ==	string.Empty ? Name : $"{Namespace}.{Name}";
 		}
 
-		private static IScriptStructure CreateComplexStructure(ScriptType type, int depth)
+		private static ISerializableStructure CreateComplexStructure(SerializableType type, int depth)
 		{
 			if (IsEngineStruct(type.Namespace, type.Name))
 			{
-				return ScriptStructure.EngineTypeToScriptStructure(type.Name);
+				return SerializableStructure.EngineTypeToScriptStructure(type.Name);
 			}
 			if (type.IsEnginePointer())
 			{
-				return new ScriptPointer(type);
+				return new SerializablePointer(type);
 			}
 			return ForceCreateComplexStructure(type, depth);
 		}
 
-		private static ScriptStructure ForceCreateComplexStructure(ScriptType type, int depth)
+		private static SerializableStructure ForceCreateComplexStructure(SerializableType type, int depth)
 		{
-			ScriptStructure @base = type.Base == null ? null : ForceCreateComplexStructure(type.Base, depth);
+			SerializableStructure @base = type.Base == null ? null : ForceCreateComplexStructure(type.Base, depth);
 			if (type.Fields.Count > 0 && depth <= MaxDepthLevel)
 			{
-				List<ScriptField> fields = new List<ScriptField>();
+				List<SerializableField> fields = new List<SerializableField>();
 				foreach (Field field in type.Fields)
 				{
 					if (depth == MaxDepthLevel)
@@ -371,22 +370,22 @@ namespace uTinyRipper.Assembly
 						}
 					}
 
-					IScriptStructure fieldStructure = field.Type.Type == PrimitiveType.Complex ? CreateComplexStructure(field.Type, depth + 1) : null;
-					ScriptField sField = new ScriptField(field.Type.Type, fieldStructure, field.IsArray, field.Name);
+					ISerializableStructure fieldStructure = field.Type.Type == PrimitiveType.Complex ? CreateComplexStructure(field.Type, depth + 1) : null;
+					SerializableField sField = new SerializableField(field.Type.Type, fieldStructure, field.IsArray, field.Name);
 					fields.Add(sField);
 				}
-				return new ScriptStructure(type, @base, fields);
+				return new SerializableStructure(type, @base, fields);
 			}
 			else
 			{
-				return new ScriptStructure(type, @base, EmptyFields);
+				return new SerializableStructure(type, @base, EmptyFields);
 			}
 		}
 
 		public string Namespace { get; }
 		public PrimitiveType Type { get; }
 		public string Name { get; }
-		public ScriptType Base { get; }
+		public SerializableType Base { get; }
 		public IReadOnlyList<Field> Fields { get; protected set; }
 
 		public const int MaxDepthLevel = 8;
@@ -457,6 +456,6 @@ namespace uTinyRipper.Assembly
 		private const string BehaviourName = "Behaviour";
 		private const string MonoBehaviourName = "MonoBehaviour";
 
-		protected static readonly IReadOnlyList<ScriptField> EmptyFields = new ScriptField[0];
+		protected static readonly IReadOnlyList<SerializableField> EmptyFields = new SerializableField[0];
 	}
 }

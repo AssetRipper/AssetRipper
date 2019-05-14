@@ -6,9 +6,9 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct Matrix4x4f : IScriptStructure
+	public struct Matrix4x4f : ISerializableStructure
 	{
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new Matrix4x4f();
 		}

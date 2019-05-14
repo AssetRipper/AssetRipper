@@ -24,7 +24,7 @@ namespace uTinyRipper.Exporters.Scripts
 			}
 
 			string name = Type.GetTypeNestedName(DeclaringType);
-			name = ScriptType.IsEngineObject(Type.Namespace, name) ? $"{Type.Namespace}.{name}" : name;
+			name = SerializableType.IsEngineObject(Type.Namespace, name) ? $"{Type.Namespace}.{name}" : name;
 			writer.WriteLine("{0} {1};", name, Name);
 		}
 

@@ -6,7 +6,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct PropertyName : IScriptStructure
+	public struct PropertyName : ISerializableStructure
 	{
 		public static bool operator ==(PropertyName lhs, PropertyName rhs)
 		{
@@ -18,7 +18,7 @@ namespace uTinyRipper.Classes
 			return lhs.ID != rhs.ID;
 		}
 
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new PropertyName();
 		}

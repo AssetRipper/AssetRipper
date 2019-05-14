@@ -62,7 +62,7 @@ namespace uTinyRipper.Classes
 			MonoScript script = Script.FindAsset(File);
 			if (script != null)
 			{
-				ScriptType behaviourType = script.GetBehaviourType();
+				SerializableType behaviourType = script.GetBehaviourType();
 				if (behaviourType != null)
 				{
 					Structure = behaviourType.CreateBehaviourStructure();
@@ -165,7 +165,7 @@ namespace uTinyRipper.Classes
 		public HideFlags EditorHideFlags { get; private set; }
 #endif
 		public string Name { get; private set; }
-		public ScriptStructure Structure { get; private set; }
+		public SerializableStructure Structure { get; private set; }
 #if UNIVERSAL
 		public string EditorClassIdentifier { get; private set; }
 #endif

@@ -9,7 +9,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct Vector2f : IScriptStructure
+	public struct Vector2f : ISerializableStructure
 	{
 		public Vector2f(float value) :
 			this(value, value)
@@ -77,7 +77,7 @@ namespace uTinyRipper.Classes
 			return (float)(360.0 * angle / (2.0 * Math.PI));
 		}
 
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new Vector2f();
 		}

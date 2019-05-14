@@ -6,7 +6,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct AABBi : IScriptStructure
+	public struct AABBi : ISerializableStructure
 	{
 		public AABBi(Vector3i center, Vector3i extent)
 		{
@@ -33,7 +33,7 @@ namespace uTinyRipper.Classes
 			yield break;
 		}
 
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new AABBi();
 		}

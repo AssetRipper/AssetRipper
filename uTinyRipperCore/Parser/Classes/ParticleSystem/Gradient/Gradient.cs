@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 	/// <summary>
 	/// GradientNEW previously
 	/// </summary>
-	public struct Gradient : IScriptStructure
+	public struct Gradient : ISerializableStructure
 	{
 		public Gradient(ColorRGBAf color1, ColorRGBAf color2):
 			this()
@@ -40,7 +40,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(5, 5);
 		}
 
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return this;
 		}

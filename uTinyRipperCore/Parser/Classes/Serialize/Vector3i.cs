@@ -8,7 +8,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct Vector3i : IScriptStructure
+	public struct Vector3i : ISerializableStructure
 	{
 		public Vector3i(int x, int y, int z)
 		{
@@ -67,7 +67,7 @@ namespace uTinyRipper.Classes
 			return false;
 		}
 
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new Vector3i();
 		}

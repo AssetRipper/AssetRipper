@@ -7,7 +7,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct Vector2i : IScriptStructure
+	public struct Vector2i : ISerializableStructure
 	{
 		public Vector2i(int x, int y)
 		{
@@ -25,7 +25,7 @@ namespace uTinyRipper.Classes
 			return left.X != right.X || left.Y != right.Y;
 		}
 
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new Vector2i();
 		}

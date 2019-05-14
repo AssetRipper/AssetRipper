@@ -7,7 +7,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct ColorRGBAf : IScriptStructure
+	public struct ColorRGBAf : ISerializableStructure
 	{
 		public ColorRGBAf(float r, float g, float b, float a)
 		{
@@ -29,7 +29,7 @@ namespace uTinyRipper.Classes
 			return color;
 		}
 
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new ColorRGBAf();
 		}

@@ -108,8 +108,8 @@ namespace uTinyRipper.AssetExporters
 				}
 				else
 				{
-					ScriptInfo scriptInfo = script.GetScriptInfo();
-					if (scriptInfo != default)
+					ScriptIdentifier scriptInfo = script.GetScriptID();
+					if (!scriptInfo.IsDefault)
 					{
 						int fileID = Compute(scriptInfo.Namespace, scriptInfo.Name);
 						return new ExportPointer(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));

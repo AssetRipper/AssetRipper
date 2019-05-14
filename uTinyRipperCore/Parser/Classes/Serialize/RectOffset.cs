@@ -6,9 +6,9 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct RectOffset : IScriptStructure
+	public struct RectOffset : ISerializableStructure
 	{
-		public IScriptStructure CreateDuplicate()
+		public ISerializableStructure CreateDuplicate()
 		{
 			return new RectOffset();
 		}
