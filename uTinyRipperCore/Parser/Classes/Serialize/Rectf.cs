@@ -28,11 +28,6 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		public Rectf(Rectf copy):
-			this(copy.X, copy.Y, copy.Width, copy.Height)
-		{
-		}
-
 		public static bool operator == (Rectf left, Rectf right)
 		{
 			if(left.X != right.X)
@@ -95,9 +90,9 @@ namespace uTinyRipper.Classes
 			return result;
 		}
 
-		public IScriptStructure CreateCopy()
+		public IScriptStructure CreateDuplicate()
 		{
-			return new Rectf(this);
+			return new Rectf();
 		}
 
 		public void Read(AssetReader reader)
@@ -169,10 +164,6 @@ namespace uTinyRipper.Classes
 		}
 
 		public Vector2f Center => new Vector2f(X + Width / 2.0f, Y + Height / 2.0f);
-
-		public IScriptStructure Base => null;
-		public string Namespace => ScriptType.UnityEngineName;
-		public string Name => ScriptType.RectName;
 
 		public Vector2f Position => new Vector2f(X, Y);
 		public Vector2f Size => new Vector2f(Width, Height);

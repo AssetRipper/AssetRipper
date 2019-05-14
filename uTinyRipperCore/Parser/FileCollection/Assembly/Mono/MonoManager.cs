@@ -101,44 +101,44 @@ namespace uTinyRipper.Assembly.Mono
 			return IsTypeValid(type, s_emptyArguments);
 		}
 
-		public ScriptStructure CreateStructure(string assembly, string name)
+		public ScriptType GetBehaviourType(string assembly, string name)
 		{
 			TypeDefinition type = FindType(assembly, name);
 			if (type == null)
 			{
 				throw new ArgumentException($"Can't find type {name}[{assembly}]");
 			}
-			return new MonoStructure(this, type);
+			return new MonoType(this, type);
 		}
 
-		public ScriptStructure CreateStructure(string assembly, string @namespace, string name)
+		public ScriptType GetBehaviourType(string assembly, string @namespace, string name)
 		{
 			TypeDefinition type = FindType(assembly, @namespace, name);
 			if (type == null)
 			{
 				throw new ArgumentException($"Can't find type {@namespace}.{name}[{assembly}]");
 			}
-			return new MonoStructure(this, type);
+			return new MonoType(this, type);
 		}
 
-		public ScriptExportType CreateExportType(ScriptExportManager exportManager, string assembly, string name)
+		public ScriptExportType GetExportType(ScriptExportManager exportManager, string assembly, string name)
 		{
 			TypeDefinition type = FindType(assembly, name);
 			if (type == null)
 			{
 				throw new ArgumentException($"Can't find type {name}[{assembly}]");
 			}
-			return exportManager.CreateExportType(type);
+			return exportManager.RetrieveType(type);
 		}
 
-		public ScriptExportType CreateExportType(ScriptExportManager exportManager, string assembly, string @namespace, string name)
+		public ScriptExportType GetExportType(ScriptExportManager exportManager, string assembly, string @namespace, string name)
 		{
 			TypeDefinition type = FindType(assembly, @namespace, name);
 			if (type == null)
 			{
 				throw new ArgumentException($"Can't find type {@namespace}.{name}[{assembly}]");
 			}
-			return exportManager.CreateExportType(type);
+			return exportManager.RetrieveType(type);
 		}
 
 		public ScriptInfo GetScriptInfo(string assembly, string name)
@@ -154,7 +154,7 @@ namespace uTinyRipper.Assembly.Mono
 		public AssemblyDefinition Resolve(AssemblyNameReference name)
 		{
 			string assemblyName = AssemblyManager.ToAssemblyName(name.Name);
-			AssemblyDefinition definition = RetrieveAssembly(assemblyName);
+			AssemblyDefinition definition = FindAssembly(assemblyName);
 			if(definition == null)
 			{
 				const string MSCorLibName = "mscorlib";
@@ -182,7 +182,6 @@ namespace uTinyRipper.Assembly.Mono
 			GC.SuppressFinalize(this);
 		}
 
-#warning TODO: max depth level 7
 		public ScriptType GetSerializableType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
 			if (type.IsGenericParameter)
@@ -213,7 +212,7 @@ namespace uTinyRipper.Assembly.Mono
 			}
 		}
 
-		private AssemblyDefinition RetrieveAssembly(string name)
+		private AssemblyDefinition FindAssembly(string name)
 		{
 			if (m_assemblies.TryGetValue(name, out AssemblyDefinition assembly))
 			{
@@ -230,7 +229,7 @@ namespace uTinyRipper.Assembly.Mono
 
 		private TypeDefinition FindType(string assembly, string name)
 		{
-			AssemblyDefinition definition = RetrieveAssembly(assembly);
+			AssemblyDefinition definition = FindAssembly(assembly);
 			if (definition == null)
 			{
 				return null;
@@ -251,7 +250,7 @@ namespace uTinyRipper.Assembly.Mono
 
 		private TypeDefinition FindType(string assembly, string @namespace, string name)
 		{
-			AssemblyDefinition definition = RetrieveAssembly(assembly);
+			AssemblyDefinition definition = FindAssembly(assembly);
 			if (definition == null)
 			{
 				return null;
@@ -259,12 +258,10 @@ namespace uTinyRipper.Assembly.Mono
 
 			foreach (ModuleDefinition module in definition.Modules)
 			{
-				foreach (TypeDefinition type in module.Types)
+				TypeDefinition type = module.GetType(@namespace, name);
+				if (type != null)
 				{
-					if (type.Name == name && type.Namespace == @namespace)
-					{
-						return type;
-					}
+					return type;
 				}
 			}
 			return null;

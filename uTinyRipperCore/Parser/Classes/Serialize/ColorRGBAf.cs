@@ -29,9 +29,9 @@ namespace uTinyRipper.Classes
 			return color;
 		}
 
-		public IScriptStructure CreateCopy()
+		public IScriptStructure CreateDuplicate()
 		{
-			return this;
+			return new ColorRGBAf();
 		}
 
 		public void Read(AssetReader reader)
@@ -71,10 +71,6 @@ namespace uTinyRipper.Classes
 		}
 
 		public static ColorRGBAf White => new ColorRGBAf(1.0f, 1.0f, 1.0f, 1.0f);
-
-		public IScriptStructure Base => null;
-		public string Namespace => ScriptType.UnityEngineName;
-		public string Name => ScriptType.ColorName;
 
 		public const string RName = "r";
 		public const string GName = "g";

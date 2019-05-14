@@ -78,14 +78,6 @@ namespace uTinyRipper.Classes.AnimationClips
 			}
 		}
 
-		public AnimationCurveTpl(AnimationCurveTpl<T> copy):
-			this(copy.Curve)
-		{
-			PreInfinity = copy.PreInfinity;
-			PostInfinity = copy.PostInfinity;
-			RotationOrder = copy.RotationOrder;
-		}
-
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
@@ -103,9 +95,9 @@ namespace uTinyRipper.Classes.AnimationClips
 			return 1;
 		}
 
-		public IScriptStructure CreateCopy()
+		public IScriptStructure CreateDuplicate()
 		{
-			return new AnimationCurveTpl<T>(this);
+			return new AnimationCurveTpl<T>();
 		}
 
 		public void Read(AssetReader reader)
@@ -142,10 +134,6 @@ namespace uTinyRipper.Classes.AnimationClips
 		{
 			return IsReadRotationOrder(version) ? RotationOrder : RotationOrder.OrderZXY;
 		}
-
-		public IScriptStructure Base => null;
-		public string Namespace => ScriptType.UnityEngineName;
-		public string Name => ScriptType.AnimationCurveName;
 
 		public IReadOnlyList<KeyframeTpl<T>> Curve => m_curve;
 		public CurveLoopTypes PreInfinity { get; private set; }

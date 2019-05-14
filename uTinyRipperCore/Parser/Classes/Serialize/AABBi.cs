@@ -33,14 +33,10 @@ namespace uTinyRipper.Classes
 			yield break;
 		}
 
-		public IScriptStructure CreateCopy()
+		public IScriptStructure CreateDuplicate()
 		{
-			return this;
+			return new AABBi();
 		}
-
-		public IScriptStructure Base => null;
-		public string Namespace => ScriptType.UnityEngineName;
-		public string Name => ScriptType.BoundsIntName;
 
 		public Vector3i Center;
 		public Vector3i Extent;

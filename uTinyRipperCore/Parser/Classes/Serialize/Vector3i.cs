@@ -17,11 +17,6 @@ namespace uTinyRipper.Classes
 			Z = z;
 		}
 
-		public Vector3i(Vector3i copy) :
-			this(copy.X, copy.Y, copy.Z)
-		{
-		}
-
 		public static bool operator ==(Vector3i left, Vector3i right)
 		{
 			return left.X == right.X && left.Y == right.Y && left.Z == right.Z;
@@ -72,9 +67,9 @@ namespace uTinyRipper.Classes
 			return false;
 		}
 
-		public IScriptStructure CreateCopy()
+		public IScriptStructure CreateDuplicate()
 		{
-			return new Vector3i(this);
+			return new Vector3i();
 		}
 
 		public void Read(AssetReader reader)
@@ -135,10 +130,6 @@ namespace uTinyRipper.Classes
 		{
 			return $"[{X}, {Y}, {Z}]";
 		}
-
-		public IScriptStructure Base => null;
-		public string Namespace => ScriptType.UnityEngineName;
-		public string Name => ScriptType.Vector3IntName;
 
 		public int X { get; private set; }
 		public int Y { get; private set; }

@@ -18,11 +18,6 @@ namespace uTinyRipper.Classes
 			W = w;
 		}
 
-		public Quaternionf(Quaternionf copy) :
-			this(copy.X, copy.Y, copy.Z, copy.W)
-		{
-		}
-
 		public float this[int index]
 		{
 			get
@@ -65,9 +60,9 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public IScriptStructure CreateCopy()
+		public IScriptStructure CreateDuplicate()
 		{
-			return new Quaternionf(this);
+			return new Quaternionf();
 		}
 
 		public void Read(AssetReader reader)
@@ -96,9 +91,9 @@ namespace uTinyRipper.Classes
 
 		public Vector3f ToEuler()
 		{
-			double eax = 0;
-			double eay = 0;
-			double eaz = 0;
+			double eax;
+			double eay;
+			double eaz;
 
 			float qx = X;
 			float qy = -Y;
@@ -147,10 +142,6 @@ namespace uTinyRipper.Classes
 
 		public static Quaternionf Zero => new Quaternionf(0.0f, 0.0f, 0.0f, 1.0f);
 		public static Quaternionf DefaultWeight => new Quaternionf(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f);
-
-		public IScriptStructure Base => null;
-		public string Namespace => ScriptType.UnityEngineName;
-		public string Name => ScriptType.QuaternionName;
 
 		public float X { get; private set; }
 		public float Y { get; private set; }

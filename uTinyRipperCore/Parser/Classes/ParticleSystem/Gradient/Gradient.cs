@@ -40,7 +40,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return version.IsGreaterEqual(5, 5);
 		}
 
-		public IScriptStructure CreateCopy()
+		public IScriptStructure CreateDuplicate()
 		{
 			return this;
 		}
@@ -231,10 +231,6 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 			return 1;
 		}
-
-		public IScriptStructure Base => null;
-		public string Namespace => ScriptType.UnityEngineName;
-		public string Name => ScriptType.GradientName;
 
 		public ushort Ctime0 { get; private set; }
 		public ushort Ctime1 { get; private set; }

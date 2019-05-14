@@ -46,12 +46,6 @@ namespace uTinyRipper.Exporters.Scripts
 			return GetExportSubPath(type.Module, type.Namespace, typeName);
 		}
 
-		public ScriptExportType CreateExportType(TypeReference type)
-		{
-			ScriptExportType exportType = RetrieveType(type);
-			return exportType;
-		}
-
 		public string Export(ScriptExportType exportType)
 		{
 			if (exportType.DeclaringType != null)

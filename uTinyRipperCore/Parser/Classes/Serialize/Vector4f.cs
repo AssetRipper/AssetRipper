@@ -22,14 +22,9 @@ namespace uTinyRipper.Classes
 			W = w;
 		}
 
-		public Vector4f(Vector4f copy) :
-			this(copy.X, copy.Y, copy.Z, copy.W)
+		public IScriptStructure CreateDuplicate()
 		{
-		}
-
-		public IScriptStructure CreateCopy()
-		{
-			return new Vector4f(this);
+			return new Vector4f();
 		}
 
 		public void Read(AssetReader reader)
@@ -83,10 +78,6 @@ namespace uTinyRipper.Classes
 		{
 			return $"[{X:0.00}, {Y:0.00}, {Z:0.00}, {W:0.00}]";
 		}
-
-		public IScriptStructure Base => null;
-		public string Namespace => ScriptType.UnityEngineName;
-		public string Name => ScriptType.Vector4Name;
 
 		public float X { get; private set; }
 		public float Y { get; private set; }

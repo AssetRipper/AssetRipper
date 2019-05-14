@@ -62,9 +62,10 @@ namespace uTinyRipper.Classes
 			MonoScript script = Script.FindAsset(File);
 			if (script != null)
 			{
-				Structure = script.CreateStructure();
-				if(Structure != null)
+				ScriptType behaviourType = script.GetBehaviourType();
+				if (behaviourType != null)
 				{
+					Structure = behaviourType.CreateBehaviourStructure();
 					Structure.Read(reader);
 					return;
 				}
@@ -85,8 +86,8 @@ namespace uTinyRipper.Classes
 			yield return GeneratorAsset.FindAsset(file);
 #endif
 			yield return Script.FindAsset(file);
-			
-			if(Structure != null)
+
+			if (Structure != null)
 			{
 				foreach (Object asset in Structure.FetchDependencies(file, isLog))
 				{

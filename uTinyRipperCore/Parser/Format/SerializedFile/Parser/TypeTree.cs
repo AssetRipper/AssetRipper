@@ -1,11 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace uTinyRipper.SerializedFiles
 {
 	internal sealed class TypeTree : ISerializedFileReadable
 	{
+		public TypeTree()
+		{
+		}
+
+		public TypeTree(IReadOnlyCollection<TypeTreeNode> nodes)
+		{
+			Nodes = nodes.ToArray();
+		}
+
 		/// <summary>
 		/// 5.0.0a1 and greater
 		/// </summary>

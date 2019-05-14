@@ -22,11 +22,6 @@ namespace uTinyRipper.Classes
 			Y = y;
 		}
 
-		public Vector2f(Vector2f copy):
-			this(copy.X, copy.Y)
-		{
-		}
-
 		public static Vector2f operator -(Vector2f left)
 		{
 			return new Vector2f(-left.X, -left.Y);
@@ -82,9 +77,9 @@ namespace uTinyRipper.Classes
 			return (float)(360.0 * angle / (2.0 * Math.PI));
 		}
 
-		public IScriptStructure CreateCopy()
+		public IScriptStructure CreateDuplicate()
 		{
-			return new Vector2f(this);
+			return new Vector2f();
 		}
 
 		public void Read(AssetReader reader)
@@ -156,10 +151,6 @@ namespace uTinyRipper.Classes
 		}
 
 		public static Vector2f One { get; } = new Vector2f(1.0f, 1.0f);
-
-		public IScriptStructure Base => null;
-		public string Namespace => ScriptType.UnityEngineName;
-		public string Name => ScriptType.Vector2Name;
 
 		public float X { get; private set; }
 		public float Y { get; private set; }

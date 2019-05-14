@@ -1,17 +1,41 @@
 using System;
+using System.Collections.Generic;
 
 namespace uTinyRipper.Assembly
 {
+#warning TODO: rename
 	public abstract class ScriptType
 	{
-		public ScriptType(PrimitiveType type)
+		public struct Field
 		{
+			public Field(ScriptType type, bool isArray, string name)
+			{
+				Type = type;
+				IsArray = isArray;
+				Name = name;
+			}
+
+			public override string ToString()
+			{
+				return Type == null ? base.ToString() : (IsArray ? $"{Type}[] {Name}" : $"{Type} {Name}");
+			}
+
+			public ScriptType Type { get; }
+			public bool IsArray { get; }
+			public string Name { get; }
+		}
+
+		public ScriptType(string @namespace, PrimitiveType type, string name, ScriptType @base)
+		{
+			Namespace = @namespace ?? throw new ArgumentNullException(nameof(@namespace));
 			Type = type;
+			Name = name ?? throw new ArgumentNullException(nameof(name));
+			Base = @base;
 		}
 
 		public static bool IsPrimitive(string @namespace, string name)
 		{
-			if(@namespace == SystemName)
+			if(@namespace == SystemNamespace)
 			{
 				switch (name)
 				{
@@ -66,7 +90,7 @@ namespace uTinyRipper.Assembly
 			{
 				return true;
 			}
-			if(@namespace == SystemName && name == ValueType)
+			if(@namespace == SystemNamespace && name == ValueType)
 			{
 				return true;
 			}
@@ -75,44 +99,44 @@ namespace uTinyRipper.Assembly
 
 		public static bool IsDelegate(string @namespace, string name)
 		{
-			return @namespace == SystemName && name == MulticastDelegateName;
+			return @namespace == SystemNamespace && name == MulticastDelegateName;
 		}
 		public static bool IsObject(string @namespace, string name)
 		{
-			return @namespace == SystemName && (name == ObjectName || name == CObjectName);
+			return @namespace == SystemNamespace && (name == ObjectName || name == CObjectName);
 		}
 		public static bool IsString(string @namespace, string name)
 		{
-			return @namespace == SystemName && (name == StringName || name == CStringName);
+			return @namespace == SystemNamespace && (name == StringName || name == CStringName);
 		}
 		public static bool IsList(string @namespace, string name)
 		{
-			return @namespace == SystemCollectionGenericName && name == ListName;
+			return @namespace == SystemCollectionGenericNamespace && name == ListName;
 		}
 		
 		public static bool IsEngineObject(string @namespace, string name)
 		{
-			return @namespace == UnityEngineName && name == ObjectName;
+			return @namespace == UnityEngineNamespace && name == ObjectName;
 		}
 		public static bool IsScriptableObject(string @namespace, string name)
 		{
-			return @namespace == UnityEngineName && name == ScriptableObjectName;
+			return @namespace == UnityEngineNamespace && name == ScriptableObjectName;
 		}
 		public static bool IsComponent(string @namespace, string name)
 		{
-			return @namespace == UnityEngineName && name == ComponentName;
+			return @namespace == UnityEngineNamespace && name == ComponentName;
 		}
 		public static bool IsBehaviour(string @namespace, string name)
 		{
-			return @namespace == UnityEngineName && name == BehaviourName;
+			return @namespace == UnityEngineNamespace && name == BehaviourName;
 		}
 		public static bool IsMonoBehaviour(string @namespace, string name)
 		{
-			return @namespace == UnityEngineName && name == MonoBehaviourName;
+			return @namespace == UnityEngineNamespace && name == MonoBehaviourName;
 		}
 		public static bool IsEngineStruct(string @namespace, string name)
 		{
-			if(@namespace == UnityEngineName)
+			if(@namespace == UnityEngineNamespace)
 			{
 				switch (name)
 				{
@@ -143,7 +167,7 @@ namespace uTinyRipper.Assembly
 		}
 		public static bool IsExposedReference(string @namespace, string name)
 		{
-			return @namespace == UnityEngineName && name == ExposedReferenceName;
+			return @namespace == UnityEngineNamespace && name == ExposedReferenceName;
 		}
 
 		public static bool IsPrime(string @namespace, string name)
@@ -178,11 +202,6 @@ namespace uTinyRipper.Assembly
 			}
 
 			return false;
-		}
-
-		public static bool IsSerializableGeneric(string @namespace, string name)
-		{
-			return IsList(@namespace, name) || IsExposedReference(@namespace, name);
 		}
 
 		public static string ToPrimitiveString(string name)
@@ -252,7 +271,7 @@ namespace uTinyRipper.Assembly
 
 		protected static PrimitiveType ToPrimitiveType(string @namespace, string name)
 		{
-			if (@namespace == SystemName)
+			if (@namespace == SystemNamespace)
 			{
 				switch (name)
 				{
@@ -292,27 +311,111 @@ namespace uTinyRipper.Assembly
 			return PrimitiveType.Complex;
 		}
 
+		public ScriptStructure CreateBehaviourStructure()
+		{
+			return ForceCreateComplexStructure(this, 0);
+		}
+
+		public bool IsEnginePointer()
+		{
+			if (IsObject(Namespace, Name))
+			{
+				return false;
+			}
+			if (IsMonoPrime(Namespace, Name))
+			{
+				return true;
+			}
+			if (Base == null)
+			{
+				return false;
+			}
+			return Base.IsEnginePointer();
+		}
+
 		public override string ToString()
 		{
-			if (Type == PrimitiveType.Complex)
+			return Namespace ==	string.Empty ? Name : $"{Namespace}.{Name}";
+		}
+
+		private static IScriptStructure CreateComplexStructure(ScriptType type, int depth)
+		{
+			if (IsEngineStruct(type.Namespace, type.Name))
 			{
-				return ComplexType.ToString();
+				return ScriptStructure.EngineTypeToScriptStructure(type.Name);
+			}
+			if (type.IsEnginePointer())
+			{
+				return new ScriptPointer(type);
+			}
+			return ForceCreateComplexStructure(type, depth);
+		}
+
+		private static ScriptStructure ForceCreateComplexStructure(ScriptType type, int depth)
+		{
+			ScriptStructure @base = type.Base == null ? null : ForceCreateComplexStructure(type.Base, depth);
+			if (type.Fields.Count > 0 && depth <= MaxDepthLevel)
+			{
+				List<ScriptField> fields = new List<ScriptField>();
+				foreach (Field field in type.Fields)
+				{
+					if (depth == MaxDepthLevel)
+					{
+						if (field.Type.Type == PrimitiveType.Complex)
+						{
+							continue;
+						}
+						if (field.IsArray)
+						{
+							continue;
+						}
+					}
+
+					IScriptStructure fieldStructure = field.Type.Type == PrimitiveType.Complex ? CreateComplexStructure(field.Type, depth + 1) : null;
+					ScriptField sField = new ScriptField(field.Type.Type, fieldStructure, field.IsArray, field.Name);
+					fields.Add(sField);
+				}
+				return new ScriptStructure(type, @base, fields);
 			}
 			else
 			{
-				return Type.ToString();
+				return new ScriptStructure(type, @base, EmptyFields);
 			}
 		}
 
+		public string Namespace { get; }
 		public PrimitiveType Type { get; }
-		public abstract IScriptStructure ComplexType { get; }
+		public string Name { get; }
+		public ScriptType Base { get; }
+		public IReadOnlyList<Field> Fields { get; protected set; }
 
-		public const string SystemName = "System";
-		public const string SystemCollectionGenericName = "System.Collections.Generic";
-		public const string UnityEngineName = "UnityEngine";
+		public const int MaxDepthLevel = 8;
+
+		public const string SystemNamespace = "System";
+		public const string SystemCollectionGenericNamespace = "System.Collections.Generic";
+		public const string UnityEngineNamespace = "UnityEngine";
 		public const string CompilerServicesNamespace = "System.Runtime.CompilerServices";
 		
 		public const string CompilerGeneratedName = "CompilerGeneratedAttribute";
+
+		public const string Vector2Name = "Vector2";
+		public const string Vector2IntName = "Vector2Int";
+		public const string Vector3Name = "Vector3";
+		public const string Vector3IntName = "Vector3Int";
+		public const string Vector4Name = "Vector4";
+		public const string RectName = "Rect";
+		public const string BoundsName = "Bounds";
+		public const string BoundsIntName = "BoundsInt";
+		public const string QuaternionName = "Quaternion";
+		public const string Matrix4x4Name = "Matrix4x4";
+		public const string ColorName = "Color";
+		public const string Color32Name = "Color32";
+		public const string LayerMaskName = "LayerMask";
+		public const string AnimationCurveName = "AnimationCurve";
+		public const string GradientName = "Gradient";
+		public const string RectOffsetName = "RectOffset";
+		public const string GUIStyleName = "GUIStyle";
+		public const string PropertyNameName = "PropertyName";
 
 		private const string ObjectName = "Object";
 		private const string CObjectName = "object";
@@ -349,28 +452,11 @@ namespace uTinyRipper.Assembly
 		private const string ListName = "List`1";
 		private const string ExposedReferenceName = "ExposedReference`1";
 
-		public const string Vector2Name = "Vector2";
-		public const string Vector2IntName = "Vector2Int";
-		public const string Vector3Name = "Vector3";
-		public const string Vector3IntName = "Vector3Int";
-		public const string Vector4Name = "Vector4";
-		public const string RectName = "Rect";
-		public const string BoundsName = "Bounds";
-		public const string BoundsIntName = "BoundsInt";
-		public const string QuaternionName = "Quaternion";
-		public const string Matrix4x4Name = "Matrix4x4";
-		public const string ColorName = "Color";
-		public const string Color32Name = "Color32";
-		public const string LayerMaskName = "LayerMask";
-		public const string AnimationCurveName = "AnimationCurve";
-		public const string GradientName = "Gradient";
-		public const string RectOffsetName = "RectOffset";
-		public const string GUIStyleName = "GUIStyle";
-		public const string PropertyNameName = "PropertyName";
-
 		private const string ScriptableObjectName = "ScriptableObject";
 		private const string ComponentName = "Component";
 		private const string BehaviourName = "Behaviour";
 		private const string MonoBehaviourName = "MonoBehaviour";
+
+		protected static readonly IReadOnlyList<ScriptField> EmptyFields = new ScriptField[0];
 	}
 }

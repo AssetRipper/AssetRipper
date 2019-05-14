@@ -217,7 +217,7 @@ namespace uTinyRipper
 			AssemblyManager.Dispose();
 			foreach (ResourceFile res in m_resources.Values)
 			{
-				res.Dispose();
+				res?.Dispose();
 			}
 		}
 

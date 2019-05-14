@@ -1,4 +1,3 @@
-using Mono.Cecil;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
@@ -9,22 +8,16 @@ using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper.Assembly
 {
-	public class ScriptPointer : ScriptStructure
+	public sealed class ScriptPointer : ScriptStructure
 	{
-		public ScriptPointer(TypeReference type):
-			base(type.Namespace, type.Name)
+		public ScriptPointer(ScriptType type):
+			base(type, null, EmptyFields)
 		{
 		}
 
-		protected ScriptPointer(ScriptPointer copy):
-			base(copy.Namespace, copy.Name)
+		public override IScriptStructure CreateDuplicate()
 		{
-			Pointer = copy.Pointer;
-		}
-
-		public override IScriptStructure CreateCopy()
-		{
-			return new ScriptPointer(this);
+			return new ScriptPointer(Type);
 		}
 
 		public override void Read(AssetReader reader)
@@ -43,5 +36,7 @@ namespace uTinyRipper.Assembly
 		}
 
 		public PPtr<Object> Pointer;
+
+		private static readonly ScriptField[] EmptyFields = new ScriptField[0];
 	}
 }

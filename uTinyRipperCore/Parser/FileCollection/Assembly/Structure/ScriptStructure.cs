@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.AnimationClips;
@@ -12,37 +11,17 @@ using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper.Assembly
 {
-	public abstract class ScriptStructure : IScriptStructure
+	public class ScriptStructure : IScriptStructure
 	{
-		protected ScriptStructure(string @namespace, string name, IScriptStructure @base, IEnumerable<IScriptField> fields) :
-			this(@namespace, name)
+		internal ScriptStructure(ScriptType type, ScriptStructure @base, IReadOnlyList<ScriptField> fields)
 		{
-			if (fields == null)
-			{
-				throw new ArgumentNullException(nameof(fields));
-			}
-
+			Type = type ?? throw new ArgumentNullException(nameof(type));
 			Base = @base;
-			m_fields = fields.ToArray();
-		}
-
-		protected ScriptStructure(string @namespace, string name)
-		{
-			if (@namespace == null)
-			{
-				throw new ArgumentNullException(nameof(@namespace));
-			}
-			if (string.IsNullOrEmpty(name))
-			{
-				throw new ArgumentNullException(nameof(name));
-			}
-
-			Namespace = @namespace;
-			Name = name;
+			Fields = fields ?? throw new ArgumentNullException(nameof(fields));
 		}
 
 		protected ScriptStructure(ScriptStructure copy) :
-			this(copy.Namespace, copy.Name, CreateBase(copy), CreateFields(copy))
+			this(copy.Type, CreateBase(copy), CreateFields(copy))
 		{
 		}
 		
@@ -93,28 +72,31 @@ namespace uTinyRipper.Assembly
 			}
 		}
 
-		protected static IScriptStructure CreateBase(ScriptStructure copy)
+		protected static ScriptStructure CreateBase(ScriptStructure copy)
 		{
 			if (copy.Base == null)
 			{
 				return null;
 			}
 
-			return copy.Base.CreateCopy();
+			return (ScriptStructure)copy.Base.CreateDuplicate();
 		}
 
-		protected static IEnumerable<IScriptField> CreateFields(ScriptStructure copy)
+		protected static List<ScriptField> CreateFields(ScriptStructure copy)
 		{
-			List<IScriptField> fields = new List<IScriptField>();
-			foreach (ScriptField cfield in copy.Fields)
+			List<ScriptField> fields = new List<ScriptField>();
+			foreach (ScriptField field in copy.Fields)
 			{
-				IScriptField field = cfield.CreateCopy();
-				fields.Add(field);
+				ScriptField fieldCopy = field.CreateCopy();
+				fields.Add(fieldCopy);
 			}
 			return fields;
 		}
 
-		public abstract IScriptStructure CreateCopy();
+		public virtual IScriptStructure CreateDuplicate()
+		{
+			return new ScriptStructure(this);
+		}
 
 		public virtual void Read(AssetReader reader)
 		{
@@ -149,7 +131,7 @@ namespace uTinyRipper.Assembly
 				}
 			}
 
-			foreach (ScriptField field in m_fields)
+			foreach (ScriptField field in Fields)
 			{
 				foreach (Object asset in field.FetchDependencies(file, isLog))
 				{
@@ -158,24 +140,58 @@ namespace uTinyRipper.Assembly
 			}
 		}
 
-		public override string ToString()
+		/*public TypeTree ToTypeTree()
 		{
-			if (Namespace == string.Empty)
+			List<TypeTreeNode> nodes = new List<TypeTreeNode>();
+
+			int index = 0;
+			int size = CalculateSize(0);
+			TypeTreeNode root = new TypeTreeNode(0, false, Name, "Base", size, index++, TransferMetaFlags.NoTransferFlags);
+			nodes.Add(root);
+			foreach (ScriptField field in Fields)
 			{
-				return $"{Name}";
+
+			}
+
+			return new TypeTree(nodes);
+		}
+
+		public int CalculateSize(int depth)
+		{
+			if (Type.Type == PrimitiveType.Complex)
+			{
+				int size = Base == null ? 0 : Base.CalculateSize(depth);
+				if (size == -1)
+				{
+					return -1;
+				}
+
+				foreach (ScriptField field in Fields)
+				{
+					int fieldSize = field.CalculateSize(depth + 1);
+
+				}
 			}
 			else
 			{
-				return $"{Namespace}.{Name}";
+				return Type.Type.GetSize();
+			}
+		}*/
+
+		public override string ToString()
+		{
+			if (Type.Namespace == string.Empty)
+			{
+				return $"{Type.Name}";
+			}
+			else
+			{
+				return $"{Type.Namespace}.{Type.Name}";
 			}
 		}
 
-		public IScriptStructure Base { get; }
-		public IReadOnlyList<IScriptField> Fields => m_fields;
-
-		public string Namespace { get; }
-		public string Name { get; }
-
-		private readonly IScriptField[] m_fields;
+		public ScriptType Type { get; }
+		public ScriptStructure Base { get; }
+		public IReadOnlyList<ScriptField> Fields { get; }
 	}
 }

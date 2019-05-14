@@ -184,13 +184,13 @@ namespace uTinyRipper.Exporters.Scripts
 
 		private string ExportNamespace()
 		{
-			if(Namespace == ScriptType.UnityEngineName)
+			if(Namespace == ScriptType.UnityEngineNamespace)
 			{
 				switch (CleanNestedName)
 				{
 					case "NavMeshAgent":
 					case "OffMeshLink":
-						return $"{ScriptType.UnityEngineName}.AI";
+						return $"{ScriptType.UnityEngineNamespace}.AI";
 				}
 			}
 			return Namespace;

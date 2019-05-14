@@ -108,24 +108,40 @@ namespace uTinyRipper.Assembly
 			return m_manager.IsValid(assembly, @namespace, name);
 		}
 
-		public ScriptStructure CreateStructure(string assembly, string name)
+		public ScriptType GetBehaviourType(string assembly, string name)
 		{
-			return m_manager.CreateStructure(assembly, name);
+			string uniqueName = $"[{assembly}]{name}";
+			if (m_serializableBehaviours.TryGetValue(uniqueName, out ScriptType type))
+			{
+				return type;
+			}
+
+			type = m_manager.GetBehaviourType(assembly, name);
+			m_serializableBehaviours.Add(uniqueName, type);
+			return type;
 		}
 
-		public ScriptStructure CreateStructure(string assembly, string @namespace, string name)
+		public ScriptType GetBehaviourType(string assembly, string @namespace, string name)
 		{
-			return m_manager.CreateStructure(assembly, @namespace, name);
+			string uniqueName = @namespace == string.Empty ? $"[{assembly}]{name}" : $"[{assembly}]{@namespace}.{name}";
+			if (m_serializableBehaviours.TryGetValue(uniqueName, out ScriptType type))
+			{
+				return type;
+			}
+
+			type = m_manager.GetBehaviourType(assembly, @namespace, name);
+			m_serializableBehaviours.Add(uniqueName, type);
+			return type;
 		}
 
-		public ScriptExportType CreateExportType(ScriptExportManager exportManager, string assembly, string name)
+		public ScriptExportType GetExportType(ScriptExportManager exportManager, string assembly, string name)
 		{
-			return m_manager.CreateExportType(exportManager, assembly, name);
+			return m_manager.GetExportType(exportManager, assembly, name);
 		}
 
-		public ScriptExportType CreateExportType(ScriptExportManager exportManager, string assembly, string @namespace, string name)
+		public ScriptExportType GetExportType(ScriptExportManager exportManager, string assembly, string @namespace, string name)
 		{
-			return m_manager.CreateExportType(exportManager, assembly, @namespace, name);
+			return m_manager.GetExportType(exportManager, assembly, @namespace, name);
 		}
 
 		public ScriptInfo GetScriptInfo(string assembly, string name)
@@ -191,7 +207,7 @@ namespace uTinyRipper.Assembly
 		private event Action<string> m_requestAssemblyCallback;
 
 		private IAssemblyManager m_manager;
+		private Dictionary<string, ScriptType> m_serializableBehaviours = new Dictionary<string, ScriptType>();
 		private Dictionary<string, ScriptType> m_serializableTypes = new Dictionary<string, ScriptType>();
-
 	}
 }

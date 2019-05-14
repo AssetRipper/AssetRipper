@@ -8,11 +8,6 @@ namespace uTinyRipper.Classes
 {
 	public struct PropertyName : IScriptStructure
 	{
-		public PropertyName(PropertyName copy)
-		{
-			ID = copy.ID;
-		}
-
 		public static bool operator ==(PropertyName lhs, PropertyName rhs)
 		{
 			return lhs.ID == rhs.ID;
@@ -23,9 +18,9 @@ namespace uTinyRipper.Classes
 			return lhs.ID != rhs.ID;
 		}
 
-		public IScriptStructure CreateCopy()
+		public IScriptStructure CreateDuplicate()
 		{
-			return new PropertyName(this);
+			return new PropertyName();
 		}
 
 		public void Read(AssetReader reader)
@@ -56,10 +51,6 @@ namespace uTinyRipper.Classes
 			}
 			return false;
 		}
-
-		public IScriptStructure Base => null;
-		public string Namespace => ScriptType.UnityEngineName;
-		public string Name => ScriptType.PropertyNameName;
 
 		public int ID { get; private set; }
 	}

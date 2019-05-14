@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes
 {
 	public sealed class MonoScript : TextAsset
 	{
-		public MonoScript(AssetInfo assetInfo):
+		public MonoScript(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -90,14 +90,14 @@ namespace uTinyRipper.Classes
 			}
 			return version.IsLess(2018, 1, 2);
 		}
-		
+
 		/// <summary>
 		/// Less than 2018.2
 		/// </summary>
 		public static bool IsReadIsEditorScript(Version version)
 		{
 			return version.IsLess(2018, 2);
-		}		
+		}
 
 		/// <summary>
 		/// Less than 5.0.0
@@ -109,7 +109,7 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if(version.IsGreaterEqual(2018, 2))
+			if (version.IsGreaterEqual(2018, 2))
 			{
 				return 5;
 			}
@@ -138,34 +138,34 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public ScriptStructure CreateStructure()
+		public ScriptType GetBehaviourType()
 		{
-			if(IsReadNamespace(File.Version))
+			if (IsReadNamespace(File.Version))
 			{
 				if (File.AssemblyManager.IsValid(AssemblyName, Namespace, ClassName))
 				{
-					return File.AssemblyManager.CreateStructure(AssemblyName, Namespace, ClassName);
+					return File.AssemblyManager.GetBehaviourType(AssemblyName, Namespace, ClassName);
 				}
 			}
 			else
 			{
 				if (File.AssemblyManager.IsValid(AssemblyName, ClassName))
 				{
-					return File.AssemblyManager.CreateStructure(AssemblyName, ClassName);
+					return File.AssemblyManager.GetBehaviourType(AssemblyName, ClassName);
 				}
 			}
 			return null;
 		}
 
-		public ScriptExportType CreateExportType(ScriptExportManager exportManager)
+		public ScriptExportType GetExportType(ScriptExportManager exportManager)
 		{
-			if(IsReadNamespace(File.Version))
+			if (IsReadNamespace(File.Version))
 			{
-				return File.AssemblyManager.CreateExportType(exportManager, AssemblyName, Namespace, ClassName);
+				return File.AssemblyManager.GetExportType(exportManager, AssemblyName, Namespace, ClassName);
 			}
 			else
 			{
-				return File.AssemblyManager.CreateExportType(exportManager, AssemblyName, ClassName);
+				return File.AssemblyManager.GetExportType(exportManager, AssemblyName, ClassName);
 			}
 		}
 

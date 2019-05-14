@@ -14,6 +14,17 @@ namespace uTinyRipper.SerializedFiles
 			Depth = depth;
 		}
 
+		public TypeTreeNode(byte depth, bool isArray, string type, string name, int byteSize, int index, TransferMetaFlags metaFlag)
+		{
+			Depth = depth;
+			IsArray = isArray;
+			Type = type;
+			Name = name;
+			ByteSize = byteSize;
+			Index = index;
+			MetaFlag = metaFlag;
+		}
+
 		public static int GetNodeSize(FileGeneration generation)
 		{
 			return IsReadUnknown(generation) ? 32 : 24;
@@ -35,7 +46,7 @@ namespace uTinyRipper.SerializedFiles
 			Index = reader.ReadInt32();
 			IsArray = reader.ReadInt32() != 0;
 			Version = reader.ReadInt32();
-			MetaFlag = reader.ReadUInt32();
+			MetaFlag = (TransferMetaFlags)reader.ReadUInt32();
 		}
 
 		public void Read(SerializedFileReader reader, long stringPosition)
@@ -47,7 +58,7 @@ namespace uTinyRipper.SerializedFiles
 			uint name = reader.ReadUInt32();
 			ByteSize = reader.ReadInt32();
 			Index = reader.ReadInt32();
-			MetaFlag = reader.ReadUInt32();
+			MetaFlag = (TransferMetaFlags)reader.ReadUInt32();
 			if (IsReadUnknown(reader.Generation))
 			{
 				Unknown1 = reader.ReadUInt32();
@@ -127,7 +138,7 @@ namespace uTinyRipper.SerializedFiles
 		/// </summary>
 		public string Name { get; private set; }
 		/// <summary>
-		/// Size of the data value in bytes, e.g. 4 for int. -1 means that the field is a class and contains child fields only.
+		/// Size of the data value in bytes, e.g. 4 for int. -1 means that there is an array somewhere inside its hierarchy
 		/// Note: The padding for the alignment is not included in the size.
 		/// </summary>
 		public int ByteSize { get; private set; }
@@ -137,9 +148,9 @@ namespace uTinyRipper.SerializedFiles
 		/// </summary>
 		public int Index { get; private set; }
 		/// <summary>
-		/// Metaflags of the field. Purpose is mostly unknown.
+		/// Metaflags of the field
 		/// </summary>
-		public uint MetaFlag { get; private set; }
+		public TransferMetaFlags MetaFlag { get; private set; }
 		public uint Unknown1 { get; private set; }
 		public uint Unknown2 { get; private set; }
 	}

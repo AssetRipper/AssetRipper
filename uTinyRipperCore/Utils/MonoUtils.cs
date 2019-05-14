@@ -65,14 +65,18 @@ namespace uTinyRipper
 			if (type.IsGenericParameter)
 			{
 				GenericParameter generic = (GenericParameter)type;
-				return arguments[generic];
+				return ResolveGenericParameter(arguments[generic], arguments);
 			}
 			if (type.IsArray)
 			{
 				ArrayType array = (ArrayType)type;
 				TypeReference arrayElement = array.ElementType;
-				TypeReference resolvedElement = arrayElement.ContainsGenericParameter ? ResolveGenericParameter(arrayElement, arguments) : arrayElement;
-				return CreateArrayFrom(array, resolvedElement);
+				if (arrayElement.ContainsGenericParameter)
+				{
+					TypeReference resolvedElement = ResolveGenericParameter(arrayElement, arguments);
+					return CreateArrayFrom(array, resolvedElement);
+				}
+				return array;
 			}
 			if (type.IsGenericInstance)
 			{

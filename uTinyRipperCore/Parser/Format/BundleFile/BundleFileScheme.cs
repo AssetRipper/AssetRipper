@@ -139,7 +139,8 @@ namespace uTinyRipper.BundleFiles
 				case BundleCompressType.None:
 					{
 						Metadata.Read(reader);
-						if (reader.BaseStream.Position != Header.HeaderSize + Header.MetadataDecompressedSize)
+						long expectedPosition = Header.Flags.IsMetadataAtTheEnd() ? Header.BundleSize : Header.HeaderSize + Header.MetadataDecompressedSize;
+						if (reader.BaseStream.Position != expectedPosition)
 						{
 							throw new Exception($"Read {reader.BaseStream.Position - Header.HeaderSize} but expected {Header.MetadataDecompressedSize}");
 						}
@@ -157,7 +158,7 @@ namespace uTinyRipper.BundleFiles
 							}
 							if (stream.Position != Header.MetadataDecompressedSize)
 							{
-								throw new Exception($"Read {stream.Position} but expected {stream.Length}");
+								throw new Exception($"Read {stream.Position} but expected {Header.MetadataDecompressedSize}");
 							}
 						}
 					}
@@ -184,7 +185,7 @@ namespace uTinyRipper.BundleFiles
 							}
 							if (stream.Position != Header.MetadataDecompressedSize)
 							{
-								throw new Exception($"Read {stream.Position} but expected {stream.Length}");
+								throw new Exception($"Read {stream.Position} but expected {Header.MetadataDecompressedSize}");
 							}
 						}
 					}
@@ -321,7 +322,7 @@ namespace uTinyRipper.BundleFiles
 												long read = lzStream.Read(blockStream, block.DecompressedSize);
 												if (read != block.DecompressedSize || lzStream.IsDataLeft)
 												{
-													throw new Exception($"Read {read} but expected {block.CompressedSize}");
+													throw new Exception($"Read {read} but expected {block.DecompressedSize}");
 												}
 											}
 											break;

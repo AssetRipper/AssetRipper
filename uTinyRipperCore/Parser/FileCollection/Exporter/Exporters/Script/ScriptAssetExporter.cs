@@ -43,7 +43,7 @@ namespace uTinyRipper.AssetExporters
 			foreach (Object asset in assets)
 			{
 				MonoScript script = (MonoScript)asset;
-				ScriptExportType exportType = script.CreateExportType(scriptManager);
+				ScriptExportType exportType = script.GetExportType(scriptManager);
 				exportTypes.Add(asset, exportType);
 			}
 			foreach (KeyValuePair<Object, ScriptExportType> exportType in exportTypes)

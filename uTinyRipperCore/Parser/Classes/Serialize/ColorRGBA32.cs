@@ -29,9 +29,9 @@ namespace uTinyRipper.Classes
 			return 2;
 		}
 
-		public IScriptStructure CreateCopy()
+		public IScriptStructure CreateDuplicate()
 		{
-			return this;
+			return new ColorRGBA32();
 		}
 
 		public void Read(AssetReader reader)
@@ -58,10 +58,6 @@ namespace uTinyRipper.Classes
 		}
 
 		public static ColorRGBA32 White => new ColorRGBA32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
-
-		public IScriptStructure Base => null;
-		public string Namespace => ScriptType.UnityEngineName;
-		public string Name => ScriptType.Color32Name;
 
 		public uint RGBA { get; private set; }
 

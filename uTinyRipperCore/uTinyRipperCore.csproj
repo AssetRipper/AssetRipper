@@ -198,6 +198,7 @@
     <Compile Include="Parser\FileCollection\Exporter\Exporters\TextAsset\TextAssetExporter.cs" />
     <Compile Include="Parser\FileCollection\Exporter\ExportOptions.cs" />
     <Compile Include="Parser\Format\ArchiveFile\ArchiveFileScheme.cs" />
+    <Compile Include="Parser\IO\Asset\TransferMetaFlags.cs" />
     <Compile Include="Parser\IO\Extensions\EndianReaderExtensions.cs" />
     <Compile Include="Parser\Format\ArchiveFile\ArchiveType.cs" />
     <Compile Include="Parser\Format\ArchiveFile\Parser\ArchiveFileEntry.cs" />
@@ -314,10 +315,8 @@
     <Compile Include="Parser\FileCollection\Assembly\Mono\MonoField.cs" />
     <Compile Include="Parser\FileCollection\Assembly\ScriptInfo.cs" />
     <Compile Include="Parser\FileCollection\Assembly\ScriptingBackEnd.cs" />
-    <Compile Include="Parser\FileCollection\Assembly\Structure\IScriptField.cs" />
     <Compile Include="Parser\FileCollection\Assembly\Structure\IScriptStructure.cs" />
     <Compile Include="Parser\FileCollection\Assembly\Structure\ScriptPointer.cs" />
-    <Compile Include="Parser\FileCollection\Assembly\Mono\MonoStructure.cs" />
     <Compile Include="Parser\FileCollection\Assembly\Mono\MonoType.cs" />
     <Compile Include="Parser\FileCollection\Assembly\Structure\PrimitiveType.cs" />
     <Compile Include="Parser\FileCollection\Assembly\Structure\ScriptField.cs" />

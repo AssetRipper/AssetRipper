@@ -33,19 +33,15 @@ namespace uTinyRipper.Classes
 			yield break;
 		}
 
-		public IScriptStructure CreateCopy()
+		public IScriptStructure CreateDuplicate()
 		{
-			return this;
+			return new AABB();
 		}
 
 		public override string ToString()
 		{
 			return $"C:{Center} E:{Extent}";
 		}
-
-		public IScriptStructure Base => null;
-		public string Namespace => ScriptType.UnityEngineName;
-		public string Name => ScriptType.BoundsName;
 
 		public const string CenterName = "m_Center";
 		public const string ExtentName = "m_Extent";

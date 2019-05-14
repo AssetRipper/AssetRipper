@@ -3,19 +3,9 @@ using System.Collections.Generic;
 
 namespace uTinyRipper.Assembly.Mono
 {
-	public sealed class MonoField : ScriptField
+#warning TODO: move to MonoType
+	public static class MonoField
 	{
-		internal MonoField(MonoManager manager, FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
-			base(manager.GetSerializableType(GetSerializedElementType(field.FieldType, arguments), arguments),
-				IsSerializableArray(field.FieldType, arguments), field.Name)
-		{
-		}
-		
-		private MonoField(MonoField copy):
-			base(copy)
-		{
-		}
-
 		public static bool IsSerializableModifier(FieldDefinition field)
 		{
 			if (field.HasConstant)
@@ -202,7 +192,7 @@ namespace uTinyRipper.Assembly.Mono
 			foreach (CustomAttribute attribute in field.CustomAttributes)
 			{
 				TypeReference type = attribute.AttributeType;
-				if (IsCompilerGeneratedAttrribute(type.Namespace, type.Name))
+				if (ScriptField.IsCompilerGeneratedAttrribute(type.Namespace, type.Name))
 				{
 					return true;
 				}
@@ -220,40 +210,12 @@ namespace uTinyRipper.Assembly.Mono
 			foreach (CustomAttribute attribute in field.CustomAttributes)
 			{
 				TypeReference type = attribute.AttributeType;
-				if (IsSerializeFieldAttrribute(type.Namespace, type.Name))
+				if (ScriptField.IsSerializeFieldAttrribute(type.Namespace, type.Name))
 				{
 					return true;
 				}
 			}
 			return false;
-		}
-
-		private static TypeReference GetSerializedElementType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
-		{
-			TypeReference resolvedType = type.ContainsGenericParameter ? MonoUtils.ResolveGenericParameter(type, arguments) : type;
-			if (resolvedType.IsArray)
-			{
-				ArrayType array = (ArrayType)resolvedType;
-				return array.ElementType;
-			}
-			if (MonoType.IsList(resolvedType))
-			{
-				GenericInstanceType generic = (GenericInstanceType)resolvedType;
-				return generic.GenericArguments[0];
-			}
-
-			return resolvedType;
-		}
-
-		private static bool IsSerializableArray(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
-		{
-			TypeReference resolvedType = type.ContainsGenericParameter ? MonoUtils.ResolveGenericParameter(type, arguments) : type;
-			return IsSerializableArray(resolvedType);
-		}
-
-		public override IScriptField CreateCopy()
-		{
-			return new MonoField(this);
 		}
 	}
 }
