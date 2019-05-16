@@ -69,7 +69,9 @@ namespace uTinyRipper.AssetExporters
 				DirectoryUtils.CreateVirtualDirectory(path);
 			}
 
-			string filePath = $"{Path.Combine(path, name)}.{asset.ExportExtension}";
+			string fullName = $"{name}.{GetExportExtension(asset)}";
+			string uniqueName = FileUtils.GetUniqueName(path, fullName, FileUtils.MaxFileNameLength - MetaExtension.Length);
+			string filePath = Path.Combine(path, uniqueName);
 			AssetExporter.Export(container, asset, filePath);
 			Meta meta = new Meta(importer, asset.GUID);
 			ExportMeta(container, meta, filePath);
@@ -77,7 +79,7 @@ namespace uTinyRipper.AssetExporters
 
 		protected void ExportMeta(IExportContainer container, Meta meta, string filePath)
 		{
-			string metaPath = $"{filePath}.meta";
+			string metaPath = $"{filePath}{MetaExtension}";
 			using (Stream fileStream = FileUtils.CreateVirtualFile(metaPath))
 			{
 				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
@@ -114,7 +116,7 @@ namespace uTinyRipper.AssetExporters
 			fileName = FileNameRegex.Replace(fileName, string.Empty);
 
 			fileName = $"{fileName}.{GetExportExtension(asset)}";
-			fileName = FileUtils.GetUniqueName(dirPath, fileName);
+			fileName = FileUtils.GetUniqueName(dirPath, fileName, FileUtils.MaxFileNameLength - MetaExtension.Length);
 			return fileName;
 		}
 
@@ -128,6 +130,8 @@ namespace uTinyRipper.AssetExporters
 		public virtual TransferInstructionFlags Flags => TransferInstructionFlags.NoTransferInstructionFlags;
 		public abstract IEnumerable<Object> Assets { get; }
 		public abstract string Name { get; }
+
+		private const string MetaExtension = ".meta";
 
 		private static readonly Regex FileNameRegex;
 	}
