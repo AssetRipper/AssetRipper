@@ -90,7 +90,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		{
 			if (MonoType.IsCPrimitive(type))
 			{
-				return SerializableType.ToCPrimitiveString(type.Name);
+				return MonoUtils.ToCPrimitiveString(type.Name);
 			}
 
 			if (type.IsGenericInstance)

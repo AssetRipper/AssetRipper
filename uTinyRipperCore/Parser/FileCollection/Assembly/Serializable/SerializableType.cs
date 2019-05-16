@@ -24,12 +24,11 @@ namespace uTinyRipper.Assembly
 			public string Name { get; }
 		}
 
-		public SerializableType(string @namespace, PrimitiveType type, string name, SerializableType @base)
+		public SerializableType(string @namespace, PrimitiveType type, string name)
 		{
 			Namespace = @namespace ?? throw new ArgumentNullException(nameof(@namespace));
 			Type = type;
 			Name = name ?? throw new ArgumentNullException(nameof(name));
-			Base = @base;
 		}
 
 		public static bool IsPrimitive(string @namespace, string name)
@@ -38,28 +37,28 @@ namespace uTinyRipper.Assembly
 			{
 				switch (name)
 				{
-					case VoidName:
-					case CVoidName:
-					case BooleanName:
-					case BoolName:
-					case ByteName:
-					case CByteName:
-					case Int16Name:
-					case ShortName:
-					case UInt16Name:
-					case UShortName:
-					case Int32Name:
-					case IntName:
-					case UInt32Name:
-					case UIntName:
-					case Int64Name:
-					case LongName:
-					case UInt64Name:
-					case ULongName:
-					case SingleName:
-					case FloatName:
-					case DoubleName:
-					case CDoubleName:
+					case MonoUtils.VoidName:
+					case MonoUtils.CVoidName:
+					case MonoUtils.BooleanName:
+					case MonoUtils.BoolName:
+					case MonoUtils.ByteName:
+					case MonoUtils.CByteName:
+					case MonoUtils.Int16Name:
+					case MonoUtils.ShortName:
+					case MonoUtils.UInt16Name:
+					case MonoUtils.UShortName:
+					case MonoUtils.Int32Name:
+					case MonoUtils.IntName:
+					case MonoUtils.UInt32Name:
+					case MonoUtils.UIntName:
+					case MonoUtils.Int64Name:
+					case MonoUtils.LongName:
+					case MonoUtils.UInt64Name:
+					case MonoUtils.ULongName:
+					case MonoUtils.SingleName:
+					case MonoUtils.FloatName:
+					case MonoUtils.DoubleName:
+					case MonoUtils.CDoubleName:
 						return true;
 				}
 			}
@@ -89,7 +88,7 @@ namespace uTinyRipper.Assembly
 			{
 				return true;
 			}
-			if(@namespace == SystemNamespace && name == ValueType)
+			if(@namespace == SystemNamespace && name == MonoUtils.ValueType)
 			{
 				return true;
 			}
@@ -102,11 +101,11 @@ namespace uTinyRipper.Assembly
 		}
 		public static bool IsObject(string @namespace, string name)
 		{
-			return @namespace == SystemNamespace && (name == ObjectName || name == CObjectName);
+			return @namespace == SystemNamespace && (name == MonoUtils.ObjectName || name == MonoUtils.CObjectName);
 		}
 		public static bool IsString(string @namespace, string name)
 		{
-			return @namespace == SystemNamespace && (name == StringName || name == CStringName);
+			return @namespace == SystemNamespace && (name == MonoUtils.StringName || name == MonoUtils.CStringName);
 		}
 		public static bool IsList(string @namespace, string name)
 		{
@@ -115,7 +114,7 @@ namespace uTinyRipper.Assembly
 		
 		public static bool IsEngineObject(string @namespace, string name)
 		{
-			return @namespace == UnityEngineNamespace && name == ObjectName;
+			return @namespace == UnityEngineNamespace && name == MonoUtils.ObjectName;
 		}
 		public static bool IsScriptableObject(string @namespace, string name)
 		{
@@ -203,104 +202,39 @@ namespace uTinyRipper.Assembly
 			return false;
 		}
 
-		public static string ToPrimitiveString(string name)
-		{
-			switch(name)
-			{
-				case VoidName:
-				case CVoidName:
-					return CVoidName;
-				case BooleanName:
-				case BoolName:
-					return BoolName;
-				case CharName:
-				case CCharName:
-					return CCharName;
-				case SByteName:
-				case CSByteName:
-					return CSByteName;
-				case ByteName:
-				case CByteName:
-					return CByteName;
-				case Int16Name:
-				case ShortName:
-					return ShortName;
-				case UInt16Name:
-				case UShortName:
-					return UShortName;
-				case Int32Name:
-				case IntName:
-					return IntName;
-				case UInt32Name:
-				case UIntName:
-					return UIntName;
-				case Int64Name:
-				case LongName:
-					return LongName;
-				case UInt64Name:
-				case ULongName:
-					return ULongName;
-				case SingleName:
-				case FloatName:
-					return FloatName;
-				case DoubleName:
-				case CDoubleName:
-					return CDoubleName;
-				default:
-					throw new Exception(name);
-			}
-		}
-
-		public static string ToCPrimitiveString(string name)
-		{
-			switch(name)
-			{
-				case StringName:
-				case CStringName:
-					return CStringName;
-
-				case ObjectName:
-				case CObjectName:
-					return CObjectName;
-
-				default:
-					return ToPrimitiveString(name);
-			}
-		}
-
 		protected static PrimitiveType ToPrimitiveType(string @namespace, string name)
 		{
 			if (@namespace == SystemNamespace)
 			{
 				switch (name)
 				{
-					case VoidName:
+					case MonoUtils.VoidName:
 						return PrimitiveType.Void;
-					case BooleanName:
+					case MonoUtils.BooleanName:
 						return PrimitiveType.Bool;
-					case CharName:
+					case MonoUtils.CharName:
 						return PrimitiveType.Char;
-					case SByteName:
+					case MonoUtils.SByteName:
 						return PrimitiveType.SByte;
-					case ByteName:
+					case MonoUtils.ByteName:
 						return PrimitiveType.Byte;
-					case Int16Name:
+					case MonoUtils.Int16Name:
 						return PrimitiveType.Short;
-					case UInt16Name:
+					case MonoUtils.UInt16Name:
 						return PrimitiveType.UShort;
-					case Int32Name:
+					case MonoUtils.Int32Name:
 						return PrimitiveType.Int;
-					case UInt32Name:
+					case MonoUtils.UInt32Name:
 						return PrimitiveType.UInt;
-					case Int64Name:
+					case MonoUtils.Int64Name:
 						return PrimitiveType.Long;
-					case UInt64Name:
+					case MonoUtils.UInt64Name:
 						return PrimitiveType.ULong;
-					case SingleName:
+					case MonoUtils.SingleName:
 						return PrimitiveType.Single;
-					case DoubleName:
+					case MonoUtils.DoubleName:
 						return PrimitiveType.Double;
-					case StringName:
+					case MonoUtils.StringName:
 						return PrimitiveType.String;
 
 					default:
@@ -385,7 +319,7 @@ namespace uTinyRipper.Assembly
 		public string Namespace { get; }
 		public PrimitiveType Type { get; }
 		public string Name { get; }
-		public SerializableType Base { get; }
+		public SerializableType Base { get; protected set; }
 		public IReadOnlyList<Field> Fields { get; protected set; }
 
 		public const int MaxDepthLevel = 8;
@@ -416,37 +350,6 @@ namespace uTinyRipper.Assembly
 		public const string GUIStyleName = "GUIStyle";
 		public const string PropertyNameName = "PropertyName";
 
-		private const string ObjectName = "Object";
-		private const string CObjectName = "object";
-		private const string ValueType = "ValueType";
-		private const string VoidName = "Void";
-		private const string CVoidName = "void";
-		private const string BooleanName = "Boolean";
-		private const string BoolName = "bool";
-		private const string CharName = "Char";
-		private const string CCharName = "char";
-		private const string SByteName = "SByte";
-		private const string CSByteName = "sbyte";
-		private const string ByteName = "Byte";
-		private const string CByteName = "byte";
-		private const string Int16Name = "Int16";
-		private const string ShortName = "short";
-		private const string UInt16Name = "UInt16";
-		private const string UShortName = "ushort";
-		private const string Int32Name = "Int32";
-		private const string IntName = "int";
-		private const string UInt32Name = "UInt32";
-		private const string UIntName = "uint";
-		private const string Int64Name = "Int64";
-		private const string LongName = "long";
-		private const string UInt64Name = "UInt64";
-		private const string ULongName = "ulong";
-		private const string SingleName = "Single";
-		private const string FloatName = "float";
-		private const string DoubleName = "Double";
-		private const string CDoubleName = "double";
-		private const string StringName = "String";
-		private const string CStringName = "string";
 		private const string MulticastDelegateName = "MulticastDelegate";
 		private const string ListName = "List`1";
 		private const string ExposedReferenceName = "ExposedReference`1";

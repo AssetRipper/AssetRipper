@@ -12,7 +12,7 @@ namespace uTinyRipper.Assembly.Mono
 		}
 
 		internal MonoType(MonoManager manager, TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
-			base(type.Namespace, ToPrimitiveType(type), type.Name, GetBaseType(manager, type, arguments))
+			base(type.Namespace, ToPrimitiveType(type), MonoUtils.GetName(type))
 		{
 			if (type.IsGenericParameter)
 			{
@@ -25,6 +25,7 @@ namespace uTinyRipper.Assembly.Mono
 
 			string uniqueName = GetUniqueName(type);
 			manager.AssemblyManager.AddSerializableType(uniqueName, this);
+			Base = GetBaseType(manager, type, arguments);
 			Fields = CreateFields(manager, type, arguments);
 		}
 
@@ -205,7 +206,7 @@ namespace uTinyRipper.Assembly.Mono
 					}
 					templateArguments.Add(parameter, argument);
 				}
-				return manager.GetSerializableType(template, templateArguments);
+				return manager.GetSerializableType(instance, templateArguments);
 			}
 			else
 			{
