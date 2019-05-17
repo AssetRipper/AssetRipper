@@ -648,7 +648,7 @@ namespace uTinyRipper.Classes
 		}
 		private StaticBatchInfo GetStaticBatchInfo(Version version)
 		{
-			if (IsReadSubsetIndices(version))
+			if (IsReadStaticBatchInfo(version))
 			{
 				return StaticBatchInfo;
 			}
