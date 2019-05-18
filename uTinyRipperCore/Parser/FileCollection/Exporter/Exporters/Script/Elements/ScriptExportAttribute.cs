@@ -41,5 +41,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 		public const string SerializableName = "Serializable";
 		protected const string SerializeFieldName = "SerializeField";
+		protected const string MultilineAttributeName = "MultilineAttribute";
+		protected const string TextAreaAttributeName = "TextAreaAttribute";
 	}
 }

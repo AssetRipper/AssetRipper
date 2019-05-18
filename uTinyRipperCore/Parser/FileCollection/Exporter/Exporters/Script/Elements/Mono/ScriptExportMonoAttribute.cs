@@ -51,6 +51,18 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			return attrType.Namespace == UnityEngineNamespace && attrType.Name == SerializeFieldName;
 		}
 
+		public static bool IsMulitlineAttribute(CustomAttribute attr)
+		{
+			TypeReference attrType = attr.AttributeType;
+			return attrType.Namespace == UnityEngineNamespace && attrType.Name == MultilineAttributeName;
+		}
+
+		public static bool IsTextAreaAttribute(CustomAttribute attr)
+		{
+			TypeReference attrType = attr.AttributeType;
+			return attrType.Namespace == UnityEngineNamespace && attrType.Name == TextAreaAttributeName;
+		}
+
 		public override string FullName { get; }
 		public override string Name => Attribute.AttributeType.Name;
 		public override string Module { get; }

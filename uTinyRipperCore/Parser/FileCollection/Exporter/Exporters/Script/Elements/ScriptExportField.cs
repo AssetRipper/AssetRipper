@@ -11,9 +11,12 @@ namespace uTinyRipper.Exporters.Scripts
 
 		public void Export(TextWriter writer, int intent)
 		{
-			if (Attribute != null)
+			if (Attributes != null)
 			{
-				Attribute.Export(writer, intent);
+				foreach (ScriptExportAttribute attribute in Attributes)
+				{
+					attribute.Export(writer, intent);
+				}
 			}
 
 			writer.WriteIndent(intent);
@@ -44,9 +47,12 @@ namespace uTinyRipper.Exporters.Scripts
 		public void GetUsedNamespaces(ICollection<string> namespaces)
 		{
 			Type.GetTypeNamespaces(namespaces);
-			if(Attribute != null)
+			if (Attributes != null)
 			{
-				Attribute.GetUsedNamespaces(namespaces);
+				foreach (ScriptExportAttribute attribute in Attributes)
+				{
+					attribute.GetUsedNamespaces(namespaces);
+				}
 			}
 		}
 
@@ -66,7 +72,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 		public abstract ScriptExportType DeclaringType { get; }
 		public abstract ScriptExportType Type { get; }
-		public abstract ScriptExportAttribute Attribute { get; }
+		public abstract IReadOnlyList<ScriptExportAttribute> Attributes { get; }
 
 		protected abstract string Keyword { get; }
 		protected bool IsNew
