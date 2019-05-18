@@ -374,7 +374,7 @@ namespace uTinyRipper.YAML
 
 			if (s_illegal.IsMatch(value))
 			{
-				return value.Contains("\n ", StringComparison.InvariantCulture) ? ScalarStyle.DoubleQuoted : ScalarStyle.SingleQuoted;
+				return value.Contains("\n ") ? ScalarStyle.DoubleQuoted : ScalarStyle.SingleQuoted;
 			}
 			return ScalarStyle.Plain;
 		}
@@ -451,7 +451,7 @@ namespace uTinyRipper.YAML
 
 		public const int MaxLineLength = 1024;
 
-		private static readonly Regex s_illegal = new Regex("(^\\s)|(^-\\s)|(^-$)|(^[\\:\\[\\]'\"*&!@#%{}?<>,\\`])|([:@]\\s)|([\\n\\r])|([:\\s]$)", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+		private static readonly Regex s_illegal = new Regex("(^\\s)|(^-\\s)|(^-$)|(^[\\:\\[\\]'\"*&!@#%{}?<>,\\`])|([:@]\\s)|([\\n\\r])|([:\\s]$)", RegexOptions.Compiled);
 
 		private ScalarType m_objectType = ScalarType.String;
 		private string m_string = string.Empty;

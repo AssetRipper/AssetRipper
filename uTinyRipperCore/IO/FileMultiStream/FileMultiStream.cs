@@ -367,7 +367,7 @@ namespace uTinyRipper
 		public override bool CanWrite { get; }
 		public override bool CanSeek => true;
 
-		private static readonly Regex s_splitCheck = new Regex($@".+{MultifileRegPostfix}[0-9]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+		private static readonly Regex s_splitCheck = new Regex($@".+{MultifileRegPostfix}[0-9]+$", RegexOptions.Compiled);
 		private static readonly SplitNameComparer s_splitNameComparer = new SplitNameComparer();
 
 		public const string MultifileRegPostfix = @"\.split";

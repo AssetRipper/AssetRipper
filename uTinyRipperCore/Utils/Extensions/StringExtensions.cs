@@ -8,10 +8,5 @@ namespace uTinyRipper
 		{
 			return _this.IndexOf(c) != -1;
 		}
-
-		public static bool Contains(this string _this, string subString, StringComparison comparisonType)
-		{
-			return _this.IndexOf(subString, comparisonType) != -1;
-		}
 	}
 }

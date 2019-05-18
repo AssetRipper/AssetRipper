@@ -467,7 +467,7 @@ namespace uTinyRipper.Classes.AnimationClips
 		private Platform Platform => m_clip.File.Platform;
 		private TransferInstructionFlags Flags => m_clip.File.Flags;
 
-		public static readonly Regex UnknownPathRegex = new Regex($@"^{UnknownPathPrefix}[0-9]{{1,10}}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+		public static readonly Regex UnknownPathRegex = new Regex($@"^{UnknownPathPrefix}[0-9]{{1,10}}$", RegexOptions.Compiled);
 
 		private const string UnknownPathPrefix = "path_";
 		private const string MissedPropertyPrefix = "missed_";
