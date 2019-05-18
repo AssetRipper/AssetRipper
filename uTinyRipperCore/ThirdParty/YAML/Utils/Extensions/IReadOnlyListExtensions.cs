@@ -13,7 +13,7 @@ namespace uTinyRipper.YAML
 				byte bvalue = unchecked((byte)(value ? 1 : 0));
 				sb.AppendHex(bvalue);
 			}
-			return new YAMLScalarNode(sb.ToString());
+			return new YAMLScalarNode(sb.ToString(), false);
 		}
 
 		public static YAMLNode ExportYAML(this IReadOnlyList<char> _this)
@@ -23,7 +23,7 @@ namespace uTinyRipper.YAML
 			{
 				sb.AppendHex((ushort)value);
 			}
-			return new YAMLScalarNode(sb.ToString());
+			return new YAMLScalarNode(sb.ToString(), false);
 		}
 
 		public static YAMLNode ExportYAML(this IReadOnlyList<byte> _this)
@@ -33,7 +33,7 @@ namespace uTinyRipper.YAML
 			{
 				sb.AppendHex(value);
 			}
-			return new YAMLScalarNode(sb.ToString());
+			return new YAMLScalarNode(sb.ToString(), false);
 		}
 
 		public static YAMLNode ExportYAML(this IReadOnlyList<ushort> _this, bool isRaw)
@@ -45,7 +45,7 @@ namespace uTinyRipper.YAML
 				{
 					sb.AppendHex(value);
 				}
-				return new YAMLScalarNode(sb.ToString());
+				return new YAMLScalarNode(sb.ToString(), false);
 			}
 			else
 			{
@@ -67,7 +67,7 @@ namespace uTinyRipper.YAML
 				{
 					sb.AppendHex(value);
 				}
-				return new YAMLScalarNode(sb.ToString());
+				return new YAMLScalarNode(sb.ToString(), false);
 			}
 			else
 			{
@@ -89,7 +89,7 @@ namespace uTinyRipper.YAML
 				{
 					sb.AppendHex(value);
 				}
-				return new YAMLScalarNode(sb.ToString());
+				return new YAMLScalarNode(sb.ToString(), false);
 			}
 			else
 			{
@@ -111,7 +111,7 @@ namespace uTinyRipper.YAML
 				{
 					sb.AppendHex(value);
 				}
-				return new YAMLScalarNode(sb.ToString());
+				return new YAMLScalarNode(sb.ToString(), false);
 			}
 			else
 			{
@@ -133,7 +133,7 @@ namespace uTinyRipper.YAML
 				{
 					sb.AppendHex(value);
 				}
-				return new YAMLScalarNode(sb.ToString());
+				return new YAMLScalarNode(sb.ToString(), false);
 			}
 			else
 			{
@@ -155,7 +155,7 @@ namespace uTinyRipper.YAML
 				{
 					sb.AppendHex(value);
 				}
-				return new YAMLScalarNode(sb.ToString());
+				return new YAMLScalarNode(sb.ToString(), false);
 			}
 			else
 			{

@@ -40,7 +40,7 @@ namespace uTinyRipper
 
 		public static ResourceFileScheme LoadScheme(string filePath, string fileName)
 		{
-			if (!FileUtils.Exists(filePath))
+			if (!FileMultiStream.Exists(filePath))
 			{
 				throw new Exception($"Resource file at path '{filePath}' doesn't exist");
 			}

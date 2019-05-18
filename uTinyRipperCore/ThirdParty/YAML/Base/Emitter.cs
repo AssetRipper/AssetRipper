@@ -7,7 +7,7 @@ namespace uTinyRipper.YAML
 	{
 		public Emitter(TextWriter writer)
 		{
-			if(writer == null)
+			if (writer == null)
 			{
 				throw new ArgumentNullException(nameof(writer));
 			}
@@ -33,6 +33,12 @@ namespace uTinyRipper.YAML
 		public Emitter Write(char value)
 		{
 			WriteDelayed();
+			m_stream.Write(value);
+			return this;
+		}
+
+		public Emitter WriteRaw(char value)
+		{
 			m_stream.Write(value);
 			return this;
 		}
@@ -102,11 +108,17 @@ namespace uTinyRipper.YAML
 
 		public Emitter Write(string value)
 		{
-			if(value != string.Empty)
+			if (value != string.Empty)
 			{
 				WriteDelayed();
 				m_stream.Write(value);
-			}			
+			}
+			return this;
+		}
+
+		public Emitter WriteRaw(string value)
+		{
+			m_stream.Write(value);
 			return this;
 		}
 
@@ -142,16 +154,16 @@ namespace uTinyRipper.YAML
 			m_isNeedLineBreak = true;
 			return this;
 		}
-		
+
 		public void WriteMeta(MetaType type, string value)
 		{
 			Write("%").Write(type.ToString()).WriteWhitespace();
 			Write(value).WriteLine();
 		}
 
-		private void WriteDelayed()
+		public void WriteDelayed()
 		{
-			if(m_isNeedLineBreak)
+			if (m_isNeedLineBreak)
 			{
 				m_stream.Write('\n');
 				m_isNeedSeparator = false;
@@ -159,12 +171,12 @@ namespace uTinyRipper.YAML
 				m_isNeedLineBreak = false;
 				WriteIndent();
 			}
-			if(m_isNeedSeparator)
+			if (m_isNeedSeparator)
 			{
 				m_stream.Write(',');
 				m_isNeedSeparator = false;
 			}
-			if(m_isNeedWhitespace)
+			if (m_isNeedWhitespace)
 			{
 				m_stream.Write(' ');
 				m_isNeedWhitespace = false;
@@ -173,15 +185,13 @@ namespace uTinyRipper.YAML
 
 		private void WriteIndent()
 		{
-			for(int i = 0; i < m_indent * 2; i++)
+			for (int i = 0; i < m_indent * 2; i++)
 			{
 				m_stream.Write(' ');
 			}
 		}
-		
-		private readonly TextWriter m_stream;
 
-		//public bool IsMultyline { get; set; } = true;
+		private readonly TextWriter m_stream;
 
 		private int m_indent = 0;
 		private bool m_isNeedWhitespace = false;

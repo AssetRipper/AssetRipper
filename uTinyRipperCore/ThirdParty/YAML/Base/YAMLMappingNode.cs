@@ -112,7 +112,7 @@ namespace uTinyRipper.YAML
 
 		public void Add(string key, YAMLNode value)
 		{
-			YAMLScalarNode keyNode = new YAMLScalarNode(key);
+			YAMLScalarNode keyNode = new YAMLScalarNode(key, false);
 			InsertEnd(keyNode, value);
 		}
 
@@ -202,7 +202,7 @@ namespace uTinyRipper.YAML
 
 		public void InsertBegin(string key, YAMLNode value)
 		{
-			YAMLScalarNode keyNode = new YAMLScalarNode(key);
+			YAMLScalarNode keyNode = new YAMLScalarNode(key, false);
 			InsertBegin(keyNode, value);
 		}
 
