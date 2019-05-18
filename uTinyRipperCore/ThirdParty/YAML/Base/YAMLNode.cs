@@ -18,7 +18,7 @@
 			
 			if(isWrote)
 			{
-				if(IsMultyline)
+				if(IsMultiline)
 				{
 					emitter.WriteLine();
 				}
@@ -26,7 +26,7 @@
 		}
 
 		public abstract YAMLNodeType NodeType { get; }
-		public abstract bool IsMultyline { get; }
+		public abstract bool IsMultiline { get; }
 		public abstract bool IsIndent { get; }
 		
 		public string Tag

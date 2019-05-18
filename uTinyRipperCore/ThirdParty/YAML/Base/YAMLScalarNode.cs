@@ -2,7 +2,6 @@
 
 using System;
 using System.Globalization;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace uTinyRipper.YAML
@@ -13,78 +12,126 @@ namespace uTinyRipper.YAML
 		{
 		}
 
-		public YAMLScalarNode(bool value)
-		{
-			SetValue(value);
-			Style = ScalarStyle.Plain;
-		}
-
-		public YAMLScalarNode(byte value)
-		{
-			SetValue(value);
-			Style = ScalarStyle.Plain;
-		}
-
-		public YAMLScalarNode(short value)
-		{
-			SetValue(value);
-			Style = ScalarStyle.Plain;
-		}
-
-		public YAMLScalarNode(ushort value)
-		{
-			SetValue(value);
-			Style = ScalarStyle.Plain;
-		}
-
-		public YAMLScalarNode(int value)
-		{
-			SetValue(value);
-			Style = ScalarStyle.Plain;
-		}
-
-		public YAMLScalarNode(uint value)
-		{
-			SetValue(value);
-			Style = ScalarStyle.Plain;
-		}
-		
-		public YAMLScalarNode(long value)
-		{
-			SetValue(value);
-			Style = ScalarStyle.Plain;
-		}
-
-		public YAMLScalarNode(ulong value)
-		{
-			SetValue(value);
-			Style = ScalarStyle.Plain;
-		}
-
-		public YAMLScalarNode(float value)
-		{
-			SetValue(value);
-			Style = ScalarStyle.Plain;
-		}
-
-		public YAMLScalarNode(double value)
-		{
-			SetValue(value);
-			Style = ScalarStyle.Plain;
-		}
-
-		public YAMLScalarNode(string value):
-			this(value, true)
+		public YAMLScalarNode(bool value) :
+			this(value, false)
 		{
 		}
 
-		public YAMLScalarNode(string value, bool updateStyle)
+		public YAMLScalarNode(bool value, bool isHex)
 		{
 			SetValue(value);
-			if (updateStyle)
-			{
-				UpdateStyle();
-			}
+			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
+		}
+
+		public YAMLScalarNode(byte value) :
+			this(value, false)
+		{
+		}
+
+		public YAMLScalarNode(byte value, bool isHex)
+		{
+			SetValue(value);
+			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
+		}
+
+		public YAMLScalarNode(short value) :
+			this(value, false)
+		{
+		}
+
+		public YAMLScalarNode(short value, bool isHex)
+		{
+			SetValue(value);
+			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
+		}
+
+		public YAMLScalarNode(ushort value) :
+			this(value, false)
+		{
+		}
+
+		public YAMLScalarNode(ushort value, bool isHex)
+		{
+			SetValue(value);
+			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
+		}
+
+		public YAMLScalarNode(int value) :
+			this(value, false)
+		{
+		}
+
+		public YAMLScalarNode(int value, bool isHex)
+		{
+			SetValue(value);
+			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
+		}
+
+		public YAMLScalarNode(uint value) :
+			this(value, false)
+		{
+		}
+
+		public YAMLScalarNode(uint value, bool isHex)
+		{
+			SetValue(value);
+			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
+		}
+
+		public YAMLScalarNode(long value) :
+			this(value, false)
+		{
+		}
+
+		public YAMLScalarNode(long value, bool isHex)
+		{
+			SetValue(value);
+			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
+		}
+
+		public YAMLScalarNode(ulong value) :
+			this(value, false)
+		{
+		}
+
+		public YAMLScalarNode(ulong value, bool isHex)
+		{
+			SetValue(value);
+			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
+		}
+
+		public YAMLScalarNode(float value) :
+			this(value, false)
+		{
+		}
+
+		public YAMLScalarNode(float value, bool isHex)
+		{
+			SetValue(value);
+			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
+		}
+
+		public YAMLScalarNode(double value) :
+			this(value, false)
+		{
+		}
+
+		public YAMLScalarNode(double value, bool isHex)
+		{
+			SetValue(value);
+			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
+		}
+
+		public YAMLScalarNode(string value)
+		{
+			SetValue(value);
+			Style = GetStringStyle(value);
+		}
+
+		internal YAMLScalarNode(string value, bool _)
+		{
+			SetValue(value);
+			Style = value.Length >= MaxLineLength ? ScalarStyle.DoubleQuoted : ScalarStyle.Plain;
 		}
 
 		public void SetValue(bool value)
@@ -230,7 +277,7 @@ namespace uTinyRipper.YAML
 		{
 			base.Emit(emitter);
 
-			switch(Style)
+			switch (Style)
 			{
 				case ScalarStyle.Hex:
 				case ScalarStyle.Plain:
@@ -280,8 +327,15 @@ namespace uTinyRipper.YAML
 			else if (Style == ScalarStyle.DoubleQuoted)
 			{
 				emitter.WriteDelayed();
+				int lineLimit = MaxLineLength;
 				for (int i = 0; i < m_string.Length; i++)
 				{
+					if (i >= lineLimit)
+					{
+						emitter.WriteRaw('\\').WriteRaw('\n');
+						lineLimit += MaxLineLength;
+					}
+
 					char c = m_string[i];
 					switch (c)
 					{
@@ -311,37 +365,24 @@ namespace uTinyRipper.YAML
 			return emitter;
 		}
 
-		private void UpdateStyle()
+		private static ScalarStyle GetStringStyle(string value)
 		{
-			string value = m_string;
+			if (value.Length >= MaxLineLength)
+			{
+				return ScalarStyle.DoubleQuoted;
+			}
+
 			if (s_illegal.IsMatch(value))
 			{
-				if (value.Contains('\''))
-				{
-					if (value.Contains('"'))
-					{
-						Style = ScalarStyle.SingleQuoted;
-					}
-					else
-					{
-						Style = ScalarStyle.DoubleQuoted;
-					}
-				}
-				else
-				{
-					Style = ScalarStyle.SingleQuoted;
-				}
+				return value.Contains("\n ", StringComparison.InvariantCulture) ? ScalarStyle.DoubleQuoted : ScalarStyle.SingleQuoted;
 			}
-			else
-			{
-				Style = ScalarStyle.Plain;
-			}
+			return ScalarStyle.Plain;
 		}
 
 		public static YAMLScalarNode Empty { get; } = new YAMLScalarNode();
 
 		public override YAMLNodeType NodeType => YAMLNodeType.Scalar;
-		public override bool IsMultyline => false;
+		public override bool IsMultiline => false;
 		public override bool IsIndent => false;
 
 		public string Value
@@ -406,7 +447,9 @@ namespace uTinyRipper.YAML
 			}
 			set => m_string = value;
 		}
-		public ScalarStyle Style { get; set; }
+		public ScalarStyle Style { get; }
+
+		public const int MaxLineLength = 1024;
 
 		private static readonly Regex s_illegal = new Regex("(^\\s)|(^-\\s)|(^-$)|(^[\\:\\[\\]'\"*&!@#%{}?<>,\\`])|([:@]\\s)|([\\n\\r])|([:\\s]$)", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 

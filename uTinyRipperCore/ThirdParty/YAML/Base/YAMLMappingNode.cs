@@ -112,7 +112,7 @@ namespace uTinyRipper.YAML
 
 		public void Add(string key, YAMLNode value)
 		{
-			YAMLScalarNode keyNode = new YAMLScalarNode(key, false);
+			YAMLScalarNode keyNode = new YAMLScalarNode(key, true);
 			InsertEnd(keyNode, value);
 		}
 
@@ -202,7 +202,7 @@ namespace uTinyRipper.YAML
 
 		public void InsertBegin(string key, YAMLNode value)
 		{
-			YAMLScalarNode keyNode = new YAMLScalarNode(key, false);
+			YAMLScalarNode keyNode = new YAMLScalarNode(key, true);
 			InsertBegin(keyNode, value);
 		}
 
@@ -270,7 +270,7 @@ namespace uTinyRipper.YAML
 			emitter.Write(':').WriteWhitespace();
 			if (Style == MappingStyle.Block)
 			{
-				if (next.IsMultyline)
+				if (next.IsMultiline)
 				{
 					emitter.WriteLine();
 				}
@@ -310,7 +310,7 @@ namespace uTinyRipper.YAML
 		public static YAMLMappingNode Empty { get; } = new YAMLMappingNode(MappingStyle.Flow);
 
 		public override YAMLNodeType NodeType => YAMLNodeType.Mapping;
-		public override bool IsMultyline => Style == MappingStyle.Block && m_children.Count > 0;
+		public override bool IsMultiline => Style == MappingStyle.Block && m_children.Count > 0;
 		public override bool IsIndent => Style == MappingStyle.Block;
 
 		public MappingStyle Style { get; set; }

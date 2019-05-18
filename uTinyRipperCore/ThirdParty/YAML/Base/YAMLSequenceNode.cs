@@ -15,71 +15,61 @@ namespace uTinyRipper.YAML
 
 		public void Add(bool value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value);
-			node.Style = Style.ToScalarStyle();
+			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(byte value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value);
-			node.Style = Style.ToScalarStyle();
+			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(short value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value);
-			node.Style = Style.ToScalarStyle();
+			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(ushort value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value);
-			node.Style = Style.ToScalarStyle();
+			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(int value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value);
-			node.Style = Style.ToScalarStyle();
+			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(uint value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value);
-			node.Style = Style.ToScalarStyle();
+			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(long value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value);
-			node.Style = Style.ToScalarStyle();
+			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(ulong value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value);
-			node.Style = Style.ToScalarStyle();
+			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(float value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value);
-			node.Style = Style.ToScalarStyle();
+			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(double value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value);
-			node.Style = Style.ToScalarStyle();
+			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
@@ -93,7 +83,7 @@ namespace uTinyRipper.YAML
 		{
 			m_children.Add(child);
 		}
-		
+
 		internal override void Emit(Emitter emitter)
 		{
 			base.Emit(emitter);
@@ -175,16 +165,16 @@ namespace uTinyRipper.YAML
 
 		private void StartChild(Emitter emitter, YAMLNode next)
 		{
-			if(Style == SequenceStyle.Block || Style == SequenceStyle.BlockCurve)
+			if (Style == SequenceStyle.Block || Style == SequenceStyle.BlockCurve)
 			{
 				emitter.Write('-').WriteWhitespace();
 
-				if(next.NodeType == NodeType)
+				if (next.NodeType == NodeType)
 				{
 					emitter.IncreaseIntent();
 				}
 			}
-			if(next.IsIndent)
+			if (next.IsIndent)
 			{
 				emitter.IncreaseIntent();
 			}
@@ -192,15 +182,15 @@ namespace uTinyRipper.YAML
 
 		private void EndChild(Emitter emitter, YAMLNode next)
 		{
-			if(Style.IsAnyBlock())
+			if (Style.IsAnyBlock())
 			{
 				emitter.WriteLine();
-				if(next.NodeType == NodeType)
+				if (next.NodeType == NodeType)
 				{
 					emitter.DecreaseIntent();
 				}
 			}
-			else if(Style == SequenceStyle.Flow)
+			else if (Style == SequenceStyle.Flow)
 			{
 				emitter.WriteSeparator().WriteWhitespace();
 			}
@@ -213,16 +203,10 @@ namespace uTinyRipper.YAML
 		public static YAMLSequenceNode Empty { get; } = new YAMLSequenceNode();
 
 		public override YAMLNodeType NodeType => YAMLNodeType.Sequence;
-		public override bool IsMultyline
-		{
-			get
-			{
-				return Style.IsAnyBlock() && m_children.Count > 0;
-			}
-		}
+		public override bool IsMultiline => Style.IsAnyBlock() && m_children.Count > 0;
 		public override bool IsIndent => false;
 
-		public SequenceStyle Style { get; set; }
+		public SequenceStyle Style { get; }
 
 		private readonly List<YAMLNode> m_children = new List<YAMLNode>();
 	}
