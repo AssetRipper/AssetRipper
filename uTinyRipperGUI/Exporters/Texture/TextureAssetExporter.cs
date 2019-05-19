@@ -30,7 +30,13 @@ namespace uTinyRipperGUI.Exporters
 				}
 				else
 				{
-					bitmap.Bitmap.Save(exportStream, ImageFormat.Png);
+					// despite the name, this packing works for different formats
+					if (texture.LightmapFormat == TextureUsageMode.NormalmapDXT5nm)
+					{
+						TextureConverter.UnpackNormal(bitmap.BitsPtr, bitmap.Bits.Length);
+					}
+
+					bitmap.Save(exportStream, ImageFormat.Png);
 					return true;
 				}
 			}
