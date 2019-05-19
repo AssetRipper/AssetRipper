@@ -7,9 +7,12 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
-	public sealed class NavMesh : NamedObject
+	/// <summary>
+	/// NavMesh previously
+	/// </summary>
+	public sealed class NavMeshObsolete : NamedObject
 	{
-		public NavMesh(AssetInfo assetInfo) :
+		public NavMeshObsolete(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

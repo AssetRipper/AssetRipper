@@ -88,7 +88,7 @@ namespace uTinyRipper.Classes
 		public const string NavMeshName = "m_NavMesh";
 		public const string NavMeshDataName = "m_NavMeshData";
 
-		public PPtr<NavMesh> NavMesh => m_navMeshData.CastTo<NavMesh>();
+		public PPtr<NavMeshObsolete> NavMesh => m_navMeshData.CastTo<NavMeshObsolete>();
 		public PPtr<NavMeshData> NavMeshData => m_navMeshData.CastTo<NavMeshData>();
 
 		public NavMeshBuildSettings BuildSettings;

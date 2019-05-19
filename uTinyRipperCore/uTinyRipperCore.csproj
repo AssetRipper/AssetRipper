@@ -170,7 +170,7 @@
     <Compile Include="Parser\Classes\ParticleSystem\UV\ParticleSystemAnimationRowMode.cs" />
     <Compile Include="Parser\Classes\Serialize\MinMaxAABB.cs" />
     <Compile Include="Parser\Classes\Mesh\VariableBoneCountWeights.cs" />
-    <Compile Include="Parser\Classes\NavMesh.cs" />
+    <Compile Include="Parser\Classes\NavMeshObsolete.cs" />
     <Compile Include="Parser\Classes\NavMeshAgent\NavMeshAgent.cs" />
     <Compile Include="Parser\Classes\NavMeshAgent\ObstacleAvoidanceType.cs" />
     <Compile Include="Parser\Classes\NavMeshObstacle\NavMeshObstacle.cs" />

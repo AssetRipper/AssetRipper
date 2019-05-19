@@ -177,7 +177,7 @@ namespace uTinyRipper
 				case ClassIDType.OcclusionArea:
 					return new OcclusionArea(assetInfo);
 				case ClassIDType.NavMeshObsolete:
-					return new NavMesh(assetInfo);
+					return new NavMeshObsolete(assetInfo);
 				case ClassIDType.NavMeshAgent:
 					return new NavMeshAgent(assetInfo);
 				case ClassIDType.NavMeshSettings:
