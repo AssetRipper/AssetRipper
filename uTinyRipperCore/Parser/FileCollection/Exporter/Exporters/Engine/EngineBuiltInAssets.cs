@@ -427,6 +427,16 @@ namespace uTinyRipper.AssetExporters
 			// Old default
 			///////////////////////////////////////////////////////
 
+			AddTexture("UnitySplash", 10403, false);
+			AddTexture("UnitySplash2", 10404, false);
+			AddTexture("UnitySplash-text", 10404, false);
+			AddTexture("UnitySplash3", 10405, false);
+			AddTexture("UnitySplash-free", 10405, false);
+			AddTexture("UnitySplashBack", 10406, false);
+			AddTexture("UnityWatermark-DebugFlashPlayer", 10412, false);
+			AddTexture("UnitySplashVRLogo", 10415, false);
+			AddTexture("UnitySplashVRPoweredBy", 10416, false);
+
 			AddShader("Internal-ErrorShader", 17, true);
 			AddShader("Shadow-ScreenBlur", 60, false);
 			AddShader("Camera-DepthTexture", 61, false);
@@ -437,6 +447,11 @@ namespace uTinyRipper.AssetExporters
 			AddShader("Internal-BlitCopy", 66, false);
 			AddShader("Shadow-ScreenBlurRotated", 67, false);
 			AddShader("Internal-Clear", 68, false);
+			AddShader("Internal-Colored", 69, false);
+			AddShader("Internal-SplashShadowCaster", 70, false);
+			AddShader("Internal-SplashShadowBlur", 71, false);
+			AddShader("Internal-SplashShadowReceiver", 72, false);
+			AddShader("Internal-SplashShadowReceiverSimple", 73, false);
 			AddShader("Internal-Flare", 102, true);
 			AddShader("Internal-Halo", 105, true);
 			AddShader("Internal-GUITextureClip", 9000, true);
@@ -487,15 +502,22 @@ namespace uTinyRipper.AssetExporters
 			AddShader("Lightmap-Bumped", 42, true);
 			AddShader("Lightmap-Glossy", 43, true);
 			AddShader("Lightmap-BumpSpec", 44, true);
+			AddShader("StandardSpecular", 45, true);
+			AddShader("Shader", new Version(5), 46, true);
 			AddShader("AlphaTest-VertexLit", 50, true);
 			AddShader("AlphaTest-Diffuse", 51, true);
 			AddShader("AlphaTest-Bumped", 52, true);
 			AddShader("AlphaTest-Glossy", 53, true);
 			AddShader("AlphaTest-BumpSpec", 54, true);
-			//AddShader("Shader", new EngineBuildInAsset(100, true);
+			AddShader("Internal-DeferredShading", 69, false);
+			AddShader("Internal-DeferredReflections", 74, false);
+			AddShader("Shader", Version.MinVersion, 100, true);
+			AddShader("Decal", 100, false);
 			AddShader("Flare", 101, true);
 			AddShader("skybox cubed", 103, true);
+			AddShader("Skybox-Cubed", 103, false);
 			AddShader("Skybox", 104, true);
+			AddShader("Skybox-Procedural", 106, false);
 			AddShader("Particle Add", 200, true);
 			AddShader("Particle AddMultiply", 201, true);
 			AddShader("Particle AddSmooth", 202, true);
@@ -524,7 +546,13 @@ namespace uTinyRipper.AssetExporters
 			AddShader("TreeCreatorLeavesFast", 10606, true);
 			AddShader("TreeCreatorLeavesFastOptimized", 10607, true);
 			AddShader("TerrBumpFirstPass", 10620, true);
+			AddShader("Specular-FirstPass", 10620, false);
 			AddShader("TerrBumpAddPass", 10621, true);
+			AddShader("Specular-AddPass", 10621, false);
+			AddShader("Specular-Base", 10622, false);
+			AddShader("Standard-FirstPass", 10623, false);
+			AddShader("Standard-AddPass", 10624, false);
+			AddShader("Standard-Base", 10625, false);
 			AddShader("Mobile-Skybox", 10700, true);
 			AddShader("Mobile-VertexLit", 10701, true);
 			AddShader("Mobile-Diffuse", 10703, true);
@@ -540,6 +568,9 @@ namespace uTinyRipper.AssetExporters
 			AddShader("Unlit-Alpha", 10750, true);
 			AddShader("Unlit-AlphaTest", 10751, true);
 			AddShader("Unlit-Normal", 10752, true);
+			AddShader("Unlit-Color", 10755, false);
+			AddShader("UI-Lit-Refraction", 10767, false);
+			AddShader("UI-Lit-RefractionDetail", 10768, false);
 			AddShader("UI-Unlit-Transparent", 10760, true);
 			AddShader("UI-Unlit-Detail", 10761, true);
 			AddShader("UI-Unlit-Text", 10762, true);
@@ -552,6 +583,14 @@ namespace uTinyRipper.AssetExporters
 			AddShader("UI-Default", 10770, true);
 			AddShader("UI-DefaultFont", 10782, true);
 			AddShader("Sprites-Diffuse", 10800, true);
+			AddShader("SpeedTree", 14000, false);
+			AddShader("SpeedTreeBillboard", 14001, false);
+			AddShader("TextureUV", 15100, false);
+			AddShader("UV1sAsPositions", 15102, false);
+			AddShader("VertexColors", 15103, false);
+			AddShader("CubeBlur", 15104, false);
+			AddShader("CubeCopy", 15105, false);
+			AddShader("CubeBlend", 15106, false);
 		}
 
 		public static bool ContainsMaterial(string name, Version version)

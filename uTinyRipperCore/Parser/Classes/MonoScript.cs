@@ -20,7 +20,7 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool IsReadScript(Version version, TransferInstructionFlags flags)
 		{
-			// unknown version
+			// unknown version (somewhere between 1.5.0 and 2.5.0)
 			return !flags.IsRelease()/* && version.IsGreaterEqual()*/;
 		}
 		/// <summary>

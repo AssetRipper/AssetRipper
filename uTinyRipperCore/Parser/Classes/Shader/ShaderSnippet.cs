@@ -46,7 +46,7 @@ namespace uTinyRipper.Classes.Shaders
 		/// </summary>
 		public static bool IsReadForceSyncCompilation(Version version)
 		{
-			return version.IsLess(2019);
+			return version.IsGreaterEqual(2019);
 		}
 		/// <summary>
 		/// 5.5.0 and greater
@@ -74,7 +74,7 @@ namespace uTinyRipper.Classes.Shaders
 		/// </summary>
 		public static bool IsReadTargetVariants(Version version)
 		{
-			return version.IsLess(5, 6) && version.IsGreaterEqual(5);
+			return version.IsGreaterEqual(5) && version.IsLess(5, 6);
 		}
 		/// <summary>
 		/// 5.6.0 and greater
@@ -203,12 +203,12 @@ namespace uTinyRipper.Classes.Shaders
 
 			if (IsReadTargetVariants(reader.Version))
 			{
-				m_targetVariants0 = reader.ReadStringArrayArray();
-				m_targetVariants1 = reader.ReadStringArrayArray();
-				m_targetVariants2 = reader.ReadStringArrayArray();
-				m_targetVariants3 = reader.ReadStringArrayArray();
-				m_targetVariants4 = reader.ReadStringArrayArray();
-				m_targetVariants5 = reader.ReadStringArrayArray();
+				m_targetVariants0 = reader.ReadStringArray();
+				m_targetVariants1 = reader.ReadStringArray();
+				m_targetVariants2 = reader.ReadStringArray();
+				m_targetVariants3 = reader.ReadStringArray();
+				m_targetVariants4 = reader.ReadStringArray();
+				m_targetVariants5 = reader.ReadStringArray();
 			}
 
 			if (IsReadBaseRequirements(reader.Version))
@@ -399,12 +399,12 @@ namespace uTinyRipper.Classes.Shaders
 		public IReadOnlyList<IReadOnlyList<string>> VariantsBuiltin3 => m_variantsBuiltin3;
 		public IReadOnlyList<IReadOnlyList<string>> VariantsBuiltin4 => m_variantsBuiltin4;
 		public IReadOnlyList<IReadOnlyList<string>> VariantsBuiltin5 => m_variantsBuiltin5;
-		public IReadOnlyList<IReadOnlyList<string>> TargetVariants0 => m_targetVariants0;
-		public IReadOnlyList<IReadOnlyList<string>> TargetVariants1 => m_targetVariants1;
-		public IReadOnlyList<IReadOnlyList<string>> TargetVariants2 => m_targetVariants2;
-		public IReadOnlyList<IReadOnlyList<string>> TargetVariants3 => m_targetVariants3;
-		public IReadOnlyList<IReadOnlyList<string>> TargetVariants4 => m_targetVariants4;
-		public IReadOnlyList<IReadOnlyList<string>> TargetVariants5 => m_targetVariants5;
+		public IReadOnlyList<string> TargetVariants0 => m_targetVariants0;
+		public IReadOnlyList<string> TargetVariants1 => m_targetVariants1;
+		public IReadOnlyList<string> TargetVariants2 => m_targetVariants2;
+		public IReadOnlyList<string> TargetVariants3 => m_targetVariants3;
+		public IReadOnlyList<string> TargetVariants4 => m_targetVariants4;
+		public IReadOnlyList<string> TargetVariants5 => m_targetVariants5;
 		public int BaseRequirements { get; private set; }
 		public IReadOnlyList<KeywordTargetInfo> KeywordTargetInfo => m_keywordTargetInfo;
 		public string NonStrippedUserKeywords { get; private set; }
@@ -491,12 +491,12 @@ namespace uTinyRipper.Classes.Shaders
 		private string[][] m_variantsBuiltin3;
 		private string[][] m_variantsBuiltin4;
 		private string[][] m_variantsBuiltin5;
-		private string[][] m_targetVariants0;
-		private string[][] m_targetVariants1;
-		private string[][] m_targetVariants2;
-		private string[][] m_targetVariants3;
-		private string[][] m_targetVariants4;
-		private string[][] m_targetVariants5;
+		private string[] m_targetVariants0;
+		private string[] m_targetVariants1;
+		private string[] m_targetVariants2;
+		private string[] m_targetVariants3;
+		private string[] m_targetVariants4;
+		private string[] m_targetVariants5;
 		private KeywordTargetInfo[] m_keywordTargetInfo;
 	}
 }

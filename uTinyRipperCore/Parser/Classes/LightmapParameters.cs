@@ -39,6 +39,18 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
 		/// <summary>
+		/// 5.0.1 and greater
+		/// </summary>
+		public static bool IsReadPushoff(Version version)
+		{
+			return version.IsGreaterEqual(5, 1);
+		}
+		public static bool IsReadBakedLightmapTag(Version version)
+		{
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		}
+		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
 		public static bool IsReadLimitLightmapCount(Version version)
@@ -57,6 +69,13 @@ namespace uTinyRipper.Classes
 		private static bool IsReadPushoffFirst(Version version)
 		{
 			return version.IsGreaterEqual(2019);
+		}
+		/// <summary>
+		/// 5.0.1 and greater
+		/// </summary>
+		private static bool IsReadBakedLightmapTagFirst(Version version)
+		{
+			return version.IsGreaterEqual(5, 1);
 		}
 
 		private static int GetSerializedVersion(Version version)
@@ -104,11 +123,23 @@ namespace uTinyRipper.Classes
 				BlurRadius = reader.ReadInt32();
 				DirectLightQuality = reader.ReadInt32();
 				AntiAliasingSamples = reader.ReadInt32();
+			}
+			if (IsReadPushoff(reader.Version))
+			{
 				if (IsReadPushoffFirst(reader.Version))
 				{
 					Pushoff = reader.ReadSingle();
 				}
-				BakedLightmapTag = reader.ReadInt32();
+			}
+			if (IsReadBakedLightmapTag(reader.Version))
+			{
+				if (IsReadBakedLightmapTagFirst(reader.Version))
+				{
+					BakedLightmapTag = reader.ReadInt32();
+				}
+			}
+			if (IsReadPushoff(reader.Version))
+			{
 				if (!IsReadPushoffFirst(reader.Version))
 				{
 					Pushoff = reader.ReadSingle();
@@ -125,6 +156,13 @@ namespace uTinyRipper.Classes
 			{
 				AOQuality = reader.ReadInt32();
 				AOAntiAliasingSamples = reader.ReadInt32();
+			}
+			if (IsReadBakedLightmapTag(reader.Version))
+			{
+				if (!IsReadBakedLightmapTagFirst(reader.Version))
+				{
+					BakedLightmapTag = reader.ReadInt32();
+				}
 			}
 		}
 

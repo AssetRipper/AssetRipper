@@ -77,7 +77,7 @@ namespace uTinyRipper.SerializedFiles
 
 #warning TEMP HACK
 			Flags = Metadata.Hierarchy.Platform == Platform.NoTarget ? TransferInstructionFlags.NoTransferInstructionFlags : Flags;
-			if (FilenameUtils.IsEngineResource(Name))
+			if (FilenameUtils.IsEngineResource(Name) || Header.Generation < FileGeneration.FG_500a1 && FilenameUtils.IsBuiltinExtra(Name))
 			{
 				Flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
 			}

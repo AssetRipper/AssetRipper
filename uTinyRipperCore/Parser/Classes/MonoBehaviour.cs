@@ -15,9 +15,11 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		public static bool IsReadEditorHideFlags(Version version, TransferInstructionFlags flags)
+		/// <summary>
+		/// Not Release
+		/// </summary>
+		public static bool IsReadEditorHideFlags(TransferInstructionFlags flags)
 		{
-#warning unknown version
 			return !flags.IsRelease();
 		}
 		/// <summary>
@@ -27,10 +29,12 @@ namespace uTinyRipper.Classes
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(2019) && version.IsLess(2019, 1, 0, VersionType.Beta, 4);
 		}
+		/// <summary>
+		/// 4.2.0 and greater and Not Release
+		/// </summary>
 		public static bool IsReadEditorClassIdentifier(Version version, TransferInstructionFlags flags)
 		{
-#warning unknown version
-			return !flags.IsRelease();
+			return !flags.IsRelease() && version.IsGreaterEqual(4, 2);
 		}
 
 		public override void Read(AssetReader reader)
@@ -39,7 +43,7 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 #if UNIVERSAL
-			if (IsReadEditorHideFlags(reader.Version, reader.Flags))
+			if (IsReadEditorHideFlags(reader.Flags))
 			{
 				EditorHideFlags = (HideFlags)reader.ReadUInt32();
 			}
@@ -123,7 +127,7 @@ namespace uTinyRipper.Classes
 		private HideFlags GetEditorHideFlags(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadEditorHideFlags(version, flags))
+			if (IsReadEditorHideFlags(flags))
 			{
 				return EditorHideFlags;
 			}
