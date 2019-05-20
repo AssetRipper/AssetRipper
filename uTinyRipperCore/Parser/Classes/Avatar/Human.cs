@@ -30,29 +30,11 @@ namespace uTinyRipper.Classes.Avatars
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(5, 6, 1))
 			{
 				return 2;
 			}
 			return 1;
-		}
-
-		private IReadOnlyList<Handle> GetExportHandles(Version version)
-		{
-			return IsReadHandles(version) ? Handles : new Handle[0];
-		}
-		private IReadOnlyList<Collider> GetExportColliderArray(Version version)
-		{
-			return IsReadHandles(version) ? ColliderArray : new Collider[0];
-		}
-		private IReadOnlyList<int> GetExportColliderIndex(Version version)
-		{
-			return IsReadColliderIndex(version) ? ColliderIndex : new int[0];
 		}
 
 		public void Read(AssetReader reader)
@@ -68,14 +50,14 @@ namespace uTinyRipper.Classes.Avatars
 				m_colliderArray = reader.ReadAssetArray<Collider>();
 			}
 
-			m_humanBoneIndex = reader.ReadInt32Array();
-			m_humanBoneIndex = UpdateBoneArray(m_humanBoneIndex, reader.Version);
-			m_humanBoneMass = reader.ReadSingleArray();
-			m_humanBoneMass = UpdateBoneArray(m_humanBoneMass, reader.Version);
+			int[] HumanBoneIndex = reader.ReadInt32Array();
+			m_humanBoneIndex = UpdateBoneArray(HumanBoneIndex, reader.Version);
+			float[] HumanBoneMass = reader.ReadSingleArray();
+			m_humanBoneMass = UpdateBoneArray(HumanBoneMass, reader.Version);
 			if (IsReadColliderIndex(reader.Version))
 			{
-				m_colliderIndex = reader.ReadInt32Array();
-				m_colliderIndex = UpdateBoneArray(m_colliderIndex, reader.Version);
+				int[] ColliderIndex = reader.ReadInt32Array();
+				m_colliderIndex = UpdateBoneArray(ColliderIndex, reader.Version);
 			}
 
 			Scale = reader.ReadSingle();
@@ -98,28 +80,28 @@ namespace uTinyRipper.Classes.Avatars
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_RootX", RootX.ExportYAML(container));
-			node.Add("m_Skeleton", Skeleton.ExportYAML(container));
-			node.Add("m_SkeletonPose", SkeletonPose.ExportYAML(container));
-			node.Add("m_LeftHand", LeftHand.ExportYAML(container));
-			node.Add("m_RightHand", RightHand.ExportYAML(container));
-			node.Add("m_Handles", GetExportHandles(container.Version).ExportYAML(container));
-			node.Add("m_ColliderArray", GetExportColliderArray(container.Version).ExportYAML(container));
-			node.Add("m_HumanBoneIndex", HumanBoneIndex.ExportYAML(true));
-			node.Add("m_HumanBoneMass", HumanBoneMass.ExportYAML());
-			node.Add("m_ColliderIndex", GetExportColliderIndex(container.Version).ExportYAML(true));
-			node.Add("m_Scale", Scale);
-			node.Add("m_ArmTwist", ArmTwist);
-			node.Add("m_ForeArmTwist", ForeArmTwist);
-			node.Add("m_UpperLegTwist", UpperLegTwist);
-			node.Add("m_LegTwist", LegTwist);
-			node.Add("m_ArmStretch", ArmStretch);
-			node.Add("m_LegStretch", LegStretch);
-			node.Add("m_FeetSpacing", FeetSpacing);
-			node.Add("m_HasLeftHand", HasLeftHand);
-			node.Add("m_HasRightHand", HasRightHand);
-			node.Add("m_HasTDoF", HasTDoF);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(RootXName, RootX.ExportYAML(container));
+			node.Add(SkeletonName, Skeleton.ExportYAML(container));
+			node.Add(SkeletonPoseName, SkeletonPose.ExportYAML(container));
+			node.Add(LeftHandName, LeftHand.ExportYAML(container));
+			node.Add(RightHandName, RightHand.ExportYAML(container));
+			node.Add(HandlesName, GetExportHandles(container.Version).ExportYAML(container));
+			node.Add(ColliderArrayName, GetExportColliderArray(container.Version).ExportYAML(container));
+			node.Add(HumanBoneIndexName, HumanBoneIndex.ExportYAML(true));
+			node.Add(HumanBoneMassName, HumanBoneMass.ExportYAML());
+			node.Add(ColliderIndexName, GetExportColliderIndex(container.Version).ExportYAML(true));
+			node.Add(ScaleName, Scale);
+			node.Add(ArmTwistName, ArmTwist);
+			node.Add(ForeArmTwistName, ForeArmTwist);
+			node.Add(UpperLegTwistName, UpperLegTwist);
+			node.Add(LegTwistName, LegTwist);
+			node.Add(ArmStretchName, ArmStretch);
+			node.Add(LegStretchName, LegStretch);
+			node.Add(FeetSpacingName, FeetSpacing);
+			node.Add(HasLeftHandName, HasLeftHand);
+			node.Add(HasRightHandName, HasRightHand);
+			node.Add(HasTDoFName, HasTDoF);
 			return node;
 		}
 
@@ -162,6 +144,19 @@ namespace uTinyRipper.Classes.Avatars
 			return array;
 		}
 
+		private IReadOnlyList<Handle> GetExportHandles(Version version)
+		{
+			return IsReadHandles(version) ? Handles : new Handle[0];
+		}
+		private IReadOnlyList<Collider> GetExportColliderArray(Version version)
+		{
+			return IsReadHandles(version) ? ColliderArray : new Collider[0];
+		}
+		private IReadOnlyList<int> GetExportColliderIndex(Version version)
+		{
+			return IsReadColliderIndex(version) ? ColliderIndex : new int[0];
+		}
+
 		public IReadOnlyList<Handle> Handles => m_handles;
 		public IReadOnlyList<Collider> ColliderArray => m_colliderArray;
 		public IReadOnlyList<int> HumanBoneIndex => m_humanBoneIndex;
@@ -178,6 +173,28 @@ namespace uTinyRipper.Classes.Avatars
 		public bool HasLeftHand { get; private set; }
 		public bool HasRightHand { get; private set; }
 		public bool HasTDoF { get; private set; }
+
+		public const string RootXName = "m_RootX";
+		public const string SkeletonName = "m_Skeleton";
+		public const string SkeletonPoseName = "m_SkeletonPose";
+		public const string LeftHandName = "m_LeftHand";
+		public const string RightHandName = "m_RightHand";
+		public const string HandlesName = "m_Handles";
+		public const string ColliderArrayName = "m_ColliderArray";
+		public const string HumanBoneIndexName = "m_HumanBoneIndex";
+		public const string HumanBoneMassName = "m_HumanBoneMass";
+		public const string ColliderIndexName = "m_ColliderIndex";
+		public const string ScaleName = "m_Scale";
+		public const string ArmTwistName = "m_ArmTwist";
+		public const string ForeArmTwistName = "m_ForeArmTwist";
+		public const string UpperLegTwistName = "m_UpperLegTwist";
+		public const string LegTwistName = "m_LegTwist";
+		public const string ArmStretchName = "m_ArmStretch";
+		public const string LegStretchName = "m_LegStretch";
+		public const string FeetSpacingName = "m_FeetSpacing";
+		public const string HasLeftHandName = "m_HasLeftHand";
+		public const string HasRightHandName = "m_HasRightHand";
+		public const string HasTDoFName = "m_HasTDoF";
 
 		public XForm RootX;
 		public OffsetPtr<Skeleton> Skeleton;

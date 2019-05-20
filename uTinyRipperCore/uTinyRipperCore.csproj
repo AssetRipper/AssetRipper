@@ -141,6 +141,7 @@
   <ItemGroup>
     <Compile Include="Attributes\EnumNameAttribute.cs" />
     <Compile Include="Parser\Classes\AnimationClip\AnimationClipSettings.cs" />
+    <Compile Include="Parser\Classes\Avatar\Bones\HumanBodyBones.cs" />
     <Compile Include="Parser\Classes\Avatar\HumanBone.cs" />
     <Compile Include="Parser\Classes\Avatar\HumanDescription.cs" />
     <Compile Include="Parser\Classes\Avatar\SkeletonBone.cs" />

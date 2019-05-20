@@ -592,7 +592,7 @@ namespace uTinyRipper.Classes
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add(EnabledName, Enabled);
 			node.Add(CastShadowsName, (byte)CastShadows);
-			node.Add(CastShadowsName, ReceiveShadows);
+			node.Add(ReceiveShadowsName, ReceiveShadows);
 			node.Add(DynamicOccludeeName, GetDynamicOccludee(container.Version));
 			node.Add(MotionVectorsName, (byte)GetMotionVectors(container.Version));
 			node.Add(LightProbeUsageName, (byte)LightProbeUsage);
