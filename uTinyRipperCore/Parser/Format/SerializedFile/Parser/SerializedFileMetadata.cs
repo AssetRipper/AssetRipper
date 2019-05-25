@@ -54,5 +54,7 @@ namespace uTinyRipper.SerializedFiles
 		public IReadOnlyList<ObjectPtr> Preloads { get; private set; }
 		public IReadOnlyList<FileIdentifier> Dependencies { get; private set; }
 		public string Unknown { get; private set; }
+
+		public const int MetadataMinSize = RTTIClassHierarchyDescriptor.HierarchyMinSize + 12;
 	}
 }

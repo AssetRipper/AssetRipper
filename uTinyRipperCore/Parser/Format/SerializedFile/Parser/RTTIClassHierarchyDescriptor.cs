@@ -93,6 +93,8 @@ namespace uTinyRipper.SerializedFiles
 		
 		private string Name { get; }
 
+		public const int HierarchyMinSize = 4;
+
 		/// <summary>
 		/// Signature
 		/// </summary>

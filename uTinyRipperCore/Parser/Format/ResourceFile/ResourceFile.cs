@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using uTinyRipper.Classes;
 using uTinyRipper.ResourceFiles;
 
 namespace uTinyRipper
@@ -36,6 +37,20 @@ namespace uTinyRipper
 		~ResourceFile()
 		{
 			Dispose(false);
+		}
+
+		public static bool IsDefaultResourceFile(string fileName)
+		{
+			string extension = Path.GetExtension(fileName).ToLower();
+			switch (extension)
+			{
+				case ResourceFileExtension:
+				case StreamingFileExtension:
+					return true;
+
+				default:
+					return false;
+			}
 		}
 
 		public static ResourceFileScheme LoadScheme(string filePath, string fileName)
@@ -88,6 +103,9 @@ namespace uTinyRipper
 		public Stream Stream => m_stream;
 		public long Offset { get; }
 		public long Size { get; }
+
+		public const string ResourceFileExtension = ".resource";
+		public const string StreamingFileExtension = ".ress";
 
 		private readonly SmartStream m_stream;
 	}

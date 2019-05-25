@@ -82,7 +82,6 @@ namespace uTinyRipper.SerializedFiles
 				Flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
 			}
 			Flags |= Header.SwapEndianess ? TransferInstructionFlags.SwapEndianess : TransferInstructionFlags.NoTransferInstructionFlags;
-
 		}
 
 		public TransferInstructionFlags Flags { get; private set; }

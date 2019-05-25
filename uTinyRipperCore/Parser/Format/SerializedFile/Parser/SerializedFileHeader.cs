@@ -18,18 +18,17 @@ namespace uTinyRipper.SerializedFiles
 
 		public static bool IsSerializedFileHeader(EndianReader reader)
 		{
-			const int CheckSize = sizeof(int) * 3;
-			if (reader.BaseStream.Position + CheckSize > reader.BaseStream.Length)
+			if (reader.BaseStream.Position + HeaderMinSize > reader.BaseStream.Length)
 			{
 				return false;
 			}
 			int metadataSize = reader.ReadInt32();
-			if (metadataSize <= 0)
+			if (metadataSize < SerializedFileMetadata.MetadataMinSize)
 			{
 				return false;
 			}
 			uint fileSize = reader.ReadUInt32();
-			if (fileSize <= 0)
+			if (fileSize < HeaderMinSize + SerializedFileMetadata.MetadataMinSize)
 			{
 				return false;
 			}
@@ -94,6 +93,8 @@ namespace uTinyRipper.SerializedFiles
 		/// Presumably controls the byte order of the data structure. This field is normally set to 0, which may indicate a little endian byte order.
 		/// </summary>
 		public bool SwapEndianess { get; private set; }
+
+		public const int HeaderMinSize = 16;
 
 		private readonly string m_name;
 	}
