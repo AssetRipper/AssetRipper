@@ -198,11 +198,14 @@ namespace uTinyRipper.AssetExporters
 			{
 				return UntaggedTag;
 			}
-			if(m_tagManager.Tags.Count == 0)
+
+			// Unity doesn't verify tagID on export?
+			int tagIndex = tagID - 20000;
+			if (tagIndex >= m_tagManager.Tags.Count)
 			{
 				return $"unknown_{tagID}";
 			}
-			return m_tagManager.Tags[tagID - 20000];
+			return m_tagManager.Tags[tagIndex];
 		}
 
 		public IExportCollection CurrentCollection { get; set; }
