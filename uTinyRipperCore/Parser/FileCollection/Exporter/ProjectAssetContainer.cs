@@ -43,7 +43,11 @@ namespace uTinyRipper.AssetExporters
 					case ClassIDType.TagManager:
 						m_tagManager = (TagManager)asset;
 						break;
-				}
+                        
+                    case ClassIDType.ResourceManager:
+                        m_resourceManager = (ResourceManager)asset;
+                        break;
+                }
 			}
 
 			List<SceneExportCollection> scenes = new List<SceneExportCollection>();
@@ -62,7 +66,17 @@ namespace uTinyRipper.AssetExporters
 			m_scenes = scenes.ToArray();
 		}
 
-		public Object FindAsset(int fileIndex, long pathID)
+        public bool GetResourcePathFromAssets(IEnumerable<Object> assets, string filePath, ref string resourceSubFolder, ref string resourceFileName)
+        {
+            foreach (Object asset in assets)
+            {
+                if (m_resourceManager.GetResourcePathFromAsset(asset, filePath, ref resourceSubFolder, ref resourceFileName))
+                    return true;
+            }
+            return false;
+        }
+
+        public Object FindAsset(int fileIndex, long pathID)
 		{
 			if(fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
@@ -223,7 +237,8 @@ namespace uTinyRipper.AssetExporters
 
 		private readonly BuildSettings m_buildSettings;
 		private readonly TagManager m_tagManager;
-		private readonly SceneExportCollection[] m_scenes;
+        private readonly ResourceManager m_resourceManager;
+        private readonly SceneExportCollection[] m_scenes;
 		private readonly TransferInstructionFlags m_exportFlags;
 	}
 }
