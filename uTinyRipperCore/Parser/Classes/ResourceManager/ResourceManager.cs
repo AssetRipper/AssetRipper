@@ -23,17 +23,17 @@ namespace uTinyRipper.Classes
 		}
 
 		public override void Read(AssetReader reader)
-        {
-            base.Read(reader);
+		{
+		    base.Read(reader);
 
-            m_container = reader.ReadStringTKVPArray<PPtr<Object>>();
-            if (IsReadDependentAssets(reader.Version, reader.Flags))
-            {
-                m_dependentAssets = reader.ReadAssetArray<ResourceManagerDependency>();
-            }
-        }
+		    m_container = reader.ReadStringTKVPArray<PPtr<Object>>();
+		    if (IsReadDependentAssets(reader.Version, reader.Flags))
+		    {
+			m_dependentAssets = reader.ReadAssetArray<ResourceManagerDependency>();
+		    }
+		}
 
-        public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+        	public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
 			foreach (Object asset in base.FetchDependencies(file, isLog))
 			{
@@ -66,33 +66,33 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-        public bool GetResourcePathFromAsset(Object asset, string filePath, ref string resourceSubFolder, ref string resourceFileName)
-        {
-            string assetsFolderLocation = filePath.Substring(0, filePath.LastIndexOf("Assets\\") + 7);
-            string exportedFileExtension = filePath.Substring(filePath.LastIndexOf("."));
+		public bool GetResourcePathFromAsset(Object asset, string filePath, ref string resourceSubFolder, ref string resourceFileName)
+		{
+		    string assetsFolderLocation = filePath.Substring(0, filePath.LastIndexOf("Assets\\") + 7);
+		    string exportedFileExtension = filePath.Substring(filePath.LastIndexOf("."));
 
-            foreach (KeyValuePair<string, PPtr<Object>> containerEntry in m_container)
-            {
-                try
-                {
-                    if (asset == containerEntry.Value.GetAsset(File)) // containerEntry.Key contains a basic path in lowercase (folder1/folder2/filename), containerEntry.Value is linked to the actual asset
-                    {
-                        string basicPath = "Resources/" + containerEntry.Key;
-                        string pathWithNoFileName = basicPath.Substring(0, basicPath.LastIndexOf('/') + 1);
-                        string resourceFileNameFromPath = basicPath.Substring(basicPath.LastIndexOf('/') + 1); // lacks an extension, we need to use it because sometimes it's different than the export name given to it
+		    foreach (KeyValuePair<string, PPtr<Object>> containerEntry in m_container)
+		    {
+			try
+			{
+			    if (asset == containerEntry.Value.GetAsset(File)) // containerEntry.Key contains a basic path in lowercase (folder1/folder2/filename), containerEntry.Value is linked to the actual asset
+			    {
+				string basicPath = "Resources/" + containerEntry.Key;
+				string pathWithNoFileName = basicPath.Substring(0, basicPath.LastIndexOf('/') + 1);
+				string resourceFileNameFromPath = basicPath.Substring(basicPath.LastIndexOf('/') + 1); // lacks an extension, we need to use it because sometimes it's different than the export name given to it
 
-                        resourceFileName = resourceFileNameFromPath + exportedFileExtension;
-                        resourceSubFolder = assetsFolderLocation + pathWithNoFileName;
+				resourceFileName = resourceFileNameFromPath + exportedFileExtension;
+				resourceSubFolder = assetsFolderLocation + pathWithNoFileName;
 
-                        return true; 
-                    }
-                } catch (System.Exception ex) // we might run into a "path ID x was not found" error (maybe unimplemented class?)
-                {
-                    continue;
-                }
-            }
-            return false;
-        }
+				return true; 
+			    }
+			} catch (System.Exception ex) // we might run into a "path ID x was not found" error (maybe unimplemented class?)
+			{
+			    continue;
+			}
+		    }
+		    return false;
+		}
 
 		public IReadOnlyList<KeyValuePair<string, PPtr<Object>>> Container => m_container;
 		public ILookup<string, PPtr<Object>> ContainerMap => Container.ToLookup(t => t.Key, t => t.Value);
