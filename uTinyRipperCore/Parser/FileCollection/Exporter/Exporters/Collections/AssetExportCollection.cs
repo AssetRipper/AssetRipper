@@ -35,31 +35,31 @@ namespace uTinyRipper.AssetExporters
 		}
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)
-        {
-            string subFolder = Asset.ExportName;
-			string subPath = Path.Combine(dirPath, subFolder);
-			string fileName = GetUniqueFileName(container.File, Asset, subPath);
-			string filePath = Path.Combine(subPath, fileName);
+		{
+			string subFolder = Asset.ExportName;
+				string subPath = Path.Combine(dirPath, subFolder);
+				string fileName = GetUniqueFileName(container.File, Asset, subPath);
+				string filePath = Path.Combine(subPath, fileName);
 
-            string resourceSubFolder = String.Empty;
-            string resourceFileName = String.Empty;
-            if (container.GetResourcePathFromAssets(Assets, filePath, ref resourceSubFolder, ref resourceFileName))
-            {
-                subPath = resourceSubFolder;
-                filePath = resourceSubFolder + resourceFileName;
-            }
-
-            if (!DirectoryUtils.Exists(subPath))
+			string resourceSubFolder = String.Empty;
+			string resourceFileName = String.Empty;
+			if (container.GetResourcePathFromAssets(Assets, filePath, ref resourceSubFolder, ref resourceFileName))
 			{
-				DirectoryUtils.CreateVirtualDirectory(subPath);
+			subPath = resourceSubFolder;
+			filePath = resourceSubFolder + resourceFileName;
 			}
 
-            if (ExportInner(container, filePath))
-            {
-                Meta meta = new Meta(MetaImporter, Asset.GUID);
-                ExportMeta(container, meta, filePath);
-                return true;
-            }
+			if (!DirectoryUtils.Exists(subPath))
+				{
+					DirectoryUtils.CreateVirtualDirectory(subPath);
+				}
+
+			if (ExportInner(container, filePath))
+			{
+			Meta meta = new Meta(MetaImporter, Asset.GUID);
+			ExportMeta(container, meta, filePath);
+			return true;
+			}
 			return false;
 		}
 
@@ -86,8 +86,8 @@ namespace uTinyRipper.AssetExporters
 		}
 
 		protected virtual bool ExportInner(ProjectAssetContainer container, string filePath)
-        {
-            return AssetExporter.Export(container, Asset, filePath);
+		{
+		    return AssetExporter.Export(container, Asset, filePath);
 		}
 
 		public override IAssetExporter AssetExporter { get; }
