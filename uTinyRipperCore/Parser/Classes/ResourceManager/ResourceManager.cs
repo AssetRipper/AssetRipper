@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.ResourceManagers;
 using uTinyRipper.YAML;
@@ -64,6 +65,38 @@ namespace uTinyRipper.Classes
 				node.Add(DependentAssetsName, DependentAssets.ExportYAML(container));
 			}
 			return node;
+		}
+
+		public bool GetResourcePathFromAsset(Object asset, string filePath, out string resourcePath)
+		{
+			string assetsFolderLocation = filePath.Substring(0, filePath.LastIndexOf("Assets") + 7);
+			string exportedFileExtension = Path.GetExtension(filePath);
+
+			foreach (KeyValuePair<string, PPtr<Object>> containerEntry in m_container)
+			{
+				try
+				{
+					if (containerEntry.Value.IsAsset(File, asset)) // containerEntry.Key contains a basic path in lowercase (folder1/folder2/filename), containerEntry.Value is linked to the actual asset
+					{
+						string assetsResourceDirectoryPath = "Resources/" + Path.GetDirectoryName(containerEntry.Key) + "/";
+						resourcePath = assetsFolderLocation + assetsResourceDirectoryPath + Path.GetFileName(filePath);
+
+						if (System.IO.File.Exists(resourcePath)) // for some reason this situation can take place with font assets, we use the less "accurate" resourcePath file name
+						{
+							resourcePath = assetsResourceDirectoryPath + Path.GetFileName(containerEntry.Key) + exportedFileExtension;
+						}
+
+						return true;
+					}
+				}
+				catch (System.NotSupportedException ex)
+				{
+					// still having issues with exceptions, probably as a result of the iteration through a prefab's list of assets (only the second one appears to be identified)
+				}
+			}
+			resourcePath = string.Empty;
+
+			return false;
 		}
 
 		public IReadOnlyList<KeyValuePair<string, PPtr<Object>>> Container => m_container;

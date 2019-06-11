@@ -43,6 +43,10 @@ namespace uTinyRipper.AssetExporters
 					case ClassIDType.TagManager:
 						m_tagManager = (TagManager)asset;
 						break;
+                        
+					case ClassIDType.ResourceManager:
+						m_resourceManager = (ResourceManager)asset;
+						break;
 				}
 			}
 
@@ -60,6 +64,20 @@ namespace uTinyRipper.AssetExporters
 				}
 			}
 			m_scenes = scenes.ToArray();
+		}
+
+		public bool GetResourcePathFromAssets(IEnumerable<Object> assets, string filePath, out string resourcePath)
+		{
+			foreach (Object asset in assets) // prefabs have a list of assets, would be better to just send the one that gets recognised if possible
+			{
+				if (m_resourceManager.GetResourcePathFromAsset(asset, filePath, out resourcePath))
+				{
+					return true;
+				}
+			}
+			resourcePath = string.Empty;
+
+			return false;
 		}
 
 		public Object FindAsset(int fileIndex, long pathID)
@@ -223,6 +241,7 @@ namespace uTinyRipper.AssetExporters
 
 		private readonly BuildSettings m_buildSettings;
 		private readonly TagManager m_tagManager;
+		private readonly ResourceManager m_resourceManager;
 		private readonly SceneExportCollection[] m_scenes;
 		private readonly TransferInstructionFlags m_exportFlags;
 	}

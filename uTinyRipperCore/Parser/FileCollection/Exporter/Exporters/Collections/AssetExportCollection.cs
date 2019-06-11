@@ -10,7 +10,7 @@ namespace uTinyRipper.AssetExporters
 {
 	public class AssetExportCollection : ExportCollection
 	{
-		public AssetExportCollection(IAssetExporter assetExporter, Object asset):
+		public AssetExportCollection(IAssetExporter assetExporter, Object asset) :
 			this(assetExporter, asset, new NativeFormatImporter(asset))
 		{
 		}
@@ -40,6 +40,13 @@ namespace uTinyRipper.AssetExporters
 			string subPath = Path.Combine(dirPath, subFolder);
 			string fileName = GetUniqueFileName(container.File, Asset, subPath);
 			string filePath = Path.Combine(subPath, fileName);
+
+			string resourcePath;
+			if (container.GetResourcePathFromAssets(Assets, filePath, out resourcePath))
+			{
+				subPath = Path.GetDirectoryName(resourcePath);
+				filePath = resourcePath;
+			}
 
 			if (!DirectoryUtils.Exists(subPath))
 			{
