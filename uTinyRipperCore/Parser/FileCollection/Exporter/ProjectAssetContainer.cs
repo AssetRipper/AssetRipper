@@ -68,6 +68,12 @@ namespace uTinyRipper.AssetExporters
 
 		public bool GetResourcePathFromAssets(IEnumerable<Object> assets, string filePath, out string resourcePath)
 		{
+			resourcePath = string.Empty;
+			if (m_resourceManager == null)
+			{
+				return false;
+			}
+
 			foreach (Object asset in assets) // prefabs have a list of assets, would be better to just send the one that gets recognised if possible
 			{
 				if (m_resourceManager.GetResourcePathFromAsset(asset, filePath, out resourcePath))
@@ -75,7 +81,6 @@ namespace uTinyRipper.AssetExporters
 					return true;
 				}
 			}
-			resourcePath = string.Empty;
 
 			return false;
 		}

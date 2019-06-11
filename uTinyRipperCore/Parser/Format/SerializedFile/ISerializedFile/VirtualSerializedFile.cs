@@ -125,7 +125,7 @@ namespace uTinyRipper.SerializedFiles
 			return instance;
 		}
 
-		public string Name => throw new NotSupportedException();
+		public string Name => nameof(VirtualSerializedFile);
 		public Platform Platform { get; }
 		public Version Version { get; }
 		public TransferInstructionFlags Flags { get; }

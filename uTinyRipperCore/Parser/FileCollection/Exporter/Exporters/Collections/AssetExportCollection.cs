@@ -41,8 +41,7 @@ namespace uTinyRipper.AssetExporters
 			string fileName = GetUniqueFileName(container.File, Asset, subPath);
 			string filePath = Path.Combine(subPath, fileName);
 
-			string resourcePath;
-			if (container.GetResourcePathFromAssets(Assets, filePath, out resourcePath))
+			if (container.GetResourcePathFromAssets(Assets, filePath, out string resourcePath))
 			{
 				subPath = Path.GetDirectoryName(resourcePath);
 				filePath = resourcePath;
