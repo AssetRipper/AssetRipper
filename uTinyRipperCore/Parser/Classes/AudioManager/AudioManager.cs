@@ -86,7 +86,11 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool IsReadRequestedDSPBufferSize(Version version)
 		{
-			return version.IsGreaterEqual(2019, 1, 1);
+			if (version.IsGreaterEqual(2019))
+			{
+				return version.IsGreaterEqual(2019, 1, 1);
+			}
+			return version.IsGreaterEqual(2018, 3, 14);
 		}
 
 		/// <summary>
@@ -108,7 +112,7 @@ namespace uTinyRipper.Classes
 		private static int GetSerializedVersion(Version version)
 		{
 			// RequestedDSPBufferSize has been added
-			if (version.IsGreaterEqual(2019, 1, 1))
+			if (IsReadRequestedDSPBufferSize(version))
 			{
 				return 2;
 			}

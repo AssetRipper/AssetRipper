@@ -77,7 +77,7 @@ namespace uTinyRipper.Classes.Shaders
 			{
 				return 201708220;
 			}
-			else if (version.IsLessEqual(2018, 3))
+			else if (version.IsLess(2019))
 			{
 				return 201802150;
 			}
