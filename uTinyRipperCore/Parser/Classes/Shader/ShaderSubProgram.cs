@@ -24,7 +24,7 @@ namespace uTinyRipper.Classes.Shaders
 		/// </summary>
 		public static bool IsReadSamplerParameters(Version version)
 		{
-			return version.IsGreaterEqual(2017, 2);
+			return version.IsGreaterEqual(2017, 1);
 		}
 		/// <summary>
 		/// 2017.3 and greater
@@ -69,11 +69,11 @@ namespace uTinyRipper.Classes.Shaders
 			{
 				return 201608170;
 			}
-			else if (version.IsGreaterEqual(5, 6) && version.IsLess(2017, 3))
+			else if (version.IsLess(2017, 3))
 			{
 				return 201609010;
 			}
-			else if (version.IsLessEqual(2018, 1))
+			else if (version.IsLess(2018, 2))
 			{
 				return 201708220;
 			}
