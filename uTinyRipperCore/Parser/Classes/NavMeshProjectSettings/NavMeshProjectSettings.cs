@@ -118,7 +118,7 @@ namespace uTinyRipper.Classes
 			return IsReadLastAgentTypeID(version) ? SettingNames : new [] { "Humanoid" };
 		}
 
-		public override string ExportName => nameof(ClassIDType.NavMeshAreas);
+		public override string ExportPath => nameof(ClassIDType.NavMeshAreas);
 
 		public IReadOnlyList<NavMeshAreaData> Areas => m_areas;
 		public int LastAgentTypeID { get; private set; }

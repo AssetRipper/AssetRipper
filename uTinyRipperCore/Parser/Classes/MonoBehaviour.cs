@@ -155,7 +155,7 @@ namespace uTinyRipper.Classes
 			return string.Empty;
 		}
 
-		public override string ExportName => Path.Combine(AssetsKeyWord, "ScriptableObject");
+		public override string ExportPath => Path.Combine(AssetsKeyword, "ScriptableObject");
 		public override string ExportExtension => AssetExtension;
 
 		/// <summary>

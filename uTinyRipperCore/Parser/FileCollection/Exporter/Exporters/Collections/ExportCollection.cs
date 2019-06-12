@@ -116,8 +116,12 @@ namespace uTinyRipper.AssetExporters
 			fileName = FileNameRegex.Replace(fileName, string.Empty);
 
 			fileName = $"{fileName}.{GetExportExtension(asset)}";
-			fileName = FileUtils.GetUniqueName(dirPath, fileName, FileUtils.MaxFileNameLength - MetaExtension.Length);
-			return fileName;
+			return GetUniqueFileName(dirPath, fileName);
+		}
+
+		protected string GetUniqueFileName(string directoryPath, string fileName)
+		{
+			return FileUtils.GetUniqueName(directoryPath, fileName, FileUtils.MaxFileNameLength - MetaExtension.Length);
 		}
 
 		protected virtual string GetExportExtension(Object asset)

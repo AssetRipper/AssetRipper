@@ -36,16 +36,24 @@ namespace uTinyRipper.AssetExporters
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
-			string subFolder = Asset.ExportName;
-			string subPath = Path.Combine(dirPath, subFolder);
-			string fileName = GetUniqueFileName(container.File, Asset, subPath);
-			string filePath = Path.Combine(subPath, fileName);
-
-			if (container.GetResourcePathFromAssets(Assets, filePath, out string resourcePath))
+			string subPath;
+			string fileName;
+			if (container.TryGetResourcePathFromAssets(Assets, out Object asset, out string subResourcePath))
 			{
+				string resourcePath = Path.Combine(dirPath, $"{subResourcePath}.{GetExportExtension(asset)}");
 				subPath = Path.GetDirectoryName(resourcePath);
-				filePath = resourcePath;
+				string resFileName = Path.GetFileName(resourcePath);
+#warning TODO: combine assets with the same res path into one big asset
+				// Unity distinguish assets with non unique path by its type, but file system doesn't support it
+				fileName = GetUniqueFileName(subPath, resFileName);
 			}
+			else
+			{
+				string subFolder = Asset.ExportPath;
+				subPath = Path.Combine(dirPath, subFolder);
+				fileName = GetUniqueFileName(container.File, Asset, subPath);
+			}
+			string filePath = Path.Combine(subPath, fileName);
 
 			if (!DirectoryUtils.Exists(subPath))
 			{

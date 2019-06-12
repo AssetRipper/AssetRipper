@@ -136,7 +136,7 @@ namespace uTinyRipper.Classes
 		public ISerializedFile File => m_assetInfo.File;
 		public ClassIDType ClassID => m_assetInfo.ClassID;
 		public virtual bool IsValid => true;
-		public virtual string ExportName => Path.Combine(AssetsKeyWord, ClassID.ToString());
+		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
 		public virtual string ExportExtension => AssetExtension;
 		public long PathID => m_assetInfo.PathID;
 		
@@ -150,7 +150,7 @@ namespace uTinyRipper.Classes
 
 		public const string ObjectHideFlagsName = "m_ObjectHideFlags";
 
-		public const string AssetsKeyWord = "Assets";
+		public const string AssetsKeyword = "Assets";
 		protected const string AssetExtension = "asset";
 
 		private readonly AssetInfo m_assetInfo;

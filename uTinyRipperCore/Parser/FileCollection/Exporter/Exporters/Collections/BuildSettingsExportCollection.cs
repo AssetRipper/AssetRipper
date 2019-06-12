@@ -65,35 +65,35 @@ namespace uTinyRipper.AssetExporters
 
 			if (NavMeshProjectSettings != null)
 			{
-				fileName = $"{NavMeshProjectSettings.ExportName}.asset";
+				fileName = $"{NavMeshProjectSettings.ExportPath}.asset";
 				filePath = Path.Combine(subPath, fileName);
 
 				AssetExporter.Export(container, NavMeshProjectSettings, filePath);
 			}
 			if (NetworkManager != null)
 			{
-				fileName = $"{NetworkManager.ExportName}.asset";
+				fileName = $"{NetworkManager.ExportPath}.asset";
 				filePath = Path.Combine(subPath, fileName);
 
 				AssetExporter.Export(container, NetworkManager, filePath);
 			}
 			if (Physics2DSettings != null)
 			{
-				fileName = $"{Physics2DSettings.ExportName}.asset";
+				fileName = $"{Physics2DSettings.ExportPath}.asset";
 				filePath = Path.Combine(subPath, fileName);
 
 				AssetExporter.Export(container, Physics2DSettings, filePath);
 			}
 			if (UnityConnectSettings != null)
 			{
-				fileName = $"{UnityConnectSettings.ExportName}.asset";
+				fileName = $"{UnityConnectSettings.ExportPath}.asset";
 				filePath = Path.Combine(subPath, fileName);
 
 				AssetExporter.Export(container, UnityConnectSettings, filePath);
 			}
 			if (QualitySettings != null)
 			{
-				fileName = $"{QualitySettings.ExportName}.asset";
+				fileName = $"{QualitySettings.ExportPath}.asset";
 				filePath = Path.Combine(subPath, fileName);
 
 				AssetExporter.Export(container, QualitySettings, filePath);

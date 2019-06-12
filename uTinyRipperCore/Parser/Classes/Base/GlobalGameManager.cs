@@ -7,6 +7,6 @@
 		{
 		}
 
-		public override string ExportName => ClassID.ToString();
+		public override string ExportPath => ClassID.ToString();
 	}
 }

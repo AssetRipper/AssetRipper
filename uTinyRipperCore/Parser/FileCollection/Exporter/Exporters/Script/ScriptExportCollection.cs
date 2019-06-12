@@ -74,7 +74,7 @@ namespace uTinyRipper.AssetExporters
 				return false;
 			}
 
-			string scriptFolder = m_export[0].ExportName;
+			string scriptFolder = m_export[0].ExportPath;
 			string scriptPath = Path.Combine(dirPath, scriptFolder);
 
 			AssetExporter.Export(container, m_export, scriptPath, OnScriptExported);

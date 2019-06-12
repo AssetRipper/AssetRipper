@@ -36,6 +36,11 @@ namespace uTinyRipper.AssetExporters
 			return component.GameObject.FindAsset(component.File) != null;
 		}
 
+		protected override string GetExportExtension(Object asset)
+		{
+			return Prefab.PrefabKeyword;
+		}
+
 		private static GameObject GetAssetRoot(Object asset)
 		{
 			GameObject go;

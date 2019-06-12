@@ -156,7 +156,7 @@ namespace uTinyRipper.Classes
 			return soId;
 		}
 
-		public override string ExportName => Path.Combine(AssetsKeyWord, OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
+		public override string ExportPath => Path.Combine(AssetsKeyword, OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
 
 		public IReadOnlyList<byte> PVSData => m_PVSData;
 		public IReadOnlyList<OcclusionScene> Scenes => m_scenes;

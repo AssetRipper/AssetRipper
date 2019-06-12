@@ -308,7 +308,7 @@ namespace uTinyRipper.Classes
 			return IsReadAssemblyName(version, flags) ? AssemblyNameOrigin : string.Empty;
 		}
 
-		public override string ExportName => Path.Combine(AssetsKeyWord, "Scripts");
+		public override string ExportPath => Path.Combine(AssetsKeyword, "Scripts");
 		public override string ExportExtension => "cs";
 
 #if UNIVERSAL

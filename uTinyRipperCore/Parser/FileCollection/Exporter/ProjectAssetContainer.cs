@@ -66,18 +66,21 @@ namespace uTinyRipper.AssetExporters
 			m_scenes = scenes.ToArray();
 		}
 
-		public bool GetResourcePathFromAssets(IEnumerable<Object> assets, string filePath, out string resourcePath)
+#warning TODO: get rid of IEnumerable. pass only main asset (issues: prefab, texture with sprites, animatorController)
+		public bool TryGetResourcePathFromAssets(IEnumerable<Object> assets, out Object selectedAsset, out string resourcePath)
 		{
+			selectedAsset = null;
 			resourcePath = string.Empty;
 			if (m_resourceManager == null)
 			{
 				return false;
 			}
 
-			foreach (Object asset in assets) // prefabs have a list of assets, would be better to just send the one that gets recognised if possible
+			foreach (Object asset in assets)
 			{
-				if (m_resourceManager.GetResourcePathFromAsset(asset, filePath, out resourcePath))
+				if (m_resourceManager.TryGetResourcePathFromAsset(asset, out resourcePath))
 				{
+					selectedAsset = asset;
 					return true;
 				}
 			}

@@ -104,13 +104,15 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public override string ExportExtension => "prefab";
+		public override string ExportExtension => PrefabKeyword;
 
 		public bool IsPrefabParent { get; private set; }
 
 #if DEBUG
 		public string Name { get; private set; }
 #endif
+		
+		public const string PrefabKeyword = "prefab";
 
 		public PrefabModification Modification;
 		/// <summary>

@@ -49,7 +49,7 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public override string ExportName => Path.Combine(AssetsKeyWord, OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
+		public override string ExportPath => Path.Combine(AssetsKeyword, OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
 
 		public IReadOnlyList<byte> MeshData => m_meshData;
 		public IReadOnlyList<HeightmapData> Heightmaps => m_heightmaps;
