@@ -48,11 +48,11 @@ namespace uTinyRipper.Classes.Lights
 			return version.IsGreater(5, 0, 0, VersionType.Beta);
 		}
 		/// <summary>
-		/// 5.3.0 and greater
+		/// 5.3.0b6 and greater
 		/// </summary>
 		public static bool IsReadNearPlane(Version version)
 		{
-			return version.IsGreaterEqual(5, 3);
+			return version.IsGreaterEqual(5, 3, 0, VersionType.Beta, 6);
 		}
 		/// <summary>
 		/// 2019.1.0b4 and greater

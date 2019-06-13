@@ -52,7 +52,7 @@ namespace uTinyRipper.Classes.Meshes
 		{
 			FirstByte = (int)reader.ReadUInt32();
 			IndexCount = (int)reader.ReadUInt32();
-			Topology = (MeshTopology)reader.ReadUInt32();
+			Topology = (MeshTopology)reader.ReadInt32();
 
 			if (IsReadTriangleCount(reader.Version))
 			{
@@ -76,7 +76,7 @@ namespace uTinyRipper.Classes.Meshes
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(FirstByteName, FirstByte);
 			node.Add(IndexCountName, IndexCount);
-			node.Add(TopologyName, (uint)GetTopology(container.Version));
+			node.Add(TopologyName, (int)GetTopology(container.Version));
 			node.Add(BaseVertexName, BaseVertex);
 			node.Add(FirstVertexName, FirstVertex);
 			node.Add(VertexCountName, VertexCount);
