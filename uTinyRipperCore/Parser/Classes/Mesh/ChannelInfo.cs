@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes.Meshes
 			Stream = stream;
 			Offset = offset;
 			Format = format;
-			Dimension = dimention;
+			RawDimension = dimention;
 		}
 
 		public static byte CalculateStride(ChannelFormat format, int dimention)
@@ -63,7 +63,7 @@ namespace uTinyRipper.Classes.Meshes
 			else
 			{
 				ChannelFormatV5 format = GetFormat(version).ToChannelFormatV5();
-				return new ChannelInfo(Stream, Offset, (byte)format, (byte)(Dimension & 0xF));
+				return new ChannelInfo(Stream, Offset, (byte)format, Dimension);
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace uTinyRipper.Classes.Meshes
 			Stream = reader.ReadByte();
 			Offset = reader.ReadByte();
 			Format = reader.ReadByte();
-			Dimension = reader.ReadByte();
+			RawDimension = reader.ReadByte();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -81,21 +81,22 @@ namespace uTinyRipper.Classes.Meshes
 			node.Add(StreamName, Stream);
 			node.Add(OffsetName, Offset);
 			node.Add(FormatName, Format);
-			node.Add(DimensionName, Dimension);
+			node.Add(DimensionName, RawDimension);
 			return node;
 		}
 
 		public override string ToString()
 		{
-			return $"S[{Stream}];\tO[{Offset}];\tF[{Format}];\tD[{Dimension}]";
+			return $"S[{Stream}];\tO[{Offset}];\tF[{Format}];\tD[{RawDimension}]";
 		}
 
-		public bool IsSet => Dimension > 0;
+		public bool IsSet => RawDimension > 0;
 
 		public byte Stream { get; private set; }
 		public byte Offset { get; private set; }
 		public byte Format { get; private set; }
-		public byte Dimension { get; private set; }
+		public byte RawDimension { get; private set; }
+		public byte Dimension => (byte)(RawDimension & 0xF);
 
 		public const string StreamName = "stream";
 		public const string OffsetName = "offset";

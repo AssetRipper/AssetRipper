@@ -492,20 +492,12 @@ namespace uTinyRipper.Classes.Meshes
 
 		private int GetStreamOffset(Version version, int stream, IReadOnlyList<ChannelInfo> channels)
 		{
-			if (stream == 0)
+			int offset = 0;
+			for (int i = 0; i < stream; i++)
 			{
-				return 0;
-			}
-
-			// There is a gape between streams (usually 8 bytes )
-			// This is NOT an alignment, even if sometimes it may seem so
-			int leftSize = channels.Where(t => t.Stream != 0).Sum(t => t.GetStride(version));
-			int offset = m_data.Length - leftSize * VertexCount;
-
-			for (int i = 1; i < stream; i++)
-			{
-				int streamStride = channels.Where(t => t.Stream == i).Sum(t => t.GetStride(version));
-				offset += streamStride * VertexCount;
+				int vertexSize = channels.Where(t => t.Stream == i).Sum(t => t.GetStride(version));
+				offset += vertexSize * VertexCount;
+				offset = (offset + (VertexStreamAlign - 1)) & ~(VertexStreamAlign - 1);
 			}
 			return offset;
 		}
@@ -523,6 +515,8 @@ namespace uTinyRipper.Classes.Meshes
 		public const string ChannelsName = "m_Channels";
 		public const string DataSizeName = "m_DataSize";
 		public const string TypelessdataName = "_typelessdata";
+
+		private const int VertexStreamAlign = 16;
 
 		private ChannelInfo[] m_channels;
 		private StreamInfo[] m_streams;

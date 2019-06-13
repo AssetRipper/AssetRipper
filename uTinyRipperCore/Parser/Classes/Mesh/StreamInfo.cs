@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-
-namespace uTinyRipper.Classes.Meshes
+﻿namespace uTinyRipper.Classes.Meshes
 {
 	public struct StreamInfo : IAssetReadable
 	{
