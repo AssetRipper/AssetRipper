@@ -24,7 +24,7 @@ namespace uTinyRipperGUI
 
 		public void SetPixel(int x, int y, Color color)
 		{
-			int index = x + (y * Width);
+			int index = (x + (y * Width)) * 4;
 			unchecked
 			{
 				uint value = (uint)color.ToArgb();

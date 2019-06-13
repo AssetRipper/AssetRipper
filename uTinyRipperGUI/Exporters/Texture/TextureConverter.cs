@@ -232,6 +232,7 @@ namespace uTinyRipperGUI.Exporters
 			try
 			{
 				AstcDecoder.DecodeASTC(data, width, height, blockSize, blockSize, bitmap.Bits);
+				bitmap.FlipY();
 				return bitmap;
 			}
 			catch
