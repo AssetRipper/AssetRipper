@@ -17,6 +17,11 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		public static bool IsReadOffsetDistance(Version version)
+		{
+			return version.IsGreaterEqual(2019, 1, 3);
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -29,6 +34,10 @@ namespace uTinyRipper.Classes
 
 			CompositePaths.Read(reader);
 			VertexDistance = reader.ReadSingle();
+			if (IsReadOffsetDistance(reader.Version))
+			{
+				OffsetDistance = reader.ReadSingle();
+			}
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -56,14 +65,24 @@ namespace uTinyRipper.Classes
 			node.Add(ColliderPathsName, ColliderPaths.ExportYAML(container));
 			node.Add(CompositePathsName, CompositePaths.ExportYAML(container));
 			node.Add(VertexDistanceName, VertexDistance);
+			if (IsReadOffsetDistance(container.ExportVersion))
+			{
+				node.Add(OffsetDistanceName, GetOffsetDistance(container.Version));
+			}
 			return node;
 		}
 		
+		private float GetOffsetDistance(Version version)
+		{
+			return IsReadOffsetDistance(version) ? OffsetDistance : 0.000005f;
+		}
+
 		public GeometryType GeometryType { get; private set; }
 		public GenerationType GenerationType { get; private set; }
 		public float EdgeRadius {get; private set; }
 		public IReadOnlyList<SubCollider> ColliderPaths => m_colliderPaths;
 		public float VertexDistance { get; private set; }
+		public float OffsetDistance { get; private set; }
 
 		public const string GeometryTypeName = "m_GeometryType";
 		public const string GenerationTypeName = "m_GenerationType";
@@ -71,6 +90,7 @@ namespace uTinyRipper.Classes
 		public const string ColliderPathsName = "m_ColliderPaths";
 		public const string CompositePathsName = "m_CompositePaths";
 		public const string VertexDistanceName = "m_VertexDistance";
+		public const string OffsetDistanceName = "m_OffsetDistance";
 
 		public Polygon2D CompositePaths;
 
