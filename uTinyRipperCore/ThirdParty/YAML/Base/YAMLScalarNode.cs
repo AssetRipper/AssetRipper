@@ -330,15 +330,22 @@ namespace uTinyRipper.YAML
 				int lineLimit = MaxLineLength;
 				for (int i = 0; i < m_string.Length; i++)
 				{
+					char c = m_string[i];
 					if (i >= lineLimit)
 					{
-						emitter.WriteRaw('\\').WriteRaw('\n');
-						lineLimit += MaxLineLength;
+						// space at the beginning of the line is discarded
+						if (c != ' ')
+						{
+							emitter.WriteRaw('\\').WriteRaw('\n').WriteRaw(' ');
+							lineLimit += MaxLineLength;
+						}
 					}
 
-					char c = m_string[i];
 					switch (c)
 					{
+						case '\\':
+							emitter.WriteRaw('\\').WriteRaw('\\');
+							break;
 						case '\n':
 							emitter.WriteRaw('\\').WriteRaw('n');
 							break;
