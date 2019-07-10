@@ -25,6 +25,11 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
+		protected void ReadBase(AssetReader reader)
+		{
+			base.Read(reader);
+		}
+
 		public const string EnabledName = "m_Enabled";
 
 		public bool Enabled { get; private set; }

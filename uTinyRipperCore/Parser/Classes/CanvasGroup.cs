@@ -10,9 +10,21 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		private static bool IsReadBehaviour(Version version)
+		{
+			return version.IsGreaterEqual(4, 6, 1);
+		}
+
 		public override void Read(AssetReader reader)
 		{
-			base.Read(reader);
+			if (IsReadBehaviour(reader.Version))
+			{
+				base.Read(reader);
+			}
+			else
+			{
+				ReadBase(reader);
+			}
 
 			Alpha = reader.ReadSingle();
 			Interactable = reader.ReadBoolean();
