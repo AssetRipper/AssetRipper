@@ -117,7 +117,7 @@ namespace uTinyRipper.Assembly.Mono
 				return IsFieldTypeSerializable(elementScope);
 			}
 
-			if (fieldType.IsPrimitive)
+			if (MonoUtils.IsSerializablePrimitive(fieldType))
 			{
 				return true;
 			}

@@ -9,6 +9,28 @@ namespace uTinyRipper
 	public static class MonoUtils
 	{
 		#region Naming
+		public static bool IsSerializablePrimitive(TypeReference type)
+		{
+			switch (type.etype)
+			{
+				case ElementType.Boolean:
+				case ElementType.Char:
+				case ElementType.I1:
+				case ElementType.U1:
+				case ElementType.I2:
+				case ElementType.U2:
+				case ElementType.I4:
+				case ElementType.U4:
+				case ElementType.I8:
+				case ElementType.U8:
+				case ElementType.R4:
+				case ElementType.R8:
+					return true;
+				default:
+					return false;
+			}
+		}
+
 		public static bool IsCPrimitive(TypeReference type)
 		{
 			switch (type.etype)
@@ -63,6 +85,10 @@ namespace uTinyRipper
 				case BooleanName:
 				case BoolName:
 					return BoolName;
+				case IntPtrName:
+					return IntPtrName;
+				case UIntPtrName:
+					return UIntPtrName;
 				case CharName:
 				case CCharName:
 					return CCharName;
@@ -277,6 +303,8 @@ namespace uTinyRipper
 		public const string CVoidName = "void";
 		public const string BooleanName = "Boolean";
 		public const string BoolName = "bool";
+		public const string IntPtrName = "IntPtr";
+		public const string UIntPtrName = "UIntPtr";
 		public const string CharName = "Char";
 		public const string CCharName = "char";
 		public const string SByteName = "SByte";
