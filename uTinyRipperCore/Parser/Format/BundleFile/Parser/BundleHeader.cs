@@ -89,7 +89,6 @@ namespace uTinyRipper.BundleFiles
 				default:
 					throw new Exception($"Unknown bundle signature '{Type}'");
 			}
-
 		}
 
 		private void ReadRawWeb(EndianReader reader)

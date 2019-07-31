@@ -66,6 +66,7 @@ namespace uTinyRipper.BundleFiles
 					Header.Read(reader);
 				}
 
+				long headerSize = stream.Position;
 				using (BundleFileReader reader = new BundleFileReader(stream, EndianType.BigEndian, Header.Generation))
 				{
 					if (reader.Generation < BundleGeneration.BF_530_x)
@@ -79,7 +80,7 @@ namespace uTinyRipper.BundleFiles
 					{
 						using (SmartStream dataStream = Read530Metadata(reader))
 						{
-							Read530Blocks(dataStream);
+							Read530Blocks(dataStream, headerSize);
 						}
 					}
 				}
@@ -172,9 +173,13 @@ namespace uTinyRipper.BundleFiles
 							using (Lz4DecodeStream decodeStream = new Lz4DecodeStream(reader.BaseStream, Header.MetadataCompressedSize))
 							{
 								long read = decodeStream.Read(stream, Header.MetadataDecompressedSize);
-								if (read != Header.MetadataDecompressedSize || decodeStream.IsDataLeft)
+								if (read != Header.MetadataDecompressedSize)
 								{
 									throw new Exception($"Read {read} but expected {Header.MetadataDecompressedSize}");
+								}
+								if (decodeStream.IsDataLeft)
+								{
+									throw new Exception($"LZ4 stream still has some data");
 								}
 							}
 
@@ -220,11 +225,11 @@ namespace uTinyRipper.BundleFiles
 			}
 		}
 
-		private void Read530Blocks(SmartStream dataStream)
+		private void Read530Blocks(SmartStream dataStream, long headerSize)
 		{
 			if (Header.Flags.IsMetadataAtTheEnd())
 			{
-				dataStream.Position = Header.HeaderSize;
+				dataStream.Position = headerSize;
 			}
 
 			int cachedBlock = -1;
@@ -320,9 +325,13 @@ namespace uTinyRipper.BundleFiles
 											using (Lz4DecodeStream lzStream = new Lz4DecodeStream(dataStream, block.CompressedSize))
 											{
 												long read = lzStream.Read(blockStream, block.DecompressedSize);
-												if (read != block.DecompressedSize || lzStream.IsDataLeft)
+												if (read != block.DecompressedSize)
 												{
 													throw new Exception($"Read {read} but expected {block.DecompressedSize}");
+												}
+												if (lzStream.IsDataLeft)
+												{
+													throw new Exception($"LZ4 stream still has some data");
 												}
 											}
 											break;
