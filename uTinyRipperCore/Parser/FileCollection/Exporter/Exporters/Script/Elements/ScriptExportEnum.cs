@@ -10,7 +10,7 @@ namespace uTinyRipper.Exporters.Scripts
 			writer.WriteIndent(intent);
             writer.Write("{0} enum {1}", Keyword, TypeName);
             if (Base != null && Base.TypeName != "int") {
-                writer.Write(" : {2}", Base.TypeName);
+                writer.Write(" : {0}", Base.TypeName);
             }
             writer.WriteLine();
 
