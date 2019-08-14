@@ -2,18 +2,18 @@
 {
 	public struct VectorParameter : IAssetReadable
 	{
-		public VectorParameter(string name, ShaderParamType type, int index, int dimension)
+		public VectorParameter(string name, ShaderParamType type, int index, int columns)
 		{
 			Name = name;
 			NameIndex = -1;
 			Index = index;
 			ArraySize = 0;
 			Type = type;
-			Dim = (byte)dimension;
+			Dim = (byte)columns;
 		}
 
-		public VectorParameter(string name, ShaderParamType type, int index, int arraySize, int dimension):
-			this(name, type, index, dimension)
+		public VectorParameter(string name, ShaderParamType type, int index, int arraySize, int columns):
+			this(name, type, index, columns)
 		{
 			ArraySize = arraySize;
 		}

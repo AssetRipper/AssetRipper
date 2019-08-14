@@ -12,13 +12,13 @@ namespace uTinyRipper.Classes.Shaders
 			return version.IsGreaterEqual(2017, 3);
 		}
 
-		public ConstantBuffer(string name, MatrixParameter[] matrices, VectorParameter[] vectors, int usedSize)
+		public ConstantBuffer(string name, MatrixParameter[] matrices, VectorParameter[] vectors, StructParameter[] structs, int usedSize)
 		{
 			Name = name;
 			NameIndex = -1;
 			m_matrixParams = matrices;
 			m_vectorParams = vectors;
-			m_structParams = null;
+			m_structParams = structs;
 			Size = usedSize;
 		}
 
