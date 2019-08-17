@@ -134,7 +134,7 @@ namespace uTinyRipper.Classes.Shaders
 			List<UAVParameter> uavs = IsReadUAVParameters(reader.Version) ? new List<UAVParameter>() : null;
 			List<SamplerParameter> samplers = IsReadSamplerParameters(reader.Version) ? new List<SamplerParameter>() : null;
 			List<BufferBinding> constBindings = new List<BufferBinding>();
-			List<StructParameter> structs = IsReadStructParameters(reader.Version) ? new List<StructParameter>() : null;
+			List<StructParameter> structs = new List<StructParameter>();
 
 			int paramGroupCount = reader.ReadInt32();
 			m_constantBuffers = new ConstantBuffer[paramGroupCount - 1];
