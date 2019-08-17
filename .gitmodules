@@ -1,0 +1,3 @@
+[submodule "uTinyRipperGUI/ThirdParty/HLSLccWrapper/HLSLcc"]
+	path = uTinyRipperGUI/ThirdParty/HLSLccWrapper/HLSLcc
+	url = https://github.com/Unity-Technologies/HLSLcc.git

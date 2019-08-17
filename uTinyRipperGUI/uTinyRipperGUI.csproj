@@ -135,6 +135,26 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Compile Include="Exporters\Audio\AudioConverter.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ConstantBufferChunk.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ConstantBufferFlags.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ConstantBufferType.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\DXProgramType.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\DXShaderObjectExporter.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ResourceBindingChunk.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ResourceChunk.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ResourceReturnType.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderFlags.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderInputFlags.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderInputType.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderResourceViewDimension.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderType.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderTypeMember.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderVariableClass.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderVariableFlags.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderVariableType.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\Variable.cs" />
+    <Compile Include="Exporters\Shader\DXShaderExporter\VariableChunk.cs" />
+    <Compile Include="Exporters\Shader\ShaderHLSLccExporter.cs" />
     <Compile Include="Exporters\Shader\ShaderVulkanExporter.cs" />
     <Compile Include="Exporters\Texture\TextureConverter.cs" />
     <Compile Include="Exporters\Texture\Texture2DExtensions.cs" />
@@ -239,6 +259,10 @@
     <ProjectReference Include="..\uTinyRipperCore\uTinyRipperCore.csproj">
       <Project>{ca9420f4-4b54-4727-91e6-cce20916d795}</Project>
       <Name>uTinyRipperCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="ThirdParty\HLSLccWrapper\HLSLccWrapper.vcxproj">
+      <Project>{b812e249-4f57-4c35-b5a8-a8ec498627f9}</Project>
+      <Name>HLSLccWrapper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

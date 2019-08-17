@@ -15,6 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrossPlatform", "CrossPlatf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uTinyRipperGUI", "uTinyRipperGUI\uTinyRipperGUI.csproj", "{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HLSLccWrapper", "uTinyRipperGUI\ThirdParty\HLSLccWrapper\HLSLccWrapper.vcxproj", "{B812E249-4F57-4C35-B5A8-A8EC498627F9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{825F97E7-5A2D-4D93-81AD-292F54FE2AC7}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +116,22 @@ Global
 		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x64.Build.0 = Virtual|x64
 		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x86.ActiveCfg = Virtual|x86
 		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x86.Build.0 = Virtual|x86
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Debug|x64.ActiveCfg = Debug|x64
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Debug|x64.Build.0 = Debug|x64
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Debug|x86.ActiveCfg = Debug|Win32
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Debug|x86.Build.0 = Debug|Win32
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Release|Any CPU.ActiveCfg = Release|Win32
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Release|x64.ActiveCfg = Release|x64
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Release|x64.Build.0 = Release|x64
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Release|x86.ActiveCfg = Release|Win32
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Release|x86.Build.0 = Release|Win32
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Virtual|Any CPU.ActiveCfg = Release|x64
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Virtual|Any CPU.Build.0 = Release|x64
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Virtual|x64.ActiveCfg = Release|x64
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Virtual|x64.Build.0 = Release|x64
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Virtual|x86.ActiveCfg = Release|Win32
+		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Virtual|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -321,7 +321,7 @@ namespace uTinyRipper.Classes.Shaders
 				writer.Write("\n");
 				writer.WriteIndent(5);
 
-				writer.WriteShaderData(ProgramType.ToGPUPlatform(writer.Platform), m_programData);
+				writer.WriteShaderData(ProgramType.ToGPUPlatform(writer.Platform), this);
 			}
 			writer.Write('"');
 		}
