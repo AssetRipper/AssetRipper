@@ -56,11 +56,21 @@ namespace uTinyRipper.Classes.TerrainDatas
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach (SplatPrototype prototype in Splats)
+			if (m_splats != null)
 			{
-				foreach (Object asset in prototype.FetchDependencies(file, isLog))
+				foreach (SplatPrototype prototype in Splats)
 				{
-					yield return asset;
+					foreach (Object asset in prototype.FetchDependencies(file, isLog))
+					{
+						yield return asset;
+					}
+				}
+			}
+			if (m_terrainLayers != null)
+			{
+				foreach (PPtr<TerrainLayer> terrainLayer in TerrainLayers)
+				{
+					yield return terrainLayer.FetchDependency(file, isLog, () => nameof(TerrainLayer), "m_TerrainLayers");
 				}
 			}
 
