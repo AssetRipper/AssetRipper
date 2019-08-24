@@ -98,7 +98,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 				}
 				if (Field.IsAssembly)
 				{
-					return ProtectedKeyWord;
+					return InternalKeyWord;
 				}
 				return ProtectedKeyWord;
 			}
