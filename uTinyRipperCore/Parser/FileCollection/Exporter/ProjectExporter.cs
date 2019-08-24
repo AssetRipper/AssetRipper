@@ -121,6 +121,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.SceneAsset);
 			OverrideYamlExporter(ClassIDType.LightmapParameters);
 			OverrideYamlExporter(ClassIDType.SpriteAtlas);
+			OverrideYamlExporter(ClassIDType.TextMesh);
 
 			OverrideBinaryExporter(ClassIDType.Shader);
 			OverrideBinaryExporter(ClassIDType.AudioClip);
