@@ -232,7 +232,8 @@ namespace uTinyRipper
 					return new SpriteAtlas(assetInfo);
 				case ClassIDType.TerrainLayer:
 					return new TerrainLayer(assetInfo);
-
+                                case ClassIDType.TextMesh:
+                                        return new TextMesh(assetInfo);
 				default:
 					return null;
 			}
