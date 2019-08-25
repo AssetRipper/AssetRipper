@@ -26,6 +26,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		
 		public override void Init(IScriptExportManager manager)
 		{
+			base.Init(manager);
 			TypeSpecification specification = (TypeSpecification)Type;
 			m_element = manager.RetrieveType(specification.ElementType);
 		}
@@ -46,5 +47,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		private TypeReference Type { get; }
 		
 		private ScriptExportType m_element;
+
+		public override bool IsPrimative => Element.IsPrimative;
 	}
 }

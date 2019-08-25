@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using uTinyRipper.Assembly;
 
 namespace uTinyRipper.Exporters.Scripts
@@ -25,12 +26,12 @@ namespace uTinyRipper.Exporters.Scripts
 			{
 				writer.Write("new ");
 			}
+			string name = Type.GetTypeQualifiedName(DeclaringType);
 
-			string name = Type.GetTypeNestedName(DeclaringType);
 			name = SerializableType.IsEngineObject(Type.Namespace, name) ? $"{Type.Namespace}.{name}" : name;
+
 			writer.WriteLine("{0} {1};", name, Name);
 		}
-
 		public void ExportEnum(TextWriter writer, int intent)
 		{
 			if (Type.IsEnum)

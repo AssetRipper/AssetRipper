@@ -1,6 +1,8 @@
 using Mono.Cecil;
+using Mono.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using uTinyRipper.Assembly;
 using uTinyRipper.Assembly.Mono;
@@ -234,12 +236,14 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 		public override void Init(IScriptExportManager manager)
 		{
+			base.Init(manager);
 			if (Definition != null && Definition.BaseType != null)
 			{
 				m_base = manager.RetrieveType(Definition.BaseType);
 			}
 
 			m_fields = CreateFields(manager);
+			CreateMethodsAndProperties(manager, out m_methods, out m_properties);
 
 			if (Type.IsNested)
 			{
@@ -249,6 +253,8 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 					AddAsNestedType();
 				}
 			}
+
+
 		}
 				
 		public override void GetUsedNamespaces(ICollection<string> namespaces)
@@ -319,6 +325,77 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			return fields.ToArray();
 		}
 
+
+		private void CreateMethodsAndProperties(IScriptExportManager manager, out IReadOnlyList<ScriptExportMethod> methodList, out IReadOnlyList<ScriptExportProperty> propertyList)
+		{
+			/*
+			 * TODO: Does not find override methods of concrete type when abstract method is generic.
+			 * Unclear how to handle, can we make the parent types/methods concrete as we walk the inheritence chain?
+			 * Affected game: Tyranny
+			 * Related to issue: https://github.com/jbevain/cecil/issues/180
+			 * TODO: Abstract classes may have the override methods and properties located in children which may not be exported.
+			 * In that case the override method or property should be implemented in the parent class
+			 * Affected game: Rimworld, Subnautica, Pillars of Eternity II
+			 * TODO: : Add constructor when parent does not contain a default constructor and type in inherits from a system or unity type
+			 * Affected game: Subnautica
+			 */
+			if (Definition == null)
+			{
+				methodList = new ScriptExportMethod[0];
+				propertyList = new ScriptExportProperty[0];
+				return;
+			}
+			List<MethodDefinition> abstractParentMethods = new List<MethodDefinition>();
+			TypeReference baseType = Definition.BaseType;
+			while(baseType != null)
+			{
+				TypeDefinition definition = baseType.Resolve();
+				if(definition.Module.Name.StartsWith("UnityEngine.") || definition.Module.Name == "mscorlib.dll" || definition.Module.Name == "netstandard.dll")
+				{
+					foreach (MethodDefinition method in definition.Methods)
+					{
+						if (method.IsAbstract)
+						{
+							abstractParentMethods.Add(method);
+						}
+					}
+				}
+				baseType = definition.BaseType;
+			}
+			List<MethodDefinition> overrideMethods = new List<MethodDefinition>();
+			foreach (MethodDefinition method in abstractParentMethods)
+			{
+				MethodDefinition overrideMethod = MetadataResolver.GetMethod(Definition.Methods, method);
+				if(overrideMethod != null) overrideMethods.Add(overrideMethod);
+			}
+			List<ScriptExportMethod> methods = new List<ScriptExportMethod>();
+			HashSet<PropertyDefinition> overrideProperties = new HashSet<PropertyDefinition>();
+			foreach (MethodDefinition method in overrideMethods)
+			{
+				if (method.IsSetter)
+				{
+					overrideProperties.Add(Definition.Properties.First(prop => prop.SetMethod == method));
+				}
+				else if (method.IsGetter)
+				{
+					overrideProperties.Add(Definition.Properties.First(prop => prop.GetMethod == method));
+				}
+				else
+				{
+					ScriptExportMethod emethod = manager.RetrieveMethod(method);
+					methods.Add(emethod);
+				}
+			}
+			List<ScriptExportProperty> properties = new List<ScriptExportProperty>();
+			foreach (PropertyDefinition property in overrideProperties)
+			{
+				ScriptExportProperty eproperty = manager.RetrieveProperty(property);
+				properties.Add(eproperty);
+			}
+			methodList = methods.ToArray();
+			propertyList = properties.ToArray();
+		}
+
 		private static bool IsContainsGenericParameter(TypeReference type)
 		{
 			if (type.IsGenericParameter)
@@ -354,6 +431,9 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		public override ScriptExportType Base => m_base;
 
 		public override IReadOnlyList<ScriptExportField> Fields => m_fields;
+		public override IReadOnlyList<ScriptExportMethod> Methods => m_methods;
+		public override IReadOnlyList<ScriptExportProperty> Properties => m_properties;
+
 
 		protected override string Keyword
 		{
@@ -381,12 +461,15 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		}
 		protected override bool IsStruct => Type.IsValueType;
 		protected override bool IsSerializable => Definition == null ? false : Definition.IsSerializable;
+		public override bool IsPrimative => MonoType.IsCPrimitive(Type);
 
 		private TypeReference Type { get; }
 		private TypeDefinition Definition { get; }
-		
+
 		private ScriptExportType m_declaringType;
 		private ScriptExportType m_base;
 		private IReadOnlyList<ScriptExportField> m_fields;
+		private IReadOnlyList<ScriptExportMethod> m_methods;
+		private IReadOnlyList<ScriptExportProperty> m_properties;
 	}
 }
