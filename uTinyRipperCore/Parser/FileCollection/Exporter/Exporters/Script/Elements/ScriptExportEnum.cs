@@ -8,7 +8,11 @@ namespace uTinyRipper.Exporters.Scripts
 		public sealed override void Export(TextWriter writer, int intent)
 		{
 			writer.WriteIndent(intent);
-			writer.WriteLine("{0} enum {1}", Keyword, TypeName);
+            writer.Write("{0} enum {1}", Keyword, TypeName);
+            if (Base != null && Base.TypeName != "int") {
+                writer.Write(" : {0}", Base.TypeName);
+            }
+            writer.WriteLine();
 
 			writer.WriteIndent(intent++);
 			writer.WriteLine('{');
@@ -29,7 +33,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 		public sealed override bool IsEnum => true;
 
-		public sealed override ScriptExportType Base => null;
+		public override ScriptExportType Base => null;
 
 		protected sealed override bool IsStruct => throw new NotSupportedException();
 		protected sealed override bool IsSerializable => false;
