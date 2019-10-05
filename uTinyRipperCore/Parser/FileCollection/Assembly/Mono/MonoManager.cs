@@ -157,25 +157,25 @@ namespace uTinyRipper.Assembly.Mono
 			GC.SuppressFinalize(this);
 		}
 
-		public SerializableType GetSerializableType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		public SerializableType GetSerializableType(MonoTypeContext context)
 		{
-			if (type.IsGenericParameter)
+			if (context.Type.IsGenericParameter)
 			{
-				throw new ArgumentException(nameof(type));
+				throw new ArgumentException(nameof(context));
 			}
-			if (MonoField.IsSerializableArray(type))
+			if (MonoField.IsSerializableArray(context.Type))
 			{
-				throw new ArgumentException(nameof(type));
+				throw new ArgumentException(nameof(context));
 			}
 
-			string uniqueName = MonoType.GetUniqueName(type);
+			string uniqueName = MonoType.GetUniqueName(context.Type);
 			if (AssemblyManager.TryGetSerializableType(uniqueName, out SerializableType serializableType))
 			{
 				return serializableType;
 			}
 			else
 			{
-				return new MonoType(this, type, arguments);
+				return new MonoType(this, context);
 			}
 		}
 

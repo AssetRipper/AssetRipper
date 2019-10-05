@@ -7,26 +7,26 @@ namespace uTinyRipper.Assembly.Mono
 	public class MonoType : SerializableType
 	{
 		internal MonoType(MonoManager manager, TypeReference type) :
-			this(manager, type, s_emptyArguments)
+			this(manager, new MonoTypeContext(type))
 		{
 		}
 
-		internal MonoType(MonoManager manager, TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
-			base(type.Namespace, ToPrimitiveType(type), MonoUtils.GetName(type))
+		internal MonoType(MonoManager manager, MonoTypeContext context) :
+			base(context.Type.Namespace, ToPrimitiveType(context.Type), MonoUtils.GetName(context.Type))
 		{
-			if (type.IsGenericParameter)
+			if (context.Type.IsGenericParameter)
 			{
-				throw new ArgumentException(nameof(type));
+				throw new ArgumentException(nameof(context));
 			}
-			if (MonoField.IsSerializableArray(type))
+			if (MonoField.IsSerializableArray(context.Type))
 			{
-				throw new ArgumentException(nameof(type));
+				throw new ArgumentException(nameof(context));
 			}
 
-			string uniqueName = GetUniqueName(type);
+			string uniqueName = GetUniqueName(context.Type);
 			manager.AssemblyManager.AddSerializableType(uniqueName, this);
-			Base = GetBaseType(manager, type, arguments);
-			Fields = CreateFields(manager, type, arguments);
+			Base = GetBaseType(manager, context);
+			Fields = CreateFields(manager, context);
 		}
 
 		public static string GetUniqueName(TypeReference type)
@@ -177,15 +177,15 @@ namespace uTinyRipper.Assembly.Mono
 			return ToPrimitiveType(type.Namespace, type.Name);
 		}
 
-		private static bool IsSerializableArray(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		private static bool IsSerializableArray(MonoTypeContext context)
 		{
-			TypeReference resolvedType = type.ContainsGenericParameter ? MonoUtils.ResolveGenericParameter(type, arguments) : type;
-			return MonoField.IsSerializableArray(resolvedType);
+			MonoTypeContext resolvedContext = context.Type.ContainsGenericParameter ? context.ResolveGenericParameter() : context;
+			return MonoField.IsSerializableArray(resolvedContext.Type);
 		}
 
-		private static SerializableType GetBaseType(MonoManager manager, TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		private static SerializableType GetBaseType(MonoManager manager, MonoTypeContext context)
 		{
-			TypeDefinition definition = type.Resolve();
+			TypeDefinition definition = context.Type.Resolve();
 			if (IsObject(definition.BaseType))
 			{
 				return null;
@@ -193,39 +193,43 @@ namespace uTinyRipper.Assembly.Mono
 
 			if (definition.BaseType.IsGenericInstance)
 			{
-				Dictionary<GenericParameter, TypeReference> templateArguments = new Dictionary<GenericParameter, TypeReference>();
 				GenericInstanceType instance = (GenericInstanceType)definition.BaseType;
 				TypeDefinition template = instance.ElementType.Resolve();
+				Dictionary<GenericParameter, TypeReference> templateArguments = new Dictionary<GenericParameter, TypeReference>(instance.GenericArguments.Count);
 				for (int i = 0; i < instance.GenericArguments.Count; i++)
 				{
 					GenericParameter parameter = template.GenericParameters[i];
 					TypeReference argument = instance.GenericArguments[i];
 					if (argument.ContainsGenericParameter)
 					{
-						argument = MonoUtils.ResolveGenericParameter(argument, arguments);
+						MonoTypeContext argumentContext = new MonoTypeContext(argument, context.Arguments);
+						argument = argumentContext.ResolveGenericParameter().Type;
 					}
 					templateArguments.Add(parameter, argument);
 				}
-				return manager.GetSerializableType(instance, templateArguments);
+				MonoTypeContext instanceContext = new MonoTypeContext(instance, templateArguments);
+				return manager.GetSerializableType(instanceContext);
 			}
 			else
 			{
 				TypeDefinition baseDefinition = definition.BaseType.Resolve();
-				return manager.GetSerializableType(baseDefinition, s_emptyArguments);
+				MonoTypeContext baseContext = new MonoTypeContext(baseDefinition);
+				return manager.GetSerializableType(baseContext);
 			}
 		}
 
-		private static Field[] CreateFields(MonoManager manager, TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		private static Field[] CreateFields(MonoManager manager, MonoTypeContext context)
 		{
-			TypeDefinition definition = type.Resolve();
+			TypeDefinition definition = context.Type.Resolve();
 			List<Field> fields = new List<Field>();
 			foreach (FieldDefinition field in definition.Fields)
 			{
-				if (MonoField.IsSerializable(field, arguments))
+				if (MonoField.IsSerializable(field, context.Arguments))
 				{
-					TypeReference fieldType = GetSerializedElementType(field.FieldType, arguments);
-					SerializableType scriptType = manager.GetSerializableType(fieldType, arguments);
-					bool isArray = IsSerializableArray(field.FieldType, arguments);
+					MonoTypeContext fieldContext = new MonoTypeContext(field.FieldType, context.Arguments);
+					MonoTypeContext serFieldContext = GetSerializedElementContext(fieldContext);
+					SerializableType scriptType = manager.GetSerializableType(serFieldContext);
+					bool isArray = IsSerializableArray(fieldContext);
 					Field fieldStruc = new Field(scriptType, isArray, field.Name);
 					fields.Add(fieldStruc);
 				}
@@ -233,25 +237,22 @@ namespace uTinyRipper.Assembly.Mono
 			return fields.ToArray();
 		}
 
-		private static TypeReference GetSerializedElementType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		private static MonoTypeContext GetSerializedElementContext(MonoTypeContext context)
 		{
-			TypeReference resolvedType = type.ContainsGenericParameter ? MonoUtils.ResolveGenericParameter(type, arguments) : type;
-			if (resolvedType.IsArray)
+			MonoTypeContext resolvedContext = context.Type.ContainsGenericParameter ? context.ResolveGenericParameter() : context;
+			if (resolvedContext.Type.IsArray)
 			{
-				ArrayType array = (ArrayType)resolvedType;
-				return array.ElementType;
+				ArrayType array = (ArrayType)resolvedContext.Type;
+				return new MonoTypeContext(array.ElementType, resolvedContext.Arguments);
 			}
-			if (IsList(resolvedType))
+			if (IsList(resolvedContext.Type))
 			{
-				GenericInstanceType generic = (GenericInstanceType)resolvedType;
-				return generic.GenericArguments[0];
+				GenericInstanceType generic = (GenericInstanceType)resolvedContext.Type;
+				return new MonoTypeContext(generic.GenericArguments[0], resolvedContext.Arguments);
 			}
-
-			return resolvedType;
+			return resolvedContext;
 		}
 
 		private const string EnumValueFieldName = "value__";
-
-		private static readonly IReadOnlyDictionary<GenericParameter, TypeReference> s_emptyArguments = new Dictionary<GenericParameter, TypeReference>(0);
 	}
 }

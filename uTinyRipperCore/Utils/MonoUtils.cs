@@ -248,54 +248,6 @@ namespace uTinyRipper
 			return count;
 		}
 
-		/// <summary>
-		/// Replace generic parameters with arguments
-		/// </summary>
-		public static TypeReference ResolveGenericParameter(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
-		{
-			if (type.IsGenericParameter)
-			{
-				GenericParameter generic = (GenericParameter)type;
-				TypeReference resolvedType = arguments[generic];
-				return resolvedType.ContainsGenericParameter ? ResolveGenericParameter(resolvedType, arguments) : resolvedType;
-			}
-			if (type.IsArray)
-			{
-				ArrayType array = (ArrayType)type;
-				TypeReference arrayElement = array.ElementType;
-				if (arrayElement.ContainsGenericParameter)
-				{
-					TypeReference resolvedElement = ResolveGenericParameter(arrayElement, arguments);
-					return CreateArrayFrom(array, resolvedElement);
-				}
-				return array;
-			}
-			if (type.IsGenericInstance)
-			{
-				GenericInstanceType genericInstance = (GenericInstanceType)type;
-				if (genericInstance.ContainsGenericParameter)
-				{
-					return ResolveGenericInstanceParameters(genericInstance, arguments);
-				}
-				return genericInstance;
-			}
-			throw new Exception($"Unknown generic parameter container {type}");
-		}
-
-		/// <summary>
-		/// Replace generic parameters in generic instance with arguments
-		/// </summary>
-		public static GenericInstanceType ResolveGenericInstanceParameters(GenericInstanceType genericInstance, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
-		{
-			GenericInstanceType newInstance = new GenericInstanceType(genericInstance.ElementType);
-			foreach (TypeReference argument in genericInstance.GenericArguments)
-			{
-				TypeReference newArgument = argument.ContainsGenericParameter ? ResolveGenericParameter(argument, arguments) : argument;
-				newInstance.GenericArguments.Add(newArgument);
-			}
-			return newInstance;
-		}
-
 		public const string ObjectName = "Object";
 		public const string CObjectName = "object";
 		public const string ValueType = "ValueType";

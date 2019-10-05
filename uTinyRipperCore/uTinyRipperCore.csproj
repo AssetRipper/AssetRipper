@@ -190,6 +190,7 @@
     <Compile Include="Parser\Classes\Skybox.cs" />
     <Compile Include="Parser\Classes\SortingGroup.cs" />
     <Compile Include="Parser\Classes\Sprite\SecondarySpriteTexture.cs" />
+    <Compile Include="Parser\FileCollection\Assembly\Mono\MonoTypeContext.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\Collections\FailExportCollection.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\Font\FontAssetExporter.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\Font\FontExportCollection.cs" />

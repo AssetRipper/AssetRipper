@@ -131,6 +131,14 @@ namespace uTinyRipper.Assembly.Mono
 			}
 			if (MonoType.IsEnginePointer(fieldType))
 			{
+				if (fieldType.ContainsGenericParameter)
+				{
+					return false;
+				}
+				if (fieldType.IsGenericInstance)
+				{
+					return false;
+				}
 				return true;
 			}
 
