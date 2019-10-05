@@ -84,11 +84,11 @@ namespace uTinyRipper.Assembly
 
 		public static bool IsBasic(string @namespace, string name)
 		{
-			if(IsObject(@namespace, name))
+			if (IsObject(@namespace, name))
 			{
 				return true;
 			}
-			if(@namespace == SystemNamespace && name == MonoUtils.ValueType)
+			if (@namespace == SystemNamespace && name == MonoUtils.ValueType)
 			{
 				return true;
 			}
