@@ -128,11 +128,13 @@ namespace uTinyRipper.Classes.Shaders
 			List<VectorParameter> vectors = new List<VectorParameter>();
 			List<MatrixParameter> matrices = new List<MatrixParameter>();
 			List<TextureParameter> textures = new List<TextureParameter>();
+			List<VectorParameter> structVectors = new List<VectorParameter>();
+			List<MatrixParameter> structMatrices = new List<MatrixParameter>();
 			List<BufferBinding> buffers = new List<BufferBinding>();
 			List<UAVParameter> uavs = IsReadUAVParameters(reader.Version) ? new List<UAVParameter>() : null;
 			List<SamplerParameter> samplers = IsReadSamplerParameters(reader.Version) ? new List<SamplerParameter>() : null;
 			List<BufferBinding> constBindings = new List<BufferBinding>();
-			List<StructParameter> structs = IsReadStructParameters(reader.Version) ? new List<StructParameter>() : null;
+			List<StructParameter> structs = new List<StructParameter>();
 
 			int paramGroupCount = reader.ReadInt32();
 			m_constantBuffers = new ConstantBuffer[paramGroupCount - 1];
@@ -140,6 +142,7 @@ namespace uTinyRipper.Classes.Shaders
 			{
 				vectors.Clear();
 				matrices.Clear();
+				structs.Clear();
 
 				string name = reader.ReadString();
 				int usedSize = reader.ReadInt32();
@@ -149,7 +152,7 @@ namespace uTinyRipper.Classes.Shaders
 					string paramName = reader.ReadString();
 					ShaderParamType paramType = (ShaderParamType)reader.ReadInt32();
 					int rows = reader.ReadInt32();
-					int dimension = reader.ReadInt32();
+					int columns = reader.ReadInt32();
 					bool isMatrix = reader.ReadInt32() > 0;
 					int arraySize = reader.ReadInt32();
 					int index = reader.ReadInt32();
@@ -157,28 +160,17 @@ namespace uTinyRipper.Classes.Shaders
 					if (isMatrix)
 					{
 						MatrixParameter matrix = IsAllParamArgs(reader.Version) ?
-							new MatrixParameter(paramName, paramType, index, arraySize, rows) :
-							new MatrixParameter(paramName, paramType, index, rows);
+							new MatrixParameter(paramName, paramType, index, arraySize, rows, columns) :
+							new MatrixParameter(paramName, paramType, index, rows, columns);
 						matrices.Add(matrix);
 					}
 					else
 					{
 						VectorParameter vector = IsAllParamArgs(reader.Version) ?
-							new VectorParameter(paramName, paramType, index, arraySize, dimension) :
-							new VectorParameter(paramName, paramType, index, dimension);
+							new VectorParameter(paramName, paramType, index, arraySize, columns) :
+							new VectorParameter(paramName, paramType, index, columns);
 						vectors.Add(vector);
 					}
-				}
-
-				if (i == 0)
-				{
-					m_vectorParameters = vectors.ToArray();
-					m_matrixParameters = matrices.ToArray();
-				}
-				else
-				{
-					ConstantBuffer constBuffer = new ConstantBuffer(name, matrices.ToArray(), vectors.ToArray(), usedSize);
-					m_constantBuffers[i - 1] = constBuffer;
 				}
 
 				if (IsReadStructParameters(reader.Version))
@@ -186,8 +178,8 @@ namespace uTinyRipper.Classes.Shaders
 					int structCount = reader.ReadInt32();
 					for (int j = 0; j < structCount; j++)
 					{
-						vectors.Clear();
-						matrices.Clear();
+						structVectors.Clear();
+						structMatrices.Clear();
 
 						string structName = reader.ReadString();
 						int index = reader.ReadInt32();
@@ -201,7 +193,7 @@ namespace uTinyRipper.Classes.Shaders
 							paramName = $"{structName}.{paramName}";
 							ShaderParamType paramType = (ShaderParamType)reader.ReadInt32();
 							int rows = reader.ReadInt32();
-							int dimension = reader.ReadInt32();
+							int columns = reader.ReadInt32();
 							bool isMatrix = reader.ReadInt32() > 0;
 							int vectorArraySize = reader.ReadInt32();
 							int paramIndex = reader.ReadInt32();
@@ -209,22 +201,33 @@ namespace uTinyRipper.Classes.Shaders
 							if (isMatrix)
 							{
 								MatrixParameter matrix = IsAllParamArgs(reader.Version) ?
-									new MatrixParameter(paramName, paramType, paramIndex, vectorArraySize, rows) :
-									new MatrixParameter(paramName, paramType, paramIndex, rows);
-								matrices.Add(matrix);
+									new MatrixParameter(paramName, paramType, paramIndex, vectorArraySize, rows, columns) :
+									new MatrixParameter(paramName, paramType, paramIndex, rows, columns);
+								structMatrices.Add(matrix);
 							}
 							else
 							{
 								VectorParameter vector = IsAllParamArgs(reader.Version) ?
-									new VectorParameter(paramName, paramType, paramIndex, vectorArraySize, dimension) :
-									new VectorParameter(paramName, paramType, paramIndex, dimension);
-								vectors.Add(vector);
+									new VectorParameter(paramName, paramType, paramIndex, vectorArraySize, columns) :
+									new VectorParameter(paramName, paramType, paramIndex, columns);
+								structVectors.Add(vector);
 							}
 						}
 
-						StructParameter @struct = new StructParameter(structName, index, arraySize, structSize, vectors.ToArray(), matrices.ToArray());
+						StructParameter @struct = new StructParameter(structName, index, arraySize, structSize, structVectors.ToArray(), structMatrices.ToArray());
 						structs.Add(@struct);
 					}
+				}
+				if (i == 0)
+				{
+					m_vectorParameters = vectors.ToArray();
+					m_matrixParameters = matrices.ToArray();
+					m_structParameters = structs.ToArray();
+				}
+				else
+				{
+					ConstantBuffer constBuffer = new ConstantBuffer(name, matrices.ToArray(), vectors.ToArray(), structs.ToArray(), usedSize);
+					m_constantBuffers[i - 1] = constBuffer;
 				}
 			}
 
