@@ -114,6 +114,8 @@ namespace uTinyRipper
 					return new GUILayer(assetInfo);
 				case ClassIDType.Animator:
 					return new Animator(assetInfo);
+				case ClassIDType.TextMesh:
+					return new TextMesh(assetInfo);
 				case ClassIDType.RenderSettings:
 					return new RenderSettings(assetInfo);
 				case ClassIDType.Light:
@@ -232,8 +234,6 @@ namespace uTinyRipper
 					return new SpriteAtlas(assetInfo);
 				case ClassIDType.TerrainLayer:
 					return new TerrainLayer(assetInfo);
-                                case ClassIDType.TextMesh:
-                                        return new TextMesh(assetInfo);
 				default:
 					return null;
 			}

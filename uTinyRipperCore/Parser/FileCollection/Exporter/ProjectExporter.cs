@@ -68,6 +68,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.AnimatorController);
 			OverrideYamlExporter(ClassIDType.GUILayer);
 			OverrideYamlExporter(ClassIDType.Animator);
+			OverrideYamlExporter(ClassIDType.TextMesh);
 			OverrideYamlExporter(ClassIDType.RenderSettings);
 			OverrideYamlExporter(ClassIDType.Light);
 			OverrideYamlExporter(ClassIDType.Animation);
@@ -121,7 +122,6 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.SceneAsset);
 			OverrideYamlExporter(ClassIDType.LightmapParameters);
 			OverrideYamlExporter(ClassIDType.SpriteAtlas);
-			OverrideYamlExporter(ClassIDType.TextMesh);
 
 			OverrideBinaryExporter(ClassIDType.Shader);
 			OverrideBinaryExporter(ClassIDType.AudioClip);
