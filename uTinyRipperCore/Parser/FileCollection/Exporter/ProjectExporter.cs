@@ -72,6 +72,7 @@ namespace uTinyRipper.AssetExporters
 			OverrideYamlExporter(ClassIDType.RenderSettings);
 			OverrideYamlExporter(ClassIDType.Light);
 			OverrideYamlExporter(ClassIDType.Animation);
+			OverrideYamlExporter(ClassIDType.TrailRenderer);
 			OverrideYamlExporter(ClassIDType.MonoBehaviour);
 			OverrideYamlExporter(ClassIDType.Texture3D);
 			OverrideYamlExporter(ClassIDType.NewAnimationTrack);

@@ -191,6 +191,10 @@
     <Compile Include="Parser\Classes\SortingGroup.cs" />
     <Compile Include="Parser\Classes\Sprite\SecondarySpriteTexture.cs" />
     <Compile Include="Parser\Classes\TextMesh.cs" />
+    <Compile Include="Parser\Classes\TrailRenderer\LineAlignment.cs" />
+    <Compile Include="Parser\Classes\TrailRenderer\LineTextureMode.cs" />
+    <Compile Include="Parser\Classes\TrailRenderer\TrailRenderer.cs" />
+    <Compile Include="Parser\Classes\TrailRenderer\TrailRendererParamaters.cs" />
     <Compile Include="Parser\FileCollection\Assembly\Mono\MonoTypeContext.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\Collections\FailExportCollection.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\Font\FontAssetExporter.cs" />
