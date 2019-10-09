@@ -136,6 +136,7 @@ namespace uTinyRipper.Exporters.Scripts
 			}
 			return false;
 		}
+
 		public virtual string GetTypeQualifiedName(ScriptExportType relativeType)
 		{
 			if (SerializableType.IsEngineObject(Namespace, NestedName))
@@ -341,6 +342,7 @@ namespace uTinyRipper.Exporters.Scripts
 		public abstract string Namespace { get; }
 		public abstract string Module { get; }
 		public virtual bool IsEnum => false;
+		public abstract bool IsPrimative { get; }
 
 		/// <summary>
 		/// ex. GenericClass<T>.NestedType
@@ -362,7 +364,6 @@ namespace uTinyRipper.Exporters.Scripts
 		protected abstract string Keyword { get; }
 		protected abstract bool IsStruct { get; }
 		protected abstract bool IsSerializable { get; }
-		public abstract bool IsPrimative { get; }
 
 		protected const string PublicKeyWord = "public";
 		protected const string InternalKeyWord = "internal";

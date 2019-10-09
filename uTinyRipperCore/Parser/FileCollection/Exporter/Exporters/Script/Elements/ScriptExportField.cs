@@ -22,16 +22,17 @@ namespace uTinyRipper.Exporters.Scripts
 
 			writer.WriteIndent(intent);
 			writer.Write("{0} ", Keyword);
-			if(IsNew)
+			if (IsNew)
 			{
 				writer.Write("new ");
 			}
-			string name = Type.GetTypeQualifiedName(DeclaringType);
 
-			name = SerializableType.IsEngineObject(Type.Namespace, name) ? $"{Type.Namespace}.{name}" : name;
+			string typeName = Type.GetTypeQualifiedName(DeclaringType);
+			typeName = SerializableType.IsEngineObject(Type.Namespace, typeName) ? $"{Type.Namespace}.{typeName}" : typeName;
 
-			writer.WriteLine("{0} {1};", name, Name);
+			writer.WriteLine("{0} {1};", typeName, Name);
 		}
+
 		public void ExportEnum(TextWriter writer, int intent)
 		{
 			if (Type.IsEnum)

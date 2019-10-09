@@ -20,17 +20,20 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		{
 			m_declaringType = manager.RetrieveType(Method.DeclaringType);
 			m_returnType = manager.RetrieveType(Method.ReturnType);
-			int argumentCount = Method.Parameters.Count;
-			m_parameters = new ScriptExportParameter[argumentCount];
-			for (int i = 0; i < argumentCount; i++)
+			m_parameters = new ScriptExportParameter[Method.Parameters.Count];
+			for (int i = 0; i < m_parameters.Length; i++)
 			{
 				ParameterDefinition argument = Method.Parameters[i];
 				m_parameters[i] = manager.RetrieveParameter(argument);
 			}
 		}
 
-		public override string Name => Method.IsConstructor ? Method.DeclaringType.Name : Method.Name;
-		protected override bool IsOverride => true;
+		public override string Name => Method.Name;
+
+		public override ScriptExportType DeclaringType => m_declaringType;
+		public override ScriptExportType ReturnType => m_returnType;
+		public override IReadOnlyList<ScriptExportParameter> Parameters => m_parameters;
+
 		protected override string Keyword
 		{
 			get
@@ -45,16 +48,11 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 				}
 				if (Method.IsAssembly)
 				{
-					return ProtectedKeyWord;
+					return InternalKeyWord;
 				}
 				return ProtectedKeyWord;
 			}
 		}
-
-		public override ScriptExportType DeclaringType => m_declaringType;
-		public override ScriptExportType ReturnType => m_returnType;
-		public override IReadOnlyList<ScriptExportParameter> Parameters => m_parameters;
-
 
 		private MethodDefinition Method { get; }
 

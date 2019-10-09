@@ -238,13 +238,6 @@ namespace uTinyRipper.Exporters.Scripts
 			return CreateAttribute(attribute);
 		}
 
-		public ScriptExportField RetrieveField(FieldDefinition field)
-		{
-			ScriptExportField exportField = new ScriptExportMonoField(field);
-			exportField.Init(this);
-			return exportField;
-		}
-
 		public ScriptExportMethod RetrieveMethod(MethodDefinition method)
 		{
 			ScriptExportMethod exportMethod = new ScriptExportMonoMethod(method);
@@ -257,6 +250,13 @@ namespace uTinyRipper.Exporters.Scripts
 			ScriptExportProperty exportProperty = new ScriptExportMonoProperty(property);
 			exportProperty.Init(this);
 			return exportProperty;
+		}
+
+		public ScriptExportField RetrieveField(FieldDefinition field)
+		{
+			ScriptExportField exportField = new ScriptExportMonoField(field);
+			exportField.Init(this);
+			return exportField;
 		}
 
 		public ScriptExportParameter RetrieveParameter(ParameterDefinition parameter)

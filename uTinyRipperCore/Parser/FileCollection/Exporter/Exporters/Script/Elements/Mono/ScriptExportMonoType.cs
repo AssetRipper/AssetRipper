@@ -272,7 +272,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 		public override bool HasMember(string name)
 		{
-			if(base.HasMember(name))
+			if (base.HasMember(name))
 			{
 				return true;
 			}

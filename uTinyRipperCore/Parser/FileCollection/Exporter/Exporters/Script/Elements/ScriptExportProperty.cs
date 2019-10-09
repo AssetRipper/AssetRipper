@@ -10,32 +10,37 @@ namespace uTinyRipper.Exporters.Scripts
 		public void Export(TextWriter writer, int intent)
 		{
 			writer.WriteIndent(intent);
-			if (IsOverride) writer.Write("{0} ", "override");
-			bool sharedKeyword = false;
-			if (HasGetter && !HasSetter) sharedKeyword = true;
-			else if(!HasGetter && HasSetter) sharedKeyword = true;
-			else if(GetKeyword == SetKeyword) sharedKeyword = true;
-			if (sharedKeyword) writer.Write("{0} ", HasGetter ? GetKeyword : SetKeyword);
-			writer.WriteLine("{0} {1} {{", PropertyType.GetTypeQualifiedName(DeclaringType), Name);
+			string sharedKeyword = PropertyKeyword;
+			writer.WriteLine("{0} override {1} {2}", sharedKeyword, Type.GetTypeQualifiedName(DeclaringType), Name);
+			writer.WriteIndent(intent);
+			writer.WriteLine("{");
+
 			if (HasGetter)
 			{
 				writer.WriteIndent(intent + 1);
-				if(!sharedKeyword) writer.WriteLine("{0} ", GetKeyword);
-				writer.WriteLine("get {{ return typeof({0}).IsValueType ? ({0})System.Activator.CreateInstance(typeof({0})) : ({0})(object)null; }}", PropertyType.NestedName);
+				if (GetKeyword != sharedKeyword)
+				{
+					writer.WriteLine("{0} ", GetKeyword);
+				}
+				writer.WriteLine("get {{ return default({0}); }}", Type.NestedName);
 			}
 			if (HasSetter)
 			{
 				writer.WriteIndent(intent + 1);
-				if (!sharedKeyword) writer.WriteLine("{0} ", SetKeyword);
-				writer.WriteLine("set {  }");
+				if (SetKeyword != sharedKeyword)
+				{
+					writer.WriteLine("{0} ", SetKeyword);
+				}
+				writer.WriteLine("set {}");
 			}
+
 			writer.WriteIndent(intent);
 			writer.WriteLine("}");
 		}
 
 		public void GetUsedNamespaces(ICollection<string> namespaces)
 		{
-			PropertyType.GetTypeNamespaces(namespaces);
+			Type.GetTypeNamespaces(namespaces);
 		}
 
 		public override string ToString()
@@ -50,16 +55,43 @@ namespace uTinyRipper.Exporters.Scripts
 			}
 		}
 
-		protected abstract bool IsOverride { get; }
-		protected abstract bool HasGetter { get; }
-		protected abstract bool HasSetter { get; }
-		public abstract ScriptExportType PropertyType { get; }
-		public abstract ScriptExportType DeclaringType { get; }
-
 		public abstract string Name { get; }
 
+		public abstract ScriptExportType DeclaringType { get; }
+		public abstract ScriptExportType Type { get; }
+
+		protected abstract bool HasGetter { get; }
+		protected abstract bool HasSetter { get; }
 		protected abstract string GetKeyword { get; }
 		protected abstract string SetKeyword { get; }
+
+		private string PropertyKeyword
+		{
+			get
+			{
+				if (HasGetter && !HasSetter)
+				{
+					return GetKeyword;
+				}
+				if (HasSetter && !HasGetter)
+				{
+					return SetKeyword;
+				}
+				if (GetKeyword == PublicKeyWord || SetKeyword == PublicKeyWord)
+				{
+					return PublicKeyWord;
+				}
+				if (GetKeyword == InternalKeyWord || SetKeyword == InternalKeyWord)
+				{
+					return InternalKeyWord;
+				}
+				if (GetKeyword == ProtectedKeyWord || SetKeyword == ProtectedKeyWord)
+				{
+					return ProtectedKeyWord;
+				}
+				return PrivateKeyWord;
+			}
+		}
 
 		protected const string PublicKeyWord = "public";
 		protected const string InternalKeyWord = "internal";
