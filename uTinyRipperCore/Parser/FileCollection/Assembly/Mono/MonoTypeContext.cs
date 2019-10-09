@@ -44,7 +44,7 @@ namespace uTinyRipper.Assembly.Mono
 			// Resolve method returns template definition for GenericInstance
 			TypeDefinition definition = Type.Resolve();
 			TypeReference parent = definition.BaseType;
-			IReadOnlyDictionary<GenericParameter, TypeReference> parentArguments = s_emptyArguments;
+			IReadOnlyDictionary<GenericParameter, TypeReference> parentArguments = Arguments;
 			if (parent.IsGenericInstance && parent.ContainsGenericParameter)
 			{
 				parentArguments = GetContextArguments();
@@ -86,7 +86,7 @@ namespace uTinyRipper.Assembly.Mono
 				}
 				return arguments;
 			}
-			return s_emptyArguments;
+			return Arguments;
 		}
 
 		public override string ToString()
@@ -129,6 +129,7 @@ namespace uTinyRipper.Assembly.Mono
 				TypeReference resolvedType = Arguments[parameter];
 				return new MonoTypeContext(resolvedType);
 			}
+
 			if (Type.IsArray)
 			{
 				ArrayType array = (ArrayType)Type;
@@ -139,37 +140,27 @@ namespace uTinyRipper.Assembly.Mono
 					MonoTypeContext resolvedContext = arrayContext.ResolveGenericParameter();
 					array = MonoUtils.CreateArrayFrom(array, resolvedContext.Type);
 				}
-				return new MonoTypeContext(array, s_emptyArguments);
+				return new MonoTypeContext(array, Arguments);
 			}
+
 			if (Type.IsGenericInstance)
 			{
 				GenericInstanceType genericInstance = (GenericInstanceType)Type;
 				if (genericInstance.ContainsGenericParameter)
 				{
-					return ResolveGenericInstanceParameters();
+					GenericInstanceType newInstance = new GenericInstanceType(genericInstance.ElementType);
+					foreach (TypeReference argument in genericInstance.GenericArguments)
+					{
+						MonoTypeContext argumentContext = new MonoTypeContext(argument, Arguments);
+						MonoTypeContext resolvedContext = argumentContext.Resolve();
+						newInstance.GenericArguments.Add(resolvedContext.Type);
+					}
+					genericInstance = newInstance;
 				}
-				else
-				{
-					return new MonoTypeContext(genericInstance, s_emptyArguments);
-				}
+				return new MonoTypeContext(genericInstance, Arguments);
 			}
-			throw new Exception($"Unknown generic parameter container {Type}");
-		}
 
-		/// <summary>
-		/// Replace generic parameters in generic instance with actual arguments
-		/// </summary>
-		private MonoTypeContext ResolveGenericInstanceParameters()
-		{
-			GenericInstanceType genericInstance = (GenericInstanceType)Type;
-			GenericInstanceType newInstance = new GenericInstanceType(genericInstance.ElementType);
-			foreach (TypeReference argument in genericInstance.GenericArguments)
-			{
-				MonoTypeContext argumentContext = new MonoTypeContext(argument, Arguments);
-				MonoTypeContext resolvedContext = argumentContext.Resolve();
-				newInstance.GenericArguments.Add(resolvedContext.Type);
-			}
-			return new MonoTypeContext(newInstance, s_emptyArguments);
+			throw new Exception($"Unknown generic parameter container {Type}");
 		}
 
 		public TypeReference Type { get; }

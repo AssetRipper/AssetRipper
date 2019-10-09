@@ -305,18 +305,21 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 					break;
 				}
 
-				MonoTypeContext baseContext = context.GetBase();
-				TypeDefinition baseDefinition = baseContext.Type.Resolve();
-				string module = GetModuleName(baseContext.Type);
+				context = context.GetBase();
+				definition = context.Type.Resolve();
+				string module = GetModuleName(definition);
 				bool isBuiltIn = ScriptExportManager.IsBuiltInLibrary(module);
-				foreach (MethodDefinition method in baseDefinition.Methods)
+				IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
+				// definition is a Template for GenericInstance, so we must recreate context
+				MonoTypeContext definitionContext = new MonoTypeContext(definition, arguments);
+				foreach (MethodDefinition method in definition.Methods)
 				{
 					if (method.IsVirtual && (method.IsNewSlot || method.IsReuseSlot))
 					{
 						for (int i = 0; i < overrides.Count; i++)
 						{
 							MethodDefinition @override = overrides[i];
-							if (MonoUtils.AreSame(@override, baseContext, method))
+							if (MonoUtils.AreSame(@override, definitionContext, method))
 							{
 								if (isBuiltIn && method.IsAbstract)
 								{
@@ -330,8 +333,6 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 						}
 					}
 				}
-				context = baseContext;
-				definition = baseDefinition;
 			}
 			return methods.ToArray();
 		}

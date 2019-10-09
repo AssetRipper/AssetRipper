@@ -191,8 +191,8 @@ namespace uTinyRipper.Assembly.Mono
 
 		private static Field[] CreateFields(MonoManager manager, MonoTypeContext context)
 		{
-			TypeDefinition definition = context.Type.Resolve();
 			List<Field> fields = new List<Field>();
+			TypeDefinition definition = context.Type.Resolve();
 			IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
 			foreach (FieldDefinition field in definition.Fields)
 			{
