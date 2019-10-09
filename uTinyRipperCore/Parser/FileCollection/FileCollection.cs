@@ -112,7 +112,7 @@ namespace uTinyRipper
 				return null;
 			}
 
-			using (ResourceFileScheme scheme = ResourceFile.LoadScheme(resPath, resName))
+			using (ResourceFileScheme scheme = ResourceFile.LoadScheme(resPath, fixedName))
 			{
 				AddFile(scheme, this, AssemblyManager);
 			}
