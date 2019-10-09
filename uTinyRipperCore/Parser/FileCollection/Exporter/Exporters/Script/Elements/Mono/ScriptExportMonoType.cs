@@ -127,7 +127,10 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 		public static string GetModuleName(TypeReference type)
 		{
-			return AssemblyManager.ToAssemblyName(type.Scope.Name);
+			// reference and definition may has differrent module, so to avoid duplicates we need try to get defition
+			TypeReference definition = type.ResolveOrDefault();
+			definition = definition == null ? type : definition;
+			return AssemblyManager.ToAssemblyName(definition.Scope.Name);
 		}
 
 		public static bool HasMember(TypeReference type, string name)
