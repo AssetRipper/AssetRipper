@@ -1,4 +1,5 @@
 ﻿using Mono.Cecil;
+using Mono.Cecil.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -123,44 +124,95 @@ namespace uTinyRipper.Assembly.Mono
 		/// </summary>
 		private MonoTypeContext ResolveGenericParameter()
 		{
-			if (Type.IsGenericParameter)
+			switch (Type.etype)
 			{
-				GenericParameter parameter = (GenericParameter)Type;
-				TypeReference resolvedType = Arguments[parameter];
-				return new MonoTypeContext(resolvedType);
-			}
-
-			if (Type.IsArray)
-			{
-				ArrayType array = (ArrayType)Type;
-				TypeReference arrayElement = array.ElementType;
-				if (arrayElement.ContainsGenericParameter)
-				{
-					MonoTypeContext arrayContext = new MonoTypeContext(arrayElement, Arguments);
-					MonoTypeContext resolvedContext = arrayContext.ResolveGenericParameter();
-					array = MonoUtils.CreateArrayFrom(array, resolvedContext.Type);
-				}
-				return new MonoTypeContext(array, Arguments);
-			}
-
-			if (Type.IsGenericInstance)
-			{
-				GenericInstanceType genericInstance = (GenericInstanceType)Type;
-				if (genericInstance.ContainsGenericParameter)
-				{
-					GenericInstanceType newInstance = new GenericInstanceType(genericInstance.ElementType);
-					foreach (TypeReference argument in genericInstance.GenericArguments)
+				case ElementType.Var:
+				case ElementType.MVar:
 					{
-						MonoTypeContext argumentContext = new MonoTypeContext(argument, Arguments);
-						MonoTypeContext resolvedContext = argumentContext.Resolve();
-						newInstance.GenericArguments.Add(resolvedContext.Type);
+						GenericParameter parameter = (GenericParameter)Type;
+						TypeReference resolvedType = Arguments[parameter];
+						return new MonoTypeContext(resolvedType);
 					}
-					genericInstance = newInstance;
-				}
-				return new MonoTypeContext(genericInstance, Arguments);
-			}
 
-			throw new Exception($"Unknown generic parameter container {Type}");
+				case ElementType.Array:
+					{
+						ArrayType array = (ArrayType)Type;
+						MonoTypeContext arrayContext = new MonoTypeContext(array.ElementType, Arguments);
+						MonoTypeContext resolvedContext = arrayContext.ResolveGenericParameter();
+						ArrayType newArray = new ArrayType(resolvedContext.Type, array.Rank);
+						if (array.Rank > 1)
+						{
+							for (int i = 0; i < array.Rank; i++)
+							{
+								newArray.Dimensions[i] = array.Dimensions[i];
+							}
+						}
+						return new MonoTypeContext(newArray, Arguments);
+					}
+
+				case ElementType.GenericInst:
+					{
+						GenericInstanceType genericInstance = (GenericInstanceType)Type;
+						GenericInstanceType newInstance = new GenericInstanceType(genericInstance.ElementType);
+						foreach (TypeReference argument in genericInstance.GenericArguments)
+						{
+							MonoTypeContext argumentContext = new MonoTypeContext(argument, Arguments);
+							MonoTypeContext resolvedArgument = argumentContext.Resolve();
+							newInstance.GenericArguments.Add(resolvedArgument.Type);
+						}
+						return new MonoTypeContext(newInstance, Arguments);
+					}
+
+				case ElementType.ByRef:
+					{
+						ByReferenceType reference = (ByReferenceType)Type;
+						MonoTypeContext refContext = new MonoTypeContext(reference.ElementType, Arguments);
+						MonoTypeContext resolvedContext = refContext.ResolveGenericParameter();
+						ByReferenceType newReference = new ByReferenceType(resolvedContext.Type);
+						return new MonoTypeContext(newReference, Arguments);
+					}
+
+				case ElementType.Ptr:
+					{
+						PointerType pointer = (PointerType)Type;
+						MonoTypeContext ptrContext = new MonoTypeContext(pointer.ElementType, Arguments);
+						MonoTypeContext resolvedContext = ptrContext.ResolveGenericParameter();
+						PointerType newPointer = new PointerType(resolvedContext.Type);
+						return new MonoTypeContext(newPointer, Arguments);
+					}
+
+				case ElementType.Pinned:
+					{
+						PinnedType pinned = (PinnedType)Type;
+						MonoTypeContext pinContext = new MonoTypeContext(pinned.ElementType, Arguments);
+						MonoTypeContext resolvedContext = pinContext.ResolveGenericParameter();
+						PinnedType newPinned = new PinnedType(resolvedContext.Type);
+						return new MonoTypeContext(newPinned, Arguments);
+					}
+
+				case ElementType.FnPtr:
+					{
+						FunctionPointerType funcPtr = (FunctionPointerType)Type;
+						FunctionPointerType newFuncPtr = new FunctionPointerType();
+						newFuncPtr.HasThis = funcPtr.HasThis;
+						newFuncPtr.ExplicitThis = funcPtr.ExplicitThis;
+						newFuncPtr.CallingConvention = funcPtr.CallingConvention;
+						MonoTypeContext returnContext = new MonoTypeContext(funcPtr.ReturnType, Arguments);
+						MonoTypeContext resolvedReturn = returnContext.Resolve();
+						newFuncPtr.ReturnType = resolvedReturn.Type;
+						foreach (ParameterDefinition param in funcPtr.Parameters)
+						{
+							MonoTypeContext paramContext = new MonoTypeContext(param.ParameterType, Arguments);
+							MonoTypeContext resolvedParam = paramContext.Resolve();
+							ParameterDefinition newParameter = new ParameterDefinition(param.Name, param.Attributes, resolvedParam.Type);
+							newFuncPtr.Parameters.Add(newParameter);
+						}
+						return new MonoTypeContext(newFuncPtr, Arguments);
+					}
+
+				default:
+					throw new Exception($"Unknown generic parameter container {Type}");
+			}
 		}
 
 		public TypeReference Type { get; }

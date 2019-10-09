@@ -198,19 +198,6 @@ namespace uTinyRipper
 		}
 #endregion
 
-		public static ArrayType CreateArrayFrom(ArrayType source, TypeReference newType)
-		{
-			ArrayType newArray = new ArrayType(newType, source.Rank);
-			if (source.Rank > 1)
-			{
-				for (int i = 0; i < source.Rank; i++)
-				{
-					newArray.Dimensions[i] = source.Dimensions[i];
-				}
-			}
-			return newArray;
-		}
-
 		public static GenericInstanceType CreateGenericInstance(TypeReference genericTemplate, IEnumerable<TypeReference> arguments)
 		{
 			GenericInstanceType genericInstance = new GenericInstanceType(genericTemplate);
