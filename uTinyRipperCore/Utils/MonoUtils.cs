@@ -8,7 +8,7 @@ namespace uTinyRipper
 {
 	public static class MonoUtils
 	{
-		#region Naming
+#region Naming
 		public static bool IsSerializablePrimitive(TypeReference type)
 		{
 			switch (type.etype)
@@ -247,6 +247,26 @@ namespace uTinyRipper
 			}
 			return count;
 		}
+
+		/*public static bool IsSameMethod(MethodDefinition lmethod, MethodDefinition rmethod, Dictionary<GenericParameter>)
+		{
+			if (lmethod.Name != rmethod.Name)
+			{
+				return false;
+			}
+			if (lmethod.HasGenericParameters)
+			{
+				if (!rmethod.HasGenericParameters)
+				{
+					return false;
+				}
+				if (lmethod.GenericParameters.Count != rmethod.GenericParameters.Count)
+				{
+					return false;
+				}
+			}
+
+		}*/
 
 		public const string ObjectName = "Object";
 		public const string CObjectName = "object";

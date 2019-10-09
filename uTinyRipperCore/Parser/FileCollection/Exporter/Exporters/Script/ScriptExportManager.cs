@@ -48,18 +48,6 @@ namespace uTinyRipper.Exporters.Scripts
 
 		private void BuildLookup()
 		{
-			void AddTypeNames(ScriptExportType exportType)
-			{
-				m_typeNames.Add($"{exportType.Namespace}.{exportType.CleanNestedName}");
-				foreach (var nested in exportType.NestedEnums)
-				{
-					AddTypeNames(nested);
-				}
-				foreach(var nested in exportType.NestedTypes)
-				{
-					AddTypeNames(nested);
-				}
-			}
 			if (m_typeNames.Count == 0)
 			{
 				m_typeNames.Add("System.Object");
@@ -70,6 +58,20 @@ namespace uTinyRipper.Exporters.Scripts
 				}
 			}
 		}
+
+		private void AddTypeNames(ScriptExportType exportType)
+		{
+			m_typeNames.Add($"{exportType.Namespace}.{exportType.CleanNestedName}");
+			foreach (var nested in exportType.NestedEnums)
+			{
+				AddTypeNames(nested);
+			}
+			foreach (var nested in exportType.NestedTypes)
+			{
+				AddTypeNames(nested);
+			}
+		}
+
 
 		public string Export(ScriptExportType exportType)
 		{

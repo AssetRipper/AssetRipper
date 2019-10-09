@@ -244,12 +244,14 @@ namespace uTinyRipper.Exporters.Scripts
 			var found = GetAmbiguous(relativeType);
 			return found;
 		}
-		internal bool IsAmbiguous(ScriptExportType relativeType)
+
+		private bool IsAmbiguous(ScriptExportType relativeType)
 		{
 			if (IsPrimative) return false;
 			return GetAmbiguous(relativeType, false).Count > 1;
 		}
-		internal bool IsAmbiguousArgument(ScriptExportType callingType)
+
+		private bool IsAmbiguousArgument(ScriptExportType callingType)
 		{
 			if (IsPrimative) return false;
 			return GetAmbiguous(callingType, true).Count > 1;
@@ -335,9 +337,25 @@ namespace uTinyRipper.Exporters.Scripts
 			return Namespace;
 		}
 
+		/// <summary>
+		/// Full name is a unique name with module prefix
+		/// ex: [Module]Namespace.DeclaringClass<DT1, DT2>.Class<T1, T2>
+		/// </summary>
 		public abstract string FullName { get; }
+		/// <summary>
+		/// Nested name is type name with declaring type prefix
+		/// ex: DeclaringClass<DT1, DT2>.Class<T1, T2>
+		/// </summary>
 		public abstract string NestedName { get; }
+		/// <summary>
+		/// Type name with declaring type prefix, but this prefix is cleaned from generic parameters
+		/// ex: DeclaringClass.Class<T1, T2>
+		/// </summary>
 		public abstract string CleanNestedName { get; }
+		/// <summary>
+		/// Type name without any prexifes
+		/// ex: Class<T1, T2>
+		/// </summary>
 		public abstract string TypeName { get; }
 		public abstract string Namespace { get; }
 		public abstract string Module { get; }
@@ -345,11 +363,13 @@ namespace uTinyRipper.Exporters.Scripts
 		public abstract bool IsPrimative { get; }
 
 		/// <summary>
-		/// ex. GenericClass<T>.NestedType
+		/// Declaring type with generic parameters (if any)
+		/// ex: GenericClass<T>.NestedType
 		/// </summary>
 		public abstract ScriptExportType DeclaringType { get; }
 		/// <summary>
-		/// ex. GenericClass<double>.NestedType
+		/// Declaring type with generic arguments (if any)
+		/// ex: GenericClass<double>.NestedType
 		/// </summary>
 		public virtual ScriptExportType NestType => DeclaringType;
 		public abstract ScriptExportType Base { get; }

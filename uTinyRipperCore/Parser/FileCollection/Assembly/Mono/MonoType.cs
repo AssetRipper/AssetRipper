@@ -14,7 +14,7 @@ namespace uTinyRipper.Assembly.Mono
 		internal MonoType(MonoManager manager, MonoTypeContext context) :
 			base(context.Type.Namespace, ToPrimitiveType(context.Type), MonoUtils.GetName(context.Type))
 		{
-			if (context.Type.IsGenericParameter)
+			if (context.Type.ContainsGenericParameter)
 			{
 				throw new ArgumentException(nameof(context));
 			}
@@ -177,59 +177,32 @@ namespace uTinyRipper.Assembly.Mono
 			return ToPrimitiveType(type.Namespace, type.Name);
 		}
 
-		private static bool IsSerializableArray(MonoTypeContext context)
-		{
-			MonoTypeContext resolvedContext = context.Type.ContainsGenericParameter ? context.ResolveGenericParameter() : context;
-			return MonoField.IsSerializableArray(resolvedContext.Type);
-		}
-
 		private static SerializableType GetBaseType(MonoManager manager, MonoTypeContext context)
 		{
-			TypeDefinition definition = context.Type.Resolve();
-			if (IsObject(definition.BaseType))
+			MonoTypeContext baseContext = context.GetBase();
+			MonoTypeContext resolvedContext = baseContext.Resolve();
+			TypeDefinition baseDefinition = resolvedContext.Type.Resolve();
+			if (IsObject(baseDefinition))
 			{
 				return null;
 			}
-
-			if (definition.BaseType.IsGenericInstance)
-			{
-				GenericInstanceType instance = (GenericInstanceType)definition.BaseType;
-				TypeDefinition template = instance.ElementType.Resolve();
-				Dictionary<GenericParameter, TypeReference> templateArguments = new Dictionary<GenericParameter, TypeReference>(instance.GenericArguments.Count);
-				for (int i = 0; i < instance.GenericArguments.Count; i++)
-				{
-					GenericParameter parameter = template.GenericParameters[i];
-					TypeReference argument = instance.GenericArguments[i];
-					if (argument.ContainsGenericParameter)
-					{
-						MonoTypeContext argumentContext = new MonoTypeContext(argument, context.Arguments);
-						argument = argumentContext.ResolveGenericParameter().Type;
-					}
-					templateArguments.Add(parameter, argument);
-				}
-				MonoTypeContext instanceContext = new MonoTypeContext(instance, templateArguments);
-				return manager.GetSerializableType(instanceContext);
-			}
-			else
-			{
-				TypeDefinition baseDefinition = definition.BaseType.Resolve();
-				MonoTypeContext baseContext = new MonoTypeContext(baseDefinition);
-				return manager.GetSerializableType(baseContext);
-			}
+			return manager.GetSerializableType(resolvedContext);
 		}
 
 		private static Field[] CreateFields(MonoManager manager, MonoTypeContext context)
 		{
 			TypeDefinition definition = context.Type.Resolve();
 			List<Field> fields = new List<Field>();
+			IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
 			foreach (FieldDefinition field in definition.Fields)
 			{
-				if (MonoField.IsSerializable(field, context.Arguments))
+				if (MonoField.IsSerializable(field, arguments))
 				{
-					MonoTypeContext fieldContext = new MonoTypeContext(field.FieldType, context.Arguments);
-					MonoTypeContext serFieldContext = GetSerializedElementContext(fieldContext);
+					MonoTypeContext fieldContext = new MonoTypeContext(field.FieldType, arguments);
+					MonoTypeContext resolvedContext = fieldContext.Resolve();
+					MonoTypeContext serFieldContext = GetSerializedElementContext(resolvedContext);
 					SerializableType scriptType = manager.GetSerializableType(serFieldContext);
-					bool isArray = IsSerializableArray(fieldContext);
+					bool isArray = MonoField.IsSerializableArray(resolvedContext.Type);
 					Field fieldStruc = new Field(scriptType, isArray, field.Name);
 					fields.Add(fieldStruc);
 				}
@@ -239,18 +212,17 @@ namespace uTinyRipper.Assembly.Mono
 
 		private static MonoTypeContext GetSerializedElementContext(MonoTypeContext context)
 		{
-			MonoTypeContext resolvedContext = context.Type.ContainsGenericParameter ? context.ResolveGenericParameter() : context;
-			if (resolvedContext.Type.IsArray)
+			if (context.Type.IsArray)
 			{
-				ArrayType array = (ArrayType)resolvedContext.Type;
-				return new MonoTypeContext(array.ElementType, resolvedContext.Arguments);
+				ArrayType array = (ArrayType)context.Type;
+				return new MonoTypeContext(array.ElementType);
 			}
-			if (IsList(resolvedContext.Type))
+			if (IsList(context.Type))
 			{
-				GenericInstanceType generic = (GenericInstanceType)resolvedContext.Type;
-				return new MonoTypeContext(generic.GenericArguments[0], resolvedContext.Arguments);
+				GenericInstanceType generic = (GenericInstanceType)context.Type;
+				return new MonoTypeContext(generic.GenericArguments[0]);
 			}
-			return resolvedContext;
+			return context;
 		}
 
 		private const string EnumValueFieldName = "value__";

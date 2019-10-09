@@ -203,7 +203,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			int argumentCount = MonoUtils.GetGenericParameterCount(genericType);
 			if (argumentCount == 0)
 			{
-				// nested class/enum (of generic class) is generic instance but it doesn't has '`' symbol in its name
+				// nested class/enum (of generic class) is a generic instance but it doesn't has '`' symbol in its name
 				return name;
 			}
 
@@ -242,6 +242,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 				m_base = manager.RetrieveType(Definition.BaseType);
 			}
 
+			//m_properties = CreateProperties(manager);
 			m_fields = CreateFields(manager);
 			CreateMethodsAndProperties(manager, out m_methods, out m_properties);
 
@@ -278,6 +279,186 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			}
 			return HasMember(Type, name);
 		}
+
+		private void CreateMethodsAndProperties(IScriptExportManager manager, out IReadOnlyList<ScriptExportMethod> methodList, out IReadOnlyList<ScriptExportProperty> propertyList)
+		{
+			/*
+			 * TODO: Does not find override methods of concrete type when abstract method is generic.
+			 * Unclear how to handle, can we make the parent types/methods concrete as we walk the inheritence chain?
+			 * Affected game: Tyranny
+			 * Related to issue: https://github.com/jbevain/cecil/issues/180
+			 * TODO: Abstract classes may have the override methods and properties located in children which may not be exported.
+			 * In that case the override method or property should be implemented in the parent class
+			 * Affected game: Rimworld, Subnautica, Pillars of Eternity II
+			 * TODO: : Add constructor when parent does not contain a default constructor and type in inherits from a system or unity type
+			 * Affected game: Subnautica
+			 */
+			if (Definition == null)
+			{
+				methodList = new ScriptExportMethod[0];
+				propertyList = new ScriptExportProperty[0];
+				return;
+			}
+			List<MethodDefinition> abstractParentMethods = new List<MethodDefinition>();
+			TypeReference baseType = Definition.BaseType;
+			while (baseType != null)
+			{
+				TypeDefinition definition = baseType.Resolve();
+				if (definition.Module.Name.StartsWith("UnityEngine.") || definition.Module.Name == "mscorlib.dll" || definition.Module.Name == "netstandard.dll")
+				{
+					foreach (MethodDefinition method in definition.Methods)
+					{
+						if (method.IsAbstract)
+						{
+							abstractParentMethods.Add(method);
+						}
+					}
+				}
+				baseType = definition.BaseType;
+			}
+			List<MethodDefinition> overrideMethods = new List<MethodDefinition>();
+			foreach (MethodDefinition method in abstractParentMethods)
+			{
+				MethodDefinition overrideMethod = MetadataResolver.GetMethod(Definition.Methods, method);
+				if (overrideMethod != null) overrideMethods.Add(overrideMethod);
+			}
+			List<ScriptExportMethod> methods = new List<ScriptExportMethod>();
+			HashSet<PropertyDefinition> overrideProperties = new HashSet<PropertyDefinition>();
+			foreach (MethodDefinition method in overrideMethods)
+			{
+				if (method.IsSetter)
+				{
+					overrideProperties.Add(Definition.Properties.First(prop => prop.SetMethod == method));
+				}
+				else if (method.IsGetter)
+				{
+					overrideProperties.Add(Definition.Properties.First(prop => prop.GetMethod == method));
+				}
+				else
+				{
+					ScriptExportMethod emethod = manager.RetrieveMethod(method);
+					methods.Add(emethod);
+				}
+			}
+			List<ScriptExportProperty> properties = new List<ScriptExportProperty>();
+			foreach (PropertyDefinition property in overrideProperties)
+			{
+				ScriptExportProperty eproperty = manager.RetrieveProperty(property);
+				properties.Add(eproperty);
+			}
+			methodList = methods.ToArray();
+			propertyList = properties.ToArray();
+		}
+
+		/*private IReadOnlyList<ScriptExportMethod> CreateMethods(IScriptExportManager manager)
+		{
+			if (Definition == null)
+			{
+				return new ScriptExportMethod[0];
+			}
+			if (Definition.BaseType.Module == null)
+			{
+				return new ScriptExportMethod[0];
+			}
+
+			List<ScriptExportMethod> properties = new List<ScriptExportMethod>();
+			List<MethodDefinition> overrides = new List<MethodDefinition>();
+			foreach (MethodDefinition method in Definition.Methods)
+			{
+				if (method.IsVirtual && method.IsReuseSlot && !method.IsSetter && !method.IsGetter)
+				{
+					overrides.Add(method);
+				}
+			}
+
+			TypeDefinition baseType = Definition.BaseType.Resolve();
+			while (baseType != null)
+			{
+				foreach (MethodDefinition method in baseType.Methods)
+				{
+					if (method.IsVirtual && !method.IsSetter && !method.IsGetter)
+					{
+						if (method.IsNewSlot || method.IsReuseSlot)
+						{
+							for (int i = 0; i < overrides.Count; i++)
+							{
+								MethodDefinition @override = overrides[i];
+								if (@override.Name == method.Name)
+								{
+									if (method.IsNewSlot)
+									{
+										ScriptExportProperty exportProperty = manager.RetrieveProperty(@override);
+										properties.Add(exportProperty);
+									}
+
+									overrides.RemoveAt(i);
+									break;
+								}
+							}
+						}
+					}
+				}
+
+				baseType = baseType.BaseType.Module == null ? null : baseType.BaseType.Resolve();
+			}
+			return properties.ToArray();
+		}
+
+		private IReadOnlyList<ScriptExportProperty> CreateProperties(IScriptExportManager manager)
+		{
+			if (Definition == null)
+			{
+				return new ScriptExportProperty[0];
+			}
+			if (Definition.BaseType.Module == null)
+			{
+				return new ScriptExportProperty[0];
+			}
+
+			List<ScriptExportProperty> properties = new List<ScriptExportProperty>();
+			List<PropertyDefinition> overrides = new List<PropertyDefinition>();
+			foreach (PropertyDefinition property in Definition.Properties)
+			{
+				MethodDefinition method = property.GetMethod == null ? property.SetMethod : property.GetMethod;
+				if (method.IsVirtual && method.IsReuseSlot)
+				{
+					overrides.Add(property);
+				}
+			}
+
+			TypeDefinition baseType = Definition.BaseType.Resolve();
+			while (baseType != null)
+			{
+				foreach (PropertyDefinition property in baseType.Properties)
+				{
+					MethodDefinition method = property.GetMethod == null ? property.SetMethod : property.GetMethod;
+					if (method.IsVirtual)
+					{
+						if (method.IsNewSlot || method.IsReuseSlot)
+						{
+							for (int i = 0; i < overrides.Count; i++)
+							{
+								PropertyDefinition @override = overrides[i];
+								if (@override.Name == property.Name)
+								{
+									if (method.IsNewSlot)
+									{
+										ScriptExportProperty exportProperty = manager.RetrieveProperty(@override);
+										properties.Add(exportProperty);
+									}
+
+									overrides.RemoveAt(i);
+									break;
+								}
+							}
+						}
+					}
+				}
+
+				baseType = baseType.BaseType.Module == null ? null : baseType.BaseType.Resolve();
+			}
+			return properties.ToArray();
+		}*/
 
 		private IReadOnlyList<ScriptExportField> CreateFields(IScriptExportManager manager)
 		{
@@ -323,77 +504,6 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 				fields.Add(efield);
 			}
 			return fields.ToArray();
-		}
-
-
-		private void CreateMethodsAndProperties(IScriptExportManager manager, out IReadOnlyList<ScriptExportMethod> methodList, out IReadOnlyList<ScriptExportProperty> propertyList)
-		{
-			/*
-			 * TODO: Does not find override methods of concrete type when abstract method is generic.
-			 * Unclear how to handle, can we make the parent types/methods concrete as we walk the inheritence chain?
-			 * Affected game: Tyranny
-			 * Related to issue: https://github.com/jbevain/cecil/issues/180
-			 * TODO: Abstract classes may have the override methods and properties located in children which may not be exported.
-			 * In that case the override method or property should be implemented in the parent class
-			 * Affected game: Rimworld, Subnautica, Pillars of Eternity II
-			 * TODO: : Add constructor when parent does not contain a default constructor and type in inherits from a system or unity type
-			 * Affected game: Subnautica
-			 */
-			if (Definition == null)
-			{
-				methodList = new ScriptExportMethod[0];
-				propertyList = new ScriptExportProperty[0];
-				return;
-			}
-			List<MethodDefinition> abstractParentMethods = new List<MethodDefinition>();
-			TypeReference baseType = Definition.BaseType;
-			while(baseType != null)
-			{
-				TypeDefinition definition = baseType.Resolve();
-				if(definition.Module.Name.StartsWith("UnityEngine.") || definition.Module.Name == "mscorlib.dll" || definition.Module.Name == "netstandard.dll")
-				{
-					foreach (MethodDefinition method in definition.Methods)
-					{
-						if (method.IsAbstract)
-						{
-							abstractParentMethods.Add(method);
-						}
-					}
-				}
-				baseType = definition.BaseType;
-			}
-			List<MethodDefinition> overrideMethods = new List<MethodDefinition>();
-			foreach (MethodDefinition method in abstractParentMethods)
-			{
-				MethodDefinition overrideMethod = MetadataResolver.GetMethod(Definition.Methods, method);
-				if(overrideMethod != null) overrideMethods.Add(overrideMethod);
-			}
-			List<ScriptExportMethod> methods = new List<ScriptExportMethod>();
-			HashSet<PropertyDefinition> overrideProperties = new HashSet<PropertyDefinition>();
-			foreach (MethodDefinition method in overrideMethods)
-			{
-				if (method.IsSetter)
-				{
-					overrideProperties.Add(Definition.Properties.First(prop => prop.SetMethod == method));
-				}
-				else if (method.IsGetter)
-				{
-					overrideProperties.Add(Definition.Properties.First(prop => prop.GetMethod == method));
-				}
-				else
-				{
-					ScriptExportMethod emethod = manager.RetrieveMethod(method);
-					methods.Add(emethod);
-				}
-			}
-			List<ScriptExportProperty> properties = new List<ScriptExportProperty>();
-			foreach (PropertyDefinition property in overrideProperties)
-			{
-				ScriptExportProperty eproperty = manager.RetrieveProperty(property);
-				properties.Add(eproperty);
-			}
-			methodList = methods.ToArray();
-			propertyList = properties.ToArray();
 		}
 
 		private static bool IsContainsGenericParameter(TypeReference type)
