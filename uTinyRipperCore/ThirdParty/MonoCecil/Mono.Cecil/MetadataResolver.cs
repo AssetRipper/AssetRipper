@@ -354,7 +354,7 @@ namespace Mono.Cecil {
 			return a.Position == b.Position;
 		}
 
-		static bool AreSame (TypeReference a, TypeReference b)
+		public static bool AreSame (TypeReference a, TypeReference b)
 		{
 			if (ReferenceEquals (a, b))
 				return true;

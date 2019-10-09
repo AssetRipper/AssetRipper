@@ -127,7 +127,6 @@ namespace uTinyRipper.Assembly.Mono
 			{
 				GenericParameter parameter = (GenericParameter)Type;
 				TypeReference resolvedType = Arguments[parameter];
-				// TODO: check how T get replaced to T for Child<T> class
 				return new MonoTypeContext(resolvedType);
 			}
 			if (Type.IsArray)

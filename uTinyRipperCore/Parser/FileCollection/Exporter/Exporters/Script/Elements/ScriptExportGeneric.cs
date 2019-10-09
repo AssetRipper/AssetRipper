@@ -78,9 +78,9 @@ namespace uTinyRipper.Exporters.Scripts
 		public abstract ScriptExportType Template { get; } 
 		public abstract IReadOnlyList<ScriptExportType> Arguments { get; }
 
-		public sealed override IReadOnlyList<ScriptExportField> Fields { get; } = new ScriptExportField[0];
-		public sealed override IReadOnlyList<ScriptExportProperty> Properties { get; } = new ScriptExportProperty[0];
 		public sealed override IReadOnlyList<ScriptExportMethod> Methods { get; } = new ScriptExportMethod[0];
+		public sealed override IReadOnlyList<ScriptExportProperty> Properties { get; } = new ScriptExportProperty[0];
+		public sealed override IReadOnlyList<ScriptExportField> Fields { get; } = new ScriptExportField[0];
 
 		protected sealed override string Keyword => throw new NotSupportedException();
 

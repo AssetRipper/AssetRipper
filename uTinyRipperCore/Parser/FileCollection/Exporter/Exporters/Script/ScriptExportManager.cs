@@ -25,6 +25,20 @@ namespace uTinyRipper.Exporters.Scripts
 			return $"[{module}]{fullname}";
 		}
 
+		public static bool IsBuiltInLibrary(string module)
+		{
+			if (IsDotNetLibrary(module))
+			{
+				return true;
+			}
+			if (IsUnityLibrary(module))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 		private static string GetExportSubPath(string assembly, string @namespace, string @class)
 		{
 			string assFolderName = AssemblyManager.ToAssemblyName(assembly);
@@ -363,16 +377,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 		private static bool IsBuiltInType(ScriptExportType type)
 		{
-			if (IsDotNetLibrary(type.Module))
-			{
-				return true;
-			}
-			if (IsUnityLibrary(type.Module))
-			{
-				return true;
-			}
-
-			return false;
+			return IsBuiltInLibrary(type.Module);
 		}
 
 		private static bool IsDotNetLibrary(string module)

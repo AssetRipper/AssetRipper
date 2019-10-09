@@ -3,6 +3,7 @@ using Mono.Cecil.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using uTinyRipper.Assembly.Mono;
 
 namespace uTinyRipper
 {
@@ -248,25 +249,82 @@ namespace uTinyRipper
 			return count;
 		}
 
-		/*public static bool IsSameMethod(MethodDefinition lmethod, MethodDefinition rmethod, Dictionary<GenericParameter>)
+		public static bool AreSame(TypeReference type, MonoTypeContext checkContext, TypeReference checkType)
 		{
-			if (lmethod.Name != rmethod.Name)
+			if (ReferenceEquals(type, checkType))
+			{
+				return true;
+			}
+			if (type == null || checkType == null)
 			{
 				return false;
 			}
-			if (lmethod.HasGenericParameters)
+
+			MonoTypeContext context = new MonoTypeContext(checkType, checkContext);
+			MonoTypeContext resolvedContext = context.Resolve();
+			return MetadataResolver.AreSame(type, resolvedContext.Type);
+		}
+
+		public static bool AreSame(MethodDefinition method, MonoTypeContext checkContext, MethodDefinition checkMethod)
+		{
+			if (method.Name != checkMethod.Name)
 			{
-				if (!rmethod.HasGenericParameters)
+				return false;
+			}
+			if (method.HasGenericParameters)
+			{
+				if (!checkMethod.HasGenericParameters)
 				{
 					return false;
 				}
-				if (lmethod.GenericParameters.Count != rmethod.GenericParameters.Count)
+				if (method.GenericParameters.Count != checkMethod.GenericParameters.Count)
+				{
+					return false;
+				}
+			}
+			if (!AreSame(method.ReturnType, checkContext, checkMethod.ReturnType))
+			{
+				return false;
+			}
+
+			if (method.IsVarArg())
+			{
+				if (!checkMethod.IsVarArg())
+				{
+					return false;
+				}
+				if (method.Parameters.Count >= checkMethod.Parameters.Count)
+				{
+					return false;
+				}
+				if (checkMethod.GetSentinelPosition() != method.Parameters.Count)
 				{
 					return false;
 				}
 			}
 
-		}*/
+			if (method.HasParameters)
+			{
+				if (!checkMethod.HasParameters)
+				{
+					return false;
+				}
+				if (method.Parameters.Count != checkMethod.Parameters.Count)
+				{
+					return false;
+				}
+
+				for (int i = 0; i < method.Parameters.Count; i++)
+				{
+					if (!AreSame(method.Parameters[i].ParameterType, checkContext, checkMethod.Parameters[i].ParameterType))
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
 
 		public const string ObjectName = "Object";
 		public const string CObjectName = "object";

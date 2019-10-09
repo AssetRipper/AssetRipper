@@ -69,18 +69,22 @@ namespace uTinyRipper.Exporters.Scripts
 				writer.WriteLine();
 			}
 
-			foreach (ScriptExportField field in Fields)
-			{
-				field.Export(writer, intent);
-			}
-
 			foreach (ScriptExportMethod method in Methods)
 			{
 				method.Export(writer, intent);
+				writer.WriteLine();
 			}
 			foreach (ScriptExportProperty property in Properties)
 			{
 				property.Export(writer, intent);
+			}
+			if (Properties.Count > 0)
+			{
+				writer.WriteLine();
+			}
+			foreach (ScriptExportField field in Fields)
+			{
+				field.Export(writer, intent);
 			}
 
 			writer.WriteIndent(--intent);
@@ -377,9 +381,9 @@ namespace uTinyRipper.Exporters.Scripts
 		public IReadOnlyList<ScriptExportType> NestedTypes => m_nestedTypes;
 		public IReadOnlyList<ScriptExportEnum> NestedEnums => m_nestedEnums;
 		public IReadOnlyList<ScriptExportDelegate> Delegates => m_nestedDelegates;
-		public abstract IReadOnlyList<ScriptExportField> Fields { get; }
 		public abstract IReadOnlyList<ScriptExportMethod> Methods { get; }
 		public abstract IReadOnlyList<ScriptExportProperty> Properties { get; }
+		public abstract IReadOnlyList<ScriptExportField> Fields { get; }
 
 		protected abstract string Keyword { get; }
 		protected abstract bool IsStruct { get; }
