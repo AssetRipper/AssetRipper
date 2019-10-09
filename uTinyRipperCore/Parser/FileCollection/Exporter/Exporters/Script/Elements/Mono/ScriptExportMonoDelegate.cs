@@ -30,11 +30,12 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			{
 				return false;
 			}
-			return type.Namespace == SystemName && type.BaseType.Name == MulticastDelegateName;
+			return type.BaseType.Namespace == SystemName && type.BaseType.Name == MulticastDelegateName;
 		}
 
 		public override void Init(IScriptExportManager manager)
 		{
+			base.Init(manager);
 			m_return = CreateReturnType(manager);
 			m_parameters = CreateParameterTypes(manager);
 
@@ -109,5 +110,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		private ScriptExportType m_declaringType;
 		private ScriptExportType m_return;
 		private IReadOnlyList<ScriptExportParameter> m_parameters;
+
+		public override bool IsPrimative => false;
 	}
 }
