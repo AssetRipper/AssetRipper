@@ -197,6 +197,10 @@
     <Compile Include="Parser\FileCollection\Exporter\Exporters\Font\FontExportCollection.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\MovieTexture\MovieTextureAssetExporter.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\MovieTexture\MovieTextureExportCollection.cs" />
+    <Compile Include="Parser\FileCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoMethod.cs" />
+    <Compile Include="Parser\FileCollection\Exporter\Exporters\Script\Elements\Mono\ScriptExportMonoProperty.cs" />
+    <Compile Include="Parser\FileCollection\Exporter\Exporters\Script\Elements\ScriptExportMethod.cs" />
+    <Compile Include="Parser\FileCollection\Exporter\Exporters\Script\Elements\ScriptExportProperty.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\TextAsset\TextAssetExportCollection.cs" />
     <Compile Include="Parser\FileCollection\Exporter\Exporters\TextAsset\TextAssetExporter.cs" />
     <Compile Include="Parser\FileCollection\Exporter\ExportOptions.cs" />

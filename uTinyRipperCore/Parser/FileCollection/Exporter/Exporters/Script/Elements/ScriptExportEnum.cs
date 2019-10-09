@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace uTinyRipper.Exporters.Scripts
@@ -33,6 +34,8 @@ namespace uTinyRipper.Exporters.Scripts
 		}
 
 		public sealed override bool IsEnum => true;
+		public sealed override IReadOnlyList<ScriptExportProperty> Properties { get; } = new ScriptExportProperty[0];
+		public sealed override IReadOnlyList<ScriptExportMethod> Methods { get; } = new ScriptExportMethod[0];
 
 		protected sealed override bool IsStruct => throw new NotSupportedException();
 		protected sealed override bool IsSerializable => false;
