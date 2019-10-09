@@ -11,7 +11,7 @@ namespace uTinyRipper.Exporters.Scripts
 		public void Export(TextWriter writer, int intent)
 		{
 			writer.WriteIndent(intent);
-			string returnTypeName = ReturnType.GetTypeQualifiedName(DeclaringType);
+			string returnTypeName = ReturnType.GetTypeNestedName(DeclaringType);
 			writer.Write("{0} override {1} {2}(", Keyword, returnTypeName, Name);
 			for (int i = 0; i < Parameters.Count; i++)
 			{

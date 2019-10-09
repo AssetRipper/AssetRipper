@@ -1,8 +1,6 @@
 using Mono.Cecil;
-using Mono.Collections.Generic;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using uTinyRipper.Assembly;
 using uTinyRipper.Assembly.Mono;
@@ -229,17 +227,11 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 		private static string GetArgumentName(TypeReference type)
 		{
-			if (MonoType.IsEngineObject(type))
-			{
-				return $"{type.Namespace}.{type.Name}";
-			}
-
 			return GetNestedName(type);
 		}
 
 		public override void Init(IScriptExportManager manager)
 		{
-			base.Init(manager);
 			if (Definition != null && Definition.BaseType != null)
 			{
 				m_base = manager.RetrieveType(Definition.BaseType);
@@ -519,7 +511,6 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		}
 		protected override bool IsStruct => Type.IsValueType;
 		protected override bool IsSerializable => Definition == null ? false : Definition.IsSerializable;
-		public override bool IsPrimative => MonoType.IsCPrimitive(Type);
 
 		private TypeReference Type { get; }
 		private TypeDefinition Definition { get; }

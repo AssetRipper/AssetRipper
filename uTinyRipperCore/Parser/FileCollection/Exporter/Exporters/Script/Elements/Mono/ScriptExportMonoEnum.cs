@@ -27,7 +27,6 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 		public override void Init(IScriptExportManager manager)
 		{
-			base.Init(manager);
 			if (Type.Module == null)
 			{
 				m_fields = new ScriptExportField[0];
@@ -104,7 +103,5 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		private ScriptExportType m_declaringType;
 		private ScriptExportType m_base;
 		private IReadOnlyList<ScriptExportField> m_fields;
-
-		public override bool IsPrimative => false;
 	}
 }

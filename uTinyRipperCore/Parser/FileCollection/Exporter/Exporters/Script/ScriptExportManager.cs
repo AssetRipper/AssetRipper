@@ -60,36 +60,8 @@ namespace uTinyRipper.Exporters.Scripts
 			return GetExportSubPath(type.Module, type.Namespace, typeName);
 		}
 
-		private void BuildLookup()
-		{
-			if (m_typeNames.Count == 0)
-			{
-				m_typeNames.Add("System.Object");
-				foreach (var exportType in Types)
-				{
-					exportType.GetUsedNamespaces(m_namespaces);
-					AddTypeNames(exportType);
-				}
-			}
-		}
-
-		private void AddTypeNames(ScriptExportType exportType)
-		{
-			m_typeNames.Add($"{exportType.Namespace}.{exportType.CleanNestedName}");
-			foreach (var nested in exportType.NestedEnums)
-			{
-				AddTypeNames(nested);
-			}
-			foreach (var nested in exportType.NestedTypes)
-			{
-				AddTypeNames(nested);
-			}
-		}
-
-
 		public string Export(ScriptExportType exportType)
 		{
-			BuildLookup();
 			if (exportType.DeclaringType != null)
 			{
 				throw new NotSupportedException("You can export only topmost types");
@@ -423,8 +395,6 @@ namespace uTinyRipper.Exporters.Scripts
 		public IEnumerable<ScriptExportType> Types => m_types.Values;
 		public IEnumerable<ScriptExportEnum> Enums => m_enums.Values;
 		public IEnumerable<ScriptExportDelegate> Delegates => m_delegates.Values;
-		public ICollection<string> TypeNames => m_typeNames;
-		public ICollection<string> Namespaces => m_namespaces;
 
 		private const string MSCoreLibName = "mscorlib";
 		private const string NetStandardName = "netstandard";
@@ -437,8 +407,6 @@ namespace uTinyRipper.Exporters.Scripts
 		private const string UnityScriptLangName = "UnityScript.Lang";
 		private const string MonoName = "Mono";
 
-		private readonly HashSet<string> m_namespaces = new HashSet<string>();
-		private readonly HashSet<string> m_typeNames = new HashSet<string>();
 		private readonly Dictionary<string, ScriptExportType> m_types = new Dictionary<string, ScriptExportType>();
 		private readonly Dictionary<string, ScriptExportArray> m_arrays = new Dictionary<string, ScriptExportArray>();
 		private readonly Dictionary<string, ScriptExportGeneric> m_generic = new Dictionary<string, ScriptExportGeneric>();

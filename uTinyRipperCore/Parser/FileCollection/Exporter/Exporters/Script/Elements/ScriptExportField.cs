@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using uTinyRipper.Assembly;
 
 namespace uTinyRipper.Exporters.Scripts
 {
@@ -27,9 +25,7 @@ namespace uTinyRipper.Exporters.Scripts
 				writer.Write("new ");
 			}
 
-			string typeName = Type.GetTypeQualifiedName(DeclaringType);
-			typeName = SerializableType.IsEngineObject(Type.Namespace, typeName) ? $"{Type.Namespace}.{typeName}" : typeName;
-
+			string typeName = Type.GetTypeNestedName(DeclaringType);
 			writer.WriteLine("{0} {1};", typeName, Name);
 		}
 

@@ -28,7 +28,6 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 		public override void Init(IScriptExportManager manager)
 		{
-			base.Init(manager);
 			m_owner = manager.RetrieveType(Type.ElementType);
 
 			int argumentCount = MonoUtils.GetGenericArgumentCount(Type);
@@ -73,8 +72,6 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		public override string TypeName { get; }
 		public override string Namespace => Type.Namespace;
 		public override string Module { get; }
-
-		public override bool IsPrimative => false;
 
 		private GenericInstanceType Type { get; }
 

@@ -11,7 +11,7 @@ namespace uTinyRipper.Exporters.Scripts
 		{
 			writer.WriteIndent(intent);
 			string sharedKeyword = PropertyKeyword;
-			writer.WriteLine("{0} override {1} {2}", sharedKeyword, Type.GetTypeQualifiedName(DeclaringType), Name);
+			writer.WriteLine("{0} override {1} {2}", sharedKeyword, Type.GetTypeNestedName(DeclaringType), Name);
 			writer.WriteIndent(intent);
 			writer.WriteLine("{");
 

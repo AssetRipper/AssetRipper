@@ -26,7 +26,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 		public static bool IsDelegate(TypeDefinition type)
 		{
-			if(type.BaseType == null)
+			if (type.BaseType == null)
 			{
 				return false;
 			}
@@ -35,7 +35,6 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 		public override void Init(IScriptExportManager manager)
 		{
-			base.Init(manager);
 			m_return = CreateReturnType(manager);
 			m_parameters = CreateParameterTypes(manager);
 
@@ -110,7 +109,5 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		private ScriptExportType m_declaringType;
 		private ScriptExportType m_return;
 		private IReadOnlyList<ScriptExportParameter> m_parameters;
-
-		public override bool IsPrimative => false;
 	}
 }

@@ -17,7 +17,5 @@ namespace uTinyRipper.Exporters.Scripts
 		IEnumerable<ScriptExportType> Types { get; }
 		IEnumerable<ScriptExportEnum> Enums { get; }
 		IEnumerable<ScriptExportDelegate> Delegates { get; }
-		ICollection<string> TypeNames { get; }
-		ICollection<string> Namespaces { get; }
 	}
 }

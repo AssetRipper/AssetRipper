@@ -7,10 +7,7 @@ namespace uTinyRipper.Exporters.Scripts
 {
 	public abstract class ScriptExportType
 	{
-		public virtual void Init(IScriptExportManager manager)
-		{
-			m_manager = manager;
-		}
+		public abstract void Init(IScriptExportManager manager);
 		
 		public void Export(TextWriter writer)
 		{
@@ -37,12 +34,10 @@ namespace uTinyRipper.Exporters.Scripts
 			}
 
 			writer.WriteIndent(intent);
-			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", TypeName);
-			
-
+			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", TypeName);			
 			if (Base != null && !SerializableType.IsBasic(Base.Namespace, Base.NestedName))
 			{
-				writer.Write(" : {0}", Base.GetTypeQualifiedName(this));
+				writer.Write(" : {0}", Base.GetTypeNestedName(DeclaringType));
 			}
 			writer.WriteLine();
 			writer.WriteIndent(intent++);
@@ -115,10 +110,6 @@ namespace uTinyRipper.Exporters.Scripts
 			{
 				@delegate.GetUsedNamespaces(namespaces);
 			}
-			foreach (ScriptExportField field in Fields)
-			{
-				field.GetUsedNamespaces(namespaces);
-			}
 			foreach (ScriptExportMethod method in Methods)
 			{
 				method.GetUsedNamespaces(namespaces);
@@ -126,6 +117,10 @@ namespace uTinyRipper.Exporters.Scripts
 			foreach (ScriptExportProperty property in Properties)
 			{
 				property.GetUsedNamespaces(namespaces);
+			}
+			foreach (ScriptExportField field in Fields)
+			{
+				field.GetUsedNamespaces(namespaces);
 			}
 		}
 
@@ -141,32 +136,6 @@ namespace uTinyRipper.Exporters.Scripts
 			return false;
 		}
 
-		public virtual string GetTypeQualifiedName(ScriptExportType relativeType)
-		{
-			if (SerializableType.IsEngineObject(Namespace, NestedName))
-			{
-				return $"{Namespace}.{NestedName}";
-			}
-			string typeName = relativeType == null ? NestedName : TypeName;
-			if (NestType == null && IsAmbiguous(relativeType))
-			{
-				typeName = string.IsNullOrEmpty(Namespace) ? typeName : $"{Namespace}.{typeName}";
-			}
-			if (relativeType == null)
-			{
-				return typeName;
-			}
-			if (DeclaringType == null)
-			{
-				return typeName;
-			}
-			if (relativeType == DeclaringType)
-			{
-				return typeName;
-			}
-			string declaringName = NestType.GetTypeQualifiedName(relativeType);
-			return $"{declaringName}.{typeName}";
-		}
 		public string GetTypeNestedName(ScriptExportType relativeType)
 		{
 			string typeName = TypeName;
@@ -181,109 +150,7 @@ namespace uTinyRipper.Exporters.Scripts
 			string declaringName = NestType.GetTypeNestedName(relativeType);
 			return $"{declaringName}.{typeName}";
 		}
-		private HashSet<string> GetAmbiguous(ScriptExportType relativeType)
-		{
-			// TODO: Check if a typename conflicts with a Unity or System type that is not directly referenced
-			// Affected Games: BattleTech
-			HashSet<string> usedNamespaces = new HashSet<string>();
-			relativeType.GetUsedNamespaces(usedNamespaces);
-			foreach (var ns in usedNamespaces.ToArray())
-			{
-				var parts = ns.Split('.');
-				for (int i = 1; i < parts.Length; i++)
-				{
-					usedNamespaces.Add(string.Join(".", parts.Take(i)));
-				}
-			}
-			ICollection<string> allNamespaces = m_manager.Namespaces;
-			ICollection<string> typeNames = m_manager.TypeNames;
-			string nestedName = GetTypeNestedName(relativeType);
-			string baseName = nestedName.Split('.').First();
-			HashSet<string> found = new HashSet<string>();
-			//Check if caller containing type has same name 
-			var parent = relativeType;
-			while (parent != null)
-			{
-				if (TypeName == parent.TypeName)
-				{
-					found.Add($"T:{parent.Namespace}.{parent.CleanNestedName}");
-				}
-				if (parent.Base != null && TypeName == parent.Base.TypeName)
-				{
-					found.Add($"T:{parent.Base.Namespace}.{parent.Base.CleanNestedName}");
-				}
-				parent = parent.DeclaringType;
-			}
-			//Check if typename matches namespace of used namespace 
-			foreach (string ns in usedNamespaces)
-			{
-				string fullName = $"{ns}.{baseName}";
-				if (allNamespaces.Contains(fullName))
-				{
-					found.Add($"NS:{fullName}");
-				}
-			}
-			//Check if typename matches any imported types 
-			foreach (string ns in usedNamespaces)
-			{
-				string fullName = $"{ns}.{nestedName}";
-				if(typeNames.Contains(fullName))
-				{
-					found.Add($"T:{fullName}");
-				}
-			}
-			return found;
-		}
-		HashSet<string> GetAmbiguous(ScriptExportType relativeType, bool isGenericArgument)
-		{
-			//If a field uses a type in the same scope that the type is defined in
-			if (this is ScriptExportArray)
-			{
-				return (this as ScriptExportArray).Element.GetAmbiguous(relativeType, isGenericArgument);
-			}
-			if (NestType != null && !isGenericArgument)
-			{
-				return NestType.GetAmbiguous(relativeType, isGenericArgument);
-			}
-			var found = GetAmbiguous(relativeType);
-			return found;
-		}
 
-		private bool IsAmbiguous(ScriptExportType relativeType)
-		{
-			if (IsPrimative) return false;
-			return GetAmbiguous(relativeType, false).Count > 1;
-		}
-
-		private bool IsAmbiguousArgument(ScriptExportType callingType)
-		{
-			if (IsPrimative) return false;
-			return GetAmbiguous(callingType, true).Count > 1;
-		}
-#if DEBUG
-		public void LogAmbiguous(ScriptExportType callingType, TextWriter writer, int intent)
-		{
-			writer.WriteIndent(intent);
-			string text = "";
-			if (this is ScriptExportGeneric generic)
-			{
-				text = string.Join(", ", generic.Template.GetAmbiguous(callingType, false));
-				text += "<";
-				foreach(var arg in generic.Arguments)
-				{
-					text += "[";
-					text += string.Join(", ", arg.GetAmbiguous(callingType, false));
-					text += "],";
-				}
-				text += ">";
-			}
-			else
-			{
-				text = string.Join(", ", GetAmbiguous(callingType, false));
-			}
-			writer.WriteLine($"//Ambiguous: {text}");
-		}
-#endif
 		public override string ToString()
 		{
 			if(FullName == null)
@@ -364,7 +231,6 @@ namespace uTinyRipper.Exporters.Scripts
 		public abstract string Namespace { get; }
 		public abstract string Module { get; }
 		public virtual bool IsEnum => false;
-		public abstract bool IsPrimative { get; }
 
 		/// <summary>
 		/// Declaring type with generic parameters (if any)
