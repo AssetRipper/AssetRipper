@@ -84,7 +84,15 @@ namespace uTinyRipper.Assembly.Mono
 				return false;
 			}
 			MonoTypeContext context = new MonoTypeContext(type);
-			return IsTypeValid(context);
+			if (!IsTypeValid(context))
+			{
+				return false;
+			}
+			if (!IsUnityObject(type))
+			{
+				return false;
+			}
+			return true;
 		}
 
 		public SerializableType GetSerializableType(ScriptIdentifier scriptID)
@@ -246,6 +254,31 @@ namespace uTinyRipper.Assembly.Mono
 		private TypeDefinition FindType(ScriptIdentifier scriptID)
 		{
 			return FindType(scriptID.Assembly, scriptID.Namespace, scriptID.Name);
+		}
+
+		private bool IsUnityObject(TypeReference type)
+		{
+			while (true)
+			{
+				if (type == null)
+				{
+					return false;
+				}
+				if (type.Module == null)
+				{
+					return false;
+				}
+				TypeDefinition definition = type.Resolve();
+				if (definition == null)
+				{
+					return false;
+				}
+				if (MonoType.IsMonoPrime(definition))
+				{
+					return true;
+				}
+				type = definition.BaseType;
+			}
 		}
 
 		/// <summary>

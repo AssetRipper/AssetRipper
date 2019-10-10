@@ -386,6 +386,7 @@ namespace uTinyRipper.AssetExporters
 			AddShader(CubeBlend, 15106, true);
 			AddShader("VR/SpatialMapping/Occlusion", 15300, true);
 			AddShader("VR/SpatialMapping/Wireframe", 15301, true);
+			AddShader("Hidden/VR/BlitCopyFromTexArray", 15304, true);
 			AddShader("Hidden/VR/BlitTexArraySlice", 15304, true);
 			AddShader("Hidden/VR/Internal-VRDistortion", 15305, true);
 			AddShader("Hidden/VR/BlitTexArraySliceToDepth", 15306, true);

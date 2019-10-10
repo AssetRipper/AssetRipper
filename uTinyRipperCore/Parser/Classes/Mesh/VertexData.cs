@@ -131,12 +131,21 @@ namespace uTinyRipper.Classes.Meshes
 		{
 			return version.IsEqual(3, 5);
 		}
+
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
 		private static bool IsStreamStatic(Version version)
 		{
 			return version.IsLess(4);
+		}
+
+		/// <summary>
+		/// 5.6.0
+		/// </summary>
+		private static bool AllowUnsetChannel(Version version)
+		{
+			return version.IsEqual(5, 6, 0);
 		}
 
 		private static int GetSerializedVersion(Version version)
@@ -158,7 +167,7 @@ namespace uTinyRipper.Classes.Meshes
 		{
 			IReadOnlyList<ChannelInfo> channels = GetChannels(version);
 			ChannelInfo channel = channels[(int)ChannelTypeV5.Vertex];
-			if (!channel.IsSet)
+			if (!channel.IsSet && !AllowUnsetChannel(version))
 			{
 				throw new Exception("Vertices hasn't been found");
 			}
