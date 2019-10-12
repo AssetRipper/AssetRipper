@@ -144,7 +144,7 @@ namespace uTinyRipper
 			}
 		}
 
-		protected void CollectAssemblies(DirectoryInfo root, IDictionary<string, string> assemblies)
+		protected virtual void CollectAssemblies(DirectoryInfo root, IDictionary<string, string> assemblies)
 		{
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
