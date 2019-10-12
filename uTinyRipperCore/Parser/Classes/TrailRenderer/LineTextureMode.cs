@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace uTinyRipper.Parser.Classes.TrailRenderers
+namespace uTinyRipper.Classes.TrailRenderers
 {
 	public enum LineTextureMode
 	{

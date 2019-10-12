@@ -2,7 +2,7 @@
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
-using uTinyRipper.Parser.Classes.TrailRenderers;
+using uTinyRipper.Classes.TrailRenderers;
 using uTinyRipper.Classes.ParticleSystems;
 
 namespace uTinyRipper.Classes
@@ -25,7 +25,7 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool IsReadParameters(Version version)
 		{
-			return version.IsGreaterEqual(5);
+			return version.IsGreaterEqual(5, 5);
 		}
 		/// <summary>
 		/// 2019.2.0 and greater
@@ -36,11 +36,7 @@ namespace uTinyRipper.Classes
 		}
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
+			// LineParameters has been added
 			if (version.IsGreaterEqual(5))
 			{
 				return 2;
@@ -88,11 +84,11 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(TimeName, Time);
-			if (IsReadParameters(container.Version))
+			if (IsReadParameters(container.ExportVersion))
 			{
-				node.Add(ParametersName, Parameters.ExportYAML(container));
+				node.Add(ParametersName, GetParameters(container.Version).ExportYAML(container));
 			}
 			else
 			{
@@ -102,11 +98,25 @@ namespace uTinyRipper.Classes
 			}
 			node.Add(MinVertexDistanceName, MinVertexDistance);
 			node.Add(AutodestructName, Autodestruct);
-			if (IsReadEmitting(container.Version))
+			if (IsReadEmitting(container.ExportVersion))
 			{
 				node.Add(EmittingName, Emitting);
 			}
 			return node;
+		}
+
+		private LineParameters GetParameters(Version version)
+		{
+			if (IsReadParameters(version))
+			{
+				return Parameters;
+			} else
+			{
+				LineParameters parameters = new LineParameters();
+				parameters.ColorGradient = Colors;
+				parameters.WidthCurve = new AnimationClips.AnimationCurveTpl<Float>(StartWidth, EndWidth, Float.DefaultWeight);
+				return parameters;
+			}
 		}
 
 		public float Time { get; private set; }
@@ -125,7 +135,7 @@ namespace uTinyRipper.Classes
 		public const string AutodestructName = "m_Autodestruct";
 		public const string EmittingName = "m_Emitting";
 
-		public TrailRendererParameters Parameters;
+		public LineParameters Parameters;
 		public Gradient Colors;
 	}
 }

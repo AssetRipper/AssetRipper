@@ -1,39 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.AnimationClips;
 using uTinyRipper.Classes.ParticleSystems;
-using uTinyRipper.SerializedFiles;
 using uTinyRipper.YAML;
-using Object = uTinyRipper.Classes.Object;
 
-namespace uTinyRipper.Parser.Classes.TrailRenderers
+namespace uTinyRipper.Classes.TrailRenderers
 {
-	public struct TrailRendererParameters : IAssetReadable, IYAMLExportable
+	public struct LineParameters : IAssetReadable, IYAMLExportable
 	{
 		public static int GetSerializedVersion(Version version)
 		{
+			// ShadowBias has been added
 			if (version.IsGreaterEqual(2018, 3))
 			{
 				return 3;
 			}
-			if (version.IsGreaterEqual(5))
-			{
-				return 2;
-			}
-			return 1;
+			// min version is 2nd 
+			return 2;
 		}
 		/// <summary>
-		/// 2019.2.0 and greater
+		/// 2018.3.0 and greater
 		/// </summary>
 		public static bool IsReadShadowBias(Version version)
 		{
 			return version.IsGreaterEqual(2018, 3);
 		}
+		/// <summary>
+		/// 2018.3.0 and greater
+		/// </summary>
+		public static bool IsReadGenerateLightingData(Version version)
+		{
+			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		}
+
 		public void Read(AssetReader reader)
 		{
 			WidthMultiplier = reader.ReadSingle();
@@ -47,9 +46,13 @@ namespace uTinyRipper.Parser.Classes.TrailRenderers
 			{
 				ShadowBias = reader.ReadSingle();
 			}
-			GenerateLightingData = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			if (IsReadGenerateLightingData(reader.Version))
+			{
+				GenerateLightingData = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
+			}
 		}
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
@@ -61,13 +64,17 @@ namespace uTinyRipper.Parser.Classes.TrailRenderers
 			node.Add(NumCapVerticesName, NumCapVertices);
 			node.Add(AlignmentName, (int)Alignment);
 			node.Add(TextureModeName, (int)TextureMode);
-			if (IsReadShadowBias(container.Version))
+			if (IsReadShadowBias(container.ExportVersion))
 			{
 				node.Add(ShadowBiasName, ShadowBias);
 			}
-			node.Add(GenerateLightingDataName, GenerateLightingData);
+			if (IsReadGenerateLightingData(container.ExportVersion))
+			{
+				node.Add(GenerateLightingDataName, GenerateLightingData);
+			}
 			return node;
 		}
+
 		public float WidthMultiplier { get; private set; }
 		public int NumCornerVertices { get; private set; }
 		public int NumCapVertices { get; private set; }
