@@ -26,11 +26,11 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 		public static bool IsDelegate(TypeDefinition type)
 		{
-			if(type.BaseType == null)
+			if (type.BaseType == null)
 			{
 				return false;
 			}
-			return type.Namespace == SystemName && type.BaseType.Name == MulticastDelegateName;
+			return type.BaseType.Namespace == SystemName && type.BaseType.Name == MulticastDelegateName;
 		}
 
 		public override void Init(IScriptExportManager manager)

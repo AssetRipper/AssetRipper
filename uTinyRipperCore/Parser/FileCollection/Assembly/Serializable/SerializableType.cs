@@ -84,11 +84,11 @@ namespace uTinyRipper.Assembly
 
 		public static bool IsBasic(string @namespace, string name)
 		{
-			if(IsObject(@namespace, name))
+			if (IsObject(@namespace, name))
 			{
 				return true;
 			}
-			if(@namespace == SystemNamespace && name == MonoUtils.ValueType)
+			if (@namespace == SystemNamespace && name == MonoUtils.ValueType)
 			{
 				return true;
 			}
@@ -308,7 +308,7 @@ namespace uTinyRipper.Assembly
 					SerializableField sField = new SerializableField(field.Type.Type, fieldStructure, field.IsArray, field.Name);
 					fields.Add(sField);
 				}
-				return new SerializableStructure(type, @base, fields);
+				return new SerializableStructure(type, @base, fields.ToArray());
 			}
 			else
 			{

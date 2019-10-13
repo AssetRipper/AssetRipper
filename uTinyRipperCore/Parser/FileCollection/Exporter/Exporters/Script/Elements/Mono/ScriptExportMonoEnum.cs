@@ -50,6 +50,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			{
 				if (field.Name == "value__")
 				{
+					m_base = manager.RetrieveType(field.FieldType);
 					continue;
 				}
 
@@ -59,6 +60,8 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			return fields;
 		}
 
+
+		public override ScriptExportType Base => m_base;
 		public override string NestedName { get; }
 		public override string CleanNestedName { get; }
 		public override string TypeName => Type.Name;
@@ -98,6 +101,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		private TypeDefinition Definition { get; }
 
 		private ScriptExportType m_declaringType;
+		private ScriptExportType m_base;
 		private IReadOnlyList<ScriptExportField> m_fields;
 	}
 }

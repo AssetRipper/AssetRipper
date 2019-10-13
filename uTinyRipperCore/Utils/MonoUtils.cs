@@ -3,12 +3,13 @@ using Mono.Cecil.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using uTinyRipper.Assembly.Mono;
 
 namespace uTinyRipper
 {
 	public static class MonoUtils
 	{
-		#region Naming
+#region Naming
 		public static bool IsSerializablePrimitive(TypeReference type)
 		{
 			switch (type.etype)
@@ -197,19 +198,6 @@ namespace uTinyRipper
 		}
 #endregion
 
-		public static ArrayType CreateArrayFrom(ArrayType source, TypeReference newType)
-		{
-			ArrayType newArray = new ArrayType(newType, source.Rank);
-			if (source.Rank > 1)
-			{
-				for (int i = 0; i < source.Rank; i++)
-				{
-					newArray.Dimensions[i] = source.Dimensions[i];
-				}
-			}
-			return newArray;
-		}
-
 		public static GenericInstanceType CreateGenericInstance(TypeReference genericTemplate, IEnumerable<TypeReference> arguments)
 		{
 			GenericInstanceType genericInstance = new GenericInstanceType(genericTemplate);
@@ -248,52 +236,81 @@ namespace uTinyRipper
 			return count;
 		}
 
-		/// <summary>
-		/// Replace generic parameters with arguments
-		/// </summary>
-		public static TypeReference ResolveGenericParameter(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		public static bool AreSame(TypeReference type, MonoTypeContext checkContext, TypeReference checkType)
 		{
-			if (type.IsGenericParameter)
+			if (ReferenceEquals(type, checkType))
 			{
-				GenericParameter generic = (GenericParameter)type;
-				TypeReference resolvedType = arguments[generic];
-				return resolvedType.ContainsGenericParameter ? ResolveGenericParameter(resolvedType, arguments) : resolvedType;
+				return true;
 			}
-			if (type.IsArray)
+			if (type == null || checkType == null)
 			{
-				ArrayType array = (ArrayType)type;
-				TypeReference arrayElement = array.ElementType;
-				if (arrayElement.ContainsGenericParameter)
-				{
-					TypeReference resolvedElement = ResolveGenericParameter(arrayElement, arguments);
-					return CreateArrayFrom(array, resolvedElement);
-				}
-				return array;
+				return false;
 			}
-			if (type.IsGenericInstance)
-			{
-				GenericInstanceType genericInstance = (GenericInstanceType)type;
-				if (genericInstance.ContainsGenericParameter)
-				{
-					return ResolveGenericInstanceParameters(genericInstance, arguments);
-				}
-				return genericInstance;
-			}
-			throw new Exception($"Unknown generic parameter container {type}");
+
+			MonoTypeContext context = new MonoTypeContext(checkType, checkContext);
+			MonoTypeContext resolvedContext = context.Resolve();
+			return MetadataResolver.AreSame(type, resolvedContext.Type);
 		}
 
-		/// <summary>
-		/// Replace generic parameters in generic instance with arguments
-		/// </summary>
-		public static GenericInstanceType ResolveGenericInstanceParameters(GenericInstanceType genericInstance, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		public static bool AreSame(MethodDefinition method, MonoTypeContext checkContext, MethodDefinition checkMethod)
 		{
-			GenericInstanceType newInstance = new GenericInstanceType(genericInstance.ElementType);
-			foreach (TypeReference argument in genericInstance.GenericArguments)
+			if (method.Name != checkMethod.Name)
 			{
-				TypeReference newArgument = argument.ContainsGenericParameter ? ResolveGenericParameter(argument, arguments) : argument;
-				newInstance.GenericArguments.Add(newArgument);
+				return false;
 			}
-			return newInstance;
+			if (method.HasGenericParameters)
+			{
+				if (!checkMethod.HasGenericParameters)
+				{
+					return false;
+				}
+				if (method.GenericParameters.Count != checkMethod.GenericParameters.Count)
+				{
+					return false;
+				}
+			}
+			if (!AreSame(method.ReturnType, checkContext, checkMethod.ReturnType))
+			{
+				return false;
+			}
+
+			if (method.IsVarArg())
+			{
+				if (!checkMethod.IsVarArg())
+				{
+					return false;
+				}
+				if (method.Parameters.Count >= checkMethod.Parameters.Count)
+				{
+					return false;
+				}
+				if (checkMethod.GetSentinelPosition() != method.Parameters.Count)
+				{
+					return false;
+				}
+			}
+
+			if (method.HasParameters)
+			{
+				if (!checkMethod.HasParameters)
+				{
+					return false;
+				}
+				if (method.Parameters.Count != checkMethod.Parameters.Count)
+				{
+					return false;
+				}
+
+				for (int i = 0; i < method.Parameters.Count; i++)
+				{
+					if (!AreSame(method.Parameters[i].ParameterType, checkContext, checkMethod.Parameters[i].ParameterType))
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
 		}
 
 		public const string ObjectName = "Object";

@@ -231,9 +231,12 @@ namespace uTinyRipper
 		PerformanceReportingManager		= 305,
 		UnityConnectSettings			= 310,
 		AvatarMask1						= 319,
+		PlayableDirector				= 320,
 		VideoPlayer						= 328,
 		VideoClip						= 329,
 		ParticleSystemForceField		= 330,
+		SpriteMask						= 331,
+		WorldAnchor						= 362,
 		OcclusionCullingData			= 363,
 
 		// =====================================

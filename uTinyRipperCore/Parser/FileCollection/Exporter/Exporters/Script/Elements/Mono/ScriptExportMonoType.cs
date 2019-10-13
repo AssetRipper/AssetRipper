@@ -125,7 +125,10 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 		public static string GetModuleName(TypeReference type)
 		{
-			return AssemblyManager.ToAssemblyName(type.Scope.Name);
+			// reference and definition may has differrent module, so to avoid duplicates we need try to get defition
+			TypeReference definition = type.ResolveOrDefault();
+			definition = definition == null ? type : definition;
+			return AssemblyManager.ToAssemblyName(definition.Scope.Name);
 		}
 
 		public static bool HasMember(TypeReference type, string name)
@@ -201,7 +204,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			int argumentCount = MonoUtils.GetGenericParameterCount(genericType);
 			if (argumentCount == 0)
 			{
-				// nested class/enum (of generic class) is generic instance but it doesn't has '`' symbol in its name
+				// nested class/enum (of generic class) is a generic instance but it doesn't has '`' symbol in its name
 				return name;
 			}
 
@@ -224,11 +227,6 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 		private static string GetArgumentName(TypeReference type)
 		{
-			if (MonoType.IsEngineObject(type))
-			{
-				return $"{type.Namespace}.{type.Name}";
-			}
-
 			return GetNestedName(type);
 		}
 
@@ -239,6 +237,8 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 				m_base = manager.RetrieveType(Definition.BaseType);
 			}
 
+			m_methods = CreateMethods(manager);
+			m_properties = CreateProperties(manager);
 			m_fields = CreateFields(manager);
 
 			if (Type.IsNested)
@@ -266,11 +266,140 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 		public override bool HasMember(string name)
 		{
-			if(base.HasMember(name))
+			if (base.HasMember(name))
 			{
 				return true;
 			}
 			return HasMember(Type, name);
+		}
+
+		private IReadOnlyList<ScriptExportMethod> CreateMethods(IScriptExportManager manager)
+		{
+			if (Definition == null || Definition.BaseType == null || Definition.BaseType.Module == null)
+			{
+				return new ScriptExportMethod[0];
+			}
+
+			// we need to export only such properties that are declared as asbtract inside builin assemblies
+			// and not overridden anywhere except current type
+			List<MethodDefinition> overrides = new List<MethodDefinition>();
+			foreach (MethodDefinition method in Definition.Methods)
+			{
+				if (method.IsVirtual && method.IsReuseSlot && !method.IsGetter && !method.IsSetter)
+				{
+					overrides.Add(method);
+				}
+			}
+
+			List<ScriptExportMethod> methods = new List<ScriptExportMethod>();
+			MonoTypeContext context = new MonoTypeContext(Definition);
+			TypeDefinition definition = Definition;
+			while (true)
+			{
+				if (overrides.Count == 0)
+				{
+					break;
+				}
+				if (definition.BaseType == null || definition.BaseType.Module == null)
+				{
+					break;
+				}
+
+				context = context.GetBase();
+				definition = context.Type.Resolve();
+				string module = GetModuleName(definition);
+				bool isBuiltIn = ScriptExportManager.IsBuiltInLibrary(module);
+				IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
+				// definition is a Template for GenericInstance, so we must recreate context
+				MonoTypeContext definitionContext = new MonoTypeContext(definition, arguments);
+				foreach (MethodDefinition method in definition.Methods)
+				{
+					if (method.IsVirtual && (method.IsNewSlot || method.IsReuseSlot))
+					{
+						for (int i = 0; i < overrides.Count; i++)
+						{
+							MethodDefinition @override = overrides[i];
+							if (MonoUtils.AreSame(@override, definitionContext, method))
+							{
+								if (isBuiltIn && method.IsAbstract)
+								{
+									ScriptExportMethod exportMethod = manager.RetrieveMethod(@override);
+									methods.Add(exportMethod);
+								}
+
+								overrides.RemoveAt(i);
+								break;
+							}
+						}
+					}
+				}
+			}
+			return methods.ToArray();
+		}
+
+		private IReadOnlyList<ScriptExportProperty> CreateProperties(IScriptExportManager manager)
+		{
+			if (Definition == null || Definition.BaseType == null || Definition.BaseType.Module == null)
+			{
+				return new ScriptExportProperty[0];
+			}
+
+			// we need to export only such properties that are declared as asbtract inside builin assemblies
+			// and not overridden anywhere except current type
+			List<PropertyDefinition> overrides = new List<PropertyDefinition>();
+			foreach (PropertyDefinition property in Definition.Properties)
+			{
+				MethodDefinition method = property.GetMethod == null ? property.SetMethod : property.GetMethod;
+				if (method.IsVirtual && method.IsReuseSlot)
+				{
+					overrides.Add(property);
+				}
+			}
+
+			List<ScriptExportProperty> properties = new List<ScriptExportProperty>();
+			MonoTypeContext context = new MonoTypeContext(Definition);
+			TypeDefinition definition = Definition;
+			while (true)
+			{
+				if (overrides.Count == 0)
+				{
+					break;
+				}
+				if (definition.BaseType == null || definition.BaseType.Module == null)
+				{
+					break;
+				}
+
+				MonoTypeContext baseContext = context.GetBase();
+				TypeDefinition baseDefinition = baseContext.Type.Resolve();
+				string module = GetModuleName(baseContext.Type);
+				bool isBuiltIn = ScriptExportManager.IsBuiltInLibrary(module);
+				foreach (PropertyDefinition property in baseDefinition.Properties)
+				{
+					MethodDefinition method = property.GetMethod == null ? property.SetMethod : property.GetMethod;
+					if (method.IsVirtual && (method.IsNewSlot || method.IsReuseSlot))
+					{
+						for (int i = 0; i < overrides.Count; i++)
+						{
+							PropertyDefinition @override = overrides[i];
+							if (@override.Name == property.Name)
+							{
+								if (isBuiltIn && method.IsAbstract)
+								{
+									ScriptExportProperty exportProperty = manager.RetrieveProperty(@override);
+									properties.Add(exportProperty);
+								}
+
+								overrides.RemoveAt(i);
+								break;
+							}
+						}
+					}
+				}
+				context = baseContext;
+				definition = baseDefinition;
+			}
+			return properties.ToArray();
 		}
 
 		private IReadOnlyList<ScriptExportField> CreateFields(IScriptExportManager manager)
@@ -353,6 +482,8 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		public override ScriptExportType DeclaringType => m_declaringType;
 		public override ScriptExportType Base => m_base;
 
+		public override IReadOnlyList<ScriptExportMethod> Methods => m_methods;
+		public override IReadOnlyList<ScriptExportProperty> Properties => m_properties;
 		public override IReadOnlyList<ScriptExportField> Fields => m_fields;
 
 		protected override string Keyword
@@ -384,9 +515,11 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 
 		private TypeReference Type { get; }
 		private TypeDefinition Definition { get; }
-		
+
 		private ScriptExportType m_declaringType;
 		private ScriptExportType m_base;
+		private IReadOnlyList<ScriptExportMethod> m_methods;
+		private IReadOnlyList<ScriptExportProperty> m_properties;
 		private IReadOnlyList<ScriptExportField> m_fields;
 	}
 }

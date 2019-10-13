@@ -157,7 +157,7 @@ namespace uTinyRipper
 		private const string AssetName = "assets";
 		private const string MetaName = "META-INF";
 		private const string BinName = "bin";
-		private const string DataName = "Data";
+		private new const string DataName = "Data";
 		
 		private readonly DirectoryInfo m_root;
 		private readonly DirectoryInfo m_obbRoot;

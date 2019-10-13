@@ -83,7 +83,16 @@ namespace uTinyRipper.Assembly.Mono
 			{
 				return false;
 			}
-			return IsTypeValid(type, s_emptyArguments);
+			MonoTypeContext context = new MonoTypeContext(type);
+			if (!IsTypeValid(context))
+			{
+				return false;
+			}
+			if (!IsUnityObject(type))
+			{
+				return false;
+			}
+			return true;
 		}
 
 		public SerializableType GetSerializableType(ScriptIdentifier scriptID)
@@ -157,25 +166,25 @@ namespace uTinyRipper.Assembly.Mono
 			GC.SuppressFinalize(this);
 		}
 
-		public SerializableType GetSerializableType(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		public SerializableType GetSerializableType(MonoTypeContext context)
 		{
-			if (type.IsGenericParameter)
+			if (context.Type.ContainsGenericParameter)
 			{
-				throw new ArgumentException(nameof(type));
+				throw new ArgumentException(nameof(context));
 			}
-			if (MonoField.IsSerializableArray(type))
+			if (MonoField.IsSerializableArray(context.Type))
 			{
-				throw new ArgumentException(nameof(type));
+				throw new ArgumentException(nameof(context));
 			}
 
-			string uniqueName = MonoType.GetUniqueName(type);
+			string uniqueName = MonoType.GetUniqueName(context.Type);
 			if (AssemblyManager.TryGetSerializableType(uniqueName, out SerializableType serializableType))
 			{
 				return serializableType;
 			}
 			else
 			{
-				return new MonoType(this, type, arguments);
+				return new MonoType(this, context);
 			}
 		}
 
@@ -247,80 +256,105 @@ namespace uTinyRipper.Assembly.Mono
 			return FindType(scriptID.Assembly, scriptID.Namespace, scriptID.Name);
 		}
 
+		private bool IsUnityObject(TypeReference type)
+		{
+			while (true)
+			{
+				if (type == null)
+				{
+					return false;
+				}
+				if (type.Module == null)
+				{
+					return false;
+				}
+				TypeDefinition definition = type.Resolve();
+				if (definition == null)
+				{
+					return false;
+				}
+				if (MonoType.IsMonoPrime(definition))
+				{
+					return true;
+				}
+				type = definition.BaseType;
+			}
+		}
+
 		/// <summary>
 		/// Is it possible to properly restore serializable layout for specified type
 		/// </summary>
 		/// <param name="type">Type to check</param>
 		/// <param name="arguments">Generic arguments for checking type</param>
 		/// <returns>Is type valid for serialization</returns>
-		private bool IsTypeValid(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		private bool IsTypeValid(MonoTypeContext context)
 		{
-			if (type.IsGenericParameter)
+			if (context.Type.IsGenericParameter)
 			{
-				GenericParameter parameter = (GenericParameter)type;
-				return IsTypeValid(arguments[parameter], arguments);
+				MonoTypeContext parameterContext = context.Resolve();
+				return IsTypeValid(parameterContext);
 			}
-			if (type.IsArray)
+			if (context.Type.IsArray)
 			{
-				ArrayType array = (ArrayType)type;
-				return IsTypeValid(array.ElementType, arguments);
+				ArrayType array = (ArrayType)context.Type;
+				MonoTypeContext arrayContext = new MonoTypeContext(array.ElementType, context);
+				return IsTypeValid(arrayContext);
 			}
-			if (MonoType.IsBuiltinGeneric(type))
+			if (MonoType.IsBuiltinGeneric(context.Type))
 			{
-				GenericInstanceType generic = (GenericInstanceType)type;
+				GenericInstanceType generic = (GenericInstanceType)context.Type;
 				TypeReference element = generic.GenericArguments[0];
-				return IsTypeValid(element, arguments);
+				MonoTypeContext genericContext = new MonoTypeContext(element, context);
+				return IsTypeValid(genericContext);
 			}
 
-			if (MonoType.IsPrime(type))
+			if (MonoType.IsPrime(context.Type))
 			{
 				return true;
 			}
-			if (type.Module == null)
+			if (context.Type.Module == null)
 			{
 				return false;
 			}
 
-			// for recursive fields and generic parameters
-			if (m_validTypes.TryGetValue(type.FullName, out bool isValid))
+			if (m_validTypes.TryGetValue(context.Type.FullName, out bool isValid))
 			{
 				return isValid;
 			}
 
-			// set value at the beginning to prevent loop referencing
-			m_validTypes[type.FullName] = true;
+			// set value right here to prevent recursion
+			m_validTypes[context.Type.FullName] = true;
 
-			if (type.IsGenericInstance)
+			// Resolve method for generic instance returns template definition, so we need to check module for template first
+			if (context.Type.IsGenericInstance)
 			{
-				GenericInstanceType instance = (GenericInstanceType)type;
-				Dictionary<GenericParameter, TypeReference> templateArguments = new Dictionary<GenericParameter, TypeReference>();
-				templateArguments.AddRange(arguments);
-				TypeReference template = instance.ElementType.ResolveOrDefault();
-				for (int i = 0; i < instance.GenericArguments.Count; i++)
+				GenericInstanceType instance = (GenericInstanceType)context.Type;
+				if (instance.ElementType.Module == null)
 				{
-					TypeReference argument = instance.GenericArguments[i];
-					templateArguments.Add(template.GenericParameters[i], argument);
+					m_validTypes[context.Type.FullName] = false;
+					return false;
 				}
-
-				return IsTypeValid(template, templateArguments);
 			}
 
-			TypeDefinition definition = type.Resolve();
+			TypeDefinition definition = context.Type.Resolve();
 			if (definition == null)
 			{
-				m_validTypes[type.FullName] = false;
+				m_validTypes[context.Type.FullName] = false;
 				return false;
 			}
 			if (definition.IsInterface)
 			{
 				return true;
 			}
-			if (!IsTypeValid(definition.BaseType, arguments))
+
+			MonoTypeContext baseContext = context.GetBase();
+			if (!IsTypeValid(baseContext))
 			{
-				m_validTypes[type.FullName] = false;
+				m_validTypes[context.Type.FullName] = false;
 				return false;
 			}
 
+			IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
 			foreach (FieldDefinition field in definition.Fields)
 			{
 				if (!MonoField.IsSerializableModifier(field))
@@ -328,9 +362,10 @@ namespace uTinyRipper.Assembly.Mono
 					continue;
 				}
 
-				if (!IsTypeValid(field.FieldType, arguments))
+				MonoTypeContext fieldContext = new MonoTypeContext(field.FieldType, arguments);
+				if (!IsTypeValid(fieldContext))
 				{
-					m_validTypes[type.FullName] = false;
+					m_validTypes[context.Type.FullName] = false;
 					return false;
 				}
 			}
@@ -344,8 +379,6 @@ namespace uTinyRipper.Assembly.Mono
 		}
 
 		public AssemblyManager AssemblyManager { get; }
-
-		private static readonly IReadOnlyDictionary<GenericParameter, TypeReference> s_emptyArguments = new Dictionary<GenericParameter, TypeReference>();
 
 		public const string AssemblyExtension = ".dll";
 
