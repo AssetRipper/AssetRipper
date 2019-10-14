@@ -135,25 +135,25 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Compile Include="Exporters\Audio\AudioConverter.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ConstantBufferChunk.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ConstantBufferFlags.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ConstantBufferType.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\DXProgramType.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\DXShaderObjectExporter.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ResourceBindingChunk.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ResourceChunk.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ResourceReturnType.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderFlags.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderInputFlags.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderInputType.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderResourceViewDimension.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderType.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderTypeMember.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderVariableClass.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderVariableFlags.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\ShaderVariableType.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\Variable.cs" />
-    <Compile Include="Exporters\Shader\DXShaderExporter\VariableChunk.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ConstantBufferChunk.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ConstantBufferFlags.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ConstantBufferType.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\DXProgramType.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\DXShaderObjectExporter.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ResourceBindingChunk.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ResourceChunk.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ResourceReturnType.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ShaderFlags.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ShaderInputFlags.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ShaderInputType.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ShaderResourceViewDimension.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ShaderType.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ShaderTypeMember.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ShaderVariableClass.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ShaderVariableFlags.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\ShaderVariableType.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\Variable.cs" />
+    <Compile Include="ThirdParty\DXShaderExporter\VariableChunk.cs" />
     <Compile Include="Exporters\Shader\ShaderHLSLccExporter.cs" />
     <Compile Include="Exporters\Shader\ShaderVulkanExporter.cs" />
     <Compile Include="Exporters\Texture\TextureConverter.cs" />
@@ -260,10 +260,6 @@
       <Project>{ca9420f4-4b54-4727-91e6-cce20916d795}</Project>
       <Name>uTinyRipperCore</Name>
     </ProjectReference>
-    <ProjectReference Include="ThirdParty\HLSLccWrapper\HLSLccWrapper.vcxproj">
-      <Project>{b812e249-4f57-4c35-b5a8-a8ec498627f9}</Project>
-      <Name>HLSLccWrapper</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -297,6 +293,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>TextureConverterWrapper.dll</TargetPath>
     </ContentWithTargetPath>
+    <Reference Include="HLSLccWrapper_x86, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\x86\HLSLccWrapper_x86.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup Condition=" '$(Platform)' == 'x64' ">
     <ContentWithTargetPath Include="Libraries\x64\crunch_x64.dll">
@@ -323,6 +323,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>TextureConverterWrapper.dll</TargetPath>
     </ContentWithTargetPath>
+    <Reference Include="HLSLccWrapper_x64, processorArchitecture=x64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\x64\HLSLccWrapper_x64.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\URIcon.ico" />
