@@ -55,7 +55,7 @@ namespace uTinyRipper
 			CollectGameFiles(root, files);
 			CollectWebFiles(root, files);
 			CollectAssetBundles(root, files);
-			CollectAssemblies(root, assemblies);
+			CollectAssembliesSafe(root, assemblies);
 			if (files.Count != count)
 			{
 				dataPathes.Add(root.FullName);
@@ -95,7 +95,7 @@ namespace uTinyRipper
 			}
 		}
 
-		protected override void CollectAssemblies(DirectoryInfo root, IDictionary<string, string> assemblies)
+		private void CollectAssembliesSafe(DirectoryInfo root, IDictionary<string, string> assemblies)
 		{
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
@@ -103,8 +103,7 @@ namespace uTinyRipper
 				{
 					if (assemblies.ContainsKey(file.Name))
 					{
-						Logger.Instance.Log(LogType.Warning, LogCategory.Import,
-							$"Duplicate assemblies found: '{assemblies[file.Name]}' & '{file.FullName}'");
+						Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Duplicate assemblies found: '{assemblies[file.Name]}' & '{file.FullName}'");
 					}
 					else
 					{
