@@ -1,9 +1,14 @@
 using System.IO;
+using System.Linq;
 
 namespace uTinyRipper.Classes.Shaders.Exporters
 {
 	public class ShaderTextExporter
 	{
+		public virtual void Export(ShaderSubProgram subProgram, TextWriter writer)
+		{
+			Export(subProgram.ProgramData.ToArray(), writer);
+		}
 		public virtual void Export(byte[] shaderData, TextWriter writer)
 		{
 			using (MemoryStream memStream = new MemoryStream(shaderData))
