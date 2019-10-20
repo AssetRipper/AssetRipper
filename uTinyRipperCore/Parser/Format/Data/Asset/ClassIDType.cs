@@ -115,6 +115,7 @@ namespace uTinyRipper
 		PhysicMaterial					= 134,
 		SphereCollider					= 135,
 		CapsuleCollider					= 136,
+		SkinnedMeshFilter				= -137,
 		SkinnedMeshRenderer				= 137,
 		FixedJoint						= 138,
 		RaycastCollider					= 140,

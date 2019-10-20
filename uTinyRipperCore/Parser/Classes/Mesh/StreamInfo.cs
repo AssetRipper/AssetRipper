@@ -1,6 +1,9 @@
-﻿namespace uTinyRipper.Classes.Meshes
+﻿using uTinyRipper.AssetExporters;
+using uTinyRipper.YAML;
+
+namespace uTinyRipper.Classes.Meshes
 {
-	public struct StreamInfo : IAssetReadable
+	public struct StreamInfo : IAsset
 	{
 		public StreamInfo(uint mask, uint offset, uint stride)
 		{
@@ -15,9 +18,11 @@
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		private static bool IsReadAlign(Version version)
+		public static bool HasAlign(Version version) => version.IsLess(4);
+
+		public bool IsMatch(ShaderChannelV4 channel)
 		{
-			return version.IsLess(4);
+			return (ChannelMask & (1 << (int)channel)) != 0;
 		}
 
 		public void Read(AssetReader reader)
@@ -25,7 +30,7 @@
 			ChannelMask = reader.ReadUInt32();
 			Offset = reader.ReadUInt32();
 
-			if (IsReadAlign(reader.Version))
+			if (HasAlign(reader.Version))
 			{
 				Stride = reader.ReadUInt32();
 				Align = reader.ReadUInt32();
@@ -38,16 +43,55 @@
 			}
 		}
 
-		public bool IsMatch(ChannelTypeV4 channel)
+		public void Write(AssetWriter writer)
 		{
-			return (ChannelMask & (1 << (int)channel)) != 0;
+			writer.Write(ChannelMask);
+			writer.Write(Offset);
+
+			if (HasAlign(writer.Version))
+			{
+				writer.Write(Stride);
+				writer.Write(Align);
+			}
+			else
+			{
+				writer.Write((byte)Stride);
+				writer.Write(DividerOp);
+				writer.Write(Frequency);
+			}
 		}
 
-		public uint ChannelMask { get; private set; }
-		public uint Offset { get; private set; }
-		public uint Stride { get; private set; }
-		public uint Align { get; private set; }
-		public byte DividerOp { get; private set; }
-		public ushort Frequency { get; private set; }
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add(ChannelMaskName, ChannelMask);
+			node.Add(OffsetName, Offset);
+			node.Add(StrideName, Stride);
+
+			if (HasAlign(container.ExportVersion))
+			{
+				node.Add(AlignName, Align);
+			}
+			else
+			{
+				node.Add(DividerOpMaskName, DividerOp);
+				node.Add(FrequencyMaskName, Frequency);
+			}
+			return node;
+		}
+
+		public uint ChannelMask { get; set; }
+		public uint Offset { get; set; }
+		public uint Stride { get; set; }
+		public uint Align { get; set; }
+		public byte DividerOp { get; set; }
+		public ushort Frequency { get; set; }
+
+		public const string ChannelMaskName = "channelMask";
+		public const string OffsetName = "offset";
+		public const string StrideName = "stride";
+		public const string AlignName = "align";
+		public const string DividerOpMaskName = "dividerOp";
+		public const string FrequencyMaskName = "frequency";
 	}
 }

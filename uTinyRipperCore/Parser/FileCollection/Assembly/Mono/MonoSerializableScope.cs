@@ -23,9 +23,9 @@ namespace uTinyRipper.Assembly.Mono
 			Arguments = arguments;
 		}
 
-		public TypeReference DeclaringType { get; }
-		public TypeReference FieldType { get; }
-		public bool IsArrayElement { get; }
-		public IReadOnlyDictionary<GenericParameter, TypeReference> Arguments { get; }
+		public readonly TypeReference DeclaringType;
+		public readonly TypeReference FieldType;
+		public readonly bool IsArrayElement;
+		public readonly IReadOnlyDictionary<GenericParameter, TypeReference> Arguments;
 	}
 }

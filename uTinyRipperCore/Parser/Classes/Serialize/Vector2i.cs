@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using uTinyRipper.Assembly;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
@@ -7,7 +6,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct Vector2i : ISerializableStructure
+	public struct Vector2i : IAsset, ISerializableStructure
 	{
 		public Vector2i(int x, int y)
 		{
@@ -36,10 +35,10 @@ namespace uTinyRipper.Classes
 			Y = reader.ReadInt32();
 		}
 
-		public void Write(BinaryWriter stream)
+		public void Write(AssetWriter writer)
 		{
-			stream.Write(X);
-			stream.Write(Y);
+			writer.Write(X);
+			writer.Write(Y);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -85,8 +84,8 @@ namespace uTinyRipper.Classes
 			return $"[{X}, {Y}]";
 		}
 
-		public int X { get; private set; }
-		public int Y { get; private set; }
+		public int X { get; set; }
+		public int Y { get; set; }
 
 		public const string XName = "x";
 		public const string YName = "y";

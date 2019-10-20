@@ -46,7 +46,7 @@ namespace uTinyRipper.Assembly.Mono
 			return false;
 		}
 
-		public static bool IsFieldTypeSerializable(MonoSerializableScope scope)
+		public static bool IsFieldTypeSerializable(in MonoSerializableScope scope)
 		{
 			TypeReference fieldType = scope.FieldType;
 

@@ -140,6 +140,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\EnumNameAttribute.cs" />
+    <Compile Include="Converter\EditorExtensionConverter.cs" />
+    <Compile Include="Converter\Mesh\BlendShapeConverter.cs" />
+    <Compile Include="Converter\Mesh\ChannelInfoConverter.cs" />
+    <Compile Include="Converter\Mesh\CompressedMeshConverter.cs" />
+    <Compile Include="Converter\Mesh\LODConverter.cs" />
+    <Compile Include="Converter\Mesh\MeshConverter.cs" />
+    <Compile Include="Converter\Mesh\StreamInfoConverter.cs" />
+    <Compile Include="Converter\Mesh\SubMeshConverter.cs" />
+    <Compile Include="Converter\Mesh\TangentConverter.cs" />
+    <Compile Include="Converter\Mesh\VertexDataConverter.cs" />
+    <Compile Include="Converter\NamedObjectConverter.cs" />
+    <Compile Include="Converter\ObjectConverter.cs" />
     <Compile Include="Parser\Classes\AnimationClip\AnimationClipSettings.cs" />
     <Compile Include="Parser\Classes\Avatar\Bones\HumanBodyBones.cs" />
     <Compile Include="Parser\Classes\Avatar\HumanBone.cs" />
@@ -162,10 +174,10 @@
     <Compile Include="Parser\Classes\LightmapSettings\Lightmapper.cs" />
     <Compile Include="Parser\Classes\LightmapSettings\ReflectionCubemapCompression.cs" />
     <Compile Include="Parser\Classes\LightmapSettings\Sampling.cs" />
-    <Compile Include="Parser\Classes\Mesh\ChannelFormat\ChannelFormat.cs" />
-    <Compile Include="Parser\Classes\Mesh\ChannelFormat\ChannelFormatV2019.cs" />
-    <Compile Include="Parser\Classes\Mesh\ChannelFormat\ChannelFormatV4.cs" />
-    <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelTypeV5.cs" />
+    <Compile Include="Parser\Classes\Mesh\VertexFormat\VertexFormat.cs" />
+    <Compile Include="Parser\Classes\Mesh\VertexFormat\VertexFormatV2019.cs" />
+    <Compile Include="Parser\Classes\Mesh\VertexFormat\VertexChannelFormat.cs" />
+    <Compile Include="Parser\Classes\Mesh\ShaderChannel\ShaderChannelV5.cs" />
     <Compile Include="Parser\Classes\Mesh\IndexFormat.cs" />
     <Compile Include="Parser\Classes\Mesh\MeshOptimizationFlags.cs" />
     <Compile Include="Parser\Classes\ParticleSystem\UV\ParticleSystemAnimationRowMode.cs" />
@@ -205,6 +217,7 @@
     <Compile Include="Parser\FileCollection\Exporter\Exporters\TextAsset\TextAssetExporter.cs" />
     <Compile Include="Parser\FileCollection\Exporter\ExportOptions.cs" />
     <Compile Include="Parser\Format\ArchiveFile\ArchiveFileScheme.cs" />
+    <Compile Include="Parser\IO\Asset\IAsset.cs" />
     <Compile Include="Parser\IO\Asset\TransferMetaFlags.cs" />
     <Compile Include="Parser\IO\Extensions\EndianReaderExtensions.cs" />
     <Compile Include="Parser\Format\ArchiveFile\ArchiveType.cs" />
@@ -455,10 +468,10 @@
     <Compile Include="Parser\Classes\LightProbes\LightProbes.cs" />
     <Compile Include="Parser\Classes\Light\FalloffTable.cs" />
     <Compile Include="Parser\Classes\Light\LightShadowCasterMode.cs" />
-    <Compile Include="Parser\Classes\Mesh\ChannelFormat\ChannelFormatV5.cs" />
-    <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelType.cs" />
-    <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelTypeV2018.cs" />
-    <Compile Include="Parser\Classes\Mesh\ChannelType\ChannelTypeV4.cs" />
+    <Compile Include="Parser\Classes\Mesh\VertexFormat\VertexFormatV2017.cs" />
+    <Compile Include="Parser\Classes\Mesh\ShaderChannel\ShaderChannel.cs" />
+    <Compile Include="Parser\Classes\Mesh\ShaderChannel\ShaderChannelV2018.cs" />
+    <Compile Include="Parser\Classes\Mesh\ShaderChannel\ShaderChannelV4.cs" />
     <Compile Include="Parser\Classes\Mesh\MeshCompression.cs" />
     <Compile Include="Parser\Classes\Mesh\MeshTopology.cs" />
     <Compile Include="Parser\Classes\MonoManager.cs" />
@@ -1166,6 +1179,7 @@
     <Compile Include="Utils\ThreadSafeRandom.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup />

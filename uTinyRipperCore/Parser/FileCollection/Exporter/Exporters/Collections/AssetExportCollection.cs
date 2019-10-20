@@ -93,7 +93,7 @@ namespace uTinyRipper.AssetExporters
 
 		protected virtual bool ExportInner(ProjectAssetContainer container, string filePath)
 		{
-			return AssetExporter.Export(container, Asset, filePath);
+			return AssetExporter.Export(container, Asset.Convert(container), filePath);
 		}
 
 		public override IAssetExporter AssetExporter { get; }

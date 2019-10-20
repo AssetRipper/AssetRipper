@@ -8,7 +8,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct Vector3i : ISerializableStructure
+	public struct Vector3i : IAsset, ISerializableStructure
 	{
 		public Vector3i(int x, int y, int z)
 		{
@@ -79,11 +79,11 @@ namespace uTinyRipper.Classes
 			Z = reader.ReadInt32();
 		}
 
-		public void Write(BinaryWriter stream)
+		public void Write(AssetWriter writer)
 		{
-			stream.Write(X);
-			stream.Write(Y);
-			stream.Write(Z);
+			writer.Write(X);
+			writer.Write(Y);
+			writer.Write(Z);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -131,9 +131,9 @@ namespace uTinyRipper.Classes
 			return $"[{X}, {Y}, {Z}]";
 		}
 
-		public int X { get; private set; }
-		public int Y { get; private set; }
-		public int Z { get; private set; }
+		public int X { get; set; }
+		public int Y { get; set; }
+		public int Z { get; set; }
 
 		public const string XName = "x";
 		public const string YName = "y";

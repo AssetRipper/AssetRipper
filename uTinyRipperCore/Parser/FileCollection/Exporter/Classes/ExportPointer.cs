@@ -1,5 +1,4 @@
-﻿using System;
-using uTinyRipper.Classes;
+﻿using uTinyRipper.Classes;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.AssetExporters.Classes
@@ -29,11 +28,11 @@ namespace uTinyRipper.AssetExporters.Classes
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Style = MappingStyle.Flow;
-			node.Add("fileID", FileID);
-			if(!GUID.IsZero)
+			node.Add(FileIDName, FileID);
+			if (!GUID.IsZero)
 			{
-				node.Add("guid", GUID.ExportYAML(container));
-				node.Add("type", (int)AssetType);
+				node.Add(GuidName, GUID.ExportYAML(container));
+				node.Add(TypeName, (int)AssetType);
 			}
 			return node;
 		}
@@ -43,5 +42,9 @@ namespace uTinyRipper.AssetExporters.Classes
 		public long FileID { get; }
 		public EngineGUID GUID { get; }
 		public AssetType AssetType { get; }
+
+		public const string FileIDName = "fileID";
+		public const string GuidName = "guid";
+		public const string TypeName = "type";
 	}
 }

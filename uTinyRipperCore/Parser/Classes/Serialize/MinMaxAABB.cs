@@ -3,12 +3,18 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
-	public struct MinMaxAABB : IAssetReadable, IYAMLExportable
+	public struct MinMaxAABB : IAsset
 	{
 		public void Read(AssetReader reader)
 		{
 			Min.Read(reader);
 			Max.Read(reader);
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			Min.Write(writer);
+			Max.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

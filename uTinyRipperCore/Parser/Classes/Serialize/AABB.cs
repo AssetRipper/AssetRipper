@@ -6,7 +6,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct AABB : ISerializableStructure
+	public struct AABB : IAsset, ISerializableStructure
 	{
 		public AABB(Vector3f center, Vector3f extent)
 		{
@@ -18,6 +18,12 @@ namespace uTinyRipper.Classes
 		{
 			Center.Read(reader);
 			Extent.Read(reader);
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			Center.Write(writer);
+			Extent.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

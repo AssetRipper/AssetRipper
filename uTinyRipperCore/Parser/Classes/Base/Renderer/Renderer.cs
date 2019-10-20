@@ -15,6 +15,20 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
+		/// 1.5.0 and greater
+		/// </summary>
+		public static bool IsReadEnabled(Version version)
+		{
+			return version.IsGreaterEqual(1, 5);
+		}
+		/// <summary>
+		/// 2.0.0 and greater
+		/// </summary>
+		public static bool IsReadCastShadows(Version version)
+		{
+			return version.IsGreaterEqual(2);
+		}
+		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
 		public static bool IsReadDynamicOccludee(Version version)
@@ -368,14 +382,20 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			Enabled = reader.ReadBoolean();
+			if (IsReadEnabled(reader.Version))
+			{
+				Enabled = reader.ReadBoolean();
+			}
 			if (IsAlign1(reader.Version))
 			{
 				reader.AlignStream(AlignType.Align4);
 			}
 
-			CastShadows = (ShadowCastingMode)reader.ReadByte();
-			ReceiveShadows = reader.ReadByte();
+			if (IsReadCastShadows(reader.Version))
+			{
+				CastShadows = (ShadowCastingMode)reader.ReadByte();
+				ReceiveShadows = reader.ReadByte();
+			}
 			if (IsReadDynamicOccludee(reader.Version))
 			{
 				DynamicOccludee = reader.ReadByte();
@@ -590,9 +610,9 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(EnabledName, Enabled);
-			node.Add(CastShadowsName, (byte)CastShadows);
-			node.Add(ReceiveShadowsName, ReceiveShadows);
+			node.Add(EnabledName, GetEnabled(container.Version));
+			node.Add(CastShadowsName, (byte)GetCastShadows(container.Version));
+			node.Add(ReceiveShadowsName, GetReceiveShadows(container.Version));
 			node.Add(DynamicOccludeeName, GetDynamicOccludee(container.Version));
 			node.Add(MotionVectorsName, (byte)GetMotionVectors(container.Version));
 			node.Add(LightProbeUsageName, (byte)LightProbeUsage);
@@ -630,6 +650,18 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
+		private bool GetEnabled(Version version)
+		{
+			return IsReadEnabled(version) ? Enabled : true;
+		}
+		private ShadowCastingMode GetCastShadows(Version version)
+		{
+			return IsReadCastShadows(version) ? CastShadows : ShadowCastingMode.On;
+		}
+		private byte GetReceiveShadows(Version version)
+		{
+			return IsReadCastShadows(version) ? ReceiveShadows : (byte)1;
+		}
 		private int GetDynamicOccludee(Version version)
 		{
 			return IsReadDynamicOccludee(version) ? DynamicOccludee : 1;

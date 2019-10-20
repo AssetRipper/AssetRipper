@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Textures;
@@ -183,7 +182,7 @@ namespace uTinyRipper.Classes
 				if (mipMap)
 				{
 					int maxSide = Math.Max(Width, Height);
-					MipCount = Convert.ToInt32(Math.Log(maxSide) / Math.Log(2));
+					MipCount = System.Convert.ToInt32(Math.Log(maxSide) / Math.Log(2));
 				}
 				else
 				{
@@ -354,7 +353,6 @@ namespace uTinyRipper.Classes
 		public const string LightmapFormatName = "m_LightmapFormat";
 		public const string ColorSpaceName = "m_ColorSpace";
 		public const string ImageDataName = "image data";
-		public const string TypelessdataName = "_typelessdata";
 		public const string StreamDataName = "m_StreamData";
 
 		public TextureSettings TextureSettings;
