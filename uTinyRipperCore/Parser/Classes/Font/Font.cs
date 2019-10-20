@@ -251,14 +251,20 @@ namespace uTinyRipper.Classes
 				}
 			}
 
+#warning TODO: dictionary with non unique keys
 			if (IsByteKerningValues(reader.Version))
 			{
-				m_kerningValuesByte = new Dictionary<Tuple<byte, byte>, float>();
-				m_kerningValuesByte.Read(reader);
+				Dictionary<Tuple<byte, byte>, float> kerningValues = new Dictionary<Tuple<byte, byte>, float>();
+				kerningValues.ReadSafe(reader);
+				foreach (var kvp in kerningValues)
+				{
+					Tuple<ushort, ushort> key = new Tuple<ushort, ushort>(kvp.Key.Item1, kvp.Key.Item2);
+					m_kerningValues.Add(key, kvp.Value);
+				}
 			}
 			else
 			{
-				m_kerningValues.Read(reader);
+				m_kerningValues.ReadSafe(reader);
 			}
 
 			if (IsReadPixelScale(reader.Version))
@@ -413,7 +419,6 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<CharacterInfo> CharacterRects => m_characterRects;
 		public bool GridFont { get; private set; }
 		public float PixelScale { get; private set; }
-		public IReadOnlyDictionary<Tuple<byte, byte>, float> KerningValuesByte => m_kerningValuesByte;
 		public IReadOnlyDictionary<Tuple<ushort, ushort>, float> KerningValues => m_kerningValues;
 		public IReadOnlyList<byte> FontData => m_fontData;
 		public float FontSize { get; private set; }
@@ -456,7 +461,6 @@ namespace uTinyRipper.Classes
 		private Tuple<byte, float>[] m_perCharacterKerningByte;
 		private Tuple<int, float>[] m_perCharacterKerning;
 		private CharacterInfo[] m_characterRects;
-		private Dictionary<Tuple<byte, byte>, float> m_kerningValuesByte;
 		private byte[] m_fontData;
 		private string[] m_fontNames;
 		private PPtr<Font>[] m_fallbackFonts;
