@@ -135,26 +135,26 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Compile Include="Exporters\Audio\AudioConverter.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ConstantBufferChunk.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ConstantBufferFlags.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ConstantBufferType.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\DXProgramType.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\DXShaderObjectExporter.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ResourceBindingChunk.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ResourceChunk.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ResourceReturnType.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ShaderFlags.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ShaderGpuProgramTypeExtensions.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ShaderInputFlags.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ShaderInputType.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ShaderResourceViewDimension.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ShaderType.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ShaderTypeMember.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ShaderVariableClass.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ShaderVariableFlags.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\ShaderVariableType.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\Variable.cs" />
-    <Compile Include="ThirdParty\DXShaderExporter\VariableChunk.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ConstantBufferChunk.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ConstantBufferFlags.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ConstantBufferType.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\DXProgramType.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\DXShaderProgramRestorer.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ResourceBindingChunk.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ResourceChunk.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ResourceReturnType.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderFlags.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderGpuProgramTypeExtensions.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderInputFlags.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderInputType.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderResourceViewDimension.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderType.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderTypeMember.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderVariableClass.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderVariableFlags.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderVariableType.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\Variable.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\VariableChunk.cs" />
     <Compile Include="Exporters\Shader\ShaderHLSLccExporter.cs" />
     <Compile Include="Exporters\Shader\ShaderVulkanExporter.cs" />
     <Compile Include="Exporters\Texture\TextureConverter.cs" />
@@ -296,7 +296,7 @@
     </ContentWithTargetPath>
     <Reference Include="HLSLccWrapper_x86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\x86\HLSLccWrapper_x86.dll</HintPath>
+      <HintPath>Libraries\x86\HLSLccWrapper.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup Condition=" '$(Platform)' == 'x64' ">
@@ -326,7 +326,7 @@
     </ContentWithTargetPath>
     <Reference Include="HLSLccWrapper_x64, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\x64\HLSLccWrapper_x64.dll</HintPath>
+      <HintPath>Libraries\x64\HLSLccWrapper.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
