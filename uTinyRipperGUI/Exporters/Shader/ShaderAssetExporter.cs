@@ -69,6 +69,7 @@ namespace uTinyRipperGUI.Exporters
 			{
 				case GPUPlatform.d3d9:
 				case GPUPlatform.d3d11_9x:
+					return new ShaderDXExporter(graphicApi);
 				case GPUPlatform.d3d11:
 					return new ShaderHLSLccExporter(graphicApi);
 
