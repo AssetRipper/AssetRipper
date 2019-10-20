@@ -1,114 +1,141 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using uTinyRipper;
 using uTinyRipper.Classes.Shaders;
 
-namespace DXShaderExporter
+namespace DXShaderRestorer
 {
 	internal class VariableHeader
 	{
-		internal uint nameOffset;
-		internal uint startOffset;
-		internal uint typeOffset;
-		internal Variable variable;
+		public uint NameOffset { get; set; }
+		public uint StartOffset { get; set; }
+		public uint TypeOffset { get; set; }
+		public Variable Variable { get; set; }
 	}
+
 	internal class VariableChunk
 	{
-		private ConstantBuffer constantBuffer;
-		private int constantBufferIndex;
-		private ShaderGpuProgramType programType;
-		List<Variable> variables;
-		List<VariableHeader> variableHeaders = new List<VariableHeader>();
-		Dictionary<string, uint> variableNameLookup = new Dictionary<string, uint>();
-		Dictionary<ShaderType, uint> typeLookup = new Dictionary<ShaderType, uint>();
-		int majorVersion;
-		uint size;
-		internal uint Size => size;
-		internal uint Count => (uint)variables.Count;
-
 		public VariableChunk(ConstantBuffer constantBuffer, int constantBufferIndex, uint variableOffset, ShaderGpuProgramType programType)
 		{
 			const int memberSize = 12;
-			this.constantBuffer = constantBuffer;
-			this.constantBufferIndex = constantBufferIndex;
-			this.programType = programType;
-			this.variables = BuildVariables(constantBuffer);
+			m_constantBufferIndex = constantBufferIndex;
+			m_programType = programType;
+			m_variables = BuildVariables(constantBuffer);
 
-			majorVersion = DXShaderObjectExporter.GetMajorVersion(programType);
+			majorVersion = programType.GetMajorDXVersion();
 			uint variableSize = majorVersion >= 5 ? (uint)40 : (uint)24;
-			uint variableCount = (uint)variables.Count;
+			uint variableCount = (uint)m_variables.Count;
 			uint dataOffset = variableOffset + variableCount * variableSize;
-			foreach (var variable in variables)
+			foreach (Variable variable in m_variables)
 			{
-				variableNameLookup[variable.Name] = dataOffset;
-				var header = new VariableHeader();
-				header.nameOffset = dataOffset;
+				m_variableNameLookup[variable.Name] = dataOffset;
+				VariableHeader header = new VariableHeader();
+				header.NameOffset = dataOffset;
 				dataOffset += (uint)variable.Name.Length + 1;
-				header.startOffset = (uint)variable.Index;
-				header.variable = variable;
+				header.StartOffset = (uint)variable.Index;
+				header.Variable = variable;
 
-				typeLookup[variable.ShaderType] = dataOffset;
+				m_typeLookup[variable.ShaderType] = dataOffset;
 				dataOffset += variable.ShaderType.Size();
 
-				variable.ShaderType.MemberOffset = variable.ShaderType.members.Count > 0 ? dataOffset : 0;
-				dataOffset += (uint)variable.ShaderType.members.Count * memberSize;
+				variable.ShaderType.MemberOffset = variable.ShaderType.Members.Count > 0 ? dataOffset : 0;
+				dataOffset += (uint)variable.ShaderType.Members.Count * memberSize;
 
-				foreach (var member in variable.ShaderType.members)
+				foreach (ShaderTypeMember member in variable.ShaderType.Members)
 				{
-					variableNameLookup[member.Name] = dataOffset;
+					m_variableNameLookup[member.Name] = dataOffset;
 					dataOffset += (uint)member.Name.Length + 1;
 
-					typeLookup[member.ShaderType] = dataOffset;
+					m_typeLookup[member.ShaderType] = dataOffset;
 					dataOffset += member.ShaderType.Size();
 				}
 
-				variableHeaders.Add(header);
+				m_variableHeaders.Add(header);
 			}
-			size = dataOffset - variableOffset;
+			Size = dataOffset - variableOffset;
 		}
-		List<Variable> BuildVariables(ConstantBuffer constantBuffer)
+
+		internal void Write(EndianWriter writer)
+		{
+			foreach (VariableHeader header in m_variableHeaders)
+			{
+				WriteVariableHeader(writer, header);
+			}
+			foreach (Variable variable in m_variables)
+			{
+				writer.WriteStringZeroTerm(variable.Name);
+				WriteShaderType(writer, variable.ShaderType);
+
+				foreach (ShaderTypeMember member in variable.ShaderType.Members)
+				{
+					uint nameOffset = m_variableNameLookup[member.Name];
+					writer.Write(nameOffset);
+					uint memberOffset = m_typeLookup[member.ShaderType];
+					writer.Write(memberOffset);
+					writer.Write(member.Index);
+				}
+				foreach (ShaderTypeMember member in variable.ShaderType.Members)
+				{
+					writer.WriteStringZeroTerm(member.Name);
+					WriteShaderType(writer, member.ShaderType);
+				}
+			}
+		}
+
+		private List<Variable> BuildVariables(ConstantBuffer constantBuffer)
 		{
 			List<Variable> variables = new List<Variable>();
-			foreach (var param in constantBuffer.MatrixParams) variables.Add(new Variable(param, programType));
-			foreach (var param in constantBuffer.VectorParams) variables.Add(new Variable(param, programType));
-			foreach (var param in constantBuffer.StructParams) variables.Add(new Variable(param, programType));
+			foreach (MatrixParameter param in constantBuffer.MatrixParams)
+			{
+				variables.Add(new Variable(param, m_programType));
+			}
+			foreach (VectorParameter param in constantBuffer.VectorParams)
+			{
+				variables.Add(new Variable(param, m_programType));
+			}
+			foreach (StructParameter param in constantBuffer.StructParams)
+			{
+				variables.Add(new Variable(param, m_programType));
+			}
 			variables = variables.OrderBy(v => v.Index).ToList();
 			//Dummy variables prevents errors in rare edge cases but produces more verbose output
 			bool useDummyVariables = true;
-			if(useDummyVariables) {
-				var allVariables = new List<Variable>();
+			if (useDummyVariables)
+			{
+				List<Variable> allVariables = new List<Variable>();
 				uint currentSize = 0;
 				for (int i = 0; i < variables.Count; i++)
 				{
-					var variable = variables[i];
+					Variable variable = variables[i];
 					if (variable.Index > currentSize)
 					{
-						var sizeToAdd = variable.Index - currentSize;
-						var id1 = constantBufferIndex;
-						var id2 = allVariables.Count;
-						allVariables.Add(new Variable($"unused_{id1}_{id2}", (int)currentSize, (int)sizeToAdd, programType));
+						long sizeToAdd = variable.Index - currentSize;
+						int id1 = m_constantBufferIndex;
+						int id2 = allVariables.Count;
+						allVariables.Add(new Variable($"unused_{id1}_{id2}", (int)currentSize, (int)sizeToAdd, m_programType));
 					}
 					allVariables.Add(variable);
 					currentSize = (uint)variable.Index + variable.ShaderType.Size();
 				}
 				if (currentSize < constantBuffer.Size)
 				{
-					var sizeToAdd = constantBuffer.Size - currentSize;
-					var id1 = constantBufferIndex;
-					var id2 = allVariables.Count;
-					allVariables.Add(new Variable($"unused_{id1}_{id2}", (int)currentSize, (int)sizeToAdd, programType));
+					long sizeToAdd = constantBuffer.Size - currentSize;
+					int id1 = m_constantBufferIndex;
+					int id2 = allVariables.Count;
+					allVariables.Add(new Variable($"unused_{id1}_{id2}", (int)currentSize, (int)sizeToAdd, m_programType));
 				}
 				variables = allVariables;
-			} else {
+			}
+			else
+			{
 				for (int i = 0; i < variables.Count; i++)
 				{
 					if (i < variables.Count - 1)
 					{
 						variables[i].Length = (uint)variables[i + 1].Index - (uint)variables[i].Index;
-					} else
+					}
+					else
 					{
 						variables[i].Length = (uint)constantBuffer.Size - (uint)variables[i].Index;
 					}
@@ -116,44 +143,19 @@ namespace DXShaderExporter
 			}
 			return variables;
 		}
-		internal void Write(EndianWriter writer)
-		{
-			foreach(var header in variableHeaders)
-			{
-				WriteVariableHeader(writer, header);
-			}
-			foreach (var variable in variables)
-			{
-				writer.WriteStringZeroTerm(variable.Name);
-				WriteShaderType(writer, variable.ShaderType);
 
-				foreach (var member in variable.ShaderType.members)
-				{
-					var nameOffset = variableNameLookup[member.Name];
-					writer.Write(nameOffset);
-					var memberOffset = typeLookup[member.ShaderType];
-					writer.Write(memberOffset);
-					writer.Write(member.Index);
-				}
-				foreach (var member in variable.ShaderType.members)
-				{
-					writer.WriteStringZeroTerm(member.Name);
-					WriteShaderType(writer, member.ShaderType);
-				}
-			}
-		}
 		private void WriteVariableHeader(EndianWriter writer, VariableHeader header)
 		{
 			//name offset
-			writer.Write(header.nameOffset);
+			writer.Write(header.NameOffset);
 			//startOffset
-			writer.Write(header.startOffset);
+			writer.Write(header.StartOffset);
 			//Size
-			writer.Write(header.variable.Length);
+			writer.Write(header.Variable.Length);
 			//flags
 			writer.Write((uint)ShaderVariableFlags.Used); //Unity only packs used variables as far as I can tell
 
-			var typeOffset = typeLookup[header.variable.ShaderType];
+			uint typeOffset = m_typeLookup[header.Variable.ShaderType];
 			//type offset
 			writer.Write(typeOffset);
 			//default value offset
@@ -170,6 +172,7 @@ namespace DXShaderExporter
 				writer.Write((uint)0);
 			}
 		}
+
 		private void WriteShaderType(EndianWriter writer, ShaderType shaderType)
 		{
 			writer.Write((ushort)shaderType.ShaderVariableClass);
@@ -181,19 +184,31 @@ namespace DXShaderExporter
 			writer.Write(shaderType.MemberOffset);
 			if (majorVersion >= 5)
 			{
-				if (shaderType.parentTypeOffset != 0 ||
-					shaderType.unknown2 != 0 ||
-					shaderType.unknown5 != 0 ||
-					shaderType.parentNameOffset != 0)
+				if (shaderType.ParentTypeOffset != 0 ||
+					shaderType.Unknown2 != 0 ||
+					shaderType.Unknown5 != 0 ||
+					shaderType.ParentNameOffset != 0)
 				{
 					throw new Exception("Shader variable type has invalid value");
 				}
-				writer.Write(shaderType.parentTypeOffset);
-				writer.Write(shaderType.unknown2);
-				writer.Write(shaderType.unknown4);
-				writer.Write(shaderType.unknown5);
-				writer.Write(shaderType.parentNameOffset);
+				writer.Write(shaderType.ParentTypeOffset);
+				writer.Write(shaderType.Unknown2);
+				writer.Write(shaderType.Unknown4);
+				writer.Write(shaderType.Unknown5);
+				writer.Write(shaderType.ParentNameOffset);
 			}
 		}
+
+		internal uint Count => (uint)m_variables.Count;
+		internal uint Size { get; }
+
+		private readonly List<VariableHeader> m_variableHeaders = new List<VariableHeader>();
+		private readonly Dictionary<string, uint> m_variableNameLookup = new Dictionary<string, uint>();
+		private readonly Dictionary<ShaderType, uint> m_typeLookup = new Dictionary<ShaderType, uint>();
+		private readonly List<Variable> m_variables;
+
+		private readonly int m_constantBufferIndex;
+		private readonly ShaderGpuProgramType m_programType;
+		private readonly int majorVersion;
 	}
 }

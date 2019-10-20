@@ -87,6 +87,7 @@ namespace uTinyRipper.Classes.Shaders
 		public void Export(ShaderWriter writer, ShaderSubProgramBlob blob, ShaderType type, bool isTier)
 		{
 			writer.WriteIndent(4);
+#warning TODO: convertion (DX to HLSL)
 			writer.Write("SubProgram \"{0} ", GpuProgramType.ToGPUPlatform(writer.Platform));
 			if (isTier)
 			{

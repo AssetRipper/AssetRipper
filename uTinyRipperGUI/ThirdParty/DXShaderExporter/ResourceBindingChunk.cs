@@ -1,58 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using uTinyRipper;
 using uTinyRipper.Classes.Shaders;
 
-namespace DXShaderExporter
+namespace DXShaderRestorer
 {
 	internal class ResourceBindingChunk
 	{
-		private ShaderSubProgram shaderSubprogram;
-		private uint resourceBindingOffset;
-		private Dictionary<string, uint> nameLookup;
-		uint size;
 		public ResourceBindingChunk(ShaderSubProgram shaderSubprogram, uint resourceBindingOffset, Dictionary<string, uint> nameLookup)
 		{
-			this.shaderSubprogram = shaderSubprogram;
-			this.resourceBindingOffset = resourceBindingOffset;
-			this.nameLookup = nameLookup;
+			m_shaderSubprogram = shaderSubprogram;
+			m_nameLookup = nameLookup;
 
 			const uint bindingHeaderSize = 32;
 			uint nameOffset = resourceBindingOffset + bindingHeaderSize * Count;
-			foreach (var bufferParam in shaderSubprogram.BufferParameters)
+			foreach (BufferBinding bufferParam in shaderSubprogram.BufferParameters)
 			{
 				nameLookup[bufferParam.Name] = nameOffset;
 				nameOffset += (uint)bufferParam.Name.Length + 1;
 			}
-			foreach (var textureParam in shaderSubprogram.TextureParameters)
+			foreach (TextureParameter textureParam in shaderSubprogram.TextureParameters)
 			{
 				nameLookup[textureParam.Name] = nameOffset;
 				nameOffset += (uint)textureParam.Name.Length + 1;
 			}
-			foreach (var constantBuffer in shaderSubprogram.ConstantBufferBindings)
+			foreach (BufferBinding constantBuffer in shaderSubprogram.ConstantBufferBindings)
 			{
 				nameLookup[constantBuffer.Name] = nameOffset;
 				nameOffset += (uint)constantBuffer.Name.Length + 1;
 			}
-			size = nameOffset - resourceBindingOffset;
+			Size = nameOffset - resourceBindingOffset;
 		}
 
-		internal uint Size => size;
-		internal uint Count => (uint)shaderSubprogram.ConstantBuffers.Count +
-			(uint)shaderSubprogram.TextureParameters.Count * 2 +
-			(uint)shaderSubprogram.BufferParameters.Count;
+		internal uint Count => (uint)m_shaderSubprogram.ConstantBuffers.Length +
+			(uint)m_shaderSubprogram.TextureParameters.Length * 2 + (uint)m_shaderSubprogram.BufferParameters.Length;
+
+		internal uint Size { get; }
 
 		internal void Write(EndianWriter writer)
 		{
 			uint bindPoint = 0;
-			foreach (var bufferParam in shaderSubprogram.BufferParameters)
+			foreach (BufferBinding bufferParam in m_shaderSubprogram.BufferParameters)
 			{
 				//Resource bindings
 				//nameOffset
-				writer.Write(nameLookup[bufferParam.Name]);
+				writer.Write(m_nameLookup[bufferParam.Name]);
 				//shader input type
 				writer.Write((uint)ShaderInputType.Structured);
 				//Resource return type
@@ -70,11 +61,11 @@ namespace DXShaderExporter
 				writer.Write((uint)ShaderInputFlags.None);
 			}
 			bindPoint = 0;
-			foreach (var textureParam in shaderSubprogram.TextureParameters)
+			foreach (TextureParameter textureParam in m_shaderSubprogram.TextureParameters)
 			{
 				//Resource bindings
 				//nameOffset
-				writer.Write(nameLookup[textureParam.Name]);
+				writer.Write(m_nameLookup[textureParam.Name]);
 				//shader input type
 				writer.Write((uint)ShaderInputType.Sampler);
 				//Resource return type
@@ -92,11 +83,11 @@ namespace DXShaderExporter
 				writer.Write((uint)ShaderInputFlags.None);
 			}
 			bindPoint = 0;
-			foreach (var textureParam in shaderSubprogram.TextureParameters)
+			foreach (TextureParameter textureParam in m_shaderSubprogram.TextureParameters)
 			{
 				//Resource bindings
 				//nameOffset
-				writer.Write(nameLookup[textureParam.Name]);
+				writer.Write(m_nameLookup[textureParam.Name]);
 				//shader input type
 				writer.Write((uint)ShaderInputType.Texture);
 				//Resource return type
@@ -114,11 +105,11 @@ namespace DXShaderExporter
 				writer.Write((uint)ShaderInputFlags.None);
 			}
 			bindPoint = 0;
-			foreach (var constantBuffer in shaderSubprogram.ConstantBufferBindings)
+			foreach (BufferBinding constantBuffer in m_shaderSubprogram.ConstantBufferBindings)
 			{
 				//Resource bindings
 				//nameOffset
-				writer.Write(nameLookup[constantBuffer.Name]);
+				writer.Write(m_nameLookup[constantBuffer.Name]);
 				//shader input type
 				writer.Write((uint)ShaderInputType.CBuffer);
 				//Resource return type
@@ -136,18 +127,22 @@ namespace DXShaderExporter
 				writer.Write((uint)ShaderInputFlags.None);
 			}
 
-			foreach (var bufferParam in shaderSubprogram.BufferParameters)
+			foreach (BufferBinding bufferParam in m_shaderSubprogram.BufferParameters)
 			{
 				writer.WriteStringZeroTerm(bufferParam.Name);
 			}
-			foreach (var textureParam in shaderSubprogram.TextureParameters)
+			foreach (TextureParameter textureParam in m_shaderSubprogram.TextureParameters)
 			{
 				writer.WriteStringZeroTerm(textureParam.Name);
 			}
-			foreach (var constantBuffer in shaderSubprogram.ConstantBufferBindings)
+			foreach (BufferBinding constantBuffer in m_shaderSubprogram.ConstantBufferBindings)
 			{
 				writer.WriteStringZeroTerm(constantBuffer.Name);
 			}
 		}
+
+		private readonly Dictionary<string, uint> m_nameLookup;
+
+		private ShaderSubProgram m_shaderSubprogram;
 	}
 }

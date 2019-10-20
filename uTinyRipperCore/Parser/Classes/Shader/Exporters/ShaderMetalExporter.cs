@@ -4,34 +4,34 @@ namespace uTinyRipper.Classes.Shaders.Exporters
 {
 	public class ShaderMetalExporter : ShaderTextExporter
 	{
-		public ShaderMetalExporter(Version version)
+		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 		{
-			m_version = version;
-		}
-
-		protected override void Export(BinaryReader reader, TextWriter writer)
-		{
-			if (Shader.IsEncoded(m_version))
+			using (MemoryStream memStream = new MemoryStream(subProgram.ProgramData))
 			{
-				long position = reader.BaseStream.Position;
-				uint fourCC = reader.ReadUInt32();
-				if (fourCC == MetalFourCC)
+				using (BinaryReader reader = new BinaryReader(memStream))
 				{
-					int offset = reader.ReadInt32();
-					reader.BaseStream.Position = position + offset;
-				}
-				using (EndianReader endReader = new EndianReader(reader.BaseStream))
-				{
-					EntryName = endReader.ReadStringZeroTerm();
+					if (Shader.IsEncoded(writer.Version))
+					{
+						long position = reader.BaseStream.Position;
+						uint fourCC = reader.ReadUInt32();
+						if (fourCC == MetalFourCC)
+						{
+							int offset = reader.ReadInt32();
+							reader.BaseStream.Position = position + offset;
+						}
+						using (EndianReader endReader = new EndianReader(reader.BaseStream))
+						{
+							EntryName = endReader.ReadStringZeroTerm();
+						}
+					}
+
+					ExportText(writer, reader);
 				}
 			}
-			base.Export(reader, writer);
 		}
 
 		public string EntryName { get; private set; }
 
 		private const uint MetalFourCC = 0xf00dcafe;
-
-		private Version m_version;
 	}
 }

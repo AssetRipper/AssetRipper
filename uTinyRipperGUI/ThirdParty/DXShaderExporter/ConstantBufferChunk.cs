@@ -1,52 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using uTinyRipper;
 using uTinyRipper.Classes.Shaders;
 
-namespace DXShaderExporter
+namespace DXShaderRestorer
 {
 	internal class ConstantBufferChunk
 	{
-
-		private ShaderSubProgram shaderSubprogram;
-		private uint contantBufferOffset;
-		private Dictionary<string, uint> nameLookup;
-		List<VariableChunk> variables;
-		uint size;
-		internal ConstantBufferChunk(ShaderSubProgram shaderSubprogram, uint contantBufferOffset, Dictionary<string, uint> nameLookup)
+		public ConstantBufferChunk(ShaderSubProgram shaderSubprogram, uint contantBufferOffset, Dictionary<string, uint> nameLookup)
 		{
-			this.shaderSubprogram = shaderSubprogram;
-			this.contantBufferOffset = contantBufferOffset;
-			this.nameLookup = nameLookup;
+			m_shaderSubprogram = shaderSubprogram;
+			m_contantBufferOffset = contantBufferOffset;
+			m_nameLookup = nameLookup;
 
-			uint headerSize = (uint)shaderSubprogram.ConstantBuffers.Count * 24;
+			uint headerSize = (uint)shaderSubprogram.ConstantBuffers.Length * 24;
 			uint variableOffset = contantBufferOffset + headerSize;
-			variables = new List<VariableChunk>();
 			int constantBufferIndex = 0;
-			foreach (var constantBuffer in shaderSubprogram.ConstantBuffers)
+			List<VariableChunk> variables = new List<VariableChunk>();
+			foreach (ConstantBuffer constantBuffer in shaderSubprogram.ConstantBuffers)
 			{
-				var variableChunk = new VariableChunk(constantBuffer, constantBufferIndex++, variableOffset, shaderSubprogram.ProgramType);
+				VariableChunk variableChunk = new VariableChunk(constantBuffer, constantBufferIndex++, variableOffset, shaderSubprogram.ProgramType);
 				variables.Add(variableChunk);
 				variableOffset += variableChunk.Size;
 			}
-			size = variableOffset - contantBufferOffset;
+			m_variables = variables;
+			Size = variableOffset - contantBufferOffset;
 		}
-		internal uint Size => size;
 
-		internal uint Count => (uint)shaderSubprogram.ConstantBuffers.Count;
-
-		internal void Write(EndianWriter writer)
+		public void Write(EndianWriter writer)
 		{
-			uint headerSize = (uint)shaderSubprogram.ConstantBuffers.Count * 24;
-			uint variableOffset = contantBufferOffset + headerSize;
-			for(int i = 0; i < shaderSubprogram.ConstantBuffers.Count; i++)
+			uint headerSize = (uint)m_shaderSubprogram.ConstantBuffers.Length * 24;
+			uint variableOffset = m_contantBufferOffset + headerSize;
+			for (int i = 0; i < m_shaderSubprogram.ConstantBuffers.Length; i++)
 			{
-				var constantBuffer = shaderSubprogram.ConstantBuffers[i];
-				var variableChunk = variables[i];
-				uint nameOffset = nameLookup[constantBuffer.Name];
+				ConstantBuffer constantBuffer = m_shaderSubprogram.ConstantBuffers[i];
+				VariableChunk variableChunk = m_variables[i];
+				uint nameOffset = m_nameLookup[constantBuffer.Name];
 				writer.Write(nameOffset);
 				writer.Write(variableChunk.Count);
 				writer.Write(variableOffset);
@@ -57,10 +45,20 @@ namespace DXShaderExporter
 				writer.Write((uint)ConstantBufferType.ConstantBuffer);
 				variableOffset += variableChunk.Size;
 			}
-			foreach (var variableChunk in variables)
+			foreach (VariableChunk variableChunk in m_variables)
 			{
 				variableChunk.Write(writer);
 			}
 		}
+
+		internal uint Count => (uint)m_shaderSubprogram.ConstantBuffers.Length;
+
+		internal uint Size { get; }
+
+		private readonly IReadOnlyList<VariableChunk> m_variables;
+		private readonly Dictionary<string, uint> m_nameLookup;
+		private readonly uint m_contantBufferOffset;
+
+		private ShaderSubProgram m_shaderSubprogram;
 	}
 }

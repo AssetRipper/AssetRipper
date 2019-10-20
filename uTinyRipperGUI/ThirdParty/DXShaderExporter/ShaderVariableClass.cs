@@ -1,4 +1,4 @@
-﻿namespace DXShaderExporter
+﻿namespace DXShaderRestorer
 {
 	internal enum ShaderVariableClass
 	{
@@ -9,6 +9,6 @@
 		Object,
 		Struct,
 		InterfaceClass,
-		InterfacePointer
+		InterfacePointer,
 	}
 }

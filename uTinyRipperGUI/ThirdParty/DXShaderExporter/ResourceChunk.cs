@@ -3,52 +3,39 @@ using System.Text;
 using uTinyRipper;
 using uTinyRipper.Classes.Shaders;
 
-namespace DXShaderExporter
+namespace DXShaderRestorer
 {
 	internal class ResourceChunk
 	{
-		//Length of Resource starting from constantBufferCount
-		uint chunkSize;
-		uint constantBufferOffset;
-		uint resourceBindingOffset;
-		DXProgramType programType;
-		uint creatorStringOffset;
-		ConstantBufferChunk constantBuffers;
-		ResourceBindingChunk resourceBindings;
-		string creatorString;
-		Dictionary<string, uint> NameLookup = new Dictionary<string, uint>();
-		byte majorVersion;
 		public ResourceChunk(ShaderSubProgram shaderSubprogram)
 		{
-			majorVersion = (byte)DXShaderObjectExporter.GetMajorVersion(shaderSubprogram.ProgramType);
-			resourceBindingOffset = majorVersion >= 5 ? (uint)60 : (uint)28;
-			resourceBindings = new ResourceBindingChunk(shaderSubprogram, resourceBindingOffset, NameLookup);
-			constantBufferOffset = resourceBindingOffset + resourceBindings.Size;
-			constantBuffers = new ConstantBufferChunk(shaderSubprogram, constantBufferOffset, NameLookup);
-			creatorStringOffset = constantBufferOffset + constantBuffers.Size;
-			creatorString = "uTinyRipper";
-			chunkSize = creatorStringOffset + (uint)creatorString.Length + 1;
-
-			programType = DXShaderObjectExporter.GetDXProgramType(shaderSubprogram.ProgramType);
-
-
+			m_majorVersion = (byte)shaderSubprogram.ProgramType.GetMajorDXVersion();
+			m_resourceBindingOffset = m_majorVersion >= 5 ? (uint)60 : (uint)28;
+			m_resourceBindings = new ResourceBindingChunk(shaderSubprogram, m_resourceBindingOffset, m_nameLookup);
+			m_constantBufferOffset = m_resourceBindingOffset + m_resourceBindings.Size;
+			m_constantBuffers = new ConstantBufferChunk(shaderSubprogram, m_constantBufferOffset, m_nameLookup);
+			m_creatorStringOffset = m_constantBufferOffset + m_constantBuffers.Size;
+			m_creatorString = "uTinyRipper";
+			m_chunkSize = m_creatorStringOffset + (uint)m_creatorString.Length + 1;
+			m_programType = shaderSubprogram.ProgramType.ToDXProgramType();
 		}
+
 		public void Write(EndianWriter writer)
 		{
 			writer.Write(Encoding.ASCII.GetBytes("RDEF"));
-			writer.Write(chunkSize);
-			writer.Write(constantBuffers.Count);
-			writer.Write(constantBufferOffset);
-			writer.Write(resourceBindings.Count);
-			writer.Write(resourceBindingOffset);
+			writer.Write(m_chunkSize);
+			writer.Write(m_constantBuffers.Count);
+			writer.Write(m_constantBufferOffset);
+			writer.Write(m_resourceBindings.Count);
+			writer.Write(m_resourceBindingOffset);
 			byte minorVersion = 0;
 			writer.Write(minorVersion);
-			writer.Write(majorVersion);
-			writer.Write((ushort)programType);
+			writer.Write(m_majorVersion);
+			writer.Write((ushort)m_programType);
 			var flags = ShaderFlags.NoPreshader;
 			writer.Write((uint)flags);
-			writer.Write(creatorStringOffset);
-			if (majorVersion >= 5)
+			writer.Write(m_creatorStringOffset);
+			if (m_majorVersion >= 5)
 			{
 				//rd11
 				writer.Write(Encoding.ASCII.GetBytes("RD11"));
@@ -67,10 +54,24 @@ namespace DXShaderExporter
 				//InterfaceSlotCount
 				writer.Write((uint)0);
 			}
-			resourceBindings.Write(writer);
-			constantBuffers.Write(writer);
-			writer.WriteStringZeroTerm(creatorString);
+			m_resourceBindings.Write(writer);
+			m_constantBuffers.Write(writer);
+			writer.WriteStringZeroTerm(m_creatorString);
 		}
-		public uint Size => chunkSize + 8;
+
+		public uint Size => m_chunkSize + 8;
+
+		private readonly Dictionary<string, uint> m_nameLookup = new Dictionary<string, uint>();
+
+		//Length of Resource starting from constantBufferCount
+		private readonly uint m_chunkSize;
+		private readonly uint m_constantBufferOffset;
+		private readonly uint m_resourceBindingOffset;
+		private readonly DXProgramType m_programType;
+		private readonly uint m_creatorStringOffset;
+		private readonly ConstantBufferChunk m_constantBuffers;
+		private readonly ResourceBindingChunk m_resourceBindings;
+		private readonly string m_creatorString;
+		private readonly byte m_majorVersion;
 	}
 }

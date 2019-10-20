@@ -1,26 +1,28 @@
 ﻿using uTinyRipper.Classes.Shaders;
 
-namespace DXShaderExporter
+namespace DXShaderRestorer
 {
 	class ShaderTypeMember
 	{
-		public string Name;
-		public ShaderType ShaderType;
-		ShaderGpuProgramType programType;
-		public uint Index;
 		public ShaderTypeMember(MatrixParameter param, ShaderGpuProgramType programType)
 		{
-			this.programType = programType;
+			this.ProgramType = programType;
 			Name = param.Name;
 			ShaderType = new ShaderType(param, programType);
 			Index = (uint)param.Index;
 		}
+
 		public ShaderTypeMember(VectorParameter param, ShaderGpuProgramType programType)
 		{
-			this.programType = programType;
+			this.ProgramType = programType;
 			Name = param.Name;
 			ShaderType = new ShaderType(param, programType);
 			Index = (uint)param.Index;
 		}
+
+		public string Name { get; }
+		public ShaderType ShaderType { get; }
+		public ShaderGpuProgramType ProgramType { get; }
+		public uint Index { get; }
 	}
 }

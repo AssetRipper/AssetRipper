@@ -1,34 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using uTinyRipper.Classes.Shaders;
 
-namespace DXShaderExporter
+namespace DXShaderRestorer
 {
 	internal class ShaderType
 	{
-		public ShaderVariableClass ShaderVariableClass;
-		public ShaderVariableType ShaderVariableType;
-		public ushort Rows;
-		public ushort Columns;
-		public ushort ElementCount;
-		public ushort MemberCount;
-		public uint MemberOffset;
-		//SM 5.0 Variables
-		public uint parentTypeOffset = 0;
-		public uint unknown2 = 0;
-		public uint unknown4 = 0;
-		public uint unknown5 = 0;
-		public uint parentNameOffset;
-		public List<ShaderTypeMember> members = new List<ShaderTypeMember>();
-		ShaderGpuProgramType programType;
 		public ShaderType(StructParameter structParameter, ShaderGpuProgramType programType)
 		{
-			members.AddRange(structParameter.VectorMembers.Select(p => new ShaderTypeMember(p, programType)));
-			members.AddRange(structParameter.MatrixMembers.Select(p => new ShaderTypeMember(p, programType)));
-			members = members
+			Members.AddRange(structParameter.VectorMembers.Select(p => new ShaderTypeMember(p, programType)));
+			Members.AddRange(structParameter.MatrixMembers.Select(p => new ShaderTypeMember(p, programType)));
+			Members = Members
 				.OrderBy(v => v.Index)
 				.ToList();
 			ShaderVariableClass = ShaderVariableClass.Struct; //TODO: matrix colums or rows?
@@ -36,10 +19,11 @@ namespace DXShaderExporter
 			Rows = 0;
 			Columns = 0;
 			ElementCount = 0;
-			MemberCount = (ushort)members.Count();
+			MemberCount = (ushort)Members.Count();
 			MemberOffset = 0;
-			this.programType = programType;
+			m_programType = programType;
 		}
+
 		public ShaderType(MatrixParameter matrixParam, ShaderGpuProgramType programType)
 		{
 			ShaderVariableClass = ShaderVariableClass.MatrixColumns;
@@ -49,8 +33,9 @@ namespace DXShaderExporter
 			ElementCount = (ushort)matrixParam.ArraySize;
 			MemberCount = 0;
 			MemberOffset = 0;
-			this.programType = programType;
+			m_programType = programType;
 		}
+
 		public ShaderType(VectorParameter vectorParam, ShaderGpuProgramType programType)
 		{
 			ShaderVariableClass = vectorParam.Dim > 1 ?
@@ -62,8 +47,9 @@ namespace DXShaderExporter
 			ElementCount = (ushort)vectorParam.ArraySize;
 			MemberCount = 0;
 			MemberOffset = 0;
-			this.programType = programType;
+			m_programType = programType;
 		}
+
 		static ShaderVariableType GetVariableType(ShaderParamType paramType)
 		{
 			switch (paramType)
@@ -86,6 +72,7 @@ namespace DXShaderExporter
 					throw new Exception($"Unexpected param type {paramType}");
 			}
 		}
+
 		/*public override bool Equals(object obj)
 		{
 			var shaderType = obj as ShaderType;
@@ -114,15 +101,35 @@ namespace DXShaderExporter
 				return hashCode;
 			}
 		}*/
+
 		public uint Length()
 		{
 			uint variableSize = 4; //TODO: does this vary with ShaderVariableType? 
 			return variableSize * Rows * Columns * ElementCount;
 		}
+
 		public uint Size()
 		{
-			var majorVersion = DXShaderObjectExporter.GetMajorVersion(programType);
+			int majorVersion = m_programType.GetMajorDXVersion();
 			return majorVersion >= 5 ? (uint)36 : (uint)16;
 		}
+
+		public ShaderVariableClass ShaderVariableClass { get; }
+		public ShaderVariableType ShaderVariableType { get; }
+		public ushort Rows { get; }
+		public ushort Columns { get; }
+		public ushort ElementCount { get; }
+		public ushort MemberCount { get; }
+		public uint MemberOffset { get; set; }
+		//SM 5.0 Variables
+		public uint ParentTypeOffset { get; }
+		public uint Unknown2 { get; }
+		public uint Unknown4 { get; }
+		public uint Unknown5 { get; }
+		public uint ParentNameOffset { get; }
+		public List<ShaderTypeMember> Members { get; } = new List<ShaderTypeMember>();
+
+
+		private readonly ShaderGpuProgramType m_programType;
 	}
 }

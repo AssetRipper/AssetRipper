@@ -1,4 +1,5 @@
-namespace DXShaderExporter{
+namespace DXShaderRestorer
+{
 	internal enum ResourceReturnType
 	{
 		NotApplicable = 0,

@@ -1,4 +1,4 @@
-namespace DXShaderExporter
+namespace DXShaderRestorer
 {
 	internal enum ShaderFlags
 	{
