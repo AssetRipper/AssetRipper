@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using uTinyRipper.Assembly;
 
 namespace uTinyRipper
 {
@@ -90,6 +91,25 @@ namespace uTinyRipper
 							}
 						}
 						break;
+				}
+			}
+		}
+
+		protected override void CollectAssemblies(DirectoryInfo root, IDictionary<string, string> assemblies)
+		{
+			foreach (FileInfo file in root.EnumerateFiles())
+			{
+				if (AssemblyManager.IsAssembly(file.Name))
+				{
+					if (assemblies.ContainsKey(file.Name))
+					{
+						Logger.Instance.Log(LogType.Warning, LogCategory.Import,
+							$"Duplicate assemblies found: '{assemblies[file.Name]}' & '{file.FullName}'");
+					}
+					else
+					{
+						assemblies.Add(file.Name, file.FullName);
+					}
 				}
 			}
 		}
