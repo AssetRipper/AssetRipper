@@ -6,7 +6,7 @@ using System.Text;
 
 namespace uTinyRipper.Assembly.Mono
 {
-	public struct MonoTypeContext
+	public readonly struct MonoTypeContext
 	{
 		public MonoTypeContext(TypeReference type):
 			this(type, GetDeclaringArguments(type))
@@ -28,11 +28,10 @@ namespace uTinyRipper.Assembly.Mono
 		{
 			if (type.HasGenericParameters)
 			{
-				// if context get created with template class, set arguments equals to itself
+				// if context get created for a template class, set arguments equals to itself
 				Dictionary<GenericParameter, TypeReference> templateArguments = new Dictionary<GenericParameter, TypeReference>(type.GenericParameters.Count);
-				for (int i = 0; i < type.GenericParameters.Count; i++)
+				foreach (GenericParameter parameter in type.GenericParameters)
 				{
-					GenericParameter parameter = type.GenericParameters[i];
 					templateArguments.Add(parameter, parameter);
 				}
 				return templateArguments;
@@ -56,12 +55,32 @@ namespace uTinyRipper.Assembly.Mono
 		/// <summary>
 		/// Replace all generic parameters with actual arguments
 		/// </summary>
-		/// <returns>Return new generic type if change was happened. Otherwise return itself</returns>
+		/// <returns>Return new generic type if change was happened. Otherwise return a self copy</returns>
 		public MonoTypeContext Resolve()
 		{
 			if (Type.ContainsGenericParameter)
 			{
 				return ResolveGenericParameter();
+			}
+			return this;
+		}
+
+		/// <summary>
+		/// Appends method generic arguments to current ones
+		/// </summary>
+		/// <returns>Return context with merged arguments if change was happened. Otherwise return a self copy</returns>
+		public MonoTypeContext Merge(MethodDefinition method)
+		{
+			if (method.HasGenericParameters)
+			{
+				int argsCount = method.GenericParameters.Count + Arguments.Count;
+				Dictionary<GenericParameter, TypeReference> arguments = new Dictionary<GenericParameter, TypeReference>(argsCount);
+				arguments.AddRange(Arguments);
+				foreach (GenericParameter parameter in method.GenericParameters)
+				{
+					arguments.Add(parameter, parameter);
+				}
+				return new MonoTypeContext(Type, arguments);
 			}
 			return this;
 		}

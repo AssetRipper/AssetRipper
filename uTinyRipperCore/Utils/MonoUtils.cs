@@ -268,6 +268,7 @@ namespace uTinyRipper
 				{
 					return false;
 				}
+				checkContext = checkContext.Merge(checkMethod);
 			}
 			if (!AreSame(method.ReturnType, checkContext, checkMethod.ReturnType))
 			{
