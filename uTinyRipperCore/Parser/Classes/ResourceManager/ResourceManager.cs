@@ -5,6 +5,7 @@ using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.ResourceManagers;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using System;
 
 namespace uTinyRipper.Classes
 {
@@ -73,7 +74,18 @@ namespace uTinyRipper.Classes
 			{
 				if (containerEntry.Value.IsAsset(File, asset))
 				{
-					resourcePath = Path.Combine(AssetsKeyword, ResourceKeyword, containerEntry.Key);
+					NamedObject named = (NamedObject)asset;
+					string validName = named.ValidName;
+					string resourceName = containerEntry.Key;
+					if (validName != resourceName && resourceName.EndsWith(validName, StringComparison.OrdinalIgnoreCase))
+					{
+						string directoryPath = resourceName.Substring(0, resourceName.Length - validName.Length);
+						resourcePath = Path.Combine(AssetsKeyword, ResourceKeyword, directoryPath, validName);
+					}
+					else
+					{
+						resourcePath = Path.Combine(AssetsKeyword, ResourceKeyword, resourceName);
+					}
 					return true;
 				}
 			}
