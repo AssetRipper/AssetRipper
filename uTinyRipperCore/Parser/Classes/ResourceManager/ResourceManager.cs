@@ -74,8 +74,17 @@ namespace uTinyRipper.Classes
 			{
 				if (containerEntry.Value.IsAsset(File, asset))
 				{
-					NamedObject named = (NamedObject)asset;
-					string validName = named.ValidName;
+					string validName;
+					if (asset is NamedObject named)
+					{
+						validName = named.ValidName;
+					}
+					else
+					{
+						GameObject gameObject = (GameObject)asset;
+						validName = gameObject.Name;
+					}
+
 					string resourceName = containerEntry.Key;
 					if (validName != resourceName && resourceName.EndsWith(validName, StringComparison.OrdinalIgnoreCase))
 					{
@@ -93,6 +102,7 @@ namespace uTinyRipper.Classes
 			resourcePath = string.Empty;
 			return false;
 		}
+
 
 		public IReadOnlyList<KeyValuePair<string, PPtr<Object>>> Container => m_container;
 		public ILookup<string, PPtr<Object>> ContainerMap => Container.ToLookup(t => t.Key, t => t.Value);
