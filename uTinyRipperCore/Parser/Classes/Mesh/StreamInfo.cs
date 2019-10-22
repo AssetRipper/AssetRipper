@@ -20,7 +20,7 @@ namespace uTinyRipper.Classes.Meshes
 		/// </summary>
 		public static bool HasAlign(Version version) => version.IsLess(4);
 
-		public bool IsMatch(ShaderChannelV4 channel)
+		public bool IsMatch(ShaderChannel4 channel)
 		{
 			return (ChannelMask & (1 << (int)channel)) != 0;
 		}

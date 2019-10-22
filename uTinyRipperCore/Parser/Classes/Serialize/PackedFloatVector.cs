@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes
 		public PackedFloatVector(bool _):
 			this()
 		{
-			Data = ArrayExtensions.EmptyBytes;
+			Data = Array.Empty<byte>();
 		}
 
 #warning TODO: Pack method

@@ -3,7 +3,7 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
-	public struct Float : IAssetReadable, IYAMLExportable
+	public struct Float : IAsset, IYAMLExportable
 	{
 		public Float(float value)
 		{
@@ -15,9 +15,19 @@ namespace uTinyRipper.Classes
 			return new Float(value);
 		}
 
+		public static implicit operator float(Float value)
+		{
+			return value.Value;
+		}
+
 		public void Read(AssetReader reader)
 		{
 			Value = reader.ReadSingle();
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Value);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -25,8 +35,6 @@ namespace uTinyRipper.Classes
 			return new YAMLScalarNode(Value);
 		}
 
-		public static Float DefaultWeight => 1.0f / 3.0f;
-
-		public float Value { get; private set; }
+		public float Value { get; set; }
 	}
 }

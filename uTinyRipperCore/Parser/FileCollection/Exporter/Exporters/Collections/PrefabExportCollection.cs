@@ -68,7 +68,7 @@ namespace uTinyRipper.AssetExporters
 				m_file = m_exportIDs.Keys.First().File;
 				yield return Asset;
 
-				foreach (Object asset in m_exportIDs.Keys)
+				foreach (Object asset in m_assets)
 				{
 					m_file = asset.File;
 					yield return asset;

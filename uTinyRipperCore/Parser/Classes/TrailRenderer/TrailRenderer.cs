@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
 using uTinyRipper.Classes.TrailRenderers;
-using uTinyRipper.Classes.ParticleSystems;
+using uTinyRipper.Classes.AnimationClips;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {
@@ -13,23 +12,10 @@ namespace uTinyRipper.Classes
 			base(assetInfo)
 		{
 		}
-		/// <summary>
-		/// 5.5.0 and greater
-		/// </summary>
-		public static bool IsReadParameters(Version version)
+
+		public static int ToSerializedVersion(Version version)
 		{
-			return version.IsGreaterEqual(5, 5);
-		}
-		/// <summary>
-		/// 2018.2.2 and greater
-		/// </summary>
-		public static bool IsReadEmitting(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2, 2);
-		}
-		private static int GetSerializedVersion(Version version)
-		{
-			// LineParameters has been added
+			// Width and Color has been replaced by Parameters
 			if (version.IsGreaterEqual(5, 5))
 			{
 				return 2;
@@ -37,23 +23,38 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool HasParameters(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// 2018.2.2 and greater
+		/// </summary>
+		public static bool HasEmitting(Version version) => version.IsGreaterEqual(2018, 2, 2);
+
+		public override Object Convert(IExportContainer container)
+		{
+			return TrailRendererConverter.Convert(container, this);
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 			Time = reader.ReadSingle();
-			if (IsReadParameters(reader.Version))
+			if (HasParameters(reader.Version))
 			{
 				Parameters.Read(reader);
 			}
 			else
 			{
-				StartWidth = reader.ReadSingle();
-				EndWidth = reader.ReadSingle();
+				float startWidth = reader.ReadSingle();
+				float endWidth = reader.ReadSingle();
+				Parameters.WidthCurve = new AnimationCurveTpl<Float>(startWidth, endWidth, KeyframeTpl<Float>.DefaultFloatWeight);
 				Colors.Read(reader);
 			}
 			MinVertexDistance = reader.ReadSingle();
 			Autodestruct = reader.ReadBoolean();
-			if (IsReadEmitting(reader.Version))
+			if (HasEmitting(reader.Version))
 			{
 				Emitting = reader.ReadBoolean();
 			}
@@ -62,11 +63,11 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TimeName, Time);
-			if (IsReadParameters(container.ExportVersion))
+			if (HasParameters(container.ExportVersion))
 			{
-				node.Add(ParametersName, GetParameters(container.Version).ExportYAML(container));
+				node.Add(ParametersName, Parameters.ExportYAML(container));
 			}
 			else
 			{
@@ -76,33 +77,19 @@ namespace uTinyRipper.Classes
 			}
 			node.Add(MinVertexDistanceName, MinVertexDistance);
 			node.Add(AutodestructName, Autodestruct);
-			if (IsReadEmitting(container.ExportVersion))
+			if (HasEmitting(container.ExportVersion))
 			{
 				node.Add(EmittingName, Emitting);
 			}
 			return node;
 		}
 
-		private LineParameters GetParameters(Version version)
-		{
-			if (IsReadParameters(version))
-			{
-				return Parameters;
-			} else
-			{
-				LineParameters parameters = new LineParameters();
-				parameters.ColorGradient = Colors;
-				parameters.WidthCurve = new AnimationClips.AnimationCurveTpl<Float>(StartWidth, EndWidth, Float.DefaultWeight);
-				return parameters;
-			}
-		}
-
-		public float Time { get; private set; }
-		public float StartWidth { get; private set; }
-		public float EndWidth { get; private set; }
-		public float MinVertexDistance { get; private set; }
-		public bool Autodestruct { get; private set; }
-		public bool Emitting { get; private set; }
+		public float Time { get; set; }
+		public float StartWidth => Parameters.WidthCurve.Curve[0].Value;
+		public float EndWidth => Parameters.WidthCurve.Curve[1].Value;
+		public float MinVertexDistance { get; set; }
+		public bool Autodestruct { get; set; }
+		public bool Emitting { get; set; }
 
 		public const string TimeName = "m_Time";
 		public const string StartWidthName = "m_StartWidth";
@@ -113,7 +100,7 @@ namespace uTinyRipper.Classes
 		public const string AutodestructName = "m_Autodestruct";
 		public const string EmittingName = "m_Emitting";
 
-		public LineParameters Parameters;
 		public Gradient Colors;
+		public LineParameters Parameters;
 	}
 }

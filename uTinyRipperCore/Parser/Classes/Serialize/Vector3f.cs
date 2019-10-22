@@ -159,9 +159,6 @@ namespace uTinyRipper.Classes
 
 		public static Vector3f One => new Vector3f(1.0f, 1.0f, 1.0f);
 
-#warning TODO: move to Keyframe
-		public static Vector3f DefaultWeight => new Vector3f(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f);
-
 		public float X { get; set; }
 		public float Y { get; set; }
 		public float Z { get; set; }

@@ -19,22 +19,6 @@ namespace uTinyRipper.Classes.Meshes
 			return GetVertexFormat(version).CalculateStride(Dimension);
 		}
 
-		public VertexFormat GetVertexFormat(Version version)
-		{
-			if (version.IsLess(5))
-			{
-				return ((VertexChannelFormat)Format).ToVertexFormat();
-			}
-			else if (version.IsLess(2019))
-			{
-				return ((VertexFormatV2017)Format).ToVertexFormat();
-			}
-			else
-			{
-				return ((VertexFormatV2019)Format).ToVertexFormat();
-			}
-		}
-
 		public ChannelInfo Convert(IExportContainer container)
 		{
 			return ChannelInfoConverter.Convert(container, this);
@@ -64,6 +48,22 @@ namespace uTinyRipper.Classes.Meshes
 			node.Add(FormatName, Format);
 			node.Add(DimensionName, RawDimension);
 			return node;
+		}
+
+		public VertexFormat GetVertexFormat(Version version)
+		{
+			if (VertexFormatExtensions.VertexFormat2019Relevant(version))
+			{
+				return ((VertexFormat2019)Format).ToVertexFormat();
+			}
+			else if (VertexFormatExtensions.VertexFormat2017Relevant(version))
+			{
+				return ((VertexFormat2017)Format).ToVertexFormat();
+			}
+			else
+			{
+				return ((VertexChannelFormat)Format).ToVertexFormat();
+			}
 		}
 
 		public override string ToString()

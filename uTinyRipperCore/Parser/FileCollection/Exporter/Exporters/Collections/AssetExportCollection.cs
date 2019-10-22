@@ -71,12 +71,12 @@ namespace uTinyRipper.AssetExporters
 
 		public override bool IsContains(Object asset)
 		{
-			return Asset == asset;
+			return Asset.AssetInfo == asset.AssetInfo;
 		}
 
 		public override long GetExportID(Object asset)
 		{
-			if(asset == Asset)
+			if(asset.AssetInfo == Asset.AssetInfo)
 			{
 				return GetMainExportID(Asset);
 			}

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
@@ -11,7 +12,7 @@ namespace uTinyRipper.Classes.Meshes
 			Vertices = new BlendShapeVertex[0];
 			Shapes = new BlendShape[0];
 			Channels = new BlendShapeChannel[0];
-			FullWeights = ArrayExtensions.EmptyFloats;
+			FullWeights = Array.Empty<float>();
 		}
 
 		/// <summary>

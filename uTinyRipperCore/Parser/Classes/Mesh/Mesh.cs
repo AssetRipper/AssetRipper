@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Meshes;
 using uTinyRipper.Classes.Textures;
-using uTinyRipper.Converters.Meshes;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -30,11 +28,13 @@ namespace uTinyRipper.Classes
 			{
 				return 9;
 			}
+			// MeshTopology == 1 has become deprecated
 			// unknown alpha/beta version
 			if (version.IsGreaterEqual(4, 0, 0, VersionType.Beta))
 			{
 				return 8;
 			}
+			// unknown conversion
 			if (version.IsGreaterEqual(4))
 			{
 				return 7;

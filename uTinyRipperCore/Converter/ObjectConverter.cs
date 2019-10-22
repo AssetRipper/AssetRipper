@@ -2,7 +2,7 @@
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Objects;
 
-namespace uTinyRipper.Converters.Objects
+namespace uTinyRipper.Converters
 {
 	public static class ObjectConverter
 	{

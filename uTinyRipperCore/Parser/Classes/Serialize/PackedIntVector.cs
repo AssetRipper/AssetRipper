@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes
 		public PackedIntVector(bool _):
 			this()
 		{
-			Data = ArrayExtensions.EmptyBytes;
+			Data = Array.Empty<byte>();
 		}
 
 #warning TODO: Pack method

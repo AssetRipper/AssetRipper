@@ -360,7 +360,7 @@ namespace uTinyRipper.Classes
 
 		public string FindMaterialPropertyNameByCRC28(uint crc)
 		{
-			foreach (PPtr<Material> materialPtr in m_materials)
+			foreach (PPtr<Material> materialPtr in Materials)
 			{
 				Material material = materialPtr.FindAsset(File);
 				if (material == null)
@@ -437,7 +437,7 @@ namespace uTinyRipper.Classes
 
 			if (IsReadMaterialFirst(reader.Version))
 			{
-				m_materials = reader.ReadAssetArray<PPtr<Material>>();
+				Materials = reader.ReadAssetArray<PPtr<Material>>();
 			}
 
 			if (IsReadLightmapTilingOffset(reader.Version, reader.Flags))
@@ -458,7 +458,7 @@ namespace uTinyRipper.Classes
 
 			if (!IsReadMaterialFirst(reader.Version))
 			{
-				m_materials = reader.ReadAssetArray<PPtr<Material>>();
+				Materials = reader.ReadAssetArray<PPtr<Material>>();
 			}
 
 			if (IsReadStaticBatchInfo(reader.Version))
@@ -467,7 +467,7 @@ namespace uTinyRipper.Classes
 			}
 			else if (IsReadSubsetIndices(reader.Version))
 			{
-				m_subsetIndices = reader.ReadUInt32Array();
+				SubsetIndices = reader.ReadUInt32Array();
 			}
 			if (IsReadStaticBatchRoot(reader.Version))
 			{
@@ -799,39 +799,39 @@ namespace uTinyRipper.Classes
 #endif
 		}
 
-		public bool Enabled { get; private set; }
-		public ShadowCastingMode CastShadows { get; private set; }
-		public byte ReceiveShadows { get; private set; }
-		public byte DynamicOccludee { get; private set; }
-		public MotionVectorGenerationMode MotionVectors { get; private set; }
+		public bool Enabled { get; set; }
+		public ShadowCastingMode CastShadows { get; set; }
+		public byte ReceiveShadows { get; set; }
+		public byte DynamicOccludee { get; set; }
+		public MotionVectorGenerationMode MotionVectors { get; set; }
 		public bool UseLightProbes => LightProbeUsage != LightProbeUsage.Off;
-		public LightProbeUsage LightProbeUsage { get; private set; }
+		public LightProbeUsage LightProbeUsage { get; set; }
 		public bool UseReflectionProbes => ReflectionProbeUsage != ReflectionProbeUsage.Off;
-		public ReflectionProbeUsage ReflectionProbeUsage { get; private set; }
-		public uint RenderingLayerMask { get; private set; }
-		public int RendererPriority { get; private set; }
-		public ushort LightmapIndex { get; private set; }
-		public ushort LightmapIndexDynamic { get; private set; }
-		public IReadOnlyList<PPtr<Material>> Materials => m_materials;
-		public IReadOnlyList<uint> SubsetIndices => m_subsetIndices;
+		public ReflectionProbeUsage ReflectionProbeUsage { get; set; }
+		public uint RenderingLayerMask { get; set; }
+		public int RendererPriority { get; set; }
+		public ushort LightmapIndex { get; set; }
+		public ushort LightmapIndexDynamic { get; set; }
+		public PPtr<Material>[] Materials { get; set; }
+		public uint[] SubsetIndices { get; set; }
 #if UNIVERSAL
-		public float ScaleInLightmap { get; private set; }
-		public ReceiveGI ReceiveGI { get; private set; }
-		public bool PreserveUVs { get; private set; }
-		public bool IgnoreNormalsForChartDetection { get; private set; }
-		public bool ImportantGI { get; private set; }
-		public bool SelectedWireframeHidden { get; private set; }
-		public bool StitchLightmapSeams { get; private set; }
+		public float ScaleInLightmap { get; set; }
+		public ReceiveGI ReceiveGI { get; set; }
+		public bool PreserveUVs { get; set; }
+		public bool IgnoreNormalsForChartDetection { get; set; }
+		public bool ImportantGI { get; set; }
+		public bool SelectedWireframeHidden { get; set; }
+		public bool StitchLightmapSeams { get; set; }
 
-		public EditorSelectedRenderState SelectedEditorRenderState { get; private set; }
-		public int MinimumChartSize { get; private set; }
-		public float AutoUVMaxDistance { get; private set; }
-		public float AutoUVMaxAngle { get; private set; }
-		public bool GIBackfaceCull { get; private set; }
+		public EditorSelectedRenderState SelectedEditorRenderState { get; set; }
+		public int MinimumChartSize { get; set; }
+		public float AutoUVMaxDistance { get; set; }
+		public float AutoUVMaxAngle { get; set; }
+		public bool GIBackfaceCull { get; set; }
 #endif
-		public int SortingLayerID { get; private set; }
-		public short SortingLayer { get; private set; }
-		public short SortingOrder { get; private set; }
+		public int SortingLayerID { get; set; }
+		public short SortingLayer { get; set; }
+		public short SortingOrder { get; set; }
 
 		public const string EnabledName = "m_Enabled";
 		public const string CastShadowsName = "m_CastShadows";
@@ -879,8 +879,5 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public PPtr<LightmapParameters> LightmapParameters;
 #endif
-
-		private PPtr<Material>[] m_materials;
-		private uint[] m_subsetIndices;
 	}
 }

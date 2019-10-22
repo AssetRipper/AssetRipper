@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using uTinyRipper.AssetExporters.Classes;
 using uTinyRipper.Classes;
 
@@ -22,21 +23,21 @@ namespace uTinyRipper.AssetExporters
 			{
 				return true;
 			}
-			return m_exportIDs.ContainsKey(asset);
+			return m_exportIDs.ContainsKey(asset.AssetInfo);
 		}
 
 		public override long GetExportID(Object asset)
 		{
-			if (asset == Asset)
+			if (asset.AssetInfo == Asset.AssetInfo)
 			{
 				return base.GetExportID(asset);
 			}
-			return m_exportIDs[asset];
+			return m_exportIDs[asset.AssetInfo];
 		}
 
 		protected override bool ExportInner(ProjectAssetContainer container, string filePath)
 		{
-			return AssetExporter.Export(container, Assets, filePath);
+			return AssetExporter.Export(container, Assets.Select(t => t.Convert(container)), filePath);
 		}
 
 		public override IEnumerable<Object> Assets
@@ -47,7 +48,7 @@ namespace uTinyRipper.AssetExporters
 				{
 					yield return asset;
 				}
-				foreach (Object asset in m_exportIDs.Keys)
+				foreach (Object asset in m_assets)
 				{
 					yield return asset;
 				}
@@ -62,7 +63,8 @@ namespace uTinyRipper.AssetExporters
 		protected void AddAsset(Object asset)
 		{
 			long exportID = GenerateExportID(asset);
-			m_exportIDs.Add(asset, exportID);
+			m_assets.Add(asset);
+			m_exportIDs.Add(asset.AssetInfo, exportID);
 		}
 
 		private bool IsContainsID(long id)
@@ -70,6 +72,7 @@ namespace uTinyRipper.AssetExporters
 			return m_exportIDs.ContainsValue(id);
 		}
 
-		protected readonly Dictionary<Object, long> m_exportIDs = new Dictionary<Object, long>();
+		protected readonly List<Object> m_assets = new List<Object>();
+		protected readonly Dictionary<AssetInfo, long> m_exportIDs = new Dictionary<AssetInfo, long>();
 	}
 }

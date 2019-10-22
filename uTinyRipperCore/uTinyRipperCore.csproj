@@ -5,7 +5,7 @@
     <LangVersion>7.2</LangVersion>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	<AssemblyName>uTinyRipperCore</AssemblyName>
-	<RootNamespace>uTinyRipperCore</RootNamespace>
+	<RootNamespace>uTinyRipper</RootNamespace>
 	<Copyright>Copyright ©  2017</Copyright>
 	<Authors>mafaca</Authors>
   </PropertyGroup>
@@ -26,13 +26,5 @@
     <OutputPath>..\Bins\$(Configuration)\</OutputPath>
     <DefineConstants>TRACE;NET_STANDARD</DefineConstants>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="App.config" />
-  </ItemGroup>
 
 </Project>

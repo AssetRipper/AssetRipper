@@ -56,7 +56,7 @@ namespace uTinyRipper.AssetExporters
 				foreach (Object asset in collection.Assets)
 				{
 #warning TODO: unique asset:collection (m_assetCollections.Add)
-					m_assetCollections[asset] = collection;
+					m_assetCollections[asset.AssetInfo] = collection;
 				}
 				if(collection is SceneExportCollection scene)
 				{
@@ -114,7 +114,7 @@ namespace uTinyRipper.AssetExporters
 
 		public long GetExportID(Object asset)
 		{
-			if (m_assetCollections.TryGetValue(asset, out IExportCollection collection))
+			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection collection))
 			{
 				return collection.GetExportID(asset);
 			}
@@ -136,7 +136,7 @@ namespace uTinyRipper.AssetExporters
 
 		public ExportPointer CreateExportPointer(Object asset)
 		{
-			if (m_assetCollections.TryGetValue(asset, out IExportCollection collection))
+			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection collection))
 			{
 				return collection.CreateExportPointer(asset, collection == CurrentCollection);
 			}
@@ -245,7 +245,7 @@ namespace uTinyRipper.AssetExporters
 		public TransferInstructionFlags ExportFlags => m_exportFlags | CurrentCollection.Flags;
 
 		private readonly ProjectExporter m_exporter;
-		private readonly Dictionary<Object, IExportCollection> m_assetCollections = new Dictionary<Object, IExportCollection>();
+		private readonly Dictionary<AssetInfo, IExportCollection> m_assetCollections = new Dictionary<AssetInfo, IExportCollection>();
 
 		private readonly BuildSettings m_buildSettings;
 		private readonly TagManager m_tagManager;

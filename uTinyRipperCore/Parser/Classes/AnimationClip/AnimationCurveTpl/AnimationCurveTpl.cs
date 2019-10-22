@@ -3,66 +3,68 @@ using uTinyRipper.Assembly;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using System;
+using uTinyRipper.Converters.Misc;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
-	public struct AnimationCurveTpl<T> : ISerializableStructure
-		where T : struct, IAssetReadable, IYAMLExportable
+	public struct AnimationCurveTpl<T> : IAsset, ISerializableStructure
+		where T : struct, IAsset, IYAMLExportable
 	{
 		public AnimationCurveTpl(bool init)
 		{
 			PreInfinity = CurveLoopTypes.CycleWithOffset;
 			PostInfinity = CurveLoopTypes.CycleWithOffset;
 			RotationOrder = RotationOrder.OrderZXY;
-			m_curve = init ? new KeyframeTpl<T>[0] : null;
+			Curve = init ? Array.Empty<KeyframeTpl<T>>() : null;
 		}
 
 		public AnimationCurveTpl(T defaultValue, T defaultWeight) :
 			this(false)
 		{
-			m_curve = new KeyframeTpl<T>[2];
-			m_curve[0] = new KeyframeTpl<T>(0.0f, defaultValue, defaultWeight);
-			m_curve[1] = new KeyframeTpl<T>(1.0f, defaultValue, defaultWeight);
+			Curve = new KeyframeTpl<T>[2];
+			Curve[0] = new KeyframeTpl<T>(0.0f, defaultValue, defaultWeight);
+			Curve[1] = new KeyframeTpl<T>(1.0f, defaultValue, defaultWeight);
 		}
 
 		public AnimationCurveTpl(T value1, T value2, T defaultWeight) :
 			this(false)
 		{
-			m_curve = new KeyframeTpl<T>[2];
-			m_curve[0] = new KeyframeTpl<T>(0.0f, value1, defaultWeight);
-			m_curve[1] = new KeyframeTpl<T>(1.0f, value2, defaultWeight);
+			Curve = new KeyframeTpl<T>[2];
+			Curve[0] = new KeyframeTpl<T>(0.0f, value1, defaultWeight);
+			Curve[1] = new KeyframeTpl<T>(1.0f, value2, defaultWeight);
 		}
 
 		public AnimationCurveTpl(T value1, T inSlope1, T outSlope1, T value2, T inSlope2, T outSlope2, T defaultWeight) :
 			this(false)
 		{
-			m_curve = new KeyframeTpl<T>[2];
-			m_curve[0] = new KeyframeTpl<T>(0.0f, value1, inSlope1, outSlope1, defaultWeight);
-			m_curve[1] = new KeyframeTpl<T>(1.0f, value2, inSlope2, outSlope2, defaultWeight);
+			Curve = new KeyframeTpl<T>[2];
+			Curve[0] = new KeyframeTpl<T>(0.0f, value1, inSlope1, outSlope1, defaultWeight);
+			Curve[1] = new KeyframeTpl<T>(1.0f, value2, inSlope2, outSlope2, defaultWeight);
 		}
 
 		public AnimationCurveTpl(KeyframeTpl<T> keyframe) :
 			this(false)
 		{
-			m_curve = new KeyframeTpl<T>[1];
-			m_curve[0] = keyframe;
+			Curve = new KeyframeTpl<T>[1];
+			Curve[0] = keyframe;
 		}
 
 		public AnimationCurveTpl(KeyframeTpl<T> keyframe1, KeyframeTpl<T> keyframe2) :
 			this(false)
 		{
-			m_curve = new KeyframeTpl<T>[2];
-			m_curve[0] = keyframe1;
-			m_curve[1] = keyframe2;
+			Curve = new KeyframeTpl<T>[2];
+			Curve[0] = keyframe1;
+			Curve[1] = keyframe2;
 		}
 
 		public AnimationCurveTpl(IReadOnlyList<KeyframeTpl<T>> keyframes) :
 			this(false)
 		{
-			m_curve = new KeyframeTpl<T>[keyframes.Count];
+			Curve = new KeyframeTpl<T>[keyframes.Count];
 			for (int i = 0; i < keyframes.Count; i++)
 			{
-				m_curve[i] = keyframes[i];
+				Curve[i] = keyframes[i];
 			}
 		}
 
@@ -71,23 +73,16 @@ namespace uTinyRipper.Classes.AnimationClips
 			PreInfinity = preInfinity;
 			PostInfinity = postInfinity;
 			RotationOrder = RotationOrder.OrderZXY;
-			m_curve = new KeyframeTpl<T>[keyframes.Count];
+			Curve = new KeyframeTpl<T>[keyframes.Count];
 			for (int i = 0; i < keyframes.Count; i++)
 			{
-				m_curve[i] = keyframes[i];
+				Curve[i] = keyframes[i];
 			}
 		}
 
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadRotationOrder(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
-			return version.IsGreaterEqual(5, 3);
-		}
-
-		private static int GetSerializedVersion(Version version)
-		{
+			// unknown conversion
 			if (version.IsGreaterEqual(2, 1))
 			{
 				return 2;
@@ -95,33 +90,58 @@ namespace uTinyRipper.Classes.AnimationClips
 			return 1;
 		}
 
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasRotationOrder(Version version) => version.IsGreaterEqual(5, 3);
+
 		public ISerializableStructure CreateDuplicate()
 		{
 			return new AnimationCurveTpl<T>();
 		}
 
+		public AnimationCurveTpl<T> Convert(IExportContainer container)
+		{
+			return AnimationCurveTplConverter.Convert(container, ref this);
+		}
+
 		public void Read(AssetReader reader)
 		{
-			m_curve = reader.ReadAssetArray<KeyframeTpl<T>>();
+			Curve = reader.ReadAssetArray<KeyframeTpl<T>>();
 			reader.AlignStream(AlignType.Align4);
 
 			PreInfinity = (CurveLoopTypes)reader.ReadInt32();
 			PostInfinity = (CurveLoopTypes)reader.ReadInt32();
-			if (IsReadRotationOrder(reader.Version))
+			if (HasRotationOrder(reader.Version))
 			{
 				RotationOrder = (RotationOrder)reader.ReadInt32();
+			}
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.WriteAssetArray(Curve);
+			writer.AlignStream(AlignType.Align4);
+
+			writer.Write((int)PreInfinity);
+			writer.Write((int)PostInfinity);
+			if (HasRotationOrder(writer.Version))
+			{
+				writer.Write((int)RotationOrder);
 			}
 		}
 		
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_Curve", Curve.ExportYAML(container));
-			node.Add("m_PreInfinity", (int)PreInfinity);
-			node.Add("m_PostInfinity", (int)PostInfinity);
-			node.Add("m_RotationOrder", (int)GetExportRotationOrder(container.Version));
-
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			node.Add(CurveName, Curve.ExportYAML(container));
+			node.Add(PreInfinityName, (int)PreInfinity);
+			node.Add(PostInfinityName, (int)PostInfinity);
+			if (HasRotationOrder(container.ExportVersion))
+			{
+				node.Add(RotationOrderName, (int)GetExportRotationOrder(container.Version));
+			}
 			return node;
 		}
 
@@ -132,14 +152,17 @@ namespace uTinyRipper.Classes.AnimationClips
 
 		private RotationOrder GetExportRotationOrder(Version version)
 		{
-			return IsReadRotationOrder(version) ? RotationOrder : RotationOrder.OrderZXY;
+			return HasRotationOrder(version) ? RotationOrder : RotationOrder.OrderZXY;
 		}
 
-		public IReadOnlyList<KeyframeTpl<T>> Curve => m_curve;
-		public CurveLoopTypes PreInfinity { get; private set; }
-		public CurveLoopTypes PostInfinity { get; private set; }
-		public RotationOrder RotationOrder { get; private set; }
+		public KeyframeTpl<T>[] Curve { get; set; }
+		public CurveLoopTypes PreInfinity { get; set; }
+		public CurveLoopTypes PostInfinity { get; set; }
+		public RotationOrder RotationOrder { get; set; }
 
-		private KeyframeTpl<T>[] m_curve;
+		public const string CurveName = "m_Curve";
+		public const string PreInfinityName = "m_PreInfinity";
+		public const string PostInfinityName = "m_PostInfinity";
+		public const string RotationOrderName = "m_RotationOrder";
 	}
 }

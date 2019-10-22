@@ -14,13 +14,13 @@ namespace uTinyRipper.Converters.Meshes
 		public static ChannelInfo GenerateChannelInfo(Version instanceVersion, StreamInfo[] origin, ShaderChannel channelType)
 		{
 			ChannelInfo instance = new ChannelInfo();
-			ShaderChannelV4 channelv4 = channelType.ToShaderChannelV4();
+			ShaderChannel4 channelv4 = channelType.ToShaderChannel4();
 			int streamIndex = origin.IndexOf(t => t.IsMatch(channelv4));
 			if (streamIndex >= 0)
 			{
 				byte offset = 0;
 				ref StreamInfo stream = ref origin[streamIndex];
-				for (ShaderChannelV4 i = 0; i < channelv4; i++)
+				for (ShaderChannel4 i = 0; i < channelv4; i++)
 				{
 					if (stream.IsMatch(i))
 					{

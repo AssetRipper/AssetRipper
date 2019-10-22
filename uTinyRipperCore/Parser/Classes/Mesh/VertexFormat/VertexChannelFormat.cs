@@ -3,7 +3,7 @@
 namespace uTinyRipper.Classes.Meshes
 {
 	/// <summary>
-	/// Less than 2017.1 version
+	/// Less than 2017.1
 	/// </summary>
 	public enum VertexChannelFormat : byte
 	{

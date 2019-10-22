@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 
@@ -8,7 +9,7 @@ namespace uTinyRipper.Classes.Meshes
 	{
 		public VariableBoneCountWeights(bool _)
 		{
-			Data = ArrayExtensions.EmptyUInts;
+			Data = Array.Empty<uint>();
 		}
 
 		public VariableBoneCountWeights Convert(IExportContainer container)

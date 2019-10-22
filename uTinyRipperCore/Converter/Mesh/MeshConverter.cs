@@ -1,13 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Meshes;
 using uTinyRipper.Classes.Textures;
-using uTinyRipper.Converters.NamedObjects;
+using uTinyRipper.Converters.Meshes;
 
-namespace uTinyRipper.Converters.Meshes
+namespace uTinyRipper.Converters
 {
 	public static class MeshConverter
 	{
@@ -161,12 +162,12 @@ namespace uTinyRipper.Converters.Meshes
 
 		private static BlendShape[] GetBlendShapes(IExportContainer container, Mesh origin)
 		{
-			return Mesh.HasBlendShapes(container.Version) ? origin.Shapes.Shapes : new BlendShape[0];
+			return Mesh.HasBlendShapes(container.Version) ? origin.Shapes.Shapes : Array.Empty<BlendShape>();
 		}
 
 		private static BlendShapeVertex[] GetShapeVertices(IExportContainer container, Mesh origin)
 		{
-			return Mesh.HasBlendShapes(container.Version) ? origin.Shapes.Vertices : new BlendShapeVertex[0];
+			return Mesh.HasBlendShapes(container.Version) ? origin.Shapes.Vertices : Array.Empty<BlendShapeVertex>();
 		}
 
 		private static BlendShapeData GetShapes(IExportContainer container, Mesh origin)
@@ -195,12 +196,12 @@ namespace uTinyRipper.Converters.Meshes
 
 		private static Matrix4x4f[] GetBindPose(IExportContainer container, Mesh origin)
 		{
-			return Mesh.HasBindPose(container.Version) ? origin.BindPose.ToArray() : new Matrix4x4f[0];
+			return Mesh.HasBindPose(container.Version) ? origin.BindPose.ToArray() : Array.Empty<Matrix4x4f>();
 		}
 
 		private static uint[] GetBoneNameHashes(IExportContainer container, Mesh origin)
 		{
-			return Mesh.HasBoneNameHashes(container.Version) ? origin.BoneNameHashes.ToArray() : ArrayExtensions.EmptyUInts;
+			return Mesh.HasBoneNameHashes(container.Version) ? origin.BoneNameHashes.ToArray() : Array.Empty<uint>();
 		}
 
 		private static uint GetRootBoneNameHash(IExportContainer container, Mesh origin)
@@ -210,7 +211,7 @@ namespace uTinyRipper.Converters.Meshes
 
 		private static MinMaxAABB[] GetBonesAABB(IExportContainer container, Mesh origin)
 		{
-			return Mesh.HasBonesAABB(container.Version) ? origin.BonesAABB.ToArray() : new MinMaxAABB[0];
+			return Mesh.HasBonesAABB(container.Version) ? origin.BonesAABB.ToArray() : Array.Empty<MinMaxAABB>();
 		}
 
 		private static VariableBoneCountWeights GetVariableBoneCountWeights(IExportContainer container, Mesh origin)
@@ -264,6 +265,7 @@ namespace uTinyRipper.Converters.Meshes
 			}
 			else
 			{
+#warning TODO: convert MeshTopology.Deprecated indices to MeshTopology.Triangles
 				if (container.Platform == container.ExportPlatform ||
 					container.Platform != Platform.XBox360 && container.ExportPlatform != Platform.XBox360)
 				{

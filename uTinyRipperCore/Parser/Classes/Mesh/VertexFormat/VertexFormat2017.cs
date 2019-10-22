@@ -5,7 +5,7 @@ namespace uTinyRipper.Classes.Meshes
 	/// <summary>
 	/// 2017.1 to 2018.x.x
 	/// </summary>
-	public enum VertexFormatV2017 : byte
+	public enum VertexFormat2017 : byte
 	{
 		Float		= 0,
 		Float16		= 1,
@@ -24,17 +24,17 @@ namespace uTinyRipper.Classes.Meshes
 
 	public static class VertexFormatV5Extension
 	{
-		public static VertexFormat ToVertexFormat(this VertexFormatV2017 _this)
+		public static VertexFormat ToVertexFormat(this VertexFormat2017 _this)
 		{
 			switch (_this)
 			{
-				case VertexFormatV2017.Float:
+				case VertexFormat2017.Float:
 					return VertexFormat.Float;
-				case VertexFormatV2017.Float16:
+				case VertexFormat2017.Float16:
 					return VertexFormat.Float16;
-				case VertexFormatV2017.UNorm8:
+				case VertexFormat2017.UNorm8:
 					return VertexFormat.Byte;
-				case VertexFormatV2017.UInt32:
+				case VertexFormat2017.UInt32:
 					return VertexFormat.Int;
 
 				default:

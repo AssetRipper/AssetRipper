@@ -8,7 +8,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct Quaternionf : ISerializableStructure
+	public struct Quaternionf : IAsset, ISerializableStructure
 	{
 		public Quaternionf(float x, float y, float z, float w)
 		{
@@ -16,77 +16,6 @@ namespace uTinyRipper.Classes
 			Y = y;
 			Z = z;
 			W = w;
-		}
-
-		public float this[int index]
-		{
-			get
-			{
-				switch(index)
-				{
-					case 0:
-						return X;
-					case 1:
-						return Y;
-					case 2:
-						return Z;
-					case 3:
-						return W;
-
-					default:
-						throw new IndexOutOfRangeException($"Index {index} is out of bound");
-				}
-			}
-			set
-			{
-				switch (index)
-				{
-					case 0:
-						X = value;
-						break;
-					case 1:
-						Y = value;
-						break;
-					case 2:
-						Z = value;
-						break;
-					case 3:
-						W = value;
-						break;
-
-					default:
-						throw new IndexOutOfRangeException($"Index {index} is out of bound");
-				}
-			}
-		}
-
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new Quaternionf();
-		}
-
-		public void Read(AssetReader reader)
-		{
-			X = reader.ReadSingle();
-			Y = reader.ReadSingle();
-			Z = reader.ReadSingle();
-			W = reader.ReadSingle();
-		}
-
-		public YAMLNode ExportYAML(IExportContainer container)
-		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Style = MappingStyle.Flow;
-			node.Add("x", X);
-			node.Add("y", Y);
-			node.Add("z", Z);
-			node.Add("w", W);
-			return node;
-		}
-
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
-		{
-			yield break;
 		}
 
 		public Vector3f ToEuler()
@@ -135,17 +64,100 @@ namespace uTinyRipper.Classes
 			return euler;
 		}
 
+		public ISerializableStructure CreateDuplicate()
+		{
+			return new Quaternionf();
+		}
+
+		public void Read(AssetReader reader)
+		{
+			X = reader.ReadSingle();
+			Y = reader.ReadSingle();
+			Z = reader.ReadSingle();
+			W = reader.ReadSingle();
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(X);
+			writer.Write(Y);
+			writer.Write(Z);
+			writer.Write(W);
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Style = MappingStyle.Flow;
+			node.Add(XName, X);
+			node.Add(YName, Y);
+			node.Add(ZName, Z);
+			node.Add(WName, W);
+			return node;
+		}
+
+		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		{
+			yield break;
+		}
+
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture, "[{0:0.00}, {1:0.00}, {2:0.00}, {3:0.00}]", X, Y, Z, W);
 		}
 
 		public static Quaternionf Zero => new Quaternionf(0.0f, 0.0f, 0.0f, 1.0f);
-		public static Quaternionf DefaultWeight => new Quaternionf(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f);
 
-		public float X { get; private set; }
-		public float Y { get; private set; }
-		public float Z { get; private set; }
-		public float W { get; private set; }
+		public float this[int index]
+		{
+			get
+			{
+				switch (index)
+				{
+					case 0:
+						return X;
+					case 1:
+						return Y;
+					case 2:
+						return Z;
+					case 3:
+						return W;
+
+					default:
+						throw new IndexOutOfRangeException($"Index {index} is out of bound");
+				}
+			}
+			set
+			{
+				switch (index)
+				{
+					case 0:
+						X = value;
+						break;
+					case 1:
+						Y = value;
+						break;
+					case 2:
+						Z = value;
+						break;
+					case 3:
+						W = value;
+						break;
+
+					default:
+						throw new IndexOutOfRangeException($"Index {index} is out of bound");
+				}
+			}
+		}
+
+		public float X { get; set; }
+		public float Y { get; set; }
+		public float Z { get; set; }
+		public float W { get; set; }
+
+		public const string XName = "x";
+		public const string YName = "y";
+		public const string ZName = "z";
+		public const string WName = "w";
 	}
 }

@@ -27,19 +27,7 @@ namespace uTinyRipper.Classes.Meshes
 		/// 2017.3 and greater
 		/// </summary>
 		public static bool HasBaseVertex(Version version) => version.IsGreaterEqual(2017, 3);
-
-		public MeshTopology GetTopology(Version version)
-		{
-			if (ToSerializedVersion(version) >= 2)
-			{
-				return Topology;
-			}
-			else
-			{
-				return IsTriStrip == 0 ? MeshTopology.Triangles : MeshTopology.Deprecated;
-			}
-		}
-
+		
 		public void Read(AssetReader reader)
 		{
 			FirstByte = (int)reader.ReadUInt32();
@@ -108,6 +96,18 @@ namespace uTinyRipper.Classes.Meshes
 				node.Add(LocalAABBName, LocalAABB.ExportYAML(container));
 			}
 			return node;
+		}
+
+		public MeshTopology GetTopology(Version version)
+		{
+			if (ToSerializedVersion(version) >= 2)
+			{
+				return Topology;
+			}
+			else
+			{
+				return IsTriStrip == 0 ? MeshTopology.Triangles : MeshTopology.Deprecated;
+			}
 		}
 
 		/// <summary>

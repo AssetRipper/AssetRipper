@@ -5,7 +5,7 @@ namespace uTinyRipper.Classes.Meshes
 	/// <summary>
 	/// Less than 5.0.0 version
 	/// </summary>
-	public enum ShaderChannelV4
+	public enum ShaderChannel4
 	{
 		Vertex	= 0,
 		Normal	= 1,
@@ -17,21 +17,21 @@ namespace uTinyRipper.Classes.Meshes
 
 	public static class ShaderChannelV4Extensions
 	{
-		public static ShaderChannel ToShaderChannel(this ShaderChannelV4 _this)
+		public static ShaderChannel ToShaderChannel(this ShaderChannel4 _this)
 		{
 			switch(_this)
 			{
-				case ShaderChannelV4.Vertex:
+				case ShaderChannel4.Vertex:
 					return ShaderChannel.Vertex;
-				case ShaderChannelV4.Normal:
+				case ShaderChannel4.Normal:
 					return ShaderChannel.Normal;
-				case ShaderChannelV4.Color:
+				case ShaderChannel4.Color:
 					return ShaderChannel.Color;
-				case ShaderChannelV4.UV0:
+				case ShaderChannel4.UV0:
 					return ShaderChannel.UV0;
-				case ShaderChannelV4.UV1:
+				case ShaderChannel4.UV1:
 					return ShaderChannel.UV1;
-				case ShaderChannelV4.Tangent:
+				case ShaderChannel4.Tangent:
 					return ShaderChannel.Tangent;
 
 				default:

@@ -7,7 +7,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct ColorRGBAf : ISerializableStructure
+	public struct ColorRGBAf : IAsset, ISerializableStructure
 	{
 		public ColorRGBAf(float r, float g, float b, float a)
 		{
@@ -47,6 +47,20 @@ namespace uTinyRipper.Classes
 			ColorRGBA32 color32 = new ColorRGBA32();
 			color32.Read(reader);
 			this = (ColorRGBAf)color32;
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(R);
+			writer.Write(G);
+			writer.Write(B);
+			writer.Write(A);
+		}
+
+		public void Write32(AssetWriter writer)
+		{
+			ColorRGBA32 color32 = (ColorRGBA32)this;
+			color32.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

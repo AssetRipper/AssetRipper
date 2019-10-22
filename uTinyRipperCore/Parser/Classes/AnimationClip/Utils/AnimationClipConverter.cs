@@ -229,7 +229,7 @@ namespace uTinyRipper.Classes.AnimationClips
 						Vector3f value = new Vector3f(x, y, z);
 						Vector3f inSlope = new Vector3f(inX, inY, inZ);
 						Vector3f outSlope = new Vector3f(outX, outY, outZ);
-						KeyframeTpl<Vector3f> transKey = new KeyframeTpl<Vector3f>(time, value, inSlope, outSlope, Vector3f.DefaultWeight);
+						KeyframeTpl<Vector3f> transKey = new KeyframeTpl<Vector3f>(time, value, inSlope, outSlope, KeyframeTpl<Vector3f>.DefaultVector3Weight);
 						transCurve.Add(transKey);
 					}
 					break;
@@ -261,7 +261,7 @@ namespace uTinyRipper.Classes.AnimationClips
 						Quaternionf value = new Quaternionf(x, y, z, w);
 						Quaternionf inSlope = new Quaternionf(inX, inY, inZ, inW);
 						Quaternionf outSlope = new Quaternionf(outX, outY, outZ, outW);
-						KeyframeTpl<Quaternionf> rotKey = new KeyframeTpl<Quaternionf>(time, value, inSlope, outSlope, Quaternionf.DefaultWeight);
+						KeyframeTpl<Quaternionf> rotKey = new KeyframeTpl<Quaternionf>(time, value, inSlope, outSlope, KeyframeTpl<Quaternionf>.DefaultQuaternionWeight);
 						rotCurve.Add(rotKey);
 					}
 					break;
@@ -290,7 +290,7 @@ namespace uTinyRipper.Classes.AnimationClips
 						Vector3f value = new Vector3f(x, y, z);
 						Vector3f inSlope = new Vector3f(inX, inY, inZ);
 						Vector3f outSlope = new Vector3f(outX, outY, outZ);
-						KeyframeTpl<Vector3f> scaleKey = new KeyframeTpl<Vector3f>(time, value, inSlope, outSlope, Vector3f.DefaultWeight);
+						KeyframeTpl<Vector3f> scaleKey = new KeyframeTpl<Vector3f>(time, value, inSlope, outSlope, KeyframeTpl<Vector3f>.DefaultVector3Weight);
 						scaleCurve.Add(scaleKey);
 					}
 					break;
@@ -319,7 +319,7 @@ namespace uTinyRipper.Classes.AnimationClips
 						Vector3f value = new Vector3f(x, y, z);
 						Vector3f inSlope = new Vector3f(inX, inY, inZ);
 						Vector3f outSlope = new Vector3f(outX, outY, outZ);
-						KeyframeTpl<Vector3f> eulerKey = new KeyframeTpl<Vector3f>(time, value, inSlope, outSlope, Vector3f.DefaultWeight);
+						KeyframeTpl<Vector3f> eulerKey = new KeyframeTpl<Vector3f>(time, value, inSlope, outSlope, KeyframeTpl<Vector3f>.DefaultVector3Weight);
 						eulerCurve.Add(eulerKey);
 					}
 					break;
@@ -395,7 +395,7 @@ namespace uTinyRipper.Classes.AnimationClips
 				m_floats.Add(curve, floatCurve);
 			}
 
-			KeyframeTpl<Float> floatKey = new KeyframeTpl<Float>(time, value, Float.DefaultWeight);
+			KeyframeTpl<Float> floatKey = new KeyframeTpl<Float>(time, value, KeyframeTpl<Float>.DefaultFloatWeight);
 			floatCurve.Add(floatKey);
 		}
 

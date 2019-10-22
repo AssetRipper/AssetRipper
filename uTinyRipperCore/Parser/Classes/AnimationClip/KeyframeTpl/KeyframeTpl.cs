@@ -1,15 +1,17 @@
 ﻿using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
+using uTinyRipper.Converters.Misc;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
-	public struct KeyframeTpl<T> : IAssetReadable, IYAMLExportable
-		where T : struct, IAssetReadable, IYAMLExportable
+	public struct KeyframeTpl<T> : IAsset
+		where T : struct, IAsset
 	{
 		public KeyframeTpl(float time, T value, T weight):
 			this(time, value, default, default, weight)
 		{
-			TangentMode = TangentMode.FreeSmooth;
+			// this enum member is version agnostic
+			TangentMode = AnimationClips.TangentMode.FreeSmooth.ToTangent(Version.MinVersion);
 		}
 
 		public KeyframeTpl(float time, T value, T inSlope, T outSlope, T weight)
@@ -18,38 +20,40 @@ namespace uTinyRipper.Classes.AnimationClips
 			Value = value;
 			InSlope = inSlope;
 			OutSlope = outSlope;
-			TangentMode = TangentMode.FreeFree;
+			// this enum member is version agnostic
+			TangentMode = AnimationClips.TangentMode.FreeFree.ToTangent(Version.MinVersion);
 			WeightedMode = WeightedMode.None;
 			InWeight = weight;
 			OutWeight = weight;
 		}
 
-		/// <summary>
-		/// 2018.1 and greater
-		/// </summary>
-		public static bool IsReadWeight(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
-			return version.IsGreaterEqual(2018);
-		}
-		/// <summary>
-		/// 5.5.0 and greater and Not Release
-		/// </summary>
-		public static bool IsReadTangentMode(Version version, TransferInstructionFlags flags)
-		{
-			return version.IsGreaterEqual(5, 5) && !flags.IsRelease();
-		}
-
-		private static int GetSerializedVersion(Version version)
-		{
+			// unknown conversion
 			if (version.IsGreaterEqual(2018))
 			{
 				return 3;
 			}
-			if (version.IsGreaterEqual(5, 5))
+			// TangentMode enum has been changed
+			if (TangentModeExtensions.TangentMode5Relevant(version))
 			{
 				return 2;
 			}
 			return 1;
+		}
+
+		/// <summary>
+		/// 2.1.0 and greater and Not Release
+		/// </summary>
+		public static bool HasTangentMode(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2, 1);
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool HasWeight(Version version) => version.IsGreaterEqual(2018);
+
+		public KeyframeTpl<T> Convert(IExportContainer container)
+		{
+			return KeyframeTplConverter.Convert(container, ref this);
 		}
 
 		public void Read(AssetReader reader)
@@ -58,11 +62,11 @@ namespace uTinyRipper.Classes.AnimationClips
 			Value.Read(reader);
 			InSlope.Read(reader);
 			OutSlope.Read(reader);
-			if (IsReadTangentMode(reader.Version, reader.Flags))
+			if (HasTangentMode(reader.Version, reader.Flags))
 			{
-				TangentMode = (TangentMode)reader.ReadInt32();
+				TangentMode = reader.ReadInt32();
 			}
-			if (IsReadWeight(reader.Version))
+			if (HasWeight(reader.Version))
 			{
 				WeightedMode = (WeightedMode)reader.ReadInt32();
 				InWeight.Read(reader);
@@ -70,19 +74,37 @@ namespace uTinyRipper.Classes.AnimationClips
 			}
 		}
 
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Time);
+			Value.Write(writer);
+			InSlope.Write(writer);
+			OutSlope.Write(writer);
+			if (HasTangentMode(writer.Version, writer.Flags))
+			{
+				writer.Write(TangentMode);
+			}
+			if (HasWeight(writer.Version))
+			{
+				writer.Write((int)WeightedMode);
+				InWeight.Write(writer);
+				OutWeight.Write(writer);
+			}
+		}
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TimeName, Time);
 			node.Add(ValueName, Value.ExportYAML(container));
 			node.Add(InSlopeName, InSlope.ExportYAML(container));
 			node.Add(OutSlopeName, OutSlope.ExportYAML(container));
-			if (IsReadTangentMode(container.ExportVersion, container.ExportFlags))
+			if (HasTangentMode(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(TangentModeName, (int)TangentMode);
+				node.Add(TangentModeName, TangentMode);
 			}
-			if (IsReadWeight(container.ExportVersion))
+			if (HasWeight(container.ExportVersion))
 			{
 				node.Add(WeightedModeName, (int)WeightedMode);
 				node.Add(InWeightName, InWeight.ExportYAML(container));
@@ -91,9 +113,21 @@ namespace uTinyRipper.Classes.AnimationClips
 			return node;
 		}
 
-		public float Time { get; private set; }
-		public TangentMode TangentMode { get; private set; }
-		public WeightedMode WeightedMode { get; private set; }
+		public TangentMode GetTangentMode(Version version)
+		{
+			if (TangentModeExtensions.TangentMode5Relevant(version))
+			{
+				return ((TangentMode5)TangentMode).ToTangentMode();
+			}
+			else
+			{
+				return ((TangentMode2)TangentMode).ToTangentMode();
+			}
+		}
+
+		public float Time { get; set; }
+		public int TangentMode { get; set; }
+		public WeightedMode WeightedMode { get; set; }
 
 		public const string TimeName = "time";
 		public const string ValueName = "value";
@@ -103,6 +137,10 @@ namespace uTinyRipper.Classes.AnimationClips
 		public const string WeightedModeName = "weightedMode";
 		public const string InWeightName = "inWeight";
 		public const string OutWeightName = "outWeight";
+
+		public static Float DefaultFloatWeight => 1.0f / 3.0f;
+		public static Vector3f DefaultVector3Weight => new Vector3f(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f);
+		public static Quaternionf DefaultQuaternionWeight => new Quaternionf(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f);
 
 		public T Value;
 		public T InSlope;

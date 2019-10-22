@@ -1,8 +1,7 @@
 ﻿using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
-using uTinyRipper.Converters.Objects;
 
-namespace uTinyRipper.Converters.EditorExtensions
+namespace uTinyRipper.Converters
 {
 	public static class EditorExtensionConverter
 	{

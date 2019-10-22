@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using uTinyRipper.AssetExporters;
 
 namespace uTinyRipper.Classes.Meshes
@@ -7,8 +8,8 @@ namespace uTinyRipper.Classes.Meshes
 	{
 		public CollisionMeshData(Version version)
 		{
-			BakedConvexCollisionMesh = ArrayExtensions.EmptyBytes;
-			BakedTriangleCollisionMesh = ArrayExtensions.EmptyBytes;
+			BakedConvexCollisionMesh = Array.Empty<byte>();
+			BakedTriangleCollisionMesh = Array.Empty<byte>();
 		}
 
 		public CollisionMeshData Convert(IExportContainer container)

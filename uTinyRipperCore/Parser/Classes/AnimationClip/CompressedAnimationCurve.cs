@@ -23,7 +23,7 @@ namespace uTinyRipper.Classes.AnimationClips
 				Quaternionf rotation = rotations[i];
 				Quaternionf inSlope = new Quaternionf(slopes[j - 4], slopes[j - 3], slopes[j - 2], slopes[j - 1]);
 				Quaternionf outSlope = new Quaternionf(slopes[j + 0], slopes[j + 1], slopes[j + 2], slopes[j + 3]);
-				keyframes[i] = new KeyframeTpl<Quaternionf>(time, rotation, inSlope, outSlope, Quaternionf.DefaultWeight);
+				keyframes[i] = new KeyframeTpl<Quaternionf>(time, rotation, inSlope, outSlope, KeyframeTpl<Quaternionf>.DefaultQuaternionWeight);
 			}
 			AnimationCurveTpl<Quaternionf> curve = new AnimationCurveTpl<Quaternionf>(keyframes, PreInfinity, PostInfinity);
 			return new QuaternionCurve(Path, curve);

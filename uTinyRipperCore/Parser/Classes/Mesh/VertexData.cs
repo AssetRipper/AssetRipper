@@ -12,12 +12,12 @@ namespace uTinyRipper.Classes.Meshes
 		public static int ToSerializedVersion(Version version)
 		{
 			// VertexFormat enum has been changed
-			if (version.IsGreaterEqual(2019))
+			if (VertexFormatExtensions.VertexFormat2019Relevant(version))
 			{
 				return 3;
 			}
 			// ShaderChannel enum has been changed
-			if (version.IsGreaterEqual(2018))
+			if (ShaderChannelExtensions.ShaderChannel2018Relevant(version))
 			{
 				return 2;
 			}
@@ -61,8 +61,8 @@ namespace uTinyRipper.Classes.Meshes
 
 		public BoneWeights4[] GenerateSkin(IExportContainer container)
 		{
-			ChannelInfo weightChannel = Channels[(int)ShaderChannelV2018.SkinWeight];
-			ChannelInfo indexChannel = Channels[(int)ShaderChannelV2018.SkinBoneIndex];
+			ChannelInfo weightChannel = Channels[(int)ShaderChannel2018.SkinWeight];
+			ChannelInfo indexChannel = Channels[(int)ShaderChannel2018.SkinBoneIndex];
 			if (!weightChannel.IsSet)
 			{
 				return new BoneWeights4[0];

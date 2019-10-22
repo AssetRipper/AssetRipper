@@ -58,7 +58,12 @@ namespace uTinyRipper.Classes
 
 		public static ColorRGBA32 White => new ColorRGBA32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 
-		public uint RGBA { get; private set; }
+		public byte R => (byte)((RGBA >> 0) & 0xFF);
+		public byte G => (byte)((RGBA >> 8) & 0xFF);
+		public byte B => (byte)((RGBA >> 16) & 0xFF);
+		public byte A => (byte)((RGBA >> 24) & 0xFF);
+
+		public uint RGBA { get; set; }
 
 		public const string RgbaName = "rgba";
 	}

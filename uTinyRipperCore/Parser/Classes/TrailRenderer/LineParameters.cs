@@ -1,16 +1,29 @@
 ﻿using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes;
 using uTinyRipper.Classes.AnimationClips;
-using uTinyRipper.Classes.ParticleSystems;
 using uTinyRipper.YAML;
+using uTinyRipper.Converters.TrailRenderers;
 
 namespace uTinyRipper.Classes.TrailRenderers
 {
-	public struct LineParameters : IAssetReadable, IYAMLExportable
+	public struct LineParameters : IAsset
 	{
-		public static int GetSerializedVersion(Version version)
+		public LineParameters(Version version)
 		{
-			// ShadowBias has been added
+			WidthMultiplier = 1.0f;
+			WidthCurve = new AnimationCurveTpl<Float>(false);
+			WidthCurve.Curve = new KeyframeTpl<Float>[] { new KeyframeTpl<Float>(0.0f, 1.0f, KeyframeTpl<Float>.DefaultFloatWeight), };
+			ColorGradient = new ParticleSystems.Gradient(ColorRGBAf.White, ColorRGBAf.White);
+			NumCornerVertices = 0;
+			NumCapVertices = 0;
+			Alignment = LineAlignment.View;
+			TextureMode = LineTextureMode.Stretch;
+			ShadowBias = 0.5f;
+			GenerateLightingData = false;
+		}
+
+		public static int ToSerializedVersion(Version version)
+		{
+			// ShadowBias default value has been changed from 0 to 0.5
 			if (version.IsGreaterEqual(2018, 3))
 			{
 				return 3;
@@ -18,19 +31,19 @@ namespace uTinyRipper.Classes.TrailRenderers
 			// min version is 2nd 
 			return 2;
 		}
+
 		/// <summary>
 		/// 2018.3.0 and greater
 		/// </summary>
-		public static bool IsReadShadowBias(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
+		public static bool HasShadowBias(Version version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
-		/// 2018.3.0 and greater
+		/// 2017.1.0b2 and greater
 		/// </summary>
-		public static bool IsReadGenerateLightingData(Version version)
+		public static bool IsReadGenerateLightingData(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+
+		public LineParameters Convert(IExportContainer container)
 		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+			return LineParametersConverter.Convert(container, ref this);
 		}
 
 		public void Read(AssetReader reader)
@@ -42,7 +55,7 @@ namespace uTinyRipper.Classes.TrailRenderers
 			NumCapVertices = reader.ReadInt32();
 			Alignment = (LineAlignment)reader.ReadInt32();
 			TextureMode = (LineTextureMode)reader.ReadInt32();
-			if (IsReadShadowBias(reader.Version))
+			if (HasShadowBias(reader.Version))
 			{
 				ShadowBias = reader.ReadSingle();
 			}
@@ -53,10 +66,30 @@ namespace uTinyRipper.Classes.TrailRenderers
 			}
 		}
 
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(WidthMultiplier);
+			WidthCurve.Write(writer);
+			ColorGradient.Write(writer);
+			writer.Write(NumCornerVertices);
+			writer.Write(NumCapVertices);
+			writer.Write((int)Alignment);
+			writer.Write((int)TextureMode);
+			if (HasShadowBias(writer.Version))
+			{
+				writer.Write(ShadowBias);
+			}
+			if (IsReadGenerateLightingData(writer.Version))
+			{
+				writer.Write(GenerateLightingData);
+				writer.AlignStream(AlignType.Align4);
+			}
+		}
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(WidthMultiplierName, WidthMultiplier);
 			node.Add(WidthCurveName, WidthCurve.ExportYAML(container));
 			node.Add(ColorGradientName, ColorGradient.ExportYAML(container));
@@ -64,7 +97,7 @@ namespace uTinyRipper.Classes.TrailRenderers
 			node.Add(NumCapVerticesName, NumCapVertices);
 			node.Add(AlignmentName, (int)Alignment);
 			node.Add(TextureModeName, (int)TextureMode);
-			if (IsReadShadowBias(container.ExportVersion))
+			if (HasShadowBias(container.ExportVersion))
 			{
 				node.Add(ShadowBiasName, ShadowBias);
 			}
@@ -75,13 +108,13 @@ namespace uTinyRipper.Classes.TrailRenderers
 			return node;
 		}
 
-		public float WidthMultiplier { get; private set; }
-		public int NumCornerVertices { get; private set; }
-		public int NumCapVertices { get; private set; }
-		public LineAlignment Alignment { get; private set; }
-		public LineTextureMode TextureMode { get; private set; }
-		public float ShadowBias { get; private set; }
-		public bool GenerateLightingData { get; private set; }
+		public float WidthMultiplier { get; set; }
+		public int NumCornerVertices { get; set; }
+		public int NumCapVertices { get; set; }
+		public LineAlignment Alignment { get; set; }
+		public LineTextureMode TextureMode { get; set; }
+		public float ShadowBias { get; set; }
+		public bool GenerateLightingData { get; set; }
 
 		public const string WidthMultiplierName = "widthMultiplier";
 		public const string WidthCurveName = "widthCurve";
@@ -94,6 +127,6 @@ namespace uTinyRipper.Classes.TrailRenderers
 		public const string GenerateLightingDataName = "generateLightingData";
 
 		public AnimationCurveTpl<Float> WidthCurve;
-		public Gradient ColorGradient;
+		public ParticleSystems.Gradient ColorGradient;
 	}
 }

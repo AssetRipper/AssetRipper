@@ -11,8 +11,17 @@ namespace uTinyRipper.Classes.Meshes
 		Int,
 	}
 
-	public static class VertexFormatExtension
+	public static class VertexFormatExtensions
 	{
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool VertexFormat2019Relevant(Version version) => version.IsGreaterEqual(2019);
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		public static bool VertexFormat2017Relevant(Version version) => version.IsGreaterEqual(2017);
+
 		public static byte CalculateStride(this VertexFormat _this, int dimention)
 		{
 			return (byte)(_this.GetSize() * dimention);
@@ -40,13 +49,13 @@ namespace uTinyRipper.Classes.Meshes
 
 		public static byte ToFormat(this VertexFormat _this, Version version)
 		{
-			if (version.IsGreaterEqual(2019))
+			if (VertexFormat2019Relevant(version))
 			{
-				return (byte)_this.ToVertexFormatV2019();
+				return (byte)_this.ToVertexFormat2019();
 			}
-			else if (version.IsGreaterEqual(2017))
+			else if (VertexFormat2017Relevant(version))
 			{
-				return (byte)_this.ToVertexFormatV2017();
+				return (byte)_this.ToVertexFormat2017();
 			}
 			else
 			{
@@ -74,36 +83,36 @@ namespace uTinyRipper.Classes.Meshes
 			}
 		}
 
-		public static VertexFormatV2017 ToVertexFormatV2017(this VertexFormat _this)
+		public static VertexFormat2017 ToVertexFormat2017(this VertexFormat _this)
 		{
 			switch (_this)
 			{
 				case VertexFormat.Float:
-					return VertexFormatV2017.Float;
+					return VertexFormat2017.Float;
 				case VertexFormat.Float16:
-					return VertexFormatV2017.Float16;
+					return VertexFormat2017.Float16;
 				case VertexFormat.Byte:
-					return VertexFormatV2017.UNorm8;
+					return VertexFormat2017.UNorm8;
 				case VertexFormat.Int:
-					return VertexFormatV2017.UInt32;
+					return VertexFormat2017.UInt32;
 
 				default:
 					throw new Exception(_this.ToString());
 			}
 		}
 
-		public static VertexFormatV2019 ToVertexFormatV2019(this VertexFormat _this)
+		public static VertexFormat2019 ToVertexFormat2019(this VertexFormat _this)
 		{
 			switch (_this)
 			{
 				case VertexFormat.Float:
-					return VertexFormatV2019.Float;
+					return VertexFormat2019.Float;
 				case VertexFormat.Float16:
-					return VertexFormatV2019.Float16;
+					return VertexFormat2019.Float16;
 				case VertexFormat.Byte:
-					return VertexFormatV2019.UNorm8;
+					return VertexFormat2019.UNorm8;
 				case VertexFormat.Int:
-					return VertexFormatV2019.UInt32;
+					return VertexFormat2019.UInt32;
 
 				default:
 					throw new Exception(_this.ToString());

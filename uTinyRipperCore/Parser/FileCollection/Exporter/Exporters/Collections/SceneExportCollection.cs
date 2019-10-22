@@ -28,14 +28,16 @@ namespace uTinyRipper.AssetExporters
 			Name = file.Name;
 			m_file = file;
 
+			List<Object> components = new List<Object>();
 			foreach (Object asset in file.FetchAssets())
 			{
 				if (OcclusionCullingSettings.IsSceneCompatible(asset))
 				{
-					m_cexportIDs.Add(asset, asset.PathID);
+					components.Add(asset);
+					m_cexportIDs.Add(asset.AssetInfo, asset.PathID);
 				}
 			}
-			m_cexportIDs = m_cexportIDs.OrderBy(t => t.Key, this).ToDictionary(t => t.Key, t => t.Value);
+			m_components = components.OrderBy(t => t, this).ToArray();
 
 			if (OcclusionCullingSettings.IsReadSceneGUID(file.Version))
 			{
@@ -134,7 +136,7 @@ namespace uTinyRipper.AssetExporters
 				DirectoryUtils.CreateVirtualDirectory(folderPath);
 			}
 
-			AssetExporter.Export(container, Components, filePath);
+			AssetExporter.Export(container, Components.Select(t => t.Convert(container)), filePath);
 			SceneImporter sceneImporter = new SceneImporter();
 			Meta meta = new Meta(sceneImporter, GUID);
 			ExportMeta(container, meta, filePath);
@@ -156,12 +158,12 @@ namespace uTinyRipper.AssetExporters
 			{
 				return true;
 			}
-			return m_cexportIDs.ContainsKey(asset);
+			return m_cexportIDs.ContainsKey(asset.AssetInfo);
 		}
 
 		public override long GetExportID(Object asset)
 		{
-			return IsComponent(asset) ? m_cexportIDs[asset] : GetMainExportID(asset);
+			return IsComponent(asset) ? m_cexportIDs[asset.AssetInfo] : GetMainExportID(asset);
 		}
 		
 		public override ExportPointer CreateExportPointer(Object asset, bool isLocal)
@@ -278,7 +280,7 @@ namespace uTinyRipper.AssetExporters
 		public OcclusionCullingData OcclusionCullingData { get; }
 		public EngineGUID GUID { get; }
 
-		private IEnumerable<Object> Components => m_cexportIDs.Keys;
+		private IEnumerable<Object> Components => m_components;
 
 		private const string AssetsName = "Assets/";
 		private const string LevelName = "level";
@@ -286,7 +288,8 @@ namespace uTinyRipper.AssetExporters
 
 		private static readonly Regex s_sceneNameFormat = new Regex($"^{LevelName}(0|[1-9][0-9]*)$");
 
-		private readonly Dictionary<Object, long> m_cexportIDs = new Dictionary<Object, long>();
+		private readonly Object[] m_components;
+		private readonly Dictionary<AssetInfo, long> m_cexportIDs = new Dictionary<AssetInfo, long>();
 		private readonly ISerializedFile m_file;
 		private readonly OcclusionCullingSettings m_occlusionCullingSettings;
 	}
