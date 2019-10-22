@@ -14,21 +14,14 @@ namespace uTinyRipper.Classes
 		{
 		}
 		/// <summary>
-		/// 2.0.0 and greater
-		/// </summary>
-		public static bool IsReadRenderer(Version version)
-		{
-			return version.IsGreaterEqual(2);
-		}
-		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.5.0 and greater
 		/// </summary>
 		public static bool IsReadParameters(Version version)
 		{
 			return version.IsGreaterEqual(5, 5);
 		}
 		/// <summary>
-		/// 2019.2.0 and greater
+		/// 2018.2.2 and greater
 		/// </summary>
 		public static bool IsReadEmitting(Version version)
 		{
@@ -37,7 +30,7 @@ namespace uTinyRipper.Classes
 		private static int GetSerializedVersion(Version version)
 		{
 			// LineParameters has been added
-			if (version.IsGreaterEqual(5))
+			if (version.IsGreaterEqual(5, 5))
 			{
 				return 2;
 			}
@@ -46,14 +39,7 @@ namespace uTinyRipper.Classes
 
 		public override void Read(AssetReader reader)
 		{
-			if (IsReadRenderer(reader.Version))
-			{
-				base.Read(reader);
-			}
-			else
-			{
-				ReadBase(reader);
-			}
+			base.Read(reader);
 			Time = reader.ReadSingle();
 			if (IsReadParameters(reader.Version))
 			{
@@ -70,14 +56,6 @@ namespace uTinyRipper.Classes
 			if (IsReadEmitting(reader.Version))
 			{
 				Emitting = reader.ReadBoolean();
-			}
-		}
-
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
-		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
-			{
-				yield return asset;
 			}
 		}
 
