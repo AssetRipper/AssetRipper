@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
-using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
+	/// <summary>
+	/// SkinnedMeshFilter previously
+	/// </summary>
 	public sealed class SkinnedMeshRenderer : Renderer
 	{
-		public SkinnedMeshRenderer(AssetInfo assetInfo):
+		public SkinnedMeshRenderer(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -18,13 +21,6 @@ namespace uTinyRipper.Classes
 		public static bool IsReadRenderer(Version version)
 		{
 			return version.IsGreaterEqual(2);
-		}
-		/// <summary>
-		/// 1.5.0 and greater
-		/// </summary>
-		public static bool IsReadQuality(Version version)
-		{
-			return version.IsGreaterEqual(1, 5);
 		}
 		/// <summary>
 		/// 1.5.0 and greater
@@ -158,30 +154,24 @@ namespace uTinyRipper.Classes
 				ReadBase(reader);
 			}
 
-			if (IsReadQuality(reader.Version))
+			if (IsReadUpdateWhenOffscreen(reader.Version))
 			{
 				if (IsReadQualityFirst(reader.Version))
 				{
 					Quality = reader.ReadInt32();
 				}
-			}
-			if (IsReadUpdateWhenOffscreen(reader.Version))
-			{
 				UpdateWhenOffscreen = reader.ReadBoolean();
-			}
-			if (IsReadQuality(reader.Version))
-			{
 				if (!IsReadQualityFirst(reader.Version))
 				{
 					Quality = reader.ReadInt32();
 				}
 			}
-			
-			if(IsReadSkinNormals(reader.Version))
+
+			if (IsReadSkinNormals(reader.Version))
 			{
 				SkinNormals = reader.ReadBoolean();
 			}
-			if(IsReadSkinMotionVector(reader.Version))
+			if (IsReadSkinMotionVector(reader.Version))
 			{
 				SkinnedMotionVectors = reader.ReadBoolean();
 			}
@@ -190,11 +180,11 @@ namespace uTinyRipper.Classes
 				reader.AlignStream(AlignType.Align4);
 			}
 
-			if(IsReadOffscreen(reader.Version))
+			if (IsReadOffscreen(reader.Version))
 			{
 				DisableAnimationWhenOffscreen.Read(reader);
 			}
-			
+
 			if (IsReadMeshFirst(reader.Version))
 			{
 				Mesh.Read(reader);
@@ -216,7 +206,7 @@ namespace uTinyRipper.Classes
 				Mesh.Read(reader);
 			}
 
-			if(IsReadBindPose(reader.Version))
+			if (IsReadBindPose(reader.Version))
 			{
 				m_bindPose = reader.ReadAssetArray<Matrix4x4f>();
 			}
@@ -224,20 +214,20 @@ namespace uTinyRipper.Classes
 			{
 				CurrentPose.Read(reader);
 			}
-			
-			if(IsReadWeights(reader.Version))
+
+			if (IsReadWeights(reader.Version))
 			{
 				m_blendShapeWeights = reader.ReadSingleArray();
 			}
-			if(IsReadRootBone(reader.Version))
+			if (IsReadRootBone(reader.Version))
 			{
 				RootBone.Read(reader);
 			}
-			if(IsReadAABB(reader.Version))
+			if (IsReadAABB(reader.Version))
 			{
 				AABB.Read(reader);
 				DirtyAABB = reader.ReadBoolean();
-				if(IsAlignDirty(reader.Version))
+				if (IsAlignDirty(reader.Version))
 				{
 					reader.AlignStream(AlignType.Align4);
 				}
@@ -246,12 +236,12 @@ namespace uTinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(file, isLog))
 			{
 				yield return asset;
 			}
 
-			if(IsReadOffscreen(file.Version))
+			if (IsReadOffscreen(file.Version))
 			{
 				yield return DisableAnimationWhenOffscreen.FetchDependency(file, isLog, ToLogString, "m_DisableAnimationWhenOffscreen");
 			}

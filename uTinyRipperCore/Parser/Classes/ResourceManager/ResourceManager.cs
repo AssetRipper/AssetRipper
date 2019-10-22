@@ -5,6 +5,7 @@ using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.ResourceManagers;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using System;
 
 namespace uTinyRipper.Classes
 {
@@ -73,7 +74,27 @@ namespace uTinyRipper.Classes
 			{
 				if (containerEntry.Value.IsAsset(File, asset))
 				{
-					resourcePath = Path.Combine(AssetsKeyword, ResourceKeyword, containerEntry.Key);
+					string validName;
+					if (asset is NamedObject named)
+					{
+						validName = named.ValidName;
+					}
+					else
+					{
+						GameObject gameObject = (GameObject)asset;
+						validName = gameObject.Name;
+					}
+
+					string resourceName = containerEntry.Key;
+					if (validName != resourceName && resourceName.EndsWith(validName, StringComparison.OrdinalIgnoreCase))
+					{
+						string directoryPath = resourceName.Substring(0, resourceName.Length - validName.Length);
+						resourcePath = Path.Combine(AssetsKeyword, ResourceKeyword, directoryPath, validName);
+					}
+					else
+					{
+						resourcePath = Path.Combine(AssetsKeyword, ResourceKeyword, resourceName);
+					}
 					return true;
 				}
 			}
@@ -81,6 +102,7 @@ namespace uTinyRipper.Classes
 			resourcePath = string.Empty;
 			return false;
 		}
+
 
 		public IReadOnlyList<KeyValuePair<string, PPtr<Object>>> Container => m_container;
 		public ILookup<string, PPtr<Object>> ContainerMap => Container.ToLookup(t => t.Key, t => t.Value);

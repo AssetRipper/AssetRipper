@@ -82,7 +82,7 @@ namespace uTinyRipper.Assembly
 			return (SerializableStructure)copy.Base.CreateDuplicate();
 		}
 
-		protected static List<SerializableField> CreateFields(SerializableStructure copy)
+		protected static SerializableField[] CreateFields(SerializableStructure copy)
 		{
 			List<SerializableField> fields = new List<SerializableField>();
 			foreach (SerializableField field in copy.Fields)
@@ -90,7 +90,7 @@ namespace uTinyRipper.Assembly
 				SerializableField fieldCopy = field.CreateCopy();
 				fields.Add(fieldCopy);
 			}
-			return fields;
+			return fields.ToArray();
 		}
 
 		public virtual ISerializableStructure CreateDuplicate()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace uTinyRipper
 {
@@ -159,6 +160,17 @@ namespace uTinyRipper
 			}
 		}
 
+		public static void ReadSafe(this IDictionary<Tuple<byte, byte>, float> _this, AssetReader reader)
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				Tuple<byte, byte> key = reader.ReadTupleByteByte();
+				float value = reader.ReadSingle();
+				_this[key] = value;
+			}
+		}
+
 		public static void Read(this IDictionary<Tuple<ushort, ushort>, float> _this, AssetReader reader)
 		{
 			int count = reader.ReadInt32();
@@ -167,6 +179,17 @@ namespace uTinyRipper
 				Tuple<ushort, ushort> key = reader.ReadTupleUInt16UInt16();
 				float value = reader.ReadSingle();
 				_this.Add(key, value);
+			}
+		}
+
+		public static void ReadSafe(this IDictionary<Tuple<ushort, ushort>, float> _this, AssetReader reader)
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				Tuple<ushort, ushort> key = reader.ReadTupleUInt16UInt16();
+				float value = reader.ReadSingle();
+				_this[key] = value;
 			}
 		}
 

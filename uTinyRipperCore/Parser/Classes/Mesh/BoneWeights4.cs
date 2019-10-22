@@ -4,9 +4,9 @@ using uTinyRipper.YAML;
 namespace uTinyRipper.Classes.Meshes
 {
 	/// <summary>
-	/// BoneInfluence in old versions
+	/// BoneInfluence previously
 	/// </summary>
-	public struct BoneWeights4 : IAssetReadable, IYAMLExportable
+	public struct BoneWeights4 : IAsset
 	{
 		public BoneWeights4(float w0, float w1, float w2, float w3, int i0, int i1, int i2, int i3)
 		{
@@ -32,6 +32,18 @@ namespace uTinyRipper.Classes.Meshes
 			BoneIndex3 = reader.ReadInt32();
 		}
 
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Weight0);
+			writer.Write(Weight1);
+			writer.Write(Weight2);
+			writer.Write(Weight3);
+			writer.Write(BoneIndex0);
+			writer.Write(BoneIndex1);
+			writer.Write(BoneIndex2);
+			writer.Write(BoneIndex3);
+		}
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
@@ -46,13 +58,15 @@ namespace uTinyRipper.Classes.Meshes
 			return node;
 		}
 		
-		public float Weight0 { get; private set; }
-		public float Weight1 { get; private set; }
-		public float Weight2 { get; private set; }
-		public float Weight3 { get; private set; }
-		public int BoneIndex0 { get; private set; }
-		public int BoneIndex1 { get; private set; }
-		public int BoneIndex2 { get; private set; }
-		public int BoneIndex3 { get; private set; }
+		public float Weight0 { get; set; }
+		public float Weight1 { get; set; }
+		public float Weight2 { get; set; }
+		public float Weight3 { get; set; }
+		public int BoneIndex0 { get; set; }
+		public int BoneIndex1 { get; set; }
+		public int BoneIndex2 { get; set; }
+		public int BoneIndex3 { get; set; }
+
+		public const int Dimention = 4;
 	}
 }

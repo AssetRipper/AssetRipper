@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using uTinyRipper.Assembly;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
@@ -9,7 +8,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct Vector2f : ISerializableStructure
+	public struct Vector2f : IAsset, ISerializableStructure
 	{
 		public Vector2f(float value) :
 			this(value, value)
@@ -21,6 +20,8 @@ namespace uTinyRipper.Classes
 			X = x;
 			Y = y;
 		}
+
+		public static explicit operator Vector2f(Vector2i v2) => new Vector2f(v2.X, v2.Y);
 
 		public static Vector2f operator -(Vector2f left)
 		{
@@ -88,10 +89,10 @@ namespace uTinyRipper.Classes
 			Y = reader.ReadSingle();
 		}
 
-		public void Write(BinaryWriter stream)
+		public void Write(AssetWriter writer)
 		{
-			stream.Write(X);
-			stream.Write(Y);
+			writer.Write(X);
+			writer.Write(Y);
 		}
 		
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -152,8 +153,8 @@ namespace uTinyRipper.Classes
 
 		public static Vector2f One { get; } = new Vector2f(1.0f, 1.0f);
 
-		public float X { get; private set; }
-		public float Y { get; private set; }
+		public float X { get; set; }
+		public float Y { get; set; }
 
 		public const string XName = "x";
 		public const string YName = "y";

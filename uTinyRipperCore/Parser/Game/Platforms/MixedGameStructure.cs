@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using uTinyRipper.Assembly;
 
 namespace uTinyRipper
 {
@@ -54,7 +55,7 @@ namespace uTinyRipper
 			CollectGameFiles(root, files);
 			CollectWebFiles(root, files);
 			CollectAssetBundles(root, files);
-			CollectAssemblies(root, assemblies);
+			CollectAssembliesSafe(root, assemblies);
 			if (files.Count != count)
 			{
 				dataPathes.Add(root.FullName);
@@ -90,6 +91,24 @@ namespace uTinyRipper
 							}
 						}
 						break;
+				}
+			}
+		}
+
+		private void CollectAssembliesSafe(DirectoryInfo root, IDictionary<string, string> assemblies)
+		{
+			foreach (FileInfo file in root.EnumerateFiles())
+			{
+				if (AssemblyManager.IsAssembly(file.Name))
+				{
+					if (assemblies.ContainsKey(file.Name))
+					{
+						Logger.Instance.Log(LogType.Warning, LogCategory.Import, $"Duplicate assemblies found: '{assemblies[file.Name]}' & '{file.FullName}'");
+					}
+					else
+					{
+						assemblies.Add(file.Name, file.FullName);
+					}
 				}
 			}
 		}

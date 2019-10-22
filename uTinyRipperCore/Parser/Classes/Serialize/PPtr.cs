@@ -6,7 +6,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct PPtr<T> : IYAMLExportable, IAssetReadable
+	public struct PPtr<T> : IAsset
 		where T: Object
 	{
 		public PPtr(int fileIndex, long pathID)
@@ -28,10 +28,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		private static bool IsLongID(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		private static bool IsLongID(Version version) => version.IsGreaterEqual(5);
 
 		public PPtr<T1> CastTo<T1>()
 			where T1 : Object
@@ -43,6 +40,19 @@ namespace uTinyRipper.Classes
 		{
 			FileIndex = reader.ReadInt32();
 			PathID = IsLongID(reader.Version) ? reader.ReadInt64() : reader.ReadInt32();
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(FileIndex);
+			if (IsLongID(writer.Version))
+			{
+				writer.Write(PathID);
+			}
+			else
+			{
+				writer.Write((int)PathID);
+			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

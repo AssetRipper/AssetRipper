@@ -37,7 +37,7 @@ namespace uTinyRipperGUI
 
 		public Color GetPixel(int x, int y)
 		{
-			int index = x + (y * Width);
+			int index = (x + (y * Width)) * 4;
 			uint col = BitConverter.ToUInt32(Bits, index);
 			return Color.FromArgb(unchecked((int)col));
 		}

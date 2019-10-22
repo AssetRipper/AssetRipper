@@ -25,6 +25,20 @@ namespace uTinyRipper.Exporters.Scripts
 			return $"[{module}]{fullname}";
 		}
 
+		public static bool IsBuiltInLibrary(string module)
+		{
+			if (IsDotNetLibrary(module))
+			{
+				return true;
+			}
+			if (IsUnityLibrary(module))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 		private static string GetExportSubPath(string assembly, string @namespace, string @class)
 		{
 			string assFolderName = AssemblyManager.ToAssemblyName(assembly);
@@ -212,6 +226,20 @@ namespace uTinyRipper.Exporters.Scripts
 			return CreateAttribute(attribute);
 		}
 
+		public ScriptExportMethod RetrieveMethod(MethodDefinition method)
+		{
+			ScriptExportMethod exportMethod = new ScriptExportMonoMethod(method);
+			exportMethod.Init(this);
+			return exportMethod;
+		}
+
+		public ScriptExportProperty RetrieveProperty(PropertyDefinition property)
+		{
+			ScriptExportProperty exportProperty = new ScriptExportMonoProperty(property);
+			exportProperty.Init(this);
+			return exportProperty;
+		}
+
 		public ScriptExportField RetrieveField(FieldDefinition field)
 		{
 			ScriptExportField exportField = new ScriptExportMonoField(field);
@@ -321,16 +349,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 		private static bool IsBuiltInType(ScriptExportType type)
 		{
-			if (IsDotNetLibrary(type.Module))
-			{
-				return true;
-			}
-			if (IsUnityLibrary(type.Module))
-			{
-				return true;
-			}
-
-			return false;
+			return IsBuiltInLibrary(type.Module);
 		}
 
 		private static bool IsDotNetLibrary(string module)
@@ -373,7 +392,6 @@ namespace uTinyRipper.Exporters.Scripts
 					}
 			}
 		}
-
 		public IEnumerable<ScriptExportType> Types => m_types.Values;
 		public IEnumerable<ScriptExportEnum> Enums => m_enums.Values;
 		public IEnumerable<ScriptExportDelegate> Delegates => m_delegates.Values;

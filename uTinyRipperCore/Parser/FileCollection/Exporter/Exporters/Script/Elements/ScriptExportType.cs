@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using uTinyRipper.Assembly;
 
 namespace uTinyRipper.Exporters.Scripts
@@ -33,14 +34,12 @@ namespace uTinyRipper.Exporters.Scripts
 			}
 
 			writer.WriteIndent(intent);
-			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", TypeName);
-
+			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", TypeName);			
 			if (Base != null && !SerializableType.IsBasic(Base.Namespace, Base.NestedName))
 			{
 				writer.Write(" : {0}", Base.GetTypeNestedName(DeclaringType));
 			}
 			writer.WriteLine();
-
 			writer.WriteIndent(intent++);
 			writer.WriteLine('{');
 
@@ -65,6 +64,19 @@ namespace uTinyRipper.Exporters.Scripts
 				writer.WriteLine();
 			}
 
+			foreach (ScriptExportMethod method in Methods)
+			{
+				method.Export(writer, intent);
+				writer.WriteLine();
+			}
+			foreach (ScriptExportProperty property in Properties)
+			{
+				property.Export(writer, intent);
+			}
+			if (Properties.Count > 0)
+			{
+				writer.WriteLine();
+			}
 			foreach (ScriptExportField field in Fields)
 			{
 				field.Export(writer, intent);
@@ -90,13 +102,21 @@ namespace uTinyRipper.Exporters.Scripts
 			{
 				Base.GetTypeNamespaces(namespaces);
 			}
-			foreach(ScriptExportType nestedType in NestedTypes)
+			foreach (ScriptExportType nestedType in NestedTypes)
 			{
 				nestedType.GetUsedNamespaces(namespaces);
 			}
 			foreach (ScriptExportDelegate @delegate in Delegates)
 			{
 				@delegate.GetUsedNamespaces(namespaces);
+			}
+			foreach (ScriptExportMethod method in Methods)
+			{
+				method.GetUsedNamespaces(namespaces);
+			}
+			foreach (ScriptExportProperty property in Properties)
+			{
+				property.GetUsedNamespaces(namespaces);
 			}
 			foreach (ScriptExportField field in Fields)
 			{
@@ -118,14 +138,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 		public string GetTypeNestedName(ScriptExportType relativeType)
 		{
-			if(relativeType == null)
-			{
-				return NestedName;
-			}
-			if (SerializableType.IsEngineObject(Namespace, NestedName))
-			{
-				return $"{Namespace}.{NestedName}";
-			}
+			string typeName = TypeName;
 			if (DeclaringType == null)
 			{
 				return TypeName;
@@ -134,9 +147,8 @@ namespace uTinyRipper.Exporters.Scripts
 			{
 				return TypeName;
 			}
-
 			string declaringName = NestType.GetTypeNestedName(relativeType);
-			return $"{declaringName}.{TypeName}";
+			return $"{declaringName}.{typeName}";
 		}
 
 		public override string ToString()
@@ -196,20 +208,38 @@ namespace uTinyRipper.Exporters.Scripts
 			return Namespace;
 		}
 
+		/// <summary>
+		/// Full name is a unique name with module prefix
+		/// ex: [Module]Namespace.DeclaringClass<DT1, DT2>.Class<T1, T2>
+		/// </summary>
 		public abstract string FullName { get; }
+		/// <summary>
+		/// Nested name is type name with declaring type prefix
+		/// ex: DeclaringClass<DT1, DT2>.Class<T1, T2>
+		/// </summary>
 		public abstract string NestedName { get; }
+		/// <summary>
+		/// Type name with declaring type prefix, but this prefix is cleaned from generic parameters
+		/// ex: DeclaringClass.Class<T1, T2>
+		/// </summary>
 		public abstract string CleanNestedName { get; }
+		/// <summary>
+		/// Type name without any prexifes
+		/// ex: Class<T1, T2>
+		/// </summary>
 		public abstract string TypeName { get; }
 		public abstract string Namespace { get; }
 		public abstract string Module { get; }
 		public virtual bool IsEnum => false;
 
 		/// <summary>
-		/// ex. GenericClass<T>.NestedType
+		/// Declaring type with generic parameters (if any)
+		/// ex: GenericClass<T>.NestedType
 		/// </summary>
 		public abstract ScriptExportType DeclaringType { get; }
 		/// <summary>
-		/// ex. GenericClass<double>.NestedType
+		/// Declaring type with generic arguments (if any)
+		/// ex: GenericClass<double>.NestedType
 		/// </summary>
 		public virtual ScriptExportType NestType => DeclaringType;
 		public abstract ScriptExportType Base { get; }
@@ -217,6 +247,8 @@ namespace uTinyRipper.Exporters.Scripts
 		public IReadOnlyList<ScriptExportType> NestedTypes => m_nestedTypes;
 		public IReadOnlyList<ScriptExportEnum> NestedEnums => m_nestedEnums;
 		public IReadOnlyList<ScriptExportDelegate> Delegates => m_nestedDelegates;
+		public abstract IReadOnlyList<ScriptExportMethod> Methods { get; }
+		public abstract IReadOnlyList<ScriptExportProperty> Properties { get; }
 		public abstract IReadOnlyList<ScriptExportField> Fields { get; }
 
 		protected abstract string Keyword { get; }
@@ -231,5 +263,6 @@ namespace uTinyRipper.Exporters.Scripts
 		protected readonly List<ScriptExportType> m_nestedTypes = new List<ScriptExportType>();
 		protected readonly List<ScriptExportEnum> m_nestedEnums = new List<ScriptExportEnum>();
 		protected readonly List<ScriptExportDelegate> m_nestedDelegates = new List<ScriptExportDelegate>();
+		protected IScriptExportManager m_manager;
 	}
 }

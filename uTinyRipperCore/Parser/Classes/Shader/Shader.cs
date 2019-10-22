@@ -276,7 +276,7 @@ namespace uTinyRipper.Classes
 					return new ShaderGLESExporter();
 
 				case GPUPlatform.metal:
-					return new ShaderMetalExporter(version);
+					return new ShaderMetalExporter();
 
 				default:
 					return new ShaderUnknownExporter(graphicApi);

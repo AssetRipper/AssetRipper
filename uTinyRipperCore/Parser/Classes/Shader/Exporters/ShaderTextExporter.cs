@@ -4,18 +4,19 @@ namespace uTinyRipper.Classes.Shaders.Exporters
 {
 	public class ShaderTextExporter
 	{
-		public virtual void Export(byte[] shaderData, TextWriter writer)
+		public virtual void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 		{
-			using (MemoryStream memStream = new MemoryStream(shaderData))
+			byte[] exportData = subProgram.ProgramData;
+			using (MemoryStream memStream = new MemoryStream(exportData))
 			{
 				using (BinaryReader reader = new BinaryReader(memStream))
 				{
-					Export(reader, writer);
+					ExportText(writer, reader);
 				}
 			}
 		}
 
-		protected virtual void Export(BinaryReader reader, TextWriter writer)
+		protected static void ExportText(TextWriter writer, BinaryReader reader)
 		{
 			while (reader.BaseStream.Position != reader.BaseStream.Length)
 			{
@@ -23,6 +24,51 @@ namespace uTinyRipper.Classes.Shaders.Exporters
 				if (c == '\n')
 				{
 					if (reader.BaseStream.Position == reader.BaseStream.Length)
+					{
+						break;
+					}
+					writer.Write(c);
+					writer.WriteIndent(ExpectedIndent);
+				}
+				else
+				{
+					writer.Write(c);
+				}
+			}
+		}
+
+		protected static void ExportListing(TextWriter writer, string listing)
+		{
+			writer.WriteLine();
+			writer.WriteIndent(ExpectedIndent);
+
+			for (int i = 0; i < listing.Length;)
+			{
+				char c = listing[i++];
+				bool newLine = false;
+				if (c == '\r')
+				{
+					if (i == listing.Length)
+					{
+						newLine = true;
+					}
+					else
+					{
+						char nc = listing[i];
+						if (nc != '\n')
+						{
+							newLine = true;
+						}
+					}
+				}
+				else if (c == '\n')
+				{
+					newLine = true;
+				}
+
+				if (newLine)
+				{
+					if (i == listing.Length)
 					{
 						break;
 					}

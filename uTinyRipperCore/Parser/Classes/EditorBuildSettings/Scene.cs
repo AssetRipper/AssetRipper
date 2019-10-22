@@ -20,7 +20,7 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 
 		public Scene(string path, EngineGUID guid)
 		{
-			if (string.IsNullOrEmpty(path))
+			if (path == null)
 			{
 				throw new ArgumentNullException(nameof(path));
 			}

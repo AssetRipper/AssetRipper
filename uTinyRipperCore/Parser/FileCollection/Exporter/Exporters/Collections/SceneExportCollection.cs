@@ -232,6 +232,11 @@ namespace uTinyRipper.AssetExporters
 					string extension = Path.GetExtension(scenePath);
 					return relativePath.Substring(0, relativePath.Length - extension.Length);
 				}
+				else if (scenePath == string.Empty)
+				{
+					// if you build a game without included scenes, Unity create one with empty name
+					return Name;
+				}
 				else
 				{
 					return scenePath;

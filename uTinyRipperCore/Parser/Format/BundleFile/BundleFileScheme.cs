@@ -78,7 +78,7 @@ namespace uTinyRipper.BundleFiles
 					}
 					else
 					{
-						using (SmartStream dataStream = Read530Metadata(reader))
+						using (SmartStream dataStream = Read530Metadata(reader, headerSize))
 						{
 							Read530Blocks(dataStream, headerSize);
 						}
@@ -127,7 +127,7 @@ namespace uTinyRipper.BundleFiles
 			}
 		}
 
-		private SmartStream Read530Metadata(BundleFileReader reader)
+		private SmartStream Read530Metadata(BundleFileReader reader, long headerSize)
 		{
 			if (Header.Flags.IsMetadataAtTheEnd())
 			{
@@ -140,10 +140,10 @@ namespace uTinyRipper.BundleFiles
 				case BundleCompressType.None:
 					{
 						Metadata.Read(reader);
-						long expectedPosition = Header.Flags.IsMetadataAtTheEnd() ? Header.BundleSize : Header.HeaderSize + Header.MetadataDecompressedSize;
+						long expectedPosition = Header.Flags.IsMetadataAtTheEnd() ? Header.BundleSize : headerSize + Header.MetadataDecompressedSize;
 						if (reader.BaseStream.Position != expectedPosition)
 						{
-							throw new Exception($"Read {reader.BaseStream.Position - Header.HeaderSize} but expected {Header.MetadataDecompressedSize}");
+							throw new Exception($"Read {reader.BaseStream.Position - headerSize} but expected {Header.MetadataDecompressedSize}");
 						}
 					}
 					break;

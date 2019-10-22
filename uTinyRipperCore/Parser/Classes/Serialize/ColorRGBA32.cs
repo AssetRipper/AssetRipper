@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using uTinyRipper.Assembly;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
@@ -7,7 +6,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct ColorRGBA32 : ISerializableStructure
+	public struct ColorRGBA32 : IAsset, ISerializableStructure
 	{
 		public ColorRGBA32(byte r, byte g, byte b, byte a)
 		{
@@ -25,7 +24,7 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			// it's min version
+			// min version is 2
 			return 2;
 		}
 
@@ -39,9 +38,9 @@ namespace uTinyRipper.Classes
 			RGBA = reader.ReadUInt32();
 		}
 
-		public void Write(BinaryWriter stream)
+		public void Write(AssetWriter writer)
 		{
-			stream.Write(RGBA);
+			writer.Write(RGBA);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

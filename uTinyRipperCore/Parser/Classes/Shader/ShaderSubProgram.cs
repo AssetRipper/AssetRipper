@@ -104,12 +104,12 @@ namespace uTinyRipper.Classes.Shaders
 				int unknown4 = reader.ReadInt32();
 			}
 
-			m_globalKeywords = reader.ReadStringArray();
+			GlobalKeywords = reader.ReadStringArray();
 			if (IsReadLocalKeywords(reader.Version))
 			{
-				m_localKeywords = reader.ReadStringArray();
+				LocalKeywords = reader.ReadStringArray();
 			}
-			m_programData = reader.ReadByteArray();
+			ProgramData = reader.ReadByteArray();
 			reader.AlignStream(AlignType.Align4);
 
 			int sourceMap = reader.ReadInt32();
@@ -137,7 +137,7 @@ namespace uTinyRipper.Classes.Shaders
 			List<StructParameter> structs = new List<StructParameter>();
 
 			int paramGroupCount = reader.ReadInt32();
-			m_constantBuffers = new ConstantBuffer[paramGroupCount - 1];
+			ConstantBuffers = new ConstantBuffer[paramGroupCount - 1];
 			for (int i = 0; i < paramGroupCount; i++)
 			{
 				vectors.Clear();
@@ -220,14 +220,14 @@ namespace uTinyRipper.Classes.Shaders
 				}
 				if (i == 0)
 				{
-					m_vectorParameters = vectors.ToArray();
-					m_matrixParameters = matrices.ToArray();
-					m_structParameters = structs.ToArray();
+					VectorParameters = vectors.ToArray();
+					MatrixParameters = matrices.ToArray();
+					StructParameters = structs.ToArray();
 				}
 				else
 				{
 					ConstantBuffer constBuffer = new ConstantBuffer(name, matrices.ToArray(), vectors.ToArray(), structs.ToArray(), usedSize);
-					m_constantBuffers[i - 1] = constBuffer;
+					ConstantBuffers[i - 1] = constBuffer;
 				}
 			}
 
@@ -278,26 +278,26 @@ namespace uTinyRipper.Classes.Shaders
 					throw new Exception($"Unupported parameter type {type}");
 				}
 			}
-			m_textureParameters = textures.ToArray();
-			m_bufferParameters = buffers.ToArray();
+			TextureParameters = textures.ToArray();
+			BufferParameters = buffers.ToArray();
 			if (IsReadUAVParameters(reader.Version))
 			{
-				m_UAVParameters = uavs.ToArray();
+				UAVParameters = uavs.ToArray();
 			}
 			if (IsReadSamplerParameters(reader.Version))
 			{
-				m_samplerParameters = samplers.ToArray();
+				SamplerParameters = samplers.ToArray();
 			}
-			m_constantBufferBindings = constBindings.ToArray();
+			ConstantBufferBindings = constBindings.ToArray();
 			if (IsReadStructParameters(reader.Version))
 			{
-				m_structParameters = structs.ToArray();
+				StructParameters = structs.ToArray();
 			}
 		}
 
 		public void Export(ShaderWriter writer, ShaderType type)
 		{
-			if (GlobalKeywords.Count > 0)
+			if (GlobalKeywords.Length > 0)
 			{
 				writer.Write("Keywords { ");
 				foreach (string keyword in GlobalKeywords)
@@ -315,13 +315,14 @@ namespace uTinyRipper.Classes.Shaders
 				writer.WriteIndent(5);
 			}
 
+#warning TODO: convertion (DX to HLSL)
 			writer.Write("\"!!{0}", ProgramType.ToShaderName(writer.Platform, type));
-			if (m_programData.Length > 0)
+			if (ProgramData.Length > 0)
 			{
 				writer.Write("\n");
 				writer.WriteIndent(5);
 
-				writer.WriteShaderData(ProgramType.ToGPUPlatform(writer.Platform), m_programData);
+				writer.WriteShaderData(ref this);
 			}
 			writer.Write('"');
 		}
@@ -330,32 +331,19 @@ namespace uTinyRipper.Classes.Shaders
 		/// <summary>
 		/// Keywords previously
 		/// </summary>
-		public IReadOnlyList<string> GlobalKeywords => m_globalKeywords;
-		public IReadOnlyList<string> LocalKeywords => m_localKeywords;
-		public IReadOnlyList<byte> ProgramData => m_programData;
-		public IReadOnlyList<VectorParameter> VectorParameters => m_vectorParameters;
-		public IReadOnlyList<MatrixParameter> MatrixParameters => m_matrixParameters;
-		public IReadOnlyList<TextureParameter> TextureParameters => m_textureParameters;
-		public IReadOnlyList<BufferBinding> BufferParameters => m_bufferParameters;
-		public IReadOnlyList<UAVParameter> UAVParameters => m_UAVParameters;
-		public IReadOnlyList<SamplerParameter> SamplerParameters => m_samplerParameters;
-		public IReadOnlyList<ConstantBuffer> ConstantBuffers => m_constantBuffers;
-		public IReadOnlyList<BufferBinding> ConstantBufferBindings => m_constantBufferBindings;
-		public IReadOnlyList<StructParameter> StructParameters => m_structParameters;
+		public string[] GlobalKeywords { get; set; }
+		public string[] LocalKeywords { get; set; }
+		public byte[] ProgramData { get; set; }
+		public VectorParameter[] VectorParameters { get; set; }
+		public MatrixParameter[] MatrixParameters { get; set; }
+		public TextureParameter[] TextureParameters { get; set; }
+		public BufferBinding[] BufferParameters { get; set; }
+		public UAVParameter[] UAVParameters { get; set; }
+		public SamplerParameter[] SamplerParameters { get; set; }
+		public ConstantBuffer[] ConstantBuffers { get; set; }
+		public BufferBinding[] ConstantBufferBindings { get; set; }
+		public StructParameter[] StructParameters { get; set; }
 
 		public ParserBindChannels BindChannels;
-
-		private string[] m_globalKeywords;
-		private string[] m_localKeywords;
-		private byte[] m_programData;
-		private VectorParameter[] m_vectorParameters;
-		private MatrixParameter[] m_matrixParameters;
-		private TextureParameter[] m_textureParameters;
-		private BufferBinding[] m_bufferParameters;
-		private UAVParameter[] m_UAVParameters;
-		private SamplerParameter[] m_samplerParameters;
-		private ConstantBuffer[] m_constantBuffers;
-		private BufferBinding[] m_constantBufferBindings;
-		private StructParameter[] m_structParameters;
 	}
 }

@@ -8,7 +8,7 @@ using uTinyRipper.Classes.Objects;
 
 namespace uTinyRipper.Classes
 {
-	public abstract class Object : IAssetReadable, IYAMLDocExportable, IDependent
+	public abstract class Object : IAsset, IYAMLDocExportable, IDependent
 	{
 		protected Object(AssetInfo assetInfo)
 		{
@@ -16,7 +16,7 @@ namespace uTinyRipper.Classes
 			{
 				throw new ArgumentNullException(nameof(assetInfo));
 			}
-			m_assetInfo = assetInfo;
+			AssetInfo = assetInfo;
 			if (assetInfo.ClassID != ClassID)
 			{
 				throw new ArgumentException($"Try to initialize '{ClassID}' with '{assetInfo.ClassID}' asset data", nameof(assetInfo));
@@ -32,16 +32,18 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 2.0.0 and greater and Not Release and Not Prefab
 		/// </summary>
-		public static bool IsReadHideFlag(Version version, TransferInstructionFlags flags)
+		public static bool HasHideFlag(Version version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && !flags.IsForPrefab() && version.IsGreaterEqual(2);
 		}
 		/// <summary>
 		/// 4.3.0 and greater and Debug
 		/// </summary>
-		public static bool IsReadInstanceID(Version version, TransferInstructionFlags flags)
+		public static bool HasInstanceID(Version version, TransferInstructionFlags flags) => flags.IsDebug() && version.IsGreaterEqual(4, 3);
+
+		public virtual Object Convert(IExportContainer container)
 		{
-			return flags.IsDebug() && version.IsGreaterEqual(4, 3);
+			return this;
 		}
 
 		public void Read(byte[] buffer)
@@ -62,12 +64,12 @@ namespace uTinyRipper.Classes
 
 		public virtual void Read(AssetReader reader)
 		{
-			if (IsReadHideFlag(reader.Version, reader.Flags))
+			if (HasHideFlag(reader.Version, reader.Flags))
 			{
 				ObjectHideFlags = (HideFlags)reader.ReadUInt32();
 			}
 #if UNIVERSAL
-			if (IsReadInstanceID(reader.Version, reader.Flags))
+			if (HasInstanceID(reader.Version, reader.Flags))
 			{
 				InstanceID = reader.ReadInt32();
 				LocalIdentfierInFile = reader.ReadInt64();
@@ -75,25 +77,43 @@ namespace uTinyRipper.Classes
 #endif
 		}
 
-		/// <summary>
-		/// Export object's content in such formats as txt or png
-		/// </summary>
-		/// <returns>Object's content</returns>
-		public virtual void ExportBinary(IExportContainer container, Stream stream)
+		public virtual void Write(AssetWriter writer)
 		{
-			throw new NotSupportedException($"Type {GetType()} doesn't support binary export");
+			if (HasHideFlag(writer.Version, writer.Flags))
+			{
+				writer.Write((uint)ObjectHideFlags);
+			}
+#if UNIVERSAL
+			if (HasInstanceID(writer.Version, writer.Flags))
+			{
+				writer.Write(InstanceID);
+				writer.Write(LocalIdentfierInFile);
+			}
+#endif
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			return ExportYAMLRoot(container);
 		}
 
 		public YAMLDocument ExportYAMLDocument(IExportContainer container)
 		{
 			YAMLDocument document = new YAMLDocument();
-			YAMLMappingNode node = ExportYAMLRoot(container);
 			YAMLMappingNode root = document.CreateMappingRoot();
 			root.Tag = ClassID.ToInt().ToString();
 			root.Anchor = container.GetExportID(this).ToString();
+			YAMLMappingNode node = ExportYAMLRoot(container);
 			root.Add(ClassID.ToString(), node);
-
 			return document;
+		}
+
+		/// <summary>
+		/// Export object's content in such formats as txt or png
+		/// </summary>
+		public virtual void ExportBinary(IExportContainer container, Stream stream)
+		{
+			throw new NotSupportedException($"Type {GetType()} doesn't support binary export");
 		}
 
 		public IEnumerable<Object> FetchDependencies(bool isLog = false)
@@ -114,45 +134,32 @@ namespace uTinyRipper.Classes
 		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(ObjectHideFlagsName, (uint)GetObjectHideFlags(container.Version, container.Flags, container.ExportFlags));
+			if (HasHideFlag(container.ExportVersion, container.ExportFlags))
+			{
+				node.Add(ObjectHideFlagsName, (uint)ObjectHideFlags);
+			}
 			return node;
 		}
 
-		private HideFlags GetObjectHideFlags(Version version, TransferInstructionFlags flags, TransferInstructionFlags exportFlags)
-		{
-			if (IsReadHideFlag(version, flags))
-			{
-				return ObjectHideFlags;
-			}
-			if (ClassID == ClassIDType.GameObject)
-			{
-				GameObject go = (GameObject)this;
-				int depth = go.GetRootDepth();
-				return depth > 1 ? HideFlags.HideInHierarchy : HideFlags.None;
-			}
-			return exportFlags.IsForPrefab() ? HideFlags.HideInHierarchy : ObjectHideFlags;
-		}
-
-		public ISerializedFile File => m_assetInfo.File;
-		public ClassIDType ClassID => m_assetInfo.ClassID;
+		public AssetInfo AssetInfo { get; }
+		public ISerializedFile File => AssetInfo.File;
+		public ClassIDType ClassID => AssetInfo.ClassID;
 		public virtual bool IsValid => true;
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
 		public virtual string ExportExtension => AssetExtension;
-		public long PathID => m_assetInfo.PathID;
-		
-		public EngineGUID GUID => m_assetInfo.GUID;
+		public long PathID => AssetInfo.PathID;		
+		public EngineGUID GUID => AssetInfo.GUID;
 
-		public HideFlags ObjectHideFlags { get; private set; }
+		public HideFlags ObjectHideFlags { get; set; }
 #if UNIVERSAL
-		public int InstanceID { get; private set; }
-		public long LocalIdentfierInFile { get; private set; }
+		public int InstanceID { get; set; }
+		public long LocalIdentfierInFile { get; set; }
 #endif
 
+		public const string TypelessdataName = "_typelessdata";
 		public const string ObjectHideFlagsName = "m_ObjectHideFlags";
 
 		public const string AssetsKeyword = "Assets";
 		protected const string AssetExtension = "asset";
-
-		private readonly AssetInfo m_assetInfo;
 	}
 }

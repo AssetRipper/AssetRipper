@@ -30,6 +30,13 @@ namespace uTinyRipper.Classes
 			Name = reader.ReadString();
 		}
 
+		public override void Write(AssetWriter writer)
+		{
+			base.Write(writer);
+
+			writer.Write(Name);
+		}
+
 		public override string ToString()
 		{
 			return $"{ValidName}({GetType().Name})";
@@ -58,7 +65,7 @@ namespace uTinyRipper.Classes
 				return Name;
 			}
 		}
-		public string Name { get; protected set; }
+		public string Name { get; set; }
 
 		public const string NameName = "m_Name";
 	}

@@ -9,6 +9,8 @@ namespace uTinyRipper.Exporters.Scripts
 		ScriptExportEnum RetrieveEnum(TypeDefinition type);
 		ScriptExportDelegate RetrieveDelegate(TypeDefinition type);
 		ScriptExportAttribute RetrieveAttribute(CustomAttribute attribute);
+		ScriptExportMethod RetrieveMethod(MethodDefinition method);
+		ScriptExportProperty RetrieveProperty(PropertyDefinition property);
 		ScriptExportField RetrieveField(FieldDefinition field);
 		ScriptExportParameter RetrieveParameter(ParameterDefinition parameter);
 

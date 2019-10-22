@@ -6,7 +6,7 @@ using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
-	public struct Matrix4x4f : ISerializableStructure
+	public struct Matrix4x4f : IAsset, ISerializableStructure
 	{
 		public ISerializableStructure CreateDuplicate()
 		{
@@ -33,25 +33,45 @@ namespace uTinyRipper.Classes
 			E33 = reader.ReadSingle();
 		}
 
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(E00);
+			writer.Write(E01);
+			writer.Write(E02);
+			writer.Write(E03);
+			writer.Write(E10);
+			writer.Write(E11);
+			writer.Write(E12);
+			writer.Write(E13);
+			writer.Write(E20);
+			writer.Write(E21);
+			writer.Write(E22);
+			writer.Write(E23);
+			writer.Write(E30);
+			writer.Write(E31);
+			writer.Write(E32);
+			writer.Write(E33);
+		}
+		
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("e00", E00);
-			node.Add("e01", E01);
-			node.Add("e02", E02);
-			node.Add("e03", E03);
-			node.Add("e10", E10);
-			node.Add("e11", E11);
-			node.Add("e12", E12);
-			node.Add("e13", E13);
-			node.Add("e20", E20);
-			node.Add("e21", E21);
-			node.Add("e22", E22);
-			node.Add("e23", E23);
-			node.Add("e30", E30);
-			node.Add("e31", E31);
-			node.Add("e32", E32);
-			node.Add("e33", E33);
+			node.Add(E00Name, E00);
+			node.Add(E01Name, E01);
+			node.Add(E02Name, E02);
+			node.Add(E03Name, E03);
+			node.Add(E10Name, E10);
+			node.Add(E11Name, E11);
+			node.Add(E12Name, E12);
+			node.Add(E13Name, E13);
+			node.Add(E20Name, E20);
+			node.Add(E21Name, E21);
+			node.Add(E22Name, E22);
+			node.Add(E23Name, E23);
+			node.Add(E30Name, E30);
+			node.Add(E31Name, E31);
+			node.Add(E32Name, E32);
+			node.Add(E33Name, E33);
 			return node;
 		}
 
@@ -62,21 +82,38 @@ namespace uTinyRipper.Classes
 
 		public static Matrix4x4f Identity => new Matrix4x4f { E00 = 1.0f, E11 = 1.0f, E22 = 1.0f, E33 = 1.0f };
 
-		public float E00 { get; private set; }
-		public float E01 { get; private set; }
-		public float E02 { get; private set; }
-		public float E03 { get; private set; }
-		public float E10 { get; private set; }
-		public float E11 { get; private set; }
-		public float E12 { get; private set; }
-		public float E13 { get; private set; }
-		public float E20 { get; private set; }
-		public float E21 { get; private set; }
-		public float E22 { get; private set; }
-		public float E23 { get; private set; }
-		public float E30 { get; private set; }
-		public float E31 { get; private set; }
-		public float E32 { get; private set; }
-		public float E33 { get; private set; }
+		public float E00 { get; set; }
+		public float E01 { get; set; }
+		public float E02 { get; set; }
+		public float E03 { get; set; }
+		public float E10 { get; set; }
+		public float E11 { get; set; }
+		public float E12 { get; set; }
+		public float E13 { get; set; }
+		public float E20 { get; set; }
+		public float E21 { get; set; }
+		public float E22 { get; set; }
+		public float E23 { get; set; }
+		public float E30 { get; set; }
+		public float E31 { get; set; }
+		public float E32 { get; set; }
+		public float E33 { get; set; }
+
+		public const string E00Name = "e00";
+		public const string E01Name = "e01";
+		public const string E02Name = "e02";
+		public const string E03Name = "e03";
+		public const string E10Name = "e10";
+		public const string E11Name = "e11";
+		public const string E12Name = "e12";
+		public const string E13Name = "e13";
+		public const string E20Name = "e20";
+		public const string E21Name = "e21";
+		public const string E22Name = "e22";
+		public const string E23Name = "e23";
+		public const string E30Name = "e30";
+		public const string E31Name = "e31";
+		public const string E32Name = "e32";
+		public const string E33Name = "e33";
 	}
 }

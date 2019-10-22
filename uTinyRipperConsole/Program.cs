@@ -88,6 +88,7 @@ namespace uTinyRipperConsole
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, engineExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, engineExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, engineExporter);
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.MonoBehaviour, engineExporter);
 #endif
 
 				GameStructure.Export(exportPath, AssetSelector);

@@ -1,12 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
-	public struct PackedIntVector : IAssetReadable, IYAMLExportable
+	public struct PackedIntVector : IAsset
 	{
+		public PackedIntVector(bool _):
+			this()
+		{
+			Data = ArrayExtensions.EmptyBytes;
+		}
+
+#warning TODO: Pack method
+
 		public int[] Unpack()
 		{
 			int bitIndex = 0;
@@ -33,28 +41,48 @@ namespace uTinyRipper.Classes
 			return buffer;
 		}
 
+		public PackedIntVector Convert(IExportContainer container)
+		{
+			PackedIntVector instance = this;
+			instance.Data = Data.ToArray();
+			return instance;
+		}
+
 		public void Read(AssetReader reader)
 		{
 			NumItems = reader.ReadUInt32();
-			m_data = reader.ReadByteArray();
+			Data = reader.ReadByteArray();
 			reader.AlignStream(AlignType.Align4);
 			BitSize = reader.ReadByte();
 			reader.AlignStream(AlignType.Align4);
 		}
 
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(NumItems);
+			writer.Write(Data);
+			writer.AlignStream(AlignType.Align4);
+			writer.Write(BitSize);
+			writer.AlignStream(AlignType.Align4);
+		}
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_NumItems", NumItems);
-			node.Add("m_Data", Data == null ? YAMLSequenceNode.Empty : Data.ExportYAML());
-			node.Add("m_BitSize", BitSize);
+			node.Add(NumItemsName, NumItems);
+			node.Add(DataName, Data == null ? YAMLSequenceNode.Empty : Data.ExportYAML());
+			node.Add(BitSizeName, BitSize);
 			return node;
 		}
 
-		public uint NumItems { get; private set; }
-		public IReadOnlyList<byte> Data => m_data;
-		public byte BitSize { get; private set; }
+		public bool IsSet => NumItems > 0;
 
-		private byte[] m_data;
+		public uint NumItems { get; set; }
+		public byte[] Data { get; set; }
+		public byte BitSize { get; set; }
+
+		public const string NumItemsName = "m_NumItems";
+		public const string DataName = "m_Data";
+		public const string BitSizeName = "m_BitSize";
 	}
 }

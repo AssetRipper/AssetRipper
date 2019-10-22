@@ -34,6 +34,10 @@ namespace uTinyRipper
 				throw new Exception($"Written {written} but expected {count}");
 			}
 			Write(buffer, 0, written);
+			if (Version.IsGreaterEqual(2, 1))
+			{
+				AlignStream(AlignType.Align4);
+			}
 		}
 
 		public override void Write(char[] buffer, int index, int count)

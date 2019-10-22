@@ -4,11 +4,19 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Textures
 {
-	public struct StreamingInfo : IAssetReadable, IYAMLExportable
+	public struct StreamingInfo : IAsset
 	{
-		public StreamingInfo(bool _):
-			this()
+		public StreamingInfo(bool _)
 		{
+			Offset = 0;
+			Size = 0;
+			Path = string.Empty;
+		}
+
+		public StreamingInfo(Version version)
+		{
+			Offset = 0;
+			Size = 0;
 			Path = string.Empty;
 		}
 
@@ -50,6 +58,13 @@ namespace uTinyRipper.Classes.Textures
 			Size = reader.ReadUInt32();
 			Offset = reader.ReadUInt32();
 			Path = path;
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Offset);
+			writer.Write(Size);
+			writer.Write(Path);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

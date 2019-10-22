@@ -3,12 +3,13 @@ using Mono.Cecil.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using uTinyRipper.Assembly.Mono;
 
 namespace uTinyRipper
 {
 	public static class MonoUtils
 	{
-		#region Naming
+#region Naming
 		public static bool IsSerializablePrimitive(TypeReference type)
 		{
 			switch (type.etype)
@@ -197,19 +198,6 @@ namespace uTinyRipper
 		}
 #endregion
 
-		public static ArrayType CreateArrayFrom(ArrayType source, TypeReference newType)
-		{
-			ArrayType newArray = new ArrayType(newType, source.Rank);
-			if (source.Rank > 1)
-			{
-				for (int i = 0; i < source.Rank; i++)
-				{
-					newArray.Dimensions[i] = source.Dimensions[i];
-				}
-			}
-			return newArray;
-		}
-
 		public static GenericInstanceType CreateGenericInstance(TypeReference genericTemplate, IEnumerable<TypeReference> arguments)
 		{
 			GenericInstanceType genericInstance = new GenericInstanceType(genericTemplate);
@@ -246,6 +234,84 @@ namespace uTinyRipper
 				}
 			}
 			return count;
+		}
+
+		public static bool AreSame(TypeReference type, MonoTypeContext checkContext, TypeReference checkType)
+		{
+			if (ReferenceEquals(type, checkType))
+			{
+				return true;
+			}
+			if (type == null || checkType == null)
+			{
+				return false;
+			}
+
+			MonoTypeContext context = new MonoTypeContext(checkType, checkContext);
+			MonoTypeContext resolvedContext = context.Resolve();
+			return MetadataResolver.AreSame(type, resolvedContext.Type);
+		}
+
+		public static bool AreSame(MethodDefinition method, MonoTypeContext checkContext, MethodDefinition checkMethod)
+		{
+			if (method.Name != checkMethod.Name)
+			{
+				return false;
+			}
+			if (method.HasGenericParameters)
+			{
+				if (!checkMethod.HasGenericParameters)
+				{
+					return false;
+				}
+				if (method.GenericParameters.Count != checkMethod.GenericParameters.Count)
+				{
+					return false;
+				}
+				checkContext = checkContext.Merge(checkMethod);
+			}
+			if (!AreSame(method.ReturnType, checkContext, checkMethod.ReturnType))
+			{
+				return false;
+			}
+
+			if (method.IsVarArg())
+			{
+				if (!checkMethod.IsVarArg())
+				{
+					return false;
+				}
+				if (method.Parameters.Count >= checkMethod.Parameters.Count)
+				{
+					return false;
+				}
+				if (checkMethod.GetSentinelPosition() != method.Parameters.Count)
+				{
+					return false;
+				}
+			}
+
+			if (method.HasParameters)
+			{
+				if (!checkMethod.HasParameters)
+				{
+					return false;
+				}
+				if (method.Parameters.Count != checkMethod.Parameters.Count)
+				{
+					return false;
+				}
+
+				for (int i = 0; i < method.Parameters.Count; i++)
+				{
+					if (!AreSame(method.Parameters[i].ParameterType, checkContext, checkMethod.Parameters[i].ParameterType))
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
 		}
 
 		public const string ObjectName = "Object";

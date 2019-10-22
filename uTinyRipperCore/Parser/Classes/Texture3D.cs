@@ -159,7 +159,7 @@ namespace uTinyRipper.Classes
 				if (mipMap)
 				{
 					int maxSide = Math.Max(Width, Height);
-					MipCount = Convert.ToInt32(Math.Log(maxSide) / Math.Log(2));
+					MipCount = System.Convert.ToInt32(Math.Log(maxSide) / Math.Log(2));
 				}
 				else
 				{

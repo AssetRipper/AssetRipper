@@ -57,7 +57,7 @@ namespace uTinyRipper.AssetExporters.Classes
 			YAMLMappingNode mipmap = new YAMLMappingNode();
 			mipmap.Add("mipMapMode", (int)TextureImporterMipFilter.BoxFilter);
 			mipmap.Add("enableMipMap", m_texture.MipCount > 1 ? true : false);
-			mipmap.Add("sRGBTexture", m_texture.ColorSpace == ColorSpace.Gamma ? true : false);
+			mipmap.Add("sRGBTexture", m_texture.ColorSpace == ColorSpace.Linear ? true : false);
 			mipmap.Add("linearTexture", false);
 			mipmap.Add("fadeOut", false);
 			mipmap.Add("borderMipMap", false);
