@@ -114,6 +114,8 @@ namespace uTinyRipper
 					return new GUILayer(assetInfo);
 				case ClassIDType.Animator:
 					return new Animator(assetInfo);
+				case ClassIDType.TrailRenderer:
+					return new TrailRenderer(assetInfo);
 				case ClassIDType.TextMesh:
 					return new TextMesh(assetInfo);
 				case ClassIDType.RenderSettings:
