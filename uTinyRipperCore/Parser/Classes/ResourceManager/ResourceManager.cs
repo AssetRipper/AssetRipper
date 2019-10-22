@@ -68,25 +68,16 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
+#warning TODO: create <asset, path> lookup in ExportContainer
 		public bool TryGetResourcePathFromAsset(Object asset, out string resourcePath)
 		{
 			foreach (KeyValuePair<string, PPtr<Object>> containerEntry in m_container)
 			{
 				if (containerEntry.Value.IsAsset(File, asset))
 				{
-					string validName;
-					if (asset is NamedObject named)
-					{
-						validName = named.ValidName;
-					}
-					else
-					{
-						GameObject gameObject = (GameObject)asset;
-						validName = gameObject.Name;
-					}
-
+					string validName = GetAssetName(asset);
 					string resourceName = containerEntry.Key;
-					if (validName != resourceName && resourceName.EndsWith(validName, StringComparison.OrdinalIgnoreCase))
+					if (validName.Length > 0 && validName != resourceName && resourceName.EndsWith(validName, StringComparison.OrdinalIgnoreCase))
 					{
 						string directoryPath = resourceName.Substring(0, resourceName.Length - validName.Length);
 						resourcePath = Path.Combine(AssetsKeyword, ResourceKeyword, directoryPath, validName);
@@ -103,6 +94,22 @@ namespace uTinyRipper.Classes
 			return false;
 		}
 
+		private static string GetAssetName(Object asset)
+		{
+			if (asset is NamedObject named)
+			{
+				return named.ValidName;
+			}
+			else if (asset is GameObject gameObject)
+			{
+				return gameObject.Name;
+			}
+			else
+			{
+				MonoBehaviour monoBeh = (MonoBehaviour)asset;
+				return monoBeh.Name;
+			}
+		}
 
 		public IReadOnlyList<KeyValuePair<string, PPtr<Object>>> Container => m_container;
 		public ILookup<string, PPtr<Object>> ContainerMap => Container.ToLookup(t => t.Key, t => t.Value);
