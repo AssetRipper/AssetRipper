@@ -28,6 +28,11 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			BindAsDefault = true;
 		}
 
+		/// <summary>
+		/// 2018.4.9 to 2019.1 exclusive
+		/// </summary>
+		public static bool HasStoredHash(Version version) => version.IsEqual(2018) && version.IsGreaterEqual(2018, 4, 9);
+
 		private static int GetSerializedVersion(Version version)
 		{
 			// packingParameters was renamed to packingSettings. Added DefaultPlatformSettings
@@ -46,8 +51,11 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			VariantMultiplier = reader.ReadSingle();
 			m_packables = reader.ReadAssetArray<PPtr<Object>>();
 			BindAsDefault = reader.ReadBoolean();
+			if (HasStoredHash(reader.Version))
+			{
+				StoredHash.Read(reader);
+			}
 			reader.AlignStream(AlignType.Align4);
-			
 		}
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -68,6 +76,10 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			node.Add(VariantMultiplierName, VariantMultiplier);
 			node.Add(PackablesName, Packables.ExportYAML(container));
 			node.Add(BindAsDefaultName, BindAsDefault);
+			if (HasStoredHash(container.ExportVersion))
+			{
+				node.Add(StoredHashName, StoredHash.ExportYAML(container));
+			}
 			return node;
 		}
 
@@ -125,12 +137,14 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		public const string VariantMultiplierName = "variantMultiplier";
 		public const string PackablesName = "packables";
 		public const string BindAsDefaultName = "bindAsDefault";
+		public const string StoredHashName = "storedHash";
 
 		public TextureSettings TextureSettings;
 		/// <summary>
 		/// PackingParameters previously
 		/// </summary>
 		public PackingSettings PackingSettings;
+		public Hash128 StoredHash;
 
 		private TextureImporterPlatformSettings[] m_platformSettings;
 		private PPtr<Object>[] m_packables;

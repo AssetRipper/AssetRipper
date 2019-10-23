@@ -204,6 +204,17 @@ namespace uTinyRipper.Classes
 		{
 			return version.IsGreaterEqual(5, 6);
 		}
+		/// <summary>
+		/// 2018.4.6 to 2019.1 exclusive or 2019.2.7 and greater
+		/// </summary>
+		public static bool HasLogWhenShaderIsCompiled(Version version)
+		{
+			if (version.IsGreaterEqual(2019))
+			{
+				return version.IsGreaterEqual(2019, 2, 7);
+			}
+			return version.IsGreaterEqual(2018, 4, 6);
+		}
 
 		/// <summary>
 		/// 5.3.0 to 5.5.0 exclusive
@@ -488,6 +499,10 @@ namespace uTinyRipper.Classes
 				LightsUseLinearIntensity = reader.ReadBoolean();
 				LightsUseColorTemperature = reader.ReadBoolean();
 			}
+			if (HasLogWhenShaderIsCompiled(reader.Version))
+			{
+				LogWhenShaderIsCompiled = reader.ReadBoolean();
+			}
 		}
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
@@ -584,6 +599,10 @@ namespace uTinyRipper.Classes
 			node.Add("m_AlbedoSwatchInfos", GetAlbedoSwatchInfos(container.Version, container.Flags).ExportYAML(container));
 			node.Add("m_LightsUseLinearIntensity", LightsUseLinearIntensity);
 			node.Add("m_LightsUseColorTemperature", LightsUseColorTemperature);
+			if (HasLogWhenShaderIsCompiled(container.ExportVersion))
+			{
+				node.Add("m_LogWhenShaderIsCompiled", LogWhenShaderIsCompiled);
+			}
 			return node;
 		}
 
@@ -895,6 +914,7 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<PlatformShaderDefines> ShaderDefinesPerShaderCompiler => m_shaderDefinesPerShaderCompiler;
 		public bool LightsUseLinearIntensity { get; private set; }
 		public bool LightsUseColorTemperature { get; private set; }
+		public bool LogWhenShaderIsCompiled { get; private set; }
 
 		public BuiltinShaderSettings Deferred;
 		public BuiltinShaderSettings DeferredReflections;
