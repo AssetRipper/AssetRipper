@@ -61,7 +61,7 @@ namespace uTinyRipper
 		{
 			return left.m_data < right.m_data;
 		}
-		
+
 		public static bool operator <=(Version left, Version right)
 		{
 			return left.m_data <= right.m_data;
@@ -88,7 +88,7 @@ namespace uTinyRipper
 		public override string ToString()
 		{
 			string result = $"{Major}.{Minor}.{Build}";
-			if(Type != VersionType.Base)
+			if (Type != VersionType.Base)
 			{
 				result = $"{result}{Type.ToLiteral()}{TypeNumber}";
 			}
@@ -265,9 +265,15 @@ namespace uTinyRipper
 			using (StringReader reader = new StringReader(version))
 			{
 				string major = string.Empty;
-				while(true)
+				while (true)
 				{
-					char c = (char)reader.Read();
+					int symb = reader.Read();
+					if (symb == -1)
+					{
+						throw new Exception($"Invalid version format");
+					}
+
+					char c = (char)symb;
 					if (c == '.')
 					{
 						Major = int.Parse(major);
@@ -280,7 +286,7 @@ namespace uTinyRipper
 				while (true)
 				{
 					int symb = reader.Read();
-					if(symb == -1)
+					if (symb == -1)
 					{
 						Minor = int.Parse(minor);
 						return;
@@ -301,7 +307,7 @@ namespace uTinyRipper
 				while (true)
 				{
 					int symb = reader.Read();
-					if(symb == -1)
+					if (symb == -1)
 					{
 						Build = int.Parse(build);
 						return;
