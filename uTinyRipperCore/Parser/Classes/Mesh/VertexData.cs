@@ -259,6 +259,8 @@ namespace uTinyRipper.Classes.Meshes
 			return offset;
 		}
 
+		public bool IsSet => VertexCount > 0;
+
 		public uint CurrentChannels { get; set; }
 		public int VertexCount { get; set; }
 		public ChannelInfo[] Channels { get; set; }

@@ -9,7 +9,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			m_constants = reader.ReadSingleArray();
 		}
 		
-		public bool IsValid => Constants.Count > 0;
+		public bool IsSet => Constants.Count > 0;
 
 		public IReadOnlyList<float> Constants => m_constants;
 

@@ -139,7 +139,7 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<byte> GetImageData()
 		{
 			byte[] data = m_imageData;
-			if (IsReadStreamData(File.Version) && StreamData.IsValid)
+			if (IsReadStreamData(File.Version) && StreamData.IsSet)
 			{
 				data = StreamData.GetContent(File) ?? m_imageData;
 			}

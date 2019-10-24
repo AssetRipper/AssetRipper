@@ -33,7 +33,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			return frames;
 		}
 
-		public bool IsValid => Data.Count > 0;
+		public bool IsSet => Data.Count > 0;
 		
 		public IReadOnlyList<uint> Data => m_data;
 		public int CurveCount { get; private set; }

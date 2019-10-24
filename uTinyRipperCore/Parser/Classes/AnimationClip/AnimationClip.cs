@@ -579,7 +579,7 @@ namespace uTinyRipper.Classes
 			{
 				if (IsReadMuscleClip(version, flags))
 				{
-					return MuscleClip.Clip.IsValid(version);
+					return MuscleClip.Clip.IsSet(version);
 				}
 				return false;
 			}
@@ -594,7 +594,7 @@ namespace uTinyRipper.Classes
 				{
 					if (AnimationType != AnimationType.Legacy)
 					{
-						return MuscleClip.Clip.IsValid(version);
+						return MuscleClip.Clip.IsSet(version);
 					}
 				}
 			}

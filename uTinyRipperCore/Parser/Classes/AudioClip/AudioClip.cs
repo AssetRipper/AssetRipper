@@ -498,28 +498,6 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override bool IsValid
-		{
-			get
-			{
-				if (IsReadLoadType(File.Version))
-				{
-					return true;
-				}
-				if (IsReadStreamingInfo(File.Version))
-				{
-					if (LoadType == AudioClipLoadType.Streaming)
-					{
-						if (m_audioData == null)
-						{
-							return true;
-						}
-					}
-				}
-				return m_audioData.Length > 0;
-			}
-		}
-
 		/// <summary>
 		/// Stream previously
 		/// </summary>

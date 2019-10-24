@@ -246,6 +246,11 @@ namespace uTinyRipper.Converters.Meshes
 
 		private static byte[] GetData(IExportContainer container, Mesh originMesh, ref VertexData instance)
 		{
+			if (!originMesh.CheckAssetIntegrity())
+			{
+				return Array.Empty<byte>();
+			}
+
 			if (NeedCopyData(container))
 			{
 				return CopyChannelsData(container, originMesh, ref instance);

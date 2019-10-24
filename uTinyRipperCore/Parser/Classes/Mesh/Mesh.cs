@@ -186,6 +186,18 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		private static bool IsMeshOptimizationFlags(Version version) => version.IsGreaterEqual(2019);
 
+		public bool CheckAssetIntegrity()
+		{
+			if (HasStreamData(File.Version))
+			{
+				if (VertexData.IsSet)
+				{
+					return StreamData.CheckIntegrity(File);
+				}
+			}
+			return true;
+		}
+
 		public string FindBlendShapeNameByCRC(uint crc)
 		{
 			if (HasBlendChannels(File.Version))
@@ -858,7 +870,7 @@ namespace uTinyRipper.Classes
 
 		public byte[] GetChannelsData()
 		{
-			if (HasStreamData(File.Version) && StreamData.IsValid)
+			if (HasStreamData(File.Version) && StreamData.IsSet)
 			{
 				return StreamData.GetContent(File);
 			}

@@ -31,19 +31,19 @@ namespace uTinyRipper.Classes.AnimationClips
 			}
 		}
 
-		public bool IsValid(Version version)
+		public bool IsSet(Version version)
 		{
-			if (StreamedClip.IsValid)
+			if (StreamedClip.IsSet)
 			{
 				return true;
 			}
-			if (DenseClip.IsValid)
+			if (DenseClip.IsSet)
 			{
 				return true;
 			}
 			if (IsReadConstantClip(version))
 			{
-				if (ConstantClip.IsValid)
+				if (ConstantClip.IsSet)
 				{
 					return true;
 				}

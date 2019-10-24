@@ -144,7 +144,6 @@ namespace uTinyRipper.Classes
 		public AssetInfo AssetInfo { get; }
 		public ISerializedFile File => AssetInfo.File;
 		public ClassIDType ClassID => AssetInfo.ClassID;
-		public virtual bool IsValid => true;
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
 		public virtual string ExportExtension => AssetExtension;
 		public long PathID => AssetInfo.PathID;		

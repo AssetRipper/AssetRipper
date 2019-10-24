@@ -22,7 +22,7 @@ namespace uTinyRipper.Classes.Textures
 
 		public bool CheckIntegrity(ISerializedFile file)
 		{
-			if (!IsValid)
+			if (!IsSet)
 			{
 				return true;
 			}
@@ -80,7 +80,7 @@ namespace uTinyRipper.Classes.Textures
 		public const string SizeName = "size";
 		public const string PathName = "path";
 
-		public bool IsValid => Path != string.Empty;
+		public bool IsSet => Path != string.Empty;
 
 		public uint Offset { get; private set; }
 		public uint Size { get; private set; }

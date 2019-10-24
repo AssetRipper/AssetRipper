@@ -312,7 +312,7 @@ namespace uTinyRipper.AssetExporters
 			AddShader("Hidden/Nature/Terrain/Utilities", 10490, true);
 			AddShader("Hidden/TerrainEngine/Details/Vertexlit", 10500, true);
 			AddShader("Hidden/TerrainEngine/Details/WavingDoublePass", 10501, true);
-			AddShader("Hidden/TerrainEngine/Details/BillboardWavingDoublePass", 10502, true);
+			AddShader(TerrainBillboardWavingDoublePass, 10502, true);
 			AddShader("Hidden/TerrainEngine/Splatmap/Diffuse-AddPass", 10503, true);
 			AddShader("Hidden/TerrainEngine/Splatmap/Diffuse-Base", 10504, true);
 			AddShader("Nature/Terrain/Diffuse", 10505, true);

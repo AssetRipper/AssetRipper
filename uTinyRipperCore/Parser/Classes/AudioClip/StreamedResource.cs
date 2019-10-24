@@ -17,7 +17,7 @@ namespace uTinyRipper.Classes.AudioClips
 
 		public bool CheckIntegrity(ISerializedFile file)
 		{
-			if (!IsValid)
+			if (!IsSet)
 			{
 				return true;
 			}
@@ -74,7 +74,7 @@ namespace uTinyRipper.Classes.AudioClips
 			return node;
 		}
 
-		public bool IsValid => Source != string.Empty;
+		public bool IsSet => Source != string.Empty;
 
 		public string Source { get; private set; }
 		public long Offset { get; private set; }

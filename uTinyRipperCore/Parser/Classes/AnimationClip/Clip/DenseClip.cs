@@ -14,7 +14,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			m_sampleArray = reader.ReadSingleArray();
 		}
 
-		public bool IsValid => SampleArray.Count > 0;
+		public bool IsSet => SampleArray.Count > 0;
 
 		public int FrameCount { get; private set; }
 		public int CurveCount { get; private set; }
