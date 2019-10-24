@@ -73,4 +73,5 @@ If you want to run binary files, you need to install:
  
  \- [Microsoft Visual C++ 2013](https://www.microsoft.com/en-us/download/details.aspx?id=40784) and [Microsoft Visual C++ 2015](https://www.microsoft.com/en-us/download/details.aspx?id=53840) Redistributables
 
- \- [Unity 2017.3.0f3](https://unity3d.com/get-unity/download/archive)
+ \- [Unity 2017.3.0f3 or greater](https://unity3d.com/get-unity/download/archive) (NOTE: editor version must be no less than game version)
+ 
