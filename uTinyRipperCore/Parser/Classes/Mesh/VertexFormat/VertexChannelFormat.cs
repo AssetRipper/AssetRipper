@@ -26,10 +26,6 @@ namespace uTinyRipper.Classes.Meshes
 					return VertexFormat.Float16;
 				case VertexChannelFormat.Color:
 					return VertexFormat.Color;
-				case VertexChannelFormat.Byte:
-					return VertexFormat.Byte;
-				case VertexChannelFormat.UInt:
-					return VertexFormat.Int;
 
 				default:
 					throw new Exception(_this.ToString());

@@ -16,7 +16,7 @@ namespace uTinyRipper.Classes.Meshes
 
 		public byte GetStride(Version version)
 		{
-			return GetVertexFormat(version).CalculateStride(Dimension);
+			return GetVertexFormat(version).CalculateStride(version, Dimension);
 		}
 
 		public ChannelInfo Convert(IExportContainer container)

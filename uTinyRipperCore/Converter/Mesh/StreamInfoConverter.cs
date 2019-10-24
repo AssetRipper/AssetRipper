@@ -24,7 +24,7 @@ namespace uTinyRipper.Converters.Meshes
 				{
 					if (stream.IsMatch(i))
 					{
-						offset += i.ToShaderChannel().GetStride();
+						offset += i.ToShaderChannel().GetStride(instanceVersion);
 					}
 				}
 

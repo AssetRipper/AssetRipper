@@ -22,12 +22,12 @@ namespace uTinyRipper.Classes.Meshes
 		/// </summary>
 		public static bool VertexFormat2017Relevant(Version version) => version.IsGreaterEqual(2017);
 
-		public static byte CalculateStride(this VertexFormat _this, int dimention)
+		public static byte CalculateStride(this VertexFormat _this, Version version, int dimention)
 		{
-			return (byte)(_this.GetSize() * dimention);
+			return (byte)(_this.GetSize(version) * dimention);
 		}
 
-		public static int GetSize(this VertexFormat _this)
+		public static int GetSize(this VertexFormat _this, Version version)
 		{
 			switch (_this)
 			{
@@ -36,7 +36,7 @@ namespace uTinyRipper.Classes.Meshes
 				case VertexFormat.Float16:
 					return 2;
 				case VertexFormat.Color:
-					return 4;
+					return ShaderChannelExtensions.ShaderChannel5Relevant(version) ? 1 : 4;
 				case VertexFormat.Byte:
 					return 1;
 				case VertexFormat.Int:
@@ -73,10 +73,6 @@ namespace uTinyRipper.Classes.Meshes
 					return VertexChannelFormat.Float16;
 				case VertexFormat.Color:
 					return VertexChannelFormat.Color;
-				case VertexFormat.Byte:
-					return VertexChannelFormat.Byte;
-				case VertexFormat.Int:
-					return VertexChannelFormat.UInt;
 
 				default:
 					throw new Exception(_this.ToString());
@@ -91,8 +87,10 @@ namespace uTinyRipper.Classes.Meshes
 					return VertexFormat2017.Float;
 				case VertexFormat.Float16:
 					return VertexFormat2017.Float16;
+				case VertexFormat.Color:
+					return VertexFormat2017.Color;
 				case VertexFormat.Byte:
-					return VertexFormat2017.UNorm8;
+					return VertexFormat2017.UInt8;
 				case VertexFormat.Int:
 					return VertexFormat2017.UInt32;
 
@@ -109,6 +107,7 @@ namespace uTinyRipper.Classes.Meshes
 					return VertexFormat2019.Float;
 				case VertexFormat.Float16:
 					return VertexFormat2019.Float16;
+				case VertexFormat.Color:
 				case VertexFormat.Byte:
 					return VertexFormat2019.UNorm8;
 				case VertexFormat.Int:

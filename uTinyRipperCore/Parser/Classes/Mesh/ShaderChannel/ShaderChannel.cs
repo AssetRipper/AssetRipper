@@ -58,7 +58,7 @@ namespace uTinyRipper.Classes.Meshes
 				case ShaderChannel.Tangent:
 					return VertexFormat.Float;
 				case ShaderChannel.Color:
-					return ShaderChannel5Relevant(version) ? VertexFormat.Byte : VertexFormat.Color;
+					return VertexFormatExtensions.VertexFormat2019Relevant(version) ? VertexFormat.Byte : VertexFormat.Color;
 
 				case ShaderChannel.UV0:
 				case ShaderChannel.UV1:
@@ -112,12 +112,11 @@ namespace uTinyRipper.Classes.Meshes
 			}
 		}
 
-		public static byte GetStride(this ShaderChannel _this)
+		public static byte GetStride(this ShaderChannel _this, Version version)
 		{
-			// since sizeof(Color) * 1 == sizeof(Byte) * 4, we can omit version
-			VertexFormat format = _this.GetVertexFormat(Version.MinVersion);
-			int dimention = _this.GetDimention(Version.MinVersion);
-			return format.CalculateStride(dimention);
+			VertexFormat format = _this.GetVertexFormat(version);
+			int dimention = _this.GetDimention(version);
+			return format.CalculateStride(version, dimention);
 		}
 
 		public static bool HasChannel(this ShaderChannel _this, Version version)
@@ -128,7 +127,7 @@ namespace uTinyRipper.Classes.Meshes
 			}
 			else if (ShaderChannel5Relevant(version))
 			{
-				return _this <= ShaderChannel.UV4;
+				return _this <= ShaderChannel.UV3;
 			}
 			else
 			{

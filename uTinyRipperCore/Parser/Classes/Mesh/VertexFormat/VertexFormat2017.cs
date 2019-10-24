@@ -32,6 +32,8 @@ namespace uTinyRipper.Classes.Meshes
 					return VertexFormat.Float;
 				case VertexFormat2017.Float16:
 					return VertexFormat.Float16;
+				case VertexFormat2017.Color:
+					return VertexFormat.Color;
 				case VertexFormat2017.UNorm8:
 					return VertexFormat.Byte;
 				case VertexFormat2017.UInt32:

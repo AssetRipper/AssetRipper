@@ -10,36 +10,39 @@ namespace uTinyRipper.Converters.Meshes
 			ChannelInfo instance = origin;
 			if (origin.IsSet)
 			{
-				if (container.Version.IsLess(5))
+				if (VertexFormatExtensions.VertexFormat2019Relevant(container.Version))
+				{
+					// TEMP: downgrade
+					if (!VertexFormatExtensions.VertexFormat2019Relevant(container.ExportVersion))
+					{
+						instance.Format = origin.GetVertexFormat(container.Version).ToFormat(container.ExportVersion);
+					}
+				}
+				else if (ShaderChannelExtensions.ShaderChannel5Relevant(container.Version))
+				{
+					if (VertexFormatExtensions.VertexFormat2019Relevant(container.ExportVersion))
+					{
+						instance.Format = origin.GetVertexFormat(container.Version).ToFormat(container.ExportVersion);
+					}
+				}
+				else
 				{
 					if (container.ExportVersion.IsGreaterEqual(5))
 					{
 						VertexChannelFormat formatv4 = (VertexChannelFormat)origin.Format;
+						instance.Format = formatv4.ToVertexFormat().ToFormat(container.ExportVersion);
 						if (formatv4 == VertexChannelFormat.Color)
 						{
-							// replace Color[1] to Byte[4]
-							instance.Format = VertexFormat.Byte.ToFormat(container.ExportVersion);
+							// replace Color4b[1] to Color1b[4]
 							instance.RawDimension = (byte)((instance.RawDimension & 0xF0) | (instance.Dimension * 4));
 						}
-						else
-						{
-							instance.Format = formatv4.ToVertexFormat().ToFormat(container.ExportVersion);
-						}
 					}
 				}
-				else if (container.Version.IsLess(2019))
+				if (ShaderChannelExtensions.ShaderChannel2018Relevant(container.Version))
 				{
-					if (container.ExportVersion.IsGreaterEqual(2019))
+					if (!ShaderChannelExtensions.ShaderChannel2018Relevant(container.ExportVersion))
 					{
-						instance.Format = origin.GetVertexFormat(container.Version).ToFormat(container.ExportVersion);
-					}
-				}
-				else // Version >= 2019
-				{
-					// TEMP: downgrade
-					if (container.ExportVersion.IsLess(2019))
-					{
-						instance.Format = origin.GetVertexFormat(container.Version).ToFormat(container.ExportVersion);
+						instance.RawDimension = origin.Dimension;
 					}
 				}
 			}

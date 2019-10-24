@@ -395,7 +395,7 @@ namespace uTinyRipper.Converters
 					byte dimention = ShaderChannel.Vertex.GetDimention(container.ExportVersion);
 					instance.Channels[index] = new ChannelInfo(0, stride, format, dimention);
 				}
-				stride += ShaderChannel.Vertex.GetStride();
+				stride += ShaderChannel.Vertex.GetStride(container.ExportVersion);
 			}
 			if (hasNormals)
 			{
@@ -407,7 +407,7 @@ namespace uTinyRipper.Converters
 					byte dimention = ShaderChannel.Normal.GetDimention(container.ExportVersion);
 					instance.Channels[index] = new ChannelInfo(0, stride, format, dimention);
 				}
-				stride += ShaderChannel.Normal.GetStride();
+				stride += ShaderChannel.Normal.GetStride(container.ExportVersion);
 			}
 			if (hasColors)
 			{
@@ -419,7 +419,7 @@ namespace uTinyRipper.Converters
 					byte dimention = ShaderChannel.Color.GetDimention(container.ExportVersion);
 					instance.Channels[index] = new ChannelInfo(0, stride, format, dimention);
 				}
-				stride += ShaderChannel.Color.GetStride();
+				stride += ShaderChannel.Color.GetStride(container.ExportVersion);
 			}
 			if (hasUV0)
 			{
@@ -431,7 +431,7 @@ namespace uTinyRipper.Converters
 					byte dimention = ShaderChannel.UV0.GetDimention(container.ExportVersion);
 					instance.Channels[index] = new ChannelInfo(0, stride, format, dimention);
 				}
-				stride += ShaderChannel.UV0.GetStride();
+				stride += ShaderChannel.UV0.GetStride(container.ExportVersion);
 			}
 			if (hasUV1)
 			{
@@ -443,7 +443,7 @@ namespace uTinyRipper.Converters
 					byte dimention = ShaderChannel.UV1.GetDimention(container.ExportVersion);
 					instance.Channels[index] = new ChannelInfo(0, stride, format, dimention);
 				}
-				stride += ShaderChannel.UV1.GetStride();
+				stride += ShaderChannel.UV1.GetStride(container.ExportVersion);
 			}
 			if (hasTangents)
 			{
@@ -455,7 +455,7 @@ namespace uTinyRipper.Converters
 					byte dimention = ShaderChannel.Tangent.GetDimention(container.ExportVersion);
 					instance.Channels[index] = new ChannelInfo(0, stride, format, dimention);
 				}
-				stride += ShaderChannel.Tangent.GetStride();
+				stride += ShaderChannel.Tangent.GetStride(container.ExportVersion);
 			}
 
 			if (VertexData.HasCurrentChannels(container.ExportVersion))

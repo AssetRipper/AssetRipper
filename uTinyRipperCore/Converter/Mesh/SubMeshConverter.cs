@@ -293,7 +293,7 @@ namespace uTinyRipper.Converters.Meshes
 			ChannelInfo channel = vertexData.GetChannel(version, ShaderChannel.Vertex);
 			int streamOffset = vertexData.GetStreamOffset(version, channel.Stream);
 			int streamStride = vertexData.GetStreamStride(version, channel.Stream);
-			int extraStride = streamStride - ShaderChannel.Vertex.GetStride();
+			int extraStride = streamStride - ShaderChannel.Vertex.GetStride(version);
 			int vertexOffset = firstVertex * streamStride;
 			int begin = streamOffset + vertexOffset + channel.Offset;
 			using (MemoryStream stream = new MemoryStream(vertexData.Data))
