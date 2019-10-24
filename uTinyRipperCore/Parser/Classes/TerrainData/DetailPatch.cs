@@ -1,18 +1,26 @@
-using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.TerrainDatas
 {
-	public struct DetailPatch : IAssetReadable, IYAMLExportable
+	public struct DetailPatch : IAsset
 	{
 		public void Read(AssetReader reader)
 		{
 			Bounds.Read(reader);
-			m_layerIndices = reader.ReadByteArray();
+			LayerIndices = reader.ReadByteArray();
 			reader.AlignStream(AlignType.Align4);
-			m_numberOfObjects = reader.ReadByteArray();
+			NumberOfObjects = reader.ReadByteArray();
 			reader.AlignStream(AlignType.Align4);
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			Bounds.Write(writer);
+			writer.WriteArray(LayerIndices);
+			writer.AlignStream(AlignType.Align4);
+			writer.WriteArray(NumberOfObjects);
+			writer.AlignStream(AlignType.Align4);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -24,16 +32,13 @@ namespace uTinyRipper.Classes.TerrainDatas
 			return node;
 		}
 
-		public IReadOnlyList<byte> LayerIndices => m_layerIndices;
-		public IReadOnlyList<byte> NumberOfObjects => m_numberOfObjects;
+		public byte[] LayerIndices { get; set; }
+		public byte[] NumberOfObjects { get; set; }
 
 		public const string BoundsName = "bounds";
 		public const string LayerIndicesName = "layerIndices";
 		public const string NumberOfObjectsName = "numberOfObjects";
 
 		public AABB Bounds;
-
-		private byte[] m_layerIndices;
-		private byte[] m_numberOfObjects;
 	}
 }

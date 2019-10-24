@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.TerrainDatas;
-using uTinyRipper.YAML;
+using uTinyRipper.Converters;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
 	public sealed class TerrainData : NamedObject
 	{
-		public TerrainData(AssetInfo assetInfo):
+		public TerrainData(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -16,9 +17,11 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool IsReadLightmap(Version version)
+		public static bool HasLightmap(Version version) => version.IsLess(3);
+
+		public override Object Convert(IExportContainer container)
 		{
-			return version.IsLess(3);
+			return TerrainDataConverter.Convert(container, this);
 		}
 
 		public override void Read(AssetReader reader)
@@ -28,33 +31,46 @@ namespace uTinyRipper.Classes
 			SplatDatabase.Read(reader);
 			DetailDatabase.Read(reader);
 			Heightmap.Read(reader);
-			if (IsReadLightmap(reader.Version))
+			if (HasLightmap(reader.Version))
 			{
 				Lightmap.Read(reader);
 			}
 		}
 
+		public override void Write(AssetWriter writer)
+		{
+			base.Write(writer);
+
+			SplatDatabase.Write(writer);
+			DetailDatabase.Write(writer);
+			Heightmap.Write(writer);
+			if (HasLightmap(writer.Version))
+			{
+				Lightmap.Write(writer);
+			}
+		}
+
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(file, isLog))
 			{
 				yield return asset;
 			}
-			
-			foreach(Object asset in SplatDatabase.FetchDependencies(file, isLog))
+
+			foreach (Object asset in SplatDatabase.FetchDependencies(file, isLog))
 			{
 				yield return asset;
 			}
-			foreach(Object asset in DetailDatabase.FetchDependencies(file, isLog))
+			foreach (Object asset in DetailDatabase.FetchDependencies(file, isLog))
 			{
 				yield return asset;
 			}
-			foreach(Object asset in Heightmap.FetchDependencies(file, isLog))
+			foreach (Object asset in Heightmap.FetchDependencies(file, isLog))
 			{
 				yield return asset;
 			}
-			
-			if (IsReadLightmap(file.Version))
+
+			if (HasLightmap(file.Version))
 			{
 				yield return Lightmap.FetchDependency(file, isLog, ToLogString, LightmapName);
 			}
@@ -66,6 +82,10 @@ namespace uTinyRipper.Classes
 			node.Add(SplatDatabaseName, SplatDatabase.ExportYAML(container));
 			node.Add(DetailDatabaseName, DetailDatabase.ExportYAML(container));
 			node.Add(HeightmapName, Heightmap.ExportYAML(container));
+			if (HasLightmap(container.ExportVersion))
+			{
+				node.Add(LightmapName, Lightmap.ExportYAML(container));
+			}
 			return node;
 		}
 

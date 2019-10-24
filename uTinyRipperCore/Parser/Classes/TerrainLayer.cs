@@ -66,9 +66,9 @@ namespace uTinyRipper.Classes
 		public override string ExportExtension => "terrainlayer";
 		public override string ExportPath => Path.Combine(AssetsKeyword, ClassIDType.Terrain.ToString(), ClassID.ToString());
 
-		public float Metallic { get; private set; }
-		public float Smoothness { get; private set; }
-		public float NormalScale { get; private set; }
+		public float Metallic { get; set; }
+		public float Smoothness { get; set; }
+		public float NormalScale { get; set; }
 
 		public const string DiffuseTextureName = "m_DiffuseTexture";
 		public const string NormalMapTextureName = "m_NormalMapTexture";
