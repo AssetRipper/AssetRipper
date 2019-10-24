@@ -32,58 +32,16 @@ namespace uTinyRipper.Converters.Meshes
 
 		private static uint GetCurrentChannels(IExportContainer container, ref VertexData origin)
 		{
-			if (VertexData.HasCurrentChannels(container.Version))
+			if (ShaderChannelExtensions.ShaderChannel5Relevant(container.Version))
 			{
-				if (ShaderChannelExtensions.ShaderChannel5Relevant(container.Version))
-				{
-					return origin.CurrentChannels;
-				}
-				else
-				{
-					BitArray curBits = new BitArray(BitConverter.GetBytes(origin.CurrentChannels));
-					curBits.Set((int)ShaderChannel5.Tangent, curBits.Get((int)ShaderChannel4.Tangent));
-					curBits.Set((int)ShaderChannel4.Tangent, false);
-					return curBits.ToUInt32();
-				}
+				return origin.CurrentChannels;
 			}
-			else // Version >= 2018
+			else
 			{
-				// TEMP: downgrade
-				BitArray curChannels = new BitArray(32);
-				for (int i = 0; i < origin.Channels.Length; i++)
-				{
-					if (origin.Channels[i].IsSet)
-					{
-						switch ((ShaderChannel2018)i)
-						{
-							case ShaderChannel2018.Vertex:
-								curChannels[(int)ShaderChannel5.Vertex] = true;
-								break;
-							case ShaderChannel2018.Normal:
-								curChannels[(int)ShaderChannel5.Normal] = true;
-								break;
-							case ShaderChannel2018.Color:
-								curChannels[(int)ShaderChannel5.Color] = true;
-								break;
-							case ShaderChannel2018.UV0:
-								curChannels[(int)ShaderChannel5.UV0] = true;
-								break;
-							case ShaderChannel2018.UV1:
-								curChannels[(int)ShaderChannel5.UV1] = true;
-								break;
-							case ShaderChannel2018.UV2:
-								curChannels[(int)ShaderChannel5.UV2] = true;
-								break;
-							case ShaderChannel2018.UV3:
-								curChannels[(int)ShaderChannel5.UV3] = true;
-								break;
-							case ShaderChannel2018.Tangent:
-								curChannels[(int)ShaderChannel5.Tangent] = true;
-								break;
-						}
-					}
-				}
-				return curChannels.ToUInt32();
+				BitArray curBits = new BitArray(BitConverter.GetBytes(origin.CurrentChannels));
+				curBits.Set((int)ShaderChannel5.Tangent, curBits.Get((int)ShaderChannel4.Tangent));
+				curBits.Set((int)ShaderChannel4.Tangent, false);
+				return curBits.ToUInt32();
 			}
 		}
 
@@ -92,23 +50,7 @@ namespace uTinyRipper.Converters.Meshes
 			ref VertexData origin = ref originMesh.VertexData;
 			if (ShaderChannelExtensions.ShaderChannel2018Relevant(container.Version)) // 2018.1 <= Version
 			{
-				// TEMP: downgrade
-				if (ShaderChannelExtensions.ShaderChannel2018Relevant(container.ExportVersion))
-				{
-					return origin.Channels.ToArray();
-				}
-				else
-				{
-					ChannelInfo[] channels = new ChannelInfo[8];
-					channels[(int)ShaderChannel5.Vertex] = origin.Channels[(int)ShaderChannel2018.Vertex].Convert(container);
-					channels[(int)ShaderChannel5.Normal] = origin.Channels[(int)ShaderChannel2018.Normal].Convert(container);
-					channels[(int)ShaderChannel5.Color] = origin.Channels[(int)ShaderChannel2018.Color].Convert(container);
-					channels[(int)ShaderChannel5.UV0] = origin.Channels[(int)ShaderChannel2018.UV0].Convert(container);
-					channels[(int)ShaderChannel5.UV1] = origin.Channels[(int)ShaderChannel2018.UV1].Convert(container);
-					channels[(int)ShaderChannel5.Tangent] = origin.Channels[(int)ShaderChannel2018.Tangent].Convert(container);
-					RecalculateChannelOffsets(container, channels);
-					return channels;
-				}
+				return origin.Channels.Select(t => t.Convert(container)).ToArray();
 			}
 			else if (ShaderChannelExtensions.ShaderChannel5Relevant(container.Version)) // 5.0.0 <= Version < 2018.1
 			{
@@ -220,30 +162,6 @@ namespace uTinyRipper.Converters.Meshes
 			}
 		}
 
-		// TEMP: downgrade
-		private static void RecalculateChannelOffsets(IExportContainer container, ChannelInfo[] channels)
-		{
-			int maxStream = channels.Max(t => t.Stream);
-			for (int i = 0; i <= maxStream; i++)
-			{
-				RecalculateChannelOffsets(container, channels, i);
-			}
-		}
-
-		private static void RecalculateChannelOffsets(IExportContainer container, ChannelInfo[] channels, int stream)
-		{
-			byte offset = 0;
-			for (int i = 0; i < channels.Length; i++)
-			{
-				ref ChannelInfo channel = ref channels[i];
-				if (channel.IsSet && channel.Stream == stream)
-				{
-					channel.Offset = offset;
-					offset += channel.GetStride(container.ExportVersion);
-				}
-			}
-		}
-
 		private static byte[] GetData(IExportContainer container, Mesh originMesh, ref VertexData instance)
 		{
 			if (!originMesh.CheckAssetIntegrity())
@@ -271,17 +189,6 @@ namespace uTinyRipper.Converters.Meshes
 			if (container.Platform == Platform.XBox360 && container.ExportPlatform != Platform.XBox360)
 			{
 				return true;
-			}
-
-			// TEMP: downgrade
-			if (VertexData.ToSerializedVersion(container.Version) >= 2)
-			{
-				if (VertexData.ToSerializedVersion(container.ExportVersion) < 2)
-				{
-					/// we swap v2018 and v5 channels and since Editor up to 2017.x ignore <see cref="ChannelInfo.Offset"/>
-					/// value, we have to swap data as well
-					return true;
-				}
 			}
 
 			return false;

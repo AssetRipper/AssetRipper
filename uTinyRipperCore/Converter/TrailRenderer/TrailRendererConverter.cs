@@ -29,19 +29,10 @@ namespace uTinyRipper.Converters
 			}
 			else
 			{
-				if (TrailRenderer.HasParameters(container.ExportVersion))
-				{
-					LineParameters instance = new LineParameters(container.ExportVersion);
-					instance.WidthCurve = origin.Parameters.WidthCurve.Convert(container);
-					instance.ColorGradient = origin.Colors.GenerateGragient(container);
-					return instance;
-				}
-				else
-				{
-					LineParameters instance = new LineParameters();
-					instance.WidthCurve = origin.Parameters.WidthCurve.Convert(container);
-					return instance;
-				}
+				LineParameters instance = new LineParameters(container.ExportVersion);
+				instance.WidthCurve = origin.Parameters.WidthCurve.Convert(container);
+				instance.ColorGradient = origin.Colors.GenerateGragient(container);
+				return instance;
 			}
 		}
 

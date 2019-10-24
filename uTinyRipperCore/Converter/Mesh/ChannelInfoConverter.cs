@@ -12,11 +12,6 @@ namespace uTinyRipper.Converters.Meshes
 			{
 				if (VertexFormatExtensions.VertexFormat2019Relevant(container.Version))
 				{
-					// TEMP: downgrade
-					if (!VertexFormatExtensions.VertexFormat2019Relevant(container.ExportVersion))
-					{
-						instance.Format = origin.GetVertexFormat(container.Version).ToFormat(container.ExportVersion);
-					}
 				}
 				else if (ShaderChannelExtensions.ShaderChannel5Relevant(container.Version))
 				{
@@ -34,15 +29,8 @@ namespace uTinyRipper.Converters.Meshes
 						if (formatv4 == VertexChannelFormat.Color)
 						{
 							// replace Color4b[1] to Color1b[4]
-							instance.RawDimension = (byte)((instance.RawDimension & 0xF0) | (instance.Dimension * 4));
+							instance.RawDimension = (byte)(instance.Dimension * 4);
 						}
-					}
-				}
-				if (ShaderChannelExtensions.ShaderChannel2018Relevant(container.Version))
-				{
-					if (!ShaderChannelExtensions.ShaderChannel2018Relevant(container.ExportVersion))
-					{
-						instance.RawDimension = origin.Dimension;
 					}
 				}
 			}

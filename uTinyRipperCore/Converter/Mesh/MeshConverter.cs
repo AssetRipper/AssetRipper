@@ -59,7 +59,7 @@ namespace uTinyRipper.Converters
 			}
 			if (Mesh.HasSkin(container.ExportVersion))
 			{
-				instance.Skin = GetSkin(container, origin);
+				instance.Skin = origin.Skin;
 			}
 
 			if (Mesh.HasVertexData(container.ExportVersion))
@@ -289,12 +289,6 @@ namespace uTinyRipper.Converters
 			{
 				return SubMeshConverter.Convert(container, instance, origin.SubMeshes);
 			}
-		}
-
-		// TEMP: downgrade
-		private static BoneWeights4[] GetSkin(IExportContainer container, Mesh origin)
-		{
-			return Mesh.HasSkin(container.Version) ? origin.Skin.ToArray() : origin.VertexData.GenerateSkin(container);
 		}
 
 		private static VertexData GetVertexData(IExportContainer container, Mesh origin)
