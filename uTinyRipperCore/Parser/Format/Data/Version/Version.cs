@@ -3,7 +3,7 @@ using System.IO;
 
 namespace uTinyRipper
 {
-	public struct Version
+	public struct Version : IComparable<Version>
 	{
 		public Version(int major)
 		{
@@ -65,6 +65,22 @@ namespace uTinyRipper
 		public static bool operator <=(Version left, Version right)
 		{
 			return left.m_data <= right.m_data;
+		}
+
+		public int CompareTo(Version other)
+		{
+			if (this > other)
+			{
+				return 1;
+			}
+			else if (this < other)
+			{
+				return -1;
+			}
+			else
+			{
+				return 0;
+			}
 		}
 
 		public override bool Equals(object obj)

@@ -149,9 +149,12 @@ namespace uTinyRipper
 
 		public void Export(string exportPath, Func<Object, bool> filter)
 		{
+			Version defaultVersion = new Version(2017, 3, 0, VersionType.Final, 3);
+			Version maxVersion = FileCollection.Files.Max(t => t.Version);
+			Version version = defaultVersion < maxVersion ? maxVersion : defaultVersion;
 			ExportOptions options = new ExportOptions()
 			{
-				Version = new Version(2017, 3, 0, VersionType.Final, 3),
+				Version = version,
 				Platform = Platform.NoTarget,
 				Flags = TransferInstructionFlags.NoTransferInstructionFlags,
 			};
