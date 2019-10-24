@@ -40,6 +40,7 @@ namespace uTinyRipper.Classes
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
+
 			Time = reader.ReadSingle();
 			if (HasParameters(reader.Version))
 			{
@@ -57,6 +58,29 @@ namespace uTinyRipper.Classes
 			if (HasEmitting(reader.Version))
 			{
 				Emitting = reader.ReadBoolean();
+			}
+		}
+
+		public override void Write(AssetWriter writer)
+		{
+			base.Write(writer);
+
+			writer.Write(Time);
+			if (HasParameters(writer.Version))
+			{
+				Parameters.Write(writer);
+			}
+			else
+			{
+				writer.Write(StartWidth);
+				writer.Write(EndWidth);
+				Colors.Write(writer);
+			}
+			writer.Write(MinVertexDistance);
+			writer.Write(Autodestruct);
+			if (HasEmitting(writer.Version))
+			{
+				writer.Write(Emitting);
 			}
 		}
 
