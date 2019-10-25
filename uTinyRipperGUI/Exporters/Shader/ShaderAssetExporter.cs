@@ -71,7 +71,7 @@ namespace uTinyRipperGUI.Exporters
 				case GPUPlatform.d3d11_9x:
 					return new ShaderDXExporter(graphicApi);
 				case GPUPlatform.d3d11:
-					return new ShaderHLSLccExporter(graphicApi);
+					return version.IsGreaterEqual(2019, 2) ? new ShaderDXExporter(graphicApi) : new ShaderHLSLccExporter(graphicApi);
 
 				case GPUPlatform.vulkan:
 					return new ShaderVulkanExporter();
