@@ -29,9 +29,20 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		}
 
 		/// <summary>
-		/// 2018.4.9 to 2019.1 exclusive
+		/// 2018.4.9 to 2019.1 exclusive or 2019.2.9 and greater
 		/// </summary>
-		public static bool HasStoredHash(Version version) => version.IsEqual(2018) && version.IsGreaterEqual(2018, 4, 9);
+		public static bool HasStoredHash(Version version)
+		{
+			if (version.IsGreaterEqual(2019, 2, 9))
+			{
+				return true;
+			}
+			if (version.IsGreaterEqual(2019))
+			{
+				return false;
+			}
+			return version.IsGreaterEqual(2018, 4, 9);
+		}
 
 		private static int GetSerializedVersion(Version version)
 		{
