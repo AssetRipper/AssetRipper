@@ -84,7 +84,6 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public MinMaxCurve MultiplierCurve { get; private set; }
 		public float Multiplier => MultiplierCurve.Scalar;
 		public int InfluenceFilter { get; private set; }
 		public IReadOnlyList<PPtr<ParticleSystemForceField>> InfluenceList => m_influenceList;
@@ -95,6 +94,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public const string InfluenceMaskName = "influenceMask";
 		public const string InfluenceListName = "influenceList";
 
+		public MinMaxCurve MultiplierCurve;
 		public BitField InfluenceMask;
 
 		private PPtr<ParticleSystemForceField>[] m_influenceList = null;
