@@ -8,6 +8,7 @@
 	<RootNamespace>uTinyRipper</RootNamespace>
 	<Copyright>Copyright ©  2017</Copyright>
 	<Authors>mafaca</Authors>
+	<Configurations>Debug;Release;Virtual</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
