@@ -2,9 +2,9 @@ using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.Exporters.Scripts;
+using uTinyRipper.Converters.Script;
 
-namespace uTinyRipper.Assembly.Mono
+namespace uTinyRipper.Game.Assembly.Mono
 {
 	internal sealed class MonoManager : IAssemblyManager, IAssemblyResolver
 	{

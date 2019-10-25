@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Meshes;
 

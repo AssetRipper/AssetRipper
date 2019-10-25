@@ -1,5 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes;
+﻿using uTinyRipper.Classes;
 using uTinyRipper.Classes.TerrainDatas;
 
 namespace uTinyRipper.Converters.TerrainDatas

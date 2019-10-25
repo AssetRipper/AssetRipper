@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.SpriteAtlases;
 using uTinyRipper.Classes.Sprites;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
@@ -199,7 +199,7 @@ namespace uTinyRipper.Classes
 
 			if (IsReadRendererData(reader.Version))
 			{
-				RenderDataKey = reader.ReadTupleTLong<EngineGUID>();
+				RenderDataKey = reader.ReadTupleTLong<GUID>();
 				m_atlasTags = reader.ReadStringArray();
 				SpriteAtlas.Read(reader);
 			}
@@ -244,7 +244,7 @@ namespace uTinyRipper.Classes
 			{
 				yield return SpriteAtlas.FetchDependency(file, isLog, ToLogString, "SpriteAtlas");
 			}
-			foreach (Object asset in RD.FetchDependencies(file))
+			foreach (Object asset in RD.FetchDependencies(file, isLog))
 			{
 				yield return asset;
 			}
@@ -344,7 +344,7 @@ namespace uTinyRipper.Classes
 		public Vector2f Offset;
 		public Vector4f Border;
 		public Vector2f Pivot;
-		public Tuple<EngineGUID, long> RenderDataKey;
+		public Tuple<GUID, long> RenderDataKey;
 		public PPtr<SpriteAtlas> SpriteAtlas;
 		public SpriteRenderData RD;
 #if UNIVERSAL

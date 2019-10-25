@@ -1,13 +1,12 @@
-﻿using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes.TrailRenderers;
+﻿using uTinyRipper.Classes.TrailRenderers;
 
 namespace uTinyRipper.Converters.TrailRenderers
 {
 	public static class GradientConverter
 	{
-		public static Classes.ParticleSystems.Gradient GenerateGradient(IExportContainer container, ref Gradient origin)
+		public static uTinyRipper.Classes.ParticleSystems.Gradient GenerateGradient(IExportContainer container, ref Gradient origin)
 		{
-			Classes.ParticleSystems.Gradient instance = new Classes.ParticleSystems.Gradient();
+			uTinyRipper.Classes.ParticleSystems.Gradient instance = new uTinyRipper.Classes.ParticleSystems.Gradient();
 			instance.Add(0 * ushort.MaxValue / 4, origin.Color0);
 			instance.Add(1 * ushort.MaxValue / 4, origin.Color1);
 			instance.Add(2 * ushort.MaxValue / 4, origin.Color2);

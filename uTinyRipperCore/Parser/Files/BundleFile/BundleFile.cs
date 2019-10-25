@@ -1,7 +1,8 @@
 using System;
 using System.IO;
+using uTinyRipper.BundleFiles;
 
-namespace uTinyRipper.BundleFiles
+namespace uTinyRipper
 {
 	public sealed class BundleFile : FileList
 	{
@@ -18,12 +19,12 @@ namespace uTinyRipper.BundleFiles
 
 		public static bool IsBundleFile(string filePath)
 		{
-			if (!FileMultiStream.Exists(filePath))
+			if (!MultiFileStream.Exists(filePath))
 			{
 				throw new Exception($"Bundle at path '{filePath}' doesn't exist");
 			}
 
-			using (Stream stream = FileMultiStream.OpenRead(filePath))
+			using (Stream stream = MultiFileStream.OpenRead(filePath))
 			{
 				return IsBundleFile(stream);
 			}

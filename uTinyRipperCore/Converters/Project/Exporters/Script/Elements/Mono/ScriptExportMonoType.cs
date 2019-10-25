@@ -2,10 +2,11 @@ using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using uTinyRipper.Assembly;
-using uTinyRipper.Assembly.Mono;
+using uTinyRipper.Game;
+using uTinyRipper.Converters.Script;
+using uTinyRipper.Game.Assembly.Mono;
 
-namespace uTinyRipper.Exporters.Scripts.Mono
+namespace uTinyRipper.Converters.Script.Mono
 {
 	public sealed class ScriptExportMonoType : ScriptExportType
 	{
@@ -59,7 +60,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 					}
 					declaringName = GetNestedGenericName(type.DeclaringType, genericArguments);
 				}
-				else if(type.HasGenericParameters)
+				else if (type.HasGenericParameters)
 				{
 					List<TypeReference> genericArguments = new List<TypeReference>(type.GenericParameters);
 					declaringName = GetNestedGenericName(type.DeclaringType, genericArguments);
@@ -250,7 +251,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 				}
 			}
 		}
-				
+
 		public override void GetUsedNamespaces(ICollection<string> namespaces)
 		{
 			if (Definition != null)

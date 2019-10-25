@@ -1,6 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
-
-namespace uTinyRipper
+﻿namespace uTinyRipper
 {
 	public interface IAsset : IAssetReadable, IAssetWritable, IYAMLExportable
 	{

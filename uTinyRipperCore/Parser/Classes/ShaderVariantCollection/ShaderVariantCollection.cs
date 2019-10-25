@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
 using uTinyRipper.Classes.ShaderVariantCollections;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {

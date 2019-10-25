@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.GUIStyles
 {
-	public struct GUIStyleState
+	public struct GUIStyleState : IAsset
 	{
 		public GUIStyleState(bool _)
 		{
@@ -31,6 +31,13 @@ namespace uTinyRipper.Classes.GUIStyles
 			m_scaledBackgrounds = new PPtr<Texture2D>[0];
 			//m_scaledBackgrounds = stream.ReadArray<PPtr<Texture2D>>();
 			TextColor.Read(reader);
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			Background.Write(writer);
+			//writer.WriteAssetArray(m_scaledBackgrounds);
+			TextColor.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

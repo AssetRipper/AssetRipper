@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace uTinyRipper.Exporters.Scripts
+namespace uTinyRipper.Converters.Script
 {
 	public abstract class ScriptExportParameter
 	{

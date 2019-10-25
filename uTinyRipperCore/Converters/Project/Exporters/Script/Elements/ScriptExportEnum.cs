@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace uTinyRipper.Exporters.Scripts
+namespace uTinyRipper.Converters.Script
 {
 	public abstract class ScriptExportEnum : ScriptExportType
 	{
@@ -18,7 +18,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 			writer.WriteIndent(intent++);
 			writer.WriteLine('{');
-			
+
 			foreach (ScriptExportField field in Fields)
 			{
 				field.ExportEnum(writer, intent);

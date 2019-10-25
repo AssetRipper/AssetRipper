@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.TerrainDatas;
 
@@ -23,7 +22,7 @@ namespace uTinyRipper.Converters.TerrainDatas
 			instance.WavingGrassSpeed = origin.WavingGrassSpeed;
 			if (DetailDatabase.HasDetailBillboardShader(container.ExportVersion))
 			{
-				instance.DetailBillboardShader = GetDetailBillboardShader(container,ref origin);
+				instance.DetailBillboardShader = GetDetailBillboardShader(container, ref origin);
 				instance.DetailMeshLitShader = GetDetailMeshLitShader(container, ref origin);
 				instance.DetailMeshGrassShader = GetDetailMeshGrassShader(container, ref origin);
 			}

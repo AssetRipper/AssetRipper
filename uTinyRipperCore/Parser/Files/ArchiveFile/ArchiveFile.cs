@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
+using uTinyRipper.ArchiveFiles;
 
-namespace uTinyRipper.ArchiveFiles
+namespace uTinyRipper
 {
 	public sealed class ArchiveFile : FileList
 	{
@@ -17,12 +18,12 @@ namespace uTinyRipper.ArchiveFiles
 
 		public static bool IsArchiveFile(string filePath)
 		{
-			if (!FileMultiStream.Exists(filePath))
+			if (!MultiFileStream.Exists(filePath))
 			{
 				throw new Exception($"Web at path '{filePath}' doesn't exist");
 			}
 
-			using (Stream stream = FileMultiStream.OpenRead(filePath))
+			using (Stream stream = MultiFileStream.OpenRead(filePath))
 			{
 				return IsArchiveFile(stream);
 			}

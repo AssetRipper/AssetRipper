@@ -1,12 +1,12 @@
-﻿using uTinyRipper.AssetExporters;
-using uTinyRipper.YAML;
+﻿using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
-namespace uTinyRipper.Classes
+namespace uTinyRipper.Classes.Misc
 {
 	public struct Hash128 : IAssetReadable, ISerializedFileReadable, IYAMLExportable
 	{
-		public Hash128(uint v):
+		public Hash128(uint v) :
 			this(v, 0, 0, 0)
 		{
 		}
@@ -40,7 +40,7 @@ namespace uTinyRipper.Classes
 			Data2 = reader.ReadUInt32();
 			Data3 = reader.ReadUInt32();
 		}
-		
+
 		public void Read(AssetReader reader)
 		{
 			Read((EndianReader)reader);

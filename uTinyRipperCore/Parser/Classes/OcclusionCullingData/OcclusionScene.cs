@@ -1,11 +1,12 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.OcclusionCullingDatas
 {
 	public struct OcclusionScene : IAssetReadable, IYAMLExportable
 	{
-		public OcclusionScene(EngineGUID scene, int renderSize, int portalSize)
+		public OcclusionScene(GUID scene, int renderSize, int portalSize)
 		{
 			Scene = scene;
 			IndexRenderers = 0;
@@ -39,6 +40,6 @@ namespace uTinyRipper.Classes.OcclusionCullingDatas
 		public int IndexPortals { get; private set; }
 		public int SizePortals { get; private set; }
 
-		public EngineGUID Scene;
+		public GUID Scene;
 	}
 }

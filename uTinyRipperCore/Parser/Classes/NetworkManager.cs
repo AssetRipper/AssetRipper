@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
@@ -16,7 +18,7 @@ namespace uTinyRipper.Classes
 			this(assetInfo)
 		{
 			Sendrate = 15.0f;
-			m_assetToPrefab = new Dictionary<EngineGUID, PPtr<GameObject>>();
+			m_assetToPrefab = new Dictionary<GUID, PPtr<GameObject>>();
 		}
 
 		public static NetworkManager CreateVirtualInstance(VirtualSerializedFile virtualFile)
@@ -38,7 +40,7 @@ namespace uTinyRipper.Classes
 
 			DebugLevel = reader.ReadInt32();
 			Sendrate = reader.ReadSingle();
-			m_assetToPrefab = new Dictionary<EngineGUID, PPtr<GameObject>>();
+			m_assetToPrefab = new Dictionary<GUID, PPtr<GameObject>>();
 			m_assetToPrefab.Read(reader);
 		}
 
@@ -66,8 +68,8 @@ namespace uTinyRipper.Classes
 
 		public int DebugLevel { get; private set; }
 		public float Sendrate { get; private set; }
-		public IReadOnlyDictionary<EngineGUID, PPtr<GameObject>> AssetToPrefab => m_assetToPrefab;
+		public IReadOnlyDictionary<GUID, PPtr<GameObject>> AssetToPrefab => m_assetToPrefab;
 
-		private Dictionary<EngineGUID, PPtr<GameObject>> m_assetToPrefab;
+		private Dictionary<GUID, PPtr<GameObject>> m_assetToPrefab;
 	}
 }

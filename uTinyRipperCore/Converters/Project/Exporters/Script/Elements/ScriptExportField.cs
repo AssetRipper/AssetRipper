@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace uTinyRipper.Exporters.Scripts
+namespace uTinyRipper.Converters.Script
 {
 	public abstract class ScriptExportField
 	{
@@ -41,7 +41,7 @@ namespace uTinyRipper.Exporters.Scripts
 				throw new NotSupportedException();
 			}
 		}
-		
+
 		public void GetUsedNamespaces(ICollection<string> namespaces)
 		{
 			Type.GetTypeNamespaces(namespaces);
@@ -65,7 +65,7 @@ namespace uTinyRipper.Exporters.Scripts
 				return Name;
 			}
 		}
-		
+
 		public abstract string Name { get; }
 
 		public abstract ScriptExportType DeclaringType { get; }

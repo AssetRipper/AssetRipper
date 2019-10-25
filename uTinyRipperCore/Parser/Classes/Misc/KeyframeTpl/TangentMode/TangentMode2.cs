@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Classes.AnimationClips
+﻿namespace uTinyRipper.Classes.Misc
 {
 	/// <summary>
 	/// Less than 5.5.0
@@ -27,7 +27,7 @@
 		{
 			int value = (int)_this;
 			int mask = (int)TangentMode2.HConstant;
-			value = (value & ~mask) | ((value & mask) << 2);
+			value = value & ~mask | (value & mask) << 2;
 			return (TangentMode)value;
 		}
 	}

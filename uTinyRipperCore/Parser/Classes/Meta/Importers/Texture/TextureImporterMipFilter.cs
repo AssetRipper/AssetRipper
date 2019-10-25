@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.AssetExporters.Classes
+﻿namespace uTinyRipper.Project.Classes
 {
 	/// <summary>
 	/// Mip map filter for TextureImporter.

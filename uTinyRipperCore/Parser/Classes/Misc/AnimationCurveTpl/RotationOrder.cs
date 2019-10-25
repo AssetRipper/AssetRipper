@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Classes.AnimationClips
+﻿namespace uTinyRipper.Classes.Misc
 {
 	public enum RotationOrder
 	{

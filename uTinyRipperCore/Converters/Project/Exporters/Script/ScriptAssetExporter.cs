@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using uTinyRipper.Project;
 using uTinyRipper.Classes;
-using uTinyRipper.Exporters.Scripts;
+using uTinyRipper.Converters.Script;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
 
-namespace uTinyRipper.AssetExporters
+namespace uTinyRipper.Converters
 {
 	public class ScriptAssetExporter : IAssetExporter
 	{

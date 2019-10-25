@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Meshes;
 

@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using uTinyRipper.Assembly;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Fonts;
 using uTinyRipper.Classes.GUIStyles;
 using uTinyRipper.Classes.GUITexts;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
@@ -108,6 +107,73 @@ namespace uTinyRipper.Classes
 				reader.AlignStream(AlignType.Align4);
 				StretchHeight = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);
+			}
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Name);
+			Normal.Write(writer);
+			Hover.Write(writer);
+			Active.Write(writer);
+			Focused.Write(writer);
+			OnNormal.Write(writer);
+			OnHover.Write(writer);
+			OnActive.Write(writer);
+			OnFocused.Write(writer);
+			Border.Write(writer);
+			if (IsBuiltIn(writer.Version))
+			{
+				Margin.Write(writer);
+				Padding.Write(writer);
+			}
+			else
+			{
+				Padding.Write(writer);
+				Margin.Write(writer);
+			}
+			Overflow.Write(writer);
+			Font.Write(writer);
+
+			if (IsBuiltIn(writer.Version))
+			{
+				writer.Write(FontSize);
+				writer.Write((int)FontStyle);
+				writer.Write((int)Alignment);
+				writer.Write(WordWrap);
+				writer.Write(RichText);
+				writer.AlignStream(AlignType.Align4);
+
+				writer.Write((int)TextClipping);
+				writer.Write((int)ImagePosition);
+				ContentOffset.Write(writer);
+				writer.Write(FixedWidth);
+				writer.Write(FixedHeight);
+				writer.Write(StretchWidth);
+				writer.Write(StretchHeight);
+				writer.AlignStream(AlignType.Align4);
+			}
+			else
+			{
+				writer.Write((int)ImagePosition);
+				writer.Write((int)Alignment);
+				writer.Write(WordWrap);
+				writer.AlignStream(AlignType.Align4);
+
+				writer.Write((int)TextClipping);
+				ContentOffset.Write(writer);
+				ClipOffset.Write(writer);
+				writer.Write(FixedWidth);
+				writer.Write(FixedHeight);
+				if (IsReadFontSize(writer.Version))
+				{
+					writer.Write(FontSize);
+					writer.Write((int)FontStyle);
+				}
+				writer.Write(StretchWidth);
+				writer.AlignStream(AlignType.Align4);
+				writer.Write(StretchHeight);
+				writer.AlignStream(AlignType.Align4);
 			}
 		}
 

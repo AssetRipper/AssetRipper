@@ -1,11 +1,6 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.ArchiveFiles;
-using uTinyRipper.Assembly;
-using uTinyRipper.BundleFiles;
-using uTinyRipper.ResourceFiles;
-using uTinyRipper.SerializedFiles;
-using uTinyRipper.WebFiles;
+using uTinyRipper.Game;
 
 namespace uTinyRipper
 {

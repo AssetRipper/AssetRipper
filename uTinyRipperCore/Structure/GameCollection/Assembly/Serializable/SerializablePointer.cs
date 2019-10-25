@@ -1,16 +1,15 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
 
-namespace uTinyRipper.Assembly
+namespace uTinyRipper.Game.Assembly
 {
 	public sealed class SerializablePointer : SerializableStructure
 	{
-		public SerializablePointer(SerializableType type):
+		public SerializablePointer(SerializableType type) :
 			base(type, null, EmptyFields)
 		{
 		}

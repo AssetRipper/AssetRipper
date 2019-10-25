@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
 using uTinyRipper.Classes.Fonts;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {
@@ -360,7 +360,7 @@ namespace uTinyRipper.Classes
 			node.Add(CharacterPaddingName, GetCharacterPadding(container.Version));
 			node.Add(ConvertCaseName, ConvertCase);
 			node.Add(CharacterRectsName, CharacterRects.ExportYAML(container));
-			node.Add(KerningValuesName, KerningValues.ExportYAML(container));
+			node.Add(KerningValuesName, KerningValues.ExportYAML());
 			node.Add(PixelScaleName, GetPixelScale(container.Version));
 			node.Add(FontDataName, GetFontData(container.Version).ExportYAML());
 			node.Add(AscentName, Ascent);

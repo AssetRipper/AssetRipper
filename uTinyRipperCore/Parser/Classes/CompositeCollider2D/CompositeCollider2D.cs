@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.CompositeCollider2Ds;
-using uTinyRipper.Classes.PolygonCollider2Ds;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
+using uTinyRipper.Project;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
@@ -12,7 +12,7 @@ namespace uTinyRipper.Classes
 	/// </summary>
 	public sealed class CompositeCollider2D : Collider2D
 	{
-		public CompositeCollider2D(AssetInfo assetInfo):
+		public CompositeCollider2D(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -42,20 +42,20 @@ namespace uTinyRipper.Classes
 
 		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(file, isLog))
 			{
 				yield return asset;
 			}
 
 			foreach (SubCollider collider in ColliderPaths)
 			{
-				foreach(Object asset in collider.FetchDependencies(file, isLog))
+				foreach (Object asset in collider.FetchDependencies(file, isLog))
 				{
 					yield return asset;
 				}
 			}
 		}
-		
+
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
@@ -71,7 +71,7 @@ namespace uTinyRipper.Classes
 			}
 			return node;
 		}
-		
+
 		private float GetOffsetDistance(Version version)
 		{
 			return IsReadOffsetDistance(version) ? OffsetDistance : 0.000005f;
@@ -79,7 +79,7 @@ namespace uTinyRipper.Classes
 
 		public GeometryType GeometryType { get; private set; }
 		public GenerationType GenerationType { get; private set; }
-		public float EdgeRadius {get; private set; }
+		public float EdgeRadius { get; private set; }
 		public IReadOnlyList<SubCollider> ColliderPaths => m_colliderPaths;
 		public float VertexDistance { get; private set; }
 		public float OffsetDistance { get; private set; }

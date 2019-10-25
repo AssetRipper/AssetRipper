@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Structures
+﻿namespace uTinyRipper
 {
 	public sealed class ProjectCollection
 	{

@@ -103,12 +103,7 @@ namespace uTinyRipper
 
 		public override string ToString()
 		{
-			string result = $"{Major}.{Minor}.{Build}";
-			if (Type != VersionType.Base)
-			{
-				result = $"{result}{Type.ToLiteral()}{TypeNumber}";
-			}
-			return result;
+			return $"{Major}.{Minor}.{Build}{Type.ToLiteral()}{TypeNumber}";
 		}
 
 		public bool IsEqual(int major)
@@ -318,7 +313,7 @@ namespace uTinyRipper
 				}
 
 				string build = string.Empty;
-				Type = VersionType.Base;
+				Type = VersionType.Final;
 				TypeNumber = 1;
 				while (true)
 				{

@@ -1,8 +1,9 @@
 using Mono.Cecil;
 using System;
 using System.IO;
+using uTinyRipper.Converters.Script;
 
-namespace uTinyRipper.Exporters.Scripts.Mono
+namespace uTinyRipper.Converters.Script.Mono
 {
 	public sealed class ScriptExportMonoAttribute : ScriptExportAttribute
 	{
@@ -12,7 +13,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			{
 				throw new ArgumentNullException(nameof(attribute));
 			}
-			
+
 			Attribute = attribute;
 
 			Module = ScriptExportMonoType.GetModuleName(Attribute.AttributeType);

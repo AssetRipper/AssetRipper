@@ -1,9 +1,10 @@
 ﻿using System;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 using Object = uTinyRipper.Classes.Object;
 
-namespace uTinyRipper.AssetExporters.Classes
+namespace uTinyRipper.Project.Classes
 {
 	public class NativeFormatImporter : DefaultImporter
 	{

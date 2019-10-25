@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.AssetExporters.Classes
+﻿namespace uTinyRipper.Project.Classes
 {
 	/// <summary>
 	/// Select the kind of shape of your texture.

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace uTinyRipper.Exporters.Scripts
+namespace uTinyRipper.Converters.Script
 {
 	public abstract class ScriptExportDelegate : ScriptExportType
 	{
@@ -14,7 +14,7 @@ namespace uTinyRipper.Exporters.Scripts
 			{
 				ScriptExportParameter parameter = Parameters[i];
 				parameter.Export(writer, intent);
-				if(i < Parameters.Count - 1)
+				if (i < Parameters.Count - 1)
 				{
 					writer.Write(',');
 				}

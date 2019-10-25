@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using uTinyRipper.Project;
 using uTinyRipper.Classes;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
 
-namespace uTinyRipper.AssetExporters
+namespace uTinyRipper.Converters
 {
 	public class BinaryAssetExporter : IAssetExporter
 	{
@@ -42,7 +43,7 @@ namespace uTinyRipper.AssetExporters
 
 		public virtual IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
-			switch(asset.ClassID)
+			switch (asset.ClassID)
 			{
 				case ClassIDType.Texture2D:
 				case ClassIDType.Cubemap:

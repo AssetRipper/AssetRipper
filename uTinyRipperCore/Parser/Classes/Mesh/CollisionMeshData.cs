@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.Meshes
 {

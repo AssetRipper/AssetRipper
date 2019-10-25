@@ -1,8 +1,9 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
 using uTinyRipper.Classes.OcclusionCullingSettingses;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
@@ -204,7 +205,7 @@ namespace uTinyRipper.Classes
 				return settings;
 			}
 		}
-		private EngineGUID GetExportSceneGUID(IExportContainer container)
+		private GUID GetExportSceneGUID(IExportContainer container)
 		{
 			if(IsReadPVSData(container.Version))
 			{
@@ -246,7 +247,7 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<PPtr<OcclusionPortal>> Portals => m_portals;
 
 		public OcclusionBakeSettings OcclusionBakeSettings;
-		public EngineGUID SceneGUID;
+		public GUID SceneGUID;
 		public PPtr<OcclusionCullingData> OcclusionCullingData;
 
 		public const string SceneKeyword = nameof(ClassIDType.Scene);

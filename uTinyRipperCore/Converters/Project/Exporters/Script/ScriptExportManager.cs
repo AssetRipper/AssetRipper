@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using uTinyRipper.Assembly;
-using uTinyRipper.Exporters.Scripts.Mono;
+using uTinyRipper.Game;
+using uTinyRipper.Converters.Script.Mono;
 
-namespace uTinyRipper.Exporters.Scripts
+namespace uTinyRipper.Converters.Script
 {
 	public sealed class ScriptExportManager : IScriptExportManager
 	{

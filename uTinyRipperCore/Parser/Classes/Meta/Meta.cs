@@ -1,14 +1,15 @@
 ﻿using System;
-using uTinyRipper.Classes;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 using DateTime = System.DateTime;
 
-namespace uTinyRipper.AssetExporters.Classes
+namespace uTinyRipper.Project.Classes
 {
-	public struct Meta : IYAMLDocExportable
+	public struct Meta
 	{
-		public Meta(IAssetImporter importer, EngineGUID guid)
+		public Meta(IAssetImporter importer, GUID guid)
 		{
 			if (importer == null)
 			{
@@ -44,6 +45,6 @@ namespace uTinyRipper.AssetExporters.Classes
 		}
 
 		private readonly IAssetImporter m_importer;
-		private readonly EngineGUID m_guid;
+		private readonly GUID m_guid;
 	}
 }

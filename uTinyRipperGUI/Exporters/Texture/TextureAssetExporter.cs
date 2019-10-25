@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
 using uTinyRipper;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Textures;
+using uTinyRipper.Converters;
+using uTinyRipper.Project;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;

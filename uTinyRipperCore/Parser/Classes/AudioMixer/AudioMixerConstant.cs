@@ -1,6 +1,8 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.AudioMixers
 {
@@ -16,12 +18,12 @@ namespace uTinyRipper.Classes.AudioMixers
 		public void Read(AssetReader reader)
 		{
 			m_groups = reader.ReadAssetArray<GroupConstant>();
-			m_groupGUIDs = reader.ReadAssetArray<EngineGUID>();
+			m_groupGUIDs = reader.ReadAssetArray<GUID>();
 			m_effects = reader.ReadAssetArray<EffectConstant>();
-			m_effectGUIDs = reader.ReadAssetArray<EngineGUID>();
+			m_effectGUIDs = reader.ReadAssetArray<GUID>();
 			NumSideChainBuffers = reader.ReadUInt32();
 			m_snapshots = reader.ReadAssetArray<SnapshotConstant>();
-			m_snapshotGUIDs = reader.ReadAssetArray<EngineGUID>();
+			m_snapshotGUIDs = reader.ReadAssetArray<GUID>();
 			//m_groupNameBuffer = stream.ReadArray<char>();
 			reader.AlignStream(AlignType.Align4);
 			
@@ -55,12 +57,12 @@ namespace uTinyRipper.Classes.AudioMixers
 		}
 
 		public IReadOnlyList<GroupConstant> Groups => m_groups;
-		public IReadOnlyList<EngineGUID> GroupGUIDs => m_groupGUIDs;
+		public IReadOnlyList<GUID> GroupGUIDs => m_groupGUIDs;
 		public IReadOnlyList<EffectConstant> Effects => m_effects;
-		public IReadOnlyList<EngineGUID> EffectGUIDs => m_effectGUIDs;
+		public IReadOnlyList<GUID> EffectGUIDs => m_effectGUIDs;
 		public uint NumSideChainBuffers { get; private set; }
 		public IReadOnlyList<SnapshotConstant> Snapshots => m_snapshots;
-		public IReadOnlyList<EngineGUID> SnapshotGUIDs => m_snapshotGUIDs;
+		public IReadOnlyList<GUID> SnapshotGUIDs => m_snapshotGUIDs;
 		public IReadOnlyList<char> GroupNameBuffer => m_groupNameBuffer;
 		public IReadOnlyList<char> SnapshotNameBuffer => m_snapshotNameBuffer;
 		public IReadOnlyList<char> PluginEffectNameBuffer => m_pluginEffectNameBuffer;
@@ -68,11 +70,11 @@ namespace uTinyRipper.Classes.AudioMixers
 		public IReadOnlyList<uint> ExposedParameterIndices => m_exposedParameterIndices;
 
 		private GroupConstant[] m_groups;
-		private EngineGUID[] m_groupGUIDs;
+		private GUID[] m_groupGUIDs;
 		private EffectConstant[] m_effects;
-		private EngineGUID[] m_effectGUIDs;
+		private GUID[] m_effectGUIDs;
 		private SnapshotConstant[] m_snapshots;
-		private EngineGUID[] m_snapshotGUIDs;
+		private GUID[] m_snapshotGUIDs;
 		private char[] m_groupNameBuffer;
 		private char[] m_snapshotNameBuffer;
 		private char[] m_pluginEffectNameBuffer;

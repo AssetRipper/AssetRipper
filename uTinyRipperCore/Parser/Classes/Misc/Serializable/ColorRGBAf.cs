@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Globalization;
-using uTinyRipper.Assembly;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {

@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using uTinyRipper.Assembly.Mono;
+using uTinyRipper.Game.Assembly.Mono;
 
 namespace uTinyRipper
 {

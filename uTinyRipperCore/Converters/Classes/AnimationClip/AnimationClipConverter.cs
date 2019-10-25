@@ -3,15 +3,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using uTinyRipper.Classes.AnimationClips.Editor;
+using uTinyRipper.Classes;
+using uTinyRipper.Classes.AnimationClips;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters.AnimationClips;
 
-namespace uTinyRipper.Classes.AnimationClips
+using Object = uTinyRipper.Classes.Object;
+
+namespace uTinyRipper.Converters
 {
 	public class AnimationClipConverter
 	{
 		private AnimationClipConverter(AnimationClip clip)
 		{
-			if(clip == null)
+			if (clip == null)
 			{
 				throw new ArgumentNullException(nameof(clip));
 			}
@@ -36,10 +41,10 @@ namespace uTinyRipper.Classes.AnimationClips
 			float lastDenseFrame = clip.DenseClip.FrameCount / clip.DenseClip.SampleRate;
 			float lastSampleFrame = streamedFrames.Count > 1 ? streamedFrames[streamedFrames.Count - 2].Time : 0.0f;
 			float lastFrame = Math.Max(lastDenseFrame, lastSampleFrame);
-			
+
 			ProcessStreams(streamedFrames, bindings, tos, clip.DenseClip.SampleRate);
 			ProcessDenses(clip, bindings, tos);
-			if(Clip.IsReadConstantClip(Version))
+			if (Clip.IsReadConstantClip(Version))
 			{
 				ProcessConstant(clip, bindings, tos, lastFrame);
 			}
@@ -69,14 +74,14 @@ namespace uTinyRipper.Classes.AnimationClips
 			for (int frameIndex = 1; frameIndex < streamFrames.Count - 1; frameIndex++)
 			{
 				StreamedFrame frame = streamFrames[frameIndex];
-				for (int curveIndex = 0; curveIndex < frame.Curves.Count; )
+				for (int curveIndex = 0; curveIndex < frame.Curves.Count;)
 				{
 					StreamedCurveKey curve = frame.Curves[curveIndex];
 					GenericBinding binding = bindings.FindBinding(curve.Index);
 					GetPreviousFrame(streamFrames, curve.Index, frameIndex, out int prevFrameIndex, out int prevCurveIndex);
 
 					string path = GetCurvePath(tos, binding.Path);
-					if(binding.IsTransform)
+					if (binding.IsTransform)
 					{
 						int dimension = binding.TransformType.GetDimension();
 						for (int key = 0; key < dimension; key++)
@@ -93,7 +98,7 @@ namespace uTinyRipper.Classes.AnimationClips
 
 						AddTransformCurve(frame.Time, binding.TransformType, curveValues, inSlopeValues, outSlopeValues, 0, path);
 					}
-					else if(binding.CustomType == BindingCustomType.None)
+					else if (binding.CustomType == BindingCustomType.None)
 					{
 						AddDefaultCurve(binding, path, frame.Time, frame.Curves[curveIndex].Value);
 						curveIndex = GetNextCurve(frame, curveIndex);
@@ -108,7 +113,7 @@ namespace uTinyRipper.Classes.AnimationClips
 		}
 
 		private void ProcessDenses(Clip clip, AnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos)
-		{ 
+		{
 			DenseClip dense = clip.DenseClip;
 			int streamCount = clip.StreamedClip.CurveCount;
 			float[] slopeValues = new float[4]; // no slopes - 0 values
@@ -178,12 +183,12 @@ namespace uTinyRipper.Classes.AnimationClips
 
 		private void AddCustomCurve(AnimationClipBindingConstant bindings, GenericBinding binding, string path, float time, float value)
 		{
-			switch(binding.CustomType)
+			switch (binding.CustomType)
 			{
 				case BindingCustomType.AnimatorMuscle:
 					AddAnimatorMuscleCurve(binding, path, time, value);
 					break;
-					
+
 				default:
 					string attribute = m_customCurveResolver.ToAttributeName(binding.CustomType, binding.Attribute, path);
 					if (binding.IsPPtrCurve)
@@ -338,7 +343,7 @@ namespace uTinyRipper.Classes.AnimationClips
 						AddGameObjectCurve(binding, path, time, value);
 					}
 					break;
-				
+
 				case ClassIDType.MonoBehaviour:
 					{
 						AddScriptCurve(binding, path, time, value);
@@ -386,7 +391,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			FloatCurve curve = new FloatCurve(string.Empty, binding.GetHumanoidMuscle(Version).ToAttributeString(), ClassIDType.Animator, default);
 			AddFloatKeyframe(curve, time, value);
 		}
-				
+
 		private void AddFloatKeyframe(FloatCurve curve, float time, float value)
 		{
 			if (!m_floats.TryGetValue(curve, out List<KeyframeTpl<Float>> floatCurve))
@@ -434,9 +439,9 @@ namespace uTinyRipper.Classes.AnimationClips
 		{
 			StreamedCurveKey curve = frame.Curves[currentCurve];
 			int i = currentCurve + 1;
-			for(; i < frame.Curves.Count; i++)
+			for (; i < frame.Curves.Count; i++)
 			{
-				if(frame.Curves[i].Index != curve.Index)
+				if (frame.Curves[i].Index != curve.Index)
 				{
 					return i;
 				}

@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using uTinyRipper.Assembly;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct RectOffset : ISerializableStructure
+	public struct RectOffset : IAsset, ISerializableStructure
 	{
 		public ISerializableStructure CreateDuplicate()
 		{
@@ -19,6 +18,14 @@ namespace uTinyRipper.Classes
 			Right = reader.ReadInt32();
 			Top = reader.ReadInt32();
 			Bottom = reader.ReadInt32();
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Left);
+			writer.Write(Right);
+			writer.Write(Top);
+			writer.Write(Bottom);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

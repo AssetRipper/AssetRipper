@@ -1,9 +1,9 @@
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
-    public sealed class AudioReverbZone : Behaviour
+	public sealed class AudioReverbZone : Behaviour
 	{
 		public AudioReverbZone(AssetInfo assetInfo) : base(assetInfo)
 		{

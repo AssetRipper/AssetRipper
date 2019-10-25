@@ -1,10 +1,12 @@
 using SevenZip;
 using System;
 using System.Linq;
+using uTinyRipper.Classes;
+using uTinyRipper.Classes.AnimationClips;
 using uTinyRipper.Classes.Lights;
 using uTinyRipper.SerializedFiles;
 
-namespace uTinyRipper.Classes.AnimationClips
+namespace uTinyRipper.Converters.AnimationClips
 {
 	public sealed class CustomCurveResolver
 	{
@@ -38,7 +40,7 @@ namespace uTinyRipper.Classes.AnimationClips
 								continue;
 							}
 							SkinnedMeshRenderer skin = child.GameObject.FindAsset(child.File).FindComponent<SkinnedMeshRenderer>();
-							if(skin == null)
+							if (skin == null)
 							{
 								continue;
 							}
@@ -80,7 +82,7 @@ namespace uTinyRipper.Classes.AnimationClips
 
 							uint crc28 = attribute & 0xFFFFFFF;
 							Renderer renderer = child.GameObject.FindAsset(child.File).FindComponent<Renderer>();
-							if(renderer == null)
+							if (renderer == null)
 							{
 								continue;
 							}
@@ -95,7 +97,7 @@ namespace uTinyRipper.Classes.AnimationClips
 								return Prefix + property;
 							}
 							char subProperty;
-							uint subPropIndex = (attribute >> 28) & 3;
+							uint subPropIndex = attribute >> 28 & 3;
 							bool isRgba = (attribute & 0x40000000) != 0;
 							switch (subPropIndex)
 							{

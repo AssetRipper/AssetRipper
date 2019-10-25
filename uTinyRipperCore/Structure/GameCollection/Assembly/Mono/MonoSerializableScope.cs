@@ -1,11 +1,11 @@
 using Mono.Cecil;
 using System.Collections.Generic;
 
-namespace uTinyRipper.Assembly.Mono
+namespace uTinyRipper.Game.Assembly.Mono
 {
 	public readonly struct MonoSerializableScope
 	{
-		public MonoSerializableScope(FieldDefinition field):
+		public MonoSerializableScope(FieldDefinition field) :
 			this(field, null)
 		{
 		}
@@ -23,9 +23,9 @@ namespace uTinyRipper.Assembly.Mono
 			Arguments = arguments;
 		}
 
-		public readonly TypeReference DeclaringType;
-		public readonly TypeReference FieldType;
-		public readonly bool IsArrayElement;
-		public readonly IReadOnlyDictionary<GenericParameter, TypeReference> Arguments;
+		public TypeReference DeclaringType { get; }
+		public TypeReference FieldType { get; }
+		public bool IsArrayElement { get; }
+		public IReadOnlyDictionary<GenericParameter, TypeReference> Arguments { get; }
 	}
 }

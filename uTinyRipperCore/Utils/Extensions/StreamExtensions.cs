@@ -29,7 +29,7 @@ namespace uTinyRipper
 				int count = BufferSize;
 				int toWrite = 0;
 
-				int read = 0;
+				int read;
 				do
 				{
 					read = _this.Read(buffer, offset, count);

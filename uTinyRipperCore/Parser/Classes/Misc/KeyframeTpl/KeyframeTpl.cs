@@ -1,17 +1,17 @@
-﻿using uTinyRipper.AssetExporters;
-using uTinyRipper.YAML;
+﻿using uTinyRipper.YAML;
 using uTinyRipper.Converters.Misc;
+using uTinyRipper.Converters;
 
-namespace uTinyRipper.Classes.AnimationClips
+namespace uTinyRipper.Classes.Misc
 {
 	public struct KeyframeTpl<T> : IAsset
 		where T : struct, IAsset
 	{
-		public KeyframeTpl(float time, T value, T weight):
+		public KeyframeTpl(float time, T value, T weight) :
 			this(time, value, default, default, weight)
 		{
 			// this enum member is version agnostic
-			TangentMode = AnimationClips.TangentMode.FreeSmooth.ToTangent(Version.MinVersion);
+			TangentMode = Misc.TangentMode.FreeSmooth.ToTangent(Version.MinVersion);
 		}
 
 		public KeyframeTpl(float time, T value, T inSlope, T outSlope, T weight)
@@ -21,7 +21,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			InSlope = inSlope;
 			OutSlope = outSlope;
 			// this enum member is version agnostic
-			TangentMode = AnimationClips.TangentMode.FreeFree.ToTangent(Version.MinVersion);
+			TangentMode = Misc.TangentMode.FreeFree.ToTangent(Version.MinVersion);
 			WeightedMode = WeightedMode.None;
 			InWeight = weight;
 			OutWeight = weight;

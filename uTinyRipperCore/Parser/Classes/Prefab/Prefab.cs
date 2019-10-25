@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Prefabs;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.Classes.Objects;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
@@ -31,7 +32,7 @@ namespace uTinyRipper.Classes
 		{
 			if (Config.IsGenerateGUIDByContent)
 			{
-				EngineGUID guid = ObjectUtils.CalculateAssetsGUID(FetchAssets(root));
+				GUID guid = ObjectUtils.CalculateAssetsGUID(FetchAssets(root));
 				return virtualFile.CreateAsset(guid, (assetInfo) => new Prefab(assetInfo, root));
 			}
 			return virtualFile.CreateAsset((assetInfo) => new Prefab(assetInfo, root));

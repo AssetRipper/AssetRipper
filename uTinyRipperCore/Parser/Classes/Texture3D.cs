@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
 using uTinyRipper.Classes.Textures;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {

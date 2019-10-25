@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
+using uTinyRipper.WebFiles;
 
-namespace uTinyRipper.WebFiles
+namespace uTinyRipper
 {
 	public sealed class WebFile : FileList
 	{
@@ -18,12 +19,12 @@ namespace uTinyRipper.WebFiles
 
 		public static bool IsWebFile(string webPath)
 		{
-			if (!FileMultiStream.Exists(webPath))
+			if (!MultiFileStream.Exists(webPath))
 			{
 				throw new Exception($"Web at path '{webPath}' doesn't exist");
 			}
 
-			using (Stream stream = FileMultiStream.OpenRead(webPath))
+			using (Stream stream = MultiFileStream.OpenRead(webPath))
 			{
 				return IsWebFile(stream);
 			}

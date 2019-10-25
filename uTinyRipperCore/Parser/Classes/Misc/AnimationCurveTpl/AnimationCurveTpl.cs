@@ -1,12 +1,14 @@
 using System.Collections.Generic;
-using uTinyRipper.Assembly;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
 using System;
 using uTinyRipper.Converters.Misc;
+using uTinyRipper.Converters;
+using uTinyRipper.Game.Assembly;
+using uTinyRipper.Classes;
+using uTinyRipper.Classes.Misc;
 
-namespace uTinyRipper.Classes.AnimationClips
+namespace uTinyRipper.Classes.Misc
 {
 	public struct AnimationCurveTpl<T> : IAsset, ISerializableStructure
 		where T : struct, IAsset, IYAMLExportable
@@ -130,7 +132,7 @@ namespace uTinyRipper.Classes.AnimationClips
 				writer.Write((int)RotationOrder);
 			}
 		}
-		
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();

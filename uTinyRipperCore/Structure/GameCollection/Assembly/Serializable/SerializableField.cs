@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
 using uTinyRipper.Classes;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
+using uTinyRipper.Converters;
 
-namespace uTinyRipper.Assembly
+namespace uTinyRipper.Game.Assembly
 {
 	public sealed class SerializableField
 	{
 		public SerializableField(PrimitiveType type, ISerializableStructure complex, bool isArray, string name)
 		{
 			Type = type;
-			ComplexType = (type == PrimitiveType.Complex && complex == null) ? throw new ArgumentNullException(nameof(complex)) : complex;
+			ComplexType = type == PrimitiveType.Complex && complex == null ? throw new ArgumentNullException(nameof(complex)) : complex;
 			IsArray = isArray;
 			Name = name ?? throw new ArgumentNullException(nameof(name));
 		}

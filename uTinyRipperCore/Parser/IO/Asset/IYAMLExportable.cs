@@ -1,6 +1,7 @@
-﻿using uTinyRipper.YAML;
+﻿using uTinyRipper.Converters;
+using uTinyRipper.YAML;
 
-namespace uTinyRipper.AssetExporters
+namespace uTinyRipper
 {
 	public interface IYAMLExportable
 	{

@@ -1,11 +1,10 @@
 using System;
 using System.IO;
 using uTinyRipper.Classes;
-using uTinyRipper.ResourceFiles;
 
 namespace uTinyRipper
 {
-	public class ResourceFile : IResourceFile, IDisposable
+	public sealed class ResourceFile : IResourceFile, IDisposable
 	{
 		internal ResourceFile(SmartStream stream, long offset, long size, string filePath, string fileName)
 		{
@@ -55,7 +54,7 @@ namespace uTinyRipper
 
 		public static ResourceFileScheme LoadScheme(string filePath, string fileName)
 		{
-			if (!FileMultiStream.Exists(filePath))
+			if (!MultiFileStream.Exists(filePath))
 			{
 				throw new Exception($"Resource file at path '{filePath}' doesn't exist");
 			}
@@ -87,7 +86,7 @@ namespace uTinyRipper
 			return Name ?? base.ToString();
 		}
 
-		protected void Dispose(bool _)
+		private void Dispose(bool _)
 		{
 			m_stream.Dispose();
 		}

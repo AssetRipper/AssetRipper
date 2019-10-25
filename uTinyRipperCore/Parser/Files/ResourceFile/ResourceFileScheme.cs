@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using uTinyRipper.SerializedFiles;
 
-namespace uTinyRipper.ResourceFiles
+namespace uTinyRipper
 {
 	public sealed class ResourceFileScheme : FileScheme
 	{
-		public ResourceFileScheme(SmartStream stream, long offset, long size, string filePath, string fileName):
+		public ResourceFileScheme(SmartStream stream, long offset, long size, string filePath, string fileName) :
 			base(stream, offset, size, filePath, fileName)
 		{
 		}

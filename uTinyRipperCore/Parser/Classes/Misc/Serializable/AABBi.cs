@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using uTinyRipper.Assembly;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
@@ -18,6 +17,12 @@ namespace uTinyRipper.Classes
 		{
 			Center.Read(reader);
 			Extent.Read(reader);
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			Center.Write(writer);
+			Extent.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

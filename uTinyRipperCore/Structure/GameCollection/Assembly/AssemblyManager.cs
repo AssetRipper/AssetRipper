@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.Assembly.Mono;
-using uTinyRipper.Exporters.Scripts;
+using uTinyRipper.Converters.Script;
+using uTinyRipper.Game.Assembly;
+using uTinyRipper.Game.Assembly.Mono;
 
-namespace uTinyRipper.Assembly
+namespace uTinyRipper.Game
 {
 	public sealed class AssemblyManager : IAssemblyManager
 	{
@@ -188,7 +189,7 @@ namespace uTinyRipper.Assembly
 
 		private event Action<string> m_requestAssemblyCallback;
 
+		private readonly Dictionary<string, SerializableType> m_serializableTypes = new Dictionary<string, SerializableType>();
 		private IAssemblyManager m_manager;
-		private Dictionary<string, SerializableType> m_serializableTypes = new Dictionary<string, SerializableType>();
 	}
 }

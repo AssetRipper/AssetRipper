@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace uTinyRipper.Classes
+namespace uTinyRipper.Classes.Misc
 {
 	public enum BuildTargetGroup
 	{
@@ -92,7 +92,7 @@ namespace uTinyRipper.Classes
 	{
 		public static BuildTargetGroup PlatformToBuildGroup(this Platform _this)
 		{
-			switch(_this)
+			switch (_this)
 			{
 				case Platform.StandaloneOSXUniversal:
 				case Platform.StandaloneOSXPPC:
@@ -185,7 +185,7 @@ namespace uTinyRipper.Classes
 
 		public static string ToExportString(this BuildTargetGroup _this)
 		{
-			switch(_this)
+			switch (_this)
 			{
 				case BuildTargetGroup.N3DS:
 					return "Nintendo 3DS";

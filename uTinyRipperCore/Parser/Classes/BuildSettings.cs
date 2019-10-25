@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -318,7 +319,7 @@ namespace uTinyRipper.Classes
 		public IReadOnlyDictionary<Hash128, Hash128> ScriptHashes => m_scriptHashes;
 		public IReadOnlyList<int> GraphicsAPIs => m_graphicsAPIs;
 
-		public EngineGUID BuildGUID;
+		public GUID BuildGUID;
 
 		private string[] m_scenes;
 		private string[] m_preloadedPlugins;

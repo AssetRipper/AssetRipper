@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using uTinyRipper.Assembly;
+using uTinyRipper.Game;
+using uTinyRipper.SerializedFiles;
 
-namespace uTinyRipper.SerializedFiles
+namespace uTinyRipper
 {
 	public sealed class SerializedFileScheme : FileScheme
 	{
@@ -33,7 +34,7 @@ namespace uTinyRipper.SerializedFiles
 		{
 			return generation <= FileGeneration.FG_300_342;
 		}
-		
+
 		public SerializedFile ReadFile(IFileCollection collection, IAssemblyManager manager)
 		{
 			SerializedFile file = new SerializedFile(collection, manager, this);

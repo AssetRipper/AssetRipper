@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using uTinyRipper.Project;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
 
-namespace uTinyRipper.AssetExporters
+namespace uTinyRipper.Converters
 {
 	public class ProjectExporter
 	{

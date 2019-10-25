@@ -1,3 +1,5 @@
+using uTinyRipper.Classes.AnimatorControllers;
+
 namespace uTinyRipper.Classes.AnimationClips
 {
 	public struct Clip : IAssetReadable

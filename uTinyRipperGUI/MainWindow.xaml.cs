@@ -4,16 +4,20 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using System.Windows.Automation.Peers;
-using System.Windows.Automation.Provider;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using uTinyRipper;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 using uTinyRipperGUI.Exporters;
+
+#if VIRTUAL
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
+#elif !DEBUG
+using uTinyRipper.SerializedFiles;
+#endif
 
 using Object = uTinyRipper.Classes.Object;
 using Version = uTinyRipper.Version;
@@ -182,7 +186,7 @@ namespace uTinyRipperGUI
 
 			foreach (string file in files)
 			{
-				if (FileMultiStream.Exists(file))
+				if (MultiFileStream.Exists(file))
 				{
 					continue;
 				}
@@ -190,7 +194,7 @@ namespace uTinyRipperGUI
 				{
 					continue;
 				}
-				Logger.Log(LogType.Warning, LogCategory.General, FileMultiStream.IsMultiFile(file) ?
+				Logger.Log(LogType.Warning, LogCategory.General, MultiFileStream.IsMultiFile(file) ?
 					$"File '{file}' doesn't has all parts for combining" :
 					$"Neither file nor directory with path '{file}' exists");
 				return false;

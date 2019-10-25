@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes;
 
-namespace uTinyRipper.Classes
+namespace uTinyRipper.Classes.Misc
 {
 	public struct PackedFloatVector : IAsset
 	{
-		public PackedFloatVector(bool _):
+		public PackedFloatVector(bool _) :
 			this()
 		{
 			Data = Array.Empty<byte>();
@@ -22,8 +24,8 @@ namespace uTinyRipper.Classes
 
 		public float[] Unpack(int chunkCount, int offset)
 		{
-			int bitIndex = (BitSize * offset) % 8;
-			int byteIndex = (BitSize * offset) / 8;
+			int bitIndex = BitSize * offset % 8;
+			int byteIndex = BitSize * offset / 8;
 
 			float scale = 1.0f / Range;
 			float halfMaxValue = scale * ((1 << BitSize) - 1);
@@ -35,7 +37,7 @@ namespace uTinyRipper.Classes
 				int bits = 0;
 				while (bits < BitSize)
 				{
-					value |= (Data[byteIndex] >> bitIndex) << bits;
+					value |= Data[byteIndex] >> bitIndex << bits;
 					int num = Math.Min(BitSize - bits, 8 - bitIndex);
 					bitIndex += num;
 					bits += num;

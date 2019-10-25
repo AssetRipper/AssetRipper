@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.AssetExporters.Classes;
+using uTinyRipper.Project.Classes;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.GraphicsSettingss
 {
@@ -44,6 +44,6 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 
 		public PPtr<Shader> Shader;
 
-		private static readonly EngineGUID FGUID = new EngineGUID(0x00000000, 0xF0000000, 0x00000000, 0x00000000);
+		private static readonly GUID FGUID = new GUID(0x00000000, 0xF0000000, 0x00000000, 0x00000000);
 	}
 }

@@ -7,8 +7,9 @@ using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
+using uTinyRipper.Project;
 
-namespace uTinyRipper.AssetExporters
+namespace uTinyRipper.Converters
 {
 	public class YAMLAssetExporter : IAssetExporter
 	{
@@ -31,7 +32,7 @@ namespace uTinyRipper.AssetExporters
 			}
 			return true;
 		}
-		
+
 		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
 		{
 			Export(container, asset, path);

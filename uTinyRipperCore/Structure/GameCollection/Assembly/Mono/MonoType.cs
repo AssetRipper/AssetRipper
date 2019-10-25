@@ -1,8 +1,9 @@
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
+using uTinyRipper.Game.Assembly;
 
-namespace uTinyRipper.Assembly.Mono
+namespace uTinyRipper.Game.Assembly.Mono
 {
 	public class MonoType : SerializableType
 	{

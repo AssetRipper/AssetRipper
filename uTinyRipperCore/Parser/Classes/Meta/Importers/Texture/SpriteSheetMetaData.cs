@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.Classes;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.AssetExporters.Classes
+namespace uTinyRipper.Project.Classes
 {
 	public class SpriteSheetMetaData : IYAMLExportable
 	{

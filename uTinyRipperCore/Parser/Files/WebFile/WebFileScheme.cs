@@ -1,6 +1,7 @@
-using uTinyRipper.Assembly;
+using uTinyRipper.Game;
+using uTinyRipper.WebFiles;
 
-namespace uTinyRipper.WebFiles
+namespace uTinyRipper
 {
 	public sealed class WebFileScheme : FileSchemeList
 	{

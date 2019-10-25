@@ -1,8 +1,9 @@
-using uTinyRipper.AssetExporters.Classes;
+using uTinyRipper.Project;
+using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes;
 using uTinyRipper.SerializedFiles;
 
-namespace uTinyRipper.AssetExporters
+namespace uTinyRipper.Converters
 {
 #warning TODO: remove
 	public interface IExportContainer : IAssetContainer

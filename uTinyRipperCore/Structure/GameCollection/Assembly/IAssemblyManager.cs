@@ -1,8 +1,9 @@
 using System;
 using System.IO;
-using uTinyRipper.Exporters.Scripts;
+using uTinyRipper.Converters.Script;
+using uTinyRipper.Game.Assembly;
 
-namespace uTinyRipper.Assembly
+namespace uTinyRipper.Game
 {
 	public interface IAssemblyManager : IDisposable
 	{

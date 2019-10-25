@@ -1,17 +1,16 @@
 ﻿using System;
-using uTinyRipper.Classes;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper
 {
 	public class AssetInfo
 	{
 		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID):
-			this(serializedFile, pathID, classID, new EngineGUID(Guid.NewGuid()))
+			this(serializedFile, pathID, classID, new GUID(Guid.NewGuid()))
 		{
 		}
 
-		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID, EngineGUID guid)
+		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID, GUID guid)
 		{
 			if (serializedFile == null)
 			{
@@ -29,6 +28,6 @@ namespace uTinyRipper
 		public long PathID { get; }
 		public ClassIDType ClassID  { get; }
 
-		public EngineGUID GUID;
+		public GUID GUID;
 	}
 }

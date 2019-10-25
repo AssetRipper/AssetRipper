@@ -1,8 +1,8 @@
 ﻿using System;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.Classes.AnimatorControllers.Editor
+namespace uTinyRipper.Classes.AnimatorControllers
 {
 	public sealed class AnimatorControllerParameter : IYAMLExportable
 	{

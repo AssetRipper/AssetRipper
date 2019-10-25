@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
 using uTinyRipper.Classes.AnimatorControllers;
-using uTinyRipper.Classes.AnimatorControllers.Editor;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes;
 
 namespace uTinyRipper.Classes
 {
@@ -160,12 +160,12 @@ namespace uTinyRipper.Classes
 				@params[i] = new AnimatorControllerParameter(this, i);
 			}
 
-			AnimatorControllerLayers[] layers = new AnimatorControllerLayers[Controller.LayerArray.Count];
+			AnimatorControllerLayer[] layers = new AnimatorControllerLayer[Controller.LayerArray.Count];
 			for(int i = 0; i < Controller.LayerArray.Count; i++)
 			{
 				int stateMachineIndex = Controller.LayerArray[i].Instance.StateMachineIndex;
 				AnimatorStateMachine stateMachine = collection.StateMachines[stateMachineIndex];
-				layers[i] = new AnimatorControllerLayers(stateMachine, this, i);
+				layers[i] = new AnimatorControllerLayer(stateMachine, this, i);
 			}
 
 			YAMLMappingNode node = base.ExportYAMLRoot(container);

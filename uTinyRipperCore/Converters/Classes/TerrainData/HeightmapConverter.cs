@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.TerrainDatas;
 
 namespace uTinyRipper.Converters.TerrainDatas

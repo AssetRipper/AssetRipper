@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using uTinyRipper.Assembly;
+using uTinyRipper.Game;
 
 namespace uTinyRipper
 {
@@ -15,9 +15,9 @@ namespace uTinyRipper
 			HashSet<string> dataPathes = new HashSet<string>();
 			foreach (string path in SelectUniquePathes(pathes))
 			{
-				if (FileMultiStream.Exists(path))
+				if (MultiFileStream.Exists(path))
 				{
-					string name = FileMultiStream.GetFileName(path);
+					string name = MultiFileStream.GetFileName(path);
 					AddFile(files, name, path);
 					string directory = Path.GetDirectoryName(path);
 					dataPathes.Add(directory);
@@ -46,7 +46,7 @@ namespace uTinyRipper
 
 		private IEnumerable<string> SelectUniquePathes(IEnumerable<string> pathes)
 		{
-			return pathes.Select(t => FileMultiStream.GetFilePath(t)).Distinct();
+			return pathes.Select(t => MultiFileStream.GetFilePath(t)).Distinct();
 		}
 
 		private void CollectFromDirectory(DirectoryInfo root, IDictionary<string, string> files, IDictionary<string, string> assemblies, ISet<string> dataPathes)

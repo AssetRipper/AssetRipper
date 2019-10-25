@@ -1,4 +1,4 @@
-using uTinyRipper.Classes;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.SerializedFiles
 {

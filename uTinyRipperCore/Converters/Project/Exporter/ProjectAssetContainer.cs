@@ -1,19 +1,21 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters.Classes;
+using uTinyRipper.Project;
+using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
+using uTinyRipper.Classes.Misc;
 
-namespace uTinyRipper.AssetExporters
+namespace uTinyRipper.Converters
 {
 	public class ProjectAssetContainer : IExportContainer
 	{
 		public ProjectAssetContainer(ProjectExporter exporter, VirtualSerializedFile file, IEnumerable<Object> assets,
 			IReadOnlyList<IExportCollection> collections, ExportOptions options)
 		{
-			if(exporter == null)
+			if (exporter == null)
 			{
 				throw new ArgumentNullException(nameof(exporter));
 			}
@@ -43,7 +45,7 @@ namespace uTinyRipper.AssetExporters
 					case ClassIDType.TagManager:
 						m_tagManager = (TagManager)asset;
 						break;
-                        
+
 					case ClassIDType.ResourceManager:
 						m_resourceManager = (ResourceManager)asset;
 						break;
@@ -58,7 +60,7 @@ namespace uTinyRipper.AssetExporters
 #warning TODO: unique asset:collection (m_assetCollections.Add)
 					m_assetCollections[asset.AssetInfo] = collection;
 				}
-				if(collection is SceneExportCollection scene)
+				if (collection is SceneExportCollection scene)
 				{
 					scenes.Add(scene);
 				}
@@ -90,7 +92,7 @@ namespace uTinyRipper.AssetExporters
 
 		public Object FindAsset(int fileIndex, long pathID)
 		{
-			if(fileIndex == VirtualSerializedFile.VirtualFileIndex)
+			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
 				return VirtualFile.FindAsset(pathID);
 			}
@@ -146,18 +148,18 @@ namespace uTinyRipper.AssetExporters
 				//throw new InvalidOperationException($"Object {asset} wasn't found in any export collection");
 			}
 			long exportID = ExportCollection.GetMainExportID(asset);
-			return new ExportPointer(exportID, EngineGUID.MissingReference, AssetType.Meta);
+			return new ExportPointer(exportID, GUID.MissingReference, AssetType.Meta);
 		}
 
-		public EngineGUID SceneNameToGUID(string name)
+		public GUID SceneNameToGUID(string name)
 		{
-			if(m_buildSettings == null)
+			if (m_buildSettings == null)
 			{
 				return default;
 			}
 
 			int index = m_buildSettings.Scenes.IndexOf(name);
-			if(index == -1)
+			if (index == -1)
 			{
 				throw new Exception($"Scene '{name}' hasn't been found in build settings");
 			}
@@ -165,7 +167,7 @@ namespace uTinyRipper.AssetExporters
 			string fileName = SceneExportCollection.SceneIndexToFileName(index, Version);
 			foreach (SceneExportCollection scene in m_scenes)
 			{
-				if(scene.Name == fileName)
+				if (scene.Name == fileName)
 				{
 					return scene.GUID;
 				}
@@ -220,7 +222,7 @@ namespace uTinyRipper.AssetExporters
 				case 7:
 					return "GameController";
 			}
-			if(m_tagManager == null)
+			if (m_tagManager == null)
 			{
 				return UntaggedTag;
 			}

@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Classes.AnimationClips
+﻿namespace uTinyRipper.Classes.Misc
 {
 	/// <summary>
 	/// 5.5.0 and greater

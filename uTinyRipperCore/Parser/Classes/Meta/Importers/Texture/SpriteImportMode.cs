@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.AssetExporters.Classes
+﻿namespace uTinyRipper.Project.Classes
 {
 	/// <summary>
 	/// Texture importer modes for Sprite import.

@@ -1,5 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes.TrailRenderers;
+﻿using uTinyRipper.Classes.TrailRenderers;
 
 namespace uTinyRipper.Converters.TrailRenderers
 {

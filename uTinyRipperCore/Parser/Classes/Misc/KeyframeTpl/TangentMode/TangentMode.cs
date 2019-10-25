@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Classes.AnimationClips
+﻿namespace uTinyRipper.Classes.Misc
 {
 	public enum TangentMode
 	{
@@ -45,11 +45,11 @@
 		{
 			if (TangentMode5Relevant(version))
 			{
-				return (int)ToTangentMode5(_this);
+				return (int)_this.ToTangentMode5();
 			}
 			else
 			{
-				return (int)ToTangentMode2(_this);
+				return (int)_this.ToTangentMode2();
 			}
 		}
 
@@ -58,7 +58,7 @@
 			int value = (int)_this;
 			int mask = (int)TangentMode.HConstant;
 			int mask2 = (int)TangentMode2.HConstant;
-			value = (value & ~mask2) | ((value & mask) >> 2);
+			value = value & ~mask2 | (value & mask) >> 2;
 			return (TangentMode2)value;
 		}
 

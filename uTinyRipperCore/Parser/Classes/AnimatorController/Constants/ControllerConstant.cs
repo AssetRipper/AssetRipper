@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.AnimatorControllers
 {

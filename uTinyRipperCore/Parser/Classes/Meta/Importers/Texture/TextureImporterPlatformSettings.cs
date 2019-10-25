@@ -1,8 +1,9 @@
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Textures;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.AssetExporters.Classes
+namespace uTinyRipper.Project.Classes
 {
 	public class TextureImporterPlatformSettings : IAssetReadable, IYAMLExportable
 	{

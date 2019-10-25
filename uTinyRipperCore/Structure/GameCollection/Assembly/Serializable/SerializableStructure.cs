@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
-using uTinyRipper.Classes.AnimationClips;
+using uTinyRipper.Classes.Misc;
 using uTinyRipper.Classes.ParticleSystems;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
 
-namespace uTinyRipper.Assembly
+namespace uTinyRipper.Game.Assembly
 {
 	public class SerializableStructure : ISerializableStructure
 	{
@@ -24,7 +23,7 @@ namespace uTinyRipper.Assembly
 			this(copy.Type, CreateBase(copy), CreateFields(copy))
 		{
 		}
-		
+
 		public static ISerializableStructure EngineTypeToScriptStructure(string name)
 		{
 			switch (name)
@@ -110,6 +109,9 @@ namespace uTinyRipper.Assembly
 				field.Read(reader);
 			}
 		}
+
+#warning TODO:
+		public void Write(AssetWriter writer) => throw new NotImplementedException();
 
 		public virtual YAMLNode ExportYAML(IExportContainer container)
 		{

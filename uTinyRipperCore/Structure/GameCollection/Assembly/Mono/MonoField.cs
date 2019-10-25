@@ -1,7 +1,8 @@
 using Mono.Cecil;
 using System.Collections.Generic;
+using uTinyRipper.Game.Assembly;
 
-namespace uTinyRipper.Assembly.Mono
+namespace uTinyRipper.Game.Assembly.Mono
 {
 #warning TODO: move to MonoType
 	public static class MonoField

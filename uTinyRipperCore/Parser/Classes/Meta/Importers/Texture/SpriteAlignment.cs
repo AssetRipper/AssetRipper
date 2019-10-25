@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.AssetExporters.Classes
+﻿namespace uTinyRipper.Project.Classes
 {
 	/// <summary>
 	/// How a Sprite's graphic rectangle is aligned with its pivot point.

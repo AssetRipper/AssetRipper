@@ -1,6 +1,6 @@
 using System;
 
-namespace uTinyRipper.Assembly
+namespace uTinyRipper.Game.Assembly
 {
 	public enum PrimitiveType
 	{

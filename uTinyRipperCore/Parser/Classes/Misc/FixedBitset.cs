@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes;
 
-namespace uTinyRipper.Classes.GraphicsSettingss
+namespace uTinyRipper.Classes.Misc
 {
 	public struct FixedBitset : IAssetReadable, IYAMLExportable
 	{

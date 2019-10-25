@@ -1,5 +1,6 @@
 ﻿using System;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.EditorBuildSettingss
@@ -18,7 +19,7 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 			GUID = default;
 		}
 
-		public Scene(string path, EngineGUID guid)
+		public Scene(string path, GUID guid)
 		{
 			if (path == null)
 			{
@@ -59,6 +60,6 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 		public bool Enabled { get; private set; }
 		public string Path { get; private set; }
 
-		public EngineGUID GUID;
+		public GUID GUID;
 	}
 }

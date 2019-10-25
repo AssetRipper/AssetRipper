@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace uTinyRipper.Assembly.Mono
+namespace uTinyRipper.Game.Assembly.Mono
 {
 	public readonly struct MonoTypeContext
 	{
-		public MonoTypeContext(TypeReference type):
+		public MonoTypeContext(TypeReference type) :
 			this(type, GetDeclaringArguments(type))
 		{
 		}

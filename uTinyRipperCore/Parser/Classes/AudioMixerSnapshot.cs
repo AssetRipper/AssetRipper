@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
@@ -39,6 +39,6 @@ namespace uTinyRipper.Classes
 		}
 
 		public PPtr<AudioMixer> AudioMixer;
-		public EngineGUID SnapshotID;
+		public GUID SnapshotID;
 	}
 }

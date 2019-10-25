@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Meshes

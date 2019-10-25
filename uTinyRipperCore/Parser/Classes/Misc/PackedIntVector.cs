@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes;
 
-namespace uTinyRipper.Classes
+namespace uTinyRipper.Classes.Misc
 {
 	public struct PackedIntVector : IAsset
 	{
-		public PackedIntVector(bool _):
+		public PackedIntVector(bool _) :
 			this()
 		{
 			Data = Array.Empty<byte>();
@@ -26,7 +28,7 @@ namespace uTinyRipper.Classes
 				buffer[i] = 0;
 				while (bitOffset < BitSize)
 				{
-					buffer[i] |= (Data[byteIndex] >> bitIndex) << bitOffset;
+					buffer[i] |= Data[byteIndex] >> bitIndex << bitOffset;
 					int read = Math.Min(BitSize - bitOffset, 8 - bitIndex);
 					bitIndex += read;
 					bitOffset += read;

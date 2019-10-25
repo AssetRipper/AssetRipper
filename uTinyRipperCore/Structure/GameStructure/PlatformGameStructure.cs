@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using uTinyRipper.Assembly;
-using uTinyRipper.Assembly.Mono;
+using uTinyRipper.Game;
+using uTinyRipper.Game.Assembly;
+using uTinyRipper.Game.Assembly.Mono;
 
 namespace uTinyRipper
 {
@@ -20,7 +21,7 @@ namespace uTinyRipper
 			foreach (string dataPath in DataPathes)
 			{
 				string filePath = Path.Combine(dataPath, dependency);
-				if (FileMultiStream.Exists(filePath))
+				if (MultiFileStream.Exists(filePath))
 				{
 					return filePath;
 				}
@@ -54,7 +55,7 @@ namespace uTinyRipper
 			foreach (string dataPath in DataPathes)
 			{
 				string path = Path.Combine(dataPath, resource);
-				if (FileMultiStream.Exists(path))
+				if (MultiFileStream.Exists(path))
 				{
 					return path;
 				}
@@ -84,20 +85,20 @@ namespace uTinyRipper
 		{
 			const string DataBundleName = DataName + AssetBundleExtension;
 			string dataBundlePath = Path.Combine(root.FullName, DataBundleName);
-			if (FileMultiStream.Exists(dataBundlePath))
+			if (MultiFileStream.Exists(dataBundlePath))
 			{
 				AddAssetBundle(files, DataBundleName, dataBundlePath);
 			}
 
 			string filePath = Path.Combine(root.FullName, GlobalGameManagerName);
-			if (FileMultiStream.Exists(filePath))
+			if (MultiFileStream.Exists(filePath))
 			{
 				AddFile(files, GlobalGameManagerName, filePath);
 			}
 			else
 			{
 				filePath = Path.Combine(root.FullName, MainDataName);
-				if (FileMultiStream.Exists(filePath))
+				if (MultiFileStream.Exists(filePath))
 				{
 					AddFile(files, MainDataName, filePath);
 				}
@@ -107,7 +108,7 @@ namespace uTinyRipper
 			{
 				if (s_levelName.IsMatch(levelFile.Name))
 				{
-					string levelName = FileMultiStream.GetFileName(levelFile.Name);
+					string levelName = MultiFileStream.GetFileName(levelFile.Name);
 					AddFile(files, levelName, levelFile.FullName);
 				}
 			}
@@ -225,7 +226,7 @@ namespace uTinyRipper
 		public abstract IReadOnlyDictionary<string, string> Files { get; }
 		public abstract IReadOnlyDictionary<string, string> Assemblies { get; }
 
-		protected static readonly Regex s_levelName = new Regex($@"^level(0|[1-9][0-9]*)({FileMultiStream.MultifileRegPostfix}0)?$", RegexOptions.Compiled);
+		protected static readonly Regex s_levelName = new Regex($@"^level(0|[1-9][0-9]*)({MultiFileStream.MultifileRegPostfix}0)?$", RegexOptions.Compiled);
 
 		protected const string ManagedName = "Managed";
 		protected const string LibName = "lib";

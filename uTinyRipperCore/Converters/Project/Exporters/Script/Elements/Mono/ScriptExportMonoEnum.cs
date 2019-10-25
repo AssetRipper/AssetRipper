@@ -1,8 +1,9 @@
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
+using uTinyRipper.Converters.Script;
 
-namespace uTinyRipper.Exporters.Scripts.Mono
+namespace uTinyRipper.Converters.Script.Mono
 {
 	public sealed class ScriptExportMonoEnum : ScriptExportEnum
 	{
@@ -12,7 +13,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			{
 				throw new ArgumentNullException(nameof(@enum));
 			}
-			
+
 			Type = @enum;
 			if (@enum.Module != null)
 			{

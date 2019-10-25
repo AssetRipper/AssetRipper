@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.Assembly;
+using uTinyRipper.Game;
+using uTinyRipper.BundleFiles;
 
-namespace uTinyRipper.BundleFiles
+namespace uTinyRipper
 {
 	public sealed class BundleFileScheme : FileSchemeList
 	{

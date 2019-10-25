@@ -1,10 +1,10 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.Classes
+namespace uTinyRipper.Classes.Misc
 {
 	public struct OffsetPtr<T> : IAssetReadable, IYAMLExportable
-		where T: struct, IAssetReadable, IYAMLExportable
+		where T : struct, IAssetReadable, IYAMLExportable
 	{
 		public OffsetPtr(T instance)
 		{

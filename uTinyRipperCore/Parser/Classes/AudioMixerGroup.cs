@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
@@ -45,7 +45,7 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<PPtr<AudioMixerGroup>> Children => m_children;
 
 		public PPtr<AudioMixer> AudioMixer;
-		public EngineGUID GroupID;
+		public GUID GroupID;
 
 		private PPtr<AudioMixerGroup>[] m_children;
 	}

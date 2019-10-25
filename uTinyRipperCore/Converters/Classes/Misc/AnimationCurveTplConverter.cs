@@ -1,6 +1,5 @@
 ﻿using System.Linq;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes.AnimationClips;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Converters.Misc
 {

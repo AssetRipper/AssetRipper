@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Shaders;
 using uTinyRipper.Classes.Shaders.Exporters;
+using uTinyRipper.Converters;
+using uTinyRipper.Project;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;

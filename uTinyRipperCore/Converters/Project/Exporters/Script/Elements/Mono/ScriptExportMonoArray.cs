@@ -1,7 +1,8 @@
 using Mono.Cecil;
 using System;
+using uTinyRipper.Converters.Script;
 
-namespace uTinyRipper.Exporters.Scripts.Mono
+namespace uTinyRipper.Converters.Script.Mono
 {
 	public sealed class ScriptExportMonoArray : ScriptExportArray
 	{
@@ -23,7 +24,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			Module = ScriptExportMonoType.GetModuleName(Type);
 			FullName = ScriptExportMonoType.GetFullName(Type, Module);
 		}
-		
+
 		public override void Init(IScriptExportManager manager)
 		{
 			TypeSpecification specification = (TypeSpecification)Type;
@@ -44,7 +45,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 		public override string Module { get; }
 
 		private TypeReference Type { get; }
-		
+
 		private ScriptExportType m_element;
 	}
 }

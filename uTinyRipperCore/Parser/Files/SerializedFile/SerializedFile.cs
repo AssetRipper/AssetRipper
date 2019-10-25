@@ -2,16 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using uTinyRipper.Assembly;
+using uTinyRipper.Game;
 using uTinyRipper.Classes;
+using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
+using uTinyRipper.Classes.Misc;
 
-namespace uTinyRipper.SerializedFiles
+namespace uTinyRipper
 {
 	/// <summary>
 	/// Serialized files contain binary serialized objects and optional run-time type information.
-	/// They have file name extensions like .asset, .assets, .sharedAssets, .unity3d, but may also have no extension at all
+	/// They have file name extensions like .asset, .assets, .sharedAssets but may also have no extension at all
 	/// </summary>
 	public sealed class SerializedFile : ISerializedFile
 	{
@@ -43,12 +45,12 @@ namespace uTinyRipper.SerializedFiles
 
 		public static bool IsSerializedFile(string filePath)
 		{
-			if (!FileMultiStream.Exists(filePath))
+			if (!MultiFileStream.Exists(filePath))
 			{
 				throw new Exception($"Serialized file at '{filePath}' doesn't exist");
 			}
 
-			using (Stream stream = FileMultiStream.OpenRead(filePath))
+			using (Stream stream = MultiFileStream.OpenRead(filePath))
 			{
 				return IsSerializedFile(stream);
 			}
@@ -72,7 +74,7 @@ namespace uTinyRipper.SerializedFiles
 
 		public static SerializedFileScheme LoadScheme(string filePath, string fileName)
 		{
-			if (!FileMultiStream.Exists(filePath))
+			if (!MultiFileStream.Exists(filePath))
 			{
 				throw new Exception($"Serialized file at path '{filePath}' doesn't exist");
 			}
@@ -84,7 +86,7 @@ namespace uTinyRipper.SerializedFiles
 
 		public static SerializedFileScheme LoadScheme(string filePath, string fileName, TransferInstructionFlags flags)
 		{
-			if (!FileMultiStream.Exists(filePath))
+			if (!MultiFileStream.Exists(filePath))
 			{
 				throw new Exception($"Serialized file at path '{filePath}' doesn't exist");
 			}
@@ -168,7 +170,7 @@ namespace uTinyRipper.SerializedFiles
 				{
 					continue;
 				}
-				foreach(Object asset in file.FetchAssets())
+				foreach (Object asset in file.FetchAssets())
 				{
 					if (asset.ClassID == classID)
 					{
@@ -186,7 +188,7 @@ namespace uTinyRipper.SerializedFiles
 				if (asset.ClassID == classID)
 				{
 					NamedObject namedAsset = (NamedObject)asset;
-					if(namedAsset.ValidName == name)
+					if (namedAsset.ValidName == name)
 					{
 						return asset;
 					}
@@ -226,9 +228,9 @@ namespace uTinyRipper.SerializedFiles
 		}
 
 		public PPtr<T> CreatePPtr<T>(T asset)
-			where T: Object
+			where T : Object
 		{
-			if(asset.File == this)
+			if (asset.File == this)
 			{
 				return new PPtr<T>(0, asset.PathID);
 			}
@@ -237,7 +239,7 @@ namespace uTinyRipper.SerializedFiles
 			{
 				FileIdentifier identifier = Dependencies[i];
 				ISerializedFile file = Collection.FindSerializedFile(identifier);
-				if(asset.File == file)
+				if (asset.File == file)
 				{
 					return new PPtr<T>(i + 1, asset.PathID);
 				}
@@ -255,7 +257,7 @@ namespace uTinyRipper.SerializedFiles
 		{
 			return Name;
 		}
-		
+
 		internal void Read(EndianReader reader)
 		{
 			if (RTTIClassHierarchyDescriptor.IsReadSignature(Header.Generation))
@@ -311,7 +313,7 @@ namespace uTinyRipper.SerializedFiles
 
 			if (file == null)
 			{
-				if(isSafe)
+				if (isSafe)
 				{
 					return null;
 				}
@@ -321,7 +323,7 @@ namespace uTinyRipper.SerializedFiles
 			Object asset = file.FindAsset(pathID);
 			if (asset == null)
 			{
-				if(isSafe)
+				if (isSafe)
 				{
 					return null;
 				}
@@ -383,7 +385,7 @@ namespace uTinyRipper.SerializedFiles
 		private Object ReadAsset(AssetReader reader, AssetInfo assetInfo, long offset, int size)
 		{
 			Object asset = Collection.AssetFactory.CreateAsset(assetInfo);
-			if(asset == null)
+			if (asset == null)
 			{
 				return null;
 			}
@@ -408,7 +410,7 @@ namespace uTinyRipper.SerializedFiles
 				using (MD5 md5 = MD5.Create())
 				{
 					byte[] md5Hash = md5.ComputeHash(data);
-					assetInfo.GUID = new EngineGUID(md5Hash);
+					assetInfo.GUID = new GUID(md5Hash);
 				}
 			}
 			else
@@ -463,7 +465,7 @@ namespace uTinyRipper.SerializedFiles
 		public Version Version => Metadata.Hierarchy.Version;
 		public Platform Platform => Metadata.Hierarchy.Platform;
 		public TransferInstructionFlags Flags { get; private set; }
-		
+
 		public IFileCollection Collection { get; }
 		public IAssemblyManager AssemblyManager { get; }
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Dependencies;

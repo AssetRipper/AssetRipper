@@ -85,7 +85,7 @@ namespace uTinyRipper
 
 		public static SmartStream OpenRead(string path)
 		{
-			return new SmartStream(FileMultiStream.OpenRead(path), SmartStreamType.File);
+			return new SmartStream(MultiFileStream.OpenRead(path), SmartStreamType.File);
 		}
 
 		public static SmartStream CreateTemp()

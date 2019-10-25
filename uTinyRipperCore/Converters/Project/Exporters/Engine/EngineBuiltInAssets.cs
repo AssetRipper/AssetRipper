@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters.Classes;
-using uTinyRipper.Classes;
+using uTinyRipper.Project.Classes;
+using uTinyRipper.Classes.Misc;
 
-namespace uTinyRipper.AssetExporters
+namespace uTinyRipper.Converters
 {
 	public struct EngineBuiltInAsset
 	{
@@ -19,7 +19,7 @@ namespace uTinyRipper.AssetExporters
 			return new ExportPointer(ExportID, GUID, AssetType.Internal);
 		}
 
-		public EngineGUID GUID => m_isF ? EngineBuiltInAssets.FGUID : EngineBuiltInAssets.EGUID;
+		public GUID GUID => m_isF ? EngineBuiltInAssets.FGUID : EngineBuiltInAssets.EGUID;
 
 		public bool IsValid => ExportID != 0;
 		public uint ExportID { get; }
@@ -416,7 +416,7 @@ namespace uTinyRipper.AssetExporters
 			AddSprite("Knob", 10913, true);
 			AddSprite("DropdownArrow", 10915, true);
 			AddSprite("UIMask", 10917, true);
-			
+
 			AddLightmapParams("Default-HighResolution", 15200, true);
 			AddLightmapParams("Default-LowResolution", 15201, true);
 			AddLightmapParams("Default-VeryLowResolution", 15203, true);
@@ -465,7 +465,7 @@ namespace uTinyRipper.AssetExporters
 			///////////////////////////////////////////////////////
 			// Old Extra
 			///////////////////////////////////////////////////////
-			
+
 			AddShader("Normal-DiffuseFast", 1, true);
 			AddShader("Normal-Bumped", 2, true);
 			AddShader("Normal-Glossy", 3, true);
@@ -816,17 +816,17 @@ namespace uTinyRipper.AssetExporters
 		public const string TerrainWavingDoublePass = "Hidden/TerrainEngine/Details/WavingDoublePass";
 		public const string TerrainBillboardWavingDoublePass = "Hidden/TerrainEngine/Details/BillboardWavingDoublePass";
 
-		public static readonly EngineGUID DGUID = new EngineGUID(0x00000000, 0xD0000000, 0x00000000, 0x00000000);
-		public static readonly EngineGUID EGUID = new EngineGUID(0x00000000, 0xE0000000, 0x00000000, 0x00000000);
-		public static readonly EngineGUID FGUID = new EngineGUID(0x00000000, 0xF0000000, 0x00000000, 0x00000000);
+		public static readonly GUID DGUID = new GUID(0x00000000, 0xD0000000, 0x00000000, 0x00000000);
+		public static readonly GUID EGUID = new GUID(0x00000000, 0xE0000000, 0x00000000, 0x00000000);
+		public static readonly GUID FGUID = new GUID(0x00000000, 0xF0000000, 0x00000000, 0x00000000);
 
 		private static Dictionary<string, EngineBuiltInAssetInfo> m_materials = new Dictionary<string, EngineBuiltInAssetInfo>();
 		private static Dictionary<string, EngineBuiltInAssetInfo> m_textures = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static Dictionary<string, EngineBuiltInAssetInfo> m_meshes = new Dictionary<string, EngineBuiltInAssetInfo> ();
-		private static Dictionary<string, EngineBuiltInAssetInfo> m_shaders = new Dictionary<string, EngineBuiltInAssetInfo> ();
-		private static Dictionary<string, EngineBuiltInAssetInfo> m_fonts = new Dictionary<string, EngineBuiltInAssetInfo> ();
-		private static Dictionary<string, EngineBuiltInAssetInfo> m_sprites = new Dictionary<string, EngineBuiltInAssetInfo> ();
-		private static Dictionary<string, EngineBuiltInAssetInfo> m_lightmapParams = new Dictionary<string, EngineBuiltInAssetInfo> ();
+		private static Dictionary<string, EngineBuiltInAssetInfo> m_meshes = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static Dictionary<string, EngineBuiltInAssetInfo> m_shaders = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static Dictionary<string, EngineBuiltInAssetInfo> m_fonts = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static Dictionary<string, EngineBuiltInAssetInfo> m_sprites = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static Dictionary<string, EngineBuiltInAssetInfo> m_lightmapParams = new Dictionary<string, EngineBuiltInAssetInfo>();
 		private static Dictionary<string, EngineBuiltInAssetInfo> m_behaviours = new Dictionary<string, EngineBuiltInAssetInfo>();
 	}
 }

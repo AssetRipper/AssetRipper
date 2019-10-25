@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.AssetExporters.Classes;
+using uTinyRipper.Project;
+using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes.Textures;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.SpriteAtlases
 {

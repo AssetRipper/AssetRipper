@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
 using uTinyRipper.Classes.Lights;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.LightmapSettingss
 {

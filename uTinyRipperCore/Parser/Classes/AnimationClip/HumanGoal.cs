@@ -1,4 +1,6 @@
-﻿namespace uTinyRipper.Classes.AnimationClips
+﻿using uTinyRipper.Classes.Misc;
+
+namespace uTinyRipper.Classes.AnimationClips
 {
 	public struct HumanGoal : IAssetReadable
 	{

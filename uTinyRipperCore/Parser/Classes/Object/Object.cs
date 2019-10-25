@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
 using uTinyRipper.Classes.Objects;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
-	public abstract class Object : IAsset, IYAMLDocExportable, IDependent
+	public abstract class Object : IAsset, IDependent
 	{
 		protected Object(AssetInfo assetInfo)
 		{
@@ -147,7 +148,7 @@ namespace uTinyRipper.Classes
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
 		public virtual string ExportExtension => AssetExtension;
 		public long PathID => AssetInfo.PathID;		
-		public EngineGUID GUID => AssetInfo.GUID;
+		public GUID GUID => AssetInfo.GUID;
 
 		public HideFlags ObjectHideFlags { get; set; }
 #if UNIVERSAL

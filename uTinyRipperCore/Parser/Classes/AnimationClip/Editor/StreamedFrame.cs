@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace uTinyRipper.Classes.AnimationClips.Editor
+namespace uTinyRipper.Classes.AnimationClips
 {
 	public struct StreamedFrame : IAssetReadable
 	{

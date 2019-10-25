@@ -1,13 +1,13 @@
 ﻿using System;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.AssetExporters.Classes;
-using uTinyRipper.YAML;
+using uTinyRipper.Project.Classes;
+using uTinyRipper.Converters;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
 	public struct PPtr<T> : IAsset
-		where T: Object
+		where T : Object
 	{
 		public PPtr(int fileIndex, long pathID)
 		{
@@ -75,7 +75,7 @@ namespace uTinyRipper.Classes
 			return exPointer.ExportYAML(container);
 		}
 
-		public T FindAsset(ISerializedFile file)
+		public T FindAsset(IAssetContainer file)
 		{
 			if (IsNull)
 			{
@@ -93,27 +93,9 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public T FindAsset(IExportContainer container)
-		{
-			if (IsNull)
-			{
-				return null;
-			}
-			Object asset = container.FindAsset(FileIndex, PathID);
-			switch (asset)
-			{
-				case null:
-					return null;
-				case T t:
-					return t;
-				default:
-					throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
-			}
-		}
-
 		public T TryGetAsset(ISerializedFile file)
 		{
-			if(IsNull)
+			if (IsNull)
 			{
 				return null;
 			}
@@ -127,7 +109,7 @@ namespace uTinyRipper.Classes
 				throw new Exception("Can't get null PPtr");
 			}
 			Object asset = file.GetAsset(FileIndex, PathID);
-			if(asset is T t)
+			if (asset is T t)
 			{
 				return t;
 			}
@@ -136,7 +118,7 @@ namespace uTinyRipper.Classes
 
 		public bool IsAsset(Object asset)
 		{
-			if(FileIndex == 0)
+			if (FileIndex == 0)
 			{
 				return asset.PathID == PathID;
 			}
@@ -181,11 +163,11 @@ namespace uTinyRipper.Classes
 			{
 				return null;
 			}
-			
+
 			T obj = FindAsset(file);
 			if (obj == null)
 			{
-				if(isLog)
+				if (isLog)
 				{
 					Logger.Log(LogType.Warning, LogCategory.Export, $"{owner.Invoke()}'s {name} {ToLogString(file)} hasn't been found");
 				}
@@ -204,7 +186,7 @@ namespace uTinyRipper.Classes
 
 		public string ToLogString(ISerializedFile file)
 		{
-			if(Config.IsAdvancedLog)
+			if (Config.IsAdvancedLog)
 			{
 				string depName = FileIndex == 0 ? file.Name : file.Dependencies[FileIndex - 1].FilePathOrigin;
 				ClassIDType classID = typeof(T).ToClassIDType();
@@ -215,11 +197,11 @@ namespace uTinyRipper.Classes
 
 		public override bool Equals(object obj)
 		{
-			if(obj == null)
+			if (obj == null)
 			{
 				return false;
 			}
-			if(obj is PPtr<T> ptr)
+			if (obj is PPtr<T> ptr)
 			{
 				return ptr == this;
 			}

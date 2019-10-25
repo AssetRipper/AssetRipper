@@ -55,7 +55,7 @@ namespace uTinyRipper.SerializedFiles
 				{
 					if (FilenameUtils.IsDefaultResource(Name))
 					{
-						Version = new Version(5, 6, 5, VersionType.Base);
+						Version = new Version(5, 6, 5, VersionType.Final);
 					}
 				}
 			}

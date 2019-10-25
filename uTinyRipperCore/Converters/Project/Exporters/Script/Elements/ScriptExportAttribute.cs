@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace uTinyRipper.Exporters.Scripts
+namespace uTinyRipper.Converters.Script
 {
 	public abstract class ScriptExportAttribute
 	{
@@ -35,7 +35,7 @@ namespace uTinyRipper.Exporters.Scripts
 		public abstract string Module { get; }
 
 		protected abstract ScriptExportType Type { get; }
-		
+
 		public const string SystemNamespace = "System";
 		protected const string UnityEngineNamespace = "UnityEngine";
 

@@ -3,7 +3,7 @@ using Mono.Cecil.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using uTinyRipper.Assembly.Mono;
+using uTinyRipper.Game.Assembly.Mono;
 
 namespace uTinyRipper
 {

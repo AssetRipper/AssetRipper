@@ -1,13 +1,13 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
+using uTinyRipper.Project;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
 	public struct PPtrCurve : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public PPtrCurve(PPtrCurve copy, IReadOnlyList<PPtrKeyframe> keyframes):
+		public PPtrCurve(PPtrCurve copy, IReadOnlyList<PPtrKeyframe> keyframes) :
 			this(copy.Path, copy.Attribute, copy.ClassID, copy.Script, keyframes)
 		{
 		}
@@ -21,14 +21,56 @@ namespace uTinyRipper.Classes.AnimationClips
 			m_curve = null;
 		}
 
-		public PPtrCurve(string path, string attribute, ClassIDType classID, PPtr<MonoScript> script, IReadOnlyList<PPtrKeyframe> keyframes):
+		public PPtrCurve(string path, string attribute, ClassIDType classID, PPtr<MonoScript> script, IReadOnlyList<PPtrKeyframe> keyframes) :
 			this(path, attribute, classID, script)
 		{
 			m_curve = new PPtrKeyframe[keyframes.Count];
-			for(int i = 0; i < keyframes.Count; i++)
+			for (int i = 0; i < keyframes.Count; i++)
 			{
 				m_curve[i] = keyframes[i];
 			}
+		}
+
+		public static bool operator ==(PPtrCurve left, PPtrCurve right)
+		{
+			if (left.Attribute != right.Attribute)
+			{
+				return false;
+			}
+			if (left.Path != right.Path)
+			{
+				return false;
+			}
+			if (left.ClassID != right.ClassID)
+			{
+				return false;
+			}
+			if (left.Script != right.Script)
+			{
+				return false;
+			}
+			return true;
+		}
+
+		public static bool operator !=(PPtrCurve left, PPtrCurve right)
+		{
+			if (left.Attribute != right.Attribute)
+			{
+				return true;
+			}
+			if (left.Path != right.Path)
+			{
+				return true;
+			}
+			if (left.ClassID != right.ClassID)
+			{
+				return true;
+			}
+			if (left.Script != right.Script)
+			{
+				return true;
+			}
+			return false;
 		}
 
 		/// <summary>
@@ -66,7 +108,7 @@ namespace uTinyRipper.Classes.AnimationClips
 
 		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
 		{
-			foreach(PPtrKeyframe keyframe in Curve)
+			foreach (PPtrKeyframe keyframe in Curve)
 			{
 				foreach (Object asset in keyframe.FetchDependencies(file, isLog))
 				{
@@ -78,29 +120,9 @@ namespace uTinyRipper.Classes.AnimationClips
 
 		public override bool Equals(object obj)
 		{
-			if(obj == null)
+			if (obj is PPtrCurve pptrCurve)
 			{
-				return false;
-			}
-			if(obj is PPtrCurve pptrCurve)
-			{
-				if(pptrCurve.Attribute != Attribute)
-				{
-					return false;
-				}
-				if (pptrCurve.Path != Path)
-				{
-					return false;
-				}
-				if (pptrCurve.ClassID != ClassID)
-				{
-					return false;
-				}
-				if (pptrCurve.Script != Script)
-				{
-					return false;
-				}
-				return true;
+				return this == pptrCurve;
 			}
 			return false;
 		}

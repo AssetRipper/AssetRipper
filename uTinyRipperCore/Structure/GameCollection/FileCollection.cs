@@ -2,16 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using uTinyRipper.ArchiveFiles;
-using uTinyRipper.Assembly;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.BundleFiles;
+using uTinyRipper;
+using uTinyRipper.Game;
 using uTinyRipper.Classes;
-using uTinyRipper.ResourceFiles;
+using uTinyRipper.Converters;
 using uTinyRipper.SerializedFiles;
-using uTinyRipper.WebFiles;
 
-using MonoManager = uTinyRipper.Assembly.Mono.MonoManager;
+using MonoManager = uTinyRipper.Game.Assembly.Mono.MonoManager;
 using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper

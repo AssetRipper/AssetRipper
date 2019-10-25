@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes;
 
-namespace uTinyRipper.Classes
+namespace uTinyRipper.Classes.Misc
 {
 	public struct PackedQuatVector : IAssetReadable, IYAMLExportable
 	{
@@ -18,7 +20,7 @@ namespace uTinyRipper.Classes
 				int bitOffset = 0;
 				while (bitOffset < 3)
 				{
-					flags |= (Data[byteIndex] >> bitIndex) << bitOffset;
+					flags |= Data[byteIndex] >> bitIndex << bitOffset;
 					int read = Math.Min(3 - bitOffset, 8 - bitIndex);
 					bitIndex += read;
 					bitOffset += read;
@@ -43,7 +45,7 @@ namespace uTinyRipper.Classes
 						bitOffset = 0;
 						while (bitOffset < bitSize)
 						{
-							value |= (Data[byteIndex] >> bitIndex) << bitOffset;
+							value |= Data[byteIndex] >> bitIndex << bitOffset;
 							int num = Math.Min(bitSize - bitOffset, 8 - bitIndex);
 							bitIndex += num;
 							bitOffset += num;

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.AssetBundles
 {

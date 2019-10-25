@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.AssetExporters
+namespace uTinyRipper.Project
 {
 	public static class IEnumerableExtensions
 	{

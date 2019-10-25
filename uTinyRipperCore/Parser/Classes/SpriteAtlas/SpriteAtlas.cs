@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
 using uTinyRipper.Classes.SpriteAtlases;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
@@ -110,7 +111,7 @@ namespace uTinyRipper.Classes
 		public SpriteAtlasEditorData EditorData { get; private set; }
 		public IReadOnlyList<PPtr<Sprite>> PackedSprites => m_packedSprites;
 		public IReadOnlyList<string> PackedSpriteNamesToIndex => m_packedSpriteNamesToIndex;
-		public IReadOnlyDictionary<Tuple<EngineGUID, long>, SpriteAtlasData> RenderDataMap => m_renderDataMap;
+		public IReadOnlyDictionary<Tuple<GUID, long>, SpriteAtlasData> RenderDataMap => m_renderDataMap;
 		public string Tag { get; private set; }
 		public bool IsVariant { get; private set; }
 
@@ -124,7 +125,7 @@ namespace uTinyRipper.Classes
 
 		public PPtr<SpriteAtlas> MasterAtlas;
 
-		private readonly Dictionary<Tuple<EngineGUID, long>, SpriteAtlasData> m_renderDataMap = new Dictionary<Tuple<EngineGUID, long>, SpriteAtlasData>();
+		private readonly Dictionary<Tuple<GUID, long>, SpriteAtlasData> m_renderDataMap = new Dictionary<Tuple<GUID, long>, SpriteAtlasData>();
 
 		private PPtr<Sprite>[] m_packedSprites;
 		private string[] m_packedSpriteNamesToIndex;

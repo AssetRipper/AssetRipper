@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.Classes.Meshes;
 using uTinyRipper.Classes.Sprites.Utils;
-using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.Sprites
 {

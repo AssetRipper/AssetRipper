@@ -4,9 +4,10 @@ using System.Linq;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Sprites;
 using uTinyRipper.Classes.Textures;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.AssetExporters.Classes
+namespace uTinyRipper.Project.Classes
 {
 	public sealed class TextureImporter : DefaultImporter
 	{

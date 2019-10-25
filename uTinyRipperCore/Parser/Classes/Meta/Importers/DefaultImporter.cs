@@ -1,6 +1,7 @@
-﻿using uTinyRipper.YAML;
+﻿using uTinyRipper.Converters;
+using uTinyRipper.YAML;
 
-namespace uTinyRipper.AssetExporters.Classes
+namespace uTinyRipper.Project.Classes
 {
 	public class DefaultImporter: IAssetImporter
 	{

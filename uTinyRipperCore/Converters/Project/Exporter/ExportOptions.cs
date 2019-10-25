@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.AssetExporters
+﻿namespace uTinyRipper.Converters
 {
 	public sealed class ExportOptions
 	{

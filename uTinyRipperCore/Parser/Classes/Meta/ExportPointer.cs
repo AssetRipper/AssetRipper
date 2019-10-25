@@ -1,7 +1,8 @@
-﻿using uTinyRipper.Classes;
+﻿using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.AssetExporters.Classes
+namespace uTinyRipper.Project.Classes
 {
 	public sealed class ExportPointer : IYAMLExportable
 	{
@@ -12,7 +13,7 @@ namespace uTinyRipper.AssetExporters.Classes
 			AssetType = default;
 		}
 
-		public ExportPointer(long fileID, EngineGUID guid, AssetType assetType)
+		public ExportPointer(long fileID, GUID guid, AssetType assetType)
 		{
 			FileID = fileID;
 			GUID = guid;
@@ -20,7 +21,7 @@ namespace uTinyRipper.AssetExporters.Classes
 		}
 
 		public ExportPointer(ClassIDType classID, AssetType assetType) :
-			this(ExportCollection.GetMainExportID((uint)classID), EngineGUID.MissingReference, assetType)
+			this(ExportCollection.GetMainExportID((uint)classID), GUID.MissingReference, assetType)
 		{
 		}
 		
@@ -40,7 +41,7 @@ namespace uTinyRipper.AssetExporters.Classes
 		public static ExportPointer EmptyPointer { get; } = new ExportPointer(0);
 
 		public long FileID { get; }
-		public EngineGUID GUID { get; }
+		public GUID GUID { get; }
 		public AssetType AssetType { get; }
 
 		public const string FileIDName = "fileID";

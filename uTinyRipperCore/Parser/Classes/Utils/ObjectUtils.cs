@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
@@ -73,7 +74,7 @@ namespace uTinyRipper.Classes
 			return exportID;
 		}
 
-		public static EngineGUID CalculateAssetsGUID(IEnumerable<Object> assets)
+		public static GUID CalculateAssetsGUID(IEnumerable<Object> assets)
 		{
 			List<uint> hashList = new List<uint>();
 			foreach (Object asset in assets)
@@ -87,7 +88,7 @@ namespace uTinyRipper.Classes
 			return CalculateGUID(hashList);
 		}
 
-		public static EngineGUID CalculateGUID(List<uint> hashList)
+		public static GUID CalculateGUID(List<uint> hashList)
 		{
 			uint[] hashArray = hashList.ToArray();
 			byte[] buffer = new byte[hashArray.Length * sizeof(uint)];
@@ -95,7 +96,7 @@ namespace uTinyRipper.Classes
 			using (MD5 md5 = MD5.Create())
 			{
 				byte[] hash = md5.ComputeHash(buffer);
-				return new EngineGUID(hash);
+				return new GUID(hash);
 			}
 		}
 	}

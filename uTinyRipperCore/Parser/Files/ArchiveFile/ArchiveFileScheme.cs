@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using uTinyRipper.Assembly;
+using uTinyRipper.ArchiveFiles;
+using uTinyRipper.Game;
 using uTinyRipper.SerializedFiles;
-using uTinyRipper.WebFiles;
 
-namespace uTinyRipper.ArchiveFiles
+namespace uTinyRipper
 {
 	public sealed class ArchiveFileScheme : FileScheme
 	{

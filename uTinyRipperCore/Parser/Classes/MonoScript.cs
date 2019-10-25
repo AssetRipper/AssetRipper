@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.Assembly;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.Exporters.Scripts;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Project;
+using uTinyRipper.Converters;
+using uTinyRipper.Converters.Script;
 using uTinyRipper.YAML;
+using uTinyRipper.Game.Assembly;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace uTinyRipper.Assembly
+namespace uTinyRipper.Game.Assembly
 {
 	public abstract class SerializableType
 	{
@@ -16,7 +16,7 @@ namespace uTinyRipper.Assembly
 
 			public override string ToString()
 			{
-				return Type == null ? base.ToString() : (IsArray ? $"{Type}[] {Name}" : $"{Type} {Name}");
+				return Type == null ? base.ToString() : IsArray ? $"{Type}[] {Name}" : $"{Type} {Name}";
 			}
 
 			public SerializableType Type { get; }
@@ -24,7 +24,7 @@ namespace uTinyRipper.Assembly
 			public string Name { get; }
 		}
 
-		public SerializableType(string @namespace, PrimitiveType type, string name)
+		protected SerializableType(string @namespace, PrimitiveType type, string name)
 		{
 			Namespace = @namespace ?? throw new ArgumentNullException(nameof(@namespace));
 			Type = type;
@@ -33,7 +33,7 @@ namespace uTinyRipper.Assembly
 
 		public static bool IsPrimitive(string @namespace, string name)
 		{
-			if(@namespace == SystemNamespace)
+			if (@namespace == SystemNamespace)
 			{
 				switch (name)
 				{
@@ -111,7 +111,7 @@ namespace uTinyRipper.Assembly
 		{
 			return @namespace == SystemCollectionGenericNamespace && name == ListName;
 		}
-		
+
 		public static bool IsEngineObject(string @namespace, string name)
 		{
 			return @namespace == UnityEngineNamespace && name == MonoUtils.ObjectName;
@@ -134,7 +134,7 @@ namespace uTinyRipper.Assembly
 		}
 		public static bool IsEngineStruct(string @namespace, string name)
 		{
-			if(@namespace == UnityEngineNamespace)
+			if (@namespace == UnityEngineNamespace)
 			{
 				switch (name)
 				{
@@ -268,7 +268,7 @@ namespace uTinyRipper.Assembly
 
 		public override string ToString()
 		{
-			return Namespace ==	string.Empty ? Name : $"{Namespace}.{Name}";
+			return Namespace == string.Empty ? Name : $"{Namespace}.{Name}";
 		}
 
 		private static ISerializableStructure CreateComplexStructure(SerializableType type, int depth)
@@ -328,7 +328,7 @@ namespace uTinyRipper.Assembly
 		public const string SystemCollectionGenericNamespace = "System.Collections.Generic";
 		public const string UnityEngineNamespace = "UnityEngine";
 		public const string CompilerServicesNamespace = "System.Runtime.CompilerServices";
-		
+
 		public const string CompilerGeneratedName = "CompilerGeneratedAttribute";
 
 		public const string Vector2Name = "Vector2";

@@ -2,10 +2,9 @@
 using System.Collections;
 using System.IO;
 using System.Linq;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Meshes;
-using uTinyRipper.Classes.Textures;
+using uTinyRipper.Classes.Misc;
 using uTinyRipper.Converters.Meshes;
 
 namespace uTinyRipper.Converters
@@ -223,7 +222,7 @@ namespace uTinyRipper.Converters
 		{
 			return Mesh.HasMeshCompression(container.Version) ? origin.MeshCompression : MeshCompression.Off;
 		}
-		
+
 		private static byte GetStreamCompression(IExportContainer container, Mesh origin)
 		{
 			return Mesh.HasStreamCompression(container.Version) ? origin.StreamCompression : (byte)0;

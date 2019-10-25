@@ -6,7 +6,6 @@ namespace uTinyRipper
 	{
 		Alpha = 0,
 		Beta,
-		Base,
 		Final,
 		Patch,
 
@@ -24,9 +23,6 @@ namespace uTinyRipper
 
 				case VersionType.Beta:
 					return "b";
-
-				case VersionType.Base:
-					return string.Empty;
 
 				case VersionType.Final:
 					return "f";

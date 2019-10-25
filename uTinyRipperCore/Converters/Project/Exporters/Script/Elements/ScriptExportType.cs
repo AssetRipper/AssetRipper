@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using uTinyRipper.Assembly;
+using uTinyRipper.Game.Assembly;
 
-namespace uTinyRipper.Exporters.Scripts
+namespace uTinyRipper.Converters.Script
 {
 	public abstract class ScriptExportType
 	{
 		public abstract void Init(IScriptExportManager manager);
-		
+
 		public void Export(TextWriter writer)
 		{
 			ExportUsings(writer);
@@ -34,7 +33,7 @@ namespace uTinyRipper.Exporters.Scripts
 			}
 
 			writer.WriteIndent(intent);
-			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", TypeName);			
+			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", TypeName);
 			if (Base != null && !SerializableType.IsBasic(Base.Namespace, Base.NestedName))
 			{
 				writer.Write(" : {0}", Base.GetTypeNestedName(DeclaringType));
@@ -153,7 +152,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 		public override string ToString()
 		{
-			if(FullName == null)
+			if (FullName == null)
 			{
 				return base.ToString();
 			}
@@ -188,7 +187,7 @@ namespace uTinyRipper.Exporters.Scripts
 			{
 				writer.WriteLine("using {0};", @namespace);
 			}
-			if(namespaces.Count > 0)
+			if (namespaces.Count > 0)
 			{
 				writer.WriteLine();
 			}
@@ -196,7 +195,7 @@ namespace uTinyRipper.Exporters.Scripts
 
 		private string ExportNamespace()
 		{
-			if(Namespace == SerializableType.UnityEngineNamespace)
+			if (Namespace == SerializableType.UnityEngineNamespace)
 			{
 				switch (CleanNestedName)
 				{
@@ -259,7 +258,7 @@ namespace uTinyRipper.Exporters.Scripts
 		protected const string InternalKeyWord = "internal";
 		protected const string ProtectedKeyWord = "protected";
 		protected const string PrivateKeyWord = "private";
-		
+
 		protected readonly List<ScriptExportType> m_nestedTypes = new List<ScriptExportType>();
 		protected readonly List<ScriptExportEnum> m_nestedEnums = new List<ScriptExportEnum>();
 		protected readonly List<ScriptExportDelegate> m_nestedDelegates = new List<ScriptExportDelegate>();

@@ -1,6 +1,6 @@
 using System;
 
-namespace uTinyRipper.Assembly
+namespace uTinyRipper.Game.Assembly
 {
 	public struct ScriptIdentifier
 	{
@@ -94,7 +94,7 @@ namespace uTinyRipper.Assembly
 
 		public override string ToString()
 		{
-			return IsDefault ? base.ToString() : (Namespace == string.Empty ? $"{Name}" : $"{Namespace}.{Name}");
+			return IsDefault ? base.ToString() : Namespace == string.Empty ? $"{Name}" : $"{Namespace}.{Name}";
 		}
 
 		public bool IsDefault => Name == null;

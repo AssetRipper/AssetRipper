@@ -1,7 +1,8 @@
 ﻿using Mono.Cecil;
 using System;
+using uTinyRipper.Converters.Script;
 
-namespace uTinyRipper.Exporters.Scripts.Mono
+namespace uTinyRipper.Converters.Script.Mono
 {
 	public sealed class ScriptExportMonoParameter : ScriptExportParameter
 	{
@@ -11,7 +12,7 @@ namespace uTinyRipper.Exporters.Scripts.Mono
 			{
 				throw new ArgumentNullException(nameof(parameter));
 			}
-			
+
 			Parameter = parameter;
 		}
 

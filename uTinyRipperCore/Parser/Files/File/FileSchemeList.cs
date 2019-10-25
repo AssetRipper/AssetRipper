@@ -5,7 +5,7 @@ namespace uTinyRipper
 {
 	public abstract class FileSchemeList : FileScheme
 	{
-		public FileSchemeList(SmartStream stream, long offset, long size, string filePath, string fileName):
+		protected FileSchemeList(SmartStream stream, long offset, long size, string filePath, string fileName):
 			base(stream, offset, size, filePath, fileName)
 		{
 		}

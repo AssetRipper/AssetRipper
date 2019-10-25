@@ -6,7 +6,7 @@ namespace uTinyRipper
 {
 	public abstract class FileScheme : IDisposable
 	{
-		public FileScheme(SmartStream stream, long offset, long size, string filePath, string fileName)
+		protected FileScheme(SmartStream stream, long offset, long size, string filePath, string fileName)
 		{
 			if (stream == null)
 			{

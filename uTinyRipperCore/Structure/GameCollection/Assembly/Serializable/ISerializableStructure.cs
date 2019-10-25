@@ -1,9 +1,8 @@
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
 
-namespace uTinyRipper.Assembly
+namespace uTinyRipper.Game.Assembly
 {
-	public interface ISerializableStructure : IAssetReadable, IYAMLExportable, IDependent
+	public interface ISerializableStructure : IAsset, IDependent
 	{
 		ISerializableStructure CreateDuplicate();
 		//int CalculateSize(int depth);

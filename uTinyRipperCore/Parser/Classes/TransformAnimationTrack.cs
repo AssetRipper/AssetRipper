@@ -1,4 +1,4 @@
-﻿using uTinyRipper.Classes.AnimationClips;
+﻿using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {

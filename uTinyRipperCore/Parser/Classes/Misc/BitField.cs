@@ -1,7 +1,7 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.Classes
+namespace uTinyRipper.Classes.Misc
 {
 	public struct BitField : IAssetReadable, IYAMLExportable
 	{
@@ -31,7 +31,7 @@ namespace uTinyRipper.Classes
 			}
 			return 1;
 		}
-		
+
 		public void Read(AssetReader reader)
 		{
 			Bits = Is16Bits(reader.Version) ? reader.ReadUInt16() : reader.ReadUInt32();

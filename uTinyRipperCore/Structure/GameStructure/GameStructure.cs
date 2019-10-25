@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using uTinyRipper.Assembly;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Project;
+using uTinyRipper.Converters;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
+using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper
 {
