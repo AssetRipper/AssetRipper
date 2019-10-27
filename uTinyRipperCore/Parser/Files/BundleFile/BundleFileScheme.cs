@@ -93,7 +93,7 @@ namespace uTinyRipper
 			foreach (BundleFileEntry entry in Metadata.Entries.Values)
 			{
 				FileEntryOffset offset = m_entryStreams[entry];
-				FileScheme scheme = FileCollection.ReadScheme(offset.Stream, offset.Offset, entry.Size, FilePath, entry.NameOrigin);
+				FileScheme scheme = GameCollection.ReadScheme(offset.Stream, offset.Offset, entry.Size, FilePath, entry.NameOrigin);
 				AddScheme(scheme);
 			}
 		}

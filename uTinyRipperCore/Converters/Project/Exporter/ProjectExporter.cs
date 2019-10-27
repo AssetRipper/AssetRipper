@@ -161,12 +161,12 @@ namespace uTinyRipper.Converters
 			OverrideExporter(classType, BinExporter);
 		}
 
-		public void Export(string path, FileCollection fileCollection, Object asset, ExportOptions options)
+		public void Export(string path, GameCollection fileCollection, Object asset, ExportOptions options)
 		{
 			Export(path, fileCollection, new Object[] { asset }, options);
 		}
 
-		public void Export(string path, FileCollection fileCollection, IEnumerable<Object> assets, ExportOptions options)
+		public void Export(string path, GameCollection fileCollection, IEnumerable<Object> assets, ExportOptions options)
 		{
 			EventExportPreparationStarted?.Invoke();
 			DependencyContext depcontext = new DependencyContext(true);

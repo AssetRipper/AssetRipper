@@ -13,7 +13,7 @@ namespace uTinyRipper
 	{
 		private class Processor : IDisposable
 		{
-			public Processor(FileCollection fileCollection, Func<string, string> dependencyCallback)
+			public Processor(GameCollection fileCollection, Func<string, string> dependencyCallback)
 			{
 				m_fileCollection = fileCollection ?? throw new ArgumentNullException(nameof(fileCollection));
 				m_dependencyCallback = dependencyCallback ?? throw new ArgumentNullException(nameof(dependencyCallback));
@@ -31,7 +31,7 @@ namespace uTinyRipper
 					return;
 				}
 
-				FileScheme scheme = FileCollection.LoadScheme(filePath, fileName);
+				FileScheme scheme = GameCollection.LoadScheme(filePath, fileName);
 				OnSchemeLoaded(scheme);
 
 				if (LoadDependencies(scheme))
@@ -114,18 +114,18 @@ namespace uTinyRipper
 			private readonly HashSet<string> m_knownFiles = new HashSet<string>();
 			private readonly Dictionary<string, FileScheme> m_delayedSchemes = new Dictionary<string, FileScheme>();
 
-			private readonly FileCollection m_fileCollection;
+			private readonly GameCollection m_fileCollection;
 			private readonly Func<string, string> m_dependencyCallback;
 		}
 
 		private GameStructure()
 		{
-			FileCollection.Parameters pars = new FileCollection.Parameters()
+			GameCollection.Parameters pars = new GameCollection.Parameters()
 			{
 				RequestAssemblyCallback = OnRequestAssembly,
 				RequestResourceCallback = OnRequestResource,
 			};
-			FileCollection = new FileCollection(pars);
+			FileCollection = new GameCollection(pars);
 		}
 
 		~GameStructure()
@@ -476,7 +476,7 @@ namespace uTinyRipper
 			}
 		}
 
-		public FileCollection FileCollection { get; }
+		public GameCollection FileCollection { get; }
 		public PlatformGameStructure PlatformStructure { get; private set; }
 		public PlatformGameStructure MixedStructure { get; private set; }
 

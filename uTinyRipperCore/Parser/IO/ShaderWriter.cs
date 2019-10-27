@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Shaders;
-using uTinyRipper.Classes.Shaders.Exporters;
+using uTinyRipper.Converters.Shaders;
 
 namespace uTinyRipper
 {

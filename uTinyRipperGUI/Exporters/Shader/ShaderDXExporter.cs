@@ -4,7 +4,7 @@ using DotNetDxc;
 using DXShaderRestorer;
 using uTinyRipper;
 using uTinyRipper.Classes.Shaders;
-using uTinyRipper.Classes.Shaders.Exporters;
+using uTinyRipper.Converters.Shaders;
 
 namespace uTinyRipperGUI.Exporters
 {

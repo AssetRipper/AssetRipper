@@ -1,4 +1,6 @@
-namespace uTinyRipper.Classes.Shaders.Exporters
+using uTinyRipper.Classes.Shaders;
+
+namespace uTinyRipper.Converters.Shaders
 {
 	public class ShaderUnknownExporter : ShaderTextExporter
 	{

@@ -16,8 +16,9 @@ namespace uTinyRipper.Classes.Shaders
 				writer.WriteIndent(3);
 				writer.Write("Program \"{0}\" {{\n", type.ToProgramTypeString());
 				HashSet<ShaderGpuProgramType> isTierLookup = GetIsTierLookup(SubPrograms);
-				foreach (SerializedSubProgram subProgram in SubPrograms)
+				for (int i = 0; i < SubPrograms.Count; i++)
 				{
+					SerializedSubProgram subProgram = SubPrograms[i];
 					Platform uplatform = writer.Platform;
 					GPUPlatform platform = subProgram.GpuProgramType.ToGPUPlatform(uplatform);
 					int index = writer.Shader.Platforms.IndexOf(platform);

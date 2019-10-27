@@ -1,6 +1,7 @@
 using System.IO;
+using uTinyRipper.Classes.Shaders;
 
-namespace uTinyRipper.Classes.Shaders.Exporters
+namespace uTinyRipper.Converters.Shaders
 {
 	public class ShaderTextExporter
 	{

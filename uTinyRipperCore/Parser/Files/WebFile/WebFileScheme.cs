@@ -44,7 +44,7 @@ namespace uTinyRipper
 		{
 			foreach (WebFileEntry entry in Metadata.Entries.Values)
 			{
-				FileScheme scheme = FileCollection.ReadScheme(m_stream, entry.Offset, entry.Size, FilePath, entry.NameOrigin);
+				FileScheme scheme = GameCollection.ReadScheme(m_stream, entry.Offset, entry.Size, FilePath, entry.NameOrigin);
 				AddScheme(scheme);
 			}
 		}

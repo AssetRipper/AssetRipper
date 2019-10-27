@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Classes.Shaders.Exporters
+﻿namespace uTinyRipper.Converters.Shaders
 {
 	public class ShaderGLESExporter : ShaderTextExporter
 	{

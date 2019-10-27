@@ -13,7 +13,7 @@ using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper
 {
-	public sealed class FileCollection : FileList, IFileCollection, IDisposable
+	public sealed class GameCollection : FileList, IFileCollection, IDisposable
 	{
 		public struct Parameters
 		{
@@ -21,20 +21,20 @@ namespace uTinyRipper
 			public Func<string, string> RequestResourceCallback { get; set; }
 		}
 
-		public FileCollection()
+		public GameCollection()
 		{
 			Exporter = new ProjectExporter(this);
 			AssemblyManager = new AssemblyManager(OnRequestAssembly);
 		}
 
-		public FileCollection(Parameters pars) :
+		public GameCollection(Parameters pars) :
 			this()
 		{
 			m_assemblyCallback = pars.RequestAssemblyCallback;
 			m_resourceCallback = pars.RequestResourceCallback;
 		}
 
-		~FileCollection()
+		~GameCollection()
 		{
 			Dispose(false);
 		}

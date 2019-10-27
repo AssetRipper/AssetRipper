@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using uTinyRipper.Classes;
 
-namespace uTinyRipper.Classes.Sprites.Utils
+namespace uTinyRipper.Converters.Sprites
 {
 	public class MeshOutlineGenerator
 	{
@@ -129,15 +130,15 @@ namespace uTinyRipper.Classes.Sprites.Utils
 
 			private void GenerateOutsiders()
 			{
-				foreach(int index in m_indexes)
+				foreach (int index in m_indexes)
 				{
-					if(GenerateOutsider(index, out Outside outsider))
+					if (GenerateOutsider(index, out Outside outsider))
 					{
 						m_outsiders.Add(outsider);
 					}
 				}
 			}
-			
+
 			private bool GenerateOutsider(int index, out Outside outsider)
 			{
 				Vector3i triangle = m_triangles[index];
@@ -172,7 +173,7 @@ namespace uTinyRipper.Classes.Sprites.Utils
 							}
 						}
 					}
-					else if (check.ContainsValue(triangle.Y) && (check.ContainsValue(triangle.Z)))
+					else if (check.ContainsValue(triangle.Y) && check.ContainsValue(triangle.Z))
 					{
 						yz = false;
 						if (++neighborCount == 3)
@@ -181,11 +182,11 @@ namespace uTinyRipper.Classes.Sprites.Utils
 						}
 					}
 				}
-				int vertex = xy ? (zx ? 2 : 0) : (yz ? 1 : 2);
+				int vertex = xy ? zx ? 2 : 0 : yz ? 1 : 2;
 				outsider = new Outside(index, vertex);
 				return true;
 			}
-			
+
 			private bool GetNextOutsideInfo(Vector3i triangle, int member, out Outside result)
 			{
 				int vertex = triangle.GetValueByMember(member);
@@ -247,7 +248,7 @@ namespace uTinyRipper.Classes.Sprites.Utils
 
 			public int TriangleCount => m_indexes.Count;
 			public IReadOnlyList<int> GeneratedOutline { get; private set; }
-			
+
 			private readonly IReadOnlyList<Vector3i> m_triangles;
 			private readonly HashSet<int> m_indexes = new HashSet<int>();
 			private readonly List<Outside> m_outsiders = new List<Outside>();
@@ -255,7 +256,7 @@ namespace uTinyRipper.Classes.Sprites.Utils
 
 		public MeshOutlineGenerator(IReadOnlyList<Vector3f> vertices, IReadOnlyList<Vector3i> triangles)
 		{
-			if(vertices == null)
+			if (vertices == null)
 			{
 				throw new ArgumentNullException(nameof(vertices));
 			}
@@ -264,9 +265,9 @@ namespace uTinyRipper.Classes.Sprites.Utils
 				throw new ArgumentNullException(nameof(triangles));
 			}
 			m_vertices = vertices;
-			foreach(Vector3i triangle in triangles)
+			foreach (Vector3i triangle in triangles)
 			{
-				if(IsValidTriangle(triangle))
+				if (IsValidTriangle(triangle))
 				{
 					m_triangles.Add(triangle);
 				}
@@ -287,7 +288,7 @@ namespace uTinyRipper.Classes.Sprites.Utils
 						break;
 					}
 				}
-				if(isKnown)
+				if (isKnown)
 				{
 					continue;
 				}
@@ -303,10 +304,10 @@ namespace uTinyRipper.Classes.Sprites.Utils
 			{
 				resultLine.Clear();
 				Outline outline = outlines[i];
-				for(int j = 0; j < outline.GeneratedOutline.Count; j++)
+				for (int j = 0; j < outline.GeneratedOutline.Count; j++)
 				{
 					int vertex = outline.GeneratedOutline[j];
-					for(int k = i + 1; k < outlines.Count; k++)
+					for (int k = i + 1; k < outlines.Count; k++)
 					{
 						Outline nextOutline = outlines[k];
 						int index = nextOutline.GeneratedOutline.IndexOf(vertex);
@@ -337,7 +338,7 @@ namespace uTinyRipper.Classes.Sprites.Utils
 		{
 			return triangle.X != triangle.Y && triangle.X != triangle.Z && triangle.Y != triangle.Z;
 		}
-		
+
 		private readonly IReadOnlyList<Vector3f> m_vertices;
 		private readonly List<Vector3i> m_triangles = new List<Vector3i>();
 	}
