@@ -60,6 +60,8 @@ namespace DXShaderRestorer
 				//Shader input flags
 				writer.Write((uint)ShaderInputFlags.None);
 			}
+			//Unity doesn't give us a good way of reconstructing the sampler header,
+			//this is probably wrong but good enough
 			bindPoint = 0;
 			foreach (TextureParameter textureParam in m_shaderSubprogram.TextureParameters)
 			{
@@ -91,9 +93,9 @@ namespace DXShaderRestorer
 				//shader input type
 				writer.Write((uint)ShaderInputType.Texture);
 				//Resource return type
-				writer.Write((uint)ResourceReturnType.NotApplicable);
+				writer.Write((uint)ResourceReturnType.Float);
 				//Resource view dimension
-				writer.Write((uint)textureParam.Dim);
+				writer.Write((uint)GetTextureDimension(textureParam));
 				//Number of samples
 				writer.Write(uint.MaxValue);
 				//Bind point
@@ -102,7 +104,7 @@ namespace DXShaderRestorer
 				//Bind count
 				writer.Write((uint)1);
 				//Shader input flags
-				writer.Write((uint)ShaderInputFlags.None);
+				writer.Write((uint)ShaderInputFlags.TextureComponents);
 			}
 			bindPoint = 0;
 			foreach (BufferBinding constantBuffer in m_shaderSubprogram.ConstantBufferBindings)
@@ -138,6 +140,25 @@ namespace DXShaderRestorer
 			foreach (BufferBinding constantBuffer in m_shaderSubprogram.ConstantBufferBindings)
 			{
 				writer.WriteStringZeroTerm(constantBuffer.Name);
+			}
+		}
+
+		ShaderResourceViewDimension GetTextureDimension(TextureParameter param)
+		{
+			switch (param.Dim)
+			{
+				case 2:
+					return ShaderResourceViewDimension.Texture2D;
+				case 3:
+					return ShaderResourceViewDimension.Texture3D;
+				case 4:
+					return ShaderResourceViewDimension.TextureCube;
+				case 5:
+					return ShaderResourceViewDimension.Texture2DArray;
+				case 6:
+					return ShaderResourceViewDimension.TextureCubeArray;
+				default:
+					return ShaderResourceViewDimension.Texture2D;
 			}
 		}
 

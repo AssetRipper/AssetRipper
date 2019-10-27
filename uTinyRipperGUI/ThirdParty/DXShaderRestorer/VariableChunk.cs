@@ -16,14 +16,27 @@ namespace DXShaderRestorer
 
 	internal class VariableChunk
 	{
-		public VariableChunk(ConstantBuffer constantBuffer, int constantBufferIndex, uint variableOffset, ShaderGpuProgramType programType)
+		public VariableChunk(BufferBinding bufferBinding, int constantBufferIndex, uint variableOffset, ShaderGpuProgramType programType)
 		{
-			const int memberSize = 12;
 			m_constantBufferIndex = constantBufferIndex;
 			m_programType = programType;
-			m_variables = BuildVariables(constantBuffer);
-
 			majorVersion = programType.GetMajorDXVersion();
+			m_variables = new List<Variable>();
+			m_variables.Add(Variable.CreateResourceBindVariable(programType));
+			BuildVariableHeaders(variableOffset);
+
+		}
+		public VariableChunk(ConstantBuffer constantBuffer, int constantBufferIndex, uint variableOffset, ShaderGpuProgramType programType)
+		{
+			m_constantBufferIndex = constantBufferIndex;
+			m_programType = programType;
+			majorVersion = programType.GetMajorDXVersion();
+			m_variables = BuildVariables(constantBuffer);
+			BuildVariableHeaders(variableOffset);
+		}
+		private void BuildVariableHeaders(uint variableOffset)
+		{
+			const int memberSize = 12;
 			uint variableSize = majorVersion >= 5 ? (uint)40 : (uint)24;
 			uint variableCount = (uint)m_variables.Count;
 			uint dataOffset = variableOffset + variableCount * variableSize;
@@ -55,7 +68,6 @@ namespace DXShaderRestorer
 			}
 			Size = dataOffset - variableOffset;
 		}
-
 		internal void Write(EndianWriter writer)
 		{
 			foreach (VariableHeader header in m_variableHeaders)
@@ -113,7 +125,7 @@ namespace DXShaderRestorer
 						long sizeToAdd = variable.Index - currentSize;
 						int id1 = m_constantBufferIndex;
 						int id2 = allVariables.Count;
-						allVariables.Add(new Variable($"unused_{id1}_{id2}", (int)currentSize, (int)sizeToAdd, m_programType));
+						allVariables.Add(Variable.CreateDummyVariable($"unused_{id1}_{id2}", (int)currentSize, (int)sizeToAdd, m_programType));
 					}
 					allVariables.Add(variable);
 					currentSize = (uint)variable.Index + variable.ShaderType.Size();
@@ -123,7 +135,7 @@ namespace DXShaderRestorer
 					long sizeToAdd = constantBuffer.Size - currentSize;
 					int id1 = m_constantBufferIndex;
 					int id2 = allVariables.Count;
-					allVariables.Add(new Variable($"unused_{id1}_{id2}", (int)currentSize, (int)sizeToAdd, m_programType));
+					allVariables.Add(Variable.CreateDummyVariable($"unused_{id1}_{id2}", (int)currentSize, (int)sizeToAdd, m_programType));
 				}
 				variables = allVariables;
 			}
@@ -200,7 +212,7 @@ namespace DXShaderRestorer
 		}
 
 		internal uint Count => (uint)m_variables.Count;
-		internal uint Size { get; }
+		internal uint Size { get; private set; }
 
 		private readonly List<VariableHeader> m_variableHeaders = new List<VariableHeader>();
 		private readonly Dictionary<string, uint> m_variableNameLookup = new Dictionary<string, uint>();
