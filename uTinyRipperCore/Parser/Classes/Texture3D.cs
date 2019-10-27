@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using uTinyRipper.Project;
 using uTinyRipper.Classes.Textures;
 using uTinyRipper.Converters;

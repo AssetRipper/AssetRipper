@@ -245,18 +245,18 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			if (IsReadDependencies(file.Version))
+			if (IsReadDependencies(context.Version))
 			{
-				foreach (PPtr<Shader> shader in Dependencies)
+				foreach (Object asset in context.FetchDependencies(Dependencies, DependenciesName))
 				{
-					yield return shader.FetchDependency(file, isLog, ToLogString, "m_dependencies");
+					yield return asset;
 				}
 			}
 		}
@@ -302,6 +302,7 @@ namespace uTinyRipper.Classes
 #endif
 
 		public const string ErrorsName = "errors";
+		public const string DependenciesName = "m_Dependencies";
 
 		public SerializedShader ParsedForm;
 		public ShaderSubProgramBlob SubProgramBlob;

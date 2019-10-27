@@ -1,7 +1,6 @@
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
-using uTinyRipper.Converters.Script;
 
 namespace uTinyRipper.Converters.Script.Mono
 {
@@ -30,7 +29,7 @@ namespace uTinyRipper.Converters.Script.Mono
 		{
 			if (Type.Module == null)
 			{
-				m_fields = new ScriptExportField[0];
+				m_fields = Array.Empty<ScriptExportField>();
 			}
 			else
 			{

@@ -52,11 +52,11 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("dynamicFriction", DynamicFriction);
-			node.Add("staticFriction", StaticFriction);
-			node.Add("bounciness", Bounciness);
-			node.Add("frictionCombine", FrictionCombine);
-			node.Add("bounceCombine", BounceCombine);
+			node.Add(DynamicFrictionName, DynamicFriction);
+			node.Add(StaticFrictionName, StaticFriction);
+			node.Add(BouncinessName, Bounciness);
+			node.Add(FrictionCombineName, FrictionCombine);
+			node.Add(BounceCombineName, BounceCombine);
 			return node;
 		}
 
@@ -68,6 +68,12 @@ namespace uTinyRipper.Classes
 		public float DynamicFriction2 { get; private set; }
 		public float StaticFriction2 { get; private set; }
 		public bool UseSpring { get; private set; }
+
+		public const string DynamicFrictionName = "dynamicFriction";
+		public const string StaticFrictionName = "staticFriction";
+		public const string BouncinessName = "bounciness";
+		public const string FrictionCombineName = "frictionCombine";
+		public const string BounceCombineName = "bounceCombine";
 
 		public Vector3f FrictionDirection2;
 		public JointSpring Spring;

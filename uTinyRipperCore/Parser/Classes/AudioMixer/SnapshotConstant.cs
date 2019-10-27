@@ -26,10 +26,10 @@ namespace uTinyRipper.Classes.AudioMixers
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("nameHash", NameHash);
-			node.Add("values", Values.ExportYAML());
-			node.Add("transitionTypes", TransitionTypes.ExportYAML(true));
-			node.Add("transitionIndices", TransitionIndices.ExportYAML(true));
+			node.Add(NameHashName, NameHash);
+			node.Add(ValuesName, Values.ExportYAML());
+			node.Add(TransitionTypesName, TransitionTypes.ExportYAML(true));
+			node.Add(TransitionIndicesName, TransitionIndices.ExportYAML(true));
 			return node;
 		}
 
@@ -37,6 +37,11 @@ namespace uTinyRipper.Classes.AudioMixers
 		public IReadOnlyList<float> Values => m_values;
 		public IReadOnlyList<uint> TransitionTypes => m_transitionTypes;
 		public IReadOnlyList<uint> TransitionIndices => m_transitionIndices;
+
+		public const string NameHashName = "nameHash";
+		public const string ValuesName = "values";
+		public const string TransitionTypesName = "transitionTypes";
+		public const string TransitionIndicesName = "transitionIndices";
 
 		private float[] m_values;
 		private uint[] m_transitionTypes;

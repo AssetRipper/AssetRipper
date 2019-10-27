@@ -21,20 +21,17 @@ namespace uTinyRipper.Classes
 			m_clips = reader.ReadAssetArray<AnimationClipOverride>();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return Controller.FetchDependency(file, isLog, ToLogString, "m_Controller");
-			foreach (AnimationClipOverride clip in Clips)
+			yield return context.FetchDependency(Controller, ControllerName);
+			foreach (Object asset in context.FetchDependencies(Clips, ClipsName))
 			{
-				foreach (Object asset in clip.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 
@@ -62,14 +59,17 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Controller", Controller.ExportYAML(container));
-			node.Add("m_Clips", Clips.ExportYAML(container));
+			node.Add(ControllerName, Controller.ExportYAML(container));
+			node.Add(ClipsName, Clips.ExportYAML(container));
 			return node;
 		}
 
 		public override string ExportExtension => "overrideController";
 
 		public IReadOnlyList<AnimationClipOverride> Clips => m_clips;
+
+		public const string ControllerName = "m_Controller";
+		public const string ClipsName = "m_Clips";
 
 		public PPtr<RuntimeAnimatorController> Controller;
 

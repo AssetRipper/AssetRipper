@@ -65,20 +65,24 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("tags", Tags.ExportYAML());
-			node.Add("layers", Layers.ExportYAML());
-			node.Add("m_SortingLayers", GetSortingLayers(container.Version).ExportYAML(container));
+			node.Add(TagsName, Tags.ExportYAML());
+			node.Add(LayersName, Layers.ExportYAML());
+			node.Add(SortingLayersName, GetSortingLayers(container.Version).ExportYAML(container));
 			return node;
 		}
 
 		private IReadOnlyList<SortingLayerEntry> GetSortingLayers(Version version)
 		{
-			return IsReadSortingLayers(version) ? SortingLayers : new SortingLayerEntry[0];
+			return IsReadSortingLayers(version) ? SortingLayers : System.Array.Empty<SortingLayerEntry>();
 		}
 
 		public IReadOnlyList<string> Tags => m_tags;
 		public IReadOnlyList<string> Layers => m_layers;
 		public IReadOnlyList<SortingLayerEntry> SortingLayers => m_sortingLayers;
+
+		public const string TagsName = "tags";
+		public const string LayersName = "layers";
+		public const string SortingLayersName = "m_SortingLayers";
 
 		private string[] m_tags;
 		private string[] m_layers;

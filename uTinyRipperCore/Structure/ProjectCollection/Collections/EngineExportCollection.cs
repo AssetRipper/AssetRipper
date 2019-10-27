@@ -222,7 +222,7 @@ namespace uTinyRipper.Converters.Project
 			GetEngineBuildInAsset(asset, m_version, out EngineBuiltInAsset engneAsset);
 			if (!engneAsset.IsValid)
 			{
-				throw new NotImplementedException($"Unknown ExportID for asset {asset.ToLogString()} from file {asset.File.Name}");
+				throw new NotImplementedException($"Unknown ExportID for asset {asset.PathID} from file {asset.File.Name}");
 			}
 			long exportID = engneAsset.ExportID;
 			GUID guid = engneAsset.GUID;

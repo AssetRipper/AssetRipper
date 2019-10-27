@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using uTinyRipper.Classes.Renderers;
 using uTinyRipper.Classes.Terrains;
 using uTinyRipper.YAML;
-using uTinyRipper.Project.Classes;
 using uTinyRipper.Converters;
 using uTinyRipper.Classes.Misc;
 
@@ -250,15 +249,15 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return TerrainData.FetchDependency(file, isLog, ToLogString, TerrainDataName);
-			yield return MaterialTemplate.FetchDependency(file, isLog, ToLogString, MaterialTemplateName);
+			yield return context.FetchDependency(TerrainData, TerrainDataName);
+			yield return context.FetchDependency(MaterialTemplate, MaterialTemplateName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

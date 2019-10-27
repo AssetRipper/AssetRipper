@@ -64,25 +64,22 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(EnlightenRendererInformation renderer in Renderers)
+			foreach (Object asset in context.FetchDependencies(Renderers, RenderersName))
 			{
-				foreach (Object dep in renderer.FetchDependencies(file, isLog))
-				{
-					yield return dep;
-				}
+				yield return asset;
 			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Renderers", Renderers.ExportYAML(container));
-			node.Add("m_Systems", Systems.ExportYAML(container));
-			node.Add("m_Probesets", Probesets.ExportYAML(container));
-			node.Add("m_SystemAtlases", SystemAtlases.ExportYAML(container));
-			node.Add("m_TerrainChunks", TerrainChunks.ExportYAML(container));
+			node.Add(RenderersName, Renderers.ExportYAML(container));
+			node.Add(SystemsName, Systems.ExportYAML(container));
+			node.Add(ProbesetsName, Probesets.ExportYAML(container));
+			node.Add(SystemAtlasesName, SystemAtlases.ExportYAML(container));
+			node.Add(TerrainChunksName, TerrainChunks.ExportYAML(container));
 			return node;
 		}
 
@@ -91,6 +88,12 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		public IReadOnlyList<Hash128> Probesets => m_probesets;
 		public IReadOnlyList<EnlightenSystemAtlasInformation> SystemAtlases => m_systemAtlases;
 		public IReadOnlyList<EnlightenTerrainChunksInformation> TerrainChunks => m_terrainChunks;
+
+		public const string RenderersName = "m_Renderers";
+		public const string SystemsName = "m_Systems";
+		public const string ProbesetsName = "m_Probesets";
+		public const string SystemAtlasesName = "m_SystemAtlases";
+		public const string TerrainChunksName = "m_TerrainChunks";
 
 		private EnlightenRendererInformation[] m_renderers;
 		private EnlightenSystemInformation[] m_systems;

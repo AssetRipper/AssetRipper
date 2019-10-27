@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace uTinyRipper.YAML
+﻿namespace uTinyRipper.YAML
 {
 	public sealed class YAMLDocument
 	{

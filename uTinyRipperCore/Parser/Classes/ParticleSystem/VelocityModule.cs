@@ -48,11 +48,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add("x", X.ExportYAML(container));
-			node.Add("y", Y.ExportYAML(container));
-			node.Add("z", Z.ExportYAML(container));
-			node.Add("speedModifier", GetSpeedModifier(container.Version).ExportYAML(container));
-			node.Add("inWorldSpace", InWorldSpace);
+			node.Add(XName, X.ExportYAML(container));
+			node.Add(YName, Y.ExportYAML(container));
+			node.Add(ZName, Z.ExportYAML(container));
+			node.Add(SpeedModifierName, GetSpeedModifier(container.Version).ExportYAML(container));
+			node.Add(InWorldSpaceName, InWorldSpace);
 			return node;
 		}
 
@@ -90,6 +90,12 @@ namespace uTinyRipper.Classes.ParticleSystems
 		}
 
 		public bool InWorldSpace { get; private set; }
+
+		public const string XName = "x";
+		public const string YName = "y";
+		public const string ZName = "z";
+		public const string SpeedModifierName = "speedModifier";
+		public const string InWorldSpaceName = "inWorldSpace";
 
 		public MinMaxCurve X;
 		public MinMaxCurve Y;

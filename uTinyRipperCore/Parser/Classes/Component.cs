@@ -37,7 +37,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			//if (IsReadGameObject(reader.Flags))
+			if (IsReadGameObject(reader.Flags))
 			{
 				GameObject.Read(reader);
 			}
@@ -48,17 +48,14 @@ namespace uTinyRipper.Classes
 			base.ExportBinary(container, stream);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			if (!GameObject.IsNull)
-			{
-				yield return GameObject.GetAsset(file);
-			}
+			yield return context.FetchDependency(GameObject, GameObjectName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

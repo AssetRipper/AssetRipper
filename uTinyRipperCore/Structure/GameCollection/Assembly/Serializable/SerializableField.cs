@@ -353,25 +353,22 @@ namespace uTinyRipper.Game.Assembly
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
 			if (Type == PrimitiveType.Complex)
 			{
 				if (IsArray)
 				{
-					IEnumerable<ISerializableStructure> structures = (IEnumerable<ISerializableStructure>)Value;
-					foreach (ISerializableStructure structure in structures)
+					ISerializableStructure[] structures = (ISerializableStructure[])Value;
+					foreach (Object asset in context.FetchDependencies(structures, Name))
 					{
-						foreach (Object asset in structure.FetchDependencies(file, isLog))
-						{
-							yield return asset;
-						}
+						yield return asset;
 					}
 				}
 				else
 				{
 					ISerializableStructure structure = (ISerializableStructure)Value;
-					foreach (Object asset in structure.FetchDependencies(file, isLog))
+					foreach (Object asset in context.FetchDependencies(structure, Name))
 					{
 						yield return asset;
 					}

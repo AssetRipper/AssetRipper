@@ -104,7 +104,7 @@ namespace uTinyRipper.Classes.Avatars
 		}
 		private IReadOnlyList<int> GetRootMotionSkeletonIndexArray(Version version)
 		{
-			return IsReadRootMotionSkeleton(version) ? RootMotionSkeletonIndexArray : new int[0];
+			return IsReadRootMotionSkeleton(version) ? RootMotionSkeletonIndexArray : System.Array.Empty<int>();
 		}
 
 		public IReadOnlyList<uint> SkeletonNameIDArray => m_skeletonNameIDArray;

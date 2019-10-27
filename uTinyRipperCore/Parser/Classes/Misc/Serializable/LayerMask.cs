@@ -32,15 +32,17 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_Bits", Bits);
+			node.Add(BitsName, Bits);
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
 			yield break;
 		}
 
 		public uint Bits { get; private set; }
+
+		public const string BitsName = "m_Bits";
 	}
 }

@@ -39,21 +39,21 @@ namespace uTinyRipper.Classes
 			EnableTreeColliders = reader.ReadBoolean();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return TerrainData.FetchDependency(file, isLog, ToLogString, "m_TerrainData");
+			yield return context.FetchDependency(TerrainData, TerrainDataName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_TerrainData", TerrainData.ExportYAML(container));
-			node.Add("m_EnableTreeColliders", EnableTreeColliders);
+			node.Add(TerrainDataName, TerrainData.ExportYAML(container));
+			node.Add(EnableTreeCollidersName, EnableTreeColliders);
 			return node;
 		}
 
@@ -61,6 +61,9 @@ namespace uTinyRipper.Classes
 		/// CreateTreeColliders previously
 		/// </summary>
 		public bool EnableTreeColliders { get; private set; }
+
+		public const string TerrainDataName = "m_TerrainData";
+		public const string EnableTreeCollidersName = "m_EnableTreeColliders";
 
 		public PPtr<TerrainData> TerrainData;
 

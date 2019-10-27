@@ -264,51 +264,51 @@ namespace uTinyRipper.Classes.Shaders
 
 		private string[][] GetVariantsUser0(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUserGlobal0;
+			return IsReadKeywordCombinations(version) ? System.Array.Empty<string[]>() : m_variantsUserGlobal0;
 		}
 		private string[][] GetVariantsUser1(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUserGlobal1;
+			return IsReadKeywordCombinations(version) ? System.Array.Empty<string[]>() : m_variantsUserGlobal1;
 		}
 		private string[][] GetVariantsUser2(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUserGlobal2;
+			return IsReadKeywordCombinations(version) ? System.Array.Empty<string[]>() : m_variantsUserGlobal2;
 		}
 		private string[][] GetVariantsUser3(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUserGlobal3;
+			return IsReadKeywordCombinations(version) ? System.Array.Empty<string[]>() : m_variantsUserGlobal3;
 		}
 		private string[][] GetVariantsUser4(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUserGlobal4;
+			return IsReadKeywordCombinations(version) ? System.Array.Empty<string[]>() : m_variantsUserGlobal4;
 		}
 		private string[][] GetVariantsUser5(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsUserGlobal5;
+			return IsReadKeywordCombinations(version) ? System.Array.Empty<string[]>() : m_variantsUserGlobal5;
 		}
 		private string[][] GetVariantsBuiltin0(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsBuiltin0;
+			return IsReadKeywordCombinations(version) ? System.Array.Empty<string[]>() : m_variantsBuiltin0;
 		}
 		private string[][] GetVariantsBuiltin1(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsBuiltin1;
+			return IsReadKeywordCombinations(version) ? System.Array.Empty<string[]>() : m_variantsBuiltin1;
 		}
 		private string[][] GetVariantsBuiltin2(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsBuiltin2;
+			return IsReadKeywordCombinations(version) ? System.Array.Empty<string[]>() : m_variantsBuiltin2;
 		}
 		private string[][] GetVariantsBuiltin3(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsBuiltin3;
+			return IsReadKeywordCombinations(version) ? System.Array.Empty<string[]>() : m_variantsBuiltin3;
 		}
 		private string[][] GetVariantsBuiltin4(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsBuiltin4;
+			return IsReadKeywordCombinations(version) ? System.Array.Empty<string[]>() : m_variantsBuiltin4;
 		}
 		private string[][] GetVariantsBuiltin5(Version version)
 		{
-			return IsReadKeywordCombinations(version) ? new string[0][] : m_variantsBuiltin5;
+			return IsReadKeywordCombinations(version) ? System.Array.Empty<string[]>() : m_variantsBuiltin5;
 		}
 
 		private int GetBaseRequirements(Version version)

@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using uTinyRipper.Classes;
 
 namespace uTinyRipper
 {

@@ -58,11 +58,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 4;
-			}
-
 			if (version.IsGreaterEqual(5, 5))
 			{
 				return 4;
@@ -127,33 +122,33 @@ namespace uTinyRipper.Classes
 			}
 		}
 		
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return Material.FetchDependency(file, isLog, ToLogString, "m_Material");
+			yield return context.FetchDependency(Material, MaterialName);
 		}
 		
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_BodyType", (int)BodyType);
-			node.Add("m_Simulated", Simulated);
-			node.Add("m_UseFullKinematicContacts", UseFullKinematicContacts);
-			node.Add("m_UseAutoMass", UseAutoMass);
-			node.Add("m_Mass", Mass);
-			node.Add("m_LinearDrag", LinearDrag);
-			node.Add("m_AngularDrag", AngularDrag);
-			node.Add("m_GravityScale", GravityScale);
-			node.Add("m_Material", Material.ExportYAML(container));
-			node.Add("m_Interpolate", (int)Interpolate);
-			node.Add("m_SleepingMode", (int)SleepingMode);
-			node.Add("m_CollisionDetection", (int)CollisionDetection);
-			node.Add("m_Constraints", (int)Constraints);
+			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(BodyTypeName, (int)BodyType);
+			node.Add(SimulatedName, Simulated);
+			node.Add(UseFullKinematicContactsName, UseFullKinematicContacts);
+			node.Add(UseAutoMassName, UseAutoMass);
+			node.Add(MassName, Mass);
+			node.Add(LinearDragName, LinearDrag);
+			node.Add(AngularDragName, AngularDrag);
+			node.Add(GravityScaleName, GravityScale);
+			node.Add(MaterialName, Material.ExportYAML(container));
+			node.Add(InterpolateName, (int)Interpolate);
+			node.Add(SleepingModeName, (int)SleepingMode);
+			node.Add(CollisionDetectionName, (int)CollisionDetection);
+			node.Add(ConstraintsName, (int)Constraints);
 			return node;
 		}
 
@@ -169,6 +164,20 @@ namespace uTinyRipper.Classes
 		public RigidbodySleepMode2D SleepingMode { get; private set; }
 		public CollisionDetectionMode2D CollisionDetection { get; private set; }
 		public RigidbodyConstraints2D Constraints { get; private set; }
+
+		public const string BodyTypeName = "m_BodyType";
+		public const string SimulatedName = "m_Simulated";
+		public const string UseFullKinematicContactsName = "m_UseFullKinematicContacts";
+		public const string UseAutoMassName = "m_UseAutoMass";
+		public const string MassName = "m_Mass";
+		public const string LinearDragName = "m_LinearDrag";
+		public const string AngularDragName = "m_AngularDrag";
+		public const string GravityScaleName = "m_GravityScale";
+		public const string MaterialName = "m_Material";
+		public const string InterpolateName = "m_Interpolate";
+		public const string SleepingModeName = "m_SleepingMode";
+		public const string CollisionDetectionName = "m_CollisionDetection";
+		public const string ConstraintsName = "m_Constraints";
 
 		public PPtr<PhysicsMaterial2D> Material;
 	}

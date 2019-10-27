@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.GameObjects
 {
@@ -16,7 +17,7 @@ namespace uTinyRipper.Classes.GameObjects
 
 		public void Read(AssetReader reader)
 		{
-			if(IsReadClassID(reader.Version))
+			if (IsReadClassID(reader.Version))
 			{
 				ClassID = (ClassIDType)reader.ReadInt32();
 			}
@@ -26,19 +27,19 @@ namespace uTinyRipper.Classes.GameObjects
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("component", Component.ExportYAML(container));
+			node.Add(ComponentName, Component.ExportYAML(container));
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			Component comp = Component.FindAsset(file);
-			if(comp == null)
+			Component comp = Component.FindAsset(context.File);
+			if (comp == null)
 			{
-				if(isLog)
+				if (context.IsLog)
 				{
-					ClassIDType compType = file.GetClassID(Component.PathID);
-					Logger.Log(LogType.Debug, LogCategory.Export, $"GameObject's component {Component}[{compType}] isn't implemeneted yet");
+					ClassIDType assetType = context.File.GetAssetType(Component.PathID);
+					Logger.Log(LogType.Debug, LogCategory.Export, $"GameObject's component {assetType}{Component} isn't implemeneted yet");
 				}
 			}
 			else
@@ -46,8 +47,10 @@ namespace uTinyRipper.Classes.GameObjects
 				yield return comp;
 			}
 		}
-		
+
 		public ClassIDType ClassID { get; private set; }
+
+		public const string ComponentName = "component";
 
 		public PPtr<Component> Component;
 	}

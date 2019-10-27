@@ -51,7 +51,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		private static int GetSerializedVersion(Version version)
 		{
 			// changed default value for Settings.Prefer32BitShadowMaps to platform specific
-			if (Config.IsExportTopmostSerializedVersion || version.IsGreaterEqual(2017))
+			if (version.IsGreaterEqual(2017))
 			{
 				return 5;
 			}
@@ -106,11 +106,11 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_BuildTarget", (int)BuildTarget);
-			node.Add("m_Tier", (int)GetTier(container.Version));
-			node.Add("m_Settings", Settings.ExportYAML(container));
-			node.Add("m_Automatic", Automatic);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(BuildTargetName, (int)BuildTarget);
+			node.Add(TierName, (int)GetTier(container.Version));
+			node.Add(SettingsName, Settings.ExportYAML(container));
+			node.Add(AutomaticName, Automatic);
 			return node;
 		}
 
@@ -162,6 +162,11 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public BuildTargetGroup BuildTarget { get; private set; }
 		public GraphicsTier Tier { get; private set; }
 		public bool Automatic { get; private set; }
+
+		public const string BuildTargetName = "m_BuildTarget";
+		public const string TierName = "m_Tier";
+		public const string SettingsName = "m_Settings";
+		public const string AutomaticName = "m_Automatic";
 
 		/// <summary>
 		/// ShaderSettings previously

@@ -15,10 +15,12 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Enabled", Enabled);
+			node.Add(EnabledName, Enabled);
 			return node;
 		}
 
 		public bool Enabled { get; private set; }
+
+		public const string EnabledName = "m_Enabled";
 	}
 }

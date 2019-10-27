@@ -180,36 +180,36 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Name", Name);
-			node.Add("m_Normal", Normal.ExportYAML(container));
-			node.Add("m_Hover", Hover.ExportYAML(container));
-			node.Add("m_Active", Active.ExportYAML(container));
-			node.Add("m_Focused", Focused.ExportYAML(container));
-			node.Add("m_OnNormal", OnNormal.ExportYAML(container));
-			node.Add("m_OnHover", OnHover.ExportYAML(container));
-			node.Add("m_OnActive", OnActive.ExportYAML(container));
-			node.Add("m_OnFocused", OnFocused.ExportYAML(container));
-			node.Add("m_Border", Border.ExportYAML(container));
-			node.Add("m_Margin", Margin.ExportYAML(container));
-			node.Add("m_Padding", Padding.ExportYAML(container));
-			node.Add("m_Overflow", Overflow.ExportYAML(container));
-			node.Add("m_Font", Font.ExportYAML(container));
-			node.Add("m_FontSize", FontSize);
-			node.Add("m_FontStyle", (int)FontStyle);
-			node.Add("m_Alignment", (int)Alignment);
-			node.Add("m_WordWrap", WordWrap);
-			node.Add("m_RichText", RichText);
-			node.Add("m_TextClipping", (int)TextClipping);
-			node.Add("m_ImagePosition", (int)ImagePosition);
-			node.Add("m_ContentOffset", ContentOffset.ExportYAML(container));
-			node.Add("m_FixedWidth", FixedWidth);
-			node.Add("m_FixedHeight", FixedHeight);
-			node.Add("m_StretchWidth", StretchWidth);
-			node.Add("m_StretchHeight", StretchHeight);
+			node.Add(NameName, Name);
+			node.Add(NormalName, Normal.ExportYAML(container));
+			node.Add(HoverName, Hover.ExportYAML(container));
+			node.Add(ActiveName, Active.ExportYAML(container));
+			node.Add(FocusedName, Focused.ExportYAML(container));
+			node.Add(OnNormalName, OnNormal.ExportYAML(container));
+			node.Add(OnHoverName, OnHover.ExportYAML(container));
+			node.Add(OnActiveName, OnActive.ExportYAML(container));
+			node.Add(OnFocusedName, OnFocused.ExportYAML(container));
+			node.Add(BorderName, Border.ExportYAML(container));
+			node.Add(MarginName, Margin.ExportYAML(container));
+			node.Add(PaddingName, Padding.ExportYAML(container));
+			node.Add(OverflowName, Overflow.ExportYAML(container));
+			node.Add(FontName, Font.ExportYAML(container));
+			node.Add(FontSizeName, FontSize);
+			node.Add(FontStyleName, (int)FontStyle);
+			node.Add(AlignmentName, (int)Alignment);
+			node.Add(WordWrapName, WordWrap);
+			node.Add(RichTextName, RichText);
+			node.Add(TextClippingName, (int)TextClipping);
+			node.Add(ImagePositionName, (int)ImagePosition);
+			node.Add(ContentOffsetName, ContentOffset.ExportYAML(container));
+			node.Add(FixedWidthName, FixedWidth);
+			node.Add(FixedHeightName, FixedHeight);
+			node.Add(StretchWidthName, StretchWidth);
+			node.Add(StretchHeightName, StretchHeight);
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
 			yield break;
 		}
@@ -226,6 +226,33 @@ namespace uTinyRipper.Classes
 		public float FixedHeight { get; private set; }
 		public bool StretchWidth { get; private set; }
 		public bool StretchHeight { get; private set; }
+
+		public const string NameName = "m_Name";
+		public const string NormalName = "m_Normal";
+		public const string HoverName = "m_Hover";
+		public const string ActiveName = "m_Active";
+		public const string FocusedName = "m_Focused";
+		public const string OnNormalName = "m_OnNormal";
+		public const string OnHoverName = "m_OnHover";
+		public const string OnActiveName = "m_OnActive";
+		public const string OnFocusedName = "m_OnFocused";
+		public const string BorderName = "m_Border";
+		public const string MarginName = "m_Margin";
+		public const string PaddingName = "m_Padding";
+		public const string OverflowName = "m_Overflow";
+		public const string FontName = "m_Font";
+		public const string FontSizeName = "m_FontSize";
+		public const string FontStyleName = "m_FontStyle";
+		public const string AlignmentName = "m_Alignment";
+		public const string WordWrapName = "m_WordWrap";
+		public const string RichTextName = "m_RichText";
+		public const string TextClippingName = "m_TextClipping";
+		public const string ImagePositionName = "m_ImagePosition";
+		public const string ContentOffsetName = "m_ContentOffset";
+		public const string FixedWidthName = "m_FixedWidth";
+		public const string FixedHeightName = "m_FixedHeight";
+		public const string StretchWidthName = "m_StretchWidth";
+		public const string StretchHeightName = "m_StretchHeight";
 
 		public GUIStyleState Normal;
 		public GUIStyleState Hover;

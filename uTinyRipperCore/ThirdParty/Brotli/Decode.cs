@@ -654,7 +654,7 @@ namespace Brotli
 
 		internal static void SetCustomDictionary(Brotli.State state, byte[] data)
 		{
-			state.customDictionary = (data == null) ? new byte[0] : data;
+			state.customDictionary = (data == null) ? System.Array.Empty<byte>() : data;
 		}
 
 		/// <summary>Actual decompress implementation.</summary>

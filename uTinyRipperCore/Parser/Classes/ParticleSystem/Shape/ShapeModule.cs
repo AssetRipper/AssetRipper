@@ -294,11 +294,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Mesh.FetchDependency(file, isLog, () => nameof(ShapeModule), "m_Mesh");
-			yield return MeshRenderer.FetchDependency(file, isLog, () => nameof(ShapeModule), "m_MeshRenderer");
-			yield return SkinnedMeshRenderer.FetchDependency(file, isLog, () => nameof(ShapeModule), "m_SkinnedMeshRenderer");
+			yield return context.FetchDependency(Mesh, MeshName);
+			yield return context.FetchDependency(MeshRenderer, MeshRendererName);
+			yield return context.FetchDependency(SkinnedMeshRenderer, SkinnedMeshRendererName);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)

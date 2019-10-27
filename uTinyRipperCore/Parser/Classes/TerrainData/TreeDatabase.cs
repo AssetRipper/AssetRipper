@@ -25,14 +25,11 @@ namespace uTinyRipper.Classes.TerrainDatas
 			node.Add(TreePrototypesName, TreePrototypes.ExportYAML(container));
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (TreePrototype prototype in TreePrototypes)
+			foreach (Object asset in context.FetchDependencies(TreePrototypes, TreeInstancesName))
 			{
-				foreach (Object asset in prototype.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 

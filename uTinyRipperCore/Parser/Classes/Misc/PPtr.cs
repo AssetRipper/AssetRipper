@@ -93,7 +93,7 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public T TryGetAsset(ISerializedFile file)
+		public T TryGetAsset(IAssetContainer file)
 		{
 			if (IsNull)
 			{
@@ -102,7 +102,7 @@ namespace uTinyRipper.Classes
 			return GetAsset(file);
 		}
 
-		public T GetAsset(ISerializedFile file)
+		public T GetAsset(IAssetContainer file)
 		{
 			if (IsNull)
 			{
@@ -128,7 +128,7 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public bool IsAsset(ISerializedFile file, Object asset)
+		public bool IsAsset(IAssetContainer file, Object asset)
 		{
 			if (FileIndex == 0)
 			{
@@ -147,52 +147,16 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public Object FetchDependency(ISerializedFile file)
-		{
-			return FetchDependency(file, null, null);
-		}
-
-		public Object FetchDependency(ISerializedFile file, Func<string> logger, string name)
-		{
-			return FetchDependency(file, logger != null, logger, name);
-		}
-
-		public Object FetchDependency(ISerializedFile file, bool isLog, Func<string> owner, string name)
-		{
-			if (IsNull)
-			{
-				return null;
-			}
-
-			T obj = FindAsset(file);
-			if (obj == null)
-			{
-				if (isLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"{owner.Invoke()}'s {name} {ToLogString(file)} hasn't been found");
-				}
-			}
-			else
-			{
-				return obj;
-			}
-			return null;
-		}
-
 		public override string ToString()
 		{
 			return $"[{FileIndex}, {PathID}]";
 		}
 
-		public string ToLogString(ISerializedFile file)
+		public string ToLogString(IAssetContainer container)
 		{
-			if (Config.IsAdvancedLog)
-			{
-				string depName = FileIndex == 0 ? file.Name : file.Dependencies[FileIndex - 1].FilePathOrigin;
-				ClassIDType classID = typeof(T).ToClassIDType();
-				return $"[{classID} {PathID}({depName})]";
-			}
-			return ToString();
+			string depName = FileIndex == 0 ? container.Name : container.Dependencies[FileIndex - 1].FilePathOrigin;
+			ClassIDType classID = typeof(T).ToClassIDType();
+			return $"[{depName}]{classID}_{PathID}";
 		}
 
 		public override bool Equals(object obj)

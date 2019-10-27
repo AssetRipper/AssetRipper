@@ -32,10 +32,10 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("useScreenSpaceShadows", UseScreenSpaceShadows);
-			node.Add("standardShaderQuality", (int)GetStandardShaderQuality(container.Version, container.Flags));
-			node.Add("useReflectionProbeBoxProjection", GetUseReflectionProbeBoxProjection(container.Version, container.Flags));
-			node.Add("useReflectionProbeBlending", GetUseReflectionProbeBlending(container.Version, container.Flags));
+			node.Add(UseScreenSpaceShadowsName, UseScreenSpaceShadows);
+			node.Add(StandardShaderQualityName, (int)GetStandardShaderQuality(container.Version, container.Flags));
+			node.Add(UseReflectionProbeBoxProjectionName, GetUseReflectionProbeBoxProjection(container.Version, container.Flags));
+			node.Add(UseReflectionProbeBlendingName, GetUseReflectionProbeBlending(container.Version, container.Flags));
 			return node;
 		}
 
@@ -76,5 +76,10 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public bool UseReflectionProbeBoxProjection { get; private set; }
 		public bool UseReflectionProbeBlending { get; private set; }
 #endif
+
+		public const string UseScreenSpaceShadowsName = "useScreenSpaceShadows";
+		public const string StandardShaderQualityName = "standardShaderQuality";
+		public const string UseReflectionProbeBoxProjectionName = "useReflectionProbeBoxProjection";
+		public const string UseReflectionProbeBlendingName = "useReflectionProbeBlending";
 	}
 }

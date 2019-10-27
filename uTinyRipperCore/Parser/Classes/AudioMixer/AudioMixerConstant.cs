@@ -41,18 +41,18 @@ namespace uTinyRipper.Classes.AudioMixers
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("groups", Groups.ExportYAML(container));
-			node.Add("groupGUIDs", GroupGUIDs.ExportYAML(container));
-			node.Add("effects", Effects.ExportYAML(container));
-			node.Add("effectGUIDs", EffectGUIDs.ExportYAML(container));
-			node.Add("numSideChainBuffers", NumSideChainBuffers);
-			node.Add("snapshots", Snapshots.ExportYAML(container));
-			node.Add("snapshotGUIDs", SnapshotGUIDs.ExportYAML(container));
+			node.Add(GroupsName, Groups.ExportYAML(container));
+			node.Add(GroupGUIDsName, GroupGUIDs.ExportYAML(container));
+			node.Add(EffectsName, Effects.ExportYAML(container));
+			node.Add(EffectGUIDsName, EffectGUIDs.ExportYAML(container));
+			node.Add(NumSideChainBuffersName, NumSideChainBuffers);
+			node.Add(SnapshotsName, Snapshots.ExportYAML(container));
+			node.Add(SnapshotGUIDsName, SnapshotGUIDs.ExportYAML(container));
 			//node.Add("groupNameBuffer", GroupNameBuffer.ExportYAML(container));
 			//node.Add("snapshotNameBuffer", SnapshotNameBuffer.ExportYAML(container));
 			//node.Add("pluginEffectNameBuffer", PluginEffectNameBuffer.ExportYAML(container));
-			node.Add("exposedParameterNames", ExposedParameterNames.ExportYAML(true));
-			node.Add("exposedParameterIndices", ExposedParameterIndices.ExportYAML(true));
+			node.Add(ExposedParameterNamesName, ExposedParameterNames.ExportYAML(true));
+			node.Add(ExposedParameterIndicesName, ExposedParameterIndices.ExportYAML(true));
 			return node;
 		}
 
@@ -68,6 +68,16 @@ namespace uTinyRipper.Classes.AudioMixers
 		public IReadOnlyList<char> PluginEffectNameBuffer => m_pluginEffectNameBuffer;
 		public IReadOnlyList<uint> ExposedParameterNames => m_exposedParameterNames;
 		public IReadOnlyList<uint> ExposedParameterIndices => m_exposedParameterIndices;
+
+		public const string GroupsName = "groups";
+		public const string GroupGUIDsName = "groupGUIDs";
+		public const string EffectsName = "effects";
+		public const string EffectGUIDsName = "effectGUIDs";
+		public const string NumSideChainBuffersName = "numSideChainBuffers";
+		public const string SnapshotsName = "snapshots";
+		public const string SnapshotGUIDsName = "snapshotGUIDs";
+		public const string ExposedParameterNamesName = "exposedParameterNames";
+		public const string ExposedParameterIndicesName = "exposedParameterIndices";
 
 		private GroupConstant[] m_groups;
 		private GUID[] m_groupGUIDs;

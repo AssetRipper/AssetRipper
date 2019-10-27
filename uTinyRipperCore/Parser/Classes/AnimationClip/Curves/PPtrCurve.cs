@@ -98,24 +98,21 @@ namespace uTinyRipper.Classes.AnimationClips
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("curve", Curve.ExportYAML(container));
-			node.Add("attribute", Attribute);
-			node.Add("path", Path);
-			node.Add("classID", (int)ClassID);
-			node.Add("script", Script.ExportYAML(container));
+			node.Add(CurveName, Curve.ExportYAML(container));
+			node.Add(AttributeName, Attribute);
+			node.Add(PathName, Path);
+			node.Add(ClassIDName, (int)ClassID);
+			node.Add(ScriptName, Script.ExportYAML(container));
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (PPtrKeyframe keyframe in Curve)
+			foreach (Object asset in context.FetchDependencies(Curve, CurveName))
 			{
-				foreach (Object asset in keyframe.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
-			yield return Script.FetchDependency(file, isLog, () => nameof(PPtrCurve), "script");
+			yield return context.FetchDependency(Script, ScriptName);
 		}
 
 		public override bool Equals(object obj)
@@ -144,6 +141,12 @@ namespace uTinyRipper.Classes.AnimationClips
 		public string Attribute { get; private set; }
 		public string Path { get; private set; }
 		public ClassIDType ClassID { get; private set; }
+
+		public const string CurveName = "curve";
+		public const string AttributeName = "attribute";
+		public const string PathName = "path";
+		public const string ClassIDName = "classID";
+		public const string ScriptName = "script";
 
 		public PPtr<MonoScript> Script;
 

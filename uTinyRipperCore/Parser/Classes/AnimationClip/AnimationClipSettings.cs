@@ -116,11 +116,11 @@ namespace uTinyRipper.Classes.AnimationClips
 			reader.AlignStream(AlignType.Align4);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			if (IsReadAdditiveReferencePoseClip(file.Version))
+			if (IsReadAdditiveReferencePoseClip(context.Version))
 			{
-				yield return AdditiveReferencePoseClip.FetchDependency(file, isLog, () => nameof(AnimationClipSettings), AdditiveReferencePoseClipName);
+				yield return context.FetchDependency(AdditiveReferencePoseClip, AdditiveReferencePoseClipName);
 			}
 		}
 

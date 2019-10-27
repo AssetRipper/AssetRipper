@@ -27,14 +27,18 @@ namespace uTinyRipper.Classes.TagManagers
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("name", Name);
-			node.Add("uniqueID", UniqueID);
-			node.Add("locked", false);
+			node.Add(NameName, Name);
+			node.Add(UniqueIDName, UniqueID);
+			node.Add(LockedName, false);
 			return node;
 		}
 
 		public string Name { get; private set; }
 		public uint UserID { get; private set; }
 		public uint UniqueID { get; private set; }
+
+		public const string NameName = "name";
+		public const string UniqueIDName = "uniqueID";
+		public const string LockedName = "locked";
 	}
 }

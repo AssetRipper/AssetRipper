@@ -35,13 +35,13 @@ namespace uTinyRipper.Classes.BlendTrees
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_Motion", Motion.ExportYAML(container));
-			node.Add("m_Threshold", Threshold);
-			node.Add("m_Position", Position.ExportYAML(container));
-			node.Add("m_TimeScale", TimeScale);
-			node.Add("m_CycleOffset", CycleOffset);
-			node.Add("m_DirectBlendParameter", DirectBlendParameter);
-			node.Add("m_Mirror", Mirror);
+			node.Add(MotionName, Motion.ExportYAML(container));
+			node.Add(ThresholdName, Threshold);
+			node.Add(PositionName, Position.ExportYAML(container));
+			node.Add(TimeScaleName, TimeScale);
+			node.Add(CycleOffsetName, CycleOffset);
+			node.Add(DirectBlendParameterName, DirectBlendParameter);
+			node.Add(MirrorName, Mirror);
 			return node;
 		}
 
@@ -50,6 +50,14 @@ namespace uTinyRipper.Classes.BlendTrees
 		public float CycleOffset { get; private set; }
 		public string DirectBlendParameter { get; private set; }
 		public bool Mirror { get; private set; }
+
+		public const string MotionName = "m_Motion";
+		public const string ThresholdName = "m_Threshold";
+		public const string PositionName = "m_Position";
+		public const string TimeScaleName = "m_TimeScale";
+		public const string CycleOffsetName = "m_CycleOffset";
+		public const string DirectBlendParameterName = "m_DirectBlendParameter";
+		public const string MirrorName = "m_Mirror";
 
 		public PPtr<Motion> Motion;
 		public Vector2f Position;

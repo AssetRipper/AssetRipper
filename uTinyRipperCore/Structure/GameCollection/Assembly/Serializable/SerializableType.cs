@@ -359,6 +359,6 @@ namespace uTinyRipper.Game.Assembly
 		private const string BehaviourName = "Behaviour";
 		private const string MonoBehaviourName = "MonoBehaviour";
 
-		protected static readonly IReadOnlyList<SerializableField> EmptyFields = new SerializableField[0];
+		protected static readonly IReadOnlyList<SerializableField> EmptyFields = Array.Empty<SerializableField>();
 	}
 }

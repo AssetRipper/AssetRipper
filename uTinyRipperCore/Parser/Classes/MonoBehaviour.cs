@@ -79,21 +79,21 @@ namespace uTinyRipper.Classes
 			reader.BaseStream.Position = position + info.Size;
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 #if UNIVERSAL
-			yield return GeneratorAsset.FindAsset(file);
+			yield return context.FetchDependency(GeneratorAsset, GeneratorAssetName);
 #endif
-			yield return Script.FindAsset(file);
+			yield return context.FetchDependency(Script, ScriptName);
 
 			if (Structure != null)
 			{
-				foreach (Object asset in Structure.FetchDependencies(file, isLog))
+				foreach (Object asset in context.FetchDependencies(Structure, Structure.Type.Name))
 				{
 					yield return asset;
 				}

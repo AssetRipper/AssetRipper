@@ -8,33 +8,6 @@ namespace uTinyRipper.Classes
 {
 	public static class ObjectUtils
 	{
-		public static List<Object> CollectDependencies(Object asset, bool isLog = false)
-		{
-			HashSet<Object> hdeps = new HashSet<Object>();
-			List<Object> deps = new List<Object>();
-			hdeps.Add(asset);
-			deps.Add(asset);
-
-			for (int i = 0; i < deps.Count; i++)
-			{
-				Object dep = deps[i];
-				foreach (Object newDep in dep.FetchDependencies(dep.File, isLog))
-				{
-					if (newDep == null)
-					{
-						continue;
-					}
-
-					if (hdeps.Add(newDep))
-					{
-						deps.Add(newDep);
-					}
-				}
-			}
-			
-			return deps;
-		}
-
 		public static long GenerateExportID(Object asset, IEnumerable<long> exportIDs)
 		{
 			return GenerateExportID(asset, (id) => exportIDs.Any(t => t == id));

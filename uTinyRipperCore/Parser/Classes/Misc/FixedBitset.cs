@@ -17,11 +17,13 @@ namespace uTinyRipper.Classes.Misc
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("data", Data.ExportYAML(true));
+			node.Add(DataName, Data.ExportYAML(true));
 			return node;
 		}
 
 		public IReadOnlyList<uint> Data => m_data;
+
+		public const string DataName = "data";
 
 		private uint[] m_data;
 	}

@@ -222,7 +222,7 @@ namespace uTinyRipper
 			return Metadata.Entries[pathID];
 		}
 
-		public ClassIDType GetClassID(long pathID)
+		public ClassIDType GetAssetType(long pathID)
 		{
 			return Metadata.Entries[pathID].ClassID;
 		}

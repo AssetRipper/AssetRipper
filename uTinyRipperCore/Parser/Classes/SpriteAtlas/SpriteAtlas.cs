@@ -50,31 +50,28 @@ namespace uTinyRipper.Classes
 			reader.AlignStream(AlignType.Align4);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			if (IsReadEditorData(file.Flags))
+			if (IsReadEditorData(context.Flags))
 			{
-				foreach (Object asset in EditorData.FetchDependencies(file))
+				foreach (Object asset in context.FetchDependencies(EditorData, EditorDataName))
 				{
 					yield return asset;
 				}
-				yield return MasterAtlas.FetchDependency(file, isLog, () => nameof(SpriteAtlas), nameof(MasterAtlas));
+				yield return context.FetchDependency(MasterAtlas, MasterAtlasName);
 			}
-			foreach (PPtr<Sprite> sprite in PackedSprites)
+			foreach (Object asset in context.FetchDependencies(PackedSprites, PackedSpritesName))
 			{
-				yield return sprite.FetchDependency(file, isLog, ToLogString, "PackedSprite");
+				yield return asset;
 			}
-			foreach (SpriteAtlasData atlasData in RenderDataMap.Values)
+			foreach (Object asset in context.FetchDependencies(RenderDataMap.Values, RenderDataMapName))
 			{
-				foreach (Object asset in atlasData.FetchDependencies(file))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 

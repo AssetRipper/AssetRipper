@@ -46,23 +46,23 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-            node.Add("m_MinDistance", MinDistance);
-            node.Add("m_MaxDistance", MaxDistance);
-            node.Add("m_ReverbPreset", ReverbPreset);
-            node.Add("m_Room", Room);
-            node.Add("m_RoomHF", RoomHF);
-            node.Add("m_DecayTime", DecayTime);
-            node.Add("m_DecayHFRatio", DecayHFRatio);
-            node.Add("m_Reflections", Reflections);
-            node.Add("m_ReflectionsDelay", ReflectionsDelay);
-            node.Add("m_Reverb", Reverb);
-            node.Add("m_ReverbDelay", ReverbDelay);
-            node.Add("m_HFReference", HFReference);
-            node.Add("m_Diffusion", Diffusion);
-            node.Add("m_Density", Density);
-            node.Add("m_LFReference", LFReference);
-            node.Add("m_RoomLF", RoomLF);
-            return node;
+			node.Add(MinDistanceName, MinDistance);
+			node.Add(MaxDistanceName, MaxDistance);
+			node.Add(ReverbPresetName, ReverbPreset);
+			node.Add(RoomName, Room);
+			node.Add(RoomHFName, RoomHF);
+			node.Add(DecayTimeName, DecayTime);
+			node.Add(DecayHFRatioName, DecayHFRatio);
+			node.Add(ReflectionsName, Reflections);
+			node.Add(ReflectionsDelayName, ReflectionsDelay);
+			node.Add(ReverbName, Reverb);
+			node.Add(ReverbDelayName, ReverbDelay);
+			node.Add(HFReferenceName, HFReference);
+			node.Add(DiffusionName, Diffusion);
+			node.Add(DensityName, Density);
+			node.Add(LFReferenceName, LFReference);
+			node.Add(RoomLFName, RoomLF);
+			return node;
 		}
         
         public float MinDistance { get; private set; }
@@ -82,5 +82,22 @@ namespace uTinyRipper.Classes
 		public float LFReference { get; private set; }
         public float Diffusion { get; private set; }
         public float Density { get; private set; }
+
+		public const string MinDistanceName = "m_MinDistance";
+		public const string MaxDistanceName = "m_MaxDistance";
+		public const string ReverbPresetName = "m_ReverbPreset";
+		public const string RoomName = "m_Room";
+		public const string RoomHFName = "m_RoomHF";
+		public const string DecayTimeName = "m_DecayTime";
+		public const string DecayHFRatioName = "m_DecayHFRatio";
+		public const string ReflectionsName = "m_Reflections";
+		public const string ReflectionsDelayName = "m_ReflectionsDelay";
+		public const string ReverbName = "m_Reverb";
+		public const string ReverbDelayName = "m_ReverbDelay";
+		public const string HFReferenceName = "m_HFReference";
+		public const string DiffusionName = "m_Diffusion";
+		public const string DensityName = "m_Density";
+		public const string LFReferenceName = "m_LFReference";
+		public const string RoomLFName = "m_RoomLF";
 	}
 }

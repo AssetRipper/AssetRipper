@@ -90,6 +90,11 @@ namespace uTinyRipper.Converters
 			return false;
 		}
 
+		public Object GetAsset(long pathID)
+		{
+			return File.GetAsset(pathID);
+		}
+
 		public Object FindAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
@@ -102,16 +107,31 @@ namespace uTinyRipper.Converters
 			}
 		}
 
+		public Object GetAsset(int fileIndex, long pathID)
+		{
+			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
+			{
+				return VirtualFile.GetAsset(pathID);
+			}
+			else
+			{
+				return File.GetAsset(fileIndex, pathID);
+			}
+		}
+
 		public Object FindAsset(ClassIDType classID)
 		{
-			Object asset = VirtualFile.FindAsset(classID);
-			return asset ?? File.FindAsset(classID);
+			return File.FindAsset(classID);
 		}
 
 		public Object FindAsset(ClassIDType classID, string name)
 		{
-			Object asset = VirtualFile.FindAsset(classID, name);
-			return asset ?? File.FindAsset(classID, name);
+			return File.FindAsset(classID, name);
+		}
+
+		public ClassIDType GetAssetType(long pathID)
+		{
+			return File.GetAssetType(pathID);
 		}
 
 		public long GetExportID(Object asset)
@@ -121,14 +141,7 @@ namespace uTinyRipper.Converters
 				return collection.GetExportID(asset);
 			}
 
-			if (Config.IsExportDependencies)
-			{
-				throw new InvalidOperationException($"Object {asset} wasn't found in any export collection");
-			}
-			else
-			{
-				return ExportCollection.GetMainExportID(asset);
-			}
+			return ExportCollection.GetMainExportID(asset);
 		}
 
 		public AssetType ToExportType(ClassIDType classID)
@@ -143,10 +156,6 @@ namespace uTinyRipper.Converters
 				return collection.CreateExportPointer(asset, collection == CurrentCollection);
 			}
 
-			if (Config.IsExportDependencies)
-			{
-				//throw new InvalidOperationException($"Object {asset} wasn't found in any export collection");
-			}
 			long exportID = ExportCollection.GetMainExportID(asset);
 			return new ExportPointer(exportID, GUID.MissingReference, AssetType.Meta);
 		}
@@ -239,12 +248,14 @@ namespace uTinyRipper.Converters
 		public IExportCollection CurrentCollection { get; set; }
 		public VirtualSerializedFile VirtualFile { get; }
 		public ISerializedFile File => CurrentCollection.File;
+		public string Name => File.Name;
 		public Version Version => File.Version;
 		public Platform Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
 		public Version ExportVersion { get; }
 		public Platform ExportPlatform { get; }
 		public TransferInstructionFlags ExportFlags => m_exportFlags | CurrentCollection.Flags;
+		public IReadOnlyList<FileIdentifier> Dependencies => File.Dependencies;
 
 		private readonly ProjectExporter m_exporter;
 		private readonly Dictionary<AssetInfo, IExportCollection> m_assetCollections = new Dictionary<AssetInfo, IExportCollection>();

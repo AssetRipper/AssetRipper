@@ -66,25 +66,25 @@ namespace uTinyRipper.Classes
 			}
 		}
 		
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return Material.FetchDependency(file, isLog, ToLogString, "m_Material");
+			yield return context.FetchDependency(Material, MaterialName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Density", Density);
-			node.Add("m_Material", Material.ExportYAML(container));
-			node.Add("m_IsTrigger", IsTrigger);
-			node.Add("m_UsedByEffector", UsedByEffector);
-			node.Add("m_UsedByComposite", UsedByComposite);
-			node.Add("m_Offset", Offset.ExportYAML(container));
+			node.Add(DensityName, Density);
+			node.Add(MaterialName, Material.ExportYAML(container));
+			node.Add(IsTriggerName, IsTrigger);
+			node.Add(UsedByEffectorName, UsedByEffector);
+			node.Add(UsedByCompositeName, UsedByComposite);
+			node.Add(OffsetName, Offset.ExportYAML(container));
 			return node;
 		}
 
@@ -92,6 +92,13 @@ namespace uTinyRipper.Classes
 		public bool IsTrigger { get; private set; }
 		public bool UsedByEffector { get; private set; }
 		public bool UsedByComposite { get; private set; }
+
+		public const string DensityName = "m_Density";
+		public const string MaterialName = "m_Material";
+		public const string IsTriggerName = "m_IsTrigger";
+		public const string UsedByEffectorName = "m_UsedByEffector";
+		public const string UsedByCompositeName = "m_UsedByComposite";
+		public const string OffsetName = "m_Offset";
 
 		public PPtr<PhysicsMaterial2D> Material;
 		public Vector2f Offset;

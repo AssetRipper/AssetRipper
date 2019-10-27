@@ -24,11 +24,6 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(5, 5))
 			{
 				return 2;
@@ -97,21 +92,18 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (SubEmitterData subEmitter in SubEmitters)
+			foreach (Object asset in context.FetchDependencies(SubEmitters, SubEmittersName))
 			{
-				foreach (Object asset in subEmitter.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
+			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(SubEmittersName, SubEmitters.ExportYAML(container));
 			return node;
 		}

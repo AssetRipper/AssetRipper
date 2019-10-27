@@ -103,12 +103,12 @@ namespace uTinyRipper.Classes.TerrainDatas
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Texture.FetchDependency(file, isLog, () => nameof(SplatPrototype), "texture");
-			if (HasNormalMap(file.Version))
+			yield return context.FetchDependency(Texture, TextureName);
+			if (HasNormalMap(context.Version))
 			{
-				yield return NormalMap.FetchDependency(file, isLog, () => nameof(SplatPrototype), "normalMap");
+				yield return context.FetchDependency(NormalMap, NormalMapName);
 			}
 		}
 

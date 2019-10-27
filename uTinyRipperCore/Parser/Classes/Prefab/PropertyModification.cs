@@ -16,15 +16,20 @@ namespace uTinyRipper.Classes.Prefabs
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("target", Target.ExportYAML(container));
-			node.Add("propertyPath", PropertyPath);
-			node.Add("value", Value);
-			node.Add("objectReference", ObjectReference.ExportYAML(container));
+			node.Add(TargetName, Target.ExportYAML(container));
+			node.Add(PropertyPathName, PropertyPath);
+			node.Add(ValueName, Value);
+			node.Add(ObjectReferenceName, ObjectReference.ExportYAML(container));
 			return node;
 		}
 
 		public string PropertyPath { get; private set; }
 		public string Value { get; private set; }
+
+		public const string TargetName = "target";
+		public const string PropertyPathName = "propertyPath";
+		public const string ValueName = "value";
+		public const string ObjectReferenceName = "objectReference";
 
 		public PPtr<Object> Target;
 		public PPtr<Object> ObjectReference;

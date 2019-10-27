@@ -131,29 +131,29 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add("mode0", (int)Mode0);
-			node.Add("vectorComponentCount0", VectorComponentCount0);
-			node.Add("color0", Color0.ExportYAML(container));
+			node.Add(Mode0Name, (int)Mode0);
+			node.Add(VectorComponentCount0Name, VectorComponentCount0);
+			node.Add(Color0Name, Color0.ExportYAML(container));
 			//node.Add("colorLabel0", IsReadLabel(container.Flags) ? ColorLabel0 : "Color");
-			node.Add("vector0_0", Vector0_0.ExportYAML(container));
+			node.Add(Vector00Name, Vector0_0.ExportYAML(container));
 			//node.Add("vectorLabel0_0", IsReadLabel(container.Flags) ? VectorLabel0_0 : "X");
-			node.Add("vector0_1", Vector0_1.ExportYAML(container));
+			node.Add(Vector01Name, Vector0_1.ExportYAML(container));
 			//node.Add("vectorLabel0_1", IsReadLabel(container.Flags) ? VectorLabel0_1 : "Y");
-			node.Add("vector0_2", Vector0_2.ExportYAML(container));
+			node.Add(Vector02Name, Vector0_2.ExportYAML(container));
 			//node.Add("vectorLabel0_2", IsReadLabel(container.Flags) ? VectorLabel0_2 : "Z");
-			node.Add("vector0_3", Vector0_3.ExportYAML(container));
+			node.Add(Vector03Name, Vector0_3.ExportYAML(container));
 			//node.Add("vectorLabel0_3", IsReadLabel(container.Flags) ? VectorLabel0_3 : "W");
-			node.Add("mode1", (int)Mode1);
-			node.Add("vectorComponentCount1", VectorComponentCount1);
-			node.Add("color1", Color1.ExportYAML(container));
+			node.Add(Mode1Name, (int)Mode1);
+			node.Add(VectorComponentCount1Name, VectorComponentCount1);
+			node.Add(Color1Name, Color1.ExportYAML(container));
 			//node.Add("colorLabel1", IsReadLabel(container.Flags) ? ColorLabel1 : "Color");
-			node.Add("vector1_0", Vector1_0.ExportYAML(container));
+			node.Add(Vector10Name, Vector1_0.ExportYAML(container));
 			//node.Add("vectorLabel1_0", IsReadLabel(container.Flags) ? VectorLabel1_0 : "X");
-			node.Add("vector1_1", Vector1_1.ExportYAML(container));
+			node.Add(Vector11Name, Vector1_1.ExportYAML(container));
 			//node.Add("vectorLabel1_1", IsReadLabel(container.Flags) ? VectorLabel1_1 : "Y");
-			node.Add("vector1_2", Vector1_2.ExportYAML(container));
+			node.Add(Vector12Name, Vector1_2.ExportYAML(container));
 			//node.Add("vectorLabel1_2", IsReadLabel(container.Flags) ? VectorLabel1_2 : "Z");
-			node.Add("vector1_3", Vector1_3.ExportYAML(container));
+			node.Add(Vector13Name, Vector1_3.ExportYAML(container));
 			//node.Add("vectorLabel1_3", IsReadLabel(container.Flags) ? VectorLabel1_3 : "W");
 			return node;
 		}
@@ -176,6 +176,21 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public string VectorLabel1_2 { get; private set; }
 		public string VectorLabel1_3 { get; private set; }
 #endif
+
+		public const string Mode0Name = "mode0";
+		public const string VectorComponentCount0Name = "vectorComponentCount0";
+		public const string Color0Name = "color0";
+		public const string Vector00Name = "vector0_0";
+		public const string Vector01Name = "vector0_1";
+		public const string Vector02Name = "vector0_2";
+		public const string Vector03Name = "vector0_3";
+		public const string Mode1Name = "mode1";
+		public const string VectorComponentCount1Name = "vectorComponentCount1";
+		public const string Color1Name = "color1";
+		public const string Vector10Name = "vector1_0";
+		public const string Vector11Name = "vector1_1";
+		public const string Vector12Name = "vector1_2";
+		public const string Vector13Name = "vector1_3";
 
 		public MinMaxGradient Color0;
 		public MinMaxCurve Vector0_0;

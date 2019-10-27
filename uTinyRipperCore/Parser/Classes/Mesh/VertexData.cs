@@ -66,7 +66,7 @@ namespace uTinyRipper.Classes.Meshes
 			ChannelInfo indexChannel = Channels[(int)ShaderChannel2018.SkinBoneIndex];
 			if (!weightChannel.IsSet)
 			{
-				return new BoneWeights4[0];
+				return Array.Empty<BoneWeights4>();
 			}
 
 			BoneWeights4[] skin = new BoneWeights4[VertexCount];
@@ -110,7 +110,7 @@ namespace uTinyRipper.Classes.Meshes
 			{
 				if (AllowUnsetVertexChannel(version))
 				{
-					return new Vector3f[0];
+					return Array.Empty<Vector3f>();
 				}
 				else
 				{

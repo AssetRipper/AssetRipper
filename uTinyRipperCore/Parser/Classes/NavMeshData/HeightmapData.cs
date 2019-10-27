@@ -12,9 +12,9 @@ namespace uTinyRipper.Classes.NavMeshDatas
 			TerrainData.Read(reader);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return TerrainData.FetchDependency(file, isLog, () => nameof(HeightmapData), "terrainData");
+			yield return context.FetchDependency(TerrainData, TerrainDataName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

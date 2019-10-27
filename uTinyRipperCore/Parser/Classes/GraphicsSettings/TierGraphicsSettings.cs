@@ -62,13 +62,13 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("renderingPath", (int)RenderingPath);
-			node.Add("hdrMode", (int)HdrMode);
-			node.Add("realtimeGICPUUsage", (int)RealtimeGICPUUsage);
-			node.Add("useCascadedShadowMaps", UseCascadedShadowMaps);
-			node.Add("prefer32BitShadowMaps", Prefer32BitShadowMaps);
-			node.Add("enableLPPV", EnableLPPV);
-			node.Add("useHDR", UseHDR);
+			node.Add(RenderingPathName, (int)RenderingPath);
+			node.Add(HdrModeName, (int)HdrMode);
+			node.Add(RealtimeGICPUUsageName, (int)RealtimeGICPUUsage);
+			node.Add(UseCascadedShadowMapsName, UseCascadedShadowMaps);
+			node.Add(Prefer32BitShadowMapsName, Prefer32BitShadowMaps);
+			node.Add(EnableLPPVName, EnableLPPV);
+			node.Add(UseHDRName, UseHDR);
 			return node;
 		}
 
@@ -79,5 +79,13 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public bool Prefer32BitShadowMaps { get; private set; }
 		public bool EnableLPPV { get; private set; }
 		public bool UseHDR { get; private set; }
+
+		public const string RenderingPathName = "renderingPath";
+		public const string HdrModeName = "hdrMode";
+		public const string RealtimeGICPUUsageName = "realtimeGICPUUsage";
+		public const string UseCascadedShadowMapsName = "useCascadedShadowMaps";
+		public const string Prefer32BitShadowMapsName = "prefer32BitShadowMaps";
+		public const string EnableLPPVName = "enableLPPV";
+		public const string UseHDRName = "useHDR";
 	}
 }

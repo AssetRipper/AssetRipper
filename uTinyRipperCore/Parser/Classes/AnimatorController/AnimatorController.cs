@@ -91,22 +91,22 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<AnimationClip> clip in AnimationClips)
+			foreach (Object asset in context.FetchDependencies(AnimationClips, AnimationClipsName))
 			{
-				yield return clip.FetchDependency(file, isLog, ToLogString, "AnimationClips");
+				yield return asset;
 			}
-			if (IsReadStateMachineBehaviourVectorDescription(file.Version))
+			if (IsReadStateMachineBehaviourVectorDescription(context.Version))
 			{
-				foreach (PPtr<MonoBehaviour> behaviour in StateMachineBehaviours)
+				foreach (Object asset in context.FetchDependencies(StateMachineBehaviours, StateMachineBehavioursName))
 				{
-					yield return behaviour.FetchDependency(file, isLog, ToLogString, "StateMachineBehaviours");
+					yield return asset;
 				}
 			}
 		}
@@ -135,7 +135,7 @@ namespace uTinyRipper.Classes
 					}
 				}
 			}
-			return new PPtr<MonoBehaviour>[0];
+			return System.Array.Empty<PPtr<MonoBehaviour>>();
 		}
 
 		public override bool IsContainsAnimationClip(AnimationClip clip)
@@ -185,6 +185,9 @@ namespace uTinyRipper.Classes
 
 		public const string AnimatorParametersName = "m_AnimatorParameters";
 		public const string AnimatorLayersName = "m_AnimatorLayers";
+		public const string AnimationClipsName = "m_AnimationClips";
+		public const string StateMachineBehaviourVectorDescriptionName = "m_StateMachineBehaviourVectorDescription";
+		public const string StateMachineBehavioursName = "m_StateMachineBehaviours";
 
 		public ControllerConstant Controller;
 		public StateMachineBehaviourVectorDescription StateMachineBehaviourVectorDescription;

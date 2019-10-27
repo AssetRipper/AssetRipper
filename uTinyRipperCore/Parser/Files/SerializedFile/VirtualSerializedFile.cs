@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using uTinyRipper.Game;
-using uTinyRipper.Project;
 using uTinyRipper.Classes;
 using uTinyRipper.Converters;
 
@@ -87,9 +86,9 @@ namespace uTinyRipper.SerializedFiles
 			throw new NotSupportedException();
 		}
 
-		public ClassIDType GetClassID(long pathID)
+		public ClassIDType GetAssetType(long pathID)
 		{
-			throw new NotSupportedException();
+			return m_assets[pathID].ClassID;
 		}
 
 		public PPtr<T> CreatePPtr<T>(T asset)

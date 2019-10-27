@@ -48,9 +48,9 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Emitter.FetchDependency(file, isLog, () => nameof(SubEmitterData), "emitter");
+			yield return context.FetchDependency(Emitter, EmitterName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

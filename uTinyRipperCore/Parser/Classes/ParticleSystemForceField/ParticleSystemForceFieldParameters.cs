@@ -5,7 +5,7 @@ using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.ParticleSystemForceFields
 {
-	public struct ParticleSystemForceFieldParameters : IAssetReadable, IYAMLExportable
+	public struct ParticleSystemForceFieldParameters : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -30,9 +30,9 @@ namespace uTinyRipper.Classes.ParticleSystemForceFields
 			reader.AlignStream(AlignType.Align4);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return VectorField.FetchDependency(file, isLog, () => nameof(ParticleSystemForceFieldParameters), VectorFieldName);
+			yield return context.FetchDependency(VectorField, VectorFieldName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

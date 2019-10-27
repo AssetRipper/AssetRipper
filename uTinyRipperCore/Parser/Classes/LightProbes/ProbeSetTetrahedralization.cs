@@ -16,13 +16,16 @@ namespace uTinyRipper.Classes.LightProbess
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Tetrahedra", Tetrahedra.ExportYAML(container));
-			node.Add("m_HullRays", HullRays.ExportYAML(container));
+			node.Add(TetrahedraName, Tetrahedra.ExportYAML(container));
+			node.Add(HullRaysName, HullRays.ExportYAML(container));
 			return node;
 		}
 
 		public IReadOnlyList<Tetrahedron> Tetrahedra => m_tetrahedra;
 		public IReadOnlyList<Vector3f> HullRays => m_hullRays;
+
+		public const string TetrahedraName = "m_Tetrahedra";
+		public const string HullRaysName = "m_HullRays";
 
 		private Tetrahedron[] m_tetrahedra;
 		private Vector3f[] m_hullRays;

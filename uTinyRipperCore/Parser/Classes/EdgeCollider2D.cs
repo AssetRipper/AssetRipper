@@ -34,13 +34,16 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_EdgeRadius", EdgeRadius);
-			node.Add("m_Points", m_points.ExportYAML(container));
+			node.Add(EdgeRadiusName, EdgeRadius);
+			node.Add(PointsName, m_points.ExportYAML(container));
 			return node;
 		}
 
 		public float EdgeRadius { get; private set; }
 		public IReadOnlyList<Vector2f> Points => m_points;
+
+		public const string EdgeRadiusName = "m_EdgeRadius";
+		public const string PointsName = "m_Points";
 
 		private Vector2f[] m_points;
 	}

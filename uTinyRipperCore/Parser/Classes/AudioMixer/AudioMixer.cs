@@ -44,14 +44,14 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_OutputGroup", OutputGroup.ExportYAML(container));
-			node.Add("m_MasterGroup", MasterGroup.ExportYAML(container));
-			node.Add("m_Snapshots", Snapshots.ExportYAML(container));
-			node.Add("m_StartSnapshot", StartSnapshot.ExportYAML(container));
-			node.Add("m_SuspendThreshold", SuspendThreshold);
-			node.Add("m_EnableSuspend", EnableSuspend);
-			node.Add("m_UpdateMode", UpdateMode);
-			node.Add("m_MixerConstant", MixerConstant.ExportYAML(container));
+			node.Add(OutputGroupName, OutputGroup.ExportYAML(container));
+			node.Add(MasterGroupName, MasterGroup.ExportYAML(container));
+			node.Add(SnapshotsName, Snapshots.ExportYAML(container));
+			node.Add(StartSnapshotName, StartSnapshot.ExportYAML(container));
+			node.Add(SuspendThresholdName, SuspendThreshold);
+			node.Add(EnableSuspendName, EnableSuspend);
+			node.Add(UpdateModeName, UpdateMode);
+			node.Add(MixerConstantName, MixerConstant.ExportYAML(container));
 			return node;
 		}
 
@@ -59,6 +59,15 @@ namespace uTinyRipper.Classes
 		public float SuspendThreshold { get; private set; }
 		public bool EnableSuspend { get; private set; }
 		public int UpdateMode { get; private set; }
+
+		public const string OutputGroupName = "m_OutputGroup";
+		public const string MasterGroupName = "m_MasterGroup";
+		public const string SnapshotsName = "m_Snapshots";
+		public const string StartSnapshotName = "m_StartSnapshot";
+		public const string SuspendThresholdName = "m_SuspendThreshold";
+		public const string EnableSuspendName = "m_EnableSuspend";
+		public const string UpdateModeName = "m_UpdateMode";
+		public const string MixerConstantName = "m_MixerConstant";
 
 		public PPtr<AudioMixerGroup> OutputGroup;
 		public PPtr<AudioMixerGroup> MasterGroup;

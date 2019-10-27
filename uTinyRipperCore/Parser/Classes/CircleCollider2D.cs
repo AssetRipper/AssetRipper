@@ -20,11 +20,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(5))
 			{
 				return 2;
@@ -46,12 +41,14 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Radius", Radius);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(RadiusName, Radius);
 			return node;
 		}
 
 		public float Radius { get; private set; }
+
+		public const string RadiusName = "m_Radius";
 
 		public Vector2f Center;
 	}

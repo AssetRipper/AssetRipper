@@ -455,7 +455,7 @@ namespace uTinyRipper.Classes.QualitySettingss
 				return ExcludedTargetPlatforms;
 			}
 #endif
-			return new string[0];
+			return System.Array.Empty<string>();
 		}
 		private bool GetStreamingMipmapsAddAllCameras(Version version)
 		{

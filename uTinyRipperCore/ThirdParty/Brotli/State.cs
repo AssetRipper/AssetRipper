@@ -95,7 +95,7 @@ namespace Brotli
 
 		internal long expectedTotalSize = 0;
 
-		internal byte[] customDictionary = new byte[0];
+		internal byte[] customDictionary = System.Array.Empty<byte>();
 
 		internal int bytesToIgnore = 0;
 

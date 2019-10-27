@@ -14,12 +14,15 @@ namespace uTinyRipper.Classes.AvatarMasks
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Path", Path);
-			node.Add("m_Weight", Weight);
+			node.Add(PathName, Path);
+			node.Add(WeightName, Weight);
 			return node;
 		}
 
 		public string Path { get; private set; }
 		public float Weight { get; private set; }
+
+		public const string PathName = "m_Path";
+		public const string WeightName = "m_Weight";
 	}
 }

@@ -31,14 +31,14 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Left", Left);
-			node.Add("m_Right", Right);
-			node.Add("m_Top", Top);
-			node.Add("m_Bottom", Bottom);
+			node.Add(LeftName, Left);
+			node.Add(RightName, Right);
+			node.Add(TopName, Top);
+			node.Add(BottomName, Bottom);
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
 			yield break;
 		}
@@ -47,5 +47,10 @@ namespace uTinyRipper.Classes
 		public int Right { get; private set; }
 		public int Top { get; private set; }
 		public int Bottom { get; private set; }
+
+		public const string LeftName = "m_Left";
+		public const string RightName = "m_Right";
+		public const string TopName = "m_Top";
+		public const string BottomName = "m_Bottom";
 	}
 }

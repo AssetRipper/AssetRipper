@@ -102,27 +102,27 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return DefaultAnimation.FetchDependency(file, isLog, ToLogString, "m_DefaultAnimation");
+			yield return context.FetchDependency(DefaultAnimation, AnimationName);
 
-			if (IsReadAnimationsPaired(file.Version))
+			if (IsReadAnimationsPaired(context.Version))
 			{
-				foreach(PPtr<AnimationClip> clip in AnimationsPaired.Select(t => t.Item2))
+				foreach (Object asset in context.FetchDependencies(AnimationsPaired.Select(t => t.Item2), AnimationsName))
 				{
-					yield return clip.FetchDependency(file, isLog, ToLogString, "m_Animations");
+					yield return asset;
 				}
 			}
 			else
 			{
-				foreach(PPtr<AnimationClip> clip in Animations)
+				foreach (Object asset in context.FetchDependencies(Animations, AnimationsName))
 				{
-					yield return clip.FetchDependency(file, isLog, ToLogString, "m_Animations");
+					yield return asset;
 				}
 			}
 		}
@@ -143,12 +143,12 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_Animation", DefaultAnimation.ExportYAML(container));
-			node.Add("m_Animations", Animations.ExportYAML(container));
-			node.Add("m_WrapMode", (int)WrapMode);
-			node.Add("m_PlayAutomatically", PlayAutomatically);
-			node.Add("m_AnimatePhysics", AnimatePhysics);
-			node.Add("m_CullingType", (int)CullingType);
+			node.Add(AnimationName, DefaultAnimation.ExportYAML(container));
+			node.Add(AnimationsName, Animations.ExportYAML(container));
+			node.Add(WrapModeName, (int)WrapMode);
+			node.Add(PlayAutomaticallyName, PlayAutomatically);
+			node.Add(AnimatePhysicsName, AnimatePhysics);
+			node.Add(CullingTypeName, (int)CullingType);
 			return node;
 		}
 		
@@ -163,9 +163,13 @@ namespace uTinyRipper.Classes
 		public bool AnimateOnlyIfVisible { get; private set; }
 		public AnimationCullingType CullingType { get; private set; }
 
-		/// <summary>
-		/// Animation previously
-		/// </summary>
+		public const string AnimationName = "m_Animation";
+		public const string AnimationsName = "m_Animations";
+		public const string WrapModeName = "m_WrapMode";
+		public const string PlayAutomaticallyName = "m_PlayAutomatically";
+		public const string AnimatePhysicsName = "m_AnimatePhysics";
+		public const string CullingTypeName = "m_CullingType";
+
 		public PPtr<AnimationClip> DefaultAnimation;
 		public AABB UserAABB;
 

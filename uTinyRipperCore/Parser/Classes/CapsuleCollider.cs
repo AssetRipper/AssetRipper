@@ -35,16 +35,21 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Radius", Radius);
-			node.Add("m_Height", Height);
-			node.Add("m_Direction", Direction);
-			node.Add("m_Center", Center.ExportYAML(container));
+			node.Add(RadiusName, Radius);
+			node.Add(HeightName, Height);
+			node.Add(DirectionName, Direction);
+			node.Add(CenterName, Center.ExportYAML(container));
 			return node;
 		}
 
 		public float Radius { get; private set; }
 		public float Height { get; private set; }
 		public int Direction { get; private set; }
+
+		public const string RadiusName = "m_Radius";
+		public const string HeightName = "m_Height";
+		public const string DirectionName = "m_Direction";
+		public const string CenterName = "m_Center";
 
 		public Vector3f Center;
 

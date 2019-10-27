@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using uTinyRipper.Project;
 using uTinyRipper.Classes.ParticleSystemRenderers;
@@ -248,19 +246,19 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return Mesh.FetchDependency(file, isLog, ToLogString, MeshName);
-			if (IsReadMeshes(file.Version))
+			yield return context.FetchDependency(Mesh, MeshName);
+			if (IsReadMeshes(context.Version))
 			{
-				yield return Mesh1.FetchDependency(file, isLog, ToLogString, Mesh1Name);
-				yield return Mesh2.FetchDependency(file, isLog, ToLogString, Mesh2Name);
-				yield return Mesh3.FetchDependency(file, isLog, ToLogString, Mesh3Name);
+				yield return context.FetchDependency(Mesh1, Mesh1Name);
+				yield return context.FetchDependency(Mesh2, Mesh2Name);
+				yield return context.FetchDependency(Mesh3, Mesh3Name);
 			}
 		}
 

@@ -57,11 +57,6 @@ namespace uTinyRipper.Classes.ParticleSystems
 		
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 3;
-			}
-
 			if (version.IsGreaterEqual(5, 5))
 			{
 				return 3;
@@ -126,21 +121,21 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("startLifetime", StartLifetime.ExportYAML(container));
-			node.Add("startSpeed", StartSpeed.ExportYAML(container));
-			node.Add("startColor", StartColor.ExportYAML(container));
-			node.Add("startSize", StartSize.ExportYAML(container));
-			node.Add("startSizeY", GetStartSizeY(container.Version).ExportYAML(container));
-			node.Add("startSizeZ", GetStartSizeZ(container.Version).ExportYAML(container));
-			node.Add("startRotationX", GetStartRotationX(container.Version).ExportYAML(container));
-			node.Add("startRotationY", GetStartRotationY(container.Version).ExportYAML(container));
-			node.Add("startRotation", StartRotation.ExportYAML(container));
-			node.Add("randomizeRotationDirection", RandomizeRotationDirection);
-			node.Add("maxNumParticles", MaxNumParticles);
-			node.Add("size3D", Size3D);
-			node.Add("rotation3D", Rotation3D);
-			node.Add("gravityModifier", GravityModifier.ExportYAML(container));
+			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(StartLifetimeName, StartLifetime.ExportYAML(container));
+			node.Add(StartSpeedName, StartSpeed.ExportYAML(container));
+			node.Add(StartColorName, StartColor.ExportYAML(container));
+			node.Add(StartSizeName, StartSize.ExportYAML(container));
+			node.Add(StartSizeYName, GetStartSizeY(container.Version).ExportYAML(container));
+			node.Add(StartSizeZName, GetStartSizeZ(container.Version).ExportYAML(container));
+			node.Add(StartRotationXName, GetStartRotationX(container.Version).ExportYAML(container));
+			node.Add(StartRotationYName, GetStartRotationY(container.Version).ExportYAML(container));
+			node.Add(StartRotationName, StartRotation.ExportYAML(container));
+			node.Add(RandomizeRotationDirectionName, RandomizeRotationDirection);
+			node.Add(MaxNumParticlesName, MaxNumParticles);
+			node.Add(Size3DName, Size3D);
+			node.Add(Rotation3DName, Rotation3D);
+			node.Add(GravityModifierName, GravityModifier.ExportYAML(container));
 			return node;
 		}
 
@@ -166,6 +161,21 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public int MaxNumParticles { get; private set; }
 		public bool Size3D { get; private set; }
 		public bool Rotation3D { get; private set; }
+
+		public const string StartLifetimeName = "startLifetime";
+		public const string StartSpeedName = "startSpeed";
+		public const string StartColorName = "startColor";
+		public const string StartSizeName = "startSize";
+		public const string StartSizeYName = "startSizeY";
+		public const string StartSizeZName = "startSizeZ";
+		public const string StartRotationXName = "startRotationX";
+		public const string StartRotationYName = "startRotationY";
+		public const string StartRotationName = "startRotation";
+		public const string RandomizeRotationDirectionName = "randomizeRotationDirection";
+		public const string MaxNumParticlesName = "maxNumParticles";
+		public const string Size3DName = "size3D";
+		public const string Rotation3DName = "rotation3D";
+		public const string GravityModifierName = "gravityModifier";
 
 		public MinMaxCurve StartLifetime;
 		public MinMaxCurve StartSpeed;

@@ -24,9 +24,9 @@ namespace uTinyRipper.Game.Assembly
 			Pointer.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Pointer.FetchDependency(file, () => nameof(MonoBehaviour), ToString());
+			yield return context.FetchDependency(Pointer, string.Empty);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)
@@ -36,6 +36,6 @@ namespace uTinyRipper.Game.Assembly
 
 		public PPtr<Object> Pointer;
 
-		private static readonly SerializableField[] EmptyFields = new SerializableField[0];
+		private static readonly SerializableField[] EmptyFields = System.Array.Empty<SerializableField>();
 	}
 }

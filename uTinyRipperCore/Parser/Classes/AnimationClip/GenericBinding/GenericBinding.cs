@@ -46,12 +46,12 @@ namespace uTinyRipper.Classes.AnimationClips
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("path", Path);
-			node.Add("attribute", Attribute);
-			node.Add("script", Script.ExportYAML(container));
-			node.Add("classID", (int)ClassID);
-			node.Add("customType", (byte)CustomType);
-			node.Add("isPPtrCurve", IsPPtrCurve);
+			node.Add(PathName, Path);
+			node.Add(AttributeName, Attribute);
+			node.Add(ScriptName, Script.ExportYAML(container));
+			node.Add(ClassIDName, (int)ClassID);
+			node.Add(CustomTypeName, (byte)CustomType);
+			node.Add(IsPPtrCurveName, IsPPtrCurve);
 			return node;
 		}
 
@@ -68,7 +68,14 @@ namespace uTinyRipper.Classes.AnimationClips
 		public ClassIDType ClassID { get; private set; }
 		public BindingCustomType CustomType { get; private set; }
 		public bool IsPPtrCurve { get; private set; }
-		
+
+		public const string PathName = "path";
+		public const string AttributeName = "attribute";
+		public const string ScriptName = "script";
+		public const string ClassIDName = "classID";
+		public const string CustomTypeName = "customType";
+		public const string IsPPtrCurveName = "isPPtrCurve";
+
 		public PPtr<Object> Script;
 	}
 }

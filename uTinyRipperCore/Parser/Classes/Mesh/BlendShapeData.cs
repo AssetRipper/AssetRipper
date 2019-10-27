@@ -10,9 +10,9 @@ namespace uTinyRipper.Classes.Meshes
 	{
 		public BlendShapeData(Version version)
 		{
-			Vertices = new BlendShapeVertex[0];
-			Shapes = new BlendShape[0];
-			Channels = new BlendShapeChannel[0];
+			Vertices = Array.Empty<BlendShapeVertex>();
+			Shapes = Array.Empty<BlendShape>();
+			Channels = Array.Empty<BlendShapeChannel>();
 			FullWeights = Array.Empty<float>();
 		}
 

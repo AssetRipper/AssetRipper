@@ -16,14 +16,18 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("atlasSize", AtlasSize);
-			node.Add("atlasHash", AtlasHash.ExportYAML(container));
-			node.Add("firstSystemId", FirstSystemId);
+			node.Add(AtlasSizeName, AtlasSize);
+			node.Add(AtlasHashName, AtlasHash.ExportYAML(container));
+			node.Add(FirstSystemIdName, FirstSystemId);
 			return node;
 		}
 
 		public int AtlasSize { get; private set; }
 		public int FirstSystemId { get; private set; }
+
+		public const string AtlasSizeName = "atlasSize";
+		public const string AtlasHashName = "atlasHash";
+		public const string FirstSystemIdName = "firstSystemId";
 
 		public Hash128 AtlasHash;
 	}

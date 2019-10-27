@@ -17,16 +17,21 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("name", Name);
-			node.Add("color", Color.ExportYAML(container));
-			node.Add("minLuminance", MinLuminance);
-			node.Add("maxLuminance", MaxLuminance);
+			node.Add(NameName, Name);
+			node.Add(ColorName, Color.ExportYAML(container));
+			node.Add(MinLuminanceName, MinLuminance);
+			node.Add(MaxLuminanceName, MaxLuminance);
 			return node;
 		}
 
 		public string Name { get; private set; }
 		public float MinLuminance { get; private set; }
 		public float MaxLuminance { get; private set; }
+
+		public const string NameName = "name";
+		public const string ColorName = "color";
+		public const string MinLuminanceName = "minLuminance";
+		public const string MaxLuminanceName = "maxLuminance";
 
 		public ColorRGBAf Color;
 	}

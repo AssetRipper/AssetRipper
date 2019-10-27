@@ -22,11 +22,6 @@ namespace uTinyRipper.Classes.Lights
 		
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(2017, 3))
 			{
 				return 2;
@@ -53,17 +48,17 @@ namespace uTinyRipper.Classes.Lights
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("probeOcclusionLightIndex", ProbeOcclusionLightIndex);
-			node.Add("occlusionMaskChannel", OcclusionMaskChannel);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(ProbeOcclusionLightIndexName, ProbeOcclusionLightIndex);
+			node.Add(OcclusionMaskChannelName, OcclusionMaskChannel);
 			if (GetSerializedVersion(container.Version) >= 2)
 			{
-				node.Add("lightmapBakeMode", LightmapBakeMode.ExportYAML(container));
-				node.Add("isBaked", IsBaked);
+				node.Add(LightmapBakeModeName, LightmapBakeMode.ExportYAML(container));
+				node.Add(IsBakedName, IsBaked);
 			}
 			else
 			{
-				node.Add("lightmappingMask", LightmappingMask);
+				node.Add(LightmappingMaskName, LightmappingMask);
 			}
 			return node;
 		}
@@ -72,6 +67,12 @@ namespace uTinyRipper.Classes.Lights
 		public int OcclusionMaskChannel { get; private set; }
 		public int LightmappingMask { get; private set; }
 		public bool IsBaked { get; private set; }
+
+		public const string ProbeOcclusionLightIndexName = "probeOcclusionLightIndex";
+		public const string OcclusionMaskChannelName = "occlusionMaskChannel";
+		public const string LightmapBakeModeName = "lightmapBakeMode";
+		public const string IsBakedName = "isBaked";
+		public const string LightmappingMaskName = "lightmappingMask";
 
 		public LightmapBakeMode LightmapBakeMode;
 	}

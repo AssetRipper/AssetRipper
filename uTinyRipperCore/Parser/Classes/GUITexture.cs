@@ -24,14 +24,14 @@ namespace uTinyRipper.Classes
 			BottomBorder = reader.ReadInt32();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return Texture.FetchDependency(file, isLog, ToLogString, TextureName);
+			yield return context.FetchDependency(Texture, TextureName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

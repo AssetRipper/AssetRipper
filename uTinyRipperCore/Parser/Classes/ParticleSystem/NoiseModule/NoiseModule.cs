@@ -84,24 +84,24 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add("strength", Strength.ExportYAML(container));
-			node.Add("strengthY", StrengthY.ExportYAML(container));
-			node.Add("strengthZ", StrengthZ.ExportYAML(container));
-			node.Add("separateAxes", SeparateAxes);
-			node.Add("frequency", Frequency);
-			node.Add("damping", Damping);
-			node.Add("octaves", Octaves);
-			node.Add("octaveMultiplier", OctaveMultiplier);
-			node.Add("octaveScale", OctaveScale);
-			node.Add("quality", (int)Quality);
-			node.Add("scrollSpeed", ScrollSpeed.ExportYAML(container));
-			node.Add("remap", Remap.ExportYAML(container));
-			node.Add("remapY", RemapY.ExportYAML(container));
-			node.Add("remapZ", RemapZ.ExportYAML(container));
-			node.Add("remapEnabled", RemapEnabled);
-			node.Add("positionAmount", GetExportPositionAmount(container.Version).ExportYAML(container));
-			node.Add("rotationAmount", GetExportRotationAmount(container.Version).ExportYAML(container));
-			node.Add("sizeAmount", GetExportSizeAmount(container.Version).ExportYAML(container));
+			node.Add(StrengthName, Strength.ExportYAML(container));
+			node.Add(StrengthYName, StrengthY.ExportYAML(container));
+			node.Add(StrengthZName, StrengthZ.ExportYAML(container));
+			node.Add(SeparateAxesName, SeparateAxes);
+			node.Add(FrequencyName, Frequency);
+			node.Add(DampingName, Damping);
+			node.Add(OctavesName, Octaves);
+			node.Add(OctaveMultiplierName, OctaveMultiplier);
+			node.Add(OctaveScaleName, OctaveScale);
+			node.Add(QualityName, (int)Quality);
+			node.Add(ScrollSpeedName, ScrollSpeed.ExportYAML(container));
+			node.Add(RemapName, Remap.ExportYAML(container));
+			node.Add(RemapYName, RemapY.ExportYAML(container));
+			node.Add(RemapZName, RemapZ.ExportYAML(container));
+			node.Add(RemapEnabledName, RemapEnabled);
+			node.Add(PositionAmountName, GetExportPositionAmount(container.Version).ExportYAML(container));
+			node.Add(RotationAmountName, GetExportRotationAmount(container.Version).ExportYAML(container));
+			node.Add(SizeAmountName, GetExportSizeAmount(container.Version).ExportYAML(container));
 			return node;
 		}
 
@@ -126,6 +126,25 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public float OctaveScale { get; private set; }
 		public ParticleSystemNoiseQuality Quality { get; private set; }
 		public bool RemapEnabled { get; private set; }
+
+		public const string StrengthName = "strength";
+		public const string StrengthYName = "strengthY";
+		public const string StrengthZName = "strengthZ";
+		public const string SeparateAxesName = "separateAxes";
+		public const string FrequencyName = "frequency";
+		public const string DampingName = "damping";
+		public const string OctavesName = "octaves";
+		public const string OctaveMultiplierName = "octaveMultiplier";
+		public const string OctaveScaleName = "octaveScale";
+		public const string QualityName = "quality";
+		public const string ScrollSpeedName = "scrollSpeed";
+		public const string RemapName = "remap";
+		public const string RemapYName = "remapY";
+		public const string RemapZName = "remapZ";
+		public const string RemapEnabledName = "remapEnabled";
+		public const string PositionAmountName = "positionAmount";
+		public const string RotationAmountName = "rotationAmount";
+		public const string SizeAmountName = "sizeAmount";
 
 		public MinMaxCurve Strength;
 		public MinMaxCurve StrengthY;

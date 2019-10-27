@@ -4,7 +4,7 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Sprites
 {
-	public struct SecondarySpriteTexture : IAssetReadable, IYAMLExportable
+	public struct SecondarySpriteTexture : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -13,9 +13,9 @@ namespace uTinyRipper.Classes.Sprites
 			reader.AlignStream(AlignType.Align4);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Texture.FetchDependency(file, isLog, () => nameof(SecondarySpriteTexture), TextureName);
+			yield return context.FetchDependency(Texture, TextureName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

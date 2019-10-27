@@ -131,11 +131,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(2, 6))
 			{
 				return 2;
@@ -234,44 +229,38 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			if (IsReadOffscreen(file.Version))
+			if (IsReadOffscreen(context.Version))
 			{
-				yield return DisableAnimationWhenOffscreen.FetchDependency(file, isLog, ToLogString, "m_DisableAnimationWhenOffscreen");
+				yield return context.FetchDependency(DisableAnimationWhenOffscreen, DisableAnimationWhenOffscreenName);
 			}
-			yield return Mesh.FetchDependency(file, isLog, ToLogString, "m_Mesh");
-			foreach (PPtr<Transform> ptr in Bones)
+			yield return context.FetchDependency(Mesh, MeshName);
+			foreach (Object asset in context.FetchDependencies(Bones, BonesName))
 			{
-				if (!ptr.IsNull)
-				{
-					yield return ptr.GetAsset(file);
-				}
+				yield return asset;
 			}
-			if (!RootBone.IsNull)
-			{
-				yield return RootBone.GetAsset(file);
-			}
+			yield return context.FetchDependency(RootBone, RootBoneName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Quality", Quality);
-			node.Add("m_UpdateWhenOffscreen", UpdateWhenOffscreen);
-			node.Add("m_skinnedMotionVectors", SkinnedMotionVectors);
-			node.Add("m_Mesh", Mesh.ExportYAML(container));
-			node.Add("m_Bones", Bones.ExportYAML(container));
-			node.Add("m_BlendShapeWeights", IsReadWeights(container.Version) ? m_blendShapeWeights.ExportYAML() : YAMLSequenceNode.Empty);
-			node.Add("m_RootBone", RootBone.ExportYAML(container));
-			node.Add("m_AABB", AABB.ExportYAML(container));
-			node.Add("m_DirtyAABB", DirtyAABB);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(QualityName, Quality);
+			node.Add(UpdateWhenOffscreenName, UpdateWhenOffscreen);
+			node.Add(SkinnedMotionVectorsName, SkinnedMotionVectors);
+			node.Add(MeshName, Mesh.ExportYAML(container));
+			node.Add(BonesName, Bones.ExportYAML(container));
+			node.Add(BlendShapeWeightsName, IsReadWeights(container.Version) ? m_blendShapeWeights.ExportYAML() : YAMLSequenceNode.Empty);
+			node.Add(RootBoneName, RootBone.ExportYAML(container));
+			node.Add(AABBName, AABB.ExportYAML(container));
+			node.Add(DirtyAABBName, DirtyAABB);
 			return node;
 		}
 
@@ -283,6 +272,17 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<Matrix4x4f> BindPose => m_bindPose;
 		public IReadOnlyList<float> BlendShapeWeights => m_blendShapeWeights;
 		public bool DirtyAABB { get; private set; }
+
+		public const string QualityName = "m_Quality";
+		public const string UpdateWhenOffscreenName = "m_UpdateWhenOffscreen";
+		public const string SkinnedMotionVectorsName = "m_skinnedMotionVectors";
+		public const string DisableAnimationWhenOffscreenName = "m_DisableAnimationWhenOffscreen";
+		public const string MeshName = "m_Mesh";
+		public const string BonesName = "m_Bones";
+		public const string BlendShapeWeightsName = "m_BlendShapeWeights";
+		public const string RootBoneName = "m_RootBone";
+		public const string AABBName = "m_AABB";
+		public const string DirtyAABBName = "m_DirtyAABB";
 
 		public PPtr<Animation> DisableAnimationWhenOffscreen;
 		/// <summary>

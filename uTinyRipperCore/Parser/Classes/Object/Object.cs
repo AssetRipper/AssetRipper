@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.Project;
 using uTinyRipper.YAML;
 using uTinyRipper.Classes.Objects;
 using uTinyRipper.Converters;
@@ -93,11 +92,6 @@ namespace uTinyRipper.Classes
 #endif
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
-		{
-			return ExportYAMLRoot(container);
-		}
-
 		public YAMLDocument ExportYAMLDocument(IExportContainer container)
 		{
 			YAMLDocument document = new YAMLDocument();
@@ -109,6 +103,11 @@ namespace uTinyRipper.Classes
 			return document;
 		}
 
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			return ExportYAMLRoot(container);
+		}
+
 		/// <summary>
 		/// Export object's content in such formats as txt or png
 		/// </summary>
@@ -117,19 +116,9 @@ namespace uTinyRipper.Classes
 			throw new NotSupportedException($"Type {GetType()} doesn't support binary export");
 		}
 
-		public IEnumerable<Object> FetchDependencies(bool isLog = false)
-		{
-			return FetchDependencies(File, isLog);
-		}
-
-		public virtual IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public virtual IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
 			yield break;
-		}
-
-		public virtual string ToLogString()
-		{
-			return $"{GetType().Name}[{PathID}]";
 		}
 
 		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -147,7 +136,7 @@ namespace uTinyRipper.Classes
 		public ClassIDType ClassID => AssetInfo.ClassID;
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
 		public virtual string ExportExtension => AssetExtension;
-		public long PathID => AssetInfo.PathID;		
+		public long PathID => AssetInfo.PathID;
 		public GUID GUID => AssetInfo.GUID;
 
 		public HideFlags ObjectHideFlags { get; set; }

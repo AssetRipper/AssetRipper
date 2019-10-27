@@ -9,7 +9,7 @@ using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.SpriteAtlases
 {
-	public class SpriteAtlasEditorData : IAssetReadable, IYAMLExportable
+	public class SpriteAtlasEditorData : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public SpriteAtlasEditorData()
 		{
@@ -18,7 +18,7 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		public SpriteAtlasEditorData(IReadOnlyList<PPtr<Sprite>> packables)
 		{
 			TextureSettings = new TextureSettings(true);
-			m_platformSettings = new TextureImporterPlatformSettings[0];
+			m_platformSettings = Array.Empty<TextureImporterPlatformSettings>();
 			PackingSettings = new PackingSettings(true);
 			VariantMultiplier = 1;
 			m_packables = new PPtr<Object>[packables.Count];
@@ -70,11 +70,11 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			reader.AlignStream(AlignType.Align4);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (PPtr<Object> packable in Packables)
+			foreach (Object asset in context.FetchDependencies(Packables, PackablesName))
 			{
-				yield return packable.FetchDependency(file, isLog, () => nameof(SpriteAtlasEditorData), "packables");
+				yield return asset;
 			}
 		}
 

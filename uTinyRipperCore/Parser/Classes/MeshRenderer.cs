@@ -27,17 +27,14 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			if (!AdditionalVertexStreams.IsNull)
-			{
-				yield return AdditionalVertexStreams.FetchDependency(file, isLog, ToLogString, AdditionalVertexStreamsName);
-			}
+			yield return context.FetchDependency(AdditionalVertexStreams, AdditionalVertexStreamsName);
 		}
 
 		public const string AdditionalVertexStreamsName = "m_AdditionalVertexStreams";

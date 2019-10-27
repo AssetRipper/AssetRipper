@@ -6,7 +6,6 @@ using uTinyRipper.Converters.Misc;
 using uTinyRipper.Converters;
 using uTinyRipper.Game.Assembly;
 using uTinyRipper.Classes;
-using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.Misc
 {
@@ -147,7 +146,7 @@ namespace uTinyRipper.Classes.Misc
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
 			yield break;
 		}

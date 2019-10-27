@@ -577,29 +577,20 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Material> material in Materials)
+			foreach (Object asset in context.FetchDependencies(Materials, MaterialsName))
 			{
-				yield return material.FetchDependency(file, isLog, ToLogString, "m_Materials");
+				yield return asset;
 			}
-			if (!StaticBatchRoot.IsNull)
-			{
-				yield return StaticBatchRoot.GetAsset(file);
-			}
-			if (!ProbeAnchor.IsNull)
-			{
-				yield return ProbeAnchor.GetAsset(file);
-			}
-			if (!LightProbeVolumeOverride.IsNull)
-			{
-				yield return LightProbeVolumeOverride.GetAsset(file);
-			}
+			yield return context.FetchDependency(StaticBatchRoot, StaticBatchRootName);
+			yield return context.FetchDependency(ProbeAnchor, ProbeAnchorName);
+			yield return context.FetchDependency(LightProbeVolumeOverride, LightProbeVolumeOverrideName);
 		}
 
 		protected void ReadBase(AssetReader reader)

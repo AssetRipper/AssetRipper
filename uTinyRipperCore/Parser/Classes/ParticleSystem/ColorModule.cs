@@ -15,9 +15,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add("gradient", Gradient.ExportYAML(container));
+			node.Add(GradientName, Gradient.ExportYAML(container));
 			return node;
 		}
+
+		public const string GradientName = "gradient";
 
 		public MinMaxGradient Gradient;
 	}

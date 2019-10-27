@@ -30,8 +30,8 @@ namespace uTinyRipper.Classes.Avatars
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Min", Min.ExportYAML3(container));
-			node.Add("m_Max", Max.ExportYAML3(container));
+			node.Add(MinName, Min.ExportYAML3(container));
+			node.Add(MaxName, Max.ExportYAML3(container));
 			return node;
 		}
 
@@ -39,6 +39,9 @@ namespace uTinyRipper.Classes.Avatars
 		{
 			return $"{Min}-{Max}";
 		}
+
+		public const string MinName = "m_Min";
+		public const string MaxName = "m_Max";
 
 		public Vector4f Min;
 		public Vector4f Max;

@@ -20,23 +20,26 @@ namespace uTinyRipper.Classes
 			SnapshotID.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return AudioMixer.FetchDependency(file, isLog, ToLogString, "m_AudioMixer");
+			yield return context.FetchDependency(AudioMixer, AudioMixerName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_AudioMixer", AudioMixer.ExportYAML(container));
-			node.Add("m_SnapshotID", SnapshotID.ExportYAML(container));
+			node.Add(AudioMixerName, AudioMixer.ExportYAML(container));
+			node.Add(SnapshotIDName, SnapshotID.ExportYAML(container));
 			return node;
 		}
+
+		public const string AudioMixerName = "m_AudioMixer";
+		public const string SnapshotIDName = "m_SnapshotID";
 
 		public PPtr<AudioMixer> AudioMixer;
 		public GUID SnapshotID;

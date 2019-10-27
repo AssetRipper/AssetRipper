@@ -25,9 +25,9 @@ namespace uTinyRipper.Classes
 			return version.IsLess(4, 3);
 		}
 
-		private static bool IsExportIsTargetVolume(Version version)
+		private static bool IsExportIsTargetVolume(Version version, TransferInstructionFlags flags)
 		{
-			return Config.IsExportTopmostSerializedVersion || IsReadIsTargetVolume(version);
+			return flags.IsRelease() || IsReadIsTargetVolume(version);
 		}
 
 		private static int GetSerializedVersion(Version version)
@@ -60,13 +60,13 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_Size", Size.ExportYAML(container));
-			node.Add("m_Center", Center.ExportYAML(container));
-			node.Add("m_IsViewVolume", IsViewVolume);
-			if (IsExportIsTargetVolume(container.Version))
+			node.Add(SizeName, Size.ExportYAML(container));
+			node.Add(CenterName, Center.ExportYAML(container));
+			node.Add(IsViewVolumeName, IsViewVolume);
+			if (IsExportIsTargetVolume(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add("m_IsTargetVolume", IsViewVolume);
-				node.Add("m_TargetResolution", TargetResolution);
+				node.Add(IsTargetVolumeName, IsViewVolume);
+				node.Add(TargetResolutionName, TargetResolution);
 			}
 			return node;
 		}
@@ -74,6 +74,12 @@ namespace uTinyRipper.Classes
 		public bool IsViewVolume { get; private set; }
 		public bool IsTargetVolume { get; private set; }
 		public int TargetResolution { get; private set; }
+
+		public const string SizeName = "m_Size";
+		public const string CenterName = "m_Center";
+		public const string IsViewVolumeName = "m_IsViewVolume";
+		public const string IsTargetVolumeName = "m_IsTargetVolume";
+		public const string TargetResolutionName = "m_TargetResolution";
 
 		public Vector3f Size;
 		public Vector3f Center;

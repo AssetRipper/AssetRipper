@@ -13,8 +13,6 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 #endif
 using uTinyRipper;
-using uTinyRipper.Project;
-using uTinyRipper.Classes;
 using uTinyRipper.Converters;
 using Object = uTinyRipper.Classes.Object;
 using Version = uTinyRipper.Version;
@@ -31,9 +29,7 @@ namespace uTinyRipperConsole
 		public static void Main(string[] args)
 		{
 			Logger.Instance = ConsoleLogger.Instance;
-			Config.IsAdvancedLog = true;
 			Config.IsGenerateGUIDByContent = false;
-			Config.IsExportDependencies = false;
 
 			if (args.Length == 0)
 			{

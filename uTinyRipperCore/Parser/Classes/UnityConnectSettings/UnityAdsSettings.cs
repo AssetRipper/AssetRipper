@@ -79,13 +79,13 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Enabled", Enabled);
-			node.Add("m_InitializeOnStartup", InitializeOnStartup);
-			node.Add("m_TestMode", TestMode);
-			node.Add("m_IosGameId", GetIosGameId(container.Version, container.Flags));
-			node.Add("m_AndroidGameId", GetAndroidGameId(container.Version, container.Flags));
-			node.Add("m_GameIds", GetGameIds(container.Version, container.Flags).ExportYAML());
-			node.Add("m_GameId", GetGameId(container.Version));
+			node.Add(EnabledName, Enabled);
+			node.Add(InitializeOnStartupName, InitializeOnStartup);
+			node.Add(TestModeName, TestMode);
+			node.Add(IosGameIdName, GetIosGameId(container.Version, container.Flags));
+			node.Add(AndroidGameIdName, GetAndroidGameId(container.Version, container.Flags));
+			node.Add(GameIdsName, GetGameIds(container.Version, container.Flags).ExportYAML());
+			node.Add(GameIdName, GetGameId(container.Version));
 			return node;
 		}
 
@@ -130,6 +130,14 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 		public IReadOnlyDictionary<string,string> GameIds => m_gameIds;
 #endif
 		public string GameId { get; private set; }
+
+		public const string EnabledName = "m_Enabled";
+		public const string InitializeOnStartupName = "m_InitializeOnStartup";
+		public const string TestModeName = "m_TestMode";
+		public const string IosGameIdName = "m_IosGameId";
+		public const string AndroidGameIdName = "m_AndroidGameId";
+		public const string GameIdsName = "m_GameIds";
+		public const string GameIdName = "m_GameId";
 
 #if UNIVERSAL
 		private Dictionary<string,string> m_gameIds;

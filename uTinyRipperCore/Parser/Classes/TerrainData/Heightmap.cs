@@ -135,11 +135,11 @@ namespace uTinyRipper.Classes.TerrainDatas
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			if (HasDefaultPhysicMaterial(file.Version))
+			if (HasDefaultPhysicMaterial(context.Version))
 			{
-				yield return DefaultPhysicMaterial.FetchDependency(file, isLog, () => nameof(Heightmap), "m_DefaultPhysicMaterial");
+				yield return context.FetchDependency(DefaultPhysicMaterial, DefaultPhysicMaterialName);
 			}
 		}
 

@@ -36,13 +36,17 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_SpriteTilingProperty", SpriteTilingProperty.ExportYAML(container));
-			node.Add("m_AutoTiling", AutoTiling);
-			node.Add("m_Points", Points.ExportYAML(container));
+			node.Add(SpriteTilingPropertyName, SpriteTilingProperty.ExportYAML(container));
+			node.Add(AutoTilingName, AutoTiling);
+			node.Add(PointsName, Points.ExportYAML(container));
 			return node;
 		}
 
 		public bool AutoTiling { get; private set; }
+
+		public const string SpriteTilingPropertyName = "m_SpriteTilingProperty";
+		public const string AutoTilingName = "m_AutoTiling";
+		public const string PointsName = "m_Points";
 
 		public SpriteTilingProperty SpriteTilingProperty;
 		/// <summary>

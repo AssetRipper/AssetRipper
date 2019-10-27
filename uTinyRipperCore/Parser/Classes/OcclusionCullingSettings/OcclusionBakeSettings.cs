@@ -15,14 +15,18 @@ namespace uTinyRipper.Classes.OcclusionCullingSettingses
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("smallestOccluder", SmallestOccluder);
-			node.Add("smallestHole", SmallestHole);
-			node.Add("backfaceThreshold", BackfaceThreshold);
+			node.Add(SmallestOccluderName, SmallestOccluder);
+			node.Add(SmallestHoleName, SmallestHole);
+			node.Add(BackfaceThresholdName, BackfaceThreshold);
 			return node;
 		}
 
 		public float SmallestOccluder { get; set; }
 		public float SmallestHole { get; set; }
 		public float BackfaceThreshold { get; set; }
+
+		public const string SmallestOccluderName = "smallestOccluder";
+		public const string SmallestHoleName = "smallestHole";
+		public const string BackfaceThresholdName = "backfaceThreshold";
 	}
 }

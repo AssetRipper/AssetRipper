@@ -19,7 +19,7 @@ namespace uTinyRipper.Classes
 			yield return root;
 
 			Transform transform = null;
-			foreach (ComponentPair cpair in root.Components)
+			foreach (ComponentPair cpair in root.Component)
 			{
 				Component component = cpair.Component.FindAsset(root.File);
 				if(component == null)
@@ -107,7 +107,7 @@ namespace uTinyRipper.Classes
 		private static int GetSerializedVersion(Version version)
 		{
 			// unknown
-			if (Config.IsExportTopmostSerializedVersion || version.IsGreaterEqual(5, 5))
+			if (version.IsGreaterEqual(5, 5))
 			{
 				return 5;
 			}
@@ -131,7 +131,7 @@ namespace uTinyRipper.Classes
 
 			if(IsReadComponents(reader.Version, reader.Flags))
 			{
-				Components = reader.ReadAssetArray<ComponentPair>();
+				Component = reader.ReadAssetArray<ComponentPair>();
 			}
 
 			if (IsReadIsActiveFirst(reader.Version))
@@ -187,18 +187,15 @@ namespace uTinyRipper.Classes
 			}
 		}
 		
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
-			foreach(ComponentPair pair in Components)
+			foreach (Object asset in context.FetchDependencies(Component, ComponentName))
 			{
-				foreach (Object asset in pair.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 
@@ -216,7 +213,7 @@ namespace uTinyRipper.Classes
 		public T FindComponent<T>()
 			where T : Component
 		{
-			foreach (ComponentPair pair in Components)
+			foreach (ComponentPair pair in Component)
 			{
 				// component could has not impelemented asset type
 				Component comp = pair.Component.FindAsset(File);
@@ -230,7 +227,7 @@ namespace uTinyRipper.Classes
 
 		public Transform GetTransform()
 		{
-			foreach (ComponentPair pair in Components)
+			foreach (ComponentPair pair in Component)
 			{
 				Component comp = pair.Component.FindAsset(File);
 				if (comp == null)
@@ -318,7 +315,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(ComponentName, GetComponents(container.Version, container.Flags).ExportYAML(container));
 			node.Add(LayerName, Layer);
 			node.Add(NameName, Name);
@@ -332,7 +329,7 @@ namespace uTinyRipper.Classes
 
 		private IReadOnlyList<ComponentPair> GetComponents(Version version, TransferInstructionFlags flags)
 		{
-			return IsReadComponents(version, flags) ? Components : new ComponentPair[0];
+			return IsReadComponents(version, flags) ? Component : Array.Empty<ComponentPair>();
 		}
 		private string GetTagString(IExportContainer container)
 		{
@@ -393,7 +390,7 @@ namespace uTinyRipper.Classes
 
 		public override string ExportExtension => throw new NotSupportedException();
 		
-		public ComponentPair[] Components { get; private set; }
+		public ComponentPair[] Component { get; private set; }
 		public uint Layer { get; private set; }
 		public string Name { get; private set; } = string.Empty;
 		public ushort Tag { get; private set; }

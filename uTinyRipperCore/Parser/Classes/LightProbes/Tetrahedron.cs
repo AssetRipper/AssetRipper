@@ -22,14 +22,14 @@ namespace uTinyRipper.Classes.LightProbess
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(IndicesName + "[0]", Indices0);
-			node.Add(IndicesName + "[1]", Indices1);
-			node.Add(IndicesName + "[2]", Indices2);
-			node.Add(IndicesName + "[3]", Indices3);
-			node.Add(NeighborsName + "[0]", Neighbors0);
-			node.Add(NeighborsName + "[1]", Neighbors1);
-			node.Add(NeighborsName + "[2]", Neighbors2);
-			node.Add(NeighborsName + "[3]", Neighbors3);
+			node.Add(Indices0Name, Indices0);
+			node.Add(Indices1Name, Indices1);
+			node.Add(Indices2Name, Indices2);
+			node.Add(Indices3Name, Indices3);
+			node.Add(Neighbors0Name, Neighbors0);
+			node.Add(Neighbors1Name, Neighbors1);
+			node.Add(Neighbors2Name, Neighbors2);
+			node.Add(Neighbors3Name, Neighbors3);
 			node.Add(MatrixName, Matrix.ExportYAML(container));
 			return node;
 		}
@@ -43,8 +43,14 @@ namespace uTinyRipper.Classes.LightProbess
 		public int Neighbors2 { get; private set; }
 		public int Neighbors3 { get; private set; }
 
-		public const string IndicesName = "indices";
-		public const string NeighborsName = "neighbors";
+		public const string Indices0Name = "indices[0]";
+		public const string Indices1Name = "indices[1]";
+		public const string Indices2Name = "indices[2]";
+		public const string Indices3Name = "indices[3]";
+		public const string Neighbors0Name = "neighbors[0]";
+		public const string Neighbors1Name = "neighbors[1]";
+		public const string Neighbors2Name = "neighbors[2]";
+		public const string Neighbors3Name = "neighbors[3]";
 		public const string MatrixName = "matrix";
 
 		public Matrix3x4f Matrix;

@@ -75,24 +75,24 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_Speed", Speed);
-			node.Add("m_CycleOffset", CycleOffset);
-			node.Add("m_Transitions", Transitions.ExportYAML(container));
-			node.Add("m_StateMachineBehaviours", StateMachineBehaviours.ExportYAML(container));
-			node.Add("m_Position", Position.ExportYAML(container));
-			node.Add("m_IKOnFeet", IKOnFeet);
-			node.Add("m_WriteDefaultValues", WriteDefaultValues);
-			node.Add("m_Mirror", Mirror);
-			node.Add("m_SpeedParameterActive", SpeedParameterActive);
-			node.Add("m_MirrorParameterActive", MirrorParameterActive);
-			node.Add("m_CycleOffsetParameterActive", CycleOffsetParameterActive);
-			node.Add("m_TimeParameterActive", TimeParameterActive);
-			node.Add("m_Motion", Motion.ExportYAML(container));
-			node.Add("m_Tag", Tag);
-			node.Add("m_SpeedParameter", SpeedParameter);
-			node.Add("m_MirrorParameter", MirrorParameter);
-			node.Add("m_CycleOffsetParameter", CycleOffsetParameter);
-			node.Add("m_TimeParameter", TimeParameter);
+			node.Add(SpeedName, Speed);
+			node.Add(CycleOffsetName, CycleOffset);
+			node.Add(TransitionsName, Transitions.ExportYAML(container));
+			node.Add(StateMachineBehavioursName, StateMachineBehaviours.ExportYAML(container));
+			node.Add(PositionName, Position.ExportYAML(container));
+			node.Add(IKOnFeetName, IKOnFeet);
+			node.Add(WriteDefaultValuesName, WriteDefaultValues);
+			node.Add(MirrorName, Mirror);
+			node.Add(SpeedParameterActiveName, SpeedParameterActive);
+			node.Add(MirrorParameterActiveName, MirrorParameterActive);
+			node.Add(CycleOffsetParameterActiveName, CycleOffsetParameterActive);
+			node.Add(TimeParameterActiveName, TimeParameterActive);
+			node.Add(MotionName, Motion.ExportYAML(container));
+			node.Add(TagName, Tag);
+			node.Add(SpeedParameterName, SpeedParameter);
+			node.Add(MirrorParameterName, MirrorParameter);
+			node.Add(CycleOffsetParameterName, CycleOffsetParameter);
+			node.Add(TimeParameterName, TimeParameter);
 			return node;
 		}
 
@@ -114,6 +114,25 @@ namespace uTinyRipper.Classes
 		public string MirrorParameter { get; private set; }
 		public string CycleOffsetParameter { get; private set; }
 		public string TimeParameter { get; private set; }
+
+		public const string SpeedName = "m_Speed";
+		public const string CycleOffsetName = "m_CycleOffset";
+		public const string TransitionsName = "m_Transitions";
+		public const string StateMachineBehavioursName = "m_StateMachineBehaviours";
+		public const string PositionName = "m_Position";
+		public const string IKOnFeetName = "m_IKOnFeet";
+		public const string WriteDefaultValuesName = "m_WriteDefaultValues";
+		public const string MirrorName = "m_Mirror";
+		public const string SpeedParameterActiveName = "m_SpeedParameterActive";
+		public const string MirrorParameterActiveName = "m_MirrorParameterActive";
+		public const string CycleOffsetParameterActiveName = "m_CycleOffsetParameterActive";
+		public const string TimeParameterActiveName = "m_TimeParameterActive";
+		public const string MotionName = "m_Motion";
+		public const string TagName = "m_Tag";
+		public const string SpeedParameterName = "m_SpeedParameter";
+		public const string MirrorParameterName = "m_MirrorParameter";
+		public const string CycleOffsetParameterName = "m_CycleOffsetParameter";
+		public const string TimeParameterName = "m_TimeParameter";
 
 		public Vector3f Position;
 		public PPtr<Motion> Motion;

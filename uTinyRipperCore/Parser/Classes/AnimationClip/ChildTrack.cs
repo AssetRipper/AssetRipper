@@ -13,9 +13,9 @@ namespace uTinyRipper.Classes.AnimationClips
 			Track.Read(reader);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Track.FetchDependency(file, isLog, () => nameof(ChildTrack), TrackName);
+			yield return context.FetchDependency(Track, TrackName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

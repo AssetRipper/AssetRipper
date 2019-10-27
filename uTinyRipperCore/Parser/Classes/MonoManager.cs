@@ -53,11 +53,6 @@ namespace uTinyRipper.Classes
 
 		private int GetSerializedVersion(Version version)
 		{
-			if(Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if(version.IsGreaterEqual(3))
 			{
 				return 2;
@@ -95,16 +90,16 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<MonoScript> script in Scripts)
+			foreach (Object asset in context.FetchDependencies(Scripts, ScriptsName))
 			{
-				yield return script.FetchDependency(file, isLog, ToLogString, "m_Scripts");
+				yield return asset;
 			}
 		}
 
@@ -119,6 +114,8 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<string> AssemblyNames => m_assemblyNames;
 		public IReadOnlyList<string> AssemblyIdentifiers => m_assemblyIdentifiers;
 		public IReadOnlyList<int> AssemblyTypes => m_assemblyTypes;
+
+		public const string ScriptsName = "m_Scripts";
 
 		public DateTime EngineDllModDate;
 

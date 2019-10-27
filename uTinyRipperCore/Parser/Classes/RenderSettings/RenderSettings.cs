@@ -178,12 +178,7 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				//return 9;
-				return 8;
-			}
-
+#warning TODO:
 			/*if (version.IsGreaterEqual(2018))
 			{
 				return 9;
@@ -331,53 +326,53 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return SkyboxMaterial.FetchDependency(file, isLog, ToLogString, "m_SkyboxMaterial");
-			yield return HaloTexture.FetchDependency(file, isLog, ToLogString, "m_HaloTexture");
-			yield return SpotCookie.FetchDependency(file, isLog, ToLogString, "m_SpotCookie");
-			yield return CustomReflection.FetchDependency(file, isLog, ToLogString, "m_CustomReflection");
-			if (IsReadGeneratedSkyboxReflection(file.Version, file.Flags))
+			yield return context.FetchDependency(SkyboxMaterial, SkyboxMaterialName);
+			yield return context.FetchDependency(HaloTexture, HaloTextureName);
+			yield return context.FetchDependency(SpotCookie, SpotCookieName);
+			yield return context.FetchDependency(CustomReflection, CustomReflectionName);
+			if (IsReadGeneratedSkyboxReflection(context.Version, context.Flags))
 			{
-				yield return GeneratedSkyboxReflection.FetchDependency(file, isLog, ToLogString, "m_GeneratedSkyboxReflection");
+				yield return context.FetchDependency(GeneratedSkyboxReflection, GeneratedSkyboxReflectionName);
 			}
-			yield return Sun.FetchDependency(file, isLog, ToLogString, "m_Sun");
+			yield return context.FetchDependency(Sun, SunName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Fog", Fog);
-			node.Add("m_FogColor", FogColor.ExportYAML(container));
-			node.Add("m_FogMode", (int)GetExportFogMode(container.Version));
-			node.Add("m_FogDensity", FogDensity);
-			node.Add("m_LinearFogStart", LinearFogStart);
-			node.Add("m_LinearFogEnd", GetExportLinearFogEnd(container.Version));
-			node.Add("m_AmbientSkyColor", AmbientSkyColor.ExportYAML(container));
-			node.Add("m_AmbientEquatorColor", GetExportAmbientEquatorColor(container.Version).ExportYAML(container));
-			node.Add("m_AmbientGroundColor", GetExportAmbientGroundColor(container.Version).ExportYAML(container));
-			node.Add("m_AmbientIntensity", GetExportAmbientIntensity(container.Version));
-			node.Add("m_AmbientMode", (int)AmbientMode);
-			node.Add("m_SubtractiveShadowColor", GetExportSubtractiveShadowColor(container.Version).ExportYAML(container));
-			node.Add("m_SkyboxMaterial", SkyboxMaterial.ExportYAML(container));
-			node.Add("m_HaloStrength", HaloStrength);
-			node.Add("m_FlareStrength", FlareStrength);
-			node.Add("m_FlareFadeSpeed", GetExportFlareFadeSpeed(container.Version));
-			node.Add("m_HaloTexture", HaloTexture.ExportYAML(container));
-			node.Add("m_SpotCookie", SpotCookie.ExportYAML(container));
-			node.Add("m_DefaultReflectionMode", DefaultReflectionMode);
-			node.Add("m_DefaultReflectionResolution", GetExportDefaultReflectionResolution(container.Version));
-			node.Add("m_ReflectionBounces", GetExportReflectionBounces(container.Version));
-			node.Add("m_ReflectionIntensity", GetExportReflectionIntensity(container.Version));
-			node.Add("m_CustomReflection", CustomReflection.ExportYAML(container));
-			node.Add("m_Sun", Sun.ExportYAML(container));
-			node.Add("m_IndirectSpecularColor", GetExportIndirectSpecularColor(container.Version).ExportYAML(container));
+			node.Add(FogName, Fog);
+			node.Add(FogColorName, FogColor.ExportYAML(container));
+			node.Add(FogModeName, (int)GetExportFogMode(container.Version));
+			node.Add(FogDensityName, FogDensity);
+			node.Add(LinearFogStartName, LinearFogStart);
+			node.Add(LinearFogEndName, GetExportLinearFogEnd(container.Version));
+			node.Add(AmbientSkyColorName, AmbientSkyColor.ExportYAML(container));
+			node.Add(AmbientEquatorColorName, GetExportAmbientEquatorColor(container.Version).ExportYAML(container));
+			node.Add(AmbientGroundColorName, GetExportAmbientGroundColor(container.Version).ExportYAML(container));
+			node.Add(AmbientIntensityName, GetExportAmbientIntensity(container.Version));
+			node.Add(AmbientModeName, (int)AmbientMode);
+			node.Add(SubtractiveShadowColorName, GetExportSubtractiveShadowColor(container.Version).ExportYAML(container));
+			node.Add(SkyboxMaterialName, SkyboxMaterial.ExportYAML(container));
+			node.Add(HaloStrengthName, HaloStrength);
+			node.Add(FlareStrengthName, FlareStrength);
+			node.Add(FlareFadeSpeedName, GetExportFlareFadeSpeed(container.Version));
+			node.Add(HaloTextureName, HaloTexture.ExportYAML(container));
+			node.Add(SpotCookieName, SpotCookie.ExportYAML(container));
+			node.Add(DefaultReflectionModeName, DefaultReflectionMode);
+			node.Add(DefaultReflectionResolutionName, GetExportDefaultReflectionResolution(container.Version));
+			node.Add(ReflectionBouncesName, GetExportReflectionBounces(container.Version));
+			node.Add(ReflectionIntensityName, GetExportReflectionIntensity(container.Version));
+			node.Add(CustomReflectionName, CustomReflection.ExportYAML(container));
+			node.Add(SunName, Sun.ExportYAML(container));
+			node.Add(IndirectSpecularColorName, GetExportIndirectSpecularColor(container.Version).ExportYAML(container));
 			return node;
 		}
 
@@ -447,6 +442,33 @@ namespace uTinyRipper.Classes
 		public float ReflectionIntensity { get; private set; }
 		public float AmbientLightScale { get; private set; }
 		public bool UseRadianceAmbientProbe { get; private set; }
+
+		public const string FogName = "m_Fog";
+		public const string FogColorName = "m_FogColor";
+		public const string FogModeName = "m_FogMode";
+		public const string FogDensityName = "m_FogDensity";
+		public const string LinearFogStartName = "m_LinearFogStart";
+		public const string LinearFogEndName = "m_LinearFogEnd";
+		public const string AmbientSkyColorName = "m_AmbientSkyColor";
+		public const string AmbientEquatorColorName = "m_AmbientEquatorColor";
+		public const string AmbientGroundColorName = "m_AmbientGroundColor";
+		public const string AmbientIntensityName = "m_AmbientIntensity";
+		public const string AmbientModeName = "m_AmbientMode";
+		public const string SubtractiveShadowColorName = "m_SubtractiveShadowColor";
+		public const string SkyboxMaterialName = "m_SkyboxMaterial";
+		public const string HaloStrengthName = "m_HaloStrength";
+		public const string FlareStrengthName = "m_FlareStrength";
+		public const string FlareFadeSpeedName = "m_FlareFadeSpeed";
+		public const string HaloTextureName = "m_HaloTexture";
+		public const string SpotCookieName = "m_SpotCookie";
+		public const string DefaultReflectionModeName = "m_DefaultReflectionMode";
+		public const string DefaultReflectionResolutionName = "m_DefaultReflectionResolution";
+		public const string ReflectionBouncesName = "m_ReflectionBounces";
+		public const string ReflectionIntensityName = "m_ReflectionIntensity";
+		public const string CustomReflectionName = "m_CustomReflection";
+		public const string GeneratedSkyboxReflectionName = "m_GeneratedSkyboxReflection";
+		public const string SunName = "m_Sun";
+		public const string IndirectSpecularColorName = "m_IndirectSpecularColor";
 
 		public ColorRGBAf FogColor;
 		/// <summary>

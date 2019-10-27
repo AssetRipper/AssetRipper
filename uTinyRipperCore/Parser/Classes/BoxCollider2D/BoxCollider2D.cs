@@ -35,11 +35,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(5))
 			{
 				return 2;
@@ -72,16 +67,21 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_SpriteTilingProperty", SpriteTilingProperty.ExportYAML(container));
-			node.Add("m_AutoTiling", AutoTiling);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Size", Size.ExportYAML(container));
-			node.Add("m_EdgeRadius", EdgeRadius);
+			node.Add(SpriteTilingPropertyName, SpriteTilingProperty.ExportYAML(container));
+			node.Add(AutoTilingName, AutoTiling);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(SizeName, Size.ExportYAML(container));
+			node.Add(EdgeRadiusName, EdgeRadius);
 			return node;
 		}
 
 		public bool AutoTiling { get; private set; }
 		public float EdgeRadius { get; private set; }
+
+		public const string SpriteTilingPropertyName = "m_SpriteTilingProperty";
+		public const string AutoTilingName = "m_AutoTiling";
+		public const string SizeName = "m_Size";
+		public const string EdgeRadiusName = "m_EdgeRadius";
 
 		public SpriteTilingProperty SpriteTilingProperty;
 		public Vector2f Size;

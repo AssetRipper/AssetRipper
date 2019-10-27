@@ -318,7 +318,7 @@ namespace uTinyRipper.Converters
 
 		private static Vector2f[] GetUV1(IExportContainer container, Mesh origin)
 		{
-			return Mesh.HasUV1(container.Version) ? origin.UV1.ToArray() : new Vector2f[0];
+			return Mesh.HasUV1(container.Version) ? origin.UV1.ToArray() : Array.Empty<Vector2f>();
 		}
 
 		private static Vector4f[] GetTangents(IExportContainer container, Mesh origin)

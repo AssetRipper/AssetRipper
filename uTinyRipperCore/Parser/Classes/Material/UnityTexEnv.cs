@@ -29,9 +29,9 @@ namespace uTinyRipper.Classes.Materials
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Texture.FetchDependency(file, isLog, () => nameof(UnityTexEnv), TextureName);
+			yield return context.FetchDependency(Texture, TextureName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

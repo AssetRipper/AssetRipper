@@ -43,11 +43,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(3, 2))
 			{
 				return 2;
@@ -91,15 +86,15 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Mass", Mass);
-			node.Add("m_Drag", Drag);
-			node.Add("m_AngularDrag", AngularDrag);
-			node.Add("m_UseGravity", UseGravity);
-			node.Add("m_IsKinematic", IsKinematic);
-			node.Add("m_Interpolate", (byte)Interpolate);
-			node.Add("m_Constraints", (int)Constraints);
-			node.Add("m_CollisionDetection", (int)CollisionDetection);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(MassName, Mass);
+			node.Add(DragName, Drag);
+			node.Add(AngularDragName, AngularDrag);
+			node.Add(UseGravityName, UseGravity);
+			node.Add(IsKinematicName, IsKinematic);
+			node.Add(InterpolateName, (byte)Interpolate);
+			node.Add(ConstraintsName, (int)Constraints);
+			node.Add(CollisionDetectionName, (int)CollisionDetection);
 			return node;
 		}
 
@@ -111,5 +106,14 @@ namespace uTinyRipper.Classes
 		public RigidbodyInterpolation Interpolate { get; private set; }
 		public RigidbodyConstraints Constraints { get; private set; }
 		public CollisionDetectionMode CollisionDetection { get; private set; }
+
+		public const string MassName = "m_Mass";
+		public const string DragName = "m_Drag";
+		public const string AngularDragName = "m_AngularDrag";
+		public const string UseGravityName = "m_UseGravity";
+		public const string IsKinematicName = "m_IsKinematic";
+		public const string InterpolateName = "m_Interpolate";
+		public const string ConstraintsName = "m_Constraints";
+		public const string CollisionDetectionName = "m_CollisionDetection";
 	}
 }

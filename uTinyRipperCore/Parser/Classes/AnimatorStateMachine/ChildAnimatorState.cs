@@ -26,10 +26,13 @@ namespace uTinyRipper.Classes.AnimatorStateMachines
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.ForceAddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_State", State.ExportYAML(container));
-			node.Add("m_Position", Position.ExportYAML(container));
+			node.Add(StateName, State.ExportYAML(container));
+			node.Add(PositionName, Position.ExportYAML(container));
 			return node;
 		}
+
+		public const string StateName = "m_State";
+		public const string PositionName = "m_Position";
 
 		public PPtr<AnimatorState> State;
 		public Vector3f Position;

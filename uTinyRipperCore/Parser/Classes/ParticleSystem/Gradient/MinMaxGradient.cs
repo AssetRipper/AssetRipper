@@ -74,16 +74,22 @@ namespace uTinyRipper.Classes.ParticleSystems
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("minMaxState", (ushort)MinMaxState);
-			node.Add("minColor", MinColor.ExportYAML(container));
-			node.Add("maxColor", MaxColor.ExportYAML(container));
-			node.Add("maxGradient", MaxGradient.ExportYAML(container));
-			node.Add("minGradient", MinGradient.ExportYAML(container));
+			node.Add(MinMaxStateName, (ushort)MinMaxState);
+			node.Add(MinColorName, MinColor.ExportYAML(container));
+			node.Add(MaxColorName, MaxColor.ExportYAML(container));
+			node.Add(MaxGradientName, MaxGradient.ExportYAML(container));
+			node.Add(MinGradientName, MinGradient.ExportYAML(container));
 			return node;
 		}
 
 		public MinMaxGradientState MinMaxState { get; private set; }
-		
+
+		public const string MinMaxStateName = "minMaxState";
+		public const string MinColorName = "minColor";
+		public const string MaxColorName = "maxColor";
+		public const string MaxGradientName = "maxGradient";
+		public const string MinGradientName = "minGradient";
+
 		public ColorRGBAf MinColor;
 		public ColorRGBAf MaxColor;
 		public Gradient MaxGradient;

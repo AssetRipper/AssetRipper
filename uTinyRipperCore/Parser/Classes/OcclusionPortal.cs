@@ -24,13 +24,17 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Open", Open);
-			node.Add("m_Center", Center.ExportYAML(container));
-			node.Add("m_Size", Size.ExportYAML(container));
+			node.Add(OpenName, Open);
+			node.Add(CenterName, Center.ExportYAML(container));
+			node.Add(SizeName, Size.ExportYAML(container));
 			return node;
 		}
 
 		public bool Open { get; private set; }
+
+		public const string OpenName = "m_Open";
+		public const string CenterName = "m_Center";
+		public const string SizeName = "m_Size";
 
 		public Vector3f Center;
 		public Vector3f Size;

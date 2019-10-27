@@ -18,9 +18,9 @@ namespace uTinyRipper.Classes.TerrainDatas
 			writer.Write(BendFactor);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Prefab.FetchDependency(file, isLog, () => nameof(TreePrototype), PrefabName);
+			yield return context.FetchDependency(Prefab, PrefabName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

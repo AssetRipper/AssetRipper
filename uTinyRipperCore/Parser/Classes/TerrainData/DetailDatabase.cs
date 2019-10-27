@@ -129,31 +129,25 @@ namespace uTinyRipper.Classes.TerrainDatas
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (DetailPrototype prototype in DetailPrototypes)
-			{
-				foreach (Object asset in prototype.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
-			}
-
-			if (HasAtlasTexture(file.Version))
-			{
-				yield return AtlasTexture.FetchDependency(file, isLog, () => nameof(DetailDatabase), AtlasTextureName);
-			}
-
-			foreach (Object asset in TreeDatabase.FetchDependencies(file, isLog))
+			foreach (Object asset in context.FetchDependencies(DetailPrototypes, DetailPrototypesName))
 			{
 				yield return asset;
 			}
-
-			if (!HasAtlasTexture(file.Version))
+			if (HasAtlasTexture(context.Version))
 			{
-				foreach (PPtr<Texture2D> preloadTexture in PreloadTextureAtlasData)
+				yield return context.FetchDependency(AtlasTexture, AtlasTextureName);
+			}
+			foreach (Object asset in TreeDatabase.FetchDependencies(context))
+			{
+				yield return asset;
+			}
+			if (!HasAtlasTexture(context.Version))
+			{
+				foreach (Object asset in context.FetchDependencies(PreloadTextureAtlasData, PreloadTextureAtlasDataName))
 				{
-					yield return preloadTexture.FetchDependency(file, isLog, () => nameof(DetailDatabase), PreloadTextureAtlasDataName);
+					yield return asset;
 				}
 			}
 		}

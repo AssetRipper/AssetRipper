@@ -67,12 +67,11 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_PVSData", PVSData.ExportYAML());
-			node.Add("m_Scenes", Scenes.ExportYAML(container));
-
+			node.Add(PVSDataName, PVSData.ExportYAML());
+			node.Add(ScenesName, Scenes.ExportYAML(container));
 			SetExportData(container);
-			node.Add("m_StaticRenderers", StaticRenderers.ExportYAML(container));
-			node.Add("m_Portals", Portals.ExportYAML(container));
+			node.Add(StaticRenderersName, StaticRenderers.ExportYAML(container));
+			node.Add(PortalsName, Portals.ExportYAML(container));
 			return node;
 		}
 
@@ -163,10 +162,15 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<OcclusionScene> Scenes => m_scenes;
 		public IReadOnlyList<SceneObjectIdentifier> StaticRenderers => m_staticRenderers;
 		public IReadOnlyList<SceneObjectIdentifier> Portals => m_portals;
-		
+
+		public const string PVSDataName = "m_PVSData";
+		public const string ScenesName = "m_Scenes";
+		public const string StaticRenderersName = "m_StaticRenderers";
+		public const string PortalsName = "m_Portals";
+
 		private byte[] m_PVSData;
 		private OcclusionScene[] m_scenes;
-		private SceneObjectIdentifier[] m_staticRenderers = new SceneObjectIdentifier[0];
-		private SceneObjectIdentifier[] m_portals = new SceneObjectIdentifier[0];
+		private SceneObjectIdentifier[] m_staticRenderers = Array.Empty<SceneObjectIdentifier>();
+		private SceneObjectIdentifier[] m_portals = Array.Empty<SceneObjectIdentifier>();
 	}
 }

@@ -10,12 +10,9 @@ namespace uTinyRipper.Converters.Script
 
 		public void Export(TextWriter writer, int intent)
 		{
-			if (Attributes != null)
+			foreach (ScriptExportAttribute attribute in Attributes)
 			{
-				foreach (ScriptExportAttribute attribute in Attributes)
-				{
-					attribute.Export(writer, intent);
-				}
+				attribute.Export(writer, intent);
 			}
 
 			writer.WriteIndent(intent);
@@ -45,12 +42,9 @@ namespace uTinyRipper.Converters.Script
 		public void GetUsedNamespaces(ICollection<string> namespaces)
 		{
 			Type.GetTypeNamespaces(namespaces);
-			if (Attributes != null)
+			foreach (ScriptExportAttribute attribute in Attributes)
 			{
-				foreach (ScriptExportAttribute attribute in Attributes)
-				{
-					attribute.GetUsedNamespaces(namespaces);
-				}
+				attribute.GetUsedNamespaces(namespaces);
 			}
 		}
 

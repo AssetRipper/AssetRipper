@@ -124,18 +124,18 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("standardShaderQuality", (int)StandardShaderQuality);
-			node.Add("renderingPath", (int)RenderingPath);
-			node.Add("hdrMode", (int)HdrMode);
-			node.Add("realtimeGICPUUsage", (int)RealtimeGICPUUsage);
-			node.Add("useReflectionProbeBoxProjection", UseReflectionProbeBoxProjection);
-			node.Add("useReflectionProbeBlending", UseReflectionProbeBlending);
-			node.Add("useHDR", UseHDR);
-			node.Add("useDetailNormalMap", UseDetailNormalMap);
-			node.Add("useCascadedShadowMaps", UseCascadedShadowMaps);
-			node.Add("prefer32BitShadowMaps", Prefer32BitShadowMaps);
-			node.Add("enableLPPV", EnableLPPV);
-			node.Add("useDitherMaskForAlphaBlendedShadows", UseDitherMaskForAlphaBlendedShadows);
+			node.Add(StandardShaderQualityName, (int)StandardShaderQuality);
+			node.Add(RenderingPathName, (int)RenderingPath);
+			node.Add(HdrModeName, (int)HdrMode);
+			node.Add(RealtimeGICPUUsageName, (int)RealtimeGICPUUsage);
+			node.Add(UseReflectionProbeBoxProjectionName, UseReflectionProbeBoxProjection);
+			node.Add(UseReflectionProbeBlendingName, UseReflectionProbeBlending);
+			node.Add(UseHDRName, UseHDR);
+			node.Add(UseDetailNormalMapName, UseDetailNormalMap);
+			node.Add(UseCascadedShadowMapsName, UseCascadedShadowMaps);
+			node.Add(Prefer32BitShadowMapsName, Prefer32BitShadowMaps);
+			node.Add(EnableLPPVName, EnableLPPV);
+			node.Add(UseDitherMaskForAlphaBlendedShadowsName, UseDitherMaskForAlphaBlendedShadows);
 			return node;
 		}
 
@@ -151,5 +151,18 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public bool Prefer32BitShadowMaps { get; private set; }
 		public bool EnableLPPV { get; private set; }
 		public bool UseDitherMaskForAlphaBlendedShadows { get; private set; }
+
+		public const string StandardShaderQualityName = "standardShaderQuality";
+		public const string RenderingPathName = "renderingPath";
+		public const string HdrModeName = "hdrMode";
+		public const string RealtimeGICPUUsageName = "realtimeGICPUUsage";
+		public const string UseReflectionProbeBoxProjectionName = "useReflectionProbeBoxProjection";
+		public const string UseReflectionProbeBlendingName = "useReflectionProbeBlending";
+		public const string UseHDRName = "useHDR";
+		public const string UseDetailNormalMapName = "useDetailNormalMap";
+		public const string UseCascadedShadowMapsName = "useCascadedShadowMaps";
+		public const string Prefer32BitShadowMapsName = "prefer32BitShadowMaps";
+		public const string EnableLPPVName = "enableLPPV";
+		public const string UseDitherMaskForAlphaBlendedShadowsName = "useDitherMaskForAlphaBlendedShadows";
 	}
 }

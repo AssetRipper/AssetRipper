@@ -39,9 +39,9 @@ namespace uTinyRipper.Classes.AnimationClips
 			MessageOptions = reader.ReadInt32();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return ObjectReferenceParameter.FetchDependency(file, isLog, () => nameof(AnimationEvent), ObjectReferenceParameterName);
+			yield return context.FetchDependency(ObjectReferenceParameter, ObjectReferenceParameterName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

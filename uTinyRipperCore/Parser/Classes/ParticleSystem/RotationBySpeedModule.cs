@@ -35,11 +35,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add("x", GetExportX(container.Version).ExportYAML(container));
-			node.Add("y", GetExportY(container.Version).ExportYAML(container));
-			node.Add("curve", Curve.ExportYAML(container));
-			node.Add("separateAxes", SeparateAxes);
-			node.Add("range", Range.ExportYAML(container));
+			node.Add(XName, GetExportX(container.Version).ExportYAML(container));
+			node.Add(YName, GetExportY(container.Version).ExportYAML(container));
+			node.Add(CurveName, Curve.ExportYAML(container));
+			node.Add(SeparateAxesName, SeparateAxes);
+			node.Add(RangeName, Range.ExportYAML(container));
 			return node;
 		}
 
@@ -53,6 +53,12 @@ namespace uTinyRipper.Classes.ParticleSystems
 		}
 
 		public bool SeparateAxes { get; private set; }
+
+		public const string XName = "x";
+		public const string YName = "y";
+		public const string CurveName = "curve";
+		public const string SeparateAxesName = "separateAxes";
+		public const string RangeName = "range";
 
 		public MinMaxCurve X;
 		public MinMaxCurve Y;

@@ -17,11 +17,11 @@ namespace uTinyRipper.Classes.WheelColliders
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_ExtremumSlip", ExtremumSlip);
-			node.Add("m_ExtremumValue", ExtremumValue);
-			node.Add("m_AsymptoteSlip", AsymptoteSlip);
-			node.Add("m_AsymptoteValue", AsymptoteValue);
-			node.Add("m_Stiffness", Stiffness);
+			node.Add(ExtremumSlipName, ExtremumSlip);
+			node.Add(ExtremumValueName, ExtremumValue);
+			node.Add(AsymptoteSlipName, AsymptoteSlip);
+			node.Add(AsymptoteValueName, AsymptoteValue);
+			node.Add(StiffnessName, Stiffness);
 			return node;
 		}
 
@@ -30,5 +30,11 @@ namespace uTinyRipper.Classes.WheelColliders
 		public float AsymptoteSlip { get; private set; }
 		public float AsymptoteValue { get; private set; }
 		public float Stiffness { get; private set; }
+
+		public const string ExtremumSlipName = "m_ExtremumSlip";
+		public const string ExtremumValueName = "m_ExtremumValue";
+		public const string AsymptoteSlipName = "m_AsymptoteSlip";
+		public const string AsymptoteValueName = "m_AsymptoteValue";
+		public const string StiffnessName = "m_Stiffness";
 	}
 }

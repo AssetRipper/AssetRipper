@@ -1,5 +1,4 @@
 ﻿using SevenZip;
-using System;
 using System.Collections.Generic;
 using uTinyRipper.Project;
 using uTinyRipper.YAML;
@@ -77,14 +76,11 @@ namespace uTinyRipper.Classes.Materials
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(UnityTexEnv env in m_texEnvs.Values)
+			foreach (Object asset in context.FetchDependencies(TexEnvs.Values, TexEnvsName))
 			{
-				foreach(Object asset in env.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 

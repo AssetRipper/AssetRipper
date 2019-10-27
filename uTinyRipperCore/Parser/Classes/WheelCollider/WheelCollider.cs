@@ -78,16 +78,16 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Center", Center.ExportYAML(container));
-			node.Add("m_Radius", Radius);
-			node.Add("m_SuspensionSpring", SuspensionSpring.ExportYAML(container));
-			node.Add("m_SuspensionDistance", SuspensionDistance);
-			node.Add("m_ForceAppPointDistance", ForceAppPointDistance);
-			node.Add("m_Mass", Mass);
-			node.Add("m_WheelDampingRate", WheelDampingRate);
-			node.Add("m_ForwardFriction", ForwardFriction.ExportYAML(container));
-			node.Add("m_SidewaysFriction", SidewaysFriction.ExportYAML(container));
-			node.Add("m_Enabled", Enabled);
+			node.Add(CenterName, Center.ExportYAML(container));
+			node.Add(RadiusName, Radius);
+			node.Add(SuspensionSpringName, SuspensionSpring.ExportYAML(container));
+			node.Add(SuspensionDistanceName, SuspensionDistance);
+			node.Add(ForceAppPointDistanceName, ForceAppPointDistance);
+			node.Add(MassName, Mass);
+			node.Add(WheelDampingRateName, WheelDampingRate);
+			node.Add(ForwardFrictionName, ForwardFriction.ExportYAML(container));
+			node.Add(SidewaysFrictionName, SidewaysFriction.ExportYAML(container));
+			node.Add(EnabledName, Enabled);
 			return node;
 		}
 
@@ -97,6 +97,17 @@ namespace uTinyRipper.Classes
 		public float Mass { get; private set; }
 		public float WheelDampingRate { get; private set; }
 		public bool Enabled { get; private set; }
+
+		public const string CenterName = "m_Center";
+		public const string RadiusName = "m_Radius";
+		public const string SuspensionSpringName = "m_SuspensionSpring";
+		public const string SuspensionDistanceName = "m_SuspensionDistance";
+		public const string ForceAppPointDistanceName = "m_ForceAppPointDistance";
+		public const string MassName = "m_Mass";
+		public const string WheelDampingRateName = "m_WheelDampingRate";
+		public const string ForwardFrictionName = "m_ForwardFriction";
+		public const string SidewaysFrictionName = "m_SidewaysFriction";
+		public const string EnabledName = "m_Enabled";
 
 		public Vector3f Center;
 		public JointSpring SuspensionSpring;

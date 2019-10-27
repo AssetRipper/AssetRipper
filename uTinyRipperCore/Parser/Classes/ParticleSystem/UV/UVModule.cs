@@ -146,14 +146,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (SpriteData spriteData in Sprites)
+			foreach (Object asset in context.FetchDependencies(Sprites, SpritesName))
 			{
-				foreach(Object asset in spriteData.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 

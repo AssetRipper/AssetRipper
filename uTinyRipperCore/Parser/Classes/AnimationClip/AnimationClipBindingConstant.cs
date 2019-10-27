@@ -10,8 +10,8 @@ namespace uTinyRipper.Classes.AnimationClips
 	{
 		public AnimationClipBindingConstant(bool _)
 		{
-			m_genericBindings = new GenericBinding[0];
-			m_pptrCurveMapping = new PPtr<Object>[0];
+			m_genericBindings = Array.Empty<GenericBinding>();
+			m_pptrCurveMapping = Array.Empty<PPtr<Object>>();
 		}
 
 		/// <summary>
@@ -72,25 +72,25 @@ namespace uTinyRipper.Classes.AnimationClips
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (PPtr<Object> ptr in m_pptrCurveMapping)
-			{
-				yield return ptr.FetchDependency(file, isLog, () => nameof(AnimationClipBindingConstant), "pptrCurveMapping");
-			}
+			return context.FetchDependencies(PptrCurveMapping, PptrCurveMappingName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("genericBindings", GenericBindings.ExportYAML(container));
-			node.Add("pptrCurveMapping", PptrCurveMapping.ExportYAML(container));
+			node.Add(GenericBindingsName, GenericBindings.ExportYAML(container));
+			node.Add(PptrCurveMappingName, PptrCurveMapping.ExportYAML(container));
 			return node;
 		}
 
 		public IReadOnlyList<GenericBinding> GenericBindings => m_genericBindings;
 		public IReadOnlyList<PPtr<Object>> PptrCurveMapping => m_pptrCurveMapping;
-		
+
+		public const string GenericBindingsName = "genericBindings";
+		public const string PptrCurveMappingName = "pptrCurveMapping";
+
 		private GenericBinding[] m_genericBindings;
 		private PPtr<Object>[] m_pptrCurveMapping;
 	}

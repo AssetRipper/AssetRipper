@@ -11,14 +11,14 @@ namespace uTinyRipper.Project.Classes
 		{
 			m_sprites = new SpriteMetaData[] { sprite };
 			m_outline = (Vector2f[][])sprite.Outline;
-			m_physicsShape = new Vector2f[0][];
+			m_physicsShape = System.Array.Empty<Vector2f[]>();
 		}
 
 		public SpriteSheetMetaData(SpriteMetaData[] sprites)
 		{
 			m_sprites = sprites;
-			m_outline = new Vector2f[0][];
-			m_physicsShape = new Vector2f[0][];
+			m_outline = System.Array.Empty<Vector2f[]>();
+			m_physicsShape = System.Array.Empty<Vector2f[]>();
 		}
 
 		private static int GetSerializedVersion(Version version)

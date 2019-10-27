@@ -1,7 +1,6 @@
 using uTinyRipper.Project;
 using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes;
-using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Converters
 {
@@ -17,9 +16,6 @@ namespace uTinyRipper.Converters
 		string TagIDToName(int tagID);
 
 		IExportCollection CurrentCollection { get; }
-		Version Version { get; }
-		Platform Platform { get; }
-		TransferInstructionFlags Flags { get; }
 		Version ExportVersion { get; }
 		Platform ExportPlatform { get; }
 		TransferInstructionFlags ExportFlags { get; }

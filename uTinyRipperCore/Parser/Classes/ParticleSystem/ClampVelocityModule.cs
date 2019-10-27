@@ -57,16 +57,16 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add("x", X.ExportYAML(container));
-			node.Add("y", Y.ExportYAML(container));
-			node.Add("z", Z.ExportYAML(container));
-			node.Add("magnitude", Magnitude.ExportYAML(container));
-			node.Add("separateAxis", SeparateAxis);
-			node.Add("inWorldSpace", InWorldSpace);
-			node.Add("multiplyDragByParticleSize", GetExportMultiplyDragByParticleSize(container.Version));
-			node.Add("multiplyDragByParticleVelocity", GetExportMultiplyDragByParticleVelocity(container.Version));
-			node.Add("dampen", Dampen);
-			node.Add("drag", GetExportDrag(container.Version).ExportYAML(container));
+			node.Add(XName, X.ExportYAML(container));
+			node.Add(YName, Y.ExportYAML(container));
+			node.Add(ZName, Z.ExportYAML(container));
+			node.Add(MagnitudeName, Magnitude.ExportYAML(container));
+			node.Add(SeparateAxisName, SeparateAxis);
+			node.Add(InWorldSpaceName, InWorldSpace);
+			node.Add(MultiplyDragByParticleSizeName, GetExportMultiplyDragByParticleSize(container.Version));
+			node.Add(MultiplyDragByParticleVelocityName, GetExportMultiplyDragByParticleVelocity(container.Version));
+			node.Add(DampenName, Dampen);
+			node.Add(DragName, GetExportDrag(container.Version).ExportYAML(container));
 			return node;
 		}
 
@@ -88,6 +88,17 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public bool MultiplyDragByParticleSize { get; private set; }
 		public bool MultiplyDragByParticleVelocity { get; private set; }
 		public float Dampen { get; private set; }
+
+		public const string XName = "x";
+		public const string YName = "y";
+		public const string ZName = "z";
+		public const string MagnitudeName = "magnitude";
+		public const string SeparateAxisName = "separateAxis";
+		public const string InWorldSpaceName = "inWorldSpace";
+		public const string MultiplyDragByParticleSizeName = "multiplyDragByParticleSize";
+		public const string MultiplyDragByParticleVelocityName = "multiplyDragByParticleVelocity";
+		public const string DampenName = "dampen";
+		public const string DragName = "drag";
 
 		public MinMaxCurve X;
 		public MinMaxCurve Y;

@@ -51,14 +51,18 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("enabled", Enabled);
-			node.Add("path", Path);
-			node.Add("guid", GUID.ExportYAML(container));
+			node.Add(EnabledName, Enabled);
+			node.Add(PathName, Path);
+			node.Add(GuidName, GUID.ExportYAML(container));
 			return node;
 		}
 
 		public bool Enabled { get; private set; }
 		public string Path { get; private set; }
+
+		public const string EnabledName = "enabled";
+		public const string PathName = "path";
+		public const string GuidName = "guid";
 
 		public GUID GUID;
 	}

@@ -15,11 +15,13 @@ namespace uTinyRipper.Classes.Avatars
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_HandBoneIndex", m_handBoneIndex.ExportYAML(true));
+			node.Add(HandBoneIndexName, m_handBoneIndex.ExportYAML(true));
 			return node;
 		}
 
 		public IReadOnlyList<int> HandBoneIndex => m_handBoneIndex;
+
+		public const string HandBoneIndexName = "m_HandBoneIndex";
 
 		private int[] m_handBoneIndex;
 	}

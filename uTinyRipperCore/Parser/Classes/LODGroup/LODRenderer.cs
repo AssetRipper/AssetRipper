@@ -4,16 +4,16 @@ using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.LODGroups
 {
-	public struct LODRenderer : IAssetReadable, IYAMLExportable
+	public struct LODRenderer : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
 			Renderer.Read(reader);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Renderer.FetchDependency(file, isLog, () => nameof(LODRenderer), RendererName);
+			yield return context.FetchDependency(Renderer, RendererName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

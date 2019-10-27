@@ -143,10 +143,6 @@ namespace uTinyRipper.Classes
 		
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
 			// min version is 2nd
 			return 2;
 		}
@@ -253,20 +249,20 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return TargetTexture.FetchDependency(file, isLog, ToLogString, "m_TargetTexture");
+			yield return context.FetchDependency(TargetTexture, TargetTextureName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(ClearFlagsName, ClearFlags);
 			node.Add(BackGroundColorName, BackGroundColor.ExportYAML(container));
 

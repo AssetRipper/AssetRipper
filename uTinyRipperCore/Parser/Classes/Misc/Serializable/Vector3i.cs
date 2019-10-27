@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
 using uTinyRipper.Game.Assembly;
@@ -95,7 +94,7 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
 			yield break;
 		}

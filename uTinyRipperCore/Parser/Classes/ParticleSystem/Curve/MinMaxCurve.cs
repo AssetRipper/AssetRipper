@@ -59,11 +59,6 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(5, 6, 1))
 			{
 				return 2;
@@ -94,12 +89,12 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("minMaxState", (ushort)MinMaxState);
-			node.Add("scalar", GetExportScalar(container.Version));
-			node.Add("minScalar", GetExportMinScalar(container.Version));
-			node.Add("maxCurve", MaxCurve.ExportYAML(container));
-			node.Add("minCurve", MinCurve.ExportYAML(container));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(MinMaxStateName, (ushort)MinMaxState);
+			node.Add(ScalarName, GetExportScalar(container.Version));
+			node.Add(MinScalarName, GetExportMinScalar(container.Version));
+			node.Add(MaxCurveName, MaxCurve.ExportYAML(container));
+			node.Add(MinCurveName, MinCurve.ExportYAML(container));
 			return node;
 		}
 
@@ -143,6 +138,12 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public ParticleSystemCurveMode MinMaxState { get; private set; }
 		public float Scalar { get; private set; }
 		public float MinScalar { get; private set; }
+
+		public const string MinMaxStateName = "minMaxState";
+		public const string ScalarName = "scalar";
+		public const string MinScalarName = "minScalar";
+		public const string MaxCurveName = "maxCurve";
+		public const string MinCurveName = "minCurve";
 
 		public AnimationCurveTpl<Float> MaxCurve;
 		public AnimationCurveTpl<Float> MinCurve;

@@ -335,15 +335,15 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return DefaultMaterial.FetchDependency(file, isLog, ToLogString, DefaultMaterialName);
-			yield return Texture.FetchDependency(file, isLog, ToLogString, TextureName);
+			yield return context.FetchDependency(DefaultMaterial, DefaultMaterialName);
+			yield return context.FetchDependency(Texture, TextureName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -388,7 +388,7 @@ namespace uTinyRipper.Classes
 		}
 		private IReadOnlyList<byte> GetFontData(Version version)
 		{
-			return IsReadFontData(version) ? FontData : new byte[0];
+			return IsReadFontData(version) ? FontData : Array.Empty<byte>();
 		}
 		private IReadOnlyList<string> GetFontNames(Version version)
 		{
@@ -396,7 +396,7 @@ namespace uTinyRipper.Classes
 		}
 		private IReadOnlyList<PPtr<Font>> GetFallbackFonts(Version version)
 		{
-			return IsReadFallbackFonts(version) ? FallbackFonts : new PPtr<Font>[0];
+			return IsReadFallbackFonts(version) ? FallbackFonts : Array.Empty<PPtr<Font>>();
 		}
 		private bool GetShouldRoundAdvanceValue(Version version)
 		{

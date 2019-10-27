@@ -35,24 +35,22 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
-			foreach (KeyValuePair<string, PPtr<Object>> asset in Container)
+
+			foreach (Object asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
 			{
-				yield return asset.Value.FetchDependency(file, isLog, () => nameof(ResourceManager), ContainerName);
+				yield return asset;
 			}
-			if (IsReadDependentAssets(file.Version, file.Flags))
+			if (IsReadDependentAssets(context.Version, context.Flags))
 			{
-				foreach (ResourceManagerDependency dependentAsset in DependentAssets)
+				foreach (Object asset in context.FetchDependencies(DependentAssets, DependentAssetsName))
 				{
-					foreach (Object asset in dependentAsset.FetchDependencies(file, isLog))
-					{
-						yield return asset;
-					}
+					yield return asset;
 				}
 			}
 		}
@@ -75,7 +73,7 @@ namespace uTinyRipper.Classes
 			{
 				if (containerEntry.Value.IsAsset(File, asset))
 				{
-					string validName = GetAssetName(asset);
+					string validName = asset.TryGetName();
 					string resourceName = containerEntry.Key;
 					if (validName.Length > 0 && validName != resourceName && resourceName.EndsWith(validName, StringComparison.OrdinalIgnoreCase))
 					{
@@ -93,24 +91,7 @@ namespace uTinyRipper.Classes
 			resourcePath = string.Empty;
 			return false;
 		}
-
-		private static string GetAssetName(Object asset)
-		{
-			if (asset is NamedObject named)
-			{
-				return named.ValidName;
-			}
-			else if (asset is GameObject gameObject)
-			{
-				return gameObject.Name;
-			}
-			else
-			{
-				MonoBehaviour monoBeh = (MonoBehaviour)asset;
-				return monoBeh.Name;
-			}
-		}
-
+		
 		public IReadOnlyList<KeyValuePair<string, PPtr<Object>>> Container => m_container;
 		public ILookup<string, PPtr<Object>> ContainerMap => Container.ToLookup(t => t.Key, t => t.Value);
 		public IReadOnlyList<ResourceManagerDependency> DependentAssets => m_dependentAssets;

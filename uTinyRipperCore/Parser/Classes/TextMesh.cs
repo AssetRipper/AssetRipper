@@ -73,14 +73,14 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return Font.FetchDependency(file, isLog, ToLogString, FontName);
+			yield return context.FetchDependency(Font, FontName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

@@ -148,15 +148,15 @@ namespace uTinyRipper.Classes.Avatars
 
 		private IReadOnlyList<Handle> GetExportHandles(Version version)
 		{
-			return IsReadHandles(version) ? Handles : new Handle[0];
+			return IsReadHandles(version) ? Handles : System.Array.Empty<Handle>();
 		}
 		private IReadOnlyList<Collider> GetExportColliderArray(Version version)
 		{
-			return IsReadHandles(version) ? ColliderArray : new Collider[0];
+			return IsReadHandles(version) ? ColliderArray : System.Array.Empty<Collider>();
 		}
 		private IReadOnlyList<int> GetExportColliderIndex(Version version)
 		{
-			return IsReadColliderIndex(version) ? ColliderIndex : new int[0];
+			return IsReadColliderIndex(version) ? ColliderIndex : System.Array.Empty<int>();
 		}
 
 		public IReadOnlyList<Handle> Handles => m_handles;

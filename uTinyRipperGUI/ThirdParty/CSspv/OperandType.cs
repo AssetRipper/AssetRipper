@@ -163,7 +163,7 @@ namespace SpirV
 						Parameter p = parameterFactory_.CreateParameter(bit);
 						if (p == null)
 						{
-							result.Add(bit, new object[0]);
+							result.Add(bit, Array.Empty<object>());
 						}
 						else
 						{
@@ -186,7 +186,7 @@ namespace SpirV
 				Parameter p = parameterFactory_.CreateParameter(words[index]);
 				if (p == null)
 				{
-					resultItems = new object[0];
+					resultItems = Array.Empty<object>();
 				}
 				else
 				{

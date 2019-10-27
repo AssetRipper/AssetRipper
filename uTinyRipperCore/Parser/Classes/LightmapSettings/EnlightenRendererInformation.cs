@@ -5,7 +5,7 @@ using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.LightmapSettingss
 {
-	public struct EnlightenRendererInformation : IAssetReadable, IYAMLExportable
+	public struct EnlightenRendererInformation : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// Not Release
@@ -27,9 +27,9 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Renderer.FetchDependency(file, isLog, () => nameof(EnlightenRendererInformation), RendererName);
+			yield return context.FetchDependency(Renderer, RendererName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

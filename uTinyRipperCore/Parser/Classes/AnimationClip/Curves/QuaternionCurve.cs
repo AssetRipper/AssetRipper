@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.Classes.Misc;
-using uTinyRipper.Classes.Misc;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
@@ -40,9 +39,8 @@ namespace uTinyRipper.Classes.AnimationClips
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("curve", Curve.ExportYAML(container));
-			node.Add("path", Path);
-
+			node.Add(CurveName, Curve.ExportYAML(container));
+			node.Add(PathName, Path);
 			return node;
 		}
 
@@ -57,6 +55,9 @@ namespace uTinyRipper.Classes.AnimationClips
 		}
 
 		public string Path { get; set; }
+
+		public const string CurveName = "curve";
+		public const string PathName = "path";
 
 		public AnimationCurveTpl<Quaternionf> Curve;
 	}

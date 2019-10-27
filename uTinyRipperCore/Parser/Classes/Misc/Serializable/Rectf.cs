@@ -114,14 +114,14 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("x", X);
-			node.Add("y", Y);
-			node.Add("width", Width);
-			node.Add("height", Height);
+			node.Add(XName, X);
+			node.Add(YName, Y);
+			node.Add(WidthName, Width);
+			node.Add(HeightName, Height);
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
 			yield break;
 		}
@@ -179,5 +179,10 @@ namespace uTinyRipper.Classes
 		public float Y { get; private set; }
 		public float Width { get; private set; }
 		public float Height { get; private set; }
+
+		public const string XName = "x";
+		public const string YName = "y";
+		public const string WidthName = "width";
+		public const string HeightName = "height";
 	}
 }

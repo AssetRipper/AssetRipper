@@ -40,9 +40,9 @@ namespace uTinyRipper.Converters.Script
 		public sealed override string CleanNestedName => NestedName;
 
 		public sealed override ScriptExportType Base => null;
-		public sealed override IReadOnlyList<ScriptExportMethod> Methods { get; } = new ScriptExportMethod[0];
-		public sealed override IReadOnlyList<ScriptExportProperty> Properties { get; } = new ScriptExportProperty[0];
-		public sealed override IReadOnlyList<ScriptExportField> Fields { get; } = new ScriptExportField[0];
+		public sealed override IReadOnlyList<ScriptExportMethod> Methods { get; } = Array.Empty<ScriptExportMethod>();
+		public sealed override IReadOnlyList<ScriptExportProperty> Properties { get; } = Array.Empty<ScriptExportProperty>();
+		public sealed override IReadOnlyList<ScriptExportField> Fields { get; } = Array.Empty<ScriptExportField>();
 		public abstract ScriptExportType Return { get; }
 		public abstract IReadOnlyList<ScriptExportParameter> Parameters { get; }
 

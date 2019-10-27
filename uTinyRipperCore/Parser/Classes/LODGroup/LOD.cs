@@ -5,7 +5,7 @@ using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.LODGroups
 {
-	public struct LOD : IAssetReadable, IYAMLExportable
+	public struct LOD : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 5.0.0 to 5.1.0 exclusive
@@ -36,14 +36,11 @@ namespace uTinyRipper.Classes.LODGroups
 			m_renderers = reader.ReadAssetArray<LODRenderer>();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (LODRenderer renderer in Renderers)
+			foreach (Object asset in context.FetchDependencies(Renderers, RenderersName))
 			{
-				foreach (Object asset in renderer.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 

@@ -1,7 +1,6 @@
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
-using uTinyRipper.Converters.Script;
 
 namespace uTinyRipper.Converters.Script.Mono
 {
@@ -66,7 +65,7 @@ namespace uTinyRipper.Converters.Script.Mono
 			List<CustomAttribute> attributes = GetExportAttributes(Field);
 			if (attributes == null || attributes.Count == 0)
 			{
-				return null;
+				return Array.Empty<ScriptExportAttribute>();
 			}
 			else
 			{

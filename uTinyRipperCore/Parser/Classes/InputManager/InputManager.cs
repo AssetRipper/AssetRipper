@@ -13,15 +13,6 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		private static int GetSerializedVersion(Version version)
-		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-			return ToSerializedVersion(version);
-		}
-
 		private static int ToSerializedVersion(Version version)
 		{
 			// added some new default Axes
@@ -42,8 +33,8 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Axes", GetAxes(container.Version).ExportYAML(container));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			node.Add(AxesName, GetAxes(container.Version).ExportYAML(container));
 			return node;
 		}
 
@@ -63,6 +54,8 @@ namespace uTinyRipper.Classes
 		}
 
 		public IReadOnlyList<InputAxis> Axes => m_axes;
+
+		public const string AxesName = "m_Axes";
 
 		private InputAxis[] m_axes;
 	}

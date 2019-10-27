@@ -28,12 +28,12 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Center", Center.ExportYAML(container));
-			node.Add("m_Extent", Extent.ExportYAML(container));
+			node.Add(CenterName, Center.ExportYAML(container));
+			node.Add(ExtentName, Extent.ExportYAML(container));
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
 			yield break;
 		}
@@ -42,6 +42,9 @@ namespace uTinyRipper.Classes
 		{
 			return new AABBi();
 		}
+
+		public const string CenterName = "m_Center";
+		public const string ExtentName = "m_Extent";
 
 		public Vector3i Center;
 		public Vector3i Extent;

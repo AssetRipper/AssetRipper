@@ -23,10 +23,12 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public virtual YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("enabled", Enabled);
+			node.Add(EnabledName, Enabled);
 			return node;
 		}
 
 		public bool Enabled { get; protected set; }
+
+		public const string EnabledName = "enabled";
 	}
 }

@@ -73,17 +73,23 @@ namespace uTinyRipper.Classes
 #endif
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 #if UNIVERSAL
-			yield return CorrespondingSourceObject.FetchDependency(file);
-			yield return PrefabInstance.FetchDependency(file);
-			yield return PrefabAsset.FetchDependency(file);
+			if (HasCorrespondingSourceObject(context.Flags))
+			{
+				yield return context.FetchDependency(CorrespondingSourceObject, CorrespondingSourceObjectName);
+				yield return context.FetchDependency(PrefabInstance, PrefabInstanceName);
+			}
+			if (HasPrefabAsset(context.Version, context.Flags))
+			{
+				yield return context.FetchDependency(PrefabAsset, PrefabAssetName);
+			}
 #endif
 		}
 

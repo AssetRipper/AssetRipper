@@ -4,7 +4,7 @@ using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.LightmapSettingss
 {
-	public struct LightmapData : IAssetReadable, IYAMLExportable
+	public struct LightmapData : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 3.0.0 and greater
@@ -23,11 +23,6 @@ namespace uTinyRipper.Classes.LightmapSettingss
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(5, 6))
 			{
 				return 2;
@@ -48,22 +43,26 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Lightmap.FetchDependency(file, isLog, () => nameof(LightmapData), "m_Lightmap");
-			yield return DirLightmap.FetchDependency(file, isLog, () => nameof(LightmapData), "m_DirLightmap");
-			yield return ShadowMask.FetchDependency(file, isLog, () => nameof(LightmapData), "m_ShadowMask");
+			yield return context.FetchDependency(Lightmap, LightmapName);
+			yield return context.FetchDependency(DirLightmap, DirLightmapName);
+			yield return context.FetchDependency(ShadowMask, ShadowMaskName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Lightmap", Lightmap.ExportYAML(container));
-			node.Add("m_DirLightmap", DirLightmap.ExportYAML(container));
-			node.Add("m_ShadowMask", ShadowMask.ExportYAML(container));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(LightmapName, Lightmap.ExportYAML(container));
+			node.Add(DirLightmapName, DirLightmap.ExportYAML(container));
+			node.Add(ShadowMaskName, ShadowMask.ExportYAML(container));
 			return node;
 		}
+
+		public const string LightmapName = "m_Lightmap";
+		public const string DirLightmapName = "m_DirLightmap";
+		public const string ShadowMaskName = "m_ShadowMask";
 
 		public PPtr<Texture2D> Lightmap;
 		/// <summary>

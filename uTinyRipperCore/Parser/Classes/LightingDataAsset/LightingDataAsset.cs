@@ -112,36 +112,30 @@ namespace uTinyRipper.Classes
 			EnlightenDataVersion = reader.ReadInt32();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return Scene.FetchDependency(file, isLog, ToLogString, SceneName);
-			foreach (LightmapData lightmapData in Lightmaps)
-			{
-				foreach (Object asset in lightmapData.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
-			}
-			yield return LightProbes.FetchDependency(file, isLog, ToLogString, LightProbesName);
-			foreach (RendererData rendererData in LightmappedRendererData)
-			{
-				foreach (Object asset in rendererData.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
-			}
-			foreach (Object asset in EnlightenSceneMapping.FetchDependencies(file, isLog))
+			yield return context.FetchDependency(Scene, SceneName);
+			foreach (Object asset in context.FetchDependencies(Lightmaps, LightmapsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Texture> cubemap in BakedReflectionProbeCubemaps)
+			yield return context.FetchDependency(LightProbes, LightProbesName);
+			foreach (Object asset in context.FetchDependencies(LightmappedRendererData, LightmappedRendererDataName))
 			{
-				yield return cubemap.FetchDependency(file, isLog, ToLogString, BakedReflectionProbeCubemapsName);
+				yield return asset;
+			}
+			foreach (Object asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
+			{
+				yield return asset;
+			}
+			foreach (Object asset in context.FetchDependencies(BakedReflectionProbeCubemaps, BakedReflectionProbeCubemapsName))
+			{
+				yield return asset;
 			}
 		}
 
@@ -181,15 +175,15 @@ namespace uTinyRipper.Classes
 
 		private IReadOnlyList<PPtr<Texture2D>> GetAOTextures(Version version)
 		{
-			return IsReadAOTextures(version) ? AOTextures : new PPtr<Texture2D>[0];
+			return IsReadAOTextures(version) ? AOTextures : System.Array.Empty<PPtr<Texture2D>>();
 		}
 		private IReadOnlyList<string> GetLightmapsCacheFiles(Version version)
 		{
-			return IsReadLightmapsCacheFiles(version) ? LightmapsCacheFiles : new string[0];
+			return IsReadLightmapsCacheFiles(version) ? LightmapsCacheFiles : System.Array.Empty<string>();
 		}
 		private IReadOnlyList<string> GetBakedReflectionProbeCubemapCacheFiles(Version version)
 		{
-			return IsReadBakedReflectionProbeCubemapCacheFiles(version) ? BakedReflectionProbeCubemapCacheFiles : new string[0];
+			return IsReadBakedReflectionProbeCubemapCacheFiles(version) ? BakedReflectionProbeCubemapCacheFiles : System.Array.Empty<string>();
 		}
 
 		public IReadOnlyList<LightmapData> Lightmaps => m_lightmaps;

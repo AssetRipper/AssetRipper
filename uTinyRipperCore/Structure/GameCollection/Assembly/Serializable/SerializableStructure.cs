@@ -123,11 +123,11 @@ namespace uTinyRipper.Game.Assembly
 			return node;
 		}
 
-		public virtual IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public virtual IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
 			if (Base != null)
 			{
-				foreach (Object asset in Base.FetchDependencies(file, isLog))
+				foreach (Object asset in Base.FetchDependencies(context))
 				{
 					yield return asset;
 				}
@@ -135,7 +135,7 @@ namespace uTinyRipper.Game.Assembly
 
 			foreach (SerializableField field in Fields)
 			{
-				foreach (Object asset in field.FetchDependencies(file, isLog))
+				foreach (Object asset in field.FetchDependencies(context))
 				{
 					yield return asset;
 				}

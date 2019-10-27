@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using uTinyRipper.Project.Classes;
+﻿using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
 using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.GraphicsSettingss
 {
-	public struct BuiltinShaderSettings : IAssetReadable, IYAMLExportable
+	public struct BuiltinShaderSettings : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -15,9 +13,9 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			Shader.Read(reader);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Shader.FetchDependency(file, isLog, () => nameof(BuiltinShaderSettings), "m_Shader");
+			yield return context.FetchDependency(Shader, ShaderName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

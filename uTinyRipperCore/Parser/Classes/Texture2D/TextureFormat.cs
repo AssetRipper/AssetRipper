@@ -1,5 +1,3 @@
-using System;
-
 namespace uTinyRipper.Classes.Textures
 {
 	public enum TextureFormat

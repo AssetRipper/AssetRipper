@@ -40,16 +40,21 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("value", Value);
-			node.Add("mode", (int)Mode);
-			node.Add("spread", Spread);
-			node.Add("speed", Speed.ExportYAML(container));
+			node.Add(ValueName, Value);
+			node.Add(ModeName, (int)Mode);
+			node.Add(SpreadName, Spread);
+			node.Add(SpeedName, Speed.ExportYAML(container));
 			return node;
 		}
 
 		public float Value { get; private set; }
 		public ParticleSystemShapeMultiModeValue Mode { get; private set; }
 		public float Spread { get; private set; }
+
+		public const string ValueName = "value";
+		public const string ModeName = "mode";
+		public const string SpreadName = "spread";
+		public const string SpeedName = "speed";
 
 		public MinMaxCurve Speed;
 	}

@@ -19,14 +19,19 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("shaderPlatform", (int)ShaderPlatform);
-			node.Add("defines_Tier1", Defines_Tier1.ExportYAML(container));
-			node.Add("defines_Tier2", Defines_Tier2.ExportYAML(container));
-			node.Add("defines_Tier3", Defines_Tier3.ExportYAML(container));
+			node.Add(ShaderPlatformName, (int)ShaderPlatform);
+			node.Add(Defines_Tier1Name, Defines_Tier1.ExportYAML(container));
+			node.Add(Defines_Tier2Name, Defines_Tier2.ExportYAML(container));
+			node.Add(Defines_Tier3Name, Defines_Tier3.ExportYAML(container));
 			return node;
 		}
 
 		public GPUPlatform ShaderPlatform { get; private set; }
+
+		public const string ShaderPlatformName = "shaderPlatform";
+		public const string Defines_Tier1Name = "defines_Tier1";
+		public const string Defines_Tier2Name = "defines_Tier2";
+		public const string Defines_Tier3Name = "defines_Tier3";
 
 		public FixedBitset Defines_Tier1;
 		public FixedBitset Defines_Tier2;

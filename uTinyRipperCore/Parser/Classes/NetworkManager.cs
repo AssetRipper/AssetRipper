@@ -44,31 +44,35 @@ namespace uTinyRipper.Classes
 			m_assetToPrefab.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach(PPtr<GameObject> prefab in AssetToPrefab.Values)
+			foreach (Object asset in context.FetchDependencies(AssetToPrefab.Values, AssetToPrefabName))
 			{
-				yield return prefab.FetchDependency(file);
+				yield return asset;
 			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_DebugLevel", DebugLevel);
-			node.Add("m_Sendrate", Sendrate);
-			node.Add("m_AssetToPrefab", AssetToPrefab.ExportYAML(container));
+			node.Add(DebugLevelName, DebugLevel);
+			node.Add(SendrateName, Sendrate);
+			node.Add(AssetToPrefabName, AssetToPrefab.ExportYAML(container));
 			return node;
 		}
 
 		public int DebugLevel { get; private set; }
 		public float Sendrate { get; private set; }
 		public IReadOnlyDictionary<GUID, PPtr<GameObject>> AssetToPrefab => m_assetToPrefab;
+
+		public const string DebugLevelName = "m_DebugLevel";
+		public const string SendrateName = "m_Sendrate";
+		public const string AssetToPrefabName = "m_AssetToPrefab";
 
 		private Dictionary<GUID, PPtr<GameObject>> m_assetToPrefab;
 	}

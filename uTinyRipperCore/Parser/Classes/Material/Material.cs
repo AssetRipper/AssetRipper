@@ -120,15 +120,15 @@ namespace uTinyRipper.Classes
 			SavedProperties.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return Shader.FetchDependency(file, isLog, ToLogString, "m_Shader");
-			foreach (Object asset in SavedProperties.FetchDependencies(file, isLog))
+			yield return context.FetchDependency(Shader, ShaderName);
+			foreach (Object asset in context.FetchDependencies(SavedProperties, SavedPropertiesName))
 			{
 				yield return asset;
 			}
@@ -139,15 +139,15 @@ namespace uTinyRipper.Classes
 #warning TODO:
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_Shader", Shader.ExportYAML(container));
-			node.Add("m_ShaderKeywords", IsReadKeywords(container.Version) ? (IsKeywordsArray(container.Version) ? string.Join(" ", m_shaderKeywordsArray) : ShaderKeywords) : string.Empty);
-			node.Add("m_LightmapFlags", LightmapFlags);
-			node.Add("m_EnableInstancingVariants", EnableInstancingVariants);
-			node.Add("m_DoubleSidedGI", DoubleSidedGI);
-			node.Add("m_CustomRenderQueue", CustomRenderQueue);
-			node.Add("stringTagMap", IsReadStringTagMap(container.Version) ? StringTagMap.ExportYAML() : YAMLMappingNode.Empty);
-			node.Add("disabledShaderPasses", IsReadDisabledShaderPasses(container.Version) ? DisabledShaderPasses.ExportYAML() : YAMLSequenceNode.Empty);
-			node.Add("m_SavedProperties", SavedProperties.ExportYAML(container));
+			node.Add(ShaderName, Shader.ExportYAML(container));
+			node.Add(ShaderKeywordsName, IsReadKeywords(container.Version) ? (IsKeywordsArray(container.Version) ? string.Join(" ", m_shaderKeywordsArray) : ShaderKeywords) : string.Empty);
+			node.Add(LightmapFlagsName, LightmapFlags);
+			node.Add(EnableInstancingVariantsName, EnableInstancingVariants);
+			node.Add(DoubleSidedGIName, DoubleSidedGI);
+			node.Add(CustomRenderQueueName, CustomRenderQueue);
+			node.Add(StringTagMapName, IsReadStringTagMap(container.Version) ? StringTagMap.ExportYAML() : YAMLMappingNode.Empty);
+			node.Add(DisabledShaderPassesName, IsReadDisabledShaderPasses(container.Version) ? DisabledShaderPasses.ExportYAML() : YAMLSequenceNode.Empty);
+			node.Add(SavedPropertiesName, SavedProperties.ExportYAML(container));
 			return node;
 		}
 
@@ -161,6 +161,16 @@ namespace uTinyRipper.Classes
 		public bool DoubleSidedGI { get; private set; }
 		public IReadOnlyList<string> DisabledShaderPasses => m_disabledShaderPasses;
 		public IReadOnlyDictionary<string, string> StringTagMap => m_stringTagMap;
+
+		public const string ShaderName = "m_Shader";
+		public const string ShaderKeywordsName = "m_ShaderKeywords";
+		public const string LightmapFlagsName = "m_LightmapFlags";
+		public const string EnableInstancingVariantsName = "m_EnableInstancingVariants";
+		public const string DoubleSidedGIName = "m_DoubleSidedGI";
+		public const string CustomRenderQueueName = "m_CustomRenderQueue";
+		public const string StringTagMapName = "stringTagMap";
+		public const string DisabledShaderPassesName = "disabledShaderPasses";
+		public const string SavedPropertiesName = "m_SavedProperties";
 
 		public PPtr<Shader> Shader;
 		public UnityPropertySheet SavedProperties;

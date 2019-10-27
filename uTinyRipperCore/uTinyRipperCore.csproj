@@ -28,8 +28,4 @@
     <DefineConstants>TRACE;NET_STANDARD</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Parser\Classes\PolygonCollider2D\" />
-  </ItemGroup>
-
 </Project>

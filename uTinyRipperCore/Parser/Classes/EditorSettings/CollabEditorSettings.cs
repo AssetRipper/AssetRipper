@@ -19,10 +19,12 @@ namespace uTinyRipper.Classes.EditorSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("inProgressEnabled", InProgressEnabled);
+			node.Add(InProgressEnabledName, InProgressEnabled);
 			return node;
 		}
 
 		public bool InProgressEnabled { get; private set; }
+
+		public const string InProgressEnabledName = "inProgressEnabled";
 	}
 }

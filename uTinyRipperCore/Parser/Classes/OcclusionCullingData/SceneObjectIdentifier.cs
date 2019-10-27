@@ -20,12 +20,15 @@ namespace uTinyRipper.Classes.OcclusionCullingDatas
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("targetObject", TargetObject);
-			node.Add("targetPrefab", TargetPrefab);
+			node.Add(TargetObjectName, TargetObject);
+			node.Add(TargetPrefabName, TargetPrefab);
 			return node;
 		}
 
 		public long TargetObject { get; private set; }
 		public long TargetPrefab { get; private set; }
+
+		public const string TargetObjectName = "targetObject";
+		public const string TargetPrefabName = "targetPrefab";
 	}
 }

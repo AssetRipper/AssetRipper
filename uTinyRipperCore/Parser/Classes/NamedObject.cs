@@ -42,11 +42,6 @@ namespace uTinyRipper.Classes
 			return $"{ValidName}({GetType().Name})";
 		}
 
-		public override string ToLogString()
-		{
-			return $"{GetType().Name}'s({ValidName})[{PathID}]";
-		}
-
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode root = base.ExportYAMLRoot(container);

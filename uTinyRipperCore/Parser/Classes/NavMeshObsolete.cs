@@ -25,19 +25,16 @@ namespace uTinyRipper.Classes
 			m_heightmaps = reader.ReadAssetArray<HeightmapData>();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object dependency in base.FetchDependencies(file, isLog))
+			foreach (Object dependency in base.FetchDependencies(context))
 			{
 				yield return dependency;
 			}
 
-			foreach (HeightmapData heightmap in Heightmaps)
+			foreach (Object asset in context.FetchDependencies(Heightmaps, HeightmapsName))
 			{
-				foreach (Object dependency in heightmap.FetchDependencies(file, isLog))
-				{
-					yield return dependency;
-				}
+				yield return asset;
 			}
 		}
 

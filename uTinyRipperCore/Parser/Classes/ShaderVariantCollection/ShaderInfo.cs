@@ -15,11 +15,13 @@ namespace uTinyRipper.Classes.ShaderVariantCollections
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("variants", Variants.ExportYAML(container));
+			node.Add(VariantsName, Variants.ExportYAML(container));
 			return node;
 		}
 
 		public IReadOnlyList<VariantInfo> Variants => m_variants;
+
+		public const string VariantsName = "variants";
 
 		/// <summary>
 		/// It's a HashSet actually

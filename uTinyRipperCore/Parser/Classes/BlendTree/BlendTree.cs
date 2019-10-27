@@ -49,14 +49,14 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Childs", Childs.ExportYAML(container));
-			node.Add("m_BlendParameter", BlendParameter);
-			node.Add("m_BlendParameterY", BlendParameterY);
-			node.Add("m_MinThreshold", MinThreshold);
-			node.Add("m_MaxThreshold", MaxThreshold);
-			node.Add("m_UseAutomaticThresholds", UseAutomaticThresholds);
-			node.Add("m_NormalizedBlendValues", NormalizedBlendValues);
-			node.Add("m_BlendType", (int)BlendType);
+			node.Add(ChildsName, Childs.ExportYAML(container));
+			node.Add(BlendParameterName, BlendParameter);
+			node.Add(BlendParameterYName, BlendParameterY);
+			node.Add(MinThresholdName, MinThreshold);
+			node.Add(MaxThresholdName, MaxThreshold);
+			node.Add(UseAutomaticThresholdsName, UseAutomaticThresholds);
+			node.Add(NormalizedBlendValuesName, NormalizedBlendValues);
+			node.Add(BlendTypeName, (int)BlendType);
 			return node;
 		}
 
@@ -70,6 +70,15 @@ namespace uTinyRipper.Classes
 		public bool UseAutomaticThresholds { get; private set; }
 		public bool NormalizedBlendValues { get; private set; }
 		public BlendTreeType BlendType { get; private set; }
+
+		public const string ChildsName = "m_Childs";
+		public const string BlendParameterName = "m_BlendParameter";
+		public const string BlendParameterYName = "m_BlendParameterY";
+		public const string MinThresholdName = "m_MinThreshold";
+		public const string MaxThresholdName = "m_MaxThreshold";
+		public const string UseAutomaticThresholdsName = "m_UseAutomaticThresholds";
+		public const string NormalizedBlendValuesName = "m_NormalizedBlendValues";
+		public const string BlendTypeName = "m_BlendType";
 
 		private ChildMotion[] m_childs;
 	}

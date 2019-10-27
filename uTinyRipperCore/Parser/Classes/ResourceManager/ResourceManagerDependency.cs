@@ -5,7 +5,7 @@ using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.ResourceManagers
 {
-	public struct ResourceManagerDependency : IAssetReadable, IYAMLExportable
+	public struct ResourceManagerDependency : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -13,12 +13,12 @@ namespace uTinyRipper.Classes.ResourceManagers
 			m_dependencies = reader.ReadAssetArray<PPtr<Object>>();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Object.FetchDependency(file, isLog, () => nameof(ResourceManagerDependency), ObjectName);
-			foreach (PPtr<Object> dependencie in Dependencies)
+			yield return context.FetchDependency(Object, ObjectName);
+			foreach (Object asset in context.FetchDependencies(Dependencies, DependenciesName))
 			{
-				yield return dependencie.FetchDependency(file, isLog, () => nameof(ResourceManagerDependency), DependenciesName);
+				yield return asset;
 			}
 		}
 

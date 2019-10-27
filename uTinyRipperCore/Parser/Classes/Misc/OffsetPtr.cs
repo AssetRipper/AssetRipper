@@ -19,9 +19,11 @@ namespace uTinyRipper.Classes.Misc
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("data", Instance.ExportYAML(container));
+			node.Add(DataName, Instance.ExportYAML(container));
 			return node;
 		}
+
+		public const string DataName = "data";
 
 		public T Instance;
 	}

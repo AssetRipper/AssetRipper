@@ -36,9 +36,9 @@ namespace uTinyRipper.Classes.ParticleSystems
 			MaxLights = reader.ReadInt32();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Light.FetchDependency(file, isLog, () => nameof(LightsModule), "light");
+			yield return context.FetchDependency(Light, LightName);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)

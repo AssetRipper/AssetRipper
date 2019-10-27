@@ -18,7 +18,7 @@ namespace uTinyRipper.Project
 		{
 		}
 
-		private PrefabExportCollection(IAssetExporter assetExporter, ISerializedFile file, Prefab prefab) :
+		private PrefabExportCollection(IAssetExporter assetExporter, IAssetContainer file, Prefab prefab) :
 			base(assetExporter, prefab)
 		{
 			foreach (EditorExtension asset in prefab.FetchObjects(file))

@@ -169,6 +169,7 @@ namespace uTinyRipper.Converters
 		public void Export(string path, FileCollection fileCollection, IEnumerable<Object> assets, ExportOptions options)
 		{
 			EventExportPreparationStarted?.Invoke();
+			DependencyContext depcontext = new DependencyContext(true);
 			VirtualSerializedFile virtualFile = new VirtualSerializedFile(options);
 			List<IExportCollection> collections = new List<IExportCollection>();
 			// speed up fetching a little bit
@@ -191,9 +192,11 @@ namespace uTinyRipper.Converters
 				}
 
 #warning TODO: if IsGenerateGUIDByContent set it should build collections and write actual references with persistent GUIS, but skip dependencies
-				if (Config.IsExportDependencies)
+				if (options.ExportDependencies)
 				{
-					foreach (Object dependency in asset.FetchDependencies(true))
+					depcontext.File = asset.File;
+					depcontext.PathID = asset.PathID;
+					foreach (Object dependency in asset.FetchDependencies(depcontext))
 					{
 						if (dependency == null)
 						{

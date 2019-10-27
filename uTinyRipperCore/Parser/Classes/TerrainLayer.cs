@@ -31,16 +31,16 @@ namespace uTinyRipper.Classes
 			MaskMapRemapMax.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return DiffuseTexture.FetchDependency(file, isLog, ToLogString, DiffuseTextureName);
-			yield return NormalMapTexture.FetchDependency(file, isLog, ToLogString, NormalMapTextureName);
-			yield return MaskMapTexture.FetchDependency(file, isLog, ToLogString, MaskMapTextureName);
+			yield return context.FetchDependency(DiffuseTexture, DiffuseTextureName);
+			yield return context.FetchDependency(NormalMapTexture, NormalMapTextureName);
+			yield return context.FetchDependency(MaskMapTexture, MaskMapTextureName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

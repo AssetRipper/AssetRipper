@@ -21,7 +21,7 @@ namespace uTinyRipper.Classes
 		private GraphicsSettings(AssetInfo assetInfo, bool _):
 			base(assetInfo)
 		{
-			m_alwaysIncludedShaders = new PPtr<Shader>[0];
+			m_alwaysIncludedShaders = System.Array.Empty<PPtr<Shader>>();
 		}
 
 		public static GraphicsSettings CreateVirtualInstance(VirtualSerializedFile virtualFile)
@@ -252,15 +252,6 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2) && version.IsLess(5, 3);
 		}
 
-		private static int GetSerializedVersion(Version version)
-		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 12;
-			}
-			return ToSerializedVersion(version);
-		}
-		
 		private static int ToSerializedVersion(Version version)
 		{
 			// changed TierSettings to platform specific
@@ -505,103 +496,103 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			foreach (Object asset in Deferred.FetchDependencies(file, isLog))
+			foreach (Object asset in context.FetchDependencies(Deferred, DeferredName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in DeferredReflections.FetchDependencies(file, isLog))
+			foreach (Object asset in context.FetchDependencies(DeferredReflections, DeferredReflectionsName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in ScreenSpaceShadows.FetchDependencies(file, isLog))
+			foreach (Object asset in context.FetchDependencies(ScreenSpaceShadows, ScreenSpaceShadowsName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in LegacyDeferred.FetchDependencies(file, isLog))
+			foreach (Object asset in context.FetchDependencies(LegacyDeferred, LegacyDeferredName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in DepthNormals.FetchDependencies(file, isLog))
+			foreach (Object asset in context.FetchDependencies(DepthNormals, DepthNormalsName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in MotionVectors.FetchDependencies(file, isLog))
+			foreach (Object asset in context.FetchDependencies(MotionVectors, MotionVectorsName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in LightHalo.FetchDependencies(file, isLog))
+			foreach (Object asset in context.FetchDependencies(LightHalo, LightHaloName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in LensFlare.FetchDependencies(file, isLog))
+			foreach (Object asset in context.FetchDependencies(LensFlare, LensFlareName))
 			{
 				yield return asset;
 			}
 
-			if (IsReadAlwaysIncludedShaders(file.Version))
+			if (IsReadAlwaysIncludedShaders(context.Version))
 			{
-				foreach (PPtr<Shader> alwaysIncludedShader in AlwaysIncludedShaders)
+				foreach (Object asset in context.FetchDependencies(AlwaysIncludedShaders, AlwaysIncludedShadersName))
 				{
-					yield return alwaysIncludedShader.FetchDependency(file, isLog, ToLogString, "m_AlwaysIncludedShaders");
+					yield return asset;
 				}
 			}
-			if(IsReadPreloadedShaders(file.Version))
+			if (IsReadPreloadedShaders(context.Version))
 			{
-				foreach (PPtr<ShaderVariantCollection> preloadedShader in PreloadedShaders)
+				foreach (Object asset in context.FetchDependencies(PreloadedShaders, PreloadedShadersName))
 				{
-					yield return preloadedShader.FetchDependency(file, isLog, ToLogString, "m_PreloadedShaders");
+					yield return asset;
 				}
 			}
-			yield return SpritesDefaultMaterial.FetchDependency(file, isLog, ToLogString, "m_SpritesDefaultMaterial");
-			yield return CustomRenderPipeline.FetchDependency(file, isLog, ToLogString, "m_CustomRenderPipeline");
+			yield return context.FetchDependency(SpritesDefaultMaterial, SpritesDefaultMaterialName);
+			yield return context.FetchDependency(CustomRenderPipeline, CustomRenderPipelineName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Deferred", ExportDeferred(container));
-			node.Add("m_DeferredReflections", ExportDeferredReflections(container));
-			node.Add("m_ScreenSpaceShadows", ExportScreenSpaceShadows(container));
-			node.Add("m_LegacyDeferred", ExportLegacyDeferred(container));
-			node.Add("m_DepthNormals", ExportDepthNormals(container));
-			node.Add("m_MotionVectors", ExportMotionVectors(container));
-			node.Add("m_LightHalo", ExportLightHalo(container));
-			node.Add("m_LensFlare", ExportLensFlare(container));
-			node.Add("m_AlwaysIncludedShaders", ExportAlwaysIncludedShaders(container));
-			node.Add("m_PreloadedShaders", GetPreloadedShaders(container.Version).ExportYAML(container));
-			node.Add("m_SpritesDefaultMaterial", GetSpritesDefaultMaterial(container.Version).ExportYAML(container));
-			node.Add("m_CustomRenderPipeline", CustomRenderPipeline.ExportYAML(container));
-			node.Add("m_TransparencySortMode", (int)TransparencySortMode);
-			node.Add("m_TransparencySortAxis", GetTransparencySortAxis(container.Version).ExportYAML(container));
-			node.Add("m_DefaultRenderingPath", (int)GetDefaultRenderingPath(container.Version, container.Flags));
-			node.Add("m_DefaultMobileRenderingPath", (int)GetDefaultMobileRenderingPath(container.Version, container.Flags));
-			node.Add("m_TierSettings", GetTierSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
-			node.Add("m_LightmapStripping", (int)GetLightmapStripping(container.Flags));
-			node.Add("m_FogStripping", (int)GetFogStripping(container.Flags));
-			node.Add("m_InstancingStripping", (int)GetInstancingStripping(container.Flags));
-			node.Add("m_LightmapKeepPlain", GetLightmapKeepPlain(container.Version, container.Flags));
-			node.Add("m_LightmapKeepDirCombined", GetLightmapKeepDirCombined(container.Version, container.Flags));
-			node.Add("m_LightmapKeepDynamicPlain", GetLightmapKeepDynamicPlain(container.Version, container.Flags));
-			node.Add("m_LightmapKeepDynamicDirCombined", GetLightmapKeepDynamicDirCombined(container.Version, container.Flags));
-			node.Add("m_LightmapKeepShadowMask", GetLightmapKeepShadowMask(container.Version, container.Flags));
-			node.Add("m_LightmapKeepSubtractive", GetLightmapKeepSubtractive(container.Version, container.Flags));
-			node.Add("m_FogKeepLinear", GetFogKeepLinear(container.Version, container.Flags));
-			node.Add("m_FogKeepExp", GetFogKeepExp(container.Version, container.Flags));
-			node.Add("m_FogKeepExp2", GetFogKeepExp2(container.Version, container.Flags));
-			node.Add("m_AlbedoSwatchInfos", GetAlbedoSwatchInfos(container.Version, container.Flags).ExportYAML(container));
-			node.Add("m_LightsUseLinearIntensity", LightsUseLinearIntensity);
-			node.Add("m_LightsUseColorTemperature", LightsUseColorTemperature);
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			node.Add(DeferredName, ExportDeferred(container));
+			node.Add(DeferredReflectionsName, ExportDeferredReflections(container));
+			node.Add(ScreenSpaceShadowsName, ExportScreenSpaceShadows(container));
+			node.Add(LegacyDeferredName, ExportLegacyDeferred(container));
+			node.Add(DepthNormalsName, ExportDepthNormals(container));
+			node.Add(MotionVectorsName, ExportMotionVectors(container));
+			node.Add(LightHaloName, ExportLightHalo(container));
+			node.Add(LensFlareName, ExportLensFlare(container));
+			node.Add(AlwaysIncludedShadersName, ExportAlwaysIncludedShaders(container));
+			node.Add(PreloadedShadersName, GetPreloadedShaders(container.Version).ExportYAML(container));
+			node.Add(SpritesDefaultMaterialName, GetSpritesDefaultMaterial(container.Version).ExportYAML(container));
+			node.Add(CustomRenderPipelineName, CustomRenderPipeline.ExportYAML(container));
+			node.Add(TransparencySortModeName, (int)TransparencySortMode);
+			node.Add(TransparencySortAxisName, GetTransparencySortAxis(container.Version).ExportYAML(container));
+			node.Add(DefaultRenderingPathName, (int)GetDefaultRenderingPath(container.Version, container.Flags));
+			node.Add(DefaultMobileRenderingPathName, (int)GetDefaultMobileRenderingPath(container.Version, container.Flags));
+			node.Add(TierSettingsName, GetTierSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
+			node.Add(LightmapStrippingName, (int)GetLightmapStripping(container.Flags));
+			node.Add(FogStrippingName, (int)GetFogStripping(container.Flags));
+			node.Add(InstancingStrippingName, (int)GetInstancingStripping(container.Flags));
+			node.Add(LightmapKeepPlainName, GetLightmapKeepPlain(container.Version, container.Flags));
+			node.Add(LightmapKeepDirCombinedName, GetLightmapKeepDirCombined(container.Version, container.Flags));
+			node.Add(LightmapKeepDynamicPlainName, GetLightmapKeepDynamicPlain(container.Version, container.Flags));
+			node.Add(LightmapKeepDynamicDirCombinedName, GetLightmapKeepDynamicDirCombined(container.Version, container.Flags));
+			node.Add(LightmapKeepShadowMaskName, GetLightmapKeepShadowMask(container.Version, container.Flags));
+			node.Add(LightmapKeepSubtractiveName, GetLightmapKeepSubtractive(container.Version, container.Flags));
+			node.Add(FogKeepLinearName, GetFogKeepLinear(container.Version, container.Flags));
+			node.Add(FogKeepExpName, GetFogKeepExp(container.Version, container.Flags));
+			node.Add(FogKeepExp2Name, GetFogKeepExp2(container.Version, container.Flags));
+			node.Add(AlbedoSwatchInfosName, GetAlbedoSwatchInfos(container.Version, container.Flags).ExportYAML(container));
+			node.Add(LightsUseLinearIntensityName, LightsUseLinearIntensity);
+			node.Add(LightsUseColorTemperatureName, LightsUseColorTemperature);
 			if (HasLogWhenShaderIsCompiled(container.ExportVersion))
 			{
-				node.Add("m_LogWhenShaderIsCompiled", LogWhenShaderIsCompiled);
+				node.Add(LogWhenShaderIsCompiledName, LogWhenShaderIsCompiled);
 			}
 			return node;
 		}
@@ -678,7 +669,7 @@ namespace uTinyRipper.Classes
 		}
 		private IReadOnlyList<PPtr<ShaderVariantCollection>> GetPreloadedShaders(Version version)
 		{
-			return IsReadPreloadedShaders(version) ? PreloadedShaders : new PPtr<ShaderVariantCollection>[0];
+			return IsReadPreloadedShaders(version) ? PreloadedShaders : System.Array.Empty<PPtr<ShaderVariantCollection>>();
 		}
 		private PPtr<Material> GetSpritesDefaultMaterial(Version version)
 		{
@@ -717,7 +708,7 @@ namespace uTinyRipper.Classes
 		{
 			if (!IsReadTierSettings(version))
 			{
-				return new TierSettings[0];
+				return System.Array.Empty<TierSettings>();
 			}
 
 			if (IsReadEditorSettings(flags))
@@ -874,7 +865,7 @@ namespace uTinyRipper.Classes
 				return AlbedoSwatchInfos;
 			}
 #endif
-			return new AlbedoSwatchInfo[0];
+			return System.Array.Empty<AlbedoSwatchInfo>();
 		}
 		
 		private void ExportShaderPointer(IExportContainer container, YAMLSequenceNode node, HashSet<string> shaderNames, string name)
@@ -927,6 +918,41 @@ namespace uTinyRipper.Classes
 		public PPtr<Material> SpritesDefaultMaterial;
 		public PPtr<MonoBehaviour> CustomRenderPipeline;
 		public Vector3f TransparencySortAxis;
+
+		public const string DeferredName = "m_Deferred";
+		public const string DeferredReflectionsName = "m_DeferredReflections";
+		public const string ScreenSpaceShadowsName = "m_ScreenSpaceShadows";
+		public const string LegacyDeferredName = "m_LegacyDeferred";
+		public const string DepthNormalsName = "m_DepthNormals";
+		public const string MotionVectorsName = "m_MotionVectors";
+		public const string LightHaloName = "m_LightHalo";
+		public const string LensFlareName = "m_LensFlare";
+		public const string AlwaysIncludedShadersName = "m_AlwaysIncludedShaders";
+		public const string PreloadedShadersName = "m_PreloadedShaders";
+		public const string SpritesDefaultMaterialName = "m_SpritesDefaultMaterial";
+		public const string CustomRenderPipelineName = "m_CustomRenderPipeline";
+		public const string TransparencySortModeName = "m_TransparencySortMode";
+		public const string TransparencySortAxisName = "m_TransparencySortAxis";
+		public const string DefaultRenderingPathName = "m_DefaultRenderingPath";
+		public const string DefaultMobileRenderingPathName = "m_DefaultMobileRenderingPath";
+		public const string TierSettingsName = "m_TierSettings";
+		public const string LightmapStrippingName = "m_LightmapStripping";
+		public const string FogStrippingName = "m_FogStripping";
+		public const string InstancingStrippingName = "m_InstancingStripping";
+		public const string LightmapKeepPlainName = "m_LightmapKeepPlain";
+		public const string LightmapKeepDirCombinedName = "m_LightmapKeepDirCombined";
+		public const string LightmapKeepDynamicPlainName = "m_LightmapKeepDynamicPlain";
+		public const string LightmapKeepDynamicDirCombinedName = "m_LightmapKeepDynamicDirCombined";
+		public const string LightmapKeepShadowMaskName = "m_LightmapKeepShadowMask";
+		public const string LightmapKeepSubtractiveName = "m_LightmapKeepSubtractive";
+		public const string FogKeepLinearName = "m_FogKeepLinear";
+		public const string FogKeepExpName = "m_FogKeepExp";
+		public const string FogKeepExp2Name = "m_FogKeepExp2";
+		public const string AlbedoSwatchInfosName = "m_AlbedoSwatchInfos";
+		public const string LightsUseLinearIntensityName = "m_LightsUseLinearIntensity";
+		public const string LightsUseColorTemperatureName = "m_LightsUseColorTemperature";
+		public const string LogWhenShaderIsCompiledName = "m_LogWhenShaderIsCompiled";
+
 
 		private PPtr<Shader>[] m_alwaysIncludedShaders;
 		private PPtr<ShaderVariantCollection>[] m_preloadedShaders;

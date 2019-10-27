@@ -36,13 +36,16 @@ namespace uTinyRipper.Classes.NavMeshProjectSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("name", Name);
-			node.Add("cost", Cost);
+			node.Add(NameName, Name);
+			node.Add(CostName, Cost);
 			return node;
 		}
 
 		public string Name { get; private set; }
 		public float Cost { get; private set; }
 		public int EditType { get; private set; }
+
+		public const string NameName = "name";
+		public const string CostName = "cost";
 	}
 }

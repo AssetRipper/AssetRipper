@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using uTinyRipper.Project;
 using uTinyRipper.Converters;
 using uTinyRipper.SerializedFiles;
 
@@ -155,6 +154,7 @@ namespace uTinyRipper
 			Version version = defaultVersion < maxVersion ? maxVersion : defaultVersion;
 			ExportOptions options = new ExportOptions()
 			{
+				ExportDependencies = false,
 				Version = version,
 				Platform = Platform.NoTarget,
 				Flags = TransferInstructionFlags.NoTransferInstructionFlags,

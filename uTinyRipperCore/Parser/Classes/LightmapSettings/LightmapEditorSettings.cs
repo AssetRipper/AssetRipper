@@ -5,7 +5,7 @@ using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.LightmapSettingss
 {
-	public struct LightmapEditorSettings
+	public struct LightmapEditorSettings : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public LightmapEditorSettings(bool _)
 		{
@@ -256,9 +256,9 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return LightmapParameters.FetchDependency(file, isLog, () => nameof(LightmapEditorSettings), LightmapParametersName);
+			yield return context.FetchDependency(LightmapParameters, LightmapParametersName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

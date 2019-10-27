@@ -48,29 +48,29 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (Object asset in SplatDatabase.FetchDependencies(file, isLog))
+			foreach (Object asset in context.FetchDependencies(SplatDatabase, SplatDatabaseName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in DetailDatabase.FetchDependencies(file, isLog))
+			foreach (Object asset in context.FetchDependencies(DetailDatabase, DetailDatabaseName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in Heightmap.FetchDependencies(file, isLog))
+			foreach (Object asset in context.FetchDependencies(Heightmap, HeightmapName))
 			{
 				yield return asset;
 			}
 
-			if (HasLightmap(file.Version))
+			if (HasLightmap(context.Version))
 			{
-				yield return Lightmap.FetchDependency(file, isLog, ToLogString, LightmapName);
+				yield return context.FetchDependency(Lightmap, LightmapName);
 			}
 		}
 

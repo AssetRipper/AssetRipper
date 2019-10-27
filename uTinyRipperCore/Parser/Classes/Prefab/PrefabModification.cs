@@ -17,14 +17,18 @@ namespace uTinyRipper.Classes.Prefabs
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_TransformParent", TransformParent.ExportYAML(container));
-			node.Add("m_Modifications", m_modifications == null ? YAMLSequenceNode.Empty : Modifications.ExportYAML(container));
-			node.Add("m_RemovedComponents", m_removedComponents == null ? YAMLSequenceNode.Empty : RemovedComponents.ExportYAML(container));
+			node.Add(TransformParentName, TransformParent.ExportYAML(container));
+			node.Add(ModificationsName, m_modifications == null ? YAMLSequenceNode.Empty : Modifications.ExportYAML(container));
+			node.Add(RemovedComponentsName, m_removedComponents == null ? YAMLSequenceNode.Empty : RemovedComponents.ExportYAML(container));
 			return node;
 		}
 
 		public IReadOnlyList<PropertyModification> Modifications => m_modifications;
 		public IReadOnlyList<PPtr<Object>> RemovedComponents => m_removedComponents;
+
+		public const string TransformParentName = "m_TransformParent";
+		public const string ModificationsName = "m_Modifications";
+		public const string RemovedComponentsName = "m_RemovedComponents";
 
 		public PPtr<Transform> TransformParent;
 

@@ -4,7 +4,6 @@ using Etc;
 using Pvrtc;
 using Rgb;
 using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Textures;

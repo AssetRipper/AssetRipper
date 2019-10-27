@@ -51,10 +51,6 @@ namespace uTinyRipper.Classes.NavMeshDatas
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
 			return 2;
 			// 5.6.0.Alpha.unknown
 			//return 1;
@@ -86,7 +82,7 @@ namespace uTinyRipper.Classes.NavMeshDatas
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(AgentTypeIDName, AgentTypeID);
 			node.Add(AgentRadiusName, AgentRadius);
 			node.Add(AgentHeightName, AgentHeight);

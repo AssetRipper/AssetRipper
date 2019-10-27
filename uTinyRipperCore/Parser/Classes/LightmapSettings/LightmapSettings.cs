@@ -238,42 +238,39 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			if (IsReadEnlightenSceneMapping(file.Version, file.Flags))
+			if (IsReadEnlightenSceneMapping(context.Version, context.Flags))
 			{
-				foreach (Object asset in EnlightenSceneMapping.FetchDependencies(file, isLog))
+				foreach (Object asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
 				{
 					yield return asset;
 				}
 			}
-			if (IsReadLightProbes(file.Version, file.Flags))
+			if (IsReadLightProbes(context.Version, context.Flags))
 			{
-				yield return LightProbes.FetchDependency(file, isLog, ToLogString, "m_LightProbes");
-				foreach (LightmapData lightmap in Lightmaps)
+				yield return context.FetchDependency(LightProbes, LightProbesName);
+				foreach (Object asset in context.FetchDependencies(Lightmaps, LightmapsName))
 				{
-					foreach (Object asset in lightmap.FetchDependencies(file, isLog))
-					{
-						yield return asset;
-					}
+					yield return asset;
 				}
 			}
 #if UNIVERSAL
-			if (IsReadLightmapEditorSettings(file.Version, file.Flags))
+			if (IsReadLightmapEditorSettings(context.Version, context.Flags))
 			{
-				foreach (Object asset in LightmapEditorSettings.FetchDependencies(file, isLog))
+				foreach (Object asset in context.FetchDependencies(LightmapEditorSettings, LightmapEditorSettingsName))
 				{
 					yield return asset;
 				}
 			}
-			if (IsReadLightingDataAsset(file.Version, file.Flags))
+			if (IsReadLightingDataAsset(context.Version, context.Flags))
 			{
-				yield return LightingDataAsset.FetchDependency(file, isLog, ToLogString, LightingDataAssetName);
+				yield return context.FetchDependency(LightingDataAsset, LightingDataAssetName);
 			}
 #endif
 		}
@@ -343,10 +340,13 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public bool UseShadowmask { get; private set; }
 
+		public const string EnlightenSceneMappingName = "m_EnlightenSceneMapping";
 		public const string GIWorkflowModeName = "m_GIWorkflowMode";
 		public const string GISettingsName = "m_GISettings";
 		public const string LightmapEditorSettingsName = "m_LightmapEditorSettings";
 		public const string LightingDataAssetName = "m_LightingDataAsset";
+		public const string LightProbesName = "m_LightProbes";
+		public const string LightmapsName = "m_Lightmaps";
 		public const string UseShadowmaskName = "m_UseShadowmask";
 
 		public EnlightenSceneMapping EnlightenSceneMapping;

@@ -32,13 +32,16 @@ namespace uTinyRipper.Classes.Sprites
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("pos", Position.ExportYAML(container));
+			node.Add(PosName, Position.ExportYAML(container));
 			if (IsReadUV(container.ExportVersion))
 			{
-				node.Add("uv", UV.ExportYAML(container));
+				node.Add(UvName, UV.ExportYAML(container));
 			}
 			return node;
 		}
+
+		public const string PosName = "pos";
+		public const string UvName = "uv";
 
 		public Vector3f Position;
 		public Vector2f UV;

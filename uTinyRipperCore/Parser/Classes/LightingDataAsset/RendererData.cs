@@ -30,9 +30,9 @@ namespace uTinyRipper.Classes.LightingDataAssets
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return UVMesh.FetchDependency(file, isLog, () => nameof(RendererData), UvMeshName);
+			yield return context.FetchDependency(UVMesh, UvMeshName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

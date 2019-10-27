@@ -6,6 +6,7 @@ using uTinyRipper.Converters.Script;
 using uTinyRipper.YAML;
 using uTinyRipper.Game.Assembly;
 using uTinyRipper.Classes.Misc;
+using System.Linq;
 
 namespace uTinyRipper.Classes
 {
@@ -226,28 +227,28 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 #if UNIVERSAL
-			if (IsReadDefaultProperties(file.Version, file.Flags))
+			if (IsReadDefaultProperties(context.Version, context.Flags))
 			{
-				yield return DefaultProperties.FetchDependency(file, isLog, ToLogString, DefaultReferencesName);
+				yield return context.FetchDependency(DefaultProperties, DefaultReferencesName);
 			}
-			if (IsReadDefaultReferences(file.Version, file.Flags))
+			if (IsReadDefaultReferences(context.Version, context.Flags))
 			{
-				foreach (PPtr<Object> reference in DefaultReferences.Values)
+				foreach (Object asset in context.FetchDependencies(DefaultReferences.Select(t => t.Value), DefaultReferencesName))
 				{
-					yield return reference.FetchDependency(file, isLog, ToLogString, DefaultReferencesName);
+					yield return asset;
 				}
 			}
-			if (IsReadIcon(file.Version, file.Flags))
+			if (IsReadIcon(context.Version, context.Flags))
 			{
-				yield return Icon.FetchDependency(file, isLog, ToLogString, IconName);
+				yield return context.FetchDependency(Icon, IconName);
 			}
 #endif
 		}
@@ -274,7 +275,7 @@ namespace uTinyRipper.Classes
 				return Script;
 			}
 #endif
-			return new byte[0];
+			return System.Array.Empty<byte>();
 		}
 
 		private IReadOnlyDictionary<string, PPtr<Object>> GetDefaultReferences(Version version, TransferInstructionFlags flags)

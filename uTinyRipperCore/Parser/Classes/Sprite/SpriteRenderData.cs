@@ -168,19 +168,16 @@ namespace uTinyRipper.Classes.Sprites
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Texture.FetchDependency(file, isLog, () => nameof(SpriteRenderData), "Texture");
-			yield return AlphaTexture.FetchDependency(file, isLog, () => nameof(SpriteRenderData), "AlphaTexture");
+			yield return context.FetchDependency(Texture, TextureName);
+			yield return context.FetchDependency(AlphaTexture, AlphaTextureName);
 
-			if (IsReadSecondaryTextures(file.Version))
+			if (IsReadSecondaryTextures(context.Version))
 			{
-				foreach (SecondarySpriteTexture secondaryTexture in SecondaryTextures)
+				foreach (Object asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
 				{
-					foreach (Object asset in secondaryTexture.FetchDependencies(file, isLog))
-					{
-						yield return asset;
-					}
+					yield return asset;
 				}
 			}
 		}
@@ -222,6 +219,10 @@ namespace uTinyRipper.Classes.Sprites
 		public IReadOnlyList<BoneWeights4> SourceSkin => m_sourceSkin;
 		public uint SettingsRaw { get; private set; }
 		public float DownscaleMultiplier { get; private set; }
+
+		public const string TextureName = "texture";
+		public const string AlphaTextureName = "alphaTexture";
+		public const string SecondaryTexturesName = "secondaryTextures";
 
 		public PPtr<Texture2D> Texture;
 		public PPtr<Texture2D> AlphaTexture;

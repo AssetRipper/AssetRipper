@@ -21,11 +21,6 @@ namespace uTinyRipper.Classes.Misc
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(5))
 			{
 				return 2;
@@ -54,29 +49,29 @@ namespace uTinyRipper.Classes.Misc
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			if (GetSerializedVersion(container.Version) == 1)
 			{
-				node.Add("bytes[0]", (byte)((Data0 & 0x000000FF) >> 0));
-				node.Add("bytes[1]", (byte)((Data0 & 0x0000FF00) >> 8));
-				node.Add("bytes[2]", (byte)((Data0 & 0x00FF0000) >> 16));
-				node.Add("bytes[3]", (byte)((Data0 & 0xFF000000) >> 24));
-				node.Add("bytes[4]", (byte)((Data1 & 0x000000FF) >> 0));
-				node.Add("bytes[5]", (byte)((Data1 & 0x0000FF00) >> 8));
-				node.Add("bytes[6]", (byte)((Data1 & 0x00FF0000) >> 16));
-				node.Add("bytes[7]", (byte)((Data1 & 0xFF000000) >> 24));
-				node.Add("bytes[8]", (byte)((Data2 & 0x000000FF) >> 0));
-				node.Add("bytes[9]", (byte)((Data2 & 0x0000FF00) >> 8));
-				node.Add("bytes[10]", (byte)((Data2 & 0x00FF0000) >> 16));
-				node.Add("bytes[11]", (byte)((Data2 & 0xFF000000) >> 24));
-				node.Add("bytes[12]", (byte)((Data3 & 0x000000FF) >> 0));
-				node.Add("bytes[13]", (byte)((Data3 & 0x0000FF00) >> 8));
-				node.Add("bytes[14]", (byte)((Data3 & 0x00FF0000) >> 16));
-				node.Add("bytes[15]", (byte)((Data3 & 0xFF000000) >> 24));
+				node.Add(Bytes0Name, (byte)((Data0 & 0x000000FF) >> 0));
+				node.Add(Bytes1Name, (byte)((Data0 & 0x0000FF00) >> 8));
+				node.Add(Bytes2Name, (byte)((Data0 & 0x00FF0000) >> 16));
+				node.Add(Bytes3Name, (byte)((Data0 & 0xFF000000) >> 24));
+				node.Add(Bytes4Name, (byte)((Data1 & 0x000000FF) >> 0));
+				node.Add(Bytes5Name, (byte)((Data1 & 0x0000FF00) >> 8));
+				node.Add(Bytes6Name, (byte)((Data1 & 0x00FF0000) >> 16));
+				node.Add(Bytes7Name, (byte)((Data1 & 0xFF000000) >> 24));
+				node.Add(Bytes8Name, (byte)((Data2 & 0x000000FF) >> 0));
+				node.Add(Bytes9Name, (byte)((Data2 & 0x0000FF00) >> 8));
+				node.Add(Bytes10Name, (byte)((Data2 & 0x00FF0000) >> 16));
+				node.Add(Bytes11Name, (byte)((Data2 & 0xFF000000) >> 24));
+				node.Add(Bytes12Name, (byte)((Data3 & 0x000000FF) >> 0));
+				node.Add(Bytes13Name, (byte)((Data3 & 0x0000FF00) >> 8));
+				node.Add(Bytes14Name, (byte)((Data3 & 0x00FF0000) >> 16));
+				node.Add(Bytes15Name, (byte)((Data3 & 0xFF000000) >> 24));
 			}
 			else
 			{
-				node.Add("Hash", $"{Data0:x8}{Data1:x8}{Data2:x8}{Data3:x8}");
+				node.Add(HashName, $"{Data0:x8}{Data1:x8}{Data2:x8}{Data3:x8}");
 			}
 			return node;
 		}
@@ -98,5 +93,23 @@ namespace uTinyRipper.Classes.Misc
 		public uint Data1 { get; private set; }
 		public uint Data2 { get; private set; }
 		public uint Data3 { get; private set; }
+
+		public const string Bytes0Name = "bytes[0]";
+		public const string Bytes1Name = "bytes[1]";
+		public const string Bytes2Name = "bytes[2]";
+		public const string Bytes3Name = "bytes[3]";
+		public const string Bytes4Name = "bytes[4]";
+		public const string Bytes5Name = "bytes[5]";
+		public const string Bytes6Name = "bytes[6]";
+		public const string Bytes7Name = "bytes[7]";
+		public const string Bytes8Name = "bytes[8]";
+		public const string Bytes9Name = "bytes[9]";
+		public const string Bytes10Name = "bytes[10]";
+		public const string Bytes11Name = "bytes[11]";
+		public const string Bytes12Name = "bytes[12]";
+		public const string Bytes13Name = "bytes[13]";
+		public const string Bytes14Name = "bytes[14]";
+		public const string Bytes15Name = "bytes[15]";
+		public const string HashName = "Hash";
 	}
 }

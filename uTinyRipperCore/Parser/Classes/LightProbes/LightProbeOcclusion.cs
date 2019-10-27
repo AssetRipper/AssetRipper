@@ -28,9 +28,9 @@ namespace uTinyRipper.Classes.LightProbess
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_ProbeOcclusionLightIndex", ProbeOcclusionLightIndex.ExportYAML(true));
-			node.Add("m_Occlusion", Occlusion.ExportYAML());
-			node.Add("m_OcclusionMaskChannel", OcclusionMaskChannel.ExportYAML());
+			node.Add(ProbeOcclusionLightIndexName, ProbeOcclusionLightIndex.ExportYAML(true));
+			node.Add(OcclusionName, Occlusion.ExportYAML());
+			node.Add(OcclusionMaskChannelName, OcclusionMaskChannel.ExportYAML());
 			return node;
 		}
 
@@ -40,6 +40,10 @@ namespace uTinyRipper.Classes.LightProbess
 		public IReadOnlyList<int> ProbeOcclusionLightIndex => m_probeOcclusionLightIndex;
 		public IReadOnlyList<float> Occlusion => m_occlusion;
 		public IReadOnlyList<byte> OcclusionMaskChannel => m_occlusionMaskChannel;
+
+		public const string ProbeOcclusionLightIndexName = "m_ProbeOcclusionLightIndex";
+		public const string OcclusionName = "m_Occlusion";
+		public const string OcclusionMaskChannelName = "m_OcclusionMaskChannel";
 
 		private int[] m_probeOcclusionLightIndex;
 		private float[] m_occlusion;

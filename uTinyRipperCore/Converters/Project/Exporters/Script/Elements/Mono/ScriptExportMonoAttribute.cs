@@ -1,7 +1,6 @@
 using Mono.Cecil;
 using System;
 using System.IO;
-using uTinyRipper.Converters.Script;
 
 namespace uTinyRipper.Converters.Script.Mono
 {

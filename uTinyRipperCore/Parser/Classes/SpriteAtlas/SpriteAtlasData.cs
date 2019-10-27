@@ -5,7 +5,7 @@ using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.SpriteAtlases
 {
-	public struct SpriteAtlasData : IAssetReadable, IYAMLExportable
+	public struct SpriteAtlasData : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 2017.2 and greater
@@ -30,10 +30,10 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			SettingsRaw = reader.ReadUInt32();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Texture.FetchDependency(file, isLog, () => nameof(SpriteAtlasData), TextureName);
-			yield return AlphaTexture.FetchDependency(file, isLog, () => nameof(SpriteAtlasData), AlphaTextureName);
+			yield return context.FetchDependency(Texture, TextureName);
+			yield return context.FetchDependency(AlphaTexture, AlphaTextureName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

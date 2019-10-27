@@ -2,7 +2,6 @@ using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using uTinyRipper.Converters.Script;
 
 namespace uTinyRipper.Converters.Script.Mono
 {

@@ -54,33 +54,33 @@ namespace uTinyRipper.Classes.RenderSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("sh[ 0]", Sh0);
-			node.Add("sh[ 1]", Sh1);
-			node.Add("sh[ 2]", Sh2);
-			node.Add("sh[ 3]", Sh3);
-			node.Add("sh[ 4]", Sh4);
-			node.Add("sh[ 5]", Sh5);
-			node.Add("sh[ 6]", Sh6);
-			node.Add("sh[ 7]", Sh7);
-			node.Add("sh[ 8]", Sh8);
-			node.Add("sh[ 9]", Sh9);
-			node.Add("sh[10]", Sh10);
-			node.Add("sh[11]", Sh11);
-			node.Add("sh[12]", Sh12);
-			node.Add("sh[13]", Sh13);
-			node.Add("sh[14]", Sh14);
-			node.Add("sh[15]", Sh15);
-			node.Add("sh[16]", Sh16);
-			node.Add("sh[17]", Sh17);
-			node.Add("sh[18]", Sh18);
-			node.Add("sh[19]", Sh19);
-			node.Add("sh[20]", Sh20);
-			node.Add("sh[21]", Sh21);
-			node.Add("sh[22]", Sh22);
-			node.Add("sh[23]", Sh23);
-			node.Add("sh[24]", Sh24);
-			node.Add("sh[25]", Sh25);
-			node.Add("sh[26]", Sh26);
+			node.Add(Sh0Name, Sh0);
+			node.Add(Sh1Name, Sh1);
+			node.Add(Sh2Name, Sh2);
+			node.Add(Sh3Name, Sh3);
+			node.Add(Sh4Name, Sh4);
+			node.Add(Sh5Name, Sh5);
+			node.Add(Sh6Name, Sh6);
+			node.Add(Sh7Name, Sh7);
+			node.Add(Sh8Name, Sh8);
+			node.Add(Sh9Name, Sh9);
+			node.Add(Sh10Name, Sh10);
+			node.Add(Sh11Name, Sh11);
+			node.Add(Sh12Name, Sh12);
+			node.Add(Sh13Name, Sh13);
+			node.Add(Sh14Name, Sh14);
+			node.Add(Sh15Name, Sh15);
+			node.Add(Sh16Name, Sh16);
+			node.Add(Sh17Name, Sh17);
+			node.Add(Sh18Name, Sh18);
+			node.Add(Sh19Name, Sh19);
+			node.Add(Sh20Name, Sh20);
+			node.Add(Sh21Name, Sh21);
+			node.Add(Sh22Name, Sh22);
+			node.Add(Sh23Name, Sh23);
+			node.Add(Sh24Name, Sh24);
+			node.Add(Sh25Name, Sh25);
+			node.Add(Sh26Name, Sh26);
 			return node;
 		}
 
@@ -111,5 +111,33 @@ namespace uTinyRipper.Classes.RenderSettingss
 		public float Sh24 { get; private set; }
 		public float Sh25 { get; private set; }
 		public float Sh26 { get; private set; }
+
+		public const string Sh0Name = "sh[ 0]";
+		public const string Sh1Name = "sh[ 1]";
+		public const string Sh2Name = "sh[ 2]";
+		public const string Sh3Name = "sh[ 3]";
+		public const string Sh4Name = "sh[ 4]";
+		public const string Sh5Name = "sh[ 5]";
+		public const string Sh6Name = "sh[ 6]";
+		public const string Sh7Name = "sh[ 7]";
+		public const string Sh8Name = "sh[ 8]";
+		public const string Sh9Name = "sh[ 9]";
+		public const string Sh10Name = "sh[10]";
+		public const string Sh11Name = "sh[11]";
+		public const string Sh12Name = "sh[12]";
+		public const string Sh13Name = "sh[13]";
+		public const string Sh14Name = "sh[14]";
+		public const string Sh15Name = "sh[15]";
+		public const string Sh16Name = "sh[16]";
+		public const string Sh17Name = "sh[17]";
+		public const string Sh18Name = "sh[18]";
+		public const string Sh19Name = "sh[19]";
+		public const string Sh20Name = "sh[20]";
+		public const string Sh21Name = "sh[21]";
+		public const string Sh22Name = "sh[22]";
+		public const string Sh23Name = "sh[23]";
+		public const string Sh24Name = "sh[24]";
+		public const string Sh25Name = "sh[25]";
+		public const string Sh26Name = "sh[26]";
 	}
 }

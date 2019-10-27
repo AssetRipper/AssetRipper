@@ -73,11 +73,6 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 3;
-			}
-
 			if (version.IsGreaterEqual(5, 4))
 			{
 				return 3;
@@ -161,45 +156,45 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Plane0.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane0");
-			yield return Plane1.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane1");
-			yield return Plane2.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane2");
-			yield return Plane3.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane3");
-			yield return Plane4.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane4");
-			yield return Plane5.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane5");
+			yield return context.FetchDependency(Plane0, Plane0Name);
+			yield return context.FetchDependency(Plane1, Plane1Name);
+			yield return context.FetchDependency(Plane2, Plane2Name);
+			yield return context.FetchDependency(Plane3, Plane3Name);
+			yield return context.FetchDependency(Plane4, Plane4Name);
+			yield return context.FetchDependency(Plane5, Plane5Name);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("type", (int)Type);
-			node.Add("collisionMode", (int)CollisionMode);
-			node.Add("colliderForce", ColliderForce);
-			node.Add("multiplyColliderForceByParticleSize", MultiplyColliderForceByParticleSize);
-			node.Add("multiplyColliderForceByParticleSpeed", MultiplyColliderForceByParticleSpeed);
-			node.Add("multiplyColliderForceByCollisionAngle", GetExportMultiplyColliderForceByCollisionAngle(container.Version));
-			node.Add("plane0", Plane0.ExportYAML(container));
-			node.Add("plane1", Plane1.ExportYAML(container));
-			node.Add("plane2", Plane2.ExportYAML(container));
-			node.Add("plane3", Plane3.ExportYAML(container));
-			node.Add("plane4", Plane4.ExportYAML(container));
-			node.Add("plane5", Plane5.ExportYAML(container));
-			node.Add("m_Dampen", Dampen.ExportYAML(container));
-			node.Add("m_Bounce", Bounce.ExportYAML(container));
-			node.Add("m_EnergyLossOnCollision", EnergyLossOnCollision.ExportYAML(container));
-			node.Add("minKillSpeed", MinKillSpeed);
-			node.Add("maxKillSpeed", GetExportMaxKillSpeed(container.Version));
-			node.Add("radiusScale", GetExportRadiusScale(container.Version));
-			node.Add("collidesWith", GetExportCollidesWith(container.Version).ExportYAML(container));
-			node.Add("maxCollisionShapes", GetExportMaxCollisionShapes(container.Version));
-			node.Add("quality", (int)Quality);
-			node.Add("voxelSize", GetExportVoxelSize(container.Version));
-			node.Add("collisionMessages", CollisionMessages);
-			node.Add("collidesWithDynamic", GetExportCollidesWithDynamic(container.Version));
-			node.Add("interiorCollisions", InteriorCollisions);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(TypeName, (int)Type);
+			node.Add(CollisionModeName, (int)CollisionMode);
+			node.Add(ColliderForceName, ColliderForce);
+			node.Add(MultiplyColliderForceByParticleSizeName, MultiplyColliderForceByParticleSize);
+			node.Add(MultiplyColliderForceByParticleSpeedName, MultiplyColliderForceByParticleSpeed);
+			node.Add(MultiplyColliderForceByCollisionAngleName, GetExportMultiplyColliderForceByCollisionAngle(container.Version));
+			node.Add(Plane0Name, Plane0.ExportYAML(container));
+			node.Add(Plane1Name, Plane1.ExportYAML(container));
+			node.Add(Plane2Name, Plane2.ExportYAML(container));
+			node.Add(Plane3Name, Plane3.ExportYAML(container));
+			node.Add(Plane4Name, Plane4.ExportYAML(container));
+			node.Add(Plane5Name, Plane5.ExportYAML(container));
+			node.Add(DampenName, Dampen.ExportYAML(container));
+			node.Add(BounceName, Bounce.ExportYAML(container));
+			node.Add(EnergyLossOnCollisionName, EnergyLossOnCollision.ExportYAML(container));
+			node.Add(MinKillSpeedName, MinKillSpeed);
+			node.Add(MaxKillSpeedName, GetExportMaxKillSpeed(container.Version));
+			node.Add(RadiusScaleName, GetExportRadiusScale(container.Version));
+			node.Add(CollidesWithName, GetExportCollidesWith(container.Version).ExportYAML(container));
+			node.Add(MaxCollisionShapesName, GetExportMaxCollisionShapes(container.Version));
+			node.Add(QualityName, (int)Quality);
+			node.Add(VoxelSizeName, GetExportVoxelSize(container.Version));
+			node.Add(CollisionMessagesName, CollisionMessages);
+			node.Add(CollidesWithDynamicName, GetExportCollidesWithDynamic(container.Version));
+			node.Add(InteriorCollisionsName, InteriorCollisions);
 			return node;
 		}
 
@@ -250,6 +245,32 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public bool CollisionMessages { get; private set; }
 		public bool CollidesWithDynamic { get; private set; }
 		public bool InteriorCollisions { get; private set; }
+
+		public const string TypeName = "type";
+		public const string CollisionModeName = "collisionMode";
+		public const string ColliderForceName = "colliderForce";
+		public const string MultiplyColliderForceByParticleSizeName = "multiplyColliderForceByParticleSize";
+		public const string MultiplyColliderForceByParticleSpeedName = "multiplyColliderForceByParticleSpeed";
+		public const string MultiplyColliderForceByCollisionAngleName = "multiplyColliderForceByCollisionAngle";
+		public const string Plane0Name = "plane0";
+		public const string Plane1Name = "plane1";
+		public const string Plane2Name = "plane2";
+		public const string Plane3Name = "plane3";
+		public const string Plane4Name = "plane4";
+		public const string Plane5Name = "plane5";
+		public const string DampenName = "m_Dampen";
+		public const string BounceName = "m_Bounce";
+		public const string EnergyLossOnCollisionName = "m_EnergyLossOnCollision";
+		public const string MinKillSpeedName = "minKillSpeed";
+		public const string MaxKillSpeedName = "maxKillSpeed";
+		public const string RadiusScaleName = "radiusScale";
+		public const string CollidesWithName = "collidesWith";
+		public const string MaxCollisionShapesName = "maxCollisionShapes";
+		public const string QualityName = "quality";
+		public const string VoxelSizeName = "voxelSize";
+		public const string CollisionMessagesName = "collisionMessages";
+		public const string CollidesWithDynamicName = "collidesWithDynamic";
+		public const string InteriorCollisionsName = "interiorCollisions";
 
 		public PPtr<Transform> Plane0;
 		public PPtr<Transform> Plane1;

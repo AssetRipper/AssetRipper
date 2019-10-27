@@ -64,11 +64,6 @@ namespace uTinyRipper.Classes
 		
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 3;
-			}
-
 			if (version.IsGreaterEqual(5, 6))
 			{
 				return 3;
@@ -126,32 +121,32 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return Camera.FetchDependency(file, isLog, ToLogString, "m_Camera");
+			yield return context.FetchDependency(Camera, CameraName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_RenderMode", (int)RenderMode);
-			node.Add("m_Camera", Camera.ExportYAML(container));
-			node.Add("m_PlaneDistance", IsReadPlaneDistance(container.Version) ? PlaneDistance : 100.0f);
-			node.Add("m_PixelPerfect", PixelPerfect);
-			node.Add("m_ReceivesEvents", IsReadRecievesEvents(container.Version) ? RecievesEvents : true);
-			node.Add("m_OverrideSorting", OverrideSorting);
-			node.Add("m_OverridePixelPerfect", OverridePixelPerfect);
-			node.Add("m_SortingBucketNormalizedSize", SortingBucketNormalizedSize);
-			node.Add("m_AdditionalShaderChannelsFlag", AdditionalShaderChannelsFlag);
-			node.Add("m_SortingLayerID", SortingLayerID);
-			node.Add("m_SortingOrder", SortingOrder);
-			node.Add("m_TargetDisplay", TargetDisplay);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(RenderModeName, (int)RenderMode);
+			node.Add(CameraName, Camera.ExportYAML(container));
+			node.Add(PlaneDistanceName, IsReadPlaneDistance(container.Version) ? PlaneDistance : 100.0f);
+			node.Add(PixelPerfectName, PixelPerfect);
+			node.Add(ReceivesEventsName, IsReadRecievesEvents(container.Version) ? RecievesEvents : true);
+			node.Add(OverrideSortingName, OverrideSorting);
+			node.Add(OverridePixelPerfectName, OverridePixelPerfect);
+			node.Add(SortingBucketNormalizedSizeName, SortingBucketNormalizedSize);
+			node.Add(AdditionalShaderChannelsFlagName, AdditionalShaderChannelsFlag);
+			node.Add(SortingLayerIDName, SortingLayerID);
+			node.Add(SortingOrderName, SortingOrder);
+			node.Add(TargetDisplayName, TargetDisplay);
 			return node;
 		}
 
@@ -169,6 +164,19 @@ namespace uTinyRipper.Classes
 		public int SortingLayerID { get; private set; }
 		public short SortingOrder { get; private set; }
 		public byte TargetDisplay { get; private set; }
+
+		public const string RenderModeName = "m_RenderMode";
+		public const string CameraName = "m_Camera";
+		public const string PlaneDistanceName = "m_PlaneDistance";
+		public const string PixelPerfectName = "m_PixelPerfect";
+		public const string ReceivesEventsName = "m_ReceivesEvents";
+		public const string OverrideSortingName = "m_OverrideSorting";
+		public const string OverridePixelPerfectName = "m_OverridePixelPerfect";
+		public const string SortingBucketNormalizedSizeName = "m_SortingBucketNormalizedSize";
+		public const string AdditionalShaderChannelsFlagName = "m_AdditionalShaderChannelsFlag";
+		public const string SortingLayerIDName = "m_SortingLayerID";
+		public const string SortingOrderName = "m_SortingOrder";
+		public const string TargetDisplayName = "m_TargetDisplay";
 
 		public PPtr<Camera> Camera;
 	}

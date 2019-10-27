@@ -20,11 +20,6 @@ namespace uTinyRipper.Classes.Misc
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(2))
 			{
 				return 2;
@@ -40,11 +35,13 @@ namespace uTinyRipper.Classes.Misc
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Bits", Bits);
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(BitsName, Bits);
 			return node;
 		}
 
 		public uint Bits { get; private set; }
+
+		public const string BitsName = "m_Bits";
 	}
 }

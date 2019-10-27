@@ -28,12 +28,12 @@ namespace uTinyRipper.Classes.AudioMixers
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("parentConstantIndex", ParentConstantIndex);
-			node.Add("volumeIndex", VolumeIndex);
-			node.Add("pitchIndex", PitchIndex);
-			node.Add("mute", Mute);
-			node.Add("solo", Solo);
-			node.Add("bypassEffects", BypassEffects);
+			node.Add(ParentConstantIndexName, ParentConstantIndex);
+			node.Add(VolumeIndexName, VolumeIndex);
+			node.Add(PitchIndexName, PitchIndex);
+			node.Add(MuteName, Mute);
+			node.Add(SoloName, Solo);
+			node.Add(BypassEffectsName, BypassEffects);
 			return node;
 		}
 
@@ -43,5 +43,12 @@ namespace uTinyRipper.Classes.AudioMixers
 		public bool Mute { get; private set; }
 		public bool Solo { get; private set; }
 		public bool BypassEffects { get; private set; }
+
+		public const string ParentConstantIndexName = "parentConstantIndex";
+		public const string VolumeIndexName = "volumeIndex";
+		public const string PitchIndexName = "pitchIndex";
+		public const string MuteName = "mute";
+		public const string SoloName = "solo";
+		public const string BypassEffectsName = "bypassEffects";
 	}
 }

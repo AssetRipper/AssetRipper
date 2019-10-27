@@ -42,16 +42,16 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object> passet in Assets)
+			foreach (Object asset in context.FetchDependencies(Assets, AssetsName))
 			{
-				yield return passet.FetchDependency(file, isLog, ToLogString, "m_Assets");
+				yield return asset;
 			}
 		}
 
@@ -63,6 +63,8 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<PPtr<Object>> Assets => m_assets;
 		public IReadOnlyList<string> Dependencies => m_dependencies;
 		public bool ExplicitDataLayout { get; private set; }
+
+		public const string AssetsName = "m_Assets";
 
 		private PPtr<Object>[] m_assets;
 		private string[] m_dependencies;

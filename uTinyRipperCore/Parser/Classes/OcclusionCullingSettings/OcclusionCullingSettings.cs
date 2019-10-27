@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using uTinyRipper.Project;
-using uTinyRipper.Classes.OcclusionCullingSettingses;
-using uTinyRipper.YAML;
-using uTinyRipper.Converters;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper.Classes.OcclusionCullingSettingses;
+using uTinyRipper.Converters;
+using uTinyRipper.Project;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -16,7 +16,7 @@ namespace uTinyRipper.Classes
 			base(assetInfo)
 		{
 		}
-		
+
 		public static bool IsSceneCompatible(Object asset)
 		{
 			if (asset.ClassID == ClassIDType.GameObject)
@@ -81,13 +81,13 @@ namespace uTinyRipper.Classes
 		public static bool IsReadSceneGUID(Version version)
 		{
 			return version.IsGreaterEqual(5, 5);
-		}		
+		}
 		/// <summary>
 		/// (3.0.0 to 5.5.0 exclusive) or (5.0.0 and greater and Release)
 		/// </summary>
 		public static bool IsReadStaticRenderers(Version version, TransferInstructionFlags flags)
 		{
-			if(version.IsGreaterEqual(3, 0, 0))
+			if (version.IsGreaterEqual(3, 0, 0))
 			{
 				if (version.IsLess(5, 5))
 				{
@@ -108,11 +108,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			// min version is 2nd
 			return 2;
 		}
@@ -130,7 +125,7 @@ namespace uTinyRipper.Classes
 			{
 				QueryMode = reader.ReadInt32();
 			}
-			
+
 			if (IsReadOcclusionBakeSettings(reader.Version, reader.Flags))
 			{
 				if (IsReadOcclusionBakeSettingsFirst(reader.Version))
@@ -139,7 +134,7 @@ namespace uTinyRipper.Classes
 				}
 			}
 
-			if(IsReadSceneGUID(reader.Version))
+			if (IsReadSceneGUID(reader.Version))
 			{
 				SceneGUID.Read(reader);
 				OcclusionCullingData.Read(reader);
@@ -162,31 +157,31 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return OcclusionCullingData.FetchDependency(file, isLog, ToLogString, "m_OcclusionCullingData");
-			foreach (PPtr<Renderer> staticRenderer in StaticRenderers)
+			yield return context.FetchDependency(OcclusionCullingData, OcclusionCullingDataName);
+			foreach (Object asset in context.FetchDependencies(StaticRenderers, StaticRenderersName))
 			{
-				yield return staticRenderer.FetchDependency(file, isLog, ToLogString, "m_StaticRenderers");
+				yield return asset;
 			}
-			foreach (PPtr<OcclusionPortal> portal in Portals)
+			foreach (Object asset in context.FetchDependencies(Portals, PortalsName))
 			{
-				yield return portal.FetchDependency(file, isLog, ToLogString, "m_Portals");
+				yield return asset;
 			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_OcclusionBakeSettings", GetExportOcclusionBakeSettings(container).ExportYAML(container));
-			node.Add("m_SceneGUID", GetExportSceneGUID(container).ExportYAML(container));
-			node.Add("m_OcclusionCullingData", GetExportOcclusionCullingData(container).ExportYAML(container));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(OcclusionBakeSettingsName, GetExportOcclusionBakeSettings(container).ExportYAML(container));
+			node.Add(SceneGUIDName, GetExportSceneGUID(container).ExportYAML(container));
+			node.Add(OcclusionCullingDataName, GetExportOcclusionCullingData(container).ExportYAML(container));
 			return node;
 		}
 
@@ -207,7 +202,7 @@ namespace uTinyRipper.Classes
 		}
 		private GUID GetExportSceneGUID(IExportContainer container)
 		{
-			if(IsReadPVSData(container.Version))
+			if (IsReadPVSData(container.Version))
 			{
 				SceneExportCollection scene = (SceneExportCollection)container.CurrentCollection;
 				return scene.GUID;
@@ -219,10 +214,10 @@ namespace uTinyRipper.Classes
 		}
 		private PPtr<OcclusionCullingData> GetExportOcclusionCullingData(IExportContainer container)
 		{
-			if(IsReadPVSData(container.Version))
+			if (IsReadPVSData(container.Version))
 			{
 				SceneExportCollection scene = (SceneExportCollection)container.CurrentCollection;
-				if(scene.OcclusionCullingData == null)
+				if (scene.OcclusionCullingData == null)
 				{
 					return default;
 				}
@@ -251,6 +246,12 @@ namespace uTinyRipper.Classes
 		public PPtr<OcclusionCullingData> OcclusionCullingData;
 
 		public const string SceneKeyword = nameof(ClassIDType.Scene);
+
+		public const string OcclusionBakeSettingsName = "m_OcclusionBakeSettings";
+		public const string SceneGUIDName = "m_SceneGUID";
+		public const string OcclusionCullingDataName = "m_OcclusionCullingData";
+		public const string StaticRenderersName = "m_StaticRenderers";
+		public const string PortalsName = "m_Portals";
 
 		private byte[] m_PVSData;
 		private PPtr<Renderer>[] m_staticRenderers;

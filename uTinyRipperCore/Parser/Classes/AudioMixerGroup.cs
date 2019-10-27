@@ -23,18 +23,18 @@ namespace uTinyRipper.Classes
 			m_children = reader.ReadAssetArray<PPtr<AudioMixerGroup>>();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<AudioMixerGroup> group in Children)
+			yield return context.FetchDependency(AudioMixer, AudioMixerName);
+			foreach (Object asset in context.FetchDependencies(Children, ChildrenName))
 			{
-				yield return group.FetchDependency(file, isLog, ToLogString, "Children");
+				yield return asset;
 			}
-			yield return AudioMixer.FetchDependency(file, isLog, ToLogString, "AudioMixer");
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -43,6 +43,9 @@ namespace uTinyRipper.Classes
 		}
 
 		public IReadOnlyList<PPtr<AudioMixerGroup>> Children => m_children;
+
+		public const string AudioMixerName = "m_AudioMixer";
+		public const string ChildrenName = "m_Children";
 
 		public PPtr<AudioMixer> AudioMixer;
 		public GUID GroupID;

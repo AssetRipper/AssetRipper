@@ -19,14 +19,14 @@ namespace uTinyRipper.Classes
 			Parameters.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (Object asset in Parameters.FetchDependencies(file, isLog))
+			foreach (Object asset in context.FetchDependencies(Parameters, ParametersName))
 			{
 				yield return asset;
 			}

@@ -75,7 +75,7 @@ namespace uTinyRipper.Classes
 		private static int GetSerializedVersion(Version version)
 		{
 			// static PlatformDefaultQuality has been replaced by dictionary
-			if (Config.IsExportTopmostSerializedVersion || version.IsGreaterEqual(3, 5))
+			if (version.IsGreaterEqual(3, 5))
 			{
 				return 5;
 			}
@@ -213,7 +213,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(CurrentQualityName, CurrentQuality);
 			node.Add(QualitySettingsName, QualitySettingss.ExportYAML(container));
 			node.Add(PerPlatformDefaultQualityName, GetPerPlatformDefaultQuality(container.Version, container.Flags).ExportYAML());

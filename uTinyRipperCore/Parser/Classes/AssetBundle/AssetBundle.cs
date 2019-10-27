@@ -87,11 +87,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 3;
-			}
-
 			if (version.IsGreaterEqual(4, 2))
 			{
 				return 3;
@@ -161,18 +156,16 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
-			foreach (AssetBundles.AssetInfo container in m_container.Select(t => t.Value))
+
+			foreach (Object asset in context.FetchDependencies(m_container.Select(t => t.Value), ContainerName))
 			{
-				foreach (Object asset in container.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 
@@ -194,7 +187,9 @@ namespace uTinyRipper.Classes
 		public bool IsStreamedSceneAssetBundle { get; private set; }
 		public int ExplicitDataLayout { get; private set; }
 		public int PathFlags { get; private set; }
-		
+
+		public const string ContainerName = "m_Container";
+
 		public AssetBundles.AssetInfo MainAsset;
 		
 		private PPtr<Object>[] m_preloadTable;

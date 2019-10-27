@@ -21,8 +21,8 @@ namespace uTinyRipper.Classes.AnimatorControllers
 #warning TODO: animator
 			Mask = default;
 
-			m_motions = new StateMotionPair[0];
-			m_behaviours = new StateBehavioursPair[0];
+			m_motions = System.Array.Empty<StateMotionPair>();
+			m_behaviours = System.Array.Empty<StateBehavioursPair>();
 			BlendingMode = layer.LayerBlendingMode;
 			SyncedLayerIndex = layer.StateMachineMotionSetIndex == 0 ? -1 : layer.StateMachineIndex;
 			DefaultWeight = layer.DefaultWeight;
@@ -41,17 +41,17 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_Name", Name);
-			node.Add("m_StateMachine", StateMachine.ExportYAML(container));
-			node.Add("m_Mask", Mask.ExportYAML(container));
-			node.Add("m_Motions", Motions.ExportYAML(container));
-			node.Add("m_Behaviours", Behaviours.ExportYAML(container));
-			node.Add("m_BlendingMode", (int)BlendingMode);
-			node.Add("m_SyncedLayerIndex", SyncedLayerIndex);
-			node.Add("m_DefaultWeight", DefaultWeight);
-			node.Add("m_IKPass", IKPass);
-			node.Add("m_SyncedLayerAffectsTiming", SyncedLayerAffectsTiming);
-			node.Add("m_Controller", Controller.ExportYAML(container));
+			node.Add(NameName, Name);
+			node.Add(StateMachineName, StateMachine.ExportYAML(container));
+			node.Add(MaskName, Mask.ExportYAML(container));
+			node.Add(MotionsName, Motions.ExportYAML(container));
+			node.Add(BehavioursName, Behaviours.ExportYAML(container));
+			node.Add(BlendingModeName, (int)BlendingMode);
+			node.Add(SyncedLayerIndexName, SyncedLayerIndex);
+			node.Add(DefaultWeightName, DefaultWeight);
+			node.Add(IKPassName, IKPass);
+			node.Add(SyncedLayerAffectsTimingName, SyncedLayerAffectsTiming);
+			node.Add(ControllerName, Controller.ExportYAML(container));
 			return node;
 		}
 
@@ -67,6 +67,18 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		public PPtr<AnimatorStateMachine> StateMachine;
 		public PPtr<AvatarMask> Mask;
 		public PPtr<AnimatorController> Controller;
+
+		public const string NameName = "m_Name";
+		public const string StateMachineName = "m_StateMachine";
+		public const string MaskName = "m_Mask";
+		public const string MotionsName = "m_Motions";
+		public const string BehavioursName = "m_Behaviours";
+		public const string BlendingModeName = "m_BlendingMode";
+		public const string SyncedLayerIndexName = "m_SyncedLayerIndex";
+		public const string DefaultWeightName = "m_DefaultWeight";
+		public const string IKPassName = "m_IKPass";
+		public const string SyncedLayerAffectsTimingName = "m_SyncedLayerAffectsTiming";
+		public const string ControllerName = "m_Controller";
 
 		private StateMotionPair[] m_motions;
 		private StateBehavioursPair[] m_behaviours;

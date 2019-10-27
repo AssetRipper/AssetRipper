@@ -16,7 +16,7 @@ namespace uTinyRipper.Classes
 			throw new System.NotImplementedException();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
 			throw new System.NotImplementedException();
 		}

@@ -78,9 +78,9 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Data", Data.ExportYAML(container));
-			node.Add("m_BakedCoefficients", BakedCoefficients.ExportYAML(container));
-			node.Add("m_BakedLightOcclusion", BakedLightOcclusion.ExportYAML(container));
+			node.Add(DataName, Data.ExportYAML(container));
+			node.Add(BakedCoefficientsName, BakedCoefficients.ExportYAML(container));
+			node.Add(BakedLightOcclusionName, BakedLightOcclusion.ExportYAML(container));
 			return node;
 		}
 
@@ -88,6 +88,10 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<SphericalHarmonicsL2> BakedCoefficients => m_bakedCoefficients;
 		public IReadOnlyList<SHCoefficientsBaked> BakedCoefficients11 => m_bakedCoefficients11;
 		public IReadOnlyList<LightProbeOcclusion> BakedLightOcclusion => m_bakedLightOcclusion;
+
+		public const string DataName = "m_Data";
+		public const string BakedCoefficientsName = "m_BakedCoefficients";
+		public const string BakedLightOcclusionName = "m_BakedLightOcclusion";
 
 		public LightProbeData Data;
 

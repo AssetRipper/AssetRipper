@@ -44,10 +44,10 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("Fixed Timestep", FixedTimestep);
-			node.Add("Maximum Allowed Timestep", GetMaximumAllowedTimestep(container.Version));
-			node.Add("m_TimeScale", TimeScale);
-			node.Add("Maximum Particle Timestep", GetMaximumParticleTimestep(container.Version));
+			node.Add(FixedTimestepName, FixedTimestep);
+			node.Add(MaximumAllowedTimestepName, GetMaximumAllowedTimestep(container.Version));
+			node.Add(TimeScaleName, TimeScale);
+			node.Add(MaximumParticleTimestepName, GetMaximumParticleTimestep(container.Version));
 			return node;
 		}
 
@@ -64,5 +64,10 @@ namespace uTinyRipper.Classes
 		public float MaximumAllowedTimestep { get; private set; }
 		public float TimeScale { get; private set; }
 		public float MaximumParticleTimestep { get; private set; }
+
+		public const string FixedTimestepName = "Fixed Timestep";
+		public const string MaximumAllowedTimestepName = "Maximum Allowed Timestep";
+		public const string TimeScaleName = "m_TimeScale";
+		public const string MaximumParticleTimestepName = "Maximum Particle Timestep";
 	}
 }

@@ -37,11 +37,6 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			// unknown version
 			// KeyValuePairs to Scene class
 			if (version.IsGreaterEqual(2, 5))
@@ -84,7 +79,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(ScenesName, Scenes.ExportYAML(container));
 			if (IsReadConfigObjects(container.ExportVersion))
 			{

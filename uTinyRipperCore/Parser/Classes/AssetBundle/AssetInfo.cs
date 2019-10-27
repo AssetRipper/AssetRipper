@@ -22,9 +22,9 @@ namespace uTinyRipper.Classes.AssetBundles
 			Asset.Read(reader);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Asset.FetchDependency(file, isLog, () => nameof(AssetInfo), "asset");
+			yield return context.FetchDependency(Asset, "asset");
 		}
 
 		public int PreloadIndex { get; private set; }

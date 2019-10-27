@@ -63,23 +63,23 @@ namespace uTinyRipper.Classes.Physics2DSettingss
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("useMultithreading", UseMultithreading);
-			node.Add("useConsistencySorting", UseConsistencySorting);
-			node.Add("m_InterpolationPosesPerJob", InterpolationPosesPerJob);
-			node.Add("m_NewContactsPerJob", NewContactsPerJob);
-			node.Add("m_CollideContactsPerJob", CollideContactsPerJob);
-			node.Add("m_ClearFlagsPerJob", ClearFlagsPerJob);
-			node.Add("m_ClearBodyForcesPerJob", ClearBodyForcesPerJob);
-			node.Add("m_SyncDiscreteFixturesPerJob", SyncDiscreteFixturesPerJob);
-			node.Add("m_SyncContinuousFixturesPerJob", SyncContinuousFixturesPerJob);
-			node.Add("m_FindNearestContactsPerJob", FindNearestContactsPerJob);
-			node.Add("m_UpdateTriggerContactsPerJob", UpdateTriggerContactsPerJob);
-			node.Add("m_IslandSolverCostThreshold", IslandSolverCostThreshold);
-			node.Add("m_IslandSolverBodyCostScale", IslandSolverBodyCostScale);
-			node.Add("m_IslandSolverContactCostScale", IslandSolverContactCostScale);
-			node.Add("m_IslandSolverJointCostScale", IslandSolverJointCostScale);
-			node.Add("m_IslandSolverBodiesPerJob", IslandSolverBodiesPerJob);
-			node.Add("m_IslandSolverContactsPerJob", IslandSolverContactsPerJob);
+			node.Add(UseMultithreadingName, UseMultithreading);
+			node.Add(UseConsistencySortingName, UseConsistencySorting);
+			node.Add(InterpolationPosesPerJobName, InterpolationPosesPerJob);
+			node.Add(NewContactsPerJobName, NewContactsPerJob);
+			node.Add(CollideContactsPerJobName, CollideContactsPerJob);
+			node.Add(ClearFlagsPerJobName, ClearFlagsPerJob);
+			node.Add(ClearBodyForcesPerJobName, ClearBodyForcesPerJob);
+			node.Add(SyncDiscreteFixturesPerJobName, SyncDiscreteFixturesPerJob);
+			node.Add(SyncContinuousFixturesPerJobName, SyncContinuousFixturesPerJob);
+			node.Add(FindNearestContactsPerJobName, FindNearestContactsPerJob);
+			node.Add(UpdateTriggerContactsPerJobName, UpdateTriggerContactsPerJob);
+			node.Add(IslandSolverCostThresholdName, IslandSolverCostThreshold);
+			node.Add(IslandSolverBodyCostScaleName, IslandSolverBodyCostScale);
+			node.Add(IslandSolverContactCostScaleName, IslandSolverContactCostScale);
+			node.Add(IslandSolverJointCostScaleName, IslandSolverJointCostScale);
+			node.Add(IslandSolverBodiesPerJobName, IslandSolverBodiesPerJob);
+			node.Add(IslandSolverContactsPerJobName, IslandSolverContactsPerJob);
 			return node;
 		}
 
@@ -100,5 +100,23 @@ namespace uTinyRipper.Classes.Physics2DSettingss
 		public int IslandSolverJointCostScale { get; private set; }
 		public int IslandSolverBodiesPerJob { get; private set; }
 		public int IslandSolverContactsPerJob { get; private set; }
+
+		public const string UseMultithreadingName = "useMultithreading";
+		public const string UseConsistencySortingName = "useConsistencySorting";
+		public const string InterpolationPosesPerJobName = "m_InterpolationPosesPerJob";
+		public const string NewContactsPerJobName = "m_NewContactsPerJob";
+		public const string CollideContactsPerJobName = "m_CollideContactsPerJob";
+		public const string ClearFlagsPerJobName = "m_ClearFlagsPerJob";
+		public const string ClearBodyForcesPerJobName = "m_ClearBodyForcesPerJob";
+		public const string SyncDiscreteFixturesPerJobName = "m_SyncDiscreteFixturesPerJob";
+		public const string SyncContinuousFixturesPerJobName = "m_SyncContinuousFixturesPerJob";
+		public const string FindNearestContactsPerJobName = "m_FindNearestContactsPerJob";
+		public const string UpdateTriggerContactsPerJobName = "m_UpdateTriggerContactsPerJob";
+		public const string IslandSolverCostThresholdName = "m_IslandSolverCostThreshold";
+		public const string IslandSolverBodyCostScaleName = "m_IslandSolverBodyCostScale";
+		public const string IslandSolverContactCostScaleName = "m_IslandSolverContactCostScale";
+		public const string IslandSolverJointCostScaleName = "m_IslandSolverJointCostScale";
+		public const string IslandSolverBodiesPerJobName = "m_IslandSolverBodiesPerJob";
+		public const string IslandSolverContactsPerJobName = "m_IslandSolverContactsPerJob";
 	}
 }

@@ -115,7 +115,7 @@ namespace uTinyRipper
 			{
 				return new[] { path };
 			}
-			return new string[0];
+			return Array.Empty<string>();
 		}
 
 		public static bool IsNameEquals(string fileName, string compare)
@@ -150,7 +150,7 @@ namespace uTinyRipper
 		{
 			if (!DirectoryUtils.Exists(dirPath))
 			{
-				return new string[0];
+				return Array.Empty<string>();
 			}
 
 			string filePatern = fileName + ".split*";

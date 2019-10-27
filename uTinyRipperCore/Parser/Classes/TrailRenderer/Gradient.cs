@@ -32,15 +32,19 @@ namespace uTinyRipper.Classes.TrailRenderers
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(ColorName + "0", Color0.ExportYAML(container));
-			node.Add(ColorName + "1", Color1.ExportYAML(container));
-			node.Add(ColorName + "2", Color2.ExportYAML(container));
-			node.Add(ColorName + "3", Color3.ExportYAML(container));
-			node.Add(ColorName + "4", Color4.ExportYAML(container));
+			node.Add(Color0Name, Color0.ExportYAML(container));
+			node.Add(Color1Name, Color1.ExportYAML(container));
+			node.Add(Color2Name, Color2.ExportYAML(container));
+			node.Add(Color3Name, Color3.ExportYAML(container));
+			node.Add(Color4Name, Color4.ExportYAML(container));
 			return node;
 		}
 
-		public const string ColorName = "m_Color";
+		public const string Color0Name = "m_Color0";
+		public const string Color1Name = "m_Color1";
+		public const string Color2Name = "m_Color2";
+		public const string Color3Name = "m_Color3";
+		public const string Color4Name = "m_Color4";
 
 		public ColorRGBA32 Color0;
 		public ColorRGBA32 Color1;

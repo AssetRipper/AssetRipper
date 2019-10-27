@@ -24,18 +24,18 @@ namespace uTinyRipper.Classes.Misc
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("e00", E00);
-			node.Add("e01", E01);
-			node.Add("e02", E02);
-			node.Add("e03", E03);
-			node.Add("e10", E10);
-			node.Add("e11", E11);
-			node.Add("e12", E12);
-			node.Add("e13", E13);
-			node.Add("e20", E20);
-			node.Add("e21", E21);
-			node.Add("e22", E22);
-			node.Add("e23", E23);
+			node.Add(E00Name, E00);
+			node.Add(E01Name, E01);
+			node.Add(E02Name, E02);
+			node.Add(E03Name, E03);
+			node.Add(E10Name, E10);
+			node.Add(E11Name, E11);
+			node.Add(E12Name, E12);
+			node.Add(E13Name, E13);
+			node.Add(E20Name, E20);
+			node.Add(E21Name, E21);
+			node.Add(E22Name, E22);
+			node.Add(E23Name, E23);
 			return node;
 		}
 
@@ -51,5 +51,18 @@ namespace uTinyRipper.Classes.Misc
 		public float E21 { get; private set; }
 		public float E22 { get; private set; }
 		public float E23 { get; private set; }
+
+		public const string E00Name = "e00";
+		public const string E01Name = "e01";
+		public const string E02Name = "e02";
+		public const string E03Name = "e03";
+		public const string E10Name = "e10";
+		public const string E11Name = "e11";
+		public const string E12Name = "e12";
+		public const string E13Name = "e13";
+		public const string E20Name = "e20";
+		public const string E21Name = "e21";
+		public const string E22Name = "e22";
+		public const string E23Name = "e23";
 	}
 }

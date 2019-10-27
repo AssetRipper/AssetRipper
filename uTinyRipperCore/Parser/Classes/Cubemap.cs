@@ -34,18 +34,18 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			if (IsReadSourceTextures(file.Version))
+			if (IsReadSourceTextures(context.Version))
 			{
-				foreach(PPtr<Texture2D> texture in m_sourceTextures)
+				foreach (Object asset in context.FetchDependencies(SourceTextures, SourceTexturesName))
 				{
-					yield return texture.FetchDependency(file, isLog, ToLogString, SourceTexturesName);
+					yield return asset;
 				}
 			}
 		}

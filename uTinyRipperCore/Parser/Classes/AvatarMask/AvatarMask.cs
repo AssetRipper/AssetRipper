@@ -24,8 +24,8 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Mask", Mask.ExportYAML(true));
-			node.Add("m_Elements", Elements.ExportYAML(container));
+			node.Add(MaskName, Mask.ExportYAML(true));
+			node.Add(ElementsName, Elements.ExportYAML(container));
 			return node;
 		}
 
@@ -33,6 +33,9 @@ namespace uTinyRipper.Classes
 
 		public IReadOnlyList<uint> Mask => m_mask;
 		public IReadOnlyList<TransformMaskElement> Elements => m_elements;
+
+		public const string MaskName = "m_Mask";
+		public const string ElementsName = "m_Elements";
 
 		private uint[] m_mask;
 		private TransformMaskElement[] m_elements;

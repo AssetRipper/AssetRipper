@@ -21,16 +21,16 @@ namespace uTinyRipper.Classes
 			m_shaders = reader.ReadTTKVPArray<PPtr<Shader>, ShaderInfo>();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (KeyValuePair<PPtr<Shader>, ShaderInfo> kvp in m_shaders)
+			foreach (Object asset in context.FetchDependencies(m_shaders.Select(t => t.Key), ShadersName))
 			{
-				yield return kvp.Key.FetchDependency(file, isLog, ToLogString, "m_Shaders");
+				yield return asset;
 			}
 		}
 
@@ -50,13 +50,15 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Shaders", GetShaders().ExportYAML(container));
+			node.Add(ShadersName, GetShaders().ExportYAML(container));
 			return node;
 		}
 
 		public override string ExportExtension => "shadervariants";
 
 		public ILookup<PPtr<Shader>, ShaderInfo> Shaders => m_shaders.ToLookup(t => t.Key, t => t.Value);
+
+		public const string ShadersName = "m_Shaders";
 
 		private KeyValuePair<PPtr<Shader>, ShaderInfo>[] m_shaders;
 	}

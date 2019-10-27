@@ -17,16 +17,20 @@ namespace uTinyRipper.Classes.Avatars
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Node", Node == null ? YAMLSequenceNode.Empty : Node.ExportYAML(container));
-			node.Add("m_ID", ID == null ? YAMLSequenceNode.Empty : ID.ExportYAML(true));
-			node.Add("m_AxesArray", AxesArray == null ? YAMLSequenceNode.Empty : AxesArray.ExportYAML(container));
+			node.Add(NodeName, Node == null ? YAMLSequenceNode.Empty : Node.ExportYAML(container));
+			node.Add(IDName, ID == null ? YAMLSequenceNode.Empty : ID.ExportYAML(true));
+			node.Add(AxesArrayName, AxesArray == null ? YAMLSequenceNode.Empty : AxesArray.ExportYAML(container));
 			return node;
 		}
 
 		public IReadOnlyList<Node> Node => m_node;
 		public IReadOnlyList<uint> ID => m_ID;
 		public IReadOnlyList<Axes> AxesArray => m_axesArray;
-		
+
+		public const string NodeName = "m_Node";
+		public const string IDName = "m_ID";
+		public const string AxesArrayName = "m_AxesArray";
+
 		private Node[] m_node;
 		private uint[] m_ID;
 		private Axes[] m_axesArray;

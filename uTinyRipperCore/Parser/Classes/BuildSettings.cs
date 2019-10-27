@@ -163,11 +163,6 @@ namespace uTinyRipper.Classes
 		
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			// min version is 2nd
 			return 2;
 		}

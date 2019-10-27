@@ -20,13 +20,13 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("rendererIndex", RendererIndex);
-			node.Add("rendererSize", RendererSize);
-			node.Add("atlasIndex", AtlasIndex);
-			node.Add("atlasOffsetX", AtlasOffsetX);
-			node.Add("atlasOffsetY", AtlasOffsetY);
-			node.Add("inputSystemHash", InputSystemHash.ExportYAML(container));
-			node.Add("radiositySystemHash", RadiositySystemHash.ExportYAML(container));
+			node.Add(RendererIndexName, RendererIndex);
+			node.Add(RendererSizeName, RendererSize);
+			node.Add(AtlasIndexName, AtlasIndex);
+			node.Add(AtlasOffsetXName, AtlasOffsetX);
+			node.Add(AtlasOffsetYName, AtlasOffsetY);
+			node.Add(InputSystemHashName, InputSystemHash.ExportYAML(container));
+			node.Add(RadiositySystemHashName, RadiositySystemHash.ExportYAML(container));
 			return node;
 		}
 
@@ -35,6 +35,14 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		public int AtlasIndex { get; private set; }
 		public int AtlasOffsetX { get; private set; }
 		public int AtlasOffsetY { get; private set; }
+
+		public const string RendererIndexName = "rendererIndex";
+		public const string RendererSizeName = "rendererSize";
+		public const string AtlasIndexName = "atlasIndex";
+		public const string AtlasOffsetXName = "atlasOffsetX";
+		public const string AtlasOffsetYName = "atlasOffsetY";
+		public const string InputSystemHashName = "inputSystemHash";
+		public const string RadiositySystemHashName = "radiositySystemHash";
 
 		public Hash128 InputSystemHash;
 		public Hash128 RadiositySystemHash;

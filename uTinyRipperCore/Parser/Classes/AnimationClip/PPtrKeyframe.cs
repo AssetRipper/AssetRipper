@@ -9,30 +9,33 @@ namespace uTinyRipper.Classes.AnimationClips
 		public PPtrKeyframe(float time, PPtr<Object> script)
 		{
 			Time = time;
-			Script = script;
+			Value = script;
 		}
 
 		public void Read(AssetReader reader)
 		{
 			Time = reader.ReadSingle();
-			Script.Read(reader);
+			Value.Read(reader);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("time", Time);
-			node.Add("value", Script.ExportYAML(container));
+			node.Add(TimeName, Time);
+			node.Add(ValueName, Value.ExportYAML(container));
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Script.FetchDependency(file, isLog, () => nameof(PPtrKeyframe), "script");
+			yield return context.FetchDependency(Value, ValueName);
 		}
 
 		public float Time { get; private set; }
 
-		public PPtr<Object> Script;
+		public const string TimeName = "time";
+		public const string ValueName = "value";
+
+		public PPtr<Object> Value;
 	}
 }

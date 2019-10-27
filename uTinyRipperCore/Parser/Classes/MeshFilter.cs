@@ -18,22 +18,24 @@ namespace uTinyRipper.Classes
 			Mesh.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return Mesh.FetchDependency(file, isLog, ToLogString, "m_Mesh");
+			yield return context.FetchDependency(Mesh, MeshName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Mesh", Mesh.ExportYAML(container));
+			node.Add(MeshName, Mesh.ExportYAML(container));
 			return node;
 		}
+
+		public const string MeshName = "m_Mesh";
 
 		public PPtr<Mesh> Mesh;
 	}

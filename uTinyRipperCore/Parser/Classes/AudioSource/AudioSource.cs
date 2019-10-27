@@ -207,43 +207,43 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return OutputAudioMixerGroup.FetchDependency(file, isLog, ToLogString, "OutputAudioMixerGroup");
-			yield return AudioClip.FetchDependency(file, isLog, ToLogString, "m_audioClip");
+			yield return context.FetchDependency(OutputAudioMixerGroup, OutputAudioMixerGroupName);
+			yield return context.FetchDependency(AudioClip, AudioClipName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("OutputAudioMixerGroup", OutputAudioMixerGroup.ExportYAML(container));
-			node.Add("m_audioClip", AudioClip.ExportYAML(container));
-			node.Add("m_PlayOnAwake", PlayOnAwake);
-			node.Add("m_Volume", Volume);
-			node.Add("m_Pitch", Pitch);
-			node.Add("Loop", Loop);
-			node.Add("Mute", Mute);
-			node.Add("Spatialize", Spatialize);
-			node.Add("SpatializePostEffects", SpatializePostEffects);
-			node.Add("Priority", Priority);
-			node.Add("DopplerLevel", DopplerLevel);
-			node.Add("MinDistance", MinDistance);
-			node.Add("MaxDistance", MaxDistance);
-			node.Add("Pan2D", Pan2D);
-			node.Add("rolloffMode", (int)RolloffMode);
-			node.Add("BypassEffects", BypassEffects);
-			node.Add("BypassListenerEffects", BypassListenerEffects);
-			node.Add("BypassReverbZones", BypassReverbZones);
-			node.Add("rolloffCustomCurve", GetRolloffCustomCurve(container.Version).ExportYAML(container));
-			node.Add("panLevelCustomCurve", GetPanLevelCustomCurve(container.Version).ExportYAML(container));
-			node.Add("spreadCustomCurve", GetSpreadCustomCurve(container.Version).ExportYAML(container));
-			node.Add("reverbZoneMixCustomCurve", GetReverbZoneMixCustomCurve(container.Version).ExportYAML(container));
+			node.Add(OutputAudioMixerGroupName, OutputAudioMixerGroup.ExportYAML(container));
+			node.Add(AudioClipName, AudioClip.ExportYAML(container));
+			node.Add(PlayOnAwakeName, PlayOnAwake);
+			node.Add(VolumeName, Volume);
+			node.Add(PitchName, Pitch);
+			node.Add(LoopName, Loop);
+			node.Add(MuteName, Mute);
+			node.Add(SpatializeName, Spatialize);
+			node.Add(SpatializePostEffectsName, SpatializePostEffects);
+			node.Add(PriorityName, Priority);
+			node.Add(DopplerLevelName, DopplerLevel);
+			node.Add(MinDistanceName, MinDistance);
+			node.Add(MaxDistanceName, MaxDistance);
+			node.Add(Pan2DName, Pan2D);
+			node.Add(RolloffModeName, (int)RolloffMode);
+			node.Add(BypassEffectsName, BypassEffects);
+			node.Add(BypassListenerEffectsName, BypassListenerEffects);
+			node.Add(BypassReverbZonesName, BypassReverbZones);
+			node.Add(RolloffCustomCurveName, GetRolloffCustomCurve(container.Version).ExportYAML(container));
+			node.Add(PanLevelCustomCurveName, GetPanLevelCustomCurve(container.Version).ExportYAML(container));
+			node.Add(SpreadCustomCurveName, GetSpreadCustomCurve(container.Version).ExportYAML(container));
+			node.Add(ReverbZoneMixCustomCurveName, GetReverbZoneMixCustomCurve(container.Version).ExportYAML(container));
 			return node;
 		}
 
@@ -301,6 +301,29 @@ namespace uTinyRipper.Classes
 		public bool BypassEffects { get; private set; }
 		public bool BypassListenerEffects { get; private set; }
 		public bool BypassReverbZones { get; private set; }
+
+		public const string OutputAudioMixerGroupName = "OutputAudioMixerGroup";
+		public const string AudioClipName = "m_audioClip";
+		public const string PlayOnAwakeName = "m_PlayOnAwake";
+		public const string VolumeName = "m_Volume";
+		public const string PitchName = "m_Pitch";
+		public const string LoopName = "Loop";
+		public const string MuteName = "Mute";
+		public const string SpatializeName = "Spatialize";
+		public const string SpatializePostEffectsName = "SpatializePostEffects";
+		public const string PriorityName = "Priority";
+		public const string DopplerLevelName = "DopplerLevel";
+		public const string MinDistanceName = "MinDistance";
+		public const string MaxDistanceName = "MaxDistance";
+		public const string Pan2DName = "Pan2D";
+		public const string RolloffModeName = "rolloffMode";
+		public const string BypassEffectsName = "BypassEffects";
+		public const string BypassListenerEffectsName = "BypassListenerEffects";
+		public const string BypassReverbZonesName = "BypassReverbZones";
+		public const string RolloffCustomCurveName = "rolloffCustomCurve";
+		public const string PanLevelCustomCurveName = "panLevelCustomCurve";
+		public const string SpreadCustomCurveName = "spreadCustomCurve";
+		public const string ReverbZoneMixCustomCurveName = "reverbZoneMixCustomCurve";
 
 		public PPtr<AudioMixerGroup> OutputAudioMixerGroup;
 		public PPtr<AudioClip> AudioClip;

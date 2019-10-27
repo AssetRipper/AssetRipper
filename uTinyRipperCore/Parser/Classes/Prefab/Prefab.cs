@@ -57,27 +57,27 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 			Modification.Read(reader);
-			ParentPrefab.Read(reader);
+			SourcePrefab.Read(reader);
 			RootGameObject.Read(reader);
 			IsPrefabParent = reader.ReadBoolean();
 			reader.AlignStream(AlignType.Align64);
 		}
 
-		public IEnumerable<EditorExtension> FetchObjects(ISerializedFile file, bool isLog = false)
+		public IEnumerable<EditorExtension> FetchObjects(IAssetContainer file)
 		{
 			GameObject root = RootGameObject.GetAsset(file);
 			return FetchAssets(root);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return ParentPrefab.GetAsset(file);
-			yield return RootGameObject.GetAsset(file);
+			yield return context.FetchDependency(SourcePrefab, ParentPrefabName);
+			yield return context.FetchDependency(RootGameObject, RootGameObjectName);
 		}
 
 		public string GetName(ISerializedFile file)
@@ -98,10 +98,10 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_Modification", Modification.ExportYAML(container));
-			node.Add("m_ParentPrefab", ParentPrefab.ExportYAML(container));
-			node.Add("m_RootGameObject", RootGameObject.ExportYAML(container));
-			node.Add("m_IsPrefabParent", IsPrefabParent);
+			node.Add(ModificationName, Modification.ExportYAML(container));
+			node.Add(ParentPrefabName, SourcePrefab.ExportYAML(container));
+			node.Add(RootGameObjectName, RootGameObject.ExportYAML(container));
+			node.Add(IsPrefabParentName, IsPrefabParent);
 			return node;
 		}
 
@@ -115,13 +115,19 @@ namespace uTinyRipper.Classes
 		
 		public const string PrefabKeyword = "prefab";
 
+		public const string ModificationName = "m_Modification";
+		public const string SourcePrefabName = "m_SourcePrefab";
+		public const string ParentPrefabName = "m_ParentPrefab";
+		public const string RootGameObjectName = "m_RootGameObject";
+		public const string IsPrefabParentName = "m_IsPrefabParent";
+
 		public PrefabModification Modification;
 		/// <summary>
-		/// SourcePrefab later
+		/// ParentPrefab previously
 		/// Prefab previously
 		/// Father previously
 		/// </summary>
-		public PPtr<Prefab> ParentPrefab;
+		public PPtr<Prefab> SourcePrefab;
 		public PPtr<GameObject> RootGameObject;
 	}
 }

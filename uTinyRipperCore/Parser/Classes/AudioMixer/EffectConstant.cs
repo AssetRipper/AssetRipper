@@ -31,13 +31,13 @@ namespace uTinyRipper.Classes.AudioMixers
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("type", Type);
-			node.Add("groupConstantIndex", GroupConstantIndex);
-			node.Add("sendTargetEffectIndex", SendTargetEffectIndex);
-			node.Add("wetMixLevelIndex", WetMixLevelIndex);
-			node.Add("prevEffectIndex", PrevEffectIndex);
-			node.Add("bypass", Bypass);
-			node.Add("parameterIndices", ParameterIndices.ExportYAML(true));
+			node.Add(TypeName, Type);
+			node.Add(GroupConstantIndexName, GroupConstantIndex);
+			node.Add(SendTargetEffectIndexName, SendTargetEffectIndex);
+			node.Add(WetMixLevelIndexName, WetMixLevelIndex);
+			node.Add(PrevEffectIndexName, PrevEffectIndex);
+			node.Add(BypassName, Bypass);
+			node.Add(ParameterIndicesName, ParameterIndices.ExportYAML(true));
 			return node;
 		}
 
@@ -48,6 +48,14 @@ namespace uTinyRipper.Classes.AudioMixers
 		public uint PrevEffectIndex { get; private set; }
 		public bool Bypass { get; private set; }
 		public IReadOnlyList<uint> ParameterIndices => m_parameterIndices;
+
+		public const string TypeName = "type";
+		public const string GroupConstantIndexName = "groupConstantIndex";
+		public const string SendTargetEffectIndexName = "sendTargetEffectIndex";
+		public const string WetMixLevelIndexName = "wetMixLevelIndex";
+		public const string PrevEffectIndexName = "prevEffectIndex";
+		public const string BypassName = "bypass";
+		public const string ParameterIndicesName = "parameterIndices";
 
 		private uint[] m_parameterIndices;
 	}

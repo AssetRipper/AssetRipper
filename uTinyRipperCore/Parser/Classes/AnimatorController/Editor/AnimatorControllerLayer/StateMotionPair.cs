@@ -23,10 +23,13 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_State", State.ExportYAML(container));
-			node.Add("m_Motion", Motion.ExportYAML(container));
+			node.Add(StateName, State.ExportYAML(container));
+			node.Add(MotionName, Motion.ExportYAML(container));
 			return node;
 		}
+
+		public const string StateName = "m_State";
+		public const string MotionName = "m_Motion";
 
 		public PPtr<AnimatorState> State;
 		public PPtr<Motion> Motion;

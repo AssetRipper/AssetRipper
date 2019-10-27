@@ -11,7 +11,7 @@ namespace uTinyRipper.Classes.GUIStyles
 		{
 			Background = default;
 			TextColor = default;
-			m_scaledBackgrounds = new PPtr<Texture2D>[0];
+			m_scaledBackgrounds = System.Array.Empty<PPtr<Texture2D>>();
 		}
 
 		public GUIStyleState(GUIStyleState copy)
@@ -28,7 +28,7 @@ namespace uTinyRipper.Classes.GUIStyles
 		public void Read(AssetReader reader)
 		{
 			Background.Read(reader);
-			m_scaledBackgrounds = new PPtr<Texture2D>[0];
+			m_scaledBackgrounds = System.Array.Empty<PPtr<Texture2D>>();
 			//m_scaledBackgrounds = stream.ReadArray<PPtr<Texture2D>>();
 			TextColor.Read(reader);
 		}
@@ -43,18 +43,22 @@ namespace uTinyRipper.Classes.GUIStyles
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Background", Background.ExportYAML(container));
-			node.Add("m_ScaledBackgrounds", m_scaledBackgrounds.ExportYAML(container));
-			node.Add("m_TextColor", TextColor.ExportYAML(container));
+			node.Add(BackgroundName, Background.ExportYAML(container));
+			node.Add(ScaledBackgroundsName, m_scaledBackgrounds.ExportYAML(container));
+			node.Add(TextColorName, TextColor.ExportYAML(container));
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
 			yield break;
 		}
 		
 		public IReadOnlyList<PPtr<Texture2D>> ScaledBackgrounds => m_scaledBackgrounds;
+
+		public const string BackgroundName = "m_Background";
+		public const string ScaledBackgroundsName = "m_ScaledBackgrounds";
+		public const string TextColorName = "m_TextColor";
 
 		public PPtr<Texture2D> Background;
 		public ColorRGBAf TextColor;

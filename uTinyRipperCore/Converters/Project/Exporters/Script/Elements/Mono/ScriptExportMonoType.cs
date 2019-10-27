@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using uTinyRipper.Game;
-using uTinyRipper.Converters.Script;
 using uTinyRipper.Game.Assembly.Mono;
 
 namespace uTinyRipper.Converters.Script.Mono
@@ -278,7 +277,7 @@ namespace uTinyRipper.Converters.Script.Mono
 		{
 			if (Definition == null || Definition.BaseType == null || Definition.BaseType.Module == null)
 			{
-				return new ScriptExportMethod[0];
+				return Array.Empty<ScriptExportMethod>();
 			}
 
 			// we need to export only such properties that are declared as asbtract inside builin assemblies
@@ -342,7 +341,7 @@ namespace uTinyRipper.Converters.Script.Mono
 		{
 			if (Definition == null || Definition.BaseType == null || Definition.BaseType.Module == null)
 			{
-				return new ScriptExportProperty[0];
+				return Array.Empty<ScriptExportProperty>();
 			}
 
 			// we need to export only such properties that are declared as asbtract inside builin assemblies
@@ -407,7 +406,7 @@ namespace uTinyRipper.Converters.Script.Mono
 		{
 			if (Definition == null)
 			{
-				return new ScriptExportField[0];
+				return Array.Empty<ScriptExportField>();
 			}
 
 			List<ScriptExportField> fields = new List<ScriptExportField>();

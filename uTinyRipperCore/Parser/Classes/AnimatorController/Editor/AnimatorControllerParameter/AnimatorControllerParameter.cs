@@ -38,12 +38,12 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Name", Name);
-			node.Add("m_Type", (int)Type);
-			node.Add("m_DefaultFloat", DefaultFloat);
-			node.Add("m_DefaultInt", DefaultInt);
-			node.Add("m_DefaultBool", DefaultBool);
-			node.Add("m_DefaultController", DefaultController.ExportYAML(container));
+			node.Add(NameName, Name);
+			node.Add(TypeName, (int)Type);
+			node.Add(DefaultFloatName, DefaultFloat);
+			node.Add(DefaultIntName, DefaultInt);
+			node.Add(DefaultBoolName, DefaultBool);
+			node.Add(DefaultControllerName, DefaultController.ExportYAML(container));
 			return node;
 		}
 
@@ -52,6 +52,13 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		public float DefaultFloat { get; private set; }
 		public int DefaultInt { get; private set; }
 		public bool DefaultBool { get; private set; }
+
+		public const string NameName = "m_Name";
+		public const string TypeName = "m_Type";
+		public const string DefaultFloatName = "m_DefaultFloat";
+		public const string DefaultIntName = "m_DefaultInt";
+		public const string DefaultBoolName = "m_DefaultBool";
+		public const string DefaultControllerName = "m_DefaultController";
 
 		public PPtr<AnimatorController> DefaultController;
 	}

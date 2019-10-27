@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.AnimationClips;
-using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper.Project;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
@@ -357,88 +358,70 @@ namespace uTinyRipper.Classes
 #endif
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			if (IsReadClassIDToTrack(file.Version, file.Flags))
+			if (IsReadClassIDToTrack(context.Version, context.Flags))
 			{
-				foreach (KeyValuePair<int, PPtr<BaseAnimationTrack>> kvp in ClassIDToTrack)
+				foreach (Object asset in context.FetchDependencies(ClassIDToTrack.Values, ClassIDToTrackName))
 				{
-					yield return kvp.Value.FetchDependency(file, isLog, () => ValidName, ClassIDToTrackName);
+					yield return asset;
 				}
-				foreach (ChildTrack track in ChildTracks)
+				foreach (Object asset in context.FetchDependencies(ChildTracks, ChildTracksName))
 				{
-					foreach (Object asset in track.FetchDependencies(file, isLog))
-					{
-						yield return asset;
-					}
+					yield return asset;
 				}
 			}
-			if (IsReadCurves(file.Version))
+			if (IsReadCurves(context.Version))
 			{
-				foreach (FloatCurve curve in FloatCurves)
+				foreach (Object asset in context.FetchDependencies(FloatCurves, FloatCurvesName))
 				{
-					foreach (Object asset in curve.FetchDependencies(file, isLog))
-					{
-						yield return asset;
-					}
+					yield return asset;
 				}
 			}
-			if (IsReadPPtrCurves(file.Version))
+			if (IsReadPPtrCurves(context.Version))
 			{
-				foreach (PPtrCurve curve in PPtrCurves)
+				foreach (Object asset in context.FetchDependencies(PPtrCurves, PPtrCurvesName))
 				{
-					foreach (Object asset in curve.FetchDependencies(file, isLog))
-					{
-						yield return asset;
-					}
+					yield return asset;
 				}
 			}
-			if (IsReadClipBindingConstant(file.Version))
+			if (IsReadClipBindingConstant(context.Version))
 			{
-				foreach (Object asset in ClipBindingConstant.FetchDependencies(file, isLog))
+				foreach (Object asset in context.FetchDependencies(ClipBindingConstant, ClipBindingConstantName))
 				{
 					yield return asset;
 				}
 			}
 #if UNIVERSAL
-			if (IsReadAnimationClipSettings(file.Version, file.Flags))
+			if (IsReadAnimationClipSettings(context.Version, context.Flags))
 			{
-				foreach (Object asset in AnimationClipSettings.FetchDependencies(file, isLog))
+				foreach (Object asset in context.FetchDependencies(AnimationClipSettings, AnimationClipSettingsName))
 				{
 					yield return asset;
 				}
 			}
-			if (IsReadEditorCurves(file.Version, file.Flags))
+			if (IsReadEditorCurves(context.Version, context.Flags))
 			{
-				foreach (FloatCurve editorCurve in EditorCurves)
+				foreach (Object asset in context.FetchDependencies(EditorCurves, EditorCurvesName))
 				{
-					foreach (Object asset in editorCurve.FetchDependencies(file, isLog))
-					{
-						yield return asset;
-					}
+					yield return asset;
 				}
-				foreach (FloatCurve eulerEditorCurve in EulerEditorCurves)
+				foreach (Object asset in context.FetchDependencies(EulerEditorCurves, EulerEditorCurvesName))
 				{
-					foreach (Object asset in eulerEditorCurve.FetchDependencies(file, isLog))
-					{
-						yield return asset;
-					}
+					yield return asset;
 				}
 			}
 #endif
-			if (IsReadEvents(file.Version))
+			if (IsReadEvents(context.Version))
 			{
-				foreach (AnimationEvent @event in Events)
+				foreach (Object asset in context.FetchDependencies(Events, EventsName))
 				{
-					foreach (Object asset in @event.FetchDependencies(file, isLog))
-					{
-						yield return asset;
-					}
+					yield return asset;
 				}
 			}
 		}
@@ -489,7 +472,7 @@ namespace uTinyRipper.Classes
 				PPtrCurves = converter.PPtrs.Union(GetPPtrCurves(File.Version)),
 			};
 		}
-		
+
 		public IReadOnlyDictionary<uint, string> FindTOS()
 		{
 			foreach (Object asset in File.Collection.FetchAssets())
@@ -558,7 +541,7 @@ namespace uTinyRipper.Classes
 		private bool IsAnimatorContainsClip(Animator animator)
 		{
 			RuntimeAnimatorController runetime = animator.Controller.FindAsset(animator.File);
-			if(runetime == null)
+			if (runetime == null)
 			{
 				return false;
 			}
@@ -633,31 +616,31 @@ namespace uTinyRipper.Classes
 
 		private IReadOnlyList<QuaternionCurve> GetRotationCurves(Version version)
 		{
-			return IsReadCurves(version) ? RotationCurves : new QuaternionCurve[0];
+			return IsReadCurves(version) ? RotationCurves : Array.Empty<QuaternionCurve>();
 		}
 		private IReadOnlyList<CompressedAnimationCurve> GetCompressedRotationCurves(Version version)
 		{
-			return IsReadCompressedRotationCurves(version) ? CompressedRotationCurves : new CompressedAnimationCurve[0];
+			return IsReadCompressedRotationCurves(version) ? CompressedRotationCurves : Array.Empty<CompressedAnimationCurve>();
 		}
 		private IReadOnlyList<Vector3Curve> GetEulerCurves(Version version)
 		{
-			return IsReadEulerCurves(version) ? EulerCurves : new Vector3Curve[0];
+			return IsReadEulerCurves(version) ? EulerCurves : Array.Empty<Vector3Curve>();
 		}
 		private IReadOnlyList<Vector3Curve> GetPositionCurves(Version version)
 		{
-			return IsReadCurves(version) ? PositionCurves : new Vector3Curve[0];
+			return IsReadCurves(version) ? PositionCurves : Array.Empty<Vector3Curve>();
 		}
 		private IReadOnlyList<Vector3Curve> GetScaleCurves(Version version)
 		{
-			return IsReadCurves(version) ? ScaleCurves : new Vector3Curve[0];
+			return IsReadCurves(version) ? ScaleCurves : Array.Empty<Vector3Curve>();
 		}
 		private IReadOnlyList<FloatCurve> GetFloatCurves(Version version)
 		{
-			return IsReadCurves(version) ? FloatCurves : new FloatCurve[0];
+			return IsReadCurves(version) ? FloatCurves : Array.Empty<FloatCurve>();
 		}
 		private IReadOnlyList<PPtrCurve> GetPPtrCurves(Version version)
 		{
-			return IsReadPPtrCurves(version) ? PPtrCurves : new PPtrCurve[0];
+			return IsReadPPtrCurves(version) ? PPtrCurves : Array.Empty<PPtrCurve>();
 		}
 		private AnimationClipBindingConstant GetClipBindingConstant(Version version)
 		{
@@ -681,7 +664,7 @@ namespace uTinyRipper.Classes
 				return EditorCurves;
 			}
 #endif
-			return new FloatCurve[0];
+			return Array.Empty<FloatCurve>();
 		}
 		private IReadOnlyList<FloatCurve> GetEulerEditorCurves(Version version, TransferInstructionFlags flags)
 		{
@@ -691,7 +674,7 @@ namespace uTinyRipper.Classes
 				return EulerEditorCurves;
 			}
 #endif
-			return new FloatCurve[0];
+			return Array.Empty<FloatCurve>();
 		}
 		private bool GetGenerateMotionCurves(Version version, TransferInstructionFlags flags)
 		{
@@ -705,7 +688,7 @@ namespace uTinyRipper.Classes
 		}
 		private IReadOnlyList<AnimationEvent> GetEvents(Version version)
 		{
-			return IsReadEvents(version) ? m_events : new AnimationEvent[0];
+			return IsReadEvents(version) ? m_events : Array.Empty<AnimationEvent>();
 		}
 
 		public override string ExportExtension => "anim";

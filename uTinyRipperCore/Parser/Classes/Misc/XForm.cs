@@ -37,9 +37,9 @@ namespace uTinyRipper.Classes.Misc
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("t", T.ExportYAML3(container));
-			node.Add("q", Q.ExportYAML(container));
-			node.Add("s", S.ExportYAML3(container));
+			node.Add(TName, T.ExportYAML3(container));
+			node.Add(QName, Q.ExportYAML(container));
+			node.Add(SName, S.ExportYAML3(container));
 			return node;
 		}
 
@@ -47,6 +47,10 @@ namespace uTinyRipper.Classes.Misc
 		{
 			return $"T:{T} Q:{Q} S:{S}";
 		}
+
+		public const string TName = "t";
+		public const string QName = "q";
+		public const string SName = "s";
 
 		public Vector4f T;
 		public Vector4f Q;

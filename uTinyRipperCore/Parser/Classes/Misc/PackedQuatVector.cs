@@ -83,13 +83,16 @@ namespace uTinyRipper.Classes.Misc
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_NumItems", NumItems);
-			node.Add("m_Data", Data == null ? YAMLSequenceNode.Empty : Data.ExportYAML());
+			node.Add(NumItemsName, NumItems);
+			node.Add(DataName, Data == null ? YAMLSequenceNode.Empty : Data.ExportYAML());
 			return node;
 		}
 
 		public uint NumItems { get; private set; }
 		public IReadOnlyList<byte> Data => m_data;
+
+		public const string NumItemsName = "m_NumItems";
+		public const string DataName = "m_Data";
 
 		private byte[] m_data;
 	}

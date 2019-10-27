@@ -14,12 +14,15 @@ namespace uTinyRipper.Classes.Lights
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("lightmapBakeType", (int)LightmapBakeType);
-			node.Add("mixedLightingMode", (int)MixedLightingMode);
+			node.Add(LightmapBakeTypeName, (int)LightmapBakeType);
+			node.Add(MixedLightingModeName, (int)MixedLightingMode);
 			return node;
 		}
 
 		public LightmapBakeType LightmapBakeType { get; private set; }
 		public MixedLightingMode MixedLightingMode { get; private set; }
+
+		public const string LightmapBakeTypeName = "lightmapBakeType";
+		public const string MixedLightingModeName = "mixedLightingMode";
 	}
 }

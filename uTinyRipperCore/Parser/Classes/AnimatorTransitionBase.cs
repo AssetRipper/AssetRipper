@@ -92,12 +92,12 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Conditions", Conditions.ExportYAML(container));
-			node.Add("m_DstStateMachine", DstStateMachine.ExportYAML(container));
-			node.Add("m_DstState", DstState.ExportYAML(container));
-			node.Add("m_Solo", Solo);
-			node.Add("m_Mute", Mute);
-			node.Add("m_IsExit", IsExit);
+			node.Add(ConditionsName, Conditions.ExportYAML(container));
+			node.Add(DstStateMachineName, DstStateMachine.ExportYAML(container));
+			node.Add(DstStateName, DstState.ExportYAML(container));
+			node.Add(SoloName, Solo);
+			node.Add(MuteName, Mute);
+			node.Add(IsExitName, IsExit);
 			return node;
 		}
 
@@ -107,6 +107,13 @@ namespace uTinyRipper.Classes
 		public bool Solo { get; private set; }
 		public bool Mute { get; private set; }
 		public bool IsExit { get; private set; }
+
+		public const string ConditionsName = "m_Conditions";
+		public const string DstStateMachineName = "m_DstStateMachine";
+		public const string DstStateName = "m_DstState";
+		public const string SoloName = "m_Solo";
+		public const string MuteName = "m_Mute";
+		public const string IsExitName = "m_IsExit";
 
 		public PPtr<AnimatorStateMachine> DstStateMachine;
 		public PPtr<AnimatorState> DstState;

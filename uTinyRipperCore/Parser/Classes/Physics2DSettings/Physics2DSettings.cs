@@ -150,7 +150,7 @@ namespace uTinyRipper.Classes
 		private static int GetSerializedVersion(Version version)
 		{
 			// disabled RaycastsHitTriggers backward compatibility?
-			if (Config.IsExportTopmostSerializedVersion || version.IsGreaterEqual(5, 6))
+			if (version.IsGreaterEqual(5, 6))
 			{
 				return 3;
 			}
@@ -253,53 +253,53 @@ namespace uTinyRipper.Classes
 			m_layerCollisionMatrix = reader.ReadUInt32Array();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach(Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return DefaultMaterial.FetchDependency(file, isLog, ToLogString, "m_DefaultMaterial");
+			yield return context.FetchDependency(DefaultMaterial, DefaultMaterialName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Gravity", Gravity.ExportYAML(container));
-			node.Add("m_DefaultMaterial", DefaultMaterial.ExportYAML(container));
-			node.Add("m_VelocityIterations", VelocityIterations);
-			node.Add("m_PositionIterations", PositionIterations);
-			node.Add("m_VelocityThreshold", GetVelocityThreshold(container.Version));
-			node.Add("m_MaxLinearCorrection", GetMaxLinearCorrection(container.Version));
-			node.Add("m_MaxAngularCorrection", GetMaxAngularCorrection(container.Version));
-			node.Add("m_MaxTranslationSpeed", GetMaxTranslationSpeed(container.Version));
-			node.Add("m_MaxRotationSpeed", GetMaxRotationSpeed(container.Version));
-			node.Add("m_BaumgarteScale", GetBaumgarteScale(container.Version));
-			node.Add("m_BaumgarteTimeOfImpactScale", GetBaumgarteTimeOfImpactScale(container.Version));
-			node.Add("m_TimeToSleep", GetTimeToSleep(container.Version));
-			node.Add("m_LinearSleepTolerance", GetLinearSleepTolerance(container.Version));
-			node.Add("m_AngularSleepTolerance", GetAngularSleepTolerance(container.Version));
-			node.Add("m_DefaultContactOffset", GetDefaultContactOffset(container.Version));
+			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.Add(GravityName, Gravity.ExportYAML(container));
+			node.Add(DefaultMaterialName, DefaultMaterial.ExportYAML(container));
+			node.Add(VelocityIterationsName, VelocityIterations);
+			node.Add(PositionIterationsName, PositionIterations);
+			node.Add(VelocityThresholdName, GetVelocityThreshold(container.Version));
+			node.Add(MaxLinearCorrectionName, GetMaxLinearCorrection(container.Version));
+			node.Add(MaxAngularCorrectionName, GetMaxAngularCorrection(container.Version));
+			node.Add(MaxTranslationSpeedName, GetMaxTranslationSpeed(container.Version));
+			node.Add(MaxRotationSpeedName, GetMaxRotationSpeed(container.Version));
+			node.Add(BaumgarteScaleName, GetBaumgarteScale(container.Version));
+			node.Add(BaumgarteTimeOfImpactScaleName, GetBaumgarteTimeOfImpactScale(container.Version));
+			node.Add(TimeToSleepName, GetTimeToSleep(container.Version));
+			node.Add(LinearSleepToleranceName, GetLinearSleepTolerance(container.Version));
+			node.Add(AngularSleepToleranceName, GetAngularSleepTolerance(container.Version));
+			node.Add(DefaultContactOffsetName, GetDefaultContactOffset(container.Version));
 			// 2018
 			//node.Add("m_JobOptions", GetJobOptions(container.Version));
-			node.Add("m_AutoSimulation", GetAutoSimulation(container.Version));
-			node.Add("m_QueriesHitTriggers", QueriesHitTriggers);
-			node.Add("m_QueriesStartInColliders", GetQueriesStartInColliders(container.Version));
-			node.Add("m_ChangeStopsCallbacks", ChangeStopsCallbacks);
-			node.Add("m_CallbacksOnDisable", GetCallbacksOnDisable(container.Version));
-			node.Add("m_AutoSyncTransforms", GetAutoSyncTransforms(container.Version));
-			node.Add("m_AlwaysShowColliders", GetAlwaysShowColliders());
-			node.Add("m_ShowColliderSleep", GetShowColliderSleep(container.Version, container.Flags));
-			node.Add("m_ShowColliderContacts", GetShowColliderContacts());
-			node.Add("m_ShowColliderAABB", GetShowColliderAABB());
-			node.Add("m_ContactArrowScale", GetContactArrowScale(container.Version, container.Flags));
-			node.Add("m_ColliderAwakeColor", GetColliderAwakeColor(container.Version, container.Flags).ExportYAML(container));
-			node.Add("m_ColliderAsleepColor", GetColliderAsleepColor(container.Version, container.Flags).ExportYAML(container));
-			node.Add("m_ColliderContactColor", GetColliderContactColor(container.Version, container.Flags).ExportYAML(container));
-			node.Add("m_ColliderAABBColor", GetColliderAABBColor(container.Version, container.Flags).ExportYAML(container));
-			node.Add("m_LayerCollisionMatrix", LayerCollisionMatrix.ExportYAML(true));
+			node.Add(AutoSimulationName, GetAutoSimulation(container.Version));
+			node.Add(QueriesHitTriggersName, QueriesHitTriggers);
+			node.Add(QueriesStartInCollidersName, GetQueriesStartInColliders(container.Version));
+			node.Add(ChangeStopsCallbacksName, ChangeStopsCallbacks);
+			node.Add(CallbacksOnDisableName, GetCallbacksOnDisable(container.Version));
+			node.Add(AutoSyncTransformsName, GetAutoSyncTransforms(container.Version));
+			node.Add(AlwaysShowCollidersName, GetAlwaysShowColliders());
+			node.Add(ShowColliderSleepName, GetShowColliderSleep(container.Version, container.Flags));
+			node.Add(ShowColliderContactsName, GetShowColliderContacts());
+			node.Add(ShowColliderAABBName, GetShowColliderAABB());
+			node.Add(ContactArrowScaleName, GetContactArrowScale(container.Version, container.Flags));
+			node.Add(ColliderAwakeColorName, GetColliderAwakeColor(container.Version, container.Flags).ExportYAML(container));
+			node.Add(ColliderAsleepColorName, GetColliderAsleepColor(container.Version, container.Flags).ExportYAML(container));
+			node.Add(ColliderContactColorName, GetColliderContactColor(container.Version, container.Flags).ExportYAML(container));
+			node.Add(ColliderAABBColorName, GetColliderAABBColor(container.Version, container.Flags).ExportYAML(container));
+			node.Add(LayerCollisionMatrixName, LayerCollisionMatrix.ExportYAML(true));
 			return node;
 		}
 
@@ -483,6 +483,38 @@ namespace uTinyRipper.Classes
 		public float ContactArrowScale { get; private set; }
 #endif
 		public IReadOnlyList<uint> LayerCollisionMatrix => m_layerCollisionMatrix;
+
+		public const string GravityName = "m_Gravity";
+		public const string DefaultMaterialName = "m_DefaultMaterial";
+		public const string VelocityIterationsName = "m_VelocityIterations";
+		public const string PositionIterationsName = "m_PositionIterations";
+		public const string VelocityThresholdName = "m_VelocityThreshold";
+		public const string MaxLinearCorrectionName = "m_MaxLinearCorrection";
+		public const string MaxAngularCorrectionName = "m_MaxAngularCorrection";
+		public const string MaxTranslationSpeedName = "m_MaxTranslationSpeed";
+		public const string MaxRotationSpeedName = "m_MaxRotationSpeed";
+		public const string BaumgarteScaleName = "m_BaumgarteScale";
+		public const string BaumgarteTimeOfImpactScaleName = "m_BaumgarteTimeOfImpactScale";
+		public const string TimeToSleepName = "m_TimeToSleep";
+		public const string LinearSleepToleranceName = "m_LinearSleepTolerance";
+		public const string AngularSleepToleranceName = "m_AngularSleepTolerance";
+		public const string DefaultContactOffsetName = "m_DefaultContactOffset";
+		public const string AutoSimulationName = "m_AutoSimulation";
+		public const string QueriesHitTriggersName = "m_QueriesHitTriggers";
+		public const string QueriesStartInCollidersName = "m_QueriesStartInColliders";
+		public const string ChangeStopsCallbacksName = "m_ChangeStopsCallbacks";
+		public const string CallbacksOnDisableName = "m_CallbacksOnDisable";
+		public const string AutoSyncTransformsName = "m_AutoSyncTransforms";
+		public const string AlwaysShowCollidersName = "m_AlwaysShowColliders";
+		public const string ShowColliderSleepName = "m_ShowColliderSleep";
+		public const string ShowColliderContactsName = "m_ShowColliderContacts";
+		public const string ShowColliderAABBName = "m_ShowColliderAABB";
+		public const string ContactArrowScaleName = "m_ContactArrowScale";
+		public const string ColliderAwakeColorName = "m_ColliderAwakeColor";
+		public const string ColliderAsleepColorName = "m_ColliderAsleepColor";
+		public const string ColliderContactColorName = "m_ColliderContactColor";
+		public const string ColliderAABBColorName = "m_ColliderAABBColor";
+		public const string LayerCollisionMatrixName = "m_LayerCollisionMatrix";
 
 		public Vector2f Gravity;
 		public PPtr<PhysicsMaterial2D> DefaultMaterial;

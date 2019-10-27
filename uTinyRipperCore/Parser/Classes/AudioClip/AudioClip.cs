@@ -216,7 +216,7 @@ namespace uTinyRipper.Classes
 		{
 			if (IsReadLoadType(File.Version))
 			{
-				return FSBResource.GetContent(File) ?? new byte[0];
+				return FSBResource.GetContent(File) ?? Array.Empty<byte>();
 			}
 			else
 			{
@@ -226,7 +226,7 @@ namespace uTinyRipper.Classes
 					{
 						if (m_audioData == null)
 						{
-							return StreamingInfo.GetContent(File) ?? new byte[0];
+							return StreamingInfo.GetContent(File) ?? Array.Empty<byte>();
 						}
 					}
 				}

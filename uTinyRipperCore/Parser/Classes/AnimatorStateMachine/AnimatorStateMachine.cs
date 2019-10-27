@@ -91,7 +91,7 @@ namespace uTinyRipper.Classes
 				Version = controller.File.Version,
 			};
 			m_entryTransitions = stateMachine.CreateEntryTransitions(virtualFile, stateParameters);
-			m_stateMachineBehaviours = new PPtr<MonoBehaviour>[0];
+			m_stateMachineBehaviours = Array.Empty<PPtr<MonoBehaviour>>();
 
 			AnyStatePosition = new Vector3f(0.0f, -StateOffset, 0.0f);
 			EntryPosition = new Vector3f(StateOffset, -StateOffset, 0.0f);

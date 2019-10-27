@@ -60,10 +60,10 @@ namespace uTinyRipper.Classes.TerrainDatas
 			writer.Write(UsePrototypeMesh);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			yield return Prototype.FetchDependency(file, isLog, () => nameof(DetailPrototype), PrototypeName);
-			yield return PrototypeTexture.FetchDependency(file, isLog, () => nameof(DetailPrototype), PrototypeTextureName);
+			yield return context.FetchDependency(Prototype, PrototypeName);
+			yield return context.FetchDependency(PrototypeTexture, PrototypeTextureName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

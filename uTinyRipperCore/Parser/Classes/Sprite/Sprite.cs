@@ -81,16 +81,11 @@ namespace uTinyRipper.Classes
 
 		private static int GetSerializedVersion(Version version)
 		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				// return 2;
-				return 1;
-			}
-
-			if (version.IsGreaterEqual(2018))
+#warning TODO:
+			/*if (version.IsGreaterEqual(2018))
 			{
 				return 2;
-			}
+			}*/
 			return 1;
 		}
 
@@ -164,7 +159,7 @@ namespace uTinyRipper.Classes
 			}
 			else
 			{
-				return new Vector2f[0][];
+				return Array.Empty<Vector2f[]>();
 			}
 		}
 
@@ -234,17 +229,15 @@ namespace uTinyRipper.Classes
 #endif
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (Object asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
-			if (!SpriteAtlas.IsNull)
-			{
-				yield return SpriteAtlas.FetchDependency(file, isLog, ToLogString, "SpriteAtlas");
-			}
-			foreach (Object asset in RD.FetchDependencies(file, isLog))
+
+			yield return context.FetchDependency(SpriteAtlas, SpriteAtlasName);
+			foreach (Object asset in context.FetchDependencies(RD, RDName))
 			{
 				yield return asset;
 			}
@@ -350,6 +343,9 @@ namespace uTinyRipper.Classes
 #if UNIVERSAL
 		public SpriteRenderData AtlasRD;
 #endif
+
+		public const string SpriteAtlasName = "m_SpriteAtlas";
+		public const string RDName = "m_RD";
 
 		private string[] m_atlasTags;
 		private Vector2f[][] m_physicsShape;

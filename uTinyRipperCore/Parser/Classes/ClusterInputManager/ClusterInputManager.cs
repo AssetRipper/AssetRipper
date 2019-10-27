@@ -23,11 +23,13 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Inputs", Inputs.ExportYAML(container));
+			node.Add(InputsName, Inputs.ExportYAML(container));
 			return node;
 		}
 
 		public IReadOnlyList<ClusterInput> Inputs => m_inputs;
+
+		public const string InputsName = "m_Inputs";
 
 		private ClusterInput[] m_inputs;
 	}

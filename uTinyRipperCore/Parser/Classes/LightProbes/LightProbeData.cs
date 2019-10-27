@@ -43,16 +43,21 @@ namespace uTinyRipper.Classes.LightProbess
 		{
 #warning TODO:
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Tetrahedralization", Tetrahedralization.ExportYAML(container));
-			node.Add("m_ProbeSets", IsReadProbeSets(container.Version) ? ProbeSets.ExportYAML(container) : YAMLSequenceNode.Empty);
-			node.Add("m_Positions", IsReadProbeSets(container.Version) ? Positions.ExportYAML(container) : YAMLSequenceNode.Empty);
-			node.Add("m_NonTetrahedralizedProbeSetIndexMap", IsReadNonTetrahedralizedProbeSetIndexMap(container.Version) ? NonTetrahedralizedProbeSetIndexMap.ExportYAML(container) : YAMLSequenceNode.Empty);
+			node.Add(TetrahedralizationName, Tetrahedralization.ExportYAML(container));
+			node.Add(ProbeSetsName, IsReadProbeSets(container.Version) ? ProbeSets.ExportYAML(container) : YAMLSequenceNode.Empty);
+			node.Add(PositionsName, IsReadProbeSets(container.Version) ? Positions.ExportYAML(container) : YAMLSequenceNode.Empty);
+			node.Add(NonTetrahedralizedProbeSetIndexMapName, IsReadNonTetrahedralizedProbeSetIndexMap(container.Version) ? NonTetrahedralizedProbeSetIndexMap.ExportYAML(container) : YAMLSequenceNode.Empty);
 			return node;
 		}
 
 		public IReadOnlyList<ProbeSetIndex> ProbeSets => m_probeSets;
 		public IReadOnlyList<Vector3f> Positions => m_positions;
 		public IReadOnlyDictionary<Hash128, int> NonTetrahedralizedProbeSetIndexMap => m_nonTetrahedralizedProbeSetIndexMap;
+
+		public const string TetrahedralizationName = "m_Tetrahedralization";
+		public const string ProbeSetsName = "m_ProbeSets";
+		public const string PositionsName = "m_Positions";
+		public const string NonTetrahedralizedProbeSetIndexMapName = "m_NonTetrahedralizedProbeSetIndexMap";
 
 		public ProbeSetTetrahedralization Tetrahedralization;
 

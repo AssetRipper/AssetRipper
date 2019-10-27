@@ -10,9 +10,7 @@ namespace uTinyRipperGUI
 	{
 		public App()
 		{
-			Config.IsAdvancedLog = true;
 			Config.IsGenerateGUIDByContent = false;
-			Config.IsExportDependencies = false;
 		}
 	}
 }

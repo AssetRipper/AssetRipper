@@ -16,11 +16,13 @@ namespace uTinyRipper.Classes.Avatars
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_X", X == null ? YAMLSequenceNode.Empty : X.ExportYAML(container));
+			node.Add(XName, X == null ? YAMLSequenceNode.Empty : X.ExportYAML(container));
 			return node;
 		}
 
 		public IReadOnlyList<XForm> X => m_x;
+
+		public const string XName = "m_X";
 
 		private XForm[] m_x;
 	}

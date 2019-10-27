@@ -304,7 +304,7 @@ namespace uTinyRipper.Classes
 			}
 
 			Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{StreamData.Path}' wasn't found");
-			return new byte[0];
+			return Array.Empty<byte>();
 		}
 
 		public bool IsValidData

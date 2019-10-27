@@ -71,7 +71,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 					}
 				}
 			}
-			return new PPtr<AnimatorTransition>[0];
+			return Array.Empty<PPtr<AnimatorTransition>>();
 		}
 
 		/// <summary>

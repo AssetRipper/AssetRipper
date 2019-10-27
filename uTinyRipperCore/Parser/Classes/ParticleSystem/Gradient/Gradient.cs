@@ -156,42 +156,42 @@ namespace uTinyRipper.Classes.ParticleSystems
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (IsColor32(container.ExportVersion))
 			{
-				node.Add(KeyName + "0", ((ColorRGBA32)Key0).ExportYAML(container));
-				node.Add(KeyName + "1", ((ColorRGBA32)Key1).ExportYAML(container));
-				node.Add(KeyName + "2", ((ColorRGBA32)Key2).ExportYAML(container));
-				node.Add(KeyName + "3", ((ColorRGBA32)Key3).ExportYAML(container));
-				node.Add(KeyName + "4", ((ColorRGBA32)Key4).ExportYAML(container));
-				node.Add(KeyName + "5", ((ColorRGBA32)Key5).ExportYAML(container));
-				node.Add(KeyName + "6", ((ColorRGBA32)Key6).ExportYAML(container));
-				node.Add(KeyName + "7", ((ColorRGBA32)Key7).ExportYAML(container));
+				node.Add(Key0Name, ((ColorRGBA32)Key0).ExportYAML(container));
+				node.Add(Key1Name, ((ColorRGBA32)Key1).ExportYAML(container));
+				node.Add(Key2Name, ((ColorRGBA32)Key2).ExportYAML(container));
+				node.Add(Key3Name, ((ColorRGBA32)Key3).ExportYAML(container));
+				node.Add(Key4Name, ((ColorRGBA32)Key4).ExportYAML(container));
+				node.Add(Key5Name, ((ColorRGBA32)Key5).ExportYAML(container));
+				node.Add(Key6Name, ((ColorRGBA32)Key6).ExportYAML(container));
+				node.Add(Key7Name, ((ColorRGBA32)Key7).ExportYAML(container));
 			}
 			else
 			{
-				node.Add(KeyName + "0", Key0.ExportYAML(container));
-				node.Add(KeyName + "1", Key1.ExportYAML(container));
-				node.Add(KeyName + "2", Key2.ExportYAML(container));
-				node.Add(KeyName + "3", Key3.ExportYAML(container));
-				node.Add(KeyName + "4", Key4.ExportYAML(container));
-				node.Add(KeyName + "5", Key5.ExportYAML(container));
-				node.Add(KeyName + "6", Key6.ExportYAML(container));
-				node.Add(KeyName + "7", Key7.ExportYAML(container));
+				node.Add(Key0Name, Key0.ExportYAML(container));
+				node.Add(Key1Name, Key1.ExportYAML(container));
+				node.Add(Key2Name, Key2.ExportYAML(container));
+				node.Add(Key3Name, Key3.ExportYAML(container));
+				node.Add(Key4Name, Key4.ExportYAML(container));
+				node.Add(Key5Name, Key5.ExportYAML(container));
+				node.Add(Key6Name, Key6.ExportYAML(container));
+				node.Add(Key7Name, Key7.ExportYAML(container));
 			}
-			node.Add(CtimeName + "0", Ctime0);
-			node.Add(CtimeName + "1", Ctime1);
-			node.Add(CtimeName + "2", Ctime2);
-			node.Add(CtimeName + "3", Ctime3);
-			node.Add(CtimeName + "4", Ctime4);
-			node.Add(CtimeName + "5", Ctime5);
-			node.Add(CtimeName + "6", Ctime6);
-			node.Add(CtimeName + "7", Ctime7);
-			node.Add(AtimeName + "0", Atime0);
-			node.Add(AtimeName + "1", Atime1);
-			node.Add(AtimeName + "2", Atime2);
-			node.Add(AtimeName + "3", Atime3);
-			node.Add(AtimeName + "4", Atime4);
-			node.Add(AtimeName + "5", Atime5);
-			node.Add(AtimeName + "6", Atime6);
-			node.Add(AtimeName + "7", Atime7);
+			node.Add(Ctime0Name, Ctime0);
+			node.Add(Ctime1Name, Ctime1);
+			node.Add(Ctime2Name, Ctime2);
+			node.Add(Ctime3Name, Ctime3);
+			node.Add(Ctime4Name, Ctime4);
+			node.Add(Ctime5Name, Ctime5);
+			node.Add(Ctime6Name, Ctime6);
+			node.Add(Ctime7Name, Ctime7);
+			node.Add(Atime0Name, Atime0);
+			node.Add(Atime1Name, Atime1);
+			node.Add(Atime2Name, Atime2);
+			node.Add(Atime3Name, Atime3);
+			node.Add(Atime4Name, Atime4);
+			node.Add(Atime5Name, Atime5);
+			node.Add(Atime6Name, Atime6);
+			node.Add(Atime7Name, Atime7);
 			if (HasMode(container.ExportVersion))
 			{
 				node.Add(ModeName, (int)Mode);
@@ -202,7 +202,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return node;
 		}
 		
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
 		{
 			yield break;
 		}
@@ -322,9 +322,30 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public byte NumColorKeys { get; set; }
 		public byte NumAlphaKeys { get; set; }
 
-		public const string KeyName = "key";
-		public const string CtimeName = "ctime";
-		public const string AtimeName = "atime";
+		public const string Key0Name = "key0";
+		public const string Key1Name = "key1";
+		public const string Key2Name = "key2";
+		public const string Key3Name = "key3";
+		public const string Key4Name = "key4";
+		public const string Key5Name = "key5";
+		public const string Key6Name = "key6";
+		public const string Key7Name = "key7";
+		public const string Ctime0Name = "ctime0";
+		public const string Ctime1Name = "ctime1";
+		public const string Ctime2Name = "ctime2";
+		public const string Ctime3Name = "ctime3";
+		public const string Ctime4Name = "ctime4";
+		public const string Ctime5Name = "ctime5";
+		public const string Ctime6Name = "ctime6";
+		public const string Ctime7Name = "ctime7";
+		public const string Atime0Name = "atime0";
+		public const string Atime1Name = "atime1";
+		public const string Atime2Name = "atime2";
+		public const string Atime3Name = "atime3";
+		public const string Atime4Name = "atime4";
+		public const string Atime5Name = "atime5";
+		public const string Atime6Name = "atime6";
+		public const string Atime7Name = "atime7";
 		public const string ModeName = "m_Mode";
 		public const string NumColorKeysName = "m_NumColorKeys";
 		public const string NumAlphaKeysName = "m_NumAlphaKeys";
