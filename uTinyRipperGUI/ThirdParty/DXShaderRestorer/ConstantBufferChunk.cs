@@ -12,7 +12,7 @@ namespace DXShaderRestorer
 			m_contantBufferOffset = contantBufferOffset;
 			m_nameLookup = nameLookup;
 
-			uint headerSize = (uint)shaderSubprogram.ConstantBuffers.Length * 24;
+			uint headerSize = (uint)Count * 24;
 			uint variableOffset = contantBufferOffset + headerSize;
 			int constantBufferIndex = 0;
 			List<VariableChunk> variables = new List<VariableChunk>();
@@ -22,18 +22,25 @@ namespace DXShaderRestorer
 				variables.Add(variableChunk);
 				variableOffset += variableChunk.Size;
 			}
+			foreach (BufferBinding bufferBindings in shaderSubprogram.BufferParameters)
+			{
+				VariableChunk variableChunk = new VariableChunk(bufferBindings, constantBufferIndex++, variableOffset, shaderSubprogram.ProgramType);
+				variables.Add(variableChunk);
+				variableOffset += variableChunk.Size;
+			}
 			m_variables = variables;
 			Size = variableOffset - contantBufferOffset;
 		}
 
 		public void Write(EndianWriter writer)
 		{
-			uint headerSize = (uint)m_shaderSubprogram.ConstantBuffers.Length * 24;
+			uint headerSize = (uint)Count * 24;
 			uint variableOffset = m_contantBufferOffset + headerSize;
-			for (int i = 0; i < m_shaderSubprogram.ConstantBuffers.Length; i++)
+			int variableIndex = 0;
+			for (int i = 0; i < m_shaderSubprogram.ConstantBuffers.Length; i++, variableIndex++)
 			{
 				ConstantBuffer constantBuffer = m_shaderSubprogram.ConstantBuffers[i];
-				VariableChunk variableChunk = m_variables[i];
+				VariableChunk variableChunk = m_variables[variableIndex];
 				uint nameOffset = m_nameLookup[constantBuffer.Name];
 				writer.Write(nameOffset);
 				writer.Write(variableChunk.Count);
@@ -45,13 +52,29 @@ namespace DXShaderRestorer
 				writer.Write((uint)ConstantBufferType.ConstantBuffer);
 				variableOffset += variableChunk.Size;
 			}
+			for (int i = 0; i < m_shaderSubprogram.BufferParameters.Length; i++, variableIndex++)
+			{
+				BufferBinding bufferParamater = m_shaderSubprogram.BufferParameters[i];
+				VariableChunk variableChunk = m_variables[variableIndex];
+				uint nameOffset = m_nameLookup[bufferParamater.Name];
+				writer.Write(nameOffset);
+				writer.Write(variableChunk.Count);
+				writer.Write(variableOffset);
+				//Size
+				writer.Write((uint)4); 
+				//Flags
+				writer.Write((uint)ConstantBufferFlags.None);
+				//ContantBufferType
+				writer.Write((uint)ConstantBufferType.ResourceBindInformation);
+				variableOffset += variableChunk.Size;
+			}
 			foreach (VariableChunk variableChunk in m_variables)
 			{
 				variableChunk.Write(writer);
 			}
 		}
 
-		internal uint Count => (uint)m_shaderSubprogram.ConstantBuffers.Length;
+		internal uint Count => (uint)(m_shaderSubprogram.ConstantBuffers.Length + m_shaderSubprogram.BufferParameters.Length);
 
 		internal uint Size { get; }
 

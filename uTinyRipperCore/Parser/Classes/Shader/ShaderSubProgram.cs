@@ -244,8 +244,10 @@ namespace uTinyRipper.Classes.Shaders
 					TextureParameter texture;
 					if (IsReadMultiSampled(reader.Version))
 					{
-						bool isMultiSampled = reader.ReadUInt32() > 0;
-						texture = new TextureParameter(name, index, isMultiSampled, extraValue);
+						uint temp = reader.ReadUInt32();
+						bool isMultiSampled = (temp & 1) == 1;
+						byte dimension = (byte)(temp >> 1);
+						texture = new TextureParameter(name, index, extraValue, isMultiSampled, dimension);
 					}
 					else
 					{
