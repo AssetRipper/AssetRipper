@@ -27,9 +27,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasParameters(Version version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
-		/// 2018.2.2 and greater
+		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasEmitting(Version version) => version.IsGreaterEqual(2018, 2, 2);
+		public static bool HasEmitting(Version version) => version.IsGreaterEqual(2018, 2);
 
 		public override Object Convert(IExportContainer container)
 		{
