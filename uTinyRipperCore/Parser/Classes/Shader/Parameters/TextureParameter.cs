@@ -10,21 +10,20 @@
 			return version.IsGreaterEqual(2017, 3);
 		}
 
-		public TextureParameter(string name, int index, int samplerIndex)
+		public TextureParameter(string name, int index, byte dimension, int sampler)
 		{
 			Name = name;
 			NameIndex = -1;
 			Index = index;
-			Dim = 2;
-			SamplerIndex = samplerIndex;
+			Dim = dimension;
+			SamplerIndex = sampler;
 			MultiSampled = false;
 		}
 
-		public TextureParameter(string name, int index, int samplerIndex, bool multiSampled, byte dimension):
-			this(name, index, samplerIndex)
+		public TextureParameter(string name, int index, byte dimension, int sampler, bool multiSampled):
+			this(name, index, dimension, sampler)
 		{
 			MultiSampled = multiSampled;
-			Dim = dimension;
 		}
 
 		public void Read(AssetReader reader)
