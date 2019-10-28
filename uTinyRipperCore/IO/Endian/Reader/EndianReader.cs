@@ -358,6 +358,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<bool>();
+			}
 
 			int index = 0;
 			bool[] array = new bool[count];
@@ -377,6 +381,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<char>();
+			}
 
 			int index = 0;
 			char[] array = new char[count];
@@ -396,6 +404,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<byte>();
+			}
 
 			int index = 0;
 			byte[] array = new byte[count];
@@ -415,6 +427,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<short>();
+			}
 
 			int index = 0;
 			short[] array = new short[count];
@@ -434,6 +450,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<ushort>();
+			}
 
 			int index = 0;
 			ushort[] array = new ushort[count];
@@ -453,6 +473,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<int>();
+			}
 
 			int index = 0;
 			int[] array = new int[count];
@@ -472,6 +496,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<uint>();
+			}
 
 			int index = 0;
 			uint[] array = new uint[count];
@@ -491,6 +519,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<long>();
+			}
 
 			int index = 0;
 			long[] array = new long[count];
@@ -510,6 +542,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<ulong>();
+			}
 
 			int index = 0;
 			ulong[] array = new ulong[count];
@@ -529,6 +565,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<float>();
+			}
 
 			int index = 0;
 			float[] array = new float[count];
@@ -548,6 +588,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<double>();
+			}
 
 			int index = 0;
 			double[] array = new double[count];
@@ -567,6 +611,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<string>();
+			}
 
 			string[] array = new string[count];
 			for (int i = 0; i < count; i++)
@@ -590,6 +638,11 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(4);
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<T>();
+			}
+
 			T[] array = new T[count];
 			for (int i = 0; i < count; i++)
 			{

@@ -32,6 +32,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int length = BufferToInt32();
+			if (length == 0)
+			{
+				return string.Empty;
+			}
 
 			byte[] buffer = ReadStringBuffer(length);
 			string result = Encoding.UTF8.GetString(buffer, 0, length);
@@ -70,6 +74,10 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
+			if (count == 0)
+			{
+				return Array.Empty<T>();
+			}
 
 			T[] array = new T[count];
 			for (int i = 0; i < count; i++)
