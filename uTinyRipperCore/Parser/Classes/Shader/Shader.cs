@@ -103,17 +103,17 @@ namespace uTinyRipper.Classes
 
 				ParsedForm.Read(reader);
 
-				m_platforms = reader.ReadEnum32Array((t) => (GPUPlatform)t);
+				Platforms = reader.ReadEnum32Array((t) => (GPUPlatform)t);
 				uint[] offsets = reader.ReadUInt32Array();
 				uint[] compressedLengths = reader.ReadUInt32Array();
 				uint[] decompressedLengths = reader.ReadUInt32Array();
 				byte[] compressedBlob = reader.ReadByteArray();
 				reader.AlignStream(AlignType.Align4);
 
-				m_subProgramBlobs = new ShaderSubProgramBlob[m_platforms.Length];
+				SubProgramBlobs = new ShaderSubProgramBlob[Platforms.Length];
 				using (MemoryStream memStream = new MemoryStream(compressedBlob))
 				{
-					for(int i = 0; i < m_platforms.Length; i++)
+					for(int i = 0; i < Platforms.Length; i++)
 					{
 						uint offset = offsets[i];
 						uint compressedLength = compressedLengths[i];
@@ -132,7 +132,7 @@ namespace uTinyRipper.Classes
 							{
 								ShaderSubProgramBlob blob = new ShaderSubProgramBlob();
 								blob.Read(blobReader);
-								m_subProgramBlobs[i] = blob;
+								SubProgramBlobs[i] = blob;
 							}
 						}
 					}
@@ -187,12 +187,12 @@ namespace uTinyRipper.Classes
 			
 			if (IsReadDependencies(reader.Version))
 			{
-				m_dependencies = reader.ReadAssetArray<PPtr<Shader>>();
+				Dependencies = reader.ReadAssetArray<PPtr<Shader>>();
 			}
 			if (IsReadNonModifiableTextures(reader.Version))
 			{
-				m_nonModifiableTextures = new Dictionary<string, PPtr<Texture>>();
-				m_nonModifiableTextures.Read(reader);
+				NonModifiableTextures = new Dictionary<string, PPtr<Texture>>();
+				NonModifiableTextures.Read(reader);
 			}
 			if (IsReadShaderIsBaked(reader.Version))
 			{
@@ -203,12 +203,12 @@ namespace uTinyRipper.Classes
 #if UNIVERSAL
 			if (IsReadErrors(reader.Version, reader.Flags))
 			{
-				m_errors = reader.ReadAssetArray<ShaderError>();
+				Errors = reader.ReadAssetArray<ShaderError>();
 			}
 			if (IsReadDefaultTextures(reader.Version, reader.Flags))
 			{
-				m_defaultTextures = new Dictionary<string, PPtr<Texture>>();
-				m_defaultTextures.Read(reader);
+				DefaultTextures = new Dictionary<string, PPtr<Texture>>();
+				DefaultTextures.Read(reader);
 			}
 			if (IsReadCompileInfo(reader.Version, reader.Flags))
 			{
@@ -291,14 +291,14 @@ namespace uTinyRipper.Classes
 
 		public override string ValidName => IsSerialized(File.Version) ? ParsedForm.Name : base.ValidName;
 
-		public IReadOnlyList<GPUPlatform> Platforms => m_platforms;
-		public IReadOnlyList<ShaderSubProgramBlob> SubProgramBlobs => m_subProgramBlobs;
-		public IReadOnlyList<PPtr<Shader>> Dependencies => m_dependencies;
-		public IReadOnlyDictionary<string, PPtr<Texture>> NonModifiableTextures => m_nonModifiableTextures;
+		public GPUPlatform[] Platforms { get; set; }
+		public ShaderSubProgramBlob[] SubProgramBlobs { get; set; }
+		public PPtr<Shader>[] Dependencies { get; set; }
+		public Dictionary<string, PPtr<Texture>> NonModifiableTextures { get; set; }
 		public bool ShaderIsBaked { get; private set; }
 #if UNIVERSAL
-		public IReadOnlyList<ShaderError> Errors => m_errors;
-		public IReadOnlyDictionary<string, PPtr<Texture>> DefaultTextures => m_defaultTextures;
+		public ShaderError[] Errors { get; set; }
+		public Dictionary<string, PPtr<Texture>> DefaultTextures { get; set; }
 #endif
 
 		public const string ErrorsName = "errors";
@@ -311,15 +311,6 @@ namespace uTinyRipper.Classes
 		public UnityPropertySheet StaticProperties;
 #if UNIVERSAL
 		public ShaderCompilationInfo CompileInfo;
-#endif
-
-		private GPUPlatform[] m_platforms;
-		private ShaderSubProgramBlob[] m_subProgramBlobs;
-		private PPtr<Shader>[] m_dependencies;
-		private Dictionary<string, PPtr<Texture>> m_nonModifiableTextures;
-#if UNIVERSAL
-		private ShaderError[] m_errors;
-		private Dictionary<string, PPtr<Texture>> m_defaultTextures;
 #endif
 	}
 }

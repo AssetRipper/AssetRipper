@@ -52,13 +52,27 @@ namespace uTinyRipper.Classes.Shaders
 				{
 					State.Export(writer);
 
-					ProgVertex.Export(writer, ShaderType.Vertex);
-					ProgFragment.Export(writer, ShaderType.Fragment);
-					ProgGeometry.Export(writer, ShaderType.Geometry);
-					ProgHull.Export(writer, ShaderType.Hull);
-					ProgDomain.Export(writer, ShaderType.Domain);
+					if ((ProgramMask & ShaderType.Vertex.ToProgramMask()) != 0)
+					{
+						ProgVertex.Export(writer, ShaderType.Vertex);
+					}
+					if ((ProgramMask & ShaderType.Fragment.ToProgramMask()) != 0)
+					{
+						ProgFragment.Export(writer, ShaderType.Fragment);
+					}
+					if ((ProgramMask & ShaderType.Geometry.ToProgramMask()) != 0)
+					{
+						ProgGeometry.Export(writer, ShaderType.Geometry);
+					}
+					if ((ProgramMask & ShaderType.Hull.ToProgramMask()) != 0)
+					{
+						ProgHull.Export(writer, ShaderType.Hull);
+					}
+					if ((ProgramMask & ShaderType.Domain.ToProgramMask()) != 0)
+					{
+						ProgDomain.Export(writer, ShaderType.Domain);
+					}
 
-#warning ProgramMask?
 #warning HasInstancingVariant?
 				}
 				else

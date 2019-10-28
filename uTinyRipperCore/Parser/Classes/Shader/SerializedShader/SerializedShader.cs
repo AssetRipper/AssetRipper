@@ -7,7 +7,7 @@ namespace uTinyRipper.Classes.Shaders
 		public void Read(AssetReader reader)
 		{
 			PropInfo.Read(reader);
-			m_subShaders = reader.ReadAssetArray<SerializedSubShader>();
+			SubShaders = reader.ReadAssetArray<SerializedSubShader>();
 			Name = reader.ReadString();
 			CustomEditorName = reader.ReadString();
 			FallbackName = reader.ReadString();
@@ -22,8 +22,9 @@ namespace uTinyRipper.Classes.Shaders
 
 			PropInfo.Export(writer);
 
-			foreach(SerializedSubShader subShader in SubShaders)
+			for (int i = 0; i < SubShaders.Length; i++)
 			{
+				ref SerializedSubShader subShader = ref SubShaders[i];
 				subShader.Export(writer);
 			}
 
@@ -42,7 +43,7 @@ namespace uTinyRipper.Classes.Shaders
 			writer.Write('}');
 		}
 
-		public IReadOnlyList<SerializedSubShader> SubShaders => m_subShaders;
+		public SerializedSubShader[] SubShaders { get; set; }
 		public string Name { get; private set; }
 		public string CustomEditorName { get; private set; }
 		public string FallbackName { get; private set; }
@@ -51,7 +52,6 @@ namespace uTinyRipper.Classes.Shaders
 
 		public SerializedProperties PropInfo;
 		
-		private SerializedSubShader[] m_subShaders;
 		private SerializedShaderDependency[] m_dependencies;
 	}
 }

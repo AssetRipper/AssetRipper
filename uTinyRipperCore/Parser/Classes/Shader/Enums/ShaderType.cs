@@ -34,5 +34,10 @@ namespace uTinyRipper.Classes.Shaders
 					throw new NotSupportedException($"ShaderType {_this} isn't supported");
 			}
 		}
+
+		public static int ToProgramMask(this ShaderType _this)
+		{
+			return 1 << (int)_this;
+		}
 	}
 }

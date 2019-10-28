@@ -84,7 +84,7 @@ namespace uTinyRipper.Classes.Shaders
 			}
 		}
 
-		public void Export(ShaderWriter writer, ShaderSubProgramBlob blob, ShaderType type, bool isTier)
+		public void Export(ShaderWriter writer, ref ShaderSubProgramBlob blob, ShaderType type, bool isTier)
 		{
 			writer.WriteIndent(4);
 #warning TODO: convertion (DX to HLSL)
@@ -96,7 +96,8 @@ namespace uTinyRipper.Classes.Shaders
 			writer.Write("\" {\n");
 			writer.WriteIndent(5);
 
-			blob.SubPrograms[(int)BlobIndex].Export(writer, type);
+			ref ShaderSubProgram subProgram = ref blob.SubPrograms[(int)BlobIndex];
+			subProgram.Export(writer, type);
 
 			writer.Write('\n');
 			writer.WriteIndent(4);
