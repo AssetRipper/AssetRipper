@@ -357,41 +357,41 @@ namespace uTinyRipper.Classes
 #endif
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(context))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			if (IsReadClassIDToTrack(context.Version, context.Flags))
 			{
-				foreach (Object asset in context.FetchDependencies(ClassIDToTrack.Values, ClassIDToTrackName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(ClassIDToTrack.Values, ClassIDToTrackName))
 				{
 					yield return asset;
 				}
-				foreach (Object asset in context.FetchDependencies(ChildTracks, ChildTracksName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(ChildTracks, ChildTracksName))
 				{
 					yield return asset;
 				}
 			}
 			if (IsReadCurves(context.Version))
 			{
-				foreach (Object asset in context.FetchDependencies(FloatCurves, FloatCurvesName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(FloatCurves, FloatCurvesName))
 				{
 					yield return asset;
 				}
 			}
 			if (IsReadPPtrCurves(context.Version))
 			{
-				foreach (Object asset in context.FetchDependencies(PPtrCurves, PPtrCurvesName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(PPtrCurves, PPtrCurvesName))
 				{
 					yield return asset;
 				}
 			}
 			if (IsReadClipBindingConstant(context.Version))
 			{
-				foreach (Object asset in context.FetchDependencies(ClipBindingConstant, ClipBindingConstantName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(ClipBindingConstant, ClipBindingConstantName))
 				{
 					yield return asset;
 				}
@@ -399,18 +399,18 @@ namespace uTinyRipper.Classes
 #if UNIVERSAL
 			if (IsReadAnimationClipSettings(context.Version, context.Flags))
 			{
-				foreach (Object asset in context.FetchDependencies(AnimationClipSettings, AnimationClipSettingsName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(AnimationClipSettings, AnimationClipSettingsName))
 				{
 					yield return asset;
 				}
 			}
 			if (IsReadEditorCurves(context.Version, context.Flags))
 			{
-				foreach (Object asset in context.FetchDependencies(EditorCurves, EditorCurvesName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(EditorCurves, EditorCurvesName))
 				{
 					yield return asset;
 				}
-				foreach (Object asset in context.FetchDependencies(EulerEditorCurves, EulerEditorCurvesName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(EulerEditorCurves, EulerEditorCurvesName))
 				{
 					yield return asset;
 				}
@@ -418,7 +418,7 @@ namespace uTinyRipper.Classes
 #endif
 			if (IsReadEvents(context.Version))
 			{
-				foreach (Object asset in context.FetchDependencies(Events, EventsName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(Events, EventsName))
 				{
 					yield return asset;
 				}

@@ -23,15 +23,15 @@ namespace uTinyRipper.Classes
 			m_children = reader.ReadAssetArray<PPtr<AudioMixerGroup>>();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(context))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(AudioMixer, AudioMixerName);
-			foreach (Object asset in context.FetchDependencies(Children, ChildrenName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(Children, ChildrenName))
 			{
 				yield return asset;
 			}

@@ -71,7 +71,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			return context.FetchDependencies(PptrCurveMapping, PptrCurveMappingName);
 		}

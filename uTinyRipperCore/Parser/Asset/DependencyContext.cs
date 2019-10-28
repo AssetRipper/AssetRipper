@@ -3,26 +3,29 @@ using uTinyRipper.Classes;
 
 namespace uTinyRipper
 {
-	public sealed class DependencyContext : IDependencyContext
+	public sealed class DependencyContext
 	{
-		public DependencyContext(bool log)
+		public DependencyContext(Version version, Platform platform, TransferInstructionFlags flags, bool log)
 		{
+			Version = version;
+			Platform = platform;
+			Flags = flags;
 			IsLog = log;
 			m_hierarchy = log ? new Stack<string>() : null;
 		}
 
-		public IEnumerable<Object> FetchDependencies<T>(T dependent, string name)
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(T dependent, string name)
 			where T: IDependent
 		{
 			if (IsLog)
 			{
 				m_hierarchy.Push(name);
 			}
-			foreach (Object asset in dependent.FetchDependencies(this))
+			foreach (PPtr<Object> pointer in dependent.FetchDependencies(this))
 			{
-				if (asset != null)
+				if (!pointer.IsNull)
 				{
-					yield return asset;
+					yield return pointer;
 				}
 			}
 			if (IsLog)
@@ -31,19 +34,19 @@ namespace uTinyRipper
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies<T>(T[] dependents, string name)
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(T[] dependents, string name)
 			where T : IDependent
 		{
 			return FetchDependencies((IEnumerable<T>)dependents, name);
 		}
 
-		public IEnumerable<Object> FetchDependencies<T>(IReadOnlyList<T> dependents, string name)
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IReadOnlyList<T> dependents, string name)
 			where T : IDependent
 		{
 			return FetchDependencies((IEnumerable<T>)dependents, name);
 		}
 
-		public IEnumerable<Object> FetchDependencies<T>(IEnumerable<T> dependents, string name)
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IEnumerable<T> dependents, string name)
 			where T : IDependent
 		{
 			if (IsLog)
@@ -52,11 +55,11 @@ namespace uTinyRipper
 			}
 			foreach (T dependent in dependents)
 			{
-				foreach (Object asset in dependent.FetchDependencies(this))
+				foreach (PPtr<Object> pointer in dependent.FetchDependencies(this))
 				{
-					if (asset != null)
+					if (!pointer.IsNull)
 					{
-						yield return asset;
+						yield return pointer;
 					}
 				}
 			}
@@ -66,67 +69,69 @@ namespace uTinyRipper
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies<T>(PPtr<T>[] pointers, string name)
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(PPtr<T>[] pointers, string name)
 			where T : Object
 		{
 			return FetchDependencies((IEnumerable<PPtr<T>>)pointers, name);
 		}
 
-		public IEnumerable<Object> FetchDependencies<T>(IReadOnlyList<PPtr<T>> pointers, string name)
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IReadOnlyList<PPtr<T>> pointers, string name)
 			where T : Object
 		{
 			return FetchDependencies((IEnumerable<PPtr<T>>)pointers, name);
 		}
 
-		public IEnumerable<Object> FetchDependencies<T>(IEnumerable<PPtr<T>> pointers, string name)
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IEnumerable<PPtr<T>> pointers, string name)
 			where T : Object
 		{
 			foreach (PPtr<T> pointer in pointers)
 			{
-				Object asset = FetchDependency(pointer, name);
-				if (asset != null)
+				if (!pointer.IsNull)
 				{
-					yield return asset;
+					yield return FetchDependency(pointer, name);
 				}
 			}
 		}
 
-		public Object FetchDependency<T>(PPtr<T> pointer, string name)
+		public PPtr<Object> FetchDependency<T>(PPtr<T> pointer, string name)
 			where T : Object
 		{
-			if (pointer.IsNull)
+			if (IsLog)
 			{
-				return null;
+				PointerName = name;
 			}
-
-			T obj = pointer.FindAsset(File);
-			if (obj == null)
-			{
-				if (IsLog)
-				{
-					Logger.Log(LogType.Warning, LogCategory.General, $"{GetHierarchy()}'s dependency {name} = {pointer.ToLogString(File)} wasn't found");
-				}
-			}
-			return obj;
+			return pointer.CastTo<Object>();
 		}
 
-		private string GetHierarchy()
+		public string GetPointerPath()
 		{
-			string hierarchy = $"[{File.Name}]" + File.GetAssetLogString(PathID);
+			if (m_hierarchy.Count == 0)
+			{
+				return string.Empty;
+			}
+
+			string hierarchy = string.Empty;
+			int i = 0;
 			foreach (string sub in m_hierarchy)
 			{
-				hierarchy += "." + sub;
+				if (i == 0)
+				{
+					hierarchy = sub;
+				}
+				else
+				{
+					hierarchy = sub + "." + hierarchy;
+				}
+				i++;
 			}
 			return hierarchy;
 		}
 
-		public Version Version => File.Version;
-		public Platform Platform => File.Platform;
-		public TransferInstructionFlags Flags => File.Flags;
-
+		public Version Version { get; }
+		public Platform Platform { get; }
+		public TransferInstructionFlags Flags { get; }
 		public bool IsLog { get; }
-		public IAssetContainer File { get; set; }
-		public long PathID { get; set; }
+		public string PointerName { get; private set; }
 
 		private readonly Stack<string> m_hierarchy;
 	}

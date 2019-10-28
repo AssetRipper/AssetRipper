@@ -4,6 +4,6 @@ namespace uTinyRipper.Classes
 {
 	public interface IDependent
 	{
-		IEnumerable<Object> FetchDependencies(IDependencyContext context);
+		IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context);
 	}
 }

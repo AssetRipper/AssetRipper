@@ -238,16 +238,16 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(context))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			if (IsReadEnlightenSceneMapping(context.Version, context.Flags))
 			{
-				foreach (Object asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
 				{
 					yield return asset;
 				}
@@ -255,7 +255,7 @@ namespace uTinyRipper.Classes
 			if (IsReadLightProbes(context.Version, context.Flags))
 			{
 				yield return context.FetchDependency(LightProbes, LightProbesName);
-				foreach (Object asset in context.FetchDependencies(Lightmaps, LightmapsName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(Lightmaps, LightmapsName))
 				{
 					yield return asset;
 				}
@@ -263,7 +263,7 @@ namespace uTinyRipper.Classes
 #if UNIVERSAL
 			if (IsReadLightmapEditorSettings(context.Version, context.Flags))
 			{
-				foreach (Object asset in context.FetchDependencies(LightmapEditorSettings, LightmapEditorSettingsName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(LightmapEditorSettings, LightmapEditorSettingsName))
 				{
 					yield return asset;
 				}

@@ -156,7 +156,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Plane0, Plane0Name);
 			yield return context.FetchDependency(Plane1, Plane1Name);

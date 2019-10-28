@@ -19,14 +19,14 @@ namespace uTinyRipper.Classes
 			Parameters.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(context))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (Object asset in context.FetchDependencies(Parameters, ParametersName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(Parameters, ParametersName))
 			{
 				yield return asset;
 			}

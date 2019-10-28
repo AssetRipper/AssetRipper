@@ -75,9 +75,9 @@ namespace uTinyRipper.Classes.Materials
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in context.FetchDependencies(TexEnvs.Values, TexEnvsName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(TexEnvs.Values, TexEnvsName))
 			{
 				yield return asset;
 			}

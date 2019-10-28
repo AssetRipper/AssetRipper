@@ -51,26 +51,26 @@ namespace uTinyRipper.Classes
 			reader.AlignStream(AlignType.Align4);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(context))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			if (IsReadEditorData(context.Flags))
 			{
-				foreach (Object asset in context.FetchDependencies(EditorData, EditorDataName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(EditorData, EditorDataName))
 				{
 					yield return asset;
 				}
 				yield return context.FetchDependency(MasterAtlas, MasterAtlasName);
 			}
-			foreach (Object asset in context.FetchDependencies(PackedSprites, PackedSpritesName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(PackedSprites, PackedSpritesName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in context.FetchDependencies(RenderDataMap.Values, RenderDataMapName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(RenderDataMap.Values, RenderDataMapName))
 			{
 				yield return asset;
 			}

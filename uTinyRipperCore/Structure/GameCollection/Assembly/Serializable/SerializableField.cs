@@ -354,14 +354,14 @@ namespace uTinyRipper.Game.Assembly
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			if (Type == PrimitiveType.Complex)
 			{
 				if (IsArray)
 				{
 					ISerializableStructure[] structures = (ISerializableStructure[])Value;
-					foreach (Object asset in context.FetchDependencies(structures, Name))
+					foreach (PPtr<Object> asset in context.FetchDependencies(structures, Name))
 					{
 						yield return asset;
 					}
@@ -369,7 +369,7 @@ namespace uTinyRipper.Game.Assembly
 				else
 				{
 					ISerializableStructure structure = (ISerializableStructure)Value;
-					foreach (Object asset in context.FetchDependencies(structure, Name))
+					foreach (PPtr<Object> asset in context.FetchDependencies(structure, Name))
 					{
 						yield return asset;
 					}

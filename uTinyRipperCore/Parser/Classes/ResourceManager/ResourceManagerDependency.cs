@@ -12,10 +12,10 @@ namespace uTinyRipper.Classes.ResourceManagers
 			m_dependencies = reader.ReadAssetArray<PPtr<Object>>();
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Object, ObjectName);
-			foreach (Object asset in context.FetchDependencies(Dependencies, DependenciesName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(Dependencies, DependenciesName))
 			{
 				yield return asset;
 			}

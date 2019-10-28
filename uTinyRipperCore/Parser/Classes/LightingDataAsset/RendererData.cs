@@ -30,7 +30,7 @@ namespace uTinyRipper.Classes.LightingDataAssets
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(UVMesh, UvMeshName);
 		}

@@ -102,24 +102,24 @@ namespace uTinyRipper.Classes.TerrainDatas
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			if (HasTerrainLayers(context.Version))
 			{
-				foreach (Object asset in context.FetchDependencies(TerrainLayers, TerrainLayersName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(TerrainLayers, TerrainLayersName))
 				{
 					yield return asset;
 				}
 			}
 			else
 			{
-				foreach (Object asset in context.FetchDependencies(Splats, SplatsName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(Splats, SplatsName))
 				{
 					yield return asset;
 				}
 			}
 
-			foreach (Object asset in context.FetchDependencies(AlphaTextures, AlphaTexturesName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(AlphaTextures, AlphaTexturesName))
 			{
 				yield return asset;
 			}

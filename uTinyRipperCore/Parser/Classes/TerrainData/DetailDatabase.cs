@@ -128,9 +128,9 @@ namespace uTinyRipper.Classes.TerrainDatas
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in context.FetchDependencies(DetailPrototypes, DetailPrototypesName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(DetailPrototypes, DetailPrototypesName))
 			{
 				yield return asset;
 			}
@@ -138,13 +138,13 @@ namespace uTinyRipper.Classes.TerrainDatas
 			{
 				yield return context.FetchDependency(AtlasTexture, AtlasTextureName);
 			}
-			foreach (Object asset in TreeDatabase.FetchDependencies(context))
+			foreach (PPtr<Object> asset in TreeDatabase.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			if (!HasAtlasTexture(context.Version))
 			{
-				foreach (Object asset in context.FetchDependencies(PreloadTextureAtlasData, PreloadTextureAtlasDataName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(PreloadTextureAtlasData, PreloadTextureAtlasDataName))
 				{
 					yield return asset;
 				}

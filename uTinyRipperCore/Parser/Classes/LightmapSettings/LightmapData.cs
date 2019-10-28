@@ -43,7 +43,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Lightmap, LightmapName);
 			yield return context.FetchDependency(DirLightmap, DirLightmapName);

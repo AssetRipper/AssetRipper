@@ -20,14 +20,14 @@ namespace uTinyRipper.Classes
 			m_shaders = reader.ReadKVPTTArray<PPtr<Shader>, ShaderInfo>();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(context))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (Object asset in context.FetchDependencies(m_shaders.Select(t => t.Key), ShadersName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(m_shaders.Select(t => t.Key), ShadersName))
 			{
 				yield return asset;
 			}

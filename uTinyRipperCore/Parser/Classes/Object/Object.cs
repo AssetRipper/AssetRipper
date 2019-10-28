@@ -116,7 +116,7 @@ namespace uTinyRipper.Classes
 			throw new NotSupportedException($"Type {GetType()} doesn't support binary export");
 		}
 
-		public virtual IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public virtual IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield break;
 		}

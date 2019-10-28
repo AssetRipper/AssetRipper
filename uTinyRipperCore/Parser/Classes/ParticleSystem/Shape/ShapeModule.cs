@@ -294,7 +294,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Mesh, MeshName);
 			yield return context.FetchDependency(MeshRenderer, MeshRendererName);

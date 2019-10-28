@@ -113,28 +113,28 @@ namespace uTinyRipper.Classes
 			EnlightenDataVersion = reader.ReadInt32();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(context))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(Scene, SceneName);
-			foreach (Object asset in context.FetchDependencies(Lightmaps, LightmapsName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(Lightmaps, LightmapsName))
 			{
 				yield return asset;
 			}
 			yield return context.FetchDependency(LightProbes, LightProbesName);
-			foreach (Object asset in context.FetchDependencies(LightmappedRendererData, LightmappedRendererDataName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(LightmappedRendererData, LightmappedRendererDataName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in context.FetchDependencies(BakedReflectionProbeCubemaps, BakedReflectionProbeCubemapsName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(BakedReflectionProbeCubemaps, BakedReflectionProbeCubemapsName))
 			{
 				yield return asset;
 			}

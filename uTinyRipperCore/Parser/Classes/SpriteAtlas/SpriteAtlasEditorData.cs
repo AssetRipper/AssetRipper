@@ -69,9 +69,9 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			reader.AlignStream(AlignType.Align4);
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in context.FetchDependencies(Packables, PackablesName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(Packables, PackablesName))
 			{
 				yield return asset;
 			}

@@ -120,15 +120,15 @@ namespace uTinyRipper.Classes
 			SavedProperties.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(context))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(Shader, ShaderName);
-			foreach (Object asset in context.FetchDependencies(SavedProperties, SavedPropertiesName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(SavedProperties, SavedPropertiesName))
 			{
 				yield return asset;
 			}

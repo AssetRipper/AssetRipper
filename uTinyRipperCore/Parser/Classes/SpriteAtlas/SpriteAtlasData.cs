@@ -30,7 +30,7 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			SettingsRaw = reader.ReadUInt32();
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Texture, TextureName);
 			yield return context.FetchDependency(AlphaTexture, AlphaTextureName);

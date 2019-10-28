@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using uTinyRipper.Classes;
 using uTinyRipper.Project;
 using uTinyRipper.SerializedFiles;
 
@@ -169,7 +170,6 @@ namespace uTinyRipper.Converters
 		public void Export(string path, GameCollection fileCollection, IEnumerable<Object> assets, ExportOptions options)
 		{
 			EventExportPreparationStarted?.Invoke();
-			DependencyContext depcontext = new DependencyContext(true);
 			VirtualSerializedFile virtualFile = new VirtualSerializedFile(options);
 			List<IExportCollection> collections = new List<IExportCollection>();
 			// speed up fetching a little bit
@@ -194,12 +194,19 @@ namespace uTinyRipper.Converters
 #warning TODO: if IsGenerateGUIDByContent set it should build collections and write actual references with persistent GUIS, but skip dependencies
 				if (options.ExportDependencies)
 				{
-					depcontext.File = asset.File;
-					depcontext.PathID = asset.PathID;
-					foreach (Object dependency in asset.FetchDependencies(depcontext))
+					DependencyContext context = new DependencyContext(asset.File.Version, asset.File.Platform, asset.File.Flags, true);
+					foreach (PPtr<Object> pointer in asset.FetchDependencies(context))
 					{
+						if (pointer.IsNull)
+						{
+							continue;
+						}
+
+						Object dependency = pointer.FindAsset(asset.File);
 						if (dependency == null)
 						{
+							string hierarchy = $"[{asset.File.Name}]" + asset.File.GetAssetLogString(asset.PathID) + "." + context.GetPointerPath();
+							Logger.Log(LogType.Warning, LogCategory.Export, $"{hierarchy}'s dependency {context.PointerName} = {pointer.ToLogString(asset.File)} wasn't found");
 							continue;
 						}
 

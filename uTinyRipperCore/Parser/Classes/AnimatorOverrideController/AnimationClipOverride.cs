@@ -20,7 +20,7 @@ namespace uTinyRipper.Classes.AnimatorOverrideControllers
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(OriginalClip, OriginalClipName);
 			yield return context.FetchDependency(OverrideClip, OverrideClipName);

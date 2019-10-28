@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.Project;
 using uTinyRipper.Converters;
 using uTinyRipper.Converters.Script;
 using uTinyRipper.YAML;
 using uTinyRipper.Game.Assembly;
 using uTinyRipper.Classes.Misc;
+#if UNIVERSAL
+using System.Linq;
+#endif
 
 namespace uTinyRipper.Classes
 {
@@ -226,9 +228,9 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(context))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -240,7 +242,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsReadDefaultReferences(context.Version, context.Flags))
 			{
-				foreach (Object asset in context.FetchDependencies(DefaultReferences.Select(t => t.Value), DefaultReferencesName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(DefaultReferences.Select(t => t.Value), DefaultReferencesName))
 				{
 					yield return asset;
 				}

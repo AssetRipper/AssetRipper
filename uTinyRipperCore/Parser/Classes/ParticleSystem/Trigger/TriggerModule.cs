@@ -33,7 +33,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			RadiusScale = reader.ReadSingle();
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(CollisionShape0, CollisionShape0Name);
 			yield return context.FetchDependency(CollisionShape1, CollisionShape1Name);

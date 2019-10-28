@@ -168,14 +168,14 @@ namespace uTinyRipper.Classes.Sprites
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Texture, TextureName);
 			yield return context.FetchDependency(AlphaTexture, AlphaTextureName);
 
 			if (IsReadSecondaryTextures(context.Version))
 			{
-				foreach (Object asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
 				{
 					yield return asset;
 				}

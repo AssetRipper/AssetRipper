@@ -24,7 +24,7 @@ namespace uTinyRipper.Game.Assembly
 			Pointer.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Pointer, string.Empty);
 		}

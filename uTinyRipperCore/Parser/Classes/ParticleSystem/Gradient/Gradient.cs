@@ -202,7 +202,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return node;
 		}
 		
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield break;
 		}

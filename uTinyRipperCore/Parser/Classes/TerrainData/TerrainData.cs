@@ -48,22 +48,22 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(context))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (Object asset in context.FetchDependencies(SplatDatabase, SplatDatabaseName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(SplatDatabase, SplatDatabaseName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in context.FetchDependencies(DetailDatabase, DetailDatabaseName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(DetailDatabase, DetailDatabaseName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in context.FetchDependencies(Heightmap, HeightmapName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(Heightmap, HeightmapName))
 			{
 				yield return asset;
 			}

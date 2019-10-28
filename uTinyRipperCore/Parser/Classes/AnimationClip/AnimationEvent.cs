@@ -39,7 +39,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			MessageOptions = reader.ReadInt32();
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(ObjectReferenceParameter, ObjectReferenceParameterName);
 		}

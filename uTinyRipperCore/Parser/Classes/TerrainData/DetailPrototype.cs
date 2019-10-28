@@ -60,7 +60,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 			writer.Write(UsePrototypeMesh);
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Prototype, PrototypeName);
 			yield return context.FetchDependency(PrototypeTexture, PrototypeTextureName);

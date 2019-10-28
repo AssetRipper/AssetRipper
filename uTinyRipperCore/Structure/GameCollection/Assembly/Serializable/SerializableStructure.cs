@@ -123,11 +123,11 @@ namespace uTinyRipper.Game.Assembly
 			return node;
 		}
 
-		public virtual IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public virtual IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			if (Base != null)
 			{
-				foreach (Object asset in Base.FetchDependencies(context))
+				foreach (PPtr<Object> asset in Base.FetchDependencies(context))
 				{
 					yield return asset;
 				}
@@ -135,7 +135,7 @@ namespace uTinyRipper.Game.Assembly
 
 			foreach (SerializableField field in Fields)
 			{
-				foreach (Object asset in field.FetchDependencies(context))
+				foreach (PPtr<Object> asset in field.FetchDependencies(context))
 				{
 					yield return asset;
 				}

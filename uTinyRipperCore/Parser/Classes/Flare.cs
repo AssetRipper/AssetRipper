@@ -16,7 +16,7 @@ namespace uTinyRipper.Classes
 			throw new System.NotImplementedException();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			throw new System.NotImplementedException();
 		}

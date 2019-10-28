@@ -43,14 +43,14 @@ namespace uTinyRipper.Classes
 			m_assetToPrefab.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(context))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (Object asset in context.FetchDependencies(AssetToPrefab.Values, AssetToPrefabName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(AssetToPrefab.Values, AssetToPrefabName))
 			{
 				yield return asset;
 			}

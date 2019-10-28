@@ -101,9 +101,9 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(context))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -112,14 +112,14 @@ namespace uTinyRipper.Classes
 
 			if (IsReadAnimationsPaired(context.Version))
 			{
-				foreach (Object asset in context.FetchDependencies(AnimationsPaired.Select(t => t.Item2), AnimationsName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(AnimationsPaired.Select(t => t.Item2), AnimationsName))
 				{
 					yield return asset;
 				}
 			}
 			else
 			{
-				foreach (Object asset in context.FetchDependencies(Animations, AnimationsName))
+				foreach (PPtr<Object> asset in context.FetchDependencies(Animations, AnimationsName))
 				{
 					yield return asset;
 				}

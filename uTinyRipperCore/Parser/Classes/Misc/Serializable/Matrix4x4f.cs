@@ -74,7 +74,7 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield break;
 		}

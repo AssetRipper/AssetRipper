@@ -116,7 +116,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			reader.AlignStream(AlignType.Align4);
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			if (IsReadAdditiveReferencePoseClip(context.Version))
 			{

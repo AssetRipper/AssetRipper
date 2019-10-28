@@ -288,19 +288,19 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(context))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
 			yield return context.FetchDependency(MoveWithCustomTransform, MoveWithCustomTransformName);
-			foreach (Object asset in context.FetchDependencies(CollisionModule, CollisionModuleName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(CollisionModule, CollisionModuleName))
 			{
 				yield return asset;
 			}
-			foreach (Object asset in context.FetchDependencies(SubModule, SubModuleName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(SubModule, SubModuleName))
 			{
 				yield return asset;
 			}

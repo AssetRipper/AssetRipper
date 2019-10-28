@@ -91,9 +91,9 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in context.FetchDependencies(SubEmitters, SubEmittersName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(SubEmitters, SubEmittersName))
 			{
 				yield return asset;
 			}

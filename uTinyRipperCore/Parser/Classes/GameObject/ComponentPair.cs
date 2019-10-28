@@ -30,21 +30,9 @@ namespace uTinyRipper.Classes.GameObjects
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			Component comp = Component.FindAsset(context.File);
-			if (comp == null)
-			{
-				if (context.IsLog)
-				{
-					ClassIDType assetType = context.File.GetAssetType(Component.PathID);
-					Logger.Log(LogType.Debug, LogCategory.Export, $"GameObject's component {assetType}{Component} isn't implemeneted yet");
-				}
-			}
-			else
-			{
-				yield return comp;
-			}
+			yield return context.FetchDependency(Component, ComponentName);
 		}
 
 		public ClassIDType ClassID { get; private set; }

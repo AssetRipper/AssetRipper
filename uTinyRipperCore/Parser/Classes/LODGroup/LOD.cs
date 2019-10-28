@@ -35,9 +35,9 @@ namespace uTinyRipper.Classes.LODGroups
 			m_renderers = reader.ReadAssetArray<LODRenderer>();
 		}
 
-		public IEnumerable<Object> FetchDependencies(IDependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in context.FetchDependencies(Renderers, RenderersName))
+			foreach (PPtr<Object> asset in context.FetchDependencies(Renderers, RenderersName))
 			{
 				yield return asset;
 			}
