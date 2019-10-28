@@ -6,6 +6,21 @@ namespace uTinyRipper
 {
 	public abstract class FileList
 	{
+		public IEnumerable<SerializedFile> FetchSerializedFiles()
+		{
+			foreach (SerializedFile file in SerializedFiles)
+			{
+				yield return file;
+			}
+			foreach (FileList list in FileLists)
+			{
+				foreach (SerializedFile file in list.FetchSerializedFiles())
+				{
+					yield return file;
+				}
+			}
+		}
+
 		internal void AddFile(FileScheme scheme, IFileCollection collection, IAssemblyManager manager)
 		{
 			switch(scheme.SchemeType)

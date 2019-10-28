@@ -152,14 +152,9 @@ namespace uTinyRipper
 			Version defaultVersion = new Version(2017, 3, 0, VersionType.Final, 3);
 			Version maxVersion = FileCollection.Files.Max(t => t.Version);
 			Version version = defaultVersion < maxVersion ? maxVersion : defaultVersion;
-			ExportOptions options = new ExportOptions()
-			{
-				ExportDependencies = false,
-				Version = version,
-				Platform = Platform.NoTarget,
-				Flags = TransferInstructionFlags.NoTransferInstructionFlags,
-			};
-			FileCollection.Exporter.Export(exportPath, FileCollection, FileCollection.FetchAssets().Where(t => filter(t)), options);
+			ExportOptions options = new ExportOptions(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
+			options.Filter = filter;
+			FileCollection.Exporter.Export(exportPath, FileCollection, FileCollection.FetchSerializedFiles(), options);
 		}
 
 		public string RequestDependency(string dependency)

@@ -162,22 +162,35 @@ namespace uTinyRipper.Converters
 			OverrideExporter(classType, BinExporter);
 		}
 
-		public void Export(string path, GameCollection fileCollection, Object asset, ExportOptions options)
+		public void Export(string path, GameCollection fileCollection, SerializedFile file, ExportOptions options)
 		{
-			Export(path, fileCollection, new Object[] { asset }, options);
+			Export(path, fileCollection, new SerializedFile[] { file }, options);
 		}
 
-		public void Export(string path, GameCollection fileCollection, IEnumerable<Object> assets, ExportOptions options)
+		public void Export(string path, GameCollection fileCollection, IEnumerable<SerializedFile> files, ExportOptions options)
 		{
 			EventExportPreparationStarted?.Invoke();
 			VirtualSerializedFile virtualFile = new VirtualSerializedFile(options);
 			List<IExportCollection> collections = new List<IExportCollection>();
-			// speed up fetching a little bit
+			// speed up fetching
 			List<Object> depList = new List<Object>();
 			HashSet<Object> depSet = new HashSet<Object>();
 			HashSet<Object> queued = new HashSet<Object>();
-			depList.AddRange(assets);
-			depSet.UnionWith(depList);
+			foreach (SerializedFile file in files)
+			{
+				foreach (Object asset in file.FetchAssets())
+				{
+					if (!options.Filter(asset))
+					{
+						continue;
+					}
+
+					depList.Add(asset);
+					depSet.Add(asset);
+				}
+			}
+
+
 			for (int i = 0; i < depList.Count; i++)
 			{
 				Object asset = depList[i];
