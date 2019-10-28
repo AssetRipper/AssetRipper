@@ -63,17 +63,17 @@ namespace uTinyRipper
 			return null;
 		}
 
-		public virtual ScriptingBackEnd GetScriptingBackend()
+		public virtual ScriptingBackend GetScriptingBackend()
 		{
 			if (Assemblies.Count == 0)
 			{
-				return ScriptingBackEnd.Unknown;
+				return ScriptingBackend.Unknown;
 			}
 
 			string assemblyPath = Assemblies.First().Value;
 			if (MonoManager.IsMonoAssembly(assemblyPath))
 			{
-				return ScriptingBackEnd.Mono;
+				return ScriptingBackend.Mono;
 			}
 			else
 			{

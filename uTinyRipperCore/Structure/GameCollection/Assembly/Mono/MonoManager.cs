@@ -372,9 +372,9 @@ namespace uTinyRipper.Game.Assembly.Mono
 			return true;
 		}
 
-		public ScriptingBackEnd ScriptingBackEnd
+		public ScriptingBackend ScriptingBackend
 		{
-			get => ScriptingBackEnd.Mono;
+			get => ScriptingBackend.Mono;
 			set => throw new NotSupportedException();
 		}
 

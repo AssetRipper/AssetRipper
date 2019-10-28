@@ -66,9 +66,9 @@ namespace uTinyRipper
 			return false;
 		}
 
-		public override ScriptingBackEnd GetScriptingBackend()
+		public override ScriptingBackend GetScriptingBackend()
 		{
-			return ScriptingBackEnd.Mono;
+			return ScriptingBackend.Mono;
 		}
 
 		public override string Name { get; }

@@ -19,6 +19,6 @@ namespace uTinyRipper.Game
 		ScriptIdentifier GetScriptID(string assembly, string name);
 		ScriptIdentifier GetScriptID(string assembly, string @namespace, string name);
 
-		ScriptingBackEnd ScriptingBackEnd { get; set; }
+		ScriptingBackend ScriptingBackend { get; set; }
 	}
 }

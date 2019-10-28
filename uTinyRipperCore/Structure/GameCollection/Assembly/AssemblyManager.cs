@@ -43,7 +43,7 @@ namespace uTinyRipper.Game
 
 		public void Load(string filePath)
 		{
-			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
+			if (ScriptingBackend == ScriptingBackend.Unknown)
 			{
 				throw new Exception("You have to set backend first");
 			}
@@ -52,7 +52,7 @@ namespace uTinyRipper.Game
 
 		public void Read(Stream stream, string fileName)
 		{
-			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
+			if (ScriptingBackend == ScriptingBackend.Unknown)
 			{
 				throw new Exception("You have to set backend first");
 			}
@@ -61,7 +61,7 @@ namespace uTinyRipper.Game
 
 		public void Unload(string fileName)
 		{
-			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
+			if (ScriptingBackend == ScriptingBackend.Unknown)
 			{
 				throw new Exception("You have to set backend first");
 			}
@@ -75,7 +75,7 @@ namespace uTinyRipper.Game
 
 		public bool IsPresent(ScriptIdentifier scriptID)
 		{
-			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
+			if (ScriptingBackend == ScriptingBackend.Unknown)
 			{
 				return false;
 			}
@@ -88,7 +88,7 @@ namespace uTinyRipper.Game
 
 		public bool IsValid(ScriptIdentifier scriptID)
 		{
-			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
+			if (ScriptingBackend == ScriptingBackend.Unknown)
 			{
 				return false;
 			}
@@ -111,7 +111,7 @@ namespace uTinyRipper.Game
 
 		public ScriptExportType GetExportType(ScriptExportManager exportManager, ScriptIdentifier scriptID)
 		{
-			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
+			if (ScriptingBackend == ScriptingBackend.Unknown)
 			{
 				throw new Exception("You have to set backend first");
 			}
@@ -120,7 +120,7 @@ namespace uTinyRipper.Game
 
 		public ScriptIdentifier GetScriptID(string assembly, string name)
 		{
-			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
+			if (ScriptingBackend == ScriptingBackend.Unknown)
 			{
 				return default;
 			}
@@ -129,7 +129,7 @@ namespace uTinyRipper.Game
 
 		public ScriptIdentifier GetScriptID(string assembly, string @namespace, string name)
 		{
-			if (ScriptingBackEnd == ScriptingBackEnd.Unknown)
+			if (ScriptingBackend == ScriptingBackend.Unknown)
 			{
 				return default;
 			}
@@ -165,19 +165,19 @@ namespace uTinyRipper.Game
 			}
 		}
 
-		public ScriptingBackEnd ScriptingBackEnd
+		public ScriptingBackend ScriptingBackend
 		{
-			get => m_manager == null ? ScriptingBackEnd.Unknown : m_manager.ScriptingBackEnd;
+			get => m_manager == null ? ScriptingBackend.Unknown : m_manager.ScriptingBackend;
 			set
 			{
-				if (ScriptingBackEnd == value)
+				if (ScriptingBackend == value)
 				{
 					return;
 				}
 
 				switch (value)
 				{
-					case ScriptingBackEnd.Mono:
+					case ScriptingBackend.Mono:
 						m_manager = new MonoManager(this);
 						break;
 

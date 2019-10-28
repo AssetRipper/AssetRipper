@@ -426,19 +426,19 @@ namespace uTinyRipper
 
 		private void SetScriptingBackend(PlatformGameStructure structure)
 		{
-			ScriptingBackEnd backend = structure.GetScriptingBackend();
-			if (backend == ScriptingBackEnd.Unknown)
+			ScriptingBackend backend = structure.GetScriptingBackend();
+			if (backend == ScriptingBackend.Unknown)
 			{
 				return;
 			}
-			if (FileCollection.AssemblyManager.ScriptingBackEnd == backend)
+			if (FileCollection.AssemblyManager.ScriptingBackend == backend)
 			{
 				return;
 			}
 
-			if (FileCollection.AssemblyManager.ScriptingBackEnd == ScriptingBackEnd.Unknown)
+			if (FileCollection.AssemblyManager.ScriptingBackend == ScriptingBackend.Unknown)
 			{
-				FileCollection.AssemblyManager.ScriptingBackEnd = backend;
+				FileCollection.AssemblyManager.ScriptingBackend = backend;
 			}
 			else
 			{
