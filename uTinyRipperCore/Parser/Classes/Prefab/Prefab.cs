@@ -30,11 +30,6 @@ namespace uTinyRipper.Classes
 
 		public static Prefab CreateVirtualInstance(VirtualSerializedFile virtualFile, GameObject root)
 		{
-			if (Config.IsGenerateGUIDByContent)
-			{
-				GUID guid = ObjectUtils.CalculateAssetsGUID(FetchAssets(root));
-				return virtualFile.CreateAsset(guid, (assetInfo) => new Prefab(assetInfo, root));
-			}
 			return virtualFile.CreateAsset((assetInfo) => new Prefab(assetInfo, root));
 		}
 

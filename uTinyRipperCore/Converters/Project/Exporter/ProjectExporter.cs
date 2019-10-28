@@ -191,7 +191,6 @@ namespace uTinyRipper.Converters
 					collections.Add(collection);
 				}
 
-#warning TODO: if IsGenerateGUIDByContent set it should build collections and write actual references with persistent GUIS, but skip dependencies
 				if (options.ExportDependencies)
 				{
 					DependencyContext context = new DependencyContext(asset.File.Version, asset.File.Platform, asset.File.Flags, true);

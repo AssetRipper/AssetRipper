@@ -116,16 +116,6 @@ namespace uTinyRipper.SerializedFiles
 			return instance;
 		}
 
-		public T CreateAsset<T>(GUID guid, Func<AssetInfo, T> instantiator)
-			where T : Object
-		{
-			ClassIDType classID = typeof(T).ToClassIDType();
-			AssetInfo assetInfo = new AssetInfo(this, ++m_nextId, classID, guid);
-			T instance = instantiator(assetInfo);
-			m_assets.Add(instance.PathID, instance);
-			return instance;
-		}
-
 		public string Name => nameof(VirtualSerializedFile);
 		public Platform Platform { get; }
 		public Version Version { get; }

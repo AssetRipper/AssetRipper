@@ -46,22 +46,6 @@ namespace uTinyRipper.Classes
 			return this;
 		}
 
-		public void Read(byte[] buffer)
-		{
-			using (MemoryStream stream = new MemoryStream(buffer))
-			{
-				using (AssetReader reader = new AssetReader(stream, File.Version, File.Platform, File.Flags))
-				{
-					Read(reader);
-
-					if (reader.BaseStream.Position != buffer.Length)
-					{
-						throw new Exception($"Read less {reader.BaseStream.Position} than expected {buffer.Length}");
-					}
-				}
-			}
-		}
-
 		public virtual void Read(AssetReader reader)
 		{
 			if (HasHideFlag(reader.Version, reader.Flags))

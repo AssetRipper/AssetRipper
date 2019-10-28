@@ -51,14 +51,7 @@ namespace uTinyRipper.Project
 			}
 			if (GUID.IsZero)
 			{
-				if (Config.IsGenerateGUIDByContent)
-				{
-					GUID = ObjectUtils.CalculateAssetsGUID(Assets);
-				}
-				else
-				{
-					GUID = new GUID(Guid.NewGuid());
-				}
+				GUID = new GUID(Guid.NewGuid());
 			}
 
 			if (OcclusionCullingSettings.IsReadPVSData(File.Version))

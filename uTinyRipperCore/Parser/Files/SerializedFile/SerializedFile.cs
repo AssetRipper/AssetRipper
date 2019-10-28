@@ -391,47 +391,22 @@ namespace uTinyRipper
 			}
 
 			reader.BaseStream.Position = offset;
-			if (Config.IsGenerateGUIDByContent)
+#if !DEBUG
+			try
+#endif
 			{
-				byte[] data = reader.ReadBytes(size);
-#if !DEBUG
-				try
-#endif
-				{
-					asset.Read(data);
-				}
-#if !DEBUG
-				catch (Exception ex)
-				{
-					throw new SerializedFileException($"Error during reading asset type {asset.ClassID}", ex, Version, Name, FilePath);
-				}
-#endif
-
-				using (MD5 md5 = MD5.Create())
-				{
-					byte[] md5Hash = md5.ComputeHash(data);
-					assetInfo.GUID = new GUID(md5Hash);
-				}
+				asset.Read(reader);
 			}
-			else
+#if !DEBUG
+			catch (Exception ex)
 			{
-#if !DEBUG
-				try
+				throw new SerializedFileException($"Error during reading asset type {asset.ClassID}", ex, Version, Name, FilePath);
+			}
 #endif
-				{
-					asset.Read(reader);
-				}
-#if !DEBUG
-				catch (Exception ex)
-				{
-					throw new SerializedFileException($"Error during reading asset type {asset.ClassID}", ex, Version, Name, FilePath);
-				}
-#endif
-				long read = reader.BaseStream.Position - offset;
-				if (read != size)
-				{
-					throw new SerializedFileException($"Read {read} but expected {size} for asset type {asset.ClassID}", Version, Name, FilePath);
-				}
+			long read = reader.BaseStream.Position - offset;
+			if (read != size)
+			{
+				throw new SerializedFileException($"Read {read} but expected {size} for asset type {asset.ClassID}", Version, Name, FilePath);
 			}
 			return asset;
 		}

@@ -29,7 +29,6 @@ namespace uTinyRipperConsole
 		public static void Main(string[] args)
 		{
 			Logger.Instance = ConsoleLogger.Instance;
-			Config.IsGenerateGUIDByContent = false;
 
 			if (args.Length == 0)
 			{
