@@ -23,6 +23,35 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(3, 5) && flags.IsRelease();
 		}
 
+		public static string ResourceToExportPath(Object asset, string resourceName)
+		{
+			string validName = asset.TryGetName();
+			if (validName.Length > 0 && validName != resourceName && resourceName.EndsWith(validName, StringComparison.OrdinalIgnoreCase))
+			{
+				string directoryPath = resourceName.Substring(0, resourceName.Length - validName.Length);
+				return Path.Combine(AssetsKeyword, ResourceKeyword, directoryPath, validName);
+			}
+			else
+			{
+				return Path.Combine(AssetsKeyword, ResourceKeyword, resourceName);
+			}
+		}
+
+		public bool TryGetResourcePathFromAsset(Object asset, out string resourcePath)
+		{
+			foreach (KeyValuePair<string, PPtr<Object>> containerEntry in m_container)
+			{
+				if (containerEntry.Value.IsAsset(File, asset))
+				{
+					resourcePath = ResourceToExportPath(asset, containerEntry.Key);
+					return true;
+				}
+			}
+
+			resourcePath = string.Empty;
+			return false;
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -63,32 +92,6 @@ namespace uTinyRipper.Classes
 				node.Add(DependentAssetsName, DependentAssets.ExportYAML(container));
 			}
 			return node;
-		}
-
-#warning TODO: create <asset, path> lookup in ExportContainer
-		public bool TryGetResourcePathFromAsset(Object asset, out string resourcePath)
-		{
-			foreach (KeyValuePair<string, PPtr<Object>> containerEntry in m_container)
-			{
-				if (containerEntry.Value.IsAsset(File, asset))
-				{
-					string validName = asset.TryGetName();
-					string resourceName = containerEntry.Key;
-					if (validName.Length > 0 && validName != resourceName && resourceName.EndsWith(validName, StringComparison.OrdinalIgnoreCase))
-					{
-						string directoryPath = resourceName.Substring(0, resourceName.Length - validName.Length);
-						resourcePath = Path.Combine(AssetsKeyword, ResourceKeyword, directoryPath, validName);
-					}
-					else
-					{
-						resourcePath = Path.Combine(AssetsKeyword, ResourceKeyword, resourceName);
-					}
-					return true;
-				}
-			}
-
-			resourcePath = string.Empty;
-			return false;
 		}
 		
 		public IReadOnlyList<KeyValuePair<string, PPtr<Object>>> Container => m_container;

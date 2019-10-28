@@ -47,7 +47,7 @@ namespace uTinyRipper.Converters
 						break;
 
 					case ClassIDType.ResourceManager:
-						m_resourceManager = (ResourceManager)asset;
+						AddResources((ResourceManager)asset);
 						break;
 				}
 			}
@@ -73,17 +73,16 @@ namespace uTinyRipper.Converters
 		{
 			selectedAsset = null;
 			resourcePath = string.Empty;
-			if (m_resourceManager == null)
+			if (m_resources.Count > 0)
 			{
-				return false;
-			}
-
-			foreach (Object asset in assets)
-			{
-				if (m_resourceManager.TryGetResourcePathFromAsset(asset, out resourcePath))
+				foreach (Object asset in assets)
 				{
-					selectedAsset = asset;
-					return true;
+					if (m_resources.TryGetValue(asset, out string path))
+					{
+						selectedAsset = asset;
+						resourcePath = ResourceManager.ResourceToExportPath(asset, path);
+						return true;
+					}
 				}
 			}
 
@@ -245,6 +244,19 @@ namespace uTinyRipper.Converters
 			return m_tagManager.Tags[tagIndex];
 		}
 
+		private void AddResources(ResourceManager manager)
+		{
+			foreach (KeyValuePair<string, PPtr<Object>> kvp in manager.Container)
+			{
+				Object asset = kvp.Value.FindAsset(manager.File);
+				if (asset == null)
+				{
+					continue;
+				}
+				m_resources.Add(asset, kvp.Key);
+			}
+		}
+
 		public IExportCollection CurrentCollection { get; set; }
 		public VirtualSerializedFile VirtualFile { get; }
 		public ISerializedFile File => CurrentCollection.File;
@@ -259,10 +271,10 @@ namespace uTinyRipper.Converters
 
 		private readonly ProjectExporter m_exporter;
 		private readonly Dictionary<AssetInfo, IExportCollection> m_assetCollections = new Dictionary<AssetInfo, IExportCollection>();
+		private readonly Dictionary<Object, string> m_resources = new Dictionary<Object, string>();
 
 		private readonly BuildSettings m_buildSettings;
 		private readonly TagManager m_tagManager;
-		private readonly ResourceManager m_resourceManager;
 		private readonly SceneExportCollection[] m_scenes;
 		private readonly TransferInstructionFlags m_exportFlags;
 	}
