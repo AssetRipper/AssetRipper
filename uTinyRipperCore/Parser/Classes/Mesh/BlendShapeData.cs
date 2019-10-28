@@ -3,6 +3,7 @@ using System.Linq;
 using uTinyRipper.Project;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes.Meshes
 {
@@ -58,15 +59,15 @@ namespace uTinyRipper.Classes.Meshes
 
 		public void Write(AssetWriter writer)
 		{
-			writer.WriteAssetArray(Vertices);
-			writer.WriteAssetArray(Shapes);
-			writer.WriteAssetArray(Channels);
+			Vertices.Write(writer);
+			Shapes.Write(writer);
+			Channels.Write(writer);
 			if (IsAlign(writer.Version))
 			{
 				writer.AlignStream(AlignType.Align4);
 			}
 
-			writer.WriteArray(FullWeights);
+			FullWeights.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

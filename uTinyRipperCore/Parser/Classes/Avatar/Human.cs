@@ -3,6 +3,7 @@ using uTinyRipper.Project;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes.Avatars
 {

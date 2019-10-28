@@ -3,6 +3,7 @@ using uTinyRipper.Project;
 using uTinyRipper.Classes.TagManagers;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes
 {

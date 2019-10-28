@@ -4,6 +4,7 @@ using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes
 {
@@ -464,7 +465,7 @@ namespace uTinyRipper.Classes
 
 			if (HasLODData(writer.Version))
 			{
-				writer.WriteAssetArray(LODData);
+				LODData.Write(writer);
 			}
 			else
 			{
@@ -474,10 +475,10 @@ namespace uTinyRipper.Classes
 				}
 				if (IsIndexBufferFirst(writer.Version))
 				{
-					writer.WriteArray(IndexBuffer);
+					IndexBuffer.Write(writer);
 					writer.AlignStream(AlignType.Align4);
 				}
-				writer.WriteAssetArray(SubMeshes);
+				SubMeshes.Write(writer);
 			}
 
 			if (HasBlendShapes(writer.Version))
@@ -488,26 +489,26 @@ namespace uTinyRipper.Classes
 				}
 				else
 				{
-					writer.WriteAssetArray(BlendShapes);
+					BlendShapes.Write(writer);
 					writer.AlignStream(AlignType.Align4);
-					writer.WriteAssetArray(ShapeVertices);
+					ShapeVertices.Write(writer);
 				}
 			}
 			if (HasBindPose(writer.Version))
 			{
 				if (IsBindPoseFirst(writer.Version))
 				{
-					writer.WriteAssetArray(BindPose);
+					BindPose.Write(writer);
 				}
 			}
 			if (HasBoneNameHashes(writer.Version))
 			{
-				writer.WriteArray(BoneNameHashes);
+				BoneNameHashes.Write(writer);
 				writer.Write(RootBoneNameHash);
 			}
 			if (HasBonesAABB(writer.Version))
 			{
-				writer.WriteAssetArray(BonesAABB);
+				BonesAABB.Write(writer);
 				VariableBoneCountWeights.Write(writer);
 			}
 
@@ -549,7 +550,7 @@ namespace uTinyRipper.Classes
 			{
 				if (!IsIndexBufferFirst(writer.Version))
 				{
-					writer.WriteArray(IndexBuffer);
+					IndexBuffer.Write(writer);
 					writer.AlignStream(AlignType.Align4);
 				}
 			}
@@ -560,24 +561,24 @@ namespace uTinyRipper.Classes
 				{
 					if (MeshCompression != MeshCompression.Off)
 					{
-						writer.WriteAssetArray(Vertices);
+						Vertices.Write(writer);
 					}
 				}
 			}
 			else
 			{
-				writer.WriteAssetArray(Vertices);
+				Vertices.Write(writer);
 			}
 
 			if (HasSkin(writer.Version))
 			{
-				writer.WriteAssetArray(Skin);
+				Skin.Write(writer);
 			}
 			if (HasBindPose(writer.Version))
 			{
 				if (!IsBindPoseFirst(writer.Version))
 				{
-					writer.WriteAssetArray(BindPose);
+					BindPose.Write(writer);
 				}
 			}
 
@@ -595,29 +596,29 @@ namespace uTinyRipper.Classes
 					}
 					else
 					{
-						writer.WriteAssetArray(UV);
-						writer.WriteAssetArray(UV1);
-						writer.WriteAssetArray(Tangents);
-						writer.WriteAssetArray(Normals);
-						writer.WriteAssetArray(Colors);
+						UV.Write(writer);
+						UV1.Write(writer);
+						Tangents.Write(writer);
+						Normals.Write(writer);
+						Colors.Write(writer);
 					}
 				}
 			}
 			else
 			{
-				writer.WriteAssetArray(UV);
+				UV.Write(writer);
 				if (HasUV1(writer.Version))
 				{
-					writer.WriteAssetArray(UV1);
+					UV1.Write(writer);
 				}
 				if (HasTangentSpace(writer.Version))
 				{
-					writer.WriteAssetArray(TangentSpace);
+					TangentSpace.Write(writer);
 				}
 				else
 				{
-					writer.WriteAssetArray(Tangents);
-					writer.WriteAssetArray(Normals);
+					Tangents.Write(writer);
+					Normals.Write(writer);
 				}
 			}
 			if (IsAlignVertex(writer.Version))
@@ -633,11 +634,11 @@ namespace uTinyRipper.Classes
 			LocalAABB.Write(writer);
 			if (!HasVertexData(writer.Version))
 			{
-				writer.WriteAssetArray(Colors);
+				Colors.Write(writer);
 			}
 			if (HasCollisionTriangles(writer.Version))
 			{
-				writer.WriteArray(CollisionTriangles);
+				CollisionTriangles.Write(writer);
 				writer.Write(CollisionVertexCount);
 			}
 			if (HasMeshUsageFlags(writer.Version))

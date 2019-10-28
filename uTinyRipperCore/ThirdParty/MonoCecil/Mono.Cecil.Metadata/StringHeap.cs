@@ -8,11 +8,11 @@
 // Licensed under the MIT/X11 license.
 //
 
-using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mono.Cecil.Metadata {
+namespace Mono.Cecil.Metadata
+{
 
 	class StringHeap : Heap {
 

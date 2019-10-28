@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.Project
+namespace uTinyRipper
 {
-	public static class IEnumerableExtensions
+	public static class IEnumerableYAMLExtensions
 	{
 		public static YAMLNode ExportYAML<T>(this IEnumerable<T> _this, IExportContainer container)
-			where T: IYAMLExportable
+			where T : IYAMLExportable
 		{
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
 			foreach (T export in _this)
@@ -18,7 +18,7 @@ namespace uTinyRipper.Project
 		}
 
 		public static YAMLNode ExportYAML<T>(this IEnumerable<IEnumerable<T>> _this, IExportContainer container)
-			where T: IYAMLExportable
+			where T : IYAMLExportable
 		{
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
 			foreach (IEnumerable<T> export in _this)
@@ -31,7 +31,7 @@ namespace uTinyRipper.Project
 		public static YAMLNode ExportYAML<T>(this IEnumerable<IReadOnlyList<T>> _this, IExportContainer container)
 			where T : IYAMLExportable
 		{
-			return ExportYAML((IEnumerable<IEnumerable<T>>)_this, container);
+			return ((IEnumerable<IEnumerable<T>>)_this).ExportYAML(container);
 		}
 
 		public static YAMLNode ExportYAML<T>(this IEnumerable<KeyValuePair<string, T>> _this, IExportContainer container)

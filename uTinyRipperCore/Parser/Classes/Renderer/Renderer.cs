@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.MeshRenderers;
 using uTinyRipper.Classes.Renderers;
 using uTinyRipper.Converters;

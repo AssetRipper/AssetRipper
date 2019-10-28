@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using uTinyRipper.Converters;
-using uTinyRipper.Project;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimationClips

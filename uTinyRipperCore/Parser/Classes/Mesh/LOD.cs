@@ -2,6 +2,7 @@ using System.Linq;
 using uTinyRipper.Project;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes.Meshes
 {
@@ -43,13 +44,13 @@ namespace uTinyRipper.Classes.Meshes
 
 		public void Write(AssetWriter writer)
 		{
-			writer.WriteAssetArray(MeshData);
+			MeshData.Write(writer);
 			if (HasVertexCount(writer.Version))
 			{
 				writer.Write(VertexCount);
 				writer.Write(NewVertexStart);
 				writer.Write(MeshError);
-				writer.WriteArray(MorphToVertex);
+				MorphToVertex.Write(writer);
 			}
 		}
 

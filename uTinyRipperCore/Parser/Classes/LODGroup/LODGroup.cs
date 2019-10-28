@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.LODGroups;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;

@@ -3,192 +3,116 @@ using System.Collections.Generic;
 
 namespace uTinyRipper
 {
-	public static class IDictionaryAssetExtensions
+	public static class IDictionaryReadAssetExtensions
 	{
 		public static void Read(this IDictionary<int, int> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				int key = reader.ReadInt32();
-				int value = reader.ReadInt32();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void Read(this IDictionary<int, uint> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				int key = reader.ReadInt32();
-				uint value = reader.ReadUInt32();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void Read(this IDictionary<uint, string> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				uint key = reader.ReadUInt32();
-				string value = reader.ReadString();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void Read(this IDictionary<string, byte> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				string key = reader.ReadString();
-				byte value = reader.ReadByte();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void Read(this IDictionary<string, short> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				string key = reader.ReadString();
-				short value = reader.ReadInt16();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void Read(this IDictionary<string, ushort> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				string key = reader.ReadString();
-				ushort value = reader.ReadUInt16();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void Read(this IDictionary<string, int> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				string key = reader.ReadString();
-				int value = reader.ReadInt32();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void Read(this IDictionary<string, uint> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				string key = reader.ReadString();
-				uint value = reader.ReadUInt32();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void Read(this IDictionary<string, long> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				string key = reader.ReadString();
-				long value = reader.ReadInt64();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void Read(this IDictionary<string, ulong> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				string key = reader.ReadString();
-				ulong value = reader.ReadUInt64();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void Read(this IDictionary<string, float> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				string key = reader.ReadString();
-				float value = reader.ReadSingle();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void Read(this IDictionary<string, string> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				string key = reader.ReadString();
-				string value = reader.ReadString();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void Read(this IDictionary<Tuple<char, char>, float> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				Tuple<char, char> key = reader.ReadTupleCharChar();
-				float value = reader.ReadSingle();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 		
 		public static void Read(this IDictionary<Tuple<byte, byte>, float> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				Tuple<byte, byte> key = reader.ReadTupleByteByte();
-				float value = reader.ReadSingle();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void ReadSafe(this IDictionary<Tuple<byte, byte>, float> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				Tuple<byte, byte> key = reader.ReadTupleByteByte();
-				float value = reader.ReadSingle();
-				_this[key] = value;
-			}
+			IDictionaryReadEndianExtensions.ReadSafe(_this, reader);
 		}
 
 		public static void Read(this IDictionary<Tuple<ushort, ushort>, float> _this, AssetReader reader)
 		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				Tuple<ushort, ushort> key = reader.ReadTupleUInt16UInt16();
-				float value = reader.ReadSingle();
-				_this.Add(key, value);
-			}
+			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
 		public static void ReadSafe(this IDictionary<Tuple<ushort, ushort>, float> _this, AssetReader reader)
 		{
+			IDictionaryReadEndianExtensions.ReadSafe(_this, reader);
+		}
+
+		public static void Read<T>(this IDictionary<int, T> _this, AssetReader reader)
+			where T : IAssetReadable, new()
+		{
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
-				Tuple<ushort, ushort> key = reader.ReadTupleUInt16UInt16();
-				float value = reader.ReadSingle();
-				_this[key] = value;
+				int key = reader.ReadInt32();
+				T value = new T();
+				value.Read(reader);
+				_this.Add(key, value);
+			}
+		}
+
+		public static void Read<T>(this IDictionary<int, T> _this, AssetReader reader, Func<T> instantiator)
+			where T : IAssetReadable
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				int key = reader.ReadInt32();
+				T value = instantiator();
+				value.Read(reader);
+				_this.Add(key, value);
 			}
 		}
 
@@ -212,32 +136,6 @@ namespace uTinyRipper
 			for (int i = 0; i < count; i++)
 			{
 				string key = reader.ReadString();
-				T value = instantiator();
-				value.Read(reader);
-				_this.Add(key, value);
-			}
-		}
-
-		public static void Read<T>(this IDictionary<int, T> _this, AssetReader reader)
-			where T : IAssetReadable, new()
-		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				int key = reader.ReadInt32();
-				T value = new T();
-				value.Read(reader);
-				_this.Add(key, value);
-			}
-		}
-
-		public static void Read<T>(this IDictionary<int, T> _this, AssetReader reader, Func<T> instantiator)
-			where T : IAssetReadable
-		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				int key = reader.ReadInt32();
 				T value = instantiator();
 				value.Read(reader);
 				_this.Add(key, value);
@@ -343,7 +241,7 @@ namespace uTinyRipper
 			}
 		}
 
-		public static void Read<T1, T2>(this Dictionary<Tuple<T1, long>, T2> _this, AssetReader reader)
+		public static void Read<T1, T2>(this IDictionary<Tuple<T1, long>, T2> _this, AssetReader reader)
 			where T1 : IAssetReadable, new()
 			where T2 : IAssetReadable, new()
 		{

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.Fonts;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes
 {
@@ -228,7 +228,7 @@ namespace uTinyRipper.Classes
 				}
 				else
 				{
-					m_perCharacterKerning = reader.ReadTupleIntFloatArray();
+					m_perCharacterKerning = reader.ReadTupleIntSingleArray();
 				}
 			}
 

@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.Objects;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
-using uTinyRipper.Classes;
 using uTinyRipper.Classes.AnimatorControllers;
 using uTinyRipper.Classes.AnimatorTransitions;
 using uTinyRipper.Classes.Misc;

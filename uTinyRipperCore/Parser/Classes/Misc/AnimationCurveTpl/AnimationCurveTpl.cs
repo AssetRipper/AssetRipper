@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.YAML;
 using System;
 using uTinyRipper.Converters.Misc;
 using uTinyRipper.Converters;
 using uTinyRipper.Game.Assembly;
-using uTinyRipper.Classes;
 
 namespace uTinyRipper.Classes.Misc
 {
@@ -121,7 +119,7 @@ namespace uTinyRipper.Classes.Misc
 
 		public void Write(AssetWriter writer)
 		{
-			writer.WriteAssetArray(Curve);
+			Curve.Write(writer);
 			writer.AlignStream(AlignType.Align4);
 
 			writer.Write((int)PreInfinity);

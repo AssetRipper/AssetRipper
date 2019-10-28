@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.EditorBuildSettingss;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;

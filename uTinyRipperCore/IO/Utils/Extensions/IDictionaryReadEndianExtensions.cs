@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace uTinyRipper
 {
-	public static class IDictionaryEndianExtensions
+	public static class IDictionaryReadEndianExtensions
 	{
 		public static void Read(this IDictionary<int, int> _this, EndianReader reader)
 		{
@@ -12,6 +12,17 @@ namespace uTinyRipper
 			{
 				int key = reader.ReadInt32();
 				int value = reader.ReadInt32();
+				_this.Add(key, value);
+			}
+		}
+
+		public static void Read(this IDictionary<int, uint> _this, EndianReader reader)
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				int key = reader.ReadInt32();
+				uint value = reader.ReadUInt32();
 				_this.Add(key, value);
 			}
 		}
@@ -134,6 +145,50 @@ namespace uTinyRipper
 				Tuple<char, char> key = reader.ReadTupleCharChar();
 				float value = reader.ReadSingle();
 				_this.Add(key, value);
+			}
+		}
+
+		public static void Read(this IDictionary<Tuple<byte, byte>, float> _this, EndianReader reader)
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				Tuple<byte, byte> key = reader.ReadTupleByteByte();
+				float value = reader.ReadSingle();
+				_this.Add(key, value);
+			}
+		}
+
+		public static void ReadSafe(this IDictionary<Tuple<byte, byte>, float> _this, EndianReader reader)
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				Tuple<byte, byte> key = reader.ReadTupleByteByte();
+				float value = reader.ReadSingle();
+				_this[key] = value;
+			}
+		}
+
+		public static void Read(this IDictionary<Tuple<ushort, ushort>, float> _this, EndianReader reader)
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				Tuple<ushort, ushort> key = reader.ReadTupleUInt16UInt16();
+				float value = reader.ReadSingle();
+				_this.Add(key, value);
+			}
+		}
+
+		public static void ReadSafe(this IDictionary<Tuple<ushort, ushort>, float> _this, EndianReader reader)
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				Tuple<ushort, ushort> key = reader.ReadTupleUInt16UInt16();
+				float value = reader.ReadSingle();
+				_this[key] = value;
 			}
 		}
 	}

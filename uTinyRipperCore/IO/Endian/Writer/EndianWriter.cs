@@ -358,13 +358,13 @@ namespace uTinyRipper
 		}
 
 		public void WriteEndian<T>(T value)
-			where T : IEndianWritable, new()
+			where T : IEndianWritable
 		{
 			value.Write(this);
 		}
 
 		public void WriteEndianArray<T>(T[] buffer)
-			where T : IEndianWritable, new()
+			where T : IEndianWritable
 		{
 			FillInnerBuffer(buffer.Length);
 			Write(m_buffer, 0, sizeof(int));
@@ -377,7 +377,7 @@ namespace uTinyRipper
 		}
 
 		public void WriteEndianArray<T>(T[][] buffer)
-			where T : IEndianWritable, new()
+			where T : IEndianWritable
 		{
 			FillInnerBuffer(buffer.Length);
 			Write(m_buffer, 0, sizeof(int));

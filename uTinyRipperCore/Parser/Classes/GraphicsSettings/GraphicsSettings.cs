@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.Cameras;
 using uTinyRipper.Classes.GraphicsSettingss;
 using uTinyRipper.YAML;

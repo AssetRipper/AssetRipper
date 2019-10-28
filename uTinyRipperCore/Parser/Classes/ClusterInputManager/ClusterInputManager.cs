@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.ClusterInputManagers;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;

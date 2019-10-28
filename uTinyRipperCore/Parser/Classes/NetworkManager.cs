@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.Converters;

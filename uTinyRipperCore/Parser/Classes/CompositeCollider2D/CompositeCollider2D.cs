@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using uTinyRipper.Classes.CompositeCollider2Ds;
 using uTinyRipper.Classes.Misc;
 using uTinyRipper.Converters;
-using uTinyRipper.Project;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes

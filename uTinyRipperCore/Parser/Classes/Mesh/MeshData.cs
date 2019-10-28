@@ -2,6 +2,7 @@ using System.Linq;
 using uTinyRipper.Project;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes.Meshes
 {
@@ -23,8 +24,8 @@ namespace uTinyRipper.Classes.Meshes
 
 		public void Write(AssetWriter writer)
 		{
-			writer.WriteAssetArray(Faces);
-			writer.WriteArray(Strips);
+			Faces.Write(writer);
+			Strips.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

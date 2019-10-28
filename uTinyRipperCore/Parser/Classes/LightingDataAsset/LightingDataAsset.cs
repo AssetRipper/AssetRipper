@@ -7,6 +7,7 @@ using uTinyRipper.Classes.OcclusionCullingDatas;
 using uTinyRipper.Classes.RenderSettingss;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes
 {

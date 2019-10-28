@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Converters;
 using uTinyRipper.Converters.TerrainDatas;
 using uTinyRipper.YAML;
@@ -69,11 +68,11 @@ namespace uTinyRipper.Classes.TerrainDatas
 
 		public void Write(AssetWriter writer)
 		{
-			writer.WriteAssetArray(Patches);
-			writer.WriteAssetArray(DetailPrototypes);
+			Patches.Write(writer);
+			DetailPrototypes.Write(writer);
 			writer.Write(PatchCount);
 			writer.Write(PatchSamples);
-			writer.WriteAssetArray(RandomRotations);
+			RandomRotations.Write(writer);
 			if (HasAtlasTexture(writer.Version))
 			{
 				AtlasTexture.Write(writer);
@@ -93,7 +92,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 			TreeDatabase.Write(writer);
 			if (!HasAtlasTexture(writer.Version))
 			{
-				writer.WriteAssetArray(PreloadTextureAtlasData);
+				PreloadTextureAtlasData.Write(writer);
 			}
 		}
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -80,13 +81,13 @@ namespace uTinyRipper
 		}
 
 		public void WriteAsset<T>(T value)
-			where T : IAssetWritable, new()
+			where T : IAssetWritable
 		{
 			value.Write(this);
 		}
 
 		public void WriteAssetArray<T>(T[] buffer)
-			where T : IAssetWritable, new()
+			where T : IAssetWritable
 		{
 			FillInnerBuffer(buffer.Length);
 			Write(m_buffer, 0, sizeof(int));
@@ -99,7 +100,7 @@ namespace uTinyRipper
 		}
 
 		public void WriteAssetArray<T>(T[][] buffer)
-			where T : IAssetWritable, new()
+			where T : IAssetWritable
 		{
 			FillInnerBuffer(buffer.Length);
 			Write(m_buffer, 0, sizeof(int));

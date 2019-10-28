@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
@@ -15,8 +14,8 @@ namespace uTinyRipper.Classes.TerrainDatas
 
 		public void Write(AssetWriter writer)
 		{
-			writer.WriteAssetArray(TreeInstances);
-			writer.WriteAssetArray(TreePrototypes);
+			TreeInstances.Write(writer);
+			TreePrototypes.Write(writer);
 		}
 
 		public void ExportYAML(IExportContainer container, YAMLMappingNode node)

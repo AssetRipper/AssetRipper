@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters.TerrainDatas;
 using uTinyRipper.Converters;
@@ -59,14 +58,14 @@ namespace uTinyRipper.Classes.TerrainDatas
 		{
 			if (HasTerrainLayers(writer.Version))
 			{
-				writer.WriteAssetArray(TerrainLayers);
+				TerrainLayers.Write(writer);
 			}
 			else
 			{
-				writer.WriteAssetArray(Splats);
+				Splats.Write(writer);
 			}
 
-			writer.WriteAssetArray(AlphaTextures);
+			AlphaTextures.Write(writer);
 			writer.Write(AlphamapResolution);
 			writer.Write(BaseMapResolution);
 			if (HasColorSpace(writer.Version))

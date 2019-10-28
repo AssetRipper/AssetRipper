@@ -5,6 +5,7 @@ using uTinyRipper.Classes.NavMeshProjectSettingss;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.Converters;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes
 {

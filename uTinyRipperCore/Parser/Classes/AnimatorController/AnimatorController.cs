@@ -3,7 +3,6 @@ using uTinyRipper.Project;
 using uTinyRipper.Classes.AnimatorControllers;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Classes;
 
 namespace uTinyRipper.Classes
 {

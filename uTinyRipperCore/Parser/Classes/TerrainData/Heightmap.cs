@@ -3,6 +3,7 @@ using uTinyRipper.Project;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters.TerrainDatas;
 using uTinyRipper.Converters;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes.TerrainDatas
 {
@@ -77,19 +78,19 @@ namespace uTinyRipper.Classes.TerrainDatas
 
 		public void Write(AssetWriter writer)
 		{
-			writer.WriteArray(Heights);
+			Heights.Write(writer);
 			if (HasAlign(writer.Version))
 			{
 				writer.AlignStream(AlignType.Align4);
 			}
 			if (HasShifts(writer.Version))
 			{
-				writer.WriteAssetArray(Shifts);
+				Shifts.Write(writer);
 				writer.AlignStream(AlignType.Align4);
 			}
 
-			writer.WriteArray(PrecomputedError);
-			writer.WriteArray(MinMaxPatchHeights);
+			PrecomputedError.Write(writer);
+			MinMaxPatchHeights.Write(writer);
 			if (HasDefaultPhysicMaterial(writer.Version))
 			{
 				DefaultPhysicMaterial.Write(writer);

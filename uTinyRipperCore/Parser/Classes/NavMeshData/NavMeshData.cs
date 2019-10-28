@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.NavMeshDatas;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;

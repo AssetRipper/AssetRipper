@@ -18,9 +18,9 @@ namespace uTinyRipper.Classes.TerrainDatas
 		public void Write(AssetWriter writer)
 		{
 			Bounds.Write(writer);
-			writer.WriteArray(LayerIndices);
+			LayerIndices.Write(writer);
 			writer.AlignStream(AlignType.Align4);
-			writer.WriteArray(NumberOfObjects);
+			NumberOfObjects.Write(writer);
 			writer.AlignStream(AlignType.Align4);
 		}
 

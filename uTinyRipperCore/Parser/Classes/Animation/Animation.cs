@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.AnimationClips;
 using uTinyRipper.Classes.Animations;
 using uTinyRipper.YAML;

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.AnimatorOverrideControllers;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;

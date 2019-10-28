@@ -5,6 +5,7 @@ using uTinyRipper.Classes.SpriteAtlases;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes
 {

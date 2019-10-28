@@ -5,6 +5,7 @@ using uTinyRipper.Project;
 using uTinyRipper.Converters;
 using uTinyRipper.Converters.Meshes;
 using uTinyRipper.YAML;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes.Meshes
 {
@@ -182,7 +183,7 @@ namespace uTinyRipper.Classes.Meshes
 
 			if (HasChannels(writer.Version))
 			{
-				writer.WriteAssetArray(Channels);
+				Channels.Write(writer);
 				writer.AlignStream(AlignType.Align4);
 			}
 			if (HasStreams(writer.Version))
@@ -196,11 +197,11 @@ namespace uTinyRipper.Classes.Meshes
 				}
 				else
 				{
-					writer.WriteAssetArray(Channels);
+					Channels.Write(writer);
 				}
 			}
 
-			writer.WriteArray(Data);
+			Data.Write(writer);
 			writer.AlignStream(AlignType.Align4);
 		}
 

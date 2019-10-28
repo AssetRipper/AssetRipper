@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.ResourceManagers;
 using uTinyRipper.YAML;
 using System;
@@ -28,7 +27,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_container = reader.ReadStringTKVPArray<PPtr<Object>>();
+			m_container = reader.ReadKVPStringTArray<PPtr<Object>>();
 			if (IsReadDependentAssets(reader.Version, reader.Flags))
 			{
 				m_dependentAssets = reader.ReadAssetArray<ResourceManagerDependency>();

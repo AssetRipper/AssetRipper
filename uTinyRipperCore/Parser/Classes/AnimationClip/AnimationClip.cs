@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using uTinyRipper.Classes.AnimationClips;
 using uTinyRipper.Converters;
-using uTinyRipper.Project;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes

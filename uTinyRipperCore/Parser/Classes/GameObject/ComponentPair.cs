@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.Converters;
-using uTinyRipper.SerializedFiles;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.GameObjects

@@ -6,7 +6,6 @@ using uTinyRipper.Converters.Script;
 using uTinyRipper.YAML;
 using uTinyRipper.Game.Assembly;
 using uTinyRipper.Classes.Misc;
-using System.Linq;
 
 namespace uTinyRipper.Classes
 {

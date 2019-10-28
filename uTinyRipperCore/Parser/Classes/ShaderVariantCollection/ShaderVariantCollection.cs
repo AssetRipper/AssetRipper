@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.ShaderVariantCollections;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
@@ -18,7 +17,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_shaders = reader.ReadTTKVPArray<PPtr<Shader>, ShaderInfo>();
+			m_shaders = reader.ReadKVPTTArray<PPtr<Shader>, ShaderInfo>();
 		}
 
 		public override IEnumerable<Object> FetchDependencies(IDependencyContext context)

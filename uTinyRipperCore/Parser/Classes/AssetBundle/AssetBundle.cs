@@ -107,7 +107,7 @@ namespace uTinyRipper.Classes
 				m_preloadTable = reader.ReadAssetArray<PPtr<Object>>();
 			}
 
-			m_container = reader.ReadStringTKVPArray<AssetBundles.AssetInfo>();
+			m_container = reader.ReadKVPStringTArray<AssetBundles.AssetInfo>();
 			MainAsset.Read(reader);
 
 			if(IsReadScriptCampatibility(reader.Version))
@@ -116,7 +116,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsReadClassCampatibility(reader.Version))
 			{
-				m_classCampatibility = reader.ReadInt32KVPUInt32Array();
+				m_classCampatibility = reader.ReadKVPInt32UInt32Array();
 			}
 
 			if (IsReadClassVersionMap(reader.Version))

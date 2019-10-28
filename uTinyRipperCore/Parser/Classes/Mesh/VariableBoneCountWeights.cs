@@ -27,7 +27,7 @@ namespace uTinyRipper.Classes.Meshes
 
 		public void Write(AssetWriter writer)
 		{
-			writer.WriteArray(Data);
+			Data.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

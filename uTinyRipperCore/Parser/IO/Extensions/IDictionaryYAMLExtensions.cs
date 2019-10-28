@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.Project
+namespace uTinyRipper
 {
 	public static class IDictionaryYAMLExtensions
 	{
@@ -33,6 +33,22 @@ namespace uTinyRipper.Project
 			return node;
 		}
 
+		public static YAMLNode ExportYAML(this IReadOnlyDictionary<Tuple<ushort, ushort>, float> _this)
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
+			foreach (var kvp in _this)
+			{
+				YAMLMappingNode kvpMap = new YAMLMappingNode();
+				YAMLMappingNode keyMap = new YAMLMappingNode();
+				keyMap.Add("first", kvp.Key.Item1);
+				keyMap.Add("second", kvp.Key.Item2);
+				kvpMap.Add("first", keyMap);
+				kvpMap.Add("second", kvp.Value);
+				node.Add(kvpMap);
+			}
+			return node;
+		}
+
 		public static YAMLNode ExportYAML<T1, T2>(this IReadOnlyDictionary<Tuple<T1, long>, T2> _this, IExportContainer container)
 			where T1 : IYAMLExportable
 			where T2 : IYAMLExportable
@@ -47,22 +63,6 @@ namespace uTinyRipper.Project
 				keyMap.Add("second", kvp.Key.Item2);
 				kvpMap.Add("first", keyMap);
 				kvpMap.Add("second", kvp.Value.ExportYAML(container));
-				node.Add(kvpMap);
-			}
-			return node;
-		}
-
-		public static YAMLNode ExportYAML(this IReadOnlyDictionary<Tuple<ushort, ushort>, float> _this)
-		{
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
-			foreach (var kvp in _this)
-			{
-				YAMLMappingNode kvpMap = new YAMLMappingNode();
-				YAMLMappingNode keyMap = new YAMLMappingNode();
-				keyMap.Add("first", kvp.Key.Item1);
-				keyMap.Add("second", kvp.Key.Item2);
-				kvpMap.Add("first", keyMap);
-				kvpMap.Add("second", kvp.Value);
 				node.Add(kvpMap);
 			}
 			return node;

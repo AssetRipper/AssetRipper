@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.LightProbess;
 using uTinyRipper.Classes.RenderSettingss;
 using uTinyRipper.Converters;
