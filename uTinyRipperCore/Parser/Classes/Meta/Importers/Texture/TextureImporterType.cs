@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Project.Classes
+﻿namespace uTinyRipper.Classes.TextureImporters
 {
 	/// <summary>
 	/// Select this to set basic parameters depending on the purpose of your texture.

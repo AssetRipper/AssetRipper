@@ -1,5 +1,4 @@
 using uTinyRipper.Project;
-using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes;
 
 namespace uTinyRipper.Converters
@@ -9,7 +8,7 @@ namespace uTinyRipper.Converters
 	{
 		long GetExportID(Object asset);
 		AssetType ToExportType(ClassIDType classID);
-		ExportPointer CreateExportPointer(Object asset);
+		MetaPtr CreateExportPointer(Object asset);
 
 		string SceneIndexToName(int sceneID);
 		bool IsSceneDuplicate(int sceneID);

@@ -3,11 +3,11 @@ using System.Text;
 
 namespace uTinyRipper.YAML
 {
-	public static class IReadOnlyListExtensions
+	public static class IEnumerableYAMLExtensions
 	{
-		public static YAMLNode ExportYAML(this IReadOnlyList<bool> _this)
+		public static YAMLNode ExportYAML(this IEnumerable<bool> _this)
 		{
-			StringBuilder sb = new StringBuilder(_this.Count * 2);
+			StringBuilder sb = new StringBuilder();
 			foreach (bool value in _this)
 			{
 				byte bvalue = unchecked((byte)(value ? 1 : 0));
@@ -16,9 +16,9 @@ namespace uTinyRipper.YAML
 			return new YAMLScalarNode(sb.ToString(), true);
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<char> _this)
+		public static YAMLNode ExportYAML(this IEnumerable<char> _this)
 		{
-			StringBuilder sb = new StringBuilder(_this.Count * 4);
+			StringBuilder sb = new StringBuilder();
 			foreach (char value in _this)
 			{
 				sb.AppendHex((ushort)value);
@@ -26,9 +26,9 @@ namespace uTinyRipper.YAML
 			return new YAMLScalarNode(sb.ToString(), true);
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<byte> _this)
+		public static YAMLNode ExportYAML(this IEnumerable<byte> _this)
 		{
-			StringBuilder sb = new StringBuilder(_this.Count * 2);
+			StringBuilder sb = new StringBuilder();
 			foreach (byte value in _this)
 			{
 				sb.AppendHex(value);
@@ -36,11 +36,11 @@ namespace uTinyRipper.YAML
 			return new YAMLScalarNode(sb.ToString(), true);
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<ushort> _this, bool isRaw)
+		public static YAMLNode ExportYAML(this IEnumerable<ushort> _this, bool isRaw)
 		{
 			if (isRaw)
 			{
-				StringBuilder sb = new StringBuilder(_this.Count * 4);
+				StringBuilder sb = new StringBuilder();
 				foreach (ushort value in _this)
 				{
 					sb.AppendHex(value);
@@ -58,11 +58,11 @@ namespace uTinyRipper.YAML
 			}
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<short> _this, bool isRaw)
+		public static YAMLNode ExportYAML(this IEnumerable<short> _this, bool isRaw)
 		{
 			if (isRaw)
 			{
-				StringBuilder sb = new StringBuilder(_this.Count * 4);
+				StringBuilder sb = new StringBuilder();
 				foreach (short value in _this)
 				{
 					sb.AppendHex(value);
@@ -80,11 +80,11 @@ namespace uTinyRipper.YAML
 			}
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<uint> _this, bool isRaw)
+		public static YAMLNode ExportYAML(this IEnumerable<uint> _this, bool isRaw)
 		{
 			if (isRaw)
 			{
-				StringBuilder sb = new StringBuilder(_this.Count * 8);
+				StringBuilder sb = new StringBuilder();
 				foreach (uint value in _this)
 				{
 					sb.AppendHex(value);
@@ -102,11 +102,11 @@ namespace uTinyRipper.YAML
 			}
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<int> _this, bool isRaw)
+		public static YAMLNode ExportYAML(this IEnumerable<int> _this, bool isRaw)
 		{
 			if (isRaw)
 			{
-				StringBuilder sb = new StringBuilder(_this.Count * 8);
+				StringBuilder sb = new StringBuilder();
 				foreach (int value in _this)
 				{
 					sb.AppendHex(value);
@@ -124,11 +124,11 @@ namespace uTinyRipper.YAML
 			}
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<ulong> _this, bool isRaw)
+		public static YAMLNode ExportYAML(this IEnumerable<ulong> _this, bool isRaw)
 		{
 			if (isRaw)
 			{
-				StringBuilder sb = new StringBuilder(_this.Count * 16);
+				StringBuilder sb = new StringBuilder();
 				foreach (ulong value in _this)
 				{
 					sb.AppendHex(value);
@@ -146,11 +146,11 @@ namespace uTinyRipper.YAML
 			}
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<long> _this, bool isRaw)
+		public static YAMLNode ExportYAML(this IEnumerable<long> _this, bool isRaw)
 		{
 			if (isRaw)
 			{
-				StringBuilder sb = new StringBuilder(_this.Count * 16);
+				StringBuilder sb = new StringBuilder();
 				foreach (long value in _this)
 				{
 					sb.AppendHex(value);
@@ -166,6 +166,46 @@ namespace uTinyRipper.YAML
 				}
 				return node;
 			}
+		}
+
+		public static YAMLNode ExportYAML(this IEnumerable<float> _this)
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			foreach (float value in _this)
+			{
+				node.Add(value);
+			}
+			return node;
+		}
+
+		public static YAMLNode ExportYAML(this IEnumerable<double> _this)
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			foreach (double value in _this)
+			{
+				node.Add(value);
+			}
+			return node;
+		}
+
+		public static YAMLNode ExportYAML(this IEnumerable<string> _this)
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			foreach (string value in _this)
+			{
+				node.Add(value);
+			}
+			return node;
+		}
+
+		public static YAMLNode ExportYAML(this IEnumerable<IEnumerable<string>> _this)
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			foreach (IEnumerable<string> export in _this)
+			{
+				node.Add(export.ExportYAML());
+			}
+			return node;
 		}
 	}
 }

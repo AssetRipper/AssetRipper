@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using uTinyRipper.Project;
-using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes;
 
 using Object = uTinyRipper.Classes.Object;
@@ -213,7 +212,7 @@ namespace uTinyRipper.Converters.Project
 			return engneAsset.ExportID;
 		}
 
-		public ExportPointer CreateExportPointer(Object asset, bool isLocal)
+		public MetaPtr CreateExportPointer(Object asset, bool isLocal)
 		{
 			if (isLocal)
 			{
@@ -226,7 +225,7 @@ namespace uTinyRipper.Converters.Project
 			}
 			long exportID = engneAsset.ExportID;
 			GUID guid = engneAsset.GUID;
-			return new ExportPointer(exportID, guid, AssetType.Internal);
+			return new MetaPtr(exportID, guid, AssetType.Internal);
 		}
 
 		public ISerializedFile File { get; }

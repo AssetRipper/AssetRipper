@@ -94,6 +94,13 @@ namespace uTinyRipper
 			return new Tuple<ushort, ushort>(value1, value2);
 		}
 
+		public static Tuple<int, long> ReadTupleInt32Int64(this EndianReader reader)
+		{
+			int value1 = reader.ReadInt32();
+			long value2 = reader.ReadInt64();
+			return new Tuple<int, long>(value1, value2);
+		}		
+
 		public static Tuple<int, float> ReadTupleInt32Single(this EndianReader reader)
 		{
 			int value1 = reader.ReadInt32();
@@ -113,6 +120,13 @@ namespace uTinyRipper
 			return array;
 		}
 
+		public static Tuple<T, long> ReadTupleTLong<T>(this EndianReader reader, Func<int, T> converter)
+		{
+			T value1 = converter(reader.ReadInt32());
+			long value2 = reader.ReadInt64();
+			return new Tuple<T, long>(value1, value2);
+		}
+
 		public static KeyValuePair<int, uint>[] ReadKVPInt32UInt32Array(this EndianReader reader)
 		{
 			int count = reader.ReadInt32();
@@ -127,7 +141,7 @@ namespace uTinyRipper
 			return array;
 		}
 
-		public static T[] ReadEnum32Array<T>(this EndianReader reader, Func<int, T> converter)
+		public static T[] ReadArray<T>(this EndianReader reader, Func<int, T> converter)
 		{
 			int count = reader.ReadInt32();
 			T[] array = new T[count];

@@ -96,8 +96,7 @@ namespace uTinyRipper.Classes.Shaders
 			writer.Write("\" {\n");
 			writer.WriteIndent(5);
 
-			ref ShaderSubProgram subProgram = ref blob.SubPrograms[(int)BlobIndex];
-			subProgram.Export(writer, type);
+			blob.SubPrograms[(int)BlobIndex].Export(writer, type);
 
 			writer.Write('\n');
 			writer.WriteIndent(4);

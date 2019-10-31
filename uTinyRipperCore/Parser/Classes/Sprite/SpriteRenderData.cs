@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.Classes.Meshes;
+using uTinyRipper.Classes.Misc;
 using uTinyRipper.Converters.Sprites;
 
 namespace uTinyRipper.Classes.Sprites
@@ -10,42 +11,27 @@ namespace uTinyRipper.Classes.Sprites
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		public static bool IsReadAlphaTexture(Version version)
-		{
-			return version.IsGreaterEqual(5, 2);
-		}
+		public static bool HasAlphaTexture(Version version) => version.IsGreaterEqual(5, 2);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool IsReadSecondaryTextures(Version version)
-		{
-			return version.IsGreaterEqual(2019);
-		}		
+		public static bool HasSecondaryTextures(Version version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// Less than 5.6.0
 		/// </summary>
-		public static bool IsReadVertices(Version version)
-		{
-			return version.IsLess(5, 6);
-		}
+		public static bool HasVertices(Version version) => version.IsLess(5, 6);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool IsReadBindpose(Version version)
-		{
-			return version.IsGreaterEqual(2018);
-		}
+		public static bool HasBindpose(Version version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// 2018.1
 		/// </summary>
-		public static bool IsReadSourceSkin(Version version)
-		{
-			return version.IsEqual(2018, 1);
-		}
+		public static bool HasSourceSkin(Version version) => version.IsEqual(2018, 1);
 		/// <summary>
 		/// 5.x.x (mess) and greater
 		/// </summary>
-		public bool IsReadAtlasRectOffset(Version version)
+		public static bool HasAtlasRectOffset(Version version)
 		{
 			if (version.IsGreaterEqual(5, 4, 5, VersionType.Patch, 1))
 			{
@@ -80,25 +66,19 @@ namespace uTinyRipper.Classes.Sprites
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool IsReadUVTransform(Version version)
-		{
-			return version.IsGreaterEqual(4, 5);
-		}
+		public static bool HasUVTransform(Version version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool IsReadDownscaleMultiplier(Version version)
-		{
-			return version.IsGreaterEqual(2017);
-		}
-		
+		public static bool HasDownscaleMultiplier(Version version) => version.IsGreaterEqual(2017);
+
 		public Vector2f[][] GenerateOutline(Version version)
 		{
-			if (IsReadVertices(version))
+			if (HasVertices(version))
 			{
 				Vector2f[][] outline = new Vector2f[1][];
-				outline[0] = new Vector2f[Vertices.Count];
-				for (int i = 0; i < Vertices.Count; i++)
+				outline[0] = new Vector2f[Vertices.Length];
+				for (int i = 0; i < Vertices.Length; i++)
 				{
 					outline[0][i] = Vertices[i].Position.ToVector2();
 				}
@@ -107,10 +87,10 @@ namespace uTinyRipper.Classes.Sprites
 			else
 			{
 				List<Vector2f[]> outlines = new List<Vector2f[]>();
-				foreach(SubMesh submesh in SubMeshes)
+				for (int i = 0; i < SubMeshes.Length; i++)
 				{
-					Vector3f[] vertices = VertexData.GenerateVertices(version, submesh);
-					VerticesToOutline(outlines, vertices, submesh);
+					Vector3f[] vertices = VertexData.GenerateVertices(version, ref SubMeshes[i]);
+					VerticesToOutline(outlines, vertices, ref SubMeshes[i]);
 				}
 				return outlines.ToArray();
 			}
@@ -119,50 +99,50 @@ namespace uTinyRipper.Classes.Sprites
 		public void Read(AssetReader reader)
 		{
 			Texture.Read(reader);
-			if (IsReadAlphaTexture(reader.Version))
+			if (HasAlphaTexture(reader.Version))
 			{
 				AlphaTexture.Read(reader);
 			}
-			if (IsReadSecondaryTextures(reader.Version))
+			if (HasSecondaryTextures(reader.Version))
 			{
-				m_secondaryTextures = reader.ReadAssetArray<SecondarySpriteTexture>();
+				SecondaryTextures = reader.ReadAssetArray<SecondarySpriteTexture>();
 			}
 
-			if (IsReadVertices(reader.Version))
+			if (HasVertices(reader.Version))
 			{
-				m_vertices = reader.ReadAssetArray<SpriteVertex>();
-				m_indices = reader.ReadUInt16Array();
+				Vertices = reader.ReadAssetArray<SpriteVertex>();
+				Indices = reader.ReadUInt16Array();
 				reader.AlignStream(AlignType.Align4);
 			}
 			else
 			{
-				m_subMeshes = reader.ReadAssetArray<SubMesh>();
-				m_indexBuffer = reader.ReadByteArray();
+				SubMeshes = reader.ReadAssetArray<SubMesh>();
+				IndexBuffer = reader.ReadByteArray();
 				reader.AlignStream(AlignType.Align4);
 
 				VertexData.Read(reader);
 			}
-			if (IsReadBindpose(reader.Version))
+			if (HasBindpose(reader.Version))
 			{
-				m_bindpose = reader.ReadAssetArray<Matrix4x4f>();
+				Bindpose = reader.ReadAssetArray<Matrix4x4f>();
 			}
-			if (IsReadSourceSkin(reader.Version))
+			if (HasSourceSkin(reader.Version))
 			{
-				m_sourceSkin = reader.ReadAssetArray<BoneWeights4>();
+				SourceSkin = reader.ReadAssetArray<BoneWeights4>();
 			}
 
 			TextureRect.Read(reader);
 			TextureRectOffset.Read(reader);
-			if (IsReadAtlasRectOffset(reader.Version))
+			if (HasAtlasRectOffset(reader.Version))
 			{
 				AtlasRectOffset.Read(reader);
 			}
 			SettingsRaw = reader.ReadUInt32();
-			if (IsReadUVTransform(reader.Version))
+			if (HasUVTransform(reader.Version))
 			{
 				UVTransform.Read(reader);
 			}
-			if (IsReadDownscaleMultiplier(reader.Version))
+			if (HasDownscaleMultiplier(reader.Version))
 			{
 				DownscaleMultiplier = reader.ReadSingle();
 			}
@@ -173,7 +153,7 @@ namespace uTinyRipper.Classes.Sprites
 			yield return context.FetchDependency(Texture, TextureName);
 			yield return context.FetchDependency(AlphaTexture, AlphaTextureName);
 
-			if (IsReadSecondaryTextures(context.Version))
+			if (HasSecondaryTextures(context.Version))
 			{
 				foreach (PPtr<Object> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
 				{
@@ -182,11 +162,11 @@ namespace uTinyRipper.Classes.Sprites
 			}
 		}
 
-		private void VerticesToOutline(List<Vector2f[]> outlines, Vector3f[] vertices, SubMesh submesh)
+		private void VerticesToOutline(List<Vector2f[]> outlines, Vector3f[] vertices, ref SubMesh submesh)
 		{
 			int triangleCount = submesh.IndexCount / 3;
 			List<Vector3i> triangles = new List<Vector3i>(triangleCount);
-			using (MemoryStream memStream = new MemoryStream(m_indexBuffer))
+			using (MemoryStream memStream = new MemoryStream(IndexBuffer))
 			{
 				using (BinaryReader reader = new BinaryReader(memStream))
 				{
@@ -210,15 +190,15 @@ namespace uTinyRipper.Classes.Sprites
 		public SpritePackingRotation PackingRotation => (SpritePackingRotation)((SettingsRaw >> 2) & 0xF);
 		public SpriteMeshType MeshType => (SpriteMeshType)((SettingsRaw >> 6) & 0x1);
 
-		public IReadOnlyList<SecondarySpriteTexture> SecondaryTextures => m_secondaryTextures;
-		public IReadOnlyList<SpriteVertex> Vertices => m_vertices;
-		public IReadOnlyList<ushort> Indices => m_indices;
-		public IReadOnlyList<SubMesh> SubMeshes => m_subMeshes;
-		public IReadOnlyList<byte> IndexBuffer => m_indexBuffer;
-		public IReadOnlyList<Matrix4x4f> Bindpose => m_bindpose;
-		public IReadOnlyList<BoneWeights4> SourceSkin => m_sourceSkin;
-		public uint SettingsRaw { get; private set; }
-		public float DownscaleMultiplier { get; private set; }
+		public SecondarySpriteTexture[] SecondaryTextures { get; set; }
+		public SpriteVertex[] Vertices { get; set; }
+		public ushort[] Indices { get; set; }
+		public SubMesh[] SubMeshes { get; set; }
+		public byte[] IndexBuffer { get; set; }
+		public Matrix4x4f[] Bindpose { get; set; }
+		public BoneWeights4[] SourceSkin { get; set; }
+		public uint SettingsRaw { get; set; }
+		public float DownscaleMultiplier { get; set; }
 
 		public const string TextureName = "texture";
 		public const string AlphaTextureName = "alphaTexture";
@@ -231,13 +211,5 @@ namespace uTinyRipper.Classes.Sprites
 		public Vector2f TextureRectOffset;
 		public Vector2f AtlasRectOffset;
 		public Vector4f UVTransform;
-
-		private SecondarySpriteTexture[] m_secondaryTextures;
-		private SpriteVertex[] m_vertices;
-		private ushort[] m_indices;
-		private SubMesh[] m_subMeshes;
-		private byte[] m_indexBuffer;
-		private Matrix4x4f[] m_bindpose;
-		private BoneWeights4[] m_sourceSkin;
 	}
 }

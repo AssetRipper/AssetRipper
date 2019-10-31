@@ -1,30 +1,31 @@
 ﻿using uTinyRipper.Classes.Misc;
 using uTinyRipper.Converters;
+using uTinyRipper.Project;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.Project.Classes
+namespace uTinyRipper.Classes
 {
-	public sealed class ExportPointer : IYAMLExportable
+	public sealed class MetaPtr : IYAMLExportable
 	{
-		public ExportPointer(long fileID)
+		public MetaPtr(long fileID)
 		{
 			FileID = fileID;
 			GUID = default;
 			AssetType = default;
 		}
 
-		public ExportPointer(long fileID, GUID guid, AssetType assetType)
+		public MetaPtr(long fileID, GUID guid, AssetType assetType)
 		{
 			FileID = fileID;
 			GUID = guid;
 			AssetType = assetType;
 		}
 
-		public ExportPointer(ClassIDType classID, AssetType assetType) :
+		public MetaPtr(ClassIDType classID, AssetType assetType) :
 			this(ExportCollection.GetMainExportID((uint)classID), GUID.MissingReference, assetType)
 		{
 		}
-		
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
@@ -38,7 +39,7 @@ namespace uTinyRipper.Project.Classes
 			return node;
 		}
 
-		public static ExportPointer EmptyPointer { get; } = new ExportPointer(0);
+		public static MetaPtr NullPtr { get; } = new MetaPtr(0);
 
 		public long FileID { get; }
 		public GUID GUID { get; }

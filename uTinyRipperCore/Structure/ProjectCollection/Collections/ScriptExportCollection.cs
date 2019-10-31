@@ -4,10 +4,8 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes;
 using uTinyRipper.Converters;
-using uTinyRipper.Importers;
 
 using Object = uTinyRipper.Classes.Object;
 using uTinyRipper.Game.Assembly;
@@ -92,7 +90,7 @@ namespace uTinyRipper.Project
 			return GetMainExportID(asset);
 		}
 
-		public override ExportPointer CreateExportPointer(Object asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(Object asset, bool isLocal)
 		{
 			if (isLocal)
 			{
@@ -105,7 +103,7 @@ namespace uTinyRipper.Project
 				if (MonoScript.IsReadNamespace(script.File.Version))
 				{
 					int fileID = Compute(script.Namespace, script.ClassName);
-					return new ExportPointer(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
+					return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 				}
 				else
 				{
@@ -113,14 +111,14 @@ namespace uTinyRipper.Project
 					if (!scriptInfo.IsDefault)
 					{
 						int fileID = Compute(scriptInfo.Namespace, scriptInfo.Name);
-						return new ExportPointer(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
+						return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 					}
 				}
 			}
 
 			long exportID = GetExportID(asset);
 			GUID uniqueGUID = script.GUID;
-			return new ExportPointer(exportID, uniqueGUID, AssetExporter.ToExportType(asset));
+			return new MetaPtr(exportID, uniqueGUID, AssetExporter.ToExportType(asset));
 		}
 
 		private static int Compute(string @namespace, string name)
@@ -144,8 +142,9 @@ namespace uTinyRipper.Project
 		private void OnScriptExported(IExportContainer container, Object asset, string path)
 		{
 			MonoScript script = (MonoScript)asset;
-			MonoImporter importer = new MonoImporter(script);
-			Meta meta = new Meta(importer, script.GUID);
+			MonoImporter importer = new MonoImporter(container.ExportVersion);
+			importer.ExecutionOrder = (short)script.ExecutionOrder;
+			Meta meta = new Meta(script.GUID, importer);
 			ExportMeta(container, meta, path);
 		}
 

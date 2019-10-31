@@ -22,6 +22,11 @@ namespace uTinyRipper.Classes
 			return version.IsGreaterEqual(4);
 		}
 
+		public override TextureImporter GenerateTextureImporter(IExportContainer container)
+		{
+			return CubemapConverter.GeenrateTextureImporter(container, this);
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);

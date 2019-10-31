@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using uTinyRipper.Project.Classes;
+using uTinyRipper.Classes;
+using uTinyRipper.Classes.Misc;
 using uTinyRipper.Converters;
 
 using Object = uTinyRipper.Classes.Object;
-using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Project
 {
@@ -30,7 +30,7 @@ namespace uTinyRipper.Project
 			throw new NotSupportedException();
 		}
 
-		public ExportPointer CreateExportPointer(Object asset, bool isLocal)
+		public MetaPtr CreateExportPointer(Object asset, bool isLocal)
 		{
 			throw new NotSupportedException();
 		}
@@ -42,6 +42,6 @@ namespace uTinyRipper.Project
 			get { yield break; }
 		}
 		public string Name => throw new NotSupportedException();
-		public IAssetImporter MetaImporter => throw new NotSupportedException();
+		public AssetImporter MetaImporter => throw new NotSupportedException();
 	}
 }

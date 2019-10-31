@@ -15,7 +15,17 @@ namespace uTinyRipper
 			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
 
+		public static void Read(this IDictionary<int, string> _this, AssetReader reader)
+		{
+			IDictionaryReadEndianExtensions.Read(_this, reader);
+		}
+
 		public static void Read(this IDictionary<uint, string> _this, AssetReader reader)
+		{
+			IDictionaryReadEndianExtensions.Read(_this, reader);
+		}
+
+		public static void Read(this IDictionary<long, string> _this, AssetReader reader)
 		{
 			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
@@ -90,6 +100,16 @@ namespace uTinyRipper
 			IDictionaryReadEndianExtensions.ReadSafe(_this, reader);
 		}
 
+		public static void Read(this IDictionary<Tuple<int, long>, string> _this, AssetReader reader)
+		{
+			IDictionaryReadEndianExtensions.Read(_this, reader);
+		}
+
+		public static void Read<T>(this IDictionary<Tuple<T, long>, string> _this, AssetReader reader, Func<int, T> converter)
+		{
+			IDictionaryReadEndianExtensions.Read(_this, reader, converter);
+		}
+
 		public static void Read<T>(this IDictionary<int, T> _this, AssetReader reader)
 			where T : IAssetReadable, new()
 		{
@@ -137,6 +157,20 @@ namespace uTinyRipper
 			{
 				string key = reader.ReadString();
 				T value = instantiator();
+				value.Read(reader);
+				_this.Add(key, value);
+			}
+		}
+
+		public static void Read<T1, T2>(this IDictionary<Tuple<T1, long>, T2> _this, AssetReader reader)
+			where T1 : IAssetReadable, new()
+			where T2 : IAssetReadable, new()
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				Tuple<T1, long> key = reader.ReadTupleTLong<T1>();
+				T2 value = new T2();
 				value.Read(reader);
 				_this.Add(key, value);
 			}
@@ -236,20 +270,6 @@ namespace uTinyRipper
 				T1 key = keyInstantiator();
 				key.Read(reader);
 				T2 value = valueInstantiator();
-				value.Read(reader);
-				_this.Add(key, value);
-			}
-		}
-
-		public static void Read<T1, T2>(this IDictionary<Tuple<T1, long>, T2> _this, AssetReader reader)
-			where T1 : IAssetReadable, new()
-			where T2 : IAssetReadable, new()
-		{
-			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-			{
-				Tuple<T1, long> key = reader.ReadTupleTLong<T1>();
-				T2 value = new T2();
 				value.Read(reader);
 				_this.Add(key, value);
 			}

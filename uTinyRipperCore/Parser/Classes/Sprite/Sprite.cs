@@ -5,6 +5,7 @@ using uTinyRipper.Classes.Sprites;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper.Classes.TextureImporters;
 
 namespace uTinyRipper.Classes
 {
@@ -18,68 +19,41 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool IsReadBorder(Version version)
-		{
-			return version.IsGreaterEqual(4, 5);
-		}
+		public static bool HasBorder(Version version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 5.4.1p3 and greater
 		/// </summary>
-		public static bool IsReadPivot(Version version)
-		{
-			return version.IsGreaterEqual(5, 4, 1, VersionType.Patch, 3);
-		}
+		public static bool HasPivot(Version version) => version.IsGreaterEqual(5, 4, 1, VersionType.Patch, 3);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool IsReadPolygon(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
+		public static bool HasPolygon(Version version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// Not Release
 		/// </summary>
-		public static bool IsReadAtlasName(TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease();
-		}
+		public static bool HasAtlasName(TransferInstructionFlags flags) => !flags.IsRelease();
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool IsReadRendererData(Version version)
-		{
-			return version.IsGreaterEqual(2017);
-		}
+		public static bool HasRendererData(Version version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// Not Release
 		/// </summary>
-		public static bool IsReadAtlasRD(TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease();
-		}
+		public static bool HasAtlasRD(TransferInstructionFlags flags) => !flags.IsRelease();
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool IsReadPhysicsShape(Version version)
-		{
-			return version.IsGreaterEqual(2017);
-		}
+		public static bool HasPhysicsShape(Version version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool IsReadBones(Version version)
-		{
-			return version.IsGreaterEqual(2018);
-		}
+		public static bool HasBones(Version version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// and greater and Not Release
 		/// </summary>
-		public static bool IsReadSpriteID(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(2018);
-		}
+		public static bool HasSpriteID(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2018);
 
-		private static int GetSerializedVersion(Version version)
+		private static int ToSerializedVersion(Version version)
 		{
 #warning TODO:
 			/*if (version.IsGreaterEqual(2018))
@@ -89,7 +63,12 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
-		public void GetExportPosition(SpriteAtlas atlas, out Rectf rect, out Vector2f pivot, out Vector4f border)
+		public SpriteMetaData GenerateSpriteMetaData(IExportContainer container, SpriteAtlas atlas)
+		{
+			return SpriteConverter.GenerateSpriteMetaData(container, atlas, this);
+		}
+
+		public void GetCoordinates(SpriteAtlas atlas, out Rectf rect, out Vector2f pivot, out Vector4f border)
 		{
 			Vector2f rectOffset;
 			if (atlas == null)
@@ -121,7 +100,7 @@ namespace uTinyRipper.Classes
 			border = new Vector4f(borderL, borderB, borderR, borderT);
 		}
 
-		public IReadOnlyList<IReadOnlyList<Vector2f>> GenerateOutline(SpriteAtlas atlas, Rectf rect, Vector2f pivot)
+		public Vector2f[][] GenerateOutline(SpriteAtlas atlas, Rectf rect, Vector2f pivot)
 		{
 			Vector2f[][] outlines = RD.GenerateOutline(File.Version);
 			float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
@@ -138,18 +117,18 @@ namespace uTinyRipper.Classes
 			return FixRotation(atlas, outlines);
 		}
 
-		public IReadOnlyList<IReadOnlyList<Vector2f>> GeneratePhysicsShape(SpriteAtlas atlas, Rectf rect, Vector2f pivot)
+		public Vector2f[][] GeneratePhysicsShape(SpriteAtlas atlas, Rectf rect, Vector2f pivot)
 		{
-			if (IsReadPhysicsShape(File.Version))
+			if (PhysicsShape.Length > 0)
 			{
-				Vector2f[][] shape = new Vector2f[PhysicsShape.Count][];
+				Vector2f[][] shape = new Vector2f[PhysicsShape.Length][];
 				float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
 				float pivotShiftY = rect.Height * pivot.Y - rect.Height * 0.5f;
 				Vector2f pivotShift = new Vector2f(pivotShiftX, pivotShiftY);
-				for (int i = 0; i < PhysicsShape.Count; i++)
+				for (int i = 0; i < PhysicsShape.Length; i++)
 				{
-					shape[i] = new Vector2f[PhysicsShape[i].Count];
-					for (int j = 0; j < PhysicsShape[i].Count; j++)
+					shape[i] = new Vector2f[PhysicsShape[i].Length];
+					for (int j = 0; j < PhysicsShape[i].Length; j++)
 					{
 						Vector2f point = PhysicsShape[i][j] * PixelsToUnits;
 						shape[i][j] = point + pivotShift;
@@ -157,10 +136,7 @@ namespace uTinyRipper.Classes
 				}
 				return FixRotation(atlas, shape);
 			}
-			else
-			{
-				return Array.Empty<Vector2f[]>();
-			}
+			return Array.Empty<Vector2f[]>();
 		}
 
 		public override void Read(AssetReader reader)
@@ -169,60 +145,55 @@ namespace uTinyRipper.Classes
 
 			Rect.Read(reader);
 			Offset.Read(reader);
-			if (IsReadBorder(reader.Version))
+			if (HasBorder(reader.Version))
 			{
 				Border.Read(reader);
 			}
 			PixelsToUnits = reader.ReadSingle();
-			if (IsReadPivot(reader.Version))
+			if (HasPivot(reader.Version))
 			{
 				Pivot.Read(reader);
 			}
 			Extrude = reader.ReadUInt32();
-			if (IsReadPolygon(reader.Version))
+			if (HasPolygon(reader.Version))
 			{
 				IsPolygon = reader.ReadBoolean();
 				reader.AlignStream(AlignType.Align4);
 			}
 #if UNIVERSAL
-			if (IsReadAtlasName(reader.Flags))
+			if (HasAtlasName(reader.Flags))
 			{
 				AtlasName = reader.ReadString();
 				PackingTag = reader.ReadString();
 			}
 #endif
 
-			if (IsReadRendererData(reader.Version))
+			if (HasRendererData(reader.Version))
 			{
 				RenderDataKey = reader.ReadTupleTLong<GUID>();
-				m_atlasTags = reader.ReadStringArray();
+				AtlasTags = reader.ReadStringArray();
 				SpriteAtlas.Read(reader);
 			}
 			RD.Read(reader);
 #if UNIVERSAL
-			if (IsReadAtlasRD(reader.Flags))
+			if (HasAtlasRD(reader.Flags))
 			{
 				AtlasRD.Read(reader);
 			}
 #endif
 			reader.AlignStream(AlignType.Align4);
 
-			if (IsReadPhysicsShape(reader.Version))
+			if (HasPhysicsShape(reader.Version))
 			{
-				int count = reader.ReadInt32();
-				m_physicsShape = new Vector2f[count][];
-				for (int i = 0; i < count; i++)
-				{
-					m_physicsShape[i] = reader.ReadAssetArray<Vector2f>();
-				}
+				PhysicsShape = reader.ReadAssetArrayArray<Vector2f>();
 			}
 
-			if (IsReadBones(reader.Version))
+			if (HasBones(reader.Version))
 			{
-				m_bones = reader.ReadAssetArray<SpriteBone>();
+				Bones = reader.ReadAssetArray<SpriteBone>();
 			}
 #if UNIVERSAL
-			if (IsReadSpriteID(reader.Version, reader.Flags))
+			if (HasSpriteID(reader.Version, reader.Flags))
 			{
 				SpriteID = reader.ReadString();
 			}
@@ -248,7 +219,7 @@ namespace uTinyRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		private IReadOnlyList<IReadOnlyList<Vector2f>> FixRotation(SpriteAtlas atlas, Vector2f[][] outlines)
+		private Vector2f[][] FixRotation(SpriteAtlas atlas, Vector2f[][] outlines)
 		{
 			bool isPacked = RD.IsPacked;
 			SpritePackingRotation rotation = RD.PackingRotation;
@@ -319,18 +290,18 @@ namespace uTinyRipper.Classes
 			return outlines;
 		}
 
-		public float PixelsToUnits { get; private set; }
-		public uint Extrude { get; private set; }
-		public bool IsPolygon { get; private set; }
+		public float PixelsToUnits { get; set; }
+		public uint Extrude { get; set; }
+		public bool IsPolygon { get; set; }
 #if UNIVERSAL
-		public string AtlasName { get; private set; }
-		public string PackingTag { get; private set; }
+		public string AtlasName { get; set; }
+		public string PackingTag { get; set; }
 #endif
-		public IReadOnlyList<string> AtlasTags => m_atlasTags;
-		public IReadOnlyList<IReadOnlyList<Vector2f>> PhysicsShape => m_physicsShape;
-		public IReadOnlyList<SpriteBone> Bones => m_bones;
+		public string[] AtlasTags { get; set; }
+		public Vector2f[][] PhysicsShape { get; set; }
+		public SpriteBone[] Bones { get; set; }
 #if UNIVERSAL
-		public string SpriteID { get; private set; }
+		public string SpriteID { get; set; }
 #endif
 
 		public Rectf Rect;
@@ -346,9 +317,5 @@ namespace uTinyRipper.Classes
 
 		public const string SpriteAtlasName = "m_SpriteAtlas";
 		public const string RDName = "m_RD";
-
-		private string[] m_atlasTags;
-		private Vector2f[][] m_physicsShape;
-		private SpriteBone[] m_bones;
 	}
 }

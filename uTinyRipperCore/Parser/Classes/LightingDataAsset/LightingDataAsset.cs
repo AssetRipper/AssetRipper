@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.LightingDataAssets;
 using uTinyRipper.Classes.LightmapSettingss;
 using uTinyRipper.Classes.Lights;

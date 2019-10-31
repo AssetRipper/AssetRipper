@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.OcclusionCullingDatas;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;

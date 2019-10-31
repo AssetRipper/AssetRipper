@@ -1,17 +1,23 @@
 using System;
 using System.IO;
+using System.Text;
 
 namespace uTinyRipper.YAML
 {
 	internal class Emitter
 	{
-		public Emitter(TextWriter writer)
+		public Emitter(TextWriter writer, bool formatKeys)
 		{
 			if (writer == null)
 			{
 				throw new ArgumentNullException(nameof(writer));
 			}
 			m_stream = writer;
+			IsFormatKeys = formatKeys;
+			if (formatKeys)
+			{
+				m_sb = new StringBuilder();
+			}
 		}
 
 		public Emitter IncreaseIntent()
@@ -108,9 +114,29 @@ namespace uTinyRipper.YAML
 
 		public Emitter Write(string value)
 		{
-			if (value != string.Empty)
+			if (value.Length > 0)
 			{
 				WriteDelayed();
+				m_stream.Write(value);
+			}
+			return this;
+		}
+
+		public Emitter WriteFormat(string value)
+		{
+			if (value.Length > 0)
+			{
+				WriteDelayed();
+				if (value.Length > 2 && value.StartsWith("m_", StringComparison.Ordinal))
+				{
+					m_sb.Append(value, 2, value.Length - 2);
+					if (char.IsUpper(m_sb[0]))
+					{
+						m_sb[0] = char.ToLower(m_sb[0]);
+					}
+					value = m_sb.ToString();
+					m_sb.Clear();
+				}
 				m_stream.Write(value);
 			}
 			return this;
@@ -191,7 +217,11 @@ namespace uTinyRipper.YAML
 			}
 		}
 
+		public bool IsFormatKeys { get; }
+		public bool IsKey { get; set; }
+
 		private readonly TextWriter m_stream;
+		private readonly StringBuilder m_sb;
 
 		private int m_indent = 0;
 		private bool m_isNeedWhitespace = false;

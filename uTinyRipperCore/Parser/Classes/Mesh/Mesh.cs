@@ -1,4 +1,3 @@
-using uTinyRipper.Project;
 using uTinyRipper.Classes.Meshes;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
@@ -277,12 +276,9 @@ namespace uTinyRipper.Classes
 					ShapeVertices = reader.ReadAssetArray<BlendShapeVertex>();
 				}
 			}
-			if (HasBindPose(reader.Version))
+			if (HasBindPose(reader.Version) && IsBindPoseFirst(reader.Version))
 			{
-				if (IsBindPoseFirst(reader.Version))
-				{
-					BindPose = reader.ReadAssetArray<Matrix4x4f>();
-				}
+				BindPose = reader.ReadAssetArray<Matrix4x4f>();
 			}
 			if (HasBoneNameHashes(reader.Version))
 			{
@@ -329,13 +325,10 @@ namespace uTinyRipper.Classes
 				}
 			}
 
-			if (!HasLODData(reader.Version))
+			if (!HasLODData(reader.Version) && !IsIndexBufferFirst(reader.Version))
 			{
-				if (!IsIndexBufferFirst(reader.Version))
-				{
-					IndexBuffer = reader.ReadByteArray();
-					reader.AlignStream(AlignType.Align4);
-				}
+				IndexBuffer = reader.ReadByteArray();
+				reader.AlignStream(AlignType.Align4);
 			}
 
 			if (HasVertexData(reader.Version))
@@ -357,12 +350,9 @@ namespace uTinyRipper.Classes
 			{
 				Skin = reader.ReadAssetArray<BoneWeights4>();
 			}
-			if (HasBindPose(reader.Version))
+			if (HasBindPose(reader.Version) && !IsBindPoseFirst(reader.Version))
 			{
-				if (!IsBindPoseFirst(reader.Version))
-				{
-					BindPose = reader.ReadAssetArray<Matrix4x4f>();
-				}
+				BindPose = reader.ReadAssetArray<Matrix4x4f>();
 			}
 
 			if (HasVertexData(reader.Version))

@@ -3,18 +3,21 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Textures
 {
-	public struct TextureSettings : IAssetReadable, IYAMLExportable
+	public struct GLTextureSettings : IAsset
 	{
-		/// <summary>
-		/// 2017.1 and greater
-		/// </summary>
-		public static bool IsReadWraps(Version version)
+		public GLTextureSettings(Version version)
 		{
-			return version.IsGreaterEqual(2017);
+			FilterMode = (FilterMode)(-1);
+			Aniso = -1;
+			MipBias = -100;
+			WrapU = (TextureWrapMode)(-1);
+			WrapV = (TextureWrapMode)(-1);
+			WrapW = (TextureWrapMode)(-1);
 		}
 
-		public static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
+			// WrapMode has been replaced by WrapU
 			if (version.IsGreaterEqual(2017))
 			{
 				return 2;
@@ -22,27 +25,53 @@ namespace uTinyRipper.Classes.Textures
 			return 1;
 		}
 
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		public static bool HasWraps(Version version) => version.IsGreaterEqual(2017);
+
 		public void Read(AssetReader reader)
 		{
 			FilterMode = (FilterMode)reader.ReadInt32();
 			Aniso = reader.ReadInt32();
 			MipBias = reader.ReadSingle();
-			WrapU = (TextureWrapMode)reader.ReadInt32();
-			if (IsReadWraps(reader.Version))
+			if (HasWraps(reader.Version))
 			{
+				WrapU = (TextureWrapMode)reader.ReadInt32();
 				WrapV = (TextureWrapMode)reader.ReadInt32();
 				WrapW = (TextureWrapMode)reader.ReadInt32();
+			}
+			else
+			{
+				WrapMode = (TextureWrapMode)reader.ReadInt32();
+			}
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write((int)FilterMode);
+			writer.Write(Aniso);
+			writer.Write(MipBias);
+			if (HasWraps(writer.Version))
+			{
+				writer.Write((int)WrapU);
+				writer.Write((int)WrapV);
+				writer.Write((int)WrapW);
+			}
+			else
+			{
+				writer.Write((int)WrapMode);
 			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(FilterModeName, (int)FilterMode);
 			node.Add(AnisoName, Aniso);
 			node.Add(MipBiasName, MipBias);
-			if (IsReadWraps(container.ExportVersion))
+			if (HasWraps(container.ExportVersion))
 			{
 				node.Add(WrapUName, (int)WrapU);
 				node.Add(WrapVName, (int)WrapV);
@@ -50,20 +79,22 @@ namespace uTinyRipper.Classes.Textures
 			}
 			else
 			{
-				node.Add(WrapModeName, (int)WrapU);
+				node.Add(WrapModeName, (int)WrapMode);
 			}
 			return node;
 		}
 
-		public FilterMode FilterMode { get; private set; }
-		public int Aniso { get; private set; }
-		public float MipBias { get; private set; }
-		/// <summary>
-		/// WrapMode previously
-		/// </summary>
-		public TextureWrapMode WrapU { get; private set; }
-		public TextureWrapMode WrapV { get; private set; }
-		public TextureWrapMode WrapW { get; private set; }
+		public FilterMode FilterMode { get; set; }
+		public int Aniso { get; set; }
+		public float MipBias { get; set; }
+		public TextureWrapMode WrapMode
+		{
+			get => WrapU;
+			set => WrapU = value;
+		}
+		public TextureWrapMode WrapU { get; set; }
+		public TextureWrapMode WrapV { get; set; }
+		public TextureWrapMode WrapW { get; set; }
 
 		public const string FilterModeName = "m_FilterMode";
 		public const string AnisoName = "m_Aniso";

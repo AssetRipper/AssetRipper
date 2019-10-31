@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using uTinyRipper.Game;
 using uTinyRipper.Classes;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
-using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper
 {

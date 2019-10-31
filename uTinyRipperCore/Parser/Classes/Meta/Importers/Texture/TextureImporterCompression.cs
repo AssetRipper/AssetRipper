@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Project.Classes
+﻿namespace uTinyRipper.Classes.TextureImporters
 {
 	/// <summary>
 	/// Select the kind of compression you want for your texture.

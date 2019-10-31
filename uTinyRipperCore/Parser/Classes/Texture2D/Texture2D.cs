@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.Textures;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
@@ -128,6 +127,16 @@ namespace uTinyRipper.Classes
 				return 2;
 			}
 			return 1;
+		}
+
+		public virtual TextureImporter GenerateTextureImporter(IExportContainer container)
+		{
+			return Texture2DConverter.GeenrateTextureImporter(container, this);
+		}
+
+		public virtual IHVImageFormatImporter GenerateIHVImporter(IExportContainer container)
+		{
+			return Texture2DConverter.GeenrateIHVImporter(container, this);
 		}
 
 		public bool CheckAssetIntegrity()
@@ -358,7 +367,7 @@ namespace uTinyRipper.Classes
 		public const string ImageDataName = "image data";
 		public const string StreamDataName = "m_StreamData";
 
-		public TextureSettings TextureSettings;
+		public GLTextureSettings TextureSettings;
 		public StreamingInfo StreamData;
 
 		private byte[] m_imageData;

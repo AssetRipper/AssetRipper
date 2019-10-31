@@ -4,7 +4,6 @@ using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.Classes.Objects;
 using uTinyRipper.Converters;
-using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {

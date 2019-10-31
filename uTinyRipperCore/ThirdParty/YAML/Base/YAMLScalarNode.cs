@@ -305,7 +305,14 @@ namespace uTinyRipper.YAML
 		{
 			if (Style == ScalarStyle.Plain)
 			{
-				emitter.Write(m_string);
+				if (emitter.IsFormatKeys && emitter.IsKey)
+				{
+					emitter.WriteFormat(m_string);
+				}
+				else
+				{
+					emitter.Write(m_string);
+				}
 			}
 			else if (Style == ScalarStyle.SingleQuoted)
 			{

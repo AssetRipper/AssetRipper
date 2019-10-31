@@ -261,6 +261,6 @@ namespace uTinyRipper.Classes
 		public const string DimensionName = "m_Dimension";
 		public const string VolumeDepthName = "m_VolumeDepth";
 
-		public TextureSettings TextureSettings;
+		public GLTextureSettings TextureSettings;
 	}
 }

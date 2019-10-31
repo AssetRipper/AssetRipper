@@ -103,7 +103,7 @@ namespace uTinyRipper.Classes
 
 				ParsedForm.Read(reader);
 
-				Platforms = reader.ReadEnum32Array((t) => (GPUPlatform)t);
+				Platforms = reader.ReadArray((t) => (GPUPlatform)t);
 				uint[] offsets = reader.ReadUInt32Array();
 				uint[] compressedLengths = reader.ReadUInt32Array();
 				uint[] decompressedLengths = reader.ReadUInt32Array();

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.AnimatorControllers;
 using uTinyRipper.Converters;
@@ -17,7 +16,7 @@ namespace uTinyRipper.Project
 		}
 
 		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, AnimatorController asset) :
-			base(assetExporter, asset, new NativeFormatImporter(asset))
+			base(assetExporter, asset)
 		{
 			ControllerConstant controller = asset.Controller;
 			IReadOnlyList<OffsetPtr<StateMachineConstant>> stateMachinesConst = controller.StateMachineArray;

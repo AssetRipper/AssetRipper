@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Project.Classes
+﻿namespace uTinyRipper.Classes.TextureImporters
 {
 	/// <summary>
 	/// For Texture to be scaled down choose resize algorithm.

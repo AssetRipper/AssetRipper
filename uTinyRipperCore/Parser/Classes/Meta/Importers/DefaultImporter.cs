@@ -1,35 +1,48 @@
 ﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.Project.Classes
+namespace uTinyRipper.Classes
 {
-	public class DefaultImporter: IAssetImporter
+	public sealed class DefaultImporter : AssetImporter
 	{
-		public YAMLNode ExportYAML(IExportContainer container)
+		public DefaultImporter(Version version):
+			base(version)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			ExportYAMLPreInner(container, node);
-			if (IsExportExternalObjects)
-			{
-				node.Add("externalObjects", YAMLMappingNode.Empty);
-			}
-			ExportYAMLInner(container, node);
-			node.Add("userData", string.Empty);
-			node.Add("assetBundleName", string.Empty);
-			node.Add("assetBundleVariant", string.Empty);
+		}
+
+		public DefaultImporter(AssetInfo assetInfo):
+			base(assetInfo)
+		{
+		}
+
+		public override bool IncludesImporter(Version version)
+		{
+			return version.IsGreaterEqual(4);
+		}
+
+		public override void Read(AssetReader reader)
+		{
+			base.Read(reader);
+
+			PostRead(reader);
+		}
+
+		public override void Write(AssetWriter writer)
+		{
+			base.Write(writer);
+
+			PostWrite(writer);
+		}
+
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		{
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			PostExportYAML(container, node);
 			return node;
 		}
 
-		protected virtual void ExportYAMLPreInner(IExportContainer container, YAMLMappingNode node)
-		{
-		}
+		public override ClassIDType ClassID => ClassIDType.DefaultImporter;
 
-		protected virtual void ExportYAMLInner(IExportContainer container, YAMLMappingNode node)
-		{
-		}
-
-		public virtual string Name => nameof(DefaultImporter);
-
-		protected virtual bool IsExportExternalObjects => true;
+		protected override bool IncludesIDToName => false;
 	}
 }

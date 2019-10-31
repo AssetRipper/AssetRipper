@@ -55,9 +55,8 @@ namespace uTinyRipper.Classes.Shaders
 					}
 				}
 
-				ref ShaderSubProgram subProgram = ref SubPrograms[subIndex];
 				// we don't know shader type so pass vertex
-				subProgram.Export(writer, ShaderType.Vertex);
+				SubPrograms[subIndex].Export(writer, ShaderType.Vertex);
 			}
 			writer.WriteString(header, j, header.Length - j);
 		}

@@ -5,20 +5,20 @@
 		internal virtual void Emit(Emitter emitter)
 		{
 			bool isWrote = false;
-			if(!CustomTag.IsEmpty)
+			if (!CustomTag.IsEmpty)
 			{
 				emitter.Write(CustomTag.ToString()).WriteWhitespace();
 				isWrote = true;
 			}
-			if (Anchor != string.Empty)
+			if (Anchor.Length > 0)
 			{
 				emitter.Write("&").Write(Anchor).WriteWhitespace();
 				isWrote = true;
 			}
-			
-			if(isWrote)
+
+			if (isWrote)
 			{
-				if(IsMultiline)
+				if (IsMultiline)
 				{
 					emitter.WriteLine();
 				}

@@ -1,4 +1,4 @@
-﻿namespace uTinyRipper.Project.Classes
+﻿namespace uTinyRipper.Classes.TextureImporters
 {
 	/// <summary>
 	/// Cubemap generation mode for TextureImporter.

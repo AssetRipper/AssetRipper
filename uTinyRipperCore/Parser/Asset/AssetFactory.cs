@@ -226,12 +226,35 @@ namespace uTinyRipper
 					return new ParticleSystemForceField(assetInfo);
 				case ClassIDType.OcclusionCullingData:
 					return new OcclusionCullingData(assetInfo);
+
+				case ClassIDType.TextureImporter:
+					return new TextureImporter(assetInfo);
+				case ClassIDType.AvatarMask1:
+				case ClassIDType.AvatarMask:
+					return new AvatarMask(assetInfo);
+				case ClassIDType.DefaultImporter:
+					return new DefaultImporter(assetInfo);
 				case ClassIDType.SceneAsset:
 					return new SceneAsset(assetInfo);
+				case ClassIDType.NativeFormatImporter:
+					return new NativeFormatImporter(assetInfo);
+				case ClassIDType.MonoImporter:
+					return new MonoImporter(assetInfo);
+				case ClassIDType.DDSImporter:
+					return new DDSImporter(assetInfo);
+				case ClassIDType.PVRImporter:
+					return new PVRImporter(assetInfo);
+				case ClassIDType.ASTCImporter:
+					return new ASTCImporter(assetInfo);
+				case ClassIDType.KTXImporter:
+					return new KTXImporter(assetInfo);
+				case ClassIDType.IHVImageFormatImporter:
+					return new IHVImageFormatImporter(assetInfo);
 				case ClassIDType.LightmapParameters:
 					return new LightmapParameters(assetInfo);
 				case ClassIDType.LightingDataAsset:
 					return new LightingDataAsset(assetInfo);
+
 				case ClassIDType.SpriteAtlas:
 					return new SpriteAtlas(assetInfo);
 				case ClassIDType.TerrainLayer:

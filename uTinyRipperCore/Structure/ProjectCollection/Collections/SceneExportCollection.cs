@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes;
 using uTinyRipper.Converters;
 using uTinyRipper.SerializedFiles;
@@ -132,8 +131,8 @@ namespace uTinyRipper.Project
 			}
 
 			AssetExporter.Export(container, Components.Select(t => t.Convert(container)), filePath);
-			SceneImporter sceneImporter = new SceneImporter();
-			Meta meta = new Meta(sceneImporter, GUID);
+			DefaultImporter sceneImporter = new DefaultImporter(container.ExportVersion);
+			Meta meta = new Meta(GUID, sceneImporter);
 			ExportMeta(container, meta, filePath);
 
 			string sceneName = Path.GetFileName(sceneSubPath);
@@ -161,17 +160,17 @@ namespace uTinyRipper.Project
 			return IsComponent(asset) ? m_cexportIDs[asset.AssetInfo] : GetMainExportID(asset);
 		}
 		
-		public override ExportPointer CreateExportPointer(Object asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(Object asset, bool isLocal)
 		{
 			long exportID = GetExportID(asset);
 			if (isLocal && IsComponent(asset))
 			{
-				return new ExportPointer(exportID);
+				return new MetaPtr(exportID);
 			}
 			else
 			{
 				GUID guid = IsComponent(asset) ? GUID : asset.GUID;
-				return new ExportPointer(exportID, guid, AssetType.Serialized);
+				return new MetaPtr(exportID, guid, AssetType.Serialized);
 			}				
 		}
 
@@ -208,7 +207,8 @@ namespace uTinyRipper.Project
 
 		private void ExportAsset(ProjectAssetContainer container, NamedObject asset, string path)
 		{
-			NativeFormatImporter importer = new NativeFormatImporter(asset);
+			NativeFormatImporter importer = new NativeFormatImporter(container.ExportVersion);
+			importer.MainObjectFileID = GetExportID(asset);
 			ExportAsset(container, importer, asset, path, asset.Name);
 		}
 

@@ -1,29 +1,73 @@
-﻿using System;
-using uTinyRipper.Converters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-using Object = uTinyRipper.Classes.Object;
-
-namespace uTinyRipper.Project.Classes
+namespace uTinyRipper.Classes
 {
-	public class NativeFormatImporter : DefaultImporter
+	public sealed class NativeFormatImporter : AssetImporter
 	{
-		public NativeFormatImporter(Object mainObject)
+		public NativeFormatImporter(Version version) :
+			base(version)
 		{
-			if(mainObject == null)
+		}
+
+		public NativeFormatImporter(AssetInfo assetInfo) :
+			base(assetInfo)
+		{
+		}
+
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
+		public static bool HasMainObjectFileID(Version version) => version.IsGreaterEqual(5, 6);
+
+		public override bool IncludesImporter(Version version)
+		{
+			return version.IsGreaterEqual(4);
+		}
+
+		public override void Read(AssetReader reader)
+		{
+			base.Read(reader);
+
+			if (HasMainObjectFileID(reader.Version))
 			{
-				throw new ArgumentNullException(nameof(mainObject));
+				MainObjectFileID = reader.ReadInt64();
 			}
-			m_mainObject = mainObject;
+			reader.AlignStream(AlignType.Align4);
+
+			PostRead(reader);
 		}
 
-		protected override void ExportYAMLInner(IExportContainer container, YAMLMappingNode node)
+		public override void Write(AssetWriter writer)
 		{
-			node.Add("mainObjectFileID", container.GetExportID(m_mainObject));
+			base.Write(writer);
+
+			if (HasMainObjectFileID(writer.Version))
+			{
+				writer.Write(MainObjectFileID);
+			}
+			writer.AlignStream(AlignType.Align4);
+
+			PostWrite(writer);
 		}
 
-		public override string Name => nameof(NativeFormatImporter);
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		{
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			if (HasMainObjectFileID(container.ExportVersion))
+			{
+				node.Add(MainObjectFileIDName, MainObjectFileID);
+			}
+			PostExportYAML(container, node);
+			return node;
+		}
 
-		private readonly Object m_mainObject;
+		public override ClassIDType ClassID => ClassIDType.NativeFormatImporter;
+
+		public long MainObjectFileID { get; set; }
+
+		protected override bool IncludesIDToName => false;
+
+		public const string MainObjectFileIDName = "m_MainObjectFileID";
 	}
 }

@@ -12,15 +12,7 @@ namespace uTinyRipper.Classes
 	{
 		protected Object(AssetInfo assetInfo)
 		{
-			if (assetInfo == null)
-			{
-				throw new ArgumentNullException(nameof(assetInfo));
-			}
 			AssetInfo = assetInfo;
-			if (assetInfo.ClassID != ClassID)
-			{
-				throw new ArgumentException($"Try to initialize '{ClassID}' with '{assetInfo.ClassID}' asset data", nameof(assetInfo));
-			}
 		}
 
 		protected Object(AssetInfo assetInfo, HideFlags hideFlags):
@@ -117,7 +109,7 @@ namespace uTinyRipper.Classes
 
 		public AssetInfo AssetInfo { get; }
 		public ISerializedFile File => AssetInfo.File;
-		public ClassIDType ClassID => AssetInfo.ClassID;
+		public virtual ClassIDType ClassID => AssetInfo.ClassID;
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
 		public virtual string ExportExtension => AssetExtension;
 		public long PathID => AssetInfo.PathID;

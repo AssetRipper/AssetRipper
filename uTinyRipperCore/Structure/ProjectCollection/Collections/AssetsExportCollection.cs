@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes;
 using uTinyRipper.Converters;
 
@@ -9,12 +8,7 @@ namespace uTinyRipper.Project
 	public abstract class AssetsExportCollection : AssetExportCollection
 	{
 		public AssetsExportCollection(IAssetExporter assetExporter, Object asset) :
-			this(assetExporter, asset, new NativeFormatImporter(asset))
-		{
-		}
-
-		protected AssetsExportCollection(IAssetExporter assetExporter, Object asset, IAssetImporter metaImporter):
-			base(assetExporter, asset, metaImporter)
+			base(assetExporter, asset)
 		{
 		}
 
@@ -58,7 +52,7 @@ namespace uTinyRipper.Project
 
 		protected virtual long GenerateExportID(Object asset)
 		{
-			return ObjectUtils.GenerateExportID(asset, IsContainsID);
+			return ObjectUtils.GenerateExportID(asset, ContainsID);
 		}
 
 		protected void AddAsset(Object asset)
@@ -68,7 +62,7 @@ namespace uTinyRipper.Project
 			m_exportIDs.Add(asset.AssetInfo, exportID);
 		}
 
-		private bool IsContainsID(long id)
+		private bool ContainsID(long id)
 		{
 			return m_exportIDs.ContainsValue(id);
 		}

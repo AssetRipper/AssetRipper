@@ -1,47 +1,38 @@
-using uTinyRipper.Classes;
 using uTinyRipper.Classes.Textures;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.Project.Classes
+namespace uTinyRipper.Classes.TextureImporters
 {
-	public class TextureImporterPlatformSettings : IAssetReadable, IYAMLExportable
+	/// <summary>
+	/// PlatformSettings in version < 2017.3
+	/// BuildTargetSettings in version < 5.5.0
+	/// </summary>
+	public struct TextureImporterPlatformSettings : IAsset
 	{
-		public TextureImporterPlatformSettings()
-		{
-		}
-
-		public TextureImporterPlatformSettings(TextureFormat textureFormat)
+		public TextureImporterPlatformSettings(Version version)
 		{
 			BuildTarget = DefaultTexturePlatformName;
 			MaxTextureSize = 2048;
 			ResizeAlgorithm = TextureResizeAlgorithm.Mitchell;
-			TextureFormat = textureFormat;
+			TextureFormat = TextureFormat.Automatic;
 			TextureCompression = TextureImporterCompression.Uncompressed;
 			CompressionQuality = 50;
 			CrunchedCompression = false;
 			AllowsAlphaSplitting = false;
 			Overridden = false;
 			AndroidETC2FallbackOverride = AndroidETC2FallbackOverride.UseBuildSettings;
-			ForceMaximumCompressionQuality_BC6H_BC7 = true;
+			ForceMaximumCompressionQuality_BC6H_BC7 = false;
 		}
 
-		/// <summary>
-		/// 2019.2 and greater
-		/// </summary>
-		public static bool IsReadForceMaximumCompressionQuality_BC6H_BC7(Version version)
-		{
-			return version.IsGreaterEqual(2019, 2);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// ForceMaximumCompressionQuality_BC6H_BC7 default value has been changed from 1 to 0
 			if (version.IsGreaterEqual(2019, 2))
 			{
 				return 3;
 			}
-			// TextureFormat.ATC_RGB4/ATC_RGBA8 was replaced to ETC_RGB4/ETC2_RGBA8
+			// TextureFormat.ATC_RGB4/ATC_RGBA8 has been replaced by ETC_RGB4/ETC2_RGBA8
 			if (version.IsGreaterEqual(2018))
 			{
 				return 2;
@@ -49,41 +40,168 @@ namespace uTinyRipper.Project.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// 2017.2 and greater
+		/// </summary>
+		public static bool HasResizeAlgorithm(Version version) => version.IsGreaterEqual(2017, 2);
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool HasTextureCompression(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool HasCrunchedCompression(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// 3.5.0 and greater
+		/// </summary>
+		public static bool HasCompressionQuality(Version version) => version.IsGreaterEqual(3, 5);
+		/// <summary>
+		/// 5.2.0 and greater
+		/// </summary>
+		public static bool HasAllowsAlphaSplitting(Version version) => version.IsGreaterEqual(5, 2);
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool HasOverridden(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// 2017.3 and greater
+		/// </summary>
+		public static bool HasAndroidETC2FallbackOverride(Version version) => version.IsGreaterEqual(2017, 3);
+		/// <summary>
+		/// 2019.2 and greater
+		/// </summary>
+		public static bool HasForceMaximumCompressionQuality_BC6H_BC7(Version version) => version.IsGreaterEqual(2019, 2);
+
+		/// <summary>
+		/// 5.2.0 and greater
+		/// </summary>
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(5, 2);
+
 		public void Read(AssetReader reader)
 		{
 			BuildTarget = reader.ReadString();
 			MaxTextureSize = reader.ReadInt32();
-			ResizeAlgorithm = (TextureResizeAlgorithm)reader.ReadInt32();
+			if (HasResizeAlgorithm(reader.Version))
+			{
+				ResizeAlgorithm = (TextureResizeAlgorithm)reader.ReadInt32();
+			}
 			TextureFormat = (TextureFormat)reader.ReadInt32();
-			TextureCompression = (TextureImporterCompression)reader.ReadInt32();
-			CompressionQuality = reader.ReadInt32();
-			CrunchedCompression = reader.ReadBoolean();
-			AllowsAlphaSplitting = reader.ReadBoolean();
-			Overridden = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			if (HasTextureCompression(reader.Version))
+			{
+				TextureCompression = (TextureImporterCompression)reader.ReadInt32();
+			}
+			if (HasCompressionQuality(reader.Version))
+			{
+				CompressionQuality = reader.ReadInt32();
+			}
+			if (HasCrunchedCompression(reader.Version))
+			{
+				CrunchedCompression = reader.ReadBoolean();
+			}
+			if (HasAllowsAlphaSplitting(reader.Version))
+			{
+				AllowsAlphaSplitting = reader.ReadBoolean();
+			}
+			if (HasOverridden(reader.Version))
+			{
+				Overridden = reader.ReadBoolean();
+			}
+			if (IsAlign(reader.Version))
+			{
+				reader.AlignStream(AlignType.Align4);
+			}
 
-			AndroidETC2FallbackOverride = (AndroidETC2FallbackOverride)reader.ReadInt32();
-			if (IsReadForceMaximumCompressionQuality_BC6H_BC7(reader.Version))
+			if (HasAndroidETC2FallbackOverride(reader.Version))
+			{
+				AndroidETC2FallbackOverride = (AndroidETC2FallbackOverride)reader.ReadInt32();
+			}
+			if (HasForceMaximumCompressionQuality_BC6H_BC7(reader.Version))
 			{
 				ForceMaximumCompressionQuality_BC6H_BC7 = reader.ReadBoolean();
+			}
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(BuildTarget);
+			writer.Write(MaxTextureSize);
+			if (HasResizeAlgorithm(writer.Version))
+			{
+				writer.Write((int)ResizeAlgorithm);
+			}
+			writer.Write((int)TextureFormat);
+			if (HasTextureCompression(writer.Version))
+			{
+				writer.Write((int)TextureCompression);
+			}
+			if (HasCompressionQuality(writer.Version))
+			{
+				writer.Write(CompressionQuality);
+			}
+			if (HasCrunchedCompression(writer.Version))
+			{
+				writer.Write(CrunchedCompression);
+			}
+			if (HasAllowsAlphaSplitting(writer.Version))
+			{
+				writer.Write(AllowsAlphaSplitting);
+			}
+			if (HasOverridden(writer.Version))
+			{
+				writer.Write(Overridden);
+			}
+			if (IsAlign(writer.Version))
+			{
+				writer.AlignStream(AlignType.Align4);
+			}
+
+			if (HasAndroidETC2FallbackOverride(writer.Version))
+			{
+				writer.Write((int)AndroidETC2FallbackOverride);
+			}
+			if (HasForceMaximumCompressionQuality_BC6H_BC7(writer.Version))
+			{
+				writer.Write(ForceMaximumCompressionQuality_BC6H_BC7);
 			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(BuildTargetName, BuildTarget);
 			node.Add(MaxTextureSizeName, MaxTextureSize);
-			node.Add(ResizeAlgorithmName, (int)ResizeAlgorithm);
+			if (HasResizeAlgorithm(container.ExportVersion))
+			{
+				node.Add(ResizeAlgorithmName, (int)ResizeAlgorithm);
+			}
 			node.Add(TextureFormatName, (int)GetTextureFormat(container.Version));
-			node.Add(TextureCompressionName, (int)TextureCompression);
-			node.Add(CompressionQualityName, GetCompressionQuality(container.Version, container.ExportVersion));
-			node.Add(CrunchedCompressionName, CrunchedCompression);
-			node.Add(AllowsAlphaSplittingName, AllowsAlphaSplitting);
-			node.Add(OverriddenName, Overridden);
-			node.Add(AndroidETC2FallbackOverrideName, (int)AndroidETC2FallbackOverride);
-			if (IsReadForceMaximumCompressionQuality_BC6H_BC7(container.ExportVersion))
+			if (HasTextureCompression(container.ExportVersion))
+			{
+				node.Add(TextureCompressionName, (int)TextureCompression);
+			}
+			if (HasCompressionQuality(container.ExportVersion))
+			{
+				node.Add(CompressionQualityName, GetCompressionQuality(container));
+			}
+			if (HasCrunchedCompression(container.ExportVersion))
+			{
+				node.Add(CrunchedCompressionName, CrunchedCompression);
+			}
+			if (HasAllowsAlphaSplitting(container.ExportVersion))
+			{
+				node.Add(AllowsAlphaSplittingName, AllowsAlphaSplitting);
+			}
+			if (HasOverridden(container.ExportVersion))
+			{
+				node.Add(OverriddenName, Overridden);
+			}
+			if (HasAndroidETC2FallbackOverride(container.ExportVersion))
+			{
+				node.Add(AndroidETC2FallbackOverrideName, (int)AndroidETC2FallbackOverride);
+			}
+			if (HasForceMaximumCompressionQuality_BC6H_BC7(container.ExportVersion))
 			{
 				node.Add(ForceMaximumCompressionQuality_BC6H_BC7Name, GetForceMaximumCompressionQuality_BC6H_BC7(container.Version));
 			}
@@ -92,7 +210,7 @@ namespace uTinyRipper.Project.Classes
 
 		private TextureFormat GetTextureFormat(Version version)
 		{
-			if (GetSerializedVersion(version) > 1)
+			if (ToSerializedVersion(version) > 1)
 			{
 				if (TextureFormat == TextureFormat.ATC_RGB4)
 				{
@@ -105,11 +223,11 @@ namespace uTinyRipper.Project.Classes
 			}
 			return TextureFormat;
 		}
-		private int GetCompressionQuality(Version dataVersion, Version exportVersion)
+		private int GetCompressionQuality(IExportContainer container)
 		{
-			if (GetSerializedVersion(dataVersion) < 3)
+			if (ToSerializedVersion(container.Version) < 3)
 			{
-				if (GetSerializedVersion(exportVersion) >= 3)
+				if (ToSerializedVersion(container.ExportVersion) >= 3)
 				{
 					if (TextureFormat == TextureFormat.BC6H || TextureFormat == TextureFormat.BC7)
 					{
@@ -121,20 +239,23 @@ namespace uTinyRipper.Project.Classes
 		}
 		private bool GetForceMaximumCompressionQuality_BC6H_BC7(Version version)
 		{
-			return IsReadForceMaximumCompressionQuality_BC6H_BC7(version) ? ForceMaximumCompressionQuality_BC6H_BC7 : true;
+			return HasForceMaximumCompressionQuality_BC6H_BC7(version) ? ForceMaximumCompressionQuality_BC6H_BC7 : true;
 		}
 
-		public string BuildTarget { get; private set; }
-		public int MaxTextureSize { get; private set; }
-		public TextureResizeAlgorithm ResizeAlgorithm { get; private set; }
-		public TextureFormat TextureFormat { get; private set; }
-		public TextureImporterCompression TextureCompression { get; private set; }
-		public int CompressionQuality { get; private set; }
-		public bool CrunchedCompression { get; private set; }
-		public bool AllowsAlphaSplitting { get; private set; }
-		public bool Overridden { get; private set; }
-		public AndroidETC2FallbackOverride AndroidETC2FallbackOverride { get; private set; }
-		public bool ForceMaximumCompressionQuality_BC6H_BC7 { get; private set; }
+		public string BuildTarget { get; set; }
+		public int MaxTextureSize { get; set; }
+		public TextureResizeAlgorithm ResizeAlgorithm { get; set; }
+		public TextureFormat TextureFormat { get; set; }
+		public TextureImporterCompression TextureCompression { get; set; }
+		public int CompressionQuality { get; set; }
+		public bool CrunchedCompression { get; set; }
+		public bool AllowsAlphaSplitting { get; set; }
+		public bool Overridden { get; set; }
+		public AndroidETC2FallbackOverride AndroidETC2FallbackOverride { get; set; }
+		public bool ForceMaximumCompressionQuality_BC6H_BC7 { get; set; }
+
+		public const string DefaultTexturePlatformName = "DefaultTexturePlatform";
+		public const string StandaloneTexturePlatformName = "StandalonePlatform";
 
 		public const string BuildTargetName = "m_BuildTarget";
 		public const string MaxTextureSizeName = "m_MaxTextureSize";
@@ -147,7 +268,5 @@ namespace uTinyRipper.Project.Classes
 		public const string OverriddenName = "m_Overridden";
 		public const string AndroidETC2FallbackOverrideName = "m_AndroidETC2FallbackOverride";
 		public const string ForceMaximumCompressionQuality_BC6H_BC7Name = "m_ForceMaximumCompressionQuality_BC6H_BC7";
-
-		public const string DefaultTexturePlatformName = "DefaultTexturePlatform";
 	}
 }

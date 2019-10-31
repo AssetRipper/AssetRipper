@@ -8,12 +8,6 @@ namespace uTinyRipper.Classes
 {
 	public struct Rectf : ISerializableStructure
 	{
-		private static int GetSerializedVersion(Version version)
-		{
-			// TODO:
-			return 2;
-		}
-		
 		public Rectf(float x, float y, float width, float height)
 		{
 			X = x;
@@ -89,6 +83,21 @@ namespace uTinyRipper.Classes
 			return result;
 		}
 
+		public static int ToSerializedVersion(Version version)
+		{
+			// absolute Min/Max has been replaced by relative values
+			if (version.IsGreaterEqual(2))
+			{
+				return 2;
+			}
+			return 1;
+		}
+
+		/// <summary>
+		/// 2.0.0 and greater
+		/// </summary>
+		public static bool HasMinMax(Version version) => version.IsLess(2);
+
 		public ISerializableStructure CreateDuplicate()
 		{
 			return new Rectf();
@@ -96,28 +105,58 @@ namespace uTinyRipper.Classes
 
 		public void Read(AssetReader reader)
 		{
-			X = reader.ReadSingle();
-			Y = reader.ReadSingle();
-			Width = reader.ReadSingle();
-			Height = reader.ReadSingle();
+			if (HasMinMax(reader.Version))
+			{
+				XMin = reader.ReadSingle();
+				YMin = reader.ReadSingle();
+				XMax = reader.ReadSingle();
+				YMax = reader.ReadSingle();
+			}
+			else
+			{
+				X = reader.ReadSingle();
+				Y = reader.ReadSingle();
+				Width = reader.ReadSingle();
+				Height = reader.ReadSingle();
+			}
 		}
 
 		public void Write(AssetWriter writer)
 		{
-			writer.Write(X);
-			writer.Write(Y);
-			writer.Write(Width);
-			writer.Write(Height);
+			if (HasMinMax(writer.Version))
+			{
+				writer.Write(XMin);
+				writer.Write(YMin);
+				writer.Write(XMax);
+				writer.Write(YMax);
+			}
+			else
+			{
+				writer.Write(X);
+				writer.Write(Y);
+				writer.Write(Width);
+				writer.Write(Height);
+			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add(XName, X);
-			node.Add(YName, Y);
-			node.Add(WidthName, Width);
-			node.Add(HeightName, Height);
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			if (HasMinMax(container.ExportVersion))
+			{
+				node.Add(XMinName, XMin);
+				node.Add(YMinName, YMin);
+				node.Add(XMaxName, XMax);
+				node.Add(YMaxName, YMax);
+			}
+			else
+			{
+				node.Add(XName, X);
+				node.Add(YName, Y);
+				node.Add(WidthName, Width);
+				node.Add(HeightName, Height);
+			}
 			return node;
 		}
 
@@ -175,11 +214,36 @@ namespace uTinyRipper.Classes
 		public Vector2f Position => new Vector2f(X, Y);
 		public Vector2f Size => new Vector2f(Width, Height);
 
-		public float X { get; private set; }
-		public float Y { get; private set; }
-		public float Width { get; private set; }
-		public float Height { get; private set; }
+		public float XMin
+		{
+			get => X;
+			set => X = value;
+		}
+		public float YMin
+		{
+			get => Y;
+			set => Y = value;
+		}
+		public float XMax
+		{
+			get => X + Width;
+			private set => Width = value - XMin;
+		}
+		public float YMax
+		{
+			get => Y + Height;
+			private set => Height = value - YMin;
+		}
 
+		public float X { get; set; }
+		public float Y { get; set; }
+		public float Width { get; set; }
+		public float Height { get; set; }
+
+		public const string XMinName = "xmin";
+		public const string YMinName = "ymin";
+		public const string XMaxName = "xmax";
+		public const string YMaxName = "ymax";
 		public const string XName = "x";
 		public const string YName = "y";
 		public const string WidthName = "width";

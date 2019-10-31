@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes;
 using uTinyRipper.Converters;
 using Object = uTinyRipper.Classes.Object;
@@ -43,7 +42,7 @@ namespace uTinyRipper.Project
 			throw new ArgumentException(nameof(asset));
 		}
 
-		public override ExportPointer CreateExportPointer(Object asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(Object asset, bool isLocal)
 		{
 			throw new NotSupportedException();
 		}

@@ -231,6 +231,7 @@ namespace uTinyRipper
 		CrashReportManager				= 304,
 		PerformanceReportingManager		= 305,
 		UnityConnectSettings			= 310,
+#warning TODO: merge with AvatarMask
 		AvatarMask1						= 319,
 		PlayableDirector				= 320,
 		VideoPlayer						= 328,

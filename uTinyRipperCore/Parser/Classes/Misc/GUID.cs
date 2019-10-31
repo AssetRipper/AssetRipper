@@ -54,15 +54,11 @@ namespace uTinyRipper.Classes.Misc
 
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (obj is GUID guid)
 			{
-				return false;
+				return this == guid;
 			}
-			if (obj.GetType() != typeof(GUID))
-			{
-				return false;
-			}
-			return this == (GUID)obj;
+			return false;
 		}
 
 		public override int GetHashCode()

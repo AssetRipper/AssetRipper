@@ -1,5 +1,4 @@
 using System.IO;
-using uTinyRipper.Project;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper.Classes;
 
 namespace uTinyRipper.Converters
 {
@@ -14,9 +14,9 @@ namespace uTinyRipper.Converters
 			m_isF = isF;
 		}
 
-		public ExportPointer ToExportPointer()
+		public MetaPtr ToExportPointer()
 		{
-			return new ExportPointer(ExportID, GUID, AssetType.Internal);
+			return new MetaPtr(ExportID, GUID, AssetType.Internal);
 		}
 
 		public GUID GUID => m_isF ? EngineBuiltInAssets.FGUID : EngineBuiltInAssets.EGUID;
@@ -125,7 +125,7 @@ namespace uTinyRipper.Converters
 			// Current default
 			///////////////////////////////////////////////////////
 
-			AddMaterial(FontMaterialName, 10100, true);
+			AddMaterial(FontMaterialName, 10100, false);
 			AddMaterial("FrameDebuggerRenderTargetDisplay", 10756, true);
 
 			AddTexture("Soft", 10001, false);

@@ -1,5 +1,4 @@
 ﻿using System;
-using uTinyRipper.Project.Classes;
 using uTinyRipper.Converters;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.YAML;
@@ -28,7 +27,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		private static bool IsLongID(Version version) => version.IsGreaterEqual(5);
+		public static bool IsLongID(Version version) => version.IsGreaterEqual(5);
 
 		public PPtr<T1> CastTo<T1>()
 			where T1 : Object
@@ -59,7 +58,7 @@ namespace uTinyRipper.Classes
 		{
 			if (IsNull)
 			{
-				return ExportPointer.EmptyPointer.ExportYAML(container);
+				return MetaPtr.NullPtr.ExportYAML(container);
 			}
 
 			T asset = FindAsset(container);
@@ -67,11 +66,11 @@ namespace uTinyRipper.Classes
 			{
 				ClassIDType classType = typeof(T).ToClassIDType();
 				AssetType assetType = container.ToExportType(classType);
-				ExportPointer pointer = new ExportPointer(classType, assetType);
+				MetaPtr pointer = new MetaPtr(classType, assetType);
 				return pointer.ExportYAML(container);
 			}
 
-			ExportPointer exPointer = container.CreateExportPointer(asset);
+			MetaPtr exPointer = container.CreateExportPointer(asset);
 			return exPointer.ExportYAML(container);
 		}
 

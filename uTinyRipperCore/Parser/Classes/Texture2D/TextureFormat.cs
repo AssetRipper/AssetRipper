@@ -267,6 +267,7 @@ namespace uTinyRipper.Classes.Textures
 
 	public static class TextureFormatExtensions
 	{
+#warning TODO: check version?
 		public static TextureFormat ToDefaultFormat(this TextureFormat _this)
 		{
 			if (_this == TextureFormat.R8)

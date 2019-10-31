@@ -1,7 +1,7 @@
 ﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.Classes.Meshes
+namespace uTinyRipper.Classes.Misc
 {
 	/// <summary>
 	/// BoneInfluence previously
@@ -47,17 +47,17 @@ namespace uTinyRipper.Classes.Meshes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("weight[0]", Weight0);
-			node.Add("weight[1]", Weight1);
-			node.Add("weight[2]", Weight2);
-			node.Add("weight[3]", Weight3);
-			node.Add("boneIndex[0]", BoneIndex0);
-			node.Add("boneIndex[1]", BoneIndex1);
-			node.Add("boneIndex[2]", BoneIndex2);
-			node.Add("boneIndex[3]", BoneIndex3);
+			node.Add(Weight0Name, Weight0);
+			node.Add(Weight1Name, Weight1);
+			node.Add(Weight2Name, Weight2);
+			node.Add(Weight3Name, Weight3);
+			node.Add(BoneIndex0Name, BoneIndex0);
+			node.Add(BoneIndex1Name, BoneIndex1);
+			node.Add(BoneIndex2Name, BoneIndex2);
+			node.Add(BoneIndex3Name, BoneIndex3);
 			return node;
 		}
-		
+
 		public float Weight0 { get; set; }
 		public float Weight1 { get; set; }
 		public float Weight2 { get; set; }
@@ -66,6 +66,15 @@ namespace uTinyRipper.Classes.Meshes
 		public int BoneIndex1 { get; set; }
 		public int BoneIndex2 { get; set; }
 		public int BoneIndex3 { get; set; }
+
+		public const string Weight0Name = "weight[0]";
+		public const string Weight1Name = "weight[1]";
+		public const string Weight2Name = "weight[2]";
+		public const string Weight3Name = "weight[3]";
+		public const string BoneIndex0Name = "boneIndex[0]";
+		public const string BoneIndex1Name = "boneIndex[1]";
+		public const string BoneIndex2Name = "boneIndex[2]";
+		public const string BoneIndex3Name = "boneIndex[3]";
 
 		public const int Dimention = 4;
 	}

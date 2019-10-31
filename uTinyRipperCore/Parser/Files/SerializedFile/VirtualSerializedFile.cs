@@ -5,7 +5,6 @@ using uTinyRipper.Classes;
 using uTinyRipper.Converters;
 
 using Object = uTinyRipper.Classes.Object;
-using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.SerializedFiles
 {

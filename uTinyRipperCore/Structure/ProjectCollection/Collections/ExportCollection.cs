@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 using Object = uTinyRipper.Classes.Object;
-using uTinyRipper.Converters;
 
 namespace uTinyRipper.Project
 {
@@ -19,6 +18,24 @@ namespace uTinyRipper.Project
 			string invalidChars = new string(Path.GetInvalidFileNameChars());
 			string escapedChars = Regex.Escape(invalidChars);
 			FileNameRegex = new Regex($"[{escapedChars}]");
+		}
+
+		protected static void ExportMeta(IExportContainer container, Meta meta, string filePath)
+		{
+			string metaPath = $"{filePath}{MetaExtension}";
+			using (Stream fileStream = FileUtils.CreateVirtualFile(metaPath))
+			{
+				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
+				{
+					YAMLWriter writer = new YAMLWriter();
+					writer.IsWriteDefaultTag = false;
+					writer.IsWriteVersion = false;
+					writer.IsFormatKeys = true;
+					YAMLDocument doc = meta.ExportYAMLDocument(container);
+					writer.AddDocument(doc);
+					writer.Write(streamWriter);
+				}
+			}
 		}
 
 		public static long GetMainExportID(Object asset)
@@ -60,9 +77,9 @@ namespace uTinyRipper.Project
 		public abstract bool Export(ProjectAssetContainer container, string dirPath);
 		public abstract bool IsContains(Object asset);
 		public abstract long GetExportID(Object asset);
-		public abstract ExportPointer CreateExportPointer(Object asset, bool isLocal);
-		
-		protected void ExportAsset(ProjectAssetContainer container, IAssetImporter importer, Object asset, string path, string name)
+		public abstract MetaPtr CreateExportPointer(Object asset, bool isLocal);
+
+		protected void ExportAsset(ProjectAssetContainer container, AssetImporter importer, Object asset, string path, string name)
 		{
 			if (!DirectoryUtils.Exists(path))
 			{
@@ -73,25 +90,8 @@ namespace uTinyRipper.Project
 			string uniqueName = FileUtils.GetUniqueName(path, fullName, FileUtils.MaxFileNameLength - MetaExtension.Length);
 			string filePath = Path.Combine(path, uniqueName);
 			AssetExporter.Export(container, asset, filePath);
-			Meta meta = new Meta(importer, asset.GUID);
+			Meta meta = new Meta(asset.GUID, importer);
 			ExportMeta(container, meta, filePath);
-		}
-
-		protected void ExportMeta(IExportContainer container, Meta meta, string filePath)
-		{
-			string metaPath = $"{filePath}{MetaExtension}";
-			using (Stream fileStream = FileUtils.CreateVirtualFile(metaPath))
-			{
-				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
-				{
-					YAMLWriter writer = new YAMLWriter();
-					YAMLDocument doc = meta.ExportYAMLDocument(container);
-					writer.IsWriteDefaultTag = false;
-					writer.IsWriteVersion = false;
-					writer.AddDocument(doc);
-					writer.Write(streamWriter);
-				}
-			}
 		}
 		
 		protected string GetUniqueFileName(ISerializedFile file, Object asset, string dirPath)

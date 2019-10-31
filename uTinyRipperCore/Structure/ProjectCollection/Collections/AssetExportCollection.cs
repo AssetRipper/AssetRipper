@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.Project.Classes;
+using uTinyRipper.Classes;
 using uTinyRipper.Converters;
 
 using Object = uTinyRipper.Classes.Object;
@@ -10,12 +10,7 @@ namespace uTinyRipper.Project
 {
 	public class AssetExportCollection : ExportCollection
 	{
-		public AssetExportCollection(IAssetExporter assetExporter, Object asset) :
-			this(assetExporter, asset, new NativeFormatImporter(asset))
-		{
-		}
-
-		public AssetExportCollection(IAssetExporter assetExporter, Object asset, IAssetImporter metaImporter)
+		public AssetExportCollection(IAssetExporter assetExporter, Object asset)
 		{
 			if (assetExporter == null)
 			{
@@ -25,13 +20,8 @@ namespace uTinyRipper.Project
 			{
 				throw new ArgumentNullException(nameof(asset));
 			}
-			if (metaImporter == null)
-			{
-				throw new ArgumentNullException(nameof(metaImporter));
-			}
 			AssetExporter = assetExporter;
 			Asset = asset;
-			MetaImporter = metaImporter;
 		}
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)
@@ -53,16 +43,17 @@ namespace uTinyRipper.Project
 				subPath = Path.Combine(dirPath, subFolder);
 				fileName = GetUniqueFileName(container.File, Asset, subPath);
 			}
-			string filePath = Path.Combine(subPath, fileName);
 
 			if (!DirectoryUtils.Exists(subPath))
 			{
 				DirectoryUtils.CreateVirtualDirectory(subPath);
 			}
 
-			if (ExportInner(container, filePath))
+			string filePath = Path.Combine(subPath, fileName);
+			bool result = ExportInner(container, filePath);
+			if (result)
 			{
-				Meta meta = new Meta(MetaImporter, Asset.GUID);
+				Meta meta = new Meta(Asset.GUID, CreateImporter(container));
 				ExportMeta(container, meta, filePath);
 				return true;
 			}
@@ -83,17 +74,24 @@ namespace uTinyRipper.Project
 			throw new ArgumentException(nameof(asset));
 		}
 
-		public override ExportPointer CreateExportPointer(Object asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(Object asset, bool isLocal)
 		{
 			long exportID = GetExportID(asset);
 			return isLocal ?
-				new ExportPointer(exportID) :
-				new ExportPointer(exportID, Asset.GUID, AssetExporter.ToExportType(Asset));
+				new MetaPtr(exportID) :
+				new MetaPtr(exportID, Asset.GUID, AssetExporter.ToExportType(Asset));
 		}
 
 		protected virtual bool ExportInner(ProjectAssetContainer container, string filePath)
 		{
 			return AssetExporter.Export(container, Asset.Convert(container), filePath);
+		}
+
+		protected virtual AssetImporter CreateImporter(IExportContainer container)
+		{
+			NativeFormatImporter importer = new NativeFormatImporter(container.ExportVersion);
+			importer.MainObjectFileID = GetExportID(Asset);
+			return importer;
 		}
 
 		public override IAssetExporter AssetExporter { get; }
@@ -104,7 +102,5 @@ namespace uTinyRipper.Project
 		}
 		public override string Name => Asset.ToString();
 		public Object Asset { get; }
-
-		protected IAssetImporter MetaImporter { get; }
 	}
 }

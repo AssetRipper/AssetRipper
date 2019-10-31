@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using System.Linq;
-using uTinyRipper.Project;
 using uTinyRipper.Converters;
 using uTinyRipper.Converters.Meshes;
 using uTinyRipper.YAML;
 using uTinyRipper;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.Meshes
 {
@@ -104,7 +104,7 @@ namespace uTinyRipper.Classes.Meshes
 			return skin;
 		}
 
-		public Vector3f[] GenerateVertices(Version version, SubMesh submesh)
+		public Vector3f[] GenerateVertices(Version version, ref SubMesh submesh)
 		{
 			ChannelInfo channel = GetChannel(version, ShaderChannel.Vertex);
 			if (!channel.IsSet)

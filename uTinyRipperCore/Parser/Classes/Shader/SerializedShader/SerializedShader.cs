@@ -24,8 +24,7 @@ namespace uTinyRipper.Classes.Shaders
 
 			for (int i = 0; i < SubShaders.Length; i++)
 			{
-				ref SerializedSubShader subShader = ref SubShaders[i];
-				subShader.Export(writer);
+				SubShaders[i].Export(writer);
 			}
 
 			if(FallbackName != string.Empty)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using uTinyRipper.Classes.Misc;
 
@@ -8,12 +7,7 @@ namespace uTinyRipper.Classes
 {
 	public static class ObjectUtils
 	{
-		public static long GenerateExportID(Object asset, IEnumerable<long> exportIDs)
-		{
-			return GenerateExportID(asset, (id) => exportIDs.Any(t => t == id));
-		}
-
-		public static long GenerateExportID(Object asset, Func<long, bool> uniqueChecker)
+		public static long GenerateExportID(Object asset, Func<long, bool> duplicateChecker)
 		{
 			if (asset == null)
 			{
@@ -35,16 +29,18 @@ namespace uTinyRipper.Classes
 			long exportID = 0;
 			do
 			{
-				ulong value = 0;
-				value += unchecked((uint)random.Next(0, 100000)) * 10000000000UL;
-				value += unchecked((uint)random.Next(0, 100000)) * 100000UL;
-				value += unchecked((uint)random.Next(0, 100000)) * 1UL;
+				ulong value = unchecked((ulong)GenerateInternalID());
 				persistentValue = unchecked(persistentValue + value);
 				exportID = prefix + (long)(persistentValue % 1000000000000000L);
-
 			}
-			while (uniqueChecker(exportID));
+			while (duplicateChecker(exportID));
 			return exportID;
+		}
+
+		public static long GenerateInternalID()
+		{
+			s_random.NextBytes(s_idBuffer);
+			return BitConverter.ToInt64(s_idBuffer, 0);
 		}
 
 		public static GUID CalculateAssetsGUID(IEnumerable<Object> assets)
@@ -72,5 +68,10 @@ namespace uTinyRipper.Classes
 				return new GUID(hash);
 			}
 		}
+
+		[ThreadStatic]
+		private static readonly ThreadSafeRandom s_random = new ThreadSafeRandom();
+		[ThreadStatic]
+		private static readonly byte[] s_idBuffer = new byte[8];
 	}
 }

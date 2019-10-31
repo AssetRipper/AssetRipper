@@ -1,41 +1,120 @@
-﻿using System;
-using uTinyRipper.Project.Classes;
-using uTinyRipper.Classes;
+﻿using System.Collections.Generic;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.Importers
+namespace uTinyRipper.Classes
 {
-	public class MonoImporter : DefaultImporter
+	public class MonoImporter : AssetImporter
 	{
-		public MonoImporter(MonoScript sctipt)
+		public MonoImporter(Version version) :
+			base(version)
 		{
-			if(sctipt == null)
+			if (HasDefaultReferences(version))
 			{
-				throw new ArgumentNullException(nameof(sctipt));
+				DefaultReferences = new Dictionary<string, PPtr<Object>>();
 			}
-			m_script = sctipt;
 		}
 
-		private static int GetSerializedVersion(Version version)
+		public MonoImporter(AssetInfo assetInfo) :
+			base(assetInfo)
 		{
-			// TODO:
-			return 2;
 		}
 
-		protected override void ExportYAMLInner(IExportContainer container, YAMLMappingNode node)
+		public static int ToSerializedVersion(Version version)
 		{
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("defaultReferences", YAMLSequenceNode.Empty);
-			node.Add("executionOrder", m_script.ExecutionOrder);
-
-			YAMLMappingNode instanceId = new YAMLMappingNode(MappingStyle.Flow);
-			instanceId.Add("instanceID", 0);
-			node.Add("icon", instanceId);
+			// NOTE: unknown conversion (default values has been changed?)
+			if (version.IsGreaterEqual(3, 5))
+			{
+				return 2;
+			}
+			return 1;
 		}
 
-		public override string Name => "MonoImporter";
+		/// <summary>
+		/// 2.6.0 and greater
+		/// </summary>
+		public static bool HasDefaultReferences(Version version) => version.IsGreaterEqual(2, 6);
+		/// <summary>
+		/// 3.4.0 and greater
+		/// </summary>
+		public static bool HasExecutionOrder(Version version) => version.IsGreaterEqual(3, 4);
 
-		private readonly MonoScript m_script;
+		public override bool IncludesImporter(Version version)
+		{
+			return true;
+		}
+
+		public override void Read(AssetReader reader)
+		{
+			base.Read(reader);
+
+			if (HasDefaultReferences(reader.Version))
+			{
+				DefaultReferences = new Dictionary<string, PPtr<Object>>();
+				DefaultReferences.Read(reader);
+			}
+			if (HasExecutionOrder(reader.Version))
+			{
+				ExecutionOrder = reader.ReadInt16();
+				reader.AlignStream(AlignType.Align4);
+
+				Icon = reader.ReadAsset<PPtr<Texture2D>>();
+			}
+
+			PostRead(reader);
+		}
+
+		public override void Write(AssetWriter writer)
+		{
+			base.Write(writer);
+
+			if (HasDefaultReferences(writer.Version))
+			{
+				DefaultReferences.Write(writer);
+			}
+			if (HasExecutionOrder(writer.Version))
+			{
+				writer.Write(ExecutionOrder);
+				writer.AlignStream(AlignType.Align4);
+
+				Icon.Write(writer);
+			}
+
+			PostWrite(writer);
+		}
+
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		{
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			if (HasDefaultReferences(container.ExportVersion))
+			{
+				node.Add(DefaultReferencesName, DefaultReferences.ExportYAML(container));
+			}
+			if (HasExecutionOrder(container.ExportVersion))
+			{
+				node.Add(ExecutionOrderName, ExecutionOrder);
+				node.Add(IconName, Icon.ExportYAML(container));
+			}
+			PostExportYAML(container, node);
+			return node;
+		}
+
+		public override ClassIDType ClassID => ClassIDType.MonoImporter;
+
+		public Dictionary<string, PPtr<Object>> DefaultReferences { get; set; }
+		public short ExecutionOrder { get; set; }
+		// map to Preview field just to reduce structure size. also they has same meaning
+		public PPtr<Texture2D> Icon
+		{
+			get => Preview;
+			set => Preview = value;
+		}
+
+		protected override bool IncludesIDToName => false;
+
+		public const string DefaultReferencesName = "m_DefaultReferences";
+		public const string ExecutionOrderName = "executionOrder";
+		public const string IconName = "icon";
 	}
 }

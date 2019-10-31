@@ -27,12 +27,34 @@ namespace uTinyRipper
 			}
 		}
 
+		public static void Read(this IDictionary<int, string> _this, EndianReader reader)
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				int key = reader.ReadInt32();
+				string value = reader.ReadString();
+				_this.Add(key, value);
+			}
+		}
+
 		public static void Read(this IDictionary<uint, string> _this, EndianReader reader)
 		{
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
 			{
 				uint key = reader.ReadUInt32();
+				string value = reader.ReadString();
+				_this.Add(key, value);
+			}
+		}
+
+		public static void Read(this IDictionary<long, string> _this, EndianReader reader)
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				long key = reader.ReadInt64();
 				string value = reader.ReadString();
 				_this.Add(key, value);
 			}
@@ -189,6 +211,28 @@ namespace uTinyRipper
 				Tuple<ushort, ushort> key = reader.ReadTupleUInt16UInt16();
 				float value = reader.ReadSingle();
 				_this[key] = value;
+			}
+		}
+
+		public static void Read(this IDictionary<Tuple<int, long>, string> _this, EndianReader reader)
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				Tuple<int, long> key = reader.ReadTupleInt32Int64();
+				string value = reader.ReadString();
+				_this.Add(key, value);
+			}
+		}
+
+		public static void Read<T>(this IDictionary<Tuple<T, long>, string> _this, EndianReader reader, Func<int, T> converter)
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				Tuple<T, long> key = reader.ReadTupleTLong(converter);
+				string value = reader.ReadString();
+				_this.Add(key, value);
 			}
 		}
 	}

@@ -5,7 +5,7 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper
 {
-	public static class IDictionaryYAMLExtensions
+	public static class IDictionaryExportYAMLExtensions
 	{
 		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<int, T> _this, IExportContainer container)
 			where T : IYAMLExportable
@@ -29,22 +29,6 @@ namespace uTinyRipper
 				YAMLMappingNode map = new YAMLMappingNode();
 				map.Add(kvp.Key, kvp.Value.ExportYAML(container));
 				node.Add(map);
-			}
-			return node;
-		}
-
-		public static YAMLNode ExportYAML(this IReadOnlyDictionary<Tuple<ushort, ushort>, float> _this)
-		{
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
-			foreach (var kvp in _this)
-			{
-				YAMLMappingNode kvpMap = new YAMLMappingNode();
-				YAMLMappingNode keyMap = new YAMLMappingNode();
-				keyMap.Add("first", kvp.Key.Item1);
-				keyMap.Add("second", kvp.Key.Item2);
-				kvpMap.Add("first", keyMap);
-				kvpMap.Add("second", kvp.Value);
-				node.Add(kvpMap);
 			}
 			return node;
 		}

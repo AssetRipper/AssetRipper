@@ -121,8 +121,17 @@ namespace uTinyRipper.Converters
 			OverrideYamlExporter(ClassIDType.ParticleSystemForceField);
 			OverrideYamlExporter(ClassIDType.OcclusionCullingData);
 			OverrideYamlExporter(ClassIDType.Prefab);
+			OverrideYamlExporter(ClassIDType.TextureImporter);
 			OverrideYamlExporter(ClassIDType.AvatarMask);
+			OverrideYamlExporter(ClassIDType.DefaultImporter);
 			OverrideYamlExporter(ClassIDType.SceneAsset);
+			OverrideYamlExporter(ClassIDType.NativeFormatImporter);
+			OverrideYamlExporter(ClassIDType.MonoImporter);
+			OverrideYamlExporter(ClassIDType.DDSImporter);
+			OverrideYamlExporter(ClassIDType.PVRImporter);
+			OverrideYamlExporter(ClassIDType.ASTCImporter);
+			OverrideYamlExporter(ClassIDType.KTXImporter);
+			OverrideYamlExporter(ClassIDType.IHVImageFormatImporter);
 			OverrideYamlExporter(ClassIDType.LightmapParameters);
 			OverrideYamlExporter(ClassIDType.SpriteAtlas);
 

@@ -1,7 +1,7 @@
-﻿using uTinyRipper.Project.Classes;
-using uTinyRipper.Classes.Textures;
+﻿using uTinyRipper.Classes.Textures;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes.TextureImporters;
 
 namespace uTinyRipper.Classes.SpriteAtlases
 {

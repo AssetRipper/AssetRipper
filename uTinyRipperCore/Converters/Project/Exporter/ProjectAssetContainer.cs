@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using uTinyRipper.Project;
-using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes;
 using uTinyRipper.SerializedFiles;
 
@@ -148,7 +147,7 @@ namespace uTinyRipper.Converters
 			return m_exporter.ToExportType(classID);
 		}
 
-		public ExportPointer CreateExportPointer(Object asset)
+		public MetaPtr CreateExportPointer(Object asset)
 		{
 			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection collection))
 			{
@@ -156,7 +155,7 @@ namespace uTinyRipper.Converters
 			}
 
 			long exportID = ExportCollection.GetMainExportID(asset);
-			return new ExportPointer(exportID, GUID.MissingReference, AssetType.Meta);
+			return new MetaPtr(exportID, GUID.MissingReference, AssetType.Meta);
 		}
 
 		public GUID SceneNameToGUID(string name)

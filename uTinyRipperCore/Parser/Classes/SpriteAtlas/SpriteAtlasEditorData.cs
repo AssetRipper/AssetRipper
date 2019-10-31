@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.Project.Classes;
 using uTinyRipper.Classes.Textures;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper.Classes.TextureImporters;
 
 namespace uTinyRipper.Classes.SpriteAtlases
 {
@@ -46,7 +46,8 @@ namespace uTinyRipper.Classes.SpriteAtlases
 
 		private static int GetSerializedVersion(Version version)
 		{
-			// packingParameters was renamed to packingSettings. Added DefaultPlatformSettings
+			// PackingParameters was renamed to PackingSettings
+			// DefaultPlatformSettings has been added
 			if (version.IsGreaterEqual(2018, 2))
 			{
 				return 2;
@@ -105,29 +106,17 @@ namespace uTinyRipper.Classes.SpriteAtlases
 				else
 				{
 					TextureImporterPlatformSettings[] settings = new TextureImporterPlatformSettings[m_platformSettings.Length + 1];
-					settings[0] = new TextureImporterPlatformSettings(TextureFormat.Automatic);
+					TextureImporterPlatformSettings setting = new TextureImporterPlatformSettings(exportVersion);
+					setting.TextureFormat = TextureFormat.Automatic;
+					setting.ForceMaximumCompressionQuality_BC6H_BC7 = true;
+					settings[0] = setting;
 					Array.Copy(m_platformSettings, 0, settings, 1, m_platformSettings.Length);
 					return settings;
 				}
 			}
 			else
 			{
-				if (GetSerializedVersion(version) > 1)
-				{
-					List<TextureImporterPlatformSettings> settings = new List<TextureImporterPlatformSettings>();
-					foreach(TextureImporterPlatformSettings setting in m_platformSettings)
-					{
-						if (setting.BuildTarget != TextureImporterPlatformSettings.DefaultTexturePlatformName)
-						{
-							settings.Add(setting);
-						}
-					}
-					return settings;
-				}
-				else
-				{
-					return m_platformSettings;
-				}
+				return m_platformSettings;
 			}
 		}
 

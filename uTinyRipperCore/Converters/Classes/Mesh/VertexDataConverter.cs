@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Meshes;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Converters.Meshes
 {

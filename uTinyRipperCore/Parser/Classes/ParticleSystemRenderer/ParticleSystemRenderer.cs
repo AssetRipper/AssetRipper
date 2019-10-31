@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.ParticleSystemRenderers;
 using uTinyRipper.Classes.SpriteRenderers;
 using uTinyRipper.YAML;

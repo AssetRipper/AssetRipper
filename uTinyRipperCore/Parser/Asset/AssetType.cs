@@ -4,7 +4,7 @@ namespace uTinyRipper
 	{
 		Internal		= 0,
 		/// <summary>
-		/// AssetPath has the format "library/cache/[first Hash byte as hex]/[Hash as hex]"
+		/// Library asset file. It has the format "library/cache/[first Hash byte as hex]/[Hash as hex]"
 		/// </summary>
 		Cached			= 1,
 		/// <summary>

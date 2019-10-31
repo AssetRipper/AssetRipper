@@ -1,34 +1,123 @@
-﻿using System;
-using uTinyRipper.Classes;
-using uTinyRipper.Classes.Textures;
+﻿using uTinyRipper.Classes.Textures;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
-namespace uTinyRipper.Project.Classes
+namespace uTinyRipper.Classes
 {
-	public sealed class IHVImageFormatImporter : DefaultImporter
+	/// <summary>
+	/// First introduced in 5.6.0 as a replacement for such importers as DDSImporter
+	/// </summary>
+	public sealed class IHVImageFormatImporter : AssetImporter
 	{
-		public IHVImageFormatImporter(Texture2D texture)
+		public IHVImageFormatImporter(Version version):
+			base(version)
 		{
-			if(texture == null)
+			TextureSettings.FilterMode = FilterMode.Bilinear;
+			TextureSettings.Aniso = 1;
+			SRGBTexture = true;
+		}
+
+		public IHVImageFormatImporter(AssetInfo assetInfo):
+			base(assetInfo)
+		{
+		}
+
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
+		public static bool HasImporter(Version version) => version.IsGreaterEqual(5, 6);
+
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool HasStreamingMipmaps(Version version) => version.IsGreaterEqual(2018, 2);
+		/// <summary>
+		/// 2017.3 and greater
+		/// </summary>
+		public static bool HasSRGBTexture(Version version) => version.IsGreaterEqual(2017, 3);
+
+		public override bool IncludesImporter(Version version)
+		{
+			return true;
+		}
+
+		public override void Read(AssetReader reader)
+		{
+			base.Read(reader);
+
+			TextureSettings.Read(reader);
+			IsReadable = reader.ReadBoolean();
+			if (HasSRGBTexture(reader.Version))
 			{
-				throw new ArgumentNullException(nameof(texture));
+				SRGBTexture = reader.ReadBoolean();
 			}
-			m_texture = texture;
+			if (HasStreamingMipmaps(reader.Version))
+			{
+				StreamingMipmaps = reader.ReadBoolean();
+				reader.AlignStream(AlignType.Align4);
+
+				StreamingMipmapsPriority = reader.ReadInt32();
+			}
+			reader.AlignStream(AlignType.Align4);
+
+			PostRead(reader);
 		}
 
-		protected override void ExportYAMLInner(IExportContainer container, YAMLMappingNode node)
+		public override void Write(AssetWriter writer)
 		{
-			base.ExportYAMLInner(container, node);
+			base.Write(writer);
 
-			TextureImportSettings importSettings = new TextureImportSettings(m_texture.TextureSettings);
-			node.Add("textureSettings", importSettings.ExportYAML(container));
-			node.Add("isReadable", m_texture.IsReadable);
-			node.Add("sRGBTexture", m_texture.ColorSpace == ColorSpace.Gamma ? true : false);
+			TextureSettings.Write(writer);
+			writer.Write(IsReadable);
+			if (HasSRGBTexture(writer.Version))
+			{
+				writer.Write(SRGBTexture);
+			}
+			if (HasStreamingMipmaps(writer.Version))
+			{
+				writer.Write(StreamingMipmaps);
+				writer.AlignStream(AlignType.Align4);
+
+				writer.Write(StreamingMipmapsPriority);
+			}
+			writer.AlignStream(AlignType.Align4);
+
+			PostWrite(writer);
 		}
 
-		public override string Name => nameof(IHVImageFormatImporter);
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		{
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
+			node.Add(IsReadableName, IsReadable);
+			if (HasSRGBTexture(container.ExportVersion))
+			{
+				node.Add(SRGBTextureName, SRGBTexture);
+			}
+			if (HasStreamingMipmaps(container.ExportVersion))
+			{
+				node.Add(StreamingMipmapsName, StreamingMipmaps);
+				node.Add(StreamingMipmapsPriorityName, StreamingMipmapsPriority);
+			}
+			PostExportYAML(container, node);
+			return node;
+		}
 
-		private readonly Texture2D m_texture;
+		public override ClassIDType ClassID => ClassIDType.IHVImageFormatImporter;
+
+		public bool IsReadable { get; set; }
+		public bool SRGBTexture { get; set; }
+		public bool StreamingMipmaps { get; set; }
+		public int StreamingMipmapsPriority { get; set; }
+
+		protected override bool IncludesIDToName => false;
+
+		public const string TextureSettingsName = "m_TextureSettings";
+		public const string IsReadableName = "m_IsReadable";
+		public const string SRGBTextureName = "m_sRGBTexture";
+		public const string StreamingMipmapsName = "m_StreamingMipmaps";
+		public const string StreamingMipmapsPriorityName = "m_StreamingMipmapsPriority";
+
+		public GLTextureSettings TextureSettings;
 	}
 }

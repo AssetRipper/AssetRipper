@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Classes.Textures;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
@@ -299,7 +298,7 @@ namespace uTinyRipper.Classes
 		public const string TypelessdataName = "_typelessdata";
 		public const string StreamDataName = "m_StreamData";
 
-		public TextureSettings TextureSettings;
+		public GLTextureSettings TextureSettings;
 		public StreamingInfo StreamData;
 
 		private byte[] m_imageData;
