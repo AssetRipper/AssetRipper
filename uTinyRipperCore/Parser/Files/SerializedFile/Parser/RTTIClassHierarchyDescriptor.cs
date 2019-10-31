@@ -24,7 +24,7 @@ namespace uTinyRipper.SerializedFiles
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool IsReadAttributes(FileGeneration generation)
+		public static bool IsReadPlatform(FileGeneration generation)
 		{
 			return generation >= FileGeneration.FG_300_342;
 		}
@@ -59,7 +59,7 @@ namespace uTinyRipper.SerializedFiles
 					}
 				}
 			}
-			if (IsReadAttributes(reader.Generation))
+			if (IsReadPlatform(reader.Generation))
 			{
 				Platform = (Platform)reader.ReadUInt32();
 				if (!Enum.IsDefined(typeof(Platform), Platform))

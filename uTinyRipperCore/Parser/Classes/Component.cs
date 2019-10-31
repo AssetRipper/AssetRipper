@@ -16,10 +16,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Not Prefab
 		/// </summary>
-		public static bool IsReadGameObject(TransferInstructionFlags flags)
-		{
-			return !flags.IsForPrefab();
-		}
+		public static bool HasGameObject(TransferInstructionFlags flags) => !flags.IsForPrefab();
 
 		public GameObject GetRoot()
 		{
@@ -37,9 +34,19 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			if (IsReadGameObject(reader.Flags))
+			if (HasGameObject(reader.Flags))
 			{
 				GameObject.Read(reader);
+			}
+		}
+
+		public override void Write(AssetWriter writer)
+		{
+			base.Write(writer);
+
+			if (HasGameObject(writer.Flags))
+			{
+				GameObject.Write(writer);
 			}
 		}
 

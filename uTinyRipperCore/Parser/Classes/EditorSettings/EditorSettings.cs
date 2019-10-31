@@ -1,13 +1,16 @@
 ﻿using uTinyRipper.Classes.EditorSettingss;
-using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
 using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
+	/// <summary>
+	/// First introduced in 2.6.0
+	/// </summary>
 	public sealed class EditorSettings : Object
 	{
-		public EditorSettings(AssetInfo assetInfo):
+		public EditorSettings(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -36,128 +39,7 @@ namespace uTinyRipper.Classes
 			return virtualFile.CreateAsset((assetInfo) => new EditorSettings(assetInfo, true));
 		}
 
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadExternalVersionControl(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
-		/// 5.4.x and less
-		/// </summary>
-		public static bool IsReadWebSecurityEmulationEnabled(Version version)
-		{
-			return version.IsLessEqual(5, 4);
-		}
-		/// <summary>
-		/// 2017.3 and greater
-		/// </summary>
-		public static bool IsReadLineEndingsForNewScripts(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
-		/// <summary>
-		/// 4.3.0 and greater
-		/// </summary>
-		public static bool IsReadDefaultBehaviorMode(Version version)
-		{
-			return version.IsGreaterEqual(4, 3);
-		}
-		/// <summary>
-		/// 2018.3 and greater
-		/// </summary>
-		public static bool IsReadPrefabRegularEnvironment(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
-		/// <summary>
-		/// 4.3.0 and greater
-		/// </summary>
-		public static bool IsReadSpritePackerMode(Version version)
-		{
-			return version.IsGreaterEqual(4, 3);
-		}
-		/// <summary>
-		/// 5.1.0 and greater
-		/// </summary>
-		public static bool IsReadSpritePackerPaddingPower(Version version)
-		{
-			return version.IsGreaterEqual(5, 1);
-		}
-		/// <summary>
-		/// 2017.2 and greater
-		/// </summary>
-		public static bool IsReadEtcTextureCompressorBehavior(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
-		/// <summary>
-		/// 5.1.0 and greater
-		/// </summary>
-		public static bool IsReadProjectGenerationIncludedExtensions(Version version)
-		{
-			return version.IsGreaterEqual(5, 1);
-		}
-		/// <summary>
-		/// 5.5.0 to 2018.3 exclusive
-		/// </summary>
-		public static bool IsReadUserGeneratedProjectSuffix(Version version)
-		{
-			return version.IsGreaterEqual(5, 5) && version.IsLess(2018, 3);
-		}
-		/// <summary>
-		/// 2017.1 and greater
-		/// </summary>
-		public static bool IsReadCollabEditorSettings(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1);
-		}
-		/// <summary>
-		/// 2019.1 and greater
-		/// </summary>
-		public static bool IsReadEnableTextureStreamingInEditMode(Version version)
-		{
-			return version.IsGreaterEqual(2019);
-		}
-		/// <summary>
-		/// 2018.2 and greater
-		/// </summary>
-		public static bool IsReadEnableTextureStreamingInPlayMode(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
-		/// <summary>
-		/// 2019.1.0b6 and greater
-		/// </summary>
-		public static bool IsReadAsyncShaderCompilation(Version version)
-		{
-			return version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 6);
-		}
-		/// <summary>
-		/// 2019.2 and greater
-		/// </summary>
-		public static bool IsReadShowLightmapResolutionOverlay(Version version)
-		{
-			return version.IsGreaterEqual(2019, 2);
-		}
-		
-		/// <summary>
-		/// 2018.2 and greater
-		/// </summary>
-		private static bool IsAlign1(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
-		/// <summary>
-		/// 2019.2 and greater
-		/// </summary>
-		private static bool IsAlign2(Version version)
-		{
-			return version.IsGreaterEqual(2019, 2);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// 'asmref' has been added to default ProjectGenerationIncludedExtensions
 			if (version.IsGreaterEqual(2019, 2))
@@ -191,7 +73,7 @@ namespace uTinyRipper.Classes
 			{
 				return 3;
 			}
-			// ExternalVersionControlSupport enum converted to string
+			// ExternalVersionControlSupport enum has converted to string 
 			if (version.IsGreaterEqual(4))
 			{
 				return 2;
@@ -199,14 +81,88 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// Less than 4.0.0
+		/// </summary>
+		public static bool IsReadExternalVersionControl(Version version) => version.IsLess(4);
+		/// <summary>
+		/// 3.5.0 and greater
+		/// </summary>
+		public static bool IsReadSerializationMode(Version version) => version.IsGreaterEqual(3, 5);
+		/// <summary>
+		/// 5.4.x and less
+		/// </summary>
+		public static bool IsReadWebSecurityEmulationEnabled(Version version) => version.IsLessEqual(5, 4);
+		/// <summary>
+		/// 2017.3 and greater
+		/// </summary>
+		public static bool IsReadLineEndingsForNewScripts(Version version) => version.IsGreaterEqual(2017, 3);
+		/// <summary>
+		/// 4.3.0 and greater
+		/// </summary>
+		public static bool IsReadDefaultBehaviorMode(Version version) => version.IsGreaterEqual(4, 3);
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsReadPrefabRegularEnvironment(Version version) => version.IsGreaterEqual(2018, 3);
+		/// <summary>
+		/// 4.3.0 and greater
+		/// </summary>
+		public static bool IsReadSpritePackerMode(Version version) => version.IsGreaterEqual(4, 3);
+		/// <summary>
+		/// 5.1.0 and greater
+		/// </summary>
+		public static bool IsReadSpritePackerPaddingPower(Version version) => version.IsGreaterEqual(5, 1);
+		/// <summary>
+		/// 2017.2 and greater
+		/// </summary>
+		public static bool IsReadEtcTextureCompressorBehavior(Version version) => version.IsGreaterEqual(2017, 2);
+		/// <summary>
+		/// 5.1.0 and greater
+		/// </summary>
+		public static bool IsReadProjectGenerationIncludedExtensions(Version version) => version.IsGreaterEqual(5, 1);
+		/// <summary>
+		/// 5.5.0 to 2018.3 exclusive
+		/// </summary>
+		public static bool IsReadUserGeneratedProjectSuffix(Version version) => version.IsLess(2018, 3) && version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		public static bool IsReadCollabEditorSettings(Version version) => version.IsGreaterEqual(2017, 1);
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool IsReadEnableTextureStreamingInEditMode(Version version) => version.IsGreaterEqual(2019);
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool IsReadEnableTextureStreamingInPlayMode(Version version) => version.IsGreaterEqual(2018, 2);
+		/// <summary>
+		/// 2019.1.0b6 and greater
+		/// </summary>
+		public static bool IsReadAsyncShaderCompilation(Version version) => version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 6);
+		/// <summary>
+		/// 2019.2 and greater
+		/// </summary>
+		public static bool IsReadShowLightmapResolutionOverlay(Version version) => version.IsGreaterEqual(2019, 2);
+
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		private static bool IsAlign1(Version version) => version.IsGreaterEqual(2018, 2);
+		/// <summary>
+		/// 2019.2 and greater
+		/// </summary>
+		private static bool IsAlign2(Version version) => version.IsGreaterEqual(2019, 2);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if(IsReadExternalVersionControl(reader.Version))
+			if (IsReadExternalVersionControl(reader.Version))
 			{
 				ExternalVersionControl support = (ExternalVersionControl)reader.ReadInt32();
-				switch(support)
+				switch (support)
 				{
 					case ExternalVersionControl.AutoDetect:
 						ExternalVersionControlSupport = "Auto detect";
@@ -242,8 +198,11 @@ namespace uTinyRipper.Classes
 						break;
 				}
 			}
-			SerializationMode = (SerializationMode)reader.ReadInt32();
-			if(IsReadWebSecurityEmulationEnabled(reader.Version))
+			if (IsReadSerializationMode(reader.Version))
+			{
+				SerializationMode = (SerializationMode)reader.ReadInt32();
+			}
+			if (IsReadWebSecurityEmulationEnabled(reader.Version))
 			{
 				WebSecurityEmulationEnabled = reader.ReadInt32();
 				WebSecurityEmulationHostUrl = reader.ReadString();
@@ -322,7 +281,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ExternalVersionControlSupportName, ExternalVersionControlSupport);
 			node.Add(SerializationModeName, (int)SerializationMode);
 			node.Add(LineEndingsForNewScriptsName, (int)LineEndingsForNewScripts);
@@ -387,7 +346,7 @@ namespace uTinyRipper.Classes
 		private string GetProjectGenerationIncludedExtensions(Version version)
 		{
 			string exts = IsReadProjectGenerationIncludedExtensions(version) ? ProjectGenerationIncludedExtensions : DefaultExtensions;
-			return GetSerializedVersion(version) < 8 ? exts : $"{exts};{AsmrefExtension}";
+			return ToSerializedVersion(version) < 8 ? exts : $"{exts};{AsmrefExtension}";
 		}
 		private string GetProjectGenerationRootNamespace(Version version)
 		{

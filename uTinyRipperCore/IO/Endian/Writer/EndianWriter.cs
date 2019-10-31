@@ -6,28 +6,39 @@ namespace uTinyRipper
 {
 	public class EndianWriter : BinaryWriter
 	{
-		public EndianWriter(Stream stream)
-			: this(stream, EndianType.LittleEndian, 0)
+		public EndianWriter(Stream stream) :
+			this(stream, EndianType.LittleEndian, 0, false)
 		{
 		}
 
 		public EndianWriter(Stream stream, EndianType endianess) :
-			this(stream, endianess, 0)
+			this(stream, endianess, 0, false)
 		{
 		}
 
 		public EndianWriter(Stream stream, EndianType endianess, long alignPosition) :
-		   base(stream, Encoding.UTF8, true)
+			this(stream, endianess, alignPosition, false)
+		{
+		}
+
+		public EndianWriter(Stream stream, EndianType endianess, long alignPosition, bool alignArray) :
+			base(stream, Encoding.UTF8, true)
 		{
 			EndianType = endianess;
 			AlignPosition = alignPosition;
+			IsAlignArray = alignArray;
+		}
+
+		protected EndianWriter(Stream stream, bool alignArray) :
+			this(stream, EndianType.LittleEndian, 0, alignArray)
+		{
 		}
 
 		~EndianWriter()
 		{
 			Dispose(false);
 		}
-		
+
 		public override void Write(short value)
 		{
 			FillInnerBuffer(unchecked((ushort)value));
@@ -101,7 +112,7 @@ namespace uTinyRipper
 
 		public void WriteArray(bool[] buffer, int index, int count)
 		{
-			FillInnerBuffer(buffer.Length);
+			FillInnerBuffer(count);
 			Write(m_buffer, 0, sizeof(int));
 
 			int last = index + count;
@@ -115,14 +126,27 @@ namespace uTinyRipper
 				}
 				Write(m_buffer, 0, toWrite);
 			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
+			}
 		}
 
 		public void WriteArray(char[] buffer)
 		{
-			FillInnerBuffer(buffer.Length);
+			WriteArray(buffer, 0, buffer.Length);
+		}
+
+		public void WriteArray(char[] buffer, int index, int count)
+		{
+			FillInnerBuffer(count);
 			Write(m_buffer, 0, sizeof(int));
 
-			Write(buffer, 0, buffer.Length);
+			Write(buffer, index, count);
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
+			}
 		}
 
 		public void WriteArray(byte[] buffer)
@@ -132,9 +156,13 @@ namespace uTinyRipper
 
 		public void WriteArray(byte[] buffer, int index, int count)
 		{
-			FillInnerBuffer(buffer.Length);
+			FillInnerBuffer(count);
 			Write(m_buffer, 0, sizeof(int));
 			Write(buffer, index, count);
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
+			}
 		}
 
 		public void WriteArray(short[] buffer)
@@ -144,11 +172,11 @@ namespace uTinyRipper
 
 		public void WriteArray(short[] buffer, int index, int count)
 		{
-			FillInnerBuffer(buffer.Length);
+			FillInnerBuffer(count);
 			Write(m_buffer, 0, sizeof(int));
 
 			int byteIndex = 0;
-			int byteCount = buffer.Length * sizeof(short);
+			int byteCount = count * sizeof(short);
 			int last = index + count;
 			while (index < last)
 			{
@@ -161,6 +189,10 @@ namespace uTinyRipper
 				Write(m_buffer, 0, toWrite);
 				byteIndex += toWrite;
 			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
+			}
 		}
 
 		public void WriteArray(ushort[] buffer)
@@ -170,11 +202,11 @@ namespace uTinyRipper
 
 		public void WriteArray(ushort[] buffer, int index, int count)
 		{
-			FillInnerBuffer(buffer.Length);
+			FillInnerBuffer(count);
 			Write(m_buffer, 0, sizeof(int));
 
 			int byteIndex = 0;
-			int byteCount = buffer.Length * sizeof(ushort);
+			int byteCount = count * sizeof(ushort);
 			int last = index + count;
 			while (index < last)
 			{
@@ -187,6 +219,10 @@ namespace uTinyRipper
 				Write(m_buffer, 0, toWrite);
 				byteIndex += toWrite;
 			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
+			}
 		}
 
 		public void WriteArray(int[] buffer)
@@ -196,11 +232,11 @@ namespace uTinyRipper
 
 		public void WriteArray(int[] buffer, int index, int count)
 		{
-			FillInnerBuffer(buffer.Length);
+			FillInnerBuffer(count);
 			Write(m_buffer, 0, sizeof(int));
 
 			int byteIndex = 0;
-			int byteCount = buffer.Length * sizeof(int);
+			int byteCount = count * sizeof(int);
 			int last = index + count;
 			while (index < last)
 			{
@@ -213,6 +249,10 @@ namespace uTinyRipper
 				Write(m_buffer, 0, toWrite);
 				byteIndex += toWrite;
 			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
+			}
 		}
 
 		public void WriteArray(uint[] buffer)
@@ -222,11 +262,11 @@ namespace uTinyRipper
 
 		public void WriteArray(uint[] buffer, int index, int count)
 		{
-			FillInnerBuffer(buffer.Length);
+			FillInnerBuffer(count);
 			Write(m_buffer, 0, sizeof(int));
 
 			int byteIndex = 0;
-			int byteCount = buffer.Length * sizeof(uint);
+			int byteCount = count * sizeof(uint);
 			int last = index + count;
 			while (index < last)
 			{
@@ -239,6 +279,10 @@ namespace uTinyRipper
 				Write(m_buffer, 0, toWrite);
 				byteIndex += toWrite;
 			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
+			}
 		}
 
 		public void WriteArray(long[] buffer)
@@ -248,11 +292,11 @@ namespace uTinyRipper
 
 		public void WriteArray(long[] buffer, int index, int count)
 		{
-			FillInnerBuffer(buffer.Length);
+			FillInnerBuffer(count);
 			Write(m_buffer, 0, sizeof(int));
 
 			int byteIndex = 0;
-			int byteCount = buffer.Length * sizeof(long);
+			int byteCount = count * sizeof(long);
 			int last = index + count;
 			while (index < last)
 			{
@@ -265,6 +309,10 @@ namespace uTinyRipper
 				Write(m_buffer, 0, toWrite);
 				byteIndex += toWrite;
 			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
+			}
 		}
 
 		public void WriteArray(ulong[] buffer)
@@ -274,11 +322,11 @@ namespace uTinyRipper
 
 		public void WriteArray(ulong[] buffer, int index, int count)
 		{
-			FillInnerBuffer(buffer.Length);
+			FillInnerBuffer(count);
 			Write(m_buffer, 0, sizeof(int));
 
 			int byteIndex = 0;
-			int byteCount = buffer.Length * sizeof(ulong);
+			int byteCount = count * sizeof(ulong);
 			int last = index + count;
 			while (index < last)
 			{
@@ -291,6 +339,10 @@ namespace uTinyRipper
 				Write(m_buffer, 0, toWrite);
 				byteIndex += toWrite;
 			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
+			}
 		}
 
 		public void WriteArray(float[] buffer)
@@ -300,11 +352,11 @@ namespace uTinyRipper
 
 		public void WriteArray(float[] buffer, int index, int count)
 		{
-			FillInnerBuffer(buffer.Length);
+			FillInnerBuffer(count);
 			Write(m_buffer, 0, sizeof(int));
 
 			int byteIndex = 0;
-			int byteCount = buffer.Length * sizeof(float);
+			int byteCount = count * sizeof(float);
 			int last = index + count;
 			while (index < last)
 			{
@@ -317,6 +369,10 @@ namespace uTinyRipper
 				Write(m_buffer, 0, toWrite);
 				byteIndex += toWrite;
 			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
+			}
 		}
 
 		public void WriteArray(double[] buffer)
@@ -326,11 +382,11 @@ namespace uTinyRipper
 
 		public void WriteArray(double[] buffer, int index, int count)
 		{
-			FillInnerBuffer(buffer.Length);
+			FillInnerBuffer(count);
 			Write(m_buffer, 0, sizeof(int));
 
 			int byteIndex = 0;
-			int byteCount = buffer.Length * sizeof(double);
+			int byteCount = count * sizeof(double);
 			int last = index + count;
 			while (index < last)
 			{
@@ -343,6 +399,10 @@ namespace uTinyRipper
 				Write(m_buffer, 0, toWrite);
 				byteIndex += toWrite;
 			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
+			}
 		}
 
 		public void WriteArray(string[] buffer)
@@ -354,6 +414,10 @@ namespace uTinyRipper
 			{
 				string str = buffer[i];
 				Write(str);
+			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
 			}
 		}
 
@@ -369,10 +433,14 @@ namespace uTinyRipper
 			FillInnerBuffer(buffer.Length);
 			Write(m_buffer, 0, sizeof(int));
 
-			for(int i = 0; i < buffer.Length; i++)
+			for (int i = 0; i < buffer.Length; i++)
 			{
 				T t = buffer[i];
 				t.Write(this);
+			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
 			}
 		}
 
@@ -384,11 +452,11 @@ namespace uTinyRipper
 
 			for (int i = 0; i < buffer.GetLength(0); i++)
 			{
-				for (int j = 0; j < buffer.GetLength(1); j++)
-				{
-					T t = buffer[i][j];
-					t.Write(this);
-				}
+				WriteEndianArray(buffer[i]);
+			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
 			}
 		}
 
@@ -397,7 +465,7 @@ namespace uTinyRipper
 			long align = (long)alignType;
 			BaseStream.Position = AlignPosition + ((BaseStream.Position - AlignPosition + align) & ~align);
 		}
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		protected void FillInnerBuffer(ushort value, int offset = 0)
 		{
@@ -478,8 +546,10 @@ namespace uTinyRipper
 			}
 		}
 
-		protected EndianType EndianType { get; }
-		protected long AlignPosition { get; private set; }
+		public EndianType EndianType { get; }
+
+		protected bool IsAlignArray { get; }
+		protected long AlignPosition { get; set; }
 
 		protected const int BufferSize = 4096;
 

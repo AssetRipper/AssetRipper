@@ -81,11 +81,11 @@ namespace uTinyRipper.Classes
 			return !flags.IsRelease() && version.IsGreaterEqual(3, 5);
 		}
 		/// <summary>
-		/// 3.0.0 to 3.5.0 exclusive
+		/// 3.0.0 to 3.5.0 exclusive and Not Release
 		/// </summary>
-		public static bool IsReadIsStatic(Version version)
+		public static bool IsReadIsStatic(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsLess(3, 5) && version.IsGreaterEqual(3);
+			return !flags.IsRelease() && version.IsLess(3, 5) && version.IsGreaterEqual(3);
 		}
 
 		/// <summary>
@@ -172,9 +172,9 @@ namespace uTinyRipper.Classes
 
 
 #if UNIVERSAL
-				if (IsReadIsStatic(reader.Version))
+				if (IsReadIsStatic(reader.Version, reader.Flags))
 				{
-					StaticEditorFlags = reader.ReadBoolean() ? uint.MaxValue : 0;
+					IsStatic = reader.ReadBoolean();
 				}
 				if (IsReadIcon(reader.Version, reader.Flags))
 				{
@@ -398,6 +398,11 @@ namespace uTinyRipper.Classes
 		public string TagString { get; private set; }
 		public uint NavMeshLayer { get; private set; }
 		public uint StaticEditorFlags { get; private set; }
+		public bool IsStatic
+		{
+			get => StaticEditorFlags != 0;
+			set => StaticEditorFlags = value ? uint.MaxValue : 0;
+		}
 #endif
 		public bool IsActive { get; private set; }
 

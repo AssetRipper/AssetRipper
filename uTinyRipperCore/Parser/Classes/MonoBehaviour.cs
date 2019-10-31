@@ -18,23 +18,34 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Not Release
 		/// </summary>
-		public static bool IsReadEditorHideFlags(TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease();
-		}
+		public static bool HasEditorHideFlags(TransferInstructionFlags flags) => !flags.IsRelease();
 		/// <summary>
 		/// 2019.1 to 2019.1.0b4 exclusive and Not Release
 		/// </summary>
-		public static bool IsReadGeneratorAsset(Version version, TransferInstructionFlags flags)
+		public static bool HasGeneratorAsset(Version version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(2019) && version.IsLess(2019, 1, 0, VersionType.Beta, 4);
 		}
 		/// <summary>
 		/// 4.2.0 and greater and Not Release
 		/// </summary>
-		public static bool IsReadEditorClassIdentifier(Version version, TransferInstructionFlags flags)
+		public static bool HasEditorClassIdentifier(Version version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(4, 2);
+		}
+
+		private static bool IsAlign(Version version, TransferInstructionFlags flags)
+		{
+			// NOTE: unknown version
+			if (version.IsGreaterEqual(3))
+			{
+				return true;
+			}
+			if (version.IsGreaterEqual(2, 1) && flags.IsRelease())
+			{
+				return true;
+			}
+			return false;
 		}
 
 		public override void Read(AssetReader reader)
@@ -43,11 +54,11 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 #if UNIVERSAL
-			if (IsReadEditorHideFlags(reader.Flags))
+			if (HasEditorHideFlags(reader.Flags))
 			{
 				EditorHideFlags = (HideFlags)reader.ReadUInt32();
 			}
-			if (IsReadGeneratorAsset(reader.Version, reader.Flags))
+			if (HasGeneratorAsset(reader.Version, reader.Flags))
 			{
 				GeneratorAsset.Read(reader);
 			}
@@ -57,7 +68,7 @@ namespace uTinyRipper.Classes
 			Name = reader.ReadString();
 
 #if UNIVERSAL
-			if (IsReadEditorClassIdentifier(reader.Version, reader.Flags))
+			if (HasEditorClassIdentifier(reader.Version, reader.Flags))
 			{
 				EditorClassIdentifier = reader.ReadString();
 			}
@@ -109,7 +120,7 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add(EditorHideFlagsName, (uint)GetEditorHideFlags(container.Version, container.Flags));
-			if (IsReadGeneratorAsset(container.ExportVersion, container.ExportFlags))
+			if (HasGeneratorAsset(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(GeneratorAssetName, GetGeneratorAsset(container.Version, container.Flags).ExportYAML(container));
 			}
@@ -127,7 +138,7 @@ namespace uTinyRipper.Classes
 		private HideFlags GetEditorHideFlags(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadEditorHideFlags(flags))
+			if (HasEditorHideFlags(flags))
 			{
 				return EditorHideFlags;
 			}
@@ -137,7 +148,7 @@ namespace uTinyRipper.Classes
 		private PPtr<Object> GetGeneratorAsset(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadGeneratorAsset(version, flags))
+			if (HasGeneratorAsset(version, flags))
 			{
 				return GeneratorAsset;
 			}
@@ -147,7 +158,7 @@ namespace uTinyRipper.Classes
 		private string GetEditorClassIdentifier(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadEditorClassIdentifier(version, flags))
+			if (HasEditorClassIdentifier(version, flags))
 			{
 				return EditorClassIdentifier;
 			}

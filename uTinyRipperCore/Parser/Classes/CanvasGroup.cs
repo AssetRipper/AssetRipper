@@ -23,7 +23,7 @@ namespace uTinyRipper.Classes
 			}
 			else
 			{
-				ReadBase(reader);
+				ReadComponent(reader);
 			}
 
 			Alpha = reader.ReadSingle();

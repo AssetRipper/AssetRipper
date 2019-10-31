@@ -7,20 +7,31 @@ namespace uTinyRipper
 	public sealed class AssetReader : EndianReader
 	{
 		public AssetReader(Stream stream, Version version, Platform platform, TransferInstructionFlags flags) :
-			base(stream)
+			base(stream, AlignArrays(version))
 		{
 			Version = version;
 			Platform = platform;
 			Flags = flags;
+			IsAlignString = AlignStrings(version);
 		}
 
 		public AssetReader(EndianReader reader, Version version, Platform platform, TransferInstructionFlags flags) :
-			base(reader)
+			base(reader, AlignArrays(version))
 		{
 			Version = version;
 			Platform = platform;
 			Flags = flags;
+			IsAlignString = AlignStrings(version);
 		}
+
+		/// <summary>
+		/// 2.1.0 and greater
+		/// </summary>
+		public static bool AlignStrings(Version version) => version.IsGreaterEqual(2, 1);
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		public static bool AlignArrays(Version version) => version.IsGreaterEqual(2017);
 
 		public override char ReadChar()
 		{
@@ -39,7 +50,7 @@ namespace uTinyRipper
 
 			byte[] buffer = ReadStringBuffer(length);
 			string result = Encoding.UTF8.GetString(buffer, 0, length);
-			if (Version.IsGreaterEqual(2, 1))
+			if (IsAlignString)
 			{
 				AlignStream(AlignType.Align4);
 			}
@@ -74,17 +85,16 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-			if (count == 0)
-			{
-				return Array.Empty<T>();
-			}
-
-			T[] array = new T[count];
+			T[] array = count == 0 ? Array.Empty<T>() : new T[count];
 			for (int i = 0; i < count; i++)
 			{
 				T instance = new T();
 				instance.Read(this);
 				array[i] = instance;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
 			}
 			return array;
 		}
@@ -94,12 +104,15 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
-			T[][] array = new T[count][];
+			T[][] array = count == 0 ? Array.Empty<T[]>() : new T[count][];
 			for (int i = 0; i < count; i++)
 			{
 				T[] innerArray = ReadAssetArray<T>();
 				array[i] = innerArray;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream(AlignType.Align4);
 			}
 			return array;
 		}
@@ -111,6 +124,8 @@ namespace uTinyRipper
 
 		public Platform Platform { get; }
 		public TransferInstructionFlags Flags { get; }
+
+		private bool IsAlignString { get; }
 
 		public Version Version;
 	}

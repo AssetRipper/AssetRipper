@@ -5,15 +5,12 @@ using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.LightmapSettingss
 {
-	public struct EnlightenRendererInformation : IAssetReadable, IYAMLExportable, IDependent
+	public struct EnlightenRendererInformation : IAsset, IDependent
 	{
 		/// <summary>
 		/// Not Release
 		/// </summary>
-		public static bool IsReadGeometryHash(TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease();
-		}
+		public static bool HasGeometryHash(TransferInstructionFlags flags) => !flags.IsRelease();
 
 		public void Read(AssetReader reader)
 		{
@@ -21,9 +18,21 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			DynamicLightmapSTInSystem.Read(reader);
 			SystemId = reader.ReadInt32();
 			InstanceHash.Read(reader);
-			if (IsReadGeometryHash(reader.Flags))
+			if (HasGeometryHash(reader.Flags))
 			{
 				GeometryHash.Read(reader);
+			}
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			Renderer.Write(writer);
+			DynamicLightmapSTInSystem.Write(writer);
+			writer.Write(SystemId);
+			InstanceHash.Write(writer);
+			if (HasGeometryHash(writer.Flags))
+			{
+				GeometryHash.Write(writer);
 			}
 		}
 

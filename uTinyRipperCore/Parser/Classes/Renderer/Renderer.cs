@@ -318,13 +318,6 @@ namespace uTinyRipper.Classes
 		{
 			return version.IsGreaterEqual(5, 4);
 		}
-		/// <summary>
-		/// 2.6.0 and greater
-		/// </summary>
-		private static bool IsLightmapTilingOffsetV4(Version version)
-		{
-			return version.IsGreaterEqual(2, 6);
-		}
 
 		/// <summary>
 		/// 5.0.0 to 5.3.x
@@ -441,14 +434,7 @@ namespace uTinyRipper.Classes
 
 			if (IsReadLightmapTilingOffset(reader.Version, reader.Flags))
 			{
-				if (IsLightmapTilingOffsetV4(reader.Version))
-				{
-					LightmapTilingOffset.Read(reader);
-				}
-				else
-				{
-					LightmapTilingOffset.Read3(reader);
-				}
+				LightmapTilingOffset.Read(reader);
 			}
 			if (IsReadLightmapTilingOffsetDynamic(reader.Version, reader.Flags))
 			{

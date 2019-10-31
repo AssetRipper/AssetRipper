@@ -60,6 +60,11 @@ namespace uTinyRipper.SerializedFiles
 			}
 		}
 
+		public override string ToString()
+		{
+			return $"{ClassID}[{PathID}]";
+		}
+
 		/// <summary>
 		/// ObjectID
 		/// Unique ID that identifies the object. Can be used as a key for a map.

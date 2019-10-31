@@ -25,7 +25,18 @@ namespace uTinyRipper.Converters
 			OverrideDummyExporter(ClassIDType.AssetBundle, true, false);
 			OverrideDummyExporter(ClassIDType.ResourceManager, true, false);
 			OverrideDummyExporter(ClassIDType.PreloadData, true, false);
+			OverrideDummyExporter(ClassIDType.EditorSettings, false, false);
 			OverrideDummyExporter(ClassIDType.Sprite, false, true);
+			OverrideDummyExporter(ClassIDType.TextureImporter, false, false);
+			OverrideDummyExporter(ClassIDType.DefaultAsset, false, false);
+			OverrideDummyExporter(ClassIDType.DefaultImporter, false, false);
+			OverrideDummyExporter(ClassIDType.NativeFormatImporter, false, false);
+			OverrideDummyExporter(ClassIDType.MonoImporter, false, false);
+			OverrideDummyExporter(ClassIDType.DDSImporter, false, false);
+			OverrideDummyExporter(ClassIDType.PVRImporter, false, false);
+			OverrideDummyExporter(ClassIDType.ASTCImporter, false, false);
+			OverrideDummyExporter(ClassIDType.KTXImporter, false, false);
+			OverrideDummyExporter(ClassIDType.IHVImageFormatImporter, false, false);
 			OverrideDummyExporter(ClassIDType.SpriteAtlas, false, false);
 			OverrideDummyExporter(ClassIDType.TerrainLayer, false, false);
 
@@ -121,17 +132,8 @@ namespace uTinyRipper.Converters
 			OverrideYamlExporter(ClassIDType.ParticleSystemForceField);
 			OverrideYamlExporter(ClassIDType.OcclusionCullingData);
 			OverrideYamlExporter(ClassIDType.Prefab);
-			OverrideYamlExporter(ClassIDType.TextureImporter);
 			OverrideYamlExporter(ClassIDType.AvatarMask);
-			OverrideYamlExporter(ClassIDType.DefaultImporter);
 			OverrideYamlExporter(ClassIDType.SceneAsset);
-			OverrideYamlExporter(ClassIDType.NativeFormatImporter);
-			OverrideYamlExporter(ClassIDType.MonoImporter);
-			OverrideYamlExporter(ClassIDType.DDSImporter);
-			OverrideYamlExporter(ClassIDType.PVRImporter);
-			OverrideYamlExporter(ClassIDType.ASTCImporter);
-			OverrideYamlExporter(ClassIDType.KTXImporter);
-			OverrideYamlExporter(ClassIDType.IHVImageFormatImporter);
 			OverrideYamlExporter(ClassIDType.LightmapParameters);
 			OverrideYamlExporter(ClassIDType.SpriteAtlas);
 
@@ -282,6 +284,8 @@ namespace uTinyRipper.Converters
 				case ClassIDType.Flare:
 					return AssetType.Serialized;
 				case ClassIDType.AudioMixerGroup:
+					return AssetType.Serialized;
+				case ClassIDType.EditorExtension:
 					return AssetType.Serialized;
 			}
 

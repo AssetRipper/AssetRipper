@@ -174,6 +174,8 @@ namespace uTinyRipper
 					return new TerrainData(assetInfo);
 				case ClassIDType.LightmapSettings:
 					return new LightmapSettings(assetInfo);
+				case ClassIDType.EditorSettings:
+					return new EditorSettings(assetInfo);
 				case ClassIDType.AudioReverbZone:
 					return new AudioReverbZone(assetInfo);
 				case ClassIDType.OffMeshLink:
@@ -232,6 +234,8 @@ namespace uTinyRipper
 				case ClassIDType.AvatarMask1:
 				case ClassIDType.AvatarMask:
 					return new AvatarMask(assetInfo);
+				case ClassIDType.DefaultAsset:
+					return new DefaultAsset(assetInfo);
 				case ClassIDType.DefaultImporter:
 					return new DefaultImporter(assetInfo);
 				case ClassIDType.SceneAsset:

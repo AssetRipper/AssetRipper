@@ -80,7 +80,7 @@ namespace uTinyRipper.Classes
 			// if < 3.0.0 this asset doesn't exist
 
 			// 3.0.0 to 5.5.0 this asset is created by culling settings so it has set data already
-			if(OcclusionCullingSettings.IsReadPVSData(container.Version))
+			if(OcclusionCullingSettings.HasReadPVSData(container.Version))
 			{
 				return;
 			}

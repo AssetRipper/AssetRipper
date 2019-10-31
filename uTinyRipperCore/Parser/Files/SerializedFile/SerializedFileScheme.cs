@@ -77,12 +77,18 @@ namespace uTinyRipper
 			}
 
 #warning TEMP HACK
-			Flags = Metadata.Hierarchy.Platform == Platform.NoTarget ? TransferInstructionFlags.NoTransferInstructionFlags : Flags;
+			if (Metadata.Hierarchy.Platform == Platform.NoTarget)
+			{
+				Flags = TransferInstructionFlags.NoTransferInstructionFlags;
+			}
 			if (FilenameUtils.IsEngineResource(Name) || Header.Generation < FileGeneration.FG_500a1 && FilenameUtils.IsBuiltinExtra(Name))
 			{
 				Flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
 			}
-			Flags |= Header.SwapEndianess ? TransferInstructionFlags.SwapEndianess : TransferInstructionFlags.NoTransferInstructionFlags;
+			if (Header.SwapEndianess)
+			{
+				Flags |= TransferInstructionFlags.SwapEndianess;
+			}
 		}
 
 		public TransferInstructionFlags Flags { get; private set; }

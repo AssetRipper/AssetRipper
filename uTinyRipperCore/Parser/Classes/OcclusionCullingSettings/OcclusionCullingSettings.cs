@@ -8,7 +8,8 @@ using uTinyRipper.YAML;
 namespace uTinyRipper.Classes
 {
 	/// <summary>
-	/// SceneSettings previously
+	/// In 5.5.0 SceneSettings has been renamed to OcclusionCullingSettings
+	/// Scene previously
 	/// </summary>
 	public sealed class OcclusionCullingSettings : LevelGameManager
 	{
@@ -42,21 +43,15 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 3.0.0 to 5.5.0 exclusive
 		/// </summary>
-		public static bool IsReadPVSData(Version version)
-		{
-			return version.IsGreaterEqual(3) && version.IsLess(5, 5);
-		}
+		public static bool HasReadPVSData(Version version) => version.IsGreaterEqual(3) && version.IsLess(5, 5);
 		/// <summary>
 		/// 3.5.0 to 4.3.0 exclusive
 		/// </summary>
-		public static bool IsReadQueryMode(Version version)
-		{
-			return version.IsGreaterEqual(3, 5) && version.IsLess(4, 3);
-		}
+		public static bool HasQueryMode(Version version) => version.IsGreaterEqual(3, 5) && version.IsLess(4, 3);
 		/// <summary>
 		/// (3.5.0 to 5.5.0 exclusive) or (5.0.0 and greater and Release)
 		/// </summary>
-		public static bool IsReadPortals(Version version, TransferInstructionFlags flags)
+		public static bool HasPortals(Version version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(3, 5, 0))
 			{
@@ -69,23 +64,20 @@ namespace uTinyRipper.Classes
 			return false;
 		}
 		/// <summary>
-		/// 3.0.0 and greater and Not Release
+		/// 3.5.0 and greater and Not Release
 		/// </summary>
-		public static bool IsReadOcclusionBakeSettings(Version version, TransferInstructionFlags flags)
+		public static bool HasOcclusionBakeSettings(Version version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(3) && !flags.IsRelease();
+			return !flags.IsRelease() && version.IsGreaterEqual(3, 5);
 		}
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool IsReadSceneGUID(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
+		public static bool HasSceneGUID(Version version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
-		/// (3.0.0 to 5.5.0 exclusive) or (5.0.0 and greater and Release)
+		/// (3.0.0 to 5.5.0 exclusive) or (5.5.0 and greater and Release)
 		/// </summary>
-		public static bool IsReadStaticRenderers(Version version, TransferInstructionFlags flags)
+		public static bool HasStaticRenderers(Version version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(3, 0, 0))
 			{
@@ -97,14 +89,18 @@ namespace uTinyRipper.Classes
 			}
 			return false;
 		}
+		/// <summary>
+		/// 3.0.0 to 3.5.0 exclusive and Not Release
+		/// </summary>
+		public static bool HasViewCellSize(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsLess(3, 5) && version.IsGreaterEqual(3);
+		}
 
 		/// <summary>
-		/// Less than 5.5.0
+		/// 5.5.0 and greater
 		/// </summary>
-		private static bool IsReadOcclusionBakeSettingsFirst(Version version)
-		{
-			return version.IsLess(5, 5);
-		}
+		private static bool IsOcclusionBakeSettingsFirst(Version version) => version.IsGreaterEqual(5, 5);
 
 		private static int GetSerializedVersion(Version version)
 		{
@@ -116,41 +112,44 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			if (IsReadPVSData(reader.Version))
+			if (HasReadPVSData(reader.Version))
 			{
 				m_PVSData = reader.ReadByteArray();
 				reader.AlignStream(AlignType.Align4);
 			}
-			if (IsReadQueryMode(reader.Version))
+			if (HasQueryMode(reader.Version))
 			{
 				QueryMode = reader.ReadInt32();
 			}
 
-			if (IsReadOcclusionBakeSettings(reader.Version, reader.Flags))
+			if (HasOcclusionBakeSettings(reader.Version, reader.Flags))
 			{
-				if (IsReadOcclusionBakeSettingsFirst(reader.Version))
+				if (IsOcclusionBakeSettingsFirst(reader.Version))
 				{
 					OcclusionBakeSettings.Read(reader);
 				}
 			}
 
-			if (IsReadSceneGUID(reader.Version))
+			if (HasSceneGUID(reader.Version))
 			{
 				SceneGUID.Read(reader);
 				OcclusionCullingData.Read(reader);
 			}
-			if (IsReadStaticRenderers(reader.Version, reader.Flags))
+			if (HasStaticRenderers(reader.Version, reader.Flags))
 			{
 				m_staticRenderers = reader.ReadAssetArray<PPtr<Renderer>>();
 			}
-			if (IsReadPortals(reader.Version, reader.Flags))
+			if (HasPortals(reader.Version, reader.Flags))
 			{
 				m_portals = reader.ReadAssetArray<PPtr<OcclusionPortal>>();
 			}
-
-			if (IsReadOcclusionBakeSettings(reader.Version, reader.Flags))
+			if (HasViewCellSize(reader.Version, reader.Flags))
 			{
-				if (!IsReadOcclusionBakeSettingsFirst(reader.Version))
+				ViewCellSize = reader.ReadSingle();
+			}
+			if (HasOcclusionBakeSettings(reader.Version, reader.Flags))
+			{
+				if (!IsOcclusionBakeSettingsFirst(reader.Version))
 				{
 					OcclusionBakeSettings.Read(reader);
 				}
@@ -187,7 +186,7 @@ namespace uTinyRipper.Classes
 
 		private OcclusionBakeSettings GetExportOcclusionBakeSettings(IExportContainer container)
 		{
-			if (IsReadOcclusionBakeSettings(container.Version, container.Flags))
+			if (HasOcclusionBakeSettings(container.Version, container.Flags))
 			{
 				return OcclusionBakeSettings;
 			}
@@ -202,7 +201,7 @@ namespace uTinyRipper.Classes
 		}
 		private GUID GetExportSceneGUID(IExportContainer container)
 		{
-			if (IsReadPVSData(container.Version))
+			if (HasReadPVSData(container.Version))
 			{
 				SceneExportCollection scene = (SceneExportCollection)container.CurrentCollection;
 				return scene.GUID;
@@ -214,7 +213,7 @@ namespace uTinyRipper.Classes
 		}
 		private PPtr<OcclusionCullingData> GetExportOcclusionCullingData(IExportContainer container)
 		{
-			if (IsReadPVSData(container.Version))
+			if (HasReadPVSData(container.Version))
 			{
 				SceneExportCollection scene = (SceneExportCollection)container.CurrentCollection;
 				if (scene.OcclusionCullingData == null)
@@ -223,7 +222,7 @@ namespace uTinyRipper.Classes
 				}
 				return scene.OcclusionCullingData.File.CreatePPtr(scene.OcclusionCullingData);
 			}
-			if (IsReadSceneGUID(container.Version))
+			if (HasSceneGUID(container.Version))
 			{
 				return OcclusionCullingData;
 			}
@@ -236,6 +235,11 @@ namespace uTinyRipper.Classes
 		/// PVSObjectsArray/m_PVSObjectsArray previously
 		/// </summary>
 		public IReadOnlyList<PPtr<Renderer>> StaticRenderers => m_staticRenderers;
+		public float ViewCellSize
+		{
+			get => OcclusionBakeSettings.ViewCellSize;
+			set => OcclusionBakeSettings.ViewCellSize = value;
+		}
 		/// <summary>
 		/// PVSPortalsArray previously
 		/// </summary>
@@ -247,6 +251,7 @@ namespace uTinyRipper.Classes
 
 		public const string SceneKeyword = nameof(ClassIDType.Scene);
 
+		public const string ViewCellSizeName = "m_ViewCellSize";
 		public const string OcclusionBakeSettingsName = "m_OcclusionBakeSettings";
 		public const string SceneGUIDName = "m_SceneGUID";
 		public const string OcclusionCullingDataName = "m_OcclusionCullingData";

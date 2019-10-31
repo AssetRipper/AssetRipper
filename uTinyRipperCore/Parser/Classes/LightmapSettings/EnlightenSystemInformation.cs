@@ -4,7 +4,7 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.LightmapSettingss
 {
-	public struct EnlightenSystemInformation : IAssetReadable, IYAMLExportable
+	public struct EnlightenSystemInformation : IAsset
 	{
 		public void Read(AssetReader reader)
 		{
@@ -15,6 +15,17 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			AtlasOffsetY = reader.ReadInt32();
 			InputSystemHash.Read(reader);
 			RadiositySystemHash.Read(reader);
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(RendererIndex);
+			writer.Write(RendererSize);
+			writer.Write(AtlasIndex);
+			writer.Write(AtlasOffsetX);
+			writer.Write(AtlasOffsetY);
+			InputSystemHash.Write(writer);
+			RadiositySystemHash.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -30,11 +41,11 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			return node;
 		}
 
-		public uint RendererIndex { get; private set; }
-		public uint RendererSize { get; private set; }
-		public int AtlasIndex { get; private set; }
-		public int AtlasOffsetX { get; private set; }
-		public int AtlasOffsetY { get; private set; }
+		public uint RendererIndex { get; set; }
+		public uint RendererSize { get; set; }
+		public int AtlasIndex { get; set; }
+		public int AtlasOffsetX { get; set; }
+		public int AtlasOffsetY { get; set; }
 
 		public const string RendererIndexName = "rendererIndex";
 		public const string RendererSizeName = "rendererSize";

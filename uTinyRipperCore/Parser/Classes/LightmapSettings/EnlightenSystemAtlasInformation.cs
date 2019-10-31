@@ -4,13 +4,20 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.LightmapSettingss
 {
-	public struct EnlightenSystemAtlasInformation : IAssetReadable, IYAMLExportable
+	public struct EnlightenSystemAtlasInformation : IAsset
 	{
 		public void Read(AssetReader reader)
 		{
 			AtlasSize = reader.ReadInt32();
 			AtlasHash.Read(reader);
 			FirstSystemId = reader.ReadInt32();
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(AtlasSize);
+			AtlasHash.Write(writer);
+			writer.Write(FirstSystemId);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -11,7 +11,8 @@ using uTinyRipper;
 namespace uTinyRipper.Classes
 {
 	/// <summary>
-	/// LightmapSnapshot previously
+	/// 5.0.0 - first introduction as LightmapSnapshot
+	/// 5.3.0 - renamed to LightingDataAsset
 	/// </summary>
 	public sealed class LightingDataAsset : NamedObject
 	{

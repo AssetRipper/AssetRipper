@@ -7,6 +7,18 @@ namespace uTinyRipper.Classes
 {
 	public static class ObjectUtils
 	{
+		static ObjectUtils()
+		{
+			if (s_random == null)
+			{
+				s_random = new ThreadSafeRandom();
+			}
+			if (s_idBuffer == null)
+			{
+				s_idBuffer = new byte[8];
+			}
+		}
+
 		public static long GenerateExportID(Object asset, Func<long, bool> duplicateChecker)
 		{
 			if (asset == null)
@@ -70,8 +82,8 @@ namespace uTinyRipper.Classes
 		}
 
 		[ThreadStatic]
-		private static readonly ThreadSafeRandom s_random = new ThreadSafeRandom();
+		private static readonly ThreadSafeRandom s_random;
 		[ThreadStatic]
-		private static readonly byte[] s_idBuffer = new byte[8];
+		private static readonly byte[] s_idBuffer;
 	}
 }

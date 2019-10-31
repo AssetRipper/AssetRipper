@@ -334,10 +334,14 @@ namespace uTinyRipper.Classes
 		public const string ClassNameName = "m_ClassName";
 		public const string NamespaceName = "m_Namespace";
 		public const string AssemblyNameName = "m_AssemblyName";
+		public const string AssemblyIdentifierName = "m_AssemblyIdentifier";
 		public const string IsEditorScriptName = "m_IsEditorScript";
 
 #if UNIVERSAL
 		public PPtr<MonoBehaviour> DefaultProperties;
+		/// <summary>
+		/// PPtr<Texture> previously
+		/// </summary>
 		public PPtr<Object> Icon;
 		/// <summary>
 		/// PPtr<MonoBehaviour> previously

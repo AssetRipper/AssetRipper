@@ -4,7 +4,7 @@ using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.Misc
 {
-	public struct Hash128 : IAssetReadable, ISerializedFileReadable, IYAMLExportable
+	public struct Hash128 : IAsset, ISerializedFileReadable
 	{
 		public Hash128(uint v) :
 			this(v, 0, 0, 0)
@@ -19,7 +19,7 @@ namespace uTinyRipper.Classes.Misc
 			Data3 = v3;
 		}
 
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(5))
 			{
@@ -46,11 +46,23 @@ namespace uTinyRipper.Classes.Misc
 			Read((EndianReader)reader);
 		}
 
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Data0);
+			writer.Write(Data1);
+			writer.Write(Data2);
+			writer.Write(Data3);
+		}
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			if (GetSerializedVersion(container.Version) == 1)
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			if (ToSerializedVersion(container.Version) > 1)
+			{
+				node.Add(HashName, $"{Data0:x8}{Data1:x8}{Data2:x8}{Data3:x8}");
+			}
+			else
 			{
 				node.Add(Bytes0Name, (byte)((Data0 & 0x000000FF) >> 0));
 				node.Add(Bytes1Name, (byte)((Data0 & 0x0000FF00) >> 8));
@@ -69,10 +81,6 @@ namespace uTinyRipper.Classes.Misc
 				node.Add(Bytes14Name, (byte)((Data3 & 0x00FF0000) >> 16));
 				node.Add(Bytes15Name, (byte)((Data3 & 0xFF000000) >> 24));
 			}
-			else
-			{
-				node.Add(HashName, $"{Data0:x8}{Data1:x8}{Data2:x8}{Data3:x8}");
-			}
 			return node;
 		}
 
@@ -89,10 +97,10 @@ namespace uTinyRipper.Classes.Misc
 			return hash;
 		}
 
-		public uint Data0 { get; private set; }
-		public uint Data1 { get; private set; }
-		public uint Data2 { get; private set; }
-		public uint Data3 { get; private set; }
+		public uint Data0 { get; set; }
+		public uint Data1 { get; set; }
+		public uint Data2 { get; set; }
+		public uint Data3 { get; set; }
 
 		public const string Bytes0Name = "bytes[0]";
 		public const string Bytes1Name = "bytes[1]";

@@ -8,10 +8,14 @@ namespace uTinyRipper.Converters
 		{
 			ObjectConverter.Convert(container, origin, instance);
 #if UNIVERSAL
-			if (EditorExtension.HasCorrespondingSourceObject(container.ExportFlags))
+			if (EditorExtension.HasCorrespondingSourceObject(container.ExportVersion, container.ExportFlags))
 			{
 				instance.CorrespondingSourceObject = GetCorrespondingSourceObject(container, origin);
 				instance.PrefabInstance = GetPrefabInstance(container, origin);
+			}
+			else
+			{
+				instance.ExtensionPtr = origin.ExtensionPtr;
 			}
 			if (EditorExtension.HasPrefabAsset(container.ExportVersion, container.ExportFlags))
 			{
@@ -23,7 +27,7 @@ namespace uTinyRipper.Converters
 #if UNIVERSAL
 		private static PPtr<EditorExtension> GetCorrespondingSourceObject(IExportContainer container, EditorExtension origin)
 		{
-			if (EditorExtension.HasCorrespondingSourceObject(container.Flags))
+			if (EditorExtension.HasCorrespondingSourceObject(container.Version, container.Flags))
 			{
 				return origin.CorrespondingSourceObject;
 			}
@@ -32,7 +36,7 @@ namespace uTinyRipper.Converters
 
 		private static PPtr<Prefab> GetPrefabInstance(IExportContainer container, EditorExtension origin)
 		{
-			if (EditorExtension.HasCorrespondingSourceObject(container.Flags))
+			if (EditorExtension.HasCorrespondingSourceObject(container.Version, container.Flags))
 			{
 				return origin.PrefabInstance;
 			}

@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
@@ -60,6 +61,9 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
+		public string TextScript => Encoding.UTF8.GetString(Script);
+
+		// NOTE: originaly, it is a string. but, since binary files are serialized as TextAsset, we have to sctore its content as byte array
 		public byte[] Script { get; protected set; }
 		public string PathName { get; protected set; } = string.Empty;
 

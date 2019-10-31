@@ -37,9 +37,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasRendererData(Version version) => version.IsGreaterEqual(2017);
 		/// <summary>
-		/// Not Release
+		/// 2017.1 and greater and Not Release
 		/// </summary>
-		public static bool HasAtlasRD(TransferInstructionFlags flags) => !flags.IsRelease();
+		public static bool HasAtlasRD(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
@@ -176,7 +176,7 @@ namespace uTinyRipper.Classes
 			}
 			RD.Read(reader);
 #if UNIVERSAL
-			if (HasAtlasRD(reader.Flags))
+			if (HasAtlasRD(reader.Version, reader.Flags))
 			{
 				AtlasRD.Read(reader);
 			}

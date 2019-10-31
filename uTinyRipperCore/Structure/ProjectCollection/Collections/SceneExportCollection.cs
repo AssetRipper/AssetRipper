@@ -40,7 +40,7 @@ namespace uTinyRipper.Project
 			}
 			m_components = components.OrderBy(t => t, this).ToArray();
 
-			if (OcclusionCullingSettings.IsReadSceneGUID(file.Version))
+			if (OcclusionCullingSettings.HasSceneGUID(file.Version))
 			{
 				OcclusionCullingSettings sceneSettings = Components.Where(t => t.ClassID == ClassIDType.OcclusionCullingSettings).Select(t => (OcclusionCullingSettings)t).FirstOrDefault();
 				if (sceneSettings != null)
@@ -53,7 +53,7 @@ namespace uTinyRipper.Project
 				GUID = new GUID(Guid.NewGuid());
 			}
 
-			if (OcclusionCullingSettings.IsReadPVSData(File.Version))
+			if (OcclusionCullingSettings.HasReadPVSData(File.Version))
 			{
 				foreach (Object comp in Components)
 				{
