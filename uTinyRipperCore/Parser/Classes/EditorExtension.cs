@@ -196,7 +196,7 @@ namespace uTinyRipper.Classes
 			set => CorrespondingSourceObject = value.CastTo<EditorExtension>();
 		}
 #else
-		private PPtr<Object> ExtensionPtr ExtensionPtr => default;
+		private PPtr<Object> ExtensionPtr => default;
 		private PPtr<EditorExtension> CorrespondingSourceObject => default;
 		private PPtr<EditorExtension> PrefabInstance => default;
 		private PPtr<EditorExtension> PrefabAsset => default;
