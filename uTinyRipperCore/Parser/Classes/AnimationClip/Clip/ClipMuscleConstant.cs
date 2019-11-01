@@ -137,7 +137,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			KeepOriginalPositionY = reader.ReadBoolean();
 			KeepOriginalPositionXZ = reader.ReadBoolean();
 			HeightFromFeet = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 		
 		public YAMLNode ExportYAML(IExportContainer container)

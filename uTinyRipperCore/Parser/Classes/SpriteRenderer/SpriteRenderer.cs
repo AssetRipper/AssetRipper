@@ -79,7 +79,7 @@ namespace uTinyRipper.Classes
 			Color.Read(reader);
 			if (IsAlignColor(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if(IsReadFlip(reader.Version))
@@ -88,7 +88,7 @@ namespace uTinyRipper.Classes
 				FlipY = reader.ReadBoolean();
 				if(IsAlignFlip(reader.Version))
 				{
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 			}
 
@@ -102,7 +102,7 @@ namespace uTinyRipper.Classes
 			if(IsReadWasSpriteAssigned(reader.Version))
 			{
 				WasSpriteAssigned = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if(IsReadMaskInteraction(reader.Version))
 			{

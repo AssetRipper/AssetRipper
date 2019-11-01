@@ -46,7 +46,7 @@ namespace uTinyRipper
 			Write(buffer, 0, written);
 			if (IsAlignString)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -87,7 +87,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -103,7 +103,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 

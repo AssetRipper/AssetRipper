@@ -109,7 +109,7 @@ namespace uTinyRipper.Classes.TextureImporters
 			}
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (HasAndroidETC2FallbackOverride(reader.Version))
@@ -153,7 +153,7 @@ namespace uTinyRipper.Classes.TextureImporters
 			}
 			if (IsAlign(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 
 			if (HasAndroidETC2FallbackOverride(writer.Version))

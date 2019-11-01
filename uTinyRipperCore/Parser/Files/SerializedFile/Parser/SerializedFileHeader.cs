@@ -65,7 +65,7 @@ namespace uTinyRipper.SerializedFiles
 			if (IsReadEndian(Generation))
 			{
 				SwapEndianess = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			else
 			{

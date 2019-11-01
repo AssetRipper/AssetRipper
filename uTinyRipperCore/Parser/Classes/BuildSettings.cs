@@ -239,7 +239,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlignBools(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadVersion(reader.Version))

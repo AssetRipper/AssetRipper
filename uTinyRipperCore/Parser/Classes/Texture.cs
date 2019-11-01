@@ -40,7 +40,7 @@ namespace uTinyRipper.Classes
 			{
 				ForcedFallbackFormat = reader.ReadInt32();
 				DownscaleFallback = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

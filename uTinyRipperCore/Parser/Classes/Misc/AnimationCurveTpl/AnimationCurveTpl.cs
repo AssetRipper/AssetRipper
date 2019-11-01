@@ -107,7 +107,7 @@ namespace uTinyRipper.Classes.Misc
 		public void Read(AssetReader reader)
 		{
 			Curve = reader.ReadAssetArray<KeyframeTpl<T>>();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			PreInfinity = (CurveLoopTypes)reader.ReadInt32();
 			PostInfinity = (CurveLoopTypes)reader.ReadInt32();
@@ -120,7 +120,7 @@ namespace uTinyRipper.Classes.Misc
 		public void Write(AssetWriter writer)
 		{
 			Curve.Write(writer);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 
 			writer.Write((int)PreInfinity);
 			writer.Write((int)PostInfinity);

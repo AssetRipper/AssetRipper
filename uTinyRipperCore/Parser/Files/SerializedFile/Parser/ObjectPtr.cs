@@ -15,7 +15,7 @@
 			FileID = reader.ReadInt32();
 			if (IsReadLongPathID(reader.Generation))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 				PathID = reader.ReadInt64();
 			}
 			else

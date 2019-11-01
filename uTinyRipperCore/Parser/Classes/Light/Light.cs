@@ -206,7 +206,7 @@ namespace uTinyRipper.Classes
 				Attenuate = reader.ReadBoolean();
 				if (IsAlign(reader.Version))
 				{
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 			}
 			if (IsReadIntensity(reader.Version))
@@ -235,7 +235,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadBakedIndex(reader.Version))
@@ -283,13 +283,13 @@ namespace uTinyRipper.Classes
 			if (IsReadUseColorTemperature(reader.Version))
 			{
 				UseColorTemperature = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadBoundingSphereOverride(reader.Version))
 			{
 				BoundingSphereOverride.Read(reader);
 				UseBoundingSphereOverride = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 #if UNIVERSAL
 			if (IsReadShadowRadius(reader.Version, reader.Flags))

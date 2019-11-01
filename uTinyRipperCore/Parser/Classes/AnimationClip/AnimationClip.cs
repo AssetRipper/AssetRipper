@@ -259,7 +259,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlignCompressed(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadCurves(reader.Version))
@@ -337,7 +337,7 @@ namespace uTinyRipper.Classes
 #endif
 			if (IsReadHasGenericRootTransform(reader.Version, reader.Flags))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadEvents(reader.Version))
@@ -346,7 +346,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 #if UNIVERSAL

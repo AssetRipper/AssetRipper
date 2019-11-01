@@ -258,7 +258,7 @@ namespace uTinyRipper.Classes
 				if (IsIndexBufferFirst(reader.Version))
 				{
 					IndexBuffer = reader.ReadByteArray();
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 				SubMeshes = reader.ReadAssetArray<SubMesh>();
 			}
@@ -272,7 +272,7 @@ namespace uTinyRipper.Classes
 				else
 				{
 					BlendShapes = reader.ReadAssetArray<BlendShape>();
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 					ShapeVertices = reader.ReadAssetArray<BlendShapeVertex>();
 				}
 			}
@@ -307,7 +307,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlignFlags(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (HasIndexFormat(reader.Version))
@@ -328,7 +328,7 @@ namespace uTinyRipper.Classes
 			if (!HasLODData(reader.Version) && !IsIndexBufferFirst(reader.Version))
 			{
 				IndexBuffer = reader.ReadByteArray();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (HasVertexData(reader.Version))
@@ -396,7 +396,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlignVertex(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (HasCompressedMesh(reader.Version))
@@ -444,7 +444,7 @@ namespace uTinyRipper.Classes
 #endif
 			if (HasStreamData(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 				StreamData.Read(reader);
 			}
 		}
@@ -466,7 +466,7 @@ namespace uTinyRipper.Classes
 				if (IsIndexBufferFirst(writer.Version))
 				{
 					IndexBuffer.Write(writer);
-					writer.AlignStream(AlignType.Align4);
+					writer.AlignStream();
 				}
 				SubMeshes.Write(writer);
 			}
@@ -480,7 +480,7 @@ namespace uTinyRipper.Classes
 				else
 				{
 					BlendShapes.Write(writer);
-					writer.AlignStream(AlignType.Align4);
+					writer.AlignStream();
 					ShapeVertices.Write(writer);
 				}
 			}
@@ -518,7 +518,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlignFlags(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 
 			if (HasIndexFormat(writer.Version))
@@ -541,7 +541,7 @@ namespace uTinyRipper.Classes
 				if (!IsIndexBufferFirst(writer.Version))
 				{
 					IndexBuffer.Write(writer);
-					writer.AlignStream(AlignType.Align4);
+					writer.AlignStream();
 				}
 			}
 
@@ -613,7 +613,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlignVertex(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 
 			if (HasCompressedMesh(writer.Version))
@@ -660,7 +660,7 @@ namespace uTinyRipper.Classes
 #endif
 			if (HasStreamData(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 				StreamData.Write(writer);
 			}
 		}

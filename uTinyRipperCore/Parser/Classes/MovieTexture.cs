@@ -18,11 +18,11 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 			IsLoop = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			AudioClip.Read(reader);
 			m_movieData = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			ColorSpace = (ColorSpace)reader.ReadInt32();
 		}

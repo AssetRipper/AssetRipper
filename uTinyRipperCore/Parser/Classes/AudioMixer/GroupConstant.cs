@@ -20,7 +20,7 @@ namespace uTinyRipper.Classes.AudioMixers
 			Mute = reader.ReadBoolean();
 			Solo = reader.ReadBoolean();
 			BypassEffects = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 		}
 

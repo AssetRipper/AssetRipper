@@ -72,7 +72,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 				EnableBakedLightmaps = reader.ReadBoolean();
 				EnableRealtimeLightmaps = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public void Write(AssetWriter writer)
@@ -100,7 +100,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 				writer.Write(EnableBakedLightmaps);
 				writer.Write(EnableRealtimeLightmaps);
 			}
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -32,7 +32,7 @@ namespace uTinyRipper.Classes.TextureImporters
 			if (HasSourceWasHDR(reader.Version))
 			{
 				SourceWasHDR = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
@@ -48,7 +48,7 @@ namespace uTinyRipper.Classes.TextureImporters
 			if (HasSourceWasHDR(writer.Version))
 			{
 				writer.Write(SourceWasHDR);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 		}
 

@@ -158,7 +158,7 @@ namespace uTinyRipper.Classes
 			if (HasPolygon(reader.Version))
 			{
 				IsPolygon = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 #if UNIVERSAL
 			if (HasAtlasName(reader.Flags))
@@ -181,7 +181,7 @@ namespace uTinyRipper.Classes
 				AtlasRD.Read(reader);
 			}
 #endif
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if (HasPhysicsShape(reader.Version))
 			{

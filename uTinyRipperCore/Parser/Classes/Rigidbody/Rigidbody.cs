@@ -64,7 +64,7 @@ namespace uTinyRipper.Classes
 				Interpolate = (RigidbodyInterpolation)reader.ReadByte();
 				if (IsAlign(reader.Version))
 				{
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 			}
 

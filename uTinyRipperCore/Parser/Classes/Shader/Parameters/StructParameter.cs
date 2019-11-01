@@ -22,9 +22,9 @@ namespace uTinyRipper.Classes.Shaders
 			ArraySize = reader.ReadInt32();
 			StructSize = reader.ReadInt32();
 			m_vectorMembers = reader.ReadAssetArray<VectorParameter>();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			m_matrixMembers = reader.ReadAssetArray<MatrixParameter>();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public string Name { get; private set; }

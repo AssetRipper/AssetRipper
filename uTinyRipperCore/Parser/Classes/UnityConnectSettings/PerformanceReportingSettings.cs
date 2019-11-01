@@ -8,7 +8,7 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 		public void Read(AssetReader reader)
 		{
 			Enabled = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 		}
 

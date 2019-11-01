@@ -172,7 +172,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlignBools(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadOffscreen(reader.Version))
@@ -193,7 +193,7 @@ namespace uTinyRipper.Classes
 			m_bones = reader.ReadAssetArray<PPtr<Transform>>();
 			if (IsAlignBones(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (!IsReadMeshFirst(reader.Version))
@@ -224,7 +224,7 @@ namespace uTinyRipper.Classes
 				DirtyAABB = reader.ReadBoolean();
 				if (IsAlignDirty(reader.Version))
 				{
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 			}
 		}

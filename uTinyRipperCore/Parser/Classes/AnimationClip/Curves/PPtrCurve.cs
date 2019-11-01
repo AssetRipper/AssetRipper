@@ -85,7 +85,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			m_curve = reader.ReadAssetArray<PPtrKeyframe>();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			Attribute = reader.ReadString();

@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes.Misc
 		public void Read(AssetReader reader)
 		{
 			m_data = reader.ReadUInt32Array();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

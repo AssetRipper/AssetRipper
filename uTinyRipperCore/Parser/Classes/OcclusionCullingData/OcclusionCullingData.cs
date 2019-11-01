@@ -54,7 +54,7 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 			m_PVSData = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			m_scenes = reader.ReadAssetArray<OcclusionScene>();
 			if (IsReadStaticRenderers(reader.Flags))

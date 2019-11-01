@@ -52,7 +52,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 				ExitTime = reader.ReadSingle();
 				HasExitTime = reader.ReadBoolean();
 				HasFixedDuration = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				InterruptionSource = (TransitionInterruptionSource)reader.ReadInt32();
 				OrderedInterruption = reader.ReadBoolean();
@@ -62,7 +62,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			{
 				CanTransitionToSelf = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -23,7 +23,7 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			
 			Radius = reader.ReadSingle();

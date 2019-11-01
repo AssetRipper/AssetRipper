@@ -40,7 +40,7 @@ namespace uTinyRipper.Classes.Physics2DSettingss
 		{
 			UseMultithreading = reader.ReadBoolean();
 			UseConsistencySorting = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			InterpolationPosesPerJob = reader.ReadInt32();
 			NewContactsPerJob = reader.ReadInt32();

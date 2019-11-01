@@ -8,7 +8,7 @@ namespace uTinyRipper.Classes.Sprites
 		public void Read(AssetReader reader)
 		{
 			Name = reader.ReadString();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			Position.Read(reader);
 			Rotation.Read(reader);
@@ -19,7 +19,7 @@ namespace uTinyRipper.Classes.Sprites
 		public void Write(AssetWriter writer)
 		{
 			writer.Write(Name);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 
 			Position.Write(writer);
 			Rotation.Write(writer);

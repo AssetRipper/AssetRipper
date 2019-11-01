@@ -152,7 +152,7 @@ namespace uTinyRipper.Classes.Shaders
 			{
 				ForceSyncCompilation = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if (IsReadLanguage(reader.Version))
 			{

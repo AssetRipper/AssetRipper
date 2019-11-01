@@ -48,7 +48,7 @@ namespace uTinyRipper.Classes.TextureImporters
 			if (HasAndroidETC2Fallback(reader.Version))
 			{
 				AndroidETC2FallbackDownscale = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
@@ -76,7 +76,7 @@ namespace uTinyRipper.Classes.TextureImporters
 			if (HasAndroidETC2Fallback(writer.Version))
 			{
 				writer.Write(AndroidETC2FallbackDownscale);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 		}
 

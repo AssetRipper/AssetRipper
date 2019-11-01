@@ -29,7 +29,7 @@ namespace uTinyRipper.Classes
 			GenerationType = (GenerationType)reader.ReadInt32();
 			EdgeRadius = reader.ReadSingle();
 			m_colliderPaths = reader.ReadAssetArray<SubCollider>();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			CompositePaths.Read(reader);
 			VertexDistance = reader.ReadSingle();

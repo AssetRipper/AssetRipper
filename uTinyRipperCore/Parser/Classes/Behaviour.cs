@@ -22,7 +22,7 @@ namespace uTinyRipper.Classes
 			Enabled = reader.ReadByte();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
@@ -33,7 +33,7 @@ namespace uTinyRipper.Classes
 			writer.Write(Enabled);
 			if (IsAlign(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 		}
 

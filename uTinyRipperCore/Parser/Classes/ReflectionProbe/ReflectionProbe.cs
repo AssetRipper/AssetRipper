@@ -141,7 +141,7 @@ namespace uTinyRipper.Classes
 					Importance = reader.ReadInt16();
 				}
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			if (IsReadCustomBakedTexture(reader.Version))
 			{

@@ -135,13 +135,13 @@ namespace uTinyRipper.Classes
 				ExternalObjects.Read(reader);
 				if (IsAlignExternalObjects(reader.Version))
 				{
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 			}
 			if (HasUsedFileIDs(reader.Version))
 			{
 				UsedFileIDs = reader.ReadInt64Array();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
@@ -184,13 +184,13 @@ namespace uTinyRipper.Classes
 				ExternalObjects.Write(writer);
 				if (IsAlignExternalObjects(writer.Version))
 				{
-					writer.AlignStream(AlignType.Align4);
+					writer.AlignStream();
 				}
 			}
 			if (HasUsedFileIDs(writer.Version))
 			{
 				UsedFileIDs.Write(writer);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 		}
 
@@ -255,7 +255,7 @@ namespace uTinyRipper.Classes
 		{
 			if (HasUserData(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				UserData = reader.ReadString();
 			}
@@ -273,7 +273,7 @@ namespace uTinyRipper.Classes
 		{
 			if (HasUserData(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 
 				writer.Write(UserData);
 			}

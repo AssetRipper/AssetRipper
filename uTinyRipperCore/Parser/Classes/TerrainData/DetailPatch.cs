@@ -9,18 +9,18 @@ namespace uTinyRipper.Classes.TerrainDatas
 		{
 			Bounds.Read(reader);
 			LayerIndices = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			NumberOfObjects = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public void Write(AssetWriter writer)
 		{
 			Bounds.Write(writer);
 			LayerIndices.Write(writer);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 			NumberOfObjects.Write(writer);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

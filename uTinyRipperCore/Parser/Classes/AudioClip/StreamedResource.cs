@@ -60,7 +60,7 @@ namespace uTinyRipper.Classes.AudioClips
 			}
 			else
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

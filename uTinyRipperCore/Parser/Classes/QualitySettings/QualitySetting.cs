@@ -345,7 +345,7 @@ namespace uTinyRipper.Classes.QualitySettingss
 			}
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadVSyncCount(reader.Version))
 			{
@@ -361,7 +361,7 @@ namespace uTinyRipper.Classes.QualitySettingss
 			{
 				StreamingMipmapsActive = reader.ReadBoolean();
 				StreamingMipmapsAddAllCameras = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				StreamingMipmapsMemoryBudget = reader.ReadSingle();
 				StreamingMipmapsRenderersPerFrame = reader.ReadInt32();
@@ -380,7 +380,7 @@ namespace uTinyRipper.Classes.QualitySettingss
 			if (IsReadAsyncUploadPersistentBuffer(reader.Version))
 			{
 				AsyncUploadPersistentBuffer = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadResolutionScalingFixedDPIFactor(reader.Version))
 			{
@@ -388,7 +388,7 @@ namespace uTinyRipper.Classes.QualitySettingss
 			}
 			if (IsReadVSyncCount(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 #if UNIVERSAL

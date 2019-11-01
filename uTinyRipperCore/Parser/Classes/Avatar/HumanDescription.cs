@@ -28,7 +28,7 @@ namespace uTinyRipper.Classes.Avatars
 			HasTranslationDoF = reader.ReadBoolean();
 			HasExtraRoot = reader.ReadBoolean();
 			SkeletonHasParents = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 		}
 

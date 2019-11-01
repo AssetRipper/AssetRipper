@@ -51,7 +51,7 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 				CaptureEditorExceptions = reader.ReadBoolean();
 			}
 #endif
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

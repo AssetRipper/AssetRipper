@@ -429,7 +429,7 @@ namespace uTinyRipper.Classes
 					if (IsReadLightmapKeepDynamic(reader.Version))
 					{
 						bool lightmapKeepDynamic = reader.ReadBoolean();
-						reader.AlignStream(AlignType.Align4);
+						reader.AlignStream();
 
 						LightmapKeepDynamicPlain = lightmapKeepDynamic;
 						LightmapKeepDynamicDirCombined = lightmapKeepDynamic;
@@ -447,7 +447,7 @@ namespace uTinyRipper.Classes
 				}
 				if (IsAlign(reader.Version))
 				{
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 
 				if (IsReadLightmapKeepShadowMask(reader.Version))
@@ -467,7 +467,7 @@ namespace uTinyRipper.Classes
 					FogKeepLinear = reader.ReadBoolean();
 					FogKeepExp = reader.ReadBoolean();
 					FogKeepExp2 = reader.ReadBoolean();
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 
 				if (IsReadAlbedoSwatchInfos(reader.Version))

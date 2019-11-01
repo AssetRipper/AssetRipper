@@ -96,7 +96,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 			NumColorKeys = reader.ReadByte();
 			NumAlphaKeys = reader.ReadByte();
-			reader.AlignStream(AlignType.Align4);			
+			reader.AlignStream();			
 		}
 
 		public void Write(AssetWriter writer)
@@ -147,7 +147,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 			writer.Write(NumColorKeys);
 			writer.Write(NumAlphaKeys);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

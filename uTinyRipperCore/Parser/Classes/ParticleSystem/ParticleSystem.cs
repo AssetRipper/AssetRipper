@@ -219,18 +219,18 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (!IsStartDelayFirst(reader.Version))
 			{
 				StartDelay.Read(reader);
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (!IsMoveWithTransformBool(reader.Version))
 			{
 				MoveWithTransform = (ParticleSystemSimulationSpace)reader.ReadInt32();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadMoveWithCustomTransform(reader.Version))

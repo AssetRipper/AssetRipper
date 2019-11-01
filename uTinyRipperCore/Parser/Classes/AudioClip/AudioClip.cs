@@ -256,7 +256,7 @@ namespace uTinyRipper.Classes
 				}
 				if (IsAlignTrackerFormat(reader.Version))
 				{
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 
 				if (IsReadAudioClipFlags(reader.Version))
@@ -272,7 +272,7 @@ namespace uTinyRipper.Classes
 				PreloadAudioData = reader.ReadBoolean();
 				LoadInBackground = reader.ReadBoolean();
 				Legacy3D = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				if (!IsReadFSBResourceFirst(reader.Version))
 				{
@@ -287,7 +287,7 @@ namespace uTinyRipper.Classes
 				{
 					CompressionFormat = (AudioCompressionFormat)reader.ReadInt32();
 				}
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 #if UNIVERSAL
 				if (IsReadEditorResource(reader.Flags))
@@ -333,7 +333,7 @@ namespace uTinyRipper.Classes
 				}
 				if (IsAlignBools(reader.Version))
 				{
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 
 				if (IsStreamInt32(reader.Version))
@@ -347,7 +347,7 @@ namespace uTinyRipper.Classes
 					if (isInnerData)
 					{
 						m_audioData = reader.ReadByteArray();
-						reader.AlignStream(AlignType.Align4);
+						reader.AlignStream();
 					}
 					else
 					{
@@ -359,7 +359,7 @@ namespace uTinyRipper.Classes
 					m_audioData = reader.ReadByteArray();
 					if (IsAlignAudioData(reader.Version))
 					{
-						reader.AlignStream(AlignType.Align4);
+						reader.AlignStream();
 					}
 				}
 

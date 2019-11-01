@@ -17,7 +17,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public virtual void Read(AssetReader reader)
 		{
 			Enabled = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public virtual YAMLNode ExportYAML(IExportContainer container)

@@ -43,7 +43,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			{
 				SyncedLayerAffectsTiming = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

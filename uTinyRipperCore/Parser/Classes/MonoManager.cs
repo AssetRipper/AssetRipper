@@ -70,7 +70,7 @@ namespace uTinyRipper.Classes
 				HasCompileErrors = reader.ReadBoolean();
 				if(IsAlign(reader.Version))
 				{
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 
 				EngineDllModDate.Read(reader);

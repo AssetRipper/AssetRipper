@@ -207,7 +207,7 @@ namespace uTinyRipper.Classes
 				WebSecurityEmulationEnabled = reader.ReadInt32();
 				WebSecurityEmulationHostUrl = reader.ReadString();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if (IsReadLineEndingsForNewScripts(reader.Version))
 			{
@@ -265,7 +265,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign1(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadShowLightmapResolutionOverlay(reader.Version))
@@ -274,7 +274,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign2(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

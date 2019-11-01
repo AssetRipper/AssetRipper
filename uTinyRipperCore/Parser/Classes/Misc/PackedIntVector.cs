@@ -53,18 +53,18 @@ namespace uTinyRipper.Classes.Misc
 		{
 			NumItems = reader.ReadUInt32();
 			Data = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			BitSize = reader.ReadByte();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public void Write(AssetWriter writer)
 		{
 			writer.Write(NumItems);
 			writer.Write(Data);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 			writer.Write(BitSize);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

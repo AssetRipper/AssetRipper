@@ -210,7 +210,7 @@ namespace uTinyRipper.Classes
 				{
 					AllowRoll = reader.ReadBoolean();
 				}
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 			}
 			if (IsReadVertexStreamMask(reader.Version))
@@ -229,7 +229,7 @@ namespace uTinyRipper.Classes
 			if (IsReadVertexStreams(reader.Version))
 			{
 				m_vertexStreams = reader.ReadByteArray();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			Mesh.Read(reader);

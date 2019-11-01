@@ -115,7 +115,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlignMiddle(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 #if UNIVERSAL
@@ -139,7 +139,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlignEnd(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

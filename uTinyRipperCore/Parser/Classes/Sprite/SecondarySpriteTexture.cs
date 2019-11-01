@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes.Sprites
 		{
 			Texture.Read(reader);
 			Name = reader.ReadString();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)

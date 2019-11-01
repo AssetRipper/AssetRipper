@@ -29,13 +29,13 @@ namespace uTinyRipper.Classes
 			StartSnapshot.Read(reader);
 			SuspendThreshold = reader.ReadSingle();
 			EnableSuspend = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			UpdateMode = reader.ReadInt32();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			MixerConstant.Read(reader);
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 		}
 

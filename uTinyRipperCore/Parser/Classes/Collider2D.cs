@@ -58,7 +58,7 @@ namespace uTinyRipper.Classes
 			{
 				UsedByComposite = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if (IsReadOffset(reader.Version))
 			{

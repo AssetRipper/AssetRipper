@@ -30,7 +30,7 @@ namespace uTinyRipper.Classes
 			Interactable = reader.ReadBoolean();
 			BlocksRaycasts = reader.ReadBoolean();
 			IgnoreParentGroups = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 		}
 

@@ -42,7 +42,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				SpeedModifier.Read(reader);
 			}
 			InWorldSpace = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)

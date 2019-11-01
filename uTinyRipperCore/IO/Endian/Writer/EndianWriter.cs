@@ -128,7 +128,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -145,7 +145,7 @@ namespace uTinyRipper
 			Write(buffer, index, count);
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -161,7 +161,7 @@ namespace uTinyRipper
 			Write(buffer, index, count);
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -191,7 +191,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -221,7 +221,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -251,7 +251,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -281,7 +281,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -311,7 +311,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -341,7 +341,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -371,7 +371,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -401,7 +401,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -417,7 +417,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -440,7 +440,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
@@ -456,14 +456,13 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 		}
 
-		public void AlignStream(AlignType alignType)
+		public void AlignStream()
 		{
-			long align = (long)alignType;
-			BaseStream.Position = AlignPosition + ((BaseStream.Position - AlignPosition + align) & ~align);
+			BaseStream.Position = AlignPosition + ((BaseStream.Position - AlignPosition + 3) & ~3);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

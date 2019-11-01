@@ -53,11 +53,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 			StrengthY.Read(reader);
 			StrengthZ.Read(reader);
 			SeparateAxes = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			Frequency = reader.ReadSingle();
 			Damping = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			Octaves = reader.ReadInt32();
 			OctaveMultiplier = reader.ReadSingle();
@@ -70,7 +70,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			RemapEnabled = reader.ReadBoolean();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadPositionAmount(reader.Version))

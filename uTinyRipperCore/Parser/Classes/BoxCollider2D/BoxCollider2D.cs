@@ -50,7 +50,7 @@ namespace uTinyRipper.Classes
 			{
 				SpriteTilingProperty.Read(reader);
 				AutoTiling = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			Size.Read(reader);

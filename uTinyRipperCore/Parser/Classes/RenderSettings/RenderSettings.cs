@@ -216,7 +216,7 @@ namespace uTinyRipper.Classes
 			Fog = reader.ReadBoolean();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			
 			FogColor.Read(reader);
@@ -255,7 +255,7 @@ namespace uTinyRipper.Classes
 				{
 					CreateAmbientLight = reader.ReadBoolean();
 				}
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadSubtractiveShadowColor(reader.Version))
 			{

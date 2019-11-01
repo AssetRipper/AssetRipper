@@ -17,7 +17,7 @@ namespace uTinyRipper.Classes
 			SortingLayerID = reader.ReadInt32();
 			SortingLayer = reader.ReadInt16();
 			SortingOrder = reader.ReadInt16();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 		}
 

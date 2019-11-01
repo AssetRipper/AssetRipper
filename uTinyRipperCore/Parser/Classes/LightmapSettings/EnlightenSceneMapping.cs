@@ -26,29 +26,29 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			Renderers = reader.ReadAssetArray<EnlightenRendererInformation>();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			Systems = reader.ReadAssetArray<EnlightenSystemInformation>();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (HasProbesets(reader.Version))
 			{
 				Probesets = reader.ReadAssetArray<Hash128>();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			SystemAtlases = reader.ReadAssetArray<EnlightenSystemAtlasInformation>();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadTerrainChunks(reader.Version))
 			{
 				TerrainChunks = reader.ReadAssetArray<EnlightenTerrainChunksInformation>();
 				if (IsAlign(reader.Version))
 				{
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 			}
 		}
@@ -58,29 +58,29 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			Renderers.Write(writer);
 			if (IsAlign(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 			Systems.Write(writer);
 			if (IsAlign(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 			if (HasProbesets(writer.Version))
 			{
 				Probesets.Write(writer);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 			SystemAtlases.Write(writer);
 			if (IsAlign(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 			if (IsReadTerrainChunks(writer.Version))
 			{
 				TerrainChunks.Write(writer);
 				if (IsAlign(writer.Version))
 				{
-					writer.AlignStream(AlignType.Align4);
+					writer.AlignStream();
 				}
 			}
 		}

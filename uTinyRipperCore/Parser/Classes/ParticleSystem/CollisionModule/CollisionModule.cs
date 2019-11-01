@@ -99,7 +99,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				MultiplyColliderForceByParticleSize = reader.ReadBoolean();
 				MultiplyColliderForceByParticleSpeed = reader.ReadBoolean();
 				MultiplyColliderForceByCollisionAngle = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			
 			Plane0.Read(reader);
@@ -152,7 +152,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			{
 				CollidesWithDynamic = reader.ReadBoolean();
 				InteriorCollisions = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

@@ -62,7 +62,7 @@ namespace uTinyRipper.Classes.TrailRenderers
 			if (IsReadGenerateLightingData(reader.Version))
 			{
 				GenerateLightingData = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
@@ -82,7 +82,7 @@ namespace uTinyRipper.Classes.TrailRenderers
 			if (IsReadGenerateLightingData(writer.Version))
 			{
 				writer.Write(GenerateLightingData);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 		}
 

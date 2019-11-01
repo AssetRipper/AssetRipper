@@ -70,9 +70,9 @@ namespace uTinyRipper.Classes.Misc
 			Range = reader.ReadSingle();
 			Start = reader.ReadSingle();
 			Data = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			BitSize = reader.ReadByte();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public void Write(AssetWriter writer)
@@ -81,9 +81,9 @@ namespace uTinyRipper.Classes.Misc
 			writer.Write(Range);
 			writer.Write(Start);
 			writer.Write(Data);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 			writer.Write(BitSize);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

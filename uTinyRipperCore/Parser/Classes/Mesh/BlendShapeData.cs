@@ -50,7 +50,7 @@ namespace uTinyRipper.Classes.Meshes
 			Channels = reader.ReadAssetArray<BlendShapeChannel>();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			FullWeights = reader.ReadSingleArray();
@@ -63,7 +63,7 @@ namespace uTinyRipper.Classes.Meshes
 			Channels.Write(writer);
 			if (IsAlign(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 
 			FullWeights.Write(writer);

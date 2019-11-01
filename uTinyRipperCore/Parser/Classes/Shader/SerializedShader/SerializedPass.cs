@@ -19,7 +19,7 @@ namespace uTinyRipper.Classes.Shaders
 			ProgHull.Read(reader);
 			ProgDomain.Read(reader);
 			HasInstancingVariant = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			UseName = reader.ReadString();
 			Name = reader.ReadString();

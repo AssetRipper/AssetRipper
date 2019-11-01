@@ -25,7 +25,7 @@
 			ArraySize = reader.ReadInt32();
 			Type = (ShaderParamType)reader.ReadByte();
 			Dim = reader.ReadByte();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public string Name { get; private set; }

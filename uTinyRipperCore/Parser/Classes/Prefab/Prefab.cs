@@ -54,7 +54,7 @@ namespace uTinyRipper.Classes
 			SourcePrefab.Read(reader);
 			RootGameObject.Read(reader);
 			IsPrefabParent = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align64);
+			reader.AlignStream();
 		}
 
 		public IEnumerable<EditorExtension> FetchObjects(IAssetContainer file)

@@ -36,7 +36,7 @@ namespace uTinyRipper.Classes
 			{
 				IsReadable = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			PostRead(reader);
 		}
@@ -49,7 +49,7 @@ namespace uTinyRipper.Classes
 			{
 				writer.Write(IsReadable);
 			}
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 
 			PostWrite(writer);
 		}

@@ -61,13 +61,13 @@ namespace uTinyRipper.Classes.AnimationClips
 			m_genericBindings = reader.ReadAssetArray<GenericBinding>();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			m_pptrCurveMapping = reader.ReadAssetArray<PPtr<Object>>();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

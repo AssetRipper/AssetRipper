@@ -83,7 +83,7 @@ namespace uTinyRipper.Classes
 			if (IsReadUseAutoMass(reader.Version))
 			{
 				UseAutoMass = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			
 			Mass = reader.ReadSingle();
@@ -107,7 +107,7 @@ namespace uTinyRipper.Classes
 				Interpolate = (RigidbodyInterpolation2D)reader.ReadByte();
 				SleepingMode = (RigidbodySleepMode2D)reader.ReadByte();
 				CollisionDetection = (CollisionDetectionMode2D)reader.ReadByte();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			
 			if (IsReadInterpolate(reader.Version))

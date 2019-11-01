@@ -321,7 +321,7 @@ namespace uTinyRipper.Classes
 				if (IsReadableFirst(reader.Version))
 				{
 					IsReadable = reader.ReadInt32();
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 			}
 
@@ -346,7 +346,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlignGrayScaleToAlpha(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			GenerateCubemap = (TextureImporterGenerateCubemap)reader.ReadInt32();
@@ -367,13 +367,13 @@ namespace uTinyRipper.Classes
 			TextureFormat = (TextureFormat)reader.ReadInt32();
 			if (IsAlignTextureFormat(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (HasRecommendedTextureFormat(reader.Version) && RecommendedTextureFormatFirst(reader.Version))
 			{
 				RecommendedTextureFormat = reader.ReadInt32();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			MaxTextureSize = reader.ReadInt32();
@@ -394,7 +394,7 @@ namespace uTinyRipper.Classes
 			if (HasAllowsAlphaSplitting(reader.Version))
 			{
 				AllowsAlphaSplitting = reader.ReadInt32();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (HasSprite(reader.Version))
 			{
@@ -443,7 +443,7 @@ namespace uTinyRipper.Classes
 			if (HasSourceTextureInformation(reader.Version))
 			{
 				SourceTextureInformation = reader.ReadAsset<SourceTextureInformation>();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (HasTextureShape(reader.Version))
 			{
@@ -459,7 +459,7 @@ namespace uTinyRipper.Classes
 				CompressionQualitySet = reader.ReadInt32();
 				TextureFormatSet = reader.ReadInt32();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if (HasPlatformSettings(reader.Version))
 			{
@@ -479,7 +479,7 @@ namespace uTinyRipper.Classes
 				PSDRemoveMatte = reader.ReadBoolean();
 				PSDShowRemoveMatteOption = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			PostRead(reader);
 		}
@@ -539,7 +539,7 @@ namespace uTinyRipper.Classes
 				if (IsReadableFirst(writer.Version))
 				{
 					writer.Write(IsReadable);
-					writer.AlignStream(AlignType.Align4);
+					writer.AlignStream();
 				}
 			}
 
@@ -564,7 +564,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlignGrayScaleToAlpha(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 
 			writer.Write((int)GenerateCubemap);
@@ -585,13 +585,13 @@ namespace uTinyRipper.Classes
 			writer.Write((int)TextureFormat);
 			if (IsAlignTextureFormat(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 
 			if (HasRecommendedTextureFormat(writer.Version) && RecommendedTextureFormatFirst(writer.Version))
 			{
 				writer.Write(RecommendedTextureFormat);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 
 			writer.Write(MaxTextureSize);
@@ -612,7 +612,7 @@ namespace uTinyRipper.Classes
 			if (HasAllowsAlphaSplitting(writer.Version))
 			{
 				writer.Write(AllowsAlphaSplitting);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 			if (HasSprite(writer.Version))
 			{
@@ -661,7 +661,7 @@ namespace uTinyRipper.Classes
 			if (HasSourceTextureInformation(writer.Version))
 			{
 				SourceTextureInformation.Write(writer);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 			if (HasTextureShape(writer.Version))
 			{
@@ -677,7 +677,7 @@ namespace uTinyRipper.Classes
 				writer.Write(CompressionQualitySet);
 				writer.Write(TextureFormatSet);
 			}
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 
 			if (HasPlatformSettings(writer.Version))
 			{
@@ -697,7 +697,7 @@ namespace uTinyRipper.Classes
 				writer.Write(PSDRemoveMatte);
 				writer.Write(PSDShowRemoveMatteOption);
 			}
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 
 			PostWrite(writer);
 		}

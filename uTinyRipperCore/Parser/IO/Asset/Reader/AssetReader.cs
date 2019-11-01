@@ -52,7 +52,7 @@ namespace uTinyRipper
 			string result = Encoding.UTF8.GetString(buffer, 0, length);
 			if (IsAlignString)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 			return result;
 		}
@@ -94,7 +94,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 			return array;
 		}
@@ -112,7 +112,7 @@ namespace uTinyRipper
 			}
 			if (IsAlignArray)
 			{
-				AlignStream(AlignType.Align4);
+				AlignStream();
 			}
 			return array;
 		}

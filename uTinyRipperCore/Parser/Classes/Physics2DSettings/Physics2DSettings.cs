@@ -234,7 +234,7 @@ namespace uTinyRipper.Classes
 				ShowColliderAABB = reader.ReadBoolean();
 			}
 #endif
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 #if UNIVERSAL
 			if (IsReadContactArrowScale(reader.Version, reader.Flags))

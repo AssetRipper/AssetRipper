@@ -110,7 +110,7 @@ namespace uTinyRipper.Classes.Shaders
 				LocalKeywords = reader.ReadStringArray();
 			}
 			ProgramData = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			int sourceMap = reader.ReadInt32();
 			int bindCount = reader.ReadInt32();

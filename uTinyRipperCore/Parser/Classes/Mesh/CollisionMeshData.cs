@@ -23,17 +23,17 @@ namespace uTinyRipper.Classes.Meshes
 		public void Read(AssetReader reader)
 		{
 			BakedConvexCollisionMesh = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			BakedTriangleCollisionMesh = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public void Write(AssetWriter writer)
 		{
 			writer.Write(BakedConvexCollisionMesh);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 			writer.Write(BakedTriangleCollisionMesh);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 		}
 
 		public byte[] BakedConvexCollisionMesh { get; set; }

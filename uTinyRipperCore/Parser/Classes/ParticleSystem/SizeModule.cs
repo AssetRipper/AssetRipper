@@ -23,7 +23,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				Y.Read(reader);
 				Z.Read(reader);
 				SeparateAxes = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

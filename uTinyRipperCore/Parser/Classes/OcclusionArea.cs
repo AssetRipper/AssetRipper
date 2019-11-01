@@ -48,7 +48,7 @@ namespace uTinyRipper.Classes
 			{
 				IsTargetVolume = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if (IsReadTargetResolution(reader.Version))
 			{

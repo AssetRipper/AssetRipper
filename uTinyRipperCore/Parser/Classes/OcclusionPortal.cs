@@ -15,7 +15,7 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 			Open = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			Center.Read(reader);
 			Size.Read(reader);

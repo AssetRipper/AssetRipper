@@ -101,7 +101,7 @@ namespace uTinyRipper.Classes.Lights
 			{
 				CullingMatrixOverride.Read(reader);
 				UseCullingMatrixOverride = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

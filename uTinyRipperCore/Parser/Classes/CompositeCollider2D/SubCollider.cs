@@ -18,7 +18,7 @@ namespace uTinyRipper.Classes.CompositeCollider2Ds
 		{
 			Collider.Read(reader);
 			m_colliderPaths = reader.ReadAssetArrayArray<IntPoint>();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)

@@ -64,12 +64,12 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			{
 				CrunchedCompression = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			if (!IsReadColorSpace(reader.Version))
 			{
 				SRGB = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

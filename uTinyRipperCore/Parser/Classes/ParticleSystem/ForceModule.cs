@@ -14,7 +14,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			Z.Read(reader);
 			InWorldSpace = reader.ReadBoolean();
 			RandomizePerFrame = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)

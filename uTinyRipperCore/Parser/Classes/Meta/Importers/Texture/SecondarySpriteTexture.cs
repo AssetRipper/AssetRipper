@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes.TextureImporters
 		{
 			Texture.Read(reader);
 			Name = reader.ReadString();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 		}
 
@@ -18,7 +18,7 @@ namespace uTinyRipper.Classes.TextureImporters
 		{
 			Texture.Write(writer);
 			writer.Write(Name);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 			
 		}
 

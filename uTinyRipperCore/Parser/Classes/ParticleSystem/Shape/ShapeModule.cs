@@ -261,7 +261,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				bool randomDirection = reader.ReadBoolean();
 				RandomDirectionAmount = randomDirection ? 1.0f : 0.0f;
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if(IsReadTexture(reader.Version))
 			{
@@ -272,7 +272,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				TextureColorAffectsParticles = reader.ReadBoolean();
 				TextureAlphaAffectsParticles = reader.ReadBoolean();
 				TextureBilinearFiltering = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadRandomDirectionAmount(reader.Version))

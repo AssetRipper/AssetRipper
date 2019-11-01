@@ -11,7 +11,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		{
 			m_childBlendEventIDArray = reader.ReadUInt32Array();
 			NormalizedBlendValues = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

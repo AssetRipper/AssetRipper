@@ -222,7 +222,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign1(reader.Version, reader.Flags))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (HasLightmapsModeLegacy(reader.Version))
@@ -243,7 +243,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign2(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (HasGISettings(reader.Version))
@@ -304,7 +304,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign1(writer.Version, writer.Flags))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 
 			if (HasLightmapsModeLegacy(writer.Version))
@@ -325,7 +325,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign2(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 
 			if (HasGISettings(writer.Version))

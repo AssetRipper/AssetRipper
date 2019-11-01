@@ -76,7 +76,7 @@ namespace uTinyRipper.Classes.Misc
 		{
 			NumItems = reader.ReadUInt32();
 			m_data = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

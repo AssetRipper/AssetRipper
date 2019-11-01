@@ -11,7 +11,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			Color.Read(reader);
 			MinLuminance = reader.ReadSingle();
 			MaxLuminance = reader.ReadSingle();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

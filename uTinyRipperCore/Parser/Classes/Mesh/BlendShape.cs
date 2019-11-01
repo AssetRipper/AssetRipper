@@ -42,7 +42,7 @@ namespace uTinyRipper.Classes.Meshes
 			HasTangents = reader.ReadBoolean();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
@@ -65,7 +65,7 @@ namespace uTinyRipper.Classes.Meshes
 			writer.Write(HasTangents);
 			if (IsAlign(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 		}
 

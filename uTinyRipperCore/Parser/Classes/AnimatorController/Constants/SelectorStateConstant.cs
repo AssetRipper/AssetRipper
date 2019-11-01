@@ -13,7 +13,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			m_transitionConstantArray = reader.ReadAssetArray<OffsetPtr<SelectorTransitionConstant>>();
 			FullPathID = reader.ReadUInt32();
 			IsEntry = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -92,10 +92,10 @@ namespace uTinyRipper.Classes.TextureImporters
 				Vertices = reader.ReadAssetArray<Vector2f>();
 				Indices = reader.ReadInt32Array();
 				Edges = reader.ReadAssetArray<Int2Storage>();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				Weights = reader.ReadAssetArray<BoneWeights4>();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (HasSecondaryTextures(reader.Version))
 			{
@@ -128,10 +128,10 @@ namespace uTinyRipper.Classes.TextureImporters
 				Vertices.Write(writer);
 				Indices.Write(writer);
 				Edges.Write(writer);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 
 				Weights.Write(writer);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 			if (HasSecondaryTextures(writer.Version))
 			{

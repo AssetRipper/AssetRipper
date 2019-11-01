@@ -28,7 +28,7 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 			Script = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if (IsReadPath(reader.Version))
 			{

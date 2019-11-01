@@ -41,7 +41,7 @@ namespace uTinyRipper.Classes.Lights
 			{
 				LightmapBakeMode.Read(reader);
 				IsBaked = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

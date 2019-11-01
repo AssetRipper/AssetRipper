@@ -49,7 +49,7 @@ namespace uTinyRipper.Classes
 			if (IsReadEnabled(reader.Version))
 			{
 				Enabled = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 		

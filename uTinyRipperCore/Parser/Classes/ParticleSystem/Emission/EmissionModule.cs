@@ -102,7 +102,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				float time3 = reader.ReadSingle();
 
 				BurstCount = IsIntCount(reader.Version) ? reader.ReadInt32() : reader.ReadByte();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				m_bursts = new ParticleSystemEmissionBurst[BurstCount];
 				if(BurstCount > 0)
@@ -125,7 +125,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			else
 			{
 				BurstCount = reader.ReadInt32();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				m_bursts = reader.ReadAssetArray<ParticleSystemEmissionBurst>();
 			}

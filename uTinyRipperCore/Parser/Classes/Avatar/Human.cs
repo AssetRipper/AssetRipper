@@ -76,7 +76,7 @@ namespace uTinyRipper.Classes.Avatars
 			{
 				HasTDoF = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -27,7 +27,7 @@ namespace uTinyRipper.Classes.ParticleSystemForceFields
 			VectorFieldAttractionCurve.Read(reader);
 			MultiplyDragByParticleSize = reader.ReadBoolean();
 			MultiplyDragByParticleVelocity = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)

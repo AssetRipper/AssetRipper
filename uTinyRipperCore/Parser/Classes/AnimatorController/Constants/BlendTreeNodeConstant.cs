@@ -98,7 +98,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			{
 				CycleOffset = reader.ReadSingle();
 				Mirror = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

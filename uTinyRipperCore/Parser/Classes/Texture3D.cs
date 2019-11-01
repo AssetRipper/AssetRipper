@@ -184,7 +184,7 @@ namespace uTinyRipper.Classes
 			{
 				ReadAllowed = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if (IsReadImageCount(reader.Version))
 			{
@@ -196,7 +196,7 @@ namespace uTinyRipper.Classes
 			if (IsReadIsReadableSecond(reader.Version))
 			{
 				IsReadable = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadLightmapFormat(reader.Version))
 			{
@@ -211,7 +211,7 @@ namespace uTinyRipper.Classes
 			}
 
 			m_imageData = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			if (IsReadStreamData(reader.Version))
 			{
 				StreamData.Read(reader);

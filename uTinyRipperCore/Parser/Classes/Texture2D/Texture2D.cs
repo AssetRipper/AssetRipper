@@ -179,7 +179,7 @@ namespace uTinyRipper.Classes
 				if (GetAlphaIsTransparencyPosition(reader.Version) == 0)
 				{
 					AlphaIsTransparency = reader.ReadBoolean();
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 			}
 #endif
@@ -227,7 +227,7 @@ namespace uTinyRipper.Classes
 				}
 			}
 #endif
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if (IsReadStreamingMipmapsPriority(reader.Version))
 			{
@@ -241,7 +241,7 @@ namespace uTinyRipper.Classes
 					}
 				}
 #endif
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			ImageCount = reader.ReadInt32();
@@ -258,7 +258,7 @@ namespace uTinyRipper.Classes
 			}
 
 			m_imageData = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			if (IsReadStreamData(reader.Version))
 			{
 				StreamData.Read(reader);

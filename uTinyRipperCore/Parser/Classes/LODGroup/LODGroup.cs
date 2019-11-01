@@ -83,14 +83,14 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			
 			m_lods = reader.ReadAssetArray<LOD>();
 			Enabled = reader.ReadBoolean();
 			if (IsAlign2(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

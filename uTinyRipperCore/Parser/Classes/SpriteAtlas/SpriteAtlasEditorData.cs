@@ -67,7 +67,7 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			{
 				StoredHash.Read(reader);
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)

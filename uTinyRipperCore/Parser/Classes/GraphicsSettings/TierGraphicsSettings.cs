@@ -56,7 +56,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			{
 				UseHDR = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

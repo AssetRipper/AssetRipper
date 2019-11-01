@@ -15,13 +15,13 @@ namespace uTinyRipper.Classes.Misc
 		public void Read(AssetReader reader)
 		{
 			Md4Hash = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public void Write(AssetWriter writer)
 		{
 			Md4Hash.Write(writer);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

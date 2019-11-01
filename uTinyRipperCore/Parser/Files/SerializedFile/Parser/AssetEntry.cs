@@ -31,7 +31,7 @@ namespace uTinyRipper.SerializedFiles
 		{
 			if (IsReadLongID(reader.Generation))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 				PathID = reader.ReadInt64();
 			}
 			else

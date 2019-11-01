@@ -13,7 +13,7 @@ namespace uTinyRipper.Classes.Shaders
 		public void Read(AssetReader reader)
 		{
 			m_channels = reader.ReadAssetArray<ShaderBindChannel>();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			SourceMap = reader.ReadInt32();
 		}
 

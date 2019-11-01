@@ -110,7 +110,7 @@ namespace uTinyRipper.Classes
 				{
 					AdditionalShaderChannelsFlag = reader.ReadInt32();
 				}
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				SortingLayerID = reader.ReadInt32();
 				SortingOrder = reader.ReadInt16();

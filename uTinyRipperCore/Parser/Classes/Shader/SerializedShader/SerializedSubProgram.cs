@@ -54,17 +54,17 @@ namespace uTinyRipper.Classes.Shaders
 			m_globalKeywordIndices = reader.ReadUInt16Array();
 			if (IsAlignKeywordIndices(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadLocalKeywordIndices(reader.Version))
 			{
 				m_localKeywordIndices = reader.ReadUInt16Array();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			ShaderHardwareTier = reader.ReadByte();
 			GpuProgramType = (ShaderGpuProgramType)reader.ReadByte();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			m_vectorParams = reader.ReadAssetArray<VectorParameter>();
 			m_matrixParams = reader.ReadAssetArray<MatrixParameter>();

@@ -9,7 +9,7 @@ namespace uTinyRipper.Classes.Misc
 		public void Read(AssetReader reader)
 		{
 			m_paths = reader.ReadAssetArrayArray<Vector2f>();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

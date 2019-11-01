@@ -49,12 +49,12 @@ namespace uTinyRipper.Classes.TerrainDatas
 			Heights = reader.ReadInt16Array();
 			if (HasAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (HasShifts(reader.Version))
 			{
 				Shifts = reader.ReadAssetArray<Shift>();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			PrecomputedError = reader.ReadSingleArray();
@@ -80,12 +80,12 @@ namespace uTinyRipper.Classes.TerrainDatas
 			Heights.Write(writer);
 			if (HasAlign(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 			if (HasShifts(writer.Version))
 			{
 				Shifts.Write(writer);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 
 			PrecomputedError.Write(writer);

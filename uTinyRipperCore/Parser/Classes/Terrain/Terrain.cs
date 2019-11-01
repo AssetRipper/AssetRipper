@@ -183,7 +183,7 @@ namespace uTinyRipper.Classes
 				DrawInstanced = reader.ReadBoolean();
 			}
 			DrawTreesAndFoliage = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if (IsReadReflectionProbeUsage(reader.Version))
 			{
@@ -227,7 +227,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 #if UNIVERSAL
 			if (IsReadScaleInLightmap(reader.Flags))
@@ -240,7 +240,7 @@ namespace uTinyRipper.Classes
 			{
 				DynamicUVST.Read(reader);
 				ChunkDynamicUVST.Read(reader);
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadGroupingID(reader.Version))
 			{

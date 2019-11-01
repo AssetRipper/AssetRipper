@@ -181,7 +181,7 @@ namespace uTinyRipper.Classes
 				DefaultMaterial.Read(reader);
 				FontSize = reader.ReadSingle();
 				Texture.Read(reader);
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsShortAsciiStartOffset(reader.Version))
@@ -270,7 +270,7 @@ namespace uTinyRipper.Classes
 			if (IsReadPixelScale(reader.Version))
 			{
 				PixelScale = reader.ReadSingle();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadGridFont(reader.Version))
@@ -280,7 +280,7 @@ namespace uTinyRipper.Classes
 					GridFont = reader.ReadBoolean();
 					if (IsAlign(reader.Version))
 					{
-						reader.AlignStream(AlignType.Align4);
+						reader.AlignStream();
 					}
 				}
 			}
@@ -288,7 +288,7 @@ namespace uTinyRipper.Classes
 			if (IsReadFontData(reader.Version))
 			{
 				m_fontData = reader.ReadByteArray();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				if (!IsReadFontImpl(reader.Version))
 				{
@@ -309,7 +309,7 @@ namespace uTinyRipper.Classes
 			if (IsReadFallbackFonts(reader.Version))
 			{
 				m_fallbackFonts = reader.ReadAssetArray<PPtr<Font>>();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				FontRenderingMode = (FontRenderingMode)reader.ReadInt32();
 			}

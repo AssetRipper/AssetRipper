@@ -73,7 +73,7 @@ namespace uTinyRipper.Classes
 				DtPolyRef = reader.ReadUInt32();
 			}
 			CostOverride = reader.ReadSingle();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			BiDirectional = reader.ReadBoolean();
 			Activated = reader.ReadBoolean();

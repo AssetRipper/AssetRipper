@@ -115,7 +115,7 @@ namespace uTinyRipper.Classes
 			if (HasReadPVSData(reader.Version))
 			{
 				m_PVSData = reader.ReadByteArray();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (HasQueryMode(reader.Version))
 			{

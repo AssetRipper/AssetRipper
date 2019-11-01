@@ -8,7 +8,7 @@ namespace uTinyRipper.Classes.NavMeshDatas
 		public void Read(AssetReader reader)
 		{
 			Flags = reader.ReadByte();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

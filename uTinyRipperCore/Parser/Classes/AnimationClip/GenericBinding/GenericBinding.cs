@@ -39,7 +39,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			IsPPtrCurve = reader.ReadByte() == 0 ? false : true;
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

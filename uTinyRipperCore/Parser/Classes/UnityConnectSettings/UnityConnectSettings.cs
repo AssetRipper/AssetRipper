@@ -282,7 +282,7 @@ namespace uTinyRipper.Classes
 			{
 				Enabled = reader.ReadBoolean();
 				TestMode = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadOldEventUrl(reader.Version))
 			{
@@ -302,7 +302,7 @@ namespace uTinyRipper.Classes
 			}
 			if(IsReadEnabled(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadCrashReportingSettings(reader.Version, reader.Platform, reader.Flags))

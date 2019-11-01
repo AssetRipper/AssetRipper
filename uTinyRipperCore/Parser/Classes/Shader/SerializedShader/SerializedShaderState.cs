@@ -25,7 +25,7 @@ namespace uTinyRipper.Classes.Shaders
 			RtBlend6.Read(reader);
 			RtBlend7.Read(reader);
 			RtSeparateBlend = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if (IsReadZClip(reader.Version))
 			{
@@ -53,7 +53,7 @@ namespace uTinyRipper.Classes.Shaders
 			Tags.Read(reader);
 			LOD = reader.ReadInt32();
 			Lighting = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public void Export(TextWriter writer)

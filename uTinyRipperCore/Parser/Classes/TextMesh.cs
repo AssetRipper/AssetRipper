@@ -64,7 +64,7 @@ namespace uTinyRipper.Classes
 			if (IsReadRichText(reader.Version))
 			{
 				RichText = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			Font.Read(reader);
 			if (IsReadColor(reader.Version))

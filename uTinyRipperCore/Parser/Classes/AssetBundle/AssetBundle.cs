@@ -138,7 +138,7 @@ namespace uTinyRipper.Classes
 			if (IsReadIsStreamedSceneAssetBundle(reader.Version))
 			{
 				IsStreamedSceneAssetBundle = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if(IsReadExplicitDataLayout(reader.Version))
 			{

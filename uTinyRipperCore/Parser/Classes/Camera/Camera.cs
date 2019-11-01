@@ -172,7 +172,7 @@ namespace uTinyRipper.Classes
 #endif
 			if (IsAlign1(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadSensorSize(reader.Version))
 			{
@@ -196,7 +196,7 @@ namespace uTinyRipper.Classes
 			FarClipPlane = reader.ReadSingle();
 			FieldOfView = reader.ReadSingle();
 			Orthographic = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			OrthographicSize = reader.ReadSingle();
 			Depth = reader.ReadSingle();
@@ -236,7 +236,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign2(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadStereoConvergence(reader.Version))
 			{

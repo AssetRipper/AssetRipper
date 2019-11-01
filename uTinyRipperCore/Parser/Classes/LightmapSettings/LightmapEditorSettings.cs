@@ -364,7 +364,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			if (HasAO(reader.Version))
 			{
 				AO = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (HasAOAmount(reader.Version))
@@ -388,7 +388,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			if (HasExtractAmbientOcclusion(reader.Version))
 			{
 				ExtractAmbientOcclusion = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (HasLODSurfaceMappingDistance(reader.Version))
 			{
@@ -435,7 +435,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			}
 			if (IsAlign1(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (HasFinalGatherRayCount(reader.Version))
@@ -485,7 +485,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			if (HasPVRCulling(reader.Version))
 			{
 				PVRCulling = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				PVRFilteringGaussRadiusDirect = reader.ReadInt32();
 				PVRFilteringGaussRadiusIndirect = reader.ReadInt32();
@@ -509,13 +509,13 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			}
 			if (IsAlign2(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (HasExportTrainingData(reader.Version))
 			{
 				ExportTrainingData = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (HasTrainingDataDestination(reader.Version))
 			{
@@ -565,7 +565,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			if (HasAO(writer.Version))
 			{
 				writer.Write(AO);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 
 			if (HasAOAmount(writer.Version))
@@ -589,7 +589,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			if (HasExtractAmbientOcclusion(writer.Version))
 			{
 				writer.Write(ExtractAmbientOcclusion);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 			if (HasLODSurfaceMappingDistance(writer.Version))
 			{
@@ -636,7 +636,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			}
 			if (IsAlign1(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 
 			if (HasFinalGatherRayCount(writer.Version))
@@ -686,7 +686,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			if (HasPVRCulling(writer.Version))
 			{
 				writer.Write(PVRCulling);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 
 				writer.Write(PVRFilteringGaussRadiusDirect);
 				writer.Write(PVRFilteringGaussRadiusIndirect);
@@ -710,13 +710,13 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			}
 			if (IsAlign2(writer.Version))
 			{
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 
 			if (HasExportTrainingData(writer.Version))
 			{
 				writer.Write(ExportTrainingData);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 			if (HasTrainingDataDestination(writer.Version))
 			{

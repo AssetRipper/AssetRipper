@@ -44,7 +44,7 @@ namespace uTinyRipper.Classes.InputManagers
 			Sensitivity = reader.ReadSingle();
 			Snap = reader.ReadBoolean();
 			Invert = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			Type = (InputAxisType)reader.ReadInt32();
 			Axis = (InputAxesDirection)reader.ReadInt32();

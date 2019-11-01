@@ -33,7 +33,7 @@ namespace uTinyRipper.Classes
 			{
 				MainObjectFileID = reader.ReadInt64();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			PostRead(reader);
 		}
@@ -46,7 +46,7 @@ namespace uTinyRipper.Classes
 			{
 				writer.Write(MainObjectFileID);
 			}
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 
 			PostWrite(writer);
 		}

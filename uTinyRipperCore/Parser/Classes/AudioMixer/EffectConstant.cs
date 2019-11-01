@@ -21,7 +21,7 @@ namespace uTinyRipper.Classes.AudioMixers
 			WetMixLevelIndex = reader.ReadUInt32();
 			PrevEffectIndex = reader.ReadUInt32();
 			Bypass = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			m_parameterIndices = reader.ReadUInt32Array();
 		}

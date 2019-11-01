@@ -27,7 +27,7 @@
 			Type = (ShaderParamType)reader.ReadByte();
 			RowCount = reader.ReadByte();
 			ColumnCount = 0;
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public string Name { get; private set; }

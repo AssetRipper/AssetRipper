@@ -113,7 +113,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			{
 				KeepAdditionalBonesAnimation = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)

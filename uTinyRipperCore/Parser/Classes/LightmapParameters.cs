@@ -148,7 +148,7 @@ namespace uTinyRipper.Classes
 			if (IsReadLimitLightmapCount(reader.Version))
 			{
 				LimitLightmapCount = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				MaxLightmapCount = reader.ReadInt32();
 			}

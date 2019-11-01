@@ -16,7 +16,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public void Read(AssetReader reader)
 		{
 			UseScreenSpaceShadows = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 #if UNIVERSAL
 			if(IsReadStandardShaderQuality(reader.Version, reader.Flags))
@@ -24,7 +24,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 				StandardShaderQuality = (ShaderQuality)reader.ReadInt32();
 				UseReflectionProbeBoxProjection = reader.ReadBoolean();
 				UseReflectionProbeBlending = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 #endif
 		}

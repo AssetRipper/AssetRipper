@@ -13,7 +13,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			Defines_Tier1.Read(reader);
 			Defines_Tier2.Read(reader);
 			Defines_Tier3.Read(reader);
-			reader.AlignStream(AlignType.Align4);			
+			reader.AlignStream();			
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

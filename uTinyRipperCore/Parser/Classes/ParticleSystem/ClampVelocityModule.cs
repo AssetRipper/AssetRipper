@@ -45,7 +45,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				MultiplyDragByParticleSize = reader.ReadBoolean();
 				MultiplyDragByParticleVelocity = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			Dampen = reader.ReadSingle();
 			if (IsReadDrag(reader.Version))

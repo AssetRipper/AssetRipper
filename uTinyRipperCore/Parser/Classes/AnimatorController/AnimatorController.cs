@@ -78,7 +78,7 @@ namespace uTinyRipper.Classes
 
 			if (!IsAlignMultiThreadedStateMachine(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadMultiThreadedStateMachine(reader.Version))
 			{
@@ -86,7 +86,7 @@ namespace uTinyRipper.Classes
 			}
 			if(IsAlignMultiThreadedStateMachine(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

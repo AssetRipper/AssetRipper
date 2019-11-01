@@ -380,7 +380,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign1(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadCastShadows(reader.Version))
@@ -406,7 +406,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign2(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadRenderingLayerMask(reader.Version))
@@ -471,7 +471,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsReadUseLight(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadReflectUsage(reader.Version))
 			{
@@ -517,7 +517,7 @@ namespace uTinyRipper.Classes
 			if (IsReadStitchLightmapSeams(reader.Version, reader.Flags))
 			{
 				StitchLightmapSeams = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadSelectedEditorRenderState(reader.Version, reader.Flags))
 			{
@@ -536,12 +536,12 @@ namespace uTinyRipper.Classes
 			if (IsReadGIBackfaceCull(reader.Version, reader.Flags))
 			{
 				GIBackfaceCull = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 #endif
 			if (IsAlign3(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadSortingLayerID(reader.Version))
@@ -558,7 +558,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign4(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

@@ -34,7 +34,7 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			AllowAlphaSplitting = reader.ReadBoolean();
 			EnableRotation = reader.ReadBoolean();
 			EnableTightPacking = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

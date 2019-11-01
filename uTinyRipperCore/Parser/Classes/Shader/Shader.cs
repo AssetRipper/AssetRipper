@@ -108,7 +108,7 @@ namespace uTinyRipper.Classes
 				uint[] compressedLengths = reader.ReadUInt32Array();
 				uint[] decompressedLengths = reader.ReadUInt32Array();
 				byte[] compressedBlob = reader.ReadByteArray();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				SubProgramBlobs = new ShaderSubProgramBlob[Platforms.Length];
 				using (MemoryStream memStream = new MemoryStream(compressedBlob))
@@ -168,7 +168,7 @@ namespace uTinyRipper.Classes
 							}
 						}
 					}
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 
 				if (IsReadFallback(reader.Version))
@@ -197,7 +197,7 @@ namespace uTinyRipper.Classes
 			if (IsReadShaderIsBaked(reader.Version))
 			{
 				ShaderIsBaked = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 #if UNIVERSAL

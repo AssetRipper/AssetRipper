@@ -12,7 +12,7 @@ namespace uTinyRipper.Classes.Avatars
 			Value.Read(reader);
 			Length = reader.ReadSingle();
 			Modified = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 		}
 

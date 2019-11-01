@@ -151,7 +151,7 @@ namespace uTinyRipper.Classes.Meshes
 			if (HasChannels(reader.Version))
 			{
 				Channels = reader.ReadAssetArray<ChannelInfo>();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (HasStreams(reader.Version))
 			{
@@ -170,7 +170,7 @@ namespace uTinyRipper.Classes.Meshes
 			}
 
 			Data = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public void Write(AssetWriter writer)
@@ -184,7 +184,7 @@ namespace uTinyRipper.Classes.Meshes
 			if (HasChannels(writer.Version))
 			{
 				Channels.Write(writer);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 			if (HasStreams(writer.Version))
 			{
@@ -202,7 +202,7 @@ namespace uTinyRipper.Classes.Meshes
 			}
 
 			Data.Write(writer);
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

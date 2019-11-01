@@ -34,7 +34,7 @@ namespace uTinyRipper.Classes
 			if (IsReadSourceTextures(reader.Version))
 			{
 				m_sourceTextures = reader.ReadAssetArray<PPtr<Texture2D>>();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

@@ -128,7 +128,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			{
 				bool RandomRow = reader.ReadBoolean();
 				RowMode = RandomRow ? ParticleSystemAnimationRowMode.Random : ParticleSystemAnimationRowMode.Custom;
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadSprites(reader.Version))

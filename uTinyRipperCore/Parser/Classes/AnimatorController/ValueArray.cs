@@ -35,7 +35,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			if(IsPrimeFirst(reader.Version))
 			{
 				m_boolValues = reader.ReadBooleanArray();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				m_intValues = reader.ReadInt32Array();
 				m_floatValues = reader.ReadSingleArray();
@@ -71,7 +71,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 				m_floatValues = reader.ReadSingleArray();
 				m_intValues = reader.ReadInt32Array();
 				m_boolValues = reader.ReadBooleanArray();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

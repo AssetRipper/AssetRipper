@@ -170,7 +170,7 @@ namespace uTinyRipper.Classes
 			if (IsReadScript(reader.Version, reader.Flags))
 			{
 				Script = reader.ReadByteArray();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadDefaultProperties(reader.Version, reader.Flags))
 			{

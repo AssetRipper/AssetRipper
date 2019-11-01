@@ -97,7 +97,7 @@ namespace uTinyRipper.Classes
 				{
 					EnableInstancingVariants = reader.ReadBoolean();
 					DoubleSidedGI = reader.ReadBoolean();
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 			}
 

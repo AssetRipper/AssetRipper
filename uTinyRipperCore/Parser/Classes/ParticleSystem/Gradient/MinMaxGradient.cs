@@ -59,7 +59,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 
 			MinMaxState = (MinMaxGradientState)reader.ReadUInt16();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if (!IsMaxGradientFirst(reader.Version))
 			{

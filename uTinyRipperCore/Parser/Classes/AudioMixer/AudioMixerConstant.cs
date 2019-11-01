@@ -25,13 +25,13 @@ namespace uTinyRipper.Classes.AudioMixers
 			m_snapshots = reader.ReadAssetArray<SnapshotConstant>();
 			m_snapshotGUIDs = reader.ReadAssetArray<GUID>();
 			//m_groupNameBuffer = stream.ReadArray<char>();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			//m_snapshotNameBuffer = stream.ReadArray<char>();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			//m_pluginEffectNameBuffer = stream.ReadArray<char>();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			m_exposedParameterNames = reader.ReadUInt32Array();
 			m_exposedParameterIndices = reader.ReadUInt32Array();

@@ -109,7 +109,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			if (IsReadRotation3D(reader.Version))
 			{
 				Rotation3D = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			
 			if (!IsReadGravityModifierSingle(reader.Version))

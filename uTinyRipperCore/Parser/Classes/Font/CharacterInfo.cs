@@ -63,7 +63,7 @@ namespace uTinyRipper.Classes.Fonts
 			if (IsReadFlipped(reader.Version))
 			{
 				Flipped = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

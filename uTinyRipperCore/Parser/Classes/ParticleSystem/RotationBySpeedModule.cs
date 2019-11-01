@@ -26,7 +26,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			if (IsReadAxes(reader.Version))
 			{
 				SeparateAxes = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			
 			Range.Read(reader);

@@ -75,7 +75,7 @@ namespace uTinyRipper.Classes
 				Alignment = (TextAnchor)reader.ReadInt32();
 				WordWrap = reader.ReadBoolean();
 				RichText = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				TextClipping = (TextClipping)reader.ReadInt32();
 				ImagePosition = (ImagePosition)reader.ReadInt32();
@@ -84,14 +84,14 @@ namespace uTinyRipper.Classes
 				FixedHeight = reader.ReadSingle();
 				StretchWidth = reader.ReadBoolean();
 				StretchHeight = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			else
 			{
 				ImagePosition = (ImagePosition)reader.ReadInt32();
 				Alignment = (TextAnchor)reader.ReadInt32();
 				WordWrap = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				TextClipping = (TextClipping)reader.ReadInt32();
 				ContentOffset.Read(reader);
@@ -104,9 +104,9 @@ namespace uTinyRipper.Classes
 					FontStyle = (FontStyle)reader.ReadInt32();
 				}
 				StretchWidth = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 				StretchHeight = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
@@ -142,7 +142,7 @@ namespace uTinyRipper.Classes
 				writer.Write((int)Alignment);
 				writer.Write(WordWrap);
 				writer.Write(RichText);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 
 				writer.Write((int)TextClipping);
 				writer.Write((int)ImagePosition);
@@ -151,14 +151,14 @@ namespace uTinyRipper.Classes
 				writer.Write(FixedHeight);
 				writer.Write(StretchWidth);
 				writer.Write(StretchHeight);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 			else
 			{
 				writer.Write((int)ImagePosition);
 				writer.Write((int)Alignment);
 				writer.Write(WordWrap);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 
 				writer.Write((int)TextClipping);
 				ContentOffset.Write(writer);
@@ -171,9 +171,9 @@ namespace uTinyRipper.Classes
 					writer.Write((int)FontStyle);
 				}
 				writer.Write(StretchWidth);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 				writer.Write(StretchHeight);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 		}
 

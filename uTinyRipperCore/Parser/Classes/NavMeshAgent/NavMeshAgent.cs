@@ -56,7 +56,7 @@ namespace uTinyRipper.Classes
 				AutoBraking = reader.ReadBoolean();
 			}
 			AutoRepath = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			Height = reader.ReadSingle();
 			BaseOffset = reader.ReadSingle();

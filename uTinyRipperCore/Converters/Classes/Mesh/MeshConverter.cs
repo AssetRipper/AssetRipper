@@ -272,8 +272,8 @@ namespace uTinyRipper.Converters
 				}
 				else
 				{
-					AlignType align = GetUse16bitIndices(container, origin) == 0 ? AlignType.Align4 : AlignType.Align2;
-					return origin.IndexBuffer.SwapBytes(align);
+					int size = GetUse16bitIndices(container, origin) == 0 ? 4 : 2;
+					return origin.IndexBuffer.SwapBytes(size);
 				}
 			}
 		}

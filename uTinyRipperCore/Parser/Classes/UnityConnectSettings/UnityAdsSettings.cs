@@ -51,7 +51,7 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 			Enabled = reader.ReadBoolean();
 			InitializeOnStartup = reader.ReadBoolean();
 			TestMode = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			if(IsReadEnabledPlatforms(reader.Version))
 			{

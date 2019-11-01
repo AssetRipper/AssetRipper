@@ -14,7 +14,7 @@ namespace uTinyRipper.Classes.BoxCollider2Ds
 			AdaptiveTilingThreshold = reader.ReadSingle();
 			DrawMode = reader.ReadInt32();
 			AdaptiveTiling = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

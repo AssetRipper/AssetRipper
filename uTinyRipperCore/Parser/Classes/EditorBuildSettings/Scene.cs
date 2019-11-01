@@ -42,7 +42,7 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 		public void Read(AssetReader reader)
 		{
 			Enabled = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			Path = reader.ReadString();
 			GUID.Read(reader);

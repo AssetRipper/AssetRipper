@@ -13,7 +13,7 @@ namespace uTinyRipper.Classes.Shaders
 			FallbackName = reader.ReadString();
 			m_dependencies = reader.ReadAssetArray<SerializedShaderDependency>();
 			DisableNoSubshadersMessage = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public void Export(ShaderWriter writer)

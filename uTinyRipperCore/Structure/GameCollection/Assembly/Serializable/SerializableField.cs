@@ -60,7 +60,7 @@ namespace uTinyRipper.Game.Assembly
 					{
 						Value = reader.ReadBoolean();
 					}
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 					break;
 
 				case PrimitiveType.Char:
@@ -72,7 +72,7 @@ namespace uTinyRipper.Game.Assembly
 					{
 						Value = reader.ReadChar();
 					}
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 					break;
 
 				case PrimitiveType.SByte:
@@ -84,7 +84,7 @@ namespace uTinyRipper.Game.Assembly
 					{
 						Value = reader.ReadSByte();
 					}
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 					break;
 
 				case PrimitiveType.Byte:
@@ -96,7 +96,7 @@ namespace uTinyRipper.Game.Assembly
 					{
 						Value = reader.ReadByte();
 					}
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 					break;
 
 				case PrimitiveType.Short:
@@ -108,7 +108,7 @@ namespace uTinyRipper.Game.Assembly
 					{
 						Value = reader.ReadInt16();
 					}
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 					break;
 
 				case PrimitiveType.UShort:
@@ -120,7 +120,7 @@ namespace uTinyRipper.Game.Assembly
 					{
 						Value = reader.ReadUInt16();
 					}
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 					break;
 
 				case PrimitiveType.Int:

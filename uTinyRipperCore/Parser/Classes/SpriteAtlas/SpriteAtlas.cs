@@ -47,7 +47,7 @@ namespace uTinyRipper.Classes
 			}
 			Tag = reader.ReadString();
 			IsVariant = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)

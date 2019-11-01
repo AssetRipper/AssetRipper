@@ -70,7 +70,7 @@ namespace uTinyRipper.Classes
 			if (IsReadCarveOnlyStationary(reader.Version))
 			{
 				CarveOnlyStationary = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				Center.Read(reader);
 				TimeToStationary = reader.ReadSingle();

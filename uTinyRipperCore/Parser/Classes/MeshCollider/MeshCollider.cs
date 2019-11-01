@@ -86,13 +86,13 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadCookingOptions(reader.Version))
 			{
 				CookingOptions = (MeshColliderCookingOptions)reader.ReadInt32();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadSkinWidth(reader.Version))
 			{

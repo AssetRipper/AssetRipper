@@ -112,13 +112,13 @@ namespace uTinyRipper.Classes.Sprites
 			{
 				Vertices = reader.ReadAssetArray<SpriteVertex>();
 				Indices = reader.ReadUInt16Array();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			else
 			{
 				SubMeshes = reader.ReadAssetArray<SubMesh>();
 				IndexBuffer = reader.ReadByteArray();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				VertexData.Read(reader);
 			}

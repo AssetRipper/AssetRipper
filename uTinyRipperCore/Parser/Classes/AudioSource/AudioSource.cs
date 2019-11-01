@@ -140,7 +140,7 @@ namespace uTinyRipper.Classes
 			PlayOnAwake = reader.ReadBoolean();
 			if (IsAlignAwake(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			
 			Volume = reader.ReadSingle();
@@ -172,7 +172,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlignMute(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadPriority(reader.Version))
@@ -192,7 +192,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlignBypass(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadRolloffCustomCurve(reader.Version))

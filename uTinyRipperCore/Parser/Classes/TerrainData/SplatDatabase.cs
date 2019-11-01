@@ -50,7 +50,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 				ColorSpace = reader.ReadInt32();
 				MaterialRequiresMetallic = reader.ReadBoolean();
 				MaterialRequiresSmoothness = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
@@ -73,7 +73,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 				writer.Write(ColorSpace);
 				writer.Write(MaterialRequiresMetallic);
 				writer.Write(MaterialRequiresSmoothness);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 			}
 		}
 

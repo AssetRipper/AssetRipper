@@ -71,7 +71,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			if (IsMinMaxStateFirst(reader.Version))
 			{
 				MinMaxState = (ParticleSystemCurveMode)reader.ReadUInt16();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			
 			Scalar = reader.ReadSingle();
@@ -82,7 +82,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			if (!IsMinMaxStateFirst(reader.Version))
 			{
 				MinMaxState = (ParticleSystemCurveMode)reader.ReadUInt16();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 

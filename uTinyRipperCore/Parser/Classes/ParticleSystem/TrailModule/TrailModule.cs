@@ -103,7 +103,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			{
 				AttachRibbonsToTransform = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			ColorOverLifetime.Read(reader);
 			WidthOverTrail.Read(reader);

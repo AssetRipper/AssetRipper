@@ -21,7 +21,7 @@ namespace uTinyRipper.Classes.TagManagers
 				UserID = reader.ReadUInt32();
 			}
 			UniqueID = reader.ReadUInt32();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

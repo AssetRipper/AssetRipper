@@ -54,11 +54,11 @@ namespace uTinyRipper.Classes
 			if (HasStreamingMipmaps(reader.Version))
 			{
 				StreamingMipmaps = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				StreamingMipmapsPriority = reader.ReadInt32();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			PostRead(reader);
 		}
@@ -76,11 +76,11 @@ namespace uTinyRipper.Classes
 			if (HasStreamingMipmaps(writer.Version))
 			{
 				writer.Write(StreamingMipmaps);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 
 				writer.Write(StreamingMipmapsPriority);
 			}
-			writer.AlignStream(AlignType.Align4);
+			writer.AlignStream();
 
 			PostWrite(writer);
 		}

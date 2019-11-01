@@ -37,7 +37,7 @@
 				MultiSampled = reader.ReadBoolean();
 			}
 			Dim = reader.ReadByte();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public string Name { get; private set; }

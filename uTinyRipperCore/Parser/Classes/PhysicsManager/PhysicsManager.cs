@@ -241,7 +241,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadClothInterCollisionDistance(reader.Version))
@@ -249,7 +249,7 @@ namespace uTinyRipper.Classes
 				ClothInterCollisionDistance = reader.ReadSingle();
 				ClothInterCollisionStiffness = reader.ReadSingle();
 				ContactsGeneration = (ContactsGeneration)reader.ReadInt32();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsReadLayerCollisionMatrix(reader.Version))
@@ -268,7 +268,7 @@ namespace uTinyRipper.Classes
 			if (IsReadClothInterCollisionSettingsToggle(reader.Version))
 			{
 				ClothInterCollisionSettingsToggle = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (IsReadClothGravity(reader.Version))
 			{
@@ -289,7 +289,7 @@ namespace uTinyRipper.Classes
 			}
 			if (IsReadDefaultMaxAngularSpeed(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				DefaultMaxAngularSpeed = reader.ReadSingle();
 			}

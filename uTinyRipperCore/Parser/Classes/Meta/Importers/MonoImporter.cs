@@ -56,7 +56,7 @@ namespace uTinyRipper.Classes
 			if (HasExecutionOrder(reader.Version))
 			{
 				ExecutionOrder = reader.ReadInt16();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				Icon = reader.ReadAsset<PPtr<Texture2D>>();
 			}
@@ -75,7 +75,7 @@ namespace uTinyRipper.Classes
 			if (HasExecutionOrder(writer.Version))
 			{
 				writer.Write(ExecutionOrder);
-				writer.AlignStream(AlignType.Align4);
+				writer.AlignStream();
 
 				Icon.Write(writer);
 			}
