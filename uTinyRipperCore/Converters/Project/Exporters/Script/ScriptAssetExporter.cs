@@ -39,7 +39,7 @@ namespace uTinyRipper.Converters
 
 		public void Export(IExportContainer container, IEnumerable<Object> assets, string dirPath, Action<IExportContainer, Object, string> callback)
 		{
-			ScriptExportManager scriptManager = new ScriptExportManager(dirPath);
+			ScriptExportManager scriptManager = new ScriptExportManager(container.Version, dirPath);
 			Dictionary<Object, ScriptExportType> exportTypes = new Dictionary<Object, ScriptExportType>();
 			foreach (Object asset in assets)
 			{

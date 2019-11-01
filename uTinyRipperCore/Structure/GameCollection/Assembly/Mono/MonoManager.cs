@@ -376,6 +376,8 @@ namespace uTinyRipper.Game.Assembly.Mono
 			set => throw new NotSupportedException();
 		}
 
+		public Version Version { get; set; }
+
 		public AssemblyManager AssemblyManager { get; }
 
 		public const string AssemblyExtension = ".dll";

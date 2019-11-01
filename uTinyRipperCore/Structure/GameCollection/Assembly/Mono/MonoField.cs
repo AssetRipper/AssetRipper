@@ -1,5 +1,4 @@
 using Mono.Cecil;
-using System.Collections.Generic;
 using uTinyRipper.Converters.Script;
 using uTinyRipper.Converters.Script.Mono;
 
@@ -38,25 +37,24 @@ namespace uTinyRipper.Game.Assembly.Mono
 			return HasSerializeFieldAttribute(field);
 		}
 
-		public static bool IsSerializable(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
+		public static bool IsSerializable(in MonoFieldContext context)
 		{
-			if (IsSerializableModifier(field))
+			if (IsSerializableModifier(context.Definition))
 			{
-				MonoSerializableScope scope = new MonoSerializableScope(field, arguments);
-				return IsFieldTypeSerializable(scope);
+				return IsFieldTypeSerializable(context);
 			}
 			return false;
 		}
 
-		public static bool IsFieldTypeSerializable(in MonoSerializableScope scope)
+		public static bool IsFieldTypeSerializable(in MonoFieldContext context)
 		{
-			TypeReference fieldType = scope.FieldType;
+			TypeReference fieldType = context.ElementType;
 
 			// if it's generic parameter then get its real type
 			if (fieldType.IsGenericParameter)
 			{
 				GenericParameter parameter = (GenericParameter)fieldType;
-				fieldType = scope.Arguments[parameter];
+				fieldType = context.Arguments[parameter];
 			}
 
 			if (fieldType.IsArray)
@@ -73,7 +71,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 				if (elementType.IsGenericParameter)
 				{
 					GenericParameter parameter = (GenericParameter)elementType;
-					elementType = scope.Arguments[parameter];
+					elementType = context.Arguments[parameter];
 				}
 
 				// array of arrays isn't serializable
@@ -87,7 +85,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 					return false;
 				}
 				// check if array element is serializable
-				MonoSerializableScope elementScope = new MonoSerializableScope(scope.DeclaringType, elementType, true, scope.Arguments);
+				MonoFieldContext elementScope = new MonoFieldContext(context, elementType, true);
 				return IsFieldTypeSerializable(elementScope);
 			}
 
@@ -101,7 +99,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 				if (listElement.IsGenericParameter)
 				{
 					GenericParameter parameter = (GenericParameter)listElement;
-					listElement = scope.Arguments[parameter];
+					listElement = context.Arguments[parameter];
 				}
 
 				// list of arrays isn't serializable
@@ -115,7 +113,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 					return false;
 				}
 				// check if list element is serializable
-				MonoSerializableScope elementScope = new MonoSerializableScope(scope.DeclaringType, listElement, true, scope.Arguments);
+				MonoFieldContext elementScope = new MonoFieldContext(context, listElement, true);
 				return IsFieldTypeSerializable(elementScope);
 			}
 
@@ -146,9 +144,9 @@ namespace uTinyRipper.Game.Assembly.Mono
 				return true;
 			}
 
-			if (IsRecursive(scope.DeclaringType, fieldType))
+			if (IsRecursive(context.DeclaringType, fieldType))
 			{
-				return scope.IsArrayElement;
+				return context.IsArray;
 			}
 
 			TypeDefinition definition = fieldType.Resolve();
@@ -171,6 +169,10 @@ namespace uTinyRipper.Game.Assembly.Mono
 			if (definition.IsSerializable)
 			{
 				if (ScriptExportManager.IsFrameworkLibrary(ScriptExportMonoType.GetModuleName(definition)))
+				{
+					return false;
+				}
+				if (definition.IsValueType && !MonoType.IsStructSerializable(context.Version))
 				{
 					return false;
 				}

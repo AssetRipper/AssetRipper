@@ -29,6 +29,11 @@ namespace uTinyRipper.Game.Assembly.Mono
 			Fields = CreateFields(manager, context);
 		}
 
+		/// <summary>
+		/// 4.5.0 and greater
+		/// </summary>
+		public static bool IsStructSerializable(Version version) => version.IsGreaterEqual(4, 5);
+
 		public static string GetUniqueName(TypeReference type)
 		{
 			string assembly = FilenameUtils.FixAssemblyEndian(type.Scope.Name);
@@ -192,10 +197,11 @@ namespace uTinyRipper.Game.Assembly.Mono
 			IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
 			foreach (FieldDefinition field in definition.Fields)
 			{
-				if (MonoField.IsSerializable(field, arguments))
+				MonoFieldContext fieldContext = new MonoFieldContext(field, arguments, manager.Version);
+				if (MonoField.IsSerializable(fieldContext))
 				{
-					MonoTypeContext fieldContext = new MonoTypeContext(field.FieldType, arguments);
-					MonoTypeContext resolvedContext = fieldContext.Resolve();
+					MonoTypeContext typeContext = new MonoTypeContext(field.FieldType, arguments);
+					MonoTypeContext resolvedContext = typeContext.Resolve();
 					MonoTypeContext serFieldContext = GetSerializedElementContext(resolvedContext);
 					SerializableType scriptType = manager.GetSerializableType(serFieldContext);
 					bool isArray = MonoField.IsSerializableArray(resolvedContext.Type);

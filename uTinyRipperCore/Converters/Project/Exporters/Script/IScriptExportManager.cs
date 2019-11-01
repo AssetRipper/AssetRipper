@@ -14,6 +14,8 @@ namespace uTinyRipper.Converters.Script
 		ScriptExportField RetrieveField(FieldDefinition field);
 		ScriptExportParameter RetrieveParameter(ParameterDefinition parameter);
 
+		Version Version { get; }
+
 		IEnumerable<ScriptExportType> Types { get; }
 		IEnumerable<ScriptExportEnum> Enums { get; }
 		IEnumerable<ScriptExportDelegate> Delegates { get; }

@@ -332,6 +332,8 @@ namespace uTinyRipper
 
 		private void ReadAssets(EndianReader reader)
 		{
+			AssemblyManager.Version = Metadata.Hierarchy.Version;
+
 			HashSet<long> preloaded = new HashSet<long>();
 			using (AssetReader assetReader = new AssetReader(reader, Version, Platform, Flags))
 			{

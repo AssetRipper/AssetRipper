@@ -11,12 +11,13 @@ namespace uTinyRipper.Converters.Script
 {
 	public sealed class ScriptExportManager : IScriptExportManager
 	{
-		public ScriptExportManager(string exportPath)
+		public ScriptExportManager(Version version, string exportPath)
 		{
 			if (string.IsNullOrEmpty(exportPath))
 			{
 				throw new ArgumentNullException(nameof(exportPath));
 			}
+			Version = version;
 			m_exportPath = exportPath;
 		}
 
@@ -392,6 +393,8 @@ namespace uTinyRipper.Converters.Script
 		{
 			return IsBuiltinLibrary(type.Module);
 		}
+
+		public Version Version { get; }
 
 		public IEnumerable<ScriptExportType> Types => m_types.Values;
 		public IEnumerable<ScriptExportEnum> Enums => m_enums.Values;

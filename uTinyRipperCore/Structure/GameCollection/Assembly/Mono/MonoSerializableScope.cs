@@ -3,29 +3,36 @@ using System.Collections.Generic;
 
 namespace uTinyRipper.Game.Assembly.Mono
 {
-	public readonly struct MonoSerializableScope
+	public readonly struct MonoFieldContext
 	{
-		public MonoSerializableScope(FieldDefinition field) :
-			this(field, null)
+		public MonoFieldContext(FieldDefinition field, Version version) :
+			this(field, null, version)
 		{
 		}
 
-		public MonoSerializableScope(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments) :
-			this(field.DeclaringType, field.FieldType, false, arguments)
+		public MonoFieldContext(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments, Version version)
 		{
-		}
-
-		public MonoSerializableScope(TypeReference declaringType, TypeReference fieldType, bool isArrayElement, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
-		{
-			DeclaringType = declaringType;
-			FieldType = fieldType;
-			IsArrayElement = isArrayElement;
+			Version = version;
+			Definition = field;
+			ElementType = field.FieldType;
+			IsArray = false;
 			Arguments = arguments;
 		}
 
-		public TypeReference DeclaringType { get; }
-		public TypeReference FieldType { get; }
-		public bool IsArrayElement { get; }
+		public MonoFieldContext(in MonoFieldContext copy, TypeReference fieldType, bool isArrayElement)
+		{
+			Version = copy.Version;
+			Definition = copy.Definition;
+			ElementType = fieldType;
+			IsArray = isArrayElement;
+			Arguments = copy.Arguments;
+		}
+
+		public Version Version { get; }
+		public FieldDefinition Definition { get; }
+		public TypeReference DeclaringType => Definition.DeclaringType;
+		public TypeReference ElementType { get; }
+		public bool IsArray { get; }
 		public IReadOnlyDictionary<GenericParameter, TypeReference> Arguments { get; }
 	}
 }

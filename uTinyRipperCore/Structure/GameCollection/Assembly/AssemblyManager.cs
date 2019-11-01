@@ -187,6 +187,12 @@ namespace uTinyRipper.Game
 			}
 		}
 
+		public Version Version
+		{
+			get => m_manager.Version;
+			set => m_manager.Version = value;
+		}
+
 		private event Action<string> m_requestAssemblyCallback;
 
 		private readonly Dictionary<string, SerializableType> m_serializableTypes = new Dictionary<string, SerializableType>();
