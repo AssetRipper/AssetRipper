@@ -87,6 +87,9 @@ namespace Mono.Cecil {
 			set { value_type = value; }
 		}
 
+		/// <summary>
+		/// Module is the place where type reference is located
+		/// </summary>
 		public override ModuleDefinition Module {
 			get {
 				if (module != null)
@@ -130,6 +133,9 @@ namespace Mono.Cecil {
 			}
 		}
 
+		/// <summary>
+		/// Scope is the place where type definition is located
+		/// </summary>
 		public virtual IMetadataScope Scope {
 			get {
 				var declaring_type = this.DeclaringType;
@@ -286,7 +292,11 @@ namespace Mono.Cecil {
 			if (module == null)
 				return this;
 
-			return module.Resolve (this);
+			var definition = module.Resolve (this);
+			if (definition == null)
+				return this;
+
+			return definition;
 		}
 	}
 

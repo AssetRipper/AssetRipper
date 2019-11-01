@@ -31,7 +31,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 
 		public static string GetUniqueName(TypeReference type)
 		{
-			string assembly = FilenameUtils.FixAssemblyEndian(type.Module.Name);
+			string assembly = FilenameUtils.FixAssemblyEndian(type.Scope.Name);
 			return ScriptIdentifier.ToUniqueName(assembly, type.FullName);
 		}
 
@@ -110,23 +110,19 @@ namespace uTinyRipper.Game.Assembly.Mono
 			return IsList(type) || IsExposedReference(type);
 		}
 
-		public static bool IsEnginePointer(TypeReference type)
+		public static bool IsMonoDerived(TypeReference type)
 		{
-			if (IsObject(type))
+			while (type != null)
 			{
-				return false;
-			}
-			if (IsMonoPrime(type))
-			{
-				return true;
-			}
+				if (IsMonoPrime(type))
+				{
+					return true;
+				}
 
-			TypeDefinition definition = type.Resolve();
-			if (definition.IsInterface)
-			{
-				return false;
+				TypeDefinition definition = type.Resolve();
+				type = definition.BaseType;
 			}
-			return IsEnginePointer(definition.BaseType);
+			return false;
 		}
 
 		public static bool IsCompilerGenerated(TypeDefinition type)

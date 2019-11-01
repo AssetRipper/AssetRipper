@@ -88,7 +88,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 			{
 				return false;
 			}
-			if (!IsUnityObject(type))
+			if (!IsMonoDerivedSafe(type))
 			{
 				return false;
 			}
@@ -256,31 +256,6 @@ namespace uTinyRipper.Game.Assembly.Mono
 			return FindType(scriptID.Assembly, scriptID.Namespace, scriptID.Name);
 		}
 
-		private bool IsUnityObject(TypeReference type)
-		{
-			while (true)
-			{
-				if (type == null)
-				{
-					return false;
-				}
-				if (type.Module == null)
-				{
-					return false;
-				}
-				TypeDefinition definition = type.Resolve();
-				if (definition == null)
-				{
-					return false;
-				}
-				if (MonoType.IsMonoPrime(definition))
-				{
-					return true;
-				}
-				type = definition.BaseType;
-			}
-		}
-
 		/// <summary>
 		/// Is it possible to properly restore serializable layout for specified type
 		/// </summary>
@@ -370,6 +345,29 @@ namespace uTinyRipper.Game.Assembly.Mono
 				}
 			}
 			return true;
+		}
+
+		private bool IsMonoDerivedSafe(TypeReference type)
+		{
+			while (type != null)
+			{
+				if (type.Module == null)
+				{
+					return false;
+				}
+				TypeDefinition definition = type.Resolve();
+				if (definition == null)
+				{
+					return false;
+				}
+
+				if (MonoType.IsMonoPrime(definition))
+				{
+					return true;
+				}
+				type = definition.BaseType;
+			}
+			return false;
 		}
 
 		public ScriptingBackend ScriptingBackend

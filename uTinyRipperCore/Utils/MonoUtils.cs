@@ -9,7 +9,6 @@ namespace uTinyRipper
 {
 	public static class MonoUtils
 	{
-#region Naming
 		public static bool IsSerializablePrimitive(TypeReference type)
 		{
 			switch (type.etype)
@@ -26,6 +25,7 @@ namespace uTinyRipper
 				case ElementType.U8:
 				case ElementType.R4:
 				case ElementType.R8:
+				case ElementType.String:
 					return true;
 				default:
 					return false;
@@ -59,6 +59,7 @@ namespace uTinyRipper
 			}
 		}
 
+#region Naming
 		public static string ToCPrimitiveString(string name)
 		{
 			switch (name)

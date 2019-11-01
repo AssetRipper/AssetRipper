@@ -141,8 +141,12 @@ namespace uTinyRipper.Converters.Script.Mono
 			{
 				return false;
 			}
-
 			TypeDefinition definition = type.Resolve();
+			if (definition == null)
+			{
+				return false;
+			}
+
 			foreach (FieldDefinition field in definition.Fields)
 			{
 				if (field.Name == name)
@@ -307,6 +311,11 @@ namespace uTinyRipper.Converters.Script.Mono
 
 				context = context.GetBase();
 				definition = context.Type.Resolve();
+				if (definition == null)
+				{
+					break;
+				}
+
 				string module = GetModuleName(definition);
 				bool isBuiltIn = ScriptExportManager.IsBuiltinLibrary(module);
 				IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
@@ -370,11 +379,16 @@ namespace uTinyRipper.Converters.Script.Mono
 					break;
 				}
 
-				MonoTypeContext baseContext = context.GetBase();
-				TypeDefinition baseDefinition = baseContext.Type.Resolve();
-				string module = GetModuleName(baseContext.Type);
+				context = context.GetBase();
+				definition = context.Type.Resolve();
+				if (definition == null)
+				{
+					break;
+				}
+
+				string module = GetModuleName(context.Type);
 				bool isBuiltIn = ScriptExportManager.IsBuiltinLibrary(module);
-				foreach (PropertyDefinition property in baseDefinition.Properties)
+				foreach (PropertyDefinition property in definition.Properties)
 				{
 					MethodDefinition method = property.GetMethod == null ? property.SetMethod : property.GetMethod;
 					if (method.IsVirtual && (method.IsNewSlot || method.IsReuseSlot))
@@ -396,8 +410,6 @@ namespace uTinyRipper.Converters.Script.Mono
 						}
 					}
 				}
-				context = baseContext;
-				definition = baseDefinition;
 			}
 			return properties.ToArray();
 		}
@@ -417,28 +429,13 @@ namespace uTinyRipper.Converters.Script.Mono
 					continue;
 				}
 
-				if (field.FieldType.Module == null)
+				// if we can't determine whether it serializable or not, then consider it as serializable
+				if (IsSerializationApplicable(field.FieldType))
 				{
-					// if field has unknown type then consider it as serializable
-				}
-				else if (field.FieldType.ContainsGenericParameter)
-				{
-					// if field type has generic parameter then consider it as serializable
-				}
-				else
-				{
-					TypeDefinition definition = field.FieldType.Resolve();
-					if (definition == null)
+					MonoSerializableScope scope = new MonoSerializableScope(field);
+					if (!MonoField.IsFieldTypeSerializable(scope))
 					{
-						// if field has unknown type then consider it as serializable
-					}
-					else
-					{
-						MonoSerializableScope scope = new MonoSerializableScope(field);
-						if (!MonoField.IsFieldTypeSerializable(scope))
-						{
-							continue;
-						}
+						continue;
 					}
 				}
 
@@ -448,28 +445,40 @@ namespace uTinyRipper.Converters.Script.Mono
 			return fields.ToArray();
 		}
 
-		private static bool IsContainsGenericParameter(TypeReference type)
+		/// <summary>
+		/// This is a hardcoded way to prevent IsFieldTypeSerializable crash
+		/// </summary>
+		private static bool IsSerializationApplicable(TypeReference type)
 		{
-			if (type.IsGenericParameter)
+			if (type.ContainsGenericParameter)
 			{
-				return true;
+				return false;
 			}
-			if (type.IsArray)
-			{
-				return IsContainsGenericParameter(type.GetElementType());
-			}
+
 			if (type.IsGenericInstance)
 			{
 				GenericInstanceType instance = (GenericInstanceType)type;
-				foreach (TypeReference argument in instance.GenericArguments)
-				{
-					if (IsContainsGenericParameter(argument))
-					{
-						return true;
-					}
-				}
+				type = instance.GenericArguments[0];
 			}
-			return false;
+			else if (type.IsArray)
+			{
+				type = type.GetElementType();
+			}
+
+			while (type != null)
+			{
+				if (type.Module == null)
+				{
+					return false;
+				}
+				TypeDefinition definition = type.Resolve();
+				if (definition == null)
+				{
+					return false;
+				}
+				type = definition.BaseType;
+			}
+			return true;
 		}
 
 		public override string FullName { get; }

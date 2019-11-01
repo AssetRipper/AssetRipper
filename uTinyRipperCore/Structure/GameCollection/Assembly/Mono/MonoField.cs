@@ -81,7 +81,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 				{
 					return false;
 				}
-				// array of generics isn't serializable
+				// array of serializable generics isn't serializable
 				if (MonoType.IsSerializableGeneric(elementType))
 				{
 					return false;
@@ -123,35 +123,29 @@ namespace uTinyRipper.Game.Assembly.Mono
 			{
 				return true;
 			}
-			if (MonoType.IsString(fieldType))
+			if (MonoType.IsObject(fieldType))
 			{
-				return true;
+				return false;
 			}
+
 			if (MonoType.IsEngineStruct(fieldType))
 			{
 				return true;
 			}
-			if (MonoType.IsEnginePointer(fieldType))
+			if (fieldType.IsGenericInstance)
+			{
+				// even monobehaviour derived generic instances aren't serialiable
+				return MonoType.IsSerializableGeneric(fieldType);
+			}
+			if (MonoType.IsMonoDerived(fieldType))
 			{
 				if (fieldType.ContainsGenericParameter)
-				{
-					return false;
-				}
-				if (fieldType.IsGenericInstance)
 				{
 					return false;
 				}
 				return true;
 			}
 
-			if (MonoType.IsObject(fieldType))
-			{
-				return false;
-			}
-			if (fieldType.IsGenericInstance)
-			{
-				return MonoType.IsSerializableGeneric(fieldType);
-			}
 			if (IsRecursive(scope.DeclaringType, fieldType))
 			{
 				return scope.IsArrayElement;
@@ -170,16 +164,16 @@ namespace uTinyRipper.Game.Assembly.Mono
 			{
 				return false;
 			}
+			if (definition.IsEnum)
+			{
+				return true;
+			}
 			if (definition.IsSerializable)
 			{
 				if (ScriptExportManager.IsFrameworkLibrary(ScriptExportMonoType.GetModuleName(definition)))
 				{
 					return false;
 				}
-				return true;
-			}
-			if (definition.IsEnum)
-			{
 				return true;
 			}
 
