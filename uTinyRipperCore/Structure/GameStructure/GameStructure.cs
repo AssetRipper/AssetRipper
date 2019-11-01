@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using uTinyRipper.Converters;
+using uTinyRipper.Game.Assembly;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper
 {

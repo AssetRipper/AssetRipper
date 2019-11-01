@@ -25,9 +25,9 @@ namespace uTinyRipper.Converters.Script
 			return $"[{module}]{fullname}";
 		}
 
-		public static bool IsBuiltInLibrary(string module)
+		public static bool IsBuiltinLibrary(string module)
 		{
-			if (IsDotNetLibrary(module))
+			if (IsFrameworkLibrary(module))
 			{
 				return true;
 			}
@@ -37,6 +37,47 @@ namespace uTinyRipper.Converters.Script
 			}
 
 			return false;
+		}
+
+		public static bool IsFrameworkLibrary(string module)
+		{
+			switch (module)
+			{
+				case MSCoreLibName:
+				case NetStandardName:
+				case SystemName:
+				case CLRName:
+					return true;
+
+				default:
+					return module.StartsWith($"{SystemName}.", StringComparison.Ordinal);
+			}
+		}
+
+		public static bool IsUnityLibrary(string module)
+		{
+			switch (module)
+			{
+				case UnityEngineName:
+				case BooName:
+				case BooLangName:
+				case UnityScriptName:
+				case UnityScriptLangName:
+					return true;
+
+				default:
+					{
+						if (module.StartsWith($"{UnityEngineName}.", StringComparison.Ordinal))
+						{
+							return true;
+						}
+						if (module.StartsWith($"{MonoName}.", StringComparison.Ordinal))
+						{
+							return true;
+						}
+						return false;
+					}
+			}
 		}
 
 		private static string GetExportSubPath(string assembly, string @namespace, string @class)
@@ -349,49 +390,9 @@ namespace uTinyRipper.Converters.Script
 
 		private static bool IsBuiltInType(ScriptExportType type)
 		{
-			return IsBuiltInLibrary(type.Module);
+			return IsBuiltinLibrary(type.Module);
 		}
 
-		private static bool IsDotNetLibrary(string module)
-		{
-			switch (module)
-			{
-				case MSCoreLibName:
-				case NetStandardName:
-				case SystemName:
-				case CLRName:
-					return true;
-
-				default:
-					return module.StartsWith($"{SystemName}.", StringComparison.Ordinal);
-			}
-		}
-
-		private static bool IsUnityLibrary(string module)
-		{
-			switch (module)
-			{
-				case UnityEngineName:
-				case BooName:
-				case BooLangName:
-				case UnityScriptName:
-				case UnityScriptLangName:
-					return true;
-
-				default:
-					{
-						if (module.StartsWith($"{UnityEngineName}.", StringComparison.Ordinal))
-						{
-							return true;
-						}
-						if (module.StartsWith($"{MonoName}.", StringComparison.Ordinal))
-						{
-							return true;
-						}
-						return false;
-					}
-			}
-		}
 		public IEnumerable<ScriptExportType> Types => m_types.Values;
 		public IEnumerable<ScriptExportEnum> Enums => m_enums.Values;
 		public IEnumerable<ScriptExportDelegate> Delegates => m_delegates.Values;

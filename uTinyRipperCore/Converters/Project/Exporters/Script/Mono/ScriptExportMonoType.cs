@@ -308,7 +308,7 @@ namespace uTinyRipper.Converters.Script.Mono
 				context = context.GetBase();
 				definition = context.Type.Resolve();
 				string module = GetModuleName(definition);
-				bool isBuiltIn = ScriptExportManager.IsBuiltInLibrary(module);
+				bool isBuiltIn = ScriptExportManager.IsBuiltinLibrary(module);
 				IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
 				// definition is a Template for GenericInstance, so we must recreate context
 				MonoTypeContext definitionContext = new MonoTypeContext(definition, arguments);
@@ -373,7 +373,7 @@ namespace uTinyRipper.Converters.Script.Mono
 				MonoTypeContext baseContext = context.GetBase();
 				TypeDefinition baseDefinition = baseContext.Type.Resolve();
 				string module = GetModuleName(baseContext.Type);
-				bool isBuiltIn = ScriptExportManager.IsBuiltInLibrary(module);
+				bool isBuiltIn = ScriptExportManager.IsBuiltinLibrary(module);
 				foreach (PropertyDefinition property in baseDefinition.Properties)
 				{
 					MethodDefinition method = property.GetMethod == null ? property.SetMethod : property.GetMethod;

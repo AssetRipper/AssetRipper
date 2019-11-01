@@ -1,24 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Threading;
 using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
 	public static class ObjectUtils
 	{
-		static ObjectUtils()
-		{
-			if (s_random == null)
-			{
-				s_random = new ThreadSafeRandom();
-			}
-			if (s_idBuffer == null)
-			{
-				s_idBuffer = new byte[8];
-			}
-		}
-
 		public static long GenerateExportID(Object asset, Func<long, bool> duplicateChecker)
 		{
 			if (asset == null)
@@ -51,8 +40,8 @@ namespace uTinyRipper.Classes
 
 		public static long GenerateInternalID()
 		{
-			s_random.NextBytes(s_idBuffer);
-			return BitConverter.ToInt64(s_idBuffer, 0);
+			s_random.NextBytes(s_idBuffer.Value);
+			return BitConverter.ToInt64(s_idBuffer.Value, 0);
 		}
 
 		public static GUID CalculateAssetsGUID(IEnumerable<Object> assets)
@@ -81,9 +70,7 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		[ThreadStatic]
-		private static readonly ThreadSafeRandom s_random;
-		[ThreadStatic]
-		private static readonly byte[] s_idBuffer;
+		private static readonly ThreadSafeRandom s_random = new ThreadSafeRandom();
+		private static readonly ThreadLocal<byte[]> s_idBuffer = new ThreadLocal<byte[]>(() => new byte[8]);
 	}
 }

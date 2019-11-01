@@ -1,5 +1,7 @@
 using Mono.Cecil;
 using System.Collections.Generic;
+using uTinyRipper.Converters.Script;
+using uTinyRipper.Converters.Script.Mono;
 
 namespace uTinyRipper.Game.Assembly.Mono
 {
@@ -170,6 +172,10 @@ namespace uTinyRipper.Game.Assembly.Mono
 			}
 			if (definition.IsSerializable)
 			{
+				if (ScriptExportManager.IsFrameworkLibrary(ScriptExportMonoType.GetModuleName(definition)))
+				{
+					return false;
+				}
 				return true;
 			}
 			if (definition.IsEnum)
