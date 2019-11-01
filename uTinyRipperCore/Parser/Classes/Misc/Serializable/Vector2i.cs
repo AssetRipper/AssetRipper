@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct Vector2i : IAsset, ISerializableStructure
+	public struct Vector2i : IAsset
 	{
 		public Vector2i(int x, int y)
 		{
@@ -21,11 +19,6 @@ namespace uTinyRipper.Classes
 		public static bool operator !=(Vector2i left, Vector2i right)
 		{
 			return left.X != right.X || left.Y != right.Y;
-		}
-
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new Vector2i();
 		}
 
 		public void Read(AssetReader reader)
@@ -47,11 +40,6 @@ namespace uTinyRipper.Classes
 			node.Add(XName, X);
 			node.Add(YName, Y);
 			return node;
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		public override bool Equals(object obj)

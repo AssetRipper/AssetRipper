@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct PropertyName : ISerializableStructure
+	public struct PropertyName : IAsset
 	{
 		public static bool operator ==(PropertyName lhs, PropertyName rhs)
 		{
@@ -15,11 +13,6 @@ namespace uTinyRipper.Classes
 		public static bool operator !=(PropertyName lhs, PropertyName rhs)
 		{
 			return lhs.ID != rhs.ID;
-		}
-
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new PropertyName();
 		}
 
 		public void Read(AssetReader reader)
@@ -35,11 +28,6 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			return new YAMLScalarNode(ID == 0 ? string.Empty : $"Unknown_{unchecked((uint)ID)}");
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		public override int GetHashCode()

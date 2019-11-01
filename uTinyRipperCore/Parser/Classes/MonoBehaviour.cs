@@ -80,7 +80,7 @@ namespace uTinyRipper.Classes
 				SerializableType behaviourType = script.GetBehaviourType();
 				if (behaviourType != null)
 				{
-					Structure = behaviourType.CreateBehaviourStructure();
+					Structure = behaviourType.CreateSerializableStructure();
 					Structure.Read(reader);
 					return;
 				}
@@ -174,7 +174,7 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		// TODO: find out why GameObject may has value like PPtr(0, 894) but such game object doesn't exists
 		public bool IsSceneObject => !GameObject.IsNull;
-		public bool IsScriptableObject => Name != string.Empty;
+		public bool IsScriptableObject => Name.Length > 0;
 
 #if UNIVERSAL
 		public HideFlags EditorHideFlags { get; private set; }

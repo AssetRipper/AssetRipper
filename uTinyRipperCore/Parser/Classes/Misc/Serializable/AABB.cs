@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct AABB : IAsset, ISerializableStructure
+	public struct AABB : IAsset
 	{
 		public AABB(Vector3f center, Vector3f extent)
 		{
@@ -31,16 +29,6 @@ namespace uTinyRipper.Classes
 			node.Add(CenterName, Center.ExportYAML(container));
 			node.Add(ExtentName, Extent.ExportYAML(container));
 			return node;
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
-		}
-
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new AABB();
 		}
 
 		public override string ToString()

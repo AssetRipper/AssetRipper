@@ -1,17 +1,10 @@
-using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct RectOffset : IAsset, ISerializableStructure
+	public struct RectOffset : IAsset
 	{
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new RectOffset();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			Left = reader.ReadInt32();
@@ -36,11 +29,6 @@ namespace uTinyRipper.Classes
 			node.Add(TopName, Top);
 			node.Add(BottomName, Bottom);
 			return node;
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		public int Left { get; private set; }

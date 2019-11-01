@@ -1,12 +1,10 @@
-using System.Collections.Generic;
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct Rectf : ISerializableStructure
+	public struct Rectf : IAsset
 	{
 		public Rectf(float x, float y, float width, float height)
 		{
@@ -98,11 +96,6 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasMinMax(Version version) => version.IsLess(2);
 
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new Rectf();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			if (HasMinMax(reader.Version))
@@ -158,11 +151,6 @@ namespace uTinyRipper.Classes
 				node.Add(HeightName, Height);
 			}
 			return node;
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		public override bool Equals(object obj)

@@ -3,11 +3,10 @@ using uTinyRipper.YAML;
 using System;
 using uTinyRipper.Converters.Misc;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes.Misc
 {
-	public struct AnimationCurveTpl<T> : IAsset, ISerializableStructure
+	public struct AnimationCurveTpl<T> : IAsset
 		where T : struct, IAsset, IYAMLExportable
 	{
 		public AnimationCurveTpl(bool init)
@@ -94,11 +93,6 @@ namespace uTinyRipper.Classes.Misc
 		/// </summary>
 		public static bool HasRotationOrder(Version version) => version.IsGreaterEqual(5, 3);
 
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new AnimationCurveTpl<T>();
-		}
-
 		public AnimationCurveTpl<T> Convert(IExportContainer container)
 		{
 			return AnimationCurveTplConverter.Convert(container, ref this);
@@ -142,11 +136,6 @@ namespace uTinyRipper.Classes.Misc
 				node.Add(RotationOrderName, (int)GetExportRotationOrder(container.Version));
 			}
 			return node;
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		private RotationOrder GetExportRotationOrder(Version version)

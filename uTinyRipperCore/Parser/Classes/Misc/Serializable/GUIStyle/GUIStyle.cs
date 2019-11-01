@@ -1,14 +1,12 @@
-using System.Collections.Generic;
 using uTinyRipper.Classes.Fonts;
 using uTinyRipper.Classes.GUIStyles;
 using uTinyRipper.Classes.GUITexts;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct GUIStyle : ISerializableStructure
+	public struct GUIStyle : IAsset
 	{
 		public GUIStyle(bool _):
 			this()
@@ -36,11 +34,6 @@ namespace uTinyRipper.Classes
 		private static bool IsReadFontSize(Version version)
 		{
 			return version.IsGreaterEqual(3, 0);
-		}
-
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new GUIStyle();
 		}
 
 		public void Read(AssetReader reader)
@@ -207,11 +200,6 @@ namespace uTinyRipper.Classes
 			node.Add(StretchWidthName, StretchWidth);
 			node.Add(StretchHeightName, StretchHeight);
 			return node;
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		public string Name { get; private set; }

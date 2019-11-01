@@ -1,17 +1,10 @@
-using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct Matrix4x4f : IAsset, ISerializableStructure
+	public struct Matrix4x4f : IAsset
 	{
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new Matrix4x4f();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			E00 = reader.ReadSingle();
@@ -72,11 +65,6 @@ namespace uTinyRipper.Classes
 			node.Add(E32Name, E32);
 			node.Add(E33Name, E33);
 			return node;
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		public static Matrix4x4f Identity => new Matrix4x4f { E00 = 1.0f, E11 = 1.0f, E22 = 1.0f, E33 = 1.0f };

@@ -1,15 +1,13 @@
 using System;
-using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes.ParticleSystems
 {
 	/// <summary>
 	/// GradientNEW previously
 	/// </summary>
-	public struct Gradient : IAsset, ISerializableStructure
+	public struct Gradient : IAsset
 	{
 		public Gradient(ColorRGBAf color1, ColorRGBAf color2):
 			this()
@@ -42,11 +40,6 @@ namespace uTinyRipper.Classes.ParticleSystems
 		/// 5.5.0 and greater
 		/// </summary>
 		public static bool HasMode(Version version) => version.IsGreaterEqual(5, 5);
-
-		public ISerializableStructure CreateDuplicate()
-		{
-			return this;
-		}
 
 		public void Read(AssetReader reader)
 		{
@@ -202,11 +195,6 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return node;
 		}
 		
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
-		}
-
 		public void Add(ushort time, ColorRGBA32 color)
 		{
 			Add(time, (ColorRGBAf)color);

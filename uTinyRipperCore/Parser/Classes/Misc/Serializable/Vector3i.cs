@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct Vector3i : IAsset, ISerializableStructure
+	public struct Vector3i : IAsset
 	{
 		public Vector3i(int x, int y, int z)
 		{
@@ -65,11 +63,6 @@ namespace uTinyRipper.Classes
 			return false;
 		}
 
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new Vector3i();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			X = reader.ReadInt32();
@@ -92,11 +85,6 @@ namespace uTinyRipper.Classes
 			node.Add(YName, Y);
 			node.Add(ZName, Z);
 			return node;
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		public override bool Equals(object obj)

@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct ColorRGBA32 : IAsset, ISerializableStructure
+	public struct ColorRGBA32 : IAsset
 	{
 		public ColorRGBA32(byte r, byte g, byte b, byte a)
 		{
@@ -27,11 +25,6 @@ namespace uTinyRipper.Classes
 			return 2;
 		}
 
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new ColorRGBA32();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			RGBA = reader.ReadUInt32();
@@ -48,11 +41,6 @@ namespace uTinyRipper.Classes
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(RgbaName, RGBA);
 			return node;
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		public static ColorRGBA32 White => new ColorRGBA32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);

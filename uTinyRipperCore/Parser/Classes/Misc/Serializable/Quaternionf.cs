@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct Quaternionf : IAsset, ISerializableStructure
+	public struct Quaternionf : IAsset
 	{
 		public Quaternionf(float x, float y, float z, float w)
 		{
@@ -63,11 +61,6 @@ namespace uTinyRipper.Classes
 			return euler;
 		}
 
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new Quaternionf();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			X = reader.ReadSingle();
@@ -93,11 +86,6 @@ namespace uTinyRipper.Classes
 			node.Add(ZName, Z);
 			node.Add(WName, W);
 			return node;
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		public override string ToString()

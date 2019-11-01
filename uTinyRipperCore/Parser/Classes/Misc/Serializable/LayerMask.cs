@@ -1,21 +1,14 @@
-using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct LayerMask : ISerializableStructure
+	public struct LayerMask : IAsset
 	{
 		private static int GetSerializedVersion(Version version)
 		{
 			// TODO:
 			return 2;
-		}
-
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new LayerMask();
 		}
 
 		public void Read(AssetReader reader)
@@ -34,11 +27,6 @@ namespace uTinyRipper.Classes
 			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
 			node.Add(BitsName, Bits);
 			return node;
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		public uint Bits { get; private set; }

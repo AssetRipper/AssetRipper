@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct Vector3f : IAsset, ISerializableStructure
+	public struct Vector3f : IAsset
 	{
 		public Vector3f(float x, float y, float z)
 		{
@@ -55,11 +53,6 @@ namespace uTinyRipper.Classes
 			return left.X != right.X || left.Y != right.Y || left.Z != right.Z;
 		}
 
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new Vector3f();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			X = reader.ReadSingle();
@@ -97,11 +90,6 @@ namespace uTinyRipper.Classes
 			node.Add(XName, X);
 			node.Add(YName, Y);
 			return node;
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		public Vector2f ToVector2()

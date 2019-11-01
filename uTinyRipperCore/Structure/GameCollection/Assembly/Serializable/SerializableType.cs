@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using uTinyRipper.Classes;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Classes.ParticleSystems;
 
 namespace uTinyRipper.Game.Assembly
 {
 	public abstract class SerializableType
 	{
-		public struct Field
+		public readonly struct Field
 		{
 			public Field(SerializableType type, bool isArray, string name)
 			{
@@ -29,6 +32,53 @@ namespace uTinyRipper.Game.Assembly
 			Namespace = @namespace ?? throw new ArgumentNullException(nameof(@namespace));
 			Type = type;
 			Name = name ?? throw new ArgumentNullException(nameof(name));
+		}
+
+		public static IAsset CreateEngineAsset(string name)
+		{
+			switch (name)
+			{
+				case Vector2Name:
+					return new Vector2f();
+				case Vector2IntName:
+					return new Vector2i();
+				case Vector3Name:
+					return new Vector3f();
+				case Vector3IntName:
+					return new Vector3i();
+				case Vector4Name:
+					return new Vector4f();
+				case RectName:
+					return new Rectf();
+				case BoundsName:
+					return new AABB();
+				case BoundsIntName:
+					return new AABBi();
+				case QuaternionName:
+					return new Quaternionf();
+				case Matrix4x4Name:
+					return new Matrix4x4f();
+				case ColorName:
+					return new ColorRGBAf();
+				case Color32Name:
+					return new ColorRGBA32();
+				case LayerMaskName:
+					return new LayerMask();
+				case AnimationCurveName:
+					return new AnimationCurveTpl<Float>(true);
+				case GradientName:
+					return new Gradient();
+				case RectOffsetName:
+					return new RectOffset();
+				case GUIStyleName:
+					return new GUIStyle(true);
+
+				case PropertyNameName:
+					return new PropertyName();
+
+				default:
+					throw new NotImplementedException(name);
+			}
 		}
 
 		public static bool IsPrimitive(string @namespace, string name)
@@ -244,9 +294,23 @@ namespace uTinyRipper.Game.Assembly
 			return PrimitiveType.Complex;
 		}
 
-		public SerializableStructure CreateBehaviourStructure()
+		public SerializableStructure CreateSerializableStructure()
 		{
-			return ForceCreateComplexStructure(this, 0);
+			return new SerializableStructure(this, 0);
+		}
+
+		public IAsset CreateInstance(int depth)
+		{
+			return CreateInstance(this, depth);
+		}
+
+		public Field GetField(int index)
+		{
+			if (index < BaseFieldCount)
+			{
+				return Base.GetField(index);
+			}
+			return Fields[index - BaseFieldCount];
 		}
 
 		public bool IsEnginePointer()
@@ -268,61 +332,42 @@ namespace uTinyRipper.Game.Assembly
 
 		public override string ToString()
 		{
-			return Namespace == string.Empty ? Name : $"{Namespace}.{Name}";
+			return Namespace.Length == 0 ? Name : $"{Namespace}.{Name}";
 		}
 
-		private static ISerializableStructure CreateComplexStructure(SerializableType type, int depth)
+		private static IAsset CreateInstance(SerializableType type, int depth)
 		{
 			if (IsEngineStruct(type.Namespace, type.Name))
 			{
-				return SerializableStructure.EngineTypeToScriptStructure(type.Name);
+				return CreateEngineAsset(type.Name);
 			}
 			if (type.IsEnginePointer())
 			{
-				return new SerializablePointer(type);
+				return new SerializablePointer();
 			}
-			return ForceCreateComplexStructure(type, depth);
-		}
-
-		private static SerializableStructure ForceCreateComplexStructure(SerializableType type, int depth)
-		{
-			SerializableStructure @base = type.Base == null ? null : ForceCreateComplexStructure(type.Base, depth);
-			if (type.Fields.Count > 0 && depth <= MaxDepthLevel)
-			{
-				List<SerializableField> fields = new List<SerializableField>();
-				foreach (Field field in type.Fields)
-				{
-					if (depth == MaxDepthLevel)
-					{
-						if (field.Type.Type == PrimitiveType.Complex)
-						{
-							continue;
-						}
-						if (field.IsArray)
-						{
-							continue;
-						}
-					}
-
-					ISerializableStructure fieldStructure = field.Type.Type == PrimitiveType.Complex ? CreateComplexStructure(field.Type, depth + 1) : null;
-					SerializableField sField = new SerializableField(field.Type.Type, fieldStructure, field.IsArray, field.Name);
-					fields.Add(sField);
-				}
-				return new SerializableStructure(type, @base, fields.ToArray());
-			}
-			else
-			{
-				return new SerializableStructure(type, @base, EmptyFields);
-			}
+			return new SerializableStructure(type, depth);
 		}
 
 		public string Namespace { get; }
 		public PrimitiveType Type { get; }
 		public string Name { get; }
-		public SerializableType Base { get; protected set; }
+		public SerializableType Base
+		{
+			get => m_base;
+			protected set
+			{
+				m_base = value;
+				if (value != null)
+				{
+					BaseFieldCount = value.FieldCount;
+				}
+			}
+		}
 		public IReadOnlyList<Field> Fields { get; protected set; }
 
-		public const int MaxDepthLevel = 8;
+		internal int FieldCount => BaseFieldCount + Fields.Count;
+
+		private int BaseFieldCount { get; set; }
 
 		public const string SystemNamespace = "System";
 		public const string SystemCollectionGenericNamespace = "System.Collections.Generic";
@@ -359,6 +404,6 @@ namespace uTinyRipper.Game.Assembly
 		private const string BehaviourName = "Behaviour";
 		private const string MonoBehaviourName = "MonoBehaviour";
 
-		protected static readonly IReadOnlyList<SerializableField> EmptyFields = Array.Empty<SerializableField>();
+		private SerializableType m_base;
 	}
 }

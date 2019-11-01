@@ -1,12 +1,10 @@
-using System.Collections.Generic;
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper.Classes
 {
-	public struct ColorRGBAf : IAsset, ISerializableStructure
+	public struct ColorRGBAf : IAsset
 	{
 		public ColorRGBAf(float r, float g, float b, float a)
 		{
@@ -26,11 +24,6 @@ namespace uTinyRipper.Classes
 				A = ((color32.RGBA & 0xFF000000) >> 24) / 255.0f
 			};
 			return color;
-		}
-
-		public ISerializableStructure CreateDuplicate()
-		{
-			return new ColorRGBAf();
 		}
 
 		public void Read(AssetReader reader)
@@ -71,11 +64,6 @@ namespace uTinyRipper.Classes
 			node.Add(BName, B);
 			node.Add(AName, A);
 			return node;
-		}
-
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		public override string ToString()

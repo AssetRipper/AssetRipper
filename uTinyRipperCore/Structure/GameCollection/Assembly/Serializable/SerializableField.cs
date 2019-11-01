@@ -1,29 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using uTinyRipper;
 using uTinyRipper.Classes;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 using Object = uTinyRipper.Classes.Object;
-using uTinyRipper.Converters;
-using uTinyRipper;
 
 namespace uTinyRipper.Game.Assembly
 {
-	public sealed class SerializableField
+	public struct SerializableField
 	{
-		public SerializableField(PrimitiveType type, ISerializableStructure complex, bool isArray, string name)
-		{
-			Type = type;
-			ComplexType = type == PrimitiveType.Complex && complex == null ? throw new ArgumentNullException(nameof(complex)) : complex;
-			IsArray = isArray;
-			Name = name ?? throw new ArgumentNullException(nameof(name));
-		}
-
-		private SerializableField(SerializableField copy) :
-			this(copy.Type, copy.ComplexType, copy.IsArray, copy.Name)
-		{
-		}
-
 		public static bool IsCompilerGeneratedAttrribute(string @namespace, string name)
 		{
 			if (@namespace == SerializableType.CompilerServicesNamespace)
@@ -42,352 +30,512 @@ namespace uTinyRipper.Game.Assembly
 			return false;
 		}
 
-		public SerializableField CreateCopy()
+		public void Read(AssetReader reader, int depth, in SerializableType.Field etalon)
 		{
-			return new SerializableField(this);
-		}
-
-		public void Read(AssetReader reader)
-		{
-			switch (Type)
+			switch (etalon.Type.Type)
 			{
 				case PrimitiveType.Bool:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
-						Value = reader.ReadBooleanArray();
+						CValue = reader.ReadBooleanArray();
 					}
 					else
 					{
-						Value = reader.ReadBoolean();
+						PValue = reader.ReadBoolean() ? 1U : 0U;
 					}
 					reader.AlignStream();
 					break;
 
 				case PrimitiveType.Char:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
-						Value = reader.ReadCharArray();
+						CValue = reader.ReadCharArray();
 					}
 					else
 					{
-						Value = reader.ReadChar();
+						PValue = reader.ReadChar();
 					}
 					reader.AlignStream();
 					break;
 
 				case PrimitiveType.SByte:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
-						Value = reader.ReadByteArray();
+						CValue = reader.ReadByteArray();
 					}
 					else
 					{
-						Value = reader.ReadSByte();
+						PValue = unchecked((byte)reader.ReadSByte());
 					}
 					reader.AlignStream();
 					break;
 
 				case PrimitiveType.Byte:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
-						Value = reader.ReadByteArray();
+						CValue = reader.ReadByteArray();
 					}
 					else
 					{
-						Value = reader.ReadByte();
+						PValue = reader.ReadByte();
 					}
 					reader.AlignStream();
 					break;
 
 				case PrimitiveType.Short:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
-						Value = reader.ReadInt16Array();
+						CValue = reader.ReadInt16Array();
 					}
 					else
 					{
-						Value = reader.ReadInt16();
+						PValue = unchecked((ushort)reader.ReadInt16());
 					}
 					reader.AlignStream();
 					break;
 
 				case PrimitiveType.UShort:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
-						Value = reader.ReadUInt16Array();
+						CValue = reader.ReadUInt16Array();
 					}
 					else
 					{
-						Value = reader.ReadUInt16();
+						PValue = reader.ReadUInt16();
 					}
 					reader.AlignStream();
 					break;
 
 				case PrimitiveType.Int:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
-						Value = reader.ReadInt32Array();
+						CValue = reader.ReadInt32Array();
 					}
 					else
 					{
-						Value = reader.ReadInt32();
+						PValue = unchecked((uint)reader.ReadInt32());
 					}
 					break;
 
 				case PrimitiveType.UInt:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
-						Value = reader.ReadUInt32Array();
+						CValue = reader.ReadUInt32Array();
 					}
 					else
 					{
-						Value = reader.ReadUInt32();
+						PValue = reader.ReadUInt32();
 					}
 					break;
 
 				case PrimitiveType.Long:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
-						Value = reader.ReadInt64Array();
+						CValue = reader.ReadInt64Array();
 					}
 					else
 					{
-						Value = reader.ReadInt64();
+						PValue = unchecked((ulong)reader.ReadInt64());
 					}
 					break;
 
 				case PrimitiveType.ULong:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
-						Value = reader.ReadUInt64Array();
+						CValue = reader.ReadUInt64Array();
 					}
 					else
 					{
-						Value = reader.ReadUInt64();
+						PValue = reader.ReadUInt64();
 					}
 					break;
 
 				case PrimitiveType.Single:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
-						Value = reader.ReadSingleArray();
+						CValue = reader.ReadSingleArray();
 					}
 					else
 					{
-						Value = reader.ReadSingle();
+						PValue = BitConverterExtensions.ToUInt32(reader.ReadSingle());
 					}
 					break;
 
 				case PrimitiveType.Double:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
-						Value = reader.ReadDoubleArray();
+						CValue = reader.ReadDoubleArray();
 					}
 					else
 					{
-						Value = reader.ReadDouble();
+						PValue = BitConverterExtensions.ToUInt64(reader.ReadDouble());
 					}
 					break;
 
 				case PrimitiveType.String:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
-						Value = reader.ReadStringArray();
+						CValue = reader.ReadStringArray();
 					}
 					else
 					{
-						Value = reader.ReadString();
+						CValue = reader.ReadString();
 					}
 					break;
 
 				case PrimitiveType.Complex:
-					if (IsArray)
+					if (etalon.IsArray)
 					{
 						int count = reader.ReadInt32();
-						ISerializableStructure[] structures = new ISerializableStructure[count];
+						IAsset[] structures = new IAsset[count];
 						for (int i = 0; i < count; i++)
 						{
-							ISerializableStructure structure = ComplexType.CreateDuplicate();
+							IAsset structure = etalon.Type.CreateInstance(depth + 1);
 							structure.Read(reader);
 							structures[i] = structure;
 						}
-						Value = structures;
+						CValue = structures;
 					}
 					else
 					{
-						ISerializableStructure structure = ComplexType.CreateDuplicate();
+						IAsset structure = etalon.Type.CreateInstance(depth + 1);
 						structure.Read(reader);
-						Value = structure;
+						CValue = structure;
 					}
 					break;
 
 				default:
-					throw new NotImplementedException($"Unknown {nameof(PrimitiveType)} '{Type}'");
+					throw new NotSupportedException(etalon.Type.Type.ToString());
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public void Write(AssetWriter writer, in SerializableType.Field etalon)
 		{
-			if (IsArray)
+			switch (etalon.Type.Type)
 			{
-				if (Type == PrimitiveType.Complex)
+				case PrimitiveType.Bool:
+					if (etalon.IsArray)
+					{
+						((bool[])CValue).Write(writer);
+					}
+					else
+					{
+						writer.Write(PValue != 0);
+					}
+					writer.AlignStream();
+					break;
+
+				case PrimitiveType.Char:
+					if (etalon.IsArray)
+					{
+						((char[])CValue).Write(writer);
+					}
+					else
+					{
+						writer.Write((char)PValue);
+					}
+					writer.AlignStream();
+					break;
+
+				case PrimitiveType.SByte:
+					if (etalon.IsArray)
+					{
+						((byte[])CValue).Write(writer);
+					}
+					else
+					{
+						writer.Write(unchecked((sbyte)PValue));
+					}
+					writer.AlignStream();
+					break;
+
+				case PrimitiveType.Byte:
+					if (etalon.IsArray)
+					{
+						((byte[])CValue).Write(writer);
+					}
+					else
+					{
+						writer.Write((byte)PValue);
+					}
+					writer.AlignStream();
+					break;
+
+				case PrimitiveType.Short:
+					if (etalon.IsArray)
+					{
+						((short[])CValue).Write(writer);
+					}
+					else
+					{
+						writer.Write(unchecked((short)PValue));
+					}
+					writer.AlignStream();
+					break;
+
+				case PrimitiveType.UShort:
+					if (etalon.IsArray)
+					{
+						((ushort[])CValue).Write(writer);
+					}
+					else
+					{
+						writer.Write((ushort)PValue);
+					}
+					writer.AlignStream();
+					break;
+
+				case PrimitiveType.Int:
+					if (etalon.IsArray)
+					{
+						((int[])CValue).Write(writer);
+					}
+					else
+					{
+						writer.Write(unchecked((int)PValue));
+					}
+					break;
+
+				case PrimitiveType.UInt:
+					if (etalon.IsArray)
+					{
+						((uint[])CValue).Write(writer);
+					}
+					else
+					{
+						writer.Write((uint)PValue);
+					}
+					break;
+
+				case PrimitiveType.Long:
+					if (etalon.IsArray)
+					{
+						((long[])CValue).Write(writer);
+					}
+					else
+					{
+						writer.Write(unchecked((long)PValue));
+					}
+					break;
+
+				case PrimitiveType.ULong:
+					if (etalon.IsArray)
+					{
+						((ulong[])CValue).Write(writer);
+					}
+					else
+					{
+						writer.Write(PValue);
+					}
+					break;
+
+				case PrimitiveType.Single:
+					if (etalon.IsArray)
+					{
+						((float[])CValue).Write(writer);
+					}
+					else
+					{
+						writer.Write(BitConverterExtensions.ToSingle((uint)PValue));
+					}
+					break;
+
+				case PrimitiveType.Double:
+					if (etalon.IsArray)
+					{
+						((double[])CValue).Write(writer);
+					}
+					else
+					{
+						writer.Write(BitConverterExtensions.ToDouble(PValue));
+					}
+					break;
+
+				case PrimitiveType.String:
+					if (etalon.IsArray)
+					{
+						((string[])CValue).Write(writer);
+					}
+					else
+					{
+						writer.Write((string)CValue);
+					}
+					break;
+
+				case PrimitiveType.Complex:
+					if (etalon.IsArray)
+					{
+						((IAsset[])CValue).Write(writer);
+					}
+					else
+					{
+						((IAsset)CValue).Write(writer);
+					}
+					break;
+
+				default:
+					throw new NotSupportedException(etalon.Type.Type.ToString());
+			}
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container, in SerializableType.Field etalon)
+		{
+			if (etalon.IsArray)
+			{
+				if (etalon.Type.Type == PrimitiveType.Complex)
 				{
-					IEnumerable<ISerializableStructure> structures = (IEnumerable<ISerializableStructure>)Value;
+					IAsset[] structures = (IAsset[])CValue;
 					return structures.ExportYAML(container);
 				}
 				else
 				{
-					switch (Type)
+					switch (etalon.Type.Type)
 					{
 						case PrimitiveType.Bool:
 							{
-								bool[] array = (bool[])Value;
+								bool[] array = (bool[])CValue;
 								return array.ExportYAML();
 							}
 						case PrimitiveType.Char:
 							{
-								char[] array = (char[])Value;
+								char[] array = (char[])CValue;
 								return array.ExportYAML();
 							}
 						case PrimitiveType.SByte:
 							{
-								byte[] array = (byte[])Value;
+								byte[] array = (byte[])CValue;
 								return array.ExportYAML();
 							}
 						case PrimitiveType.Byte:
 							{
-								byte[] array = (byte[])Value;
+								byte[] array = (byte[])CValue;
 								return array.ExportYAML();
 							}
 						case PrimitiveType.Short:
 							{
-								short[] array = (short[])Value;
+								short[] array = (short[])CValue;
 								return array.ExportYAML(true);
 							}
 						case PrimitiveType.UShort:
 							{
-								ushort[] array = (ushort[])Value;
+								ushort[] array = (ushort[])CValue;
 								return array.ExportYAML(true);
 							}
 						case PrimitiveType.Int:
 							{
-								int[] array = (int[])Value;
+								int[] array = (int[])CValue;
 								return array.ExportYAML(true);
 							}
 						case PrimitiveType.UInt:
 							{
-								uint[] array = (uint[])Value;
+								uint[] array = (uint[])CValue;
 								return array.ExportYAML(true);
 							}
 						case PrimitiveType.Long:
 							{
-								long[] array = (long[])Value;
+								long[] array = (long[])CValue;
 								return array.ExportYAML(true);
 							}
 						case PrimitiveType.ULong:
 							{
-								ulong[] array = (ulong[])Value;
+								ulong[] array = (ulong[])CValue;
 								return array.ExportYAML(true);
 							}
 						case PrimitiveType.Single:
 							{
-								float[] array = (float[])Value;
+								float[] array = (float[])CValue;
 								return array.ExportYAML();
 							}
 						case PrimitiveType.Double:
 							{
-								double[] array = (double[])Value;
+								double[] array = (double[])CValue;
 								return array.ExportYAML();
 							}
 						case PrimitiveType.String:
 							{
-								string[] array = (string[])Value;
+								string[] array = (string[])CValue;
 								return array.ExportYAML();
 							}
 						default:
-							throw new NotSupportedException(Type.ToString());
+							throw new NotSupportedException(etalon.Type.Type.ToString());
 					}
 				}
 			}
 			else
 			{
-				if (Type == PrimitiveType.Complex)
+				if (etalon.Type.Type == PrimitiveType.Complex)
 				{
-					ISerializableStructure structure = (ISerializableStructure)Value;
+					IAsset structure = (IAsset)CValue;
 					return structure.ExportYAML(container);
 				}
 				else
 				{
-					switch (Type)
+					switch (etalon.Type.Type)
 					{
 						case PrimitiveType.Bool:
-							return new YAMLScalarNode((bool)Value);
+							return new YAMLScalarNode(PValue != 0);
 						case PrimitiveType.Char:
-							return new YAMLScalarNode((int)(char)Value);
+							return new YAMLScalarNode((int)(char)PValue);
 						case PrimitiveType.SByte:
-							return new YAMLScalarNode((sbyte)Value);
+							return new YAMLScalarNode(unchecked((sbyte)PValue));
 						case PrimitiveType.Byte:
-							return new YAMLScalarNode((byte)Value);
+							return new YAMLScalarNode((byte)PValue);
 						case PrimitiveType.Short:
-							return new YAMLScalarNode((short)Value);
+							return new YAMLScalarNode(unchecked((short)PValue));
 						case PrimitiveType.UShort:
-							return new YAMLScalarNode((ushort)Value);
+							return new YAMLScalarNode((ushort)PValue);
 						case PrimitiveType.Int:
-							return new YAMLScalarNode((int)Value);
+							return new YAMLScalarNode(unchecked((int)PValue));
 						case PrimitiveType.UInt:
-							return new YAMLScalarNode((uint)Value);
+							return new YAMLScalarNode((uint)PValue);
 						case PrimitiveType.Long:
-							return new YAMLScalarNode((long)Value);
+							return new YAMLScalarNode(unchecked((long)PValue));
 						case PrimitiveType.ULong:
-							return new YAMLScalarNode((ulong)Value);
+							return new YAMLScalarNode(PValue);
 						case PrimitiveType.Single:
-							return new YAMLScalarNode((float)Value);
+							return new YAMLScalarNode(BitConverterExtensions.ToSingle((uint)PValue));
 						case PrimitiveType.Double:
-							return new YAMLScalarNode((double)Value);
+							return new YAMLScalarNode(BitConverterExtensions.ToDouble(PValue));
 						case PrimitiveType.String:
-							return new YAMLScalarNode((string)Value);
+							return new YAMLScalarNode((string)CValue);
 						default:
-							throw new NotSupportedException(Type.ToString());
+							throw new NotSupportedException(etalon.Type.Type.ToString());
 					}
 				}
 			}
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context, SerializableType.Field etalon)
 		{
-			if (Type == PrimitiveType.Complex)
+			if (etalon.Type.Type == PrimitiveType.Complex)
 			{
-				if (IsArray)
+				if (etalon.IsArray)
 				{
-					ISerializableStructure[] structures = (ISerializableStructure[])Value;
-					foreach (PPtr<Object> asset in context.FetchDependencies(structures, Name))
+					IAsset[] structures = (IAsset[])CValue;
+					if (structures.Length > 0 && structures[0] is IDependent)
 					{
-						yield return asset;
+						foreach (PPtr<Object> asset in context.FetchDependencies(structures.Cast<IDependent>(), etalon.Name))
+						{
+							yield return asset;
+						}
 					}
 				}
 				else
 				{
-					ISerializableStructure structure = (ISerializableStructure)Value;
-					foreach (PPtr<Object> asset in context.FetchDependencies(structure, Name))
+					IAsset structure = (IAsset)CValue;
+					if (structure is IDependent dependent)
 					{
-						yield return asset;
+						foreach (PPtr<Object> asset in context.FetchDependencies(dependent, etalon.Name))
+						{
+							yield return asset;
+						}
 					}
 				}
 			}
 		}
 
-		public override string ToString()
-		{
-			string type = Type == PrimitiveType.Complex ? ComplexType.ToString() : Type.ToString();
-			return IsArray ? $"{type}[] {Name}" : $"{type} {Name}";
-		}
-
-		public PrimitiveType Type { get; }
-		public bool IsArray { get; }
-		public string Name { get; }
-		public object Value { get; private set; }
-
-		private ISerializableStructure ComplexType { get; }
+		public ulong PValue { get; set; }
+		public object CValue { get; set; }
 
 		private const string SerializeFieldName = "SerializeField";
 	}
