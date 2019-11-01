@@ -424,7 +424,7 @@ namespace uTinyRipper.Converters.Script.Mono
 			List<ScriptExportField> fields = new List<ScriptExportField>();
 			foreach (FieldDefinition field in Definition.Fields)
 			{
-				if (!MonoField.IsSerializableModifier(field))
+				if (!MonoType.IsSerializableModifier(field))
 				{
 					continue;
 				}
@@ -433,7 +433,7 @@ namespace uTinyRipper.Converters.Script.Mono
 				if (IsSerializationApplicable(field.FieldType))
 				{
 					MonoFieldContext scope = new MonoFieldContext(field, manager.Version);
-					if (!MonoField.IsFieldTypeSerializable(scope))
+					if (!MonoType.IsFieldTypeSerializable(scope))
 					{
 						continue;
 					}

@@ -172,7 +172,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 			{
 				throw new ArgumentException(nameof(context));
 			}
-			if (MonoField.IsSerializableArray(context.Type))
+			if (MonoType.IsSerializableArray(context.Type))
 			{
 				throw new ArgumentException(nameof(context));
 			}
@@ -332,7 +332,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 			IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
 			foreach (FieldDefinition field in definition.Fields)
 			{
-				if (!MonoField.IsSerializableModifier(field))
+				if (!MonoType.IsSerializableModifier(field))
 				{
 					continue;
 				}

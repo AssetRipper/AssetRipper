@@ -1,6 +1,8 @@
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
+using uTinyRipper.Converters.Script;
+using uTinyRipper.Converters.Script.Mono;
 
 namespace uTinyRipper.Game.Assembly.Mono
 {
@@ -18,7 +20,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 			{
 				throw new ArgumentException(nameof(context));
 			}
-			if (MonoField.IsSerializableArray(context.Type))
+			if (IsSerializableArray(context.Type))
 			{
 				throw new ArgumentException(nameof(context));
 			}
@@ -34,6 +36,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 		/// </summary>
 		public static bool IsStructSerializable(Version version) => version.IsGreaterEqual(4, 5);
 
+#region Naming
 		public static string GetUniqueName(TypeReference type)
 		{
 			string assembly = FilenameUtils.FixAssemblyEndian(type.Scope.Name);
@@ -100,46 +103,26 @@ namespace uTinyRipper.Game.Assembly.Mono
 		{
 			return IsExposedReference(type.Namespace, type.Name);
 		}
-
+#endregion
+#region Helpers
 		public static bool IsPrime(TypeReference type)
 		{
 			return IsPrime(type.Namespace, type.Name);
 		}
+
 		public static bool IsMonoPrime(TypeReference type)
 		{
 			return IsMonoPrime(type.Namespace, type.Name);
 		}
 
+		public static bool IsSerializableArray(TypeReference type)
+		{
+			return type.IsArray || IsList(type);
+		}
+
 		public static bool IsBuiltinGeneric(TypeReference type)
 		{
 			return IsList(type) || IsExposedReference(type);
-		}
-
-		public static bool IsMonoDerived(TypeReference type)
-		{
-			while (type != null)
-			{
-				if (IsMonoPrime(type))
-				{
-					return true;
-				}
-
-				TypeDefinition definition = type.Resolve();
-				type = definition.BaseType;
-			}
-			return false;
-		}
-
-		public static bool IsCompilerGenerated(TypeDefinition type)
-		{
-			foreach (CustomAttribute attr in type.CustomAttributes)
-			{
-				if (attr.AttributeType.Name == CompilerGeneratedName && attr.AttributeType.Namespace == CompilerServicesNamespace)
-				{
-					return true;
-				}
-			}
-			return false;
 		}
 
 		public static bool IsSerializableGeneric(TypeReference type)
@@ -159,6 +142,250 @@ namespace uTinyRipper.Game.Assembly.Mono
 			}
 			return false;
 		}
+
+		public static bool IsMonoDerived(TypeReference type)
+		{
+			while (type != null)
+			{
+				if (IsMonoPrime(type))
+				{
+					return true;
+				}
+
+				TypeDefinition definition = type.Resolve();
+				type = definition.BaseType;
+			}
+			return false;
+		}
+
+		public static bool HasSerializeFieldAttribute(FieldDefinition field)
+		{
+			foreach (CustomAttribute attribute in field.CustomAttributes)
+			{
+				TypeReference type = attribute.AttributeType;
+				if (IsSerializeFieldAttrribute(type.Namespace, type.Name))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public static bool IsCompilerGenerated(TypeDefinition type)
+		{
+			foreach (CustomAttribute attr in type.CustomAttributes)
+			{
+				if (IsCompilerGeneratedAttrribute(attr.AttributeType.Namespace, attr.AttributeType.Name))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public static bool IsCompilerGenerated(FieldDefinition field)
+		{
+			foreach (CustomAttribute attr in field.CustomAttributes)
+			{
+				if (IsCompilerGeneratedAttrribute(attr.AttributeType.Namespace, attr.AttributeType.Name))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+#endregion
+#region Serialization
+		public static bool IsSerializable(in MonoFieldContext context)
+		{
+			if (IsSerializableModifier(context.Definition))
+			{
+				return IsFieldTypeSerializable(context);
+			}
+			return false;
+		}
+
+		public static bool IsSerializableModifier(FieldDefinition field)
+		{
+			if (field.HasConstant)
+			{
+				return false;
+			}
+			if (field.IsStatic)
+			{
+				return false;
+			}
+			if (field.IsInitOnly)
+			{
+				return false;
+			}
+			if (IsCompilerGenerated(field))
+			{
+				return false;
+			}
+
+			if (field.IsPublic)
+			{
+				if (field.IsNotSerialized)
+				{
+					return false;
+				}
+				return true;
+			}
+			return HasSerializeFieldAttribute(field);
+		}
+
+		public static bool IsFieldTypeSerializable(in MonoFieldContext context)
+		{
+			TypeReference fieldType = context.ElementType;
+
+			// if it's generic parameter then get its real type
+			if (fieldType.IsGenericParameter)
+			{
+				GenericParameter parameter = (GenericParameter)fieldType;
+				fieldType = context.Arguments[parameter];
+			}
+
+			if (fieldType.IsArray)
+			{
+				ArrayType array = (ArrayType)fieldType;
+				// one dimention array only
+				if (!array.IsVector)
+				{
+					return false;
+				}
+
+				// if it's generic parameter then get its real type
+				TypeReference elementType = array.ElementType;
+				if (elementType.IsGenericParameter)
+				{
+					GenericParameter parameter = (GenericParameter)elementType;
+					elementType = context.Arguments[parameter];
+				}
+
+				// array of arrays isn't serializable
+				if (elementType.IsArray)
+				{
+					return false;
+				}
+				// array of serializable generics isn't serializable
+				if (IsSerializableGeneric(elementType))
+				{
+					return false;
+				}
+				// check if array element is serializable
+				MonoFieldContext elementScope = new MonoFieldContext(context, elementType, true);
+				return IsFieldTypeSerializable(elementScope);
+			}
+
+			if (IsList(fieldType))
+			{
+				// list is serialized same way as array, so check its argument
+				GenericInstanceType list = (GenericInstanceType)fieldType;
+				TypeReference listElement = list.GenericArguments[0];
+
+				// if it's generic parameter then get its real type
+				if (listElement.IsGenericParameter)
+				{
+					GenericParameter parameter = (GenericParameter)listElement;
+					listElement = context.Arguments[parameter];
+				}
+
+				// list of arrays isn't serializable
+				if (listElement.IsArray)
+				{
+					return false;
+				}
+				// list of buildin generics isn't serializable
+				if (IsBuiltinGeneric(listElement))
+				{
+					return false;
+				}
+				// check if list element is serializable
+				MonoFieldContext elementScope = new MonoFieldContext(context, listElement, true);
+				return IsFieldTypeSerializable(elementScope);
+			}
+
+			if (MonoUtils.IsSerializablePrimitive(fieldType))
+			{
+				return true;
+			}
+			if (IsObject(fieldType))
+			{
+				return false;
+			}
+
+			if (IsEngineStruct(fieldType))
+			{
+				return true;
+			}
+			if (fieldType.IsGenericInstance)
+			{
+				// even monobehaviour derived generic instances aren't serialiable
+				return IsSerializableGeneric(fieldType);
+			}
+			if (IsMonoDerived(fieldType))
+			{
+				if (fieldType.ContainsGenericParameter)
+				{
+					return false;
+				}
+				return true;
+			}
+
+			if (IsRecursive(context.DeclaringType, fieldType))
+			{
+				return context.IsArray;
+			}
+
+			TypeDefinition definition = fieldType.Resolve();
+			if (definition.IsInterface)
+			{
+				return false;
+			}
+			if (definition.IsAbstract)
+			{
+				return false;
+			}
+			if (IsCompilerGenerated(definition))
+			{
+				return false;
+			}
+			if (definition.IsEnum)
+			{
+				return true;
+			}
+			if (definition.IsSerializable)
+			{
+				if (ScriptExportManager.IsFrameworkLibrary(ScriptExportMonoType.GetModuleName(definition)))
+				{
+					return false;
+				}
+				if (definition.IsValueType && !IsStructSerializable(context.Version))
+				{
+					return false;
+				}
+				return true;
+			}
+
+			return false;
+		}
+
+		private static bool IsRecursive(TypeReference declaringType, TypeReference fieldType)
+		{
+			// "built in" primitive .NET types are placed into itself... it is so stupid
+			// field.FieldType.IsPrimitive || MonoType.IsString(field.FieldType) || MonoType.IsEnginePointer(field.FieldType) => return false
+			if (IsDelegate(fieldType))
+			{
+				return false;
+			}
+			if (declaringType == fieldType)
+			{
+				return true;
+			}
+			return false;
+		}
+#endregion
 
 		private static PrimitiveType ToPrimitiveType(TypeReference type)
 		{
@@ -198,13 +425,13 @@ namespace uTinyRipper.Game.Assembly.Mono
 			foreach (FieldDefinition field in definition.Fields)
 			{
 				MonoFieldContext fieldContext = new MonoFieldContext(field, arguments, manager.Version);
-				if (MonoField.IsSerializable(fieldContext))
+				if (IsSerializable(fieldContext))
 				{
 					MonoTypeContext typeContext = new MonoTypeContext(field.FieldType, arguments);
 					MonoTypeContext resolvedContext = typeContext.Resolve();
 					MonoTypeContext serFieldContext = GetSerializedElementContext(resolvedContext);
 					SerializableType scriptType = manager.GetSerializableType(serFieldContext);
-					bool isArray = MonoField.IsSerializableArray(resolvedContext.Type);
+					bool isArray = IsSerializableArray(resolvedContext.Type);
 					Field fieldStruc = new Field(scriptType, isArray, field.Name);
 					fields.Add(fieldStruc);
 				}

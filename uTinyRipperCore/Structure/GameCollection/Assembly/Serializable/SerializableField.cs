@@ -12,24 +12,6 @@ namespace uTinyRipper.Game.Assembly
 {
 	public struct SerializableField
 	{
-		public static bool IsCompilerGeneratedAttrribute(string @namespace, string name)
-		{
-			if (@namespace == SerializableType.CompilerServicesNamespace)
-			{
-				return name == SerializableType.CompilerGeneratedName;
-			}
-			return false;
-		}
-
-		public static bool IsSerializeFieldAttrribute(string @namespace, string name)
-		{
-			if (@namespace == SerializableType.UnityEngineNamespace)
-			{
-				return name == SerializeFieldName;
-			}
-			return false;
-		}
-
 		public void Read(AssetReader reader, int depth, in SerializableType.Field etalon)
 		{
 			switch (etalon.Type.Type)
@@ -536,7 +518,5 @@ namespace uTinyRipper.Game.Assembly
 
 		public ulong PValue { get; set; }
 		public object CValue { get; set; }
-
-		private const string SerializeFieldName = "SerializeField";
 	}
 }

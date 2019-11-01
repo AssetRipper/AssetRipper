@@ -7,6 +7,7 @@ using uTinyRipper.Game.Assembly.Mono;
 
 namespace uTinyRipper
 {
+#warning TODO: merge with other Script/Mono static methods
 	public static class MonoUtils
 	{
 		public static bool IsSerializablePrimitive(TypeReference type)

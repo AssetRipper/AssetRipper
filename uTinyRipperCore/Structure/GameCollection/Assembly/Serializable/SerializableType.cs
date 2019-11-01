@@ -81,6 +81,7 @@ namespace uTinyRipper.Game.Assembly
 			}
 		}
 
+#region Naming
 		public static bool IsPrimitive(string @namespace, string name)
 		{
 			if (@namespace == SystemNamespace)
@@ -293,6 +294,26 @@ namespace uTinyRipper.Game.Assembly
 			}
 			return PrimitiveType.Complex;
 		}
+		#endregion
+#region Attributes
+		public static bool IsCompilerGeneratedAttrribute(string @namespace, string name)
+		{
+			if (@namespace == CompilerServicesNamespace)
+			{
+				return name == CompilerGeneratedName;
+			}
+			return false;
+		}
+
+		public static bool IsSerializeFieldAttrribute(string @namespace, string name)
+		{
+			if (@namespace == UnityEngineNamespace)
+			{
+				return name == SerializeFieldName;
+			}
+			return false;
+		}
+#endregion
 
 		public SerializableStructure CreateSerializableStructure()
 		{
@@ -375,6 +396,7 @@ namespace uTinyRipper.Game.Assembly
 		public const string CompilerServicesNamespace = "System.Runtime.CompilerServices";
 
 		public const string CompilerGeneratedName = "CompilerGeneratedAttribute";
+		private const string SerializeFieldName = "SerializeField";
 
 		public const string Vector2Name = "Vector2";
 		public const string Vector2IntName = "Vector2Int";
