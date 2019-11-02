@@ -12,7 +12,7 @@ namespace uTinyRipper.SerializedFiles
 		/// </summary>
 		public static bool HasEndian(FileGeneration generation) => generation >= FileGeneration.FG_350_47x;
 
-		public static bool IsSerializedFileHeader(EndianReader reader)
+		public static bool IsSerializedFileHeader(EndianReader reader, uint fileSize)
 		{
 			if (reader.BaseStream.Position + HeaderMinSize > reader.BaseStream.Length)
 			{
@@ -23,8 +23,12 @@ namespace uTinyRipper.SerializedFiles
 			{
 				return false;
 			}
-			uint fileSize = reader.ReadUInt32();
-			if (fileSize < HeaderMinSize + SerializedFileMetadata.MetadataMinSize)
+			uint hFileSize = reader.ReadUInt32();
+			if (hFileSize < HeaderMinSize + SerializedFileMetadata.MetadataMinSize)
+			{
+				return false;
+			}
+			if (hFileSize != fileSize)
 			{
 				return false;
 			}

@@ -57,7 +57,7 @@ namespace uTinyRipper
 			{
 				using (EndianReader reader = new EndianReader(bundleStream, EndianType.BigEndian))
 				{
-					return SerializedFileHeader.IsSerializedFileHeader(reader);
+					return SerializedFileHeader.IsSerializedFileHeader(reader, (uint)size);
 				}
 			}
 		}
