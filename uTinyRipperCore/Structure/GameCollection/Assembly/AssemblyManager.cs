@@ -189,8 +189,21 @@ namespace uTinyRipper.Game
 
 		public Version Version
 		{
-			get => m_manager.Version;
-			set => m_manager.Version = value;
+			get
+			{
+				if (m_manager == null)
+				{
+					return default;
+				}
+				return m_manager.Version;
+			}
+			set
+			{
+				if (m_manager != null)
+				{
+					m_manager.Version = value;
+				}
+			}
 		}
 
 		private event Action<string> m_requestAssemblyCallback;
