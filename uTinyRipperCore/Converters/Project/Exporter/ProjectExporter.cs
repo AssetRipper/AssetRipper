@@ -129,6 +129,7 @@ namespace uTinyRipper.Converters
 			OverrideYamlExporter(ClassIDType.ClusterInputManager);
 			OverrideYamlExporter(ClassIDType.NavMeshData);
 			OverrideYamlExporter(ClassIDType.UnityConnectSettings);
+			OverrideYamlExporter(ClassIDType.AvatarMask1);
 			OverrideYamlExporter(ClassIDType.ParticleSystemForceField);
 			OverrideYamlExporter(ClassIDType.OcclusionCullingData);
 			OverrideYamlExporter(ClassIDType.Prefab);
