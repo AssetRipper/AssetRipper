@@ -18,7 +18,7 @@ namespace uTinyRipper.SerializedFiles
 		/// </summary>
 		public static bool HasStripped(FileGeneration generation) => generation >= FileGeneration.FG_501_54 && generation <= FileGeneration.FG_5unknown;
 
-		public void Read(SerializedFileReader reader)
+		public void Read(SerializedReader reader)
 		{
 			if (IsLongID(reader.Generation))
 			{
@@ -49,7 +49,7 @@ namespace uTinyRipper.SerializedFiles
 			}
 		}
 
-		public void Write(SerializedFileWriter writer)
+		public void Write(SerializedWriter writer)
 		{
 			if (IsLongID(writer.Generation))
 			{

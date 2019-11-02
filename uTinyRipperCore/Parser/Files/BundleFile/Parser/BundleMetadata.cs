@@ -5,14 +5,14 @@ namespace uTinyRipper.BundleFiles
 	/// <summary>
 	/// Metadata about bundle's block or chunk
 	/// </summary>
-	public sealed class BundleMetadata : IBundleFileReadable
+	public sealed class BundleMetadata : IBundleReadable
 	{
 		private static bool IsReadBlockInfo(BundleGeneration generation)
 		{
 			return generation >= BundleGeneration.BF_530_x;
 		}
 
-		public void Read(BundleFileReader reader)
+		public void Read(BundleReader reader)
 		{
 			if (IsReadBlockInfo(reader.Generation))
 			{

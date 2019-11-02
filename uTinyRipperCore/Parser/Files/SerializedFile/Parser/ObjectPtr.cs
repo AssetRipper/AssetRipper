@@ -2,7 +2,7 @@
 {
 	public struct ObjectPtr : ISerializedReadable, ISerializedWritable
 	{
-		public void Read(SerializedFileReader reader)
+		public void Read(SerializedReader reader)
 		{
 			FileID = reader.ReadInt32();
 			if (AssetEntry.IsLongID(reader.Generation))
@@ -16,7 +16,7 @@
 			}
 		}
 
-		public void Write(SerializedFileWriter writer)
+		public void Write(SerializedWriter writer)
 		{
 			writer.Write(FileID);
 			if (AssetEntry.IsLongID(writer.Generation))

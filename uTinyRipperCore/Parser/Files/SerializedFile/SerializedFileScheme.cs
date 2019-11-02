@@ -61,7 +61,7 @@ namespace uTinyRipper
 				{
 					endianess = Header.SwapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
 				}
-				using (SerializedFileReader reader = new SerializedFileReader(stream, endianess, Name, Header.Generation))
+				using (SerializedReader reader = new SerializedReader(stream, endianess, Name, Header.Generation))
 				{
 					if (SerializedFileMetadata.IsMetadataAtTheEnd(reader.Generation))
 					{

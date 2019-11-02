@@ -22,7 +22,7 @@ namespace uTinyRipper.SerializedFiles
 		/// </summary>
 		public static bool HasHash(FileGeneration generation) => generation >= FileGeneration.FG_500aunk2;
 
-		public void Read(SerializedFileReader reader)
+		public void Read(SerializedReader reader)
 		{
 			if (HasScriptType(reader.Generation))
 			{
@@ -48,7 +48,7 @@ namespace uTinyRipper.SerializedFiles
 			Tree?.Read(reader);
 		}
 
-		public void Write(SerializedFileWriter writer)
+		public void Write(SerializedWriter writer)
 		{
 			if (HasScriptType(writer.Generation))
 			{

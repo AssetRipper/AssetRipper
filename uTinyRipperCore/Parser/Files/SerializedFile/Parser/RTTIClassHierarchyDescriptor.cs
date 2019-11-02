@@ -19,7 +19,7 @@
 		/// </summary>
 		public static bool HasUnknown(FileGeneration generation) => generation >= FileGeneration.FG_300b && generation < FileGeneration.FG_500;
 
-		public void Read(SerializedFileReader reader)
+		public void Read(SerializedReader reader)
 		{
 			if (HasSignature(reader.Generation))
 			{
@@ -49,7 +49,7 @@
 			}
 		}
 
-		public void Write(SerializedFileWriter writer)
+		public void Write(SerializedWriter writer)
 		{
 			if (HasSignature(writer.Generation))
 			{

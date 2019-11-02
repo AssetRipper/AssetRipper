@@ -16,7 +16,7 @@
 		/// </summary>
 		public static bool HasUnknown(FileGeneration generation) => generation >= FileGeneration.FG_120_200;
 
-		public void Read(SerializedFileReader reader)
+		public void Read(SerializedReader reader)
 		{
 			Hierarchy.Read(reader);
 			Entries = reader.ReadSerializedArray<AssetEntry>();
@@ -31,7 +31,7 @@
 			}
 		}
 
-		public void Write(SerializedFileWriter writer)
+		public void Write(SerializedWriter writer)
 		{
 			Hierarchy.Write(writer);
 			writer.WriteSerializedArray(Entries);

@@ -2,6 +2,6 @@
 {
 	public interface ISerializedReadable
 	{
-		void Read(SerializedFileReader reader);
+		void Read(SerializedReader reader);
 	}
 }

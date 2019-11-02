@@ -1,13 +1,13 @@
 namespace uTinyRipper.BundleFiles
 {
-	public sealed class BundleFileEntry : FileEntry, IBundleFileReadable
+	public sealed class BundleFileEntry : FileEntry, IBundleReadable
 	{
 		public static bool IsReadBlobIndex(BundleGeneration generation)
 		{
 			return generation >= BundleGeneration.BF_530_x;
 		}
 
-		public void Read(BundleFileReader reader)
+		public void Read(BundleReader reader)
 		{
 			if (IsReadBlobIndex(reader.Generation))
 			{

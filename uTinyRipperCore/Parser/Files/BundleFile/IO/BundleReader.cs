@@ -3,16 +3,16 @@ using System.IO;
 
 namespace uTinyRipper.BundleFiles
 {
-	public sealed class BundleFileReader : EndianReader
+	public sealed class BundleReader : EndianReader
 	{
-		public BundleFileReader(Stream stream, EndianType endianess, BundleGeneration generation) :
+		public BundleReader(Stream stream, EndianType endianess, BundleGeneration generation) :
 			base(stream, endianess)
 		{
 			Generation = generation;
 		}
 
 		public T ReadBundle<T>()
-			where T : IBundleFileReadable, new()
+			where T : IBundleReadable, new()
 		{
 			T t = new T();
 			t.Read(this);
@@ -20,7 +20,7 @@ namespace uTinyRipper.BundleFiles
 		}
 
 		public T[] ReadBundleArray<T>()
-			where T : IBundleFileReadable, new()
+			where T : IBundleReadable, new()
 		{
 			int count = ReadInt32();
 			T[] array = new T[count];
@@ -34,7 +34,7 @@ namespace uTinyRipper.BundleFiles
 		}
 
 		public T[] ReadBundleArray<T>(Func<T> instantiator)
-			where T : IBundleFileReadable
+			where T : IBundleReadable
 		{
 			int count = ReadInt32();
 			T[] array = new T[count];

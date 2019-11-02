@@ -36,7 +36,7 @@ namespace uTinyRipper.Classes.Misc
 			Data3 = reader.ReadUInt32();
 		}
 
-		public void Read(SerializedFileReader reader)
+		public void Read(SerializedReader reader)
 		{
 			Read((EndianReader)reader);
 		}
@@ -54,7 +54,7 @@ namespace uTinyRipper.Classes.Misc
 			writer.Write(Data3);
 		}
 
-		public void Write(SerializedFileWriter writer)
+		public void Write(SerializedWriter writer)
 		{
 			Write((EndianWriter)writer);
 		}

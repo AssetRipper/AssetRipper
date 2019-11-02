@@ -21,7 +21,7 @@ namespace uTinyRipper.SerializedFiles
 			return file.Name == FilePath;
 		}
 		
-		public void Read(SerializedFileReader reader)
+		public void Read(SerializedReader reader)
 		{
 			if (HasAssetName(reader.Generation))
 			{
@@ -36,7 +36,7 @@ namespace uTinyRipper.SerializedFiles
 			FilePath = FilenameUtils.FixFileIdentifier(FilePathOrigin);
 		}
 
-		public void Write(SerializedFileWriter writer)
+		public void Write(SerializedWriter writer)
 		{
 			if (HasAssetName(writer.Generation))
 			{

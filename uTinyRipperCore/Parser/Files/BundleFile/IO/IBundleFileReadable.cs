@@ -1,7 +1,7 @@
 ﻿namespace uTinyRipper.BundleFiles
 {
-	public interface IBundleFileReadable
+	public interface IBundleReadable
 	{
-		void Read(BundleFileReader reader);
+		void Read(BundleReader reader);
 	}
 }

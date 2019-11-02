@@ -2,6 +2,6 @@
 {
 	public interface ISerializedWritable
 	{
-		void Write(SerializedFileWriter writer);
+		void Write(SerializedWriter writer);
 	}
 }

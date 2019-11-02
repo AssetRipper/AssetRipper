@@ -3,9 +3,9 @@ using System.IO;
 
 namespace uTinyRipper.SerializedFiles
 {
-	public sealed class SerializedFileReader : EndianReader
+	public sealed class SerializedReader : EndianReader
 	{
-		public SerializedFileReader(Stream stream, EndianType endianess, string name, FileGeneration generation) :
+		public SerializedReader(Stream stream, EndianType endianess, string name, FileGeneration generation) :
 			base(stream, endianess)
 		{
 			Name = name ?? throw new ArgumentNullException(nameof(name));

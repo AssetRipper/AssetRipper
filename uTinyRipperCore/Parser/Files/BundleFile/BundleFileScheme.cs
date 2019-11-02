@@ -68,7 +68,7 @@ namespace uTinyRipper
 				}
 
 				long headerSize = stream.Position;
-				using (BundleFileReader reader = new BundleFileReader(stream, EndianType.BigEndian, Header.Generation))
+				using (BundleReader reader = new BundleReader(stream, EndianType.BigEndian, Header.Generation))
 				{
 					if (reader.Generation < BundleGeneration.BF_530_x)
 					{
@@ -98,7 +98,7 @@ namespace uTinyRipper
 			}
 		}
 
-		private SmartStream ReadPre530Metadata(BundleFileReader reader)
+		private SmartStream ReadPre530Metadata(BundleReader reader)
 		{
 			switch (Header.Type)
 			{
@@ -115,7 +115,7 @@ namespace uTinyRipper
 						using (SmartStream stream = SmartStream.CreateMemory(new byte[chunkInfo.DecompressedSize]))
 						{
 							SevenZipHelper.DecompressLZMASizeStream(reader.BaseStream, chunkInfo.CompressedSize, stream);
-							using (BundleFileReader decompressReader = new BundleFileReader(stream, reader.EndianType, reader.Generation))
+							using (BundleReader decompressReader = new BundleReader(stream, reader.EndianType, reader.Generation))
 							{
 								Metadata.Read(decompressReader);
 							}
@@ -128,7 +128,7 @@ namespace uTinyRipper
 			}
 		}
 
-		private SmartStream Read530Metadata(BundleFileReader reader, long headerSize)
+		private SmartStream Read530Metadata(BundleReader reader, long headerSize)
 		{
 			if (Header.Flags.IsMetadataAtTheEnd())
 			{
@@ -154,7 +154,7 @@ namespace uTinyRipper
 						using (MemoryStream stream = new MemoryStream(new byte[Header.MetadataDecompressedSize]))
 						{
 							SevenZipHelper.DecompressLZMASizeStream(reader.BaseStream, Header.MetadataCompressedSize, stream);
-							using (BundleFileReader decompressReader = new BundleFileReader(stream, reader.EndianType, reader.Generation))
+							using (BundleReader decompressReader = new BundleReader(stream, reader.EndianType, reader.Generation))
 							{
 								Metadata.Read(decompressReader);
 							}
@@ -185,7 +185,7 @@ namespace uTinyRipper
 							}
 
 							stream.Position = 0;
-							using (BundleFileReader decompressReader = new BundleFileReader(stream, reader.EndianType, reader.Generation))
+							using (BundleReader decompressReader = new BundleReader(stream, reader.EndianType, reader.Generation))
 							{
 								Metadata.Read(decompressReader);
 							}

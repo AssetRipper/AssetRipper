@@ -13,7 +13,7 @@ namespace uTinyRipper.SerializedFiles
 		/// </summary>
 		public static bool HasUnknown(FileGeneration generation) => generation >= FileGeneration.FG_20191;
 
-		public void Read(SerializedFileReader reader)
+		public void Read(SerializedReader reader)
 		{
 			if (IsFormat5(reader.Generation))
 			{
@@ -43,7 +43,7 @@ namespace uTinyRipper.SerializedFiles
 			}
 		}
 
-		public void Write(SerializedFileWriter writer)
+		public void Write(SerializedWriter writer)
 		{
 			if (IsFormat5(writer.Generation))
 			{

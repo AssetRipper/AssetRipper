@@ -5,7 +5,7 @@ namespace uTinyRipper.SerializedFiles
 {
 	public sealed class TypeTree : ISerializedReadable, ISerializedWritable
 	{
-		public void Read(SerializedFileReader reader)
+		public void Read(SerializedReader reader)
 		{
 			if (TypeTreeNode.IsFormat5(reader.Generation))
 			{
@@ -27,7 +27,7 @@ namespace uTinyRipper.SerializedFiles
 			}
 		}
 
-		public void Write(SerializedFileWriter writer)
+		public void Write(SerializedWriter writer)
 		{
 			if (TypeTreeNode.IsFormat5(writer.Generation))
 			{
@@ -46,7 +46,7 @@ namespace uTinyRipper.SerializedFiles
 			}
 		}
 
-		private static void ReadTreeNode(SerializedFileReader reader, ICollection<TypeTreeNode> nodes, byte depth)
+		private static void ReadTreeNode(SerializedReader reader, ICollection<TypeTreeNode> nodes, byte depth)
 		{
 			TypeTreeNode node = new TypeTreeNode();
 			node.Read(reader);
@@ -60,7 +60,7 @@ namespace uTinyRipper.SerializedFiles
 			}
 		}
 
-		private void WriteTreeNode(SerializedFileWriter writer, ref int index)
+		private void WriteTreeNode(SerializedWriter writer, ref int index)
 		{
 			Nodes[index].Write(writer);
 			int childCount = GetChildCount(index);
