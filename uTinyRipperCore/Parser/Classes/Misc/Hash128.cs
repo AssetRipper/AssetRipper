@@ -4,7 +4,7 @@ using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.Misc
 {
-	public struct Hash128 : IAsset, ISerializedFileReadable
+	public struct Hash128 : IAsset, ISerializedReadable, ISerializedWritable
 	{
 		public Hash128(uint v) :
 			this(v, 0, 0, 0)
@@ -36,22 +36,32 @@ namespace uTinyRipper.Classes.Misc
 			Data3 = reader.ReadUInt32();
 		}
 
-		public void Read(AssetReader reader)
-		{
-			Read((EndianReader)reader);
-		}
-
 		public void Read(SerializedFileReader reader)
 		{
 			Read((EndianReader)reader);
 		}
 
-		public void Write(AssetWriter writer)
+		public void Read(AssetReader reader)
+		{
+			Read((EndianReader)reader);
+		}
+
+		public void Write(EndianWriter writer)
 		{
 			writer.Write(Data0);
 			writer.Write(Data1);
 			writer.Write(Data2);
 			writer.Write(Data3);
+		}
+
+		public void Write(SerializedFileWriter writer)
+		{
+			Write((EndianWriter)writer);
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			Write((EndianWriter)writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

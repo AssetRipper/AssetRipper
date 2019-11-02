@@ -8,36 +8,20 @@ namespace uTinyRipper
 	public class EndianReader : BinaryReader
 	{
 		public EndianReader(Stream stream) :
-			this(stream, EndianType.LittleEndian, 0, false)
+			this(stream, EndianType.LittleEndian, false)
 		{
 		}
 
 		public EndianReader(Stream stream, EndianType endianess) :
-			this(stream, endianess, 0, false)
+			this(stream, endianess, false)
 		{
 		}
 
-		public EndianReader(Stream stream, EndianType endianess, long alignPosition) :
-			this(stream, endianess, alignPosition, false)
-		{
-		}
-
-		public EndianReader(Stream stream, EndianType endianess, long alignPosition, bool alignArray) :
+		protected EndianReader(Stream stream, EndianType endianess, bool alignArray) :
 			base(stream, Encoding.UTF8, true)
 		{
 			EndianType = endianess;
-			AlignPosition = alignPosition;
 			IsAlignArray = alignArray;
-		}
-
-		protected EndianReader(Stream stream, bool alignArray) :
-			this(stream, EndianType.LittleEndian, 0, alignArray)
-		{
-		}
-
-		protected EndianReader(EndianReader reader, bool alignArray) :
-			this(reader.BaseStream, reader.EndianType, reader.AlignPosition, alignArray)
-		{
 		}
 
 		~EndianReader()
@@ -666,7 +650,7 @@ namespace uTinyRipper
 
 		public void AlignStream()
 		{
-			BaseStream.Position = AlignPosition + ((BaseStream.Position - AlignPosition + 3) & ~3);
+			BaseStream.Position = (BaseStream.Position + 3) & ~3;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -756,7 +740,6 @@ namespace uTinyRipper
 		public EndianType EndianType { get; }
 
 		protected bool IsAlignArray { get; }
-		protected long AlignPosition { get; }
 
 		protected const int BufferSize = 4096;
 

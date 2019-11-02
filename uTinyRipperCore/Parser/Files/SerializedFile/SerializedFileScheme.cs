@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using uTinyRipper.Converters;
 using uTinyRipper.Game;
 using uTinyRipper.SerializedFiles;
 
@@ -11,8 +12,8 @@ namespace uTinyRipper
 		{
 			Flags = flags;
 
-			Header = new SerializedFileHeader(Name);
-			Metadata = new SerializedFileMetadata(Name);
+			Header = new SerializedFileHeader();
+			Metadata = new SerializedFileMetadata();
 		}
 
 		internal static SerializedFileScheme ReadSceme(SmartStream stream, long offset, long size, string filePath, string fileName)
@@ -27,21 +28,13 @@ namespace uTinyRipper
 			return scheme;
 		}
 
-		/// <summary>
-		/// Less than 3.0.0
-		/// </summary>
-		private static bool IsMetadataAtTheEnd(FileGeneration generation)
-		{
-			return generation <= FileGeneration.FG_300_342;
-		}
-
 		public SerializedFile ReadFile(IFileCollection collection, IAssemblyManager manager)
 		{
 			SerializedFile file = new SerializedFile(collection, manager, this);
 			using (PartialStream stream = new PartialStream(m_stream, m_offset, m_size))
 			{
 				EndianType endianess = Header.SwapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
-				using (EndianReader reader = new EndianReader(stream, endianess, stream.Position))
+				using (EndianReader reader = new EndianReader(stream, endianess))
 				{
 					file.Read(reader);
 				}
@@ -63,10 +56,14 @@ namespace uTinyRipper
 					Header.Read(reader);
 				}
 
-				EndianType endianess = Header.SwapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
-				using (SerializedFileReader reader = new SerializedFileReader(stream, endianess, Header.Generation))
+				EndianType endianess = EndianType.LittleEndian;
+				if (SerializedFileHeader.HasEndian(Header.Generation))
 				{
-					if (IsMetadataAtTheEnd(reader.Generation))
+					endianess = Header.SwapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
+				}
+				using (SerializedFileReader reader = new SerializedFileReader(stream, endianess, Name, Header.Generation))
+				{
+					if (SerializedFileMetadata.IsMetadataAtTheEnd(reader.Generation))
 					{
 						reader.BaseStream.Position = Header.FileSize - Header.MetadataSize;
 						reader.BaseStream.Position++;
@@ -75,6 +72,9 @@ namespace uTinyRipper
 					Metadata.Read(reader);
 				}
 			}
+
+			SerializedFileMetadataConverter.CombineFormats(Header.Generation, Metadata);
+			RTTIClassHierarchyDescriptorConverter.FixResourceVersion(Name, ref Metadata.Hierarchy);
 
 #warning TEMP HACK
 			if (Metadata.Hierarchy.Platform == Platform.NoTarget)
@@ -91,13 +91,12 @@ namespace uTinyRipper
 			}
 		}
 
-		public TransferInstructionFlags Flags { get; private set; }
-
-		public SerializedFileHeader Header { get; private set; }
-		public SerializedFileMetadata Metadata { get; private set; }
-
 		public override FileEntryType SchemeType => FileEntryType.Serialized;
 		public override IEnumerable<FileIdentifier> Dependencies => Metadata.Dependencies;
+
+		public SerializedFileHeader Header { get; }
+		public SerializedFileMetadata Metadata { get; }
+		public TransferInstructionFlags Flags { get; private set; }
 
 		public const TransferInstructionFlags DefaultFlags = TransferInstructionFlags.SerializeGameRelease;
 	}

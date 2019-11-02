@@ -2,9 +2,10 @@ using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.SerializedFiles
 {
-	internal sealed class RTTIBaseClassDescriptor : ISerializedFileReadable
+	public struct RTTIBaseClassDescriptor : ISerializedReadable, ISerializedWritable
 	{
-		public RTTIBaseClassDescriptor(bool isSerializeTypeTrees)
+		public RTTIBaseClassDescriptor(bool isSerializeTypeTrees) :
+			this()
 		{
 			if (isSerializeTypeTrees)
 			{
@@ -15,38 +16,26 @@ namespace uTinyRipper.SerializedFiles
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool IsReadScriptType(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_550_2018;
-		}
+		public static bool HasScriptType(FileGeneration generation) => generation >= FileGeneration.FG_550_2018;
 		/// <summary>
 		/// 5.0.0unk2 and greater
 		/// </summary>
-		public static bool IsReadHash(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_500aunk2;
-		}
+		public static bool HasHash(FileGeneration generation) => generation >= FileGeneration.FG_500aunk2;
 
 		public void Read(SerializedFileReader reader)
 		{
-			ClassID = (ClassIDType)reader.ReadInt32();
-			if (IsReadScriptType(reader.Generation))
+			if (HasScriptType(reader.Generation))
 			{
+				ClassID = (ClassIDType)reader.ReadInt32();
 				IsStrippedType = reader.ReadBoolean();
 				ScriptID = reader.ReadInt16();
 			}
 			else
 			{
-				// For old version it specifies ClassIDType or -ScriptID for MonoBehaviour
-				int uniqueTypeID = (int)ClassID;
-				if (uniqueTypeID < 0)
-				{
-					ClassID = ClassIDType.MonoBehaviour;
-					ScriptID = (short)(-uniqueTypeID - 1);
-				}
+				UniqueTypeID = reader.ReadInt32();
 			}
 
-			if (IsReadHash(reader.Generation))
+			if (HasHash(reader.Generation))
 			{
 				if (ClassID == ClassIDType.MonoBehaviour)
 				{
@@ -54,12 +43,35 @@ namespace uTinyRipper.SerializedFiles
 				}
 				TypeHash.Read(reader);
 			}
-			
+
 			// isSerializeTypeTrees
-			if (Tree != null)
+			Tree?.Read(reader);
+		}
+
+		public void Write(SerializedFileWriter writer)
+		{
+			if (HasScriptType(writer.Generation))
 			{
-				Tree.Read(reader);
+				writer.Write((int)ClassID);
+				writer.Write(IsStrippedType);
+				writer.Write(ScriptID);
 			}
+			else
+			{
+				writer.Write(UniqueTypeID);
+			}
+
+			if (HasHash(writer.Generation))
+			{
+				if (ClassID == ClassIDType.MonoBehaviour)
+				{
+					ScriptHash.Write(writer);
+				}
+				TypeHash.Write(writer);
+			}
+
+			// isSerializeTypeTrees
+			Tree?.Write(writer);
 		}
 
 		public override string ToString()
@@ -67,16 +79,40 @@ namespace uTinyRipper.SerializedFiles
 			return ClassID.ToString();
 		}
 
-		public ClassIDType ClassID { get; private set; }
-		public bool IsStrippedType { get; private set; }
+		public ClassIDType ClassID { get; set; }
+		public bool IsStrippedType { get; set; }
 		/// <summary>
 		/// For MonoBehaviours specifies script type
 		/// </summary>
-		public short ScriptID { get; private set; }
+		public short ScriptID { get; set; }
 		/// <summary>
 		/// The type of the class.
 		/// </summary>
-		public TypeTree Tree { get; }
+		public TypeTree Tree { get; set; }
+
+		/// <summary>
+		/// For old version it specifies ClassIDType or -ScriptID for MonoBehaviour
+		/// </summary>
+		public int UniqueTypeID
+		{
+			get
+			{
+				return ClassID == ClassIDType.MonoBehaviour ? -(ScriptID + 1) : (int)ClassID;
+			}
+			set
+			{
+				if (value >= 0)
+				{
+					ClassID = (ClassIDType)value;
+					ScriptID = 0;
+				}
+				else
+				{
+					ClassID = ClassIDType.MonoBehaviour;
+					ScriptID = (short)(-value - 1);
+				}
+			}
+		}
 
 		public Hash128 ScriptHash;
 		public Hash128 TypeHash;

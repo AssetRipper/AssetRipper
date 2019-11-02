@@ -5,26 +5,25 @@ namespace uTinyRipper.SerializedFiles
 	/// <summary>
 	/// A serialized file may be linked with other serialized files to create shared dependencies.
 	/// </summary>
-	public class FileIdentifier : ISerializedFileReadable
+	public struct FileIdentifier : ISerializedReadable, ISerializedWritable
 	{
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		public static bool IsReadAssetName(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_210_261;
-		}
+		public static bool HasAssetName(FileGeneration generation) => generation >= FileGeneration.FG_210_261;
 		/// <summary>
 		/// 1.2.0 and greater
 		/// </summary>
-		public static bool IsReadHash(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_120_200;
-		}
+		public static bool IsReadHash(FileGeneration generation) => generation >= FileGeneration.FG_120_200;
 
+		public bool IsFile(ISerializedFile file)
+		{
+			return file.Name == FilePath;
+		}
+		
 		public void Read(SerializedFileReader reader)
 		{
-			if (IsReadAssetName(reader.Generation))
+			if (HasAssetName(reader.Generation))
 			{
 				AssetPath = reader.ReadStringZeroTerm();
 			}
@@ -37,9 +36,18 @@ namespace uTinyRipper.SerializedFiles
 			FilePath = FilenameUtils.FixFileIdentifier(FilePathOrigin);
 		}
 
-		public bool IsFile(ISerializedFile file)
+		public void Write(SerializedFileWriter writer)
 		{
-			return file.Name == FilePath;
+			if (HasAssetName(writer.Generation))
+			{
+				writer.WriteStringZeroTerm(AssetPath);
+			}
+			if (IsReadHash(writer.Generation))
+			{
+				Hash.Write(writer);
+				writer.Write((int)Type);
+			}
+			writer.WriteStringZeroTerm(FilePathOrigin);
 		}
 
 		public override string ToString()
@@ -48,23 +56,24 @@ namespace uTinyRipper.SerializedFiles
 		}
 
 		/// <summary>
+		/// File path without such prefixes as archive:/directory/fileName
+		/// </summary>
+		public string FilePath { get; set; }
+
+		/// <summary>
 		/// Virtual asset path. Used for cached files, otherwise it's empty.
 		/// The file with that path usually doesn't exist, so it's probably an alias.
 		/// </summary>
-		public string AssetPath { get; private set; }
+		public string AssetPath { get; set; }
 		/// <summary>
 		/// The type of the file
 		/// </summary>
-		public AssetType Type { get; private set; }
-		/// <summary>
-		/// File path without such prefixes as archive:/directory/fileName
-		/// </summary>
-		public string FilePath { get; private set; }
+		public AssetType Type { get; set; }
 		/// <summary>
 		/// Actual file path. This path is relative to the path of the current file.
 		/// The folder "library" often needs to be translated to "resources" in order to find the file on the file system.
 		/// </summary>
-		public string FilePathOrigin { get; private set; }
+		public string FilePathOrigin { get; set; }
 
 		/// <summary>
 		/// Globally unique identifier of the file (or Hash?), 16 bytes long.

@@ -12,11 +12,7 @@ namespace uTinyRipper
 
 		public PartialStream(Stream baseStream, long offset, long length, bool leaveOpen)
 		{
-			if (baseStream == null)
-			{
-				throw new ArgumentNullException(nameof(baseStream));
-			}
-			m_stream = baseStream;
+			m_stream = baseStream ?? throw new ArgumentNullException(nameof(baseStream));
 			m_baseOffset = offset;
 			Length = length;
 			m_leaveOpen = leaveOpen;

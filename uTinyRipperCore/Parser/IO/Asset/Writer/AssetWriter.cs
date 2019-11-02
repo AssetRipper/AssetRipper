@@ -7,7 +7,16 @@ namespace uTinyRipper
 	public sealed class AssetWriter : EndianWriter
 	{
 		public AssetWriter(Stream stream, Version version, Platform platform, TransferInstructionFlags flags) :
-			base(stream, AlignArrays(version))
+			base(stream, EndianType.LittleEndian, AlignArrays(version))
+		{
+			Version = version;
+			Platform = platform;
+			Flags = flags;
+			IsAlignString = AlignStrings(version);
+		}
+
+		public AssetWriter(EndianWriter writer, Version version, Platform platform, TransferInstructionFlags flags) :
+			base(writer.BaseStream, writer.EndianType, AlignArrays(version))
 		{
 			Version = version;
 			Platform = platform;
@@ -82,8 +91,7 @@ namespace uTinyRipper
 
 			for (int i = 0; i < buffer.Length; i++)
 			{
-				T t = buffer[i];
-				t.Write(this);
+				buffer[i].Write(this);
 			}
 			if (IsAlignArray)
 			{

@@ -1,19 +1,11 @@
 ﻿namespace uTinyRipper.SerializedFiles
 {
-	public class ObjectPtr : ISerializedFileReadable
+	public struct ObjectPtr : ISerializedReadable, ISerializedWritable
 	{
-		/// <summary>
-		/// 5.0.0 and greater
-		/// </summary>
-		public static bool IsReadLongPathID(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_500;
-		}
-
 		public void Read(SerializedFileReader reader)
 		{
 			FileID = reader.ReadInt32();
-			if (IsReadLongPathID(reader.Generation))
+			if (AssetEntry.IsLongID(reader.Generation))
 			{
 				reader.AlignStream();
 				PathID = reader.ReadInt64();
@@ -21,6 +13,20 @@
 			else
 			{
 				PathID = reader.ReadInt32();
+			}
+		}
+
+		public void Write(SerializedFileWriter writer)
+		{
+			writer.Write(FileID);
+			if (AssetEntry.IsLongID(writer.Generation))
+			{
+				writer.AlignStream();
+				writer.Write(PathID);
+			}
+			else
+			{
+				writer.Write((int)PathID);
 			}
 		}
 

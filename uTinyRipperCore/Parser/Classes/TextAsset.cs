@@ -44,7 +44,7 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		protected void ReadBase(AssetReader reader)
+		protected void ReadNamedObject(AssetReader reader)
 		{
 			base.Read(reader);
 		}

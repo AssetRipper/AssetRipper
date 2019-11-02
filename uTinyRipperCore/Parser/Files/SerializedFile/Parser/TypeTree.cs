@@ -1,55 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace uTinyRipper.SerializedFiles
 {
-	internal sealed class TypeTree : ISerializedFileReadable
+	public sealed class TypeTree : ISerializedReadable, ISerializedWritable
 	{
-		public TypeTree()
-		{
-		}
-
-		public TypeTree(IReadOnlyCollection<TypeTreeNode> nodes)
-		{
-			Nodes = nodes.ToArray();
-		}
-
-		/// <summary>
-		/// 5.0.0a1 and greater
-		/// </summary>
-		private static bool IsRead5Format(FileGeneration generation)
-		{
-			return generation == FileGeneration.FG_500a1 || generation >= FileGeneration.FG_500aunk1;
-		}
-
 		public void Read(SerializedFileReader reader)
 		{
-			if (IsRead5Format(reader.Generation))
+			if (TypeTreeNode.IsFormat5(reader.Generation))
 			{
 				int nodesCount = reader.ReadInt32();
-				if(nodesCount < 0)
-				{
-					throw new Exception($"Invalid type tree's node count {nodesCount}");
-				}
-
-				int stringSize = reader.ReadInt32();
-				if (stringSize < 0)
-				{
-					throw new Exception($"Invalid type tree's string size {stringSize}");
-				}
-
-				TypeTreeNode[] nodes = new TypeTreeNode[nodesCount];
-				long stringPosition = reader.BaseStream.Position + nodesCount * TypeTreeNode.GetNodeSize(reader.Generation);
+				int customBufferSize = reader.ReadInt32();
+				Nodes = new TypeTreeNode[nodesCount];
 				for (int i = 0; i < nodesCount; i++)
 				{
-					TypeTreeNode node = new TypeTreeNode();
-					node.Read(reader, stringPosition);
-					nodes[i] = node;
+					Nodes[i].Read(reader);
 				}
-				Nodes = nodes;
-				reader.BaseStream.Position += stringSize;
+				CustomTypeBuffer = new byte[customBufferSize];
+				reader.Read(CustomTypeBuffer, 0, CustomTypeBuffer.Length);
 			}
 			else
 			{
@@ -59,16 +27,48 @@ namespace uTinyRipper.SerializedFiles
 			}
 		}
 
+		public void Write(SerializedFileWriter writer)
+		{
+			if (TypeTreeNode.IsFormat5(writer.Generation))
+			{
+				writer.Write(Nodes.Length);
+				writer.Write(CustomTypeBuffer.Length);
+				for (int i = 0; i < Nodes.Length; i++)
+				{
+					Nodes[i].Write(writer);
+				}
+				writer.Write(CustomTypeBuffer, 0, CustomTypeBuffer.Length);
+			}
+			else
+			{
+				int index = 0;
+				WriteTreeNode(writer, ref index);
+			}
+		}
+
 		private static void ReadTreeNode(SerializedFileReader reader, ICollection<TypeTreeNode> nodes, byte depth)
 		{
-			TypeTreeNode node = new TypeTreeNode(depth);
+			TypeTreeNode node = new TypeTreeNode();
 			node.Read(reader);
+			node.Depth = depth;
 			nodes.Add(node);
 
 			int childCount = reader.ReadInt32();
 			for (int i = 0; i < childCount; i++)
 			{
 				ReadTreeNode(reader, nodes, (byte)(depth + 1));
+			}
+		}
+
+		private void WriteTreeNode(SerializedFileWriter writer, ref int index)
+		{
+			Nodes[index].Write(writer);
+			int childCount = GetChildCount(index);
+			writer.Write(childCount);
+			index++;
+			for (int i = 0; i < childCount; i++)
+			{
+				WriteTreeNode(writer, ref index);
 			}
 		}
 
@@ -91,6 +91,25 @@ namespace uTinyRipper.SerializedFiles
 			return sb;
 		}
 
+		private int GetChildCount(int index)
+		{
+			int count = 0;
+			int depth = Nodes[index].Depth + 1;
+			for (int i = index + 1; i < Nodes.Length; i++)
+			{
+				int nodeDepth = Nodes[i].Depth;
+				if (nodeDepth < depth)
+				{
+					break;
+				}
+				if (nodeDepth == depth)
+				{
+					count++;
+				}
+			}
+			return count;
+		}
+
 #if DEBUG
 		public string Dump
 		{
@@ -103,6 +122,7 @@ namespace uTinyRipper.SerializedFiles
 		}
 #endif
 
-		public IReadOnlyList<TypeTreeNode> Nodes { get; private set; }
+		public TypeTreeNode[] Nodes { get; set; }
+		public byte[] CustomTypeBuffer { get; set; }
 	}
 }

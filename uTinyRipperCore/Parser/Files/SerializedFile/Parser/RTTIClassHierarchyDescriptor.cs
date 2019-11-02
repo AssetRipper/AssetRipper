@@ -1,97 +1,83 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace uTinyRipper.SerializedFiles
+﻿namespace uTinyRipper.SerializedFiles
 {
-	public sealed class RTTIClassHierarchyDescriptor
+	public struct RTTIClassHierarchyDescriptor : ISerializedReadable, ISerializedWritable
 	{
-		public RTTIClassHierarchyDescriptor(string name)
-		{
-			if (string.IsNullOrEmpty(name))
-			{
-				throw new ArgumentNullException(nameof(name));
-			}
-			Name = name;
-		}
-
 		/// <summary>
 		/// 3.0.0b and greater
 		/// </summary>
-		public static bool IsReadSignature(FileGeneration generation)
-		{
-			return generation > FileGeneration.FG_300b;
-		}
+		public static bool HasSignature(FileGeneration generation) => generation > FileGeneration.FG_300b;
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool IsReadPlatform(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_300_342;
-		}
+		public static bool HasPlatform(FileGeneration generation) => generation >= FileGeneration.FG_300_342;
 		/// <summary>
 		/// 5.0.0Unk2 and greater
 		/// </summary>
-		public static bool IsReadSerializeTypeTrees(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_500aunk2;
-		}
+		public static bool HasSerializeTypeTrees(FileGeneration generation) => generation >= FileGeneration.FG_500aunk2;
 		/// <summary>
 		/// 3.0.0b to 4.x.x
 		/// </summary>
-		public static bool IsReadUnknown(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_300b && generation < FileGeneration.FG_500;
-		}
+		public static bool HasUnknown(FileGeneration generation) => generation >= FileGeneration.FG_300b && generation < FileGeneration.FG_500;
 
 		public void Read(SerializedFileReader reader)
 		{
-			if (IsReadSignature(reader.Generation))
+			if (HasSignature(reader.Generation))
 			{
 				string signature = reader.ReadStringZeroTerm();
 				Version.Parse(signature);
-
-#warning HACK: TEMP:
-				if (Version == new Version(5, 6, 4, VersionType.Patch, 1))
-				{
-					if (FilenameUtils.IsDefaultResource(Name))
-					{
-						Version = new Version(5, 6, 5, VersionType.Final);
-					}
-				}
 			}
-			if (IsReadPlatform(reader.Generation))
+			if (HasPlatform(reader.Generation))
 			{
 				Platform = (Platform)reader.ReadUInt32();
-				if (!Enum.IsDefined(typeof(Platform), Platform))
-				{
-					throw new Exception($"Unsuported platform {Platform} for asset file '{Name}'");
-				}
 			}
-			if (IsReadSerializeTypeTrees(reader.Generation))
+
+			bool serializeTypeTree;
+			if (HasSerializeTypeTrees(reader.Generation))
 			{
 				SerializeTypeTrees = reader.ReadBoolean();
+				serializeTypeTree = SerializeTypeTrees;
 			}
 			else
 			{
-				SerializeTypeTrees = true;
+				serializeTypeTree = true;
 			}
-			Types = reader.ReadSerializedArray(() => new RTTIBaseClassDescriptor(SerializeTypeTrees));
 
-			if (IsReadUnknown(reader.Generation))
+			Types = reader.ReadSerializedArray(() => new RTTIBaseClassDescriptor(serializeTypeTree));
+			if (HasUnknown(reader.Generation))
 			{
 				Unknown = reader.ReadInt32();
+			}
+		}
+
+		public void Write(SerializedFileWriter writer)
+		{
+			if (HasSignature(writer.Generation))
+			{
+				writer.WriteStringZeroTerm(Version.ToString());
+			}
+			if (HasPlatform(writer.Generation))
+			{
+				writer.Write((uint)Platform);
+			}
+			if (HasSerializeTypeTrees(writer.Generation))
+			{
+				writer.Write(SerializeTypeTrees);
+			}
+
+			writer.WriteSerializedArray(Types);
+			if (HasUnknown(writer.Generation))
+			{
+				writer.Write(Unknown);
 			}
 		}
 
 		/// <summary>
 		/// Attributes
 		/// </summary>
-		public Platform Platform { get; private set; }
-		internal bool SerializeTypeTrees { get; private set; }
-		internal IReadOnlyList<RTTIBaseClassDescriptor> Types { get; private set; }
-		internal int Unknown { get; private set; }
-		
-		private string Name { get; }
+		public Platform Platform { get; set; }
+		public bool SerializeTypeTrees { get; set; }
+		public RTTIBaseClassDescriptor[] Types { get; set; }
+		public int Unknown { get; set; }
 
 		public const int HierarchyMinSize = 4;
 

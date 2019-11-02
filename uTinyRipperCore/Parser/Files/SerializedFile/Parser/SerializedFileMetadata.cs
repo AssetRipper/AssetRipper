@@ -1,60 +1,58 @@
-﻿using System.Collections.Generic;
-
-namespace uTinyRipper.SerializedFiles
+﻿namespace uTinyRipper.SerializedFiles
 {
-	public sealed class SerializedFileMetadata : ISerializedFileReadable
+	public sealed class SerializedFileMetadata : ISerializedReadable, ISerializedWritable
 	{
-		public SerializedFileMetadata(string name)
-		{
-			Hierarchy = new RTTIClassHierarchyDescriptor(name);
-		}
+		/// <summary>
+		/// Less than 3.5.0
+		/// </summary>
+		public static bool IsMetadataAtTheEnd(FileGeneration generation) => generation <= FileGeneration.FG_300_342;
 
 		/// <summary>
 		/// 5.0.0Unk0 and greater
 		/// </summary>
-		public static bool IsReadPreload(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_500aunk;
-		}
+		public static bool HasPreload(FileGeneration generation) => generation >= FileGeneration.FG_500aunk;
 		/// <summary>
 		/// 1.2.0 and greater
 		/// </summary>
-		public static bool IsReadUnknown(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_120_200;
-		}
+		public static bool HasUnknown(FileGeneration generation) => generation >= FileGeneration.FG_120_200;
 
 		public void Read(SerializedFileReader reader)
 		{
 			Hierarchy.Read(reader);
-
-			int count = reader.ReadInt32();
-			Dictionary<long, AssetEntry> entries = new Dictionary<long, AssetEntry>(count);
-			for (int i = 0; i < count; i++)
-			{
-				AssetEntry entry = new AssetEntry();
-				entry.Read(reader, Hierarchy);
-				entries.Add(entry.PathID, entry);
-			}
-			Entries = entries;
-
-			if (IsReadPreload(reader.Generation))
+			Entries = reader.ReadSerializedArray<AssetEntry>();
+			if (HasPreload(reader.Generation))
 			{
 				Preloads = reader.ReadSerializedArray<ObjectPtr>();
 			}
 			Dependencies = reader.ReadSerializedArray<FileIdentifier>();
-			if (IsReadUnknown(reader.Generation))
+			if (HasUnknown(reader.Generation))
 			{
 				Unknown = reader.ReadStringZeroTerm();
 			}
 		}
 
-		public RTTIClassHierarchyDescriptor Hierarchy { get; }
-		public IReadOnlyDictionary<long, AssetEntry> Entries { get; private set; }
-		public IReadOnlyList<ObjectPtr> Preloads { get; private set; }
-		public IReadOnlyList<FileIdentifier> Dependencies { get; private set; }
-		public string Unknown { get; private set; }
+		public void Write(SerializedFileWriter writer)
+		{
+			Hierarchy.Write(writer);
+			writer.WriteSerializedArray(Entries);
+			if (HasPreload(writer.Generation))
+			{
+				writer.WriteSerializedArray(Preloads);
+			}
+			writer.WriteSerializedArray(Dependencies);
+			if (HasUnknown(writer.Generation))
+			{
+				writer.WriteStringZeroTerm(Unknown);
+			}
+		}
+
+		public AssetEntry[] Entries { get; set; }
+		public ObjectPtr[] Preloads { get; set; }
+		public FileIdentifier[] Dependencies { get; set; }
+		public string Unknown { get; set; }
 
 		public const int MetadataMinSize = RTTIClassHierarchyDescriptor.HierarchyMinSize + 12;
+
+		public RTTIClassHierarchyDescriptor Hierarchy;
 	}
 }

@@ -17,21 +17,8 @@ namespace uTinyRipper
 	{
 		internal SerializedFile(IFileCollection collection, IAssemblyManager manager, SerializedFileScheme scheme)
 		{
-			if (collection == null)
-			{
-				throw new ArgumentNullException(nameof(collection));
-			}
-			if (manager == null)
-			{
-				throw new ArgumentNullException(nameof(manager));
-			}
-			if (scheme == null)
-			{
-				throw new ArgumentNullException(nameof(scheme));
-			}
-
-			Collection = collection;
-			AssemblyManager = manager;
+			Collection = collection ?? throw new ArgumentNullException(nameof(collection));
+			AssemblyManager = manager ?? throw new ArgumentNullException(nameof(manager));
 			FilePath = scheme.FilePath;
 			NameOrigin = scheme.Name;
 			Name = FilenameUtils.FixFileIdentifier(scheme.Name);
@@ -39,6 +26,11 @@ namespace uTinyRipper
 
 			Header = scheme.Header;
 			Metadata = scheme.Metadata;
+
+			for (int i = 0; i < Metadata.Entries.Length; i++)
+			{
+				m_assetEntryLookup.Add(Metadata.Entries[i].PathID, i);
+			}
 		}
 
 		public static bool IsSerializedFile(string filePath)
@@ -217,12 +209,12 @@ namespace uTinyRipper
 
 		public AssetEntry GetAssetEntry(long pathID)
 		{
-			return Metadata.Entries[pathID];
+			return Metadata.Entries[m_assetEntryLookup[pathID]];
 		}
 
 		public ClassIDType GetAssetType(long pathID)
 		{
-			return Metadata.Entries[pathID].ClassID;
+			return Metadata.Entries[m_assetEntryLookup[pathID]].ClassID;
 		}
 
 		public PPtr<T> CreatePPtr<T>(T asset)
@@ -258,7 +250,7 @@ namespace uTinyRipper
 
 		internal void Read(EndianReader reader)
 		{
-			if (RTTIClassHierarchyDescriptor.IsReadSignature(Header.Generation))
+			if (RTTIClassHierarchyDescriptor.HasSignature(Header.Generation))
 			{
 				ReadAssets(reader);
 			}
@@ -332,47 +324,46 @@ namespace uTinyRipper
 
 		private void ReadAssets(EndianReader reader)
 		{
-			AssemblyManager.Version = Metadata.Hierarchy.Version;
+			AssemblyManager.Version = Version;
 
-			HashSet<long> preloaded = new HashSet<long>();
+			HashSet<int> preloaded = new HashSet<int>();
 			using (AssetReader assetReader = new AssetReader(reader, Version, Platform, Flags))
 			{
-				if (SerializedFileMetadata.IsReadPreload(Header.Generation))
+				if (SerializedFileMetadata.HasPreload(Header.Generation))
 				{
 					foreach (ObjectPtr ptr in Metadata.Preloads)
 					{
 						if (ptr.FileID == 0)
 						{
-							AssetEntry info = Metadata.Entries[ptr.PathID];
-							ReadAsset(assetReader, info);
-							preloaded.Add(ptr.PathID);
+							int index = m_assetEntryLookup[ptr.PathID];
+							ReadAsset(assetReader, ref Metadata.Entries[index]);
+							preloaded.Add(index);
 						}
 					}
 				}
 
-				foreach (KeyValuePair<long, AssetEntry> infoPair in Metadata.Entries)
+				for (int i = 0; i < Metadata.Entries.Length; i++)
 				{
-					if (infoPair.Value.ClassID == ClassIDType.MonoScript)
+					if (Metadata.Entries[i].ClassID == ClassIDType.MonoScript)
 					{
-						if (!preloaded.Contains(infoPair.Key))
+						if (preloaded.Add(i))
 						{
-							ReadAsset(assetReader, infoPair.Value);
-							preloaded.Add(infoPair.Key);
+							ReadAsset(assetReader, ref Metadata.Entries[i]);
 						}
 					}
 				}
 
-				foreach (AssetEntry info in Metadata.Entries.Values)
+				for (int i = 0; i < Metadata.Entries.Length; i++)
 				{
-					if (!preloaded.Contains(info.PathID))
+					if (!preloaded.Contains(i))
 					{
-						ReadAsset(assetReader, info);
+						ReadAsset(assetReader, ref Metadata.Entries[i]);
 					}
 				}
 			}
 		}
 
-		private void ReadAsset(AssetReader reader, AssetEntry info)
+		private void ReadAsset(AssetReader reader, ref AssetEntry info)
 		{
 			AssetInfo assetInfo = new AssetInfo(this, info.PathID, info.ClassID);
 			Object asset = ReadAsset(reader, assetInfo, Header.DataOffset + info.Offset, info.Size);
@@ -413,7 +404,7 @@ namespace uTinyRipper
 
 		private void UpdateFileVersion()
 		{
-			if (!RTTIClassHierarchyDescriptor.IsReadSignature(Header.Generation))
+			if (!RTTIClassHierarchyDescriptor.HasSignature(Header.Generation))
 			{
 				foreach (Object asset in FetchAssets())
 				{
@@ -446,5 +437,6 @@ namespace uTinyRipper
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Dependencies;
 
 		private readonly Dictionary<long, Object> m_assets = new Dictionary<long, Object>();
+		private readonly Dictionary<long, int> m_assetEntryLookup = new Dictionary<long, int>();
 	}
 }

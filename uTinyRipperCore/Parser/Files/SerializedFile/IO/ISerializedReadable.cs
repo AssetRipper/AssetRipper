@@ -1,6 +1,6 @@
 ﻿namespace uTinyRipper.SerializedFiles
 {
-	public interface ISerializedFileReadable
+	public interface ISerializedReadable
 	{
 		void Read(SerializedFileReader reader);
 	}

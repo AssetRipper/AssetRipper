@@ -3,33 +3,24 @@ namespace uTinyRipper.SerializedFiles
 	/// <summary>
 	/// Contains information for a block of raw serialized object data.
 	/// </summary>
-	public class AssetEntry
+	public struct AssetEntry : ISerializedReadable, ISerializedWritable
 	{
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadLongID(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_500;
-		}
+		public static bool IsLongID(FileGeneration generation) => generation >= FileGeneration.FG_500;
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool IsReadTypeIndex(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_550_2018;
-		}
+		public static bool HasTypeIndex(FileGeneration generation) => generation >= FileGeneration.FG_550_2018;
 		/// <summary>
-		/// 5.0.1 to 5.4.x
+		/// 5.0.1 to 5.5.0b exclusive
 		/// </summary>
-		public static bool IsReadUnknown(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_501_54 &&  generation <= FileGeneration.FG_5unknown;
-		}
+		public static bool HasStripped(FileGeneration generation) => generation >= FileGeneration.FG_501_54 && generation <= FileGeneration.FG_5unknown;
 
-		public void Read(SerializedFileReader reader, RTTIClassHierarchyDescriptor heirarchy)
+		public void Read(SerializedFileReader reader)
 		{
-			if (IsReadLongID(reader.Generation))
+			if (IsLongID(reader.Generation))
 			{
 				reader.AlignStream();
 				PathID = reader.ReadInt64();
@@ -38,15 +29,12 @@ namespace uTinyRipper.SerializedFiles
 			{
 				PathID = reader.ReadInt32();
 			}
+
 			Offset = reader.ReadUInt32();
 			Size = reader.ReadInt32();
-			if (IsReadTypeIndex(reader.Generation))
+			if (HasTypeIndex(reader.Generation))
 			{
-				int TypeIndex = reader.ReadInt32();
-				RTTIBaseClassDescriptor type = heirarchy.Types[TypeIndex];
-				TypeID = type.ClassID == ClassIDType.MonoBehaviour ? (-type.ScriptID - 1) : (int)type.ClassID;
-				ClassID = type.ClassID;
-				ScriptID = type.ScriptID;
+				TypeIndex = reader.ReadInt32();
 			}
 			else
 			{
@@ -54,9 +42,41 @@ namespace uTinyRipper.SerializedFiles
 				ClassID = (ClassIDType)reader.ReadInt16();
 				ScriptID = reader.ReadInt16();
 			}
-			if (IsReadUnknown(reader.Generation))
+
+			if (HasStripped(reader.Generation))
 			{
 				IsStripped = reader.ReadBoolean();
+			}
+		}
+
+		public void Write(SerializedFileWriter writer)
+		{
+			if (IsLongID(writer.Generation))
+			{
+				writer.AlignStream();
+				writer.Write(PathID);
+			}
+			else
+			{
+				writer.Write((int)PathID);
+			}
+
+			writer.Write(Offset);
+			writer.Write(Size);
+			if (HasTypeIndex(writer.Generation))
+			{
+				writer.Write(TypeIndex);
+			}
+			else
+			{
+				writer.Write(TypeID);
+				writer.Write((short)ClassID);
+				writer.Write(ScriptID);
+			}
+
+			if (HasStripped(writer.Generation))
+			{
+				writer.Write(IsStripped);
 			}
 		}
 
@@ -69,26 +89,30 @@ namespace uTinyRipper.SerializedFiles
 		/// ObjectID
 		/// Unique ID that identifies the object. Can be used as a key for a map.
 		/// </summary>
-		public long PathID { get; private set; }
+		public long PathID { get; set; }
 		/// <summary>
 		/// Offset to the object data.
 		/// Add to SerializedFileHeader.dataOffset to get the absolute offset within the serialized file.
 		/// </summary>
-		public uint Offset { get; private set; }
+		public uint Offset { get; set; }
 		/// <summary>
 		/// Size of the object data.
 		/// </summary>
-		public int Size { get; private set; }
+		public int Size { get; set; }
+		/// <summary>
+		/// Type index in <see cref="RTTIClassHierarchyDescriptor.Types"/> array
+		/// </summary>
+		public int TypeIndex { get; set; }
 		/// <summary>
 		/// Type ID of the object, which is mapped to RTTIBaseClassDescriptor.classID.
 		/// Equals to classID if the object is not a MonoBehaviour.
 		/// </summary>
-		public int TypeID { get; private set; }
+		public int TypeID { get; set; }
 		/// <summary>
 		/// Class ID of the object.
 		/// </summary>
-		public ClassIDType ClassID { get; private set; }
-		public short ScriptID { get; private set; }
-		public bool IsStripped { get; private set; }
+		public ClassIDType ClassID { get; set; }
+		public short ScriptID { get; set; }
+		public bool IsStripped { get; set; }
 	}
 }

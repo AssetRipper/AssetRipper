@@ -99,7 +99,7 @@ namespace uTinyRipper.Classes
 		{
 			if (IsSerialized(reader.Version))
 			{
-				ReadBase(reader);
+				ReadNamedObject(reader);
 
 				ParsedForm.Read(reader);
 

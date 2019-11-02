@@ -7,7 +7,7 @@ namespace uTinyRipper
 	public sealed class AssetReader : EndianReader
 	{
 		public AssetReader(Stream stream, Version version, Platform platform, TransferInstructionFlags flags) :
-			base(stream, AlignArrays(version))
+			base(stream, EndianType.LittleEndian, AlignArrays(version))
 		{
 			Version = version;
 			Platform = platform;
@@ -16,7 +16,7 @@ namespace uTinyRipper
 		}
 
 		public AssetReader(EndianReader reader, Version version, Platform platform, TransferInstructionFlags flags) :
-			base(reader, AlignArrays(version))
+			base(reader.BaseStream, reader.EndianType, AlignArrays(version))
 		{
 			Version = version;
 			Platform = platform;

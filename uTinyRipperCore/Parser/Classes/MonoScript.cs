@@ -164,7 +164,7 @@ namespace uTinyRipper.Classes
 
 		public override void Read(AssetReader reader)
 		{
-			ReadBase(reader);
+			ReadNamedObject(reader);
 
 #if UNIVERSAL
 			if (IsReadScript(reader.Version, reader.Flags))

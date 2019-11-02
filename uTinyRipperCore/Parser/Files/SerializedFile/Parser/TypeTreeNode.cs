@@ -1,94 +1,75 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace uTinyRipper.SerializedFiles
 {
-	internal sealed class TypeTreeNode
+	public struct TypeTreeNode : ISerializedReadable, ISerializedWritable
 	{
-		public TypeTreeNode()
-		{
-		}
-
-		public TypeTreeNode(byte depth)
-		{
-			Depth = depth;
-		}
-
-		public TypeTreeNode(byte depth, bool isArray, string type, string name, int byteSize, int index, TransferMetaFlags metaFlag)
-		{
-			Depth = depth;
-			IsArray = isArray;
-			Type = type;
-			Name = name;
-			ByteSize = byteSize;
-			Index = index;
-			MetaFlag = metaFlag;
-		}
-
-		public static int GetNodeSize(FileGeneration generation)
-		{
-			return IsReadUnknown(generation) ? 32 : 24;
-		}
-
+		/// <summary>
+		/// 5.0.0a1 and greater
+		/// </summary>
+		public static bool IsFormat5(FileGeneration generation) => generation >= FileGeneration.FG_500a1;
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool IsReadUnknown(FileGeneration generation)
-		{
-			return generation >= FileGeneration.FG_20191;
-		}
+		public static bool HasUnknown(FileGeneration generation) => generation >= FileGeneration.FG_20191;
 
 		public void Read(SerializedFileReader reader)
 		{
-			Type = reader.ReadStringZeroTerm();
-			Name = reader.ReadStringZeroTerm();
-			ByteSize = reader.ReadInt32();
-			Index = reader.ReadInt32();
-			IsArray = reader.ReadInt32() != 0;
-			Version = reader.ReadInt32();
-			MetaFlag = (TransferMetaFlags)reader.ReadUInt32();
-		}
-
-		public void Read(SerializedFileReader reader, long stringPosition)
-		{
-			Version = reader.ReadUInt16();
-			Depth = reader.ReadByte();
-			IsArray = reader.ReadBoolean();
-			uint type = reader.ReadUInt32();
-			uint name = reader.ReadUInt32();
-			ByteSize = reader.ReadInt32();
-			Index = reader.ReadInt32();
-			MetaFlag = (TransferMetaFlags)reader.ReadUInt32();
-			if (IsReadUnknown(reader.Generation))
+			if (IsFormat5(reader.Generation))
 			{
-				Unknown1 = reader.ReadUInt32();
-				Unknown2 = reader.ReadUInt32();
-			}
-
-			Type = ReadString(reader, stringPosition, type);
-			Name = ReadString(reader, stringPosition, name);
-		}
-
-		private static string ReadString(SerializedFileReader reader, long stringPosition, uint value)
-		{
-			bool isCustomType = (value & 0x80000000) == 0;
-			if (isCustomType)
-			{
-				long position = reader.BaseStream.Position;
-				reader.BaseStream.Position = stringPosition + value;
-				string stringValue = reader.ReadStringZeroTerm();
-				reader.BaseStream.Position = position;
-				return stringValue;
+				Version = reader.ReadUInt16();
+				Depth = reader.ReadByte();
+				IsArrayBool = reader.ReadBoolean();
+				TypeOffset = reader.ReadUInt32();
+				NameOffset = reader.ReadUInt32();
+				ByteSize = reader.ReadInt32();
+				Index = reader.ReadInt32();
+				MetaFlag = (TransferMetaFlags)reader.ReadUInt32();
+				if (HasUnknown(reader.Generation))
+				{
+					Unknown1 = reader.ReadUInt32();
+					Unknown2 = reader.ReadUInt32();
+				}
 			}
 			else
 			{
-				uint type = value & 0x7FFFFFFF;
-				TreeNodeType nodeType = (TreeNodeType)type;
-				if (!Enum.IsDefined(typeof(TreeNodeType), nodeType))
+				Type = reader.ReadStringZeroTerm();
+				Name = reader.ReadStringZeroTerm();
+				ByteSize = reader.ReadInt32();
+				Index = reader.ReadInt32();
+				IsArray = reader.ReadInt32();
+				Version = reader.ReadInt32();
+				MetaFlag = (TransferMetaFlags)reader.ReadUInt32();
+			}
+		}
+
+		public void Write(SerializedFileWriter writer)
+		{
+			if (IsFormat5(writer.Generation))
+			{
+				writer.Write((ushort)Version);
+				writer.Write(Depth);
+				writer.Write(IsArrayBool);
+				writer.Write(TypeOffset);
+				writer.Write(NameOffset);
+				writer.Write(ByteSize);
+				writer.Write(Index);
+				writer.Write((uint)MetaFlag);
+				if (HasUnknown(writer.Generation))
 				{
-					throw new Exception($"Unsupported asset class type name '{nodeType}''");
+					writer.Write(Unknown1);
+					writer.Write(Unknown2);
 				}
-				return nodeType.ToTypeString();
+			}
+			else
+			{
+				writer.WriteStringZeroTerm(Type);
+				writer.WriteStringZeroTerm(Name);
+				writer.Write(ByteSize);
+				writer.Write(Index);
+				writer.Write(IsArray);
+				writer.Write(Version);
+				writer.Write((uint)MetaFlag);
 			}
 		}
 
@@ -111,7 +92,7 @@ namespace uTinyRipper.SerializedFiles
 					"{", unchecked((uint)ByteSize), "}",
 					"{", Index, "}",
 					"{", Version, "}",
-					IsArray ? 1 : 0,
+					IsArray,
 					"{", MetaFlag, "}");
 			return sb;
 		}
@@ -120,38 +101,51 @@ namespace uTinyRipper.SerializedFiles
 		/// Field type version, starts with 1 and is incremented after the type information has been significantly updated in a new release.
 		/// Equal to serializedVersion in YAML format files
 		/// </summary>
-		public int Version { get; private set; }
+		public int Version { get; set; }
 		/// <summary>
 		/// Depth of current type relative to root
 		/// </summary>
-		public byte Depth { get; private set; }
+		public byte Depth { get; set; }
+		public bool IsArrayBool
+		{
+			get => IsArray != 0;
+			set => IsArray = value ? 1 : 0;
+		}
 		/// <summary>
 		/// Array flag, set to 1 if type is "Array" or "TypelessData".
 		/// </summary>
-		public bool IsArray { get; private set; }
+		public int IsArray { get; set; }
+		/// <summary>
+		/// Type offset in <see cref="TypeTree.CustomTypeBuffer">
+		/// </summary>
+		public uint TypeOffset { get; set; }
+		/// <summary>
+		/// Name offset in <see cref="TypeTree.CustomTypeBuffer">
+		/// </summary>
+		public uint NameOffset { get; set; }
 		/// <summary>
 		/// Name of the data type. This can be the name of any substructure or a static predefined type.
 		/// </summary>
-		public string Type { get; private set; }
+		public string Type { get; set; }
 		/// <summary>
 		/// Name of the field.
 		/// </summary>
-		public string Name { get; private set; }
+		public string Name { get; set; }
 		/// <summary>
 		/// Size of the data value in bytes, e.g. 4 for int. -1 means that there is an array somewhere inside its hierarchy
 		/// Note: The padding for the alignment is not included in the size.
 		/// </summary>
-		public int ByteSize { get; private set; }
+		public int ByteSize { get; set; }
 		/// <summary>
 		/// Index of the field that is unique within a tree.
 		/// Normally starts with 0 and is incremented with each additional field.
 		/// </summary>
-		public int Index { get; private set; }
+		public int Index { get; set; }
 		/// <summary>
 		/// Metaflags of the field
 		/// </summary>
-		public TransferMetaFlags MetaFlag { get; private set; }
-		public uint Unknown1 { get; private set; }
-		public uint Unknown2 { get; private set; }
+		public TransferMetaFlags MetaFlag { get; set; }
+		public uint Unknown1 { get; set; }
+		public uint Unknown2 { get; set; }
 	}
 }

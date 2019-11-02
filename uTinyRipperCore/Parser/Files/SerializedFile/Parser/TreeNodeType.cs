@@ -148,7 +148,7 @@ namespace uTinyRipper.SerializedFiles
 			Dictionary<TreeNodeType, string> typeNames = new Dictionary<TreeNodeType, string>(values.Length);
 			foreach (FieldInfo field in fields)
 			{
-				if(index > 0)
+				if (index > 0)
 				{
 					EnumNameAttribute name = field.GetCustomAttribute<EnumNameAttribute>();
 					typeNames.Add(values[index - 1], name == null ? values[index - 1].ToString() : name.Name);

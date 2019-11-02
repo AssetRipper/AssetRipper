@@ -7,31 +7,20 @@ namespace uTinyRipper
 	public class EndianWriter : BinaryWriter
 	{
 		public EndianWriter(Stream stream) :
-			this(stream, EndianType.LittleEndian, 0, false)
+			this(stream, EndianType.LittleEndian, false)
 		{
 		}
 
 		public EndianWriter(Stream stream, EndianType endianess) :
-			this(stream, endianess, 0, false)
+			this(stream, endianess, false)
 		{
 		}
 
-		public EndianWriter(Stream stream, EndianType endianess, long alignPosition) :
-			this(stream, endianess, alignPosition, false)
-		{
-		}
-
-		public EndianWriter(Stream stream, EndianType endianess, long alignPosition, bool alignArray) :
+		protected EndianWriter(Stream stream, EndianType endianess, bool alignArray) :
 			base(stream, Encoding.UTF8, true)
 		{
 			EndianType = endianess;
-			AlignPosition = alignPosition;
 			IsAlignArray = alignArray;
-		}
-
-		protected EndianWriter(Stream stream, bool alignArray) :
-			this(stream, EndianType.LittleEndian, 0, alignArray)
-		{
 		}
 
 		~EndianWriter()
@@ -462,7 +451,7 @@ namespace uTinyRipper
 
 		public void AlignStream()
 		{
-			BaseStream.Position = AlignPosition + ((BaseStream.Position - AlignPosition + 3) & ~3);
+			BaseStream.Position = (BaseStream.Position + 3) & ~3;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -548,7 +537,6 @@ namespace uTinyRipper
 		public EndianType EndianType { get; }
 
 		protected bool IsAlignArray { get; }
-		protected long AlignPosition { get; set; }
 
 		protected const int BufferSize = 4096;
 

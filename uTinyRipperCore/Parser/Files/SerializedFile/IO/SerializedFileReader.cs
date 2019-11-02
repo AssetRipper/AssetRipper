@@ -5,14 +5,15 @@ namespace uTinyRipper.SerializedFiles
 {
 	public sealed class SerializedFileReader : EndianReader
 	{
-		public SerializedFileReader(Stream stream, EndianType endianess, FileGeneration generation) :
+		public SerializedFileReader(Stream stream, EndianType endianess, string name, FileGeneration generation) :
 			base(stream, endianess)
 		{
+			Name = name ?? throw new ArgumentNullException(nameof(name));
 			Generation = generation;
 		}
 
 		public T ReadSerialized<T>()
-			where T : ISerializedFileReadable, new()
+			where T : ISerializedReadable, new()
 		{
 			T t = new T();
 			t.Read(this);
@@ -20,7 +21,7 @@ namespace uTinyRipper.SerializedFiles
 		}
 
 		public T[] ReadSerializedArray<T>()
-			where T : ISerializedFileReadable, new()
+			where T : ISerializedReadable, new()
 		{
 			int count = ReadInt32();
 			T[] array = new T[count];
@@ -34,7 +35,7 @@ namespace uTinyRipper.SerializedFiles
 		}
 		
 		public T[] ReadSerializedArray<T>(Func<T> instantiator)
-			where T : ISerializedFileReadable
+			where T : ISerializedReadable
 		{
 			int count = ReadInt32();
 			T[] array = new T[count];
@@ -47,6 +48,7 @@ namespace uTinyRipper.SerializedFiles
 			return array;
 		}
 
+		public string Name { get; }
 		public FileGeneration Generation { get; }
 	}
 }
