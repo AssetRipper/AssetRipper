@@ -29,37 +29,21 @@ namespace uTinyRipper.Classes.Sprites
 		/// </summary>
 		public static bool HasSourceSkin(Version version) => version.IsEqual(2018, 1);
 		/// <summary>
-		/// 5.x.x (mess) and greater
+		/// 5.4.x-5.6.x and greater
 		/// </summary>
 		public static bool HasAtlasRectOffset(Version version)
 		{
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 10))
+			{
+				return true;
+			}
 			if (version.IsGreaterEqual(5, 4, 5, VersionType.Patch, 1))
 			{
-				if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 10))
-				{
-					return true;
-				}
 				if (version.IsGreaterEqual(5, 5, 2, VersionType.Patch))
 				{
-					if (version.IsGreaterEqual(5, 6))
-					{
-						return false;
-					}
-					return true;
+					return version.IsEqual(5, 5);
 				}
-				if (version.IsGreaterEqual(5, 5, 0, VersionType.Patch, 3))
-				{
-					if (version.IsGreaterEqual(5, 5, 1))
-					{
-						return false;
-					}
-					return true;
-				}
-				if (version.IsGreaterEqual(5, 5))
-				{
-					return false;
-				}
-				return true;
+				return version.IsEqual(5, 4);
 			}
 			return false;
 		}
