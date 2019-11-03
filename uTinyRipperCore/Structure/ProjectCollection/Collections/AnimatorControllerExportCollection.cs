@@ -27,12 +27,12 @@ namespace uTinyRipper.Project
 				StateMachines[i] = stateMachine;
 			}
 
-#warning TODO: export MonoBehaviours
 			for (int i = 0; i < StateMachines.Length; i++)
 			{
 				AnimatorStateMachine stateMachine = StateMachines[i];
 				StateMachineConstant stateMachineConstant = asset.Controller.StateMachineArray[i].Instance;
 				AddAsset(stateMachine);
+				AddBehaviours(asset, stateMachine.StateMachineBehaviours);
 
 				foreach (PPtr<AnimatorStateTransition> transitionPtr in stateMachine.AnyStateTransitions)
 				{
@@ -51,6 +51,7 @@ namespace uTinyRipper.Project
 					AnimatorState state = statePtr.GetAsset(virtualFile);
 					StateConstant stateConstant = stateMachineConstant.StateConstantArray[j].Instance;
 					AddAsset(state);
+					AddBehaviours(asset, state.StateMachineBehaviours);
 
 					if (state.Motion.IsVirtual)
 					{
@@ -79,6 +80,22 @@ namespace uTinyRipper.Project
 				{
 					Motion motion = childMotion.Motion.GetAsset(virtualFile);
 					AddBlendTree(virtualFile, (BlendTree)motion);
+				}
+			}
+		}
+		
+		private void AddBehaviours(AnimatorController asset, IEnumerable<PPtr<MonoBehaviour>> behaviours)
+		{
+			foreach (PPtr<MonoBehaviour> pbehaviour in behaviours)
+			{
+				MonoBehaviour behaviour = pbehaviour.FindAsset(asset.File);
+				if (behaviour != null)
+				{
+#warning HACK: skip duplicates. remove it when AnimatorStateMachine's child StateMachines has been implemented
+					if (!m_exportIDs.ContainsKey(behaviour.AssetInfo))
+					{
+						AddAsset(behaviour);
+					}
 				}
 			}
 		}

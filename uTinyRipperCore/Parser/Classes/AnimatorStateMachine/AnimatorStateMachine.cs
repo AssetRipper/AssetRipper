@@ -16,7 +16,8 @@ namespace uTinyRipper.Classes
 		{
 			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 
-			LayerConstant layer = controller.Controller.GetLayerByStateMachineIndex(stateMachineIndex);
+			int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
+			ref LayerConstant layer = ref controller.Controller.LayerArray[layerIndex].Instance;
 			Name = controller.TOS[layer.Binding];
 
 			StateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Instance;
@@ -89,6 +90,8 @@ namespace uTinyRipper.Classes
 				Version = controller.File.Version,
 			};
 			EntryTransitions = stateMachine.CreateEntryTransitions(virtualFile, stateParameters);
+#warning TEMP: remove comment when AnimatorStateMachine's child StateMachines has been implemented
+			//StateMachineBehaviours = controller.GetStateBehaviours(layerIndex);
 			StateMachineBehaviours = Array.Empty<PPtr<MonoBehaviour>>();
 
 			AnyStatePosition = new Vector3f(0.0f, -StateOffset, 0.0f);

@@ -3,6 +3,7 @@ using uTinyRipper.Project;
 using uTinyRipper.Classes.AnimatorControllers;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using System;
 
 namespace uTinyRipper.Classes
 {
@@ -103,8 +104,22 @@ namespace uTinyRipper.Classes
 				}
 			}
 		}
-		
-		public PPtr<MonoBehaviour>[] GetStateBeahviours(int stateMachineIndex, int stateIndex)
+
+		public PPtr<MonoBehaviour>[] GetStateBehaviours(int layerIndex)
+		{
+			if (HasStateMachineBehaviourVectorDescription(File.Version))
+			{
+				uint layerID = Controller.LayerArray[layerIndex].Instance.Binding;
+				StateKey key = new StateKey(layerIndex, layerID);
+				if (StateMachineBehaviourVectorDescription.StateMachineBehaviourRanges.TryGetValue(key, out StateRange range))
+				{
+					return GetStateBehaviours(range);
+				}
+			}
+			return Array.Empty<PPtr<MonoBehaviour>>();
+		}
+
+		public PPtr<MonoBehaviour>[] GetStateBehaviours(int stateMachineIndex, int stateIndex)
 		{
 			if (HasStateMachineBehaviourVectorDescription(File.Version))
 			{
@@ -112,23 +127,13 @@ namespace uTinyRipper.Classes
 				StateMachineConstant stateMachine = Controller.StateMachineArray[stateMachineIndex].Instance;
 				StateConstant state = stateMachine.StateConstantArray[stateIndex].Instance;
 				uint stateID = state.GetID(File.Version);
-				foreach (KeyValuePair<StateKey, StateRange> pair in StateMachineBehaviourVectorDescription.StateMachineBehaviourRanges)
+				StateKey key = new StateKey(layerIndex, stateID);
+				if (StateMachineBehaviourVectorDescription.StateMachineBehaviourRanges.TryGetValue(key, out StateRange range))
 				{
-					StateKey key = pair.Key;
-					if (key.LayerIndex == layerIndex && key.StateID == stateID)
-					{
-						StateRange range = pair.Value;
-						PPtr<MonoBehaviour>[] stateMachineBehaviours = new PPtr<MonoBehaviour>[range.Count];
-						for (int i = 0; i < range.Count; i++)
-						{
-							int index = (int)StateMachineBehaviourVectorDescription.StateMachineBehaviourIndices[range.StartIndex + i];
-							stateMachineBehaviours[i] = StateMachineBehaviours[index];
-						}
-						return stateMachineBehaviours;
-					}
+					return GetStateBehaviours(range);
 				}
 			}
-			return System.Array.Empty<PPtr<MonoBehaviour>>();
+			return Array.Empty<PPtr<MonoBehaviour>>();
 		}
 
 		public override bool IsContainsAnimationClip(AnimationClip clip)
@@ -166,6 +171,17 @@ namespace uTinyRipper.Classes
 			node.Add(AnimatorParametersName, @params.ExportYAML(container));
 			node.Add(AnimatorLayersName, layers.ExportYAML(container));
 			return node;
+		}
+
+		private PPtr<MonoBehaviour>[] GetStateBehaviours(StateRange range)
+		{
+			PPtr<MonoBehaviour>[] stateMachineBehaviours = new PPtr<MonoBehaviour>[range.Count];
+			for (int i = 0; i < range.Count; i++)
+			{
+				int index = (int)StateMachineBehaviourVectorDescription.StateMachineBehaviourIndices[range.StartIndex + i];
+				stateMachineBehaviours[i] = StateMachineBehaviours[index];
+			}
+			return stateMachineBehaviours;
 		}
 
 		public override string ExportExtension => "controller";

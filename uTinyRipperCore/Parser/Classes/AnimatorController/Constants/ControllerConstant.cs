@@ -15,10 +15,10 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public LayerConstant GetLayerByStateMachineIndex(int index)
 		{
-			foreach(OffsetPtr<LayerConstant> layerPtr in LayerArray)
+			for (int i = 0; i < LayerArray.Length; i++)
 			{
-				LayerConstant layer = layerPtr.Instance;
-				if(layer.StateMachineIndex == index && layer.StateMachineMotionSetIndex == 0)
+				ref LayerConstant layer = ref LayerArray[i].Instance;
+				if (layer.StateMachineIndex == index && layer.StateMachineMotionSetIndex == 0)
 				{
 					return layer;
 				}
@@ -30,7 +30,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		{
 			for (int i = 0; i < LayerArray.Length; i++)
 			{
-				LayerConstant layer = LayerArray[i].Instance;
+				ref LayerConstant layer = ref LayerArray[i].Instance;
 				if (layer.StateMachineIndex == index && layer.StateMachineMotionSetIndex == 0)
 				{
 					return i;

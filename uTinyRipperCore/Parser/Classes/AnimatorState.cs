@@ -18,8 +18,7 @@ namespace uTinyRipper.Classes
 			IReadOnlyDictionary<uint, string> TOS = controller.TOS;
 			if (!TOS.ContainsKey(0))
 			{
-				Dictionary<uint, string> tos = new Dictionary<uint, string>();
-				tos.Add(0, string.Empty);
+				Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
 				tos.AddRange(controller.TOS);
 				TOS = tos;
 			}
@@ -31,9 +30,23 @@ namespace uTinyRipper.Classes
 			Speed = state.Speed;
 			CycleOffset = state.CycleOffset;
 
-			// skip Transitions because not all state exists right now
+			// skip Transitions because not all state exists at this moment
 
-			StateMachineBehaviours = controller.GetStateBeahviours(stateMachineIndex, stateIndex);
+			// exclude StateMachine's behaviours
+			int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
+			PPtr<MonoBehaviour>[] machineBehaviours = controller.GetStateBehaviours(layerIndex);
+			PPtr<MonoBehaviour>[] stateBehaviours = controller.GetStateBehaviours(stateMachineIndex, stateIndex);
+			List<PPtr<MonoBehaviour>> behaviours = new List<PPtr<MonoBehaviour>>(stateBehaviours.Length);
+			foreach (PPtr<MonoBehaviour> ptr in stateBehaviours)
+			{
+#warning TEMP: remove comment when AnimatorStateMachine's child StateMachines has been implemented
+				//if (!machineBehaviours.Contains(ptr))
+				{
+					behaviours.Add(ptr);
+				}
+			}
+			StateMachineBehaviours = behaviours.ToArray();
+
 			Position = position;
 			IKOnFeet = state.IKOnFeet;
 			WriteDefaultValues = state.GetWriteDefaultValues(controller.File.Version);
