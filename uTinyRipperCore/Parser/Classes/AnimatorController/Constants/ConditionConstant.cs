@@ -20,9 +20,9 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 
-		public AnimatorConditionMode ConditionMode { get; private set; }
-		public uint EventID { get; private set; }
-		public float EventThreshold { get; private set; }
-		public float ExitTime { get; private set; }
+		public AnimatorConditionMode ConditionMode { get; set; }
+		public uint EventID { get; set; }
+		public float EventThreshold { get; set; }
+		public float ExitTime { get; set; }
 	}
 }

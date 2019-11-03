@@ -47,10 +47,10 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public int LeftBorder { get; private set; }
-		public int RightBorder { get; private set; }
-		public int TopBorder { get; private set; }
-		public int BottomBorder { get; private set; }
+		public int LeftBorder { get; set; }
+		public int RightBorder { get; set; }
+		public int TopBorder { get; set; }
+		public int BottomBorder { get; set; }
 
 		public const string TextureName = "m_Texture";
 		public const string ColorName = "m_Color";

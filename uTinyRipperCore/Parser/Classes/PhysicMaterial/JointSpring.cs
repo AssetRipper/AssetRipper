@@ -21,9 +21,9 @@ namespace uTinyRipper.Classes.PhysicMaterials
 			return node;
 		}
 
-		public float Spring { get; private set; }
-		public float Damper { get; private set; }
-		public float TargetPosition { get; private set; }
+		public float Spring { get; set; }
+		public float Damper { get; set; }
+		public float TargetPosition { get; set; }
 
 		public const string SpringName = "spring";
 		public const string DamperName = "damper";

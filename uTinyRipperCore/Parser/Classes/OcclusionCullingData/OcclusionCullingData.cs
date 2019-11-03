@@ -31,21 +31,21 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Not Release
 		/// </summary>
-		public static bool IsReadStaticRenderers(TransferInstructionFlags flags)
+		public static bool HasStaticRenderers(TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease();
 		}
 
 		public void Initialize(IExportContainer container, OcclusionCullingSettings cullingSetting)
 		{
-			m_PVSData = (byte[])cullingSetting.PVSData;
-			int renderCount = cullingSetting.StaticRenderers.Count;
-			int portalCount = cullingSetting.Portals.Count;
+			PVSData = (byte[])cullingSetting.PVSData;
+			int renderCount = cullingSetting.StaticRenderers.Length;
+			int portalCount = cullingSetting.Portals.Length;
 			OcclusionScene scene = new OcclusionScene(cullingSetting.SceneGUID, renderCount, portalCount);
-			m_scenes = new OcclusionScene[] { scene };
+			Scenes = new OcclusionScene[] { scene };
 
-			m_staticRenderers = new SceneObjectIdentifier[scene.SizeRenderers];
-			m_portals = new SceneObjectIdentifier[scene.SizePortals];
+			StaticRenderers = new SceneObjectIdentifier[scene.SizeRenderers];
+			Portals = new SceneObjectIdentifier[scene.SizePortals];
 			SetIDs(container, cullingSetting, scene);
 		}
 
@@ -53,14 +53,14 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_PVSData = reader.ReadByteArray();
+			PVSData = reader.ReadByteArray();
 			reader.AlignStream();
 
-			m_scenes = reader.ReadAssetArray<OcclusionScene>();
-			if (IsReadStaticRenderers(reader.Flags))
+			Scenes = reader.ReadAssetArray<OcclusionScene>();
+			if (HasStaticRenderers(reader.Flags))
 			{
-				m_staticRenderers = reader.ReadAssetArray<SceneObjectIdentifier>();
-				m_portals = reader.ReadAssetArray<SceneObjectIdentifier>();
+				StaticRenderers = reader.ReadAssetArray<SceneObjectIdentifier>();
+				Portals = reader.ReadAssetArray<SceneObjectIdentifier>();
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace uTinyRipper.Classes
 			}
 
 			// if >= 5.5.0 and !Release this asset containts renderer data
-			if (IsReadStaticRenderers(container.Flags))
+			if (HasStaticRenderers(container.Flags))
 			{
 				return;
 			}
@@ -106,9 +106,9 @@ namespace uTinyRipper.Classes
 			}
 
 			int maxRenderer = Scenes.Max(j => j.IndexRenderers + j.SizeRenderers);
-			m_staticRenderers = new SceneObjectIdentifier[maxRenderer];
+			StaticRenderers = new SceneObjectIdentifier[maxRenderer];
 			int maxPortal = Scenes.Max(j => j.IndexPortals + j.SizePortals);
-			m_portals = new SceneObjectIdentifier[maxPortal];
+			Portals = new SceneObjectIdentifier[maxPortal];
 
 			foreach(OcclusionCullingSettings cullingSetting in cullingSettings)
 			{
@@ -120,13 +120,13 @@ namespace uTinyRipper.Classes
 				}
 
 				OcclusionScene scene = Scenes[sceneIndex];
-				if (scene.SizeRenderers != cullingSetting.StaticRenderers.Count)
+				if (scene.SizeRenderers != cullingSetting.StaticRenderers.Length)
 				{
-					throw new Exception($"Scene renderer count {scene.SizeRenderers} doesn't match with given {cullingSetting.StaticRenderers.Count}");
+					throw new Exception($"Scene renderer count {scene.SizeRenderers} doesn't match with given {cullingSetting.StaticRenderers.Length}");
 				}
-				if (scene.SizePortals != cullingSetting.Portals.Count)
+				if (scene.SizePortals != cullingSetting.Portals.Length)
 				{
-					throw new Exception($"Scene portal count {scene.SizePortals} doesn't match with given {cullingSetting.Portals.Count}");
+					throw new Exception($"Scene portal count {scene.SizePortals} doesn't match with given {cullingSetting.Portals.Length}");
 				}
 				SetIDs(container, cullingSetting, scene);
 			}
@@ -134,18 +134,18 @@ namespace uTinyRipper.Classes
 
 		private void SetIDs(IExportContainer container, OcclusionCullingSettings cullingSetting, OcclusionScene scene)
 		{
-			for (int i = 0; i < cullingSetting.StaticRenderers.Count; i++)
+			for (int i = 0; i < cullingSetting.StaticRenderers.Length; i++)
 			{
 				PPtr<Renderer> prenderer = cullingSetting.StaticRenderers[i];
 				Renderer renderer = prenderer.FindAsset(cullingSetting.File);
-				m_staticRenderers[scene.IndexRenderers + i] = CreateObjectID(container, renderer);
+				StaticRenderers[scene.IndexRenderers + i] = CreateObjectID(container, renderer);
 			}
 
-			for (int i = 0; i < cullingSetting.Portals.Count; i++)
+			for (int i = 0; i < cullingSetting.Portals.Length; i++)
 			{
 				PPtr<OcclusionPortal> pportal = cullingSetting.Portals[i];
 				OcclusionPortal portal = pportal.FindAsset(cullingSetting.File);
-				m_portals[scene.IndexPortals + i] = CreateObjectID(container, portal);
+				Portals[scene.IndexPortals + i] = CreateObjectID(container, portal);
 			}
 		}
 
@@ -158,19 +158,14 @@ namespace uTinyRipper.Classes
 
 		public override string ExportPath => Path.Combine(AssetsKeyword, OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
 
-		public IReadOnlyList<byte> PVSData => m_PVSData;
-		public IReadOnlyList<OcclusionScene> Scenes => m_scenes;
-		public IReadOnlyList<SceneObjectIdentifier> StaticRenderers => m_staticRenderers;
-		public IReadOnlyList<SceneObjectIdentifier> Portals => m_portals;
+		public byte[] PVSData { get; set; }
+		public OcclusionScene[] Scenes { get; set; }
+		public SceneObjectIdentifier[] StaticRenderers { get; set; } = Array.Empty<SceneObjectIdentifier>();
+		public SceneObjectIdentifier[] Portals { get; set; } = Array.Empty<SceneObjectIdentifier>();
 
 		public const string PVSDataName = "m_PVSData";
 		public const string ScenesName = "m_Scenes";
 		public const string StaticRenderersName = "m_StaticRenderers";
 		public const string PortalsName = "m_Portals";
-
-		private byte[] m_PVSData;
-		private OcclusionScene[] m_scenes;
-		private SceneObjectIdentifier[] m_staticRenderers = Array.Empty<SceneObjectIdentifier>();
-		private SceneObjectIdentifier[] m_portals = Array.Empty<SceneObjectIdentifier>();
 	}
 }

@@ -23,8 +23,8 @@ namespace uTinyRipper.Classes.NavMeshDatas
 			return node;
 		}
 
-		public int I { get; private set; }
-		public int N { get; private set; }
+		public int I { get; set; }
+		public int N { get; set; }
 
 		public const string MinName = "min";
 		public const string MaxName = "max";

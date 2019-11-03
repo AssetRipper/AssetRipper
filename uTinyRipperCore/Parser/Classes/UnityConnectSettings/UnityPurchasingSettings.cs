@@ -20,8 +20,8 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 			return node;
 		}
 
-		public bool Enabled { get; private set; }
-		public bool TestMode { get; private set; }
+		public bool Enabled { get; set; }
+		public bool TestMode { get; set; }
 
 		public const string EnabledName = "m_Enabled";
 		public const string TestModeName = "m_TestMode";

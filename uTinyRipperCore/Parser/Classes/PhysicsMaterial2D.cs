@@ -26,8 +26,8 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public float Friction { get; private set; }
-		public float Bounciness { get; private set; }
+		public float Friction { get; set; }
+		public float Bounciness { get; set; }
 
 		public const string FrictionName = "friction";
 		public const string BouncinessName = "bounciness";

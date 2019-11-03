@@ -30,7 +30,7 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public bool Open { get; private set; }
+		public bool Open { get; set; }
 
 		public const string OpenName = "m_Open";
 		public const string CenterName = "m_Center";

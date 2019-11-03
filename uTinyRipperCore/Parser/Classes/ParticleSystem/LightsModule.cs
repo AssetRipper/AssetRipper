@@ -56,12 +56,12 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public float Ratio { get; private set; }
-		public bool RandomDistribution { get; private set; }
-		public bool Color { get; private set; }
-		public bool Range { get; private set; }
-		public bool Intensity { get; private set; }
-		public int MaxLights { get; private set; }
+		public float Ratio { get; set; }
+		public bool RandomDistribution { get; set; }
+		public bool Color { get; set; }
+		public bool Range { get; set; }
+		public bool Intensity { get; set; }
+		public int MaxLights { get; set; }
 
 		public const string RatioName = "ratio";
 		public const string LightName = "light";

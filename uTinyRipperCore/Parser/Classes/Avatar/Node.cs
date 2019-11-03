@@ -24,8 +24,8 @@ namespace uTinyRipper.Classes.Avatars
 			return $"P:{ParentId} A:{AxesId}";
 		}
 
-		public int ParentId { get; private set; }
-		public int AxesId { get; private set; }
+		public int ParentId { get; set; }
+		public int AxesId { get; set; }
 
 		public const string ParentIdName = "m_ParentId";
 		public const string AxesIdName = "m_AxesId";

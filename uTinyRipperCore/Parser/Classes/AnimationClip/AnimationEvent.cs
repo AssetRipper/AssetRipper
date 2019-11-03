@@ -9,17 +9,11 @@ namespace uTinyRipper.Classes.AnimationClips
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool IsReadObjectReferenceParameter(Version version)
-		{
-			return version.IsGreaterEqual(2, 6);
-		}
+		public static bool HasObjectReferenceParameter(Version version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool IsReadIntParameter(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
+		public static bool HasIntParameter(Version version) => version.IsGreaterEqual(3);
 
 		public void Read(AssetReader reader)
 		{
@@ -27,12 +21,12 @@ namespace uTinyRipper.Classes.AnimationClips
 
 			FunctionName = reader.ReadString();
 			StringParameter = reader.ReadString();
-			if (IsReadObjectReferenceParameter(reader.Version))
+			if (HasObjectReferenceParameter(reader.Version))
 			{
 				ObjectReferenceParameter.Read(reader);
 				FloatParameter = reader.ReadSingle();
 			}
-			if (IsReadIntParameter(reader.Version))
+			if (HasIntParameter(reader.Version))
 			{
 				IntParameter = reader.ReadInt32();
 			}
@@ -57,15 +51,15 @@ namespace uTinyRipper.Classes.AnimationClips
 			return node;
 		}
 
-		public float Time { get; private set; }
-		public string FunctionName { get; private set; }
+		public float Time { get; set; }
+		public string FunctionName { get; set; }
 		/// <summary>
 		/// Data
 		/// </summary>
-		public string StringParameter { get; private set; }
-		public float FloatParameter { get; private set; }
-		public int IntParameter { get; private set; }
-		public int MessageOptions { get; private set; }
+		public string StringParameter { get; set; }
+		public float FloatParameter { get; set; }
+		public int IntParameter { get; set; }
+		public int MessageOptions { get; set; }
 
 		public const string TimeName = "time";
 		public const string FunctionNameName = "functionName";

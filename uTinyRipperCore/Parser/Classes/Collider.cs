@@ -14,39 +14,30 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 3.4.0 and greater
 		/// </summary>
-		public static bool IsReadEnabled(Version version)
-		{
-			return version.IsGreaterEqual(3, 4);
-		}
+		public static bool HasEnabled(Version version) => version.IsGreaterEqual(3, 4);
 
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		private static bool IsMaterialConditional(Version version)
-		{
-			return version.IsGreaterEqual(4, 3);
-		}
+		private static bool IsMaterialConditional(Version version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		private static bool IsTriggerConditional(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		private static bool IsTriggerConditional(Version version) => version.IsGreaterEqual(5);
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (!IsMaterialConditional(reader.Version) || IsReadMaterial)
+			if (!IsMaterialConditional(reader.Version) || IncludesMaterial)
 			{
 				Material.Read(reader);
 			}
-			if (!IsTriggerConditional(reader.Version) || IsReadIsTrigger)
+			if (!IsTriggerConditional(reader.Version) || IncludesIsTrigger)
 			{
 				IsTrigger = reader.ReadBoolean();
 			}
-			if (IsReadEnabled(reader.Version))
+			if (HasEnabled(reader.Version))
 			{
 				Enabled = reader.ReadBoolean();
 				reader.AlignStream();
@@ -66,11 +57,11 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			if (IsReadMaterial)
+			if (IncludesMaterial)
 			{
 				node.Add(MaterialName, Material.ExportYAML(container));
 			}
-			if (IsReadIsTrigger)
+			if (IncludesIsTrigger)
 			{
 				node.Add(IsTriggerName, IsTrigger);
 			}
@@ -83,7 +74,7 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 		}
 		
-		public bool IsTrigger { get; private set; }
+		public bool IsTrigger { get; set; }
 		public bool Enabled { get; protected set; }
 
 		public const string MaterialName = "m_Material";
@@ -92,7 +83,7 @@ namespace uTinyRipper.Classes
 
 		public PPtr<PhysicMaterial> Material;
 
-		protected abstract bool IsReadMaterial { get; }
-		protected abstract bool IsReadIsTrigger { get; }
+		protected abstract bool IncludesMaterial { get; }
+		protected abstract bool IncludesIsTrigger { get; }
 	}
 }

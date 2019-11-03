@@ -18,10 +18,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Less than 2017.1
 		/// </summary>
-		public static bool IsReadPath(Version version)
-		{
-			return version.IsLess(2017);
-		}
+		public static bool HasPath(Version version) => version.IsLess(2017);
 
 		public override void Read(AssetReader reader)
 		{
@@ -30,7 +27,7 @@ namespace uTinyRipper.Classes
 			Script = reader.ReadByteArray();
 			reader.AlignStream();
 
-			if (IsReadPath(reader.Version))
+			if (HasPath(reader.Version))
 			{
 				PathName = reader.ReadString();
 			}

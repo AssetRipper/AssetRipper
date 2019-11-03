@@ -13,31 +13,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 5.0.0 and greater
-		/// </summary>
-		public static bool IsReadStateMachineBehaviourVectorDescription(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
-		/// <summary>
-		/// 5.0.0b2 to 5.1.x and 5.4.0 and greater
-		/// </summary>
-		public static bool IsReadMultiThreadedStateMachine(Version version)
-		{
-			// unknown start version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 2) || version.IsGreaterEqual(5, 4);
-		}
-
-		/// <summary>
-		/// 5.1.0 and greater
-		/// </summary>
-		private static bool IsAlignMultiThreadedStateMachine(Version version)
-		{
-			return version.IsGreaterEqual(5, 1);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// unknown version
 			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
@@ -60,6 +36,24 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
+		public static bool HasStateMachineBehaviourVectorDescription(Version version) => version.IsGreaterEqual(5);
+		/// <summary>
+		/// 5.0.0b2 to 5.1.x and 5.4.0 and greater
+		/// </summary>
+		public static bool HasMultiThreadedStateMachine(Version version)
+		{
+			// unknown start version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 2) || version.IsGreaterEqual(5, 4);
+		}
+
+		/// <summary>
+		/// 5.1.0 and greater
+		/// </summary>
+		private static bool IsAlignMultiThreadedStateMachine(Version version) => version.IsGreaterEqual(5, 1);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -68,19 +62,19 @@ namespace uTinyRipper.Classes
 			Controller.Read(reader);
 			m_TOS.Clear();
 			m_TOS.Read(reader);
-			m_animationClips = reader.ReadAssetArray<PPtr<AnimationClip>>();
+			AnimationClips = reader.ReadAssetArray<PPtr<AnimationClip>>();
 
-			if (IsReadStateMachineBehaviourVectorDescription(reader.Version))
+			if (HasStateMachineBehaviourVectorDescription(reader.Version))
 			{
 				StateMachineBehaviourVectorDescription.Read(reader);
-				m_stateMachineBehaviours = reader.ReadAssetArray<PPtr<MonoBehaviour>>();
+				StateMachineBehaviours = reader.ReadAssetArray<PPtr<MonoBehaviour>>();
 			}
 
 			if (!IsAlignMultiThreadedStateMachine(reader.Version))
 			{
 				reader.AlignStream();
 			}
-			if (IsReadMultiThreadedStateMachine(reader.Version))
+			if (HasMultiThreadedStateMachine(reader.Version))
 			{
 				MultiThreadedStateMachine = reader.ReadBoolean();
 			}
@@ -101,7 +95,7 @@ namespace uTinyRipper.Classes
 			{
 				yield return asset;
 			}
-			if (IsReadStateMachineBehaviourVectorDescription(context.Version))
+			if (HasStateMachineBehaviourVectorDescription(context.Version))
 			{
 				foreach (PPtr<Object> asset in context.FetchDependencies(StateMachineBehaviours, StateMachineBehavioursName))
 				{
@@ -112,7 +106,7 @@ namespace uTinyRipper.Classes
 		
 		public PPtr<MonoBehaviour>[] GetStateBeahviours(int stateMachineIndex, int stateIndex)
 		{
-			if (IsReadStateMachineBehaviourVectorDescription(File.Version))
+			if (HasStateMachineBehaviourVectorDescription(File.Version))
 			{
 				int layerIndex = Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
 				StateMachineConstant stateMachine = Controller.StateMachineArray[stateMachineIndex].Instance;
@@ -153,14 +147,14 @@ namespace uTinyRipper.Classes
 		{
 			AnimatorControllerExportCollection collection = (AnimatorControllerExportCollection)container.CurrentCollection;
 
-			AnimatorControllerParameter[] @params = new AnimatorControllerParameter[Controller.Values.Instance.ValueArray.Count];
-			for(int i = 0; i < Controller.Values.Instance.ValueArray.Count; i++)
+			AnimatorControllerParameter[] @params = new AnimatorControllerParameter[Controller.Values.Instance.ValueArray.Length];
+			for(int i = 0; i < Controller.Values.Instance.ValueArray.Length; i++)
 			{
 				@params[i] = new AnimatorControllerParameter(this, i);
 			}
 
-			AnimatorControllerLayer[] layers = new AnimatorControllerLayer[Controller.LayerArray.Count];
-			for(int i = 0; i < Controller.LayerArray.Count; i++)
+			AnimatorControllerLayer[] layers = new AnimatorControllerLayer[Controller.LayerArray.Length];
+			for(int i = 0; i < Controller.LayerArray.Length; i++)
 			{
 				int stateMachineIndex = Controller.LayerArray[i].Instance.StateMachineIndex;
 				AnimatorStateMachine stateMachine = collection.StateMachines[stateMachineIndex];
@@ -168,7 +162,7 @@ namespace uTinyRipper.Classes
 			}
 
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(AnimatorParametersName, @params.ExportYAML(container));
 			node.Add(AnimatorLayersName, layers.ExportYAML(container));
 			return node;
@@ -176,11 +170,11 @@ namespace uTinyRipper.Classes
 
 		public override string ExportExtension => "controller";
 
-		public uint ControllerSize { get; private set; }
+		public uint ControllerSize { get; set; }
 		public IReadOnlyDictionary<uint, string> TOS => m_TOS;
-		public IReadOnlyList<PPtr<AnimationClip>> AnimationClips => m_animationClips;
-		public IReadOnlyList<PPtr<MonoBehaviour>> StateMachineBehaviours => m_stateMachineBehaviours;
-		public bool MultiThreadedStateMachine { get; private set; }
+		public PPtr<AnimationClip>[] AnimationClips { get; set; }
+		public PPtr<MonoBehaviour>[] StateMachineBehaviours { get; set; }
+		public bool MultiThreadedStateMachine { get; set; }
 
 		public const string AnimatorParametersName = "m_AnimatorParameters";
 		public const string AnimatorLayersName = "m_AnimatorLayers";
@@ -192,8 +186,5 @@ namespace uTinyRipper.Classes
 		public StateMachineBehaviourVectorDescription StateMachineBehaviourVectorDescription;
 
 		private readonly Dictionary<uint, string> m_TOS = new Dictionary<uint, string>();
-
-		private PPtr<AnimationClip>[] m_animationClips;
-		private PPtr<MonoBehaviour>[] m_stateMachineBehaviours;
 	}
 }

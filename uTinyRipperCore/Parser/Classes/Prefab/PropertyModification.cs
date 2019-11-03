@@ -23,8 +23,8 @@ namespace uTinyRipper.Classes.Prefabs
 			return node;
 		}
 
-		public string PropertyPath { get; private set; }
-		public string Value { get; private set; }
+		public string PropertyPath { get; set; }
+		public string Value { get; set; }
 
 		public const string TargetName = "target";
 		public const string PropertyPathName = "propertyPath";

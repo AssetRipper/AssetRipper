@@ -21,23 +21,23 @@ namespace uTinyRipper.Project
 		{
 			EditorBuildSettings = EditorBuildSettings.CreateVirtualInstance(virtualFile);
 			EditorSettings = EditorSettings.CreateVirtualInstance(virtualFile);
-			if (!NavMeshProjectSettings.IsReadNavMeshProjectSettings(asset.File.Version))
+			if (!NavMeshProjectSettings.HasNavMeshProjectSettings(asset.File.Version))
 			{
 				NavMeshProjectSettings = NavMeshProjectSettings.CreateVirtualInstance(virtualFile);
 			}
-			if (!NetworkManager.IsReadNetworkManager(asset.File.Version))
+			if (!NetworkManager.HasNetworkManager(asset.File.Version))
 			{
 				NetworkManager = NetworkManager.CreateVirtualInstance(virtualFile);
 			}
-			if (!Physics2DSettings.IsReadPhysics2DSettings(asset.File.Version))
+			if (!Physics2DSettings.HasPhysics2DSettings(asset.File.Version))
 			{
 				Physics2DSettings = Physics2DSettings.CreateVirtualInstance(virtualFile);
 			}
-			if (!UnityConnectSettings.IsReadUnityConnectSettings(asset.File.Version))
+			if (!UnityConnectSettings.HasUnityConnectSettings(asset.File.Version))
 			{
 				UnityConnectSettings = UnityConnectSettings.CreateVirtualInstance(virtualFile);
 			}
-			if (!QualitySettings.IsReadQualitySettings(asset.File.Version))
+			if (!QualitySettings.HasQualitySettings(asset.File.Version))
 			{
 				QualitySettings = QualitySettings.CreateVirtualInstance(virtualFile);
 			}

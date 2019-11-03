@@ -20,31 +20,19 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 		/// <summary>
 		/// Less than 2017.2
 		/// </summary>
-		public static bool IsReadEnabledPlatforms(Version version)
-		{
-			return version.IsLess(2017, 2);
-		}
+		public static bool HasEnabledPlatforms(Version version) => version.IsLess(2017, 2);
 		/// <summary>
 		/// Less than 2017.1 or Not Release
 		/// </summary>
-		public static bool IsReadIosGameId(Version version, TransferInstructionFlags flags)
-		{
-			return version.IsLess(2017) || !flags.IsRelease();
-		}
+		public static bool HasIosGameId(Version version, TransferInstructionFlags flags) => version.IsLess(2017) || !flags.IsRelease();
 		/// <summary>
 		/// 2017.1 and greater and Not Release
 		/// </summary>
-		public static bool IsReadGameIds(Version version, TransferInstructionFlags flags)
-		{
-			return version.IsGreaterEqual(2017) && !flags.IsRelease();
-		}
+		public static bool HasGameIds(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(2017) && !flags.IsRelease();
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool IsReadGameId(Version version)
-		{
-			return version.IsGreaterEqual(2017);
-		}
+		public static bool HasGameId(Version version) => version.IsGreaterEqual(2017);
 		
 		public void Read(AssetReader reader)
 		{
@@ -53,23 +41,23 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 			TestMode = reader.ReadBoolean();
 			reader.AlignStream();
 
-			if(IsReadEnabledPlatforms(reader.Version))
+			if (HasEnabledPlatforms(reader.Version))
 			{
 				EnabledPlatforms = reader.ReadInt32();
 			}
-			if(IsReadIosGameId(reader.Version, reader.Flags))
+			if (HasIosGameId(reader.Version, reader.Flags))
 			{
 				IosGameId = reader.ReadString();
 				AndroidGameId = reader.ReadString();
 			}
 #if UNIVERSAL
-			if (IsReadGameIds(reader.Version, reader.Flags))
+			if (HasGameIds(reader.Version, reader.Flags))
 			{
 				m_gameIds = new Dictionary<string, string>();
 				m_gameIds.Read(reader);
 			}
 #endif
-			if(IsReadGameId(reader.Version))
+			if (HasGameId(reader.Version))
 			{
 				GameId = reader.ReadString();
 			}
@@ -90,7 +78,7 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 
 		private string GetIosGameId(Version version, TransferInstructionFlags flags)
 		{
-			if(IsReadIosGameId(version, flags))
+			if (HasIosGameId(version, flags))
 			{
 				return IosGameId;
 			}
@@ -98,7 +86,7 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 		}
 		private string GetAndroidGameId(Version version, TransferInstructionFlags flags)
 		{
-			if (IsReadIosGameId(version, flags))
+			if (HasIosGameId(version, flags))
 			{
 				return AndroidGameId;
 			}
@@ -107,7 +95,7 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 		private IReadOnlyDictionary<string, string> GetGameIds(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadGameIds(version, flags))
+			if (HasGameIds(version, flags))
 			{
 				return GameIds;
 			}
@@ -116,19 +104,19 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 		}
 		private string GetGameId(Version version)
 		{
-			return IsReadGameId(version) ? GameId : string.Empty;
+			return HasGameId(version) ? GameId : string.Empty;
 		}
 
-		public bool Enabled { get; private set; }
-		public bool InitializeOnStartup { get; private set; }
-		public bool TestMode { get; private set; }
-		public int EnabledPlatforms { get; private set; }
-		public string IosGameId { get; private set; }
-		public string AndroidGameId { get; private set; }
+		public bool Enabled { get; set; }
+		public bool InitializeOnStartup { get; set; }
+		public bool TestMode { get; set; }
+		public int EnabledPlatforms { get; set; }
+		public string IosGameId { get; set; }
+		public string AndroidGameId { get; set; }
 #if UNIVERSAL
 		public IReadOnlyDictionary<string,string> GameIds => m_gameIds;
 #endif
-		public string GameId { get; private set; }
+		public string GameId { get; set; }
 
 		public const string EnabledName = "m_Enabled";
 		public const string InitializeOnStartupName = "m_InitializeOnStartup";

@@ -44,6 +44,6 @@ namespace uTinyRipper.Classes
 			return false;
 		}
 
-		public int ID { get; private set; }
+		public int ID { get; set; }
 	}
 }

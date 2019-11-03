@@ -19,7 +19,7 @@
 			return hash;
 		}
 
-		public uint StateID { get; private set; }
-		public int LayerIndex { get; private set; }
+		public uint StateID { get; set; }
+		public int LayerIndex { get; set; }
 	}
 }

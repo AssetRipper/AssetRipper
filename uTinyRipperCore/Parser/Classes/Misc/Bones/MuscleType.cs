@@ -68,10 +68,7 @@ namespace uTinyRipper.Classes.Misc
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsIncludeUpperChest(Version version)
-		{
-			return BoneTypeExtensions.IsIncludeUpperChest(version);
-		}
+		public static bool IsIncludeUpperChest(Version version) => BoneTypeExtensions.IsIncludeUpperChest(version);
 
 		public static MuscleType Update(this MuscleType _this, Version version)
 		{

@@ -7,14 +7,14 @@ namespace uTinyRipper.BundleFiles
 	/// </summary>
 	public sealed class BundleMetadata : IBundleReadable
 	{
-		private static bool IsReadBlockInfo(BundleGeneration generation)
+		private static bool HasBlockInfo(BundleGeneration generation)
 		{
 			return generation >= BundleGeneration.BF_530_x;
 		}
 
 		public void Read(BundleReader reader)
 		{
-			if (IsReadBlockInfo(reader.Generation))
+			if (HasBlockInfo(reader.Generation))
 			{
 				// unknown 0x10
 				reader.BaseStream.Position += 0x10;

@@ -14,29 +14,23 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.0.0 and greater and not Release
 		/// </summary>
-		public static bool IsReadImageContentsHash(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(5);
-		}
+		public static bool HasImageContentsHash(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsReadFallbackFormat(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
+		public static bool HasFallbackFormat(Version version) => version.IsGreaterEqual(2017, 3);
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
 #if UNIVERSAL
-			if (IsReadImageContentsHash(reader.Version, reader.Flags))
+			if (HasImageContentsHash(reader.Version, reader.Flags))
 			{
 				ImageContentsHash.Read(reader);
 			}
 #endif
-			if (IsReadFallbackFormat(reader.Version))
+			if (HasFallbackFormat(reader.Version))
 			{
 				ForcedFallbackFormat = reader.ReadInt32();
 				DownscaleFallback = reader.ReadBoolean();
@@ -47,11 +41,11 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			if (IsReadImageContentsHash(container.ExportVersion, container.ExportFlags))
+			if (HasImageContentsHash(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(ImageContentsHashName, GetImageContentsHash(container.Version, container.Flags).ExportYAML(container));
 			}
-			if (IsReadFallbackFormat(container.ExportVersion))
+			if (HasFallbackFormat(container.ExportVersion))
 			{
 				node.Add(ForcedFallbackFormatName, ForcedFallbackFormat);
 				node.Add(DownscaleFallbackName, DownscaleFallback);
@@ -62,14 +56,14 @@ namespace uTinyRipper.Classes
 		private Hash128 GetImageContentsHash(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			return IsReadImageContentsHash(version, flags) ? ImageContentsHash : default;
+			return HasImageContentsHash(version, flags) ? ImageContentsHash : default;
 #else
 			return default;
 #endif
 		}
 
-		public int ForcedFallbackFormat { get; private set; }
-		public bool DownscaleFallback { get; private set; }
+		public int ForcedFallbackFormat { get; set; }
+		public bool DownscaleFallback { get; set; }
 
 		public const string ImageContentsHashName = "m_ImageContentsHash";
 		public const string ForcedFallbackFormatName = "m_ForcedFallbackFormat";

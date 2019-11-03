@@ -65,7 +65,7 @@ namespace uTinyRipper
 				if(dinfo.Name.EndsWith(AppExtension, StringComparison.Ordinal))
 				{
 					appName = dinfo.Name.Substring(0, dinfo.Name.Length - AppExtension.Length);
-					dataPath = Path.Combine(dinfo.FullName, DataName);
+					dataPath = Path.Combine(dinfo.FullName, iOSDataName);
 					if (DirectoryUtils.Exists(dataPath))
 					{
 						return true;
@@ -97,7 +97,7 @@ namespace uTinyRipper
 		private const string iOSStreamingName = "Raw";
 
 		private const string PayloadName = "Payload";
-		private const string DataName = "Data";
+		private const string iOSDataName = "Data";
 		private const string AppExtension = ".app";
 
 		private readonly DirectoryInfo m_root;

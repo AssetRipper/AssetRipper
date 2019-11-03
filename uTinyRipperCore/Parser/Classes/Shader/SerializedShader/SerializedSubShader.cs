@@ -28,7 +28,7 @@ namespace uTinyRipper.Classes.Shaders
 		}
 
 		public SerializedPass[] Passes { get; set; }
-		public int LOD { get; private set; }
+		public int LOD { get; set; }
 
 		public SerializedTagMap Tags;
 	}

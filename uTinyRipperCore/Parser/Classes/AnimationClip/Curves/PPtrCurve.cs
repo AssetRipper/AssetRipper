@@ -17,16 +17,16 @@ namespace uTinyRipper.Classes.AnimationClips
 			Path = path;
 			ClassID = classID;
 			Script = script;
-			m_curve = null;
+			Curve = null;
 		}
 
 		public PPtrCurve(string path, string attribute, ClassIDType classID, PPtr<MonoScript> script, IReadOnlyList<PPtrKeyframe> keyframes) :
 			this(path, attribute, classID, script)
 		{
-			m_curve = new PPtrKeyframe[keyframes.Count];
+			Curve = new PPtrKeyframe[keyframes.Count];
 			for (int i = 0; i < keyframes.Count; i++)
 			{
-				m_curve[i] = keyframes[i];
+				Curve[i] = keyframes[i];
 			}
 		}
 
@@ -75,14 +75,11 @@ namespace uTinyRipper.Classes.AnimationClips
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(2017);
-		}
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(2017);
 
 		public void Read(AssetReader reader)
 		{
-			m_curve = reader.ReadAssetArray<PPtrKeyframe>();
+			Curve = reader.ReadAssetArray<PPtrKeyframe>();
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream();
@@ -136,10 +133,10 @@ namespace uTinyRipper.Classes.AnimationClips
 			return hash;
 		}
 
-		public IReadOnlyList<PPtrKeyframe> Curve => m_curve;
-		public string Attribute { get; private set; }
-		public string Path { get; private set; }
-		public ClassIDType ClassID { get; private set; }
+		public PPtrKeyframe[] Curve { get; set; }
+		public string Attribute { get; set; }
+		public string Path { get; set; }
+		public ClassIDType ClassID { get; set; }
 
 		public const string CurveName = "curve";
 		public const string AttributeName = "attribute";
@@ -148,7 +145,5 @@ namespace uTinyRipper.Classes.AnimationClips
 		public const string ScriptName = "script";
 
 		public PPtr<MonoScript> Script;
-
-		private PPtrKeyframe[] m_curve;
 	}
 }

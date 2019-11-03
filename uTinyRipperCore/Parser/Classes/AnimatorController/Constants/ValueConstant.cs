@@ -5,21 +5,18 @@
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
-		public static bool IsReadType(Version version)
-		{
-			return version.IsLess(5, 5);
-		}
+		public static bool HasType(Version version) => version.IsLess(5, 5);
 
 		public AnimatorControllerParameterType GetTypeValue(Version version)
 		{
-			return IsReadType(version) ? Type : (AnimatorControllerParameterType)TypeID;
+			return HasType(version) ? Type : (AnimatorControllerParameterType)TypeID;
 		}
 
 		public void Read(AssetReader reader)
 		{
 			ID = reader.ReadUInt32();
 			TypeID = reader.ReadUInt32();
-			if (IsReadType(reader.Version))
+			if (HasType(reader.Version))
 			{
 				Type = (AnimatorControllerParameterType)reader.ReadUInt32();
 			}
@@ -41,9 +38,9 @@
 		/// <summary>
 		/// Unique ID. Key in dictionary
 		/// </summary>
-		public uint ID { get; private set; }
-		public uint TypeID { get; private set; }
-		public AnimatorControllerParameterType Type { get; private set; }
-		public int Index { get; private set; }
+		public uint ID { get; set; }
+		public uint TypeID { get; set; }
+		public AnimatorControllerParameterType Type { get; set; }
+		public int Index { get; set; }
 	}
 }

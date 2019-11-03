@@ -13,7 +13,7 @@
 
 		public bool IsZero => X.IsZero && Y.IsZero && Z.IsZero && W.IsZero;
 
-		public string Name { get; private set; }
+		public string Name { get; set; }
 
 		public SerializedShaderFloatValue X;
 		public SerializedShaderFloatValue Y;

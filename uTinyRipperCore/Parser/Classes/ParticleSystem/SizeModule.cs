@@ -8,17 +8,14 @@ namespace uTinyRipper.Classes.ParticleSystems
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool IsReadAxes(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
+		public static bool HasAxes(Version version) => version.IsGreaterEqual(5, 4);
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 			
 			Curve.Read(reader);
-			if (IsReadAxes(reader.Version))
+			if (HasAxes(reader.Version))
 			{
 				Y.Read(reader);
 				Z.Read(reader);
@@ -39,14 +36,14 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		private MinMaxCurve GetExportY(Version version)
 		{
-			return IsReadAxes(version) ? Y : new MinMaxCurve(1.0f, 1.0f, 1.0f, 0.0f, 1.0f);
+			return HasAxes(version) ? Y : new MinMaxCurve(1.0f, 1.0f, 1.0f, 0.0f, 1.0f);
 		}
 		private MinMaxCurve GetExportZ(Version version)
 		{
-			return IsReadAxes(version) ? Z : new MinMaxCurve(1.0f, 1.0f, 1.0f, 0.0f, 1.0f);
+			return HasAxes(version) ? Z : new MinMaxCurve(1.0f, 1.0f, 1.0f, 0.0f, 1.0f);
 		}
 
-		public bool SeparateAxes { get; private set; }
+		public bool SeparateAxes { get; set; }
 
 		public const string CurveName = "curve";
 		public const string YName = "y";

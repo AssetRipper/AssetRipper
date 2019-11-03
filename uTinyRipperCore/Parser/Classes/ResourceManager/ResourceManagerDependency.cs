@@ -9,7 +9,7 @@ namespace uTinyRipper.Classes.ResourceManagers
 		public void Read(AssetReader reader)
 		{
 			Object.Read(reader);
-			m_dependencies = reader.ReadAssetArray<PPtr<Object>>();
+			Dependencies = reader.ReadAssetArray<PPtr<Object>>();
 		}
 
 		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
@@ -29,13 +29,11 @@ namespace uTinyRipper.Classes.ResourceManagers
 			return node;
 		}
 
-		public IReadOnlyList<PPtr<Object>> Dependencies => m_dependencies;
+		public PPtr<Object>[] Dependencies { get; set; }
 
 		public const string ObjectName = "m_Object";
 		public const string DependenciesName = "m_Dependencies";
 
 		public PPtr<Object> Object;
-
-		private PPtr<Object>[] m_dependencies;
 	}
 }

@@ -17,7 +17,7 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 			Controller.Read(reader);
-			m_clips = reader.ReadAssetArray<AnimationClipOverride>();
+			Clips = reader.ReadAssetArray<AnimationClipOverride>();
 		}
 
 		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
@@ -65,13 +65,11 @@ namespace uTinyRipper.Classes
 
 		public override string ExportExtension => "overrideController";
 
-		public IReadOnlyList<AnimationClipOverride> Clips => m_clips;
+		public AnimationClipOverride[] Clips { get; set; }
 
 		public const string ControllerName = "m_Controller";
 		public const string ClipsName = "m_Clips";
 
 		public PPtr<RuntimeAnimatorController> Controller;
-
-		private AnimationClipOverride[] m_clips;
 	}
 }

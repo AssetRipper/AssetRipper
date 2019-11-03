@@ -24,14 +24,11 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool IsBuiltIn(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
+		public static bool IsBuiltIn(Version version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		private static bool IsReadFontSize(Version version)
+		private static bool HasFontSize(Version version)
 		{
 			return version.IsGreaterEqual(3, 0);
 		}
@@ -91,7 +88,7 @@ namespace uTinyRipper.Classes
 				ClipOffset.Read(reader);
 				FixedWidth = reader.ReadSingle();
 				FixedHeight = reader.ReadSingle();
-				if (IsReadFontSize(reader.Version))
+				if (HasFontSize(reader.Version))
 				{
 					FontSize = reader.ReadInt32();
 					FontStyle = (FontStyle)reader.ReadInt32();
@@ -158,7 +155,7 @@ namespace uTinyRipper.Classes
 				ClipOffset.Write(writer);
 				writer.Write(FixedWidth);
 				writer.Write(FixedHeight);
-				if (IsReadFontSize(writer.Version))
+				if (HasFontSize(writer.Version))
 				{
 					writer.Write(FontSize);
 					writer.Write((int)FontStyle);
@@ -202,18 +199,18 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public string Name { get; private set; }
-		public int FontSize { get; private set; }
-		public FontStyle FontStyle { get; private set; }
-		public TextAnchor Alignment { get; private set; }
-		public bool WordWrap { get; private set; }
-		public bool RichText { get; private set; }
-		public TextClipping TextClipping { get; private set; }
-		public ImagePosition ImagePosition { get; private set; }
-		public float FixedWidth { get; private set; }
-		public float FixedHeight { get; private set; }
-		public bool StretchWidth { get; private set; }
-		public bool StretchHeight { get; private set; }
+		public string Name { get; set; }
+		public int FontSize { get; set; }
+		public FontStyle FontStyle { get; set; }
+		public TextAnchor Alignment { get; set; }
+		public bool WordWrap { get; set; }
+		public bool RichText { get; set; }
+		public TextClipping TextClipping { get; set; }
+		public ImagePosition ImagePosition { get; set; }
+		public float FixedWidth { get; set; }
+		public float FixedHeight { get; set; }
+		public bool StretchWidth { get; set; }
+		public bool StretchHeight { get; set; }
 
 		public const string NameName = "m_Name";
 		public const string NormalName = "m_Normal";

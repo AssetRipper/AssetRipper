@@ -193,10 +193,10 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 0 means current file
 		/// </summary>
-		public int FileIndex { get; private set; }
+		public int FileIndex { get; set; }
 		/// <summary>
 		/// It is acts more like a hash in some cases
 		/// </summary>
-		public long PathID { get; private set; }
+		public long PathID { get; set; }
 	}
 }

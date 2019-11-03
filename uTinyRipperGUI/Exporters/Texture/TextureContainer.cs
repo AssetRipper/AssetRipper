@@ -18,7 +18,7 @@ namespace uTinyRipperGUI.Exporters
 				return;
 			}
 
-			if (Texture2D.IsReadStreamData(texture.File.Version))
+			if (Texture2D.HasStreamData(texture.File.Version))
 			{
 				string path = texture.StreamData.Path;
 				if (path != string.Empty)

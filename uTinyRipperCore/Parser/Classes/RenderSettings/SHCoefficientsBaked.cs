@@ -39,18 +39,18 @@ namespace uTinyRipper.Classes.RenderSettingss
 			return node;
 		}
 
-		public float Sh0 { get; private set; }
-		public float Sh1 { get; private set; }
-		public float Sh2 { get; private set; }
-		public float Sh3 { get; private set; }
-		public float Sh4 { get; private set; }
-		public float Sh5 { get; private set; }
-		public float Sh6 { get; private set; }
-		public float Sh7 { get; private set; }
-		public float Sh8 { get; private set; }
-		public float Sh9 { get; private set; }
-		public float Sh10 { get; private set; }
-		public float Sh11 { get; private set; }
+		public float Sh0 { get; set; }
+		public float Sh1 { get; set; }
+		public float Sh2 { get; set; }
+		public float Sh3 { get; set; }
+		public float Sh4 { get; set; }
+		public float Sh5 { get; set; }
+		public float Sh6 { get; set; }
+		public float Sh7 { get; set; }
+		public float Sh8 { get; set; }
+		public float Sh9 { get; set; }
+		public float Sh10 { get; set; }
+		public float Sh11 { get; set; }
 
 		public const string Sh0Name = "sh0";
 		public const string Sh1Name = "sh1";

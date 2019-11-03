@@ -31,10 +31,10 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public int Left { get; private set; }
-		public int Right { get; private set; }
-		public int Top { get; private set; }
-		public int Bottom { get; private set; }
+		public int Left { get; set; }
+		public int Right { get; set; }
+		public int Top { get; set; }
+		public int Bottom { get; set; }
 
 		public const string LeftName = "m_Left";
 		public const string RightName = "m_Right";

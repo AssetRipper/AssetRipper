@@ -98,9 +98,9 @@ namespace uTinyRipper.Project
 			}
 
 			MonoScript script = m_scripts[asset];
-			if (!MonoScript.IsReadAssemblyName(script.File.Version, script.File.Flags) || s_unityEngine.IsMatch(script.AssemblyName))
+			if (!MonoScript.HasAssemblyName(script.File.Version, script.File.Flags) || s_unityEngine.IsMatch(script.AssemblyName))
 			{
-				if (MonoScript.IsReadNamespace(script.File.Version))
+				if (MonoScript.HasNamespace(script.File.Version))
 				{
 					int fileID = Compute(script.Namespace, script.ClassName);
 					return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));

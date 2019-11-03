@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using uTinyRipper.Converters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Lights
@@ -8,10 +7,10 @@ namespace uTinyRipper.Classes.Lights
 	{
 		public void Read(AssetReader reader)
 		{
-			m_table = new float[13];
-			for(int i = 0; i < m_table.Length; i++)
+			Table = new float[13];
+			for(int i = 0; i < Table.Length; i++)
 			{
-				m_table[i] = reader.ReadSingle();
+				Table[i] = reader.ReadSingle();
 			}
 		}
 
@@ -34,7 +33,7 @@ namespace uTinyRipper.Classes.Lights
 			return node;
 		}
 
-		public IReadOnlyList<float> Table => m_table;
+		public float[] Table { get; set; }
 
 		public const string Table0Name = "m_Table[0]";
 		public const string Table1Name = "m_Table[1]";
@@ -49,7 +48,5 @@ namespace uTinyRipper.Classes.Lights
 		public const string Table10Name = "m_Table[10]";
 		public const string Table11Name = "m_Table[11]";
 		public const string Table12Name = "m_Table[12]";
-
-		private float[] m_table;
 	}
 }

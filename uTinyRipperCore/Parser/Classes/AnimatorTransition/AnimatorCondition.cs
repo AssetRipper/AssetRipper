@@ -23,9 +23,9 @@ namespace uTinyRipper.Classes.AnimatorTransitions
 			return node;
 		}
 
-		public AnimatorConditionMode ConditionMode { get; private set; }
-		public string ConditionEvent { get; private set; }
-		public float EventTreshold { get; private set; }
+		public AnimatorConditionMode ConditionMode { get; set; }
+		public string ConditionEvent { get; set; }
+		public float EventTreshold { get; set; }
 
 		public const string ConditionModeName = "m_ConditionMode";
 		public const string ConditionEventName = "m_ConditionEvent";

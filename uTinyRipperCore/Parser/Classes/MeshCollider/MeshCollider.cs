@@ -12,51 +12,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// Less than 5.0.0
-		/// </summary>
-		public static bool IsReadSmoothSphereCollisions(Version version)
-		{
-			return version.IsLess(5);
-		}
-		/// <summary>
-		/// 2017.3 and greater
-		/// </summary>
-		public static bool IsReadCookingOptions(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
-		/// <summary>
-		/// 5.5.0 to 2018.3 exclusive
-		/// </summary>
-		public static bool IsReadSkinWidth(Version version)
-		{
-			return version.IsGreaterEqual(5, 5) && version.IsLess(2018, 3);
-		}
-		/// <summary>
-		/// 5.5.0 to 2017.3 exclusive
-		/// </summary>
-		public static bool IsReadInflateMesh(Version version)
-		{
-			return version.IsGreaterEqual(5, 5) && version.IsLess(2017, 3);
-		}
-		
-		/// <summary>
-		/// Less than 2.1.0
-		/// </summary>
-		private static bool IsReadMeshFirst(Version version)
-		{
-			return version.IsLess(2, 1);
-		}
-		/// <summary>
-		/// 2.1.0 and greater
-		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(2, 1);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(2017, 3))
 			{
@@ -66,21 +22,47 @@ namespace uTinyRipper.Classes
 			return 2;
 		}
 
+		/// <summary>
+		/// Less than 5.0.0
+		/// </summary>
+		public static bool HasSmoothSphereCollisions(Version version) => version.IsLess(5);
+		/// <summary>
+		/// 2017.3 and greater
+		/// </summary>
+		public static bool HasCookingOptions(Version version) => version.IsGreaterEqual(2017, 3);
+		/// <summary>
+		/// 5.5.0 to 2018.3 exclusive
+		/// </summary>
+		public static bool HasSkinWidth(Version version) => version.IsGreaterEqual(5, 5) && version.IsLess(2018, 3);
+		/// <summary>
+		/// 5.5.0 to 2017.3 exclusive
+		/// </summary>
+		public static bool HasInflateMesh(Version version) => version.IsGreaterEqual(5, 5) && version.IsLess(2017, 3);
+		
+		/// <summary>
+		/// Less than 2.1.0
+		/// </summary>
+		private static bool IsMeshFirst(Version version) => version.IsLess(2, 1);
+		/// <summary>
+		/// 2.1.0 and greater
+		/// </summary>
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadMeshFirst(reader.Version))
+			if (IsMeshFirst(reader.Version))
 			{
 				Mesh.Read(reader);
 			}
 
-			if (IsReadSmoothSphereCollisions(reader.Version))
+			if (HasSmoothSphereCollisions(reader.Version))
 			{
 				SmoothSphereCollisions = reader.ReadBoolean();
 			}
 			Convex = reader.ReadBoolean();
-			if (IsReadInflateMesh(reader.Version))
+			if (HasInflateMesh(reader.Version))
 			{
 				InflateMesh = reader.ReadBoolean();
 			}
@@ -89,17 +71,17 @@ namespace uTinyRipper.Classes
 				reader.AlignStream();
 			}
 
-			if (IsReadCookingOptions(reader.Version))
+			if (HasCookingOptions(reader.Version))
 			{
 				CookingOptions = (MeshColliderCookingOptions)reader.ReadInt32();
 				reader.AlignStream();
 			}
-			if (IsReadSkinWidth(reader.Version))
+			if (HasSkinWidth(reader.Version))
 			{
 				SkinWidth = reader.ReadSingle();
 			}
 
-			if (!IsReadMeshFirst(reader.Version))
+			if (!IsMeshFirst(reader.Version))
 			{
 				Mesh.Read(reader);
 			}
@@ -118,7 +100,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ConvexName, Convex);
 			node.Add(CookingOptionsName, (int)GetCookingOptions(container.Version));
 			node.Add(SkinWidthName, GetSkinWidth(container.Version));
@@ -128,7 +110,7 @@ namespace uTinyRipper.Classes
 
 		private MeshColliderCookingOptions GetCookingOptions(Version version)
 		{
-			if(IsReadCookingOptions(version))
+			if (HasCookingOptions(version))
 			{
 				return CookingOptions;
 			}
@@ -136,7 +118,7 @@ namespace uTinyRipper.Classes
 			{
 				MeshColliderCookingOptions options = MeshColliderCookingOptions.CookForFasterSimulation |
 					MeshColliderCookingOptions.EnableMeshCleaning | MeshColliderCookingOptions.WeldColocatedVertices;
-				if (IsReadInflateMesh(version))
+				if (HasInflateMesh(version))
 				{
 					options |= InflateMesh ? MeshColliderCookingOptions.InflateConvexMesh : MeshColliderCookingOptions.None;
 				}
@@ -146,14 +128,14 @@ namespace uTinyRipper.Classes
 
 		private float GetSkinWidth(Version version)
 		{
-			return IsReadSkinWidth(version) ? SkinWidth : 0.01f;
+			return HasSkinWidth(version) ? SkinWidth : 0.01f;
 		}
 
-		public bool Convex { get; private set; }
-		public bool SmoothSphereCollisions { get; private set; }
-		public bool InflateMesh { get; private set; }
-		public MeshColliderCookingOptions CookingOptions { get; private set; }
-		public float SkinWidth { get; private set; }
+		public bool Convex { get; set; }
+		public bool SmoothSphereCollisions { get; set; }
+		public bool InflateMesh { get; set; }
+		public MeshColliderCookingOptions CookingOptions { get; set; }
+		public float SkinWidth { get; set; }
 
 		public const string ConvexName = "m_Convex";
 		public const string CookingOptionsName = "m_CookingOptions";
@@ -162,7 +144,7 @@ namespace uTinyRipper.Classes
 
 		public PPtr<Mesh> Mesh;
 
-		protected override bool IsReadIsTrigger => true;
-		protected override bool IsReadMaterial => true;
+		protected override bool IncludesIsTrigger => true;
+		protected override bool IncludesMaterial => true;
 	}
 }

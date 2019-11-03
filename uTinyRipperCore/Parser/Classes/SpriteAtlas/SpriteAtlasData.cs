@@ -10,10 +10,7 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool IsReadAtlasRectOffset(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
+		public static bool HasAtlasRectOffset(Version version) => version.IsGreaterEqual(2017, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -21,7 +18,7 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			AlphaTexture.Read(reader);
 			TextureRect.Read(reader);
 			TextureRectOffset.Read(reader);
-			if(IsReadAtlasRectOffset(reader.Version))
+			if (HasAtlasRectOffset(reader.Version))
 			{
 				AtlasRectOffset.Read(reader);
 			}
@@ -55,8 +52,8 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		public SpritePackingRotation PackingRotation => (SpritePackingRotation)((SettingsRaw >> 2) & 0xF);
 		public SpriteMeshType MeshType => (SpriteMeshType)((SettingsRaw >> 6) & 0x1);
 
-		public float DownscaleMultiplier { get; private set; }
-		public uint SettingsRaw { get; private set; }
+		public float DownscaleMultiplier { get; set; }
+		public uint SettingsRaw { get; set; }
 
 		public const string TextureName = "texture";
 		public const string AlphaTextureName = "alphaTexture";

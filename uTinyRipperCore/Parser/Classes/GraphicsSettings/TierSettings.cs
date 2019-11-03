@@ -25,30 +25,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			Automatic = false;
 		}
 
-		/// <summary>
-		/// 5.4.0 and greater
-		/// </summary>
-		public static bool IsReadTier(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
-
-		/// <summary>
-		/// Less than 5.5.0
-		/// </summary>
-		private static bool IsReadBuildTargetString(Version version)
-		{
-			return version.IsLess(5, 5);
-		}
-		/// <summary>
-		/// Less than 5.5.0
-		/// </summary>
-		private static bool IsReadPlatfromSettings(Version version)
-		{
-			return version.IsLess(5, 5);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// changed default value for Settings.Prefer32BitShadowMaps to platform specific
 			if (version.IsGreaterEqual(2017))
@@ -73,9 +50,23 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			return 1;
 		}
 
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		public static bool HasTier(Version version) => version.IsGreaterEqual(5, 4);
+
+		/// <summary>
+		/// Less than 5.5.0
+		/// </summary>
+		private static bool HasBuildTargetString(Version version) => version.IsLess(5, 5);
+		/// <summary>
+		/// Less than 5.5.0
+		/// </summary>
+		private static bool HasPlatfromSettings(Version version) => version.IsLess(5, 5);
+
 		public void Read(AssetReader reader)
 		{
-			if (IsReadBuildTargetString(reader.Version))
+			if (HasBuildTargetString(reader.Version))
 			{
 				string buildTarget = reader.ReadString();
 				BuildTarget = StringToBuildGroup(buildTarget);
@@ -84,12 +75,12 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			{
 				BuildTarget = (BuildTargetGroup)reader.ReadInt32();
 			}
-			if (IsReadTier(reader.Version))
+			if (HasTier(reader.Version))
 			{
 				Tier = (GraphicsTier)reader.ReadInt32();
 			}
 
-			if (IsReadPlatfromSettings(reader.Version))
+			if (HasPlatfromSettings(reader.Version))
 			{
 				PlatformShaderSettings settings = reader.ReadAsset<PlatformShaderSettings>();
 				Settings = new TierGraphicsSettingsEditor(settings, reader.Version, reader.Flags);
@@ -106,7 +97,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(BuildTargetName, (int)BuildTarget);
 			node.Add(TierName, (int)GetTier(container.Version));
 			node.Add(SettingsName, Settings.ExportYAML(container));
@@ -116,7 +107,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 
 		private GraphicsTier GetTier(Version version)
 		{
-			return IsReadTier(version) ? Tier : GraphicsTier.Tier1;
+			return HasTier(version) ? Tier : GraphicsTier.Tier1;
 		}
 
 		private static BuildTargetGroup StringToBuildGroup(string group)
@@ -159,9 +150,9 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			}
 		}
 
-		public BuildTargetGroup BuildTarget { get; private set; }
-		public GraphicsTier Tier { get; private set; }
-		public bool Automatic { get; private set; }
+		public BuildTargetGroup BuildTarget { get; set; }
+		public GraphicsTier Tier { get; set; }
+		public bool Automatic { get; set; }
 
 		public const string BuildTargetName = "m_BuildTarget";
 		public const string TierName = "m_Tier";

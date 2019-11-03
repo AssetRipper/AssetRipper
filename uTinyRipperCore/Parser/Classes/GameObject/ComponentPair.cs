@@ -9,14 +9,11 @@ namespace uTinyRipper.Classes.GameObjects
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
-		public static bool IsReadClassID(Version version)
-		{
-			return version.IsLess(5, 5);
-		}
+		public static bool HasClassID(Version version) => version.IsLess(5, 5);
 
 		public void Read(AssetReader reader)
 		{
-			if (IsReadClassID(reader.Version))
+			if (HasClassID(reader.Version))
 			{
 				ClassID = (ClassIDType)reader.ReadInt32();
 			}
@@ -35,7 +32,7 @@ namespace uTinyRipper.Classes.GameObjects
 			yield return context.FetchDependency(Component, ComponentName);
 		}
 
-		public ClassIDType ClassID { get; private set; }
+		public ClassIDType ClassID { get; set; }
 
 		public const string ComponentName = "component";
 

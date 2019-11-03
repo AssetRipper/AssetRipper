@@ -64,7 +64,5 @@ namespace uTinyRipper
 		}
 
 		public ArchiveHeader Header { get; private set; }
-
-		private readonly string m_filePath;
 	}
 }

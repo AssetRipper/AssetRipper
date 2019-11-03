@@ -28,8 +28,8 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public bool InWorldSpace { get; private set; }
-		public bool RandomizePerFrame { get; private set; }
+		public bool InWorldSpace { get; set; }
+		public bool RandomizePerFrame { get; set; }
 
 		public const string XName = "x";
 		public const string YName = "y";

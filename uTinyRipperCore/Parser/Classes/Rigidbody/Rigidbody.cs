@@ -11,37 +11,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 1.5.0 and greater
-		/// </summary>
-		public static bool IsReadInterpolate(Version version)
-		{
-			return version.IsGreaterEqual(1, 5);
-		}
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		public static bool IsReadCollisionDetection(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
-		
-		/// <summary>
-		/// Less than 3.2.0
-		/// </summary>
-		private static bool IsReadFreezeRotation(Version version)
-		{
-			return version.IsLess(3, 2);
-		}
-		/// <summary>
-		/// 3.2.0 and greater
-		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(3, 2);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(3, 2))
 			{
@@ -49,6 +19,25 @@ namespace uTinyRipper.Classes
 			}
 			return 1;
 		}
+
+		/// <summary>
+		/// 1.5.0 and greater
+		/// </summary>
+		public static bool HasInterpolate(Version version) => version.IsGreaterEqual(1, 5);
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool HasCollisionDetection(Version version) => version.IsGreaterEqual(3);
+		
+		/// <summary>
+		/// Less than 3.2.0
+		/// </summary>
+		private static bool HasFreezeRotation(Version version) => version.IsLess(3, 2);
+
+		/// <summary>
+		/// 3.2.0 and greater
+		/// </summary>
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(3, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -59,7 +48,7 @@ namespace uTinyRipper.Classes
 			AngularDrag = reader.ReadSingle();
 			UseGravity = reader.ReadBoolean();
 			IsKinematic = reader.ReadBoolean();
-			if (IsReadInterpolate(reader.Version))
+			if (HasInterpolate(reader.Version))
 			{
 				Interpolate = (RigidbodyInterpolation)reader.ReadByte();
 				if (IsAlign(reader.Version))
@@ -68,7 +57,7 @@ namespace uTinyRipper.Classes
 				}
 			}
 
-			if (IsReadFreezeRotation(reader.Version))
+			if (HasFreezeRotation(reader.Version))
 			{
 				bool freezeRotation = reader.ReadBoolean();
 				Constraints = freezeRotation ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.None;
@@ -77,7 +66,7 @@ namespace uTinyRipper.Classes
 			{
 				Constraints = (RigidbodyConstraints)reader.ReadInt32();
 			}
-			if (IsReadCollisionDetection(reader.Version))
+			if (HasCollisionDetection(reader.Version))
 			{
 				CollisionDetection = (CollisionDetectionMode)reader.ReadInt32();
 			}
@@ -86,7 +75,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(MassName, Mass);
 			node.Add(DragName, Drag);
 			node.Add(AngularDragName, AngularDrag);
@@ -98,14 +87,14 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public float Mass { get; private set; }
-		public float Drag { get; private set; }
-		public float AngularDrag { get; private set; }
-		public bool UseGravity { get; private set; }
-		public bool IsKinematic { get; private set; }
-		public RigidbodyInterpolation Interpolate { get; private set; }
-		public RigidbodyConstraints Constraints { get; private set; }
-		public CollisionDetectionMode CollisionDetection { get; private set; }
+		public float Mass { get; set; }
+		public float Drag { get; set; }
+		public float AngularDrag { get; set; }
+		public bool UseGravity { get; set; }
+		public bool IsKinematic { get; set; }
+		public RigidbodyInterpolation Interpolate { get; set; }
+		public RigidbodyConstraints Constraints { get; set; }
+		public CollisionDetectionMode CollisionDetection { get; set; }
 
 		public const string MassName = "m_Mass";
 		public const string DragName = "m_Drag";

@@ -29,7 +29,7 @@ namespace uTinyRipper.Classes
 			return virtualFile.CreateAsset((assetInfo) => new AnimatorTransition(assetInfo, parameters));
 		}
 
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			return 1;
 		}
@@ -37,7 +37,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.ForceAddSerializedVersion(GetSerializedVersion(container.Version));
+			node.ForceAddSerializedVersion(ToSerializedVersion(container.Version));
 			return node;
 		}
 	}

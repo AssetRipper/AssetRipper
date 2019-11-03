@@ -29,8 +29,8 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			return node;
 		}
 
-		public int AtlasSize { get; private set; }
-		public int FirstSystemId { get; private set; }
+		public int AtlasSize { get; set; }
+		public int FirstSystemId { get; set; }
 
 		public const string AtlasSizeName = "atlasSize";
 		public const string AtlasHashName = "atlasHash";

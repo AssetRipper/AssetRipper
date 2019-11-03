@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 using uTinyRipper.Classes;
@@ -75,7 +74,7 @@ namespace uTinyRipper.Classes.Misc
 		public void Read(AssetReader reader)
 		{
 			NumItems = reader.ReadUInt32();
-			m_data = reader.ReadByteArray();
+			Data = reader.ReadByteArray();
 			reader.AlignStream();
 		}
 
@@ -87,12 +86,10 @@ namespace uTinyRipper.Classes.Misc
 			return node;
 		}
 
-		public uint NumItems { get; private set; }
-		public IReadOnlyList<byte> Data => m_data;
+		public uint NumItems { get; set; }
+		public byte[] Data { get; set; }
 
 		public const string NumItemsName = "m_NumItems";
 		public const string DataName = "m_Data";
-
-		private byte[] m_data;
 	}
 }

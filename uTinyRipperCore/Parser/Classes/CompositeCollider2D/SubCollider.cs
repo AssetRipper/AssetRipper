@@ -9,7 +9,7 @@ namespace uTinyRipper.Classes.CompositeCollider2Ds
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		private static bool IsReadDoubleColliderPath(Version version)
+		private static bool HasDoubleColliderPath(Version version)
 		{
 			return version.IsGreaterEqual(2018, 3);
 		}
@@ -17,7 +17,7 @@ namespace uTinyRipper.Classes.CompositeCollider2Ds
 		public void Read(AssetReader reader)
 		{
 			Collider.Read(reader);
-			m_colliderPaths = reader.ReadAssetArrayArray<IntPoint>();
+			ColliderPaths = reader.ReadAssetArrayArray<IntPoint>();
 			reader.AlignStream();
 		}
 
@@ -30,13 +30,13 @@ namespace uTinyRipper.Classes.CompositeCollider2Ds
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(ColliderName, Collider.ExportYAML(container));
-			if (IsReadDoubleColliderPath(container.ExportVersion))
+			if (HasDoubleColliderPath(container.ExportVersion))
 			{
 				node.Add(ColliderPathsName, ColliderPaths.ExportYAML(container));
 			}
 			else
 			{
-				IReadOnlyList<IntPoint> colliderPaths = ColliderPaths.Count == 0 ? System.Array.Empty<IntPoint>() : ColliderPaths[0];
+				IReadOnlyList<IntPoint> colliderPaths = ColliderPaths.Length == 0 ? System.Array.Empty<IntPoint>() : ColliderPaths[0];
 				node.Add(ColliderPathsName, colliderPaths.ExportYAML(container));
 			}
 			return node;
@@ -46,8 +46,6 @@ namespace uTinyRipper.Classes.CompositeCollider2Ds
 		public const string ColliderPathsName = "m_ColliderPaths";
 
 		public PPtr<Collider2D> Collider;
-		public IReadOnlyList<IReadOnlyList<IntPoint>> ColliderPaths => m_colliderPaths;
-
-		private IntPoint[][] m_colliderPaths;
+		public IReadOnlyList<IntPoint>[] ColliderPaths { get; set; }
 	}
 }

@@ -78,9 +78,9 @@ namespace uTinyRipper.Classes
 		public const string BName = "b";
 		public const string AName = "a";
 
-		public float R { get; private set; }
-		public float G { get; private set; }
-		public float B { get; private set; }
-		public float A { get; private set; }
+		public float R { get; set; }
+		public float G { get; set; }
+		public float B { get; set; }
+		public float A { get; set; }
 	}
 }

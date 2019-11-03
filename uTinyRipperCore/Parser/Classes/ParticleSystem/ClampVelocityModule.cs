@@ -8,24 +8,15 @@ namespace uTinyRipper.Classes.ParticleSystems
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool IsReadInWorldSpace(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
+		public static bool HasInWorldSpace(Version version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool IsReadMultiplyDragByParticleSize(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
+		public static bool HasMultiplyDragByParticleSize(Version version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool IsReadDrag(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
+		public static bool HasDrag(Version version) => version.IsGreaterEqual(2017, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -36,11 +27,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 			Z.Read(reader);
 			Magnitude.Read(reader);
 			SeparateAxis = reader.ReadBoolean();
-			if (IsReadInWorldSpace(reader.Version))
+			if (HasInWorldSpace(reader.Version))
 			{
 				InWorldSpace = reader.ReadBoolean();
 			}
-			if (IsReadMultiplyDragByParticleSize(reader.Version))
+			if (HasMultiplyDragByParticleSize(reader.Version))
 			{
 				MultiplyDragByParticleSize = reader.ReadBoolean();
 				MultiplyDragByParticleVelocity = reader.ReadBoolean();
@@ -48,7 +39,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			reader.AlignStream();
 			
 			Dampen = reader.ReadSingle();
-			if (IsReadDrag(reader.Version))
+			if (HasDrag(reader.Version))
 			{
 				Drag.Read(reader);
 			}
@@ -72,22 +63,22 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		private bool GetExportMultiplyDragByParticleSize(Version version)
 		{
-			return IsReadMultiplyDragByParticleSize(version) ? MultiplyDragByParticleSize : true;
+			return HasMultiplyDragByParticleSize(version) ? MultiplyDragByParticleSize : true;
 		}
 		private bool GetExportMultiplyDragByParticleVelocity(Version version)
 		{
-			return IsReadMultiplyDragByParticleSize(version) ? MultiplyDragByParticleVelocity : true;
+			return HasMultiplyDragByParticleSize(version) ? MultiplyDragByParticleVelocity : true;
 		}
 		private MinMaxCurve GetExportDrag(Version version)
 		{
-			return IsReadDrag(version) ? Drag : new MinMaxCurve(0.0f);
+			return HasDrag(version) ? Drag : new MinMaxCurve(0.0f);
 		}
 
-		public bool SeparateAxis { get; private set; }
-		public bool InWorldSpace { get; private set; }
-		public bool MultiplyDragByParticleSize { get; private set; }
-		public bool MultiplyDragByParticleVelocity { get; private set; }
-		public float Dampen { get; private set; }
+		public bool SeparateAxis { get; set; }
+		public bool InWorldSpace { get; set; }
+		public bool MultiplyDragByParticleSize { get; set; }
+		public bool MultiplyDragByParticleVelocity { get; set; }
+		public float Dampen { get; set; }
 
 		public const string XName = "x";
 		public const string YName = "y";

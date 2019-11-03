@@ -18,26 +18,10 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		public static bool IsSceneCompatible(Object asset)
+		public static int ToSerializedVersion(Version version)
 		{
-			if (asset.ClassID == ClassIDType.GameObject)
-			{
-				return true;
-			}
-			if (asset.ClassID.IsSceneSettings())
-			{
-				return true;
-			}
-			if (asset.ClassID == ClassIDType.MonoBehaviour)
-			{
-				MonoBehaviour monoBeh = (MonoBehaviour)asset;
-				if (!monoBeh.IsSceneObject)
-				{
-					return false;
-				}
-			}
-
-			return asset is Component;
+			// min version is 2nd
+			return 2;
 		}
 
 		/// <summary>
@@ -66,10 +50,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 3.5.0 and greater and Not Release
 		/// </summary>
-		public static bool HasOcclusionBakeSettings(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(3, 5);
-		}
+		public static bool HasOcclusionBakeSettings(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
@@ -102,10 +83,26 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		private static bool IsOcclusionBakeSettingsFirst(Version version) => version.IsGreaterEqual(5, 5);
 
-		private static int GetSerializedVersion(Version version)
+		public static bool IsSceneCompatible(Object asset)
 		{
-			// min version is 2nd
-			return 2;
+			if (asset.ClassID == ClassIDType.GameObject)
+			{
+				return true;
+			}
+			if (asset.ClassID.IsSceneSettings())
+			{
+				return true;
+			}
+			if (asset.ClassID == ClassIDType.MonoBehaviour)
+			{
+				MonoBehaviour monoBeh = (MonoBehaviour)asset;
+				if (!monoBeh.IsSceneObject)
+				{
+					return false;
+				}
+			}
+
+			return asset is Component;
 		}
 
 		public override void Read(AssetReader reader)
@@ -114,7 +111,7 @@ namespace uTinyRipper.Classes
 
 			if (HasReadPVSData(reader.Version))
 			{
-				m_PVSData = reader.ReadByteArray();
+				PVSData = reader.ReadByteArray();
 				reader.AlignStream();
 			}
 			if (HasQueryMode(reader.Version))
@@ -137,11 +134,11 @@ namespace uTinyRipper.Classes
 			}
 			if (HasStaticRenderers(reader.Version, reader.Flags))
 			{
-				m_staticRenderers = reader.ReadAssetArray<PPtr<Renderer>>();
+				StaticRenderers = reader.ReadAssetArray<PPtr<Renderer>>();
 			}
 			if (HasPortals(reader.Version, reader.Flags))
 			{
-				m_portals = reader.ReadAssetArray<PPtr<OcclusionPortal>>();
+				Portals = reader.ReadAssetArray<PPtr<OcclusionPortal>>();
 			}
 			if (HasViewCellSize(reader.Version, reader.Flags))
 			{
@@ -177,7 +174,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(OcclusionBakeSettingsName, GetExportOcclusionBakeSettings(container).ExportYAML(container));
 			node.Add(SceneGUIDName, GetExportSceneGUID(container).ExportYAML(container));
 			node.Add(OcclusionCullingDataName, GetExportOcclusionCullingData(container).ExportYAML(container));
@@ -229,12 +226,12 @@ namespace uTinyRipper.Classes
 			return default;
 		}
 
-		public IReadOnlyList<byte> PVSData => m_PVSData;
-		public int QueryMode { get; private set; }
+		public byte[] PVSData { get; set; }
+		public int QueryMode { get; set; }
 		/// <summary>
 		/// PVSObjectsArray/m_PVSObjectsArray previously
 		/// </summary>
-		public IReadOnlyList<PPtr<Renderer>> StaticRenderers => m_staticRenderers;
+		public PPtr<Renderer>[] StaticRenderers { get; set; }
 		public float ViewCellSize
 		{
 			get => OcclusionBakeSettings.ViewCellSize;
@@ -243,7 +240,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// PVSPortalsArray previously
 		/// </summary>
-		public IReadOnlyList<PPtr<OcclusionPortal>> Portals => m_portals;
+		public PPtr<OcclusionPortal>[] Portals { get; set; }
 
 		public OcclusionBakeSettings OcclusionBakeSettings;
 		public GUID SceneGUID;
@@ -257,9 +254,5 @@ namespace uTinyRipper.Classes
 		public const string OcclusionCullingDataName = "m_OcclusionCullingData";
 		public const string StaticRenderersName = "m_StaticRenderers";
 		public const string PortalsName = "m_Portals";
-
-		private byte[] m_PVSData;
-		private PPtr<Renderer>[] m_staticRenderers;
-		private PPtr<OcclusionPortal>[] m_portals;
 	}
 }

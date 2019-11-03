@@ -33,7 +33,7 @@ namespace uTinyRipper.Classes
 
 			// skip Transitions because not all state exists right now
 
-			m_stateMachineBehaviours = controller.GetStateBeahviours(stateMachineIndex, stateIndex);
+			StateMachineBehaviours = controller.GetStateBeahviours(stateMachineIndex, stateIndex);
 			Position = position;
 			IKOnFeet = state.IKOnFeet;
 			WriteDefaultValues = state.GetWriteDefaultValues(controller.File.Version);
@@ -58,7 +58,7 @@ namespace uTinyRipper.Classes
 			return virtualFile.CreateAsset((assetInfo) => new AnimatorState(assetInfo, controller, stateMachineIndex, stateIndex, position));
 		}
 
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// TODO:
 			return 5;
@@ -72,7 +72,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(SpeedName, Speed);
 			node.Add(CycleOffsetName, CycleOffset);
 			node.Add(TransitionsName, Transitions.ExportYAML(container));
@@ -96,22 +96,22 @@ namespace uTinyRipper.Classes
 
 		public override string ExportExtension => throw new NotSupportedException();
 
-		public float Speed { get; private set; }
-		public float CycleOffset { get; private set; }
-		public IReadOnlyList<PPtr<AnimatorStateTransition>> Transitions { get; set; }
-		public IReadOnlyList<PPtr<MonoBehaviour>> StateMachineBehaviours => m_stateMachineBehaviours;
-		public bool IKOnFeet { get; private set; }
-		public bool WriteDefaultValues { get; private set; }
-		public bool Mirror { get; private set; }
-		public bool SpeedParameterActive { get; private set; }
-		public bool MirrorParameterActive { get; private set; }
-		public bool CycleOffsetParameterActive { get; private set; }
-		public bool TimeParameterActive { get; private set; }
-		public string Tag { get; private set; }
-		public string SpeedParameter { get; private set; }
-		public string MirrorParameter { get; private set; }
-		public string CycleOffsetParameter { get; private set; }
-		public string TimeParameter { get; private set; }
+		public float Speed { get; set; }
+		public float CycleOffset { get; set; }
+		public PPtr<AnimatorStateTransition>[] Transitions { get; set; }
+		public PPtr<MonoBehaviour>[] StateMachineBehaviours { get; set; }
+		public bool IKOnFeet { get; set; }
+		public bool WriteDefaultValues { get; set; }
+		public bool Mirror { get; set; }
+		public bool SpeedParameterActive { get; set; }
+		public bool MirrorParameterActive { get; set; }
+		public bool CycleOffsetParameterActive { get; set; }
+		public bool TimeParameterActive { get; set; }
+		public string Tag { get; set; }
+		public string SpeedParameter { get; set; }
+		public string MirrorParameter { get; set; }
+		public string CycleOffsetParameter { get; set; }
+		public string TimeParameter { get; set; }
 
 		public const string SpeedName = "m_Speed";
 		public const string CycleOffsetName = "m_CycleOffset";
@@ -134,7 +134,5 @@ namespace uTinyRipper.Classes
 
 		public Vector3f Position;
 		public PPtr<Motion> Motion;
-
-		private PPtr<MonoBehaviour>[] m_stateMachineBehaviours;
 	}
 }

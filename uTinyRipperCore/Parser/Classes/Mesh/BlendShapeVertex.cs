@@ -34,7 +34,7 @@ namespace uTinyRipper.Classes.Meshes
 			return node;
 		}
 
-		public uint Index { get; private set; }
+		public uint Index { get; set; }
 
 		public const string VertexName = "vertex";
 		public const string NormalName = "normal";

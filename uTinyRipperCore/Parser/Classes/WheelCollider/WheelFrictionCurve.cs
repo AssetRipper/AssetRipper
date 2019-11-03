@@ -25,11 +25,11 @@ namespace uTinyRipper.Classes.WheelColliders
 			return node;
 		}
 
-		public float ExtremumSlip { get; private set; }
-		public float ExtremumValue { get; private set; }
-		public float AsymptoteSlip { get; private set; }
-		public float AsymptoteValue { get; private set; }
-		public float Stiffness { get; private set; }
+		public float ExtremumSlip { get; set; }
+		public float ExtremumValue { get; set; }
+		public float AsymptoteSlip { get; set; }
+		public float AsymptoteValue { get; set; }
+		public float Stiffness { get; set; }
 
 		public const string ExtremumSlipName = "m_ExtremumSlip";
 		public const string ExtremumValueName = "m_ExtremumValue";

@@ -13,72 +13,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		public static bool IsReadResolution(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
-		public static bool IsReadIrradianceQuality(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
-		public static bool IsReadEnvironmentResolution(Version version)
-		{
-			// unknown version
-			return version.IsEqual(5, 0, 0, VersionType.Beta);
-		}
-		public static bool IsReadIsTransparent(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
-		public static bool IsReadEdgeStitching(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
-		/// <summary>
-		/// 5.0.1 and greater
-		/// </summary>
-		public static bool IsReadPushoff(Version version)
-		{
-			return version.IsGreaterEqual(5, 1);
-		}
-		public static bool IsReadBakedLightmapTag(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
-		/// <summary>
-		/// 2019.1 and greater
-		/// </summary>
-		public static bool IsReadLimitLightmapCount(Version version)
-		{
-			return version.IsGreaterEqual(2019);
-		}
-		public static bool IsReadAOQuality(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
-
-		/// <summary>
-		/// 2019.1 and greater
-		/// </summary>
-		private static bool IsReadPushoffFirst(Version version)
-		{
-			return version.IsGreaterEqual(2019);
-		}
-		/// <summary>
-		/// 5.0.1 and greater
-		/// </summary>
-		private static bool IsReadBakedLightmapTagFirst(Version version)
-		{
-			return version.IsGreaterEqual(5, 1);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// Default value for ModellingTolerance has been changed from 0.001 to 0.01
 			// unknown version
@@ -92,74 +27,120 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// 5.0.0f1 and greater (NOTE: unknown version)
+		/// </summary>
+		public static bool HasResolution(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		/// <summary>
+		/// 5.0.0f1 and greater (NOTE: unknown version)
+		/// </summary>
+		public static bool HasIrradianceQuality(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		/// <summary>
+		/// 5.0.0bx (NOTE: unknown version)
+		/// </summary>
+		public static bool HasEnvironmentResolution(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
+		/// <summary>
+		/// 5.0.0f1 and greater (NOTE: unknown version)
+		/// </summary>
+		public static bool HasIsTransparent(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		/// <summary>
+		/// 5.0.0f1 and greater (NOTE: unknown version)
+		/// </summary>
+		public static bool HasEdgeStitching(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		/// <summary>
+		/// 5.0.1 and greater
+		/// </summary>
+		public static bool HasPushoff(Version version) => version.IsGreaterEqual(5, 1);
+		/// <summary>
+		/// 5.0.0f1 and greater (NOTE: unknown version)
+		/// </summary>
+		public static bool HasBakedLightmapTag(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool HasLimitLightmapCount(Version version) => version.IsGreaterEqual(2019);
+		/// <summary>
+		/// 5.0.0f1 and greater (NOTE: unknown version)
+		/// </summary>
+		public static bool HasAOQuality(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		private static bool IsPushoffFirst(Version version) => version.IsGreaterEqual(2019);
+		/// <summary>
+		/// 5.0.1 and greater
+		/// </summary>
+		private static bool IsBakedLightmapTagFirst(Version version) => version.IsGreaterEqual(5, 1);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadResolution(reader.Version))
+			if (HasResolution(reader.Version))
 			{
 				Resolution = reader.ReadSingle();
 			}
 			ClusterResolution = reader.ReadSingle();
 			IrradianceBudget = reader.ReadInt32();
-			if (IsReadIrradianceQuality(reader.Version))
+			if (HasIrradianceQuality(reader.Version))
 			{
 				IrradianceQuality = reader.ReadInt32();
 			}
 			BackFaceTolerance = reader.ReadSingle();
-			if (IsReadEnvironmentResolution(reader.Version))
+			if (HasEnvironmentResolution(reader.Version))
 			{
 				EnvironmentResolution = reader.ReadInt32();
 			}
-			if (IsReadIsTransparent(reader.Version))
+			if (HasIsTransparent(reader.Version))
 			{
 				IsTransparent = reader.ReadInt32();
 				ModellingTolerance = reader.ReadSingle();
 			}
 			SystemTag = reader.ReadInt32();
-			if (IsReadEdgeStitching(reader.Version))
+			if (HasEdgeStitching(reader.Version))
 			{
 				EdgeStitching = reader.ReadInt32();
 				BlurRadius = reader.ReadInt32();
 				DirectLightQuality = reader.ReadInt32();
 				AntiAliasingSamples = reader.ReadInt32();
 			}
-			if (IsReadPushoff(reader.Version))
+			if (HasPushoff(reader.Version))
 			{
-				if (IsReadPushoffFirst(reader.Version))
+				if (IsPushoffFirst(reader.Version))
 				{
 					Pushoff = reader.ReadSingle();
 				}
 			}
-			if (IsReadBakedLightmapTag(reader.Version))
+			if (HasBakedLightmapTag(reader.Version))
 			{
-				if (IsReadBakedLightmapTagFirst(reader.Version))
+				if (IsBakedLightmapTagFirst(reader.Version))
 				{
 					BakedLightmapTag = reader.ReadInt32();
 				}
 			}
-			if (IsReadPushoff(reader.Version))
+			if (HasPushoff(reader.Version))
 			{
-				if (!IsReadPushoffFirst(reader.Version))
+				if (!IsPushoffFirst(reader.Version))
 				{
 					Pushoff = reader.ReadSingle();
 				}
 			}
-			if (IsReadLimitLightmapCount(reader.Version))
+			if (HasLimitLightmapCount(reader.Version))
 			{
 				LimitLightmapCount = reader.ReadBoolean();
 				reader.AlignStream();
 
 				MaxLightmapCount = reader.ReadInt32();
 			}
-			if (IsReadAOQuality(reader.Version))
+			if (HasAOQuality(reader.Version))
 			{
 				AOQuality = reader.ReadInt32();
 				AOAntiAliasingSamples = reader.ReadInt32();
 			}
-			if (IsReadBakedLightmapTag(reader.Version))
+			if (HasBakedLightmapTag(reader.Version))
 			{
-				if (!IsReadBakedLightmapTagFirst(reader.Version))
+				if (!IsBakedLightmapTagFirst(reader.Version))
 				{
 					BakedLightmapTag = reader.ReadInt32();
 				}
@@ -169,7 +150,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ResolutionName, GetResolution(container.Version));
 			node.Add(ClusterResolutionName, ClusterResolution);
 			node.Add(IrradianceBudgetName, IrradianceBudget);
@@ -184,7 +165,7 @@ namespace uTinyRipper.Classes
 			node.Add(AntiAliasingSamplesName, GetAntiAliasingSamples(container.Version));
 			node.Add(BakedLightmapTagName, GetBakedLightmapTag(container.Version));
 			node.Add(PushoffName, GetPushoff(container.Version));
-			if (IsReadLimitLightmapCount(container.ExportVersion))
+			if (HasLimitLightmapCount(container.ExportVersion))
 			{
 				node.Add(LimitLightmapCountName, LimitLightmapCount);
 				node.Add(MaxLightmapCountName, GetMaxLightmapCount(container.Version));
@@ -196,80 +177,80 @@ namespace uTinyRipper.Classes
 
 		private float GetResolution(Version version)
 		{
-			return IsReadResolution(version) ? Resolution : 1.0f;
+			return HasResolution(version) ? Resolution : 1.0f;
 		}
 		private int GetIrradianceQuality(Version version)
 		{
-			return IsReadIrradianceQuality(version) ? IrradianceQuality : 8192;
+			return HasIrradianceQuality(version) ? IrradianceQuality : 8192;
 		}
 		private float GetModellingTolerance(Version version)
 		{
-			return IsReadIsTransparent(version) ? ModellingTolerance : 0.001f;
+			return HasIsTransparent(version) ? ModellingTolerance : 0.001f;
 		}
 		private int GetEdgeStitching(Version version)
 		{
-			return IsReadEdgeStitching(version) ? EdgeStitching : 1;
+			return HasEdgeStitching(version) ? EdgeStitching : 1;
 		}
 		private int GetBlurRadius(Version version)
 		{
-			return IsReadEdgeStitching(version) ? BlurRadius : 2;
+			return HasEdgeStitching(version) ? BlurRadius : 2;
 		}
 		private int GetDirectLightQuality(Version version)
 		{
-			return IsReadEdgeStitching(version) ? DirectLightQuality : 64;
+			return HasEdgeStitching(version) ? DirectLightQuality : 64;
 		}
 		private int GetAntiAliasingSamples(Version version)
 		{
-			return IsReadEdgeStitching(version) ? AntiAliasingSamples : 8;
+			return HasEdgeStitching(version) ? AntiAliasingSamples : 8;
 		}
 		private int GetBakedLightmapTag(Version version)
 		{
-			return IsReadEdgeStitching(version) ? BakedLightmapTag : -1;
+			return HasEdgeStitching(version) ? BakedLightmapTag : -1;
 		}
 		private float GetPushoff(Version version)
 		{
-			return IsReadEdgeStitching(version) ? Pushoff : 0.0001f;
+			return HasEdgeStitching(version) ? Pushoff : 0.0001f;
 		}
 		private int GetMaxLightmapCount(Version version)
 		{
-			return IsReadLimitLightmapCount(version) ? MaxLightmapCount : 1;
+			return HasLimitLightmapCount(version) ? MaxLightmapCount : 1;
 		}
 		private int GetAOQuality(Version version)
 		{
-			return IsReadEdgeStitching(version) ? AOQuality : 256;
+			return HasEdgeStitching(version) ? AOQuality : 256;
 		}
 		private int GetAOAntiAliasingSamples(Version version)
 		{
-			return IsReadEdgeStitching(version) ? AOAntiAliasingSamples : 16;
+			return HasEdgeStitching(version) ? AOAntiAliasingSamples : 16;
 		}
 
 		public override string ExportExtension => "giparams";
 
-		public float Resolution { get; private set; }
+		public float Resolution { get; set; }
 		/// <summary>
 		/// ClusterSize previously
 		/// </summary>
-		public float ClusterResolution { get; private set; }
+		public float ClusterResolution { get; set; }
 		/// <summary>
 		/// IrradBudget previously
 		/// </summary>
-		public int IrradianceBudget { get; private set; }
-		public int IrradianceQuality { get; private set; }
-		public float BackFaceTolerance { get; private set; }
-		public int EnvironmentResolution { get; private set; }
-		public int IsTransparent { get; private set; }
-		public float ModellingTolerance { get; private set; }
-		public int SystemTag { get; private set; }
-		public int EdgeStitching { get; private set; }
-		public int BlurRadius { get; private set; }
-		public int DirectLightQuality { get; private set; }
-		public int AntiAliasingSamples { get; private set; }
-		public int BakedLightmapTag { get; private set; }
-		public float Pushoff { get; private set; }
-		public bool LimitLightmapCount { get; private set; }
-		public int MaxLightmapCount { get; private set; }
-		public int AOQuality { get; private set; }
-		public int AOAntiAliasingSamples { get; private set; }
+		public int IrradianceBudget { get; set; }
+		public int IrradianceQuality { get; set; }
+		public float BackFaceTolerance { get; set; }
+		public int EnvironmentResolution { get; set; }
+		public int IsTransparent { get; set; }
+		public float ModellingTolerance { get; set; }
+		public int SystemTag { get; set; }
+		public int EdgeStitching { get; set; }
+		public int BlurRadius { get; set; }
+		public int DirectLightQuality { get; set; }
+		public int AntiAliasingSamples { get; set; }
+		public int BakedLightmapTag { get; set; }
+		public float Pushoff { get; set; }
+		public bool LimitLightmapCount { get; set; }
+		public int MaxLightmapCount { get; set; }
+		public int AOQuality { get; set; }
+		public int AOAntiAliasingSamples { get; set; }
 
 		public const string ResolutionName = "resolution";
 		public const string ClusterSizeName = "m_ClusterSize";

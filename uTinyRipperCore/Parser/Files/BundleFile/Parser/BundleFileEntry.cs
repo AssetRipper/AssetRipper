@@ -2,14 +2,14 @@ namespace uTinyRipper.BundleFiles
 {
 	public sealed class BundleFileEntry : FileEntry, IBundleReadable
 	{
-		public static bool IsReadBlobIndex(BundleGeneration generation)
+		public static bool HasBlobIndex(BundleGeneration generation)
 		{
 			return generation >= BundleGeneration.BF_530_x;
 		}
 
 		public void Read(BundleReader reader)
 		{
-			if (IsReadBlobIndex(reader.Generation))
+			if (HasBlobIndex(reader.Generation))
 			{
 				Offset = reader.ReadInt64();
 				Size = reader.ReadInt64();

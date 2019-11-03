@@ -35,10 +35,10 @@ namespace uTinyRipper.Classes.OcclusionCullingDatas
 			return node;
 		}
 
-		public int IndexRenderers { get; private set; }
-		public int SizeRenderers { get; private set; }
-		public int IndexPortals { get; private set; }
-		public int SizePortals { get; private set; }
+		public int IndexRenderers { get; set; }
+		public int SizeRenderers { get; set; }
+		public int IndexPortals { get; set; }
+		public int SizePortals { get; set; }
 
 		public const string IndexRenderersName = "indexRenderers";
 		public const string SizeRenderersName = "sizeRenderers";

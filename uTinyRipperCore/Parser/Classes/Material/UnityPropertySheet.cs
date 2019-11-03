@@ -7,7 +7,7 @@ namespace uTinyRipper.Classes.Materials
 {
 	public struct UnityPropertySheet : IAssetReadable, IYAMLExportable, IDependent
 	{
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(2017, 3))
 			{
@@ -68,7 +68,7 @@ namespace uTinyRipper.Classes.Materials
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TexEnvsName, m_texEnvs.ExportYAML(container));
 			node.Add(FloatsName, m_floats.ExportYAML(container));
 			node.Add(ColorsName, m_colors.ExportYAML(container));

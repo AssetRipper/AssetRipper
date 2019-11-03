@@ -13,29 +13,23 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool IsReadMaximumAllowedTimestep(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
+		public static bool HasMaximumAllowedTimestep(Version version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool IsReadMaximumParticleTimestep(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
+		public static bool HasMaximumParticleTimestep(Version version) => version.IsGreaterEqual(5, 5);
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
 			FixedTimestep = reader.ReadSingle();
-			if(IsReadMaximumAllowedTimestep(reader.Version))
+			if (HasMaximumAllowedTimestep(reader.Version))
 			{
 				MaximumAllowedTimestep = reader.ReadSingle();
 			}
 			TimeScale = reader.ReadSingle();
-			if(IsReadMaximumParticleTimestep(reader.Version))
+			if (HasMaximumParticleTimestep(reader.Version))
 			{
 				MaximumParticleTimestep = reader.ReadSingle();
 			}
@@ -53,17 +47,17 @@ namespace uTinyRipper.Classes
 
 		private float GetMaximumAllowedTimestep(Version version)
 		{
-			return IsReadMaximumAllowedTimestep(version) ? MaximumAllowedTimestep : 1.0f / 3.0f;
+			return HasMaximumAllowedTimestep(version) ? MaximumAllowedTimestep : 1.0f / 3.0f;
 		}
 		private float GetMaximumParticleTimestep(Version version)
 		{
-			return IsReadMaximumParticleTimestep(version) ? MaximumParticleTimestep : 0.03f;
+			return HasMaximumParticleTimestep(version) ? MaximumParticleTimestep : 0.03f;
 		}
 
-		public float FixedTimestep { get; private set; }
-		public float MaximumAllowedTimestep { get; private set; }
-		public float TimeScale { get; private set; }
-		public float MaximumParticleTimestep { get; private set; }
+		public float FixedTimestep { get; set; }
+		public float MaximumAllowedTimestep { get; set; }
+		public float TimeScale { get; set; }
+		public float MaximumParticleTimestep { get; set; }
 
 		public const string FixedTimestepName = "Fixed Timestep";
 		public const string MaximumAllowedTimestepName = "Maximum Allowed Timestep";

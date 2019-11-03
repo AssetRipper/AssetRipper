@@ -34,10 +34,7 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadGuid(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasGuid(Version version) => version.IsGreaterEqual(5, 6);
 
 		public void Read(AssetReader reader)
 		{
@@ -57,8 +54,8 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 			return node;
 		}
 
-		public bool Enabled { get; private set; }
-		public string Path { get; private set; }
+		public bool Enabled { get; set; }
+		public string Path { get; set; }
 
 		public const string EnabledName = "enabled";
 		public const string PathName = "path";

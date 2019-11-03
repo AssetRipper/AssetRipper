@@ -24,10 +24,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 2.0.0 and greater and Not Release and Not Prefab
 		/// </summary>
-		public static bool HasHideFlag(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && !flags.IsForPrefab() && version.IsGreaterEqual(2);
-		}
+		public static bool HasHideFlag(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && !flags.IsForPrefab() && version.IsGreaterEqual(2);
 		/// <summary>
 		/// 4.3.0 and greater and Debug
 		/// </summary>

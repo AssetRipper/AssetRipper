@@ -27,8 +27,8 @@ namespace uTinyRipper.Classes.Avatars
 			return node;
 		}
 
-		public float Length { get; private set; }
-		public bool Modified { get; private set; }
+		public float Length { get; set; }
+		public bool Modified { get; set; }
 
 		public const string MinName = "m_Min";
 		public const string MaxName = "m_Max";

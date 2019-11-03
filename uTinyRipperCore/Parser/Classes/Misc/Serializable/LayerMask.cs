@@ -5,7 +5,7 @@ namespace uTinyRipper.Classes
 {
 	public struct LayerMask : IAsset
 	{
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// TODO:
 			return 2;
@@ -24,12 +24,12 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(BitsName, Bits);
 			return node;
 		}
 
-		public uint Bits { get; private set; }
+		public uint Bits { get; set; }
 
 		public const string BitsName = "m_Bits";
 	}

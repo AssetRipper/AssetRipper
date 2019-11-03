@@ -14,53 +14,41 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool IsReadDensity(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
+		public static bool HasDensity(Version version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadUsedByEffector(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		public static bool HasUsedByEffector(Version version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadUsedByComposite(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasUsedByComposite(Version version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadOffset(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		public static bool HasOffset(Version version) => version.IsGreaterEqual(5);
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadDensity(reader.Version))
+			if (HasDensity(reader.Version))
 			{
 				Density = reader.ReadSingle();
 			}
 			Material.Read(reader);
 			IsTrigger = reader.ReadBoolean();
-			if (IsReadUsedByEffector(reader.Version))
+			if (HasUsedByEffector(reader.Version))
 			{
 				UsedByEffector = reader.ReadBoolean();
 			}
-			if (IsReadUsedByComposite(reader.Version))
+			if (HasUsedByComposite(reader.Version))
 			{
 				UsedByComposite = reader.ReadBoolean();
 			}
 			reader.AlignStream();
 
-			if (IsReadOffset(reader.Version))
+			if (HasOffset(reader.Version))
 			{
 				Offset.Read(reader);
 			}
@@ -88,10 +76,10 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public float Density { get; private set; }
-		public bool IsTrigger { get; private set; }
-		public bool UsedByEffector { get; private set; }
-		public bool UsedByComposite { get; private set; }
+		public float Density { get; set; }
+		public bool IsTrigger { get; set; }
+		public bool UsedByEffector { get; set; }
+		public bool UsedByComposite { get; set; }
 
 		public const string DensityName = "m_Density";
 		public const string MaterialName = "m_Material";

@@ -19,8 +19,8 @@ namespace uTinyRipper.Classes.AvatarMasks
 			return node;
 		}
 
-		public string Path { get; private set; }
-		public float Weight { get; private set; }
+		public string Path { get; set; }
+		public float Weight { get; set; }
 
 		public const string PathName = "m_Path";
 		public const string WeightName = "m_Weight";

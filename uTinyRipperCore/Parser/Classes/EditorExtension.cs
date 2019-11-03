@@ -21,24 +21,15 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Less than 3.5.0 and Not Release and Not Prefab
 		/// </summary>
-		public static bool HasExtensionPtr(Version version, TransferInstructionFlags flags)
-		{
-			return HasEditorPtrs(flags) && version.IsGreaterEqual(3, 5);
-		}
+		public static bool HasExtensionPtr(Version version, TransferInstructionFlags flags) => HasEditorPtrs(flags) && version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 3.5.0 and greater and Not Release and Not Prefab
 		/// </summary>
-		public static bool HasCorrespondingSourceObject(Version version, TransferInstructionFlags flags)
-		{
-			return HasEditorPtrs(flags) && version.IsGreaterEqual(3, 5);
-		}
+		public static bool HasCorrespondingSourceObject(Version version, TransferInstructionFlags flags) => HasEditorPtrs(flags) && version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 2018.3 and Not Release and Not Prefab
 		/// </summary>
-		public static bool HasPrefabAsset(Version version, TransferInstructionFlags flags)
-		{
-			return HasEditorPtrs(flags) && version.IsGreaterEqual(2018, 3);
-		}
+		public static bool HasPrefabAsset(Version version, TransferInstructionFlags flags) => HasEditorPtrs(flags) && version.IsGreaterEqual(2018, 3);
 
 		/// <summary>
 		/// Not Release and Not Prefab

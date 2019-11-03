@@ -17,19 +17,30 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		public SpriteAtlasEditorData(IReadOnlyList<PPtr<Sprite>> packables)
 		{
 			TextureSettings = new TextureSettings(true);
-			m_platformSettings = Array.Empty<TextureImporterPlatformSettings>();
+			PlatformSettings = Array.Empty<TextureImporterPlatformSettings>();
 			PackingSettings = new PackingSettings(true);
 			VariantMultiplier = 1;
-			m_packables = new PPtr<Object>[packables.Count];
+			Packables = new PPtr<Object>[packables.Count];
 			for (int i = 0; i < packables.Count; i++)
 			{
-				m_packables[i] = packables[i].CastTo<Object>();
+				Packables[i] = packables[i].CastTo<Object>();
 			}
 			BindAsDefault = true;
 		}
 
+		public static int ToSerializedVersion(Version version)
+		{
+			// PackingParameters was renamed to PackingSettings
+			// DefaultPlatformSettings has been added
+			if (version.IsGreaterEqual(2018, 2))
+			{
+				return 2;
+			}
+			return 1;
+		}
+
 		/// <summary>
-		/// 2018.4.9 to 2019.1 exclusive or 2019.2.9 and greater
+		/// (2018.4.9 to 2019.1 exclusive) or (2019.2.9 and greater)
 		/// </summary>
 		public static bool HasStoredHash(Version version)
 		{
@@ -44,24 +55,13 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			return version.IsGreaterEqual(2018, 4, 9);
 		}
 
-		private static int GetSerializedVersion(Version version)
-		{
-			// PackingParameters was renamed to PackingSettings
-			// DefaultPlatformSettings has been added
-			if (version.IsGreaterEqual(2018, 2))
-			{
-				return 2;
-			}
-			return 1;
-		}
-
 		public void Read(AssetReader reader)
 		{
 			TextureSettings.Read(reader);
-			m_platformSettings = reader.ReadAssetArray<TextureImporterPlatformSettings>();
+			PlatformSettings = reader.ReadAssetArray<TextureImporterPlatformSettings>();
 			PackingSettings.Read(reader);
 			VariantMultiplier = reader.ReadSingle();
-			m_packables = reader.ReadAssetArray<PPtr<Object>>();
+			Packables = reader.ReadAssetArray<PPtr<Object>>();
 			BindAsDefault = reader.ReadBoolean();
 			if (HasStoredHash(reader.Version))
 			{
@@ -81,7 +81,7 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
 			node.Add(PlatformSettingsName, GetPlatformSettings(container.Version, container.ExportVersion).ExportYAML(container));
 			node.Add(GetPackingSettingsName(container.ExportVersion), PackingSettings.ExportYAML(container));
@@ -97,38 +97,38 @@ namespace uTinyRipper.Classes.SpriteAtlases
 
 		public IReadOnlyList<TextureImporterPlatformSettings> GetPlatformSettings(Version version, Version exportVersion)
 		{
-			if (GetSerializedVersion(exportVersion) > 1)
+			if (ToSerializedVersion(exportVersion) > 1)
 			{
-				if (GetSerializedVersion(version) > 1)
+				if (ToSerializedVersion(version) > 1)
 				{
-					return m_platformSettings;
+					return PlatformSettings;
 				}
 				else
 				{
-					TextureImporterPlatformSettings[] settings = new TextureImporterPlatformSettings[m_platformSettings.Length + 1];
+					TextureImporterPlatformSettings[] settings = new TextureImporterPlatformSettings[PlatformSettings.Length + 1];
 					TextureImporterPlatformSettings setting = new TextureImporterPlatformSettings(exportVersion);
 					setting.TextureFormat = TextureFormat.Automatic;
 					setting.ForceMaximumCompressionQuality_BC6H_BC7 = true;
 					settings[0] = setting;
-					Array.Copy(m_platformSettings, 0, settings, 1, m_platformSettings.Length);
+					Array.Copy(PlatformSettings, 0, settings, 1, PlatformSettings.Length);
 					return settings;
 				}
 			}
 			else
 			{
-				return m_platformSettings;
+				return PlatformSettings;
 			}
 		}
 
 		private string GetPackingSettingsName(Version version)
 		{
-			return GetSerializedVersion(version) > 1 ? PackingSettingsName : PackingParametersName;
+			return ToSerializedVersion(version) > 1 ? PackingSettingsName : PackingParametersName;
 		}
 
-		public IReadOnlyList<TextureImporterPlatformSettings> PlatformSettings => m_platformSettings;
-		public float VariantMultiplier { get; private set; }
-		public IReadOnlyList<PPtr<Object>> Packables => m_packables;
-		public bool BindAsDefault { get; private set; }
+		public TextureImporterPlatformSettings[] PlatformSettings { get; set; }
+		public float VariantMultiplier { get; set; }
+		public PPtr<Object>[] Packables { get; set; }
+		public bool BindAsDefault { get; set; }
 
 		public const string TextureSettingsName = "textureSettings";
 		public const string PlatformSettingsName = "platformSettings";
@@ -145,8 +145,5 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		/// </summary>
 		public PackingSettings PackingSettings;
 		public Hash128 StoredHash;
-
-		private TextureImporterPlatformSettings[] m_platformSettings;
-		private PPtr<Object>[] m_packables;
 	}
 }

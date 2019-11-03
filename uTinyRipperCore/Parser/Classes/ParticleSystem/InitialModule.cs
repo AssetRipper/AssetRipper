@@ -5,57 +5,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 {
 	public sealed class InitialModule : ParticleSystemModule
 	{
-		/// <summary>
-		/// 5.4.0 and greater
-		/// </summary>
-		public static bool IsReadSizeAxes(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadRotationAxes(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// Less than 5.3.0
-		/// </summary>
-		public static bool IsReadInheritVelocity(Version version)
-		{
-			return version.IsLess(5, 3);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadRandomizeRotationDirection(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// Less than 5.5.0
-		/// </summary>
-		public static bool IsReadGravityModifierSingle(Version version)
-		{
-			return version.IsLess(5, 5);
-		}
-		/// <summary>
-		/// 5.4.0 and greater
-		/// </summary>
-		public static bool IsReadSize3D(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadRotation3D(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(5, 5))
 			{
@@ -68,6 +18,35 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		public static bool HasSizeAxes(Version version) => version.IsGreaterEqual(5, 4);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasRotationAxes(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// Less than 5.3.0
+		/// </summary>
+		public static bool HasInheritVelocity(Version version) => version.IsLess(5, 3);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasRandomizeRotationDirection(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// Less than 5.5.0
+		/// </summary>
+		public static bool HasGravityModifierSingle(Version version) => version.IsLess(5, 5);
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		public static bool HasSize3D(Version version) => version.IsGreaterEqual(5, 4);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasRotation3D(Version version) => version.IsGreaterEqual(5, 3);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -76,43 +55,43 @@ namespace uTinyRipper.Classes.ParticleSystems
 			StartSpeed.Read(reader);
 			StartColor.Read(reader);
 			StartSize.Read(reader);
-			if (IsReadSizeAxes(reader.Version))
+			if (HasSizeAxes(reader.Version))
 			{
 				StartSizeY.Read(reader);
 				StartSizeZ.Read(reader);
 			}
-			if (IsReadRotationAxes(reader.Version))
+			if (HasRotationAxes(reader.Version))
 			{
 				StartRotationX.Read(reader);
 				StartRotationY.Read(reader);
 			}
 			StartRotation.Read(reader);
 			
-			if (IsReadRandomizeRotationDirection(reader.Version))
+			if (HasRandomizeRotationDirection(reader.Version))
 			{
 				RandomizeRotationDirection = reader.ReadSingle();
 			}
-			if (IsReadGravityModifierSingle(reader.Version))
+			if (HasGravityModifierSingle(reader.Version))
 			{
 				float gravityModifier = reader.ReadSingle();
 				GravityModifier = new MinMaxCurve(gravityModifier);
 			}
-			if (IsReadInheritVelocity(reader.Version))
+			if (HasInheritVelocity(reader.Version))
 			{
 				InheritVelocity = reader.ReadSingle();
 			}
 			MaxNumParticles = reader.ReadInt32();
-			if (IsReadSize3D(reader.Version))
+			if (HasSize3D(reader.Version))
 			{
 				Size3D = reader.ReadBoolean();
 			}
-			if (IsReadRotation3D(reader.Version))
+			if (HasRotation3D(reader.Version))
 			{
 				Rotation3D = reader.ReadBoolean();
 				reader.AlignStream();
 			}
 			
-			if (!IsReadGravityModifierSingle(reader.Version))
+			if (!HasGravityModifierSingle(reader.Version))
 			{
 				GravityModifier.Read(reader);
 			}
@@ -121,7 +100,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(StartLifetimeName, StartLifetime.ExportYAML(container));
 			node.Add(StartSpeedName, StartSpeed.ExportYAML(container));
 			node.Add(StartColorName, StartColor.ExportYAML(container));
@@ -141,26 +120,26 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		private MinMaxCurve GetStartSizeY(Version version)
 		{
-			return IsReadSizeAxes(version) ? StartSizeY : new MinMaxCurve(1.0f);
+			return HasSizeAxes(version) ? StartSizeY : new MinMaxCurve(1.0f);
 		}
 		private MinMaxCurve GetStartSizeZ(Version version)
 		{
-			return IsReadSizeAxes(version) ? StartSizeZ : new MinMaxCurve(1.0f);
+			return HasSizeAxes(version) ? StartSizeZ : new MinMaxCurve(1.0f);
 		}
 		private MinMaxCurve GetStartRotationX(Version version)
 		{
-			return IsReadRotationAxes(version) ? StartRotationX : new MinMaxCurve(0.0f);
+			return HasRotationAxes(version) ? StartRotationX : new MinMaxCurve(0.0f);
 		}
 		private MinMaxCurve GetStartRotationY(Version version)
 		{
-			return IsReadRotationAxes(version) ? StartRotationY : new MinMaxCurve(0.0f);
+			return HasRotationAxes(version) ? StartRotationY : new MinMaxCurve(0.0f);
 		}
 
-		public float RandomizeRotationDirection { get; private set; }
-		public float InheritVelocity { get; private set; }
-		public int MaxNumParticles { get; private set; }
-		public bool Size3D { get; private set; }
-		public bool Rotation3D { get; private set; }
+		public float RandomizeRotationDirection { get; set; }
+		public float InheritVelocity { get; set; }
+		public int MaxNumParticles { get; set; }
+		public bool Size3D { get; set; }
+		public bool Rotation3D { get; set; }
 
 		public const string StartLifetimeName = "startLifetime";
 		public const string StartSpeedName = "startSpeed";

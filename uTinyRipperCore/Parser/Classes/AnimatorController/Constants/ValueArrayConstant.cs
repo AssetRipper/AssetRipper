@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
@@ -9,7 +8,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 	{
 		public void Read(AssetReader reader)
 		{
-			m_valueArray = reader.ReadAssetArray<ValueConstant>();
+			ValueArray = reader.ReadAssetArray<ValueConstant>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -17,8 +16,6 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 
-		public IReadOnlyList<ValueConstant> ValueArray => m_valueArray;
-
-		private ValueConstant[] m_valueArray;
+		public ValueConstant[] ValueArray { get; set; }
 	}
 }

@@ -39,7 +39,7 @@ namespace uTinyRipper.Classes.TrailRenderers
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		public static bool IsReadGenerateLightingData(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		public static bool HasGenerateLightingData(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 
 		public LineParameters Convert(IExportContainer container)
 		{
@@ -59,7 +59,7 @@ namespace uTinyRipper.Classes.TrailRenderers
 			{
 				ShadowBias = reader.ReadSingle();
 			}
-			if (IsReadGenerateLightingData(reader.Version))
+			if (HasGenerateLightingData(reader.Version))
 			{
 				GenerateLightingData = reader.ReadBoolean();
 				reader.AlignStream();
@@ -79,7 +79,7 @@ namespace uTinyRipper.Classes.TrailRenderers
 			{
 				writer.Write(ShadowBias);
 			}
-			if (IsReadGenerateLightingData(writer.Version))
+			if (HasGenerateLightingData(writer.Version))
 			{
 				writer.Write(GenerateLightingData);
 				writer.AlignStream();
@@ -101,7 +101,7 @@ namespace uTinyRipper.Classes.TrailRenderers
 			{
 				node.Add(ShadowBiasName, ShadowBias);
 			}
-			if (IsReadGenerateLightingData(container.ExportVersion))
+			if (HasGenerateLightingData(container.ExportVersion))
 			{
 				node.Add(GenerateLightingDataName, GenerateLightingData);
 			}

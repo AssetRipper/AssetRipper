@@ -15,23 +15,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			MinGradient = new Gradient(ColorRGBAf.White, ColorRGBAf.White);
 		}
 
-		/// <summary>
-		/// Less than 5.4.0
-		/// </summary>
-		public static bool IsColor32(Version version)
-		{
-			return version.IsLess(5, 4);
-		}
-
-		/// <summary>
-		/// Less than 5.6.0
-		/// </summary>
-		private static bool IsMaxGradientFirst(Version version)
-		{
-			return version.IsLess(5, 6);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(5, 4))
 			{
@@ -39,6 +23,16 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 			return 1;
 		}
+
+		/// <summary>
+		/// Less than 5.4.0
+		/// </summary>
+		public static bool IsColor32(Version version) => version.IsLess(5, 4);
+
+		/// <summary>
+		/// Less than 5.6.0
+		/// </summary>
+		private static bool IsMaxGradientFirst(Version version) => version.IsLess(5, 6);
 
 		public void Read(AssetReader reader)
 		{
@@ -73,7 +67,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(MinMaxStateName, (ushort)MinMaxState);
 			node.Add(MinColorName, MinColor.ExportYAML(container));
 			node.Add(MaxColorName, MaxColor.ExportYAML(container));
@@ -82,7 +76,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public MinMaxGradientState MinMaxState { get; private set; }
+		public MinMaxGradientState MinMaxState { get; set; }
 
 		public const string MinMaxStateName = "minMaxState";
 		public const string MinColorName = "minColor";

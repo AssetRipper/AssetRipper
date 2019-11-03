@@ -14,7 +14,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool IsReadTerrainChunks(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasTerrainChunks(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 
 		/// <summary>
 		/// 2017.1 and greater
@@ -43,7 +43,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			{
 				reader.AlignStream();
 			}
-			if (IsReadTerrainChunks(reader.Version))
+			if (HasTerrainChunks(reader.Version))
 			{
 				TerrainChunks = reader.ReadAssetArray<EnlightenTerrainChunksInformation>();
 				if (IsAlign(reader.Version))
@@ -75,7 +75,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			{
 				writer.AlignStream();
 			}
-			if (IsReadTerrainChunks(writer.Version))
+			if (HasTerrainChunks(writer.Version))
 			{
 				TerrainChunks.Write(writer);
 				if (IsAlign(writer.Version))

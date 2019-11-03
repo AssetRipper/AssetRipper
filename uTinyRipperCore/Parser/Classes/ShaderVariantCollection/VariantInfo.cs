@@ -53,8 +53,8 @@ namespace uTinyRipper.Classes.ShaderVariantCollections
 			return this == (VariantInfo)obj;
 		}
 
-		public string Keywords { get; private set; }
-		public PassType PassType { get; private set; }
+		public string Keywords { get; set; }
+		public PassType PassType { get; set; }
 
 		public const string KeywordsName = "keywords";
 		public const string PassTypeName = "passType";

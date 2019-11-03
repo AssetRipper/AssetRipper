@@ -8,7 +8,7 @@
 			TexDim = reader.ReadInt32();
 		}
 
-		public string DefaultName { get; private set; }
-		public int TexDim { get; private set; }
+		public string DefaultName { get; set; }
+		public int TexDim { get; set; }
 	}
 }

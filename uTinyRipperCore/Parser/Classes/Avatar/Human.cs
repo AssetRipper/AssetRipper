@@ -8,29 +8,7 @@ namespace uTinyRipper.Classes.Avatars
 {
 	public struct Human : IAssetReadable, IYAMLExportable
 	{
-		/// <summary>
-		/// Less than 2018.2
-		/// </summary>
-		public static bool IsReadHandles(Version version)
-		{
-			return version.IsLess(2018, 2);
-		}
-		/// <summary>
-		/// Less than 2018.2
-		/// </summary>
-		public static bool IsReadColliderIndex(Version version)
-		{
-			return version.IsLess(2018, 2);
-		}
-		/// <summary>
-		/// 5.2.0 and greater
-		/// </summary>
-		public static bool IsReadHasTDoF(Version version)
-		{
-			return version.IsGreaterEqual(5, 2);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(5, 6, 1))
 			{
@@ -39,6 +17,19 @@ namespace uTinyRipper.Classes.Avatars
 			return 1;
 		}
 
+		/// <summary>
+		/// Less than 2018.2
+		/// </summary>
+		public static bool HasHandles(Version version) => version.IsLess(2018, 2);
+		/// <summary>
+		/// Less than 2018.2
+		/// </summary>
+		public static bool HasColliderIndex(Version version) => version.IsLess(2018, 2);
+		/// <summary>
+		/// 5.2.0 and greater
+		/// </summary>
+		public static bool HasHasTDoF(Version version) => version.IsGreaterEqual(5, 2);
+
 		public void Read(AssetReader reader)
 		{
 			RootX.Read(reader);
@@ -46,20 +37,20 @@ namespace uTinyRipper.Classes.Avatars
 			SkeletonPose.Read(reader);
 			LeftHand.Read(reader);
 			RightHand.Read(reader);
-			if(IsReadHandles(reader.Version))
+			if (HasHandles(reader.Version))
 			{
-				m_handles = reader.ReadAssetArray<Handle>();
-				m_colliderArray = reader.ReadAssetArray<Collider>();
+				Handles = reader.ReadAssetArray<Handle>();
+				ColliderArray = reader.ReadAssetArray<Collider>();
 			}
 
-			int[] HumanBoneIndex = reader.ReadInt32Array();
-			m_humanBoneIndex = UpdateBoneArray(HumanBoneIndex, reader.Version);
-			float[] HumanBoneMass = reader.ReadSingleArray();
-			m_humanBoneMass = UpdateBoneArray(HumanBoneMass, reader.Version);
-			if (IsReadColliderIndex(reader.Version))
+			int[] humanBoneIndex = reader.ReadInt32Array();
+			HumanBoneIndex = UpdateBoneArray(humanBoneIndex, reader.Version);
+			float[] humanBoneMass = reader.ReadSingleArray();
+			HumanBoneMass = UpdateBoneArray(humanBoneMass, reader.Version);
+			if (HasColliderIndex(reader.Version))
 			{
-				int[] ColliderIndex = reader.ReadInt32Array();
-				m_colliderIndex = UpdateBoneArray(ColliderIndex, reader.Version);
+				int[] colliderIndex = reader.ReadInt32Array();
+				ColliderIndex = UpdateBoneArray(colliderIndex, reader.Version);
 			}
 
 			Scale = reader.ReadSingle();
@@ -72,7 +63,7 @@ namespace uTinyRipper.Classes.Avatars
 			FeetSpacing = reader.ReadSingle();
 			HasLeftHand = reader.ReadBoolean();
 			HasRightHand = reader.ReadBoolean();
-			if (IsReadHasTDoF(reader.Version))
+			if (HasHasTDoF(reader.Version))
 			{
 				HasTDoF = reader.ReadBoolean();
 			}
@@ -82,7 +73,7 @@ namespace uTinyRipper.Classes.Avatars
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(RootXName, RootX.ExportYAML(container));
 			node.Add(SkeletonName, Skeleton.ExportYAML(container));
 			node.Add(SkeletonPoseName, SkeletonPose.ExportYAML(container));
@@ -148,33 +139,33 @@ namespace uTinyRipper.Classes.Avatars
 
 		private IReadOnlyList<Handle> GetExportHandles(Version version)
 		{
-			return IsReadHandles(version) ? Handles : System.Array.Empty<Handle>();
+			return HasHandles(version) ? Handles : System.Array.Empty<Handle>();
 		}
 		private IReadOnlyList<Collider> GetExportColliderArray(Version version)
 		{
-			return IsReadHandles(version) ? ColliderArray : System.Array.Empty<Collider>();
+			return HasHandles(version) ? ColliderArray : System.Array.Empty<Collider>();
 		}
 		private IReadOnlyList<int> GetExportColliderIndex(Version version)
 		{
-			return IsReadColliderIndex(version) ? ColliderIndex : System.Array.Empty<int>();
+			return HasColliderIndex(version) ? ColliderIndex : System.Array.Empty<int>();
 		}
 
-		public IReadOnlyList<Handle> Handles => m_handles;
-		public IReadOnlyList<Collider> ColliderArray => m_colliderArray;
-		public IReadOnlyList<int> HumanBoneIndex => m_humanBoneIndex;
-		public IReadOnlyList<float> HumanBoneMass => m_humanBoneMass;
-		public IReadOnlyList<int> ColliderIndex => m_colliderIndex;
-		public float Scale { get; private set; }
-		public float ArmTwist { get; private set; }
-		public float ForeArmTwist { get; private set; }
-		public float UpperLegTwist { get; private set; }
-		public float LegTwist { get; private set; }
-		public float ArmStretch { get; private set; }
-		public float LegStretch { get; private set; }
-		public float FeetSpacing { get; private set; }
-		public bool HasLeftHand { get; private set; }
-		public bool HasRightHand { get; private set; }
-		public bool HasTDoF { get; private set; }
+		public Handle[] Handles { get; set; }
+		public Collider[] ColliderArray { get; set; }
+		public int[] HumanBoneIndex { get; set; }
+		public float[] HumanBoneMass { get; set; }
+		public int[] ColliderIndex { get; set; }
+		public float Scale { get; set; }
+		public float ArmTwist { get; set; }
+		public float ForeArmTwist { get; set; }
+		public float UpperLegTwist { get; set; }
+		public float LegTwist { get; set; }
+		public float ArmStretch { get; set; }
+		public float LegStretch { get; set; }
+		public float FeetSpacing { get; set; }
+		public bool HasLeftHand { get; set; }
+		public bool HasRightHand { get; set; }
+		public bool HasTDoF { get; set; }
 
 		public const string RootXName = "m_RootX";
 		public const string SkeletonName = "m_Skeleton";
@@ -203,11 +194,5 @@ namespace uTinyRipper.Classes.Avatars
 		public OffsetPtr<SkeletonPose> SkeletonPose;
 		public OffsetPtr<Hand> LeftHand;
 		public OffsetPtr<Hand> RightHand;
-		
-		private Handle[] m_handles;
-		private Collider[] m_colliderArray;
-		private int[] m_humanBoneIndex;
-		private float[] m_humanBoneMass;
-		private int[] m_colliderIndex;
 	}
 }

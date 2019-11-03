@@ -20,7 +20,7 @@ namespace uTinyRipper.Classes
 
 			AudioMixer.Read(reader);
 			GroupID.Read(reader);
-			m_children = reader.ReadAssetArray<PPtr<AudioMixerGroup>>();
+			Children = reader.ReadAssetArray<PPtr<AudioMixerGroup>>();
 		}
 
 		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
@@ -42,14 +42,12 @@ namespace uTinyRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		public IReadOnlyList<PPtr<AudioMixerGroup>> Children => m_children;
+		public PPtr<AudioMixerGroup>[] Children { get; set; }
 
 		public const string AudioMixerName = "m_AudioMixer";
 		public const string ChildrenName = "m_Children";
 
 		public PPtr<AudioMixer> AudioMixer;
 		public GUID GroupID;
-
-		private PPtr<AudioMixerGroup>[] m_children;
 	}
 }

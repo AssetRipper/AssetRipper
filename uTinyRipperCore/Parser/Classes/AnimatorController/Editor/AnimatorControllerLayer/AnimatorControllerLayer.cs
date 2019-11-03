@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using uTinyRipper.Converters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
@@ -19,8 +18,8 @@ namespace uTinyRipper.Classes.AnimatorControllers
 #warning TODO: animator
 			Mask = default;
 
-			m_motions = System.Array.Empty<StateMotionPair>();
-			m_behaviours = System.Array.Empty<StateBehavioursPair>();
+			Motions = System.Array.Empty<StateMotionPair>();
+			Behaviours = System.Array.Empty<StateBehavioursPair>();
 			BlendingMode = layer.LayerBlendingMode;
 			SyncedLayerIndex = layer.StateMachineMotionSetIndex == 0 ? -1 : layer.StateMachineIndex;
 			DefaultWeight = layer.DefaultWeight;
@@ -29,7 +28,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			Controller = controller.File.CreatePPtr(controller);
 		}
 
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// TODO:
 			return 5;
@@ -38,7 +37,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(NameName, Name);
 			node.Add(StateMachineName, StateMachine.ExportYAML(container));
 			node.Add(MaskName, Mask.ExportYAML(container));
@@ -53,14 +52,14 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			return node;
 		}
 
-		public string Name { get; private set; }
-		public IReadOnlyList<StateMotionPair> Motions => m_motions;
-		public IReadOnlyList<StateBehavioursPair> Behaviours => m_behaviours;
-		public AnimatorLayerBlendingMode BlendingMode { get; private set; }
-		public int SyncedLayerIndex { get; private set; }
-		public float DefaultWeight { get; private set; }
-		public bool IKPass { get; private set; }
-		public bool SyncedLayerAffectsTiming { get; private set; }
+		public string Name { get; set; }
+		public StateMotionPair[] Motions { get; set; }
+		public StateBehavioursPair[] Behaviours { get; set; }
+		public AnimatorLayerBlendingMode BlendingMode { get; set; }
+		public int SyncedLayerIndex { get; set; }
+		public float DefaultWeight { get; set; }
+		public bool IKPass { get; set; }
+		public bool SyncedLayerAffectsTiming { get; set; }
 
 		public PPtr<AnimatorStateMachine> StateMachine;
 		public PPtr<AvatarMask> Mask;
@@ -77,8 +76,5 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		public const string IKPassName = "m_IKPass";
 		public const string SyncedLayerAffectsTimingName = "m_SyncedLayerAffectsTiming";
 		public const string ControllerName = "m_Controller";
-
-		private StateMotionPair[] m_motions;
-		private StateBehavioursPair[] m_behaviours;
 	}
 }

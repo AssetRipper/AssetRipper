@@ -12,100 +12,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// Less than 3.5.0
-		/// </summary>
-		public static bool IsReadIsPowerOfTwo(Version version)
-		{
-			return version.IsLess(3, 5);
-		}
-		/// <summary>
-		/// 4.2.0 and greater
-		/// </summary>
-		public static bool IsReadAntiAliasing(Version version)
-		{
-			return version.IsGreaterEqual(4, 2);
-		}
-		/// <summary>
-		/// 2019.2 and greater
-		/// </summary>
-		public static bool IsReadMipCount(Version version)
-		{
-			return version.IsGreaterEqual(2019, 2);
-		}
-		/// <summary>
-		/// 2.0.0 and greater
-		/// </summary>
-		public static bool IsReadColorFormat(Version version)
-		{
-			return version.IsGreaterEqual(2);
-		}
-		/// <summary>
-		/// 2.0.0 to 4.0.0 exclusive
-		/// </summary>
-		public static bool IsReadIsCubemap(Version version)
-		{
-			return version.IsGreaterEqual(2) && version.IsLess(4);
-		}
-		/// <summary>
-		/// 2.0.0 and greater
-		/// </summary>
-		public static bool IsReadMipMap(Version version)
-		{
-			return version.IsGreaterEqual(2);
-		}
-		/// <summary>
-		/// 4.3.0 and greater
-		/// </summary>
-		public static bool IsReadGenerateMips(Version version)
-		{
-			return version.IsGreaterEqual(4, 3);
-		}
-		/// <summary>
-		/// 3.5.0 and greater
-		/// </summary>
-		public static bool IsReadSRGB(Version version)
-		{
-			return version.IsGreaterEqual(3, 5);
-		}
-		/// <summary>
-		/// 2017.3 and greater
-		/// </summary>
-		public static bool IsReadUseDynamicScale(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
-		/// <summary>
-		/// 2019.1 and greater
-		/// </summary>
-		public static bool IsReadEnableCompatibleFormat(Version version)
-		{
-			return version.IsGreaterEqual(2019);
-		}
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		public static bool IsReadDimension(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
-		/// <summary>
-		/// Less than 2.1.0
-		/// </summary>
-		public static bool IsReadIsPowerOfTwoFirst(Version version)
-		{
-			return version.IsLess(2, 1);
-		}
-		
-		/// <summary>
-		/// 2.1.0 and greater
-		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(2, 1);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// unknown
 			if (version.IsGreaterEqual(2019))
@@ -119,61 +26,115 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// Less than 3.5.0
+		/// </summary>
+		public static bool HasIsPowerOfTwo(Version version) => version.IsLess(3, 5);
+		/// <summary>
+		/// 4.2.0 and greater
+		/// </summary>
+		public static bool HasAntiAliasing(Version version) => version.IsGreaterEqual(4, 2);
+		/// <summary>
+		/// 2019.2 and greater
+		/// </summary>
+		public static bool HasMipCount(Version version) => version.IsGreaterEqual(2019, 2);
+		/// <summary>
+		/// 2.0.0 and greater
+		/// </summary>
+		public static bool HasColorFormat(Version version) => version.IsGreaterEqual(2);
+		/// <summary>
+		/// 2.0.0 to 4.0.0 exclusive
+		/// </summary>
+		public static bool HasIsCubemap(Version version) => version.IsGreaterEqual(2) && version.IsLess(4);
+		/// <summary>
+		/// 2.0.0 and greater
+		/// </summary>
+		public static bool HasMipMap(Version version) => version.IsGreaterEqual(2);
+		/// <summary>
+		/// 4.3.0 and greater
+		/// </summary>
+		public static bool HasGenerateMips(Version version) => version.IsGreaterEqual(4, 3);
+		/// <summary>
+		/// 3.5.0 and greater
+		/// </summary>
+		public static bool HasSRGB(Version version) => version.IsGreaterEqual(3, 5);
+		/// <summary>
+		/// 2017.3 and greater
+		/// </summary>
+		public static bool HasUseDynamicScale(Version version) => version.IsGreaterEqual(2017, 3);
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool HasEnableCompatibleFormat(Version version) => version.IsGreaterEqual(2019);
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
+		public static bool HasDimension(Version version) => version.IsGreaterEqual(5, 6);
+		/// <summary>
+		/// Less than 2.1.0
+		/// </summary>
+		public static bool HasIsPowerOfTwoFirst(Version version) => version.IsLess(2, 1);
+		
+		/// <summary>
+		/// 2.1.0 and greater
+		/// </summary>
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadIsPowerOfTwo(reader.Version))
+			if (HasIsPowerOfTwo(reader.Version))
 			{
-				if (IsReadIsPowerOfTwoFirst(reader.Version))
+				if (HasIsPowerOfTwoFirst(reader.Version))
 				{
 					IsPowerOfTwo = reader.ReadBoolean();
 				}
 			}
 			Width = reader.ReadInt32();
 			Height = reader.ReadInt32();
-			if (IsReadAntiAliasing(reader.Version))
+			if (HasAntiAliasing(reader.Version))
 			{
 				AntiAliasing = reader.ReadInt32();
 			}
-			if (IsReadMipCount(reader.Version))
+			if (HasMipCount(reader.Version))
 			{
 				MipCount = reader.ReadInt32();
 			}
 			DepthFormat = reader.ReadInt32();
-			if (IsReadColorFormat(reader.Version))
+			if (HasColorFormat(reader.Version))
 			{
 				ColorFormat = (RenderTextureFormat)reader.ReadInt32();
 			}
-			if (IsReadIsPowerOfTwo(reader.Version))
+			if (HasIsPowerOfTwo(reader.Version))
 			{
-				if (!IsReadIsPowerOfTwoFirst(reader.Version))
+				if (!HasIsPowerOfTwoFirst(reader.Version))
 				{
 					IsPowerOfTwo = reader.ReadBoolean();
 				}
 			}
-			if (IsReadIsCubemap(reader.Version))
+			if (HasIsCubemap(reader.Version))
 			{
 				IsCubemap = reader.ReadBoolean();
 			}
-			if (IsReadMipMap(reader.Version))
+			if (HasMipMap(reader.Version))
 			{
 				MipMap = reader.ReadBoolean();
 			}
-			if (IsReadGenerateMips(reader.Version))
+			if (HasGenerateMips(reader.Version))
 			{
 				GenerateMips = reader.ReadBoolean();
 			}
-			if (IsReadSRGB(reader.Version))
+			if (HasSRGB(reader.Version))
 			{
 				SRGB = reader.ReadBoolean();
 			}
-			if (IsReadUseDynamicScale(reader.Version))
+			if (HasUseDynamicScale(reader.Version))
 			{
 				UseDynamicScale = reader.ReadBoolean();
 				BindMS = reader.ReadBoolean();
 			}
-			if (IsReadEnableCompatibleFormat(reader.Version))
+			if (HasEnableCompatibleFormat(reader.Version))
 			{
 				EnableCompatibleFormat = reader.ReadBoolean();
 			}
@@ -183,7 +144,7 @@ namespace uTinyRipper.Classes
 			}
 			
 			TextureSettings.Read(reader);
-			if (IsReadDimension(reader.Version))
+			if (HasDimension(reader.Version))
 			{
 				Dimension = reader.ReadInt32();
 				VolumeDepth = reader.ReadInt32();
@@ -193,11 +154,11 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(WidthName, Width);
 			node.Add(HeightName, Height);
 			node.Add(AntiAliasingName, AntiAliasing);
-			if (IsReadMipCount(container.ExportVersion))
+			if (HasMipCount(container.ExportVersion))
 			{
 				node.Add(MipCountName, MipCount);
 			}
@@ -208,7 +169,7 @@ namespace uTinyRipper.Classes
 			node.Add(SRGBName, SRGB);
 			node.Add(UseDynamicScaleName, UseDynamicScale);
 			node.Add(BindMSName, BindMS);
-			if (IsReadEnableCompatibleFormat(container.ExportVersion))
+			if (HasEnableCompatibleFormat(container.ExportVersion))
 			{
 				node.Add(EnableCompatibleFormatName, GetEnableCompatibleFormat(container.Version));
 			}
@@ -220,30 +181,30 @@ namespace uTinyRipper.Classes
 
 		private bool GetEnableCompatibleFormat(Version version)
 		{
-			return IsReadEnableCompatibleFormat(version) ? EnableCompatibleFormat : true;
+			return HasEnableCompatibleFormat(version) ? EnableCompatibleFormat : true;
 		}
 
 		public override string ExportExtension => "renderTexture";
 
-		public bool IsPowerOfTwo { get; private set; }
-		public int Width { get; private set; }
-		public int Height { get; private set; }
-		public int AntiAliasing { get; private set; }
-		public int MipCount { get; private set; }
+		public bool IsPowerOfTwo { get; set; }
+		public int Width { get; set; }
+		public int Height { get; set; }
+		public int AntiAliasing { get; set; }
+		public int MipCount { get; set; }
 		/// <summary>
 		/// Depth previously
 		/// </summary>
-		public int DepthFormat { get; private set; }
-		public RenderTextureFormat ColorFormat { get; private set; }
-		public bool IsCubemap { get; private set; }
-		public bool MipMap { get; private set; }
-		public bool GenerateMips { get; private set; }
-		public bool SRGB { get; private set; }
-		public bool UseDynamicScale { get; private set; }
-		public bool BindMS { get; private set; }
-		public bool EnableCompatibleFormat { get; private set; }
-		public int Dimension { get; private set; }
-		public int VolumeDepth { get; private set; }
+		public int DepthFormat { get; set; }
+		public RenderTextureFormat ColorFormat { get; set; }
+		public bool IsCubemap { get; set; }
+		public bool MipMap { get; set; }
+		public bool GenerateMips { get; set; }
+		public bool SRGB { get; set; }
+		public bool UseDynamicScale { get; set; }
+		public bool BindMS { get; set; }
+		public bool EnableCompatibleFormat { get; set; }
+		public int Dimension { get; set; }
+		public int VolumeDepth { get; set; }
 
 		public const string WidthName = "m_Width";
 		public const string HeightName = "m_Height";

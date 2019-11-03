@@ -47,11 +47,11 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			return node;
 		}
 
-		public string Name { get; private set; }
-		public AnimatorControllerParameterType Type { get; private set; }
-		public float DefaultFloat { get; private set; }
-		public int DefaultInt { get; private set; }
-		public bool DefaultBool { get; private set; }
+		public string Name { get; set; }
+		public AnimatorControllerParameterType Type { get; set; }
+		public float DefaultFloat { get; set; }
+		public int DefaultInt { get; set; }
+		public bool DefaultBool { get; set; }
 
 		public const string NameName = "m_Name";
 		public const string TypeName = "m_Type";

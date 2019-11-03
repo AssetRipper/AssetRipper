@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using uTinyRipper.Classes.AvatarMasks;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
@@ -17,8 +16,8 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_mask = reader.ReadUInt32Array();
-			m_elements = reader.ReadAssetArray<TransformMaskElement>();
+			Mask = reader.ReadUInt32Array();
+			Elements = reader.ReadAssetArray<TransformMaskElement>();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -31,13 +30,10 @@ namespace uTinyRipper.Classes
 
 		public override string ExportExtension => "mask";
 
-		public IReadOnlyList<uint> Mask => m_mask;
-		public IReadOnlyList<TransformMaskElement> Elements => m_elements;
+		public uint[] Mask { get; set; }
+		public TransformMaskElement[] Elements { get; set; }
 
 		public const string MaskName = "m_Mask";
 		public const string ElementsName = "m_Elements";
-
-		private uint[] m_mask;
-		private TransformMaskElement[] m_elements;
 	}
 }

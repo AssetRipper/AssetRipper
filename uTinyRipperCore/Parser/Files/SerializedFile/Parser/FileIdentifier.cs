@@ -14,7 +14,7 @@ namespace uTinyRipper.SerializedFiles
 		/// <summary>
 		/// 1.2.0 and greater
 		/// </summary>
-		public static bool IsReadHash(FileGeneration generation) => generation >= FileGeneration.FG_120_200;
+		public static bool HasHash(FileGeneration generation) => generation >= FileGeneration.FG_120_200;
 
 		public bool IsFile(ISerializedFile file)
 		{
@@ -27,7 +27,7 @@ namespace uTinyRipper.SerializedFiles
 			{
 				AssetPath = reader.ReadStringZeroTerm();
 			}
-			if (IsReadHash(reader.Generation))
+			if (HasHash(reader.Generation))
 			{
 				Hash.Read(reader);
 				Type = (AssetType)reader.ReadInt32();
@@ -42,7 +42,7 @@ namespace uTinyRipper.SerializedFiles
 			{
 				writer.WriteStringZeroTerm(AssetPath);
 			}
-			if (IsReadHash(writer.Generation))
+			if (HasHash(writer.Generation))
 			{
 				Hash.Write(writer);
 				writer.Write((int)Type);

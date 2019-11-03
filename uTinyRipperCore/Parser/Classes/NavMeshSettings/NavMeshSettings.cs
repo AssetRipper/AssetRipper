@@ -15,23 +15,20 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Not Release
 		/// </summary>
-		public static bool IsReadBuildSettings(TransferInstructionFlags flags)
+		public static bool HasBuildSettings(TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease();
 		}
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadNavMeshData(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		public static bool HasNavMeshData(Version version) => version.IsGreaterEqual(5);
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadBuildSettings(reader.Flags))
+			if (HasBuildSettings(reader.Flags))
 			{
 				BuildSettings.Read(reader);
 			}
@@ -52,26 +49,26 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add(BuildSettingsName, GetExportNavMeshBuildSettings(container).ExportYAML(container));
-			node.Add(NavMeshDataName, IsReadNavMeshData(container.Version) ? NavMeshData.ExportYAML(container) : NavMesh.ExportYAML(container));
+			node.Add(NavMeshDataName, HasNavMeshData(container.Version) ? NavMeshData.ExportYAML(container) : NavMesh.ExportYAML(container));
 			return node;
 		}
 
 		private NavMeshBuildSettings GetExportNavMeshBuildSettings(IExportContainer container)
 		{
-			if (IsReadBuildSettings(container.Flags))
+			if (HasBuildSettings(container.Flags))
 			{
 				return BuildSettings;
 			}
 			else
 			{
-				NavMeshData data = IsReadNavMeshData(container.Version) ? NavMeshData.FindAsset(container) : null;
+				NavMeshData data = HasNavMeshData(container.Version) ? NavMeshData.FindAsset(container) : null;
 				if (data == null)
 				{
 					return new NavMeshBuildSettings(true);
 				}
 				else
 				{
-					if (Classes.NavMeshData.IsReadNavMeshParams(container.Version))
+					if (Classes.NavMeshData.HasNavMeshParams(container.Version))
 					{
 						return new NavMeshBuildSettings(data.NavMeshParams);
 					}

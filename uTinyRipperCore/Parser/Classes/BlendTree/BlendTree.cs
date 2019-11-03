@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.Classes.Objects;
@@ -19,10 +18,10 @@ namespace uTinyRipper.Classes
 
 			Name = nameof(BlendTree);
 
-			m_childs = new ChildMotion[node.ChildIndices.Count];
-			for (int i = 0; i < node.ChildIndices.Count; i++)
+			Childs = new ChildMotion[node.ChildIndices.Length];
+			for (int i = 0; i < node.ChildIndices.Length; i++)
 			{
-				m_childs[i] = new ChildMotion(virtualFile, controller, state, nodeIndex, i);
+				Childs[i] = new ChildMotion(virtualFile, controller, state, nodeIndex, i);
 			}
 
 			BlendParameter = node.BlendEventID == uint.MaxValue ? string.Empty : controller.TOS[node.BlendEventID];
@@ -60,14 +59,14 @@ namespace uTinyRipper.Classes
 
 		public override string ExportExtension => throw new NotSupportedException();
 
-		public IReadOnlyList<ChildMotion> Childs => m_childs;
-		public string BlendParameter { get; private set; }
-		public string BlendParameterY { get; private set; }
-		public float MinThreshold { get; private set; }
-		public float MaxThreshold { get; private set; }
-		public bool UseAutomaticThresholds { get; private set; }
-		public bool NormalizedBlendValues { get; private set; }
-		public BlendTreeType BlendType { get; private set; }
+		public ChildMotion[] Childs { get; set; }
+		public string BlendParameter { get; set; }
+		public string BlendParameterY { get; set; }
+		public float MinThreshold { get; set; }
+		public float MaxThreshold { get; set; }
+		public bool UseAutomaticThresholds { get; set; }
+		public bool NormalizedBlendValues { get; set; }
+		public BlendTreeType BlendType { get; set; }
 
 		public const string ChildsName = "m_Childs";
 		public const string BlendParameterName = "m_BlendParameter";
@@ -77,7 +76,5 @@ namespace uTinyRipper.Classes
 		public const string UseAutomaticThresholdsName = "m_UseAutomaticThresholds";
 		public const string NormalizedBlendValuesName = "m_NormalizedBlendValues";
 		public const string BlendTypeName = "m_BlendType";
-
-		private ChildMotion[] m_childs;
 	}
 }

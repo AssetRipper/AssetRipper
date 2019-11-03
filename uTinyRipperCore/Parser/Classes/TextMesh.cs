@@ -13,29 +13,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		public static bool IsReadFontSize(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadRichText(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
-		/// 4.2.0 and greater
-		/// </summary>
-		public static bool IsReadColor(Version version)
-		{
-			return version.IsGreaterEqual(4, 2);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(1, 5))
 			{
@@ -44,6 +22,19 @@ namespace uTinyRipper.Classes
 			// min is 2
 			return 2;
 		}
+
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool HasFontSize(Version version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasRichText(Version version) => version.IsGreaterEqual(4);
+		/// <summary>
+		/// 4.2.0 and greater
+		/// </summary>
+		public static bool HasColor(Version version) => version.IsGreaterEqual(4, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -56,18 +47,18 @@ namespace uTinyRipper.Classes
 			Anchor = (TextAnchor)reader.ReadInt16();
 			Alignment = (TextAlignment)reader.ReadInt16();
 			TabSize = reader.ReadSingle();
-			if (IsReadFontSize(reader.Version))
+			if (HasFontSize(reader.Version))
 			{
 				FontSize = reader.ReadInt32();
 				FontStyle = (FontStyle)reader.ReadInt32();
 			}
-			if (IsReadRichText(reader.Version))
+			if (HasRichText(reader.Version))
 			{
 				RichText = reader.ReadBoolean();
 				reader.AlignStream();
 			}
 			Font.Read(reader);
-			if (IsReadColor(reader.Version))
+			if (HasColor(reader.Version))
 			{
 				Color.Read(reader);
 			}
@@ -86,7 +77,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TextName, Text);
 			node.Add(OffsetZName, OffsetZ);
 			node.Add(CharacterSizeName, CharacterSize);
@@ -94,17 +85,17 @@ namespace uTinyRipper.Classes
 			node.Add(AnchorName, (short)Anchor);
 			node.Add(AlignmentName, (short)Alignment);
 			node.Add(TabSizeName, TabSize);
-			if (IsReadFontSize(container.ExportVersion))
+			if (HasFontSize(container.ExportVersion))
 			{
 				node.Add(FontSizeName, FontSize);
 				node.Add(FontStyleName, (int)FontStyle);
 			}
-			if (IsReadRichText(container.ExportVersion))
+			if (HasRichText(container.ExportVersion))
 			{
 				node.Add(RichTextName, GetRichText(container.Version));
 			}
 			node.Add(FontName, Font.ExportYAML(container));
-			if (IsReadColor(container.ExportVersion))
+			if (HasColor(container.ExportVersion))
 			{
 				node.Add(ColorName, GetColor(container.Version).ExportYAML(container));
 			}
@@ -113,23 +104,23 @@ namespace uTinyRipper.Classes
 
 		private bool GetRichText(Version version)
 		{
-			return IsReadRichText(version) ? RichText : true;
+			return HasRichText(version) ? RichText : true;
 		}
 		private ColorRGBA32 GetColor(Version version)
 		{
-			return IsReadFontSize(version) ? Color : ColorRGBA32.White;
+			return HasFontSize(version) ? Color : ColorRGBA32.White;
 		}
 
-		public string Text { get; private set; }
-		public float OffsetZ { get; private set; }
-		public float CharacterSize { get; private set; }
-		public float LineSpacing { get; private set; }
-		public TextAnchor Anchor { get; private set; }
-		public TextAlignment Alignment { get; private set; }
-		public float TabSize { get; private set; }
-		public int FontSize { get; private set; }
-		public FontStyle FontStyle { get; private set; }
-		public bool RichText { get; private set; }
+		public string Text { get; set; }
+		public float OffsetZ { get; set; }
+		public float CharacterSize { get; set; }
+		public float LineSpacing { get; set; }
+		public TextAnchor Anchor { get; set; }
+		public TextAlignment Alignment { get; set; }
+		public float TabSize { get; set; }
+		public int FontSize { get; set; }
+		public FontStyle FontStyle { get; set; }
+		public bool RichText { get; set; }
 
 		public const string TextName = "m_Text";
 		public const string OffsetZName = "m_OffsetZ";

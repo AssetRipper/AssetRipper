@@ -27,7 +27,7 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public CapsuleDirection2D Direction { get; private set; }
+		public CapsuleDirection2D Direction { get; set; }
 
 		public const string SizeName = "m_Size";
 		public const string DirectionName = "m_Direction";

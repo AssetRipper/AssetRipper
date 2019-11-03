@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
@@ -20,12 +19,12 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 			State = state.File.CreatePPtr(state);
 
-			m_stateMachineBehaviours = new PPtr<MonoBehaviour>[behaviours.Length];
+			StateMachineBehaviours = new PPtr<MonoBehaviour>[behaviours.Length];
 			for (int i = 0; i < behaviours.Length; i++)
 			{
 				MonoBehaviour behaviour = behaviours[i];
 				PPtr<MonoBehaviour> behaviourPtr = behaviour.File.CreatePPtr(behaviour);
-				m_stateMachineBehaviours[i] = behaviourPtr;
+				StateMachineBehaviours[i] = behaviourPtr;
 			}
 		}
 
@@ -37,13 +36,11 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			return node;
 		}
 
-		public IReadOnlyList<PPtr<MonoBehaviour>> StateMachineBehaviours => m_stateMachineBehaviours;
+		public PPtr<MonoBehaviour>[] StateMachineBehaviours { get; set; }
 
 		public const string StateName = "m_State";
 		public const string StateMachineBehavioursName = "m_StateMachineBehaviours";
 
 		public PPtr<AnimatorState> State;
-
-		private PPtr<MonoBehaviour>[] m_stateMachineBehaviours;
 	}
 }

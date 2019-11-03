@@ -26,7 +26,7 @@ namespace uTinyRipperGUI.Exporters
 
 		public static bool IsSupported(AudioClip audioClip)
 		{
-			if (AudioClip.IsReadType(audioClip.File.Version))
+			if (AudioClip.HasType(audioClip.File.Version))
 			{
 				switch (audioClip.Type)
 				{
@@ -138,7 +138,7 @@ namespace uTinyRipperGUI.Exporters
 
 		private static string GetAudioType(AudioClip audioClip)
 		{
-			if (AudioClip.IsReadType(audioClip.File.Version))
+			if (AudioClip.HasType(audioClip.File.Version))
 			{
 				return audioClip.Type.ToString();
 			}

@@ -21,7 +21,7 @@ namespace uTinyRipper.Classes
 			reader.AlignStream();
 
 			AudioClip.Read(reader);
-			m_movieData = reader.ReadByteArray();
+			MovieData = reader.ReadByteArray();
 			reader.AlignStream();
 
 			ColorSpace = (ColorSpace)reader.ReadInt32();
@@ -31,7 +31,7 @@ namespace uTinyRipper.Classes
 		{
 			using (BinaryWriter writer = new BinaryWriter(stream))
 			{
-				writer.Write(m_movieData, 0, m_movieData.Length);
+				writer.Write(MovieData, 0, MovieData.Length);
 			}
 		}
 
@@ -55,9 +55,9 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public bool IsLoop { get; private set; }
-		public IReadOnlyList<byte> MovieData => m_movieData;
-		public ColorSpace ColorSpace { get; private set; }
+		public bool IsLoop { get; set; }
+		public byte[] MovieData { get; set; }
+		public ColorSpace ColorSpace { get; set; }
 
 		public const string LoopName = "m_Loop";
 		public const string AudioClipName = "m_AudioClip";
@@ -65,7 +65,5 @@ namespace uTinyRipper.Classes
 		public const string ColorSpaceName = "m_ColorSpace";
 
 		public PPtr<AudioClip> AudioClip;
-
-		private byte[] m_movieData;
 	}
 }

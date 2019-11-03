@@ -32,18 +32,12 @@ namespace uTinyRipper.Classes.ParticleSystems
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		public static bool IsReadPositionAmount(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		}
+		public static bool HasPositionAmount(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 		
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		}
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -73,7 +67,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				reader.AlignStream();
 			}
 
-			if (IsReadPositionAmount(reader.Version))
+			if (HasPositionAmount(reader.Version))
 			{
 				PositionAmount.Read(reader);
 				RotationAmount.Read(reader);
@@ -107,25 +101,25 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		private MinMaxCurve GetExportPositionAmount(Version version)
 		{
-			return IsReadPositionAmount(version) ? PositionAmount : new MinMaxCurve(1.0f);
+			return HasPositionAmount(version) ? PositionAmount : new MinMaxCurve(1.0f);
 		}
 		private MinMaxCurve GetExportRotationAmount(Version version)
 		{
-			return IsReadPositionAmount(version) ? RotationAmount : new MinMaxCurve(0.0f);
+			return HasPositionAmount(version) ? RotationAmount : new MinMaxCurve(0.0f);
 		}
 		private MinMaxCurve GetExportSizeAmount(Version version)
 		{
-			return IsReadPositionAmount(version) ? SizeAmount : new MinMaxCurve(0.0f);
+			return HasPositionAmount(version) ? SizeAmount : new MinMaxCurve(0.0f);
 		}
 
-		public bool SeparateAxes { get; private set; }
-		public float Frequency { get; private set; }
-		public bool Damping { get; private set; }
-		public int Octaves { get; private set; }
-		public float OctaveMultiplier { get; private set; }
-		public float OctaveScale { get; private set; }
-		public ParticleSystemNoiseQuality Quality { get; private set; }
-		public bool RemapEnabled { get; private set; }
+		public bool SeparateAxes { get; set; }
+		public float Frequency { get; set; }
+		public bool Damping { get; set; }
+		public int Octaves { get; set; }
+		public float OctaveMultiplier { get; set; }
+		public float OctaveScale { get; set; }
+		public ParticleSystemNoiseQuality Quality { get; set; }
+		public bool RemapEnabled { get; set; }
 
 		public const string StrengthName = "strength";
 		public const string StrengthYName = "strengthY";

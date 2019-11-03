@@ -52,7 +52,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			return node;
 		}
 
-		public int SystemId { get; private set; }
+		public int SystemId { get; set; }
 
 		public const string RendererName = "renderer";
 		public const string DynamicLightmapSTInSystemName = "dynamicLightmapSTInSystem";

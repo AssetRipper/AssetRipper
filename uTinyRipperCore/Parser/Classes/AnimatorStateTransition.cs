@@ -37,7 +37,7 @@ namespace uTinyRipper.Classes
 			return virtualFile.CreateAsset((assetInfo) => new AnimatorStateTransition(assetInfo, parameters));
 		}
 
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// TODO:
 			return 3;
@@ -46,7 +46,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TransitionDurationName, TransitionDuration);
 			node.Add(TransitionOffsetName, TransitionOffset);
 			node.Add(ExitTimeName, ExitTime);
@@ -58,14 +58,14 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public float TransitionDuration { get; private set; }
-		public float TransitionOffset { get; private set; }
-		public float ExitTime { get; private set; }
-		public bool HasExitTime { get; private set; }
-		public bool HasFixedDuration { get; private set; }
-		public TransitionInterruptionSource InterruptionSource { get; private set; }
-		public bool OrderedInterruption { get; private set; }
-		public bool CanTransitionToSelf { get; private set; }
+		public float TransitionDuration { get; set; }
+		public float TransitionOffset { get; set; }
+		public float ExitTime { get; set; }
+		public bool HasExitTime { get; set; }
+		public bool HasFixedDuration { get; set; }
+		public TransitionInterruptionSource InterruptionSource { get; set; }
+		public bool OrderedInterruption { get; set; }
+		public bool CanTransitionToSelf { get; set; }
 
 		public const string TransitionDurationName = "m_TransitionDuration";
 		public const string TransitionOffsetName = "m_TransitionOffset";

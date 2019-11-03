@@ -10,30 +10,8 @@ namespace uTinyRipper.Classes
 			base(assetInfo)
 		{
 		}
-		
-		/// <summary>
-		/// 2017.1 and greater
-		/// </summary>
-		public static bool IsReadSpriteTilingProperty(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
-		/// <summary>
-		/// Less than 5.0.0
-		/// </summary>
-		public static bool IsReadCenter(Version version)
-		{
-			return version.IsLess(5);
-		}
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		public static bool IsReadEdgeRadius(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
 
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(5))
 			{
@@ -42,11 +20,24 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		public static bool HasSpriteTilingProperty(Version version) => version.IsGreaterEqual(5, 6);
+		/// <summary>
+		/// Less than 5.0.0
+		/// </summary>
+		public static bool HasCenter(Version version) => version.IsLess(5);
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
+		public static bool HasEdgeRadius(Version version) => version.IsGreaterEqual(5, 6);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadSpriteTilingProperty(reader.Version))
+			if (HasSpriteTilingProperty(reader.Version))
 			{
 				SpriteTilingProperty.Read(reader);
 				AutoTiling = reader.ReadBoolean();
@@ -54,11 +45,11 @@ namespace uTinyRipper.Classes
 			}
 
 			Size.Read(reader);
-			if (IsReadCenter(reader.Version))
+			if (HasCenter(reader.Version))
 			{
 				Center.Read(reader);
 			}
-			if (IsReadEdgeRadius(reader.Version))
+			if (HasEdgeRadius(reader.Version))
 			{
 				EdgeRadius = reader.ReadSingle();
 			}
@@ -69,14 +60,14 @@ namespace uTinyRipper.Classes
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add(SpriteTilingPropertyName, SpriteTilingProperty.ExportYAML(container));
 			node.Add(AutoTilingName, AutoTiling);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(SizeName, Size.ExportYAML(container));
 			node.Add(EdgeRadiusName, EdgeRadius);
 			return node;
 		}
 
-		public bool AutoTiling { get; private set; }
-		public float EdgeRadius { get; private set; }
+		public bool AutoTiling { get; set; }
+		public float EdgeRadius { get; set; }
 
 		public const string SpriteTilingPropertyName = "m_SpriteTilingProperty";
 		public const string AutoTilingName = "m_AutoTiling";

@@ -24,9 +24,9 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			return node;
 		}
 
-		public string Name { get; private set; }
-		public float MinLuminance { get; private set; }
-		public float MaxLuminance { get; private set; }
+		public string Name { get; set; }
+		public float MinLuminance { get; set; }
+		public float MaxLuminance { get; set; }
 
 		public const string NameName = "name";
 		public const string ColorName = "color";

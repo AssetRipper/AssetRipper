@@ -18,16 +18,13 @@ namespace uTinyRipper.Classes.NavMeshProjectSettingss
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool IsReadEditType(Version version)
-		{
-			return version.IsLess(5);
-		}
+		public static bool HasEditType(Version version) => version.IsLess(5);
 
 		public void Read(AssetReader reader)
 		{
 			Name = reader.ReadString();
 			Cost = reader.ReadSingle();
-			if(IsReadEditType(reader.Version))
+			if (HasEditType(reader.Version))
 			{
 				EditType = reader.ReadInt32();
 			}
@@ -41,9 +38,9 @@ namespace uTinyRipper.Classes.NavMeshProjectSettingss
 			return node;
 		}
 
-		public string Name { get; private set; }
-		public float Cost { get; private set; }
-		public int EditType { get; private set; }
+		public string Name { get; set; }
+		public float Cost { get; set; }
+		public int EditType { get; set; }
 
 		public const string NameName = "name";
 		public const string CostName = "cost";

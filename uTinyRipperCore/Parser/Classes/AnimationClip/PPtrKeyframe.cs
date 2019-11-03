@@ -31,7 +31,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			yield return context.FetchDependency(Value, ValueName);
 		}
 
-		public float Time { get; private set; }
+		public float Time { get; set; }
 
 		public const string TimeName = "time";
 		public const string ValueName = "value";

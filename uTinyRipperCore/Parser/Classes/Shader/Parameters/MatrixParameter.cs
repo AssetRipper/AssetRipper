@@ -30,12 +30,12 @@
 			reader.AlignStream();
 		}
 
-		public string Name { get; private set; }
-		public int NameIndex { get; private set; }
-		public int Index { get; private set; }
-		public int ArraySize { get; private set; }
-		public ShaderParamType Type { get; private set; }
-		public byte RowCount { get; private set; }
-		public byte ColumnCount { get; private set; }
+		public string Name { get; set; }
+		public int NameIndex { get; set; }
+		public int Index { get; set; }
+		public int ArraySize { get; set; }
+		public ShaderParamType Type { get; set; }
+		public byte RowCount { get; set; }
+		public byte ColumnCount { get; set; }
 	}
 }

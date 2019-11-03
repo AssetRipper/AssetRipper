@@ -15,16 +15,13 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadSpriteTilingProperty(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasSpriteTilingProperty(Version version) => version.IsGreaterEqual(5, 6);
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 			
-			if (IsReadSpriteTilingProperty(reader.Version))
+			if (HasSpriteTilingProperty(reader.Version))
 			{
 				SpriteTilingProperty.Read(reader);
 				AutoTiling = reader.ReadBoolean();
@@ -42,7 +39,7 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public bool AutoTiling { get; private set; }
+		public bool AutoTiling { get; set; }
 
 		public const string SpriteTilingPropertyName = "m_SpriteTilingProperty";
 		public const string AutoTilingName = "m_AutoTiling";

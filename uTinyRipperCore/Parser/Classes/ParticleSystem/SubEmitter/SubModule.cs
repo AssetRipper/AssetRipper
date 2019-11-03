@@ -6,22 +6,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 {
 	public sealed class SubModule : ParticleSystemModule, IDependent
 	{
-		/// <summary>
-		/// 5.5.0 and greater
-		/// </summary>
-		public static bool IsReadSubEmitters(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadSecond(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(5, 5))
 			{
@@ -30,13 +15,22 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool HasSubEmitters(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasSecond(Version version) => version.IsGreaterEqual(4);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadSubEmitters(reader.Version))
+			if (HasSubEmitters(reader.Version))
 			{
-				m_subEmitters = reader.ReadAssetArray<SubEmitterData>();
+				SubEmitters = reader.ReadAssetArray<SubEmitterData>();
 			}
 			else
 			{
@@ -46,7 +40,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				{
 					subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Birth, subEmitterBirth));
 				}
-				if (IsReadSecond(reader.Version))
+				if (HasSecond(reader.Version))
 				{
 					PPtr<ParticleSystem> subEmitterBirth1 = reader.ReadAsset<PPtr<ParticleSystem>>();
 					if (!subEmitterBirth1.IsNull)
@@ -60,7 +54,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				{
 					subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Death, subEmitterDeath));
 				}
-				if (IsReadSecond(reader.Version))
+				if (HasSecond(reader.Version))
 				{
 					PPtr<ParticleSystem> subEmitterDeath1 = reader.ReadAsset<PPtr<ParticleSystem>>();
 					if (!subEmitterDeath1.IsNull)
@@ -74,7 +68,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				{
 					subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Collision, subEmitterCollision));
 				}
-				if (IsReadSecond(reader.Version))
+				if (HasSecond(reader.Version))
 				{
 					PPtr<ParticleSystem> subEmitterCollision1 = reader.ReadAsset<PPtr<ParticleSystem>>();
 					if (!subEmitterCollision1.IsNull)
@@ -87,7 +81,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 				{
 					subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Birth, default));
 				}
-				m_subEmitters = subEmitters.ToArray();
+				SubEmitters = subEmitters.ToArray();
 			}
 		}
 
@@ -102,15 +96,13 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(SubEmittersName, SubEmitters.ExportYAML(container));
 			return node;
 		}
 
-		public IReadOnlyList<SubEmitterData> SubEmitters => m_subEmitters;
+		public SubEmitterData[] SubEmitters { get; set; }
 
 		public const string SubEmittersName = "subEmitters";
-
-		private SubEmitterData[] m_subEmitters;
 	}
 }

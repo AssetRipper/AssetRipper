@@ -28,10 +28,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool IsReadNetworkManager(Version version)
-		{
-			return version.IsGreaterEqual(2);
-		}
+		public static bool HasNetworkManager(Version version) => version.IsGreaterEqual(2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -65,8 +62,8 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public int DebugLevel { get; private set; }
-		public float Sendrate { get; private set; }
+		public int DebugLevel { get; set; }
+		public float Sendrate { get; set; }
 		public IReadOnlyDictionary<GUID, PPtr<GameObject>> AssetToPrefab => m_assetToPrefab;
 
 		public const string DebugLevelName = "m_DebugLevel";

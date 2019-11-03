@@ -59,13 +59,13 @@ namespace uTinyRipper.Classes.ParticleSystemForceFields
 			return node;
 		}
 
-		public ParticleSystemForceFieldShape Shape { get; private set; }
-		public float StartRange { get; private set; }
-		public float EndRange { get; private set; }
-		public float Length { get; private set; }
-		public float GravityFocus { get; private set; }
-		public bool MultiplyDragByParticleSize { get; private set; }
-		public bool MultiplyDragByParticleVelocity { get; private set; }
+		public ParticleSystemForceFieldShape Shape { get; set; }
+		public float StartRange { get; set; }
+		public float EndRange { get; set; }
+		public float Length { get; set; }
+		public float GravityFocus { get; set; }
+		public bool MultiplyDragByParticleSize { get; set; }
+		public bool MultiplyDragByParticleVelocity { get; set; }
 
 		public const string ShapeName = "m_Shape";
 		public const string StartRangeName = "m_StartRange";

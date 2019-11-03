@@ -16,7 +16,7 @@ namespace uTinyRipper.Classes.AnimatorStateMachines
 			Position = position;
 		}
 
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// TODO:
 			return 1;
@@ -25,7 +25,7 @@ namespace uTinyRipper.Classes.AnimatorStateMachines
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(StateMachineName, StateMachine.ExportYAML(container));
 			node.Add(PositionName, Position.ExportYAML(container));
 			return node;

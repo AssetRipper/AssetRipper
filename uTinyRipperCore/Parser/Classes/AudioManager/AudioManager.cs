@@ -11,80 +11,60 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		public static int ToSerializedVersion(Version version)
+		{
+			// RequestedDSPBufferSize has been added
+			if (HasRequestedDSPBufferSize(version))
+			{
+				return 2;
+			}
+			return 1;
+		}
+
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool IsReadRolloffScale(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
+		public static bool HasRolloffScale(Version version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 5.0.0b1 and less
 		/// </summary>
-		public static bool IsReadSpeedOfSound(Version version)
-		{
-			return version.IsLessEqual(5, 0, 0, VersionType.Beta, 1);
-		}
+		public static bool HasSpeedOfSound(Version version) => version.IsLessEqual(5, 0, 0, VersionType.Beta, 1);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool IsReadDefaultSpeakerMode(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
+		public static bool HasDefaultSpeakerMode(Version version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// Greater than 5.0.0b1
 		/// </summary>
-		public static bool IsReadSampleRate(Version version)
-		{
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
-		}
+		public static bool HasSampleRate(Version version) => version.IsGreater(5, 0, 0, VersionType.Beta, 1);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool IsReadDSPBufferSize(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
+		public static bool HasDSPBufferSize(Version version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// Greater than 5.0.0b1
 		/// </summary>
-		public static bool IsReadVirtualVoiceCount(Version version)
-		{
-			return version.IsGreater(5, 0, 0, VersionType.Beta, 1);
-		}
+		public static bool HasVirtualVoiceCount(Version version) => version.IsGreater(5, 0, 0, VersionType.Beta, 1);
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		public static bool IsReadSpatializerPlugin(Version version)
-		{
-			return version.IsGreaterEqual(5, 2);
-		}
+		public static bool HasSpatializerPlugin(Version version) => version.IsGreaterEqual(5, 2);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool IsReadAmbisonicDecoderPlugin(Version version)
-		{
-			return version.IsGreaterEqual(2017);
-		}
+		public static bool HasAmbisonicDecoderPlugin(Version version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 4.1.2 and greater
 		/// </summary>
-		public static bool IsReadDisableAudio(Version version)
-		{
-			return version.IsGreaterEqual(4, 1, 2);
-		}
+		public static bool HasDisableAudio(Version version) => version.IsGreaterEqual(4, 1, 2);
 		/// <summary>
 		/// 5.3.6 and greater
 		/// </summary>
-		public static bool IsReadVirtualizeEffects(Version version)
-		{
-			return version.IsGreaterEqual(5, 3, 6);
-		}
+		public static bool HasVirtualizeEffects(Version version) => version.IsGreaterEqual(5, 3, 6);
 		/// <summary>
 		/// 2019.1.1 and greater
 		/// </summary>
-		public static bool IsReadRequestedDSPBufferSize(Version version)
+		public static bool HasRequestedDSPBufferSize(Version version)
 		{
 			if (version.IsGreaterEqual(2019))
 			{
@@ -94,85 +74,69 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// 3.5.0 and greater
-		/// </summary>
-		private static bool IsReadRolloffScaleFirst(Version version)
-		{
-			return version.IsGreaterEqual(3, 5);
-		}
-		/// <summary>
 		/// 5.0.0b2 and greater
 		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
-		}
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
 
-
-		private static int GetSerializedVersion(Version version)
-		{
-			// RequestedDSPBufferSize has been added
-			if (IsReadRequestedDSPBufferSize(version))
-			{
-				return 2;
-			}
-			return 1;
-		}
+		/// <summary>
+		/// 3.5.0 and greater
+		/// </summary>
+		private static bool IsRolloffScaleFirst(Version version) => version.IsGreaterEqual(3, 5);
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
 			Volume = reader.ReadSingle();
-			if(IsReadRolloffScale(reader.Version))
+			if (HasRolloffScale(reader.Version))
 			{
-				if(IsReadRolloffScaleFirst(reader.Version))
+				if (IsRolloffScaleFirst(reader.Version))
 				{
 					RolloffScale = reader.ReadSingle();
 				}
 			}
-			if(IsReadSpeedOfSound(reader.Version))
+			if (HasSpeedOfSound(reader.Version))
 			{
 				SpeedOfSound = reader.ReadSingle();
 			}
 			DopplerFactor = reader.ReadSingle();
-			if(IsReadDefaultSpeakerMode(reader.Version))
+			if (HasDefaultSpeakerMode(reader.Version))
 			{
 				DefaultSpeakerMode = (AudioSpeakerMode)reader.ReadInt32();
 			}
-			if (IsReadSampleRate(reader.Version))
+			if (HasSampleRate(reader.Version))
 			{
 				SampleRate = reader.ReadInt32();
 			}
-			if (IsReadRolloffScale(reader.Version))
+			if (HasRolloffScale(reader.Version))
 			{
-				if (!IsReadRolloffScaleFirst(reader.Version))
+				if (!IsRolloffScaleFirst(reader.Version))
 				{
 					RolloffScale = reader.ReadSingle();
 				}
 			}
-			if (IsReadDSPBufferSize(reader.Version))
+			if (HasDSPBufferSize(reader.Version))
 			{
 				DSPBufferSize = reader.ReadInt32();
 			}
-			if (IsReadVirtualVoiceCount(reader.Version))
+			if (HasVirtualVoiceCount(reader.Version))
 			{
 				VirtualVoiceCount = reader.ReadInt32();
 				RealVoiceCount = reader.ReadInt32();
 			}
-			if (IsReadSpatializerPlugin(reader.Version))
+			if (HasSpatializerPlugin(reader.Version))
 			{
 				SpatializerPlugin = reader.ReadString();
 			}
-			if (IsReadAmbisonicDecoderPlugin(reader.Version))
+			if (HasAmbisonicDecoderPlugin(reader.Version))
 			{
 				AmbisonicDecoderPlugin = reader.ReadString();
 			}
-			if (IsReadDisableAudio(reader.Version))
+			if (HasDisableAudio(reader.Version))
 			{
 				DisableAudio = reader.ReadBoolean();
 			}
-			if (IsReadVirtualizeEffects(reader.Version))
+			if (HasVirtualizeEffects(reader.Version))
 			{
 				VirtualizeEffects = reader.ReadBoolean();
 			}
@@ -181,7 +145,7 @@ namespace uTinyRipper.Classes
 				reader.AlignStream();
 			}
 
-			if (IsReadRequestedDSPBufferSize(reader.Version))
+			if (HasRequestedDSPBufferSize(reader.Version))
 			{
 				RequestedDSPBufferSize = reader.ReadInt32();
 			}
@@ -190,7 +154,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(VolumeName, Volume);
 			node.Add(RolloffScaleName, RolloffScale);
 			node.Add(DopplerFactorName, DopplerFactor);
@@ -203,7 +167,7 @@ namespace uTinyRipper.Classes
 			node.Add(AmbisonicDecoderPluginName, GetAmbisonicDecoderPlugin(container.Version));
 			node.Add(DisableAudioName, DisableAudio);
 			node.Add(VirtualizeEffectsName, GetVirtualizeEffects(container.Version));
-			if (IsReadRequestedDSPBufferSize(container.ExportVersion))
+			if (HasRequestedDSPBufferSize(container.ExportVersion))
 			{
 				node.Add(RequestedDSPBufferSizeName, GetRequestedDSPBufferSize(container.Version));
 			}
@@ -212,49 +176,49 @@ namespace uTinyRipper.Classes
 
 		private int GetVirtualVoiceCount(Version version)
 		{
-			return IsReadVirtualVoiceCount(version) ? VirtualVoiceCount : 512;
+			return HasVirtualVoiceCount(version) ? VirtualVoiceCount : 512;
 		}
 		private int GetRealVoiceCount(Version version)
 		{
-			return IsReadVirtualVoiceCount(version) ? RealVoiceCount : 32;
+			return HasVirtualVoiceCount(version) ? RealVoiceCount : 32;
 		}
 		private string GetSpatializerPlugin(Version version)
 		{
-			return IsReadSpatializerPlugin(version) ? SpatializerPlugin : string.Empty;
+			return HasSpatializerPlugin(version) ? SpatializerPlugin : string.Empty;
 		}
 		private string GetAmbisonicDecoderPlugin(Version version)
 		{
-			return IsReadAmbisonicDecoderPlugin(version) ? AmbisonicDecoderPlugin : string.Empty;
+			return HasAmbisonicDecoderPlugin(version) ? AmbisonicDecoderPlugin : string.Empty;
 		}
 		private bool GetVirtualizeEffects(Version version)
 		{
-			return IsReadVirtualizeEffects(version) ? VirtualizeEffects : true;
+			return HasVirtualizeEffects(version) ? VirtualizeEffects : true;
 		}
 		private int GetRequestedDSPBufferSize(Version version)
 		{
-			return IsReadRequestedDSPBufferSize(version) ? RequestedDSPBufferSize : DSPBufferSize;
+			return HasRequestedDSPBufferSize(version) ? RequestedDSPBufferSize : DSPBufferSize;
 		}
 
-		public float Volume { get; private set; }
-		public float RolloffScale { get; private set; }
+		public float Volume { get; set; }
+		public float RolloffScale { get; set; }
 		/// <summary>
 		/// DopplerVelocity previously
 		/// </summary>
-		public float SpeedOfSound { get; private set; }
-		public float DopplerFactor { get; private set; }
-		public AudioSpeakerMode DefaultSpeakerMode { get; private set; }
-		public int SampleRate { get; private set; }
+		public float SpeedOfSound { get; set; }
+		public float DopplerFactor { get; set; }
+		public AudioSpeakerMode DefaultSpeakerMode { get; set; }
+		public int SampleRate { get; set; }
 		/// <summary>
 		/// iOSDSPBufferSize previously
 		/// </summary>
-		public int DSPBufferSize { get; private set; }
-		public int VirtualVoiceCount { get; private set; }
-		public int RealVoiceCount { get; private set; }
-		public string SpatializerPlugin { get; private set; }
-		public string AmbisonicDecoderPlugin { get; private set; }
-		public bool DisableAudio { get; private set; }
-		public bool VirtualizeEffects { get; private set; }
-		public int RequestedDSPBufferSize { get; private set; }
+		public int DSPBufferSize { get; set; }
+		public int VirtualVoiceCount { get; set; }
+		public int RealVoiceCount { get; set; }
+		public string SpatializerPlugin { get; set; }
+		public string AmbisonicDecoderPlugin { get; set; }
+		public bool DisableAudio { get; set; }
+		public bool VirtualizeEffects { get; set; }
+		public int RequestedDSPBufferSize { get; set; }
 
 		public const string VolumeName = "m_Volume";
 		public const string RolloffScaleName = "Rolloff Scale";

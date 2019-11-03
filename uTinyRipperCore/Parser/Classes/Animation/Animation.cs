@@ -15,44 +15,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// Less than 1.5
-		/// </summary>
-		public static bool IsReadAnimationsPaired(Version version)
-		{
-			return version.IsLess(1, 5);
-		}
-		/// <summary>
-		/// 2.6.0 to 3.4.0 exclusive
-		/// </summary>
-		public static bool IsReadAnimateOnlyIfVisible(Version version)
-		{
-			return version.IsGreaterEqual(2, 6) && version.IsLess(3, 4);
-		}
-		/// <summary>
-		/// 3.4.0 and greater
-		/// </summary>
-		public static bool IsReadCullingType(Version version)
-		{
-			return version.IsGreaterEqual(3, 4);
-		}
-		/// <summary>
-		/// 3.4.0 to
-		/// </summary>
-		public static bool IsReadUserAABB(Version version)
-		{
-			return version.IsGreaterEqual(3, 4) && version.IsLess(4, 3);
-		}
-
-		/// <summary>
-		/// 3.2.0 and greater
-		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(3, 2);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(3, 4))
 			{
@@ -65,23 +28,45 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// Less than 1.5
+		/// </summary>
+		public static bool HasAnimationsPaired(Version version) => version.IsLess(1, 5);
+		/// <summary>
+		/// 2.6.0 to 3.4.0 exclusive
+		/// </summary>
+		public static bool HasAnimateOnlyIfVisible(Version version) => version.IsGreaterEqual(2, 6) && version.IsLess(3, 4);
+		/// <summary>
+		/// 3.4.0 and greater
+		/// </summary>
+		public static bool HasCullingType(Version version) => version.IsGreaterEqual(3, 4);
+		/// <summary>
+		/// 3.4.0 to
+		/// </summary>
+		public static bool HasUserAABB(Version version) => version.IsGreaterEqual(3, 4) && version.IsLess(4, 3);
+
+		/// <summary>
+		/// 3.2.0 and greater
+		/// </summary>
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(3, 2);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 			
 			DefaultAnimation.Read(reader);
-			if (IsReadAnimationsPaired(reader.Version))
+			if (HasAnimationsPaired(reader.Version))
 			{
-				m_animationsPaired = reader.ReadTupleStringTArray<PPtr<AnimationClip>>();
+				AnimationsPaired = reader.ReadTupleStringTArray<PPtr<AnimationClip>>();
 			}
 			else
 			{
-				m_animations = reader.ReadAssetArray<PPtr<AnimationClip>>();
+				Animations = reader.ReadAssetArray<PPtr<AnimationClip>>();
 			}
 			WrapMode = (WrapMode)reader.ReadInt32();
 			PlayAutomatically = reader.ReadBoolean();
 			AnimatePhysics = reader.ReadBoolean();
-			if(IsReadAnimateOnlyIfVisible(reader.Version))
+			if(HasAnimateOnlyIfVisible(reader.Version))
 			{
 				AnimateOnlyIfVisible = reader.ReadBoolean();
 			}
@@ -90,12 +75,12 @@ namespace uTinyRipper.Classes
 				reader.AlignStream();
 			}
 
-			if (IsReadCullingType(reader.Version))
+			if (HasCullingType(reader.Version))
 			{
 				CullingType = (AnimationCullingType)reader.ReadInt32();
 			}
 
-			if (IsReadUserAABB(reader.Version))
+			if (HasUserAABB(reader.Version))
 			{
 				UserAABB.Read(reader);
 			}
@@ -110,7 +95,7 @@ namespace uTinyRipper.Classes
 			
 			yield return context.FetchDependency(DefaultAnimation, AnimationName);
 
-			if (IsReadAnimationsPaired(context.Version))
+			if (HasAnimationsPaired(context.Version))
 			{
 				foreach (PPtr<Object> asset in context.FetchDependencies(AnimationsPaired.Select(t => t.Item2), AnimationsName))
 				{
@@ -141,7 +126,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(AnimationName, DefaultAnimation.ExportYAML(container));
 			node.Add(AnimationsName, Animations.ExportYAML(container));
 			node.Add(WrapModeName, (int)WrapMode);
@@ -151,16 +136,16 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 		
-		public IReadOnlyList<Tuple<string, PPtr<AnimationClip>>> AnimationsPaired => m_animationsPaired;
-		public IReadOnlyList<PPtr<AnimationClip>> Animations => m_animations;
-		public WrapMode WrapMode { get; private set; }
-		public bool PlayAutomatically { get; private set; }
+		public Tuple<string, PPtr<AnimationClip>>[] AnimationsPaired { get; set; }
+		public PPtr<AnimationClip>[] Animations { get; set; }
+		public WrapMode WrapMode { get; set; }
+		public bool PlayAutomatically { get; set; }
 		/// <summary>
 		/// PlayFixedFrameRate previously
 		/// </summary>
-		public bool AnimatePhysics { get; private set; }
-		public bool AnimateOnlyIfVisible { get; private set; }
-		public AnimationCullingType CullingType { get; private set; }
+		public bool AnimatePhysics { get; set; }
+		public bool AnimateOnlyIfVisible { get; set; }
+		public AnimationCullingType CullingType { get; set; }
 
 		public const string AnimationName = "m_Animation";
 		public const string AnimationsName = "m_Animations";
@@ -171,8 +156,5 @@ namespace uTinyRipper.Classes
 
 		public PPtr<AnimationClip> DefaultAnimation;
 		public AABB UserAABB;
-
-		private Tuple<string, PPtr<AnimationClip>>[] m_animationsPaired;
-		private PPtr<AnimationClip>[] m_animations;
 	}
 }

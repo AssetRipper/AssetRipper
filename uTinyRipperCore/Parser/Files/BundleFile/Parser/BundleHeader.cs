@@ -52,14 +52,14 @@ namespace uTinyRipper.BundleFiles
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool IsReadBundleSize(BundleGeneration generation)
+		public static bool HasBundleSize(BundleGeneration generation)
 		{
 			return generation >= BundleGeneration.BF_260_340;
 		}
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool IsReadMetadataDecompressedSize(BundleGeneration generation)
+		public static bool HasMetadataDecompressedSize(BundleGeneration generation)
 		{
 			return generation >= BundleGeneration.BF_350_4x;
 		}
@@ -120,11 +120,11 @@ namespace uTinyRipper.BundleFiles
 			HeaderSize = reader.ReadInt32();
 			TotalChunkCount = reader.ReadInt32();
 			ChunkInfos = reader.ReadEndianArray<ChunkInfo>();
-			if (IsReadBundleSize(Generation))
+			if (HasBundleSize(Generation))
 			{
 				BundleSize = reader.ReadUInt32();
 			}
-			if (IsReadMetadataDecompressedSize(Generation))
+			if (HasMetadataDecompressedSize(Generation))
 			{
 				MetadataDecompressedSize = (int)reader.ReadUInt32();
 			}

@@ -8,96 +8,72 @@ namespace uTinyRipper.Classes.Lights
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool IsReadCustomResolution(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
+		public static bool HasCustomResolution(Version version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// Less than 3.4.0
 		/// </summary>
-		public static bool IsReadProjection(Version version)
-		{
-			return version.IsLess(3, 4);
-		}
+		public static bool HasProjection(Version version) => version.IsLess(3, 4);
 		/// <summary>
 		/// Less than 3
 		/// </summary>
-		public static bool IsReadConstantBias(Version version)
-		{
-			return version.IsLess(3);
-		}
+		public static bool HasConstantBias(Version version) => version.IsLess(3);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool IsReadBias(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
+		public static bool HasBias(Version version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 3.2.0 to 5.0.0beta
 		/// </summary>
-		public static bool IsReadSoftness(Version version)
-		{
-			return version.IsGreaterEqual(3, 2) && version.IsLess(5, 0, 0, VersionType.Beta);
-		}
+		public static bool HasSoftness(Version version) => version.IsGreaterEqual(3, 2) && version.IsLess(5, 0, 0, VersionType.Beta);
 		/// <summary>
 		/// 5.0.0f and greater
 		/// </summary>
-		public static bool IsReadNormalBias(Version version)
-		{
-			return version.IsGreater(5, 0, 0, VersionType.Beta);
-		}
+		public static bool HasNormalBias(Version version) => version.IsGreater(5, 0, 0, VersionType.Beta);
 		/// <summary>
 		/// 5.3.0b6 and greater
 		/// </summary>
-		public static bool IsReadNearPlane(Version version)
-		{
-			return version.IsGreaterEqual(5, 3, 0, VersionType.Beta, 6);
-		}
+		public static bool HasNearPlane(Version version) => version.IsGreaterEqual(5, 3, 0, VersionType.Beta, 6);
 		/// <summary>
 		/// 2019.1.0b4 and greater
 		/// </summary>
-		public static bool IsReadCullingMatrixOverride(Version version)
-		{
-			return version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 4);
-		}
+		public static bool HasCullingMatrixOverride(Version version) => version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 4);
 
 		public void Read(AssetReader reader)
 		{
 			Type = (LightShadows)reader.ReadInt32();
 			Resolution = reader.ReadInt32();
-			if (IsReadCustomResolution(reader.Version))
+			if (HasCustomResolution(reader.Version))
 			{
 				CustomResolution = reader.ReadInt32();
 			}
 			Strength = reader.ReadSingle();
-			if (IsReadProjection(reader.Version))
+			if (HasProjection(reader.Version))
 			{
 				Projection = reader.ReadInt32();
 			}
-			if (IsReadConstantBias(reader.Version))
+			if (HasConstantBias(reader.Version))
 			{
 				ConstantBias = reader.ReadSingle();
 				ObjectSizeBias = reader.ReadSingle();
 			}
-			if (IsReadBias(reader.Version))
+			if (HasBias(reader.Version))
 			{
 				Bias = reader.ReadSingle();
 			}
-			if (IsReadSoftness(reader.Version))
+			if (HasSoftness(reader.Version))
 			{
 				Softness = reader.ReadSingle();
 				SoftnessFade = reader.ReadSingle();
 			}
-			if (IsReadNormalBias(reader.Version))
+			if (HasNormalBias(reader.Version))
 			{
 				NormalBias = reader.ReadSingle();
 			}
-			if (IsReadNearPlane(reader.Version))
+			if (HasNearPlane(reader.Version))
 			{
 				NearPlane = reader.ReadSingle();
 			}
-			if (IsReadCullingMatrixOverride(reader.Version))
+			if (HasCullingMatrixOverride(reader.Version))
 			{
 				CullingMatrixOverride.Read(reader);
 				UseCullingMatrixOverride = reader.ReadBoolean();
@@ -115,7 +91,7 @@ namespace uTinyRipper.Classes.Lights
 			node.Add(BiasName, Bias);
 			node.Add(NormalBiasName, NormalBias);
 			node.Add(NearPlaneName, NearPlane);
-			if (IsReadCullingMatrixOverride(container.ExportVersion))
+			if (HasCullingMatrixOverride(container.ExportVersion))
 			{
 				node.Add(CullingMatrixOverrideName, GetCullingMatrixOverride(container.Version).ExportYAML(container));
 				node.Add(UseCullingMatrixOverrideName, UseCullingMatrixOverride);
@@ -125,22 +101,22 @@ namespace uTinyRipper.Classes.Lights
 
 		private Matrix4x4f GetCullingMatrixOverride(Version version)
 		{
-			return IsReadCullingMatrixOverride(version) ? CullingMatrixOverride : Matrix4x4f.Identity;
+			return HasCullingMatrixOverride(version) ? CullingMatrixOverride : Matrix4x4f.Identity;
 		}
 
-		public LightShadows Type { get; private set; }
-		public int Resolution { get; private set; }
-		public int CustomResolution { get; private set; }
-		public float Strength { get; private set; }
-		public int Projection { get; private set; }
-		public float ConstantBias { get; private set; }
-		public float ObjectSizeBias { get; private set; }
-		public float Bias { get; private set; }
-		public float Softness  { get; private set; }
-		public float SoftnessFade  { get; private set; }
-		public float NormalBias { get; private set; }
-		public float NearPlane { get; private set; }
-		public bool UseCullingMatrixOverride { get; private set; }
+		public LightShadows Type { get; set; }
+		public int Resolution { get; set; }
+		public int CustomResolution { get; set; }
+		public float Strength { get; set; }
+		public int Projection { get; set; }
+		public float ConstantBias { get; set; }
+		public float ObjectSizeBias { get; set; }
+		public float Bias { get; set; }
+		public float Softness  { get; set; }
+		public float SoftnessFade  { get; set; }
+		public float NormalBias { get; set; }
+		public float NearPlane { get; set; }
+		public bool UseCullingMatrixOverride { get; set; }
 		
 		public const string TypeName = "m_Type";
 		public const string ResolutionName = "m_Resolution";
@@ -152,6 +128,6 @@ namespace uTinyRipper.Classes.Lights
 		public const string CullingMatrixOverrideName = "m_CullingMatrixOverride";
 		public const string UseCullingMatrixOverrideName = "m_UseCullingMatrixOverride";
 
-		public Matrix4x4f CullingMatrixOverride { get; private set; }
+		public Matrix4x4f CullingMatrixOverride { get; set; }
 	}
 }

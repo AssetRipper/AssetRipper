@@ -18,14 +18,14 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Not Release
 		/// </summary>
-		public static bool IsReadEditorData(TransferInstructionFlags flags)
+		public static bool HasEditorData(TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease();
 		}
 		/// <summary>
 		/// Release
 		/// </summary>
-		public static bool IsReadRenderDataMap(TransferInstructionFlags flags)
+		public static bool HasRenderDataMap(TransferInstructionFlags flags)
 		{
 			return flags.IsRelease();
 		}
@@ -34,16 +34,16 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			if (IsReadEditorData(reader.Flags))
+			if (HasEditorData(reader.Flags))
 			{
 				EditorData = reader.ReadAsset<SpriteAtlasEditorData>();
 				MasterAtlas.Read(reader);
 			}
-			m_packedSprites = reader.ReadAssetArray<PPtr<Sprite>>();
-			m_packedSpriteNamesToIndex = reader.ReadStringArray();
-			if (IsReadRenderDataMap(reader.Flags))
+			PackedSprites = reader.ReadAssetArray<PPtr<Sprite>>();
+			PackedSpriteNamesToIndex = reader.ReadStringArray();
+			if (HasRenderDataMap(reader.Flags))
 			{
-				m_renderDataMap.Read(reader);
+				RenderDataMap.Read(reader);
 			}
 			Tag = reader.ReadString();
 			IsVariant = reader.ReadBoolean();
@@ -57,7 +57,7 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 
-			if (IsReadEditorData(context.Flags))
+			if (HasEditorData(context.Flags))
 			{
 				foreach (PPtr<Object> asset in context.FetchDependencies(EditorData, EditorDataName))
 				{
@@ -69,7 +69,7 @@ namespace uTinyRipper.Classes
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(RenderDataMap.Values, RenderDataMapName))
+			foreach (PPtr<Object> asset in context.FetchDependencies((IEnumerable<SpriteAtlasData>)RenderDataMap.Values, RenderDataMapName))
 			{
 				yield return asset;
 			}
@@ -78,14 +78,14 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			if (IsReadEditorData(container.ExportFlags))
+			if (HasEditorData(container.ExportFlags))
 			{
 				node.Add(EditorDataName, GetEditorData(container.Flags).ExportYAML(container));
 				node.Add(MasterAtlasName, MasterAtlas.ExportYAML(container));
 			}
 			node.Add(PackedSpritesName, PackedSprites.ExportYAML(container));
 			node.Add(PackedSpriteNamesToIndexName, PackedSpriteNamesToIndex.ExportYAML());
-			if (IsReadRenderDataMap(container.ExportFlags))
+			if (HasRenderDataMap(container.ExportFlags))
 			{
 				node.Add(RenderDataMapName, RenderDataMap.ExportYAML(container));
 			}
@@ -96,7 +96,7 @@ namespace uTinyRipper.Classes
 
 		public SpriteAtlasEditorData GetEditorData(TransferInstructionFlags flags)
 		{
-			if (IsReadEditorData(flags))
+			if (HasEditorData(flags))
 			{
 				return EditorData;
 			}
@@ -105,12 +105,12 @@ namespace uTinyRipper.Classes
 
 		public override string ExportExtension => "spriteatlas";
 
-		public SpriteAtlasEditorData EditorData { get; private set; }
-		public IReadOnlyList<PPtr<Sprite>> PackedSprites => m_packedSprites;
-		public IReadOnlyList<string> PackedSpriteNamesToIndex => m_packedSpriteNamesToIndex;
-		public IReadOnlyDictionary<Tuple<GUID, long>, SpriteAtlasData> RenderDataMap => m_renderDataMap;
-		public string Tag { get; private set; }
-		public bool IsVariant { get; private set; }
+		public SpriteAtlasEditorData EditorData { get; set; }
+		public PPtr<Sprite>[] PackedSprites { get; set; }
+		public string[] PackedSpriteNamesToIndex { get; set; }
+		public Dictionary<Tuple<GUID, long>, SpriteAtlasData> RenderDataMap { get; set; } = new Dictionary<Tuple<GUID, long>, SpriteAtlasData>();
+		public string Tag { get; set; }
+		public bool IsVariant { get; set; }
 
 		public const string EditorDataName = "m_EditorData";
 		public const string MasterAtlasName = "m_MasterAtlas";
@@ -121,10 +121,5 @@ namespace uTinyRipper.Classes
 		public const string IsVariantName = "m_IsVariant";
 
 		public PPtr<SpriteAtlas> MasterAtlas;
-
-		private readonly Dictionary<Tuple<GUID, long>, SpriteAtlasData> m_renderDataMap = new Dictionary<Tuple<GUID, long>, SpriteAtlasData>();
-
-		private PPtr<Sprite>[] m_packedSprites;
-		private string[] m_packedSpriteNamesToIndex;
 	}
 }

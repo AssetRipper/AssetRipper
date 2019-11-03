@@ -19,8 +19,8 @@ namespace uTinyRipper.Classes.Lights
 			return node;
 		}
 
-		public LightmapBakeType LightmapBakeType { get; private set; }
-		public MixedLightingMode MixedLightingMode { get; private set; }
+		public LightmapBakeType LightmapBakeType { get; set; }
+		public MixedLightingMode MixedLightingMode { get; set; }
 
 		public const string LightmapBakeTypeName = "lightmapBakeType";
 		public const string MixedLightingModeName = "mixedLightingMode";

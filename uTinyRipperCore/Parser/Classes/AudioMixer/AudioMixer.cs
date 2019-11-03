@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using uTinyRipper.Classes.AudioMixers;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
@@ -13,7 +12,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/*private static int GetSerializedVersion(Version version)
+		/*public static int ToSerializedVersion(Version version)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			return 2;
@@ -25,7 +24,7 @@ namespace uTinyRipper.Classes
 
 			OutputGroup.Read(reader);
 			MasterGroup.Read(reader);
-			m_snapshots = reader.ReadAssetArray<PPtr<AudioMixerSnapshot>>();
+			Snapshots = reader.ReadAssetArray<PPtr<AudioMixerSnapshot>>();
 			StartSnapshot.Read(reader);
 			SuspendThreshold = reader.ReadSingle();
 			EnableSuspend = reader.ReadBoolean();
@@ -42,7 +41,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			//node.AddSerializedVersion(ToSerializedVersion(container.Version));
 			node.Add(OutputGroupName, OutputGroup.ExportYAML(container));
 			node.Add(MasterGroupName, MasterGroup.ExportYAML(container));
 			node.Add(SnapshotsName, Snapshots.ExportYAML(container));
@@ -54,10 +53,10 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public IReadOnlyList<PPtr<AudioMixerSnapshot>> Snapshots => m_snapshots;
-		public float SuspendThreshold { get; private set; }
-		public bool EnableSuspend { get; private set; }
-		public int UpdateMode { get; private set; }
+		public PPtr<AudioMixerSnapshot>[] Snapshots { get; set; }
+		public float SuspendThreshold { get; set; }
+		public bool EnableSuspend { get; set; }
+		public int UpdateMode { get; set; }
 
 		public const string OutputGroupName = "m_OutputGroup";
 		public const string MasterGroupName = "m_MasterGroup";
@@ -72,7 +71,5 @@ namespace uTinyRipper.Classes
 		public PPtr<AudioMixerGroup> MasterGroup;
 		public PPtr<AudioMixerSnapshot> StartSnapshot;
 		public AudioMixerConstant MixerConstant;
-
-		private PPtr<AudioMixerSnapshot>[] m_snapshots;
 	}
 }

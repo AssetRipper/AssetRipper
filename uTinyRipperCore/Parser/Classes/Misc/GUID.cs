@@ -76,10 +76,10 @@ namespace uTinyRipper.Classes.Misc
 
 		public bool IsZero => Data0 == 0 && Data1 == 0 && Data2 == 0 && Data3 == 0;
 
-		public uint Data0 { get; private set; }
-		public uint Data1 { get; private set; }
-		public uint Data2 { get; private set; }
-		public uint Data3 { get; private set; }
+		public uint Data0 { get; set; }
+		public uint Data1 { get; set; }
+		public uint Data2 { get; set; }
+		public uint Data3 { get; set; }
 
 		public static readonly GUID MissingReference = new GUID(0xD0000000, 0x5DEADF00, 0xEADBEEF1, 0x0000000D);
 	}

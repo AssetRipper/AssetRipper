@@ -35,7 +35,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			return node;
 		}
 
-		public BuiltinShaderMode Mode { get; private set; }
+		public BuiltinShaderMode Mode { get; set; }
 
 		public const string ModeName = "m_Mode";
 		public const string ShaderName = "m_Shader";

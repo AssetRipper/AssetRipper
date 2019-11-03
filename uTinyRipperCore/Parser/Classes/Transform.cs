@@ -15,17 +15,11 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 4.5.0 and greater and Not Release
 		/// </summary>
-		public static bool IsReadRootOrder(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(4, 5);
-		}
+		public static bool HasRootOrder(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 5.0.0 and greater and Not Release
 		/// </summary>
-		public static bool IsReadLocalEulerAnglesHint(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(5);
-		}
+		public static bool HasLocalEulerAnglesHint(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -34,14 +28,14 @@ namespace uTinyRipper.Classes
 			LocalRotation.Read(reader);
 			LocalPosition.Read(reader);
 			LocalScale.Read(reader);
-			m_children = reader.ReadAssetArray<PPtr<Transform>>();
+			Children = reader.ReadAssetArray<PPtr<Transform>>();
 			Father.Read(reader);
 #if UNIVERSAL
-			if (IsReadRootOrder(reader.Version, reader.Flags))
+			if (HasRootOrder(reader.Version, reader.Flags))
 			{
 				RootOrder = reader.ReadInt32();
 			}
-			if (IsReadLocalEulerAnglesHint(reader.Version, reader.Flags))
+			if (HasLocalEulerAnglesHint(reader.Version, reader.Flags))
 			{
 				LocalEulerAnglesHint.Read(reader);
 			}
@@ -79,7 +73,7 @@ namespace uTinyRipper.Classes
 				return 0;
 			}
 			Transform father = Father.GetAsset(File);
-			for(int i = 0; i < father.Children.Count; i++)
+			for(int i = 0; i < father.Children.Length; i++)
 			{
 				PPtr<Transform> child = father.Children[i];
 				if (child.PathID == PathID)
@@ -115,7 +109,7 @@ namespace uTinyRipper.Classes
 		private int GetRootOrder(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadRootOrder(version, flags))
+			if (HasRootOrder(version, flags))
 			{
 				return RootOrder;
 			}
@@ -125,7 +119,7 @@ namespace uTinyRipper.Classes
 		private Vector3f GetLocalEulerAnglesHint(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadLocalEulerAnglesHint(version, flags))
+			if (HasLocalEulerAnglesHint(version, flags))
 			{
 				return LocalEulerAnglesHint;
 			}
@@ -139,7 +133,7 @@ namespace uTinyRipper.Classes
 			string childName = separatorIndex == -1 ?
 				path.Substring(startIndex, path.Length - startIndex) :
 				path.Substring(startIndex, separatorIndex - startIndex);
-			foreach (PPtr<Transform> childPtr in m_children)
+			foreach (PPtr<Transform> childPtr in Children)
 			{
 				Transform child = childPtr.GetAsset(File);
 				GameObject childGO = child.GameObject.GetAsset(File);
@@ -159,10 +153,10 @@ namespace uTinyRipper.Classes
 		public const string RootOrderName = "m_RootOrder";
 		public const string LocalEulerAnglesHintName = "m_LocalEulerAnglesHint";
 
-		public IReadOnlyList<PPtr<Transform>> Children => m_children;
+		public PPtr<Transform>[] Children { get; set; }
 #if UNIVERSAL
-		public int RootOrder { get; private set; }
-		public Vector3f LocalEulerAnglesHint { get; private set; }
+		public int RootOrder { get; set; }
+		public Vector3f LocalEulerAnglesHint { get; set; }
 #endif
 
 		public const char PathSeparator = '/';
@@ -171,7 +165,5 @@ namespace uTinyRipper.Classes
 		public Vector3f LocalPosition;
 		public Vector3f LocalScale;
 		public PPtr<Transform> Father;
-
-		private PPtr<Transform>[] m_children;
 	}
 }

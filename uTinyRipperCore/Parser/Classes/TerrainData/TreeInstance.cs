@@ -54,10 +54,10 @@ namespace uTinyRipper.Classes.TerrainDatas
 			return node;
 		}
 
-		public float WidthScale { get; private set; }
-		public float HeightScale { get; private set; }
-		public float Rotation { get; private set; }
-		public int Index { get; private set; }
+		public float WidthScale { get; set; }
+		public float HeightScale { get; set; }
+		public float Rotation { get; set; }
+		public int Index { get; set; }
 
 		public const string PositionName = "position";
 		public const string WidthScaleName = "widthScale";

@@ -25,11 +25,11 @@ namespace uTinyRipper.Classes.ClusterInputManagers
 			return node;
 		}
 
-		public string Name { get; private set; }
-		public string DeviceName { get; private set; }
-		public string ServerUrl { get; private set; }
-		public int Index { get; private set; }
-		public int Type { get; private set; }
+		public string Name { get; set; }
+		public string DeviceName { get; set; }
+		public string ServerUrl { get; set; }
+		public int Index { get; set; }
+		public int Type { get; set; }
 
 		public const string NameName = "m_Name";
 		public const string DeviceNameName = "m_DeviceName";

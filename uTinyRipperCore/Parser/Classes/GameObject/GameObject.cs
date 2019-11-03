@@ -14,6 +14,68 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		public static int ToSerializedVersion(Version version)
+		{
+			// unknown
+			if (version.IsGreaterEqual(5, 5))
+			{
+				return 5;
+			}
+			// active state inheritance
+			if (version.IsGreaterEqual(4))
+			{
+				return 4;
+			}
+			// min is 3
+			// tag is ushort for Release, otherwise string. For later versions for yaml only string left
+			return 3;
+			// tag is string
+			//return 2;
+			// tag is ushort
+			//return 1;
+		}
+
+		/// <summary>
+		/// Less than 3.5 or Not Prefab
+		/// </summary>
+		public static bool HasComponents(Version version, TransferInstructionFlags flags) => !flags.IsForPrefab() || version.IsLess(3, 5);
+		/// <summary>
+		/// Less than 2.1.0
+		/// </summary>
+		public static bool HasIsActiveFirst(Version version) => version.IsLess(2, 1);
+		/// <summary>
+		/// Release
+		/// </summary>
+		public static bool HasTag(TransferInstructionFlags flags)
+		{
+			return flags.IsRelease();
+		}
+		/// <summary>
+		/// 3.4.0 and greater and Not Release
+		/// </summary>
+		public static bool HasIcon(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 4);
+		/// <summary>
+		/// 3.5.0 and greater and Not Release
+		/// </summary>
+		public static bool HasNavMeshLayer(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 5);
+		/// <summary>
+		/// 3.0.0 to 3.5.0 exclusive and Not Release
+		/// </summary>
+		public static bool HasIsStatic(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsLess(3, 5) && version.IsGreaterEqual(3);
+		}
+
+		/// <summary>
+		/// 3.5.0 and greater
+		/// </summary>
+		private static bool IsIconFirst(Version version) => version.IsGreaterEqual(3, 5);
+
+		/// <summary>
+		/// Less than 4.0.0
+		/// </summary>
+		private static bool IsActiveInherited(Version version) => version.IsLess(4);
+
 		private static IEnumerable<EditorExtension> FetchHierarchy(GameObject root)
 		{
 			yield return root;
@@ -22,7 +84,7 @@ namespace uTinyRipper.Classes
 			foreach (ComponentPair cpair in root.Component)
 			{
 				Component component = cpair.Component.FindAsset(root.File);
-				if(component == null)
+				if (component == null)
 				{
 					continue;
 				}
@@ -45,96 +107,16 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		/// <summary>
-		/// Less than 3.5 or Not Prefab
-		/// </summary>
-		public static bool IsReadComponents(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsForPrefab() || version.IsLess(3, 5);
-		}
-		/// <summary>
-		/// Less than 2.1.0
-		/// </summary>
-		public static bool IsReadIsActiveFirst(Version version)
-		{
-			return version.IsLess(2, 1);
-		}
-		/// <summary>
-		/// Release
-		/// </summary>
-		public static bool IsReadTag(TransferInstructionFlags flags)
-		{
-			return flags.IsRelease();
-		}
-		/// <summary>
-		/// 3.4.0 and greater and Not Release
-		/// </summary>
-		public static bool IsReadIcon(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(3, 4);
-		}
-		/// <summary>
-		/// 3.5.0 and greater and Not Release
-		/// </summary>
-		public static bool IsReadNavMeshLayer(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(3, 5);
-		}
-		/// <summary>
-		/// 3.0.0 to 3.5.0 exclusive and Not Release
-		/// </summary>
-		public static bool IsReadIsStatic(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsLess(3, 5) && version.IsGreaterEqual(3);
-		}
-
-		/// <summary>
-		/// 3.5.0 and greater
-		/// </summary>
-		private static bool IsReadIconFirst(Version version)
-		{
-			return version.IsGreaterEqual(3, 5);
-		}
-		/// <summary>
-		/// Less than 4.0.0
-		/// SerializedVersion less than 4
-		/// </summary>
-		private static bool IsActiveInherited(Version version)
-		{
-			return version.IsLess(4);
-		}
-
-		private static int GetSerializedVersion(Version version)
-		{
-			// unknown
-			if (version.IsGreaterEqual(5, 5))
-			{
-				return 5;
-			}
-			// active state inheritance
-			if (version.IsGreaterEqual(4))
-			{
-				return 4;
-			}
-			// min is 3
-			// tag is ushort for Release, otherwise string. For later versions for yaml only string left
-			return 3;
-			// tag is string
-			//return 2;
-			// tag is ushort
-			//return 1;
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if(IsReadComponents(reader.Version, reader.Flags))
+			if (HasComponents(reader.Version, reader.Flags))
 			{
 				Component = reader.ReadAssetArray<ComponentPair>();
 			}
 
-			if (IsReadIsActiveFirst(reader.Version))
+			if (HasIsActiveFirst(reader.Version))
 			{
 				IsActive = reader.ReadBoolean();
 				Layer = reader.ReadUInt32();
@@ -146,7 +128,7 @@ namespace uTinyRipper.Classes
 				Layer = reader.ReadUInt32();
 				Name = reader.ReadString();
 
-				if (IsReadTag(reader.Flags))
+				if (HasTag(reader.Flags))
 				{
 					Tag = reader.ReadUInt16();
 				}
@@ -155,14 +137,14 @@ namespace uTinyRipper.Classes
 				{
 					TagString = reader.ReadString();
 				}
-				if (IsReadIcon(reader.Version, reader.Flags))
+				if (HasIcon(reader.Version, reader.Flags))
 				{
-					if (IsReadIconFirst(reader.Version))
+					if (IsIconFirst(reader.Version))
 					{
 						Icon.Read(reader);
 					}
 				}
-				if (IsReadNavMeshLayer(reader.Version, reader.Flags))
+				if (HasNavMeshLayer(reader.Version, reader.Flags))
 				{
 					NavMeshLayer = reader.ReadUInt32();
 					StaticEditorFlags = reader.ReadUInt32();
@@ -172,13 +154,13 @@ namespace uTinyRipper.Classes
 
 
 #if UNIVERSAL
-				if (IsReadIsStatic(reader.Version, reader.Flags))
+				if (HasIsStatic(reader.Version, reader.Flags))
 				{
 					IsStatic = reader.ReadBoolean();
 				}
-				if (IsReadIcon(reader.Version, reader.Flags))
+				if (HasIcon(reader.Version, reader.Flags))
 				{
-					if (!IsReadIconFirst(reader.Version))
+					if (!IsIconFirst(reader.Version))
 					{
 						Icon.Read(reader);
 					}
@@ -315,7 +297,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ComponentName, GetComponents(container.Version, container.Flags).ExportYAML(container));
 			node.Add(LayerName, Layer);
 			node.Add(NameName, Name);
@@ -329,12 +311,12 @@ namespace uTinyRipper.Classes
 
 		private IReadOnlyList<ComponentPair> GetComponents(Version version, TransferInstructionFlags flags)
 		{
-			return IsReadComponents(version, flags) ? Component : Array.Empty<ComponentPair>();
+			return HasComponents(version, flags) ? Component : Array.Empty<ComponentPair>();
 		}
 		private string GetTagString(IExportContainer container)
 		{
 #if UNIVERSAL
-			if(!IsReadTag(container.Flags) && !IsReadIsActiveFirst(container.Version))
+			if (!HasTag(container.Flags) && !HasIsActiveFirst(container.Version))
 			{
 				return TagString;
 			}
@@ -391,20 +373,20 @@ namespace uTinyRipper.Classes
 		public override string ExportExtension => throw new NotSupportedException();
 		
 		public ComponentPair[] Component { get; private set; }
-		public uint Layer { get; private set; }
-		public string Name { get; private set; } = string.Empty;
-		public ushort Tag { get; private set; }
+		public uint Layer { get; set; }
+		public string Name { get; set; } = string.Empty;
+		public ushort Tag { get; set; }
 #if UNIVERSAL
-		public string TagString { get; private set; }
-		public uint NavMeshLayer { get; private set; }
-		public uint StaticEditorFlags { get; private set; }
+		public string TagString { get; set; }
+		public uint NavMeshLayer { get; set; }
+		public uint StaticEditorFlags { get; set; }
 		public bool IsStatic
 		{
 			get => StaticEditorFlags != 0;
 			set => StaticEditorFlags = value ? uint.MaxValue : 0;
 		}
 #endif
-		public bool IsActive { get; private set; }
+		public bool IsActive { get; set; }
 
 		public const string ComponentName = "m_Component";
 		public const string LayerName = "m_Layer";

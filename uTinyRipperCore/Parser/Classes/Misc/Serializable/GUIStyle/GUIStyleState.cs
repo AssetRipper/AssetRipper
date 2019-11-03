@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using System;
 
 namespace uTinyRipper.Classes.GUIStyles
 {
@@ -10,24 +11,24 @@ namespace uTinyRipper.Classes.GUIStyles
 		{
 			Background = default;
 			TextColor = default;
-			m_scaledBackgrounds = System.Array.Empty<PPtr<Texture2D>>();
+			ScaledBackgrounds = Array.Empty<PPtr<Texture2D>>();
 		}
 
 		public GUIStyleState(GUIStyleState copy)
 		{
 			Background = copy.Background;
 			TextColor = copy.TextColor;
-			m_scaledBackgrounds = new PPtr<Texture2D>[copy.ScaledBackgrounds.Count];
-			for(int i = 0; i < copy.ScaledBackgrounds.Count; i++)
+			ScaledBackgrounds = new PPtr<Texture2D>[copy.ScaledBackgrounds.Length];
+			for(int i = 0; i < copy.ScaledBackgrounds.Length; i++)
 			{
-				m_scaledBackgrounds[i] = copy.ScaledBackgrounds[i];
+				ScaledBackgrounds[i] = copy.ScaledBackgrounds[i];
 			}
 		}
 
 		public void Read(AssetReader reader)
 		{
 			Background.Read(reader);
-			m_scaledBackgrounds = System.Array.Empty<PPtr<Texture2D>>();
+			ScaledBackgrounds = Array.Empty<PPtr<Texture2D>>();
 			//m_scaledBackgrounds = stream.ReadArray<PPtr<Texture2D>>();
 			TextColor.Read(reader);
 		}
@@ -43,7 +44,7 @@ namespace uTinyRipper.Classes.GUIStyles
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(BackgroundName, Background.ExportYAML(container));
-			node.Add(ScaledBackgroundsName, m_scaledBackgrounds.ExportYAML(container));
+			node.Add(ScaledBackgroundsName, ScaledBackgrounds.ExportYAML(container));
 			node.Add(TextColorName, TextColor.ExportYAML(container));
 			return node;
 		}
@@ -53,7 +54,7 @@ namespace uTinyRipper.Classes.GUIStyles
 			yield break;
 		}
 		
-		public IReadOnlyList<PPtr<Texture2D>> ScaledBackgrounds => m_scaledBackgrounds;
+		public PPtr<Texture2D>[] ScaledBackgrounds { get; set; }
 
 		public const string BackgroundName = "m_Background";
 		public const string ScaledBackgroundsName = "m_ScaledBackgrounds";
@@ -61,7 +62,5 @@ namespace uTinyRipper.Classes.GUIStyles
 
 		public PPtr<Texture2D> Background;
 		public ColorRGBAf TextColor;
-
-		private PPtr<Texture2D>[] m_scaledBackgrounds;
 	}
 }

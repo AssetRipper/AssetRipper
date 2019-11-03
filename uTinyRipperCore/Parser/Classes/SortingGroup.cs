@@ -30,9 +30,9 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public int SortingLayerID { get; private set; }
-		public short SortingLayer { get; private set; }
-		public short SortingOrder { get; private set; }
+		public int SortingLayerID { get; set; }
+		public short SortingLayer { get; set; }
+		public short SortingOrder { get; set; }
 
 		public const string SortingLayerIDName = "m_SortingLayerID";
 		public const string SortingLayerName = "m_SortingLayer";

@@ -21,9 +21,9 @@ namespace uTinyRipper.Classes.Misc
 			return node;
 		}
 
-		public ushort HighSeconds { get; private set; }
-		public ushort Fraction { get; private set; }
-		public uint LowSeconds { get; private set; }
+		public ushort HighSeconds { get; set; }
+		public ushort Fraction { get; set; }
+		public uint LowSeconds { get; set; }
 
 		public const string HighSecondsName = "highSeconds";
 		public const string FractionName = "fraction";

@@ -31,7 +31,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public InheritVelocityMode Mode { get; private set; }
+		public InheritVelocityMode Mode { get; set; }
 
 		public const string ModeName = "m_Mode";
 		public const string CurveName = "m_Curve";

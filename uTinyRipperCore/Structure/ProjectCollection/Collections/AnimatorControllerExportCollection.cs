@@ -20,15 +20,15 @@ namespace uTinyRipper.Project
 		{
 			ControllerConstant controller = asset.Controller;
 			IReadOnlyList<OffsetPtr<StateMachineConstant>> stateMachinesConst = controller.StateMachineArray;
-			m_stateMachines = new AnimatorStateMachine[stateMachinesConst.Count];
+			StateMachines = new AnimatorStateMachine[stateMachinesConst.Count];
 			for (int i = 0; i < stateMachinesConst.Count; i++)
 			{
 				AnimatorStateMachine stateMachine = AnimatorStateMachine.CreateVirtualInstance(virtualFile, asset, i);
-				m_stateMachines[i] = stateMachine;
+				StateMachines[i] = stateMachine;
 			}
 
 #warning TODO: export MonoBehaviours
-			for (int i = 0; i < StateMachines.Count; i++)
+			for (int i = 0; i < StateMachines.Length; i++)
 			{
 				AnimatorStateMachine stateMachine = StateMachines[i];
 				StateMachineConstant stateMachineConstant = asset.Controller.StateMachineArray[i].Instance;
@@ -45,7 +45,7 @@ namespace uTinyRipper.Project
 					AddAsset(transition);
 				}
 
-				for (int j = 0; j < stateMachine.ChildStates.Count; j++)
+				for (int j = 0; j < stateMachine.ChildStates.Length; j++)
 				{
 					PPtr<AnimatorState> statePtr = stateMachine.ChildStates[j].State;
 					AnimatorState state = statePtr.GetAsset(virtualFile);
@@ -58,7 +58,7 @@ namespace uTinyRipper.Project
 						AddBlendTree(virtualFile, (BlendTree)motion);
 					}
 
-					for (int k = 0; k < state.Transitions.Count; k++)
+					for (int k = 0; k < state.Transitions.Length; k++)
 					{
 						PPtr<AnimatorStateTransition> transitionPtr = state.Transitions[k];
 						AnimatorStateTransition transition = transitionPtr.GetAsset(virtualFile);
@@ -83,8 +83,6 @@ namespace uTinyRipper.Project
 			}
 		}
 
-		public IReadOnlyList<AnimatorStateMachine> StateMachines => m_stateMachines;
-
-		private readonly AnimatorStateMachine[] m_stateMachines;
+		public AnimatorStateMachine[] StateMachines { get; set; }
 	}
 }

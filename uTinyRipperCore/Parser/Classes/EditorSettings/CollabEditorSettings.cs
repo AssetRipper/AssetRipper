@@ -23,7 +23,7 @@ namespace uTinyRipper.Classes.EditorSettingss
 			return node;
 		}
 
-		public bool InProgressEnabled { get; private set; }
+		public bool InProgressEnabled { get; set; }
 
 		public const string InProgressEnabledName = "inProgressEnabled";
 	}

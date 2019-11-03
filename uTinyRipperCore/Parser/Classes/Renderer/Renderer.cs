@@ -16,49 +16,31 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 1.5.0 and greater
 		/// </summary>
-		public static bool IsReadEnabled(Version version)
-		{
-			return version.IsGreaterEqual(1, 5);
-		}
+		public static bool HasEnabled(Version version) => version.IsGreaterEqual(1, 5);
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool IsReadCastShadows(Version version)
-		{
-			return version.IsGreaterEqual(2);
-		}
+		public static bool HasCastShadows(Version version) => version.IsGreaterEqual(2);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool IsReadDynamicOccludee(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
+		public static bool HasDynamicOccludee(Version version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool IsReadMotionVector(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
+		public static bool HasMotionVector(Version version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool IsReadRenderingLayerMask(Version version)
-		{
-			return version.IsGreaterEqual(2018);
-		}
+		public static bool HasRenderingLayerMask(Version version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool IsReadRendererPriority(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
+		public static bool HasRendererPriority(Version version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		public static bool IsReadLightmapIndex(Version version, TransferInstructionFlags flags)
+		public static bool HasLightmapIndex(Version version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(2, 1))
 			{
@@ -77,7 +59,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadLightmapIndexDynamic(Version version, TransferInstructionFlags flags)
+		public static bool HasLightmapIndexDynamic(Version version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(5))
 			{
@@ -96,7 +78,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		public static bool IsReadLightmapTilingOffset(Version version, TransferInstructionFlags flags)
+		public static bool HasLightmapTilingOffset(Version version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(2, 1))
 			{
@@ -115,7 +97,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadLightmapTilingOffsetDynamic(Version version, TransferInstructionFlags flags)
+		public static bool HasLightmapTilingOffsetDynamic(Version version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(5))
 			{
@@ -134,140 +116,83 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 3.0.0 to 5.5.0
 		/// </summary>
-		public static bool IsReadSubsetIndices(Version version)
-		{
-			return version.IsGreaterEqual(3) && version.IsLess(5, 5);
-		}
+		public static bool HasSubsetIndices(Version version) => version.IsGreaterEqual(3) && version.IsLess(5, 5);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool IsReadStaticBatchInfo(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
+		public static bool HasStaticBatchInfo(Version version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool IsReadStaticBatchRoot(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
+		public static bool HasStaticBatchRoot(Version version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 3.5.0 to 5.4.0
 		/// </summary>
-		public static bool IsReadUseLight(Version version)
-		{
-			return version.IsGreaterEqual(3, 5) && version.IsLess(5, 4);
-		}
+		public static bool HasUseLight(Version version) => version.IsGreaterEqual(3, 5) && version.IsLess(5, 4);
 		/// <summary>
 		/// 5.0.0bx
 		/// </summary>
-		public static bool IsReadUseReflectionProbes(Version version)
-		{
-			return version.IsEqual(5, 0, 0, VersionType.Beta);
-		}
+		public static bool HasUseReflectionProbes(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
 		/// <summary>
 		/// 5.0.0f1 and greater
 		/// </summary>
-		public static bool IsReadReflectUsage(Version version)
-		{
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
+		public static bool HasReflectUsage(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool IsReadProbeAnchor(Version version)
-		{
-			return version.IsGreaterEqual(3, 5);
-		}
+		public static bool HasProbeAnchor(Version version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool IsReadLightOverride(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
+		public static bool HasLightOverride(Version version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 3.0.0 and greater and Not Release
 		/// </summary>
-		public static bool IsReadScaleInLightmap(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(3);
-		}
+		public static bool HasScaleInLightmap(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3);
 		/// <summary>
 		/// 2019.2 and greater and Not Release
 		/// </summary>
-		public static bool IsReadReceiveGI(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(2019, 2);
-		}
+		public static bool HasReceiveGI(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2019, 2);
 		/// <summary>
 		/// 5.0.0f1 and greater and Not Release
 		/// </summary>
-		public static bool IsReadPreserveUVs(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
+		public static bool HasPreserveUVs(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		/// <summary>
 		/// 5.2.3 and greater and Not Release
 		/// </summary>
-		public static bool IsReadIgnoreNormalsForChartDetection(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(5, 2, 3);
-		}
+		public static bool HasIgnoreNormalsForChartDetection(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 2, 3);
 		/// <summary>
 		/// 5.0.0f1 and greater and Not Release
 		/// </summary>
-		public static bool IsReadImportantGI(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
+		public static bool HasImportantGI(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		/// <summary>
 		/// 5.4.x and Not Release
 		/// </summary>
-		public static bool IsReadSelectedWireframeHidden(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsEqual(5, 4);
-		}
+		public static bool HasSelectedWireframeHidden(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsEqual(5, 4);
 		/// <summary>
 		/// 2017.2 and greater and Not Release
 		/// </summary>
-		public static bool IsReadStitchLightmapSeams(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(2017, 2);
-		}
+		public static bool HasStitchLightmapSeams(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 5.5.0 and greater and Not Release
 		/// </summary>
-		public static bool IsReadSelectedEditorRenderState(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(5, 5);
-		}
+		public static bool HasSelectedEditorRenderState(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 5.2.3 and greater and Not Release
 		/// </summary>
-		public static bool IsReadMinimumChartSize(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(5, 2, 3);
-		}
+		public static bool HasMinimumChartSize(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 2, 3);
 		/// <summary>
 		/// 5.0.0 and greater and Not Release 
 		/// </summary>
-		public static bool IsReadAutoUVMaxDistance(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(5);
-		}
+		public static bool HasAutoUVMaxDistance(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0bx and Not Release 
 		/// </summary>
-		public static bool IsReadGIBackfaceCull(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsEqual(5, 0, 0, VersionType.Beta);
-		}
+		public static bool HasGIBackfaceCull(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsEqual(5, 0, 0, VersionType.Beta);
 		/// <summary>
 		/// 4.5.0 and greater but exluding 5.6.0b
 		/// </summary>
-		public static bool IsReadSortingLayerID(Version version)
+		public static bool HasSortingLayerID(Version version)
 		{
 			if (version.IsGreaterEqual(4, 5))
 			{
@@ -285,70 +210,47 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 4.3.x or 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadSortingLayer(Version version)
-		{
-			return version.IsEqual(4, 3) || version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasSortingLayer(Version version) => version.IsEqual(4, 3) || version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool IsReadSortingOrder(Version version)
-		{
-			return version.IsGreaterEqual(4, 3);
-		}
+		public static bool HasSortingOrder(Version version) => version.IsGreaterEqual(4, 3);
 
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		private static bool IsLightmapIndexShort(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		private static bool IsLightmapIndexShort(Version version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		private static bool IsReadMaterialFirst(Version version)
+		private static bool IsMaterialFirst(Version version)
 		{
 			return version.IsLess(3);
 		}
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		private static bool IsReadReflectUsageFirst(Version version)
+		private static bool IsReflectUsageFirst(Version version)
 		{
 			return version.IsGreaterEqual(5, 4);
 		}
 
 		/// <summary>
-		/// 5.0.0 to 5.3.x
+		/// 5.0.0 to 5.3.x (NOTE: unknown version)
 		/// </summary>
-		private static bool IsAlign1(Version version)
-		{
-			// unknown lower version
-			return version.IsGreaterEqual(5) && version.IsLess(5, 4);
-		}
+		private static bool IsAlign1(Version version) => version.IsGreaterEqual(5) && version.IsLess(5, 4);
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.0.0 and greater (NOTE: unknown version)
 		/// </summary>
-		private static bool IsAlign2(Version version)
-		{
-			// unknown lower version
-			return version.IsGreaterEqual(5);
-		}
+		private static bool IsAlign2(Version version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		private static bool IsAlign3(Version version)
-		{
-			return version.IsGreaterEqual(4, 3);
-		}
+		private static bool IsAlign3(Version version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		private static bool IsAlign4(Version version)
-		{
-			return version.IsGreaterEqual(4, 5);
-		}
+		private static bool IsAlign4(Version version) => version.IsGreaterEqual(4, 5);
 
 		public string FindMaterialPropertyNameByCRC28(uint crc)
 		{
@@ -374,7 +276,7 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			if (IsReadEnabled(reader.Version))
+			if (HasEnabled(reader.Version))
 			{
 				Enabled = reader.ReadBoolean();
 			}
@@ -383,23 +285,23 @@ namespace uTinyRipper.Classes
 				reader.AlignStream();
 			}
 
-			if (IsReadCastShadows(reader.Version))
+			if (HasCastShadows(reader.Version))
 			{
 				CastShadows = (ShadowCastingMode)reader.ReadByte();
 				ReceiveShadows = reader.ReadByte();
 			}
-			if (IsReadDynamicOccludee(reader.Version))
+			if (HasDynamicOccludee(reader.Version))
 			{
 				DynamicOccludee = reader.ReadByte();
 			}
-			if (IsReadMotionVector(reader.Version))
+			if (HasMotionVector(reader.Version))
 			{
 				MotionVectors = (MotionVectorGenerationMode)reader.ReadByte();
 				LightProbeUsage = (LightProbeUsage)reader.ReadByte();
 			}
-			if (IsReadReflectUsage(reader.Version))
+			if (HasReflectUsage(reader.Version))
 			{
-				if (IsReadReflectUsageFirst(reader.Version))
+				if (IsReflectUsageFirst(reader.Version))
 				{
 					ReflectionProbeUsage = (ReflectionProbeUsage)reader.ReadByte();
 				}
@@ -409,131 +311,131 @@ namespace uTinyRipper.Classes
 				reader.AlignStream();
 			}
 
-			if (IsReadRenderingLayerMask(reader.Version))
+			if (HasRenderingLayerMask(reader.Version))
 			{
 				RenderingLayerMask = reader.ReadUInt32();
 			}
-			if (IsReadRendererPriority(reader.Version))
+			if (HasRendererPriority(reader.Version))
 			{
 				RendererPriority = reader.ReadInt32();
 			}
 
-			if (IsReadLightmapIndex(reader.Version, reader.Flags))
+			if (HasLightmapIndex(reader.Version, reader.Flags))
 			{
 				LightmapIndex = IsLightmapIndexShort(reader.Version) ? reader.ReadUInt16() : reader.ReadByte();
 			}
-			if (IsReadLightmapIndexDynamic(reader.Version, reader.Flags))
+			if (HasLightmapIndexDynamic(reader.Version, reader.Flags))
 			{
 				LightmapIndexDynamic = reader.ReadUInt16();
 			}
 
-			if (IsReadMaterialFirst(reader.Version))
+			if (IsMaterialFirst(reader.Version))
 			{
 				Materials = reader.ReadAssetArray<PPtr<Material>>();
 			}
 
-			if (IsReadLightmapTilingOffset(reader.Version, reader.Flags))
+			if (HasLightmapTilingOffset(reader.Version, reader.Flags))
 			{
 				LightmapTilingOffset.Read(reader);
 			}
-			if (IsReadLightmapTilingOffsetDynamic(reader.Version, reader.Flags))
+			if (HasLightmapTilingOffsetDynamic(reader.Version, reader.Flags))
 			{
 				LightmapTilingOffsetDynamic.Read(reader);
 			}
 
-			if (!IsReadMaterialFirst(reader.Version))
+			if (!IsMaterialFirst(reader.Version))
 			{
 				Materials = reader.ReadAssetArray<PPtr<Material>>();
 			}
 
-			if (IsReadStaticBatchInfo(reader.Version))
+			if (HasStaticBatchInfo(reader.Version))
 			{
 				StaticBatchInfo.Read(reader);
 			}
-			else if (IsReadSubsetIndices(reader.Version))
+			else if (HasSubsetIndices(reader.Version))
 			{
 				SubsetIndices = reader.ReadUInt32Array();
 			}
-			if (IsReadStaticBatchRoot(reader.Version))
+			if (HasStaticBatchRoot(reader.Version))
 			{
 				StaticBatchRoot.Read(reader);
 			}
 
-			if (IsReadUseLight(reader.Version))
+			if (HasUseLight(reader.Version))
 			{
 				bool UseLightProbes = reader.ReadBoolean();
 				LightProbeUsage = UseLightProbes ? LightProbeUsage.BlendProbes : LightProbeUsage.Off;
 			}
-			if (IsReadUseReflectionProbes(reader.Version))
+			if (HasUseReflectionProbes(reader.Version))
 			{
 				bool UseReflectionProbes = reader.ReadBoolean();
 				ReflectionProbeUsage = UseReflectionProbes ? ReflectionProbeUsage.Simple : ReflectionProbeUsage.Off;
 			}
-			if (IsReadUseLight(reader.Version))
+			if (HasUseLight(reader.Version))
 			{
 				reader.AlignStream();
 			}
-			if (IsReadReflectUsage(reader.Version))
+			if (HasReflectUsage(reader.Version))
 			{
-				if (!IsReadReflectUsageFirst(reader.Version))
+				if (!IsReflectUsageFirst(reader.Version))
 				{
 					ReflectionProbeUsage = (ReflectionProbeUsage)reader.ReadInt32();
 				}
 			}
 
-			if (IsReadProbeAnchor(reader.Version))
+			if (HasProbeAnchor(reader.Version))
 			{
 				ProbeAnchor.Read(reader);
 			}
-			if (IsReadLightOverride(reader.Version))
+			if (HasLightOverride(reader.Version))
 			{
 				LightProbeVolumeOverride.Read(reader);
 			}
 #if UNIVERSAL
-			if (IsReadScaleInLightmap(reader.Version, reader.Flags))
+			if (HasScaleInLightmap(reader.Version, reader.Flags))
 			{
 				ScaleInLightmap = reader.ReadSingle();
 			}
-			if (IsReadReceiveGI(reader.Version, reader.Flags))
+			if (HasReceiveGI(reader.Version, reader.Flags))
 			{
 				ReceiveGI = (ReceiveGI)reader.ReadInt32();
 			}
-			if (IsReadPreserveUVs(reader.Version, reader.Flags))
+			if (HasPreserveUVs(reader.Version, reader.Flags))
 			{
 				PreserveUVs = reader.ReadBoolean();
 			}
-			if (IsReadIgnoreNormalsForChartDetection(reader.Version, reader.Flags))
+			if (HasIgnoreNormalsForChartDetection(reader.Version, reader.Flags))
 			{
 				IgnoreNormalsForChartDetection = reader.ReadBoolean();
 			}
-			if (IsReadImportantGI(reader.Version, reader.Flags))
+			if (HasImportantGI(reader.Version, reader.Flags))
 			{
 				ImportantGI = reader.ReadBoolean();
 			}
-			if (IsReadSelectedWireframeHidden(reader.Version, reader.Flags))
+			if (HasSelectedWireframeHidden(reader.Version, reader.Flags))
 			{
 				SelectedWireframeHidden = reader.ReadBoolean();
 			}
-			if (IsReadStitchLightmapSeams(reader.Version, reader.Flags))
+			if (HasStitchLightmapSeams(reader.Version, reader.Flags))
 			{
 				StitchLightmapSeams = reader.ReadBoolean();
 				reader.AlignStream();
 			}
-			if (IsReadSelectedEditorRenderState(reader.Version, reader.Flags))
+			if (HasSelectedEditorRenderState(reader.Version, reader.Flags))
 			{
 				SelectedEditorRenderState = (EditorSelectedRenderState)reader.ReadInt32();
 			}
-			if (IsReadMinimumChartSize(reader.Version, reader.Flags))
+			if (HasMinimumChartSize(reader.Version, reader.Flags))
 			{
 				MinimumChartSize = reader.ReadInt32();
 			}
-			if (IsReadAutoUVMaxDistance(reader.Version, reader.Flags))
+			if (HasAutoUVMaxDistance(reader.Version, reader.Flags))
 			{
 				AutoUVMaxDistance = reader.ReadSingle();
 				AutoUVMaxAngle = reader.ReadSingle();
 				LightmapParameters.Read(reader);
 			}
-			if (IsReadGIBackfaceCull(reader.Version, reader.Flags))
+			if (HasGIBackfaceCull(reader.Version, reader.Flags))
 			{
 				GIBackfaceCull = reader.ReadBoolean();
 				reader.AlignStream();
@@ -544,15 +446,15 @@ namespace uTinyRipper.Classes
 				reader.AlignStream();
 			}
 
-			if (IsReadSortingLayerID(reader.Version))
+			if (HasSortingLayerID(reader.Version))
 			{
 				SortingLayerID = reader.ReadInt32();
 			}
-			if (IsReadSortingLayer(reader.Version))
+			if (HasSortingLayer(reader.Version))
 			{
 				SortingLayer = reader.ReadInt16();
 			}
-			if (IsReadSortingOrder(reader.Version))
+			if (HasSortingOrder(reader.Version))
 			{
 				SortingOrder = reader.ReadInt16();
 			}
@@ -593,11 +495,11 @@ namespace uTinyRipper.Classes
 			node.Add(MotionVectorsName, (byte)GetMotionVectors(container.Version));
 			node.Add(LightProbeUsageName, (byte)LightProbeUsage);
 			node.Add(ReflectionProbeUsageName, (byte)GetReflectionProbeUsage(container.Version));
-			if (IsReadRenderingLayerMask(container.ExportVersion))
+			if (HasRenderingLayerMask(container.ExportVersion))
 			{
 				node.Add(RenderingLayerMaskName, GetRenderingLayerMask(container.Version));
 			}
-			if (IsReadRendererPriority(container.ExportVersion))
+			if (HasRendererPriority(container.ExportVersion))
 			{
 				node.Add(RendererPriorityName, RendererPriority);
 			}
@@ -607,7 +509,7 @@ namespace uTinyRipper.Classes
 			node.Add(ProbeAnchorName, ProbeAnchor.ExportYAML(container));
 			node.Add(LightProbeVolumeOverrideName, LightProbeVolumeOverride.ExportYAML(container));
 			node.Add(ScaleInLightmapName, GetScaleInLightmap(container.Version, container.Flags));
-			if (IsReadReceiveGI(container.ExportVersion, container.ExportFlags))
+			if (HasReceiveGI(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(ReceiveGIName, (int)GetReceiveGI(container.Version, container.Flags));
 			}
@@ -628,39 +530,39 @@ namespace uTinyRipper.Classes
 
 		private bool GetEnabled(Version version)
 		{
-			return IsReadEnabled(version) ? Enabled : true;
+			return HasEnabled(version) ? Enabled : true;
 		}
 		private ShadowCastingMode GetCastShadows(Version version)
 		{
-			return IsReadCastShadows(version) ? CastShadows : ShadowCastingMode.On;
+			return HasCastShadows(version) ? CastShadows : ShadowCastingMode.On;
 		}
 		private byte GetReceiveShadows(Version version)
 		{
-			return IsReadCastShadows(version) ? ReceiveShadows : (byte)1;
+			return HasCastShadows(version) ? ReceiveShadows : (byte)1;
 		}
 		private int GetDynamicOccludee(Version version)
 		{
-			return IsReadDynamicOccludee(version) ? DynamicOccludee : 1;
+			return HasDynamicOccludee(version) ? DynamicOccludee : 1;
 		}
 		private MotionVectorGenerationMode GetMotionVectors(Version version)
 		{
-			return IsReadMotionVector(version) ? MotionVectors : MotionVectorGenerationMode.Object;
+			return HasMotionVector(version) ? MotionVectors : MotionVectorGenerationMode.Object;
 		}
 		private ReflectionProbeUsage GetReflectionProbeUsage(Version version)
 		{
-			return IsReadReflectUsage(version) ? ReflectionProbeUsage : ReflectionProbeUsage.BlendProbes;
+			return HasReflectUsage(version) ? ReflectionProbeUsage : ReflectionProbeUsage.BlendProbes;
 		}
 		private uint GetRenderingLayerMask(Version version)
 		{
-			return IsReadRenderingLayerMask(version) ? RenderingLayerMask : 1;
+			return HasRenderingLayerMask(version) ? RenderingLayerMask : 1;
 		}
 		private StaticBatchInfo GetStaticBatchInfo(Version version)
 		{
-			if (IsReadStaticBatchInfo(version))
+			if (HasStaticBatchInfo(version))
 			{
 				return StaticBatchInfo;
 			}
-			else if (IsReadSubsetIndices(version))
+			else if (HasSubsetIndices(version))
 			{
 				return new StaticBatchInfo(SubsetIndices);
 			}
@@ -669,7 +571,7 @@ namespace uTinyRipper.Classes
 		private float GetScaleInLightmap(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadScaleInLightmap(version, flags))
+			if (HasScaleInLightmap(version, flags))
 			{
 				return ScaleInLightmap;
 			}
@@ -679,7 +581,7 @@ namespace uTinyRipper.Classes
 		private ReceiveGI GetReceiveGI(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadReceiveGI(version, flags))
+			if (HasReceiveGI(version, flags))
 			{
 				return ReceiveGI;
 			}
@@ -689,7 +591,7 @@ namespace uTinyRipper.Classes
 		private bool GetPreserveUVs(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadPreserveUVs(version, flags))
+			if (HasPreserveUVs(version, flags))
 			{
 				return PreserveUVs;
 			}
@@ -699,7 +601,7 @@ namespace uTinyRipper.Classes
 		private bool GetIgnoreNormalsForChartDetection(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadIgnoreNormalsForChartDetection(version, flags))
+			if (HasIgnoreNormalsForChartDetection(version, flags))
 			{
 				return IgnoreNormalsForChartDetection;
 			}
@@ -709,7 +611,7 @@ namespace uTinyRipper.Classes
 		private bool GetImportantGI(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadImportantGI(version, flags))
+			if (HasImportantGI(version, flags))
 			{
 				return ImportantGI;
 			}
@@ -719,7 +621,7 @@ namespace uTinyRipper.Classes
 		private bool GetStitchLightmapSeams(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadStitchLightmapSeams(version, flags))
+			if (HasStitchLightmapSeams(version, flags))
 			{
 				return StitchLightmapSeams;
 			}
@@ -729,7 +631,7 @@ namespace uTinyRipper.Classes
 		private EditorSelectedRenderState GetSelectedEditorRenderState(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadSelectedEditorRenderState(version, flags))
+			if (HasSelectedEditorRenderState(version, flags))
 			{
 				return SelectedEditorRenderState;
 			}
@@ -739,7 +641,7 @@ namespace uTinyRipper.Classes
 		private int GetMinimumChartSize(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadMinimumChartSize(version, flags))
+			if (HasMinimumChartSize(version, flags))
 			{
 				return MinimumChartSize;
 			}
@@ -749,7 +651,7 @@ namespace uTinyRipper.Classes
 		private float GetAutoUVMaxDistance(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadAutoUVMaxDistance(version, flags))
+			if (HasAutoUVMaxDistance(version, flags))
 			{
 				return AutoUVMaxDistance;
 			}
@@ -759,7 +661,7 @@ namespace uTinyRipper.Classes
 		private float GetAutoUVMaxAngle(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadAutoUVMaxDistance(version, flags))
+			if (HasAutoUVMaxDistance(version, flags))
 			{
 				return AutoUVMaxAngle;
 			}

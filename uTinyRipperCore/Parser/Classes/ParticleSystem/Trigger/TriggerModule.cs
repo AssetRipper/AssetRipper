@@ -60,11 +60,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public TriggerAction Inside { get; private set; }
-		public TriggerAction Outside { get; private set; }
-		public TriggerAction Enter { get; private set; }
-		public TriggerAction Exit { get; private set; }
-		public float RadiusScale { get; private set; }
+		public TriggerAction Inside { get; set; }
+		public TriggerAction Outside { get; set; }
+		public TriggerAction Enter { get; set; }
+		public TriggerAction Exit { get; set; }
+		public float RadiusScale { get; set; }
 
 		public const string CollisionShape0Name = "collisionShape0";
 		public const string CollisionShape1Name = "collisionShape1";

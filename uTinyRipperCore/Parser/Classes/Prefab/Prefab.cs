@@ -32,18 +32,18 @@ namespace uTinyRipper.Classes
 			return virtualFile.CreateAsset((assetInfo) => new Prefab(assetInfo, root));
 		}
 
+		public static int ToSerializedVersion(Version version)
+		{
+			// TODO:
+			return 2;
+		}
+
 		private static IEnumerable<EditorExtension> FetchAssets(GameObject root, bool isLog = false)
 		{
 			foreach (EditorExtension asset in root.FetchHierarchy())
 			{
 				yield return asset;
 			}
-		}
-
-		private static int GetSerializedVersion(Version version)
-		{
-			// TODO:
-			return 2;
 		}
 
 		public override void Read(AssetReader reader)
@@ -91,7 +91,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ModificationName, Modification.ExportYAML(container));
 			node.Add(ParentPrefabName, SourcePrefab.ExportYAML(container));
 			node.Add(RootGameObjectName, RootGameObject.ExportYAML(container));
@@ -101,10 +101,10 @@ namespace uTinyRipper.Classes
 
 		public override string ExportExtension => PrefabKeyword;
 
-		public bool IsPrefabParent { get; private set; }
+		public bool IsPrefabParent { get; set; }
 
 #if DEBUG
-		public string Name { get; private set; }
+		public string Name { get; set; }
 #endif
 		
 		public const string PrefabKeyword = "prefab";

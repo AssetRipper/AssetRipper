@@ -5,24 +5,21 @@ namespace uTinyRipper.Classes.Sprites
 {
 	public struct SpriteVertex : IAssetReadable, IYAMLExportable
 	{
-		/// <summary>
-		/// Less than 4.5.0 
-		/// </summary>
-		public static bool IsReadUV(Version version)
-		{
-			return version.IsLess(4, 5);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// TODO:
 			return 2;
 		}
 
+		/// <summary>
+		/// Less than 4.5.0 
+		/// </summary>
+		public static bool HasUV(Version version) => version.IsLess(4, 5);
+
 		public void Read(AssetReader reader)
 		{
 			Position.Read(reader);
-			if(IsReadUV(reader.Version))
+			if (HasUV(reader.Version))
 			{
 				UV.Read(reader);
 			}
@@ -31,9 +28,9 @@ namespace uTinyRipper.Classes.Sprites
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(PosName, Position.ExportYAML(container));
-			if (IsReadUV(container.ExportVersion))
+			if (HasUV(container.ExportVersion))
 			{
 				node.Add(UvName, UV.ExportYAML(container));
 			}

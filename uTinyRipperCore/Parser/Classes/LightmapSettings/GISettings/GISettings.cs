@@ -22,6 +22,17 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			EnableRealtimeLightmaps = true;
 		}
 
+		public static int ToSerializedVersion(Version version)
+		{
+			// NOTE: unknown version
+			// DynamicEnv has been replaved by EnvironmentLightingMode?
+			//if (version.IsGreaterEqual(5, 0, 0, VersionType.Beta))
+			{
+				return 2;
+			}
+			//return 1;
+		}
+
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
@@ -34,18 +45,6 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
 		public static bool HasDynamicEnv(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
-		
-
-		private static int ToSerializedVersion(Version version)
-		{
-			// NOTE: unknown version
-			// DynamicEnv has been replaved by EnvironmentLightingMode?
-			//if (version.IsGreaterEqual(5, 0, 0, VersionType.Beta))
-			{
-				return 2;
-			}
-			//return 1;
-		}
 
 		public void Read(AssetReader reader)
 		{

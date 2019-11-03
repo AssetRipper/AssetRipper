@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 using uTinyRipper.Classes.Misc;
@@ -9,7 +8,7 @@ namespace uTinyRipper.Classes.Avatars
 	{
 		public void Read(AssetReader reader)
 		{
-			m_x = reader.ReadAssetArray<XForm>();
+			X = reader.ReadAssetArray<XForm>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -19,10 +18,8 @@ namespace uTinyRipper.Classes.Avatars
 			return node;
 		}
 
-		public IReadOnlyList<XForm> X => m_x;
+		public XForm[] X { get; set; }
 
 		public const string XName = "m_X";
-
-		private XForm[] m_x;
 	}
 }

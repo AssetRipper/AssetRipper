@@ -25,8 +25,8 @@ namespace uTinyRipper.Classes.OcclusionCullingDatas
 			return node;
 		}
 
-		public long TargetObject { get; private set; }
-		public long TargetPrefab { get; private set; }
+		public long TargetObject { get; set; }
+		public long TargetPrefab { get; set; }
 
 		public const string TargetObjectName = "targetObject";
 		public const string TargetPrefabName = "targetPrefab";

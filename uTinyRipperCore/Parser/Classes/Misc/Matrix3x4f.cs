@@ -39,18 +39,18 @@ namespace uTinyRipper.Classes.Misc
 			return node;
 		}
 
-		public float E00 { get; private set; }
-		public float E01 { get; private set; }
-		public float E02 { get; private set; }
-		public float E03 { get; private set; }
-		public float E10 { get; private set; }
-		public float E11 { get; private set; }
-		public float E12 { get; private set; }
-		public float E13 { get; private set; }
-		public float E20 { get; private set; }
-		public float E21 { get; private set; }
-		public float E22 { get; private set; }
-		public float E23 { get; private set; }
+		public float E00 { get; set; }
+		public float E01 { get; set; }
+		public float E02 { get; set; }
+		public float E03 { get; set; }
+		public float E10 { get; set; }
+		public float E11 { get; set; }
+		public float E12 { get; set; }
+		public float E13 { get; set; }
+		public float E20 { get; set; }
+		public float E21 { get; set; }
+		public float E22 { get; set; }
+		public float E23 { get; set; }
 
 		public const string E00Name = "e00";
 		public const string E01Name = "e01";

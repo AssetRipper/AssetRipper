@@ -13,105 +13,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 5.0.0 and greater
-		/// </summary>
-		public static bool IsReadOutputAudioMixerGroup(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
-		/// <summary>
-		/// Less than 3.0.0
-		/// </summary>
-		public static bool IsReadMinVolume(Version version)
-		{
-			return version.IsLess(3);
-		}
-		/// <summary>
-		/// 1.6.0 and greater
-		/// </summary>
-		public static bool IsReadPitch(Version version)
-		{
-			return version.IsGreaterEqual(1, 6);
-		}
-		/// <summary>
-		/// Less than 3.0.0
-		/// </summary>
-		public static bool IsReadRolloffFactor(Version version)
-		{
-			return version.IsLess(3);
-		}
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		public static bool IsReadMute(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
-		/// <summary>
-		/// 5.2.0 and greater
-		/// </summary>
-		public static bool IsReadSpatialize(Version version)
-		{
-			return version.IsGreaterEqual(5, 2);
-		}
-		/// <summary>
-		/// 5.5.0 and greater
-		/// </summary>
-		public static bool IsReadSpatializePostEffects(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		public static bool IsReadPriority(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
-		public static bool IsReadBypassListenerEffects(Version version)
-		{
-			return version.IsGreaterEqual(4, 2);
-		}
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		public static bool IsReadRolloffCustomCurve(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
-		/// <summary>
-		/// 5.0.0f1 and greater
-		/// </summary>
-		public static bool IsReadReverbZoneMixCustomCurve(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
-
-		/// <summary>
-		/// 2.1.0 and greater
-		/// </summary>
-		private static bool IsAlignAwake(Version version)
-		{
-			return version.IsGreaterEqual(2, 1);
-		}
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		private static bool IsAlignMute(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		private static bool IsAlignBypass(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(5))
 			{
@@ -128,11 +30,69 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
+		public static bool HasOutputAudioMixerGroup(Version version) => version.IsGreaterEqual(5);
+		/// <summary>
+		/// Less than 3.0.0
+		/// </summary>
+		public static bool HasMinVolume(Version version) => version.IsLess(3);
+		/// <summary>
+		/// 1.6.0 and greater
+		/// </summary>
+		public static bool HasPitch(Version version) => version.IsGreaterEqual(1, 6);
+		/// <summary>
+		/// Less than 3.0.0
+		/// </summary>
+		public static bool HasRolloffFactor(Version version) => version.IsLess(3);
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool HasMute(Version version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// 5.2.0 and greater
+		/// </summary>
+		public static bool HasSpatialize(Version version) => version.IsGreaterEqual(5, 2);
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool HasSpatializePostEffects(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool HasPriority(Version version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// 4.2.0 and greater
+		/// </summary>
+		public static bool HasBypassListenerEffects(Version version) => version.IsGreaterEqual(4, 2);
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool HasRolloffCustomCurve(Version version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// 5.0.0f1 and greater (NOTE: unknown version)
+		/// </summary>
+		public static bool HasReverbZoneMixCustomCurve(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+
+		/// <summary>
+		/// 2.1.0 and greater
+		/// </summary>
+		private static bool IsAlignAwake(Version version) => version.IsGreaterEqual(2, 1);
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		private static bool IsAlignMute(Version version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		private static bool IsAlignBypass(Version version) => version.IsGreaterEqual(3);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadOutputAudioMixerGroup(reader.Version))
+			if (HasOutputAudioMixerGroup(reader.Version))
 			{
 				OutputAudioMixerGroup.Read(reader);
 			}
@@ -144,29 +104,29 @@ namespace uTinyRipper.Classes
 			}
 			
 			Volume = reader.ReadSingle();
-			if (IsReadMinVolume(reader.Version))
+			if (HasMinVolume(reader.Version))
 			{
 				MinVolume = reader.ReadSingle();
 				MaxVolume = reader.ReadSingle();
 			}
-			if (IsReadPitch(reader.Version))
+			if (HasPitch(reader.Version))
 			{
 				Pitch = reader.ReadSingle();
 			}
 			Loop = reader.ReadBoolean();
-			if (IsReadRolloffFactor(reader.Version))
+			if (HasRolloffFactor(reader.Version))
 			{
 				RolloffFactor = reader.ReadSingle();
 			}
-			if (IsReadMute(reader.Version))
+			if (HasMute(reader.Version))
 			{
 				Mute = reader.ReadBoolean();
 			}
-			if (IsReadSpatialize(reader.Version))
+			if (HasSpatialize(reader.Version))
 			{
 				Spatialize = reader.ReadBoolean();
 			}
-			if (IsReadSpatializePostEffects(reader.Version))
+			if (HasSpatializePostEffects(reader.Version))
 			{
 				SpatializePostEffects = reader.ReadBoolean();
 			}
@@ -175,7 +135,7 @@ namespace uTinyRipper.Classes
 				reader.AlignStream();
 			}
 
-			if (IsReadPriority(reader.Version))
+			if (HasPriority(reader.Version))
 			{
 				Priority = reader.ReadInt32();
 				DopplerLevel = reader.ReadSingle();
@@ -185,7 +145,7 @@ namespace uTinyRipper.Classes
 				RolloffMode = (AudioRolloffMode)reader.ReadInt32();
 				BypassEffects = reader.ReadBoolean();
 			}
-			if (IsReadBypassListenerEffects(reader.Version))
+			if (HasBypassListenerEffects(reader.Version))
 			{
 				BypassListenerEffects = reader.ReadBoolean();
 				BypassReverbZones = reader.ReadBoolean();
@@ -195,13 +155,13 @@ namespace uTinyRipper.Classes
 				reader.AlignStream();
 			}
 
-			if (IsReadRolloffCustomCurve(reader.Version))
+			if (HasRolloffCustomCurve(reader.Version))
 			{
 				RolloffCustomCurve.Read(reader);
 				PanLevelCustomCurve.Read(reader);
 				SpreadCustomCurve.Read(reader);
 			}
-			if (IsReadReverbZoneMixCustomCurve(reader.Version))
+			if (HasReverbZoneMixCustomCurve(reader.Version))
 			{
 				ReverbZoneMixCustomCurve.Read(reader);
 			}
@@ -221,7 +181,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(OutputAudioMixerGroupName, OutputAudioMixerGroup.ExportYAML(container));
 			node.Add(AudioClipName, AudioClip.ExportYAML(container));
 			node.Add(PlayOnAwakeName, PlayOnAwake);
@@ -249,11 +209,11 @@ namespace uTinyRipper.Classes
 
 		private AnimationCurveTpl<Float> GetRolloffCustomCurve(Version version)
 		{
-			return IsReadRolloffCustomCurve(version) ? RolloffCustomCurve : new AnimationCurveTpl<Float>(1.0f, 0.0f, 1.0f / 3.0f);
+			return HasRolloffCustomCurve(version) ? RolloffCustomCurve : new AnimationCurveTpl<Float>(1.0f, 0.0f, 1.0f / 3.0f);
 		}
 		private AnimationCurveTpl<Float> GetPanLevelCustomCurve(Version version)
 		{
-			if(IsReadRolloffCustomCurve(version))
+			if (HasRolloffCustomCurve(version))
 			{
 				return PanLevelCustomCurve;
 			}
@@ -263,7 +223,7 @@ namespace uTinyRipper.Classes
 		}
 		private AnimationCurveTpl<Float> GetSpreadCustomCurve(Version version)
 		{
-			if (IsReadRolloffCustomCurve(version))
+			if (HasRolloffCustomCurve(version))
 			{
 				return SpreadCustomCurve;
 			}
@@ -273,7 +233,7 @@ namespace uTinyRipper.Classes
 		}
 		private AnimationCurveTpl<Float> GetReverbZoneMixCustomCurve(Version version)
 		{
-			if (IsReadReverbZoneMixCustomCurve(version))
+			if (HasReverbZoneMixCustomCurve(version))
 			{
 				return ReverbZoneMixCustomCurve;
 			}
@@ -282,25 +242,25 @@ namespace uTinyRipper.Classes
 			return new AnimationCurveTpl<Float>(frame);
 		}
 
-		public bool PlayOnAwake { get; private set; }
-		public float Volume { get; private set; }
-		public float MinVolume { get; private set; }
-		public float MaxVolume { get; private set; }
-		public float Pitch { get; private set; }
-		public bool Loop { get; private set; }
-		public float RolloffFactor { get; private set; }
-		public bool Mute { get; private set; }
-		public bool Spatialize { get; private set; }
-		public bool SpatializePostEffects { get; private set; }
-		public int Priority { get; private set; }
-		public float DopplerLevel { get; private set; }
-		public float MinDistance { get; private set; }
-		public float MaxDistance { get; private set; }
-		public float Pan2D { get; private set; }
-		public AudioRolloffMode RolloffMode { get; private set; }
-		public bool BypassEffects { get; private set; }
-		public bool BypassListenerEffects { get; private set; }
-		public bool BypassReverbZones { get; private set; }
+		public bool PlayOnAwake { get; set; }
+		public float Volume { get; set; }
+		public float MinVolume { get; set; }
+		public float MaxVolume { get; set; }
+		public float Pitch { get; set; }
+		public bool Loop { get; set; }
+		public float RolloffFactor { get; set; }
+		public bool Mute { get; set; }
+		public bool Spatialize { get; set; }
+		public bool SpatializePostEffects { get; set; }
+		public int Priority { get; set; }
+		public float DopplerLevel { get; set; }
+		public float MinDistance { get; set; }
+		public float MaxDistance { get; set; }
+		public float Pan2D { get; set; }
+		public AudioRolloffMode RolloffMode { get; set; }
+		public bool BypassEffects { get; set; }
+		public bool BypassListenerEffects { get; set; }
+		public bool BypassReverbZones { get; set; }
 
 		public const string OutputAudioMixerGroupName = "OutputAudioMixerGroup";
 		public const string AudioClipName = "m_audioClip";

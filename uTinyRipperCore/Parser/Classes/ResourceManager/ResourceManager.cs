@@ -18,10 +18,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 3.5.0 and greater and Release
 		/// </summary>
-		public static bool IsReadDependentAssets(Version version, TransferInstructionFlags flags)
-		{
-			return version.IsGreaterEqual(3, 5) && flags.IsRelease();
-		}
+		public static bool HasDependentAssets(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 5) && flags.IsRelease();
 
 		public static string ResourceToExportPath(Object asset, string resourceName)
 		{
@@ -39,7 +36,7 @@ namespace uTinyRipper.Classes
 
 		public bool TryGetResourcePathFromAsset(Object asset, out string resourcePath)
 		{
-			foreach (KeyValuePair<string, PPtr<Object>> containerEntry in m_container)
+			foreach (KeyValuePair<string, PPtr<Object>> containerEntry in Container)
 			{
 				if (containerEntry.Value.IsAsset(File, asset))
 				{
@@ -56,10 +53,10 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_container = reader.ReadKVPStringTArray<PPtr<Object>>();
-			if (IsReadDependentAssets(reader.Version, reader.Flags))
+			Container = reader.ReadKVPStringTArray<PPtr<Object>>();
+			if (HasDependentAssets(reader.Version, reader.Flags))
 			{
-				m_dependentAssets = reader.ReadAssetArray<ResourceManagerDependency>();
+				DependentAssets = reader.ReadAssetArray<ResourceManagerDependency>();
 			}
 		}
 
@@ -74,7 +71,7 @@ namespace uTinyRipper.Classes
 			{
 				yield return asset;
 			}
-			if (IsReadDependentAssets(context.Version, context.Flags))
+			if (HasDependentAssets(context.Version, context.Flags))
 			{
 				foreach (PPtr<Object> asset in context.FetchDependencies(DependentAssets, DependentAssetsName))
 				{
@@ -87,23 +84,19 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add(ContainerName, Container.ExportYAML(container));
-			if (IsReadDependentAssets(container.Version, container.ExportFlags))
+			if (HasDependentAssets(container.Version, container.ExportFlags))
 			{
 				node.Add(DependentAssetsName, DependentAssets.ExportYAML(container));
 			}
 			return node;
 		}
 		
-		public IReadOnlyList<KeyValuePair<string, PPtr<Object>>> Container => m_container;
-		public ILookup<string, PPtr<Object>> ContainerMap => Container.ToLookup(t => t.Key, t => t.Value);
-		public IReadOnlyList<ResourceManagerDependency> DependentAssets => m_dependentAssets;
+		public KeyValuePair<string, PPtr<Object>>[] Container { get; set; }
+		public ResourceManagerDependency[] DependentAssets { get; set; }
 
 		public const string ResourceKeyword = "Resources";
 
 		public const string ContainerName = "m_Container";
 		public const string DependentAssetsName = "m_DependentAssets";
-
-		private KeyValuePair<string, PPtr<Object>>[] m_container;
-		private ResourceManagerDependency[] m_dependentAssets;
 	}
 }

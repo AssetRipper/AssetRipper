@@ -16,6 +16,16 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		public static int ToSerializedVersion(Version version)
+		{
+#warning TODO:
+			/*if (version.IsGreaterEqual(2018))
+			{
+				return 2;
+			}*/
+			return 1;
+		}
+
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
@@ -52,16 +62,6 @@ namespace uTinyRipper.Classes
 		/// and greater and Not Release
 		/// </summary>
 		public static bool HasSpriteID(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2018);
-
-		private static int ToSerializedVersion(Version version)
-		{
-#warning TODO:
-			/*if (version.IsGreaterEqual(2018))
-			{
-				return 2;
-			}*/
-			return 1;
-		}
 
 		public SpriteMetaData GenerateSpriteMetaData(IExportContainer container, SpriteAtlas atlas)
 		{

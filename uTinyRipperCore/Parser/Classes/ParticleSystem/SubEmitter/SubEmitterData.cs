@@ -14,15 +14,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			EmitProbability = 1.0f;
 		}
 
-		/// <summary>
-		/// 2018.3 and greater
-		/// </summary>
-		public static bool IsReadEmitProbability(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// ParticleSystemSubEmitterProperties.InheritDuration added
 			if (version.IsGreaterEqual(2018, 3))
@@ -37,12 +29,17 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return 1;
 		}
 
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool HasEmitProbability(Version version) => version.IsGreaterEqual(2018, 3);
+
 		public void Read(AssetReader reader)
 		{
 			Emitter.Read(reader);
 			Type = (ParticleSystemSubEmitterType)reader.ReadInt32();
 			Properties = (ParticleSystemSubEmitterProperties)reader.ReadInt32();
-			if (IsReadEmitProbability(reader.Version))
+			if (HasEmitProbability(reader.Version))
 			{
 				EmitProbability = reader.ReadSingle();
 			}
@@ -56,20 +53,20 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(EmitterName, Emitter.ExportYAML(container));
 			node.Add(TypeName, (int)Type);
 			node.Add(PropertiesName, (int)Properties);
-			if (IsReadEmitProbability(container.ExportVersion))
+			if (HasEmitProbability(container.ExportVersion))
 			{
 				node.Add(EmitProbabilityName, EmitProbability);
 			}
 			return node;
 		}
 
-		public ParticleSystemSubEmitterType Type { get; private set; }
-		public ParticleSystemSubEmitterProperties Properties { get; private set; }
-		public float EmitProbability { get; private set; }
+		public ParticleSystemSubEmitterType Type { get; set; }
+		public ParticleSystemSubEmitterProperties Properties { get; set; }
+		public float EmitProbability { get; set; }
 
 		public const string EmitterName = "emitter";
 		public const string TypeName = "type";

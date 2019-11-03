@@ -34,14 +34,14 @@ namespace uTinyRipper.Classes.Avatars
 			return node;
 		}
 
-		public uint Type { get; private set; }
-		public uint XMotionType { get; private set; }
-		public uint YMotionType { get; private set; }
-		public uint ZMotionType { get; private set; }
-		public float MinLimitX { get; private set; }
-		public float MaxLimitX { get; private set; }
-		public float MaxLimitY { get; private set; }
-		public float MaxLimitZ { get; private set; }
+		public uint Type { get; set; }
+		public uint XMotionType { get; set; }
+		public uint YMotionType { get; set; }
+		public uint ZMotionType { get; set; }
+		public float MinLimitX { get; set; }
+		public float MaxLimitX { get; set; }
+		public float MaxLimitY { get; set; }
+		public float MaxLimitZ { get; set; }
 
 		public const string XName = "m_X";
 		public const string TypeName = "m_Type";

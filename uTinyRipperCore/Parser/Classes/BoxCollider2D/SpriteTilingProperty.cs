@@ -30,9 +30,9 @@ namespace uTinyRipper.Classes.BoxCollider2Ds
 			return node;
 		}
 
-		public float AdaptiveTilingThreshold { get; private set; }
-		public int DrawMode { get; private set; }
-		public bool AdaptiveTiling { get; private set; }
+		public float AdaptiveTilingThreshold { get; set; }
+		public int DrawMode { get; set; }
+		public bool AdaptiveTiling { get; set; }
 
 		public const string BorderName = "border";
 		public const string PivotName = "pivot";

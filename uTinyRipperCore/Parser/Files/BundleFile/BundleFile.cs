@@ -66,7 +66,5 @@ namespace uTinyRipper
 
 		public BundleHeader Header { get; } = new BundleHeader();
 		public BundleMetadata Metadata { get; private set; }
-
-		private readonly string m_filePath;
 	}
 }

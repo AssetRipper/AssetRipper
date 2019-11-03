@@ -8,15 +8,12 @@ namespace uTinyRipper.Classes.TagManagers
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool IsReadUserID(Version version)
-		{
-			return version.IsLess(5);
-		}
+		public static bool HasUserID(Version version) => version.IsLess(5);
 
 		public void Read(AssetReader reader)
 		{
 			Name = reader.ReadString();
-			if(IsReadUserID(reader.Version))
+			if (HasUserID(reader.Version))
 			{
 				UserID = reader.ReadUInt32();
 			}
@@ -33,9 +30,9 @@ namespace uTinyRipper.Classes.TagManagers
 			return node;
 		}
 
-		public string Name { get; private set; }
-		public uint UserID { get; private set; }
-		public uint UniqueID { get; private set; }
+		public string Name { get; set; }
+		public uint UserID { get; set; }
+		public uint UniqueID { get; set; }
 
 		public const string NameName = "name";
 		public const string UniqueIDName = "uniqueID";

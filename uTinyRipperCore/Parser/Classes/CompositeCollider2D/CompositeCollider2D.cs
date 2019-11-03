@@ -16,10 +16,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		public static bool IsReadOffsetDistance(Version version)
-		{
-			return version.IsGreaterEqual(2019, 1, 3);
-		}
+		public static bool HasOffsetDistance(Version version) => version.IsGreaterEqual(2019, 1, 3);
 
 		public override void Read(AssetReader reader)
 		{
@@ -28,12 +25,12 @@ namespace uTinyRipper.Classes
 			GeometryType = (GeometryType)reader.ReadInt32();
 			GenerationType = (GenerationType)reader.ReadInt32();
 			EdgeRadius = reader.ReadSingle();
-			m_colliderPaths = reader.ReadAssetArray<SubCollider>();
+			ColliderPaths = reader.ReadAssetArray<SubCollider>();
 			reader.AlignStream();
 
 			CompositePaths.Read(reader);
 			VertexDistance = reader.ReadSingle();
-			if (IsReadOffsetDistance(reader.Version))
+			if (HasOffsetDistance(reader.Version))
 			{
 				OffsetDistance = reader.ReadSingle();
 			}
@@ -61,7 +58,7 @@ namespace uTinyRipper.Classes
 			node.Add(ColliderPathsName, ColliderPaths.ExportYAML(container));
 			node.Add(CompositePathsName, CompositePaths.ExportYAML(container));
 			node.Add(VertexDistanceName, VertexDistance);
-			if (IsReadOffsetDistance(container.ExportVersion))
+			if (HasOffsetDistance(container.ExportVersion))
 			{
 				node.Add(OffsetDistanceName, GetOffsetDistance(container.Version));
 			}
@@ -70,15 +67,15 @@ namespace uTinyRipper.Classes
 
 		private float GetOffsetDistance(Version version)
 		{
-			return IsReadOffsetDistance(version) ? OffsetDistance : 0.000005f;
+			return HasOffsetDistance(version) ? OffsetDistance : 0.000005f;
 		}
 
-		public GeometryType GeometryType { get; private set; }
-		public GenerationType GenerationType { get; private set; }
-		public float EdgeRadius { get; private set; }
-		public IReadOnlyList<SubCollider> ColliderPaths => m_colliderPaths;
-		public float VertexDistance { get; private set; }
-		public float OffsetDistance { get; private set; }
+		public GeometryType GeometryType { get; set; }
+		public GenerationType GenerationType { get; set; }
+		public float EdgeRadius { get; set; }
+		public SubCollider[] ColliderPaths { get; set; }
+		public float VertexDistance { get; set; }
+		public float OffsetDistance { get; set; }
 
 		public const string GeometryTypeName = "m_GeometryType";
 		public const string GenerationTypeName = "m_GenerationType";
@@ -89,7 +86,5 @@ namespace uTinyRipper.Classes
 		public const string OffsetDistanceName = "m_OffsetDistance";
 
 		public Polygon2D CompositePaths;
-
-		private SubCollider[] m_colliderPaths;
 	}
 }

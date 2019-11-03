@@ -22,8 +22,8 @@ namespace uTinyRipper.Classes.Avatars
 			return node;
 		}
 
-		public uint ParentHumanIndex { get; private set; }
-		public uint ID { get; private set; }
+		public uint ParentHumanIndex { get; set; }
+		public uint ID { get; set; }
 
 		public const string XName = "m_X";
 		public const string ParentHumanIndexName = "m_ParentHumanIndex";

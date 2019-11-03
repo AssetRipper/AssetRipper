@@ -26,7 +26,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			return node;
 		}
 
-		public GPUPlatform ShaderPlatform { get; private set; }
+		public GPUPlatform ShaderPlatform { get; set; }
 
 		public const string ShaderPlatformName = "shaderPlatform";
 		public const string Defines_Tier1Name = "defines_Tier1";

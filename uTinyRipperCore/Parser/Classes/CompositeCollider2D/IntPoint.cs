@@ -19,8 +19,8 @@ namespace uTinyRipper.Classes.CompositeCollider2Ds
 			return node;
 		}
 
-		public long X { get; private set; }
-		public long Y { get; private set; }
+		public long X { get; set; }
+		public long Y { get; set; }
 
 		public const string XName = "X";
 		public const string YName = "Y";

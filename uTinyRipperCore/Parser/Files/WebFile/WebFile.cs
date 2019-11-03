@@ -66,7 +66,5 @@ namespace uTinyRipper
 
 		public WebHeader Header { get; private set; }
 		public WebMetadata Metadata { get; private set; }
-
-		private readonly string m_filePath;
 	}
 }

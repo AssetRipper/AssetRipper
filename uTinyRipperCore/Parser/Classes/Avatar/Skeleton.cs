@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 using uTinyRipper;
@@ -9,9 +8,9 @@ namespace uTinyRipper.Classes.Avatars
 	{
 		public void Read(AssetReader reader)
 		{
-			m_node = reader.ReadAssetArray<Node>();
-			m_ID = reader.ReadUInt32Array();
-			m_axesArray = reader.ReadAssetArray<Axes>();
+			Node = reader.ReadAssetArray<Node>();
+			ID = reader.ReadUInt32Array();
+			AxesArray = reader.ReadAssetArray<Axes>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -23,16 +22,12 @@ namespace uTinyRipper.Classes.Avatars
 			return node;
 		}
 
-		public IReadOnlyList<Node> Node => m_node;
-		public IReadOnlyList<uint> ID => m_ID;
-		public IReadOnlyList<Axes> AxesArray => m_axesArray;
+		public Node[] Node { get; set; }
+		public uint[] ID { get; set; }
+		public Axes[] AxesArray { get; set; }
 
 		public const string NodeName = "m_Node";
 		public const string IDName = "m_ID";
 		public const string AxesArrayName = "m_AxesArray";
-
-		private Node[] m_node;
-		private uint[] m_ID;
-		private Axes[] m_axesArray;
 	}
 }

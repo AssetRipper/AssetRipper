@@ -20,7 +20,7 @@ namespace uTinyRipper
 
 			Name = m_root.Name.Substring(0, m_root.Name.Length - AppExtension.Length);
 
-			string dataPath = Path.Combine(m_root.FullName, ContentsName, DataName);
+			string dataPath = Path.Combine(m_root.FullName, ContentsName, MacDataName);
 			if (!Directory.Exists(dataPath))
 			{
 				throw new Exception("Data directory hasn't been found");
@@ -56,7 +56,7 @@ namespace uTinyRipper
 				return false;
 			}
 
-			string dataPath = Path.Combine(dinfo.FullName, ContentsName, DataName);
+			string dataPath = Path.Combine(dinfo.FullName, ContentsName, MacDataName);
 			if (!Directory.Exists(dataPath))
 			{
 				return false;
@@ -76,7 +76,7 @@ namespace uTinyRipper
 		public override IReadOnlyDictionary<string, string> Assemblies { get; }
 
 		private const string ContentsName = "Contents";
-		private const string DataName = "Data";
+		private const string MacDataName = "Data";
 		private const string ResourcesName = "Resources";
 		private const string AppExtension = ".app";
 

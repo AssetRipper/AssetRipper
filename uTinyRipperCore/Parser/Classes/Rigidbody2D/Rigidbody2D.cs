@@ -12,51 +12,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 5.5.0 and greater
-		/// </summary>
-		public static bool IsReadBodyType(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadUseAutoMass(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 5.5.0 and greater
-		/// </summary>
-		public static bool IsReadMaterial(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
-		/// <summary>
-		/// 5.5.0 and greater
-		/// </summary>
-		public static bool IsReadInterpolate(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
-
-		/// <summary>
-		/// Less than 5.1.0
-		/// </summary>
-		private static bool IsReadFixedAngle(Version version)
-		{
-			return version.IsLess(5, 1);
-		}
-		/// <summary>
-		/// Less than 5.5.0
-		/// </summary>
-		private static bool IsReadIsKinematic(Version version)
-		{
-			return version.IsLess(5, 5);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(5, 5))
 			{
@@ -70,17 +26,43 @@ namespace uTinyRipper.Classes
 			return 4;
 		}
 
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool HasBodyType(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasUseAutoMass(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool HasMaterial(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool HasInterpolate(Version version) => version.IsGreaterEqual(5, 5);
+
+		/// <summary>
+		/// Less than 5.1.0
+		/// </summary>
+		private static bool HasFixedAngle(Version version) => version.IsLess(5, 1);
+		/// <summary>
+		/// Less than 5.5.0
+		/// </summary>
+		private static bool HasIsKinematic(Version version) => version.IsLess(5, 5);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadBodyType(reader.Version))
+			if (HasBodyType(reader.Version))
 			{
 				BodyType = (RigidbodyType2D)reader.ReadInt32();
 				Simulated = reader.ReadBoolean();
 				UseFullKinematicContacts = reader.ReadBoolean();
 			}
-			if (IsReadUseAutoMass(reader.Version))
+			if (HasUseAutoMass(reader.Version))
 			{
 				UseAutoMass = reader.ReadBoolean();
 				reader.AlignStream();
@@ -90,17 +72,17 @@ namespace uTinyRipper.Classes
 			LinearDrag = reader.ReadSingle();
 			AngularDrag = reader.ReadSingle();
 			GravityScale = reader.ReadSingle();
-			if (IsReadMaterial(reader.Version))
+			if (HasMaterial(reader.Version))
 			{
 				Material.Read(reader);
 			}
 
-			if (IsReadFixedAngle(reader.Version))
+			if (HasFixedAngle(reader.Version))
 			{
 				bool fixedAngle = reader.ReadBoolean();
 				Constraints = fixedAngle ? RigidbodyConstraints2D.FreezeRotation : RigidbodyConstraints2D.None;
 			}
-			if (IsReadIsKinematic(reader.Version))
+			if (HasIsKinematic(reader.Version))
 			{
 				bool isKinematic = reader.ReadBoolean();
 				BodyType = isKinematic ? RigidbodyType2D.Kinematic : RigidbodyType2D.Static;
@@ -110,13 +92,13 @@ namespace uTinyRipper.Classes
 				reader.AlignStream();
 			}
 			
-			if (IsReadInterpolate(reader.Version))
+			if (HasInterpolate(reader.Version))
 			{
 				Interpolate = (RigidbodyInterpolation2D)reader.ReadInt32();
 				SleepingMode = (RigidbodySleepMode2D)reader.ReadInt32();
 				CollisionDetection = (CollisionDetectionMode2D)reader.ReadInt32();
 			}
-			if (!IsReadFixedAngle(reader.Version))
+			if (!HasFixedAngle(reader.Version))
 			{
 				Constraints = (RigidbodyConstraints2D)reader.ReadInt32();
 			}
@@ -135,7 +117,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(BodyTypeName, (int)BodyType);
 			node.Add(SimulatedName, Simulated);
 			node.Add(UseFullKinematicContactsName, UseFullKinematicContacts);
@@ -152,18 +134,18 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public RigidbodyType2D BodyType { get; private set; }
-		public bool Simulated { get; private set; }
-		public bool UseFullKinematicContacts { get; private set; }
-		public bool UseAutoMass { get; private set; }
-		public float Mass  { get; private set; }
-		public float LinearDrag { get; private set; }
-		public float AngularDrag { get; private set; }
-		public float GravityScale { get; private set; }
-		public RigidbodyInterpolation2D Interpolate { get; private set; }
-		public RigidbodySleepMode2D SleepingMode { get; private set; }
-		public CollisionDetectionMode2D CollisionDetection { get; private set; }
-		public RigidbodyConstraints2D Constraints { get; private set; }
+		public RigidbodyType2D BodyType { get; set; }
+		public bool Simulated { get; set; }
+		public bool UseFullKinematicContacts { get; set; }
+		public bool UseAutoMass { get; set; }
+		public float Mass  { get; set; }
+		public float LinearDrag { get; set; }
+		public float AngularDrag { get; set; }
+		public float GravityScale { get; set; }
+		public RigidbodyInterpolation2D Interpolate { get; set; }
+		public RigidbodySleepMode2D SleepingMode { get; set; }
+		public CollisionDetectionMode2D CollisionDetection { get; set; }
+		public RigidbodyConstraints2D Constraints { get; set; }
 
 		public const string BodyTypeName = "m_BodyType";
 		public const string SimulatedName = "m_Simulated";

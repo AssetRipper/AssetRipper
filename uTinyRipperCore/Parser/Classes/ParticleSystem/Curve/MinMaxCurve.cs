@@ -41,23 +41,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			MaxCurve = new AnimationCurveTpl<Float>(maxCurve, KeyframeTpl<Float>.DefaultFloatWeight);
 		}
 
-		/// <summary>
-		/// 5.6.1 and greater
-		/// </summary>
-		public static bool IsReadMinScalar(Version version)
-		{
-			return version.IsGreaterEqual(5, 6, 1);
-		}
-
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		private static bool IsMinMaxStateFirst(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(5, 6, 1))
 			{
@@ -65,6 +49,16 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 			return 1;
 		}
+
+		/// <summary>
+		/// 5.6.1 and greater
+		/// </summary>
+		public static bool HasMinScalar(Version version) => version.IsGreaterEqual(5, 6, 1);
+
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
+		private static bool IsMinMaxStateFirst(Version version) => version.IsGreaterEqual(5, 6);
 
 		public void Read(AssetReader reader)
 		{
@@ -75,7 +69,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 			
 			Scalar = reader.ReadSingle();
-			MinScalar = IsReadMinScalar(reader.Version) ? reader.ReadSingle() : Scalar;
+			MinScalar = HasMinScalar(reader.Version) ? reader.ReadSingle() : Scalar;
 			MaxCurve.Read(reader);
 			MinCurve.Read(reader);
 			
@@ -89,7 +83,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(MinMaxStateName, (ushort)MinMaxState);
 			node.Add(ScalarName, GetExportScalar(container.Version));
 			node.Add(MinScalarName, GetExportMinScalar(container.Version));
@@ -100,7 +94,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		private float GetExportScalar(Version version)
 		{
-			if(IsReadMinScalar(version))
+			if (HasMinScalar(version))
 			{
 				return Scalar;
 			}
@@ -118,7 +112,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 		}
 		private float GetExportMinScalar(Version version)
 		{
-			if(IsReadMinScalar(version))
+			if (HasMinScalar(version))
 			{
 				return MinScalar;
 			}
@@ -135,9 +129,9 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public ParticleSystemCurveMode MinMaxState { get; private set; }
-		public float Scalar { get; private set; }
-		public float MinScalar { get; private set; }
+		public ParticleSystemCurveMode MinMaxState { get; set; }
+		public float Scalar { get; set; }
+		public float MinScalar { get; set; }
 
 		public const string MinMaxStateName = "minMaxState";
 		public const string ScalarName = "scalar";

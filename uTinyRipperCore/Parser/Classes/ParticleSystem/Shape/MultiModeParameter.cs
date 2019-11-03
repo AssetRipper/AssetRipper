@@ -16,10 +16,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool IsConditionalValue(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
+		public static bool IsConditionalValue(Version version) => version.IsGreaterEqual(2018, 3);
 
 		public void Read(AssetReader reader)
 		{
@@ -47,9 +44,9 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public float Value { get; private set; }
-		public ParticleSystemShapeMultiModeValue Mode { get; private set; }
-		public float Spread { get; private set; }
+		public float Value { get; set; }
+		public ParticleSystemShapeMultiModeValue Mode { get; set; }
+		public float Spread { get; set; }
 
 		public const string ValueName = "value";
 		public const string ModeName = "mode";

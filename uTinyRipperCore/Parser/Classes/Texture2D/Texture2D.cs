@@ -18,69 +18,52 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		public static int ToSerializedVersion(Version version)
+		{
+			// MipMap has been converted to MipCount
+			if (version.IsGreaterEqual(5, 2))
+			{
+				return 2;
+			}
+			return 1;
+		}
+
 		/// <summary>
 		/// Less than 5.2.0
 		/// </summary>
-		public static bool IsBoolMinMap(Version version)
-		{
-			return version.IsLess(5, 2);
-		}
+		public static bool IsBoolMinMap(Version version) => version.IsLess(5, 2);
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool IsReadIsReadable(Version version)
-		{
-			return version.IsGreaterEqual(2, 6);
-		}
+		public static bool HasHasable(Version version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// From 3.0.0 to 5.5.0 exclusive
 		/// </summary>
-		public static bool IsReadReadAllowed(Version version)
-		{
-			return version.IsGreaterEqual(3) && version.IsLess(5, 5);
-		}
+		public static bool HasReadAllowed(Version version) => version.IsGreaterEqual(3) && version.IsLess(5, 5);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool IsReadStreamingMipmaps(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
+		public static bool HasStreamingMipmaps(Version version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool IsReadStreamingMipmapsPriority(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
+		public static bool HasStreamingMipmapsPriority(Version version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 4.2.0 and greater and not Release
 		/// </summary>
-		public static bool IsReadAlphaIsTransparency(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(4, 2);
-		}
+		public static bool HasAlphaIsTransparency(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool IsReadLightmapFormat(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
+		public static bool HasLightmapFormat(Version version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool IsReadColorSpace(Version version)
-		{
-			return version.IsGreaterEqual(3, 5);
-		}
+		public static bool HasColorSpace(Version version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool IsReadStreamData(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
+		public static bool HasStreamData(Version version) => version.IsGreaterEqual(5, 3);
 
 		public static bool IsSwapBytes(Platform platform, TextureFormat format)
 		{
@@ -106,7 +89,7 @@ namespace uTinyRipper.Classes
 		/// <para>1 - less than 2018.2</para>
 		/// <para>2 - 2018.2 and greater</para>
 		/// </summary>
-		private static int GetAlphaIsTransparencyPosition(Version version)
+		private static int GetAlphaIsTransparencyOrder(Version version)
 		{
 			if (version.IsLess(5))
 			{
@@ -117,16 +100,6 @@ namespace uTinyRipper.Classes
 				return 1;
 			}
 			return 2;
-		}
-
-		private static int GetSerializedVersion(Version version)
-		{
-			// MipMap has been converted to MipCount
-			if (version.IsGreaterEqual(5, 2))
-			{
-				return 2;
-			}
-			return 1;
 		}
 
 		public virtual TextureImporter GenerateTextureImporter(IExportContainer container)
@@ -141,7 +114,7 @@ namespace uTinyRipper.Classes
 
 		public bool CheckAssetIntegrity()
 		{
-			if (IsReadStreamData(File.Version))
+			if (HasStreamData(File.Version))
 			{
 				return StreamData.CheckIntegrity(File);
 			}
@@ -151,7 +124,7 @@ namespace uTinyRipper.Classes
 		public IReadOnlyList<byte> GetImageData()
 		{
 			byte[] data = m_imageData;
-			if (IsReadStreamData(File.Version) && StreamData.IsSet)
+			if (HasStreamData(File.Version) && StreamData.IsSet)
 			{
 				data = StreamData.GetContent(File) ?? m_imageData;
 			}
@@ -174,13 +147,12 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 #if UNIVERSAL
-			if (IsReadAlphaIsTransparency(reader.Version, reader.Flags))
+			bool hasAlphaIsTransparency = HasAlphaIsTransparency(reader.Version, reader.Flags);
+			int alphaIsTransparencyOrder = GetAlphaIsTransparencyOrder(reader.Version);
+			if (hasAlphaIsTransparency && alphaIsTransparencyOrder == 0)
 			{
-				if (GetAlphaIsTransparencyPosition(reader.Version) == 0)
-				{
-					AlphaIsTransparency = reader.ReadBoolean();
-					reader.AlignStream();
-				}
+				AlphaIsTransparency = reader.ReadBoolean();
+				reader.AlignStream();
 			}
 #endif
 			Width = reader.ReadInt32();
@@ -206,39 +178,33 @@ namespace uTinyRipper.Classes
 				MipCount = reader.ReadInt32();
 			}
 
-			if (IsReadIsReadable(reader.Version))
+			if (HasHasable(reader.Version))
 			{
 				IsReadable = reader.ReadBoolean();
 			}
-			if (IsReadReadAllowed(reader.Version))
+			if (HasReadAllowed(reader.Version))
 			{
 				ReadAllowed = reader.ReadBoolean();
 			}
-			if (IsReadStreamingMipmaps(reader.Version))
+			if (HasStreamingMipmaps(reader.Version))
 			{
 				StreamingMipmaps = reader.ReadBoolean();
 			}
 #if UNIVERSAL
-			if (IsReadAlphaIsTransparency(reader.Version, reader.Flags))
+			if (hasAlphaIsTransparency && alphaIsTransparencyOrder == 1)
 			{
-				if (GetAlphaIsTransparencyPosition(reader.Version) == 1)
-				{
-					AlphaIsTransparency = reader.ReadBoolean();
-				}
+				AlphaIsTransparency = reader.ReadBoolean();
 			}
 #endif
 			reader.AlignStream();
 
-			if (IsReadStreamingMipmapsPriority(reader.Version))
+			if (HasStreamingMipmapsPriority(reader.Version))
 			{
 				StreamingMipmapsPriority = reader.ReadInt32();
 #if UNIVERSAL
-				if (IsReadAlphaIsTransparency(reader.Version, reader.Flags))
+				if (hasAlphaIsTransparency && alphaIsTransparencyOrder == 2)
 				{
-					if (GetAlphaIsTransparencyPosition(reader.Version) == 2)
-					{
-						AlphaIsTransparency = reader.ReadBoolean();
-					}
+					AlphaIsTransparency = reader.ReadBoolean();
 				}
 #endif
 				reader.AlignStream();
@@ -248,18 +214,18 @@ namespace uTinyRipper.Classes
 			TextureDimension = (TextureDimension)reader.ReadInt32();
 			TextureSettings.Read(reader);
 
-			if (IsReadLightmapFormat(reader.Version))
+			if (HasLightmapFormat(reader.Version))
 			{
 				LightmapFormat = (TextureUsageMode)reader.ReadInt32();
 			}
-			if (IsReadColorSpace(reader.Version))
+			if (HasColorSpace(reader.Version))
 			{
 				ColorSpace = (ColorSpace)reader.ReadInt32();
 			}
 
 			m_imageData = reader.ReadByteArray();
 			reader.AlignStream();
-			if (IsReadStreamData(reader.Version))
+			if (HasStreamData(reader.Version))
 			{
 				StreamData.Read(reader);
 			}
@@ -268,18 +234,18 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(WidthName, Width);
 			node.Add(HeightName, Height);
 			node.Add(CompleteImageSizeName, CompleteImageSize);
 			node.Add(TextureFormatName, (int)TextureFormat);
 			node.Add(MipCountName, MipCount);
 			node.Add(IsReadableName, IsReadable);
-			if (IsReadStreamingMipmaps(container.ExportVersion))
+			if (HasStreamingMipmaps(container.ExportVersion))
 			{
 				node.Add(StreamingMipmapsName, StreamingMipmaps);
 			}
-			if (IsReadStreamingMipmapsPriority(container.ExportVersion))
+			if (HasStreamingMipmapsPriority(container.ExportVersion))
 			{
 				node.Add(StreamingMipmapsPriorityName, StreamingMipmapsPriority);
 			}
@@ -300,7 +266,7 @@ namespace uTinyRipper.Classes
 		private bool GetAlphaIsTransparency(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			return IsReadAlphaIsTransparency(version, flags) ? AlphaIsTransparency : true;
+			return HasAlphaIsTransparency(version, flags) ? AlphaIsTransparency : true;
 #else
 			return true;
 #endif
@@ -320,7 +286,7 @@ namespace uTinyRipper.Classes
 		{
 			get
 			{
-				if (IsReadStreamData(File.Version))
+				if (HasStreamData(File.Version))
 				{
 					string path = StreamData.Path;
 					if (path != string.Empty)
@@ -332,22 +298,22 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public int Width { get; private set; }
-		public int Height { get; private set; }
-		public int CompleteImageSize { get; private set; }
-		public TextureFormat TextureFormat { get; private set; }
-		public int MipCount { get; private set; }
-		public bool IsReadable { get; private set; }
-		public bool ReadAllowed { get; private set; }
-		public bool StreamingMipmaps { get; private set; }
-		public int StreamingMipmapsPriority { get; private set; }
+		public int Width { get; set; }
+		public int Height { get; set; }
+		public int CompleteImageSize { get; set; }
+		public TextureFormat TextureFormat { get; set; }
+		public int MipCount { get; set; }
+		public bool IsReadable { get; set; }
+		public bool ReadAllowed { get; set; }
+		public bool StreamingMipmaps { get; set; }
+		public int StreamingMipmapsPriority { get; set; }
 #if UNIVERSAL
-		public bool AlphaIsTransparency { get; private set; }
+		public bool AlphaIsTransparency { get; set; }
 #endif
-		public int ImageCount { get; private set; }
-		public TextureDimension TextureDimension { get; private set; }
-		public TextureUsageMode LightmapFormat { get; private set; }
-		public ColorSpace ColorSpace { get; private set; }
+		public int ImageCount { get; set; }
+		public TextureDimension TextureDimension { get; set; }
+		public TextureUsageMode LightmapFormat { get; set; }
+		public ColorSpace ColorSpace { get; set; }
 		public IReadOnlyCollection<byte> ImageData => m_imageData;
 
 		public const string WidthName = "m_Width";

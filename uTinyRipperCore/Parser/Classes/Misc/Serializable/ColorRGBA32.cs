@@ -19,7 +19,7 @@ namespace uTinyRipper.Classes
 			return new ColorRGBA32(r, g, b, a);
 		}
 
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// min version is 2
 			return 2;
@@ -38,7 +38,7 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(RgbaName, RGBA);
 			return node;
 		}

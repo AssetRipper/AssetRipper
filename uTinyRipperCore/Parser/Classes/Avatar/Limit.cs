@@ -8,10 +8,7 @@ namespace uTinyRipper.Classes.Avatars
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool IsVector3(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
+		public static bool IsVector3(Version version) => version.IsGreaterEqual(5, 4);
 
 		public void Read(AssetReader reader)
 		{

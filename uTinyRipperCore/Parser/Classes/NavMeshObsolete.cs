@@ -21,8 +21,8 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_meshData = reader.ReadByteArray();
-			m_heightmaps = reader.ReadAssetArray<HeightmapData>();
+			MeshData = reader.ReadByteArray();
+			Heightmaps = reader.ReadAssetArray<HeightmapData>();
 		}
 
 		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
@@ -48,13 +48,10 @@ namespace uTinyRipper.Classes
 
 		public override string ExportPath => Path.Combine(AssetsKeyword, OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
 
-		public IReadOnlyList<byte> MeshData => m_meshData;
-		public IReadOnlyList<HeightmapData> Heightmaps => m_heightmaps;
+		public byte[] MeshData { get; set; }
+		public HeightmapData[] Heightmaps { get; set; }
 
 		public const string MeshDataName = "m_MeshData";
 		public const string HeightmapsName = "m_Heightmaps";
-
-		private byte[] m_meshData;
-		private HeightmapData[] m_heightmaps;
 	}
 }

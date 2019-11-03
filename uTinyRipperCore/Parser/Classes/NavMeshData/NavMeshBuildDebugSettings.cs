@@ -20,6 +20,6 @@ namespace uTinyRipper.Classes.NavMeshDatas
 
 		public const string FlagsName = "m_Flags";
 
-		public byte Flags { get; private set; }
+		public byte Flags { get; set; }
 	}
 }

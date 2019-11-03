@@ -12,10 +12,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Less than 5.6.0
 		/// </summary>
-		public static bool IsReadRoomRolloffFactor(Version version)
-		{
-			return version.IsLess(5, 6);
-		}
+		public static bool HasRoomRolloffFactor(Version version) => version.IsLess(5, 6);
 
 		public override void Read(AssetReader reader)
 		{
@@ -33,7 +30,7 @@ namespace uTinyRipper.Classes
             Reverb = reader.ReadInt32();
             ReverbDelay = reader.ReadSingle();
             HFReference = reader.ReadSingle();
-			if (IsReadRoomRolloffFactor(reader.Version))
+			if (HasRoomRolloffFactor(reader.Version))
 			{
 				RoomRolloffFactor = reader.ReadSingle();
 			}
@@ -65,23 +62,23 @@ namespace uTinyRipper.Classes
 			return node;
 		}
         
-        public float MinDistance { get; private set; }
-        public float MaxDistance { get; private set; }
-        public int ReverbPreset { get; private set; }
-        public int Room { get; private set; }
-        public int RoomHF { get; private set; }
-        public int RoomLF { get; private set; }
-        public float DecayTime { get; private set; }
-        public float DecayHFRatio { get; private set; }
-        public int Reflections { get; private set; }
-        public float ReflectionsDelay { get; private set; }
-        public int Reverb { get; private set; }
-        public float ReverbDelay { get; private set; }
-        public float HFReference { get; private set; }
-		public float RoomRolloffFactor { get; private set; }
-		public float LFReference { get; private set; }
-        public float Diffusion { get; private set; }
-        public float Density { get; private set; }
+        public float MinDistance { get; set; }
+        public float MaxDistance { get; set; }
+        public int ReverbPreset { get; set; }
+        public int Room { get; set; }
+        public int RoomHF { get; set; }
+        public int RoomLF { get; set; }
+        public float DecayTime { get; set; }
+        public float DecayHFRatio { get; set; }
+        public int Reflections { get; set; }
+        public float ReflectionsDelay { get; set; }
+        public int Reverb { get; set; }
+        public float ReverbDelay { get; set; }
+        public float HFReference { get; set; }
+		public float RoomRolloffFactor { get; set; }
+		public float LFReference { get; set; }
+        public float Diffusion { get; set; }
+        public float Density { get; set; }
 
 		public const string MinDistanceName = "m_MinDistance";
 		public const string MaxDistanceName = "m_MaxDistance";

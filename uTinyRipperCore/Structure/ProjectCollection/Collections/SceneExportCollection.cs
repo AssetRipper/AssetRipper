@@ -60,7 +60,7 @@ namespace uTinyRipper.Project
 					if (comp.ClassID == ClassIDType.OcclusionCullingSettings)
 					{
 						OcclusionCullingSettings settings = (OcclusionCullingSettings)comp;
-						if (settings.PVSData.Count > 0)
+						if (settings.PVSData.Length > 0)
 						{
 							m_occlusionCullingSettings = settings;
 							OcclusionCullingData = OcclusionCullingData.CreateVirtualInstance(virtualFile, settings);
@@ -71,14 +71,11 @@ namespace uTinyRipper.Project
 			}
 		}
 
-		public static bool IsReadMainData(Version version)
-		{
-			return version.IsLess(5, 3);
-		}
+		public static bool HasMainData(Version version) => version.IsLess(5, 3);
 
 		public static string SceneIndexToFileName(int index, Version version)
 		{
-			if (IsReadMainData(version))
+			if (HasMainData(version))
 			{
 				if (index == 0)
 				{
@@ -91,7 +88,7 @@ namespace uTinyRipper.Project
 
 		public static int FileNameToSceneIndex(string name, Version version)
 		{
-			if (IsReadMainData(version))
+			if (HasMainData(version))
 			{
 				if (name == MainSceneName)
 				{

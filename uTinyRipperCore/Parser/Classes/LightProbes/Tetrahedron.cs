@@ -34,14 +34,14 @@ namespace uTinyRipper.Classes.LightProbess
 			return node;
 		}
 
-		public int Indices0 { get; private set; }
-		public int Indices1 { get; private set; }
-		public int Indices2 { get; private set; }
-		public int Indices3 { get; private set; }
-		public int Neighbors0 { get; private set; }
-		public int Neighbors1 { get; private set; }
-		public int Neighbors2 { get; private set; }
-		public int Neighbors3 { get; private set; }
+		public int Indices0 { get; set; }
+		public int Indices1 { get; set; }
+		public int Indices2 { get; set; }
+		public int Indices3 { get; set; }
+		public int Neighbors0 { get; set; }
+		public int Neighbors1 { get; set; }
+		public int Neighbors2 { get; set; }
+		public int Neighbors3 { get; set; }
 
 		public const string Indices0Name = "indices[0]";
 		public const string Indices1Name = "indices[1]";

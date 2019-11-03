@@ -81,8 +81,8 @@ namespace uTinyRipper.Classes.Misc
 
 		public bool IsSet => Path != string.Empty;
 
-		public uint Offset { get; private set; }
-		public uint Size { get; private set; }
-		public string Path { get; private set; }
+		public uint Offset { get; set; }
+		public uint Size { get; set; }
+		public string Path { get; set; }
 	}
 }

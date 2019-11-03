@@ -92,8 +92,8 @@ namespace uTinyRipper.Classes.AnimationClips
 
 		public float OutSlope => Coefficient.Z;
 
-		public int Index { get; private set; }
-		public float Value { get; private set; }
+		public int Index { get; set; }
+		public float Value { get; set; }
 
 		public Vector3f Coefficient;
 	}

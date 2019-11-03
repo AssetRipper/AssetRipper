@@ -37,7 +37,7 @@ namespace uTinyRipper.Classes
 					{
 						SelectorStateConstant selectorState = StateMachine.SelectorStateConstantArray[stateIndex].Instance;
 						// HACK: take default Entry destination. TODO: child StateMachines
-						SelectorTransitionConstant selectorTransition = selectorState.TransitionConstantArray[selectorState.TransitionConstantArray.Count - 1].Instance;
+						SelectorTransitionConstant selectorTransition = selectorState.TransitionConstantArray[selectorState.TransitionConstantArray.Length - 1].Instance;
 						return GetDestinationState(selectorTransition.Destination);
 					}
 				}
@@ -69,7 +69,7 @@ namespace uTinyRipper.Classes
 					conditionList.Add(condition);
 				}
 			}
-			m_conditions = conditionList.ToArray();
+			Conditions = conditionList.ToArray();
 
 			AnimatorState state = parameters.GetDestinationState();
 			DstStateMachine = default;
@@ -101,10 +101,10 @@ namespace uTinyRipper.Classes
 
 		public override string ExportExtension => throw new NotSupportedException();
 
-		public IReadOnlyList<AnimatorCondition> Conditions => m_conditions;
-		public bool Solo { get; private set; }
-		public bool Mute { get; private set; }
-		public bool IsExit { get; private set; }
+		public AnimatorCondition[] Conditions { get; set; }
+		public bool Solo { get; set; }
+		public bool Mute { get; set; }
+		public bool IsExit { get; set; }
 
 		public const string ConditionsName = "m_Conditions";
 		public const string DstStateMachineName = "m_DstStateMachine";
@@ -115,7 +115,5 @@ namespace uTinyRipper.Classes
 
 		public PPtr<AnimatorStateMachine> DstStateMachine;
 		public PPtr<AnimatorState> DstState;
-
-		private AnimatorCondition[] m_conditions;
 	}
 }

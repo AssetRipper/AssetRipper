@@ -22,8 +22,8 @@ namespace uTinyRipper.Classes.LightProbess
 			return node;
 		}
 
-		public int Offset { get; private set; }
-		public int Size { get; private set; }
+		public int Offset { get; set; }
+		public int Size { get; set; }
 
 		public const string HashName = "m_Hash";
 		public const string OffsetName = "m_Offset";

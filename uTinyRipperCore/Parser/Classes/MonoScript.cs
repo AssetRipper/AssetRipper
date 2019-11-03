@@ -18,99 +18,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// ? and greater and Not Release
-		/// </summary>
-		public static bool IsReadScript(Version version, TransferInstructionFlags flags)
-		{
-			// unknown version (somewhere between 1.5.0 and 2.5.0)
-			return !flags.IsRelease()/* && version.IsGreaterEqual()*/;
-		}
-		/// <summary>
-		/// 1.5.0 to 2.6.0 and Not Release
-		/// </summary>
-		public static bool IsReadDefaultProperties(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(1, 5) && version.IsLess(2, 6);
-		}
-		/// <summary>
-		/// 2.6.0 and greater and Not Release
-		/// </summary>
-		public static bool IsReadDefaultReferences(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(2, 6);
-		}
-		/// <summary>
-		/// 3.4.0 and greater and Not Release
-		/// </summary>
-		public static bool IsReadIcon(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(3, 4);
-		}
-		/// <summary>
-		/// 3.4.0 to 5.0.0 and Not Release
-		/// </summary>
-		public static bool IsReadEditorGraphData(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(3, 4) && version.IsLess(5);
-		}
-		/// <summary>
-		/// 3.4.0 and greater
-		/// </summary>
-		public static bool IsReadExecutionOrder(Version version)
-		{
-			return version.IsGreaterEqual(3, 4);
-		}
-		/// <summary>
-		/// 3.4.0 and greater and Release
-		/// </summary>
-		public static bool IsReadPropertiesHash(Version version, TransferInstructionFlags flags)
-		{
-			return version.IsGreaterEqual(3, 4) && flags.IsRelease();
-		}
-		/// <summary>
-		/// Less than 3.0.0
-		/// </summary>
-		public static bool IsReadPathName(Version version)
-		{
-			return version.IsLess(3);
-		}
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		public static bool IsReadNamespace(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
-		/// <summary>
-		/// Release or less than 2018.1.2
-		/// </summary>
-		public static bool IsReadAssemblyName(Version version, TransferInstructionFlags flags)
-		{
-			if (flags.IsRelease())
-			{
-				return true;
-			}
-			return version.IsLess(2018, 1, 2);
-		}
-
-		/// <summary>
-		/// Less than 2018.2
-		/// </summary>
-		public static bool IsReadIsEditorScript(Version version)
-		{
-			return version.IsLess(2018, 2);
-		}
-
-		/// <summary>
-		/// Less than 5.0.0
-		/// </summary>
-		private static bool IsUInt32Hash(Version version)
-		{
-			return version.IsLess(5);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(2018, 2))
 			{
@@ -129,9 +37,68 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// Not Release (NOTE: unknown version 1.5.0-2.5.0)
+		/// </summary>
+		public static bool HasScript(Version version, TransferInstructionFlags flags) => !flags.IsRelease();
+		/// <summary>
+		/// 1.5.0 to 2.6.0 and Not Release
+		/// </summary>
+		public static bool HasDefaultProperties(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(1, 5) && version.IsLess(2, 6);
+		}
+		/// <summary>
+		/// 2.6.0 and greater and Not Release
+		/// </summary>
+		public static bool HasDefaultReferences(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(2, 6);
+		}
+		/// <summary>
+		/// 3.4.0 and greater and Not Release
+		/// </summary>
+		public static bool HasIcon(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 4);
+		/// <summary>
+		/// 3.4.0 to 5.0.0 and Not Release
+		/// </summary>
+		public static bool HasEditorGraphData(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(3, 4) && version.IsLess(5);
+		}
+		/// <summary>
+		/// 3.4.0 and greater
+		/// </summary>
+		public static bool HasExecutionOrder(Version version) => version.IsGreaterEqual(3, 4);
+		/// <summary>
+		/// 3.4.0 and greater and Release
+		/// </summary>
+		public static bool HasPropertiesHash(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 4) && flags.IsRelease();
+		/// <summary>
+		/// Less than 3.0.0
+		/// </summary>
+		public static bool HasPathName(Version version) => version.IsLess(3);
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool HasNamespace(Version version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// Less than 2018.1.2 or Release
+		/// </summary>
+		public static bool HasAssemblyName(Version version, TransferInstructionFlags flags) => flags.IsRelease() || version.IsLess(2018, 1, 2);
+		/// <summary>
+		/// Less than 2018.2
+		/// </summary>
+		public static bool HasIsEditorScript(Version version) => version.IsLess(2018, 2);
+
+		/// <summary>
+		/// Less than 5.0.0
+		/// </summary>
+		private static bool IsUInt32Hash(Version version) => version.IsLess(5);
+
 		public bool IsScriptPresents()
 		{
-			ScriptIdentifier scriptID = IsReadNamespace(File.Version) ?
+			ScriptIdentifier scriptID = HasNamespace(File.Version) ?
 				File.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
 				File.AssemblyManager.GetScriptID(AssemblyName, ClassName);
 			return File.AssemblyManager.IsPresent(scriptID);
@@ -139,7 +106,7 @@ namespace uTinyRipper.Classes
 
 		public SerializableType GetBehaviourType()
 		{
-			ScriptIdentifier scriptID = IsReadNamespace(File.Version) ?
+			ScriptIdentifier scriptID = HasNamespace(File.Version) ?
 				File.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
 				File.AssemblyManager.GetScriptID(AssemblyName, ClassName);
 			if (File.AssemblyManager.IsValid(scriptID))
@@ -151,7 +118,7 @@ namespace uTinyRipper.Classes
 
 		public ScriptExportType GetExportType(ScriptExportManager exportManager)
 		{
-			ScriptIdentifier scriptID = IsReadNamespace(File.Version) ?
+			ScriptIdentifier scriptID = HasNamespace(File.Version) ?
 				File.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
 				File.AssemblyManager.GetScriptID(AssemblyName, ClassName);
 			return File.AssemblyManager.GetExportType(exportManager, scriptID);
@@ -167,35 +134,35 @@ namespace uTinyRipper.Classes
 			ReadNamedObject(reader);
 
 #if UNIVERSAL
-			if (IsReadScript(reader.Version, reader.Flags))
+			if (HasScript(reader.Version, reader.Flags))
 			{
 				Script = reader.ReadByteArray();
 				reader.AlignStream();
 			}
-			if (IsReadDefaultProperties(reader.Version, reader.Flags))
+			if (HasDefaultProperties(reader.Version, reader.Flags))
 			{
 				DefaultProperties.Read(reader);
 			}
-			if (IsReadDefaultReferences(reader.Version, reader.Flags))
+			if (HasDefaultReferences(reader.Version, reader.Flags))
 			{
 				m_defaultReferences = new Dictionary<string, PPtr<Object>>();
 				m_defaultReferences.Read(reader);
 			}
-			if (IsReadIcon(reader.Version, reader.Flags))
+			if (HasIcon(reader.Version, reader.Flags))
 			{
 				Icon.Read(reader);
 			}
-			if (IsReadEditorGraphData(reader.Version, reader.Flags))
+			if (HasEditorGraphData(reader.Version, reader.Flags))
 			{
 				EditorGraphData.Read(reader);
 			}
 #endif
 
-			if (IsReadExecutionOrder(reader.Version))
+			if (HasExecutionOrder(reader.Version))
 			{
 				ExecutionOrder = reader.ReadInt32();
 			}
-			if (IsReadPropertiesHash(reader.Version, reader.Flags))
+			if (HasPropertiesHash(reader.Version, reader.Flags))
 			{
 				if (IsUInt32Hash(reader.Version))
 				{
@@ -208,21 +175,21 @@ namespace uTinyRipper.Classes
 				}
 			}
 
-			if (IsReadPathName(reader.Version))
+			if (HasPathName(reader.Version))
 			{
 				PathName = reader.ReadString();
 			}
 			ClassName = reader.ReadString();
-			if (IsReadNamespace(reader.Version))
+			if (HasNamespace(reader.Version))
 			{
 				Namespace = reader.ReadString();
 			}
-			if (IsReadAssemblyName(reader.Version, reader.Flags))
+			if (HasAssemblyName(reader.Version, reader.Flags))
 			{
 				AssemblyNameOrigin = reader.ReadString();
 				AssemblyName = FilenameUtils.FixAssemblyName(AssemblyNameOrigin);
 			}
-			if (IsReadIsEditorScript(reader.Version))
+			if (HasIsEditorScript(reader.Version))
 			{
 				IsEditorScript = reader.ReadBoolean();
 			}
@@ -236,18 +203,18 @@ namespace uTinyRipper.Classes
 			}
 
 #if UNIVERSAL
-			if (IsReadDefaultProperties(context.Version, context.Flags))
+			if (HasDefaultProperties(context.Version, context.Flags))
 			{
 				yield return context.FetchDependency(DefaultProperties, DefaultReferencesName);
 			}
-			if (IsReadDefaultReferences(context.Version, context.Flags))
+			if (HasDefaultReferences(context.Version, context.Flags))
 			{
 				foreach (PPtr<Object> asset in context.FetchDependencies(DefaultReferences.Select(t => t.Value), DefaultReferencesName))
 				{
 					yield return asset;
 				}
 			}
-			if (IsReadIcon(context.Version, context.Flags))
+			if (HasIcon(context.Version, context.Flags))
 			{
 				yield return context.FetchDependency(Icon, IconName);
 			}
@@ -271,7 +238,7 @@ namespace uTinyRipper.Classes
 		private IReadOnlyList<byte> GetScript(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadScript(version, flags))
+			if (HasScript(version, flags))
 			{
 				return Script;
 			}
@@ -282,7 +249,7 @@ namespace uTinyRipper.Classes
 		private IReadOnlyDictionary<string, PPtr<Object>> GetDefaultReferences(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadDefaultReferences(version, flags))
+			if (HasDefaultReferences(version, flags))
 			{
 				return DefaultReferences;
 			}
@@ -293,7 +260,7 @@ namespace uTinyRipper.Classes
 		private PPtr<Object> GetIcon(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadIcon(version, flags))
+			if (HasIcon(version, flags))
 			{
 				return Icon;
 			}
@@ -303,12 +270,12 @@ namespace uTinyRipper.Classes
 
 		private string GetNamespace(Version version)
 		{
-			return IsReadNamespace(version) ? Namespace : string.Empty;
+			return HasNamespace(version) ? Namespace : string.Empty;
 		}
 
 		private string GetAssemblyName(Version version, TransferInstructionFlags flags)
 		{
-			return IsReadAssemblyName(version, flags) ? AssemblyNameOrigin : string.Empty;
+			return HasAssemblyName(version, flags) ? AssemblyNameOrigin : string.Empty;
 		}
 
 		public override string ExportPath => Path.Combine(AssetsKeyword, "Scripts");
@@ -317,15 +284,15 @@ namespace uTinyRipper.Classes
 #if UNIVERSAL
 		public IReadOnlyDictionary<string, PPtr<Object>> DefaultReferences => m_defaultReferences;
 #endif
-		public int ExecutionOrder { get; private set; }
-		public string ClassName { get; private set; }
-		public string Namespace { get; private set; }
+		public int ExecutionOrder { get; set; }
+		public string ClassName { get; set; }
+		public string Namespace { get; set; }
 		/// <summary>
 		/// AssemblyIdentifier previously
 		/// </summary>
-		public string AssemblyName { get; private set; }
-		public string AssemblyNameOrigin { get; private set; }
-		public bool IsEditorScript { get; private set; }
+		public string AssemblyName { get; set; }
+		public string AssemblyNameOrigin { get; set; }
+		public bool IsEditorScript { get; set; }
 
 		public const string DefaultPropertiesName = "m_DefaultProperties";
 		public const string DefaultReferencesName = "m_DefaultReferences";

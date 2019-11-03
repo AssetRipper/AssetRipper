@@ -17,10 +17,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool IsReadSourceTextures(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
+		public static bool HasSourceTextures(Version version) => version.IsGreaterEqual(4);
 
 		public override TextureImporter GenerateTextureImporter(IExportContainer container)
 		{
@@ -31,9 +28,9 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			if (IsReadSourceTextures(reader.Version))
+			if (HasSourceTextures(reader.Version))
 			{
-				m_sourceTextures = reader.ReadAssetArray<PPtr<Texture2D>>();
+				SourceTextures = reader.ReadAssetArray<PPtr<Texture2D>>();
 				reader.AlignStream();
 			}
 		}
@@ -45,7 +42,7 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 
-			if (IsReadSourceTextures(context.Version))
+			if (HasSourceTextures(context.Version))
 			{
 				foreach (PPtr<Object> asset in context.FetchDependencies(SourceTextures, SourceTexturesName))
 				{
@@ -61,10 +58,8 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public IReadOnlyList<PPtr<Texture2D>> SourceTextures => m_sourceTextures;
+		public PPtr<Texture2D>[] SourceTextures { get; set; }
 
 		public const string SourceTexturesName = "m_SourceTextures";
-
-		private PPtr<Texture2D>[] m_sourceTextures;
 	}
 }

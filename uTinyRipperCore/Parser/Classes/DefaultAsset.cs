@@ -54,8 +54,8 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public string Message { get; private set; }
-		public bool IsWarning { get; private set; }
+		public string Message { get; set; }
+		public bool IsWarning { get; set; }
 
 		public const string MessageName = "m_Message";
 		public const string IsWarningName = "m_IsWarning";

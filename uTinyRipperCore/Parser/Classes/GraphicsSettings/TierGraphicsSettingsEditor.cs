@@ -41,43 +41,28 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadHdrMode(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasHdrMode(Version version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadUseHDR(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasUseHDR(Version version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool IsReadPrefer32BitShadowMaps(Version version)
-		{
-			return version.IsGreaterEqual(2017);
-		}
+		public static bool HasPrefer32BitShadowMaps(Version version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 5.6.3 and greater
 		/// </summary>
-		public static bool IsReadEnableLPPV(Version version)
-		{
-			return version.IsGreaterEqual(5, 6, 3);
-		}
+		public static bool HasEnableLPPV(Version version) => version.IsGreaterEqual(5, 6, 3);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadUseDitherMaskForAlphaBlendedShadows(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasUseDitherMaskForAlphaBlendedShadows(Version version) => version.IsGreaterEqual(5, 6);
 
 		/// <summary>
 		/// Less than 5.6.0
 		/// </summary>
-		private static bool IsReadUseCascadedShadowMapsFirst(Version version)
+		private static bool HasUseCascadedShadowMapsFirst(Version version)
 		{
 			return version.IsLess(5, 6);
 		}
@@ -86,35 +71,35 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		{
 			StandardShaderQuality = (ShaderQuality)reader.ReadInt32();
 			RenderingPath = (RenderingPath)reader.ReadInt32();
-			if (IsReadUseCascadedShadowMapsFirst(reader.Version))
+			if (HasUseCascadedShadowMapsFirst(reader.Version))
 			{
 				UseCascadedShadowMaps = reader.ReadBoolean();
 			}
-			if (IsReadHdrMode(reader.Version))
+			if (HasHdrMode(reader.Version))
 			{
 				HdrMode = (CameraHDRMode)reader.ReadInt32();
 				RealtimeGICPUUsage = (RealtimeGICPUUsage)reader.ReadInt32();
 			}
 			UseReflectionProbeBoxProjection = reader.ReadBoolean();
 			UseReflectionProbeBlending = reader.ReadBoolean();
-			if (IsReadUseHDR(reader.Version))
+			if (HasUseHDR(reader.Version))
 			{
 				UseHDR = reader.ReadBoolean();
 				UseDetailNormalMap = reader.ReadBoolean();
 			}
-			if (!IsReadUseCascadedShadowMapsFirst(reader.Version))
+			if (!HasUseCascadedShadowMapsFirst(reader.Version))
 			{
 				UseCascadedShadowMaps = reader.ReadBoolean();
 			}
-			if (IsReadPrefer32BitShadowMaps(reader.Version))
+			if (HasPrefer32BitShadowMaps(reader.Version))
 			{
 				Prefer32BitShadowMaps = reader.ReadBoolean();
 			}
-			if (IsReadEnableLPPV(reader.Version))
+			if (HasEnableLPPV(reader.Version))
 			{
 				EnableLPPV = reader.ReadBoolean();
 			}
-			if (IsReadUseDitherMaskForAlphaBlendedShadows(reader.Version))
+			if (HasUseDitherMaskForAlphaBlendedShadows(reader.Version))
 			{
 				UseDitherMaskForAlphaBlendedShadows = reader.ReadBoolean();
 			}
@@ -139,18 +124,18 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			return node;
 		}
 
-		public ShaderQuality StandardShaderQuality { get; private set; }
-		public RenderingPath RenderingPath { get; private set; }
-		public CameraHDRMode HdrMode { get; private set; }
-		public RealtimeGICPUUsage RealtimeGICPUUsage { get; private set; }
-		public bool UseReflectionProbeBoxProjection { get; private set; }
-		public bool UseReflectionProbeBlending { get; private set; }
-		public bool UseHDR { get; private set; }
-		public bool UseDetailNormalMap { get; private set; }
-		public bool UseCascadedShadowMaps { get; private set; }
-		public bool Prefer32BitShadowMaps { get; private set; }
-		public bool EnableLPPV { get; private set; }
-		public bool UseDitherMaskForAlphaBlendedShadows { get; private set; }
+		public ShaderQuality StandardShaderQuality { get; set; }
+		public RenderingPath RenderingPath { get; set; }
+		public CameraHDRMode HdrMode { get; set; }
+		public RealtimeGICPUUsage RealtimeGICPUUsage { get; set; }
+		public bool UseReflectionProbeBoxProjection { get; set; }
+		public bool UseReflectionProbeBlending { get; set; }
+		public bool UseHDR { get; set; }
+		public bool UseDetailNormalMap { get; set; }
+		public bool UseCascadedShadowMaps { get; set; }
+		public bool Prefer32BitShadowMaps { get; set; }
+		public bool EnableLPPV { get; set; }
+		public bool UseDitherMaskForAlphaBlendedShadows { get; set; }
 
 		public const string StandardShaderQualityName = "standardShaderQuality";
 		public const string RenderingPathName = "renderingPath";

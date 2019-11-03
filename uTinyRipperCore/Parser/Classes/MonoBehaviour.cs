@@ -177,12 +177,12 @@ namespace uTinyRipper.Classes
 		public bool IsScriptableObject => Name.Length > 0;
 
 #if UNIVERSAL
-		public HideFlags EditorHideFlags { get; private set; }
+		public HideFlags EditorHideFlags { get; set; }
 #endif
-		public string Name { get; private set; }
-		public SerializableStructure Structure { get; private set; }
+		public string Name { get; set; }
+		public SerializableStructure Structure { get; set; }
 #if UNIVERSAL
-		public string EditorClassIdentifier { get; private set; }
+		public string EditorClassIdentifier { get; set; }
 #endif
 
 		public const string EditorHideFlagsName = "m_EditorHideFlags";

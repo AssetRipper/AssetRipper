@@ -12,16 +12,13 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadVertex(Version version, TransferInstructionFlags flags)
-		{
-			return version.IsGreaterEqual(5) && flags.IsRelease();
-		}
+		public static bool HasVertex(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(5) && flags.IsRelease();
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadVertex(reader.Version, reader.Flags))
+			if (HasVertex(reader.Version, reader.Flags))
 			{
 				AdditionalVertexStreams.Read(reader);
 			}

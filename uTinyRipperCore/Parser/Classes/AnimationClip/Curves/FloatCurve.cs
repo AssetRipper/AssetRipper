@@ -33,10 +33,7 @@ namespace uTinyRipper.Classes.AnimationClips
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool IsReadScript(Version version)
-		{
-			return version.IsGreaterEqual(2);
-		}
+		public static bool HasScript(Version version) => version.IsGreaterEqual(2);
 
 		public void Read(AssetReader reader)
 		{
@@ -44,7 +41,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			Attribute = reader.ReadString();
 			Path = reader.ReadString();
 			ClassID = (ClassIDType)reader.ReadInt32();
-			if (IsReadScript(reader.Version))
+			if (HasScript(reader.Version))
 			{
 				Script.Read(reader);
 			}
@@ -66,9 +63,9 @@ namespace uTinyRipper.Classes.AnimationClips
 			return node;
 		}
 		
-		public string Attribute { get; private set; }
-		public string Path { get; private set; }
-		public ClassIDType ClassID { get; private set; }
+		public string Attribute { get; set; }
+		public string Path { get; set; }
+		public ClassIDType ClassID { get; set; }
 
 		public const string CurveName = "curve";
 		public const string AttributeName = "attribute";

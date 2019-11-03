@@ -15,28 +15,22 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadDependencies(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		public static bool HasDependencies(Version version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool IsReadExplicitDataLayout(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
+		public static bool HasExplicitDataLayout(Version version) => version.IsGreaterEqual(2018, 2);
 		
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			m_assets = reader.ReadAssetArray<PPtr<Object>>();
-			if(IsReadDependencies(reader.Version))
+			Assets = reader.ReadAssetArray<PPtr<Object>>();
+			if (HasDependencies(reader.Version))
 			{
-				m_dependencies = reader.ReadStringArray();
+				Dependencies = reader.ReadStringArray();
 			}
-			if(IsReadExplicitDataLayout(reader.Version))
+			if (HasExplicitDataLayout(reader.Version))
 			{
 				ExplicitDataLayout = reader.ReadBoolean();
 			}
@@ -60,13 +54,10 @@ namespace uTinyRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		public IReadOnlyList<PPtr<Object>> Assets => m_assets;
-		public IReadOnlyList<string> Dependencies => m_dependencies;
-		public bool ExplicitDataLayout { get; private set; }
+		public PPtr<Object>[] Assets { get; set; }
+		public string[] Dependencies { get; set; }
+		public bool ExplicitDataLayout { get; set; }
 
 		public const string AssetsName = "m_Assets";
-
-		private PPtr<Object>[] m_assets;
-		private string[] m_dependencies;
 	}
 }

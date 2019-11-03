@@ -25,7 +25,7 @@ namespace uTinyRipper.Classes.BlendTrees
 			Mirror = node.Mirror;
 		}
 
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// TODO:
 			return 2;
@@ -34,7 +34,7 @@ namespace uTinyRipper.Classes.BlendTrees
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(MotionName, Motion.ExportYAML(container));
 			node.Add(ThresholdName, Threshold);
 			node.Add(PositionName, Position.ExportYAML(container));
@@ -45,11 +45,11 @@ namespace uTinyRipper.Classes.BlendTrees
 			return node;
 		}
 
-		public float Threshold { get; private set; }
-		public float TimeScale { get; private set; }
-		public float CycleOffset { get; private set; }
-		public string DirectBlendParameter { get; private set; }
-		public bool Mirror { get; private set; }
+		public float Threshold { get; set; }
+		public float TimeScale { get; set; }
+		public float CycleOffset { get; set; }
+		public string DirectBlendParameter { get; set; }
+		public bool Mirror { get; set; }
 
 		public const string MotionName = "m_Motion";
 		public const string ThresholdName = "m_Threshold";

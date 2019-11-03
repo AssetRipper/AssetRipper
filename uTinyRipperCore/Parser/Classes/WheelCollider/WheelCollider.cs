@@ -15,29 +15,20 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadForceAppPointDistance(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		public static bool HasForceAppPointDistance(Version version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadWheelDampingRate(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		public static bool HasWheelDampingRate(Version version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool IsReadEnabled(Version version)
-		{
-			return version.IsGreaterEqual(3, 5);
-		}
+		public static bool HasEnabled(Version version) => version.IsGreaterEqual(3, 5);
 
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		private static bool IsReadSuspensionSpringFirst(Version version)
+		private static bool HasSuspensionSpringFirst(Version version)
 		{
 			return version.IsGreaterEqual(5);
 		}
@@ -48,27 +39,27 @@ namespace uTinyRipper.Classes
 
 			Center.Read(reader);
 			Radius = reader.ReadSingle();
-			if (IsReadSuspensionSpringFirst(reader.Version))
+			if (HasSuspensionSpringFirst(reader.Version))
 			{
 				SuspensionSpring.Read(reader);
 			}
 			SuspensionDistance = reader.ReadSingle();
-			if (!IsReadSuspensionSpringFirst(reader.Version))
+			if (!HasSuspensionSpringFirst(reader.Version))
 			{
 				SuspensionSpring.Read(reader);
 			}
-			if (IsReadForceAppPointDistance(reader.Version))
+			if (HasForceAppPointDistance(reader.Version))
 			{
 				ForceAppPointDistance = reader.ReadSingle();
 			}
 			Mass = reader.ReadSingle();
-			if (IsReadWheelDampingRate(reader.Version))
+			if (HasWheelDampingRate(reader.Version))
 			{
 				WheelDampingRate = reader.ReadSingle();
 			}
 			ForwardFriction.Read(reader);
 			SidewaysFriction.Read(reader);
-			if (IsReadEnabled(reader.Version))
+			if (HasEnabled(reader.Version))
 			{
 				Enabled = reader.ReadBoolean();
 				reader.AlignStream();
@@ -91,12 +82,12 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public float Radius { get; private set; }
-		public float SuspensionDistance { get; private set; }
-		public float ForceAppPointDistance { get; private set; }
-		public float Mass { get; private set; }
-		public float WheelDampingRate { get; private set; }
-		public bool Enabled { get; private set; }
+		public float Radius { get; set; }
+		public float SuspensionDistance { get; set; }
+		public float ForceAppPointDistance { get; set; }
+		public float Mass { get; set; }
+		public float WheelDampingRate { get; set; }
+		public bool Enabled { get; set; }
 
 		public const string CenterName = "m_Center";
 		public const string RadiusName = "m_Radius";

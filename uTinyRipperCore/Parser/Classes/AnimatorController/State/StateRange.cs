@@ -8,7 +8,7 @@
 			Count = (int)reader.ReadUInt32();
 		}
 
-		public int StartIndex { get; private set; }
-		public int Count { get; private set; }
+		public int StartIndex { get; set; }
+		public int Count { get; set; }
 	}
 }

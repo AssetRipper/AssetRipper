@@ -86,12 +86,12 @@ namespace uTinyRipper.Classes.Shaders
 		}
 		
 		public IReadOnlyDictionary<string, int> NameIndices => m_nameIndices;
-		public SerializedPassType Type { get; private set; }
-		public uint ProgramMask { get; private set; }
-		public bool HasInstancingVariant { get; private set; }
-		public string UseName { get; private set; }
-		public string Name { get; private set; }
-		public string TextureName { get; private set; }
+		public SerializedPassType Type { get; set; }
+		public uint ProgramMask { get; set; }
+		public bool HasInstancingVariant { get; set; }
+		public string UseName { get; set; }
+		public string Name { get; set; }
+		public string TextureName { get; set; }
 
 		public SerializedShaderState State;
 		public SerializedProgram ProgVertex;

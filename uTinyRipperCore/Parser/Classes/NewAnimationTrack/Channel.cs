@@ -22,8 +22,8 @@ namespace uTinyRipper.Classes.NewAnimationTracks
 			return node;
 		}
 
-		public int ByteOffset { get; private set; }
-		public string AttributeName { get; private set; }
+		public int ByteOffset { get; set; }
+		public string AttributeName { get; set; }
 
 		public const string ByteOffsetName = "byteOffset";
 		public const string CurveName = "curve";

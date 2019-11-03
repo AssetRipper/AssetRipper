@@ -42,8 +42,8 @@ namespace uTinyRipper.Classes.MeshRenderers
 			return node;
 		}
 
-		public ushort FirstSubMesh { get; private set; }
-		public ushort SubMeshCount { get; private set; }
+		public ushort FirstSubMesh { get; set; }
+		public ushort SubMeshCount { get; set; }
 
 		public const string FirstSubMeshName = "firstSubMesh";
 		public const string SubMeshCountName = "subMeshCount";

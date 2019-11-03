@@ -8,17 +8,11 @@ namespace uTinyRipper.Classes.AnimationClips
 		/// <summary>
 		/// 5.6.0 an greater
 		/// </summary>
-		private static bool IsInt32ID(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		private static bool IsInt32ID(Version version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(5, 6);
 
 		public void Read(AssetReader reader)
 		{
@@ -63,11 +57,11 @@ namespace uTinyRipper.Classes.AnimationClips
 		public bool IsTransform => ClassID == ClassIDType.Transform || ClassID == ClassIDType.RectTransform && TransformType.IsValid();
 		public TransformType TransformType => unchecked((TransformType)Attribute);
 
-		public uint Path { get; private set; }
-		public uint Attribute { get; private set; }
-		public ClassIDType ClassID { get; private set; }
-		public BindingCustomType CustomType { get; private set; }
-		public bool IsPPtrCurve { get; private set; }
+		public uint Path { get; set; }
+		public uint Attribute { get; set; }
+		public ClassIDType ClassID { get; set; }
+		public BindingCustomType CustomType { get; set; }
+		public bool IsPPtrCurve { get; set; }
 
 		public const string PathName = "path";
 		public const string AttributeName = "attribute";

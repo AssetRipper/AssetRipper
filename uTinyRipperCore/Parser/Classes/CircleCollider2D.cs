@@ -10,15 +10,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// Less than 5.0.0
-		/// </summary>
-		public static bool IsReadCenter(Version version)
-		{
-			return version.IsLess(5);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(5))
 			{
@@ -27,12 +19,17 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// Less than 5.0.0
+		/// </summary>
+		public static bool HasCenter(Version version) => version.IsLess(5);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
 			Radius = reader.ReadSingle();
-			if (IsReadCenter(reader.Version))
+			if (HasCenter(reader.Version))
 			{
 				Center.Read(reader);
 			}
@@ -41,12 +38,12 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(RadiusName, Radius);
 			return node;
 		}
 
-		public float Radius { get; private set; }
+		public float Radius { get; set; }
 
 		public const string RadiusName = "m_Radius";
 

@@ -52,9 +52,9 @@ namespace uTinyRipper.Classes.AnimationClips
 			return node;
 		}
 
-		public string Path { get; private set; }
-		public CurveLoopTypes PreInfinity { get; private set; }
-		public CurveLoopTypes PostInfinity { get; private set; }
+		public string Path { get; set; }
+		public CurveLoopTypes PreInfinity { get; set; }
+		public CurveLoopTypes PostInfinity { get; set; }
 
 		public const string PathName = "m_Path";
 		public const string TimesName = "m_Times";

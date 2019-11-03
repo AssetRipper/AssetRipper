@@ -27,8 +27,8 @@ namespace uTinyRipper.Classes.AnimationClips
 			return node;
 		}
 
-		public string Path { get; private set; }
-		public ClassIDType ClassID { get; private set; }
+		public string Path { get; set; }
+		public ClassIDType ClassID { get; set; }
 
 		public const string PathName = "path";
 		public const string ClassIDName = "classID";

@@ -9,15 +9,12 @@ namespace uTinyRipper.Classes.Materials
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsReadVector2(Version version)
-		{
-			return version.IsGreaterEqual(2, 1);
-		}
+		private static bool IsVector2(Version version) => version.IsGreaterEqual(2, 1);
 
 		public void Read(AssetReader reader)
 		{
 			Texture.Read(reader);
-			if (IsReadVector2(reader.Version))
+			if (IsVector2(reader.Version))
 			{
 				Scale.Read2(reader);
 				Offset.Read2(reader);

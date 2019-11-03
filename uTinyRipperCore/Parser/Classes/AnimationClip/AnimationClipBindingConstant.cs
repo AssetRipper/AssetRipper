@@ -9,22 +9,19 @@ namespace uTinyRipper.Classes.AnimationClips
 	{
 		public AnimationClipBindingConstant(bool _)
 		{
-			m_genericBindings = Array.Empty<GenericBinding>();
-			m_pptrCurveMapping = Array.Empty<PPtr<Object>>();
+			GenericBindings = Array.Empty<GenericBinding>();
+			PPtrCurveMapping = Array.Empty<PPtr<Object>>();
 		}
 
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreater(2017);
-		}
+		private static bool IsAlign(Version version) => version.IsGreater(2017);
 
 		public GenericBinding FindBinding(int index)
 		{
 			int curves = 0;
-			for (int i = 0; i < GenericBindings.Count; i++)
+			for (int i = 0; i < GenericBindings.Length; i++)
 			{
 				GenericBinding gb = GenericBindings[i];
 				if (gb.ClassID == ClassIDType.Transform)
@@ -58,13 +55,13 @@ namespace uTinyRipper.Classes.AnimationClips
 
 		public void Read(AssetReader reader)
 		{
-			m_genericBindings = reader.ReadAssetArray<GenericBinding>();
+			GenericBindings = reader.ReadAssetArray<GenericBinding>();
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream();
 			}
 
-			m_pptrCurveMapping = reader.ReadAssetArray<PPtr<Object>>();
+			PPtrCurveMapping = reader.ReadAssetArray<PPtr<Object>>();
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream();
@@ -73,24 +70,21 @@ namespace uTinyRipper.Classes.AnimationClips
 
 		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			return context.FetchDependencies(PptrCurveMapping, PptrCurveMappingName);
+			return context.FetchDependencies(PPtrCurveMapping, PptrCurveMappingName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(GenericBindingsName, GenericBindings.ExportYAML(container));
-			node.Add(PptrCurveMappingName, PptrCurveMapping.ExportYAML(container));
+			node.Add(PptrCurveMappingName, PPtrCurveMapping.ExportYAML(container));
 			return node;
 		}
 
-		public IReadOnlyList<GenericBinding> GenericBindings => m_genericBindings;
-		public IReadOnlyList<PPtr<Object>> PptrCurveMapping => m_pptrCurveMapping;
+		public GenericBinding[] GenericBindings { get; set; }
+		public PPtr<Object>[] PPtrCurveMapping { get; set; }
 
 		public const string GenericBindingsName = "genericBindings";
 		public const string PptrCurveMappingName = "pptrCurveMapping";
-
-		private GenericBinding[] m_genericBindings;
-		private PPtr<Object>[] m_pptrCurveMapping;
 	}
 }

@@ -26,7 +26,7 @@ namespace uTinyRipper.Classes.Sprites
 			return node;
 		}
 
-		public string Name { get; private set; }
+		public string Name { get; set; }
 
 		public const string TextureName = "texture";
 		public const string NameName = "name";

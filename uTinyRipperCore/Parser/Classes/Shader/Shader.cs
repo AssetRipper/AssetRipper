@@ -20,77 +20,50 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool IsSerialized(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
+		public static bool IsSerialized(Version version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 5.3.0 to 5.4.0
 		/// </summary>
-		public static bool IsEncoded(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
+		public static bool IsEncoded(Version version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// Less than 2.0.0
 		/// </summary>
-		public static bool IsReadFallback(Version version)
-		{
-			return version.IsLess(2);
-		}
+		public static bool HasFallback(Version version) => version.IsLess(2);
 		/// <summary>
 		/// Less than 3.2.0
 		/// </summary>
-		public static bool IsReadDefaultProperties(Version version)
-		{
-			return version.IsLess(3, 2);
-		}
+		public static bool HasDefaultProperties(Version version) => version.IsLess(3, 2);
 		/// <summary>
 		/// 2.0.0 to 3.0.0 exclusive
 		/// </summary>
-		public static bool IsReadStaticProperties(Version version)
-		{
-			return version.IsGreaterEqual(2) && version.IsLess(3);
-		}
+		public static bool HasStaticProperties(Version version) => version.IsGreaterEqual(2) && version.IsLess(3);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool IsReadDependencies(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
+		public static bool HasDependencies(Version version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool IsReadNonModifiableTextures(Version version)
-		{
-			return version.IsGreaterEqual(2018);
-		}		
+		public static bool HasNonModifiableTextures(Version version) => version.IsGreaterEqual(2018);		
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool IsReadShaderIsBaked(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
+		public static bool HasShaderIsBaked(Version version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 3.4.0 to 5.5.0 exclusive and Not Release
 		/// </summary>
-		public static bool IsReadErrors(Version version, TransferInstructionFlags flags)
+		public static bool HasErrors(Version version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(3, 4) && version.IsLess(5, 5);
 		}
 		/// <summary>
 		/// 4.2.0 and greater and Not Release
 		/// </summary>
-		public static bool IsReadDefaultTextures(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(4, 2);
-		}
+		public static bool HasDefaultTextures(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 4.5.0 and greater and Not Release and Not Buildin
 		/// </summary>
-		public static bool IsReadCompileInfo(Version version, TransferInstructionFlags flags)
+		public static bool HasCompileInfo(Version version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && !flags.IsBuiltinResources() && version.IsGreaterEqual(4, 5);
 		}
@@ -171,46 +144,46 @@ namespace uTinyRipper.Classes
 					reader.AlignStream();
 				}
 
-				if (IsReadFallback(reader.Version))
+				if (HasFallback(reader.Version))
 				{
 					Fallback.Read(reader);
 				}
-				if (IsReadDefaultProperties(reader.Version))
+				if (HasDefaultProperties(reader.Version))
 				{
 					DefaultProperties.Read(reader);
 				}
-				if (IsReadStaticProperties(reader.Version))
+				if (HasStaticProperties(reader.Version))
 				{
 					StaticProperties.Read(reader);
 				}
 			}
 			
-			if (IsReadDependencies(reader.Version))
+			if (HasDependencies(reader.Version))
 			{
 				Dependencies = reader.ReadAssetArray<PPtr<Shader>>();
 			}
-			if (IsReadNonModifiableTextures(reader.Version))
+			if (HasNonModifiableTextures(reader.Version))
 			{
 				NonModifiableTextures = new Dictionary<string, PPtr<Texture>>();
 				NonModifiableTextures.Read(reader);
 			}
-			if (IsReadShaderIsBaked(reader.Version))
+			if (HasShaderIsBaked(reader.Version))
 			{
 				ShaderIsBaked = reader.ReadBoolean();
 				reader.AlignStream();
 			}
 
 #if UNIVERSAL
-			if (IsReadErrors(reader.Version, reader.Flags))
+			if (HasErrors(reader.Version, reader.Flags))
 			{
 				Errors = reader.ReadAssetArray<ShaderError>();
 			}
-			if (IsReadDefaultTextures(reader.Version, reader.Flags))
+			if (HasDefaultTextures(reader.Version, reader.Flags))
 			{
 				DefaultTextures = new Dictionary<string, PPtr<Texture>>();
 				DefaultTextures.Read(reader);
 			}
-			if (IsReadCompileInfo(reader.Version, reader.Flags))
+			if (HasCompileInfo(reader.Version, reader.Flags))
 			{
 				CompileInfo.Read(reader);
 			}
@@ -252,7 +225,7 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 
-			if (IsReadDependencies(context.Version))
+			if (HasDependencies(context.Version))
 			{
 				foreach (PPtr<Object> asset in context.FetchDependencies(Dependencies, DependenciesName))
 				{
@@ -295,7 +268,7 @@ namespace uTinyRipper.Classes
 		public ShaderSubProgramBlob[] SubProgramBlobs { get; set; }
 		public PPtr<Shader>[] Dependencies { get; set; }
 		public Dictionary<string, PPtr<Texture>> NonModifiableTextures { get; set; }
-		public bool ShaderIsBaked { get; private set; }
+		public bool ShaderIsBaked { get; set; }
 #if UNIVERSAL
 		public ShaderError[] Errors { get; set; }
 		public Dictionary<string, PPtr<Texture>> DefaultTextures { get; set; }

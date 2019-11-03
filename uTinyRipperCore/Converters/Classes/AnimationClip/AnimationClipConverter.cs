@@ -44,7 +44,7 @@ namespace uTinyRipper.Converters
 
 			ProcessStreams(streamedFrames, bindings, tos, clip.DenseClip.SampleRate);
 			ProcessDenses(clip, bindings, tos);
-			if (Clip.IsReadConstantClip(Version))
+			if (Clip.HasConstantClip(Version))
 			{
 				ProcessConstant(clip, bindings, tos, lastFrame);
 			}
@@ -53,12 +53,12 @@ namespace uTinyRipper.Converters
 
 		private void CreateCurves()
 		{
-			m_translationCurves = m_translations.Select(t => new Vector3Curve(t.Key, t.Value)).ToArray();
-			m_rotationCurves = m_rotations.Select(t => new QuaternionCurve(t.Key, t.Value)).ToArray();
-			m_scaleCurves = m_scales.Select(t => new Vector3Curve(t.Key, t.Value)).ToArray();
-			m_eulerCurves = m_eulers.Select(t => new Vector3Curve(t.Key, t.Value)).ToArray();
-			m_floatCurves = m_floats.Select(t => new FloatCurve(t.Key, t.Value)).ToArray();
-			m_pptrCurves = m_pptrs.Select(t => new PPtrCurve(t.Key, t.Value)).ToArray();
+			Translations = m_translations.Select(t => new Vector3Curve(t.Key, t.Value)).ToArray();
+			Rotations = m_rotations.Select(t => new QuaternionCurve(t.Key, t.Value)).ToArray();
+			Scales = m_scales.Select(t => new Vector3Curve(t.Key, t.Value)).ToArray();
+			Eulers = m_eulers.Select(t => new Vector3Curve(t.Key, t.Value)).ToArray();
+			Floats = m_floats.Select(t => new FloatCurve(t.Key, t.Value)).ToArray();
+			PPtrs = m_pptrs.Select(t => new PPtrCurve(t.Key, t.Value)).ToArray();
 		}
 
 		private void ProcessStreams(IReadOnlyList<StreamedFrame> streamFrames, AnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos, float sampleRate)
@@ -74,7 +74,7 @@ namespace uTinyRipper.Converters
 			for (int frameIndex = 1; frameIndex < streamFrames.Count - 1; frameIndex++)
 			{
 				StreamedFrame frame = streamFrames[frameIndex];
-				for (int curveIndex = 0; curveIndex < frame.Curves.Count;)
+				for (int curveIndex = 0; curveIndex < frame.Curves.Length;)
 				{
 					StreamedCurveKey curve = frame.Curves[curveIndex];
 					GenericBinding binding = bindings.FindBinding(curve.Index);
@@ -157,7 +157,7 @@ namespace uTinyRipper.Converters
 			float time = 0.0f;
 			for (int i = 0; i < 2; i++, time += lastFrame)
 			{
-				for (int curveIndex = 0; curveIndex < constant.Constants.Count;)
+				for (int curveIndex = 0; curveIndex < constant.Constants.Length;)
 				{
 					int index = streamCount + denseCount + curveIndex;
 					GenericBinding binding = bindings.FindBinding(index);
@@ -413,7 +413,7 @@ namespace uTinyRipper.Converters
 				AddPPtrKeyframe(curve, bindings, 0.0f, index - 1);
 			}
 
-			PPtr<Object> value = bindings.PptrCurveMapping[index];
+			PPtr<Object> value = bindings.PPtrCurveMapping[index];
 			PPtrKeyframe pptrKey = new PPtrKeyframe(time, value);
 			pptrCurve.Add(pptrKey);
 		}
@@ -423,7 +423,7 @@ namespace uTinyRipper.Converters
 			for (frameIndex = currentFrame - 1; frameIndex >= 0; frameIndex--)
 			{
 				StreamedFrame frame = streamFrames[frameIndex];
-				for (curveIndex = 0; curveIndex < frame.Curves.Count; curveIndex++)
+				for (curveIndex = 0; curveIndex < frame.Curves.Length; curveIndex++)
 				{
 					StreamedCurveKey curve = frame.Curves[curveIndex];
 					if (curve.Index == curveID)
@@ -439,7 +439,7 @@ namespace uTinyRipper.Converters
 		{
 			StreamedCurveKey curve = frame.Curves[currentCurve];
 			int i = currentCurve + 1;
-			for (; i < frame.Curves.Count; i++)
+			for (; i < frame.Curves.Length; i++)
 			{
 				if (frame.Curves[i].Index != curve.Index)
 				{
@@ -461,12 +461,12 @@ namespace uTinyRipper.Converters
 			}
 		}
 
-		public IReadOnlyList<Vector3Curve> Translations => m_translationCurves;
-		public IReadOnlyList<QuaternionCurve> Rotations => m_rotationCurves;
-		public IReadOnlyList<Vector3Curve> Scales => m_scaleCurves;
-		public IReadOnlyList<Vector3Curve> Eulers => m_eulerCurves;
-		public IReadOnlyList<FloatCurve> Floats => m_floatCurves;
-		public IReadOnlyList<PPtrCurve> PPtrs => m_pptrCurves;
+		public Vector3Curve[] Translations { get; private set; }
+		public QuaternionCurve[] Rotations { get; private set; }
+		public Vector3Curve[] Scales { get; private set; }
+		public Vector3Curve[] Eulers { get; private set; }
+		public FloatCurve[] Floats { get; private set; }
+		public PPtrCurve[] PPtrs { get; private set; }
 
 		private Version Version => m_clip.File.Version;
 		private Platform Platform => m_clip.File.Platform;
@@ -488,12 +488,5 @@ namespace uTinyRipper.Converters
 
 		private readonly AnimationClip m_clip;
 		private readonly CustomCurveResolver m_customCurveResolver;
-
-		private Vector3Curve[] m_translationCurves;
-		private QuaternionCurve[] m_rotationCurves;
-		private Vector3Curve[] m_scaleCurves;
-		private Vector3Curve[] m_eulerCurves;
-		private FloatCurve[] m_floatCurves;
-		private PPtrCurve[] m_pptrCurves;
 	}
 }

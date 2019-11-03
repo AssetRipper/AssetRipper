@@ -41,20 +41,17 @@ namespace uTinyRipper.Classes.NavMeshDatas
 			CellSize = navParams.CellSize;
 		}
 
+		public static int ToSerializedVersion(Version version)
+		{
+			return 2;
+			// NOTE: unknown version (5.6.0a)
+			//return 1;
+		}
+
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool IsReadDebug(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
-
-		private static int GetSerializedVersion(Version version)
-		{
-			return 2;
-			// 5.6.0.Alpha.unknown
-			//return 1;
-		}
+		public static bool HasDebug(Version version) => version.IsGreaterEqual(2017, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -73,7 +70,7 @@ namespace uTinyRipper.Classes.NavMeshDatas
 			TileSize = reader.ReadInt32();
 			// it is bool with align in 5.6 beta but there is no difference
 			AccuratePlacement = reader.ReadInt32();
-			if (IsReadDebug(reader.Version))
+			if (HasDebug(reader.Version))
 			{
 				Debug.Read(reader);
 			}
@@ -82,7 +79,7 @@ namespace uTinyRipper.Classes.NavMeshDatas
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(AgentTypeIDName, AgentTypeID);
 			node.Add(AgentRadiusName, AgentRadius);
 			node.Add(AgentHeightName, AgentHeight);

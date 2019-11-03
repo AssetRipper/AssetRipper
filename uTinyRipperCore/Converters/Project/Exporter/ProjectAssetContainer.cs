@@ -195,7 +195,7 @@ namespace uTinyRipper.Converters
 			}
 
 			string sceneName = m_buildSettings.Scenes[sceneIndex];
-			for (int i = 0; i < m_buildSettings.Scenes.Count; i++)
+			for (int i = 0; i < m_buildSettings.Scenes.Length; i++)
 			{
 				if (m_buildSettings.Scenes[i] == sceneName)
 				{
@@ -236,7 +236,7 @@ namespace uTinyRipper.Converters
 
 			// Unity doesn't verify tagID on export?
 			int tagIndex = tagID - 20000;
-			if (tagIndex >= m_tagManager.Tags.Count)
+			if (tagIndex >= m_tagManager.Tags.Length)
 			{
 				return $"unknown_{tagID}";
 			}

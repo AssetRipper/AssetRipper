@@ -38,10 +38,7 @@ namespace uTinyRipper.Classes.Misc
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsIncludeUpperChest(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool IsIncludeUpperChest(Version version) => version.IsGreaterEqual(5, 6);
 
 		public static BoneType Update(this BoneType _this, Version version)
 		{

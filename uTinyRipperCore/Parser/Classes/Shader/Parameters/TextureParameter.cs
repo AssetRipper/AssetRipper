@@ -5,10 +5,7 @@
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsReadMultiSampled(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
+		public static bool HasMultiSampled(Version version) => version.IsGreaterEqual(2017, 3);
 
 		public TextureParameter(string name, int index, byte dimension, int sampler)
 		{
@@ -32,7 +29,7 @@
 			Index = reader.ReadInt32();
 			SamplerIndex = reader.ReadInt32();
 
-			if(IsReadMultiSampled(reader.Version))
+			if (HasMultiSampled(reader.Version))
 			{
 				MultiSampled = reader.ReadBoolean();
 			}
@@ -40,11 +37,11 @@
 			reader.AlignStream();
 		}
 
-		public string Name { get; private set; }
-		public int NameIndex { get; private set; }
-		public int Index { get; private set; }
-		public int SamplerIndex { get; private set; }
-		public bool MultiSampled { get; private set; }
-		public byte Dim { get; private set; }
+		public string Name { get; set; }
+		public int NameIndex { get; set; }
+		public int Index { get; set; }
+		public int SamplerIndex { get; set; }
+		public bool MultiSampled { get; set; }
+		public byte Dim { get; set; }
 	}
 }

@@ -48,7 +48,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			return hash;
 		}
 
-		public string Path { get; private set; }
+		public string Path { get; set; }
 
 		public const string CurveName = "curve";
 		public const string PathName = "path";
