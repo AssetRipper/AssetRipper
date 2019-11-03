@@ -420,6 +420,7 @@ namespace uTinyRipper.Classes
 
 		public IReadOnlyDictionary<uint, string> FindTOS()
 		{
+			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty }  };
 			foreach (Object asset in File.Collection.FetchAssets())
 			{
 				switch (asset.ClassID)
@@ -427,9 +428,9 @@ namespace uTinyRipper.Classes
 					case ClassIDType.Avatar:
 						{
 							Avatar avatar = (Avatar)asset;
-							if (ClipBindingConstant.IsAvatarMatch(avatar))
+							if (AddAvatarTOS(avatar, tos))
 							{
-								return avatar.TOS;
+								return tos;
 							}
 						}
 						break;
@@ -438,7 +439,10 @@ namespace uTinyRipper.Classes
 						Animator animator = (Animator)asset;
 						if (IsAnimatorContainsClip(animator))
 						{
-							return animator.RetrieveTOS();
+							if (AddAnimatorTOS(animator, tos))
+							{
+								return tos;
+							}
 						}
 						break;
 
@@ -446,14 +450,15 @@ namespace uTinyRipper.Classes
 						Animation animation = (Animation)asset;
 						if (IsAnimationContainsClip(animation))
 						{
-							GameObject go = animation.GameObject.GetAsset(animation.File);
-							return go.BuildTOS();
+							if (AddAnimationTOS(animation, tos))
+							{
+								return tos;
+							}
 						}
 						break;
 				}
 			}
-
-			return new Dictionary<uint, string>() { { 0, string.Empty } };
+			return tos;
 		}
 
 		public IEnumerable<GameObject> FindRoots()
@@ -499,6 +504,51 @@ namespace uTinyRipper.Classes
 		private bool IsAnimationContainsClip(Animation animation)
 		{
 			return animation.IsContainsAnimationClip(this);
+		}
+
+		private bool AddAvatarTOS(Avatar avatar, Dictionary<uint, string> tos)
+		{
+			return AddTOS(avatar.TOS, tos);
+		}
+
+		private bool AddAnimatorTOS(Animator animator, Dictionary<uint, string> tos)
+		{
+			Avatar avatar = animator.Avatar.FindAsset(File);
+			if (avatar != null)
+			{
+				if (AddAvatarTOS(avatar, tos))
+				{
+					return true;
+				}
+			}
+
+			IReadOnlyDictionary<uint, string> animatorTOS = animator.BuildTOS();
+			return AddTOS(animatorTOS, tos);
+		}
+
+		private bool AddAnimationTOS(Animation animation, Dictionary<uint, string> tos)
+		{
+			GameObject go = animation.GameObject.GetAsset(animation.File);
+			IReadOnlyDictionary<uint, string> animationTOS = go.BuildTOS();
+			return AddTOS(animationTOS, tos);
+		}
+
+		private bool AddTOS(IReadOnlyDictionary<uint, string> src, Dictionary<uint, string> dest)
+		{
+			int tosCount = ClipBindingConstant.GenericBindings.Length;
+			for (int i = 0; i < tosCount; i++)
+			{
+				ref GenericBinding binding = ref ClipBindingConstant.GenericBindings[i];
+				if (src.TryGetValue(binding.Path, out string path))
+				{
+					dest[binding.Path] = path;
+					if (dest.Count == tosCount)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 		private bool IsExportGenericData(Version version, TransferInstructionFlags flags)

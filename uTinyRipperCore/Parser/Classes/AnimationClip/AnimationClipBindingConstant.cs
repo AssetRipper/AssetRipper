@@ -41,18 +41,6 @@ namespace uTinyRipper.Classes.AnimationClips
 			throw new ArgumentException($"Binding with index {index} hasn't been found", nameof(index));
 		}
 
-		public bool IsAvatarMatch(Avatar avatar)
-		{
-			foreach (GenericBinding binding in GenericBindings)
-			{
-				if (!avatar.TOS.ContainsKey(binding.Path))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
 		public void Read(AssetReader reader)
 		{
 			GenericBindings = reader.ReadAssetArray<GenericBinding>();

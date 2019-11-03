@@ -278,9 +278,7 @@ namespace uTinyRipper.Classes
 
 		public IReadOnlyDictionary<uint, string> BuildTOS()
 		{
-			Dictionary<uint, string> tos = new Dictionary<uint, string>();
-			tos.Add(0, string.Empty);
-
+			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
 			BuildTOS(this, string.Empty, tos);
 			return tos;
 		}

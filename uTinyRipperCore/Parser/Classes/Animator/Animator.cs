@@ -127,19 +127,6 @@ namespace uTinyRipper.Classes
 			yield return context.FetchDependency(Controller, ControllerName);
 		}
 
-		public IReadOnlyDictionary<uint, string> RetrieveTOS()
-		{
-			Avatar avatar = Avatar.FindAsset(File);
-			if (avatar == null)
-			{
-				return BuildTOS();
-			}
-			else
-			{
-				return avatar.TOS;
-			}
-		}
-
 		public IReadOnlyDictionary<uint, string> BuildTOS()
 		{
 			if (HasHasTransformHierarchy(File.Version))
