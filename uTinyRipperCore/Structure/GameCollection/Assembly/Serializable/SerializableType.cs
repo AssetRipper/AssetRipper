@@ -372,23 +372,21 @@ namespace uTinyRipper.Game.Assembly
 		public string Namespace { get; }
 		public PrimitiveType Type { get; }
 		public string Name { get; }
-		public SerializableType Base
+		public SerializableType Base { get; protected set; }
+		public IReadOnlyList<Field> Fields { get; protected set; }
+		public int FieldCount => BaseFieldCount + Fields.Count;
+
+		internal int BaseFieldCount
 		{
-			get => m_base;
-			protected set
+			get
 			{
-				m_base = value;
-				if (value != null)
+				if (m_baseFieldCount < 0)
 				{
-					BaseFieldCount = value.FieldCount;
+					m_baseFieldCount = Base == null ? 0 : Base.FieldCount;
 				}
+				return m_baseFieldCount;
 			}
 		}
-		public IReadOnlyList<Field> Fields { get; protected set; }
-
-		internal int FieldCount => BaseFieldCount + Fields.Count;
-
-		private int BaseFieldCount { get; set; }
 
 		public const string SystemNamespace = "System";
 		public const string SystemCollectionGenericNamespace = "System.Collections.Generic";
@@ -426,6 +424,6 @@ namespace uTinyRipper.Game.Assembly
 		private const string BehaviourName = "Behaviour";
 		private const string MonoBehaviourName = "MonoBehaviour";
 
-		private SerializableType m_base;
+		private int m_baseFieldCount = -1;
 	}
 }
