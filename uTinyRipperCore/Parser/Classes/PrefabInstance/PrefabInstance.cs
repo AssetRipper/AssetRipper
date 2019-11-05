@@ -8,16 +8,16 @@ using uTinyRipper.Converters;
 namespace uTinyRipper.Classes
 {
 	/// <summary>
-	/// PrefabInstance later
+	/// 2018.3 - Prefab has been renamed to PrefabInstance
 	/// </summary>
-	public sealed class Prefab : Object
+	public sealed class PrefabInstance : Object
 	{
-		public Prefab(AssetInfo assetInfo):
+		public PrefabInstance(AssetInfo assetInfo):
 			base(assetInfo)
 		{
 		}
 
-		private Prefab(AssetInfo assetInfo, GameObject root) :
+		private PrefabInstance(AssetInfo assetInfo, GameObject root) :
 			base(assetInfo, HideFlags.HideInHierarchy)
 		{
 			RootGameObject = root.File.CreatePPtr(root);
@@ -27,23 +27,15 @@ namespace uTinyRipper.Classes
 #endif
 		}
 
-		public static Prefab CreateVirtualInstance(VirtualSerializedFile virtualFile, GameObject root)
+		public static PrefabInstance CreateVirtualInstance(VirtualSerializedFile virtualFile, GameObject root)
 		{
-			return virtualFile.CreateAsset((assetInfo) => new Prefab(assetInfo, root));
+			return virtualFile.CreateAsset((assetInfo) => new PrefabInstance(assetInfo, root));
 		}
 
 		public static int ToSerializedVersion(Version version)
 		{
 			// TODO:
 			return 2;
-		}
-
-		private static IEnumerable<EditorExtension> FetchAssets(GameObject root, bool isLog = false)
-		{
-			foreach (EditorExtension asset in root.FetchHierarchy())
-			{
-				yield return asset;
-			}
 		}
 
 		public override void Read(AssetReader reader)
@@ -60,7 +52,10 @@ namespace uTinyRipper.Classes
 		public IEnumerable<EditorExtension> FetchObjects(IAssetContainer file)
 		{
 			GameObject root = RootGameObject.GetAsset(file);
-			return FetchAssets(root);
+			foreach (EditorExtension asset in root.FetchHierarchy())
+			{
+				yield return asset;
+			}
 		}
 
 		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
@@ -82,7 +77,7 @@ namespace uTinyRipper.Classes
 		public override string ToString()
 		{
 #if DEBUG
-			return $"{Name}({nameof(Prefab)})";
+			return $"{Name}({nameof(PrefabInstance)})";
 #else
 			return nameof(Prefab);
 #endif
@@ -121,7 +116,7 @@ namespace uTinyRipper.Classes
 		/// Prefab previously
 		/// Father previously
 		/// </summary>
-		public PPtr<Prefab> SourcePrefab;
+		public PPtr<PrefabInstance> SourcePrefab;
 		public PPtr<GameObject> RootGameObject;
 	}
 }

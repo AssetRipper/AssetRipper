@@ -132,7 +132,7 @@ namespace uTinyRipper.Converters
 			OverrideYamlExporter(ClassIDType.AvatarMask1);
 			OverrideYamlExporter(ClassIDType.ParticleSystemForceField);
 			OverrideYamlExporter(ClassIDType.OcclusionCullingData);
-			OverrideYamlExporter(ClassIDType.Prefab);
+			OverrideYamlExporter(ClassIDType.PrefabInstance);
 			OverrideYamlExporter(ClassIDType.AvatarMask);
 			OverrideYamlExporter(ClassIDType.SceneAsset);
 			OverrideYamlExporter(ClassIDType.LightmapParameters);

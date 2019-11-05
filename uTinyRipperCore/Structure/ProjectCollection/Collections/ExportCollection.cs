@@ -102,7 +102,7 @@ namespace uTinyRipper.Project
 				case NamedObject named:
 					fileName = named.ValidName;
 					break;
-				case Prefab prefab:
+				case PrefabInstance prefab:
 					fileName = prefab.GetName(file);
 					break;
 				case MonoBehaviour monoBehaviour:

@@ -34,7 +34,7 @@ namespace uTinyRipper.Converters
 			return default;
 		}
 
-		private static PPtr<Prefab> GetPrefabInstance(IExportContainer container, EditorExtension origin)
+		private static PPtr<PrefabInstance> GetPrefabInstance(IExportContainer container, EditorExtension origin)
 		{
 			if (EditorExtension.HasCorrespondingSourceObject(container.Version, container.Flags))
 			{
@@ -43,7 +43,7 @@ namespace uTinyRipper.Converters
 			return default;
 		}
 
-		private static PPtr<Prefab> GetPrefabAsset(IExportContainer container, EditorExtension origin)
+		private static PPtr<PrefabInstance> GetPrefabAsset(IExportContainer container, EditorExtension origin)
 		{
 			if (EditorExtension.HasPrefabAsset(container.Version, container.Flags))
 			{

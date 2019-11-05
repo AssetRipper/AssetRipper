@@ -14,11 +14,11 @@ namespace uTinyRipper.Project
 		}
 
 		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, GameObject root) :
-			this(assetExporter, root.File, Prefab.CreateVirtualInstance(virtualFile, root))
+			this(assetExporter, root.File, PrefabInstance.CreateVirtualInstance(virtualFile, root))
 		{
 		}
 
-		private PrefabExportCollection(IAssetExporter assetExporter, IAssetContainer file, Prefab prefab) :
+		private PrefabExportCollection(IAssetExporter assetExporter, IAssetContainer file, PrefabInstance prefab) :
 			base(assetExporter, prefab)
 		{
 			foreach (EditorExtension asset in prefab.FetchObjects(file))
@@ -39,7 +39,7 @@ namespace uTinyRipper.Project
 
 		protected override string GetExportExtension(Object asset)
 		{
-			return Prefab.PrefabKeyword;
+			return PrefabInstance.PrefabKeyword;
 		}
 
 		private static GameObject GetAssetRoot(Object asset)

@@ -52,7 +52,7 @@ namespace uTinyRipper.Classes
 				if (HasCorrespondingSourceObject(context.Version, context.Flags))
 				{
 					context.AddPPtr(nameof(EditorExtension), CorrespondingSourceObjectName);
-					context.AddPPtr(nameof(PrefabInstance), PrefabInstanceName);
+					context.AddPPtr(nameof(Classes.PrefabInstance), PrefabInstanceName);
 				}
 				else
 				{
@@ -183,7 +183,7 @@ namespace uTinyRipper.Classes
 			return IsPrefabInstanceName(version) ? PrefabInstanceName : PrefabInternalName;
 		}
 
-		private PPtr<Prefab> GetPrefabInstance(IExportContainer container)
+		private PPtr<PrefabInstance> GetPrefabInstance(IExportContainer container)
 		{
 #if UNIVERSAL
 			if (HasCorrespondingSourceObject(container.Version, container.Flags))
@@ -195,7 +195,7 @@ namespace uTinyRipper.Classes
 			if (container.ExportFlags.IsForPrefab())
 			{
 				PrefabExportCollection prefabCollection = (PrefabExportCollection)container.CurrentCollection;
-				return prefabCollection.Asset.File.CreatePPtr((Prefab)prefabCollection.Asset);
+				return prefabCollection.Asset.File.CreatePPtr((PrefabInstance)prefabCollection.Asset);
 			}
 			return default;
 		}
@@ -210,8 +210,8 @@ namespace uTinyRipper.Classes
 #else
 		private PPtr<Object> ExtensionPtr => default;
 		private PPtr<EditorExtension> CorrespondingSourceObject => default;
-		private PPtr<EditorExtension> PrefabInstance => default;
-		private PPtr<EditorExtension> PrefabAsset => default;
+		private PPtr<PrefabInstance> PrefabInstance => default;
+		private PPtr<Prefab> PrefabAsset => default;
 #endif
 
 		public const string ExtensionPtrName = "m_ExtensionPtr";
@@ -233,8 +233,7 @@ namespace uTinyRipper.Classes
 		/// PrefabInternal previously
 		/// Prefab previously
 		/// </summary>
-#warning PPtr<PrefabInstance>
-		public PPtr<Prefab> PrefabInstance;
+		public PPtr<PrefabInstance> PrefabInstance;
 		public PPtr<Prefab> PrefabAsset;
 #endif
 	}
