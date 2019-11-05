@@ -1,6 +1,7 @@
 ﻿using uTinyRipper.YAML;
 using uTinyRipper.Converters.Misc;
 using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.Misc
 {
@@ -50,6 +51,27 @@ namespace uTinyRipper.Classes.Misc
 		/// 2018.1 and greater
 		/// </summary>
 		public static bool HasWeight(Version version) => version.IsGreaterEqual(2018);
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name, TypeTreeGenerator generator)
+		{
+			context.AddNode(TypeTreeUtils.KeyframeName, name, 0, ToSerializedVersion(context.Version));
+			context.BeginChildren();
+			context.AddSingle(TimeName);
+			generator.Invoke(context, ValueName);
+			generator.Invoke(context, InSlopeName);
+			generator.Invoke(context, OutSlopeName);
+			if (HasTangentMode(context.Version, context .Flags))
+			{
+				context.AddInt32(TangentModeName);
+			}
+			if (HasWeight(context.Version))
+			{
+				context.AddInt32(WeightedModeName);
+				generator.Invoke(context, InWeightName);
+				generator.Invoke(context, OutWeightName);
+			}
+			context.EndChildren();
+		}
 
 		public KeyframeTpl<T> Convert(IExportContainer container)
 		{

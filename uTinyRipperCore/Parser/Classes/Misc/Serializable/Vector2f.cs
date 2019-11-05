@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
@@ -73,6 +74,15 @@ namespace uTinyRipper.Classes
 				angle += (2 * Math.PI);
 			}
 			return (float)(360.0 * angle / (2.0 * Math.PI));
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(TypeTreeUtils.Vector2Name, name);
+			context.BeginChildren();
+			context.AddSingle(XName);
+			context.AddSingle(YName);
+			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)

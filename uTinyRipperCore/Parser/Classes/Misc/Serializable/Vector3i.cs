@@ -1,6 +1,7 @@
 using System;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
@@ -61,6 +62,16 @@ namespace uTinyRipper.Classes
 				return true;
 			}
 			return false;
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(TypeTreeUtils.Vector3IntName, name);
+			context.BeginChildren();
+			context.AddInt32(XName);
+			context.AddInt32(YName);
+			context.AddInt32(ZName);
+			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)

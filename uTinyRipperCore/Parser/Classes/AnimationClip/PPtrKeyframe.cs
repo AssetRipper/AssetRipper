@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
@@ -10,6 +11,15 @@ namespace uTinyRipper.Classes.AnimationClips
 		{
 			Time = time;
 			Value = script;
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(nameof(PPtrKeyframe), name);
+			context.BeginChildren();
+			context.AddSingle(TimeName);
+			context.AddPPtr(nameof(Object), ValueName);
+			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)

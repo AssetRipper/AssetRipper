@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
@@ -59,6 +60,17 @@ namespace uTinyRipper.Classes
 			float z = (float)(eaz * 180.0 / Math.PI);
 			Vector3f euler = new Vector3f(x, y, z);
 			return euler;
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(TypeTreeUtils.QuaternionName, name);
+			context.BeginChildren();
+			context.AddSingle(XName);
+			context.AddSingle(XName);
+			context.AddSingle(ZName);
+			context.AddSingle(WName);
+			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)

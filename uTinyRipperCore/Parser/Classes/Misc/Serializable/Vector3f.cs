@@ -2,6 +2,8 @@ using System;
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using System.Collections.Generic;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
@@ -51,6 +53,16 @@ namespace uTinyRipper.Classes
 		public static bool operator !=(Vector3f left, Vector3f right)
 		{
 			return left.X != right.X || left.Y != right.Y || left.Z != right.Z;
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(TypeTreeUtils.Vector3Name, name);
+			context.BeginChildren();
+			context.AddSingle(XName);
+			context.AddSingle(YName);
+			context.AddSingle(ZName);
+			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)
@@ -153,5 +165,7 @@ namespace uTinyRipper.Classes
 		public const string XName = "x";
 		public const string YName = "y";
 		public const string ZName = "z";
+
+		public const int StructSize = 3 * sizeof(float);
 	}
 }

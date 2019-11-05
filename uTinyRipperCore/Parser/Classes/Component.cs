@@ -18,6 +18,15 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasGameObject(TransferInstructionFlags flags) => !flags.IsForPrefab();
 
+		protected new static void GenerateTypeTree(TypeTreeContext context)
+		{
+			EditorExtension.GenerateTypeTree(context);
+			if (HasGameObject(context.Flags))
+			{
+				context.AddPPtr(nameof(Classes.GameObject), GameObjectName);
+			}
+		}
+
 		public GameObject GetRoot()
 		{
 			GameObject go = GameObject.GetAsset(File);

@@ -35,6 +35,16 @@ namespace uTinyRipper.Classes
 			return new PPtr<T1>(FileIndex, PathID);
 		}
 
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddPPtr<T>(name);
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string type, string name)
+		{
+			context.AddPPtr(type, name);
+		}
+
 		public void Read(AssetReader reader)
 		{
 			FileIndex = reader.ReadInt32();
@@ -198,5 +208,8 @@ namespace uTinyRipper.Classes
 		/// It is acts more like a hash in some cases
 		/// </summary>
 		public long PathID { get; set; }
+
+		public const string FileIDName = "m_FileID";
+		public const string PathIDName = "m_PathID";
 	}
 }

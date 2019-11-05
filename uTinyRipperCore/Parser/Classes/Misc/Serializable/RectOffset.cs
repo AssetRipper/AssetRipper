@@ -1,10 +1,22 @@
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
 	public struct RectOffset : IAsset
 	{
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(TypeTreeUtils.RectOffsetName, name);
+			context.BeginChildren();
+			context.AddInt32(LeftName);
+			context.AddInt32(RightName);
+			context.AddInt32(TopName);
+			context.AddInt32(BottomName);
+			context.EndChildren();
+		}
+
 		public void Read(AssetReader reader)
 		{
 			Left = reader.ReadInt32();

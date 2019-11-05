@@ -2,6 +2,7 @@ using uTinyRipper.Classes.Fonts;
 using uTinyRipper.Classes.GUIStyles;
 using uTinyRipper.Classes.GUITexts;
 using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -24,13 +25,73 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool IsBuiltIn(Version version) => version.IsGreaterEqual(4);
+		public static bool IsBuiltin(Version version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		private static bool HasFontSize(Version version)
+		private static bool HasFontSize(Version version) => version.IsGreaterEqual(3, 0);
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{
-			return version.IsGreaterEqual(3, 0);
+			context.AddNode(TypeTreeUtils.GUIStyleName, name);
+			context.BeginChildren();
+			context.AddString(NameName);
+			GUIStyleState.GenerateTypeTree(context, NormalName);
+			GUIStyleState.GenerateTypeTree(context, HoverName);
+			GUIStyleState.GenerateTypeTree(context, ActiveName);
+			GUIStyleState.GenerateTypeTree(context, FocusedName);
+			GUIStyleState.GenerateTypeTree(context, OnNormalName);
+			GUIStyleState.GenerateTypeTree(context, OnHoverName);
+			GUIStyleState.GenerateTypeTree(context, OnActiveName);
+			GUIStyleState.GenerateTypeTree(context, OnFocusedName);
+			RectOffset.GenerateTypeTree(context, BorderName);
+			bool isBuildin = IsBuiltin(context.Version);
+			if (isBuildin)
+			{
+				RectOffset.GenerateTypeTree(context, MarginName);
+				RectOffset.GenerateTypeTree(context, PaddingName);
+			}
+			else
+			{
+				RectOffset.GenerateTypeTree(context, PaddingName);
+				RectOffset.GenerateTypeTree(context, MarginName);
+			}
+			RectOffset.GenerateTypeTree(context, OverflowName);
+			context.AddPPtr(nameof(Font), FontName);
+			if (isBuildin)
+			{
+				context.AddInt32(FontSizeName);
+				context.AddInt32(FontStyleName);
+				context.AddInt32(AlignmentName);
+				context.AddBool(WordWrapName);
+				context.AddBool(RichTextName);
+				context.AddInt32(TextClippingName);
+				context.AddInt32(ImagePositionName);
+				Vector2f.GenerateTypeTree(context, ContentOffsetName);
+				context.AddSingle(FixedWidthName);
+				context.AddSingle(FixedHeightName);
+				context.AddBool(StretchWidthName);
+				context.AddBool(StretchHeightName);
+			}
+			else
+			{
+				context.AddInt32(ImagePositionName);
+				context.AddInt32(AlignmentName);
+				context.AddBool(WordWrapName);
+				context.AddInt32(TextClippingName);
+				Vector2f.GenerateTypeTree(context, ContentOffsetName);
+				Vector2f.GenerateTypeTree(context, ClipOffsetName);
+				context.AddSingle(FixedWidthName);
+				context.AddSingle(FixedHeightName);
+				if (HasFontSize(context.Version))
+				{
+					context.AddInt32(FontSizeName);
+					context.AddInt32(FontStyleName);
+				}
+				context.AddBool(StretchWidthName);
+				context.AddBool(StretchHeightName);
+			}
+			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)
@@ -45,7 +106,7 @@ namespace uTinyRipper.Classes
 			OnActive.Read(reader);
 			OnFocused.Read(reader);
 			Border.Read(reader);
-			if (IsBuiltIn(reader.Version))
+			if (IsBuiltin(reader.Version))
 			{
 				Margin.Read(reader);
 				Padding.Read(reader);
@@ -58,7 +119,7 @@ namespace uTinyRipper.Classes
 			Overflow.Read(reader);
 			Font.Read(reader);
 
-			if (IsBuiltIn(reader.Version))
+			if (IsBuiltin(reader.Version))
 			{
 				FontSize = reader.ReadInt32();
 				FontStyle = (FontStyle)reader.ReadInt32();
@@ -112,7 +173,7 @@ namespace uTinyRipper.Classes
 			OnActive.Write(writer);
 			OnFocused.Write(writer);
 			Border.Write(writer);
-			if (IsBuiltIn(writer.Version))
+			if (IsBuiltin(writer.Version))
 			{
 				Margin.Write(writer);
 				Padding.Write(writer);
@@ -125,7 +186,7 @@ namespace uTinyRipper.Classes
 			Overflow.Write(writer);
 			Font.Write(writer);
 
-			if (IsBuiltIn(writer.Version))
+			if (IsBuiltin(writer.Version))
 			{
 				writer.Write(FontSize);
 				writer.Write((int)FontStyle);
@@ -234,6 +295,7 @@ namespace uTinyRipper.Classes
 		public const string TextClippingName = "m_TextClipping";
 		public const string ImagePositionName = "m_ImagePosition";
 		public const string ContentOffsetName = "m_ContentOffset";
+		public const string ClipOffsetName = "m_ClipOffset";
 		public const string FixedWidthName = "m_FixedWidth";
 		public const string FixedHeightName = "m_FixedHeight";
 		public const string StretchWidthName = "m_StretchWidth";

@@ -12,7 +12,7 @@ namespace uTinyRipper.Classes.TrailRenderers
 			WidthMultiplier = 1.0f;
 			WidthCurve = new AnimationCurveTpl<Float>(false);
 			WidthCurve.Curve = new KeyframeTpl<Float>[] { new KeyframeTpl<Float>(0.0f, 1.0f, KeyframeTpl<Float>.DefaultFloatWeight), };
-			ColorGradient = new ParticleSystems.Gradient(ColorRGBAf.White, ColorRGBAf.White);
+			ColorGradient = new Classes.Gradient(ColorRGBAf.White, ColorRGBAf.White);
 			NumCornerVertices = 0;
 			NumCapVertices = 0;
 			Alignment = LineAlignment.View;
@@ -127,6 +127,6 @@ namespace uTinyRipper.Classes.TrailRenderers
 		public const string GenerateLightingDataName = "generateLightingData";
 
 		public AnimationCurveTpl<Float> WidthCurve;
-		public ParticleSystems.Gradient ColorGradient;
+		public Classes.Gradient ColorGradient;
 	}
 }

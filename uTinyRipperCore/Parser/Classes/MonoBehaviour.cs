@@ -48,6 +48,26 @@ namespace uTinyRipper.Classes
 			return false;
 		}
 
+		public new static void GenerateTypeTree(TypeTreeContext context)
+		{
+			Behaviour.GenerateTypeTree(context);
+
+			if (HasEditorHideFlags(context.Flags))
+			{
+				context.AddUInt32(EditorHideFlagsName);
+			}
+			if (HasGeneratorAsset(context.Version, context.Flags))
+			{
+				context.AddPPtr(nameof(Object), GeneratorAssetName);
+			}
+			context.AddPPtr(nameof(MonoScript), ScriptName);
+			context.AddString(NameName);
+			if (HasEditorClassIdentifier(context.Version, context.Flags))
+			{
+				context.AddString(EditorClassIdentifierName);
+			}
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			long position = reader.BaseStream.Position;

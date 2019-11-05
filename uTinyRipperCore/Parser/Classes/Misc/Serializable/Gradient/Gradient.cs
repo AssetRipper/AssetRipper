@@ -1,15 +1,18 @@
 using System;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper.Classes.ParticleSystems;
+using System.Collections.Generic;
+using uTinyRipper.SerializedFiles;
 
-namespace uTinyRipper.Classes.ParticleSystems
+namespace uTinyRipper.Classes
 {
 	/// <summary>
 	/// GradientNEW previously
 	/// </summary>
 	public struct Gradient : IAsset
 	{
-		public Gradient(ColorRGBAf color1, ColorRGBAf color2):
+		public Gradient(ColorRGBAf color1, ColorRGBAf color2) :
 			this()
 		{
 			Ctime0 = 0;
@@ -40,6 +43,61 @@ namespace uTinyRipper.Classes.ParticleSystems
 		/// 5.5.0 and greater
 		/// </summary>
 		public static bool HasMode(Version version) => version.IsGreaterEqual(5, 5);
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			int version = ToSerializedVersion(context.Version);
+			context.AddNode(TypeTreeUtils.GradientName, name, 0, version);
+			context.BeginChildren();
+			if (version == 1)
+			{
+				ColorRGBA32.GenerateTypeTree(context, Key0Name);
+				ColorRGBA32.GenerateTypeTree(context, Key1Name);
+				ColorRGBA32.GenerateTypeTree(context, Key2Name);
+				ColorRGBA32.GenerateTypeTree(context, Key3Name);
+				ColorRGBA32.GenerateTypeTree(context, Key4Name);
+				ColorRGBA32.GenerateTypeTree(context, Key5Name);
+				ColorRGBA32.GenerateTypeTree(context, Key6Name);
+				ColorRGBA32.GenerateTypeTree(context, Key7Name);
+			}
+			else
+			{
+				ColorRGBAf.GenerateTypeTree(context, Key0Name);
+				ColorRGBAf.GenerateTypeTree(context, Key1Name);
+				ColorRGBAf.GenerateTypeTree(context, Key2Name);
+				ColorRGBAf.GenerateTypeTree(context, Key3Name);
+				ColorRGBAf.GenerateTypeTree(context, Key4Name);
+				ColorRGBAf.GenerateTypeTree(context, Key5Name);
+				ColorRGBAf.GenerateTypeTree(context, Key6Name);
+				ColorRGBAf.GenerateTypeTree(context, Key7Name);
+			}
+
+			context.AddInt16(Ctime0Name);
+			context.AddInt16(Ctime1Name);
+			context.AddInt16(Ctime2Name);
+			context.AddInt16(Ctime3Name);
+			context.AddInt16(Ctime4Name);
+			context.AddInt16(Ctime5Name);
+			context.AddInt16(Ctime6Name);
+			context.AddInt16(Ctime7Name);
+
+			context.AddInt16(Atime0Name);
+			context.AddInt16(Atime1Name);
+			context.AddInt16(Atime2Name);
+			context.AddInt16(Atime3Name);
+			context.AddInt16(Atime4Name);
+			context.AddInt16(Atime5Name);
+			context.AddInt16(Atime6Name);
+			context.AddInt16(Atime7Name);
+
+			if (HasMode(context.Version))
+			{
+				context.AddInt32(ModeName);
+			}
+			context.AddByte(NumColorKeysName);
+			context.AddByte(NumAlphaKeysName);
+			context.EndChildren();
+		}
 
 		public void Read(AssetReader reader)
 		{
@@ -89,7 +147,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 			NumColorKeys = reader.ReadByte();
 			NumAlphaKeys = reader.ReadByte();
-			reader.AlignStream();			
+			reader.AlignStream();
 		}
 
 		public void Write(AssetWriter writer)
@@ -194,7 +252,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			node.Add(NumAlphaKeysName, NumAlphaKeys);
 			return node;
 		}
-		
+
 		public void Add(ushort time, ColorRGBA32 color)
 		{
 			Add(time, (ColorRGBAf)color);

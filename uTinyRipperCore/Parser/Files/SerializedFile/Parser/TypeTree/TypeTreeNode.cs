@@ -2,7 +2,7 @@
 
 namespace uTinyRipper.SerializedFiles
 {
-	public struct TypeTreeNode : ISerializedReadable, ISerializedWritable
+	public class TypeTreeNode : ISerializedReadable, ISerializedWritable
 	{
 		/// <summary>
 		/// 5.0.0a1 and greater
@@ -93,7 +93,7 @@ namespace uTinyRipper.SerializedFiles
 					"{", Index, "}",
 					"{", Version, "}",
 					IsArray,
-					"{", MetaFlag, "}");
+					"{", (int)MetaFlag, "}");
 			return sb;
 		}
 

@@ -1,5 +1,6 @@
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
@@ -9,6 +10,15 @@ namespace uTinyRipper.Classes
 		{
 			Center = center;
 			Extent = extent;
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(TypeTreeUtils.BoundsIntName, name);
+			context.BeginChildren();
+			Vector3i.GenerateTypeTree(context, CenterName);
+			Vector3i.GenerateTypeTree(context, ExtentName);
+			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)

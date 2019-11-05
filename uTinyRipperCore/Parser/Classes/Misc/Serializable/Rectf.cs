@@ -1,6 +1,8 @@
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using System.Collections.Generic;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
@@ -95,6 +97,28 @@ namespace uTinyRipper.Classes
 		/// 2.0.0 and greater
 		/// </summary>
 		public static bool HasMinMax(Version version) => version.IsLess(2);
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			int version = ToSerializedVersion(context.Version);
+			context.AddNode(TypeTreeUtils.RectName, name, 0, version);
+			context.BeginChildren();
+			if (version == 1)
+			{
+				context.AddSingle(XMinName);
+				context.AddSingle(YMinName);
+				context.AddSingle(XMaxName);
+				context.AddSingle(YMaxName);
+			}
+			else
+			{
+				context.AddSingle(XName);
+				context.AddSingle(YName);
+				context.AddSingle(WidthName);
+				context.AddSingle(HeightName);
+			}
+			context.EndChildren();
+		}
 
 		public void Read(AssetReader reader)
 		{

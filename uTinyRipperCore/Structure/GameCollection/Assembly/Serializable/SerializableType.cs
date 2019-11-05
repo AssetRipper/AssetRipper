@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Misc;
-using uTinyRipper.Classes.ParticleSystems;
+using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Game.Assembly
 {
@@ -92,8 +93,12 @@ namespace uTinyRipper.Game.Assembly
 					case MonoUtils.CVoidName:
 					case MonoUtils.BooleanName:
 					case MonoUtils.BoolName:
+					case MonoUtils.SByteName:
+					case MonoUtils.CSByteName:
 					case MonoUtils.ByteName:
 					case MonoUtils.CByteName:
+					case MonoUtils.CharName:
+					case MonoUtils.CCharName:
 					case MonoUtils.Int16Name:
 					case MonoUtils.ShortName:
 					case MonoUtils.UInt16Name:
@@ -315,6 +320,11 @@ namespace uTinyRipper.Game.Assembly
 		}
 #endregion
 
+		public TypeTree GenerateTypeTree()
+		{
+			return SerializableTypeConverter.GenerateTypeTree(this);
+		}
+
 		public SerializableStructure CreateSerializableStructure()
 		{
 			return new SerializableStructure(this, 0);
@@ -332,6 +342,21 @@ namespace uTinyRipper.Game.Assembly
 				return Base.GetField(index);
 			}
 			return Fields[index - BaseFieldCount];
+		}
+
+		public bool IsPrimitive()
+		{
+			return IsPrimitive(Namespace, Name);
+		}
+
+		public bool IsString()
+		{
+			return IsString(Namespace, Name);
+		}
+
+		public bool IsEngineStruct()
+		{
+			return IsEngineStruct(Namespace, Name);
 		}
 
 		public bool IsEnginePointer()

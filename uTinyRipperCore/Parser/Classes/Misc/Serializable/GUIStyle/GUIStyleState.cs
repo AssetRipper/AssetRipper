@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using uTinyRipper.YAML;
+﻿using uTinyRipper.YAML;
 using uTinyRipper.Converters;
 using System;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.GUIStyles
 {
@@ -23,6 +23,16 @@ namespace uTinyRipper.Classes.GUIStyles
 			{
 				ScaledBackgrounds[i] = copy.ScaledBackgrounds[i];
 			}
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(TypeTreeUtils.GUIStyleStateName, name);
+			context.BeginChildren();
+			context.AddPPtr(nameof(Texture2D), BackgroundName);
+			context.AddVector(ScaledBackgroundsName, PPtr<Texture2D>.GenerateTypeTree);
+			ColorRGBAf.GenerateTypeTree(context, TextColorName);
+			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)
@@ -49,11 +59,6 @@ namespace uTinyRipper.Classes.GUIStyles
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
-		}
-		
 		public PPtr<Texture2D>[] ScaledBackgrounds { get; set; }
 
 		public const string BackgroundName = "m_Background";

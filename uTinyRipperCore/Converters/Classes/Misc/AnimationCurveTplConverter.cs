@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using uTinyRipper.Classes;
 using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Converters.Misc

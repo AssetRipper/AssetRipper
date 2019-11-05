@@ -6,7 +6,7 @@ namespace uTinyRipper.Classes.TrailRenderers
 {
 	public struct Gradient : IAsset
 	{
-		public ParticleSystems.Gradient GenerateGragient(IExportContainer container)
+		public Classes.Gradient GenerateGragient(IExportContainer container)
 		{
 			return GradientConverter.GenerateGradient(container, ref this);
 		}

@@ -1,5 +1,7 @@
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using System.Collections.Generic;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
@@ -56,6 +58,17 @@ namespace uTinyRipper.Classes
 		public static bool operator !=(Vector4f left, Vector4f right)
 		{
 			return left.X != right.X || left.Y != right.Y || left.Z != right.Z || left.W != right.W;
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(TypeTreeUtils.Vector4Name, name);
+			context.BeginChildren();
+			context.AddSingle(XName);
+			context.AddSingle(YName);
+			context.AddSingle(ZName);
+			context.AddSingle(WName);
+			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)

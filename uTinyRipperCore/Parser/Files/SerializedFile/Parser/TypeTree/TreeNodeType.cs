@@ -115,7 +115,7 @@ namespace uTinyRipper.SerializedFiles
 		UInt32						= 914,
 		UInt64						= 921,
 		UInt8						= 928,
-		[EnumName("unsigned int")]
+		[EnumName(TypeTreeUtils.UnsignedIntName)]
 		unsignedint					= 934,
 		[EnumName("unsigned long long")]
 		unsignedlonglong			= 947,
@@ -127,7 +127,7 @@ namespace uTinyRipper.SerializedFiles
 		Vector4f					= 1006,
 		m_ScriptingClassIdentifier	= 1015,
 		Gradient					= 1042,
-		[EnumName("Type*")]
+		[EnumName(TypeTreeUtils.TypeStarName)]
 		TypeStar					= 1051,
 		int2_storage				= 1057,
 		int3_storage				= 1070,

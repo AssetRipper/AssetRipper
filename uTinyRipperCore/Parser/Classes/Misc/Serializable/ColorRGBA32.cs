@@ -1,5 +1,6 @@
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
@@ -23,6 +24,14 @@ namespace uTinyRipper.Classes
 		{
 			// min version is 2
 			return 2;
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(TypeTreeUtils.ColorName, name, 0, ToSerializedVersion(context.Version));
+			context.BeginChildren();
+			context.AddUInt32(RgbaName);
+			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)

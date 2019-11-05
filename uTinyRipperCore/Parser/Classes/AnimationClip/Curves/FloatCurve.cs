@@ -2,6 +2,7 @@
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
@@ -34,6 +35,18 @@ namespace uTinyRipper.Classes.AnimationClips
 		/// 2.0.0 and greater
 		/// </summary>
 		public static bool HasScript(Version version) => version.IsGreaterEqual(2);
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(nameof(PPtrCurve), name);
+			context.BeginChildren();
+			AnimationCurveTpl<Float>.GenerateTypeTree(context, name, Float.GenerateTypeTree);
+			context.AddString(AttributeName);
+			context.AddString(PathName);
+			context.AddNode(TypeTreeUtils.TypeStarName, ClassIDName, sizeof(int));
+			context.AddPPtr(nameof(MonoScript), ScriptName);
+			context.EndChildren();
+		}
 
 		public void Read(AssetReader reader)
 		{

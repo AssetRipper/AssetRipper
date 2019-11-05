@@ -1,10 +1,34 @@
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
 	public struct Matrix4x4f : IAsset
 	{
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(TypeTreeUtils.Matrix4x4Name, name);
+			context.BeginChildren();
+			context.AddSingle(E00Name);
+			context.AddSingle(E01Name);
+			context.AddSingle(E02Name);
+			context.AddSingle(E03Name);
+			context.AddSingle(E10Name);
+			context.AddSingle(E11Name);
+			context.AddSingle(E12Name);
+			context.AddSingle(E13Name);
+			context.AddSingle(E20Name);
+			context.AddSingle(E21Name);
+			context.AddSingle(E22Name);
+			context.AddSingle(E23Name);
+			context.AddSingle(E30Name);
+			context.AddSingle(E31Name);
+			context.AddSingle(E32Name);
+			context.AddSingle(E33Name);
+			context.EndChildren();
+		}
+
 		public void Read(AssetReader reader)
 		{
 			E00 = reader.ReadSingle();

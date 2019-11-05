@@ -24,6 +24,15 @@ namespace uTinyRipper.Classes.AnimationClips
 			Curve = new AnimationCurveTpl<Vector3f>(keyframes);
 		}
 
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(nameof(Vector3Curve), name);
+			context.BeginChildren();
+			AnimationCurveTpl<Vector3f>.GenerateTypeTree(context, name, Vector3f.GenerateTypeTree);
+			context.AddString(PathName);
+			context.EndChildren();
+		}
+
 		public void Read(AssetReader reader)
 		{
 			Curve.Read(reader);

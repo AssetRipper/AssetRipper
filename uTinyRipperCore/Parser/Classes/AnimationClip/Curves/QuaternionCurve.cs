@@ -30,6 +30,15 @@ namespace uTinyRipper.Classes.AnimationClips
 			Curve = curve;
 		}
 
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(nameof(QuaternionCurve), name);
+			context.BeginChildren();
+			AnimationCurveTpl<Quaternionf>.GenerateTypeTree(context, CurveName, Quaternionf.GenerateTypeTree);
+			context.AddString(PathName);
+			context.EndChildren();
+		}
+
 		public void Read(AssetReader reader)
 		{
 			Curve.Read(reader);

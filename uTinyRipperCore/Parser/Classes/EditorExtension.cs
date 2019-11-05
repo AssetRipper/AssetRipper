@@ -44,6 +44,27 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		private static bool IsPrefabInstanceName(Version version) => version.IsGreaterEqual(2018, 3);
 
+		protected new static void GenerateTypeTree(TypeTreeContext context)
+		{
+			Object.GenerateTypeTree(context);
+			if (HasEditorPtrs(context.Flags))
+			{
+				if (HasCorrespondingSourceObject(context.Version, context.Flags))
+				{
+					context.AddPPtr(nameof(EditorExtension), CorrespondingSourceObjectName);
+					context.AddPPtr(nameof(PrefabInstance), PrefabInstanceName);
+				}
+				else
+				{
+					context.AddPPtr(nameof(Object), ExtensionPtrName);
+				}
+				if (HasPrefabAsset(context.Version, context.Flags))
+				{
+					context.AddPPtr(nameof(Prefab), PrefabAssetName);
+				}
+			}
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -212,8 +233,9 @@ namespace uTinyRipper.Classes
 		/// PrefabInternal previously
 		/// Prefab previously
 		/// </summary>
+#warning PPtr<PrefabInstance>
 		public PPtr<Prefab> PrefabInstance;
-		public PPtr<Object> PrefabAsset;
+		public PPtr<Prefab> PrefabAsset;
 #endif
 	}
 }

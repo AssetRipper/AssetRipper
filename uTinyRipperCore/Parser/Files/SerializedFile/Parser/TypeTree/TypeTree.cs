@@ -14,7 +14,9 @@ namespace uTinyRipper.SerializedFiles
 				Nodes = new TypeTreeNode[nodesCount];
 				for (int i = 0; i < nodesCount; i++)
 				{
-					Nodes[i].Read(reader);
+					TypeTreeNode node = new TypeTreeNode();
+					node.Read(reader);
+					Nodes[i] = node;
 				}
 				CustomTypeBuffer = new byte[customBufferSize];
 				reader.Read(CustomTypeBuffer, 0, CustomTypeBuffer.Length);

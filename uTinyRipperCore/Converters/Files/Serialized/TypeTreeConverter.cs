@@ -25,9 +25,8 @@ namespace uTinyRipper.Converters
 					}
 				}
 
-				for (int i = 0; i < origin.Nodes.Length; i++)
+				foreach (TypeTreeNode node in origin.Nodes)
 				{
-					ref TypeTreeNode node = ref origin.Nodes[i];
 					node.Type = GetTypeName(customTypes, node.TypeOffset);
 					node.Name = GetTypeName(customTypes, node.NameOffset);
 				}

@@ -1,6 +1,8 @@
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using System.Collections.Generic;
+using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
@@ -24,6 +26,17 @@ namespace uTinyRipper.Classes
 				A = ((color32.RGBA & 0xFF000000) >> 24) / 255.0f
 			};
 			return color;
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(TypeTreeUtils.ColorName, name);
+			context.BeginChildren();
+			context.AddSingle(RName);
+			context.AddSingle(GName);
+			context.AddSingle(BName);
+			context.AddSingle(AName);
+			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)
@@ -73,14 +86,14 @@ namespace uTinyRipper.Classes
 
 		public static ColorRGBAf White => new ColorRGBAf(1.0f, 1.0f, 1.0f, 1.0f);
 
-		public const string RName = "r";
-		public const string GName = "g";
-		public const string BName = "b";
-		public const string AName = "a";
-
 		public float R { get; set; }
 		public float G { get; set; }
 		public float B { get; set; }
 		public float A { get; set; }
+
+		public const string RName = "r";
+		public const string GName = "g";
+		public const string BName = "b";
+		public const string AName = "a";
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -14,6 +15,13 @@ namespace uTinyRipper.Classes
 		/// 2.1.0 and greater
 		/// </summary>
 		private static bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
+
+		protected new static void GenerateTypeTree(TypeTreeContext context)
+		{
+			Component.GenerateTypeTree(context);
+			TransferMetaFlags flags = IsAlign(context.Version) ? TransferMetaFlags.AlignBytesFlag : TransferMetaFlags.NoTransferFlags;
+			context.AddByte(EnabledName, flags);
+		}
 
 		public override void Read(AssetReader reader)
 		{

@@ -1,10 +1,12 @@
-using System.Collections.Generic;
-using uTinyRipper.YAML;
 using System;
-using uTinyRipper.Converters.Misc;
+using System.Collections.Generic;
 using uTinyRipper.Converters;
+using uTinyRipper.Converters.Misc;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.YAML;
+using uTinyRipper.SerializedFiles;
 
-namespace uTinyRipper.Classes.Misc
+namespace uTinyRipper.Classes
 {
 	public struct AnimationCurveTpl<T> : IAsset
 		where T : struct, IAsset, IYAMLExportable
@@ -96,6 +98,22 @@ namespace uTinyRipper.Classes.Misc
 		public AnimationCurveTpl<T> Convert(IExportContainer container)
 		{
 			return AnimationCurveTplConverter.Convert(container, ref this);
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name, TypeTreeGenerator generator)
+		{
+			context.AddNode(TypeTreeUtils.AnimationCurveName, name, 0, ToSerializedVersion(context.Version));
+			context.BeginChildren();
+			context.BeginVector(CurveName, TransferMetaFlags.AlignBytesFlag);
+			KeyframeTpl<T>.GenerateTypeTree(context, TypeTreeUtils.DataName, generator);
+			context.EndVector();
+			context.AddInt32(PreInfinityName);
+			context.AddInt32(PostInfinityName);
+			if (HasRotationOrder(context.Version))
+			{
+				context.AddInt32(RotationOrderName);
+			}
+			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)

@@ -15,6 +15,11 @@ namespace uTinyRipper.Classes
 			return lhs.ID != rhs.ID;
 		}
 
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddString(name);
+		}
+
 		public void Read(AssetReader reader)
 		{
 			ID = reader.ReadInt32();

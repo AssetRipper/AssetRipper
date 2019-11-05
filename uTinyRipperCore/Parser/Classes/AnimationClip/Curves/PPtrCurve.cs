@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using uTinyRipper.Converters;
+using uTinyRipper.SerializedFiles;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimationClips
@@ -76,6 +77,18 @@ namespace uTinyRipper.Classes.AnimationClips
 		/// 2017.1 and greater
 		/// </summary>
 		private static bool IsAlign(Version version) => version.IsGreaterEqual(2017);
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(nameof(PPtrCurve), name);
+			context.BeginChildren();
+			context.AddVector(CurveName, PPtrKeyframe.GenerateTypeTree);
+			context.AddString(AttributeName);
+			context.AddString(PathName);
+			context.AddNode(TypeTreeUtils.TypeStarName, ClassIDName, sizeof(int));
+			context.AddPPtr(nameof(MonoScript), ScriptName);
+			context.EndChildren();
+		}
 
 		public void Read(AssetReader reader)
 		{

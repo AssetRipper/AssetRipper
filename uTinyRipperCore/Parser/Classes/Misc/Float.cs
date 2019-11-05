@@ -20,6 +20,11 @@ namespace uTinyRipper.Classes.Misc
 			return value.Value;
 		}
 
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddSingle(name);
+		}
+
 		public void Read(AssetReader reader)
 		{
 			Value = reader.ReadSingle();

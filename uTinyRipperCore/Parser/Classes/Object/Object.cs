@@ -30,6 +30,19 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasInstanceID(Version version, TransferInstructionFlags flags) => flags.IsDebug() && version.IsGreaterEqual(4, 3);
 
+		protected static void GenerateTypeTree(TypeTreeContext context)
+		{
+			if (HasHideFlag(context.Version, context.Flags))
+			{
+				context.AddUInt32(ObjectHideFlagsName);
+			}
+			if (HasInstanceID(context.Version, context.Flags))
+			{
+				context.AddInt32(InstanceIDName);
+				context.AddInt64(ObjectHideFlagsName);
+			}
+		}
+
 		public virtual Object Convert(IExportContainer container)
 		{
 			return this;
@@ -120,6 +133,8 @@ namespace uTinyRipper.Classes
 
 		public const string TypelessdataName = "_typelessdata";
 		public const string ObjectHideFlagsName = "m_ObjectHideFlags";
+		public const string InstanceIDName = "m_InstanceID";
+		public const string LocalIdentfierInFileName = "m_LocalIdentfierInFile";
 
 		public const string AssetsKeyword = "Assets";
 		protected const string AssetExtension = "asset";

@@ -123,7 +123,7 @@ namespace uTinyRipper.Classes
 		public const string AutodestructName = "m_Autodestruct";
 		public const string EmittingName = "m_Emitting";
 
-		public Gradient Colors;
+		public TrailRenderers.Gradient Colors;
 		public LineParameters Parameters;
 	}
 }
