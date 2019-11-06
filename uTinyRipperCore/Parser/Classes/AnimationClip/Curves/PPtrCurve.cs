@@ -82,7 +82,7 @@ namespace uTinyRipper.Classes.AnimationClips
 		{
 			context.AddNode(nameof(PPtrCurve), name);
 			context.BeginChildren();
-			context.AddVector(CurveName, PPtrKeyframe.GenerateTypeTree);
+			context.AddArray(CurveName, PPtrKeyframe.GenerateTypeTree);
 			context.AddString(AttributeName);
 			context.AddString(PathName);
 			context.AddNode(TypeTreeUtils.TypeStarName, ClassIDName, sizeof(int));

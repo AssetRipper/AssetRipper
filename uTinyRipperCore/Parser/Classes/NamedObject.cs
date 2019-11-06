@@ -6,6 +6,12 @@ namespace uTinyRipper.Classes
 {
 	public abstract class NamedObject : EditorExtension
 	{
+		protected NamedObject(Version version):
+			base(version)
+		{
+			Name = string.Empty;
+		}
+
 		protected NamedObject(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
@@ -21,6 +27,12 @@ namespace uTinyRipper.Classes
 			base(assetInfo)
 		{
 			Name = string.Empty;
+		}
+
+		protected new static void GenerateTypeTree(TypeTreeContext context)
+		{
+			EditorExtension.GenerateTypeTree(context);
+			context.AddString(NameName);
 		}
 
 		public override void Read(AssetReader reader)
@@ -53,7 +65,7 @@ namespace uTinyRipper.Classes
 		{
 			get
 			{
-				if (Name == string.Empty)
+				if (Name.Length > 0)
 				{
 					return GetType().Name;
 				}

@@ -8,8 +8,8 @@ using uTinyRipper.YAML;
 namespace uTinyRipper.Classes
 {
 	/// <summary>
-	/// In 5.5.0 SceneSettings has been renamed to OcclusionCullingSettings
-	/// Scene previously
+	/// 5.5.0 - SceneSettings has been renamed to OcclusionCullingSettings
+	/// 4.0.0 - Scene has been renamed to SceneSettings
 	/// </summary>
 	public sealed class OcclusionCullingSettings : LevelGameManager
 	{

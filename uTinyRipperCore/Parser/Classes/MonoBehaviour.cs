@@ -150,7 +150,7 @@ namespace uTinyRipper.Classes
 			if (Structure != null)
 			{
 				YAMLMappingNode structureNode = (YAMLMappingNode)Structure.ExportYAML(container);
-				node.Concatenate(structureNode);
+				node.Append(structureNode);
 			}
 			return node;
 		}

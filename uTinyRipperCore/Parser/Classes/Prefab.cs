@@ -9,9 +9,23 @@ namespace uTinyRipper.Classes
 	/// </summary>
 	public sealed class Prefab : Object
 	{
+		public Prefab(Version version):
+			base(version)
+		{
+		}
+
 		public Prefab(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(nameof(Prefab), name);
+			context.BeginChildren();
+			Object.GenerateTypeTree(context);
+			context.AddPPtr(nameof(GameObject), RootGameObjectName);
+			context.EndChildren();
 		}
 
 		public override void Read(AssetReader reader)

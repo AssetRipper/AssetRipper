@@ -10,6 +10,10 @@ namespace uTinyRipper.Classes
 {
 	public abstract class Object : IAsset, IDependent
 	{
+		protected Object(Version version)
+		{
+		}
+
 		protected Object(AssetInfo assetInfo)
 		{
 			AssetInfo = assetInfo;
@@ -85,7 +89,7 @@ namespace uTinyRipper.Classes
 			root.Tag = ClassID.ToInt().ToString();
 			root.Anchor = container.GetExportID(this).ToString();
 			YAMLMappingNode node = ExportYAMLRoot(container);
-			root.Add(ClassID.ToString(), node);
+			root.Add(GetClassName(container.ExportVersion), node);
 			return document;
 		}
 
@@ -115,6 +119,11 @@ namespace uTinyRipper.Classes
 				node.Add(ObjectHideFlagsName, (uint)ObjectHideFlags);
 			}
 			return node;
+		}
+
+		protected virtual string GetClassName(Version version)
+		{
+			return ClassID.ToString();
 		}
 
 		public AssetInfo AssetInfo { get; }

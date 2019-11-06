@@ -99,14 +99,14 @@ namespace uTinyRipper.Project
 			string fileName;
 			switch (asset)
 			{
-				case NamedObject named:
-					fileName = named.ValidName;
-					break;
 				case PrefabInstance prefab:
 					fileName = prefab.GetName(file);
 					break;
 				case MonoBehaviour monoBehaviour:
 					fileName = monoBehaviour.Name;
+					break;
+				case NamedObject named:
+					fileName = named.ValidName;
 					break;
 
 				default:

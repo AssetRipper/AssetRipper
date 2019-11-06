@@ -4,7 +4,7 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Misc
 {
-	public struct GUID : IAssetReadable, IYAMLExportable
+	public struct GUID : IAsset
 	{
 		public GUID(Guid guid) :
 			this(guid.ToByteArray())
@@ -37,12 +37,31 @@ namespace uTinyRipper.Classes.Misc
 			return left.Data0 != right.Data0 || left.Data1 != right.Data1 || left.Data2 != right.Data2 || left.Data3 != right.Data3;
 		}
 
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(nameof(GUID), name);
+			context.BeginChildren();
+			context.AddUInt32(Data0Name);
+			context.AddUInt32(Data1Name);
+			context.AddUInt32(Data2Name);
+			context.AddUInt32(Data3Name);
+			context.EndChildren();
+		}
+
 		public void Read(AssetReader reader)
 		{
 			Data0 = reader.ReadUInt32();
 			Data1 = reader.ReadUInt32();
 			Data2 = reader.ReadUInt32();
 			Data3 = reader.ReadUInt32();
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Data0);
+			writer.Write(Data1);
+			writer.Write(Data2);
+			writer.Write(Data3);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -82,5 +101,10 @@ namespace uTinyRipper.Classes.Misc
 		public uint Data3 { get; set; }
 
 		public static readonly GUID MissingReference = new GUID(0xD0000000, 0x5DEADF00, 0xEADBEEF1, 0x0000000D);
+
+		public const string Data0Name = "data[0]";
+		public const string Data1Name = "data[1]";
+		public const string Data2Name = "data[2]";
+		public const string Data3Name = "data[3]";
 	}
 }

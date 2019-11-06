@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using uTinyRipper.Converters;
 using uTinyRipper.Game;
@@ -80,6 +81,10 @@ namespace uTinyRipper
 			if (Metadata.Hierarchy.Platform == Platform.NoTarget)
 			{
 				Flags = TransferInstructionFlags.NoTransferInstructionFlags;
+				if (FilePath.EndsWith(".unity", StringComparison.Ordinal))
+				{
+					Flags |= TransferInstructionFlags.SerializeEditorMinimalScene;
+				}
 			}
 			if (FilenameUtils.IsEngineResource(Name) || Header.Generation < FileGeneration.FG_500a1 && FilenameUtils.IsBuiltinExtra(Name))
 			{

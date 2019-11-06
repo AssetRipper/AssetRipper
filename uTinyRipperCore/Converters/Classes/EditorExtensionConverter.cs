@@ -43,7 +43,7 @@ namespace uTinyRipper.Converters
 			return default;
 		}
 
-		private static PPtr<PrefabInstance> GetPrefabAsset(IExportContainer container, EditorExtension origin)
+		private static PPtr<Prefab> GetPrefabAsset(IExportContainer container, EditorExtension origin)
 		{
 			if (EditorExtension.HasPrefabAsset(container.Version, container.Flags))
 			{

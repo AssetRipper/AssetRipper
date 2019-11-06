@@ -70,11 +70,12 @@ namespace uTinyRipper.Converters
 			node.ByteSize = size;
 			node.Type = type;
 			node.Name = name;
-			node.Index = Index++;
+			node.Index = Index;
 			node.IsArrayBool = isArray;
 			node.MetaFlag = flags;
 			m_nodes.Add(node);
 
+			DepthIndex = Index;
 			if (Size >= 0)
 			{
 				if (size >= 0)
@@ -86,6 +87,7 @@ namespace uTinyRipper.Converters
 					Size = -1;
 				}
 			}
+			Index++;
 		}
 
 		public void AddPrimitive(string type, string name)
@@ -258,9 +260,9 @@ namespace uTinyRipper.Converters
 
 		public void AddString(string name)
 		{
-			BeginArray(TypeTreeUtils.StringName, name, DefaultStringFlag);
+			BeginArrayInner(TypeTreeUtils.StringName, name, DefaultStringFlag);
 			AddNode(TypeTreeUtils.CharName, TypeTreeUtils.DataName, sizeof(byte));
-			EndArray();
+			EndArrayInner();
 		}
 
 		public void AddPPtr<T>(string name)
@@ -294,34 +296,39 @@ namespace uTinyRipper.Converters
 			EndChildren();
 		}
 
-		public void AddVector(string name, TypeTreeGenerator generator)
+		public void AddArray(string name, TypeTreeGenerator generator)
 		{
-			AddVector(name, TransferMetaFlags.NoTransferFlags, generator);
+			AddArray(name, TransferMetaFlags.NoTransferFlags, generator);
 		}
 
-		public void AddVector(string name, TransferMetaFlags flags, TypeTreeGenerator generator)
+		public void AddArray(string name, TransferMetaFlags flags, TypeTreeGenerator generator)
 		{
-			BeginVector(name, flags);
+			BeginArray(name, flags);
 			generator.Invoke(this, TypeTreeUtils.DataName);
-			EndVector();
-		}
-
-		public void BeginVector(string name)
-		{
-			BeginVector(name, TransferMetaFlags.NoTransferFlags);
-		}
-
-		public void BeginVector(string name, TransferMetaFlags flags)
-		{
-			BeginArray(TypeTreeUtils.VectorName, name, flags);
-		}
-
-		public void EndVector()
-		{
 			EndArray();
 		}
 
-		private void BeginArray(string type, string name, TransferMetaFlags flags)
+		public void BeginArray(string name)
+		{
+			BeginArray(name, TransferMetaFlags.NoTransferFlags);
+		}
+
+		public void BeginArray(string name, TransferMetaFlags flags)
+		{
+			BeginArrayInner(TypeTreeUtils.VectorName, name, flags);
+		}
+
+		public void EndArray()
+		{
+			EndArrayInner();
+		}
+
+		public void Align()
+		{
+			Nodes[DepthIndex].MetaFlag |= TransferMetaFlags.AlignBytesFlag;
+		}
+
+		private void BeginArrayInner(string type, string name, TransferMetaFlags flags)
 		{
 			AddNode(type, name, -1);
 			BeginChildren();
@@ -330,7 +337,7 @@ namespace uTinyRipper.Converters
 			AddInt32(TypeTreeUtils.SizeName);
 		}
 
-		private void EndArray()
+		private void EndArrayInner()
 		{
 			EndChildren();
 			EndChildren();
@@ -339,7 +346,8 @@ namespace uTinyRipper.Converters
 		public void BeginChildren()
 		{
 			Depth++;
-			m_hierarchy.Push(new HierarchyData(Index - 1, Size));
+			m_hierarchy.Push(new HierarchyData(DepthIndex, Size));
+			DepthIndex = 0;
 			Size = 0;
 		}
 
@@ -352,6 +360,7 @@ namespace uTinyRipper.Converters
 			{
 				Nodes[hierarchy.Index].ByteSize = size;
 			}
+			DepthIndex = hierarchy.Index;
 			Size = hierarchy.Size;
 			if (Size >= 0)
 			{
@@ -367,6 +376,7 @@ namespace uTinyRipper.Converters
 		public IReadOnlyList<TypeTreeNode> Nodes => m_nodes;
 		private int Depth { get; set; }
 		private int Index { get; set; }
+		private int DepthIndex { get; set; }
 		private int Size { get; set; }
 
 		private TransferMetaFlags DefaultStringFlag { get; }

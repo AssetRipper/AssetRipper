@@ -104,9 +104,9 @@ namespace uTinyRipper.Classes
 		{
 			context.AddNode(TypeTreeUtils.AnimationCurveName, name, 0, ToSerializedVersion(context.Version));
 			context.BeginChildren();
-			context.BeginVector(CurveName, TransferMetaFlags.AlignBytesFlag);
+			context.BeginArray(CurveName, TransferMetaFlags.AlignBytesFlag);
 			KeyframeTpl<T>.GenerateTypeTree(context, TypeTreeUtils.DataName, generator);
-			context.EndVector();
+			context.EndArray();
 			context.AddInt32(PreInfinityName);
 			context.AddInt32(PostInfinityName);
 			if (HasRotationOrder(context.Version))

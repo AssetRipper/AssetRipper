@@ -30,7 +30,7 @@ namespace uTinyRipper.Classes.GUIStyles
 			context.AddNode(TypeTreeUtils.GUIStyleStateName, name);
 			context.BeginChildren();
 			context.AddPPtr(nameof(Texture2D), BackgroundName);
-			context.AddVector(ScaledBackgroundsName, PPtr<Texture2D>.GenerateTypeTree);
+			context.AddArray(ScaledBackgroundsName, PPtr<Texture2D>.GenerateTypeTree);
 			ColorRGBAf.GenerateTypeTree(context, TextColorName);
 			context.EndChildren();
 		}

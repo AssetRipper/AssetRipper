@@ -192,7 +192,7 @@ namespace uTinyRipper.YAML
 			InsertEnd(key, value);
 		}
 
-		public void Concatenate(YAMLMappingNode map)
+		public void Append(YAMLMappingNode map)
 		{
 			foreach (KeyValuePair<YAMLNode, YAMLNode> child in map.m_children)
 			{

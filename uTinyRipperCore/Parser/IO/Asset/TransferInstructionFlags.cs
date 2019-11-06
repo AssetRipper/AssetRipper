@@ -54,6 +54,10 @@ namespace uTinyRipper
 		{
 			return (_this & TransferInstructionFlags.SerializeForPrefabSystem) != 0;
 		}
+		public static bool IsEditorScene(this TransferInstructionFlags _this)
+		{
+			return (_this & TransferInstructionFlags.SerializeEditorMinimalScene) != 0;
+		}
 		public static bool IsBuiltinResources(this TransferInstructionFlags _this)
 		{
 			return (_this & TransferInstructionFlags.IsBuiltinResourcesFile) != 0;

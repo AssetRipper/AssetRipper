@@ -8,6 +8,11 @@ namespace uTinyRipper.Classes
 {
 	public abstract class EditorExtension : Object
 	{
+		protected EditorExtension(Version version):
+			base(version)
+		{
+		}
+
 		protected EditorExtension(AssetInfo assetInfo):
 			base(assetInfo)
 		{
@@ -52,7 +57,7 @@ namespace uTinyRipper.Classes
 				if (HasCorrespondingSourceObject(context.Version, context.Flags))
 				{
 					context.AddPPtr(nameof(EditorExtension), CorrespondingSourceObjectName);
-					context.AddPPtr(nameof(Classes.PrefabInstance), PrefabInstanceName);
+					context.AddPPtr(Classes.PrefabInstance.GetPrefabInstanceName(context.Version), PrefabInstanceName);
 				}
 				else
 				{
@@ -172,6 +177,14 @@ namespace uTinyRipper.Classes
 		protected YAMLMappingNode ExportYAMLRootObject(IExportContainer container)
 		{
 			return base.ExportYAMLRoot(container);
+		}
+
+		protected IEnumerable<PPtr<Object>> FetchDependenciesObject(DependencyContext context)
+		{
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			{
+				yield return asset;
+			}
 		}
 
 		private string GetCorrespondingSourceObjectName(Version version)

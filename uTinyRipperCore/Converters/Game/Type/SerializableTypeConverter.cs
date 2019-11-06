@@ -152,9 +152,9 @@ namespace uTinyRipper.Converters
 
 		private static void GenerateVectorNode(TypeTreeContext context, SerializableType origin, string name)
 		{
-			context.BeginVector(name);
+			context.BeginArray(name);
 			GenerateNode(context, origin, TypeTreeUtils.DataName);
-			context.EndVector();
+			context.EndArray();
 		}
 	}
 }

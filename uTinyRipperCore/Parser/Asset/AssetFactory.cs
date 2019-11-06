@@ -229,6 +229,8 @@ namespace uTinyRipper
 				case ClassIDType.OcclusionCullingData:
 					return new OcclusionCullingData(assetInfo);
 
+				case ClassIDType.PrefabInstance:
+					return new PrefabInstance(assetInfo);
 				case ClassIDType.TextureImporter:
 					return new TextureImporter(assetInfo);
 				case ClassIDType.AvatarMask1:
