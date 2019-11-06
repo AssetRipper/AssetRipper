@@ -513,7 +513,7 @@ namespace uTinyRipper.Classes
 
 		private bool AddAnimatorTOS(Animator animator, Dictionary<uint, string> tos)
 		{
-			Avatar avatar = animator.Avatar.FindAsset(File);
+			Avatar avatar = animator.Avatar.FindAsset(animator.File);
 			if (avatar != null)
 			{
 				if (AddAvatarTOS(avatar, tos))
