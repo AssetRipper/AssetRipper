@@ -65,7 +65,7 @@ namespace uTinyRipper.Classes
 		{
 			get
 			{
-				if (Name.Length > 0)
+				if (Name.Length == 0)
 				{
 					return GetType().Name;
 				}
