@@ -8,7 +8,10 @@ namespace uTinyRipper.WebFiles
 		{
 			if (reader.BaseStream.Length - reader.BaseStream.Position > Signature.Length)
 			{
-				if (reader.ReadStringZeroTerm(Signature.Length, out string signature))
+				long position = reader.BaseStream.Position;
+				bool isRead = reader.ReadStringZeroTerm(Signature.Length, out string signature);
+				reader.BaseStream.Position = position;
+				if (isRead)
 				{
 					return signature == Signature;
 				}

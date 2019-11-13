@@ -6,7 +6,7 @@ namespace uTinyRipper
 {
 	public sealed class BundleFile : FileList
 	{
-		internal BundleFile(IFileCollection collection, BundleFileScheme scheme)
+		internal BundleFile(BundleFileScheme scheme)
 		{
 			if (scheme == null)
 			{
@@ -19,12 +19,15 @@ namespace uTinyRipper
 
 		public static bool IsBundleFile(string filePath)
 		{
-			if (!MultiFileStream.Exists(filePath))
-			{
-				throw new Exception($"Bundle at path '{filePath}' doesn't exist");
-			}
-
 			using (Stream stream = MultiFileStream.OpenRead(filePath))
+			{
+				return IsBundleFile(stream);
+			}
+		}
+
+		public static bool IsBundleFile(byte[] buffer, int offset, int size)
+		{
+			using (MemoryStream stream = new MemoryStream(buffer, offset, size, false))
 			{
 				return IsBundleFile(stream);
 			}
@@ -32,39 +35,32 @@ namespace uTinyRipper
 
 		public static bool IsBundleFile(Stream stream)
 		{
-			return IsBundleFile(stream, stream.Position, stream.Length - stream.Position);
-		}
-
-		public static bool IsBundleFile(Stream stream, long offset, long size)
-		{
-			using (PartialStream bundleStream = new PartialStream(stream, offset, size))
+			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
 			{
-				using (EndianReader reader = new EndianReader(bundleStream, EndianType.BigEndian))
-				{
-					return BundleHeader.IsBundleHeader(reader);
-				}
+				return BundleHeader.IsBundleHeader(reader);
 			}
 		}
 
 		public static BundleFileScheme LoadScheme(string filePath)
 		{
-			if (!FileUtils.Exists(filePath))
-			{
-				throw new Exception($"Bundle file at path '{filePath}' doesn't exist");
-			}
 			string fileName = Path.GetFileNameWithoutExtension(filePath);
-			using (SmartStream stream = SmartStream.OpenRead(filePath))
+			using (Stream stream = MultiFileStream.OpenRead(filePath))
 			{
-				return ReadScheme(stream, 0, stream.Length, filePath, fileName);
+				return ReadScheme(stream, filePath, fileName);
 			}
 		}
 
-		public static BundleFileScheme ReadScheme(SmartStream stream, long offset, long size, string filePath, string fileName)
+		public static BundleFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
 		{
-			return BundleFileScheme.ReadScheme(stream, offset, size, filePath, fileName);
+			return BundleFileScheme.ReadScheme(buffer, filePath, fileName);
 		}
 
-		public BundleHeader Header { get; } = new BundleHeader();
-		public BundleMetadata Metadata { get; private set; }
+		public static BundleFileScheme ReadScheme(Stream stream, string filePath, string fileName)
+		{
+			return BundleFileScheme.ReadScheme(stream, filePath, fileName);
+		}
+
+		public BundleHeader Header { get; }
+		public BundleMetadata Metadata { get; }
 	}
 }

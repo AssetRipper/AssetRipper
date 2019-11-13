@@ -2,6 +2,11 @@
 {
 	public static class PrimitiveExtensions
 	{
+		public static int ParseDigit(this char _this)
+		{
+			return _this - '0';
+		}
+
 		public static string ToHexString(this byte _this)
 		{
 			return _this.ToString("x2");

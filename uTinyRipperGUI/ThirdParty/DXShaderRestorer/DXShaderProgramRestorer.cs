@@ -39,11 +39,11 @@ namespace DXShaderRestorer
 			int dataOffset = GetDataOffset(version, graphicApi, shaderSubProgram);
 			using (MemoryStream src = new MemoryStream(shaderSubProgram.ProgramData, dataOffset, shaderSubProgram.ProgramData.Length - dataOffset))
 			{
-				using (EndianReader reader = new EndianReader(src))
+				using (BinaryReader reader = new BinaryReader(src))
 				{
 					using (MemoryStream dest = new MemoryStream())
 					{
-						using (EndianWriter writer = new EndianWriter(dest))
+						using (BinaryWriter writer = new BinaryWriter(dest))
 						{
 							byte[] magicBytes = reader.ReadBytes(4);
 							byte[] checksum = reader.ReadBytes(16);
@@ -90,7 +90,7 @@ namespace DXShaderRestorer
 		{
 			using (MemoryStream memoryStream = new MemoryStream())
 			{
-				using (EndianWriter writer = new EndianWriter(memoryStream))
+				using (EndianWriter writer = new EndianWriter(memoryStream, EndianType.LittleEndian))
 				{
 					ResourceChunk resourceChunk = new ResourceChunk(shaderSubprogram);
 					resourceChunk.Write(writer);

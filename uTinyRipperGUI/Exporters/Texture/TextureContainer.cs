@@ -35,11 +35,8 @@ namespace uTinyRipperGUI.Exporters
 					}
 					else
 					{
-						using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
-						{
-							resStream.Position = texture.StreamData.Offset;
-							Export(texture, exportStream, resStream, texture.StreamData.Size);
-						}
+						res.Stream.Position = texture.StreamData.Offset;
+						Export(texture, exportStream, res.Stream, texture.StreamData.Size);
 					}
 					return;
 				}

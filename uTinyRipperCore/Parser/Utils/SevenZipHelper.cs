@@ -17,26 +17,18 @@ namespace uTinyRipper
 		{
 			long basePosition = baseStream.Position;
 			byte[] properties = new byte[PropertiesSize];
-			int read = baseStream.Read(properties, 0, PropertiesSize);
-			if (read != PropertiesSize)
-			{
-				throw new Exception("Unable to read lzma properties");
-			}
+			baseStream.ReadBuffer(properties, 0, PropertiesSize);
 			byte[] countBuffer = new byte[CountSize];
-			read = baseStream.Read(countBuffer, 0, CountSize);
-			if (read != CountSize)
-			{
-				throw new Exception("Unable to read decompressed lzma size");
-			}
+			baseStream.ReadBuffer(countBuffer, 0, CountSize);
 			
 			long decompressedSize = BitConverter.ToInt64(countBuffer, 0);
 			Decoder decoder = new Decoder();
 			decoder.SetDecoderProperties(properties);
 
 			long headSize = baseStream.Position - basePosition;
-			long headlessSize = compressSize - headSize;
+			long dataSize = compressSize - headSize;
 			long startPosition = decompressedStream.Position;
-			decoder.Code(baseStream, decompressedStream, headlessSize, decompressedSize, null);
+			decoder.Code(baseStream, decompressedStream, dataSize, decompressedSize, null);
 
 			if (baseStream.Position > basePosition + compressSize)
 			{

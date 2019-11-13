@@ -21,7 +21,7 @@ namespace uTinyRipper.Converters.Shaders
 							int offset = reader.ReadInt32();
 							reader.BaseStream.Position = position + offset;
 						}
-						using (EndianReader endReader = new EndianReader(reader.BaseStream))
+						using (EndianReader endReader = new EndianReader(reader.BaseStream, EndianType.LittleEndian))
 						{
 							EntryName = endReader.ReadStringZeroTerm();
 						}

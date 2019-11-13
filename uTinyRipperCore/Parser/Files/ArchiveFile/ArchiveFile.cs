@@ -1,29 +1,26 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using uTinyRipper.ArchiveFiles;
 
 namespace uTinyRipper
 {
 	public sealed class ArchiveFile : FileList
 	{
-		internal ArchiveFile(IFileCollection collection, ArchiveFileScheme scheme)
+		internal ArchiveFile(ArchiveFileScheme scheme)
 		{
-			if (scheme == null)
-			{
-				throw new ArgumentNullException(nameof(scheme));
-			}
-
 			Header = scheme.Header;
 		}
 
 		public static bool IsArchiveFile(string filePath)
 		{
-			if (!MultiFileStream.Exists(filePath))
-			{
-				throw new Exception($"Web at path '{filePath}' doesn't exist");
-			}
-
 			using (Stream stream = MultiFileStream.OpenRead(filePath))
+			{
+				return IsArchiveFile(stream);
+			}
+		}
+
+		public static bool IsArchiveFile(byte[] buffer, int offset, int size)
+		{
+			using (MemoryStream stream = new MemoryStream(buffer, offset, size, false))
 			{
 				return IsArchiveFile(stream);
 			}
@@ -31,38 +28,31 @@ namespace uTinyRipper
 
 		public static bool IsArchiveFile(Stream stream)
 		{
-			return IsArchiveFile(stream, stream.Position, stream.Length - stream.Position);
-		}
-
-		public static bool IsArchiveFile(Stream stream, long offset, long size)
-		{
-			using (PartialStream bundleStream = new PartialStream(stream, offset, size))
+			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
 			{
-				using (EndianReader reader = new EndianReader(bundleStream, EndianType.BigEndian))
-				{
-					return ArchiveHeader.IsArchiveHeader(reader);
-				}
+				return ArchiveHeader.IsArchiveHeader(reader);
 			}
 		}
 
 		public static ArchiveFileScheme LoadScheme(string filePath)
 		{
-			if (!FileUtils.Exists(filePath))
-			{
-				throw new Exception($"Bundle file at path '{filePath}' doesn't exist");
-			}
 			string fileName = Path.GetFileNameWithoutExtension(filePath);
-			using (SmartStream stream = SmartStream.OpenRead(filePath))
+			using (Stream stream = MultiFileStream.OpenRead(filePath))
 			{
-				return ReadScheme(stream, 0, stream.Length, filePath, fileName);
+				return ReadScheme(stream, filePath, fileName);
 			}
 		}
 
-		public static ArchiveFileScheme ReadScheme(SmartStream stream, long offset, long size, string filePath, string fileName)
+		public static ArchiveFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
 		{
-			return ArchiveFileScheme.ReadScheme(stream, offset, size, filePath, fileName);
+			return ArchiveFileScheme.ReadScheme(buffer, filePath, fileName);
 		}
 
-		public ArchiveHeader Header { get; private set; }
+		public static ArchiveFileScheme ReadScheme(Stream stream, string filePath, string fileName)
+		{
+			return ArchiveFileScheme.ReadScheme(stream, filePath, fileName);
+		}
+
+		public ArchiveHeader Header { get; }
 	}
 }

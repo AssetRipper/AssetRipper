@@ -5,27 +5,39 @@ namespace uTinyRipper
 {
 	public sealed class ResourceFileScheme : FileScheme
 	{
-		public ResourceFileScheme(SmartStream stream, long offset, long size, string filePath, string fileName) :
-			base(stream, offset, size, filePath, fileName)
+		private ResourceFileScheme(SmartStream stream, string filePath, string fileName) :
+			base(filePath, fileName)
 		{
+			Stream = stream.CreateReference();
 		}
 
-		internal static ResourceFileScheme ReadScheme(SmartStream stream, long offset, long size, string filePath, string fileName)
+		internal static ResourceFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
 		{
-			return new ResourceFileScheme(stream, offset, size, filePath, fileName);
+			using (SmartStream stream = SmartStream.CreateMemory(buffer))
+			{
+				return new ResourceFileScheme(stream, filePath, fileName);
+			}
+		}
+
+		internal static ResourceFileScheme ReadScheme(SmartStream stream, string filePath, string fileName)
+		{
+			return new ResourceFileScheme(stream, filePath, fileName);
 		}
 
 		public ResourceFile ReadFile()
 		{
-			return new ResourceFile(m_stream, m_offset, m_size, FilePath, NameOrigin);
+			return new ResourceFile(this);
 		}
 
-		public override bool ContainsFile(string fileName)
+		protected override void Dispose(bool disposing)
 		{
-			return false;
+			base.Dispose(disposing);
+			Stream.Dispose();
 		}
 
 		public override FileEntryType SchemeType => FileEntryType.Resource;
 		public override IEnumerable<FileIdentifier> Dependencies { get { yield break; } }
+
+		public SmartStream Stream { get; }
 	}
 }

@@ -472,7 +472,7 @@ namespace uTinyRipper.Converters
 			instance.Data = new byte[instance.VertexCount * stride];
 			using (MemoryStream stream = new MemoryStream(instance.Data))
 			{
-				using (AssetWriter writer = new AssetWriter(stream, container.ExportVersion, container.ExportPlatform, container.ExportFlags))
+				using (AssetWriter writer = new AssetWriter(stream, EndianType.LittleEndian, container.ExportVersion, container.ExportPlatform, container.ExportFlags))
 				{
 					for (int i = 0; i < instance.VertexCount; i++)
 					{

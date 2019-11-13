@@ -66,7 +66,6 @@ namespace uTinyRipperConsole
 #endif
 			{
 				GameStructure = GameStructure.Load(args);
-				Validate();
 
 				string exportPath = Path.Combine("Ripped", GameStructure.Name);
 				PrepareExportDirectory(exportPath);
@@ -95,19 +94,6 @@ namespace uTinyRipperConsole
 				Logger.Log(LogType.Error, LogCategory.General, ex.ToString());
 			}
 #endif
-		}
-		
-		private void Validate()
-		{
-			Version[] versions = GameStructure.FileCollection.Files.Select(t => t.Version).Distinct().ToArray();
-			if (versions.Count() > 1)
-			{
-				Logger.Log(LogType.Warning, LogCategory.Import, $"Asset collection has versions probably incompatible with each other. Here they are:");
-				foreach (Version version in versions)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Import, version.ToString());
-				}
-			}
 		}
 		
 		private static void PrepareExportDirectory(string path)

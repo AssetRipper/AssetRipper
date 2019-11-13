@@ -17,7 +17,7 @@ namespace uTinyRipper
 	{
 		public struct Parameters
 		{
-			public Action<string> RequestAssemblyCallback { get; set; }
+			public Func<string, string> RequestAssemblyCallback { get; set; }
 			public Func<string, string> RequestResourceCallback { get; set; }
 		}
 
@@ -43,33 +43,53 @@ namespace uTinyRipper
 		{
 			using (SmartStream stream = SmartStream.OpenRead(filePath))
 			{
-				return ReadScheme(stream, 0, stream.Length, filePath, fileName);
+				return ReadScheme(stream, filePath, fileName);
 			}
 		}
 
-		public static FileScheme ReadScheme(SmartStream stream, long offset, long size, string filePath, string fileName)
+		public static FileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
 		{
-			if (BundleFile.IsBundleFile(stream, offset, size))
+			using (MemoryStream stream = new MemoryStream(buffer, 0, buffer.Length, false))
 			{
-				return BundleFile.ReadScheme(stream, offset, size, filePath, fileName);
+				if (BundleFile.IsBundleFile(stream))
+				{
+					return BundleFile.ReadScheme(buffer, filePath, fileName);
+				}
+				if (ArchiveFile.IsArchiveFile(stream))
+				{
+					return ArchiveFile.ReadScheme(buffer, filePath, fileName);
+				}
+				if (WebFile.IsWebFile(stream))
+				{
+					return WebFile.ReadScheme(buffer, filePath);
+				}
+				if (SerializedFile.IsSerializedFile(stream))
+				{
+					return SerializedFile.ReadScheme(buffer, filePath, fileName);
+				}
+				return ResourceFile.ReadScheme(buffer, filePath, fileName);
 			}
-			if (ArchiveFile.IsArchiveFile(stream, offset, size))
+		}
+
+		public static FileScheme ReadScheme(SmartStream stream, string filePath, string fileName)
+		{
+			if (BundleFile.IsBundleFile(stream))
 			{
-				return ArchiveFile.ReadScheme(stream, offset, size, filePath, fileName);
+				return BundleFile.ReadScheme(stream, filePath, fileName);
 			}
-			if (WebFile.IsWebFile(stream, offset, size))
+			if (ArchiveFile.IsArchiveFile(stream))
 			{
-				return WebFile.ReadScheme(stream, offset, size, filePath, fileName);
+				return ArchiveFile.ReadScheme(stream, filePath, fileName);
 			}
-			if (ResourceFile.IsDefaultResourceFile(fileName))
+			if (WebFile.IsWebFile(stream))
 			{
-				return ResourceFile.ReadScheme(stream, offset, size, filePath, fileName);
+				return WebFile.ReadScheme(stream, filePath);
 			}
-			if (SerializedFile.IsSerializedFile(stream, offset, size))
+			if (SerializedFile.IsSerializedFile(stream))
 			{
-				return SerializedFile.ReadScheme(stream, offset, size, filePath, fileName);
+				return SerializedFile.ReadScheme(stream, filePath, fileName);
 			}
-			return ResourceFile.ReadScheme(stream, offset, size, filePath, fileName);
+			return ResourceFile.ReadScheme(stream, filePath, fileName);
 		}
 
 		public void LoadAssembly(string filePath)
@@ -105,14 +125,17 @@ namespace uTinyRipper
 			string resPath = m_resourceCallback?.Invoke(fixedName);
 			if (resPath == null)
 			{
+				Logger.Log(LogType.Warning, LogCategory.Import, $"Resource file '{resName}' hasn't been found");
 				m_resources.Add(fixedName, null);
 				return null;
 			}
 
 			using (ResourceFileScheme scheme = ResourceFile.LoadScheme(resPath, fixedName))
 			{
-				AddFile(scheme, this, AssemblyManager);
+				ResourceFile resourceFile = scheme.ReadFile();
+				AddResourceFile(resourceFile);
 			}
+			Logger.Log(LogType.Info, LogCategory.Import, $"Resource file '{resName}' has been loaded");
 			return m_resources[fixedName];
 		}
 
@@ -166,8 +189,6 @@ namespace uTinyRipper
 
 		protected override void OnSerializedFileAdded(SerializedFile file)
 		{
-			//SetVersion(file);
-
 			if (m_files.ContainsKey(file.Name))
 			{
 				throw new ArgumentException($"{nameof(SerializedFile)} with name '{file.Name}' already presents in the collection", nameof(file));
@@ -182,7 +203,7 @@ namespace uTinyRipper
 			}*/
 
 			m_files.Add(file.Name, file);
-			if (SerializedFileIsScene(file))
+			if (IsSceneSerializedFile(file))
 			{
 				m_scenes.Add(file);
 			}
@@ -194,13 +215,13 @@ namespace uTinyRipper
 			{
 				OnSerializedFileAdded(file);
 			}
-			foreach (ResourceFile file in list.ResourceFiles)
-			{
-				OnResourceFileAdded(file);
-			}
 			foreach (FileList nestedList in list.FileLists)
 			{
 				OnFileListAdded(nestedList);
+			}
+			foreach (ResourceFile file in list.ResourceFiles)
+			{
+				OnResourceFileAdded(file);
 			}
 		}
 
@@ -222,11 +243,11 @@ namespace uTinyRipper
 			}
 		}
 
-		private bool SerializedFileIsScene(ISerializedFile file)
+		private bool IsSceneSerializedFile(SerializedFile file)
 		{
-			foreach(Object asset in file.FetchAssets())
+			foreach (AssetEntry entry in file.Metadata.Entries)
 			{
-				if (asset.ClassID.IsSceneSettings())
+				if (entry.ClassID.IsSceneSettings())
 				{
 					return true;
 				}
@@ -237,32 +258,27 @@ namespace uTinyRipper
 		private void OnRequestAssembly(string assembly)
 		{
 			string assemblyName = $"{assembly}{MonoManager.AssemblyExtension}";
-			foreach (ResourceFile file in m_resources.Values)
+			if (m_resources.TryGetValue(assemblyName, out ResourceFile resFile))
 			{
-				if (file.Name == assemblyName)
+				resFile.Stream.Position = 0;
+				ReadAssembly(resFile.Stream, assemblyName);
+			}
+			else
+			{
+				string path = m_assemblyCallback?.Invoke(assembly);
+				if (path == null)
 				{
-					using (PartialStream stream = new PartialStream(file.Stream, file.Offset, file.Size))
-					{
-						ReadAssembly(stream, assemblyName);
-					}
-					Logger.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
-
-					m_resources.Remove(assemblyName);
-					file.Dispose();
+					Logger.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
 					return;
 				}
+				LoadAssembly(path);
 			}
-
-			m_assemblyCallback?.Invoke(assembly);
+			Logger.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
 		}
-
-		//public Version Version { get; }
-		//public Platform Platform { get; }
-		//public TransferInstructionFlags Flags { get; }
 
 		public ProjectExporter Exporter { get; }
 		public AssetFactory AssetFactory { get; } = new AssetFactory();
-		public IEnumerable<ISerializedFile> Files => m_files.Values;
+		public IReadOnlyDictionary<string, SerializedFile> GameFiles => m_files;
 		public IAssemblyManager AssemblyManager { get; }
 
 		private readonly Dictionary<string, SerializedFile> m_files = new Dictionary<string, SerializedFile>();
@@ -270,7 +286,7 @@ namespace uTinyRipper
 
 		private readonly HashSet<SerializedFile> m_scenes = new HashSet<SerializedFile>();
 
-		private readonly Action<string> m_assemblyCallback;
+		private readonly Func<string, string> m_assemblyCallback;
 		private readonly Func<string, string> m_resourceCallback;
 	}
 }

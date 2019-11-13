@@ -6,23 +6,11 @@ namespace uTinyRipper
 {
 	public abstract class FileScheme : IDisposable
 	{
-		protected FileScheme(SmartStream stream, long offset, long size, string filePath, string fileName)
+		protected FileScheme(string filePath, string fileName)
 		{
-			if (stream == null)
-			{
-				throw new ArgumentNullException(nameof(stream));
-			}
-			if (string.IsNullOrEmpty(filePath))
-			{
-				throw new ArgumentNullException(nameof(filePath));
-			}
-			m_stream = stream.CreateReference();
-			m_offset = offset;
-			m_size = size;
-			FilePath = filePath;
+			FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
 			NameOrigin = fileName;
 			Name = FilenameUtils.FixFileIdentifier(fileName);
-
 		}
 
 		~FileScheme()
@@ -36,8 +24,6 @@ namespace uTinyRipper
 			GC.SuppressFinalize(this);
 		}
 
-		public abstract bool ContainsFile(string fileName);
-
 		public override string ToString()
 		{
 			return Name == null ? base.ToString() : $"T:{SchemeType} N:'{Name}'";
@@ -45,7 +31,6 @@ namespace uTinyRipper
 
 		protected virtual void Dispose(bool disposing)
 		{
-			m_stream.Dispose();
 		}
 
 		public string FilePath { get; }
@@ -54,9 +39,5 @@ namespace uTinyRipper
 
 		public abstract FileEntryType SchemeType { get; }
 		public abstract IEnumerable<FileIdentifier> Dependencies { get; }
-
-		protected readonly SmartStream m_stream;
-		protected readonly long m_offset; 
-		protected readonly long m_size;
 	}
 }

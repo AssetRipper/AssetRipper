@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using uTinyRipper.Converters;
 using uTinyRipper.Game.Assembly;
-using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
 
@@ -11,113 +10,6 @@ namespace uTinyRipper
 {
 	public sealed class GameStructure : IDisposable
 	{
-		private class Processor : IDisposable
-		{
-			public Processor(GameCollection fileCollection, Func<string, string> dependencyCallback)
-			{
-				m_fileCollection = fileCollection ?? throw new ArgumentNullException(nameof(fileCollection));
-				m_dependencyCallback = dependencyCallback ?? throw new ArgumentNullException(nameof(dependencyCallback));
-			}
-
-			~Processor()
-			{
-				Dispose(false);
-			}
-
-			public void ProcessFile(string fileName, string filePath)
-			{
-				if (m_loadedFiles.Contains(fileName))
-				{
-					return;
-				}
-
-				FileScheme scheme = GameCollection.LoadScheme(filePath, fileName);
-				OnSchemeLoaded(scheme);
-
-				if (LoadDependencies(scheme))
-				{
-					m_fileCollection.AddFile(scheme, m_fileCollection, m_fileCollection.AssemblyManager);
-					scheme.Dispose();
-				}
-				else
-				{
-					m_delayedSchemes.Add(fileName, scheme);
-				}
-			}
-
-			public void PostProcess()
-			{
-#warning TODO:
-				foreach (FileScheme scheme in m_delayedSchemes.Values)
-				{
-					m_fileCollection.AddFile(scheme, m_fileCollection, m_fileCollection.AssemblyManager);
-				}
-			}
-
-			public void Dispose()
-			{
-				GC.SuppressFinalize(this);
-				Dispose(true);
-			}
-
-			private void Dispose(bool _)
-			{
-				foreach (FileScheme scheme in m_delayedSchemes.Values)
-				{
-					scheme.Dispose();
-				}
-			}
-
-			private bool LoadDependencies(FileScheme scheme)
-			{
-				bool loaded = true;
-#warning TODO: fetch unresolved (external) dependencies
-				foreach (FileIdentifier dependency in scheme.Dependencies)
-				{
-					if (m_loadedFiles.Contains(dependency.FilePath))
-					{
-						continue;
-					}
-
-					string fileSystemPath = m_dependencyCallback.Invoke(dependency.FilePath);
-					if (fileSystemPath == null)
-					{
-						if (m_knownFiles.Add(dependency.FilePath))
-						{
-							Logger.Log(LogType.Warning, LogCategory.Import, $"Dependency '{dependency}' hasn't been found");
-						}
-						loaded = false;
-					}
-					else
-					{
-						ProcessFile(dependency.FilePath, fileSystemPath);
-					}
-				}
-				return loaded;
-			}
-
-			private void OnSchemeLoaded(FileScheme scheme)
-			{
-				m_loadedFiles.Add(scheme.Name);
-				m_knownFiles.Add(scheme.Name);
-
-				if (scheme is FileSchemeList list)
-				{
-					foreach (FileScheme nestedScheme in list.Schemes)
-					{
-						OnSchemeLoaded(nestedScheme);
-					}
-				}
-			}
-
-			private readonly HashSet<string> m_loadedFiles = new HashSet<string>();
-			private readonly HashSet<string> m_knownFiles = new HashSet<string>();
-			private readonly Dictionary<string, FileScheme> m_delayedSchemes = new Dictionary<string, FileScheme>();
-
-			private readonly GameCollection m_fileCollection;
-			private readonly Func<string, string> m_dependencyCallback;
-		}
-
 		private GameStructure()
 		{
 			GameCollection.Parameters pars = new GameCollection.Parameters()
@@ -150,7 +42,7 @@ namespace uTinyRipper
 		public void Export(string exportPath, Func<Object, bool> filter)
 		{
 			Version defaultVersion = new Version(2017, 3, 0, VersionType.Final, 3);
-			Version maxVersion = FileCollection.Files.Max(t => t.Version);
+			Version maxVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
 			Version version = defaultVersion < maxVersion ? maxVersion : defaultVersion;
 			ExportOptions options = new ExportOptions(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 			options.Filter = filter;
@@ -181,32 +73,24 @@ namespace uTinyRipper
 
 		public string RequestAssembly(string assembly)
 		{
-			if (m_knownAssemblies.Add(assembly))
+			if (PlatformStructure != null)
 			{
-				if (PlatformStructure != null)
+				string assemblyPath = PlatformStructure.RequestAssembly(assembly);
+				if (assemblyPath != null)
 				{
-					string assemblyPath = PlatformStructure.RequestAssembly(assembly);
-					if (assemblyPath != null)
-					{
-						return assemblyPath;
-					}
+					return assemblyPath;
 				}
-				if (MixedStructure != null)
+			}
+			if (MixedStructure != null)
+			{
+				string assemblyPath = MixedStructure.RequestAssembly(assembly);
+				if (assemblyPath != null)
 				{
-					string assemblyPath = MixedStructure.RequestAssembly(assembly);
-					if (assemblyPath != null)
-					{
-						return assemblyPath;
-					}
+					return assemblyPath;
 				}
+			}
 
-				Logger.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
-				return null;
-			}
-			else
-			{
-				return null;
-			}
+			return null;
 		}
 
 		public string RequestResource(string resource)
@@ -253,16 +137,19 @@ namespace uTinyRipper
 			else if (CheckWebPlayer(pathes)) {}
 			CheckMixed(pathes);
 
-			Processor processor = new Processor(FileCollection, RequestDependency);
-			if (PlatformStructure != null)
+			using (GameStructureProcessor processor = new GameStructureProcessor())
 			{
-				ProcessGameStructure(processor, PlatformStructure);
+				if (PlatformStructure != null)
+				{
+					ProcessPlatformStructure(processor, PlatformStructure);
+				}
+				if (MixedStructure != null)
+				{
+					ProcessPlatformStructure(processor, MixedStructure);
+				}
+				processor.AddDependencySchemes(RequestDependency);
+				processor.ProcessSchemes(FileCollection);
 			}
-			if (MixedStructure != null)
-			{
-				ProcessGameStructure(processor, MixedStructure);
-			}
-			processor.PostProcess();
 		}
 
 		private bool CheckPC(List<string> pathes)
@@ -410,12 +297,12 @@ namespace uTinyRipper
 			}
 		}
 
-		private void ProcessGameStructure(Processor processor, PlatformGameStructure structure)
+		private void ProcessPlatformStructure(GameStructureProcessor processor, PlatformGameStructure structure)
 		{
 			SetScriptingBackend(structure);
 			foreach (KeyValuePair<string, string> file in structure.Files)
 			{
-				processor.ProcessFile(file.Key, file.Value);
+				processor.AddScheme(file.Value, file.Key);
 			}
 		}
 
@@ -441,14 +328,9 @@ namespace uTinyRipper
 			}
 		}
 
-		private void OnRequestAssembly(string assembly)
+		private string OnRequestAssembly(string assembly)
 		{
-			string assemblyPath = RequestAssembly(assembly);
-			if (assemblyPath !=	null)
-			{
-				FileCollection.LoadAssembly(assemblyPath);
-				Logger.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
-			}
+			return RequestAssembly(assembly);
 		}
 
 		private string OnRequestResource(string resource)
@@ -474,7 +356,5 @@ namespace uTinyRipper
 		public GameCollection FileCollection { get; }
 		public PlatformGameStructure PlatformStructure { get; private set; }
 		public PlatformGameStructure MixedStructure { get; private set; }
-
-		private readonly HashSet<string> m_knownAssemblies = new HashSet<string>();
 	}
 }

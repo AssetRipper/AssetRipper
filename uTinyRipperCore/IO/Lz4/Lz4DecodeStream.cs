@@ -86,27 +86,9 @@ namespace uTinyRipper
 
 		public override int Read(byte[] buffer, int offset, int count)
 		{
-			using (MemoryStream stream = new MemoryStream(buffer))
+			using (MemoryStream stream = new MemoryStream(buffer, offset, count))
 			{
-				stream.Position = offset;
 				return (int)Read(stream, count);
-			}
-		}
-
-		public void ReadBuffer(byte[] buffer, int offset, int count)
-		{
-			using (MemoryStream stream = new MemoryStream(buffer))
-			{
-				stream.Position = offset;
-				int read = (int)Read(stream, count);
-				if (read != count)
-				{
-					throw new Exception($"Unexpected end of input stream. Read {read} but expected {count}");
-				}
-				if (IsDataLeft)
-				{
-					throw new Exception($"Some data left");
-				}
 			}
 		}
 
@@ -242,6 +224,27 @@ namespace uTinyRipper
 					default:
 						throw new Exception($"Unknonw decode phase {m_phase}");
 				}
+			}
+		}
+
+		public void ReadBuffer(byte[] buffer, int offset, int count)
+		{
+			using (MemoryStream stream = new MemoryStream(buffer, offset, count))
+			{
+				ReadBuffer(stream, count);
+			}
+		}
+
+		public void ReadBuffer(Stream stream, long count)
+		{
+			int read = (int)Read(stream, count);
+			if (read != count)
+			{
+				throw new Exception($"Unexpected end of input stream. Read {read} but expected {count}");
+			}
+			if (IsDataLeft)
+			{
+				throw new Exception($"Some data left");
 			}
 		}
 

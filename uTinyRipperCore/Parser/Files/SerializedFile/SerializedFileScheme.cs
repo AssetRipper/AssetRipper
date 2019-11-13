@@ -1,91 +1,101 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using uTinyRipper.Converters;
-using uTinyRipper.Game;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper
 {
 	public sealed class SerializedFileScheme : FileScheme
 	{
-		private SerializedFileScheme(SmartStream stream, long offset, long size, string filePath, string fileName, TransferInstructionFlags flags) :
-			base(stream, offset, size, filePath, fileName)
+		private SerializedFileScheme(byte[] buffer, string filePath, string fileName) :
+			base(filePath, fileName)
 		{
-			Flags = flags;
-
-			Header = new SerializedFileHeader();
-			Metadata = new SerializedFileMetadata();
+			Stream = new MemoryStream(buffer, 0, buffer.Length, false);
 		}
 
-		internal static SerializedFileScheme ReadSceme(SmartStream stream, long offset, long size, string filePath, string fileName)
+		private SerializedFileScheme(SmartStream stream, string filePath, string fileName) :
+			base(filePath, fileName)
 		{
-			return ReadSceme(stream, offset, size, filePath, fileName, DefaultFlags);
+			if (stream.Length <= int.MaxValue)
+			{
+				byte[] buffer = new byte[stream.Length];
+				stream.ReadBuffer(buffer, 0, buffer.Length);
+				Stream = new MemoryStream(buffer, 0, buffer.Length, false);
+			}
+			else
+			{
+				Stream = stream.CreateReference();
+			}
 		}
 
-		internal static SerializedFileScheme ReadSceme(SmartStream stream, long offset, long size, string filePath, string fileName, TransferInstructionFlags flags)
+		internal static SerializedFileScheme ReadSceme(byte[] buffer, string filePath, string fileName)
 		{
-			SerializedFileScheme scheme = new SerializedFileScheme(stream, offset, size, filePath, fileName, flags);
+			SerializedFileScheme scheme = new SerializedFileScheme(buffer, filePath, fileName);
 			scheme.ReadScheme();
 			return scheme;
 		}
 
-		public SerializedFile ReadFile(IFileCollection collection, IAssemblyManager manager)
+		internal static SerializedFileScheme ReadSceme(SmartStream stream, string filePath, string fileName)
 		{
-			SerializedFile file = new SerializedFile(collection, manager, this);
-			using (PartialStream stream = new PartialStream(m_stream, m_offset, m_size))
-			{
-				EndianType endianess = Header.SwapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
-				using (EndianReader reader = new EndianReader(stream, endianess))
-				{
-					file.Read(reader);
-				}
-			}
+			SerializedFileScheme scheme = new SerializedFileScheme(stream, filePath, fileName);
+			scheme.ReadScheme();
+			return scheme;
+		}
+
+		internal SerializedFile ReadFile(GameProcessorContext context)
+		{
+			SerializedFile file = new SerializedFile(context.Collection, this);
+			context.AddSerializedFile(file, this);
 			return file;
 		}
 
-		public override bool ContainsFile(string fileName)
+		protected override void Dispose(bool disposing)
 		{
-			return false;
+			base.Dispose(disposing);
+			if (Stream != null)
+			{
+				Stream.Dispose();
+				Stream = null;
+			}
 		}
 
 		private void ReadScheme()
 		{
-			using (PartialStream stream = new PartialStream(m_stream, m_offset, m_size))
+			using (EndianReader reader = new EndianReader(Stream, EndianType.BigEndian))
 			{
-				using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
-				{
-					Header.Read(reader);
-				}
-
-				EndianType endianess = EndianType.LittleEndian;
-				if (SerializedFileHeader.HasEndian(Header.Generation))
-				{
-					endianess = Header.SwapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
-				}
-				using (SerializedReader reader = new SerializedReader(stream, endianess, Name, Header.Generation))
-				{
-					if (SerializedFileMetadata.IsMetadataAtTheEnd(reader.Generation))
-					{
-						reader.BaseStream.Position = Header.FileSize - Header.MetadataSize;
-						reader.BaseStream.Position++;
-					}
-
-					Metadata.Read(reader);
-				}
+				Header.Read(reader);
+			}
+			if (SerializedFileMetadata.IsMetadataAtTheEnd(Header.Generation))
+			{
+				Stream.Position = Header.FileSize - Header.MetadataSize;
+				Stream.Position++;
+			}
+			using (SerializedReader reader = new SerializedReader(Stream, Header.GetEndianType(), Name, Header.Generation))
+			{
+				Metadata.Read(reader);
 			}
 
 			SerializedFileMetadataConverter.CombineFormats(Header.Generation, Metadata);
 			RTTIClassHierarchyDescriptorConverter.FixResourceVersion(Name, ref Metadata.Hierarchy);
+			UpdateFlags();
+		}
 
-#warning TEMP HACK
-			if (Metadata.Hierarchy.Platform == Platform.NoTarget)
+		private void UpdateFlags()
+		{
+			Flags = TransferInstructionFlags.SerializeGameRelease;
+			if (RTTIClassHierarchyDescriptor.HasPlatform(Header.Generation))
 			{
-				Flags = TransferInstructionFlags.NoTransferInstructionFlags;
-				if (FilePath.EndsWith(".unity", StringComparison.Ordinal))
+				if (Metadata.Hierarchy.Platform == Platform.NoTarget)
 				{
-					Flags |= TransferInstructionFlags.SerializeEditorMinimalScene;
+					Flags = TransferInstructionFlags.NoTransferInstructionFlags;
+					if (FilePath.EndsWith(".unity", StringComparison.Ordinal))
+					{
+						Flags |= TransferInstructionFlags.SerializeEditorMinimalScene;
+					}
 				}
 			}
+
 			if (FilenameUtils.IsEngineResource(Name) || Header.Generation < FileGeneration.FG_500a1 && FilenameUtils.IsBuiltinExtra(Name))
 			{
 				Flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
@@ -99,10 +109,10 @@ namespace uTinyRipper
 		public override FileEntryType SchemeType => FileEntryType.Serialized;
 		public override IEnumerable<FileIdentifier> Dependencies => Metadata.Dependencies;
 
-		public SerializedFileHeader Header { get; }
-		public SerializedFileMetadata Metadata { get; }
-		public TransferInstructionFlags Flags { get; private set; }
+		public SerializedFileHeader Header { get; } = new SerializedFileHeader();
+		public SerializedFileMetadata Metadata { get; } = new SerializedFileMetadata();
+		public TransferInstructionFlags Flags { get; set; }
 
-		public const TransferInstructionFlags DefaultFlags = TransferInstructionFlags.SerializeGameRelease;
+		public Stream Stream { get; private set; }
 	}
 }

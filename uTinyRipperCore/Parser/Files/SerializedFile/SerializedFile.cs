@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.Game;
 using uTinyRipper.Classes;
+using uTinyRipper.Converters;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
@@ -15,10 +15,9 @@ namespace uTinyRipper
 	/// </summary>
 	public sealed class SerializedFile : ISerializedFile
 	{
-		internal SerializedFile(IFileCollection collection, IAssemblyManager manager, SerializedFileScheme scheme)
+		internal SerializedFile(IFileCollection collection, SerializedFileScheme scheme)
 		{
 			Collection = collection ?? throw new ArgumentNullException(nameof(collection));
-			AssemblyManager = manager ?? throw new ArgumentNullException(nameof(manager));
 			FilePath = scheme.FilePath;
 			NameOrigin = scheme.Name;
 			Name = FilenameUtils.FixFileIdentifier(scheme.Name);
@@ -35,12 +34,15 @@ namespace uTinyRipper
 
 		public static bool IsSerializedFile(string filePath)
 		{
-			if (!MultiFileStream.Exists(filePath))
-			{
-				throw new Exception($"Serialized file at '{filePath}' doesn't exist");
-			}
-
 			using (Stream stream = MultiFileStream.OpenRead(filePath))
+			{
+				return IsSerializedFile(stream);
+			}
+		}
+
+		public static bool IsSerializedFile(byte[] buffer, int offset, int size)
+		{
+			using (MemoryStream stream = new MemoryStream(buffer, offset, size, false))
 			{
 				return IsSerializedFile(stream);
 			}
@@ -48,52 +50,28 @@ namespace uTinyRipper
 
 		public static bool IsSerializedFile(Stream stream)
 		{
-			return IsSerializedFile(stream, stream.Position, stream.Length - stream.Position);
-		}
-
-		public static bool IsSerializedFile(Stream stream, long offset, long size)
-		{
-			using (PartialStream bundleStream = new PartialStream(stream, offset, size))
+			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
 			{
-				using (EndianReader reader = new EndianReader(bundleStream, EndianType.BigEndian))
-				{
-					return SerializedFileHeader.IsSerializedFileHeader(reader, (uint)size);
-				}
+				return SerializedFileHeader.IsSerializedFileHeader(reader, (uint)stream.Length);
 			}
 		}
 
 		public static SerializedFileScheme LoadScheme(string filePath, string fileName)
 		{
-			if (!MultiFileStream.Exists(filePath))
-			{
-				throw new Exception($"Serialized file at path '{filePath}' doesn't exist");
-			}
 			using (SmartStream fileStream = SmartStream.OpenRead(filePath))
 			{
-				return ReadScheme(fileStream, 0, fileStream.Length, filePath, fileName);
+				return ReadScheme(fileStream, filePath, fileName);
 			}
 		}
 
-		public static SerializedFileScheme LoadScheme(string filePath, string fileName, TransferInstructionFlags flags)
+		public static SerializedFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
 		{
-			if (!MultiFileStream.Exists(filePath))
-			{
-				throw new Exception($"Serialized file at path '{filePath}' doesn't exist");
-			}
-			using (SmartStream fileStream = SmartStream.OpenRead(filePath))
-			{
-				return ReadScheme(fileStream, 0, fileStream.Length, filePath, fileName, flags);
-			}
+			return SerializedFileScheme.ReadSceme(buffer, filePath, fileName);
 		}
 
-		public static SerializedFileScheme ReadScheme(SmartStream stream, long offset, long size, string filePath, string fileName)
+		public static SerializedFileScheme ReadScheme(SmartStream stream, string filePath, string fileName)
 		{
-			return SerializedFileScheme.ReadSceme(stream, offset, size, filePath, fileName);
-		}
-
-		public static SerializedFileScheme ReadScheme(SmartStream stream, long offset, long size, string filePath, string fileName, TransferInstructionFlags flags)
-		{
-			return SerializedFileScheme.ReadSceme(stream, offset, size, filePath, fileName, flags);
+			return SerializedFileScheme.ReadSceme(stream, filePath, fileName);
 		}
 
 		private static string[] GetGenerationVersions(FileGeneration generation)
@@ -153,7 +131,7 @@ namespace uTinyRipper
 				}
 			}
 
-			foreach (FileIdentifier identifier in Dependencies)
+			foreach (FileIdentifier identifier in Metadata.Dependencies)
 			{
 				ISerializedFile file = Collection.FindSerializedFile(identifier);
 				if (file == null)
@@ -185,7 +163,7 @@ namespace uTinyRipper
 				}
 			}
 
-			foreach (FileIdentifier identifier in Dependencies)
+			foreach (FileIdentifier identifier in Metadata.Dependencies)
 			{
 				ISerializedFile file = Collection.FindSerializedFile(identifier);
 				if (file == null)
@@ -225,9 +203,9 @@ namespace uTinyRipper
 				return new PPtr<T>(0, asset.PathID);
 			}
 
-			for (int i = 0; i < Dependencies.Count; i++)
+			for (int i = 0; i < Metadata.Dependencies.Length; i++)
 			{
-				FileIdentifier identifier = Dependencies[i];
+				FileIdentifier identifier = Metadata.Dependencies[i];
 				ISerializedFile file = Collection.FindSerializedFile(identifier);
 				if (asset.File == file)
 				{
@@ -248,25 +226,25 @@ namespace uTinyRipper
 			return Name;
 		}
 
-		internal void Read(EndianReader reader)
+		internal void ReadData(Stream stream)
 		{
 			if (RTTIClassHierarchyDescriptor.HasSignature(Header.Generation))
 			{
-				ReadAssets(reader);
+				ReadAssets(stream);
 			}
 			else
 			{
-				Logger.Log(LogType.Warning, LogCategory.Import, $"Can't determine file version for generation {Header.Generation} for file '{Name}'");
+				Logger.Log(LogType.Warning, LogCategory.Import, $"Can't determine file version for file '{Name}'. Generation {Header.Generation}");
 				string[] versions = GetGenerationVersions(Header.Generation);
 				for (int i = 0; i < versions.Length; i++)
 				{
 					string version = versions[i];
 					Logger.Log(LogType.Debug, LogCategory.Import, $"Try parse {Name} as {version} version");
-					Metadata.Hierarchy.Version.Parse(version);
+					Metadata.Hierarchy.Version = Version.Parse(version);
 					m_assets.Clear();
 					try
 					{
-						ReadAssets(reader);
+						ReadAssets(stream);
 						UpdateFileVersion();
 						break;
 					}
@@ -292,12 +270,12 @@ namespace uTinyRipper
 			else
 			{
 				fileIndex--;
-				if (fileIndex >= Dependencies.Count)
+				if (fileIndex >= Metadata.Dependencies.Length)
 				{
 					throw new Exception($"{nameof(SerializedFile)} with index {fileIndex} was not found in dependencies");
 				}
 
-				FileIdentifier fileRef = Dependencies[fileIndex];
+				FileIdentifier fileRef = Metadata.Dependencies[fileIndex];
 				file = Collection.FindSerializedFile(fileRef);
 			}
 
@@ -322,12 +300,12 @@ namespace uTinyRipper
 			return asset;
 		}
 
-		private void ReadAssets(EndianReader reader)
+		private void ReadAssets(Stream stream)
 		{
-			AssemblyManager.Version = Version;
+			Collection.AssemblyManager.Version = Version;
 
 			HashSet<int> preloaded = new HashSet<int>();
-			using (AssetReader assetReader = new AssetReader(reader, Version, Platform, Flags))
+			using (AssetReader assetReader = new AssetReader(stream, Header.GetEndianType(), Version, Platform, Flags))
 			{
 				if (SerializedFileMetadata.HasPreload(Header.Generation))
 				{
@@ -404,14 +382,14 @@ namespace uTinyRipper
 
 		private void UpdateFileVersion()
 		{
-			if (!RTTIClassHierarchyDescriptor.HasSignature(Header.Generation))
+			if (!RTTIClassHierarchyDescriptor.HasSignature(Header.Generation) && BuildSettings.HasVersion(Version))
 			{
 				foreach (Object asset in FetchAssets())
 				{
 					if (asset.ClassID == ClassIDType.BuildSettings)
 					{
 						BuildSettings settings = (BuildSettings)asset;
-						Metadata.Hierarchy.Version.Parse(settings.Version);
+						Metadata.Hierarchy.Version = Version.Parse(settings.Version);
 						return;
 					}
 				}
@@ -430,10 +408,9 @@ namespace uTinyRipper
 		public SerializedFileMetadata Metadata { get; }
 		public Version Version => Metadata.Hierarchy.Version;
 		public Platform Platform => Metadata.Hierarchy.Platform;
-		public TransferInstructionFlags Flags { get; private set; }
+		public TransferInstructionFlags Flags { get; set; }
 
 		public IFileCollection Collection { get; }
-		public IAssemblyManager AssemblyManager { get; }
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Dependencies;
 
 		private readonly Dictionary<long, Object> m_assets = new Dictionary<long, Object>();

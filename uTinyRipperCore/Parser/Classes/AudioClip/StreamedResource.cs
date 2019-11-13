@@ -42,11 +42,8 @@ namespace uTinyRipper.Classes.AudioClips
 			}
 
 			byte[] data = new byte[Size];
-			using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
-			{
-				resStream.Position = Offset;
-				resStream.ReadBuffer(data, 0, data.Length);
-			}
+			res.Stream.Position = Offset;
+			res.Stream.ReadBuffer(data, 0, data.Length);
 			return data;
 		}
 

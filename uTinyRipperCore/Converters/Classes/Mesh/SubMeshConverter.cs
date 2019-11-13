@@ -297,7 +297,7 @@ namespace uTinyRipper.Converters.Meshes
 			int begin = streamOffset + vertexOffset + channel.Offset;
 			using (MemoryStream stream = new MemoryStream(vertexData.Data))
 			{
-				using (AssetReader reader = new AssetReader(stream, version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags))
+				using (AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags))
 				{
 					stream.Position = begin;
 					Vector3f dummyVertex = reader.ReadAsset<Vector3f>();

@@ -6,17 +6,17 @@ namespace uTinyRipper.WebFiles
 	{
 		public void Read(EndianReader reader)
 		{
-			Dictionary<string, WebFileEntry> entries = new Dictionary<string, WebFileEntry>();
+			List<WebFileEntry> entries = new List<WebFileEntry>();
 			long metadataLength = reader.ReadInt32();
 			while (reader.BaseStream.Position < metadataLength)
 			{
 				WebFileEntry entry = new WebFileEntry();
 				entry.Read(reader);
-				entries.Add(entry.Name, entry);
+				entries.Add(entry);
 			}
-			Entries = entries;
+			Entries = entries.ToArray();
 		}
 
-		public IReadOnlyDictionary<string, WebFileEntry> Entries { get; private set; }
+		public WebFileEntry[] Entries { get; set; }
 	}
 }

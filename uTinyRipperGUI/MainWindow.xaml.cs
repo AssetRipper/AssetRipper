@@ -330,7 +330,7 @@ namespace uTinyRipperGUI
 
 		private void Validate()
 		{
-			Version[] versions = GameStructure.FileCollection.Files.Select(t => t.Version).Distinct().ToArray();
+			Version[] versions = GameStructure.FileCollection.GameFiles.Values.Select(t => t.Version).Distinct().ToArray();
 			if (versions.Length > 1)
 			{
 				Logger.Log(LogType.Warning, LogCategory.Import, $"Asset collection has versions probably incompatible with each other. Here they are:");

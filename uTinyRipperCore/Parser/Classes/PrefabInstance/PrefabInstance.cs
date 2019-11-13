@@ -213,7 +213,8 @@ namespace uTinyRipper.Classes
 
 		public IEnumerable<EditorExtension> FetchObjects(IAssetContainer file)
 		{
-			if (IsModificationsFormat(file.Version))
+#warning TEMP HACK:
+			//if (IsModificationsFormat(file.Version))
 			{
 				GameObject root = RootGameObject.GetAsset(file);
 				foreach (EditorExtension asset in root.FetchHierarchy())
@@ -221,13 +222,13 @@ namespace uTinyRipper.Classes
 					yield return asset;
 				}
 			}
-			else
+			/*else
 			{
 				foreach (PPtr<EditorExtension> asset in Objects)
 				{
 					yield return asset.GetAsset(file);
 				}
-			}
+			}*/
 		}
 
 		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)

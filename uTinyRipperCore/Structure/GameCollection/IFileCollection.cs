@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using uTinyRipper.Classes;
+using uTinyRipper.Game;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper
@@ -18,5 +19,6 @@ namespace uTinyRipper
 		bool IsScene(ISerializedFile file);
 
 		AssetFactory AssetFactory { get; }
+		IAssemblyManager AssemblyManager { get; }
 	}
 }

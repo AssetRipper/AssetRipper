@@ -14,6 +14,7 @@ namespace uTinyRipper.SerializedFiles
 
 		public static bool IsSerializedFileHeader(EndianReader reader, uint fileSize)
 		{
+			long position = reader.BaseStream.Position;
 			if (reader.BaseStream.Position + HeaderMinSize > reader.BaseStream.Length)
 			{
 				return false;
@@ -21,22 +22,28 @@ namespace uTinyRipper.SerializedFiles
 			int metadataSize = reader.ReadInt32();
 			if (metadataSize < SerializedFileMetadata.MetadataMinSize)
 			{
+				reader.BaseStream.Position = position;
 				return false;
 			}
 			uint hFileSize = reader.ReadUInt32();
 			if (hFileSize < HeaderMinSize + SerializedFileMetadata.MetadataMinSize)
 			{
+				reader.BaseStream.Position = position;
 				return false;
 			}
 			if (hFileSize != fileSize)
 			{
+				reader.BaseStream.Position = position;
 				return false;
 			}
 			int generation = reader.ReadInt32();
 			if (!Enum.IsDefined(typeof(FileGeneration), generation))
 			{
+				reader.BaseStream.Position = position;
 				return false;
 			}
+
+			reader.BaseStream.Position = position;
 			return true;
 		}
 
@@ -72,6 +79,18 @@ namespace uTinyRipper.SerializedFiles
 				writer.Write(SwapEndianess);
 				writer.AlignStream();
 			}
+		}
+
+		public EndianType GetEndianType()
+		{
+			if (HasEndian(Generation))
+			{
+				if (SwapEndianess)
+				{
+					return EndianType.BigEndian;
+				}
+			}
+			return EndianType.LittleEndian;
 		}
 
 		/// <summary>

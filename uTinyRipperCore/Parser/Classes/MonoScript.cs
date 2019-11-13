@@ -99,19 +99,19 @@ namespace uTinyRipper.Classes
 		public bool IsScriptPresents()
 		{
 			ScriptIdentifier scriptID = HasNamespace(File.Version) ?
-				File.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
-				File.AssemblyManager.GetScriptID(AssemblyName, ClassName);
-			return File.AssemblyManager.IsPresent(scriptID);
+				File.Collection.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
+				File.Collection.AssemblyManager.GetScriptID(AssemblyName, ClassName);
+			return File.Collection.AssemblyManager.IsPresent(scriptID);
 		}
 
 		public SerializableType GetBehaviourType()
 		{
 			ScriptIdentifier scriptID = HasNamespace(File.Version) ?
-				File.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
-				File.AssemblyManager.GetScriptID(AssemblyName, ClassName);
-			if (File.AssemblyManager.IsValid(scriptID))
+				File.Collection.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
+				File.Collection.AssemblyManager.GetScriptID(AssemblyName, ClassName);
+			if (File.Collection.AssemblyManager.IsValid(scriptID))
 			{
-				return File.AssemblyManager.GetSerializableType(scriptID);
+				return File.Collection.AssemblyManager.GetSerializableType(scriptID);
 			}
 			return null;
 		}
@@ -119,14 +119,14 @@ namespace uTinyRipper.Classes
 		public ScriptExportType GetExportType(ScriptExportManager exportManager)
 		{
 			ScriptIdentifier scriptID = HasNamespace(File.Version) ?
-				File.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
-				File.AssemblyManager.GetScriptID(AssemblyName, ClassName);
-			return File.AssemblyManager.GetExportType(exportManager, scriptID);
+				File.Collection.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
+				File.Collection.AssemblyManager.GetScriptID(AssemblyName, ClassName);
+			return File.Collection.AssemblyManager.GetExportType(exportManager, scriptID);
 		}
 
 		public ScriptIdentifier GetScriptID()
 		{
-			return File.AssemblyManager.GetScriptID(AssemblyName, ClassName);
+			return File.Collection.AssemblyManager.GetScriptID(AssemblyName, ClassName);
 		}
 
 		public override void Read(AssetReader reader)

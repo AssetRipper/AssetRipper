@@ -14,7 +14,7 @@ namespace uTinyRipper.Converters
 				Dictionary<uint, string> customTypes = new Dictionary<uint, string>();
 				using (MemoryStream stream = new MemoryStream(origin.CustomTypeBuffer))
 				{
-					using (EndianReader reader = new EndianReader(stream))
+					using (EndianReader reader = new EndianReader(stream, EndianType.LittleEndian))
 					{
 						while (stream.Position < stream.Length)
 						{

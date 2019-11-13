@@ -98,7 +98,11 @@ namespace uTinyRipper.Classes
 			if (script != null)
 			{
 				SerializableType behaviourType = script.GetBehaviourType();
-				if (behaviourType != null)
+				if (behaviourType == null)
+				{
+					Logger.Log(LogType.Warning, LogCategory.Import, $"Unable to read {ValidName}, because some assemblies are missing");
+				}
+				else
 				{
 					Structure = behaviourType.CreateSerializableStructure();
 					Structure.Read(reader);
@@ -189,6 +193,7 @@ namespace uTinyRipper.Classes
 		public override string ExportPath => Path.Combine(AssetsKeyword, "ScriptableObject");
 		public override string ExportExtension => AssetExtension;
 
+		public string ValidName => Name.Length == 0 ? nameof(MonoBehaviour) : Name;
 		/// <summary>
 		/// Whether this MonoBeh belongs to scene/prefab hierarchy or not
 		/// </summary>

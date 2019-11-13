@@ -39,7 +39,7 @@ namespace uTinyRipper
 
 		public static string FixFileIdentifier(string name)
 		{
-			name = name.ToLowerInvariant();
+			name = name.ToLower();
 			name = FixDependencyName(name);
 			name = FixResourcePath(name);
 			if (IsDefaultResource(name))

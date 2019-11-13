@@ -34,7 +34,7 @@ namespace uTinyRipper.Game
 
 		public static string ToAssemblyName(string scopeName)
 		{
-			if (scopeName.EndsWith(MonoManager.AssemblyExtension))
+			if (scopeName.EndsWith(MonoManager.AssemblyExtension, StringComparison.Ordinal))
 			{
 				return scopeName.Substring(0, scopeName.Length - MonoManager.AssemblyExtension.Length);
 			}

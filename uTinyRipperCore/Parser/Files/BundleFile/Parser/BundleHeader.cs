@@ -41,7 +41,10 @@ namespace uTinyRipper.BundleFiles
 			const int MaxLength = 0x20;
 			if (reader.BaseStream.Length >= MaxLength)
 			{
-				if (reader.ReadStringZeroTerm(MaxLength, out string signature))
+				long position = reader.BaseStream.Position;
+				bool isRead = reader.ReadStringZeroTerm(MaxLength, out string signature);
+				reader.BaseStream.Position = position;
+				if (isRead)
 				{
 					return TryParseSignature(signature, out BundleType _);
 				}
@@ -52,17 +55,11 @@ namespace uTinyRipper.BundleFiles
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool HasBundleSize(BundleGeneration generation)
-		{
-			return generation >= BundleGeneration.BF_260_340;
-		}
+		public static bool HasBundleSize(BundleGeneration generation) => generation >= BundleGeneration.BF_260_340;
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasMetadataDecompressedSize(BundleGeneration generation)
-		{
-			return generation >= BundleGeneration.BF_350_4x;
-		}
+		public static bool HasMetadataDecompressedSize(BundleGeneration generation) => generation >= BundleGeneration.BF_350_4x;
 
 		public void Read(EndianReader reader)
 		{
@@ -73,7 +70,7 @@ namespace uTinyRipper.BundleFiles
 
 			PlayerVersion = reader.ReadStringZeroTerm();
 			string engineVersion = reader.ReadStringZeroTerm();
-			EngineVersion.Parse(engineVersion);
+			EngineVersion = Version.Parse(engineVersion);
 
 			switch (Type)
 			{
@@ -151,6 +148,10 @@ namespace uTinyRipper.BundleFiles
 		/// Engine version
 		/// </summary>
 		public string PlayerVersion { get; private set; }
+		/// <summary>
+		/// Minimum revision
+		/// </summary>
+		public Version EngineVersion { get; private set; }
 
 		/// <summary>
 		/// Minimum number of bytes to read for streamed bundles, equal to BundleSize for normal bundles
@@ -185,10 +186,5 @@ namespace uTinyRipper.BundleFiles
 		/// UnityFS flags
 		/// </summary>
 		internal BundleFlag Flags { get; private set; }
-
-		/// <summary>
-		/// Minimum revision
-		/// </summary>
-		public Version EngineVersion;
 	}
 }

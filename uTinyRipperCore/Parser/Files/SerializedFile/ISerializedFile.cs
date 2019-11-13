@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using uTinyRipper.Classes;
-using uTinyRipper.Game;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper
@@ -22,6 +21,5 @@ namespace uTinyRipper
 		IEnumerable<Object> FetchAssets();
 
 		IFileCollection Collection { get; }
-		IAssemblyManager AssemblyManager { get; }
 	}
 }

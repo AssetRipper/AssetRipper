@@ -3,7 +3,7 @@
 namespace uTinyRipper.BundleFiles
 {
 	[Flags]
-	internal enum BundleFlag
+	public enum BundleFlag
 	{
 		CompressionMask		= 0x3F,
 

@@ -59,7 +59,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 
 		public void Unload(string fileName)
 		{
-			if(m_assemblies.TryGetValue(fileName, out AssemblyDefinition assembly))
+			if (m_assemblies.TryGetValue(fileName, out AssemblyDefinition assembly))
 			{
 				assembly.Dispose();
 				m_assemblies.Remove(fileName);
@@ -135,24 +135,10 @@ namespace uTinyRipper.Game.Assembly.Mono
 			return new ScriptIdentifier(assembly, type.Namespace, type.Name);
 		}
 
-		public AssemblyDefinition Resolve(AssemblyNameReference name)
+		public AssemblyDefinition Resolve(AssemblyNameReference assemblyReference)
 		{
-			string assemblyName = AssemblyManager.ToAssemblyName(name.Name);
-			AssemblyDefinition definition = FindAssembly(assemblyName);
-			if(definition == null)
-			{
-				const string MSCorLibName = "mscorlib";
-				if (name.Name == MSCorLibName)
-				{
-					DefaultAssemblyResolver defaultResolver = new DefaultAssemblyResolver();
-					definition = defaultResolver.Resolve(name);
-					if (definition != null)
-					{
-						m_assemblies.Add(MSCorLibName, definition);
-					}
-				}
-			}
-			return definition;
+			string assemblyName = AssemblyManager.ToAssemblyName(assemblyReference.Name);
+			return FindAssembly(assemblyName);
 		}
 
 		public AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
@@ -192,7 +178,10 @@ namespace uTinyRipper.Game.Assembly.Mono
 		{
 			foreach (AssemblyDefinition assembly in m_assemblies.Values)
 			{
-				assembly.Dispose();
+				if (assembly != null)
+				{
+					assembly.Dispose();
+				}
 			}
 		}
 
@@ -208,6 +197,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 			{
 				return assembly;
 			}
+			m_assemblies.Add(name, null);
 			return null;
 		}
 

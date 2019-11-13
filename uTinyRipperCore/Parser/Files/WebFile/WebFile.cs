@@ -1,70 +1,51 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using uTinyRipper.WebFiles;
 
 namespace uTinyRipper
 {
 	public sealed class WebFile : FileList
 	{
-		internal WebFile(IFileCollection collection, WebFileScheme scheme)
+		internal WebFile(WebFileScheme scheme)
 		{
-			if (scheme == null)
-			{
-				throw new ArgumentNullException(nameof(scheme));
-			}
-
 			Header = scheme.Header;
 			Metadata = scheme.Metadata;
 		}
 
 		public static bool IsWebFile(string webPath)
 		{
-			if (!MultiFileStream.Exists(webPath))
-			{
-				throw new Exception($"Web at path '{webPath}' doesn't exist");
-			}
-
 			using (Stream stream = MultiFileStream.OpenRead(webPath))
 			{
 				return IsWebFile(stream);
 			}
 		}
 
-		public static bool IsWebFile(Stream stream)
+	 	public static bool IsWebFile(Stream stream)
 		{
-			return IsWebFile(stream, stream.Position, stream.Length - stream.Position);
-		}
-
-		public static bool IsWebFile(Stream stream, long offset, long size)
-		{
-			using (PartialStream bundleStream = new PartialStream(stream, offset, size))
+			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
 			{
-				using (EndianReader reader = new EndianReader(bundleStream, EndianType.BigEndian))
-				{
-					return WebHeader.IsWebHeader(reader);
-				}
+				return WebHeader.IsWebHeader(reader);
 			}
 		}
 
-		public static WebFileScheme LoadScheme(string filePath)
+		public static bool IsWebFile(byte[] buffer, int offset, int size)
 		{
-			if (!FileUtils.Exists(filePath))
+			using (MemoryStream stream = new MemoryStream(buffer, offset, size, false))
 			{
-				throw new Exception($"Web file at path '{filePath}' doesn't exist");
-			}
-			string fileName = Path.GetFileNameWithoutExtension(filePath);
-			using (SmartStream stream = SmartStream.OpenRead(filePath))
-			{
-				return ReadScheme(stream, 0, stream.Length, filePath, fileName);
+				return IsWebFile(stream);
 			}
 		}
 
-		public static WebFileScheme ReadScheme(SmartStream stream, long offset, long size, string filePath, string fileName)
+		public static WebFileScheme ReadScheme(byte[] buffer, string filePath)
 		{
-			return WebFileScheme.ReadScheme(stream, offset, size, filePath, fileName);
+			return WebFileScheme.ReadScheme(buffer, filePath);
 		}
 
-		public WebHeader Header { get; private set; }
-		public WebMetadata Metadata { get; private set; }
+		public static WebFileScheme ReadScheme(SmartStream stream, string filePath)
+		{
+			return WebFileScheme.ReadScheme(stream, filePath);
+		}
+		
+		public WebHeader Header { get; }
+		public WebMetadata Metadata { get; }
 	}
 }

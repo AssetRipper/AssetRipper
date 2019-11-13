@@ -19,7 +19,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			Buffer.BlockCopy(Data, 0, memStreamBuffer, 0, memStreamBuffer.Length);
 			using (MemoryStream stream = new MemoryStream(memStreamBuffer))
 			{
-				using (AssetReader reader = new AssetReader(stream, version, platform, flags))
+				using (AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, version, platform, flags))
 				{
 					while (reader.BaseStream.Position < reader.BaseStream.Length)
 					{

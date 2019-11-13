@@ -5,25 +5,18 @@ namespace uTinyRipper
 {
 	public abstract class FileSchemeList : FileScheme
 	{
-		protected FileSchemeList(SmartStream stream, long offset, long size, string filePath, string fileName):
-			base(stream, offset, size, filePath, fileName)
+		protected FileSchemeList(string filePath, string fileName) :
+			base(filePath, fileName)
 		{
 		}
 
-		public sealed override bool ContainsFile(string fileName)
+		protected override void Dispose(bool disposing)
 		{
-			foreach (FileScheme fileScheme in Schemes)
+			base.Dispose(disposing);
+			foreach (FileScheme scheme in Schemes)
 			{
-				if (fileScheme.Name == fileName)
-				{
-					return true;
-				}
-				if (fileScheme.ContainsFile(fileName))
-				{
-					return true;
-				}
+				scheme.Dispose();
 			}
-			return false;
 		}
 
 		protected void AddScheme(FileScheme scheme)
@@ -31,7 +24,7 @@ namespace uTinyRipper
 			m_schemes.Add(scheme);
 		}
 
-		public override sealed IEnumerable<FileIdentifier> Dependencies
+		public sealed override IEnumerable<FileIdentifier> Dependencies
 		{
 			get
 			{

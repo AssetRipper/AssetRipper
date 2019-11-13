@@ -4,107 +4,97 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using uTinyRipper.ArchiveFiles;
-using uTinyRipper.Game;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper
 {
 	public sealed class ArchiveFileScheme : FileScheme
 	{
-		private ArchiveFileScheme(SmartStream stream, long offset, long size, string filePath, string fileName) :
-			base(stream, offset, size, filePath, fileName)
+		private ArchiveFileScheme(string filePath, string fileName) :
+			base(filePath, fileName)
 		{
 		}
 
-		internal static ArchiveFileScheme ReadScheme(SmartStream stream, long offset, long size, string filePath, string fileName)
+		internal static ArchiveFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
 		{
-			ArchiveFileScheme scheme = new ArchiveFileScheme(stream, offset, size, filePath, fileName);
-			scheme.ReadScheme();
-			scheme.ProcessEntry();
+			ArchiveFileScheme scheme = new ArchiveFileScheme(filePath, fileName);
+			using (MemoryStream stream = new MemoryStream(buffer, 0, buffer.Length, false))
+			{
+				scheme.ReadScheme(stream);
+			}
 			return scheme;
 		}
 
-		public ArchiveFile ReadFile(IFileCollection collection, IAssemblyManager manager)
+		internal static ArchiveFileScheme ReadScheme(Stream stream, string filePath, string fileName)
 		{
-			ArchiveFile archive = new ArchiveFile(collection, this);
-			archive.AddFile(WebScheme, collection, manager);
+			ArchiveFileScheme scheme = new ArchiveFileScheme(filePath, fileName);
+			scheme.ReadScheme(stream);
+			return scheme;
+		}
+
+		internal ArchiveFile ReadFile(GameProcessorContext context)
+		{
+			ArchiveFile archive = new ArchiveFile(this);
+			archive.AddFile(context, WebScheme);
 			return archive;
 		}
 
 		protected override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);
-
-			m_dataStream.Dispose();
 		}
 
-		private void ReadScheme()
+		private void ReadScheme(Stream stream)
 		{
-			using (PartialStream stream = new PartialStream(m_stream, m_offset, m_size))
+			byte[] buffer;
+			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
 			{
-				using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
+				Header.Read(reader);
+				switch (Header.Type)
 				{
-					Header.Read(reader);
+					case ArchiveType.GZip:
+						buffer = ReadGZip(reader);
+						break;
+					case ArchiveType.Brotli:
+						buffer = ReadBrotli(reader);
+						break;
 
-					switch (Header.Type)
-					{
-						case ArchiveType.GZip:
-							m_dataStream = ReadGZip(reader);
-							break;
-
-						case ArchiveType.Brotli:
-							m_dataStream = ReadBrotli(reader);
-							break;
-
-						default:
-							throw new NotSupportedException(Header.Type.ToString());
-					}
+					default:
+						throw new NotSupportedException(Header.Type.ToString());
 				}
 			}
+
+			WebScheme = WebFile.ReadScheme(buffer, FilePath);
 		}
 
-		private void ProcessEntry()
+		private byte[] ReadGZip(EndianReader reader)
 		{
-			string name = Path.GetFileNameWithoutExtension(FilePath);
-			WebScheme = WebFile.ReadScheme(m_dataStream, 0, m_stream.Length, FilePath, name);
-		}
-
-		private SmartStream ReadGZip(EndianReader reader)
-		{
-			using (SmartStream stream = SmartStream.CreateMemory())
+			using (MemoryStream stream = new MemoryStream())
 			{
 				using (GZipStream gzipStream = new GZipStream(reader.BaseStream, CompressionMode.Decompress))
 				{
 					gzipStream.CopyTo(stream);
 				}
-				return stream.CreateReference();
+				return stream.ToArray();
 			}
 		}
 
-		private SmartStream ReadBrotli(EndianReader reader)
+		private byte[] ReadBrotli(EndianReader reader)
 		{
-			using (SmartStream stream = SmartStream.CreateMemory())
+			using (MemoryStream stream = new MemoryStream())
 			{
 				using (BrotliInputStream brotliStream = new BrotliInputStream(reader.BaseStream))
 				{
 					brotliStream.CopyTo(stream);
 				}
-				return stream.CreateReference();
+				return stream.ToArray();
 			}
 		}
-
-		public override bool ContainsFile(string fileName)
-		{
-			return WebScheme.ContainsFile(fileName);
-		}
-
-		public ArchiveHeader Header { get; } = new ArchiveHeader();
 
 		public override FileEntryType SchemeType => FileEntryType.Archive;
 		public override IEnumerable<FileIdentifier> Dependencies => WebScheme.Dependencies;
 
+		public ArchiveHeader Header { get; } = new ArchiveHeader();
 		public WebFileScheme WebScheme { get; private set; }
-
-		private SmartStream m_dataStream;
 	}
 }

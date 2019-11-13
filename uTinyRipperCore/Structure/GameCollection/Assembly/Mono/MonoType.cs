@@ -409,8 +409,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 		{
 			MonoTypeContext baseContext = context.GetBase();
 			MonoTypeContext resolvedContext = baseContext.Resolve();
-			TypeDefinition baseDefinition = resolvedContext.Type.Resolve();
-			if (IsObject(baseDefinition))
+			if (IsObject(resolvedContext.Type))
 			{
 				return null;
 			}

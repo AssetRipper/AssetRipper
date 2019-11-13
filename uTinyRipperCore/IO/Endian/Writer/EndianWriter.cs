@@ -6,11 +6,6 @@ namespace uTinyRipper
 {
 	public class EndianWriter : BinaryWriter
 	{
-		public EndianWriter(Stream stream) :
-			this(stream, EndianType.LittleEndian, false)
-		{
-		}
-
 		public EndianWriter(Stream stream, EndianType endianess) :
 			this(stream, endianess, false)
 		{

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace uTinyRipper
 {
-	public struct Version : IComparable<Version>
+	public readonly struct Version : IComparable<Version>
 	{
 		public Version(int major)
 		{
@@ -65,6 +65,107 @@ namespace uTinyRipper
 		public static bool operator <=(Version left, Version right)
 		{
 			return left.m_data <= right.m_data;
+		}
+
+		public static Version Parse(string version)
+		{
+			if (string.IsNullOrEmpty(version))
+			{
+				throw new Exception($"Invalid version number {version}");
+			}
+
+			int major = 0;
+			int minor = 0;
+			int build = 0;
+			VersionType versionType = VersionType.Final;
+			int typeNumber = 0;
+			using (StringReader reader = new StringReader(version))
+			{
+				while (true)
+				{
+					int symb = reader.Read();
+					if (symb == -1)
+					{
+						throw new Exception($"Invalid version format");
+					}
+					char c = (char)symb;
+					if (c == '.')
+					{
+						break;
+					}
+
+					major = major * 10 + c.ParseDigit();
+				}
+
+				while (true)
+				{
+					int symb = reader.Read();
+					if (symb == -1)
+					{
+						break;
+					}
+					char c = (char)symb;
+					if (c == '.')
+					{
+						break;
+					}
+
+					minor = minor * 10 + c.ParseDigit();
+				}
+
+				while (true)
+				{
+					int symb = reader.Read();
+					if (symb == -1)
+					{
+						break;
+					}
+
+					char c = (char)symb;
+					if (char.IsDigit(c))
+					{
+						build = build * 10 + c.ParseDigit();
+					}
+					else
+					{
+						switch (c)
+						{
+							case 'a':
+								versionType = VersionType.Alpha;
+								break;
+
+							case 'b':
+								versionType = VersionType.Beta;
+								break;
+
+							case 'p':
+								versionType = VersionType.Patch;
+								break;
+
+							case 'f':
+								versionType = VersionType.Final;
+								break;
+
+							default:
+								throw new Exception($"Unsupported version type {c} for version '{version}'");
+						}
+						break;
+					}
+				}
+
+				while (true)
+				{
+					int symb = reader.Read();
+					if (symb == -1)
+					{
+						break;
+					}
+
+					char c = (char)symb;
+					typeNumber = typeNumber * 10 + c.ParseDigit();
+				}
+			}
+			return new Version(major, minor, build, versionType, typeNumber);
 		}
 
 		public int CompareTo(Version other)
@@ -133,9 +234,7 @@ namespace uTinyRipper
 
 		public bool IsEqual(string version)
 		{
-			Version compareVersion = new Version();
-			compareVersion.Parse(version);
-			return this == compareVersion;
+			return this == Parse(version);
 		}
 
 		public bool IsLess(int major)
@@ -165,9 +264,7 @@ namespace uTinyRipper
 
 		public bool IsLess(string version)
 		{
-			Version compareVersion = new Version();
-			compareVersion.Parse(version);
-			return this < compareVersion;
+			return this < Parse(version);
 		}
 
 		public bool IsLessEqual(int major)
@@ -197,9 +294,7 @@ namespace uTinyRipper
 
 		public bool IsLessEqual(string version)
 		{
-			Version compareVersion = new Version();
-			compareVersion.Parse(version);
-			return this <= compareVersion;
+			return this <= Parse(version);
 		}
 
 		public bool IsGreater(int major)
@@ -229,9 +324,7 @@ namespace uTinyRipper
 
 		public bool IsGreater(string version)
 		{
-			Version compareVersion = new Version();
-			compareVersion.Parse(version);
-			return this > compareVersion;
+			return this > Parse(version);
 		}
 
 		public bool IsGreaterEqual(int major)
@@ -261,118 +354,7 @@ namespace uTinyRipper
 
 		public bool IsGreaterEqual(string version)
 		{
-			Version compareVersion = new Version();
-			compareVersion.Parse(version);
-			return this >= compareVersion;
-		}
-
-		public void Parse(string version)
-		{
-			if (string.IsNullOrEmpty(version))
-			{
-				throw new Exception($"Invalid version number {version}");
-			}
-
-			using (StringReader reader = new StringReader(version))
-			{
-				string major = string.Empty;
-				while (true)
-				{
-					int symb = reader.Read();
-					if (symb == -1)
-					{
-						throw new Exception($"Invalid version format");
-					}
-
-					char c = (char)symb;
-					if (c == '.')
-					{
-						Major = int.Parse(major);
-						break;
-					}
-					major += c;
-				}
-
-				string minor = string.Empty;
-				while (true)
-				{
-					int symb = reader.Read();
-					if (symb == -1)
-					{
-						Minor = int.Parse(minor);
-						return;
-					}
-
-					char c = (char)symb;
-					if (c == '.')
-					{
-						Minor = int.Parse(minor);
-						break;
-					}
-					minor += c;
-				}
-
-				string build = string.Empty;
-				Type = VersionType.Final;
-				TypeNumber = 1;
-				while (true)
-				{
-					int symb = reader.Read();
-					if (symb == -1)
-					{
-						Build = int.Parse(build);
-						return;
-					}
-
-					char c = (char)symb;
-					if (!char.IsDigit(c))
-					{
-						Build = int.Parse(build);
-						switch (c)
-						{
-							case 'a':
-								Type = VersionType.Alpha;
-								break;
-
-							case 'b':
-								Type = VersionType.Beta;
-								break;
-
-							case 'p':
-								Type = VersionType.Patch;
-								break;
-
-							case 'f':
-								Type = VersionType.Final;
-								break;
-
-							default:
-								throw new Exception($"Unsupported version type {c} for version '{version}'");
-						}
-						break;
-					}
-					build += c;
-				}
-
-				string typeNumber = string.Empty;
-				while (true)
-				{
-					int symb = reader.Read();
-					if (symb == -1)
-					{
-						TypeNumber = int.Parse(typeNumber);
-						return;
-					}
-
-					char c = (char)symb;
-					if (!char.IsDigit(c))
-					{
-						TypeNumber = int.Parse(typeNumber);
-						break;
-					}
-					typeNumber += c;
-				}
-			}
+			return this >= Parse(version);
 		}
 
 		private Version From(int major)
@@ -410,31 +392,24 @@ namespace uTinyRipper
 		public int Major
 		{
 			get => unchecked((int)((m_data >> 48) & 0xFFFFUL));
-			private set => m_data = ((ulong)(value & 0xFFFF) << 48) | (~(0xFFFFUL << 48) & m_data);
 		}
 		public int Minor
 		{
 			get => unchecked((int)((m_data >> 40) & 0xFFUL));
-			private set => m_data = ((ulong)(value & 0xFF) << 40) | (~(0xFFUL << 40) & m_data);
 		}
 		public int Build
 		{
 			get => unchecked((int)((m_data >> 32) & 0xFFUL));
-			private set => m_data = ((ulong)(value & 0xFF) << 32) | (~(0xFFUL << 32) & m_data);
 		}
 		public VersionType Type
 		{
 			get => (VersionType)unchecked((int)((m_data >> 24) & 0xFFUL));
-			private set => m_data = ((ulong)((int)value & 0xFF) << 24) | (~(0xFFUL << 24) & m_data);
 		}
 		public int TypeNumber
 		{
 			get => unchecked((int)((m_data >> 16) & 0xFFUL));
-			private set => m_data = ((ulong)(value & 0xFF) << 16) | (~(0xFFUL << 16) & m_data);
 		}
 
-		public bool IsSet => m_data != 0;
-
-		private ulong m_data;
+		private readonly ulong m_data;
 	}
 }

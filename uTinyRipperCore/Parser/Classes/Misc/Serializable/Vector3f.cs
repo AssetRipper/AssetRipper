@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using System.Collections.Generic;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes

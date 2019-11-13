@@ -104,6 +104,11 @@ namespace uTinyRipper
 			return new SmartStream(new MemoryStream(buffer), SmartStreamType.Memory);
 		}
 
+		public static SmartStream CreateMemory(byte[] buffer, int offset, int size)
+		{
+			return new SmartStream(new MemoryStream(buffer, offset, size), SmartStreamType.Memory);
+		}
+
 		public void Assign(SmartStream source)
 		{
 			Dispose();
@@ -114,7 +119,7 @@ namespace uTinyRipper
 			m_isDisposed = source.m_isDisposed;
 			if (m_isDisposed)
 			{
-				if(!IsNull)
+				if (!IsNull)
 				{
 					throw new ObjectDisposedException(nameof(source));
 				}

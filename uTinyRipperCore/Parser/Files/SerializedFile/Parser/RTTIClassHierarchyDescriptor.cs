@@ -24,7 +24,7 @@
 			if (HasSignature(reader.Generation))
 			{
 				string signature = reader.ReadStringZeroTerm();
-				Version.Parse(signature);
+				Version = Version.Parse(signature);
 			}
 			if (HasPlatform(reader.Generation))
 			{
@@ -72,6 +72,10 @@
 		}
 
 		/// <summary>
+		/// Signature
+		/// </summary>
+		public Version Version { get; set; }
+		/// <summary>
 		/// Attributes
 		/// </summary>
 		public Platform Platform { get; set; }
@@ -80,10 +84,5 @@
 		public int Unknown { get; set; }
 
 		public const int HierarchyMinSize = 4;
-
-		/// <summary>
-		/// Signature
-		/// </summary>
-		public Version Version;
 	}
 }

@@ -4,7 +4,7 @@
 	/// Contains compression information about block
 	/// Block is a similar to chunk structure that contains data blob but without file entries
 	/// </summary>
-	internal struct BlockInfo : IBundleReadable
+	public struct BlockInfo : IBundleReadable
 	{
 		public void Read(BundleReader reader)
 		{

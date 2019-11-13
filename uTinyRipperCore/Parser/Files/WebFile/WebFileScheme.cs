@@ -1,57 +1,63 @@
-using uTinyRipper.Game;
+using System.IO;
 using uTinyRipper.WebFiles;
 
 namespace uTinyRipper
 {
 	public sealed class WebFileScheme : FileSchemeList
 	{
-		private WebFileScheme(SmartStream stream, long offset, long size, string filePath, string fileName) :
-			base(stream, offset, size, filePath, fileName)
+		private WebFileScheme(string filePath) :
+			base(filePath, string.Empty)
 		{
 		}
 
-		internal static WebFileScheme ReadScheme(SmartStream stream, long offset, long size, string filePath, string fileName)
+		internal static WebFileScheme ReadScheme(byte[] buffer, string filePath)
 		{
-			WebFileScheme scheme = new WebFileScheme(stream, offset, size, filePath, fileName);
-			scheme.ReadScheme();
-			scheme.ProcessEntries();
+			WebFileScheme scheme = new WebFileScheme(filePath);
+			using (MemoryStream stream = new MemoryStream(buffer, 0, buffer.Length, false))
+			{
+				scheme.ReadScheme(stream);
+			}
 			return scheme;
 		}
 
-		public WebFile ReadFile(IFileCollection collection, IAssemblyManager manager)
+		internal static WebFileScheme ReadScheme(Stream stream, string filePath)
 		{
-			WebFile web = new WebFile(collection, this);
+			WebFileScheme scheme = new WebFileScheme(filePath);
+			scheme.ReadScheme(stream);
+			return scheme;
+		}
+
+		internal WebFile ReadFile(GameProcessorContext context)
+		{
+			WebFile web = new WebFile(this);
 			foreach (FileScheme scheme in Schemes)
 			{
-				web.AddFile(scheme, collection, manager);
+				web.AddFile(context, scheme);
 			}
 			return web;
 		}
 
-		private void ReadScheme()
+		private void ReadScheme(Stream stream)
 		{
-			using (PartialStream stream = new PartialStream(m_stream, m_offset, m_size))
+			using (EndianReader reader = new EndianReader(stream, EndianType.LittleEndian))
 			{
-				using (EndianReader reader = new EndianReader(stream, EndianType.LittleEndian))
-				{
-					Header.Read(reader);
-					Metadata.Read(reader);
-				}
+				Header.Read(reader);
+				Metadata.Read(reader);
 			}
-		}
 
-		private void ProcessEntries()
-		{
-			foreach (WebFileEntry entry in Metadata.Entries.Values)
+			foreach (WebFileEntry entry in Metadata.Entries)
 			{
-				FileScheme scheme = GameCollection.ReadScheme(m_stream, entry.Offset, entry.Size, FilePath, entry.NameOrigin);
+				byte[] buffer = new byte[entry.Size];
+				stream.Position = entry.Offset;
+				stream.ReadBuffer(buffer, 0, buffer.Length);
+				FileScheme scheme = GameCollection.ReadScheme(buffer, FilePath, entry.NameOrigin);
 				AddScheme(scheme);
 			}
 		}
 
+		public override FileEntryType SchemeType => FileEntryType.Web;
+
 		public WebHeader Header { get; } = new WebHeader();
 		public WebMetadata Metadata { get; } = new WebMetadata();
-
-		public override FileEntryType SchemeType => FileEntryType.Web;
 	}
 }

@@ -6,27 +6,37 @@ namespace uTinyRipper.ArchiveFiles
 	{
 		internal static bool IsArchiveHeader(EndianReader reader)
 		{
-			if (reader.BaseStream.Length >= sizeof(ushort))
+			long position = reader.BaseStream.Position;
+			ushort gzipMagic = ReadGZipMagic(reader);
+			if (gzipMagic == GZipMagic)
 			{
-				ushort magic = reader.ReadUInt16();
-				if (magic == GZipMagic)
-				{
-					return true;
-				}
-			}
-
-			string signature = ReadBrotliMetadata(reader);
-			if(signature == BrotliSignature)
-			{
+				reader.BaseStream.Position = position;
 				return true;
 			}
 
+			string brotliSignature = ReadBrotliMetadata(reader);
+			if (brotliSignature == BrotliSignature)
+			{
+				reader.BaseStream.Position = position;
+				return true;
+			}
+
+			reader.BaseStream.Position = position;
 			return false;
+		}
+
+		private static ushort ReadGZipMagic(EndianReader reader)
+		{
+			if (reader.BaseStream.Length >= sizeof(ushort))
+			{
+				return reader.ReadUInt16();
+			}
+			return 0;
 		}
 
 		private static string ReadBrotliMetadata(EndianReader reader)
 		{
-			if (reader.BaseStream.Length < 2)
+			if (reader.BaseStream.Length < 4)
 			{
 				return null;
 			}

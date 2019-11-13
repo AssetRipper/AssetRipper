@@ -7,32 +7,30 @@ namespace uTinyRipper.BundleFiles
 	/// </summary>
 	public sealed class BundleMetadata : IBundleReadable
 	{
-		private static bool HasBlockInfo(BundleGeneration generation)
-		{
-			return generation >= BundleGeneration.BF_530_x;
-		}
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		private static bool HasBlockInfo(BundleGeneration generation) => generation >= BundleGeneration.BF_530_x;
 
 		public void Read(BundleReader reader)
 		{
 			if (HasBlockInfo(reader.Generation))
 			{
-				// unknown 0x10
-				reader.BaseStream.Position += 0x10;
+				Unknown0 = reader.ReadInt32();
+				Unknown1 = reader.ReadInt32();
+				Unknown2 = reader.ReadInt32();
+				Unknown3 = reader.ReadInt32();
 				BlockInfos = reader.ReadBundleArray<BlockInfo>();
 			}
 
-			int count = reader.ReadInt32();
-			Dictionary<string, BundleFileEntry> entries = new Dictionary<string, BundleFileEntry>(count);
-			for (int i = 0; i < count; i++)
-			{
-				BundleFileEntry entry = reader.ReadBundle<BundleFileEntry>();
-				entries.Add(entry.Name, entry);
-			}
-			Entries = entries;
+			Entries = reader.ReadBundleArray<BundleFileEntry>();
 		}
 
-		public IReadOnlyDictionary<string, BundleFileEntry> Entries { get; private set; }
-
-		internal IReadOnlyList<BlockInfo> BlockInfos { get; private set; }
+		public int Unknown0 { get; set; }
+		public int Unknown1 { get; set; }
+		public int Unknown2 { get; set; }
+		public int Unknown3 { get; set; }
+		public BlockInfo[] BlockInfos { get; set; }
+		public BundleFileEntry[] Entries { get; set; }
 	}
 }

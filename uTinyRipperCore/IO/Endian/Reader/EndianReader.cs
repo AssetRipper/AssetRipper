@@ -7,11 +7,6 @@ namespace uTinyRipper
 {
 	public class EndianReader : BinaryReader
 	{
-		public EndianReader(Stream stream) :
-			this(stream, EndianType.LittleEndian, false)
-		{
-		}
-
 		public EndianReader(Stream stream, EndianType endianess) :
 			this(stream, endianess, false)
 		{

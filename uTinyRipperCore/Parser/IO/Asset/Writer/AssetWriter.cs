@@ -6,17 +6,8 @@ namespace uTinyRipper
 {
 	public sealed class AssetWriter : EndianWriter
 	{
-		public AssetWriter(Stream stream, Version version, Platform platform, TransferInstructionFlags flags) :
-			base(stream, EndianType.LittleEndian, AlignArrays(version))
-		{
-			Version = version;
-			Platform = platform;
-			Flags = flags;
-			IsAlignString = AlignStrings(version);
-		}
-
-		public AssetWriter(EndianWriter writer, Version version, Platform platform, TransferInstructionFlags flags) :
-			base(writer.BaseStream, writer.EndianType, AlignArrays(version))
+		public AssetWriter(Stream stream, EndianType endian, Version version, Platform platform, TransferInstructionFlags flags) :
+			base(stream, endian, AlignArrays(version))
 		{
 			Version = version;
 			Platform = platform;
