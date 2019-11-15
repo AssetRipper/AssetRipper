@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Misc;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Game.Assembly
@@ -66,13 +67,13 @@ namespace uTinyRipper.Game.Assembly
 				case LayerMaskName:
 					return new LayerMask();
 				case AnimationCurveName:
-					return new AnimationCurveTpl<Float>(true);
+					return new AnimationCurveTpl<Float>();
 				case GradientName:
 					return new Gradient();
 				case RectOffsetName:
 					return new RectOffset();
 				case GUIStyleName:
-					return new GUIStyle(true);
+					return new GUIStyle();
 
 				case PropertyNameName:
 					return new PropertyName();
@@ -320,9 +321,9 @@ namespace uTinyRipper.Game.Assembly
 		}
 #endregion
 
-		public TypeTree GenerateTypeTree()
+		public TypeTree GenerateTypeTree(AssetLayout layout)
 		{
-			return SerializableTypeConverter.GenerateTypeTree(this);
+			return SerializableTypeConverter.GenerateTypeTree(layout, this);
 		}
 
 		public SerializableStructure CreateSerializableStructure()
@@ -434,6 +435,10 @@ namespace uTinyRipper.Game.Assembly
 		public const string ColorName = "Color";
 		public const string Color32Name = "Color32";
 		public const string LayerMaskName = "LayerMask";
+		public const string FloatCurveName = "FloatCurve";
+		public const string Vector3CurveName = "Vector3Curve";
+		public const string QuaternionCurveName = "QuaternionCurve";
+		public const string PPtrCurveName = "PPtrCurve";
 		public const string AnimationCurveName = "AnimationCurve";
 		public const string GradientName = "Gradient";
 		public const string RectOffsetName = "RectOffset";

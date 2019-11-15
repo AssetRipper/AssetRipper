@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
@@ -62,17 +62,6 @@ namespace uTinyRipper.Classes
 			return euler;
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(TypeTreeUtils.QuaternionName, name);
-			context.BeginChildren();
-			context.AddSingle(XName);
-			context.AddSingle(XName);
-			context.AddSingle(ZName);
-			context.AddSingle(WName);
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			X = reader.ReadSingle();
@@ -92,11 +81,12 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
+			QuaternionfLayout layout = container.ExportLayout.Serialized.Quaternionf;
 			node.Style = MappingStyle.Flow;
-			node.Add(XName, X);
-			node.Add(YName, Y);
-			node.Add(ZName, Z);
-			node.Add(WName, W);
+			node.Add(layout.XName, X);
+			node.Add(layout.YName, Y);
+			node.Add(layout.ZName, Z);
+			node.Add(layout.WName, W);
 			return node;
 		}
 
@@ -153,10 +143,5 @@ namespace uTinyRipper.Classes
 		public float Y { get; set; }
 		public float Z { get; set; }
 		public float W { get; set; }
-
-		public const string XName = "x";
-		public const string YName = "y";
-		public const string ZName = "z";
-		public const string WName = "w";
 	}
 }

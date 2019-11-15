@@ -4,6 +4,7 @@ using System.Linq;
 using uTinyRipper.Classes.AssetImporters;
 using uTinyRipper.Classes.Misc;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -11,25 +12,25 @@ namespace uTinyRipper.Classes
 	// NOTE: unknown layout for all importers for versions < 2.5.0
 	public abstract class AssetImporter : NamedObject
 	{
-		protected AssetImporter(Version version) :
-			base(null)
+		protected AssetImporter(AssetLayout layout) :
+			base(layout)
 		{
 			if (IncludesIDToName)
 			{
-				if (HasInternalIDToNameTable(version))
+				if (HasInternalIDToNameTable(layout.Info.Version))
 				{
 					InternalIDToNameTable = new Dictionary<Tuple<ClassIDType, long>, string>();
 				}
-				else if (FileIDToRecycleNameRelevant(version))
+				else if (FileIDToRecycleNameRelevant(layout.Info.Version))
 				{
 					FileIDToRecycleName = new Dictionary<long, string>();
 				}
 			}
-			if (HasExternalObjects(version))
+			if (HasExternalObjects(layout.Info.Version))
 			{
 				ExternalObjects = new Dictionary<SourceAssetIdentifier, PPtr<Object>>();
 			}
-			if (HasUsedFileIDs(version))
+			if (HasUsedFileIDs(layout.Info.Version))
 			{
 				UsedFileIDs = Array.Empty<long>();
 			}
@@ -107,7 +108,7 @@ namespace uTinyRipper.Classes
 			{
 				if (!IsFileIDToRecycleNameConditional(reader.Version) || IncludesIDToName)
 				{
-					if (PPtr<Object>.IsLongID(reader.Version))
+					if (reader.Layout.PPtr.IsLongID)
 					{
 						FileIDToRecycleName = new Dictionary<long, string>();
 						FileIDToRecycleName.Read(reader);
@@ -160,7 +161,7 @@ namespace uTinyRipper.Classes
 			{
 				if (!IsFileIDToRecycleNameConditional(writer.Version) || IncludesIDToName)
 				{
-					if (PPtr<Object>.IsLongID(writer.Version))
+					if (writer.Layout.PPtr.IsLongID)
 					{
 						FileIDToRecycleName.Write(writer);
 					}

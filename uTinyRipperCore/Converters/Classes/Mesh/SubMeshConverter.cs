@@ -2,15 +2,16 @@
 using System.IO;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Meshes;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Converters.Meshes
 {
 	public static class SubMeshConverter
 	{
-		public static void CalculateSubMeshVertexRangeAndBounds(Version version, Mesh mesh, ref SubMesh submesh)
+		public static void CalculateSubMeshVertexRangeAndBounds(AssetLayout layout, Mesh mesh, ref SubMesh submesh)
 		{
-			UpdateSubMeshVertexRange(version, mesh, ref submesh);
-			RecalculateSubmeshBounds(version, mesh, ref submesh);
+			UpdateSubMeshVertexRange(layout.Info.Version, mesh, ref submesh);
+			RecalculateSubmeshBounds(layout, mesh, ref submesh);
 		}
 
 		public static SubMesh[] Convert(IExportContainer container, Mesh instanceMesh, SubMesh[] origin)
@@ -64,7 +65,7 @@ namespace uTinyRipper.Converters.Meshes
 			}
 			else
 			{
-				CalculateSubMeshVertexRangeAndBounds(container.ExportVersion, instanceMesh, ref instance);
+				CalculateSubMeshVertexRangeAndBounds(container.ExportLayout, instanceMesh, ref instance);
 			}
 		}
 
@@ -163,7 +164,7 @@ namespace uTinyRipper.Converters.Meshes
 			}
 		}
 
-		private static void RecalculateSubmeshBounds(Version version, Mesh mesh, ref SubMesh submesh)
+		private static void RecalculateSubmeshBounds(AssetLayout layout, Mesh mesh, ref SubMesh submesh)
 		{
 			if (submesh.VertexCount == 0)
 			{
@@ -171,15 +172,15 @@ namespace uTinyRipper.Converters.Meshes
 				return;
 			}
 
-			FindMinMaxBounds(version, mesh, ref submesh, out Vector3f min, out Vector3f max);
+			FindMinMaxBounds(layout, mesh, ref submesh, out Vector3f min, out Vector3f max);
 			Vector3f center = (min + max) / 2.0f;
 			Vector3f extent = max - center;
 			submesh.LocalAABB = new AABB(center, extent);
 		}
 
-		private static void FindMinMaxBounds(Version version, Mesh mesh, ref SubMesh submesh, out Vector3f min, out Vector3f max)
+		private static void FindMinMaxBounds(AssetLayout layout, Mesh mesh, ref SubMesh submesh, out Vector3f min, out Vector3f max)
 		{
-			if (Mesh.HasCompressedMesh(version))
+			if (Mesh.HasCompressedMesh(layout.Info.Version))
 			{
 				if (mesh.CompressedMesh.Vertices.IsSet)
 				{
@@ -189,17 +190,17 @@ namespace uTinyRipper.Converters.Meshes
 				}
 			}
 
-			if (Mesh.HasVertexData(version))
+			if (Mesh.HasVertexData(layout.Info.Version))
 			{
-				if (Mesh.IsOnlyVertexData(version))
+				if (Mesh.IsOnlyVertexData(layout.Info.Version))
 				{
-					FindMinMaxBounds(version, ref mesh.VertexData, submesh.FirstVertex, submesh.VertexCount, out min, out max);
+					FindMinMaxBounds(layout, ref mesh.VertexData, submesh.FirstVertex, submesh.VertexCount, out min, out max);
 				}
 				else
 				{
 					if (mesh.MeshCompression == MeshCompression.Off)
 					{
-						FindMinMaxBounds(version, ref mesh.VertexData, submesh.FirstVertex, submesh.VertexCount, out min, out max);
+						FindMinMaxBounds(layout, ref mesh.VertexData, submesh.FirstVertex, submesh.VertexCount, out min, out max);
 					}
 					else
 					{
@@ -287,17 +288,17 @@ namespace uTinyRipper.Converters.Meshes
 			}
 		}
 
-		private static void FindMinMaxBounds(Version version, ref VertexData vertexData, int firstVertex, int vertexCount, out Vector3f min, out Vector3f max)
+		private static void FindMinMaxBounds(AssetLayout layout, ref VertexData vertexData, int firstVertex, int vertexCount, out Vector3f min, out Vector3f max)
 		{
-			ChannelInfo channel = vertexData.GetChannel(version, ShaderChannel.Vertex);
-			int streamOffset = vertexData.GetStreamOffset(version, channel.Stream);
-			int streamStride = vertexData.GetStreamStride(version, channel.Stream);
-			int extraStride = streamStride - ShaderChannel.Vertex.GetStride(version);
+			ChannelInfo channel = vertexData.GetChannel(layout.Info.Version, ShaderChannel.Vertex);
+			int streamOffset = vertexData.GetStreamOffset(layout.Info.Version, channel.Stream);
+			int streamStride = vertexData.GetStreamStride(layout.Info.Version, channel.Stream);
+			int extraStride = streamStride - ShaderChannel.Vertex.GetStride(layout.Info.Version);
 			int vertexOffset = firstVertex * streamStride;
 			int begin = streamOffset + vertexOffset + channel.Offset;
 			using (MemoryStream stream = new MemoryStream(vertexData.Data))
 			{
-				using (AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags))
+				using (AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout))
 				{
 					stream.Position = begin;
 					Vector3f dummyVertex = reader.ReadAsset<Vector3f>();

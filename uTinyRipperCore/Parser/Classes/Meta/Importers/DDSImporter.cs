@@ -1,4 +1,5 @@
 ﻿using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -8,8 +9,8 @@ namespace uTinyRipper.Classes
 	/// </summary>
 	public sealed class DDSImporter : AssetImporter
 	{
-		public DDSImporter(Version version) :
-			base(version)
+		public DDSImporter(AssetLayout layout) :
+			base(layout)
 		{
 		}
 

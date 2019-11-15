@@ -432,7 +432,7 @@ namespace uTinyRipper.Converters.Script.Mono
 				// if we can't determine whether it serializable or not, then consider it as serializable
 				if (IsSerializationApplicable(field.FieldType))
 				{
-					MonoFieldContext scope = new MonoFieldContext(field, manager.Version);
+					MonoFieldContext scope = new MonoFieldContext(field, manager.Layout);
 					if (!MonoType.IsFieldTypeSerializable(scope))
 					{
 						continue;

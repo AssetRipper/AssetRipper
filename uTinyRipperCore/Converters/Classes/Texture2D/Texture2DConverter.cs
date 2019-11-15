@@ -7,9 +7,9 @@ namespace uTinyRipper.Converters
 {
 	public static class Texture2DConverter
 	{
-		public static TextureImporter GeenrateTextureImporter(IExportContainer container, Texture2D origin)
+		public static TextureImporter GenerateTextureImporter(IExportContainer container, Texture2D origin)
 		{
-			TextureImporter instance = new TextureImporter(container.ExportVersion);
+			TextureImporter instance = new TextureImporter(container.ExportLayout);
 			instance.EnableMipMap = origin.MipCount > 1 ? 1 : 0;
 			instance.SRGBTexture = origin.ColorSpace == ColorSpace.Linear ? 1 : 0;
 			instance.StreamingMipmaps = origin.StreamingMipmaps ? 1 : 0;
@@ -24,9 +24,9 @@ namespace uTinyRipper.Converters
 			return instance;
 		}
 
-		public static IHVImageFormatImporter GeenrateIHVImporter(IExportContainer container, Texture2D origin)
+		public static IHVImageFormatImporter GenerateIHVImporter(IExportContainer container, Texture2D origin)
 		{
-			IHVImageFormatImporter instance = new IHVImageFormatImporter(container.ExportVersion);
+			IHVImageFormatImporter instance = new IHVImageFormatImporter(container.ExportLayout);
 			instance.IsReadable = origin.IsReadable;
 			instance.SRGBTexture = origin.ColorSpace == ColorSpace.Linear;
 			instance.StreamingMipmaps = origin.StreamingMipmaps;

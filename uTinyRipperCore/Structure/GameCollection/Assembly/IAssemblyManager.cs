@@ -18,8 +18,5 @@ namespace uTinyRipper.Game
 		ScriptExportType GetExportType(ScriptExportManager exportManager, ScriptIdentifier scriptID);
 		ScriptIdentifier GetScriptID(string assembly, string name);
 		ScriptIdentifier GetScriptID(string assembly, string @namespace, string name);
-
-		ScriptingBackend ScriptingBackend { get; set; }
-		Version Version { get; set; }
 	}
 }

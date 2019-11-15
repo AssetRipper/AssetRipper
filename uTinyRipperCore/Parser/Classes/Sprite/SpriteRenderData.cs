@@ -64,7 +64,7 @@ namespace uTinyRipper.Classes.Sprites
 				outline[0] = new Vector2f[Vertices.Length];
 				for (int i = 0; i < Vertices.Length; i++)
 				{
-					outline[0][i] = Vertices[i].Position.ToVector2();
+					outline[0][i] = (Vector2f)Vertices[i].Position;
 				}
 				return outline;
 			}

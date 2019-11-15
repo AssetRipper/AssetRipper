@@ -1,5 +1,6 @@
 using uTinyRipper.Classes.Textures;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.TextureImporters
@@ -10,7 +11,7 @@ namespace uTinyRipper.Classes.TextureImporters
 	/// </summary>
 	public struct TextureImporterPlatformSettings : IAsset
 	{
-		public TextureImporterPlatformSettings(Version version)
+		public TextureImporterPlatformSettings(AssetLayout layout)
 		{
 			BuildTarget = DefaultTexturePlatformName;
 			MaxTextureSize = 2048;

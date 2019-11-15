@@ -14,43 +14,54 @@ namespace uTinyRipper.Classes.Misc
 		{
 			if (IsVector3(reader.Version))
 			{
-				T.Read3(reader);
+				T = reader.ReadAsset<Vector3f>();
 			}
 			else
 			{
-				T.Read(reader);
+				T4.Read(reader);
 			}
 			Q.Read(reader);
 			if (IsVector3(reader.Version))
 			{
-				S.Read3(reader);
+				S = reader.ReadAsset<Vector3f>();
 			}
 			else
 			{
-				S.Read(reader);
+				S4.Read(reader);
 			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(TName, T.ExportYAML3(container));
+			node.Add(TName, T.ExportYAML(container));
 			node.Add(QName, Q.ExportYAML(container));
-			node.Add(SName, S.ExportYAML3(container));
+			node.Add(SName, S.ExportYAML(container));
 			return node;
 		}
 
 		public override string ToString()
 		{
-			return $"T:{T} Q:{Q} S:{S}";
+			return $"T:{T4} Q:{Q} S:{S4}";
+		}
+
+		public Vector3f T
+		{
+			get => (Vector3f)T4;
+			set => T4 = value;
+		}
+		public Vector3f S
+		{
+			get => (Vector3f)S4;
+			set => S4 = value;
 		}
 
 		public const string TName = "t";
 		public const string QName = "q";
 		public const string SName = "s";
 
-		public Vector4f T;
+		public Vector4f T4;
 		public Vector4f Q;
-		public Vector4f S;
+		public Vector4f S4;
 	}
 }

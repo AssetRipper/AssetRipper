@@ -1,4 +1,5 @@
 ﻿using uTinyRipper.Classes;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Converters
 {
@@ -6,51 +7,31 @@ namespace uTinyRipper.Converters
 	{
 		public static void Convert(IExportContainer container, EditorExtension origin, EditorExtension instance)
 		{
+			EditorExtensionLayout layout = container.Layout.EditorExtension;
+			EditorExtensionLayout exlayout = container.ExportLayout.EditorExtension;
 			ObjectConverter.Convert(container, origin, instance);
 #if UNIVERSAL
-			if (EditorExtension.HasCorrespondingSourceObject(container.ExportVersion, container.ExportFlags))
+			if (exlayout.HasCorrespondingSourceObjectInvariant)
 			{
-				instance.CorrespondingSourceObject = GetCorrespondingSourceObject(container, origin);
-				instance.PrefabInstance = GetPrefabInstance(container, origin);
+				if (layout.HasCorrespondingSourceObjectInvariant)
+				{
+					instance.CorrespondingSourceObject = origin.CorrespondingSourceObject;
+					instance.PrefabInstance = origin.PrefabInstance;
+				}
+				else
+				{
+#warning TODO: get values from ExtensionPtr
+				}
 			}
 			else
 			{
 				instance.ExtensionPtr = origin.ExtensionPtr;
 			}
-			if (EditorExtension.HasPrefabAsset(container.ExportVersion, container.ExportFlags))
+			if (exlayout.HasPrefabAsset && layout.HasPrefabAsset)
 			{
-				instance.PrefabAsset = GetPrefabAsset(container, origin);
+				instance.PrefabAsset = origin.PrefabAsset;
 			}
 #endif
 		}
-
-#if UNIVERSAL
-		private static PPtr<EditorExtension> GetCorrespondingSourceObject(IExportContainer container, EditorExtension origin)
-		{
-			if (EditorExtension.HasCorrespondingSourceObject(container.Version, container.Flags))
-			{
-				return origin.CorrespondingSourceObject;
-			}
-			return default;
-		}
-
-		private static PPtr<PrefabInstance> GetPrefabInstance(IExportContainer container, EditorExtension origin)
-		{
-			if (EditorExtension.HasCorrespondingSourceObject(container.Version, container.Flags))
-			{
-				return origin.PrefabInstance;
-			}
-			return default;
-		}
-
-		private static PPtr<Prefab> GetPrefabAsset(IExportContainer container, EditorExtension origin)
-		{
-			if (EditorExtension.HasPrefabAsset(container.Version, container.Flags))
-			{
-				return origin.PrefabAsset;
-			}
-			return default;
-		}
-#endif
 	}
 }

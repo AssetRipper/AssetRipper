@@ -3,28 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
 	public abstract class Component : EditorExtension
 	{
-		protected Component(AssetInfo assetInfo) :
-			base(assetInfo)
+		protected Component(AssetLayout layout) :
+			base(layout)
 		{
 		}
 
-		/// <summary>
-		/// Not Prefab
-		/// </summary>
-		public static bool HasGameObject(TransferInstructionFlags flags) => !flags.IsForPrefab();
-
-		protected new static void GenerateTypeTree(TypeTreeContext context)
+		protected Component(AssetInfo assetInfo) :
+			base(assetInfo)
 		{
-			EditorExtension.GenerateTypeTree(context);
-			if (HasGameObject(context.Flags))
-			{
-				context.AddPPtr(nameof(Classes.GameObject), GameObjectName);
-			}
 		}
 
 		public GameObject GetRoot()
@@ -43,20 +35,14 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			if (HasGameObject(reader.Flags))
-			{
-				GameObject.Read(reader);
-			}
+			GameObject.Read(reader);
 		}
 
 		public override void Write(AssetWriter writer)
 		{
 			base.Write(writer);
 
-			if (HasGameObject(writer.Flags))
-			{
-				GameObject.Write(writer);
-			}
+			GameObject.Write(writer);
 		}
 
 		public sealed override void ExportBinary(IExportContainer container, Stream stream)
@@ -71,19 +57,19 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 
-			yield return context.FetchDependency(GameObject, GameObjectName);
+			ComponentLayout layout = context.Layout.Component;
+			yield return context.FetchDependency(GameObject, layout.GameObjectName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(GameObjectName, GameObject.ExportYAML(container));
+			ComponentLayout layout = container.ExportLayout.Component;
+			node.Add(layout.GameObjectName, GameObject.ExportYAML(container));
 			return node;
 		}
 
 		public override string ExportExtension => throw new NotSupportedException();
-
-		public const string GameObjectName = "m_GameObject";
 
 		public PPtr<GameObject> GameObject;
 	}

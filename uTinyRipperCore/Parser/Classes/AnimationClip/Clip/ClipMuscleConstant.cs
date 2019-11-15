@@ -68,7 +68,7 @@ namespace uTinyRipper.Classes.AnimationClips
 
 			if (IsVector3(reader.Version))
 			{
-				AverageSpeed.Read3(reader);
+				AverageSpeed = reader.ReadAsset<Vector3f>();
 			}
 			else
 			{

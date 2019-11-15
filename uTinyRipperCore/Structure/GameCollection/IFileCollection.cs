@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using uTinyRipper.Classes;
 using uTinyRipper.Game;
-using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper
 {
 	public interface IFileCollection
 	{
-		ISerializedFile FindSerializedFile(FileIdentifier identifier);
+		ISerializedFile FindSerializedFile(string fileName);
 		IResourceFile FindResourceFile(string fileName);
 
 		T FindAsset<T>()

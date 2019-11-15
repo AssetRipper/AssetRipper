@@ -1,7 +1,13 @@
-﻿namespace uTinyRipper.SerializedFiles
+﻿using System.IO;
+
+namespace uTinyRipper.SerializedFiles
 {
-	public sealed class SerializedFileMetadata : ISerializedReadable, ISerializedWritable
+	public sealed class SerializedFileMetadata
 	{
+		/// <summary>
+		/// Less than 3.5.0
+		/// </summary>
+		public static bool HasEndian(FileGeneration generation) => generation <= FileGeneration.FG_300_342;
 		/// <summary>
 		/// Less than 3.5.0
 		/// </summary>
@@ -16,7 +22,37 @@
 		/// </summary>
 		public static bool HasUnknown(FileGeneration generation) => generation >= FileGeneration.FG_120_200;
 
-		public void Read(SerializedReader reader)
+		public void Read(Stream stream, SerializedFileHeader header)
+		{
+			bool swapEndianess = header.SwapEndianess;
+			if (HasEndian(header.Generation))
+			{
+				SwapEndianess = stream.ReadByte() != 0;
+				swapEndianess = SwapEndianess;
+			}
+			EndianType endianess = swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
+			using (SerializedReader reader = new SerializedReader(stream, endianess, header.Generation))
+			{
+				Read(reader);
+			}
+		}
+
+		public void Write(Stream stream, SerializedFileHeader header)
+		{
+			bool swapEndianess = header.SwapEndianess;
+			if (HasEndian(header.Generation))
+			{
+				SwapEndianess = stream.ReadByte() != 0;
+				swapEndianess = SwapEndianess;
+			}
+			EndianType endianess = swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
+			using (SerializedWriter writer = new SerializedWriter(stream, endianess, header.Generation))
+			{
+				Write(writer);
+			}
+		}
+
+		private void Read(SerializedReader reader)
 		{
 			Hierarchy.Read(reader);
 			Entries = reader.ReadSerializedArray<AssetEntry>();
@@ -31,8 +67,12 @@
 			}
 		}
 
-		public void Write(SerializedWriter writer)
+		private void Write(SerializedWriter writer)
 		{
+			if (HasEndian(writer.Generation))
+			{
+				writer.Write(SwapEndianess);
+			}
 			Hierarchy.Write(writer);
 			writer.WriteSerializedArray(Entries);
 			if (HasPreload(writer.Generation))
@@ -46,6 +86,7 @@
 			}
 		}
 
+		public bool SwapEndianess { get; set; }
 		public AssetEntry[] Entries { get; set; }
 		public ObjectPtr[] Preloads { get; set; }
 		public FileIdentifier[] Dependencies { get; set; }

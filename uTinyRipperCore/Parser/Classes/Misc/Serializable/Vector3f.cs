@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
@@ -15,9 +15,10 @@ namespace uTinyRipper.Classes
 			Z = z;
 		}
 
-		public static explicit operator Vector3f(Vector2f v2) => new Vector3f(v2.X, v2.Y, 0.0f);
-		public static explicit operator Vector3f(Vector2i v2) => new Vector3f(v2.X, v2.Y, 0.0f);
-		public static explicit operator Vector3f(Vector3i v3) => new Vector3f(v3.X, v3.Y, v3.Z);
+		public static implicit operator Vector3f(Vector2f v2) => new Vector3f(v2.X, v2.Y, 0.0f);
+		public static implicit operator Vector3f(Vector2i v2) => new Vector3f(v2.X, v2.Y, 0.0f);
+		public static implicit operator Vector3f(Vector3i v3) => new Vector3f(v3.X, v3.Y, v3.Z);
+		public static explicit operator Vector3f(Vector4f v4) => new Vector3f(v4.X, v4.Y, v4.Z);
 
 		public static Vector3f operator -(Vector3f left)
 		{
@@ -54,27 +55,11 @@ namespace uTinyRipper.Classes
 			return left.X != right.X || left.Y != right.Y || left.Z != right.Z;
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(TypeTreeUtils.Vector3Name, name);
-			context.BeginChildren();
-			context.AddSingle(XName);
-			context.AddSingle(YName);
-			context.AddSingle(ZName);
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			X = reader.ReadSingle();
 			Y = reader.ReadSingle();
 			Z = reader.ReadSingle();
-		}
-
-		public void Read2(AssetReader reader)
-		{
-			X = reader.ReadSingle();
-			Y = reader.ReadSingle();
 		}
 
 		public void Write(AssetWriter writer)
@@ -87,25 +72,12 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
+			Vector3fLayout layout = container.ExportLayout.Serialized.Vector3f;
 			node.Style = MappingStyle.Flow;
-			node.Add(XName, X);
-			node.Add(YName, Y);
-			node.Add(ZName, Z);
+			node.Add(layout.XName, X);
+			node.Add(layout.YName, Y);
+			node.Add(layout.ZName, Z);
 			return node;
-		}
-
-		public YAMLNode ExportYAML2(IExportContainer container)
-		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Style = MappingStyle.Flow;
-			node.Add(XName, X);
-			node.Add(YName, Y);
-			return node;
-		}
-
-		public Vector2f ToVector2()
-		{
-			return new Vector2f(X, Y);
 		}
 
 		public float GetMember(int index)
@@ -160,11 +132,5 @@ namespace uTinyRipper.Classes
 		public float X { get; set; }
 		public float Y { get; set; }
 		public float Z { get; set; }
-
-		public const string XName = "x";
-		public const string YName = "y";
-		public const string ZName = "z";
-
-		public const int StructSize = 3 * sizeof(float);
 	}
 }

@@ -7,7 +7,7 @@ namespace uTinyRipper.Converters
 	{
 		public static TextureImporter GeenrateTextureImporter(IExportContainer container, Cubemap origin)
 		{
-			TextureImporter importer = Texture2DConverter.GeenrateTextureImporter(container, origin);
+			TextureImporter importer = Texture2DConverter.GenerateTextureImporter(container, origin);
 			importer.TextureShape = TextureImporterShape.TextureCube;
 			return importer;
 		}

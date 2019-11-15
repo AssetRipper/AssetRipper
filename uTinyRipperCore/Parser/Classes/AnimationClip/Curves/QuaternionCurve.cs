@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.Classes.Misc;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout.AnimationClips;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
-	public struct QuaternionCurve : IAssetReadable, IYAMLExportable
+	public struct QuaternionCurve : IAsset, IYAMLExportable
 	{
 		public QuaternionCurve(QuaternionCurve copy, IReadOnlyList<KeyframeTpl<Quaternionf>> keyframes) :
 			this(copy.Path, keyframes)
@@ -30,26 +31,24 @@ namespace uTinyRipper.Classes.AnimationClips
 			Curve = curve;
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(nameof(QuaternionCurve), name);
-			context.BeginChildren();
-			AnimationCurveTpl<Quaternionf>.GenerateTypeTree(context, CurveName, Quaternionf.GenerateTypeTree);
-			context.AddString(PathName);
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			Curve.Read(reader);
 			Path = reader.ReadString();
 		}
-		
+
+		public void Write(AssetWriter writer)
+		{
+			Curve.Write(writer);
+			writer.Write(Path);
+		}
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(CurveName, Curve.ExportYAML(container));
-			node.Add(PathName, Path);
+			QuaternionCurveLayout layout = container.ExportLayout.AnimationClip.QuaternionCurve;
+			node.Add(layout.CurveName, Curve.ExportYAML(container));
+			node.Add(layout.PathName, Path);
 			return node;
 		}
 
@@ -64,9 +63,6 @@ namespace uTinyRipper.Classes.AnimationClips
 		}
 
 		public string Path { get; set; }
-
-		public const string CurveName = "curve";
-		public const string PathName = "path";
 
 		public AnimationCurveTpl<Quaternionf> Curve;
 	}

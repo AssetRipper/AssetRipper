@@ -1,12 +1,13 @@
 ﻿using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
 	public class DefaultAsset : NamedObject
 	{
-		public DefaultAsset(Version version):
-			base(null)
+		public DefaultAsset(AssetLayout layout):
+			base(layout)
 		{
 			Message = string.Empty;
 		}

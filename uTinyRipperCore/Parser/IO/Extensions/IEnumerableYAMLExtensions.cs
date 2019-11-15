@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
@@ -28,16 +29,23 @@ namespace uTinyRipper
 			return node;
 		}
 
-		public static YAMLNode ExportYAML<T>(this IEnumerable<IReadOnlyList<T>> _this, IExportContainer container)
-			where T : IYAMLExportable
+		public static YAMLNode ExportYAML<T1, T2>(this IEnumerable<Tuple<T1, T2>> _this, IExportContainer container, Func<T1, int> converter)
+			where T2 : IYAMLExportable
 		{
-			return ((IEnumerable<IEnumerable<T>>)_this).ExportYAML(container);
+			YAMLSequenceNode node = new YAMLSequenceNode();
+			foreach (var kvp in _this)
+			{
+				YAMLMappingNode map = new YAMLMappingNode();
+				map.Add(converter(kvp.Item1), kvp.Item2.ExportYAML(container));
+				node.Add(map);
+			}
+			return node;
 		}
 
 		public static YAMLNode ExportYAML<T>(this IEnumerable<KeyValuePair<string, T>> _this, IExportContainer container)
 			where T : IYAMLExportable
 		{
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
+			YAMLSequenceNode node = new YAMLSequenceNode();
 			foreach (var kvp in _this)
 			{
 				YAMLMappingNode map = new YAMLMappingNode();

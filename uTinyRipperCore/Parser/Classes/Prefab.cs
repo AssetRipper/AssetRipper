@@ -1,31 +1,20 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
-	/// <summary>
-	/// 2018.3 - first introduction
-	/// </summary>
 	public sealed class Prefab : Object
 	{
-		public Prefab(Version version):
-			base(version)
+		public Prefab(AssetLayout layout):
+			base(layout)
 		{
 		}
 
 		public Prefab(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(nameof(Prefab), name);
-			context.BeginChildren();
-			Object.GenerateTypeTree(context);
-			context.AddPPtr(nameof(GameObject), RootGameObjectName);
-			context.EndChildren();
 		}
 
 		public override void Read(AssetReader reader)
@@ -49,19 +38,19 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 
-			yield return context.FetchDependency(RootGameObject, RootGameObjectName);
+			PrefabLayout layout = context.Layout.Prefab;
+			yield return context.FetchDependency(RootGameObject, layout.RootGameObjectName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(RootGameObjectName, RootGameObject.ExportYAML(container));
+			PrefabLayout layout = container.ExportLayout.Prefab;
+			node.Add(layout.RootGameObjectName, RootGameObject.ExportYAML(container));
 			return node;
 		}
 
 		public override ClassIDType ClassID => ClassIDType.Prefab;
-
-		public const string RootGameObjectName = "m_RootGameObject";
 
 		public PPtr<GameObject> RootGameObject;
 	}

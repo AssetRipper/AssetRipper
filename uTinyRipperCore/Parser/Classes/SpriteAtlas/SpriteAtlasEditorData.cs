@@ -83,7 +83,7 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
-			node.Add(PlatformSettingsName, GetPlatformSettings(container.Version, container.ExportVersion).ExportYAML(container));
+			node.Add(PlatformSettingsName, GetPlatformSettings(container).ExportYAML(container));
 			node.Add(GetPackingSettingsName(container.ExportVersion), PackingSettings.ExportYAML(container));
 			node.Add(VariantMultiplierName, VariantMultiplier);
 			node.Add(PackablesName, Packables.ExportYAML(container));
@@ -95,18 +95,18 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			return node;
 		}
 
-		public IReadOnlyList<TextureImporterPlatformSettings> GetPlatformSettings(Version version, Version exportVersion)
+		public IReadOnlyList<TextureImporterPlatformSettings> GetPlatformSettings(IExportContainer container)
 		{
-			if (ToSerializedVersion(exportVersion) > 1)
+			if (ToSerializedVersion(container.ExportVersion) > 1)
 			{
-				if (ToSerializedVersion(version) > 1)
+				if (ToSerializedVersion(container.Version) > 1)
 				{
 					return PlatformSettings;
 				}
 				else
 				{
 					TextureImporterPlatformSettings[] settings = new TextureImporterPlatformSettings[PlatformSettings.Length + 1];
-					TextureImporterPlatformSettings setting = new TextureImporterPlatformSettings(exportVersion);
+					TextureImporterPlatformSettings setting = new TextureImporterPlatformSettings(container.ExportLayout);
 					setting.TextureFormat = TextureFormat.Automatic;
 					setting.ForceMaximumCompressionQuality_BC6H_BC7 = true;
 					settings[0] = setting;

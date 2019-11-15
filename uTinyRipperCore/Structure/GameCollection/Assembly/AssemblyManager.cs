@@ -4,18 +4,17 @@ using System.IO;
 using uTinyRipper.Converters.Script;
 using uTinyRipper.Game.Assembly;
 using uTinyRipper.Game.Assembly.Mono;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Game
 {
 	public sealed class AssemblyManager : IAssemblyManager
 	{
-		public AssemblyManager(Action<string> requestAssemblyCallback)
+		public AssemblyManager(ScriptingBackend backend, AssetLayout layout, Action<string> requestAssemblyCallback)
 		{
-			if (requestAssemblyCallback == null)
-			{
-				throw new ArgumentNullException(nameof(requestAssemblyCallback));
-			}
-			m_requestAssemblyCallback = requestAssemblyCallback;
+			m_manager = backend == ScriptingBackend.Mono ? new MonoManager(this) : null;
+			Layout = layout;
+			m_requestAssemblyCallback = requestAssemblyCallback ?? throw new ArgumentNullException(nameof(requestAssemblyCallback));
 		}
 
 		~AssemblyManager()
@@ -43,28 +42,16 @@ namespace uTinyRipper.Game
 
 		public void Load(string filePath)
 		{
-			if (ScriptingBackend == ScriptingBackend.Unknown)
-			{
-				throw new Exception("You have to set backend first");
-			}
 			m_manager.Load(filePath);
 		}
 
 		public void Read(Stream stream, string fileName)
 		{
-			if (ScriptingBackend == ScriptingBackend.Unknown)
-			{
-				throw new Exception("You have to set backend first");
-			}
 			m_manager.Read(stream, fileName);
 		}
 
 		public void Unload(string fileName)
 		{
-			if (ScriptingBackend == ScriptingBackend.Unknown)
-			{
-				throw new Exception("You have to set backend first");
-			}
 			m_manager.Unload(fileName);
 		}
 
@@ -75,7 +62,7 @@ namespace uTinyRipper.Game
 
 		public bool IsPresent(ScriptIdentifier scriptID)
 		{
-			if (ScriptingBackend == ScriptingBackend.Unknown)
+			if (m_manager == null)
 			{
 				return false;
 			}
@@ -88,7 +75,7 @@ namespace uTinyRipper.Game
 
 		public bool IsValid(ScriptIdentifier scriptID)
 		{
-			if (ScriptingBackend == ScriptingBackend.Unknown)
+			if (m_manager == null)
 			{
 				return false;
 			}
@@ -111,16 +98,12 @@ namespace uTinyRipper.Game
 
 		public ScriptExportType GetExportType(ScriptExportManager exportManager, ScriptIdentifier scriptID)
 		{
-			if (ScriptingBackend == ScriptingBackend.Unknown)
-			{
-				throw new Exception("You have to set backend first");
-			}
 			return m_manager.GetExportType(exportManager, scriptID);
 		}
 
 		public ScriptIdentifier GetScriptID(string assembly, string name)
 		{
-			if (ScriptingBackend == ScriptingBackend.Unknown)
+			if (m_manager == null)
 			{
 				return default;
 			}
@@ -129,7 +112,7 @@ namespace uTinyRipper.Game
 
 		public ScriptIdentifier GetScriptID(string assembly, string @namespace, string name)
 		{
-			if (ScriptingBackend == ScriptingBackend.Unknown)
+			if (m_manager == null)
 			{
 				return default;
 			}
@@ -165,46 +148,7 @@ namespace uTinyRipper.Game
 			}
 		}
 
-		public ScriptingBackend ScriptingBackend
-		{
-			get => m_manager == null ? ScriptingBackend.Unknown : m_manager.ScriptingBackend;
-			set
-			{
-				if (ScriptingBackend == value)
-				{
-					return;
-				}
-
-				switch (value)
-				{
-					case ScriptingBackend.Mono:
-						m_manager = new MonoManager(this);
-						break;
-
-					default:
-						throw new NotImplementedException($"Scripting backend {value} is not impelented yet");
-				}
-			}
-		}
-
-		public Version Version
-		{
-			get
-			{
-				if (m_manager == null)
-				{
-					return default;
-				}
-				return m_manager.Version;
-			}
-			set
-			{
-				if (m_manager != null)
-				{
-					m_manager.Version = value;
-				}
-			}
-		}
+		public AssetLayout Layout { get; }
 
 		private event Action<string> m_requestAssemblyCallback;
 

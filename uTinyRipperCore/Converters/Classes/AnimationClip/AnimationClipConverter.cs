@@ -7,7 +7,7 @@ using uTinyRipper.Classes;
 using uTinyRipper.Classes.AnimationClips;
 using uTinyRipper.Classes.Misc;
 using uTinyRipper.Converters.AnimationClips;
-
+using uTinyRipper.Layout;
 using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper.Converters
@@ -37,14 +37,14 @@ namespace uTinyRipper.Converters
 			AnimationClipBindingConstant bindings = m_clip.ClipBindingConstant;
 			IReadOnlyDictionary<uint, string> tos = m_clip.FindTOS();
 
-			IReadOnlyList<StreamedFrame> streamedFrames = clip.StreamedClip.GenerateFrames(Version, Platform, Flags);
+			IReadOnlyList<StreamedFrame> streamedFrames = clip.StreamedClip.GenerateFrames(Layout);
 			float lastDenseFrame = clip.DenseClip.FrameCount / clip.DenseClip.SampleRate;
 			float lastSampleFrame = streamedFrames.Count > 1 ? streamedFrames[streamedFrames.Count - 2].Time : 0.0f;
 			float lastFrame = Math.Max(lastDenseFrame, lastSampleFrame);
 
 			ProcessStreams(streamedFrames, bindings, tos, clip.DenseClip.SampleRate);
 			ProcessDenses(clip, bindings, tos);
-			if (Clip.HasConstantClip(Version))
+			if (Clip.HasConstantClip(Layout.Info.Version))
 			{
 				ProcessConstant(clip, bindings, tos, lastFrame);
 			}
@@ -186,11 +186,11 @@ namespace uTinyRipper.Converters
 			switch (binding.CustomType)
 			{
 				case BindingCustomType.AnimatorMuscle:
-					AddAnimatorMuscleCurve(binding, path, time, value);
+					AddAnimatorMuscleCurve(binding, time, value);
 					break;
 
 				default:
-					string attribute = m_customCurveResolver.ToAttributeName(binding.CustomType, binding.Attribute, path);
+					string attribute = m_customCurveResolver.ToAttributeName(Layout, binding.CustomType, binding.Attribute, path);
 					if (binding.IsPPtrCurve)
 					{
 						PPtrCurve curve = new PPtrCurve(path, attribute, binding.ClassID, binding.Script.CastTo<MonoScript>());
@@ -358,15 +358,15 @@ namespace uTinyRipper.Converters
 
 		private void AddGameObjectCurve(GenericBinding binding, string path, float time, float value)
 		{
-			if (binding.Attribute == CRC.CalculateDigestAscii(GameObject.IsActiveName))
+			if (binding.Attribute == CRC.CalculateDigestAscii(Layout.GameObject.IsActiveName))
 			{
-				FloatCurve curve = new FloatCurve(path, GameObject.IsActiveName, ClassIDType.GameObject, default);
+				FloatCurve curve = new FloatCurve(path, Layout.GameObject.IsActiveName, ClassIDType.GameObject, default);
 				AddFloatKeyframe(curve, time, value);
 				return;
 			}
 			else
 			{
-				// that means that dev exported animation clip with missed component
+				// that means that dev exported animation clip with missing component
 				FloatCurve curve = new FloatCurve(path, MissedPropertyPrefix + binding.Attribute, ClassIDType.GameObject, default);
 				AddFloatKeyframe(curve, time, value);
 			}
@@ -386,9 +386,9 @@ namespace uTinyRipper.Converters
 			AddFloatKeyframe(curve, time, value);
 		}
 
-		private void AddAnimatorMuscleCurve(GenericBinding binding, string path, float time, float value)
+		private void AddAnimatorMuscleCurve(GenericBinding binding, float time, float value)
 		{
-			FloatCurve curve = new FloatCurve(string.Empty, binding.GetHumanoidMuscle(Version).ToAttributeString(), ClassIDType.Animator, default);
+			FloatCurve curve = new FloatCurve(string.Empty, binding.GetHumanoidMuscle(Layout.Info.Version).ToAttributeString(), ClassIDType.Animator, default);
 			AddFloatKeyframe(curve, time, value);
 		}
 
@@ -468,9 +468,7 @@ namespace uTinyRipper.Converters
 		public FloatCurve[] Floats { get; private set; }
 		public PPtrCurve[] PPtrs { get; private set; }
 
-		private Version Version => m_clip.File.Version;
-		private Platform Platform => m_clip.File.Platform;
-		private TransferInstructionFlags Flags => m_clip.File.Flags;
+		private AssetLayout Layout => m_clip.File.Layout;
 
 		public static readonly Regex UnknownPathRegex = new Regex($@"^{UnknownPathPrefix}[0-9]{{1,10}}$", RegexOptions.Compiled);
 

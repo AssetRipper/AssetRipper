@@ -1,6 +1,6 @@
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
@@ -10,15 +10,6 @@ namespace uTinyRipper.Classes
 		{
 			Center = center;
 			Extent = extent;
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(TypeTreeUtils.BoundsIntName, name);
-			context.BeginChildren();
-			Vector3i.GenerateTypeTree(context, CenterName);
-			Vector3i.GenerateTypeTree(context, ExtentName);
-			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)
@@ -36,13 +27,11 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(CenterName, Center.ExportYAML(container));
-			node.Add(ExtentName, Extent.ExportYAML(container));
+			AABBiLayout layout = container.ExportLayout.Serialized.AABBi;
+			node.Add(layout.CenterName, Center.ExportYAML(container));
+			node.Add(layout.ExtentName, Extent.ExportYAML(container));
 			return node;
 		}
-
-		public const string CenterName = "m_Center";
-		public const string ExtentName = "m_Extent";
 
 		public Vector3i Center;
 		public Vector3i Extent;

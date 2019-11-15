@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using uTinyRipper.Converters;
 using uTinyRipper.Classes.AnimatorControllers;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
@@ -19,14 +20,14 @@ namespace uTinyRipper.Classes
 			public override IReadOnlyList<OffsetPtr<ConditionConstant>> ConditionConstants => Transition.ConditionConstantArray;
 		}
 
-		private AnimatorTransition(AssetInfo assetInfo, Parameters parameters) :
-			   base(assetInfo, ClassIDType.AnimatorTransition, parameters)
+		private AnimatorTransition(AssetLayout layout, AssetInfo assetInfo, Parameters parameters) :
+			   base(layout, assetInfo, parameters)
 		{
 		}
 
 		public static AnimatorTransition CreateVirtualInstance(VirtualSerializedFile virtualFile, Parameters parameters)
 		{
-			return virtualFile.CreateAsset((assetInfo) => new AnimatorTransition(assetInfo, parameters));
+			return virtualFile.CreateAsset((assetInfo) => new AnimatorTransition(virtualFile.Layout, assetInfo, parameters));
 		}
 
 		public static int ToSerializedVersion(Version version)

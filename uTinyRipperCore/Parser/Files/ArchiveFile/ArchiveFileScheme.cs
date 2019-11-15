@@ -85,7 +85,12 @@ namespace uTinyRipper
 			{
 				using (BrotliInputStream brotliStream = new BrotliInputStream(reader.BaseStream))
 				{
-					brotliStream.CopyTo(stream);
+					int count;
+					byte[] buffer = new byte[81920];
+					while ((count = brotliStream.Read(buffer, 0, buffer.Length)) > 0)
+					{
+						stream.Write(buffer, 0, count);
+					}
 				}
 				return stream.ToArray();
 			}

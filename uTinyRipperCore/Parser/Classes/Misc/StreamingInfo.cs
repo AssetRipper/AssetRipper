@@ -76,7 +76,7 @@ namespace uTinyRipper.Classes.Misc
 		public const string SizeName = "size";
 		public const string PathName = "path";
 
-		public bool IsSet => Path != string.Empty;
+		public bool IsSet => Path.Length > 0;
 
 		public uint Offset { get; set; }
 		public uint Size { get; set; }

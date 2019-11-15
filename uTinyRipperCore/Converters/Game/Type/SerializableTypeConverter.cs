@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Linq;
 using uTinyRipper.Classes;
-using uTinyRipper.Classes.Misc;
 using uTinyRipper.Game.Assembly;
+using uTinyRipper.Layout;
+using uTinyRipper.Layout.AnimationClips;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Converters
 {
 	public static class SerializableTypeConverter
 	{
-		/// <summary>
-		/// NOTE: Only for debug purposes at this moment
-		/// </summary>
-		public static TypeTree GenerateTypeTree(SerializableType origin)
+		public static TypeTree GenerateTypeTree(AssetLayout layout, SerializableType origin)
 		{
-			Version version = new Version(9999, 1, 0, VersionType.Final, 1);
-			TypeTreeContext context = new TypeTreeContext(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
+			TypeTreeContext context = new TypeTreeContext(layout);
 			GenerateTypeTree(context, origin);
 
 			TypeTree instance = new TypeTree();
@@ -28,7 +25,7 @@ namespace uTinyRipper.Converters
 		{
 			context.AddNode(nameof(MonoBehaviour), TypeTreeUtils.BaseName);
 			context.BeginChildren();
-			MonoBehaviour.GenerateTypeTree(context);
+			MonoBehaviourLayout.GenerateTypeTree(context);
 			GenerateFields(context, origin);
 			context.EndChildren();
 		}
@@ -44,6 +41,10 @@ namespace uTinyRipper.Converters
 			{
 				context.AddString(name);
 			}
+			else if (IsEngineCurve(origin))
+			{
+				GenerateEngineCurve(context, origin, name);
+			}
 			else if (origin.IsEngineStruct())
 			{
 				GenerateEngineStruct(context, origin, name);
@@ -58,63 +59,100 @@ namespace uTinyRipper.Converters
 			}
 		}
 
+		private static bool IsEngineCurve(SerializableType origin)
+		{
+			switch (origin.Name)
+			{
+				case SerializableType.FloatCurveName:
+				case SerializableType.Vector3CurveName:
+				case SerializableType.QuaternionCurveName:
+				case SerializableType.PPtrCurveName:
+					return true;
+
+				default:
+					return false;
+			}
+		}
+
+		private static void GenerateEngineCurve(TypeTreeContext context, SerializableType origin, string name)
+		{
+			switch (origin.Name)
+			{
+				case SerializableType.FloatCurveName:
+					FloatCurveLayout.GenerateTypeTree(context, name);
+					break;
+				case SerializableType.Vector3CurveName:
+					Vector3CurveLayout.GenerateTypeTree(context, name);
+					break;
+				case SerializableType.QuaternionCurveName:
+					QuaternionCurveLayout.GenerateTypeTree(context, name);
+					break;
+				case SerializableType.PPtrCurveName:
+					PPtrCurveLayout.GenerateTypeTree(context, name);
+					break;
+
+				default:
+					throw new Exception($"Unknown engine curve {origin.Name}");
+			}
+		}
+
 		private static void GenerateEngineStruct(TypeTreeContext context, SerializableType origin, string name)
 		{
 			switch (origin.Name)
 			{
 				case SerializableType.Vector2Name:
-					Vector2f.GenerateTypeTree(context, name);
+					Vector2fLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.Vector2IntName:
-					Vector2i.GenerateTypeTree(context, name);
+					Vector2iLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.Vector3Name:
-					Vector3f.GenerateTypeTree(context, name);
+					Vector3fLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.Vector3IntName:
-					Vector3i.GenerateTypeTree(context, name);
+					Vector3iLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.Vector4Name:
-					Vector4f.GenerateTypeTree(context, name);
+					Vector4fLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.RectName:
-					Rectf.GenerateTypeTree(context, name);
+					RectfLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.BoundsName:
-					AABB.GenerateTypeTree(context, name);
+					AABBLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.BoundsIntName:
-					AABBi.GenerateTypeTree(context, name);
+					AABBiLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.QuaternionName:
-					Quaternionf.GenerateTypeTree(context, name);
+					QuaternionfLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.Matrix4x4Name:
-					Matrix4x4f.GenerateTypeTree(context, name);
+					Matrix4x4fLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.ColorName:
-					ColorRGBAf.GenerateTypeTree(context, name);
+					ColorRGBAfLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.Color32Name:
-					ColorRGBA32.GenerateTypeTree(context, name);
+					ColorRGBA32Layout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.LayerMaskName:
-					LayerMask.GenerateTypeTree(context, name);
+					LayerMaskLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.AnimationCurveName:
-					AnimationCurveTpl<Float>.GenerateTypeTree(context, name, Float.GenerateTypeTree);
+					AnimationCurveTplLayout.GenerateTypeTree(context, name, SingleLayout.GenerateTypeTree);
 					break;
 				case SerializableType.GradientName:
-					Gradient.GenerateTypeTree(context, name);
+					GradientLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.RectOffsetName:
-					RectOffset.GenerateTypeTree(context, name);
+					RectOffsetLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.GUIStyleName:
-					GUIStyle.GenerateTypeTree(context, name);
+					GUIStyleLayout.GenerateTypeTree(context, name);
 					break;
 				case SerializableType.PropertyNameName:
-					PropertyName.GenerateTypeTree(context, name);
+					PropertyNameLayout.GenerateTypeTree(context, name);
 					break;
 
 				default:

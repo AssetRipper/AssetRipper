@@ -69,12 +69,8 @@ namespace uTinyRipper
 			if (SerializedFileMetadata.IsMetadataAtTheEnd(Header.Generation))
 			{
 				Stream.Position = Header.FileSize - Header.MetadataSize;
-				Stream.Position++;
 			}
-			using (SerializedReader reader = new SerializedReader(Stream, Header.GetEndianType(), Name, Header.Generation))
-			{
-				Metadata.Read(reader);
-			}
+			Metadata.Read(Stream, Header);
 
 			SerializedFileMetadataConverter.CombineFormats(Header.Generation, Metadata);
 			RTTIClassHierarchyDescriptorConverter.FixResourceVersion(Name, ref Metadata.Hierarchy);
@@ -100,7 +96,7 @@ namespace uTinyRipper
 			{
 				Flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
 			}
-			if (Header.SwapEndianess)
+			if (Header.SwapEndianess || Metadata.SwapEndianess)
 			{
 				Flags |= TransferInstructionFlags.SwapEndianess;
 			}

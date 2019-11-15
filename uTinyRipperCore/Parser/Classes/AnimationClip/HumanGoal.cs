@@ -23,7 +23,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			{
 				if(IsVector3(reader.Version))
 				{
-					HintT.Read3(reader);
+					HintT = reader.ReadAsset<Vector3f>();
 				}
 				else
 				{

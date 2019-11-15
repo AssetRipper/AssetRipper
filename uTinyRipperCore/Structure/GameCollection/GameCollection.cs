@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using uTinyRipper;
 using uTinyRipper.Game;
+using uTinyRipper.Game.Assembly;
 using uTinyRipper.Classes;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.SerializedFiles;
 
 using MonoManager = uTinyRipper.Game.Assembly.Mono.MonoManager;
@@ -15,23 +17,27 @@ namespace uTinyRipper
 {
 	public sealed class GameCollection : FileList, IFileCollection, IDisposable
 	{
-		public struct Parameters
+		public sealed class Parameters
 		{
+			public Parameters(AssetLayout layout)
+			{
+				Layout = layout;
+			}
+
+			public AssetLayout Layout { get; }
+			public ScriptingBackend ScriptBackend { get; set; }
 			public Func<string, string> RequestAssemblyCallback { get; set; }
 			public Func<string, string> RequestResourceCallback { get; set; }
 		}
 
-		public GameCollection()
+		public GameCollection(Parameters pars)
 		{
-			Exporter = new ProjectExporter(this);
-			AssemblyManager = new AssemblyManager(OnRequestAssembly);
-		}
-
-		public GameCollection(Parameters pars) :
-			this()
-		{
+			Layout = pars.Layout;
+			m_layouts.Add(Layout.Info, Layout);
+			AssemblyManager = new AssemblyManager(pars.ScriptBackend, Layout, OnRequestAssembly);
 			m_assemblyCallback = pars.RequestAssemblyCallback;
 			m_resourceCallback = pars.RequestResourceCallback;
+			Exporter = new ProjectExporter(this);
 		}
 
 		~GameCollection()
@@ -108,9 +114,9 @@ namespace uTinyRipper
 			GC.SuppressFinalize(this);
 		}
 
-		public ISerializedFile FindSerializedFile(FileIdentifier identifier)
+		public ISerializedFile FindSerializedFile(string fileName)
 		{
-			m_files.TryGetValue(identifier.FilePath, out SerializedFile file);
+			m_files.TryGetValue(fileName, out SerializedFile file);
 			return file;
 		}
 
@@ -187,20 +193,30 @@ namespace uTinyRipper
 			return m_scenes.Contains(file);
 		}
 
+		public AssetLayout GetLayout(LayoutInfo info)
+		{
+			if (!m_layouts.TryGetValue(info, out AssetLayout value))
+			{
+				value = new AssetLayout(info);
+				m_layouts.Add(info, value);
+			}
+			return value;
+		}
+
 		protected override void OnSerializedFileAdded(SerializedFile file)
 		{
 			if (m_files.ContainsKey(file.Name))
 			{
 				throw new ArgumentException($"{nameof(SerializedFile)} with name '{file.Name}' already presents in the collection", nameof(file));
 			}
-			/*if (file.Platform != Platform)
+			if (file.Platform != Layout.Info.Platform)
 			{
-				throw new ArgumentException($"{nameof(SerializedFile)} '{file.Name}' is incompatible with platform of other asset files {file.Platform} ", nameof(file));
+				Logger.Log(LogType.Warning, LogCategory.Import, $"'{file.Name}' is incompatible with platform of the game collection");
 			}
-			if (file.Version != Version)
+			if (file.Version != Layout.Info.Version)
 			{
-				throw new ArgumentException($"{nameof(SerializedFile)} '{file.Name}' is incompatible with version of other asset files {file.Platform} ", nameof(file));
-			}*/
+				Logger.Log(LogType.Warning, LogCategory.Import, $"'{file.Name}' is incompatible with version of the game collection");
+			}
 
 			m_files.Add(file.Name, file);
 			if (IsSceneSerializedFile(file))
@@ -276,6 +292,7 @@ namespace uTinyRipper
 			Logger.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
 		}
 
+		public AssetLayout Layout { get; }
 		public ProjectExporter Exporter { get; }
 		public AssetFactory AssetFactory { get; } = new AssetFactory();
 		public IReadOnlyDictionary<string, SerializedFile> GameFiles => m_files;
@@ -283,6 +300,7 @@ namespace uTinyRipper
 
 		private readonly Dictionary<string, SerializedFile> m_files = new Dictionary<string, SerializedFile>();
 		private readonly Dictionary<string, ResourceFile> m_resources = new Dictionary<string, ResourceFile>();
+		private readonly Dictionary<LayoutInfo, AssetLayout> m_layouts = new Dictionary<LayoutInfo, AssetLayout>();
 
 		private readonly HashSet<SerializedFile> m_scenes = new HashSet<SerializedFile>();
 

@@ -1,5 +1,6 @@
 ﻿using uTinyRipper.Classes.Textures;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -9,8 +10,8 @@ namespace uTinyRipper.Classes
 	/// </summary>
 	public sealed class IHVImageFormatImporter : AssetImporter
 	{
-		public IHVImageFormatImporter(Version version):
-			base(version)
+		public IHVImageFormatImporter(AssetLayout layout) :
+			base(layout)
 		{
 			TextureSettings.FilterMode = FilterMode.Bilinear;
 			TextureSettings.Aniso = 1;

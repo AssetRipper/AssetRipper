@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using uTinyRipper.Converters;
 using uTinyRipper.Game.Assembly;
+using uTinyRipper.Layout;
+using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
 
@@ -12,12 +14,6 @@ namespace uTinyRipper
 	{
 		private GameStructure()
 		{
-			GameCollection.Parameters pars = new GameCollection.Parameters()
-			{
-				RequestAssemblyCallback = OnRequestAssembly,
-				RequestResourceCallback = OnRequestResource,
-			};
-			FileCollection = new GameCollection(pars);
 		}
 
 		~GameStructure()
@@ -136,6 +132,15 @@ namespace uTinyRipper
 			else if (CheckWebGL(pathes)) {}
 			else if (CheckWebPlayer(pathes)) {}
 			CheckMixed(pathes);
+
+#warning TEMP:
+			LayoutInfo layinfo = new LayoutInfo(new Version(2019, 2, 10, VersionType.Final, 1), Platform.StandaloneWinPlayer, TransferInstructionFlags.SerializeGameRelease);
+			AssetLayout layout = new AssetLayout(layinfo);
+			GameCollection.Parameters pars = new GameCollection.Parameters(layout);
+			pars.ScriptBackend = GetScriptingBackend();
+			pars.RequestAssemblyCallback = OnRequestAssembly;
+			pars.RequestResourceCallback = OnRequestResource;
+			FileCollection = new GameCollection(pars);
 
 			using (GameStructureProcessor processor = new GameStructureProcessor())
 			{
@@ -299,33 +304,31 @@ namespace uTinyRipper
 
 		private void ProcessPlatformStructure(GameStructureProcessor processor, PlatformGameStructure structure)
 		{
-			SetScriptingBackend(structure);
 			foreach (KeyValuePair<string, string> file in structure.Files)
 			{
 				processor.AddScheme(file.Value, file.Key);
 			}
 		}
 
-		private void SetScriptingBackend(PlatformGameStructure structure)
+		private ScriptingBackend GetScriptingBackend()
 		{
-			ScriptingBackend backend = structure.GetScriptingBackend();
-			if (backend == ScriptingBackend.Unknown)
+			if (PlatformStructure != null)
 			{
-				return;
+				ScriptingBackend backend = PlatformStructure.GetScriptingBackend();
+				if (backend != ScriptingBackend.Unknown)
+				{
+					return backend;
+				}
 			}
-			if (FileCollection.AssemblyManager.ScriptingBackend == backend)
+			if (MixedStructure != null)
 			{
-				return;
+				ScriptingBackend backend = MixedStructure.GetScriptingBackend();
+				if (backend != ScriptingBackend.Unknown)
+				{
+					return backend;
+				}
 			}
-
-			if (FileCollection.AssemblyManager.ScriptingBackend == ScriptingBackend.Unknown)
-			{
-				FileCollection.AssemblyManager.ScriptingBackend = backend;
-			}
-			else
-			{
-				throw new Exception("Scripting backend is already set");
-			}
+			return ScriptingBackend.Unknown;
 		}
 
 		private string OnRequestAssembly(string assembly)
@@ -353,7 +356,7 @@ namespace uTinyRipper
 			}
 		}
 
-		public GameCollection FileCollection { get; }
+		public GameCollection FileCollection { get; private set; }
 		public PlatformGameStructure PlatformStructure { get; private set; }
 		public PlatformGameStructure MixedStructure { get; private set; }
 	}

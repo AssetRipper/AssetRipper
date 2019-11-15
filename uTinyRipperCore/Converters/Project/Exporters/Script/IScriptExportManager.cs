@@ -1,5 +1,6 @@
 ﻿using Mono.Cecil;
 using System.Collections.Generic;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Converters.Script
 {
@@ -14,7 +15,7 @@ namespace uTinyRipper.Converters.Script
 		ScriptExportField RetrieveField(FieldDefinition field);
 		ScriptExportParameter RetrieveParameter(ParameterDefinition parameter);
 
-		Version Version { get; }
+		AssetLayout Layout { get; }
 
 		IEnumerable<ScriptExportType> Types { get; }
 		IEnumerable<ScriptExportEnum> Enums { get; }

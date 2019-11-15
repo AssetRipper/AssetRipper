@@ -235,7 +235,7 @@ namespace uTinyRipper.Classes.Meshes
 			}
 
 			node.Add(DataSizeName, Data.Length);
-			node.Add(Object.TypelessdataName, Data.ExportYAML());
+			node.Add(container.Layout.TypelessdataName, Data.ExportYAML());
 			return node;
 		}
 

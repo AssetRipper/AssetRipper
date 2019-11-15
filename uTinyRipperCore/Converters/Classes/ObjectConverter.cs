@@ -1,5 +1,6 @@
 ﻿using uTinyRipper.Classes;
 using uTinyRipper.Classes.Objects;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Converters
 {
@@ -7,25 +8,20 @@ namespace uTinyRipper.Converters
 	{
 		public static void Convert(IExportContainer container, Object origin, Object instance)
 		{
-			if (Object.HasHideFlag(container.ExportVersion, container.ExportFlags))
+			ObjectLayout exlayout = container.ExportLayout.Object;
+			if (exlayout.HasHideFlag)
 			{
 				instance.ObjectHideFlags = GetObjectHideFlags(container, origin);
 			}
-#if UNIVERSAL
-			if (Object.HasInstanceID(container.ExportVersion, container.ExportFlags))
-			{
-				instance.InstanceID = origin.InstanceID;
-				instance.LocalIdentfierInFile = origin.LocalIdentfierInFile;
-			}
-#endif
 		}
 
 		private static HideFlags GetObjectHideFlags(IExportContainer container, Object origin)
 		{
-			if (Object.HasHideFlag(container.Version, container.Flags))
+			if (container.Layout.Object.HasHideFlag)
 			{
 				return origin.ObjectHideFlags;
 			}
+#warning TODO: set those flags at the moment of creation a prefab
 			if (origin.ClassID == ClassIDType.GameObject)
 			{
 				GameObject originGameObject = (GameObject)origin;

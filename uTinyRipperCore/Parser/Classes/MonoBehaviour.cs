@@ -5,6 +5,7 @@ using uTinyRipper.Converters;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.YAML;
 using uTinyRipper.Game.Assembly;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
@@ -15,70 +16,18 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// Not Release
-		/// </summary>
-		public static bool HasEditorHideFlags(TransferInstructionFlags flags) => !flags.IsRelease();
-		/// <summary>
-		/// 2019.1 to 2019.1.0b4 exclusive and Not Release
-		/// </summary>
-		public static bool HasGeneratorAsset(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(2019) && version.IsLess(2019, 1, 0, VersionType.Beta, 4);
-		}
-		/// <summary>
-		/// 4.2.0 and greater and Not Release
-		/// </summary>
-		public static bool HasEditorClassIdentifier(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(4, 2);
-		}
-
-		private static bool IsAlign(Version version, TransferInstructionFlags flags)
-		{
-			// NOTE: unknown version
-			if (version.IsGreaterEqual(3))
-			{
-				return true;
-			}
-			if (version.IsGreaterEqual(2, 1) && flags.IsRelease())
-			{
-				return true;
-			}
-			return false;
-		}
-
-		public new static void GenerateTypeTree(TypeTreeContext context)
-		{
-			Behaviour.GenerateTypeTree(context);
-
-			if (HasEditorHideFlags(context.Flags))
-			{
-				context.AddUInt32(EditorHideFlagsName);
-			}
-			if (HasGeneratorAsset(context.Version, context.Flags))
-			{
-				context.AddPPtr(nameof(Object), GeneratorAssetName);
-			}
-			context.AddPPtr(nameof(MonoScript), ScriptName);
-			context.AddString(NameName);
-			if (HasEditorClassIdentifier(context.Version, context.Flags))
-			{
-				context.AddString(EditorClassIdentifierName);
-			}
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			long position = reader.BaseStream.Position;
 			base.Read(reader);
 
 #if UNIVERSAL
-			if (HasEditorHideFlags(reader.Flags))
+			MonoBehaviourLayout layout = reader.Layout.MonoBehaviour;
+			if (layout.HasEditorHideFlags)
 			{
 				EditorHideFlags = (HideFlags)reader.ReadUInt32();
 			}
-			if (HasGeneratorAsset(reader.Version, reader.Flags))
+			if (layout.HasGeneratorAsset)
 			{
 				GeneratorAsset.Read(reader);
 			}
@@ -88,7 +37,7 @@ namespace uTinyRipper.Classes
 			Name = reader.ReadString();
 
 #if UNIVERSAL
-			if (HasEditorClassIdentifier(reader.Version, reader.Flags))
+			if (layout.HasEditorClassIdentifier)
 			{
 				EditorClassIdentifier = reader.ReadString();
 			}
@@ -114,6 +63,38 @@ namespace uTinyRipper.Classes
 			reader.BaseStream.Position = position + info.Size;
 		}
 
+		public override void Write(AssetWriter writer)
+		{
+			base.Write(writer);
+
+#if UNIVERSAL
+			MonoBehaviourLayout layout = writer.Layout.MonoBehaviour;
+			if (layout.HasEditorHideFlags)
+			{
+				writer.Write((uint)EditorHideFlags);
+			}
+			if (layout.HasGeneratorAsset)
+			{
+				GeneratorAsset.Write(writer);
+			}
+#endif
+
+			Script.Write(writer);
+			writer.Write(Name);
+
+#if UNIVERSAL
+			if (layout.HasEditorClassIdentifier)
+			{
+				writer.Write(EditorClassIdentifier);
+			}
+#endif
+
+			if (Structure != null)
+			{
+				Structure.Write(writer);
+			}
+		}
+
 		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			foreach (PPtr<Object> asset in base.FetchDependencies(context))
@@ -121,10 +102,11 @@ namespace uTinyRipper.Classes
 				yield return asset;
 			}
 
+			MonoBehaviourLayout layout = context.Layout.MonoBehaviour;
 #if UNIVERSAL
-			yield return context.FetchDependency(GeneratorAsset, GeneratorAssetName);
+			yield return context.FetchDependency(GeneratorAsset, layout.GeneratorAssetName);
 #endif
-			yield return context.FetchDependency(Script, ScriptName);
+			yield return context.FetchDependency(Script, layout.ScriptName);
 
 			if (Structure != null)
 			{
@@ -143,14 +125,15 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(EditorHideFlagsName, (uint)GetEditorHideFlags(container.Version, container.Flags));
-			if (HasGeneratorAsset(container.ExportVersion, container.ExportFlags))
+			MonoBehaviourLayout layout = container.ExportLayout.MonoBehaviour;
+			node.Add(layout.EditorHideFlagsName, (uint)GetEditorHideFlags(container));
+			if (layout.HasGeneratorAsset)
 			{
-				node.Add(GeneratorAssetName, GetGeneratorAsset(container.Version, container.Flags).ExportYAML(container));
+				node.Add(layout.GeneratorAssetName, GetGeneratorAsset(container).ExportYAML(container));
 			}
-			node.Add(ScriptName, Script.ExportYAML(container));
-			node.Add(NameName, Name);
-			node.Add(EditorClassIdentifierName, GetEditorClassIdentifier(container.Version, container.Flags));
+			node.Add(layout.ScriptName, Script.ExportYAML(container));
+			node.Add(layout.NameName, Name);
+			node.Add(layout.EditorClassIdentifierName, GetEditorClassIdentifier(container));
 			if (Structure != null)
 			{
 				YAMLMappingNode structureNode = (YAMLMappingNode)Structure.ExportYAML(container);
@@ -159,30 +142,30 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		private HideFlags GetEditorHideFlags(Version version, TransferInstructionFlags flags)
+		private HideFlags GetEditorHideFlags(IExportContainer container)
 		{
 #if UNIVERSAL
-			if (HasEditorHideFlags(flags))
+			if (container.Layout.MonoBehaviour.HasEditorHideFlags)
 			{
 				return EditorHideFlags;
 			}
 #endif
 			return HideFlags.None;
 		}
-		private PPtr<Object> GetGeneratorAsset(Version version, TransferInstructionFlags flags)
+		private PPtr<Object> GetGeneratorAsset(IExportContainer container)
 		{
 #if UNIVERSAL
-			if (HasGeneratorAsset(version, flags))
+			if (container.Layout.MonoBehaviour.HasGeneratorAsset)
 			{
 				return GeneratorAsset;
 			}
 #endif
 			return default;
 		}
-		private string GetEditorClassIdentifier(Version version, TransferInstructionFlags flags)
+		private string GetEditorClassIdentifier(IExportContainer container)
 		{
 #if UNIVERSAL
-			if (HasEditorClassIdentifier(version, flags))
+			if (container.Layout.MonoBehaviour.HasEditorClassIdentifier)
 			{
 				return EditorClassIdentifier;
 			}
@@ -209,12 +192,6 @@ namespace uTinyRipper.Classes
 #if UNIVERSAL
 		public string EditorClassIdentifier { get; set; }
 #endif
-
-		public const string EditorHideFlagsName = "m_EditorHideFlags";
-		public const string GeneratorAssetName = "m_GeneratorAsset";
-		public const string ScriptName = "m_Script";
-		public const string NameName = "m_Name";
-		public const string EditorClassIdentifierName = "m_EditorClassIdentifier";
 
 #if UNIVERSAL
 		public PPtr<Object> GeneratorAsset;

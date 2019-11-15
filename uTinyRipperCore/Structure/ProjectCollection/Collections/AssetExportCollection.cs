@@ -89,7 +89,7 @@ namespace uTinyRipper.Project
 
 		protected virtual AssetImporter CreateImporter(IExportContainer container)
 		{
-			NativeFormatImporter importer = new NativeFormatImporter(container.ExportVersion);
+			NativeFormatImporter importer = new NativeFormatImporter(container.ExportLayout);
 			importer.MainObjectFileID = GetExportID(Asset);
 			return importer;
 		}

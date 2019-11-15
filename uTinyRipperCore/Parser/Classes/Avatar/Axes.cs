@@ -16,7 +16,7 @@ namespace uTinyRipper.Classes.Avatars
 			PostQ.Read(reader);
 			if (IsVector3(reader.Version))
 			{
-				Sgn.Read3(reader);
+				Sgn = reader.ReadAsset<Vector3f>();
 			}
 			else
 			{

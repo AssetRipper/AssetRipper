@@ -45,7 +45,8 @@ namespace uTinyRipper.Classes.CompositeCollider2Ds
 		public const string ColliderName = "m_Collider";
 		public const string ColliderPathsName = "m_ColliderPaths";
 
+		public IntPoint[][] ColliderPaths { get; set; }
+
 		public PPtr<Collider2D> Collider;
-		public IReadOnlyList<IntPoint>[] ColliderPaths { get; set; }
 	}
 }

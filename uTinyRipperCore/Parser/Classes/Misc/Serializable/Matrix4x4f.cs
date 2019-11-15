@@ -1,34 +1,11 @@
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
 	public struct Matrix4x4f : IAsset
 	{
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(TypeTreeUtils.Matrix4x4Name, name);
-			context.BeginChildren();
-			context.AddSingle(E00Name);
-			context.AddSingle(E01Name);
-			context.AddSingle(E02Name);
-			context.AddSingle(E03Name);
-			context.AddSingle(E10Name);
-			context.AddSingle(E11Name);
-			context.AddSingle(E12Name);
-			context.AddSingle(E13Name);
-			context.AddSingle(E20Name);
-			context.AddSingle(E21Name);
-			context.AddSingle(E22Name);
-			context.AddSingle(E23Name);
-			context.AddSingle(E30Name);
-			context.AddSingle(E31Name);
-			context.AddSingle(E32Name);
-			context.AddSingle(E33Name);
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			E00 = reader.ReadSingle();
@@ -72,22 +49,23 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(E00Name, E00);
-			node.Add(E01Name, E01);
-			node.Add(E02Name, E02);
-			node.Add(E03Name, E03);
-			node.Add(E10Name, E10);
-			node.Add(E11Name, E11);
-			node.Add(E12Name, E12);
-			node.Add(E13Name, E13);
-			node.Add(E20Name, E20);
-			node.Add(E21Name, E21);
-			node.Add(E22Name, E22);
-			node.Add(E23Name, E23);
-			node.Add(E30Name, E30);
-			node.Add(E31Name, E31);
-			node.Add(E32Name, E32);
-			node.Add(E33Name, E33);
+			Matrix4x4fLayout layout = container.ExportLayout.Serialized.Matrix4x4f;
+			node.Add(layout.E00Name, E00);
+			node.Add(layout.E01Name, E01);
+			node.Add(layout.E02Name, E02);
+			node.Add(layout.E03Name, E03);
+			node.Add(layout.E10Name, E10);
+			node.Add(layout.E11Name, E11);
+			node.Add(layout.E12Name, E12);
+			node.Add(layout.E13Name, E13);
+			node.Add(layout.E20Name, E20);
+			node.Add(layout.E21Name, E21);
+			node.Add(layout.E22Name, E22);
+			node.Add(layout.E23Name, E23);
+			node.Add(layout.E30Name, E30);
+			node.Add(layout.E31Name, E31);
+			node.Add(layout.E32Name, E32);
+			node.Add(layout.E33Name, E33);
 			return node;
 		}
 
@@ -109,22 +87,5 @@ namespace uTinyRipper.Classes
 		public float E31 { get; set; }
 		public float E32 { get; set; }
 		public float E33 { get; set; }
-
-		public const string E00Name = "e00";
-		public const string E01Name = "e01";
-		public const string E02Name = "e02";
-		public const string E03Name = "e03";
-		public const string E10Name = "e10";
-		public const string E11Name = "e11";
-		public const string E12Name = "e12";
-		public const string E13Name = "e13";
-		public const string E20Name = "e20";
-		public const string E21Name = "e21";
-		public const string E22Name = "e22";
-		public const string E23Name = "e23";
-		public const string E30Name = "e30";
-		public const string E31Name = "e31";
-		public const string E32Name = "e32";
-		public const string E33Name = "e33";
 	}
 }

@@ -3,14 +3,15 @@ using uTinyRipper.Classes.Sprites;
 using uTinyRipper.Classes.TextureImporters;
 using uTinyRipper.Classes.Textures;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
 	public sealed class TextureImporter : AssetImporter
 	{
-		public TextureImporter(Version version) :
-			base(version)
+		public TextureImporter(AssetLayout layout) :
+			base(layout)
 		{
 			EnableMipMap = 1;
 			SRGBTexture = 1;
@@ -21,7 +22,7 @@ namespace uTinyRipper.Classes
 			GenerateCubemap = TextureImporterGenerateCubemap.AutoCubemap;
 			TextureFormat = TextureFormat.Alpha8;
 			MaxTextureSize = 2048;
-			TextureSettings = new GLTextureSettings(version);
+			TextureSettings = new GLTextureSettings(layout);
 			NPOTScale = TextureImporterNPOTScale.ToNearest;
 			CompressionQuality = 50;
 
@@ -35,10 +36,10 @@ namespace uTinyRipper.Classes
 			AlphaIsTransparency = 0;
 			SpriteTessellationDetail = -1;
 			TextureShape = TextureImporterShape.Texture2D;
-			PlatformSettings = new TextureImporterPlatformSettings[] { new TextureImporterPlatformSettings(version) };
-			SpriteSheet = new SpriteSheetMetaData(version);
+			PlatformSettings = new TextureImporterPlatformSettings[] { new TextureImporterPlatformSettings(layout) };
+			SpriteSheet = new SpriteSheetMetaData(layout);
 			SpritePackingTag = string.Empty;
-			Output = new TextureImportOutput(version);
+			Output = new TextureImportOutput(layout);
 		}
 
 		public TextureImporter(AssetInfo assetInfo) :

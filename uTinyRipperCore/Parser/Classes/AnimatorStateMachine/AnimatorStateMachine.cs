@@ -6,14 +6,18 @@ using uTinyRipper.Classes.Objects;
 using uTinyRipper.Converters;
 using uTinyRipper.Classes.AnimatorControllers;
 using uTinyRipper.Classes.AnimatorStateMachines;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
 	public sealed class AnimatorStateMachine : NamedObject
 	{
-		private AnimatorStateMachine(AssetInfo assetInfo, AnimatorController controller, int stateMachineIndex) :
-			base(assetInfo, HideFlags.HideInHierarchy)
+		private AnimatorStateMachine(AssetLayout layout, AssetInfo assetInfo, AnimatorController controller, int stateMachineIndex) :
+			base(layout)
 		{
+			AssetInfo = assetInfo;
+			ObjectHideFlags = HideFlags.HideInHierarchy;
+
 			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 
 			int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
@@ -104,7 +108,7 @@ namespace uTinyRipper.Classes
 
 		public static AnimatorStateMachine CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController controller, int stateMachineIndex)
 		{
-			return virtualFile.CreateAsset((assetInfo) => new AnimatorStateMachine(assetInfo, controller, stateMachineIndex));
+			return virtualFile.CreateAsset((assetInfo) => new AnimatorStateMachine(virtualFile.Layout, assetInfo, controller, stateMachineIndex));
 		}
 
 		public static int ToSerializedVersion(Version version)

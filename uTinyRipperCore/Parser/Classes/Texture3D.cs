@@ -199,7 +199,7 @@ namespace uTinyRipper.Classes
 			node.Add(IsReadableName, IsReadable);
 			IReadOnlyList<byte> imageData = GetImageData(container.Version);
 			node.Add(ImageDataName, imageData.Count);
-			node.Add(TypelessdataName, imageData.ExportYAML());
+			node.Add(container.Layout.TypelessdataName, imageData.ExportYAML());
 			StreamingInfo streamData = new StreamingInfo(true);
 			node.Add(StreamDataName, streamData.ExportYAML(container));
 			return node;

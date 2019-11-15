@@ -1,12 +1,13 @@
 ﻿using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
 	public sealed class DefaultImporter : AssetImporter
 	{
-		public DefaultImporter(Version version):
-			base(version)
+		public DefaultImporter(AssetLayout layout) :
+			base(layout)
 		{
 		}
 

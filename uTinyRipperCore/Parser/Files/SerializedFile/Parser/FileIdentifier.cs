@@ -50,8 +50,21 @@ namespace uTinyRipper.SerializedFiles
 			writer.WriteStringZeroTerm(FilePathOrigin);
 		}
 
+		public string GetFilePath()
+		{
+			if (Type == AssetType.Meta)
+			{
+				return Hash.ToString();
+			}
+			return FilePath;
+		}
+
 		public override string ToString()
 		{
+			if (Type == AssetType.Meta)
+			{
+				return Hash.ToString();
+			}
 			return FilePathOrigin ?? base.ToString();
 		}
 

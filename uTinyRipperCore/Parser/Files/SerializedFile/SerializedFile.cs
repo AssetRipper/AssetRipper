@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.Classes;
+using uTinyRipper.Game;
+using uTinyRipper.Layout;
 using uTinyRipper.Converters;
 using uTinyRipper.SerializedFiles;
 
@@ -15,13 +17,13 @@ namespace uTinyRipper
 	/// </summary>
 	public sealed class SerializedFile : ISerializedFile
 	{
-		internal SerializedFile(IFileCollection collection, SerializedFileScheme scheme)
+		internal SerializedFile(GameCollection collection, SerializedFileScheme scheme)
 		{
 			Collection = collection ?? throw new ArgumentNullException(nameof(collection));
 			FilePath = scheme.FilePath;
 			NameOrigin = scheme.Name;
 			Name = FilenameUtils.FixFileIdentifier(scheme.Name);
-			Flags = scheme.Flags;
+			Layout = GetLayout(collection, scheme, Name);
 
 			Header = scheme.Header;
 			Metadata = scheme.Metadata;
@@ -72,6 +74,22 @@ namespace uTinyRipper
 		public static SerializedFileScheme ReadScheme(SmartStream stream, string filePath, string fileName)
 		{
 			return SerializedFileScheme.ReadSceme(stream, filePath, fileName);
+		}
+
+		private static AssetLayout GetLayout(GameCollection collection, SerializedFileScheme scheme, string name)
+		{
+			if (!RTTIClassHierarchyDescriptor.HasSignature(scheme.Header.Generation))
+			{
+				return collection.Layout;
+			}
+#warning TEMP:
+			/*if (FilenameUtils.IsDefaultResource(name))
+			{
+				return collection.Layout;
+			}*/
+
+			LayoutInfo info = new LayoutInfo(scheme.Metadata.Hierarchy.Version, scheme.Metadata.Hierarchy.Platform, scheme.Flags);
+			return collection.GetLayout(info);
 		}
 
 		private static string[] GetGenerationVersions(FileGeneration generation)
@@ -133,7 +151,7 @@ namespace uTinyRipper
 
 			foreach (FileIdentifier identifier in Metadata.Dependencies)
 			{
-				ISerializedFile file = Collection.FindSerializedFile(identifier);
+				ISerializedFile file = Collection.FindSerializedFile(identifier.GetFilePath());
 				if (file == null)
 				{
 					continue;
@@ -165,7 +183,7 @@ namespace uTinyRipper
 
 			foreach (FileIdentifier identifier in Metadata.Dependencies)
 			{
-				ISerializedFile file = Collection.FindSerializedFile(identifier);
+				ISerializedFile file = Collection.FindSerializedFile(identifier.GetFilePath());
 				if (file == null)
 				{
 					continue;
@@ -206,7 +224,7 @@ namespace uTinyRipper
 			for (int i = 0; i < Metadata.Dependencies.Length; i++)
 			{
 				FileIdentifier identifier = Metadata.Dependencies[i];
-				ISerializedFile file = Collection.FindSerializedFile(identifier);
+				ISerializedFile file = Collection.FindSerializedFile(identifier.GetFilePath());
 				if (asset.File == file)
 				{
 					return new PPtr<T>(i + 1, asset.PathID);
@@ -242,20 +260,20 @@ namespace uTinyRipper
 					Logger.Log(LogType.Debug, LogCategory.Import, $"Try parse {Name} as {version} version");
 					Metadata.Hierarchy.Version = Version.Parse(version);
 					m_assets.Clear();
-					try
+					//try
 					{
 						ReadAssets(stream);
 						UpdateFileVersion();
 						break;
 					}
-					catch
+					/*catch
 					{
 						Logger.Log(LogType.Debug, LogCategory.Import, "Faild");
 						if (i == versions.Length - 1)
 						{
 							throw;
 						}
-					}
+					}*/
 				}
 			}
 		}
@@ -275,8 +293,8 @@ namespace uTinyRipper
 					throw new Exception($"{nameof(SerializedFile)} with index {fileIndex} was not found in dependencies");
 				}
 
-				FileIdentifier fileRef = Metadata.Dependencies[fileIndex];
-				file = Collection.FindSerializedFile(fileRef);
+				FileIdentifier identifier = Metadata.Dependencies[fileIndex];
+				file = Collection.FindSerializedFile(identifier.GetFilePath());
 			}
 
 			if (file == null)
@@ -302,10 +320,8 @@ namespace uTinyRipper
 
 		private void ReadAssets(Stream stream)
 		{
-			Collection.AssemblyManager.Version = Version;
-
 			HashSet<int> preloaded = new HashSet<int>();
-			using (AssetReader assetReader = new AssetReader(stream, Header.GetEndianType(), Version, Platform, Flags))
+			using (AssetReader assetReader = new AssetReader(stream, GetEndianType(), Layout))
 			{
 				if (SerializedFileMetadata.HasPreload(Header.Generation))
 				{
@@ -401,14 +417,21 @@ namespace uTinyRipper
 			m_assets.Add(pathID, asset);
 		}
 
+		public EndianType GetEndianType()
+		{
+			bool swapEndianess = SerializedFileHeader.HasEndian(Header.Generation) ? Header.SwapEndianess : Metadata.SwapEndianess;
+			return swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
+		}
+
 		public string Name { get; }
 		public string NameOrigin { get; }
 		public string FilePath { get; }
 		public SerializedFileHeader Header { get; }
 		public SerializedFileMetadata Metadata { get; }
-		public Version Version => Metadata.Hierarchy.Version;
-		public Platform Platform => Metadata.Hierarchy.Platform;
-		public TransferInstructionFlags Flags { get; set; }
+		public AssetLayout Layout { get; }
+		public Version Version => Layout.Info.Version;
+		public Platform Platform => Layout.Info.Platform;
+		public TransferInstructionFlags Flags => Layout.Info.Flags;
 
 		public IFileCollection Collection { get; }
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Dependencies;

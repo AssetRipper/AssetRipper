@@ -1,13 +1,13 @@
-using uTinyRipper.Classes.Objects;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
 	public abstract class NamedObject : EditorExtension
 	{
-		protected NamedObject(Version version):
-			base(version)
+		protected NamedObject(AssetLayout layout):
+			base(layout)
 		{
 			Name = string.Empty;
 		}
@@ -15,24 +15,6 @@ namespace uTinyRipper.Classes
 		protected NamedObject(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
-		}
-
-		protected NamedObject(AssetInfo assetInfo, HideFlags hideFlags) :
-			base(assetInfo, hideFlags)
-		{
-			Name = string.Empty;
-		}
-
-		protected NamedObject(AssetInfo assetInfo, bool _) :
-			base(assetInfo)
-		{
-			Name = string.Empty;
-		}
-
-		protected new static void GenerateTypeTree(TypeTreeContext context)
-		{
-			EditorExtension.GenerateTypeTree(context);
-			context.AddString(NameName);
 		}
 
 		public override void Read(AssetReader reader)
@@ -57,7 +39,8 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode root = base.ExportYAMLRoot(container);
-			root.Add(NameName, Name);
+			NamedObjectLayout layout = container.ExportLayout.NamedObject;
+			root.Add(layout.NameName, Name);
 			return root;
 		}
 
@@ -72,8 +55,7 @@ namespace uTinyRipper.Classes
 				return Name;
 			}
 		}
-		public string Name { get; set; }
 
-		public const string NameName = "m_Name";
+		public string Name { get; set; }
 	}
 }

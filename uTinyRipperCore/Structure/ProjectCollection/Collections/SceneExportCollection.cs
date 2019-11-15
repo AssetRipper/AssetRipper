@@ -63,7 +63,7 @@ namespace uTinyRipper.Project
 						if (settings.PVSData.Length > 0)
 						{
 							m_occlusionCullingSettings = settings;
-							OcclusionCullingData = OcclusionCullingData.CreateVirtualInstance(virtualFile, settings);
+							OcclusionCullingData = OcclusionCullingData.CreateVirtualInstance(virtualFile);
 							break;
 						}
 					}
@@ -128,7 +128,7 @@ namespace uTinyRipper.Project
 			}
 
 			AssetExporter.Export(container, Components.Select(t => t.Convert(container)), filePath);
-			DefaultImporter sceneImporter = new DefaultImporter(container.ExportVersion);
+			DefaultImporter sceneImporter = new DefaultImporter(container.ExportLayout);
 			Meta meta = new Meta(GUID, sceneImporter);
 			ExportMeta(container, meta, filePath);
 
@@ -204,7 +204,7 @@ namespace uTinyRipper.Project
 
 		private void ExportAsset(ProjectAssetContainer container, NamedObject asset, string path)
 		{
-			NativeFormatImporter importer = new NativeFormatImporter(container.ExportVersion);
+			NativeFormatImporter importer = new NativeFormatImporter(container.ExportLayout);
 			importer.MainObjectFileID = GetExportID(asset);
 			ExportAsset(container, importer, asset, path, asset.Name);
 		}

@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
 	public class MonoImporter : AssetImporter
 	{
-		public MonoImporter(Version version) :
-			base(version)
+		public MonoImporter(AssetLayout layout) :
+			base(layout)
 		{
-			if (HasDefaultReferences(version))
+			if (HasDefaultReferences(layout.Info.Version))
 			{
 				DefaultReferences = new Dictionary<string, PPtr<Object>>();
 			}

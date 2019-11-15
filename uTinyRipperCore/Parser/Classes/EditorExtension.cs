@@ -3,13 +3,14 @@ using uTinyRipper.Project;
 using uTinyRipper.YAML;
 using uTinyRipper.Classes.Objects;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
 	public abstract class EditorExtension : Object
 	{
-		protected EditorExtension(Version version):
-			base(version)
+		protected EditorExtension(AssetLayout layout) :
+			base(layout)
 		{
 		}
 
@@ -18,78 +19,24 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		protected EditorExtension(AssetInfo assetInfo, HideFlags hideFlags):
-			base(assetInfo, hideFlags)
-		{
-		}
-
-		/// <summary>
-		/// Less than 3.5.0 and Not Release and Not Prefab
-		/// </summary>
-		public static bool HasExtensionPtr(Version version, TransferInstructionFlags flags) => HasEditorPtrs(flags) && version.IsGreaterEqual(3, 5);
-		/// <summary>
-		/// 3.5.0 and greater and Not Release and Not Prefab
-		/// </summary>
-		public static bool HasCorrespondingSourceObject(Version version, TransferInstructionFlags flags) => HasEditorPtrs(flags) && version.IsGreaterEqual(3, 5);
-		/// <summary>
-		/// 2018.3 and Not Release and Not Prefab
-		/// </summary>
-		public static bool HasPrefabAsset(Version version, TransferInstructionFlags flags) => HasEditorPtrs(flags) && version.IsGreaterEqual(2018, 3);
-
-		/// <summary>
-		/// Not Release and Not Prefab
-		/// </summary>
-		private static bool HasEditorPtrs(TransferInstructionFlags flags) => !flags.IsRelease() && !flags.IsForPrefab();
-		/// <summary>
-		/// 2018.2 and greater
-		/// </summary>
-		private static bool IsCorrespondingSourceObjectName(Version version) => version.IsGreaterEqual(2018, 2);
-		/// <summary>
-		/// 2018.3 and greater
-		/// </summary>
-		private static bool IsPrefabInstanceName(Version version) => version.IsGreaterEqual(2018, 3);
-
-		protected new static void GenerateTypeTree(TypeTreeContext context)
-		{
-			Object.GenerateTypeTree(context);
-			if (HasEditorPtrs(context.Flags))
-			{
-				if (HasCorrespondingSourceObject(context.Version, context.Flags))
-				{
-					context.AddPPtr(nameof(EditorExtension), CorrespondingSourceObjectName);
-					context.AddPPtr(Classes.PrefabInstance.GetPrefabInstanceName(context.Version), PrefabInstanceName);
-				}
-				else
-				{
-					context.AddPPtr(nameof(Object), ExtensionPtrName);
-				}
-				if (HasPrefabAsset(context.Version, context.Flags))
-				{
-					context.AddPPtr(nameof(Prefab), PrefabAssetName);
-				}
-			}
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
 #if UNIVERSAL
-			if (HasEditorPtrs(reader.Flags))
+			EditorExtensionLayout layout = reader.Layout.EditorExtension;
+			if (layout.HasExtensionPtr)
 			{
-				if (HasCorrespondingSourceObject(reader.Version, reader.Flags))
-				{
-					CorrespondingSourceObject.Read(reader);
-					PrefabInstance.Read(reader);
-				}
-				else
-				{
-					ExtensionPtr = reader.ReadAsset<PPtr<Object>>();
-				}
-				if (HasPrefabAsset(reader.Version, reader.Flags))
-				{
-					PrefabAsset.Read(reader);
-				}
+				ExtensionPtr = reader.ReadAsset<PPtr<Object>>();
+			}
+			if (layout.HasCorrespondingSourceObject)
+			{
+				CorrespondingSourceObject.Read(reader);
+				PrefabInstance.Read(reader);
+			}
+			if (layout.HasPrefabAsset)
+			{
+				PrefabAsset.Read(reader);
 			}
 #endif
 		}
@@ -99,21 +46,19 @@ namespace uTinyRipper.Classes
 			base.Write(writer);
 
 #if UNIVERSAL
-			if (HasEditorPtrs(writer.Flags))
+			EditorExtensionLayout layout = writer.Layout.EditorExtension;
+			if (layout.HasExtensionPtr)
 			{
-				if (HasCorrespondingSourceObject(writer.Version, writer.Flags))
-				{
-					CorrespondingSourceObject.Write(writer);
-					PrefabInstance.Write(writer);
-				}
-				else
-				{
-					ExtensionPtr.Write(writer);
-				}
-				if (HasPrefabAsset(writer.Version, writer.Flags))
-				{
-					PrefabAsset.Write(writer);
-				}
+				ExtensionPtr.Write(writer);
+			}
+			if (layout.HasCorrespondingSourceObject)
+			{
+				CorrespondingSourceObject.Write(writer);
+				PrefabInstance.Write(writer);
+			}
+			if (layout.HasPrefabAsset)
+			{
+				PrefabAsset.Write(writer);
 			}
 #endif
 		}
@@ -126,21 +71,19 @@ namespace uTinyRipper.Classes
 			}
 
 #if UNIVERSAL
-			if (HasEditorPtrs(context.Flags))
+			EditorExtensionLayout layout = context.Layout.EditorExtension;
+			if (layout.HasExtensionPtr)
 			{
-				if (HasCorrespondingSourceObject(context.Version, context.Flags))
-				{
-					yield return context.FetchDependency(CorrespondingSourceObject, CorrespondingSourceObjectName);
-					yield return context.FetchDependency(PrefabInstance, PrefabInstanceName);
-				}
-				else
-				{
-					yield return context.FetchDependency(ExtensionPtr, ExtensionPtrName);
-				}
-				if (HasPrefabAsset(context.Version, context.Flags))
-				{
-					yield return context.FetchDependency(PrefabAsset, PrefabAssetName);
-				}
+				yield return context.FetchDependency(ExtensionPtr, layout.ExtensionPtrName);
+			}
+			if (layout.HasCorrespondingSourceObject)
+			{
+				yield return context.FetchDependency(CorrespondingSourceObject, layout.CorrespondingSourceObjectInvariantName);
+				yield return context.FetchDependency(PrefabInstance, layout.PrefabInstanceInvariantName);
+			}
+			if (layout.HasPrefabAsset)
+			{
+				yield return context.FetchDependency(PrefabAsset, layout.PrefabAssetName);
 			}
 #endif
 		}
@@ -148,18 +91,19 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			if (HasCorrespondingSourceObject(container.ExportVersion, container.ExportFlags))
+			EditorExtensionLayout layout = container.ExportLayout.EditorExtension;
+			if (layout.HasExtensionPtr)
 			{
-				node.Add(GetCorrespondingSourceObjectName(container.ExportVersion), CorrespondingSourceObject.ExportYAML(container));
-				node.Add(GetPrefabInstanceName(container.ExportVersion), GetPrefabInstance(container).ExportYAML(container));
+				node.Add(layout.ExtensionPtrName, ExtensionPtr.ExportYAML(container));
 			}
-			else if (HasExtensionPtr(container.ExportVersion, container.ExportFlags))
+			if (layout.HasCorrespondingSourceObject)
 			{
-				node.Add(ExtensionPtrName, ExtensionPtr.ExportYAML(container));
+				node.Add(layout.CorrespondingSourceObjectInvariantName, CorrespondingSourceObject.ExportYAML(container));
+				node.Add(layout.PrefabInstanceInvariantName, GetPrefabInstance(container).ExportYAML(container));
 			}
-			if (HasPrefabAsset(container.ExportVersion, container.ExportFlags))
+			if (layout.HasPrefabAsset)
 			{
-				node.Add(PrefabAssetName, PrefabAsset.ExportYAML(container));
+				node.Add(layout.PrefabAssetName, PrefabAsset.ExportYAML(container));
 			}
 			return node;
 		}
@@ -187,19 +131,10 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		private string GetCorrespondingSourceObjectName(Version version)
-		{
-			return IsCorrespondingSourceObjectName(version) ? CorrespondingSourceObjectName : PrefabParentObjectName;
-		}
-		private string GetPrefabInstanceName(Version version)
-		{
-			return IsPrefabInstanceName(version) ? PrefabInstanceName : PrefabInternalName;
-		}
-
 		private PPtr<PrefabInstance> GetPrefabInstance(IExportContainer container)
 		{
 #if UNIVERSAL
-			if (HasCorrespondingSourceObject(container.Version, container.Flags))
+			if (container.ExportLayout.EditorExtension.HasPrefabInstanceInvariant)
 			{
 				return PrefabInstance;
 			}
@@ -214,40 +149,26 @@ namespace uTinyRipper.Classes
 		}
 
 #if UNIVERSAL
-#warning TODO: PPtr<Extension>
-		public PPtr<Object> ExtensionPtr
+		public PPtr<EditorExtension> PrefabParentObject
 		{
-			get => CorrespondingSourceObject.CastTo<Object>();
-			set => CorrespondingSourceObject = value.CastTo<EditorExtension>();
+			get => CorrespondingSourceObject;
+			set => CorrespondingSourceObject = value;
 		}
+		public PPtr<PrefabInstance> PrefabInternal
+		{
+			get => PrefabInstance;
+			set => PrefabInstance = value;
+		}
+
+#warning TODO: PPtr<EditorExtensionImpl>
+		public PPtr<Object> ExtensionPtr;
+		public PPtr<EditorExtension> CorrespondingSourceObject;
+		public PPtr<PrefabInstance> PrefabInstance;
+		public PPtr<Prefab> PrefabAsset;
 #else
 		private PPtr<Object> ExtensionPtr => default;
 		private PPtr<EditorExtension> CorrespondingSourceObject => default;
-		private PPtr<PrefabInstance> PrefabInstance => default;
 		private PPtr<Prefab> PrefabAsset => default;
-#endif
-
-		public const string ExtensionPtrName = "m_ExtensionPtr";
-		public const string CorrespondingSourceObjectName = "m_CorrespondingSourceObject";
-		public const string CorrespondingObjectFromSourceName = "m_CorrespondingObjectFromSource";
-		public const string PrefabParentObjectName = "m_PrefabParentObject";
-		public const string PrefabInstanceName = "m_PrefabInstance";
-		public const string PrefabInternalName = "m_PrefabInternal";
-		public const string PrefabName = "m_Prefab";
-		public const string PrefabAssetName = "m_PrefabAsset";
-
-#if UNIVERSAL
-		/// <summary>
-		/// CorrespondingObjectFromSource previously
-		/// PrefabParentObject previously
-		/// </summary>
-		public PPtr<EditorExtension> CorrespondingSourceObject;
-		/// <summary>
-		/// PrefabInternal previously
-		/// Prefab previously
-		/// </summary>
-		public PPtr<PrefabInstance> PrefabInstance;
-		public PPtr<Prefab> PrefabAsset;
 #endif
 	}
 }

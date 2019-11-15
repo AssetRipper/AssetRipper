@@ -1,4 +1,5 @@
 ﻿using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -9,8 +10,8 @@ namespace uTinyRipper.Classes
 	/// </summary>
 	public sealed class ASTCImporter : AssetImporter
 	{
-		public ASTCImporter(Version version) :
-			base(version)
+		public ASTCImporter(AssetLayout layout) :
+			base(layout)
 		{
 		}
 

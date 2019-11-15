@@ -1,5 +1,6 @@
 using uTinyRipper.Project;
 using uTinyRipper.Classes;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Converters
 {
@@ -13,8 +14,10 @@ namespace uTinyRipper.Converters
 		string SceneIndexToName(int sceneID);
 		bool IsSceneDuplicate(int sceneID);
 		string TagIDToName(int tagID);
+		ushort TagNameToID(string tagName);
 
 		IExportCollection CurrentCollection { get; }
+		AssetLayout ExportLayout { get; }
 		Version ExportVersion { get; }
 		Platform ExportPlatform { get; }
 		TransferInstructionFlags ExportFlags { get; }

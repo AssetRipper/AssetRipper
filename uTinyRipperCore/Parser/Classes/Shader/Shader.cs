@@ -101,7 +101,7 @@ namespace uTinyRipper.Classes
 
 						using (MemoryStream blobMem = new MemoryStream(decompressedBuffer))
 						{
-							using (AssetReader blobReader = new AssetReader(blobMem, EndianType.LittleEndian, reader.Version, reader.Platform, reader.Flags))
+							using (AssetReader blobReader = new AssetReader(blobMem, EndianType.LittleEndian, reader.Layout))
 							{
 								ShaderSubProgramBlob blob = new ShaderSubProgramBlob();
 								blob.Read(blobReader);
@@ -135,7 +135,7 @@ namespace uTinyRipper.Classes
 
 						using (MemoryStream memStream = new MemoryStream(decompressedBuffer))
 						{
-							using (AssetReader blobReader = new AssetReader(memStream, EndianType.LittleEndian, reader.Version, reader.Platform, reader.Flags))
+							using (AssetReader blobReader = new AssetReader(memStream, EndianType.LittleEndian, reader.Layout))
 							{
 								SubProgramBlob.Read(blobReader);
 							}

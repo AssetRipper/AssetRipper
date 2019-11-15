@@ -1,16 +1,17 @@
 ﻿using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
 	/// <summary>
-	/// First introduced in 3.0.0
-	/// In 5.6.0 has been replaced by IHVImageFormatImporter
+	/// 5.6.0 - has been replaced by IHVImageFormatImporter
+	/// 3.0.0 - first introduction
 	/// </summary>
 	public sealed class PVRImporter : AssetImporter
 	{
-		public PVRImporter(Version version) :
-			base(version)
+		public PVRImporter(AssetLayout layout) :
+			base(layout)
 		{
 		}
 

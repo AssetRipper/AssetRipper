@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
@@ -37,17 +38,6 @@ namespace uTinyRipper.Classes.Misc
 			return left.Data0 != right.Data0 || left.Data1 != right.Data1 || left.Data2 != right.Data2 || left.Data3 != right.Data3;
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(nameof(GUID), name);
-			context.BeginChildren();
-			context.AddUInt32(Data0Name);
-			context.AddUInt32(Data1Name);
-			context.AddUInt32(Data2Name);
-			context.AddUInt32(Data3Name);
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			Data0 = reader.ReadUInt32();
@@ -68,8 +58,6 @@ namespace uTinyRipper.Classes.Misc
 		{
 			return new YAMLScalarNode(ToString());
 		}
-
-		public override string ToString() => $"{Data3:x8}{Data2:x8}{Data1:x8}{Data0:x8}";
 
 		public override bool Equals(object obj)
 		{
@@ -93,6 +81,39 @@ namespace uTinyRipper.Classes.Misc
 			return hash;
 		}
 
+		public override string ToString()
+		{
+			StringBuilder sb = GetStringBuilder();
+			Append(sb, Data0);
+			Append(sb, Data1);
+			Append(sb, Data2);
+			Append(sb, Data3);
+			string result = sb.ToString();
+			sb.Clear();
+			return result;
+		}
+
+		private static StringBuilder GetStringBuilder()
+		{
+			if (s_sb == null)
+			{
+				s_sb = new StringBuilder(32, 32);
+			}
+			return s_sb;
+		}
+
+		private void Append(StringBuilder sb, uint value)
+		{
+			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 0) & 0xF)]);
+			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 4) & 0xF)]);
+			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 8) & 0xF)]);
+			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 12) & 0xF)]);
+			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 16) & 0xF)]);
+			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 20) & 0xF)]);
+			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 24) & 0xF)]);
+			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 28) & 0xF)]);
+		}
+
 		public bool IsZero => Data0 == 0 && Data1 == 0 && Data2 == 0 && Data3 == 0;
 
 		public uint Data0 { get; set; }
@@ -102,9 +123,7 @@ namespace uTinyRipper.Classes.Misc
 
 		public static readonly GUID MissingReference = new GUID(0xD0000000, 0x5DEADF00, 0xEADBEEF1, 0x0000000D);
 
-		public const string Data0Name = "data[0]";
-		public const string Data1Name = "data[1]";
-		public const string Data2Name = "data[2]";
-		public const string Data3Name = "data[3]";
+		[ThreadStatic]
+		private static StringBuilder s_sb = null;
 	}
 }

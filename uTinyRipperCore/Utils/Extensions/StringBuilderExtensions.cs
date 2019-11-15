@@ -88,6 +88,6 @@ namespace uTinyRipper
 			return _this;
 		}
 
-		private static readonly string HexAlphabet = "0123456789abcdef";
+		public static readonly string HexAlphabet = "0123456789abcdef";
 	}
 }

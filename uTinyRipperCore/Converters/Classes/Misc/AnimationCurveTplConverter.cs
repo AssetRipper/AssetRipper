@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Converters.Misc
 {
@@ -9,11 +10,12 @@ namespace uTinyRipper.Converters.Misc
 		public static AnimationCurveTpl<T> Convert<T>(IExportContainer container, ref AnimationCurveTpl<T> origin)
 			where T : struct, IAsset
 		{
+			AnimationCurveTplLayout exlayout = container.ExportLayout.Serialized.AnimationCurveTpl;
 			AnimationCurveTpl<T> instance = new AnimationCurveTpl<T>();
 			instance.Curve = origin.Curve.Select(t => t.Convert(container)).ToArray();
 			instance.PreInfinity = origin.PreInfinity;
 			instance.PostInfinity = origin.PostInfinity;
-			if (AnimationCurveTpl<T>.HasRotationOrder(container.ExportVersion))
+			if (exlayout.HasRotationOrder)
 			{
 				instance.RotationOrder = GetRotationOrder(container, ref origin);
 			}
@@ -23,7 +25,7 @@ namespace uTinyRipper.Converters.Misc
 		private static RotationOrder GetRotationOrder<T>(IExportContainer container, ref AnimationCurveTpl<T> origin)
 			where T : struct, IAsset
 		{
-			return AnimationCurveTpl<T>.HasRotationOrder(container.Version) ? origin.RotationOrder : RotationOrder.OrderZXY;
+			return container.Layout.Serialized.AnimationCurveTpl.HasRotationOrder ? origin.RotationOrder : RotationOrder.OrderZXY;
 		}
 	}
 }

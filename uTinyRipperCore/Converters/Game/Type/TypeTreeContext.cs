@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using uTinyRipper.Classes;
+using uTinyRipper.Layout;
 using uTinyRipper.SerializedFiles;
-
-using Object = uTinyRipper.Classes.Object;
 
 namespace uTinyRipper.Converters
 {
 	public delegate void TypeTreeGenerator(TypeTreeContext context, string name);
+	public delegate void TypeTreeExGenerator(TypeTreeContext context, string type, string name);
+	public delegate void TypeTreeTGenerator(TypeTreeContext context, string name, TypeTreeGenerator type);
+	public delegate void TypeTreeT2Generator(TypeTreeContext context, string name, TypeTreeGenerator firstType, TypeTreeGenerator secondType);
 
 	public sealed class TypeTreeContext
 	{
@@ -23,46 +24,34 @@ namespace uTinyRipper.Converters
 			public int Size { get; }
 		}
 
-		public TypeTreeContext(Version version, Platform platform, TransferInstructionFlags flags)
+		public TypeTreeContext(AssetLayout layout)
 		{
-			Version = version;
-			Platform = platform;
-			Flags = flags;
-
-			DefaultStringFlag = AlignStrings(version) ? TransferMetaFlags.AlignBytesFlag : TransferMetaFlags.NoTransferFlags;
-			DefaultArrayFlag = AlignArrays(version) ? TransferMetaFlags.AlignBytesFlag : TransferMetaFlags.NoTransferFlags;
+			Layout = layout;
+			DefaultStringFlag = Layout.IsAlign ? TransferMetaFlags.AlignBytesFlag : TransferMetaFlags.NoTransferFlags;
+			DefaultArrayFlag = Layout.IsAlignArrays ? TransferMetaFlags.AlignBytesFlag : TransferMetaFlags.NoTransferFlags;
 		}
-
-		/// <summary>
-		/// 2.1.0 and greater
-		/// </summary>
-		public static bool AlignStrings(Version version) => version.IsGreaterEqual(2, 1);
-		/// <summary>
-		/// 2017.1 and greater
-		/// </summary>
-		public static bool AlignArrays(Version version) => version.IsGreaterEqual(2017);
 
 		public void AddNode(string type, string name)
 		{
-			AddNode(type, name, 0);
+			AddNode(type, name, 1);
 		}
 
-		public void AddNode(string type, string name, int size)
+		public void AddNode(string type, string name, int version)
 		{
-			AddNode(type, name, size, 1);
+			AddNode(type, name, version, 0);
 		}
 
-		public void AddNode(string type, string name, int size, int version)
+		public void AddNode(string type, string name, int version, int size)
 		{
 			AddNode(type, name, size, version, TransferMetaFlags.NoTransferFlags);
 		}
 
-		public void AddNode(string type, string name, int size, int version, TransferMetaFlags flags)
+		public void AddNode(string type, string name, int version, int size, TransferMetaFlags flags)
 		{
-			AddNode(type, name, size, version, false, TransferMetaFlags.NoTransferFlags);
+			AddNode(type, name, size, version, false, flags);
 		}
 
-		private void AddNode(string type, string name, int size, int version, bool isArray, TransferMetaFlags flags)
+		private void AddNode(string type, string name, int version, int size, bool isArray, TransferMetaFlags flags)
 		{
 			TypeTreeNode node = new TypeTreeNode();
 			node.Version = version;
@@ -261,18 +250,8 @@ namespace uTinyRipper.Converters
 		public void AddString(string name)
 		{
 			BeginArrayInner(TypeTreeUtils.StringName, name, DefaultStringFlag);
-			AddNode(TypeTreeUtils.CharName, TypeTreeUtils.DataName, sizeof(byte));
+			AddNode(TypeTreeUtils.CharName, TypeTreeUtils.DataName, 1, sizeof(byte));
 			EndArrayInner();
-		}
-
-		public void AddPPtr<T>(string name)
-		{
-			AddPPtr(typeof(T).Name, name);
-		}
-
-		public void AddPPtr<T>(string name, TransferMetaFlags flags)
-		{
-			AddPPtr(typeof(T).Name, name, flags);
 		}
 
 		public void AddPPtr(string type, string name)
@@ -282,18 +261,8 @@ namespace uTinyRipper.Converters
 
 		public void AddPPtr(string type, string name, TransferMetaFlags flags)
 		{
-			AddNode($"PPtr<{type}>", name, 0, 1, flags);
-			BeginChildren();
-			AddInt32(PPtr<Object>.FileIDName);
-			if (PPtr<Object>.IsLongID(Version))
-			{
-				AddInt64(PPtr<Object>.PathIDName);
-			}
-			else
-			{
-				AddInt32(PPtr<Object>.PathIDName);
-			}
-			EndChildren();
+			PPtrLayout.GenerateTypeTree(this, type, name);
+			Nodes[DepthIndex].MetaFlag = flags;
 		}
 
 		public void AddArray(string name, TypeTreeGenerator generator)
@@ -305,6 +274,27 @@ namespace uTinyRipper.Converters
 		{
 			BeginArray(name, flags);
 			generator.Invoke(this, TypeTreeUtils.DataName);
+			EndArray();
+		}
+
+		public void AddArray(string type, string name, TypeTreeExGenerator generator)
+		{
+			BeginArray(name);
+			generator.Invoke(this, type, TypeTreeUtils.DataName);
+			EndArray();
+		}
+
+		public void AddArray(string name, TypeTreeTGenerator generator, TypeTreeGenerator type)
+		{
+			BeginArray(name);
+			generator.Invoke(this, TypeTreeUtils.DataName, type);
+			EndArray();
+		}
+
+		public void AddArray(string name, TypeTreeT2Generator generator, TypeTreeGenerator first, TypeTreeGenerator second)
+		{
+			BeginArray(name);
+			generator.Invoke(this, TypeTreeUtils.DataName, first, second);
 			EndArray();
 		}
 
@@ -330,9 +320,9 @@ namespace uTinyRipper.Converters
 
 		private void BeginArrayInner(string type, string name, TransferMetaFlags flags)
 		{
-			AddNode(type, name, -1);
+			AddNode(type, name, 1, -1);
 			BeginChildren();
-			AddNode(TypeTreeUtils.ArrayName, TypeTreeUtils.ArrayName, -1, 1, true, DefaultArrayFlag | flags);
+			AddNode(TypeTreeUtils.ArrayName, TypeTreeUtils.ArrayName, 1, -1, true, DefaultArrayFlag | flags);
 			BeginChildren();
 			AddInt32(TypeTreeUtils.SizeName);
 		}
@@ -347,7 +337,7 @@ namespace uTinyRipper.Converters
 		{
 			Depth++;
 			m_hierarchy.Push(new HierarchyData(DepthIndex, Size));
-			DepthIndex = 0;
+			DepthIndex = -1;
 			Size = 0;
 		}
 
@@ -369,9 +359,7 @@ namespace uTinyRipper.Converters
 			Depth--;
 		}
 
-		public Version Version { get; }
-		public Platform Platform { get; }
-		public TransferInstructionFlags Flags { get; }
+		public AssetLayout Layout { get; }
 		
 		public IReadOnlyList<TypeTreeNode> Nodes => m_nodes;
 		private int Depth { get; set; }

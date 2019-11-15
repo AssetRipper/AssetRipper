@@ -145,7 +145,7 @@ namespace uTinyRipper.BundleFiles
 		/// </summary>
 		public BundleGeneration Generation { get; private set; }
 		/// <summary>
-		/// Engine version
+		/// Generation version
 		/// </summary>
 		public string PlayerVersion { get; private set; }
 		/// <summary>

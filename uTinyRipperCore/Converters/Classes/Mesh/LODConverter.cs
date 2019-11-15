@@ -52,7 +52,7 @@ namespace uTinyRipper.Converters.Meshes
 				}
 				if (SubMesh.HasVertex(container.ExportVersion))
 				{
-					SubMeshConverter.CalculateSubMeshVertexRangeAndBounds(container.ExportVersion, instanceMesh, ref instance);
+					SubMeshConverter.CalculateSubMeshVertexRangeAndBounds(container.ExportLayout, instanceMesh, ref instance);
 				}
 				instances[i] = instance;
 				offset += indexCount * sizeof(ushort);

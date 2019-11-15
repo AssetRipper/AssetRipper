@@ -1,4 +1,5 @@
 ﻿using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -9,8 +10,8 @@ namespace uTinyRipper.Classes
 	/// </summary>
 	public sealed class KTXImporter : AssetImporter
 	{
-		public KTXImporter(Version version) :
-			base(version)
+		public KTXImporter(AssetLayout layout) :
+			base(layout)
 		{
 		}
 

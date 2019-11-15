@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.Game;
 using uTinyRipper.Classes;
-using uTinyRipper.Converters;
+using uTinyRipper.Game;
+using uTinyRipper.Layout;
 
 using Object = uTinyRipper.Classes.Object;
 
@@ -10,11 +10,9 @@ namespace uTinyRipper.SerializedFiles
 {
 	public class VirtualSerializedFile : ISerializedFile
 	{
-		public VirtualSerializedFile(ExportOptions options)
+		public VirtualSerializedFile(AssetLayout layout)
 		{
-			Version = options.Version;
-			Platform = options.Platform;
-			Flags = options.Flags;
+			Layout = layout;
 		}
 
 		public Object GetAsset(long pathID)
@@ -116,12 +114,13 @@ namespace uTinyRipper.SerializedFiles
 		}
 
 		public string Name => nameof(VirtualSerializedFile);
-		public Platform Platform { get; }
-		public Version Version { get; }
-		public TransferInstructionFlags Flags { get; }
+		public Platform Platform => Layout.Info.Platform;
+		public Version Version => Layout.Info.Version;
+		public TransferInstructionFlags Flags => Layout.Info.Flags;
 
 		public bool IsScene => throw new NotSupportedException();
 
+		public AssetLayout Layout { get; }
 		public IFileCollection Collection => throw new NotSupportedException();
 		public IAssemblyManager AssemblyManager => throw new NotSupportedException();
 		public IReadOnlyList<FileIdentifier> Dependencies => throw new NotSupportedException();

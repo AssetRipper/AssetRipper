@@ -42,10 +42,6 @@ namespace uTinyRipper
 
 	public static class TransferInstructionFlagsExtensions
 	{
-		public static bool IsDebug(this TransferInstructionFlags _this)
-		{
-			return (_this & TransferInstructionFlags.SerializeDebugProperties) != 0;
-		}
 		public static bool IsRelease(this TransferInstructionFlags _this)
 		{
 			return (_this & TransferInstructionFlags.SerializeGameRelease) != 0;

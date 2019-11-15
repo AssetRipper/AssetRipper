@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.Converters.Script;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Game.Assembly.Mono
 {
@@ -10,7 +11,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 	{
 		public MonoManager(AssemblyManager assemblyManager)
 		{
-			AssemblyManager = assemblyManager ?? throw new ArgumentNullException(nameof(assemblyManager));
+			m_assemblyManager = assemblyManager ?? throw new ArgumentNullException(nameof(assemblyManager));
 		}
 
 		~MonoManager()
@@ -25,6 +26,12 @@ namespace uTinyRipper.Game.Assembly.Mono
 				return true;
 			}
 			return false;
+		}
+
+		public static string GetUniqueName(TypeReference type)
+		{
+			string assembly = FilenameUtils.FixAssemblyEndian(type.Scope.Name);
+			return ScriptIdentifier.ToUniqueName(assembly, type.FullName);
 		}
 
 		public void Load(string filePath)
@@ -163,8 +170,8 @@ namespace uTinyRipper.Game.Assembly.Mono
 				throw new ArgumentException(nameof(context));
 			}
 
-			string uniqueName = MonoType.GetUniqueName(context.Type);
-			if (AssemblyManager.TryGetSerializableType(uniqueName, out SerializableType serializableType))
+			string uniqueName = GetUniqueName(context.Type);
+			if (m_assemblyManager.TryGetSerializableType(uniqueName, out SerializableType serializableType))
 			{
 				return serializableType;
 			}
@@ -172,6 +179,12 @@ namespace uTinyRipper.Game.Assembly.Mono
 			{
 				return new MonoType(this, context);
 			}
+		}
+
+		internal void AddSerializableType(TypeReference type, SerializableType scriptType)
+		{
+			string uniqueName = GetUniqueName(type);
+			m_assemblyManager.AddSerializableType(uniqueName, scriptType);
 		}
 
 		private void Dispose(bool disposing)
@@ -192,7 +205,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 				return assembly;
 			}
 
-			AssemblyManager.InvokeRequestAssemblyCallback(name);
+			m_assemblyManager.InvokeRequestAssemblyCallback(name);
 			if (m_assemblies.TryGetValue(name, out assembly))
 			{
 				return assembly;
@@ -360,19 +373,12 @@ namespace uTinyRipper.Game.Assembly.Mono
 			return false;
 		}
 
-		public ScriptingBackend ScriptingBackend
-		{
-			get => ScriptingBackend.Mono;
-			set => throw new NotSupportedException();
-		}
-
-		public Version Version { get; set; }
-
-		public AssemblyManager AssemblyManager { get; }
+		public AssetLayout Layout => m_assemblyManager.Layout;
 
 		public const string AssemblyExtension = ".dll";
 
 		private readonly Dictionary<string, AssemblyDefinition> m_assemblies = new Dictionary<string, AssemblyDefinition>();
 		private readonly Dictionary<string, bool> m_validTypes = new Dictionary<string, bool>();
+		private readonly AssemblyManager m_assemblyManager;
 	}
 }

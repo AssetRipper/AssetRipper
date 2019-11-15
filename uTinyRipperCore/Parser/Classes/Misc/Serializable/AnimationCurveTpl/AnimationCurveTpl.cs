@@ -4,7 +4,7 @@ using uTinyRipper.Converters;
 using uTinyRipper.Converters.Misc;
 using uTinyRipper.Classes.Misc;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
@@ -80,50 +80,20 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public static int ToSerializedVersion(Version version)
-		{
-			// unknown conversion
-			if (version.IsGreaterEqual(2, 1))
-			{
-				return 2;
-			}
-			return 1;
-		}
-
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool HasRotationOrder(Version version) => version.IsGreaterEqual(5, 3);
-
 		public AnimationCurveTpl<T> Convert(IExportContainer container)
 		{
 			return AnimationCurveTplConverter.Convert(container, ref this);
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name, TypeTreeGenerator generator)
-		{
-			context.AddNode(TypeTreeUtils.AnimationCurveName, name, 0, ToSerializedVersion(context.Version));
-			context.BeginChildren();
-			context.BeginArray(CurveName, TransferMetaFlags.AlignBytesFlag);
-			KeyframeTpl<T>.GenerateTypeTree(context, TypeTreeUtils.DataName, generator);
-			context.EndArray();
-			context.AddInt32(PreInfinityName);
-			context.AddInt32(PostInfinityName);
-			if (HasRotationOrder(context.Version))
-			{
-				context.AddInt32(RotationOrderName);
-			}
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
+			AnimationCurveTplLayout layout = reader.Layout.Serialized.AnimationCurveTpl;
 			Curve = reader.ReadAssetArray<KeyframeTpl<T>>();
 			reader.AlignStream();
 
 			PreInfinity = (CurveLoopTypes)reader.ReadInt32();
 			PostInfinity = (CurveLoopTypes)reader.ReadInt32();
-			if (HasRotationOrder(reader.Version))
+			if (layout.HasRotationOrder)
 			{
 				RotationOrder = (RotationOrder)reader.ReadInt32();
 			}
@@ -131,12 +101,13 @@ namespace uTinyRipper.Classes
 
 		public void Write(AssetWriter writer)
 		{
+			AnimationCurveTplLayout layout = writer.Layout.Serialized.AnimationCurveTpl;
 			Curve.Write(writer);
 			writer.AlignStream();
 
 			writer.Write((int)PreInfinity);
 			writer.Write((int)PostInfinity);
-			if (HasRotationOrder(writer.Version))
+			if (layout.HasRotationOrder)
 			{
 				writer.Write((int)RotationOrder);
 			}
@@ -145,30 +116,26 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(CurveName, Curve.ExportYAML(container));
-			node.Add(PreInfinityName, (int)PreInfinity);
-			node.Add(PostInfinityName, (int)PostInfinity);
-			if (HasRotationOrder(container.ExportVersion))
+			AnimationCurveTplLayout layout = container.ExportLayout.Serialized.AnimationCurveTpl;
+			node.AddSerializedVersion(layout.Version);
+			node.Add(layout.CurveName, Curve.ExportYAML(container));
+			node.Add(layout.PreInfinityName, (int)PreInfinity);
+			node.Add(layout.PostInfinityName, (int)PostInfinity);
+			if (layout.HasRotationOrder)
 			{
-				node.Add(RotationOrderName, (int)GetExportRotationOrder(container.Version));
+				node.Add(layout.RotationOrderName, (int)GetExportRotationOrder(layout));
 			}
 			return node;
 		}
 
-		private RotationOrder GetExportRotationOrder(Version version)
+		private RotationOrder GetExportRotationOrder(AnimationCurveTplLayout layout)
 		{
-			return HasRotationOrder(version) ? RotationOrder : RotationOrder.OrderZXY;
+			return layout.HasRotationOrder ? RotationOrder : RotationOrder.OrderZXY;
 		}
 
 		public KeyframeTpl<T>[] Curve { get; set; }
 		public CurveLoopTypes PreInfinity { get; set; }
 		public CurveLoopTypes PostInfinity { get; set; }
 		public RotationOrder RotationOrder { get; set; }
-
-		public const string CurveName = "m_Curve";
-		public const string PreInfinityName = "m_PreInfinity";
-		public const string PostInfinityName = "m_PostInfinity";
-		public const string RotationOrderName = "m_RotationOrder";
 	}
 }

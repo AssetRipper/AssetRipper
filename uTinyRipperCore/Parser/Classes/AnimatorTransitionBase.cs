@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.Classes.Objects;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 using uTinyRipper.Classes.AnimatorControllers;
 using uTinyRipper.Classes.AnimatorTransitions;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper.Layout;
+using uTinyRipper.Classes.Objects;
 
 namespace uTinyRipper.Classes
 {
@@ -56,9 +57,12 @@ namespace uTinyRipper.Classes
 			public abstract IReadOnlyList<OffsetPtr<ConditionConstant>> ConditionConstants { get; }
 		}
 
-		protected AnimatorTransitionBase(AssetInfo assetInfo, ClassIDType classID, BaseParameters parameters) :
-			base(assetInfo, HideFlags.HideInHierarchy)
+		protected AnimatorTransitionBase(AssetLayout layout, AssetInfo assetInfo, BaseParameters parameters) :
+			base(layout)
 		{
+			AssetInfo = assetInfo;
+			ObjectHideFlags = HideFlags.HideInHierarchy;
+
 			List<AnimatorCondition> conditionList = new List<AnimatorCondition>(parameters.ConditionConstants.Count);
 			for (int i = 0; i < parameters.ConditionConstants.Count; i++)
 			{

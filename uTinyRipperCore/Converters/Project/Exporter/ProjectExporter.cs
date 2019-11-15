@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using uTinyRipper.Classes;
+using uTinyRipper.Layout;
 using uTinyRipper.Project;
 using uTinyRipper.SerializedFiles;
 
@@ -182,7 +183,10 @@ namespace uTinyRipper.Converters
 		public void Export(string path, GameCollection fileCollection, IEnumerable<SerializedFile> files, ExportOptions options)
 		{
 			EventExportPreparationStarted?.Invoke();
-			VirtualSerializedFile virtualFile = new VirtualSerializedFile(options);
+
+			LayoutInfo info = new LayoutInfo(options.Version, options.Platform, options.Flags);
+			AssetLayout exportLayout = new AssetLayout(info);
+			VirtualSerializedFile virtualFile = new VirtualSerializedFile(exportLayout);
 			List<IExportCollection> collections = new List<IExportCollection>();
 			// speed up fetching
 			List<Object> depList = new List<Object>();
@@ -218,7 +222,7 @@ namespace uTinyRipper.Converters
 
 				if (options.ExportDependencies)
 				{
-					DependencyContext context = new DependencyContext(asset.File.Version, asset.File.Platform, asset.File.Flags, true);
+					DependencyContext context = new DependencyContext(exportLayout, true);
 					foreach (PPtr<Object> pointer in asset.FetchDependencies(context))
 					{
 						if (pointer.IsNull)
@@ -248,7 +252,7 @@ namespace uTinyRipper.Converters
 			EventExportPreparationFinished?.Invoke();
 
 			EventExportStarted?.Invoke();
-			ProjectAssetContainer container = new ProjectAssetContainer(this, virtualFile, fileCollection.FetchAssets(), collections, options);
+			ProjectAssetContainer container = new ProjectAssetContainer(this, virtualFile, fileCollection.FetchAssets(), collections);
 			for (int i = 0; i < collections.Count; i++)
 			{
 				IExportCollection collection = collections[i];

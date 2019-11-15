@@ -1,14 +1,12 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace uTinyRipper.SerializedFiles
 {
 	public sealed class SerializedWriter : EndianWriter
 	{
-		public SerializedWriter(Stream stream, EndianType endianess, string name, FileGeneration generation) :
+		public SerializedWriter(Stream stream, EndianType endianess, FileGeneration generation) :
 			base(stream, endianess)
 		{
-			Name = name ?? throw new ArgumentNullException(nameof(name));
 			Generation = generation;
 		}
 
@@ -30,7 +28,6 @@ namespace uTinyRipper.SerializedFiles
 			}
 		}
 
-		public string Name { get; }
 		public FileGeneration Generation { get; }
 	}
 }

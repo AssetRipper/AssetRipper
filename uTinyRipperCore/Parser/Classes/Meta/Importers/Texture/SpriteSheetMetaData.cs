@@ -4,13 +4,14 @@ using uTinyRipper.Classes;
 using uTinyRipper.Classes.Misc;
 using uTinyRipper.Classes.Sprites;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.TextureImporters
 {
 	public struct SpriteSheetMetaData : IAsset, IDependent
 	{
-		public SpriteSheetMetaData(Version version)
+		public SpriteSheetMetaData(AssetLayout layout)
 		{
 			Sprites = Array.Empty<SpriteMetaData>();
 			Outline = Array.Empty<Vector2f[]>();

@@ -40,7 +40,18 @@ namespace uTinyRipper
 
 		public override long Seek(long offset, SeekOrigin origin)
 		{
-			return m_stream.Seek(offset, origin) - m_baseOffset;
+			if (origin == SeekOrigin.Begin)
+			{
+				return m_stream.Seek(m_baseOffset + offset, SeekOrigin.Begin) - m_baseOffset;
+			}
+			else if (origin == SeekOrigin.End)
+			{
+				return m_stream.Seek(m_baseOffset + Length + offset, SeekOrigin.Begin) - m_baseOffset;
+			}
+			else
+			{
+				return m_stream.Seek(offset, origin) - m_baseOffset;
+			}
 		}
 
 		public override void SetLength(long value)

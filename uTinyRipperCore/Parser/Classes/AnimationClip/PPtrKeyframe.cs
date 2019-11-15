@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
-	public struct PPtrKeyframe : IAssetReadable, IYAMLExportable, IDependent
+	public struct PPtrKeyframe : IAsset, IDependent
 	{
 		public PPtrKeyframe(float time, PPtr<Object> script)
 		{
@@ -26,6 +25,12 @@ namespace uTinyRipper.Classes.AnimationClips
 		{
 			Time = reader.ReadSingle();
 			Value.Read(reader);
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Time);
+			Value.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

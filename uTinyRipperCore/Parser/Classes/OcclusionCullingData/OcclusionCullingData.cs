@@ -7,6 +7,7 @@ using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.Converters;
 using uTinyRipper;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
@@ -17,15 +18,16 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		private OcclusionCullingData(AssetInfo assetInfo, OcclusionCullingSettings cullingSetting) :
-			base(assetInfo, true)
+		private OcclusionCullingData(AssetLayout layout, AssetInfo assetInfo) :
+			base(layout)
 		{
+			AssetInfo = assetInfo;
 			Name = nameof(OcclusionCullingData);
 		}
 
-		public static OcclusionCullingData CreateVirtualInstance(VirtualSerializedFile virtualFile, OcclusionCullingSettings cullingSetting)
+		public static OcclusionCullingData CreateVirtualInstance(VirtualSerializedFile virtualFile)
 		{
-			return virtualFile.CreateAsset((assetInfo) => new OcclusionCullingData(assetInfo, cullingSetting));
+			return virtualFile.CreateAsset((assetInfo) => new OcclusionCullingData(virtualFile.Layout, assetInfo));
 		}
 
 		/// <summary>

@@ -2,100 +2,34 @@ using uTinyRipper.Classes.Fonts;
 using uTinyRipper.Classes.GUIStyles;
 using uTinyRipper.Classes.GUITexts;
 using uTinyRipper.Converters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
 	public struct GUIStyle : IAsset
 	{
-		public GUIStyle(bool _):
+		public GUIStyle(AssetLayout layout) :
 			this()
 		{
-			Normal = new GUIStyleState(true);
-			Hover = new GUIStyleState(true);
-			Active = new GUIStyleState(true);
-			Focused = new GUIStyleState(true);
-			OnNormal = new GUIStyleState(true);
-			OnHover = new GUIStyleState(true);
-			OnActive = new GUIStyleState(true);
-			OnFocused = new GUIStyleState(true);
-		}
-
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsBuiltin(Version version) => version.IsGreaterEqual(4);
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		private static bool HasFontSize(Version version) => version.IsGreaterEqual(3, 0);
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(TypeTreeUtils.GUIStyleName, name);
-			context.BeginChildren();
-			context.AddString(NameName);
-			GUIStyleState.GenerateTypeTree(context, NormalName);
-			GUIStyleState.GenerateTypeTree(context, HoverName);
-			GUIStyleState.GenerateTypeTree(context, ActiveName);
-			GUIStyleState.GenerateTypeTree(context, FocusedName);
-			GUIStyleState.GenerateTypeTree(context, OnNormalName);
-			GUIStyleState.GenerateTypeTree(context, OnHoverName);
-			GUIStyleState.GenerateTypeTree(context, OnActiveName);
-			GUIStyleState.GenerateTypeTree(context, OnFocusedName);
-			RectOffset.GenerateTypeTree(context, BorderName);
-			bool isBuildin = IsBuiltin(context.Version);
-			if (isBuildin)
-			{
-				RectOffset.GenerateTypeTree(context, MarginName);
-				RectOffset.GenerateTypeTree(context, PaddingName);
-			}
-			else
-			{
-				RectOffset.GenerateTypeTree(context, PaddingName);
-				RectOffset.GenerateTypeTree(context, MarginName);
-			}
-			RectOffset.GenerateTypeTree(context, OverflowName);
-			context.AddPPtr(nameof(Font), FontName);
-			if (isBuildin)
-			{
-				context.AddInt32(FontSizeName);
-				context.AddInt32(FontStyleName);
-				context.AddInt32(AlignmentName);
-				context.AddBool(WordWrapName);
-				context.AddBool(RichTextName);
-				context.AddInt32(TextClippingName);
-				context.AddInt32(ImagePositionName);
-				Vector2f.GenerateTypeTree(context, ContentOffsetName);
-				context.AddSingle(FixedWidthName);
-				context.AddSingle(FixedHeightName);
-				context.AddBool(StretchWidthName);
-				context.AddBool(StretchHeightName);
-			}
-			else
-			{
-				context.AddInt32(ImagePositionName);
-				context.AddInt32(AlignmentName);
-				context.AddBool(WordWrapName);
-				context.AddInt32(TextClippingName);
-				Vector2f.GenerateTypeTree(context, ContentOffsetName);
-				Vector2f.GenerateTypeTree(context, ClipOffsetName);
-				context.AddSingle(FixedWidthName);
-				context.AddSingle(FixedHeightName);
-				if (HasFontSize(context.Version))
-				{
-					context.AddInt32(FontSizeName);
-					context.AddInt32(FontStyleName);
-				}
-				context.AddBool(StretchWidthName);
-				context.AddBool(StretchHeightName);
-			}
-			context.EndChildren();
+			Name = string.Empty;
+			Normal = new GUIStyleState(layout);
+			Hover = new GUIStyleState(layout);
+			Active = new GUIStyleState(layout);
+			Focused = new GUIStyleState(layout);
+			OnNormal = new GUIStyleState(layout);
+			OnHover = new GUIStyleState(layout);
+			OnActive = new GUIStyleState(layout);
+			OnFocused = new GUIStyleState(layout);
+			FontSize = 33;
+			RichText = true;
+			TextClipping = layout.Info.Version.IsGreaterEqual(4) ? TextClipping.Overflow : TextClipping.Clip;
+			StretchWidth = true;
 		}
 
 		public void Read(AssetReader reader)
 		{
+			GUIStyleLayout layout = reader.Layout.Serialized.GUIStyle;
 			Name = reader.ReadString();
 			Normal.Read(reader);
 			Hover.Read(reader);
@@ -106,7 +40,7 @@ namespace uTinyRipper.Classes
 			OnActive.Read(reader);
 			OnFocused.Read(reader);
 			Border.Read(reader);
-			if (IsBuiltin(reader.Version))
+			if (layout.IsBuiltinFormat)
 			{
 				Margin.Read(reader);
 				Padding.Read(reader);
@@ -116,10 +50,10 @@ namespace uTinyRipper.Classes
 				Padding.Read(reader);
 				Margin.Read(reader);
 			}
+
 			Overflow.Read(reader);
 			Font.Read(reader);
-
-			if (IsBuiltin(reader.Version))
+			if (layout.IsBuiltinFormat)
 			{
 				FontSize = reader.ReadInt32();
 				FontStyle = (FontStyle)reader.ReadInt32();
@@ -149,7 +83,7 @@ namespace uTinyRipper.Classes
 				ClipOffset.Read(reader);
 				FixedWidth = reader.ReadSingle();
 				FixedHeight = reader.ReadSingle();
-				if (HasFontSize(reader.Version))
+				if (layout.HasFontSize)
 				{
 					FontSize = reader.ReadInt32();
 					FontStyle = (FontStyle)reader.ReadInt32();
@@ -163,6 +97,7 @@ namespace uTinyRipper.Classes
 
 		public void Write(AssetWriter writer)
 		{
+			GUIStyleLayout layout = writer.Layout.Serialized.GUIStyle;
 			writer.Write(Name);
 			Normal.Write(writer);
 			Hover.Write(writer);
@@ -173,7 +108,7 @@ namespace uTinyRipper.Classes
 			OnActive.Write(writer);
 			OnFocused.Write(writer);
 			Border.Write(writer);
-			if (IsBuiltin(writer.Version))
+			if (layout.IsBuiltinFormat)
 			{
 				Margin.Write(writer);
 				Padding.Write(writer);
@@ -183,10 +118,10 @@ namespace uTinyRipper.Classes
 				Padding.Write(writer);
 				Margin.Write(writer);
 			}
+
 			Overflow.Write(writer);
 			Font.Write(writer);
-
-			if (IsBuiltin(writer.Version))
+			if (layout.IsBuiltinFormat)
 			{
 				writer.Write(FontSize);
 				writer.Write((int)FontStyle);
@@ -216,7 +151,7 @@ namespace uTinyRipper.Classes
 				ClipOffset.Write(writer);
 				writer.Write(FixedWidth);
 				writer.Write(FixedHeight);
-				if (HasFontSize(writer.Version))
+				if (layout.HasFontSize)
 				{
 					writer.Write(FontSize);
 					writer.Write((int)FontStyle);
@@ -231,32 +166,63 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(NameName, Name);
-			node.Add(NormalName, Normal.ExportYAML(container));
-			node.Add(HoverName, Hover.ExportYAML(container));
-			node.Add(ActiveName, Active.ExportYAML(container));
-			node.Add(FocusedName, Focused.ExportYAML(container));
-			node.Add(OnNormalName, OnNormal.ExportYAML(container));
-			node.Add(OnHoverName, OnHover.ExportYAML(container));
-			node.Add(OnActiveName, OnActive.ExportYAML(container));
-			node.Add(OnFocusedName, OnFocused.ExportYAML(container));
-			node.Add(BorderName, Border.ExportYAML(container));
-			node.Add(MarginName, Margin.ExportYAML(container));
-			node.Add(PaddingName, Padding.ExportYAML(container));
-			node.Add(OverflowName, Overflow.ExportYAML(container));
-			node.Add(FontName, Font.ExportYAML(container));
-			node.Add(FontSizeName, FontSize);
-			node.Add(FontStyleName, (int)FontStyle);
-			node.Add(AlignmentName, (int)Alignment);
-			node.Add(WordWrapName, WordWrap);
-			node.Add(RichTextName, RichText);
-			node.Add(TextClippingName, (int)TextClipping);
-			node.Add(ImagePositionName, (int)ImagePosition);
-			node.Add(ContentOffsetName, ContentOffset.ExportYAML(container));
-			node.Add(FixedWidthName, FixedWidth);
-			node.Add(FixedHeightName, FixedHeight);
-			node.Add(StretchWidthName, StretchWidth);
-			node.Add(StretchHeightName, StretchHeight);
+			GUIStyleLayout layout = container.ExportLayout.Serialized.GUIStyle;
+			node.Add(layout.NameName, Name);
+			node.Add(layout.NormalName, Normal.ExportYAML(container));
+			node.Add(layout.HoverName, Hover.ExportYAML(container));
+			node.Add(layout.ActiveName, Active.ExportYAML(container));
+			node.Add(layout.FocusedName, Focused.ExportYAML(container));
+			node.Add(layout.OnNormalName, OnNormal.ExportYAML(container));
+			node.Add(layout.OnHoverName, OnHover.ExportYAML(container));
+			node.Add(layout.OnActiveName, OnActive.ExportYAML(container));
+			node.Add(layout.OnFocusedName, OnFocused.ExportYAML(container));
+			node.Add(layout.BorderName, Border.ExportYAML(container));
+			if (layout.IsBuiltinFormat)
+			{
+				node.Add(layout.MarginName, Margin.ExportYAML(container));
+				node.Add(layout.PaddingName, Padding.ExportYAML(container));
+			}
+			else
+			{
+				node.Add(layout.PaddingName, Padding.ExportYAML(container));
+				node.Add(layout.MarginName, Margin.ExportYAML(container));
+			}
+
+			node.Add(layout.OverflowName, Overflow.ExportYAML(container));
+			node.Add(layout.FontName, Font.ExportYAML(container));
+			if (layout.IsBuiltinFormat)
+			{
+				node.Add(layout.FontSizeName, FontSize);
+				node.Add(layout.FontStyleName, (int)FontStyle);
+				node.Add(layout.AlignmentName, (int)Alignment);
+				node.Add(layout.WordWrapName, WordWrap);
+				node.Add(layout.RichTextName, RichText);
+				node.Add(layout.TextClippingName, (int)TextClipping);
+				node.Add(layout.ImagePositionName, (int)ImagePosition);
+				node.Add(layout.ContentOffsetName, ContentOffset.ExportYAML(container));
+				node.Add(layout.FixedWidthName, FixedWidth);
+				node.Add(layout.FixedHeightName, FixedHeight);
+				node.Add(layout.StretchWidthName, StretchWidth);
+				node.Add(layout.StretchHeightName, StretchHeight);
+			}
+			else
+			{
+				node.Add(layout.ImagePositionName, (int)ImagePosition);
+				node.Add(layout.AlignmentName, (int)Alignment);
+				node.Add(layout.WordWrapName, WordWrap);
+				node.Add(layout.TextClippingName, (int)TextClipping);
+				node.Add(layout.ContentOffsetName, ContentOffset.ExportYAML(container));
+				node.Add(layout.ClipOffsetName, ClipOffset.ExportYAML(container));
+				node.Add(layout.FixedWidthName, FixedWidth);
+				node.Add(layout.FixedHeightName, FixedHeight);
+				if (layout.HasFontSize)
+				{
+					node.Add(layout.FontSizeName, FontSize);
+					node.Add(layout.FontStyleName, (int)FontStyle);
+				}
+				node.Add(layout.StretchWidthName, StretchWidth);
+				node.Add(layout.StretchHeightName, StretchHeight);
+			}
 			return node;
 		}
 
@@ -272,34 +238,6 @@ namespace uTinyRipper.Classes
 		public float FixedHeight { get; set; }
 		public bool StretchWidth { get; set; }
 		public bool StretchHeight { get; set; }
-
-		public const string NameName = "m_Name";
-		public const string NormalName = "m_Normal";
-		public const string HoverName = "m_Hover";
-		public const string ActiveName = "m_Active";
-		public const string FocusedName = "m_Focused";
-		public const string OnNormalName = "m_OnNormal";
-		public const string OnHoverName = "m_OnHover";
-		public const string OnActiveName = "m_OnActive";
-		public const string OnFocusedName = "m_OnFocused";
-		public const string BorderName = "m_Border";
-		public const string MarginName = "m_Margin";
-		public const string PaddingName = "m_Padding";
-		public const string OverflowName = "m_Overflow";
-		public const string FontName = "m_Font";
-		public const string FontSizeName = "m_FontSize";
-		public const string FontStyleName = "m_FontStyle";
-		public const string AlignmentName = "m_Alignment";
-		public const string WordWrapName = "m_WordWrap";
-		public const string RichTextName = "m_RichText";
-		public const string TextClippingName = "m_TextClipping";
-		public const string ImagePositionName = "m_ImagePosition";
-		public const string ContentOffsetName = "m_ContentOffset";
-		public const string ClipOffsetName = "m_ClipOffset";
-		public const string FixedWidthName = "m_FixedWidth";
-		public const string FixedHeightName = "m_FixedHeight";
-		public const string StretchWidthName = "m_StretchWidth";
-		public const string StretchHeightName = "m_StretchHeight";
 
 		public GUIStyleState Normal;
 		public GUIStyleState Hover;

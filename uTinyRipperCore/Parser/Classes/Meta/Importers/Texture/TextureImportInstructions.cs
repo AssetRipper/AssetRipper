@@ -1,11 +1,12 @@
 ﻿using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.TextureImporters
 {
 	public struct TextureImportInstructions : IAsset
 	{
-		public TextureImportInstructions(Version version) :
+		public TextureImportInstructions(AssetLayout layout) :
 			this()
 		{
 #warning TODO: default values

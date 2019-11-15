@@ -106,7 +106,7 @@ namespace uTinyRipper
 
 			foreach (FileInfo levelFile in root.EnumerateFiles())
 			{
-				if (s_levelName.IsMatch(levelFile.Name))
+				if (s_levelTemplate.IsMatch(levelFile.Name))
 				{
 					string levelName = MultiFileStream.GetFileName(levelFile.Name);
 					AddFile(files, levelName, levelFile.FullName);
@@ -184,7 +184,7 @@ namespace uTinyRipper
 				return filePath;
 			}
 
-			string resourcePath = Path.Combine(path, ResourceName);
+			string resourcePath = Path.Combine(path, ResourcesName);
 			filePath = Path.Combine(resourcePath, dependency);
 			if (FileUtils.Exists(filePath))
 			{
@@ -226,17 +226,19 @@ namespace uTinyRipper
 		public abstract IReadOnlyDictionary<string, string> Files { get; }
 		public abstract IReadOnlyDictionary<string, string> Assemblies { get; }
 
-		protected static readonly Regex s_levelName = new Regex($@"^level(0|[1-9][0-9]*)({MultiFileStream.MultifileRegPostfix}0)?$", RegexOptions.Compiled);
+		protected static readonly Regex s_levelTemplate = new Regex($@"^level(0|[1-9][0-9]*)({MultiFileStream.MultifileRegPostfix}0)?$", RegexOptions.Compiled);
+		protected static readonly Regex s_sharedAssetTemplate = new Regex(@"^sharedassets[0-9]+\.assets", RegexOptions.Compiled);
 
 		protected const string ManagedName = "Managed";
 		protected const string LibName = "lib";
-		protected const string ResourceName = "Resources";
+		protected const string ResourcesName = "Resources";
 		protected const string UnityName = "unity";
 		protected const string StreamingName = "StreamingAssets";
 
 		protected const string DataName = "data";
 		protected const string MainDataName = "mainData";
 		protected const string GlobalGameManagerName = "globalgamemanagers";
+		protected const string ResourcesAssetsName = "resources.assets";
 		protected const string LevelPrefix = "level";
 
 		protected const string AssetBundleExtension = ".unity3d";

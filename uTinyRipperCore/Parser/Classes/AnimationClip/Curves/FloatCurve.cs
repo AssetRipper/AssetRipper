@@ -2,11 +2,11 @@
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
 using uTinyRipper.Classes.Misc;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout.AnimationClips;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
-	public struct FloatCurve : IAssetReadable, IYAMLExportable, IDependent
+	public struct FloatCurve : IAsset, IDependent
 	{
 		public FloatCurve(FloatCurve copy, IReadOnlyList<KeyframeTpl<Float>> keyframes):
 			this(copy.Path, copy.Attribute, copy.ClassID, copy.Script, keyframes)
@@ -31,60 +31,53 @@ namespace uTinyRipper.Classes.AnimationClips
 			Curve = new AnimationCurveTpl<Float>(keyframes);
 		}
 
-		/// <summary>
-		/// 2.0.0 and greater
-		/// </summary>
-		public static bool HasScript(Version version) => version.IsGreaterEqual(2);
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(nameof(PPtrCurve), name);
-			context.BeginChildren();
-			AnimationCurveTpl<Float>.GenerateTypeTree(context, name, Float.GenerateTypeTree);
-			context.AddString(AttributeName);
-			context.AddString(PathName);
-			context.AddNode(TypeTreeUtils.TypeStarName, ClassIDName, sizeof(int));
-			context.AddPPtr(nameof(MonoScript), ScriptName);
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
+			FloatCurveLayout layout = reader.Layout.AnimationClip.FloatCurve;
 			Curve.Read(reader);
 			Attribute = reader.ReadString();
 			Path = reader.ReadString();
 			ClassID = (ClassIDType)reader.ReadInt32();
-			if (HasScript(reader.Version))
+			if (layout.HasScript)
 			{
 				Script.Read(reader);
 			}
 		}
 
+		public void Write(AssetWriter writer)
+		{
+			FloatCurveLayout layout = writer.Layout.AnimationClip.FloatCurve;
+			Curve.Write(writer);
+			writer.Write(Attribute);
+			writer.Write(Path);
+			writer.Write((int)ClassID);
+			if (layout.HasScript)
+			{
+				Script.Write(writer);
+			}
+		}
+
 		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return context.FetchDependency(Script, ScriptName);
+			FloatCurveLayout layout = context.Layout.AnimationClip.FloatCurve;
+			yield return context.FetchDependency(Script, layout.ScriptName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(CurveName, Curve.ExportYAML(container));
-			node.Add(AttributeName, Attribute);
-			node.Add(PathName, Path);
-			node.Add(ClassIDName, (int)ClassID);
-			node.Add(ScriptName, Script.ExportYAML(container));
+			FloatCurveLayout layout = container.ExportLayout.AnimationClip.FloatCurve;
+			node.Add(layout.CurveName, Curve.ExportYAML(container));
+			node.Add(layout.AttributeName, Attribute);
+			node.Add(layout.PathName, Path);
+			node.Add(layout.ClassIDName, (int)ClassID);
+			node.Add(layout.ScriptName, Script.ExportYAML(container));
 			return node;
 		}
 		
 		public string Attribute { get; set; }
 		public string Path { get; set; }
 		public ClassIDType ClassID { get; set; }
-
-		public const string CurveName = "curve";
-		public const string AttributeName = "attribute";
-		public const string PathName = "path";
-		public const string ClassIDName = "classID";
-		public const string ScriptName = "script";
 
 		public AnimationCurveTpl<Float> Curve;
 		public PPtr<MonoScript> Script;

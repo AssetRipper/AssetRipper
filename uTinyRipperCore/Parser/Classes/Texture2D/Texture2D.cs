@@ -104,12 +104,12 @@ namespace uTinyRipper.Classes
 
 		public virtual TextureImporter GenerateTextureImporter(IExportContainer container)
 		{
-			return Texture2DConverter.GeenrateTextureImporter(container, this);
+			return Texture2DConverter.GenerateTextureImporter(container, this);
 		}
 
 		public virtual IHVImageFormatImporter GenerateIHVImporter(IExportContainer container)
 		{
-			return Texture2DConverter.GeenrateIHVImporter(container, this);
+			return Texture2DConverter.GenerateIHVImporter(container, this);
 		}
 
 		public bool CheckAssetIntegrity()
@@ -257,7 +257,7 @@ namespace uTinyRipper.Classes
 			node.Add(ColorSpaceName, (int)ColorSpace);
 			IReadOnlyList<byte> imageData = GetExportImageData();
 			node.Add(ImageDataName, imageData.Count);
-			node.Add(TypelessdataName, imageData.ExportYAML());
+			node.Add(container.Layout.TypelessdataName, imageData.ExportYAML());
 			StreamingInfo streamData = new StreamingInfo(true);
 			node.Add(StreamDataName, streamData.ExportYAML(container));
 			return node;
@@ -288,11 +288,7 @@ namespace uTinyRipper.Classes
 			{
 				if (HasStreamData(File.Version))
 				{
-					string path = StreamData.Path;
-					if (path != string.Empty)
-					{
-						return true;
-					}
+					return StreamData.IsSet;
 				}
 				return ImageData.Count > 0;
 			}

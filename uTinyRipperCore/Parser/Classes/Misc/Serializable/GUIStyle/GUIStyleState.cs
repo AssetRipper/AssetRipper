@@ -1,17 +1,17 @@
-﻿using uTinyRipper.YAML;
+﻿using System;
 using uTinyRipper.Converters;
-using System;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
+using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.GUIStyles
 {
 	public struct GUIStyleState : IAsset
 	{
-		public GUIStyleState(bool _)
+		public GUIStyleState(AssetLayout layout)
 		{
 			Background = default;
-			TextColor = default;
 			ScaledBackgrounds = Array.Empty<PPtr<Texture2D>>();
+			TextColor = ColorRGBAf.Black;
 		}
 
 		public GUIStyleState(GUIStyleState copy)
@@ -19,51 +19,52 @@ namespace uTinyRipper.Classes.GUIStyles
 			Background = copy.Background;
 			TextColor = copy.TextColor;
 			ScaledBackgrounds = new PPtr<Texture2D>[copy.ScaledBackgrounds.Length];
-			for(int i = 0; i < copy.ScaledBackgrounds.Length; i++)
+			for (int i = 0; i < copy.ScaledBackgrounds.Length; i++)
 			{
 				ScaledBackgrounds[i] = copy.ScaledBackgrounds[i];
 			}
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(TypeTreeUtils.GUIStyleStateName, name);
-			context.BeginChildren();
-			context.AddPPtr(nameof(Texture2D), BackgroundName);
-			context.AddArray(ScaledBackgroundsName, PPtr<Texture2D>.GenerateTypeTree);
-			ColorRGBAf.GenerateTypeTree(context, TextColorName);
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
+			GUIStyleStateLayout layout = reader.Layout.Serialized.GUIStyle.GUIStyleState;
 			Background.Read(reader);
-			ScaledBackgrounds = Array.Empty<PPtr<Texture2D>>();
-			//m_scaledBackgrounds = stream.ReadArray<PPtr<Texture2D>>();
+			if (layout.HasScaledBackgrounds)
+			{
+				ScaledBackgrounds = reader.ReadAssetArray<PPtr<Texture2D>>();
+			}
+			else
+			{
+				ScaledBackgrounds = Array.Empty<PPtr<Texture2D>>();
+			}
 			TextColor.Read(reader);
 		}
 
 		public void Write(AssetWriter writer)
 		{
+			GUIStyleStateLayout layout = writer.Layout.Serialized.GUIStyle.GUIStyleState;
 			Background.Write(writer);
-			//writer.WriteAssetArray(m_scaledBackgrounds);
+			if (layout.HasScaledBackgrounds)
+			{
+				writer.WriteAssetArray(ScaledBackgrounds);
+			}
 			TextColor.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(BackgroundName, Background.ExportYAML(container));
-			node.Add(ScaledBackgroundsName, ScaledBackgrounds.ExportYAML(container));
-			node.Add(TextColorName, TextColor.ExportYAML(container));
+			GUIStyleStateLayout layout = container.ExportLayout.Serialized.GUIStyle.GUIStyleState;
+			node.Add(layout.BackgroundName, Background.ExportYAML(container));
+			if (layout.HasScaledBackgrounds)
+			{
+				node.Add(layout.ScaledBackgroundsName, ScaledBackgrounds.ExportYAML(container));
+			}
+			node.Add(layout.TextColorName, TextColor.ExportYAML(container));
 			return node;
 		}
 
 		public PPtr<Texture2D>[] ScaledBackgrounds { get; set; }
-
-		public const string BackgroundName = "m_Background";
-		public const string ScaledBackgroundsName = "m_ScaledBackgrounds";
-		public const string TextColorName = "m_TextColor";
 
 		public PPtr<Texture2D> Background;
 		public ColorRGBAf TextColor;

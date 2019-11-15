@@ -24,20 +24,10 @@ namespace uTinyRipper.Classes
 			return left.FileIndex != right.FileIndex || left.PathID != right.PathID;
 		}
 
-		/// <summary>
-		/// 5.0.0 and greater
-		/// </summary>
-		public static bool IsLongID(Version version) => version.IsGreaterEqual(5);
-
 		public PPtr<T1> CastTo<T1>()
 			where T1 : Object
 		{
 			return new PPtr<T1>(FileIndex, PathID);
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddPPtr<T>(name);
 		}
 
 		public static void GenerateTypeTree(TypeTreeContext context, string type, string name)
@@ -48,13 +38,13 @@ namespace uTinyRipper.Classes
 		public void Read(AssetReader reader)
 		{
 			FileIndex = reader.ReadInt32();
-			PathID = IsLongID(reader.Version) ? reader.ReadInt64() : reader.ReadInt32();
+			PathID = reader.Layout.PPtr.IsLongID ? reader.ReadInt64() : reader.ReadInt32();
 		}
 
 		public void Write(AssetWriter writer)
 		{
 			writer.Write(FileIndex);
-			if (IsLongID(writer.Version))
+			if (writer.Layout.PPtr.IsLongID)
 			{
 				writer.Write(PathID);
 			}
@@ -208,8 +198,5 @@ namespace uTinyRipper.Classes
 		/// It is acts more like a hash in some cases
 		/// </summary>
 		public long PathID { get; set; }
-
-		public const string FileIDName = "m_FileID";
-		public const string PathIDName = "m_PathID";
 	}
 }

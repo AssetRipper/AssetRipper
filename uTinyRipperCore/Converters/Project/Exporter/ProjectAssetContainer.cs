@@ -1,37 +1,23 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.Project;
 using uTinyRipper.Classes;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Layout;
+using uTinyRipper.Project;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
-using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Converters
 {
 	public class ProjectAssetContainer : IExportContainer
 	{
 		public ProjectAssetContainer(ProjectExporter exporter, VirtualSerializedFile file, IEnumerable<Object> assets,
-			IReadOnlyList<IExportCollection> collections, ExportOptions options)
+			IReadOnlyList<IExportCollection> collections)
 		{
-			if (exporter == null)
-			{
-				throw new ArgumentNullException(nameof(exporter));
-			}
-			if (file == null)
-			{
-				throw new ArgumentNullException(nameof(file));
-			}
-			if (collections == null)
-			{
-				throw new ArgumentNullException(nameof(collections));
-			}
-			m_exporter = exporter;
-			VirtualFile = file;
-
-			ExportVersion = options.Version;
-			ExportPlatform = options.Platform;
-			m_exportFlags = options.Flags;
+			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
+			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
+			ExportLayout = file.Layout;
 
 			foreach (Object asset in assets)
 			{
@@ -210,37 +196,66 @@ namespace uTinyRipper.Converters
 
 		public string TagIDToName(int tagID)
 		{
-			const string UntaggedTag = "Untagged";
 			switch (tagID)
 			{
 				case 0:
-					return UntaggedTag;
+					return TagManager.UntaggedTag;
 				case 1:
-					return "Respawn";
+					return TagManager.RespawnTag;
 				case 2:
-					return "Finish";
+					return TagManager.FinishTag;
 				case 3:
-					return "EditorOnly";
+					return TagManager.EditorOnlyTag;
 				//case 4:
 				case 5:
-					return "MainCamera";
+					return TagManager.MainCameraTag;
 				case 6:
-					return "Player";
+					return TagManager.PlayerTag;
 				case 7:
-					return "GameController";
+					return TagManager.GameControllerTag;
 			}
-			if (m_tagManager == null)
+			if (m_tagManager != null)
 			{
-				return UntaggedTag;
+				// Unity doesn't verify tagID on export?
+				int tagIndex = tagID - 20000;
+				if (tagIndex < m_tagManager.Tags.Length)
+				{
+					return m_tagManager.Tags[tagIndex];
+				}
 			}
+			return $"unknown_{tagID}";
+		}
 
-			// Unity doesn't verify tagID on export?
-			int tagIndex = tagID - 20000;
-			if (tagIndex >= m_tagManager.Tags.Length)
+		public ushort TagNameToID(string tagName)
+		{
+			switch (tagName)
 			{
-				return $"unknown_{tagID}";
+				case TagManager.UntaggedTag:
+					return 0;
+				case TagManager.RespawnTag:
+					return 1;
+				case TagManager.FinishTag:
+					return 2;
+				case TagManager.EditorOnlyTag:
+					return 3;
+				case TagManager.MainCameraTag:
+					return 5;
+				case TagManager.PlayerTag:
+					return 6;
+				case TagManager.GameControllerTag:
+					return 7;
 			}
-			return m_tagManager.Tags[tagIndex];
+			if (m_tagManager != null)
+			{
+				for (int i = 0; i < m_tagManager.Tags.Length; i++)
+				{
+					if (m_tagManager.Tags[i] == tagName)
+					{
+						return (ushort)(20000 + i);
+					}
+				}
+			}
+			return 0;
 		}
 
 		private void AddResources(ResourceManager manager)
@@ -260,12 +275,14 @@ namespace uTinyRipper.Converters
 		public VirtualSerializedFile VirtualFile { get; }
 		public ISerializedFile File => CurrentCollection.File;
 		public string Name => File.Name;
+		public AssetLayout Layout => File.Layout;
 		public Version Version => File.Version;
 		public Platform Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
-		public Version ExportVersion { get; }
-		public Platform ExportPlatform { get; }
-		public TransferInstructionFlags ExportFlags => m_exportFlags | CurrentCollection.Flags;
+		public AssetLayout ExportLayout { get; }
+		public Version ExportVersion => ExportLayout.Info.Version;
+		public Platform ExportPlatform => ExportLayout.Info.Platform;
+		public TransferInstructionFlags ExportFlags => ExportLayout.Info.Flags | CurrentCollection.Flags;
 		public IReadOnlyList<FileIdentifier> Dependencies => File.Dependencies;
 
 		private readonly ProjectExporter m_exporter;
@@ -275,6 +292,5 @@ namespace uTinyRipper.Converters
 		private readonly BuildSettings m_buildSettings;
 		private readonly TagManager m_tagManager;
 		private readonly SceneExportCollection[] m_scenes;
-		private readonly TransferInstructionFlags m_exportFlags;
 	}
 }

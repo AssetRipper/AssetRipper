@@ -1,4 +1,6 @@
-﻿namespace uTinyRipper.SerializedFiles
+﻿using uTinyRipper.SerializedFiles;
+
+namespace uTinyRipper.Converters
 {
 	public static class TypeTreeUtils
 	{
@@ -22,7 +24,7 @@
 		public const string Vector3IntName = "Vector3Int";
 		public const string Vector4Name = nameof(TreeNodeType.Vector4f);
 		public const string RectName = nameof(TreeNodeType.Rectf);
-		public const string BoundsName = nameof(TreeNodeType.AABB);
+		public const string BoundName = nameof(TreeNodeType.AABB);
 		public const string BoundsIntName = nameof(TreeNodeType.BoundsInt);
 		public const string QuaternionName = nameof(TreeNodeType.Quaternionf);
 		public const string Matrix4x4Name = nameof(TreeNodeType.Matrix4x4f);
@@ -32,16 +34,20 @@
 		public const string AnimationCurveName = nameof(TreeNodeType.AnimationCurve);
 		public const string KeyframeName = "Keyframe";
 		public const string GradientName = nameof(TreeNodeType.Gradient);
+		public const string GradientNEWName = nameof(TreeNodeType.GradientNEW);
 		public const string RectOffsetName = nameof(TreeNodeType.RectOffset);
 		public const string GUIStyleName = nameof(TreeNodeType.GUIStyle);
 		public const string GUIStyleStateName = "GUIStyleState";
 		public const string PropertyNameName = "PropertyName";
 
 		public const string BaseName = nameof(TreeNodeType.Base);
+		public const string PairName = nameof(TreeNodeType.pair);
+		public const string FirstName = nameof(TreeNodeType.first);
+		public const string SecondName = nameof(TreeNodeType.second);
 		public const string VectorName = nameof(TreeNodeType.vector);
 		public const string ArrayName = nameof(TreeNodeType.Array);
-		public const string TypeStarName = "Type*";
 		public const string SizeName = nameof(TreeNodeType.size);
 		public const string DataName = nameof(TreeNodeType.data);
+		public const string TypeStarName = "Type*";
 	}
 }

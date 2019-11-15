@@ -1,28 +1,18 @@
 using System;
 using System.IO;
 using System.Text;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper
 {
 	public sealed class AssetReader : EndianReader
 	{
-		public AssetReader(Stream stream, EndianType endian, Version version, Platform platform, TransferInstructionFlags flags) :
-			base(stream, endian, AlignArrays(version))
+		public AssetReader(Stream stream, EndianType endian, AssetLayout layout) :
+			base(stream, endian, layout.IsAlignArrays)
 		{
-			Version = version;
-			Platform = platform;
-			Flags = flags;
-			IsAlignString = AlignStrings(version);
+			Layout = layout;
+			IsAlignString = layout.IsAlign;
 		}
-
-		/// <summary>
-		/// 2.1.0 and greater
-		/// </summary>
-		public static bool AlignStrings(Version version) => version.IsGreaterEqual(2, 1);
-		/// <summary>
-		/// 2017.1 and greater
-		/// </summary>
-		public static bool AlignArrays(Version version) => version.IsGreaterEqual(2017);
 
 		public override char ReadChar()
 		{
@@ -113,11 +103,11 @@ namespace uTinyRipper
 			return $"{nameof(AssetReader)} ({Platform} {Version})";
 		}
 
-		public Platform Platform { get; }
-		public TransferInstructionFlags Flags { get; }
+		public AssetLayout Layout { get; }
+		public Version Version => Layout.Info.Version;
+		public Platform Platform => Layout.Info.Platform;
+		public TransferInstructionFlags Flags => Layout.Info.Flags;
 
 		private bool IsAlignString { get; }
-
-		public Version Version;
 	}
 }

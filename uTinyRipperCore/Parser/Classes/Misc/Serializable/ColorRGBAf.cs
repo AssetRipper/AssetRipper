@@ -1,8 +1,7 @@
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using System.Collections.Generic;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
@@ -28,17 +27,6 @@ namespace uTinyRipper.Classes
 			return color;
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(TypeTreeUtils.ColorName, name);
-			context.BeginChildren();
-			context.AddSingle(RName);
-			context.AddSingle(GName);
-			context.AddSingle(BName);
-			context.AddSingle(AName);
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			R = reader.ReadSingle();
@@ -62,20 +50,15 @@ namespace uTinyRipper.Classes
 			writer.Write(A);
 		}
 
-		public void Write32(AssetWriter writer)
-		{
-			ColorRGBA32 color32 = (ColorRGBA32)this;
-			color32.Write(writer);
-		}
-
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
+			ColorRGBAfLayout layout = container.Layout.Serialized.ColorRGBAf;
 			node.Style = MappingStyle.Flow;
-			node.Add(RName, R);
-			node.Add(GName, G);
-			node.Add(BName, B);
-			node.Add(AName, A);
+			node.Add(layout.RName, R);
+			node.Add(layout.GName, G);
+			node.Add(layout.BName, B);
+			node.Add(layout.AName, A);
 			return node;
 		}
 
@@ -84,16 +67,12 @@ namespace uTinyRipper.Classes
 			return string.Format(CultureInfo.InvariantCulture, "[R:{0:0.00} G:{1:0.00} B:{2:0.00} A:{3:0.00}]", R, G, B, A);
 		}
 
+		public static ColorRGBAf Black => new ColorRGBAf(0.0f, 0.0f, 0.0f, 1.0f);
 		public static ColorRGBAf White => new ColorRGBAf(1.0f, 1.0f, 1.0f, 1.0f);
 
 		public float R { get; set; }
 		public float G { get; set; }
 		public float B { get; set; }
 		public float A { get; set; }
-
-		public const string RName = "r";
-		public const string GName = "g";
-		public const string BName = "b";
-		public const string AName = "a";
 	}
 }

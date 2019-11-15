@@ -81,18 +81,6 @@ namespace uTinyRipper.SerializedFiles
 			}
 		}
 
-		public EndianType GetEndianType()
-		{
-			if (HasEndian(Generation))
-			{
-				if (SwapEndianess)
-				{
-					return EndianType.BigEndian;
-				}
-			}
-			return EndianType.LittleEndian;
-		}
-
 		/// <summary>
 		/// Size of the metadata parts of the file
 		/// </summary>

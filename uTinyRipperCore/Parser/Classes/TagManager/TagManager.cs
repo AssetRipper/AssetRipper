@@ -74,6 +74,14 @@ namespace uTinyRipper.Classes
 		public string[] Layers { get; set; }
 		public SortingLayerEntry[] SortingLayers { get; set; }
 
+		public const string UntaggedTag = "Untagged";
+		public const string RespawnTag = "Respawn";
+		public const string FinishTag = "Finish";
+		public const string EditorOnlyTag = "EditorOnly";
+		public const string MainCameraTag = "MainCamera";
+		public const string PlayerTag = "Player";
+		public const string GameControllerTag = "GameController";
+
 		public const string TagsName = "tags";
 		public const string LayersName = "layers";
 		public const string SortingLayersName = "m_SortingLayers";

@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
@@ -19,7 +19,9 @@ namespace uTinyRipper.Classes
 			Y = y;
 		}
 
-		public static explicit operator Vector2f(Vector2i v2) => new Vector2f(v2.X, v2.Y);
+		public static implicit operator Vector2f(Vector2i v2) => new Vector2f(v2.X, v2.Y);
+		public static explicit operator Vector2f(Vector3f v3) => new Vector2f(v3.X, v3.Y);
+		public static explicit operator Vector2f(Vector3i v3) => new Vector2f(v3.X, v3.Y);
 
 		public static Vector2f operator -(Vector2f left)
 		{
@@ -76,15 +78,6 @@ namespace uTinyRipper.Classes
 			return (float)(360.0 * angle / (2.0 * Math.PI));
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(TypeTreeUtils.Vector2Name, name);
-			context.BeginChildren();
-			context.AddSingle(XName);
-			context.AddSingle(YName);
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			X = reader.ReadSingle();
@@ -100,9 +93,10 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
+			Vector2fLayout layout = container.ExportLayout.Serialized.Vector2f;
 			node.Style = MappingStyle.Flow;
-			node.Add(XName, X);
-			node.Add(YName, Y);
+			node.Add(layout.XName, X);
+			node.Add(layout.YName, Y);
 			return node;
 		}
 
@@ -152,8 +146,5 @@ namespace uTinyRipper.Classes
 
 		public float X { get; set; }
 		public float Y { get; set; }
-
-		public const string XName = "x";
-		public const string YName = "y";
 	}
 }

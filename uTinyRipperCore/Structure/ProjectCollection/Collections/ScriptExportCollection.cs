@@ -5,11 +5,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using uTinyRipper.Classes;
+using uTinyRipper.Classes.Misc;
 using uTinyRipper.Converters;
+using uTinyRipper.Game.Assembly;
 
 using Object = uTinyRipper.Classes.Object;
-using uTinyRipper.Game.Assembly;
-using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Project
 {
@@ -17,11 +17,7 @@ namespace uTinyRipper.Project
 	{
 		public ScriptExportCollection(IAssetExporter assetExporter, MonoScript script)
 		{
-			if (assetExporter == null)
-			{
-				throw new ArgumentNullException(nameof(assetExporter));
-			}
-			AssetExporter = assetExporter;
+			AssetExporter = assetExporter ?? throw new ArgumentNullException(nameof(assetExporter));
 
 			File = script.File;
 
@@ -142,7 +138,7 @@ namespace uTinyRipper.Project
 		private void OnScriptExported(IExportContainer container, Object asset, string path)
 		{
 			MonoScript script = (MonoScript)asset;
-			MonoImporter importer = new MonoImporter(container.ExportVersion);
+			MonoImporter importer = new MonoImporter(container.ExportLayout);
 			importer.ExecutionOrder = (short)script.ExecutionOrder;
 			Meta meta = new Meta(script.GUID, importer);
 			ExportMeta(container, meta, path);

@@ -42,8 +42,8 @@ namespace uTinyRipper.Classes.ParticleSystems
 				MinGradient.Read(reader);
 				if (IsColor32(reader.Version))
 				{
-					MinColor.Read32(reader);
-					MaxColor.Read32(reader);
+					MinColor32 = reader.ReadAsset<ColorRGBA32>();
+					MaxColor32 = reader.ReadAsset<ColorRGBA32>();
 				}
 				else
 				{
@@ -76,6 +76,16 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
+		public ColorRGBA32 MinColor32
+		{
+			get => (ColorRGBA32)MinColor;
+			set => MinColor = (ColorRGBAf)value;
+		}
+		public ColorRGBA32 MaxColor32
+		{
+			get => (ColorRGBA32)MaxColor;
+			set => MaxColor = (ColorRGBAf)value;
+		}
 		public MinMaxGradientState MinMaxState { get; set; }
 
 		public const string MinMaxStateName = "minMaxState";

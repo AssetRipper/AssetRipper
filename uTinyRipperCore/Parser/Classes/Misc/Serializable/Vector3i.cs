@@ -1,7 +1,7 @@
 using System;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
@@ -64,16 +64,6 @@ namespace uTinyRipper.Classes
 			return false;
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(TypeTreeUtils.Vector3IntName, name);
-			context.BeginChildren();
-			context.AddInt32(XName);
-			context.AddInt32(YName);
-			context.AddInt32(ZName);
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			X = reader.ReadInt32();
@@ -91,10 +81,11 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
+			Vector3iLayout layout = container.ExportLayout.Serialized.Vector3i;
 			node.Style = MappingStyle.Flow;
-			node.Add(XName, X);
-			node.Add(YName, Y);
-			node.Add(ZName, Z);
+			node.Add(layout.XName, X);
+			node.Add(layout.YName, Y);
+			node.Add(layout.ZName, Z);
 			return node;
 		}
 
@@ -131,9 +122,5 @@ namespace uTinyRipper.Classes
 		public int X { get; set; }
 		public int Y { get; set; }
 		public int Z { get; set; }
-
-		public const string XName = "x";
-		public const string YName = "y";
-		public const string ZName = "z";
 	}
 }

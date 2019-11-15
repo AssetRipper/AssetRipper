@@ -25,24 +25,12 @@ namespace uTinyRipper.Game.Assembly.Mono
 				throw new ArgumentException(nameof(context));
 			}
 
-			string uniqueName = GetUniqueName(context.Type);
-			manager.AssemblyManager.AddSerializableType(uniqueName, this);
+			manager.AddSerializableType(context.Type, this);
 			Base = GetBaseType(manager, context);
 			Fields = CreateFields(manager, context);
 		}
 
-		/// <summary>
-		/// 4.5.0 and greater
-		/// </summary>
-		public static bool IsStructSerializable(Version version) => version.IsGreaterEqual(4, 5);
-
 #region Naming
-		public static string GetUniqueName(TypeReference type)
-		{
-			string assembly = FilenameUtils.FixAssemblyEndian(type.Scope.Name);
-			return ScriptIdentifier.ToUniqueName(assembly, type.FullName);
-		}
-
 		public static bool IsPrimitive(TypeReference type)
 		{
 			return IsPrimitive(type.Namespace, type.Name);
@@ -361,7 +349,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 				{
 					return false;
 				}
-				if (definition.IsValueType && !IsStructSerializable(context.Version))
+				if (definition.IsValueType && !context.Layout.IsStructSerializable)
 				{
 					return false;
 				}
@@ -423,7 +411,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 			IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
 			foreach (FieldDefinition field in definition.Fields)
 			{
-				MonoFieldContext fieldContext = new MonoFieldContext(field, arguments, manager.Version);
+				MonoFieldContext fieldContext = new MonoFieldContext(field, arguments, manager.Layout);
 				if (IsSerializable(fieldContext))
 				{
 					MonoTypeContext typeContext = new MonoTypeContext(field.FieldType, arguments);

@@ -5,10 +5,9 @@ namespace uTinyRipper.SerializedFiles
 {
 	public sealed class SerializedReader : EndianReader
 	{
-		public SerializedReader(Stream stream, EndianType endianess, string name, FileGeneration generation) :
+		public SerializedReader(Stream stream, EndianType endianess, FileGeneration generation) :
 			base(stream, endianess)
 		{
-			Name = name ?? throw new ArgumentNullException(nameof(name));
 			Generation = generation;
 		}
 
@@ -48,7 +47,6 @@ namespace uTinyRipper.SerializedFiles
 			return array;
 		}
 
-		public string Name { get; }
 		public FileGeneration Generation { get; }
 	}
 }

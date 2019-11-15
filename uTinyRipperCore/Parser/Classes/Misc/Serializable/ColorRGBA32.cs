@@ -1,6 +1,6 @@
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
@@ -20,20 +20,6 @@ namespace uTinyRipper.Classes
 			return new ColorRGBA32(r, g, b, a);
 		}
 
-		public static int ToSerializedVersion(Version version)
-		{
-			// min version is 2
-			return 2;
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(TypeTreeUtils.ColorName, name, 0, ToSerializedVersion(context.Version));
-			context.BeginChildren();
-			context.AddUInt32(RgbaName);
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			RGBA = reader.ReadUInt32();
@@ -47,8 +33,9 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(RgbaName, RGBA);
+			ColorRGBA32Layout layout = container.ExportLayout.Serialized.ColorRGBA32;
+			node.AddSerializedVersion(layout.Version);
+			node.Add(layout.RgbaName, RGBA);
 			return node;
 		}
 
@@ -60,7 +47,5 @@ namespace uTinyRipper.Classes
 		public byte A => (byte)((RGBA >> 24) & 0xFF);
 
 		public uint RGBA { get; set; }
-
-		public const string RgbaName = "rgba";
 	}
 }

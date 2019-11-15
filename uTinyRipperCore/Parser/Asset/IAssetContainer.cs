@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.Classes;
+using uTinyRipper.Layout;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper
@@ -32,6 +33,7 @@ namespace uTinyRipper
 		ClassIDType GetAssetType(long pathID);
 
 		string Name { get; }
+		AssetLayout Layout { get; }
 		Version Version { get; }
 		Platform Platform { get; }
 		TransferInstructionFlags Flags { get; }

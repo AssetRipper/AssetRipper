@@ -5,14 +5,18 @@ using uTinyRipper.Classes.Objects;
 using uTinyRipper.Converters;
 using uTinyRipper.Classes.AnimatorControllers;
 using uTinyRipper.Classes.BlendTrees;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
 	public sealed class BlendTree : Motion
 	{
-		private BlendTree(AssetInfo assetInfo, AnimatorController controller, StateConstant state, int nodeIndex) :
-			base(assetInfo, HideFlags.HideInHierarchy)
+		private BlendTree(AssetLayout layout, AssetInfo assetInfo, AnimatorController controller, StateConstant state, int nodeIndex) :
+			base(layout)
 		{
+			AssetInfo = assetInfo;
+			ObjectHideFlags = HideFlags.HideInHierarchy;
+
 			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 			BlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Instance;
 
@@ -35,7 +39,7 @@ namespace uTinyRipper.Classes
 
 		public static BlendTree CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController controller, StateConstant state, int nodeIndex)
 		{
-			return virtualFile.CreateAsset((assetInfo) => new BlendTree(assetInfo, controller, state, nodeIndex));
+			return virtualFile.CreateAsset((assetInfo) => new BlendTree(virtualFile.Layout, assetInfo, controller, state, nodeIndex));
 		}
 
 		public override void Read(AssetReader reader)

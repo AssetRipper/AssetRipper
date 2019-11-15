@@ -1,5 +1,5 @@
 ﻿using uTinyRipper.Converters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -11,24 +11,13 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 2.1.0 and greater
-		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
-
-		protected new static void GenerateTypeTree(TypeTreeContext context)
-		{
-			Component.GenerateTypeTree(context);
-			TransferMetaFlags flags = IsAlign(context.Version) ? TransferMetaFlags.AlignBytesFlag : TransferMetaFlags.NoTransferFlags;
-			context.AddByte(EnabledName, flags);
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
+			BehaviourLayout layout = reader.Layout.Behaviour;
 			Enabled = reader.ReadByte();
-			if (IsAlign(reader.Version))
+			if (layout.IsAlignEnabled)
 			{
 				reader.AlignStream();
 			}
@@ -38,8 +27,9 @@ namespace uTinyRipper.Classes
 		{
 			base.Write(writer);
 
+			BehaviourLayout layout = writer.Layout.Behaviour;
 			writer.Write(Enabled);
-			if (IsAlign(writer.Version))
+			if (layout.IsAlignEnabled)
 			{
 				writer.AlignStream();
 			}
@@ -48,7 +38,8 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(EnabledName, Enabled);
+			BehaviourLayout layout = container.ExportLayout.Behaviour;
+			node.Add(layout.EnabledName, Enabled);
 			return node;
 		}
 
@@ -62,9 +53,11 @@ namespace uTinyRipper.Classes
 			base.Write(writer);
 		}
 
-		public const string EnabledName = "m_Enabled";
+		protected YAMLMappingNode ExportYAMLRootComponent(IExportContainer container)
+		{
+			return base.ExportYAMLRoot(container);
+		}
 
-		// bool has been replaced by byte in 3.0.0
 		public bool EnabledBool
 		{
 			get => Enabled != 0;

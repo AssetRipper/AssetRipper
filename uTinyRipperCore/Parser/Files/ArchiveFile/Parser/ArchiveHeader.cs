@@ -7,21 +7,21 @@ namespace uTinyRipper.ArchiveFiles
 		internal static bool IsArchiveHeader(EndianReader reader)
 		{
 			long position = reader.BaseStream.Position;
+
 			ushort gzipMagic = ReadGZipMagic(reader);
+			reader.BaseStream.Position = position;
 			if (gzipMagic == GZipMagic)
 			{
-				reader.BaseStream.Position = position;
 				return true;
 			}
 
 			string brotliSignature = ReadBrotliMetadata(reader);
+			reader.BaseStream.Position = position;
 			if (brotliSignature == BrotliSignature)
 			{
-				reader.BaseStream.Position = position;
 				return true;
 			}
 
-			reader.BaseStream.Position = position;
 			return false;
 		}
 
@@ -42,24 +42,24 @@ namespace uTinyRipper.ArchiveFiles
 			}
 
 			reader.BaseStream.Position += 1;
-			byte bt = reader.ReadByte();
-			int count = bt & 0x3;
+			byte bt = reader.ReadByte(); // read 3 bits
+			int sizeBytes = bt & 0x3;
 
-			if (reader.BaseStream.Position + count > reader.BaseStream.Length)
+			if (reader.BaseStream.Position + sizeBytes > reader.BaseStream.Length)
 			{
 				return null;
 			}
 
 			int length = 0;
-			for (int i = 0; i < count; i++)
+			for (int i = 0; i < sizeBytes; i++)
 			{
-				byte nbt = reader.ReadByte();
-				int number = (bt >> 2) & ((nbt & 0x3) << 6);
+				byte nbt = reader.ReadByte();  // read next 8 bits
+				int bits = (bt >> 2) | ((nbt & 0x3) << 6);
 				bt = nbt;
-				length += number << (8 * i);
+				length += bits << (8 * i);
 			}
 
-			if (length == 0)
+			if (length <= 0)
 			{
 				return null;
 			}

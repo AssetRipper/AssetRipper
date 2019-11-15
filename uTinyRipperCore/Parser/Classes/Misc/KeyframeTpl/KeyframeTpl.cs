@@ -1,7 +1,7 @@
 ﻿using uTinyRipper.YAML;
 using uTinyRipper.Converters.Misc;
 using uTinyRipper.Converters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout.Misc;
 
 namespace uTinyRipper.Classes.Misc
 {
@@ -28,51 +28,6 @@ namespace uTinyRipper.Classes.Misc
 			OutWeight = weight;
 		}
 
-		public static int ToSerializedVersion(Version version)
-		{
-			// unknown conversion
-			if (version.IsGreaterEqual(2018))
-			{
-				return 3;
-			}
-			// TangentMode enum has been changed
-			if (TangentModeExtensions.TangentMode5Relevant(version))
-			{
-				return 2;
-			}
-			return 1;
-		}
-
-		/// <summary>
-		/// 2.1.0 and greater and Not Release
-		/// </summary>
-		public static bool HasTangentMode(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2, 1);
-		/// <summary>
-		/// 2018.1 and greater
-		/// </summary>
-		public static bool HasWeight(Version version) => version.IsGreaterEqual(2018);
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name, TypeTreeGenerator generator)
-		{
-			context.AddNode(TypeTreeUtils.KeyframeName, name, 0, ToSerializedVersion(context.Version));
-			context.BeginChildren();
-			context.AddSingle(TimeName);
-			generator.Invoke(context, ValueName);
-			generator.Invoke(context, InSlopeName);
-			generator.Invoke(context, OutSlopeName);
-			if (HasTangentMode(context.Version, context .Flags))
-			{
-				context.AddInt32(TangentModeName);
-			}
-			if (HasWeight(context.Version))
-			{
-				context.AddInt32(WeightedModeName);
-				generator.Invoke(context, InWeightName);
-				generator.Invoke(context, OutWeightName);
-			}
-			context.EndChildren();
-		}
-
 		public KeyframeTpl<T> Convert(IExportContainer container)
 		{
 			return KeyframeTplConverter.Convert(container, ref this);
@@ -80,15 +35,16 @@ namespace uTinyRipper.Classes.Misc
 
 		public void Read(AssetReader reader)
 		{
+			KeyframeTplLayout layout = reader.Layout.Misc.KeyframeTpl;
 			Time = reader.ReadSingle();
 			Value.Read(reader);
 			InSlope.Read(reader);
 			OutSlope.Read(reader);
-			if (HasTangentMode(reader.Version, reader.Flags))
+			if (layout.HasTangentMode)
 			{
 				TangentMode = reader.ReadInt32();
 			}
-			if (HasWeight(reader.Version))
+			if (layout.HasWeightedMode)
 			{
 				WeightedMode = (WeightedMode)reader.ReadInt32();
 				InWeight.Read(reader);
@@ -98,15 +54,16 @@ namespace uTinyRipper.Classes.Misc
 
 		public void Write(AssetWriter writer)
 		{
+			KeyframeTplLayout layout = writer.Layout.Misc.KeyframeTpl;
 			writer.Write(Time);
 			Value.Write(writer);
 			InSlope.Write(writer);
 			OutSlope.Write(writer);
-			if (HasTangentMode(writer.Version, writer.Flags))
+			if (layout.HasTangentMode)
 			{
 				writer.Write(TangentMode);
 			}
-			if (HasWeight(writer.Version))
+			if (layout.HasWeightedMode)
 			{
 				writer.Write((int)WeightedMode);
 				InWeight.Write(writer);
@@ -116,21 +73,22 @@ namespace uTinyRipper.Classes.Misc
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
+			KeyframeTplLayout layout = container.ExportLayout.Misc.KeyframeTpl;
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(TimeName, Time);
-			node.Add(ValueName, Value.ExportYAML(container));
-			node.Add(InSlopeName, InSlope.ExportYAML(container));
-			node.Add(OutSlopeName, OutSlope.ExportYAML(container));
-			if (HasTangentMode(container.ExportVersion, container.ExportFlags))
+			node.AddSerializedVersion(layout.Version);
+			node.Add(layout.TimeName, Time);
+			node.Add(layout.ValueName, Value.ExportYAML(container));
+			node.Add(layout.InSlopeName, InSlope.ExportYAML(container));
+			node.Add(layout.OutSlopeName, OutSlope.ExportYAML(container));
+			if (layout.HasTangentMode)
 			{
-				node.Add(TangentModeName, TangentMode);
+				node.Add(layout.TangentModeName, TangentMode);
 			}
-			if (HasWeight(container.ExportVersion))
+			if (layout.HasWeightedMode)
 			{
-				node.Add(WeightedModeName, (int)WeightedMode);
-				node.Add(InWeightName, InWeight.ExportYAML(container));
-				node.Add(OutWeightName, OutWeight.ExportYAML(container));
+				node.Add(layout.WeightedModeName, (int)WeightedMode);
+				node.Add(layout.InWeightName, InWeight.ExportYAML(container));
+				node.Add(layout.OutWeightName, OutWeight.ExportYAML(container));
 			}
 			return node;
 		}
@@ -150,15 +108,6 @@ namespace uTinyRipper.Classes.Misc
 		public float Time { get; set; }
 		public int TangentMode { get; set; }
 		public WeightedMode WeightedMode { get; set; }
-
-		public const string TimeName = "time";
-		public const string ValueName = "value";
-		public const string InSlopeName = "inSlope";
-		public const string OutSlopeName = "outSlope";
-		public const string TangentModeName = "tangentMode";
-		public const string WeightedModeName = "weightedMode";
-		public const string InWeightName = "inWeight";
-		public const string OutWeightName = "outWeight";
 
 		public static Float DefaultFloatWeight => 1.0f / 3.0f;
 		public static Vector3f DefaultVector3Weight => new Vector3f(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f);

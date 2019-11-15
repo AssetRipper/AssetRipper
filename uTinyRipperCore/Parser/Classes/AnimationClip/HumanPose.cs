@@ -18,7 +18,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			RootX.Read(reader);
 			if(IsVector3(reader.Version))
 			{
-				LookAtPosition.Read3(reader);
+				LookAtPosition = reader.ReadAsset<Vector3f>();
 			}
 			else
 			{

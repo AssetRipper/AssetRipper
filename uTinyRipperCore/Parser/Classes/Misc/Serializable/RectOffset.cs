@@ -1,22 +1,11 @@
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
 	public struct RectOffset : IAsset
 	{
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(TypeTreeUtils.RectOffsetName, name);
-			context.BeginChildren();
-			context.AddInt32(LeftName);
-			context.AddInt32(RightName);
-			context.AddInt32(TopName);
-			context.AddInt32(BottomName);
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			Left = reader.ReadInt32();
@@ -36,10 +25,11 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(LeftName, Left);
-			node.Add(RightName, Right);
-			node.Add(TopName, Top);
-			node.Add(BottomName, Bottom);
+			RectOffsetLayout layout = container.ExportLayout.Serialized.RectOffset;
+			node.Add(layout.LeftName, Left);
+			node.Add(layout.RightName, Right);
+			node.Add(layout.TopName, Top);
+			node.Add(layout.BottomName, Bottom);
 			return node;
 		}
 
@@ -47,10 +37,5 @@ namespace uTinyRipper.Classes
 		public int Right { get; set; }
 		public int Top { get; set; }
 		public int Bottom { get; set; }
-
-		public const string LeftName = "m_Left";
-		public const string RightName = "m_Right";
-		public const string TopName = "m_Top";
-		public const string BottomName = "m_Bottom";
 	}
 }

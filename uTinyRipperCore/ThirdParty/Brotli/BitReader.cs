@@ -116,7 +116,7 @@ namespace Brotli
 		{
 			if (br.bitOffset >= 32)
 			{
-				br.accumulator = ((long)br.intBuffer[br.intOffset++] << 32) | ((long)(((ulong)br.accumulator) >> 32));
+				br.accumulator = unchecked(((long)br.intBuffer[br.intOffset++] << 32) | ((long)(((ulong)br.accumulator) >> 32)));
 				br.bitOffset -= 32;
 			}
 		}
@@ -125,7 +125,7 @@ namespace Brotli
 		internal static int ReadBits(Brotli.BitReader br, int n)
 		{
 			FillBitWindow(br);
-			int val = (int)((long)(((ulong)br.accumulator) >> br.bitOffset)) & ((1 << n) - 1);
+			int val = unchecked((int)((long)(((ulong)br.accumulator) >> br.bitOffset)) & ((1 << n) - 1));
 			br.bitOffset += n;
 			return val;
 		}

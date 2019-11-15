@@ -1,8 +1,7 @@
 using System.Globalization;
 using uTinyRipper.YAML;
 using uTinyRipper.Converters;
-using System.Collections.Generic;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
@@ -83,46 +82,10 @@ namespace uTinyRipper.Classes
 			return result;
 		}
 
-		public static int ToSerializedVersion(Version version)
-		{
-			// absolute Min/Max has been replaced by relative values
-			if (version.IsGreaterEqual(2))
-			{
-				return 2;
-			}
-			return 1;
-		}
-
-		/// <summary>
-		/// 2.0.0 and greater
-		/// </summary>
-		public static bool HasMinMax(Version version) => version.IsLess(2);
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			int version = ToSerializedVersion(context.Version);
-			context.AddNode(TypeTreeUtils.RectName, name, 0, version);
-			context.BeginChildren();
-			if (version == 1)
-			{
-				context.AddSingle(XMinName);
-				context.AddSingle(YMinName);
-				context.AddSingle(XMaxName);
-				context.AddSingle(YMaxName);
-			}
-			else
-			{
-				context.AddSingle(XName);
-				context.AddSingle(YName);
-				context.AddSingle(WidthName);
-				context.AddSingle(HeightName);
-			}
-			context.EndChildren();
-		}
-
 		public void Read(AssetReader reader)
 		{
-			if (HasMinMax(reader.Version))
+			RectfLayout layout = reader.Layout.Serialized.Rectf;
+			if (layout.HasXMin)
 			{
 				XMin = reader.ReadSingle();
 				YMin = reader.ReadSingle();
@@ -140,7 +103,8 @@ namespace uTinyRipper.Classes
 
 		public void Write(AssetWriter writer)
 		{
-			if (HasMinMax(writer.Version))
+			RectfLayout layout = writer.Layout.Serialized.Rectf;
+			if (layout.HasXMin)
 			{
 				writer.Write(XMin);
 				writer.Write(YMin);
@@ -159,20 +123,21 @@ namespace uTinyRipper.Classes
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			if (HasMinMax(container.ExportVersion))
+			RectfLayout layout = container.ExportLayout.Serialized.Rectf;
+			node.AddSerializedVersion(layout.Version);
+			if (layout.HasXMin)
 			{
-				node.Add(XMinName, XMin);
-				node.Add(YMinName, YMin);
-				node.Add(XMaxName, XMax);
-				node.Add(YMaxName, YMax);
+				node.Add(layout.XMinName, XMin);
+				node.Add(layout.YMinName, YMin);
+				node.Add(layout.XMaxName, XMax);
+				node.Add(layout.YMaxName, YMax);
 			}
 			else
 			{
-				node.Add(XName, X);
-				node.Add(YName, Y);
-				node.Add(WidthName, Width);
-				node.Add(HeightName, Height);
+				node.Add(layout.XName, X);
+				node.Add(layout.YName, Y);
+				node.Add(layout.WidthName, Width);
+				node.Add(layout.HeightName, Height);
 			}
 			return node;
 		}
@@ -251,14 +216,5 @@ namespace uTinyRipper.Classes
 		public float Y { get; set; }
 		public float Width { get; set; }
 		public float Height { get; set; }
-
-		public const string XMinName = "xmin";
-		public const string YMinName = "ymin";
-		public const string XMaxName = "xmax";
-		public const string YMaxName = "ymax";
-		public const string XName = "x";
-		public const string YName = "y";
-		public const string WidthName = "width";
-		public const string HeightName = "height";
 	}
 }

@@ -5,46 +5,19 @@ using uTinyRipper.YAML;
 using uTinyRipper.Classes.Objects;
 using uTinyRipper.Converters;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
 	public abstract class Object : IAsset, IDependent
 	{
-		protected Object(Version version)
+		protected Object(AssetLayout layout)
 		{
 		}
 
 		protected Object(AssetInfo assetInfo)
 		{
 			AssetInfo = assetInfo;
-		}
-
-		protected Object(AssetInfo assetInfo, HideFlags hideFlags):
-			this(assetInfo)
-		{
-			ObjectHideFlags = hideFlags;
-		}
-
-		/// <summary>
-		/// 2.0.0 and greater and Not Release and Not Prefab
-		/// </summary>
-		public static bool HasHideFlag(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && !flags.IsForPrefab() && version.IsGreaterEqual(2);
-		/// <summary>
-		/// 4.3.0 and greater and Debug
-		/// </summary>
-		public static bool HasInstanceID(Version version, TransferInstructionFlags flags) => flags.IsDebug() && version.IsGreaterEqual(4, 3);
-
-		protected static void GenerateTypeTree(TypeTreeContext context)
-		{
-			if (HasHideFlag(context.Version, context.Flags))
-			{
-				context.AddUInt32(ObjectHideFlagsName);
-			}
-			if (HasInstanceID(context.Version, context.Flags))
-			{
-				context.AddInt32(InstanceIDName);
-				context.AddInt64(ObjectHideFlagsName);
-			}
 		}
 
 		public virtual Object Convert(IExportContainer container)
@@ -54,32 +27,20 @@ namespace uTinyRipper.Classes
 
 		public virtual void Read(AssetReader reader)
 		{
-			if (HasHideFlag(reader.Version, reader.Flags))
+			ObjectLayout layout = reader.Layout.Object;
+			if (layout.HasHideFlag)
 			{
 				ObjectHideFlags = (HideFlags)reader.ReadUInt32();
 			}
-#if UNIVERSAL
-			if (HasInstanceID(reader.Version, reader.Flags))
-			{
-				InstanceID = reader.ReadInt32();
-				LocalIdentfierInFile = reader.ReadInt64();
-			}
-#endif
 		}
 
 		public virtual void Write(AssetWriter writer)
 		{
-			if (HasHideFlag(writer.Version, writer.Flags))
+			ObjectLayout layout = writer.Layout.Object;
+			if (layout.HasHideFlag)
 			{
 				writer.Write((uint)ObjectHideFlags);
 			}
-#if UNIVERSAL
-			if (HasInstanceID(writer.Version, writer.Flags))
-			{
-				writer.Write(InstanceID);
-				writer.Write(LocalIdentfierInFile);
-			}
-#endif
 		}
 
 		public YAMLDocument ExportYAMLDocument(IExportContainer container)
@@ -89,7 +50,7 @@ namespace uTinyRipper.Classes
 			root.Tag = ClassID.ToInt().ToString();
 			root.Anchor = container.GetExportID(this).ToString();
 			YAMLMappingNode node = ExportYAMLRoot(container);
-			root.Add(GetClassName(container.ExportVersion), node);
+			root.Add(container.ExportLayout.ClassNames[ClassID], node);
 			return document;
 		}
 
@@ -114,19 +75,16 @@ namespace uTinyRipper.Classes
 		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			if (HasHideFlag(container.ExportVersion, container.ExportFlags))
+			ObjectLayout layout = container.Layout.Object;
+			if (layout.HasHideFlag)
 			{
-				node.Add(ObjectHideFlagsName, (uint)ObjectHideFlags);
+				node.Add(layout.ObjectHideFlagsName, (uint)ObjectHideFlags);
 			}
 			return node;
 		}
 
-		protected virtual string GetClassName(Version version)
-		{
-			return ClassID.ToString();
-		}
-
-		public AssetInfo AssetInfo { get; }
+#warning TODO: remove this whole block
+		public AssetInfo AssetInfo { get; set; }
 		public ISerializedFile File => AssetInfo.File;
 		public virtual ClassIDType ClassID => AssetInfo.ClassID;
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
@@ -135,15 +93,6 @@ namespace uTinyRipper.Classes
 		public GUID GUID => AssetInfo.GUID;
 
 		public HideFlags ObjectHideFlags { get; set; }
-#if UNIVERSAL
-		public int InstanceID { get; set; }
-		public long LocalIdentfierInFile { get; set; }
-#endif
-
-		public const string TypelessdataName = "_typelessdata";
-		public const string ObjectHideFlagsName = "m_ObjectHideFlags";
-		public const string InstanceIDName = "m_InstanceID";
-		public const string LocalIdentfierInFileName = "m_LocalIdentfierInFile";
 
 		public const string AssetsKeyword = "Assets";
 		protected const string AssetExtension = "asset";

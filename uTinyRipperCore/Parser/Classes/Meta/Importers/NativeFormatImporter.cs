@@ -1,12 +1,13 @@
 ﻿using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
 	public sealed class NativeFormatImporter : AssetImporter
 	{
-		public NativeFormatImporter(Version version) :
-			base(version)
+		public NativeFormatImporter(AssetLayout layout) :
+			base(layout)
 		{
 		}
 

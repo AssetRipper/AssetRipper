@@ -1,14 +1,15 @@
 ﻿using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.TextureImporters
 {
 	public struct TextureImportOutput : IAsset
 	{
-		public TextureImportOutput(Version version)
+		public TextureImportOutput(AssetLayout layout)
 		{
-			TextureImportInstructions = new TextureImportInstructions(version);
-			SourceTextureInformation = new SourceTextureInformation(version);
+			TextureImportInstructions = new TextureImportInstructions(layout);
+			SourceTextureInformation = new SourceTextureInformation(layout);
 			ImportInspectorWarnings = string.Empty;
 		}
 

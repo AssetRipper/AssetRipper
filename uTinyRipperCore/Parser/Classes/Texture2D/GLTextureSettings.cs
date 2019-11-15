@@ -1,11 +1,12 @@
 using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Textures
 {
 	public struct GLTextureSettings : IAsset
 	{
-		public GLTextureSettings(Version version)
+		public GLTextureSettings(AssetLayout layout)
 		{
 			FilterMode = (FilterMode)(-1);
 			Aniso = -1;

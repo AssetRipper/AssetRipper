@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.Classes;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper
 {
 	public sealed class DependencyContext
 	{
-		public DependencyContext(Version version, Platform platform, TransferInstructionFlags flags, bool log)
+		public DependencyContext(AssetLayout layout, bool log)
 		{
-			Version = version;
-			Platform = platform;
-			Flags = flags;
+			Layout = layout;
 			IsLog = log;
 			m_hierarchy = log ? new Stack<string>() : null;
 		}
@@ -127,9 +126,10 @@ namespace uTinyRipper
 			return hierarchy;
 		}
 
-		public Version Version { get; }
-		public Platform Platform { get; }
-		public TransferInstructionFlags Flags { get; }
+		public AssetLayout Layout { get; }
+		public Version Version => Layout.Info.Version;
+		public Platform Platform => Layout.Info.Platform;
+		public TransferInstructionFlags Flags => Layout.Info.Flags;
 		public bool IsLog { get; }
 		public string PointerName { get; private set; }
 

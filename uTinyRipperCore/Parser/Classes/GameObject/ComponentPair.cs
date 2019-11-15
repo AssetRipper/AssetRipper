@@ -1,40 +1,35 @@
 ﻿using System.Collections.Generic;
 using uTinyRipper.Converters;
+using uTinyRipper.Layout.GameObjects;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.GameObjects
 {
-	public struct ComponentPair : IAssetReadable, IYAMLExportable, IDependent
+	public struct ComponentPair : IAsset, IDependent
 	{
-		/// <summary>
-		/// Less than 5.5.0
-		/// </summary>
-		public static bool HasClassID(Version version) => version.IsLess(5, 5);
-
 		public void Read(AssetReader reader)
 		{
-			if (HasClassID(reader.Version))
-			{
-				ClassID = (ClassIDType)reader.ReadInt32();
-			}
 			Component.Read(reader);
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			Component.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
+			ComponentPairLayout layout = container.Layout.GameObject.ComponentPair;
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(ComponentName, Component.ExportYAML(container));
+			node.Add(layout.ComponentName, Component.ExportYAML(container));
 			return node;
 		}
 
 		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return context.FetchDependency(Component, ComponentName);
+			ComponentPairLayout layout = context.Layout.GameObject.ComponentPair;
+			yield return context.FetchDependency(Component, layout.ComponentName);
 		}
-
-		public ClassIDType ClassID { get; set; }
-
-		public const string ComponentName = "component";
 
 		public PPtr<Component> Component;
 	}

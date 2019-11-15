@@ -1,6 +1,7 @@
 ﻿using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.Converters;
+using System.Text;
 
 namespace uTinyRipper.Classes.Misc
 {
@@ -105,6 +106,12 @@ namespace uTinyRipper.Classes.Misc
 				hash = hash * 653 + Data3.GetHashCode();
 			}
 			return hash;
+		}
+
+		public override string ToString()
+		{
+			GUID guid = new GUID(Data0, Data1, Data2, Data3);
+			return guid.ToString();
 		}
 
 		public uint Data0 { get; set; }

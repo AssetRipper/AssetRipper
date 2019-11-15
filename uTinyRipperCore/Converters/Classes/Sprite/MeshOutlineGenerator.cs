@@ -316,17 +316,17 @@ namespace uTinyRipper.Converters.Sprites
 							for (int l = index; l < nextOutline.GeneratedOutline.Count; l++)
 							{
 								int nextVertex = nextOutline.GeneratedOutline[l];
-								resultLine.Add(m_vertices[nextVertex].ToVector2());
+								resultLine.Add((Vector2f)m_vertices[nextVertex]);
 							}
 							for (int m = 0; m < index; m++)
 							{
 								int nextVertex = nextOutline.GeneratedOutline[m];
-								resultLine.Add(m_vertices[nextVertex].ToVector2());
+								resultLine.Add((Vector2f)m_vertices[nextVertex]);
 							}
 							outlines.RemoveAt(k--);
 						}
 					}
-					resultLine.Add(m_vertices[vertex].ToVector2());
+					resultLine.Add((Vector2f)m_vertices[vertex]);
 				}
 				result.Add(resultLine.ToArray());
 			}
