@@ -121,7 +121,7 @@ namespace uTinyRipper.Classes.Misc
 		public uint Data2 { get; set; }
 		public uint Data3 { get; set; }
 
-		public static readonly GUID MissingReference = new GUID(0xD0000000, 0x5DEADF00, 0xEADBEEF1, 0x0000000D);
+		public static readonly GUID MissingReference = new GUID(0xD0000000, 0x1FEEBDAE, 0x00FDAED5, 0x0000000D);
 
 		[ThreadStatic]
 		private static StringBuilder s_sb = null;

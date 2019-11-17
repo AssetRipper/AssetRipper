@@ -178,7 +178,7 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public string GetName(ISerializedFile file)
+		public string GetName(IAssetContainer file)
 		{
 			if (file.Layout.PrefabInstance.IsModificationFormat)
 			{

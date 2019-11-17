@@ -149,7 +149,7 @@ namespace uTinyRipper.Project
 		public override IEnumerable<Object> Assets => m_scripts.Keys;
 		public override string Name => nameof(ScriptExportCollection);
 
-		private static readonly GUID UnityEngineGUID = new GUID(0xE09C671C, 0x825f0804, 0x44d8491a, 0xf70555f1);
+		private static readonly GUID UnityEngineGUID = new GUID(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
 		private static readonly Regex s_unityEngine = new Regex(@"^UnityEngine(\.[0-9a-zA-Z]+)*(\.dll)?$", RegexOptions.Compiled);
 
 		private readonly List<MonoScript> m_export = new List<MonoScript>();

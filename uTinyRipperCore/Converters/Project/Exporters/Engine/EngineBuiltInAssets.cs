@@ -816,9 +816,9 @@ namespace uTinyRipper.Converters
 		public const string TerrainWavingDoublePass = "Hidden/TerrainEngine/Details/WavingDoublePass";
 		public const string TerrainBillboardWavingDoublePass = "Hidden/TerrainEngine/Details/BillboardWavingDoublePass";
 
-		public static readonly GUID DGUID = new GUID(0x00000000, 0xD0000000, 0x00000000, 0x00000000);
-		public static readonly GUID EGUID = new GUID(0x00000000, 0xE0000000, 0x00000000, 0x00000000);
-		public static readonly GUID FGUID = new GUID(0x00000000, 0xF0000000, 0x00000000, 0x00000000);
+		public static readonly GUID DGUID = new GUID(0x00000000, 0x00000000, 0x0000000D, 0x00000000);
+		public static readonly GUID EGUID = new GUID(0x00000000, 0x00000000, 0x0000000E, 0x00000000);
+		public static readonly GUID FGUID = new GUID(0x00000000, 0x00000000, 0x0000000F, 0x00000000);
 
 		private static Dictionary<string, EngineBuiltInAssetInfo> m_materials = new Dictionary<string, EngineBuiltInAssetInfo>();
 		private static Dictionary<string, EngineBuiltInAssetInfo> m_textures = new Dictionary<string, EngineBuiltInAssetInfo>();

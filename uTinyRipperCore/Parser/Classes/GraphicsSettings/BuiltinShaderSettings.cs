@@ -41,7 +41,5 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public const string ShaderName = "m_Shader";
 
 		public PPtr<Shader> Shader;
-
-		private static readonly GUID FGUID = new GUID(0x00000000, 0xF0000000, 0x00000000, 0x00000000);
 	}
 }
