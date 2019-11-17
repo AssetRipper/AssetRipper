@@ -74,7 +74,7 @@ namespace uTinyRipper.Classes
 					return (Transform)comp;
 				}
 			}
-			return null;
+			throw new Exception("Can't find transform component");
 		}
 
 		public GameObject GetRoot()
@@ -82,7 +82,7 @@ namespace uTinyRipper.Classes
 			Transform root = GetTransform();
 			while (true)
 			{
-				Transform parent = root.Father.TryGetAsset(File);
+				Transform parent = root.Father.TryGetAsset(root.File);
 				if (parent == null)
 				{
 					break;
@@ -92,7 +92,7 @@ namespace uTinyRipper.Classes
 					root = parent;
 				}
 			}
-			return root.GameObject.GetAsset(File);
+			return root.GameObject.GetAsset(root.File);
 		}
 
 		public int GetRootDepth()
@@ -101,7 +101,7 @@ namespace uTinyRipper.Classes
 			int depth = 0;
 			while (true)
 			{
-				Transform parent = root.Father.TryGetAsset(File);
+				Transform parent = root.Father.TryGetAsset(root.File);
 				if (parent == null)
 				{
 					break;

@@ -2,6 +2,9 @@ namespace uTinyRipper
 {
 	public enum AssetType
 	{
+		/// <summary>
+		/// Used by released game
+		/// </summary>
 		Internal		= 0,
 		/// <summary>
 		/// Library asset file. It is editor created file, it doesn't exist in Assets directory
