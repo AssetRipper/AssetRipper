@@ -223,7 +223,6 @@ namespace uTinyRipper
 
 		internal void ReadData(Stream stream)
 		{
-			HashSet<int> preloaded = new HashSet<int>();
 			using (AssetReader assetReader = new AssetReader(stream, GetEndianType(), Layout))
 			{
 				if (SerializedFileMetadata.HasPreload(Header.Generation))
@@ -234,7 +233,6 @@ namespace uTinyRipper
 						{
 							int index = m_assetEntryLookup[ptr.PathID];
 							ReadAsset(assetReader, ref Metadata.Entries[index]);
-							preloaded.Add(index);
 						}
 					}
 				}
@@ -243,7 +241,7 @@ namespace uTinyRipper
 				{
 					if (Metadata.Entries[i].ClassID == ClassIDType.MonoScript)
 					{
-						if (preloaded.Add(i))
+						if (!m_assets.ContainsKey(Metadata.Entries[i].PathID))
 						{
 							ReadAsset(assetReader, ref Metadata.Entries[i]);
 						}
@@ -252,7 +250,7 @@ namespace uTinyRipper
 
 				for (int i = 0; i < Metadata.Entries.Length; i++)
 				{
-					if (!preloaded.Contains(i))
+					if (!m_assets.ContainsKey(Metadata.Entries[i].PathID))
 					{
 						ReadAsset(assetReader, ref Metadata.Entries[i]);
 					}

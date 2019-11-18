@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.Classes.Meshes;
@@ -17,9 +18,9 @@ namespace uTinyRipper.Classes.Sprites
 		/// </summary>
 		public static bool HasSecondaryTextures(Version version) => version.IsGreaterEqual(2019);
 		/// <summary>
-		/// Less than 5.6.0
+		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasVertices(Version version) => version.IsLess(5, 6);
+		public static bool HasVertexData(Version version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
@@ -58,25 +59,39 @@ namespace uTinyRipper.Classes.Sprites
 
 		public Vector2f[][] GenerateOutline(Version version)
 		{
-			if (HasVertices(version))
+			if (HasVertexData(version))
 			{
-				Vector2f[][] outline = new Vector2f[1][];
-				outline[0] = new Vector2f[Vertices.Length];
-				for (int i = 0; i < Vertices.Length; i++)
+				if (SubMeshes.Length == 0)
 				{
-					outline[0][i] = (Vector2f)Vertices[i].Position;
+					return Array.Empty<Vector2f[]>();
 				}
-				return outline;
+				else
+				{
+					List<Vector2f[]> outlines = new List<Vector2f[]>();
+					for (int i = 0; i < SubMeshes.Length; i++)
+					{
+						Vector3f[] vertices = VertexData.GenerateVertices(version, ref SubMeshes[i]);
+						VerticesToOutline(outlines, vertices, ref SubMeshes[i]);
+					}
+					return outlines.ToArray();
+				}
 			}
 			else
 			{
-				List<Vector2f[]> outlines = new List<Vector2f[]>();
-				for (int i = 0; i < SubMeshes.Length; i++)
+				if (Vertices.Length == 0)
 				{
-					Vector3f[] vertices = VertexData.GenerateVertices(version, ref SubMeshes[i]);
-					VerticesToOutline(outlines, vertices, ref SubMeshes[i]);
+					return Array.Empty<Vector2f[]>();
 				}
-				return outlines.ToArray();
+				else
+				{
+					Vector2f[][] outline = new Vector2f[1][];
+					outline[0] = new Vector2f[Indices.Length];
+					for (int i = 0; i < Indices.Length; i++)
+					{
+						outline[0][i] = (Vector2f)Vertices[Indices[i]].Position;
+					}
+					return outline;
+				}
 			}
 		}
 
@@ -92,19 +107,19 @@ namespace uTinyRipper.Classes.Sprites
 				SecondaryTextures = reader.ReadAssetArray<SecondarySpriteTexture>();
 			}
 
-			if (HasVertices(reader.Version))
-			{
-				Vertices = reader.ReadAssetArray<SpriteVertex>();
-				Indices = reader.ReadUInt16Array();
-				reader.AlignStream();
-			}
-			else
+			if (HasVertexData(reader.Version))
 			{
 				SubMeshes = reader.ReadAssetArray<SubMesh>();
 				IndexBuffer = reader.ReadByteArray();
 				reader.AlignStream();
 
 				VertexData.Read(reader);
+			}
+			else
+			{
+				Vertices = reader.ReadAssetArray<SpriteVertex>();
+				Indices = reader.ReadUInt16Array();
+				reader.AlignStream();
 			}
 			if (HasBindpose(reader.Version))
 			{

@@ -27,6 +27,8 @@ namespace uTinyRipper
 
 		private void ReadFile(SerializedFile file)
 		{
+#warning TODO: fix cross dependencies
+			m_knownFiles.Add(file.Name);
 			foreach (FileIdentifier dependency in file.Metadata.Dependencies)
 			{
 				if (!m_knownFiles.Contains(dependency.FilePath))
@@ -46,7 +48,6 @@ namespace uTinyRipper
 			file.ReadData(scheme.Stream);
 			scheme.Dispose();
 			m_files.Remove(file);
-			m_knownFiles.Add(file.Name);
 		}
 
 		public GameCollection Collection { get; }

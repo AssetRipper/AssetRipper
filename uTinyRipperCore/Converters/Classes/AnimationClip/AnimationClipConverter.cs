@@ -78,11 +78,11 @@ namespace uTinyRipper.Converters
 				{
 					StreamedCurveKey curve = frame.Curves[curveIndex];
 					GenericBinding binding = bindings.FindBinding(curve.Index);
-					GetPreviousFrame(streamFrames, curve.Index, frameIndex, out int prevFrameIndex, out int prevCurveIndex);
 
 					string path = GetCurvePath(tos, binding.Path);
 					if (binding.IsTransform)
 					{
+						GetPreviousFrame(streamFrames, curve.Index, frameIndex, out int prevFrameIndex, out int prevCurveIndex);
 						int dimension = binding.TransformType.GetDimension();
 						for (int key = 0; key < dimension; key++)
 						{
