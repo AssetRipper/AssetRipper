@@ -73,7 +73,6 @@ namespace uTinyRipper
 			Metadata.Read(Stream, Header);
 
 			SerializedFileMetadataConverter.CombineFormats(Header.Generation, Metadata);
-			RTTIClassHierarchyDescriptorConverter.FixResourceVersion(Name, ref Metadata.Hierarchy);
 			UpdateFlags();
 		}
 

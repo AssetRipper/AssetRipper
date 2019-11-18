@@ -11,6 +11,31 @@ namespace uTinyRipper
 {
 	public abstract class PlatformGameStructure
 	{
+		public static bool IsPrimaryEngineFile(string fileName)
+		{
+			if (fileName == MainDataName)
+			{
+				return true;
+			}
+			if (fileName == GlobalGameManagerName || fileName == GlobalGameManagerAssetsName)
+			{
+				return true;
+			}
+			if (fileName == ResourcesAssetsName)
+			{
+				return true;
+			}
+			if (s_levelTemplate.IsMatch(fileName))
+			{
+				return true;
+			}
+			if (s_sharedAssetTemplate.IsMatch(fileName))
+			{
+				return true;
+			}
+			return false;
+		}
+
 		public string RequestDependency(string dependency)
 		{
 			if (Files.TryGetValue(dependency, out string dependencyPath))
@@ -238,6 +263,7 @@ namespace uTinyRipper
 		protected const string DataName = "data";
 		protected const string MainDataName = "mainData";
 		protected const string GlobalGameManagerName = "globalgamemanagers";
+		protected const string GlobalGameManagerAssetsName = "globalgamemanagers.assets";
 		protected const string ResourcesAssetsName = "resources.assets";
 		protected const string LevelPrefix = "level";
 

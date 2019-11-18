@@ -149,7 +149,7 @@ namespace uTinyRipper.BundleFiles
 		/// </summary>
 		public string PlayerVersion { get; private set; }
 		/// <summary>
-		/// Minimum revision
+		/// Actual engine version
 		/// </summary>
 		public Version EngineVersion { get; private set; }
 

@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper.Classes;
-using uTinyRipper.Game;
 using uTinyRipper.Layout;
-using uTinyRipper.Converters;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
@@ -78,38 +76,17 @@ namespace uTinyRipper
 
 		private static AssetLayout GetLayout(GameCollection collection, SerializedFileScheme scheme, string name)
 		{
-			if (!RTTIClassHierarchyDescriptor.HasSignature(scheme.Header.Generation))
+			if (!RTTIClassHierarchyDescriptor.HasPlatform(scheme.Header.Generation))
 			{
 				return collection.Layout;
 			}
-#warning TEMP:
-			/*if (FilenameUtils.IsDefaultResource(name))
+			if (FilenameUtils.IsDefaultResource(name))
 			{
 				return collection.Layout;
-			}*/
+			}
 
 			LayoutInfo info = new LayoutInfo(scheme.Metadata.Hierarchy.Version, scheme.Metadata.Hierarchy.Platform, scheme.Flags);
 			return collection.GetLayout(info);
-		}
-
-		private static string[] GetGenerationVersions(FileGeneration generation)
-		{
-			if (generation < FileGeneration.FG_120_200)
-			{
-				return new[] { "1.2.2" };
-			}
-
-			switch (generation)
-			{
-				case FileGeneration.FG_120_200:
-					return new[] { "2.0.0", "1.6.0", "1.5.0", "1.2.2" };
-				case FileGeneration.FG_210_261:
-					return new[] { "2.6.1", "2.6.0", "2.5.1", "2.5.0", "2.1.0", };
-				case FileGeneration.FG_300b:
-					return new[] { "3.0.0b1" };
-				default:
-					throw new NotSupportedException();
-			}
 		}
 
 		public Object GetAsset(long pathID)
@@ -246,34 +223,39 @@ namespace uTinyRipper
 
 		internal void ReadData(Stream stream)
 		{
-			if (RTTIClassHierarchyDescriptor.HasSignature(Header.Generation))
+			HashSet<int> preloaded = new HashSet<int>();
+			using (AssetReader assetReader = new AssetReader(stream, GetEndianType(), Layout))
 			{
-				ReadAssets(stream);
-			}
-			else
-			{
-				Logger.Log(LogType.Warning, LogCategory.Import, $"Can't determine file version for file '{Name}'. Generation {Header.Generation}");
-				string[] versions = GetGenerationVersions(Header.Generation);
-				for (int i = 0; i < versions.Length; i++)
+				if (SerializedFileMetadata.HasPreload(Header.Generation))
 				{
-					string version = versions[i];
-					Logger.Log(LogType.Debug, LogCategory.Import, $"Try parse {Name} as {version} version");
-					Metadata.Hierarchy.Version = Version.Parse(version);
-					m_assets.Clear();
-					//try
+					foreach (ObjectPtr ptr in Metadata.Preloads)
 					{
-						ReadAssets(stream);
-						UpdateFileVersion();
-						break;
-					}
-					/*catch
-					{
-						Logger.Log(LogType.Debug, LogCategory.Import, "Faild");
-						if (i == versions.Length - 1)
+						if (ptr.FileID == 0)
 						{
-							throw;
+							int index = m_assetEntryLookup[ptr.PathID];
+							ReadAsset(assetReader, ref Metadata.Entries[index]);
+							preloaded.Add(index);
 						}
-					}*/
+					}
+				}
+
+				for (int i = 0; i < Metadata.Entries.Length; i++)
+				{
+					if (Metadata.Entries[i].ClassID == ClassIDType.MonoScript)
+					{
+						if (preloaded.Add(i))
+						{
+							ReadAsset(assetReader, ref Metadata.Entries[i]);
+						}
+					}
+				}
+
+				for (int i = 0; i < Metadata.Entries.Length; i++)
+				{
+					if (!preloaded.Contains(i))
+					{
+						ReadAsset(assetReader, ref Metadata.Entries[i]);
+					}
 				}
 			}
 		}
@@ -316,45 +298,6 @@ namespace uTinyRipper
 				throw new Exception($"Object with path ID {pathID} was not found");
 			}
 			return asset;
-		}
-
-		private void ReadAssets(Stream stream)
-		{
-			HashSet<int> preloaded = new HashSet<int>();
-			using (AssetReader assetReader = new AssetReader(stream, GetEndianType(), Layout))
-			{
-				if (SerializedFileMetadata.HasPreload(Header.Generation))
-				{
-					foreach (ObjectPtr ptr in Metadata.Preloads)
-					{
-						if (ptr.FileID == 0)
-						{
-							int index = m_assetEntryLookup[ptr.PathID];
-							ReadAsset(assetReader, ref Metadata.Entries[index]);
-							preloaded.Add(index);
-						}
-					}
-				}
-
-				for (int i = 0; i < Metadata.Entries.Length; i++)
-				{
-					if (Metadata.Entries[i].ClassID == ClassIDType.MonoScript)
-					{
-						if (preloaded.Add(i))
-						{
-							ReadAsset(assetReader, ref Metadata.Entries[i]);
-						}
-					}
-				}
-
-				for (int i = 0; i < Metadata.Entries.Length; i++)
-				{
-					if (!preloaded.Contains(i))
-					{
-						ReadAsset(assetReader, ref Metadata.Entries[i]);
-					}
-				}
-			}
 		}
 
 		private void ReadAsset(AssetReader reader, ref AssetEntry info)

@@ -4,7 +4,6 @@ using System.Linq;
 using uTinyRipper.Converters;
 using uTinyRipper.Game.Assembly;
 using uTinyRipper.Layout;
-using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
 
@@ -23,15 +22,20 @@ namespace uTinyRipper
 
 		public static GameStructure Load(IEnumerable<string> pathes)
 		{
+			return Load(pathes, null);
+		}
+
+		public static GameStructure Load(IEnumerable<string> pathes, LayoutInfo layinfo)
+		{
 			List<string> toProcess = new List<string>();
 			toProcess.AddRange(pathes);
 			if (toProcess.Count == 0)
 			{
-				throw new ArgumentException("No pathes found", nameof(pathes));
+				throw new ArgumentException("Game files not found", nameof(pathes));
 			}
 
 			GameStructure structure = new GameStructure();
-			structure.Load(toProcess);
+			structure.Load(toProcess, layinfo);
 			return structure;
 		}
 
@@ -122,7 +126,7 @@ namespace uTinyRipper
 			FileCollection.Dispose();
 		}
 
-		private void Load(List<string> pathes)
+		private void Load(List<string> pathes, LayoutInfo layinfo)
 		{
 			if (CheckPC(pathes)) {}
 			else if (CheckLinux(pathes)) {}
@@ -132,15 +136,6 @@ namespace uTinyRipper
 			else if (CheckWebGL(pathes)) {}
 			else if (CheckWebPlayer(pathes)) {}
 			CheckMixed(pathes);
-
-#warning TEMP:
-			LayoutInfo layinfo = new LayoutInfo(new Version(2019, 2, 10, VersionType.Final, 1), Platform.StandaloneWinPlayer, TransferInstructionFlags.SerializeGameRelease);
-			AssetLayout layout = new AssetLayout(layinfo);
-			GameCollection.Parameters pars = new GameCollection.Parameters(layout);
-			pars.ScriptBackend = GetScriptingBackend();
-			pars.RequestAssemblyCallback = OnRequestAssembly;
-			pars.RequestResourceCallback = OnRequestResource;
-			FileCollection = new GameCollection(pars);
 
 			using (GameStructureProcessor processor = new GameStructureProcessor())
 			{
@@ -153,6 +148,14 @@ namespace uTinyRipper
 					ProcessPlatformStructure(processor, MixedStructure);
 				}
 				processor.AddDependencySchemes(RequestDependency);
+
+				layinfo = layinfo ?? processor.GetLayoutInfo();
+				AssetLayout layout = new AssetLayout(layinfo);
+				GameCollection.Parameters pars = new GameCollection.Parameters(layout);
+				pars.ScriptBackend = GetScriptingBackend();
+				pars.RequestAssemblyCallback = OnRequestAssembly;
+				pars.RequestResourceCallback = OnRequestResource;
+				FileCollection = new GameCollection(pars);
 				processor.ProcessSchemes(FileCollection);
 			}
 		}
