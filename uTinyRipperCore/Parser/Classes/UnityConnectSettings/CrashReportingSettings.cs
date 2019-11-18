@@ -68,7 +68,9 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 		}
 		private uint GetLogBufferSize(Version version)
 		{
-			return HasLogBufferSize(version) ? LogBufferSize : 10;
+			// NOTE: editor has different value than player
+			//return HasLogBufferSize(version) ? LogBufferSize : 10;
+			return 10;
 		}
 		private bool GetCaptureEditorExceptions(Version version, TransferInstructionFlags flags)
 		{
