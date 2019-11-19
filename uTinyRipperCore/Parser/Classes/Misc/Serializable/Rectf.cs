@@ -190,26 +190,54 @@ namespace uTinyRipper.Classes
 
 		public Vector2f Position => new Vector2f(X, Y);
 		public Vector2f Size => new Vector2f(Width, Height);
+		public Vector2f Min
+		{
+			get => new Vector2f(XMin, YMin);
+			set
+			{
+				XMin = value.X;
+				YMin = value.Y;
+			}
+		}
+		public Vector2f Max
+		{
+			get => new Vector2f(XMax, YMax);
+			set
+			{
+				XMax = value.X;
+				YMax = value.Y;
+			}
+		}
 
 		public float XMin
 		{
 			get => X;
-			set => X = value;
+			set
+			{
+				float delta = X - value;
+				X = value;
+				Width += delta;
+			}
 		}
 		public float YMin
 		{
 			get => Y;
-			set => Y = value;
+			set
+			{
+				float delta = Y - value;
+				Y = value;
+				Height += delta;
+			}
 		}
 		public float XMax
 		{
 			get => X + Width;
-			private set => Width = value - XMin;
+			set => Width = value - XMin;
 		}
 		public float YMax
 		{
 			get => Y + Height;
-			private set => Height = value - YMin;
+			set => Height = value - YMin;
 		}
 
 		public float X { get; set; }

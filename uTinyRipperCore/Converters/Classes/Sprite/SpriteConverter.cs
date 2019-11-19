@@ -8,7 +8,7 @@ namespace uTinyRipper.Converters
 	{
 		public static SpriteMetaData GenerateSpriteMetaData(IExportContainer container, SpriteAtlas originAtlas, Sprite origin)
 		{
-			origin.GetCoordinates(originAtlas, out Rectf rect, out Vector2f pivot, out Vector4f border);
+			origin.GetSpriteCoordinatesInAtlas(originAtlas, out Rectf rect, out Vector2f pivot, out Vector4f border);
 
 			SpriteMetaData instance = new SpriteMetaData(container.ExportVersion);
 			instance.Name = origin.Name;

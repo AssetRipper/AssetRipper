@@ -68,36 +68,50 @@ namespace uTinyRipper.Classes
 			return SpriteConverter.GenerateSpriteMetaData(container, atlas, this);
 		}
 
-		public void GetCoordinates(SpriteAtlas atlas, out Rectf rect, out Vector2f pivot, out Vector4f border)
+		public void GetSpriteCoordinatesInAtlas(SpriteAtlas atlas, out Rectf sAtlasRect, out Vector2f sAtlasPivot, out Vector4f sAtlasBorder)
 		{
-			Vector2f rectOffset;
+			// sprite values are relative to original image (image, it was created from).
+			// since atlas shuffle and crop sprite images, we need to recalculate those values.
+			// if sprite doesn't belong to an atlas, consider its image as single sprite atlas
+
+			Vector2f cropBotLeft;
+			Vector2f cropTopRight;
 			if (atlas == null)
 			{
-				Vector2f textureOffset = RD.TextureRect.Position;
-				Vector2f textureSize = RD.TextureRect.Size;
-				rectOffset = RD.TextureRectOffset; // should be equal to RD.TextureRect.Position - Rect.Position
-				rect = new Rectf(textureOffset, textureSize);
+				Vector2f spriteOffset = RD.TextureRect.Position;
+				Vector2f spriteSize = RD.TextureRect.Size;
+				sAtlasRect = new Rectf(spriteOffset, spriteSize);
+				cropBotLeft = RD.TextureRectOffset;
 			}
 			else
 			{
 				SpriteAtlasData atlasData = atlas.RenderDataMap[RenderDataKey];
-				Vector2f textureOffset = atlasData.TextureRect.Position;
-				Vector2f textureSize = atlasData.TextureRect.Size;
-				rectOffset = atlasData.TextureRectOffset;
-				rect = new Rectf(textureOffset, textureSize);
+				Vector2f spriteOffset = atlasData.TextureRect.Position;
+				Vector2f spriteSize = atlasData.TextureRect.Size;
+				sAtlasRect = new Rectf(spriteOffset, spriteSize);
+				cropBotLeft = atlasData.TextureRectOffset;
 			}
 
-			Vector2f sizeDif = Rect.Size - rect.Size;
-			Vector2f pivotShiftSize = new Vector2f(Pivot.X * sizeDif.X, Pivot.Y * sizeDif.Y);
-			Vector2f relPivotShiftPos = new Vector2f(rectOffset.X / rect.Size.X, rectOffset.Y / rect.Size.Y);
-			Vector2f relPivotShiftSize = new Vector2f(pivotShiftSize.X / rect.Size.X, pivotShiftSize.Y / rect.Size.Y);
-			pivot = Pivot - relPivotShiftPos + relPivotShiftSize;
+			Vector2f sizeDelta = Rect.Size - sAtlasRect.Size;
+			cropTopRight = new Vector2f(sizeDelta.X - cropBotLeft.X, sizeDelta.Y - cropBotLeft.Y);
 
-			float borderL = Border.X == 0.0f ? 0.0f : Border.X - rectOffset.X;
-			float borderB = Border.Y == 0.0f ? 0.0f : Border.Y - rectOffset.Y;
-			float borderR = Border.Z == 0.0f ? 0.0f : Border.Z + rectOffset.X - sizeDif.X;
-			float borderT = Border.W == 0.0f ? 0.0f : Border.W + rectOffset.Y - sizeDif.Y;
-			border = new Vector4f(borderL, borderB, borderR, borderT);
+			Vector2f pivot = Pivot;
+			if (!HasPivot(File.Version))
+			{
+				Vector2f center = new Vector2f(Rect.Size.X / 2.0f, Rect.Size.Y / 2.0f);
+				Vector2f pivotOffset = center + Offset;
+				pivot = new Vector2f(pivotOffset.X / Rect.Size.X, pivotOffset.Y / Rect.Size.Y);
+			}
+
+			Vector2f pivotPosition = new Vector2f(pivot.X * Rect.Size.X, pivot.Y * Rect.Size.Y);
+			Vector2f aAtlasPivotPosition = pivotPosition - cropBotLeft;
+			sAtlasPivot = new Vector2f(aAtlasPivotPosition.X / sAtlasRect.Size.X, aAtlasPivotPosition.Y / sAtlasRect.Size.Y);
+
+			float borderL = Border.X == 0.0f ? 0.0f : Border.X - cropBotLeft.X;
+			float borderB = Border.Y == 0.0f ? 0.0f : Border.Y - cropBotLeft.Y;
+			float borderR = Border.Z == 0.0f ? 0.0f : Border.Z - cropTopRight.X;
+			float borderT = Border.W == 0.0f ? 0.0f : Border.W - cropTopRight.Y;
+			sAtlasBorder = new Vector4f(borderL, borderB, borderR, borderT);
 		}
 
 		public Vector2f[][] GenerateOutline(SpriteAtlas atlas, Rectf rect, Vector2f pivot)
@@ -304,9 +318,21 @@ namespace uTinyRipper.Classes
 		public string SpriteID { get; set; }
 #endif
 
+		/// <summary>
+		/// Rectangle of the sprite in the source image (image, that was used to create an atlas)
+		/// </summary>
 		public Rectf Rect;
+		/// <summary>
+		/// Pivot pixel offset relative to sprite center
+		/// </summary>
 		public Vector2f Offset;
+		/// <summary>
+		/// Border of the sprite relative to original rectangle Rect
+		/// </summary>
 		public Vector4f Border;
+		/// <summary>
+		/// Pivot, relative to left-bottom of original sprite rectangle Rect
+		/// </summary>
 		public Vector2f Pivot;
 		public Tuple<GUID, long> RenderDataKey;
 		public PPtr<SpriteAtlas> SpriteAtlas;

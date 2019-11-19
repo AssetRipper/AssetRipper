@@ -71,7 +71,7 @@ namespace uTinyRipper.Classes.Sprites
 					for (int i = 0; i < SubMeshes.Length; i++)
 					{
 						Vector3f[] vertices = VertexData.GenerateVertices(version, ref SubMeshes[i]);
-						VerticesToOutline(outlines, vertices, ref SubMeshes[i]);
+						VertexDataToOutline(outlines, vertices, ref SubMeshes[i]);
 					}
 					return outlines.ToArray();
 				}
@@ -84,13 +84,7 @@ namespace uTinyRipper.Classes.Sprites
 				}
 				else
 				{
-					Vector2f[][] outline = new Vector2f[1][];
-					outline[0] = new Vector2f[Indices.Length];
-					for (int i = 0; i < Indices.Length; i++)
-					{
-						outline[0][i] = (Vector2f)Vertices[Indices[i]].Position;
-					}
-					return outline;
+					return VerticesToOutline().ToArray();
 				}
 			}
 		}
@@ -161,23 +155,36 @@ namespace uTinyRipper.Classes.Sprites
 			}
 		}
 
-		private void VerticesToOutline(List<Vector2f[]> outlines, Vector3f[] vertices, ref SubMesh submesh)
+		private List<Vector2f[]> VerticesToOutline()
 		{
-			int triangleCount = submesh.IndexCount / 3;
-			List<Vector3i> triangles = new List<Vector3i>(triangleCount);
-			using (MemoryStream memStream = new MemoryStream(IndexBuffer))
+			Vector3f[] vertices = new Vector3f[Vertices.Length];
+			for (int i = 0; i < vertices.Length; i++)
 			{
-				using (BinaryReader reader = new BinaryReader(memStream))
-				{
-					memStream.Position = submesh.FirstByte;
-					for (int i = 0; i < triangleCount; i++)
-					{
-						int x = reader.ReadInt16();
-						int y = reader.ReadInt16();
-						int z = reader.ReadInt16();
-						triangles.Add(new Vector3i(x, y, z));
-					}
-				}
+				vertices[i] = Vertices[i].Position;
+			}
+
+			Vector3i[] triangles = new Vector3i[Indices.Length / 3];
+			for (int i = 0, j = 0; i < triangles.Length; i++)
+			{
+				int x = Indices[j++];
+				int y = Indices[j++];
+				int z = Indices[j++];
+				triangles[i] = new Vector3i(x, y, z);
+			}
+
+			MeshOutlineGenerator outlineGenerator = new MeshOutlineGenerator(vertices, triangles);
+			return outlineGenerator.GenerateOutlines();
+		}
+
+		private void VertexDataToOutline(List<Vector2f[]> outlines, Vector3f[] vertices, ref SubMesh submesh)
+		{
+			Vector3i[] triangles = new Vector3i[submesh.IndexCount / 3];
+			for (int o = submesh.FirstByte, ti = 0; ti < triangles.Length; o += 6, ti++)
+			{
+				int x = BitConverter.ToInt16(IndexBuffer, o + 0);
+				int y = BitConverter.ToInt16(IndexBuffer, o + 2);
+				int z = BitConverter.ToInt16(IndexBuffer, o + 4);
+				triangles[ti] = new Vector3i(x, y, z);
 			}
 			MeshOutlineGenerator outlineGenerator = new MeshOutlineGenerator(vertices, triangles);
 			List<Vector2f[]> meshOutlines = outlineGenerator.GenerateOutlines();
@@ -206,7 +213,17 @@ namespace uTinyRipper.Classes.Sprites
 		public PPtr<Texture2D> Texture;
 		public PPtr<Texture2D> AlphaTexture;
 		public VertexData VertexData;
+		/// <summary>
+		/// Actual sprite rectangle inside atlas texture (or in original texture for non atlas sprite)
+		/// It is a retangle of cropped image if tight mode is used. Otherwise, its size matches the original size
+		/// </summary>
 		public Rectf TextureRect;
+		/// <summary>
+		/// Offset of actual (cropped) sprite rectangle relative to Sprite.Rect .
+		/// Unity crops rectangle to save atlas space if tight mode is used. So final atlas image is a cropped version
+		/// of a rectangle, developer specified in original texture.
+		/// In other words, this value show how much Unity cropped the Sprite.Rect from bottom-left corner
+		/// </summary>
 		public Vector2f TextureRectOffset;
 		public Vector2f AtlasRectOffset;
 		public Vector4f UVTransform;
