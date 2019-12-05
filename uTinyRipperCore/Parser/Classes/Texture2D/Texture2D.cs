@@ -288,7 +288,10 @@ namespace uTinyRipper.Classes
 			{
 				if (HasStreamData(File.Version))
 				{
-					return StreamData.IsSet;
+					if (StreamData.IsSet)
+					{
+						return true;
+					}
 				}
 				return ImageData.Count > 0;
 			}
