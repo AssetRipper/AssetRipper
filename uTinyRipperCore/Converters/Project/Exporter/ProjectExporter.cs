@@ -39,7 +39,6 @@ namespace uTinyRipper.Converters
 			OverrideDummyExporter(ClassIDType.KTXImporter, false, false);
 			OverrideDummyExporter(ClassIDType.IHVImageFormatImporter, false, false);
 			OverrideDummyExporter(ClassIDType.SpriteAtlas, false, false);
-			OverrideDummyExporter(ClassIDType.TerrainLayer, false, false);
 
 			OverrideYamlExporter(ClassIDType.GameObject);
 			OverrideYamlExporter(ClassIDType.Transform);
@@ -138,6 +137,7 @@ namespace uTinyRipper.Converters
 			OverrideYamlExporter(ClassIDType.SceneAsset);
 			OverrideYamlExporter(ClassIDType.LightmapParameters);
 			OverrideYamlExporter(ClassIDType.SpriteAtlas);
+			OverrideYamlExporter(ClassIDType.TerrainLayer);
 
 			OverrideBinaryExporter(ClassIDType.Shader);
 			OverrideBinaryExporter(ClassIDType.AudioClip);

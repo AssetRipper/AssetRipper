@@ -63,7 +63,7 @@ namespace uTinyRipper.Classes
 		}
 
 		public override string ExportExtension => "terrainlayer";
-		public override string ExportPath => Path.Combine(AssetsKeyword, ClassIDType.Terrain.ToString(), ClassID.ToString());
+		public override string ExportPath => Path.Combine(AssetsKeyword, nameof(Terrain), nameof(TerrainLayer));
 
 		public float Metallic { get; set; }
 		public float Smoothness { get; set; }

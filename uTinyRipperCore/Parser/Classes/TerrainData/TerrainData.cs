@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using uTinyRipper.Classes.TerrainDatas;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
@@ -86,6 +87,8 @@ namespace uTinyRipper.Classes
 			}
 			return node;
 		}
+
+		public override string ExportPath => Path.Combine(AssetsKeyword, nameof(Terrain), nameof(TerrainData));
 
 		public const string SplatDatabaseName = "m_SplatDatabase";
 		public const string DetailDatabaseName = "m_DetailDatabase";
