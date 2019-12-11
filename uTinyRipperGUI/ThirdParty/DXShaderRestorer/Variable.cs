@@ -16,6 +16,7 @@ namespace DXShaderRestorer
 			NameIndex = param.NameIndex;
 			Index = param.Index;
 			ArraySize = param.ArraySize;
+			Length = (uint)(param.RowCount * param.ColumnCount * 4);
 		}
 
 		public Variable(VectorParameter param, ShaderGpuProgramType programType)
@@ -25,6 +26,7 @@ namespace DXShaderRestorer
 			NameIndex = param.NameIndex;
 			Index = param.Index;
 			ArraySize = param.ArraySize;
+			Length = (uint)(param.Dim * 4);
 		}
 
 		public Variable(StructParameter param, ShaderGpuProgramType programType)
@@ -47,6 +49,7 @@ namespace DXShaderRestorer
 			variable.Index = index;
 			variable.ArraySize = param.ArraySize;
 			variable.Type = ShaderParamType.Int;
+			variable.Length = (uint)sizeToAdd;
 			return variable;
 		}
 
