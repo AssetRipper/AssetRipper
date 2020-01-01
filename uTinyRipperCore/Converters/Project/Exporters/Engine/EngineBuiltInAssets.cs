@@ -309,6 +309,7 @@ namespace uTinyRipper.Converters
 			AddShader("Hidden/Internal-GUIRoundedRect", 9004, true);
 			AddShader("Hidden/Internal-UIRDefault", 9005, true);
 			AddShader("Hidden/Internal-UIRAtlasBlitCopy", 9006, true);
+			AddShader("Hidden/Internal-GUIRoundedRectWithColorPerBorder", 9007, true);
 			AddShader("Hidden/Nature/Terrain/Utilities", 10490, true);
 			AddShader("Hidden/TerrainEngine/Details/Vertexlit", 10500, true);
 			AddShader("Hidden/TerrainEngine/Details/WavingDoublePass", 10501, true);
@@ -402,6 +403,7 @@ namespace uTinyRipper.Converters
 			AddShader("Hidden/VideoDecodeAndroid", 16002, true);
 			AddShader("Hidden/Compositing", 17000, true);
 			AddShader("Hidden/TerrainEngine/PaintHeight", 18000, true);
+			AddShader("Hidden/TerrainEngine/HeightBlitCopy", 18001, true);
 			AddShader("Hidden/TerrainEngine/GenerateNormalmap", 18002, true);
 			AddShader("Hidden/TerrainEngine/TerrainLayerUtils", 18003, true);
 			AddShader("Hidden/TerrainEngine/BrushPreview", 18004, true);

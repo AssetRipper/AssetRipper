@@ -57,6 +57,10 @@ namespace uTinyRipper.Classes.Shaders
 		/// </summary>
 		public static bool HasKeywordCombinations(Version version) => version.IsLess(5);
 		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasVariant6(Version version) => version.IsGreaterEqual(2019, 3);
+		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
 		public static bool HasVariantsUserLocal(Version version) => version.IsGreaterEqual(2019);
@@ -138,6 +142,10 @@ namespace uTinyRipper.Classes.Shaders
 				VariantsUserGlobal3 = reader.ReadStringArrayArray();
 				VariantsUserGlobal4 = reader.ReadStringArrayArray();
 				VariantsUserGlobal5 = reader.ReadStringArrayArray();
+				if (HasVariant6(reader.Version))
+				{
+					VariantsUserGlobal6 = reader.ReadStringArrayArray();
+				}
 
 				if (HasVariantsUserLocal(reader.Version))
 				{
@@ -147,6 +155,10 @@ namespace uTinyRipper.Classes.Shaders
 					VariantsUserLocal3 = reader.ReadStringArrayArray();
 					VariantsUserLocal4 = reader.ReadStringArrayArray();
 					VariantsUserLocal5 = reader.ReadStringArrayArray();
+					if (HasVariant6(reader.Version))
+					{
+						VariantsUserLocal6 = reader.ReadStringArrayArray();
+					}
 				}
 
 				VariantsBuiltin0 = reader.ReadStringArrayArray();
@@ -155,6 +167,10 @@ namespace uTinyRipper.Classes.Shaders
 				VariantsBuiltin3 = reader.ReadStringArrayArray();
 				VariantsBuiltin4 = reader.ReadStringArrayArray();
 				VariantsBuiltin5 = reader.ReadStringArrayArray();
+				if (HasVariant6(reader.Version))
+				{
+					VariantsBuiltin6 = reader.ReadStringArrayArray();
+				}
 			}
 
 			if (HasTarget(reader.Version))
@@ -351,18 +367,21 @@ namespace uTinyRipper.Classes.Shaders
 		/// VariantsUser5 previously
 		/// </summary>
 		public string[][] VariantsUserGlobal5 { get; set; }
+		public string[][] VariantsUserGlobal6 { get; set; }
 		public string[][] VariantsUserLocal0 { get; set; }
 		public string[][] VariantsUserLocal1 { get; set; }
 		public string[][] VariantsUserLocal2 { get; set; }
 		public string[][] VariantsUserLocal3 { get; set; }
 		public string[][] VariantsUserLocal4 { get; set; }
 		public string[][] VariantsUserLocal5 { get; set; }
+		public string[][] VariantsUserLocal6 { get; set; }
 		public string[][] VariantsBuiltin0 { get; set; }
 		public string[][] VariantsBuiltin1 { get; set; }
 		public string[][] VariantsBuiltin2 { get; set; }
 		public string[][] VariantsBuiltin3 { get; set; }
 		public string[][] VariantsBuiltin4 { get; set; }
 		public string[][] VariantsBuiltin5 { get; set; }
+		public string[][] VariantsBuiltin6 { get; set; }
 		public string[] TargetVariants0 { get; set; }
 		public string[] TargetVariants1 { get; set; }
 		public string[] TargetVariants2 { get; set; }

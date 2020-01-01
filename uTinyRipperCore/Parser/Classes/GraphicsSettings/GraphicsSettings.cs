@@ -31,6 +31,11 @@ namespace uTinyRipper.Classes
 
 		public static int ToSerializedVersion(Version version)
 		{
+			// AllowEnlightenSupportForUpgradedProject default value has been changed from True to custom?
+			if (version.IsGreaterEqual(2019, 3))
+			{
+				return 13;
+			}
 			// changed TierSettings to platform specific
 			if (version.IsGreaterEqual(5, 6))
 			{
@@ -197,6 +202,10 @@ namespace uTinyRipper.Classes
 			}
 			return version.IsGreaterEqual(2018, 4, 6);
 		}
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasAllowEnlightenSupportForUpgradedProject(Version version) => version.IsGreaterEqual(2019, 3);
 
 		/// <summary>
 		/// 5.3.0 to 5.5.0 exclusive
@@ -404,6 +413,10 @@ namespace uTinyRipper.Classes
 			{
 				LogWhenShaderIsCompiled = reader.ReadBoolean();
 			}
+			if (HasAllowEnlightenSupportForUpgradedProject(reader.Version))
+			{
+				AllowEnlightenSupportForUpgradedProject = reader.ReadBoolean();
+			}
 		}
 
 		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
@@ -503,6 +516,10 @@ namespace uTinyRipper.Classes
 			if (HasLogWhenShaderIsCompiled(container.ExportVersion))
 			{
 				node.Add(LogWhenShaderIsCompiledName, LogWhenShaderIsCompiled);
+			}
+			if (HasAllowEnlightenSupportForUpgradedProject(container.ExportVersion))
+			{
+				node.Add(AllowEnlightenSupportForUpgradedProjectName, GetAllowEnlightenSupportForUpgradedProject(container.Version));
 			}
 			return node;
 		}
@@ -787,6 +804,11 @@ namespace uTinyRipper.Classes
 			}
 		}
 
+		private bool GetAllowEnlightenSupportForUpgradedProject(Version version)
+		{
+			return HasAllowEnlightenSupportForUpgradedProject(version) ? AllowEnlightenSupportForUpgradedProject : true;
+		}
+
 		public PPtr<Shader>[] AlwaysIncludedShaders { get; set; }
 		public PPtr<ShaderVariantCollection>[] PreloadedShaders { get; set; }
 		public TransparencySortMode TransparencySortMode { get; set; }
@@ -816,6 +838,7 @@ namespace uTinyRipper.Classes
 		public bool LightsUseLinearIntensity { get; set; }
 		public bool LightsUseColorTemperature { get; set; }
 		public bool LogWhenShaderIsCompiled { get; set; }
+		public bool AllowEnlightenSupportForUpgradedProject { get; set; }
 
 		public BuiltinShaderSettings Deferred;
 		public BuiltinShaderSettings DeferredReflections;
@@ -862,5 +885,6 @@ namespace uTinyRipper.Classes
 		public const string LightsUseLinearIntensityName = "m_LightsUseLinearIntensity";
 		public const string LightsUseColorTemperatureName = "m_LightsUseColorTemperature";
 		public const string LogWhenShaderIsCompiledName = "m_LogWhenShaderIsCompiled";
+		public const string AllowEnlightenSupportForUpgradedProjectName = "m_AllowEnlightenSupportForUpgradedProject";
 	}
 }

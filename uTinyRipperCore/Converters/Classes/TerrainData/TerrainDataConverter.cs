@@ -1,4 +1,6 @@
-﻿using uTinyRipper.Classes;
+﻿using System;
+using System.Linq;
+using uTinyRipper.Classes;
 
 namespace uTinyRipper.Converters
 {
@@ -15,7 +17,16 @@ namespace uTinyRipper.Converters
 			{
 				instance.Lightmap = origin.Lightmap;
 			}
+			if (TerrainData.HasPreloadShaders(container.ExportVersion))
+			{
+				instance.PreloadShaders = GetPreloadShaders(container, origin);
+			}
 			return instance;
+		}
+
+		private static PPtr<Shader>[] GetPreloadShaders(IExportContainer container, TerrainData origin)
+		{
+			return TerrainData.HasPreloadShaders(container.Version) ? origin.PreloadShaders.ToArray() : Array.Empty<PPtr<Shader>>();
 		}
 	}
 }

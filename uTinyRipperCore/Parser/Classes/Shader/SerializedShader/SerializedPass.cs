@@ -5,6 +5,11 @@ namespace uTinyRipper.Classes.Shaders
 {
 	public struct SerializedPass : IAssetReadable
 	{
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasProgRayTracing(Version version) => version.IsGreaterEqual(2019, 3);
+
 		public void Read(AssetReader reader)
 		{
 			m_nameIndices = new Dictionary<string, int>();
@@ -18,6 +23,10 @@ namespace uTinyRipper.Classes.Shaders
 			ProgGeometry.Read(reader);
 			ProgHull.Read(reader);
 			ProgDomain.Read(reader);
+			if (HasProgRayTracing(reader.Version))
+			{
+				ProgRayTracing.Read(reader);
+			}
 			HasInstancingVariant = reader.ReadBoolean();
 			reader.AlignStream();
 
@@ -72,6 +81,10 @@ namespace uTinyRipper.Classes.Shaders
 					{
 						ProgDomain.Export(writer, ShaderType.Domain);
 					}
+					if ((ProgramMask & ShaderType.RayTracing.ToProgramMask()) != 0)
+					{
+						ProgDomain.Export(writer, ShaderType.RayTracing);
+					}
 
 #warning HasInstancingVariant?
 				}
@@ -99,6 +112,7 @@ namespace uTinyRipper.Classes.Shaders
 		public SerializedProgram ProgGeometry;
 		public SerializedProgram ProgHull;
 		public SerializedProgram ProgDomain;
+		public SerializedProgram ProgRayTracing;
 		public SerializedTagMap Tags;
 
 		private Dictionary<string, int> m_nameIndices;

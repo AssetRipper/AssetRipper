@@ -5,6 +5,17 @@ namespace uTinyRipper
 {
 	public static class EndianReaderExtensions
 	{
+		public static uint[][] ReadUInt32ArrayArray(this EndianReader _this)
+		{
+			int count = _this.ReadInt32();
+			uint[][] array = new uint[count][];
+			for (int i = 0; i < count; i++)
+			{
+				array[i] = _this.ReadUInt32Array();
+			}
+			return array;
+		}
+
 		public static string[][] ReadStringArrayArray(this EndianReader _this)
 		{
 			int count = _this.ReadInt32();

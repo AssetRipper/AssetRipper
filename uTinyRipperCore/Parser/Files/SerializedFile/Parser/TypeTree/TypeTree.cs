@@ -5,6 +5,11 @@ namespace uTinyRipper.SerializedFiles
 {
 	public sealed class TypeTree : ISerializedReadable, ISerializedWritable
 	{
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasUnknown(FileGeneration generation) => generation >= FileGeneration.FG_20193_x;
+
 		public void Read(SerializedReader reader)
 		{
 			if (TypeTreeNode.IsFormat5(reader.Generation))
@@ -20,6 +25,11 @@ namespace uTinyRipper.SerializedFiles
 				}
 				CustomTypeBuffer = new byte[customBufferSize];
 				reader.Read(CustomTypeBuffer, 0, CustomTypeBuffer.Length);
+
+				if (HasUnknown(reader.Generation))
+				{
+					Unknown = reader.ReadInt32();
+				}
 			}
 			else
 			{
@@ -40,6 +50,11 @@ namespace uTinyRipper.SerializedFiles
 					Nodes[i].Write(writer);
 				}
 				writer.Write(CustomTypeBuffer, 0, CustomTypeBuffer.Length);
+
+				if (HasUnknown(writer.Generation))
+				{
+					writer.Write(Unknown);
+				}
 			}
 			else
 			{
@@ -126,5 +141,6 @@ namespace uTinyRipper.SerializedFiles
 
 		public TypeTreeNode[] Nodes { get; set; }
 		public byte[] CustomTypeBuffer { get; set; }
+		public int Unknown { get; set; }
 	}
 }

@@ -17,6 +17,10 @@ namespace uTinyRipper.Classes
 		/// Less than 3.0.0
 		/// </summary>
 		public static bool HasLightmap(Version version) => version.IsLess(3);
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasPreloadShaders(Version version) => version.IsGreaterEqual(2019, 3);
 
 		public override Object Convert(IExportContainer container)
 		{
@@ -34,6 +38,10 @@ namespace uTinyRipper.Classes
 			{
 				Lightmap.Read(reader);
 			}
+			if (HasPreloadShaders(reader.Version))
+			{
+				PreloadShaders = reader.ReadAssetArray<PPtr<Shader>>();
+			}
 		}
 
 		public override void Write(AssetWriter writer)
@@ -46,6 +54,10 @@ namespace uTinyRipper.Classes
 			if (HasLightmap(writer.Version))
 			{
 				Lightmap.Write(writer);
+			}
+			if (HasPreloadShaders(writer.Version))
+			{
+				PreloadShaders.Write(writer);
 			}
 		}
 
@@ -73,6 +85,13 @@ namespace uTinyRipper.Classes
 			{
 				yield return context.FetchDependency(Lightmap, LightmapName);
 			}
+			if (HasPreloadShaders(context.Version))
+			{
+				foreach (PPtr<Object> asset in context.FetchDependencies(PreloadShaders, PreloadShadersName))
+				{
+					yield return asset;
+				}
+			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -85,15 +104,22 @@ namespace uTinyRipper.Classes
 			{
 				node.Add(LightmapName, Lightmap.ExportYAML(container));
 			}
+			if (HasPreloadShaders(container.ExportVersion))
+			{
+				node.Add(PreloadShadersName, PreloadShaders.ExportYAML(container));
+			}
 			return node;
 		}
 
 		public override string ExportPath => Path.Combine(AssetsKeyword, nameof(Terrain), nameof(TerrainData));
 
+		public PPtr<Shader>[] PreloadShaders { get; set; }
+
 		public const string SplatDatabaseName = "m_SplatDatabase";
 		public const string DetailDatabaseName = "m_DetailDatabase";
 		public const string HeightmapName = "m_Heightmap";
 		public const string LightmapName = "m_Lightmap";
+		public const string PreloadShadersName = "m_PreloadShaders";
 
 		public SplatDatabase SplatDatabase;
 		public DetailDatabase DetailDatabase;

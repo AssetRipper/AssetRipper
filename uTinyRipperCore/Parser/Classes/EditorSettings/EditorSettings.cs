@@ -41,6 +41,11 @@ namespace uTinyRipper.Classes
 
 		public static int ToSerializedVersion(Version version)
 		{
+			// UseLegacyProbeSampleCount default value has been changed from 1 to custom?
+			if (version.IsGreaterEqual(2019, 3))
+			{
+				return 9;
+			}
 			// 'asmref' has been added to default ProjectGenerationIncludedExtensions
 			if (version.IsGreaterEqual(2019, 2))
 			{
@@ -142,9 +147,17 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasAsyncShaderCompilation(Version version) => version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 6);
 		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasEnterPlayModeOptions(Version version) => version.IsGreaterEqual(2019, 3);
+		/// <summary>
 		/// 2019.2 and greater
 		/// </summary>
 		public static bool HasShowLightmapResolutionOverlay(Version version) => version.IsGreaterEqual(2019, 2);
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasUseLegacyProbeSampleCount(Version version) => version.IsGreaterEqual(2019, 3);
 
 		/// <summary>
 		/// 2018.2 and greater
@@ -268,12 +281,25 @@ namespace uTinyRipper.Classes
 				reader.AlignStream();
 			}
 
+			if (HasEnterPlayModeOptions(reader.Version))
+			{
+				EnterPlayModeOptionsEnabled = reader.ReadBoolean();
+				reader.AlignStream();
+
+				EnterPlayModeOptions = (EnterPlayModeOptions)reader.ReadInt32();
+			}
 			if (HasShowLightmapResolutionOverlay(reader.Version))
 			{
 				ShowLightmapResolutionOverlay = reader.ReadBoolean();
 			}
 			if (IsAlign2(reader.Version))
 			{
+				reader.AlignStream();
+			}
+
+			if (HasUseLegacyProbeSampleCount(reader.Version))
+			{
+				UseLegacyProbeSampleCount = reader.ReadInt32();
 				reader.AlignStream();
 			}
 		}
@@ -316,9 +342,18 @@ namespace uTinyRipper.Classes
 			{
 				node.Add(AsyncShaderCompilationName, GetAsyncShaderCompilation(container.Version));
 			}
+			if (HasEnterPlayModeOptions(container.ExportVersion))
+			{
+				node.Add(EnterPlayModeOptionsEnabledName, EnterPlayModeOptionsEnabled);
+				node.Add(EnterPlayModeOptionsName, (int)GetEnterPlayModeOptions(container.Version));
+			}
 			if (HasShowLightmapResolutionOverlay(container.ExportVersion))
 			{
 				node.Add(ShowLightmapResolutionOverlayName, GetShowLightmapResolutionOverlay(container.Version));
+			}
+			if (HasUseLegacyProbeSampleCount(container.ExportVersion))
+			{
+				node.Add(UseLegacyProbeSampleCountName, GetUseLegacyProbeSampleCount(container.Version));
 			}
 			return node;
 		}
@@ -372,9 +407,17 @@ namespace uTinyRipper.Classes
 		{
 			return HasAsyncShaderCompilation(version) ? AsyncShaderCompilation : true;
 		}
+		public EnterPlayModeOptions GetEnterPlayModeOptions(Version version)
+		{
+			return HasEnterPlayModeOptions(version) ? EnterPlayModeOptions : EnterPlayModeOptions.DisableDomainReload | EnterPlayModeOptions.DisableSceneReload;
+		}
 		private bool GetShowLightmapResolutionOverlay(Version version)
 		{
 			return HasShowLightmapResolutionOverlay(version) ? ShowLightmapResolutionOverlay : true;
+		}
+		private int GetUseLegacyProbeSampleCount(Version version)
+		{
+			return HasUseLegacyProbeSampleCount(version) ? UseLegacyProbeSampleCount : 1;
 		}
 
 		public string ExternalVersionControlSupport { get; set; }
@@ -395,7 +438,10 @@ namespace uTinyRipper.Classes
 		public bool EnableTextureStreamingInEditMode { get; set; }
 		public bool EnableTextureStreamingInPlayMode { get; set; }
 		public bool AsyncShaderCompilation { get; set; }
+		public bool EnterPlayModeOptionsEnabled { get; set; }
+		public EnterPlayModeOptions EnterPlayModeOptions { get; set; }
 		public bool ShowLightmapResolutionOverlay { get; set; }
+		public int UseLegacyProbeSampleCount { get; set; }
 
 		public const string ExternalVersionControlSupportName = "m_ExternalVersionControlSupport";
 		public const string SerializationModeName = "m_SerializationMode";
@@ -416,7 +462,10 @@ namespace uTinyRipper.Classes
 		public const string EnableTextureStreamingInEditModeName = "m_EnableTextureStreamingInEditMode";
 		public const string EnableTextureStreamingInPlayModeName = "m_EnableTextureStreamingInPlayMode";
 		public const string AsyncShaderCompilationName = "m_AsyncShaderCompilation";
+		public const string EnterPlayModeOptionsEnabledName = "m_EnterPlayModeOptionsEnabled";
+		public const string EnterPlayModeOptionsName = "m_EnterPlayModeOptions";
 		public const string ShowLightmapResolutionOverlayName = "m_ShowLightmapResolutionOverlay";
+		public const string UseLegacyProbeSampleCountName = "m_UseLegacyProbeSampleCount";
 
 		public PPtr<SceneAsset> PrefabRegularEnvironment;
 		public PPtr<SceneAsset> PrefabUIEnvironment;

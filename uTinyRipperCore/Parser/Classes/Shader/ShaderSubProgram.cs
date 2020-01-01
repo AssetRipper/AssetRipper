@@ -24,10 +24,7 @@ namespace uTinyRipper.Classes.Shaders
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		private static bool HasUnknown4(Version version)
-		{
-			return Shader.IsSerialized(version);
-		}
+		private static bool HasUnknown4(Version version) => Shader.IsSerialized(version);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>

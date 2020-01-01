@@ -1,69 +1,80 @@
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.Classes.Textures;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
-	public sealed class MovieTexture : Texture
+	public sealed class MovieTexture : BaseVideoTexture
 	{
 		public MovieTexture(AssetInfo assetInfo):
 			base(assetInfo)
 		{
 		}
 
+		/// <summary>
+		/// Less than 5.0.0
+		/// </summary>
+		private static bool HasData(Version version) => version.IsLess(5);
+		/// <summary>
+		/// 5.0.0 to 2019.3 exclusive
+		/// </summary>
+		private static bool IsInherited(Version version) => version.IsGreaterEqual(5) && version.IsLess(2019, 3);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			IsLoop = reader.ReadBoolean();
-			reader.AlignStream();
-
-			AudioClip.Read(reader);
-			MovieData = reader.ReadByteArray();
-			reader.AlignStream();
-
-			ColorSpace = (ColorSpace)reader.ReadInt32();
+			if (HasData(reader.Version) || IsInherited(reader.Version))
+			{
+				base.Read(reader);
+			}
+			else
+			{
+				ReadTexture(reader);
+			}
 		}
 
 		public override void ExportBinary(IExportContainer container, Stream stream)
 		{
-			using (BinaryWriter writer = new BinaryWriter(stream))
+			if (HasData(container.Version) || IsInherited(container.Version))
 			{
-				writer.Write(MovieData, 0, MovieData.Length);
+				base.ExportBinary(container, stream);
+			}
+			else
+			{
+				Logger.Log(LogType.Warning, LogCategory.Export, "Movie texture doesn't has any data");
 			}
 		}
 
 		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			if (HasData(context.Version) || IsInherited(context.Version))
 			{
-				yield return asset;
+				foreach (PPtr<Object> asset in base.FetchDependencies(context))
+				{
+					yield return asset;
+				}
 			}
-			
-			yield return context.FetchDependency(AudioClip, AudioClipName);
+			else
+			{
+				foreach (PPtr<Object> asset in FetchDependenciesTexture(context))
+				{
+					yield return asset;
+				}
+			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(LoopName, IsLoop);
-			node.Add(AudioClipName, AudioClip.ExportYAML(container));
-			node.Add(MovieDataName, MovieData.ExportYAML());
-			node.Add(ColorSpaceName, (int)ColorSpace);
-			return node;
+			if (HasData(container.Version) || IsInherited(container.Version))
+			{
+				return base.ExportYAMLRoot(container);
+			}
+			else
+			{
+				return ExportYAMLRootTexture(container);
+			}
 		}
-
-		public bool IsLoop { get; set; }
-		public byte[] MovieData { get; set; }
-		public ColorSpace ColorSpace { get; set; }
-
-		public const string LoopName = "m_Loop";
-		public const string AudioClipName = "m_AudioClip";
-		public const string MovieDataName = "m_MovieData";
-		public const string ColorSpaceName = "m_ColorSpace";
-
-		public PPtr<AudioClip> AudioClip;
 	}
 }

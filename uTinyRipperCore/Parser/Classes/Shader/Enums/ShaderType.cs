@@ -10,7 +10,9 @@ namespace uTinyRipper.Classes.Shaders
 		Geometry	= 3,
 		Hull		= 4,
 		Domain		= 5,
-		TypeCount	= 6,
+		RayTracing	= 6,
+
+		TypeCount,
 	}
 
 	public static class ShaderTypeExtensions

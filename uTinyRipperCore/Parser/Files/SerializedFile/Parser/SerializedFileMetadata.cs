@@ -21,6 +21,10 @@ namespace uTinyRipper.SerializedFiles
 		/// 1.2.0 and greater
 		/// </summary>
 		public static bool HasUnknown(FileGeneration generation) => generation >= FileGeneration.FG_120_200;
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasUnknown2(FileGeneration generation) => generation >= FileGeneration.FG_20193_x;
 
 		public void Read(Stream stream, SerializedFileHeader header)
 		{
@@ -65,6 +69,10 @@ namespace uTinyRipper.SerializedFiles
 			{
 				Unknown = reader.ReadStringZeroTerm();
 			}
+			if (HasUnknown2(reader.Generation))
+			{
+				Unknown2 = reader.ReadInt32();
+			}
 		}
 
 		private void Write(SerializedWriter writer)
@@ -84,6 +92,10 @@ namespace uTinyRipper.SerializedFiles
 			{
 				writer.WriteStringZeroTerm(Unknown);
 			}
+			if (HasUnknown2(writer.Generation))
+			{
+				writer.Write(Unknown2);
+			}
 		}
 
 		public bool SwapEndianess { get; set; }
@@ -91,6 +103,7 @@ namespace uTinyRipper.SerializedFiles
 		public ObjectPtr[] Preloads { get; set; }
 		public FileIdentifier[] Dependencies { get; set; }
 		public string Unknown { get; set; }
+		public int Unknown2 { get; set; }
 
 		public const int MetadataMinSize = RTTIClassHierarchyDescriptor.HierarchyMinSize + 12;
 

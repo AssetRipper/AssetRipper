@@ -10,6 +10,12 @@ namespace uTinyRipper.Converters.TerrainDatas
 		{
 			Heightmap instance = new Heightmap();
 			instance.Heights = origin.Heights.ToArray();
+			if (Heightmap.HasHoles(container.ExportVersion))
+			{
+				instance.Holes = GetHoles(container, ref origin);
+				instance.HolesLOD = GetHolesLOD(container, ref origin);
+				instance.EnableHolesTextureCompression = GetEnableHolesTextureCompression(container, ref origin);
+			}
 			if (Heightmap.HasShifts(container.ExportVersion))
 			{
 				instance.Shifts = GetShifts(container, ref origin);
@@ -31,9 +37,24 @@ namespace uTinyRipper.Converters.TerrainDatas
 			return instance;
 		}
 
+		private static byte[] GetHoles(IExportContainer container, ref Heightmap origin)
+		{
+			return Heightmap.HasHoles(container.Version) ? origin.Holes.ToArray() : Array.Empty<byte>();
+		}
+
+		private static byte[] GetHolesLOD(IExportContainer container, ref Heightmap origin)
+		{
+			return Heightmap.HasHoles(container.Version) ? origin.HolesLOD.ToArray() : Array.Empty<byte>();
+		}
+
+		private static bool GetEnableHolesTextureCompression(IExportContainer container, ref Heightmap origin)
+		{
+			return Heightmap.HasHoles(container.Version) ? origin.EnableHolesTextureCompression : true;
+		}
+
 		private static Shift[] GetShifts(IExportContainer container, ref Heightmap origin)
 		{
-			return Heightmap.HasShifts(container.Version) ? origin.Shifts : Array.Empty<Shift>();
+			return Heightmap.HasShifts(container.Version) ? origin.Shifts.ToArray() : Array.Empty<Shift>();
 		}
 
 		private static float GetThickness(IExportContainer container, ref Heightmap origin)

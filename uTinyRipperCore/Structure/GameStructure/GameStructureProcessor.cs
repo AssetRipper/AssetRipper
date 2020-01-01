@@ -129,7 +129,7 @@ namespace uTinyRipper
 			if (RTTIClassHierarchyDescriptor.HasPlatform(serialized.Header.Generation))
 			{
 				RTTIClassHierarchyDescriptor hierarchy = serialized.Metadata.Hierarchy;
-				return new LayoutInfo(hierarchy.Version, hierarchy.Platform, TransferInstructionFlags.SerializeGameRelease);
+				return new LayoutInfo(hierarchy.Version, hierarchy.Platform, serialized.Flags);
 			}
 			else
 			{

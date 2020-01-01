@@ -127,6 +127,10 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasFrictionType(Version version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasSolverType(Version version) => version.IsGreaterEqual(2019, 3);
+		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
 		public static bool HasDefaultMaxAngularSpeed(Version version) => version.IsGreaterEqual(2019);
@@ -135,6 +139,10 @@ namespace uTinyRipper.Classes
 		/// 3.0.0 and greater
 		/// </summary>
 		private static bool IsAlign(Version version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool IsAlign2(Version version) => version.IsGreaterEqual(2019);
 
 		public override void Read(AssetReader reader)
 		{
@@ -233,10 +241,17 @@ namespace uTinyRipper.Classes
 				EnableEnhancedDeterminism = reader.ReadBoolean();
 				EnableUnifiedHeightmaps = reader.ReadBoolean();
 			}
-			if (HasDefaultMaxAngularSpeed(reader.Version))
+			if (IsAlign2(reader.Version))
 			{
 				reader.AlignStream();
+			}
 
+			if (HasSolverType(reader.Version))
+			{
+				SolverType = (SolverType)reader.ReadInt32();
+			}
+			if (HasDefaultMaxAngularSpeed(reader.Version))
+			{
 				DefaultMaxAngularSpeed = reader.ReadSingle();
 			}
 		}
@@ -286,6 +301,10 @@ namespace uTinyRipper.Classes
 				node.Add(FrictionTypeName, (int)FrictionType);
 				node.Add(EnableEnhancedDeterminismName, EnableEnhancedDeterminism);
 				node.Add(EnableUnifiedHeightmapsName, GetEnableUnifiedHeightmaps(container.Version));
+			}
+			if (HasSolverType(container.ExportVersion))
+			{
+				node.Add(SolverTypeName, (int)SolverType);
 			}
 			if (HasDefaultMaxAngularSpeed(container.ExportVersion))
 			{
@@ -401,6 +420,7 @@ namespace uTinyRipper.Classes
 		public FrictionType FrictionType { get; set; }
 		public bool EnableEnhancedDeterminism { get; set; }
 		public bool EnableUnifiedHeightmaps { get; set; }
+		public SolverType SolverType { get; set; }
 		/// <summary>
 		/// DefaultMaxAngluarSpeed previously
 		/// </summary>
@@ -432,6 +452,7 @@ namespace uTinyRipper.Classes
 		public const string FrictionTypeName = "m_FrictionType";
 		public const string EnableEnhancedDeterminismName = "m_EnableEnhancedDeterminism";
 		public const string EnableUnifiedHeightmapsName = "m_EnableUnifiedHeightmaps";
+		public const string SolverTypeName = "m_SolverType";
 		public const string DefaultMaxAngluarSpeedName = "m_DefaultMaxAngluarSpeed";
 		public const string DefaultMaxAngularSpeedName = "m_DefaultMaxAngularSpeed";
 

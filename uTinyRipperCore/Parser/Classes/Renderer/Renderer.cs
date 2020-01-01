@@ -138,6 +138,10 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasReflectUsage(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasRayTracingMode(Version version) => version.IsGreaterEqual(2019, 3);
+		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
 		public static bool HasProbeAnchor(Version version) => version.IsGreaterEqual(3, 5);
@@ -305,6 +309,10 @@ namespace uTinyRipper.Classes
 				{
 					ReflectionProbeUsage = (ReflectionProbeUsage)reader.ReadByte();
 				}
+			}
+			if (HasRayTracingMode(reader.Version))
+			{
+				RayTracingMode = (RayTracingMode)reader.ReadByte();
 			}
 			if (IsAlign2(reader.Version))
 			{
@@ -495,6 +503,10 @@ namespace uTinyRipper.Classes
 			node.Add(MotionVectorsName, (byte)GetMotionVectors(container.Version));
 			node.Add(LightProbeUsageName, (byte)LightProbeUsage);
 			node.Add(ReflectionProbeUsageName, (byte)GetReflectionProbeUsage(container.Version));
+			if (HasRayTracingMode(container.ExportVersion))
+			{
+				node.Add(RayTracingModeName, (byte)RayTracingMode);
+			}
 			if (HasRenderingLayerMask(container.ExportVersion))
 			{
 				node.Add(RenderingLayerMaskName, GetRenderingLayerMask(container.Version));
@@ -686,6 +698,7 @@ namespace uTinyRipper.Classes
 		public LightProbeUsage LightProbeUsage { get; set; }
 		public bool UseReflectionProbes => ReflectionProbeUsage != ReflectionProbeUsage.Off;
 		public ReflectionProbeUsage ReflectionProbeUsage { get; set; }
+		public RayTracingMode RayTracingMode { get; set; }
 		public uint RenderingLayerMask { get; set; }
 		public int RendererPriority { get; set; }
 		public ushort LightmapIndex { get; set; }
@@ -719,6 +732,7 @@ namespace uTinyRipper.Classes
 		public const string UseLightProbesName = "m_UseLightProbes";
 		public const string LightProbeUsageName = "m_LightProbeUsage";
 		public const string ReflectionProbeUsageName = "m_ReflectionProbeUsage";
+		public const string RayTracingModeName = "m_RayTracingMode";
 		public const string RenderingLayerMaskName = "m_RenderingLayerMask";
 		public const string RendererPriorityName = "m_RendererPriority";
 		public const string MaterialsName = "m_Materials";

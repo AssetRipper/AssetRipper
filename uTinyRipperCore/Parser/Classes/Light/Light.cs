@@ -11,6 +11,12 @@ namespace uTinyRipper.Classes
 	{
 		public static int ToSerializedVersion(Version version)
 		{
+			// unknown conversion
+			if (version.IsGreaterEqual(2019, 3))
+			{
+				return 10;
+			}
+			// InnerSpotAngle value has become configurable
 			// Range value has been recalculated
 			if (version.IsGreaterEqual(2019))
 			{
@@ -49,10 +55,12 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasShape(Version version) => version.IsGreaterEqual(2019, 3);
+		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		/// <param name="version"></param>
-		/// <returns></returns>
 		public static bool HasAttenuate(Version version) => version.IsLess(3);
 		/// <summary>
 		/// 2.0.0 and greater
@@ -142,6 +150,10 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 			Type = (LightType)reader.ReadInt32();
+			if (HasShape(reader.Version))
+			{
+				Shape = (LightShape)reader.ReadInt32();
+			}
 			Color.Read(reader);
 			if (HasAttenuate(reader.Version))
 			{
@@ -258,6 +270,10 @@ namespace uTinyRipper.Classes
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TypeName, (int)Type);
+			if (HasShape(container.ExportVersion))
+			{
+				node.Add(ShapeName, (int)Shape);
+			}
 			node.Add(ColorName, Color.ExportYAML(container));
 			node.Add(IntensityName, Intensity);
 			node.Add(RangeName, Range);
@@ -318,6 +334,7 @@ namespace uTinyRipper.Classes
 		}
 
 		public LightType Type { get; set; }
+		public LightShape Shape { get; set; }
 		public bool Attenuate { get; set; }
 		public float Intensity { get; set; }
 		public float Range { get; set; }
@@ -347,6 +364,7 @@ namespace uTinyRipper.Classes
 #endif
 
 		public const string TypeName = "m_Type";
+		public const string ShapeName = "m_Shape";
 		public const string ColorName = "m_Color";
 		public const string IntensityName = "m_Intensity";
 		public const string RangeName = "m_Range";

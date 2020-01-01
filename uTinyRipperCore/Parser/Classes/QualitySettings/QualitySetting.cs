@@ -117,6 +117,10 @@ namespace uTinyRipper.Classes.QualitySettingss
 		/// </summary>
 		public static bool HasResolutionScalingFixedDPIFactor(Version version) => version.IsGreaterEqual(2017, 1);
 		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasCustomRenderPipeline(Version version) => version.IsGreaterEqual(2019, 3);
+		/// <summary>
 		/// 3.5.0 and greater and Not Release
 		/// </summary>
 		public static bool HasExcludedTargetPlatforms(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 5);
@@ -205,6 +209,10 @@ namespace uTinyRipper.Classes.QualitySettingss
 			if (!HasResolutionScalingFixedDPIFactor(version))
 			{
 				ResolutionScalingFixedDPIFactor = setting.ResolutionScalingFixedDPIFactor;
+			}
+			if (!HasCustomRenderPipeline(version))
+			{
+				CustomRenderPipeline = setting.CustomRenderPipeline;
 			}
 #if UNIVERSAL
 			if (!HasExcludedTargetPlatforms(version, flags))
@@ -316,6 +324,10 @@ namespace uTinyRipper.Classes.QualitySettingss
 			{
 				ResolutionScalingFixedDPIFactor = reader.ReadSingle();
 			}
+			if (HasCustomRenderPipeline(reader.Version))
+			{
+				CustomRenderPipeline.Read(reader);
+			}
 			if (HasVSyncCount(reader.Version))
 			{
 				reader.AlignStream();
@@ -372,6 +384,10 @@ namespace uTinyRipper.Classes.QualitySettingss
 				node.Add(AsyncUploadPersistentBufferName, AsyncUploadPersistentBuffer);
 			}
 			node.Add(ResolutionScalingFixedDPIFactorName, ResolutionScalingFixedDPIFactor);
+			if (HasCustomRenderPipeline(container.ExportVersion))
+			{
+				node.Add(CustomRenderPipelineName, CustomRenderPipeline.ExportYAML(container));
+			}
 			node.Add(ExcludedTargetPlatformsName, GetExcludedTargetPlatforms(container.Version, container.Flags).ExportYAML());
 			return node;
 		}
@@ -486,8 +502,10 @@ namespace uTinyRipper.Classes.QualitySettingss
 		public const string AsyncUploadBufferSizeName = "asyncUploadBufferSize";
 		public const string AsyncUploadPersistentBufferName = "asyncUploadPersistentBuffer";
 		public const string ResolutionScalingFixedDPIFactorName = "resolutionScalingFixedDPIFactor";
+		public const string CustomRenderPipelineName = "customRenderPipeline";
 		public const string ExcludedTargetPlatformsName = "excludedTargetPlatforms";
 
 		public Vector3f ShadowCascade4Split;
+		public PPtr<MonoBehaviour> CustomRenderPipeline;
 	}
 }

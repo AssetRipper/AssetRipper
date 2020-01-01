@@ -57,6 +57,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			ShowResolutionOverlay = true;
 			ExportTrainingData = false;
 			TrainingDataDestination = TrainingDataName;
+			LightProbeSampleCountMultiplier = 4.0f;
 		}
 
 		public static int ToSerializedVersion(Version version)
@@ -308,6 +309,10 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		/// 2019.2 and greater
 		/// </summary>
 		public static bool HasTrainingDataDestination(Version version) => version.IsGreaterEqual(2019, 2);
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasLightProbeSampleCountMultiplier(Version version) => version.IsGreaterEqual(2019, 3);
 
 		/// <summary>
 		/// 5.4.0 and greater
@@ -521,6 +526,10 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			{
 				TrainingDataDestination = reader.ReadString();
 			}
+			if (HasLightProbeSampleCountMultiplier(reader.Version))
+			{
+				LightProbeSampleCountMultiplier = reader.ReadSingle();
+			}
 		}
 
 		public void Write(AssetWriter writer)
@@ -722,6 +731,10 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			{
 				writer.Write(TrainingDataDestination);
 			}
+			if (HasLightProbeSampleCountMultiplier(writer.Version))
+			{
+				writer.Write(LightProbeSampleCountMultiplier);
+			}
 		}
 
 		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
@@ -915,6 +928,10 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			{
 				node.Add(TrainingDataDestinationName, GetTrainingDataDestination(container.Version));
 			}
+			if (HasLightProbeSampleCountMultiplier(container.ExportVersion))
+			{
+				node.Add(LightProbeSampleCountMultiplierName, GetLightProbeSampleCountMultiplier(container.Version));
+			}
 			return node;
 		}
 
@@ -1012,6 +1029,10 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		{
 			return HasTrainingDataDestination(version) ? TrainingDataDestination : TrainingDataName;
 		}
+		private float GetLightProbeSampleCountMultiplier(Version version)
+		{
+			return HasLightProbeSampleCountMultiplier(version) ? LightProbeSampleCountMultiplier : 4.0f;
+		}
 
 		public float Resolution { get; set; }
 		public float BakeResolution { get; set; }
@@ -1083,6 +1104,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		public bool ShowResolutionOverlay { get; set; }
 		public bool ExportTrainingData { get; set; }
 		public string TrainingDataDestination { get; set; }
+		public float LightProbeSampleCountMultiplier { get; set; }
 
 		public const string ResolutionName = "m_Resolution";
 		public const string BakeResolutionName = "m_BakeResolution";
@@ -1151,6 +1173,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		public const string ShowResolutionOverlayName = "m_ShowResolutionOverlay";
 		public const string ExportTrainingDataName = "m_ExportTrainingData";
 		public const string TrainingDataDestinationName = "m_TrainingDataDestination";
+		public const string LightProbeSampleCountMultiplierName = "m_LightProbeSampleCountMultiplier";
 
 		private const string TrainingDataName = "TrainingData";
 

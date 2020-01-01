@@ -4,18 +4,29 @@ namespace uTinyRipper.Classes.Shaders
 {
 	public struct ShaderSubProgramBlob : IAssetReadable
 	{
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasUnknown(Version version) => version.IsGreaterEqual(2019, 3);
+
 		public void Read(AssetReader reader)
 		{
 			long startPosition = reader.BaseStream.Position;
 			int count = reader.ReadInt32();
 			long headerPosition = reader.BaseStream.Position;
+			int entrySize = HasUnknown(reader.Version) ? 12 : 8;
 
 			SubPrograms = new ShaderSubProgram[count];
 			for (int i = 0; i < count; i++)
 			{
-				reader.BaseStream.Position = headerPosition + i * 8;
+				reader.BaseStream.Position = headerPosition + i * entrySize;
 				int offset = reader.ReadInt32();
 				int length = reader.ReadInt32();
+				int unknown = 0;
+				if (HasUnknown(reader.Version))
+				{
+					unknown = reader.ReadInt32();
+				}
 				
 				long dataPosition = startPosition + offset;
 				reader.BaseStream.Position = dataPosition;

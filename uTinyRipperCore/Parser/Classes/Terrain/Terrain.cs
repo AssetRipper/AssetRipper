@@ -16,6 +16,11 @@ namespace uTinyRipper.Classes
 
 		public static int ToSerializedVersion(Version version)
 		{
+			// RenderingLayerMask value has been changed from 1 to custom
+			if (version.IsGreaterEqual(2019, 3))
+			{
+				return 6;
+			}
 			// MaterialType has been replaced by actual shaders
 			if (version.IsGreaterEqual(2019, 2))
 			{
@@ -116,6 +121,10 @@ namespace uTinyRipper.Classes
 		/// 2018.3 and greater
 		/// </summary>
 		public static bool HasGroupingID(Version version) => version.IsGreaterEqual(2018, 3);
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasRenderingLayerMask(Version version) => version.IsGreaterEqual(2019, 3);
 
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
@@ -216,6 +225,13 @@ namespace uTinyRipper.Classes
 			if (HasGroupingID(reader.Version))
 			{
 				GroupingID = reader.ReadInt32();
+			}
+			if (HasRenderingLayerMask(reader.Version))
+			{
+				RenderingLayerMask = reader.ReadUInt32();
+			}
+			if (HasGroupingID(reader.Version))
+			{
 				AllowAutoConnect = reader.ReadBoolean();
 			}
 		}
@@ -282,6 +298,13 @@ namespace uTinyRipper.Classes
 			if (HasGroupingID(container.ExportVersion))
 			{
 				node.Add(GroupingIDName, GroupingID);
+			}
+			if (HasRenderingLayerMask(container.ExportVersion))
+			{
+				node.Add(RenderingLayerMaskName, GetRenderingLayerMask(container.Version));
+			}
+			if (HasGroupingID(container.ExportVersion))
+			{
 				node.Add(AllowAutoConnectName, AllowAutoConnect);
 			}
 			return node;
@@ -348,6 +371,10 @@ namespace uTinyRipper.Classes
 #endif
 			return default;
 		}
+		private uint GetRenderingLayerMask(Version version)
+		{
+			return HasRenderingLayerMask(version) ? RenderingLayerMask : 1;
+		}
 
 		public float TreeDistance { get; set; }
 		public float TreeBillboardDistance { get; set; }
@@ -377,6 +404,7 @@ namespace uTinyRipper.Classes
 		public float ScaleInLightmap { get; set; }
 #endif
 		public int GroupingID { get; set; }
+		public uint RenderingLayerMask { get; set; }
 		public bool AllowAutoConnect { get; set; }
 
 		public const string TerrainDataName = "m_TerrainData";
@@ -405,6 +433,7 @@ namespace uTinyRipper.Classes
 		public const string ScaleInLightmapName = "m_ScaleInLightmap";
 		public const string LightmapParametersName = "m_LightmapParameters";
 		public const string GroupingIDName = "m_GroupingID";
+		public const string RenderingLayerMaskName = "m_RenderingLayerMask";
 		public const string AllowAutoConnectName = "m_AllowAutoConnect";
 
 		public PPtr<TerrainData> TerrainData;
