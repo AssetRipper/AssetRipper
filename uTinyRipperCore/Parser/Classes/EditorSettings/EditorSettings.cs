@@ -158,6 +158,10 @@ namespace uTinyRipper.Classes
 		/// 2019.3 and greater
 		/// </summary>
 		public static bool HasUseLegacyProbeSampleCount(Version version) => version.IsGreaterEqual(2019, 3);
+		/// <summary>
+		/// 2019.3.0b7 and greater
+		/// </summary>
+		public static bool HasAssetPipelineMode(Version version) => version.IsGreaterEqual(2019, 3, 0, VersionType.Beta, 7);
 
 		/// <summary>
 		/// 2018.2 and greater
@@ -302,6 +306,16 @@ namespace uTinyRipper.Classes
 				UseLegacyProbeSampleCount = reader.ReadInt32();
 				reader.AlignStream();
 			}
+			if (HasAssetPipelineMode(reader.Version))
+			{
+				AssetPipelineMode = (AssetPipelineMode)reader.ReadInt32();
+				CacheServerMode = (CacheServerMode)reader.ReadInt32();
+				CacheServerEndpoint = reader.ReadString();
+				CacheServerNamespacePrefix = reader.ReadString();
+				CacheServerEnableDownload = reader.ReadBoolean();
+				CacheServerEnableUpload = reader.ReadBoolean();
+				reader.AlignStream();
+			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -354,6 +368,15 @@ namespace uTinyRipper.Classes
 			if (HasUseLegacyProbeSampleCount(container.ExportVersion))
 			{
 				node.Add(UseLegacyProbeSampleCountName, GetUseLegacyProbeSampleCount(container.Version));
+			}
+			if (HasAssetPipelineMode(container.ExportVersion))
+			{
+				node.Add(AssetPipelineModeName, (int)AssetPipelineMode);
+				node.Add(CacheServerModeName, (int)CacheServerMode);
+				node.Add(CacheServerEndpointName, GetCacheServerEndpoint(container.Version));
+				node.Add(CacheServerNamespacePrefixName, GetCacheServerNamespacePrefix(container.Version));
+				node.Add(CacheServerEnableDownloadName, CacheServerEnableDownload);
+				node.Add(CacheServerEnableUploadName, CacheServerEnableUpload);
 			}
 			return node;
 		}
@@ -419,6 +442,14 @@ namespace uTinyRipper.Classes
 		{
 			return HasUseLegacyProbeSampleCount(version) ? UseLegacyProbeSampleCount : 1;
 		}
+		private string GetCacheServerEndpoint(Version version)
+		{
+			return HasAssetPipelineMode(version) ? CacheServerEndpoint : string.Empty;
+		}
+		private string GetCacheServerNamespacePrefix(Version version)
+		{
+			return HasAssetPipelineMode(version) ? CacheServerNamespacePrefix : "default";
+		}
 
 		public string ExternalVersionControlSupport { get; set; }
 		public SerializationMode SerializationMode { get; set; }
@@ -442,6 +473,12 @@ namespace uTinyRipper.Classes
 		public EnterPlayModeOptions EnterPlayModeOptions { get; set; }
 		public bool ShowLightmapResolutionOverlay { get; set; }
 		public int UseLegacyProbeSampleCount { get; set; }
+		public AssetPipelineMode AssetPipelineMode { get; set; }
+		public CacheServerMode CacheServerMode { get; set; }
+		public string CacheServerEndpoint { get; set; }
+		public string CacheServerNamespacePrefix { get; set; }
+		public bool CacheServerEnableDownload { get; set; }
+		public bool CacheServerEnableUpload { get; set; }
 
 		public const string ExternalVersionControlSupportName = "m_ExternalVersionControlSupport";
 		public const string SerializationModeName = "m_SerializationMode";
@@ -466,6 +503,12 @@ namespace uTinyRipper.Classes
 		public const string EnterPlayModeOptionsName = "m_EnterPlayModeOptions";
 		public const string ShowLightmapResolutionOverlayName = "m_ShowLightmapResolutionOverlay";
 		public const string UseLegacyProbeSampleCountName = "m_UseLegacyProbeSampleCount";
+		public const string AssetPipelineModeName = "m_AssetPipelineMode";
+		public const string CacheServerModeName = "m_CacheServerMode";
+		public const string CacheServerEndpointName = "m_CacheServerEndpoint";
+		public const string CacheServerNamespacePrefixName = "m_CacheServerNamespacePrefix";
+		public const string CacheServerEnableDownloadName = "m_CacheServerEnableDownload";
+		public const string CacheServerEnableUploadName = "m_CacheServerEnableUpload";
 
 		public PPtr<SceneAsset> PrefabRegularEnvironment;
 		public PPtr<SceneAsset> PrefabUIEnvironment;
