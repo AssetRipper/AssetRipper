@@ -20,7 +20,7 @@ namespace uTinyRipper.Layout
 			context.AddPPtr(context.Layout.Texture2D.Name, layout.BackgroundName);
 			if (layout.HasScaledBackgrounds)
 			{
-				context.AddArray(layout.ScaledBackgroundsName, (c, n) => PPtrLayout.GenerateTypeTree(c, c.Layout.Texture2D.Name, n));
+				context.AddArray(layout.ScaledBackgroundsName, (c, n) => c.AddPPtr(c.Layout.Texture2D.Name, n));
 			}
 			ColorRGBAfLayout.GenerateTypeTree(context, layout.TextColorName);
 			context.EndChildren();

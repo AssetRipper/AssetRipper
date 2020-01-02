@@ -32,6 +32,12 @@ namespace uTinyRipper.Classes
 			EnableTextureStreamingInEditMode = true;
 			EnableTextureStreamingInPlayMode = true;
 			AsyncShaderCompilation = true;
+			AssetPipelineMode = AssetPipelineMode.Version1;
+			CacheServerMode = CacheServerMode.AsPreferences;
+			CacheServerEndpoint = string.Empty;
+			CacheServerNamespacePrefix = "default";
+			CacheServerEnableDownload = false;
+			CacheServerEnableUpload = false;
 		}
 
 		public static EditorSettings CreateVirtualInstance(VirtualSerializedFile virtualFile)

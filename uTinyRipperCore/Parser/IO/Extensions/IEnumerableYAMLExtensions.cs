@@ -29,6 +29,19 @@ namespace uTinyRipper
 			return node;
 		}
 
+		public static YAMLNode ExportYAML<T>(this IEnumerable<Tuple<string, T>> _this, IExportContainer container)
+			where T : IYAMLExportable
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode();
+			foreach (var kvp in _this)
+			{
+				YAMLMappingNode map = new YAMLMappingNode();
+				map.Add(kvp.Item1, kvp.Item2.ExportYAML(container));
+				node.Add(map);
+			}
+			return node;
+		}
+
 		public static YAMLNode ExportYAML<T1, T2>(this IEnumerable<Tuple<T1, T2>> _this, IExportContainer container, Func<T1, int> converter)
 			where T2 : IYAMLExportable
 		{
