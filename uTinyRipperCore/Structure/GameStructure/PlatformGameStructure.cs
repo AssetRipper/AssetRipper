@@ -108,13 +108,22 @@ namespace uTinyRipper
 
 		protected void CollectGameFiles(DirectoryInfo root, IDictionary<string, string> files)
 		{
+			CollectBundleGameFiles(root, files);
+			CollectSerializedGameFiles(root, files);
+		}
+
+		protected void CollectBundleGameFiles(DirectoryInfo root, IDictionary<string, string> files)
+		{
 			const string DataBundleName = DataName + AssetBundleExtension;
 			string dataBundlePath = Path.Combine(root.FullName, DataBundleName);
 			if (MultiFileStream.Exists(dataBundlePath))
 			{
 				AddAssetBundle(files, DataBundleName, dataBundlePath);
 			}
+		}
 
+		protected void CollectSerializedGameFiles(DirectoryInfo root, IDictionary<string, string> files)
+		{
 			string filePath = Path.Combine(root.FullName, GlobalGameManagerName);
 			if (MultiFileStream.Exists(filePath))
 			{

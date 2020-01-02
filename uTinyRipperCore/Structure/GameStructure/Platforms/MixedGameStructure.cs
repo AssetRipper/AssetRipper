@@ -52,7 +52,7 @@ namespace uTinyRipper
 		private void CollectFromDirectory(DirectoryInfo root, IDictionary<string, string> files, IDictionary<string, string> assemblies, ISet<string> dataPathes)
 		{
 			int count = files.Count;
-			CollectGameFiles(root, files);
+			CollectSerializedGameFiles(root, files);
 			CollectWebFiles(root, files);
 			CollectAssetBundles(root, files);
 			CollectAssembliesSafe(root, assemblies);
