@@ -77,10 +77,6 @@ namespace uTinyRipper.SerializedFiles
 
 		private void Write(SerializedWriter writer)
 		{
-			if (HasEndian(writer.Generation))
-			{
-				writer.Write(SwapEndianess);
-			}
 			Hierarchy.Write(writer);
 			writer.WriteSerializedArray(Entries);
 			if (HasPreload(writer.Generation))
