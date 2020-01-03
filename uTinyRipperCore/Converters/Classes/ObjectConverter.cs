@@ -8,6 +8,7 @@ namespace uTinyRipper.Converters
 	{
 		public static void Convert(IExportContainer container, Object origin, Object instance)
 		{
+			instance.AssetInfo = origin.AssetInfo;
 			ObjectLayout exlayout = container.ExportLayout.Object;
 			if (exlayout.HasHideFlag)
 			{

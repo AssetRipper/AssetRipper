@@ -6,6 +6,12 @@ namespace uTinyRipper.Classes
 {
 	public abstract class Behaviour : Component
 	{
+		protected Behaviour(AssetLayout layout) :
+			base(layout)
+		{
+			Enabled = 1;
+		}
+
 		protected Behaviour(AssetInfo assetInfo):
 			base(assetInfo)
 		{

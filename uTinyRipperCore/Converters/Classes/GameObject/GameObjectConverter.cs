@@ -15,7 +15,6 @@ namespace uTinyRipper.Converters
 			GameObjectLayout exlayout = container.ExportLayout.GameObject;
 			GameObject instance = new GameObject(container.ExportLayout);
 			EditorExtensionConverter.Convert(container, origin, instance);
-			instance.AssetInfo = origin.AssetInfo;
 			if (exlayout.IsComponentTuple)
 			{
 				instance.ComponentTuple = origin.ComponentTuple.ToArray();

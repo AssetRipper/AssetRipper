@@ -11,9 +11,29 @@ namespace uTinyRipper.Classes
 {
 	public sealed class Animation : Behaviour
 	{
+		public Animation(AssetLayout layout) :
+			base(layout)
+		{
+			AnimationLayout classLayout = layout.Animation;
+			if (classLayout.HasAnimations)
+			{
+				Animations = Array.Empty<PPtr<AnimationClip>>();
+			}
+			else
+			{
+				AnimationsPaired = Array.Empty<Tuple<string, PPtr<AnimationClip>>>();
+			}
+			PlayAutomatically = true;
+		}
+
 		public Animation(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
+		}
+
+		public override Object Convert(IExportContainer container)
+		{
+			return AnimationConverter.Convert(container, this);
 		}
 
 		public override void Read(AssetReader reader)

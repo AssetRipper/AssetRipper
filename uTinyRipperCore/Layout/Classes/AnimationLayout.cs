@@ -41,6 +41,7 @@ namespace uTinyRipper.Layout
 			}
 			if (info.Version.IsGreaterEqual(2, 6))
 			{
+				HasCullingTypeInvariant = true;
 				if (info.Version.IsGreaterEqual(3, 4))
 				{
 					HasCullingType = true;
@@ -146,6 +147,10 @@ namespace uTinyRipper.Layout
 		/// Less than 1.5.0
 		/// </summary>
 		public bool HasPlayFixedFrameRate { get; }
+		/// <summary>
+		/// 2.6.0 and greater
+		/// </summary>
+		public bool HasCullingTypeInvariant { get; }
 		/// <summary>
 		/// 3.4.0 and greater
 		/// </summary>
