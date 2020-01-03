@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.ParticleSystems
@@ -32,18 +32,12 @@ namespace uTinyRipper.Classes.ParticleSystems
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		public static bool IsReadPositionAmount(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		}
+		public static bool HasPositionAmount(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 		
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		}
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -53,11 +47,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 			StrengthY.Read(reader);
 			StrengthZ.Read(reader);
 			SeparateAxes = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			Frequency = reader.ReadSingle();
 			Damping = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			Octaves = reader.ReadInt32();
 			OctaveMultiplier = reader.ReadSingle();
@@ -70,10 +64,10 @@ namespace uTinyRipper.Classes.ParticleSystems
 			RemapEnabled = reader.ReadBoolean();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
-			if (IsReadPositionAmount(reader.Version))
+			if (HasPositionAmount(reader.Version))
 			{
 				PositionAmount.Read(reader);
 				RotationAmount.Read(reader);
@@ -84,48 +78,67 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add("strength", Strength.ExportYAML(container));
-			node.Add("strengthY", StrengthY.ExportYAML(container));
-			node.Add("strengthZ", StrengthZ.ExportYAML(container));
-			node.Add("separateAxes", SeparateAxes);
-			node.Add("frequency", Frequency);
-			node.Add("damping", Damping);
-			node.Add("octaves", Octaves);
-			node.Add("octaveMultiplier", OctaveMultiplier);
-			node.Add("octaveScale", OctaveScale);
-			node.Add("quality", (int)Quality);
-			node.Add("scrollSpeed", ScrollSpeed.ExportYAML(container));
-			node.Add("remap", Remap.ExportYAML(container));
-			node.Add("remapY", RemapY.ExportYAML(container));
-			node.Add("remapZ", RemapZ.ExportYAML(container));
-			node.Add("remapEnabled", RemapEnabled);
-			node.Add("positionAmount", GetExportPositionAmount(container.Version).ExportYAML(container));
-			node.Add("rotationAmount", GetExportRotationAmount(container.Version).ExportYAML(container));
-			node.Add("sizeAmount", GetExportSizeAmount(container.Version).ExportYAML(container));
+			node.Add(StrengthName, Strength.ExportYAML(container));
+			node.Add(StrengthYName, StrengthY.ExportYAML(container));
+			node.Add(StrengthZName, StrengthZ.ExportYAML(container));
+			node.Add(SeparateAxesName, SeparateAxes);
+			node.Add(FrequencyName, Frequency);
+			node.Add(DampingName, Damping);
+			node.Add(OctavesName, Octaves);
+			node.Add(OctaveMultiplierName, OctaveMultiplier);
+			node.Add(OctaveScaleName, OctaveScale);
+			node.Add(QualityName, (int)Quality);
+			node.Add(ScrollSpeedName, ScrollSpeed.ExportYAML(container));
+			node.Add(RemapName, Remap.ExportYAML(container));
+			node.Add(RemapYName, RemapY.ExportYAML(container));
+			node.Add(RemapZName, RemapZ.ExportYAML(container));
+			node.Add(RemapEnabledName, RemapEnabled);
+			node.Add(PositionAmountName, GetExportPositionAmount(container.Version).ExportYAML(container));
+			node.Add(RotationAmountName, GetExportRotationAmount(container.Version).ExportYAML(container));
+			node.Add(SizeAmountName, GetExportSizeAmount(container.Version).ExportYAML(container));
 			return node;
 		}
 
 		private MinMaxCurve GetExportPositionAmount(Version version)
 		{
-			return IsReadPositionAmount(version) ? PositionAmount : new MinMaxCurve(1.0f);
+			return HasPositionAmount(version) ? PositionAmount : new MinMaxCurve(1.0f);
 		}
 		private MinMaxCurve GetExportRotationAmount(Version version)
 		{
-			return IsReadPositionAmount(version) ? RotationAmount : new MinMaxCurve(0.0f);
+			return HasPositionAmount(version) ? RotationAmount : new MinMaxCurve(0.0f);
 		}
 		private MinMaxCurve GetExportSizeAmount(Version version)
 		{
-			return IsReadPositionAmount(version) ? SizeAmount : new MinMaxCurve(0.0f);
+			return HasPositionAmount(version) ? SizeAmount : new MinMaxCurve(0.0f);
 		}
 
-		public bool SeparateAxes { get; private set; }
-		public float Frequency { get; private set; }
-		public bool Damping { get; private set; }
-		public int Octaves { get; private set; }
-		public float OctaveMultiplier { get; private set; }
-		public float OctaveScale { get; private set; }
-		public ParticleSystemNoiseQuality Quality { get; private set; }
-		public bool RemapEnabled { get; private set; }
+		public bool SeparateAxes { get; set; }
+		public float Frequency { get; set; }
+		public bool Damping { get; set; }
+		public int Octaves { get; set; }
+		public float OctaveMultiplier { get; set; }
+		public float OctaveScale { get; set; }
+		public ParticleSystemNoiseQuality Quality { get; set; }
+		public bool RemapEnabled { get; set; }
+
+		public const string StrengthName = "strength";
+		public const string StrengthYName = "strengthY";
+		public const string StrengthZName = "strengthZ";
+		public const string SeparateAxesName = "separateAxes";
+		public const string FrequencyName = "frequency";
+		public const string DampingName = "damping";
+		public const string OctavesName = "octaves";
+		public const string OctaveMultiplierName = "octaveMultiplier";
+		public const string OctaveScaleName = "octaveScale";
+		public const string QualityName = "quality";
+		public const string ScrollSpeedName = "scrollSpeed";
+		public const string RemapName = "remap";
+		public const string RemapYName = "remapY";
+		public const string RemapZName = "remapZ";
+		public const string RemapEnabledName = "remapEnabled";
+		public const string PositionAmountName = "positionAmount";
+		public const string RotationAmountName = "rotationAmount";
+		public const string SizeAmountName = "sizeAmount";
 
 		public MinMaxCurve Strength;
 		public MinMaxCurve StrengthY;

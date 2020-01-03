@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Fonts;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes
 {
@@ -15,145 +15,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// Less than 4.0.0
-		/// </summary>
-		public static bool IsReadFontCount(Version version)
-		{
-			return version.IsLess(4);
-		}
-		/// <summary>
-		/// Less than 5.3.0
-		/// </summary>
-		public static bool IsReadKerning(Version version)
-		{
-			return version.IsLess(5, 3);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadTracking(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadCharacterSpacing(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
-		/// Less than 4.0.0
-		/// </summary>
-		public static bool IsReadPerCharacterKerning(Version version)
-		{
-			return version.IsLess(4);
-		}
-		/// <summary>
-		/// Less than 4.0.0
-		/// </summary>
-		public static bool IsReadGridFont(Version version)
-		{
-			return version.IsLess(4);
-		}
-		/// <summary>
-		/// 2.1.0 and greater
-		/// </summary>
-		public static bool IsBytePerCharacterKerning(Version version)
-		{
-			return version.IsLess(2, 1);
-		}
-		/// <summary>
-		/// Less than 1.6.0
-		/// </summary>
-		public static bool IsByteKerningValues(Version version)
-		{
-			return version.IsLess(1, 6);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadPixelScale(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		public static bool IsReadFontData(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
-		/// <summary>
-		/// 5.4.0 and greater
-		/// </summary>
-		public static bool IsReadDescent(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		public static bool IsReadDefaultStyle(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadFallbackFonts(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
-		/// 5.6.4p1 to 2017 exclusive or 2017.2.1 and greater
-		/// </summary>
-		public static bool IsReadUseLegacyBoundsCalculation(Version version)
-		{
-			return version.IsGreaterEqual(5, 6, 4, VersionType.Patch) && version.IsLess(2017) ||
-				version.IsGreaterEqual(2017, 1, 3) && version.IsLess(2017, 2) ||
-				version.IsGreaterEqual(2017, 2, 0, VersionType.Patch, 2) && version.IsLess(2017, 3) ||
-				version.IsGreaterEqual(2017, 3, 0, VersionType.Beta);
-		}
-		/// <summary>
-		/// 2018.1 and greater
-		/// </summary>
-		public static bool IsReadShouldRoundAdvanceValue(Version version)
-		{
-			return version.IsGreaterEqual(2018, 1);
-		}
-
-		/// <summary>
-		/// 5.5.0 and greater
-		/// </summary>
-		private static bool IsReadFontImpl(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
-		/// <summary>
-		/// Less than 2.1.0
-		/// </summary>
-		private static bool IsShortAsciiStartOffset(Version version)
-		{
-			return version.IsLess(2, 1);
-		}
-		/// <summary>
-		/// Less than 2.1.0
-		/// </summary>
-		private static bool IsGridFontFirst(Version version)
-		{
-			return version.IsLess(2, 1);
-		}
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(5, 4))
 			{
@@ -171,17 +33,115 @@ namespace uTinyRipper.Classes
 			return 2;
 		}
 
+		/// <summary>
+		/// Less than 4.0.0
+		/// </summary>
+		public static bool HasFontCount(Version version) => version.IsLess(4);
+		/// <summary>
+		/// Less than 5.3.0
+		/// </summary>
+		public static bool HasKerning(Version version) => version.IsLess(5, 3);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasTracking(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasCharacterSpacing(Version version) => version.IsGreaterEqual(4);
+		/// <summary>
+		/// Less than 4.0.0
+		/// </summary>
+		public static bool HasPerCharacterKerning(Version version) => version.IsLess(4);
+		/// <summary>
+		/// Less than 4.0.0
+		/// </summary>
+		public static bool HasGridFont(Version version) => version.IsLess(4);
+		/// <summary>
+		/// 2.1.0 and greater
+		/// </summary>
+		public static bool IsBytePerCharacterKerning(Version version) => version.IsLess(2, 1);
+		/// <summary>
+		/// Less than 1.6.0
+		/// </summary>
+		public static bool IsByteKerningValues(Version version) => version.IsLess(1, 6);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasPixelScale(Version version) => version.IsGreaterEqual(4);
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool HasFontData(Version version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		public static bool HasDescent(Version version) => version.IsGreaterEqual(5, 4);
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool HasDefaultStyle(Version version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasFallbackFonts(Version version) => version.IsGreaterEqual(4);
+		/// <summary>
+		/// 5.6.4p1 to 2017 exclusive or 2017.2.1 and greater
+		/// </summary>
+		public static bool HasUseLegacyBoundsCalculation(Version version)
+		{
+			if (version.IsGreaterEqual(2017, 3, 0, VersionType.Beta))
+			{
+				return true;
+			}
+			if (version.IsGreaterEqual(5, 6, 4, VersionType.Patch))
+			{
+				if (version.IsGreaterEqual(2017, 2, 0, VersionType.Patch, 2))
+				{
+					return version.IsEqual(2017, 2);
+				}
+				if (version.IsGreaterEqual(2017, 1, 3))
+				{
+					return version.IsEqual(2017, 1);
+				}
+				return version.IsEqual(5);
+			}
+			return false;
+		}
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool HasShouldRoundAdvanceValue(Version version) => version.IsGreaterEqual(2018, 1);
+
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		private static bool IsFontGrouped(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// Less than 2.1.0
+		/// </summary>
+		private static bool IsShortAsciiStartOffset(Version version) => version.IsLess(2, 1);
+		/// <summary>
+		/// Less than 2.1.0
+		/// </summary>
+		private static bool IsGridFontFirst(Version version) => version.IsLess(2, 1);
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(3);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadFontImpl(reader.Version))
+			bool isGrouped = IsFontGrouped(reader.Version);
+			if (isGrouped)
 			{
 				LineSpacing = reader.ReadSingle();
 				DefaultMaterial.Read(reader);
 				FontSize = reader.ReadSingle();
 				Texture.Read(reader);
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (IsShortAsciiStartOffset(reader.Version))
@@ -193,57 +153,57 @@ namespace uTinyRipper.Classes
 			else
 			{
 				AsciiStartOffset = reader.ReadInt32();
-				if (IsReadFontCount(reader.Version))
+				if (HasFontCount(reader.Version))
 				{
 					FontCountX = reader.ReadInt32();
 					FontCountY = reader.ReadInt32();
 				}
 			}
 
-			if (IsReadKerning(reader.Version))
+			if (HasKerning(reader.Version))
 			{
 				Kerning = reader.ReadSingle();
 			}
-			if (IsReadTracking(reader.Version))
+			if (HasTracking(reader.Version))
 			{
 				Tracking = reader.ReadSingle();
 			}
 
-			if (!IsReadFontImpl(reader.Version))
+			if (!isGrouped)
 			{
 				LineSpacing = reader.ReadSingle();
 			}
 
-			if (IsReadCharacterSpacing(reader.Version))
+			if (HasCharacterSpacing(reader.Version))
 			{
 				CharacterSpacing = reader.ReadInt32();
 				CharacterPadding = reader.ReadInt32();
 			}
 
-			if (IsReadPerCharacterKerning(reader.Version))
+			if (HasPerCharacterKerning(reader.Version))
 			{
 				if (IsBytePerCharacterKerning(reader.Version))
 				{
-					m_perCharacterKerningByte = reader.ReadTupleByteSingleArray();
+					PerCharacterKerningByte = reader.ReadTupleByteSingleArray();
 				}
 				else
 				{
-					m_perCharacterKerning = reader.ReadTupleIntFloatArray();
+					PerCharacterKerning = reader.ReadTupleIntSingleArray();
 				}
 			}
 
 			ConvertCase = reader.ReadInt32();
-			if (!IsReadFontImpl(reader.Version))
+			if (!isGrouped)
 			{
 				DefaultMaterial.Read(reader);
 			}
-			m_characterRects = reader.ReadAssetArray<CharacterInfo>();
-			if (!IsReadFontImpl(reader.Version))
+			CharacterRects = reader.ReadAssetArray<CharacterInfo>();
+			if (!isGrouped)
 			{
 				Texture.Read(reader);
 			}
 
-			if (IsReadGridFont(reader.Version))
+			if (HasGridFont(reader.Version))
 			{
 				if (IsGridFontFirst(reader.Version))
 				{
@@ -251,68 +211,74 @@ namespace uTinyRipper.Classes
 				}
 			}
 
+#warning TODO: create a dictionary with non unique keys
 			if (IsByteKerningValues(reader.Version))
 			{
-				m_kerningValuesByte = new Dictionary<Tuple<byte, byte>, float>();
-				m_kerningValuesByte.Read(reader);
+				Dictionary<Tuple<byte, byte>, float> kerningValues = new Dictionary<Tuple<byte, byte>, float>();
+				kerningValues.ReadSafe(reader);
+				foreach (var kvp in kerningValues)
+				{
+					Tuple<ushort, ushort> key = new Tuple<ushort, ushort>(kvp.Key.Item1, kvp.Key.Item2);
+					KerningValues.Add(key, kvp.Value);
+				}
 			}
 			else
 			{
-				m_kerningValues.Read(reader);
+				KerningValues.ReadSafe(reader);
 			}
 
-			if (IsReadPixelScale(reader.Version))
+			if (HasPixelScale(reader.Version))
 			{
 				PixelScale = reader.ReadSingle();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
-			if (IsReadGridFont(reader.Version))
+			if (HasGridFont(reader.Version))
 			{
 				if (!IsGridFontFirst(reader.Version))
 				{
 					GridFont = reader.ReadBoolean();
 					if (IsAlign(reader.Version))
 					{
-						reader.AlignStream(AlignType.Align4);
+						reader.AlignStream();
 					}
 				}
 			}
 
-			if (IsReadFontData(reader.Version))
+			if (HasFontData(reader.Version))
 			{
-				m_fontData = reader.ReadByteArray();
-				reader.AlignStream(AlignType.Align4);
+				FontData = reader.ReadByteArray();
+				reader.AlignStream();
 
-				if (!IsReadFontImpl(reader.Version))
+				if (!isGrouped)
 				{
 					FontSize = reader.ReadSingle();
 				}
 				Ascent = reader.ReadSingle();
 			}
-			if (IsReadDescent(reader.Version))
+			if (HasDescent(reader.Version))
 			{
 				Descent = reader.ReadSingle();
 			}
-			if (IsReadDefaultStyle(reader.Version))
+			if (HasDefaultStyle(reader.Version))
 			{
 				DefaultStyle = (FontStyle)reader.ReadUInt32();
-				m_fontNames = reader.ReadStringArray();
+				FontNames = reader.ReadStringArray();
 			}
 
-			if (IsReadFallbackFonts(reader.Version))
+			if (HasFallbackFonts(reader.Version))
 			{
-				m_fallbackFonts = reader.ReadAssetArray<PPtr<Font>>();
-				reader.AlignStream(AlignType.Align4);
+				FallbackFonts = reader.ReadAssetArray<PPtr<Font>>();
+				reader.AlignStream();
 
 				FontRenderingMode = (FontRenderingMode)reader.ReadInt32();
 			}
 
-			if (IsReadUseLegacyBoundsCalculation(reader.Version))
+			if (HasUseLegacyBoundsCalculation(reader.Version))
 			{
 				UseLegacyBoundsCalculation = reader.ReadBoolean();
 			}
-			if (IsReadShouldRoundAdvanceValue(reader.Version))
+			if (HasShouldRoundAdvanceValue(reader.Version))
 			{
 				ShouldRoundAdvanceValue = reader.ReadBoolean();
 			}
@@ -320,30 +286,30 @@ namespace uTinyRipper.Classes
 
 		public override void ExportBinary(IExportContainer container, Stream stream)
 		{
-			if (IsReadFontData(container.Version))
+			if (HasFontData(container.Version))
 			{
 				using (BinaryWriter writer = new BinaryWriter(stream))
 				{
-					writer.Write(m_fontData);
+					writer.Write(FontData);
 				}
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return DefaultMaterial.FetchDependency(file, isLog, ToLogString, DefaultMaterialName);
-			yield return Texture.FetchDependency(file, isLog, ToLogString, TextureName);
+			yield return context.FetchDependency(DefaultMaterial, DefaultMaterialName);
+			yield return context.FetchDependency(Texture, TextureName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(LineSpacingName, LineSpacing);
 			node.Add(DefaultMaterialName, DefaultMaterial.ExportYAML(container));
 			node.Add(FontSizeName, FontSize);
@@ -354,7 +320,7 @@ namespace uTinyRipper.Classes
 			node.Add(CharacterPaddingName, GetCharacterPadding(container.Version));
 			node.Add(ConvertCaseName, ConvertCase);
 			node.Add(CharacterRectsName, CharacterRects.ExportYAML(container));
-			node.Add(KerningValuesName, KerningValues.ExportYAML(container));
+			node.Add(KerningValuesName, KerningValues.ExportYAML());
 			node.Add(PixelScaleName, GetPixelScale(container.Version));
 			node.Add(FontDataName, GetFontData(container.Version).ExportYAML());
 			node.Add(AscentName, Ascent);
@@ -370,61 +336,60 @@ namespace uTinyRipper.Classes
 
 		private float GetTracking(Version version)
 		{
-			return IsReadTracking(version) ? Tracking : 1.0f;
+			return HasTracking(version) ? Tracking : 1.0f;
 		}
 		private int GetCharacterPadding(Version version)
 		{
-			return IsReadCharacterSpacing(version) ? CharacterPadding : 1;
+			return HasCharacterSpacing(version) ? CharacterPadding : 1;
 		}
 		private float GetPixelScale(Version version)
 		{
-			return IsReadPixelScale(version) ? PixelScale : 0.1f;
+			return HasPixelScale(version) ? PixelScale : 0.1f;
 		}
 		private IReadOnlyList<byte> GetFontData(Version version)
 		{
-			return IsReadFontData(version) ? FontData : new byte[0];
+			return HasFontData(version) ? FontData : Array.Empty<byte>();
 		}
 		private IReadOnlyList<string> GetFontNames(Version version)
 		{
-			return IsReadDefaultStyle(version) ? FontNames : new string[] { Name };
+			return HasDefaultStyle(version) ? FontNames : new string[] { Name };
 		}
 		private IReadOnlyList<PPtr<Font>> GetFallbackFonts(Version version)
 		{
-			return IsReadFallbackFonts(version) ? FallbackFonts : new PPtr<Font>[0];
+			return HasFallbackFonts(version) ? FallbackFonts : Array.Empty<PPtr<Font>>();
 		}
 		private bool GetShouldRoundAdvanceValue(Version version)
 		{
-			return IsReadShouldRoundAdvanceValue(version) ? ShouldRoundAdvanceValue : true;
+			return HasShouldRoundAdvanceValue(version) ? ShouldRoundAdvanceValue : true;
 		}
 
-		public bool IsValidData => m_fontData != null && m_fontData.Length > 0;
+		public bool IsValidData => FontData != null && FontData.Length > 0;
 
-		public int AsciiStartOffset { get; private set; }
-		public int FontCountX { get; private set; }
-		public int FontCountY { get; private set; }
-		public float Kerning { get; private set; }
-		public float Tracking { get; private set; }
-		public float LineSpacing { get; private set; }
-		public int CharacterSpacing { get; private set; }
-		public int CharacterPadding { get; private set; }
-		public IReadOnlyList<Tuple<byte, float>> PerCharacterKerningByte => m_perCharacterKerningByte;
-		public IReadOnlyList<Tuple<int, float>> PerCharacterKerning => m_perCharacterKerning;
-		public int ConvertCase { get; private set; }
-		public IReadOnlyList<CharacterInfo> CharacterRects => m_characterRects;
-		public bool GridFont { get; private set; }
-		public float PixelScale { get; private set; }
-		public IReadOnlyDictionary<Tuple<byte, byte>, float> KerningValuesByte => m_kerningValuesByte;
-		public IReadOnlyDictionary<Tuple<ushort, ushort>, float> KerningValues => m_kerningValues;
-		public IReadOnlyList<byte> FontData => m_fontData;
-		public float FontSize { get; private set; }
-		public float Ascent { get; private set; }
-		public float Descent { get; private set; }
+		public int AsciiStartOffset { get; set; }
+		public int FontCountX { get; set; }
+		public int FontCountY { get; set; }
+		public float Kerning { get; set; }
+		public float Tracking { get; set; }
+		public float LineSpacing { get; set; }
+		public int CharacterSpacing { get; set; }
+		public int CharacterPadding { get; set; }
+		public Tuple<byte, float>[] PerCharacterKerningByte { get; set; }
+		public Tuple<int, float>[] PerCharacterKerning { get; set; }
+		public int ConvertCase { get; set; }
+		public CharacterInfo[] CharacterRects { get; set; }
+		public bool GridFont { get; set; }
+		public float PixelScale { get; set; }
+		public Dictionary<Tuple<ushort, ushort>, float> KerningValues { get; set; } = new Dictionary<Tuple<ushort, ushort>, float>();
+		public byte[] FontData { get; set; }
+		public float FontSize { get; set; }
+		public float Ascent { get; set; }
+		public float Descent { get; set; }
 		public FontStyle DefaultStyle {get; private set; }
-		public IReadOnlyList<string> FontNames => m_fontNames;
-		public IReadOnlyList<PPtr<Font>> FallbackFonts => m_fallbackFonts;
-		public FontRenderingMode FontRenderingMode { get; private set; }
-		public bool UseLegacyBoundsCalculation { get; private set; }
-		public bool ShouldRoundAdvanceValue { get; private set; }
+		public string[] FontNames { get; set; }
+		public PPtr<Font>[] FallbackFonts { get; set; }
+		public FontRenderingMode FontRenderingMode { get; set; }
+		public bool UseLegacyBoundsCalculation { get; set; }
+		public bool ShouldRoundAdvanceValue { get; set; }
 
 		public const string LineSpacingName = "m_LineSpacing";
 		public const string DefaultMaterialName = "m_DefaultMaterial";
@@ -450,15 +415,5 @@ namespace uTinyRipper.Classes
 
 		public PPtr<Material> DefaultMaterial;
 		public PPtr<Texture> Texture;
-
-		private readonly Dictionary<Tuple<ushort, ushort>, float> m_kerningValues = new Dictionary<Tuple<ushort, ushort>, float>();
-
-		private Tuple<byte, float>[] m_perCharacterKerningByte;
-		private Tuple<int, float>[] m_perCharacterKerning;
-		private CharacterInfo[] m_characterRects;
-		private Dictionary<Tuple<byte, byte>, float> m_kerningValuesByte;
-		private byte[] m_fontData;
-		private string[] m_fontNames;
-		private PPtr<Font>[] m_fallbackFonts;
 	}
 }

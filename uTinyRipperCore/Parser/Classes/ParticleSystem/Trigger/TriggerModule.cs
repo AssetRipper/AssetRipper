@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.ParticleSystems
 {
@@ -34,38 +33,50 @@ namespace uTinyRipper.Classes.ParticleSystems
 			RadiusScale = reader.ReadSingle();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return CollisionShape0.FetchDependency(file, isLog, () => nameof(TriggerModule), "collisionShape0");
-			yield return CollisionShape1.FetchDependency(file, isLog, () => nameof(TriggerModule), "collisionShape1");
-			yield return CollisionShape2.FetchDependency(file, isLog, () => nameof(TriggerModule), "collisionShape2");
-			yield return CollisionShape3.FetchDependency(file, isLog, () => nameof(TriggerModule), "collisionShape3");
-			yield return CollisionShape4.FetchDependency(file, isLog, () => nameof(TriggerModule), "collisionShape4");
-			yield return CollisionShape5.FetchDependency(file, isLog, () => nameof(TriggerModule), "collisionShape5");
+			yield return context.FetchDependency(CollisionShape0, CollisionShape0Name);
+			yield return context.FetchDependency(CollisionShape1, CollisionShape1Name);
+			yield return context.FetchDependency(CollisionShape2, CollisionShape2Name);
+			yield return context.FetchDependency(CollisionShape3, CollisionShape3Name);
+			yield return context.FetchDependency(CollisionShape4, CollisionShape4Name);
+			yield return context.FetchDependency(CollisionShape5, CollisionShape5Name);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add("collisionShape0", CollisionShape0.ExportYAML(container));
-			node.Add("collisionShape1", CollisionShape1.ExportYAML(container));
-			node.Add("collisionShape2", CollisionShape2.ExportYAML(container));
-			node.Add("collisionShape3", CollisionShape3.ExportYAML(container));
-			node.Add("collisionShape4", CollisionShape4.ExportYAML(container));
-			node.Add("collisionShape5", CollisionShape5.ExportYAML(container));
-			node.Add("inside", (int)Inside);
-			node.Add("outside", (int)Outside);
-			node.Add("enter", (int)Enter);
-			node.Add("exit", (int)Exit);
-			node.Add("radiusScale", RadiusScale);
+			node.Add(CollisionShape0Name, CollisionShape0.ExportYAML(container));
+			node.Add(CollisionShape1Name, CollisionShape1.ExportYAML(container));
+			node.Add(CollisionShape2Name, CollisionShape2.ExportYAML(container));
+			node.Add(CollisionShape3Name, CollisionShape3.ExportYAML(container));
+			node.Add(CollisionShape4Name, CollisionShape4.ExportYAML(container));
+			node.Add(CollisionShape5Name, CollisionShape5.ExportYAML(container));
+			node.Add(InsideName, (int)Inside);
+			node.Add(OutsideName, (int)Outside);
+			node.Add(EnterName, (int)Enter);
+			node.Add(ExitName, (int)Exit);
+			node.Add(RadiusScaleName, RadiusScale);
 			return node;
 		}
 
-		public TriggerAction Inside { get; private set; }
-		public TriggerAction Outside { get; private set; }
-		public TriggerAction Enter { get; private set; }
-		public TriggerAction Exit { get; private set; }
-		public float RadiusScale { get; private set; }
+		public TriggerAction Inside { get; set; }
+		public TriggerAction Outside { get; set; }
+		public TriggerAction Enter { get; set; }
+		public TriggerAction Exit { get; set; }
+		public float RadiusScale { get; set; }
+
+		public const string CollisionShape0Name = "collisionShape0";
+		public const string CollisionShape1Name = "collisionShape1";
+		public const string CollisionShape2Name = "collisionShape2";
+		public const string CollisionShape3Name = "collisionShape3";
+		public const string CollisionShape4Name = "collisionShape4";
+		public const string CollisionShape5Name = "collisionShape5";
+		public const string InsideName = "inside";
+		public const string OutsideName = "outside";
+		public const string EnterName = "enter";
+		public const string ExitName = "exit";
+		public const string RadiusScaleName = "radiusScale";
 
 		public PPtr<Component> CollisionShape0;
 		public PPtr<Component> CollisionShape1;

@@ -1,40 +1,15 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes.Avatars
 {
 	public struct Human : IAssetReadable, IYAMLExportable
 	{
-		/// <summary>
-		/// Less than 2018.2
-		/// </summary>
-		public static bool IsReadHandles(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
-			return version.IsLess(2018, 2);
-		}
-		/// <summary>
-		/// Less than 2018.2
-		/// </summary>
-		public static bool IsReadColliderIndex(Version version)
-		{
-			return version.IsLess(2018, 2);
-		}
-		/// <summary>
-		/// 5.2.0 and greater
-		/// </summary>
-		public static bool IsReadHasTDoF(Version version)
-		{
-			return version.IsGreaterEqual(5, 2);
-		}
-
-		private static int GetSerializedVersion(Version version)
-		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if (version.IsGreaterEqual(5, 6, 1))
 			{
 				return 2;
@@ -42,18 +17,18 @@ namespace uTinyRipper.Classes.Avatars
 			return 1;
 		}
 
-		private IReadOnlyList<Handle> GetExportHandles(Version version)
-		{
-			return IsReadHandles(version) ? Handles : new Handle[0];
-		}
-		private IReadOnlyList<Collider> GetExportColliderArray(Version version)
-		{
-			return IsReadHandles(version) ? ColliderArray : new Collider[0];
-		}
-		private IReadOnlyList<int> GetExportColliderIndex(Version version)
-		{
-			return IsReadColliderIndex(version) ? ColliderIndex : new int[0];
-		}
+		/// <summary>
+		/// Less than 2018.2
+		/// </summary>
+		public static bool HasHandles(Version version) => version.IsLess(2018, 2);
+		/// <summary>
+		/// Less than 2018.2
+		/// </summary>
+		public static bool HasColliderIndex(Version version) => version.IsLess(2018, 2);
+		/// <summary>
+		/// 5.2.0 and greater
+		/// </summary>
+		public static bool HasHasTDoF(Version version) => version.IsGreaterEqual(5, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -62,20 +37,20 @@ namespace uTinyRipper.Classes.Avatars
 			SkeletonPose.Read(reader);
 			LeftHand.Read(reader);
 			RightHand.Read(reader);
-			if(IsReadHandles(reader.Version))
+			if (HasHandles(reader.Version))
 			{
-				m_handles = reader.ReadAssetArray<Handle>();
-				m_colliderArray = reader.ReadAssetArray<Collider>();
+				Handles = reader.ReadAssetArray<Handle>();
+				ColliderArray = reader.ReadAssetArray<Collider>();
 			}
 
-			m_humanBoneIndex = reader.ReadInt32Array();
-			m_humanBoneIndex = UpdateBoneArray(m_humanBoneIndex, reader.Version);
-			m_humanBoneMass = reader.ReadSingleArray();
-			m_humanBoneMass = UpdateBoneArray(m_humanBoneMass, reader.Version);
-			if (IsReadColliderIndex(reader.Version))
+			int[] humanBoneIndex = reader.ReadInt32Array();
+			HumanBoneIndex = UpdateBoneArray(humanBoneIndex, reader.Version);
+			float[] humanBoneMass = reader.ReadSingleArray();
+			HumanBoneMass = UpdateBoneArray(humanBoneMass, reader.Version);
+			if (HasColliderIndex(reader.Version))
 			{
-				m_colliderIndex = reader.ReadInt32Array();
-				m_colliderIndex = UpdateBoneArray(m_colliderIndex, reader.Version);
+				int[] colliderIndex = reader.ReadInt32Array();
+				ColliderIndex = UpdateBoneArray(colliderIndex, reader.Version);
 			}
 
 			Scale = reader.ReadSingle();
@@ -88,38 +63,38 @@ namespace uTinyRipper.Classes.Avatars
 			FeetSpacing = reader.ReadSingle();
 			HasLeftHand = reader.ReadBoolean();
 			HasRightHand = reader.ReadBoolean();
-			if (IsReadHasTDoF(reader.Version))
+			if (HasHasTDoF(reader.Version))
 			{
 				HasTDoF = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_RootX", RootX.ExportYAML(container));
-			node.Add("m_Skeleton", Skeleton.ExportYAML(container));
-			node.Add("m_SkeletonPose", SkeletonPose.ExportYAML(container));
-			node.Add("m_LeftHand", LeftHand.ExportYAML(container));
-			node.Add("m_RightHand", RightHand.ExportYAML(container));
-			node.Add("m_Handles", GetExportHandles(container.Version).ExportYAML(container));
-			node.Add("m_ColliderArray", GetExportColliderArray(container.Version).ExportYAML(container));
-			node.Add("m_HumanBoneIndex", HumanBoneIndex.ExportYAML(true));
-			node.Add("m_HumanBoneMass", HumanBoneMass.ExportYAML());
-			node.Add("m_ColliderIndex", GetExportColliderIndex(container.Version).ExportYAML(true));
-			node.Add("m_Scale", Scale);
-			node.Add("m_ArmTwist", ArmTwist);
-			node.Add("m_ForeArmTwist", ForeArmTwist);
-			node.Add("m_UpperLegTwist", UpperLegTwist);
-			node.Add("m_LegTwist", LegTwist);
-			node.Add("m_ArmStretch", ArmStretch);
-			node.Add("m_LegStretch", LegStretch);
-			node.Add("m_FeetSpacing", FeetSpacing);
-			node.Add("m_HasLeftHand", HasLeftHand);
-			node.Add("m_HasRightHand", HasRightHand);
-			node.Add("m_HasTDoF", HasTDoF);
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			node.Add(RootXName, RootX.ExportYAML(container));
+			node.Add(SkeletonName, Skeleton.ExportYAML(container));
+			node.Add(SkeletonPoseName, SkeletonPose.ExportYAML(container));
+			node.Add(LeftHandName, LeftHand.ExportYAML(container));
+			node.Add(RightHandName, RightHand.ExportYAML(container));
+			node.Add(HandlesName, GetExportHandles(container.Version).ExportYAML(container));
+			node.Add(ColliderArrayName, GetExportColliderArray(container.Version).ExportYAML(container));
+			node.Add(HumanBoneIndexName, HumanBoneIndex.ExportYAML(true));
+			node.Add(HumanBoneMassName, HumanBoneMass.ExportYAML());
+			node.Add(ColliderIndexName, GetExportColliderIndex(container.Version).ExportYAML(true));
+			node.Add(ScaleName, Scale);
+			node.Add(ArmTwistName, ArmTwist);
+			node.Add(ForeArmTwistName, ForeArmTwist);
+			node.Add(UpperLegTwistName, UpperLegTwist);
+			node.Add(LegTwistName, LegTwist);
+			node.Add(ArmStretchName, ArmStretch);
+			node.Add(LegStretchName, LegStretch);
+			node.Add(FeetSpacingName, FeetSpacing);
+			node.Add(HasLeftHandName, HasLeftHand);
+			node.Add(HasRightHandName, HasRightHand);
+			node.Add(HasTDoFName, HasTDoF);
 			return node;
 		}
 
@@ -162,33 +137,62 @@ namespace uTinyRipper.Classes.Avatars
 			return array;
 		}
 
-		public IReadOnlyList<Handle> Handles => m_handles;
-		public IReadOnlyList<Collider> ColliderArray => m_colliderArray;
-		public IReadOnlyList<int> HumanBoneIndex => m_humanBoneIndex;
-		public IReadOnlyList<float> HumanBoneMass => m_humanBoneMass;
-		public IReadOnlyList<int> ColliderIndex => m_colliderIndex;
-		public float Scale { get; private set; }
-		public float ArmTwist { get; private set; }
-		public float ForeArmTwist { get; private set; }
-		public float UpperLegTwist { get; private set; }
-		public float LegTwist { get; private set; }
-		public float ArmStretch { get; private set; }
-		public float LegStretch { get; private set; }
-		public float FeetSpacing { get; private set; }
-		public bool HasLeftHand { get; private set; }
-		public bool HasRightHand { get; private set; }
-		public bool HasTDoF { get; private set; }
+		private IReadOnlyList<Handle> GetExportHandles(Version version)
+		{
+			return HasHandles(version) ? Handles : System.Array.Empty<Handle>();
+		}
+		private IReadOnlyList<Collider> GetExportColliderArray(Version version)
+		{
+			return HasHandles(version) ? ColliderArray : System.Array.Empty<Collider>();
+		}
+		private IReadOnlyList<int> GetExportColliderIndex(Version version)
+		{
+			return HasColliderIndex(version) ? ColliderIndex : System.Array.Empty<int>();
+		}
+
+		public Handle[] Handles { get; set; }
+		public Collider[] ColliderArray { get; set; }
+		public int[] HumanBoneIndex { get; set; }
+		public float[] HumanBoneMass { get; set; }
+		public int[] ColliderIndex { get; set; }
+		public float Scale { get; set; }
+		public float ArmTwist { get; set; }
+		public float ForeArmTwist { get; set; }
+		public float UpperLegTwist { get; set; }
+		public float LegTwist { get; set; }
+		public float ArmStretch { get; set; }
+		public float LegStretch { get; set; }
+		public float FeetSpacing { get; set; }
+		public bool HasLeftHand { get; set; }
+		public bool HasRightHand { get; set; }
+		public bool HasTDoF { get; set; }
+
+		public const string RootXName = "m_RootX";
+		public const string SkeletonName = "m_Skeleton";
+		public const string SkeletonPoseName = "m_SkeletonPose";
+		public const string LeftHandName = "m_LeftHand";
+		public const string RightHandName = "m_RightHand";
+		public const string HandlesName = "m_Handles";
+		public const string ColliderArrayName = "m_ColliderArray";
+		public const string HumanBoneIndexName = "m_HumanBoneIndex";
+		public const string HumanBoneMassName = "m_HumanBoneMass";
+		public const string ColliderIndexName = "m_ColliderIndex";
+		public const string ScaleName = "m_Scale";
+		public const string ArmTwistName = "m_ArmTwist";
+		public const string ForeArmTwistName = "m_ForeArmTwist";
+		public const string UpperLegTwistName = "m_UpperLegTwist";
+		public const string LegTwistName = "m_LegTwist";
+		public const string ArmStretchName = "m_ArmStretch";
+		public const string LegStretchName = "m_LegStretch";
+		public const string FeetSpacingName = "m_FeetSpacing";
+		public const string HasLeftHandName = "m_HasLeftHand";
+		public const string HasRightHandName = "m_HasRightHand";
+		public const string HasTDoFName = "m_HasTDoF";
 
 		public XForm RootX;
 		public OffsetPtr<Skeleton> Skeleton;
 		public OffsetPtr<SkeletonPose> SkeletonPose;
 		public OffsetPtr<Hand> LeftHand;
 		public OffsetPtr<Hand> RightHand;
-		
-		private Handle[] m_handles;
-		private Collider[] m_colliderArray;
-		private int[] m_humanBoneIndex;
-		private float[] m_humanBoneMass;
-		private int[] m_colliderIndex;
 	}
 }

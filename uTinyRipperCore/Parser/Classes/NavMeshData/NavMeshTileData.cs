@@ -1,6 +1,6 @@
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.NavMeshDatas
 {
@@ -9,15 +9,12 @@ namespace uTinyRipper.Classes.NavMeshDatas
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadHash(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasHash(Version version) => version.IsGreaterEqual(5, 6);
 
 		public void Read(AssetReader reader)
 		{
-			m_meshData = reader.ReadByteArray();
-			if (IsReadHash(reader.Version))
+			MeshData = reader.ReadByteArray();
+			if (HasHash(reader.Version))
 			{
 				Hash.Read(reader);
 			}
@@ -31,13 +28,11 @@ namespace uTinyRipper.Classes.NavMeshDatas
 			return node;
 		}
 
-		public IReadOnlyList<byte> MeshData => m_meshData;
+		public byte[] MeshData { get; set; }
 
 		public const string MeshDataName = "m_MeshData";
 		public const string HashName = "m_Hash";
 
 		public Hash128 Hash;
-
-		private byte[] m_meshData;
 	}
 }

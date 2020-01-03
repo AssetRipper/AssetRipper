@@ -1,5 +1,5 @@
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.NavMeshAgents;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -14,49 +14,40 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadAgentTypeID(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasAgentTypeID(Version version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool IsReadAvoidancePriority(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
+		public static bool HasAvoidancePriority(Version version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
-		public static bool IsReadAutoBraking(Version version)
-		{
-			return version.IsGreaterEqual(4, 1);
-		}
+		public static bool HasAutoBraking(Version version) => version.IsGreaterEqual(4, 1);
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadAgentTypeID(reader.Version))
+			if (HasAgentTypeID(reader.Version))
 			{
 				AgentTypeID = reader.ReadInt32();
 			}
 			Radius = reader.ReadSingle();
 			Speed = reader.ReadSingle();
 			Acceleration = reader.ReadSingle();
-			if (IsReadAvoidancePriority(reader.Version))
+			if (HasAvoidancePriority(reader.Version))
 			{
 				AvoidancePriority = reader.ReadInt32();
 			}
 			AngularSpeed = reader.ReadSingle();
 			StoppingDistance = reader.ReadSingle();
 			AutoTraverseOffMeshLink = reader.ReadBoolean();
-			if (IsReadAutoBraking(reader.Version))
+			if (HasAutoBraking(reader.Version))
 			{
 				AutoBraking = reader.ReadBoolean();
 			}
 			AutoRepath = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			Height = reader.ReadSingle();
 			BaseOffset = reader.ReadSingle();
@@ -86,27 +77,27 @@ namespace uTinyRipper.Classes
 
 		private float GetAvoidancePriority(Version version)
 		{
-			return IsReadAvoidancePriority(version) ? AvoidancePriority : 50.0f;
+			return HasAvoidancePriority(version) ? AvoidancePriority : 50.0f;
 		}
 		private bool GetAutoBraking(Version version)
 		{
-			return IsReadAutoBraking(version) ? AutoBraking : true;
+			return HasAutoBraking(version) ? AutoBraking : true;
 		}
 
-		public int AgentTypeID { get; private set; }
-		public float Radius { get; private set; }
-		public float Speed { get; private set; }
-		public float Acceleration { get; private set; }
-		public int AvoidancePriority { get; private set; }
-		public float AngularSpeed { get; private set; }
-		public float StoppingDistance { get; private set; }
-		public bool AutoTraverseOffMeshLink { get; private set; }
-		public bool AutoBraking { get; private set; }
-		public bool AutoRepath { get; private set; }
-		public float Height { get; private set; }
-		public float BaseOffset { get; private set; }
-		public uint WalkableMask { get; private set; }
-		public ObstacleAvoidanceType ObstacleAvoidanceType { get; private set; }
+		public int AgentTypeID { get; set; }
+		public float Radius { get; set; }
+		public float Speed { get; set; }
+		public float Acceleration { get; set; }
+		public int AvoidancePriority { get; set; }
+		public float AngularSpeed { get; set; }
+		public float StoppingDistance { get; set; }
+		public bool AutoTraverseOffMeshLink { get; set; }
+		public bool AutoBraking { get; set; }
+		public bool AutoRepath { get; set; }
+		public float Height { get; set; }
+		public float BaseOffset { get; set; }
+		public uint WalkableMask { get; set; }
+		public ObstacleAvoidanceType ObstacleAvoidanceType { get; set; }
 
 		public const string AgentTypeIDName = "m_AgentTypeID";
 		public const string RadiusName = "m_Radius";

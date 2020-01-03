@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes.AnimatorControllers.Editor;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.AnimatorControllers
 {
@@ -12,119 +11,95 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		/// <summary>
 		/// Less than 5.2.0
 		/// </summary>
-		public static bool IsReadLeafInfo(Version version)
-		{
-			return version.IsLess(5, 2);
-		}
+		public static bool HasLeafInfo(Version version) => version.IsLess(5, 2);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool IsReadPathID(Version version)
-		{
-			return version.IsGreaterEqual(4, 3);
-		}
+		public static bool HasPathID(Version version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadFullPathID(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		public static bool HasFullPathID(Version version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.1.0 and greater
 		/// </summary>
-		public static bool IsReadSpeedParam(Version version)
-		{
-			return version.IsGreaterEqual(5, 1);
-		}
+		public static bool HasSpeedParam(Version version) => version.IsGreaterEqual(5, 1);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool IsReadTimeParam(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
+		public static bool HasTimeParam(Version version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
-		public static bool IsReadCycleOffset(Version version)
-		{
-			return version.IsGreaterEqual(4, 1);
-		}
+		public static bool HasCycleOffset(Version version) => version.IsGreaterEqual(4, 1);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadDefaultValues(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		public static bool HasDefaultValues(Version version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
-		public static bool IsReadMirror(Version version)
-		{
-			return version.IsGreaterEqual(4, 1);
-		}
+		public static bool HasMirror(Version version) => version.IsGreaterEqual(4, 1);
 
 		public bool GetWriteDefaultValues(Version version)
 		{
-			return IsReadDefaultValues(version) ? WriteDefaultValues : true;
+			return HasDefaultValues(version) ? WriteDefaultValues : true;
 		}
 		public uint GetID(Version version)
 		{
-			return IsReadFullPathID(version) ? FullPathID : NameID;
+			return HasFullPathID(version) ? FullPathID : NameID;
 		}
 
 		public void Read(AssetReader reader)
 		{
-			m_transitionConstantArray = reader.ReadAssetArray<OffsetPtr<TransitionConstant>>();
-			m_blendTreeConstantIndexArray = reader.ReadInt32Array();
-			if(IsReadLeafInfo(reader.Version))
+			TransitionConstantArray = reader.ReadAssetArray<OffsetPtr<TransitionConstant>>();
+			BlendTreeConstantIndexArray = reader.ReadInt32Array();
+			if (HasLeafInfo(reader.Version))
 			{
-				m_leafInfoArray = reader.ReadAssetArray<LeafInfoConstant>();
+				LeafInfoArray = reader.ReadAssetArray<LeafInfoConstant>();
 			}
 
-			m_blendTreeConstantArray = reader.ReadAssetArray<OffsetPtr<BlendTreeConstant>>();
+			BlendTreeConstantArray = reader.ReadAssetArray<OffsetPtr<BlendTreeConstant>>();
 			NameID = reader.ReadUInt32();
-			if (IsReadPathID(reader.Version))
+			if (HasPathID(reader.Version))
 			{
 				PathID = reader.ReadUInt32();
 			}
-			if(IsReadFullPathID(reader.Version))
+			if (HasFullPathID(reader.Version))
 			{
 				FullPathID = reader.ReadUInt32();
 			}
 
 			TagID = reader.ReadUInt32();
-			if(IsReadSpeedParam(reader.Version))
+			if (HasSpeedParam(reader.Version))
 			{
 				SpeedParamID = reader.ReadUInt32();
 				MirrorParamID = reader.ReadUInt32();
 				CycleOffsetParamID = reader.ReadUInt32();
 			}
-			if (IsReadTimeParam(reader.Version))
+			if (HasTimeParam(reader.Version))
 			{
 				TimeParamID = reader.ReadUInt32();
 			}
 
 			Speed = reader.ReadSingle();
-			if (IsReadCycleOffset(reader.Version))
+			if (HasCycleOffset(reader.Version))
 			{
 				CycleOffset = reader.ReadSingle();
 			}
 
 			IKOnFeet = reader.ReadBoolean();
-			if (IsReadDefaultValues(reader.Version))
+			if (HasDefaultValues(reader.Version))
 			{
 				WriteDefaultValues = reader.ReadBoolean();
 			}
 
 			Loop = reader.ReadBoolean();
-			if (IsReadMirror(reader.Version))
+			if (HasMirror(reader.Version))
 			{
 				Mirror = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -134,11 +109,11 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public bool IsBlendTree(Version version)
 		{
-			if (BlendTreeConstantArray.Count == 0)
+			if (BlendTreeConstantArray.Length == 0)
 			{
 				return false;
 			}
-			return GetBlendTree().NodeArray.Count > 1;
+			return GetBlendTree().NodeArray.Length > 1;
 		}
 
 		public BlendTreeConstant GetBlendTree()
@@ -161,7 +136,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public PPtr<Motion> CreateMotion(VirtualSerializedFile file, AnimatorController controller, int nodeIndex)
 		{
-			if (BlendTreeConstantArray.Count == 0)
+			if (BlendTreeConstantArray.Length == 0)
 			{
 				return default;
 			}
@@ -176,9 +151,9 @@ namespace uTinyRipper.Classes.AnimatorControllers
 				else
 				{
 					int clipIndex = -1;
-					if (IsReadLeafInfo(controller.File.Version))
+					if (HasLeafInfo(controller.File.Version))
 					{
-						for(int i = 0; i < LeafInfoArray.Count; i++)
+						for(int i = 0; i < LeafInfoArray.Length; i++)
 						{
 							LeafInfoConstant leafInfo = LeafInfoArray[i];
 							int index = leafInfo.IDArray.IndexOf(node.ClipID);
@@ -198,32 +173,27 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			}
 		}
 
-		public IReadOnlyList<OffsetPtr<TransitionConstant>> TransitionConstantArray => m_transitionConstantArray;
-		public IReadOnlyList<int> BlendTreeConstantIndexArray => m_blendTreeConstantIndexArray;
-		public IReadOnlyList<LeafInfoConstant> LeafInfoArray => m_leafInfoArray;
-		public IReadOnlyList<OffsetPtr<BlendTreeConstant>> BlendTreeConstantArray => m_blendTreeConstantArray;
+		public OffsetPtr<TransitionConstant>[] TransitionConstantArray { get; set; }
+		public int[] BlendTreeConstantIndexArray { get; set; }
+		public LeafInfoConstant[] LeafInfoArray { get; set; }
+		public OffsetPtr<BlendTreeConstant>[] BlendTreeConstantArray { get; set; }
 		/// <summary>
 		/// ID previously
 		/// </summary>
-		public uint NameID { get; private set; }
-		public uint PathID { get; private set; }
-		public uint FullPathID { get; private set; }
-		public uint TagID { get; private set; }
-		public uint SpeedParamID { get; private set; }
-		public uint MirrorParamID { get; private set; }
-		public uint CycleOffsetParamID { get; private set; }
-		public uint TimeParamID { get; private set; }
-		public float Speed { get; private set; }
-		public float CycleOffset { get; private set; }
-		public bool IKOnFeet { get; private set; }
-		public bool WriteDefaultValues { get; private set; }
-		public bool Loop { get; private set; }
-		public bool Mirror { get; private set; }
-		
-		private OffsetPtr<TransitionConstant>[] m_transitionConstantArray;
-		private int[] m_blendTreeConstantIndexArray;
-		private LeafInfoConstant[] m_leafInfoArray;
-		private OffsetPtr<BlendTreeConstant>[] m_blendTreeConstantArray;
+		public uint NameID { get; set; }
+		public uint PathID { get; set; }
+		public uint FullPathID { get; set; }
+		public uint TagID { get; set; }
+		public uint SpeedParamID { get; set; }
+		public uint MirrorParamID { get; set; }
+		public uint CycleOffsetParamID { get; set; }
+		public uint TimeParamID { get; set; }
+		public float Speed { get; set; }
+		public float CycleOffset { get; set; }
+		public bool IKOnFeet { get; set; }
+		public bool WriteDefaultValues { get; set; }
+		public bool Loop { get; set; }
+		public bool Mirror { get; set; }
 		
 	}
 }

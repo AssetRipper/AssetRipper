@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Meshes
@@ -6,29 +6,42 @@ namespace uTinyRipper.Classes.Meshes
 	/// <summary>
 	/// MeshBlendShapeVertex previously
 	/// </summary>
-	public struct BlendShapeVertex : IAssetReadable, IYAMLExportable
+	public struct BlendShapeVertex : IAsset
 	{
 		public void Read(AssetReader reader)
 		{
-			Position.Read(reader);
+			Vertex.Read(reader);
 			Normal.Read(reader);
 			Tangent.Read(reader);
 			Index = reader.ReadUInt32();
 		}
 
+		public void Write(AssetWriter writer)
+		{
+			writer.WriteAsset(Vertex);
+			writer.WriteAsset(Normal);
+			writer.WriteAsset(Tangent);
+			writer.Write(Index);
+		}
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("vertex", Position.ExportYAML(container));
-			node.Add("normal", Normal.ExportYAML(container));
-			node.Add("tangent", Tangent.ExportYAML(container));
-			node.Add("index", Index);
+			node.Add(VertexName, Vertex.ExportYAML(container));
+			node.Add(NormalName, Normal.ExportYAML(container));
+			node.Add(TangentName, Tangent.ExportYAML(container));
+			node.Add(IndexName, Index);
 			return node;
 		}
 
-		public uint Index { get; private set; }
+		public uint Index { get; set; }
 
-		public Vector3f Position;
+		public const string VertexName = "vertex";
+		public const string NormalName = "normal";
+		public const string TangentName = "tangent";
+		public const string IndexName = "index";
+
+		public Vector3f Vertex;
 		public Vector3f Normal;
 		public Vector3f Tangent;
 	}

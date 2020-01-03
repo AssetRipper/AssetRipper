@@ -5,20 +5,20 @@
 		internal virtual void Emit(Emitter emitter)
 		{
 			bool isWrote = false;
-			if(!CustomTag.IsEmpty)
+			if (!CustomTag.IsEmpty)
 			{
 				emitter.Write(CustomTag.ToString()).WriteWhitespace();
 				isWrote = true;
 			}
-			if (Anchor != string.Empty)
+			if (Anchor.Length > 0)
 			{
 				emitter.Write("&").Write(Anchor).WriteWhitespace();
 				isWrote = true;
 			}
-			
-			if(isWrote)
+
+			if (isWrote)
 			{
-				if(IsMultyline)
+				if (IsMultiline)
 				{
 					emitter.WriteLine();
 				}
@@ -26,7 +26,7 @@
 		}
 
 		public abstract YAMLNodeType NodeType { get; }
-		public abstract bool IsMultyline { get; }
+		public abstract bool IsMultiline { get; }
 		public abstract bool IsIndent { get; }
 		
 		public string Tag

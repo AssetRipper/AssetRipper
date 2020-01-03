@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {
@@ -32,16 +31,16 @@ namespace uTinyRipper.Classes
 			MaskMapRemapMax.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return DiffuseTexture.FetchDependency(file, isLog, ToLogString, DiffuseTextureName);
-			yield return NormalMapTexture.FetchDependency(file, isLog, ToLogString, NormalMapTextureName);
-			yield return MaskMapTexture.FetchDependency(file, isLog, ToLogString, MaskMapTextureName);
+			yield return context.FetchDependency(DiffuseTexture, DiffuseTextureName);
+			yield return context.FetchDependency(NormalMapTexture, NormalMapTextureName);
+			yield return context.FetchDependency(MaskMapTexture, MaskMapTextureName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -64,11 +63,11 @@ namespace uTinyRipper.Classes
 		}
 
 		public override string ExportExtension => "terrainlayer";
-		public override string ExportName => Path.Combine(AssetsKeyWord, ClassIDType.Terrain.ToString(), ClassID.ToString());
+		public override string ExportPath => Path.Combine(AssetsKeyword, nameof(Terrain), nameof(TerrainLayer));
 
-		public float Metallic { get; private set; }
-		public float Smoothness { get; private set; }
-		public float NormalScale { get; private set; }
+		public float Metallic { get; set; }
+		public float Smoothness { get; set; }
+		public float NormalScale { get; set; }
 
 		public const string DiffuseTextureName = "m_DiffuseTexture";
 		public const string NormalMapTextureName = "m_NormalMapTexture";

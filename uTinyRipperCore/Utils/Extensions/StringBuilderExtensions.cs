@@ -79,15 +79,15 @@ namespace uTinyRipper
 			return AppendHex(_this, BitConverterExtensions.ToUInt64(value));
 		}
 
-		public static StringBuilder AppendIntent(this StringBuilder _this, int count)
+		public static StringBuilder AppendIndent(this StringBuilder _this, int count)
 		{
-			for(int i = 0; i < count; i++)
+			for (int i = 0; i < count; i++)
 			{
 				_this.Append('\t');
 			}
 			return _this;
 		}
 
-		private static readonly string HexAlphabet = "0123456789abcdef";
+		public static readonly string HexAlphabet = "0123456789abcdef";
 	}
 }

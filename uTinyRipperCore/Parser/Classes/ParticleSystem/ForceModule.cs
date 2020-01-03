@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.ParticleSystems
@@ -14,22 +14,28 @@ namespace uTinyRipper.Classes.ParticleSystems
 			Z.Read(reader);
 			InWorldSpace = reader.ReadBoolean();
 			RandomizePerFrame = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add("x", X.ExportYAML(container));
-			node.Add("y", Y.ExportYAML(container));
-			node.Add("z", Z.ExportYAML(container));
-			node.Add("inWorldSpace", InWorldSpace);
-			node.Add("randomizePerFrame", RandomizePerFrame);
+			node.Add(XName, X.ExportYAML(container));
+			node.Add(YName, Y.ExportYAML(container));
+			node.Add(ZName, Z.ExportYAML(container));
+			node.Add(InWorldSpaceName, InWorldSpace);
+			node.Add(RandomizePerFrameName, RandomizePerFrame);
 			return node;
 		}
 
-		public bool InWorldSpace { get; private set; }
-		public bool RandomizePerFrame { get; private set; }
+		public bool InWorldSpace { get; set; }
+		public bool RandomizePerFrame { get; set; }
+
+		public const string XName = "x";
+		public const string YName = "y";
+		public const string ZName = "z";
+		public const string InWorldSpaceName = "inWorldSpace";
+		public const string RandomizePerFrameName = "randomizePerFrame";
 
 		public MinMaxCurve X;
 		public MinMaxCurve Y;

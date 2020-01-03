@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes.AnimatorControllers.Editor;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
@@ -11,7 +10,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		public void Read(AssetReader reader)
 		{
 			Destination = unchecked((int)reader.ReadUInt32());
-			m_conditionConstantArray = reader.ReadAssetArray<OffsetPtr<ConditionConstant>>();
+			ConditionConstantArray = reader.ReadAssetArray<OffsetPtr<ConditionConstant>>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -19,9 +18,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 
-		public int Destination { get; private set; }
-		public IReadOnlyList<OffsetPtr<ConditionConstant>> ConditionConstantArray => m_conditionConstantArray;
-		
-		private OffsetPtr<ConditionConstant>[] m_conditionConstantArray;
+		public int Destination { get; set; }
+		public OffsetPtr<ConditionConstant>[] ConditionConstantArray { get; set; }
 	}
 }

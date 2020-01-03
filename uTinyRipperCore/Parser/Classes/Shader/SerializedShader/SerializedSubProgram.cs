@@ -1,40 +1,8 @@
-using System.Collections.Generic;
-
 namespace uTinyRipper.Classes.Shaders
 {
 	public struct SerializedSubProgram : IAssetReadable
 	{
-		/// <summary>
-		/// 2019.1 and greater
-		/// </summary>
-		public static bool IsReadLocalKeywordIndices(Version version)
-		{
-			return version.IsGreaterEqual(2019);
-		}
-		/// <summary>
-		/// 2017.1 and greater
-		/// </summary>
-		public static bool IsReadSamplers(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1);
-		}
-		/// <summary>
-		/// 2017.2 and greater
-		/// </summary>
-		public static bool IsReadShaderRequirements(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
-
-		/// <summary>
-		/// 2017.1 and greater
-		/// </summary>
-		private static bool IsAlignKeywordIndices(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// KeywordIndices has been renamed to GlobalKeywordIndices
 			if (version.IsGreaterEqual(2019))
@@ -47,46 +15,65 @@ namespace uTinyRipper.Classes.Shaders
 			// return 1;
 		}
 
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool HasLocalKeywordIndices(Version version) => version.IsGreaterEqual(2019);
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		public static bool HasSamplers(Version version) => version.IsGreaterEqual(2017, 1);
+		/// <summary>
+		/// 2017.2 and greater
+		/// </summary>
+		public static bool HasShaderRequirements(Version version) => version.IsGreaterEqual(2017, 2);
+
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		private static bool IsAlignKeywordIndices(Version version) => version.IsGreaterEqual(2017, 1);
+
 		public void Read(AssetReader reader)
 		{
 			BlobIndex = reader.ReadUInt32();
 			Channels.Read(reader);
-			m_globalKeywordIndices = reader.ReadUInt16Array();
+			GlobalKeywordIndices = reader.ReadUInt16Array();
 			if (IsAlignKeywordIndices(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
-			if (IsReadLocalKeywordIndices(reader.Version))
+			if (HasLocalKeywordIndices(reader.Version))
 			{
-				m_localKeywordIndices = reader.ReadUInt16Array();
-				reader.AlignStream(AlignType.Align4);
+				LocalKeywordIndices = reader.ReadUInt16Array();
+				reader.AlignStream();
 			}
 
 			ShaderHardwareTier = reader.ReadByte();
 			GpuProgramType = (ShaderGpuProgramType)reader.ReadByte();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
-			m_vectorParams = reader.ReadAssetArray<VectorParameter>();
-			m_matrixParams = reader.ReadAssetArray<MatrixParameter>();
-			m_textureParams = reader.ReadAssetArray<TextureParameter>();
-			m_bufferParams = reader.ReadAssetArray<BufferBinding>();
-			m_constantBuffers = reader.ReadAssetArray<ConstantBuffer>();
-			m_constantBufferBindings = reader.ReadAssetArray<BufferBinding>();
-			m_UAVParams = reader.ReadAssetArray<UAVParameter>();
+			VectorParams = reader.ReadAssetArray<VectorParameter>();
+			MatrixParams = reader.ReadAssetArray<MatrixParameter>();
+			TextureParams = reader.ReadAssetArray<TextureParameter>();
+			BufferParams = reader.ReadAssetArray<BufferBinding>();
+			ConstantBuffers = reader.ReadAssetArray<ConstantBuffer>();
+			ConstantBufferBindings = reader.ReadAssetArray<BufferBinding>();
+			UAVParams = reader.ReadAssetArray<UAVParameter>();
 
-			if (IsReadSamplers(reader.Version))
+			if (HasSamplers(reader.Version))
 			{
-				m_samplers = reader.ReadAssetArray<SamplerParameter>();
+				Samplers = reader.ReadAssetArray<SamplerParameter>();
 			}
-			if (IsReadShaderRequirements(reader.Version))
+			if (HasShaderRequirements(reader.Version))
 			{
 				ShaderRequirements = reader.ReadInt32();
 			}
 		}
 
-		public void Export(ShaderWriter writer, ShaderSubProgramBlob blob, ShaderType type, bool isTier)
+		public void Export(ShaderWriter writer, ref ShaderSubProgramBlob blob, ShaderType type, bool isTier)
 		{
 			writer.WriteIndent(4);
+#warning TODO: convertion (DX to HLSL)
 			writer.Write("SubProgram \"{0} ", GpuProgramType.ToGPUPlatform(writer.Platform));
 			if (isTier)
 			{
@@ -102,35 +89,24 @@ namespace uTinyRipper.Classes.Shaders
 			writer.Write("}\n");
 		}
 
-		public uint BlobIndex { get; private set; }
+		public uint BlobIndex { get; set; }
 		/// <summary>
 		/// KeywordIndices previously
 		/// </summary>
-		public IReadOnlyList<ushort> GlobalKeywordIndices => m_globalKeywordIndices;
-		public IReadOnlyList<ushort> LocalKeywordIndices => m_localKeywordIndices;
-		public byte ShaderHardwareTier { get; private set; }
-		public ShaderGpuProgramType GpuProgramType { get; private set; }
-		public IReadOnlyList<VectorParameter> VectorParams => m_vectorParams;
-		public IReadOnlyList<MatrixParameter> MatrixParams => m_matrixParams;
-		public IReadOnlyList<TextureParameter> TextureParams => m_textureParams;
-		public IReadOnlyList<BufferBinding> BufferParams => m_bufferParams;
-		public IReadOnlyList<ConstantBuffer> ConstantBuffers => m_constantBuffers;
-		public IReadOnlyList<BufferBinding> ConstantBufferBindings => m_constantBufferBindings;
-		public IReadOnlyList<UAVParameter> UAVParams => m_UAVParams;
-		public IReadOnlyList<SamplerParameter> Samplers => m_samplers;
-		public int ShaderRequirements { get; private set; }
+		public ushort[] GlobalKeywordIndices { get; set; }
+		public ushort[] LocalKeywordIndices { get; set; }
+		public byte ShaderHardwareTier { get; set; }
+		public ShaderGpuProgramType GpuProgramType { get; set; }
+		public VectorParameter[] VectorParams { get; set; }
+		public MatrixParameter[] MatrixParams { get; set; }
+		public TextureParameter[] TextureParams { get; set; }
+		public BufferBinding[] BufferParams { get; set; }
+		public ConstantBuffer[] ConstantBuffers { get; set; }
+		public BufferBinding[] ConstantBufferBindings { get; set; }
+		public UAVParameter[] UAVParams { get; set; }
+		public SamplerParameter[] Samplers { get; set; }
+		public int ShaderRequirements { get; set; }
 
 		public ParserBindChannels Channels;
-
-		private ushort[] m_globalKeywordIndices;
-		private ushort[] m_localKeywordIndices;
-		private VectorParameter[] m_vectorParams;
-		private MatrixParameter[] m_matrixParams;
-		private TextureParameter[] m_textureParams;
-		private BufferBinding[] m_bufferParams;
-		private ConstantBuffer[] m_constantBuffers;
-		private BufferBinding[] m_constantBufferBindings;
-		private UAVParameter[] m_UAVParams;
-		private SamplerParameter[] m_samplers;
 	}
 }

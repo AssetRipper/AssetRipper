@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
@@ -17,7 +16,7 @@ namespace uTinyRipper.Classes
 			throw new System.NotImplementedException();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			throw new System.NotImplementedException();
 		}

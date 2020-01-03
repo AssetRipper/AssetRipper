@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.AssetExporters.Classes;
+﻿using System.Collections.Generic;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.GraphicsSettingss
 {
-	public struct BuiltinShaderSettings : IAssetReadable, IYAMLExportable
+	public struct BuiltinShaderSettings : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -15,9 +13,9 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			Shader.Read(reader);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return Shader.FetchDependency(file, isLog, () => nameof(BuiltinShaderSettings), "m_Shader");
+			yield return context.FetchDependency(Shader, ShaderName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -33,18 +31,15 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(ModeName, (int)BuiltinShaderMode.Builtin);
 			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(shaderName, container.ExportVersion);
-			ExportPointer pointer = new ExportPointer(buildInAsset.ExportID, buildInAsset.GUID, AssetType.Internal);
-			node.Add(ShaderName, pointer.ExportYAML(container));
+			node.Add(ShaderName, buildInAsset.ToExportPointer().ExportYAML(container));
 			return node;
 		}
 
-		public BuiltinShaderMode Mode { get; private set; }
+		public BuiltinShaderMode Mode { get; set; }
 
 		public const string ModeName = "m_Mode";
 		public const string ShaderName = "m_Shader";
 
 		public PPtr<Shader> Shader;
-
-		private static readonly EngineGUID FGUID = new EngineGUID(0x00000000, 0xF0000000, 0x00000000, 0x00000000);
 	}
 }

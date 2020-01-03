@@ -1,17 +1,18 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.LightingDataAssets;
 using uTinyRipper.Classes.LightmapSettingss;
 using uTinyRipper.Classes.Lights;
 using uTinyRipper.Classes.OcclusionCullingDatas;
 using uTinyRipper.Classes.RenderSettingss;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes
 {
 	/// <summary>
-	/// LightmapSnapshot previously
+	/// 5.0.0 - first introduction as LightmapSnapshot
+	/// 5.3.0 - renamed to LightingDataAsset
 	/// </summary>
 	public sealed class LightingDataAsset : NamedObject
 	{
@@ -20,29 +21,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 2019.1 and greater
-		/// </summary>
-		public static bool IsReadAOTextures(Version version)
-		{
-			return version.IsGreaterEqual(2019);
-		}
-		/// <summary>
-		/// 2018.2 and greater
-		/// </summary>
-		public static bool IsReadLightmapsCacheFiles(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
-		/// <summary>
-		/// 2018.2 and greater
-		/// </summary>
-		public static bool IsReadBakedReflectionProbeCubemapCacheFiles(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			return 4;
 			/*if (version.IsGreaterEqual())
@@ -60,6 +39,18 @@ namespace uTinyRipper.Classes
 			return 1;*/
 		}
 
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool HasAOTextures(Version version) => version.IsGreaterEqual(2019);
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool HasLightmapsCacheFiles(Version version) => version.IsGreaterEqual(2018, 2);
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool HasBakedReflectionProbeCubemapCacheFiles(Version version) => version.IsGreaterEqual(2018, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -67,95 +58,89 @@ namespace uTinyRipper.Classes
 
 			Scene.Read(reader);
 
-			m_lightmaps = reader.ReadAssetArray<LightmapData>();
-			reader.AlignStream(AlignType.Align4);
+			Lightmaps = reader.ReadAssetArray<LightmapData>();
+			reader.AlignStream();
 
-			if (IsReadAOTextures(reader.Version))
+			if (HasAOTextures(reader.Version))
 			{
-				m_AOTextures = reader.ReadAssetArray<PPtr<Texture2D>>();
+				AOTextures = reader.ReadAssetArray<PPtr<Texture2D>>();
 			}
-			if (IsReadLightmapsCacheFiles(reader.Version))
+			if (HasLightmapsCacheFiles(reader.Version))
 			{
-				m_lightmapsCacheFiles = reader.ReadStringArray();
+				LightmapsCacheFiles = reader.ReadStringArray();
 			}
 
 			LightProbes.Read(reader);
 			LightmapsMode = reader.ReadInt32();
 			BakedAmbientProbeInLinear.Read(reader);
-			m_lightmappedRendererData = reader.ReadAssetArray<RendererData>();
-			reader.AlignStream(AlignType.Align4);
+			LightmappedRendererData = reader.ReadAssetArray<RendererData>();
+			reader.AlignStream();
 
-			m_lightmappedRendererDataIDs = reader.ReadAssetArray<SceneObjectIdentifier>();
-			reader.AlignStream(AlignType.Align4);
+			LightmappedRendererDataIDs = reader.ReadAssetArray<SceneObjectIdentifier>();
+			reader.AlignStream();
 
 			EnlightenSceneMapping.Read(reader);
-			m_enlightenSceneMappingRendererIDs = reader.ReadAssetArray<SceneObjectIdentifier>();
-			reader.AlignStream(AlignType.Align4);
+			EnlightenSceneMappingRendererIDs = reader.ReadAssetArray<SceneObjectIdentifier>();
+			reader.AlignStream();
 
-			m_lights = reader.ReadAssetArray<SceneObjectIdentifier>();
-			reader.AlignStream(AlignType.Align4);
+			Lights = reader.ReadAssetArray<SceneObjectIdentifier>();
+			reader.AlignStream();
 
-			m_lightBakingOutputs = reader.ReadAssetArray<LightBakingOutput>();
-			reader.AlignStream(AlignType.Align4);
+			LightBakingOutputs = reader.ReadAssetArray<LightBakingOutput>();
+			reader.AlignStream();
 
-			if (IsReadBakedReflectionProbeCubemapCacheFiles(reader.Version))
+			if (HasBakedReflectionProbeCubemapCacheFiles(reader.Version))
 			{
-				m_bakedReflectionProbeCubemapCacheFiles = reader.ReadStringArray();
+				BakedReflectionProbeCubemapCacheFiles = reader.ReadStringArray();
 			}
-			m_bakedReflectionProbeCubemaps = reader.ReadAssetArray<PPtr<Texture>>();
-			m_bakedReflectionProbes = reader.ReadAssetArray<SceneObjectIdentifier>();
-			reader.AlignStream(AlignType.Align4);
+			BakedReflectionProbeCubemaps = reader.ReadAssetArray<PPtr<Texture>>();
+			BakedReflectionProbes = reader.ReadAssetArray<SceneObjectIdentifier>();
+			reader.AlignStream();
 
-			m_enlightenData = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			EnlightenData = reader.ReadByteArray();
+			reader.AlignStream();
 
 			EnlightenDataVersion = reader.ReadInt32();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return Scene.FetchDependency(file, isLog, ToLogString, SceneName);
-			foreach (LightmapData lightmapData in Lightmaps)
-			{
-				foreach (Object asset in lightmapData.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
-			}
-			yield return LightProbes.FetchDependency(file, isLog, ToLogString, LightProbesName);
-			foreach (RendererData rendererData in LightmappedRendererData)
-			{
-				foreach (Object asset in rendererData.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
-			}
-			foreach (Object asset in EnlightenSceneMapping.FetchDependencies(file, isLog))
+			yield return context.FetchDependency(Scene, SceneName);
+			foreach (PPtr<Object> asset in context.FetchDependencies(Lightmaps, LightmapsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Texture> cubemap in BakedReflectionProbeCubemaps)
+			yield return context.FetchDependency(LightProbes, LightProbesName);
+			foreach (PPtr<Object> asset in context.FetchDependencies(LightmappedRendererData, LightmappedRendererDataName))
 			{
-				yield return cubemap.FetchDependency(file, isLog, ToLogString, BakedReflectionProbeCubemapsName);
+				yield return asset;
+			}
+			foreach (PPtr<Object> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
+			{
+				yield return asset;
+			}
+			foreach (PPtr<Object> asset in context.FetchDependencies(BakedReflectionProbeCubemaps, BakedReflectionProbeCubemapsName))
+			{
+				yield return asset;
 			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(SceneName, Scene.ExportYAML(container));
 			node.Add(LightmapsName, Lightmaps.ExportYAML(container));
-			if (IsReadAOTextures(container.ExportVersion))
+			if (HasAOTextures(container.ExportVersion))
 			{
 				node.Add(AOTexturesName, GetAOTextures(container.Version).ExportYAML(container));
 			}
-			if (IsReadLightmapsCacheFiles(container.Version))
+			if (HasLightmapsCacheFiles(container.Version))
 			{
 				node.Add(LightmapsCacheFilesName, GetLightmapsCacheFiles(container.Version).ExportYAML());
 			}
@@ -168,7 +153,7 @@ namespace uTinyRipper.Classes
 			node.Add(EnlightenSceneMappingRendererIDsName, EnlightenSceneMappingRendererIDs.ExportYAML(container));
 			node.Add(LightsName, Lights.ExportYAML(container));
 			node.Add(LightBakingOutputsName, LightBakingOutputs.ExportYAML(container));
-			if (IsReadBakedReflectionProbeCubemapCacheFiles(container.ExportVersion))
+			if (HasBakedReflectionProbeCubemapCacheFiles(container.ExportVersion))
 			{
 				node.Add(BakedReflectionProbeCubemapCacheFilesName, GetBakedReflectionProbeCubemapCacheFiles(container.Version).ExportYAML());
 			}
@@ -181,31 +166,31 @@ namespace uTinyRipper.Classes
 
 		private IReadOnlyList<PPtr<Texture2D>> GetAOTextures(Version version)
 		{
-			return IsReadAOTextures(version) ? AOTextures : new PPtr<Texture2D>[0];
+			return HasAOTextures(version) ? AOTextures : System.Array.Empty<PPtr<Texture2D>>();
 		}
 		private IReadOnlyList<string> GetLightmapsCacheFiles(Version version)
 		{
-			return IsReadLightmapsCacheFiles(version) ? LightmapsCacheFiles : new string[0];
+			return HasLightmapsCacheFiles(version) ? LightmapsCacheFiles : System.Array.Empty<string>();
 		}
 		private IReadOnlyList<string> GetBakedReflectionProbeCubemapCacheFiles(Version version)
 		{
-			return IsReadBakedReflectionProbeCubemapCacheFiles(version) ? BakedReflectionProbeCubemapCacheFiles : new string[0];
+			return HasBakedReflectionProbeCubemapCacheFiles(version) ? BakedReflectionProbeCubemapCacheFiles : System.Array.Empty<string>();
 		}
 
-		public IReadOnlyList<LightmapData> Lightmaps => m_lightmaps;
-		public IReadOnlyList<PPtr<Texture2D>> AOTextures => m_AOTextures;
-		public IReadOnlyList<string> LightmapsCacheFiles => m_lightmapsCacheFiles;
-		public int LightmapsMode { get; private set; }
-		public IReadOnlyList<RendererData> LightmappedRendererData => m_lightmappedRendererData;
-		public IReadOnlyList<SceneObjectIdentifier> LightmappedRendererDataIDs => m_lightmappedRendererDataIDs;
-		public IReadOnlyList<SceneObjectIdentifier> EnlightenSceneMappingRendererIDs => m_enlightenSceneMappingRendererIDs;
-		public IReadOnlyList<SceneObjectIdentifier> Lights => m_lights;
-		public IReadOnlyList<LightBakingOutput> LightBakingOutputs => m_lightBakingOutputs;
-		public IReadOnlyList<string> BakedReflectionProbeCubemapCacheFiles => m_bakedReflectionProbeCubemapCacheFiles;
-		public IReadOnlyList<PPtr<Texture>> BakedReflectionProbeCubemaps => m_bakedReflectionProbeCubemaps;
-		public IReadOnlyList<SceneObjectIdentifier> BakedReflectionProbes => m_bakedReflectionProbes;
-		public IReadOnlyList<byte> EnlightenData => m_enlightenData;
-		public int EnlightenDataVersion { get; private set; }
+		public LightmapData[] Lightmaps { get; set; }
+		public PPtr<Texture2D>[] AOTextures { get; set; }
+		public string[] LightmapsCacheFiles { get; set; }
+		public int LightmapsMode { get; set; }
+		public RendererData[] LightmappedRendererData { get; set; }
+		public SceneObjectIdentifier[] LightmappedRendererDataIDs { get; set; }
+		public SceneObjectIdentifier[] EnlightenSceneMappingRendererIDs { get; set; }
+		public SceneObjectIdentifier[] Lights { get; set; }
+		public LightBakingOutput[] LightBakingOutputs { get; set; }
+		public string[] BakedReflectionProbeCubemapCacheFiles { get; set; }
+		public PPtr<Texture>[] BakedReflectionProbeCubemaps { get; set; }
+		public SceneObjectIdentifier[] BakedReflectionProbes { get; set; }
+		public byte[] EnlightenData { get; set; }
+		public int EnlightenDataVersion { get; set; }
 
 		public const string SceneName = "m_Scene";
 		public const string LightmapsName = "m_Lightmaps";
@@ -230,18 +215,5 @@ namespace uTinyRipper.Classes
 		public PPtr<LightProbes> LightProbes;
 		public SphericalHarmonicsL2 BakedAmbientProbeInLinear;
 		public EnlightenSceneMapping EnlightenSceneMapping;
-
-		private LightmapData[] m_lightmaps;
-		private PPtr<Texture2D>[] m_AOTextures;
-		private string[] m_lightmapsCacheFiles;
-		private RendererData[] m_lightmappedRendererData;
-		private SceneObjectIdentifier[] m_lightmappedRendererDataIDs;
-		private SceneObjectIdentifier[] m_enlightenSceneMappingRendererIDs;
-		private SceneObjectIdentifier[] m_lights;
-		private LightBakingOutput[] m_lightBakingOutputs;
-		private string[] m_bakedReflectionProbeCubemapCacheFiles;
-		private PPtr<Texture>[] m_bakedReflectionProbeCubemaps;
-		private SceneObjectIdentifier[] m_bakedReflectionProbes;
-		private byte[] m_enlightenData;
 	}
 }

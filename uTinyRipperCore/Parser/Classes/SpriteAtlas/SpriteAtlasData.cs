@@ -1,20 +1,16 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Sprites;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.SpriteAtlases
 {
-	public struct SpriteAtlasData : IAssetReadable, IYAMLExportable
+	public struct SpriteAtlasData : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool IsReadAtlasRectOffset(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
+		public static bool HasAtlasRectOffset(Version version) => version.IsGreaterEqual(2017, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -22,7 +18,7 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			AlphaTexture.Read(reader);
 			TextureRect.Read(reader);
 			TextureRectOffset.Read(reader);
-			if(IsReadAtlasRectOffset(reader.Version))
+			if (HasAtlasRectOffset(reader.Version))
 			{
 				AtlasRectOffset.Read(reader);
 			}
@@ -31,10 +27,10 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			SettingsRaw = reader.ReadUInt32();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return Texture.FetchDependency(file, isLog, () => nameof(SpriteAtlasData), TextureName);
-			yield return AlphaTexture.FetchDependency(file, isLog, () => nameof(SpriteAtlasData), AlphaTextureName);
+			yield return context.FetchDependency(Texture, TextureName);
+			yield return context.FetchDependency(AlphaTexture, AlphaTextureName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -56,8 +52,8 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		public SpritePackingRotation PackingRotation => (SpritePackingRotation)((SettingsRaw >> 2) & 0xF);
 		public SpriteMeshType MeshType => (SpriteMeshType)((SettingsRaw >> 6) & 0x1);
 
-		public float DownscaleMultiplier { get; private set; }
-		public uint SettingsRaw { get; private set; }
+		public float DownscaleMultiplier { get; set; }
+		public uint SettingsRaw { get; set; }
 
 		public const string TextureName = "texture";
 		public const string AlphaTextureName = "alphaTexture";

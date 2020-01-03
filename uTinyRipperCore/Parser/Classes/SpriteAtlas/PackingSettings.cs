@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.SpriteAtlases
@@ -17,7 +17,7 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			EnableTightPacking = true;
 		}
 
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// paddingPower was renamed to padding
 			if (version.IsGreaterEqual(2017, 1, 2))
@@ -34,13 +34,13 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			AllowAlphaSplitting = reader.ReadBoolean();
 			EnableRotation = reader.ReadBoolean();
 			EnableTightPacking = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(PaddingName, Padding);
 			node.Add(BlockOffsetName, BlockOffset);
 			node.Add(AllowAlphaSplittingName, AllowAlphaSplitting);
@@ -52,11 +52,11 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		/// <summary>
 		/// PaddingPower previously
 		/// </summary>
-		public int Padding { get; private set; }
-		public int BlockOffset { get; private set; }
-		public bool AllowAlphaSplitting { get; private set; }
-		public bool EnableRotation { get; private set; }
-		public bool EnableTightPacking { get; private set; }
+		public int Padding { get; set; }
+		public int BlockOffset { get; set; }
+		public bool AllowAlphaSplitting { get; set; }
+		public bool EnableRotation { get; set; }
+		public bool EnableTightPacking { get; set; }
 
 		public const string PaddingName = "padding";
 		public const string BlockOffsetName = "blockOffset";

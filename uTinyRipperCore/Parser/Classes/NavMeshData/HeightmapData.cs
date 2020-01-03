@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.NavMeshDatas
 {
@@ -13,9 +12,9 @@ namespace uTinyRipper.Classes.NavMeshDatas
 			TerrainData.Read(reader);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return TerrainData.FetchDependency(file, isLog, () => nameof(HeightmapData), "terrainData");
+			yield return context.FetchDependency(TerrainData, TerrainDataName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

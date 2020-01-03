@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -17,7 +17,7 @@ namespace uTinyRipper.Classes
 			SortingLayerID = reader.ReadInt32();
 			SortingLayer = reader.ReadInt16();
 			SortingOrder = reader.ReadInt16();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 		}
 
@@ -30,9 +30,9 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public int SortingLayerID { get; private set; }
-		public short SortingLayer { get; private set; }
-		public short SortingOrder { get; private set; }
+		public int SortingLayerID { get; set; }
+		public short SortingLayer { get; set; }
+		public short SortingOrder { get; set; }
 
 		public const string SortingLayerIDName = "m_SortingLayerID";
 		public const string SortingLayerName = "m_SortingLayer";

@@ -1,128 +1,137 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AnimationClips;
 using uTinyRipper.Classes.Animations;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
 	public sealed class Animation : Behaviour
 	{
+		public Animation(AssetLayout layout) :
+			base(layout)
+		{
+			AnimationLayout classLayout = layout.Animation;
+			if (classLayout.HasAnimations)
+			{
+				Animations = Array.Empty<PPtr<AnimationClip>>();
+			}
+			else
+			{
+				AnimationsPaired = Array.Empty<Tuple<string, PPtr<AnimationClip>>>();
+			}
+			PlayAutomatically = true;
+		}
+
 		public Animation(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
 
-		/// <summary>
-		/// Less than 1.5
-		/// </summary>
-		public static bool IsReadAnimationsPaired(Version version)
+		public override Object Convert(IExportContainer container)
 		{
-			return version.IsLess(1, 5);
-		}
-		/// <summary>
-		/// 2.6.0 to 3.4.0 exclusive
-		/// </summary>
-		public static bool IsReadAnimateOnlyIfVisible(Version version)
-		{
-			return version.IsGreaterEqual(2, 6) && version.IsLess(3, 4);
-		}
-		/// <summary>
-		/// 3.4.0 and greater
-		/// </summary>
-		public static bool IsReadCullingType(Version version)
-		{
-			return version.IsGreaterEqual(3, 4);
-		}
-		/// <summary>
-		/// 3.4.0 to
-		/// </summary>
-		public static bool IsReadUserAABB(Version version)
-		{
-			return version.IsGreaterEqual(3, 4) && version.IsLess(4, 3);
-		}
-
-		/// <summary>
-		/// 3.2.0 and greater
-		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(3, 2);
-		}
-
-		private static int GetSerializedVersion(Version version)
-		{
-			if (version.IsGreaterEqual(3, 4))
-			{
-				return 3;
-			}
-			if (version.IsGreaterEqual(1, 5))
-			{
-				return 2;
-			}
-			return 1;
+			return AnimationConverter.Convert(container, this);
 		}
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
+			AnimationLayout layout = reader.Layout.Animation;
 			DefaultAnimation.Read(reader);
-			if (IsReadAnimationsPaired(reader.Version))
+			if (layout.HasAnimations)
 			{
-				m_animationsPaired = reader.ReadTupleStringTArray<PPtr<AnimationClip>>();
+				Animations = reader.ReadAssetArray<PPtr<AnimationClip>>();
 			}
 			else
 			{
-				m_animations = reader.ReadAssetArray<PPtr<AnimationClip>>();
+				AnimationsPaired = reader.ReadTupleStringTArray<PPtr<AnimationClip>>();
 			}
+
 			WrapMode = (WrapMode)reader.ReadInt32();
 			PlayAutomatically = reader.ReadBoolean();
 			AnimatePhysics = reader.ReadBoolean();
-			if(IsReadAnimateOnlyIfVisible(reader.Version))
+			if (layout.HasAnimateOnlyIfVisible)
 			{
 				AnimateOnlyIfVisible = reader.ReadBoolean();
 			}
-			if (IsAlign(reader.Version))
+			if (layout.IsAlign)
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
-			if (IsReadCullingType(reader.Version))
+			if (layout.HasCullingType)
 			{
 				CullingType = (AnimationCullingType)reader.ReadInt32();
 			}
-
-			if (IsReadUserAABB(reader.Version))
+			if (layout.HasUserAABB)
 			{
 				UserAABB.Read(reader);
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override void Write(AssetWriter writer)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			base.Write(writer);
+
+			AnimationLayout layout = writer.Layout.Animation;
+			DefaultAnimation.Write(writer);
+			if (layout.HasAnimations)
+			{
+				Animations.Write(writer);
+			}
+			else
+			{
+				AnimationsPaired.Write(writer);
+			}
+
+			writer.Write((int)WrapMode);
+			writer.Write(PlayAutomatically);
+			writer.Write(AnimatePhysics);
+			if (layout.HasAnimateOnlyIfVisible)
+			{
+				writer.Write(AnimateOnlyIfVisible);
+			}
+			if (layout.IsAlign)
+			{
+				writer.AlignStream();
+			}
+
+			if (layout.HasCullingType)
+			{
+				writer.Write((int)CullingType);
+			}
+			if (layout.HasUserAABB)
+			{
+				UserAABB.Write(writer);
+			}
+		}
+
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		{
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
-			
-			yield return DefaultAnimation.FetchDependency(file, isLog, ToLogString, "m_DefaultAnimation");
 
-			if (IsReadAnimationsPaired(file.Version))
+			AnimationLayout layout = context.Layout.Animation;
+			yield return context.FetchDependency(DefaultAnimation, layout.AnimationName);
+
+			if (layout.HasAnimationsPaired)
 			{
-				foreach(PPtr<AnimationClip> clip in AnimationsPaired.Select(t => t.Item2))
+				foreach (PPtr<Object> asset in context.FetchDependencies(AnimationsPaired.Select(t => t.Item2), layout.AnimationsName))
 				{
-					yield return clip.FetchDependency(file, isLog, ToLogString, "m_Animations");
+					yield return asset;
 				}
 			}
 			else
 			{
-				foreach(PPtr<AnimationClip> clip in Animations)
+				foreach (PPtr<Object> asset in context.FetchDependencies(Animations, layout.AnimationsName))
 				{
-					yield return clip.FetchDependency(file, isLog, ToLogString, "m_Animations");
+					yield return asset;
 				}
 			}
 		}
@@ -142,34 +151,54 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_Animation", DefaultAnimation.ExportYAML(container));
-			node.Add("m_Animations", Animations.ExportYAML(container));
-			node.Add("m_WrapMode", (int)WrapMode);
-			node.Add("m_PlayAutomatically", PlayAutomatically);
-			node.Add("m_AnimatePhysics", AnimatePhysics);
-			node.Add("m_CullingType", (int)CullingType);
+			AnimationLayout layout = container.ExportLayout.Animation;
+			node.AddSerializedVersion(layout.Version);
+			node.Add(layout.AnimationName, DefaultAnimation.ExportYAML(container));
+			if (layout.HasAnimations)
+			{
+				node.Add(layout.AnimationsName, Animations.ExportYAML(container));
+			}
+			else
+			{
+				node.Add(layout.AnimationsName, AnimationsPaired.ExportYAML(container));
+			}
+
+			node.Add(layout.WrapModeName, (int)WrapMode);
+			node.Add(layout.PlayAutomaticallyName, PlayAutomatically);
+			node.Add(layout.AnimatePhysicsInvariantName, AnimatePhysics);
+			if (layout.HasAnimateOnlyIfVisible)
+			{
+				node.Add(layout.CullingTypeName, AnimateOnlyIfVisible);
+			}
+			if (layout.HasCullingType)
+			{
+				node.Add(layout.CullingTypeName, (int)CullingType);
+			}
+			if (layout.HasUserAABB)
+			{
+				node.Add(layout.UserAABBName, UserAABB.ExportYAML(container));
+			}
 			return node;
 		}
 		
-		public IReadOnlyList<Tuple<string, PPtr<AnimationClip>>> AnimationsPaired => m_animationsPaired;
-		public IReadOnlyList<PPtr<AnimationClip>> Animations => m_animations;
-		public WrapMode WrapMode { get; private set; }
-		public bool PlayAutomatically { get; private set; }
-		/// <summary>
-		/// PlayFixedFrameRate previously
-		/// </summary>
-		public bool AnimatePhysics { get; private set; }
-		public bool AnimateOnlyIfVisible { get; private set; }
-		public AnimationCullingType CullingType { get; private set; }
+		public PPtr<AnimationClip>[] Animations { get; set; }
+		public Tuple<string, PPtr<AnimationClip>>[] AnimationsPaired { get; set; }
+		public WrapMode WrapMode { get; set; }
+		public bool PlayAutomatically { get; set; }
+		public bool AnimatePhysics { get; set; }
+		public bool PlayFixedFrameRate
+		{
+			get => AnimatePhysics;
+			set => AnimatePhysics = value;
+		}
+		public bool AnimateOnlyIfVisible
+		{
+			get => CullingType != AnimationCullingType.AlwaysAnimate;
+			set => CullingType = value ? AnimationCullingType.BasedOnRenderers : AnimationCullingType.AlwaysAnimate;
+		}
+		public AnimationCullingType CullingType { get; set; }
 
-		/// <summary>
-		/// Animation previously
-		/// </summary>
 		public PPtr<AnimationClip> DefaultAnimation;
 		public AABB UserAABB;
-
-		private Tuple<string, PPtr<AnimationClip>>[] m_animationsPaired;
-		private PPtr<AnimationClip>[] m_animations;
 	}
 }

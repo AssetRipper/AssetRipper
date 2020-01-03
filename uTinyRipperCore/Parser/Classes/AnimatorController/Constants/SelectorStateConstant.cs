@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
@@ -9,10 +9,10 @@ namespace uTinyRipper.Classes.AnimatorControllers
 	{
 		public void Read(AssetReader reader)
 		{
-			m_transitionConstantArray = reader.ReadAssetArray<OffsetPtr<SelectorTransitionConstant>>();
+			TransitionConstantArray = reader.ReadAssetArray<OffsetPtr<SelectorTransitionConstant>>();
 			FullPathID = reader.ReadUInt32();
 			IsEntry = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -20,10 +20,8 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 
-		public IReadOnlyList<OffsetPtr<SelectorTransitionConstant>> TransitionConstantArray => m_transitionConstantArray;
-		public uint FullPathID { get; private set; }
-		public bool IsEntry { get; private set; }
-
-		private OffsetPtr<SelectorTransitionConstant>[] m_transitionConstantArray;
+		public OffsetPtr<SelectorTransitionConstant>[] TransitionConstantArray { get; set; }
+		public uint FullPathID { get; set; }
+		public bool IsEntry { get; set; }
 	}
 }

@@ -15,7 +15,7 @@ namespace uTinyRipper
 		BuildPlayerOnlySerializeBuildProperties	= 0x40,
 		Workaround35MeshSerializationFuckup		= 0x80,
 		/// <summary>
-		/// Has this file been built for release game
+		/// Is this a game or a project file 
 		/// </summary>
 		SerializeGameRelease					= 0x100,
 		SwapEndianess							= 0x200,
@@ -23,9 +23,6 @@ namespace uTinyRipper
 		DontReadObjectsFromDiskBeforeWriting	= 0x800,
 		SerializeMonoReload						= 0x1000,
 		DontRequireAllMetaFlags					= 0x2000,
-		/// <summary>
-		/// Is prefab's format read
-		/// </summary>
 		SerializeForPrefabSystem				= 0x4000,
 		WarnAboutLeakedObjects					= 0x8000,
 		EditorPlayMode							= 0x40000,
@@ -45,10 +42,6 @@ namespace uTinyRipper
 
 	public static class TransferInstructionFlagsExtensions
 	{
-		public static bool IsDebug(this TransferInstructionFlags _this)
-		{
-			return (_this & TransferInstructionFlags.SerializeDebugProperties) != 0;
-		}
 		public static bool IsRelease(this TransferInstructionFlags _this)
 		{
 			return (_this & TransferInstructionFlags.SerializeGameRelease) != 0;
@@ -56,6 +49,10 @@ namespace uTinyRipper
 		public static bool IsForPrefab(this TransferInstructionFlags _this)
 		{
 			return (_this & TransferInstructionFlags.SerializeForPrefabSystem) != 0;
+		}
+		public static bool IsEditorScene(this TransferInstructionFlags _this)
+		{
+			return (_this & TransferInstructionFlags.SerializeEditorMinimalScene) != 0;
 		}
 		public static bool IsBuiltinResources(this TransferInstructionFlags _this)
 		{

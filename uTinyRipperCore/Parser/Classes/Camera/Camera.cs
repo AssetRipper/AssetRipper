@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Cameras;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
@@ -13,143 +13,88 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		public static int ToSerializedVersion(Version version)
+		{
+			// min version is 2nd
+			return 2;
+		}
+
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool IsReadProjectionMatrixMode(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
+		public static bool HasProjectionMatrixMode(Version version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 2019.1 and greater and Not Release
 		/// </summary>
-		public static bool IsReadFOVAxisMode(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(2019);
-		}
+		public static bool HasFOVAxisMode(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool IsReadSensorSize(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
+		public static bool HasSensorSize(Version version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool IsReadGateFitMode(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
+		public static bool HasGateFitMode(Version version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool IsReadFocalLength(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
+		public static bool HasFocalLength(Version version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool IsReadRenderingPath(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
+		public static bool HasRenderingPath(Version version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool IsReadTargetDisplay(Version version)
-		{
-			return version.IsGreaterEqual(4, 5);
-		}
+		public static bool HasTargetDisplay(Version version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 5.1.3 and greater
 		/// </summary>
-		public static bool IsReadTargetEye(Version version)
-		{
-			return version.IsGreaterEqual(5, 1, 3);
-		}
+		public static bool HasTargetEye(Version version) => version.IsGreaterEqual(5, 1, 3);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool IsReadHDR(Version version)
-		{
-			return version.IsGreaterEqual(3, 5);
-		}
+		public static bool HasHDR(Version version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadAllowMSAA(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasAllowMSAA(Version version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsReadAllowDynamicResolution(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
+		public static bool HasAllowDynamicResolution(Version version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadForceIntoRT(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasForceIntoRT(Version version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool IsReadOcclusionCulling(Version version)
-		{
-			return version.IsGreaterEqual(4, 3);
-		}
+		public static bool HasOcclusionCulling(Version version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool IsReadStereoConvergence(Version version)
-		{
-			return version.IsGreaterEqual(4, 5);
-		}
+		public static bool HasStereoConvergence(Version version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 5.1.0 to 2017.2 exclusive
 		/// </summary>
-		public static bool IsReadStereoMirrorMode(Version version)
-		{
-			return version.IsGreaterEqual(5, 1) && version.IsLess(2017, 2);
-		}
+		public static bool HasStereoMirrorMode(Version version) => version.IsGreaterEqual(5, 1) && version.IsLess(2017, 2);
 		
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		private static bool IsReadGateFitModeFirst(Version version)
+		private static bool HasGateFitModeFirst(Version version)
 		{
 			return version.IsGreaterEqual(2019);
 		}
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		private static bool IsAlign1(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
+		private static bool IsAlign1(Version version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		private static bool IsAlign2(Version version)
-		{
-			return version.IsGreaterEqual(4, 5);
-		}
-		
-		private static int GetSerializedVersion(Version version)
-		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-			// min version is 2nd
-			return 2;
-		}
+		private static bool IsAlign2(Version version) => version.IsGreaterEqual(4, 5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -157,40 +102,40 @@ namespace uTinyRipper.Classes
 
 			ClearFlags = reader.ReadUInt32();
 			BackGroundColor.Read(reader);
-			if (IsReadProjectionMatrixMode(reader.Version))
+			if (HasProjectionMatrixMode(reader.Version))
 			{
 				ProjectionMatrixMode = (ProjectionMatrixMode)reader.ReadInt32();
 			}
-			if (IsReadGateFitMode(reader.Version))
+			if (HasGateFitMode(reader.Version))
 			{
-				if (IsReadGateFitModeFirst(reader.Version))
+				if (HasGateFitModeFirst(reader.Version))
 				{
 					GateFitMode = (GateFitMode)reader.ReadInt32();
 				}
 			}
 #if UNIVERSAL
-			if (IsReadFOVAxisMode(reader.Version, reader.Flags))
+			if (HasFOVAxisMode(reader.Version, reader.Flags))
 			{
 				FOVAxisMode = (FieldOfViewAxis)reader.ReadInt32();
 			}
 #endif
 			if (IsAlign1(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
-			if (IsReadSensorSize(reader.Version))
+			if (HasSensorSize(reader.Version))
 			{
 				SensorSize.Read(reader);
 				LensShift.Read(reader);
 			}
-			if (IsReadGateFitMode(reader.Version))
+			if (HasGateFitMode(reader.Version))
 			{
-				if (!IsReadGateFitModeFirst(reader.Version))
+				if (!HasGateFitModeFirst(reader.Version))
 				{
 					GateFitMode = (GateFitMode)reader.ReadInt32();
 				}
 			}
-			if (IsReadFocalLength(reader.Version))
+			if (HasFocalLength(reader.Version))
 			{
 				FocalLength = reader.ReadSingle();
 			}
@@ -200,94 +145,94 @@ namespace uTinyRipper.Classes
 			FarClipPlane = reader.ReadSingle();
 			FieldOfView = reader.ReadSingle();
 			Orthographic = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			OrthographicSize = reader.ReadSingle();
 			Depth = reader.ReadSingle();
 			CullingMask.Read(reader);
-			if (IsReadRenderingPath(reader.Version))
+			if (HasRenderingPath(reader.Version))
 			{
 				RenderingPath = (RenderingPath)reader.ReadInt32();
 			}
 			TargetTexture.Read(reader);
-			if (IsReadTargetDisplay(reader.Version))
+			if (HasTargetDisplay(reader.Version))
 			{
 				TargetDisplay = reader.ReadInt32();
 			}
-			if (IsReadTargetEye(reader.Version))
+			if (HasTargetEye(reader.Version))
 			{
 				TargetEye = (StereoTargetEyeMask)reader.ReadInt32();
 			}
-			if (IsReadHDR(reader.Version))
+			if (HasHDR(reader.Version))
 			{
 				HDR = reader.ReadBoolean();
 			}
-			if (IsReadAllowMSAA(reader.Version))
+			if (HasAllowMSAA(reader.Version))
 			{
 				AllowMSAA = reader.ReadBoolean();
 			}
-			if (IsReadAllowDynamicResolution(reader.Version))
+			if (HasAllowDynamicResolution(reader.Version))
 			{
 				AllowDynamicResolution = reader.ReadBoolean();
 			}
-			if (IsReadForceIntoRT(reader.Version))
+			if (HasForceIntoRT(reader.Version))
 			{
 				ForceIntoRT = reader.ReadBoolean();
 			}
-			if (IsReadOcclusionCulling(reader.Version))
+			if (HasOcclusionCulling(reader.Version))
 			{
 				OcclusionCulling = reader.ReadBoolean();
 			}
 			if (IsAlign2(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
-			if (IsReadStereoConvergence(reader.Version))
+			if (HasStereoConvergence(reader.Version))
 			{
 				StereoConvergence = reader.ReadSingle();
 				StereoSeparation = reader.ReadSingle();
 			}
-			if (IsReadStereoMirrorMode(reader.Version))
+			if (HasStereoMirrorMode(reader.Version))
 			{
 				StereoMirrorMode = reader.ReadBoolean();
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return TargetTexture.FetchDependency(file, isLog, ToLogString, "m_TargetTexture");
+			yield return context.FetchDependency(TargetTexture, TargetTextureName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ClearFlagsName, ClearFlags);
 			node.Add(BackGroundColorName, BackGroundColor.ExportYAML(container));
 
-			if (IsReadProjectionMatrixMode(container.ExportVersion))
+			if (HasProjectionMatrixMode(container.ExportVersion))
 			{
 				node.Add(ProjectionMatrixModeName, (int)ProjectionMatrixMode);
 			}
-			if (IsReadFOVAxisMode(container.ExportVersion, container.ExportFlags))
+			if (HasFOVAxisMode(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(FOVAxisModeName, (int)GetFOVAxisMode(container.Version, container.Flags));
 			}
-			if (IsReadSensorSize(container.ExportVersion))
+			if (HasSensorSize(container.ExportVersion))
 			{
 				node.Add(SensorSizeName, SensorSize.ExportYAML(container));
 				node.Add(LensShiftName, LensShift.ExportYAML(container));
 			}
-			if (IsReadGateFitMode(container.ExportVersion))
+			if (HasGateFitMode(container.ExportVersion))
 			{
 				node.Add(GateFitModeName, (int)GateFitMode);
 			}
-			if (IsReadFocalLength(container.ExportVersion))
+			if (HasFocalLength(container.ExportVersion))
 			{
 				node.Add(FocalLengthName, FocalLength);
 			}
@@ -317,7 +262,7 @@ namespace uTinyRipper.Classes
 		private FieldOfViewAxis GetFOVAxisMode(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadFOVAxisMode(version, flags))
+			if (HasFOVAxisMode(version, flags))
 			{
 				return FOVAxisMode;
 			}
@@ -325,33 +270,33 @@ namespace uTinyRipper.Classes
 			return FieldOfViewAxis.Vertical;
 		}
 
-		public uint ClearFlags { get; private set; }
-		public ProjectionMatrixMode ProjectionMatrixMode { get; private set; }
-		public GateFitMode GateFitMode { get; private set; }
+		public uint ClearFlags { get; set; }
+		public ProjectionMatrixMode ProjectionMatrixMode { get; set; }
+		public GateFitMode GateFitMode { get; set; }
 #if UNIVERSAL
-		public FieldOfViewAxis FOVAxisMode { get; private set; }
+		public FieldOfViewAxis FOVAxisMode { get; set; }
 #endif
-		public float FocalLength { get; private set; }
-		public float NearClipPlane { get; private set; }
-		public float FarClipPlane { get; private set; }
-		public float FieldOfView { get; private set; }
+		public float FocalLength { get; set; }
+		public float NearClipPlane { get; set; }
+		public float FarClipPlane { get; set; }
+		public float FieldOfView { get; set; }
 		/// <summary>
 		/// IsOrthoGraphic previously
 		/// </summary>
-		public bool Orthographic { get; private set; }
-		public float OrthographicSize { get; private set; }
-		public float Depth { get; private set; }
-		public RenderingPath RenderingPath { get; private set; }
-		public int TargetDisplay { get; private set; }
-		public StereoTargetEyeMask TargetEye { get; private set; }
-		public bool HDR { get; private set; }
-		public bool AllowMSAA { get; private set; }
-		public bool AllowDynamicResolution { get; private set; }
-		public bool ForceIntoRT { get; private set; }
-		public bool OcclusionCulling { get; private set; }
-		public float StereoConvergence { get; private set; }
-		public float StereoSeparation { get; private set; }
-		public bool StereoMirrorMode { get; private set; }
+		public bool Orthographic { get; set; }
+		public float OrthographicSize { get; set; }
+		public float Depth { get; set; }
+		public RenderingPath RenderingPath { get; set; }
+		public int TargetDisplay { get; set; }
+		public StereoTargetEyeMask TargetEye { get; set; }
+		public bool HDR { get; set; }
+		public bool AllowMSAA { get; set; }
+		public bool AllowDynamicResolution { get; set; }
+		public bool ForceIntoRT { get; set; }
+		public bool OcclusionCulling { get; set; }
+		public float StereoConvergence { get; set; }
+		public float StereoSeparation { get; set; }
+		public bool StereoMirrorMode { get; set; }
 
 		public const string ClearFlagsName = "m_ClearFlags";
 		public const string BackGroundColorName = "m_BackGroundColor";

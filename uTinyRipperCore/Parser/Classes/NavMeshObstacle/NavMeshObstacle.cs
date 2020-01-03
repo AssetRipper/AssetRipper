@@ -1,5 +1,5 @@
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.NavMeshObstacles;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -11,29 +11,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 5.0.0 and greater
-		/// </summary>
-		public static bool IsReadShape(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
-		/// <summary>
-		/// 4.3.0 and greater
-		/// </summary>
-		public static bool IsReadMoveThreshold(Version version)
-		{
-			return version.IsGreaterEqual(4, 3);
-		}
-		/// <summary>
-		/// 5.0.0 and greater
-		/// </summary>
-		public static bool IsReadCarveOnlyStationary(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// added Shape and Extents
 			if (version.IsGreaterEqual(5))
@@ -45,11 +23,24 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
+		public static bool HasShape(Version version) => version.IsGreaterEqual(5);
+		/// <summary>
+		/// 4.3.0 and greater
+		/// </summary>
+		public static bool HasMoveThreshold(Version version) => version.IsGreaterEqual(4, 3);
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
+		public static bool HasCarveOnlyStationary(Version version) => version.IsGreaterEqual(5);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadShape(reader.Version))
+			if (HasShape(reader.Version))
 			{
 				Shape = (NavMeshObstacleShape)reader.ReadInt32();
 				Extents.Read(reader);
@@ -62,15 +53,15 @@ namespace uTinyRipper.Classes
 				Extents = new Vector3f(m_Radius, m_Radius, m_Height);
 				Center = new Vector3f(0.0f, m_Height / 2.0f, 0.0f);
 			}
-			if (IsReadMoveThreshold(reader.Version))
+			if (HasMoveThreshold(reader.Version))
 			{
 				MoveThreshold = reader.ReadSingle();
 				Carve = reader.ReadBoolean();
 			}
-			if (IsReadCarveOnlyStationary(reader.Version))
+			if (HasCarveOnlyStationary(reader.Version))
 			{
 				CarveOnlyStationary = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				Center.Read(reader);
 				TimeToStationary = reader.ReadSingle();
@@ -80,7 +71,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ShapeName, (int)Shape);
 			node.Add(ExtentsName, Extents.ExportYAML(container));
 			node.Add(MoveThresholdName, GetMoveThreshold(container.Version));
@@ -93,22 +84,22 @@ namespace uTinyRipper.Classes
 
 		private float GetMoveThreshold(Version version)
 		{
-			return IsReadMoveThreshold(version) ? MoveThreshold : 0.1f;
+			return HasMoveThreshold(version) ? MoveThreshold : 0.1f;
 		}
 		private bool GetCarveOnlyStationary(Version version)
 		{
-			return IsReadCarveOnlyStationary(version) ? CarveOnlyStationary : true;
+			return HasCarveOnlyStationary(version) ? CarveOnlyStationary : true;
 		}
 		private float GetTimeToStationary(Version version)
 		{
-			return IsReadCarveOnlyStationary(version) ? TimeToStationary : 0.5f;
+			return HasCarveOnlyStationary(version) ? TimeToStationary : 0.5f;
 		}
 
-		public NavMeshObstacleShape Shape { get; private set; }
-		public float MoveThreshold { get; private set; }
-		public bool Carve { get; private set; }
-		public bool CarveOnlyStationary { get; private set; }
-		public float TimeToStationary { get; private set; }
+		public NavMeshObstacleShape Shape { get; set; }
+		public float MoveThreshold { get; set; }
+		public bool Carve { get; set; }
+		public bool CarveOnlyStationary { get; set; }
+		public float TimeToStationary { get; set; }
 
 		public const string ShapeName = "m_Shape";
 		public const string ExtentsName = "m_Extents";

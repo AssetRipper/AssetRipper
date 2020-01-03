@@ -14,7 +14,7 @@
 			Target = (VertexComponent)reader.ReadByte();
 		}
 
-		public ShaderChannel Source { get; private set; }
-		public VertexComponent Target { get; private set; }
+		public ShaderChannel Source { get; set; }
+		public VertexComponent Target { get; set; }
 	}
 }

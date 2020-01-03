@@ -1,70 +1,27 @@
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
+using uTinyRipper.Converters.Meshes;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Meshes
 {
-	public struct ChannelInfo : IAssetReadable, IYAMLExportable
+	public struct ChannelInfo : IAsset
 	{
-		public ChannelInfo(byte stream, byte offset, byte format, byte dimention)
+		public ChannelInfo(byte stream, byte offset, byte format, byte rawDimention)
 		{
 			Stream = stream;
 			Offset = offset;
 			Format = format;
-			Dimension = dimention;
+			RawDimension = rawDimention;
 		}
 
-		public static byte CalculateStride(ChannelFormat format, int dimention)
-		{
-			return (byte)(format.GetSize() * dimention);
-		}
-		
 		public byte GetStride(Version version)
 		{
-			ChannelFormat format = GetFormat(version);
-			return CalculateStride(format, Dimension);
+			return GetVertexFormat(version).CalculateStride(version, Dimension);
 		}
 
-		public ChannelFormat GetFormat(Version version)
+		public ChannelInfo Convert(IExportContainer container)
 		{
-			if (version.IsLess(5))
-			{
-				return ((ChannelFormatV4)Format).ToChannelFormat();
-			}
-			else if (version.IsLess(2019))
-			{
-				return ((ChannelFormatV5)Format).ToChannelFormat();
-			}
-			else
-			{
-				return ((ChannelFormatV2019)Format).ToChannelFormat();
-			}
-		}
-
-		public ChannelInfo ConvertToV5(Version version)
-		{
-			if (version.IsLess(5))
-			{
-				ChannelFormatV4 formatv4 = (ChannelFormatV4)Format;
-				if (formatv4 == ChannelFormatV4.Color)
-				{
-					// replace ChannelFormat.Color with 1 dimention to ChannelFormat.Byte with 4 dimention
-					return new ChannelInfo(Stream, Offset, IsSet ? (byte)ChannelFormatV5.Byte : (byte)0, IsSet ? (byte)4 : (byte)0);
-				}
-				else
-				{
-					ChannelFormatV5 format = GetFormat(version).ToChannelFormatV5();
-					return new ChannelInfo(Stream, Offset, (byte)format, Dimension);
-				}
-			}
-			else if (version.IsLess(2019))
-			{
-				return this;
-			}
-			else
-			{
-				ChannelFormatV5 format = GetFormat(version).ToChannelFormatV5();
-				return new ChannelInfo(Stream, Offset, (byte)format, (byte)(Dimension & 0xF));
-			}
+			return ChannelInfoConverter.Convert(container, this);
 		}
 
 		public void Read(AssetReader reader)
@@ -72,7 +29,15 @@ namespace uTinyRipper.Classes.Meshes
 			Stream = reader.ReadByte();
 			Offset = reader.ReadByte();
 			Format = reader.ReadByte();
-			Dimension = reader.ReadByte();
+			RawDimension = reader.ReadByte();
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Stream);
+			writer.Write(Offset);
+			writer.Write(Format);
+			writer.Write(RawDimension);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -81,21 +46,52 @@ namespace uTinyRipper.Classes.Meshes
 			node.Add(StreamName, Stream);
 			node.Add(OffsetName, Offset);
 			node.Add(FormatName, Format);
-			node.Add(DimensionName, Dimension);
+			node.Add(DimensionName, RawDimension);
 			return node;
+		}
+
+		public VertexFormat GetVertexFormat(Version version)
+		{
+			if (VertexFormatExtensions.VertexFormat2019Relevant(version))
+			{
+				return ((VertexFormat2019)Format).ToVertexFormat();
+			}
+			else if (VertexFormatExtensions.VertexFormat2017Relevant(version))
+			{
+				return ((VertexFormat2017)Format).ToVertexFormat();
+			}
+			else
+			{
+				return ((VertexChannelFormat)Format).ToVertexFormat();
+			}
 		}
 
 		public override string ToString()
 		{
-			return $"S[{Stream}];\tO[{Offset}];\tF[{Format}];\tD[{Dimension}]";
+			return $"S[{Stream}];\tO[{Offset}];\tF[{Format}];\tD[{RawDimension}]";
 		}
 
-		public bool IsSet => Dimension > 0;
+		public bool IsSet => RawDimension > 0;
 
-		public byte Stream { get; private set; }
-		public byte Offset { get; private set; }
-		public byte Format { get; private set; }
-		public byte Dimension { get; private set; }
+		/// <summary>
+		/// Stream index
+		/// BinaryData:[Stream0][Align][Stream1][Align]...
+		/// </summary>
+		public byte Stream { get; set; }
+		/// <summary>
+		/// Offset inside stream
+		/// Stream:[FirstVertex: VertexOffset,NormalOffset,TangentOffset...][SecondVertex: VertexOffset,NormalOffset,TangentOffset...]...
+		/// </summary>
+		public byte Offset { get; set; }
+		/// <summary>
+		/// Data format: float, int, byte
+		/// </summary>
+		public byte Format { get; set; }
+		public byte RawDimension { get; set; }
+		/// <summary>
+		/// Data dimention: Vector3, Vector2, Vector1
+		/// </summary>
+		public byte Dimension => (byte)(RawDimension & 0xF);
 
 		public const string StreamName = "stream";
 		public const string OffsetName = "offset";

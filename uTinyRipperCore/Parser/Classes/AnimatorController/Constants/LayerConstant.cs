@@ -1,5 +1,6 @@
 ﻿using System;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
@@ -12,17 +13,11 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool IsReadDefaultWeight(Version version)
-		{
-			return version.IsGreaterEqual(4, 2);
-		}
+		public static bool HasDefaultWeight(Version version) => version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool IsReadSyncedLayerAffectsTiming(Version version)
-		{
-			return version.IsGreaterEqual(4, 2);
-		}
+		public static bool HasSyncedLayerAffectsTiming(Version version) => version.IsGreaterEqual(4, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -32,17 +27,17 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			SkeletonMask.Read(reader);
 			Binding = reader.ReadUInt32();
 			LayerBlendingMode = (AnimatorLayerBlendingMode)reader.ReadInt32();
-			if (IsReadDefaultWeight(reader.Version))
+			if (HasDefaultWeight(reader.Version))
 			{
 				DefaultWeight = reader.ReadSingle();
 			}
 
 			IKPass = reader.ReadBoolean();
-			if (IsReadSyncedLayerAffectsTiming(reader.Version))
+			if (HasSyncedLayerAffectsTiming(reader.Version))
 			{
 				SyncedLayerAffectsTiming = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -50,13 +45,13 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 		
-		public int StateMachineIndex { get; private set; }
-		public int StateMachineMotionSetIndex { get; private set; }
-		public uint Binding { get; private set; }
-		public AnimatorLayerBlendingMode LayerBlendingMode { get; private set; }
-		public float DefaultWeight { get; private set; }
-		public bool IKPass { get; private set; }
-		public bool SyncedLayerAffectsTiming { get; private set; }
+		public int StateMachineIndex { get; set; }
+		public int StateMachineMotionSetIndex { get; set; }
+		public uint Binding { get; set; }
+		public AnimatorLayerBlendingMode LayerBlendingMode { get; set; }
+		public float DefaultWeight { get; set; }
+		public bool IKPass { get; set; }
+		public bool SyncedLayerAffectsTiming { get; set; }
 		
 		public HumanPoseMask BodyMask;
 		public OffsetPtr<SkeletonMask> SkeletonMask;

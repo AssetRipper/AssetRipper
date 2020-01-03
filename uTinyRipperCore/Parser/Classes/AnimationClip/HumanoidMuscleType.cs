@@ -1,5 +1,5 @@
 ﻿using System;
-using uTinyRipper.Classes.Avatars;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.AnimationClips
 {

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimationClips
@@ -42,36 +41,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			Mirror = false;
 		}
 
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadAdditiveReferencePoseClip(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadHasAdditiveReferencePose(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 4.3.0 and greater
-		/// </summary>
-		public static bool IsReadLoopTime(Version version)
-		{
-			return version.IsGreaterEqual(4, 3);
-		}
-		/// <summary>
-		/// Less than 4.1.0
-		/// </summary>
-		public static bool IsReadKeepAdditionalBonesAnimation(Version version)
-		{
-			return version.IsLess(4, 1);
-		}
-		
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// LoopBlend has been splitted to LoopBlend and LoopTime
 			if (version.IsGreaterEqual(4, 3))
@@ -81,9 +51,26 @@ namespace uTinyRipper.Classes.AnimationClips
 			return 1;
 		}
 
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasAdditiveReferencePoseClip(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasHasAdditiveReferencePose(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 4.3.0 and greater
+		/// </summary>
+		public static bool HasLoopTime(Version version) => version.IsGreaterEqual(4, 3);
+		/// <summary>
+		/// Less than 4.1.0
+		/// </summary>
+		public static bool HasKeepAdditionalBonesAnimation(Version version) => version.IsLess(4, 1);
+
 		public void Read(AssetReader reader)
 		{
-			if (IsReadAdditiveReferencePoseClip(reader.Version))
+			if (HasAdditiveReferencePoseClip(reader.Version))
 			{
 				AdditiveReferencePoseClip.Read(reader);
 				AdditiveReferencePoseTime = reader.ReadSingle();
@@ -93,11 +80,11 @@ namespace uTinyRipper.Classes.AnimationClips
 			OrientationOffsetY = reader.ReadSingle();
 			Level = reader.ReadSingle();
 			CycleOffset = reader.ReadSingle();
-			if (IsReadHasAdditiveReferencePose(reader.Version))
+			if (HasHasAdditiveReferencePose(reader.Version))
 			{
 				HasAdditiveReferencePose = reader.ReadBoolean();
 			}
-			if (IsReadLoopTime(reader.Version))
+			if (HasLoopTime(reader.Version))
 			{
 				LoopTime = reader.ReadBoolean();
 			}
@@ -110,25 +97,25 @@ namespace uTinyRipper.Classes.AnimationClips
 			KeepOriginalPositionXZ = reader.ReadBoolean();
 			HeightFromFeet = reader.ReadBoolean();
 			Mirror = reader.ReadBoolean();
-			if (IsReadKeepAdditionalBonesAnimation(reader.Version))
+			if (HasKeepAdditionalBonesAnimation(reader.Version))
 			{
 				KeepAdditionalBonesAnimation = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			if (IsReadAdditiveReferencePoseClip(file.Version))
+			if (HasAdditiveReferencePoseClip(context.Version))
 			{
-				yield return AdditiveReferencePoseClip.FetchDependency(file, isLog, () => nameof(AnimationClipSettings), AdditiveReferencePoseClipName);
+				yield return context.FetchDependency(AdditiveReferencePoseClip, AdditiveReferencePoseClipName);
 			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(AdditiveReferencePoseClipName, AdditiveReferencePoseClip.ExportYAML(container));
 			node.Add(AdditiveReferencePoseTimeName, AdditiveReferencePoseTime);
 			node.Add(StartTimeName, StartTime);
@@ -152,27 +139,27 @@ namespace uTinyRipper.Classes.AnimationClips
 
 		private bool GetLoopTime(Version version)
 		{
-			return IsReadLoopTime(version) ? LoopTime : LoopBlend;
+			return HasLoopTime(version) ? LoopTime : LoopBlend;
 		}
 
-		public float AdditiveReferencePoseTime { get; private set; }
-		public float StartTime { get; private set; }
-		public float StopTime { get; private set; }
-		public float OrientationOffsetY { get; private set; }
-		public float Level { get; private set; }
-		public float CycleOffset { get; private set; }
-		public bool HasAdditiveReferencePose { get; private set; }
-		public bool LoopTime { get; private set; }
-		public bool LoopBlend { get; private set; }
-		public bool LoopBlendOrientation { get; private set; }
-		public bool LoopBlendPositionY { get; private set; }
-		public bool LoopBlendPositionXZ { get; private set; }
-		public bool KeepOriginalOrientation { get; private set; }
-		public bool KeepOriginalPositionY { get; private set; }
-		public bool KeepOriginalPositionXZ { get; private set; }
-		public bool HeightFromFeet { get; private set; }
-		public bool Mirror { get; private set; }
-		public bool KeepAdditionalBonesAnimation { get; private set; }
+		public float AdditiveReferencePoseTime { get; set; }
+		public float StartTime { get; set; }
+		public float StopTime { get; set; }
+		public float OrientationOffsetY { get; set; }
+		public float Level { get; set; }
+		public float CycleOffset { get; set; }
+		public bool HasAdditiveReferencePose { get; set; }
+		public bool LoopTime { get; set; }
+		public bool LoopBlend { get; set; }
+		public bool LoopBlendOrientation { get; set; }
+		public bool LoopBlendPositionY { get; set; }
+		public bool LoopBlendPositionXZ { get; set; }
+		public bool KeepOriginalOrientation { get; set; }
+		public bool KeepOriginalPositionY { get; set; }
+		public bool KeepOriginalPositionXZ { get; set; }
+		public bool HeightFromFeet { get; set; }
+		public bool Mirror { get; set; }
+		public bool KeepAdditionalBonesAnimation { get; set; }
 
 		public const string AdditiveReferencePoseClipName = "m_AdditiveReferencePoseClip";
 		public const string AdditiveReferencePoseTimeName = "m_AdditiveReferencePoseTime";

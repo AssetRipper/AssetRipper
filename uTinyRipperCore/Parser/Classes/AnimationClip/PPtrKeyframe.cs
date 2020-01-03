@@ -1,39 +1,56 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
-	public struct PPtrKeyframe : IAssetReadable, IYAMLExportable, IDependent
+	public struct PPtrKeyframe : IAsset, IDependent
 	{
 		public PPtrKeyframe(float time, PPtr<Object> script)
 		{
 			Time = time;
-			Script = script;
+			Value = script;
+		}
+
+		public static void GenerateTypeTree(TypeTreeContext context, string name)
+		{
+			context.AddNode(nameof(PPtrKeyframe), name);
+			context.BeginChildren();
+			context.AddSingle(TimeName);
+			context.AddPPtr(nameof(Object), ValueName);
+			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)
 		{
 			Time = reader.ReadSingle();
-			Script.Read(reader);
+			Value.Read(reader);
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Time);
+			Value.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("time", Time);
-			node.Add("value", Script.ExportYAML(container));
+			node.Add(TimeName, Time);
+			node.Add(ValueName, Value.ExportYAML(container));
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return Script.FetchDependency(file, isLog, () => nameof(PPtrKeyframe), "script");
+			yield return context.FetchDependency(Value, ValueName);
 		}
 
-		public float Time { get; private set; }
+		public float Time { get; set; }
 
-		public PPtr<Object> Script;
+		public const string TimeName = "time";
+		public const string ValueName = "value";
+
+		public PPtr<Object> Value;
 	}
 }

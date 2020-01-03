@@ -7,20 +7,20 @@
 uTinyRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*.assets*, *\*.sharedAssets*, etc.) and assets bundles (*\*.unity3d*, *\*.assetbundle*, etc.) and conveting them into native Engine format.
 
 ## Export features
+* Scenes
 * Prefabs (GameObjects with transform components)
-* Meshes
-* Materials
-* Shaders
-* Textures (containers and raw only)
-* Audio (raw only)
-* Movie textures
-* Fonts
 * AnimationClips (legacy, generic, humanoid)
+* Meshes
+* Shaders (native listing)
+* Textures
+* Audio
+* Fonts
+* Movie textures
+* Materials
 * AnimatorControllers
 * Avatars
 * Terrains
 * TextAssets
-* Scenes
 * Components:
   * MeshRenderer
   * SkinnedMeshRenderer
@@ -37,42 +37,41 @@ uTinyRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*
   * MonoScript (Mono only)
 
 ## Structure
-Solution consists of five projects:
+
 * *uTinyRipperCore*
 
    Core library. It's designed as an single module without any third party dependencies.
    
-* *uTinyRipperConsole*
-
-   Sample console application which is designed to test Core library functionality.   
-   It is command line console application. Drag and drop resource file(s) or/and folder(s) onto .exe to retrive assets. It will automaticly try to find resource dependencies, create 'Ripped' folder and extract all supported assets into created directory.
-   As it is a sample application so I'm not going to improve it in any way.
-
-* *uTinyRipperNETCore* and *uTinyRipperCoreNETStandard*
-
-   They are copies of previous two but target other platform. Those two projects are cross platform and could be lauched on Windows, Linux and Mac using .NET Core frameword runetime.
-   
 * *uTinyRipperGUI*
 
-   Basic graphic interface application. It contains some converters so additionally it exports next assets:
+   Basic graphic interface application. It has some extra converters, so additionally it export:
    * AudioClip .wav export
    * Texture2D .png export (with Sprites)
    * Shader DirectX blob export
    * References to build-in Engine assets
    
-   
+* *uTinyRipperConsole* and *uTinyRipperConsoleNETCore*
+
+   Sample console application which is designed to test Core library functionality.   
+   It is command line console application. Drag and drop resource file(s) or/and folder(s) onto .exe to retrive assets. It will automaticly try to find resource dependencies, create 'Ripped' folder and extract all supported assets into created directory.
+   As it is a sample application so I'm not going to improve it in any way.
+
+
 
 ### Requirements:
 
-If you want to build solution you need:
+If you want to build a solution, you need:
 
- \- .NET Framework 4.5.0 or .NET Standard 1.3 + .NET Core 1.0 SDK
+ \- .NET Framework 4.6.0 + .NET Standard 1.3 + .NET Core 1.0 SDK
 
  \- Compiler with C# 7.3 syntax support (Visual Studio 2017)
 
 
-If you want only to run binaries of sample project you need to install:
+If you want to run binary files, you need to install:
 
- \- [.NET Framework 4.5.0](https://www.microsoft.com/en-us/download/details.aspx?id=30653) or [.NET Core 1.0](https://www.microsoft.com/net/download/dotnet-core/1.0) Runetime
+ \- [.NET Framework 4.6.0](https://www.microsoft.com/en-us/download/details.aspx?id=48137)
+ 
+ \- [Microsoft Visual C++ 2013](https://www.microsoft.com/en-us/download/details.aspx?id=40784) and [Microsoft Visual C++ 2015](https://www.microsoft.com/en-us/download/details.aspx?id=53840) Redistributables
 
- \- [Unity 2017.3.0f3](https://unity3d.com/get-unity/download/archive)
+ \- [Unity 2017.3.0f3 or greater](https://unity3d.com/get-unity/download/archive) (NOTE: editor version must be no less than game version)
+ 

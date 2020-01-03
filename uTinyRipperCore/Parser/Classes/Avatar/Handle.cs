@@ -1,4 +1,5 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Avatars
@@ -15,14 +16,18 @@ namespace uTinyRipper.Classes.Avatars
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_X", X.ExportYAML(container));
-			node.Add("m_ParentHumanIndex", ParentHumanIndex);
-			node.Add("m_ID", ID);
+			node.Add(XName, X.ExportYAML(container));
+			node.Add(ParentHumanIndexName, ParentHumanIndex);
+			node.Add(IDName, ID);
 			return node;
 		}
 
-		public uint ParentHumanIndex { get; private set; }
-		public uint ID { get; private set; }
+		public uint ParentHumanIndex { get; set; }
+		public uint ID { get; set; }
+
+		public const string XName = "m_X";
+		public const string ParentHumanIndexName = "m_ParentHumanIndex";
+		public const string IDName = "m_ID";
 
 		public XForm X;
 	}

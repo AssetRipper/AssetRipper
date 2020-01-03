@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.ParticleSystems
@@ -8,24 +8,15 @@ namespace uTinyRipper.Classes.ParticleSystems
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool IsReadInWorldSpace(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
+		public static bool HasInWorldSpace(Version version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool IsReadMultiplyDragByParticleSize(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
+		public static bool HasMultiplyDragByParticleSize(Version version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool IsReadDrag(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
+		public static bool HasDrag(Version version) => version.IsGreaterEqual(2017, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -36,19 +27,19 @@ namespace uTinyRipper.Classes.ParticleSystems
 			Z.Read(reader);
 			Magnitude.Read(reader);
 			SeparateAxis = reader.ReadBoolean();
-			if (IsReadInWorldSpace(reader.Version))
+			if (HasInWorldSpace(reader.Version))
 			{
 				InWorldSpace = reader.ReadBoolean();
 			}
-			if (IsReadMultiplyDragByParticleSize(reader.Version))
+			if (HasMultiplyDragByParticleSize(reader.Version))
 			{
 				MultiplyDragByParticleSize = reader.ReadBoolean();
 				MultiplyDragByParticleVelocity = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			Dampen = reader.ReadSingle();
-			if (IsReadDrag(reader.Version))
+			if (HasDrag(reader.Version))
 			{
 				Drag.Read(reader);
 			}
@@ -57,37 +48,48 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add("x", X.ExportYAML(container));
-			node.Add("y", Y.ExportYAML(container));
-			node.Add("z", Z.ExportYAML(container));
-			node.Add("magnitude", Magnitude.ExportYAML(container));
-			node.Add("separateAxis", SeparateAxis);
-			node.Add("inWorldSpace", InWorldSpace);
-			node.Add("multiplyDragByParticleSize", GetExportMultiplyDragByParticleSize(container.Version));
-			node.Add("multiplyDragByParticleVelocity", GetExportMultiplyDragByParticleVelocity(container.Version));
-			node.Add("dampen", Dampen);
-			node.Add("drag", GetExportDrag(container.Version).ExportYAML(container));
+			node.Add(XName, X.ExportYAML(container));
+			node.Add(YName, Y.ExportYAML(container));
+			node.Add(ZName, Z.ExportYAML(container));
+			node.Add(MagnitudeName, Magnitude.ExportYAML(container));
+			node.Add(SeparateAxisName, SeparateAxis);
+			node.Add(InWorldSpaceName, InWorldSpace);
+			node.Add(MultiplyDragByParticleSizeName, GetExportMultiplyDragByParticleSize(container.Version));
+			node.Add(MultiplyDragByParticleVelocityName, GetExportMultiplyDragByParticleVelocity(container.Version));
+			node.Add(DampenName, Dampen);
+			node.Add(DragName, GetExportDrag(container.Version).ExportYAML(container));
 			return node;
 		}
 
 		private bool GetExportMultiplyDragByParticleSize(Version version)
 		{
-			return IsReadMultiplyDragByParticleSize(version) ? MultiplyDragByParticleSize : true;
+			return HasMultiplyDragByParticleSize(version) ? MultiplyDragByParticleSize : true;
 		}
 		private bool GetExportMultiplyDragByParticleVelocity(Version version)
 		{
-			return IsReadMultiplyDragByParticleSize(version) ? MultiplyDragByParticleVelocity : true;
+			return HasMultiplyDragByParticleSize(version) ? MultiplyDragByParticleVelocity : true;
 		}
 		private MinMaxCurve GetExportDrag(Version version)
 		{
-			return IsReadDrag(version) ? Drag : new MinMaxCurve(0.0f);
+			return HasDrag(version) ? Drag : new MinMaxCurve(0.0f);
 		}
 
-		public bool SeparateAxis { get; private set; }
-		public bool InWorldSpace { get; private set; }
-		public bool MultiplyDragByParticleSize { get; private set; }
-		public bool MultiplyDragByParticleVelocity { get; private set; }
-		public float Dampen { get; private set; }
+		public bool SeparateAxis { get; set; }
+		public bool InWorldSpace { get; set; }
+		public bool MultiplyDragByParticleSize { get; set; }
+		public bool MultiplyDragByParticleVelocity { get; set; }
+		public float Dampen { get; set; }
+
+		public const string XName = "x";
+		public const string YName = "y";
+		public const string ZName = "z";
+		public const string MagnitudeName = "magnitude";
+		public const string SeparateAxisName = "separateAxis";
+		public const string InWorldSpaceName = "inWorldSpace";
+		public const string MultiplyDragByParticleSizeName = "multiplyDragByParticleSize";
+		public const string MultiplyDragByParticleVelocityName = "multiplyDragByParticleVelocity";
+		public const string DampenName = "dampen";
+		public const string DragName = "drag";
 
 		public MinMaxCurve X;
 		public MinMaxCurve Y;

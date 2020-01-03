@@ -37,9 +37,9 @@
 			</Menu.Resources>
 
 			<MenuItem Header="_File" Foreground="White">
-				<MenuItem Header="_Add..." Background="#FF272727"/>
+				<!--<MenuItem Header="_Add..." Background="#FF272727"/>
 				<MenuItem Header="_Open" Background="#FF272727">
-					<MenuItem Header="Android" Background="#FF272727"/>
+					<MenuItem Header="Android" Background="#FF272727" Click="OnOpenAndroidClicked"/>
 					<MenuItem Header="iOS" Background="#FF272727"/>
 					<MenuItem Header="Window" Background="#FF272727"/>
 					<MenuItem Header="Mac" Background="#FF272727"/>
@@ -48,18 +48,17 @@
 					<MenuItem Header="WebGL" Background="#FF272727"/>
 					<MenuItem Header="Asset Bundles" Background="#FF272727"/>
 				</MenuItem>
-				<MenuItem Header="_Reset" Background="#FF272727"/>
-				<Separator Background="#FF272727"/>
+				<MenuItem Header="_Reset" Background="#FF272727" Click="OnResetButtonClicked"/>
+				<Separator Background="#FF272727"/>-->
 				<!--Background="#FF272727" Foreground="White"-->
-				<MenuItem Header="_Exit" InputGestureText="Alt+F4" Background="#FF272727"/>
+				<MenuItem Header="_Exit" InputGestureText="Alt+F4" Background="#FF272727" Click="OnExitButtonClicked"/>
 			</MenuItem>
 
 			<MenuItem Header="_Help" Foreground="White">
-				<MenuItem Header="_Check for Updates" Background="#FF272727"/>
-				<MenuItem Header="_Report a bug" Background="#FF272727"
-						  Click="OnReportBugClicked"/>
+				<MenuItem Header="_Check for Updates" Background="#FF272727" Click="OnCheckForUpdateButtonClicked" />
+				<MenuItem Header="_Report a bug" Background="#FF272727" Click="OnReportBugClicked"/>
 				<Separator Background="#FF272727"/>
-				<MenuItem Header="_About" Background="#FF272727"/>
+				<MenuItem Header="_About" Background="#FF272727" Click="OnAboutButtonClicked"/>
 			</MenuItem>
 
 		</Menu>

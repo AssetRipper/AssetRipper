@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.ShaderVariantCollections
@@ -24,8 +24,8 @@ namespace uTinyRipper.Classes.ShaderVariantCollections
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("keywords", Keywords);
-			node.Add("passType", (int)PassType);
+			node.Add(KeywordsName, Keywords);
+			node.Add(PassTypeName, (int)PassType);
 			return node;
 		}
 
@@ -53,7 +53,10 @@ namespace uTinyRipper.Classes.ShaderVariantCollections
 			return this == (VariantInfo)obj;
 		}
 
-		public string Keywords { get; private set; }
-		public PassType PassType { get; private set; }
+		public string Keywords { get; set; }
+		public PassType PassType { get; set; }
+
+		public const string KeywordsName = "keywords";
+		public const string PassTypeName = "passType";
 	}
 }

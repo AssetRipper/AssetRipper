@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.ParticleSystems
 {
@@ -37,9 +36,9 @@ namespace uTinyRipper.Classes.ParticleSystems
 			MaxLights = reader.ReadInt32();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return Light.FetchDependency(file, isLog, () => nameof(LightsModule), "light");
+			yield return context.FetchDependency(Light, LightName);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)
@@ -57,12 +56,12 @@ namespace uTinyRipper.Classes.ParticleSystems
 			return node;
 		}
 
-		public float Ratio { get; private set; }
-		public bool RandomDistribution { get; private set; }
-		public bool Color { get; private set; }
-		public bool Range { get; private set; }
-		public bool Intensity { get; private set; }
-		public int MaxLights { get; private set; }
+		public float Ratio { get; set; }
+		public bool RandomDistribution { get; set; }
+		public bool Color { get; set; }
+		public bool Range { get; set; }
+		public bool Intensity { get; set; }
+		public int MaxLights { get; set; }
 
 		public const string RatioName = "ratio";
 		public const string LightName = "light";

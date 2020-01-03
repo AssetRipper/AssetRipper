@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.ParticleSystems;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {
@@ -12,137 +11,8 @@ namespace uTinyRipper.Classes
 			base(assetInfo)
 		{
 		}
-		
-		/// <summary>
-		/// Less than 5.3.0
-		/// </summary>
-		public static bool IsReadStartDelaySingle(Version version)
-		{
-			return version.IsLess(5, 3);
-		}
-		/// <summary>
-		/// 2017.2 and greater
-		/// </summary>
-		public static bool IsReadStopAction(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
-		/// <summary>
-		/// 2018.3 and greater
-		/// </summary>
-		public static bool IsReadCullingMode(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
-		/// <summary>
-		/// 2017.1.0b2 and greater
-		/// </summary>
-		public static bool IsReadUseUnscaledTime(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		}
-		/// <summary>
-		/// 5.4.0p4 and greater
-		/// </summary>
-		public static bool IsReadAutoRandomSeed(Version version)
-		{
-			return version.IsGreaterEqual(5, 4, 0, VersionType.Patch, 4);
-		}
-		/// <summary>
-		/// 2017.1.0f1 and greater
-		/// </summary>
-		public static bool IsReadUseRigidbodyForVelocity(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Final);
-		}
-		/// <summary>
-		/// 5.5.0 and greater
-		/// </summary>
-		public static bool IsReadMoveWithCustomTransform(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadScalingMode(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadInheritVelocityModule(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadExternalForcesModule(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
-		/// 5.5.0 and greater
-		/// </summary>
-		public static bool IsReadNoiseModule(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
-		/// <summary>
-		/// 5.4.0 and greater
-		/// </summary>
-		public static bool IsReadTriggerModule(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
-		/// <summary>
-		/// 5.5.0 and greater
-		/// </summary>
-		public static bool IsReadLightsModule(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		public static bool IsReadCustomDataModule(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
-		
-		/// <summary>
-		/// Less than 5.5.0
-		/// </summary>
-		private static bool IsStartDelayFirst(Version version)
-		{
-			return version.IsLess(5, 5);
-		}
-		/// <summary>
-		/// Less than 5.4.0p4
-		/// </summary>
-		private static bool IsRandomSeedFirst(Version version)
-		{
-			return version.IsLess(5, 4, 0, VersionType.Patch, 4);
-		}
-		/// <summary>
-		/// Less than 5.5.0
-		/// </summary>
-		private static bool IsMoveWithTransformBool(Version version)
-		{
-			return version.IsLess(5, 5);
-		}
-		/// <summary>
-		/// 5.4.0p4 and greater
-		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(5, 4, 0, VersionType.Patch, 4);
-		}
-		
-		private static int GetSerializedVersion(Version version)
+
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(2018, 3))
 			{
@@ -163,6 +33,80 @@ namespace uTinyRipper.Classes
 			}
 			return 1;
 		}
+
+		/// <summary>
+		/// Less than 5.3.0
+		/// </summary>
+		public static bool HasStartDelaySingle(Version version) => version.IsLess(5, 3);
+		/// <summary>
+		/// 2017.2 and greater
+		/// </summary>
+		public static bool HasStopAction(Version version) => version.IsGreaterEqual(2017, 2);
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool HasCullingMode(Version version) => version.IsGreaterEqual(2018, 3);
+		/// <summary>
+		/// 2017.1.0b2 and greater
+		/// </summary>
+		public static bool HasUseUnscaledTime(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		/// <summary>
+		/// 5.4.0p4 and greater
+		/// </summary>
+		public static bool HasAutoRandomSeed(Version version) => version.IsGreaterEqual(5, 4, 0, VersionType.Patch, 4);
+		/// <summary>
+		/// 2017.1.0f1 and greater
+		/// </summary>
+		public static bool HasUseRigidbodyForVelocity(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Final);
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool HasMoveWithCustomTransform(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasScalingMode(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasInheritVelocityModule(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasExternalForcesModule(Version version) => version.IsGreaterEqual(4);
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool HasNoiseModule(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		public static bool HasTriggerModule(Version version) => version.IsGreaterEqual(5, 4);
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool HasLightsModule(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
+		public static bool HasCustomDataModule(Version version) => version.IsGreaterEqual(5, 6);
+		
+		/// <summary>
+		/// Less than 5.5.0
+		/// </summary>
+		private static bool IsStartDelayFirst(Version version) => version.IsLess(5, 5);
+		/// <summary>
+		/// Less than 5.4.0p4
+		/// </summary>
+		private static bool IsRandomSeedFirst(Version version) => version.IsLess(5, 4, 0, VersionType.Patch, 4);
+		/// <summary>
+		/// Less than 5.5.0
+		/// </summary>
+		private static bool IsMoveWithTransformBool(Version version) => version.IsLess(5, 5);
+		/// <summary>
+		/// 5.4.0p4 and greater
+		/// </summary>
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(5, 4, 0, VersionType.Patch, 4);
 		
 		public override void Read(AssetReader reader)
 		{
@@ -171,7 +115,7 @@ namespace uTinyRipper.Classes
 			LengthInSec = reader.ReadSingle();
 			if (IsStartDelayFirst(reader.Version))
 			{
-				if (IsReadStartDelaySingle(reader.Version))
+				if (HasStartDelaySingle(reader.Version))
 				{
 					StartDelaySingle = reader.ReadSingle();
 				}
@@ -182,7 +126,7 @@ namespace uTinyRipper.Classes
 			}
 			
 			SimulationSpeed = reader.ReadSingle();
-			if (IsReadStopAction(reader.Version))
+			if (HasStopAction(reader.Version))
 			{
 				StopAction = (ParticleSystemStopAction)reader.ReadInt32();
 			}
@@ -192,7 +136,7 @@ namespace uTinyRipper.Classes
 				RandomSeed = unchecked((int)reader.ReadUInt32());
 			}
 			
-			if (IsReadCullingMode(reader.Version))
+			if (HasCullingMode(reader.Version))
 			{
 				CullingMode = (ParticleSystemCullingMode)reader.ReadInt32();
 				RingBufferMode = (ParticleSystemRingBufferMode)reader.ReadInt32();
@@ -202,7 +146,7 @@ namespace uTinyRipper.Classes
 			Looping = reader.ReadBoolean();
 			Prewarm = reader.ReadBoolean();
 			PlayOnAwake = reader.ReadBoolean();
-			if (IsReadUseUnscaledTime(reader.Version))
+			if (HasUseUnscaledTime(reader.Version))
 			{
 				UseUnscaledTime = reader.ReadBoolean();
 			}
@@ -210,35 +154,35 @@ namespace uTinyRipper.Classes
 			{
 				MoveWithTransform = reader.ReadBoolean() ? ParticleSystemSimulationSpace.Local : ParticleSystemSimulationSpace.World;
 			}
-			if (IsReadAutoRandomSeed(reader.Version))
+			if (HasAutoRandomSeed(reader.Version))
 			{
 				AutoRandomSeed = reader.ReadBoolean();
 			}
-			if (IsReadUseRigidbodyForVelocity(reader.Version))
+			if (HasUseRigidbodyForVelocity(reader.Version))
 			{
 				UseRigidbodyForVelocity = reader.ReadBoolean();
 			}
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
 			if (!IsStartDelayFirst(reader.Version))
 			{
 				StartDelay.Read(reader);
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			if (!IsMoveWithTransformBool(reader.Version))
 			{
 				MoveWithTransform = (ParticleSystemSimulationSpace)reader.ReadInt32();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
-			if (IsReadMoveWithCustomTransform(reader.Version))
+			if (HasMoveWithCustomTransform(reader.Version))
 			{
 				MoveWithCustomTransform.Read(reader);
 			}
-			if (IsReadScalingMode(reader.Version))
+			if (HasScalingMode(reader.Version))
 			{
 				ScalingMode = (ParticleSystemScalingMode)reader.ReadInt32();
 			}
@@ -255,17 +199,17 @@ namespace uTinyRipper.Classes
 			ColorModule.Read(reader);
 			UVModule.Read(reader);
 			VelocityModule.Read(reader);
-			if (IsReadInheritVelocityModule(reader.Version))
+			if (HasInheritVelocityModule(reader.Version))
 			{
 				InheritVelocityModule.Read(reader);
 			}
 			ForceModule.Read(reader);
-			if (IsReadExternalForcesModule(reader.Version))
+			if (HasExternalForcesModule(reader.Version))
 			{
 				ExternalForcesModule.Read(reader);
 			}
 			ClampVelocityModule.Read(reader);
-			if (IsReadNoiseModule(reader.Version))
+			if (HasNoiseModule(reader.Version))
 			{
 				NoiseModule.Read(reader);
 			}
@@ -273,35 +217,35 @@ namespace uTinyRipper.Classes
 			RotationBySpeedModule.Read(reader);
 			ColorBySpeedModule.Read(reader);
 			CollisionModule.Read(reader);
-			if (IsReadTriggerModule(reader.Version))
+			if (HasTriggerModule(reader.Version))
 			{
 				TriggerModule.Read(reader);
 			}
 			SubModule.Read(reader);
-			if (IsReadLightsModule(reader.Version))
+			if (HasLightsModule(reader.Version))
 			{
 				LightsModule.Read(reader);
 				TrailModule.Read(reader);
 			}
-			if (IsReadCustomDataModule(reader.Version))
+			if (HasCustomDataModule(reader.Version))
 			{
 				CustomDataModule.Read(reader);
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return MoveWithCustomTransform.FetchDependency(file, isLog, ToLogString, "moveWithCustomTransform");
-			foreach(Object asset in CollisionModule.FetchDependencies(file, isLog))
+			yield return context.FetchDependency(MoveWithCustomTransform, MoveWithCustomTransformName);
+			foreach (PPtr<Object> asset in context.FetchDependencies(CollisionModule, CollisionModuleName))
 			{
 				yield return asset;
 			}
-			foreach(Object asset in SubModule.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in context.FetchDependencies(SubModule, SubModuleName))
 			{
 				yield return asset;
 			}
@@ -310,7 +254,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(LengthInSecName, LengthInSec);
 			node.Add(SimulationSpeedName, SimulationSpeed);
 			node.Add(StopActionName, (int)StopAction);
@@ -352,68 +296,68 @@ namespace uTinyRipper.Classes
 
 		private bool GetAutoRandomSeed(Version version)
 		{
-			return IsReadAutoRandomSeed(version) ? AutoRandomSeed : true;
+			return HasAutoRandomSeed(version) ? AutoRandomSeed : true;
 		}
 		public bool GetUseRigidbodyForVelocity(Version version)
 		{
-			return IsReadUseRigidbodyForVelocity(version) ? UseRigidbodyForVelocity : true;
+			return HasUseRigidbodyForVelocity(version) ? UseRigidbodyForVelocity : true;
 		}
 		private MinMaxCurve GetStartDelay(Version version)
 		{
-			return IsReadStartDelaySingle(version) ? new MinMaxCurve(StartDelaySingle) : StartDelay;
+			return HasStartDelaySingle(version) ? new MinMaxCurve(StartDelaySingle) : StartDelay;
 		}
 		private ParticleSystemScalingMode GetScalingMode(Version version)
 		{
-			return IsReadScalingMode(version) ? ScalingMode : ParticleSystemScalingMode.Shape;
+			return HasScalingMode(version) ? ScalingMode : ParticleSystemScalingMode.Shape;
 		}
 		private InheritVelocityModule GetInheritVelocityModule(Version version)
 		{
-			return IsReadInheritVelocityModule(version) ? InheritVelocityModule : new InheritVelocityModule(InitialModule.InheritVelocity);
+			return HasInheritVelocityModule(version) ? InheritVelocityModule : new InheritVelocityModule(InitialModule.InheritVelocity);
 		}
 		private ExternalForcesModule GetExternalForcesModule(Version version)
 		{
-			return IsReadExternalForcesModule(version) ? ExternalForcesModule : new ExternalForcesModule(true);
+			return HasExternalForcesModule(version) ? ExternalForcesModule : new ExternalForcesModule(true);
 		}
 		public NoiseModule GetNoiseModule(Version version)
 		{
-			return IsReadNoiseModule(version) ? NoiseModule : new NoiseModule(true);
+			return HasNoiseModule(version) ? NoiseModule : new NoiseModule(true);
 		}
 		public TriggerModule GetTriggerModule(Version version)
 		{
-			return IsReadTriggerModule(version) ? TriggerModule : new TriggerModule(true);
+			return HasTriggerModule(version) ? TriggerModule : new TriggerModule(true);
 		}
 		public LightsModule GetLightsModule(Version version)
 		{
-			return IsReadLightsModule(version) ? LightsModule : new LightsModule(true);
+			return HasLightsModule(version) ? LightsModule : new LightsModule(true);
 		}
 		public TrailModule GetTrailModule(Version version)
 		{
-			return IsReadLightsModule(version) ? TrailModule : new TrailModule(true);
+			return HasLightsModule(version) ? TrailModule : new TrailModule(true);
 		}
 		public CustomDataModule GetCustomDataModule(Version version)
 		{
-			return IsReadCustomDataModule(version) ? CustomDataModule : new CustomDataModule(true);
+			return HasCustomDataModule(version) ? CustomDataModule : new CustomDataModule(true);
 		}
 
-		public float LengthInSec { get; private set; }
-		public float StartDelaySingle { get; private set; }
+		public float LengthInSec { get; set; }
+		public float StartDelaySingle { get; set; }
 		/// <summary>
 		/// Speed previously
 		/// </summary>
-		public float SimulationSpeed { get; private set; }
-		public ParticleSystemStopAction StopAction { get; private set; }
-		public ParticleSystemCullingMode CullingMode { get; private set; }
-		public ParticleSystemRingBufferMode RingBufferMode { get; private set; }
-		public Vector2f RingBufferLoopRange { get; private set; }
-		public bool Looping { get; private set; }
-		public bool Prewarm { get; private set; }
-		public bool PlayOnAwake { get; private set; }
-		public bool UseUnscaledTime { get; private set; }
-		public bool AutoRandomSeed { get; private set; }
-		public bool UseRigidbodyForVelocity { get; private set; }
-		public ParticleSystemSimulationSpace MoveWithTransform { get; private set; }
-		public ParticleSystemScalingMode ScalingMode { get; private set; }
-		public int RandomSeed { get; private set; }
+		public float SimulationSpeed { get; set; }
+		public ParticleSystemStopAction StopAction { get; set; }
+		public ParticleSystemCullingMode CullingMode { get; set; }
+		public ParticleSystemRingBufferMode RingBufferMode { get; set; }
+		public Vector2f RingBufferLoopRange { get; set; }
+		public bool Looping { get; set; }
+		public bool Prewarm { get; set; }
+		public bool PlayOnAwake { get; set; }
+		public bool UseUnscaledTime { get; set; }
+		public bool AutoRandomSeed { get; set; }
+		public bool UseRigidbodyForVelocity { get; set; }
+		public ParticleSystemSimulationSpace MoveWithTransform { get; set; }
+		public ParticleSystemScalingMode ScalingMode { get; set; }
+		public int RandomSeed { get; set; }
 		public InitialModule InitialModule { get; } = new InitialModule();
 		public ShapeModule ShapeModule { get; } = new ShapeModule();
 		public EmissionModule EmissionModule { get; } = new EmissionModule();

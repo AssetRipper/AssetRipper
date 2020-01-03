@@ -10,9 +10,9 @@
 			Hash = reader.ReadUInt32();
 		}
 
-		public string ClassName { get; private set; }
-		public string NameSpace { get; private set; }
-		public string AssemblyName { get; private set; }
-		public uint Hash { get; private set; }
+		public string ClassName { get; set; }
+		public string NameSpace { get; set; }
+		public string AssemblyName { get; set; }
+		public uint Hash { get; set; }
 	}
 }

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Renderers;
 using uTinyRipper.Classes.Terrains;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
@@ -14,115 +14,18 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 2019.1 and greater
-		/// </summary>
-		public static bool IsReadShadowCastingMode(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
-			return version.IsGreaterEqual(2019);
-		}
-		/// <summary>
-		/// 5.0.0f1 and greater
-		/// </summary>
-		public static bool IsReadDrawHeightmap(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
-		/// <summary>
-		/// 2018.3 and greater
-		/// </summary>
-		public static bool IsReadDrawInstanced(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
-		/// <summary>
-		/// 5.0.0f1 and greater
-		/// </summary>
-		public static bool IsReadReflectionProbeUsage(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
-		/// <summary>
-		/// 5.0.0f1 to 5.0.1 exclusive
-		/// </summary>
-		public static bool IsReadDefaultSmoothness(Version version)
-		{
-			// unknown bottom version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 0, 1);
-		}
-		/// <summary>
-		/// Release
-		/// </summary>
-		public static bool IsReadLightmapIndex(TransferInstructionFlags flags)
-		{
-			return flags.IsRelease();
-		}
-		/// <summary>
-		/// 2017.2 and greater and Release
-		/// </summary>
-		public static bool IsReadExplicitProbeSetHash(Version version, TransferInstructionFlags flags)
-		{
-			return version.IsGreaterEqual(2017, 2) && flags.IsRelease();
-		}
-		/// <summary>
-		/// 5.0.0f1 and greater
-		/// </summary>
-		public static bool IsReadBakeLightProbesForTrees(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
-		/// <summary>
-		/// 2018.2 and greater
-		/// </summary>
-		public static bool IsReadPreserveTreePrototypeLayers(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
-		/// <summary>
-		/// 2019.1 and greater and Not Release
-		/// </summary>
-		public static bool IsReadDeringLightProbesForTrees(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(2019);
-		}
-		/// <summary>
-		/// 5.0.0f1 and greater and Release
-		/// </summary>
-		public static bool IsReadDynamicUVST(Version version, TransferInstructionFlags flags)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && flags.IsRelease();
-		}
-		/// <summary>
-		/// Not Release
-		/// </summary>
-		public static bool IsReadScaleInLightmap(TransferInstructionFlags flags)
-		{
-			// unknown version
-			return !flags.IsRelease();
-		}
-		/// <summary>
-		/// 2018.3 and greater
-		/// </summary>
-		public static bool IsReadGroupingID(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
-
-		/// <summary>
-		/// 5.0.0f1 and greater
-		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
-
-		private static int GetSerializedVersion(Version version)
-		{
+			// RenderingLayerMask value has been changed from 1 to custom
+			if (version.IsGreaterEqual(2019, 3))
+			{
+				return 6;
+			}
+			// MaterialType has been replaced by actual shaders
+			if (version.IsGreaterEqual(2019, 2))
+			{
+				return 5;
+			}
 			// CastShadows has been converted to ShadowCastingMode
 			if (version.IsGreaterEqual(2019))
 			{
@@ -138,6 +41,96 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		public static bool HasShadowCastingMode(Version version) => version.IsGreaterEqual(2019);
+		/// <summary>
+		/// 5.0.0f1 and greater
+		/// </summary>
+		public static bool HasDrawHeightmap(Version version)
+		{
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		}
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool HasDrawInstanced(Version version) => version.IsGreaterEqual(2018, 3);
+		/// <summary>
+		/// 5.0.0f1 and greater
+		/// </summary>
+		public static bool HasReflectionProbeUsage(Version version)
+		{
+			// unknown version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		}
+		/// <summary>
+		/// 5.0.0f1 to 2019.2 exclusive
+		/// </summary>
+		public static bool HasMaterialType(Version version)
+		{
+			// unknown bottom version
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(2019, 2);
+		}
+		/// <summary>
+		/// 5.0.0f1 to 5.0.1 exclusive
+		/// </summary>
+		public static bool HasDefaultSmoothness(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 0, 1);
+		/// <summary>
+		/// Release
+		/// </summary>
+		public static bool HasLightmapIndex(TransferInstructionFlags flags)
+		{
+			return flags.IsRelease();
+		}
+		/// <summary>
+		/// 2017.2 and greater and Release
+		/// </summary>
+		public static bool HasExplicitProbeSetHash(Version version, TransferInstructionFlags flags)
+		{
+			return version.IsGreaterEqual(2017, 2) && flags.IsRelease();
+		}
+		/// <summary>
+		/// 5.0.0f1 and greater (NOTE: unknown version)
+		/// </summary>
+		public static bool HasBakeLightProbesForTrees(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool HasPreserveTreePrototypeLayers(Version version) => version.IsGreaterEqual(2018, 2);
+		/// <summary>
+		/// 2019.1 and greater and Not Release
+		/// </summary>
+		public static bool HasDeringLightProbesForTrees(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(2019);
+		}
+		/// <summary>
+		/// 5.0.0f1 and greater and Release (NOTE: unknown version)
+		/// </summary>
+		public static bool HasDynamicUVST(Version version, TransferInstructionFlags flags)
+		{
+			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && flags.IsRelease();
+		}
+		/// <summary>
+		/// Not Release (NOTE: unknown version)
+		/// </summary>
+		public static bool HasScaleInLightmap(TransferInstructionFlags flags) => !flags.IsRelease();
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool HasGroupingID(Version version) => version.IsGreaterEqual(2018, 3);
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasRenderingLayerMask(Version version) => version.IsGreaterEqual(2019, 3);
+
+		/// <summary>
+		/// 5.0.0f1 and greater (NOTE: unknown version)
+		/// </summary>
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -152,7 +145,7 @@ namespace uTinyRipper.Classes
 			HeightmapPixelError = reader.ReadSingle();
 			SplatMapDistance = reader.ReadSingle();
 			HeightmapMaximumLOD = reader.ReadInt32();
-			if (IsReadShadowCastingMode(reader.Version))
+			if (HasShadowCastingMode(reader.Version))
 			{
 				ShadowCastingMode = (ShadowCastingMode)reader.ReadInt32();
 			}
@@ -161,93 +154,103 @@ namespace uTinyRipper.Classes
 				bool CastShadows = reader.ReadBoolean();
 				ShadowCastingMode = CastShadows ? ShadowCastingMode.TwoSided : ShadowCastingMode.Off;
 			}
-			if (IsReadDrawHeightmap(reader.Version))
+			if (HasDrawHeightmap(reader.Version))
 			{
 				DrawHeightmap = reader.ReadBoolean();
 			}
-			if (IsReadDrawInstanced(reader.Version))
+			if (HasDrawInstanced(reader.Version))
 			{
 				DrawInstanced = reader.ReadBoolean();
 			}
 			DrawTreesAndFoliage = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
-			if (IsReadReflectionProbeUsage(reader.Version))
+			if (HasReflectionProbeUsage(reader.Version))
 			{
 				ReflectionProbeUsage = (ReflectionProbeUsage)reader.ReadInt32();
+			}
+			if (HasMaterialType(reader.Version))
+			{
 				MaterialType = (MaterialType)reader.ReadInt32();
 				LegacySpecular.Read(reader);
 				LegacyShininess = reader.ReadSingle();
 			}
-			if (IsReadDefaultSmoothness(reader.Version))
+			if (HasDefaultSmoothness(reader.Version))
 			{
 				UseDefaultSmoothness = reader.ReadBoolean();
 				DefaultSmoothness = reader.ReadSingle();
 			}
 			MaterialTemplate.Read(reader);
-			if (IsReadLightmapIndex(reader.Flags))
+			if (HasLightmapIndex(reader.Flags))
 			{
 				LightmapIndex = reader.ReadUInt16();
 				LightmapIndexDynamic = reader.ReadUInt16();
 				LightmapTilingOffset.Read(reader);
 				LightmapTilingOffsetDynamic.Read(reader);
 			}
-			if (IsReadExplicitProbeSetHash(reader.Version, reader.Flags))
+			if (HasExplicitProbeSetHash(reader.Version, reader.Flags))
 			{
 				ExplicitProbeSetHash.Read(reader);
 			}
 
-			if (IsReadBakeLightProbesForTrees(reader.Version))
+			if (HasBakeLightProbesForTrees(reader.Version))
 			{
 				BakeLightProbesForTrees = reader.ReadBoolean();
 			}
-			if (IsReadPreserveTreePrototypeLayers(reader.Version))
+			if (HasPreserveTreePrototypeLayers(reader.Version))
 			{
 				PreserveTreePrototypeLayers = reader.ReadBoolean();
 			}
-			if (IsReadDeringLightProbesForTrees(reader.Version, reader.Flags))
+			if (HasDeringLightProbesForTrees(reader.Version, reader.Flags))
 			{
 				DeringLightProbesForTrees = reader.ReadBoolean();
 			}
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 #if UNIVERSAL
-			if (IsReadScaleInLightmap(reader.Flags))
+			if (HasScaleInLightmap(reader.Flags))
 			{
 				ScaleInLightmap = reader.ReadSingle();
 				LightmapParameters.Read(reader);
 			}
 #endif
-			if (IsReadDynamicUVST(reader.Version, reader.Flags))
+			if (HasDynamicUVST(reader.Version, reader.Flags))
 			{
 				DynamicUVST.Read(reader);
 				ChunkDynamicUVST.Read(reader);
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
-			if (IsReadGroupingID(reader.Version))
+			if (HasGroupingID(reader.Version))
 			{
 				GroupingID = reader.ReadInt32();
+			}
+			if (HasRenderingLayerMask(reader.Version))
+			{
+				RenderingLayerMask = reader.ReadUInt32();
+			}
+			if (HasGroupingID(reader.Version))
+			{
 				AllowAutoConnect = reader.ReadBoolean();
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return TerrainData.FetchDependency(file, isLog, ToLogString, TerrainDataName);
-			yield return MaterialTemplate.FetchDependency(file, isLog, ToLogString, MaterialTemplateName);
+			yield return context.FetchDependency(TerrainData, TerrainDataName);
+			yield return context.FetchDependency(MaterialTemplate, MaterialTemplateName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TerrainDataName, TerrainData.ExportYAML(container));
 			node.Add(TreeDistanceName, TreeDistance);
 			node.Add(TreeBillboardDistanceName, TreeBillboardDistance);
@@ -258,7 +261,7 @@ namespace uTinyRipper.Classes
 			node.Add(HeightmapPixelErrorName, HeightmapPixelError);
 			node.Add(SplatMapDistanceName, SplatMapDistance);
 			node.Add(HeightmapMaximumLODName, HeightmapMaximumLOD);
-			if (IsReadShadowCastingMode(container.ExportVersion))
+			if (HasShadowCastingMode(container.ExportVersion))
 			{
 				node.Add(ShadowCastingModeName, (int)ShadowCastingMode);
 			}
@@ -267,44 +270,91 @@ namespace uTinyRipper.Classes
 				node.Add(CastShadowsName, CastShadows);
 			}
 			node.Add(DrawHeightmapName, DrawHeightmap);
-			if (IsReadDrawInstanced(container.ExportVersion))
+			if (HasDrawInstanced(container.ExportVersion))
 			{
 				node.Add(DrawInstancedName, DrawInstanced);
 			}
 			node.Add(DrawTreesAndFoliageName, DrawTreesAndFoliage);
 			node.Add(ReflectionProbeUsageName, (int)ReflectionProbeUsage);
-			node.Add(MaterialTypeName, (int)MaterialType);
-			node.Add(LegacySpecularName, LegacySpecular.ExportYAML(container));
-			node.Add(LegacyShininessName, LegacyShininess);
-			node.Add(MaterialTemplateName, MaterialTemplate.ExportYAML(container));
+			if (HasMaterialType(container.ExportVersion))
+			{
+				node.Add(MaterialTypeName, (int)GetMaterialType(container.Version));
+				node.Add(LegacySpecularName, LegacySpecular.ExportYAML(container));
+				node.Add(LegacyShininessName, LegacyShininess);
+			}
+			node.Add(MaterialTemplateName, ExportMaterialTemplate(container));
 			node.Add(BakeLightProbesForTreesName, BakeLightProbesForTrees);
-			if (IsReadPreserveTreePrototypeLayers(container.ExportVersion))
+			if (HasPreserveTreePrototypeLayers(container.ExportVersion))
 			{
 				node.Add(PreserveTreePrototypeLayersName, PreserveTreePrototypeLayers);
 			}
-			if (IsReadDeringLightProbesForTrees(container.ExportVersion, container.ExportFlags))
+			if (HasDeringLightProbesForTrees(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(DeringLightProbesForTreesName, GetDeringLightProbesForTrees(container.Version, container.Flags));
 			}
 #warning TODO: get lightmap by index and fill those values
 			node.Add(ScaleInLightmapName, GetScaleInLightmap(container.Flags));
 			node.Add(LightmapParametersName, GetLightmapParameters(container.Flags).ExportYAML(container));
-			if (IsReadGroupingID(container.ExportVersion))
+			if (HasGroupingID(container.ExportVersion))
 			{
 				node.Add(GroupingIDName, GroupingID);
+			}
+			if (HasRenderingLayerMask(container.ExportVersion))
+			{
+				node.Add(RenderingLayerMaskName, GetRenderingLayerMask(container.Version));
+			}
+			if (HasGroupingID(container.ExportVersion))
+			{
 				node.Add(AllowAutoConnectName, AllowAutoConnect);
 			}
 			return node;
 		}
 
+		private MaterialType GetMaterialType(Version version)
+		{
+			if (ToSerializedVersion(version) > 2)
+			{
+				return MaterialType;
+			}
+			return MaterialType == MaterialType.BuiltInStandard ? MaterialType.BuiltInLegacyDiffuse : MaterialType.Custom;
+		}
+		private YAMLNode ExportMaterialTemplate(IExportContainer container)
+		{
+			if (ToSerializedVersion(container.ExportVersion) < 5)
+			{
+				return MaterialTemplate.ExportYAML(container);
+			}
+			if (ToSerializedVersion(container.Version) >= 5)
+			{
+				return MaterialTemplate.ExportYAML(container);
+			}
+
+			MaterialType type = GetMaterialType(container.Version);
+			if (type == MaterialType.BuiltInStandard)
+			{
+				EngineBuiltInAsset asset = EngineBuiltInAssets.GetMaterial(EngineBuiltInAssets.DefaultTerrainStandardName, container.ExportVersion);
+				return asset.ToExportPointer().ExportYAML(container);
+			}
+			if (type == MaterialType.BuiltInLegacyDiffuse)
+			{
+				EngineBuiltInAsset asset = EngineBuiltInAssets.GetMaterial(EngineBuiltInAssets.DefaultTerrainDiffuseName, container.ExportVersion);
+				return asset.ToExportPointer().ExportYAML(container);
+			}
+			if (type == MaterialType.BuiltInLegacySpecular)
+			{
+				EngineBuiltInAsset asset = EngineBuiltInAssets.GetMaterial(EngineBuiltInAssets.DefaultTerrainSpecularName, container.ExportVersion);
+				return asset.ToExportPointer().ExportYAML(container);
+			}
+			return MaterialTemplate.ExportYAML(container);
+		}
 		private bool GetDeringLightProbesForTrees(Version version, TransferInstructionFlags flags)
 		{
-			return IsReadDeringLightProbesForTrees(version, flags) ? DeringLightProbesForTrees : true;
+			return HasDeringLightProbesForTrees(version, flags) ? DeringLightProbesForTrees : true;
 		}
 		private float GetScaleInLightmap(TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadScaleInLightmap(flags))
+			if (HasScaleInLightmap(flags))
 			{
 				return ScaleInLightmap;
 			}
@@ -314,43 +364,48 @@ namespace uTinyRipper.Classes
 		private PPtr<LightmapParameters> GetLightmapParameters(TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadScaleInLightmap(flags))
+			if (HasScaleInLightmap(flags))
 			{
 				return LightmapParameters;
 			}
 #endif
 			return default;
 		}
+		private uint GetRenderingLayerMask(Version version)
+		{
+			return HasRenderingLayerMask(version) ? RenderingLayerMask : 1;
+		}
 
-		public float TreeDistance { get; private set; }
-		public float TreeBillboardDistance { get; private set; }
-		public float TreeCrossFadeLength { get; private set; }
-		public int TreeMaximumFullLODCount { get; private set; }
-		public float DetailObjectDistance { get; private set; }
-		public float DetailObjectDensity { get; private set; }
-		public float HeightmapPixelError { get; private set; }
-		public float SplatMapDistance { get; private set; }
-		public int HeightmapMaximumLOD { get; private set; }
+		public float TreeDistance { get; set; }
+		public float TreeBillboardDistance { get; set; }
+		public float TreeCrossFadeLength { get; set; }
+		public int TreeMaximumFullLODCount { get; set; }
+		public float DetailObjectDistance { get; set; }
+		public float DetailObjectDensity { get; set; }
+		public float HeightmapPixelError { get; set; }
+		public float SplatMapDistance { get; set; }
+		public int HeightmapMaximumLOD { get; set; }
 		public bool CastShadows => ShadowCastingMode != ShadowCastingMode.Off;
-		public ShadowCastingMode ShadowCastingMode { get; private set; }
-		public bool DrawHeightmap { get; private set; }
-		public bool DrawInstanced { get; private set; }
-		public bool DrawTreesAndFoliage { get; private set; }
-		public ReflectionProbeUsage ReflectionProbeUsage { get; private set; }
-		public MaterialType MaterialType { get; private set; }
-		public float LegacyShininess { get; private set; }
-		public bool UseDefaultSmoothness { get; private set; }
-		public float DefaultSmoothness { get; private set; }
-		public ushort LightmapIndex { get; private set; }
-		public ushort LightmapIndexDynamic { get; private set; }
-		public bool BakeLightProbesForTrees { get; private set; }
-		public bool PreserveTreePrototypeLayers { get; private set; }
-		public bool DeringLightProbesForTrees { get; private set; }
+		public ShadowCastingMode ShadowCastingMode { get; set; }
+		public bool DrawHeightmap { get; set; }
+		public bool DrawInstanced { get; set; }
+		public bool DrawTreesAndFoliage { get; set; }
+		public ReflectionProbeUsage ReflectionProbeUsage { get; set; }
+		public MaterialType MaterialType { get; set; }
+		public float LegacyShininess { get; set; }
+		public bool UseDefaultSmoothness { get; set; }
+		public float DefaultSmoothness { get; set; }
+		public ushort LightmapIndex { get; set; }
+		public ushort LightmapIndexDynamic { get; set; }
+		public bool BakeLightProbesForTrees { get; set; }
+		public bool PreserveTreePrototypeLayers { get; set; }
+		public bool DeringLightProbesForTrees { get; set; }
 #if UNIVERSAL
-		public float ScaleInLightmap { get; private set; }
+		public float ScaleInLightmap { get; set; }
 #endif
-		public int GroupingID { get; private set; }
-		public bool AllowAutoConnect { get; private set; }
+		public int GroupingID { get; set; }
+		public uint RenderingLayerMask { get; set; }
+		public bool AllowAutoConnect { get; set; }
 
 		public const string TerrainDataName = "m_TerrainData";
 		public const string TreeDistanceName = "m_TreeDistance";
@@ -378,6 +433,7 @@ namespace uTinyRipper.Classes
 		public const string ScaleInLightmapName = "m_ScaleInLightmap";
 		public const string LightmapParametersName = "m_LightmapParameters";
 		public const string GroupingIDName = "m_GroupingID";
+		public const string RenderingLayerMaskName = "m_RenderingLayerMask";
 		public const string AllowAutoConnectName = "m_AllowAutoConnect";
 
 		public PPtr<TerrainData> TerrainData;

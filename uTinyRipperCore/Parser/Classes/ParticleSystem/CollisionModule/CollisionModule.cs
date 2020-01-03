@@ -1,83 +1,14 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.ParticleSystems
 {
 	public sealed class CollisionModule : ParticleSystemModule, IDependent
 	{
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadCollisionMode(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 2017.1 and greater
-		/// </summary>
-		public static bool IsReadColliderForce(Version version)
-		{
-			return version.IsGreaterEqual(2017);
-		}
-		/// <summary>
-		/// Less than 5.3.0
-		/// </summary>
-		public static bool IsReadDampenSingle(Version version)
-		{
-			return version.IsLess(5, 3);
-		}
-		/// <summary>
-		/// 5.4.0 and greater
-		/// </summary>
-		public static bool IsReadMaxKillSpeed(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadRadiusScale(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadQuality(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadMaxCollisionShapes(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 4.2.0 and greater
-		/// </summary>
-		public static bool IsReadCollisionMessages(Version version)
-		{
-			return version.IsGreaterEqual(4, 2);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadCollidesWithDynamic(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-
-		private static int GetSerializedVersion(Version version)
-		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 3;
-			}
-
 			if (version.IsGreaterEqual(5, 4))
 			{
 				return 3;
@@ -88,23 +19,60 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 			return 1;
 		}
+
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasCollisionMode(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		public static bool HasColliderForce(Version version) => version.IsGreaterEqual(2017);
+		/// <summary>
+		/// Less than 5.3.0
+		/// </summary>
+		public static bool HasDampenSingle(Version version) => version.IsLess(5, 3);
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		public static bool HasMaxKillSpeed(Version version) => version.IsGreaterEqual(5, 4);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasRadiusScale(Version version) => version.IsGreaterEqual(4);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasQuality(Version version) => version.IsGreaterEqual(4);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasMaxCollisionShapes(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 4.2.0 and greater
+		/// </summary>
+		public static bool HasCollisionMessages(Version version) => version.IsGreaterEqual(4, 2);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasCollidesWithDynamic(Version version) => version.IsGreaterEqual(5, 3);
 		
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 			
 			Type = (ParticleSystemCollisionType)reader.ReadInt32();
-			if (IsReadCollisionMode(reader.Version))
+			if (HasCollisionMode(reader.Version))
 			{
 				CollisionMode = (ParticleSystemCollisionMode)reader.ReadInt32();
 			}
-			if (IsReadColliderForce(reader.Version))
+			if (HasColliderForce(reader.Version))
 			{
 				ColliderForce = reader.ReadSingle();
 				MultiplyColliderForceByParticleSize = reader.ReadBoolean();
 				MultiplyColliderForceByParticleSpeed = reader.ReadBoolean();
 				MultiplyColliderForceByCollisionAngle = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 			
 			Plane0.Read(reader);
@@ -114,7 +82,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			Plane4.Read(reader);
 			Plane5.Read(reader);
 
-			if (IsReadDampenSingle(reader.Version))
+			if (HasDampenSingle(reader.Version))
 			{
 				float dampenSingle = reader.ReadSingle();
 				float bounceSingle = reader.ReadSingle();
@@ -131,125 +99,151 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 
 			MinKillSpeed = reader.ReadSingle();
-			if (IsReadMaxKillSpeed(reader.Version))
+			if (HasMaxKillSpeed(reader.Version))
 			{
 				MaxKillSpeed = reader.ReadSingle();
 			}
-			if (IsReadRadiusScale(reader.Version))
+			if (HasRadiusScale(reader.Version))
 			{
 				RadiusScale = reader.ReadSingle();
 				CollidesWith.Read(reader);
 			}
-			if (IsReadMaxCollisionShapes(reader.Version))
+			if (HasMaxCollisionShapes(reader.Version))
 			{
 				MaxCollisionShapes = reader.ReadInt32();
 			}
-			if (IsReadQuality(reader.Version))
+			if (HasQuality(reader.Version))
 			{
 				Quality = (ParticleSystemCollisionQuality)reader.ReadInt32();
 				VoxelSize = reader.ReadSingle();
 			}
-			if (IsReadCollisionMessages(reader.Version))
+			if (HasCollisionMessages(reader.Version))
 			{
 				CollisionMessages = reader.ReadBoolean();
 			}
-			if (IsReadCollidesWithDynamic(reader.Version))
+			if (HasCollidesWithDynamic(reader.Version))
 			{
 				CollidesWithDynamic = reader.ReadBoolean();
 				InteriorCollisions = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return Plane0.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane0");
-			yield return Plane1.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane1");
-			yield return Plane2.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane2");
-			yield return Plane3.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane3");
-			yield return Plane4.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane4");
-			yield return Plane5.FetchDependency(file, isLog, () => nameof(CollisionModule), "m_Plane5");
+			yield return context.FetchDependency(Plane0, Plane0Name);
+			yield return context.FetchDependency(Plane1, Plane1Name);
+			yield return context.FetchDependency(Plane2, Plane2Name);
+			yield return context.FetchDependency(Plane3, Plane3Name);
+			yield return context.FetchDependency(Plane4, Plane4Name);
+			yield return context.FetchDependency(Plane5, Plane5Name);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("type", (int)Type);
-			node.Add("collisionMode", (int)CollisionMode);
-			node.Add("colliderForce", ColliderForce);
-			node.Add("multiplyColliderForceByParticleSize", MultiplyColliderForceByParticleSize);
-			node.Add("multiplyColliderForceByParticleSpeed", MultiplyColliderForceByParticleSpeed);
-			node.Add("multiplyColliderForceByCollisionAngle", GetExportMultiplyColliderForceByCollisionAngle(container.Version));
-			node.Add("plane0", Plane0.ExportYAML(container));
-			node.Add("plane1", Plane1.ExportYAML(container));
-			node.Add("plane2", Plane2.ExportYAML(container));
-			node.Add("plane3", Plane3.ExportYAML(container));
-			node.Add("plane4", Plane4.ExportYAML(container));
-			node.Add("plane5", Plane5.ExportYAML(container));
-			node.Add("m_Dampen", Dampen.ExportYAML(container));
-			node.Add("m_Bounce", Bounce.ExportYAML(container));
-			node.Add("m_EnergyLossOnCollision", EnergyLossOnCollision.ExportYAML(container));
-			node.Add("minKillSpeed", MinKillSpeed);
-			node.Add("maxKillSpeed", GetExportMaxKillSpeed(container.Version));
-			node.Add("radiusScale", GetExportRadiusScale(container.Version));
-			node.Add("collidesWith", GetExportCollidesWith(container.Version).ExportYAML(container));
-			node.Add("maxCollisionShapes", GetExportMaxCollisionShapes(container.Version));
-			node.Add("quality", (int)Quality);
-			node.Add("voxelSize", GetExportVoxelSize(container.Version));
-			node.Add("collisionMessages", CollisionMessages);
-			node.Add("collidesWithDynamic", GetExportCollidesWithDynamic(container.Version));
-			node.Add("interiorCollisions", InteriorCollisions);
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			node.Add(TypeName, (int)Type);
+			node.Add(CollisionModeName, (int)CollisionMode);
+			node.Add(ColliderForceName, ColliderForce);
+			node.Add(MultiplyColliderForceByParticleSizeName, MultiplyColliderForceByParticleSize);
+			node.Add(MultiplyColliderForceByParticleSpeedName, MultiplyColliderForceByParticleSpeed);
+			node.Add(MultiplyColliderForceByCollisionAngleName, GetExportMultiplyColliderForceByCollisionAngle(container.Version));
+			node.Add(Plane0Name, Plane0.ExportYAML(container));
+			node.Add(Plane1Name, Plane1.ExportYAML(container));
+			node.Add(Plane2Name, Plane2.ExportYAML(container));
+			node.Add(Plane3Name, Plane3.ExportYAML(container));
+			node.Add(Plane4Name, Plane4.ExportYAML(container));
+			node.Add(Plane5Name, Plane5.ExportYAML(container));
+			node.Add(DampenName, Dampen.ExportYAML(container));
+			node.Add(BounceName, Bounce.ExportYAML(container));
+			node.Add(EnergyLossOnCollisionName, EnergyLossOnCollision.ExportYAML(container));
+			node.Add(MinKillSpeedName, MinKillSpeed);
+			node.Add(MaxKillSpeedName, GetExportMaxKillSpeed(container.Version));
+			node.Add(RadiusScaleName, GetExportRadiusScale(container.Version));
+			node.Add(CollidesWithName, GetExportCollidesWith(container.Version).ExportYAML(container));
+			node.Add(MaxCollisionShapesName, GetExportMaxCollisionShapes(container.Version));
+			node.Add(QualityName, (int)Quality);
+			node.Add(VoxelSizeName, GetExportVoxelSize(container.Version));
+			node.Add(CollisionMessagesName, CollisionMessages);
+			node.Add(CollidesWithDynamicName, GetExportCollidesWithDynamic(container.Version));
+			node.Add(InteriorCollisionsName, InteriorCollisions);
 			return node;
 		}
 
 		private bool GetExportMultiplyColliderForceByCollisionAngle(Version version)
 		{
-			return IsReadColliderForce(version) ? MultiplyColliderForceByCollisionAngle : true;
+			return HasColliderForce(version) ? MultiplyColliderForceByCollisionAngle : true;
 		}
 		private float GetExportMaxKillSpeed(Version version)
 		{
-			return IsReadMaxKillSpeed(version) ? MaxKillSpeed : 10000;
+			return HasMaxKillSpeed(version) ? MaxKillSpeed : 10000;
 		}
 		private float GetExportRadiusScale(Version version)
 		{
-			return IsReadRadiusScale(version) ? RadiusScale : 1.0f;
+			return HasRadiusScale(version) ? RadiusScale : 1.0f;
 		}
 		private BitField GetExportCollidesWith(Version version)
 		{
-			return IsReadRadiusScale(version) ? CollidesWith : new BitField(uint.MaxValue);
+			return HasRadiusScale(version) ? CollidesWith : new BitField(uint.MaxValue);
 		}
 		private int GetExportMaxCollisionShapes(Version version)
 		{
-			return IsReadMaxCollisionShapes(version) ? MaxCollisionShapes : 256;
+			return HasMaxCollisionShapes(version) ? MaxCollisionShapes : 256;
 		}
 		private float GetExportVoxelSize(Version version)
 		{
-			return IsReadQuality(version) ? VoxelSize : 0.5f;
+			return HasQuality(version) ? VoxelSize : 0.5f;
 		}
 		private bool GetExportCollidesWithDynamic(Version version)
 		{
-			return IsReadCollidesWithDynamic(version) ? CollidesWithDynamic : true;
+			return HasCollidesWithDynamic(version) ? CollidesWithDynamic : true;
 		}
 
-		public ParticleSystemCollisionType Type { get; private set; }
-		public ParticleSystemCollisionMode CollisionMode { get; private set; }
-		public float ColliderForce { get; private set; }
-		public bool MultiplyColliderForceByParticleSize { get; private set; }
-		public bool MultiplyColliderForceByParticleSpeed { get; private set; }
-		public bool MultiplyColliderForceByCollisionAngle { get; private set; }
-		public float MinKillSpeed { get; private set; }
-		public float MaxKillSpeed { get; private set; }
+		public ParticleSystemCollisionType Type { get; set; }
+		public ParticleSystemCollisionMode CollisionMode { get; set; }
+		public float ColliderForce { get; set; }
+		public bool MultiplyColliderForceByParticleSize { get; set; }
+		public bool MultiplyColliderForceByParticleSpeed { get; set; }
+		public bool MultiplyColliderForceByCollisionAngle { get; set; }
+		public float MinKillSpeed { get; set; }
+		public float MaxKillSpeed { get; set; }
 		/// <summary>
 		/// ParticleRadius previously
 		/// </summary>
-		public float RadiusScale { get; private set; }
-		public int MaxCollisionShapes { get; private set; }
-		public ParticleSystemCollisionQuality Quality { get; private set; }
-		public float VoxelSize { get; private set; }
-		public bool CollisionMessages { get; private set; }
-		public bool CollidesWithDynamic { get; private set; }
-		public bool InteriorCollisions { get; private set; }
+		public float RadiusScale { get; set; }
+		public int MaxCollisionShapes { get; set; }
+		public ParticleSystemCollisionQuality Quality { get; set; }
+		public float VoxelSize { get; set; }
+		public bool CollisionMessages { get; set; }
+		public bool CollidesWithDynamic { get; set; }
+		public bool InteriorCollisions { get; set; }
+
+		public const string TypeName = "type";
+		public const string CollisionModeName = "collisionMode";
+		public const string ColliderForceName = "colliderForce";
+		public const string MultiplyColliderForceByParticleSizeName = "multiplyColliderForceByParticleSize";
+		public const string MultiplyColliderForceByParticleSpeedName = "multiplyColliderForceByParticleSpeed";
+		public const string MultiplyColliderForceByCollisionAngleName = "multiplyColliderForceByCollisionAngle";
+		public const string Plane0Name = "plane0";
+		public const string Plane1Name = "plane1";
+		public const string Plane2Name = "plane2";
+		public const string Plane3Name = "plane3";
+		public const string Plane4Name = "plane4";
+		public const string Plane5Name = "plane5";
+		public const string DampenName = "m_Dampen";
+		public const string BounceName = "m_Bounce";
+		public const string EnergyLossOnCollisionName = "m_EnergyLossOnCollision";
+		public const string MinKillSpeedName = "minKillSpeed";
+		public const string MaxKillSpeedName = "maxKillSpeed";
+		public const string RadiusScaleName = "radiusScale";
+		public const string CollidesWithName = "collidesWith";
+		public const string MaxCollisionShapesName = "maxCollisionShapes";
+		public const string QualityName = "quality";
+		public const string VoxelSizeName = "voxelSize";
+		public const string CollisionMessagesName = "collisionMessages";
+		public const string CollidesWithDynamicName = "collidesWithDynamic";
+		public const string InteriorCollisionsName = "interiorCollisions";
 
 		public PPtr<Transform> Plane0;
 		public PPtr<Transform> Plane1;

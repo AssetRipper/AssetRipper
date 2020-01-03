@@ -8,49 +8,31 @@ namespace uTinyRipper.Classes.Shaders
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool IsReadLocalKeywords(Version version)
-		{
-			return version.IsGreaterEqual(2019);
-		}
+		public static bool HasLocalKeywords(Version version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool IsReadUAVParameters(Version version)
-		{
-			return Shader.IsSerialized(version);
-		}
+		public static bool HasUAVParameters(Version version) => Shader.IsSerialized(version);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool IsReadSamplerParameters(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
+		public static bool HasSamplerParameters(Version version) => version.IsGreaterEqual(2017, 1);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsReadMultiSampled(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
+		public static bool HasMultiSampled(Version version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		private static bool IsReadUnknown4(Version version)
-		{
-			return Shader.IsSerialized(version);
-		}
+		private static bool HasUnknown4(Version version) => Shader.IsSerialized(version);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		private static bool IsAllParamArgs(Version version)
-		{
-			return Shader.IsSerialized(version);
-		}
+		private static bool IsAllParamArgs(Version version) => Shader.IsSerialized(version);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		private static bool IsReadStructParameters(Version version)
+		private static bool HasStructParameters(Version version)
 		{
 			return version.IsGreaterEqual(2017, 3);
 		}
@@ -69,15 +51,15 @@ namespace uTinyRipper.Classes.Shaders
 			{
 				return 201608170;
 			}
-			else if (version.IsGreaterEqual(5, 6) && version.IsLess(2017, 3))
+			else if (version.IsLess(2017, 3))
 			{
 				return 201609010;
 			}
-			else if (version.IsLessEqual(2018, 1))
+			else if (version.IsLess(2018, 2))
 			{
 				return 201708220;
 			}
-			else if (version.IsLessEqual(2018, 3))
+			else if (version.IsLess(2019))
 			{
 				return 201802150;
 			}
@@ -99,18 +81,18 @@ namespace uTinyRipper.Classes.Shaders
 			int unknown1 = reader.ReadInt32();
 			int unknown2 = reader.ReadInt32();
 			int unknown3 = reader.ReadInt32();
-			if (IsReadUnknown4(reader.Version))
+			if (HasUnknown4(reader.Version))
 			{
 				int unknown4 = reader.ReadInt32();
 			}
 
-			m_globalKeywords = reader.ReadStringArray();
-			if (IsReadLocalKeywords(reader.Version))
+			GlobalKeywords = reader.ReadStringArray();
+			if (HasLocalKeywords(reader.Version))
 			{
-				m_localKeywords = reader.ReadStringArray();
+				LocalKeywords = reader.ReadStringArray();
 			}
-			m_programData = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			ProgramData = reader.ReadByteArray();
+			reader.AlignStream();
 
 			int sourceMap = reader.ReadInt32();
 			int bindCount = reader.ReadInt32();
@@ -128,18 +110,21 @@ namespace uTinyRipper.Classes.Shaders
 			List<VectorParameter> vectors = new List<VectorParameter>();
 			List<MatrixParameter> matrices = new List<MatrixParameter>();
 			List<TextureParameter> textures = new List<TextureParameter>();
+			List<VectorParameter> structVectors = new List<VectorParameter>();
+			List<MatrixParameter> structMatrices = new List<MatrixParameter>();
 			List<BufferBinding> buffers = new List<BufferBinding>();
-			List<UAVParameter> uavs = IsReadUAVParameters(reader.Version) ? new List<UAVParameter>() : null;
-			List<SamplerParameter> samplers = IsReadSamplerParameters(reader.Version) ? new List<SamplerParameter>() : null;
+			List<UAVParameter> uavs = HasUAVParameters(reader.Version) ? new List<UAVParameter>() : null;
+			List<SamplerParameter> samplers = HasSamplerParameters(reader.Version) ? new List<SamplerParameter>() : null;
 			List<BufferBinding> constBindings = new List<BufferBinding>();
-			List<StructParameter> structs = IsReadStructParameters(reader.Version) ? new List<StructParameter>() : null;
+			List<StructParameter> structs = new List<StructParameter>();
 
 			int paramGroupCount = reader.ReadInt32();
-			m_constantBuffers = new ConstantBuffer[paramGroupCount - 1];
+			ConstantBuffers = new ConstantBuffer[paramGroupCount - 1];
 			for (int i = 0; i < paramGroupCount; i++)
 			{
 				vectors.Clear();
 				matrices.Clear();
+				structs.Clear();
 
 				string name = reader.ReadString();
 				int usedSize = reader.ReadInt32();
@@ -149,7 +134,7 @@ namespace uTinyRipper.Classes.Shaders
 					string paramName = reader.ReadString();
 					ShaderParamType paramType = (ShaderParamType)reader.ReadInt32();
 					int rows = reader.ReadInt32();
-					int dimension = reader.ReadInt32();
+					int columns = reader.ReadInt32();
 					bool isMatrix = reader.ReadInt32() > 0;
 					int arraySize = reader.ReadInt32();
 					int index = reader.ReadInt32();
@@ -157,37 +142,26 @@ namespace uTinyRipper.Classes.Shaders
 					if (isMatrix)
 					{
 						MatrixParameter matrix = IsAllParamArgs(reader.Version) ?
-							new MatrixParameter(paramName, paramType, index, arraySize, rows) :
-							new MatrixParameter(paramName, paramType, index, rows);
+							new MatrixParameter(paramName, paramType, index, arraySize, rows, columns) :
+							new MatrixParameter(paramName, paramType, index, rows, columns);
 						matrices.Add(matrix);
 					}
 					else
 					{
 						VectorParameter vector = IsAllParamArgs(reader.Version) ?
-							new VectorParameter(paramName, paramType, index, arraySize, dimension) :
-							new VectorParameter(paramName, paramType, index, dimension);
+							new VectorParameter(paramName, paramType, index, arraySize, columns) :
+							new VectorParameter(paramName, paramType, index, columns);
 						vectors.Add(vector);
 					}
 				}
 
-				if (i == 0)
-				{
-					m_vectorParameters = vectors.ToArray();
-					m_matrixParameters = matrices.ToArray();
-				}
-				else
-				{
-					ConstantBuffer constBuffer = new ConstantBuffer(name, matrices.ToArray(), vectors.ToArray(), usedSize);
-					m_constantBuffers[i - 1] = constBuffer;
-				}
-
-				if (IsReadStructParameters(reader.Version))
+				if (HasStructParameters(reader.Version))
 				{
 					int structCount = reader.ReadInt32();
 					for (int j = 0; j < structCount; j++)
 					{
-						vectors.Clear();
-						matrices.Clear();
+						structVectors.Clear();
+						structMatrices.Clear();
 
 						string structName = reader.ReadString();
 						int index = reader.ReadInt32();
@@ -201,7 +175,7 @@ namespace uTinyRipper.Classes.Shaders
 							paramName = $"{structName}.{paramName}";
 							ShaderParamType paramType = (ShaderParamType)reader.ReadInt32();
 							int rows = reader.ReadInt32();
-							int dimension = reader.ReadInt32();
+							int columns = reader.ReadInt32();
 							bool isMatrix = reader.ReadInt32() > 0;
 							int vectorArraySize = reader.ReadInt32();
 							int paramIndex = reader.ReadInt32();
@@ -209,22 +183,33 @@ namespace uTinyRipper.Classes.Shaders
 							if (isMatrix)
 							{
 								MatrixParameter matrix = IsAllParamArgs(reader.Version) ?
-									new MatrixParameter(paramName, paramType, paramIndex, vectorArraySize, rows) :
-									new MatrixParameter(paramName, paramType, paramIndex, rows);
-								matrices.Add(matrix);
+									new MatrixParameter(paramName, paramType, paramIndex, vectorArraySize, rows, columns) :
+									new MatrixParameter(paramName, paramType, paramIndex, rows, columns);
+								structMatrices.Add(matrix);
 							}
 							else
 							{
 								VectorParameter vector = IsAllParamArgs(reader.Version) ?
-									new VectorParameter(paramName, paramType, paramIndex, vectorArraySize, dimension) :
-									new VectorParameter(paramName, paramType, paramIndex, dimension);
-								vectors.Add(vector);
+									new VectorParameter(paramName, paramType, paramIndex, vectorArraySize, columns) :
+									new VectorParameter(paramName, paramType, paramIndex, columns);
+								structVectors.Add(vector);
 							}
 						}
 
-						StructParameter @struct = new StructParameter(structName, index, arraySize, structSize, vectors.ToArray(), matrices.ToArray());
+						StructParameter @struct = new StructParameter(structName, index, arraySize, structSize, structVectors.ToArray(), structMatrices.ToArray());
 						structs.Add(@struct);
 					}
+				}
+				if (i == 0)
+				{
+					VectorParameters = vectors.ToArray();
+					MatrixParameters = matrices.ToArray();
+					StructParameters = structs.ToArray();
+				}
+				else
+				{
+					ConstantBuffer constBuffer = new ConstantBuffer(name, matrices.ToArray(), vectors.ToArray(), structs.ToArray(), usedSize);
+					ConstantBuffers[i - 1] = constBuffer;
 				}
 			}
 
@@ -239,14 +224,22 @@ namespace uTinyRipper.Classes.Shaders
 				if (type == 0)
 				{
 					TextureParameter texture;
-					if (IsReadMultiSampled(reader.Version))
+					if (HasMultiSampled(reader.Version))
 					{
-						bool isMultiSampled = reader.ReadUInt32() > 0;
-						texture = new TextureParameter(name, index, isMultiSampled, extraValue);
+						uint textureExtraValue = reader.ReadUInt32();
+						bool isMultiSampled = (textureExtraValue & 1) == 1;
+						byte dimension = (byte)(textureExtraValue >> 1);
+						texture = new TextureParameter(name, index, dimension, extraValue, isMultiSampled);
 					}
 					else
 					{
-						texture = new TextureParameter(name, index, extraValue);
+						byte dimension = unchecked((byte)extraValue);
+						int samplerIndex = extraValue >> 8;
+						if (samplerIndex == 0xFFFFFF)
+						{
+							samplerIndex = -1;
+						}
+						texture = new TextureParameter(name, index, dimension, samplerIndex);
 					}
 					textures.Add(texture);
 				}
@@ -260,12 +253,12 @@ namespace uTinyRipper.Classes.Shaders
 					BufferBinding buffer = new BufferBinding(name, index);
 					buffers.Add(buffer);
 				}
-				else if (type == 3 && IsReadUAVParameters(reader.Version))
+				else if (type == 3 && HasUAVParameters(reader.Version))
 				{
 					UAVParameter uav = new UAVParameter(name, index, extraValue);
 					uavs.Add(uav);
 				}
-				else if (type == 4 && IsReadSamplerParameters(reader.Version))
+				else if (type == 4 && HasSamplerParameters(reader.Version))
 				{
 					SamplerParameter sampler = new SamplerParameter((uint)extraValue, index);
 					samplers.Add(sampler);
@@ -275,33 +268,33 @@ namespace uTinyRipper.Classes.Shaders
 					throw new Exception($"Unupported parameter type {type}");
 				}
 			}
-			m_textureParameters = textures.ToArray();
-			m_bufferParameters = buffers.ToArray();
-			if (IsReadUAVParameters(reader.Version))
+			TextureParameters = textures.ToArray();
+			BufferParameters = buffers.ToArray();
+			if (HasUAVParameters(reader.Version))
 			{
-				m_UAVParameters = uavs.ToArray();
+				UAVParameters = uavs.ToArray();
 			}
-			if (IsReadSamplerParameters(reader.Version))
+			if (HasSamplerParameters(reader.Version))
 			{
-				m_samplerParameters = samplers.ToArray();
+				SamplerParameters = samplers.ToArray();
 			}
-			m_constantBufferBindings = constBindings.ToArray();
-			if (IsReadStructParameters(reader.Version))
+			ConstantBufferBindings = constBindings.ToArray();
+			if (HasStructParameters(reader.Version))
 			{
-				m_structParameters = structs.ToArray();
+				StructParameters = structs.ToArray();
 			}
 		}
 
 		public void Export(ShaderWriter writer, ShaderType type)
 		{
-			if (GlobalKeywords.Count > 0)
+			if (GlobalKeywords.Length > 0)
 			{
 				writer.Write("Keywords { ");
 				foreach (string keyword in GlobalKeywords)
 				{
 					writer.Write("\"{0}\" ", keyword);
 				}
-				if (IsReadLocalKeywords(writer.Version))
+				if (HasLocalKeywords(writer.Version))
 				{
 					foreach (string keyword in LocalKeywords)
 					{
@@ -312,47 +305,35 @@ namespace uTinyRipper.Classes.Shaders
 				writer.WriteIndent(5);
 			}
 
+#warning TODO: convertion (DX to HLSL)
 			writer.Write("\"!!{0}", ProgramType.ToShaderName(writer.Platform, type));
-			if (m_programData.Length > 0)
+			if (ProgramData.Length > 0)
 			{
 				writer.Write("\n");
 				writer.WriteIndent(5);
 
-				writer.WriteShaderData(ProgramType.ToGPUPlatform(writer.Platform), m_programData);
+				writer.WriteShaderData(ref this);
 			}
 			writer.Write('"');
 		}
 
-		public ShaderGpuProgramType ProgramType { get; private set; }
+		public ShaderGpuProgramType ProgramType { get; set; }
 		/// <summary>
 		/// Keywords previously
 		/// </summary>
-		public IReadOnlyList<string> GlobalKeywords => m_globalKeywords;
-		public IReadOnlyList<string> LocalKeywords => m_localKeywords;
-		public IReadOnlyList<byte> ProgramData => m_programData;
-		public IReadOnlyList<VectorParameter> VectorParameters => m_vectorParameters;
-		public IReadOnlyList<MatrixParameter> MatrixParameters => m_matrixParameters;
-		public IReadOnlyList<TextureParameter> TextureParameters => m_textureParameters;
-		public IReadOnlyList<BufferBinding> BufferParameters => m_bufferParameters;
-		public IReadOnlyList<UAVParameter> UAVParameters => m_UAVParameters;
-		public IReadOnlyList<SamplerParameter> SamplerParameters => m_samplerParameters;
-		public IReadOnlyList<ConstantBuffer> ConstantBuffers => m_constantBuffers;
-		public IReadOnlyList<BufferBinding> ConstantBufferBindings => m_constantBufferBindings;
-		public IReadOnlyList<StructParameter> StructParameters => m_structParameters;
+		public string[] GlobalKeywords { get; set; }
+		public string[] LocalKeywords { get; set; }
+		public byte[] ProgramData { get; set; }
+		public VectorParameter[] VectorParameters { get; set; }
+		public MatrixParameter[] MatrixParameters { get; set; }
+		public TextureParameter[] TextureParameters { get; set; }
+		public BufferBinding[] BufferParameters { get; set; }
+		public UAVParameter[] UAVParameters { get; set; }
+		public SamplerParameter[] SamplerParameters { get; set; }
+		public ConstantBuffer[] ConstantBuffers { get; set; }
+		public BufferBinding[] ConstantBufferBindings { get; set; }
+		public StructParameter[] StructParameters { get; set; }
 
 		public ParserBindChannels BindChannels;
-
-		private string[] m_globalKeywords;
-		private string[] m_localKeywords;
-		private byte[] m_programData;
-		private VectorParameter[] m_vectorParameters;
-		private MatrixParameter[] m_matrixParameters;
-		private TextureParameter[] m_textureParameters;
-		private BufferBinding[] m_bufferParameters;
-		private UAVParameter[] m_UAVParameters;
-		private SamplerParameter[] m_samplerParameters;
-		private ConstantBuffer[] m_constantBuffers;
-		private BufferBinding[] m_constantBufferBindings;
-		private StructParameter[] m_structParameters;
 	}
 }

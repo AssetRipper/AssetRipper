@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes.AnimatorControllers.Editor;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.AnimatorControllers
 {
@@ -20,18 +20,15 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadConstantArray(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		public static bool HasConstantArray(Version version) => version.IsGreaterEqual(5);
 
 		public void Read(AssetReader reader)
 		{
-			m_stateConstantArray = reader.ReadAssetArray<OffsetPtr<StateConstant>>();
-			m_anyStateTransitionConstantArray = reader.ReadAssetArray<OffsetPtr<TransitionConstant>>();
-			if(IsReadConstantArray(reader.Version))
+			StateConstantArray = reader.ReadAssetArray<OffsetPtr<StateConstant>>();
+			AnyStateTransitionConstantArray = reader.ReadAssetArray<OffsetPtr<TransitionConstant>>();
+			if (HasConstantArray(reader.Version))
 			{
-				m_selectorStateConstantArray = reader.ReadAssetArray<OffsetPtr<SelectorStateConstant>>();
+				SelectorStateConstantArray = reader.ReadAssetArray<OffsetPtr<SelectorStateConstant>>();
 			}
 
 			DefaultState = (int)reader.ReadUInt32();
@@ -45,15 +42,15 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public PPtr<AnimatorTransition>[] CreateEntryTransitions(VirtualSerializedFile file, Parameters parameters)
 		{
-			if (IsReadConstantArray(parameters.Version))
+			if (HasConstantArray(parameters.Version))
 			{
 				foreach (OffsetPtr<SelectorStateConstant> selectorPtr in SelectorStateConstantArray)
 				{
 					SelectorStateConstant selector = selectorPtr.Instance;
 					if (selector.FullPathID == parameters.ID && selector.IsEntry)
 					{
-						PPtr<AnimatorTransition>[] transitions = new PPtr<AnimatorTransition>[selector.TransitionConstantArray.Count - 1];
-						for(int i = 0; i < selector.TransitionConstantArray.Count - 1; i++)
+						PPtr<AnimatorTransition>[] transitions = new PPtr<AnimatorTransition>[selector.TransitionConstantArray.Length - 1];
+						for(int i = 0; i < selector.TransitionConstantArray.Length - 1; i++)
 						{
 							SelectorTransitionConstant selectorTrans = selector.TransitionConstantArray[i].Instance;
 							AnimatorTransition.Parameters transParameters = new AnimatorTransition.Parameters
@@ -71,23 +68,19 @@ namespace uTinyRipper.Classes.AnimatorControllers
 					}
 				}
 			}
-			return new PPtr<AnimatorTransition>[0];
+			return Array.Empty<PPtr<AnimatorTransition>>();
 		}
 
 		/// <summary>
 		/// All states except Entry and Exit 
 		/// </summary>
-		public IReadOnlyList<OffsetPtr<StateConstant>> StateConstantArray => m_stateConstantArray;
-		public IReadOnlyList<OffsetPtr<TransitionConstant>> AnyStateTransitionConstantArray => m_anyStateTransitionConstantArray;
+		public OffsetPtr<StateConstant>[] StateConstantArray { get; set; }
+		public OffsetPtr<TransitionConstant>[] AnyStateTransitionConstantArray { get; set; }
 		/// <summary>
 		/// Entry [StateMachineIndex * 2 + 0] and Exit [StateMachineIndex * 2 + 1] pair for each SubStateMachine
 		/// </summary>
-		public IReadOnlyList<OffsetPtr<SelectorStateConstant>> SelectorStateConstantArray => m_selectorStateConstantArray;
-		public int DefaultState { get; private set; }
-		public uint MotionSetCount { get; private set; }
-
-		private OffsetPtr<StateConstant>[] m_stateConstantArray;
-		private OffsetPtr<TransitionConstant>[] m_anyStateTransitionConstantArray;
-		private OffsetPtr<SelectorStateConstant>[] m_selectorStateConstantArray;
+		public OffsetPtr<SelectorStateConstant>[] SelectorStateConstantArray { get; set; }
+		public int DefaultState { get; set; }
+		public uint MotionSetCount { get; set; }
 	}
 }

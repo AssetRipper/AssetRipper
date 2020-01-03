@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace uTinyRipper.Classes.Shaders
 {
 	public struct StructParameter : IAssetReadable
@@ -11,8 +9,8 @@ namespace uTinyRipper.Classes.Shaders
 			Index = index;
 			ArraySize = arraySize;
 			StructSize = structSize;
-			m_vectorMembers = vectors;
-			m_matrixMembers = matrices;
+			VectorMembers = vectors;
+			MatrixMembers = matrices;
 		}
 
 		public void Read(AssetReader reader)
@@ -21,21 +19,18 @@ namespace uTinyRipper.Classes.Shaders
 			Index = reader.ReadInt32();
 			ArraySize = reader.ReadInt32();
 			StructSize = reader.ReadInt32();
-			m_vectorMembers = reader.ReadAssetArray<VectorParameter>();
-			reader.AlignStream(AlignType.Align4);
-			m_matrixMembers = reader.ReadAssetArray<MatrixParameter>();
-			reader.AlignStream(AlignType.Align4);
+			VectorMembers = reader.ReadAssetArray<VectorParameter>();
+			reader.AlignStream();
+			MatrixMembers = reader.ReadAssetArray<MatrixParameter>();
+			reader.AlignStream();
 		}
 
-		public string Name { get; private set; }
-		public int NameIndex { get; private set; }
-		public int Index { get; private set; }
-		public int ArraySize { get; private set; }
-		public int StructSize { get; private set; }
-		public IReadOnlyList<VectorParameter> VectorMembers => m_vectorMembers;
-		public IReadOnlyList<MatrixParameter> MatrixMembers => m_matrixMembers;
-
-		private VectorParameter[] m_vectorMembers;
-		private MatrixParameter[] m_matrixMembers;
+		public string Name { get; set; }
+		public int NameIndex { get; set; }
+		public int Index { get; set; }
+		public int ArraySize { get; set; }
+		public int StructSize { get; set; }
+		public VectorParameter[] VectorMembers { get; set; }
+		public MatrixParameter[] MatrixMembers { get; set; }
 	}
 }

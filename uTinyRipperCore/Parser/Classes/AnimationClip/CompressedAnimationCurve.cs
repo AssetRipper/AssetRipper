@@ -1,4 +1,5 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimationClips
@@ -23,7 +24,7 @@ namespace uTinyRipper.Classes.AnimationClips
 				Quaternionf rotation = rotations[i];
 				Quaternionf inSlope = new Quaternionf(slopes[j - 4], slopes[j - 3], slopes[j - 2], slopes[j - 1]);
 				Quaternionf outSlope = new Quaternionf(slopes[j + 0], slopes[j + 1], slopes[j + 2], slopes[j + 3]);
-				keyframes[i] = new KeyframeTpl<Quaternionf>(time, rotation, inSlope, outSlope, Quaternionf.DefaultWeight);
+				keyframes[i] = new KeyframeTpl<Quaternionf>(time, rotation, inSlope, outSlope, KeyframeTpl<Quaternionf>.DefaultQuaternionWeight);
 			}
 			AnimationCurveTpl<Quaternionf> curve = new AnimationCurveTpl<Quaternionf>(keyframes, PreInfinity, PostInfinity);
 			return new QuaternionCurve(Path, curve);
@@ -42,18 +43,25 @@ namespace uTinyRipper.Classes.AnimationClips
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Path", Path);
-			node.Add("m_Times", Times.ExportYAML(container));
-			node.Add("m_Values", Values.ExportYAML(container));
-			node.Add("m_Slopes", Slopes.ExportYAML(container));
-			node.Add("m_PreInfinity", (int)PreInfinity);
-			node.Add("m_PostInfinity", (int)PostInfinity);
+			node.Add(PathName, Path);
+			node.Add(TimesName, Times.ExportYAML(container));
+			node.Add(ValuesName, Values.ExportYAML(container));
+			node.Add(SlopesName, Slopes.ExportYAML(container));
+			node.Add(PreInfinityName, (int)PreInfinity);
+			node.Add(PostInfinityName, (int)PostInfinity);
 			return node;
 		}
 
-		public string Path { get; private set; }
-		public CurveLoopTypes PreInfinity { get; private set; }
-		public CurveLoopTypes PostInfinity { get; private set; }
+		public string Path { get; set; }
+		public CurveLoopTypes PreInfinity { get; set; }
+		public CurveLoopTypes PostInfinity { get; set; }
+
+		public const string PathName = "m_Path";
+		public const string TimesName = "m_Times";
+		public const string ValuesName = "m_Values";
+		public const string SlopesName = "m_Slopes";
+		public const string PreInfinityName = "m_PreInfinity";
+		public const string PostInfinityName = "m_PostInfinity";
 
 		public PackedIntVector Times;
 		public PackedQuatVector Values;

@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.ParticleSystemForceFields;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {
@@ -20,14 +19,14 @@ namespace uTinyRipper.Classes
 			Parameters.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (Object asset in Parameters.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in context.FetchDependencies(Parameters, ParametersName))
 			{
 				yield return asset;
 			}

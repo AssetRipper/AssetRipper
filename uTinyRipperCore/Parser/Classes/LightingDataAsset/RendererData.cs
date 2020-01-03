@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.LightingDataAssets
 {
@@ -10,10 +10,7 @@ namespace uTinyRipper.Classes.LightingDataAssets
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool IsReadExplicitProbeSetHash(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
+		public static bool HasExplicitProbeSetHash(Version version) => version.IsGreaterEqual(2018, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -24,15 +21,15 @@ namespace uTinyRipper.Classes.LightingDataAssets
 			LightmapIndexDynamic = reader.ReadUInt16();
 			LightmapST.Read(reader);
 			LightmapSTDynamic.Read(reader);
-			if (IsReadExplicitProbeSetHash(reader.Version))
+			if (HasExplicitProbeSetHash(reader.Version))
 			{
 				ExplicitProbeSetHash.Read(reader);
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return UVMesh.FetchDependency(file, isLog, () => nameof(RendererData), UvMeshName);
+			yield return context.FetchDependency(UVMesh, UvMeshName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -45,15 +42,15 @@ namespace uTinyRipper.Classes.LightingDataAssets
 			node.Add(LightmapIndexDynamicName, LightmapIndexDynamic);
 			node.Add(LightmapSTName, LightmapST.ExportYAML(container));
 			node.Add(LightmapSTDynamicName, LightmapSTDynamic.ExportYAML(container));
-			if (IsReadExplicitProbeSetHash(container.ExportVersion))
+			if (HasExplicitProbeSetHash(container.ExportVersion))
 			{
 				node.Add(ExplicitProbeSetHashName, ExplicitProbeSetHash.ExportYAML(container));
 			}
 			return node;
 		}
 
-		public ushort LightmapIndex { get; private set; }
-		public ushort LightmapIndexDynamic { get; private set; }
+		public ushort LightmapIndex { get; set; }
+		public ushort LightmapIndexDynamic { get; set; }
 
 		public const string UvMeshName = "uvMesh";
 		public const string TerrainDynamicUVSTName = "terrainDynamicUVST";

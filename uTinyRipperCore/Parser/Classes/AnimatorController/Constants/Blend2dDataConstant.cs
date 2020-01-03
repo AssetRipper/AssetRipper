@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
@@ -9,11 +8,11 @@ namespace uTinyRipper.Classes.AnimatorControllers
 	{
 		public void Read(AssetReader reader)
 		{
-			m_childPositionArray = reader.ReadAssetArray<Vector2f>();
-			m_childMagnitudeArray = reader.ReadSingleArray();
-			m_childPairVectorArray = reader.ReadAssetArray<Vector2f>();
-			m_childPairAvgMagInvArray = reader.ReadSingleArray();
-			m_childNeighborListArray = reader.ReadAssetArray<MotionNeighborList>();
+			ChildPositionArray = reader.ReadAssetArray<Vector2f>();
+			ChildMagnitudeArray = reader.ReadSingleArray();
+			ChildPairVectorArray = reader.ReadAssetArray<Vector2f>();
+			ChildPairAvgMagInvArray = reader.ReadSingleArray();
+			ChildNeighborListArray = reader.ReadAssetArray<MotionNeighborList>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -21,16 +20,10 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 
-		public IReadOnlyList<Vector2f> ChildPositionArray => m_childPositionArray;
-		public IReadOnlyList<float> ChildMagnitudeArray => m_childMagnitudeArray;
-		public IReadOnlyList<Vector2f> ChildPairVectorArray => m_childPairVectorArray;
-		public IReadOnlyList<float> ChildPairAvgMagInvArray => m_childPairAvgMagInvArray;
-		public IReadOnlyList<MotionNeighborList> ChildNeighborListArray => m_childNeighborListArray;
-
-		private Vector2f[] m_childPositionArray;
-		private float[] m_childMagnitudeArray;
-		private Vector2f[] m_childPairVectorArray;
-		private float[] m_childPairAvgMagInvArray;
-		private MotionNeighborList[] m_childNeighborListArray;
+		public Vector2f[] ChildPositionArray { get; set; }
+		public float[] ChildMagnitudeArray { get; set; }
+		public Vector2f[] ChildPairVectorArray { get; set; }
+		public float[] ChildPairAvgMagInvArray { get; set; }
+		public MotionNeighborList[] ChildNeighborListArray { get; set; }
 	}
 }

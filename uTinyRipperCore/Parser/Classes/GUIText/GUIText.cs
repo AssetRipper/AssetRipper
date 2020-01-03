@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Fonts;
 using uTinyRipper.Classes.GUITexts;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -14,36 +13,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 1.5.0 and greater
-		/// </summary>
-		public static bool IsReadPixelOffset(Version version)
-		{
-			return version.IsGreaterEqual(1, 5);
-		}
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		public static bool IsReadFontSize(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
-		/// <summary>
-		/// 4.2.0 and greater
-		/// </summary>
-		public static bool IsReadColor(Version version)
-		{
-			return version.IsGreaterEqual(4, 2);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadRichText(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(1, 5))
 			{
@@ -54,6 +24,23 @@ namespace uTinyRipper.Classes
 			return 2;
 		}
 
+		/// <summary>
+		/// 1.5.0 and greater
+		/// </summary>
+		public static bool HasPixelOffset(Version version) => version.IsGreaterEqual(1, 5);
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool HasFontSize(Version version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// 4.2.0 and greater
+		/// </summary>
+		public static bool HasColor(Version version) => version.IsGreaterEqual(4, 2);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasRichText(Version version) => version.IsGreaterEqual(4);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -61,7 +48,7 @@ namespace uTinyRipper.Classes
 			Text = reader.ReadString();
 			Anchor = (TextAnchor)reader.ReadInt16();
 			Alignment = (TextAlignment)reader.ReadInt16();
-			if (IsReadPixelOffset(reader.Version))
+			if (HasPixelOffset(reader.Version))
 			{
 				PixelOffset.Read(reader);
 			}
@@ -69,37 +56,37 @@ namespace uTinyRipper.Classes
 			TabSize = reader.ReadSingle();
 			Font.Read(reader);
 			Material.Read(reader);
-			if (IsReadFontSize(reader.Version))
+			if (HasFontSize(reader.Version))
 			{
 				FontSize = reader.ReadInt32();
 				FontStyle = (FontStyle)reader.ReadInt32();
 			}
-			if (IsReadColor(reader.Version))
+			if (HasColor(reader.Version))
 			{
 				Color.Read(reader);
 			}
 			PixelCorrect = reader.ReadBoolean();
-			if (IsReadRichText(reader.Version))
+			if (HasRichText(reader.Version))
 			{
 				RichText = reader.ReadBoolean();
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return Font.FetchDependency(file, isLog, ToLogString, FontName);
-			yield return Material.FetchDependency(file, isLog, ToLogString, MaterialName);
+			yield return context.FetchDependency(Font, FontName);
+			yield return context.FetchDependency(Material, MaterialName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TextName, Text);
 			node.Add(AnchorName, (short)Anchor);
 			node.Add(AlignmentName, (short)Alignment);
@@ -118,22 +105,22 @@ namespace uTinyRipper.Classes
 
 		private ColorRGBA32 GetColor(Version version)
 		{
-			return IsReadFontSize(version) ? Color : ColorRGBA32.White;
+			return HasFontSize(version) ? Color : ColorRGBA32.White;
 		}
 		private bool GetRichText(Version version)
 		{
-			return IsReadRichText(version) ? RichText : true;
+			return HasRichText(version) ? RichText : true;
 		}
 
-		public string Text { get; private set; }
-		public TextAnchor Anchor { get; private set; }
-		public TextAlignment Alignment { get; private set; }
-		public float LineSpacing { get; private set; }
-		public float TabSize { get; private set; }
-		public int FontSize { get; private set; }
-		public FontStyle FontStyle { get; private set; }
-		public bool PixelCorrect { get; private set; }
-		public bool RichText { get; private set; }
+		public string Text { get; set; }
+		public TextAnchor Anchor { get; set; }
+		public TextAlignment Alignment { get; set; }
+		public float LineSpacing { get; set; }
+		public float TabSize { get; set; }
+		public int FontSize { get; set; }
+		public FontStyle FontStyle { get; set; }
+		public bool PixelCorrect { get; set; }
+		public bool RichText { get; set; }
 
 		public const string TextName = "m_Text";
 		public const string AnchorName = "m_Anchor";

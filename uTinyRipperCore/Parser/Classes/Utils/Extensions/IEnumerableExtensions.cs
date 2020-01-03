@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.GameObjects;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
@@ -22,16 +23,6 @@ namespace uTinyRipper.Classes
 			return -1;
 		}
 
-		public static YAMLNode ExportYAML3(this IEnumerable<Vector4f> _this, IExportContainer container)
-		{
-			YAMLSequenceNode node = new YAMLSequenceNode();
-			foreach (Vector4f vector in _this)
-			{
-				node.Add(vector.ExportYAML3(container));
-			}
-			return node;
-		}
-		
 		public static YAMLNode ExportYAML(this IEnumerable<Float> _this, IExportContainer container)
 		{
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Flow);
@@ -53,12 +44,6 @@ namespace uTinyRipper.Classes
 				}
 			}
 			return node;
-		}
-		
-		public static YAMLNode ExportYAML<T>(this T[][] _this, IExportContainer container)
-			where T: IYAMLExportable
-		{
-			return ((IEnumerable<IEnumerable<T>>)_this).ExportYAML(container);
 		}
 	}
 }

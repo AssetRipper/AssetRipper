@@ -85,7 +85,7 @@ namespace uTinyRipper
 
 		public static SmartStream OpenRead(string path)
 		{
-			return new SmartStream(FileMultiStream.OpenRead(path), SmartStreamType.File);
+			return new SmartStream(MultiFileStream.OpenRead(path), SmartStreamType.File);
 		}
 
 		public static SmartStream CreateTemp()
@@ -104,6 +104,11 @@ namespace uTinyRipper
 			return new SmartStream(new MemoryStream(buffer), SmartStreamType.Memory);
 		}
 
+		public static SmartStream CreateMemory(byte[] buffer, int offset, int size)
+		{
+			return new SmartStream(new MemoryStream(buffer, offset, size), SmartStreamType.Memory);
+		}
+
 		public void Assign(SmartStream source)
 		{
 			Dispose();
@@ -114,7 +119,7 @@ namespace uTinyRipper
 			m_isDisposed = source.m_isDisposed;
 			if (m_isDisposed)
 			{
-				if(!IsNull)
+				if (!IsNull)
 				{
 					throw new ObjectDisposedException(nameof(source));
 				}

@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Shaders
@@ -8,26 +8,20 @@ namespace uTinyRipper.Classes.Shaders
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool IsReadMessageDetails(Version version)
-		{
-			return version.IsGreaterEqual(3, 5);
-		}
+		public static bool HasMessageDetails(Version version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool IsReadFile(Version version)
-		{
-			return version.IsGreaterEqual(4, 5);
-		}
+		public static bool HasFile(Version version) => version.IsGreaterEqual(4, 5);
 
 		public void Read(AssetReader reader)
 		{
 			Message = reader.ReadString();
-			if (IsReadMessageDetails(reader.Version))
+			if (HasMessageDetails(reader.Version))
 			{
 				MessageDetails = reader.ReadString();
 			}
-			if (IsReadFile(reader.Version))
+			if (HasFile(reader.Version))
 			{
 				File = reader.ReadString();
 				CompilerPlatform = (Platform)reader.ReadInt32();
@@ -52,20 +46,20 @@ namespace uTinyRipper.Classes.Shaders
 
 		private string GetMessageDetails(Version version)
 		{
-			return IsReadMessageDetails(version) ? MessageDetails : string.Empty;
+			return HasMessageDetails(version) ? MessageDetails : string.Empty;
 		}
 		private string GetFile(Version version)
 		{
-			return IsReadFile(version) ? File : string.Empty;
+			return HasFile(version) ? File : string.Empty;
 		}
 
-		public string Message { get; private set; }
-		public string MessageDetails { get; private set; }
-		public string File { get; private set; }
-		public Platform CompilerPlatform { get; private set; }
-		public string Line { get; private set; }
-		public bool Warning { get; private set; }
-		public bool ProgramError { get; private set; }
+		public string Message { get; set; }
+		public string MessageDetails { get; set; }
+		public string File { get; set; }
+		public Platform CompilerPlatform { get; set; }
+		public string Line { get; set; }
+		public bool Warning { get; set; }
+		public bool ProgramError { get; set; }
 
 		public const string MessageName = "message";
 		public const string MessageDetailsName = "messageDetails";

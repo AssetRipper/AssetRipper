@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Avatars
@@ -8,10 +8,7 @@ namespace uTinyRipper.Classes.Avatars
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool IsVector3(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
+		public static bool IsVector3(Version version) => version.IsGreaterEqual(5, 4);
 
 		public void Read(AssetReader reader)
 		{
@@ -19,7 +16,7 @@ namespace uTinyRipper.Classes.Avatars
 			PostQ.Read(reader);
 			if (IsVector3(reader.Version))
 			{
-				Sgn.Read3(reader);
+				Sgn = reader.ReadAsset<Vector3f>();
 			}
 			else
 			{
@@ -33,17 +30,24 @@ namespace uTinyRipper.Classes.Avatars
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_PreQ", PreQ.ExportYAML(container));
-			node.Add("m_PostQ", PostQ.ExportYAML(container));
-			node.Add("m_Sgn", Sgn.ExportYAML(container));
-			node.Add("m_Limit", Limit.ExportYAML(container));
-			node.Add("m_Length", Length);
-			node.Add("m_Type", Type);
+			node.Add(PreQName, PreQ.ExportYAML(container));
+			node.Add(PostQName, PostQ.ExportYAML(container));
+			node.Add(SgnName, Sgn.ExportYAML(container));
+			node.Add(LimitName, Limit.ExportYAML(container));
+			node.Add(LengthName, Length);
+			node.Add(TypeName, Type);
 			return node;
 		}
 
-		public float Length { get; private set; }
-		public uint Type { get; private set; }
+		public float Length { get; set; }
+		public uint Type { get; set; }
+
+		public const string PreQName = "m_PreQ";
+		public const string PostQName = "m_PostQ";
+		public const string SgnName = "m_Sgn";
+		public const string LimitName = "m_Limit";
+		public const string LengthName = "m_Length";
+		public const string TypeName = "m_Type";
 
 		public Vector4f PreQ;
 		public Vector4f PostQ;

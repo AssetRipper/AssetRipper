@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+
+using DateTime = uTinyRipper.Classes.Misc.DateTime;
 
 namespace uTinyRipper.Classes
 {
@@ -16,47 +17,27 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool IsReadHasCompileErrors(Version version)
-		{
-			return version.IsLess(3, 0, 0);
-		}
+		public static bool HasHasCompileErrors(Version version) => version.IsLess(3, 0, 0);
 		/// <summary>
 		/// 1.6.0 to 3.0.0 exclusive
 		/// </summary>
-		public static bool IsReadCustomDlls(Version version)
-		{
-			return version.IsGreaterEqual(1, 6) && version.IsLess(3, 0, 0);
-		}
+		public static bool HasCustomDlls(Version version) => version.IsGreaterEqual(1, 6) && version.IsLess(3, 0, 0);
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool IsReadAssemblyIdentifiers(Version version)
-		{
-			return version.IsLess(3);
-		}
+		public static bool HasAssemblyIdentifiers(Version version) => version.IsLess(3);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool IsReadAssemblyTypes(Version version)
-		{
-			return version.IsGreaterEqual(2017);
-		}
+		public static bool HasAssemblyTypes(Version version) => version.IsGreaterEqual(2017);
 
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(2, 1);
-		}
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
 
 		private int GetSerializedVersion(Version version)
 		{
-			if(Config.IsExportTopmostSerializedVersion)
-			{
-				return 2;
-			}
-
 			if(version.IsGreaterEqual(3))
 			{
 				return 2;
@@ -68,42 +49,42 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_scripts = reader.ReadAssetArray<PPtr<MonoScript>>();
-			if(IsReadHasCompileErrors(reader.Version))
+			Scripts = reader.ReadAssetArray<PPtr<MonoScript>>();
+			if (HasHasCompileErrors(reader.Version))
 			{
 				HasCompileErrors = reader.ReadBoolean();
 				if(IsAlign(reader.Version))
 				{
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 
 				EngineDllModDate.Read(reader);
 			}
-			if (IsReadCustomDlls(reader.Version))
+			if (HasCustomDlls(reader.Version))
 			{
-				m_customDlls = reader.ReadStringArray();
+				CustomDlls = reader.ReadStringArray();
 			}
-			m_assemblyNames = reader.ReadStringArray();
-			if(IsReadAssemblyIdentifiers(reader.Version))
+			AssemblyNames = reader.ReadStringArray();
+			if (HasAssemblyIdentifiers(reader.Version))
 			{
-				m_assemblyIdentifiers = reader.ReadStringArray();
+				AssemblyIdentifiers = reader.ReadStringArray();
 			}
-			if (IsReadAssemblyTypes(reader.Version))
+			if (HasAssemblyTypes(reader.Version))
 			{
-				m_assemblyTypes = reader.ReadInt32Array();
+				AssemblyTypes = reader.ReadInt32Array();
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<MonoScript> script in Scripts)
+			foreach (PPtr<Object> asset in context.FetchDependencies(Scripts, ScriptsName))
 			{
-				yield return script.FetchDependency(file, isLog, ToLogString, "m_Scripts");
+				yield return asset;
 			}
 		}
 
@@ -112,19 +93,15 @@ namespace uTinyRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		public IReadOnlyList<PPtr<MonoScript>> Scripts => m_scripts;
-		public bool HasCompileErrors { get; private set; }
-		public IReadOnlyList<string> CustomDlls => m_customDlls;
-		public IReadOnlyList<string> AssemblyNames => m_assemblyNames;
-		public IReadOnlyList<string> AssemblyIdentifiers => m_assemblyIdentifiers;
-		public IReadOnlyList<int> AssemblyTypes => m_assemblyTypes;
+		public PPtr<MonoScript>[] Scripts { get; set; }
+		public bool HasCompileErrors { get; set; }
+		public string[] CustomDlls { get; set; }
+		public string[] AssemblyNames { get; set; }
+		public string[] AssemblyIdentifiers { get; set; }
+		public int[] AssemblyTypes { get; set; }
+
+		public const string ScriptsName = "m_Scripts";
 
 		public DateTime EngineDllModDate;
-
-		private PPtr<MonoScript>[] m_scripts;
-		private string[] m_customDlls;
-		private string[] m_assemblyNames;
-		private string[] m_assemblyIdentifiers;
-		private int[] m_assemblyTypes;
 	}
 }

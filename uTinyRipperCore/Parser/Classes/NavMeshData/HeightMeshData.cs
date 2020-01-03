@@ -1,6 +1,6 @@
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes.NavMeshDatas
 {
@@ -8,10 +8,10 @@ namespace uTinyRipper.Classes.NavMeshDatas
 	{
 		public void Read(AssetReader reader)
 		{
-			m_vertices = reader.ReadAssetArray<Vector3f>();
-			m_indices = reader.ReadInt32Array();
+			Vertices = reader.ReadAssetArray<Vector3f>();
+			Indices = reader.ReadInt32Array();
 			Bounds.Read(reader);
-			m_nodes = reader.ReadAssetArray<HeightMeshBVNode>();
+			Nodes = reader.ReadAssetArray<HeightMeshBVNode>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -24,9 +24,9 @@ namespace uTinyRipper.Classes.NavMeshDatas
 			return node;
 		}
 
-		public IReadOnlyList<Vector3f> Vertices => m_vertices;
-		public IReadOnlyList<int> Indices => m_indices;
-		public IReadOnlyList<HeightMeshBVNode> Nodes => m_nodes;
+		public Vector3f[] Vertices { get; set; }
+		public int[] Indices { get; set; }
+		public HeightMeshBVNode[] Nodes { get; set; }
 
 		public const string VerticesName = "m_Vertices";
 		public const string IndicesName = "m_Indices";
@@ -34,9 +34,5 @@ namespace uTinyRipper.Classes.NavMeshDatas
 		public const string NodesName = "m_Nodes";
 
 		public AABB Bounds;
-
-		private Vector3f[] m_vertices;
-		private int[] m_indices;
-		private HeightMeshBVNode[] m_nodes;
 	}
 }

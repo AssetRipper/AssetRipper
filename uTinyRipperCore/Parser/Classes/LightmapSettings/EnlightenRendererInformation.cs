@@ -1,19 +1,16 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.LightmapSettingss
 {
-	public struct EnlightenRendererInformation : IAssetReadable, IYAMLExportable
+	public struct EnlightenRendererInformation : IAsset, IDependent
 	{
 		/// <summary>
 		/// Not Release
 		/// </summary>
-		public static bool IsReadGeometryHash(TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease();
-		}
+		public static bool HasGeometryHash(TransferInstructionFlags flags) => !flags.IsRelease();
 
 		public void Read(AssetReader reader)
 		{
@@ -21,15 +18,27 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			DynamicLightmapSTInSystem.Read(reader);
 			SystemId = reader.ReadInt32();
 			InstanceHash.Read(reader);
-			if (IsReadGeometryHash(reader.Flags))
+			if (HasGeometryHash(reader.Flags))
 			{
 				GeometryHash.Read(reader);
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public void Write(AssetWriter writer)
 		{
-			yield return Renderer.FetchDependency(file, isLog, () => nameof(EnlightenRendererInformation), RendererName);
+			Renderer.Write(writer);
+			DynamicLightmapSTInSystem.Write(writer);
+			writer.Write(SystemId);
+			InstanceHash.Write(writer);
+			if (HasGeometryHash(writer.Flags))
+			{
+				GeometryHash.Write(writer);
+			}
+		}
+
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		{
+			yield return context.FetchDependency(Renderer, RendererName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -43,7 +52,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			return node;
 		}
 
-		public int SystemId { get; private set; }
+		public int SystemId { get; set; }
 
 		public const string RendererName = "renderer";
 		public const string DynamicLightmapSTInSystemName = "dynamicLightmapSTInSystem";

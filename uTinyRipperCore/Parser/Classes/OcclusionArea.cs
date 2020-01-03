@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -10,32 +10,23 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// Less than 4.3.0
-		/// </summary>
-		public static bool IsReadIsTargetVolume(Version version)
-		{
-			return version.IsLess(4, 3);
-		}
-		/// <summary>
-		/// Less than 4.3.0
-		/// </summary>
-		public static bool IsReadTargetResolution(Version version)
-		{
-			return version.IsLess(4, 3);
-		}
-
-		private static bool IsExportIsTargetVolume(Version version)
-		{
-			return Config.IsExportTopmostSerializedVersion || IsReadIsTargetVolume(version);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			return 2;
-			// unknown (beta) version
+			// NOTE: unknown version
 			//return 1;
 		}
+
+		/// <summary>
+		/// Less than 4.3.0
+		/// </summary>
+		public static bool HasIsTargetVolume(Version version) => version.IsLess(4, 3);
+		/// <summary>
+		/// Less than 4.3.0
+		/// </summary>
+		public static bool HasTargetResolution(Version version) => version.IsLess(4, 3);
+
+		private static bool IsExportIsTargetVolume(Version version, TransferInstructionFlags flags) => flags.IsRelease() || HasIsTargetVolume(version);
 
 		public override void Read(AssetReader reader)
 		{
@@ -44,13 +35,13 @@ namespace uTinyRipper.Classes
 			Size.Read(reader);
 			Center.Read(reader);
 			IsViewVolume = reader.ReadBoolean();
-			if (IsReadIsTargetVolume(reader.Version))
+			if (HasIsTargetVolume(reader.Version))
 			{
 				IsTargetVolume = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
-			if (IsReadTargetResolution(reader.Version))
+			if (HasTargetResolution(reader.Version))
 			{
 				TargetResolution = reader.ReadInt32();
 			}
@@ -59,21 +50,27 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_Size", Size.ExportYAML(container));
-			node.Add("m_Center", Center.ExportYAML(container));
-			node.Add("m_IsViewVolume", IsViewVolume);
-			if (IsExportIsTargetVolume(container.Version))
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			node.Add(SizeName, Size.ExportYAML(container));
+			node.Add(CenterName, Center.ExportYAML(container));
+			node.Add(IsViewVolumeName, IsViewVolume);
+			if (IsExportIsTargetVolume(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add("m_IsTargetVolume", IsViewVolume);
-				node.Add("m_TargetResolution", TargetResolution);
+				node.Add(IsTargetVolumeName, IsViewVolume);
+				node.Add(TargetResolutionName, TargetResolution);
 			}
 			return node;
 		}
 
-		public bool IsViewVolume { get; private set; }
-		public bool IsTargetVolume { get; private set; }
-		public int TargetResolution { get; private set; }
+		public bool IsViewVolume { get; set; }
+		public bool IsTargetVolume { get; set; }
+		public int TargetResolution { get; set; }
+
+		public const string SizeName = "m_Size";
+		public const string CenterName = "m_Center";
+		public const string IsViewVolumeName = "m_IsViewVolume";
+		public const string IsTargetVolumeName = "m_IsTargetVolume";
+		public const string TargetResolutionName = "m_TargetResolution";
 
 		public Vector3f Size;
 		public Vector3f Center;

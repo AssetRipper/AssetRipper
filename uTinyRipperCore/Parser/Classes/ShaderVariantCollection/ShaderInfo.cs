@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.ShaderVariantCollections
@@ -8,21 +7,21 @@ namespace uTinyRipper.Classes.ShaderVariantCollections
 	{
 		public void Read(AssetReader reader)
 		{
-			m_variants = reader.ReadAssetArray<VariantInfo>();
+			Variants = reader.ReadAssetArray<VariantInfo>();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("variants", Variants.ExportYAML(container));
+			node.Add(VariantsName, Variants.ExportYAML(container));
 			return node;
 		}
-
-		public IReadOnlyList<VariantInfo> Variants => m_variants;
 
 		/// <summary>
 		/// It's a HashSet actually
 		/// </summary>
-		private VariantInfo[] m_variants;
+		public VariantInfo[] Variants { get; set; }
+
+		public const string VariantsName = "variants";
 	}
 }

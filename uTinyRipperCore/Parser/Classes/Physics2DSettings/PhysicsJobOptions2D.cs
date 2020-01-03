@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Physics2DSettingss
@@ -26,7 +26,7 @@ namespace uTinyRipper.Classes.Physics2DSettingss
 			IslandSolverContactsPerJob = 50;
 		}
 
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// m_UseMultithreading renamed to useMultithreading, m_UseConsistencySorting to useConsistencySorting
 			if (version.IsGreaterEqual(2018, 1, 0, VersionType.Beta, 11))
@@ -40,7 +40,7 @@ namespace uTinyRipper.Classes.Physics2DSettingss
 		{
 			UseMultithreading = reader.ReadBoolean();
 			UseConsistencySorting = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			InterpolationPosesPerJob = reader.ReadInt32();
 			NewContactsPerJob = reader.ReadInt32();
@@ -62,43 +62,61 @@ namespace uTinyRipper.Classes.Physics2DSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("useMultithreading", UseMultithreading);
-			node.Add("useConsistencySorting", UseConsistencySorting);
-			node.Add("m_InterpolationPosesPerJob", InterpolationPosesPerJob);
-			node.Add("m_NewContactsPerJob", NewContactsPerJob);
-			node.Add("m_CollideContactsPerJob", CollideContactsPerJob);
-			node.Add("m_ClearFlagsPerJob", ClearFlagsPerJob);
-			node.Add("m_ClearBodyForcesPerJob", ClearBodyForcesPerJob);
-			node.Add("m_SyncDiscreteFixturesPerJob", SyncDiscreteFixturesPerJob);
-			node.Add("m_SyncContinuousFixturesPerJob", SyncContinuousFixturesPerJob);
-			node.Add("m_FindNearestContactsPerJob", FindNearestContactsPerJob);
-			node.Add("m_UpdateTriggerContactsPerJob", UpdateTriggerContactsPerJob);
-			node.Add("m_IslandSolverCostThreshold", IslandSolverCostThreshold);
-			node.Add("m_IslandSolverBodyCostScale", IslandSolverBodyCostScale);
-			node.Add("m_IslandSolverContactCostScale", IslandSolverContactCostScale);
-			node.Add("m_IslandSolverJointCostScale", IslandSolverJointCostScale);
-			node.Add("m_IslandSolverBodiesPerJob", IslandSolverBodiesPerJob);
-			node.Add("m_IslandSolverContactsPerJob", IslandSolverContactsPerJob);
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			node.Add(UseMultithreadingName, UseMultithreading);
+			node.Add(UseConsistencySortingName, UseConsistencySorting);
+			node.Add(InterpolationPosesPerJobName, InterpolationPosesPerJob);
+			node.Add(NewContactsPerJobName, NewContactsPerJob);
+			node.Add(CollideContactsPerJobName, CollideContactsPerJob);
+			node.Add(ClearFlagsPerJobName, ClearFlagsPerJob);
+			node.Add(ClearBodyForcesPerJobName, ClearBodyForcesPerJob);
+			node.Add(SyncDiscreteFixturesPerJobName, SyncDiscreteFixturesPerJob);
+			node.Add(SyncContinuousFixturesPerJobName, SyncContinuousFixturesPerJob);
+			node.Add(FindNearestContactsPerJobName, FindNearestContactsPerJob);
+			node.Add(UpdateTriggerContactsPerJobName, UpdateTriggerContactsPerJob);
+			node.Add(IslandSolverCostThresholdName, IslandSolverCostThreshold);
+			node.Add(IslandSolverBodyCostScaleName, IslandSolverBodyCostScale);
+			node.Add(IslandSolverContactCostScaleName, IslandSolverContactCostScale);
+			node.Add(IslandSolverJointCostScaleName, IslandSolverJointCostScale);
+			node.Add(IslandSolverBodiesPerJobName, IslandSolverBodiesPerJob);
+			node.Add(IslandSolverContactsPerJobName, IslandSolverContactsPerJob);
 			return node;
 		}
 
-		public bool UseMultithreading { get; private set; }
-		public bool UseConsistencySorting { get; private set; }
-		public int InterpolationPosesPerJob { get; private set; }
-		public int NewContactsPerJob { get; private set; }
-		public int CollideContactsPerJob { get; private set; }
-		public int ClearFlagsPerJob { get; private set; }
-		public int ClearBodyForcesPerJob { get; private set; }
-		public int SyncDiscreteFixturesPerJob { get; private set; }
-		public int SyncContinuousFixturesPerJob { get; private set; }
-		public int FindNearestContactsPerJob { get; private set; }
-		public int UpdateTriggerContactsPerJob { get; private set; }
-		public int IslandSolverCostThreshold { get; private set; }
-		public int IslandSolverBodyCostScale { get; private set; }
-		public int IslandSolverContactCostScale { get; private set; }
-		public int IslandSolverJointCostScale { get; private set; }
-		public int IslandSolverBodiesPerJob { get; private set; }
-		public int IslandSolverContactsPerJob { get; private set; }
+		public bool UseMultithreading { get; set; }
+		public bool UseConsistencySorting { get; set; }
+		public int InterpolationPosesPerJob { get; set; }
+		public int NewContactsPerJob { get; set; }
+		public int CollideContactsPerJob { get; set; }
+		public int ClearFlagsPerJob { get; set; }
+		public int ClearBodyForcesPerJob { get; set; }
+		public int SyncDiscreteFixturesPerJob { get; set; }
+		public int SyncContinuousFixturesPerJob { get; set; }
+		public int FindNearestContactsPerJob { get; set; }
+		public int UpdateTriggerContactsPerJob { get; set; }
+		public int IslandSolverCostThreshold { get; set; }
+		public int IslandSolverBodyCostScale { get; set; }
+		public int IslandSolverContactCostScale { get; set; }
+		public int IslandSolverJointCostScale { get; set; }
+		public int IslandSolverBodiesPerJob { get; set; }
+		public int IslandSolverContactsPerJob { get; set; }
+
+		public const string UseMultithreadingName = "useMultithreading";
+		public const string UseConsistencySortingName = "useConsistencySorting";
+		public const string InterpolationPosesPerJobName = "m_InterpolationPosesPerJob";
+		public const string NewContactsPerJobName = "m_NewContactsPerJob";
+		public const string CollideContactsPerJobName = "m_CollideContactsPerJob";
+		public const string ClearFlagsPerJobName = "m_ClearFlagsPerJob";
+		public const string ClearBodyForcesPerJobName = "m_ClearBodyForcesPerJob";
+		public const string SyncDiscreteFixturesPerJobName = "m_SyncDiscreteFixturesPerJob";
+		public const string SyncContinuousFixturesPerJobName = "m_SyncContinuousFixturesPerJob";
+		public const string FindNearestContactsPerJobName = "m_FindNearestContactsPerJob";
+		public const string UpdateTriggerContactsPerJobName = "m_UpdateTriggerContactsPerJob";
+		public const string IslandSolverCostThresholdName = "m_IslandSolverCostThreshold";
+		public const string IslandSolverBodyCostScaleName = "m_IslandSolverBodyCostScale";
+		public const string IslandSolverContactCostScaleName = "m_IslandSolverContactCostScale";
+		public const string IslandSolverJointCostScaleName = "m_IslandSolverJointCostScale";
+		public const string IslandSolverBodiesPerJobName = "m_IslandSolverBodiesPerJob";
+		public const string IslandSolverContactsPerJobName = "m_IslandSolverContactsPerJob";
 	}
 }

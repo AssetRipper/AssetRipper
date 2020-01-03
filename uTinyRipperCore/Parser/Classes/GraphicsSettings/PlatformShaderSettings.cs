@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.GraphicsSettingss
@@ -8,7 +8,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		/// <summary>
 		/// 5.4.0 and greater and Not Release
 		/// </summary>
-		public static bool IsReadStandardShaderQuality(Version version, TransferInstructionFlags flags)
+		public static bool HasStandardShaderQuality(Version version, TransferInstructionFlags flags)
 		{
 			return version.IsGreaterEqual(5, 4) && !flags.IsRelease();
 		}
@@ -16,15 +16,15 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public void Read(AssetReader reader)
 		{
 			UseScreenSpaceShadows = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 #if UNIVERSAL
-			if(IsReadStandardShaderQuality(reader.Version, reader.Flags))
+			if (HasStandardShaderQuality(reader.Version, reader.Flags))
 			{
 				StandardShaderQuality = (ShaderQuality)reader.ReadInt32();
 				UseReflectionProbeBoxProjection = reader.ReadBoolean();
 				UseReflectionProbeBlending = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 #endif
 		}
@@ -32,17 +32,17 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("useScreenSpaceShadows", UseScreenSpaceShadows);
-			node.Add("standardShaderQuality", (int)GetStandardShaderQuality(container.Version, container.Flags));
-			node.Add("useReflectionProbeBoxProjection", GetUseReflectionProbeBoxProjection(container.Version, container.Flags));
-			node.Add("useReflectionProbeBlending", GetUseReflectionProbeBlending(container.Version, container.Flags));
+			node.Add(UseScreenSpaceShadowsName, UseScreenSpaceShadows);
+			node.Add(StandardShaderQualityName, (int)GetStandardShaderQuality(container.Version, container.Flags));
+			node.Add(UseReflectionProbeBoxProjectionName, GetUseReflectionProbeBoxProjection(container.Version, container.Flags));
+			node.Add(UseReflectionProbeBlendingName, GetUseReflectionProbeBlending(container.Version, container.Flags));
 			return node;
 		}
 
 		public ShaderQuality GetStandardShaderQuality(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadStandardShaderQuality(version, flags))
+			if (HasStandardShaderQuality(version, flags))
 			{
 				return StandardShaderQuality;
 			}
@@ -52,7 +52,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public bool GetUseReflectionProbeBoxProjection(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadStandardShaderQuality(version, flags))
+			if (HasStandardShaderQuality(version, flags))
 			{
 				return UseReflectionProbeBoxProjection;
 			}
@@ -62,7 +62,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		public bool GetUseReflectionProbeBlending(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if (IsReadStandardShaderQuality(version, flags))
+			if (HasStandardShaderQuality(version, flags))
 			{
 				return UseReflectionProbeBlending;
 			}
@@ -70,11 +70,16 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			return true;
 		}
 
-		public bool UseScreenSpaceShadows { get; private set; }
+		public bool UseScreenSpaceShadows { get; set; }
 #if UNIVERSAL
-		public ShaderQuality StandardShaderQuality { get; private set; }
-		public bool UseReflectionProbeBoxProjection { get; private set; }
-		public bool UseReflectionProbeBlending { get; private set; }
+		public ShaderQuality StandardShaderQuality { get; set; }
+		public bool UseReflectionProbeBoxProjection { get; set; }
+		public bool UseReflectionProbeBlending { get; set; }
 #endif
+
+		public const string UseScreenSpaceShadowsName = "useScreenSpaceShadows";
+		public const string StandardShaderQualityName = "standardShaderQuality";
+		public const string UseReflectionProbeBoxProjectionName = "useReflectionProbeBoxProjection";
+		public const string UseReflectionProbeBlendingName = "useReflectionProbeBlending";
 	}
 }

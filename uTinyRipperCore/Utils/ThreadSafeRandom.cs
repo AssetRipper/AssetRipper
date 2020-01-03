@@ -32,6 +32,11 @@ namespace uTinyRipper
 			return s_local.Next(minValue, maxValue);
 		}
 
+		public void NextBytes(byte[] buffer)
+		{
+			s_local.NextBytes(buffer);
+		}
+
 		private static readonly Random s_global = new Random();
 		[ThreadStatic]
 		private static Random s_local;

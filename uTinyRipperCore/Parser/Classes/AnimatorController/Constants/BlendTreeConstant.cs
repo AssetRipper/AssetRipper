@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
@@ -10,15 +10,12 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		/// <summary>
 		/// Less than 4.5.0
 		/// </summary>
-		public static bool IsReadBlendEventArrayConstant(Version version)
-		{
-			return version.IsLess(4, 5);
-		}
+		public static bool HasBlendEventArrayConstant(Version version) => version.IsLess(4, 5);
 
 		public void Read(AssetReader reader)
 		{
-			m_nodeArray = reader.ReadAssetArray<OffsetPtr<BlendTreeNodeConstant>>();
-			if (IsReadBlendEventArrayConstant(reader.Version))
+			NodeArray = reader.ReadAssetArray<OffsetPtr<BlendTreeNodeConstant>>();
+			if (HasBlendEventArrayConstant(reader.Version))
 			{
 				BlendEventArrayConstant.Read(reader);
 			}
@@ -29,10 +26,8 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 
-		public IReadOnlyList<OffsetPtr<BlendTreeNodeConstant>> NodeArray => m_nodeArray;
+		public OffsetPtr<BlendTreeNodeConstant>[] NodeArray { get; set; }
 
 		public OffsetPtr<ValueArrayConstant> BlendEventArrayConstant;
-
-		private OffsetPtr<BlendTreeNodeConstant>[] m_nodeArray;
 	}
 }

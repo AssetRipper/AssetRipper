@@ -7,31 +7,16 @@ namespace uTinyRipper
 {
 	public class EndianReader : BinaryReader
 	{
-		public EndianReader(Stream stream)
-			: this(stream, EndianType.LittleEndian, 0)
-		{
-		}
-
 		public EndianReader(Stream stream, EndianType endianess) :
-			this(stream, endianess, 0)
+			this(stream, endianess, false)
 		{
 		}
 
-		public EndianReader(Stream stream, EndianType endianess, long alignPosition) :
-		   base(stream, Encoding.UTF8, true)
+		protected EndianReader(Stream stream, EndianType endianess, bool alignArray) :
+			base(stream, Encoding.UTF8, true)
 		{
 			EndianType = endianess;
-			AlignPosition = alignPosition;
-		}
-
-		protected EndianReader(EndianReader reader) :
-			this(reader, reader.AlignPosition)
-		{
-		}
-
-		private EndianReader(EndianReader reader, long alignPosition) :
-			this(reader.BaseStream, reader.EndianType, alignPosition)
-		{
+			IsAlignArray = alignArray;
 		}
 
 		~EndianReader()
@@ -358,9 +343,8 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
 			int index = 0;
-			bool[] array = new bool[count];
+			bool[] array = count == 0 ? Array.Empty<bool>() : new bool[count];
 			while (index < count)
 			{
 				int read = Read(array, index, count - index);
@@ -369,6 +353,10 @@ namespace uTinyRipper
 					throw new Exception($"End of stream. Read {index}, expected {count} elements");
 				}
 				index += read;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 			return array;
 		}
@@ -377,9 +365,8 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
 			int index = 0;
-			char[] array = new char[count];
+			char[] array = count == 0 ? Array.Empty<char>() : new char[count];
 			while (index < count)
 			{
 				int read = Read(array, index, count - index);
@@ -388,6 +375,10 @@ namespace uTinyRipper
 					throw new Exception($"End of stream. Read {index}, expected {count} elements");
 				}
 				index += read;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 			return array;
 		}
@@ -396,9 +387,8 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
 			int index = 0;
-			byte[] array = new byte[count];
+			byte[] array = count == 0 ? Array.Empty<byte>() : new byte[count];
 			while (index < count)
 			{
 				int read = Read(array, index, count - index);
@@ -407,6 +397,10 @@ namespace uTinyRipper
 					throw new Exception($"End of stream. Read {index}, expected {count} elements");
 				}
 				index += read;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 			return array;
 		}
@@ -415,9 +409,8 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
 			int index = 0;
-			short[] array = new short[count];
+			short[] array = count == 0 ? Array.Empty<short>() : new short[count];
 			while (index < count)
 			{
 				int read = Read(array, index, count - index);
@@ -426,6 +419,10 @@ namespace uTinyRipper
 					throw new Exception($"End of stream. Read {index}, expected {count} elements");
 				}
 				index += read;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 			return array;
 		}
@@ -434,9 +431,8 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
 			int index = 0;
-			ushort[] array = new ushort[count];
+			ushort[] array = count == 0 ? Array.Empty<ushort>() : new ushort[count];
 			while (index < count)
 			{
 				int read = Read(array, index, count - index);
@@ -445,6 +441,10 @@ namespace uTinyRipper
 					throw new Exception($"End of stream. Read {index}, expected {count} elements");
 				}
 				index += read;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 			return array;
 		}
@@ -453,9 +453,8 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
 			int index = 0;
-			int[] array = new int[count];
+			int[] array = count == 0 ? Array.Empty<int>() : new int[count];
 			while (index < count)
 			{
 				int read = Read(array, index, count - index);
@@ -464,6 +463,10 @@ namespace uTinyRipper
 					throw new Exception($"End of stream. Read {index}, expected {count} elements");
 				}
 				index += read;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 			return array;
 		}
@@ -472,9 +475,8 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
 			int index = 0;
-			uint[] array = new uint[count];
+			uint[] array = count == 0 ? Array.Empty<uint>() : new uint[count];
 			while (index < count)
 			{
 				int read = Read(array, index, count - index);
@@ -483,6 +485,10 @@ namespace uTinyRipper
 					throw new Exception($"End of stream. Read {index}, expected {count} elements");
 				}
 				index += read;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 			return array;
 		}
@@ -491,9 +497,8 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
 			int index = 0;
-			long[] array = new long[count];
+			long[] array = count == 0 ? Array.Empty<long>() : new long[count];
 			while (index < count)
 			{
 				int read = Read(array, index, count - index);
@@ -502,6 +507,10 @@ namespace uTinyRipper
 					throw new Exception($"End of stream. Read {index}, expected {count} elements");
 				}
 				index += read;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 			return array;
 		}
@@ -510,9 +519,8 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
 			int index = 0;
-			ulong[] array = new ulong[count];
+			ulong[] array = count == 0 ? Array.Empty<ulong>() : new ulong[count];
 			while (index < count)
 			{
 				int read = Read(array, index, count - index);
@@ -521,6 +529,10 @@ namespace uTinyRipper
 					throw new Exception($"End of stream. Read {index}, expected {count} elements");
 				}
 				index += read;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 			return array;
 		}
@@ -529,9 +541,8 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
 			int index = 0;
-			float[] array = new float[count];
+			float[] array = count == 0 ? Array.Empty<float>() : new float[count];
 			while (index < count)
 			{
 				int read = Read(array, index, count - index);
@@ -540,6 +551,10 @@ namespace uTinyRipper
 					throw new Exception($"End of stream. Read {index}, expected {count} elements");
 				}
 				index += read;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 			return array;
 		}
@@ -548,9 +563,8 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
 			int index = 0;
-			double[] array = new double[count];
+			double[] array = count == 0 ? Array.Empty<double>() : new double[count];
 			while (index < count)
 			{
 				int read = Read(array, index, count - index);
@@ -560,6 +574,10 @@ namespace uTinyRipper
 				}
 				index += read;
 			}
+			if (IsAlignArray)
+			{
+				AlignStream();
+			}
 			return array;
 		}
 
@@ -567,12 +585,15 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
-			string[] array = new string[count];
+			string[] array = count == 0 ? Array.Empty<string>() : new string[count];
 			for (int i = 0; i < count; i++)
 			{
 				string value = ReadString();
 				array[i] = value;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 			return array;
 		}
@@ -590,12 +611,16 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(4);
 			int count = BufferToInt32();
-			T[] array = new T[count];
+			T[] array = count == 0 ? Array.Empty<T>() : new T[count];
 			for (int i = 0; i < count; i++)
 			{
 				T t = new T();
 				t.Read(this);
 				array[i] = t;
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 			return array;
 		}
@@ -605,20 +630,22 @@ namespace uTinyRipper
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
-
-			T[][] array = new T[count][];
+			T[][] array = count == 0 ? Array.Empty<T[]>() : new T[count][];
 			for (int i = 0; i < count; i++)
 			{
 				T[] innerArray = ReadEndianArray<T>();
 				array[i] = innerArray;
 			}
+			if (IsAlignArray)
+			{
+				AlignStream();
+			}
 			return array;
 		}
 
-		public void AlignStream(AlignType alignType)
+		public void AlignStream()
 		{
-			long align = (long)alignType;
-			BaseStream.Position = AlignPosition + ((BaseStream.Position - AlignPosition + align) & ~align);
+			BaseStream.Position = (BaseStream.Position + 3) & ~3;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -707,7 +734,7 @@ namespace uTinyRipper
 
 		public EndianType EndianType { get; }
 
-		protected long AlignPosition { get; }
+		protected bool IsAlignArray { get; }
 
 		protected const int BufferSize = 4096;
 

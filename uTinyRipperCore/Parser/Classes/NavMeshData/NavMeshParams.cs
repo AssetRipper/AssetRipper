@@ -1,4 +1,4 @@
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.NavMeshDatas
@@ -25,11 +25,11 @@ namespace uTinyRipper.Classes.NavMeshDatas
 			return node;
 		}
 
-		public float TileSize { get; private set; }
-		public float WalkableHeight { get; private set; }
-		public float WalkableRadius { get; private set; }
-		public float WalkableClimb { get; private set; }
-		public float CellSize { get; private set; }
+		public float TileSize { get; set; }
+		public float WalkableHeight { get; set; }
+		public float WalkableRadius { get; set; }
+		public float WalkableClimb { get; set; }
+		public float CellSize { get; set; }
 
 		public const string TileSizeName = "tileSize";
 		public const string WalkableHeightName = "walkableHeight";

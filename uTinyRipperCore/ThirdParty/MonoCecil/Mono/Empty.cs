@@ -15,7 +15,7 @@ namespace Mono {
 
 	static class Empty<T> {
 
-		public static readonly T [] Array = new T [0];
+		public static readonly T [] Array = System.Array.Empty<T>();
 	}
 
 	class ArgumentNullOrEmptyException : ArgumentException {

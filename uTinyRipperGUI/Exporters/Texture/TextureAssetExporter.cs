@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
 using uTinyRipper;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Textures;
+using uTinyRipper.Converters;
+using uTinyRipper.Project;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
@@ -30,7 +31,13 @@ namespace uTinyRipperGUI.Exporters
 				}
 				else
 				{
-					bitmap.Bitmap.Save(exportStream, ImageFormat.Png);
+					// despite the name, this packing works for different formats
+					if (texture.LightmapFormat == TextureUsageMode.NormalmapDXT5nm)
+					{
+						TextureConverter.UnpackNormal(bitmap.BitsPtr, bitmap.Bits.Length);
+					}
+
+					bitmap.Save(exportStream, ImageFormat.Png);
 					return true;
 				}
 			}

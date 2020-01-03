@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using uTinyRipper.AssetExporters;
+using System.IO;
 using uTinyRipper.Classes.ResourceManagers;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using System;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {
@@ -17,40 +18,80 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 3.5.0 and greater and Release
 		/// </summary>
-		public static bool IsReadDependentAssets(Version version, TransferInstructionFlags flags)
+		public static bool HasDependentAssets(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 5) && flags.IsRelease();
+
+		public static string ResourceToExportPath(Object asset, string resourceName)
 		{
-			return version.IsGreaterEqual(3, 5) && flags.IsRelease();
+			bool replace = false;
+			string validName = asset.TryGetName();
+			if (validName.Length > 0)
+			{
+				if (validName != resourceName && resourceName.EndsWith(validName, StringComparison.OrdinalIgnoreCase))
+				{
+					if (validName.Length == resourceName.Length)
+					{
+						replace = true;
+					}
+					else if (resourceName[resourceName.Length - validName.Length - 1] == DirectorySeparator)
+					{
+						replace = true;
+					}
+				}
+			}
+
+			if (replace)
+			{
+				string directoryPath = resourceName.Substring(0, resourceName.Length - validName.Length);
+				return Path.Combine(AssetsKeyword, ResourceKeyword, directoryPath + validName);
+			}
+			else
+			{
+				return Path.Combine(AssetsKeyword, ResourceKeyword, resourceName);
+			}
+		}
+
+		public bool TryGetResourcePathFromAsset(Object asset, out string resourcePath)
+		{
+			foreach (KeyValuePair<string, PPtr<Object>> containerEntry in Container)
+			{
+				if (containerEntry.Value.IsAsset(File, asset))
+				{
+					resourcePath = ResourceToExportPath(asset, containerEntry.Key);
+					return true;
+				}
+			}
+
+			resourcePath = string.Empty;
+			return false;
 		}
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			m_container = reader.ReadStringTKVPArray<PPtr<Object>>();
-			if (IsReadDependentAssets(reader.Version, reader.Flags))
+			Container = reader.ReadKVPStringTArray<PPtr<Object>>();
+			if (HasDependentAssets(reader.Version, reader.Flags))
 			{
-				m_dependentAssets = reader.ReadAssetArray<ResourceManagerDependency>();
+				DependentAssets = reader.ReadAssetArray<ResourceManagerDependency>();
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
-			foreach (KeyValuePair<string, PPtr<Object>> asset in Container)
+
+			foreach (PPtr<Object> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
 			{
-				yield return asset.Value.FetchDependency(file, isLog, () => nameof(ResourceManager), ContainerName);
+				yield return asset;
 			}
-			if (IsReadDependentAssets(file.Version, file.Flags))
+			if (HasDependentAssets(context.Version, context.Flags))
 			{
-				foreach (ResourceManagerDependency dependentAsset in DependentAssets)
+				foreach (PPtr<Object> asset in context.FetchDependencies(DependentAssets, DependentAssetsName))
 				{
-					foreach (Object asset in dependentAsset.FetchDependencies(file, isLog))
-					{
-						yield return asset;
-					}
+					yield return asset;
 				}
 			}
 		}
@@ -59,21 +100,20 @@ namespace uTinyRipper.Classes
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add(ContainerName, Container.ExportYAML(container));
-			if (IsReadDependentAssets(container.Version, container.ExportFlags))
+			if (HasDependentAssets(container.Version, container.ExportFlags))
 			{
 				node.Add(DependentAssetsName, DependentAssets.ExportYAML(container));
 			}
 			return node;
 		}
+		
+		public KeyValuePair<string, PPtr<Object>>[] Container { get; set; }
+		public ResourceManagerDependency[] DependentAssets { get; set; }
 
-		public IReadOnlyList<KeyValuePair<string, PPtr<Object>>> Container => m_container;
-		public ILookup<string, PPtr<Object>> ContainerMap => Container.ToLookup(t => t.Key, t => t.Value);
-		public IReadOnlyList<ResourceManagerDependency> DependentAssets => m_dependentAssets;
+		public const string ResourceKeyword = "Resources";
+		public const char DirectorySeparator = '/';
 
 		public const string ContainerName = "m_Container";
 		public const string DependentAssetsName = "m_DependentAssets";
-
-		private KeyValuePair<string, PPtr<Object>>[] m_container;
-		private ResourceManagerDependency[] m_dependentAssets;
 	}
 }

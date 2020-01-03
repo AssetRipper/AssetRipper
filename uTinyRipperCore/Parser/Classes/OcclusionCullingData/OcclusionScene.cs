@@ -1,11 +1,12 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.OcclusionCullingDatas
 {
 	public struct OcclusionScene : IAssetReadable, IYAMLExportable
 	{
-		public OcclusionScene(EngineGUID scene, int renderSize, int portalSize)
+		public OcclusionScene(GUID scene, int renderSize, int portalSize)
 		{
 			Scene = scene;
 			IndexRenderers = 0;
@@ -26,19 +27,25 @@ namespace uTinyRipper.Classes.OcclusionCullingDatas
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("indexRenderers", IndexRenderers);
-			node.Add("sizeRenderers", SizeRenderers);
-			node.Add("indexPortals", IndexPortals);
-			node.Add("sizePortals", SizePortals);
-			node.Add("scene", Scene.ExportYAML(container));
+			node.Add(IndexRenderersName, IndexRenderers);
+			node.Add(SizeRenderersName, SizeRenderers);
+			node.Add(IndexPortalsName, IndexPortals);
+			node.Add(SizePortalsName, SizePortals);
+			node.Add(SceneName, Scene.ExportYAML(container));
 			return node;
 		}
 
-		public int IndexRenderers { get; private set; }
-		public int SizeRenderers { get; private set; }
-		public int IndexPortals { get; private set; }
-		public int SizePortals { get; private set; }
+		public int IndexRenderers { get; set; }
+		public int SizeRenderers { get; set; }
+		public int IndexPortals { get; set; }
+		public int SizePortals { get; set; }
 
-		public EngineGUID Scene;
+		public const string IndexRenderersName = "indexRenderers";
+		public const string SizeRenderersName = "sizeRenderers";
+		public const string IndexPortalsName = "indexPortals";
+		public const string SizePortalsName = "sizePortals";
+		public const string SceneName = "scene";
+
+		public GUID Scene;
 	}
 }

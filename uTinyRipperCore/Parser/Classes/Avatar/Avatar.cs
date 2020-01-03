@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Avatars;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -15,10 +15,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool IsReadHumanDescription(Version version)
-		{
-			return version.IsGreaterEqual(2019);
-		}
+		public static bool HasHumanDescription(Version version) => version.IsGreaterEqual(2019);
 
 		public override void Read(AssetReader reader)
 		{
@@ -29,7 +26,7 @@ namespace uTinyRipper.Classes
 			AvatarSize = reader.ReadUInt32();
 			AvatarConstant.Read(reader);
 			m_TOS.Read(reader);
-			if (IsReadHumanDescription(reader.Version))
+			if (HasHumanDescription(reader.Version))
 			{
 				HumanDescription.Read(reader);
 			}
@@ -41,14 +38,14 @@ namespace uTinyRipper.Classes
 			node.Add(AvatarSizeName, AvatarSize);
 			node.Add(AvatarName, AvatarConstant.ExportYAML(container));
 			node.Add(TOSName, TOS.ExportYAML());
-			if (IsReadHumanDescription(container.Version))
+			if (HasHumanDescription(container.Version))
 			{
 				node.Add(HumanDescriptionName, HumanDescription.ExportYAML(container));
 			}
 			return node;
 		}
 
-		public uint AvatarSize { get; private set; }
+		public uint AvatarSize { get; set; }
 		public IReadOnlyDictionary<uint, string> TOS => m_TOS;
 
 		public const string AvatarSizeName = "m_AvatarSize";

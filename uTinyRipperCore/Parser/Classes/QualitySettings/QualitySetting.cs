@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.QualitySettingss
@@ -25,168 +26,11 @@ namespace uTinyRipper.Classes.QualitySettingss
 			AsyncUploadBufferSize = 4;
 			ResolutionScalingFixedDPIFactor = 1.0f;
 #if UNIVERSAL
-			m_excludedTargetPlatforms = new string[0];
+			ExcludedTargetPlatforms = Array.Empty<string>();
 #endif
 		}
 
-		/// <summary>
-		/// 3.5.0 and greater
-		/// </summary>
-		public static bool IsReadName(Version version)
-		{
-			return version.IsGreaterEqual(3, 5);
-		}
-		/// <summary>
-		/// 2.0.0 and greater
-		/// </summary>
-		public static bool IsReadShadows(Version version)
-		{
-			return version.IsGreaterEqual(2);
-		}
-		/// <summary>
-		/// 3.4.0 and greater
-		/// </summary>
-		public static bool IsReadShadowProjection(Version version)
-		{
-			return version.IsGreaterEqual(3, 4);
-		}
-		/// <summary>
-		/// 2.0.0 and greater
-		/// </summary>
-		public static bool IsReadShadowCascades(Version version)
-		{
-			return version.IsGreaterEqual(2);
-		}
-		/// <summary>
-		/// 5.2.0 and greater
-		/// </summary>
-		public static bool IsReadShadowNearPlaneOffset(Version version)
-		{
-			return version.IsGreaterEqual(5, 2);
-		}
-		/// <summary>
-		/// 5.0.0b2 and greater
-		/// </summary>
-		public static bool IsReadShadowCascade2Split(Version version)
-		{
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
-		}
-		/// <summary>
-		/// 2017.1 and greater
-		/// </summary>
-		public static bool IsReadShadowmaskMode(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1);
-		}
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		public static bool IsReadSoftParticles(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
-		/// <summary>
-		/// 2.0.0 and greater
-		/// </summary>
-		public static bool IsReadSoftVegetation(Version version)
-		{
-			return version.IsGreaterEqual(2);
-		}
-		/// <summary>
-		/// 5.0.0 and greater
-		/// </summary>
-		public static bool IsReadRealtimeReflectionProbes(Version version)
-		{
-			return version.IsGreaterEqual(2);
-		}
-		/// <summary>
-		/// 5.0.0b2 and greater
-		/// </summary>
-		public static bool IsReadBillboardsFaceCameraPosition(Version version)
-		{
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
-		}
-		/// <summary>
-		/// Less than 3.4.0
-		/// </summary>
-		public static bool IsReadSyncToVBL(Version version)
-		{
-			return version.IsLess(3, 4);
-		}
-		/// <summary>
-		/// 3.4.0 and greater
-		/// </summary>
-		public static bool IsReadVSyncCount(Version version)
-		{
-			return version.IsGreaterEqual(3, 4);
-		}
-		/// <summary>
-		/// 3.5.0 and greater
-		/// </summary>
-		public static bool IsReadLodBias(Version version)
-		{
-			return version.IsGreaterEqual(3, 5);
-		}
-		/// <summary>
-		/// 2018.2 and greater
-		/// </summary>
-		public static bool IsReadStreamingMipmapsActive(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadParticleRaycastBudget(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadAsyncUploadTimeSlice(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 2018.3 and greater
-		/// </summary>
-		public static bool IsReadAsyncUploadPersistentBuffer(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
-		/// <summary>
-		/// 2017.1 and greater
-		/// </summary>
-		public static bool IsReadResolutionScalingFixedDPIFactor(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1);
-		}
-		/// <summary>
-		/// 3.5.0 and greater and Not Release
-		/// </summary>
-		public static bool IsReadExcludedTargetPlatforms(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(3, 5);
-		}
-
-		/// <summary>
-		/// 2.1.0 and greater
-		/// </summary>
-		private bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(2, 1);
-		}
-
-		/// <summary>
-		/// 2019.1 and greater
-		/// </summary>
-		private bool IsSkinWeightsName(Version version)
-		{
-			return version.IsGreaterEqual(2019);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// SyncToVBL has been removed
 			if (version.IsGreaterEqual(3, 4))
@@ -196,65 +40,155 @@ namespace uTinyRipper.Classes.QualitySettingss
 			return 1;
 		}
 
+		/// <summary>
+		/// 3.5.0 and greater
+		/// </summary>
+		public static bool HasName(Version version) => version.IsGreaterEqual(3, 5);
+		/// <summary>
+		/// 2.0.0 and greater
+		/// </summary>
+		public static bool HasShadows(Version version) => version.IsGreaterEqual(2);
+		/// <summary>
+		/// 3.4.0 and greater
+		/// </summary>
+		public static bool HasShadowProjection(Version version) => version.IsGreaterEqual(3, 4);
+		/// <summary>
+		/// 2.0.0 and greater
+		/// </summary>
+		public static bool HasShadowCascades(Version version) => version.IsGreaterEqual(2);
+		/// <summary>
+		/// 5.2.0 and greater
+		/// </summary>
+		public static bool HasShadowNearPlaneOffset(Version version) => version.IsGreaterEqual(5, 2);
+		/// <summary>
+		/// 5.0.0b2 and greater
+		/// </summary>
+		public static bool HasShadowCascade2Split(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		public static bool HasShadowmaskMode(Version version) => version.IsGreaterEqual(2017, 1);
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool HasSoftParticles(Version version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// 2.0.0 and greater
+		/// </summary>
+		public static bool HasSoftVegetation(Version version) => version.IsGreaterEqual(2);
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
+		public static bool HasRealtimeReflectionProbes(Version version) => version.IsGreaterEqual(2);
+		/// <summary>
+		/// 5.0.0b2 and greater
+		/// </summary>
+		public static bool HasBillboardsFaceCameraPosition(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		/// <summary>
+		/// Less than 3.4.0
+		/// </summary>
+		public static bool HasSyncToVBL(Version version) => version.IsLess(3, 4);
+		/// <summary>
+		/// 3.4.0 and greater
+		/// </summary>
+		public static bool HasVSyncCount(Version version) => version.IsGreaterEqual(3, 4);
+		/// <summary>
+		/// 3.5.0 and greater
+		/// </summary>
+		public static bool HasLodBias(Version version) => version.IsGreaterEqual(3, 5);
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool HasStreamingMipmapsActive(Version version) => version.IsGreaterEqual(2018, 2);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasParticleRaycastBudget(Version version) => version.IsGreaterEqual(4);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasAsyncUploadTimeSlice(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool HasAsyncUploadPersistentBuffer(Version version) => version.IsGreaterEqual(2018, 3);
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		public static bool HasResolutionScalingFixedDPIFactor(Version version) => version.IsGreaterEqual(2017, 1);
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasCustomRenderPipeline(Version version) => version.IsGreaterEqual(2019, 3);
+		/// <summary>
+		/// 3.5.0 and greater and Not Release
+		/// </summary>
+		public static bool HasExcludedTargetPlatforms(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 5);
+
+		/// <summary>
+		/// 2.1.0 and greater
+		/// </summary>
+		private bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
+
 		public void Merge(QualitySetting setting, Version version, TransferInstructionFlags flags)
 		{
-			if (!IsReadShadows(version))
+			if (!HasShadows(version))
 			{
 				Shadows = setting.Shadows;
 				ShadowResolution = setting.ShadowResolution;
 			}
-			if (!IsReadShadowProjection(version))
+			if (!HasShadowProjection(version))
 			{
 				ShadowProjection = setting.ShadowProjection;
 			}
-			if (!IsReadShadowCascades(version))
+			if (!HasShadowCascades(version))
 			{
 				ShadowCascades = setting.ShadowCascades;
 				ShadowDistance = setting.ShadowDistance;
 			}
-			if (!IsReadShadowNearPlaneOffset(version))
+			if (!HasShadowNearPlaneOffset(version))
 			{
 				ShadowNearPlaneOffset = setting.ShadowNearPlaneOffset;
 			}
-			if (!IsReadShadowCascade2Split(version))
+			if (!HasShadowCascade2Split(version))
 			{
 				ShadowCascade2Split = setting.ShadowCascade2Split;
 				ShadowCascade4Split = setting.ShadowCascade4Split;
 			}
-			if (!IsReadShadowmaskMode(version))
+			if (!HasShadowmaskMode(version))
 			{
 				ShadowmaskMode = setting.ShadowmaskMode;
 			}
-			if (!IsReadSoftParticles(version))
+			if (!HasSoftParticles(version))
 			{
 				SoftParticles = setting.SoftParticles;
 			}
-			if (!IsReadSoftVegetation(version))
+			if (!HasSoftVegetation(version))
 			{
 				SoftVegetation = setting.SoftVegetation;
 			}
-			if (!IsReadRealtimeReflectionProbes(version))
+			if (!HasRealtimeReflectionProbes(version))
 			{
 				RealtimeReflectionProbes = setting.RealtimeReflectionProbes;
 			}
-			if (!IsReadBillboardsFaceCameraPosition(version))
+			if (!HasBillboardsFaceCameraPosition(version))
 			{
 				BillboardsFaceCameraPosition = setting.BillboardsFaceCameraPosition;
 			}
-			if (!IsReadSyncToVBL(version))
+			if (!HasSyncToVBL(version))
 			{
 				SyncToVBL = setting.SyncToVBL;
 			}
-			if (!IsReadVSyncCount(version))
+			if (!HasVSyncCount(version))
 			{
 				VSyncCount = setting.VSyncCount;
 			}
-			if (!IsReadLodBias(version))
+			if (!HasLodBias(version))
 			{
 				LodBias = setting.LodBias;
 				MaximumLODLevel = setting.MaximumLODLevel;
 			}
-			if (!IsReadStreamingMipmapsActive(version))
+			if (!HasStreamingMipmapsActive(version))
 			{
 				StreamingMipmapsActive = setting.StreamingMipmapsActive;
 				StreamingMipmapsAddAllCameras = setting.StreamingMipmapsAddAllCameras;
@@ -263,58 +197,62 @@ namespace uTinyRipper.Classes.QualitySettingss
 				StreamingMipmapsMaxLevelReduction = setting.StreamingMipmapsMaxLevelReduction;
 				StreamingMipmapsMaxFileIORequests = setting.StreamingMipmapsMaxFileIORequests;
 			}
-			if (!IsReadParticleRaycastBudget(version))
+			if (!HasParticleRaycastBudget(version))
 			{
 				ParticleRaycastBudget = setting.ParticleRaycastBudget;
 			}
-			if (!IsReadAsyncUploadTimeSlice(version))
+			if (!HasAsyncUploadTimeSlice(version))
 			{
 				AsyncUploadTimeSlice = setting.AsyncUploadTimeSlice;
 				AsyncUploadBufferSize = setting.AsyncUploadBufferSize;
 			}
-			if (!IsReadResolutionScalingFixedDPIFactor(version))
+			if (!HasResolutionScalingFixedDPIFactor(version))
 			{
 				ResolutionScalingFixedDPIFactor = setting.ResolutionScalingFixedDPIFactor;
 			}
-#if UNIVERSAL
-			if (!IsReadExcludedTargetPlatforms(version, flags))
+			if (!HasCustomRenderPipeline(version))
 			{
-				m_excludedTargetPlatforms = setting.m_excludedTargetPlatforms;
+				CustomRenderPipeline = setting.CustomRenderPipeline;
+			}
+#if UNIVERSAL
+			if (!HasExcludedTargetPlatforms(version, flags))
+			{
+				ExcludedTargetPlatforms = setting.ExcludedTargetPlatforms;
 			}
 #endif
 		}
 
 		public void Read(AssetReader reader)
 		{
-			if (IsReadName(reader.Version))
+			if (HasName(reader.Version))
 			{
 				Name = reader.ReadString();
 			}
 			PixelLightCount = reader.ReadInt32();
-			if (IsReadShadows(reader.Version))
+			if (HasShadows(reader.Version))
 			{
 				Shadows = (ShadowQuality)reader.ReadInt32();
 				ShadowResolution = (ShadowResolution)reader.ReadInt32();
 			}
-			if (IsReadShadowProjection(reader.Version))
+			if (HasShadowProjection(reader.Version))
 			{
 				ShadowProjection = (ShadowProjection)reader.ReadInt32();
 			}
-			if (IsReadShadowCascades(reader.Version))
+			if (HasShadowCascades(reader.Version))
 			{
 				ShadowCascades = (ShadowCascades)reader.ReadInt32();
 				ShadowDistance = reader.ReadSingle();
 			}
-			if (IsReadShadowNearPlaneOffset(reader.Version))
+			if (HasShadowNearPlaneOffset(reader.Version))
 			{
 				ShadowNearPlaneOffset = reader.ReadSingle();
 			}
-			if (IsReadShadowCascade2Split(reader.Version))
+			if (HasShadowCascade2Split(reader.Version))
 			{
 				ShadowCascade2Split = reader.ReadSingle();
 				ShadowCascade4Split.Read(reader);
 			}
-			if (IsReadShadowmaskMode(reader.Version))
+			if (HasShadowmaskMode(reader.Version))
 			{
 				ShadowmaskMode = (ShadowmaskMode)reader.ReadInt32();
 			}
@@ -323,78 +261,82 @@ namespace uTinyRipper.Classes.QualitySettingss
 			TextureQuality = (TextureQuality)reader.ReadInt32();
 			AnisotropicTextures = (AnisotropicFiltering)reader.ReadInt32();
 			AntiAliasing = (AntiAliasing)reader.ReadInt32();
-			if (IsReadSoftParticles(reader.Version))
+			if (HasSoftParticles(reader.Version))
 			{
 				SoftParticles = reader.ReadBoolean();
 			}
-			if (IsReadSoftVegetation(reader.Version))
+			if (HasSoftVegetation(reader.Version))
 			{
 				SoftVegetation = reader.ReadBoolean();
 			}
-			if (IsReadRealtimeReflectionProbes(reader.Version))
+			if (HasRealtimeReflectionProbes(reader.Version))
 			{
 				RealtimeReflectionProbes = reader.ReadBoolean();
 			}
-			if (IsReadBillboardsFaceCameraPosition(reader.Version))
+			if (HasBillboardsFaceCameraPosition(reader.Version))
 			{
 				BillboardsFaceCameraPosition = reader.ReadBoolean();
 			}
-			if (IsReadSyncToVBL(reader.Version))
+			if (HasSyncToVBL(reader.Version))
 			{
 				SyncToVBL = reader.ReadBoolean();
 			}
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
-			if (IsReadVSyncCount(reader.Version))
+			if (HasVSyncCount(reader.Version))
 			{
 				VSyncCount = (VSyncCount)reader.ReadInt32();
 			}
-			if (IsReadLodBias(reader.Version))
+			if (HasLodBias(reader.Version))
 			{
 				LodBias = reader.ReadSingle();
 				MaximumLODLevel = reader.ReadInt32();
 			}
 
-			if (IsReadStreamingMipmapsActive(reader.Version))
+			if (HasStreamingMipmapsActive(reader.Version))
 			{
 				StreamingMipmapsActive = reader.ReadBoolean();
 				StreamingMipmapsAddAllCameras = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				StreamingMipmapsMemoryBudget = reader.ReadSingle();
 				StreamingMipmapsRenderersPerFrame = reader.ReadInt32();
 				StreamingMipmapsMaxLevelReduction = reader.ReadInt32();
 				StreamingMipmapsMaxFileIORequests = reader.ReadInt32();
 			}
-			if (IsReadParticleRaycastBudget(reader.Version))
+			if (HasParticleRaycastBudget(reader.Version))
 			{
 				ParticleRaycastBudget = reader.ReadInt32();
 			}
-			if (IsReadAsyncUploadTimeSlice(reader.Version))
+			if (HasAsyncUploadTimeSlice(reader.Version))
 			{
 				AsyncUploadTimeSlice = reader.ReadInt32();
 				AsyncUploadBufferSize = reader.ReadInt32();
 			}
-			if (IsReadAsyncUploadPersistentBuffer(reader.Version))
+			if (HasAsyncUploadPersistentBuffer(reader.Version))
 			{
 				AsyncUploadPersistentBuffer = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
-			if (IsReadResolutionScalingFixedDPIFactor(reader.Version))
+			if (HasResolutionScalingFixedDPIFactor(reader.Version))
 			{
 				ResolutionScalingFixedDPIFactor = reader.ReadSingle();
 			}
-			if (IsReadVSyncCount(reader.Version))
+			if (HasCustomRenderPipeline(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				CustomRenderPipeline.Read(reader);
+			}
+			if (HasVSyncCount(reader.Version))
+			{
+				reader.AlignStream();
 			}
 
 #if UNIVERSAL
-			if (IsReadExcludedTargetPlatforms(reader.Version, reader.Flags))
+			if (HasExcludedTargetPlatforms(reader.Version, reader.Flags))
 			{
-				m_excludedTargetPlatforms = reader.ReadStringArray();
+				ExcludedTargetPlatforms = reader.ReadStringArray();
 			}
 #endif
 		}
@@ -402,7 +344,7 @@ namespace uTinyRipper.Classes.QualitySettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(NameName, Name);
 			node.Add(PixelLightCountName, PixelLightCount);
 			node.Add(ShadowsName, (int)Shadows);
@@ -414,7 +356,7 @@ namespace uTinyRipper.Classes.QualitySettingss
 			node.Add(ShadowCascade2SplitName, ShadowCascade2Split);
 			node.Add(ShadowCascade4SplitName, ShadowCascade4Split.ExportYAML(container));
 			node.Add(ShadowmaskModeName, (int)ShadowmaskMode);
-			node.Add(IsSkinWeightsName(container.ExportVersion) ? SkinWeightsName : BlendWeightsName, (int)SkinWeights);
+			node.Add(GetSkinWeightsName(container.ExportVersion), (int)SkinWeights);
 			node.Add(TextureQualityName, (int)TextureQuality);
 			node.Add(AnisotropicTexturesName, (int)AnisotropicTextures);
 			node.Add(AntiAliasingName, (int)AntiAliasing);
@@ -425,7 +367,7 @@ namespace uTinyRipper.Classes.QualitySettingss
 			node.Add(VSyncCountName, (int)VSyncCount);
 			node.Add(LodBiasName, LodBias);
 			node.Add(MaximumLODLevelName, MaximumLODLevel);
-			if (IsReadStreamingMipmapsActive(container.ExportVersion))
+			if (HasStreamingMipmapsActive(container.ExportVersion))
 			{
 				node.Add(StreamingMipmapsActiveName, StreamingMipmapsActive);
 				node.Add(StreamingMipmapsAddAllCamerasName, GetStreamingMipmapsAddAllCameras(container.Version));
@@ -437,11 +379,15 @@ namespace uTinyRipper.Classes.QualitySettingss
 			node.Add(ParticleRaycastBudgetName, ParticleRaycastBudget);
 			node.Add(AsyncUploadTimeSliceName, AsyncUploadTimeSlice);
 			node.Add(AsyncUploadBufferSizeName, AsyncUploadBufferSize);
-			if (IsReadAsyncUploadPersistentBuffer(container.ExportVersion))
+			if (HasAsyncUploadPersistentBuffer(container.ExportVersion))
 			{
 				node.Add(AsyncUploadPersistentBufferName, AsyncUploadPersistentBuffer);
 			}
 			node.Add(ResolutionScalingFixedDPIFactorName, ResolutionScalingFixedDPIFactor);
+			if (HasCustomRenderPipeline(container.ExportVersion))
+			{
+				node.Add(CustomRenderPipelineName, CustomRenderPipeline.ExportYAML(container));
+			}
 			node.Add(ExcludedTargetPlatformsName, GetExcludedTargetPlatforms(container.Version, container.Flags).ExportYAML());
 			return node;
 		}
@@ -449,32 +395,37 @@ namespace uTinyRipper.Classes.QualitySettingss
 		private IReadOnlyList<string> GetExcludedTargetPlatforms(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
-			if(IsReadExcludedTargetPlatforms(version, flags))
+			if (HasExcludedTargetPlatforms(version, flags))
 			{
 				return ExcludedTargetPlatforms;
 			}
 #endif
-			return new string[0];
+			return System.Array.Empty<string>();
 		}
 		private bool GetStreamingMipmapsAddAllCameras(Version version)
 		{
-			return IsReadStreamingMipmapsActive(version) ? StreamingMipmapsAddAllCameras : true;
+			return HasStreamingMipmapsActive(version) ? StreamingMipmapsAddAllCameras : true;
 		}
 		private float GetStreamingMipmapsMemoryBudget(Version version)
 		{
-			return IsReadStreamingMipmapsActive(version) ? StreamingMipmapsMemoryBudget : 512.0f;
+			return HasStreamingMipmapsActive(version) ? StreamingMipmapsMemoryBudget : 512.0f;
 		}
 		private int GetStreamingMipmapsRenderersPerFrame(Version version)
 		{
-			return IsReadStreamingMipmapsActive(version) ? StreamingMipmapsRenderersPerFrame : 512;
+			return HasStreamingMipmapsActive(version) ? StreamingMipmapsRenderersPerFrame : 512;
 		}
 		private int GetStreamingMipmapsMaxLevelReduction(Version version)
 		{
-			return IsReadStreamingMipmapsActive(version) ? StreamingMipmapsMaxLevelReduction : 2;
+			return HasStreamingMipmapsActive(version) ? StreamingMipmapsMaxLevelReduction : 2;
 		}
 		private int GetStreamingMipmapsMaxFileIORequests(Version version)
 		{
-			return IsReadStreamingMipmapsActive(version) ? StreamingMipmapsMaxFileIORequests : 1024;
+			return HasStreamingMipmapsActive(version) ? StreamingMipmapsMaxFileIORequests : 1024;
+		}
+
+		private string GetSkinWeightsName(Version version)
+		{
+			return version.IsGreaterEqual(2019) ? SkinWeightsName : BlendWeightsName;
 		}
 
 		public string Name { get; set; }
@@ -514,7 +465,7 @@ namespace uTinyRipper.Classes.QualitySettingss
 		public bool AsyncUploadPersistentBuffer { get; set; }
 		public float ResolutionScalingFixedDPIFactor { get; set; }
 #if UNIVERSAL
-		public IReadOnlyList<string> ExcludedTargetPlatforms => m_excludedTargetPlatforms;
+		public string[] ExcludedTargetPlatforms { get; set; }
 #endif
 
 		public const string NameName = "name";
@@ -551,12 +502,10 @@ namespace uTinyRipper.Classes.QualitySettingss
 		public const string AsyncUploadBufferSizeName = "asyncUploadBufferSize";
 		public const string AsyncUploadPersistentBufferName = "asyncUploadPersistentBuffer";
 		public const string ResolutionScalingFixedDPIFactorName = "resolutionScalingFixedDPIFactor";
+		public const string CustomRenderPipelineName = "customRenderPipeline";
 		public const string ExcludedTargetPlatformsName = "excludedTargetPlatforms";
 
 		public Vector3f ShadowCascade4Split;
-
-#if UNIVERSAL
-		private string[] m_excludedTargetPlatforms;
-#endif
+		public PPtr<MonoBehaviour> CustomRenderPipeline;
 	}
 }

@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.EditorSettingss
@@ -13,16 +13,18 @@ namespace uTinyRipper.Classes.EditorSettingss
 		public void Read(AssetReader reader)
 		{
 			InProgressEnabled = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("inProgressEnabled", InProgressEnabled);
+			node.Add(InProgressEnabledName, InProgressEnabled);
 			return node;
 		}
 
-		public bool InProgressEnabled { get; private set; }
+		public bool InProgressEnabled { get; set; }
+
+		public const string InProgressEnabledName = "inProgressEnabled";
 	}
 }

@@ -1,11 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.ParticleSystemRenderers;
 using uTinyRipper.Classes.SpriteRenderers;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {
@@ -16,115 +13,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadMinParticleSize(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadNormalDirection(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
-		/// 2018.3 and greater
-		/// </summary>
-		public static bool IsReadShadowBias(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadRenderAlignment(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 2018.3 and greater
-		/// </summary>
-		public static bool IsReadFlip(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
-		/// <summary>
-		/// 5.5.0b11 and greater
-		/// </summary>
-		public static bool IsReadUseCustomVertexStreams(Version version)
-		{
-			return version.IsGreaterEqual(5, 5, 0, VersionType.Beta, 11);
-		}
-		/// <summary>
-		/// 2018.1 and greater
-		/// </summary>
-		public static bool IsReadEnableGPUInstancing(Version version)
-		{
-			return version.IsGreaterEqual(2018);
-		}
-		/// <summary>
-		/// 2018.2 and greater
-		/// </summary>
-		public static bool IsReadApplyActiveColorSpace(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
-		/// <summary>
-		/// 2018.3 and greater
-		/// </summary>
-		public static bool IsReadAllowRoll(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
-		/// <summary>
-		/// 5.5.0 to 5.6.0 exclusive
-		/// </summary>
-		public static bool IsReadVertexStreamMask(Version version)
-		{
-			return version.IsGreaterEqual(5, 5) && version.IsLess(5, 6);
-		}
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		public static bool IsReadVertexStreams(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
-		
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadMeshes(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
-		/// 2017.1.0b2 and greater
-		/// </summary>
-		public static bool IsReadMaskInteraction(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		}
-		
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		private static bool IsModeShort(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		private static bool IsSortModeFirst(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// m_ApplyActiveColorSpace previous value is false
 			if (version.IsGreaterEqual(2018, 2))
@@ -151,6 +40,69 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasMinParticleSize(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasNormalDirection(Version version) => version.IsGreaterEqual(4);
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool HasShadowBias(Version version) => version.IsGreaterEqual(2018, 3);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasRenderAlignment(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool HasFlip(Version version) => version.IsGreaterEqual(2018, 3);
+		/// <summary>
+		/// 5.5.0b11 and greater
+		/// </summary>
+		public static bool HasUseCustomVertexStreams(Version version) => version.IsGreaterEqual(5, 5, 0, VersionType.Beta, 11);
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool HasEnableGPUInstancing(Version version) => version.IsGreaterEqual(2018);
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool HasApplyActiveColorSpace(Version version) => version.IsGreaterEqual(2018, 2);
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool HasAllowRoll(Version version) => version.IsGreaterEqual(2018, 3);
+		/// <summary>
+		/// 5.5.0 to 5.6.0 exclusive
+		/// </summary>
+		public static bool HasVertexStreamMask(Version version) => version.IsGreaterEqual(5, 5) && version.IsLess(5, 6);
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
+		public static bool HasVertexStreams(Version version) => version.IsGreaterEqual(5, 6);
+		
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasMeshes(Version version) => version.IsGreaterEqual(4);
+		/// <summary>
+		/// 2017.1.0b2 and greater
+		/// </summary>
+		public static bool HasMaskInteraction(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		private static bool IsModeShort(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		private static bool IsSortModeFirst(Version version) => version.IsGreaterEqual(5, 3);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -161,7 +113,7 @@ namespace uTinyRipper.Classes
 				SortMode = (ParticleSystemSortMode)reader.ReadUInt16();
 			}
 
-			if (IsReadMinParticleSize(reader.Version))
+			if (HasMinParticleSize(reader.Version))
 			{
 				MinParticleSize = reader.ReadSingle();
 			}
@@ -171,11 +123,11 @@ namespace uTinyRipper.Classes
 			LengthScale = reader.ReadSingle();
 			SortingFudge = reader.ReadSingle();
 
-			if (IsReadNormalDirection(reader.Version))
+			if (HasNormalDirection(reader.Version))
 			{
 				NormalDirection = reader.ReadSingle();
 			}
-			if (IsReadShadowBias(reader.Version))
+			if (HasShadowBias(reader.Version))
 			{
 				ShadowBias = reader.ReadSingle();
 			}
@@ -184,7 +136,7 @@ namespace uTinyRipper.Classes
 				SortMode = (ParticleSystemSortMode)reader.ReadInt32();
 			}
 
-			if (IsReadRenderAlignment(reader.Version))
+			if (HasRenderAlignment(reader.Version))
 			{
 				RenderAlignment = (ParticleSystemRenderSpace)reader.ReadInt32();
 				Pivot.Read(reader);
@@ -193,30 +145,30 @@ namespace uTinyRipper.Classes
 			{
 				RenderAlignment = RenderMode == ParticleSystemRenderMode.Mesh ? ParticleSystemRenderSpace.Local : ParticleSystemRenderSpace.View;
 			}
-			if (IsReadFlip(reader.Version))
+			if (HasFlip(reader.Version))
 			{
 				Flip.Read(reader);
 			}
 
-			if (IsReadUseCustomVertexStreams(reader.Version))
+			if (HasUseCustomVertexStreams(reader.Version))
 			{
 				UseCustomVertexStreams = reader.ReadBoolean();
-				if (IsReadEnableGPUInstancing(reader.Version))
+				if (HasEnableGPUInstancing(reader.Version))
 				{
 					EnableGPUInstancing = reader.ReadBoolean();
 				}
-				if (IsReadApplyActiveColorSpace(reader.Version))
+				if (HasApplyActiveColorSpace(reader.Version))
 				{
 					ApplyActiveColorSpace = reader.ReadBoolean();
 				}
-				if (IsReadAllowRoll(reader.Version))
+				if (HasAllowRoll(reader.Version))
 				{
 					AllowRoll = reader.ReadBoolean();
 				}
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 			}
-			if (IsReadVertexStreamMask(reader.Version))
+			if (HasVertexStreamMask(reader.Version))
 			{
 				int vertexStreamMask = reader.ReadInt32();
 				List<byte> vertexStreams = new List<byte>(8);
@@ -227,47 +179,47 @@ namespace uTinyRipper.Classes
 						vertexStreams.Add(i);
 					}
 				}
-				m_vertexStreams = vertexStreams.ToArray();
+				VertexStreams = vertexStreams.ToArray();
 			}
-			if (IsReadVertexStreams(reader.Version))
+			if (HasVertexStreams(reader.Version))
 			{
-				m_vertexStreams = reader.ReadByteArray();
-				reader.AlignStream(AlignType.Align4);
+				VertexStreams = reader.ReadByteArray();
+				reader.AlignStream();
 			}
 
 			Mesh.Read(reader);
-			if (IsReadMeshes(reader.Version))
+			if (HasMeshes(reader.Version))
 			{
 				Mesh1.Read(reader);
 				Mesh2.Read(reader);
 				Mesh3.Read(reader);
 			}
-			if (IsReadMaskInteraction(reader.Version))
+			if (HasMaskInteraction(reader.Version))
 			{
 				MaskInteraction = (SpriteMaskInteraction)reader.ReadInt32();
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return Mesh.FetchDependency(file, isLog, ToLogString, MeshName);
-			if (IsReadMeshes(file.Version))
+			yield return context.FetchDependency(Mesh, MeshName);
+			if (HasMeshes(context.Version))
 			{
-				yield return Mesh1.FetchDependency(file, isLog, ToLogString, Mesh1Name);
-				yield return Mesh2.FetchDependency(file, isLog, ToLogString, Mesh2Name);
-				yield return Mesh3.FetchDependency(file, isLog, ToLogString, Mesh3Name);
+				yield return context.FetchDependency(Mesh1, Mesh1Name);
+				yield return context.FetchDependency(Mesh2, Mesh2Name);
+				yield return context.FetchDependency(Mesh3, Mesh3Name);
 			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(RenderModeName, (short)RenderMode);
 			node.Add(SortModeName, (short)SortMode);
 			node.Add(MinParticleSizeName, MinParticleSize);
@@ -291,30 +243,30 @@ namespace uTinyRipper.Classes
 
 		private float GetNormalDirection(Version version)
 		{
-			return IsReadNormalDirection(version) ? NormalDirection : 1.0f;
+			return HasNormalDirection(version) ? NormalDirection : 1.0f;
 		}
 		private IReadOnlyList<byte> GetVertexStreams(Version version)
 		{
-			return IsReadUseCustomVertexStreams(version) ? VertexStreams : new byte[] { 0, 1, 3, 4, 5 };
+			return HasUseCustomVertexStreams(version) ? VertexStreams : new byte[] { 0, 1, 3, 4, 5 };
 		}
 
-		public ParticleSystemRenderMode RenderMode { get; private set; }
-		public ParticleSystemSortMode SortMode { get; private set; }
-		public float MinParticleSize { get; private set; }
-		public float MaxParticleSize { get; private set; }
-		public float CameraVelocityScale { get; private set; }
-		public float VelocityScale { get; private set; }
-		public float LengthScale { get; private set; }
-		public float SortingFudge { get; private set; }
-		public float NormalDirection { get; private set; }
-		public float ShadowBias { get; private set; }
-		public ParticleSystemRenderSpace RenderAlignment { get; private set; }
-		public bool UseCustomVertexStreams { get; private set; }
-		public bool EnableGPUInstancing { get; private set; }
-		public bool ApplyActiveColorSpace { get; private set; }
-		public bool AllowRoll { get; private set; }
-		public IReadOnlyList<byte> VertexStreams => m_vertexStreams;
-		public SpriteMaskInteraction MaskInteraction { get; private set; }
+		public ParticleSystemRenderMode RenderMode { get; set; }
+		public ParticleSystemSortMode SortMode { get; set; }
+		public float MinParticleSize { get; set; }
+		public float MaxParticleSize { get; set; }
+		public float CameraVelocityScale { get; set; }
+		public float VelocityScale { get; set; }
+		public float LengthScale { get; set; }
+		public float SortingFudge { get; set; }
+		public float NormalDirection { get; set; }
+		public float ShadowBias { get; set; }
+		public ParticleSystemRenderSpace RenderAlignment { get; set; }
+		public bool UseCustomVertexStreams { get; set; }
+		public bool EnableGPUInstancing { get; set; }
+		public bool ApplyActiveColorSpace { get; set; }
+		public bool AllowRoll { get; set; }
+		public byte[] VertexStreams { get; set; }
+		public SpriteMaskInteraction MaskInteraction { get; set; }
 
 		public const string RenderModeName = "m_RenderMode";
 		public const string SortModeName = "m_SortMode";
@@ -341,7 +293,5 @@ namespace uTinyRipper.Classes
 		public PPtr<Mesh> Mesh1;
 		public PPtr<Mesh> Mesh2;
 		public PPtr<Mesh> Mesh3;
-
-		private byte[] m_vertexStreams;
 	}
 }

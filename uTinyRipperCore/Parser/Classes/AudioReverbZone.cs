@@ -1,9 +1,9 @@
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
-    public sealed class AudioReverbZone : Behaviour
+	public sealed class AudioReverbZone : Behaviour
 	{
 		public AudioReverbZone(AssetInfo assetInfo) : base(assetInfo)
 		{
@@ -12,10 +12,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Less than 5.6.0
 		/// </summary>
-		public static bool IsReadRoomRolloffFactor(Version version)
-		{
-			return version.IsLess(5, 6);
-		}
+		public static bool HasRoomRolloffFactor(Version version) => version.IsLess(5, 6);
 
 		public override void Read(AssetReader reader)
 		{
@@ -33,7 +30,7 @@ namespace uTinyRipper.Classes
             Reverb = reader.ReadInt32();
             ReverbDelay = reader.ReadSingle();
             HFReference = reader.ReadSingle();
-			if (IsReadRoomRolloffFactor(reader.Version))
+			if (HasRoomRolloffFactor(reader.Version))
 			{
 				RoomRolloffFactor = reader.ReadSingle();
 			}
@@ -46,41 +43,58 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-            node.Add("m_MinDistance", MinDistance);
-            node.Add("m_MaxDistance", MaxDistance);
-            node.Add("m_ReverbPreset", ReverbPreset);
-            node.Add("m_Room", Room);
-            node.Add("m_RoomHF", RoomHF);
-            node.Add("m_DecayTime", DecayTime);
-            node.Add("m_DecayHFRatio", DecayHFRatio);
-            node.Add("m_Reflections", Reflections);
-            node.Add("m_ReflectionsDelay", ReflectionsDelay);
-            node.Add("m_Reverb", Reverb);
-            node.Add("m_ReverbDelay", ReverbDelay);
-            node.Add("m_HFReference", HFReference);
-            node.Add("m_Diffusion", Diffusion);
-            node.Add("m_Density", Density);
-            node.Add("m_LFReference", LFReference);
-            node.Add("m_RoomLF", RoomLF);
-            return node;
+			node.Add(MinDistanceName, MinDistance);
+			node.Add(MaxDistanceName, MaxDistance);
+			node.Add(ReverbPresetName, ReverbPreset);
+			node.Add(RoomName, Room);
+			node.Add(RoomHFName, RoomHF);
+			node.Add(DecayTimeName, DecayTime);
+			node.Add(DecayHFRatioName, DecayHFRatio);
+			node.Add(ReflectionsName, Reflections);
+			node.Add(ReflectionsDelayName, ReflectionsDelay);
+			node.Add(ReverbName, Reverb);
+			node.Add(ReverbDelayName, ReverbDelay);
+			node.Add(HFReferenceName, HFReference);
+			node.Add(DiffusionName, Diffusion);
+			node.Add(DensityName, Density);
+			node.Add(LFReferenceName, LFReference);
+			node.Add(RoomLFName, RoomLF);
+			return node;
 		}
         
-        public float MinDistance { get; private set; }
-        public float MaxDistance { get; private set; }
-        public int ReverbPreset { get; private set; }
-        public int Room { get; private set; }
-        public int RoomHF { get; private set; }
-        public int RoomLF { get; private set; }
-        public float DecayTime { get; private set; }
-        public float DecayHFRatio { get; private set; }
-        public int Reflections { get; private set; }
-        public float ReflectionsDelay { get; private set; }
-        public int Reverb { get; private set; }
-        public float ReverbDelay { get; private set; }
-        public float HFReference { get; private set; }
-		public float RoomRolloffFactor { get; private set; }
-		public float LFReference { get; private set; }
-        public float Diffusion { get; private set; }
-        public float Density { get; private set; }
+        public float MinDistance { get; set; }
+        public float MaxDistance { get; set; }
+        public int ReverbPreset { get; set; }
+        public int Room { get; set; }
+        public int RoomHF { get; set; }
+        public int RoomLF { get; set; }
+        public float DecayTime { get; set; }
+        public float DecayHFRatio { get; set; }
+        public int Reflections { get; set; }
+        public float ReflectionsDelay { get; set; }
+        public int Reverb { get; set; }
+        public float ReverbDelay { get; set; }
+        public float HFReference { get; set; }
+		public float RoomRolloffFactor { get; set; }
+		public float LFReference { get; set; }
+        public float Diffusion { get; set; }
+        public float Density { get; set; }
+
+		public const string MinDistanceName = "m_MinDistance";
+		public const string MaxDistanceName = "m_MaxDistance";
+		public const string ReverbPresetName = "m_ReverbPreset";
+		public const string RoomName = "m_Room";
+		public const string RoomHFName = "m_RoomHF";
+		public const string DecayTimeName = "m_DecayTime";
+		public const string DecayHFRatioName = "m_DecayHFRatio";
+		public const string ReflectionsName = "m_Reflections";
+		public const string ReflectionsDelayName = "m_ReflectionsDelay";
+		public const string ReverbName = "m_Reverb";
+		public const string ReverbDelayName = "m_ReverbDelay";
+		public const string HFReferenceName = "m_HFReference";
+		public const string DiffusionName = "m_Diffusion";
+		public const string DensityName = "m_Density";
+		public const string LFReferenceName = "m_LFReference";
+		public const string RoomLFName = "m_RoomLF";
 	}
 }

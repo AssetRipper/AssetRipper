@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -21,12 +21,15 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("friction", Friction);
-			node.Add("bounciness", Bounciness);
+			node.Add(FrictionName, Friction);
+			node.Add(BouncinessName, Bounciness);
 			return node;
 		}
 
-		public float Friction { get; private set; }
-		public float Bounciness { get; private set; }
+		public float Friction { get; set; }
+		public float Bounciness { get; set; }
+
+		public const string FrictionName = "friction";
+		public const string BouncinessName = "bounciness";
 	}
 }

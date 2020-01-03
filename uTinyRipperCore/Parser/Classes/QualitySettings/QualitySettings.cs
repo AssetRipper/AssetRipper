@@ -1,8 +1,10 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.QualitySettingss;
+using uTinyRipper.Converters;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes
 {
@@ -19,61 +21,10 @@ namespace uTinyRipper.Classes
 			return virtualFile.CreateAsset((assetInfo) => new QualitySettings(assetInfo));
 		}
 
-		/// <summary>
-		/// 1.5.0 and greater
-		/// </summary>
-		public static bool IsReadQualitySettings(Version version)
-		{
-			return version.IsGreaterEqual(1, 5);
-		}
-
-		/// <summary>
-		/// 1.6.0 to 3.5.0 exclusive
-		/// </summary>
-		public static bool IsReadDefaultStandaloneQuality(Version version)
-		{
-			return version.IsLess(3, 5) && version.IsGreaterEqual(1, 6);
-		}
-		/// <summary>
-		/// 3.2.0 to 3.5.0 exclusive
-		/// </summary>
-		public static bool IsReadDefaultMobileQuality(Version version)
-		{
-			return version.IsLess(3, 5) && version.IsGreaterEqual(3, 2);
-		}
-		/// <summary>
-		/// 3.5.0 and greater
-		/// </summary>
-		public static bool IsReadQualitySettingArray(Version version)
-		{
-			return version.IsGreaterEqual(3, 5);
-		}
-		/// <summary>
-		/// Less than 3.0.0
-		/// </summary>
-		public static bool IsReadWebPlayer(Version version)
-		{
-			return version.IsLess(3);
-		}
-		/// <summary>
-		/// 3.5.0 and greater and Not Release
-		/// </summary>
-		public static bool IsReadPerPlatformDefaultQuality(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(3, 5);
-		}
-		/// <summary>
-		/// 3.5.0 and greater and Release
-		/// </summary>
-		public static bool IsReadStrippedMaximumLODLevel(Version version, TransferInstructionFlags flags)
-		{
-			return flags.IsRelease() && version.IsGreaterEqual(3, 5);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// static PlatformDefaultQuality has been replaced by dictionary
-			if (Config.IsExportTopmostSerializedVersion || version.IsGreaterEqual(3, 5))
+			if (version.IsGreaterEqual(3, 5))
 			{
 				return 5;
 			}
@@ -95,58 +46,93 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// 1.5.0 and greater
+		/// </summary>
+		public static bool HasQualitySettings(Version version) => version.IsGreaterEqual(1, 5);
+		/// <summary>
+		/// 1.6.0 to 3.5.0 exclusive
+		/// </summary>
+		public static bool HasDefaultStandaloneQuality(Version version) => version.IsLess(3, 5) && version.IsGreaterEqual(1, 6);
+		/// <summary>
+		/// 3.2.0 to 3.5.0 exclusive
+		/// </summary>
+		public static bool HasDefaultMobileQuality(Version version) => version.IsLess(3, 5) && version.IsGreaterEqual(3, 2);
+		/// <summary>
+		/// 3.5.0 and greater
+		/// </summary>
+		public static bool HasQualitySettingArray(Version version) => version.IsGreaterEqual(3, 5);
+		/// <summary>
+		/// Less than 3.0.0
+		/// </summary>
+		public static bool HasWebPlayer(Version version) => version.IsLess(3);
+		/// <summary>
+		/// 3.5.0 and greater and Not Release
+		/// </summary>
+		public static bool HasPerPlatformDefaultQuality(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(3, 5);
+		}
+		/// <summary>
+		/// 3.5.0 and greater and Release
+		/// </summary>
+		public static bool HasStrippedMaximumLODLevel(Version version, TransferInstructionFlags flags)
+		{
+			return flags.IsRelease() && version.IsGreaterEqual(3, 5);
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadDefaultStandaloneQuality(reader.Version))
+			if (HasDefaultStandaloneQuality(reader.Version))
 			{
 				QualityLevel defaultStandaloneQuality = (QualityLevel)reader.ReadInt32();
 				QualityLevel defaultWebPlayerQuality = (QualityLevel)reader.ReadInt32();
-				m_perPlatformDefaultQuality = new Dictionary<string, int>();
-				SetDefaultPlatformQuality(m_perPlatformDefaultQuality);
-				m_perPlatformDefaultQuality[BuildTargetGroup.Standalone.ToExportString()] = (int)defaultStandaloneQuality;
-				m_perPlatformDefaultQuality[BuildTargetGroup.WebPlayer.ToExportString()] = (int)defaultStandaloneQuality;
+				PerPlatformDefaultQuality = new Dictionary<string, int>();
+				SetDefaultPlatformQuality(PerPlatformDefaultQuality);
+				PerPlatformDefaultQuality[BuildTargetGroup.Standalone.ToExportString()] = (int)defaultStandaloneQuality;
+				PerPlatformDefaultQuality[BuildTargetGroup.WebPlayer.ToExportString()] = (int)defaultStandaloneQuality;
 			}
-			if (IsReadDefaultMobileQuality(reader.Version))
+			if (HasDefaultMobileQuality(reader.Version))
 			{
 				QualityLevel defaultMobileQuality = (QualityLevel)reader.ReadInt32();
-				m_perPlatformDefaultQuality[BuildTargetGroup.Android.ToExportString()] = (int)defaultMobileQuality;
-				m_perPlatformDefaultQuality[BuildTargetGroup.iOS.ToExportString()] = (int)defaultMobileQuality;
+				PerPlatformDefaultQuality[BuildTargetGroup.Android.ToExportString()] = (int)defaultMobileQuality;
+				PerPlatformDefaultQuality[BuildTargetGroup.iOS.ToExportString()] = (int)defaultMobileQuality;
 			}
 			CurrentQuality = reader.ReadInt32();
-			if (IsReadQualitySettingArray(reader.Version))
+			if (HasQualitySettingArray(reader.Version))
 			{
-				m_qualitySettings = reader.ReadAssetArray<QualitySetting>();
+				QualitySettingss = reader.ReadAssetArray<QualitySetting>();
 			}
 			else
 			{
-				m_qualitySettings = new QualitySetting[6];
+				QualitySettingss = new QualitySetting[6];
 				QualitySetting fastest = reader.ReadAsset<QualitySetting>();
 				fastest.Name = nameof(QualityLevel.Fastest);
-				m_qualitySettings[(int)QualityLevel.Fastest] = fastest;
+				QualitySettingss[(int)QualityLevel.Fastest] = fastest;
 
 				QualitySetting fast = reader.ReadAsset<QualitySetting>();
 				fast.Name = nameof(QualityLevel.Fast);
-				m_qualitySettings[(int)QualityLevel.Fast] = fast;
+				QualitySettingss[(int)QualityLevel.Fast] = fast;
 
 				QualitySetting simple = reader.ReadAsset<QualitySetting>();
 				simple.Name = nameof(QualityLevel.Simple);
-				m_qualitySettings[(int)QualityLevel.Simple] = simple;
+				QualitySettingss[(int)QualityLevel.Simple] = simple;
 
 				QualitySetting good = reader.ReadAsset<QualitySetting>();
 				good.Name = nameof(QualityLevel.Good);
-				m_qualitySettings[(int)QualityLevel.Good] = good;
+				QualitySettingss[(int)QualityLevel.Good] = good;
 
 				QualitySetting beautiful = reader.ReadAsset<QualitySetting>();
 				beautiful.Name = nameof(QualityLevel.Beautiful);
-				m_qualitySettings[(int)QualityLevel.Beautiful] = beautiful;
+				QualitySettingss[(int)QualityLevel.Beautiful] = beautiful;
 
 				QualitySetting fantastic = reader.ReadAsset<QualitySetting>();
 				fantastic.Name = nameof(QualityLevel.Fantastic);
-				m_qualitySettings[(int)QualityLevel.Fantastic] = fantastic;
+				QualitySettingss[(int)QualityLevel.Fantastic] = fantastic;
 			}
-			foreach (QualitySetting setting in m_qualitySettings)
+			foreach (QualitySetting setting in QualitySettingss)
 			{
 				switch (setting.Name)
 				{
@@ -189,20 +175,20 @@ namespace uTinyRipper.Classes
 				}
 			}
 
-			if (IsReadWebPlayer(reader.Version))
+			if (HasWebPlayer(reader.Version))
 			{
 				QualitySetting webPlayer = reader.ReadAsset<QualitySetting>();
 				webPlayer.Name = "WebPlayer";
 			}
 
 #if UNIVERSAL
-			if (IsReadPerPlatformDefaultQuality(reader.Version, reader.Flags))
+			if (HasPerPlatformDefaultQuality(reader.Version, reader.Flags))
 			{
-				m_perPlatformDefaultQuality = new Dictionary<string, int>();
-				m_perPlatformDefaultQuality.Read(reader);
+				PerPlatformDefaultQuality = new Dictionary<string, int>();
+				PerPlatformDefaultQuality.Read(reader);
 			}
 #endif
-			if (IsReadStrippedMaximumLODLevel(reader.Version, reader.Flags))
+			if (HasStrippedMaximumLODLevel(reader.Version, reader.Flags))
 			{
 				StrippedMaximumLODLevel = reader.ReadInt32();
 			}
@@ -211,7 +197,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(CurrentQualityName, CurrentQuality);
 			node.Add(QualitySettingsName, QualitySettingss.ExportYAML(container));
 			node.Add(PerPlatformDefaultQualityName, GetPerPlatformDefaultQuality(container.Version, container.Flags).ExportYAML());
@@ -220,12 +206,12 @@ namespace uTinyRipper.Classes
 
 		private IReadOnlyDictionary<string, int> GetPerPlatformDefaultQuality(Version version, TransferInstructionFlags flags)
 		{
-			if (IsReadDefaultStandaloneQuality(version))
+			if (HasDefaultStandaloneQuality(version))
 			{
 				return PerPlatformDefaultQuality;
 			}
 #if UNIVERSAL
-			if (IsReadPerPlatformDefaultQuality(version, flags))
+			if (HasPerPlatformDefaultQuality(version, flags))
 			{
 				return PerPlatformDefaultQuality;
 			}
@@ -362,16 +348,13 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// EditorQuality previously
 		/// </summary>
-		public int CurrentQuality { get; private set; }
-		public IReadOnlyList<QualitySetting> QualitySettingss => m_qualitySettings;
-		public IReadOnlyDictionary<string, int> PerPlatformDefaultQuality => m_perPlatformDefaultQuality;
-		public int StrippedMaximumLODLevel { get; private set; }
+		public int CurrentQuality { get; set; }
+		public QualitySetting[] QualitySettingss { get; set; }
+		public Dictionary<string, int> PerPlatformDefaultQuality { get; set; }
+		public int StrippedMaximumLODLevel { get; set; }
 
 		public const string CurrentQualityName = "m_CurrentQuality";
 		public const string QualitySettingsName = "m_QualitySettings";
 		public const string PerPlatformDefaultQualityName = "m_PerPlatformDefaultQuality";
-
-		private QualitySetting[] m_qualitySettings;
-		private Dictionary<string, int> m_perPlatformDefaultQuality;
 	}
 }

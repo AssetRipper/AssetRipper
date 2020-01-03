@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
@@ -9,7 +8,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 	{
 		public void Read(AssetReader reader)
 		{
-			m_childThresholdArray = reader.ReadSingleArray();
+			ChildThresholdArray = reader.ReadSingleArray();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -17,8 +16,6 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 
-		public IReadOnlyList<float> ChildThresholdArray => m_childThresholdArray;
-
-		private float[] m_childThresholdArray;
+		public float[] ChildThresholdArray { get; set; }
 	}
 }

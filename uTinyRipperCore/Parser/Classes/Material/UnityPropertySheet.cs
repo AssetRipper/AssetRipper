@@ -1,15 +1,13 @@
 ﻿using SevenZip;
-using System;
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.Materials
 {
 	public struct UnityPropertySheet : IAssetReadable, IYAMLExportable, IDependent
 	{
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(2017, 3))
 			{
@@ -70,21 +68,18 @@ namespace uTinyRipper.Classes.Materials
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TexEnvsName, m_texEnvs.ExportYAML(container));
 			node.Add(FloatsName, m_floats.ExportYAML(container));
 			node.Add(ColorsName, m_colors.ExportYAML(container));
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(UnityTexEnv env in m_texEnvs.Values)
+			foreach (PPtr<Object> asset in context.FetchDependencies(TexEnvs.Values, TexEnvsName))
 			{
-				foreach(Object asset in env.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 

@@ -8,11 +8,10 @@
 // Licensed under the MIT/X11 license.
 //
 
-using System;
-
 using RVA = System.UInt32;
 
-namespace Mono.Cecil.PE {
+namespace Mono.Cecil.PE
+{
 
 	struct DataDirectory {
 

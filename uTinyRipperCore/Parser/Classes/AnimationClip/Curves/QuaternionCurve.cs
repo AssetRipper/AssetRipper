@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
+using uTinyRipper.Layout.AnimationClips;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
-	public struct QuaternionCurve : IAssetReadable, IYAMLExportable
+	public struct QuaternionCurve : IAsset, IYAMLExportable
 	{
 		public QuaternionCurve(QuaternionCurve copy, IReadOnlyList<KeyframeTpl<Quaternionf>> keyframes) :
 			this(copy.Path, keyframes)
@@ -34,13 +36,19 @@ namespace uTinyRipper.Classes.AnimationClips
 			Curve.Read(reader);
 			Path = reader.ReadString();
 		}
-		
+
+		public void Write(AssetWriter writer)
+		{
+			Curve.Write(writer);
+			writer.Write(Path);
+		}
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("curve", Curve.ExportYAML(container));
-			node.Add("path", Path);
-
+			QuaternionCurveLayout layout = container.ExportLayout.AnimationClip.QuaternionCurve;
+			node.Add(layout.CurveName, Curve.ExportYAML(container));
+			node.Add(layout.PathName, Path);
 			return node;
 		}
 

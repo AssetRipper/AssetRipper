@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes
 {
@@ -13,32 +12,26 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadVertex(Version version, TransferInstructionFlags flags)
-		{
-			return version.IsGreaterEqual(5) && flags.IsRelease();
-		}
+		public static bool HasVertex(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(5) && flags.IsRelease();
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadVertex(reader.Version, reader.Flags))
+			if (HasVertex(reader.Version, reader.Flags))
 			{
 				AdditionalVertexStreams.Read(reader);
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			if (!AdditionalVertexStreams.IsNull)
-			{
-				yield return AdditionalVertexStreams.FetchDependency(file, isLog, ToLogString, AdditionalVertexStreamsName);
-			}
+			yield return context.FetchDependency(AdditionalVertexStreams, AdditionalVertexStreamsName);
 		}
 
 		public const string AdditionalVertexStreamsName = "m_AdditionalVertexStreams";

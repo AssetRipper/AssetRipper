@@ -1,45 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
+using System.Threading;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
 	public static class ObjectUtils
 	{
-		public static List<Object> CollectDependencies(Object asset, bool isLog = false)
-		{
-			HashSet<Object> hdeps = new HashSet<Object>();
-			List<Object> deps = new List<Object>();
-			hdeps.Add(asset);
-			deps.Add(asset);
-
-			for (int i = 0; i < deps.Count; i++)
-			{
-				Object dep = deps[i];
-				foreach (Object newDep in dep.FetchDependencies(dep.File, isLog))
-				{
-					if (newDep == null)
-					{
-						continue;
-					}
-
-					if (hdeps.Add(newDep))
-					{
-						deps.Add(newDep);
-					}
-				}
-			}
-			
-			return deps;
-		}
-
-		public static long GenerateExportID(Object asset, IEnumerable<long> exportIDs)
-		{
-			return GenerateExportID(asset, (id) => exportIDs.Any(t => t == id));
-		}
-
-		public static long GenerateExportID(Object asset, Func<long, bool> uniqueChecker)
+		public static long GenerateExportID(Object asset, Func<long, bool> duplicateChecker)
 		{
 			if (asset == null)
 			{
@@ -61,19 +30,21 @@ namespace uTinyRipper.Classes
 			long exportID = 0;
 			do
 			{
-				ulong value = 0;
-				value += unchecked((uint)random.Next(0, 100000)) * 10000000000UL;
-				value += unchecked((uint)random.Next(0, 100000)) * 100000UL;
-				value += unchecked((uint)random.Next(0, 100000)) * 1UL;
+				ulong value = unchecked((ulong)GenerateInternalID());
 				persistentValue = unchecked(persistentValue + value);
 				exportID = prefix + (long)(persistentValue % 1000000000000000L);
-
 			}
-			while (uniqueChecker(exportID));
+			while (duplicateChecker(exportID));
 			return exportID;
 		}
 
-		public static EngineGUID CalculateAssetsGUID(IEnumerable<Object> assets)
+		public static long GenerateInternalID()
+		{
+			s_random.NextBytes(s_idBuffer.Value);
+			return BitConverter.ToInt64(s_idBuffer.Value, 0);
+		}
+
+		public static GUID CalculateAssetsGUID(IEnumerable<Object> assets)
 		{
 			List<uint> hashList = new List<uint>();
 			foreach (Object asset in assets)
@@ -87,7 +58,7 @@ namespace uTinyRipper.Classes
 			return CalculateGUID(hashList);
 		}
 
-		public static EngineGUID CalculateGUID(List<uint> hashList)
+		public static GUID CalculateGUID(List<uint> hashList)
 		{
 			uint[] hashArray = hashList.ToArray();
 			byte[] buffer = new byte[hashArray.Length * sizeof(uint)];
@@ -95,8 +66,11 @@ namespace uTinyRipper.Classes
 			using (MD5 md5 = MD5.Create())
 			{
 				byte[] hash = md5.ComputeHash(buffer);
-				return new EngineGUID(hash);
+				return new GUID(hash);
 			}
 		}
+
+		private static readonly ThreadSafeRandom s_random = new ThreadSafeRandom();
+		private static readonly ThreadLocal<byte[]> s_idBuffer = new ThreadLocal<byte[]>(() => new byte[8]);
 	}
 }

@@ -8,10 +8,8 @@
 // Licensed under the MIT/X11 license.
 //
 
-using System;
-using Mono.Cecil.PE;
-
-namespace Mono.Cecil.Metadata {
+namespace Mono.Cecil.Metadata
+{
 
 	enum Table : byte {
 		Module = 0x00,

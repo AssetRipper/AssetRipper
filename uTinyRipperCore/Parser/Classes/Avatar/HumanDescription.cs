@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Avatars
 {
 	public struct HumanDescription : IAssetReadable, IYAMLExportable
 	{
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// TODO:
 			return 3;
@@ -14,8 +13,8 @@ namespace uTinyRipper.Classes.Avatars
 
 		public void Read(AssetReader reader)
 		{
-			m_human = reader.ReadAssetArray<HumanBone>();
-			m_skeleton = reader.ReadAssetArray<SkeletonBone>();
+			Human = reader.ReadAssetArray<HumanBone>();
+			Skeleton = reader.ReadAssetArray<SkeletonBone>();
 			ArmTwist = reader.ReadSingle();
 			ForeArmTwist = reader.ReadSingle();
 			UpperLegTwist = reader.ReadSingle();
@@ -28,14 +27,14 @@ namespace uTinyRipper.Classes.Avatars
 			HasTranslationDoF = reader.ReadBoolean();
 			HasExtraRoot = reader.ReadBoolean();
 			SkeletonHasParents = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(HumanName, Human.ExportYAML(container));
 			node.Add(SkeletonName, Skeleton.ExportYAML(container));
 			node.Add(ArmTwistName, ArmTwist);
@@ -53,20 +52,20 @@ namespace uTinyRipper.Classes.Avatars
 			return node;
 		}
 
-		public IReadOnlyList<HumanBone> Human => m_human;
-		public IReadOnlyList<SkeletonBone> Skeleton => m_skeleton;
-		public float ArmTwist { get; private set; }
-		public float ForeArmTwist { get; private set; }
-		public float UpperLegTwist { get; private set; }
-		public float LegTwist { get; private set; }
-		public float ArmStretch { get; private set; }
-		public float LegStretch { get; private set; }
-		public float FeetSpacing { get; private set; }
-		public float GlobalScale { get; private set; }
-		public string RootMotionBoneName { get; private set; }
-		public bool HasTranslationDoF { get; private set; }
-		public bool HasExtraRoot { get; private set; }
-		public bool SkeletonHasParents { get; private set; }
+		public HumanBone[] Human { get; set; }
+		public SkeletonBone[] Skeleton { get; set; }
+		public float ArmTwist { get; set; }
+		public float ForeArmTwist { get; set; }
+		public float UpperLegTwist { get; set; }
+		public float LegTwist { get; set; }
+		public float ArmStretch { get; set; }
+		public float LegStretch { get; set; }
+		public float FeetSpacing { get; set; }
+		public float GlobalScale { get; set; }
+		public string RootMotionBoneName { get; set; }
+		public bool HasTranslationDoF { get; set; }
+		public bool HasExtraRoot { get; set; }
+		public bool SkeletonHasParents { get; set; }
 
 		public const string HumanName = "m_Human";
 		public const string SkeletonName = "m_Skeleton";
@@ -82,8 +81,5 @@ namespace uTinyRipper.Classes.Avatars
 		public const string HasTranslationDoFName = "m_HasTranslationDoF";
 		public const string HasExtraRootName = "m_HasExtraRoot";
 		public const string SkeletonHasParentsName = "m_SkeletonHasParents";
-
-		private HumanBone[] m_human;
-		private SkeletonBone[] m_skeleton;
 	}
 }

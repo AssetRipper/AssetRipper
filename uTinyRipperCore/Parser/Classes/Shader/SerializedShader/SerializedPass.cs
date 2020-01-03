@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using uTinyRipper.Classes.Shaders.Exporters;
 
 namespace uTinyRipper.Classes.Shaders
 {
 	public struct SerializedPass : IAssetReadable
 	{
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasProgRayTracing(Version version) => version.IsGreaterEqual(2019, 3);
+
 		public void Read(AssetReader reader)
 		{
 			m_nameIndices = new Dictionary<string, int>();
@@ -20,8 +23,12 @@ namespace uTinyRipper.Classes.Shaders
 			ProgGeometry.Read(reader);
 			ProgHull.Read(reader);
 			ProgDomain.Read(reader);
+			if (HasProgRayTracing(reader.Version))
+			{
+				ProgRayTracing.Read(reader);
+			}
 			HasInstancingVariant = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
 			UseName = reader.ReadString();
 			Name = reader.ReadString();
@@ -54,13 +61,31 @@ namespace uTinyRipper.Classes.Shaders
 				{
 					State.Export(writer);
 
-					ProgVertex.Export(writer, ShaderType.Vertex);
-					ProgFragment.Export(writer, ShaderType.Fragment);
-					ProgGeometry.Export(writer, ShaderType.Geometry);
-					ProgHull.Export(writer, ShaderType.Hull);
-					ProgDomain.Export(writer, ShaderType.Domain);
+					if ((ProgramMask & ShaderType.Vertex.ToProgramMask()) != 0)
+					{
+						ProgVertex.Export(writer, ShaderType.Vertex);
+					}
+					if ((ProgramMask & ShaderType.Fragment.ToProgramMask()) != 0)
+					{
+						ProgFragment.Export(writer, ShaderType.Fragment);
+					}
+					if ((ProgramMask & ShaderType.Geometry.ToProgramMask()) != 0)
+					{
+						ProgGeometry.Export(writer, ShaderType.Geometry);
+					}
+					if ((ProgramMask & ShaderType.Hull.ToProgramMask()) != 0)
+					{
+						ProgHull.Export(writer, ShaderType.Hull);
+					}
+					if ((ProgramMask & ShaderType.Domain.ToProgramMask()) != 0)
+					{
+						ProgDomain.Export(writer, ShaderType.Domain);
+					}
+					if ((ProgramMask & ShaderType.RayTracing.ToProgramMask()) != 0)
+					{
+						ProgDomain.Export(writer, ShaderType.RayTracing);
+					}
 
-#warning ProgramMask?
 #warning HasInstancingVariant?
 				}
 				else
@@ -74,12 +99,12 @@ namespace uTinyRipper.Classes.Shaders
 		}
 		
 		public IReadOnlyDictionary<string, int> NameIndices => m_nameIndices;
-		public SerializedPassType Type { get; private set; }
-		public uint ProgramMask { get; private set; }
-		public bool HasInstancingVariant { get; private set; }
-		public string UseName { get; private set; }
-		public string Name { get; private set; }
-		public string TextureName { get; private set; }
+		public SerializedPassType Type { get; set; }
+		public uint ProgramMask { get; set; }
+		public bool HasInstancingVariant { get; set; }
+		public string UseName { get; set; }
+		public string Name { get; set; }
+		public string TextureName { get; set; }
 
 		public SerializedShaderState State;
 		public SerializedProgram ProgVertex;
@@ -87,6 +112,7 @@ namespace uTinyRipper.Classes.Shaders
 		public SerializedProgram ProgGeometry;
 		public SerializedProgram ProgHull;
 		public SerializedProgram ProgDomain;
+		public SerializedProgram ProgRayTracing;
 		public SerializedTagMap Tags;
 
 		private Dictionary<string, int> m_nameIndices;

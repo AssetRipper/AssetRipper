@@ -1,6 +1,9 @@
-﻿namespace uTinyRipper.Classes.TerrainDatas
+﻿using uTinyRipper.Converters;
+using uTinyRipper.YAML;
+
+namespace uTinyRipper.Classes.TerrainDatas
 {
-	public struct Shift : IAssetReadable
+	public struct Shift : IAsset
 	{
 		public void Read(AssetReader reader)
 		{
@@ -9,8 +12,28 @@
 			Flags = reader.ReadUInt16();
 		}
 
-		public ushort X { get; private set; }
-		public ushort Y { get; private set; }
-		public ushort Flags { get; private set; }
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(X);
+			writer.Write(Y);
+			writer.Write(Flags);
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add(XName, X);
+			node.Add(YName, Y);
+			node.Add(FlagsName, Flags);
+			return node;
+		}
+
+		public ushort X { get; set; }
+		public ushort Y { get; set; }
+		public ushort Flags { get; set; }
+
+		public const string XName = "x";
+		public const string YName = "y";
+		public const string FlagsName = "flags";
 	}
 }

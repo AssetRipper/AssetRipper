@@ -1,25 +1,21 @@
-using System.Collections.Generic;
-
 namespace uTinyRipper.Classes.Shaders
 {
 	public struct ParserBindChannels : IAssetReadable
 	{
 		public ParserBindChannels(ShaderBindChannel[] channels, int sourceMap)
 		{
-			m_channels = channels;
+			Channels = channels;
 			SourceMap = sourceMap;
 		}
 
 		public void Read(AssetReader reader)
 		{
-			m_channels = reader.ReadAssetArray<ShaderBindChannel>();
-			reader.AlignStream(AlignType.Align4);
+			Channels = reader.ReadAssetArray<ShaderBindChannel>();
+			reader.AlignStream();
 			SourceMap = reader.ReadInt32();
 		}
 
-		public IReadOnlyList<ShaderBindChannel> Channels => m_channels;
-		public int SourceMap { get; private set; }
-
-		private ShaderBindChannel[] m_channels;
+		public ShaderBindChannel[] Channels { get; set; }
+		public int SourceMap { get; set; }
 	}
 }

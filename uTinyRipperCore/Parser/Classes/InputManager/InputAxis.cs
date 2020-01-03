@@ -1,6 +1,5 @@
-﻿using uTinyRipper.AssetExporters;
-using uTinyRipper.YAML;
-using uTinyRipper.Classes.InputManagers;
+﻿using uTinyRipper.YAML;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.InputManagers
 {
@@ -25,7 +24,7 @@ namespace uTinyRipper.Classes.InputManagers
 			JoyNum = JoystickType.AllJoysticks;
 		}
 
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// this is min version
 			return 3;
@@ -45,7 +44,7 @@ namespace uTinyRipper.Classes.InputManagers
 			Sensitivity = reader.ReadSingle();
 			Snap = reader.ReadBoolean();
 			Invert = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			Type = (InputAxisType)reader.ReadInt32();
 			Axis = (InputAxesDirection)reader.ReadInt32();
@@ -55,39 +54,55 @@ namespace uTinyRipper.Classes.InputManagers
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("m_Name", Name);
-			node.Add("descriptiveName", DescriptiveName);
-			node.Add("descriptiveNegativeName", DescriptiveNegativeName);
-			node.Add("negativeButton", NegativeButton);
-			node.Add("positiveButton", PositiveButton);
-			node.Add("altNegativeButton", AltNegativeButton);
-			node.Add("altPositiveButton", AltPositiveButton);
-			node.Add("gravity", Gravity);
-			node.Add("dead", Dead);
-			node.Add("sensitivity", Sensitivity);
-			node.Add("snap", Snap);
-			node.Add("invert", Invert);
-			node.Add("type", (int)Type);
-			node.Add("axis", (int)Axis);
-			node.Add("joyNum", (int)JoyNum);
+			node.AddSerializedVersion(ToSerializedVersion(container.Version));
+			node.Add(NameName, Name);
+			node.Add(DescriptiveNameName, DescriptiveName);
+			node.Add(DescriptiveNegativeNameName, DescriptiveNegativeName);
+			node.Add(NegativeButtonName, NegativeButton);
+			node.Add(PositiveButtonName, PositiveButton);
+			node.Add(AltNegativeButtonName, AltNegativeButton);
+			node.Add(AltPositiveButtonName, AltPositiveButton);
+			node.Add(GravityName, Gravity);
+			node.Add(DeadName, Dead);
+			node.Add(SensitivityName, Sensitivity);
+			node.Add(SnapName, Snap);
+			node.Add(InvertName, Invert);
+			node.Add(TypeName, (int)Type);
+			node.Add(AxisName, (int)Axis);
+			node.Add(JoyNumName, (int)JoyNum);
 			return node;
 		}
 
-		public string Name { get; private set; }
-		public string DescriptiveName { get; private set; }
-		public string DescriptiveNegativeName { get; private set; }
-		public string NegativeButton { get; private set; }
-		public string PositiveButton { get; private set; }
-		public string AltNegativeButton { get; private set; }
-		public string AltPositiveButton { get; private set; }
-		public float Gravity { get; private set; }
-		public float Dead { get; private set; }
-		public float Sensitivity { get; private set; }
-		public bool Snap { get; private set; }
-		public bool Invert { get; private set; }
-		public InputAxisType Type { get; private set; }
-		public InputAxesDirection Axis { get; private set; }
-		public JoystickType JoyNum { get; private set; }
+		public string Name { get; set; }
+		public string DescriptiveName { get; set; }
+		public string DescriptiveNegativeName { get; set; }
+		public string NegativeButton { get; set; }
+		public string PositiveButton { get; set; }
+		public string AltNegativeButton { get; set; }
+		public string AltPositiveButton { get; set; }
+		public float Gravity { get; set; }
+		public float Dead { get; set; }
+		public float Sensitivity { get; set; }
+		public bool Snap { get; set; }
+		public bool Invert { get; set; }
+		public InputAxisType Type { get; set; }
+		public InputAxesDirection Axis { get; set; }
+		public JoystickType JoyNum { get; set; }
+
+		public const string NameName = "m_Name";
+		public const string DescriptiveNameName = "descriptiveName";
+		public const string DescriptiveNegativeNameName = "descriptiveNegativeName";
+		public const string NegativeButtonName = "negativeButton";
+		public const string PositiveButtonName = "positiveButton";
+		public const string AltNegativeButtonName = "altNegativeButton";
+		public const string AltPositiveButtonName = "altPositiveButton";
+		public const string GravityName = "gravity";
+		public const string DeadName = "dead";
+		public const string SensitivityName = "sensitivity";
+		public const string SnapName = "snap";
+		public const string InvertName = "invert";
+		public const string TypeName = "type";
+		public const string AxisName = "axis";
+		public const string JoyNumName = "joyNum";
 	}
 }

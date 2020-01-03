@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.CompositeCollider2Ds
 {
@@ -10,7 +9,7 @@ namespace uTinyRipper.Classes.CompositeCollider2Ds
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		private static bool IsReadDoubleColliderPath(Version version)
+		private static bool HasDoubleColliderPath(Version version)
 		{
 			return version.IsGreaterEqual(2018, 3);
 		}
@@ -18,42 +17,36 @@ namespace uTinyRipper.Classes.CompositeCollider2Ds
 		public void Read(AssetReader reader)
 		{
 			Collider.Read(reader);
-			if (IsReadDoubleColliderPath(reader.Version))
-			{
-				m_colliderPaths = reader.ReadAssetArrayArray<IntPoint>();
-			}
-			else
-			{
-				IntPoint[] colliderPaths = reader.ReadAssetArray<IntPoint>();
-				m_colliderPaths = new IntPoint[][] { colliderPaths };
-			}
-			reader.AlignStream(AlignType.Align4);
+			ColliderPaths = reader.ReadAssetArrayArray<IntPoint>();
+			reader.AlignStream();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return Collider.FetchDependency(file, isLog, () => nameof(SubCollider), "m_Collider");
+			yield return context.FetchDependency(Collider, ColliderName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Collider", Collider.ExportYAML(container));
-			if (IsReadDoubleColliderPath(container.ExportVersion))
+			node.Add(ColliderName, Collider.ExportYAML(container));
+			if (HasDoubleColliderPath(container.ExportVersion))
 			{
-				node.Add("m_ColliderPaths", ColliderPaths.ExportYAML(container));
+				node.Add(ColliderPathsName, ColliderPaths.ExportYAML(container));
 			}
 			else
 			{
-				IReadOnlyList<IntPoint> colliderPaths = ColliderPaths.Count == 0 ? new IntPoint[0] : ColliderPaths[0];
-				node.Add("m_ColliderPaths", colliderPaths.ExportYAML(container));
+				IReadOnlyList<IntPoint> colliderPaths = ColliderPaths.Length == 0 ? System.Array.Empty<IntPoint>() : ColliderPaths[0];
+				node.Add(ColliderPathsName, colliderPaths.ExportYAML(container));
 			}
 			return node;
 		}
 
-		public PPtr<Collider2D> Collider;
-		public IReadOnlyList<IReadOnlyList<IntPoint>> ColliderPaths => m_colliderPaths;
+		public const string ColliderName = "m_Collider";
+		public const string ColliderPathsName = "m_ColliderPaths";
 
-		private IntPoint[][] m_colliderPaths;
+		public IntPoint[][] ColliderPaths { get; set; }
+
+		public PPtr<Collider2D> Collider;
 	}
 }

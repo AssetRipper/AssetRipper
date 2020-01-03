@@ -1,7 +1,7 @@
-﻿using uTinyRipper.AssetExporters;
-using uTinyRipper.AssetExporters.Classes;
-using uTinyRipper.Classes.Textures;
+﻿using uTinyRipper.Classes.Textures;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes.TextureImporters;
 
 namespace uTinyRipper.Classes.SpriteAtlases
 {
@@ -20,7 +20,7 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			SRGB = true;
 		}
 
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// colorSpace was renamed to sRGB
 			if (version.IsGreaterEqual(2017, 1, 2))
@@ -33,18 +33,12 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		/// <summary>
 		/// 2017.1.0b3
 		/// </summary>
-		public static bool IsReadCrunchedCompression(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 3);
-		}
+		public static bool HasCrunchedCompression(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 3);
 
 		/// <summary>
 		/// Less than 2017.1.2
 		/// </summary>
-		private static bool IsReadColorSpace(Version version)
-		{
-			return version.IsLess(2017, 1, 2);
-		}
+		private static bool HasColorSpace(Version version) => version.IsLess(2017, 1, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -52,7 +46,7 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			CompressionQuality = reader.ReadInt32();
 			MaxTextureSize = reader.ReadInt32();
 			TextureCompression = (TextureImporterCompression)reader.ReadInt32();
-			if (IsReadColorSpace(reader.Version))
+			if (HasColorSpace(reader.Version))
 			{
 				ColorSpace colorSpace = (ColorSpace)reader.ReadInt32();
 				SRGB = colorSpace == ColorSpace.Gamma;
@@ -60,23 +54,23 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			FilterMode = (FilterMode)reader.ReadInt32();
 			GenerateMipMaps = reader.ReadBoolean();
 			Readable = reader.ReadBoolean();
-			if (IsReadCrunchedCompression(reader.Version))
+			if (HasCrunchedCompression(reader.Version))
 			{
 				CrunchedCompression = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
-			if (!IsReadColorSpace(reader.Version))
+			if (!HasColorSpace(reader.Version))
 			{
 				SRGB = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(AnisoLevelName, AnisoLevel);
 			node.Add(CompressionQualityName, CompressionQuality);
 			node.Add(MaxTextureSizeName, MaxTextureSize);
@@ -89,18 +83,18 @@ namespace uTinyRipper.Classes.SpriteAtlases
 			return node;
 		}
 
-		public int AnisoLevel { get; private set; }
-		public int CompressionQuality { get; private set; }
-		public int MaxTextureSize { get; private set; }
-		public TextureImporterCompression TextureCompression { get; private set; }
-		public FilterMode FilterMode { get; private set; }
-		public bool GenerateMipMaps { get; private set; }
-		public bool Readable { get; private set; }
-		public bool CrunchedCompression { get; private set; }
+		public int AnisoLevel { get; set; }
+		public int CompressionQuality { get; set; }
+		public int MaxTextureSize { get; set; }
+		public TextureImporterCompression TextureCompression { get; set; }
+		public FilterMode FilterMode { get; set; }
+		public bool GenerateMipMaps { get; set; }
+		public bool Readable { get; set; }
+		public bool CrunchedCompression { get; set; }
 		/// <summary>
 		/// ColorSpace previously
 		/// </summary>
-		public bool SRGB { get; private set; }
+		public bool SRGB { get; set; }
 
 		public const string AnisoLevelName = "anisoLevel";
 		public const string CompressionQualityName = "compressionQuality";

@@ -15,8 +15,8 @@
 			Index = reader.ReadInt32();
 		}
 
-		public string Name { get; private set; }
-		public int NameIndex { get; private set; }
-		public int Index { get; private set; }
+		public string Name { get; set; }
+		public int NameIndex { get; set; }
+		public int Index { get; set; }
 	}
 }

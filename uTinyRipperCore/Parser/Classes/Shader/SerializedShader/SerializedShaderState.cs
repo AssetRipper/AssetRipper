@@ -8,10 +8,7 @@ namespace uTinyRipper.Classes.Shaders
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool IsReadZClip(Version version)
-		{
-			return version.IsGreaterEqual(2017, 2);
-		}
+		public static bool HasZClip(Version version) => version.IsGreaterEqual(2017, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -25,9 +22,9 @@ namespace uTinyRipper.Classes.Shaders
 			RtBlend6.Read(reader);
 			RtBlend7.Read(reader);
 			RtSeparateBlend = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
-			if (IsReadZClip(reader.Version))
+			if (HasZClip(reader.Version))
 			{
 				ZClip.Read(reader);
 			}
@@ -53,7 +50,7 @@ namespace uTinyRipper.Classes.Shaders
 			Tags.Read(reader);
 			LOD = reader.ReadInt32();
 			Lighting = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public void Export(TextWriter writer)
@@ -189,12 +186,12 @@ namespace uTinyRipper.Classes.Shaders
 			writer.Write("GpuProgramID {0}\n", GpuProgramID);
 		}
 
-		public string Name { get; private set; }
-		public bool RtSeparateBlend { get; private set; }
-		public FogMode FogMode { get; private set; }
-		public int GpuProgramID { get; private set; }
-		public int LOD { get; private set; }
-		public bool Lighting { get; private set; }
+		public string Name { get; set; }
+		public bool RtSeparateBlend { get; set; }
+		public FogMode FogMode { get; set; }
+		public int GpuProgramID { get; set; }
+		public int LOD { get; set; }
+		public bool Lighting { get; set; }
 
 		private ZClip ZClipValue => (ZClip)ZClip.Val;
 		private ZTest ZTestValue => (ZTest)ZTest.Val;

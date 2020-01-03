@@ -6,6 +6,5 @@
 		BasedOnRenderers	= 1,
 		BasedOnClipBounds	= 2,
 		BasedOnUserBounds	= 3,
-
 	}
 }

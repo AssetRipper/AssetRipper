@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
@@ -16,7 +17,7 @@ namespace uTinyRipper.Classes
 			this(assetInfo)
 		{
 			Sendrate = 15.0f;
-			m_assetToPrefab = new Dictionary<EngineGUID, PPtr<GameObject>>();
+			m_assetToPrefab = new Dictionary<GUID, PPtr<GameObject>>();
 		}
 
 		public static NetworkManager CreateVirtualInstance(VirtualSerializedFile virtualFile)
@@ -27,10 +28,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool IsReadNetworkManager(Version version)
-		{
-			return version.IsGreaterEqual(2);
-		}
+		public static bool HasNetworkManager(Version version) => version.IsGreaterEqual(2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -38,36 +36,40 @@ namespace uTinyRipper.Classes
 
 			DebugLevel = reader.ReadInt32();
 			Sendrate = reader.ReadSingle();
-			m_assetToPrefab = new Dictionary<EngineGUID, PPtr<GameObject>>();
+			m_assetToPrefab = new Dictionary<GUID, PPtr<GameObject>>();
 			m_assetToPrefab.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach(PPtr<GameObject> prefab in AssetToPrefab.Values)
+			foreach (PPtr<Object> asset in context.FetchDependencies(AssetToPrefab.Values, AssetToPrefabName))
 			{
-				yield return prefab.FetchDependency(file);
+				yield return asset;
 			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_DebugLevel", DebugLevel);
-			node.Add("m_Sendrate", Sendrate);
-			node.Add("m_AssetToPrefab", AssetToPrefab.ExportYAML(container));
+			node.Add(DebugLevelName, DebugLevel);
+			node.Add(SendrateName, Sendrate);
+			node.Add(AssetToPrefabName, AssetToPrefab.ExportYAML(container));
 			return node;
 		}
 
-		public int DebugLevel { get; private set; }
-		public float Sendrate { get; private set; }
-		public IReadOnlyDictionary<EngineGUID, PPtr<GameObject>> AssetToPrefab => m_assetToPrefab;
+		public int DebugLevel { get; set; }
+		public float Sendrate { get; set; }
+		public IReadOnlyDictionary<GUID, PPtr<GameObject>> AssetToPrefab => m_assetToPrefab;
 
-		private Dictionary<EngineGUID, PPtr<GameObject>> m_assetToPrefab;
+		public const string DebugLevelName = "m_DebugLevel";
+		public const string SendrateName = "m_Sendrate";
+		public const string AssetToPrefabName = "m_AssetToPrefab";
+
+		private Dictionary<GUID, PPtr<GameObject>> m_assetToPrefab;
 	}
 }

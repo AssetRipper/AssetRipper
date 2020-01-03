@@ -13,7 +13,7 @@
 			return $"Start:{Start} Stop:{Stop}";
 		}
 
-		public float Start { get; private set; }
-		public float Stop { get; private set; }
+		public float Start { get; set; }
+		public float Stop { get; set; }
 	}
 }

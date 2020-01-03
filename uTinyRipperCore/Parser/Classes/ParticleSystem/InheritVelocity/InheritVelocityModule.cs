@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.ParticleSystems
@@ -26,12 +26,15 @@ namespace uTinyRipper.Classes.ParticleSystems
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add("m_Mode", (int)Mode);
-			node.Add("m_Curve", Curve.ExportYAML(container));
+			node.Add(ModeName, (int)Mode);
+			node.Add(CurveName, Curve.ExportYAML(container));
 			return node;
 		}
 
-		public InheritVelocityMode Mode { get; private set; }
+		public InheritVelocityMode Mode { get; set; }
+
+		public const string ModeName = "m_Mode";
+		public const string CurveName = "m_Curve";
 
 		public MinMaxCurve Curve;
 	}

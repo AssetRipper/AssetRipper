@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Avatars
@@ -25,8 +25,8 @@ namespace uTinyRipper.Classes.Avatars
 			return node;
 		}
 
-		public string Name { get; private set; }
-		public string ParentName { get; private set; }
+		public string Name { get; set; }
+		public string ParentName { get; set; }
 
 		public const string NameName = "m_Name";
 		public const string ParentNameName = "m_ParentName";

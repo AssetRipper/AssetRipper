@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.ParticleSystems
 {
@@ -12,17 +11,19 @@ namespace uTinyRipper.Classes.ParticleSystems
 			Sprite.Read(reader);
 		}
 		
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return Sprite.FetchDependency(file, isLog, () => nameof(SpriteData), "sprite");
+			yield return context.FetchDependency(Sprite, SpriteName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("sprite", Sprite.ExportYAML(container));
+			node.Add(SpriteName, Sprite.ExportYAML(container));
 			return node;
 		}
+
+		public const string SpriteName = "sprite";
 
 		public PPtr<Object> Sprite;
 	}

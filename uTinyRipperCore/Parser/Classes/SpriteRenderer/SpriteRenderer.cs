@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.SpriteRenderers;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {
@@ -16,22 +15,16 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool IsReadFlip(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
+		public static bool HasFlip(Version version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadDrawMode(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasDrawMode(Version version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 5.6.1p2 to 5.6.x
 		/// 2017.1.0b5 and greater
 		/// </summary>
-		public static bool IsReadWasSpriteAssigned(Version version)
+		public static bool HasWasSpriteAssigned(Version version)
 		{
 			if(version.IsGreaterEqual(2017))
 			{
@@ -45,32 +38,20 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool IsReadMaskInteraction(Version version)
-		{
-			return version.IsGreaterEqual(2017);
-		}
+		public static bool HasMaskInteraction(Version version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool IsReadSpriteSortPoint(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
+		public static bool HasSpriteSortPoint(Version version) => version.IsGreaterEqual(2018, 2);
 		
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		private static bool IsAlignColor(Version version)
-		{
-			return version.IsGreaterEqual(4, 5);
-		}
+		private static bool IsAlignColor(Version version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		private static bool IsAlignFlip(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
+		private static bool IsAlignFlip(Version version) => version.IsGreaterEqual(5, 4);
 
 		public override void Read(AssetReader reader)
 		{
@@ -80,49 +61,49 @@ namespace uTinyRipper.Classes
 			Color.Read(reader);
 			if (IsAlignColor(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
-			if(IsReadFlip(reader.Version))
+			if (HasFlip(reader.Version))
 			{
 				FlipX = reader.ReadBoolean();
 				FlipY = reader.ReadBoolean();
 				if(IsAlignFlip(reader.Version))
 				{
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 			}
 
-			if(IsReadDrawMode(reader.Version))
+			if (HasDrawMode(reader.Version))
 			{
 				DrawMode = (SpriteDrawMode)reader.ReadInt32();
 				Size.Read(reader);
 				AdaptiveModeThreshold = reader.ReadSingle();
 				SpriteTileMode = (SpriteTileMode)reader.ReadInt32();
 			}
-			if(IsReadWasSpriteAssigned(reader.Version))
+			if (HasWasSpriteAssigned(reader.Version))
 			{
 				WasSpriteAssigned = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
-			if(IsReadMaskInteraction(reader.Version))
+			if (HasMaskInteraction(reader.Version))
 			{
 				MaskInteraction = (SpriteMaskInteraction)reader.ReadInt32();
 			}
-			if(IsReadSpriteSortPoint(reader.Version))
+			if (HasSpriteSortPoint(reader.Version))
 			{
 				SpriteSortPoint = (SpriteSortPoint)reader.ReadInt32();
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return Sprite.FetchDependency(file, isLog, ToLogString, "m_Sprite");
+			yield return context.FetchDependency(Sprite, SpriteName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -133,7 +114,7 @@ namespace uTinyRipper.Classes
 			node.Add(FlipXName, FlipX);
 			node.Add(FlipYName, FlipY);
 			node.Add(DrawModeName, (int)DrawMode);
-			node.Add(SizeName, (IsReadDrawMode(container.Version) ? Size : Vector2f.One).ExportYAML(container));
+			node.Add(SizeName, (HasDrawMode(container.Version) ? Size : Vector2f.One).ExportYAML(container));
 			node.Add(AdaptiveModeThresholdName, AdaptiveModeThreshold);
 			node.Add(SpriteTileModeName, (int)SpriteTileMode);
 			node.Add(WasSpriteAssignedName, WasSpriteAssigned);
@@ -141,14 +122,14 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public bool FlipX { get; private set; }
-		public bool FlipY { get; private set; }
-		public SpriteDrawMode DrawMode { get; private set; }
-		public float AdaptiveModeThreshold { get; private set; }
-		public SpriteTileMode SpriteTileMode { get; private set; }
-		public bool WasSpriteAssigned { get; private set; }
-		public SpriteMaskInteraction MaskInteraction { get; private set; }
-		public SpriteSortPoint SpriteSortPoint { get; private set; }
+		public bool FlipX { get; set; }
+		public bool FlipY { get; set; }
+		public SpriteDrawMode DrawMode { get; set; }
+		public float AdaptiveModeThreshold { get; set; }
+		public SpriteTileMode SpriteTileMode { get; set; }
+		public bool WasSpriteAssigned { get; set; }
+		public SpriteMaskInteraction MaskInteraction { get; set; }
+		public SpriteSortPoint SpriteSortPoint { get; set; }
 
 		public const string SpriteName = "m_Sprite";
 		public const string ColorName = "m_Color";

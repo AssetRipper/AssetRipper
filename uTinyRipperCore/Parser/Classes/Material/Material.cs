@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Materials;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -13,61 +12,40 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 4.1.0b and greater
-		/// </summary>
-		public static bool IsReadKeywords(Version version)
-		{
-			return version.IsGreaterEqual(4, 1, 0, VersionType.Beta);
-		}
-		/// <summary>
-		/// Less 5.0.0
-		/// </summary>
-		public static bool IsKeywordsArray(Version version)
-		{
-			return version.IsLess(5);
-		}
-		/// <summary>
-		/// 4.3.0 and greater
-		/// </summary>
-		public static bool IsReadCustomRenderQueue(Version version)
-		{
-			return version.IsGreaterEqual(4, 3);
-		}
-		/// <summary>
-		/// 5.0.0f1 and greater
-		/// </summary>
-		public static bool IsReadLightmapFlags(Version version)
-		{
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		public static bool IsReadOtherFlags(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
-		/// <summary>
-		/// 5.1.0 and greater
-		/// </summary>
-		public static bool IsReadStringTagMap(Version version)
-		{
-			return version.IsGreaterEqual(5, 1);
-		}
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		public static bool IsReadDisabledShaderPasses(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// TODO:
 			return 6;
 		}
+
+		/// <summary>
+		/// 4.1.0b and greater
+		/// </summary>
+		public static bool HasKeywords(Version version) => version.IsGreaterEqual(4, 1, 0, VersionType.Beta);
+		/// <summary>
+		/// Less 5.0.0
+		/// </summary>
+		public static bool IsKeywordsArray(Version version) => version.IsLess(5);
+		/// <summary>
+		/// 4.3.0 and greater
+		/// </summary>
+		public static bool HasCustomRenderQueue(Version version) => version.IsGreaterEqual(4, 3);
+		/// <summary>
+		/// 5.0.0f1 and greater
+		/// </summary>
+		public static bool HasLightmapFlags(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
+		public static bool HasOtherFlags(Version version) => version.IsGreaterEqual(5, 6);
+		/// <summary>
+		/// 5.1.0 and greater
+		/// </summary>
+		public static bool HasStringTagMap(Version version) => version.IsGreaterEqual(5, 1);
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
+		public static bool HasDisabledShaderPasses(Version version) => version.IsGreaterEqual(5, 6);
 
 		public string FindPropertyNameByCRC28(uint crc)
 		{
@@ -79,11 +57,11 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 			Shader.Read(reader);
-			if (IsReadKeywords(reader.Version))
+			if (HasKeywords(reader.Version))
 			{
 				if (IsKeywordsArray(reader.Version))
 				{
-					m_shaderKeywordsArray = reader.ReadStringArray();
+					ShaderKeywordsArray = reader.ReadStringArray();
 				}
 				else
 				{
@@ -91,44 +69,44 @@ namespace uTinyRipper.Classes
 				}
 			}
 
-			if (IsReadLightmapFlags(reader.Version))
+			if (HasLightmapFlags(reader.Version))
 			{
 				LightmapFlags = reader.ReadUInt32();
-				if (IsReadOtherFlags(reader.Version))
+				if (HasOtherFlags(reader.Version))
 				{
 					EnableInstancingVariants = reader.ReadBoolean();
 					DoubleSidedGI = reader.ReadBoolean();
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 			}
 
-			if (IsReadCustomRenderQueue(reader.Version))
+			if (HasCustomRenderQueue(reader.Version))
 			{
 				CustomRenderQueue = reader.ReadInt32();
 			}
 
-			if (IsReadStringTagMap(reader.Version))
+			if (HasStringTagMap(reader.Version))
 			{
-				m_stringTagMap = new Dictionary<string, string>();
-				m_stringTagMap.Read(reader);
-				if (IsReadDisabledShaderPasses(reader.Version))
+				StringTagMap = new Dictionary<string, string>();
+				StringTagMap.Read(reader);
+				if (HasDisabledShaderPasses(reader.Version))
 				{
-					m_disabledShaderPasses = reader.ReadStringArray();
+					DisabledShaderPasses = reader.ReadStringArray();
 				}
 			}
 
 			SavedProperties.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return Shader.FetchDependency(file, isLog, ToLogString, "m_Shader");
-			foreach (Object asset in SavedProperties.FetchDependencies(file, isLog))
+			yield return context.FetchDependency(Shader, ShaderName);
+			foreach (PPtr<Object> asset in context.FetchDependencies(SavedProperties, SavedPropertiesName))
 			{
 				yield return asset;
 			}
@@ -138,35 +116,41 @@ namespace uTinyRipper.Classes
 		{
 #warning TODO:
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			node.Add("m_Shader", Shader.ExportYAML(container));
-			node.Add("m_ShaderKeywords", IsReadKeywords(container.Version) ? (IsKeywordsArray(container.Version) ? string.Join(" ", m_shaderKeywordsArray) : ShaderKeywords) : string.Empty);
-			node.Add("m_LightmapFlags", LightmapFlags);
-			node.Add("m_EnableInstancingVariants", EnableInstancingVariants);
-			node.Add("m_DoubleSidedGI", DoubleSidedGI);
-			node.Add("m_CustomRenderQueue", CustomRenderQueue);
-			node.Add("stringTagMap", IsReadStringTagMap(container.Version) ? StringTagMap.ExportYAML() : YAMLMappingNode.Empty);
-			node.Add("disabledShaderPasses", IsReadDisabledShaderPasses(container.Version) ? DisabledShaderPasses.ExportYAML() : YAMLSequenceNode.Empty);
-			node.Add("m_SavedProperties", SavedProperties.ExportYAML(container));
+			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			node.Add(ShaderName, Shader.ExportYAML(container));
+			node.Add(ShaderKeywordsName, HasKeywords(container.Version) ? (IsKeywordsArray(container.Version) ? string.Join(" ", ShaderKeywordsArray) : ShaderKeywords) : string.Empty);
+			node.Add(LightmapFlagsName, LightmapFlags);
+			node.Add(EnableInstancingVariantsName, EnableInstancingVariants);
+			node.Add(DoubleSidedGIName, DoubleSidedGI);
+			node.Add(CustomRenderQueueName, CustomRenderQueue);
+			node.Add(StringTagMapName, HasStringTagMap(container.Version) ? StringTagMap.ExportYAML() : YAMLMappingNode.Empty);
+			node.Add(DisabledShaderPassesName, HasDisabledShaderPasses(container.Version) ? DisabledShaderPasses.ExportYAML() : YAMLSequenceNode.Empty);
+			node.Add(SavedPropertiesName, SavedProperties.ExportYAML(container));
 			return node;
 		}
 
 		public override string ExportExtension => "mat";
 
-		public IReadOnlyList<string> ShaderKeywordsArray => m_shaderKeywordsArray;
-		public string ShaderKeywords { get; private set; } = string.Empty;
-		public int CustomRenderQueue { get; private set; }
-		public uint LightmapFlags { get; private set; }
-		public bool EnableInstancingVariants { get; private set; }
-		public bool DoubleSidedGI { get; private set; }
-		public IReadOnlyList<string> DisabledShaderPasses => m_disabledShaderPasses;
-		public IReadOnlyDictionary<string, string> StringTagMap => m_stringTagMap;
+		public string[] ShaderKeywordsArray { get; set; }
+		public string ShaderKeywords { get; set; } = string.Empty;
+		public int CustomRenderQueue { get; set; }
+		public uint LightmapFlags { get; set; }
+		public bool EnableInstancingVariants { get; set; }
+		public bool DoubleSidedGI { get; set; }
+		public string[] DisabledShaderPasses { get; set; }
+		public Dictionary<string, string> StringTagMap { get; set; }
+
+		public const string ShaderName = "m_Shader";
+		public const string ShaderKeywordsName = "m_ShaderKeywords";
+		public const string LightmapFlagsName = "m_LightmapFlags";
+		public const string EnableInstancingVariantsName = "m_EnableInstancingVariants";
+		public const string DoubleSidedGIName = "m_DoubleSidedGI";
+		public const string CustomRenderQueueName = "m_CustomRenderQueue";
+		public const string StringTagMapName = "stringTagMap";
+		public const string DisabledShaderPassesName = "disabledShaderPasses";
+		public const string SavedPropertiesName = "m_SavedProperties";
 
 		public PPtr<Shader> Shader;
 		public UnityPropertySheet SavedProperties;
-
-		private string[] m_shaderKeywordsArray = null;
-		private string[] m_disabledShaderPasses = null;
-		private Dictionary<string, string> m_stringTagMap;
 	}
 }

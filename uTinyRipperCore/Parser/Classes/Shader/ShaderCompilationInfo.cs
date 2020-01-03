@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Shaders
@@ -9,10 +9,7 @@ namespace uTinyRipper.Classes.Shaders
 		/// <summary>
 		/// 5.2.0 adn greater
 		/// </summary>
-		public static bool IsReadHasFixedFunctionShaders(Version version)
-		{
-			return version.IsGreaterEqual(5, 2);
-		}
+		public static bool HasHasFixedFunctionShaders(Version version) => version.IsGreaterEqual(5, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -20,7 +17,7 @@ namespace uTinyRipper.Classes.Shaders
 			m_snippets.Read(reader);
 			MeshComponentsFromSnippets = reader.ReadInt32();
 			HasSurfaceShaders = reader.ReadBoolean();
-			if (IsReadHasFixedFunctionShaders(reader.Version))
+			if (HasHasFixedFunctionShaders(reader.Version))
 			{
 				HasFixedFunctionShaders = reader.ReadBoolean();
 			}
@@ -37,9 +34,9 @@ namespace uTinyRipper.Classes.Shaders
 		}
 
 		public IReadOnlyDictionary<int, ShaderSnippet> Snippets => m_snippets;
-		public int MeshComponentsFromSnippets { get; private set; }
-		public bool HasSurfaceShaders { get; private set; }
-		public bool HasFixedFunctionShaders { get; private set; }
+		public int MeshComponentsFromSnippets { get; set; }
+		public bool HasSurfaceShaders { get; set; }
+		public bool HasFixedFunctionShaders { get; set; }
 
 		public const string SnippetsName = "m_Snippets";
 		public const string MeshComponentsFromSnippetsName = "m_MeshComponentsFromSnippets";

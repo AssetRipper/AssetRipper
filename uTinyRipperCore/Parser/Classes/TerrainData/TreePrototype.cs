@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.TerrainDatas
 {
-	public struct TreePrototype : IAssetReadable, IYAMLExportable, IDependent
+	public struct TreePrototype : IAsset, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -13,9 +12,15 @@ namespace uTinyRipper.Classes.TerrainDatas
 			BendFactor = reader.ReadSingle();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public void Write(AssetWriter writer)
 		{
-			yield return Prefab.FetchDependency(file, isLog, () => nameof(TreePrototype), "prefab");
+			Prefab.Write(writer);
+			writer.Write(BendFactor);
+		}
+
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		{
+			yield return context.FetchDependency(Prefab, PrefabName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -26,7 +31,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 			return node;
 		}
 
-		public float BendFactor { get; private set; }
+		public float BendFactor { get; set; }
 
 		public const string PrefabName = "prefab";
 		public const string BendFactorName = "bendFactor";

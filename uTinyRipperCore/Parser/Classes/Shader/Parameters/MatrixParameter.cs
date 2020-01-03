@@ -2,7 +2,7 @@
 {
 	public struct MatrixParameter : IAssetReadable
 	{
-		public MatrixParameter(string name, ShaderParamType type, int index, int rowCount)
+		public MatrixParameter(string name, ShaderParamType type, int index, int rowCount, int columnCount)
 		{
 			Name = name;
 			NameIndex = -1;
@@ -10,10 +10,11 @@
 			ArraySize = 0;
 			Type = type;
 			RowCount = (byte)rowCount;
+			ColumnCount = (byte)columnCount;
 		}
 
-		public MatrixParameter(string name, ShaderParamType type, int index, int arraySize, int rowCount) :
-			this(name, type, index, rowCount)
+		public MatrixParameter(string name, ShaderParamType type, int index, int arraySize, int rowCount, int columnCount) :
+			this(name, type, index, rowCount, columnCount)
 		{
 			ArraySize = arraySize;
 		}
@@ -25,14 +26,16 @@
 			ArraySize = reader.ReadInt32();
 			Type = (ShaderParamType)reader.ReadByte();
 			RowCount = reader.ReadByte();
-			reader.AlignStream(AlignType.Align4);
+			ColumnCount = 0;
+			reader.AlignStream();
 		}
 
-		public string Name { get; private set; }
-		public int NameIndex { get; private set; }
-		public int Index { get; private set; }
-		public int ArraySize { get; private set; }
-		public ShaderParamType Type { get; private set; }
-		public byte RowCount { get; private set; }
+		public string Name { get; set; }
+		public int NameIndex { get; set; }
+		public int Index { get; set; }
+		public int ArraySize { get; set; }
+		public ShaderParamType Type { get; set; }
+		public byte RowCount { get; set; }
+		public byte ColumnCount { get; set; }
 	}
 }

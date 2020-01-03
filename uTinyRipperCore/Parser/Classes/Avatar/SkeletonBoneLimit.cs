@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Avatars
@@ -12,7 +12,7 @@ namespace uTinyRipper.Classes.Avatars
 			Value.Read(reader);
 			Length = reader.ReadSingle();
 			Modified = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 		}
 
@@ -27,8 +27,8 @@ namespace uTinyRipper.Classes.Avatars
 			return node;
 		}
 
-		public float Length { get; private set; }
-		public bool Modified { get; private set; }
+		public float Length { get; set; }
+		public bool Modified { get; set; }
 
 		public const string MinName = "m_Min";
 		public const string MaxName = "m_Max";

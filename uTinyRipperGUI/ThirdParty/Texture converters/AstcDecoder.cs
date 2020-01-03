@@ -65,7 +65,7 @@ namespace Astc
 					{
 						for (int j = 0; j < clen; j++) outputPtr[j] = bufPtr[j];
 						outputPtr += width;
-						bufPtr += 4;
+						bufPtr += blockWidth;
 					}
 				}
 			}

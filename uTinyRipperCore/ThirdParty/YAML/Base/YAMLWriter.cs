@@ -46,7 +46,7 @@ namespace uTinyRipper.YAML
 
 		public void WriteHead(TextWriter output)
 		{
-			m_emitter = new Emitter(output);
+			m_emitter = new Emitter(output, IsFormatKeys);
 			m_isWriteSeparator = false;
 
 			if (IsWriteVersion)
@@ -87,6 +87,7 @@ namespace uTinyRipper.YAML
 
 		public bool IsWriteVersion { get; set; } = true;
 		public bool IsWriteDefaultTag { get; set; } = true;
+		public bool IsFormatKeys { get; set; }
 
 		private readonly HashSet<YAMLDocument> m_documents = new HashSet<YAMLDocument>();
 		private readonly List<YAMLTag> m_tags = new List<YAMLTag>();

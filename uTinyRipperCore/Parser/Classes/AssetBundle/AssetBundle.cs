@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AssetBundles;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {
@@ -15,84 +14,8 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 2.5.0 and greater
-		/// </summary>
-		public static bool IsReadPreloadTable(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
-			return version.IsGreaterEqual(2, 5);
-		}
-		/// <summary>
-		/// 3.4.0 to 5.0.0 exclusive
-		/// </summary>
-		public static bool IsReadScriptCampatibility(Version version)
-		{
-			return version.IsGreaterEqual(3, 4) && version.IsLess(5);
-		}
-		/// <summary>
-		/// 3.5.0 to 5.0.0 exclusive
-		/// </summary>
-		public static bool IsReadClassCampatibility(Version version)
-		{
-			return version.IsGreaterEqual(3, 5) && version.IsLess(5);
-		}
-		/// <summary>
-		/// 5.4.0 to 5.5.0 exclusive
-		/// </summary>
-		public static bool IsReadClassVersionMap(Version version)
-		{
-			return version.IsGreaterEqual(5, 4) && version.IsLess(5, 5);
-		}
-		/// <summary>
-		/// 4.2.0 and greater
-		/// </summary>
-		public static bool IsReadRuntimeCompatibility(Version version)
-		{
-			return version.IsGreaterEqual(4, 2);
-		}
-		/// <summary>
-		/// 5.0.0 and greater
-		/// </summary>
-		public static bool IsReadAssetBundleName(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
-		/// <summary>
-		/// 5.0.0b2
-		/// </summary>
-		public static bool IsReadIsStreamedSceneAssetBundle(Version version)
-		{
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
-		}
-		/// <summary>
-		/// 2017.3 and greater
-		/// </summary>
-		public static bool IsReadExplicitDataLayout(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
-		/// <summary>
-		/// 2017.1.0b2 and greater
-		/// </summary>
-		public static bool IsReadPathFlags(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		}
-		/// <summary>
-		/// 2017.3 and greater
-		/// </summary>
-		public static bool IsReadSceneHashes(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
-
-		private static int GetSerializedVersion(Version version)
-		{
-			if (Config.IsExportTopmostSerializedVersion)
-			{
-				return 3;
-			}
-
 			if (version.IsGreaterEqual(4, 2))
 			{
 				return 3;
@@ -104,76 +27,115 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// 2.5.0 and greater
+		/// </summary>
+		public static bool HasPreloadTable(Version version) => version.IsGreaterEqual(2, 5);
+		/// <summary>
+		/// 3.4.0 to 5.0.0 exclusive
+		/// </summary>
+		public static bool HasScriptCampatibility(Version version) => version.IsGreaterEqual(3, 4) && version.IsLess(5);
+		/// <summary>
+		/// 3.5.0 to 5.0.0 exclusive
+		/// </summary>
+		public static bool HasClassCampatibility(Version version) => version.IsGreaterEqual(3, 5) && version.IsLess(5);
+		/// <summary>
+		/// 5.4.0 to 5.5.0 exclusive
+		/// </summary>
+		public static bool HasClassVersionMap(Version version) => version.IsGreaterEqual(5, 4) && version.IsLess(5, 5);
+		/// <summary>
+		/// 4.2.0 and greater
+		/// </summary>
+		public static bool HasRuntimeCompatibility(Version version) => version.IsGreaterEqual(4, 2);
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
+		public static bool HasAssetBundleName(Version version) => version.IsGreaterEqual(5);
+		/// <summary>
+		/// 5.0.0b2
+		/// </summary>
+		public static bool HasIsStreamedSceneAssetBundle(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		/// <summary>
+		/// 2017.3 and greater
+		/// </summary>
+		public static bool HasExplicitDataLayout(Version version) => version.IsGreaterEqual(2017, 3);
+		/// <summary>
+		/// 2017.1.0b2 and greater
+		/// </summary>
+		public static bool HasPathFlags(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		/// <summary>
+		/// 2017.3 and greater
+		/// </summary>
+		public static bool HasSceneHashes(Version version) => version.IsGreaterEqual(2017, 3);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadPreloadTable(reader.Version))
+			if (HasPreloadTable(reader.Version))
 			{
-				m_preloadTable = reader.ReadAssetArray<PPtr<Object>>();
+				PreloadTable = reader.ReadAssetArray<PPtr<Object>>();
 			}
 
-			m_container = reader.ReadStringTKVPArray<AssetBundles.AssetInfo>();
+			Container = reader.ReadKVPStringTArray<AssetBundles.AssetInfo>();
 			MainAsset.Read(reader);
 
-			if(IsReadScriptCampatibility(reader.Version))
+			if (HasScriptCampatibility(reader.Version))
 			{
-				m_scriptCampatibility = reader.ReadAssetArray<AssetBundleScriptInfo>();
+				ScriptCampatibility = reader.ReadAssetArray<AssetBundleScriptInfo>();
 			}
-			if (IsReadClassCampatibility(reader.Version))
+			if (HasClassCampatibility(reader.Version))
 			{
-				m_classCampatibility = reader.ReadInt32KVPUInt32Array();
-			}
-
-			if (IsReadClassVersionMap(reader.Version))
-			{
-				m_classVersionMap = new Dictionary<int, int>();
-				m_classVersionMap.Read(reader);
+				ClassCampatibility = reader.ReadKVPInt32UInt32Array();
 			}
 
-			if (IsReadRuntimeCompatibility(reader.Version))
+			if (HasClassVersionMap(reader.Version))
+			{
+				ClassVersionMap = new Dictionary<int, int>();
+				ClassVersionMap.Read(reader);
+			}
+
+			if (HasRuntimeCompatibility(reader.Version))
 			{
 				RuntimeCompatibility = reader.ReadUInt32();
 			}
 
-			if(IsReadAssetBundleName(reader.Version))
+			if (HasAssetBundleName(reader.Version))
 			{
 				AssetBundleName = reader.ReadString();
-				m_dependencies = reader.ReadStringArray();
+				Dependencies = reader.ReadStringArray();
 			}
-			if (IsReadIsStreamedSceneAssetBundle(reader.Version))
+			if (HasIsStreamedSceneAssetBundle(reader.Version))
 			{
 				IsStreamedSceneAssetBundle = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
-			if(IsReadExplicitDataLayout(reader.Version))
+			if (HasExplicitDataLayout(reader.Version))
 			{
 				ExplicitDataLayout = reader.ReadInt32();
 			}
-			if (IsReadPathFlags(reader.Version))
+			if (HasPathFlags(reader.Version))
 			{
 				PathFlags = reader.ReadInt32();
 			}
 
-			if(IsReadSceneHashes(reader.Version))
+			if (HasSceneHashes(reader.Version))
 			{
-				m_sceneHashes = new Dictionary<string, string>();
-				m_sceneHashes.Read(reader);
+				SceneHashes = new Dictionary<string, string>();
+				SceneHashes.Read(reader);
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
-			foreach (AssetBundles.AssetInfo container in m_container.Select(t => t.Value))
+
+			foreach (PPtr<Object> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
 			{
-				foreach (Object asset in container.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 
@@ -184,26 +146,21 @@ namespace uTinyRipper.Classes
 
 		public override string ExportExtension => throw new NotSupportedException();
 
-		public IReadOnlyList<PPtr<Object>> PreloadTable => m_preloadTable;
-		public ILookup<string, AssetBundles.AssetInfo> Container => m_container.ToLookup(t => t.Key, t => t.Value);
-		public IReadOnlyList<AssetBundleScriptInfo> ScriptCampatibility => m_scriptCampatibility;
-		public IReadOnlyList<KeyValuePair<int, uint>> ClassCampatibility => m_classCampatibility;
-		public IReadOnlyDictionary<int, int> ClassVersionMap => m_classVersionMap;
-		public uint RuntimeCompatibility { get; private set; }
-		public string AssetBundleName { get; private set; }
-		public IReadOnlyList<string> Dependencies  => m_dependencies;
-		public bool IsStreamedSceneAssetBundle { get; private set; }
-		public int ExplicitDataLayout { get; private set; }
-		public int PathFlags { get; private set; }
-		
+		public PPtr<Object>[] PreloadTable { get; set; }
+		public KeyValuePair<string, AssetBundles.AssetInfo>[] Container { get; set; }
+		public AssetBundleScriptInfo[] ScriptCampatibility { get; set; }
+		public KeyValuePair<int, uint>[] ClassCampatibility { get; set; }
+		public Dictionary<int, int> ClassVersionMap { get; set; }
+		public uint RuntimeCompatibility { get; set; }
+		public string AssetBundleName { get; set; }
+		public string[] Dependencies { get; set; }
+		public bool IsStreamedSceneAssetBundle { get; set; }
+		public int ExplicitDataLayout { get; set; }
+		public int PathFlags { get; set; }
+		public Dictionary<string, string> SceneHashes { get; set; }
+
+		public const string ContainerName = "m_Container";
+
 		public AssetBundles.AssetInfo MainAsset;
-		
-		private PPtr<Object>[] m_preloadTable;
-		private KeyValuePair<string, AssetBundles.AssetInfo>[] m_container;
-		private AssetBundleScriptInfo[] m_scriptCampatibility;
-		private KeyValuePair<int, uint>[] m_classCampatibility;
-		private Dictionary<int, int> m_classVersionMap;
-		private string[] m_dependencies;
-		private Dictionary<string, string> m_sceneHashes;
 	}
 }

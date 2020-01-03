@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
@@ -9,9 +8,9 @@ namespace uTinyRipper.Classes.AnimatorControllers
 	{
 		public void Read(AssetReader reader)
 		{
-			m_childBlendEventIDArray = reader.ReadUInt32Array();
+			ChildBlendEventIDArray = reader.ReadUInt32Array();
 			NormalizedBlendValues = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -19,9 +18,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 
-		public IReadOnlyList<uint> ChildBlendEventIDArray => m_childBlendEventIDArray;
-		public bool NormalizedBlendValues { get; private set; }
-
-		private uint[] m_childBlendEventIDArray;
+		public uint[] ChildBlendEventIDArray { get; set; }
+		public bool NormalizedBlendValues { get; set; }
 	}
 }

@@ -1,5 +1,5 @@
-﻿using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes.CapsuleCollider2Ds;
+﻿using uTinyRipper.Classes.CapsuleCollider2Ds;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -22,12 +22,15 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Size", Size.ExportYAML(container));
-			node.Add("m_Direction", (int)Direction);
+			node.Add(SizeName, Size.ExportYAML(container));
+			node.Add(DirectionName, (int)Direction);
 			return node;
 		}
 
-		public CapsuleDirection2D Direction { get; private set; }
+		public CapsuleDirection2D Direction { get; set; }
+
+		public const string SizeName = "m_Size";
+		public const string DirectionName = "m_Direction";
 
 		public Vector2f Size;
 	}

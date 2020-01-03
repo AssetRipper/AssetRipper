@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes.AnimatorControllers.Editor;
+using uTinyRipper.Classes.BlendTrees;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
@@ -12,92 +12,71 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
-		public static bool IsReadBlendType(Version version)
-		{
-			return version.IsGreaterEqual(4, 1);
-		}
+		public static bool HasBlendType(Version version) => version.IsGreaterEqual(4, 1);
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
-		public static bool IsReadBlendEventYID(Version version)
-		{
-			return version.IsGreaterEqual(4, 1);
-		}
+		public static bool HasBlendEventYID(Version version) => version.IsGreaterEqual(4, 1);
 		/// <summary>
 		/// 4.0.x
 		/// </summary>
-		public static bool IsReadChildThresholdArray(Version version)
-		{
-			return version.IsLess(4, 1);
-		}
+		public static bool HasChildThresholdArray(Version version) => version.IsLess(4, 1);
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
-		public static bool IsReadBlendData(Version version)
-		{
-			return version.IsGreaterEqual(4, 1);
-		}
+		public static bool HasBlendData(Version version) => version.IsGreaterEqual(4, 1);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadBlendDirectData(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		public static bool HasBlendDirectData(Version version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 4.5.2 to 5.0.0 exclusive
 		/// </summary>
-		public static bool IsReadClipIndex(Version version)
-		{
-			return version.IsGreaterEqual(4, 5, 2) && version.IsLess(5);
-		}
+		public static bool HasClipIndex(Version version) => version.IsGreaterEqual(4, 5, 1, VersionType.Patch, 3) && version.IsLess(5);
 		/// <summary>
 		/// 4.1.3 and greater
 		/// </summary>
-		public static bool IsReadCycleOffset(Version version)
-		{
-			return version.IsGreaterEqual(4, 1, 3);
-		}
+		public static bool HasCycleOffset(Version version) => version.IsGreaterEqual(4, 1, 3);
 		
 		public void Read(AssetReader reader)
 		{
-			if (IsReadBlendType(reader.Version))
+			if (HasBlendType(reader.Version))
 			{
 				BlendType = (BlendTreeType)reader.ReadUInt32();
 			}
 			BlendEventID = reader.ReadUInt32();
-			if (IsReadBlendEventYID(reader.Version))
+			if (HasBlendEventYID(reader.Version))
 			{
 				BlendEventYID = reader.ReadUInt32();
 			}
-			m_childIndices = reader.ReadUInt32Array();
-			if (IsReadChildThresholdArray(reader.Version))
+			ChildIndices = reader.ReadUInt32Array();
+			if (HasChildThresholdArray(reader.Version))
 			{
-				m_childThresholdArray = reader.ReadSingleArray();
+				ChildThresholdArray = reader.ReadSingleArray();
 			}
 
-			if (IsReadBlendData(reader.Version))
+			if (HasBlendData(reader.Version))
 			{
 				Blend1dData.Read(reader);
 				Blend2dData.Read(reader);
 			}
-			if(IsReadBlendDirectData(reader.Version))
+			if (HasBlendDirectData(reader.Version))
 			{
 				BlendDirectData.Read(reader);
 			}
 
 			ClipID = reader.ReadUInt32();
-			if (IsReadClipIndex(reader.Version))
+			if (HasClipIndex(reader.Version))
 			{
 				ClipIndex = reader.ReadUInt32();
 			}
 
 			Duration = reader.ReadSingle();
-			if (IsReadCycleOffset(reader.Version))
+			if (HasCycleOffset(reader.Version))
 			{
 				CycleOffset = reader.ReadSingle();
 				Mirror = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
@@ -120,7 +99,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public float GetThreshold(Version version, int index)
 		{
-			if (IsReadBlendData(version))
+			if (HasBlendData(version))
 			{
 				if(BlendType == BlendTreeType.Simple1D)
 				{
@@ -132,7 +111,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public float GetMinThreshold(Version version)
 		{
-			if (IsReadBlendData(version))
+			if (HasBlendData(version))
 			{
 				if (BlendType == BlendTreeType.Simple1D)
 				{
@@ -144,7 +123,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public float GetMaxThreshold(Version version)
 		{
-			if (IsReadBlendData(version))
+			if (HasBlendData(version))
 			{
 				if(BlendType == BlendTreeType.Simple1D)
 				{
@@ -156,7 +135,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		
 		public uint GetDirectBlendParameter(Version version, int index)
 		{
-			if(IsReadBlendDirectData(version))
+			if (HasBlendDirectData(version))
 			{
 				if(BlendType == BlendTreeType.Direct)
 				{
@@ -166,24 +145,21 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			return 0;
 		}
 		
-		public bool IsBlendTree => ChildIndices.Count > 0;
+		public bool IsBlendTree => ChildIndices.Length > 0;
 
-		public BlendTreeType BlendType { get; private set; }
-		public uint BlendEventID { get; private set; }
-		public uint BlendEventYID { get; private set; }
-		public IReadOnlyList<uint> ChildIndices => m_childIndices;
-		public IReadOnlyList<float> ChildThresholdArray => m_childThresholdArray;
-		public uint ClipID { get; private set; }
-		public uint ClipIndex { get; private set; }
-		public float Duration { get; private set; }
-		public float CycleOffset { get; private set; }
-		public bool Mirror { get; private set; }
+		public BlendTreeType BlendType { get; set; }
+		public uint BlendEventID { get; set; }
+		public uint BlendEventYID { get; set; }
+		public uint[] ChildIndices { get; set; }
+		public float[] ChildThresholdArray { get; set; }
+		public uint ClipID { get; set; }
+		public uint ClipIndex { get; set; }
+		public float Duration { get; set; }
+		public float CycleOffset { get; set; }
+		public bool Mirror { get; set; }
 
 		public OffsetPtr<Blend1dDataConstant> Blend1dData;
 		public OffsetPtr<Blend2dDataConstant> Blend2dData;
 		public OffsetPtr<BlendDirectDataConstant> BlendDirectData;
-
-		private uint[] m_childIndices;
-		private float[] m_childThresholdArray;
 	}
 }

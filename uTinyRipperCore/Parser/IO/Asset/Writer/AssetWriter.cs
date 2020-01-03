@@ -1,17 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper
 {
 	public sealed class AssetWriter : EndianWriter
 	{
-		public AssetWriter(Stream stream, Version version, Platform platform, TransferInstructionFlags flags) :
-			base(stream)
+		public AssetWriter(Stream stream, EndianType endian, AssetLayout layout) :
+			base(stream, endian, layout.IsAlignArrays)
 		{
-			Version = version;
-			Platform = platform;
-			Flags = flags;
+			Layout = layout;
+			IsAlignString = layout.IsAlign;
 		}
 
 		public override void Write(char value)
@@ -34,6 +34,10 @@ namespace uTinyRipper
 				throw new Exception($"Written {written} but expected {count}");
 			}
 			Write(buffer, 0, written);
+			if (IsAlignString)
+			{
+				AlignStream();
+			}
 		}
 
 		public override void Write(char[] buffer, int index, int count)
@@ -54,65 +58,49 @@ namespace uTinyRipper
 			}
 		}
 
-		public void WriteArray(char[] buffer, int index, int count)
-		{
-			FillInnerBuffer(buffer.Length);
-			Write(m_buffer, 0, sizeof(int));
-
-			int byteIndex = 0;
-			int byteCount = buffer.Length * sizeof(char);
-			int last = index + count;
-			while (index < last)
-			{
-				int left = byteCount - byteIndex;
-				int toWrite = left < BufferSize ? left : BufferSize;
-				for (int i = 0; i < toWrite; i += sizeof(char), index++)
-				{
-					FillInnerBuffer((ushort)buffer[index], i);
-				}
-				Write(m_buffer, 0, toWrite);
-				byteIndex += toWrite;
-			}
-		}
-
 		public void WriteAsset<T>(T value)
-			where T : IAssetWritable, new()
+			where T : IAssetWritable
 		{
 			value.Write(this);
 		}
 
 		public void WriteAssetArray<T>(T[] buffer)
-			where T : IAssetWritable, new()
+			where T : IAssetWritable
 		{
 			FillInnerBuffer(buffer.Length);
 			Write(m_buffer, 0, sizeof(int));
 
 			for (int i = 0; i < buffer.Length; i++)
 			{
-				T t = buffer[i];
-				t.Write(this);
+				buffer[i].Write(this);
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 		}
 
 		public void WriteAssetArray<T>(T[][] buffer)
-			where T : IAssetWritable, new()
+			where T : IAssetWritable
 		{
 			FillInnerBuffer(buffer.Length);
 			Write(m_buffer, 0, sizeof(int));
 
 			for (int i = 0; i < buffer.GetLength(0); i++)
 			{
-				for (int j = 0; j < buffer.GetLength(1); j++)
-				{
-					T t = buffer[i][j];
-					t.Write(this);
-				}
+				WriteAssetArray(buffer[i]);
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
 			}
 		}
 
-		public Platform Platform { get; }
-		public TransferInstructionFlags Flags { get; }
+		public AssetLayout Layout { get; }
+		public Version Version => Layout.Info.Version;
+		public Platform Platform => Layout.Info.Platform;
+		public TransferInstructionFlags Flags => Layout.Info.Flags;
 
-		public Version Version;
+		private bool IsAlignString { get; }
 	}
 }

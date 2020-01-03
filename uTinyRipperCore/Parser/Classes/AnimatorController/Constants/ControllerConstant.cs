@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.AnimatorControllers
 {
@@ -7,18 +7,18 @@ namespace uTinyRipper.Classes.AnimatorControllers
 	{		
 		public void Read(AssetReader reader)
 		{
-			m_layerArray = reader.ReadAssetArray<OffsetPtr<LayerConstant>>();
-			m_stateMachineArray = reader.ReadAssetArray<OffsetPtr<StateMachineConstant>>();
+			LayerArray = reader.ReadAssetArray<OffsetPtr<LayerConstant>>();
+			StateMachineArray = reader.ReadAssetArray<OffsetPtr<StateMachineConstant>>();
 			Values.Read(reader);
 			DefaultValues.Read(reader);
 		}
 
 		public LayerConstant GetLayerByStateMachineIndex(int index)
 		{
-			foreach(OffsetPtr<LayerConstant> layerPtr in LayerArray)
+			for (int i = 0; i < LayerArray.Length; i++)
 			{
-				LayerConstant layer = layerPtr.Instance;
-				if(layer.StateMachineIndex == index && layer.StateMachineMotionSetIndex == 0)
+				ref LayerConstant layer = ref LayerArray[i].Instance;
+				if (layer.StateMachineIndex == index && layer.StateMachineMotionSetIndex == 0)
 				{
 					return layer;
 				}
@@ -28,9 +28,9 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		
 		public int GetLayerIndexByStateMachineIndex(int index)
 		{
-			for (int i = 0; i < LayerArray.Count; i++)
+			for (int i = 0; i < LayerArray.Length; i++)
 			{
-				LayerConstant layer = LayerArray[i].Instance;
+				ref LayerConstant layer = ref LayerArray[i].Instance;
 				if (layer.StateMachineIndex == index && layer.StateMachineMotionSetIndex == 0)
 				{
 					return i;
@@ -41,7 +41,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public int GetLayerIndex(LayerConstant layer)
 		{
-			for(int i = 0; i < LayerArray.Count; i++)
+			for(int i = 0; i < LayerArray.Length; i++)
 			{
 				LayerConstant checkLayer = LayerArray[i].Instance;
 				if(checkLayer.StateMachineIndex == layer.StateMachineIndex && checkLayer.StateMachineMotionSetIndex == layer.StateMachineMotionSetIndex)
@@ -52,16 +52,13 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			throw new ArgumentException("Layer hasn't been found", nameof(layer));
 		}
 
-		public IReadOnlyList<OffsetPtr<LayerConstant>> LayerArray => m_layerArray;
-		public IReadOnlyList<OffsetPtr<StateMachineConstant>> StateMachineArray => m_stateMachineArray;
+		/// <summary>
+		/// HumanLayerArray previously
+		/// </summary>
+		public OffsetPtr<LayerConstant>[] LayerArray { get; set; }
+		public OffsetPtr<StateMachineConstant>[] StateMachineArray { get; set; }
 
 		public OffsetPtr<ValueArrayConstant> Values;
 		public OffsetPtr<ValueArray> DefaultValues;
-
-		/// <summary>
-		/// m_HumanLayerArray previously
-		/// </summary>
-		private OffsetPtr<LayerConstant>[] m_layerArray;
-		private OffsetPtr<StateMachineConstant>[] m_stateMachineArray;
 	}
 }

@@ -114,7 +114,7 @@ namespace Brotli
 		/// <summary>Decodes the next Huffman code from bit-stream.</summary>
 		private static int ReadSymbol(int[] table, int offset, Brotli.BitReader br)
 		{
-			int val = (int)((long)(((ulong)br.accumulator) >> br.bitOffset));
+			int val = unchecked((int)((long)(((ulong)br.accumulator) >> br.bitOffset)));
 			offset += val & HuffmanTableMask;
 			int bits = table[offset] >> 16;
 			int sym = table[offset] & unchecked((int)(0xFFFF));
@@ -190,7 +190,7 @@ namespace Brotli
 			{
 				Brotli.BitReader.ReadMoreInput(br);
 				Brotli.BitReader.FillBitWindow(br);
-				int p = (int)(((long)(((ulong)br.accumulator) >> br.bitOffset))) & 31;
+				int p = unchecked((int)(((long)(((ulong)br.accumulator) >> br.bitOffset))) & 31);
 				br.bitOffset += table[p] >> 16;
 				int codeLen = table[p] & unchecked((int)(0xFFFF));
 				if (codeLen < CodeLengthRepeatCode)
@@ -324,7 +324,7 @@ namespace Brotli
 				{
 					int codeLenIdx = CodeLengthCodeOrder[i];
 					Brotli.BitReader.FillBitWindow(br);
-					int p = (int)((long)(((ulong)br.accumulator) >> br.bitOffset)) & 15;
+					int p = unchecked((int)((long)(((ulong)br.accumulator) >> br.bitOffset)) & 15);
 					// TODO: Demultiplex FIXED_TABLE.
 					br.bitOffset += FixedTable[p] >> 16;
 					int v = FixedTable[p] & unchecked((int)(0xFFFF));
@@ -654,7 +654,7 @@ namespace Brotli
 
 		internal static void SetCustomDictionary(Brotli.State state, byte[] data)
 		{
-			state.customDictionary = (data == null) ? new byte[0] : data;
+			state.customDictionary = (data == null) ? System.Array.Empty<byte>() : data;
 		}
 
 		/// <summary>Actual decompress implementation.</summary>

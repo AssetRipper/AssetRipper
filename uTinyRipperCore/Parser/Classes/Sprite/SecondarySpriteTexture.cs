@@ -1,22 +1,21 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Sprites
 {
-	public struct SecondarySpriteTexture : IAssetReadable, IYAMLExportable
+	public struct SecondarySpriteTexture : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
 			Texture.Read(reader);
 			Name = reader.ReadString();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return Texture.FetchDependency(file, isLog, () => nameof(SecondarySpriteTexture), TextureName);
+			yield return context.FetchDependency(Texture, TextureName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -27,7 +26,7 @@ namespace uTinyRipper.Classes.Sprites
 			return node;
 		}
 
-		public string Name { get; private set; }
+		public string Name { get; set; }
 
 		public const string TextureName = "texture";
 		public const string NameName = "name";

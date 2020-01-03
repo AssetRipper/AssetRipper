@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
+using uTinyRipper.Layout.AnimationClips;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
-	public struct Vector3Curve : IAssetReadable, IYAMLExportable
+	public struct Vector3Curve : IAsset, IYAMLExportable
 	{
 		public Vector3Curve(Vector3Curve copy, IReadOnlyList<KeyframeTpl<Vector3f>> keyframes):
 			this(copy.Path, keyframes)
@@ -29,11 +31,18 @@ namespace uTinyRipper.Classes.AnimationClips
 			Path = reader.ReadString();
 		}
 
+		public void Write(AssetWriter writer)
+		{
+			Curve.Write(writer);
+			writer.Write(Path);
+		}
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("curve", Curve.ExportYAML(container));
-			node.Add("path", Path);
+			Vector3CurveLayout layout = container.ExportLayout.AnimationClip.Vector3Curve;
+			node.Add(layout.CurveName, Curve.ExportYAML(container));
+			node.Add(layout.PathName, Path);
 			return node;
 		}
 
@@ -47,7 +56,7 @@ namespace uTinyRipper.Classes.AnimationClips
 			return hash;
 		}
 
-		public string Path { get; private set; }
+		public string Path { get; set; }
 
 		public AnimationCurveTpl<Vector3f> Curve;
 	}

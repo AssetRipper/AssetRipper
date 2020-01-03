@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Avatars
@@ -14,8 +14,8 @@ namespace uTinyRipper.Classes.Avatars
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_ParentId", ParentId);
-			node.Add("m_AxesId", AxesId);
+			node.Add(ParentIdName, ParentId);
+			node.Add(AxesIdName, AxesId);
 			return node;
 		}
 
@@ -24,7 +24,10 @@ namespace uTinyRipper.Classes.Avatars
 			return $"P:{ParentId} A:{AxesId}";
 		}
 
-		public int ParentId { get; private set; }
-		public int AxesId { get; private set; }
+		public int ParentId { get; set; }
+		public int AxesId { get; set; }
+
+		public const string ParentIdName = "m_ParentId";
+		public const string AxesIdName = "m_AxesId";
 	}
 }

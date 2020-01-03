@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Avatars
@@ -8,39 +8,50 @@ namespace uTinyRipper.Classes.Avatars
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool IsVector3(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
+		public static bool IsVector3(Version version) => version.IsGreaterEqual(5, 4);
 
 		public void Read(AssetReader reader)
 		{
-			if(IsVector3(reader.Version))
+			if (IsVector3(reader.Version))
 			{
-				Min.Read3(reader);
-				Max.Read3(reader);
+				Min = reader.ReadAsset<Vector3f>();
+				Max = reader.ReadAsset<Vector3f>();
 			}
 			else
 			{
-				Min.Read(reader);
-				Max.Read(reader);
+				Min4.Read(reader);
+				Max4.Read(reader);
 			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Min", Min.ExportYAML3(container));
-			node.Add("m_Max", Max.ExportYAML3(container));
+			node.Add(MinName, Min.ExportYAML(container));
+			node.Add(MaxName, Max.ExportYAML(container));
 			return node;
 		}
 
 		public override string ToString()
 		{
-			return $"{Min}-{Max}";
+			return $"{Min4}-{Max4}";
 		}
 
-		public Vector4f Min;
-		public Vector4f Max;
+		public Vector3f Min
+		{
+			get => (Vector3f)Min4;
+			set => Min4 = value;
+		}
+		public Vector3f Max
+		{
+			get => (Vector3f)Max4;
+			set => Max4 = value;
+		}
+
+		public const string MinName = "m_Min";
+		public const string MaxName = "m_Max";
+
+		public Vector4f Min4;
+		public Vector4f Max4;
 	}
 }

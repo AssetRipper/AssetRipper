@@ -8,12 +8,12 @@
 // Licensed under the MIT/X11 license.
 //
 
-using System;
 using System.Text;
 
 using Mono.Collections.Generic;
 
-namespace Mono.Cecil {
+namespace Mono.Cecil
+{
 
 	public sealed class GenericInstanceMethod : MethodSpecification, IGenericInstance, IGenericContext {
 

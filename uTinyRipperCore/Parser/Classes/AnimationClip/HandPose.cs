@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
@@ -8,21 +8,19 @@ namespace uTinyRipper.Classes.AnimationClips
 		{
 			GrabX.Read(reader);
 
-			m_doFArray = reader.ReadSingleArray();
+			DoFArray = reader.ReadSingleArray();
 			Override = reader.ReadSingle();
 			CloseOpen = reader.ReadSingle();
 			InOut = reader.ReadSingle();
 			Grab = reader.ReadSingle();
 		}
 
-		public IReadOnlyList<float> DoFArray => m_doFArray;
-		public float Override { get; private set; }
-		public float CloseOpen { get; private set; }
-		public float InOut { get; private set; }
-		public float Grab { get; private set; }
+		public float[] DoFArray { get; set; }
+		public float Override { get; set; }
+		public float CloseOpen { get; set; }
+		public float InOut { get; set; }
+		public float Grab { get; set; }
 
 		public XForm GrabX;
-
-		private float[] m_doFArray;
 	}
 }

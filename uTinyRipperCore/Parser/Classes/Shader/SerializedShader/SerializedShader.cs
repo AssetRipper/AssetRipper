@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace uTinyRipper.Classes.Shaders
 {
 	public struct SerializedShader : IAssetReadable
@@ -7,13 +5,13 @@ namespace uTinyRipper.Classes.Shaders
 		public void Read(AssetReader reader)
 		{
 			PropInfo.Read(reader);
-			m_subShaders = reader.ReadAssetArray<SerializedSubShader>();
+			SubShaders = reader.ReadAssetArray<SerializedSubShader>();
 			Name = reader.ReadString();
 			CustomEditorName = reader.ReadString();
 			FallbackName = reader.ReadString();
-			m_dependencies = reader.ReadAssetArray<SerializedShaderDependency>();
+			Dependencies = reader.ReadAssetArray<SerializedShaderDependency>();
 			DisableNoSubshadersMessage = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public void Export(ShaderWriter writer)
@@ -22,9 +20,9 @@ namespace uTinyRipper.Classes.Shaders
 
 			PropInfo.Export(writer);
 
-			foreach(SerializedSubShader subShader in SubShaders)
+			for (int i = 0; i < SubShaders.Length; i++)
 			{
-				subShader.Export(writer);
+				SubShaders[i].Export(writer);
 			}
 
 			if(FallbackName != string.Empty)
@@ -42,16 +40,13 @@ namespace uTinyRipper.Classes.Shaders
 			writer.Write('}');
 		}
 
-		public IReadOnlyList<SerializedSubShader> SubShaders => m_subShaders;
-		public string Name { get; private set; }
-		public string CustomEditorName { get; private set; }
-		public string FallbackName { get; private set; }
-		public IReadOnlyList<SerializedShaderDependency> Dependencies => m_dependencies;
-		public bool DisableNoSubshadersMessage { get; private set; }
+		public SerializedSubShader[] SubShaders { get; set; }
+		public string Name { get; set; }
+		public string CustomEditorName { get; set; }
+		public string FallbackName { get; set; }
+		public SerializedShaderDependency[] Dependencies { get; set; }
+		public bool DisableNoSubshadersMessage { get; set; }
 
 		public SerializedProperties PropInfo;
-		
-		private SerializedSubShader[] m_subShaders;
-		private SerializedShaderDependency[] m_dependencies;
 	}
 }

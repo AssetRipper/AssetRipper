@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Misc;
 using uTinyRipper.Classes.ReflectionProbes;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -13,56 +13,46 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 5.0.0f1 and greater
-		/// </summary>
-		public static bool IsReadRefreshMode(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+			// NOTE: unknown version
+			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
+			{
+				return 2;
+			}
+			return 1;
 		}
+
 		/// <summary>
-		/// 5.0.0f1 and greater
+		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool IsReadImportance(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
+		public static bool HasRefreshMode(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		/// <summary>
+		/// 5.0.0f1 and greater (NOTE: unknown version)
+		/// </summary>
+		public static bool HasImportance(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		public static bool IsReadBlendDistance(Version version)
-		{
-			return version.IsGreaterEqual(5, 2);
-		}
+		public static bool HasBlendDistance(Version version) => version.IsGreaterEqual(5, 2);
 		/// <summary>
-		/// Less than 5.0.0f1
+		/// Less than 5.0.0f1 (NOTE: unknown version)
 		/// </summary>
-		public static bool IsReadBakedRenderPassCount(Version version)
-		{
-			// unknown version
-			return version.IsLess(5, 0, 0, VersionType.Final);
-		}
+		public static bool HasBakedRenderPassCount(Version version) => version.IsLess(5, 0, 0, VersionType.Final);
 		/// <summary>
-		/// 5.0.0f1 and greater
+		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool IsReadBoxProjection(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
+		public static bool HasBoxProjection(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		/// <summary>
-		/// 5.0.0f1 and greater
+		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool IsReadCustomBakedTexture(Version version)
+		public static bool HasCustomBakedTexture(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		/// <summary>
+		/// (Less than 5.0.0) or (5.0.0 and greater and Release)
+		/// </summary>
+		public static bool HasBakedTexture(Version version, TransferInstructionFlags flags)
 		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
-		public static bool IsReadBakedTexture(Version version, TransferInstructionFlags flags)
-		{
-			// unknown version
+			// NOTE: unknown version
 			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
 			{
 				return flags.IsRelease();
@@ -71,22 +61,11 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// 5.0.0f1 to 5.4.0 exclusive
+		/// 5.0.0f1 to 5.4.0 exclusive (NOTE: unknown version)
 		/// </summary>
-		private static bool IsReadImportanceFirst(Version version)
+		private static bool HasImportanceFirst(Version version)
 		{
-			// unknown start version
 			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 4);
-		}
-
-		private static int GetSerializedVersion(Version version)
-		{
-			// unknown version
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
-			{
-				return 2;
-			}
-			return 1;
 		}
 
 		public override void Read(AssetReader reader)
@@ -95,16 +74,16 @@ namespace uTinyRipper.Classes
 
 			Type = (ReflectionProbeType)reader.ReadInt32();
 			Mode = (ReflectionProbeMode)reader.ReadInt32();
-			if (IsReadRefreshMode(reader.Version))
+			if (HasRefreshMode(reader.Version))
 			{
 				RefreshMode = (ReflectionProbeRefreshMode)reader.ReadInt32();
 				TimeSlicingMode = (ReflectionProbeTimeSlicingMode)reader.ReadInt32();
 			}
 			Resolution = reader.ReadInt32();
 			UpdateFrequency = reader.ReadInt32();
-			if (IsReadImportance(reader.Version))
+			if (HasImportance(reader.Version))
 			{
-				if (IsReadImportanceFirst(reader.Version))
+				if (HasImportanceFirst(reader.Version))
 				{
 					Importance = reader.ReadInt16();
 				}
@@ -118,55 +97,55 @@ namespace uTinyRipper.Classes
 			BackGroundColor.Read(reader);
 			CullingMask.Read(reader);
 			IntensityMultiplier = reader.ReadSingle();
-			if (IsReadBlendDistance(reader.Version))
+			if (HasBlendDistance(reader.Version))
 			{
 				BlendDistance = reader.ReadSingle();
 			}
-			if (IsReadBakedRenderPassCount(reader.Version))
+			if (HasBakedRenderPassCount(reader.Version))
 			{
 				BakedRenderPassCount = reader.ReadUInt32();
 				UseMipMap = reader.ReadBoolean();
 			}
 			HDR = reader.ReadBoolean();
-			if (IsReadBoxProjection(reader.Version))
+			if (HasBoxProjection(reader.Version))
 			{
 				BoxProjection = reader.ReadBoolean();
 				RenderDynamicObjects = reader.ReadBoolean();
 				UseOcclusionCulling = reader.ReadBoolean();
 			}
-			if (IsReadImportance(reader.Version))
+			if (HasImportance(reader.Version))
 			{
-				if (!IsReadImportanceFirst(reader.Version))
+				if (!HasImportanceFirst(reader.Version))
 				{
 					Importance = reader.ReadInt16();
 				}
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
-			if (IsReadCustomBakedTexture(reader.Version))
+			if (HasCustomBakedTexture(reader.Version))
 			{
 				CustomBakedTexture.Read(reader);
 			}
-			if (IsReadBakedTexture(reader.Version, reader.Flags))
+			if (HasBakedTexture(reader.Version, reader.Flags))
 			{
 				BakedTextureTexture.Read(reader);
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return CustomBakedTexture.FetchDependency(file, isLog, ToLogString, CustomBakedTextureName);
+			yield return context.FetchDependency(CustomBakedTexture, CustomBakedTextureName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TypeName, (int)Type);
 			node.Add(ModeName, (int)Mode);
 			node.Add(RefreshModeName, (int)RefreshMode);
@@ -189,32 +168,32 @@ namespace uTinyRipper.Classes
 			node.Add(UseOcclusionCullingName, UseOcclusionCulling);
 			node.Add(ImportanceName, Importance);
 			node.Add(CustomBakedTextureName, CustomBakedTexture.ExportYAML(container));
-			if (IsReadBakedTexture(container.ExportVersion, container.ExportFlags))
+			if (HasBakedTexture(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(BakedTextureName, BakedTextureTexture.ExportYAML(container));
 			}
 			return node;
 		}
 
-		public ReflectionProbeType Type { get; private set; }
-		public ReflectionProbeMode Mode { get; private set; }
-		public ReflectionProbeRefreshMode RefreshMode { get; private set; }
-		public ReflectionProbeTimeSlicingMode TimeSlicingMode { get; private set; }
-		public int Resolution { get; private set; }
-		public int UpdateFrequency { get; private set; }
-		public float NearClip { get; private set; }
-		public float FarClip { get; private set; }
-		public float ShadowDistance { get; private set; }
-		public ReflectionProbeClearFlags ClearFlags { get; private set; }
-		public float IntensityMultiplier { get; private set; }
-		public float BlendDistance { get; private set; }
-		public uint BakedRenderPassCount { get; private set; }
-		public bool UseMipMap { get; private set; }
-		public bool HDR { get; private set; }
-		public bool BoxProjection { get; private set; }
-		public bool RenderDynamicObjects { get; private set; }
-		public bool UseOcclusionCulling { get; private set; }
-		public short Importance { get; private set; }
+		public ReflectionProbeType Type { get; set; }
+		public ReflectionProbeMode Mode { get; set; }
+		public ReflectionProbeRefreshMode RefreshMode { get; set; }
+		public ReflectionProbeTimeSlicingMode TimeSlicingMode { get; set; }
+		public int Resolution { get; set; }
+		public int UpdateFrequency { get; set; }
+		public float NearClip { get; set; }
+		public float FarClip { get; set; }
+		public float ShadowDistance { get; set; }
+		public ReflectionProbeClearFlags ClearFlags { get; set; }
+		public float IntensityMultiplier { get; set; }
+		public float BlendDistance { get; set; }
+		public uint BakedRenderPassCount { get; set; }
+		public bool UseMipMap { get; set; }
+		public bool HDR { get; set; }
+		public bool BoxProjection { get; set; }
+		public bool RenderDynamicObjects { get; set; }
+		public bool UseOcclusionCulling { get; set; }
+		public short Importance { get; set; }
 
 		public const string TypeName = "m_Type";
 		public const string ModeName = "m_Mode";

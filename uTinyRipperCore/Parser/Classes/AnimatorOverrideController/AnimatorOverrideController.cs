@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.AnimatorOverrideControllers;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {
@@ -18,23 +17,20 @@ namespace uTinyRipper.Classes
 			base.Read(reader);
 
 			Controller.Read(reader);
-			m_clips = reader.ReadAssetArray<AnimationClipOverride>();
+			Clips = reader.ReadAssetArray<AnimationClipOverride>();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			
-			yield return Controller.FetchDependency(file, isLog, ToLogString, "m_Controller");
-			foreach (AnimationClipOverride clip in Clips)
+			yield return context.FetchDependency(Controller, ControllerName);
+			foreach (PPtr<Object> asset in context.FetchDependencies(Clips, ClipsName))
 			{
-				foreach (Object asset in clip.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 
@@ -62,17 +58,18 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Controller", Controller.ExportYAML(container));
-			node.Add("m_Clips", Clips.ExportYAML(container));
+			node.Add(ControllerName, Controller.ExportYAML(container));
+			node.Add(ClipsName, Clips.ExportYAML(container));
 			return node;
 		}
 
 		public override string ExportExtension => "overrideController";
 
-		public IReadOnlyList<AnimationClipOverride> Clips => m_clips;
+		public AnimationClipOverride[] Clips { get; set; }
+
+		public const string ControllerName = "m_Controller";
+		public const string ClipsName = "m_Clips";
 
 		public PPtr<RuntimeAnimatorController> Controller;
-
-		private AnimationClipOverride[] m_clips;
 	}
 }

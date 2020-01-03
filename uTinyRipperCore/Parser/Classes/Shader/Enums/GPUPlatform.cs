@@ -9,7 +9,7 @@ namespace uTinyRipper.Classes.Shaders
 		/// For inner use only
 		/// </summary>
 		unknown			= -1,
-
+		
 		openGL			= 0,
 		d3d9			= 1,
 		xbox360			= 2,

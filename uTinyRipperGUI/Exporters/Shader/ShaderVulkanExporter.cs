@@ -3,15 +3,16 @@ using SpirV;
 using System;
 using System.IO;
 using uTinyRipper;
-using uTinyRipper.Classes.Shaders.Exporters;
+using uTinyRipper.Classes.Shaders;
+using uTinyRipper.Converters.Shaders;
 
 namespace uTinyRipperGUI.Exporters
 {
 	public class ShaderVulkanExporter : ShaderTextExporter
 	{
-		public override void Export(byte[] shaderData, TextWriter writer)
+		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 		{
-			using (MemoryStream ms = new MemoryStream(shaderData))
+			using (MemoryStream ms = new MemoryStream(subProgram.ProgramData))
 			{
 				using (BinaryReader reader = new BinaryReader(ms))
 				{
@@ -24,14 +25,14 @@ namespace uTinyRipperGUI.Exporters
 
 						if (size > 0)
 						{
-							ExportSnippet(ms, offset, size, writer);
+							ExportSnippet(writer, ms, offset, size);
 						}
 					}
 				}
 			}
 		}
 
-		private void ExportSnippet(Stream stream, int offset, int size, TextWriter writer)
+		private void ExportSnippet(TextWriter writer, Stream stream, int offset, int size)
 		{
 			using (PartialStream snippetStream = new PartialStream(stream, offset, size))
 			{
@@ -47,57 +48,12 @@ namespace uTinyRipperGUI.Exporters
 						decodedStream.Position = 0;
 						Module module = Module.ReadFrom(decodedStream);
 						string listing = m_disassembler.Disassemble(module, DisassemblyOptions.Default);
-						ExportListing(listing, writer);
+						ExportListing(writer, listing);
 					}
 					else
 					{
 						throw new Exception("Unable to decode SMOL-V shader");
 					}
-				}
-			}
-		}
-
-		private void ExportListing(string listing, TextWriter writer)
-		{
-			writer.WriteLine();
-			writer.WriteIndent(ExpectedIndent);
-
-			for (int i = 0; i < listing.Length;)
-			{
-				char c = listing[i++];
-				bool newLine = false;
-				if (c == '\r')
-				{
-					if (i == listing.Length)
-					{
-						newLine = true;
-					}
-					else
-					{
-						char nc = listing[i];
-						if (nc != '\n')
-						{
-							newLine = true;
-						}
-					}
-				}
-				else if (c == '\n')
-				{
-					newLine = true;
-				}
-
-				if (newLine)
-				{
-					if (i == listing.Length)
-					{
-						break;
-					}
-					writer.Write(c);
-					writer.WriteIndent(ExpectedIndent);
-				}
-				else
-				{
-					writer.Write(c);
 				}
 			}
 		}

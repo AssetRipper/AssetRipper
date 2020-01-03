@@ -14,7 +14,7 @@
 			BindPoint = reader.ReadInt32();
 		}
 
-		public uint Sampler { get; private set; }
-		public int BindPoint { get; private set; }
+		public uint Sampler { get; set; }
+		public int BindPoint { get; set; }
 	}
 }

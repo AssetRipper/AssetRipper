@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -25,14 +24,14 @@ namespace uTinyRipper.Classes
 			BottomBorder = reader.ReadInt32();
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return Texture.FetchDependency(file, isLog, ToLogString, TextureName);
+			yield return context.FetchDependency(Texture, TextureName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -48,10 +47,10 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public int LeftBorder { get; private set; }
-		public int RightBorder { get; private set; }
-		public int TopBorder { get; private set; }
-		public int BottomBorder { get; private set; }
+		public int LeftBorder { get; set; }
+		public int RightBorder { get; set; }
+		public int TopBorder { get; set; }
+		public int BottomBorder { get; set; }
 
 		public const string TextureName = "m_Texture";
 		public const string ColorName = "m_Color";

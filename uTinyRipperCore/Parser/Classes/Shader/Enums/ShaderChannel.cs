@@ -1,5 +1,6 @@
 ﻿namespace uTinyRipper.Classes.Shaders
 {
+#warning TODO: metge with Mesh's ShaderChannel
 	public enum ShaderChannel
 	{
 		Vertex		= 0,

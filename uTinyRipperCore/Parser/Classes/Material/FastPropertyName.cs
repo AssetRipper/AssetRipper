@@ -1,5 +1,5 @@
 ﻿using SevenZip;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Materials
@@ -9,10 +9,7 @@ namespace uTinyRipper.Classes.Materials
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		private static bool IsPlainString(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
+		private static bool IsPlainString(Version version) => version.IsGreaterEqual(2017, 3);
 
 		public bool IsCRC28Match(uint crc)
 		{
@@ -52,7 +49,7 @@ namespace uTinyRipper.Classes.Materials
 			return Value;
 		}
 
-		public string Value { get; private set; }
+		public string Value { get; set; }
 
 		public const string NameName = "name";
 	}

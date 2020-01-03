@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>uTinyRipperGUI</RootNamespace>
     <AssemblyName>uTinyRipper</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
@@ -30,6 +30,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -141,6 +142,27 @@
       <DependentUpon>OutputView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Exporters\Audio\AudioConverter.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ConstantBufferChunk.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ConstantBufferFlags.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ConstantBufferType.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\DXProgramType.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\DXShaderProgramRestorer.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ResourceBindingChunk.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ResourceChunk.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ResourceReturnType.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderFlags.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderGpuProgramTypeExtensions.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderInputFlags.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderInputType.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderResourceViewDimension.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderType.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderTypeMember.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderVariableClass.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderVariableFlags.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\ShaderVariableType.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\Variable.cs" />
+    <Compile Include="ThirdParty\DXShaderRestorer\VariableChunk.cs" />
+    <Compile Include="Exporters\Shader\ShaderHLSLccExporter.cs" />
     <Compile Include="Exporters\Shader\ShaderVulkanExporter.cs" />
     <Compile Include="Exporters\Texture\TextureConverter.cs" />
     <Compile Include="Exporters\Texture\Texture2DExtensions.cs" />
@@ -293,6 +315,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>TextureConverterWrapper.dll</TargetPath>
     </ContentWithTargetPath>
+    <Reference Include="HLSLccWrapper_x86, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\x86\HLSLccWrapper.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup Condition=" '$(Platform)' == 'x64' ">
     <ContentWithTargetPath Include="Libraries\x64\crunch_x64.dll">
@@ -319,6 +345,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>TextureConverterWrapper.dll</TargetPath>
     </ContentWithTargetPath>
+    <Reference Include="HLSLccWrapper_x64, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\x64\HLSLccWrapper.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\URIcon.ico" />

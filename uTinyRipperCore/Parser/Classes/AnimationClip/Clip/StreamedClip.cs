@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.Classes.AnimationClips.Editor;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
@@ -9,18 +9,18 @@ namespace uTinyRipper.Classes.AnimationClips
 	{
 		public void Read(AssetReader reader)
 		{
-			m_data = reader.ReadUInt32Array();
+			Data = reader.ReadUInt32Array();
 			CurveCount = (int)reader.ReadUInt32();
 		}
 
-		public IReadOnlyList<StreamedFrame> GenerateFrames(Version version, Platform platform, TransferInstructionFlags flags)
+		public IReadOnlyList<StreamedFrame> GenerateFrames(AssetLayout layout)
 		{
 			List<StreamedFrame> frames = new List<StreamedFrame>();
-			byte[] memStreamBuffer = new byte[m_data.Length * sizeof(uint)];
-			Buffer.BlockCopy(m_data, 0, memStreamBuffer, 0, memStreamBuffer.Length);
+			byte[] memStreamBuffer = new byte[Data.Length * sizeof(uint)];
+			Buffer.BlockCopy(Data, 0, memStreamBuffer, 0, memStreamBuffer.Length);
 			using (MemoryStream stream = new MemoryStream(memStreamBuffer))
 			{
-				using (AssetReader reader = new AssetReader(stream, version, platform, flags))
+				using (AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout))
 				{
 					while (reader.BaseStream.Position < reader.BaseStream.Length)
 					{
@@ -33,11 +33,9 @@ namespace uTinyRipper.Classes.AnimationClips
 			return frames;
 		}
 
-		public bool IsValid => Data.Count > 0;
+		public bool IsSet => Data.Length > 0;
 		
-		public IReadOnlyList<uint> Data => m_data;
-		public int CurveCount { get; private set; }
-
-		private uint[] m_data;
+		public uint[] Data { get; set; }
+		public int CurveCount { get; set; }
 	}
 }

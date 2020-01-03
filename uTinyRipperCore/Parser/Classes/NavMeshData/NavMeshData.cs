@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.NavMeshDatas;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {
@@ -17,22 +16,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// Less than 5.6.0
-		/// </summary>
-		public static bool IsReadNavMeshParams(Version version)
-		{
-			return version.IsLess(5, 6);
-		}
-		/// <summary>
-		/// 5.6.1 and greater
-		/// </summary>
-		public static bool IsReadSourceBounds(Version version)
-		{
-			return version.IsGreaterEqual(5, 6, 1);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(5, 6))
 			{
@@ -41,12 +25,21 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// Less than 5.6.0
+		/// </summary>
+		public static bool HasNavMeshParams(Version version) => version.IsLess(5, 6);
+		/// <summary>
+		/// 5.6.1 and greater
+		/// </summary>
+		public static bool HasSourceBounds(Version version) => version.IsGreaterEqual(5, 6, 1);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			m_navMeshTiles = reader.ReadAssetArray<NavMeshTileData>();
-			if (IsReadNavMeshParams(reader.Version))
+			NavMeshTiles = reader.ReadAssetArray<NavMeshTileData>();
+			if (HasNavMeshParams(reader.Version))
 			{
 				NavMeshParams.Read(reader);
 			}
@@ -54,10 +47,10 @@ namespace uTinyRipper.Classes
 			{
 				NavMeshBuildSettings.Read(reader);
 			}
-			m_heightmaps = reader.ReadAssetArray<HeightmapData>();
-			m_heightMeshes = reader.ReadAssetArray<HeightMeshData>();
-			m_offMeshLinks = reader.ReadAssetArray<AutoOffMeshLinkData>();
-			if (IsReadSourceBounds(reader.Version))
+			Heightmaps = reader.ReadAssetArray<HeightmapData>();
+			HeightMeshes = reader.ReadAssetArray<HeightMeshData>();
+			OffMeshLinks = reader.ReadAssetArray<AutoOffMeshLinkData>();
+			if (HasSourceBounds(reader.Version))
 			{
 				SourceBounds.Read(reader);
 				Rotation.Read(reader);
@@ -66,26 +59,23 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (Object dependency in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
-				yield return dependency;
+				yield return asset;
 			}
 
-			foreach (HeightmapData heightmap in Heightmaps)
+			foreach (PPtr<Object> asset in context.FetchDependencies(Heightmaps, HeightmapsName))
 			{
-				foreach (Object dependency in heightmap.FetchDependencies(file, isLog))
-				{
-					yield return dependency;
-				}
+				yield return asset;
 			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(NavMeshTilesName, NavMeshTiles.ExportYAML(container));
 			node.Add(NavMeshBuildSettingsName, GetExportNavMeshBuildSettings(container.Version).ExportYAML(container));
 			node.Add(HeightmapsName, Heightmaps.ExportYAML(container));
@@ -100,20 +90,20 @@ namespace uTinyRipper.Classes
 
 		private NavMeshBuildSettings GetExportNavMeshBuildSettings(Version version)
 		{
-			return IsReadNavMeshParams(version) ? new NavMeshBuildSettings(NavMeshParams) : NavMeshBuildSettings;
+			return HasNavMeshParams(version) ? new NavMeshBuildSettings(NavMeshParams) : NavMeshBuildSettings;
 		}
 		private Quaternionf GetExportRotation(Version version)
 		{
-			return IsReadSourceBounds(version) ? Rotation : Quaternionf.Zero;
+			return HasSourceBounds(version) ? Rotation : Quaternionf.Zero;
 		}
 
-		public override string ExportName => Path.Combine(AssetsKeyWord, OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
+		public override string ExportPath => Path.Combine(AssetsKeyword, OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
 
-		public IReadOnlyList<NavMeshTileData> NavMeshTiles => m_navMeshTiles;
-		public IReadOnlyList<HeightmapData> Heightmaps => m_heightmaps;
-		public IReadOnlyList<HeightMeshData> HeightMeshes => m_heightMeshes;
-		public IReadOnlyList<AutoOffMeshLinkData> OffMeshLinks => m_offMeshLinks;
-		public int AgentTypeID { get; private set; }
+		public NavMeshTileData[] NavMeshTiles { get; set; }
+		public HeightmapData[] Heightmaps { get; set; }
+		public HeightMeshData[] HeightMeshes { get; set; }
+		public AutoOffMeshLinkData[] OffMeshLinks { get; set; }
+		public int AgentTypeID { get; set; }
 
 		public const string NavMeshTilesName = "m_NavMeshTiles";
 		public const string NavMeshBuildSettingsName = "m_NavMeshBuildSettings";
@@ -130,10 +120,5 @@ namespace uTinyRipper.Classes
 		public AABB SourceBounds;
 		public Quaternionf Rotation;
 		public Vector3f Position;
-
-		private NavMeshTileData[] m_navMeshTiles;
-		private HeightmapData[] m_heightmaps;
-		private HeightMeshData[] m_heightMeshes;
-		private AutoOffMeshLinkData[] m_offMeshLinks;
 	}
 }

@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.UnityConnectSettingss
@@ -9,18 +9,21 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 		{
 			Enabled = reader.ReadBoolean();
 			TestMode = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Enabled", Enabled);
-			node.Add("m_TestMode", TestMode);
+			node.Add(EnabledName, Enabled);
+			node.Add(TestModeName, TestMode);
 			return node;
 		}
 
-		public bool Enabled { get; private set; }
-		public bool TestMode { get; private set; }
+		public bool Enabled { get; set; }
+		public bool TestMode { get; set; }
+
+		public const string EnabledName = "m_Enabled";
+		public const string TestModeName = "m_TestMode";
 	}
 }

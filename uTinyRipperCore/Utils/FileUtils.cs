@@ -108,25 +108,36 @@ namespace uTinyRipper
 
 		public static string GetUniqueName(string dirPath, string fileName)
 		{
+			return GetUniqueName(dirPath, fileName, MaxFileNameLength);
+		}
+
+		public static string GetUniqueName(string dirPath, string fileName, int maxNameLength)
+		{
+			string ext = null;
+			string name = null;
+			int maxLength = maxNameLength - 4;
+			string validFileName = fileName;
+			if (validFileName.Length > maxLength)
+			{
+				ext = Path.GetExtension(validFileName);
+				name = Path.GetFileNameWithoutExtension(validFileName).Substring(0, maxLength - ext.Length);
+				validFileName = name + ext;
+			}
+
 			dirPath = DirectoryUtils.ToLongPath(dirPath);
 			if (!Directory.Exists(dirPath))
 			{
-				return fileName;
+				return validFileName;
 			}
 
-			string filePath = ToLongPath(Path.Combine(dirPath, fileName));
+			string filePath = ToLongPath(Path.Combine(dirPath, validFileName));
 			if (!File.Exists(filePath))
 			{
-				return fileName;
+				return validFileName;
 			}
 
-			string name = Path.GetFileNameWithoutExtension(fileName);
-			string ext = Path.GetExtension(fileName);
-			int maxLength = MaxFileNameLength - ext.Length - 4;
-			if (name.Length > maxLength)
-			{
-				name = name.Substring(0, maxLength);
-			}
+			ext = ext ?? Path.GetExtension(validFileName);
+			name = name ?? Path.GetFileNameWithoutExtension(validFileName);
 
 			string escapedName = Regex.Escape(name);
 			List<string> files = new List<string>();

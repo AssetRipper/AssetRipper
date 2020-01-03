@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimationClips
@@ -14,9 +13,9 @@ namespace uTinyRipper.Classes.AnimationClips
 			Track.Read(reader);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return Track.FetchDependency(file, isLog, () => nameof(ChildTrack), TrackName);
+			yield return context.FetchDependency(Track, TrackName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -28,8 +27,8 @@ namespace uTinyRipper.Classes.AnimationClips
 			return node;
 		}
 
-		public string Path { get; private set; }
-		public ClassIDType ClassID { get; private set; }
+		public string Path { get; set; }
+		public ClassIDType ClassID { get; set; }
 
 		public const string PathName = "path";
 		public const string ClassIDName = "classID";

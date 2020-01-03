@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
-using uTinyRipper.Assembly;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Objects;
+using uTinyRipper.Converters;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.YAML;
+using uTinyRipper.Game.Assembly;
+using uTinyRipper.Layout;
 
 namespace uTinyRipper.Classes
 {
@@ -15,35 +16,18 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		public static bool IsReadEditorHideFlags(Version version, TransferInstructionFlags flags)
-		{
-#warning unknown version
-			return !flags.IsRelease();
-		}
-		/// <summary>
-		/// 2019.1 to 2019.1.0b4 exclusive and Not Release
-		/// </summary>
-		public static bool IsReadGeneratorAsset(Version version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(2019) && version.IsLess(2019, 1, 0, VersionType.Beta, 4);
-		}
-		public static bool IsReadEditorClassIdentifier(Version version, TransferInstructionFlags flags)
-		{
-#warning unknown version
-			return !flags.IsRelease();
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			long position = reader.BaseStream.Position;
 			base.Read(reader);
 
 #if UNIVERSAL
-			if (IsReadEditorHideFlags(reader.Version, reader.Flags))
+			MonoBehaviourLayout layout = reader.Layout.MonoBehaviour;
+			if (layout.HasEditorHideFlags)
 			{
 				EditorHideFlags = (HideFlags)reader.ReadUInt32();
 			}
-			if (IsReadGeneratorAsset(reader.Version, reader.Flags))
+			if (layout.HasGeneratorAsset)
 			{
 				GeneratorAsset.Read(reader);
 			}
@@ -53,7 +37,7 @@ namespace uTinyRipper.Classes
 			Name = reader.ReadString();
 
 #if UNIVERSAL
-			if (IsReadEditorClassIdentifier(reader.Version, reader.Flags))
+			if (layout.HasEditorClassIdentifier)
 			{
 				EditorClassIdentifier = reader.ReadString();
 			}
@@ -62,9 +46,14 @@ namespace uTinyRipper.Classes
 			MonoScript script = Script.FindAsset(File);
 			if (script != null)
 			{
-				Structure = script.CreateStructure();
-				if(Structure != null)
+				SerializableType behaviourType = script.GetBehaviourType();
+				if (behaviourType == null)
 				{
+					Logger.Log(LogType.Warning, LogCategory.Import, $"Unable to read {ValidName}, because definition for script {script.ValidName} wasn't found");
+				}
+				else
+				{
+					Structure = behaviourType.CreateSerializableStructure();
 					Structure.Read(reader);
 					return;
 				}
@@ -74,21 +63,54 @@ namespace uTinyRipper.Classes
 			reader.BaseStream.Position = position + info.Size;
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override void Write(AssetWriter writer)
 		{
-			foreach (Object asset in base.FetchDependencies(file, isLog))
+			base.Write(writer);
+
+#if UNIVERSAL
+			MonoBehaviourLayout layout = writer.Layout.MonoBehaviour;
+			if (layout.HasEditorHideFlags)
+			{
+				writer.Write((uint)EditorHideFlags);
+			}
+			if (layout.HasGeneratorAsset)
+			{
+				GeneratorAsset.Write(writer);
+			}
+#endif
+
+			Script.Write(writer);
+			writer.Write(Name);
+
+#if UNIVERSAL
+			if (layout.HasEditorClassIdentifier)
+			{
+				writer.Write(EditorClassIdentifier);
+			}
+#endif
+
+			if (Structure != null)
+			{
+				Structure.Write(writer);
+			}
+		}
+
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		{
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
+			MonoBehaviourLayout layout = context.Layout.MonoBehaviour;
 #if UNIVERSAL
-			yield return GeneratorAsset.FindAsset(file);
+			yield return context.FetchDependency(GeneratorAsset, layout.GeneratorAssetName);
 #endif
-			yield return Script.FindAsset(file);
-			
-			if(Structure != null)
+			yield return context.FetchDependency(Script, layout.ScriptName);
+
+			if (Structure != null)
 			{
-				foreach (Object asset in Structure.FetchDependencies(file, isLog))
+				foreach (PPtr<Object> asset in context.FetchDependencies(Structure, Structure.Type.Name))
 				{
 					yield return asset;
 				}
@@ -103,46 +125,47 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(EditorHideFlagsName, (uint)GetEditorHideFlags(container.Version, container.Flags));
-			if (IsReadGeneratorAsset(container.ExportVersion, container.ExportFlags))
+			MonoBehaviourLayout layout = container.ExportLayout.MonoBehaviour;
+			node.Add(layout.EditorHideFlagsName, (uint)GetEditorHideFlags(container));
+			if (layout.HasGeneratorAsset)
 			{
-				node.Add(GeneratorAssetName, GetGeneratorAsset(container.Version, container.Flags).ExportYAML(container));
+				node.Add(layout.GeneratorAssetName, GetGeneratorAsset(container).ExportYAML(container));
 			}
-			node.Add(ScriptName, Script.ExportYAML(container));
-			node.Add(NameName, Name);
-			node.Add(EditorClassIdentifierName, GetEditorClassIdentifier(container.Version, container.Flags));
+			node.Add(layout.ScriptName, Script.ExportYAML(container));
+			node.Add(layout.NameName, Name);
+			node.Add(layout.EditorClassIdentifierName, GetEditorClassIdentifier(container));
 			if (Structure != null)
 			{
 				YAMLMappingNode structureNode = (YAMLMappingNode)Structure.ExportYAML(container);
-				node.Concatenate(structureNode);
+				node.Append(structureNode);
 			}
 			return node;
 		}
 
-		private HideFlags GetEditorHideFlags(Version version, TransferInstructionFlags flags)
+		private HideFlags GetEditorHideFlags(IExportContainer container)
 		{
 #if UNIVERSAL
-			if (IsReadEditorHideFlags(version, flags))
+			if (container.Layout.MonoBehaviour.HasEditorHideFlags)
 			{
 				return EditorHideFlags;
 			}
 #endif
 			return HideFlags.None;
 		}
-		private PPtr<Object> GetGeneratorAsset(Version version, TransferInstructionFlags flags)
+		private PPtr<Object> GetGeneratorAsset(IExportContainer container)
 		{
 #if UNIVERSAL
-			if (IsReadGeneratorAsset(version, flags))
+			if (container.Layout.MonoBehaviour.HasGeneratorAsset)
 			{
 				return GeneratorAsset;
 			}
 #endif
 			return default;
 		}
-		private string GetEditorClassIdentifier(Version version, TransferInstructionFlags flags)
+		private string GetEditorClassIdentifier(IExportContainer container)
 		{
 #if UNIVERSAL
-			if (IsReadEditorClassIdentifier(version, flags))
+			if (container.Layout.MonoBehaviour.HasEditorClassIdentifier)
 			{
 				return EditorClassIdentifier;
 			}
@@ -150,30 +173,25 @@ namespace uTinyRipper.Classes
 			return string.Empty;
 		}
 
-		public override string ExportName => Path.Combine(AssetsKeyWord, "ScriptableObject");
+		public override string ExportPath => Path.Combine(AssetsKeyword, "ScriptableObject");
 		public override string ExportExtension => AssetExtension;
 
+		public string ValidName => Name.Length == 0 ? nameof(MonoBehaviour) : Name;
 		/// <summary>
 		/// Whether this MonoBeh belongs to scene/prefab hierarchy or not
 		/// </summary>
 		// TODO: find out why GameObject may has value like PPtr(0, 894) but such game object doesn't exists
 		public bool IsSceneObject => !GameObject.IsNull;
-		public bool IsScriptableObject => Name != string.Empty;
+		public bool IsScriptableObject => Name.Length > 0;
 
 #if UNIVERSAL
-		public HideFlags EditorHideFlags { get; private set; }
+		public HideFlags EditorHideFlags { get; set; }
 #endif
-		public string Name { get; private set; }
-		public ScriptStructure Structure { get; private set; }
+		public string Name { get; set; }
+		public SerializableStructure Structure { get; set; }
 #if UNIVERSAL
-		public string EditorClassIdentifier { get; private set; }
+		public string EditorClassIdentifier { get; set; }
 #endif
-
-		public const string EditorHideFlagsName = "m_EditorHideFlags";
-		public const string GeneratorAssetName = "m_GeneratorAsset";
-		public const string ScriptName = "m_Script";
-		public const string NameName = "m_Name";
-		public const string EditorClassIdentifierName = "m_EditorClassIdentifier";
 
 #if UNIVERSAL
 		public PPtr<Object> GeneratorAsset;

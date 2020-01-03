@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {
@@ -18,34 +17,36 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool IsReadSourceTextures(Version version)
+		public static bool HasSourceTextures(Version version) => version.IsGreaterEqual(4);
+
+		public override TextureImporter GenerateTextureImporter(IExportContainer container)
 		{
-			return version.IsGreaterEqual(4);
+			return CubemapConverter.GeenrateTextureImporter(container, this);
 		}
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadSourceTextures(reader.Version))
+			if (HasSourceTextures(reader.Version))
 			{
-				m_sourceTextures = reader.ReadAssetArray<PPtr<Texture2D>>();
-				reader.AlignStream(AlignType.Align4);
+				SourceTextures = reader.ReadAssetArray<PPtr<Texture2D>>();
+				reader.AlignStream();
 			}
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			if (IsReadSourceTextures(file.Version))
+			if (HasSourceTextures(context.Version))
 			{
-				foreach(PPtr<Texture2D> texture in m_sourceTextures)
+				foreach (PPtr<Object> asset in context.FetchDependencies(SourceTextures, SourceTexturesName))
 				{
-					yield return texture.FetchDependency(file, isLog, ToLogString, SourceTexturesName);
+					yield return asset;
 				}
 			}
 		}
@@ -57,10 +58,8 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public IReadOnlyList<PPtr<Texture2D>> SourceTextures => m_sourceTextures;
+		public PPtr<Texture2D>[] SourceTextures { get; set; }
 
 		public const string SourceTexturesName = "m_SourceTextures";
-
-		private PPtr<Texture2D>[] m_sourceTextures;
 	}
 }

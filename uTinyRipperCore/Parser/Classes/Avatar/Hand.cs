@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Avatars
@@ -8,18 +7,18 @@ namespace uTinyRipper.Classes.Avatars
 	{
 		public void Read(AssetReader reader)
 		{
-			m_handBoneIndex = reader.ReadInt32Array();
+			HandBoneIndex = reader.ReadInt32Array();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_HandBoneIndex", m_handBoneIndex.ExportYAML(true));
+			node.Add(HandBoneIndexName, HandBoneIndex.ExportYAML(true));
 			return node;
 		}
 
-		public IReadOnlyList<int> HandBoneIndex => m_handBoneIndex;
+		public int[] HandBoneIndex { get; set; }
 
-		private int[] m_handBoneIndex;
+		public const string HandBoneIndexName = "m_HandBoneIndex";
 	}
 }

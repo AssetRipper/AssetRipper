@@ -13,9 +13,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 #endif
 using uTinyRipper;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes;
-
+using uTinyRipper.Converters;
 using Object = uTinyRipper.Classes.Object;
 using Version = uTinyRipper.Version;
 
@@ -31,9 +29,6 @@ namespace uTinyRipperConsole
 		public static void Main(string[] args)
 		{
 			Logger.Instance = ConsoleLogger.Instance;
-			Config.IsAdvancedLog = true;
-			Config.IsGenerateGUIDByContent = false;
-			Config.IsExportDependencies = false;
 
 			if (args.Length == 0)
 			{
@@ -44,7 +39,7 @@ namespace uTinyRipperConsole
 
 			foreach (string arg in args)
 			{
-				if (FileMultiStream.Exists(arg))
+				if (MultiFileStream.Exists(arg))
 				{
 					continue;
 				}
@@ -52,7 +47,7 @@ namespace uTinyRipperConsole
 				{
 					continue;
 				}
-				Console.WriteLine(FileMultiStream.IsMultiFile(arg) ?
+				Console.WriteLine(MultiFileStream.IsMultiFile(arg) ?
 					$"File '{arg}' doesn't has all parts for combining" :
 					$"Neither file nor directory with path '{arg}' exists");
 				Console.ReadKey();
@@ -71,7 +66,6 @@ namespace uTinyRipperConsole
 #endif
 			{
 				GameStructure = GameStructure.Load(args);
-				Validate();
 
 				string exportPath = Path.Combine("Ripped", GameStructure.Name);
 				PrepareExportDirectory(exportPath);
@@ -88,6 +82,7 @@ namespace uTinyRipperConsole
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, engineExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, engineExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, engineExporter);
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.MonoBehaviour, engineExporter);
 #endif
 
 				GameStructure.Export(exportPath, AssetSelector);
@@ -99,19 +94,6 @@ namespace uTinyRipperConsole
 				Logger.Log(LogType.Error, LogCategory.General, ex.ToString());
 			}
 #endif
-		}
-		
-		private void Validate()
-		{
-			Version[] versions = GameStructure.FileCollection.Files.Select(t => t.Version).Distinct().ToArray();
-			if (versions.Count() > 1)
-			{
-				Logger.Log(LogType.Warning, LogCategory.Import, $"Asset collection has versions probably incompatible with each other. Here they are:");
-				foreach (Version version in versions)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Import, version.ToString());
-				}
-			}
 		}
 		
 		private static void PrepareExportDirectory(string path)

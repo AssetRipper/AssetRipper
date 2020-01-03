@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.ParticleSystems;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.ParticleSystemForceFields
 {
-	public struct ParticleSystemForceFieldParameters : IAssetReadable, IYAMLExportable
+	public struct ParticleSystemForceFieldParameters : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -28,12 +27,12 @@ namespace uTinyRipper.Classes.ParticleSystemForceFields
 			VectorFieldAttractionCurve.Read(reader);
 			MultiplyDragByParticleSize = reader.ReadBoolean();
 			MultiplyDragByParticleVelocity = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return VectorField.FetchDependency(file, isLog, () => nameof(ParticleSystemForceFieldParameters), VectorFieldName);
+			yield return context.FetchDependency(VectorField, VectorFieldName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -60,13 +59,13 @@ namespace uTinyRipper.Classes.ParticleSystemForceFields
 			return node;
 		}
 
-		public ParticleSystemForceFieldShape Shape { get; private set; }
-		public float StartRange { get; private set; }
-		public float EndRange { get; private set; }
-		public float Length { get; private set; }
-		public float GravityFocus { get; private set; }
-		public bool MultiplyDragByParticleSize { get; private set; }
-		public bool MultiplyDragByParticleVelocity { get; private set; }
+		public ParticleSystemForceFieldShape Shape { get; set; }
+		public float StartRange { get; set; }
+		public float EndRange { get; set; }
+		public float Length { get; set; }
+		public float GravityFocus { get; set; }
+		public bool MultiplyDragByParticleSize { get; set; }
+		public bool MultiplyDragByParticleVelocity { get; set; }
 
 		public const string ShapeName = "m_Shape";
 		public const string StartRangeName = "m_StartRange";

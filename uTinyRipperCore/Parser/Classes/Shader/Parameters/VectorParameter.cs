@@ -2,18 +2,18 @@
 {
 	public struct VectorParameter : IAssetReadable
 	{
-		public VectorParameter(string name, ShaderParamType type, int index, int dimension)
+		public VectorParameter(string name, ShaderParamType type, int index, int columns)
 		{
 			Name = name;
 			NameIndex = -1;
 			Index = index;
 			ArraySize = 0;
 			Type = type;
-			Dim = (byte)dimension;
+			Dim = (byte)columns;
 		}
 
-		public VectorParameter(string name, ShaderParamType type, int index, int arraySize, int dimension):
-			this(name, type, index, dimension)
+		public VectorParameter(string name, ShaderParamType type, int index, int arraySize, int columns):
+			this(name, type, index, columns)
 		{
 			ArraySize = arraySize;
 		}
@@ -25,14 +25,14 @@
 			ArraySize = reader.ReadInt32();
 			Type = (ShaderParamType)reader.ReadByte();
 			Dim = reader.ReadByte();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
-		public string Name { get; private set; }
-		public int NameIndex { get; private set; }
-		public int Index { get; private set; }
-		public int ArraySize { get; private set; }
-		public ShaderParamType Type { get; private set; }
-		public byte Dim { get; private set; }
+		public string Name { get; set; }
+		public int NameIndex { get; set; }
+		public int Index { get; set; }
+		public int ArraySize { get; set; }
+		public ShaderParamType Type { get; set; }
+		public byte Dim { get; set; }
 	}
 }

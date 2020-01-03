@@ -1,100 +1,119 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.LightmapSettingss
 {
-	public struct EnlightenSceneMapping : IAssetReadable, IYAMLExportable, IDependent
+	public struct EnlightenSceneMapping : IAsset, IDependent
 	{
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool IsReadProbesets(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
+		public static bool HasProbesets(Version version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
-		/// 5.0.0f1 and greater
+		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool IsReadTerrainChunks(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
+		public static bool HasTerrainChunks(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		private static bool IsAlign(Version version)
-		{
-			return version.IsGreaterEqual(2017);
-		}
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(2017);
 
 		public void Read(AssetReader reader)
 		{
-			m_renderers = reader.ReadAssetArray<EnlightenRendererInformation>();
-			if(IsAlign(reader.Version))
-			{
-				reader.AlignStream(AlignType.Align4);
-			}
-			m_systems = reader.ReadAssetArray<EnlightenSystemInformation>();
+			Renderers = reader.ReadAssetArray<EnlightenRendererInformation>();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
-			if (IsReadProbesets(reader.Version))
-			{
-				m_probesets = reader.ReadAssetArray<Hash128>();
-				reader.AlignStream(AlignType.Align4);
-			}
-			m_systemAtlases = reader.ReadAssetArray<EnlightenSystemAtlasInformation>();
+			Systems = reader.ReadAssetArray<EnlightenSystemInformation>();
 			if (IsAlign(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
-			if(IsReadTerrainChunks(reader.Version))
+			if (HasProbesets(reader.Version))
 			{
-				m_terrainChunks = reader.ReadAssetArray<EnlightenTerrainChunksInformation>();
+				Probesets = reader.ReadAssetArray<Hash128>();
+				reader.AlignStream();
+			}
+			SystemAtlases = reader.ReadAssetArray<EnlightenSystemAtlasInformation>();
+			if (IsAlign(reader.Version))
+			{
+				reader.AlignStream();
+			}
+			if (HasTerrainChunks(reader.Version))
+			{
+				TerrainChunks = reader.ReadAssetArray<EnlightenTerrainChunksInformation>();
 				if (IsAlign(reader.Version))
 				{
-					reader.AlignStream(AlignType.Align4);
+					reader.AlignStream();
 				}
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public void Write(AssetWriter writer)
 		{
-			foreach(EnlightenRendererInformation renderer in Renderers)
+			Renderers.Write(writer);
+			if (IsAlign(writer.Version))
 			{
-				foreach (Object dep in renderer.FetchDependencies(file, isLog))
+				writer.AlignStream();
+			}
+			Systems.Write(writer);
+			if (IsAlign(writer.Version))
+			{
+				writer.AlignStream();
+			}
+			if (HasProbesets(writer.Version))
+			{
+				Probesets.Write(writer);
+				writer.AlignStream();
+			}
+			SystemAtlases.Write(writer);
+			if (IsAlign(writer.Version))
+			{
+				writer.AlignStream();
+			}
+			if (HasTerrainChunks(writer.Version))
+			{
+				TerrainChunks.Write(writer);
+				if (IsAlign(writer.Version))
 				{
-					yield return dep;
+					writer.AlignStream();
 				}
+			}
+		}
+
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		{
+			foreach (PPtr<Object> asset in context.FetchDependencies(Renderers, RenderersName))
+			{
+				yield return asset;
 			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Renderers", Renderers.ExportYAML(container));
-			node.Add("m_Systems", Systems.ExportYAML(container));
-			node.Add("m_Probesets", Probesets.ExportYAML(container));
-			node.Add("m_SystemAtlases", SystemAtlases.ExportYAML(container));
-			node.Add("m_TerrainChunks", TerrainChunks.ExportYAML(container));
+			node.Add(RenderersName, Renderers.ExportYAML(container));
+			node.Add(SystemsName, Systems.ExportYAML(container));
+			node.Add(ProbesetsName, Probesets.ExportYAML(container));
+			node.Add(SystemAtlasesName, SystemAtlases.ExportYAML(container));
+			node.Add(TerrainChunksName, TerrainChunks.ExportYAML(container));
 			return node;
 		}
 
-		public IReadOnlyList<EnlightenRendererInformation> Renderers => m_renderers;
-		public IReadOnlyList<EnlightenSystemInformation> Systems => m_systems;
-		public IReadOnlyList<Hash128> Probesets => m_probesets;
-		public IReadOnlyList<EnlightenSystemAtlasInformation> SystemAtlases => m_systemAtlases;
-		public IReadOnlyList<EnlightenTerrainChunksInformation> TerrainChunks => m_terrainChunks;
+		public EnlightenRendererInformation[] Renderers { get; set; }
+		public EnlightenSystemInformation[] Systems { get; set; }
+		public Hash128[] Probesets { get; set; }
+		public EnlightenSystemAtlasInformation[] SystemAtlases { get; set; }
+		public EnlightenTerrainChunksInformation[] TerrainChunks { get; set; }
 
-		private EnlightenRendererInformation[] m_renderers;
-		private EnlightenSystemInformation[] m_systems;
-		private Hash128[] m_probesets;
-		private EnlightenSystemAtlasInformation[] m_systemAtlases;
-		private EnlightenTerrainChunksInformation[] m_terrainChunks;
+		public const string RenderersName = "m_Renderers";
+		public const string SystemsName = "m_Systems";
+		public const string ProbesetsName = "m_Probesets";
+		public const string SystemAtlasesName = "m_SystemAtlases";
+		public const string TerrainChunksName = "m_TerrainChunks";
 	}
 }

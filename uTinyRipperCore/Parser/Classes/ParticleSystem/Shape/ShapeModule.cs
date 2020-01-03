@@ -1,148 +1,12 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.ParticleSystems
 {
 	public sealed class ShapeModule : ParticleSystemModule, IDependent
 	{
-		/// <summary>
-		/// Less than 5.6.0
-		/// </summary>
-		public static bool IsReadRadiusSingle(Version version)
-		{
-			return version.IsLess(5, 6);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadLength(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
-		/// Less than 2017.1.0b2
-		/// </summary>
-		public static bool IsReadBoxAxes(Version version)
-		{
-			return version.IsLess(2017, 1, 0, VersionType.Beta, 2);
-		}
-		/// <summary>
-		/// 5.0.0 to 5.6.0
-		/// </summary>
-		public static bool IsReadArcSingle(Version version)
-		{
-			return version.IsGreaterEqual(5) && version.IsLess(5, 6);
-		}
-		/// <summary>
-		/// 2017.1.0b2 and greater
-		/// </summary>
-		public static bool IsReadBoxThickness(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadMeshMaterialIndex(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 2018.3 and greater
-		/// </summary>
-		public static bool IsReadMeshSpawn(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadMeshRenderer(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 2018.2 and greater
-		/// </summary>
-		public static bool IsReadSprite(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
-		/// <summary>
-		/// 5.5.0b11 to 2017.1.0b1
-		/// </summary>
-		public static bool IsReadMeshScale(Version version)
-		{
-			return version.IsGreaterEqual(5, 5, 0, VersionType.Beta, 11) && version.IsLessEqual(2017, 1, 0, VersionType.Beta, 1);
-		}
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadUseMeshMaterialIndex(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 5.5.0 and greater
-		/// </summary>
-		public static bool IsReadAlignToDirection(Version version)
-		{
-			return version.IsGreaterEqual(5, 5);
-		}
-		/// <summary>
-		/// Less than 5.5.0b11
-		/// </summary>
-		public static bool IsReadRandomDirection(Version version)
-		{
-			return version.IsLess(5, 5, 0, VersionType.Beta, 11);
-		}
-		/// <summary>
-		/// 2018.1 and greater
-		/// </summary>
-		public static bool IsReadTexture(Version version)
-		{
-			return version.IsGreaterEqual(2018, 1);
-		}
-		/// <summary>
-		/// 5.5.0b11 and greater
-		/// </summary>
-		public static bool IsReadRandomDirectionAmount(Version version)
-		{
-			return version.IsGreaterEqual(5, 5, 0, VersionType.Beta, 11);
-		}
-		/// <summary>
-		/// 2017.1.0b2 and greater
-		/// </summary>
-		public static bool IsReadRandomPositionAmount(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		}
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		public static bool IsReadRadius(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
-
-		/// <summary>
-		/// Less than 2017.1.0b2
-		/// </summary>
-		private static bool IsReadRadiusFirst(Version version)
-		{
-			return version.IsLess(2017, 1, 0, VersionType.Beta, 2);
-		}
-		/// <summary>
-		/// Less than 2017.1.0b2
-		/// </summary>
-		private static bool IsReadMeshMaterialIndexFirst(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(2018, 3))
 			{
@@ -164,45 +28,126 @@ namespace uTinyRipper.Classes.ParticleSystems
 			{
 				return 2;
 			}
-			return 1;			
+			return 1;
 		}
+
+		/// <summary>
+		/// Less than 5.6.0
+		/// </summary>
+		public static bool HasRadiusSingle(Version version) => version.IsLess(5, 6);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasLength(Version version) => version.IsGreaterEqual(4);
+		/// <summary>
+		/// Less than 2017.1.0b2
+		/// </summary>
+		public static bool HasBoxAxes(Version version) => version.IsLess(2017, 1, 0, VersionType.Beta, 2);
+		/// <summary>
+		/// 5.0.0 to 5.6.0
+		/// </summary>
+		public static bool HasArcSingle(Version version) => version.IsGreaterEqual(5) && version.IsLess(5, 6);
+		/// <summary>
+		/// 2017.1.0b2 and greater
+		/// </summary>
+		public static bool HasBoxThickness(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasMeshMaterialIndex(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool HasMeshSpawn(Version version) => version.IsGreaterEqual(2018, 3);
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasMeshRenderer(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool HasSprite(Version version) => version.IsGreaterEqual(2018, 2);
+		/// <summary>
+		/// 5.5.0b11 to 2017.1.0b1
+		/// </summary>
+		public static bool HasMeshScale(Version version)
+		{
+			return version.IsGreaterEqual(5, 5, 0, VersionType.Beta, 11) && version.IsLessEqual(2017, 1, 0, VersionType.Beta, 1);
+		}
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasUseMeshMaterialIndex(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 5.5.0 and greater
+		/// </summary>
+		public static bool HasAlignToDirection(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// Less than 5.5.0b11
+		/// </summary>
+		public static bool HasRandomDirection(Version version) => version.IsLess(5, 5, 0, VersionType.Beta, 11);
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool HasTexture(Version version) => version.IsGreaterEqual(2018, 1);
+		/// <summary>
+		/// 5.5.0b11 and greater
+		/// </summary>
+		public static bool HasRandomDirectionAmount(Version version) => version.IsGreaterEqual(5, 5, 0, VersionType.Beta, 11);
+		/// <summary>
+		/// 2017.1.0b2 and greater
+		/// </summary>
+		public static bool HasRandomPositionAmount(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
+		public static bool HasRadius(Version version) => version.IsGreaterEqual(5, 6);
+
+		/// <summary>
+		/// Less than 2017.1.0b2
+		/// </summary>
+		private static bool HasRadiusFirst(Version version) => version.IsLess(2017, 1, 0, VersionType.Beta, 2);
+		/// <summary>
+		/// Less than 2017.1.0b2
+		/// </summary>
+		private static bool HasMeshMaterialIndexFirst(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 			
 			Type = (ParticleSystemShapeType)reader.ReadInt32();
-			if (IsReadRadiusSingle(reader.Version))
+			if (HasRadiusSingle(reader.Version))
 			{
 				float radius = reader.ReadSingle();
 				Radius = new MultiModeParameter(radius);
 			}
 			Angle = reader.ReadSingle();
-			if (IsReadLength(reader.Version))
+			if (HasLength(reader.Version))
 			{
 				Length = reader.ReadSingle();
 			}
-			if (IsReadBoxAxes(reader.Version))
+			if (HasBoxAxes(reader.Version))
 			{
 				float boxX = reader.ReadSingle();
 				float boxY = reader.ReadSingle();
 				float boxZ = reader.ReadSingle();
 				Scale = Type.IsBoxAny() ? new Vector3f(boxX, boxY, boxZ) : Vector3f.One;
 			}
-			if (IsReadArcSingle(reader.Version))
+			if (HasArcSingle(reader.Version))
 			{
 				float arc = reader.ReadSingle();
 				Arc = new MultiModeParameter(arc);
 			}
-			if (IsReadRadius(reader.Version))
+			if (HasRadius(reader.Version))
 			{
-				if (IsReadRadiusFirst(reader.Version))
+				if (HasRadiusFirst(reader.Version))
 				{
 					Radius.Read(reader);
 					Arc.Read(reader);
 				}
 			}
-			if (IsReadBoxThickness(reader.Version))
+			if (HasBoxThickness(reader.Version))
 			{
 				BoxThickness.Read(reader);
 				RadiusThickness = reader.ReadSingle();
@@ -212,59 +157,59 @@ namespace uTinyRipper.Classes.ParticleSystems
 				Scale.Read(reader);
 			}
 			PlacementMode = (PlacementMode)reader.ReadInt32();
-			if (IsReadMeshMaterialIndex(reader.Version))
+			if (HasMeshMaterialIndex(reader.Version))
 			{
-				if (IsReadMeshMaterialIndexFirst(reader.Version))
+				if (HasMeshMaterialIndexFirst(reader.Version))
 				{
 					MeshMaterialIndex = reader.ReadInt32();
 					MeshNormalOffset = reader.ReadSingle();
 				}
 			}
-			if (IsReadMeshSpawn(reader.Version))
+			if (HasMeshSpawn(reader.Version))
 			{
 				MeshSpawn.Read(reader, false);
 			}
 			Mesh.Read(reader);
-			if (IsReadMeshRenderer(reader.Version))
+			if (HasMeshRenderer(reader.Version))
 			{
 				MeshRenderer.Read(reader);
 				SkinnedMeshRenderer.Read(reader);
 			}
-			if(IsReadSprite(reader.Version))
+			if (HasSprite(reader.Version))
 			{
 				Sprite.Read(reader);
 				SpriteRenderer.Read(reader);
 			}
-			if (IsReadMeshMaterialIndex(reader.Version))
+			if (HasMeshMaterialIndex(reader.Version))
 			{
-				if (!IsReadMeshMaterialIndexFirst(reader.Version))
+				if (!HasMeshMaterialIndexFirst(reader.Version))
 				{
 					MeshMaterialIndex = reader.ReadInt32();
 					MeshNormalOffset = reader.ReadSingle();
 				}
 			}
-			if (IsReadMeshScale(reader.Version))
+			if (HasMeshScale(reader.Version))
 			{
 				float meshScale = reader.ReadSingle();
 				Scale = new Vector3f(meshScale, meshScale, meshScale);
 			}
-			if (IsReadUseMeshMaterialIndex(reader.Version))
+			if (HasUseMeshMaterialIndex(reader.Version))
 			{
 				UseMeshMaterialIndex = reader.ReadBoolean();
 				UseMeshColors = reader.ReadBoolean();
 			}
-			if (IsReadAlignToDirection(reader.Version))
+			if (HasAlignToDirection(reader.Version))
 			{
 				AlignToDirection = reader.ReadBoolean();
 			}
-			if (IsReadRandomDirection(reader.Version))
+			if (HasRandomDirection(reader.Version))
 			{
 				bool randomDirection = reader.ReadBoolean();
 				RandomDirectionAmount = randomDirection ? 1.0f : 0.0f;
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
-			if(IsReadTexture(reader.Version))
+			if (HasTexture(reader.Version))
 			{
 				Texture.Read(reader);
 				TextureClipChannel = reader.ReadInt32();
@@ -273,21 +218,21 @@ namespace uTinyRipper.Classes.ParticleSystems
 				TextureColorAffectsParticles = reader.ReadBoolean();
 				TextureAlphaAffectsParticles = reader.ReadBoolean();
 				TextureBilinearFiltering = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
-			if (IsReadRandomDirectionAmount(reader.Version))
+			if (HasRandomDirectionAmount(reader.Version))
 			{
 				RandomDirectionAmount = reader.ReadSingle();
 				SphericalDirectionAmount = reader.ReadSingle();
 			}
-			if (IsReadRandomPositionAmount(reader.Version))
+			if (HasRandomPositionAmount(reader.Version))
 			{
 				RandomPositionAmount = reader.ReadSingle();
 			}
-			if (IsReadRadius(reader.Version))
+			if (HasRadius(reader.Version))
 			{
-				if (!IsReadRadiusFirst(reader.Version))
+				if (!HasRadiusFirst(reader.Version))
 				{
 					Radius.Read(reader);
 					Arc.Read(reader);
@@ -295,17 +240,17 @@ namespace uTinyRipper.Classes.ParticleSystems
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return Mesh.FetchDependency(file, isLog, () => nameof(ShapeModule), "m_Mesh");
-			yield return MeshRenderer.FetchDependency(file, isLog, () => nameof(ShapeModule), "m_MeshRenderer");
-			yield return SkinnedMeshRenderer.FetchDependency(file, isLog, () => nameof(ShapeModule), "m_SkinnedMeshRenderer");
+			yield return context.FetchDependency(Mesh, MeshName);
+			yield return context.FetchDependency(MeshRenderer, MeshRendererName);
+			yield return context.FetchDependency(SkinnedMeshRenderer, SkinnedMeshRendererName);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.InsertSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TypeName, (int)GetType(container.Version));
 			node.Add(AngleName, Angle);
 			node.Add(LengthName, GetExportLength(container.Version));
@@ -318,7 +263,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			node.Add(PlacementModeName, (int)PlacementMode);
 			node.Add(MeshMaterialIndexName, MeshMaterialIndex);
 			node.Add(MeshNormalOffsetName, MeshNormalOffset);
-			if (IsReadMeshSpawn(container.Version))
+			if (HasMeshSpawn(container.Version))
 			{
 				node.Add(MeshSpawnName, MeshSpawn.ExportYAML(container));
 			}
@@ -338,7 +283,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		private ParticleSystemShapeType GetType(Version version)
 		{
-			if (IsReadBoxThickness(version))
+			if (HasBoxThickness(version))
 			{
 				return Type;
 			}
@@ -361,11 +306,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 		}
 		private float GetExportLength(Version version)
 		{
-			return IsReadLength(version) ? Length : 5.0f;
+			return HasLength(version) ? Length : 5.0f;
 		}
 		private float GetExportRadiusThickness(Version version)
 		{
-			if (IsReadBoxThickness(version))
+			if (HasBoxThickness(version))
 			{
 				return RadiusThickness;
 			}
@@ -385,51 +330,51 @@ namespace uTinyRipper.Classes.ParticleSystems
 		}
 		private float GetExportDonutRadius(Version version)
 		{
-			return IsReadBoxThickness(version) ? DonutRadius : 0.2f;
+			return HasBoxThickness(version) ? DonutRadius : 0.2f;
 		}
 		private bool GetExportUseMeshColors(Version version)
 		{
-			return IsReadUseMeshMaterialIndex(version) ? UseMeshColors : true;
+			return HasUseMeshMaterialIndex(version) ? UseMeshColors : true;
 		}
 		private int GetTextureClipChannel(Version version)
 		{
-			return IsReadTexture(version) ? TextureClipChannel : 3;
+			return HasTexture(version) ? TextureClipChannel : 3;
 		}
 		private bool GetTextureColorAffectsParticles(Version version)
 		{
-			return IsReadTexture(version) ? TextureColorAffectsParticles : true;
+			return HasTexture(version) ? TextureColorAffectsParticles : true;
 		}
 		private bool GetTextureAlphaAffectsParticles(Version version)
 		{
-			return IsReadTexture(version) ? TextureAlphaAffectsParticles : true;
+			return HasTexture(version) ? TextureAlphaAffectsParticles : true;
 		}
 		private MultiModeParameter GetArc(Version version)
 		{
-			return IsReadArcSingle(version) || IsReadRadius(version) ? Arc : new MultiModeParameter(360.0f);
+			return HasArcSingle(version) || HasRadius(version) ? Arc : new MultiModeParameter(360.0f);
 		}
 
-		public ParticleSystemShapeType Type { get; private set; }
-		public float Angle { get; private set; }
-		public float Length { get; private set; }
-		public float ArcSingle { get; private set; }
-		public float RadiusThickness { get; private set; }
-		public float DonutRadius { get; private set; }
-		public PlacementMode PlacementMode { get; private set; }
-		public int MeshMaterialIndex { get; private set; }
-		public float MeshNormalOffset { get; private set; }
-		public float MeshScale { get; private set; }
-		public bool UseMeshMaterialIndex { get; private set; }
-		public bool UseMeshColors { get; private set; }
-		public bool AlignToDirection { get; private set; }
-		public int TextureClipChannel { get; private set; }
-		public float TextureClipThreshold { get; private set; }
-		public int TextureUVChannel { get; private set; }
-		public bool TextureColorAffectsParticles { get; private set; }
-		public bool TextureAlphaAffectsParticles { get; private set; }
-		public bool TextureBilinearFiltering { get; private set; }
-		public float RandomDirectionAmount { get; private set; }
-		public float SphericalDirectionAmount { get; private set; }
-		public float RandomPositionAmount { get; private set; }
+		public ParticleSystemShapeType Type { get; set; }
+		public float Angle { get; set; }
+		public float Length { get; set; }
+		public float ArcSingle { get; set; }
+		public float RadiusThickness { get; set; }
+		public float DonutRadius { get; set; }
+		public PlacementMode PlacementMode { get; set; }
+		public int MeshMaterialIndex { get; set; }
+		public float MeshNormalOffset { get; set; }
+		public float MeshScale { get; set; }
+		public bool UseMeshMaterialIndex { get; set; }
+		public bool UseMeshColors { get; set; }
+		public bool AlignToDirection { get; set; }
+		public int TextureClipChannel { get; set; }
+		public float TextureClipThreshold { get; set; }
+		public int TextureUVChannel { get; set; }
+		public bool TextureColorAffectsParticles { get; set; }
+		public bool TextureAlphaAffectsParticles { get; set; }
+		public bool TextureBilinearFiltering { get; set; }
+		public float RandomDirectionAmount { get; set; }
+		public float SphericalDirectionAmount { get; set; }
+		public float RandomPositionAmount { get; set; }
 
 		public const string TypeName = "type";
 		public const string AngleName = "angle";

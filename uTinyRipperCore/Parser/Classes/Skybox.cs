@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -19,14 +18,14 @@ namespace uTinyRipper.Classes
 			CustomSkybox.Read(reader);
 		}
 
-		public override IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach(Object asset in base.FetchDependencies(file, isLog))
+			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			yield return CustomSkybox.FetchDependency(file, isLog, ToLogString, CustomSkyboxName);
+			yield return context.FetchDependency(CustomSkybox, CustomSkyboxName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

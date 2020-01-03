@@ -1,7 +1,7 @@
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.UnityConnectSettingss;
 using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
 {
@@ -27,53 +27,43 @@ namespace uTinyRipper.Classes
 			return virtualFile.CreateAsset((assetInfo) => new UnityConnectSettings(assetInfo, true));
 		}
 
-		/// <summary>
-		/// 5.3.0 and greater
-		/// </summary>
-		public static bool IsReadUnityConnectSettings(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
-			return version.IsGreaterEqual(5, 3);
+			if (version.IsGreaterEqual(2018, 3))
+			{
+				return 1;
+			}
+			return 0;
 		}
 
 		/// <summary>
-		/// 5.4.0 and greater
+		/// 5.3.0 and greater
 		/// </summary>
-		public static bool IsReadEnabled(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
+		public static bool HasUnityConnectSettings(Version version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool IsReadOldEventUrl(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
+		public static bool HasEnabled(Version version) => version.IsGreaterEqual(5, 4);
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		public static bool HasOldEventUrl(Version version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool IsReadEventUrl(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
+		public static bool HasEventUrl(Version version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool IsReadTestConfigUrl(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
+		public static bool HasTestConfigUrl(Version version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadTestInitMode(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasTestInitMode(Version version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 5.4.0 and greater and (Not Release or IsSupported)
 		/// </summary>
-		public static bool IsReadCrashReportingSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasCrashReportingSettings(Version version, Platform platform, TransferInstructionFlags flags)
 		{
 			if(version.IsLess(5, 4))
 			{
@@ -115,7 +105,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Less than 5.4.0 or Not Release or IsSupported
 		/// </summary>
-		public static bool IsReadUnityPurchasingSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasUnityPurchasingSettings(Version version, Platform platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 4))
 			{
@@ -153,7 +143,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Less than 5.4.0 or Not Release or IsSupported
 		/// </summary>
-		public static bool IsReadUnityAnalyticsSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasUnityAnalyticsSettings(Version version, Platform platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 4))
 			{
@@ -191,7 +181,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.5.0 and greater and (Not Release or IsSupported)
 		/// </summary>
-		public static bool IsReadUnityAdsSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasUnityAdsSettings(Version version, Platform platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 5))
 			{
@@ -229,7 +219,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.6.0 and greater and (Not Release or IsSupported)
 		/// </summary>
-		public static bool IsReadPerformanceReportingSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasPerformanceReportingSettings(Version version, Platform platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 6))
 			{
@@ -265,63 +255,54 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		private static int GetSerializedVersion(Version version)
-		{
-			if (version.IsGreaterEqual(2018, 3))
-			{
-				return 1;
-			}
-			return 0;
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if(IsReadEnabled(reader.Version))
+			if (HasEnabled(reader.Version))
 			{
 				Enabled = reader.ReadBoolean();
 				TestMode = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
-			if (IsReadOldEventUrl(reader.Version))
+			if (HasOldEventUrl(reader.Version))
 			{
 				TestEventUrl = reader.ReadString();
 			}
-			if (IsReadEventUrl(reader.Version))
+			if (HasEventUrl(reader.Version))
 			{
 				EventUrl = reader.ReadString();
 			}
-			if (IsReadTestConfigUrl(reader.Version))
+			if (HasTestConfigUrl(reader.Version))
 			{
 				TestConfigUrl = reader.ReadString();
 			}
-			if (IsReadTestInitMode(reader.Version))
+			if (HasTestInitMode(reader.Version))
 			{
 				TestInitMode = reader.ReadInt32();
 			}
-			if(IsReadEnabled(reader.Version))
+			if (HasEnabled(reader.Version))
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 
-			if (IsReadCrashReportingSettings(reader.Version, reader.Platform, reader.Flags))
+			if (HasCrashReportingSettings(reader.Version, reader.Platform, reader.Flags))
 			{
 				CrashReportingSettings.Read(reader);
 			}
-			if (IsReadUnityPurchasingSettings(reader.Version, reader.Platform, reader.Flags))
+			if (HasUnityPurchasingSettings(reader.Version, reader.Platform, reader.Flags))
 			{
 				UnityPurchasingSettings.Read(reader);
 			}
-			if (IsReadUnityAnalyticsSettings(reader.Version, reader.Platform, reader.Flags))
+			if (HasUnityAnalyticsSettings(reader.Version, reader.Platform, reader.Flags))
 			{
 				UnityAnalyticsSettings.Read(reader);
 			}
-			if (IsReadUnityAdsSettings(reader.Version, reader.Platform, reader.Flags))
+			if (HasUnityAdsSettings(reader.Version, reader.Platform, reader.Flags))
 			{
 				UnityAdsSettings.Read(reader);
 			}
-			if (IsReadPerformanceReportingSettings(reader.Version, reader.Platform, reader.Flags))
+			if (HasPerformanceReportingSettings(reader.Version, reader.Platform, reader.Flags))
 			{
 				PerformanceReportingSettings.Read(reader);
 			}
@@ -330,7 +311,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.ForceAddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.ForceAddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(EnabledName, Enabled);
 			node.Add(TestModeName, TestMode);
 			node.Add(TestEventUrlName, GetTestEventUrl(container.Version));
@@ -346,37 +327,37 @@ namespace uTinyRipper.Classes
 
 		private string GetTestEventUrl(Version version)
 		{
-			return IsReadEnabled(version) ? TestEventUrl : "https://api.uca.cloud.unity3d.com/v1/events";
+			return HasEnabled(version) ? TestEventUrl : "https://api.uca.cloud.unity3d.com/v1/events";
 		}
 		private string GetTestConfigUrl(Version version)
 		{
-			return IsReadEnabled(version) ? TestConfigUrl : "https://config.uca.cloud.unity3d.com";
+			return HasEnabled(version) ? TestConfigUrl : "https://config.uca.cloud.unity3d.com";
 		}
 		private CrashReportingSettings GetCrashReportingSettings(Version version, Platform platform, TransferInstructionFlags flags)
 		{
-			return IsReadCrashReportingSettings(version, platform, flags) ? CrashReportingSettings : new CrashReportingSettings(true);
+			return HasCrashReportingSettings(version, platform, flags) ? CrashReportingSettings : new CrashReportingSettings(true);
 		}
 		private UnityAnalyticsSettings GetUnityAnalyticsSettings(Version version, Platform platform, TransferInstructionFlags flags)
 		{
-			return IsReadUnityAnalyticsSettings(version, platform, flags) ? UnityAnalyticsSettings : new UnityAnalyticsSettings(true);
+			return HasUnityAnalyticsSettings(version, platform, flags) ? UnityAnalyticsSettings : new UnityAnalyticsSettings(true);
 		}
 		private UnityAdsSettings GetUnityAdsSettings(Version version, Platform platform, TransferInstructionFlags flags)
 		{
-			return IsReadUnityAdsSettings(version, platform, flags) ? UnityAdsSettings : new UnityAdsSettings(true);
+			return HasUnityAdsSettings(version, platform, flags) ? UnityAdsSettings : new UnityAdsSettings(true);
 		}
 
-		public bool Enabled { get; private set; }
-		public bool TestMode { get; private set; }
+		public bool Enabled { get; set; }
+		public bool TestMode { get; set; }
 		/// <summary>
 		/// OldEventUrl since 2018.3
 		/// </summary>
-		public string TestEventUrl { get; private set; }
-		public string EventUrl { get; private set; }
+		public string TestEventUrl { get; set; }
+		public string EventUrl { get; set; }
 		/// <summary>
 		/// ConfigUrl since 2018.3 
 		/// </summary>
-		public string TestConfigUrl { get; private set; }
-		public int TestInitMode { get; private set; }
+		public string TestConfigUrl { get; set; }
+		public int TestInitMode { get; set; }
 
 		public const string EnabledName = "m_Enabled";
 		public const string TestModeName = "m_TestMode";

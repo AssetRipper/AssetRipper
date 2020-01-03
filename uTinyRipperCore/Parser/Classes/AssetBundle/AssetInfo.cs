@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipper.Classes.AssetBundles
 {
@@ -8,14 +7,11 @@ namespace uTinyRipper.Classes.AssetBundles
 		/// <summary>
 		/// 2.5.0 and greater
 		/// </summary>
-		public static bool IsReadPreload(Version version)
-		{
-			return version.IsGreaterEqual(2, 5);
-		}
+		public static bool HasPreload(Version version) => version.IsGreaterEqual(2, 5);
 
 		public void Read(AssetReader reader)
 		{
-			if (IsReadPreload(reader.Version))
+			if (HasPreload(reader.Version))
 			{	
 				PreloadIndex = reader.ReadInt32();
 				PreloadSize = reader.ReadInt32();
@@ -23,13 +19,13 @@ namespace uTinyRipper.Classes.AssetBundles
 			Asset.Read(reader);
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return Asset.FetchDependency(file, isLog, () => nameof(AssetInfo), "asset");
+			yield return context.FetchDependency(Asset, "asset");
 		}
 
-		public int PreloadIndex { get; private set; }
-		public int PreloadSize { get; private set; }
+		public int PreloadIndex { get; set; }
+		public int PreloadSize { get; set; }
 
 		public PPtr<Object> Asset;
 	}

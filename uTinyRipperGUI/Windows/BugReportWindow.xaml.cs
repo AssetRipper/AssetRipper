@@ -102,10 +102,9 @@ namespace uTinyRipperGUI.Windows
 
 		private void OnReportButtonClicked(object sender, RoutedEventArgs e)
 		{
-			Process.Start("explorer.exe", IssuePage.ToString());
+			Process.Start("explorer.exe", MainWindow.IssuePage);
 		}
 
-		private const string IssuePage = "https://github.com/mafaca/UtinyRipper/issues/new";
 
 		private const string DefaultGameName = "(please, specify the game name)";
 		private const string DefaultVersion = "(specify engine version, if known)";

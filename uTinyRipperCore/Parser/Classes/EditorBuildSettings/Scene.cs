@@ -1,5 +1,6 @@
 ﻿using System;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.EditorBuildSettingss
@@ -18,9 +19,9 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 			GUID = default;
 		}
 
-		public Scene(string path, EngineGUID guid)
+		public Scene(string path, GUID guid)
 		{
-			if (string.IsNullOrEmpty(path))
+			if (path == null)
 			{
 				throw new ArgumentNullException(nameof(path));
 			}
@@ -33,15 +34,12 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadGuid(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasGuid(Version version) => version.IsGreaterEqual(5, 6);
 
 		public void Read(AssetReader reader)
 		{
 			Enabled = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			Path = reader.ReadString();
 			GUID.Read(reader);
@@ -50,15 +48,19 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("enabled", Enabled);
-			node.Add("path", Path);
-			node.Add("guid", GUID.ExportYAML(container));
+			node.Add(EnabledName, Enabled);
+			node.Add(PathName, Path);
+			node.Add(GuidName, GUID.ExportYAML(container));
 			return node;
 		}
 
-		public bool Enabled { get; private set; }
-		public string Path { get; private set; }
+		public bool Enabled { get; set; }
+		public string Path { get; set; }
 
-		public EngineGUID GUID;
+		public const string EnabledName = "enabled";
+		public const string PathName = "path";
+		public const string GuidName = "guid";
+
+		public GUID GUID;
 	}
 }

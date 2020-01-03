@@ -1,21 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.Meshes
 {
-	public struct CollisionMeshData : IAssetReadable
+	public struct CollisionMeshData : IAssetReadable, IAssetWritable
 	{
-		public void Read(AssetReader reader)
+		public CollisionMeshData(Version version)
 		{
-			m_bakedConvexCollisionMesh = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
-			m_bakedTriangleCollisionMesh = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
+			BakedConvexCollisionMesh = Array.Empty<byte>();
+			BakedTriangleCollisionMesh = Array.Empty<byte>();
 		}
 
-		public IReadOnlyList<byte> BakedConvexCollisionMesh => m_bakedConvexCollisionMesh;
-		public IReadOnlyList<byte> BakedTriangleCollisionMesh => m_bakedTriangleCollisionMesh;
+		public CollisionMeshData Convert(IExportContainer container)
+		{
+			CollisionMeshData instance = new CollisionMeshData();
+			instance.BakedConvexCollisionMesh = BakedConvexCollisionMesh.ToArray();
+			instance.BakedTriangleCollisionMesh = BakedTriangleCollisionMesh.ToArray();
+			return instance;
+		}
 
-		private byte[] m_bakedConvexCollisionMesh;
-		private byte[] m_bakedTriangleCollisionMesh;
+		public void Read(AssetReader reader)
+		{
+			BakedConvexCollisionMesh = reader.ReadByteArray();
+			reader.AlignStream();
+			BakedTriangleCollisionMesh = reader.ReadByteArray();
+			reader.AlignStream();
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(BakedConvexCollisionMesh);
+			writer.AlignStream();
+			writer.Write(BakedTriangleCollisionMesh);
+			writer.AlignStream();
+		}
+
+		public byte[] BakedConvexCollisionMesh { get; set; }
+		public byte[] BakedTriangleCollisionMesh { get; set; }
 	}
 }

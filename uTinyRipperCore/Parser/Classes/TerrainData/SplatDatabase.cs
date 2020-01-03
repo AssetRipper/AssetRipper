@@ -1,30 +1,15 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters.TerrainDatas;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.TerrainDatas
 {
-	public struct SplatDatabase : IAssetReadable, IYAMLExportable, IDependent
+	public struct SplatDatabase : IAsset, IDependent
 	{
-		/// <summary>
-		/// 2018.3 and greater
-		/// </summary>
-		public static bool IsReadTerrainLayers(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
-			return version.IsGreaterEqual(2018, 3);
-		}
-		/// <summary>
-		/// 5.0.1 to 2018.3 exclusive
-		/// </summary>
-		public static bool IsReadColorSpace(Version version)
-		{
-			return version.IsGreaterEqual(5, 0, 1) && version.IsLess(2018, 3);
-		}
-
-		private static int GetSerializedVersion(Version version)
-		{
-			// SplatPrototype is replaced with TerrainLayer
+			// SplatPrototype is replaced by TerrainLayer
 			if (version.IsGreaterEqual(2018, 3))
 			{
 				return 2;
@@ -32,60 +17,83 @@ namespace uTinyRipper.Classes.TerrainDatas
 			return 1;
 		}
 
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool HasTerrainLayers(Version version) => version.IsGreaterEqual(2018, 3);
+		/// <summary>
+		/// 5.0.1 to 2018.3 exclusive
+		/// </summary>
+		public static bool HasColorSpace(Version version) => version.IsGreaterEqual(5, 0, 1) && version.IsLess(2018, 3);
+
+		public SplatDatabase Convert(IExportContainer container)
+		{
+			return SplatDatabaseConverter.Convert(container, ref this);
+		}
+
 		public void Read(AssetReader reader)
 		{
-			if (IsReadTerrainLayers(reader.Version))
+			if (HasTerrainLayers(reader.Version))
 			{
-				m_terrainLayers = reader.ReadAssetArray<PPtr<TerrainLayer>>();
+				TerrainLayers = reader.ReadAssetArray<PPtr<TerrainLayer>>();
 			}
 			else
 			{
-				m_splats = reader.ReadAssetArray<SplatPrototype>();
+				Splats = reader.ReadAssetArray<SplatPrototype>();
 			}
-			m_alphaTextures = reader.ReadAssetArray<PPtr<Texture2D>>();
+
+			AlphaTextures = reader.ReadAssetArray<PPtr<Texture2D>>();
 			AlphamapResolution = reader.ReadInt32();
 			BaseMapResolution = reader.ReadInt32();
-			if (IsReadColorSpace(reader.Version))
+			if (HasColorSpace(reader.Version))
 			{
 				ColorSpace = reader.ReadInt32();
 				MaterialRequiresMetallic = reader.ReadBoolean();
 				MaterialRequiresSmoothness = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public void Write(AssetWriter writer)
 		{
-			foreach (SplatPrototype prototype in Splats)
+			if (HasTerrainLayers(writer.Version))
 			{
-				foreach (Object asset in prototype.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				TerrainLayers.Write(writer);
+			}
+			else
+			{
+				Splats.Write(writer);
 			}
 
-			foreach (PPtr<Texture2D> alphaTexture in AlphaTextures)
+			AlphaTextures.Write(writer);
+			writer.Write(AlphamapResolution);
+			writer.Write(BaseMapResolution);
+			if (HasColorSpace(writer.Version))
 			{
-				yield return alphaTexture.FetchDependency(file, isLog, () => nameof(SplatDatabase), "m_AlphaTextures");
+				writer.Write(ColorSpace);
+				writer.Write(MaterialRequiresMetallic);
+				writer.Write(MaterialRequiresSmoothness);
+				writer.AlignStream();
 			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
-			if (IsReadTerrainLayers(container.ExportVersion))
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			if (HasTerrainLayers(container.ExportVersion))
 			{
 				node.Add(TerrainLayersName, TerrainLayers.ExportYAML(container));
 			}
 			else
 			{
-				node.Add(SplatsName, GetSplats(container).ExportYAML(container));
+				node.Add(SplatsName, Splats.ExportYAML(container));
 			}
+
 			node.Add(AlphaTexturesName, AlphaTextures.ExportYAML(container));
 			node.Add(AlphamapResolutionName, AlphamapResolution);
 			node.Add(BaseMapResolutionName, BaseMapResolution);
-			if (IsReadColorSpace(container.ExportVersion))
+			if (HasColorSpace(container.ExportVersion))
 			{
 				node.Add(ColorSpaceName, ColorSpace);
 				node.Add(MaterialRequiresMetallicName, MaterialRequiresMetallic);
@@ -94,32 +102,37 @@ namespace uTinyRipper.Classes.TerrainDatas
 			return node;
 		}
 
-		private IReadOnlyList<SplatPrototype> GetSplats(IExportContainer container)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			if (IsReadTerrainLayers(container.Version))
+			if (HasTerrainLayers(context.Version))
 			{
-				SplatPrototype[] splats = new SplatPrototype[m_terrainLayers.Length];
-				for (int i = 0; i < splats.Length; i++)
+				foreach (PPtr<Object> asset in context.FetchDependencies(TerrainLayers, TerrainLayersName))
 				{
-					TerrainLayer layer = m_terrainLayers[i].FindAsset(container);
-					splats[i] = layer == null ? new SplatPrototype(true) : new SplatPrototype(layer);
+					yield return asset;
 				}
-				return splats;
 			}
 			else
 			{
-				return Splats;
+				foreach (PPtr<Object> asset in context.FetchDependencies(Splats, SplatsName))
+				{
+					yield return asset;
+				}
+			}
+
+			foreach (PPtr<Object> asset in context.FetchDependencies(AlphaTextures, AlphaTexturesName))
+			{
+				yield return asset;
 			}
 		}
 
-		public IReadOnlyList<SplatPrototype> Splats => m_splats;
-		public IReadOnlyList<PPtr<TerrainLayer>> TerrainLayers => m_terrainLayers;
-		public IReadOnlyList<PPtr<Texture2D>> AlphaTextures => m_alphaTextures;
-		public int AlphamapResolution { get; private set; }
-		public int BaseMapResolution { get; private set; }
-		public int ColorSpace { get; private set; }
-		public bool MaterialRequiresMetallic { get; private set; }
-		public bool MaterialRequiresSmoothness { get; private set; }
+		public SplatPrototype[] Splats { get; set; }
+		public PPtr<TerrainLayer>[] TerrainLayers { get; set; }
+		public PPtr<Texture2D>[] AlphaTextures { get; set; }
+		public int AlphamapResolution { get; set; }
+		public int BaseMapResolution { get; set; }
+		public int ColorSpace { get; set; }
+		public bool MaterialRequiresMetallic { get; set; }
+		public bool MaterialRequiresSmoothness { get; set; }
 
 		public const string TerrainLayersName = "m_TerrainLayers";
 		public const string SplatsName = "m_Splats";
@@ -129,9 +142,5 @@ namespace uTinyRipper.Classes.TerrainDatas
 		public const string ColorSpaceName = "m_ColorSpace";
 		public const string MaterialRequiresMetallicName = "m_MaterialRequiresMetallic";
 		public const string MaterialRequiresSmoothnessName = "m_MaterialRequiresSmoothness";
-
-		private SplatPrototype[] m_splats;
-		private PPtr<TerrainLayer>[] m_terrainLayers;
-		private PPtr<Texture2D>[] m_alphaTextures;
 	}
 }

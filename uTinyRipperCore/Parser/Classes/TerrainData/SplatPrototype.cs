@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters.TerrainDatas;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.TerrainDatas
 {
-	public struct SplatPrototype : IAssetReadable, IYAMLExportable, IDependent
+	public struct SplatPrototype : IAsset, IDependent
 	{
 		public SplatPrototype(bool _):
 			this()
@@ -13,74 +13,69 @@ namespace uTinyRipper.Classes.TerrainDatas
 			TileSize = Vector2f.One;
 		}
 
-		public SplatPrototype(TerrainLayer layer)
-		{
-			Texture = layer.DiffuseTexture;
-			NormalMap = layer.NormalMapTexture;
-			TileSize = layer.TileSize;
-			TileOffset = layer.TileOffset;
-			SpecularMetallic = new Vector4f(layer.Specular.R, layer.Specular.G, layer.Specular.B, layer.Metallic);
-			Smoothness = layer.Smoothness;
-		}
-
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool IsReadNormalMap(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
+		public static bool HasNormalMap(Version version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool IsReadTileOffset(Version version)
-		{
-			return version.IsGreaterEqual(3);
-		}
+		public static bool HasTileOffset(Version version) => version.IsGreaterEqual(3);
 		/// <summary>
-		/// 5.0.0f1 and greater
+		/// 5.0.0f1 and greater (unknown version)
 		/// </summary>
-		public static bool IsReadSpecularMetallic(Version version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
-		}
+		public static bool HasSpecularMetallic(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		/// <summary>
 		/// 5.0.1 and greater
 		/// </summary>
-		public static bool IsReadSmoothness(Version version)
+		public static bool HasSmoothness(Version version) => version.IsGreaterEqual(5, 0, 1);
+
+		public TerrainLayer Convert(IExportContainer container)
 		{
-			return version.IsGreaterEqual(5, 0, 1);
+			return SplatPrototypeConverter.GenerateTerrainLayer(container, ref this);
 		}
 
 		public void Read(AssetReader reader)
 		{
 			Texture.Read(reader);
-			if (IsReadNormalMap(reader.Version))
+			if (HasNormalMap(reader.Version))
 			{
 				NormalMap.Read(reader);
 			}
 			TileSize.Read(reader);
-			if (IsReadTileOffset(reader.Version))
+			if (HasTileOffset(reader.Version))
 			{
 				TileOffset.Read(reader);
 			}
-			if (IsReadSpecularMetallic(reader.Version))
+			if (HasSpecularMetallic(reader.Version))
 			{
 				SpecularMetallic.Read(reader);
 			}
-			if (IsReadSmoothness(reader.Version))
+			if (HasSmoothness(reader.Version))
 			{
 				Smoothness = reader.ReadSingle();
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public void Write(AssetWriter writer)
 		{
-			yield return Texture.FetchDependency(file, isLog, () => nameof(SplatPrototype), "texture");
-			if (IsReadNormalMap(file.Version))
+			Texture.Write(writer);
+			if (HasNormalMap(writer.Version))
 			{
-				yield return NormalMap.FetchDependency(file, isLog, () => nameof(SplatPrototype), "normalMap");
+				NormalMap.Write(writer);
+			}
+			TileSize.Write(writer);
+			if (HasTileOffset(writer.Version))
+			{
+				TileOffset.Write(writer);
+			}
+			if (HasSpecularMetallic(writer.Version))
+			{
+				SpecularMetallic.Write(writer);
+			}
+			if (HasSmoothness(writer.Version))
+			{
+				writer.Write(Smoothness);
 			}
 		}
 
@@ -88,15 +83,36 @@ namespace uTinyRipper.Classes.TerrainDatas
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(TextureName, Texture.ExportYAML(container));
-			node.Add(NormalMapName, NormalMap.ExportYAML(container));
+			if (HasNormalMap(container.ExportVersion))
+			{
+				node.Add(NormalMapName, NormalMap.ExportYAML(container));
+			}
 			node.Add(TileSizeName, TileSize.ExportYAML(container));
-			node.Add(TileOffsetName, TileOffset.ExportYAML(container));
-			node.Add(SpecularMetallicName, SpecularMetallic.ExportYAML(container));
-			node.Add(SmoothnessName, Smoothness);
+			if (HasTileOffset(container.ExportVersion))
+			{
+				node.Add(TileOffsetName, TileOffset.ExportYAML(container));
+			}
+			if (HasSpecularMetallic(container.ExportVersion))
+			{
+				node.Add(SpecularMetallicName, SpecularMetallic.ExportYAML(container));
+			}
+			if (HasSmoothness(container.ExportVersion))
+			{
+				node.Add(SmoothnessName, Smoothness);
+			}
 			return node;
 		}
 
-		public float Smoothness { get; private set; }
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		{
+			yield return context.FetchDependency(Texture, TextureName);
+			if (HasNormalMap(context.Version))
+			{
+				yield return context.FetchDependency(NormalMap, NormalMapName);
+			}
+		}
+
+		public float Smoothness { get; set; }
 
 		public const string TextureName = "texture";
 		public const string NormalMapName = "normalMap";

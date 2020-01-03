@@ -1,5 +1,5 @@
 using SevenZip;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Meshes
@@ -7,7 +7,7 @@ namespace uTinyRipper.Classes.Meshes
 	/// <summary>
 	/// MeshBlendShapeChannel previously
 	/// </summary>
-	public struct BlendShapeChannel : IAssetReadable, IYAMLExportable
+	public struct BlendShapeChannel : IAsset
 	{
 		public BlendShapeChannel(string name, int frameIndex, int frameCount)
 		{
@@ -16,13 +16,21 @@ namespace uTinyRipper.Classes.Meshes
 			FrameIndex = frameIndex;
 			FrameCount = frameCount;
 		}
-		
+
 		public void Read(AssetReader reader)
 		{
 			Name = reader.ReadString();
 			NameHash = reader.ReadUInt32();
 			FrameIndex = reader.ReadInt32();
 			FrameCount = reader.ReadInt32();
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Name);
+			writer.Write(NameHash);
+			writer.Write(FrameIndex);
+			writer.Write(FrameCount);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -35,10 +43,10 @@ namespace uTinyRipper.Classes.Meshes
 			return node;
 		}
 
-		public string Name { get; private set; }
-		public uint NameHash { get; private set; }
-		public int FrameIndex { get; private set; }
-		public int FrameCount { get; private set; }
+		public string Name { get; set; }
+		public uint NameHash { get; set; }
+		public int FrameIndex { get; set; }
+		public int FrameCount { get; set; }
 
 		public const string NameName = "name";
 		public const string NameHashName = "nameHash";

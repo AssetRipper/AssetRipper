@@ -1,4 +1,4 @@
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.NavMeshDatas
@@ -27,10 +27,10 @@ namespace uTinyRipper.Classes.NavMeshDatas
 			return node;
 		}
 
-		public float Radius { get; private set; }
-		public ushort LinkType { get; private set; }
-		public byte Area { get; private set; }
-		public byte LinkDirection { get; private set; }
+		public float Radius { get; set; }
+		public ushort LinkType { get; set; }
+		public byte Area { get; set; }
+		public byte LinkDirection { get; set; }
 
 		public const string StartName = "m_Start";
 		public const string EndName = "m_End";

@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AudioMixers
@@ -6,7 +6,7 @@ namespace uTinyRipper.Classes.AudioMixers
 #warning TODO: not implemented
 	public struct GroupConstant : IAssetReadable, IYAMLExportable
 	{
-		/*private static int GetSerializedVersion(Version version)
+		/*public static int ToSerializedVersion(Version version)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			return 2;
@@ -20,28 +20,35 @@ namespace uTinyRipper.Classes.AudioMixers
 			Mute = reader.ReadBoolean();
 			Solo = reader.ReadBoolean();
 			BypassEffects = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("parentConstantIndex", ParentConstantIndex);
-			node.Add("volumeIndex", VolumeIndex);
-			node.Add("pitchIndex", PitchIndex);
-			node.Add("mute", Mute);
-			node.Add("solo", Solo);
-			node.Add("bypassEffects", BypassEffects);
+			//node.AddSerializedVersion(ToSerializedVersion(container.Version));
+			node.Add(ParentConstantIndexName, ParentConstantIndex);
+			node.Add(VolumeIndexName, VolumeIndex);
+			node.Add(PitchIndexName, PitchIndex);
+			node.Add(MuteName, Mute);
+			node.Add(SoloName, Solo);
+			node.Add(BypassEffectsName, BypassEffects);
 			return node;
 		}
 
-		public int ParentConstantIndex { get; private set; }
-		public uint VolumeIndex { get; private set; }
-		public uint PitchIndex { get; private set; }
-		public bool Mute { get; private set; }
-		public bool Solo { get; private set; }
-		public bool BypassEffects { get; private set; }
+		public int ParentConstantIndex { get; set; }
+		public uint VolumeIndex { get; set; }
+		public uint PitchIndex { get; set; }
+		public bool Mute { get; set; }
+		public bool Solo { get; set; }
+		public bool BypassEffects { get; set; }
+
+		public const string ParentConstantIndexName = "parentConstantIndex";
+		public const string VolumeIndexName = "volumeIndex";
+		public const string PitchIndexName = "pitchIndex";
+		public const string MuteName = "mute";
+		public const string SoloName = "solo";
+		public const string BypassEffectsName = "bypassEffects";
 	}
 }

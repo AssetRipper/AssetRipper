@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -35,11 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\uTinyRipperCore\uTinyRipperCoreNETStandard.csproj" />
+    <ProjectReference Include="..\uTinyRipperCore\uTinyRipperCore.csproj" />
   </ItemGroup>
 
 </Project>

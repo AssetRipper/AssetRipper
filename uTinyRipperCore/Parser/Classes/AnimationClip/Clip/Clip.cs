@@ -1,3 +1,5 @@
+using uTinyRipper.Classes.AnimatorControllers;
+
 namespace uTinyRipper.Classes.AnimationClips
 {
 	public struct Clip : IAssetReadable
@@ -5,45 +7,39 @@ namespace uTinyRipper.Classes.AnimationClips
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool IsReadConstantClip(Version version)
-		{
-			return version.IsGreaterEqual(4, 3);
-		}
+		public static bool HasConstantClip(Version version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// Less than 2018.3
 		/// </summary>
-		public static bool IsReadBinding(Version version)
-		{
-			return version.IsLess(2018, 3);
-		}
+		public static bool HasBinding(Version version) => version.IsLess(2018, 3);
 
 		public void Read(AssetReader reader)
 		{
 			StreamedClip.Read(reader);
 			DenseClip.Read(reader);
-			if (IsReadConstantClip(reader.Version))
+			if (HasConstantClip(reader.Version))
 			{
 				ConstantClip.Read(reader);
 			}
-			if (IsReadBinding(reader.Version))
+			if (HasBinding(reader.Version))
 			{
 				Binding.Read(reader);
 			}
 		}
 
-		public bool IsValid(Version version)
+		public bool IsSet(Version version)
 		{
-			if (StreamedClip.IsValid)
+			if (StreamedClip.IsSet)
 			{
 				return true;
 			}
-			if (DenseClip.IsValid)
+			if (DenseClip.IsSet)
 			{
 				return true;
 			}
-			if (IsReadConstantClip(version))
+			if (HasConstantClip(version))
 			{
-				if (ConstantClip.IsValid)
+				if (ConstantClip.IsSet)
 				{
 					return true;
 				}

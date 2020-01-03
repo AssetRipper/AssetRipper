@@ -1,24 +1,23 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.ResourceManagers
 {
-	public struct ResourceManagerDependency : IAssetReadable, IYAMLExportable
+	public struct ResourceManagerDependency : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
 			Object.Read(reader);
-			m_dependencies = reader.ReadAssetArray<PPtr<Object>>();
+			Dependencies = reader.ReadAssetArray<PPtr<Object>>();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return Object.FetchDependency(file, isLog, () => nameof(ResourceManagerDependency), ObjectName);
-			foreach (PPtr<Object> dependencie in Dependencies)
+			yield return context.FetchDependency(Object, ObjectName);
+			foreach (PPtr<Object> asset in context.FetchDependencies(Dependencies, DependenciesName))
 			{
-				yield return dependencie.FetchDependency(file, isLog, () => nameof(ResourceManagerDependency), DependenciesName);
+				yield return asset;
 			}
 		}
 
@@ -30,13 +29,11 @@ namespace uTinyRipper.Classes.ResourceManagers
 			return node;
 		}
 
-		public IReadOnlyList<PPtr<Object>> Dependencies => m_dependencies;
+		public PPtr<Object>[] Dependencies { get; set; }
 
 		public const string ObjectName = "m_Object";
 		public const string DependenciesName = "m_Dependencies";
 
 		public PPtr<Object> Object;
-
-		private PPtr<Object>[] m_dependencies;
 	}
 }

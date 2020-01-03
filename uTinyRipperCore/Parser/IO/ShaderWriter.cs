@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Shaders;
-using uTinyRipper.Classes.Shaders.Exporters;
+using uTinyRipper.Converters.Shaders;
 
 namespace uTinyRipper
 {
@@ -25,10 +25,11 @@ namespace uTinyRipper
 			m_exporterInstantiator = exporterInstantiator;
 		}
 
-		public void WriteShaderData(GPUPlatform graphicApi, byte[] shaderData)
+		public void WriteShaderData(ref ShaderSubProgram subProgram)
 		{
+			GPUPlatform graphicApi = subProgram.ProgramType.ToGPUPlatform(Platform);
 			ShaderTextExporter exporter = m_exporterInstantiator.Invoke(Shader.File.Version, graphicApi);
-			exporter.Export(shaderData, this);
+			exporter.Export(this, ref subProgram);
 		}
 		
 		public Shader Shader { get; }

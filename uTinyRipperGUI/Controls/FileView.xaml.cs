@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Controls;
 using uTinyRipper;
-using uTinyRipper.ResourceFiles;
 using uTinyRipper.SerializedFiles;
 
 namespace uTinyRipperGUI.Controls
@@ -39,7 +38,7 @@ namespace uTinyRipperGUI.Controls
 			Treeview.ItemsSource = m_entries;
 		}
 
-		public void AddItem(FileCollection collection)
+		public void AddItem(GameCollection collection)
 		{
 			Clear();
 			AddChildrenItems(m_entries, collection);
@@ -48,8 +47,8 @@ namespace uTinyRipperGUI.Controls
 		private void AddItem(IList<FileEntry> entries, SerializedFile file)
 		{
 			int index = 0;
-			FileEntry[] children = new FileEntry[file.Metadata.Entries.Count];
-			foreach (AssetEntry entry in file.Metadata.Entries.Values)
+			FileEntry[] children = new FileEntry[file.Metadata.Entries.Length];
+			foreach (AssetEntry entry in file.Metadata.Entries)
 			{
 				children[index++] = new FileEntry($"{entry.PathID}. {entry.ClassID}");
 			}
@@ -92,6 +91,7 @@ namespace uTinyRipperGUI.Controls
 		public void Clear()
 		{
 			m_entries.Clear();
+			Refresh();
 		}
 
 		private readonly IList<FileEntry> m_entries = new List<FileEntry>();

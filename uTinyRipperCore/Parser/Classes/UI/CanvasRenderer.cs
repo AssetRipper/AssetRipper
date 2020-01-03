@@ -13,16 +13,13 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool IsReadCullTransparentMesh(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
+		public static bool HasCullTransparentMesh(Version version) => version.IsGreaterEqual(2018, 2);
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if(IsReadCullTransparentMesh(reader.Version))
+			if (HasCullTransparentMesh(reader.Version))
 			{
 				CullTransparentMesh = reader.ReadBoolean();
 			}
@@ -34,6 +31,6 @@ namespace uTinyRipper.Classes
 			return node;
 		}*/
 
-		public bool CullTransparentMesh { get; private set; }
+		public bool CullTransparentMesh { get; set; }
 	}
 }

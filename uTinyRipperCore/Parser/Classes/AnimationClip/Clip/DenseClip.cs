@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace uTinyRipper.Classes.AnimationClips
+﻿namespace uTinyRipper.Classes.AnimationClips
 {
 	public struct DenseClip : IAssetReadable
 	{
@@ -11,17 +9,15 @@ namespace uTinyRipper.Classes.AnimationClips
 			SampleRate = reader.ReadSingle();
 			BeginTime = reader.ReadSingle();
 
-			m_sampleArray = reader.ReadSingleArray();
+			SampleArray = reader.ReadSingleArray();
 		}
 
-		public bool IsValid => SampleArray.Count > 0;
+		public bool IsSet => SampleArray.Length > 0;
 
-		public int FrameCount { get; private set; }
-		public int CurveCount { get; private set; }
-		public float SampleRate { get; private set; }
-		public float BeginTime { get; private set; }
-		public IReadOnlyList<float> SampleArray => m_sampleArray;
-
-		private float[] m_sampleArray;
+		public int FrameCount { get; set; }
+		public int CurveCount { get; set; }
+		public float SampleRate { get; set; }
+		public float BeginTime { get; set; }
+		public float[] SampleArray { get; set; }
 	}
 }

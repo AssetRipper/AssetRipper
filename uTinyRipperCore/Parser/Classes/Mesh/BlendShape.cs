@@ -1,5 +1,5 @@
 using SevenZip;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Meshes
@@ -7,29 +7,87 @@ namespace uTinyRipper.Classes.Meshes
 	/// <summary>
 	/// MeshBlendShape previously
 	/// </summary>
-	public struct BlendShape : IAssetReadable, IYAMLExportable
+	public struct BlendShape : IAsset
 	{
 		/// <summary>
 		/// Less than 4.3.0
 		/// </summary>
-		public static bool IsReadName(Version version)
-		{
-			return version.IsLess(4, 3);
-		}
+		public static bool HasName(Version version) => version.IsLess(4, 3);
 		/// <summary>
 		/// Less than 4.3
 		/// </summary>
-		public static bool IsReadAABB(Version version)
-		{
-			return version.IsLess(4, 3);
-		}
+		public static bool HasAABB(Version version) => version.IsLess(4, 3);
 
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version)
+		private static bool IsAlign(Version version) => version.IsGreaterEqual(4, 3);
+
+		public void Read(AssetReader reader)
 		{
-			return version.IsGreaterEqual(4, 3);
+			if (HasName(reader.Version))
+			{
+				Name = reader.ReadString();
+			}
+
+			FirstVertex = reader.ReadUInt32();
+			VertexCount = reader.ReadUInt32();
+			if (HasAABB(reader.Version))
+			{
+				AabbMinDelta.Read(reader);
+				AabbMaxDelta.Read(reader);
+			}
+
+			HasNormals = reader.ReadBoolean();
+			HasTangents = reader.ReadBoolean();
+			if (IsAlign(reader.Version))
+			{
+				reader.AlignStream();
+			}
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			if (HasName(writer.Version))
+			{
+				writer.Write(Name);
+			}
+
+			writer.Write(FirstVertex);
+			writer.Write(VertexCount);
+			if (HasAABB(writer.Version))
+			{
+				AabbMinDelta.Write(writer);
+				AabbMaxDelta.Write(writer);
+			}
+
+			writer.Write(HasNormals);
+			writer.Write(HasTangents);
+			if (IsAlign(writer.Version))
+			{
+				writer.AlignStream();
+			}
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			if (HasName(container.ExportVersion))
+			{
+				node.Add(NameName, Name);
+			}
+
+			node.Add(FirstVertexName, FirstVertex);
+			node.Add(VertexCountName, VertexCount);
+			if (HasAABB(container.ExportVersion))
+			{
+				node.Add(AabbMinDeltaName, AabbMinDelta.ExportYAML(container));
+				node.Add(AabbMaxDeltaName, AabbMaxDelta.ExportYAML(container));
+			}
+
+			node.Add(HasNormalsName, HasNormals);
+			node.Add(HasTangentsName, HasTangents);
+			return node;
 		}
 
 		public bool IsCRCMatch(uint crc)
@@ -37,45 +95,17 @@ namespace uTinyRipper.Classes.Meshes
 			return CRC.VerifyDigestUTF8(Name, crc);
 		}
 
-		public void Read(AssetReader reader)
-		{
-			if (IsReadName(reader.Version))
-			{
-				Name = reader.ReadString();
-			}
-			FirstVertex = reader.ReadUInt32();
-			VertexCount = reader.ReadUInt32();
-			if (IsReadAABB(reader.Version))
-			{
-				AabbMinDelta.Read(reader);
-				AabbMaxDelta.Read(reader);
-			}
-			HasNormals = reader.ReadBoolean();
-			HasTangents = reader.ReadBoolean();
-			if (IsAlign(reader.Version))
-			{
-				reader.AlignStream(AlignType.Align4);
-			}
-		}
+		public string Name { get; set; }
+		public uint FirstVertex { get; set; }
+		public uint VertexCount { get; set; }
+		public bool HasNormals { get; set; }
+		public bool HasTangents { get; set; }
 
-		public YAMLNode ExportYAML(IExportContainer container)
-		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(FirstVertexName, FirstVertex);
-			node.Add(VertexCountName, VertexCount);
-			node.Add(HasNormalsName, HasNormals);
-			node.Add(HasTangentsName, HasTangents);
-			return node;
-		}
-
-		public string Name { get; private set; }
-		public uint FirstVertex { get; private set; }
-		public uint VertexCount { get; private set; }
-		public bool HasNormals { get; private set; }
-		public bool HasTangents { get; private set; }
-
+		public const string NameName = "name";
 		public const string FirstVertexName = "firstVertex";
 		public const string VertexCountName = "vertexCount";
+		public const string AabbMinDeltaName = "aabbMinDelta";
+		public const string AabbMaxDeltaName = "aabbMaxDelta";
 		public const string HasNormalsName = "hasNormals";
 		public const string HasTangentsName = "hasTangents";
 

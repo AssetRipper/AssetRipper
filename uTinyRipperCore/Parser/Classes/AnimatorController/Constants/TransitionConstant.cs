@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes.AnimatorControllers.Editor;
+using uTinyRipper.Classes.AnimatorTransitions;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AnimatorControllers
@@ -11,30 +11,21 @@ namespace uTinyRipper.Classes.AnimatorControllers
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadPathID(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		public static bool HasPathID(Version version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool IsReadAtomic(Version version)
-		{
-			return version.IsLess(5);
-		}
+		public static bool HasAtomic(Version version) => version.IsLess(5);
 		/// <summary>
 		/// Less than 4.5.0
 		/// </summary>
-		public static bool IsCanTransitionToSelf(Version version)
-		{
-			return version.IsGreaterEqual(4, 5);
-		}
+		public static bool IsCanTransitionToSelf(Version version) => version.IsGreaterEqual(4, 5);
 
 		public void Read(AssetReader reader)
 		{
-			m_conditionConstantArray = reader.ReadAssetArray<OffsetPtr<ConditionConstant>>();
+			ConditionConstantArray = reader.ReadAssetArray<OffsetPtr<ConditionConstant>>();
 			DestinationState = (int)reader.ReadUInt32();
-			if(IsReadPathID(reader.Version))
+			if (HasPathID(reader.Version))
 			{
 				FullPathID = reader.ReadUInt32();
 			}
@@ -42,7 +33,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			UserID = reader.ReadUInt32();
 			TransitionDuration = reader.ReadSingle();
 			TransitionOffset = reader.ReadSingle();
-			if(IsReadAtomic(reader.Version))
+			if (HasAtomic(reader.Version))
 			{
 				Atomic = reader.ReadBoolean();
 			}
@@ -51,7 +42,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 				ExitTime = reader.ReadSingle();
 				HasExitTime = reader.ReadBoolean();
 				HasFixedDuration = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 
 				InterruptionSource = (TransitionInterruptionSource)reader.ReadInt32();
 				OrderedInterruption = reader.ReadBoolean();
@@ -61,7 +52,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 			{
 				CanTransitionToSelf = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -71,12 +62,12 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public bool GetHasFixedDuration(Version version)
 		{
-			return IsReadAtomic(version) ? true : HasFixedDuration;
+			return HasAtomic(version) ? true : HasFixedDuration;
 		}
 
 		public TransitionInterruptionSource GetInterruptionSource(Version version)
 		{
-			if (IsReadAtomic(version))
+			if (HasAtomic(version))
 			{
 				return Atomic ? TransitionInterruptionSource.None : TransitionInterruptionSource.Destination;
 			}
@@ -88,7 +79,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public float GetExitTime(Version version)
 		{
-			if (IsReadAtomic(version))
+			if (HasAtomic(version))
 			{
 				foreach (OffsetPtr<ConditionConstant> conditionPtr in ConditionConstantArray)
 				{
@@ -107,7 +98,7 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public bool GetHasExitTime(Version version)
 		{
-			if (IsReadAtomic(version))
+			if (HasAtomic(version))
 			{
 				foreach (OffsetPtr<ConditionConstant> conditionPtr in ConditionConstantArray)
 				{
@@ -126,27 +117,25 @@ namespace uTinyRipper.Classes.AnimatorControllers
 
 		public bool IsExit => DestinationState >= 30000;
 
-		public IReadOnlyList<OffsetPtr<ConditionConstant>> ConditionConstantArray => m_conditionConstantArray;
-		public int DestinationState { get; private set; }
-		public uint FullPathID { get; private set; }
+		public OffsetPtr<ConditionConstant>[] ConditionConstantArray { get; set; }
+		public int DestinationState { get; set; }
+		public uint FullPathID { get; set; }
 		/// <summary>
 		/// PathID
 		/// </summary>
-		public uint ID { get; private set; }
+		public uint ID { get; set; }
 		/// <summary>
 		/// Name
 		/// </summary>
-		public uint UserID { get; private set; }
-		public float TransitionDuration { get; private set; }
-		public float TransitionOffset { get; private set; }
-		public bool Atomic { get; private set; }
-		public float ExitTime { get; private set; }
-		public bool HasExitTime { get; private set; }
-		public bool HasFixedDuration { get; private set; }
-		public TransitionInterruptionSource InterruptionSource { get; private set; }
-		public bool OrderedInterruption { get; private set; }
-		public bool CanTransitionToSelf { get; private set; }
-
-		private OffsetPtr<ConditionConstant>[] m_conditionConstantArray;
+		public uint UserID { get; set; }
+		public float TransitionDuration { get; set; }
+		public float TransitionOffset { get; set; }
+		public bool Atomic { get; set; }
+		public float ExitTime { get; set; }
+		public bool HasExitTime { get; set; }
+		public bool HasFixedDuration { get; set; }
+		public TransitionInterruptionSource InterruptionSource { get; set; }
+		public bool OrderedInterruption { get; set; }
+		public bool CanTransitionToSelf { get; set; }
 	}
 }

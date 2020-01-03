@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.ClusterInputManagers;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -16,18 +15,18 @@ namespace uTinyRipper.Classes
 		{
 			base.Read(reader);
 
-			m_inputs = reader.ReadAssetArray<ClusterInput>();
+			Inputs = reader.ReadAssetArray<ClusterInput>();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("m_Inputs", Inputs.ExportYAML(container));
+			node.Add(InputsName, Inputs.ExportYAML(container));
 			return node;
 		}
 
-		public IReadOnlyList<ClusterInput> Inputs => m_inputs;
+		public ClusterInput[] Inputs { get; set; }
 
-		private ClusterInput[] m_inputs;
+		public const string InputsName = "m_Inputs";
 	}
 }

@@ -1,4 +1,4 @@
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.ParticleSystems
@@ -26,51 +26,33 @@ namespace uTinyRipper.Classes.ParticleSystems
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsReadMode(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
+		public static bool HasMode(Version version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsReadRibbonCount(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
+		public static bool HasRibbonCount(Version version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool IsReadShadowBias(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
+		public static bool HasShadowBias(Version version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 2017.1.0b2
 		/// </summary>
-		public static bool IsReadGenerateLightingData(Version version)
-		{
-			return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		}
+		public static bool HasGenerateLightingData(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsReadSplitSubEmitterRibbons(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
+		public static bool HasSplitSubEmitterRibbons(Version version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool IsReadAttachRibbonsToTransform(Version version)
-		{
-			return version.IsGreaterEqual(2018, 3);
-		}
+		public static bool HasAttachRibbonsToTransform(Version version) => version.IsGreaterEqual(2018, 3);
 
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadMode(reader.Version))
+			if (HasMode(reader.Version))
 			{
 				Mode = (ParticleSystemTrailMode)reader.ReadInt32();
 			}
@@ -78,11 +60,11 @@ namespace uTinyRipper.Classes.ParticleSystems
 			Lifetime.Read(reader);
 			MinVertexDistance = reader.ReadSingle();
 			TextureMode = (ParticleSystemTrailTextureMode)reader.ReadInt32();
-			if (IsReadRibbonCount(reader.Version))
+			if (HasRibbonCount(reader.Version))
 			{
 				RibbonCount = reader.ReadInt32();
 			}
-			if (IsReadShadowBias(reader.Version))
+			if (HasShadowBias(reader.Version))
 			{
 				ShadowBias = reader.ReadSingle();
 			}
@@ -91,19 +73,19 @@ namespace uTinyRipper.Classes.ParticleSystems
 			SizeAffectsWidth = reader.ReadBoolean();
 			SizeAffectsLifetime = reader.ReadBoolean();
 			InheritParticleColor = reader.ReadBoolean();
-			if (IsReadGenerateLightingData(reader.Version))
+			if (HasGenerateLightingData(reader.Version))
 			{
 				GenerateLightingData = reader.ReadBoolean();
 			}
-			if (IsReadSplitSubEmitterRibbons(reader.Version))
+			if (HasSplitSubEmitterRibbons(reader.Version))
 			{
 				SplitSubEmitterRibbons = reader.ReadBoolean();
 			}
-			if (IsReadAttachRibbonsToTransform(reader.Version))
+			if (HasAttachRibbonsToTransform(reader.Version))
 			{
 				AttachRibbonsToTransform = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			ColorOverLifetime.Read(reader);
 			WidthOverTrail.Read(reader);
@@ -119,7 +101,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			node.Add(MinVertexDistanceName, MinVertexDistance);
 			node.Add(TextureModeName, (int)TextureMode);
 			node.Add(RibbonCountName, GetExportRibbonCount(container.Version));
-			if (IsReadShadowBias(container.ExportVersion))
+			if (HasShadowBias(container.ExportVersion))
 			{
 				node.Add(ShadowBiasName, ShadowBias);
 			}
@@ -130,7 +112,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			node.Add(InheritParticleColorName, InheritParticleColor);
 			node.Add(GenerateLightingDataName, GenerateLightingData);
 			node.Add(SplitSubEmitterRibbonsName, SplitSubEmitterRibbons);
-			if (IsReadAttachRibbonsToTransform(container.ExportVersion))
+			if (HasAttachRibbonsToTransform(container.ExportVersion))
 			{
 				node.Add(AttachRibbonsToTransformName, AttachRibbonsToTransform);
 			}
@@ -143,23 +125,23 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		private int GetExportRibbonCount(Version version)
 		{
-			return IsReadRibbonCount(version) ? RibbonCount : 1;
+			return HasRibbonCount(version) ? RibbonCount : 1;
 		}
 
-		public ParticleSystemTrailMode Mode { get; private set; }
-		public float Ratio { get; private set; }
-		public float MinVertexDistance { get; private set; }
-		public ParticleSystemTrailTextureMode TextureMode { get; private set; }
-		public int RibbonCount { get; private set; }
-		public float ShadowBias { get; private set; }
-		public bool WorldSpace { get; private set; }
-		public bool DieWithParticles { get; private set; }
-		public bool SizeAffectsWidth { get; private set; }
-		public bool SizeAffectsLifetime { get; private set; }
-		public bool InheritParticleColor { get; private set; }
-		public bool GenerateLightingData { get; private set; }
-		public bool SplitSubEmitterRibbons { get; private set; }
-		public bool AttachRibbonsToTransform { get; private set; }
+		public ParticleSystemTrailMode Mode { get; set; }
+		public float Ratio { get; set; }
+		public float MinVertexDistance { get; set; }
+		public ParticleSystemTrailTextureMode TextureMode { get; set; }
+		public int RibbonCount { get; set; }
+		public float ShadowBias { get; set; }
+		public bool WorldSpace { get; set; }
+		public bool DieWithParticles { get; set; }
+		public bool SizeAffectsWidth { get; set; }
+		public bool SizeAffectsLifetime { get; set; }
+		public bool InheritParticleColor { get; set; }
+		public bool GenerateLightingData { get; set; }
+		public bool SplitSubEmitterRibbons { get; set; }
+		public bool AttachRibbonsToTransform { get; set; }
 
 		public const string ModeName = "mode";
 		public const string RatioName = "ratio";

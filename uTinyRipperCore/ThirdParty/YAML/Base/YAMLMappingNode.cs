@@ -14,6 +14,12 @@ namespace uTinyRipper.YAML
 			Style = style;
 		}
 
+		public void Add(int key, long value)
+		{
+			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			Add(key, valueNode);
+		}
+
 		public void Add(int key, string value)
 		{
 			YAMLScalarNode valueNode = new YAMLScalarNode(value);
@@ -112,7 +118,7 @@ namespace uTinyRipper.YAML
 
 		public void Add(string key, YAMLNode value)
 		{
-			YAMLScalarNode keyNode = new YAMLScalarNode(key);
+			YAMLScalarNode keyNode = new YAMLScalarNode(key, true);
 			InsertEnd(keyNode, value);
 		}
 
@@ -186,7 +192,7 @@ namespace uTinyRipper.YAML
 			InsertEnd(key, value);
 		}
 
-		public void Concatenate(YAMLMappingNode map)
+		public void Append(YAMLMappingNode map)
 		{
 			foreach (KeyValuePair<YAMLNode, YAMLNode> child in map.m_children)
 			{
@@ -202,7 +208,7 @@ namespace uTinyRipper.YAML
 
 		public void InsertBegin(string key, YAMLNode value)
 		{
-			YAMLScalarNode keyNode = new YAMLScalarNode(key);
+			YAMLScalarNode keyNode = new YAMLScalarNode(key, true);
 			InsertBegin(keyNode, value);
 		}
 
@@ -226,10 +232,14 @@ namespace uTinyRipper.YAML
 				YAMLNode key = kvp.Key;
 				YAMLNode value = kvp.Value;
 
+				bool iskey = emitter.IsKey;
+				emitter.IsKey = true;
 				key.Emit(emitter);
+				emitter.IsKey = false;
 				StartTransition(emitter, value);
 				value.Emit(emitter);
 				EndTransition(emitter, value);
+				emitter.IsKey = iskey;
 			}
 			EndChildren(emitter);
 		}
@@ -270,7 +280,7 @@ namespace uTinyRipper.YAML
 			emitter.Write(':').WriteWhitespace();
 			if (Style == MappingStyle.Block)
 			{
-				if (next.IsMultyline)
+				if (next.IsMultiline)
 				{
 					emitter.WriteLine();
 				}
@@ -310,7 +320,7 @@ namespace uTinyRipper.YAML
 		public static YAMLMappingNode Empty { get; } = new YAMLMappingNode(MappingStyle.Flow);
 
 		public override YAMLNodeType NodeType => YAMLNodeType.Mapping;
-		public override bool IsMultyline => Style == MappingStyle.Block && m_children.Count > 0;
+		public override bool IsMultiline => Style == MappingStyle.Block && m_children.Count > 0;
 		public override bool IsIndent => Style == MappingStyle.Block;
 
 		public MappingStyle Style { get; set; }

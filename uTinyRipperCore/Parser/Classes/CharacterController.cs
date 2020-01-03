@@ -1,4 +1,4 @@
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -10,15 +10,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 5.0.0 and greater
-		/// </summary>
-		public static bool IsReadCollider(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// SlopeLimit default value has been changed to 45.0f
 			if (version.IsGreaterEqual(3))
@@ -28,9 +20,14 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// 5.0.0 and greater
+		/// </summary>
+		public static bool HasCollider(Version version) => version.IsGreaterEqual(5);
+
 		public override void Read(AssetReader reader)
 		{
-			if (IsReadCollider(reader.Version))
+			if (HasCollider(reader.Version))
 			{
 				base.Read(reader);
 			}
@@ -52,7 +49,7 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(HeightName, Height);
 			node.Add(RadiusName, Radius);
 			node.Add(SlopeLimitName, GetSlopeLimit(container.Version));
@@ -65,7 +62,7 @@ namespace uTinyRipper.Classes
 
 		private float GetSlopeLimit(Version version)
 		{
-			if (GetSerializedVersion(version) >= 2)
+			if (ToSerializedVersion(version) >= 2)
 			{
 				return SlopeLimit;
 			}
@@ -75,15 +72,15 @@ namespace uTinyRipper.Classes
 			}
 		}
 
-		public float Height { get; private set; }
-		public float Radius { get; private set; }
-		public float SlopeLimit { get; private set; }
-		public float StepOffset { get; private set; }
-		public float SkinWidth { get; private set; }
-		public float MinMoveDistance { get; private set; }
+		public float Height { get; set; }
+		public float Radius { get; set; }
+		public float SlopeLimit { get; set; }
+		public float StepOffset { get; set; }
+		public float SkinWidth { get; set; }
+		public float MinMoveDistance { get; set; }
 
-		protected override bool IsReadMaterial => true;
-		protected override bool IsReadIsTrigger => true;
+		protected override bool IncludesMaterial => true;
+		protected override bool IncludesIsTrigger => true;
 
 		public const string HeightName = "m_Height";
 		public const string RadiusName = "m_Radius";

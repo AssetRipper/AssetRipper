@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.AnimatorOverrideControllers
 {
@@ -16,16 +15,19 @@ namespace uTinyRipper.Classes.AnimatorOverrideControllers
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_OriginalClip", OriginalClip.ExportYAML(container));
-			node.Add("m_OverrideClip", OverrideClip.ExportYAML(container));
+			node.Add(OriginalClipName, OriginalClip.ExportYAML(container));
+			node.Add(OverrideClipName, OverrideClip.ExportYAML(container));
 			return node;
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return OriginalClip.FetchDependency(file, isLog, () => nameof(AnimationClipOverride), "m_OriginalClip");
-			yield return OverrideClip.FetchDependency(file, isLog, () => nameof(AnimationClipOverride), "m_OverrideClip");
+			yield return context.FetchDependency(OriginalClip, OriginalClipName);
+			yield return context.FetchDependency(OverrideClip, OverrideClipName);
 		}
+
+		public const string OriginalClipName = "m_OriginalClip";
+		public const string OverrideClipName = "m_OverrideClip";
 
 		public PPtr<AnimationClip> OriginalClip;
 		public PPtr<AnimationClip> OverrideClip;

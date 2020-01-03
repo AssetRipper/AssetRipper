@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper.Layout.AnimationClips;
 
 namespace uTinyRipper.Classes.AnimationClips
 {
-	public struct FloatCurve : IAssetReadable, IYAMLExportable, IDependent
+	public struct FloatCurve : IAsset, IDependent
 	{
 		public FloatCurve(FloatCurve copy, IReadOnlyList<KeyframeTpl<Float>> keyframes):
 			this(copy.Path, copy.Attribute, copy.ClassID, copy.Script, keyframes)
@@ -30,45 +31,53 @@ namespace uTinyRipper.Classes.AnimationClips
 			Curve = new AnimationCurveTpl<Float>(keyframes);
 		}
 
-		/// <summary>
-		/// 2.0.0 and greater
-		/// </summary>
-		public static bool IsReadScript(Version version)
-		{
-			return version.IsGreaterEqual(2);
-		}
-
 		public void Read(AssetReader reader)
 		{
+			FloatCurveLayout layout = reader.Layout.AnimationClip.FloatCurve;
 			Curve.Read(reader);
 			Attribute = reader.ReadString();
 			Path = reader.ReadString();
 			ClassID = (ClassIDType)reader.ReadInt32();
-			if (IsReadScript(reader.Version))
+			if (layout.HasScript)
 			{
 				Script.Read(reader);
 			}
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public void Write(AssetWriter writer)
 		{
-			yield return Script.FetchDependency(file, isLog, () => nameof(FloatCurve), "script");
+			FloatCurveLayout layout = writer.Layout.AnimationClip.FloatCurve;
+			Curve.Write(writer);
+			writer.Write(Attribute);
+			writer.Write(Path);
+			writer.Write((int)ClassID);
+			if (layout.HasScript)
+			{
+				Script.Write(writer);
+			}
+		}
+
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		{
+			FloatCurveLayout layout = context.Layout.AnimationClip.FloatCurve;
+			yield return context.FetchDependency(Script, layout.ScriptName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("curve", Curve.ExportYAML(container));
-			node.Add("attribute", Attribute);
-			node.Add("path", Path);
-			node.Add("classID", (int)ClassID);
-			node.Add("script", Script.ExportYAML(container));
+			FloatCurveLayout layout = container.ExportLayout.AnimationClip.FloatCurve;
+			node.Add(layout.CurveName, Curve.ExportYAML(container));
+			node.Add(layout.AttributeName, Attribute);
+			node.Add(layout.PathName, Path);
+			node.Add(layout.ClassIDName, (int)ClassID);
+			node.Add(layout.ScriptName, Script.ExportYAML(container));
 			return node;
 		}
 		
-		public string Attribute { get; private set; }
-		public string Path { get; private set; }
-		public ClassIDType ClassID { get; private set; }
+		public string Attribute { get; set; }
+		public string Path { get; set; }
+		public ClassIDType ClassID { get; set; }
 
 		public AnimationCurveTpl<Float> Curve;
 		public PPtr<MonoScript> Script;

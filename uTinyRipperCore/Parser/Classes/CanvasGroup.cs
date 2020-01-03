@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -10,15 +10,27 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		private static bool HasBehaviour(Version version)
+		{
+			return version.IsGreaterEqual(4, 6, 1);
+		}
+
 		public override void Read(AssetReader reader)
 		{
-			base.Read(reader);
+			if (HasBehaviour(reader.Version))
+			{
+				base.Read(reader);
+			}
+			else
+			{
+				ReadComponent(reader);
+			}
 
 			Alpha = reader.ReadSingle();
 			Interactable = reader.ReadBoolean();
 			BlocksRaycasts = reader.ReadBoolean();
 			IgnoreParentGroups = reader.ReadBoolean();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 		}
 
@@ -32,10 +44,10 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		public float Alpha { get; private set; }
-		public bool Interactable { get; private set; }
-		public bool BlocksRaycasts { get; private set; }
-		public bool IgnoreParentGroups { get; private set; }
+		public float Alpha { get; set; }
+		public bool Interactable { get; set; }
+		public bool BlocksRaycasts { get; set; }
+		public bool IgnoreParentGroups { get; set; }
 
 		public const string AlphaName = "m_Alpha";
 		public const string InteractableName = "m_Interactable";

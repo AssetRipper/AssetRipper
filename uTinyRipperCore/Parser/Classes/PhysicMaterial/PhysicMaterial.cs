@@ -1,5 +1,5 @@
-﻿using uTinyRipper.AssetExporters;
-using uTinyRipper.Classes.PhysicMaterials;
+﻿using uTinyRipper.Classes.PhysicMaterials;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
@@ -14,17 +14,11 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Less than 5.2.0
 		/// </summary>
-		public static bool IsReadFrictionDirection2(Version version)
-		{
-			return version.IsLess(5, 2);
-		}
+		public static bool HasFrictionDirection2(Version version) => version.IsLess(5, 2);
 		/// <summary>
 		/// Less than 2.0.0
 		/// </summary>
-		public static bool IsReadUseSpring(Version version)
-		{
-			return version.IsLess(2);
-		}
+		public static bool HasUseSpring(Version version) => version.IsLess(2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -36,13 +30,13 @@ namespace uTinyRipper.Classes
 			FrictionCombine = reader.ReadInt32();
 			BounceCombine = reader.ReadInt32();
 
-			if (IsReadFrictionDirection2(reader.Version))
+			if (HasFrictionDirection2(reader.Version))
 			{
 				FrictionDirection2.Read(reader);
 				DynamicFriction2 = reader.ReadSingle();
 				StaticFriction2 = reader.ReadSingle();
 			}
-			if (IsReadUseSpring(reader.Version))
+			if (HasUseSpring(reader.Version))
 			{
 				UseSpring = reader.ReadBoolean();
 				Spring.Read(reader);
@@ -52,22 +46,28 @@ namespace uTinyRipper.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add("dynamicFriction", DynamicFriction);
-			node.Add("staticFriction", StaticFriction);
-			node.Add("bounciness", Bounciness);
-			node.Add("frictionCombine", FrictionCombine);
-			node.Add("bounceCombine", BounceCombine);
+			node.Add(DynamicFrictionName, DynamicFriction);
+			node.Add(StaticFrictionName, StaticFriction);
+			node.Add(BouncinessName, Bounciness);
+			node.Add(FrictionCombineName, FrictionCombine);
+			node.Add(BounceCombineName, BounceCombine);
 			return node;
 		}
 
-		public float DynamicFriction { get; private set; }
-		public float StaticFriction { get; private set; }
-		public float Bounciness { get; private set; }
-		public int FrictionCombine { get; private set; }
-		public int BounceCombine { get; private set; }
-		public float DynamicFriction2 { get; private set; }
-		public float StaticFriction2 { get; private set; }
-		public bool UseSpring { get; private set; }
+		public float DynamicFriction { get; set; }
+		public float StaticFriction { get; set; }
+		public float Bounciness { get; set; }
+		public int FrictionCombine { get; set; }
+		public int BounceCombine { get; set; }
+		public float DynamicFriction2 { get; set; }
+		public float StaticFriction2 { get; set; }
+		public bool UseSpring { get; set; }
+
+		public const string DynamicFrictionName = "dynamicFriction";
+		public const string StaticFrictionName = "staticFriction";
+		public const string BouncinessName = "bounciness";
+		public const string FrictionCombineName = "frictionCombine";
+		public const string BounceCombineName = "bounceCombine";
 
 		public Vector3f FrictionDirection2;
 		public JointSpring Spring;

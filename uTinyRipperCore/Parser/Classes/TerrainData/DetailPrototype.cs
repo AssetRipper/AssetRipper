@@ -1,25 +1,21 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.TerrainDatas
 {
-	public struct DetailPrototype : IAssetReadable, IYAMLExportable, IDependent
+	public struct DetailPrototype : IAsset, IDependent
 	{
-		/// <summary>
-		/// Less than 3.0.0
-		/// </summary>
-		public static bool IsReadGrayscaleLighting(Version version)
-		{
-			return version.IsLess(3);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// this is min version
 			return 2;
 		}
+
+		/// <summary>
+		/// Less than 3.0.0
+		/// </summary>
+		public static bool HasGrayscaleLighting(Version version) => version.IsLess(3);
 
 		public void Read(AssetReader reader)
 		{
@@ -33,7 +29,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 			BendFactor = reader.ReadSingle();
 			HealthyColor.Read(reader);
 			DryColor.Read(reader);
-			if (IsReadGrayscaleLighting(reader.Version))
+			if (HasGrayscaleLighting(reader.Version))
 			{
 				GrayscaleLighting = reader.ReadInt32();
 			}
@@ -42,16 +38,38 @@ namespace uTinyRipper.Classes.TerrainDatas
 			UsePrototypeMesh = reader.ReadInt32();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public void Write(AssetWriter writer)
 		{
-			yield return Prototype.FetchDependency(file, isLog, () => nameof(DetailPrototype), "prototype");
-			yield return PrototypeTexture.FetchDependency(file, isLog, () => nameof(DetailPrototype), "prototypeTexture");
+			Prototype.Write(writer);
+			PrototypeTexture.Write(writer);
+			writer.Write(MinWidth);
+			writer.Write(MaxWidth);
+			writer.Write(MinHeight);
+			writer.Write(MaxHeight);
+			writer.Write(NoiseSpread);
+			writer.Write(BendFactor);
+			writer.Write(BendFactor);
+			HealthyColor.Write(writer);
+			DryColor.Write(writer);
+			if (HasGrayscaleLighting(writer.Version))
+			{
+				writer.Write(GrayscaleLighting);
+			}
+			writer.Write(LightmapFactor);
+			writer.Write((int)RenderMode);
+			writer.Write(UsePrototypeMesh);
+		}
+
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		{
+			yield return context.FetchDependency(Prototype, PrototypeName);
+			yield return context.FetchDependency(PrototypeTexture, PrototypeTextureName);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(PrototypeName, Prototype.ExportYAML(container));
 			node.Add(PrototypeTextureName, PrototypeTexture.ExportYAML(container));
 			node.Add(MinWidthName, MinWidth);
@@ -62,22 +80,26 @@ namespace uTinyRipper.Classes.TerrainDatas
 			node.Add(BendFactorName, BendFactor);
 			node.Add(HealthyColorName, HealthyColor.ExportYAML(container));
 			node.Add(DryColorName, DryColor.ExportYAML(container));
+			if (HasGrayscaleLighting(container.ExportVersion))
+			{
+				node.Add(GrayscaleLightingName, GrayscaleLighting);
+			}
 			node.Add(LightmapFactorName, LightmapFactor);
 			node.Add(RenderModeName, (int)RenderMode);
 			node.Add(UsePrototypeMeshName, UsePrototypeMesh);
 			return node;
 		}
 
-		public float MinWidth { get; private set; }
-		public float MaxWidth { get; private set; }
-		public float MinHeight { get; private set; }
-		public float MaxHeight { get; private set; }
-		public float NoiseSpread { get; private set; }
-		public float BendFactor { get; private set; }
-		public int GrayscaleLighting { get; private set; }
-		public float LightmapFactor { get; private set; }
-		public DetailRenderMode RenderMode { get; private set; }
-		public int UsePrototypeMesh { get; private set; }
+		public float MinWidth { get; set; }
+		public float MaxWidth { get; set; }
+		public float MinHeight { get; set; }
+		public float MaxHeight { get; set; }
+		public float NoiseSpread { get; set; }
+		public float BendFactor { get; set; }
+		public int GrayscaleLighting { get; set; }
+		public float LightmapFactor { get; set; }
+		public DetailRenderMode RenderMode { get; set; }
+		public int UsePrototypeMesh { get; set; }
 
 		public const string PrototypeName = "prototype";
 		public const string PrototypeTextureName = "prototypeTexture";
@@ -89,6 +111,7 @@ namespace uTinyRipper.Classes.TerrainDatas
 		public const string BendFactorName = "bendFactor";
 		public const string HealthyColorName = "healthyColor";
 		public const string DryColorName = "dryColor";
+		public const string GrayscaleLightingName = "grayscaleLighting";
 		public const string LightmapFactorName = "lightmapFactor";
 		public const string RenderModeName = "renderMode";
 		public const string UsePrototypeMeshName = "usePrototypeMesh";

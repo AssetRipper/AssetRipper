@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using uTinyRipper.Classes.Misc;
 
-namespace uTinyRipper.Classes.AnimationClips.Editor
+namespace uTinyRipper.Classes.AnimationClips
 {
 	public struct StreamedCurveKey : IAssetReadable
 	{
@@ -78,10 +79,10 @@ namespace uTinyRipper.Classes.AnimationClips.Editor
 			float deltaValue = nextValue - Value;
 			float inverseTime = 1.0f / (deltaTime * deltaTime);
 			float outTangent = OutSlope * deltaTime;
-			float inTangent =  deltaValue + deltaValue + deltaValue - outTangent - outTangent - Coefficient.Y / inverseTime;
+			float inTangent = deltaValue + deltaValue + deltaValue - outTangent - outTangent - Coefficient.Y / inverseTime;
 			return inTangent / deltaTime;
 		}
-		
+
 		public void Read(AssetReader reader)
 		{
 			Index = reader.ReadInt32();
@@ -91,8 +92,8 @@ namespace uTinyRipper.Classes.AnimationClips.Editor
 
 		public float OutSlope => Coefficient.Z;
 
-		public int Index { get; private set; }
-		public float Value { get; private set; }
+		public int Index { get; set; }
+		public float Value { get; set; }
 
 		public Vector3f Coefficient;
 	}

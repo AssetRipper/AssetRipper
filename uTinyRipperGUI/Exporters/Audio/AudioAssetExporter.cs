@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using uTinyRipper;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.AudioClips;
+using uTinyRipper.Converters;
+using uTinyRipper.Project;
 using uTinyRipper.SerializedFiles;
 
 using Object = uTinyRipper.Classes.Object;
@@ -25,7 +26,7 @@ namespace uTinyRipperGUI.Exporters
 
 		public static bool IsSupported(AudioClip audioClip)
 		{
-			if (AudioClip.IsReadType(audioClip.File.Version))
+			if (AudioClip.HasType(audioClip.File.Version))
 			{
 				switch (audioClip.Type)
 				{
@@ -137,7 +138,7 @@ namespace uTinyRipperGUI.Exporters
 
 		private static string GetAudioType(AudioClip audioClip)
 		{
-			if (AudioClip.IsReadType(audioClip.File.Version))
+			if (AudioClip.HasType(audioClip.File.Version))
 			{
 				return audioClip.Type.ToString();
 			}

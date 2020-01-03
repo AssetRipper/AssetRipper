@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.LightProbess
@@ -9,39 +8,36 @@ namespace uTinyRipper.Classes.LightProbess
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsReadOcclusionMaskChannel(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
+		public static bool HasOcclusionMaskChannel(Version version) => version.IsGreaterEqual(5, 6);
 
 		public void Read(AssetReader reader)
 		{
-			m_probeOcclusionLightIndex = reader.ReadInt32Array();
-			m_occlusion = reader.ReadSingleArray();
-			if(IsReadOcclusionMaskChannel(reader.Version))
+			ProbeOcclusionLightIndex = reader.ReadInt32Array();
+			Occlusion = reader.ReadSingleArray();
+			if (HasOcclusionMaskChannel(reader.Version))
 			{
-				m_occlusionMaskChannel = reader.ReadByteArray();
+				OcclusionMaskChannel = reader.ReadByteArray();
 			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_ProbeOcclusionLightIndex", ProbeOcclusionLightIndex.ExportYAML(true));
-			node.Add("m_Occlusion", Occlusion.ExportYAML());
-			node.Add("m_OcclusionMaskChannel", OcclusionMaskChannel.ExportYAML());
+			node.Add(ProbeOcclusionLightIndexName, ProbeOcclusionLightIndex.ExportYAML(true));
+			node.Add(OcclusionName, Occlusion.ExportYAML());
+			node.Add(OcclusionMaskChannelName, OcclusionMaskChannel.ExportYAML());
 			return node;
 		}
 
 		/// <summary>
 		/// BakedLightIndex previously
 		/// </summary>
-		public IReadOnlyList<int> ProbeOcclusionLightIndex => m_probeOcclusionLightIndex;
-		public IReadOnlyList<float> Occlusion => m_occlusion;
-		public IReadOnlyList<byte> OcclusionMaskChannel => m_occlusionMaskChannel;
+		public int[] ProbeOcclusionLightIndex { get; set; }
+		public float[] Occlusion { get; set; }
+		public byte[] OcclusionMaskChannel { get; set; }
 
-		private int[] m_probeOcclusionLightIndex;
-		private float[] m_occlusion;
-		private byte[] m_occlusionMaskChannel;
+		public const string ProbeOcclusionLightIndexName = "m_ProbeOcclusionLightIndex";
+		public const string OcclusionName = "m_Occlusion";
+		public const string OcclusionMaskChannelName = "m_OcclusionMaskChannel";
 	}
 }

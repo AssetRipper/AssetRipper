@@ -1,24 +1,21 @@
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.TerrainDatas
 {
-	public struct TreeInstance : IAssetReadable, IYAMLExportable
+	public struct TreeInstance : IAsset
 	{
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadRotation(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		public static bool HasRotation(Version version) => version.IsGreaterEqual(5);
 
 		public void Read(AssetReader reader)
 		{
 			Position.Read(reader);
 			WidthScale = reader.ReadSingle();
 			HeightScale = reader.ReadSingle();
-			if (IsReadRotation(reader.Version))
+			if (HasRotation(reader.Version))
 			{
 				Rotation = reader.ReadSingle();
 			}
@@ -27,23 +24,40 @@ namespace uTinyRipper.Classes.TerrainDatas
 			Index = reader.ReadInt32();
 		}
 
+		public void Write(AssetWriter writer)
+		{
+			Position.Write(writer);
+			writer.Write(WidthScale);
+			writer.Write(HeightScale);
+			if (HasRotation(writer.Version))
+			{
+				writer.Write(Rotation);
+			}
+			Color.Write(writer);
+			LightmapColor.Write(writer);
+			writer.Write(Index);
+		}
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(PositionName, Position.ExportYAML(container));
 			node.Add(WidthScaleName, WidthScale);
 			node.Add(HeightScaleName, HeightScale);
-			node.Add(RotationName, Rotation);
+			if (HasRotation(container.ExportVersion))
+			{
+				node.Add(RotationName, Rotation);
+			}
 			node.Add(ColorName, Color.ExportYAML(container));
 			node.Add(LightmapColorName, LightmapColor.ExportYAML(container));
 			node.Add(IndexName, Index);
 			return node;
 		}
 
-		public float WidthScale { get; private set; }
-		public float HeightScale { get; private set; }
-		public float Rotation { get; private set; }
-		public int Index { get; private set; }
+		public float WidthScale { get; set; }
+		public float HeightScale { get; set; }
+		public float Rotation { get; set; }
+		public int Index { get; set; }
 
 		public const string PositionName = "position";
 		public const string WidthScaleName = "widthScale";

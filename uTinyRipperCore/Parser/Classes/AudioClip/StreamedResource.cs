@@ -1,5 +1,4 @@
-using uTinyRipper.AssetExporters;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.AudioClips
@@ -9,7 +8,7 @@ namespace uTinyRipper.Classes.AudioClips
 		/// <summary>
 		/// 5.0.0f1 and greater
 		/// </summary>
-		public static bool IsReadSize(Version version)
+		public static bool HasSize(Version version)
 		{
 			// unknown version
 			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
@@ -17,11 +16,11 @@ namespace uTinyRipper.Classes.AudioClips
 
 		public bool CheckIntegrity(ISerializedFile file)
 		{
-			if (!IsValid)
+			if (!IsSet)
 			{
 				return true;
 			}
-			if (!IsReadSize(file.Version))
+			if (!HasSize(file.Version))
 			{
 				// I think they read data by its type for this verison, so I can't even export raw data :/
 				return false;
@@ -43,11 +42,8 @@ namespace uTinyRipper.Classes.AudioClips
 			}
 
 			byte[] data = new byte[Size];
-			using (PartialStream resStream = new PartialStream(res.Stream, res.Offset, res.Size))
-			{
-				resStream.Position = Offset;
-				resStream.ReadBuffer(data, 0, data.Length);
-			}
+			res.Stream.Position = Offset;
+			res.Stream.ReadBuffer(data, 0, data.Length);
 			return data;
 		}
 
@@ -55,13 +51,13 @@ namespace uTinyRipper.Classes.AudioClips
 		{
 			Source = reader.ReadString();
 			Offset = (long)reader.ReadUInt64();
-			if (IsReadSize(reader.Version))
+			if (HasSize(reader.Version))
 			{
 				Size = (long)reader.ReadUInt64();
 			}
 			else
 			{
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
@@ -74,11 +70,11 @@ namespace uTinyRipper.Classes.AudioClips
 			return node;
 		}
 
-		public bool IsValid => Source != string.Empty;
+		public bool IsSet => Source != string.Empty;
 
-		public string Source { get; private set; }
-		public long Offset { get; private set; }
-		public long Size { get; private set; }
+		public string Source { get; set; }
+		public long Offset { get; set; }
+		public long Size { get; set; }
 
 		public const string SourceName = "m_Source";
 		public const string OffsetName = "m_Offset";

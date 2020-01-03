@@ -1,13 +1,14 @@
-using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes.Misc;
+using uTinyRipper;
 
 namespace uTinyRipper.Classes.AudioMixers
 {
 #warning TODO: not implemented
 	public struct AudioMixerConstant : IAssetReadable, IYAMLExportable
 	{
-		/*private static int GetSerializedVersion(Version version)
+		/*public static int ToSerializedVersion(Version version)
 		{
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			return 2;
@@ -15,68 +16,66 @@ namespace uTinyRipper.Classes.AudioMixers
 
 		public void Read(AssetReader reader)
 		{
-			m_groups = reader.ReadAssetArray<GroupConstant>();
-			m_groupGUIDs = reader.ReadAssetArray<EngineGUID>();
-			m_effects = reader.ReadAssetArray<EffectConstant>();
-			m_effectGUIDs = reader.ReadAssetArray<EngineGUID>();
+			Groups = reader.ReadAssetArray<GroupConstant>();
+			GroupGUIDs = reader.ReadAssetArray<GUID>();
+			Effects = reader.ReadAssetArray<EffectConstant>();
+			EffectGUIDs = reader.ReadAssetArray<GUID>();
 			NumSideChainBuffers = reader.ReadUInt32();
-			m_snapshots = reader.ReadAssetArray<SnapshotConstant>();
-			m_snapshotGUIDs = reader.ReadAssetArray<EngineGUID>();
+			Snapshots = reader.ReadAssetArray<SnapshotConstant>();
+			SnapshotGUIDs = reader.ReadAssetArray<GUID>();
 			//m_groupNameBuffer = stream.ReadArray<char>();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			//m_snapshotNameBuffer = stream.ReadArray<char>();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
 			//m_pluginEffectNameBuffer = stream.ReadArray<char>();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 			
-			m_exposedParameterNames = reader.ReadUInt32Array();
-			m_exposedParameterIndices = reader.ReadUInt32Array();
+			ExposedParameterNames = reader.ReadUInt32Array();
+			ExposedParameterIndices = reader.ReadUInt32Array();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			//node.AddSerializedVersion(GetSerializedVersion(container.Version));
-			node.Add("groups", Groups.ExportYAML(container));
-			node.Add("groupGUIDs", GroupGUIDs.ExportYAML(container));
-			node.Add("effects", Effects.ExportYAML(container));
-			node.Add("effectGUIDs", EffectGUIDs.ExportYAML(container));
-			node.Add("numSideChainBuffers", NumSideChainBuffers);
-			node.Add("snapshots", Snapshots.ExportYAML(container));
-			node.Add("snapshotGUIDs", SnapshotGUIDs.ExportYAML(container));
+			//node.AddSerializedVersion(ToSerializedVersion(container.Version));
+			node.Add(GroupsName, Groups.ExportYAML(container));
+			node.Add(GroupGUIDsName, GroupGUIDs.ExportYAML(container));
+			node.Add(EffectsName, Effects.ExportYAML(container));
+			node.Add(EffectGUIDsName, EffectGUIDs.ExportYAML(container));
+			node.Add(NumSideChainBuffersName, NumSideChainBuffers);
+			node.Add(SnapshotsName, Snapshots.ExportYAML(container));
+			node.Add(SnapshotGUIDsName, SnapshotGUIDs.ExportYAML(container));
 			//node.Add("groupNameBuffer", GroupNameBuffer.ExportYAML(container));
 			//node.Add("snapshotNameBuffer", SnapshotNameBuffer.ExportYAML(container));
 			//node.Add("pluginEffectNameBuffer", PluginEffectNameBuffer.ExportYAML(container));
-			node.Add("exposedParameterNames", ExposedParameterNames.ExportYAML(true));
-			node.Add("exposedParameterIndices", ExposedParameterIndices.ExportYAML(true));
+			node.Add(ExposedParameterNamesName, ExposedParameterNames.ExportYAML(true));
+			node.Add(ExposedParameterIndicesName, ExposedParameterIndices.ExportYAML(true));
 			return node;
 		}
 
-		public IReadOnlyList<GroupConstant> Groups => m_groups;
-		public IReadOnlyList<EngineGUID> GroupGUIDs => m_groupGUIDs;
-		public IReadOnlyList<EffectConstant> Effects => m_effects;
-		public IReadOnlyList<EngineGUID> EffectGUIDs => m_effectGUIDs;
-		public uint NumSideChainBuffers { get; private set; }
-		public IReadOnlyList<SnapshotConstant> Snapshots => m_snapshots;
-		public IReadOnlyList<EngineGUID> SnapshotGUIDs => m_snapshotGUIDs;
-		public IReadOnlyList<char> GroupNameBuffer => m_groupNameBuffer;
-		public IReadOnlyList<char> SnapshotNameBuffer => m_snapshotNameBuffer;
-		public IReadOnlyList<char> PluginEffectNameBuffer => m_pluginEffectNameBuffer;
-		public IReadOnlyList<uint> ExposedParameterNames => m_exposedParameterNames;
-		public IReadOnlyList<uint> ExposedParameterIndices => m_exposedParameterIndices;
+		public GroupConstant[] Groups { get; set; }
+		public GUID[] GroupGUIDs { get; set; }
+		public EffectConstant[] Effects { get; set; }
+		public GUID[] EffectGUIDs { get; set; }
+		public uint NumSideChainBuffers { get; set; }
+		public SnapshotConstant[] Snapshots { get; set; }
+		public GUID[] SnapshotGUIDs { get; set; }
+		public char[] GroupNameBuffer { get; set; }
+		public char[] SnapshotNameBuffer { get; set; }
+		public char[] PluginEffectNameBuffer { get; set; }
+		public uint[] ExposedParameterNames { get; set; }
+		public uint[] ExposedParameterIndices { get; set; }
 
-		private GroupConstant[] m_groups;
-		private EngineGUID[] m_groupGUIDs;
-		private EffectConstant[] m_effects;
-		private EngineGUID[] m_effectGUIDs;
-		private SnapshotConstant[] m_snapshots;
-		private EngineGUID[] m_snapshotGUIDs;
-		private char[] m_groupNameBuffer;
-		private char[] m_snapshotNameBuffer;
-		private char[] m_pluginEffectNameBuffer;
-		private uint[] m_exposedParameterNames;
-		private uint[] m_exposedParameterIndices;
+		public const string GroupsName = "groups";
+		public const string GroupGUIDsName = "groupGUIDs";
+		public const string EffectsName = "effects";
+		public const string EffectGUIDsName = "effectGUIDs";
+		public const string NumSideChainBuffersName = "numSideChainBuffers";
+		public const string SnapshotsName = "snapshots";
+		public const string SnapshotGUIDsName = "snapshotGUIDs";
+		public const string ExposedParameterNamesName = "exposedParameterNames";
+		public const string ExposedParameterIndicesName = "exposedParameterIndices";
 	}
 }

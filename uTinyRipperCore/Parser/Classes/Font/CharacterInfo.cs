@@ -1,40 +1,11 @@
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Fonts
 {
 	public struct CharacterInfo : IAssetReadable, IYAMLExportable
 	{
-		/// <summary>
-		/// 1.6.0 and greater
-		/// </summary>
-		public static bool IsReadIndex(Version version)
-		{
-			return version.IsGreaterEqual(1, 6);
-		}
-		/// <summary>
-		/// 1.6.0 to 5.3.0 exclusive
-		/// </summary>
-		public static bool IsReadWidth(Version version)
-		{
-			return version.IsGreaterEqual(1, 6) && version.IsLess(5, 3);
-		}
-		/// <summary>
-		/// 5.3.0 and greater 
-		/// </summary>
-		public static bool IsReadAdvance(Version version)
-		{
-			return version.IsGreaterEqual(5, 3);
-		}
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadFlipped(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(1, 6))
 			{
@@ -43,34 +14,51 @@ namespace uTinyRipper.Classes.Fonts
 			return 1;
 		}
 
+		/// <summary>
+		/// 1.6.0 and greater
+		/// </summary>
+		public static bool HasIndex(Version version) => version.IsGreaterEqual(1, 6);
+		/// <summary>
+		/// 1.6.0 to 5.3.0 exclusive
+		/// </summary>
+		public static bool HasWidth(Version version) => version.IsGreaterEqual(1, 6) && version.IsLess(5, 3);
+		/// <summary>
+		/// 5.3.0 and greater 
+		/// </summary>
+		public static bool HasAdvance(Version version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasFlipped(Version version) => version.IsGreaterEqual(4);
+
 		public void Read(AssetReader reader)
 		{
-			if (IsReadIndex(reader.Version))
+			if (HasIndex(reader.Version))
 			{
 				Index = reader.ReadInt32();
 			}
 			UV.Read(reader);
 			Vert.Read(reader);
 			
-			if (IsReadWidth(reader.Version))
+			if (HasWidth(reader.Version))
 			{
 				Width = reader.ReadSingle();
 			}
-			if (IsReadAdvance(reader.Version))
+			if (HasAdvance(reader.Version))
 			{
 				Advance = reader.ReadSingle();
 			}
-			if (IsReadFlipped(reader.Version))
+			if (HasFlipped(reader.Version))
 			{
 				Flipped = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(GetSerializedVersion(container.ExportVersion));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(IndexName, Index);
 			node.Add(UVName, UV.ExportYAML(container));
 			node.Add(VertName, Vert.ExportYAML(container));
@@ -79,10 +67,10 @@ namespace uTinyRipper.Classes.Fonts
 			return node;
 		}
 
-		public int Index { get; private set; }
-		public float Width  { get; private set; }
-		public float Advance { get; private set; }
-		public bool Flipped { get; private set; }
+		public int Index { get; set; }
+		public float Width  { get; set; }
+		public float Advance { get; set; }
+		public bool Flipped { get; set; }
 
 		public const string IndexName = "index";
 		public const string UVName = "uv";

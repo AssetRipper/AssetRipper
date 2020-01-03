@@ -1,49 +1,39 @@
 using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.YAML;
-using uTinyRipper.SerializedFiles;
+using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes.LODGroups
 {
-	public struct LOD : IAssetReadable, IYAMLExportable
+	public struct LOD : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 5.0.0 to 5.1.0 exclusive
 		/// </summary>
-		public static bool IsReadFadeMode(Version version)
-		{
-			return version.IsGreaterEqual(5) && version.IsLess(5, 1);
-		}
+		public static bool HasFadeMode(Version version) => version.IsGreaterEqual(5) && version.IsLess(5, 1);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool IsReadFadeTransitionWidth(Version version)
-		{
-			return version.IsGreaterEqual(5);
-		}
+		public static bool HasFadeTransitionWidth(Version version) => version.IsGreaterEqual(5);
 
 		public void Read(AssetReader reader)
 		{
 			ScreenRelativeHeight = reader.ReadSingle();
-			if (IsReadFadeMode(reader.Version))
+			if (HasFadeMode(reader.Version))
 			{
 				FadeMode = (LODFadeMode)reader.ReadInt32();
 			}
-			if (IsReadFadeTransitionWidth(reader.Version))
+			if (HasFadeTransitionWidth(reader.Version))
 			{
 				FadeTransitionWidth = reader.ReadSingle();
 			}
-			m_renderers = reader.ReadAssetArray<LODRenderer>();
+			Renderers = reader.ReadAssetArray<LODRenderer>();
 		}
 
-		public IEnumerable<Object> FetchDependencies(ISerializedFile file, bool isLog = false)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (LODRenderer renderer in Renderers)
+			foreach (PPtr<Object> asset in context.FetchDependencies(Renderers, RenderersName))
 			{
-				foreach (Object asset in renderer.FetchDependencies(file, isLog))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 
@@ -56,16 +46,14 @@ namespace uTinyRipper.Classes.LODGroups
 			return node;
 		}
 
-		public float ScreenRelativeHeight { get; private set; }
-		public LODFadeMode FadeMode { get; private set; }
-		public float FadeTransitionWidth { get; private set; }
-		public IReadOnlyList<LODRenderer> Renderers => m_renderers;
+		public float ScreenRelativeHeight { get; set; }
+		public LODFadeMode FadeMode { get; set; }
+		public float FadeTransitionWidth { get; set; }
+		public LODRenderer[] Renderers { get; set; }
 
 		public const string ScreenRelativeHeightName = "screenRelativeHeight";
 		public const string FadeModeName = "fadeMode";
 		public const string FadeTransitionWidthName = "fadeTransitionWidth";
 		public const string RenderersName = "renderers";
-
-		private LODRenderer[] m_renderers;
 	}
 }

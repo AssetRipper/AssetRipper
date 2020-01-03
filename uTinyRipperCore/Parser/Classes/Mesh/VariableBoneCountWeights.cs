@@ -1,19 +1,32 @@
-﻿using System.Collections.Generic;
-using uTinyRipper.AssetExporters;
+﻿using System;
+using System.Linq;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Meshes
 {
-	public struct VariableBoneCountWeights : IAssetReadable, IYAMLExportable
+	public struct VariableBoneCountWeights : IAsset
 	{
 		public VariableBoneCountWeights(bool _)
 		{
-			m_data = new uint[0];
+			Data = Array.Empty<uint>();
+		}
+
+		public VariableBoneCountWeights Convert(IExportContainer container)
+		{
+			VariableBoneCountWeights instance = new VariableBoneCountWeights();
+			instance.Data = Data.ToArray();
+			return instance;
 		}
 
 		public void Read(AssetReader reader)
 		{
-			m_data = reader.ReadUInt32Array();
+			Data = reader.ReadUInt32Array();
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			Data.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -23,10 +36,8 @@ namespace uTinyRipper.Classes.Meshes
 			return node;
 		}
 
-		public IReadOnlyList<uint> Data => m_data;
+		public uint[] Data { get; set; }
 
 		public const string DataName = "m_Data";
-
-		private uint[] m_data;
 	}
 }

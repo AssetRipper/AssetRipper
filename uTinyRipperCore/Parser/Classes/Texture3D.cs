@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using uTinyRipper.AssetExporters;
 using uTinyRipper.Classes.Textures;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
+using uTinyRipper.Classes;
+using uTinyRipper.Classes.Misc;
 
 namespace uTinyRipper.Classes
 {
@@ -14,100 +15,7 @@ namespace uTinyRipper.Classes
 		{
 		}
 
-		/// <summary>
-		/// 4.0.0 and greater
-		/// </summary>
-		public static bool IsReadDepth(Version version)
-		{
-			return version.IsGreaterEqual(4);
-		}
-		/// <summary>
-		/// 2.6.0 to 4.0.0 exclusize or 5.4.0 and greater
-		/// </summary>
-		public static bool IsReadIsReadable(Version version)
-		{
-			return IsReadIsReadableFirst(version) || IsReadIsReadableSecond(version);
-		}
-		/// <summary>
-		/// From 3.0.0 to 4.0.0 exclusive
-		/// </summary>
-		public static bool IsReadReadAllowed(Version version)
-		{
-			return version.IsGreaterEqual(3) && version.IsLess(4);
-		}
-		/// <summary>
-		/// Less than 4.0.0
-		/// </summary>
-		public static bool IsReadImageCount(Version version)
-		{
-			return version.IsLess(4);
-		}
-		/// <summary>
-		/// 3.0.0 to 4.0.0 exclusive
-		/// </summary>
-		public static bool IsReadLightmapFormat(Version version)
-		{
-			return version.IsGreaterEqual(3) && version.IsLess(4);
-		}
-		/// <summary>
-		/// 3.5.0 to 4.0.0 exclusive or 2019.1 and greater
-		/// </summary>
-		public static bool IsReadColorSpace(Version version)
-		{
-			return version.IsGreaterEqual(2019) || version.IsGreaterEqual(3, 5) && version.IsLess(4);
-		}
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		public static bool IsReadStreamData(Version version)
-		{
-			return version.IsGreaterEqual(5, 6);
-		}
-
-		/// <summary>
-		/// 2019.1 and greater
-		/// </summary>
-		private static bool IsReadColorSpaceFirst(Version version)
-		{
-			return version.IsGreaterEqual(2019);
-		}
-		/// <summary>
-		/// 2019.1 and greater
-		/// </summary>
-		private static bool IsReadFormatFirst(Version version)
-		{
-			return version.IsGreaterEqual(2019);
-		}
-		/// <summary>
-		/// Less than 4.0.0
-		/// </summary>
-		private static bool IsReadDataSizeFirst(Version version)
-		{
-			return version.IsLess(4);
-		}
-		/// <summary>
-		/// Less than 5.2.0
-		/// </summary>
-		private static bool IsBoolMinMap(Version version)
-		{
-			return version.IsLess(5, 2);
-		}
-		/// <summary>
-		/// 2.6.0 to 4.0.0 exclusize
-		/// </summary>
-		private static bool IsReadIsReadableFirst(Version version)
-		{
-			return version.IsGreaterEqual(2, 6) && version.IsLess(4);
-		}
-		/// <summary>
-		/// 5.4.0 and greater
-		/// </summary>
-		private static bool IsReadIsReadableSecond(Version version)
-		{
-			return version.IsGreaterEqual(5, 4);
-		}
-
-		private static int GetSerializedVersion(Version version)
+		public static int ToSerializedVersion(Version version)
 		{
 			// ColorSpace has been added which affects on Format
 			if (version.IsGreaterEqual(2019))
@@ -122,33 +30,90 @@ namespace uTinyRipper.Classes
 			return 1;
 		}
 
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasDepth(Version version) => version.IsGreaterEqual(4);
+		/// <summary>
+		/// 2.6.0 to 4.0.0 exclusize or 5.4.0 and greater
+		/// </summary>
+		public static bool HasIsReadable(Version version) => IsReadableFirst(version) || IsReadableSecond(version);
+		/// <summary>
+		/// From 3.0.0 to 4.0.0 exclusive
+		/// </summary>
+		public static bool HasReadAllowed(Version version) => version.IsGreaterEqual(3) && version.IsLess(4);
+		/// <summary>
+		/// Less than 4.0.0
+		/// </summary>
+		public static bool HasImageCount(Version version) => version.IsLess(4);
+		/// <summary>
+		/// 3.0.0 to 4.0.0 exclusive
+		/// </summary>
+		public static bool HasLightmapFormat(Version version) => version.IsGreaterEqual(3) && version.IsLess(4);
+		/// <summary>
+		/// 3.5.0 to 4.0.0 exclusive or 2019.1 and greater
+		/// </summary>
+		public static bool HasColorSpace(Version version)
+		{
+			return version.IsGreaterEqual(2019) || version.IsGreaterEqual(3, 5) && version.IsLess(4);
+		}
+		/// <summary>
+		/// 5.6.0 and greater
+		/// </summary>
+		public static bool HasStreamData(Version version) => version.IsGreaterEqual(5, 6);
+
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		private static bool IsColorSpaceFirst(Version version) => version.IsGreaterEqual(2019);
+		/// <summary>
+		/// 2019.1 and greater
+		/// </summary>
+		private static bool IsFormatFirst(Version version) => version.IsGreaterEqual(2019);
+		/// <summary>
+		/// Less than 4.0.0
+		/// </summary>
+		private static bool IsDataSizeFirst(Version version) => version.IsLess(4);
+		/// <summary>
+		/// Less than 5.2.0
+		/// </summary>
+		private static bool IsBoolMinMap(Version version) => version.IsLess(5, 2);
+		/// <summary>
+		/// 2.6.0 to 4.0.0 exclusize
+		/// </summary>
+		private static bool IsReadableFirst(Version version) => version.IsGreaterEqual(2, 6) && version.IsLess(4);
+		/// <summary>
+		/// 5.4.0 and greater
+		/// </summary>
+		private static bool IsReadableSecond(Version version) => version.IsGreaterEqual(5, 4);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			if (IsReadColorSpace(reader.Version))
+			if (HasColorSpace(reader.Version))
 			{
-				if (IsReadColorSpaceFirst(reader.Version))
+				if (IsColorSpaceFirst(reader.Version))
 				{
 					ColorSpace = (ColorSpace)reader.ReadInt32();
 				}
 			}
-			if (IsReadFormatFirst(reader.Version))
+			if (IsFormatFirst(reader.Version))
 			{
 				Format = (TextureFormat)reader.ReadInt32();
 			}
 
 			Width = reader.ReadInt32();
 			Height = reader.ReadInt32();
-			if (IsReadDepth(reader.Version))
+			if (HasDepth(reader.Version))
 			{
 				Depth = reader.ReadInt32();
 			}
-			if (IsReadDataSizeFirst(reader.Version))
+			if (IsDataSizeFirst(reader.Version))
 			{
 				DataSize = reader.ReadInt32();
 			}
-			if (!IsReadFormatFirst(reader.Version))
+			if (!IsFormatFirst(reader.Version))
 			{
 				Format = (TextureFormat)reader.ReadInt32();
 			}
@@ -159,7 +124,7 @@ namespace uTinyRipper.Classes
 				if (mipMap)
 				{
 					int maxSide = Math.Max(Width, Height);
-					MipCount = Convert.ToInt32(Math.Log(maxSide) / Math.Log(2));
+					MipCount = System.Convert.ToInt32(Math.Log(maxSide) / Math.Log(2));
 				}
 				else
 				{
@@ -171,47 +136,47 @@ namespace uTinyRipper.Classes
 				MipCount = reader.ReadInt32();
 			}
 
-			if (!IsReadDataSizeFirst(reader.Version))
+			if (!IsDataSizeFirst(reader.Version))
 			{
 				DataSize = reader.ReadInt32();
 			}
-			if (IsReadIsReadableFirst(reader.Version))
+			if (IsReadableFirst(reader.Version))
 			{
 				IsReadable = reader.ReadBoolean();
 			}
-			if (IsReadReadAllowed(reader.Version))
+			if (HasReadAllowed(reader.Version))
 			{
 				ReadAllowed = reader.ReadBoolean();
 			}
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 
-			if (IsReadImageCount(reader.Version))
+			if (HasImageCount(reader.Version))
 			{
 				ImageCount = reader.ReadInt32();
 				TextureDimension = (TextureDimension)reader.ReadInt32();
 			}
 			TextureSettings.Read(reader);
 
-			if (IsReadIsReadableSecond(reader.Version))
+			if (IsReadableSecond(reader.Version))
 			{
 				IsReadable = reader.ReadBoolean();
-				reader.AlignStream(AlignType.Align4);
+				reader.AlignStream();
 			}
-			if (IsReadLightmapFormat(reader.Version))
+			if (HasLightmapFormat(reader.Version))
 			{
 				LightmapFormat = (TextureUsageMode)reader.ReadInt32();
 			}
-			if (IsReadColorSpace(reader.Version))
+			if (HasColorSpace(reader.Version))
 			{
-				if (!IsReadColorSpaceFirst(reader.Version))
+				if (!IsColorSpaceFirst(reader.Version))
 				{
 					ColorSpace = (ColorSpace)reader.ReadInt32();
 				}
 			}
 
 			m_imageData = reader.ReadByteArray();
-			reader.AlignStream(AlignType.Align4);
-			if (IsReadStreamData(reader.Version))
+			reader.AlignStream();
+			if (HasStreamData(reader.Version))
 			{
 				StreamData.Read(reader);
 			}
@@ -220,7 +185,7 @@ namespace uTinyRipper.Classes
 		protected sealed override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			if (IsReadColorSpace(container.ExportVersion))
+			if (HasColorSpace(container.ExportVersion))
 			{
 				node.Add(ColorSpaceName, (int)ColorSpace);
 			}
@@ -234,7 +199,7 @@ namespace uTinyRipper.Classes
 			node.Add(IsReadableName, IsReadable);
 			IReadOnlyList<byte> imageData = GetImageData(container.Version);
 			node.Add(ImageDataName, imageData.Count);
-			node.Add(TypelessdataName, imageData.ExportYAML());
+			node.Add(container.Layout.TypelessdataName, imageData.ExportYAML());
 			StreamingInfo streamData = new StreamingInfo(true);
 			node.Add(StreamDataName, streamData.ExportYAML(container));
 			return node;
@@ -242,7 +207,7 @@ namespace uTinyRipper.Classes
 
 		private IReadOnlyList<byte> GetImageData(Version version)
 		{
-			if (IsReadStreamData(version) && StreamData.IsValid)
+			if (HasStreamData(version) && StreamData.IsSet)
 			{
 				byte[] data = StreamData.GetContent(File);
 				if (data == null)
@@ -256,27 +221,27 @@ namespace uTinyRipper.Classes
 			return m_imageData;
 		}
 
-		public ColorSpace ColorSpace { get; private set; }
-		public int Width { get; private set; }
-		public int Height { get; private set; }
+		public ColorSpace ColorSpace { get; set; }
+		public int Width { get; set; }
+		public int Height { get; set; }
 		/// <summary>
 		/// CompleteImageSize previously
 		/// </summary>
-		public int DataSize { get; private set; }
-		public bool IsReadable { get; private set; }
-		public bool ReadAllowed { get; private set; }
-		public int Depth { get; private set; }
+		public int DataSize { get; set; }
+		public bool IsReadable { get; set; }
+		public bool ReadAllowed { get; set; }
+		public int Depth { get; set; }
 		/// <summary>
 		/// TextureFormat previously
 		/// </summary>
-		public TextureFormat Format { get; private set; }
+		public TextureFormat Format { get; set; }
 		/// <summary>
 		/// bool MipMap previously
 		/// </summary>
-		public int MipCount { get; private set; }
-		public int ImageCount { get; private set; }
-		public TextureDimension TextureDimension { get; private set; }
-		public TextureUsageMode LightmapFormat { get; private set; }
+		public int MipCount { get; set; }
+		public int ImageCount { get; set; }
+		public TextureDimension TextureDimension { get; set; }
+		public TextureUsageMode LightmapFormat { get; set; }
 		public IReadOnlyCollection<byte> ImageData => m_imageData;
 
 		public const string ColorSpaceName = "m_ColorSpace";
@@ -294,10 +259,9 @@ namespace uTinyRipper.Classes
 		public const string TextureDimensionName = "m_TextureDimension";
 		public const string TextureSettingsName = "m_TextureSettings";
 		public const string ImageDataName = "image data";
-		public const string TypelessdataName = "_typelessdata";
 		public const string StreamDataName = "m_StreamData";
 
-		public TextureSettings TextureSettings;
+		public GLTextureSettings TextureSettings;
 		public StreamingInfo StreamData;
 
 		private byte[] m_imageData;

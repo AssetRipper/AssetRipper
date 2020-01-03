@@ -1,18 +1,14 @@
-using System.Collections.Generic;
-
-namespace uTinyRipper.Classes.AnimationClips.Editor
+namespace uTinyRipper.Classes.AnimationClips
 {
 	public struct StreamedFrame : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{
 			Time = reader.ReadSingle();
-			m_curves = reader.ReadAssetArray<StreamedCurveKey>();
+			Curves = reader.ReadAssetArray<StreamedCurveKey>();
 		}
 
 		public float Time { get; set; }
-		public IReadOnlyList<StreamedCurveKey> Curves => m_curves;
-
-		private StreamedCurveKey[] m_curves;
+		public StreamedCurveKey[] Curves { get; set; }
 	}
 }

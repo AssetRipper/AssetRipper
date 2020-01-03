@@ -1,4 +1,4 @@
-using uTinyRipper.AssetExporters;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.NavMeshDatas
@@ -8,7 +8,7 @@ namespace uTinyRipper.Classes.NavMeshDatas
 		public void Read(AssetReader reader)
 		{
 			Flags = reader.ReadByte();
-			reader.AlignStream(AlignType.Align4);
+			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -20,6 +20,6 @@ namespace uTinyRipper.Classes.NavMeshDatas
 
 		public const string FlagsName = "m_Flags";
 
-		public byte Flags { get; private set; }
+		public byte Flags { get; set; }
 	}
 }

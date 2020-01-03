@@ -1,4 +1,4 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Shaders
@@ -30,8 +30,8 @@ namespace uTinyRipper.Classes.Shaders
 			return KeywordName == null ? base.ToString() : $"{KeywordName}:{Requirements}";
 		}
 
-		public string KeywordName { get; private set; }
-		public int Requirements { get; private set; }
+		public string KeywordName { get; set; }
+		public int Requirements { get; set; }
 
 		public const string KeywordNameName = "keywordName";
 		public const string RequirementsName = "requirements";

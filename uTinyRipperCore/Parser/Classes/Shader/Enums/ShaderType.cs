@@ -10,7 +10,9 @@ namespace uTinyRipper.Classes.Shaders
 		Geometry	= 3,
 		Hull		= 4,
 		Domain		= 5,
-		TypeCount	= 6,
+		RayTracing	= 6,
+
+		TypeCount,
 	}
 
 	public static class ShaderTypeExtensions
@@ -33,6 +35,11 @@ namespace uTinyRipper.Classes.Shaders
 				default:
 					throw new NotSupportedException($"ShaderType {_this} isn't supported");
 			}
+		}
+
+		public static int ToProgramMask(this ShaderType _this)
+		{
+			return 1 << (int)_this;
 		}
 	}
 }

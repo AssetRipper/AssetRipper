@@ -1,4 +1,5 @@
-﻿using uTinyRipper.AssetExporters;
+﻿using uTinyRipper.Classes.Misc;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.LightProbess
@@ -15,14 +16,18 @@ namespace uTinyRipper.Classes.LightProbess
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Hash", Hash.ExportYAML(container));
-			node.Add("m_Offset", Offset);
-			node.Add("m_Size", Size);
+			node.Add(HashName, Hash.ExportYAML(container));
+			node.Add(OffsetName, Offset);
+			node.Add(SizeName, Size);
 			return node;
 		}
 
-		public int Offset { get; private set; }
-		public int Size { get; private set; }
+		public int Offset { get; set; }
+		public int Size { get; set; }
+
+		public const string HashName = "m_Hash";
+		public const string OffsetName = "m_Offset";
+		public const string SizeName = "m_Size";
 
 		public Hash128 Hash;
 	}

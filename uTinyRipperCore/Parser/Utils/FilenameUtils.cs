@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using uTinyRipper.Assembly.Mono;
+using uTinyRipper.Game.Assembly.Mono;
 
 namespace uTinyRipper
 {
@@ -39,7 +39,7 @@ namespace uTinyRipper
 
 		public static string FixFileIdentifier(string name)
 		{
-			name = name.ToLowerInvariant();
+			name = name.ToLower();
 			name = FixDependencyName(name);
 			name = FixResourcePath(name);
 			if (IsDefaultResource(name))
@@ -82,9 +82,15 @@ namespace uTinyRipper
 			{
 				assembly = $"Assembly - {assembly}";
 			}
-			if (assembly.EndsWith(MonoManager.AssemblyExtension))
+			assembly = FixAssemblyEndian(assembly);
+			return assembly;
+		}
+
+		public static string FixAssemblyEndian(string assembly)
+		{
+			if (assembly.EndsWith(MonoManager.AssemblyExtension, StringComparison.Ordinal))
 			{
-				assembly = assembly.Substring(0, assembly.Length - MonoManager.AssemblyExtension.Length);
+				return assembly.Substring(0, assembly.Length - MonoManager.AssemblyExtension.Length);
 			}
 			return assembly;
 		}

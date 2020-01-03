@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using uTinyRipper;
 
 namespace uTinyRipperGUI
 {
@@ -10,9 +9,6 @@ namespace uTinyRipperGUI
 	{
 		public App()
 		{
-			Config.IsAdvancedLog = true;
-			Config.IsGenerateGUIDByContent = false;
-			Config.IsExportDependencies = false;
 		}
 	}
 }
