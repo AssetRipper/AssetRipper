@@ -1,13 +1,24 @@
 ﻿using uTinyRipper.Converters;
+using uTinyRipper.Layout;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
 	public sealed class RectTransform : Transform
 	{
+		public RectTransform(AssetLayout layout):
+			base(layout)
+		{
+		}
+
 		public RectTransform(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
+		}
+
+		public override Object Convert(IExportContainer container)
+		{
+			return RectTransformConverter.Convert(container, this);
 		}
 
 		public override void Read(AssetReader reader)

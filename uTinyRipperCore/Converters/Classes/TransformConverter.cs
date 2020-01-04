@@ -9,7 +9,12 @@ namespace uTinyRipper.Converters
 		public static Transform Convert(IExportContainer container, Transform origin)
 		{
 			Transform instance = new Transform(container.ExportLayout);
-			instance.AssetInfo = origin.AssetInfo;
+			Convert(container, origin, instance);
+			return instance;
+		}
+
+		public static void Convert(IExportContainer container, Transform origin, Transform instance)
+		{
 			ComponentConverter.Convert(container, origin, instance);
 			instance.LocalRotation = origin.LocalRotation;
 			instance.LocalPosition = origin.LocalPosition;
@@ -27,7 +32,6 @@ namespace uTinyRipper.Converters
 				instance.LocalEulerAnglesHint = GetLocalEulerAnglesHint(container, origin);
 			}
 #endif
-			return instance;
 		}
 
 #if UNIVERSAL
