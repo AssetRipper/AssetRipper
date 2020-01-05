@@ -23,6 +23,12 @@ namespace DXShaderRestorer
 				nameLookup[textureParam.Name] = nameOffset;
 				nameOffset += (uint)textureParam.Name.Length + 1;
 			}
+			foreach (TextureParameter textureParam in shaderSubprogram.TextureParameters)
+			{
+				string samplerName = textureParam.Name + "Sampler";
+				nameLookup[samplerName] = nameOffset;
+				nameOffset += (uint)samplerName.Length + 1;
+			}
 			foreach (BufferBinding constantBuffer in shaderSubprogram.ConstantBufferBindings)
 			{
 				nameLookup[constantBuffer.Name] = nameOffset;
@@ -52,7 +58,7 @@ namespace DXShaderRestorer
 				writer.Write((uint)ShaderResourceViewDimension.Buffer);
 				//Number of samples
 				writer.Write((uint)56); //TODO: Check this
-										//Bind point
+				//Bind point
 				writer.Write((uint)bufferParam.Index);
 				bindPoint += 1;
 				//Bind count
@@ -67,7 +73,7 @@ namespace DXShaderRestorer
 			{
 				//Resource bindings
 				//nameOffset
-				writer.Write(m_nameLookup[textureParam.Name]);
+				writer.Write(m_nameLookup[textureParam.Name + "Sampler"]);
 				//shader input type
 				writer.Write((uint)ShaderInputType.Sampler);
 				//Resource return type
@@ -136,6 +142,10 @@ namespace DXShaderRestorer
 			foreach (TextureParameter textureParam in m_shaderSubprogram.TextureParameters)
 			{
 				writer.WriteStringZeroTerm(textureParam.Name);
+			}
+			foreach (TextureParameter textureParam in m_shaderSubprogram.TextureParameters)
+			{
+				writer.WriteStringZeroTerm(textureParam.Name + "Sampler");
 			}
 			foreach (BufferBinding constantBuffer in m_shaderSubprogram.ConstantBufferBindings)
 			{
