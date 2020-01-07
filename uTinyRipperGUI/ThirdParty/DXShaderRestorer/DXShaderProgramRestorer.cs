@@ -33,7 +33,26 @@ namespace DXShaderRestorer
 			}
 			return dataOffset;
 		}
+		static readonly uint RDEF = ToFourCc("RDEF"); //0x46454452
+		public static string ToFourCcString(uint fourCc)
+		{
+			char a = (char)(fourCc & 0xFF);
+			char b = (char)((fourCc >> 8) & 0xFF);
+			char c = (char)((fourCc >> 16) & 0xFF);
+			char d = (char)((fourCc >> 24) & 0xFF);
 
+			return new string(new[] { a, b, c, d });
+		}
+		public static uint ToFourCc(string fourCc)
+		{
+			if (string.IsNullOrEmpty(fourCc) || fourCc.Length != 4)
+				throw new ArgumentOutOfRangeException("fourCc", "Invalid FOURCC: " + fourCc);
+			var a = (byte)fourCc[0];
+			var b = (byte)fourCc[1];
+			var c = (byte)fourCc[2];
+			var d = (byte)fourCc[3];
+			return a | ((uint)(b << 8)) | ((uint)c << 16) | ((uint)d << 24);
+		}
 		public static byte[] RestoreProgramData(Version version, GPUPlatform graphicApi, ShaderSubProgram shaderSubProgram)
 		{
 			int dataOffset = GetDataOffset(version, graphicApi, shaderSubProgram);
@@ -55,7 +74,20 @@ namespace DXShaderRestorer
 							{
 								chunkOffsets.Add(reader.ReadUInt32());
 							}
-							uint offset = (uint)src.Position + 4;
+							uint bodyOffset = (uint)src.Position;
+							// Check if shader already has resource chunk
+							foreach (uint chunkOffset in chunkOffsets)
+							{
+								src.Position = chunkOffset;
+								uint fourCc = reader.ReadUInt32();
+								if (fourCc == RDEF)
+								{
+									src.Position = 0;
+									byte[] original = reader.ReadBytes((int)src.Length);
+									return original;
+								}
+							}
+							src.Position = bodyOffset;
 							byte[] resourceChunkData = GetResourceChunk(shaderSubProgram);
 							//Adjust for new chunk
 							totalSize += (uint)resourceChunkData.Length;
@@ -63,7 +95,7 @@ namespace DXShaderRestorer
 							{
 								chunkOffsets[i] += (uint)resourceChunkData.Length + 4;
 							}
-							chunkOffsets.Insert(0, offset);
+							chunkOffsets.Insert(0, bodyOffset + 4);
 							chunkCount += 1;
 							totalSize += (uint)resourceChunkData.Length;
 
@@ -85,7 +117,6 @@ namespace DXShaderRestorer
 				}
 			}
 		}
-
 		private static byte[] GetResourceChunk(ShaderSubProgram shaderSubprogram)
 		{
 			using (MemoryStream memoryStream = new MemoryStream())
