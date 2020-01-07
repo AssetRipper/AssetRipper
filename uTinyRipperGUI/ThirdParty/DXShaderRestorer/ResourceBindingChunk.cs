@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using uTinyRipper;
 using uTinyRipper.Classes.Shaders;
 
@@ -6,11 +8,38 @@ namespace DXShaderRestorer
 {
 	internal class ResourceBindingChunk
 	{
+		public enum SamplerFilterMode
+		{
+			Point,
+			Linear,
+			Trilinear
+		};
+		public enum SamplerWrapMode
+		{
+			Repeat,
+			Clamp,
+			Mirror,
+			MirrorOnce
+		};
+		//TODO: Move to seprate file
+		private class Sampler
+		{
+			public string Name;
+			public uint BindPoint;
+			public bool IsComparisonSampler;
+			public Sampler(string name, uint bindPoint, bool isComparisonSampler)
+			{
+				this.Name = name;
+				this.BindPoint = bindPoint;
+				this.IsComparisonSampler = isComparisonSampler;
+			}
+		}
+		private List<Sampler> m_Samplers = new List<Sampler>();
 		public ResourceBindingChunk(ShaderSubProgram shaderSubprogram, uint resourceBindingOffset, Dictionary<string, uint> nameLookup)
 		{
 			m_shaderSubprogram = shaderSubprogram;
 			m_nameLookup = nameLookup;
-
+			m_Samplers = CreateSamplers(shaderSubprogram);
 			const uint bindingHeaderSize = 32;
 			uint nameOffset = resourceBindingOffset + bindingHeaderSize * Count;
 			foreach (BufferBinding bufferParam in shaderSubprogram.BufferParameters)
@@ -23,11 +52,10 @@ namespace DXShaderRestorer
 				nameLookup[textureParam.Name] = nameOffset;
 				nameOffset += (uint)textureParam.Name.Length + 1;
 			}
-			foreach (TextureParameter textureParam in shaderSubprogram.TextureParameters)
+			foreach (Sampler sampler in m_Samplers)
 			{
-				string samplerName = textureParam.Name + "Sampler";
-				nameLookup[samplerName] = nameOffset;
-				nameOffset += (uint)samplerName.Length + 1;
+				nameLookup[sampler.Name] = nameOffset;
+				nameOffset += (uint)sampler.Name.Length + 1;
 			}
 			foreach (BufferBinding constantBuffer in shaderSubprogram.ConstantBufferBindings)
 			{
@@ -38,13 +66,70 @@ namespace DXShaderRestorer
 		}
 
 		internal uint Count => (uint)m_shaderSubprogram.ConstantBuffers.Length +
-			(uint)m_shaderSubprogram.TextureParameters.Length * 2 + (uint)m_shaderSubprogram.BufferParameters.Length;
+			(uint)m_shaderSubprogram.TextureParameters.Length +
+			(uint)m_Samplers.Count +
+			(uint)m_shaderSubprogram.BufferParameters.Length;
 
 		internal uint Size { get; }
 
+		private List<Sampler> CreateSamplers(ShaderSubProgram shaderSubprogram)
+		{
+			/*
+			 * Unity supports three types of samplers
+			 * Coupled textures and sampler:
+			 *		sampler2D _MainTex;
+			 *		TODO: Investigate how they work
+			 * Separate textures and samplers:
+			 *		Texture2D _MainTex;
+			 *		SamplerState sampler_MainTex; // "sampler" + “_MainTex”
+			 *		These samplers do not contain an entry in SamplerParameters
+			 * Inline sampler states: 
+			 *		Texture2D _MainTex;
+			 *		SamplerState my_point_clamp_sampler;
+			 *		These samplers do contain an entry in SamplerParameters
+			 * See https://docs.unity3d.com/Manual/SL-SamplerStates.html
+			 */
+			List<Sampler> samplers = new List<Sampler>();
+			foreach (TextureParameter textureParam in shaderSubprogram.TextureParameters)
+			{
+				if (textureParam.SamplerIndex < 0 || textureParam.SamplerIndex == 0xFFFF) continue;
+				string samplerName = "sampler" + textureParam.Name;
+				samplers.Add(new Sampler(samplerName, (uint)textureParam.SamplerIndex, false));
+			}
+			foreach (SamplerParameter samplerParam in shaderSubprogram.SamplerParameters ?? Array.Empty<SamplerParameter>())
+			{
+				SamplerFilterMode filterMode = (SamplerFilterMode)(samplerParam.Sampler & 0x3);
+				SamplerWrapMode wrapU = (SamplerWrapMode)((samplerParam.Sampler >> 2) & 0x3);
+				SamplerWrapMode wrapV = (SamplerWrapMode)((samplerParam.Sampler >> 4) & 0x3);
+				SamplerWrapMode wrapW = (SamplerWrapMode)((samplerParam.Sampler >> 6) & 0x3);
+				bool isComparisonSampler = (samplerParam.Sampler & 0x100) != 0;
+				string samplerName;
+				if (wrapU == wrapV && wrapU == wrapW)
+				{
+					samplerName = $"{filterMode}_{wrapU}";
+				}
+				else
+				{
+					samplerName = $"{filterMode}_{wrapU}U_{wrapV}V_{wrapW}W";
+				}
+				if (isComparisonSampler)
+				{
+					samplerName += $"_Comparison";
+				}
+				samplerName += $"_Sampler{samplerParam.BindPoint}";
+				samplers.Add(new Sampler(samplerName, (uint)samplerParam.BindPoint, isComparisonSampler));
+			}
+			samplers = samplers
+				.OrderBy(s => s.BindPoint)
+				.ToList();
+			System.Diagnostics.Debug.Assert(m_Samplers.Select(s => s.BindPoint).Distinct().Count()
+				== m_Samplers.Select(s => s.BindPoint).Count(), "Duplicate sampler bindpoint");
+			System.Diagnostics.Debug.Assert(m_Samplers.Select(s => s.BindPoint).Distinct().Count()
+				== m_Samplers.Select(s => s.BindPoint).Count(), "Duplicate sampler name");
+			return samplers;
+		}
 		internal void Write(EndianWriter writer)
 		{
-			uint bindPoint = 0;
 			foreach (BufferBinding bufferParam in m_shaderSubprogram.BufferParameters)
 			{
 				//Resource bindings
@@ -60,20 +145,16 @@ namespace DXShaderRestorer
 				writer.Write((uint)56); //TODO: Check this
 				//Bind point
 				writer.Write((uint)bufferParam.Index);
-				bindPoint += 1;
 				//Bind count
 				writer.Write((uint)1);
 				//Shader input flags
 				writer.Write((uint)ShaderInputFlags.None);
 			}
-			//Unity doesn't give us a good way of reconstructing the sampler header,
-			//this is probably wrong but good enough
-			bindPoint = 0;
-			foreach (TextureParameter textureParam in m_shaderSubprogram.TextureParameters)
+			foreach (Sampler sampler in m_Samplers)
 			{
 				//Resource bindings
 				//nameOffset
-				writer.Write(m_nameLookup[textureParam.Name + "Sampler"]);
+				writer.Write(m_nameLookup[sampler.Name]);
 				//shader input type
 				writer.Write((uint)ShaderInputType.Sampler);
 				//Resource return type
@@ -83,14 +164,14 @@ namespace DXShaderRestorer
 				//Number of samples
 				writer.Write((uint)0);
 				//Bind point
-				writer.Write((uint)textureParam.Index);
-				bindPoint += 1;
+				writer.Write((uint)sampler.BindPoint);
 				//Bind count
 				writer.Write((uint)1);
 				//Shader input flags
-				writer.Write((uint)ShaderInputFlags.None);
+				ShaderInputFlags samplerFlags = sampler.IsComparisonSampler ?
+					ShaderInputFlags.ComparisonSampler : ShaderInputFlags.None;
+				writer.Write((uint)samplerFlags);
 			}
-			bindPoint = 0;
 			foreach (TextureParameter textureParam in m_shaderSubprogram.TextureParameters)
 			{
 				//Resource bindings
@@ -106,13 +187,11 @@ namespace DXShaderRestorer
 				writer.Write(uint.MaxValue);
 				//Bind point
 				writer.Write((uint)textureParam.Index);
-				bindPoint += 1;
 				//Bind count
 				writer.Write((uint)1);
 				//Shader input flags
 				writer.Write((uint)ShaderInputFlags.TextureComponents);
 			}
-			bindPoint = 0;
 			foreach (BufferBinding constantBuffer in m_shaderSubprogram.ConstantBufferBindings)
 			{
 				//Resource bindings
@@ -128,7 +207,6 @@ namespace DXShaderRestorer
 				writer.Write((uint)0);
 				//Bind point
 				writer.Write((uint)constantBuffer.Index);
-				bindPoint += 1;
 				//Bind count
 				writer.Write((uint)1);
 				//Shader input flags
@@ -143,9 +221,9 @@ namespace DXShaderRestorer
 			{
 				writer.WriteStringZeroTerm(textureParam.Name);
 			}
-			foreach (TextureParameter textureParam in m_shaderSubprogram.TextureParameters)
+			foreach (Sampler sampler in m_Samplers)
 			{
-				writer.WriteStringZeroTerm(textureParam.Name + "Sampler");
+				writer.WriteStringZeroTerm(sampler.Name);
 			}
 			foreach (BufferBinding constantBuffer in m_shaderSubprogram.ConstantBufferBindings)
 			{

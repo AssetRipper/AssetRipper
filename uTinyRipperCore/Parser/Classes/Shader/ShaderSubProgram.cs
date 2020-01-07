@@ -231,8 +231,13 @@ namespace uTinyRipper.Classes.Shaders
 					{
 						uint textureExtraValue = reader.ReadUInt32();
 						bool isMultiSampled = (textureExtraValue & 1) == 1;
-						byte dimension = (byte)(textureExtraValue >> 1);
-						texture = new TextureParameter(name, index, dimension, extraValue, isMultiSampled);
+						byte dimension = unchecked((byte)extraValue);
+						int samplerIndex = extraValue >> 8;
+						if (samplerIndex == 0xFFFFFF)
+						{
+							samplerIndex = -1;
+						}
+						texture = new TextureParameter(name, index, dimension, samplerIndex, isMultiSampled);
 					}
 					else
 					{
