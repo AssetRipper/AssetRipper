@@ -39,7 +39,13 @@ namespace uTinyRipper.Classes.Shaders
 		{
 			return version.IsGreaterEqual(2017, 3);
 		}
-
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		private static bool HasNewTextureParams(Version version)
+		{
+			return version.IsGreaterEqual(2018, 2);
+		}
 		private static int GetMagicNumber(Version version)
 		{
 			if (version.IsEqual(5, 3))
@@ -227,10 +233,18 @@ namespace uTinyRipper.Classes.Shaders
 				if (type == 0)
 				{
 					TextureParameter texture;
-					if (HasMultiSampled(reader.Version))
+					if (HasNewTextureParams(reader.Version))
 					{
 						uint textureExtraValue = reader.ReadUInt32();
 						bool isMultiSampled = (textureExtraValue & 1) == 1;
+						byte dimension = (byte)(textureExtraValue >> 1);
+						int samplerIndex = extraValue;
+						texture = new TextureParameter(name, index, dimension, samplerIndex, isMultiSampled);
+					}
+					else if (HasMultiSampled(reader.Version))
+					{
+						uint textureExtraValue = reader.ReadUInt32();
+						bool isMultiSampled = textureExtraValue == 1;
 						byte dimension = unchecked((byte)extraValue);
 						int samplerIndex = extraValue >> 8;
 						if (samplerIndex == 0xFFFFFF)
