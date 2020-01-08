@@ -26,7 +26,7 @@
 			ArraySize = reader.ReadInt32();
 			Type = (ShaderParamType)reader.ReadByte();
 			RowCount = reader.ReadByte();
-			ColumnCount = 0;
+			ColumnCount = 4;
 			reader.AlignStream();
 		}
 
