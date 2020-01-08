@@ -64,7 +64,7 @@ namespace uTinyRipper
 				return path;
 			}
 
-			string fullPath = Path.IsPathRooted(path) ? path : Path.GetFullPath(path);
+			string fullPath = FileUtils.GetFullPath(path);
 			if (force || fullPath.Length >= MaxDirectoryLength)
 			{
 				return $"{LongPathPrefix}{fullPath}";

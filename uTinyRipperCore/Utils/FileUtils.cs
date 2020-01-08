@@ -84,7 +84,7 @@ namespace uTinyRipper
 				return path;
 			}
 
-			string fullPath = Path.IsPathRooted(path) ? path : Path.GetFullPath(path);
+			string fullPath = GetFullPath(path);
 			int sepIndex = fullPath.LastIndexOf(Path.DirectorySeparatorChar);
 			int asepIndex = fullPath.LastIndexOf(Path.AltDirectorySeparatorChar);
 			int index = Math.Max(sepIndex, asepIndex);
@@ -104,6 +104,18 @@ namespace uTinyRipper
 				return $"{DirectoryUtils.LongPathPrefix}{fullPath}";
 			}
 			return path;
+		}
+
+		public static string GetFullPath(string path)
+		{
+			if (Path.IsPathRooted(path))
+			{
+				return path.Replace('/', '\\');
+			}
+			else
+			{
+				return Path.GetFullPath(path);
+			}
 		}
 
 		public static string GetUniqueName(string dirPath, string fileName)
