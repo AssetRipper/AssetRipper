@@ -267,7 +267,21 @@ namespace uTinyRipper.Converters
 				{
 					continue;
 				}
-				m_resources.Add(asset, kvp.Key);
+
+				if (m_resources.ContainsKey(asset))
+				{
+					// for paths like "Resources/inner/resources/extra/file" engine creates 2 resource entries
+					// "inner/resources/extra/file" and "extra/file"
+					string path = m_resources[asset];
+					if (path.Length < kvp.Key.Length)
+					{
+						m_resources[asset] = kvp.Key;
+					}
+				}
+				else
+				{
+					m_resources.Add(asset, kvp.Key);
+				}
 			}
 		}
 
