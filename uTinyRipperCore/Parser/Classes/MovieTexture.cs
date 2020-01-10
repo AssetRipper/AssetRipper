@@ -23,8 +23,6 @@ namespace uTinyRipper.Classes
 
 		public override void Read(AssetReader reader)
 		{
-			base.Read(reader);
-
 			if (HasData(reader.Version) || IsInherited(reader.Version))
 			{
 				base.Read(reader);
