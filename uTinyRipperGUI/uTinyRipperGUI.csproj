@@ -142,6 +142,8 @@
       <DependentUpon>OutputView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Exporters\Audio\AudioConverter.cs" />
+    <Compile Include="Exporters\Shader\DirectX\DXDataHeader.cs" />
+    <Compile Include="Exporters\Shader\DirectX\DXInputPrimitive.cs" />
     <Compile Include="ThirdParty\DXShaderRestorer\ConstantBufferChunk.cs" />
     <Compile Include="ThirdParty\DXShaderRestorer\ConstantBufferFlags.cs" />
     <Compile Include="ThirdParty\DXShaderRestorer\ConstantBufferType.cs" />
@@ -238,7 +240,7 @@
     <Compile Include="Exporters\Audio\AudioAssetExporter.cs" />
     <Compile Include="Exporters\Audio\AudioExportCollection.cs" />
     <Compile Include="Exporters\Shader\ShaderAssetExporter.cs" />
-    <Compile Include="Exporters\Shader\ShaderDXExporter.cs" />
+    <Compile Include="Exporters\Shader\DirectX\ShaderDXExporter.cs" />
     <Compile Include="Exporters\Texture\QFORMAT.cs" />
     <Compile Include="Exporters\Texture\TexgenpackTexturetype.cs" />
     <Compile Include="Exporters\Texture\TextureAssetExporter.cs" />

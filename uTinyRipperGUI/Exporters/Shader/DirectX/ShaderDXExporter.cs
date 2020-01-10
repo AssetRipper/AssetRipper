@@ -1,7 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
 using DotNetDxc;
-using DXShaderRestorer;
 using uTinyRipper;
 using uTinyRipper.Classes.Shaders;
 using uTinyRipper.Converters.Shaders;
@@ -18,7 +17,17 @@ namespace uTinyRipperGUI.Exporters
 		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 		{
 			byte[] exportData = subProgram.ProgramData;
-			int dataOffset = DXShaderProgramRestorer.GetDataOffset(writer.Version, m_graphicApi, subProgram);
+			int dataOffset = 0;
+			if (DXDataHeader.HasHeader(m_graphicApi))
+			{
+				dataOffset = DXDataHeader.GetDataOffset(writer.Version, m_graphicApi);
+				uint fourCC = BitConverter.ToUInt32(exportData, dataOffset);
+				if (fourCC != DXBCFourCC)
+				{
+					throw new Exception("Magic number doesn't match");
+				}
+			}
+
 			int dataLength = exportData.Length - dataOffset;
 			IntPtr unmanagedPointer = Marshal.AllocHGlobal(dataLength);
 			Marshal.Copy(exportData, dataOffset, unmanagedPointer, dataLength);
@@ -34,6 +43,11 @@ namespace uTinyRipperGUI.Exporters
 		{
 			return Marshal.PtrToStringAnsi(blob.GetBufferPointer());
 		}
+
+		/// <summary>
+		/// 'DXBC' ascii
+		/// </summary>
+		protected const uint DXBCFourCC = 0x43425844;
 
 		protected readonly GPUPlatform m_graphicApi;
 	}
