@@ -38,6 +38,7 @@ namespace DXShaderRestorer
 			{
 				using (BinaryWriter writer = new BinaryWriter(dest))
 				{
+					uint baseOffset = (uint)reader.BaseStream.Position;
 					byte[] magicBytes = reader.ReadBytes(4);
 					byte[] checksum = reader.ReadBytes(16);
 					uint unknown0 = reader.ReadUInt32();
@@ -69,7 +70,7 @@ namespace DXShaderRestorer
 					{
 						chunkOffsets[i] += (uint)resourceChunkData.Length + 4;
 					}
-					chunkOffsets.Insert(0, bodyOffset + 4);
+					chunkOffsets.Insert(0, bodyOffset - baseOffset + 4);
 					chunkCount += 1;
 					totalSize += (uint)resourceChunkData.Length;
 
