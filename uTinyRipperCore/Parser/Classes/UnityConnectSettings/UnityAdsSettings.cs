@@ -15,6 +15,7 @@ namespace uTinyRipper.Classes.UnityConnectSettingss
 #if UNIVERSAL
 			m_gameIds = new Dictionary<string, string>();
 #endif
+			GameId = string.Empty;
 		}
 
 		/// <summary>
