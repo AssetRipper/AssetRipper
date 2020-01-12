@@ -38,6 +38,7 @@ namespace DXShaderRestorer
 			{
 				using (BinaryWriter writer = new BinaryWriter(dest))
 				{
+					uint baseOffset = (uint)reader.BaseStream.Position;
 					byte[] magicBytes = reader.ReadBytes(4);
 					byte[] checksum = reader.ReadBytes(16);
 					uint unknown0 = reader.ReadUInt32();
@@ -52,11 +53,11 @@ namespace DXShaderRestorer
 					// Check if shader already has resource chunk
 					foreach (uint chunkOffset in chunkOffsets)
 					{
-						reader.BaseStream.Position = chunkOffset;
+						reader.BaseStream.Position = chunkOffset + baseOffset;
 						uint fourCc = reader.ReadUInt32();
 						if (fourCc == RDEFFourCC)
 						{
-							reader.BaseStream.Position = 0;
+							reader.BaseStream.Position = baseOffset;
 							byte[] original = reader.ReadBytes((int)reader.BaseStream.Length);
 							return original;
 						}
@@ -69,7 +70,7 @@ namespace DXShaderRestorer
 					{
 						chunkOffsets[i] += (uint)resourceChunkData.Length + 4;
 					}
-					chunkOffsets.Insert(0, bodyOffset + 4);
+					chunkOffsets.Insert(0, bodyOffset - baseOffset + 4);
 					chunkCount += 1;
 					totalSize += (uint)resourceChunkData.Length;
 

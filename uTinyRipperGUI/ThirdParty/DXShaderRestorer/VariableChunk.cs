@@ -120,22 +120,24 @@ namespace DXShaderRestorer
 				for (int i = 0; i < variables.Count; i++)
 				{
 					Variable variable = variables[i];
-					if (variable.Index > currentSize)
+					if (variable.Index - currentSize >= 16)
 					{
 						long sizeToAdd = variable.Index - currentSize;
 						int id1 = m_constantBufferIndex;
 						int id2 = allVariables.Count;
-						allVariables.Add(Variable.CreateDummyVariable($"unused_{id1}_{id2}", (int)currentSize, (int)sizeToAdd, m_programType));
+						allVariables.Add(Variable.CreateDummyVariable($"unused_{id1}_{id2}",
+								(int)currentSize, (int)sizeToAdd, m_programType));
 					}
 					allVariables.Add(variable);
-					currentSize = (uint)variable.Index + variable.ShaderType.Size();
+					currentSize = (uint)variable.Index + variable.Length;
 				}
-				if (currentSize < constantBuffer.Size)
+				if (constantBuffer.Size - currentSize >= 16)
 				{
 					long sizeToAdd = constantBuffer.Size - currentSize;
 					int id1 = m_constantBufferIndex;
 					int id2 = allVariables.Count;
-					allVariables.Add(Variable.CreateDummyVariable($"unused_{id1}_{id2}", (int)currentSize, (int)sizeToAdd, m_programType));
+					allVariables.Add(Variable.CreateDummyVariable($"unused_{id1}_{id2}", 
+						(int)currentSize, (int)sizeToAdd, m_programType));
 				}
 				variables = allVariables;
 			}
