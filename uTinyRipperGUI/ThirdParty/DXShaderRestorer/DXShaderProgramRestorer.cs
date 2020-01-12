@@ -53,11 +53,11 @@ namespace DXShaderRestorer
 					// Check if shader already has resource chunk
 					foreach (uint chunkOffset in chunkOffsets)
 					{
-						reader.BaseStream.Position = chunkOffset;
+						reader.BaseStream.Position = chunkOffset + baseOffset;
 						uint fourCc = reader.ReadUInt32();
 						if (fourCc == RDEFFourCC)
 						{
-							reader.BaseStream.Position = 0;
+							reader.BaseStream.Position = baseOffset;
 							byte[] original = reader.ReadBytes((int)reader.BaseStream.Length);
 							return original;
 						}
