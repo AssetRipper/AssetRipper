@@ -154,7 +154,7 @@ namespace uTinyRipper
 			DirectoryInfo streamingDirectory = new DirectoryInfo(streamingPath);
 			if (streamingDirectory.Exists)
 			{
-				CollectAssetBundlesRecursivly(root, files);
+				CollectAssetBundlesRecursivly(streamingDirectory, files);
 			}
 		}
 
