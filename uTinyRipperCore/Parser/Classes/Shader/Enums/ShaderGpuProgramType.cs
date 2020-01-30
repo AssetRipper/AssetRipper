@@ -30,8 +30,12 @@ namespace uTinyRipper.Classes.Shaders
 		MetalVS				= 23,
 		MetalFS				= 24,
 		Console				= 25,
+#warning TODO: SPIRV - 25, Console - 26
 		PSVertex			= 26,
 		PSPixel				= 27,
+		Unknown28			= 28,
+#warning TODO: issue_536
+		Unknown29			= 29,
 	}
 
 	public static class ShaderGpuProgramTypeExtensions
@@ -205,6 +209,8 @@ namespace uTinyRipper.Classes.Shaders
 				// TODO: unknown
 				case ShaderGpuProgramType.PSVertex:
 				case ShaderGpuProgramType.PSPixel:
+				case ShaderGpuProgramType.Unknown28:
+				case ShaderGpuProgramType.Unknown29:
 					{
 						if (platform == Platform.Switch)
 						{
@@ -316,6 +322,10 @@ namespace uTinyRipper.Classes.Shaders
 						}
 					}
 					break;
+
+				case ShaderGpuProgramType.Unknown28:
+				case ShaderGpuProgramType.Unknown29:
+					return "unknown";
 			}
 
 			throw new NotSupportedException($"Unsupported gpu program type {_this} [{platform}, {type}]");
