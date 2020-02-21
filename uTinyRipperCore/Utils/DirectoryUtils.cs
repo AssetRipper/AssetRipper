@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace uTinyRipper
 {
@@ -59,7 +60,8 @@ namespace uTinyRipper
 
 		public static string ToLongPath(string path, bool force)
 		{
-			if (path.StartsWith(LongPathPrefix, StringComparison.Ordinal))
+			if (path.StartsWith(LongPathPrefix, StringComparison.Ordinal) ||
+				!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
 				return path;
 			}
