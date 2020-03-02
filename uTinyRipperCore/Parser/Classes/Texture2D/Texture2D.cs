@@ -121,7 +121,7 @@ namespace uTinyRipper.Classes
 			return true;
 		}
 
-		public IReadOnlyList<byte> GetImageData()
+		public byte[] GetImageData()
 		{
 			byte[] data = m_imageData;
 			if (HasStreamData(File.Version) && StreamData.IsSet)
@@ -255,8 +255,8 @@ namespace uTinyRipper.Classes
 			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
 			node.Add(LightmapFormatName, (int)LightmapFormat);
 			node.Add(ColorSpaceName, (int)ColorSpace);
-			IReadOnlyList<byte> imageData = GetExportImageData();
-			node.Add(ImageDataName, imageData.Count);
+			var imageData = GetExportImageData();
+			node.Add(ImageDataName, imageData.Length);
 			node.Add(container.Layout.TypelessdataName, imageData.ExportYAML());
 			StreamingInfo streamData = new StreamingInfo(true);
 			node.Add(StreamDataName, streamData.ExportYAML(container));
@@ -271,7 +271,7 @@ namespace uTinyRipper.Classes
 			return true;
 #endif
 		}
-		private IReadOnlyList<byte> GetExportImageData()
+		private byte[] GetExportImageData()
 		{
 			if (CheckAssetIntegrity())
 			{
