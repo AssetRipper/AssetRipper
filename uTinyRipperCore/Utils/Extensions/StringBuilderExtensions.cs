@@ -6,8 +6,7 @@ namespace uTinyRipper
 	{
 		public static StringBuilder AppendHex(this StringBuilder _this, byte value)
 		{
-			_this.Append(HexAlphabet[value >> 4]);
-			_this.Append(HexAlphabet[value & 0xF]);
+			_this.Append(value.ToString("x2"));
 			return _this;
 		}
 
