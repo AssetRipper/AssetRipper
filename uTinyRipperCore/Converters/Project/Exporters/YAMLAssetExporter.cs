@@ -13,6 +13,8 @@ namespace uTinyRipper.Converters
 {
 	public class YAMLAssetExporter : IAssetExporter
 	{
+		private static Encoding UTF8 = new UTF8Encoding(false);
+
 		public bool IsHandle(Object asset, ExportOptions options)
 		{
 			return true;
@@ -20,15 +22,14 @@ namespace uTinyRipper.Converters
 
 		public bool Export(IExportContainer container, Object asset, string path)
 		{
-			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
+			using (var fileStream = FileUtils.CreateVirtualFile(path))
+			using (var stream = new BufferedStream(fileStream))
+			using (var streamWriter = new InvariantStreamWriter(stream, UTF8))
 			{
-				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
-				{
-					YAMLWriter writer = new YAMLWriter();
-					YAMLDocument doc = asset.ExportYAMLDocument(container);
-					writer.AddDocument(doc);
-					writer.Write(streamWriter);
-				}
+				var writer = new YAMLWriter();
+				var doc = asset.ExportYAMLDocument(container);
+				writer.AddDocument(doc);
+				writer.Write(streamWriter);
 			}
 			return true;
 		}
@@ -41,19 +42,18 @@ namespace uTinyRipper.Converters
 
 		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
-			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
+			using (var fileStream = FileUtils.CreateVirtualFile(path))
+			using (var stream = new BufferedStream(fileStream))
+			using (var streamWriter = new InvariantStreamWriter(stream, new UTF8Encoding(false)))
 			{
-				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
+				YAMLWriter writer = new YAMLWriter();
+				writer.WriteHead(streamWriter);
+				foreach (Object asset in assets)
 				{
-					YAMLWriter writer = new YAMLWriter();
-					writer.WriteHead(streamWriter);
-					foreach (Object asset in assets)
-					{
-						YAMLDocument doc = asset.ExportYAMLDocument(container);
-						writer.WriteDocument(doc);
-					}
-					writer.WriteTail(streamWriter);
+					YAMLDocument doc = asset.ExportYAMLDocument(container);
+					writer.WriteDocument(doc);
 				}
+				writer.WriteTail(streamWriter);
 			}
 			return true;
 		}
