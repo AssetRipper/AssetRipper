@@ -18,10 +18,16 @@ namespace uTinyRipperGUI.Exporters
 				{
 					const int SnippetCount = 5;
 					int unknown = reader.ReadInt32();
+					int minOffset = subProgram.ProgramData.Length;
 					for (int i = 0; i < SnippetCount; i++)
 					{
+						if (((i + 1) * 2 + 1) * 4 > minOffset)
+							break;
+
 						int offset = reader.ReadInt32();
 						int size = reader.ReadInt32();
+						if (offset < minOffset)
+							minOffset = offset;
 
 						if (size > 0)
 						{
