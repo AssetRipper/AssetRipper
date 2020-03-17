@@ -10,6 +10,9 @@ namespace uTinyRipper.Classes.Shaders
 		Geometry	= 3,
 		Hull		= 4,
 		Domain		= 5,
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
 		RayTracing	= 6,
 
 		TypeCount,
@@ -31,6 +34,8 @@ namespace uTinyRipper.Classes.Shaders
 					return "hp";
 				case ShaderType.Domain:
 					return "dp";
+				case ShaderType.RayTracing:
+					return "rtp";
 
 				default:
 					throw new NotSupportedException($"ShaderType {_this} isn't supported");
