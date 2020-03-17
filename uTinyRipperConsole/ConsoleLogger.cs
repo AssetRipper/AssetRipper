@@ -7,11 +7,13 @@ namespace uTinyRipperConsole
 	{
 		public ConsoleLogger()
 		{
-			if(!RunetimeUtils.IsRunningOnMono)
+#if !NET_CORE
+			if (!RunetimeUtils.IsRunningOnMono)
 			{
 				Console.WindowWidth = (int)(Console.LargestWindowWidth * 0.8f);
 				Console.BufferHeight = 2000;
 			}
+#endif
 		}
 
 		public void Log(LogType type, LogCategory category, string message)
