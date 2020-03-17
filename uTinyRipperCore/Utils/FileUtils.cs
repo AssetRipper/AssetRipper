@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 namespace uTinyRipper
@@ -79,29 +80,32 @@ namespace uTinyRipper
 
 		public static string ToLongPath(string path)
 		{
-			if (path.StartsWith(DirectoryUtils.LongPathPrefix, StringComparison.Ordinal))
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
-				return path;
-			}
+				if (path.StartsWith(DirectoryUtils.LongPathPrefix, StringComparison.Ordinal))
+				{
+					return path;
+				}
 
-			string fullPath = GetFullPath(path);
-			int sepIndex = fullPath.LastIndexOf(Path.DirectorySeparatorChar);
-			int asepIndex = fullPath.LastIndexOf(Path.AltDirectorySeparatorChar);
-			int index = Math.Max(sepIndex, asepIndex);
-			if (fullPath.Length - index > MaxFileNameLength)
-			{
-				// file name is too long. need to shrink
-				fullPath = $"{DirectoryUtils.LongPathPrefix}{fullPath}";
-				string directory = Path.GetDirectoryName(fullPath);
-				string fileName = Path.GetFileNameWithoutExtension(fullPath);
-				string extension = Path.GetExtension(fullPath);
-				fileName = fileName.Substring(0, MaxFileNameLength - extension.Length - 1);
-				return Path.Combine(directory, fileName + extension);
-			}
-			else if (fullPath.Length >= MaxFilePathLength)
-			{
-				// name is ok but whole path is too long. just add a prefix
-				return $"{DirectoryUtils.LongPathPrefix}{fullPath}";
+				string fullPath = GetFullPath(path);
+				int sepIndex = fullPath.LastIndexOf(Path.DirectorySeparatorChar);
+				int asepIndex = fullPath.LastIndexOf(Path.AltDirectorySeparatorChar);
+				int index = Math.Max(sepIndex, asepIndex);
+				if (fullPath.Length - index > MaxFileNameLength)
+				{
+					// file name is too long. need to shrink
+					fullPath = $"{DirectoryUtils.LongPathPrefix}{fullPath}";
+					string directory = Path.GetDirectoryName(fullPath);
+					string fileName = Path.GetFileNameWithoutExtension(fullPath);
+					string extension = Path.GetExtension(fullPath);
+					fileName = fileName.Substring(0, MaxFileNameLength - extension.Length - 1);
+					return Path.Combine(directory, fileName + extension);
+				}
+				else if (fullPath.Length >= MaxFilePathLength)
+				{
+					// name is ok but whole path is too long. just add a prefix
+					return $"{DirectoryUtils.LongPathPrefix}{fullPath}";
+				}
 			}
 			return path;
 		}
