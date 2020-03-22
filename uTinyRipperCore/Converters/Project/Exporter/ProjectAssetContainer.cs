@@ -12,18 +12,6 @@ namespace uTinyRipper.Converters
 {
 	public class ProjectAssetContainer : IExportContainer
 	{
-		private struct AssetBundlePath
-		{
-			public AssetBundlePath(AssetBundle bundle, string path)
-			{
-				Bundle = bundle;
-				Path = path;
-			}
-
-			public AssetBundle Bundle { get; }
-			public string Path { get; }
-		}
-
 		public ProjectAssetContainer(ProjectExporter exporter, VirtualSerializedFile file, IEnumerable<Object> assets,
 			IReadOnlyList<IExportCollection> collections)
 		{
@@ -84,10 +72,10 @@ namespace uTinyRipper.Converters
 						assetPath = ResourceManager.ResourceToExportPath(asset, path);
 						return true;
 					}
-					if (m_assetBundlePaths.TryGetValue(asset, out AssetBundlePath assetBundlePath))
+					if (m_assetBundlePaths.TryGetValue(asset, out string assetBundlePath))
 					{
 						selectedAsset = asset;
-						assetPath = assetBundlePath.Bundle.AssetToExportPath(asset, assetBundlePath.Path);
+						assetPath = AssetBundle.AssetToExportPath(asset, assetBundlePath);
 						return true;
 					}
 				}
@@ -314,7 +302,7 @@ namespace uTinyRipper.Converters
 				Object asset = kvp.Value.Asset.FindAsset(bundle.File);
 				if (asset != null)
 				{
-					m_assetBundlePaths.Add(asset, new AssetBundlePath(bundle, kvp.Key));
+					m_assetBundlePaths.Add(asset, kvp.Key);
 				}
 			}
 		}
@@ -338,7 +326,9 @@ namespace uTinyRipper.Converters
 		// Both ResourceManager and AssetBundle should neither exist in the same ProjectAssetContainer nor share asset Objects,
 		// but just in case they somehow do, keeping m_resources and m_assetBundlePaths separately rather than merging the two.
 		private readonly Dictionary<Object, string> m_resources = new Dictionary<Object, string>();
-		private readonly Dictionary<Object, AssetBundlePath> m_assetBundlePaths = new Dictionary<Object, AssetBundlePath>();
+		// Also assume that there's at most a single AssetBundle in the ProjectAssetContainer, so we don't need to disambiguate
+		// between multiple asset bundle names.
+		private readonly Dictionary<Object, string> m_assetBundlePaths = new Dictionary<Object, string>();
 
 		private readonly BuildSettings m_buildSettings;
 		private readonly TagManager m_tagManager;
