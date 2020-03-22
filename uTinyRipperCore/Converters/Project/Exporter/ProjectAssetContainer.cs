@@ -12,6 +12,18 @@ namespace uTinyRipper.Converters
 {
 	public class ProjectAssetContainer : IExportContainer
 	{
+		private struct AssetBundlePath
+		{
+			public AssetBundlePath(AssetBundle bundle, string path)
+			{
+				Bundle = bundle;
+				Path = path;
+			}
+
+			public AssetBundle Bundle { get; }
+			public string Path { get; }
+		}
+
 		public ProjectAssetContainer(ProjectExporter exporter, VirtualSerializedFile file, IEnumerable<Object> assets,
 			IReadOnlyList<IExportCollection> collections)
 		{
@@ -34,6 +46,10 @@ namespace uTinyRipper.Converters
 					case ClassIDType.ResourceManager:
 						AddResources((ResourceManager)asset);
 						break;
+
+					case ClassIDType.AssetBundle:
+						AddAssets((AssetBundle)asset);
+						break;
 				}
 			}
 
@@ -54,18 +70,24 @@ namespace uTinyRipper.Converters
 		}
 
 #warning TODO: get rid of IEnumerable. pass only main asset (issues: prefab, texture with sprites, animatorController)
-		public bool TryGetResourcePathFromAssets(IEnumerable<Object> assets, out Object selectedAsset, out string resourcePath)
+		public bool TryGetAssetPathFromAssets(IEnumerable<Object> assets, out Object selectedAsset, out string assetPath)
 		{
 			selectedAsset = null;
-			resourcePath = string.Empty;
-			if (m_resources.Count > 0)
+			assetPath = string.Empty;
+			if (m_resources.Count > 0 || m_assetBundlePaths.Count > 0)
 			{
 				foreach (Object asset in assets)
 				{
 					if (m_resources.TryGetValue(asset, out string path))
 					{
 						selectedAsset = asset;
-						resourcePath = ResourceManager.ResourceToExportPath(asset, path);
+						assetPath = ResourceManager.ResourceToExportPath(asset, path);
+						return true;
+					}
+					if (m_assetBundlePaths.TryGetValue(asset, out AssetBundlePath assetBundlePath))
+					{
+						selectedAsset = asset;
+						assetPath = assetBundlePath.Bundle.AssetToExportPath(asset, assetBundlePath.Path);
 						return true;
 					}
 				}
@@ -218,7 +240,7 @@ namespace uTinyRipper.Converters
 			{
 				// Unity doesn't verify tagID on export?
 				int tagIndex = tagID - 20000;
-				if (tagIndex < m_tagManager.Tags.Length)
+				if (tagIndex >= 0 && tagIndex < m_tagManager.Tags.Length)
 				{
 					return m_tagManager.Tags[tagIndex];
 				}
@@ -268,19 +290,31 @@ namespace uTinyRipper.Converters
 					continue;
 				}
 
+				string resourcePath = kvp.Key;
 				if (m_resources.ContainsKey(asset))
 				{
 					// for paths like "Resources/inner/resources/extra/file" engine creates 2 resource entries
 					// "inner/resources/extra/file" and "extra/file"
-					string path = m_resources[asset];
-					if (path.Length < kvp.Key.Length)
+					if (m_resources[asset].Length < resourcePath.Length)
 					{
-						m_resources[asset] = kvp.Key;
+						m_resources[asset] = resourcePath;
 					}
 				}
 				else
 				{
-					m_resources.Add(asset, kvp.Key);
+					m_resources.Add(asset, resourcePath);
+				}
+			}
+		}
+
+		private void AddAssets(AssetBundle bundle)
+		{
+			foreach (KeyValuePair<string, Classes.AssetBundles.AssetInfo> kvp in bundle.Container)
+			{
+				Object asset = kvp.Value.Asset.FindAsset(bundle.File);
+				if (asset != null)
+				{
+					m_assetBundlePaths.Add(asset, new AssetBundlePath(bundle, kvp.Key));
 				}
 			}
 		}
@@ -301,7 +335,10 @@ namespace uTinyRipper.Converters
 
 		private readonly ProjectExporter m_exporter;
 		private readonly Dictionary<AssetInfo, IExportCollection> m_assetCollections = new Dictionary<AssetInfo, IExportCollection>();
+		// Both ResourceManager and AssetBundle should neither exist in the same ProjectAssetContainer nor share asset Objects,
+		// but just in case they somehow do, keeping m_resources and m_assetBundlePaths separately rather than merging the two.
 		private readonly Dictionary<Object, string> m_resources = new Dictionary<Object, string>();
+		private readonly Dictionary<Object, AssetBundlePath> m_assetBundlePaths = new Dictionary<Object, AssetBundlePath>();
 
 		private readonly BuildSettings m_buildSettings;
 		private readonly TagManager m_tagManager;

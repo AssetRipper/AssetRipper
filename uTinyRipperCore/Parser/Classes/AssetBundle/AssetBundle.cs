@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using uTinyRipper.Classes.AssetBundles;
 using uTinyRipper.YAML;
@@ -67,6 +68,13 @@ namespace uTinyRipper.Classes
 		/// 2017.3 and greater
 		/// </summary>
 		public static bool HasSceneHashes(Version version) => version.IsGreaterEqual(2017, 3);
+
+		public string AssetToExportPath(Object asset, string assetName)
+		{
+			// Folder structure inferred from https://docs.unity3d.com/Manual/AssetBundles-Manager.html
+			var basePath = Path.Combine(AssetBundlesKeyword, AssetBundleName);
+			return ResourceManager.AssetToExportPath(asset, basePath, assetName);
+		}
 
 		public override void Read(AssetReader reader)
 		{
@@ -158,6 +166,8 @@ namespace uTinyRipper.Classes
 		public int ExplicitDataLayout { get; set; }
 		public int PathFlags { get; set; }
 		public Dictionary<string, string> SceneHashes { get; set; }
+
+		public const string AssetBundlesKeyword = "AssetBundles";
 
 		public const string ContainerName = "m_Container";
 
