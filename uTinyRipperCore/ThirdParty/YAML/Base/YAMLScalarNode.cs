@@ -131,7 +131,7 @@ namespace uTinyRipper.YAML
 		internal YAMLScalarNode(string value, bool _)
 		{
 			SetValue(value);
-			Style = value.Length >= MaxLineLength ? ScalarStyle.DoubleQuoted : ScalarStyle.Plain;
+			Style = ScalarStyle.Plain;
 		}
 
 		public void SetValue(bool value)
@@ -334,20 +334,9 @@ namespace uTinyRipper.YAML
 			else if (Style == ScalarStyle.DoubleQuoted)
 			{
 				emitter.WriteDelayed();
-				int lineLimit = MaxLineLength;
 				for (int i = 0; i < m_string.Length; i++)
 				{
 					char c = m_string[i];
-					if (i >= lineLimit)
-					{
-						// space at the beginning of the line is discarded
-						if (c != ' ')
-						{
-							emitter.WriteRaw('\\').WriteRaw('\n').WriteRaw(' ');
-							lineLimit += MaxLineLength;
-						}
-					}
-
 					switch (c)
 					{
 						case '\\':
@@ -381,11 +370,6 @@ namespace uTinyRipper.YAML
 
 		private static ScalarStyle GetStringStyle(string value)
 		{
-			if (value.Length >= MaxLineLength)
-			{
-				return ScalarStyle.DoubleQuoted;
-			}
-
 			if (s_illegal.IsMatch(value))
 			{
 				return value.Contains("\n ") ? ScalarStyle.DoubleQuoted : ScalarStyle.SingleQuoted;
@@ -462,8 +446,6 @@ namespace uTinyRipper.YAML
 			set => m_string = value;
 		}
 		public ScalarStyle Style { get; }
-
-		public const int MaxLineLength = 1024;
 
 		private static readonly Regex s_illegal = new Regex("(^\\s)|(^-\\s)|(^-$)|(^[\\:\\[\\]'\"*&!@#%{}?<>,\\`])|([:@]\\s)|([\\n\\r])|([:\\s]$)", RegexOptions.Compiled);
 

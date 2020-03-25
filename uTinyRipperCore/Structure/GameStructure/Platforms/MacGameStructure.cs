@@ -77,7 +77,6 @@ namespace uTinyRipper
 
 		private const string ContentsName = "Contents";
 		private const string MacDataName = "Data";
-		private const string ResourcesName = "Resources";
 		private const string AppExtension = ".app";
 
 		private readonly DirectoryInfo m_root;
