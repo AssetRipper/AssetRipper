@@ -19,24 +19,9 @@ namespace uTinyRipper
 			Finish,
 		}
 
-		public Lz4DecodeStream(byte[] buffer, long offset, long length)
+		public Lz4DecodeStream(byte[] buffer, int offset, int length) :
+			this(new MemoryStream(buffer, offset, length), length, false)
 		{
-			if (buffer == null || buffer.Length == 0)
-			{
-				throw new ArgumentNullException(nameof(buffer));
-			}
-			if (offset < 0)
-			{
-				throw new ArgumentException($"Invalid offset value {offset}", nameof(offset));
-			}
-			if (length <= 0)
-			{
-				throw new ArgumentException($"Invalid length value {length}", nameof(length));
-			}
-
-			m_baseStream = new MemoryStream(buffer);
-			m_inputLeft = length;
-			m_phase = DecodePhase.ReadToken;
 		}
 
 		/// <summary>
@@ -55,16 +40,13 @@ namespace uTinyRipper
 		/// <param name="compressedSize">Amount of comprassed data</param>
 		public Lz4DecodeStream(Stream baseStream, long compressedSize, bool leaveOpen = true)
 		{
-			if (baseStream == null)
-			{
-				throw new ArgumentNullException(nameof(baseStream));
-			}
 			if (compressedSize <= 0)
 			{
-				throw new ArgumentException($"Compress length {compressedSize} must be greater then 0");
+				throw new ArgumentException($"Compressed size {compressedSize} must be greater then 0");
 			}
 
-			m_baseStream = baseStream;
+			m_baseStream = baseStream ?? throw new ArgumentNullException(nameof(baseStream));
+			Length = compressedSize;
 			m_inputLeft = compressedSize;
 			m_phase = DecodePhase.ReadToken;
 			m_leaveOpen = leaveOpen;
@@ -341,6 +323,7 @@ namespace uTinyRipper
 					throw new Exception("No data left");
 #endif
 				}
+				m_position += read;
 				offset += read;
 				count -= read;
 				m_inputLeft -= read;
@@ -364,10 +347,10 @@ namespace uTinyRipper
 		public override bool CanRead => true;
 		public override bool CanWrite => false;
 
-		public override long Length => throw new NotSupportedException();
+		public override long Length { get; }
 		public override long Position
 		{
-			get => throw new NotSupportedException();
+			get => m_position;
 			set => throw new NotSupportedException();
 		}
 
@@ -381,6 +364,7 @@ namespace uTinyRipper
 		private readonly Stream m_baseStream;
 		private readonly bool m_leaveOpen;
 
+		private long m_position = 0;
 		private long m_inputLeft = 0;
 		private int m_inputBufferPosition = InputBufferCapacity;
 		private int m_decodeBufferPosition = 0;
