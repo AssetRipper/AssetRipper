@@ -16,26 +16,22 @@ namespace uTinyRipper.Classes.Shaders
 
 			writer.WriteIndent(3);
 			writer.Write("Program \"{0}\" {{\n", type.ToProgramTypeString());
-			int tierCount = GetTierCount(SubPrograms);
+			int tierCount = GetTierCount();
 			for (int i = 0; i < SubPrograms.Length; i++)
 			{
-				Platform uplatform = writer.Platform;
-				GPUPlatform platform = SubPrograms[i].GpuProgramType.ToGPUPlatform(uplatform);
-				int index = writer.Shader.Platforms.IndexOf(platform);
-				ref ShaderSubProgramBlob blob = ref writer.Shader.SubProgramBlobs[index];
-				SubPrograms[i].Export(writer, ref blob, type, tierCount > 1);
+				SubPrograms[i].Export(writer, type, tierCount > 1);
 			}
 			writer.WriteIndent(3);
 			writer.Write("}\n");
 		}
 
-		private int GetTierCount(SerializedSubProgram[] subPrograms)
+		private int GetTierCount()
 		{
 			int tierCount = 1;
-			int tier = subPrograms[0].ShaderHardwareTier;
-			for (int i = 1; i < subPrograms.Length; i++)
+			int tier = SubPrograms[0].ShaderHardwareTier;
+			for (int i = 1; i < SubPrograms.Length; i++)
 			{
-				if (subPrograms[i].ShaderHardwareTier <= tier)
+				if (SubPrograms[i].ShaderHardwareTier <= tier)
 				{
 					break;
 				}

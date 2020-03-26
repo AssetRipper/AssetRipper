@@ -70,7 +70,7 @@ namespace uTinyRipper.Classes.Shaders
 			}
 		}
 
-		public void Export(ShaderWriter writer, ref ShaderSubProgramBlob blob, ShaderType type, bool isTier)
+		public void Export(ShaderWriter writer, ShaderType type, bool isTier)
 		{
 			writer.WriteIndent(4);
 #warning TODO: convertion (DX to HLSL)
@@ -82,7 +82,9 @@ namespace uTinyRipper.Classes.Shaders
 			writer.Write("\" {\n");
 			writer.WriteIndent(5);
 
-			blob.SubPrograms[(int)BlobIndex].Export(writer, type);
+			GPUPlatform gpuPlatform = GpuProgramType.ToGPUPlatform(writer.Platform);
+			int platformIndex = writer.Shader.Platforms.IndexOf(gpuPlatform);
+			writer.Shader.Blobs[platformIndex].SubPrograms[BlobIndex].Export(writer, type);
 
 			writer.Write('\n');
 			writer.WriteIndent(4);

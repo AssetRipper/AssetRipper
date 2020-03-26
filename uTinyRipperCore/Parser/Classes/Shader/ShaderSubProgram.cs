@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace uTinyRipper.Classes.Shaders
 {
-	public struct ShaderSubProgram : IAssetReadable
+	public struct ShaderSubProgram : IAssetReadable, IAssetWritable
 	{
 		/// <summary>
 		/// 2019.1 and greater
@@ -302,6 +302,12 @@ namespace uTinyRipper.Classes.Shaders
 			{
 				StructParameters = structs.ToArray();
 			}
+		}
+
+		public void Write(AssetWriter writer)
+		{
+#warning TODO:
+			throw new NotImplementedException();
 		}
 
 		public void Export(ShaderWriter writer, ShaderType type)

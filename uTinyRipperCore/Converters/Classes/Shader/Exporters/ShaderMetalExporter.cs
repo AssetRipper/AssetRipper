@@ -12,7 +12,7 @@ namespace uTinyRipper.Converters.Shaders
 			{
 				using (BinaryReader reader = new BinaryReader(memStream))
 				{
-					if (Shader.IsEncoded(writer.Version))
+					if (Shader.HasBlob(writer.Version))
 					{
 						long position = reader.BaseStream.Position;
 						uint fourCC = reader.ReadUInt32();

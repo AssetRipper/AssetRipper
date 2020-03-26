@@ -8,6 +8,7 @@ using uTinyRipper.YAML;
 using uTinyRipper.Converters;
 using uTinyRipper.Converters.Shaders;
 using uTinyRipper.Layout;
+using System.Linq;
 
 namespace uTinyRipper.Classes
 {
@@ -20,7 +21,7 @@ namespace uTinyRipper.Classes
 
 		public static int ToSerializedVersion(Version version)
 		{
-			// 
+			// double blob arrays (offsets, compressedLengths and decompressedLengths)
 			if (version.IsGreaterEqual(2019, 3))
 			{
 				return 2;
@@ -33,9 +34,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool IsSerialized(Version version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
-		/// 5.3.0 to 5.4.0
+		/// 5.3.0 and greater
 		/// </summary>
-		public static bool IsEncoded(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasBlob(Version version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// Less than 2.0.0
 		/// </summary>
@@ -55,7 +56,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasNonModifiableTextures(Version version) => version.IsGreaterEqual(2018);		
+		public static bool HasNonModifiableTextures(Version version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
@@ -91,7 +92,6 @@ namespace uTinyRipper.Classes
 				ReadNamedObject(reader);
 
 				ParsedForm.Read(reader);
-
 				Platforms = reader.ReadArray((t) => (GPUPlatform)t);
 				if (IsDoubleArray(reader.Version))
 				{
@@ -101,7 +101,7 @@ namespace uTinyRipper.Classes
 					byte[] compressedBlob = reader.ReadByteArray();
 					reader.AlignStream();
 
-					ReadSubProgramBlobs(reader.Layout, offsets, compressedLengths, decompressedLengths, compressedBlob);
+					UnpackSubProgramBlobs(reader.Layout, offsets, compressedLengths, decompressedLengths, compressedBlob);
 				}
 				else
 				{
@@ -111,40 +111,21 @@ namespace uTinyRipper.Classes
 					byte[] compressedBlob = reader.ReadByteArray();
 					reader.AlignStream();
 
-					ReadSubProgramBlobs(reader.Layout, offsets, compressedLengths, decompressedLengths, compressedBlob);
+					UnpackSubProgramBlobs(reader.Layout, offsets, compressedLengths, decompressedLengths, compressedBlob);
 				}
 			}
 			else
 			{
 				base.Read(reader);
-				
-				if (IsEncoded(reader.Version))
+
+				if (HasBlob(reader.Version))
 				{
 					uint decompressedSize = reader.ReadUInt32();
 					int comressedSize = reader.ReadInt32();
-					if (comressedSize > 0 && decompressedSize > 0)
-					{
-						byte[] subProgramBlob = new byte[comressedSize];
-						reader.ReadBuffer(subProgramBlob, 0, comressedSize);
-
-						byte[] decompressedBuffer = new byte[decompressedSize];
-						using (MemoryStream memStream = new MemoryStream(subProgramBlob))
-						{
-							using (Lz4DecodeStream lz4Stream = new Lz4DecodeStream(memStream))
-							{
-								lz4Stream.ReadBuffer(decompressedBuffer, 0, decompressedBuffer.Length);
-							}
-						}
-
-						using (MemoryStream memStream = new MemoryStream(decompressedBuffer))
-						{
-							using (AssetReader blobReader = new AssetReader(memStream, EndianType.LittleEndian, reader.Layout))
-							{
-								SubProgramBlob.Read(blobReader);
-							}
-						}
-					}
+					byte[] compressedBlob = comressedSize > 0 && decompressedSize > 0 ? reader.ReadByteArray() : null;
 					reader.AlignStream();
+
+					UnpackSubProgramBlobs(reader.Layout, 0, (uint)comressedSize, decompressedSize, compressedBlob);
 				}
 
 				if (HasFallback(reader.Version))
@@ -160,7 +141,7 @@ namespace uTinyRipper.Classes
 					StaticProperties.Read(reader);
 				}
 			}
-			
+
 			if (HasDependencies(reader.Version))
 			{
 				Dependencies = reader.ReadAssetArray<PPtr<Shader>>();
@@ -207,12 +188,19 @@ namespace uTinyRipper.Classes
 					ParsedForm.Export(writer);
 				}
 			}
-			else if (IsEncoded(container.Version))
+			else if (HasBlob(container.Version))
 			{
 				using (ShaderWriter writer = new ShaderWriter(stream, this, exporterInstantiator))
 				{
 					string header = Encoding.UTF8.GetString(Script);
-					SubProgramBlob.Export(writer, header);
+					if (Blobs.Length == 0)
+					{
+						writer.Write(header);
+					}
+					else
+					{
+						Blobs[0].Export(writer, header);
+					}
 				}
 			}
 			else
@@ -263,55 +251,51 @@ namespace uTinyRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		private void ReadSubProgramBlobs(AssetLayout layout, uint[][] offsets, uint[][] compressedLengths, uint[][] decompressedLengths, byte[] compressedBlob)
+		private void UnpackSubProgramBlobs(AssetLayout layout, uint offset, uint compressedLength, uint decompressedLength, byte[] compressedBlob)
 		{
-			SubProgramBlobs = new ShaderSubProgramBlob[Platforms.Length];
-			using (MemoryStream memStream = new MemoryStream(compressedBlob))
+			if (compressedBlob == null)
 			{
-				for (int i = 0; i < Platforms.Length; i++)
+				Blobs = Array.Empty<ShaderSubProgramBlob>();
+			}
+			else
+			{
+				Blobs = new ShaderSubProgramBlob[1];
+				using (MemoryStream memStream = new MemoryStream(compressedBlob))
 				{
-					// TODO: indexing
-					uint offset = offsets[i][0];
-					uint compressedLength = compressedLengths[i][0];
-					uint decompressedLength = decompressedLengths[i][0];
-
-					SubProgramBlobs[i] = ReadSubProgramBlobs(layout, memStream, offset, compressedLength, decompressedLength);
+					uint[] offsets = new uint[] { offset };
+					uint[] compressedLengths = new uint[] { compressedLength };
+					uint[] decompressedLengths = new uint[] { decompressedLength };
+					Blobs[0].Read(layout, memStream, offsets, compressedLengths, decompressedLengths);
 				}
 			}
 		}
 
-		private void ReadSubProgramBlobs(AssetLayout layout, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths, byte[] compressedBlob)
+		private void UnpackSubProgramBlobs(AssetLayout layout, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths, byte[] compressedBlob)
 		{
-			SubProgramBlobs = new ShaderSubProgramBlob[Platforms.Length];
+			Blobs = new ShaderSubProgramBlob[offsets.Length];
 			using (MemoryStream memStream = new MemoryStream(compressedBlob))
 			{
-				for (int i = 0; i < Platforms.Length; i++)
+				for (int i = 0; i < Blobs.Length; i++)
 				{
-					uint offset = offsets[i];
-					uint compressedLength = compressedLengths[i];
-					uint decompressedLength = decompressedLengths[i];
-
-					SubProgramBlobs[i] = ReadSubProgramBlobs(layout, memStream, offset, compressedLength, decompressedLength);
+					uint[] blobOffsets = new uint[] { offsets[i] };
+					uint[] blobCompressedLengths = new uint[] { compressedLengths[i] };
+					uint[] blobDecompressedLengths = new uint[] { decompressedLengths[i] };
+					Blobs[i].Read(layout, memStream, blobOffsets, blobCompressedLengths, blobDecompressedLengths);
 				}
 			}
 		}
 
-		private ShaderSubProgramBlob ReadSubProgramBlobs(AssetLayout layout, MemoryStream memStream, uint offset, uint compressedLength, uint decompressedLength)
+		private void UnpackSubProgramBlobs(AssetLayout layout, uint[][] offsets, uint[][] compressedLengths, uint[][] decompressedLengths, byte[] compressedBlob)
 		{
-			memStream.Position = offset;
-			byte[] decompressedBuffer = new byte[decompressedLength];
-			using (Lz4DecodeStream lz4Stream = new Lz4DecodeStream(memStream, (int)compressedLength))
+			Blobs = new ShaderSubProgramBlob[offsets.Length];
+			using (MemoryStream memStream = new MemoryStream(compressedBlob))
 			{
-				lz4Stream.ReadBuffer(decompressedBuffer, 0, decompressedBuffer.Length);
-			}
-
-			using (MemoryStream blobMem = new MemoryStream(decompressedBuffer))
-			{
-				using (AssetReader blobReader = new AssetReader(blobMem, EndianType.LittleEndian, layout))
+				for (int i = 0; i < Platforms.Length; i++)
 				{
-					ShaderSubProgramBlob blob = new ShaderSubProgramBlob();
-					blob.Read(blobReader);
-					return blob;
+					uint[] blobOffsets = offsets[i];
+					uint[] blobCompressedLengths = compressedLengths[i];
+					uint[] blobDecompressedLengths = decompressedLengths[i];
+					Blobs[i].Read(layout, memStream, blobOffsets, blobCompressedLengths, blobDecompressedLengths);
 				}
 			}
 		}
@@ -321,7 +305,7 @@ namespace uTinyRipper.Classes
 		public override string ValidName => IsSerialized(File.Version) ? ParsedForm.Name : base.ValidName;
 
 		public GPUPlatform[] Platforms { get; set; }
-		public ShaderSubProgramBlob[] SubProgramBlobs { get; set; }
+		public ShaderSubProgramBlob[] Blobs { get; set; }
 		public PPtr<Shader>[] Dependencies { get; set; }
 		public Dictionary<string, PPtr<Texture>> NonModifiableTextures { get; set; }
 		public bool ShaderIsBaked { get; set; }
@@ -334,7 +318,6 @@ namespace uTinyRipper.Classes
 		public const string DependenciesName = "m_Dependencies";
 
 		public SerializedShader ParsedForm;
-		public ShaderSubProgramBlob SubProgramBlob;
 		public PPtr<Shader> Fallback;
 		public UnityPropertySheet DefaultProperties;
 		public UnityPropertySheet StaticProperties;
