@@ -228,7 +228,7 @@ namespace uTinyRipper.Converters
 			{
 				// Unity doesn't verify tagID on export?
 				int tagIndex = tagID - 20000;
-				if (tagIndex >= 0 && tagIndex < m_tagManager.Tags.Length)
+				if (tagIndex < m_tagManager.Tags.Length)
 				{
 					return m_tagManager.Tags[tagIndex];
 				}
