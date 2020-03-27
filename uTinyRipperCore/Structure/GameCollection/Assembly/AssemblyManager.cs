@@ -62,7 +62,7 @@ namespace uTinyRipper.Game
 
 		public bool IsPresent(ScriptIdentifier scriptID)
 		{
-			if (m_manager == null)
+			if (!IsSet)
 			{
 				return false;
 			}
@@ -75,7 +75,7 @@ namespace uTinyRipper.Game
 
 		public bool IsValid(ScriptIdentifier scriptID)
 		{
-			if (m_manager == null)
+			if (!IsSet)
 			{
 				return false;
 			}
@@ -103,7 +103,7 @@ namespace uTinyRipper.Game
 
 		public ScriptIdentifier GetScriptID(string assembly, string name)
 		{
-			if (m_manager == null)
+			if (!IsSet)
 			{
 				return default;
 			}
@@ -112,7 +112,7 @@ namespace uTinyRipper.Game
 
 		public ScriptIdentifier GetScriptID(string assembly, string @namespace, string name)
 		{
-			if (m_manager == null)
+			if (!IsSet)
 			{
 				return default;
 			}
@@ -149,6 +149,7 @@ namespace uTinyRipper.Game
 		}
 
 		public AssetLayout Layout { get; }
+		public bool IsSet => m_manager != null;
 
 		private event Action<string> m_requestAssemblyCallback;
 

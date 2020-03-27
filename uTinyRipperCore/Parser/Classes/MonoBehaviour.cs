@@ -43,24 +43,11 @@ namespace uTinyRipper.Classes
 			}
 #endif
 
-			MonoScript script = Script.FindAsset(File);
-			if (script != null)
+			if (!ReadStructure(reader))
 			{
-				SerializableType behaviourType = script.GetBehaviourType();
-				if (behaviourType == null)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Import, $"Unable to read {ValidName}, because definition for script {script.ValidName} wasn't found");
-				}
-				else
-				{
-					Structure = behaviourType.CreateSerializableStructure();
-					Structure.Read(reader);
-					return;
-				}
+				AssetEntry info = File.GetAssetEntry(PathID);
+				reader.BaseStream.Position = position + info.Size;
 			}
-
-			AssetEntry info = File.GetAssetEntry(PathID);
-			reader.BaseStream.Position = position + info.Size;
 		}
 
 		public override void Write(AssetWriter writer)
@@ -171,6 +158,45 @@ namespace uTinyRipper.Classes
 			}
 #endif
 			return string.Empty;
+		}
+
+		private bool ReadStructure(AssetReader reader)
+		{
+			if (!File.Collection.AssemblyManager.IsSet)
+			{
+				return false;
+			}
+
+			MonoScript script = Script.FindAsset(File);
+			if (script == null)
+			{
+				return false;
+			}
+
+			SerializableType behaviourType = script.GetBehaviourType();
+			if (behaviourType == null)
+			{
+				Logger.Log(LogType.Warning, LogCategory.Import, $"Unable to read {ValidName}, because valid definition for script {script.ValidName} wasn't found");
+				return false;
+			}
+
+			Structure = behaviourType.CreateSerializableStructure();
+#if !DEBUG
+			try
+#endif
+			{
+				Structure.Read(reader);
+			}
+#if !DEBUG
+			catch
+			{
+				Structure = null;
+				Logger.Log(LogType.Error, LogCategory.Import, $"Unable to read {ValidName}, because script layout {script.ValidName} mismatch binary content");
+			}
+			return false;
+#else
+			return true;
+#endif
 		}
 
 		public override string ExportPath => Path.Combine(AssetsKeyword, "ScriptableObject");

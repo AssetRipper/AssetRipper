@@ -90,12 +90,16 @@ namespace uTinyRipper.Game.Assembly.Mono
 			{
 				return false;
 			}
+			if (type.IsAbstract)
+			{
+				return false;
+			}
 			MonoTypeContext context = new MonoTypeContext(type);
 			if (!IsTypeValid(context))
 			{
 				return false;
 			}
-			if (!IsMonoDerivedSafe(type))
+			if (!IsInheritanceValid(type))
 			{
 				return false;
 			}
@@ -350,7 +354,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 			return true;
 		}
 
-		private bool IsMonoDerivedSafe(TypeReference type)
+		private bool IsInheritanceValid(TypeReference type)
 		{
 			while (type != null)
 			{
@@ -364,7 +368,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 					return false;
 				}
 
-				if (MonoType.IsMonoPrime(definition))
+				if (MonoType.IsMonoBehaviour(definition) || MonoType.IsScriptableObject(definition))
 				{
 					return true;
 				}
@@ -374,6 +378,7 @@ namespace uTinyRipper.Game.Assembly.Mono
 		}
 
 		public AssetLayout Layout => m_assemblyManager.Layout;
+		public bool IsSet => true;
 
 		public const string AssemblyExtension = ".dll";
 
