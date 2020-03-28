@@ -71,15 +71,28 @@ namespace uTinyRipper.Classes
 
 		public static string AssetToExportPath(Object asset, string assetPath)
 		{
-			// AssetExportCollection.Export appends its own extension, so strip any extension off the asset path.
-			string extension = Path.GetExtension(assetPath);
-			if (extension != null)
+			string assetName = asset.TryGetName();
+			if (assetName.Length > 0 && assetName != assetPath)
 			{
-				assetPath = assetPath.Substring(0, assetPath.Length - extension.Length);
+				string exportPath = SubstituteExportPath(assetName, assetPath);
+				if (exportPath != null)
+					return exportPath;
+
+				string extension = Path.GetExtension(assetPath);
+				if (extension != null)
+				{
+					exportPath = SubstituteExportPath(assetName, assetPath.Substring(0, assetPath.Length - extension.Length));
+					if (exportPath != null)
+						return exportPath;
+				}
 			}
 
-			string assetName = asset.TryGetName();
-			if (assetName.Length > 0 && assetName != assetPath && assetPath.EndsWith(assetName, StringComparison.OrdinalIgnoreCase))
+			return assetPath;
+		}
+
+		private static string SubstituteExportPath(string assetName, string assetPath)
+		{
+			if (assetPath.EndsWith(assetName, StringComparison.OrdinalIgnoreCase))
 			{
 				if (assetName.Length == assetPath.Length ||
 					assetPath[assetPath.Length - assetName.Length - 1] == DirectorySeparator)
@@ -88,8 +101,7 @@ namespace uTinyRipper.Classes
 					return directoryPath + assetName;
 				}
 			}
-
-			return assetPath;
+			return null;
 		}
 
 		public override void Read(AssetReader reader)
