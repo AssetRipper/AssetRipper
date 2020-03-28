@@ -35,7 +35,11 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool HasHasable(Version version) => version.IsGreaterEqual(2, 6);
+		public static bool HasReadable(Version version) => version.IsGreaterEqual(2, 6);
+		/// <summary>
+		/// 2019.3.1 and greater
+		/// </summary>
+		public static bool HasIgnoreMasterTextureLimit(Version version) => version.IsGreaterEqual(2019, 3, 1);
 		/// <summary>
 		/// From 3.0.0 to 5.5.0 exclusive
 		/// </summary>
@@ -178,9 +182,13 @@ namespace uTinyRipper.Classes
 				MipCount = reader.ReadInt32();
 			}
 
-			if (HasHasable(reader.Version))
+			if (HasReadable(reader.Version))
 			{
 				IsReadable = reader.ReadBoolean();
+			}
+			if (HasIgnoreMasterTextureLimit(reader.Version))
+			{
+				IgnoreMasterTextureLimit = reader.ReadBoolean();
 			}
 			if (HasReadAllowed(reader.Version))
 			{
@@ -241,6 +249,10 @@ namespace uTinyRipper.Classes
 			node.Add(TextureFormatName, (int)TextureFormat);
 			node.Add(MipCountName, MipCount);
 			node.Add(IsReadableName, IsReadable);
+			if (HasIgnoreMasterTextureLimit(container.ExportVersion))
+			{
+				node.Add(IgnoreMasterTextureLimitName, IgnoreMasterTextureLimit);
+			}
 			if (HasStreamingMipmaps(container.ExportVersion))
 			{
 				node.Add(StreamingMipmapsName, StreamingMipmaps);
@@ -303,6 +315,7 @@ namespace uTinyRipper.Classes
 		public TextureFormat TextureFormat { get; set; }
 		public int MipCount { get; set; }
 		public bool IsReadable { get; set; }
+		public bool IgnoreMasterTextureLimit { get; set; }
 		public bool ReadAllowed { get; set; }
 		public bool StreamingMipmaps { get; set; }
 		public int StreamingMipmapsPriority { get; set; }
@@ -321,6 +334,7 @@ namespace uTinyRipper.Classes
 		public const string TextureFormatName = "m_TextureFormat";
 		public const string MipCountName = "m_MipCount";
 		public const string IsReadableName = "m_IsReadable";
+		public const string IgnoreMasterTextureLimitName = "m_IgnoreMasterTextureLimit";
 		public const string StreamingMipmapsName = "m_StreamingMipmaps";
 		public const string StreamingMipmapsPriorityName = "m_StreamingMipmapsPriority";
 		public const string AlphaIsTransparencyName = "m_AlphaIsTransparency";

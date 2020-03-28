@@ -14,6 +14,12 @@ namespace uTinyRipper.Classes
 
 		public static int ToSerializedVersion(Version version)
 		{
+			// MeshColliderCookingOptions.UseFastMidphase is a force option for old versions (even though it was introduced in 2019.3.0)
+			if (version.IsGreaterEqual(2019, 3, 7))
+			{
+				return 4;
+			}
+			// NOTE: unknown conversion
 			if (version.IsGreaterEqual(2017, 3))
 			{
 				return 3;
@@ -102,15 +108,15 @@ namespace uTinyRipper.Classes
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ConvexName, Convex);
-			node.Add(CookingOptionsName, (int)GetCookingOptions(container.Version));
+			node.Add(CookingOptionsName, (int)GetCookingOptions(container.Version, container.ExportVersion));
 			node.Add(SkinWidthName, GetSkinWidth(container.Version));
 			node.Add(MeshName, Mesh.ExportYAML(container));
 			return node;
 		}
 
-		private MeshColliderCookingOptions GetCookingOptions(Version version)
+		private MeshColliderCookingOptions GetCookingOptions(Version origin, Version export)
 		{
-			if (HasCookingOptions(version))
+			if (HasCookingOptions(origin))
 			{
 				return CookingOptions;
 			}
@@ -118,9 +124,16 @@ namespace uTinyRipper.Classes
 			{
 				MeshColliderCookingOptions options = MeshColliderCookingOptions.CookForFasterSimulation |
 					MeshColliderCookingOptions.EnableMeshCleaning | MeshColliderCookingOptions.WeldColocatedVertices;
-				if (HasInflateMesh(version))
+				if (HasInflateMesh(origin))
 				{
-					options |= InflateMesh ? MeshColliderCookingOptions.InflateConvexMesh : MeshColliderCookingOptions.None;
+					if (InflateMesh)
+					{
+						options |= MeshColliderCookingOptions.InflateConvexMesh;
+					}
+				}
+				if (ToSerializedVersion(origin) < 4 && ToSerializedVersion(export) >= 4)
+				{
+					options |= MeshColliderCookingOptions.UseFastMidphase;
 				}
 				return options;
 			}

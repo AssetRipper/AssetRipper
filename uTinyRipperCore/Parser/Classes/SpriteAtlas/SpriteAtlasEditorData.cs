@@ -40,19 +40,26 @@ namespace uTinyRipper.Classes.SpriteAtlases
 		}
 
 		/// <summary>
-		/// (2018.4.9 to 2019.1 exclusive) or (2019.2.9 and greater)
+		/// (2018.4.9 to 2018.4.15) or (2019.2.9 to 2019.2.18) or (2019.3.0 to 2019.3.1)
 		/// </summary>
 		public static bool HasStoredHash(Version version)
 		{
-			if (version.IsGreaterEqual(2019, 2, 9))
-			{
-				return true;
-			}
 			if (version.IsGreaterEqual(2019))
 			{
-				return false;
+				if (version.IsGreaterEqual(2019, 3))
+				{
+					return version.IsLessEqual(2019, 3, 1);
+				}
+				else if (version.IsGreaterEqual(2019, 2, 9))
+				{
+					return version.IsLessEqual(2019, 2, 18);
+				}
 			}
-			return version.IsGreaterEqual(2018, 4, 9);
+			else if (version.IsGreaterEqual(2018, 4, 9))
+			{
+				return version.IsLessEqual(2018, 4, 15);
+			}
+			return false;
 		}
 
 		public void Read(AssetReader reader)

@@ -49,6 +49,11 @@ namespace uTinyRipper.Classes
 
 		public static int ToSerializedVersion(Version version)
 		{
+			// ApplyGammaDecoding default value has been changed from 1 to 0
+			if (version.IsGreaterEqual(2019, 3, 6))
+			{
+				return 11;
+			}
 			// NOTE: unknown conversion
 			if (version.IsGreaterEqual(2019, 1, 0, VersionType.Final))
 			{
@@ -223,6 +228,10 @@ namespace uTinyRipper.Classes
 		/// 5.5.0 and greater
 		/// </summary>
 		public static bool HasMaxTextureSizeSet(Version version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// 2019.3.6 and greater
+		/// </summary>
+		public static bool HasApplyGammaDecoding(Version version) => version.IsGreaterEqual(2019, 3, 6);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
@@ -460,6 +469,10 @@ namespace uTinyRipper.Classes
 				CompressionQualitySet = reader.ReadInt32();
 				TextureFormatSet = reader.ReadInt32();
 			}
+			if (HasApplyGammaDecoding(reader.Version))
+			{
+				ApplyGammaDecoding = reader.ReadInt32();
+			}
 			reader.AlignStream();
 
 			if (HasPlatformSettings(reader.Version))
@@ -678,6 +691,10 @@ namespace uTinyRipper.Classes
 				writer.Write(CompressionQualitySet);
 				writer.Write(TextureFormatSet);
 			}
+			if (HasApplyGammaDecoding(writer.Version))
+			{
+				writer.Write(ApplyGammaDecoding);
+			}
 			writer.AlignStream();
 
 			if (HasPlatformSettings(writer.Version))
@@ -870,6 +887,10 @@ namespace uTinyRipper.Classes
 				node.Add(CompressionQualitySetName, CompressionQualitySet);
 				node.Add(TextureFormatSetName, TextureFormatSet);
 			}
+			if (HasApplyGammaDecoding(container.ExportVersion))
+			{
+				node.Add(ApplyGammaDecodingName, GetApplyGammaDecoding(container.Version));
+			}
 			if (HasPlatformSettings(container.ExportVersion))
 			{
 				node.Add(GetPlatformSettingsName(container.ExportVersion), PlatformSettings.ExportYAML(container));
@@ -890,6 +911,11 @@ namespace uTinyRipper.Classes
 			}
 			PostExportYAML(container, node);
 			return node;
+		}
+
+		private int GetApplyGammaDecoding(Version version)
+		{
+			return ToSerializedVersion(version) < 11 ? 1 : ApplyGammaDecoding;
 		}
 
 		private string GetPlatformSettingsName(Version version)
@@ -951,6 +977,7 @@ namespace uTinyRipper.Classes
 		public int CompressionQualitySet { get; set; }
 		public int AllowsAlphaSplitting { get; set; }
 		public int TextureFormatSet { get; set; }
+		public int ApplyGammaDecoding { get; set; }
 		public TextureImporterPlatformSettings[] PlatformSettings { get; set; }
 		public string SpritePackingTag { get; set; }
 		public bool PSDRemoveMatte { get; set; }
@@ -1048,6 +1075,7 @@ namespace uTinyRipper.Classes
 		public const string MaxTextureSizeSetName = "m_MaxTextureSizeSet";
 		public const string CompressionQualitySetName = "m_CompressionQualitySet";
 		public const string TextureFormatSetName = "m_TextureFormatSet";
+		public const string ApplyGammaDecodingName = "m_ApplyGammaDecoding";
 		public const string BuildTargetSettingsName = "m_BuildTargetSettings";
 		public const string PlatformSettingsName = "m_PlatformSettings";
 		public const string SpriteSheetName = "m_SpriteSheet";
