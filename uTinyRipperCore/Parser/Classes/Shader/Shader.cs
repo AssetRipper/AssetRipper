@@ -121,11 +121,10 @@ namespace uTinyRipper.Classes
 				if (HasBlob(reader.Version))
 				{
 					uint decompressedSize = reader.ReadUInt32();
-					int comressedSize = reader.ReadInt32();
-					byte[] compressedBlob = comressedSize > 0 && decompressedSize > 0 ? reader.ReadByteArray() : null;
+					byte[] compressedBlob = reader.ReadByteArray();
 					reader.AlignStream();
 
-					UnpackSubProgramBlobs(reader.Layout, 0, (uint)comressedSize, decompressedSize, compressedBlob);
+					UnpackSubProgramBlobs(reader.Layout, 0, (uint)compressedBlob.Length, decompressedSize, compressedBlob);
 				}
 
 				if (HasFallback(reader.Version))
@@ -253,7 +252,7 @@ namespace uTinyRipper.Classes
 
 		private void UnpackSubProgramBlobs(AssetLayout layout, uint offset, uint compressedLength, uint decompressedLength, byte[] compressedBlob)
 		{
-			if (compressedBlob == null)
+			if (compressedBlob.Length == 0)
 			{
 				Blobs = Array.Empty<ShaderSubProgramBlob>();
 			}

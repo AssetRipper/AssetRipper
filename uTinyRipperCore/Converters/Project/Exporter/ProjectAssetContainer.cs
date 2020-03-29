@@ -230,7 +230,14 @@ namespace uTinyRipper.Converters
 				int tagIndex = tagID - 20000;
 				if (tagIndex < m_tagManager.Tags.Length)
 				{
-					return m_tagManager.Tags[tagIndex];
+					if (tagIndex >= 0)
+					{
+						return m_tagManager.Tags[tagIndex];
+					}
+					else if (!TagManager.IsBrokenCustomTags(m_tagManager.File.Version))
+					{
+						throw new Exception($"Unknown default tag {tagID}");
+					}
 				}
 			}
 			return $"unknown_{tagID}";

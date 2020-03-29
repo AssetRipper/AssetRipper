@@ -28,6 +28,11 @@ namespace uTinyRipper.Classes
 		public static bool HasSortingLayers(Version version) => version.IsGreaterEqual(4, 3);
 
 		/// <summary>
+		/// 5.0.0 to 5.5.0 exclusive
+		/// </summary>
+		public static bool IsBrokenCustomTags(Version version) => version.IsGreaterEqual(5) && version.IsLess(5, 5);
+
+		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
 		private static bool IsStaticArray(Version version) => version.IsLess(5);
