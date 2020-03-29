@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using uTinyRipper.Classes.ResourceManagers;
 using uTinyRipper.YAML;
-using System;
 using uTinyRipper.Converters;
 
 namespace uTinyRipper.Classes
@@ -20,18 +18,13 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasDependentAssets(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 5) && flags.IsRelease();
 
-		public static string ResourceToExportPath(Object asset, string resourceName)
-		{
-			return Path.Combine(ResourceBasePath, AssetBundle.AssetToExportPath(asset, resourceName));
-		}
-
 		public bool TryGetResourcePathFromAsset(Object asset, out string resourcePath)
 		{
 			foreach (KeyValuePair<string, PPtr<Object>> containerEntry in Container)
 			{
 				if (containerEntry.Value.IsAsset(File, asset))
 				{
-					resourcePath = ResourceToExportPath(asset, containerEntry.Key);
+					resourcePath = PathUtils.SubstituteResourcePath(asset, containerEntry.Key);
 					return true;
 				}
 			}
@@ -84,10 +77,6 @@ namespace uTinyRipper.Classes
 		
 		public KeyValuePair<string, PPtr<Object>>[] Container { get; set; }
 		public ResourceManagerDependency[] DependentAssets { get; set; }
-
-		public const string ResourceKeyword = "Resources";
-
-		private static readonly string ResourceBasePath = Path.Combine(AssetsKeyword, ResourceKeyword);
 
 		public const string ContainerName = "m_Container";
 		public const string DependentAssetsName = "m_DependentAssets";

@@ -36,7 +36,7 @@ namespace uTinyRipper.Converters
 						break;
 
 					case ClassIDType.AssetBundle:
-						AddAssets((AssetBundle)asset);
+						AddBundleAssets((AssetBundle)asset);
 						break;
 				}
 			}
@@ -62,20 +62,20 @@ namespace uTinyRipper.Converters
 		{
 			selectedAsset = null;
 			assetPath = string.Empty;
-			if (m_resources.Count > 0 || m_assetBundlePaths.Count > 0)
+			if (m_resources.Count > 0 || m_bundleAssets.Count > 0)
 			{
 				foreach (Object asset in assets)
 				{
-					if (m_resources.TryGetValue(asset, out string path))
+					if (m_resources.TryGetValue(asset, out string resourcePath))
 					{
 						selectedAsset = asset;
-						assetPath = ResourceManager.ResourceToExportPath(asset, path);
+						assetPath = PathUtils.SubstituteResourcePath(asset, resourcePath);
 						return true;
 					}
-					if (m_assetBundlePaths.TryGetValue(asset, out string assetBundlePath))
+					if (m_bundleAssets.TryGetValue(asset, out string bundleAssetPath))
 					{
 						selectedAsset = asset;
-						assetPath = AssetBundle.AssetToExportPath(asset, assetBundlePath);
+						assetPath = PathUtils.SubstituteAssetBundlePath(asset, bundleAssetPath);
 						return true;
 					}
 				}
@@ -295,14 +295,19 @@ namespace uTinyRipper.Converters
 			}
 		}
 
-		private void AddAssets(AssetBundle bundle)
+		private void AddBundleAssets(AssetBundle bundle)
 		{
 			foreach (KeyValuePair<string, Classes.AssetBundles.AssetInfo> kvp in bundle.Container)
 			{
 				Object asset = kvp.Value.Asset.FindAsset(bundle.File);
 				if (asset != null)
 				{
-					m_assetBundlePaths.Add(asset, kvp.Key);
+					string assetPath = kvp.Key;
+					if (AssetBundle.HasPathExtension(bundle.File.Version))
+					{
+						assetPath = assetPath.Substring(0, assetPath.LastIndexOf('.'));
+					}
+					m_bundleAssets.Add(asset, assetPath);
 				}
 			}
 		}
@@ -328,7 +333,7 @@ namespace uTinyRipper.Converters
 		private readonly Dictionary<Object, string> m_resources = new Dictionary<Object, string>();
 		// Also assume that there's at most a single AssetBundle in the ProjectAssetContainer, so we don't need to disambiguate
 		// between multiple asset bundle names.
-		private readonly Dictionary<Object, string> m_assetBundlePaths = new Dictionary<Object, string>();
+		private readonly Dictionary<Object, string> m_bundleAssets = new Dictionary<Object, string>();
 
 		private readonly BuildSettings m_buildSettings;
 		private readonly TagManager m_tagManager;
