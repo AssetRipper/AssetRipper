@@ -245,7 +245,7 @@ namespace uTinyRipper.Classes
 		{
 			return HasNormalDirection(version) ? NormalDirection : 1.0f;
 		}
-		private IReadOnlyList<byte> GetVertexStreams(Version version)
+		private byte[] GetVertexStreams(Version version)
 		{
 			return HasUseCustomVertexStreams(version) ? VertexStreams : new byte[] { 0, 1, 3, 4, 5 };
 		}

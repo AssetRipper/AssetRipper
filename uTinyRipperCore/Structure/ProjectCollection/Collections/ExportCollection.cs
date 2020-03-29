@@ -23,18 +23,17 @@ namespace uTinyRipper.Project
 		protected static void ExportMeta(IExportContainer container, Meta meta, string filePath)
 		{
 			string metaPath = $"{filePath}{MetaExtension}";
-			using (Stream fileStream = FileUtils.CreateVirtualFile(metaPath))
+			using (var fileStream = FileUtils.CreateVirtualFile(metaPath))
+			using (var stream = new BufferedStream(fileStream))
+			using (var streamWriter = new InvariantStreamWriter(stream, new UTF8Encoding(false)))
 			{
-				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
-				{
-					YAMLWriter writer = new YAMLWriter();
-					writer.IsWriteDefaultTag = false;
-					writer.IsWriteVersion = false;
-					writer.IsFormatKeys = true;
-					YAMLDocument doc = meta.ExportYAMLDocument(container);
-					writer.AddDocument(doc);
-					writer.Write(streamWriter);
-				}
+				YAMLWriter writer = new YAMLWriter();
+				writer.IsWriteDefaultTag = false;
+				writer.IsWriteVersion = false;
+				writer.IsFormatKeys = true;
+				YAMLDocument doc = meta.ExportYAMLDocument(container);
+				writer.AddDocument(doc);
+				writer.Write(streamWriter);
 			}
 		}
 

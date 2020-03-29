@@ -88,6 +88,7 @@ namespace uTinyRipper.Classes
 			return false;
 		}
 
+#if UNIVERSAL
 		/// <summary>
 		/// <para>0 - less than 5.0.0</para>
 		/// <para>1 - less than 2018.2</para>
@@ -105,6 +106,7 @@ namespace uTinyRipper.Classes
 			}
 			return 2;
 		}
+#endif
 
 		public virtual TextureImporter GenerateTextureImporter(IExportContainer container)
 		{
@@ -125,7 +127,7 @@ namespace uTinyRipper.Classes
 			return true;
 		}
 
-		public IReadOnlyList<byte> GetImageData()
+		public byte[] GetImageData()
 		{
 			byte[] data = m_imageData;
 			if (HasStreamData(File.Version) && StreamData.IsSet)
@@ -267,8 +269,8 @@ namespace uTinyRipper.Classes
 			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
 			node.Add(LightmapFormatName, (int)LightmapFormat);
 			node.Add(ColorSpaceName, (int)ColorSpace);
-			IReadOnlyList<byte> imageData = GetExportImageData();
-			node.Add(ImageDataName, imageData.Count);
+			byte[] imageData = GetExportImageData();
+			node.Add(ImageDataName, imageData.Length);
 			node.Add(container.Layout.TypelessdataName, imageData.ExportYAML());
 			StreamingInfo streamData = new StreamingInfo(true);
 			node.Add(StreamDataName, streamData.ExportYAML(container));
@@ -283,7 +285,7 @@ namespace uTinyRipper.Classes
 			return true;
 #endif
 		}
-		private IReadOnlyList<byte> GetExportImageData()
+		private byte[] GetExportImageData()
 		{
 			if (CheckAssetIntegrity())
 			{

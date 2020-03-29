@@ -235,7 +235,7 @@ namespace uTinyRipper.Classes
 			return node;
 		}
 
-		private IReadOnlyList<byte> GetScript(Version version, TransferInstructionFlags flags)
+		private byte[] GetScript(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasScript(version, flags))

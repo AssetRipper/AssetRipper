@@ -20,7 +20,10 @@ namespace uTinyRipper.Converters
 		{
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
-				asset.ExportBinary(container, fileStream);
+				using (BufferedStream stream = new BufferedStream(fileStream))
+				{
+					asset.ExportBinary(container, stream);
+				}
 			}
 			return true;
 		}

@@ -62,6 +62,10 @@ namespace uTinyRipper
 		{
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
+				if (RunetimeUtils.IsRunningOnNetCore)
+				{
+					return path;
+				}
 				if (path.StartsWith(LongPathPrefix, StringComparison.Ordinal))
 				{
 					return path;

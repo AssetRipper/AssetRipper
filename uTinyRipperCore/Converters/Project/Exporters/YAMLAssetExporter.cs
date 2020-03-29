@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using uTinyRipper.Classes;
-using uTinyRipper.YAML;
+using uTinyRipper.Project;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.YAML;
 
 using Object = uTinyRipper.Classes.Object;
-using uTinyRipper.Project;
 
 namespace uTinyRipper.Converters
 {
@@ -22,12 +22,15 @@ namespace uTinyRipper.Converters
 		{
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
-				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
+				using (BufferedStream stream = new BufferedStream(fileStream))
 				{
-					YAMLWriter writer = new YAMLWriter();
-					YAMLDocument doc = asset.ExportYAMLDocument(container);
-					writer.AddDocument(doc);
-					writer.Write(streamWriter);
+					using (InvariantStreamWriter streamWriter = new InvariantStreamWriter(stream, UTF8))
+					{
+						YAMLWriter writer = new YAMLWriter();
+						YAMLDocument doc = asset.ExportYAMLDocument(container);
+						writer.AddDocument(doc);
+						writer.Write(streamWriter);
+					}
 				}
 			}
 			return true;
@@ -43,16 +46,19 @@ namespace uTinyRipper.Converters
 		{
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
-				using (StreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
+				using (BufferedStream stream = new BufferedStream(fileStream))
 				{
-					YAMLWriter writer = new YAMLWriter();
-					writer.WriteHead(streamWriter);
-					foreach (Object asset in assets)
+					using (InvariantStreamWriter streamWriter = new InvariantStreamWriter(stream, UTF8))
 					{
-						YAMLDocument doc = asset.ExportYAMLDocument(container);
-						writer.WriteDocument(doc);
+						YAMLWriter writer = new YAMLWriter();
+						writer.WriteHead(streamWriter);
+						foreach (Object asset in assets)
+						{
+							YAMLDocument doc = asset.ExportYAMLDocument(container);
+							writer.WriteDocument(doc);
+						}
+						writer.WriteTail(streamWriter);
 					}
-					writer.WriteTail(streamWriter);
 				}
 			}
 			return true;
@@ -134,5 +140,7 @@ namespace uTinyRipper.Converters
 			assetType = AssetType.Serialized;
 			return true;
 		}
+
+		private static readonly Encoding UTF8 = new UTF8Encoding(false);
 	}
 }

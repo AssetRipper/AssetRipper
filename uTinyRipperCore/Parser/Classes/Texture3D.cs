@@ -197,15 +197,15 @@ namespace uTinyRipper.Classes
 			node.Add(DataSizeName, DataSize);
 			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
 			node.Add(IsReadableName, IsReadable);
-			IReadOnlyList<byte> imageData = GetImageData(container.Version);
-			node.Add(ImageDataName, imageData.Count);
+			byte[] imageData = GetImageData(container.Version);
+			node.Add(ImageDataName, imageData.Length);
 			node.Add(container.Layout.TypelessdataName, imageData.ExportYAML());
 			StreamingInfo streamData = new StreamingInfo(true);
 			node.Add(StreamDataName, streamData.ExportYAML(container));
 			return node;
 		}
 
-		private IReadOnlyList<byte> GetImageData(Version version)
+		private byte[] GetImageData(Version version)
 		{
 			if (HasStreamData(version) && StreamData.IsSet)
 			{
