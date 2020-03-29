@@ -4,10 +4,17 @@ namespace uTinyRipper
 {
 	public static class StringBuilderExtensions
 	{
+		private static string[] ByteHexRepresentations = new string[256];
+
+		static StringBuilderExtensions() {
+			for (var i = 0; i < 256; i ++) {
+				ByteHexRepresentations[i] = ((byte)i).ToString("x2");
+			}
+		}
+
 		public static StringBuilder AppendHex(this StringBuilder _this, byte value)
 		{
-			_this.Append(HexAlphabet[value >> 4]);
-			_this.Append(HexAlphabet[value & 0xF]);
+			_this.Append(ByteHexRepresentations[value]);
 			return _this;
 		}
 

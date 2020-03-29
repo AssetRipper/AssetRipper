@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -80,6 +79,11 @@ namespace uTinyRipper
 
 		public static string ToLongPath(string path)
 		{
+#if NET_CORE
+			// .NET Core Solution: "It just works because the framework adds the long path syntax for you."
+			// https://stackoverflow.com/a/5188559
+			return path;
+#endif
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
 				if (path.StartsWith(DirectoryUtils.LongPathPrefix, StringComparison.Ordinal))
@@ -154,30 +158,10 @@ namespace uTinyRipper
 
 			ext = ext ?? Path.GetExtension(validFileName);
 			name = name ?? Path.GetFileNameWithoutExtension(validFileName);
-
-			string escapedName = Regex.Escape(name);
-			List<string> files = new List<string>();
-			DirectoryInfo dirInfo = new DirectoryInfo(DirectoryUtils.ToLongPath(dirPath, true));
-			Regex regex = new Regex($@"(?i)^{escapedName}(_[\d]+)?\.[^\.]+$");
-			foreach (FileInfo fileInfo in dirInfo.EnumerateFiles($"{name}_*{ext}"))
-			{
-				if (regex.IsMatch(fileInfo.Name))
-				{
-					files.Add(fileInfo.Name.ToLower());
-				}
-			}
-			if (files.Count == 0)
-			{
-				return $"{name}_0{ext}";
-			}
-
-			string lowName = name.ToLower();
-			for (int i = 1; i < int.MaxValue; i++)
-			{
-				string newName = $"{lowName}_{i}.";
-				if (files.All(t => !t.StartsWith(newName, StringComparison.Ordinal)))
-				{
-					return $"{name}_{i}{ext}";
+			for(int counter = 0; counter < int.MaxValue; counter++) {
+				var proposedName = $"{name}_{counter}{ext}";
+				if (!File.Exists(Path.Combine(dirPath, proposedName))) {
+					return proposedName;
 				}
 			}
 			throw new Exception($"Can't generate unique name for file {fileName} in directory {dirPath}");

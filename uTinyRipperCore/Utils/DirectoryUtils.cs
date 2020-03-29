@@ -60,6 +60,11 @@ namespace uTinyRipper
 
 		public static string ToLongPath(string path, bool force)
 		{
+#if NET_CORE
+			// .NET Core Solution: "It just works because the framework adds the long path syntax for you."
+			// https://stackoverflow.com/a/5188559
+			return path;
+#endif
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
 				if (path.StartsWith(LongPathPrefix, StringComparison.Ordinal))
