@@ -54,9 +54,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasAmbisonicDecoderPlugin(Version version) => version.IsGreaterEqual(2017);
 		/// <summary>
-		/// 4.1.2 and greater
+		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasDisableAudio(Version version) => version.IsGreaterEqual(4, 1, 2);
+		public static bool HasDisableAudio(Version version) => version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 5.3.6 and greater
 		/// </summary>
