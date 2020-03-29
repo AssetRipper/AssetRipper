@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using uTinyRipper.Classes;
-using uTinyRipper.YAML;
+using uTinyRipper.Project;
 using uTinyRipper.SerializedFiles;
+using uTinyRipper.YAML;
 
 using Object = uTinyRipper.Classes.Object;
-using uTinyRipper.Project;
 
 namespace uTinyRipper.Converters
 {
 	public class YAMLAssetExporter : IAssetExporter
 	{
-		private static Encoding UTF8 = new UTF8Encoding(false);
-
 		public bool IsHandle(Object asset, ExportOptions options)
 		{
 			return true;
@@ -22,14 +20,18 @@ namespace uTinyRipper.Converters
 
 		public bool Export(IExportContainer container, Object asset, string path)
 		{
-			using (var fileStream = FileUtils.CreateVirtualFile(path))
-			using (var stream = new BufferedStream(fileStream))
-			using (var streamWriter = new InvariantStreamWriter(stream, UTF8))
+			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
-				var writer = new YAMLWriter();
-				var doc = asset.ExportYAMLDocument(container);
-				writer.AddDocument(doc);
-				writer.Write(streamWriter);
+				using (BufferedStream stream = new BufferedStream(fileStream))
+				{
+					using (InvariantStreamWriter streamWriter = new InvariantStreamWriter(stream, UTF8))
+					{
+						YAMLWriter writer = new YAMLWriter();
+						YAMLDocument doc = asset.ExportYAMLDocument(container);
+						writer.AddDocument(doc);
+						writer.Write(streamWriter);
+					}
+				}
 			}
 			return true;
 		}
@@ -42,18 +44,22 @@ namespace uTinyRipper.Converters
 
 		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
-			using (var fileStream = FileUtils.CreateVirtualFile(path))
-			using (var stream = new BufferedStream(fileStream))
-			using (var streamWriter = new InvariantStreamWriter(stream, new UTF8Encoding(false)))
+			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
-				YAMLWriter writer = new YAMLWriter();
-				writer.WriteHead(streamWriter);
-				foreach (Object asset in assets)
+				using (BufferedStream stream = new BufferedStream(fileStream))
 				{
-					YAMLDocument doc = asset.ExportYAMLDocument(container);
-					writer.WriteDocument(doc);
+					using (InvariantStreamWriter streamWriter = new InvariantStreamWriter(stream, UTF8))
+					{
+						YAMLWriter writer = new YAMLWriter();
+						writer.WriteHead(streamWriter);
+						foreach (Object asset in assets)
+						{
+							YAMLDocument doc = asset.ExportYAMLDocument(container);
+							writer.WriteDocument(doc);
+						}
+						writer.WriteTail(streamWriter);
+					}
 				}
-				writer.WriteTail(streamWriter);
 			}
 			return true;
 		}
@@ -134,5 +140,7 @@ namespace uTinyRipper.Converters
 			assetType = AssetType.Serialized;
 			return true;
 		}
+
+		private static readonly Encoding UTF8 = new UTF8Encoding(false);
 	}
 }

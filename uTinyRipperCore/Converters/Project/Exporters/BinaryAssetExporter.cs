@@ -18,10 +18,12 @@ namespace uTinyRipper.Converters
 
 		public bool Export(IExportContainer container, Object asset, string path)
 		{
-			using (var fileStream = FileUtils.CreateVirtualFile(path))
-			using (var stream = new BufferedStream(fileStream))
+			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
-				asset.ExportBinary(container, stream);
+				using (BufferedStream stream = new BufferedStream(fileStream))
+				{
+					asset.ExportBinary(container, stream);
+				}
 			}
 			return true;
 		}

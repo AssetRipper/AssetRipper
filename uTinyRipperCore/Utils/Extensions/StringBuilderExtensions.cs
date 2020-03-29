@@ -4,11 +4,11 @@ namespace uTinyRipper
 {
 	public static class StringBuilderExtensions
 	{
-		private static string[] ByteHexRepresentations = new string[256];
-
-		static StringBuilderExtensions() {
-			for (var i = 0; i < 256; i ++) {
-				ByteHexRepresentations[i] = ((byte)i).ToString("x2");
+		static StringBuilderExtensions()
+		{
+			for (int i = 0; i <= byte.MaxValue; i++)
+			{
+				ByteHexRepresentations[i] = i.ToString("x2");
 			}
 		}
 
@@ -20,10 +20,8 @@ namespace uTinyRipper
 
 		public static StringBuilder AppendHex(this StringBuilder _this, ushort value)
 		{
-			_this.Append(HexAlphabet[(value >> 4) & 0xF]);
-			_this.Append(HexAlphabet[(value >> 0) & 0xF]);
-			_this.Append(HexAlphabet[(value >> 12) & 0xF]);
-			_this.Append(HexAlphabet[(value >> 8) & 0xF]);
+			_this.Append(ByteHexRepresentations[(value >> 0) & 0xFF]);
+			_this.Append(ByteHexRepresentations[(value >> 8) & 0xFF]);
 			return _this;
 		}
 
@@ -34,14 +32,10 @@ namespace uTinyRipper
 
 		public static StringBuilder AppendHex(this StringBuilder _this, uint value)
 		{
-			_this.Append(HexAlphabet[unchecked((int)(value >> 4) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 0) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 12) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 8) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 20) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 16) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 28) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 24) & 0xF)]);
+			_this.Append(ByteHexRepresentations[unchecked((int)(value >> 0) & 0xFF)]);
+			_this.Append(ByteHexRepresentations[unchecked((int)(value >> 8) & 0xFF)]);
+			_this.Append(ByteHexRepresentations[unchecked((int)(value >> 16) & 0xFF)]);
+			_this.Append(ByteHexRepresentations[unchecked((int)(value >> 24) & 0xFF)]);
 			return _this;
 		}
 
@@ -52,22 +46,14 @@ namespace uTinyRipper
 
 		public static StringBuilder AppendHex(this StringBuilder _this, ulong value)
 		{
-			_this.Append(HexAlphabet[unchecked((int)(value >> 4) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 0) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 12) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 8) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 20) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 16) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 28) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 24) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 36) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 32) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 44) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 40) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 52) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 48) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 60) & 0xF)]);
-			_this.Append(HexAlphabet[unchecked((int)(value >> 56) & 0xF)]);
+			_this.Append(ByteHexRepresentations[unchecked((int)(value >> 0) & 0xFF)]);
+			_this.Append(ByteHexRepresentations[unchecked((int)(value >> 8) & 0xFF)]);
+			_this.Append(ByteHexRepresentations[unchecked((int)(value >> 16) & 0xFF)]);
+			_this.Append(ByteHexRepresentations[unchecked((int)(value >> 24) & 0xFF)]);
+			_this.Append(ByteHexRepresentations[unchecked((int)(value >> 32) & 0xFF)]);
+			_this.Append(ByteHexRepresentations[unchecked((int)(value >> 40) & 0xFF)]);
+			_this.Append(ByteHexRepresentations[unchecked((int)(value >> 48) & 0xFF)]);
+			_this.Append(ByteHexRepresentations[unchecked((int)(value >> 56) & 0xFF)]);
 			return _this;
 		}
 
@@ -96,5 +82,6 @@ namespace uTinyRipper
 		}
 
 		public static readonly string HexAlphabet = "0123456789abcdef";
+		public static readonly string[] ByteHexRepresentations = new string[256];
 	}
 }

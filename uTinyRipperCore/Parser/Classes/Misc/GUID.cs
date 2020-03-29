@@ -84,13 +84,18 @@ namespace uTinyRipper.Classes.Misc
 		public override string ToString()
 		{
 			StringBuilder sb = GetStringBuilder();
-			Append(sb, Data0);
-			Append(sb, Data1);
-			Append(sb, Data2);
-			Append(sb, Data3);
-			string result = sb.ToString();
-			sb.Clear();
-			return result;
+			try
+			{
+				Append(sb, Data0);
+				Append(sb, Data1);
+				Append(sb, Data2);
+				Append(sb, Data3);
+				return sb.ToString();
+			}
+			finally
+			{
+				sb.Clear();
+			}
 		}
 
 		private static StringBuilder GetStringBuilder()
@@ -104,14 +109,10 @@ namespace uTinyRipper.Classes.Misc
 
 		private void Append(StringBuilder sb, uint value)
 		{
-			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 0) & 0xF)]);
-			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 4) & 0xF)]);
-			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 8) & 0xF)]);
-			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 12) & 0xF)]);
-			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 16) & 0xF)]);
-			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 20) & 0xF)]);
-			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 24) & 0xF)]);
-			sb.Append(StringBuilderExtensions.HexAlphabet[unchecked((int)(value >> 28) & 0xF)]);
+			sb.Append(StringBuilderExtensions.ByteHexRepresentations[unchecked((int)(value << 4) & 0xF0) | unchecked((int)(value >> 4) & 0xF)]);
+			sb.Append(StringBuilderExtensions.ByteHexRepresentations[unchecked((int)(value >> 4) & 0xF0) | unchecked((int)(value >> 12) & 0xF)]);
+			sb.Append(StringBuilderExtensions.ByteHexRepresentations[unchecked((int)(value >> 12) & 0xF0) | unchecked((int)(value >> 20) & 0xF)]);
+			sb.Append(StringBuilderExtensions.ByteHexRepresentations[unchecked((int)(value >> 20) & 0xF0) | unchecked((int)(value >> 28) & 0xF)]);
 		}
 
 		public bool IsZero => Data0 == 0 && Data1 == 0 && Data2 == 0 && Data3 == 0;

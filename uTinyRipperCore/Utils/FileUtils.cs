@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 
 namespace uTinyRipper
 {
@@ -79,13 +77,12 @@ namespace uTinyRipper
 
 		public static string ToLongPath(string path)
 		{
-#if NET_CORE
-			// .NET Core Solution: "It just works because the framework adds the long path syntax for you."
-			// https://stackoverflow.com/a/5188559
-			return path;
-#endif
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
+				if (RunetimeUtils.IsRunningOnNetCore)
+				{
+					return path;
+				}
 				if (path.StartsWith(DirectoryUtils.LongPathPrefix, StringComparison.Ordinal))
 				{
 					return path;
@@ -158,9 +155,11 @@ namespace uTinyRipper
 
 			ext = ext ?? Path.GetExtension(validFileName);
 			name = name ?? Path.GetFileNameWithoutExtension(validFileName);
-			for(int counter = 0; counter < int.MaxValue; counter++) {
-				var proposedName = $"{name}_{counter}{ext}";
-				if (!File.Exists(Path.Combine(dirPath, proposedName))) {
+			for (int counter = 0; counter < int.MaxValue; counter++)
+			{
+				string proposedName = $"{name}_{counter}{ext}";
+				if (!File.Exists(Path.Combine(dirPath, proposedName)))
+				{
 					return proposedName;
 				}
 			}

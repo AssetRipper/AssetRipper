@@ -88,6 +88,7 @@ namespace uTinyRipper.Classes
 			return false;
 		}
 
+#if UNIVERSAL
 		/// <summary>
 		/// <para>0 - less than 5.0.0</para>
 		/// <para>1 - less than 2018.2</para>
@@ -105,6 +106,7 @@ namespace uTinyRipper.Classes
 			}
 			return 2;
 		}
+#endif
 
 		public virtual TextureImporter GenerateTextureImporter(IExportContainer container)
 		{
@@ -267,7 +269,7 @@ namespace uTinyRipper.Classes
 			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
 			node.Add(LightmapFormatName, (int)LightmapFormat);
 			node.Add(ColorSpaceName, (int)ColorSpace);
-			var imageData = GetExportImageData();
+			byte[] imageData = GetExportImageData();
 			node.Add(ImageDataName, imageData.Length);
 			node.Add(container.Layout.TypelessdataName, imageData.ExportYAML());
 			StreamingInfo streamData = new StreamingInfo(true);

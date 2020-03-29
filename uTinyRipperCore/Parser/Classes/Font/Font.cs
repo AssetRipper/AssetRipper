@@ -346,7 +346,7 @@ namespace uTinyRipper.Classes
 		{
 			return HasPixelScale(version) ? PixelScale : 0.1f;
 		}
-		private IReadOnlyList<byte> GetFontData(Version version)
+		private byte[] GetFontData(Version version)
 		{
 			return HasFontData(version) ? FontData : Array.Empty<byte>();
 		}

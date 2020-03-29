@@ -36,15 +36,6 @@ namespace uTinyRipper.YAML
 			return new YAMLScalarNode(sb.ToString(), true);
 		}
 
-		public static YAMLNode ExportYAML(this byte[] _this)
-		{
-			StringBuilder sb = new StringBuilder(_this.Length * 2);
-			for (var i = 0; i < _this.Length; i++) {
-				sb.AppendHex(_this[i]);
-			}
-			return new YAMLScalarNode(sb.ToString(), true);
-		}
-
 		public static YAMLNode ExportYAML(this IReadOnlyList<ushort> _this, bool isRaw)
 		{
 			if (isRaw)

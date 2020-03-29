@@ -15,7 +15,6 @@ using System.Security.Principal;
 using uTinyRipper;
 using uTinyRipper.Converters;
 using Object = uTinyRipper.Classes.Object;
-using Version = uTinyRipper.Version;
 
 namespace uTinyRipperConsole
 {
