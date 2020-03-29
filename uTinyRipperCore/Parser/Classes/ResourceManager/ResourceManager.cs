@@ -22,32 +22,7 @@ namespace uTinyRipper.Classes
 
 		public static string ResourceToExportPath(Object asset, string resourceName)
 		{
-			bool replace = false;
-			string validName = asset.TryGetName();
-			if (validName.Length > 0)
-			{
-				if (validName != resourceName && resourceName.EndsWith(validName, StringComparison.OrdinalIgnoreCase))
-				{
-					if (validName.Length == resourceName.Length)
-					{
-						replace = true;
-					}
-					else if (resourceName[resourceName.Length - validName.Length - 1] == DirectorySeparator)
-					{
-						replace = true;
-					}
-				}
-			}
-
-			if (replace)
-			{
-				string directoryPath = resourceName.Substring(0, resourceName.Length - validName.Length);
-				return Path.Combine(AssetsKeyword, ResourceKeyword, directoryPath + validName);
-			}
-			else
-			{
-				return Path.Combine(AssetsKeyword, ResourceKeyword, resourceName);
-			}
+			return Path.Combine(ResourceBasePath, AssetBundle.AssetToExportPath(asset, resourceName));
 		}
 
 		public bool TryGetResourcePathFromAsset(Object asset, out string resourcePath)
@@ -111,7 +86,8 @@ namespace uTinyRipper.Classes
 		public ResourceManagerDependency[] DependentAssets { get; set; }
 
 		public const string ResourceKeyword = "Resources";
-		public const char DirectorySeparator = '/';
+
+		private static readonly string ResourceBasePath = Path.Combine(AssetsKeyword, ResourceKeyword);
 
 		public const string ContainerName = "m_Container";
 		public const string DependentAssetsName = "m_DependentAssets";

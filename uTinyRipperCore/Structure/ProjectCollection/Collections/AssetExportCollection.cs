@@ -28,9 +28,9 @@ namespace uTinyRipper.Project
 		{
 			string subPath;
 			string fileName;
-			if (container.TryGetResourcePathFromAssets(Assets, out Object asset, out string subResourcePath))
+			if (container.TryGetAssetPathFromAssets(Assets, out Object asset, out string assetPath))
 			{
-				string resourcePath = Path.Combine(dirPath, $"{subResourcePath}.{GetExportExtension(asset)}");
+				string resourcePath = Path.Combine(dirPath, $"{assetPath}.{GetExportExtension(asset)}");
 				subPath = Path.GetDirectoryName(resourcePath);
 				string resFileName = Path.GetFileName(resourcePath);
 #warning TODO: combine assets with the same res path into one big asset

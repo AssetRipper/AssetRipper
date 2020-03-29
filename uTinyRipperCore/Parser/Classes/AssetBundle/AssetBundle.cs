@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using uTinyRipper.Classes.AssetBundles;
 using uTinyRipper.YAML;
@@ -67,6 +68,41 @@ namespace uTinyRipper.Classes
 		/// 2017.3 and greater
 		/// </summary>
 		public static bool HasSceneHashes(Version version) => version.IsGreaterEqual(2017, 3);
+
+		public static string AssetToExportPath(Object asset, string assetPath)
+		{
+			string assetName = asset.TryGetName();
+			if (assetName.Length > 0 && assetName != assetPath)
+			{
+				string exportPath = SubstituteExportPath(assetName, assetPath);
+				if (exportPath != null)
+					return exportPath;
+
+				string extension = Path.GetExtension(assetPath);
+				if (extension != null)
+				{
+					exportPath = SubstituteExportPath(assetName, assetPath.Substring(0, assetPath.Length - extension.Length));
+					if (exportPath != null)
+						return exportPath;
+				}
+			}
+
+			return assetPath;
+		}
+
+		private static string SubstituteExportPath(string assetName, string assetPath)
+		{
+			if (assetPath.EndsWith(assetName, StringComparison.OrdinalIgnoreCase))
+			{
+				if (assetName.Length == assetPath.Length ||
+					assetPath[assetPath.Length - assetName.Length - 1] == DirectorySeparator)
+				{
+					string directoryPath = assetPath.Substring(0, assetPath.Length - assetName.Length);
+					return directoryPath + assetName;
+				}
+			}
+			return null;
+		}
 
 		public override void Read(AssetReader reader)
 		{
@@ -158,6 +194,8 @@ namespace uTinyRipper.Classes
 		public int ExplicitDataLayout { get; set; }
 		public int PathFlags { get; set; }
 		public Dictionary<string, string> SceneHashes { get; set; }
+
+		private const char DirectorySeparator = '/';
 
 		public const string ContainerName = "m_Container";
 
