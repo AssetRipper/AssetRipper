@@ -6,25 +6,28 @@ namespace DXShaderRestorer
 {
 	internal class ConstantBufferChunk
 	{
-		public ConstantBufferChunk(ShaderSubProgram shaderSubprogram, uint contantBufferOffset, Dictionary<string, uint> nameLookup)
+		public ConstantBufferChunk(Version version, ref ShaderSubProgram shaderSubprogram, uint contantBufferOffset, Dictionary<string, uint> nameLookup)
 		{
 			m_shaderSubprogram = shaderSubprogram;
 			m_contantBufferOffset = contantBufferOffset;
 			m_nameLookup = nameLookup;
 
+			ShaderGpuProgramType programType = shaderSubprogram.GetProgramType(version);
 			uint headerSize = (uint)Count * 24;
 			uint variableOffset = contantBufferOffset + headerSize;
 			int constantBufferIndex = 0;
 			List<VariableChunk> variables = new List<VariableChunk>();
-			foreach (ConstantBuffer constantBuffer in shaderSubprogram.ConstantBuffers)
+			for (int i = 0; i < shaderSubprogram.ConstantBuffers.Length; i++)
 			{
-				VariableChunk variableChunk = new VariableChunk(constantBuffer, constantBufferIndex++, variableOffset, shaderSubprogram.ProgramType);
+				ref ConstantBuffer constantBuffer = ref shaderSubprogram.ConstantBuffers[i];
+				VariableChunk variableChunk = new VariableChunk(ref constantBuffer, constantBufferIndex++, variableOffset, programType);
 				variables.Add(variableChunk);
 				variableOffset += variableChunk.Size;
 			}
-			foreach (BufferBinding bufferBindings in shaderSubprogram.BufferParameters)
+			for (int i = 0; i < shaderSubprogram.BufferParameters.Length; i++)
 			{
-				VariableChunk variableChunk = new VariableChunk(bufferBindings, constantBufferIndex++, variableOffset, shaderSubprogram.ProgramType);
+				ref BufferBinding bufferBindings = ref shaderSubprogram.BufferParameters[i];
+				VariableChunk variableChunk = new VariableChunk(ref bufferBindings, constantBufferIndex++, variableOffset, programType);
 				variables.Add(variableChunk);
 				variableOffset += variableChunk.Size;
 			}

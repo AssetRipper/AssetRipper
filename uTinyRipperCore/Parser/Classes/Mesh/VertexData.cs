@@ -6,6 +6,7 @@ using uTinyRipper.Converters.Meshes;
 using uTinyRipper.YAML;
 using uTinyRipper;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper.Classes.Shaders;
 
 namespace uTinyRipper.Classes.Meshes
 {

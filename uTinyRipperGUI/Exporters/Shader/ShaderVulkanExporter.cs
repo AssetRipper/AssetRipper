@@ -16,11 +16,17 @@ namespace uTinyRipperGUI.Exporters
 			{
 				using (BinaryReader reader = new BinaryReader(ms))
 				{
-					int unknown = reader.ReadInt32();
+					int requirements = reader.ReadInt32();
 					int minOffset = subProgram.ProgramData.Length;
-#warning TODO: const snippet count? equal to ShaderType count: 5 snippets for < 2019.3, 6 for >= 2019.3
-					while (reader.BaseStream.Position < minOffset)
+					int snippetCount = SerializedPass.HasProgRayTracing(writer.Version) ? 6 : 5;
+					for (int i = 0; i < snippetCount; i++)
 					{
+#warning TEMP: HACK: pull/591
+						if (reader.BaseStream.Position >= minOffset)
+						{
+							break;
+						}
+
 						int offset = reader.ReadInt32();
 						int size = reader.ReadInt32();
 						if (size > 0)

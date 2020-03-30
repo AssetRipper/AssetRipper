@@ -83,13 +83,13 @@ namespace uTinyRipper.Classes.Shaders
 				throw new Exception($"Magic number {magic} doesn't match");
 			}
 
-			ProgramType = (ShaderGpuProgramType)reader.ReadInt32();
-			int unknown1 = reader.ReadInt32();
-			int unknown2 = reader.ReadInt32();
-			int unknown3 = reader.ReadInt32();
+			ProgramType = reader.ReadInt32();
+			Unknown1 = reader.ReadInt32();
+			Unknown2 = reader.ReadInt32();
+			Unknown3 = reader.ReadInt32();
 			if (HasUnknown4(reader.Version))
 			{
-				int unknown4 = reader.ReadInt32();
+				Unknown4 = reader.ReadInt32();
 			}
 
 			GlobalKeywords = reader.ReadStringArray();
@@ -105,7 +105,7 @@ namespace uTinyRipper.Classes.Shaders
 			ShaderBindChannel[] channels = new ShaderBindChannel[bindCount];
 			for (int i = 0; i < bindCount; i++)
 			{
-				ShaderChannel source = (ShaderChannel)reader.ReadUInt32();
+				uint source = reader.ReadUInt32();
 				VertexComponent target = (VertexComponent)reader.ReadUInt32();
 				ShaderBindChannel channel = new ShaderBindChannel(source, target);
 				channels[i] = channel;
@@ -331,7 +331,8 @@ namespace uTinyRipper.Classes.Shaders
 			}
 
 #warning TODO: convertion (DX to HLSL)
-			writer.Write("\"!!{0}", ProgramType.ToShaderName(writer.Platform, type));
+			ShaderGpuProgramType programType = GetProgramType(writer.Version);
+			writer.Write("\"{0}", programType.ToProgramDataKeyword(writer.Platform, type));
 			if (ProgramData.Length > 0)
 			{
 				writer.Write("\n");
@@ -342,7 +343,23 @@ namespace uTinyRipper.Classes.Shaders
 			writer.Write('"');
 		}
 
-		public ShaderGpuProgramType ProgramType { get; set; }
+		public ShaderGpuProgramType GetProgramType(Version version)
+		{
+			if (ShaderGpuProgramTypeExtensions.GpuProgramType55Relevant(version))
+			{
+				return ((ShaderGpuProgramType55)ProgramType).ToGpuProgramType();
+			}
+			else
+			{
+				return ((ShaderGpuProgramType53)ProgramType).ToGpuProgramType();
+			}
+		}
+
+		public int ProgramType { get; set; }
+		public int Unknown1 { get; set; }
+		public int Unknown2 { get; set; }
+		public int Unknown3 { get; set; }
+		public int Unknown4 { get; set; }
 		/// <summary>
 		/// Keywords previously
 		/// </summary>

@@ -49,7 +49,7 @@ namespace uTinyRipper.Classes.Shaders
 			}
 
 			ShaderHardwareTier = reader.ReadByte();
-			GpuProgramType = (ShaderGpuProgramType)reader.ReadByte();
+			GpuProgramType = reader.ReadByte();
 			reader.AlignStream();
 
 			VectorParams = reader.ReadAssetArray<VectorParameter>();
@@ -74,7 +74,9 @@ namespace uTinyRipper.Classes.Shaders
 		{
 			writer.WriteIndent(4);
 #warning TODO: convertion (DX to HLSL)
-			writer.Write("SubProgram \"{0} ", GpuProgramType.ToGPUPlatform(writer.Platform));
+			ShaderGpuProgramType programType = GetProgramType(writer.Version);
+			GPUPlatform graphicApi = programType.ToGPUPlatform(writer.Platform);
+			writer.Write("SubProgram \"{0} ", graphicApi);
 			if (isTier)
 			{
 				writer.Write("hw_tier{0} ", ShaderHardwareTier.ToString("00"));
@@ -82,13 +84,24 @@ namespace uTinyRipper.Classes.Shaders
 			writer.Write("\" {\n");
 			writer.WriteIndent(5);
 
-			GPUPlatform gpuPlatform = GpuProgramType.ToGPUPlatform(writer.Platform);
-			int platformIndex = writer.Shader.Platforms.IndexOf(gpuPlatform);
+			int platformIndex = writer.Shader.Platforms.IndexOf(graphicApi);
 			writer.Shader.Blobs[platformIndex].SubPrograms[BlobIndex].Export(writer, type);
 
 			writer.Write('\n');
 			writer.WriteIndent(4);
 			writer.Write("}\n");
+		}
+
+		public ShaderGpuProgramType GetProgramType(Version version)
+		{
+			if (ShaderGpuProgramTypeExtensions.GpuProgramType55Relevant(version))
+			{
+				return ((ShaderGpuProgramType55)GpuProgramType).ToGpuProgramType();
+			}
+			else
+			{
+				return ((ShaderGpuProgramType53)GpuProgramType).ToGpuProgramType();
+			}
 		}
 
 		public uint BlobIndex { get; set; }
@@ -98,7 +111,7 @@ namespace uTinyRipper.Classes.Shaders
 		public ushort[] GlobalKeywordIndices { get; set; }
 		public ushort[] LocalKeywordIndices { get; set; }
 		public byte ShaderHardwareTier { get; set; }
-		public ShaderGpuProgramType GpuProgramType { get; set; }
+		public byte GpuProgramType { get; set; }
 		public VectorParameter[] VectorParams { get; set; }
 		public MatrixParameter[] MatrixParams { get; set; }
 		public TextureParameter[] TextureParams { get; set; }

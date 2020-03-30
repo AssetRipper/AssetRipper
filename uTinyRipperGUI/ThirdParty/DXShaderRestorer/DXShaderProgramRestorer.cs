@@ -4,35 +4,13 @@ using System.IO;
 using uTinyRipper;
 using uTinyRipper.Classes.Shaders;
 
+using Version = uTinyRipper.Version;
+
 namespace DXShaderRestorer
 {
 	public static class DXShaderProgramRestorer
 	{
-		public static string ToFourCcString(uint fourCc)
-		{
-			char a = (char)(fourCc & 0xFF);
-			char b = (char)((fourCc >> 8) & 0xFF);
-			char c = (char)((fourCc >> 16) & 0xFF);
-			char d = (char)((fourCc >> 24) & 0xFF);
-
-			return new string(new[] { a, b, c, d });
-		}
-
-		public static uint ToFourCc(string fourCc)
-		{
-			if (string.IsNullOrEmpty(fourCc) || fourCc.Length != 4)
-			{
-				throw new ArgumentOutOfRangeException("fourCc", "Invalid FOURCC: " + fourCc);
-			}
-
-			byte a = (byte)fourCc[0];
-			byte b = (byte)fourCc[1];
-			byte c = (byte)fourCc[2];
-			byte d = (byte)fourCc[3];
-			return a | ((uint)(b << 8)) | ((uint)c << 16) | ((uint)d << 24);
-		}
-
-		public static byte[] RestoreProgramData(BinaryReader reader, ref ShaderSubProgram shaderSubProgram)
+		public static byte[] RestoreProgramData(BinaryReader reader, Version version, ref ShaderSubProgram shaderSubProgram)
 		{
 			using (MemoryStream dest = new MemoryStream())
 			{
@@ -63,7 +41,7 @@ namespace DXShaderRestorer
 						}
 					}
 					reader.BaseStream.Position = bodyOffset;
-					byte[] resourceChunkData = GetResourceChunk(shaderSubProgram);
+					byte[] resourceChunkData = GetResourceChunk(version, ref shaderSubProgram);
 					//Adjust for new chunk
 					totalSize += (uint)resourceChunkData.Length;
 					for (int i = 0; i < chunkCount; i++)
@@ -91,13 +69,13 @@ namespace DXShaderRestorer
 			}
 		}
 
-		private static byte[] GetResourceChunk(ShaderSubProgram shaderSubprogram)
+		private static byte[] GetResourceChunk(Version version, ref ShaderSubProgram shaderSubprogram)
 		{
 			using (MemoryStream memoryStream = new MemoryStream())
 			{
 				using (EndianWriter writer = new EndianWriter(memoryStream, EndianType.LittleEndian))
 				{
-					ResourceChunk resourceChunk = new ResourceChunk(shaderSubprogram);
+					ResourceChunk resourceChunk = new ResourceChunk(version, ref shaderSubprogram);
 					resourceChunk.Write(writer);
 					//uint size = resourceChunk.Size;
 					//if (memoryStream.Length != resourceChunk.Size) throw new Exception("Expected size does not match actual size");

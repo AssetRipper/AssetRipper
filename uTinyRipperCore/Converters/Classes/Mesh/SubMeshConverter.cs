@@ -2,6 +2,7 @@
 using System.IO;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Meshes;
+using uTinyRipper.Classes.Shaders;
 using uTinyRipper.Layout;
 
 namespace uTinyRipper.Converters.Meshes

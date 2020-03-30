@@ -29,7 +29,7 @@ namespace uTinyRipperGUI.Exporters
 					}
 					else
 					{
-						byte[] exportData = DXShaderProgramRestorer.RestoreProgramData(reader, ref subProgram);
+						byte[] exportData = DXShaderProgramRestorer.RestoreProgramData(reader, writer.Version, ref subProgram);
 						WrappedGlExtensions ext = new WrappedGlExtensions();
 						ext.ARB_explicit_attrib_location = 1;
 						ext.ARB_explicit_uniform_location = 1;

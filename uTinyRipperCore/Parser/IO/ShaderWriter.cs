@@ -27,7 +27,8 @@ namespace uTinyRipper
 
 		public void WriteShaderData(ref ShaderSubProgram subProgram)
 		{
-			GPUPlatform graphicApi = subProgram.ProgramType.ToGPUPlatform(Platform);
+			ShaderGpuProgramType programType = subProgram.GetProgramType(Version);
+			GPUPlatform graphicApi = programType.ToGPUPlatform(Platform);
 			ShaderTextExporter exporter = m_exporterInstantiator.Invoke(Shader.File.Version, graphicApi);
 			exporter.Export(this, ref subProgram);
 		}

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace uTinyRipper.Classes.Meshes
+namespace uTinyRipper.Classes.Shaders
 {
 	/// <summary>
 	/// 2019.1 and greater

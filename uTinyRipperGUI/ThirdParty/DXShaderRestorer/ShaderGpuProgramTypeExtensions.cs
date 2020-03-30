@@ -52,6 +52,9 @@ namespace DXShaderRestorer
 				case ShaderGpuProgramType.DX11DomainSM50:
 					return 5;
 
+				case ShaderGpuProgramType.DX12RayTracingSM63:
+					return 6;
+
 				default:
 					throw new Exception($"Unexpected program type {_this}");
 			}

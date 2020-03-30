@@ -16,29 +16,28 @@ namespace DXShaderRestorer
 
 	internal class VariableChunk
 	{
-		public VariableChunk(BufferBinding bufferBinding, int constantBufferIndex, uint variableOffset, ShaderGpuProgramType programType)
+		public VariableChunk(ref BufferBinding bufferBinding, int constantBufferIndex, uint variableOffset, ShaderGpuProgramType programType)
 		{
 			m_constantBufferIndex = constantBufferIndex;
 			m_programType = programType;
 			majorVersion = programType.GetMajorDXVersion();
-			m_variables = new List<Variable>();
-			m_variables.Add(Variable.CreateResourceBindVariable(programType));
+			m_variables = new Variable[] { Variable.CreateResourceBindVariable(programType) };
 			BuildVariableHeaders(variableOffset);
 
 		}
-		public VariableChunk(ConstantBuffer constantBuffer, int constantBufferIndex, uint variableOffset, ShaderGpuProgramType programType)
+		public VariableChunk(ref ConstantBuffer constantBuffer, int constantBufferIndex, uint variableOffset, ShaderGpuProgramType programType)
 		{
 			m_constantBufferIndex = constantBufferIndex;
 			m_programType = programType;
 			majorVersion = programType.GetMajorDXVersion();
-			m_variables = BuildVariables(constantBuffer);
+			m_variables = BuildVariables(ref constantBuffer);
 			BuildVariableHeaders(variableOffset);
 		}
 		private void BuildVariableHeaders(uint variableOffset)
 		{
 			const int memberSize = 12;
 			uint variableSize = majorVersion >= 5 ? (uint)40 : (uint)24;
-			uint variableCount = (uint)m_variables.Count;
+			uint variableCount = (uint)m_variables.Length;
 			uint dataOffset = variableOffset + variableCount * variableSize;
 			foreach (Variable variable in m_variables)
 			{
@@ -52,8 +51,8 @@ namespace DXShaderRestorer
 				m_typeLookup[variable.ShaderType] = dataOffset;
 				dataOffset += variable.ShaderType.Size();
 
-				variable.ShaderType.MemberOffset = variable.ShaderType.Members.Count > 0 ? dataOffset : 0;
-				dataOffset += (uint)variable.ShaderType.Members.Count * memberSize;
+				variable.ShaderType.MemberOffset = variable.ShaderType.Members.Length > 0 ? dataOffset : 0;
+				dataOffset += (uint)variable.ShaderType.Members.Length * memberSize;
 
 				foreach (ShaderTypeMember member in variable.ShaderType.Members)
 				{
@@ -95,7 +94,7 @@ namespace DXShaderRestorer
 			}
 		}
 
-		private List<Variable> BuildVariables(ConstantBuffer constantBuffer)
+		private Variable[] BuildVariables(ref ConstantBuffer constantBuffer)
 		{
 			List<Variable> variables = new List<Variable>();
 			foreach (MatrixParameter param in constantBuffer.MatrixParams)
@@ -155,7 +154,7 @@ namespace DXShaderRestorer
 					}
 				}
 			}
-			return variables;
+			return variables.ToArray();
 		}
 
 		private void WriteVariableHeader(EndianWriter writer, VariableHeader header)
@@ -213,13 +212,13 @@ namespace DXShaderRestorer
 			}
 		}
 
-		internal uint Count => (uint)m_variables.Count;
+		internal uint Count => (uint)m_variables.Length;
 		internal uint Size { get; private set; }
 
 		private readonly List<VariableHeader> m_variableHeaders = new List<VariableHeader>();
 		private readonly Dictionary<string, uint> m_variableNameLookup = new Dictionary<string, uint>();
 		private readonly Dictionary<ShaderType, uint> m_typeLookup = new Dictionary<ShaderType, uint>();
-		private readonly List<Variable> m_variables;
+		private readonly Variable[] m_variables;
 
 		private readonly int m_constantBufferIndex;
 		private readonly ShaderGpuProgramType m_programType;

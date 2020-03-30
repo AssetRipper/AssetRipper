@@ -9,11 +9,10 @@ namespace DXShaderRestorer
 	{
 		public ShaderType(StructParameter structParameter, ShaderGpuProgramType programType)
 		{
-			Members.AddRange(structParameter.VectorMembers.Select(p => new ShaderTypeMember(p, programType)));
-			Members.AddRange(structParameter.MatrixMembers.Select(p => new ShaderTypeMember(p, programType)));
-			Members = Members
-				.OrderBy(v => v.Index)
-				.ToList();
+			List<ShaderTypeMember> members = new List<ShaderTypeMember>();
+			members.AddRange(structParameter.VectorMembers.Select(p => new ShaderTypeMember(p, programType)));
+			members.AddRange(structParameter.MatrixMembers.Select(p => new ShaderTypeMember(p, programType)));
+			Members = members.OrderBy(v => v.Index).ToArray();
 			ShaderVariableClass = ShaderVariableClass.Struct; //TODO: matrix colums or rows?
 			ShaderVariableType = ShaderVariableType.Void;
 			Rows = 0;
@@ -26,6 +25,7 @@ namespace DXShaderRestorer
 
 		public ShaderType(MatrixParameter matrixParam, ShaderGpuProgramType programType)
 		{
+			Members = Array.Empty<ShaderTypeMember>();
 			ShaderVariableClass = ShaderVariableClass.MatrixColumns;
 			ShaderVariableType = GetVariableType(matrixParam.Type);
 			Rows = matrixParam.RowCount;
@@ -38,9 +38,8 @@ namespace DXShaderRestorer
 
 		public ShaderType(VectorParameter vectorParam, ShaderGpuProgramType programType)
 		{
-			ShaderVariableClass = vectorParam.Dim > 1 ?
-				ShaderVariableClass.Vector :
-				ShaderVariableClass.Scalar;
+			Members = Array.Empty<ShaderTypeMember>();
+			ShaderVariableClass = vectorParam.Dim > 1 ? ShaderVariableClass.Vector : ShaderVariableClass.Scalar;
 			ShaderVariableType = GetVariableType(vectorParam.Type);
 			Rows = 1;
 			Columns = vectorParam.Dim;
@@ -50,7 +49,7 @@ namespace DXShaderRestorer
 			m_programType = programType;
 		}
 
-		static ShaderVariableType GetVariableType(ShaderParamType paramType)
+		private static ShaderVariableType GetVariableType(ShaderParamType paramType)
 		{
 			switch (paramType)
 			{
@@ -127,8 +126,7 @@ namespace DXShaderRestorer
 		public uint Unknown4 { get; }
 		public uint Unknown5 { get; }
 		public uint ParentNameOffset { get; }
-		public List<ShaderTypeMember> Members { get; } = new List<ShaderTypeMember>();
-
+		public ShaderTypeMember[] Members { get; }
 
 		private readonly ShaderGpuProgramType m_programType;
 	}

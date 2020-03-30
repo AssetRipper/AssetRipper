@@ -1,6 +1,7 @@
 ﻿using uTinyRipper;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Meshes;
+using uTinyRipper.Classes.Shaders;
 
 namespace uTinyRipper.Converters.Meshes
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace uTinyRipper.Classes.Meshes
+namespace uTinyRipper.Classes.Shaders
 {
 	/// <summary>
 	/// Less than 5.0.0 version

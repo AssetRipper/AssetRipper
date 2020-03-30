@@ -5,6 +5,7 @@ using System.Linq;
 using uTinyRipper.Classes;
 using uTinyRipper.Classes.Meshes;
 using uTinyRipper.Classes.Misc;
+using uTinyRipper.Classes.Shaders;
 using uTinyRipper.Converters.Meshes;
 
 namespace uTinyRipper.Converters

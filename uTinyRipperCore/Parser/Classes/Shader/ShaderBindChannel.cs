@@ -2,19 +2,22 @@
 {
 	public struct ShaderBindChannel : IAssetReadable
 	{
-		public ShaderBindChannel(ShaderChannel source, VertexComponent target)
+		public ShaderBindChannel(uint source, VertexComponent target)
 		{
-			Source = source;
+			Source = (byte)source;
 			Target = target;
 		}
 
 		public void Read(AssetReader reader)
 		{
-			Source = (ShaderChannel)reader.ReadByte();
+			Source = reader.ReadByte();
 			Target = (VertexComponent)reader.ReadByte();
 		}
 
-		public ShaderChannel Source { get; set; }
+		/// <summary>
+		/// ShaderChannel enum
+		/// </summary>
+		public byte Source { get; set; }
 		public VertexComponent Target { get; set; }
 	}
 }

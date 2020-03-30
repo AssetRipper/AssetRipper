@@ -6,7 +6,7 @@ namespace DXShaderRestorer
 	{
 		public ShaderTypeMember(MatrixParameter param, ShaderGpuProgramType programType)
 		{
-			this.ProgramType = programType;
+			ProgramType = programType;
 			Name = param.Name;
 			ShaderType = new ShaderType(param, programType);
 			Index = (uint)param.Index;
@@ -14,7 +14,7 @@ namespace DXShaderRestorer
 
 		public ShaderTypeMember(VectorParameter param, ShaderGpuProgramType programType)
 		{
-			this.ProgramType = programType;
+			ProgramType = programType;
 			Name = param.Name;
 			ShaderType = new ShaderType(param, programType);
 			Index = (uint)param.Index;

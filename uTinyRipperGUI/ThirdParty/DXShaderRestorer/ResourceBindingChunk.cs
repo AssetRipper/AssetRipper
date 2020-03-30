@@ -14,6 +14,7 @@ namespace DXShaderRestorer
 			Linear,
 			Trilinear
 		};
+
 		public enum SamplerWrapMode
 		{
 			Repeat,
@@ -21,6 +22,7 @@ namespace DXShaderRestorer
 			Mirror,
 			MirrorOnce
 		};
+
 		//TODO: Move to seprate file
 		private class Sampler
 		{
@@ -34,12 +36,12 @@ namespace DXShaderRestorer
 				this.IsComparisonSampler = isComparisonSampler;
 			}
 		}
-		private List<Sampler> m_Samplers = new List<Sampler>();
-		public ResourceBindingChunk(ShaderSubProgram shaderSubprogram, uint resourceBindingOffset, Dictionary<string, uint> nameLookup)
+
+		public ResourceBindingChunk(ref ShaderSubProgram shaderSubprogram, uint resourceBindingOffset, Dictionary<string, uint> nameLookup)
 		{
 			m_shaderSubprogram = shaderSubprogram;
 			m_nameLookup = nameLookup;
-			m_Samplers = CreateSamplers(shaderSubprogram);
+			m_Samplers = CreateSamplers(ref shaderSubprogram);
 			const uint bindingHeaderSize = 32;
 			uint nameOffset = resourceBindingOffset + bindingHeaderSize * Count;
 			foreach (BufferBinding bufferParam in shaderSubprogram.BufferParameters)
@@ -72,7 +74,7 @@ namespace DXShaderRestorer
 
 		internal uint Size { get; }
 
-		private List<Sampler> CreateSamplers(ShaderSubProgram shaderSubprogram)
+		private static List<Sampler> CreateSamplers(ref ShaderSubProgram shaderSubprogram)
 		{
 			/*
 			 * Unity supports three types of samplers
@@ -119,13 +121,11 @@ namespace DXShaderRestorer
 				samplerName += $"_Sampler{samplerParam.BindPoint}";
 				samplers.Add(new Sampler(samplerName, (uint)samplerParam.BindPoint, isComparisonSampler));
 			}
-			samplers = samplers
-				.OrderBy(s => s.BindPoint)
-				.ToList();
-			System.Diagnostics.Debug.Assert(m_Samplers.Select(s => s.BindPoint).Distinct().Count()
-				== m_Samplers.Select(s => s.BindPoint).Count(), "Duplicate sampler bindpoint");
-			System.Diagnostics.Debug.Assert(m_Samplers.Select(s => s.BindPoint).Distinct().Count()
-				== m_Samplers.Select(s => s.BindPoint).Count(), "Duplicate sampler name");
+			samplers = samplers.OrderBy(s => s.BindPoint).ToList();
+			System.Diagnostics.Debug.Assert(samplers.Select(s => s.BindPoint).Distinct().Count()
+				== samplers.Select(s => s.BindPoint).Count(), "Duplicate sampler bindpoint");
+			System.Diagnostics.Debug.Assert(samplers.Select(s => s.BindPoint).Distinct().Count()
+				== samplers.Select(s => s.BindPoint).Count(), "Duplicate sampler name");
 			return samplers;
 		}
 		internal void Write(EndianWriter writer)
@@ -251,6 +251,7 @@ namespace DXShaderRestorer
 		}
 
 		private readonly Dictionary<string, uint> m_nameLookup;
+		private readonly List<Sampler> m_Samplers;
 
 		private ShaderSubProgram m_shaderSubprogram;
 	}

@@ -13,7 +13,7 @@ namespace uTinyRipper.Classes.Shaders
 		public void Read(AssetReader reader)
 		{
 			m_nameIndices = new Dictionary<string, int>();
-			
+
 			m_nameIndices.Read(reader);
 			Type = (SerializedPassType)reader.ReadInt32();
 			State.Read(reader);
@@ -48,10 +48,10 @@ namespace uTinyRipper.Classes.Shaders
 			else
 			{
 				writer.Write("{\n");
-				
+
 				if (Type == SerializedPassType.GrabPass)
 				{
-					if(TextureName != string.Empty)
+					if (TextureName.Length > 0)
 					{
 						writer.WriteIndent(3);
 						writer.Write("\"{0}\"\n", TextureName);
@@ -97,7 +97,7 @@ namespace uTinyRipper.Classes.Shaders
 				writer.Write("}\n");
 			}
 		}
-		
+
 		public IReadOnlyDictionary<string, int> NameIndices => m_nameIndices;
 		public SerializedPassType Type { get; set; }
 		public uint ProgramMask { get; set; }

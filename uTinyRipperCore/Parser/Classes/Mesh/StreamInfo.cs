@@ -1,4 +1,5 @@
-﻿using uTinyRipper.Converters;
+﻿using uTinyRipper.Classes.Shaders;
+using uTinyRipper.Converters;
 using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.Meshes

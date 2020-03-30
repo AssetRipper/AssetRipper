@@ -7,17 +7,18 @@ namespace DXShaderRestorer
 {
 	internal class ResourceChunk
 	{
-		public ResourceChunk(ShaderSubProgram shaderSubprogram)
+		public ResourceChunk(Version version, ref ShaderSubProgram shaderSubprogram)
 		{
-			m_majorVersion = (byte)shaderSubprogram.ProgramType.GetMajorDXVersion();
+			ShaderGpuProgramType programType = shaderSubprogram.GetProgramType(version);
+			m_majorVersion = (byte)programType.GetMajorDXVersion();
 			m_resourceBindingOffset = m_majorVersion >= 5 ? (uint)60 : (uint)28;
-			m_resourceBindings = new ResourceBindingChunk(shaderSubprogram, m_resourceBindingOffset, m_nameLookup);
+			m_resourceBindings = new ResourceBindingChunk(ref shaderSubprogram, m_resourceBindingOffset, m_nameLookup);
 			m_constantBufferOffset = m_resourceBindingOffset + m_resourceBindings.Size;
-			m_constantBuffers = new ConstantBufferChunk(shaderSubprogram, m_constantBufferOffset, m_nameLookup);
+			m_constantBuffers = new ConstantBufferChunk(version, ref shaderSubprogram, m_constantBufferOffset, m_nameLookup);
 			m_creatorStringOffset = m_constantBufferOffset + m_constantBuffers.Size;
 			m_creatorString = "uTinyRipper";
 			m_chunkSize = m_creatorStringOffset + (uint)m_creatorString.Length + 1;
-			m_programType = shaderSubprogram.ProgramType.ToDXProgramType();
+			m_programType = programType.ToDXProgramType();
 		}
 
 		public void Write(EndianWriter writer)
