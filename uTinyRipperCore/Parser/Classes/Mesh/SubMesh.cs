@@ -106,7 +106,7 @@ namespace uTinyRipper.Classes.Meshes
 			}
 			else
 			{
-				return IsTriStrip == 0 ? MeshTopology.Triangles : MeshTopology.Deprecated;
+				return IsTriStrip == 0 ? MeshTopology.Triangles : MeshTopology.TriangleStrip;
 			}
 		}
 

@@ -10,9 +10,9 @@
 		/// </summary>
 		Triangles		= 0,
 		/// <summary>
-		/// Some deprecated value that was used together with Triangles topology
+		/// Mesh is a triangle strip.
 		/// </summary>
-		Deprecated		= 1,
+		TriangleStrip = 1,
 		/// <summary>
 		/// Mesh is made from quads.
 		/// </summary>
