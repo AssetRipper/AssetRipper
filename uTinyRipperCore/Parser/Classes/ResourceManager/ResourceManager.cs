@@ -18,21 +18,6 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasDependentAssets(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 5) && flags.IsRelease();
 
-		public bool TryGetResourcePathFromAsset(Object asset, out string resourcePath)
-		{
-			foreach (KeyValuePair<string, PPtr<Object>> containerEntry in Container)
-			{
-				if (containerEntry.Value.IsAsset(File, asset))
-				{
-					resourcePath = PathUtils.SubstituteResourcePath(asset, containerEntry.Key);
-					return true;
-				}
-			}
-
-			resourcePath = string.Empty;
-			return false;
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);

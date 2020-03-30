@@ -70,6 +70,9 @@ namespace uTinyRipper.Classes
 			}
 		}
 
+		public const char DirectorySeparatorChar = '/';
+		public const string DirectorySeparator = "/";
+
 		private static readonly ThreadSafeRandom s_random = new ThreadSafeRandom();
 		private static readonly ThreadLocal<byte[]> s_idBuffer = new ThreadLocal<byte[]>(() => new byte[8]);
 	}

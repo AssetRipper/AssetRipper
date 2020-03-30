@@ -44,17 +44,7 @@ namespace uTinyRipper.Classes
 			return root;
 		}
 
-		public virtual string ValidName
-		{
-			get
-			{
-				if (Name.Length == 0)
-				{
-					return GetType().Name;
-				}
-				return Name;
-			}
-		}
+		public virtual string ValidName => Name.Length == 0 ? GetType().Name : Name;
 
 		public string Name { get; set; }
 	}

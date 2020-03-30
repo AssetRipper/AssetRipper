@@ -26,6 +26,10 @@ namespace uTinyRipper.Converters
 		/// Should objects get exported with dependencies or without
 		/// </summary>
 		public bool ExportDependencies { get; set; }
+		/// <summary>
+		/// Export asset bundle content to its original path instead of AssetBundle directory
+		/// </summary>
+		public bool KeepAssetBundleContentPath { get; set; }
 		public Func<Object, bool> Filter { get; set; } = DefaultFilter;
 	}
 }
