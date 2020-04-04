@@ -308,7 +308,12 @@ namespace uTinyRipper.Converters
 				string assetPath = kvp.Key;
 				if (AssetBundle.HasPathExtension(bundle.File.Version))
 				{
-					assetPath = assetPath.Substring(0, assetPath.LastIndexOf('.'));
+					// custom names may not contain extension
+					int extensionIndex = assetPath.LastIndexOf('.');
+					if (extensionIndex != -1)
+					{
+						assetPath = assetPath.Substring(0, extensionIndex);
+					}
 				}
 
 				if (m_options.KeepAssetBundleContentPath)
