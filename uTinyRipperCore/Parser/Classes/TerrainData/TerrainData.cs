@@ -18,9 +18,20 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasLightmap(Version version) => version.IsLess(3);
 		/// <summary>
-		/// 2019.2.17 and greater
+		/// (2018.4.14 to 2019.1 exclusive) or (2019.2.17 and greater)
 		/// </summary>
-		public static bool HasPreloadShaders(Version version) => version.IsGreaterEqual(2019, 2, 17);
+		public static bool HasPreloadShaders(Version version)
+		{
+			if (version.IsGreaterEqual(2019, 2, 17))
+			{
+				return true;
+			}
+			if (version.IsGreaterEqual(2018, 4, 14))
+			{
+				return version.IsLess(2019);
+			}
+			return false;
+		}
 
 		public override Object Convert(IExportContainer container)
 		{
