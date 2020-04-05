@@ -20,15 +20,15 @@ namespace uTinyRipper
 
 			Name = m_root.Name.Substring(0, m_root.Name.Length - AppExtension.Length);
 
-			string dataPath = Path.Combine(m_root.FullName, ContentsName, MacDataName);
+			string dataPath = Path.Combine(m_root.FullName, ContentsName, DataFolderName);
 			if (!Directory.Exists(dataPath))
 			{
-				throw new Exception("Data directory hasn't been found");
+				throw new Exception("Data directory wasn't found");
 			}
 			string resourcePath = Path.Combine(m_root.FullName, ContentsName, ResourcesName);
 			if (!Directory.Exists(resourcePath))
 			{
-				throw new Exception("Resources directory hasn't been found");
+				throw new Exception("Resources directory wasn't found");
 			}
 			DataPathes = new string[] { dataPath, resourcePath };
 
@@ -56,7 +56,7 @@ namespace uTinyRipper
 				return false;
 			}
 
-			string dataPath = Path.Combine(dinfo.FullName, ContentsName, MacDataName);
+			string dataPath = Path.Combine(dinfo.FullName, ContentsName, DataFolderName);
 			if (!Directory.Exists(dataPath))
 			{
 				return false;
@@ -76,7 +76,6 @@ namespace uTinyRipper
 		public override IReadOnlyDictionary<string, string> Assemblies { get; }
 
 		private const string ContentsName = "Contents";
-		private const string MacDataName = "Data";
 		private const string AppExtension = ".app";
 
 		private readonly DirectoryInfo m_root;

@@ -263,6 +263,7 @@ namespace uTinyRipper
 		protected static readonly Regex s_levelTemplate = new Regex($@"^level(0|[1-9][0-9]*)({MultiFileStream.MultifileRegPostfix}0)?$", RegexOptions.Compiled);
 		protected static readonly Regex s_sharedAssetTemplate = new Regex(@"^sharedassets[0-9]+\.assets", RegexOptions.Compiled);
 
+		protected const string DataFolderName = "Data";
 		protected const string ManagedName = "Managed";
 		protected const string LibName = "lib";
 		protected const string ResourcesName = "Resources";

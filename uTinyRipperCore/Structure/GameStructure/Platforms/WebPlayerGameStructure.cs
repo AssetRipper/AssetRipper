@@ -5,9 +5,9 @@ using uTinyRipper.Game.Assembly;
 
 namespace uTinyRipper
 {
-	internal sealed class WebPlayerStructure : PlatformGameStructure
+	internal sealed class WebPlayerGameStructure : PlatformGameStructure
 	{
-		public WebPlayerStructure(string rootPath)
+		public WebPlayerGameStructure(string rootPath)
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
@@ -21,7 +21,7 @@ namespace uTinyRipper
 
 			if(!GetWebPlayerName(m_root, out string name))
 			{
-				throw new Exception($"Web player asset bundle data hasn't been found");
+				throw new Exception($"Web player asset bundle data wasn't found");
 			}
 			Name = name;
 			DataPathes = new string[] { rootPath };

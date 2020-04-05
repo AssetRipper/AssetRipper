@@ -8,19 +8,19 @@ namespace uTinyRipper
 	{
 		public PCGameStructure(string rootPath)
 		{
-			if(string.IsNullOrEmpty(rootPath))
+			if (string.IsNullOrEmpty(rootPath))
 			{
 				throw new ArgumentNullException(rootPath);
 			}
 			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
-			if(!m_root.Exists)
+			if (!m_root.Exists)
 			{
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
 			}
 
 			if (!GetDataPCDirectory(m_root, out string dataPath, out string name))
 			{
-				throw new Exception($"Data directory hasn't been found");
+				throw new Exception($"Data directory wasn't found");
 			}
 			Name = name;
 			DataPathes = new string[] { dataPath };
@@ -40,7 +40,7 @@ namespace uTinyRipper
 		public static bool IsPCStructure(string path)
 		{
 			DirectoryInfo dinfo = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
-			if(!dinfo.Exists)
+			if (!dinfo.Exists)
 			{
 				return false;
 			}
@@ -51,7 +51,7 @@ namespace uTinyRipper
 		{
 			return GetDataPCDirectory(rootDiectory, out string _, out string _);
 		}
-		
+
 		private static bool GetDataPCDirectory(DirectoryInfo rootDiectory, out string dataPath, out string name)
 		{
 			name = null;
@@ -62,7 +62,7 @@ namespace uTinyRipper
 				{
 					exeCount++;
 					name = Path.GetFileNameWithoutExtension(finfo.Name);
-					string dataFolder = $"{name}_{DataPostfix}";
+					string dataFolder = $"{name}_{DataFolderName}";
 					dataPath = Path.Combine(rootDiectory.FullName, dataFolder);
 					if (DirectoryUtils.Exists(dataPath))
 					{
@@ -71,10 +71,10 @@ namespace uTinyRipper
 				}
 			}
 
-			if(exeCount > 0)
+			if (exeCount > 0)
 			{
 				name = exeCount == 1 ? name : rootDiectory.Name;
-				dataPath = Path.Combine(rootDiectory.FullName, DataPostfix);
+				dataPath = Path.Combine(rootDiectory.FullName, DataFolderName);
 				if (DirectoryUtils.Exists(dataPath))
 				{
 					return true;
@@ -91,8 +91,6 @@ namespace uTinyRipper
 
 		public override IReadOnlyDictionary<string, string> Files { get; }
 		public override IReadOnlyDictionary<string, string> Assemblies { get; }
-
-		private const string DataPostfix = "Data";
 
 		private const string ExeExtension = ".exe";
 

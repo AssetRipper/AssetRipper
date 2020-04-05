@@ -23,7 +23,7 @@ namespace uTinyRipper
 				throw new Exception($"Root directory '{rootPath}' doesn't exist");
 			}
 
-			string apkDataPath = Path.Combine(rootPath, AssetName, BinName, DataName);
+			string apkDataPath = Path.Combine(rootPath, AssetName, BinName, DataFolderName);
 			DirectoryInfo apkDataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(apkDataPath));
 			if (!apkDataDirectory.Exists)
 			{
@@ -40,10 +40,10 @@ namespace uTinyRipper
 					throw new Exception($"Obb directory '{obbPath}' doesn't exist");
 				}
 
-				string obbDataPath = Path.Combine(obbPath, AssetName, BinName, DataName);
+				string obbDataPath = Path.Combine(obbPath, AssetName, BinName, DataFolderName);
 				if (!DirectoryUtils.Exists(obbDataPath))
 				{
-					throw new Exception($"Obb data directory '{obbDataPath}' hasn't beed found");
+					throw new Exception($"Obb data directory '{obbDataPath}' wasn't found");
 				}
 				dataPathes.Add(obbDataPath);
 			}
@@ -62,7 +62,7 @@ namespace uTinyRipper
 			CollectMainAssemblies(apkDataDirectory, assemblies);
 			Assemblies = assemblies;
 		}
-		
+
 		public static bool IsAndroidStructure(string path)
 		{
 			DirectoryInfo directory = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
@@ -77,8 +77,8 @@ namespace uTinyRipper
 				return false;
 			}
 
-			string dataPath = Path.Combine(path, AssetName, BinName, DataName);
-			if(!DirectoryUtils.Exists(dataPath))
+			string dataPath = Path.Combine(path, AssetName, BinName, DataFolderName);
+			if (!DirectoryUtils.Exists(dataPath))
 			{
 				return false;
 			}
@@ -100,7 +100,7 @@ namespace uTinyRipper
 				return false;
 			}
 
-			string dataPath = Path.Combine(path, AssetName, BinName, DataName);
+			string dataPath = Path.Combine(path, AssetName, BinName, DataFolderName);
 			if (!DirectoryUtils.Exists(dataPath))
 			{
 				return false;
@@ -131,16 +131,16 @@ namespace uTinyRipper
 			}
 			return matches;
 		}
-		
+
 		private void CollectApkAssetBundles(IDictionary<string, string> files)
 		{
 			string assetPath = Path.Combine(m_root.FullName, AssetName);
 			DirectoryInfo root = new DirectoryInfo(assetPath);
 
 			CollectAssetBundles(root, files);
-			foreach(DirectoryInfo subDirectory in root.EnumerateDirectories())
+			foreach (DirectoryInfo subDirectory in root.EnumerateDirectories())
 			{
-				if(subDirectory.Name == BinName)
+				if (subDirectory.Name == BinName)
 				{
 					continue;
 				}
@@ -157,8 +157,7 @@ namespace uTinyRipper
 		private const string AssetName = "assets";
 		private const string MetaName = "META-INF";
 		private const string BinName = "bin";
-		private new const string DataName = "Data";
-		
+
 		private readonly DirectoryInfo m_root;
 		private readonly DirectoryInfo m_obbRoot;
 	}

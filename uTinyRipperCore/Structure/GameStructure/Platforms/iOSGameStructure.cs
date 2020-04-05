@@ -20,7 +20,7 @@ namespace uTinyRipper
 
 			if (!GetDataiOSDirectory(m_root, out string dataPath, out string name))
 			{
-				throw new Exception($"Data directory hasn't been found");
+				throw new Exception($"Data directory wasn't found");
 			}
 			Name = name;
 			DataPathes = new string[] { dataPath };
@@ -65,7 +65,7 @@ namespace uTinyRipper
 				if(dinfo.Name.EndsWith(AppExtension, StringComparison.Ordinal))
 				{
 					appName = dinfo.Name.Substring(0, dinfo.Name.Length - AppExtension.Length);
-					dataPath = Path.Combine(dinfo.FullName, iOSDataName);
+					dataPath = Path.Combine(dinfo.FullName, DataFolderName);
 					if (DirectoryUtils.Exists(dataPath))
 					{
 						return true;
@@ -97,7 +97,6 @@ namespace uTinyRipper
 		private const string iOSStreamingName = "Raw";
 
 		private const string PayloadName = "Payload";
-		private const string iOSDataName = "Data";
 		private const string AppExtension = ".app";
 
 		private readonly DirectoryInfo m_root;

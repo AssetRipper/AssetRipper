@@ -20,7 +20,7 @@ namespace uTinyRipper
 
 			if (!GetDataLinuxDirectory(m_root, out string dataPath, out string name))
 			{
-				throw new Exception($"Data directory hasn't been found");
+				throw new Exception($"Data directory wasn't found");
 			}
 			Name = name;
 			DataPathes = new string[] { dataPath };
@@ -59,7 +59,7 @@ namespace uTinyRipper
 				if (finfo.Extension == x86Extension || finfo.Extension == x64Extension)
 				{
 					name = Path.GetFileNameWithoutExtension(finfo.Name);
-					string dataFolder = $"{name}_{DataPostfix}";
+					string dataFolder = $"{name}_{DataFolderName}";
 					dataPath = Path.Combine(rootDiectory.FullName, dataFolder);
 					if (DirectoryUtils.Exists(dataPath))
 					{
@@ -78,8 +78,6 @@ namespace uTinyRipper
 
 		public override IReadOnlyDictionary<string, string> Files { get; }
 		public override IReadOnlyDictionary<string, string> Assemblies { get; }
-
-		private const string DataPostfix = "Data";
 
 		private const string x86Extension = ".x86";
 		private const string x64Extension = ".x64";

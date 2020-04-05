@@ -4,9 +4,9 @@ using System.IO;
 
 namespace uTinyRipper
 {
-	internal sealed class WebGLStructure : PlatformGameStructure
+	internal sealed class WebGLGameStructure : PlatformGameStructure
 	{
-		public WebGLStructure(string rootPath)
+		public WebGLGameStructure(string rootPath)
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
@@ -70,14 +70,14 @@ namespace uTinyRipper
 					}
 					else
 					{
-						throw new Exception("Build directory hasn't been found");
+						throw new Exception("Build directory wasn't found");
 					}
 				}
 			}
 
 			if(files.Count == 0)
 			{
-				throw new Exception("No files has been found");
+				throw new Exception("No files were found");
 			}
 
 			CollectStreamingAssets(m_root, files);
