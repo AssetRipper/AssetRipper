@@ -297,6 +297,9 @@ namespace uTinyRipper.Converters
 
 		private void AddBundleAssets(AssetBundle bundle)
 		{
+			string bundleName = AssetBundle.HasAssetBundleName(bundle.File.Version) ? bundle.AssetBundleName : bundle.File.Name;
+			string bundleDirectory = bundleName + ObjectUtils.DirectorySeparator;
+			string directory = Path.Combine(AssetBundleFullPath, bundleName);
 			foreach (KeyValuePair<string, Classes.AssetBundles.AssetInfo> kvp in bundle.Container)
 			{
 				Object asset = kvp.Value.Asset.FindAsset(bundle.File);
@@ -326,13 +329,10 @@ namespace uTinyRipper.Converters
 					{
 						assetPath = assetPath.Substring(AssetsDirectory.Length);
 					}
-					string bundleName = AssetBundle.HasAssetBundleName(bundle.File.Version) ? bundle.AssetBundleName : bundle.File.Name;
-					string bundleDirectory = bundleName + ObjectUtils.DirectorySeparator;
 					if (assetPath.StartsWith(bundleDirectory, StringComparison.OrdinalIgnoreCase))
 					{
 						assetPath = assetPath.Substring(bundleDirectory.Length);
 					}
-					string directory = Path.Combine(AssetBundleFullPath, bundleName);
 					m_pathAssets.Add(asset, new ProjectAssetPath(directory, assetPath));
 				}
 			}

@@ -29,14 +29,14 @@ namespace uTinyRipper.Classes.Shaders
 		DX11DomainSM50		= 22,
 		MetalVS				= 23,
 		MetalFS				= 24,
-		Spirv				= 25,
+		SPIRV				= 25,
 		Console				= 26,
-		//ConsoleVertex		= 26,
-		//ConsolePixel		= 27,
-		//Console3			= 28,
-		//Console4			= 29,
-		//ConsoleGeometry	= 30,
-		DX12RayTracingSM63	= 31,
+		//ConsoleVS			= 26,
+		//ConsoleFS			= 27,
+		//ConsoleHS			= 28,
+		//ConsoleDS			= 29,
+		//ConsoleGS			= 30,
+		RayTracing			= 31,
 	}
 
 	public static class ShaderGpuProgramType55Extensions
@@ -95,12 +95,12 @@ namespace uTinyRipper.Classes.Shaders
 					return ShaderGpuProgramType.MetalVS;
 				case ShaderGpuProgramType55.MetalFS:
 					return ShaderGpuProgramType.MetalFS;
-				case ShaderGpuProgramType55.Spirv:
-					return ShaderGpuProgramType.Spirv;
+				case ShaderGpuProgramType55.SPIRV:
+					return ShaderGpuProgramType.SPIRV;
 				case ShaderGpuProgramType55.Console:
 					return ShaderGpuProgramType.Console;
-				case ShaderGpuProgramType55.DX12RayTracingSM63:
-					return ShaderGpuProgramType.DX12RayTracingSM63;
+				case ShaderGpuProgramType55.RayTracing:
+					return ShaderGpuProgramType.RayTracing;
 
 				default:
 					throw new Exception($"Unsupported gpu program type {_this}");

@@ -226,7 +226,7 @@ namespace uTinyRipper.Project
 					string extension = Path.GetExtension(scenePath);
 					return relativePath.Substring(0, relativePath.Length - extension.Length);
 				}
-				else if (scenePath == string.Empty)
+				else if (scenePath.Length == 0)
 				{
 					// if you build a game without included scenes, Unity create one with empty name
 					return Name;

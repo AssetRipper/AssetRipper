@@ -52,7 +52,7 @@ namespace DXShaderRestorer
 				case ShaderGpuProgramType.DX11DomainSM50:
 					return 5;
 
-				case ShaderGpuProgramType.DX12RayTracingSM63:
+				case ShaderGpuProgramType.RayTracing:
 					return 6;
 
 				default:

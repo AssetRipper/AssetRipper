@@ -29,14 +29,14 @@ namespace uTinyRipper.Classes.Shaders
 		DX11DomainSM50,
 		MetalVS,
 		MetalFS,
-		Spirv,
+		SPIRV,
 		Console,
-		ConsoleVertex,
-		ConsolePixel,
-		Console3,
-		Console4,
-		ConsoleGeometry,
-		DX12RayTracingSM63,
+		ConsoleVS,
+		ConsoleFS,
+		ConsoleHS,
+		ConsoleDS,
+		ConsoleGS,
+		RayTracing,
 	}
 
 	public static class ShaderGpuProgramTypeExtensions
@@ -165,15 +165,15 @@ namespace uTinyRipper.Classes.Shaders
 				case ShaderGpuProgramType.MetalFS:
 					return GPUPlatform.metal;
 
-				case ShaderGpuProgramType.Spirv:
+				case ShaderGpuProgramType.SPIRV:
 					return GPUPlatform.vulkan;
 
 				case ShaderGpuProgramType.Console:
-				case ShaderGpuProgramType.ConsoleVertex:
-				case ShaderGpuProgramType.ConsolePixel:
-				case ShaderGpuProgramType.Console3:
-				case ShaderGpuProgramType.Console4:
-				case ShaderGpuProgramType.ConsoleGeometry:
+				case ShaderGpuProgramType.ConsoleVS:
+				case ShaderGpuProgramType.ConsoleFS:
+				case ShaderGpuProgramType.ConsoleHS:
+				case ShaderGpuProgramType.ConsoleDS:
+				case ShaderGpuProgramType.ConsoleGS:
 					switch (platform)
 					{
 						case Platform.PS3:
@@ -287,7 +287,7 @@ namespace uTinyRipper.Classes.Shaders
 				case ShaderGpuProgramType.MetalFS:
 					return "metal_fs";
 
-				case ShaderGpuProgramType.Spirv:
+				case ShaderGpuProgramType.SPIRV:
 					return "spirv";
 			}
 
@@ -326,11 +326,11 @@ namespace uTinyRipper.Classes.Shaders
 								}
 								break;
 
-							case ShaderGpuProgramType.ConsoleVertex:
+							case ShaderGpuProgramType.ConsoleVS:
 								return "pssl_vs";
-							case ShaderGpuProgramType.ConsolePixel:
+							case ShaderGpuProgramType.ConsoleFS:
 								return "pssl_ps";
-							case ShaderGpuProgramType.ConsoleGeometry:
+							case ShaderGpuProgramType.ConsoleGS:
 								return "pssl_gs";
 						}
 					}
