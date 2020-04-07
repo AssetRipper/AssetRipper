@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -137,7 +138,7 @@ namespace uTinyRipper
 			if (validFileName.Length > maxLength)
 			{
 				ext = Path.GetExtension(validFileName);
-				name = Path.GetFileNameWithoutExtension(validFileName).Substring(0, maxLength - ext.Length);
+				name = validFileName.Substring(0, maxLength - ext.Length);
 				validFileName = name + ext;
 			}
 
@@ -147,14 +148,17 @@ namespace uTinyRipper
 				return validFileName;
 			}
 
-			string filePath = ToLongPath(Path.Combine(dirPath, validFileName));
-			if (!File.Exists(filePath))
+			name = name ?? Path.GetFileNameWithoutExtension(validFileName);
+			if (!IsReservedName(name))
 			{
-				return validFileName;
+				string filePath = ToLongPath(Path.Combine(dirPath, validFileName));
+				if (!File.Exists(filePath))
+				{
+					return validFileName;
+				}
 			}
 
 			ext = ext ?? Path.GetExtension(validFileName);
-			name = name ?? Path.GetFileNameWithoutExtension(validFileName);
 			for (int counter = 0; counter < int.MaxValue; counter++)
 			{
 				string proposedName = $"{name}_{counter}{ext}";
@@ -166,7 +170,23 @@ namespace uTinyRipper
 			throw new Exception($"Can't generate unique name for file {fileName} in directory {dirPath}");
 		}
 
+		public static bool IsReservedName(string name)
+		{
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			{
+				return s_reservedNames.Contains(name.ToLower());
+			}
+			return false;
+		}
+
 		public const int MaxFileNameLength = 256;
 		public const int MaxFilePathLength = 260;
+
+		private static readonly HashSet<string> s_reservedNames = new HashSet<string>()
+		{
+			"aux", "con", "nul", "prn",
+			"com1", "com2", "com3", "com4", "com5", "com6", "com7", "com8", "com9",
+			"lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9",
+		};
 	}
 }
