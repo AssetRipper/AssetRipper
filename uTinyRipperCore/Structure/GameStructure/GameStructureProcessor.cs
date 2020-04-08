@@ -32,20 +32,20 @@ namespace uTinyRipper
 				FileScheme scheme = m_schemes[i];
 				foreach (FileIdentifier dependency in scheme.Dependencies)
 				{
-					if (m_knownFiles.Contains(dependency.FilePath))
+					if (m_knownFiles.Contains(dependency.PathName))
 					{
 						continue;
 					}
 
-					string systemFilePath = dependencyCallback.Invoke(dependency.FilePath);
+					string systemFilePath = dependencyCallback.Invoke(dependency.PathName);
 					if (systemFilePath == null)
 					{
-						m_knownFiles.Add(dependency.FilePath);
+						m_knownFiles.Add(dependency.PathName);
 						Logger.Log(LogType.Warning, LogCategory.Import, $"Dependency '{dependency}' hasn't been found");
 						continue;
 					}
 
-					AddScheme(systemFilePath, dependency.FilePath);
+					AddScheme(systemFilePath, dependency.PathName);
 				}
 			}
 		}
@@ -96,20 +96,20 @@ namespace uTinyRipper
 			}
 		}
 
-		private static Version GetDefaultGenerationVersions(FileGeneration generation)
+		private static Version GetDefaultGenerationVersions(FormatVersion generation)
 		{
-			if (generation < FileGeneration.FG_120_200)
+			if (generation < FormatVersion.Unknown_5)
 			{
 				return new Version(1, 2, 2);
 			}
 
 			switch (generation)
 			{
-				case FileGeneration.FG_120_200:
+				case FormatVersion.Unknown_5:
 					return new Version(1, 6);
-				case FileGeneration.FG_210_261:
+				case FormatVersion.Unknown_6:
 					return new Version(2, 5);
-				case FileGeneration.FG_300b:
+				case FormatVersion.Unknown_7:
 					return new Version(3, 0, 0, VersionType.Beta, 1);
 				default:
 					throw new NotSupportedException();
@@ -126,10 +126,10 @@ namespace uTinyRipper
 
 		private LayoutInfo GetLayoutInfo(SerializedFileScheme serialized)
 		{
-			if (RTTIClassHierarchyDescriptor.HasPlatform(serialized.Header.Generation))
+			if (SerializedFileMetadata.HasPlatform(serialized.Header.Version))
 			{
-				RTTIClassHierarchyDescriptor hierarchy = serialized.Metadata.Hierarchy;
-				return new LayoutInfo(hierarchy.Version, hierarchy.Platform, serialized.Flags);
+				SerializedFileMetadata metadata = serialized.Metadata;
+				return new LayoutInfo(metadata.UnityVersion, metadata.TargetPlatform, serialized.Flags);
 			}
 			else
 			{
@@ -139,7 +139,7 @@ namespace uTinyRipper
 				if (bundle == null)
 				{
 					Logger.Log(LogType.Warning, LogCategory.Import, "Unable to determine layout for provided files. Tring default one");
-					Version version = GetDefaultGenerationVersions(serialized.Header.Generation);
+					Version version = GetDefaultGenerationVersions(serialized.Header.Version);
 					return new LayoutInfo(version, DefaultPlatform, DefaultFlags);
 
 				}

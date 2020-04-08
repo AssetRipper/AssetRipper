@@ -42,6 +42,6 @@ namespace uTinyRipper.Classes
 		public const string SnapshotIDName = "m_SnapshotID";
 
 		public PPtr<AudioMixer> AudioMixer;
-		public GUID SnapshotID;
+		public UnityGUID SnapshotID;
 	}
 }

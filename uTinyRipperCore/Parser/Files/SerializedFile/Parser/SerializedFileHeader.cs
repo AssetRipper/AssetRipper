@@ -10,7 +10,7 @@ namespace uTinyRipper.SerializedFiles
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasEndian(FileGeneration generation) => generation >= FileGeneration.FG_350_47x;
+		public static bool HasEndianess(FormatVersion generation) => generation >= FormatVersion.Unknown_9;
 
 		public static bool IsSerializedFileHeader(EndianReader reader, uint fileSize)
 		{
@@ -37,7 +37,7 @@ namespace uTinyRipper.SerializedFiles
 				return false;
 			}
 			int generation = reader.ReadInt32();
-			if (!Enum.IsDefined(typeof(FileGeneration), generation))
+			if (!Enum.IsDefined(typeof(FormatVersion), generation))
 			{
 				reader.BaseStream.Position = position;
 				return false;
@@ -55,15 +55,15 @@ namespace uTinyRipper.SerializedFiles
 				throw new Exception($"Invalid metadata size {MetadataSize}");
 			}
 			FileSize = reader.ReadUInt32();
-			Generation = (FileGeneration)reader.ReadInt32();
-			if (!Enum.IsDefined(typeof(FileGeneration), Generation))
+			Version = (FormatVersion)reader.ReadInt32();
+			if (!Enum.IsDefined(typeof(FormatVersion), Version))
 			{
-				throw new Exception($"Unsupported file generation {Generation}'");
+				throw new Exception($"Unsupported file generation {Version}'");
 			}
 			DataOffset = reader.ReadUInt32();
-			if (HasEndian(Generation))
+			if (HasEndianess(Version))
 			{
-				SwapEndianess = reader.ReadBoolean();
+				Endianess = reader.ReadBoolean();
 				reader.AlignStream();
 			}
 		}
@@ -72,11 +72,11 @@ namespace uTinyRipper.SerializedFiles
 		{
 			writer.Write(MetadataSize);
 			writer.Write(FileSize);
-			writer.Write((int)Generation);
+			writer.Write((int)Version);
 			writer.Write(DataOffset);
-			if (HasEndian(Generation))
+			if (HasEndianess(Version))
 			{
-				writer.Write(SwapEndianess);
+				writer.Write(Endianess);
 				writer.AlignStream();
 			}
 		}
@@ -92,7 +92,7 @@ namespace uTinyRipper.SerializedFiles
 		/// <summary>
 		/// File format version. The number is required for backward compatibility and is normally incremented after the file format has been changed in a major update
 		/// </summary>
-		public FileGeneration Generation { get; set; }
+		public FormatVersion Version { get; set; }
 		/// <summary>
 		/// Offset to the serialized object data. It starts at the data for the first object
 		/// </summary>
@@ -100,7 +100,7 @@ namespace uTinyRipper.SerializedFiles
 		/// <summary>
 		/// Presumably controls the byte order of the data structure. This field is normally set to 0, which may indicate a little endian byte order.
 		/// </summary>
-		public bool SwapEndianess { get; set; }
+		public bool Endianess { get; set; }
 
 		public const int HeaderMinSize = 16;
 	}

@@ -184,7 +184,7 @@ namespace uTinyRipper.Classes
 
 			if (HasRendererData(reader.Version))
 			{
-				RenderDataKey = reader.ReadTupleTLong<GUID>();
+				RenderDataKey = reader.ReadTupleTLong<UnityGUID>();
 				AtlasTags = reader.ReadStringArray();
 				SpriteAtlas.Read(reader);
 			}
@@ -334,7 +334,7 @@ namespace uTinyRipper.Classes
 		/// Pivot, relative to left-bottom of original sprite rectangle Rect
 		/// </summary>
 		public Vector2f Pivot;
-		public Tuple<GUID, long> RenderDataKey;
+		public Tuple<UnityGUID, long> RenderDataKey;
 		public PPtr<SpriteAtlas> SpriteAtlas;
 		public SpriteRenderData RD;
 #if UNIVERSAL

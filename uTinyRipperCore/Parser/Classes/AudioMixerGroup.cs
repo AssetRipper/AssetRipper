@@ -48,6 +48,6 @@ namespace uTinyRipper.Classes
 		public const string ChildrenName = "m_Children";
 
 		public PPtr<AudioMixer> AudioMixer;
-		public GUID GroupID;
+		public UnityGUID GroupID;
 	}
 }

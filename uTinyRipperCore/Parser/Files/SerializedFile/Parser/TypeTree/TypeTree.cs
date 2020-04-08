@@ -5,17 +5,12 @@ namespace uTinyRipper.SerializedFiles
 {
 	public sealed class TypeTree : ISerializedReadable, ISerializedWritable
 	{
-		/// <summary>
-		/// 2019.3 and greater
-		/// </summary>
-		public static bool HasUnknown(FileGeneration generation) => generation >= FileGeneration.FG_20193_x;
-
 		public void Read(SerializedReader reader)
 		{
 			if (TypeTreeNode.IsFormat5(reader.Generation))
 			{
 				int nodesCount = reader.ReadInt32();
-				int customBufferSize = reader.ReadInt32();
+				int stringBufferSize = reader.ReadInt32();
 				Nodes = new TypeTreeNode[nodesCount];
 				for (int i = 0; i < nodesCount; i++)
 				{
@@ -23,13 +18,8 @@ namespace uTinyRipper.SerializedFiles
 					node.Read(reader);
 					Nodes[i] = node;
 				}
-				CustomTypeBuffer = new byte[customBufferSize];
-				reader.Read(CustomTypeBuffer, 0, CustomTypeBuffer.Length);
-
-				if (HasUnknown(reader.Generation))
-				{
-					Unknown = reader.ReadInt32();
-				}
+				StringBuffer = new byte[stringBufferSize];
+				reader.Read(StringBuffer, 0, StringBuffer.Length);
 			}
 			else
 			{
@@ -44,17 +34,12 @@ namespace uTinyRipper.SerializedFiles
 			if (TypeTreeNode.IsFormat5(writer.Generation))
 			{
 				writer.Write(Nodes.Length);
-				writer.Write(CustomTypeBuffer.Length);
+				writer.Write(StringBuffer.Length);
 				for (int i = 0; i < Nodes.Length; i++)
 				{
 					Nodes[i].Write(writer);
 				}
-				writer.Write(CustomTypeBuffer, 0, CustomTypeBuffer.Length);
-
-				if (HasUnknown(writer.Generation))
-				{
-					writer.Write(Unknown);
-				}
+				writer.Write(StringBuffer, 0, StringBuffer.Length);
 			}
 			else
 			{
@@ -67,7 +52,7 @@ namespace uTinyRipper.SerializedFiles
 		{
 			TypeTreeNode node = new TypeTreeNode();
 			node.Read(reader);
-			node.Depth = depth;
+			node.Level = depth;
 			nodes.Add(node);
 
 			int childCount = reader.ReadInt32();
@@ -111,10 +96,10 @@ namespace uTinyRipper.SerializedFiles
 		private int GetChildCount(int index)
 		{
 			int count = 0;
-			int depth = Nodes[index].Depth + 1;
+			int depth = Nodes[index].Level + 1;
 			for (int i = index + 1; i < Nodes.Length; i++)
 			{
-				int nodeDepth = Nodes[i].Depth;
+				int nodeDepth = Nodes[i].Level;
 				if (nodeDepth < depth)
 				{
 					break;
@@ -140,7 +125,6 @@ namespace uTinyRipper.SerializedFiles
 #endif
 
 		public TypeTreeNode[] Nodes { get; set; }
-		public byte[] CustomTypeBuffer { get; set; }
-		public int Unknown { get; set; }
+		public byte[] StringBuffer { get; set; }
 	}
 }

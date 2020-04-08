@@ -9,17 +9,17 @@ namespace uTinyRipper.Classes
 {
 	public struct Meta
 	{
-		public Meta(GUID guid, AssetImporter importer):
+		public Meta(UnityGUID guid, AssetImporter importer):
 			this(guid, true, importer)
 		{
 		}
 
-		public Meta(GUID guid, bool hasLicense, AssetImporter importer):
+		public Meta(UnityGUID guid, bool hasLicense, AssetImporter importer):
 			this(guid, hasLicense, false, importer)
 		{
 		}
 
-		public Meta(GUID guid, bool hasLicense, bool isFolder, AssetImporter importer)
+		public Meta(UnityGUID guid, bool hasLicense, bool isFolder, AssetImporter importer)
 		{
 			if (guid.IsZero)
 			{
@@ -60,7 +60,7 @@ namespace uTinyRipper.Classes
 			return document;
 		}
 
-		public GUID GUID { get; }
+		public UnityGUID GUID { get; }
 		public bool IsFolderAsset { get; }
 		public bool HasLicenseData { get; }
 		public AssetImporter Importer { get; }

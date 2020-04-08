@@ -55,12 +55,12 @@ namespace uTinyRipper.Converters
 		{
 			TypeTreeNode node = new TypeTreeNode();
 			node.Version = version;
-			node.Depth = (byte)Depth;
+			node.Level = (byte)Depth;
 			node.ByteSize = size;
 			node.Type = type;
 			node.Name = name;
 			node.Index = Index;
-			node.IsArrayBool = isArray;
+			node.TypeFlags = isArray ? 1 : 0;
 			node.MetaFlag = flags;
 			m_nodes.Add(node);
 

@@ -113,7 +113,7 @@ namespace uTinyRipper.Project
 			}
 
 			long exportID = GetExportID(asset);
-			GUID uniqueGUID = script.GUID;
+			UnityGUID uniqueGUID = script.GUID;
 			return new MetaPtr(exportID, uniqueGUID, AssetExporter.ToExportType(asset));
 		}
 
@@ -149,7 +149,7 @@ namespace uTinyRipper.Project
 		public override IEnumerable<Object> Assets => m_scripts.Keys;
 		public override string Name => nameof(ScriptExportCollection);
 
-		private static readonly GUID UnityEngineGUID = new GUID(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
+		private static readonly UnityGUID UnityEngineGUID = new UnityGUID(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
 		private static readonly Regex s_unityEngine = new Regex(@"^UnityEngine(\.[0-9a-zA-Z]+)*(\.dll)?$", RegexOptions.Compiled);
 
 		private readonly List<MonoScript> m_export = new List<MonoScript>();

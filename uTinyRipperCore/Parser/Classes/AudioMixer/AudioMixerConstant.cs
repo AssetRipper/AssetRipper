@@ -17,12 +17,12 @@ namespace uTinyRipper.Classes.AudioMixers
 		public void Read(AssetReader reader)
 		{
 			Groups = reader.ReadAssetArray<GroupConstant>();
-			GroupGUIDs = reader.ReadAssetArray<GUID>();
+			GroupGUIDs = reader.ReadAssetArray<UnityGUID>();
 			Effects = reader.ReadAssetArray<EffectConstant>();
-			EffectGUIDs = reader.ReadAssetArray<GUID>();
+			EffectGUIDs = reader.ReadAssetArray<UnityGUID>();
 			NumSideChainBuffers = reader.ReadUInt32();
 			Snapshots = reader.ReadAssetArray<SnapshotConstant>();
-			SnapshotGUIDs = reader.ReadAssetArray<GUID>();
+			SnapshotGUIDs = reader.ReadAssetArray<UnityGUID>();
 			//m_groupNameBuffer = stream.ReadArray<char>();
 			reader.AlignStream();
 			
@@ -56,12 +56,12 @@ namespace uTinyRipper.Classes.AudioMixers
 		}
 
 		public GroupConstant[] Groups { get; set; }
-		public GUID[] GroupGUIDs { get; set; }
+		public UnityGUID[] GroupGUIDs { get; set; }
 		public EffectConstant[] Effects { get; set; }
-		public GUID[] EffectGUIDs { get; set; }
+		public UnityGUID[] EffectGUIDs { get; set; }
 		public uint NumSideChainBuffers { get; set; }
 		public SnapshotConstant[] Snapshots { get; set; }
-		public GUID[] SnapshotGUIDs { get; set; }
+		public UnityGUID[] SnapshotGUIDs { get; set; }
 		public char[] GroupNameBuffer { get; set; }
 		public char[] SnapshotNameBuffer { get; set; }
 		public char[] PluginEffectNameBuffer { get; set; }

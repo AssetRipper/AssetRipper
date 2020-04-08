@@ -66,22 +66,22 @@ namespace uTinyRipper
 			{
 				Header.Read(reader);
 			}
-			if (SerializedFileMetadata.IsMetadataAtTheEnd(Header.Generation))
+			if (SerializedFileMetadata.IsMetadataAtTheEnd(Header.Version))
 			{
 				Stream.Position = Header.FileSize - Header.MetadataSize;
 			}
 			Metadata.Read(Stream, Header);
 
-			SerializedFileMetadataConverter.CombineFormats(Header.Generation, Metadata);
+			SerializedFileMetadataConverter.CombineFormats(Header.Version, Metadata);
 			UpdateFlags();
 		}
 
 		private void UpdateFlags()
 		{
 			Flags = TransferInstructionFlags.SerializeGameRelease;
-			if (RTTIClassHierarchyDescriptor.HasPlatform(Header.Generation))
+			if (SerializedFileMetadata.HasPlatform(Header.Version))
 			{
-				if (Metadata.Hierarchy.Platform == Platform.NoTarget)
+				if (Metadata.TargetPlatform == Platform.NoTarget)
 				{
 					Flags = TransferInstructionFlags.NoTransferInstructionFlags;
 					if (FilePath.EndsWith(".unity", StringComparison.Ordinal))
@@ -91,18 +91,18 @@ namespace uTinyRipper
 				}
 			}
 
-			if (FilenameUtils.IsEngineResource(Name) || Header.Generation < FileGeneration.FG_500a1 && FilenameUtils.IsBuiltinExtra(Name))
+			if (FilenameUtils.IsEngineResource(Name) || Header.Version < FormatVersion.Unknown_10 && FilenameUtils.IsBuiltinExtra(Name))
 			{
 				Flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
 			}
-			if (Header.SwapEndianess || Metadata.SwapEndianess)
+			if (Header.Endianess || Metadata.SwapEndianess)
 			{
 				Flags |= TransferInstructionFlags.SwapEndianess;
 			}
 		}
 
 		public override FileEntryType SchemeType => FileEntryType.Serialized;
-		public override IEnumerable<FileIdentifier> Dependencies => Metadata.Dependencies;
+		public override IEnumerable<FileIdentifier> Dependencies => Metadata.Externals;
 
 		public SerializedFileHeader Header { get; } = new SerializedFileHeader();
 		public SerializedFileMetadata Metadata { get; } = new SerializedFileMetadata();

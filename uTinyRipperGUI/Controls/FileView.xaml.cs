@@ -47,10 +47,10 @@ namespace uTinyRipperGUI.Controls
 		private void AddItem(IList<FileEntry> entries, SerializedFile file)
 		{
 			int index = 0;
-			FileEntry[] children = new FileEntry[file.Metadata.Entries.Length];
-			foreach (AssetEntry entry in file.Metadata.Entries)
+			FileEntry[] children = new FileEntry[file.Metadata.Object.Length];
+			foreach (ObjectInfo entry in file.Metadata.Object)
 			{
-				children[index++] = new FileEntry($"{entry.PathID}. {entry.ClassID}");
+				children[index++] = new FileEntry($"{entry.FileID}. {entry.ClassID}");
 			}
 			entries.Add(new FileEntry(file.Name, children));
 		}

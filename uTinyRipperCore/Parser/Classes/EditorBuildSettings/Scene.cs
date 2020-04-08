@@ -19,7 +19,7 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 			GUID = default;
 		}
 
-		public Scene(string path, GUID guid)
+		public Scene(string path, UnityGUID guid)
 		{
 			if (path == null)
 			{
@@ -61,6 +61,6 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 		public const string PathName = "path";
 		public const string GuidName = "guid";
 
-		public GUID GUID;
+		public UnityGUID GUID;
 	}
 }

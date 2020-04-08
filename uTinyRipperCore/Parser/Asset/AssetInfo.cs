@@ -6,11 +6,11 @@ namespace uTinyRipper
 	public class AssetInfo
 	{
 		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID):
-			this(serializedFile, pathID, classID, new GUID(Guid.NewGuid()))
+			this(serializedFile, pathID, classID, new UnityGUID(Guid.NewGuid()))
 		{
 		}
 
-		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID, GUID guid)
+		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID, UnityGUID guid)
 		{
 			if (serializedFile == null)
 			{
@@ -28,6 +28,6 @@ namespace uTinyRipper
 		public long PathID { get; }
 		public ClassIDType ClassID  { get; }
 
-		public GUID GUID;
+		public UnityGUID GUID;
 	}
 }

@@ -45,8 +45,8 @@ namespace uTinyRipper.Classes
 
 			if (!ReadStructure(reader))
 			{
-				AssetEntry info = File.GetAssetEntry(PathID);
-				reader.BaseStream.Position = position + info.Size;
+				ObjectInfo info = File.GetAssetEntry(PathID);
+				reader.BaseStream.Position = position + info.ByteSize;
 			}
 		}
 

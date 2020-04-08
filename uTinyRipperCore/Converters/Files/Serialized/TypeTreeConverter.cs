@@ -7,12 +7,12 @@ namespace uTinyRipper.Converters
 {
 	public static class TypeTreeConverter
 	{
-		public static void CombineFormats(FileGeneration generation, TypeTree origin)
+		public static void CombineFormats(FormatVersion generation, TypeTree origin)
 		{
 			if (TypeTreeNode.IsFormat5(generation))
 			{
 				Dictionary<uint, string> customTypes = new Dictionary<uint, string>();
-				using (MemoryStream stream = new MemoryStream(origin.CustomTypeBuffer))
+				using (MemoryStream stream = new MemoryStream(origin.StringBuffer))
 				{
 					using (EndianReader reader = new EndianReader(stream, EndianType.LittleEndian))
 					{
@@ -27,8 +27,8 @@ namespace uTinyRipper.Converters
 
 				foreach (TypeTreeNode node in origin.Nodes)
 				{
-					node.Type = GetTypeName(customTypes, node.TypeOffset);
-					node.Name = GetTypeName(customTypes, node.NameOffset);
+					node.Type = GetTypeName(customTypes, node.TypeStrOffset);
+					node.Name = GetTypeName(customTypes, node.NameStrOffset);
 				}
 			}
 		}

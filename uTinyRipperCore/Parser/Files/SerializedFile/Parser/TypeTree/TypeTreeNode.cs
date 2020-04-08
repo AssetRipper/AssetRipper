@@ -7,28 +7,27 @@ namespace uTinyRipper.SerializedFiles
 		/// <summary>
 		/// 5.0.0a1 and greater
 		/// </summary>
-		public static bool IsFormat5(FileGeneration generation) => generation >= FileGeneration.FG_500a1;
+		public static bool IsFormat5(FormatVersion generation) => generation >= FormatVersion.Unknown_10;
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasUnknown(FileGeneration generation) => generation >= FileGeneration.FG_20191;
+		public static bool HasRefTypeHash(FormatVersion generation) => generation >= FormatVersion.TypeTreeNodeWithTypeFlags;
 
 		public void Read(SerializedReader reader)
 		{
 			if (IsFormat5(reader.Generation))
 			{
 				Version = reader.ReadUInt16();
-				Depth = reader.ReadByte();
-				IsArrayBool = reader.ReadBoolean();
-				TypeOffset = reader.ReadUInt32();
-				NameOffset = reader.ReadUInt32();
+				Level = reader.ReadByte();
+				TypeFlags = reader.ReadByte();
+				TypeStrOffset = reader.ReadUInt32();
+				NameStrOffset = reader.ReadUInt32();
 				ByteSize = reader.ReadInt32();
 				Index = reader.ReadInt32();
 				MetaFlag = (TransferMetaFlags)reader.ReadUInt32();
-				if (HasUnknown(reader.Generation))
+				if (HasRefTypeHash(reader.Generation))
 				{
-					Unknown1 = reader.ReadUInt32();
-					Unknown2 = reader.ReadUInt32();
+					RefTypeHash = reader.ReadUInt64();
 				}
 			}
 			else
@@ -37,7 +36,7 @@ namespace uTinyRipper.SerializedFiles
 				Name = reader.ReadStringZeroTerm();
 				ByteSize = reader.ReadInt32();
 				Index = reader.ReadInt32();
-				IsArray = reader.ReadInt32();
+				TypeFlags = reader.ReadInt32();
 				Version = reader.ReadInt32();
 				MetaFlag = (TransferMetaFlags)reader.ReadUInt32();
 			}
@@ -48,17 +47,16 @@ namespace uTinyRipper.SerializedFiles
 			if (IsFormat5(writer.Generation))
 			{
 				writer.Write((ushort)Version);
-				writer.Write(Depth);
-				writer.Write(IsArrayBool);
-				writer.Write(TypeOffset);
-				writer.Write(NameOffset);
+				writer.Write(Level);
+				writer.Write((byte)TypeFlags);
+				writer.Write(TypeStrOffset);
+				writer.Write(NameStrOffset);
 				writer.Write(ByteSize);
 				writer.Write(Index);
 				writer.Write((uint)MetaFlag);
-				if (HasUnknown(writer.Generation))
+				if (HasRefTypeHash(writer.Generation))
 				{
-					writer.Write(Unknown1);
-					writer.Write(Unknown2);
+					writer.Write(RefTypeHash);
 				}
 			}
 			else
@@ -67,7 +65,7 @@ namespace uTinyRipper.SerializedFiles
 				writer.WriteStringZeroTerm(Name);
 				writer.Write(ByteSize);
 				writer.Write(Index);
-				writer.Write(IsArray);
+				writer.Write(TypeFlags);
 				writer.Write(Version);
 				writer.Write((uint)MetaFlag);
 			}
@@ -87,12 +85,12 @@ namespace uTinyRipper.SerializedFiles
 
 		public StringBuilder ToString(StringBuilder sb)
 		{
-			sb.Append('\t', Depth).Append(Type).Append(' ').Append(Name);
+			sb.Append('\t', Level).Append(Type).Append(' ').Append(Name);
 			sb.AppendFormat(" // ByteSize{0}{1:x}{2}, Index{3}{4:x}{5}, Version{6}{7:x}{8}, IsArray{{{9}}}, MetaFlag{10}{11:x}{12}",
 					"{", unchecked((uint)ByteSize), "}",
 					"{", Index, "}",
 					"{", Version, "}",
-					IsArray,
+					TypeFlags,
 					"{", (int)MetaFlag, "}");
 			return sb;
 		}
@@ -105,24 +103,19 @@ namespace uTinyRipper.SerializedFiles
 		/// <summary>
 		/// Depth of current type relative to root
 		/// </summary>
-		public byte Depth { get; set; }
-		public bool IsArrayBool
-		{
-			get => IsArray != 0;
-			set => IsArray = value ? 1 : 0;
-		}
+		public byte Level { get; set; }
 		/// <summary>
 		/// Array flag, set to 1 if type is "Array" or "TypelessData".
 		/// </summary>
-		public int IsArray { get; set; }
+		public int TypeFlags { get; set; }
 		/// <summary>
-		/// Type offset in <see cref="TypeTree.CustomTypeBuffer">
+		/// Type offset in <see cref="TypeTree.StringBuffer">
 		/// </summary>
-		public uint TypeOffset { get; set; }
+		public uint TypeStrOffset { get; set; }
 		/// <summary>
-		/// Name offset in <see cref="TypeTree.CustomTypeBuffer">
+		/// Name offset in <see cref="TypeTree.StringBuffer">
 		/// </summary>
-		public uint NameOffset { get; set; }
+		public uint NameStrOffset { get; set; }
 		/// <summary>
 		/// Name of the data type. This can be the name of any substructure or a static predefined type.
 		/// </summary>
@@ -145,7 +138,6 @@ namespace uTinyRipper.SerializedFiles
 		/// Metaflags of the field
 		/// </summary>
 		public TransferMetaFlags MetaFlag { get; set; }
-		public uint Unknown1 { get; set; }
-		public uint Unknown2 { get; set; }
+		public ulong RefTypeHash { get; set; }
 	}
 }

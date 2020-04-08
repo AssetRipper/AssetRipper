@@ -4,18 +4,25 @@ namespace uTinyRipper.Converters
 {
 	public static class SerializedFileMetadataConverter
 	{
-		public static void CombineFormats(FileGeneration generation, SerializedFileMetadata origin)
+		public static void CombineFormats(FormatVersion generation, SerializedFileMetadata origin)
 		{
-			RTTIClassHierarchyDescriptorConverter.CombineFormats(generation, ref origin.Hierarchy);
-			if (AssetEntry.HasTypeIndex(generation))
+			if (!SerializedFileMetadata.HasEnableTypeTree(generation))
 			{
-				for (int i = 0; i < origin.Entries.Length; i++)
+				origin.EnableTypeTree = true;
+			}
+			for (int i = 0; i < origin.Types.Length; i++)
+			{
+				SerializedTypeConverter.CombineFormats(generation, ref origin.Types[i]);
+			}
+			if (generation >= FormatVersion.RefactorTypeData)
+			{
+				for (int i = 0; i < origin.Object.Length; i++)
 				{
-					ref AssetEntry entry = ref origin.Entries[i];
-					ref RTTIBaseClassDescriptor type = ref origin.Hierarchy.Types[entry.TypeIndex];
-					entry.TypeID = type.ClassID == ClassIDType.MonoBehaviour ? (-type.ScriptID - 1) : (int)type.ClassID;
-					entry.ClassID = type.ClassID;
-					entry.ScriptID = type.ScriptID;
+					ref ObjectInfo entry = ref origin.Object[i];
+					ref SerializedType type = ref origin.Types[entry.TypeID];
+					entry.ClassID = type.TypeID;
+					entry.ScriptTypeIndex = type.ScriptTypeIndex;
+					entry.Stripped = type.IsStrippedType;
 				}
 			}
 		}

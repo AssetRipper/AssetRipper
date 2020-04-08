@@ -147,10 +147,10 @@ namespace uTinyRipper.Converters
 			}
 
 			long exportID = ExportCollection.GetMainExportID(asset);
-			return new MetaPtr(exportID, GUID.MissingReference, AssetType.Meta);
+			return new MetaPtr(exportID, UnityGUID.MissingReference, AssetType.Meta);
 		}
 
-		public GUID SceneNameToGUID(string name)
+		public UnityGUID SceneNameToGUID(string name)
 		{
 			if (m_buildSettings == null)
 			{

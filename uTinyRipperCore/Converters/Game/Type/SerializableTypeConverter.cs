@@ -17,7 +17,7 @@ namespace uTinyRipper.Converters
 
 			TypeTree instance = new TypeTree();
 			instance.Nodes = context.Nodes.ToArray();
-			instance.CustomTypeBuffer = Array.Empty<byte>();
+			instance.StringBuffer = Array.Empty<byte>();
 			return instance;
 		}
 

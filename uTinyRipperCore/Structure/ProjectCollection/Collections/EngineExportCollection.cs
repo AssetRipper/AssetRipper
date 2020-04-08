@@ -224,7 +224,7 @@ namespace uTinyRipper.Converters.Project
 				throw new NotImplementedException($"Unknown ExportID for asset {asset.PathID} from file {asset.File.Name}");
 			}
 			long exportID = engneAsset.ExportID;
-			GUID guid = engneAsset.GUID;
+			UnityGUID guid = engneAsset.GUID;
 			return new MetaPtr(exportID, guid, AssetType.Internal);
 		}
 

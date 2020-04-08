@@ -45,7 +45,7 @@ namespace uTinyRipper.Project
 			throw new ArgumentException(nameof(asset));
 		}
 
-		public GUID GetExportGUID(Object _)
+		public UnityGUID GetExportGUID(Object _)
 		{
 			throw new NotSupportedException();
 		}
@@ -59,7 +59,7 @@ namespace uTinyRipper.Project
 
 			long exportId = GetExportID(asset);
 			AssetType type = AssetExporter.ToExportType(asset);
-			return new MetaPtr(exportId, GUID.MissingReference, type);
+			return new MetaPtr(exportId, UnityGUID.MissingReference, type);
 		}
 
 		public IAssetExporter AssetExporter { get; }

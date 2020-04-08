@@ -153,7 +153,7 @@ namespace uTinyRipper.Classes
 
 		public string ToLogString(IAssetContainer container)
 		{
-			string depName = FileIndex == 0 ? container.Name : container.Dependencies[FileIndex - 1].FilePathOrigin;
+			string depName = FileIndex == 0 ? container.Name : container.Dependencies[FileIndex - 1].PathNameOrigin;
 			ClassIDType classID = typeof(T).ToClassIDType();
 			return $"[{depName}]{classID}_{PathID}";
 		}

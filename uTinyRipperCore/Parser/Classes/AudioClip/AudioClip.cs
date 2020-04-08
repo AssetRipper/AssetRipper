@@ -104,6 +104,11 @@ namespace uTinyRipper.Classes
 		private static bool IsFSBResourceFirst(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
 		private static int GetDecompressOnLoadOrder(Version version)
 		{
+			if (version.IsGreaterEqual(3))
+			{
+				return 0;
+			}
+
 			if (version.IsEqual(2, 6))
 			{
 				return 3;

@@ -29,17 +29,17 @@ namespace uTinyRipper
 		{
 #warning TODO: fix cross dependencies
 			m_knownFiles.Add(file.Name);
-			foreach (FileIdentifier dependency in file.Metadata.Dependencies)
+			foreach (FileIdentifier dependency in file.Metadata.Externals)
 			{
-				if (!m_knownFiles.Contains(dependency.FilePath))
+				if (!m_knownFiles.Contains(dependency.PathName))
 				{
-					if (Collection.GameFiles.TryGetValue(dependency.FilePath, out SerializedFile dependencyFile))
+					if (Collection.GameFiles.TryGetValue(dependency.PathName, out SerializedFile dependencyFile))
 					{
 						ReadFile(dependencyFile);
 					}
 					else
 					{
-						m_knownFiles.Add(dependency.FilePath);
+						m_knownFiles.Add(dependency.PathName);
 					}
 				}
 			}

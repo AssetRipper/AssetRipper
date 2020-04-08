@@ -78,7 +78,7 @@ namespace uTinyRipper.SerializedFiles
 			return null;
 		}
 
-		public AssetEntry GetAssetEntry(long pathID)
+		public ObjectInfo GetAssetEntry(long pathID)
 		{
 			throw new NotSupportedException();
 		}

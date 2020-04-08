@@ -25,7 +25,7 @@ namespace uTinyRipper.Project
 			throw new NotSupportedException();
 		}
 
-		public GUID GetExportGUID(Object asset)
+		public UnityGUID GetExportGUID(Object asset)
 		{
 			throw new NotSupportedException();
 		}

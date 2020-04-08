@@ -108,7 +108,7 @@ namespace uTinyRipper.Classes
 		public SpriteAtlasEditorData EditorData { get; set; }
 		public PPtr<Sprite>[] PackedSprites { get; set; }
 		public string[] PackedSpriteNamesToIndex { get; set; }
-		public Dictionary<Tuple<GUID, long>, SpriteAtlasData> RenderDataMap { get; set; } = new Dictionary<Tuple<GUID, long>, SpriteAtlasData>();
+		public Dictionary<Tuple<UnityGUID, long>, SpriteAtlasData> RenderDataMap { get; set; } = new Dictionary<Tuple<UnityGUID, long>, SpriteAtlasData>();
 		public string Tag { get; set; }
 		public bool IsVariant { get; set; }
 

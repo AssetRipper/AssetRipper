@@ -2,6 +2,7 @@
 
 namespace uTinyRipper.SerializedFiles
 {
+#warning TODO: move to classes
 	/// <summary>
 	/// A serialized file may be linked with other serialized files to create shared dependencies.
 	/// </summary>
@@ -10,68 +11,68 @@ namespace uTinyRipper.SerializedFiles
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		public static bool HasAssetName(FileGeneration generation) => generation >= FileGeneration.FG_210_261;
+		public static bool HasAssetPath(FormatVersion generation) => generation >= FormatVersion.Unknown_6;
 		/// <summary>
 		/// 1.2.0 and greater
 		/// </summary>
-		public static bool HasHash(FileGeneration generation) => generation >= FileGeneration.FG_120_200;
+		public static bool HasHash(FormatVersion generation) => generation >= FormatVersion.Unknown_5;
 
 		public bool IsFile(ISerializedFile file)
 		{
-			return file.Name == FilePath;
+			return file.Name == PathName;
 		}
 		
 		public void Read(SerializedReader reader)
 		{
-			if (HasAssetName(reader.Generation))
+			if (HasAssetPath(reader.Generation))
 			{
 				AssetPath = reader.ReadStringZeroTerm();
 			}
 			if (HasHash(reader.Generation))
 			{
-				Hash.Read(reader);
+				Guid.Read(reader);
 				Type = (AssetType)reader.ReadInt32();
 			}
-			FilePathOrigin = reader.ReadStringZeroTerm();
-			FilePath = FilenameUtils.FixFileIdentifier(FilePathOrigin);
+			PathNameOrigin = reader.ReadStringZeroTerm();
+			PathName = FilenameUtils.FixFileIdentifier(PathNameOrigin);
 		}
 
 		public void Write(SerializedWriter writer)
 		{
-			if (HasAssetName(writer.Generation))
+			if (HasAssetPath(writer.Generation))
 			{
 				writer.WriteStringZeroTerm(AssetPath);
 			}
 			if (HasHash(writer.Generation))
 			{
-				Hash.Write(writer);
+				Guid.Write(writer);
 				writer.Write((int)Type);
 			}
-			writer.WriteStringZeroTerm(FilePathOrigin);
+			writer.WriteStringZeroTerm(PathNameOrigin);
 		}
 
 		public string GetFilePath()
 		{
 			if (Type == AssetType.Meta)
 			{
-				return Hash.ToString();
+				return Guid.ToString();
 			}
-			return FilePath;
+			return PathName;
 		}
 
 		public override string ToString()
 		{
 			if (Type == AssetType.Meta)
 			{
-				return Hash.ToString();
+				return Guid.ToString();
 			}
-			return FilePathOrigin ?? base.ToString();
+			return PathNameOrigin ?? base.ToString();
 		}
 
 		/// <summary>
 		/// File path without such prefixes as archive:/directory/fileName
 		/// </summary>
-		public string FilePath { get; set; }
+		public string PathName { get; set; }
 
 		/// <summary>
 		/// Virtual asset path. Used for cached files, otherwise it's empty.
@@ -86,13 +87,8 @@ namespace uTinyRipper.SerializedFiles
 		/// Actual file path. This path is relative to the path of the current file.
 		/// The folder "library" often needs to be translated to "resources" in order to find the file on the file system.
 		/// </summary>
-		public string FilePathOrigin { get; set; }
+		public string PathNameOrigin { get; set; }
 
-		/// <summary>
-		/// Globally unique identifier of the file (or Hash?), 16 bytes long.
-		/// Engine apparently always uses the big endian format and when converted to text,
-		/// the GUID is a simple 32 character hex string with swapped characters for each byte.
-		/// </summary>
-		public Hash128 Hash;
+		public UnityGUID Guid;
 	}
 }

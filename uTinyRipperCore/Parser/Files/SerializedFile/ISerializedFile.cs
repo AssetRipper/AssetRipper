@@ -13,7 +13,7 @@ namespace uTinyRipper
 		/// <returns>Found asset or null</returns>
 		Object FindAsset(long pathID);
 
-		AssetEntry GetAssetEntry(long pathID);
+		ObjectInfo GetAssetEntry(long pathID);
 
 		PPtr<T> CreatePPtr<T>(T asset)
 			where T : Object;

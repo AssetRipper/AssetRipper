@@ -196,7 +196,7 @@ namespace uTinyRipper.Classes
 				return settings;
 			}
 		}
-		private GUID GetExportSceneGUID(IExportContainer container)
+		private UnityGUID GetExportSceneGUID(IExportContainer container)
 		{
 			if (HasReadPVSData(container.Version))
 			{
@@ -243,7 +243,7 @@ namespace uTinyRipper.Classes
 		public PPtr<OcclusionPortal>[] Portals { get; set; }
 
 		public OcclusionBakeSettings OcclusionBakeSettings;
-		public GUID SceneGUID;
+		public UnityGUID SceneGUID;
 		public PPtr<OcclusionCullingData> OcclusionCullingData;
 
 		public const string SceneKeyword = nameof(ClassIDType.Scene);

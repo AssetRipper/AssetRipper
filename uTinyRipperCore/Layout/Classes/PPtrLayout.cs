@@ -6,6 +6,7 @@ namespace uTinyRipper.Layout
 	{
 		public PPtrLayout(LayoutInfo info)
 		{
+			// NOTE: unknown version SerializedFiles.FormatVersion.Unknown_14
 			IsLongID = info.Version.IsGreaterEqual(5);
 		}
 

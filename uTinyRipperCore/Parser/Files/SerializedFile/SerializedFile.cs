@@ -26,9 +26,9 @@ namespace uTinyRipper
 			Header = scheme.Header;
 			Metadata = scheme.Metadata;
 
-			for (int i = 0; i < Metadata.Entries.Length; i++)
+			for (int i = 0; i < Metadata.Object.Length; i++)
 			{
-				m_assetEntryLookup.Add(Metadata.Entries[i].PathID, i);
+				m_assetEntryLookup.Add(Metadata.Object[i].FileID, i);
 			}
 		}
 
@@ -76,7 +76,7 @@ namespace uTinyRipper
 
 		private static AssetLayout GetLayout(GameCollection collection, SerializedFileScheme scheme, string name)
 		{
-			if (!RTTIClassHierarchyDescriptor.HasPlatform(scheme.Header.Generation))
+			if (!SerializedFileMetadata.HasPlatform(scheme.Header.Version))
 			{
 				return collection.Layout;
 			}
@@ -85,7 +85,7 @@ namespace uTinyRipper
 				return collection.Layout;
 			}
 
-			LayoutInfo info = new LayoutInfo(scheme.Metadata.Hierarchy.Version, scheme.Metadata.Hierarchy.Platform, scheme.Flags);
+			LayoutInfo info = new LayoutInfo(scheme.Metadata.UnityVersion, scheme.Metadata.TargetPlatform, scheme.Flags);
 			return collection.GetLayout(info);
 		}
 
@@ -126,7 +126,7 @@ namespace uTinyRipper
 				}
 			}
 
-			foreach (FileIdentifier identifier in Metadata.Dependencies)
+			foreach (FileIdentifier identifier in Metadata.Externals)
 			{
 				ISerializedFile file = Collection.FindSerializedFile(identifier.GetFilePath());
 				if (file == null)
@@ -158,7 +158,7 @@ namespace uTinyRipper
 				}
 			}
 
-			foreach (FileIdentifier identifier in Metadata.Dependencies)
+			foreach (FileIdentifier identifier in Metadata.Externals)
 			{
 				ISerializedFile file = Collection.FindSerializedFile(identifier.GetFilePath());
 				if (file == null)
@@ -180,14 +180,14 @@ namespace uTinyRipper
 			return null;
 		}
 
-		public AssetEntry GetAssetEntry(long pathID)
+		public ObjectInfo GetAssetEntry(long pathID)
 		{
-			return Metadata.Entries[m_assetEntryLookup[pathID]];
+			return Metadata.Object[m_assetEntryLookup[pathID]];
 		}
 
 		public ClassIDType GetAssetType(long pathID)
 		{
-			return Metadata.Entries[m_assetEntryLookup[pathID]].ClassID;
+			return Metadata.Object[m_assetEntryLookup[pathID]].ClassID;
 		}
 
 		public PPtr<T> CreatePPtr<T>(T asset)
@@ -198,9 +198,9 @@ namespace uTinyRipper
 				return new PPtr<T>(0, asset.PathID);
 			}
 
-			for (int i = 0; i < Metadata.Dependencies.Length; i++)
+			for (int i = 0; i < Metadata.Externals.Length; i++)
 			{
-				FileIdentifier identifier = Metadata.Dependencies[i];
+				FileIdentifier identifier = Metadata.Externals[i];
 				ISerializedFile file = Collection.FindSerializedFile(identifier.GetFilePath());
 				if (asset.File == file)
 				{
@@ -225,34 +225,34 @@ namespace uTinyRipper
 		{
 			using (AssetReader assetReader = new AssetReader(stream, GetEndianType(), Layout))
 			{
-				if (SerializedFileMetadata.HasPreload(Header.Generation))
+				if (SerializedFileMetadata.HasScriptTypes(Header.Version))
 				{
-					foreach (ObjectPtr ptr in Metadata.Preloads)
+					foreach (LocalSerializedObjectIdentifier ptr in Metadata.ScriptTypes)
 					{
-						if (ptr.FileID == 0)
+						if (ptr.LocalSerializedFileIndex == 0)
 						{
-							int index = m_assetEntryLookup[ptr.PathID];
-							ReadAsset(assetReader, ref Metadata.Entries[index]);
+							int index = m_assetEntryLookup[ptr.LocalIdentifierInFile];
+							ReadAsset(assetReader, ref Metadata.Object[index]);
 						}
 					}
 				}
 
-				for (int i = 0; i < Metadata.Entries.Length; i++)
+				for (int i = 0; i < Metadata.Object.Length; i++)
 				{
-					if (Metadata.Entries[i].ClassID == ClassIDType.MonoScript)
+					if (Metadata.Object[i].ClassID == ClassIDType.MonoScript)
 					{
-						if (!m_assets.ContainsKey(Metadata.Entries[i].PathID))
+						if (!m_assets.ContainsKey(Metadata.Object[i].FileID))
 						{
-							ReadAsset(assetReader, ref Metadata.Entries[i]);
+							ReadAsset(assetReader, ref Metadata.Object[i]);
 						}
 					}
 				}
 
-				for (int i = 0; i < Metadata.Entries.Length; i++)
+				for (int i = 0; i < Metadata.Object.Length; i++)
 				{
-					if (!m_assets.ContainsKey(Metadata.Entries[i].PathID))
+					if (!m_assets.ContainsKey(Metadata.Object[i].FileID))
 					{
-						ReadAsset(assetReader, ref Metadata.Entries[i]);
+						ReadAsset(assetReader, ref Metadata.Object[i]);
 					}
 				}
 			}
@@ -268,12 +268,12 @@ namespace uTinyRipper
 			else
 			{
 				fileIndex--;
-				if (fileIndex >= Metadata.Dependencies.Length)
+				if (fileIndex >= Metadata.Externals.Length)
 				{
 					throw new Exception($"{nameof(SerializedFile)} with index {fileIndex} was not found in dependencies");
 				}
 
-				FileIdentifier identifier = Metadata.Dependencies[fileIndex];
+				FileIdentifier identifier = Metadata.Externals[fileIndex];
 				file = Collection.FindSerializedFile(identifier.GetFilePath());
 			}
 
@@ -298,13 +298,13 @@ namespace uTinyRipper
 			return asset;
 		}
 
-		private void ReadAsset(AssetReader reader, ref AssetEntry info)
+		private void ReadAsset(AssetReader reader, ref ObjectInfo info)
 		{
-			AssetInfo assetInfo = new AssetInfo(this, info.PathID, info.ClassID);
-			Object asset = ReadAsset(reader, assetInfo, Header.DataOffset + info.Offset, info.Size);
+			AssetInfo assetInfo = new AssetInfo(this, info.FileID, info.ClassID);
+			Object asset = ReadAsset(reader, assetInfo, Header.DataOffset + info.ByteStart, info.ByteSize);
 			if (asset != null)
 			{
-				AddAsset(info.PathID, asset);
+				AddAsset(info.FileID, asset);
 			}
 		}
 
@@ -339,14 +339,14 @@ namespace uTinyRipper
 
 		private void UpdateFileVersion()
 		{
-			if (!RTTIClassHierarchyDescriptor.HasSignature(Header.Generation) && BuildSettings.HasVersion(Version))
+			if (!SerializedFileMetadata.HasSignature(Header.Version) && BuildSettings.HasVersion(Version))
 			{
 				foreach (Object asset in FetchAssets())
 				{
 					if (asset.ClassID == ClassIDType.BuildSettings)
 					{
 						BuildSettings settings = (BuildSettings)asset;
-						Metadata.Hierarchy.Version = Version.Parse(settings.Version);
+						Metadata.UnityVersion = Version.Parse(settings.Version);
 						return;
 					}
 				}
@@ -360,7 +360,7 @@ namespace uTinyRipper
 
 		public EndianType GetEndianType()
 		{
-			bool swapEndianess = SerializedFileHeader.HasEndian(Header.Generation) ? Header.SwapEndianess : Metadata.SwapEndianess;
+			bool swapEndianess = SerializedFileHeader.HasEndianess(Header.Version) ? Header.Endianess : Metadata.SwapEndianess;
 			return swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
 		}
 
@@ -375,7 +375,7 @@ namespace uTinyRipper
 		public TransferInstructionFlags Flags => Layout.Info.Flags;
 
 		public IFileCollection Collection { get; }
-		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Dependencies;
+		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Externals;
 
 		private readonly Dictionary<long, Object> m_assets = new Dictionary<long, Object>();
 		private readonly Dictionary<long, int> m_assetEntryLookup = new Dictionary<long, int>();

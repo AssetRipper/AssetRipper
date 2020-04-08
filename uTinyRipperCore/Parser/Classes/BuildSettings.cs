@@ -251,6 +251,6 @@ namespace uTinyRipper.Classes
 		public Dictionary<Hash128, Hash128> ScriptHashes { get; set; }
 		public int[] GraphicsAPIs { get; set; }
 
-		public GUID BuildGUID;
+		public UnityGUID BuildGUID;
 	}
 }

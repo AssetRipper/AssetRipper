@@ -14,7 +14,7 @@ namespace uTinyRipper.Classes
 			AssetType = default;
 		}
 
-		public MetaPtr(long fileID, GUID guid, AssetType assetType)
+		public MetaPtr(long fileID, UnityGUID guid, AssetType assetType)
 		{
 			FileID = fileID;
 			GUID = guid;
@@ -22,7 +22,7 @@ namespace uTinyRipper.Classes
 		}
 
 		public MetaPtr(ClassIDType classID, AssetType assetType) :
-			this(ExportCollection.GetMainExportID((uint)classID), GUID.MissingReference, assetType)
+			this(ExportCollection.GetMainExportID((uint)classID), UnityGUID.MissingReference, assetType)
 		{
 		}
 
@@ -42,7 +42,7 @@ namespace uTinyRipper.Classes
 		public static MetaPtr NullPtr { get; } = new MetaPtr(0);
 
 		public long FileID { get; }
-		public GUID GUID { get; }
+		public UnityGUID GUID { get; }
 		public AssetType AssetType { get; }
 
 		public const string FileIDName = "fileID";

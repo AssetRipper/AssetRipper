@@ -38,7 +38,7 @@ namespace uTinyRipper.Layout.Misc
 		/// </summary>
 		public bool HasData3 => true;
 
-		public string Name => nameof(GUID);
+		public string Name => nameof(UnityGUID);
 		public string Data0Name => "data[0]";
 		public string Data1Name => "data[1]";
 		public string Data2Name => "data[2]";

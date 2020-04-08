@@ -17,7 +17,7 @@ namespace uTinyRipper.Classes
 			this(assetInfo)
 		{
 			Sendrate = 15.0f;
-			m_assetToPrefab = new Dictionary<GUID, PPtr<GameObject>>();
+			m_assetToPrefab = new Dictionary<UnityGUID, PPtr<GameObject>>();
 		}
 
 		public static NetworkManager CreateVirtualInstance(VirtualSerializedFile virtualFile)
@@ -36,7 +36,7 @@ namespace uTinyRipper.Classes
 
 			DebugLevel = reader.ReadInt32();
 			Sendrate = reader.ReadSingle();
-			m_assetToPrefab = new Dictionary<GUID, PPtr<GameObject>>();
+			m_assetToPrefab = new Dictionary<UnityGUID, PPtr<GameObject>>();
 			m_assetToPrefab.Read(reader);
 		}
 
@@ -64,12 +64,12 @@ namespace uTinyRipper.Classes
 
 		public int DebugLevel { get; set; }
 		public float Sendrate { get; set; }
-		public IReadOnlyDictionary<GUID, PPtr<GameObject>> AssetToPrefab => m_assetToPrefab;
+		public IReadOnlyDictionary<UnityGUID, PPtr<GameObject>> AssetToPrefab => m_assetToPrefab;
 
 		public const string DebugLevelName = "m_DebugLevel";
 		public const string SendrateName = "m_Sendrate";
 		public const string AssetToPrefabName = "m_AssetToPrefab";
 
-		private Dictionary<GUID, PPtr<GameObject>> m_assetToPrefab;
+		private Dictionary<UnityGUID, PPtr<GameObject>> m_assetToPrefab;
 	}
 }

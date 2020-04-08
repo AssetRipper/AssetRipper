@@ -279,8 +279,8 @@ namespace uTinyRipper.Classes
 
 		public const string PrefabKeyword = "prefab";
 
-		public GUID LastMergeIdentifier;
-		public GUID LastTemplateIdentifier;
+		public UnityGUID LastMergeIdentifier;
+		public UnityGUID LastTemplateIdentifier;
 		public PrefabModification Modification;
 		public PPtr<PrefabInstance> SourcePrefab;
 		public PPtr<GameObject> RootGameObject;

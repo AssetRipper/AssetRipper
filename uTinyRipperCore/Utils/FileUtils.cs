@@ -142,7 +142,7 @@ namespace uTinyRipper
 				validFileName = name + ext;
 			}
 
-			dirPath = DirectoryUtils.ToLongPath(dirPath);
+			dirPath = DirectoryUtils.ToLongPath(dirPath, true);
 			if (!Directory.Exists(dirPath))
 			{
 				return validFileName;
@@ -151,8 +151,7 @@ namespace uTinyRipper
 			name = name ?? Path.GetFileNameWithoutExtension(validFileName);
 			if (!IsReservedName(name))
 			{
-				string filePath = ToLongPath(Path.Combine(dirPath, validFileName));
-				if (!File.Exists(filePath))
+				if (!File.Exists(Path.Combine(dirPath, validFileName)))
 				{
 					return validFileName;
 				}

@@ -90,7 +90,7 @@ namespace uTinyRipper.Classes
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
 		public virtual string ExportExtension => AssetExtension;
 		public long PathID => AssetInfo.PathID;
-		public GUID GUID => AssetInfo.GUID;
+		public UnityGUID GUID => AssetInfo.GUID;
 
 		public HideFlags ObjectHideFlags { get; set; }
 

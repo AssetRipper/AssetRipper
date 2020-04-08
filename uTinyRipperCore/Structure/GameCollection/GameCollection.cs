@@ -262,7 +262,7 @@ namespace uTinyRipper
 
 		private bool IsSceneSerializedFile(SerializedFile file)
 		{
-			foreach (AssetEntry entry in file.Metadata.Entries)
+			foreach (ObjectInfo entry in file.Metadata.Object)
 			{
 				if (entry.ClassID.IsSceneSettings())
 				{

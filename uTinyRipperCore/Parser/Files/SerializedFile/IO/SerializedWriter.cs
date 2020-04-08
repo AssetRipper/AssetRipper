@@ -4,7 +4,7 @@ namespace uTinyRipper.SerializedFiles
 {
 	public sealed class SerializedWriter : EndianWriter
 	{
-		public SerializedWriter(Stream stream, EndianType endianess, FileGeneration generation) :
+		public SerializedWriter(Stream stream, EndianType endianess, FormatVersion generation) :
 			base(stream, endianess)
 		{
 			Generation = generation;
@@ -28,6 +28,6 @@ namespace uTinyRipper.SerializedFiles
 			}
 		}
 
-		public FileGeneration Generation { get; }
+		public FormatVersion Generation { get; }
 	}
 }
