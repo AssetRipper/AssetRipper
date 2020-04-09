@@ -302,6 +302,11 @@ namespace uTinyRipper.Converters
 			string directory = Path.Combine(AssetBundleFullPath, bundleName);
 			foreach (KeyValuePair<string, Classes.AssetBundles.AssetInfo> kvp in bundle.Container)
 			{
+				// skip shared bundle assets, because we need to export them in their bundle directory
+				if (kvp.Value.Asset.FileIndex != 0)
+				{
+					continue;
+				}
 				Object asset = kvp.Value.Asset.FindAsset(bundle.File);
 				if (asset == null)
 				{
@@ -311,7 +316,7 @@ namespace uTinyRipper.Converters
 				string assetPath = kvp.Key;
 				if (AssetBundle.HasPathExtension(bundle.File.Version))
 				{
-					// custom names may not contain extension
+					// custom names may not has extension
 					int extensionIndex = assetPath.LastIndexOf('.');
 					if (extensionIndex != -1)
 					{
