@@ -150,14 +150,17 @@ namespace uTinyRipper
 				}
 				processor.AddDependencySchemes(RequestDependency);
 
-				layinfo = layinfo ?? processor.GetLayoutInfo();
-				AssetLayout layout = new AssetLayout(layinfo);
-				GameCollection.Parameters pars = new GameCollection.Parameters(layout);
-				pars.ScriptBackend = GetScriptingBackend();
-				pars.RequestAssemblyCallback = OnRequestAssembly;
-				pars.RequestResourceCallback = OnRequestResource;
-				FileCollection = new GameCollection(pars);
-				processor.ProcessSchemes(FileCollection);
+				if (processor.IsValid)
+				{
+					layinfo = layinfo ?? processor.GetLayoutInfo();
+					AssetLayout layout = new AssetLayout(layinfo);
+					GameCollection.Parameters pars = new GameCollection.Parameters(layout);
+					pars.ScriptBackend = GetScriptingBackend();
+					pars.RequestAssemblyCallback = OnRequestAssembly;
+					pars.RequestResourceCallback = OnRequestResource;
+					FileCollection = new GameCollection(pars);
+					processor.ProcessSchemes(FileCollection);
+				}
 			}
 		}
 
@@ -374,6 +377,7 @@ namespace uTinyRipper
 				}
 			}
 		}
+		public bool IsValid => FileCollection != null;
 
 		public GameCollection FileCollection { get; private set; }
 		public PlatformGameStructure PlatformStructure { get; private set; }

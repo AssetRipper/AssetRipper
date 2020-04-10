@@ -11,13 +11,6 @@ using uTinyRipperGUI.Exporters;
 using uTinyRipperGUI.Properties;
 using uTinyRipperGUI.Windows;
 
-#if VIRTUAL
-using System.Windows.Automation.Peers;
-using System.Windows.Automation.Provider;
-#elif !DEBUG
-using uTinyRipper.SerializedFiles;
-#endif
-
 using Object = uTinyRipper.Classes.Object;
 using Version = uTinyRipper.Version;
 
@@ -94,14 +87,12 @@ namespace uTinyRipperGUI
 		{
 			string[] files = (string[])data;
 
+			OnImportStarted();
 #if !DEBUG
 			try
 #endif
 			{
-				OnImportStarted();
 				GameStructure = GameStructure.Load(files);
-				Validate();
-				OnImportFinished();
 			}
 #if !DEBUG
 			catch (SerializedFileException ex)
@@ -116,21 +107,37 @@ namespace uTinyRipperGUI
 			}
 #endif
 
-			Dispatcher.Invoke(() =>
-				{
-					IntroText.Text = "Files has been loaded";
-					ExportButton.Visibility = Visibility.Visible;
+			if (GameStructure.IsValid)
+			{
+				Validate();
+			}
+			OnImportFinished();
 
-					Fileview.AddItem(GameStructure.FileCollection);
-					Fileview.Refresh();
+			if (GameStructure.IsValid)
+			{
+				Dispatcher.Invoke(() =>
+					{
+						IntroText.Text = "Files has been loaded";
+						ExportButton.Visibility = Visibility.Visible;
+
+						Fileview.AddItem(GameStructure.FileCollection);
+						Fileview.Refresh();
 
 #if VIRTUAL
-					ButtonAutomationPeer peer = new ButtonAutomationPeer(ExportButton);
-					IInvokeProvider invokeProv = peer.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
-					invokeProv.Invoke();
+						OnExportButtonClicked(null, null);
 #endif
-				}
-			);
+					}
+				);
+			}
+			else
+			{
+				Dispatcher.Invoke(() =>
+					{
+						OnResetButtonClicked(null, null);
+						Logger.Log(LogType.Warning, LogCategory.Import, "Game files wasn't found");
+					}
+				);
+			}
 		}
 
 		private void ExportFiles(object data)
@@ -326,19 +333,16 @@ namespace uTinyRipperGUI
 
 		private void OnResetButtonClicked(object sender, RoutedEventArgs e)
 		{
-			if (ResetButton.Visibility == Visibility.Visible)
-			{
-				Fileview.Clear();
-				IntroText.Text = m_initialIntroText;
-				StatusText.Content = m_initialStatusText;
-				MainGrid.AllowDrop = true;
-				PostExportButton.Visibility = Visibility.Hidden;
-				ResetButton.Visibility = Visibility.Hidden;
-				OutputView.Clear();
-				m_processingFiles = null;
+			Fileview.Clear();
+			IntroText.Text = m_initialIntroText;
+			StatusText.Content = m_initialStatusText;
+			MainGrid.AllowDrop = true;
+			PostExportButton.Visibility = Visibility.Hidden;
+			ResetButton.Visibility = Visibility.Hidden;
+			OutputView.Clear();
+			m_processingFiles = null;
 
-				GameStructure.Dispose();
-			}
+			GameStructure.Dispose();
 		}
 
 		private void OnExitButtonClicked(object sender, RoutedEventArgs e)
@@ -436,7 +440,7 @@ namespace uTinyRipperGUI
 				{
 					return;
 				}
-				if (m_gameStructure != null)
+				if (m_gameStructure != null && m_gameStructure.IsValid)
 				{
 					m_gameStructure.FileCollection.Exporter.EventExportFinished -= OnExportFinished;
 					m_gameStructure.FileCollection.Exporter.EventExportProgressUpdated -= OnExportProgressUpdated;
@@ -445,7 +449,7 @@ namespace uTinyRipperGUI
 					m_gameStructure.FileCollection.Exporter.EventExportPreparationStarted -= OnExportPreparationStarted;
 				}
 				m_gameStructure = value;
-				if (value != null)
+				if (value != null && value.IsValid)
 				{
 					value.FileCollection.Exporter.EventExportPreparationStarted += OnExportPreparationStarted;
 					value.FileCollection.Exporter.EventExportPreparationFinished += OnExportPreparationFinished;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using uTinyRipper.Layout;
 using uTinyRipper.SerializedFiles;
 
@@ -41,7 +42,7 @@ namespace uTinyRipper
 					if (systemFilePath == null)
 					{
 						m_knownFiles.Add(dependency.PathName);
-						Logger.Log(LogType.Warning, LogCategory.Import, $"Dependency '{dependency}' hasn't been found");
+						Logger.Log(LogType.Warning, LogCategory.Import, $"Dependency '{dependency}' wasn't found");
 						continue;
 					}
 
@@ -205,6 +206,8 @@ namespace uTinyRipper
 				}
 			}
 		}
+
+		public bool IsValid => m_schemes.Any(t => t.SchemeType != FileEntryType.Resource);	
 
 		private readonly List<FileScheme> m_schemes = new List<FileScheme>();
 		private readonly HashSet<string> m_knownFiles = new HashSet<string>();
