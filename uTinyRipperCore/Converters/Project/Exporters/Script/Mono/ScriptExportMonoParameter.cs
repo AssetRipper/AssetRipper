@@ -1,4 +1,4 @@
-﻿using Mono.Cecil;
+using Mono.Cecil;
 using System;
 
 namespace uTinyRipper.Converters.Script.Mono
@@ -17,12 +17,25 @@ namespace uTinyRipper.Converters.Script.Mono
 
 		public override void Init(IScriptExportManager manager)
 		{
-			m_type = manager.RetrieveType(Parameter.ParameterType);
+			m_type = manager.RetrieveType(Parameter.ParameterType.IsByReference ? Parameter.ParameterType.GetElementType() : Parameter.ParameterType);
 		}
 
-		protected override ScriptExportType Type => m_type;
+		public override ScriptExportType Type => m_type;
 
-		protected override string Name => Parameter.Name;
+		public override string Name => Parameter.Name;
+
+		public override ByRefType IsByRef
+		{
+			get
+			{
+				if (!Parameter.ParameterType.IsByReference) return ByRefType.None;
+
+				if (Parameter.IsOut) return ByRefType.Out;
+				if (Parameter.IsIn) return ByRefType.In;
+
+				return ByRefType.Ref;
+			}
+		}
 
 		private ParameterDefinition Parameter { get; }
 
