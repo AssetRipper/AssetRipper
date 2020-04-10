@@ -1,14 +1,15 @@
 ﻿using System;
 using System.IO;
+using uTinyRipper.Lz4;
 
 namespace uTinyRipper.BundleFiles
 {
 	internal sealed class BundleFileBlockReader : IDisposable
 	{
-		public BundleFileBlockReader(Stream stream, BundleMetadata metadata)
+		public BundleFileBlockReader(Stream stream, BlocksInfo blocksInfo)
 		{
 			m_stream = stream;
-			m_metadata = metadata;
+			m_blocksInfo = blocksInfo;
 			m_dataOffset = stream.Position;
 		}
 
@@ -23,21 +24,21 @@ namespace uTinyRipper.BundleFiles
 			GC.SuppressFinalize(this);
 		}
 
-		public SmartStream ReadEntry(BundleFileEntry entry)
+		public SmartStream ReadEntry(Node entry)
 		{
 			if (m_isDisposed)
 			{
 				throw new ObjectDisposedException(nameof(BundleFileBlockReader));
 			}
 
-			// find out block offsets
+			// find block offsets
 			int blockIndex;
 			long blockCompressedOffset = 0;
 			long blockDecompressedOffset = 0;
-			for (blockIndex = 0; blockDecompressedOffset + m_metadata.BlockInfos[blockIndex].DecompressedSize <= entry.Offset; blockIndex++)
+			for (blockIndex = 0; blockDecompressedOffset + m_blocksInfo.StorageBlocks[blockIndex].UncompressedSize <= entry.Offset; blockIndex++)
 			{
-				blockCompressedOffset += m_metadata.BlockInfos[blockIndex].CompressedSize;
-				blockDecompressedOffset += m_metadata.BlockInfos[blockIndex].DecompressedSize;
+				blockCompressedOffset += m_blocksInfo.StorageBlocks[blockIndex].CompressedSize;
+				blockDecompressedOffset += m_blocksInfo.StorageBlocks[blockIndex].UncompressedSize;
 			}
 			long entryOffsetInsideBlock = entry.Offset - blockDecompressedOffset;
 
@@ -51,7 +52,7 @@ namespace uTinyRipper.BundleFiles
 				{
 					long blockStreamOffset;
 					Stream blockStream;
-					BlockInfo block = m_metadata.BlockInfos[blockIndex];
+					StorageBlock block = m_blocksInfo.StorageBlocks[blockIndex];
 					if (m_cachedBlockIndex == blockIndex)
 					{
 						// data of the previous entry is in the same block as this one
@@ -62,8 +63,8 @@ namespace uTinyRipper.BundleFiles
 					}
 					else
 					{
-						BundleCompressType compressType = block.Flags.GetCompression();
-						if (compressType == BundleCompressType.None)
+						CompressionType compressType = block.Flags.GetCompression();
+						if (compressType == CompressionType.None)
 						{
 							blockStreamOffset = m_dataOffset + blockCompressedOffset;
 							blockStream = m_stream;
@@ -72,18 +73,18 @@ namespace uTinyRipper.BundleFiles
 						{
 							blockStreamOffset = 0;
 							m_cachedBlockIndex = blockIndex;
-							m_cachedBlockStream.Move(CreateStream(block.DecompressedSize));
+							m_cachedBlockStream.Move(CreateStream(block.UncompressedSize));
 							switch (compressType)
 							{
-								case BundleCompressType.LZMA:
-									SevenZipHelper.DecompressLZMAStream(m_stream, block.CompressedSize, m_cachedBlockStream, block.DecompressedSize);
+								case CompressionType.Lzma:
+									SevenZipHelper.DecompressLZMAStream(m_stream, block.CompressedSize, m_cachedBlockStream, block.UncompressedSize);
 									break;
 
-								case BundleCompressType.LZ4:
-								case BundleCompressType.LZ4HZ:
+								case CompressionType.Lz4:
+								case CompressionType.Lz4HC:
 									using (Lz4DecodeStream lzStream = new Lz4DecodeStream(m_stream, block.CompressedSize))
 									{
-										lzStream.ReadBuffer(m_cachedBlockStream, block.DecompressedSize);
+										lzStream.ReadBuffer(m_cachedBlockStream, block.UncompressedSize);
 									}
 									break;
 
@@ -98,7 +99,7 @@ namespace uTinyRipper.BundleFiles
 					// 1) block - if it is new stream then offset is 0, otherwise offset of this block in the bundle file
 					// 2) entry - if this is first block for current entry then it is offset of this entry related to this block
 					//			  otherwise 0
-					long blockSize = block.DecompressedSize - entryOffsetInsideBlock;
+					long blockSize = block.UncompressedSize - entryOffsetInsideBlock;
 					blockStream.Position = blockStreamOffset + entryOffsetInsideBlock;
 					entryOffsetInsideBlock = 0;
 
@@ -130,7 +131,7 @@ namespace uTinyRipper.BundleFiles
 		}
 
 		private readonly Stream m_stream;
-		private readonly BundleMetadata m_metadata;
+		private readonly BlocksInfo m_blocksInfo;
 		private readonly long m_dataOffset;
 
 		private readonly SmartStream m_cachedBlockStream = SmartStream.CreateNull();

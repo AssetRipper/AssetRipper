@@ -1,10 +1,11 @@
 ﻿using uTinyRipper.YAML;
 using uTinyRipper.SerializedFiles;
 using uTinyRipper.Converters;
+using uTinyRipper.BundleFiles;
 
 namespace uTinyRipper.Classes.Misc
 {
-	public struct Hash128 : IAsset, ISerializedReadable, ISerializedWritable
+	public struct Hash128 : IAsset, ISerializedReadable, ISerializedWritable, IBundleReadable
 	{
 		public Hash128(uint v) :
 			this(v, 0, 0, 0)
@@ -26,6 +27,11 @@ namespace uTinyRipper.Classes.Misc
 				return 2;
 			}
 			return 1;
+		}
+
+		public void Read(BundleReader reader)
+		{
+			Read((EndianReader)reader);
 		}
 
 		public void Read(SerializedReader reader)

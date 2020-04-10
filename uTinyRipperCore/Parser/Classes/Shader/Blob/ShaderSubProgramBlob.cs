@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using uTinyRipper.Layout;
+using uTinyRipper.Lz4;
 
 namespace uTinyRipper.Classes.Shaders
 {

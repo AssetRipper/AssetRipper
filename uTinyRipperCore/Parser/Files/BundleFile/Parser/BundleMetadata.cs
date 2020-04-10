@@ -6,29 +6,28 @@ namespace uTinyRipper.BundleFiles
 	public sealed class BundleMetadata : IBundleReadable
 	{
 		/// <summary>
-		/// 5.3.0 and greater
+		/// 5.2.0 and greater
 		/// </summary>
-		private static bool HasBlockInfo(BundleGeneration generation) => generation >= BundleGeneration.BF_530_x;
+		private static bool HasBlocksInfo(BundleType signature) => signature == BundleType.UnityFS;
 
 		public void Read(BundleReader reader)
 		{
-			if (HasBlockInfo(reader.Generation))
+			if (HasBlocksInfo(reader.Signature))
 			{
-				Unknown0 = reader.ReadInt32();
-				Unknown1 = reader.ReadInt32();
-				Unknown2 = reader.ReadInt32();
-				Unknown3 = reader.ReadInt32();
-				BlockInfos = reader.ReadBundleArray<BlockInfo>();
+				BlocksInfo.Read(reader);
+				if (reader.Flags.IsBlocksAndDirectoryInfoCombined())
+				{
+					DirectoryInfo.Read(reader);
+				}
 			}
-
-			Entries = reader.ReadBundleArray<BundleFileEntry>();
+			else
+			{
+				DirectoryInfo.Read(reader);
+				reader.AlignStream();
+			}
 		}
 
-		public int Unknown0 { get; set; }
-		public int Unknown1 { get; set; }
-		public int Unknown2 { get; set; }
-		public int Unknown3 { get; set; }
-		public BlockInfo[] BlockInfos { get; set; }
-		public BundleFileEntry[] Entries { get; set; }
+		public BlocksInfo BlocksInfo;
+		public DirectoryInfo DirectoryInfo;
 	}
 }

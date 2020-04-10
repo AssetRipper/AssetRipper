@@ -5,10 +5,12 @@ namespace uTinyRipper.BundleFiles
 {
 	public sealed class BundleReader : EndianReader
 	{
-		public BundleReader(Stream stream, EndianType endianess, BundleGeneration generation) :
+		public BundleReader(Stream stream, EndianType endianess, BundleType signature, BundleVersion generation, BundleFlags flags) :
 			base(stream, endianess)
 		{
+			Signature = signature;
 			Generation = generation;
+			Flags = flags;
 		}
 
 		public T ReadBundle<T>()
@@ -47,6 +49,8 @@ namespace uTinyRipper.BundleFiles
 			return array;
 		}
 
-		public BundleGeneration Generation { get; }
+		public BundleType Signature { get; }
+		public BundleVersion Generation { get; }
+		public BundleFlags Flags { get; }
 	}
 }

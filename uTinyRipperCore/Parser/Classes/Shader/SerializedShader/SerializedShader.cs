@@ -25,13 +25,13 @@ namespace uTinyRipper.Classes.Shaders
 				SubShaders[i].Export(writer);
 			}
 
-			if(FallbackName != string.Empty)
+			if (FallbackName.Length != 0)
 			{
 				writer.WriteIndent(1);
 				writer.Write("Fallback \"{0}\"\n", FallbackName);
 			}
 
-			if (CustomEditorName != string.Empty)
+			if (CustomEditorName.Length != 0)
 			{
 				writer.WriteIndent(1);
 				writer.Write("CustomEditor \"{0}\"\n", CustomEditorName);

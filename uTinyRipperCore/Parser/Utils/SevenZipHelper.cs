@@ -7,103 +7,102 @@ namespace uTinyRipper
 	public static class SevenZipHelper
 	{
 		/// <summary>
-		/// Decompress engine's LZMA stream. Write decomressed data to decompressedStream.
-		/// BaseStream contains 'decompress size'
+		/// Read LZMA properties and decompress LZMA data
 		/// </summary>
-		/// <param name="baseStream">LZMA compressed stream</param>
-		/// <param name="compressSize">Compressed data length</param>
-		/// <param name="decompressedStream">Decompressed out stream</param>
-		public static void DecompressLZMASizeStream(Stream baseStream, long compressSize, Stream decompressedStream)
+		/// <param name="compressedStream">LZMA compressed stream</param>
+		/// <param name="compressedSize">Compressed data length</param>
+		/// <param name="decompressedSize">Decompressed data length</param>
+		/// <returns>Decompressed output</returns>
+		public static byte[] DecompressLZMA(Stream compressedStream, long compressedSize, long decompressedSize)
 		{
-			long basePosition = baseStream.Position;
-			byte[] properties = new byte[PropertiesSize];
-			baseStream.ReadBuffer(properties, 0, PropertiesSize);
-			byte[] countBuffer = new byte[CountSize];
-			baseStream.ReadBuffer(countBuffer, 0, CountSize);
-			
-			long decompressedSize = BitConverter.ToInt64(countBuffer, 0);
-			Decoder decoder = new Decoder();
-			decoder.SetDecoderProperties(properties);
-
-			long headSize = baseStream.Position - basePosition;
-			long dataSize = compressSize - headSize;
-			long startPosition = decompressedStream.Position;
-			decoder.Code(baseStream, decompressedStream, dataSize, decompressedSize, null);
-
-			if (baseStream.Position > basePosition + compressSize)
+			byte[] buffer = new byte[decompressedSize];
+			using (MemoryStream decompressedStream = new MemoryStream(buffer))
 			{
-				throw new Exception($"Read {baseStream.Position - basePosition} more than expected {compressSize}");
+				DecompressLZMAStream(compressedStream, compressedSize, decompressedStream, decompressedSize);
 			}
-			baseStream.Position = basePosition + compressSize;
-			decompressedStream.Position = startPosition;
+			return buffer;
 		}
 
 		/// <summary>
-		/// Decompress engine's LZMA stream. Return new decompressed MemoryStream.
-		/// BaseStream contains 'decompress size'
+		/// Read LZMA properties and decompress LZMA data
 		/// </summary>
-		/// <param name="baseStream">LZMA compressed stream</param>
-		/// <param name="compressSize">Compressed data length</param>
-		/// <returns>Decompressed MemoryStream</returns>
-		public static MemoryStream DecompressLZMASizeStream(Stream baseStream, long compressSize)
-		{
-			MemoryStream decompressStream = new MemoryStream();
-			DecompressLZMASizeStream(baseStream, compressSize, decompressStream);
-			return decompressStream;
-		}
-
-
-		/// <summary>
-		/// Decompress engine's LZMA stream. Return new decompressed MemoryStream
-		/// BaseStream don't contains 'decompress size'
-		/// </summary>
-		/// <param name="baseStream">LZMA compressed stream</param>
-		/// <param name="compressSize">Compressed data length</param>
+		/// <param name="compressedStream">LZMA compressed stream</param>
+		/// <param name="compressedSize">Compressed data length</param>
 		/// <param name="decompressedStream">Stream for decompressed output</param>
-		/// <param name="decompreesSize">Decompressed data length</param>
-		/// <returns>Decompressed MemoryStream</returns>
-		public static void DecompressLZMAStream(Stream baseStream, long compressSize, Stream decompressedStream, long decompreesSize)
+		/// <param name="decompressedSize">Decompressed data length</param>
+		public static void DecompressLZMAStream(Stream compressedStream, long compressedSize, Stream decompressedStream, long decompressedSize)
 		{
-			long basePosition = baseStream.Position;
-			byte[] properties = new byte[PropertiesSize];
-			int read = baseStream.Read(properties, 0, PropertiesSize);
-			if (read != PropertiesSize)
-			{
-				throw new Exception("Unable to read lzma properties");
-			}
+			long basePosition = compressedStream.Position;
+
+			byte[] properties = GetPropertiesBuffer();
+			compressedStream.ReadBuffer(properties, 0, PropertiesBufferSize);
+
+			long headSize = compressedStream.Position - basePosition;
+			long headlessSize = compressedSize - headSize;
 
 			Decoder decoder = new Decoder();
 			decoder.SetDecoderProperties(properties);
+			decoder.Code(compressedStream, decompressedStream, headlessSize, decompressedSize, null);
 
-			long headSize = baseStream.Position - basePosition;
-			long headlessSize = compressSize - headSize;
-			long startPosition = decompressedStream.Position;
-			decoder.Code(baseStream, decompressedStream, headlessSize, decompreesSize, null);
-
-			if(baseStream.Position > basePosition + compressSize)
+			if (compressedStream.Position != basePosition + compressedSize)
 			{
-				throw new Exception($"Read {baseStream.Position - basePosition} more than expected {compressSize}");
+				throw new Exception($"Read {compressedStream.Position - basePosition} more than expected {compressedSize}");
 			}
-			baseStream.Position = basePosition + compressSize;
-			decompressedStream.Position = startPosition;
 		}
 
 		/// <summary>
-		/// Decompress engine's LZMA stream. Return new decompressed MemoryStream
-		/// BaseStream don't contains 'decompress size'
+		/// Read LZMA properties and decompressed size and decompress LZMA data
 		/// </summary>
-		/// <param name="baseStream">LZMA compressed stream</param>
-		/// <param name="compressLength">Compressed data length</param>
-		/// <param name="decompreesLength">Decompressed data length</param>
-		/// <returns>Decompressed MemoryStream</returns>
-		public static MemoryStream DecompressLZMAStream(Stream baseStream, long compressLength, long decompreesLength)
+		/// <param name="compressedStream">LZMA compressed stream</param>
+		/// <param name="compressedSize">Compressed data length</param>
+		/// <param name="decompressedStream">Stream for decompressed output</param>
+		public static void DecompressLZMASizeStream(Stream compressedStream, long compressedSize, Stream decompressedStream)
 		{
-			MemoryStream decompressStream = new MemoryStream();
-			DecompressLZMAStream(baseStream, compressLength, decompressStream, decompreesLength);
-			return decompressStream;
+			long basePosition = compressedStream.Position;
+
+			byte[] properties = GetPropertiesBuffer();
+			compressedStream.ReadBuffer(properties, 0, PropertiesBufferSize);
+			byte[] sizeBuffer = GetSizeBuffer();
+			compressedStream.ReadBuffer(sizeBuffer, 0, SizeBufferSize);
+
+			long headSize = compressedStream.Position - basePosition;
+			long dataSize = compressedSize - headSize;
+			long decompressedSize = BitConverter.ToInt64(sizeBuffer, 0);
+
+			Decoder decoder = new Decoder();
+			decoder.SetDecoderProperties(properties);
+			decoder.Code(compressedStream, decompressedStream, dataSize, decompressedSize, null);
+
+			if (compressedStream.Position != basePosition + compressedSize)
+			{
+				throw new Exception($"Read {compressedStream.Position - basePosition} more than expected {compressedSize}");
+			}
 		}
 
-		private const int PropertiesSize = 5;
-		private const int CountSize = 8;
+		private static byte[] GetPropertiesBuffer()
+		{
+			if (PropertiesBuffer == null)
+			{
+				PropertiesBuffer = new byte[PropertiesBufferSize];
+			}
+			return PropertiesBuffer;
+		}
+
+		private static byte[] GetSizeBuffer()
+		{
+			if (SizeBuffer == null)
+			{
+				SizeBuffer = new byte[SizeBufferSize];
+			}
+			return SizeBuffer;
+		}
+
+		private const int PropertiesBufferSize = 5;
+		private const int SizeBufferSize = 8;
+
+		[ThreadStatic]
+		private static byte[] PropertiesBuffer;
+		[ThreadStatic]
+		private static byte[] SizeBuffer;
 	}
 }

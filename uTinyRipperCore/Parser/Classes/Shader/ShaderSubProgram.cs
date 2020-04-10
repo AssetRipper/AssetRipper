@@ -32,18 +32,12 @@ namespace uTinyRipper.Classes.Shaders
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		private static bool HasStructParameters(Version version)
-		{
-			return version.IsGreaterEqual(2017, 3);
-		}
+		private static bool HasStructParameters(Version version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		private static bool HasNewTextureParams(Version version)
-		{
-			return version.IsGreaterEqual(2018, 2);
-		}
-		private static int GetMagicNumber(Version version)
+		private static bool HasNewTextureParams(Version version) => version.IsGreaterEqual(2018, 2);
+		private static int GetExpectedProgramVersion(Version version)
 		{
 			if (version.IsEqual(5, 3))
 			{
@@ -77,10 +71,10 @@ namespace uTinyRipper.Classes.Shaders
 
 		public void Read(AssetReader reader)
 		{
-			int magic = reader.ReadInt32();
-			if (magic != GetMagicNumber(reader.Version))
+			int version = reader.ReadInt32();
+			if (version != GetExpectedProgramVersion(reader.Version))
 			{
-				throw new Exception($"Magic number {magic} doesn't match");
+				throw new Exception($"Shader program version {version} doesn't match");
 			}
 
 			ProgramType = reader.ReadInt32();
@@ -360,9 +354,6 @@ namespace uTinyRipper.Classes.Shaders
 		public int Unknown2 { get; set; }
 		public int Unknown3 { get; set; }
 		public int Unknown4 { get; set; }
-		/// <summary>
-		/// Keywords previously
-		/// </summary>
 		public string[] GlobalKeywords { get; set; }
 		public string[] LocalKeywords { get; set; }
 		public byte[] ProgramData { get; set; }

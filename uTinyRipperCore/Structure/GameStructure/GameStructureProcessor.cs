@@ -146,7 +146,7 @@ namespace uTinyRipper
 				else
 				{
 					Logger.Log(LogType.Warning, LogCategory.Import, "Unable to precisly determine layout for provided files. Tring default one");
-					return new LayoutInfo(bundle.Header.EngineVersion, DefaultPlatform, DefaultFlags);
+					return new LayoutInfo(bundle.Header.UnityWebMinimumRevision, DefaultPlatform, DefaultFlags);
 				}
 			}
 		}
