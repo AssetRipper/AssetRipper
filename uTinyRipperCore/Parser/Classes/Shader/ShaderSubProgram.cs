@@ -24,7 +24,7 @@ namespace uTinyRipper.Classes.Shaders
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		private static bool HasUnknown4(Version version) => Shader.IsSerialized(version);
+		private static bool HasStatsTempRegister(Version version) => Shader.IsSerialized(version);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
@@ -78,12 +78,12 @@ namespace uTinyRipper.Classes.Shaders
 			}
 
 			ProgramType = reader.ReadInt32();
-			Unknown1 = reader.ReadInt32();
-			Unknown2 = reader.ReadInt32();
-			Unknown3 = reader.ReadInt32();
-			if (HasUnknown4(reader.Version))
+			StatsALU = reader.ReadInt32();
+			StatsTEX = reader.ReadInt32();
+			StatsFlow = reader.ReadInt32();
+			if (HasStatsTempRegister(reader.Version))
 			{
-				Unknown4 = reader.ReadInt32();
+				StatsTempRegister = reader.ReadInt32();
 			}
 
 			GlobalKeywords = reader.ReadStringArray();
@@ -350,10 +350,10 @@ namespace uTinyRipper.Classes.Shaders
 		}
 
 		public int ProgramType { get; set; }
-		public int Unknown1 { get; set; }
-		public int Unknown2 { get; set; }
-		public int Unknown3 { get; set; }
-		public int Unknown4 { get; set; }
+		public int StatsALU { get; set; }
+		public int StatsTEX { get; set; }
+		public int StatsFlow { get; set; }
+		public int StatsTempRegister { get; set; }
 		public string[] GlobalKeywords { get; set; }
 		public string[] LocalKeywords { get; set; }
 		public byte[] ProgramData { get; set; }
