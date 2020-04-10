@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -9,6 +10,10 @@ namespace uTinyRipper.Converters.Script
 
 		public void Export(TextWriter writer, int intent)
 		{
+			if (IsByRef == ByRefType.None) { }
+			else if (IsByRef == ByRefType.Out) writer.Write("out ");
+			else if (IsByRef == ByRefType.In && HasInParameters) writer.Write("in ");
+			else writer.Write("ref ");
 			writer.Write("{0} {1}", Type.NestedName, Name);
 		}
 
@@ -29,8 +34,22 @@ namespace uTinyRipper.Converters.Script
 			}
 		}
 
-		protected abstract ScriptExportType Type { get; }
+		public abstract ScriptExportType Type { get; }
 
-		protected abstract string Name { get; }
+		public abstract string Name { get; }
+
+		public abstract ByRefType IsByRef { get; }
+
+		private bool HasInParameters => false;
+
+		[Flags]
+		public enum ByRefType
+		{
+			None = 0,
+			In = 1,
+			Out = 2,
+			InOut = In | Out,
+			Ref = InOut
+		}
 	}
 }
