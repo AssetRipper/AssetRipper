@@ -284,7 +284,47 @@ namespace uTinyRipper.Converters.Script.Mono
 				return Array.Empty<ScriptExportMethod>();
 			}
 
-			// we need to export only such properties that are declared as asbtract inside builin assemblies
+			List<ScriptExportMethod> methods = new List<ScriptExportMethod>();
+			MonoTypeContext context = new MonoTypeContext(Definition);
+
+			// we need to generate a constructor if the base type is in a builtin assembly and does not contain a parameterless constructor
+			// if this happens we generate a parameterless constructor that calls a base constructor with default values so that we don't have to call it in derived classes
+			// the method generated will have the name '.ctor' and the signature of the base constructor to call instead of being empty
+
+			MonoTypeContext baseContext = context.GetBase();
+			if (ScriptExportManager.IsBuiltinLibrary(GetModuleName(baseContext.Type)))
+			{
+				MethodDefinition ctor = null;
+				foreach (MethodDefinition method in baseContext.Type.Resolve().Methods)
+				{
+					if (method.IsConstructor && !method.IsStatic)
+					{
+						if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly ||
+						    (baseContext.Type.Module.Assembly == context.Type.Module.Assembly && (method.IsAssembly || method.IsFamilyAndAssembly)))
+						{
+							if (ctor == null || ctor.Parameters.Count > method.Parameters.Count)
+							{
+								ctor = method;
+							}
+						}
+					}
+				}
+
+				if (ctor != null)
+				{
+					if (ctor.Parameters.Count != 0)
+					{
+						methods.Add(new ScriptExportMonoConstructor(manager.RetrieveMethod(ctor), manager.RetrieveType(context.Type)));
+					}
+				}
+				else
+				{
+					// the base has no accessible constructor 
+					// this shouldn't be possible but it is so simply ignore it
+				}
+			}
+
+			// we need to export only such properties that are declared as abstract inside builtin assemblies
 			// and not overridden anywhere except current type
 			List<MethodDefinition> overrides = new List<MethodDefinition>();
 			foreach (MethodDefinition method in Definition.Methods)
@@ -295,8 +335,6 @@ namespace uTinyRipper.Converters.Script.Mono
 				}
 			}
 
-			List<ScriptExportMethod> methods = new List<ScriptExportMethod>();
-			MonoTypeContext context = new MonoTypeContext(Definition);
 			TypeDefinition definition = Definition;
 			while (true)
 			{

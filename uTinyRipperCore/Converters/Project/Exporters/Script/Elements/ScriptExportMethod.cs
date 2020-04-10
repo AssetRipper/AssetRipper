@@ -3,13 +3,34 @@ using System.IO;
 
 namespace uTinyRipper.Converters.Script
 {
-	// TODO: add constructor support
 	public abstract class ScriptExportMethod
 	{
 		public abstract void Init(IScriptExportManager manager);
 
 		public void Export(TextWriter writer, int intent)
 		{
+			if (Name == ".ctor")
+			{
+				writer.WriteIndent(intent);
+				writer.Write("{0} {1}() : base(", Keyword, DeclaringType.TypeName);
+				for (int i = 0; i < Parameters.Count; i++)
+				{
+					ScriptExportParameter parameter = Parameters[i];
+					writer.Write("default({0})", parameter.Type.GetTypeNestedName(DeclaringType));
+					if (i < Parameters.Count - 1)
+					{
+						writer.Write(", ");
+					}
+				}
+				writer.WriteLine(")");
+				writer.WriteIndent(intent);
+				writer.WriteLine("{");
+				writer.WriteIndent(intent);
+				writer.WriteLine("}");
+
+				return;
+			}
+
 			writer.WriteIndent(intent);
 			string returnTypeName = ReturnType.GetTypeNestedName(DeclaringType);
 			writer.Write("{0} override {1} {2}(", Keyword, returnTypeName, Name);
@@ -69,7 +90,7 @@ namespace uTinyRipper.Converters.Script
 		public abstract ScriptExportType ReturnType { get; }
 		public abstract IReadOnlyList<ScriptExportParameter> Parameters { get; }
 
-		protected abstract string Keyword { get; }
+		public abstract string Keyword { get; }
 
 		protected const string PublicKeyWord = "public";
 		protected const string InternalKeyWord = "internal";
