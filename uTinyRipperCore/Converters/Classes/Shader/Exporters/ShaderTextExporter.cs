@@ -40,7 +40,7 @@ namespace uTinyRipper.Converters.Shaders
 
 		protected static void ExportListing(TextWriter writer, string listing)
 		{
-			writer.WriteLine();
+			writer.Write('\n');
 			writer.WriteIndent(ExpectedIndent);
 
 			for (int i = 0; i < listing.Length;)
