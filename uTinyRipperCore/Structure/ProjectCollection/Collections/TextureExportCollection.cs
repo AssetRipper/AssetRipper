@@ -39,16 +39,19 @@ namespace uTinyRipper.Project
 						case ClassIDType.SpriteAtlas:
 							{
 								SpriteAtlas atlas = (SpriteAtlas)asset;
-								foreach (PPtr<Sprite> spritePtr in atlas.PackedSprites)
+								if (atlas.RenderDataMap.Count > 0)
 								{
-									Sprite sprite = spritePtr.FindAsset(atlas.File);
-									if (sprite != null)
+									foreach (PPtr<Sprite> spritePtr in atlas.PackedSprites)
 									{
-										SpriteAtlasData atlasData = atlas.RenderDataMap[sprite.RenderDataKey];
-										if (atlasData.Texture.IsAsset(atlas.File, texture))
+										Sprite sprite = spritePtr.FindAsset(atlas.File);
+										if (sprite != null)
 										{
-											m_sprites.Add(sprite, atlas);
-											AddAsset(sprite);
+											SpriteAtlasData atlasData = atlas.RenderDataMap[sprite.RenderDataKey];
+											if (atlasData.Texture.IsAsset(atlas.File, texture))
+											{
+												m_sprites.Add(sprite, atlas);
+												AddAsset(sprite);
+											}
 										}
 									}
 								}

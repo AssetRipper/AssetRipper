@@ -18,17 +18,11 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// Not Release
 		/// </summary>
-		public static bool HasEditorData(TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease();
-		}
+		public static bool HasEditorData(TransferInstructionFlags flags) => !flags.IsRelease();
 		/// <summary>
 		/// Release
 		/// </summary>
-		public static bool HasRenderDataMap(TransferInstructionFlags flags)
-		{
-			return flags.IsRelease();
-		}
+		public static bool HasRenderDataMap(TransferInstructionFlags flags) => flags.IsRelease();
 
 		public override void Read(AssetReader reader)
 		{
