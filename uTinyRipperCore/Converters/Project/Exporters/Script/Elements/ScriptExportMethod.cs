@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 
 namespace uTinyRipper.Converters.Script
@@ -25,6 +25,14 @@ namespace uTinyRipper.Converters.Script
 			writer.WriteLine(")");
 			writer.WriteIndent(intent);
 			writer.WriteLine("{");
+			foreach (ScriptExportParameter parameter in Parameters)
+			{
+				if (parameter.ByRef == ScriptExportParameter.ByRefType.Out)
+				{
+					writer.WriteIndent(intent + 1);
+					writer.WriteLine("{0} = default({1});", parameter.Name, parameter.Type.GetTypeNestedName(DeclaringType));
+				}
+			}
 			if (ReturnType.TypeName != MonoUtils.CVoidName)
 			{
 				writer.WriteIndent(intent + 1);
