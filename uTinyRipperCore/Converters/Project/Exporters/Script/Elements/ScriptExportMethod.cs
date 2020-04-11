@@ -27,7 +27,7 @@ namespace uTinyRipper.Converters.Script
 			writer.WriteLine("{");
 			foreach (ScriptExportParameter parameter in Parameters)
 			{
-				if (parameter.IsByRef == ScriptExportParameter.ByRefType.Out)
+				if (parameter.ByRef == ScriptExportParameter.ByRefType.Out)
 				{
 					writer.WriteIndent(intent + 1);
 					writer.WriteLine("{0} = default({1});", parameter.Name, parameter.Type.GetTypeNestedName(DeclaringType));
