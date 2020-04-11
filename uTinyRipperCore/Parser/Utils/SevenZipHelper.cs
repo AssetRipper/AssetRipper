@@ -32,22 +32,22 @@ namespace uTinyRipper
 		/// <param name="decompressedSize">Decompressed data length</param>
 		public static void DecompressLZMAStream(Stream compressedStream, long compressedSize, Stream decompressedStream, long decompressedSize)
 		{
+			Decoder decoder = new Decoder();
+			byte[] buffer = GetBuffer();
 			long basePosition = compressedStream.Position;
 
-			byte[] properties = GetPropertiesBuffer();
-			compressedStream.ReadBuffer(properties, 0, PropertiesBufferSize);
+			compressedStream.ReadBuffer(buffer, 0, PropertiesSize);
+			decoder.SetDecoderProperties(buffer);
 
 			long headSize = compressedStream.Position - basePosition;
 			long headlessSize = compressedSize - headSize;
 
-			Decoder decoder = new Decoder();
-			decoder.SetDecoderProperties(properties);
 			decoder.Code(compressedStream, decompressedStream, headlessSize, decompressedSize, null);
-
-			if (compressedStream.Position != basePosition + compressedSize)
+			if (compressedStream.Position > basePosition + compressedSize)
 			{
 				throw new Exception($"Read {compressedStream.Position - basePosition} more than expected {compressedSize}");
 			}
+			compressedStream.Position = basePosition + compressedSize;
 		}
 
 		/// <summary>
@@ -58,51 +58,39 @@ namespace uTinyRipper
 		/// <param name="decompressedStream">Stream for decompressed output</param>
 		public static void DecompressLZMASizeStream(Stream compressedStream, long compressedSize, Stream decompressedStream)
 		{
+			Decoder decoder = new Decoder();
+			byte[] buffer = GetBuffer();
 			long basePosition = compressedStream.Position;
 
-			byte[] properties = GetPropertiesBuffer();
-			compressedStream.ReadBuffer(properties, 0, PropertiesBufferSize);
-			byte[] sizeBuffer = GetSizeBuffer();
-			compressedStream.ReadBuffer(sizeBuffer, 0, SizeBufferSize);
+			compressedStream.ReadBuffer(buffer, 0, PropertiesSize);
+			decoder.SetDecoderProperties(buffer);
+			compressedStream.ReadBuffer(buffer, 0, UncompressedSize);
+			long decompressedSize = BitConverter.ToInt64(buffer, 0);
 
 			long headSize = compressedStream.Position - basePosition;
 			long dataSize = compressedSize - headSize;
-			long decompressedSize = BitConverter.ToInt64(sizeBuffer, 0);
 
-			Decoder decoder = new Decoder();
-			decoder.SetDecoderProperties(properties);
 			decoder.Code(compressedStream, decompressedStream, dataSize, decompressedSize, null);
-
-			if (compressedStream.Position != basePosition + compressedSize)
+			if (compressedStream.Position > basePosition + compressedSize)
 			{
 				throw new Exception($"Read {compressedStream.Position - basePosition} more than expected {compressedSize}");
 			}
+			compressedStream.Position = basePosition + compressedSize;
 		}
 
-		private static byte[] GetPropertiesBuffer()
+		private static byte[] GetBuffer()
 		{
-			if (PropertiesBuffer == null)
+			if (s_buffer == null)
 			{
-				PropertiesBuffer = new byte[PropertiesBufferSize];
+				s_buffer = new byte[UncompressedSize];
 			}
-			return PropertiesBuffer;
+			return s_buffer;
 		}
 
-		private static byte[] GetSizeBuffer()
-		{
-			if (SizeBuffer == null)
-			{
-				SizeBuffer = new byte[SizeBufferSize];
-			}
-			return SizeBuffer;
-		}
-
-		private const int PropertiesBufferSize = 5;
-		private const int SizeBufferSize = 8;
+		private const int PropertiesSize = 5;
+		private const int UncompressedSize = 8;
 
 		[ThreadStatic]
-		private static byte[] PropertiesBuffer;
-		[ThreadStatic]
-		private static byte[] SizeBuffer;
+		private static byte[] s_buffer;
 	}
 }

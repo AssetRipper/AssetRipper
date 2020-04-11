@@ -133,7 +133,7 @@ namespace uTinyRipper
 					{
 						using (MemoryStream uncompressedStream = new MemoryStream(new byte[header.UncompressedBlocksInfoSize]))
 						{
-							SevenZipHelper.DecompressLZMASizeStream(stream, header.CompressedBlocksInfoSize, uncompressedStream);
+							SevenZipHelper.DecompressLZMAStream(stream, header.CompressedBlocksInfoSize, uncompressedStream, header.UncompressedBlocksInfoSize);
 
 							uncompressedStream.Position = 0;
 							ReadMetadata(uncompressedStream, header.UncompressedBlocksInfoSize);
