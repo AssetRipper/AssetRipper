@@ -1,6 +1,4 @@
-using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace Etc
 {
@@ -758,53 +756,58 @@ namespace Etc
 			{
 				for (int i = 0; i < 16; i++)
 				{
-					int oi = WriteOrderTableRev[i];
-					((byte*)(output + oi))[3] = unchecked((byte)@base);
+					DecodeEac11Block((byte*)output + 3, @base);
 				}
 			}
 			else
 			{
-				int ti = data1 & 0xF;
-				fixed (sbyte* table = &Etc2AlphaModTable[ti * 8])
-				{
-					ulong l = Get6SwapedBytes(input);
-					for (int i = 0; i < 16; i++, l >>= 3)
-					{
-						int oi = WriteOrderTableRev[i];
-						int ai = table[(int)(l & 7)];
-						byte c = (byte)Clamp255(@base + mul * ai);
-						((byte*)(output + oi))[3] = c;
-					}
-				}
+				int table = data1 & 0xF;
+				ulong l = Get6SwapedBytes(input);
+				DecodeEac11Block((byte*)output + 3, @base, table, mul, l);
 			}
 		}
 
 		private unsafe static void DecodeEacUnsignedBlock(byte* input, uint* output, int channel)
 		{
-			int @base = 4 + input[0] * 8;
+			int @base = input[0];
 			int data1 = input[1];
-			int table = data1 & 0xF;
-			int mul = (data1 >> 4) * 8;
+			int mul = data1 >> 4;
 			if (mul == 0)
 			{
-				mul = 1;
+				DecodeEac11Block((byte*)output + channel, @base);
 			}
-			ulong l = Get6SwapedBytes(input);
-			DecodeEac11Block((byte*)output + channel, @base, table, mul, l);
+			else
+			{
+				int table = data1 & 0xF;
+				ulong l = Get6SwapedBytes(input);
+				DecodeEac11Block((byte*)output + channel, @base, table, mul, l);
+			}
 		}
 
 		private unsafe static void DecodeEacSignedBlock(byte* input, uint* output, int channel)
 		{
-			int @base = 1023 + unchecked((sbyte)input[0]) * 8;
+			int @base = 127 + unchecked((sbyte)input[0]);
 			int data1 = input[1];
-			int table = data1 & 0xF;
-			int mul = (data1 >> 4) * 8;
+			int mul = data1 >> 4;
 			if (mul == 0)
 			{
-				mul = 1;
+				DecodeEac11Block((byte*)output + channel, @base);
 			}
-			ulong l = Get6SwapedBytes(input);
-			DecodeEac11Block((byte*)output + channel, @base, table, mul, l);
+			else
+			{
+				int table = data1 & 0xF;
+				ulong l = Get6SwapedBytes(input);
+				DecodeEac11Block((byte*)output + channel, @base, table, mul, l);
+			}
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private unsafe static void DecodeEac11Block(byte* output, int @base)
+		{
+			for (int i = 0; i < 16; i++)
+			{
+				output[WriteOrderTableRev[i] * 4] = (byte)(@base);
+			}
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -815,8 +818,7 @@ namespace Etc
 				for (int i = 0; i < 16; i++, l >>= 3)
 				{
 					int val = @base + mul * table[l & 7];
-					val = Clamp(val, 0, 2047);
-					output[WriteOrderTableRev[i] * 4] = (byte)(val / 8);
+					output[WriteOrderTableRev[i] * 4] = (byte)(Clamp255(val));
 				}
 			}
 		}
@@ -831,12 +833,6 @@ namespace Etc
 		private static int Clamp255(int n)
 		{
 			return n < 0 ? 0 : n > 255 ? 255 : n;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static int Clamp(int n, int min, int max)
-		{
-			return n < min ? min : n > max ? max : n;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
