@@ -148,6 +148,12 @@ namespace uTinyRipper.Converters.Script
 					continue;
 				}
 
+#warning TODO: properly skip pointer types
+				if (type.TypeName.Contains("*"))
+				{
+					continue;
+				}
+
 				Export(type);
 			}
 
@@ -274,6 +280,13 @@ namespace uTinyRipper.Converters.Script
 			ScriptExportMethod exportMethod = new ScriptExportMonoMethod(method);
 			exportMethod.Init(this);
 			return exportMethod;
+		}
+
+		public ScriptExportConstructor RetrieveConstructor(MethodDefinition method, MethodDefinition baseCtor)
+		{
+			ScriptExportConstructor exportConstructor = new ScriptExportMonoConstructor(new ScriptExportMonoMethod(method), baseCtor != null ? new ScriptExportMonoMethod(baseCtor) : null);
+			exportConstructor.Init(this);
+			return exportConstructor;
 		}
 
 		public ScriptExportProperty RetrieveProperty(PropertyDefinition property)

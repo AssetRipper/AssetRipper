@@ -287,40 +287,78 @@ namespace uTinyRipper.Converters.Script.Mono
 			List<ScriptExportMethod> methods = new List<ScriptExportMethod>();
 			MonoTypeContext context = new MonoTypeContext(Definition);
 
-			// we need to generate a constructor if the base type is in a builtin assembly and does not contain a parameterless constructor
-			// if this happens we generate a parameterless constructor that calls a base constructor with default values so that we don't have to call it in derived classes
-			// the method generated will have the name '.ctor' and the signature of the base constructor to call instead of being empty
+			// find the constructors to generate by simply taking the first constructor with the least arguments
+			// that has the appropriate accessibility, we need to generate both a public and a internal constructor
+			// since the can be used by derived classes generated
+			// if none of them exist we need to generate a private constructor
+			// to avoid the compiler generating a parameterless public one that didn't exist before
+
+			MethodDefinition ctor = null;
+			MethodDefinition internalCtor = null;
+			MethodDefinition privateCtor = null;
+			foreach (MethodDefinition method in context.Type.Resolve().Methods)
+			{
+				if (method.IsConstructor && !method.IsStatic)
+				{
+					if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly)
+					{
+						if (ctor == null || ctor.Parameters.Count > method.Parameters.Count)
+						{
+							ctor = method;
+						}
+					}
+
+					if (method.IsAssembly || method.IsFamilyAndAssembly)
+					{
+						if (internalCtor == null || internalCtor.Parameters.Count > method.Parameters.Count)
+						{
+							internalCtor = method;
+						}
+					}
+
+					if (privateCtor == null || privateCtor.Parameters.Count > method.Parameters.Count)
+					{
+						privateCtor = method;
+					}
+				}
+			}
+
+			// find the base constructor to call by the same algorithm
+			// this will always be a constructor we generated if we generated the base class ourselves
 
 			MonoTypeContext baseContext = context.GetBase();
-			if (ScriptExportManager.IsBuiltinLibrary(GetModuleName(baseContext.Type)))
+			MethodDefinition baseCtor = null;
+			foreach (MethodDefinition method in baseContext.Type.Resolve().Methods)
 			{
-				MethodDefinition ctor = null;
-				foreach (MethodDefinition method in baseContext.Type.Resolve().Methods)
+				if (method.IsConstructor && !method.IsStatic)
 				{
-					if (method.IsConstructor && !method.IsStatic)
+					if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly ||
+					    (baseContext.Type.Module.Assembly == context.Type.Module.Assembly && (method.IsAssembly || method.IsFamilyAndAssembly)))
 					{
-						if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly ||
-						    (baseContext.Type.Module.Assembly == context.Type.Module.Assembly && (method.IsAssembly || method.IsFamilyAndAssembly)))
+						if (baseCtor == null || baseCtor.Parameters.Count > method.Parameters.Count)
 						{
-							if (ctor == null || ctor.Parameters.Count > method.Parameters.Count)
-							{
-								ctor = method;
-							}
+							baseCtor = method;
 						}
 					}
 				}
+			}
 
-				if (ctor != null)
+			if (ctor != null || internalCtor != null || privateCtor != null)
+			{
+				if (ctor != null || internalCtor != null)
 				{
-					if (ctor.Parameters.Count != 0)
+					if (ctor != null && (ctor.HasParameters || (baseCtor?.HasParameters ?? false)))
 					{
-						methods.Add(new ScriptExportMonoConstructor(manager.RetrieveMethod(ctor), manager.RetrieveType(context.Type)));
+						methods.Add(manager.RetrieveConstructor(ctor, baseCtor));
+					}
+					if (internalCtor != null && (internalCtor.HasParameters || (baseCtor?.HasParameters ?? false)))
+					{
+						methods.Add(manager.RetrieveConstructor(internalCtor, baseCtor));
 					}
 				}
 				else
 				{
-					// the base has no accessible constructor 
-					// this shouldn't be possible but it is so simply ignore it
+					methods.Add(manager.RetrieveConstructor(privateCtor, baseCtor));
 				}
 			}
 

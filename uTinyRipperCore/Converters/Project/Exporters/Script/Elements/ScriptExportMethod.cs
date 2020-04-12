@@ -7,30 +7,8 @@ namespace uTinyRipper.Converters.Script
 	{
 		public abstract void Init(IScriptExportManager manager);
 
-		public void Export(TextWriter writer, int intent)
+		public virtual void Export(TextWriter writer, int intent)
 		{
-			if (Name == ".ctor")
-			{
-				writer.WriteIndent(intent);
-				writer.Write("{0} {1}() : base(", Keyword, DeclaringType.TypeName);
-				for (int i = 0; i < Parameters.Count; i++)
-				{
-					ScriptExportParameter parameter = Parameters[i];
-					writer.Write("default({0})", parameter.Type.GetTypeNestedName(DeclaringType));
-					if (i < Parameters.Count - 1)
-					{
-						writer.Write(", ");
-					}
-				}
-				writer.WriteLine(")");
-				writer.WriteIndent(intent);
-				writer.WriteLine("{");
-				writer.WriteIndent(intent);
-				writer.WriteLine("}");
-
-				return;
-			}
-
 			writer.WriteIndent(intent);
 			string returnTypeName = ReturnType.GetTypeNestedName(DeclaringType);
 			writer.Write("{0} override {1} {2}(", Keyword, returnTypeName, Name);
@@ -63,7 +41,7 @@ namespace uTinyRipper.Converters.Script
 			writer.WriteLine("}");
 		}
 
-		public void GetUsedNamespaces(ICollection<string> namespaces)
+		public virtual void GetUsedNamespaces(ICollection<string> namespaces)
 		{
 			ReturnType.GetTypeNamespaces(namespaces);
 			foreach (ScriptExportParameter parameter in Parameters)
