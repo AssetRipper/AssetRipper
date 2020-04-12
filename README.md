@@ -62,14 +62,14 @@ uTinyRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*
 
 If you want to build a solution, you need:
 
- \- .NET Framework 4.6.1 + .NET Core 2.0 SDK
+ \- .NET Framework 4.7.2 + .NET Core 2.0 SDK
 
  \- Compiler with C# 7.3 syntax support (Visual Studio 2017)
 
 
 If you want to run binary files, you need to install:
 
- \- [.NET Framework 4.6.1](https://www.microsoft.com/en-us/download/details.aspx?id=49982)
+ \- [.NET Framework 4.7.2](https://support.microsoft.com/en-us/help/4054530/microsoft-net-framework-4-7-2-offline-installer-for-windows)
  
  \- [Microsoft Visual C++ 2013](https://www.microsoft.com/en-us/download/details.aspx?id=40784) and [Microsoft Visual C++ 2015](https://www.microsoft.com/en-us/download/details.aspx?id=53840) Redistributables
 
