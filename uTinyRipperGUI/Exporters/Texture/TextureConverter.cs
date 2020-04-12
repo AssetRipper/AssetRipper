@@ -1,4 +1,5 @@
 using Astc;
+using Atc;
 using Dxt;
 using Etc;
 using Pvrtc;
@@ -16,9 +17,6 @@ namespace uTinyRipperGUI.Exporters
 {
 	public static class TextureConverter
 	{
-		[DllImport("TextureConverterWrapper", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool Ponvert(byte[] buffer, IntPtr bmp, int nWidth, int nHeight, int len, int type, int bmpsize, bool fixAlpha);
-
 		[DllImport("texgenpack", CallingConvention = CallingConvention.Cdecl)]
 		private static extern void texgenpackdecode(int texturetype, byte[] texturedata, int width, int height, IntPtr bmp, bool fixAlpha);
 
@@ -122,6 +120,27 @@ namespace uTinyRipperGUI.Exporters
 					case TextureFormat.R8:
 						RgbConverter.R8ToBGRA32(data, width, height, bitmap.Bits);
 						break;
+					case TextureFormat.RHalf:
+						RgbConverter.RHalfToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.RGHalf:
+						RgbConverter.RGHalfToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.RGBAHalf:
+						RgbConverter.RGBAHalfToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.RFloat:
+						RgbConverter.RFloatToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.RGFloat:
+						RgbConverter.RGFloatToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.RGBAFloat:
+						RgbConverter.RGBAFloatToBGRA32(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.RGB9e5Float:
+						RgbConverter.RGB9e5FloatToBGRA32(data, width, height, bitmap.Bits);
+						break;
 
 					default:
 						throw new Exception(texture.TextureFormat.ToString());
@@ -150,6 +169,19 @@ namespace uTinyRipperGUI.Exporters
 					case TextureFormat.ETC_RGB4_3DS:
 					case TextureFormat.ETC_RGB4Crunched:
 						EtcDecoder.DecompressETC(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.EAC_R:
+						EtcDecoder.DecompressEACRUnsigned(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.EAC_R_SIGNED:
+						EtcDecoder.DecompressEACRSigned(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.EAC_RG:
+						EtcDecoder.DecompressEACRGUnsigned(data, width, height, bitmap.Bits);
+						break;
+					case TextureFormat.EAC_RG_SIGNED:
+						EtcDecoder.DecompressEACRGSigned(data, width, height, bitmap.Bits);
 						break;
 
 					case TextureFormat.ETC2_RGB:
@@ -184,6 +216,37 @@ namespace uTinyRipperGUI.Exporters
 		{
 			byte[] decompressed = DecompressCrunch(texture, data);
 			return ETCTextureToBitmap(texture, decompressed);
+		}
+
+		public static DirectBitmap ATCTextureToBitmap(Texture2D texture, byte[] data)
+		{
+			int width = texture.Width;
+			int height = texture.Height;
+			DirectBitmap bitmap = new DirectBitmap(width, height);
+			try
+			{
+				switch (texture.TextureFormat)
+				{
+					case TextureFormat.ATC_RGB4:
+						AtcDecoder.DecompressAtcRgb4(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.ATC_RGBA8:
+						AtcDecoder.DecompressAtcRgba8(data, width, height, bitmap.Bits);
+						break;
+
+					default:
+						throw new Exception(texture.TextureFormat.ToString());
+
+				}
+				bitmap.FlipY();
+				return bitmap;
+			}
+			catch
+			{
+				bitmap.Dispose();
+				throw;
+			}
 		}
 
 		public static DirectBitmap YUY2TextureToBitmap(Texture2D texture, byte[] data)
@@ -233,31 +296,6 @@ namespace uTinyRipperGUI.Exporters
 				AstcDecoder.DecodeASTC(data, width, height, blockSize, blockSize, bitmap.Bits);
 				bitmap.FlipY();
 				return bitmap;
-			}
-			catch
-			{
-				bitmap.Dispose();
-				throw;
-			}
-		}
-
-		public static DirectBitmap TextureConverterTextureToBitmap(Texture2D texture, byte[] data)
-		{
-			bool fixAlpha = texture.KTXBaseInternalFormat() == KTXBaseInternalFormat.RED || texture.KTXBaseInternalFormat() == KTXBaseInternalFormat.RG;
-			DirectBitmap bitmap = new DirectBitmap(texture.Width, texture.Height);
-			try
-			{
-				int len = bitmap.Stride * bitmap.Height;
-				if (Ponvert(data, bitmap.BitsPtr, texture.Width, texture.Height, data.Length, (int)ToQFormat(texture.TextureFormat), len, fixAlpha))
-				{
-					bitmap.FlipY();
-					return bitmap;
-				}
-				else
-				{
-					bitmap.Dispose();
-					return null;
-				}
 			}
 			catch
 			{

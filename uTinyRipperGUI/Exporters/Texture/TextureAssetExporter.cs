@@ -61,6 +61,13 @@ namespace uTinyRipperGUI.Exporters
 				case TextureFormat.R16:
 				case TextureFormat.RGBA4444:
 				case TextureFormat.BGRA32:
+				case TextureFormat.RHalf:
+				case TextureFormat.RGHalf:
+				case TextureFormat.RGBAHalf:
+				case TextureFormat.RFloat:
+				case TextureFormat.RGFloat:
+				case TextureFormat.RGBAFloat:
+				case TextureFormat.RGB9e5Float:
 				case TextureFormat.RG16:
 				case TextureFormat.R8:
 					return TextureConverter.RGBTextureToBitmap(texture, data);
@@ -75,12 +82,20 @@ namespace uTinyRipperGUI.Exporters
 					return TextureConverter.PVRTCTextureToBitmap(texture, data);
 
 				case TextureFormat.ETC_RGB4:
+				case TextureFormat.EAC_R:
+				case TextureFormat.EAC_R_SIGNED:
+				case TextureFormat.EAC_RG:
+				case TextureFormat.EAC_RG_SIGNED:
 				case TextureFormat.ETC2_RGB:
 				case TextureFormat.ETC2_RGBA1:
 				case TextureFormat.ETC2_RGBA8:
 				case TextureFormat.ETC_RGB4_3DS:
 				case TextureFormat.ETC_RGBA8_3DS:
 					return TextureConverter.ETCTextureToBitmap(texture, data);
+
+				case TextureFormat.ATC_RGB4:
+				case TextureFormat.ATC_RGBA8:
+					return TextureConverter.ATCTextureToBitmap(texture, data);
 
 				case TextureFormat.ASTC_RGB_4x4:
 				case TextureFormat.ASTC_RGB_5x5:
@@ -95,21 +110,6 @@ namespace uTinyRipperGUI.Exporters
 				case TextureFormat.ASTC_RGBA_10x10:
 				case TextureFormat.ASTC_RGBA_12x12:
 					return TextureConverter.ASTCTextureToBitmap(texture, data);
-
-				case TextureFormat.RHalf:
-				case TextureFormat.RGHalf:
-				case TextureFormat.RGBAHalf:
-				case TextureFormat.RFloat:
-				case TextureFormat.RGFloat:
-				case TextureFormat.RGBAFloat:
-				case TextureFormat.RGB9e5Float:
-				case TextureFormat.ATC_RGB4:
-				case TextureFormat.ATC_RGBA8:
-				case TextureFormat.EAC_R:
-				case TextureFormat.EAC_R_SIGNED:
-				case TextureFormat.EAC_RG:
-				case TextureFormat.EAC_RG_SIGNED:
-					return TextureConverter.TextureConverterTextureToBitmap(texture, data);
 
 				case TextureFormat.BC4:
 				case TextureFormat.BC5:

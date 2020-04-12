@@ -126,7 +126,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
-    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -212,6 +211,7 @@
     <Compile Include="ThirdParty\Texture containers\PVR\PVRContainerParameters.cs" />
     <Compile Include="ThirdParty\Texture containers\PVR\PVRFlag.cs" />
     <Compile Include="ThirdParty\Texture containers\PVR\PVRPixelFormat.cs" />
+    <Compile Include="ThirdParty\Texture converters\AtcDecoder.cs" />
     <Compile Include="ThirdParty\Texture converters\DxtDecoder.cs" />
     <Compile Include="ThirdParty\Texture converters\EtcDecoder.cs" />
     <Compile Include="ThirdParty\Texture converters\PvrtcDecoder.cs" />
@@ -309,14 +309,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>texgenpack.dll</TargetPath>
     </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x86\TextureConverter.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>TextureConverter.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x86\TextureConverterWrapper_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>TextureConverterWrapper.dll</TargetPath>
-    </ContentWithTargetPath>
     <Reference Include="HLSLccWrapper_x86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\x86\HLSLccWrapper.dll</HintPath>
@@ -338,14 +330,6 @@
     <ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>texgenpack.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x64\TextureConverter.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>TextureConverter.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x64\TextureConverterWrapper_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>TextureConverterWrapper.dll</TargetPath>
     </ContentWithTargetPath>
     <Reference Include="HLSLccWrapper_x64, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
