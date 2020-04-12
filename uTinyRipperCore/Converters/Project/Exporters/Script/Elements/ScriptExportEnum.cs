@@ -34,6 +34,7 @@ namespace uTinyRipper.Converters.Script
 		}
 
 		public sealed override bool IsEnum => true;
+		public sealed override bool IsValueType => true;
 		public sealed override IReadOnlyList<ScriptExportProperty> Properties { get; } = Array.Empty<ScriptExportProperty>();
 		public sealed override IReadOnlyList<ScriptExportMethod> Methods { get; } = Array.Empty<ScriptExportMethod>();
 

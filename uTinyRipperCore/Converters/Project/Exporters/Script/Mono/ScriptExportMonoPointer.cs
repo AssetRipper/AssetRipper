@@ -3,17 +3,17 @@ using System;
 
 namespace uTinyRipper.Converters.Script.Mono
 {
-	public sealed class ScriptExportMonoArray : ScriptExportArray
+	public sealed class ScriptExportMonoPointer : ScriptExportPointer
 	{
-		public ScriptExportMonoArray(TypeReference type)
+		public ScriptExportMonoPointer(TypeReference type)
 		{
 			if (type == null)
 			{
 				throw new ArgumentNullException(nameof(type));
 			}
-			if (!type.IsArray)
+			if (!type.IsPointer)
 			{
-				throw new Exception("Type isn't an array");
+				throw new Exception("Type isn't a pointer");
 			}
 
 			Type = type;

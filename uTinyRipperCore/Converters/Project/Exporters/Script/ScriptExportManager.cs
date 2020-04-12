@@ -147,13 +147,7 @@ namespace uTinyRipper.Converters.Script
 				{
 					continue;
 				}
-
-#warning TODO: properly skip pointer types
-				if (type.TypeName.Contains("*"))
-				{
-					continue;
-				}
-
+				
 				Export(type);
 			}
 
@@ -191,6 +185,10 @@ namespace uTinyRipper.Converters.Script
 			if (type.IsArray)
 			{
 				return RetrieveArray(type);
+			}
+			if (type.IsPointer)
+			{
+				return RetrievePointer(type);
 			}
 			if (type.IsGenericInstance)
 			{
@@ -233,6 +231,16 @@ namespace uTinyRipper.Converters.Script
 				return exportArray;
 			}
 			return CreateArray(array);
+		}
+		
+		public ScriptExportPointer RetrievePointer(TypeReference pointer)
+		{
+			string fullname = ScriptExportMonoType.GetFullName(pointer);
+			if (m_pointers.TryGetValue(fullname, out ScriptExportPointer exportArray))
+			{
+				return exportArray;
+			}
+			return CreatePointer(pointer);
 		}
 
 		public ScriptExportGeneric RetrieveGeneric(TypeReference generic)
@@ -327,6 +335,14 @@ namespace uTinyRipper.Converters.Script
 			m_arrays.Add(exportArray.FullName, exportArray);
 			exportArray.Init(this);
 			return exportArray;
+		}
+		
+		public ScriptExportPointer CreatePointer(TypeReference type)
+		{
+			ScriptExportPointer exportPointer = new ScriptExportMonoPointer(type);
+			m_pointers.Add(exportPointer.FullName, exportPointer);
+			exportPointer.Init(this);
+			return exportPointer;
 		}
 
 		public ScriptExportGeneric CreateGeneric(TypeReference type)
@@ -427,6 +443,7 @@ namespace uTinyRipper.Converters.Script
 
 		private readonly Dictionary<string, ScriptExportType> m_types = new Dictionary<string, ScriptExportType>();
 		private readonly Dictionary<string, ScriptExportArray> m_arrays = new Dictionary<string, ScriptExportArray>();
+		private readonly Dictionary<string, ScriptExportPointer> m_pointers = new Dictionary<string, ScriptExportPointer>();
 		private readonly Dictionary<string, ScriptExportGeneric> m_generic = new Dictionary<string, ScriptExportGeneric>();
 		private readonly Dictionary<string, ScriptExportEnum> m_enums = new Dictionary<string, ScriptExportEnum>();
 		private readonly Dictionary<string, ScriptExportDelegate> m_delegates = new Dictionary<string, ScriptExportDelegate>();

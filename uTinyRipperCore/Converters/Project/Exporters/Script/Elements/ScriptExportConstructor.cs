@@ -8,7 +8,7 @@ namespace uTinyRipper.Converters.Script
 		public override void Export(TextWriter writer, int intent)
 		{
 			writer.WriteIndent(intent);
-			writer.Write("{0} {1}(", Keyword, DeclaringType.TypeName);
+			writer.Write("{0} {1}(", Keyword, DeclaringType.Name);
 			for (int i = 0; i < Parameters.Count; i++)
 			{
 				ScriptExportParameter parameter = Parameters[i];
@@ -31,6 +31,13 @@ namespace uTinyRipper.Converters.Script
 						writer.Write(", ");
 					}
 				}
+			} 
+			else if (DeclaringType.IsValueType)
+			{
+				// all field of a value type must be initialized
+				// they always inherit System.ValueType which only has a parameterless constructor
+				// so this is always written
+				writer.Write(") : this(");
 			}
 
 			writer.WriteLine(")");

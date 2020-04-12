@@ -227,9 +227,15 @@ namespace uTinyRipper.Converters.Script
 		/// ex: Class<T1, T2>
 		/// </summary>
 		public abstract string TypeName { get; }
+		/// <summary>
+		/// Type name without any prefixes or generic parameters
+		/// ex: Class
+		/// </summary>
+		public abstract string Name { get; }
 		public abstract string Namespace { get; }
 		public abstract string Module { get; }
 		public virtual bool IsEnum => false;
+		public abstract bool IsValueType { get; }
 
 		/// <summary>
 		/// Declaring type with generic parameters (if any)

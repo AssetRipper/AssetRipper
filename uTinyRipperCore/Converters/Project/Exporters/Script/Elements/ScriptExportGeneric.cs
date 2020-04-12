@@ -25,6 +25,7 @@ namespace uTinyRipper.Converters.Script
 
 		public sealed override string CleanNestedName => Template.CleanNestedName;
 		public sealed override bool IsEnum => Template.IsEnum;
+		public sealed override bool IsValueType => Template.IsValueType;
 
 		public sealed override ScriptExportType DeclaringType => Template.DeclaringType;
 		public abstract ScriptExportType Template { get; }

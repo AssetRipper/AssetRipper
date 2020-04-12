@@ -23,10 +23,12 @@ namespace uTinyRipper.Converters.Script.Mono
 			}
 
 			TypeName = GetName(Type);
+			Name = GetSimpleName(Type);
 			NestedName = GetNestedName(Type, TypeName);
 			CleanNestedName = ToCleanName(NestedName);
 			Module = GetModuleName(Type);
 			FullName = GetFullName(Type, Module);
+			IsValueType = Type.IsValueType;
 		}
 
 		public static string GetNestedName(TypeReference type)
@@ -108,6 +110,38 @@ namespace uTinyRipper.Converters.Script.Mono
 				return GetName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
 			}
 			return type.Name;
+		}
+
+		public static string GetSimpleName(TypeReference type)
+		{
+			string name = type.Name;
+			int index = name.IndexOf('`');
+			if (index == -1)
+			{
+				return name;
+			}
+
+			StringBuilder sb = new StringBuilder(name.Length);
+			bool strip = false;
+
+			foreach (char c in name)
+			{
+				if (c == '`')
+				{
+					strip = true;
+				}
+				else if (!char.IsDigit(c))
+				{
+					strip = false;
+				}
+
+				if (!strip)
+				{
+					sb.Append(c);
+				}
+			}
+
+			return sb.ToString();
 		}
 
 		public static string GetFullName(TypeReference type)
@@ -561,8 +595,10 @@ namespace uTinyRipper.Converters.Script.Mono
 		public override string NestedName { get; }
 		public override string CleanNestedName { get; }
 		public override string TypeName { get; }
+		public override string Name { get; }
 		public override string Namespace => DeclaringType == null ? Type.Namespace : DeclaringType.Namespace;
 		public override string Module { get; }
+		public override bool IsValueType { get; }
 
 		public override ScriptExportType DeclaringType => m_declaringType;
 		public override ScriptExportType Base => m_base;
