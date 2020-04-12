@@ -71,7 +71,7 @@ If you want to run binary files, you need to install:
 
  \- [.NET Framework 4.7.2](https://support.microsoft.com/en-us/help/4054530/microsoft-net-framework-4-7-2-offline-installer-for-windows)
  
- \- [Microsoft Visual C++ 2013](https://www.microsoft.com/en-us/download/details.aspx?id=40784) and [Microsoft Visual C++ 2015](https://www.microsoft.com/en-us/download/details.aspx?id=53840) Redistributables
+ \- [Microsoft Visual C++ 2015](https://www.microsoft.com/en-us/download/details.aspx?id=53840) Redistributables
 
  \- [Unity 2017.3.0f3 or greater](https://unity3d.com/get-unity/download/archive) (NOTE: editor version must be no less than game version)
  
