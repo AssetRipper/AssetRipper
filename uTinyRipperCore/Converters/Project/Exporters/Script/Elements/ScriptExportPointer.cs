@@ -22,7 +22,7 @@ namespace uTinyRipper.Converters.Script
 
 		protected sealed override string Keyword => throw new NotSupportedException();
 
-		protected sealed override bool IsStruct => throw new NotSupportedException();
+		public sealed override bool IsStruct => throw new NotSupportedException();
 		protected sealed override bool IsSerializable => throw new NotSupportedException();
 	}
 }

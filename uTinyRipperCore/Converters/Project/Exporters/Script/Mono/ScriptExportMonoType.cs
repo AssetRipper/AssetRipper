@@ -28,7 +28,6 @@ namespace uTinyRipper.Converters.Script.Mono
 			CleanNestedName = ToCleanName(NestedName);
 			Module = GetModuleName(Type);
 			FullName = GetFullName(Type, Module);
-			IsValueType = Type.IsValueType;
 		}
 
 		public static string GetNestedName(TypeReference type)
@@ -598,7 +597,6 @@ namespace uTinyRipper.Converters.Script.Mono
 		public override string Name { get; }
 		public override string Namespace => DeclaringType == null ? Type.Namespace : DeclaringType.Namespace;
 		public override string Module { get; }
-		public override bool IsValueType { get; }
 
 		public override ScriptExportType DeclaringType => m_declaringType;
 		public override ScriptExportType Base => m_base;
@@ -631,7 +629,7 @@ namespace uTinyRipper.Converters.Script.Mono
 				return InternalKeyWord;
 			}
 		}
-		protected override bool IsStruct => Type.IsValueType;
+		public override bool IsStruct => Type.IsValueType;
 		protected override bool IsSerializable => Definition == null ? false : Definition.IsSerializable;
 
 		private TypeReference Type { get; }

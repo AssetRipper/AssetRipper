@@ -235,7 +235,6 @@ namespace uTinyRipper.Converters.Script
 		public abstract string Namespace { get; }
 		public abstract string Module { get; }
 		public virtual bool IsEnum => false;
-		public abstract bool IsValueType { get; }
 
 		/// <summary>
 		/// Declaring type with generic parameters (if any)
@@ -257,7 +256,7 @@ namespace uTinyRipper.Converters.Script
 		public abstract IReadOnlyList<ScriptExportField> Fields { get; }
 
 		protected abstract string Keyword { get; }
-		protected abstract bool IsStruct { get; }
+		public abstract bool IsStruct { get; }
 		protected abstract bool IsSerializable { get; }
 
 		protected const string PublicKeyWord = "public";

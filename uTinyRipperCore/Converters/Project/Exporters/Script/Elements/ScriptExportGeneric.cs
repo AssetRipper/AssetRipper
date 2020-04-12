@@ -25,7 +25,6 @@ namespace uTinyRipper.Converters.Script
 
 		public sealed override string CleanNestedName => Template.CleanNestedName;
 		public sealed override bool IsEnum => Template.IsEnum;
-		public sealed override bool IsValueType => Template.IsValueType;
 
 		public sealed override ScriptExportType DeclaringType => Template.DeclaringType;
 		public abstract ScriptExportType Template { get; }
@@ -37,7 +36,7 @@ namespace uTinyRipper.Converters.Script
 
 		protected sealed override string Keyword => throw new NotSupportedException();
 
-		protected sealed override bool IsStruct => throw new NotSupportedException();
+		public sealed override bool IsStruct => throw new NotSupportedException();
 		protected sealed override bool IsSerializable => throw new NotSupportedException();
 	}
 }

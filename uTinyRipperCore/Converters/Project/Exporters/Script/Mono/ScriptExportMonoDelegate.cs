@@ -80,7 +80,6 @@ namespace uTinyRipper.Converters.Script.Mono
 		public override string TypeName => Type.Name;
 		public override string Namespace => DeclaringType == null ? Type.Namespace : DeclaringType.Namespace;
 		public override string Module { get; }
-		public override bool IsValueType => false;
 
 		public override ScriptExportType DeclaringType => m_declaringType;
 		public override ScriptExportType Return => m_return;

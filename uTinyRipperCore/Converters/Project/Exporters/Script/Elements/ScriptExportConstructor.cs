@@ -32,7 +32,7 @@ namespace uTinyRipper.Converters.Script
 					}
 				}
 			} 
-			else if (DeclaringType.IsValueType)
+			else if (DeclaringType.IsStruct)
 			{
 				// all field of a value type must be initialized
 				// they always inherit System.ValueType which only has a parameterless constructor

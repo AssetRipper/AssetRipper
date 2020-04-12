@@ -44,7 +44,6 @@ namespace uTinyRipper.Converters.Script.Mono
 		public override string TypeName { get; }
 		public override string Namespace => Element.Namespace;
 		public override string Module { get; }
-		public override bool IsValueType => false;
 
 		private TypeReference Type { get; }
 
