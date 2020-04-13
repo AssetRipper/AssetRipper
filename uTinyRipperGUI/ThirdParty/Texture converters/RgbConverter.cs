@@ -372,11 +372,11 @@ namespace Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					byte r = Convert.ToByte(Math.Round(Half.ToHalf(sinput[0]) * 255f));
-					output[0] = 0;              // b
-					output[1] = 0;              // g
-					output[2] = r;              // r
-					output[3] = 255;            // a
+					double r = Clamp255(Math.Round(Half.ToHalf(sinput[0]) * 255f));
+					output[0] = 0;					// b
+					output[1] = 0;					// g
+					output[2] = Convert.ToByte(r);	// r
+					output[3] = 255;				// a
 					sinput += 1;
 					output += 4;
 				}
@@ -408,12 +408,12 @@ namespace Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					byte r = Convert.ToByte(Math.Round(Half.ToHalf(sinput[0]) * 255f));
-					byte g = Convert.ToByte(Math.Round(Half.ToHalf(sinput[1]) * 255f));
-					output[0] = 0;             // b
-					output[1] = g;             // g
-					output[2] = r;             // r
-					output[3] = 255;           // a
+					double r = Clamp255(Math.Round(Half.ToHalf(sinput[0]) * 255f));
+					double g = Clamp255(Math.Round(Half.ToHalf(sinput[1]) * 255f));
+					output[0] = 0;					// b
+					output[1] = Convert.ToByte(g);	// g
+					output[2] = Convert.ToByte(r);	// r
+					output[3] = 255;				// a
 					sinput += 2;
 					output += 4;
 				}
@@ -445,14 +445,14 @@ namespace Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					byte r = Convert.ToByte(Math.Round(Half.ToHalf(sinput[0]) * 255f));
-					byte g = Convert.ToByte(Math.Round(Half.ToHalf(sinput[1]) * 255f));
-					byte b = Convert.ToByte(Math.Round(Half.ToHalf(sinput[2]) * 255f));
-					byte a = Convert.ToByte(Math.Round(Half.ToHalf(sinput[3]) * 255f));
-					output[0] = b;             // b
-					output[1] = g;             // g
-					output[2] = r;             // r
-					output[3] = a;             // a
+					double r = Clamp255(Math.Round(Half.ToHalf(sinput[0]) * 255f));
+					double g = Clamp255(Math.Round(Half.ToHalf(sinput[1]) * 255f));
+					double b = Clamp255(Math.Round(Half.ToHalf(sinput[2]) * 255f));
+					double a = Clamp255(Math.Round(Half.ToHalf(sinput[3]) * 255f));
+					output[0] = Convert.ToByte(b);  // b
+					output[1] = Convert.ToByte(g);  // g
+					output[2] = Convert.ToByte(r);  // r
+					output[3] = Convert.ToByte(a);  // a
 					sinput += 4;
 					output += 4;
 				}
@@ -484,11 +484,11 @@ namespace Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					byte r = Convert.ToByte(Math.Round(sinput[0] * 255f));
-					output[0] = 0;              // b
-					output[1] = 0;              // g
-					output[2] = r;              // r
-					output[3] = 255;            // a
+					double r = Clamp255(Math.Round(sinput[0] * 255f));
+					output[0] = 0;					// b
+					output[1] = 0;					// g
+					output[2] = Convert.ToByte(r);	// r
+					output[3] = 255;				// a
 					sinput += 1;
 					output += 4;
 				}
@@ -520,12 +520,12 @@ namespace Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					byte r = Convert.ToByte(Math.Round(sinput[0] * 255f));
-					byte g = Convert.ToByte(Math.Round(sinput[1] * 255f));
-					output[0] = 0;             // b
-					output[1] = g;             // g
-					output[2] = r;             // r
-					output[3] = 255;           // a
+					double r = Clamp255(Math.Round(sinput[0] * 255f));
+					double g = Clamp255(Math.Round(sinput[1] * 255f));
+					output[0] = 0;					// b
+					output[1] = Convert.ToByte(g);	// g
+					output[2] = Convert.ToByte(r);	// r
+					output[3] = 255;				// a
 					sinput += 2;
 					output += 4;
 				}
@@ -557,14 +557,14 @@ namespace Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					byte r = Convert.ToByte(Math.Round(sinput[0] * 255f));
-					byte g = Convert.ToByte(Math.Round(sinput[1] * 255f));
-					byte b = Convert.ToByte(Math.Round(sinput[2] * 255f));
-					byte a = Convert.ToByte(Math.Round(sinput[3] * 255f));
-					output[0] = b;              // b
-					output[1] = g;              // g
-					output[2] = r;              // r
-					output[3] = a;              // a
+					double r = Clamp255(Math.Round(sinput[0] * 255f));
+					double g = Clamp255(Math.Round(sinput[1] * 255f));
+					double b = Clamp255(Math.Round(sinput[2] * 255f));
+					double a = Clamp255(Math.Round(sinput[3] * 255f));
+					output[0] = Convert.ToByte(b);	// b
+					output[1] = Convert.ToByte(g);	// g
+					output[2] = Convert.ToByte(r);	// r
+					output[3] = Convert.ToByte(a);	// a
 					sinput += 4;
 					output += 4;
 				}
@@ -610,5 +610,7 @@ namespace Rgb
 				}
 			}
 		}
+
+		private static double Clamp255(double value) => value < 0.0 ? 0.0 : value > 255.0 ? 255.0 : value;
 	}
 }
