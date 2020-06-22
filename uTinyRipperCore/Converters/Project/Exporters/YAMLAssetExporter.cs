@@ -118,7 +118,7 @@ namespace uTinyRipper.Converters
 							}
 							else
 							{
-								// such MonoBehaviours as StateMachineBehaviour in AimatorController
+								// such MonoBehaviours as StateMachineBehaviour in AnimatorController
 								return new EmptyExportCollection();
 							}
 						}

@@ -208,7 +208,7 @@ namespace uTinyRipper.Converters.Script.Mono
 			int argumentCount = MonoUtils.GetGenericParameterCount(genericType);
 			if (argumentCount == 0)
 			{
-				// nested class/enum (of generic class) is a generic instance but it doesn't has '`' symbol in its name
+				// nested class/enum (of generic class) is a generic instance but it doesn't have '`' symbol in its name
 				return name;
 			}
 

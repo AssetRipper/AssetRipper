@@ -47,7 +47,7 @@ namespace uTinyRipperConsole
 					continue;
 				}
 				Console.WriteLine(MultiFileStream.IsMultiFile(arg) ?
-					$"File '{arg}' doesn't has all parts for combining" :
+					$"File '{arg}' doesn't have all parts for combining" :
 					$"Neither file nor directory with path '{arg}' exists");
 				Console.ReadKey();
 				return;
