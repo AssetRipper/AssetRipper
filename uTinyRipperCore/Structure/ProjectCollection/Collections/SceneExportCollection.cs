@@ -222,9 +222,16 @@ namespace uTinyRipper.Project
 				string scenePath = container.SceneIndexToName(index);
 				if (scenePath.StartsWith(AssetsName, StringComparison.Ordinal))
 				{
-					string relativePath = scenePath.Substring(AssetsName.Length);
 					string extension = Path.GetExtension(scenePath);
-					return relativePath.Substring(0, relativePath.Length - extension.Length);
+					return scenePath.Substring(AssetsName.Length, scenePath.Length - AssetsName.Length - extension.Length);
+				}
+				else if (Path.IsPathRooted(scenePath))
+				{
+					// pull/617
+					// NOTE: absolute project path may contain Assets/ in its name so in this case we get incorrect scene path, but there is no way to bypass this issue
+					int assetIndex = scenePath.IndexOf(AssetsName);
+					string extension = Path.GetExtension(scenePath);
+					return scenePath.Substring(assetIndex + AssetsName.Length, scenePath.Length - assetIndex - AssetsName.Length - extension.Length);
 				}
 				else if (scenePath.Length == 0)
 				{
