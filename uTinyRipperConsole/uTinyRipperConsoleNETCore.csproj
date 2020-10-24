@@ -6,6 +6,7 @@
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	<AssemblyName>uTinyRipperCmd</AssemblyName>
 	<RootNamespace>uTinyRipperConsole</RootNamespace>
+	<LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

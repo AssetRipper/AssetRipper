@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.5</TargetFramework>
-    <LangVersion>7.2</LangVersion>
+    <LangVersion>7.3</LangVersion>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	<AssemblyName>uTinyRipperCore</AssemblyName>
 	<RootNamespace>uTinyRipper</RootNamespace>
