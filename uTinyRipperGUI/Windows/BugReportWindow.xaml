@@ -25,13 +25,13 @@
 			</Grid.ColumnDefinitions>
 
 			<Image Grid.Column="0" Source="pack://application:,,,/Resources/alert-decagram-outline.png" Width="48" Height="48"/>
-			<Label Grid.Column="1" Content="An error during file processing has occurred!" Foreground="White"
+			<Label Grid.Column="1" Content="An error has occurred during file processing!" Foreground="White"
 				   VerticalAlignment="Center" FontSize="16"/>
 		</Grid>
 
 		<TextBlock Grid.Row="1" Foreground="White" TextWrapping="Wrap" Margin="10,0,0,5">
 			For some reason uTinyRipper is unable to process your files.<LineBreak/>
-			If you want this issue to be fixed you need to contact the developer and report about it. For this you need to provide the following information:
+			You can report about it to the developer. Essential report information:
 		</TextBlock>
 
 		<Grid Grid.Row="2" Background="#FF3C3B3B" >
@@ -49,7 +49,7 @@
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
 
-			<Label Grid.Row="0" Content="Please, attach the following files:" Foreground="White" />
+			<Label Grid.Row="0" Content="Please, attach following files or whole game if list is empty:" Foreground="White" />
 			<StackPanel Name="FilePanel" Grid.Row="1" Margin="20,0,0,10">
 				<TextBlock>
 					<Hyperlink>level0</Hyperlink>
@@ -63,16 +63,20 @@
 		<Grid Grid.Row="4" >
 
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="230" />
 				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
+			<TextBlock Grid.Column="0" TextWrapping="WrapWithOverflow" Foreground="White" VerticalAlignment="Center" Margin="20,0,0,0">
+				Before submiting an issue, make sure file version is supported!
+			</TextBlock>
+			
 			<!--<Button Grid.Column="0" Content="Unsupported games" Height="28" Width="120" HorizontalAlignment="Right" Margin="20,0,0,0"
 					Background="#FF4F4F4F" Foreground="White" Focusable="False"
 					Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>-->
 
-			<Button Grid.Column="1" Content="Report an issue" Height="28" Width="120" HorizontalAlignment="Right" Margin="0,0,20,0"
+			<Button Grid.Column="2" Content="Report an issue" Height="28" Width="120" HorizontalAlignment="Right" Margin="0,0,20,0"
 					Background="#FF4F4F4F" Foreground="White" Focusable="False"
 					Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
 					Click="OnReportButtonClicked"/>
