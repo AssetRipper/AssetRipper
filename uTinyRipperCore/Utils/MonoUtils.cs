@@ -178,7 +178,7 @@ namespace uTinyRipper
 			int argumentCount = GetGenericParameterCount(genericType);
 			if (argumentCount == 0)
 			{
-				// nested class/enum (of generic class) is generic instance but it doesn't has '`' symbol in its name
+				// nested class/enum (of generic class) is generic instance but it doesn't have '`' symbol in its name
 				return name;
 			}
 

@@ -41,7 +41,7 @@ namespace uTinyRipper.Classes
 			}
 			else
 			{
-				Logger.Log(LogType.Warning, LogCategory.Export, "Movie texture doesn't has any data");
+				Logger.Log(LogType.Warning, LogCategory.Export, "Movie texture doesn't have any data");
 			}
 		}
 

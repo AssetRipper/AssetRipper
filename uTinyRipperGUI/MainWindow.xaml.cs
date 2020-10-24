@@ -70,7 +70,7 @@ namespace uTinyRipperGUI
 					continue;
 				}
 				Logger.Log(LogType.Warning, LogCategory.General, MultiFileStream.IsMultiFile(file) ?
-					$"File '{file}' doesn't has all parts for combining" :
+					$"File '{file}' doesn't have all parts for combining" :
 					$"Neither file nor directory with path '{file}' exists");
 				return false;
 			}
@@ -117,7 +117,7 @@ namespace uTinyRipperGUI
 			{
 				Dispatcher.Invoke(() =>
 					{
-						IntroText.Text = "Files has been loaded";
+						IntroText.Text = "Files have been loaded";
 						ExportButton.Visibility = Visibility.Visible;
 
 						Fileview.AddItem(GameStructure.FileCollection);
@@ -134,7 +134,7 @@ namespace uTinyRipperGUI
 				Dispatcher.Invoke(() =>
 					{
 						OnResetButtonClicked(null, null);
-						Logger.Log(LogType.Warning, LogCategory.Import, "Game files wasn't found");
+						Logger.Log(LogType.Warning, LogCategory.Import, "Game files weren't found");
 					}
 				);
 			}
@@ -255,11 +255,11 @@ namespace uTinyRipperGUI
 			});
 		}
 
-		private void OpenGameFolder(string plaformName)
+		private void OpenGameFolder(string platformName)
 		{
 			using (System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog())
 			{
-				folderDialog.Description = $"Select {plaformName} game folder";
+				folderDialog.Description = $"Select {platformName} game folder";
 				folderDialog.SelectedPath = Settings.Default.ImportFolderPath;
 				System.Windows.Forms.DialogResult result = folderDialog.ShowDialog();
 				if (result == System.Windows.Forms.DialogResult.OK)
