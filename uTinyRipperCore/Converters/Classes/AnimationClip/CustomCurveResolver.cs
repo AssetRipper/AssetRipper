@@ -505,6 +505,8 @@ namespace uTinyRipper.Converters.AnimationClips
 								return $"m_Sources.Array.data[{attribute >> 8}].sourceTransform";
 							case 4:
 								return $"m_Sources.Array.data[{attribute >> 8}].weight";
+							case 5:
+								return "m_Roll";
 						}
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
