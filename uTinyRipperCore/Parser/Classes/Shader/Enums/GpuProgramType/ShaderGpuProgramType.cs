@@ -346,6 +346,8 @@ namespace uTinyRipper.Classes.Shaders
 									return "nssl_vs";
 								case ShaderType.Fragment:
 									return "nssl_ps";
+								case ShaderType.Hull:
+									return "nssl_hs";
 							}
 						}
 					}
