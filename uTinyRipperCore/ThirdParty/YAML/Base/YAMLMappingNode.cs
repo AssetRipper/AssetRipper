@@ -287,7 +287,7 @@ namespace uTinyRipper.YAML
 			}
 			if (next.IsIndent)
 			{
-				emitter.IncreaseIntent();
+				emitter.IncreaseIndent();
 			}
 		}
 
@@ -303,7 +303,7 @@ namespace uTinyRipper.YAML
 			}
 			if (next.IsIndent)
 			{
-				emitter.DecreaseIntent();
+				emitter.DecreaseIndent();
 			}
 		}
 

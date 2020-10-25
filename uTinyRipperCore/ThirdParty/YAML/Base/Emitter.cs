@@ -20,17 +20,17 @@ namespace uTinyRipper.YAML
 			}
 		}
 
-		public Emitter IncreaseIntent()
+		public Emitter IncreaseIndent()
 		{
 			m_indent++;
 			return this;
 		}
 
-		public Emitter DecreaseIntent()
+		public Emitter DecreaseIndent()
 		{
 			if (m_indent == 0)
 			{
-				throw new Exception($"Increase/decrease intent mismatch");
+				throw new Exception($"Increase/decrease indent mismatch");
 			}
 			m_indent--;
 			return this;
@@ -183,7 +183,7 @@ namespace uTinyRipper.YAML
 
 		public void WriteMeta(MetaType type, string value)
 		{
-			Write("%").Write(type.ToString()).WriteWhitespace();
+			Write('%').Write(type.ToString()).WriteWhitespace();
 			Write(value).WriteLine();
 		}
 

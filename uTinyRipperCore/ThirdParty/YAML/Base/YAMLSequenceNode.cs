@@ -165,18 +165,18 @@ namespace uTinyRipper.YAML
 
 		private void StartChild(Emitter emitter, YAMLNode next)
 		{
-			if (Style == SequenceStyle.Block || Style == SequenceStyle.BlockCurve)
+			if (Style.IsAnyBlock())
 			{
-				emitter.Write('-').WriteWhitespace();
+				emitter.Write('-').Write(' ');
 
 				if (next.NodeType == NodeType)
 				{
-					emitter.IncreaseIntent();
+					emitter.IncreaseIndent();
 				}
 			}
 			if (next.IsIndent)
 			{
-				emitter.IncreaseIntent();
+				emitter.IncreaseIndent();
 			}
 		}
 
@@ -187,7 +187,7 @@ namespace uTinyRipper.YAML
 				emitter.WriteLine();
 				if (next.NodeType == NodeType)
 				{
-					emitter.DecreaseIntent();
+					emitter.DecreaseIndent();
 				}
 			}
 			else if (Style == SequenceStyle.Flow)
@@ -196,7 +196,7 @@ namespace uTinyRipper.YAML
 			}
 			if (next.IsIndent)
 			{
-				emitter.DecreaseIntent();
+				emitter.DecreaseIndent();
 			}
 		}
 
