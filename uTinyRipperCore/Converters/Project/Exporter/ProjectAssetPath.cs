@@ -16,7 +16,9 @@ namespace uTinyRipper.Converters
 
 		public string SubstituteExportPath(Object asset)
 		{
-			return Path.Combine(Root, SubstitutePath(asset.GetOriginalName()));
+			string projectPath = SubstitutePath(asset.GetOriginalName());
+			projectPath = FileUtils.FixInvalidPathCharacters(projectPath);
+			return Path.Combine(Root, projectPath);
 		}
 
 		private string SubstitutePath(string assetName)

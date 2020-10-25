@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Text.RegularExpressions;
 using uTinyRipper.Classes;
 using uTinyRipper.Converters;
 using uTinyRipper.YAML;
@@ -13,13 +12,6 @@ namespace uTinyRipper.Project
 {
 	public abstract class ExportCollection : IExportCollection
 	{
-		static ExportCollection()
-		{
-			string invalidChars = new string(Path.GetInvalidFileNameChars());
-			string escapedChars = Regex.Escape(invalidChars);
-			FileNameRegex = new Regex($"[{escapedChars}]");
-		}
-
 		protected static void ExportMeta(IExportContainer container, Meta meta, string filePath)
 		{
 			string metaPath = $"{filePath}{MetaExtension}";
@@ -112,7 +104,7 @@ namespace uTinyRipper.Project
 					fileName = asset.GetType().Name;
 					break;
 			}
-			fileName = FileNameRegex.Replace(fileName, string.Empty);
+			fileName = FileUtils.FixInvalidPathCharacters(fileName);
 
 			fileName = $"{fileName}.{GetExportExtension(asset)}";
 			return GetUniqueFileName(dirPath, fileName);
@@ -135,7 +127,5 @@ namespace uTinyRipper.Project
 		public abstract string Name { get; }
 
 		private const string MetaExtension = ".meta";
-
-		private static readonly Regex FileNameRegex;
 	}
 }
