@@ -76,7 +76,7 @@ namespace uTinyRipper.Classes
 		/// <summary>
 		/// 5.0.0f1 to 5.0.1 exclusive
 		/// </summary>
-		public static bool HasDefaultSmoothness(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 0, 1);
+		public static bool HasDefaultSmoothness(Version version) => version.IsEqual(5, 0, 0, VersionType.Final);
 		/// <summary>
 		/// Release
 		/// </summary>

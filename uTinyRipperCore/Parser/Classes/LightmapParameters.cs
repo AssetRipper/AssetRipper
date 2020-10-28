@@ -48,9 +48,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasEdgeStitching(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		/// <summary>
-		/// 5.0.1 and greater
+		/// 5.0.0p2 and greater
 		/// </summary>
-		public static bool HasPushoff(Version version) => version.IsGreaterEqual(5, 1);
+		public static bool HasPushoff(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Patch, 2);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
@@ -69,9 +69,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		private static bool IsPushoffFirst(Version version) => version.IsGreaterEqual(2019);
 		/// <summary>
-		/// 5.0.1 and greater
+		/// 5.0.0p2 and greater
 		/// </summary>
-		private static bool IsBakedLightmapTagFirst(Version version) => version.IsGreaterEqual(5, 1);
+		private static bool IsBakedLightmapTagFirst(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Patch, 2);
 
 		public override void Read(AssetReader reader)
 		{

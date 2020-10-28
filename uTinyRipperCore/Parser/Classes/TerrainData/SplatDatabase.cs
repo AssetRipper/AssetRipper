@@ -22,9 +22,9 @@ namespace uTinyRipper.Classes.TerrainDatas
 		/// </summary>
 		public static bool HasTerrainLayers(Version version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
-		/// 5.0.1 to 2018.3 exclusive
+		/// 5.0.0p1 to 2018.3 exclusive
 		/// </summary>
-		public static bool HasColorSpace(Version version) => version.IsGreaterEqual(5, 0, 1) && version.IsLess(2018, 3);
+		public static bool HasColorSpace(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Patch) && version.IsLess(2018, 3);
 
 		public SplatDatabase Convert(IExportContainer container)
 		{
