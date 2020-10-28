@@ -41,6 +41,10 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasIgnoreMasterTextureLimit(Version version) => version.IsGreaterEqual(2019, 3, 1);
 		/// <summary>
+		/// 2019.4.9 and greater
+		/// </summary>
+		public static bool HasIsPreProcessed(Version version) => version.IsGreaterEqual(2019, 4, 9);
+		/// <summary>
 		/// From 3.0.0 to 5.5.0 exclusive
 		/// </summary>
 		public static bool HasReadAllowed(Version version) => version.IsGreaterEqual(3) && version.IsLess(5, 5);
@@ -192,6 +196,10 @@ namespace uTinyRipper.Classes
 			{
 				IgnoreMasterTextureLimit = reader.ReadBoolean();
 			}
+			if (HasIsPreProcessed(reader.Version))
+			{
+				IsPreProcessed = reader.ReadBoolean();
+			}
 			if (HasReadAllowed(reader.Version))
 			{
 				ReadAllowed = reader.ReadBoolean();
@@ -254,6 +262,10 @@ namespace uTinyRipper.Classes
 			if (HasIgnoreMasterTextureLimit(container.ExportVersion))
 			{
 				node.Add(IgnoreMasterTextureLimitName, IgnoreMasterTextureLimit);
+			}
+			if (HasIsPreProcessed(container.ExportVersion))
+			{
+				node.Add(IsPreProcessedName, IsPreProcessed);
 			}
 			if (HasStreamingMipmaps(container.ExportVersion))
 			{
@@ -318,6 +330,7 @@ namespace uTinyRipper.Classes
 		public int MipCount { get; set; }
 		public bool IsReadable { get; set; }
 		public bool IgnoreMasterTextureLimit { get; set; }
+		public bool IsPreProcessed { get; set; }
 		public bool ReadAllowed { get; set; }
 		public bool StreamingMipmaps { get; set; }
 		public int StreamingMipmapsPriority { get; set; }
@@ -337,6 +350,7 @@ namespace uTinyRipper.Classes
 		public const string MipCountName = "m_MipCount";
 		public const string IsReadableName = "m_IsReadable";
 		public const string IgnoreMasterTextureLimitName = "m_IgnoreMasterTextureLimit";
+		public const string IsPreProcessedName = "m_IsPreProcessed";
 		public const string StreamingMipmapsName = "m_StreamingMipmaps";
 		public const string StreamingMipmapsPriorityName = "m_StreamingMipmapsPriority";
 		public const string AlphaIsTransparencyName = "m_AlphaIsTransparency";
