@@ -33,15 +33,10 @@ namespace uTinyRipper
 				}
 			}
 
-			if (files.Count == 0)
-			{
-				throw new Exception("No files were found");
-			}
-
 			DataPathes = dataPathes.ToArray();
 			Files = files;
 			Assemblies = assemblies;
-			Name = Files.First().Key;
+			Name = Files.Count == 0 ? string.Empty : Files.First().Key;
 		}
 
 		private IEnumerable<string> SelectUniquePathes(IEnumerable<string> pathes)

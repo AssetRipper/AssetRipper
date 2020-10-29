@@ -134,7 +134,7 @@ namespace uTinyRipperGUI
 				Dispatcher.Invoke(() =>
 					{
 						OnResetButtonClicked(null, null);
-						Logger.Log(LogType.Warning, LogCategory.Import, "Game files weren't found");
+						Logger.Log(LogType.Warning, LogCategory.Import, "No game files found");
 					}
 				);
 			}
