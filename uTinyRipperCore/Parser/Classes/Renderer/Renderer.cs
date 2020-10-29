@@ -194,20 +194,17 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasGIBackfaceCull(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsEqual(5, 0, 0, VersionType.Beta);
 		/// <summary>
-		/// 4.5.0 and greater but exluding 5.6.0b
+		/// 4.5.0 and greater (Release exlude 5.6.0bx)
 		/// </summary>
-		public static bool HasSortingLayerID(Version version)
+		public static bool HasSortingLayerID(Version version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(4, 5))
 			{
-				if (version.IsLess(5, 6))
+				if (version.IsEqual(5, 6, 0, VersionType.Beta) && flags.IsRelease())
 				{
-					return true;
+					return false;
 				}
-				if (version.IsGreater(5, 6, 0, VersionType.Beta))
-				{
-					return true;
-				}
+				return true;
 			}
 			return false;
 		}
@@ -237,6 +234,13 @@ namespace uTinyRipper.Classes
 		private static bool IsReflectUsageFirst(Version version)
 		{
 			return version.IsGreaterEqual(5, 4);
+		}
+		/// <summary>
+		/// 5.6.0bx
+		/// </summary>
+		private static bool IsSortingLayerIDFirst(Version version)
+		{
+			return version.IsEqual(5, 6, 0, VersionType.Beta);
 		}
 
 		/// <summary>
@@ -449,14 +453,24 @@ namespace uTinyRipper.Classes
 				reader.AlignStream();
 			}
 #endif
+			if (HasSortingLayerID(reader.Version, reader.Flags))
+			{
+				if (IsSortingLayerIDFirst(reader.Version))
+				{
+					SortingLayerID = reader.ReadInt32();
+				}
+			}
 			if (IsAlign3(reader.Version))
 			{
 				reader.AlignStream();
 			}
 
-			if (HasSortingLayerID(reader.Version))
+			if (HasSortingLayerID(reader.Version, reader.Flags))
 			{
-				SortingLayerID = reader.ReadInt32();
+				if (!IsSortingLayerIDFirst(reader.Version))
+				{
+					SortingLayerID = reader.ReadInt32();
+				}
 			}
 			if (HasSortingLayer(reader.Version))
 			{

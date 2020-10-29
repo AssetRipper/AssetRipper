@@ -3,6 +3,9 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes
 {
+	/// <summary>
+	/// Introduced in 5.6.0
+	/// </summary>
 	public sealed class SortingGroup : Behaviour
 	{
 		public SortingGroup(AssetInfo assetInfo):
@@ -10,13 +13,22 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		private static bool IsSortingLayerIDFirst(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Final);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
-			SortingLayerID = reader.ReadInt32();
+			if (IsSortingLayerIDFirst(reader.Version))
+			{
+				SortingLayerID = reader.ReadInt32();
+			}
 			SortingLayer = reader.ReadInt16();
 			SortingOrder = reader.ReadInt16();
+			if (!IsSortingLayerIDFirst(reader.Version))
+			{
+				SortingLayerID = reader.ReadInt32();
+			}
 			reader.AlignStream();
 			
 		}

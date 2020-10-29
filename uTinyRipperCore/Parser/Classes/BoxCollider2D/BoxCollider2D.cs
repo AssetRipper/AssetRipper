@@ -21,17 +21,21 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// 2017.1 and greater
+		/// 5.6.0b5 and greater
 		/// </summary>
-		public static bool HasSpriteTilingProperty(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasSpriteTilingProperty(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
+		/// <summary>
+		/// 5.6.0b3 and greater
+		/// </summary>
+		public static bool HasAutoTiling(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 3);
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
 		public static bool HasCenter(Version version) => version.IsLess(5);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b5 and greater
 		/// </summary>
-		public static bool HasEdgeRadius(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasEdgeRadius(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -40,6 +44,9 @@ namespace uTinyRipper.Classes
 			if (HasSpriteTilingProperty(reader.Version))
 			{
 				SpriteTilingProperty.Read(reader);
+			}
+			if (HasAutoTiling(reader.Version))
+			{
 				AutoTiling = reader.ReadBoolean();
 				reader.AlignStream();
 			}

@@ -57,9 +57,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasTestConfigUrl(Version version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b6 and greater
 		/// </summary>
-		public static bool HasTestInitMode(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasTestInitMode(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
 		/// <summary>
 		/// 5.4.0 and greater and (Not Release or IsSupported)
 		/// </summary>

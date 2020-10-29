@@ -233,8 +233,8 @@ namespace uTinyRipper
 					return new PrefabInstance(assetInfo);
 				case ClassIDType.TextureImporter:
 					return new TextureImporter(assetInfo);
-				case ClassIDType.AvatarMask1:
 				case ClassIDType.AvatarMask:
+				case ClassIDType.AvatarMaskOld:
 					return new AvatarMask(assetInfo);
 				case ClassIDType.DefaultAsset:
 					return new DefaultAsset(assetInfo);

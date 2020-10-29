@@ -11,6 +11,10 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 		/// </summary>
 		public static bool HasHdrMode(Version version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
+		/// 5.6.0b7 and greater
+		/// </summary>
+		public static bool HasRealtimeGICPUUsage(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 7);
+		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
 		public static bool HasPrefer32BitShadowMaps(Version version) => version.IsGreaterEqual(2017);
@@ -29,6 +33,9 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 			if (HasHdrMode(reader.Version))
 			{
 				HdrMode = (CameraHDRMode)reader.ReadInt32();
+			}
+			if (HasRealtimeGICPUUsage(reader.Version))
+			{
 				RealtimeGICPUUsage = (RealtimeGICPUUsage)reader.ReadInt32();
 			}
 			UseCascadedShadowMaps = reader.ReadBoolean();

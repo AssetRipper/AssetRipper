@@ -35,7 +35,7 @@ namespace uTinyRipper.Classes
 		public static int ToSerializedVersion(Version version)
 		{
 			// disabled RaycastsHitTriggers backward compatibility?
-			if (version.IsGreaterEqual(5, 6))
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 7))
 			{
 				return 3;
 			}
@@ -56,17 +56,17 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasVelocityThreshold(Version version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
-		/// 4.6.1 to 5.6.0 exclusive
+		/// 4.6.1 to 5.6.0b6
 		/// </summary>
-		public static bool HasMinPenetrationForPenalty(Version version) => version.IsLess(5, 6) && version.IsGreaterEqual(4, 6, 1);
+		public static bool HasMinPenetrationForPenalty(Version version) => version.IsGreaterEqual(4, 6, 1) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 6);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
 		public static bool HasBaumgarteScale(Version version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b7 and greater
 		/// </summary>
-		public static bool HasDefaultContactOffset(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasDefaultContactOffset(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 7);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>

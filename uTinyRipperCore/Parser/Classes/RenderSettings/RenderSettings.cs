@@ -22,7 +22,7 @@ namespace uTinyRipper.Classes
 			{
 				return 9;
 			}*/
-			if (version.IsGreaterEqual(5, 6))
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2))
 			{
 				return 8;
 			}
@@ -73,9 +73,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasCreateAmbientLight(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b2 and greater
 		/// </summary>
-		public static bool HasSubtractiveShadowColor(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasSubtractiveShadowColor(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>

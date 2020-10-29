@@ -3,6 +3,9 @@ using uTinyRipper.YAML;
 
 namespace uTinyRipper.Classes.NavMeshDatas
 {
+	/// <summary>
+	/// Introduced in 5.6.0
+	/// </summary>
 	public struct NavMeshBuildSettings : IAssetReadable, IYAMLExportable
 	{
 		public NavMeshBuildSettings(bool _)
@@ -49,6 +52,10 @@ namespace uTinyRipper.Classes.NavMeshDatas
 		}
 
 		/// <summary>
+		/// 5.6.0bx
+		/// </summary>
+		public static bool IsBoolFlags(Version version) => version.IsEqual(5, 6, 0, VersionType.Beta);
+		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
 		public static bool HasDebug(Version version) => version.IsGreaterEqual(2017, 2);
@@ -63,13 +70,35 @@ namespace uTinyRipper.Classes.NavMeshDatas
 			LedgeDropHeight = reader.ReadSingle();
 			MaxJumpAcrossDistance = reader.ReadSingle();
 			MinRegionArea = reader.ReadSingle();
-			// it is bool with align in 5.6 beta but there is no difference
-			ManualCellSize = reader.ReadInt32();
+			if (IsBoolFlags(reader.Version))
+			{
+				ManualCellSizeBool = reader.ReadBoolean();
+				reader.AlignStream();
+			}
+			else
+			{
+				ManualCellSize = reader.ReadInt32();
+			}
 			CellSize = reader.ReadSingle();
-			ManualTileSize = reader.ReadInt32();
+			if (IsBoolFlags(reader.Version))
+			{
+				ManualTileSizeBool = reader.ReadBoolean();
+				reader.AlignStream();
+			}
+			else
+			{
+				ManualTileSize = reader.ReadInt32();
+			}
 			TileSize = reader.ReadInt32();
-			// it is bool with align in 5.6 beta but there is no difference
-			AccuratePlacement = reader.ReadInt32();
+			if (IsBoolFlags(reader.Version))
+			{
+				AccuratePlacementBool = reader.ReadBoolean();
+				reader.AlignStream();
+			}
+			else
+			{
+				AccuratePlacement = reader.ReadInt32();
+			}
 			if (HasDebug(reader.Version))
 			{
 				Debug.Read(reader);
@@ -106,10 +135,25 @@ namespace uTinyRipper.Classes.NavMeshDatas
 		public float LedgeDropHeight { get; set; }
 		public float MaxJumpAcrossDistance { get; set; }
 		public float MinRegionArea { get; set; }
+		public bool ManualCellSizeBool
+		{
+			get => ManualCellSize != 0;
+			set => ManualCellSize = value ? 1 : 0;
+		}
 		public int ManualCellSize { get; set; }
 		public float CellSize { get; set; }
+		public bool ManualTileSizeBool
+		{
+			get => ManualTileSize != 0;
+			set => ManualTileSize = value ? 1 : 0;
+		}
 		public int ManualTileSize { get; set; }
 		public int TileSize { get; set; }
+		public bool AccuratePlacementBool
+		{
+			get => AccuratePlacement != 0;
+			set => AccuratePlacement = value ? 1 : 0;
+		}
 		public int AccuratePlacement { get; set; }
 
 		public const string AgentTypeIDName = "agentTypeID";

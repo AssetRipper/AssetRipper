@@ -16,7 +16,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			{
 				return 5;
 			}
-			if (version.IsGreaterEqual(5, 6))
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5))
 			{
 				return 4;
 			}
@@ -32,9 +32,9 @@ namespace uTinyRipper.Classes.ParticleSystems
 		}
 
 		/// <summary>
-		/// Less than 5.6.0
+		/// 5.6.0b5 and greater
 		/// </summary>
-		public static bool HasRadiusSingle(Version version) => version.IsLess(5, 6);
+		public static bool IsMultimodeParameter(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
@@ -44,9 +44,9 @@ namespace uTinyRipper.Classes.ParticleSystems
 		/// </summary>
 		public static bool HasBoxAxes(Version version) => version.IsLess(2017, 1, 0, VersionType.Beta, 2);
 		/// <summary>
-		/// 5.0.0 to 5.6.0
+		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasArcSingle(Version version) => version.IsGreaterEqual(5) && version.IsLess(5, 6);
+		public static bool HasArc(Version version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
@@ -98,10 +98,6 @@ namespace uTinyRipper.Classes.ParticleSystems
 		/// 2017.1.0b2 and greater
 		/// </summary>
 		public static bool HasRandomPositionAmount(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		public static bool HasRadius(Version version) => version.IsGreaterEqual(5, 6);
 
 		/// <summary>
 		/// Less than 2017.1.0b2
@@ -117,7 +113,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			base.Read(reader);
 			
 			Type = (ParticleSystemShapeType)reader.ReadInt32();
-			if (HasRadiusSingle(reader.Version))
+			if (!IsMultimodeParameter(reader.Version))
 			{
 				float radius = reader.ReadSingle();
 				Radius = new MultiModeParameter(radius);
@@ -134,17 +130,20 @@ namespace uTinyRipper.Classes.ParticleSystems
 				float boxZ = reader.ReadSingle();
 				Scale = Type.IsBoxAny() ? new Vector3f(boxX, boxY, boxZ) : Vector3f.One;
 			}
-			if (HasArcSingle(reader.Version))
-			{
-				float arc = reader.ReadSingle();
-				Arc = new MultiModeParameter(arc);
-			}
-			if (HasRadius(reader.Version))
+			if (IsMultimodeParameter(reader.Version))
 			{
 				if (HasRadiusFirst(reader.Version))
 				{
 					Radius.Read(reader);
 					Arc.Read(reader);
+				}
+			}
+			else
+			{
+				if (HasArc(reader.Version))
+				{
+					float arc = reader.ReadSingle();
+					Arc = new MultiModeParameter(arc);
 				}
 			}
 			if (HasBoxThickness(reader.Version))
@@ -230,7 +229,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 			{
 				RandomPositionAmount = reader.ReadSingle();
 			}
-			if (HasRadius(reader.Version))
+			if (IsMultimodeParameter(reader.Version))
 			{
 				if (!HasRadiusFirst(reader.Version))
 				{
@@ -350,7 +349,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 		}
 		private MultiModeParameter GetArc(Version version)
 		{
-			return HasArcSingle(version) || HasRadius(version) ? Arc : new MultiModeParameter(360.0f);
+			return HasArc(version) ? Arc : new MultiModeParameter(360.0f);
 		}
 
 		public ParticleSystemShapeType Type { get; set; }

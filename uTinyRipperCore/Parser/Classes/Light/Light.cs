@@ -115,9 +115,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasBounceIntensity(Version version) => version.IsGreaterEqual(5);
 		/// <summary>
-		/// 2017.1.0b1 to 2017.1.0p5 exclusive
+		/// 2017.1.0b1 to 2017.1.0p4
 		/// </summary>
-		public static bool HasFalloffTable(Version version) => version.IsGreaterEqual(2017, 1, 0) && version.IsLess(2017, 1, 0, VersionType.Patch, 5);
+		public static bool HasFalloffTable(Version version) => version.IsGreaterEqual(2017, 1, 0) && version.IsLessEqual(2017, 1, 0, VersionType.Patch, 4);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
@@ -353,7 +353,7 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public float BounceIntensity { get; set; }
 		/// <summary>
-		/// CCT in 5.6.0 beta
+		/// CCT previously (before 5.6.0b10)
 		/// </summary>
 		public float ColorTemperature { get; set; }
 		public bool UseColorTemperature { get; set; }

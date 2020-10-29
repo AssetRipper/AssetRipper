@@ -43,9 +43,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasStringTagMap(Version version) => version.IsGreaterEqual(5, 1);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b5 and greater
 		/// </summary>
-		public static bool HasDisabledShaderPasses(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasDisabledShaderPasses(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
 
 		public string FindPropertyNameByCRC28(uint crc)
 		{
@@ -89,10 +89,10 @@ namespace uTinyRipper.Classes
 			{
 				StringTagMap = new Dictionary<string, string>();
 				StringTagMap.Read(reader);
-				if (HasDisabledShaderPasses(reader.Version))
-				{
-					DisabledShaderPasses = reader.ReadStringArray();
-				}
+			}
+			if (HasDisabledShaderPasses(reader.Version))
+			{
+				DisabledShaderPasses = reader.ReadStringArray();
 			}
 
 			SavedProperties.Read(reader);

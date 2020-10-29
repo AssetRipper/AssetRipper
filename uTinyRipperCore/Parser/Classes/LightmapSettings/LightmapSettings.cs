@@ -26,16 +26,10 @@ namespace uTinyRipper.Classes
 			{
 				return 10;
 			}
-			// NOTE: unknown version
 			// NOTE: unknown conversion
 			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2))
 			{
 				return 9;
-			}
-			// NOTE: unknown conversion
-			if (version.IsGreaterEqual(5, 6))
-			{
-				return 8;
 			}
 			// NOTE: unknown conversion
 			if (version.IsGreaterEqual(5, 4))

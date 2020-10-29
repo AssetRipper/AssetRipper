@@ -16,6 +16,13 @@ namespace uTinyRipper.Classes
 		{
 		}
 
+		/// <summary>
+		/// 5.6.0b5 and greater
+		/// </summary>
+		public static bool HasEdgeRadius(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
+		/// <summary>
+		/// 2019.1.3 and greater
+		/// </summary>
 		public static bool HasOffsetDistance(Version version) => version.IsGreaterEqual(2019, 1, 3);
 
 		public override void Read(AssetReader reader)
@@ -24,7 +31,10 @@ namespace uTinyRipper.Classes
 
 			GeometryType = (GeometryType)reader.ReadInt32();
 			GenerationType = (GenerationType)reader.ReadInt32();
-			EdgeRadius = reader.ReadSingle();
+			if (HasEdgeRadius(reader.Version))
+			{
+				EdgeRadius = reader.ReadSingle();
+			}
 			ColliderPaths = reader.ReadAssetArray<SubCollider>();
 			reader.AlignStream();
 

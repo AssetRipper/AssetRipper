@@ -52,6 +52,10 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasAudioClipFlags(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
 		/// <summary>
+		/// (Less or equal to 5.6.0b4) or (5.6.011 and greater)
+		/// </summary>
+		public static bool HasLoadInBackground(Version version) => version.IsLessEqual(5, 6, 0, VersionType.Beta, 4) || version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 11);
+		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
 		public static bool HasCompressionFormat(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
@@ -209,7 +213,10 @@ namespace uTinyRipper.Classes
 
 				SubsoundIndex = reader.ReadInt32();
 				PreloadAudioData = reader.ReadBoolean();
-				LoadInBackground = reader.ReadBoolean();
+				if (HasLoadInBackground(reader.Version))
+				{
+					LoadInBackground = reader.ReadBoolean();
+				}
 				Legacy3D = reader.ReadBoolean();
 				reader.AlignStream();
 

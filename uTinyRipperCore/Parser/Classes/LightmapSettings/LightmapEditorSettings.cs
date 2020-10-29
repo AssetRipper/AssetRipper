@@ -90,25 +90,20 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			{
 				return 9;
 			}
-			// NOTE: unknown version
-			// NOTE: unknown conversion
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Final))
+			// StationaryBakeMode has been renamed to MixedBakeMode
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 8))
 			{
 				return 8;
 			}
-
-			// NOTE: unknown version
 			// NOTE: unknown conversion
-			// return 7;
-
-			// NOTE: unknown version
-			// NOTE: unknown conversion
-			// return 6;
-
-			// NOTE: unknown conversion
-			if (version.IsGreaterEqual(5, 6))
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6))
 			{
-				return 5;
+				return 7;
+			}
+			// NOTE: unknown conversion
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2))
+			{
+				return 6;
 			}
 			// NOTE: unknown conversion
 			if (version.IsGreaterEqual(5, 4))
@@ -198,9 +193,9 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		/// </summary>
 		public static bool HasLockAtlas(Version version) => version.IsLess(5, 0, 0, VersionType.Final);
 		/// <summary>
-		/// 5.4.0 to 5.6.0 exclusive
+		/// 5.4.0 to 5.6.0b1
 		/// </summary>
-		public static bool HasDirectLightInLightProbes(Version version) => version.IsLess(5, 6) && version.IsGreaterEqual(5, 4);
+		public static bool HasDirectLightInLightProbes(Version version) => version.IsGreaterEqual(5, 4) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 1);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
@@ -218,15 +213,27 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		/// </summary>
 		public static bool HasReflectionCompression(Version version) => version.IsGreaterEqual(5, 2);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b2 and greater
 		/// </summary>
-		public static bool HasMixedBakeMode(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasMixedBakeMode(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
+		/// <summary>
+		/// 5.6.0b6 and greater
+		/// </summary>
+		public static bool HasBakeBackend(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
+		/// <summary>
+		/// 5.6.0b10 and greater
+		/// </summary>
+		public static bool HasPVRDirectSampleCount(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 10);
+		/// <summary>
+		/// 5.6.0b6 and greater
+		/// </summary>
+		public static bool HasPVRSampleCount(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
 		public static bool HasPVREnvironmentSampleCount(Version version) => version.IsGreaterEqual(2019);
 		/// <summary>
-		/// 5.6.0 to 5.6.4 or 2017.1.0 to 2017.1.2 exclusive
+		/// 5.6.0b6 to 5.6.4 or 2017.1.0 to 2017.1.2 exclusive
 		/// </summary>
 		public static bool HasPVRFiltering(Version version)
 		{
@@ -234,7 +241,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			{
 				if (version.IsLess(5, 6, 5))
 				{
-					return version.IsGreaterEqual(5, 6);
+					return version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
 				}
 				return version.IsGreaterEqual(2017);
 			}
@@ -260,15 +267,15 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		/// </summary>
 		public static bool HasPVREnvironmentMIS(Version version) => version.IsGreaterEqual(2019);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b6 and greater
 		/// </summary>
-		public static bool HasPVRFilteringMode(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasPVRFilteringMode(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b6 and greater
 		/// </summary>
-		public static bool HasPVRCulling(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasPVRCulling(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
 		/// <summary>
-		/// 5.6.0 to 5.6.4 or 2017.1.0 to 2017.1.2 exclusive
+		/// 5.6.0b6 to 5.6.4 or 2017.1.0 to 2017.1.2 exclusive
 		/// </summary>
 		public static bool HasPVRFilteringAtrousColorSigma(Version version)
 		{
@@ -276,7 +283,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			{
 				if (version.IsLess(5, 6, 5))
 				{
-					return version.IsGreaterEqual(5, 6);
+					return version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
 				}
 				return version.IsGreaterEqual(2017);
 			}
@@ -454,9 +461,18 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			if (HasMixedBakeMode(reader.Version))
 			{
 				MixedBakeMode = (MixedLightingMode)reader.ReadInt32();
+			}
+			if (HasBakeBackend(reader.Version))
+			{
 				BakeBackend = (Lightmapper)reader.ReadInt32();
 				PVRSampling = (Sampling)reader.ReadInt32();
+			}
+			if (HasPVRDirectSampleCount(reader.Version))
+			{
 				PVRDirectSampleCount = reader.ReadInt32();
+			}
+			if (HasPVRSampleCount(reader.Version))
+			{
 				PVRSampleCount = reader.ReadInt32();
 				PVRBounces = reader.ReadInt32();
 			}
@@ -659,9 +675,18 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			if (HasMixedBakeMode(writer.Version))
 			{
 				writer.Write((int)MixedBakeMode);
+			}
+			if (HasBakeBackend(writer.Version))
+			{
 				writer.Write((int)BakeBackend);
 				writer.Write((int)PVRSampling);
+			}
+			if (HasPVRDirectSampleCount(writer.Version))
+			{
 				writer.Write(PVRDirectSampleCount);
+			}
+			if (HasPVRSampleCount(writer.Version))
+			{
 				writer.Write(PVRSampleCount);
 				writer.Write(PVRBounces);
 			}
@@ -864,9 +889,18 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			if (HasMixedBakeMode(container.ExportVersion))
 			{
 				node.Add(MixedBakeModeName, (int)MixedBakeMode);
+			}
+			if (HasBakeBackend(container.ExportVersion))
+			{
 				node.Add(BakeBackendName, (int)BakeBackend);
 				node.Add(PVRSamplingName, (int)PVRSampling);
+			}
+			if (HasPVRDirectSampleCount(container.ExportVersion))
+			{
 				node.Add(PVRDirectSampleCountName, PVRDirectSampleCount);
+			}
+			if (HasPVRSampleCount(container.ExportVersion))
+			{
 				node.Add(PVRSampleCountName, PVRSampleCount);
 				node.Add(PVRBouncesName, PVRBounces);
 			}
@@ -1074,6 +1108,9 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		public bool FinalGatherFiltering { get; set; }
 		public int FinalGatherRayCount { get; set; }
 		public ReflectionCubemapCompression ReflectionCompression { get; set; }
+		/// <summary>
+		/// StationaryBakeMode previously (before 5.6.0b8)
+		/// </summary>
 		public MixedLightingMode MixedBakeMode { get; set; }
 		public Lightmapper BakeBackend { get; set; }
 		public Sampling PVRSampling { get; set; }
@@ -1143,6 +1180,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		public const string FinalGatherFilteringName = "m_FinalGatherFiltering";
 		public const string FinalGatherRayCountName = "m_FinalGatherRayCount";
 		public const string ReflectionCompressionName = "m_ReflectionCompression";
+		public const string StationaryBakeModeName = "m_StationaryBakeMode";
 		public const string MixedBakeModeName = "m_MixedBakeMode";
 		public const string BakeBackendName = "m_BakeBackend";
 		public const string PVRSamplingName = "m_PVRSampling";

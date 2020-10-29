@@ -11,9 +11,9 @@ namespace uTinyRipper.Classes
 		}
 
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b5 and greater
 		/// </summary>
-		public static bool HasEdgeRadius(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasEdgeRadius(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
 
 		public override void Read(AssetReader reader)
 		{

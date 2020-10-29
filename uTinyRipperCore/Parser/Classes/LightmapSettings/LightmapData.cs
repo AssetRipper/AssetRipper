@@ -9,7 +9,7 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		public static int ToSerializedVersion(Version version)
 		{
 			// NOTE: unknown conversion
-			if (version.IsGreaterEqual(5, 6))
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2))
 			{
 				return 2;
 			}
@@ -17,21 +17,17 @@ namespace uTinyRipper.Classes.LightmapSettingss
 		}
 
 		/// <summary>
-		/// 3.0.0 to 5.6.0 exclusive
+		/// 3.0.0 to 5.6.0b1
 		/// </summary>
-		public static bool HasIndirectLightmap(Version version) => version.IsGreaterEqual(3) && version.IsLess(5, 6);
+		public static bool HasIndirectLightmap(Version version) => version.IsGreaterEqual(3) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 1);
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
 		public static bool HasLightInd(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b2 and greater
 		/// </summary>
-		public static bool HasDirLightmap(Version version) => version.IsGreaterEqual(5, 6);
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		public static bool HasShadowMask(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasDirLightmap(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -48,9 +44,6 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			if (HasDirLightmap(reader.Version))
 			{
 				DirLightmap.Read(reader);
-			}
-			if (HasShadowMask(reader.Version))
-			{
 				ShadowMask.Read(reader);
 			}
 		}
@@ -70,9 +63,6 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			if (HasDirLightmap(writer.Version))
 			{
 				DirLightmap.Write(writer);
-			}
-			if (HasShadowMask(writer.Version))
-			{
 				ShadowMask.Write(writer);
 			}
 		}
@@ -92,9 +82,6 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			if (HasDirLightmap(context.Version))
 			{
 				yield return context.FetchDependency(DirLightmap, DirLightmapName);
-			}
-			if (HasShadowMask(context.Version))
-			{
 				yield return context.FetchDependency(ShadowMask, ShadowMaskName);
 			}
 		}
@@ -116,9 +103,6 @@ namespace uTinyRipper.Classes.LightmapSettingss
 			if (HasDirLightmap(container.ExportVersion))
 			{
 				node.Add(DirLightmapName, DirLightmap.ExportYAML(container));
-			}
-			if (HasShadowMask(container.ExportVersion))
-			{
 				node.Add(ShadowMaskName, ShadowMask.ExportYAML(container));
 			}
 			return node;

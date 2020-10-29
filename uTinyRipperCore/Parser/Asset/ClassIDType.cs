@@ -240,10 +240,12 @@ namespace uTinyRipper
 		CrashReportManager				= 304,
 		PerformanceReportingManager		= 305,
 		UnityConnectSettings			= 310,
-#warning TODO: merge with AvatarMask
-		AvatarMask1						= 319,
+#warning TODO: merge with AvatarMaskOld (since 5.6.0b3)
+		AvatarMask						= 319,
 		PlayableDirector				= 320,
+		VideoClipOld					= 327,
 		VideoPlayer						= 328,
+#warning TODO: merge with VideoClipOld (since 5.6.0b10)
 		VideoClip						= 329,
 		ParticleSystemForceField		= 330,
 		SpriteMask						= 331,
@@ -263,7 +265,7 @@ namespace uTinyRipper
 		TextureImporter					= 1006,
 		ShaderImporter					= 1007,
 		ComputeShaderImporter			= 1008,
-		AvatarMask						= 1011,
+		AvatarMaskOld					= 1011,
 		AudioImporter					= 1020,
 		HierarchyState					= 1026,
 		GUIDSerializer					= 1027,

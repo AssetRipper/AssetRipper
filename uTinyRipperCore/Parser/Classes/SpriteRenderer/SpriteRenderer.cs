@@ -17,9 +17,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasFlip(Version version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b3 and greater
 		/// </summary>
-		public static bool HasDrawMode(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasDrawMode(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 3);
 		/// <summary>
 		/// 5.6.1p2 to 5.6.x
 		/// 2017.1.0b5 and greater

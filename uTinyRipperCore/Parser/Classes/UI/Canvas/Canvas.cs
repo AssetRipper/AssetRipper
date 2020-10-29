@@ -14,7 +14,7 @@ namespace uTinyRipper.Classes
 
 		public static int ToSerializedVersion(Version version)
 		{
-			if (version.IsGreaterEqual(5, 6))
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5))
 			{
 				return 3;
 			}
@@ -50,9 +50,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasTargetDisplay(Version version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b5 and greater
 		/// </summary>
-		public static bool HasAdditionalShaderChannelsFlag(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasAdditionalShaderChannelsFlag(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
 
 		public override void Read(AssetReader reader)
 		{

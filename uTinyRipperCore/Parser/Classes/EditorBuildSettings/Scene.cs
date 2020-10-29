@@ -32,9 +32,9 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 		}
 
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b10 and greater
 		/// </summary>
-		public static bool HasGuid(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasGuid(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 10);
 
 		public void Read(AssetReader reader)
 		{
@@ -42,7 +42,10 @@ namespace uTinyRipper.Classes.EditorBuildSettingss
 			reader.AlignStream();
 			
 			Path = reader.ReadString();
-			GUID.Read(reader);
+			if (HasGuid(reader.Version))
+			{
+				GUID.Read(reader);
+			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

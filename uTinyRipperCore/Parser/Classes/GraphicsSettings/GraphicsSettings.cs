@@ -37,19 +37,21 @@ namespace uTinyRipper.Classes
 				return 13;
 			}
 			// changed TierSettings to platform specific
-			if (version.IsGreaterEqual(5, 6))
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 7))
 			{
 				return 12;
 			}
 			// changed default LightsUseLinearIntensity value
-			/*if (version.IsGreaterEqual(5, 6, 0, some alpha or beta))
+			// NOTE: unknown version (maybe some alpha)
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta))
 			{
 				return 11;
 			}
-			if (version.IsGreaterEqual(5, 6, 0, some alpha or beta))
+			// NOTE: unknown version
+			if (version.IsGreaterEqual(5, 6))
 			{
 				return 10;
-			}*/
+			}
 			// PlatformShaderSettings converted to TierGraphicsSettings
 			if (version.IsGreaterEqual(5, 5))
 			{
@@ -124,9 +126,13 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasSpritesDefaultMaterial(Version version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
+		/// 5.6.0b5 and greater
+		/// </summary>
+		public static bool HasCustomRenderPipeline(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
+		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasCustomRenderPipeline(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasTransparencySortMode(Version version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// Release or less than 5.6.0
 		/// </summary>
@@ -160,21 +166,21 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasLightmapKeepPlain(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
 		/// <summary>
-		/// 5.0.0b2 to 5.6.0 exclusive
+		/// 5.0.0b2 to 5.6.0b1
 		/// </summary>
-		public static bool HasLightmapKeepDirSeparate(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2) && version.IsLess(5, 6);
+		public static bool HasLightmapKeepDirSeparate(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 1);
 		/// <summary>
 		/// 5.0.0b2 and greater
 		/// </summary>
 		public static bool HasLightmapKeepDynamicPlain(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
 		/// <summary>
-		/// 5.2.0 to 5.6.0 exclusive
+		/// 5.2.0 to 5.6.0b1
 		/// </summary>
-		public static bool HasLightmapKeepDynamicDirSeparate(Version version) => version.IsGreaterEqual(5, 2) && version.IsLess(5, 6);
+		public static bool HasLightmapKeepDynamicDirSeparate(Version version) => version.IsGreaterEqual(5, 2) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 1);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b2 and greater
 		/// </summary>
-		public static bool HasLightmapKeepShadowMask(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasLightmapKeepShadowMask(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
 		/// <summary>
 		/// 5.0.0b2 and greater
 		/// </summary>
@@ -272,6 +278,9 @@ namespace uTinyRipper.Classes
 			if (HasCustomRenderPipeline(reader.Version))
 			{
 				CustomRenderPipeline.Read(reader);
+			}
+			if (HasTransparencySortMode(reader.Version))
+			{
 				TransparencySortMode = (TransparencySortMode)reader.ReadInt32();
 				TransparencySortAxis.Read(reader);
 			}
@@ -609,7 +618,7 @@ namespace uTinyRipper.Classes
 		}
 		private Vector3f GetTransparencySortAxis(Version version)
 		{
-			return HasCustomRenderPipeline(version) ? TransparencySortAxis : new Vector3f(0.0f, 0.0f, 1.0f);
+			return HasTransparencySortMode(version) ? TransparencySortAxis : new Vector3f(0.0f, 0.0f, 1.0f);
 		}
 		private RenderingPath GetDefaultRenderingPath(Version version, TransferInstructionFlags flags)
 		{
@@ -836,6 +845,9 @@ namespace uTinyRipper.Classes
 		public TierSettings[] TierSettings { get; set; }
 		public PlatformShaderDefines[] ShaderDefinesPerShaderCompiler { get; set; }
 		public bool LightsUseLinearIntensity { get; set; }
+		/// <summary>
+		/// LightsUseCCT previously (before 5.6.0b10)
+		/// </summary>
 		public bool LightsUseColorTemperature { get; set; }
 		public bool LogWhenShaderIsCompiled { get; set; }
 		public bool AllowEnlightenSupportForUpgradedProject { get; set; }
@@ -883,6 +895,7 @@ namespace uTinyRipper.Classes
 		public const string FogKeepExp2Name = "m_FogKeepExp2";
 		public const string AlbedoSwatchInfosName = "m_AlbedoSwatchInfos";
 		public const string LightsUseLinearIntensityName = "m_LightsUseLinearIntensity";
+		public const string LightsUseCCTName = "m_LightsUseCCT";
 		public const string LightsUseColorTemperatureName = "m_LightsUseColorTemperature";
 		public const string LogWhenShaderIsCompiledName = "m_LogWhenShaderIsCompiled";
 		public const string AllowEnlightenSupportForUpgradedProjectName = "m_AllowEnlightenSupportForUpgradedProject";

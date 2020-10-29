@@ -23,12 +23,12 @@ namespace uTinyRipper.Classes
 
 		public static int ToSerializedVersion(Version version)
 		{
-			return 4;
-			/*if (version.IsGreaterEqual())
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2))
 			{
 				return 4;
 			}
-			if (version.IsGreaterEqual())
+			return 3;
+			/*if (version.IsGreaterEqual())
 			{
 				return 3;
 			}

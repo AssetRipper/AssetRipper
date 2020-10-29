@@ -37,9 +37,9 @@ namespace uTinyRipper.Classes.Shaders
 		/// </summary>
 		public static bool HasCodeHash(Version version) => version.IsGreaterEqual(2018);
 		/// <summary>
-		/// Less than 5.6.0
+		/// Less or equal to 5.6.0b1
 		/// </summary>
-		public static bool HasTarget(Version version) => version.IsLess(5, 6);
+		public static bool HasTarget(Version version) => version.IsLessEqual(5, 6, 0, VersionType.Beta, 1);
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
@@ -65,13 +65,13 @@ namespace uTinyRipper.Classes.Shaders
 		/// </summary>
 		public static bool HasVariantsUserLocal(Version version) => version.IsGreaterEqual(2019);
 		/// <summary>
-		/// 5.0.0 to 5.6.0 exclusive
+		/// 5.0.0 to 5.6.0b1
 		/// </summary>
-		public static bool HasTargetVariants(Version version) => version.IsGreaterEqual(5) && version.IsLess(5, 6);
+		public static bool HasTargetVariants(Version version) => version.IsGreaterEqual(5) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 1);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 5.6.0b2 and greater
 		/// </summary>
-		public static bool HasBaseRequirements(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasBaseRequirements(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>

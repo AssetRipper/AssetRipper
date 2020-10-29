@@ -155,6 +155,13 @@ namespace uTinyRipper.Classes
 			return !flags.IsRelease() && version.IsGreaterEqual(5) && version.IsLess(2018, 3);
 		}
 		/// <summary>
+		/// 5.5.0 to 5.6.0b9 and Not Release
+		/// </summary>
+		public static bool HasIsEmpty(Version version, TransferInstructionFlags flags)
+		{
+			return !flags.IsRelease() && version.IsGreaterEqual(5, 5) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 9);
+		}
+		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
 		public static bool HasEvents(Version version) => version.IsGreaterEqual(2, 1);
@@ -279,6 +286,10 @@ namespace uTinyRipper.Classes
 			if (HasGenerateMotionCurves(reader.Version, reader.Flags))
 			{
 				GenerateMotionCurves = reader.ReadBoolean();
+			}
+			if (HasIsEmpty(reader.Version, reader.Flags))
+			{
+				IsEmpty = reader.ReadBoolean();
 			}
 #endif
 			if (HasHasGenericRootTransform(reader.Version, reader.Flags))
@@ -714,6 +725,7 @@ namespace uTinyRipper.Classes
 		public bool HasMotionFloatCurves { get; set; }
 #if UNIVERSAL
 		public bool GenerateMotionCurves { get; set; }
+		public bool IsEmpty { get; set; }
 #endif
 		public AnimationEvent[] Events { get; set; }
 #if UNIVERSAL
@@ -742,6 +754,7 @@ namespace uTinyRipper.Classes
 		public const string HasGenericRootTransformName = "m_HasGenericRootTransform";
 		public const string HasMotionFloatCurvesName = "m_HasMotionFloatCurves";
 		public const string GenerateMotionCurvesName = "m_GenerateMotionCurves";
+		public const string IsEmptyName = "m_IsEmpty";
 		public const string EventsName = "m_Events";
 
 		public AABB Bounds;

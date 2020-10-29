@@ -33,7 +33,7 @@ namespace uTinyRipper.Classes.GraphicsSettingss
 				return 5;
 			}
 			// changed default value for Settings.RealtimeGICPUUsage to platform specific
-			if (version.IsGreaterEqual(5, 6))
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 7))
 			{
 				return 4;
 			}
