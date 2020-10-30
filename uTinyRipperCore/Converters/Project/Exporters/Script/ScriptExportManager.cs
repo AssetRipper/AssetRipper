@@ -84,11 +84,11 @@ namespace uTinyRipper.Converters.Script
 
 		private static string GetExportSubPath(string assembly, string @namespace, string @class)
 		{
-			string assFolderName = AssemblyManager.ToAssemblyName(assembly);
-			string nsFolder = @namespace.Replace('.', Path.DirectorySeparatorChar);
-			string finalFolderPath = Path.Combine(assFolderName, nsFolder);
-			string filePath = Path.Combine(finalFolderPath, @class);
-			return $"{filePath}.cs";
+			string assemblyFolder = AssemblyManager.ToAssemblyName(assembly);
+			string namespaceFolder = @namespace.Replace('.', Path.DirectorySeparatorChar);
+			string folderPath = Path.Combine(assemblyFolder, namespaceFolder);
+			string filePath = Path.Combine(folderPath, @class);
+			return $"{FileUtils.FixInvalidPathCharacters(filePath)}.cs";
 		}
 
 		private static string GetExportSubPath(ScriptExportType type)
