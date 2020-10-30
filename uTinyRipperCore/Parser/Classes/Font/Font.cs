@@ -86,24 +86,24 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasFallbackFonts(Version version) => version.IsGreaterEqual(4);
 		/// <summary>
-		/// 5.6.4p1 to 2017 exclusive or 2017.2.1 and greater
+		/// 5.6.x-2017.x and greater
 		/// </summary>
 		public static bool HasUseLegacyBoundsCalculation(Version version)
 		{
-			if (version.IsGreaterEqual(2017, 3, 0, VersionType.Beta))
+			if (version.IsGreaterEqual(2017, 3, 0, VersionType.Beta, 11))
 			{
 				return true;
 			}
+			if (version.IsGreaterEqual(2017, 2, 0, VersionType.Patch, 2))
+			{
+				return version.IsEqual(2017, 2);
+			}
+			if (version.IsGreaterEqual(2017, 1, 2, VersionType.Patch))
+			{
+				return version.IsEqual(2017, 1);
+			}
 			if (version.IsGreaterEqual(5, 6, 4, VersionType.Patch))
 			{
-				if (version.IsGreaterEqual(2017, 2, 0, VersionType.Patch, 2))
-				{
-					return version.IsEqual(2017, 2);
-				}
-				if (version.IsGreaterEqual(2017, 1, 3))
-				{
-					return version.IsEqual(2017, 1);
-				}
 				return version.IsEqual(5);
 			}
 			return false;
