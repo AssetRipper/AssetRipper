@@ -29,14 +29,23 @@ namespace uTinyRipper.Classes.ParticleSystems
 		/// </summary>
 		public static bool IsColor32(Version version) => version.IsLess(5, 4);
 
-		/// <summary>
-		/// Less than 5.6.0
-		/// </summary>
-		private static bool IsMaxGradientFirst(Version version) => version.IsLess(5, 6);
+		private static int GetMaxGradientPlacement(Version version)
+		{
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Patch, 4))
+			{
+				return 3;
+			}
+			if (version.IsGreaterEqual(5, 6))
+			{
+				return 2;
+			}
+			return 1;
+		}
 
 		public void Read(AssetReader reader)
 		{
-			if (IsMaxGradientFirst(reader.Version))
+			int maxGradientPlacement = GetMaxGradientPlacement(reader.Version);
+			if (maxGradientPlacement == 1)
 			{
 				MaxGradient.Read(reader);
 				MinGradient.Read(reader);
@@ -52,15 +61,24 @@ namespace uTinyRipper.Classes.ParticleSystems
 				}
 			}
 
+			// Int16 before 5.6.0p4
 			MinMaxState = (MinMaxGradientState)reader.ReadUInt16();
 			reader.AlignStream();
 
-			if (!IsMaxGradientFirst(reader.Version))
+			if (maxGradientPlacement != 1)
 			{
+				if (maxGradientPlacement == 2)
+				{
+					MaxGradient.Read(reader);
+					MinGradient.Read(reader);
+				}
 				MinColor.Read(reader);
 				MaxColor.Read(reader);
-				MaxGradient.Read(reader);
-				MinGradient.Read(reader);
+				if (maxGradientPlacement == 3)
+				{
+					MaxGradient.Read(reader);
+					MinGradient.Read(reader);
+				}
 			}
 		}
 

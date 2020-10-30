@@ -30,9 +30,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasNavMeshParams(Version version) => version.IsLess(5, 6);
 		/// <summary>
-		/// 5.6.1 and greater
+		/// 5.6.0p1 and greater
 		/// </summary>
-		public static bool HasSourceBounds(Version version) => version.IsGreaterEqual(5, 6, 1);
+		public static bool HasSourceBounds(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Patch);
 
 		public override void Read(AssetReader reader)
 		{

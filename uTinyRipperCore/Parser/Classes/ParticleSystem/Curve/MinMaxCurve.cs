@@ -43,7 +43,7 @@ namespace uTinyRipper.Classes.ParticleSystems
 
 		public static int ToSerializedVersion(Version version)
 		{
-			if (version.IsGreaterEqual(5, 6, 1))
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Patch, 4))
 			{
 				return 2;
 			}
@@ -51,9 +51,9 @@ namespace uTinyRipper.Classes.ParticleSystems
 		}
 
 		/// <summary>
-		/// 5.6.1 and greater
+		/// 5.6.0p4 and greater
 		/// </summary>
-		public static bool HasMinScalar(Version version) => version.IsGreaterEqual(5, 6, 1);
+		public static bool HasMinScalar(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Patch, 4);
 
 		/// <summary>
 		/// 5.6.0 and greater

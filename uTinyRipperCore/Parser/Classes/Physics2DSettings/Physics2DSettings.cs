@@ -88,9 +88,9 @@ namespace uTinyRipper.Classes
 		/// </summary>
 		public static bool HasChangeStopsCallbacks(Version version) => version.IsGreaterEqual(4, 6, 1) && version.IsLess(2018);
 		/// <summary>
-		/// 5.6.1 and greater
+		/// 5.6.0p1 and greater
 		/// </summary>
-		public static bool HasCallbacksOnDisable(Version version) => version.IsGreaterEqual(5, 6, 1);
+		public static bool HasCallbacksOnDisable(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Patch);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>

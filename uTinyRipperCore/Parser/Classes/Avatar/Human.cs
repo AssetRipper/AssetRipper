@@ -10,7 +10,7 @@ namespace uTinyRipper.Classes.Avatars
 	{
 		public static int ToSerializedVersion(Version version)
 		{
-			if (version.IsGreaterEqual(5, 6, 1))
+			if (version.IsGreaterEqual(5, 6, 0, VersionType.Patch, 2))
 			{
 				return 2;
 			}
