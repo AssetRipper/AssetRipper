@@ -54,7 +54,7 @@ namespace uTinyRipper.Converters.Sprites
 				int lastTriIndex = outsider.Triangle;
 				while (true)
 				{
-					if (GetNextOutsideInfo(lastTri, lastMember, out outsider))
+					if (GetNextOutsider(lastTri, lastMember, out outsider))
 					{
 						lastTri = m_triangles[outsider.Triangle];
 						lastMember = outsider.Member + 1;
@@ -90,13 +90,54 @@ namespace uTinyRipper.Converters.Sprites
 				return m_indexes.Contains(triIndex);
 			}
 
-			private static bool IsNeighbors(Vector3i tri1, Vector3i tri2)
+			private int GetEdgeMask(Vector3i triangle, IReadOnlyList<int> indexes)
 			{
-				if (tri1.ContainsValue(tri2.X) && (tri1.ContainsValue(tri2.Y) || tri1.ContainsValue(tri2.Z)))
+				int edgeMask = 0;
+				for (int i = 0; i < indexes.Count; i++)
+				{
+					Vector3i check = m_triangles[indexes[i]];
+					if (check == triangle)
+					{
+						continue;
+					}	
+					int edge = GetNeighborEdge(triangle, check);
+					if (edge == 0)
+					{
+						continue;
+					}
+					edgeMask |= edge;
+				}
+				return edgeMask;
+			}
+
+			private static int GetNeighborEdge(Vector3i tri1, Vector3i tri2)
+			{
+				if (IsNeighbors(tri1.X, tri1.Y, tri2))
+				{
+					return 1 << 0;
+				}
+				if (IsNeighbors(tri1.Y, tri1.Z, tri2))
+				{
+					return 1 << 1;
+				}
+				if (IsNeighbors(tri1.Z, tri1.X, tri2))
+				{
+					return 1 << 2;
+				}
+				return 0;
+			}
+
+			private static bool IsNeighbors(int a, int b, Vector3i tri2)
+			{
+				if (a == tri2.X && b == tri2.Z)
 				{
 					return true;
 				}
-				if (tri1.ContainsValue(tri2.Y) && tri1.ContainsValue(tri2.Z))
+				if (b == tri2.Y && a == tri2.Z)
+				{
+					return true;
+				}
+				if (b == tri2.X && a == tri2.Y)
 				{
 					return true;
 				}
@@ -112,6 +153,7 @@ namespace uTinyRipper.Converters.Sprites
 				{
 					int index = indexes[i];
 					Vector3i triangle = m_triangles[index];
+					//int edgeMask = GetEdgeMask(triangle, indexes);
 					for (int j = 0; j < m_triangles.Count; j++)
 					{
 						if (m_indexes.Contains(j))
@@ -119,11 +161,20 @@ namespace uTinyRipper.Converters.Sprites
 							continue;
 						}
 						Vector3i check = m_triangles[j];
-						if (IsNeighbors(triangle, check))
+						int edge = GetNeighborEdge(triangle, check);
+						if (edge == 0)
 						{
-							indexes.Add(j);
-							m_indexes.Add(j);
+							continue;
 						}
+						// allow only one neighbor per edge
+						//if ((edgeMask & edge) != 0)
+						{
+							//continue;
+						}
+
+						indexes.Add(j);
+						m_indexes.Add(j);
+						//edgeMask |= edge;
 					}
 				}
 			}
@@ -187,7 +238,7 @@ namespace uTinyRipper.Converters.Sprites
 				return true;
 			}
 
-			private bool GetNextOutsideInfo(Vector3i triangle, int member, out Outside result)
+			private bool GetNextOutsider(Vector3i triangle, int member, out Outside result)
 			{
 				int vertex = triangle.GetValueByMember(member);
 				foreach (Outside outsider in m_outsiders)
@@ -206,7 +257,7 @@ namespace uTinyRipper.Converters.Sprites
 				return false;
 			}
 
-			private Vector3i GetNextNeighbor(Vector3i tri, int vertex)
+			private bool GetNextNeighbor(Vector3i tri, int vertex, out Vector3i result)
 			{
 				int member = tri.GetMemberByValue(vertex);
 				int nextVertex = tri.GetValueByMember(member + 1);
@@ -217,33 +268,31 @@ namespace uTinyRipper.Converters.Sprites
 					{
 						if (check != tri)
 						{
-							return check;
+							result = check;
+							return true;
 						}
 					}
 				}
-				return default;
+				result = default;
+				return false;
 			}
 
 			private bool IsConnectedNeighbors(Vector3i tri1, Vector3i tri2, int vertex)
 			{
-				if (IsNeighbors(tri1, tri2))
+				if (GetNeighborEdge(tri1, tri2) != 0)
 				{
 					return true;
 				}
 
 				Vector3i next = tri1;
-				while (true)
+				while (GetNextNeighbor(next, vertex, out next))
 				{
-					next = GetNextNeighbor(next, vertex);
 					if (next == tri2)
 					{
 						return true;
 					}
-					if (next == default)
-					{
-						return false;
-					}
 				}
+				return false;
 			}
 
 			public int TriangleCount => m_indexes.Count;
@@ -307,7 +356,8 @@ namespace uTinyRipper.Converters.Sprites
 				for (int j = 0; j < outline.GeneratedOutline.Count; j++)
 				{
 					int vertex = outline.GeneratedOutline[j];
-					for (int k = i + 1; k < outlines.Count; k++)
+					// include outlines that has common vertex with current outline
+					/*for (int k = i + 1; k < outlines.Count; k++)
 					{
 						Outline nextOutline = outlines[k];
 						int index = nextOutline.GeneratedOutline.IndexOf(vertex);
@@ -325,7 +375,7 @@ namespace uTinyRipper.Converters.Sprites
 							}
 							outlines.RemoveAt(k--);
 						}
-					}
+					}*/
 					resultLine.Add((Vector2f)m_vertices[vertex]);
 				}
 				result.Add(resultLine.ToArray());

@@ -181,9 +181,9 @@ namespace uTinyRipper.Classes.Sprites
 			Vector3i[] triangles = new Vector3i[submesh.IndexCount / 3];
 			for (int o = submesh.FirstByte, ti = 0; ti < triangles.Length; o += 6, ti++)
 			{
-				int x = BitConverter.ToInt16(IndexBuffer, o + 0);
-				int y = BitConverter.ToInt16(IndexBuffer, o + 2);
-				int z = BitConverter.ToInt16(IndexBuffer, o + 4);
+				int x = BitConverter.ToUInt16(IndexBuffer, o + 0);
+				int y = BitConverter.ToUInt16(IndexBuffer, o + 2);
+				int z = BitConverter.ToUInt16(IndexBuffer, o + 4);
 				triangles[ti] = new Vector3i(x, y, z);
 			}
 			MeshOutlineGenerator outlineGenerator = new MeshOutlineGenerator(vertices, triangles);
