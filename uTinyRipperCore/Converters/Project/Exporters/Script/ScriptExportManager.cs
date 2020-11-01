@@ -88,7 +88,7 @@ namespace uTinyRipper.Converters.Script
 			string namespaceFolder = @namespace.Replace('.', Path.DirectorySeparatorChar);
 			string folderPath = Path.Combine(assemblyFolder, namespaceFolder);
 			string filePath = Path.Combine(folderPath, @class);
-			return $"{FileUtils.FixInvalidPathCharacters(filePath)}.cs";
+			return $"{DirectoryUtils.FixInvalidPathCharacters(filePath)}.cs";
 		}
 
 		private static string GetExportSubPath(ScriptExportType type)

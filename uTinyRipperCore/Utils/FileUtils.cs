@@ -113,7 +113,7 @@ namespace uTinyRipper
 			return path;
 		}
 
-		public static string FixInvalidPathCharacters(string path)
+		public static string FixInvalidNameCharacters(string path)
 		{
 			return FileNameRegex.Replace(path, string.Empty);
 		}

@@ -104,7 +104,7 @@ namespace uTinyRipper.Project
 					fileName = asset.GetType().Name;
 					break;
 			}
-			fileName = FileUtils.FixInvalidPathCharacters(fileName);
+			fileName = FileUtils.FixInvalidNameCharacters(fileName);
 
 			fileName = $"{fileName}.{GetExportExtension(asset)}";
 			return GetUniqueFileName(dirPath, fileName);
