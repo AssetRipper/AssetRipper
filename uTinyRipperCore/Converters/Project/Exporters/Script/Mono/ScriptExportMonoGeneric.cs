@@ -24,6 +24,7 @@ namespace uTinyRipper.Converters.Script.Mono
 			NestedName = ScriptExportMonoType.GetNestedName(Type, TypeName);
 			Module = ScriptExportMonoType.GetModuleName(Type);
 			FullName = ScriptExportMonoType.GetFullName(Type, Module);
+			Name = ScriptExportMonoType.GetSimpleName(Type);
 		}
 
 		public override void Init(IScriptExportManager manager)
@@ -70,6 +71,7 @@ namespace uTinyRipper.Converters.Script.Mono
 		public override string FullName { get; }
 		public override string NestedName { get; }
 		public override string TypeName { get; }
+		public override string Name { get; }
 		public override string Namespace => Type.Namespace;
 		public override string Module { get; }
 

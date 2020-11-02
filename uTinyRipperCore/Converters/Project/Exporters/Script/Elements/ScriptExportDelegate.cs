@@ -46,7 +46,7 @@ namespace uTinyRipper.Converters.Script
 		public abstract ScriptExportType Return { get; }
 		public abstract IReadOnlyList<ScriptExportParameter> Parameters { get; }
 
-		protected sealed override bool IsStruct => false;
+		public sealed override bool IsStruct => false;
 		protected sealed override bool IsSerializable => false;
 
 		protected const string SystemName = "System";

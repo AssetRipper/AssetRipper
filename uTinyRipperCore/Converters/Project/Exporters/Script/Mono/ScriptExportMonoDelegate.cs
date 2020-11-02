@@ -75,6 +75,7 @@ namespace uTinyRipper.Converters.Script.Mono
 		}
 
 		public override string FullName { get; }
+		public override string Name => Type.Name;
 		public override string NestedName { get; }
 		public override string TypeName => Type.Name;
 		public override string Namespace => DeclaringType == null ? Type.Namespace : DeclaringType.Namespace;
