@@ -34,10 +34,12 @@ namespace uTinyRipper.Converters.Script
 		}
 
 		public sealed override bool IsEnum => true;
+
+		public sealed override ScriptExportConstructor Constructor => null;
 		public sealed override IReadOnlyList<ScriptExportProperty> Properties { get; } = Array.Empty<ScriptExportProperty>();
 		public sealed override IReadOnlyList<ScriptExportMethod> Methods { get; } = Array.Empty<ScriptExportMethod>();
 
 		public sealed override bool IsStruct => throw new NotSupportedException();
-		protected sealed override bool IsSerializable => false;
+		public sealed override bool IsSerializable => false;
 	}
 }

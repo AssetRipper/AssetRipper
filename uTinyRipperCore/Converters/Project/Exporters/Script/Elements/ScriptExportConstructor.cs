@@ -8,7 +8,7 @@ namespace uTinyRipper.Converters.Script
 		public override void Export(TextWriter writer, int intent)
 		{
 			writer.WriteIndent(intent);
-			writer.Write("{0} {1}(", Keyword, DeclaringType.Name);
+			writer.Write("{0} {1}(", Keyword, DeclaringType.CleanName);
 			for (int i = 0; i < Parameters.Count; i++)
 			{
 				ScriptExportParameter parameter = Parameters[i];
@@ -19,14 +19,14 @@ namespace uTinyRipper.Converters.Script
 				}
 			}
 
-			if (BaseParameters != null && BaseParameters.Count != 0)
+			if (Base != null && Base.Parameters.Count != 0)
 			{
 				writer.Write(") : base(");
-				for (int i = 0; i < BaseParameters.Count; i++)
+				for (int i = 0; i < Base.Parameters.Count; i++)
 				{
-					ScriptExportParameter parameter = BaseParameters[i];
+					ScriptExportParameter parameter = Base.Parameters[i];
 					writer.Write("default({0})", parameter.Type.GetTypeNestedName(DeclaringType));
-					if (i < BaseParameters.Count - 1)
+					if (i < Base.Parameters.Count - 1)
 					{
 						writer.Write(", ");
 					}
@@ -35,8 +35,6 @@ namespace uTinyRipper.Converters.Script
 			else if (DeclaringType.IsStruct)
 			{
 				// all field of a value type must be initialized
-				// they always inherit System.ValueType which only has a parameterless constructor
-				// so this is always written
 				writer.Write(") : this(");
 			}
 
@@ -50,12 +48,15 @@ namespace uTinyRipper.Converters.Script
 		public override void GetUsedNamespaces(ICollection<string> namespaces)
 		{
 			base.GetUsedNamespaces(namespaces);
-			foreach (ScriptExportParameter parameter in BaseParameters)
+			if (Base != null)
 			{
-				parameter.GetUsedNamespaces(namespaces);
+				foreach (ScriptExportParameter parameter in Base.Parameters)
+				{
+					parameter.GetUsedNamespaces(namespaces);
+				}
 			}
 		}
-		
-		public abstract IReadOnlyList<ScriptExportParameter> BaseParameters { get; }
+
+		public ScriptExportMethod Base => DeclaringType.Base?.Constructor;
 	}
 }

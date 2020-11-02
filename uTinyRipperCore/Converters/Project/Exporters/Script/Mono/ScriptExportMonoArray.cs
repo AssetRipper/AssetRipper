@@ -18,11 +18,11 @@ namespace uTinyRipper.Converters.Script.Mono
 
 			Type = type;
 
-			TypeName = ScriptExportMonoType.GetName(Type);
+			CleanName = ScriptExportMonoType.GetSimpleName(Type);
+			TypeName = ScriptExportMonoType.GetTypeName(Type);
 			NestedName = ScriptExportMonoType.GetNestedName(Type, TypeName);
 			Module = ScriptExportMonoType.GetModuleName(Type);
 			FullName = ScriptExportMonoType.GetFullName(Type, Module);
-			Name = ScriptExportMonoType.GetSimpleName(Type);
 		}
 
 		public override void Init(IScriptExportManager manager)
@@ -39,7 +39,7 @@ namespace uTinyRipper.Converters.Script.Mono
 		public override ScriptExportType Element => m_element;
 
 		public override string FullName { get; }
-		public override string Name { get; }
+		public override string CleanName { get; }
 		public override string NestedName { get; }
 		public override string TypeName { get; }
 		public override string Namespace => Element.Namespace;

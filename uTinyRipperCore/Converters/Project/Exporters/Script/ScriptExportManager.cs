@@ -290,9 +290,9 @@ namespace uTinyRipper.Converters.Script
 			return exportMethod;
 		}
 
-		public ScriptExportConstructor RetrieveConstructor(MethodDefinition method, MethodDefinition baseCtor)
+		public ScriptExportConstructor RetrieveConstructor(MethodDefinition constructor)
 		{
-			ScriptExportConstructor exportConstructor = new ScriptExportMonoConstructor(new ScriptExportMonoMethod(method), baseCtor != null ? new ScriptExportMonoMethod(baseCtor) : null);
+			ScriptExportConstructor exportConstructor = new ScriptExportMonoConstructor(constructor);
 			exportConstructor.Init(this);
 			return exportConstructor;
 		}
@@ -384,7 +384,7 @@ namespace uTinyRipper.Converters.Script
 			{
 				m_exported.Add(nestedEnum.FullName);
 			}
-			foreach (ScriptExportDelegate @delegate in exportType.Delegates)
+			foreach (ScriptExportDelegate @delegate in exportType.NestedDelegates)
 			{
 				m_exported.Add(@delegate.FullName);
 			}

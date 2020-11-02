@@ -28,15 +28,8 @@ namespace uTinyRipper.Converters.Script
 
 		public void ExportEnum(TextWriter writer, int intent)
 		{
-			if (Type.IsEnum)
-			{
-				writer.WriteIndent(intent);
-				writer.WriteLine("{0} = {1},", Name, Constant);
-			}
-			else
-			{
-				throw new NotSupportedException();
-			}
+			writer.WriteIndent(intent);
+			writer.WriteLine("{0} = {1},", Name, Constant);
 		}
 
 		public void GetUsedNamespaces(ICollection<string> namespaces)

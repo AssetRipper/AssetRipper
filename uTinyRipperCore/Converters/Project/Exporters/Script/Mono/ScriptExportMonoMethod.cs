@@ -4,16 +4,11 @@ using System.Collections.Generic;
 
 namespace uTinyRipper.Converters.Script.Mono
 {
-	public class ScriptExportMonoMethod : ScriptExportMethod
+	public sealed class ScriptExportMonoMethod : ScriptExportMethod
 	{
 		public ScriptExportMonoMethod(MethodDefinition method)
 		{
-			if (method == null)
-			{
-				throw new ArgumentNullException(nameof(method));
-			}
-
-			Method = method;
+			Method = method ?? throw new ArgumentNullException(nameof(method));
 		}
 
 		public override void Init(IScriptExportManager manager)

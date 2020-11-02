@@ -54,15 +54,20 @@ namespace uTinyRipper.Converters.Script
 				writer.WriteLine();
 			}
 
-			foreach (ScriptExportDelegate @delegate in Delegates)
+			foreach (ScriptExportDelegate @delegate in NestedDelegates)
 			{
 				@delegate.Export(writer, intent);
 			}
-			if (Delegates.Count > 0)
+			if (NestedDelegates.Count > 0)
 			{
 				writer.WriteLine();
 			}
 
+			if (Constructor != null)
+			{
+				Constructor.Export(writer, intent);
+				writer.WriteLine();
+			}
 			foreach (ScriptExportMethod method in Methods)
 			{
 				method.Export(writer, intent);
@@ -105,10 +110,11 @@ namespace uTinyRipper.Converters.Script
 			{
 				nestedType.GetUsedNamespaces(namespaces);
 			}
-			foreach (ScriptExportDelegate @delegate in Delegates)
+			foreach (ScriptExportDelegate @delegate in NestedDelegates)
 			{
 				@delegate.GetUsedNamespaces(namespaces);
 			}
+			Constructor?.GetUsedNamespaces(namespaces);
 			foreach (ScriptExportMethod method in Methods)
 			{
 				method.GetUsedNamespaces(namespaces);
@@ -231,7 +237,7 @@ namespace uTinyRipper.Converters.Script
 		/// Type name without any prefixes or generic parameters
 		/// ex: Class
 		/// </summary>
-		public abstract string Name { get; }
+		public abstract string CleanName { get; }
 		public abstract string Namespace { get; }
 		public abstract string Module { get; }
 		public virtual bool IsEnum => false;
@@ -250,14 +256,15 @@ namespace uTinyRipper.Converters.Script
 
 		public IReadOnlyList<ScriptExportType> NestedTypes => m_nestedTypes;
 		public IReadOnlyList<ScriptExportEnum> NestedEnums => m_nestedEnums;
-		public IReadOnlyList<ScriptExportDelegate> Delegates => m_nestedDelegates;
+		public IReadOnlyList<ScriptExportDelegate> NestedDelegates => m_nestedDelegates;
+		public abstract ScriptExportConstructor Constructor { get; }
 		public abstract IReadOnlyList<ScriptExportMethod> Methods { get; }
 		public abstract IReadOnlyList<ScriptExportProperty> Properties { get; }
 		public abstract IReadOnlyList<ScriptExportField> Fields { get; }
 
-		protected abstract string Keyword { get; }
+		public abstract string Keyword { get; }
 		public abstract bool IsStruct { get; }
-		protected abstract bool IsSerializable { get; }
+		public abstract bool IsSerializable { get; }
 
 		protected const string PublicKeyWord = "public";
 		protected const string InternalKeyWord = "internal";

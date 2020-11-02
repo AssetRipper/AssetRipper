@@ -40,6 +40,8 @@ namespace uTinyRipper.Converters.Script
 		public sealed override string CleanNestedName => NestedName;
 
 		public sealed override ScriptExportType Base => null;
+
+		public sealed override ScriptExportConstructor Constructor => null;
 		public sealed override IReadOnlyList<ScriptExportMethod> Methods { get; } = Array.Empty<ScriptExportMethod>();
 		public sealed override IReadOnlyList<ScriptExportProperty> Properties { get; } = Array.Empty<ScriptExportProperty>();
 		public sealed override IReadOnlyList<ScriptExportField> Fields { get; } = Array.Empty<ScriptExportField>();
@@ -47,7 +49,7 @@ namespace uTinyRipper.Converters.Script
 		public abstract IReadOnlyList<ScriptExportParameter> Parameters { get; }
 
 		public sealed override bool IsStruct => false;
-		protected sealed override bool IsSerializable => false;
+		public sealed override bool IsSerializable => false;
 
 		protected const string SystemName = "System";
 

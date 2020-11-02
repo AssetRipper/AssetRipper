@@ -22,8 +22,8 @@ namespace uTinyRipper.Converters.Script.Mono
 				Definition = type.Resolve();
 			}
 
-			TypeName = GetName(Type);
-			Name = GetSimpleName(Type);
+			CleanName = GetSimpleName(Type);
+			TypeName = GetTypeName(Type);
 			NestedName = GetNestedName(Type, TypeName);
 			CleanNestedName = ToCleanName(NestedName);
 			Module = GetModuleName(Type);
@@ -32,7 +32,7 @@ namespace uTinyRipper.Converters.Script.Mono
 
 		public static string GetNestedName(TypeReference type)
 		{
-			string typeName = GetName(type);
+			string typeName = GetTypeName(type);
 			return GetNestedName(type, typeName);
 		}
 
@@ -87,30 +87,6 @@ namespace uTinyRipper.Converters.Script.Mono
 			return firstPart + ToCleanName(secondPart);
 		}
 
-		public static string GetName(TypeReference type)
-		{
-			if (MonoType.IsCPrimitive(type))
-			{
-				return MonoUtils.ToCPrimitiveString(type.Name);
-			}
-
-			if (type.IsGenericInstance)
-			{
-				GenericInstanceType generic = (GenericInstanceType)type;
-				return GetGenericInstanceName(generic);
-			}
-			else if (type.HasGenericParameters)
-			{
-				return GetGenericTypeName(type);
-			}
-			else if (type.IsArray)
-			{
-				ArrayType array = (ArrayType)type;
-				return GetName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
-			}
-			return type.Name;
-		}
-
 		public static string GetSimpleName(TypeReference type)
 		{
 			string name = type.Name;
@@ -120,9 +96,8 @@ namespace uTinyRipper.Converters.Script.Mono
 				return name;
 			}
 
-			StringBuilder sb = new StringBuilder(name.Length);
 			bool strip = false;
-
+			StringBuilder sb = new StringBuilder(name.Length);
 			foreach (char c in name)
 			{
 				if (c == '`')
@@ -141,6 +116,30 @@ namespace uTinyRipper.Converters.Script.Mono
 			}
 
 			return sb.ToString();
+		}
+
+		public static string GetTypeName(TypeReference type)
+		{
+			if (MonoType.IsCPrimitive(type))
+			{
+				return MonoUtils.ToCPrimitiveString(type.Name);
+			}
+
+			if (type.IsGenericInstance)
+			{
+				GenericInstanceType generic = (GenericInstanceType)type;
+				return GetGenericInstanceName(generic);
+			}
+			else if (type.HasGenericParameters)
+			{
+				return GetGenericTypeName(type);
+			}
+			else if (type.IsArray)
+			{
+				ArrayType array = (ArrayType)type;
+				return GetTypeName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
+			}
+			return type.Name;
 		}
 
 		public static string GetFullName(TypeReference type)
@@ -274,6 +273,7 @@ namespace uTinyRipper.Converters.Script.Mono
 				m_base = manager.RetrieveType(Definition.BaseType);
 			}
 
+			m_constructor = CreateConstructor(manager);
 			m_methods = CreateMethods(manager);
 			m_properties = CreateProperties(manager);
 			m_fields = CreateFields(manager);
@@ -310,93 +310,76 @@ namespace uTinyRipper.Converters.Script.Mono
 			return HasMember(Type, name);
 		}
 
+		private ScriptExportConstructor CreateConstructor(IScriptExportManager manager)
+		{
+			if (Definition == null)
+			{
+				return null;
+			}
+
+			// find the constructors to generate by simply taking the first constructor with the least arguments that has maximum accessibility
+			MethodDefinition ctor = null;
+			MethodAttributes ctorAttributes = 0;
+			foreach (MethodDefinition method in Definition.Methods)
+			{
+				if (method.IsConstructor && !method.IsStatic)
+				{
+					MethodAttributes attributes;
+					if (method.IsPublic)
+					{
+						attributes = MethodAttributes.Public;
+					}
+					else if (method.IsFamilyOrAssembly || method.IsFamily)
+					{
+						attributes = MethodAttributes.Family;
+					}
+					else if (method.IsAssembly)
+					{
+						attributes = MethodAttributes.Assembly;
+					}
+					else
+					{
+						attributes = MethodAttributes.Private;
+					}
+
+					if (ctor == null || attributes > ctorAttributes || (attributes == ctorAttributes && ctor.Parameters.Count > method.Parameters.Count))
+					{
+						ctor = method;
+						ctorAttributes = attributes;
+					}
+				}
+			}
+			if (ctor != null)
+			{
+				ScriptExportConstructor constructor = manager.RetrieveConstructor(ctor);
+				// if public, protected or internal constructor doesn't exist we need to generate a private constructor
+				// to avoid the compiler generating a parameterless public one that didn't exist before
+				if (ctorAttributes == MethodAttributes.Private)
+				{
+					return constructor;
+				}
+				if (constructor.Parameters.Count != 0)
+				{
+					return constructor;
+				}
+				if ((constructor.Base?.Parameters.Count ?? 0) != 0)
+				{
+					return constructor;
+				}
+			}
+			return null;
+		}
+
 		private IReadOnlyList<ScriptExportMethod> CreateMethods(IScriptExportManager manager)
 		{
-			if (Definition == null || Definition.BaseType == null || Definition.BaseType.Module == null)
+			if (Definition == null || Definition.BaseType == null)
 			{
 				return Array.Empty<ScriptExportMethod>();
 			}
 
-			List<ScriptExportMethod> methods = new List<ScriptExportMethod>();
-			MonoTypeContext context = new MonoTypeContext(Definition);
-
-			// find the constructors to generate by simply taking the first constructor with the least arguments
-			// that has the appropriate accessibility, we need to generate both a public and a internal constructor
-			// since the can be used by derived classes generated
-			// if none of them exist we need to generate a private constructor
-			// to avoid the compiler generating a parameterless public one that didn't exist before
-
-			MethodDefinition ctor = null;
-			MethodDefinition internalCtor = null;
-			MethodDefinition privateCtor = null;
-			foreach (MethodDefinition method in context.Type.Resolve().Methods)
-			{
-				if (method.IsConstructor && !method.IsStatic)
-				{
-					if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly)
-					{
-						if (ctor == null || ctor.Parameters.Count > method.Parameters.Count)
-						{
-							ctor = method;
-						}
-					}
-
-					if (method.IsAssembly || method.IsFamilyAndAssembly)
-					{
-						if (internalCtor == null || internalCtor.Parameters.Count > method.Parameters.Count)
-						{
-							internalCtor = method;
-						}
-					}
-
-					if (privateCtor == null || privateCtor.Parameters.Count > method.Parameters.Count)
-					{
-						privateCtor = method;
-					}
-				}
-			}
-
-			// find the base constructor to call by the same algorithm
-			// this will always be a constructor we generated if we generated the base class ourselves
-
-			MonoTypeContext baseContext = context.GetBase();
-			MethodDefinition baseCtor = null;
-			foreach (MethodDefinition method in baseContext.Type.Resolve().Methods)
-			{
-				if (method.IsConstructor && !method.IsStatic)
-				{
-					if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly ||
-					    (baseContext.Type.Module.Assembly == context.Type.Module.Assembly && (method.IsAssembly || method.IsFamilyAndAssembly)))
-					{
-						if (baseCtor == null || baseCtor.Parameters.Count > method.Parameters.Count)
-						{
-							baseCtor = method;
-						}
-					}
-				}
-			}
-
-			if (ctor != null || internalCtor != null || privateCtor != null)
-			{
-				if (ctor != null || internalCtor != null)
-				{
-					if (ctor != null && (ctor.HasParameters || (baseCtor?.HasParameters ?? false)))
-					{
-						methods.Add(manager.RetrieveConstructor(ctor, baseCtor));
-					}
-					if (internalCtor != null && (internalCtor.HasParameters || (baseCtor?.HasParameters ?? false)))
-					{
-						methods.Add(manager.RetrieveConstructor(internalCtor, baseCtor));
-					}
-				}
-				else
-				{
-					methods.Add(manager.RetrieveConstructor(privateCtor, baseCtor));
-				}
-			}
-
-			// we need to export only such properties that are declared as abstract inside builtin assemblies
+			// we need to export only such methods that are declared as abstract inside builtin assemblies
 			// and not overridden anywhere except current type
+			List<ScriptExportMethod> methods = new List<ScriptExportMethod>();
 			List<MethodDefinition> overrides = new List<MethodDefinition>();
 			foreach (MethodDefinition method in Definition.Methods)
 			{
@@ -407,6 +390,7 @@ namespace uTinyRipper.Converters.Script.Mono
 			}
 
 			TypeDefinition definition = Definition;
+			MonoTypeContext context = new MonoTypeContext(Definition);
 			while (true)
 			{
 				if (overrides.Count == 0)
@@ -594,18 +578,19 @@ namespace uTinyRipper.Converters.Script.Mono
 		public override string NestedName { get; }
 		public override string CleanNestedName { get; }
 		public override string TypeName { get; }
-		public override string Name { get; }
+		public override string CleanName { get; }
 		public override string Namespace => DeclaringType == null ? Type.Namespace : DeclaringType.Namespace;
 		public override string Module { get; }
 
 		public override ScriptExportType DeclaringType => m_declaringType;
 		public override ScriptExportType Base => m_base;
 
+		public override ScriptExportConstructor Constructor => m_constructor;
 		public override IReadOnlyList<ScriptExportMethod> Methods => m_methods;
 		public override IReadOnlyList<ScriptExportProperty> Properties => m_properties;
 		public override IReadOnlyList<ScriptExportField> Fields => m_fields;
 
-		protected override string Keyword
+		public override string Keyword
 		{
 			get
 			{
@@ -630,13 +615,14 @@ namespace uTinyRipper.Converters.Script.Mono
 			}
 		}
 		public override bool IsStruct => Type.IsValueType;
-		protected override bool IsSerializable => Definition == null ? false : Definition.IsSerializable;
+		public override bool IsSerializable => Definition == null ? false : Definition.IsSerializable;
 
 		private TypeReference Type { get; }
 		private TypeDefinition Definition { get; }
 
 		private ScriptExportType m_declaringType;
 		private ScriptExportType m_base;
+		private ScriptExportConstructor m_constructor;
 		private IReadOnlyList<ScriptExportMethod> m_methods;
 		private IReadOnlyList<ScriptExportProperty> m_properties;
 		private IReadOnlyList<ScriptExportField> m_fields;

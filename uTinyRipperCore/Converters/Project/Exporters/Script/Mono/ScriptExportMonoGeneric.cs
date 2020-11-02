@@ -20,16 +20,16 @@ namespace uTinyRipper.Converters.Script.Mono
 
 			Type = (GenericInstanceType)type;
 
-			TypeName = ScriptExportMonoType.GetName(Type);
+			CleanName = ScriptExportMonoType.GetSimpleName(Type);
+			TypeName = ScriptExportMonoType.GetTypeName(Type);
 			NestedName = ScriptExportMonoType.GetNestedName(Type, TypeName);
 			Module = ScriptExportMonoType.GetModuleName(Type);
 			FullName = ScriptExportMonoType.GetFullName(Type, Module);
-			Name = ScriptExportMonoType.GetSimpleName(Type);
 		}
 
 		public override void Init(IScriptExportManager manager)
 		{
-			m_owner = manager.RetrieveType(Type.ElementType);
+			m_template = manager.RetrieveType(Type.ElementType);
 
 			int argumentCount = MonoUtils.GetGenericArgumentCount(Type);
 			m_arguments = new ScriptExportType[argumentCount];
@@ -64,21 +64,20 @@ namespace uTinyRipper.Converters.Script.Mono
 		}
 
 		public override ScriptExportType NestType => m_nest;
-		public override ScriptExportType Template => m_owner;
+		public override ScriptExportType Template => m_template;
 		public override IReadOnlyList<ScriptExportType> Arguments => m_arguments;
-		public override ScriptExportType Base => Template.Base;
 
 		public override string FullName { get; }
 		public override string NestedName { get; }
 		public override string TypeName { get; }
-		public override string Name { get; }
+		public override string CleanName { get; }
 		public override string Namespace => Type.Namespace;
 		public override string Module { get; }
 
 		private GenericInstanceType Type { get; }
 
 		private ScriptExportType m_nest;
-		private ScriptExportType m_owner;
+		private ScriptExportType m_template;
 		private ScriptExportType[] m_arguments;
 	}
 }
