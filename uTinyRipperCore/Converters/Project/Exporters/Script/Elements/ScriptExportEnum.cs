@@ -37,7 +37,7 @@ namespace uTinyRipper.Converters.Script
 		public sealed override IReadOnlyList<ScriptExportProperty> Properties { get; } = Array.Empty<ScriptExportProperty>();
 		public sealed override IReadOnlyList<ScriptExportMethod> Methods { get; } = Array.Empty<ScriptExportMethod>();
 
-		protected sealed override bool IsStruct => throw new NotSupportedException();
+		public sealed override bool IsStruct => throw new NotSupportedException();
 		protected sealed override bool IsSerializable => false;
 	}
 }

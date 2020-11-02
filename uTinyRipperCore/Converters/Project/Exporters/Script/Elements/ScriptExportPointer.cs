@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace uTinyRipper.Converters.Script
 {
-	public abstract class ScriptExportArray : ScriptExportType
+	public abstract class ScriptExportPointer : ScriptExportType
 	{
 		public override void GetUsedNamespaces(ICollection<string> namespaces)
 		{

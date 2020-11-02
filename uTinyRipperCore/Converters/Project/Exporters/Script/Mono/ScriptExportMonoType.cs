@@ -23,6 +23,7 @@ namespace uTinyRipper.Converters.Script.Mono
 			}
 
 			TypeName = GetName(Type);
+			Name = GetSimpleName(Type);
 			NestedName = GetNestedName(Type, TypeName);
 			CleanNestedName = ToCleanName(NestedName);
 			Module = GetModuleName(Type);
@@ -108,6 +109,38 @@ namespace uTinyRipper.Converters.Script.Mono
 				return GetName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
 			}
 			return type.Name;
+		}
+
+		public static string GetSimpleName(TypeReference type)
+		{
+			string name = type.Name;
+			int index = name.IndexOf('`');
+			if (index == -1)
+			{
+				return name;
+			}
+
+			StringBuilder sb = new StringBuilder(name.Length);
+			bool strip = false;
+
+			foreach (char c in name)
+			{
+				if (c == '`')
+				{
+					strip = true;
+				}
+				else if (!char.IsDigit(c))
+				{
+					strip = false;
+				}
+
+				if (!strip)
+				{
+					sb.Append(c);
+				}
+			}
+
+			return sb.ToString();
 		}
 
 		public static string GetFullName(TypeReference type)
@@ -284,7 +317,85 @@ namespace uTinyRipper.Converters.Script.Mono
 				return Array.Empty<ScriptExportMethod>();
 			}
 
-			// we need to export only such properties that are declared as asbtract inside builin assemblies
+			List<ScriptExportMethod> methods = new List<ScriptExportMethod>();
+			MonoTypeContext context = new MonoTypeContext(Definition);
+
+			// find the constructors to generate by simply taking the first constructor with the least arguments
+			// that has the appropriate accessibility, we need to generate both a public and a internal constructor
+			// since the can be used by derived classes generated
+			// if none of them exist we need to generate a private constructor
+			// to avoid the compiler generating a parameterless public one that didn't exist before
+
+			MethodDefinition ctor = null;
+			MethodDefinition internalCtor = null;
+			MethodDefinition privateCtor = null;
+			foreach (MethodDefinition method in context.Type.Resolve().Methods)
+			{
+				if (method.IsConstructor && !method.IsStatic)
+				{
+					if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly)
+					{
+						if (ctor == null || ctor.Parameters.Count > method.Parameters.Count)
+						{
+							ctor = method;
+						}
+					}
+
+					if (method.IsAssembly || method.IsFamilyAndAssembly)
+					{
+						if (internalCtor == null || internalCtor.Parameters.Count > method.Parameters.Count)
+						{
+							internalCtor = method;
+						}
+					}
+
+					if (privateCtor == null || privateCtor.Parameters.Count > method.Parameters.Count)
+					{
+						privateCtor = method;
+					}
+				}
+			}
+
+			// find the base constructor to call by the same algorithm
+			// this will always be a constructor we generated if we generated the base class ourselves
+
+			MonoTypeContext baseContext = context.GetBase();
+			MethodDefinition baseCtor = null;
+			foreach (MethodDefinition method in baseContext.Type.Resolve().Methods)
+			{
+				if (method.IsConstructor && !method.IsStatic)
+				{
+					if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly ||
+					    (baseContext.Type.Module.Assembly == context.Type.Module.Assembly && (method.IsAssembly || method.IsFamilyAndAssembly)))
+					{
+						if (baseCtor == null || baseCtor.Parameters.Count > method.Parameters.Count)
+						{
+							baseCtor = method;
+						}
+					}
+				}
+			}
+
+			if (ctor != null || internalCtor != null || privateCtor != null)
+			{
+				if (ctor != null || internalCtor != null)
+				{
+					if (ctor != null && (ctor.HasParameters || (baseCtor?.HasParameters ?? false)))
+					{
+						methods.Add(manager.RetrieveConstructor(ctor, baseCtor));
+					}
+					if (internalCtor != null && (internalCtor.HasParameters || (baseCtor?.HasParameters ?? false)))
+					{
+						methods.Add(manager.RetrieveConstructor(internalCtor, baseCtor));
+					}
+				}
+				else
+				{
+					methods.Add(manager.RetrieveConstructor(privateCtor, baseCtor));
+				}
+			}
+
+			// we need to export only such properties that are declared as abstract inside builtin assemblies
 			// and not overridden anywhere except current type
 			List<MethodDefinition> overrides = new List<MethodDefinition>();
 			foreach (MethodDefinition method in Definition.Methods)
@@ -295,8 +406,6 @@ namespace uTinyRipper.Converters.Script.Mono
 				}
 			}
 
-			List<ScriptExportMethod> methods = new List<ScriptExportMethod>();
-			MonoTypeContext context = new MonoTypeContext(Definition);
 			TypeDefinition definition = Definition;
 			while (true)
 			{
@@ -485,6 +594,7 @@ namespace uTinyRipper.Converters.Script.Mono
 		public override string NestedName { get; }
 		public override string CleanNestedName { get; }
 		public override string TypeName { get; }
+		public override string Name { get; }
 		public override string Namespace => DeclaringType == null ? Type.Namespace : DeclaringType.Namespace;
 		public override string Module { get; }
 
@@ -519,7 +629,7 @@ namespace uTinyRipper.Converters.Script.Mono
 				return InternalKeyWord;
 			}
 		}
-		protected override bool IsStruct => Type.IsValueType;
+		public override bool IsStruct => Type.IsValueType;
 		protected override bool IsSerializable => Definition == null ? false : Definition.IsSerializable;
 
 		private TypeReference Type { get; }

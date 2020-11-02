@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace uTinyRipper.Converters.Script.Mono
 {
-	public sealed class ScriptExportMonoMethod : ScriptExportMethod
+	public class ScriptExportMonoMethod : ScriptExportMethod
 	{
 		public ScriptExportMonoMethod(MethodDefinition method)
 		{
@@ -34,7 +34,7 @@ namespace uTinyRipper.Converters.Script.Mono
 		public override ScriptExportType ReturnType => m_returnType;
 		public override IReadOnlyList<ScriptExportParameter> Parameters => m_parameters;
 
-		protected override string Keyword
+		public override string Keyword
 		{
 			get
 			{

@@ -227,6 +227,11 @@ namespace uTinyRipper.Converters.Script
 		/// ex: Class<T1, T2>
 		/// </summary>
 		public abstract string TypeName { get; }
+		/// <summary>
+		/// Type name without any prefixes or generic parameters
+		/// ex: Class
+		/// </summary>
+		public abstract string Name { get; }
 		public abstract string Namespace { get; }
 		public abstract string Module { get; }
 		public virtual bool IsEnum => false;
@@ -251,7 +256,7 @@ namespace uTinyRipper.Converters.Script
 		public abstract IReadOnlyList<ScriptExportField> Fields { get; }
 
 		protected abstract string Keyword { get; }
-		protected abstract bool IsStruct { get; }
+		public abstract bool IsStruct { get; }
 		protected abstract bool IsSerializable { get; }
 
 		protected const string PublicKeyWord = "public";
