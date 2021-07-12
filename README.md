@@ -50,7 +50,7 @@ Current supported versions: 1.x to 2019.x (support for later versions is in prog
    * Shader DirectX blob export
    * References to build-in Engine assets
    
-* *AssetRipperConsole* and *AssetRipperConsoleNETCore*
+* *AssetRipperConsole*
 
    Sample console application which is designed to test Core library functionality.   
    It's a command line application. Drag and drop resource file(s) or/and folder(s) onto the .exe to retrieve the assets. It will then automaticly try to find resource dependencies, create a 'Ripped' folder and extract all supported assets into the created directory.
