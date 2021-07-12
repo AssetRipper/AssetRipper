@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.5</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	<AssemblyName>AssetRipperCore</AssemblyName>
 	<RootNamespace>AssetRipper</RootNamespace>
-	<Copyright>Copyright ©  2017</Copyright>
-	<Authors>mafaca</Authors>
+	<Copyright>Copyright ©  2021</Copyright>
+	<Authors>ds5678</Authors>
 	<Configurations>Debug;Release;Virtual</Configurations>
   </PropertyGroup>
 

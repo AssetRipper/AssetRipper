@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperConsoleNETCore", "AssetRipperConsole\AssetRipperConsoleNETCore.csproj", "{C9583270-6D3E-4CBF-8011-A818A7D8F3DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperConsole", "AssetRipperConsole\AssetRipperConsole.csproj", "{C9583270-6D3E-4CBF-8011-A818A7D8F3DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperCore", "AssetRipperCore\AssetRipperCore.csproj", "{CA9420F4-4B54-4727-91E6-CCE20916D795}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{D9598030-E984-43AE-A9BD-E9D1C2D97E97}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipperGUI", "AssetRipperGUI\AssetRipperGUI.csproj", "{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}"
 EndProject
@@ -24,8 +22,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\AssetStudio.md = Licenses\AssetStudio.md
 		Licenses\uTinyRipper.md = Licenses\uTinyRipper.md
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipperConsole", "AssetRipperConsole\AssetRipperConsole.csproj", "{469C078E-8398-4628-AF0E-8B8B0472D7D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,32 +81,12 @@ Global
 		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x64.Build.0 = Virtual|x64
 		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x86.ActiveCfg = Virtual|x86
 		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x86.Build.0 = Virtual|x86
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Debug|x64.Build.0 = Debug|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Debug|x86.Build.0 = Debug|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Release|x64.ActiveCfg = Release|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Release|x64.Build.0 = Release|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Release|x86.ActiveCfg = Release|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Release|x86.Build.0 = Release|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Virtual|Any CPU.ActiveCfg = Debug|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Virtual|Any CPU.Build.0 = Debug|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Virtual|x64.ActiveCfg = Debug|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Virtual|x64.Build.0 = Debug|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Virtual|x86.ActiveCfg = Debug|Any CPU
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1}.Virtual|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{C9583270-6D3E-4CBF-8011-A818A7D8F3DC} = {D9598030-E984-43AE-A9BD-E9D1C2D97E97}
 		{56F5A3D3-3388-476F-9852-D531BE14A9F8} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
-		{469C078E-8398-4628-AF0E-8B8B0472D7D1} = {D9598030-E984-43AE-A9BD-E9D1C2D97E97}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ED4FF66B-4A6D-4440-8721-23C5ED09791C}

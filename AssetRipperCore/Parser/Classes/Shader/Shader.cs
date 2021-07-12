@@ -8,7 +8,6 @@ using AssetRipper.YAML;
 using AssetRipper.Converters;
 using AssetRipper.Converters.Shaders;
 using AssetRipper.Layout;
-using System.Linq;
 
 namespace AssetRipper.Classes
 {

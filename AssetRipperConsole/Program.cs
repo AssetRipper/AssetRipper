@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 #if !NET_CORE
 using System.ComponentModel;
 using System.Diagnostics;

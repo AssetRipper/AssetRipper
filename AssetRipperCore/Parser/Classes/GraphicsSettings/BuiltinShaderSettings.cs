@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using AssetRipper.YAML;
 using AssetRipper.Converters;
-using AssetRipper.Classes.Misc;
 
 namespace AssetRipper.Classes.GraphicsSettingss
 {

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using AssetRipper.Project;
 using AssetRipper.YAML;
-using AssetRipper.Classes.Objects;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
 
