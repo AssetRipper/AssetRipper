@@ -64,11 +64,7 @@ namespace AssetRipperConsole
 		{
 			get
 			{
-#if NET_CORE
 				return System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows);
-#else
-				return !RunetimeUtils.IsRunningOnMono;
-#endif
 			}
 		}
 	}
