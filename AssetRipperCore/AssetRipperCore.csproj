@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.5</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<AssemblyName>AssetRipperCore</AssemblyName>
+	<RootNamespace>AssetRipper</RootNamespace>
+	<Copyright>Copyright ©  2017</Copyright>
+	<Authors>mafaca</Authors>
+	<Configurations>Debug;Release;Virtual</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE;NET_STANDARD;UNIVERSAL</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <OutputPath>..\Bins\$(Configuration)\</OutputPath>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Virtual|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE;NET_STANDARD;VIRTUAL</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <OutputPath>..\Bins\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\Bins\$(Configuration)\</OutputPath>
+    <DefineConstants>TRACE;NET_STANDARD</DefineConstants>
+  </PropertyGroup>
+
+</Project>

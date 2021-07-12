@@ -1,14 +1,10 @@
-# uTinyRipper
-[![Download uTinyRipper](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/utinyripper/files)
+# AssetRipper
 
-[![Build status](https://ci.appveyor.com/api/projects/status/yd78hqp83f7vjkwb?svg=true)](https://ci.appveyor.com/project/mafaca/utinyripper)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/UtinyRipper/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+AssetRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*.assets*, *\*.sharedAssets*, etc.) and assets bundles (*\*.unity3d*, *\*.assetbundle*, etc.) and converting them into the native engine format.
 
-uTinyRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*.assets*, *\*.sharedAssets*, etc.) and assets bundles (*\*.unity3d*, *\*.assetbundle*, etc.) and converting them into native Engine format.
+Important note: This project is currently in an experimental state. Expect bugs and many changes.
 
-Important note: work on this project has been suspended. The Author is going to restart it from scratch, please redirect development and focus on other things. So don't waste your time on PRs, propositions or complex issues. The only exception is bug fixes.
-
-Supported versions: 1.x to 2019.x (since development is suspended, 2020.x or greater won't be supported)
+Current supported versions: 1.x to 2019.x (support for later versions is in progress)
 
 ## Export features
 * Scenes
@@ -42,11 +38,11 @@ Supported versions: 1.x to 2019.x (since development is suspended, 2020.x or gre
 
 ## Structure
 
-* *uTinyRipperCore*
+* *AssetRipperCore*
 
    Core library. It's designed as an single module without any third party dependencies.
    
-* *uTinyRipperGUI*
+* *AssetRipperGUI*
 
    Basic graphic interface application. It has some extra converters, so additionally it exports:
    * AudioClip .wav export
@@ -54,15 +50,14 @@ Supported versions: 1.x to 2019.x (since development is suspended, 2020.x or gre
    * Shader DirectX blob export
    * References to build-in Engine assets
    
-* *uTinyRipperConsole* and *uTinyRipperConsoleNETCore*
+* *AssetRipperConsole* and *AssetRipperConsoleNETCore*
 
    Sample console application which is designed to test Core library functionality.   
    It's a command line application. Drag and drop resource file(s) or/and folder(s) onto the .exe to retrieve the assets. It will then automaticly try to find resource dependencies, create a 'Ripped' folder and extract all supported assets into the created directory.
-   As this is a sample application, I'm not going to improve it in any way.
+   As this is a sample application, I'm might not improve it in any way, nor do I make any guarantees about its functionality.
 
 
-
-### Requirements:
+## Requirements:
 
 If you want to build a solution, you'll need:
 
@@ -79,3 +74,14 @@ If you want to run binary files, you need to install:
 
  \- [Unity 2017.3.0f3 or greater](https://unity3d.com/get-unity/download/archive) (NOTE: your editor version must be no less than the game's version)
  
+
+## Copyright Issues
+
+Please be aware that distributing the output from this software may be against copyright legislation in your jurisdiction. You are responsible for ensuring that you're not breaking any laws.
+
+
+## Credits
+
+This began as a fork of [mafaca](https://github.com/mafaca)'s [uTinyRipper](https://github.com/mafaca/UtinyRipper) project licensed under the MIT license.
+
+It has borrowed code from [Perfare](https://github.com/Perfare)'s [AssetStudio](https://github.com/Perfare/AssetStudio) project licensed under the MIT license.
