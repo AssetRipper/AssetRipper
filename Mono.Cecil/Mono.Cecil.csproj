@@ -1,26 +1,23 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>7.3</LangVersion>
-	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	  <AssemblyName>AssetRipperCore</AssemblyName>
-	  <RootNamespace>AssetRipper</RootNamespace>
-	  <Copyright>Copyright ©  2021</Copyright>
-	  <Authors>ds5678</Authors>
-	  <Configurations>Debug;Release;Virtual</Configurations>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AssemblyName>MonoCecil</AssemblyName>
+    <RootNamespace>Mono.Cecil</RootNamespace>
+    <Configurations>Debug;Release;Virtual</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE;NET_CORE;UNIVERSAL</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <OutputPath>..\Bins\AssetRipper\$(Configuration)\</OutputPath>
+    <OutputPath>..\Bins\MonoCecil\$(Configuration)\</OutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\Bins\AssetRipper\$(Configuration)\</OutputPath>
+    <OutputPath>..\Bins\MonoCecil\$(Configuration)\</OutputPath>
     <DefineConstants>TRACE;NET_CORE</DefineConstants>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
@@ -29,15 +26,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Virtual|AnyCPU'">
     <DefineConstants>DEBUG;TRACE;NET_CORE;VIRTUAL</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <OutputPath>..\Bins\AssetRipper\$(Configuration)\</OutputPath>
+    <OutputPath>..\Bins\MonoCecil\$(Configuration)\</OutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Brotli\Brotli.csproj" />
-    <ProjectReference Include="..\Mono.Cecil\Mono.Cecil.csproj" />
-    <ProjectReference Include="..\SevenZip\SevenZip.csproj" />
-  </ItemGroup>
 
 </Project>

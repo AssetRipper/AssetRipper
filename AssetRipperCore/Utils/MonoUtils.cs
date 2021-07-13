@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using AssetRipper.Game.Assembly.Mono;
+using Mono.Cecil.Extensions;
 
 namespace AssetRipper
 {

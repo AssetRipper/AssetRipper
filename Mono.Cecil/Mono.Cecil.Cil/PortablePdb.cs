@@ -24,7 +24,7 @@ namespace Mono.Cecil.Cil
 			Mixin.CheckModule (module);
 			Mixin.CheckFileName (fileName);
 
-			var file = AssetRipper.FileUtils.OpenRead (Mixin.GetPdbFileName (fileName));
+			var file = Extensions.FileUtils.OpenRead (Mixin.GetPdbFileName (fileName));
 			return GetSymbolReader (module, Disposable.Owned (file as Stream), file.Name);
 		}
 

@@ -56,7 +56,7 @@ namespace Mono.Cecil {
 		internal IMetadataScope scope;
 		internal ModuleDefinition module;
 
-		internal ElementType etype = ElementType.None;
+		public ElementType etype = ElementType.None;
 
 		string fullname;
 

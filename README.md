@@ -4,7 +4,7 @@ AssetRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*
 
 > Important note: This project is currently in an experimental state. Expect bugs and many changes.
 
-Current supported versions: 1.x to 2019.x (support for later versions is in progress)
+Current supported versions: `1.x` to `2019.x` (support for later versions is in progress)
 
 ## Export features
 * Scenes
@@ -103,6 +103,16 @@ Please be aware that distributing the output from this software may be against c
 This began as a fork of [mafaca](https://github.com/mafaca)'s [uTinyRipper](https://github.com/mafaca/UtinyRipper) project licensed under the MIT license.
 
 It has borrowed code from [Perfare](https://github.com/Perfare)'s [AssetStudio](https://github.com/Perfare/AssetStudio) project licensed under the MIT license.
+
+[Mono.Cecil](https://github.com/jbevain/cecil) is licensed under the MIT license.
+
+[Brotli](https://github.com/google/brotli) is licensed under the MIT license.
+
+[SpirV](https://github.com/Anteru/csspv) is licensed under the BSD 2-Clause license.
+
+[Lz4](https://github.com/lz4/lz4) is licensed under the MIT license and the BSD 2-Clause license.
+
+[Smolv](https://github.com/aras-p/smol-v) is licensed under the MIT license.
 
 
 ## Disclaimer

@@ -10,7 +10,7 @@
 
 namespace Mono.Cecil.Metadata {
 
-	enum ElementType : byte {
+	public enum ElementType : byte {
 		None = 0x00,
 		Void = 0x01,
 		Boolean = 0x02,
