@@ -26,13 +26,13 @@ namespace AssetRipperGUI.Windows
 			string innerMessage = ex.InnerException?.ToString();
 			Fill(DefaultGameName, ex.Version.ToString(), ex.Platform.ToString(), ex.FileName, ex.Message, innerMessage, ex.StackTrace);
 			AddHyperlink(ex.FileName, ex.FilePath);
-			SystemSounds.Beep.Play();
+			if(OperatingSystem.IsWindows()) SystemSounds.Beep.Play();
 		}
 
 		public void Fill(Exception ex)
 		{
 			Fill(DefaultGameName, DefaultVersion, DefaultPlatform, null, ex.Message, null, ex.StackTrace);
-			SystemSounds.Beep.Play();
+			if (OperatingSystem.IsWindows()) SystemSounds.Beep.Play();
 		}
 
 		private void Fill(string gameName, string version, string platform, string fileName, string message, string innerMessage, string stackTrace)

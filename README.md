@@ -78,7 +78,6 @@ If you want to run binary files, you need to install:
 ## To Do
  * Update Mono.Cecil
  * Replace third party code with Nuget Packages where possible
- * Otherwise, move third party code into separate projects/repositories
  * New Icon
  * Set up proper build actions
 

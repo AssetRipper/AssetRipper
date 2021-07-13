@@ -7,7 +7,7 @@ namespace AssetRipperConsole
 	{
 		public ConsoleLogger()
 		{
-			if (IsConsoleConfigAvailable)
+			if (OperatingSystem.IsWindows())
 			{
 				try
 				{
@@ -59,13 +59,5 @@ namespace AssetRipperConsole
 		}
 
 		public static ConsoleLogger Instance { get; } = new ConsoleLogger();
-
-		private static bool IsConsoleConfigAvailable
-		{
-			get
-			{
-				return System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows);
-			}
-		}
 	}
 }

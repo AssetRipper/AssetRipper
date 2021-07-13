@@ -28,17 +28,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\uTinyRipper.md = Licenses\uTinyRipper.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brotli", "Brotli\Brotli.csproj", "{DE764903-A3F8-4A04-80DF-BA487A26DF75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brotli", "Brotli\Brotli.csproj", "{DE764903-A3F8-4A04-80DF-BA487A26DF75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DXShaderRestorer", "DXShaderRestorer\DXShaderRestorer.csproj", "{CF2E94CC-82B3-4143-B793-1104AF161630}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DXShaderRestorer", "DXShaderRestorer\DXShaderRestorer.csproj", "{CF2E94CC-82B3-4143-B793-1104AF161630}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpirV", "SpirV\SpirV.csproj", "{EEC07247-C8CC-40F0-AD1A-C6780F01D659}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpirV", "SpirV\SpirV.csproj", "{EEC07247-C8CC-40F0-AD1A-C6780F01D659}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smolv", "Smolv\Smolv.csproj", "{17649F08-1065-4956-A810-A35A5C75E7E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smolv", "Smolv\Smolv.csproj", "{17649F08-1065-4956-A810-A35A5C75E7E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SevenZip", "SevenZip\SevenZip.csproj", "{313E4411-8805-4F58-A678-408803CC4B01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SevenZip", "SevenZip\SevenZip.csproj", "{313E4411-8805-4F58-A678-408803CC4B01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Cecil", "Mono.Cecil\Mono.Cecil.csproj", "{F05EDC94-CA68-403C-9811-B37FDF765E04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mono.Cecil", "Mono.Cecil\Mono.Cecil.csproj", "{F05EDC94-CA68-403C-9811-B37FDF765E04}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FMOD", "FMOD\FMOD.csproj", "{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -206,6 +208,21 @@ Global
 		{F05EDC94-CA68-403C-9811-B37FDF765E04}.Virtual|x64.Build.0 = Virtual|Any CPU
 		{F05EDC94-CA68-403C-9811-B37FDF765E04}.Virtual|x86.ActiveCfg = Virtual|Any CPU
 		{F05EDC94-CA68-403C-9811-B37FDF765E04}.Virtual|x86.Build.0 = Virtual|Any CPU
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Debug|x64.ActiveCfg = Debug|x64
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Debug|x64.Build.0 = Debug|x64
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Debug|x86.ActiveCfg = Debug|x86
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Debug|x86.Build.0 = Debug|x86
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Release|Any CPU.ActiveCfg = Release|x64
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Release|x64.ActiveCfg = Release|x64
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Release|x64.Build.0 = Release|x64
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Release|x86.ActiveCfg = Release|x86
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Release|x86.Build.0 = Release|x86
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Virtual|Any CPU.ActiveCfg = Virtual|x64
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Virtual|x64.ActiveCfg = Virtual|x64
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Virtual|x64.Build.0 = Virtual|x64
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Virtual|x86.ActiveCfg = Virtual|x86
+		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Virtual|x86.Build.0 = Virtual|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

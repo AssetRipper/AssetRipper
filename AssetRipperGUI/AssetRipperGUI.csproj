@@ -92,6 +92,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
     <ProjectReference Include="..\DXShaderRestorer\DXShaderRestorer.csproj" />
+    <ProjectReference Include="..\FMOD\FMOD.csproj" />
     <ProjectReference Include="..\Smolv\Smolv.csproj" />
     <ProjectReference Include="..\SpirV\SpirV.csproj" />
   </ItemGroup>
@@ -111,10 +112,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>crunchunity.dll</TargetPath>
     </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x86\fmod_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>fmod.dll</TargetPath>
-    </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x86\texgenpack_x86.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>texgenpack.dll</TargetPath>
@@ -132,10 +129,6 @@
     <ContentWithTargetPath Include="Libraries\x64\crunchunity_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>crunchunity.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x64\fmod_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>fmod.dll</TargetPath>
     </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -12,12 +12,15 @@ namespace AssetRipperGUI
 	{
 		public static void RestartAsAdministrator(string arguments)
 		{
-			WindowsIdentity identity = WindowsIdentity.GetCurrent();
-			WindowsPrincipal principal = new WindowsPrincipal(identity);
-			// is run as administrator?
-			if (principal.IsInRole(WindowsBuiltInRole.Administrator))
+			if (OperatingSystem.IsWindows())
 			{
-				return;
+				WindowsIdentity identity = WindowsIdentity.GetCurrent();
+				WindowsPrincipal principal = new WindowsPrincipal(identity);
+				// is run as administrator?
+				if (principal.IsInRole(WindowsBuiltInRole.Administrator))
+				{
+					return;
+				}
 			}
 
 			// try run as admin
@@ -50,6 +53,8 @@ namespace AssetRipperGUI
 
 		public static bool CheckAccess(string path)
 		{
+			if (!OperatingSystem.IsWindows()) return false;
+
 			WindowsIdentity identity = WindowsIdentity.GetCurrent();
 			WindowsPrincipal principal = new WindowsPrincipal(identity);
 			bool isInRoleWithAccess = true;
