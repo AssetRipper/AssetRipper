@@ -28,8 +28,8 @@ If applicable, paste your error message here.
 
 **Information (please complete the following information):**
  - OS: [e.g. Windows 10 Pro]
- - Release version [e.g. 0.1.0.0]
- - Unity version [e.g. 2019.4.3]
+ - Release version: [e.g. 0.1.0.0]
+ - Unity version: [e.g. 2019.4.3]
 
 **Additional context**
 Add any other context about the problem here.
