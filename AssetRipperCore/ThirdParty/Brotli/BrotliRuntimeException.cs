@@ -6,9 +6,7 @@ See file LICENSE for detail or copy at https://opensource.org/licenses/MIT
 namespace Brotli
 {
 	/// <summary>Unchecked exception used internally.</summary>
-#if !NET_STANDARD
 	[System.Serializable]
-#endif
 	internal class BrotliRuntimeException : System.Exception
 	{
 		internal BrotliRuntimeException(string message)

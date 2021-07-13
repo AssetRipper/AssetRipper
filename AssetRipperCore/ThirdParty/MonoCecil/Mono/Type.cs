@@ -11,7 +11,7 @@
 using System;
 using System.Reflection;
 
-#if NET_CORE || NET_STANDARD
+#if NET_CORE
 using System.Collections.Generic;
 #endif
 
@@ -42,7 +42,7 @@ namespace Mono {
 
 	static class TypeExtensions {
 
-#if NET_CORE || NET_STANDARD
+#if NET_CORE
 		private static readonly Dictionary<Type, TypeCode> TypeCodeMap = new Dictionary<Type, TypeCode>
 		{
 			{ typeof (bool), TypeCode.Boolean },
@@ -65,7 +65,7 @@ namespace Mono {
 
 		public static TypeCode GetTypeCode (this Type type)
 		{
-#if NET_CORE || NET_STANDARD
+#if NET_CORE
 			if (type == null)
 				return TypeCode.Empty;
 
@@ -81,8 +81,8 @@ namespace Mono {
 
 		public static Assembly Assembly (this Type type)
 		{
-#if NET_CORE || NET_STANDARD
-			return type.GetTypeInfo ().Assembly;
+#if NET_CORE
+			return type.GetTypeInfo().Assembly;
 #else
 			return type.Assembly;
 #endif
@@ -90,8 +90,8 @@ namespace Mono {
 
 		public static MethodBase DeclaringMethod (this Type type)
 		{
-#if NET_CORE || NET_STANDARD
-			return type.GetTypeInfo ().DeclaringMethod;
+#if NET_CORE
+			return type.GetTypeInfo().DeclaringMethod;
 #else
 			return type.DeclaringMethod;
 #endif
@@ -99,8 +99,8 @@ namespace Mono {
 
 		public static Type [] GetGenericArguments (this Type type)
 		{
-#if NET_CORE || NET_STANDARD
-			var info = type.GetTypeInfo ();
+#if NET_CORE
+			var info = type.GetTypeInfo();
 			return info.IsGenericTypeDefinition ? info.GenericTypeParameters : info.GenericTypeArguments;
 #else
 			return type.GetGenericArguments ();
@@ -109,8 +109,8 @@ namespace Mono {
 
 		public static bool IsGenericType (this Type type)
 		{
-#if NET_CORE || NET_STANDARD
-			return type.GetTypeInfo ().IsGenericType;
+#if NET_CORE
+			return type.GetTypeInfo().IsGenericType;
 #else
 			return type.IsGenericType;
 #endif
@@ -118,8 +118,8 @@ namespace Mono {
 
 		public static bool IsGenericTypeDefinition (this Type type)
 		{
-#if NET_CORE || NET_STANDARD
-			return type.GetTypeInfo ().IsGenericTypeDefinition;
+#if NET_CORE
+			return type.GetTypeInfo().IsGenericTypeDefinition;
 #else
 			return type.IsGenericTypeDefinition;
 #endif
@@ -127,8 +127,8 @@ namespace Mono {
 
 		public static bool IsValueType (this Type type)
 		{
-#if NET_CORE || NET_STANDARD
-			return type.GetTypeInfo ().IsValueType;
+#if NET_CORE
+			return type.GetTypeInfo().IsValueType;
 #else
 			return type.IsValueType;
 #endif

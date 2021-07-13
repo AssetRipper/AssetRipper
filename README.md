@@ -61,19 +61,24 @@ Current supported versions: 1.x to 2019.x (support for later versions is in prog
 
 If you want to build a solution, you'll need:
 
- \- .NET Framework 4.7.2 + .NET Core 2.0 SDK
+ \- [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0)
 
- \- Compiler with C# 7.3 syntax support (Visual Studio 2017)
+ \- Compiler with C# 9 syntax support, such as [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/)
 
 
 If you want to run binary files, you need to install:
 
- \- [.NET Framework 4.7.2](https://support.microsoft.com/en-us/help/4054530/microsoft-net-framework-4-7-2-offline-installer-for-windows)
+ \- [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0)
  
  \- [Microsoft Visual C++ 2015](https://www.microsoft.com/en-us/download/details.aspx?id=53840) Redistributables
 
  \- [Unity 2017.3.0f3 or greater](https://unity3d.com/get-unity/download/archive) (NOTE: your editor version must be no less than the game's version)
  
+
+## License
+
+AssetRipper is licensed under the GNU General Public License v3.0
+
 
 ## Copyright Issues
 

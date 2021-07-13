@@ -1,20 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}</ProjectGuid>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>AssetRipperGUI</RootNamespace>
     <AssemblyName>AssetRipper</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <Deterministic>true</Deterministic>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -30,34 +19,27 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <Platforms>x64;x86</Platforms>
+    <Configurations>Debug;Release;Virtual</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;WIN64</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;WIN64</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Virtual|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,41 +48,22 @@
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>..\Bins\$(Configuration)\$(Platform)\</OutputPath>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Virtual|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -108,182 +71,14 @@
     <DefineConstants>TRACE;DEBUG;VIRTUAL</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\URIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </ApplicationDefinition>
-    <Compile Include="Controls\FileView.xaml.cs">
-      <DependentUpon>FileView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\OutputView.xaml.cs">
-      <DependentUpon>OutputView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Exporters\Audio\AudioConverter.cs" />
-    <Compile Include="Exporters\Shader\DirectX\DXDataHeader.cs" />
-    <Compile Include="Exporters\Shader\DirectX\DXInputPrimitive.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ConstantBufferChunk.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ConstantBufferFlags.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ConstantBufferType.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\DXProgramType.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\DXShaderProgramRestorer.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ResourceBindingChunk.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ResourceChunk.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ResourceReturnType.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ShaderFlags.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ShaderGpuProgramTypeExtensions.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ShaderInputFlags.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ShaderInputType.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ShaderResourceViewDimension.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ShaderType.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ShaderTypeMember.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ShaderVariableClass.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ShaderVariableFlags.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\ShaderVariableType.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\Variable.cs" />
-    <Compile Include="ThirdParty\DXShaderRestorer\VariableChunk.cs" />
-    <Compile Include="Exporters\Shader\ShaderHLSLccExporter.cs" />
-    <Compile Include="Exporters\Shader\ShaderVulkanExporter.cs" />
-    <Compile Include="Exporters\Texture\TextureConverter.cs" />
-    <Compile Include="Exporters\Texture\Texture2DExtensions.cs" />
-    <Compile Include="Exporters\Texture\TextureFormatExtensions.cs" />
-    <Compile Include="OutputLogger.cs" />
-    <Compile Include="ThirdParty\CSspv\Disassembler.cs" />
-    <Compile Include="ThirdParty\CSspv\EnumValuesExtensions.cs" />
-    <Compile Include="ThirdParty\CSspv\Instruction.cs" />
-    <Compile Include="ThirdParty\CSspv\Module.cs" />
-    <Compile Include="ThirdParty\CSspv\OperandType.cs" />
-    <Compile Include="ThirdParty\CSspv\ParsedInstruction.cs" />
-    <Compile Include="ThirdParty\CSspv\Reader.cs" />
-    <Compile Include="ThirdParty\CSspv\SpirV.Core.Grammar.cs" />
-    <Compile Include="ThirdParty\CSspv\SpirV.Meta.cs" />
-    <Compile Include="ThirdParty\CSspv\Types.cs" />
-    <Compile Include="ThirdParty\D3DCompiler\D3DCompiler.cs" />
-    <Compile Include="ThirdParty\D3DCompiler\DotNetDxc.cs" />
-    <Compile Include="ThirdParty\FMOD Studio API\fmod.cs" />
-    <Compile Include="ThirdParty\FMOD Studio API\fmod_dsp.cs" />
-    <Compile Include="ThirdParty\FMOD Studio API\fmod_errors.cs" />
-    <Compile Include="ThirdParty\Smolv\OpData.cs" />
-    <Compile Include="ThirdParty\Smolv\SmolvDecoder.cs" />
-    <Compile Include="ThirdParty\Smolv\SpvOp.cs" />
-    <Compile Include="ThirdParty\Texture containers\ContainerType.cs" />
-    <Compile Include="ThirdParty\Texture containers\DDS\DDPFFlags.cs" />
-    <Compile Include="ThirdParty\Texture containers\DDS\DDSCaps2Flags.cs" />
-    <Compile Include="ThirdParty\Texture containers\DDS\DDSCapsFlags.cs" />
-    <Compile Include="ThirdParty\Texture containers\DDS\DDSContainer.cs" />
-    <Compile Include="ThirdParty\Texture containers\DDS\DDSContainerParameters.cs" />
-    <Compile Include="Exporters\Texture\TextureContainer.cs" />
-    <Compile Include="ThirdParty\Texture converters\AstcDecoder.cs" />
-    <Compile Include="ThirdParty\Texture containers\DDS\DDSDFlags.cs" />
-    <Compile Include="ThirdParty\Texture containers\DDS\DDSFourCCType.cs" />
-    <Compile Include="ThirdParty\Texture containers\DDS\DDSPixelFormat.cs" />
-    <Compile Include="ThirdParty\Texture containers\DDS\DXGIFormat.cs" />
-    <Compile Include="ThirdParty\Texture containers\KTX\KTXBaseInternalFormat.cs" />
-    <Compile Include="ThirdParty\Texture containers\KTX\KTXContainer.cs" />
-    <Compile Include="ThirdParty\Texture containers\KTX\KTXContainerParameters.cs" />
-    <Compile Include="ThirdParty\Texture containers\KTX\KTXFormat.cs" />
-    <Compile Include="ThirdParty\Texture containers\KTX\KTXInternalFormat.cs" />
-    <Compile Include="ThirdParty\Texture containers\KTX\KTXType.cs" />
-    <Compile Include="ThirdParty\Texture containers\PVR\PVRChannelType.cs" />
-    <Compile Include="ThirdParty\Texture containers\PVR\PVRColourSpace.cs" />
-    <Compile Include="ThirdParty\Texture containers\PVR\PVRContainer.cs" />
-    <Compile Include="ThirdParty\Texture containers\PVR\PVRContainerParameters.cs" />
-    <Compile Include="ThirdParty\Texture containers\PVR\PVRFlag.cs" />
-    <Compile Include="ThirdParty\Texture containers\PVR\PVRPixelFormat.cs" />
-    <Compile Include="ThirdParty\Texture converters\AtcDecoder.cs" />
-    <Compile Include="ThirdParty\Texture converters\DxtDecoder.cs" />
-    <Compile Include="ThirdParty\Texture converters\EtcDecoder.cs" />
-    <Compile Include="ThirdParty\Texture converters\PvrtcDecoder.cs" />
-    <Compile Include="ThirdParty\Texture converters\RgbConverter.cs" />
-    <Compile Include="ThirdParty\Texture converters\Yuy2Decoder.cs" />
-    <Compile Include="Utils\DirectBitmap.cs" />
-    <Compile Include="Utils\PermissionValidator.cs" />
-    <Compile Include="Windows\BugReportWindow.xaml.cs">
-      <DependentUpon>BugReportWindow.xaml</DependentUpon>
-    </Compile>
-    <Page Include="Controls\FileView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\OutputView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Exporters\Audio\AudioAssetExporter.cs" />
-    <Compile Include="Exporters\Audio\AudioExportCollection.cs" />
-    <Compile Include="Exporters\Shader\ShaderAssetExporter.cs" />
-    <Compile Include="Exporters\Shader\DirectX\ShaderDXExporter.cs" />
-    <Compile Include="Exporters\Texture\QFORMAT.cs" />
-    <Compile Include="Exporters\Texture\TexgenpackTexturetype.cs" />
-    <Compile Include="Exporters\Texture\TextureAssetExporter.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Windows\BugReportWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj">
-      <Project>{ca9420f4-4b54-4727-91e6-cce20916d795}</Project>
-      <Name>AssetRipperCore</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -340,5 +135,11 @@
     <Resource Include="Resources\URIcon.ico" />
     <Resource Include="Resources\alert-decagram-outline.png" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.233001">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+  </ItemGroup>
 </Project>

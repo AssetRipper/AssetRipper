@@ -1,7 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 
-namespace System
+namespace AssetRipper
 {
 	/// <summary>
 	/// Represents a half-precision floating point number. 

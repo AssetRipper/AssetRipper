@@ -372,7 +372,7 @@ namespace Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					double r = Clamp255(Math.Round(Half.ToHalf(sinput[0]) * 255f));
+					double r = Clamp255(Math.Round(AssetRipper.Half.ToHalf(sinput[0]) * 255f));
 					output[0] = 0;					// b
 					output[1] = 0;					// g
 					output[2] = Convert.ToByte(r);	// r
@@ -408,8 +408,8 @@ namespace Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					double r = Clamp255(Math.Round(Half.ToHalf(sinput[0]) * 255f));
-					double g = Clamp255(Math.Round(Half.ToHalf(sinput[1]) * 255f));
+					double r = Clamp255(Math.Round(AssetRipper.Half.ToHalf(sinput[0]) * 255f));
+					double g = Clamp255(Math.Round(AssetRipper.Half.ToHalf(sinput[1]) * 255f));
 					output[0] = 0;					// b
 					output[1] = Convert.ToByte(g);	// g
 					output[2] = Convert.ToByte(r);	// r
@@ -445,10 +445,10 @@ namespace Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					double r = Clamp255(Math.Round(Half.ToHalf(sinput[0]) * 255f));
-					double g = Clamp255(Math.Round(Half.ToHalf(sinput[1]) * 255f));
-					double b = Clamp255(Math.Round(Half.ToHalf(sinput[2]) * 255f));
-					double a = Clamp255(Math.Round(Half.ToHalf(sinput[3]) * 255f));
+					double r = Clamp255(Math.Round(AssetRipper.Half.ToHalf(sinput[0]) * 255f));
+					double g = Clamp255(Math.Round(AssetRipper.Half.ToHalf(sinput[1]) * 255f));
+					double b = Clamp255(Math.Round(AssetRipper.Half.ToHalf(sinput[2]) * 255f));
+					double a = Clamp255(Math.Round(AssetRipper.Half.ToHalf(sinput[3]) * 255f));
 					output[0] = Convert.ToByte(b);  // b
 					output[1] = Convert.ToByte(g);  // g
 					output[2] = Convert.ToByte(r);  // r

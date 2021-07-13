@@ -1,6 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
-namespace System
+namespace AssetRipper
 {
 	/// <summary>
 	/// Helper class for Half conversions and some low level operations.

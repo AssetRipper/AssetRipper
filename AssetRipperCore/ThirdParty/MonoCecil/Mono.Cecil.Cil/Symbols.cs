@@ -756,7 +756,7 @@ namespace Mono.Cecil.Cil {
 		ISymbolReader GetSymbolReader (ModuleDefinition module, Stream symbolStream);
 	}
 
-#if !NET_CORE && !NET_STANDARD
+#if !NET_CORE
 	[Serializable]
 #endif
 	public sealed class SymbolsNotFoundException : FileNotFoundException {
@@ -765,7 +765,7 @@ namespace Mono.Cecil.Cil {
 		{
 		}
 
-#if !NET_CORE && !NET_STANDARD
+#if !NET_CORE
 		SymbolsNotFoundException (
 			System.Runtime.Serialization.SerializationInfo info,
 			System.Runtime.Serialization.StreamingContext context)
@@ -775,7 +775,7 @@ namespace Mono.Cecil.Cil {
 #endif
 	}
 
-#if !NET_CORE && !NET_STANDARD
+#if !NET_CORE
 	[Serializable]
 #endif
 	public sealed class SymbolsNotMatchingException : InvalidOperationException {
@@ -784,7 +784,7 @@ namespace Mono.Cecil.Cil {
 		{
 		}
 
-#if !NET_CORE && !NET_STANDARD
+#if !NET_CORE
 		SymbolsNotMatchingException (
 			System.Runtime.Serialization.SerializationInfo info,
 			System.Runtime.Serialization.StreamingContext context)
