@@ -36,7 +36,11 @@
   <ItemGroup>
     <Compile Remove="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-
+  
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
+  </ItemGroup>
+  
   <ItemGroup>
     <None Remove="App.config" />
     <None Remove="App.manifest" />

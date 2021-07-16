@@ -3,14 +3,15 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <AssemblyName>FMOD_Library</AssemblyName>
-    <RootNamespace>FMOD</RootNamespace>
+    <AssemblyName>AssetRipperLibrary</AssemblyName>
+    <RootNamespace>AssetRipperLibrary</RootNamespace>
+    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <Platforms>x64;x86</Platforms>
     <Configurations>Debug;Release;Virtual</Configurations>
   </PropertyGroup>
-
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutputPath>..\Bins\FMOD\$(Configuration)\$(Platform)\</OutputPath>
+    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;WIN64</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -20,7 +21,7 @@
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>..\Bins\FMOD\$(Configuration)\$(Platform)\</OutputPath>
+    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;WIN64</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -29,7 +30,7 @@
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Virtual|x64' ">
-    <OutputPath>..\Bins\FMOD\$(Configuration)\$(Platform)\</OutputPath>
+    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;WIN64;VIRTUAL</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -41,7 +42,7 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>..\Bins\FMOD\$(Configuration)\$(Platform)\</OutputPath>
+    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -49,7 +50,7 @@
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\Bins\FMOD\$(Configuration)\$(Platform)\</OutputPath>
+    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -58,25 +59,22 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Virtual|x86' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\Bins\FMOD\$(Configuration)\$(Platform)\</OutputPath>
+    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;VIRTUAL</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
   </PropertyGroup>
-
-  <ItemGroup Condition=" '$(Platform)' == 'x86' ">
-    <ContentWithTargetPath Include="Libraries\x86\fmod_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>fmod.dll</TargetPath>
-    </ContentWithTargetPath>
+  
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(Platform)' == 'x64' ">
-    <ContentWithTargetPath Include="Libraries\x64\fmod_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>fmod.dll</TargetPath>
-    </ContentWithTargetPath>
+  
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -84,9 +82,37 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="obj\**" />
-    <EmbeddedResource Remove="obj\**" />
-    <None Remove="obj\**" />
+    <ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
+    <ProjectReference Include="..\FMOD\FMOD.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(Platform)' == 'x86' ">
+    <ContentWithTargetPath Include="Libraries\x86\crunch_x86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>crunch.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Libraries\x86\crunchunity_x86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>crunchunity.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Libraries\x86\texgenpack_x86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>texgenpack.dll</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Platform)' == 'x64' ">
+    <ContentWithTargetPath Include="Libraries\x64\crunch_x64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>crunch.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Libraries\x64\crunchunity_x64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>crunchunity.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>texgenpack.dll</TargetPath>
+    </ContentWithTargetPath>
   </ItemGroup>
   
 </Project>

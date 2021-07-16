@@ -42,19 +42,21 @@ Current supported versions: `1.x` to `2019.x` (support for later versions is in 
 
    Core library. It's designed as an single module without any third party dependencies.
    
-* *AssetRipperGUI*
+* *AssetRipperLibrary*
 
-   Basic graphic interface application. It has some extra converters, so additionally it exports:
+   This is an expansion library for AssetRipperCore. It includes some third party dependencies and has some extra converters, so it additionally exports:
    * AudioClip .wav export
    * Texture2D .png export (with Sprites)
-   * Shader DirectX blob export
    * References to build-in Engine assets
+
+* *AssetRipperGUI*
+
+   Basic graphic interface application utilizing the AssetRipperLibrary. Since it's Windows-only, it can also export:
+   * Shader DirectX blob export
    
 * *AssetRipperConsole*
 
-   Sample console application which is designed to test Core library functionality.   
-   It's a command line application. Drag and drop resource file(s) or/and folder(s) onto the .exe to retrieve the assets. It will then automaticly try to find resource dependencies, create a 'Ripped' folder and extract all supported assets into the created directory.
-   As this is a sample application, I might not improve it in any way, nor do I make any guarantees about its functionality.
+   This is intended to become a cross-platform command line application. Drag and drop resource file(s) or/and folder(s) onto the .exe to retrieve the assets. It will then automaticly try to find resource dependencies, create a 'Ripped' folder and extract all supported assets into the created directory.
 
 
 ## Requirements:
@@ -77,14 +79,18 @@ If you want to run binary files, you need to install:
 
 ## To Do
  * Update Mono.Cecil
- * Replace third party code with Nuget Packages where possible
+ * Some other third party projects need updated too
  * New Icon
  * Set up proper build actions
+ * Move more code from the GUI project to the Library project if possible
+ * Readme's describing the purpose of each subproject
 
-## Long-term Goals
+## Goals
  * IL2Cpp support
  * Unity 2020 and 2021 support
  * Dummy shader implementation
+ * Cross-Platform console application
+ * NAudio implementation for exporting other audio formats
 
 
 ## License

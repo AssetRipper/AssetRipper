@@ -42,6 +42,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mono.Cecil", "Mono.Cecil\Mo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FMOD", "FMOD\FMOD.csproj", "{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperLibrary", "AssetRipperLibrary\AssetRipperLibrary.csproj", "{36C3C081-547B-4C0C-98D0-BB90BA07B976}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -223,6 +225,21 @@ Global
 		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Virtual|x64.Build.0 = Virtual|x64
 		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Virtual|x86.ActiveCfg = Virtual|x86
 		{2D3F628E-CB89-416D-8DE6-AAF6C5D6A6B7}.Virtual|x86.Build.0 = Virtual|x86
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Debug|x64.ActiveCfg = Debug|x64
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Debug|x64.Build.0 = Debug|x64
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Debug|x86.ActiveCfg = Debug|x86
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Debug|x86.Build.0 = Debug|x86
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Release|Any CPU.ActiveCfg = Release|x64
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Release|x64.ActiveCfg = Release|x64
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Release|x64.Build.0 = Release|x64
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Release|x86.ActiveCfg = Release|x86
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Release|x86.Build.0 = Release|x86
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Virtual|Any CPU.ActiveCfg = Virtual|x64
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Virtual|x64.ActiveCfg = Virtual|x64
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Virtual|x64.Build.0 = Virtual|x64
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Virtual|x86.ActiveCfg = Virtual|x86
+		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Virtual|x86.Build.0 = Virtual|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -24,12 +24,16 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Virtual|AnyCPU'">
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;VIRTUAL</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <OutputPath>..\Bins\DXShaderRestorer\$(Configuration)\</OutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
+
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />

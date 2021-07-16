@@ -35,6 +35,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Brotli\Brotli.csproj" />
     <ProjectReference Include="..\Mono.Cecil\Mono.Cecil.csproj" />
     <ProjectReference Include="..\SevenZip\SevenZip.csproj" />

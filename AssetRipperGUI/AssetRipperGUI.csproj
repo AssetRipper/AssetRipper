@@ -27,6 +27,7 @@
     <Platforms>x64;x86</Platforms>
     <Configurations>Debug;Release;Virtual</Configurations>
   </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <OutputPath>..\Bins\AssetRipper\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;WIN64</DefineConstants>
@@ -57,45 +58,61 @@
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <OutputPath>..\Bins\AssetRipper\$(Configuration)\$(Platform)\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>..\Bins\AssetRipper\$(Configuration)\$(Platform)\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Virtual|x86' ">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\Bins\AssetRipper\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;VIRTUAL</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
+  
   <PropertyGroup>
     <ApplicationIcon>Resources\URIcon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="obj\**" />
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
     <Page Remove="obj\**" />
   </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
+    <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
     <ProjectReference Include="..\DXShaderRestorer\DXShaderRestorer.csproj" />
-    <ProjectReference Include="..\FMOD\FMOD.csproj" />
     <ProjectReference Include="..\Smolv\Smolv.csproj" />
     <ProjectReference Include="..\SpirV\SpirV.csproj" />
   </ItemGroup>
+  
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
@@ -103,46 +120,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup Condition=" '$(Platform)' == 'x86' ">
-    <ContentWithTargetPath Include="Libraries\x86\crunch_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>crunch.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x86\crunchunity_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>crunchunity.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x86\texgenpack_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>texgenpack.dll</TargetPath>
-    </ContentWithTargetPath>
-    <Reference Include="HLSLccWrapper_x86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\x86\HLSLccWrapper.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(Platform)' == 'x64' ">
-    <ContentWithTargetPath Include="Libraries\x64\crunch_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>crunch.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x64\crunchunity_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>crunchunity.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>texgenpack.dll</TargetPath>
-    </ContentWithTargetPath>
-    <Reference Include="HLSLccWrapper_x64, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\x64\HLSLccWrapper.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+  
   <ItemGroup>
     <Resource Include="Resources\URIcon.ico" />
     <Resource Include="Resources\alert-decagram-outline.png" />
   </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.233001">
@@ -150,4 +133,33 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(Platform)' == 'x86' ">
+    <Reference Include="HLSLccWrapper_x86, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\x86\HLSLccWrapper.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Platform)' == 'x64' ">
+    <Reference Include="HLSLccWrapper_x64, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\x64\HLSLccWrapper.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
