@@ -44,6 +44,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FMOD", "FMOD\FMOD.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperLibrary", "AssetRipperLibrary\AssetRipperLibrary.csproj", "{36C3C081-547B-4C0C-98D0-BB90BA07B976}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTester", "UnitTester\UnitTester.csproj", "{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -240,6 +242,24 @@ Global
 		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Virtual|x64.Build.0 = Virtual|x64
 		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Virtual|x86.ActiveCfg = Virtual|x86
 		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Virtual|x86.Build.0 = Virtual|x86
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Debug|x64.Build.0 = Debug|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Debug|x86.Build.0 = Debug|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Release|x64.ActiveCfg = Release|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Release|x64.Build.0 = Release|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Release|x86.ActiveCfg = Release|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Release|x86.Build.0 = Release|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Virtual|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Virtual|Any CPU.Build.0 = Debug|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Virtual|x64.ActiveCfg = Debug|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Virtual|x64.Build.0 = Debug|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Virtual|x86.ActiveCfg = Debug|Any CPU
+		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Virtual|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

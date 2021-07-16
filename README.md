@@ -84,6 +84,7 @@ If you want to run binary files, you need to install:
  * Set up proper build actions
  * Move more code from the GUI project to the Library project if possible
  * Readme's describing the purpose of each subproject
+ * Add some basic unit testing
 
 ## Goals
  * IL2Cpp support
