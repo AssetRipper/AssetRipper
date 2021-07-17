@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 	ProjectSection(SolutionItems) = preProject
 		Licenses\AssetStudio.md = Licenses\AssetStudio.md
 		Licenses\Brotli.md = Licenses\Brotli.md
+		Licenses\FMOD.md = Licenses\FMOD.md
 		Licenses\Lz4.md = Licenses\Lz4.md
 		Licenses\MonoCecil.md = Licenses\MonoCecil.md
 		Licenses\Smolv.md = Licenses\Smolv.md
