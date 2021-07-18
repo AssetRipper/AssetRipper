@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace Yuy2
+namespace AssetRipperLibrary.TextureDecoders.Yuy2
 {
 	public static class Yuy2Decoder
 	{

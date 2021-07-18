@@ -8,10 +8,10 @@ using AssetRipper.Classes.Textures;
 using AssetRipper.Converters;
 using AssetRipper.Project;
 using AssetRipper.SerializedFiles;
-
+using AssetRipperLibrary.Utils;
 using Object = AssetRipper.Classes.Object;
 
-namespace AssetRipperLibrary.Exporters
+namespace AssetRipperLibrary.Exporters.Texture
 {
 	public class TextureAssetExporter : IAssetExporter
 	{

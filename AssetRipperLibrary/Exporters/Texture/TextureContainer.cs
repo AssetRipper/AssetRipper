@@ -7,7 +7,7 @@ using AssetRipperLibrary.TextureContainers.DDS;
 using AssetRipperLibrary.TextureContainers.KTX;
 using AssetRipperLibrary.TextureContainers.PVR;
 
-namespace AssetRipperLibrary.Exporters
+namespace AssetRipperLibrary.Exporters.Texture
 {
 	public static class TextureContainer
 	{

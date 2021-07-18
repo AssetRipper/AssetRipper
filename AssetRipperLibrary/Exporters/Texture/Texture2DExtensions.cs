@@ -9,7 +9,7 @@ using KTXFormat = AssetRipperLibrary.TextureContainers.KTX.KTXInternalFormat;
 using KTXBaseFormat = AssetRipperLibrary.TextureContainers.KTX.KTXBaseInternalFormat;
 using PVRFormat = AssetRipperLibrary.TextureContainers.PVR.PVRPixelFormat;
 
-namespace AssetRipperLibrary.Exporters
+namespace AssetRipperLibrary.Exporters.Texture
 {
 	public static class Texture2DExtensions
 	{

@@ -10,7 +10,7 @@ using AssetRipper.SerializedFiles;
 
 using Object = AssetRipper.Classes.Object;
 
-namespace AssetRipperLibrary.Exporters
+namespace AssetRipperLibrary.Exporters.Audio
 {
 	public class AudioAssetExporter : IAssetExporter
 	{

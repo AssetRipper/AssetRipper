@@ -10,7 +10,8 @@ using AssetRipper.SerializedFiles;
 using AssetRipperGUI.Exporters;
 using AssetRipperGUI.Properties;
 using AssetRipperGUI.Windows;
-using AssetRipperLibrary.Exporters;
+using AssetRipperLibrary.Exporters.Audio;
+using AssetRipperLibrary.Exporters.Texture;
 using Object = AssetRipper.Classes.Object;
 using Version = AssetRipper.Version;
 

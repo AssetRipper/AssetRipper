@@ -1,6 +1,6 @@
 using System;
 
-namespace Rgb
+namespace AssetRipperLibrary.TextureDecoders.Rgb
 {
 	public static class RgbConverter
 	{

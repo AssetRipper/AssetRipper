@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace AssetRipperLibrary.Exporters
+namespace AssetRipperLibrary.Exporters.Audio
 {
 	public static class AudioConverter
 	{

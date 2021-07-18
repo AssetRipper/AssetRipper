@@ -1,19 +1,19 @@
-using Astc;
-using Atc;
-using Dxt;
-using Etc;
-using Pvrtc;
-using Rgb;
 using System;
 using System.Runtime.InteropServices;
 using AssetRipper.Classes;
 using AssetRipper.Classes.Textures;
 using AssetRipperLibrary.TextureContainers.KTX;
-using Yuy2;
-
+using AssetRipperLibrary.TextureDecoders.Astc;
+using AssetRipperLibrary.TextureDecoders.Atc;
+using AssetRipperLibrary.TextureDecoders.Dxt;
+using AssetRipperLibrary.TextureDecoders.Etc;
+using AssetRipperLibrary.TextureDecoders.Pvrtc;
+using AssetRipperLibrary.TextureDecoders.Rgb;
+using AssetRipperLibrary.TextureDecoders.Yuy2;
+using AssetRipperLibrary.Utils;
 using Version = AssetRipper.Version;
 
-namespace AssetRipperLibrary.Exporters
+namespace AssetRipperLibrary.Exporters.Texture
 {
 	public static class TextureConverter
 	{

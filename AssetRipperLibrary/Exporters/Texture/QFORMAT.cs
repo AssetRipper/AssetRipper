@@ -1,4 +1,4 @@
-﻿namespace AssetRipperLibrary.Exporters
+﻿namespace AssetRipperLibrary.Exporters.Texture
 {
 	public enum QFormat
 	{

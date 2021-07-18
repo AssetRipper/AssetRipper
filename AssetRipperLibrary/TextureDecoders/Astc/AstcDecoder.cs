@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace Astc
+namespace AssetRipperLibrary.TextureDecoders.Astc
 {
 	public static class AstcDecoder
 	{

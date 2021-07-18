@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace Etc
+namespace AssetRipperLibrary.TextureDecoders.Etc
 {
 	public static class EtcDecoder
 	{

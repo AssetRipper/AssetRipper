@@ -2,7 +2,7 @@ using AssetRipper.Project;
 using AssetRipper.Classes;
 using AssetRipper.Converters;
 
-namespace AssetRipperLibrary.Exporters
+namespace AssetRipperLibrary.Exporters.Audio
 {
 	public class AudioExportCollection : AssetExportCollection
 	{

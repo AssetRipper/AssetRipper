@@ -106,7 +106,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
     <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
     <ProjectReference Include="..\DXShaderRestorer\DXShaderRestorer.csproj" />
     <ProjectReference Include="..\Smolv\Smolv.csproj" />
