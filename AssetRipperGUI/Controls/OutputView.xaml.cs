@@ -1,5 +1,5 @@
-using System.Windows.Controls;
 using AssetRipper;
+using System.Windows.Controls;
 
 namespace AssetRipperGUI.Controls
 {
@@ -12,7 +12,8 @@ namespace AssetRipperGUI.Controls
 		{
 			InitializeComponent();
 
-			Logger.Instance = new OutputLogger(Textbox);
+			Logger.Add(new OutputLogger(Textbox));
+			Logger.Add(new FileLogger());
 		}
 
 		public void Clear()

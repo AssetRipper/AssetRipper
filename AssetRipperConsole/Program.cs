@@ -1,12 +1,8 @@
-#if DEBUG
-#define DEBUG_PROGRAM
-#endif
-
+using AssetRipper;
+using AssetRipper.Converters;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using AssetRipper;
-using AssetRipper.Converters;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipperConsole
@@ -20,7 +16,8 @@ namespace AssetRipperConsole
 
 		public static void Main(string[] args)
 		{
-			Logger.Instance = ConsoleLogger.Instance;
+			Logger.Add(new ConsoleLogger());
+			Logger.Add(new FileLogger());
 
 			if (args.Length == 0)
 			{
@@ -35,7 +32,7 @@ namespace AssetRipperConsole
 				{
 					continue;
 				}
-				if(DirectoryUtils.Exists(arg))
+				if (DirectoryUtils.Exists(arg))
 				{
 					continue;
 				}
@@ -53,7 +50,7 @@ namespace AssetRipperConsole
 
 		public void Load(IReadOnlyList<string> args)
 		{
-#if !DEBUG_PROGRAM
+#if !DEBUG
 			try
 #endif
 			{
@@ -80,14 +77,14 @@ namespace AssetRipperConsole
 				GameStructure.Export(exportPath, AssetSelector);
 				Logger.Log(LogType.Info, LogCategory.General, "Finished");
 			}
-#if !DEBUG_PROGRAM
-			catch(Exception ex)
+#if !DEBUG
+			catch (Exception ex)
 			{
 				Logger.Log(LogType.Error, LogCategory.General, ex.ToString());
 			}
 #endif
 		}
-		
+
 		private static void PrepareExportDirectory(string path)
 		{
 			if (DirectoryUtils.Exists(path))

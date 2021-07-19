@@ -1,5 +1,5 @@
-﻿using System;
-using AssetRipper;
+﻿using AssetRipper;
+using System;
 
 namespace AssetRipperConsole
 {
@@ -24,7 +24,7 @@ namespace AssetRipperConsole
 		public void Log(LogType type, LogCategory category, string message)
 		{
 #if !DEBUG
-			if(category == LogCategory.Debug)
+			if (category == LogCategory.Debug)
 			{
 				return;
 			}
@@ -57,7 +57,5 @@ namespace AssetRipperConsole
 			Console.BackgroundColor = backColor;
 			Console.ForegroundColor = foreColor;
 		}
-
-		public static ConsoleLogger Instance { get; } = new ConsoleLogger();
 	}
 }

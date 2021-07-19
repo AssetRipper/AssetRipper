@@ -1,16 +1,18 @@
+using AssetRipper;
 using System;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using AssetRipper;
 
 namespace AssetRipperGUI
 {
 	public sealed class OutputLogger : ILogger
 	{
+		private readonly TextBox m_textBox;
+
 		public OutputLogger(TextBox textBox)
 		{
-			if(textBox == null)
+			if (textBox == null)
 			{
 				throw new ArgumentNullException(nameof(textBox));
 			}
@@ -56,7 +58,5 @@ namespace AssetRipperGUI
 			m_textBox.AppendText(message);
 			m_textBox.AppendText(Environment.NewLine);
 		}
-
-		private readonly TextBox m_textBox;
 	}
 }
