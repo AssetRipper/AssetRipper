@@ -1,9 +1,9 @@
-﻿using System;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.Sprites;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System;
 
 namespace AssetRipper.Classes.TextureImporters
 {

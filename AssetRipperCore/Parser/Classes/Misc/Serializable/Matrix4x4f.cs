@@ -1,6 +1,6 @@
-using AssetRipper.YAML;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
+using AssetRipper.YAML;
 
 namespace AssetRipper.Classes
 {
@@ -45,7 +45,7 @@ namespace AssetRipper.Classes
 			writer.Write(E32);
 			writer.Write(E33);
 		}
-		
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();

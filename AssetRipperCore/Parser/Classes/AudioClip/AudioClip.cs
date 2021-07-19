@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using AssetRipper.Classes.AudioClips;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace AssetRipper.Classes
 {
@@ -467,7 +467,7 @@ namespace AssetRipper.Classes
 		/// <summary>
 		/// SoundType in some versions
 		/// </summary>
-		public FMODSoundType Type {get; private set; }
+		public FMODSoundType Type { get; private set; }
 		public float Length { get; set; }
 		public int Frequency { get; set; }
 		public int Size { get; set; }

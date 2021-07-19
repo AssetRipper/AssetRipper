@@ -73,7 +73,7 @@ namespace AssetRipper
 		}
 
 		public static KeyValuePair<T1, T2>[] ReadKVPTTArray<T1, T2>(this AssetReader reader)
-			where T1: IAssetReadable, new()
+			where T1 : IAssetReadable, new()
 			where T2 : IAssetReadable, new()
 		{
 			int count = reader.ReadInt32();

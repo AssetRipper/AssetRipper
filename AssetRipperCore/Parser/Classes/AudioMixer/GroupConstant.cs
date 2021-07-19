@@ -21,7 +21,7 @@ namespace AssetRipper.Classes.AudioMixers
 			Solo = reader.ReadBoolean();
 			BypassEffects = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

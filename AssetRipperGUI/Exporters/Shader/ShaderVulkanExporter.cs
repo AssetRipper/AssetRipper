@@ -1,10 +1,10 @@
+using AssetRipper;
+using AssetRipper.Classes.Shaders;
+using AssetRipper.Converters.Shaders;
 using Smolv;
 using SpirV;
 using System;
 using System.IO;
-using AssetRipper;
-using AssetRipper.Classes.Shaders;
-using AssetRipper.Converters.Shaders;
 
 namespace AssetRipperGUI.Exporters
 {

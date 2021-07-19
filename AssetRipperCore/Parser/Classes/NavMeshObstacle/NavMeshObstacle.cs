@@ -6,7 +6,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class NavMeshObstacle : Behaviour
 	{
-		public NavMeshObstacle(AssetInfo assetInfo):
+		public NavMeshObstacle(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

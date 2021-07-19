@@ -5,7 +5,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class OcclusionArea : Component
 	{
-		public OcclusionArea(AssetInfo assetInfo):
+		public OcclusionArea(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

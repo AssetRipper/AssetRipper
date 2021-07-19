@@ -1,6 +1,6 @@
-﻿using System.IO;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Classes.Shaders;
+using System.IO;
 
 namespace AssetRipper.Converters.Shaders
 {

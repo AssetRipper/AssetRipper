@@ -112,12 +112,12 @@ namespace AssetRipper.Classes.Lights
 		public float ConstantBias { get; set; }
 		public float ObjectSizeBias { get; set; }
 		public float Bias { get; set; }
-		public float Softness  { get; set; }
-		public float SoftnessFade  { get; set; }
+		public float Softness { get; set; }
+		public float SoftnessFade { get; set; }
 		public float NormalBias { get; set; }
 		public float NearPlane { get; set; }
 		public bool UseCullingMatrixOverride { get; set; }
-		
+
 		public const string TypeName = "m_Type";
 		public const string ResolutionName = "m_Resolution";
 		public const string CustomResolutionName = "m_CustomResolution";

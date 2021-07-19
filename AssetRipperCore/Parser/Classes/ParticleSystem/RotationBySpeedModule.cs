@@ -25,7 +25,7 @@ namespace AssetRipper.Classes.ParticleSystems
 				SeparateAxes = reader.ReadBoolean();
 				reader.AlignStream();
 			}
-			
+
 			Range.Read(reader);
 		}
 

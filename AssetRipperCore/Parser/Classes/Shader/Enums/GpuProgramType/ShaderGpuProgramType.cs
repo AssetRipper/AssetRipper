@@ -120,7 +120,7 @@ namespace AssetRipper.Classes.Shaders
 
 		public static GPUPlatform ToGPUPlatform(this ShaderGpuProgramType _this, Platform platform)
 		{
-			switch(_this)
+			switch (_this)
 			{
 				case ShaderGpuProgramType.Unknown:
 					return GPUPlatform.unknown;

@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.Layout.AnimationClips;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.AnimationClips
 {
 	public struct Vector3Curve : IAsset, IYAMLExportable
 	{
-		public Vector3Curve(Vector3Curve copy, IReadOnlyList<KeyframeTpl<Vector3f>> keyframes):
+		public Vector3Curve(Vector3Curve copy, IReadOnlyList<KeyframeTpl<Vector3f>> keyframes) :
 			this(copy.Path, keyframes)
 		{
 		}

@@ -1,7 +1,7 @@
+using AssetRipper;
 using AssetRipper.Classes.AvatarMasks;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper;
 
 namespace AssetRipper.Classes
 {

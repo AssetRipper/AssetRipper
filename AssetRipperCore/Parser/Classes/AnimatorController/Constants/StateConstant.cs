@@ -1,8 +1,8 @@
-using System;
-using AssetRipper.YAML;
-using AssetRipper.SerializedFiles;
-using AssetRipper.Converters;
 using AssetRipper.Classes.Misc;
+using AssetRipper.Converters;
+using AssetRipper.SerializedFiles;
+using AssetRipper.YAML;
+using System;
 
 namespace AssetRipper.Classes.AnimatorControllers
 {
@@ -153,7 +153,7 @@ namespace AssetRipper.Classes.AnimatorControllers
 					int clipIndex = -1;
 					if (HasLeafInfo(controller.File.Version))
 					{
-						for(int i = 0; i < LeafInfoArray.Length; i++)
+						for (int i = 0; i < LeafInfoArray.Length; i++)
 						{
 							LeafInfoConstant leafInfo = LeafInfoArray[i];
 							int index = leafInfo.IDArray.IndexOf(node.ClipID);
@@ -194,6 +194,6 @@ namespace AssetRipper.Classes.AnimatorControllers
 		public bool WriteDefaultValues { get; set; }
 		public bool Loop { get; set; }
 		public bool Mirror { get; set; }
-		
+
 	}
 }

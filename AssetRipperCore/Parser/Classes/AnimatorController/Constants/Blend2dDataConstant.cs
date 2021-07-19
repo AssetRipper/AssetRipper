@@ -1,6 +1,6 @@
-using System;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System;
 
 namespace AssetRipper.Classes.AnimatorControllers
 {

@@ -1,8 +1,8 @@
-using System;
-using System.Globalization;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
+using AssetRipper.YAML;
+using System;
+using System.Globalization;
 
 namespace AssetRipper.Classes
 {
@@ -47,7 +47,7 @@ namespace AssetRipper.Classes
 		{
 			return new Vector2f(left.X / right, left.Y / right);
 		}
-		
+
 		public static bool operator ==(Vector2f left, Vector2f right)
 		{
 			return left.X == right.X && left.Y == right.Y;
@@ -89,7 +89,7 @@ namespace AssetRipper.Classes
 			writer.Write(X);
 			writer.Write(Y);
 		}
-		
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();

@@ -5,7 +5,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class CapsuleCollider : Collider
 	{
-		public CapsuleCollider(AssetInfo assetInfo):
+		public CapsuleCollider(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -22,7 +22,7 @@ namespace AssetRipper.Classes
 			{
 				reader.AlignStream();
 			}
-			
+
 			Radius = reader.ReadSingle();
 			Height = reader.ReadSingle();
 			Direction = reader.ReadInt32();

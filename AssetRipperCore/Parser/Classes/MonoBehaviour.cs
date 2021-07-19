@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-using System.IO;
 using AssetRipper.Classes.Objects;
 using AssetRipper.Converters;
-using AssetRipper.SerializedFiles;
-using AssetRipper.YAML;
 using AssetRipper.Game.Assembly;
 using AssetRipper.Layout;
+using AssetRipper.SerializedFiles;
+using AssetRipper.YAML;
+using System.Collections.Generic;
+using System.IO;
 
 namespace AssetRipper.Classes
 {

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Classes.TerrainDatas;
+using System;
+using System.Linq;
 
 namespace AssetRipper.Converters.TerrainDatas
 {

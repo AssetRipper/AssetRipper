@@ -1,16 +1,16 @@
-using System.Collections.Generic;
+using AssetRipper;
+using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.QualitySettingss;
 using AssetRipper.Converters;
 using AssetRipper.SerializedFiles;
 using AssetRipper.YAML;
-using AssetRipper.Classes.Misc;
-using AssetRipper;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class QualitySettings : GlobalGameManager
 	{
-		public QualitySettings(AssetInfo assetInfo):
+		public QualitySettings(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 

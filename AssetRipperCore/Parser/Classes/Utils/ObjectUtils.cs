@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AssetRipper.Classes.Misc;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading;
-using AssetRipper.Classes.Misc;
 
 namespace AssetRipper.Classes
 {

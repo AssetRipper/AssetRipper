@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.ReflectionProbes;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class ReflectionProbe : Behaviour
 	{
-		public ReflectionProbe(AssetInfo assetInfo):
+		public ReflectionProbe(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -121,7 +121,7 @@ namespace AssetRipper.Classes
 				}
 			}
 			reader.AlignStream();
-			
+
 			if (HasCustomBakedTexture(reader.Version))
 			{
 				CustomBakedTexture.Read(reader);

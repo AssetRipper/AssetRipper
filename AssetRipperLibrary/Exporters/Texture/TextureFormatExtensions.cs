@@ -1,6 +1,6 @@
-using System;
 using AssetRipper.Classes.Textures;
 using AssetRipperLibrary.TextureContainers;
+using System;
 
 namespace AssetRipperLibrary.Exporters.Texture
 {

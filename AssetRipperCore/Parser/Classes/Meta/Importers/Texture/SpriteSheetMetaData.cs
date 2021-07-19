@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.Sprites;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
 using AssetRipper.YAML;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.TextureImporters
 {

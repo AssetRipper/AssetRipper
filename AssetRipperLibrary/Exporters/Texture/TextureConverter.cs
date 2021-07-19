@@ -1,5 +1,3 @@
-using System;
-using System.Runtime.InteropServices;
 using AssetRipper.Classes;
 using AssetRipper.Classes.Textures;
 using AssetRipperLibrary.TextureContainers.KTX;
@@ -11,6 +9,8 @@ using AssetRipperLibrary.TextureDecoders.Pvrtc;
 using AssetRipperLibrary.TextureDecoders.Rgb;
 using AssetRipperLibrary.TextureDecoders.Yuy2;
 using AssetRipperLibrary.Utils;
+using System;
+using System.Runtime.InteropServices;
 using Version = AssetRipper.Version;
 
 namespace AssetRipperLibrary.Exporters.Texture

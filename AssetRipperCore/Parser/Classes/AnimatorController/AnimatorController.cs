@@ -1,15 +1,15 @@
-using System.Collections.Generic;
-using AssetRipper.Project;
 using AssetRipper.Classes.AnimatorControllers;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.Project;
+using AssetRipper.YAML;
 using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class AnimatorController : RuntimeAnimatorController
 	{
-		public AnimatorController(AssetInfo assetsInfo):
+		public AnimatorController(AssetInfo assetsInfo) :
 			base(assetsInfo)
 		{
 		}
@@ -58,7 +58,7 @@ namespace AssetRipper.Classes
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			ControllerSize = reader.ReadUInt32();
 			Controller.Read(reader);
 			m_TOS.Clear();
@@ -79,7 +79,7 @@ namespace AssetRipper.Classes
 			{
 				MultiThreadedStateMachine = reader.ReadBoolean();
 			}
-			if(IsAlignMultiThreadedStateMachine(reader.Version))
+			if (IsAlignMultiThreadedStateMachine(reader.Version))
 			{
 				reader.AlignStream();
 			}
@@ -153,13 +153,13 @@ namespace AssetRipper.Classes
 			AnimatorControllerExportCollection collection = (AnimatorControllerExportCollection)container.CurrentCollection;
 
 			AnimatorControllerParameter[] @params = new AnimatorControllerParameter[Controller.Values.Instance.ValueArray.Length];
-			for(int i = 0; i < Controller.Values.Instance.ValueArray.Length; i++)
+			for (int i = 0; i < Controller.Values.Instance.ValueArray.Length; i++)
 			{
 				@params[i] = new AnimatorControllerParameter(this, i);
 			}
 
 			AnimatorControllerLayer[] layers = new AnimatorControllerLayer[Controller.LayerArray.Length];
-			for(int i = 0; i < Controller.LayerArray.Length; i++)
+			for (int i = 0; i < Controller.LayerArray.Length; i++)
 			{
 				int stateMachineIndex = Controller.LayerArray[i].Instance.StateMachineIndex;
 				AnimatorStateMachine stateMachine = collection.StateMachines[stateMachineIndex];

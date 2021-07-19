@@ -8,7 +8,7 @@ namespace AssetRipper.Classes
 	/// </summary>
 	public sealed class LightmapParameters : NamedObject
 	{
-		public LightmapParameters(AssetInfo assetInfo):
+		public LightmapParameters(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

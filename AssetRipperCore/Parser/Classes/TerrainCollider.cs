@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Converters;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class TerrainCollider : Collider
 	{
-		public TerrainCollider(AssetInfo assetInfo):
+		public TerrainCollider(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

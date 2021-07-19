@@ -1,6 +1,6 @@
+using AssetRipper;
 using System.IO;
 using System.Text;
-using AssetRipper;
 
 namespace AssetRipperLibrary.TextureContainers.PVR
 {
@@ -30,7 +30,7 @@ namespace AssetRipperLibrary.TextureContainers.PVR
 			ExportPVRHeader(destination, @params);
 			source.CopyStream(destination, @params.DataLength);
 		}
-		
+
 		private const int Version = 0x03525650;
 		private const PVRFlag Flags = PVRFlag.NoFlag;
 		private const PVRColourSpace ColourSpace = PVRColourSpace.LinearRGB;

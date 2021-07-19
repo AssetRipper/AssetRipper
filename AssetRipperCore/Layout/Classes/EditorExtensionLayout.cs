@@ -38,7 +38,7 @@ namespace AssetRipper.Layout
 				HasPrefabAsset = true;
 			}
 
-			CorrespondingSourceObjectInvariantName = HasCorrespondingSourceObject ?	CorrespondingSourceObjectName : PrefabParentObjectName;
+			CorrespondingSourceObjectInvariantName = HasCorrespondingSourceObject ? CorrespondingSourceObjectName : PrefabParentObjectName;
 			PrefabInstanceInvariantName = HasPrefabInstance ? PrefabInstanceName : PrefabInternalName;
 		}
 

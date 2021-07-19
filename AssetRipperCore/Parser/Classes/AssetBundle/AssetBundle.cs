@@ -1,15 +1,15 @@
+using AssetRipper.Classes.AssetBundles;
+using AssetRipper.Converters;
+using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssetRipper.Classes.AssetBundles;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
 
 namespace AssetRipper.Classes
 {
 	public sealed class AssetBundle : NamedObject
 	{
-		public AssetBundle(AssetInfo assetInfo):
+		public AssetBundle(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

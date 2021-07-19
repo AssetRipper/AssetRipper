@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters;
 using AssetRipper.Game.Assembly;
 using AssetRipper.Layout;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper
@@ -128,14 +127,14 @@ namespace AssetRipper
 
 		private void Load(List<string> pathes, LayoutInfo layinfo)
 		{
-			if (CheckPC(pathes)) {}
-			else if (CheckLinux(pathes)) {}
-			else if (CheckMac(pathes)) {}
-			else if (CheckAndroid(pathes)) {}
-			else if (CheckiOS(pathes)) {}
-			else if (CheckSwitch(pathes)) {}
-			else if (CheckWebGL(pathes)) {}
-			else if (CheckWebPlayer(pathes)) {}
+			if (CheckPC(pathes)) { }
+			else if (CheckLinux(pathes)) { }
+			else if (CheckMac(pathes)) { }
+			else if (CheckAndroid(pathes)) { }
+			else if (CheckiOS(pathes)) { }
+			else if (CheckSwitch(pathes)) { }
+			else if (CheckWebGL(pathes)) { }
+			else if (CheckWebPlayer(pathes)) { }
 			CheckMixed(pathes);
 
 			using (GameStructureProcessor processor = new GameStructureProcessor())

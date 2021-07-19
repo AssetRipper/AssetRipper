@@ -6,7 +6,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class CapsuleCollider2D : Collider2D
 	{
-		public CapsuleCollider2D(AssetInfo assetInfo):
+		public CapsuleCollider2D(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

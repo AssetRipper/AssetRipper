@@ -26,11 +26,11 @@ namespace SevenZip.Compression.LZ
 		const UInt32 kHash3Offset = kHash2Size;
 		const UInt32 kEmptyHashValue = 0;
 		const UInt32 kMaxValForNormalize = ((UInt32)1 << 31) - 1;
-	
+
 		UInt32 kNumHashDirectBytes = 0;
 		UInt32 kMinMatchCheck = 4;
 		UInt32 kFixHashSize = kHash2Size + kHash3Size;
-		
+
 		public void SetType(int numHashBytes)
 		{
 			HASH_ARRAY = (numHashBytes > 2);
@@ -50,7 +50,7 @@ namespace SevenZip.Compression.LZ
 
 		public new void SetStream(System.IO.Stream stream) { base.SetStream(stream); }
 		public new void ReleaseStream() { base.ReleaseStream(); }
-		
+
 		public new void Init()
 		{
 			base.Init();
@@ -82,7 +82,7 @@ namespace SevenZip.Compression.LZ
 			if (historySize > kMaxValForNormalize - 256)
 				throw new Exception();
 			_cutValue = 16 + (matchMaxLen >> 1);
-				
+
 			UInt32 windowReservSize = (historySize + keepAddBufferBefore +
 					matchMaxLen + keepAddBufferAfter) / 2 + 256;
 
@@ -183,7 +183,7 @@ namespace SevenZip.Compression.LZ
 
 			UInt32 len0, len1;
 			len0 = len1 = kNumHashDirectBytes;
-			
+
 			if (kNumHashDirectBytes != 0)
 			{
 				if (curMatch > matchMinPos)
@@ -196,12 +196,12 @@ namespace SevenZip.Compression.LZ
 					}
 				}
 			}
-			
+
 			UInt32 count = _cutValue;
-			
-			while(true)
+
+			while (true)
 			{
-				if(curMatch <= matchMinPos || count-- == 0)
+				if (curMatch <= matchMinPos || count-- == 0)
 				{
 					_son[ptr0] = _son[ptr1] = kEmptyHashValue;
 					break;
@@ -215,7 +215,7 @@ namespace SevenZip.Compression.LZ
 				UInt32 len = Math.Min(len0, len1);
 				if (_bufferBase[pby1 + len] == _bufferBase[cur + len])
 				{
-					while(++len != lenLimit)
+					while (++len != lenLimit)
 						if (_bufferBase[pby1 + len] != _bufferBase[cur + len])
 							break;
 					if (maxLen < len)

@@ -1,8 +1,8 @@
+using AssetRipper.Classes.NavMeshDatas;
+using AssetRipper.Converters;
+using AssetRipper.YAML;
 using System.Collections.Generic;
 using System.IO;
-using AssetRipper.Classes.NavMeshDatas;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
 
 namespace AssetRipper.Classes
 {
@@ -11,7 +11,7 @@ namespace AssetRipper.Classes
 	/// </summary>
 	public sealed class NavMeshData : NamedObject
 	{
-		public NavMeshData(AssetInfo assetInfo):
+		public NavMeshData(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

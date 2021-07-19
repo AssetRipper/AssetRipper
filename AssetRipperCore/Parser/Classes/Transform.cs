@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
+using AssetRipper.YAML;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public class Transform : Component
 	{
-		public Transform(AssetLayout layout):
+		public Transform(AssetLayout layout) :
 			base(layout)
 		{
 			Children = Array.Empty<PPtr<Transform>>();
@@ -64,7 +64,7 @@ namespace AssetRipper.Classes
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			LocalRotation.Read(reader);
 			LocalPosition.Read(reader);
 			LocalScale.Read(reader);

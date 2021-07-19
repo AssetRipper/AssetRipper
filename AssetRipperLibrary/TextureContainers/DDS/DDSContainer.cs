@@ -61,23 +61,23 @@ namespace AssetRipperLibrary.TextureContainers.DDS
 
 		public static void ExportDDS(BinaryReader sourceReader, Stream destination, DDSContainerParameters @params)
 		{
-			if(IsRGBA32(@params))
+			if (IsRGBA32(@params))
 			{
 				ExportRGBA32ToDDS(sourceReader, destination, @params);
 			}
-			else if(IsARGB32(@params))
+			else if (IsARGB32(@params))
 			{
 				ExportARGB32ToDDS(sourceReader, destination, @params);
 			}
-			else if(IsRGBA16(@params))
+			else if (IsRGBA16(@params))
 			{
 				ExportRGBA16ToDDS(sourceReader, destination, @params);
 			}
-			else if(IsAlpha8(@params))
+			else if (IsAlpha8(@params))
 			{
 				ExportAlpha8ToDDS(sourceReader, destination, @params);
 			}
-			else if(IsR8(@params))
+			else if (IsR8(@params))
 			{
 				ExportR8ToDDS(sourceReader, destination, @params);
 			}
@@ -301,7 +301,7 @@ namespace AssetRipperLibrary.TextureContainers.DDS
 		/// </summary>
 		private const uint MagicNumber = 0x20534444;
 		private const uint HeaderSize = 0x7C;
-		
+
 		private const DDSCaps2Flags Caps2 = 0;
 	}
 }

@@ -1,14 +1,13 @@
+using AssetRipper.Classes;
+using AssetRipper.Classes.Misc;
+using AssetRipper.Converters;
+using AssetRipper.Game.Assembly;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using AssetRipper.Classes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
-using AssetRipper.Game.Assembly;
-
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper.Project

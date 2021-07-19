@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Classes.EditorBuildSettingss;
 using AssetRipper.Converters;
 using AssetRipper.SerializedFiles;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace AssetRipper.Project
 {
@@ -157,7 +157,7 @@ namespace AssetRipper.Project
 				{
 					yield return NetworkManager;
 				}
-				if(Physics2DSettings != null)
+				if (Physics2DSettings != null)
 				{
 					yield return Physics2DSettings;
 				}

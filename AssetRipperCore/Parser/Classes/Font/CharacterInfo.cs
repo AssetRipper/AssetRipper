@@ -39,7 +39,7 @@ namespace AssetRipper.Classes.Fonts
 			}
 			UV.Read(reader);
 			Vert.Read(reader);
-			
+
 			if (HasWidth(reader.Version))
 			{
 				Width = reader.ReadSingle();
@@ -68,7 +68,7 @@ namespace AssetRipper.Classes.Fonts
 		}
 
 		public int Index { get; set; }
-		public float Width  { get; set; }
+		public float Width { get; set; }
 		public float Advance { get; set; }
 		public bool Flipped { get; set; }
 

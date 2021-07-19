@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using AssetRipper.YAML;
+﻿using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
-using AssetRipper.Classes.Misc;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
@@ -26,7 +26,7 @@ namespace AssetRipper.Classes
 			{
 				yield return asset;
 			}
-			
+
 			yield return context.FetchDependency(AudioMixer, AudioMixerName);
 		}
 

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper;
+using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Classes.Misc;
-using AssetRipper;
 using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.Shaders
 {
@@ -405,7 +405,7 @@ namespace AssetRipper.Classes.Shaders
 		public const string IsGLSLName = "m_IsGLSL";
 		public const string FromOtherName = "m_FromOther";
 		public const string ForceSyncCompilationName = "m_ForceSyncCompilation";
-		public const string LanguageName = "m_Language";		
+		public const string LanguageName = "m_Language";
 		public const string KeywordCombinations0Name = "m_KeywordCombinations[0]";
 		public const string KeywordCombinations1Name = "m_KeywordCombinations[1]";
 		public const string KeywordCombinations2Name = "m_KeywordCombinations[2]";

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Layout;
+using System.Collections.Generic;
 
 namespace AssetRipper
 {
@@ -14,7 +14,7 @@ namespace AssetRipper
 		}
 
 		public IEnumerable<PPtr<Object>> FetchDependencies<T>(T dependent, string name)
-			where T: IDependent
+			where T : IDependent
 		{
 			if (IsLog)
 			{

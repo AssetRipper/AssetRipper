@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using AssetRipper;
 using AssetRipper.Classes;
 using AssetRipper.Classes.AudioClips;
 using AssetRipper.Converters;
 using AssetRipper.Project;
 using AssetRipper.SerializedFiles;
-
+using System;
+using System.Collections.Generic;
+using System.IO;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipperLibrary.Exporters.Audio

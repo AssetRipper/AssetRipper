@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes.AudioSources;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
+﻿using AssetRipper.Classes.AudioSources;
 using AssetRipper.Classes.Misc;
+using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class AudioSource : AudioBehaviour
 	{
-		public AudioSource(AssetInfo assetInfo):
+		public AudioSource(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -102,7 +102,7 @@ namespace AssetRipper.Classes
 			{
 				reader.AlignStream();
 			}
-			
+
 			Volume = reader.ReadSingle();
 			if (HasMinVolume(reader.Version))
 			{

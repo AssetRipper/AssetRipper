@@ -79,7 +79,7 @@ namespace AssetRipper
 		{
 			IDictionaryReadEndianExtensions.Read(_this, reader);
 		}
-		
+
 		public static void Read(this IDictionary<Tuple<byte, byte>, float> _this, AssetReader reader)
 		{
 			IDictionaryReadEndianExtensions.Read(_this, reader);

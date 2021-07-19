@@ -9,7 +9,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		{
 		}
 
-		public InheritVelocityModule(float value):
+		public InheritVelocityModule(float value) :
 			base(value != 0.0f)
 		{
 			Curve = new MinMaxCurve(value);
@@ -18,7 +18,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			Mode = (InheritVelocityMode)reader.ReadInt32();
 			Curve.Read(reader);
 		}

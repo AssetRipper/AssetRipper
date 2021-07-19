@@ -43,7 +43,7 @@ namespace AssetRipper.Classes.AnimationClips
 		/// 5.5.0 and greater
 		/// </summary>
 		public static bool HasStartAtOrigin(Version version) => version.IsGreaterEqual(5, 5);
-		
+
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
@@ -117,12 +117,12 @@ namespace AssetRipper.Classes.AnimationClips
 			HeightFromFeet = reader.ReadBoolean();
 			reader.AlignStream();
 		}
-		
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			throw new System.NotImplementedException();
 		}
-		
+
 		public float StartTime { get; set; }
 		public float StopTime { get; set; }
 		public float OrientationOffsetY { get; set; }

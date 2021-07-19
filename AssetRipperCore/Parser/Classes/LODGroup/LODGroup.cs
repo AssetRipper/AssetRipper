@@ -1,13 +1,13 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.LODGroups;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class LODGroup : Component
 	{
-		public LODGroup(AssetInfo assetInfo):
+		public LODGroup(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

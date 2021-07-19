@@ -1,6 +1,6 @@
-﻿using System.IO;
-using AssetRipper;
+﻿using AssetRipper;
 using AssetRipper.Classes.Shaders;
+using System.IO;
 
 namespace AssetRipperGUI.Exporters
 {

@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-using AssetRipper.Project;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
+using AssetRipper.Project;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
@@ -13,7 +13,7 @@ namespace AssetRipper.Classes
 		{
 		}
 
-		protected EditorExtension(AssetInfo assetInfo):
+		protected EditorExtension(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

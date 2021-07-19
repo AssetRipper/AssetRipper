@@ -1,6 +1,6 @@
-﻿using System;
+﻿using AssetRipper.Lz4;
+using System;
 using System.IO;
-using AssetRipper.Lz4;
 
 namespace AssetRipper.BundleFiles
 {

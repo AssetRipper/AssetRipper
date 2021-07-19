@@ -1,9 +1,9 @@
+using AssetRipper;
+using AssetRipper.Classes;
 using AssetRipper.Classes.Meshes;
+using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Classes;
-using AssetRipper.Classes.Misc;
-using AssetRipper;
 
 namespace AssetRipper.Classes
 {

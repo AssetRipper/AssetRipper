@@ -1,7 +1,7 @@
-using System.IO;
-using System.Text;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.IO;
+using System.Text;
 
 namespace AssetRipper.Classes
 {
@@ -10,7 +10,7 @@ namespace AssetRipper.Classes
 	/// </summary>
 	public class TextAsset : NamedObject
 	{
-		public TextAsset(AssetInfo assetInfo):
+		public TextAsset(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

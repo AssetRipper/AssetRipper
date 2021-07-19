@@ -1,7 +1,7 @@
-﻿using SevenZip;
-using System.Collections.Generic;
+﻿using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Converters;
+using SevenZip;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.Materials
 {
@@ -64,7 +64,7 @@ namespace AssetRipper.Classes.Materials
 			m_floats.Read(reader);
 			m_colors.Read(reader);
 		}
-		
+
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();

@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using AssetRipper;
 using AssetRipper.Classes;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper.Game.Assembly

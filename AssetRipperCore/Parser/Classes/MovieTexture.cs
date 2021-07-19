@@ -1,13 +1,13 @@
-using System.Collections.Generic;
-using System.IO;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
+using System.IO;
 
 namespace AssetRipper.Classes
 {
 	public sealed class MovieTexture : BaseVideoTexture
 	{
-		public MovieTexture(AssetInfo assetInfo):
+		public MovieTexture(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

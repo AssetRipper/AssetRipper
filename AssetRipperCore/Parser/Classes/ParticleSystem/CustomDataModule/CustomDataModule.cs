@@ -26,7 +26,7 @@ namespace AssetRipper.Classes.ParticleSystems
 #endif
 
 			VectorComponentCount0 = 4;
-			Color1= new MinMaxGradient(true);
+			Color1 = new MinMaxGradient(true);
 			Vector1_0 = new MinMaxCurve(0.0f);
 			Vector1_1 = new MinMaxCurve(0.0f);
 			Vector1_2 = new MinMaxCurve(0.0f);
@@ -51,7 +51,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			Mode0 = (ParticleSystemCustomDataMode)reader.ReadInt32();
 			VectorComponentCount0 = reader.ReadInt32();
 			Color0.Read(reader);

@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
 using AssetRipper.Classes.Meshes;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Converters.Sprites;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.Sprites
 {

@@ -16,7 +16,7 @@
 				m_word2 = reader.ReadUInt32();
 			}
 		}
-		
+
 		public uint m_word0;
 		public uint m_word1;
 		public uint m_word2;

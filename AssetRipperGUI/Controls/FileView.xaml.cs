@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AssetRipper;
+using AssetRipper.SerializedFiles;
+using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
-using AssetRipper;
-using AssetRipper.SerializedFiles;
 
 namespace AssetRipperGUI.Controls
 {

@@ -5,7 +5,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class CircleCollider2D : Collider2D
 	{
-		public CircleCollider2D(AssetInfo assetInfo):
+		public CircleCollider2D(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

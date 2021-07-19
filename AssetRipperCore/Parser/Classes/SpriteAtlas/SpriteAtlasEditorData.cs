@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using AssetRipper.Classes.Textures;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.TextureImporters;
+using AssetRipper.Classes.Textures;
+using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.SpriteAtlases
 {

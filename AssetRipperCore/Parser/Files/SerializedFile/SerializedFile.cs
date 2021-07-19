@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using AssetRipper.Classes;
 using AssetRipper.Layout;
 using AssetRipper.SerializedFiles;
-
+using System;
+using System.Collections.Generic;
+using System.IO;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper
@@ -326,7 +325,7 @@ namespace AssetRipper
 #if !DEBUG
 			catch (Exception ex)
 			{
-					throw new SerializedFileException($"Error during reading of asset type {asset.ClassID}", ex, Version, Platform, asset.ClassID, Name, FilePath);
+				throw new SerializedFileException($"Error during reading of asset type {asset.ClassID}", ex, Version, Platform, asset.ClassID, Name, FilePath);
 			}
 #endif
 			long read = reader.BaseStream.Position - offset;

@@ -1,11 +1,11 @@
-﻿using System;
-using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Classes.Misc;
+using System;
 
 namespace AssetRipper
 {
 	public class AssetInfo
 	{
-		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID):
+		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID) :
 			this(serializedFile, pathID, classID, new UnityGUID(Guid.NewGuid()))
 		{
 		}
@@ -26,7 +26,7 @@ namespace AssetRipper
 		public ISerializedFile File { get; }
 
 		public long PathID { get; }
-		public ClassIDType ClassID  { get; }
+		public ClassIDType ClassID { get; }
 
 		public UnityGUID GUID;
 	}

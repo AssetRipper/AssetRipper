@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes.RenderSettingss;
-using AssetRipper.YAML;
+﻿using AssetRipper.Classes.RenderSettingss;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
@@ -10,7 +10,7 @@ namespace AssetRipper.Classes
 	/// </summary>
 	public sealed class RenderSettings : LevelGameManager
 	{
-		public RenderSettings(AssetInfo assetInfo):
+		public RenderSettings(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -153,7 +153,7 @@ namespace AssetRipper.Classes
 			{
 				reader.AlignStream();
 			}
-			
+
 			FogColor.Read(reader);
 			if (HasFogMode(reader.Version))
 			{
@@ -196,7 +196,7 @@ namespace AssetRipper.Classes
 			{
 				SubtractiveShadowColor.Read(reader);
 			}
-			
+
 			SkyboxMaterial.Read(reader);
 			HaloStrength = reader.ReadSingle();
 			FlareStrength = reader.ReadSingle();

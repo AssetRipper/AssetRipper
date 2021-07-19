@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
-
+using System;
+using System.Collections.Generic;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper.Project

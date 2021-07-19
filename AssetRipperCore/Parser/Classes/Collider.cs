@@ -1,12 +1,12 @@
-using System.Collections.Generic;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public abstract class Collider : Component
 	{
-		protected Collider(AssetInfo assetInfo):
+		protected Collider(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -43,14 +43,14 @@ namespace AssetRipper.Classes
 				reader.AlignStream();
 			}
 		}
-		
+
 		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
-			
+
 			yield return context.FetchDependency(Material, MaterialName);
 		}
 
@@ -73,7 +73,7 @@ namespace AssetRipper.Classes
 		{
 			base.Read(reader);
 		}
-		
+
 		public bool IsTrigger { get; set; }
 		public bool Enabled { get; protected set; }
 

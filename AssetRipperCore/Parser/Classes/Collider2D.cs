@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Converters;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public abstract class Collider2D : Behaviour
 	{
-		protected Collider2D(AssetInfo assetInfo):
+		protected Collider2D(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -53,14 +53,14 @@ namespace AssetRipper.Classes
 				Offset.Read(reader);
 			}
 		}
-		
+
 		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
-			
+
 			yield return context.FetchDependency(Material, MaterialName);
 		}
 

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using AssetRipper.YAML;
-using AssetRipper.Classes.Lights;
+﻿using AssetRipper.Classes.Lights;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.LightmapSettingss
 {
@@ -10,7 +10,7 @@ namespace AssetRipper.Classes.LightmapSettingss
 	/// </summary>
 	public struct LightmapEditorSettings : IAsset, IDependent
 	{
-		public LightmapEditorSettings(Version version):
+		public LightmapEditorSettings(Version version) :
 			this()
 		{
 #warning TODO:
@@ -1134,7 +1134,7 @@ namespace AssetRipper.Classes.LightmapSettingss
 		public int PVRFilteringGaussRadiusAO { get; set; }
 		public float PVRFilteringAtrousColorSigma { get; set; }
 		public float PVRFilteringAtrousNormalSigma { get; set; }
-		public float PVRFilteringAtrousPositionSigma { get; set; }		
+		public float PVRFilteringAtrousPositionSigma { get; set; }
 		public float PVRFilteringAtrousPositionSigmaDirect { get; set; }
 		public float PVRFilteringAtrousPositionSigmaIndirect { get; set; }
 		public float PVRFilteringAtrousPositionSigmaAO { get; set; }

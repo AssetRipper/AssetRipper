@@ -12,7 +12,7 @@ namespace AssetRipper.Classes
 			Enabled = 1;
 		}
 
-		protected Behaviour(AssetInfo assetInfo):
+		protected Behaviour(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

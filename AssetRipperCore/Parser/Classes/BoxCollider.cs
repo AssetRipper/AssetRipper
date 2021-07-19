@@ -5,7 +5,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class BoxCollider : Collider
 	{
-		public BoxCollider(AssetInfo assetInfo):
+		public BoxCollider(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -28,7 +28,7 @@ namespace AssetRipper.Classes
 			{
 				reader.AlignStream();
 			}
-			
+
 			Size.Read(reader);
 			Center.Read(reader);
 		}

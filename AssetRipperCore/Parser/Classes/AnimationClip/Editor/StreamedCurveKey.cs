@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Classes.Misc;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.AnimationClips
 {

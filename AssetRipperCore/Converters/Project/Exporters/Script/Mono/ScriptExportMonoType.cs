@@ -1,9 +1,9 @@
+using AssetRipper.Game;
+using AssetRipper.Game.Assembly.Mono;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using AssetRipper.Game;
-using AssetRipper.Game.Assembly.Mono;
 
 namespace AssetRipper.Converters.Script.Mono
 {

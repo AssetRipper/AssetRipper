@@ -1,6 +1,6 @@
-﻿using System;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Classes.TextureImporters;
+using System;
 
 namespace AssetRipper.Converters
 {

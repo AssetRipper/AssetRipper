@@ -7,7 +7,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class LightProbes : NamedObject
 	{
-		public LightProbes(AssetInfo assetInfo):
+		public LightProbes(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

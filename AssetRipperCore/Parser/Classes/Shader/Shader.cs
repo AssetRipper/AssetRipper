@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using AssetRipper.Classes.Materials;
 using AssetRipper.Classes.Shaders;
-using System.Text;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
 using AssetRipper.Converters.Shaders;
 using AssetRipper.Layout;
+using AssetRipper.YAML;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace AssetRipper.Classes
 {

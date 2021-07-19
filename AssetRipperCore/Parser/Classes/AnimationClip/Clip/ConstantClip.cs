@@ -6,7 +6,7 @@
 		{
 			Constants = reader.ReadSingleArray();
 		}
-		
+
 		public bool IsSet => Constants.Length > 0;
 
 		public float[] Constants { get; set; }

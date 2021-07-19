@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
+using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.Converters.Misc;
-using AssetRipper.Classes.Misc;
-using AssetRipper.YAML;
 using AssetRipper.Layout;
+using AssetRipper.YAML;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {

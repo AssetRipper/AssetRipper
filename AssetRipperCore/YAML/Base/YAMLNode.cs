@@ -28,7 +28,7 @@
 		public abstract YAMLNodeType NodeType { get; }
 		public abstract bool IsMultiline { get; }
 		public abstract bool IsIndent { get; }
-		
+
 		public string Tag
 		{
 			get => CustomTag.Content;

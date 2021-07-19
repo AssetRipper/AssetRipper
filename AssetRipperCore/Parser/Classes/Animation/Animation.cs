@@ -1,11 +1,11 @@
+using AssetRipper.Classes.AnimationClips;
+using AssetRipper.Classes.Animations;
+using AssetRipper.Converters;
+using AssetRipper.Layout;
+using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssetRipper.Classes.AnimationClips;
-using AssetRipper.Classes.Animations;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
-using AssetRipper.Layout;
 
 namespace AssetRipper.Classes
 {
@@ -135,7 +135,7 @@ namespace AssetRipper.Classes
 				}
 			}
 		}
-		
+
 		public bool IsContainsAnimationClip(AnimationClip clip)
 		{
 			foreach (PPtr<AnimationClip> clipPtr in Animations)
@@ -180,7 +180,7 @@ namespace AssetRipper.Classes
 			}
 			return node;
 		}
-		
+
 		public PPtr<AnimationClip>[] Animations { get; set; }
 		public Tuple<string, PPtr<AnimationClip>>[] AnimationsPaired { get; set; }
 		public WrapMode WrapMode { get; set; }

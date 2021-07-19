@@ -1,7 +1,7 @@
+using AssetRipper.Classes;
+using AssetRipper.Classes.Misc;
 using System;
 using System.Collections.Generic;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes;
 
 namespace AssetRipper.Converters
 {

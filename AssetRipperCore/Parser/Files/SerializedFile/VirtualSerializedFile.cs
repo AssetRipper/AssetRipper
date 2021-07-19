@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
 using AssetRipper.Classes;
 using AssetRipper.Game;
 using AssetRipper.Layout;
-
+using System;
+using System.Collections.Generic;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper.SerializedFiles
@@ -42,7 +41,7 @@ namespace AssetRipper.SerializedFiles
 
 		public Object FindAsset(int fileIndex, long pathID)
 		{
-			if(fileIndex == VirtualFileIndex)
+			if (fileIndex == VirtualFileIndex)
 			{
 				return FindAsset(pathID);
 			}
@@ -51,7 +50,7 @@ namespace AssetRipper.SerializedFiles
 
 		public Object FindAsset(ClassIDType classID)
 		{
-			foreach(Object asset in FetchAssets())
+			foreach (Object asset in FetchAssets())
 			{
 				if (asset.ClassID == classID)
 				{
@@ -68,7 +67,7 @@ namespace AssetRipper.SerializedFiles
 				if (asset.ClassID == classID)
 				{
 					NamedObject namedAsset = (NamedObject)asset;
-					if(namedAsset.ValidName == name)
+					if (namedAsset.ValidName == name)
 					{
 						return namedAsset;
 					}
@@ -91,7 +90,7 @@ namespace AssetRipper.SerializedFiles
 		public PPtr<T> CreatePPtr<T>(T asset)
 			where T : Object
 		{
-			if(asset.File == this)
+			if (asset.File == this)
 			{
 				return new PPtr<T>(VirtualFileIndex, asset.PathID);
 			}
@@ -104,7 +103,7 @@ namespace AssetRipper.SerializedFiles
 		}
 
 		public T CreateAsset<T>(Func<AssetInfo, T> instantiator)
-			where T: Object
+			where T : Object
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
 			AssetInfo assetInfo = new AssetInfo(this, ++m_nextId, classID);
@@ -124,7 +123,7 @@ namespace AssetRipper.SerializedFiles
 		public IFileCollection Collection => throw new NotSupportedException();
 		public IAssemblyManager AssemblyManager => throw new NotSupportedException();
 		public IReadOnlyList<FileIdentifier> Dependencies => throw new NotSupportedException();
-		
+
 		public const int VirtualFileIndex = -1;
 
 		private readonly Dictionary<long, Object> m_assets = new Dictionary<long, Object>();

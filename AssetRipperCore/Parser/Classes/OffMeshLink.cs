@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class OffMeshLink : Behaviour
 	{
-		public OffMeshLink(AssetInfo assetInfo):
+		public OffMeshLink(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -62,7 +62,7 @@ namespace AssetRipper.Classes
 			}
 			CostOverride = reader.ReadSingle();
 			reader.AlignStream();
-			
+
 			BiDirectional = reader.ReadBoolean();
 			Activated = reader.ReadBoolean();
 			if (HasAutoUpdatePositions(reader.Version))

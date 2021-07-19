@@ -1,10 +1,10 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.Sprites;
 using AssetRipper.Classes.TextureImporters;
 using AssetRipper.Classes.Textures;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
@@ -172,7 +172,7 @@ namespace AssetRipper.Classes
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasSprite(Version version) => version.IsGreaterEqual(4, 3);		
+		public static bool HasSprite(Version version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>

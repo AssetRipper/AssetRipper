@@ -1,6 +1,6 @@
-using SevenZip;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using SevenZip;
 
 namespace AssetRipper.Classes.Meshes
 {

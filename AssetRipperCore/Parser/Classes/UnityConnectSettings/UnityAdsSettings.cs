@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.UnityConnectSettingss
 {
 	public struct UnityAdsSettings : IAssetReadable, IYAMLExportable
 	{
-		public UnityAdsSettings(bool _):
+		public UnityAdsSettings(bool _) :
 			this()
 		{
 			InitializeOnStartup = true;
@@ -34,7 +34,7 @@ namespace AssetRipper.Classes.UnityConnectSettingss
 		/// 2017.1 and greater
 		/// </summary>
 		public static bool HasGameId(Version version) => version.IsGreaterEqual(2017);
-		
+
 		public void Read(AssetReader reader)
 		{
 			Enabled = reader.ReadBoolean();

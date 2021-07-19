@@ -11,7 +11,7 @@ namespace AssetRipper.Classes
 		{
 		}
 
-		public DefaultImporter(AssetInfo assetInfo):
+		public DefaultImporter(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

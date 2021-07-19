@@ -1,6 +1,6 @@
-﻿using SevenZip;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters;
 using AssetRipper.YAML;
+using SevenZip;
 
 namespace AssetRipper.Classes.Materials
 {
@@ -42,7 +42,7 @@ namespace AssetRipper.Classes.Materials
 
 		public override string ToString()
 		{
-			if(Value == null)
+			if (Value == null)
 			{
 				return base.ToString();
 			}

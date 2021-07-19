@@ -1,7 +1,7 @@
+using AssetRipper.Converters;
+using AssetRipper.YAML;
 using System.Collections.Generic;
 using System.IO;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
 
 namespace AssetRipper.Classes
 {
@@ -11,7 +11,7 @@ namespace AssetRipper.Classes
 			base(assetInfo)
 		{
 		}
-		
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);

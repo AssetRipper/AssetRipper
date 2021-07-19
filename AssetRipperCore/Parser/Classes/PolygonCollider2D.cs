@@ -7,7 +7,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class PolygonCollider2D : Collider2D
 	{
-		public PolygonCollider2D(AssetInfo assetInfo):
+		public PolygonCollider2D(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

@@ -1,14 +1,14 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.ParticleSystemRenderers;
 using AssetRipper.Classes.SpriteRenderers;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class ParticleSystemRenderer : Renderer
 	{
-		public ParticleSystemRenderer(AssetInfo assetInfo):
+		public ParticleSystemRenderer(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -84,7 +84,7 @@ namespace AssetRipper.Classes
 		/// 5.6.0 and greater
 		/// </summary>
 		public static bool HasVertexStreams(Version version) => version.IsGreaterEqual(5, 6);
-		
+
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
@@ -93,7 +93,7 @@ namespace AssetRipper.Classes
 		/// 2017.1.0b2 and greater
 		/// </summary>
 		public static bool HasMaskInteraction(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		
+
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
@@ -206,7 +206,7 @@ namespace AssetRipper.Classes
 			{
 				yield return asset;
 			}
-			
+
 			yield return context.FetchDependency(Mesh, MeshName);
 			if (HasMeshes(context.Version))
 			{

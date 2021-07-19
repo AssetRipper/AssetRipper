@@ -119,9 +119,9 @@ namespace AssetRipperLibrary.TextureDecoders.Pvrtc
 
 					// compute the modulated color. Swap red and blue channel
 					int position = (x + y * xDim) << 2;
-					output[position + 0] = (byte)((aSig[2] * 8 + mod * (bSig[2] -aSig[2])) >> 3);
-					output[position + 1] = (byte)((aSig[1] * 8 + mod * (bSig[1] -aSig[1])) >> 3);
-					output[position + 2] = (byte)((aSig[0] * 8 + mod * (bSig[0] -aSig[0])) >> 3);
+					output[position + 0] = (byte)((aSig[2] * 8 + mod * (bSig[2] - aSig[2])) >> 3);
+					output[position + 1] = (byte)((aSig[1] * 8 + mod * (bSig[1] - aSig[1])) >> 3);
+					output[position + 2] = (byte)((aSig[0] * 8 + mod * (bSig[0] - aSig[0])) >> 3);
 					output[position + 3] = doPT ? (byte)0 : (byte)((aSig[3] * 8 + mod * (bSig[3] - aSig[3])) >> 3);
 				}
 			}

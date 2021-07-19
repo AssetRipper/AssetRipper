@@ -62,7 +62,7 @@ namespace AssetRipper
 
 			foreach (DirectoryInfo dinfo in payloadDirectory.EnumerateDirectories())
 			{
-				if(dinfo.Name.EndsWith(AppExtension, StringComparison.Ordinal))
+				if (dinfo.Name.EndsWith(AppExtension, StringComparison.Ordinal))
 				{
 					appName = dinfo.Name.Substring(0, dinfo.Name.Length - AppExtension.Length);
 					dataPath = Path.Combine(dinfo.FullName, DataFolderName);

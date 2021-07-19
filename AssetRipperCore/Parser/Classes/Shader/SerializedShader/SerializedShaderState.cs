@@ -66,7 +66,7 @@ namespace AssetRipper.Classes.Shaders
 				writer.Write("LOD {0}\n", LOD);
 			}
 			Tags.Export(writer, 3);
-			
+
 			RtBlend0.Export(writer, RtSeparateBlend ? 0 : -1);
 			RtBlend1.Export(writer, 1);
 			RtBlend2.Export(writer, 2);
@@ -112,42 +112,42 @@ namespace AssetRipper.Classes.Shaders
 			{
 				writer.WriteIndent(3);
 				writer.Write("Stencil {\n");
-				if(!StencilRef.IsZero)
+				if (!StencilRef.IsZero)
 				{
 					writer.WriteIndent(4);
 					writer.Write("Ref {0}\n", StencilRef.Val);
 				}
-				if(!StencilReadMask.IsMax)
+				if (!StencilReadMask.IsMax)
 				{
 					writer.WriteIndent(4);
 					writer.Write("ReadMask {0}\n", StencilReadMask.Val);
 				}
-				if(!StencilWriteMask.IsMax)
+				if (!StencilWriteMask.IsMax)
 				{
 					writer.WriteIndent(4);
 					writer.Write("WriteMask {0}\n", StencilWriteMask.Val);
 				}
-				if(!StencilOp.IsDefault)
+				if (!StencilOp.IsDefault)
 				{
 					StencilOp.Export(writer, StencilType.Base);
 				}
-				if(!StencilOpFront.IsDefault)
+				if (!StencilOpFront.IsDefault)
 				{
 					StencilOpFront.Export(writer, StencilType.Front);
 				}
-				if(!StencilOpBack.IsDefault)
+				if (!StencilOpBack.IsDefault)
 				{
 					StencilOpBack.Export(writer, StencilType.Back);
 				}
 				writer.WriteIndent(3);
 				writer.Write("}\n");
 			}
-			
-			if(!FogMode.IsUnknown() || !FogColor.IsZero || !FogDensity.IsZero || !FogStart.IsZero || !FogEnd.IsZero)
+
+			if (!FogMode.IsUnknown() || !FogColor.IsZero || !FogDensity.IsZero || !FogStart.IsZero || !FogEnd.IsZero)
 			{
 				writer.WriteIndent(3);
 				writer.Write("Fog {\n");
-				if(!FogMode.IsUnknown())
+				if (!FogMode.IsUnknown())
 				{
 					writer.WriteIndent(4);
 					writer.Write("Mode {0}\n", FogMode);
@@ -166,7 +166,7 @@ namespace AssetRipper.Classes.Shaders
 					writer.WriteIndent(4);
 					writer.Write("Density {0}\n", FogDensity.Val.ToString(CultureInfo.InvariantCulture));
 				}
-				if (!FogStart.IsZero ||!FogEnd.IsZero)
+				if (!FogStart.IsZero || !FogEnd.IsZero)
 				{
 					writer.WriteIndent(4);
 					writer.Write("Range {0}, {1}\n",
@@ -177,7 +177,7 @@ namespace AssetRipper.Classes.Shaders
 				writer.Write("}\n");
 			}
 
-			if(Lighting)
+			if (Lighting)
 			{
 				writer.WriteIndent(3);
 				writer.Write("Lighting {0}\n", LightingValue);

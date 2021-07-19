@@ -4,7 +4,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class Flare : NamedObject
 	{
-		public Flare(AssetInfo assetInfo):
+		public Flare(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

@@ -27,7 +27,7 @@ namespace AssetRipper.Classes.Meshes
 		/// 2017.3 and greater
 		/// </summary>
 		public static bool HasBaseVertex(Version version) => version.IsGreaterEqual(2017, 3);
-		
+
 		public void Read(AssetReader reader)
 		{
 			FirstByte = (int)reader.ReadUInt32();

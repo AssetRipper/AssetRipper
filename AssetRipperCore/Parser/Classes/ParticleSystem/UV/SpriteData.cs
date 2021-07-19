@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Converters;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.ParticleSystems
 {
@@ -10,7 +10,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		{
 			Sprite.Read(reader);
 		}
-		
+
 		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Sprite, SpriteName);

@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using AssetRipper.Converters;
 using AssetRipper.Layout.AnimationClips;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.AnimationClips
 {

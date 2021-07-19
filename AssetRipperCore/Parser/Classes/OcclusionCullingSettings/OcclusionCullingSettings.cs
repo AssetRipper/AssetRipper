@@ -1,9 +1,9 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.OcclusionCullingSettingses;
 using AssetRipper.Converters;
 using AssetRipper.Project;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {

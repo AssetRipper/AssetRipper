@@ -6,7 +6,7 @@ namespace AssetRipper.Classes
 {
 	public abstract class NamedObject : EditorExtension
 	{
-		protected NamedObject(AssetLayout layout):
+		protected NamedObject(AssetLayout layout) :
 			base(layout)
 		{
 			Name = string.Empty;

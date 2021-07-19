@@ -1,14 +1,14 @@
-using System.Collections.Generic;
+using AssetRipper;
 using AssetRipper.Classes.TagManagers;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class TagManager : GlobalGameManager
 	{
-		public TagManager(AssetInfo assetInfo):
+		public TagManager(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -45,7 +45,7 @@ namespace AssetRipper.Classes
 			if (IsStaticArray(reader.Version))
 			{
 				Layers = new string[32];
-				for(int i = 0; i < Layers.Length; i++)
+				for (int i = 0; i < Layers.Length; i++)
 				{
 					Layers[i] = reader.ReadString();
 				}

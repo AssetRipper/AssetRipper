@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Converters;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.ParticleSystems
 {
@@ -19,7 +19,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			CollisionShape0.Read(reader);
 			CollisionShape1.Read(reader);
 			CollisionShape2.Read(reader);

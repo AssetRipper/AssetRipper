@@ -2,8 +2,8 @@ using System.Runtime.CompilerServices;
 
 namespace AssetRipperLibrary.TextureDecoders.Dxt
 {
-    public static class DxtDecoder
-    {
+	public static class DxtDecoder
+	{
 		public unsafe static void DecompressDXT1(byte[] input, int width, int height, byte[] output)
 		{
 			fixed (byte* inputPtr = input)
@@ -282,8 +282,8 @@ namespace AssetRipperLibrary.TextureDecoders.Dxt
 			c[1] = Color(r1, g1, b1);
 			if (q0 > q1)
 			{
-				c[2] = Color((r0* 2 + r1) / 3, (g0* 2 + g1) / 3, (b0* 2 + b1) / 3);
-				c[3] = Color((r0 + r1* 2) / 3, (g0 + g1* 2) / 3, (b0 + b1* 2) / 3);
+				c[2] = Color((r0 * 2 + r1) / 3, (g0 * 2 + g1) / 3, (b0 * 2 + b1) / 3);
+				c[3] = Color((r0 + r1 * 2) / 3, (g0 + g1 * 2) / 3, (b0 + b1 * 2) / 3);
 			}
 			else
 			{

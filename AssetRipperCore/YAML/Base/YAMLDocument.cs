@@ -26,10 +26,10 @@
 			Root = root;
 			return root;
 		}
-		
+
 		internal void Emit(Emitter emitter, bool isSeparator)
 		{
-			if(isSeparator)
+			if (isSeparator)
 			{
 				emitter.Write("---").WriteWhitespace();
 			}

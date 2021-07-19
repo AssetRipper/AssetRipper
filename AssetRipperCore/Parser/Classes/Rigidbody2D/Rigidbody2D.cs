@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes.Rigidbody2Ds;
-using AssetRipper.YAML;
+﻿using AssetRipper.Classes.Rigidbody2Ds;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class Rigidbody2D : Component
 	{
-		public Rigidbody2D(AssetInfo assetInfo):
+		public Rigidbody2D(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -67,7 +67,7 @@ namespace AssetRipper.Classes
 				UseAutoMass = reader.ReadBoolean();
 				reader.AlignStream();
 			}
-			
+
 			Mass = reader.ReadSingle();
 			LinearDrag = reader.ReadSingle();
 			AngularDrag = reader.ReadSingle();
@@ -91,7 +91,7 @@ namespace AssetRipper.Classes
 				CollisionDetection = (CollisionDetectionMode2D)reader.ReadByte();
 				reader.AlignStream();
 			}
-			
+
 			if (HasInterpolate(reader.Version))
 			{
 				Interpolate = (RigidbodyInterpolation2D)reader.ReadInt32();
@@ -103,17 +103,17 @@ namespace AssetRipper.Classes
 				Constraints = (RigidbodyConstraints2D)reader.ReadInt32();
 			}
 		}
-		
+
 		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			foreach (PPtr<Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
-			
+
 			yield return context.FetchDependency(Material, MaterialName);
 		}
-		
+
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
@@ -138,7 +138,7 @@ namespace AssetRipper.Classes
 		public bool Simulated { get; set; }
 		public bool UseFullKinematicContacts { get; set; }
 		public bool UseAutoMass { get; set; }
-		public float Mass  { get; set; }
+		public float Mass { get; set; }
 		public float LinearDrag { get; set; }
 		public float AngularDrag { get; set; }
 		public float GravityScale { get; set; }

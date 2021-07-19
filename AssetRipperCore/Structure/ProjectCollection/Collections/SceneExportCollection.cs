@@ -1,14 +1,13 @@
+using AssetRipper.Classes;
+using AssetRipper.Classes.Misc;
+using AssetRipper.Converters;
+using AssetRipper.SerializedFiles;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using AssetRipper.Classes;
-using AssetRipper.Converters;
-using AssetRipper.SerializedFiles;
-
 using Object = AssetRipper.Classes.Object;
-using AssetRipper.Classes.Misc;
 
 namespace AssetRipper.Project
 {
@@ -156,7 +155,7 @@ namespace AssetRipper.Project
 		{
 			return IsComponent(asset) ? m_cexportIDs[asset.AssetInfo] : GetMainExportID(asset);
 		}
-		
+
 		public override MetaPtr CreateExportPointer(Object asset, bool isLocal)
 		{
 			long exportID = GetExportID(asset);
@@ -168,7 +167,7 @@ namespace AssetRipper.Project
 			{
 				UnityGUID guid = IsComponent(asset) ? GUID : asset.GUID;
 				return new MetaPtr(exportID, guid, AssetType.Serialized);
-			}				
+			}
 		}
 
 		public int Compare(Object obj1, Object obj2)

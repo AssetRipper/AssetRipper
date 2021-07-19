@@ -1,5 +1,5 @@
-﻿using System.IO;
-using AssetRipper.WebFiles;
+﻿using AssetRipper.WebFiles;
+using System.IO;
 
 namespace AssetRipper
 {
@@ -20,7 +20,7 @@ namespace AssetRipper
 			}
 		}
 
-	 	public static bool IsWebFile(Stream stream)
+		public static bool IsWebFile(Stream stream)
 		{
 			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
 			{
@@ -45,7 +45,7 @@ namespace AssetRipper
 		{
 			return WebFileScheme.ReadScheme(stream, filePath);
 		}
-		
+
 		public WebHeader Header { get; }
 		public WebMetadata Metadata { get; }
 	}

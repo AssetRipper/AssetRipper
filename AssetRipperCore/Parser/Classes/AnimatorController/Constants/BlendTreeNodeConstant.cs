@@ -1,9 +1,9 @@
-using System;
-using System.Linq;
 using AssetRipper.Classes.BlendTrees;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System;
+using System.Linq;
 
 namespace AssetRipper.Classes.AnimatorControllers
 {
@@ -37,7 +37,7 @@ namespace AssetRipper.Classes.AnimatorControllers
 		/// 4.1.3 and greater
 		/// </summary>
 		public static bool HasCycleOffset(Version version) => version.IsGreaterEqual(4, 1, 3);
-		
+
 		public void Read(AssetReader reader)
 		{
 			if (HasBlendType(reader.Version))
@@ -84,7 +84,7 @@ namespace AssetRipper.Classes.AnimatorControllers
 		{
 			throw new NotSupportedException();
 		}
-		
+
 		public PPtr<Motion> CreateMotion(AnimatorController controller, int clipIndex)
 		{
 			if (clipIndex == -1)
@@ -101,7 +101,7 @@ namespace AssetRipper.Classes.AnimatorControllers
 		{
 			if (HasBlendData(version))
 			{
-				if(BlendType == BlendTreeType.Simple1D)
+				if (BlendType == BlendTreeType.Simple1D)
 				{
 					return Blend1dData.Instance.ChildThresholdArray[index];
 				}
@@ -125,26 +125,26 @@ namespace AssetRipper.Classes.AnimatorControllers
 		{
 			if (HasBlendData(version))
 			{
-				if(BlendType == BlendTreeType.Simple1D)
+				if (BlendType == BlendTreeType.Simple1D)
 				{
 					return Blend1dData.Instance.ChildThresholdArray.Max();
 				}
 			}
 			return 1.0f;
 		}
-		
+
 		public uint GetDirectBlendParameter(Version version, int index)
 		{
 			if (HasBlendDirectData(version))
 			{
-				if(BlendType == BlendTreeType.Direct)
+				if (BlendType == BlendTreeType.Direct)
 				{
 					return BlendDirectData.Instance.ChildBlendEventIDArray[index];
 				}
 			}
 			return 0;
 		}
-		
+
 		public bool IsBlendTree => ChildIndices.Length > 0;
 
 		public BlendTreeType BlendType { get; set; }

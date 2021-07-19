@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class GUITexture : GUIElement
 	{
-		public GUITexture(AssetInfo assetInfo):
+		public GUITexture(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

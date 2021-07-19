@@ -26,7 +26,7 @@ namespace AssetRipper.YAML
 
 		public void AddTag(string handle, string content)
 		{
-			if(m_tags.Any(t => t.Handle == handle))
+			if (m_tags.Any(t => t.Handle == handle))
 			{
 				throw new Exception($"Writer already contains tag {handle}");
 			}

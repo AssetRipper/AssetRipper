@@ -1,7 +1,7 @@
-using System;
-using System.IO;
 using AssetRipper.Converters.Script;
 using AssetRipper.Game.Assembly;
+using System;
+using System.IO;
 
 namespace AssetRipper.Game
 {

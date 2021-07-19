@@ -31,7 +31,7 @@ namespace AssetRipper.Converters.Script
 						writer.Write(", ");
 					}
 				}
-			} 
+			}
 			else if (DeclaringType.IsStruct)
 			{
 				// all field of a value type must be initialized

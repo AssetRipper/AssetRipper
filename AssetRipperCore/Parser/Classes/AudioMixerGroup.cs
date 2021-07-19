@@ -1,15 +1,15 @@
+using AssetRipper.Classes.Misc;
+using AssetRipper.Converters;
+using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
-using AssetRipper.Classes.Misc;
 
 namespace AssetRipper.Classes
 {
 #warning TODO: not implemented
 	public sealed class AudioMixerGroup : NamedObject
 	{
-		public AudioMixerGroup(AssetInfo assetInfo):
+		public AudioMixerGroup(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

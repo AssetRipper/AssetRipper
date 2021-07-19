@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using AssetRipper.YAML;
+﻿using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
-using AssetRipper.Classes.Misc;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.ParticleSystems
 {
@@ -56,11 +56,11 @@ namespace AssetRipper.Classes.ParticleSystems
 		/// 5.3.0 and greater
 		/// </summary>
 		public static bool HasCollidesWithDynamic(Version version) => version.IsGreaterEqual(5, 3);
-		
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			Type = (ParticleSystemCollisionType)reader.ReadInt32();
 			if (HasCollisionMode(reader.Version))
 			{
@@ -74,7 +74,7 @@ namespace AssetRipper.Classes.ParticleSystems
 				MultiplyColliderForceByCollisionAngle = reader.ReadBoolean();
 				reader.AlignStream();
 			}
-			
+
 			Plane0.Read(reader);
 			Plane1.Read(reader);
 			Plane2.Read(reader);

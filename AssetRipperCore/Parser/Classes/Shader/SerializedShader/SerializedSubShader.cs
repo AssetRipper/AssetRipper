@@ -13,7 +13,7 @@ namespace AssetRipper.Classes.Shaders
 		{
 			writer.WriteIndent(1);
 			writer.Write("SubShader {\n");
-			if(LOD != 0)
+			if (LOD != 0)
 			{
 				writer.WriteIndent(2);
 				writer.Write("LOD {0}\n", LOD);

@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Layout;
+using System.Linq;
 
 namespace AssetRipper.Converters
 {

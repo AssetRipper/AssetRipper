@@ -1,7 +1,7 @@
-﻿using System;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters;
 using AssetRipper.SerializedFiles;
 using AssetRipper.YAML;
+using System;
 
 namespace AssetRipper.Classes
 {

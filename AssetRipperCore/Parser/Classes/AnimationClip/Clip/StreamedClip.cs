@@ -1,7 +1,7 @@
-﻿using System;
+﻿using AssetRipper.Layout;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using AssetRipper.Layout;
 
 namespace AssetRipper.Classes.AnimationClips
 {
@@ -34,7 +34,7 @@ namespace AssetRipper.Classes.AnimationClips
 		}
 
 		public bool IsSet => Data.Length > 0;
-		
+
 		public uint[] Data { get; set; }
 		public int CurveCount { get; set; }
 	}

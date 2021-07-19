@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using AssetRipper.Classes;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Layout;
 using AssetRipper.Project;
 using AssetRipper.SerializedFiles;
-
+using System;
+using System.Collections.Generic;
+using System.IO;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper.Converters

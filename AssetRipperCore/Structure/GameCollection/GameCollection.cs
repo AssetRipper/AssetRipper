@@ -1,15 +1,14 @@
+using AssetRipper;
+using AssetRipper.Classes;
+using AssetRipper.Converters;
+using AssetRipper.Game;
+using AssetRipper.Game.Assembly;
+using AssetRipper.Layout;
+using AssetRipper.SerializedFiles;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AssetRipper;
-using AssetRipper.Game;
-using AssetRipper.Game.Assembly;
-using AssetRipper.Classes;
-using AssetRipper.Converters;
-using AssetRipper.Layout;
-using AssetRipper.SerializedFiles;
-
 using MonoManager = AssetRipper.Game.Assembly.Mono.MonoManager;
 using Object = AssetRipper.Classes.Object;
 
@@ -30,7 +29,7 @@ namespace AssetRipper
 			public Func<string, string> RequestResourceCallback { get; set; }
 		}
 
-		public GameCollection(Parameters pars):
+		public GameCollection(Parameters pars) :
 			base(nameof(GameCollection))
 		{
 			Layout = pars.Layout;

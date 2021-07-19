@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using AssetRipper.Classes.Textures;
+﻿using AssetRipper.Classes.Textures;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
+using System.IO;
 
 namespace AssetRipper.Classes
 {

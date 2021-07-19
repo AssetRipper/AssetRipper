@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Classes.Meshes;
 using AssetRipper.Classes.Shaders;
 using AssetRipper.Layout;
+using System;
+using System.IO;
 
 namespace AssetRipper.Converters.Meshes
 {

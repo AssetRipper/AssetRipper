@@ -1,6 +1,6 @@
-using System.Collections.Generic;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.ParticleSystems
 {
@@ -24,7 +24,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			Ratio = reader.ReadSingle();
 			Light.Read(reader);
 			RandomDistribution = reader.ReadBoolean();

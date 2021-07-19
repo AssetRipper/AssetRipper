@@ -1,6 +1,6 @@
-using System;
 using AssetRipper.Classes;
 using AssetRipper.Converters;
+using System;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper.Project

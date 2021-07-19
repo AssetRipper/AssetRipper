@@ -7,11 +7,11 @@ namespace AssetRipper.Classes
 {
 	public sealed class WheelCollider : Component
 	{
-		public WheelCollider(AssetInfo assetInfo):
+		public WheelCollider(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
-		
+
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>

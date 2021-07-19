@@ -1,11 +1,11 @@
-﻿using System;
+﻿using AssetRipper.SerializedFiles;
+using System;
 using System.Diagnostics;
 using System.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Navigation;
-using AssetRipper.SerializedFiles;
 
 namespace AssetRipperGUI.Windows
 {
@@ -26,7 +26,7 @@ namespace AssetRipperGUI.Windows
 			string innerMessage = ex.InnerException?.ToString();
 			Fill(DefaultGameName, ex.Version.ToString(), ex.Platform.ToString(), ex.FileName, ex.Message, innerMessage, ex.StackTrace);
 			AddHyperlink(ex.FileName, ex.FilePath);
-			if(OperatingSystem.IsWindows()) SystemSounds.Beep.Play();
+			if (OperatingSystem.IsWindows()) SystemSounds.Beep.Play();
 		}
 
 		public void Fill(Exception ex)
@@ -50,7 +50,7 @@ namespace AssetRipperGUI.Windows
 			Textbox.AppendText("Platform: ");
 			Textbox.AppendText(platform.ToString());
 			Textbox.AppendText(Environment.NewLine);
-			
+
 			if (fileName != null)
 			{
 				Textbox.AppendText("File name: ");

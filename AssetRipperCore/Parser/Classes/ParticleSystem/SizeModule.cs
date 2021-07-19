@@ -13,7 +13,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			Curve.Read(reader);
 			if (HasAxes(reader.Version))
 			{

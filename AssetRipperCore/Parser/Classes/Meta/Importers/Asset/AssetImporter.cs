@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AssetRipper.Classes.AssetImporters;
+﻿using AssetRipper.Classes.AssetImporters;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
 using AssetRipper.YAML;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AssetRipper.Classes
 {

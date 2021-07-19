@@ -7,12 +7,12 @@ namespace AssetRipper
 {
 	public class InvariantStreamWriter : StreamWriter
 	{
-		public InvariantStreamWriter(Stream stream):
+		public InvariantStreamWriter(Stream stream) :
 			base(stream)
 		{
 		}
 
-		public InvariantStreamWriter(string path):
+		public InvariantStreamWriter(string path) :
 			base(path)
 		{
 		}

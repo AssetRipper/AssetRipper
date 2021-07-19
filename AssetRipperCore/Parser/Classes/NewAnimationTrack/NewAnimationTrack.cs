@@ -6,7 +6,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class NewAnimationTrack : BaseAnimationTrack
 	{
-		public NewAnimationTrack(AssetInfo assetInfo):
+		public NewAnimationTrack(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

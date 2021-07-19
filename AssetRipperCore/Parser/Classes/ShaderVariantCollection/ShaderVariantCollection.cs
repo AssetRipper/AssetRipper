@@ -1,18 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AssetRipper.Classes.ShaderVariantCollections;
-using AssetRipper.YAML;
+﻿using AssetRipper.Classes.ShaderVariantCollections;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AssetRipper.Classes
 {
 	public sealed class ShaderVariantCollection : NamedObject
 	{
-		public ShaderVariantCollection(AssetInfo assetInfo):
+		public ShaderVariantCollection(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
-		
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);

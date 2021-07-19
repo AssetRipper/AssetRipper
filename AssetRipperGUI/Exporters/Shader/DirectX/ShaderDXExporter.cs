@@ -1,9 +1,9 @@
-using System;
-using System.Runtime.InteropServices;
-using DotNetDxc;
 using AssetRipper;
 using AssetRipper.Classes.Shaders;
 using AssetRipper.Converters.Shaders;
+using DotNetDxc;
+using System;
+using System.Runtime.InteropServices;
 
 namespace AssetRipperGUI.Exporters
 {

@@ -5,7 +5,7 @@ namespace AssetRipper.SerializedFiles
 {
 	public sealed class SerializedFileException : Exception
 	{
-		public SerializedFileException(string message, Version version, Platform platform, ClassIDType assetType, string fileName, string filePath):
+		public SerializedFileException(string message, Version version, Platform platform, ClassIDType assetType, string fileName, string filePath) :
 			base(message)
 		{
 			if (string.IsNullOrEmpty(fileName))
@@ -24,7 +24,7 @@ namespace AssetRipper.SerializedFiles
 			FilePath = filePath;
 		}
 
-		public SerializedFileException(string message, Exception innerException, Version version, Platform platform, ClassIDType assetType, string fileName, string filePath):
+		public SerializedFileException(string message, Exception innerException, Version version, Platform platform, ClassIDType assetType, string fileName, string filePath) :
 			base(message, innerException)
 		{
 			if (string.IsNullOrEmpty(fileName))
@@ -53,7 +53,7 @@ namespace AssetRipper.SerializedFiles
 			sb.Append(" n:").Append(FileName).AppendLine();
 			sb.Append("Path:").Append(FilePath).AppendLine();
 			sb.Append("Message: ").Append(Message).AppendLine();
-			if(InnerException != null)
+			if (InnerException != null)
 			{
 				sb.Append("Inner: ").Append(InnerException.ToString()).AppendLine();
 			}

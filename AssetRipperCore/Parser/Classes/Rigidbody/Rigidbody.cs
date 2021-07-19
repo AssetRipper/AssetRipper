@@ -6,7 +6,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class Rigidbody : Component
 	{
-		public Rigidbody(AssetInfo assetInfo):
+		public Rigidbody(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -28,7 +28,7 @@ namespace AssetRipper.Classes
 		/// 3.0.0 and greater
 		/// </summary>
 		public static bool HasCollisionDetection(Version version) => version.IsGreaterEqual(3);
-		
+
 		/// <summary>
 		/// Less than 3.2.0
 		/// </summary>

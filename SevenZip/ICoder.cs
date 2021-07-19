@@ -9,7 +9,7 @@ namespace SevenZip
 	/// </summary>
 	class DataErrorException : Exception
 	{
-		public DataErrorException(): base("Data Error") { }
+		public DataErrorException() : base("Data Error") { }
 	}
 
 	/// <summary>
@@ -17,7 +17,7 @@ namespace SevenZip
 	/// </summary>
 	class InvalidParamException : Exception
 	{
-		public InvalidParamException(): base("Invalid Parameter") { }
+		public InvalidParamException() : base("Invalid Parameter") { }
 	}
 
 	public interface ICodeProgress

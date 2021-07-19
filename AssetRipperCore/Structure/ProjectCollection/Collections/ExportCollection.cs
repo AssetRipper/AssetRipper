@@ -1,11 +1,10 @@
+using AssetRipper.Classes;
+using AssetRipper.Converters;
+using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using AssetRipper.Classes;
-using AssetRipper.Converters;
-using AssetRipper.YAML;
-
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper.Project
@@ -84,7 +83,7 @@ namespace AssetRipper.Project
 			Meta meta = new Meta(asset.GUID, importer);
 			ExportMeta(container, meta, filePath);
 		}
-		
+
 		protected string GetUniqueFileName(ISerializedFile file, Object asset, string dirPath)
 		{
 			string fileName;

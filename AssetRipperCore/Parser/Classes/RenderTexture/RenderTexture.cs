@@ -7,7 +7,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class RenderTexture : Texture
 	{
-		public RenderTexture(AssetInfo assetInfo):
+		public RenderTexture(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -74,7 +74,7 @@ namespace AssetRipper.Classes
 		/// Less than 2.1.0
 		/// </summary>
 		public static bool HasIsPowerOfTwoFirst(Version version) => version.IsLess(2, 1);
-		
+
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
@@ -142,7 +142,7 @@ namespace AssetRipper.Classes
 			{
 				reader.AlignStream();
 			}
-			
+
 			TextureSettings.Read(reader);
 			if (HasDimension(reader.Version))
 			{

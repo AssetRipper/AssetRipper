@@ -3,23 +3,23 @@ using System.Collections.Generic;
 namespace SpirV
 {
 	internal class Meta
-    {
-        public class ToolInfo
-        {
-            public ToolInfo(string vendor)
-            {
-                Vendor = vendor;
-            }
+	{
+		public class ToolInfo
+		{
+			public ToolInfo(string vendor)
+			{
+				Vendor = vendor;
+			}
 
-            public ToolInfo(string vendor, string name)
-            {
-                Vendor = vendor;
-                Name = name;
-            }
+			public ToolInfo(string vendor, string name)
+			{
+				Vendor = vendor;
+				Name = name;
+			}
 
-            public string Name { get; }
-            public string Vendor { get; }
-        }
+			public string Name { get; }
+			public string Vendor { get; }
+		}
 
 		public static uint MagicNumber => 119734787U;
 		public static uint Version => 66048U;

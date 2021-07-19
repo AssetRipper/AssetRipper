@@ -1,7 +1,7 @@
-﻿using System;
-using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System;
 
 namespace AssetRipper.Classes.EditorBuildSettingss
 {
@@ -40,7 +40,7 @@ namespace AssetRipper.Classes.EditorBuildSettingss
 		{
 			Enabled = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 			Path = reader.ReadString();
 			if (HasGuid(reader.Version))
 			{

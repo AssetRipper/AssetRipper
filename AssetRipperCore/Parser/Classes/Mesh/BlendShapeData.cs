@@ -1,8 +1,8 @@
-using System;
-using System.Linq;
+using AssetRipper;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper;
+using System;
+using System.Linq;
 
 namespace AssetRipper.Classes.Meshes
 {

@@ -1,5 +1,5 @@
-﻿using System.IO;
-using AssetRipper.ArchiveFiles;
+﻿using AssetRipper.ArchiveFiles;
+using System.IO;
 
 namespace AssetRipper
 {

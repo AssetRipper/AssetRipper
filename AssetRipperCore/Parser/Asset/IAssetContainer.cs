@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Layout;
 using AssetRipper.SerializedFiles;
+using System.Collections.Generic;
 
 namespace AssetRipper
 {

@@ -17,7 +17,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			X.Read(reader);
 			Y.Read(reader);
 			Z.Read(reader);

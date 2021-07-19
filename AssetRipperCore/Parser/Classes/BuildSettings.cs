@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class BuildSettings : GlobalGameManager
 	{
-		public BuildSettings(AssetInfo assetInfo):
+		public BuildSettings(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -171,7 +171,7 @@ namespace AssetRipper.Classes
 			}
 			if (HasEnableMultipleDisplays(reader.Version))
 			{
-				EnableMultipleDisplays =  reader.ReadBoolean();
+				EnableMultipleDisplays = reader.ReadBoolean();
 			}
 			if (HasHasOculusPlugin(reader.Version))
 			{

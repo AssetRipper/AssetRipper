@@ -1,7 +1,7 @@
-﻿using System;
-using AssetRipper.Classes.AnimatorTransitions;
+﻿using AssetRipper.Classes.AnimatorTransitions;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System;
 
 namespace AssetRipper.Classes.AnimatorControllers
 {

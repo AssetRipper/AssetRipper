@@ -2,7 +2,7 @@
 {
 	public abstract class BaseAnimationTrack : NamedObject
 	{
-		protected BaseAnimationTrack(AssetInfo assetInfo):
+		protected BaseAnimationTrack(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace SpirV
 {
@@ -146,7 +146,7 @@ namespace SpirV
 
 	public class EnumType<T, U> : OperandType
 		where T : Enum
-		where U : ParameterFactory, new ()
+		where U : ParameterFactory, new()
 	{
 		public override bool ReadValue(IReadOnlyList<uint> words, int index, out object value, out int wordsUsed)
 		{

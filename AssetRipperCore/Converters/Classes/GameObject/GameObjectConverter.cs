@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Classes.GameObjects;
 using AssetRipper.Converters.GameObjects;
 using AssetRipper.Layout;
+using System;
+using System.Linq;
 
 namespace AssetRipper.Converters
 {

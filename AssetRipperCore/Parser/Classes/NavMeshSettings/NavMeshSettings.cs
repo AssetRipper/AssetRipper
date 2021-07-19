@@ -1,13 +1,13 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.NavMeshDatas;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class NavMeshSettings : LevelGameManager
 	{
-		public NavMeshSettings(AssetInfo assetInfo):
+		public NavMeshSettings(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

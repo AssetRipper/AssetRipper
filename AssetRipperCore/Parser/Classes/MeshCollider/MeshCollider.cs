@@ -1,13 +1,13 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.MeshColliders;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class MeshCollider : Collider
 	{
-		public MeshCollider(AssetInfo assetInfo):
+		public MeshCollider(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -44,7 +44,7 @@ namespace AssetRipper.Classes
 		/// 5.5.0 to 2017.3 exclusive
 		/// </summary>
 		public static bool HasInflateMesh(Version version) => version.IsGreaterEqual(5, 5) && version.IsLess(2017, 3);
-		
+
 		/// <summary>
 		/// Less than 2.1.0
 		/// </summary>
@@ -99,7 +99,7 @@ namespace AssetRipper.Classes
 			{
 				yield return asset;
 			}
-			
+
 			yield return context.FetchDependency(Mesh, MeshName);
 		}
 

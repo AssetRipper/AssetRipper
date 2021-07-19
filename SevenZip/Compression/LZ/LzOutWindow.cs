@@ -35,7 +35,7 @@ namespace SevenZip.Compression.LZ
 				TrainSize = 0;
 			}
 		}
-	
+
 		public bool Train(System.IO.Stream stream)
 		{
 			long len = stream.Length;

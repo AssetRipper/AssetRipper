@@ -50,7 +50,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			StartLifetime.Read(reader);
 			StartSpeed.Read(reader);
 			StartColor.Read(reader);
@@ -66,7 +66,7 @@ namespace AssetRipper.Classes.ParticleSystems
 				StartRotationY.Read(reader);
 			}
 			StartRotation.Read(reader);
-			
+
 			if (HasRandomizeRotationDirection(reader.Version))
 			{
 				RandomizeRotationDirection = reader.ReadSingle();
@@ -90,7 +90,7 @@ namespace AssetRipper.Classes.ParticleSystems
 				Rotation3D = reader.ReadBoolean();
 				reader.AlignStream();
 			}
-			
+
 			if (!HasGravityModifierSingle(reader.Version))
 			{
 				GravityModifier.Read(reader);

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes.Avatars;
+﻿using AssetRipper.Classes.Avatars;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
@@ -31,7 +31,7 @@ namespace AssetRipper.Classes
 				HumanDescription.Read(reader);
 			}
 		}
-		
+
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);

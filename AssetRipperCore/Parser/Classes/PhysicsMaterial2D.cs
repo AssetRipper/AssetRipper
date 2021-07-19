@@ -5,7 +5,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class PhysicsMaterial2D : NamedObject
 	{
-		public PhysicsMaterial2D(AssetInfo assetInfo):
+		public PhysicsMaterial2D(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

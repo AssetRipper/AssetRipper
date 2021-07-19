@@ -1,25 +1,25 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes.Prefabs;
-using AssetRipper.YAML;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.Objects;
+using AssetRipper.Classes.Prefabs;
 using AssetRipper.Converters;
-using AssetRipper.Classes.Misc;
-using System;
 using AssetRipper.Layout;
+using AssetRipper.SerializedFiles;
+using AssetRipper.YAML;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class PrefabInstance : NamedObject
 	{
-		public PrefabInstance(AssetLayout layout):
+		public PrefabInstance(AssetLayout layout) :
 			base(layout)
 		{
 			Objects = Array.Empty<PPtr<EditorExtension>>();
 			Modification = new PrefabModification(layout);
 		}
 
-		public PrefabInstance(AssetInfo assetInfo):
+		public PrefabInstance(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

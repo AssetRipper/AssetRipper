@@ -181,29 +181,36 @@ namespace Brotli
 			}
 		}
 		// <{[INJECTED CODE]}>
-		public override bool CanRead {
-			get {return true;}
+		public override bool CanRead
+		{
+			get { return true; }
 		}
 
-		public override bool CanSeek {
-			get {return false;}
+		public override bool CanSeek
+		{
+			get { return false; }
 		}
-		public override long Length {
-			get {throw new System.NotSupportedException();}
+		public override long Length
+		{
+			get { throw new System.NotSupportedException(); }
 		}
-		public override long Position {
-			get {throw new System.NotSupportedException();}
-			set {throw new System.NotSupportedException();}
+		public override long Position
+		{
+			get { throw new System.NotSupportedException(); }
+			set { throw new System.NotSupportedException(); }
 		}
-		public override long Seek(long offset, System.IO.SeekOrigin origin) {
+		public override long Seek(long offset, System.IO.SeekOrigin origin)
+		{
 			throw new System.NotSupportedException();
 		}
-		public override void SetLength(long value){
+		public override void SetLength(long value)
+		{
 			throw new System.NotSupportedException();
 		}
 
-		public override bool CanWrite{get{return false;}}
-		public override void Write(byte[] buffer, int offset, int count) {
+		public override bool CanWrite { get { return false; } }
+		public override void Write(byte[] buffer, int offset, int count)
+		{
 			throw new System.NotSupportedException();
 		}
 

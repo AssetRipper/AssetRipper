@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using AssetRipper;
+﻿using AssetRipper;
 using AssetRipper.Classes.Shaders;
+using System.Collections.Generic;
+using System.Text;
 
 namespace DXShaderRestorer
 {

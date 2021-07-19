@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using AssetRipper.Converters;
-using AssetRipper.YAML;
 using AssetRipper.Classes.AnimatorControllers;
 using AssetRipper.Classes.AnimatorTransitions;
 using AssetRipper.Classes.Misc;
-using AssetRipper.Layout;
 using AssetRipper.Classes.Objects;
+using AssetRipper.Converters;
+using AssetRipper.Layout;
+using AssetRipper.YAML;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {

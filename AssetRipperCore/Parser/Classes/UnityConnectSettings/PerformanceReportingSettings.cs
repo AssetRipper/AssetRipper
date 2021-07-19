@@ -9,7 +9,7 @@ namespace AssetRipper.Classes.UnityConnectSettingss
 		{
 			Enabled = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

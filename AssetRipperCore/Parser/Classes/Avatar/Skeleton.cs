@@ -1,6 +1,6 @@
+using AssetRipper;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper;
 
 namespace AssetRipper.Classes.Avatars
 {

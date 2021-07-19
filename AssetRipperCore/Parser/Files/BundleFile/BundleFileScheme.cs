@@ -1,7 +1,7 @@
-using System;
-using System.IO;
 using AssetRipper.BundleFiles;
 using AssetRipper.Lz4;
+using System;
+using System.IO;
 
 namespace AssetRipper
 {

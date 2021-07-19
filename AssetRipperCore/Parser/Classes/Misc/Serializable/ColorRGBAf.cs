@@ -1,7 +1,7 @@
-using System.Globalization;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
+using AssetRipper.YAML;
+using System.Globalization;
 
 namespace AssetRipper.Classes
 {

@@ -43,7 +43,7 @@ namespace SpirV
 
 	public class IntegerType : ScalarType
 	{
-		public IntegerType (int width, bool signed)
+		public IntegerType(int width, bool signed)
 		{
 			Width = width;
 			Signed = signed;
@@ -80,7 +80,7 @@ namespace SpirV
 
 	public class FloatingPointType : ScalarType
 	{
-		public FloatingPointType (int width)
+		public FloatingPointType(int width)
 		{
 			Width = width;
 		}
@@ -100,7 +100,7 @@ namespace SpirV
 
 	public class VectorType : Type
 	{
-		public VectorType (ScalarType scalarType, int componentCount)
+		public VectorType(ScalarType scalarType, int componentCount)
 		{
 			ComponentType = scalarType;
 			ComponentCount = componentCount;
@@ -122,13 +122,13 @@ namespace SpirV
 
 	public class MatrixType : Type
 	{
-		public MatrixType (VectorType vectorType, int columnCount)
+		public MatrixType(VectorType vectorType, int columnCount)
 		{
 			ColumnType = vectorType;
 			ColumnCount = columnCount;
 		}
 
-		public override string ToString ()
+		public override string ToString()
 		{
 			return $"{ColumnType}x{ColumnCount}";
 		}
@@ -145,7 +145,7 @@ namespace SpirV
 
 	public class ImageType : Type
 	{
-		public ImageType (Type sampledType, Dim dim, int depth, bool isArray, bool isMultisampled, int sampleCount,
+		public ImageType(Type sampledType, Dim dim, int depth, bool isArray, bool isMultisampled, int sampleCount,
 			ImageFormat imageFormat, AccessQualifier accessQualifier)
 		{
 			SampledType = sampledType;
@@ -158,9 +158,9 @@ namespace SpirV
 			AccessQualifier = accessQualifier;
 		}
 
-		public override string ToString ()
+		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder ();
+			StringBuilder sb = new StringBuilder();
 			ToString(sb);
 			return sb.ToString();
 		}
@@ -233,7 +233,7 @@ namespace SpirV
 
 	public class SampledImageType : Type
 	{
-		public SampledImageType (ImageType imageType)
+		public SampledImageType(ImageType imageType)
 		{
 			ImageType = imageType;
 		}
@@ -253,7 +253,7 @@ namespace SpirV
 
 	public class ArrayType : Type
 	{
-		public ArrayType (Type elementType, int elementCount)
+		public ArrayType(Type elementType, int elementCount)
 		{
 			ElementType = elementType;
 			ElementCount = elementCount;

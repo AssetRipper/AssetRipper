@@ -6,7 +6,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class ClusterInputManager : GlobalGameManager
 	{
-		public ClusterInputManager(AssetInfo assetInfo):
+		public ClusterInputManager(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

@@ -5,18 +5,18 @@ namespace AssetRipper.Classes
 {
 	public sealed class OcclusionPortal : Component
 	{
-		public OcclusionPortal(AssetInfo assetInfo):
+		public OcclusionPortal(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
-		
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
 			Open = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 			Center.Read(reader);
 			Size.Read(reader);
 		}

@@ -2,7 +2,7 @@
 {
 	public abstract class GlobalGameManager : GameManager
 	{
-		protected GlobalGameManager(AssetInfo assetInfo):
+		protected GlobalGameManager(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

@@ -6,13 +6,13 @@ namespace AssetRipper.Classes
 {
 	public class DefaultAsset : NamedObject
 	{
-		public DefaultAsset(AssetLayout layout):
+		public DefaultAsset(AssetLayout layout) :
 			base(layout)
 		{
 			Message = string.Empty;
 		}
 
-		public DefaultAsset(AssetInfo assetInfo):
+		public DefaultAsset(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

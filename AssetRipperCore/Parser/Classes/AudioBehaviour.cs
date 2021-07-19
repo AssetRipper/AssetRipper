@@ -2,7 +2,7 @@
 {
 	public abstract class AudioBehaviour : Behaviour
 	{
-		protected AudioBehaviour(AssetInfo assetInfo):
+		protected AudioBehaviour(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

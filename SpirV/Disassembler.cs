@@ -25,7 +25,7 @@ namespace SpirV
 
 	public class Disassembler
 	{
-		public string Disassemble (Module module)
+		public string Disassemble(Module module)
 		{
 			return Disassemble(module, DisassemblyOptions.Default);
 		}

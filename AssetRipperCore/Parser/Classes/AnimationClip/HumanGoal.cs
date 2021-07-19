@@ -21,7 +21,7 @@ namespace AssetRipper.Classes.AnimationClips
 			WeightR = reader.ReadSingle();
 			if (HasHints(reader.Version))
 			{
-				if(IsVector3(reader.Version))
+				if (IsVector3(reader.Version))
 				{
 					HintT = reader.ReadAsset<Vector3f>();
 				}
@@ -32,7 +32,7 @@ namespace AssetRipper.Classes.AnimationClips
 				HintWeightT = reader.ReadSingle();
 			}
 		}
-		
+
 		public float WeightT { get; set; }
 		public float WeightR { get; set; }
 		public float HintWeightT { get; set; }

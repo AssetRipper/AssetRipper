@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AssetRipper;
+using AssetRipper.Classes.Shaders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssetRipper;
-using AssetRipper.Classes.Shaders;
 
 namespace DXShaderRestorer
 {
@@ -143,7 +143,7 @@ namespace DXShaderRestorer
 				writer.Write((uint)ShaderResourceViewDimension.Buffer);
 				//Number of samples
 				writer.Write((uint)56); //TODO: Check this
-				//Bind point
+										//Bind point
 				writer.Write((uint)bufferParam.Index);
 				//Bind count
 				writer.Write((uint)1);

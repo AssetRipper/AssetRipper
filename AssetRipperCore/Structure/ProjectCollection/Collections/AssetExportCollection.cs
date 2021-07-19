@@ -1,9 +1,8 @@
+using AssetRipper.Classes;
+using AssetRipper.Converters;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using AssetRipper.Classes;
-using AssetRipper.Converters;
-
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper.Project
@@ -67,7 +66,7 @@ namespace AssetRipper.Project
 
 		public override long GetExportID(Object asset)
 		{
-			if(asset.AssetInfo == Asset.AssetInfo)
+			if (asset.AssetInfo == Asset.AssetInfo)
 			{
 				return GetMainExportID(Asset);
 			}

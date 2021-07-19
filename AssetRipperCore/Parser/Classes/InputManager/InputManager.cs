@@ -1,13 +1,13 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.InputManagers;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class InputManager : GlobalGameManager
 	{
-		public InputManager(AssetInfo assetInfo):
+		public InputManager(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

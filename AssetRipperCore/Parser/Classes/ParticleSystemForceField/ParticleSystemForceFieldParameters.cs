@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.ParticleSystems;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.ParticleSystemForceFields
 {

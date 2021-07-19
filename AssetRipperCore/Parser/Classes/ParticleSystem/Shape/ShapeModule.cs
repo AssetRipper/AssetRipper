@@ -1,6 +1,6 @@
-using System.Collections.Generic;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.ParticleSystems
 {
@@ -111,7 +111,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			Type = (ParticleSystemShapeType)reader.ReadInt32();
 			if (!IsMultimodeParameter(reader.Version))
 			{
@@ -286,7 +286,7 @@ namespace AssetRipper.Classes.ParticleSystems
 			{
 				return Type;
 			}
-			switch(Type)
+			switch (Type)
 			{
 				case ParticleSystemShapeType.SphereShell:
 					return ParticleSystemShapeType.Sphere;
@@ -314,7 +314,7 @@ namespace AssetRipper.Classes.ParticleSystems
 				return RadiusThickness;
 			}
 
-			switch(Type)
+			switch (Type)
 			{
 				case ParticleSystemShapeType.SphereShell:
 				case ParticleSystemShapeType.HemisphereShell:

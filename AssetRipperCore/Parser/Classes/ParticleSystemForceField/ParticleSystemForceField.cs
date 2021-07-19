@@ -1,13 +1,13 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.ParticleSystemForceFields;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class ParticleSystemForceField : Behaviour
 	{
-		public ParticleSystemForceField(AssetInfo assetInfo):
+		public ParticleSystemForceField(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

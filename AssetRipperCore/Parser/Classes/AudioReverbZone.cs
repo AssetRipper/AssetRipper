@@ -18,27 +18,27 @@ namespace AssetRipper.Classes
 		{
 			base.Read(reader);
 
-            MinDistance = reader.ReadSingle();
-            MaxDistance = reader.ReadSingle();
-            ReverbPreset = reader.ReadInt32();
-            Room = reader.ReadInt32();
-            RoomHF = reader.ReadInt32();
-            DecayTime = reader.ReadSingle();
-            DecayHFRatio = reader.ReadSingle();
-            Reflections = reader.ReadInt32();
-            ReflectionsDelay = reader.ReadSingle();
-            Reverb = reader.ReadInt32();
-            ReverbDelay = reader.ReadSingle();
-            HFReference = reader.ReadSingle();
+			MinDistance = reader.ReadSingle();
+			MaxDistance = reader.ReadSingle();
+			ReverbPreset = reader.ReadInt32();
+			Room = reader.ReadInt32();
+			RoomHF = reader.ReadInt32();
+			DecayTime = reader.ReadSingle();
+			DecayHFRatio = reader.ReadSingle();
+			Reflections = reader.ReadInt32();
+			ReflectionsDelay = reader.ReadSingle();
+			Reverb = reader.ReadInt32();
+			ReverbDelay = reader.ReadSingle();
+			HFReference = reader.ReadSingle();
 			if (HasRoomRolloffFactor(reader.Version))
 			{
 				RoomRolloffFactor = reader.ReadSingle();
 			}
-            Diffusion = reader.ReadSingle();
-            Density = reader.ReadSingle();
-            LFReference = reader.ReadSingle();
-            RoomLF = reader.ReadInt32();
-        }
+			Diffusion = reader.ReadSingle();
+			Density = reader.ReadSingle();
+			LFReference = reader.ReadSingle();
+			RoomLF = reader.ReadInt32();
+		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
@@ -61,24 +61,24 @@ namespace AssetRipper.Classes
 			node.Add(RoomLFName, RoomLF);
 			return node;
 		}
-        
-        public float MinDistance { get; set; }
-        public float MaxDistance { get; set; }
-        public int ReverbPreset { get; set; }
-        public int Room { get; set; }
-        public int RoomHF { get; set; }
-        public int RoomLF { get; set; }
-        public float DecayTime { get; set; }
-        public float DecayHFRatio { get; set; }
-        public int Reflections { get; set; }
-        public float ReflectionsDelay { get; set; }
-        public int Reverb { get; set; }
-        public float ReverbDelay { get; set; }
-        public float HFReference { get; set; }
+
+		public float MinDistance { get; set; }
+		public float MaxDistance { get; set; }
+		public int ReverbPreset { get; set; }
+		public int Room { get; set; }
+		public int RoomHF { get; set; }
+		public int RoomLF { get; set; }
+		public float DecayTime { get; set; }
+		public float DecayHFRatio { get; set; }
+		public int Reflections { get; set; }
+		public float ReflectionsDelay { get; set; }
+		public int Reverb { get; set; }
+		public float ReverbDelay { get; set; }
+		public float HFReference { get; set; }
 		public float RoomRolloffFactor { get; set; }
 		public float LFReference { get; set; }
-        public float Diffusion { get; set; }
-        public float Density { get; set; }
+		public float Diffusion { get; set; }
+		public float Density { get; set; }
 
 		public const string MinDistanceName = "m_MinDistance";
 		public const string MaxDistanceName = "m_MaxDistance";

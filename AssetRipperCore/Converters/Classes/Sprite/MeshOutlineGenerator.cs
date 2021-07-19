@@ -1,6 +1,6 @@
-﻿using System;
+﻿using AssetRipper.Classes;
+using System;
 using System.Collections.Generic;
-using AssetRipper.Classes;
 
 namespace AssetRipper.Converters.Sprites
 {
@@ -99,7 +99,7 @@ namespace AssetRipper.Converters.Sprites
 					if (check == triangle)
 					{
 						continue;
-					}	
+					}
 					int edge = GetNeighborEdge(triangle, check);
 					if (edge == 0)
 					{

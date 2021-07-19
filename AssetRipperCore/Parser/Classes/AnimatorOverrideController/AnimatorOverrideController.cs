@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.AnimatorOverrideControllers;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
@@ -26,7 +26,7 @@ namespace AssetRipper.Classes
 			{
 				yield return asset;
 			}
-			
+
 			yield return context.FetchDependency(Controller, ControllerName);
 			foreach (PPtr<Object> asset in context.FetchDependencies(Clips, ClipsName))
 			{
@@ -38,7 +38,7 @@ namespace AssetRipper.Classes
 		{
 			foreach (AnimationClipOverride overClip in Clips)
 			{
-				if(overClip.OriginalClip.IsAsset(File, clip))
+				if (overClip.OriginalClip.IsAsset(File, clip))
 				{
 					return true;
 				}
@@ -48,7 +48,7 @@ namespace AssetRipper.Classes
 				}
 			}
 			RuntimeAnimatorController baseController = Controller.FindAsset(File);
-			if(baseController != null)
+			if (baseController != null)
 			{
 				return baseController.IsContainsAnimationClip(clip);
 			}

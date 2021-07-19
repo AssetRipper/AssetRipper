@@ -1,9 +1,8 @@
+using AssetRipper.Converters.Project;
+using AssetRipper.Project;
+using AssetRipper.SerializedFiles;
 using System;
 using System.Collections.Generic;
-using AssetRipper.Project;
-using AssetRipper.Converters.Project;
-using AssetRipper.SerializedFiles;
-
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper.Converters

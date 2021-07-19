@@ -5,7 +5,7 @@ namespace AssetRipper
 {
 	public class ReverseStream : Stream
 	{
-		public ReverseStream(Stream stream):
+		public ReverseStream(Stream stream) :
 			this(stream, true)
 		{
 		}
@@ -15,14 +15,14 @@ namespace AssetRipper
 		{
 		}
 
-		public ReverseStream(Stream stream, long offset, long size):
+		public ReverseStream(Stream stream, long offset, long size) :
 			this(stream, offset, size, true)
 		{
 		}
 
 		public ReverseStream(Stream stream, long offset, long size, bool leaveOpen)
 		{
-			if(stream == null)
+			if (stream == null)
 			{
 				throw new ArgumentNullException(nameof(stream));
 			}
@@ -34,7 +34,7 @@ namespace AssetRipper
 			{
 				throw new ArgumentException($"Length {size} grater than stream lengh {stream.Length}", nameof(stream));
 			}
-			if(!stream.CanSeek)
+			if (!stream.CanSeek)
 			{
 				throw new ArgumentException("Stream can't seek", nameof(stream));
 			}
@@ -56,7 +56,7 @@ namespace AssetRipper
 		{
 			m_stream.Flush();
 		}
-		
+
 		public override void WriteByte(byte value)
 		{
 			if (Position < 0)
@@ -117,7 +117,7 @@ namespace AssetRipper
 
 		public override int Read(byte[] buffer, int offset, int count)
 		{
-			if(Position < 0)
+			if (Position < 0)
 			{
 				throw new Exception($"Position {Position} is out of range");
 			}
@@ -135,7 +135,7 @@ namespace AssetRipper
 
 				Array.Reverse(m_buffer, 0, read);
 				Buffer.BlockCopy(m_buffer, 0, buffer, offset, read);
-				
+
 				offset += read;
 				Position += read;
 				count -= read;
@@ -151,7 +151,7 @@ namespace AssetRipper
 
 		public override long Seek(long offset, SeekOrigin origin)
 		{
-			switch(origin)
+			switch (origin)
 			{
 				case SeekOrigin.Begin:
 					Position = offset;
@@ -162,7 +162,7 @@ namespace AssetRipper
 					break;
 
 				case SeekOrigin.End:
-					Position = m_end - offset - 1; 
+					Position = m_end - offset - 1;
 					break;
 			}
 			return Position;
@@ -176,7 +176,7 @@ namespace AssetRipper
 		protected override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);
-			if(!m_leaveOpen)
+			if (!m_leaveOpen)
 			{
 				m_stream.Dispose();
 			}
@@ -187,7 +187,7 @@ namespace AssetRipper
 			get => m_position;
 			set
 			{
-				if(value < 0)
+				if (value < 0)
 				{
 					throw new ArgumentOutOfRangeException(nameof(value), value, null);
 				}

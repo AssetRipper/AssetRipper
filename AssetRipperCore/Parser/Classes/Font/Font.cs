@@ -1,10 +1,10 @@
+using AssetRipper;
+using AssetRipper.Classes.Fonts;
+using AssetRipper.Converters;
+using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using AssetRipper.Classes.Fonts;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
-using AssetRipper;
 
 namespace AssetRipper.Classes
 {
@@ -384,7 +384,7 @@ namespace AssetRipper.Classes
 		public float FontSize { get; set; }
 		public float Ascent { get; set; }
 		public float Descent { get; set; }
-		public FontStyle DefaultStyle {get; private set; }
+		public FontStyle DefaultStyle { get; private set; }
 		public string[] FontNames { get; set; }
 		public PPtr<Font>[] FallbackFonts { get; set; }
 		public FontRenderingMode FontRenderingMode { get; set; }

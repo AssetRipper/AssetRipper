@@ -10,7 +10,7 @@ namespace AssetRipper.Classes.AnimationClips
 		{
 			int[] timesValues = Times.Unpack();
 			float[] times = new float[timesValues.Length];
-			for(int i = 0; i < times.Length; i++)
+			for (int i = 0; i < times.Length; i++)
 			{
 				times[i] = timesValues[i] * 0.01f;
 			}
@@ -18,7 +18,7 @@ namespace AssetRipper.Classes.AnimationClips
 			float[] slopes = Slopes.Unpack();
 
 			KeyframeTpl<Quaternionf>[] keyframes = new KeyframeTpl<Quaternionf>[rotations.Length];
-			for(int i = 0, j = 4; i < rotations.Length; i++, j += 4)
+			for (int i = 0, j = 4; i < rotations.Length; i++, j += 4)
 			{
 				float time = times[i];
 				Quaternionf rotation = rotations[i];

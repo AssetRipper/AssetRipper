@@ -6,7 +6,7 @@ namespace AssetRipper.Classes
 	{
 		public static void AddSerializedVersion(this YAMLMappingNode _this, int version)
 		{
-			if(version > 1)
+			if (version > 1)
 			{
 				_this.Add(SerializedVersionName, version);
 			}
@@ -22,7 +22,7 @@ namespace AssetRipper.Classes
 
 		public static void InsertSerializedVersion(this YAMLMappingNode _this, int version)
 		{
-			if(version > 1)
+			if (version > 1)
 			{
 				_this.InsertBegin(SerializedVersionName, version);
 			}

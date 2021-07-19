@@ -1,9 +1,9 @@
+using AssetRipper.Classes.Misc;
+using AssetRipper.Converters;
+using AssetRipper.SerializedFiles;
+using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
-using AssetRipper.YAML;
-using AssetRipper.SerializedFiles;
-using AssetRipper.Converters;
-using AssetRipper.Classes.Misc;
 
 namespace AssetRipper.Classes.AnimatorControllers
 {
@@ -50,7 +50,7 @@ namespace AssetRipper.Classes.AnimatorControllers
 					if (selector.FullPathID == parameters.ID && selector.IsEntry)
 					{
 						PPtr<AnimatorTransition>[] transitions = new PPtr<AnimatorTransition>[selector.TransitionConstantArray.Length - 1];
-						for(int i = 0; i < selector.TransitionConstantArray.Length - 1; i++)
+						for (int i = 0; i < selector.TransitionConstantArray.Length - 1; i++)
 						{
 							SelectorTransitionConstant selectorTrans = selector.TransitionConstantArray[i].Instance;
 							AnimatorTransition.Parameters transParameters = new AnimatorTransition.Parameters

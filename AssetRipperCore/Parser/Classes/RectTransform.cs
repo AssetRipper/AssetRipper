@@ -6,7 +6,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class RectTransform : Transform
 	{
-		public RectTransform(AssetLayout layout):
+		public RectTransform(AssetLayout layout) :
 			base(layout)
 		{
 		}

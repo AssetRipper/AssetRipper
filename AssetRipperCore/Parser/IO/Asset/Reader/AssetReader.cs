@@ -1,7 +1,7 @@
+using AssetRipper.Layout;
 using System;
 using System.IO;
 using System.Text;
-using AssetRipper.Layout;
 
 namespace AssetRipper
 {

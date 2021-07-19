@@ -1,6 +1,6 @@
+using AssetRipper.Game.Assembly;
 using System.Collections.Generic;
 using System.IO;
-using AssetRipper.Game.Assembly;
 
 namespace AssetRipper.Converters.Script
 {

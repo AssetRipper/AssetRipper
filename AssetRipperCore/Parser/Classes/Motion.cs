@@ -9,7 +9,7 @@ namespace AssetRipper.Classes
 		{
 		}
 
-		protected Motion(AssetInfo assetInfo):
+		protected Motion(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

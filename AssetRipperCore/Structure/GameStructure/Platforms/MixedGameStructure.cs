@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AssetRipper.Game;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AssetRipper.Game;
 
 namespace AssetRipper
 {
@@ -67,7 +67,7 @@ namespace AssetRipper
 			foreach (FileInfo levelFile in root.EnumerateFiles())
 			{
 				string extension = Path.GetExtension(levelFile.Name);
-				switch(extension)
+				switch (extension)
 				{
 					case WebGLGameStructure.DataExtension:
 					case WebGLGameStructure.DataGzExtension:
@@ -79,7 +79,7 @@ namespace AssetRipper
 
 					case WebGLGameStructure.UnityWebExtension:
 						{
-							if(levelFile.Name.EndsWith(WebGLGameStructure.DataWebExtension, StringComparison.Ordinal))
+							if (levelFile.Name.EndsWith(WebGLGameStructure.DataWebExtension, StringComparison.Ordinal))
 							{
 								string name = levelFile.Name.Substring(0, levelFile.Name.Length - WebGLGameStructure.DataWebExtension.Length);
 								AddFile(files, name, levelFile.FullName);

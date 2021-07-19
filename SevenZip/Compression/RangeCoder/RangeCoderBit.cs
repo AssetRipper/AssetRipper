@@ -64,7 +64,7 @@ namespace SevenZip.Compression.RangeCoder
 		{
 			return ProbPrices[(((Prob - symbol) ^ ((-(int)symbol))) & (kBitModelTotal - 1)) >> kNumMoveReducingBits];
 		}
-	  public uint GetPrice0() { return ProbPrices[Prob >> kNumMoveReducingBits]; }
+		public uint GetPrice0() { return ProbPrices[Prob >> kNumMoveReducingBits]; }
 		public uint GetPrice1() { return ProbPrices[(kBitModelTotal - Prob) >> kNumMoveReducingBits]; }
 	}
 

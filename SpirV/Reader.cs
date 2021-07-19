@@ -28,7 +28,7 @@ namespace SpirV
 		{
 			if (littleEndian_)
 			{
-				return reader_.ReadUInt32 ();
+				return reader_.ReadUInt32();
 			}
 			else
 			{

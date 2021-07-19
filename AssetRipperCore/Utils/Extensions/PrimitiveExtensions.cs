@@ -65,11 +65,11 @@
 
 		public static int ToClosestInt(this long _this)
 		{
-			if(_this > int.MaxValue)
+			if (_this > int.MaxValue)
 			{
 				return int.MaxValue;
 			}
-			if(_this < int.MinValue)
+			if (_this < int.MinValue)
 			{
 				return int.MinValue;
 			}

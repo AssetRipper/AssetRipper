@@ -1,7 +1,7 @@
-using System.Globalization;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
+using AssetRipper.YAML;
+using System.Globalization;
 
 namespace AssetRipper.Classes
 {
@@ -15,14 +15,14 @@ namespace AssetRipper.Classes
 			Height = height;
 		}
 
-		public Rectf(Vector2f positon, Vector2f size):
+		public Rectf(Vector2f positon, Vector2f size) :
 			this(positon.X, positon.Y, size.X, size.Y)
 		{
 		}
 
-		public static bool operator == (Rectf left, Rectf right)
+		public static bool operator ==(Rectf left, Rectf right)
 		{
-			if(left.X != right.X)
+			if (left.X != right.X)
 			{
 				return false;
 			}
@@ -30,11 +30,11 @@ namespace AssetRipper.Classes
 			{
 				return false;
 			}
-			if(left.Height != right.Height)
+			if (left.Height != right.Height)
 			{
 				return false;
 			}
-			if(left.Width != right.Width)
+			if (left.Width != right.Width)
 			{
 				return false;
 			}
@@ -175,7 +175,7 @@ namespace AssetRipper.Classes
 
 		public bool ContainsCorner(Vector2f position)
 		{
-			if(X != position.X && X + Width != position.X)
+			if (X != position.X && X + Width != position.X)
 			{
 				return false;
 			}

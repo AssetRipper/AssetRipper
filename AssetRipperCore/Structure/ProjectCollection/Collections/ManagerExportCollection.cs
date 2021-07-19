@@ -1,14 +1,14 @@
-﻿using System;
-using System.IO;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Converters;
+using System;
+using System.IO;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper.Project
 {
 	public class ManagerExportCollection : AssetExportCollection
 	{
-		public ManagerExportCollection(IAssetExporter assetExporter, Object asset):
+		public ManagerExportCollection(IAssetExporter assetExporter, Object asset) :
 			this(assetExporter, (GlobalGameManager)asset)
 		{
 		}

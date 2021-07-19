@@ -8,7 +8,7 @@ namespace AssetRipper.Classes
 	/// </summary>
 	public sealed class SortingGroup : Behaviour
 	{
-		public SortingGroup(AssetInfo assetInfo):
+		public SortingGroup(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -30,7 +30,7 @@ namespace AssetRipper.Classes
 				SortingLayerID = reader.ReadInt32();
 			}
 			reader.AlignStream();
-			
+
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

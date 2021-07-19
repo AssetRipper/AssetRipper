@@ -12,7 +12,7 @@
 			Dim = (byte)columns;
 		}
 
-		public VectorParameter(string name, ShaderParamType type, int index, int arraySize, int columns):
+		public VectorParameter(string name, ShaderParamType type, int index, int arraySize, int columns) :
 			this(name, type, index, columns)
 		{
 			ArraySize = arraySize;

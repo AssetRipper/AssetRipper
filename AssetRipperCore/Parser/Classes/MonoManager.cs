@@ -1,8 +1,7 @@
+using AssetRipper.Converters;
+using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
-
 using DateTime = AssetRipper.Classes.Misc.DateTime;
 
 namespace AssetRipper.Classes
@@ -38,7 +37,7 @@ namespace AssetRipper.Classes
 
 		private int GetSerializedVersion(Version version)
 		{
-			if(version.IsGreaterEqual(3))
+			if (version.IsGreaterEqual(3))
 			{
 				return 2;
 			}
@@ -53,7 +52,7 @@ namespace AssetRipper.Classes
 			if (HasHasCompileErrors(reader.Version))
 			{
 				HasCompileErrors = reader.ReadBoolean();
-				if(IsAlign(reader.Version))
+				if (IsAlign(reader.Version))
 				{
 					reader.AlignStream();
 				}

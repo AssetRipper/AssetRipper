@@ -1,7 +1,7 @@
-using System;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
+using AssetRipper.YAML;
+using System;
 
 namespace AssetRipper.Classes
 {
@@ -23,7 +23,7 @@ namespace AssetRipper.Classes
 		{
 			return left.X != right.X || left.Y != right.Y || left.Z != right.Z;
 		}
-		
+
 		public int GetValueByMember(int member)
 		{
 			member %= 3;

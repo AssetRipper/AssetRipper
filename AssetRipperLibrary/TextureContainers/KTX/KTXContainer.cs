@@ -1,6 +1,6 @@
+using AssetRipper;
 using System.IO;
 using System.Text;
-using AssetRipper;
 
 namespace AssetRipperLibrary.TextureContainers.KTX
 {

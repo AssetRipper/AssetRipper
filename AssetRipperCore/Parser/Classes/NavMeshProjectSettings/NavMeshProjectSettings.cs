@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+using AssetRipper;
 using AssetRipper.Classes.NavMeshDatas;
 using AssetRipper.Classes.NavMeshProjectSettingss;
-using AssetRipper.YAML;
-using AssetRipper.SerializedFiles;
 using AssetRipper.Converters;
-using AssetRipper;
+using AssetRipper.SerializedFiles;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
@@ -14,12 +14,12 @@ namespace AssetRipper.Classes
 	/// </summary>
 	public sealed class NavMeshProjectSettings : GlobalGameManager
 	{
-		public NavMeshProjectSettings(AssetInfo assetInfo):
+		public NavMeshProjectSettings(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
 
-		private NavMeshProjectSettings(AssetInfo assetInfo, bool _):
+		private NavMeshProjectSettings(AssetInfo assetInfo, bool _) :
 			this(assetInfo)
 		{
 			Areas = new NavMeshAreaData[32];
@@ -101,11 +101,11 @@ namespace AssetRipper.Classes
 		}
 		private IReadOnlyList<NavMeshBuildSettings> GetSettings(Version version)
 		{
-			return HasLastAgentTypeID(version) ? Settings : new [] { new NavMeshBuildSettings(0.75f, 1.0f / 6.0f) };
+			return HasLastAgentTypeID(version) ? Settings : new[] { new NavMeshBuildSettings(0.75f, 1.0f / 6.0f) };
 		}
 		private IReadOnlyList<string> GetSettingNames(Version version)
 		{
-			return HasLastAgentTypeID(version) ? SettingNames : new [] { "Humanoid" };
+			return HasLastAgentTypeID(version) ? SettingNames : new[] { "Humanoid" };
 		}
 
 		public override string ExportPath => nameof(ClassIDType.NavMeshAreas);

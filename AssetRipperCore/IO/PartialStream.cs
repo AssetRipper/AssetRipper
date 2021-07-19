@@ -95,7 +95,7 @@ namespace AssetRipper
 			get => m_stream.Position - m_baseOffset;
 			set
 			{
-				if(value < 0)
+				if (value < 0)
 				{
 					throw new ArgumentOutOfRangeException(nameof(value), "Non-negative number required");
 				}

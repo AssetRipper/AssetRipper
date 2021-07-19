@@ -75,7 +75,7 @@ namespace AssetRipper
 				}
 			}
 
-			if(files.Count == 0)
+			if (files.Count == 0)
 			{
 				throw new Exception("No files were found");
 			}
@@ -98,9 +98,9 @@ namespace AssetRipper
 			{
 				if (fi.Extension == HtmlExtension)
 				{
-					foreach(DirectoryInfo di in root.EnumerateDirectories())
+					foreach (DirectoryInfo di in root.EnumerateDirectories())
 					{
-						switch(di.Name)
+						switch (di.Name)
 						{
 							case DevelopmentName:
 								{
@@ -118,7 +118,7 @@ namespace AssetRipper
 								{
 									foreach (FileInfo file in di.EnumerateFiles())
 									{
-										if(file.Extension == DataGzExtension)
+										if (file.Extension == DataGzExtension)
 										{
 											return true;
 										}
@@ -130,7 +130,7 @@ namespace AssetRipper
 								{
 									foreach (FileInfo file in di.EnumerateFiles())
 									{
-										if(file.Name.EndsWith(DataWebExtension, StringComparison.Ordinal))
+										if (file.Name.EndsWith(DataWebExtension, StringComparison.Ordinal))
 										{
 											return true;
 										}

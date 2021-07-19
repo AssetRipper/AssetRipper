@@ -20,7 +20,7 @@ namespace AssetRipper.Classes.AnimationClips
 			Attribute = reader.ReadUInt32();
 			Script.Read(reader);
 
-			if(IsInt32ID(reader.Version))
+			if (IsInt32ID(reader.Version))
 			{
 				ClassID = (ClassIDType)reader.ReadInt32();
 			}
@@ -53,7 +53,7 @@ namespace AssetRipper.Classes.AnimationClips
 		{
 			return ((HumanoidMuscleType)Attribute).Update(version);
 		}
-		
+
 		public bool IsTransform => ClassID == ClassIDType.Transform || ClassID == ClassIDType.RectTransform && TransformType.IsValid();
 		public TransformType TransformType => unchecked((TransformType)Attribute);
 

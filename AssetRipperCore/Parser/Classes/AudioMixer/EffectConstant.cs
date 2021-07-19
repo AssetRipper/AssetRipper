@@ -21,7 +21,7 @@ namespace AssetRipper.Classes.AudioMixers
 			PrevEffectIndex = reader.ReadUInt32();
 			Bypass = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 			ParameterIndices = reader.ReadUInt32Array();
 		}
 

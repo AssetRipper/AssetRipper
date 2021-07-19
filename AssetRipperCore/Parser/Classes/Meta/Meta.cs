@@ -1,20 +1,19 @@
-﻿using System;
-using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-
+using System;
 using DateTime = System.DateTime;
 
 namespace AssetRipper.Classes
 {
 	public struct Meta
 	{
-		public Meta(UnityGUID guid, AssetImporter importer):
+		public Meta(UnityGUID guid, AssetImporter importer) :
 			this(guid, true, importer)
 		{
 		}
 
-		public Meta(UnityGUID guid, bool hasLicense, AssetImporter importer):
+		public Meta(UnityGUID guid, bool hasLicense, AssetImporter importer) :
 			this(guid, hasLicense, false, importer)
 		{
 		}

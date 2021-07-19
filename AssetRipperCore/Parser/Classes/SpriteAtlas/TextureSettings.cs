@@ -1,7 +1,7 @@
-﻿using AssetRipper.Classes.Textures;
+﻿using AssetRipper.Classes.TextureImporters;
+using AssetRipper.Classes.Textures;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Classes.TextureImporters;
 
 namespace AssetRipper.Classes.SpriteAtlases
 {
@@ -59,7 +59,7 @@ namespace AssetRipper.Classes.SpriteAtlases
 				CrunchedCompression = reader.ReadBoolean();
 			}
 			reader.AlignStream();
-			
+
 			if (!HasColorSpace(reader.Version))
 			{
 				SRGB = reader.ReadBoolean();

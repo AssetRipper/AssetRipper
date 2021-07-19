@@ -1,10 +1,10 @@
+using AssetRipper.Game.Assembly.Mono;
 using Mono.Cecil;
+using Mono.Cecil.Extensions;
 using Mono.Cecil.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using AssetRipper.Game.Assembly.Mono;
-using Mono.Cecil.Extensions;
 
 namespace AssetRipper
 {
@@ -61,7 +61,7 @@ namespace AssetRipper
 			}
 		}
 
-#region Naming
+		#region Naming
 		public static string ToCPrimitiveString(string name)
 		{
 			switch (name)
@@ -199,7 +199,7 @@ namespace AssetRipper
 			sb.Append('>');
 			return sb.ToString();
 		}
-#endregion
+		#endregion
 
 		public static GenericInstanceType CreateGenericInstance(TypeReference genericTemplate, IEnumerable<TypeReference> arguments)
 		{

@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using AssetRipper.SerializedFiles;
+using System.Collections.Generic;
 
 namespace AssetRipper
 {

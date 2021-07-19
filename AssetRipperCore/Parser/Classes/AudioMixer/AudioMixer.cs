@@ -7,7 +7,7 @@ namespace AssetRipper.Classes
 #warning TODO: not implemented
 	public sealed class AudioMixer : NamedObject
 	{
-		public AudioMixer(AssetInfo assetInfo):
+		public AudioMixer(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -29,13 +29,13 @@ namespace AssetRipper.Classes
 			SuspendThreshold = reader.ReadSingle();
 			EnableSuspend = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 			UpdateMode = reader.ReadInt32();
 			reader.AlignStream();
-			
+
 			MixerConstant.Read(reader);
 			reader.AlignStream();
-			
+
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

@@ -1,8 +1,8 @@
-using System.Collections.Generic;
+using AssetRipper;
+using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Classes.Misc;
-using AssetRipper;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.Avatars
 {

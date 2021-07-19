@@ -20,7 +20,7 @@
 			Weight = reader.ReadSingle();
 		}
 
-		public uint Index  { get; set; }
+		public uint Index { get; set; }
 		public uint PathHash { get; set; }
 		public float Weight { get; set; }
 	}

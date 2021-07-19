@@ -8,7 +8,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			Gradient.Read(reader);
 			Range.Read(reader);
 		}

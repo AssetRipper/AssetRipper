@@ -16,7 +16,7 @@ namespace AssetRipper
 	{
 		public static string ToLiteral(this VersionType _this)
 		{
-			switch(_this)
+			switch (_this)
 			{
 				case VersionType.Alpha:
 					return "a";

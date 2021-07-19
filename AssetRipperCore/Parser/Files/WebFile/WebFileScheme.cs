@@ -1,5 +1,5 @@
-using System.IO;
 using AssetRipper.WebFiles;
+using System.IO;
 
 namespace AssetRipper
 {

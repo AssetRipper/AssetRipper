@@ -6,7 +6,7 @@ namespace AssetRipper
 	{
 		public static void WriteString(this TextWriter writer, string @string, int offset, int length)
 		{
-			for(int i = offset; i < offset + length; i++)
+			for (int i = offset; i < offset + length; i++)
 			{
 				writer.Write(@string[i]);
 			}

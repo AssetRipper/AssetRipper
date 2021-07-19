@@ -1,14 +1,14 @@
+using AssetRipper;
+using AssetRipper.Classes.Shaders;
 using DXShaderRestorer;
 using HLSLccWrapper;
 using System.IO;
-using AssetRipper;
-using AssetRipper.Classes.Shaders;
 
 namespace AssetRipperGUI.Exporters
 {
 	public class ShaderHLSLccExporter : ShaderDXExporter
 	{
-		public ShaderHLSLccExporter(GPUPlatform graphicApi):
+		public ShaderHLSLccExporter(GPUPlatform graphicApi) :
 			base(graphicApi)
 		{
 		}

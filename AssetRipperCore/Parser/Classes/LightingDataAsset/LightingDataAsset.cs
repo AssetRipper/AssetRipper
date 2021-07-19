@@ -1,12 +1,12 @@
-using System.Collections.Generic;
+using AssetRipper;
 using AssetRipper.Classes.LightingDataAssets;
 using AssetRipper.Classes.LightmapSettingss;
 using AssetRipper.Classes.Lights;
 using AssetRipper.Classes.OcclusionCullingDatas;
 using AssetRipper.Classes.RenderSettingss;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
-using AssetRipper;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
@@ -16,7 +16,7 @@ namespace AssetRipper.Classes
 	/// </summary>
 	public sealed class LightingDataAsset : NamedObject
 	{
-		public LightingDataAsset(AssetInfo assetInfo):
+		public LightingDataAsset(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

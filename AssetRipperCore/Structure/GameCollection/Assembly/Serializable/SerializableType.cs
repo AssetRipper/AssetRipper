@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
 using AssetRipper.Classes;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
 using AssetRipper.SerializedFiles;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Game.Assembly
 {
@@ -83,7 +83,7 @@ namespace AssetRipper.Game.Assembly
 			}
 		}
 
-#region Naming
+		#region Naming
 		public static bool IsPrimitive(string @namespace, string name)
 		{
 			if (@namespace == SystemNamespace)
@@ -301,7 +301,7 @@ namespace AssetRipper.Game.Assembly
 			return PrimitiveType.Complex;
 		}
 		#endregion
-#region Attributes
+		#region Attributes
 		public static bool IsCompilerGeneratedAttrribute(string @namespace, string name)
 		{
 			if (@namespace == CompilerServicesNamespace)
@@ -319,7 +319,7 @@ namespace AssetRipper.Game.Assembly
 			}
 			return false;
 		}
-#endregion
+		#endregion
 
 		public TypeTree GenerateTypeTree(AssetLayout layout)
 		{

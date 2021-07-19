@@ -1,14 +1,14 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.Cameras;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
 using AssetRipper.Classes.Misc;
+using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class Camera : Behaviour
 	{
-		public Camera(AssetInfo assetInfo):
+		public Camera(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -79,7 +79,7 @@ namespace AssetRipper.Classes
 		/// 5.1.0 to 2017.2 exclusive
 		/// </summary>
 		public static bool HasStereoMirrorMode(Version version) => version.IsGreaterEqual(5, 1) && version.IsLess(2017, 2);
-		
+
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
@@ -146,7 +146,7 @@ namespace AssetRipper.Classes
 			FieldOfView = reader.ReadSingle();
 			Orthographic = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 			OrthographicSize = reader.ReadSingle();
 			Depth = reader.ReadSingle();
 			CullingMask.Read(reader);
@@ -204,7 +204,7 @@ namespace AssetRipper.Classes
 			{
 				yield return asset;
 			}
-			
+
 			yield return context.FetchDependency(TargetTexture, TargetTextureName);
 		}
 

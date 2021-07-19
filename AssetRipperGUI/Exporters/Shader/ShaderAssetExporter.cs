@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using AssetRipper;
 using AssetRipper.Classes;
 using AssetRipper.Classes.Shaders;
@@ -8,7 +5,9 @@ using AssetRipper.Converters;
 using AssetRipper.Converters.Shaders;
 using AssetRipper.Project;
 using AssetRipper.SerializedFiles;
-
+using System;
+using System.Collections.Generic;
+using System.IO;
 using Object = AssetRipper.Classes.Object;
 using Version = AssetRipper.Version;
 

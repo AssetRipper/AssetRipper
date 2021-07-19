@@ -1,7 +1,7 @@
-﻿using System;
+﻿using AssetRipper.Layout;
+using System;
 using System.IO;
 using System.Text;
-using AssetRipper.Layout;
 
 namespace AssetRipper
 {
@@ -29,7 +29,7 @@ namespace AssetRipper
 
 			byte[] buffer = count <= m_buffer.Length ? m_buffer : new byte[count];
 			int written = Encoding.UTF8.GetBytes(valueArray, 0, valueArray.Length, buffer, 0);
-			if(written != count)
+			if (written != count)
 			{
 				throw new Exception($"Written {written} but expected {count}");
 			}

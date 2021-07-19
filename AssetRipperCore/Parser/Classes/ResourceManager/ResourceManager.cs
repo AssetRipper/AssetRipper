@@ -1,8 +1,8 @@
+using AssetRipper.Classes.ResourceManagers;
+using AssetRipper.Converters;
+using AssetRipper.YAML;
 using System.Collections.Generic;
 using System.Linq;
-using AssetRipper.Classes.ResourceManagers;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
 
 namespace AssetRipper.Classes
 {
@@ -59,7 +59,7 @@ namespace AssetRipper.Classes
 			}
 			return node;
 		}
-		
+
 		public KeyValuePair<string, PPtr<Object>>[] Container { get; set; }
 		public ResourceManagerDependency[] DependentAssets { get; set; }
 

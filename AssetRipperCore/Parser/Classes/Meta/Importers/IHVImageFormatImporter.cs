@@ -18,7 +18,7 @@ namespace AssetRipper.Classes
 			SRGBTexture = true;
 		}
 
-		public IHVImageFormatImporter(AssetInfo assetInfo):
+		public IHVImageFormatImporter(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

@@ -1,13 +1,13 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.ParticleSystems;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class ParticleSystem : Component
 	{
-		public ParticleSystem(AssetInfo assetInfo):
+		public ParticleSystem(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -90,7 +90,7 @@ namespace AssetRipper.Classes
 		/// 5.6.0 and greater
 		/// </summary>
 		public static bool HasCustomDataModule(Version version) => version.IsGreaterEqual(5, 6);
-		
+
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
@@ -107,11 +107,11 @@ namespace AssetRipper.Classes
 		/// 5.4.0p4 and greater
 		/// </summary>
 		private static bool IsAlign(Version version) => version.IsGreaterEqual(5, 4, 0, VersionType.Patch, 4);
-		
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			LengthInSec = reader.ReadSingle();
 			if (IsStartDelayFirst(reader.Version))
 			{
@@ -124,7 +124,7 @@ namespace AssetRipper.Classes
 					StartDelay.Read(reader);
 				}
 			}
-			
+
 			SimulationSpeed = reader.ReadSingle();
 			if (HasStopAction(reader.Version))
 			{
@@ -135,7 +135,7 @@ namespace AssetRipper.Classes
 			{
 				RandomSeed = unchecked((int)reader.ReadUInt32());
 			}
-			
+
 			if (HasCullingMode(reader.Version))
 			{
 				CullingMode = (ParticleSystemCullingMode)reader.ReadInt32();
@@ -239,7 +239,7 @@ namespace AssetRipper.Classes
 			{
 				yield return asset;
 			}
-			
+
 			yield return context.FetchDependency(MoveWithCustomTransform, MoveWithCustomTransformName);
 			foreach (PPtr<Object> asset in context.FetchDependencies(CollisionModule, CollisionModuleName))
 			{

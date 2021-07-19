@@ -2,7 +2,7 @@
 {
 	public sealed class AudioListener : AudioBehaviour
 	{
-		public AudioListener(AssetInfo assetInfo):
+		public AudioListener(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

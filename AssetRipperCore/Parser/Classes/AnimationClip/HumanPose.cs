@@ -16,7 +16,7 @@ namespace AssetRipper.Classes.AnimationClips
 		public void Read(AssetReader reader)
 		{
 			RootX.Read(reader);
-			if(IsVector3(reader.Version))
+			if (IsVector3(reader.Version))
 			{
 				LookAtPosition = reader.ReadAsset<Vector3f>();
 			}
@@ -32,7 +32,7 @@ namespace AssetRipper.Classes.AnimationClips
 
 			if (HasTArray(reader.Version))
 			{
-				if(IsVector3(reader.Version))
+				if (IsVector3(reader.Version))
 				{
 					TDoFArray = reader.ReadVector3Array();
 				}

@@ -250,7 +250,7 @@ namespace SevenZip.Compression.LZMA
 			while (nowPos64 < outSize64)
 			{
 				// UInt64 next = Math.Min(nowPos64 + (1 << 18), outSize64);
-					// while(nowPos64 < next)
+				// while(nowPos64 < next)
 				{
 					uint posState = (uint)nowPos64 & m_PosStateMask;
 					if (m_IsMatchDecoders[(state.Index << Base.kNumPosStatesBitsMax) + posState].Decode(m_RangeDecoder) == 0)

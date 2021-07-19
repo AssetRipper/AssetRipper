@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-using System.IO;
 using AssetRipper;
 using AssetRipper.Classes.Shaders;
-
+using System.Collections.Generic;
+using System.IO;
 using Version = AssetRipper.Version;
 
 namespace DXShaderRestorer

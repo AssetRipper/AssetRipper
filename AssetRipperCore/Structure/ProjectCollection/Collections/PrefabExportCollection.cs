@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Converters;
 using AssetRipper.SerializedFiles;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AssetRipper.Project
 {

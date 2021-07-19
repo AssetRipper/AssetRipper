@@ -12,7 +12,7 @@ namespace AssetRipper.Classes.AssetBundles
 		public void Read(AssetReader reader)
 		{
 			if (HasPreload(reader.Version))
-			{	
+			{
 				PreloadIndex = reader.ReadInt32();
 				PreloadSize = reader.ReadInt32();
 			}

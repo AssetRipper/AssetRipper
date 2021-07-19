@@ -16,7 +16,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		{
 		}
 
-		public MinMaxCurve(float minValue, float maxValue, float minCurve, float maxCurve):
+		public MinMaxCurve(float minValue, float maxValue, float minCurve, float maxCurve) :
 			this(ParticleSystemCurveMode.Constant, minValue, maxValue, minCurve, maxCurve)
 		{
 		}
@@ -67,12 +67,12 @@ namespace AssetRipper.Classes.ParticleSystems
 				MinMaxState = (ParticleSystemCurveMode)reader.ReadUInt16();
 				reader.AlignStream();
 			}
-			
+
 			Scalar = reader.ReadSingle();
 			MinScalar = HasMinScalar(reader.Version) ? reader.ReadSingle() : Scalar;
 			MaxCurve.Read(reader);
 			MinCurve.Read(reader);
-			
+
 			if (!IsMinMaxStateFirst(reader.Version))
 			{
 				MinMaxState = (ParticleSystemCurveMode)reader.ReadUInt16();

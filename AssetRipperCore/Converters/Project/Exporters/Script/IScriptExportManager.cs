@@ -1,6 +1,6 @@
-﻿using Mono.Cecil;
+﻿using AssetRipper.Layout;
+using Mono.Cecil;
 using System.Collections.Generic;
-using AssetRipper.Layout;
 
 namespace AssetRipper.Converters.Script
 {

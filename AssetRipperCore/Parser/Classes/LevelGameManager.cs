@@ -2,7 +2,7 @@
 {
 	public abstract class LevelGameManager : GameManager
 	{
-		protected LevelGameManager(AssetInfo assetInfo):
+		protected LevelGameManager(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

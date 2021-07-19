@@ -1,7 +1,7 @@
+using AssetRipper;
+using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Classes.Misc;
-using AssetRipper;
 
 namespace AssetRipper.Classes.AudioMixers
 {
@@ -25,13 +25,13 @@ namespace AssetRipper.Classes.AudioMixers
 			SnapshotGUIDs = reader.ReadAssetArray<UnityGUID>();
 			//m_groupNameBuffer = stream.ReadArray<char>();
 			reader.AlignStream();
-			
+
 			//m_snapshotNameBuffer = stream.ReadArray<char>();
 			reader.AlignStream();
-			
+
 			//m_pluginEffectNameBuffer = stream.ReadArray<char>();
 			reader.AlignStream();
-			
+
 			ExposedParameterNames = reader.ReadUInt32Array();
 			ExposedParameterIndices = reader.ReadUInt32Array();
 		}

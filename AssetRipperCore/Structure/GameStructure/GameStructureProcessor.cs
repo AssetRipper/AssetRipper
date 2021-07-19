@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AssetRipper.Layout;
+using AssetRipper.SerializedFiles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssetRipper.Layout;
-using AssetRipper.SerializedFiles;
 
 namespace AssetRipper
 {
@@ -207,7 +207,7 @@ namespace AssetRipper
 			}
 		}
 
-		public bool IsValid => m_schemes.Any(t => t.SchemeType != FileEntryType.Resource);	
+		public bool IsValid => m_schemes.Any(t => t.SchemeType != FileEntryType.Resource);
 
 		private readonly List<FileScheme> m_schemes = new List<FileScheme>();
 		private readonly HashSet<string> m_knownFiles = new HashSet<string>();

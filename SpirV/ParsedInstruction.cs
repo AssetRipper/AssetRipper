@@ -228,13 +228,13 @@ namespace SpirV
 			}
 		}
 
-		public void ResolveReferences (IReadOnlyDictionary<uint, ParsedInstruction> objects)
+		public void ResolveReferences(IReadOnlyDictionary<uint, ParsedInstruction> objects)
 		{
 			foreach (var operand in Operands)
 			{
 				if (operand.Value is ObjectReference objectReference)
 				{
-					objectReference.Resolve (objects);
+					objectReference.Resolve(objects);
 				}
 			}
 		}

@@ -1,12 +1,12 @@
+using AssetRipper.BundleFiles;
 using System;
 using System.IO;
-using AssetRipper.BundleFiles;
 
 namespace AssetRipper
 {
 	public sealed class BundleFile : FileList
 	{
-		internal BundleFile(BundleFileScheme scheme):
+		internal BundleFile(BundleFileScheme scheme) :
 			base(scheme.NameOrigin)
 		{
 			if (scheme == null)

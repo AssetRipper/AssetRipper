@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AssetRipper;
+using AssetRipper.Classes.Shaders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssetRipper;
-using AssetRipper.Classes.Shaders;
 
 namespace DXShaderRestorer
 {
@@ -135,7 +135,7 @@ namespace DXShaderRestorer
 					long sizeToAdd = constantBuffer.Size - currentSize;
 					int id1 = m_constantBufferIndex;
 					int id2 = allVariables.Count;
-					allVariables.Add(Variable.CreateDummyVariable($"unused_{id1}_{id2}", 
+					allVariables.Add(Variable.CreateDummyVariable($"unused_{id1}_{id2}",
 						(int)currentSize, (int)sizeToAdd, m_programType));
 				}
 				variables = allVariables;

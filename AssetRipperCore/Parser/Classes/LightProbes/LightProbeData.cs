@@ -1,7 +1,7 @@
-using System.Collections.Generic;
+using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Classes.Misc;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.LightProbess
 {
@@ -19,7 +19,7 @@ namespace AssetRipper.Classes.LightProbess
 			// unknown version
 			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
 		}
-		
+
 		public void Read(AssetReader reader)
 		{
 			Tetrahedralization.Read(reader);

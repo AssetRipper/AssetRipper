@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using AssetRipper.Classes;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Classes;
+using System;
+using System.Linq;
 
 namespace AssetRipper.Classes.Misc
 {

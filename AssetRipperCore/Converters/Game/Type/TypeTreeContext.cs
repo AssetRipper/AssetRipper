@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using AssetRipper.Layout;
+﻿using AssetRipper.Layout;
 using AssetRipper.SerializedFiles;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Converters
 {
@@ -360,7 +360,7 @@ namespace AssetRipper.Converters
 		}
 
 		public AssetLayout Layout { get; }
-		
+
 		public IReadOnlyList<TypeTreeNode> Nodes => m_nodes;
 		private int Depth { get; set; }
 		private int Index { get; set; }

@@ -21,23 +21,23 @@ namespace AssetRipper.Classes.Shaders
 			{
 				writer.WriteIndent(3);
 				writer.Write("Blend ");
-				if(index != -1)
+				if (index != -1)
 				{
 					writer.Write("{0} ", index);
 				}
 				writer.Write("{0} {1}", SrcBlendValue, DestBlendValue);
-				if(!SrcBlendAlphaValue.IsOne() || !DestBlendAlphaValue.IsZero())
+				if (!SrcBlendAlphaValue.IsOne() || !DestBlendAlphaValue.IsZero())
 				{
 					writer.Write(", {0} {1}", SrcBlendAlphaValue, DestBlendAlphaValue);
 				}
 				writer.Write('\n');
 			}
 
-			if(!BlendOpValue.IsAdd() || !BlendOpAlphaValue.IsAdd())
+			if (!BlendOpValue.IsAdd() || !BlendOpAlphaValue.IsAdd())
 			{
 				writer.WriteIndent(3);
 				writer.Write("BlendOp ");
-				if(index != -1)
+				if (index != -1)
 				{
 					writer.Write("{0} ", index);
 				}
@@ -48,8 +48,8 @@ namespace AssetRipper.Classes.Shaders
 				}
 				writer.Write('\n');
 			}
-			
-			if(!ColMaskValue.IsRBGA())
+
+			if (!ColMaskValue.IsRBGA())
 			{
 				writer.WriteIndent(3);
 				writer.Write("ColorMask ");

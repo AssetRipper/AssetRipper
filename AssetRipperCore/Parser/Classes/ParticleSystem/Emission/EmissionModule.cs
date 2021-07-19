@@ -47,7 +47,7 @@ namespace AssetRipper.Classes.ParticleSystems
 			if (HasType(reader.Version))
 			{
 				EmissionType type = (EmissionType)reader.ReadInt32();
-				if(type == EmissionType.Time)
+				if (type == EmissionType.Time)
 				{
 					RateOverTime.Read(reader);
 					RateOverDistance = new MinMaxCurve(0.0f);
@@ -92,7 +92,7 @@ namespace AssetRipper.Classes.ParticleSystems
 				reader.AlignStream();
 
 				Bursts = new ParticleSystemEmissionBurst[BurstCount];
-				if(BurstCount > 0)
+				if (BurstCount > 0)
 				{
 					Bursts[0] = new ParticleSystemEmissionBurst(time0, cnt0, cntMax0);
 					if (BurstCount > 1)

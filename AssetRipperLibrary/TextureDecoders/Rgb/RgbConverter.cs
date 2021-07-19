@@ -28,10 +28,10 @@ namespace AssetRipperLibrary.TextureDecoders.Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					output[0] = 0;		// b
-					output[1] = 0;		// g
-					output[2] = 0;		// r
-					output[3] = *input;	// a
+					output[0] = 0;      // b
+					output[1] = 0;      // g
+					output[2] = 0;      // r
+					output[3] = *input; // a
 					output += 4;
 					input++;
 				}
@@ -62,10 +62,10 @@ namespace AssetRipperLibrary.TextureDecoders.Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					output[0] = unchecked((byte)(input[0] << 4));	// b
-					output[1] = (byte)(input[0] & 0xF0);			// g	
-					output[2] = unchecked((byte)(input[1] << 4));	// r
-					output[3] = (byte)(input[1] & 0xF0);			// a
+					output[0] = unchecked((byte)(input[0] << 4));   // b
+					output[1] = (byte)(input[0] & 0xF0);            // g	
+					output[2] = unchecked((byte)(input[1] << 4));   // r
+					output[3] = (byte)(input[1] & 0xF0);            // a
 					input += 2;
 					output += 4;
 				}
@@ -96,10 +96,10 @@ namespace AssetRipperLibrary.TextureDecoders.Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					output[0] = input[2];	// b
-					output[1] = input[1];	// g
-					output[2] = input[0];	// r
-					output[3] = 255;		// a
+					output[0] = input[2];   // b
+					output[1] = input[1];   // g
+					output[2] = input[0];   // r
+					output[3] = 255;        // a
 					input += 3;
 					output += 4;
 				}
@@ -201,10 +201,10 @@ namespace AssetRipperLibrary.TextureDecoders.Rgb
 					byte r = (byte)(input[1] & 0xF8);
 					byte g = unchecked((byte)((input[1] << 5) | ((input[0] & 0xE0) >> 3)));
 					byte b = unchecked((byte)(input[0] << 3));
-					output[0] = b;		// b
-					output[1] = g;		// g
-					output[2] = r;		// r
-					output[3] = 255;	// a
+					output[0] = b;      // b
+					output[1] = g;      // g
+					output[2] = r;      // r
+					output[3] = 255;    // a
 					input += 2;
 					output += 4;
 				}
@@ -235,10 +235,10 @@ namespace AssetRipperLibrary.TextureDecoders.Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					output[0] = 0;			// b
-					output[1] = 0;			// g
-					output[2] = input[1];	// r
-					output[3] = 255;		// a
+					output[0] = 0;          // b
+					output[1] = 0;          // g
+					output[2] = input[1];   // r
+					output[3] = 255;        // a
 					input += 2;
 					output += 4;
 				}
@@ -269,10 +269,10 @@ namespace AssetRipperLibrary.TextureDecoders.Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					output[0] = (byte)(input[0] & 0xF0);			// b
-					output[1] = unchecked((byte)(input[1] << 4));	// g	
-					output[2] = (byte)(input[1] & 0xF0);			// r
-					output[3] = unchecked((byte)(input[0] << 4));	// a
+					output[0] = (byte)(input[0] & 0xF0);            // b
+					output[1] = unchecked((byte)(input[1] << 4));   // g	
+					output[2] = (byte)(input[1] & 0xF0);            // r
+					output[3] = unchecked((byte)(input[0] << 4));   // a
 					input += 2;
 					output += 4;
 				}
@@ -303,10 +303,10 @@ namespace AssetRipperLibrary.TextureDecoders.Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					output[0] = 0;			// b
-					output[1] = input[1];	// g
-					output[2] = input[0];	// r
-					output[3] = 255;		// a
+					output[0] = 0;          // b
+					output[1] = input[1];   // g
+					output[2] = input[0];   // r
+					output[3] = 255;        // a
 					input += 2;
 					output += 4;
 				}
@@ -337,10 +337,10 @@ namespace AssetRipperLibrary.TextureDecoders.Rgb
 			{
 				for (int j = 0; j < height; j++)
 				{
-					output[0] = 0;			// b
-					output[1] = 0;			// g
-					output[2] = input[0];	// r
-					output[3] = 255;		// a
+					output[0] = 0;          // b
+					output[1] = 0;          // g
+					output[2] = input[0];   // r
+					output[3] = 255;        // a
 					input += 1;
 					output += 4;
 				}
@@ -373,10 +373,10 @@ namespace AssetRipperLibrary.TextureDecoders.Rgb
 				for (int j = 0; j < height; j++)
 				{
 					double r = Clamp255(Math.Round(AssetRipper.Half.ToHalf(sinput[0]) * 255f));
-					output[0] = 0;					// b
-					output[1] = 0;					// g
-					output[2] = Convert.ToByte(r);	// r
-					output[3] = 255;				// a
+					output[0] = 0;                  // b
+					output[1] = 0;                  // g
+					output[2] = Convert.ToByte(r);  // r
+					output[3] = 255;                // a
 					sinput += 1;
 					output += 4;
 				}
@@ -410,10 +410,10 @@ namespace AssetRipperLibrary.TextureDecoders.Rgb
 				{
 					double r = Clamp255(Math.Round(AssetRipper.Half.ToHalf(sinput[0]) * 255f));
 					double g = Clamp255(Math.Round(AssetRipper.Half.ToHalf(sinput[1]) * 255f));
-					output[0] = 0;					// b
-					output[1] = Convert.ToByte(g);	// g
-					output[2] = Convert.ToByte(r);	// r
-					output[3] = 255;				// a
+					output[0] = 0;                  // b
+					output[1] = Convert.ToByte(g);  // g
+					output[2] = Convert.ToByte(r);  // r
+					output[3] = 255;                // a
 					sinput += 2;
 					output += 4;
 				}
@@ -485,10 +485,10 @@ namespace AssetRipperLibrary.TextureDecoders.Rgb
 				for (int j = 0; j < height; j++)
 				{
 					double r = Clamp255(Math.Round(sinput[0] * 255f));
-					output[0] = 0;					// b
-					output[1] = 0;					// g
-					output[2] = Convert.ToByte(r);	// r
-					output[3] = 255;				// a
+					output[0] = 0;                  // b
+					output[1] = 0;                  // g
+					output[2] = Convert.ToByte(r);  // r
+					output[3] = 255;                // a
 					sinput += 1;
 					output += 4;
 				}
@@ -522,10 +522,10 @@ namespace AssetRipperLibrary.TextureDecoders.Rgb
 				{
 					double r = Clamp255(Math.Round(sinput[0] * 255f));
 					double g = Clamp255(Math.Round(sinput[1] * 255f));
-					output[0] = 0;					// b
-					output[1] = Convert.ToByte(g);	// g
-					output[2] = Convert.ToByte(r);	// r
-					output[3] = 255;				// a
+					output[0] = 0;                  // b
+					output[1] = Convert.ToByte(g);  // g
+					output[2] = Convert.ToByte(r);  // r
+					output[3] = 255;                // a
 					sinput += 2;
 					output += 4;
 				}
@@ -561,10 +561,10 @@ namespace AssetRipperLibrary.TextureDecoders.Rgb
 					double g = Clamp255(Math.Round(sinput[1] * 255f));
 					double b = Clamp255(Math.Round(sinput[2] * 255f));
 					double a = Clamp255(Math.Round(sinput[3] * 255f));
-					output[0] = Convert.ToByte(b);	// b
-					output[1] = Convert.ToByte(g);	// g
-					output[2] = Convert.ToByte(r);	// r
-					output[3] = Convert.ToByte(a);	// a
+					output[0] = Convert.ToByte(b);  // b
+					output[1] = Convert.ToByte(g);  // g
+					output[2] = Convert.ToByte(r);  // r
+					output[3] = Convert.ToByte(a);  // a
 					sinput += 4;
 					output += 4;
 				}

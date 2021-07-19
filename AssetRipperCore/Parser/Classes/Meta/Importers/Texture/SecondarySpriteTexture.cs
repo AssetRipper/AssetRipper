@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.TextureImporters
 {
@@ -11,7 +11,7 @@ namespace AssetRipper.Classes.TextureImporters
 			Texture.Read(reader);
 			Name = reader.ReadString();
 			reader.AlignStream();
-			
+
 		}
 
 		public void Write(AssetWriter writer)
@@ -19,7 +19,7 @@ namespace AssetRipper.Classes.TextureImporters
 			Texture.Write(writer);
 			writer.Write(Name);
 			writer.AlignStream();
-			
+
 		}
 
 		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)

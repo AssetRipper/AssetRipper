@@ -23,7 +23,7 @@ namespace AssetRipper.Classes.AnimatorControllers
 				StateMachineBehaviourIndices = reader.ReadUInt32Array();
 			}
 		}
-		
+
 		/// <summary>
 		/// m_BehavioursRangeInfo previously
 		/// </summary>

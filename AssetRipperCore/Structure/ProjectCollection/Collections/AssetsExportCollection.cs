@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using AssetRipper.Classes;
 using AssetRipper.Converters;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AssetRipper.Project
 {

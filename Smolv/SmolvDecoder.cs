@@ -327,7 +327,7 @@ namespace Smolv
 				return false;
 			}
 			len = ((value >> 20) << 4) | ((value >> 4) & 0xF);
-			op = (SpvOp) (((value >> 4) & 0xFFF0) | (value & 0xF));
+			op = (SpvOp)(((value >> 4) & 0xFFF0) | (value & 0xF));
 
 			op = RemapOp(op);
 			len = DecodeLen(op, len);

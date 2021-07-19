@@ -5,7 +5,7 @@ namespace AssetRipper.Classes
 {
 	public abstract class GameManager : EditorExtension
 	{
-		protected GameManager(AssetInfo assetInfo):
+		protected GameManager(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

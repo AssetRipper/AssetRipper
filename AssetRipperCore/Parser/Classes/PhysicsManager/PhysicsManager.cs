@@ -1,13 +1,13 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.PhysicsManagers;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class PhysicsManager : GlobalGameManager
 	{
-		public PhysicsManager(AssetInfo assetInfo):
+		public PhysicsManager(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -345,7 +345,7 @@ namespace AssetRipper.Classes
 				return LayerCollisionMatrix;
 			}
 			uint[] matrix = new uint[32];
-			for(int i = 0; i < matrix.Length; i++)
+			for (int i = 0; i < matrix.Length; i++)
 			{
 				matrix[i] = uint.MaxValue;
 			}

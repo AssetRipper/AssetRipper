@@ -6,7 +6,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class NavMeshAgent : Behaviour
 	{
-		public NavMeshAgent(AssetInfo assetInfo):
+		public NavMeshAgent(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -48,7 +48,7 @@ namespace AssetRipper.Classes
 			}
 			AutoRepath = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 			Height = reader.ReadSingle();
 			BaseOffset = reader.ReadSingle();
 			WalkableMask = reader.ReadUInt32();

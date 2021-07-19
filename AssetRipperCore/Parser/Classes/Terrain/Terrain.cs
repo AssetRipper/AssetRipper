@@ -1,15 +1,15 @@
-using System.Collections.Generic;
+using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.Renderers;
 using AssetRipper.Classes.Terrains;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
-using AssetRipper.Classes.Misc;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class Terrain : Behaviour
 	{
-		public Terrain(AssetInfo assetInfo):
+		public Terrain(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

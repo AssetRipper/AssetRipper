@@ -1,13 +1,13 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.SpriteRenderers;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class SpriteRenderer : Renderer
 	{
-		public SpriteRenderer(AssetInfo assetInfo):
+		public SpriteRenderer(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -26,7 +26,7 @@ namespace AssetRipper.Classes
 		/// </summary>
 		public static bool HasWasSpriteAssigned(Version version)
 		{
-			if(version.IsGreaterEqual(2017))
+			if (version.IsGreaterEqual(2017))
 			{
 				return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 5);
 			}
@@ -43,7 +43,7 @@ namespace AssetRipper.Classes
 		/// 2018.2 and greater
 		/// </summary>
 		public static bool HasSpriteSortPoint(Version version) => version.IsGreaterEqual(2018, 2);
-		
+
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
@@ -68,7 +68,7 @@ namespace AssetRipper.Classes
 			{
 				FlipX = reader.ReadBoolean();
 				FlipY = reader.ReadBoolean();
-				if(IsAlignFlip(reader.Version))
+				if (IsAlignFlip(reader.Version))
 				{
 					reader.AlignStream();
 				}
@@ -102,7 +102,7 @@ namespace AssetRipper.Classes
 			{
 				yield return asset;
 			}
-			
+
 			yield return context.FetchDependency(Sprite, SpriteName);
 		}
 

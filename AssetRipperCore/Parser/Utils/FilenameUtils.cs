@@ -1,6 +1,6 @@
+using AssetRipper.Game.Assembly.Mono;
 using System;
 using System.IO;
-using AssetRipper.Game.Assembly.Mono;
 
 namespace AssetRipper
 {

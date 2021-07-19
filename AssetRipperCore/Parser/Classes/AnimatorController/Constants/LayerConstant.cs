@@ -1,7 +1,7 @@
-﻿using System;
-using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System;
 
 namespace AssetRipper.Classes.AnimatorControllers
 {
@@ -44,7 +44,7 @@ namespace AssetRipper.Classes.AnimatorControllers
 		{
 			throw new NotSupportedException();
 		}
-		
+
 		public int StateMachineIndex { get; set; }
 		public int StateMachineMotionSetIndex { get; set; }
 		public uint Binding { get; set; }
@@ -52,7 +52,7 @@ namespace AssetRipper.Classes.AnimatorControllers
 		public float DefaultWeight { get; set; }
 		public bool IKPass { get; set; }
 		public bool SyncedLayerAffectsTiming { get; set; }
-		
+
 		public HumanPoseMask BodyMask;
 		public OffsetPtr<SkeletonMask> SkeletonMask;
 	}

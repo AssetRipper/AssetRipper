@@ -48,7 +48,7 @@ namespace SpirV
 			// Entry points contain forward references
 			// Those need to be resolved afterwards
 			List<ParsedInstruction> entryPoints = new List<ParsedInstruction>();
-			
+
 			foreach (var instruction in instructions)
 			{
 				if (IsDebugInstruction(instruction))
@@ -80,9 +80,9 @@ namespace SpirV
 					case OpConstant oc:
 						{
 							Type t = instruction.ResultType;
-							Debug.Assert (t != null);
-							Debug.Assert (t is ScalarType);
-							
+							Debug.Assert(t != null);
+							Debug.Assert(t is ScalarType);
+
 							object constant = ConvertConstant(instruction.ResultType as ScalarType, instruction.Words, 3);
 							instruction.Operands[2].Value = constant;
 							instruction.Value = constant;
@@ -155,7 +155,7 @@ namespace SpirV
 			List<ParsedInstruction> instructions = new List<ParsedInstruction>();
 			while (!reader.EndOfStream)
 			{
-				uint instructionStart = reader.ReadDWord ();
+				uint instructionStart = reader.ReadDWord();
 				ushort wordCount = (ushort)(instructionStart >> 16);
 				int opCode = (int)(instructionStart & 0xFFFF);
 
@@ -266,7 +266,7 @@ namespace SpirV
 
 				case OpTypeImage t:
 					{
-						Type sampledType = objects[i.Operands[1].GetId ()].ResultType;
+						Type sampledType = objects[i.Operands[1].GetId()].ResultType;
 						Dim dim = i.Operands[2].GetSingleEnumValue<Dim>();
 						uint depth = (uint)i.Operands[3].Value;
 						bool isArray = (uint)i.Operands[4].Value != 0;
@@ -321,9 +321,9 @@ namespace SpirV
 							// a forward reference. The storage type must
 							// match
 							PointerType pt = (PointerType)i.ResultType;
-							Debug.Assert (pt != null);
-							Debug.Assert (pt.StorageClass == (StorageClass)i.Words[2]);
-							pt.ResolveForwardReference (objects[i.Words[3]].ResultType);
+							Debug.Assert(pt != null);
+							Debug.Assert(pt.StorageClass == (StorageClass)i.Words[2]);
+							pt.ResolveForwardReference(objects[i.Words[3]].ResultType);
 						}
 						else
 						{
@@ -382,7 +382,7 @@ namespace SpirV
 							}
 						}
 
-						throw new Exception ("Cannot construct integer literal.");
+						throw new Exception("Cannot construct integer literal.");
 					}
 
 				case FloatingPointType f:

@@ -1,6 +1,6 @@
-using System.Collections.Generic;
-using AssetRipper.YAML;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
@@ -9,7 +9,7 @@ namespace AssetRipper.Classes
 	/// </summary>
 	public sealed class Cubemap : Texture2D
 	{
-		public Cubemap(AssetInfo assetInfo):
+		public Cubemap(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

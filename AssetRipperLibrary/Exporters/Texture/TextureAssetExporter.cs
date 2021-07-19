@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.IO;
 using AssetRipper;
 using AssetRipper.Classes;
 using AssetRipper.Classes.Textures;
@@ -9,6 +5,10 @@ using AssetRipper.Converters;
 using AssetRipper.Project;
 using AssetRipper.SerializedFiles;
 using AssetRipperLibrary.Utils;
+using System;
+using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.IO;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipperLibrary.Exporters.Texture

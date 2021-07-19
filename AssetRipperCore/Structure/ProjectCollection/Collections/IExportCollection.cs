@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Converters;
+using System.Collections.Generic;
 
 namespace AssetRipper.Project
 {
@@ -14,6 +14,6 @@ namespace AssetRipper.Project
 		ISerializedFile File { get; }
 		TransferInstructionFlags Flags { get; }
 		IEnumerable<Object> Assets { get; }
-		string Name { get; } 
+		string Name { get; }
 	}
 }

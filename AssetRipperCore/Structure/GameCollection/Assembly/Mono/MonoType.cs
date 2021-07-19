@@ -1,8 +1,8 @@
+using AssetRipper.Converters.Script;
+using AssetRipper.Converters.Script.Mono;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
-using AssetRipper.Converters.Script;
-using AssetRipper.Converters.Script.Mono;
 
 namespace AssetRipper.Game.Assembly.Mono
 {
@@ -30,7 +30,7 @@ namespace AssetRipper.Game.Assembly.Mono
 			Fields = CreateFields(manager, context);
 		}
 
-#region Naming
+		#region Naming
 		public static bool IsPrimitive(TypeReference type)
 		{
 			return IsPrimitive(type.Namespace, type.Name);
@@ -91,8 +91,8 @@ namespace AssetRipper.Game.Assembly.Mono
 		{
 			return IsExposedReference(type.Namespace, type.Name);
 		}
-#endregion
-#region Helpers
+		#endregion
+		#region Helpers
 		public static bool IsPrime(TypeReference type)
 		{
 			return IsPrime(type.Namespace, type.Name);
@@ -182,8 +182,8 @@ namespace AssetRipper.Game.Assembly.Mono
 			}
 			return false;
 		}
-#endregion
-#region Serialization
+		#endregion
+		#region Serialization
 		public static bool IsSerializable(in MonoFieldContext context)
 		{
 			if (IsSerializableModifier(context.Definition))
@@ -373,7 +373,7 @@ namespace AssetRipper.Game.Assembly.Mono
 			}
 			return false;
 		}
-#endregion
+		#endregion
 
 		private static PrimitiveType ToPrimitiveType(TypeReference type)
 		{

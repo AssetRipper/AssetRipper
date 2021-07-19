@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Game.Assembly;
 using AssetRipper.Layout;
 using AssetRipper.Layout.AnimationClips;
 using AssetRipper.SerializedFiles;
+using System;
+using System.Linq;
 
 namespace AssetRipper.Converters
 {

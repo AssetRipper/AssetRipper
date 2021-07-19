@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AssetRipper.Layout;
+using AssetRipper.Lz4;
+using System;
 using System.IO;
 using System.Linq;
-using AssetRipper.Layout;
-using AssetRipper.Lz4;
 
 namespace AssetRipper.Classes.Shaders
 {

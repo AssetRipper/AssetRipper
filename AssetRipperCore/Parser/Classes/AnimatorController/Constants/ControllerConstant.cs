@@ -1,10 +1,10 @@
-using System;
 using AssetRipper.Classes.Misc;
+using System;
 
 namespace AssetRipper.Classes.AnimatorControllers
 {
 	public struct ControllerConstant : IAssetReadable
-	{		
+	{
 		public void Read(AssetReader reader)
 		{
 			LayerArray = reader.ReadAssetArray<OffsetPtr<LayerConstant>>();
@@ -25,7 +25,7 @@ namespace AssetRipper.Classes.AnimatorControllers
 			}
 			throw new ArgumentOutOfRangeException(nameof(index));
 		}
-		
+
 		public int GetLayerIndexByStateMachineIndex(int index)
 		{
 			for (int i = 0; i < LayerArray.Length; i++)
@@ -41,10 +41,10 @@ namespace AssetRipper.Classes.AnimatorControllers
 
 		public int GetLayerIndex(LayerConstant layer)
 		{
-			for(int i = 0; i < LayerArray.Length; i++)
+			for (int i = 0; i < LayerArray.Length; i++)
 			{
 				LayerConstant checkLayer = LayerArray[i].Instance;
-				if(checkLayer.StateMachineIndex == layer.StateMachineIndex && checkLayer.StateMachineMotionSetIndex == layer.StateMachineMotionSetIndex)
+				if (checkLayer.StateMachineIndex == layer.StateMachineIndex && checkLayer.StateMachineMotionSetIndex == layer.StateMachineMotionSetIndex)
 				{
 					return i;
 				}

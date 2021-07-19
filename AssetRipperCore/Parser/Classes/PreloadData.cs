@@ -1,7 +1,7 @@
+using AssetRipper.Converters;
+using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
 
 namespace AssetRipper.Classes
 {
@@ -20,7 +20,7 @@ namespace AssetRipper.Classes
 		/// 2018.2 and greater
 		/// </summary>
 		public static bool HasExplicitDataLayout(Version version) => version.IsGreaterEqual(2018, 2);
-		
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);

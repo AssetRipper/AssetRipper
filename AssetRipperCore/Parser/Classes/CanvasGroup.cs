@@ -5,7 +5,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class CanvasGroup : Behaviour
 	{
-		public CanvasGroup(AssetInfo assetInfo):
+		public CanvasGroup(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -31,7 +31,7 @@ namespace AssetRipper.Classes
 			BlocksRaycasts = reader.ReadBoolean();
 			IgnoreParentGroups = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

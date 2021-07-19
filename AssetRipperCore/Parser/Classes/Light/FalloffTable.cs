@@ -8,7 +8,7 @@ namespace AssetRipper.Classes.Lights
 		public void Read(AssetReader reader)
 		{
 			Table = new float[13];
-			for(int i = 0; i < Table.Length; i++)
+			for (int i = 0; i < Table.Length; i++)
 			{
 				Table[i] = reader.ReadSingle();
 			}

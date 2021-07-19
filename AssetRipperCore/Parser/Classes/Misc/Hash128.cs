@@ -1,7 +1,7 @@
-﻿using AssetRipper.YAML;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.BundleFiles;
 using AssetRipper.Converters;
-using AssetRipper.BundleFiles;
+using AssetRipper.SerializedFiles;
+using AssetRipper.YAML;
 
 namespace AssetRipper.Classes.Misc
 {

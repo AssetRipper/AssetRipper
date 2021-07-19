@@ -1,7 +1,7 @@
-﻿using AssetRipper.YAML;
+﻿using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.TrailRenderers;
 using AssetRipper.Converters;
-using AssetRipper.Classes.Misc;
+using AssetRipper.YAML;
 
 namespace AssetRipper.Classes
 {

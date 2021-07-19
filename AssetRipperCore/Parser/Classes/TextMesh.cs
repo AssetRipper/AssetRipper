@@ -1,8 +1,8 @@
-﻿using AssetRipper.YAML;
-using AssetRipper.Classes.Fonts;
+﻿using AssetRipper.Classes.Fonts;
 using AssetRipper.Classes.GUITexts;
-using System.Collections.Generic;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {

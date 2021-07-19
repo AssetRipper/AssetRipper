@@ -1,10 +1,10 @@
+using AssetRipper.ArchiveFiles;
+using AssetRipper.SerializedFiles;
 using Brotli;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using AssetRipper.ArchiveFiles;
-using AssetRipper.SerializedFiles;
 
 namespace AssetRipper
 {

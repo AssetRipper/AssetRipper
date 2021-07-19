@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.LightmapSettingss;
 using AssetRipper.Classes.Textures;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {

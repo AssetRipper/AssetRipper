@@ -5,7 +5,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class SphereCollider : Collider
 	{
-		public SphereCollider(AssetInfo assetInfo):
+		public SphereCollider(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -28,7 +28,7 @@ namespace AssetRipper.Classes
 			{
 				reader.AlignStream();
 			}
-			
+
 			Radius = reader.ReadSingle();
 			Center.Read(reader);
 		}

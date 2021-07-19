@@ -31,15 +31,15 @@ namespace Brotli
 			return result;
 		}
 
-		internal static readonly Brotli.Transform[] Transforms = new Brotli.Transform[] { new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, string.Empty), new Brotli.Transform(string.Empty, 
+		internal static readonly Brotli.Transform[] Transforms = new Brotli.Transform[] { new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, string.Empty), new Brotli.Transform(string.Empty,
 			Brotli.WordTransformType.Identity, " "), new Brotli.Transform(" ", Brotli.WordTransformType.Identity, " "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.OmitFirst1, string.Empty), new Brotli.Transform
 			(string.Empty, Brotli.WordTransformType.UppercaseFirst, " "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, " the "), new Brotli.Transform(" ", Brotli.WordTransformType.Identity
 			, string.Empty), new Brotli.Transform("s ", Brotli.WordTransformType.Identity, " "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, " of "), new Brotli.Transform(string.Empty, Brotli.WordTransformType
 			.UppercaseFirst, string.Empty), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, " and "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.OmitFirst2, string.Empty), new Brotli.Transform
 			(string.Empty, Brotli.WordTransformType.OmitLast1, string.Empty), new Brotli.Transform(", ", Brotli.WordTransformType.Identity, " "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity
 			, ", "), new Brotli.Transform(" ", Brotli.WordTransformType.UppercaseFirst, " "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, " in "), new Brotli.Transform(string.Empty, Brotli.WordTransformType
-			.Identity, " to "), new Brotli.Transform("e ", Brotli.WordTransformType.Identity, " "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "\""), new Brotli.Transform(string.Empty, 
-			Brotli.WordTransformType.Identity, "."), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "\">"), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "\n"), new 
+			.Identity, " to "), new Brotli.Transform("e ", Brotli.WordTransformType.Identity, " "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "\""), new Brotli.Transform(string.Empty,
+			Brotli.WordTransformType.Identity, "."), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "\">"), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "\n"), new
 			Brotli.Transform(string.Empty, Brotli.WordTransformType.OmitLast3, string.Empty), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "]"), new Brotli.Transform(string.Empty, Brotli.WordTransformType
 			.Identity, " for "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.OmitFirst3, string.Empty), new Brotli.Transform(string.Empty, Brotli.WordTransformType.OmitLast2, string.Empty), new Brotli.Transform
 			(string.Empty, Brotli.WordTransformType.Identity, " a "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, " that "), new Brotli.Transform(" ", Brotli.WordTransformType.UppercaseFirst
@@ -58,21 +58,21 @@ namespace Brotli
 			.Identity, "ly "), new Brotli.Transform(" the ", Brotli.WordTransformType.Identity, " of "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.OmitLast5, string.Empty), new Brotli.Transform(
 			string.Empty, Brotli.WordTransformType.OmitLast9, string.Empty), new Brotli.Transform(" ", Brotli.WordTransformType.UppercaseFirst, ", "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseFirst
 			, "\""), new Brotli.Transform(".", Brotli.WordTransformType.Identity, "("), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseAll, " "), new Brotli.Transform(string.Empty, Brotli.WordTransformType
-			.UppercaseFirst, "\">"), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "=\""), new Brotli.Transform(" ", Brotli.WordTransformType.Identity, "."), new Brotli.Transform(".com/", 
+			.UppercaseFirst, "\">"), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "=\""), new Brotli.Transform(" ", Brotli.WordTransformType.Identity, "."), new Brotli.Transform(".com/",
 			Brotli.WordTransformType.Identity, string.Empty), new Brotli.Transform(" the ", Brotli.WordTransformType.Identity, " of the "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseFirst
 			, "'"), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, ". This "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, ","), new Brotli.Transform(".", Brotli.WordTransformType
 			.Identity, " "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseFirst, "("), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseFirst, "."), new Brotli.Transform
 			(string.Empty, Brotli.WordTransformType.Identity, " not "), new Brotli.Transform(" ", Brotli.WordTransformType.Identity, "=\""), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "er "
 			), new Brotli.Transform(" ", Brotli.WordTransformType.UppercaseAll, " "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "al "), new Brotli.Transform(" ", Brotli.WordTransformType
 			.UppercaseAll, string.Empty), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "='"), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseAll, "\""), new Brotli.Transform
-			(string.Empty, Brotli.WordTransformType.UppercaseFirst, ". "), new Brotli.Transform(" ", Brotli.WordTransformType.Identity, "("), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, 
+			(string.Empty, Brotli.WordTransformType.UppercaseFirst, ". "), new Brotli.Transform(" ", Brotli.WordTransformType.Identity, "("), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity,
 			"ful "), new Brotli.Transform(" ", Brotli.WordTransformType.UppercaseFirst, ". "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "ive "), new Brotli.Transform(string.Empty, Brotli.WordTransformType
 			.Identity, "less "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseAll, "'"), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "est "), new Brotli.Transform
 			(" ", Brotli.WordTransformType.UppercaseFirst, "."), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseAll, "\">"), new Brotli.Transform(" ", Brotli.WordTransformType.Identity, "='"
 			), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseFirst, ","), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity, "ize "), new Brotli.Transform(string.Empty, Brotli.WordTransformType
 			.UppercaseAll, "."), new Brotli.Transform("\u00c2\u00a0", Brotli.WordTransformType.Identity, string.Empty), new Brotli.Transform(" ", Brotli.WordTransformType.Identity, ","), new Brotli.Transform(string.Empty
 			, Brotli.WordTransformType.UppercaseFirst, "=\""), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseAll, "=\""), new Brotli.Transform(string.Empty, Brotli.WordTransformType.Identity
-			, "ous "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseAll, ", "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseFirst, "='"), new Brotli.Transform(" ", 
+			, "ous "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseAll, ", "), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseFirst, "='"), new Brotli.Transform(" ",
 			Brotli.WordTransformType.UppercaseFirst, ","), new Brotli.Transform(" ", Brotli.WordTransformType.UppercaseAll, "=\""), new Brotli.Transform(" ", Brotli.WordTransformType.UppercaseAll, ", "), new Brotli.Transform
 			(string.Empty, Brotli.WordTransformType.UppercaseAll, ","), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseAll, "("), new Brotli.Transform(string.Empty, Brotli.WordTransformType.
 			UppercaseAll, ". "), new Brotli.Transform(" ", Brotli.WordTransformType.UppercaseAll, "."), new Brotli.Transform(string.Empty, Brotli.WordTransformType.UppercaseAll, "='"), new Brotli.Transform(" ", Brotli.WordTransformType

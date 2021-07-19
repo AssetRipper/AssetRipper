@@ -21,7 +21,7 @@ namespace AssetRipper.SerializedFiles
 		{
 			return file.Name == PathName;
 		}
-		
+
 		public void Read(SerializedReader reader)
 		{
 			if (HasAssetPath(reader.Generation))

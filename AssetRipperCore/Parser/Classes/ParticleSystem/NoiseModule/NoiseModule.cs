@@ -33,7 +33,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		/// 2017.1.0b2 and greater
 		/// </summary>
 		public static bool HasPositionAmount(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
-		
+
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
@@ -42,17 +42,17 @@ namespace AssetRipper.Classes.ParticleSystems
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			Strength.Read(reader);
 			StrengthY.Read(reader);
 			StrengthZ.Read(reader);
 			SeparateAxes = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 			Frequency = reader.ReadSingle();
 			Damping = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 			Octaves = reader.ReadInt32();
 			OctaveMultiplier = reader.ReadSingle();
 			OctaveScale = reader.ReadSingle();

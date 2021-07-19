@@ -5,7 +5,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class EdgeCollider2D : Collider2D
 	{
-		public EdgeCollider2D(AssetInfo assetInfo):
+		public EdgeCollider2D(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

@@ -34,12 +34,12 @@ namespace SpirV
 
 	public class Instruction
 	{
-		public Instruction (string name)
-			: this (name, new List<Operand> ())
+		public Instruction(string name)
+			: this(name, new List<Operand>())
 		{
 		}
 
-		public Instruction (string name, IReadOnlyList<Operand> operands)
+		public Instruction(string name, IReadOnlyList<Operand> operands)
 		{
 			Operands = operands;
 			Name = name;

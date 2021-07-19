@@ -13,7 +13,7 @@ namespace AssetRipper.Classes.Avatars
 			Length = reader.ReadSingle();
 			Modified = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

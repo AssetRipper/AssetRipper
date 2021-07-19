@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using AssetRipper.YAML;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
-using AssetRipper.Classes.Misc;
+using AssetRipper.SerializedFiles;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class NetworkManager : GlobalGameManager
 	{
-		public NetworkManager(AssetInfo assetInfo):
+		public NetworkManager(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using AssetRipper.Classes;
 using AssetRipper.Game;
+using System.Collections.Generic;
 
 namespace AssetRipper
 {
@@ -10,7 +10,7 @@ namespace AssetRipper
 		IResourceFile FindResourceFile(string fileName);
 
 		T FindAsset<T>()
-			where T: Object;
+			where T : Object;
 		T FindAsset<T>(string name)
 			where T : NamedObject;
 		IEnumerable<Object> FetchAssets();

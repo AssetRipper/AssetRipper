@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.IO;
-using System.Linq;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Classes.Meshes;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.Shaders;
+using System;
+using System.Collections;
+using System.IO;
+using System.Linq;
 
 namespace AssetRipper.Converters.Meshes
 {

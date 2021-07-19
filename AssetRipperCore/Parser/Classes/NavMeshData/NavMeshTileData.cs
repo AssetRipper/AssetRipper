@@ -1,6 +1,6 @@
+using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Classes.Misc;
 
 namespace AssetRipper.Classes.NavMeshDatas
 {

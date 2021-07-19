@@ -1,9 +1,9 @@
-using System;
-using System.IO;
-using System.Text;
 using AssetRipper.Classes;
 using AssetRipper.Classes.Shaders;
 using AssetRipper.Converters.Shaders;
+using System;
+using System.IO;
+using System.Text;
 
 namespace AssetRipper
 {
@@ -12,11 +12,11 @@ namespace AssetRipper
 		public ShaderWriter(Stream stream, Shader shader, Func<Version, GPUPlatform, ShaderTextExporter> exporterInstantiator) :
 			base(stream, new UTF8Encoding(false), 4096, true)
 		{
-			if(shader == null)
+			if (shader == null)
 			{
 				throw new ArgumentNullException(nameof(shader));
 			}
-			if(exporterInstantiator == null)
+			if (exporterInstantiator == null)
 			{
 				throw new ArgumentNullException(nameof(exporterInstantiator));
 			}
@@ -32,7 +32,7 @@ namespace AssetRipper
 			ShaderTextExporter exporter = m_exporterInstantiator.Invoke(Shader.File.Version, graphicApi);
 			exporter.Export(this, ref subProgram);
 		}
-		
+
 		public Shader Shader { get; }
 		public Version Version => Shader.File.Version;
 		public Platform Platform => Shader.File.Platform;

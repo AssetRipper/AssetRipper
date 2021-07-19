@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using AssetRipper.Classes.GameObjects;
+﻿using AssetRipper.Classes.GameObjects;
+using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Classes.Misc;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
@@ -12,9 +12,9 @@ namespace AssetRipper.Classes
 		public static int IndexOf<T>(this IEnumerable<T> _this, Func<T, bool> predicate)
 		{
 			int index = 0;
-			foreach(T t in _this)
+			foreach (T t in _this)
 			{
-				if(predicate(t))
+				if (predicate(t))
 				{
 					return index;
 				}
@@ -32,13 +32,13 @@ namespace AssetRipper.Classes
 			}
 			return node;
 		}
-		
+
 		public static YAMLNode ExportYAML(this IEnumerable<ComponentPair> _this, IExportContainer container)
 		{
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
 			foreach (ComponentPair pair in _this)
 			{
-				if(pair.Component.IsValid(container))
+				if (pair.Component.IsValid(container))
 				{
 					node.Add(pair.ExportYAML(container));
 				}

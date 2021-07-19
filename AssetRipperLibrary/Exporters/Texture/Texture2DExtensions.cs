@@ -1,12 +1,11 @@
-using System;
 using AssetRipper.Classes;
 using AssetRipper.Classes.Textures;
 using AssetRipperLibrary.TextureContainers.DDS;
 using AssetRipperLibrary.TextureContainers.KTX;
 using AssetRipperLibrary.TextureContainers.PVR;
-
-using KTXFormat = AssetRipperLibrary.TextureContainers.KTX.KTXInternalFormat;
+using System;
 using KTXBaseFormat = AssetRipperLibrary.TextureContainers.KTX.KTXBaseInternalFormat;
+using KTXFormat = AssetRipperLibrary.TextureContainers.KTX.KTXInternalFormat;
 using PVRFormat = AssetRipperLibrary.TextureContainers.PVR.PVRPixelFormat;
 
 namespace AssetRipperLibrary.Exporters.Texture

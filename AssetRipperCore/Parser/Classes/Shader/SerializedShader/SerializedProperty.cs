@@ -23,11 +23,11 @@ namespace AssetRipper.Classes.Shaders
 		public void Export(TextWriter writer)
 		{
 			writer.WriteIndent(2);
-			foreach(string attribute in Attributes)
+			foreach (string attribute in Attributes)
 			{
 				writer.Write("[{0}] ", attribute);
 			}
-			if(Flags.IsHideInEnspector())
+			if (Flags.IsHideInEnspector())
 			{
 				writer.Write("[HideInInspector] ");
 			}
@@ -54,7 +54,7 @@ namespace AssetRipper.Classes.Shaders
 
 			writer.Write("{0} (\"{1}\", ", Name, Description);
 
-			switch(Type)
+			switch (Type)
 			{
 				case SerializedPropertyType.Color:
 				case SerializedPropertyType.Vector:
@@ -74,9 +74,9 @@ namespace AssetRipper.Classes.Shaders
 					break;
 
 				case SerializedPropertyType._2D:
-				//case SerializedPropertyType._3D:
-				//case SerializedPropertyType.Cube:
-					switch(DefTexture.TexDim)
+					//case SerializedPropertyType._3D:
+					//case SerializedPropertyType.Cube:
+					switch (DefTexture.TexDim)
 					{
 						case 1:
 							writer.Write("any");
@@ -107,7 +107,7 @@ namespace AssetRipper.Classes.Shaders
 			}
 			writer.Write(") = ");
 
-			switch(Type)
+			switch (Type)
 			{
 				case SerializedPropertyType.Color:
 				case SerializedPropertyType.Vector:
@@ -125,8 +125,8 @@ namespace AssetRipper.Classes.Shaders
 					break;
 
 				case SerializedPropertyType._2D:
-				//case SerializedPropertyType._3D:
-				//case SerializedPropertyType.Cube:
+					//case SerializedPropertyType._3D:
+					//case SerializedPropertyType.Cube:
 					writer.Write("\"{0}\" {{}}", DefTexture.DefaultName);
 					break;
 

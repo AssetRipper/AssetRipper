@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using AssetRipper.Converters.Script;
 using AssetRipper.Game.Assembly;
 using AssetRipper.Game.Assembly.Mono;
 using AssetRipper.Layout;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace AssetRipper.Game
 {

@@ -112,7 +112,7 @@ namespace AssetRipper.Classes.GraphicsSettingss
 
 		private static BuildTargetGroup StringToBuildGroup(string group)
 		{
-			switch(group)
+			switch (group)
 			{
 				case "Standalone":
 					return BuildTargetGroup.Standalone;

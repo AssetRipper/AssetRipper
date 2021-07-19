@@ -1,9 +1,9 @@
+using AssetRipper.Converters;
+using AssetRipper.Layout;
+using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
-using AssetRipper.Layout;
 
 namespace AssetRipper.Classes
 {

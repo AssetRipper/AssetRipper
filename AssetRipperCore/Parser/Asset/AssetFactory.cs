@@ -1,7 +1,6 @@
+using AssetRipper.Classes;
 using System;
 using System.Collections.Generic;
-using AssetRipper.Classes;
-
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper

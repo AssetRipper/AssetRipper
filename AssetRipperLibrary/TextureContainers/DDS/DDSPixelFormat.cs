@@ -15,7 +15,7 @@ namespace AssetRipperLibrary.TextureContainers.DDS
 			writer.Write(BBitMask);
 			writer.Write(ABitMask);
 		}
-		
+
 		public DDPFFlags Flags { get; set; }
 		public DDSFourCCType FourCC { get; set; }
 		public int RGBBitCount { get; set; }

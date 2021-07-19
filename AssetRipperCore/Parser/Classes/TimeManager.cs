@@ -5,7 +5,7 @@ namespace AssetRipper.Classes
 {
 	public sealed class TimeManager : GlobalGameManager
 	{
-		public TimeManager(AssetInfo assetInfo):
+		public TimeManager(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

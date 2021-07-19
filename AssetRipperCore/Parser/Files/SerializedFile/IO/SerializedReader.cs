@@ -32,7 +32,7 @@ namespace AssetRipper.SerializedFiles
 			}
 			return array;
 		}
-		
+
 		public T[] ReadSerializedArray<T>(Func<T> instantiator)
 			where T : ISerializedReadable
 		{

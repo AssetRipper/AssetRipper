@@ -1,6 +1,6 @@
-﻿using System;
+﻿using SevenZip.Compression.LZMA;
+using System;
 using System.IO;
-using SevenZip.Compression.LZMA;
 
 namespace AssetRipper
 {

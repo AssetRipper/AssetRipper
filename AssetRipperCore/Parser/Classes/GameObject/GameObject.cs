@@ -1,17 +1,17 @@
+using AssetRipper.Classes.GameObjects;
+using AssetRipper.Converters;
+using AssetRipper.Layout;
+using AssetRipper.YAML;
 using SevenZip;
 using System;
 using System.Collections.Generic;
-using AssetRipper.Classes.GameObjects;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
-using AssetRipper.Layout;
 using System.Linq;
 
 namespace AssetRipper.Classes
 {
 	public sealed class GameObject : EditorExtension
 	{
-		public GameObject(AssetLayout layout):
+		public GameObject(AssetLayout layout) :
 			base(layout)
 		{
 			GameObjectLayout classLayout = layout.GameObject;
@@ -28,7 +28,7 @@ namespace AssetRipper.Classes
 			IsActive = true;
 		}
 
-		public GameObject(AssetInfo assetInfo):
+		public GameObject(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -423,7 +423,7 @@ namespace AssetRipper.Classes
 		}
 
 		public override string ExportExtension => throw new NotSupportedException();
-		
+
 		public ComponentPair[] Component
 		{
 			get => (ComponentPair[])m_component;

@@ -1,13 +1,13 @@
 using AssetRipper.Classes.UnityConnectSettingss;
-using AssetRipper.YAML;
-using AssetRipper.SerializedFiles;
 using AssetRipper.Converters;
+using AssetRipper.SerializedFiles;
+using AssetRipper.YAML;
 
 namespace AssetRipper.Classes
 {
 	public sealed class UnityConnectSettings : GlobalGameManager
 	{
-		public UnityConnectSettings(AssetInfo assetInfo):
+		public UnityConnectSettings(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -65,7 +65,7 @@ namespace AssetRipper.Classes
 		/// </summary>
 		public static bool HasCrashReportingSettings(Version version, Platform platform, TransferInstructionFlags flags)
 		{
-			if(version.IsLess(5, 4))
+			if (version.IsLess(5, 4))
 			{
 				return false;
 			}

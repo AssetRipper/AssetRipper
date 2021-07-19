@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters;
 using AssetRipper.Layout;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.Prefabs
 {

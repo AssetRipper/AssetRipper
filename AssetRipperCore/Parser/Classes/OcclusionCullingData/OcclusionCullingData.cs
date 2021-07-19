@@ -1,19 +1,19 @@
+using AssetRipper;
+using AssetRipper.Classes.OcclusionCullingDatas;
+using AssetRipper.Converters;
+using AssetRipper.Layout;
+using AssetRipper.SerializedFiles;
+using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AssetRipper.Classes.OcclusionCullingDatas;
-using AssetRipper.YAML;
-using AssetRipper.SerializedFiles;
-using AssetRipper.Converters;
-using AssetRipper;
-using AssetRipper.Layout;
 
 namespace AssetRipper.Classes
 {
 	public sealed class OcclusionCullingData : NamedObject
 	{
-		public OcclusionCullingData(AssetInfo assetInfo):
+		public OcclusionCullingData(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -82,7 +82,7 @@ namespace AssetRipper.Classes
 			// if < 3.0.0 this asset doesn't exist
 
 			// 3.0.0 to 5.5.0 this asset is created by culling settings so it has set data already
-			if(OcclusionCullingSettings.HasReadPVSData(container.Version))
+			if (OcclusionCullingSettings.HasReadPVSData(container.Version))
 			{
 				return;
 			}
@@ -112,7 +112,7 @@ namespace AssetRipper.Classes
 			int maxPortal = Scenes.Max(j => j.IndexPortals + j.SizePortals);
 			Portals = new SceneObjectIdentifier[maxPortal];
 
-			foreach(OcclusionCullingSettings cullingSetting in cullingSettings)
+			foreach (OcclusionCullingSettings cullingSetting in cullingSettings)
 			{
 				int sceneIndex = Scenes.IndexOf(t => t.Scene == cullingSetting.SceneGUID);
 				if (sceneIndex == -1)

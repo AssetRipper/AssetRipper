@@ -1,12 +1,12 @@
+using AssetRipper.Converters.Script.Mono;
+using AssetRipper.Game;
+using AssetRipper.Layout;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using AssetRipper.Game;
-using AssetRipper.Converters.Script.Mono;
-using AssetRipper.Layout;
 
 namespace AssetRipper.Converters.Script
 {
@@ -147,7 +147,7 @@ namespace AssetRipper.Converters.Script
 				{
 					continue;
 				}
-				
+
 				Export(type);
 			}
 
@@ -232,7 +232,7 @@ namespace AssetRipper.Converters.Script
 			}
 			return CreateArray(array);
 		}
-		
+
 		public ScriptExportPointer RetrievePointer(TypeReference pointer)
 		{
 			string fullname = ScriptExportMonoType.GetFullName(pointer);
@@ -336,7 +336,7 @@ namespace AssetRipper.Converters.Script
 			exportArray.Init(this);
 			return exportArray;
 		}
-		
+
 		public ScriptExportPointer CreatePointer(TypeReference type)
 		{
 			ScriptExportPointer exportPointer = new ScriptExportMonoPointer(type);

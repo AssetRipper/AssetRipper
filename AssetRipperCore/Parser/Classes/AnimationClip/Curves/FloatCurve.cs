@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using AssetRipper.YAML;
+﻿using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
-using AssetRipper.Classes.Misc;
 using AssetRipper.Layout.AnimationClips;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.AnimationClips
 {
 	public struct FloatCurve : IAsset, IDependent
 	{
-		public FloatCurve(FloatCurve copy, IReadOnlyList<KeyframeTpl<Float>> keyframes):
+		public FloatCurve(FloatCurve copy, IReadOnlyList<KeyframeTpl<Float>> keyframes) :
 			this(copy.Path, copy.Attribute, copy.ClassID, copy.Script, keyframes)
 		{
 		}
@@ -74,7 +74,7 @@ namespace AssetRipper.Classes.AnimationClips
 			node.Add(layout.ScriptName, Script.ExportYAML(container));
 			return node;
 		}
-		
+
 		public string Attribute { get; set; }
 		public string Path { get; set; }
 		public ClassIDType ClassID { get; set; }

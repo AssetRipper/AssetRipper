@@ -1,10 +1,10 @@
-using System.Collections.Generic;
 using AssetRipper.Classes;
 using AssetRipper.Classes.AnimatorControllers;
+using AssetRipper.Classes.BlendTrees;
+using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.SerializedFiles;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.BlendTrees;
+using System.Collections.Generic;
 
 namespace AssetRipper.Project
 {
@@ -83,7 +83,7 @@ namespace AssetRipper.Project
 				}
 			}
 		}
-		
+
 		private void AddBehaviours(AnimatorController asset, IEnumerable<PPtr<MonoBehaviour>> behaviours)
 		{
 			foreach (PPtr<MonoBehaviour> pbehaviour in behaviours)

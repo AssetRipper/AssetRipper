@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters;
 using AssetRipper.Layout;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class Prefab : Object
 	{
-		public Prefab(AssetLayout layout):
+		public Prefab(AssetLayout layout) :
 			base(layout)
 		{
 		}

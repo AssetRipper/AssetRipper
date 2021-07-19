@@ -1,11 +1,11 @@
-using System;
-using System.IO;
 using AssetRipper;
 using AssetRipper.Classes;
 using AssetRipperLibrary.TextureContainers;
 using AssetRipperLibrary.TextureContainers.DDS;
 using AssetRipperLibrary.TextureContainers.KTX;
 using AssetRipperLibrary.TextureContainers.PVR;
+using System;
+using System.IO;
 
 namespace AssetRipperLibrary.Exporters.Texture
 {

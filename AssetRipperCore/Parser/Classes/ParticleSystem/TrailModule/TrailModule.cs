@@ -86,7 +86,7 @@ namespace AssetRipper.Classes.ParticleSystems
 				AttachRibbonsToTransform = reader.ReadBoolean();
 			}
 			reader.AlignStream();
-			
+
 			ColorOverLifetime.Read(reader);
 			WidthOverTrail.Read(reader);
 			ColorOverTrail.Read(reader);

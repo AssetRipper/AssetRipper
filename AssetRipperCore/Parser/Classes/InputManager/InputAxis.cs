@@ -1,5 +1,5 @@
-﻿using AssetRipper.YAML;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters;
+using AssetRipper.YAML;
 
 namespace AssetRipper.Classes.InputManagers
 {
@@ -45,7 +45,7 @@ namespace AssetRipper.Classes.InputManagers
 			Snap = reader.ReadBoolean();
 			Invert = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 			Type = (InputAxisType)reader.ReadInt32();
 			Axis = (InputAxesDirection)reader.ReadInt32();
 			JoyNum = (JoystickType)reader.ReadInt32();

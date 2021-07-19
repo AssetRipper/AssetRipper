@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using AssetRipper.Classes.MeshRenderers;
 using AssetRipper.Classes.Renderers;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
@@ -592,7 +592,7 @@ namespace AssetRipper.Classes
 			{
 				return new StaticBatchInfo(SubsetIndices);
 			}
-			return default; 
+			return default;
 		}
 		private float GetScaleInLightmap(Version version, TransferInstructionFlags flags)
 		{

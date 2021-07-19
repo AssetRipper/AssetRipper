@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using System.IO;
+using AssetRipper;
 using AssetRipper.Classes.NavMeshDatas;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper;
+using System.Collections.Generic;
+using System.IO;
 
 namespace AssetRipper.Classes
 {

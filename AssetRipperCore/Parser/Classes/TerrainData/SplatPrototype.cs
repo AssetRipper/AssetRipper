@@ -1,13 +1,13 @@
-using System.Collections.Generic;
-using AssetRipper.YAML;
-using AssetRipper.Converters.TerrainDatas;
 using AssetRipper.Converters;
+using AssetRipper.Converters.TerrainDatas;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes.TerrainDatas
 {
 	public struct SplatPrototype : IAsset, IDependent
 	{
-		public SplatPrototype(bool _):
+		public SplatPrototype(bool _) :
 			this()
 		{
 			TileSize = Vector2f.One;

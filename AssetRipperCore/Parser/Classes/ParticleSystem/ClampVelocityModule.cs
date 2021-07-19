@@ -21,7 +21,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			X.Read(reader);
 			Y.Read(reader);
 			Z.Read(reader);
@@ -37,7 +37,7 @@ namespace AssetRipper.Classes.ParticleSystems
 				MultiplyDragByParticleVelocity = reader.ReadBoolean();
 			}
 			reader.AlignStream();
-			
+
 			Dampen = reader.ReadSingle();
 			if (HasDrag(reader.Version))
 			{

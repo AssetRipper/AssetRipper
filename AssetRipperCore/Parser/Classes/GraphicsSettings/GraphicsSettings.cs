@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
 using AssetRipper.Classes.Cameras;
 using AssetRipper.Classes.GraphicsSettingss;
-using AssetRipper.YAML;
-using AssetRipper.SerializedFiles;
 using AssetRipper.Converters;
+using AssetRipper.SerializedFiles;
+using AssetRipper.YAML;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
@@ -13,12 +13,12 @@ namespace AssetRipper.Classes
 	/// </summary>
 	public sealed class GraphicsSettings : GlobalGameManager
 	{
-		public GraphicsSettings(AssetInfo assetInfo):
+		public GraphicsSettings(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
 
-		private GraphicsSettings(AssetInfo assetInfo, bool _):
+		private GraphicsSettings(AssetInfo assetInfo, bool _) :
 			base(assetInfo)
 		{
 			AlwaysIncludedShaders = Array.Empty<PPtr<Shader>>();
@@ -434,7 +434,7 @@ namespace AssetRipper.Classes
 			{
 				yield return asset;
 			}
-			
+
 			foreach (PPtr<Object> asset in context.FetchDependencies(Deferred, DeferredName))
 			{
 				yield return asset;
@@ -575,7 +575,7 @@ namespace AssetRipper.Classes
 		}
 		private YAMLNode ExportAlwaysIncludedShaders(IExportContainer container)
 		{
-			if(ToSerializedVersion(container.Version) >= 3)
+			if (ToSerializedVersion(container.Version) >= 3)
 			{
 				return AlwaysIncludedShaders.ExportYAML(container);
 			}
@@ -588,7 +588,7 @@ namespace AssetRipper.Classes
 				{
 					node.Add(shaderPtr.ExportYAML(container));
 					Shader shader = shaderPtr.FindAsset(container);
-					if(shader != null)
+					if (shader != null)
 					{
 						shaderNames.Add(shader.ValidName);
 					}
@@ -803,7 +803,7 @@ namespace AssetRipper.Classes
 #endif
 			return System.Array.Empty<AlbedoSwatchInfo>();
 		}
-		
+
 		private void ExportShaderPointer(IExportContainer container, YAMLSequenceNode node, HashSet<string> shaderNames, string name)
 		{
 			if (!shaderNames.Contains(name))

@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
 using AssetRipper.Classes;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-
+using System;
+using System.Collections.Generic;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper.Game.Assembly
@@ -92,7 +91,7 @@ namespace AssetRipper.Game.Assembly
 			{
 				return false;
 			}
-			if (field.Type.Type	== PrimitiveType.Complex)
+			if (field.Type.Type == PrimitiveType.Complex)
 			{
 				if (SerializableType.IsEngineStruct(field.Type.Namespace, field.Type.Name))
 				{

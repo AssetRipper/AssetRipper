@@ -1,7 +1,7 @@
+using AssetRipper.Game.Assembly;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using AssetRipper.Game.Assembly;
 
 namespace AssetRipper
 {
@@ -19,7 +19,7 @@ namespace AssetRipper
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
 			}
 
-			if(!GetWebPlayerName(m_root, out string name))
+			if (!GetWebPlayerName(m_root, out string name))
 			{
 				throw new Exception($"Web player asset bundle data wasn't found");
 			}

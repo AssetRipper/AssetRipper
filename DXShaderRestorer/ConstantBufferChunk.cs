@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using AssetRipper;
+﻿using AssetRipper;
 using AssetRipper.Classes.Shaders;
+using System.Collections.Generic;
 
 namespace DXShaderRestorer
 {
@@ -64,7 +64,7 @@ namespace DXShaderRestorer
 				writer.Write(variableChunk.Count);
 				writer.Write(variableOffset);
 				//Size
-				writer.Write((uint)4); 
+				writer.Write((uint)4);
 				//Flags
 				writer.Write((uint)ConstantBufferFlags.None);
 				//ContantBufferType

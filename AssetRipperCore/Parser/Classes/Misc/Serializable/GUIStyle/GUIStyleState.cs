@@ -1,7 +1,7 @@
-﻿using System;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters;
 using AssetRipper.Layout;
 using AssetRipper.YAML;
+using System;
 
 namespace AssetRipper.Classes.GUIStyles
 {

@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes.Animators;
-using AssetRipper.YAML;
+﻿using AssetRipper.Classes.Animators;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class Animator : Behaviour
 	{
-		public Animator(AssetInfo assetInfo):
+		public Animator(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -122,7 +122,7 @@ namespace AssetRipper.Classes
 			{
 				yield return asset;
 			}
-			
+
 			yield return context.FetchDependency(Avatar, AvatarName);
 			yield return context.FetchDependency(Controller, ControllerName);
 		}

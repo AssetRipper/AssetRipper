@@ -13,7 +13,7 @@ namespace AssetRipper.Classes.Shaders
 		{
 			writer.WriteIndent(1);
 			writer.Write("Properties {\n");
-			foreach(SerializedProperty prop in Props)
+			foreach (SerializedProperty prop in Props)
 			{
 				prop.Export(writer);
 			}

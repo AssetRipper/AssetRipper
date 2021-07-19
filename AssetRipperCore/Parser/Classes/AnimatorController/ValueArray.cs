@@ -1,6 +1,6 @@
-using System;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System;
 
 namespace AssetRipper.Classes.AnimatorControllers
 {
@@ -22,7 +22,7 @@ namespace AssetRipper.Classes.AnimatorControllers
 
 		public void Read(AssetReader reader)
 		{
-			if(IsPrimeFirst(reader.Version))
+			if (IsPrimeFirst(reader.Version))
 			{
 				BoolValues = reader.ReadBooleanArray();
 				reader.AlignStream();
@@ -37,7 +37,7 @@ namespace AssetRipper.Classes.AnimatorControllers
 			}
 			else
 			{
-				if(IsVector4(reader.Version))
+				if (IsVector4(reader.Version))
 				{
 					Position4Values = reader.ReadAssetArray<Vector4f>();
 				}

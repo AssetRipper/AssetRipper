@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes.Physics2DSettingss;
-using AssetRipper.YAML;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Classes.Physics2DSettingss;
 using AssetRipper.Converters;
+using AssetRipper.SerializedFiles;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class Physics2DSettings : GlobalGameManager
 	{
-		public Physics2DSettings(AssetInfo assetInfo):
+		public Physics2DSettings(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -21,7 +21,7 @@ namespace AssetRipper.Classes
 			PositionIterations = 3;
 			QueriesHitTriggers = true;
 			LayerCollisionMatrix = new uint[32];
-			for(int i = 0; i < LayerCollisionMatrix.Length; i++)
+			for (int i = 0; i < LayerCollisionMatrix.Length; i++)
 			{
 				LayerCollisionMatrix[i] = uint.MaxValue;
 			}

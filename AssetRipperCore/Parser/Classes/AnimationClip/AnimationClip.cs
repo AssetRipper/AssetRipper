@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using AssetRipper.Classes.AnimationClips;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AssetRipper.Classes
 {
@@ -431,7 +431,7 @@ namespace AssetRipper.Classes
 
 		public IReadOnlyDictionary<uint, string> FindTOS()
 		{
-			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty }  };
+			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
 			foreach (Object asset in File.Collection.FetchAssets())
 			{
 				switch (asset.ClassID)

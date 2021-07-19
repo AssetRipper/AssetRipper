@@ -370,7 +370,7 @@ namespace AssetRipperLibrary.TextureDecoders.Astc
 
 			int* v = ev;
 			for (int cem = 0, cemOff = 0; cem < pBlock->part_num; v += (pBlock->cem[cem] / 4 + 1) * 2, cem++, cemOff += 8)
-			{				
+			{
 				switch (pBlock->cem[cem])
 				{
 					case 0:
@@ -437,7 +437,7 @@ namespace AssetRipperLibrary.TextureDecoders.Astc
 		{
 			IntSeqData* wSeq = stackalloc IntSeqData[128];
 			DecodeIntseq(input, 128, WeightPrecTableA[block->weight_range], WeightPrecTableB[block->weight_range], block->weight_num, true, wSeq);
-			
+
 			int* wv = stackalloc int[128];
 			if (WeightPrecTableA[block->weight_range] == 0)
 			{
@@ -591,7 +591,7 @@ namespace AssetRipperLibrary.TextureDecoders.Astc
 				rnum ^= rnum << 6;
 				rnum ^= rnum >> 17;
 			}
-			
+
 			int* seeds = stackalloc int[8];
 			for (int i = 0; i < 8; i++)
 			{

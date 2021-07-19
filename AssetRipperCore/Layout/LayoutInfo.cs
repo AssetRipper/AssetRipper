@@ -9,7 +9,7 @@
 			Flags = flags;
 		}
 
-		public static bool operator == (LayoutInfo lhs, LayoutInfo rhs)
+		public static bool operator ==(LayoutInfo lhs, LayoutInfo rhs)
 		{
 			if (lhs.Version != rhs.Version)
 			{

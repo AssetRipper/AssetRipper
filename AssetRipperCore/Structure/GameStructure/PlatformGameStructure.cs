@@ -1,11 +1,11 @@
+using AssetRipper.Game;
+using AssetRipper.Game.Assembly;
+using AssetRipper.Game.Assembly.Mono;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using AssetRipper.Game;
-using AssetRipper.Game.Assembly;
-using AssetRipper.Game.Assembly.Mono;
 
 namespace AssetRipper
 {

@@ -1,12 +1,12 @@
-using System;
-using System.IO;
-using System.Linq;
-using AssetRipper.Converters;
-using AssetRipper.Converters.Meshes;
-using AssetRipper.YAML;
 using AssetRipper;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.Shaders;
+using AssetRipper.Converters;
+using AssetRipper.Converters.Meshes;
+using AssetRipper.YAML;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace AssetRipper.Classes.Meshes
 {

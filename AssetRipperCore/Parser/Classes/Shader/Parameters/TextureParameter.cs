@@ -17,7 +17,7 @@
 			MultiSampled = false;
 		}
 
-		public TextureParameter(string name, int index, byte dimension, int sampler, bool multiSampled):
+		public TextureParameter(string name, int index, byte dimension, int sampler, bool multiSampled) :
 			this(name, index, dimension, sampler)
 		{
 			MultiSampled = multiSampled;

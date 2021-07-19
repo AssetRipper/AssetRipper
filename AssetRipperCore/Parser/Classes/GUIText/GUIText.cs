@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes.Fonts;
+﻿using AssetRipper.Classes.Fonts;
 using AssetRipper.Classes.GUITexts;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class GUIText : GUIElement
 	{
-		public GUIText(AssetInfo assetInfo):
+		public GUIText(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}

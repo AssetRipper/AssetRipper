@@ -1,5 +1,5 @@
-﻿using System;
-using AssetRipper.Classes.Shaders;
+﻿using AssetRipper.Classes.Shaders;
+using System;
 
 namespace DXShaderRestorer
 {

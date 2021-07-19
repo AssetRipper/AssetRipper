@@ -1,9 +1,3 @@
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Windows;
 using AssetRipper;
 using AssetRipper.Converters;
 using AssetRipper.SerializedFiles;
@@ -12,6 +6,12 @@ using AssetRipperGUI.Properties;
 using AssetRipperGUI.Windows;
 using AssetRipperLibrary.Exporters.Audio;
 using AssetRipperLibrary.Exporters.Texture;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Windows;
 using Object = AssetRipper.Classes.Object;
 using Version = AssetRipper.Version;
 

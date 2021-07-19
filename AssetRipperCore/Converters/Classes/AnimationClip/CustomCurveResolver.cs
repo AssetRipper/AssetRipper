@@ -1,11 +1,11 @@
-using SevenZip;
-using System;
-using System.Linq;
 using AssetRipper.Classes;
 using AssetRipper.Classes.AnimationClips;
 using AssetRipper.Classes.Lights;
 using AssetRipper.Layout;
 using AssetRipper.SerializedFiles;
+using SevenZip;
+using System;
+using System.Linq;
 
 namespace AssetRipper.Converters.AnimationClips
 {

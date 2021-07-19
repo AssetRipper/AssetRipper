@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
+using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.SpriteAtlases;
 using AssetRipper.Classes.Sprites;
-using AssetRipper.YAML;
-using AssetRipper.Converters;
-using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.TextureImporters;
+using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
@@ -250,7 +250,7 @@ namespace AssetRipper.Classes
 				{
 					case SpritePackingRotation.FlipHorizontal:
 						{
-							foreach(Vector2f[] outline in outlines)
+							foreach (Vector2f[] outline in outlines)
 							{
 								for (int i = 0; i < outline.Length; i++)
 								{

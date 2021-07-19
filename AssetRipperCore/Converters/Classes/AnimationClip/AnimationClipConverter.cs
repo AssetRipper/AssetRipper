@@ -1,13 +1,13 @@
-﻿using SevenZip;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using AssetRipper.Classes;
+﻿using AssetRipper.Classes;
 using AssetRipper.Classes.AnimationClips;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Converters.AnimationClips;
 using AssetRipper.Layout;
+using SevenZip;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper.Converters

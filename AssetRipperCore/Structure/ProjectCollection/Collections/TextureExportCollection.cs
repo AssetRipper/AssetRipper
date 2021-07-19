@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using AssetRipper.Classes;
 using AssetRipper.Classes.SpriteAtlases;
 using AssetRipper.Classes.Sprites;
 using AssetRipper.Classes.TextureImporters;
 using AssetRipper.Converters;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Object = AssetRipper.Classes.Object;
 
 namespace AssetRipper.Project
@@ -14,7 +13,7 @@ namespace AssetRipper.Project
 	public class TextureExportCollection : AssetsExportCollection
 	{
 #warning TODO: optimize (now it is suuuuuuuuper slow)
-		public TextureExportCollection(IAssetExporter assetExporter, Texture2D texture, bool convert):
+		public TextureExportCollection(IAssetExporter assetExporter, Texture2D texture, bool convert) :
 			base(assetExporter, texture)
 		{
 			m_convert = convert;

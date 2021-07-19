@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper
 {

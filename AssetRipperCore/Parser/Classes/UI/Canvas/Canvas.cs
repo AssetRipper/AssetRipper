@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using AssetRipper.Classes.Canvases;
-using AssetRipper.YAML;
+﻿using AssetRipper.Classes.Canvases;
 using AssetRipper.Converters;
+using AssetRipper.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
 	public sealed class Canvas : Behaviour
 	{
-		public Canvas(AssetInfo assetInfo):
+		public Canvas(AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -106,7 +106,7 @@ namespace AssetRipper.Classes
 			{
 				yield return asset;
 			}
-			
+
 			yield return context.FetchDependency(Camera, CameraName);
 		}
 

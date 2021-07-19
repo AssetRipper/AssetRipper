@@ -1,6 +1,6 @@
+using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
-using AssetRipper.Classes.Misc;
 
 namespace AssetRipper.Classes.ParticleSystems
 {
@@ -38,7 +38,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-			
+
 			if (HasMultiplierCurve(reader.Version))
 			{
 				MultiplierCurve.Read(reader);

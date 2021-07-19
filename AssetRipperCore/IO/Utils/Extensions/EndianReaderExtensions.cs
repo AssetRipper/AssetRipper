@@ -110,7 +110,7 @@ namespace AssetRipper
 			int value1 = reader.ReadInt32();
 			long value2 = reader.ReadInt64();
 			return new Tuple<int, long>(value1, value2);
-		}		
+		}
 
 		public static Tuple<int, float> ReadTupleInt32Single(this EndianReader reader)
 		{
