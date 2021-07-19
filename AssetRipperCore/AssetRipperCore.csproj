@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>7.3</LangVersion>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	  <AssemblyName>AssetRipperCore</AssemblyName>
 	  <RootNamespace>AssetRipper</RootNamespace>

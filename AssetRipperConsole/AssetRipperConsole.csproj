@@ -6,7 +6,6 @@
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	  <AssemblyName>AssetRipperConsole</AssemblyName>
 	  <RootNamespace>AssetRipperConsole</RootNamespace>
-	  <LangVersion>7.3</LangVersion>
 	  <Configurations>Debug;Release;Virtual</Configurations>
   </PropertyGroup>
 
