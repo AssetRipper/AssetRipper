@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Classes;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
+using AssetRipper.Logging;
 using System;
 using System.Collections.Generic;
 using Object = AssetRipper.Classes.Object;

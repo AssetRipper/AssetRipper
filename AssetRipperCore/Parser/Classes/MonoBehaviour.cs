@@ -2,6 +2,7 @@ using AssetRipper.Classes.Objects;
 using AssetRipper.Converters;
 using AssetRipper.Game.Assembly;
 using AssetRipper.Layout;
+using AssetRipper.Logging;
 using AssetRipper.SerializedFiles;
 using AssetRipper.YAML;
 using System.Collections.Generic;

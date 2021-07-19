@@ -1,4 +1,4 @@
-﻿namespace AssetRipper
+﻿namespace AssetRipper.Logging
 {
 	public enum LogType
 	{

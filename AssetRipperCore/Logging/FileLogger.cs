@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace AssetRipper
+namespace AssetRipper.Logging
 {
 	public class FileLogger : ILogger
 	{

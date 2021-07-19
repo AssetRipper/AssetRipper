@@ -1,6 +1,7 @@
 using AssetRipper.Converters.Script.Mono;
 using AssetRipper.Game;
 using AssetRipper.Layout;
+using AssetRipper.Logging;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;

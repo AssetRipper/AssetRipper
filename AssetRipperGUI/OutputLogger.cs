@@ -1,4 +1,4 @@
-using AssetRipper;
+using AssetRipper.Logging;
 using System;
 using System.Threading;
 using System.Windows;

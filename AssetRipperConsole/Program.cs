@@ -1,5 +1,6 @@
 using AssetRipper;
 using AssetRipper.Converters;
+using AssetRipper.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;

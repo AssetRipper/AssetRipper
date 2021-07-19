@@ -1,6 +1,7 @@
 using AssetRipper.Game;
 using AssetRipper.Game.Assembly;
 using AssetRipper.Game.Assembly.Mono;
+using AssetRipper.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;

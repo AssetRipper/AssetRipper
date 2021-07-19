@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Classes.Meshes;
 using AssetRipper.Classes.Misc;
+using AssetRipper.Logging;
 
 namespace AssetRipper.Converters.Meshes
 {

@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Converters;
 using AssetRipper.Game.Assembly;
 using AssetRipper.Layout;
+using AssetRipper.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;

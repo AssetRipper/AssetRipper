@@ -2,6 +2,7 @@ using AssetRipper;
 using AssetRipper.Classes;
 using AssetRipper.Classes.Textures;
 using AssetRipper.Converters;
+using AssetRipper.Logging;
 using AssetRipper.Project;
 using AssetRipper.SerializedFiles;
 using AssetRipperLibrary.Utils;

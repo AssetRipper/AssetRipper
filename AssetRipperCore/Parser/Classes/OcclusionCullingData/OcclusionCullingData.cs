@@ -2,6 +2,7 @@ using AssetRipper;
 using AssetRipper.Classes.OcclusionCullingDatas;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
+using AssetRipper.Logging;
 using AssetRipper.SerializedFiles;
 using AssetRipper.YAML;
 using System;

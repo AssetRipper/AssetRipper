@@ -1,4 +1,4 @@
-using AssetRipper;
+using AssetRipper.Logging;
 using System.Windows.Controls;
 
 namespace AssetRipperGUI.Controls

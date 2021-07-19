@@ -2,6 +2,7 @@ using AssetRipper.Classes;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.Textures;
 using AssetRipper.Converters;
+using AssetRipper.Logging;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;

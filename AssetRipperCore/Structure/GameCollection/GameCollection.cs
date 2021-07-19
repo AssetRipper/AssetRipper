@@ -4,6 +4,7 @@ using AssetRipper.Converters;
 using AssetRipper.Game;
 using AssetRipper.Game.Assembly;
 using AssetRipper.Layout;
+using AssetRipper.Logging;
 using AssetRipper.SerializedFiles;
 using System;
 using System.Collections.Generic;
