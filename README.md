@@ -80,7 +80,6 @@ If you want to run binary files, you need to install:
 ## To Do
  * Update Mono.Cecil
  * Some other third party projects need updated too
- * New Icon
  * Set up proper build actions
  * Move more code from the GUI project to the Library project if possible
  * Readme's describing the purpose of each subproject
