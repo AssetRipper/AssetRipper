@@ -2,6 +2,7 @@ using AssetRipper.Classes.Materials;
 using AssetRipper.Classes.Shaders;
 using AssetRipper.Converters;
 using AssetRipper.Converters.Shaders;
+using AssetRipper.IO.Extensions;
 using AssetRipper.Layout;
 using AssetRipper.YAML;
 using System;

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
-namespace AssetRipper
+namespace AssetRipper.IO
 {
 	public class InvariantStreamWriter : StreamWriter
 	{

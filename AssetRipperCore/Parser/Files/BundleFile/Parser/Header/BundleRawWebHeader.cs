@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Classes.Misc;
+using AssetRipper.IO.Endian;
 
 namespace AssetRipper.BundleFiles
 {

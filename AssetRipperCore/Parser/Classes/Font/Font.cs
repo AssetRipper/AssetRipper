@@ -1,6 +1,7 @@
 using AssetRipper;
 using AssetRipper.Classes.Fonts;
 using AssetRipper.Converters;
+using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System;

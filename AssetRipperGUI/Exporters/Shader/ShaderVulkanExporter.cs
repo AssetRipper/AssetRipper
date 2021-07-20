@@ -1,6 +1,7 @@
 using AssetRipper;
 using AssetRipper.Classes.Shaders;
 using AssetRipper.Converters.Shaders;
+using AssetRipper.IO;
 using Smolv;
 using SpirV;
 using System;

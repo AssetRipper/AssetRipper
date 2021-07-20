@@ -1,7 +1,8 @@
-﻿using System;
+﻿using AssetRipper.IO.MultiFile;
+using System;
 using System.IO;
 
-namespace AssetRipper
+namespace AssetRipper.IO.Smart
 {
 	public class SmartStream : Stream
 	{

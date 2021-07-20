@@ -1,4 +1,6 @@
 using AssetRipper.BundleFiles;
+using AssetRipper.IO.Endian;
+using AssetRipper.IO.MultiFile;
 using System;
 using System.IO;
 

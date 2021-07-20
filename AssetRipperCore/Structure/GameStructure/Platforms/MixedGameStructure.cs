@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Game;
+using AssetRipper.IO.MultiFile;
 using AssetRipper.Logging;
 using AssetRipper.Utils;
 using System;

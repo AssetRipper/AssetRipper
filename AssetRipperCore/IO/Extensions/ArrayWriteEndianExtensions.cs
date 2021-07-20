@@ -1,4 +1,6 @@
-﻿namespace AssetRipper
+﻿using AssetRipper.IO.Endian;
+
+namespace AssetRipper.IO.Extensions
 {
 	public static class ArrayWriteEndianExtensions
 	{

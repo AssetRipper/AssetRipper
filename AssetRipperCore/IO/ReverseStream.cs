@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace AssetRipper
+namespace AssetRipper.IO
 {
 	public class ReverseStream : Stream
 	{

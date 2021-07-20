@@ -1,4 +1,5 @@
-﻿using AssetRipper.Layout;
+﻿using AssetRipper.IO.Endian;
+using AssetRipper.Layout;
 using System;
 using System.Collections.Generic;
 using System.IO;

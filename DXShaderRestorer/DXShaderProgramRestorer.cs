@@ -1,5 +1,6 @@
 using AssetRipper;
 using AssetRipper.Classes.Shaders;
+using AssetRipper.IO.Endian;
 using System.Collections.Generic;
 using System.IO;
 using Version = AssetRipper.Version;

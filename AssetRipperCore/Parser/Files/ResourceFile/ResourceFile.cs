@@ -1,3 +1,4 @@
+using AssetRipper.IO.Smart;
 using System;
 using System.IO;
 

@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Converters;
 using AssetRipper.Extensions;
+using AssetRipper.IO.Endian;
 using AssetRipper.SerializedFiles;
 using AssetRipper.YAML;
 using System;

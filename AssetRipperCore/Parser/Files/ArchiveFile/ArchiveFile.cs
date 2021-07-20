@@ -1,4 +1,6 @@
 ﻿using AssetRipper.ArchiveFiles;
+using AssetRipper.IO.Endian;
+using AssetRipper.IO.MultiFile;
 using System.IO;
 
 namespace AssetRipper

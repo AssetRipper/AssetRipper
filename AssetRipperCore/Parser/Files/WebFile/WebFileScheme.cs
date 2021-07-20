@@ -1,4 +1,5 @@
 using AssetRipper.Extensions;
+using AssetRipper.IO.Endian;
 using AssetRipper.WebFiles;
 using System.IO;
 

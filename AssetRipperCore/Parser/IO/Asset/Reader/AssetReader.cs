@@ -1,3 +1,4 @@
+using AssetRipper.IO.Endian;
 using AssetRipper.Layout;
 using System;
 using System.IO;

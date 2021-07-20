@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Classes;
 using AssetRipper.Classes.Meshes;
 using AssetRipper.Classes.Shaders;
+using AssetRipper.IO.Endian;
 using AssetRipper.Layout;
 using System;
 using System.IO;

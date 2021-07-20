@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Classes;
 using AssetRipper.Classes.Meshes;
+using AssetRipper.IO.Endian;
 using System.IO;
 using System.Linq;
 

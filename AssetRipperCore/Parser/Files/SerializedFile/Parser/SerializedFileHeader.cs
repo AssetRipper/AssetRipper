@@ -1,3 +1,4 @@
+using AssetRipper.IO.Endian;
 using System;
 
 namespace AssetRipper.SerializedFiles

@@ -1,5 +1,7 @@
 using AssetRipper.BundleFiles;
 using AssetRipper.Extensions;
+using AssetRipper.IO.Endian;
+using AssetRipper.IO.Smart;
 using AssetRipper.Lz4;
 using System;
 using System.IO;

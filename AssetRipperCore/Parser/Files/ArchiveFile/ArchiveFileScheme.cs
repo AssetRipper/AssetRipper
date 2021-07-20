@@ -1,4 +1,5 @@
 using AssetRipper.ArchiveFiles;
+using AssetRipper.IO.Endian;
 using AssetRipper.SerializedFiles;
 using Brotli;
 using System;

@@ -1,4 +1,7 @@
 using AssetRipper.Classes;
+using AssetRipper.IO.Endian;
+using AssetRipper.IO.MultiFile;
+using AssetRipper.IO.Smart;
 using AssetRipper.Layout;
 using AssetRipper.SerializedFiles;
 using System;

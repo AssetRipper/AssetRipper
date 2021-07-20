@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AssetRipper.IO.Endian;
+using System;
 using System.IO;
 
 namespace AssetRipper.BundleFiles

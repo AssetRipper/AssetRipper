@@ -3,6 +3,7 @@ using AssetRipper.Classes;
 using AssetRipper.Converters;
 using AssetRipper.Game;
 using AssetRipper.Game.Assembly;
+using AssetRipper.IO.Smart;
 using AssetRipper.Layout;
 using AssetRipper.Logging;
 using AssetRipper.SerializedFiles;

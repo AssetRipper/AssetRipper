@@ -1,4 +1,5 @@
-﻿using AssetRipper.SerializedFiles;
+﻿using AssetRipper.IO.Endian;
+using AssetRipper.SerializedFiles;
 using System;
 using System.Collections.Generic;
 using System.IO;

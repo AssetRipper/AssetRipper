@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.WebFiles
+﻿using AssetRipper.IO.Endian;
+
+namespace AssetRipper.WebFiles
 {
 	public class WebFileEntry : FileEntry, IEndianReadable
 	{

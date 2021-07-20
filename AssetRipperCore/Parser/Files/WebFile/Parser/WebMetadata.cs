@@ -1,3 +1,4 @@
+using AssetRipper.IO.Endian;
 using System.Collections.Generic;
 
 namespace AssetRipper.WebFiles

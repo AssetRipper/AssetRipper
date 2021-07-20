@@ -1,4 +1,7 @@
-﻿using AssetRipper.WebFiles;
+﻿using AssetRipper.IO.Endian;
+using AssetRipper.IO.MultiFile;
+using AssetRipper.IO.Smart;
+using AssetRipper.WebFiles;
 using System.IO;
 
 namespace AssetRipper

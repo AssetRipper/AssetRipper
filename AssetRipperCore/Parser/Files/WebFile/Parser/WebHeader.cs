@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AssetRipper.IO.Endian;
+using System;
 
 namespace AssetRipper.WebFiles
 {

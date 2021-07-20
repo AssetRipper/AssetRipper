@@ -1,5 +1,6 @@
 using AssetRipper.Classes.EditorBuildSettingss;
 using AssetRipper.Converters;
+using AssetRipper.IO.Extensions;
 using AssetRipper.SerializedFiles;
 using AssetRipper.YAML;
 using System;

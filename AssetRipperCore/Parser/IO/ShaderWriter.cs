@@ -1,6 +1,7 @@
 using AssetRipper.Classes;
 using AssetRipper.Classes.Shaders;
 using AssetRipper.Converters.Shaders;
+using AssetRipper.IO;
 using System;
 using System.IO;
 using System.Text;

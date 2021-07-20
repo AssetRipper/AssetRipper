@@ -3,6 +3,7 @@ using AssetRipper.Classes.Meshes;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.Shaders;
 using AssetRipper.Extensions;
+using AssetRipper.IO.Endian;
 using System;
 using System.Collections;
 using System.IO;

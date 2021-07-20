@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Classes;
 using AssetRipper.Classes.Shaders;
+using AssetRipper.IO.Endian;
 using System.IO;
 
 namespace AssetRipper.Converters.Shaders

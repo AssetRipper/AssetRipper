@@ -1,6 +1,7 @@
 ﻿using AssetRipper;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
+using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System;

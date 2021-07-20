@@ -1,5 +1,7 @@
 using AssetRipper.Converters;
 using AssetRipper.Extensions;
+using AssetRipper.IO.Endian;
+using AssetRipper.IO.Smart;
 using AssetRipper.SerializedFiles;
 using System;
 using System.Collections.Generic;

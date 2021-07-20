@@ -1,3 +1,4 @@
+using AssetRipper.IO.Smart;
 using AssetRipper.SerializedFiles;
 using System.Collections.Generic;
 

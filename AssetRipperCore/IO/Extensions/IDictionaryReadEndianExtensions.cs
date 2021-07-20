@@ -1,7 +1,8 @@
-﻿using System;
+﻿using AssetRipper.IO.Endian;
+using System;
 using System.Collections.Generic;
 
-namespace AssetRipper
+namespace AssetRipper.IO.Extensions
 {
 	public static class IDictionaryReadEndianExtensions
 	{

@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.BundleFiles
+﻿using AssetRipper.IO.Endian;
+
+namespace AssetRipper.BundleFiles
 {
 	public sealed class BundleFileStreamHeader
 	{

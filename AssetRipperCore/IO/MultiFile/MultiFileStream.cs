@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper
+namespace AssetRipper.IO.MultiFile
 {
 	public sealed class MultiFileStream : Stream
 	{

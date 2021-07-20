@@ -1,4 +1,4 @@
-﻿namespace AssetRipper
+﻿namespace AssetRipper.IO.Smart
 {
 	public enum SmartStreamType
 	{

@@ -1,6 +1,7 @@
-﻿using System;
+﻿using AssetRipper.IO.Endian;
+using System;
 
-namespace AssetRipper
+namespace AssetRipper.IO.Extensions
 {
 	public static class EndianWriterExtensions
 	{

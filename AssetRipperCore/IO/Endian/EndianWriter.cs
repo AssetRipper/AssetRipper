@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace AssetRipper
+namespace AssetRipper.IO.Endian
 {
 	public class EndianWriter : BinaryWriter
 	{
