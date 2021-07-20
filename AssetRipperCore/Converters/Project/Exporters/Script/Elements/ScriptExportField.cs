@@ -1,3 +1,4 @@
+using AssetRipper.Extensions;
 using System.Collections.Generic;
 using System.IO;
 
@@ -7,14 +8,14 @@ namespace AssetRipper.Converters.Script
 	{
 		public abstract void Init(IScriptExportManager manager);
 
-		public void Export(TextWriter writer, int intent)
+		public void Export(TextWriter writer, int indent)
 		{
 			foreach (ScriptExportAttribute attribute in Attributes)
 			{
-				attribute.Export(writer, intent);
+				attribute.Export(writer, indent);
 			}
 
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			writer.Write("{0} ", Keyword);
 			if (IsNew)
 			{
@@ -25,9 +26,9 @@ namespace AssetRipper.Converters.Script
 			writer.WriteLine("{0} {1};", typeName, Name);
 		}
 
-		public void ExportEnum(TextWriter writer, int intent)
+		public void ExportEnum(TextWriter writer, int indent)
 		{
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			writer.WriteLine("{0} = {1},", Name, Constant);
 		}
 

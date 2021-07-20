@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using AssetRipper.Extensions;
+using System.Text;
 
 namespace AssetRipper.YAML
 {

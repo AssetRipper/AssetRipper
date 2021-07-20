@@ -1,3 +1,4 @@
+using AssetRipper.Extensions;
 using System.Collections.Generic;
 using System.IO;
 
@@ -5,14 +6,14 @@ namespace AssetRipper.Converters.Script
 {
 	public abstract class ScriptExportConstructor : ScriptExportMethod
 	{
-		public override void Export(TextWriter writer, int intent)
+		public override void Export(TextWriter writer, int indent)
 		{
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			writer.Write("{0} {1}(", Keyword, DeclaringType.CleanName);
 			for (int i = 0; i < Parameters.Count; i++)
 			{
 				ScriptExportParameter parameter = Parameters[i];
-				parameter.Export(writer, intent);
+				parameter.Export(writer, indent);
 				if (i < Parameters.Count - 1)
 				{
 					writer.Write(", ");
@@ -39,9 +40,9 @@ namespace AssetRipper.Converters.Script
 			}
 
 			writer.WriteLine(")");
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			writer.WriteLine("{");
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			writer.WriteLine("}");
 		}
 

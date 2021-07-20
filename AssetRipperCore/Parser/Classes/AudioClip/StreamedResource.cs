@@ -1,4 +1,5 @@
 using AssetRipper.Converters;
+using AssetRipper.Extensions;
 using AssetRipper.YAML;
 
 namespace AssetRipper.Classes.AudioClips

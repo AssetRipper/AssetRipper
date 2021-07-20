@@ -1,4 +1,5 @@
 using AssetRipper.Converters;
+using AssetRipper.Extensions;
 using AssetRipper.SerializedFiles;
 using System;
 using System.Collections.Generic;

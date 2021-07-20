@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace AssetRipper
+namespace AssetRipper.Extensions
 {
 	public static class BitArrayExtensions
 	{

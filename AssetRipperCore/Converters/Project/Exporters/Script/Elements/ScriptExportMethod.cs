@@ -1,3 +1,4 @@
+using AssetRipper.Extensions;
 using AssetRipper.Utils;
 using System.Collections.Generic;
 using System.IO;
@@ -8,37 +9,37 @@ namespace AssetRipper.Converters.Script
 	{
 		public abstract void Init(IScriptExportManager manager);
 
-		public virtual void Export(TextWriter writer, int intent)
+		public virtual void Export(TextWriter writer, int indent)
 		{
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			string returnTypeName = ReturnType.GetTypeNestedName(DeclaringType);
 			writer.Write("{0} override {1} {2}(", Keyword, returnTypeName, Name);
 			for (int i = 0; i < Parameters.Count; i++)
 			{
 				ScriptExportParameter parameter = Parameters[i];
-				parameter.Export(writer, intent);
+				parameter.Export(writer, indent);
 				if (i < Parameters.Count - 1)
 				{
 					writer.Write(", ");
 				}
 			}
 			writer.WriteLine(")");
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			writer.WriteLine("{");
 			foreach (ScriptExportParameter parameter in Parameters)
 			{
 				if (parameter.ByRef == ScriptExportParameter.ByRefType.Out)
 				{
-					writer.WriteIndent(intent + 1);
+					writer.WriteIndent(indent + 1);
 					writer.WriteLine("{0} = default({1});", parameter.Name, parameter.Type.GetTypeNestedName(DeclaringType));
 				}
 			}
 			if (ReturnType.TypeName != MonoUtils.CVoidName)
 			{
-				writer.WriteIndent(intent + 1);
+				writer.WriteIndent(indent + 1);
 				writer.WriteLine("return default({0});", returnTypeName);
 			}
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			writer.WriteLine("}");
 		}
 

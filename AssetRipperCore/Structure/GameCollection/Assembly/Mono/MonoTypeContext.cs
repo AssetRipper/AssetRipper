@@ -1,4 +1,5 @@
-﻿using Mono.Cecil;
+﻿using AssetRipper.Extensions;
+using Mono.Cecil;
 using Mono.Cecil.Metadata;
 using System;
 using System.Collections.Generic;

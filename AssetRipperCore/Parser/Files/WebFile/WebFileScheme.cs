@@ -1,3 +1,4 @@
+using AssetRipper.Extensions;
 using AssetRipper.WebFiles;
 using System.IO;
 

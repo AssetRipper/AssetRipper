@@ -18,7 +18,7 @@ namespace AssetRipper.Converters.Script
 
 		public abstract void Init(IScriptExportManager manager);
 
-		public void Export(TextWriter writer, int intent)
+		public void Export(TextWriter writer, int indent)
 		{
 			switch (ByRef)
 			{

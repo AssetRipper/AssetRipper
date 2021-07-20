@@ -1,3 +1,5 @@
+using AssetRipper.Extensions;
+
 namespace AssetRipper.YAML
 {
 	internal static class EmitterExtensions

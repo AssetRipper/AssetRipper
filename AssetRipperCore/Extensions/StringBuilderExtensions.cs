@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace AssetRipper
+namespace AssetRipper.Extensions
 {
 	public static class StringBuilderExtensions
 	{

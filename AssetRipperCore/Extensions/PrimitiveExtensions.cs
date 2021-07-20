@@ -1,4 +1,4 @@
-﻿namespace AssetRipper
+﻿namespace AssetRipper.Extensions
 {
 	public static class PrimitiveExtensions
 	{

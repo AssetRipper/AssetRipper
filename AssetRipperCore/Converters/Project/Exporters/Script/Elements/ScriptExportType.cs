@@ -1,3 +1,4 @@
+using AssetRipper.Extensions;
 using AssetRipper.Game.Assembly;
 using System.Collections.Generic;
 using System.IO;
@@ -24,39 +25,39 @@ namespace AssetRipper.Converters.Script
 			}
 		}
 
-		public virtual void Export(TextWriter writer, int intent)
+		public virtual void Export(TextWriter writer, int indent)
 		{
 			if (IsSerializable)
 			{
-				writer.WriteIndent(intent);
+				writer.WriteIndent(indent);
 				writer.WriteLine("[{0}]", ScriptExportAttribute.SerializableName);
 			}
 
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", TypeName);
 			if (Base != null && !SerializableType.IsBasic(Base.Namespace, Base.NestedName))
 			{
 				writer.Write(" : {0}", Base.GetTypeNestedName(DeclaringType));
 			}
 			writer.WriteLine();
-			writer.WriteIndent(intent++);
+			writer.WriteIndent(indent++);
 			writer.WriteLine('{');
 
 			foreach (ScriptExportType nestedType in NestedTypes)
 			{
-				nestedType.Export(writer, intent);
+				nestedType.Export(writer, indent);
 				writer.WriteLine();
 			}
 
 			foreach (ScriptExportEnum nestedEnum in NestedEnums)
 			{
-				nestedEnum.Export(writer, intent);
+				nestedEnum.Export(writer, indent);
 				writer.WriteLine();
 			}
 
 			foreach (ScriptExportDelegate @delegate in NestedDelegates)
 			{
-				@delegate.Export(writer, intent);
+				@delegate.Export(writer, indent);
 			}
 			if (NestedDelegates.Count > 0)
 			{
@@ -65,17 +66,17 @@ namespace AssetRipper.Converters.Script
 
 			if (Constructor != null)
 			{
-				Constructor.Export(writer, intent);
+				Constructor.Export(writer, indent);
 				writer.WriteLine();
 			}
 			foreach (ScriptExportMethod method in Methods)
 			{
-				method.Export(writer, intent);
+				method.Export(writer, indent);
 				writer.WriteLine();
 			}
 			foreach (ScriptExportProperty property in Properties)
 			{
-				property.Export(writer, intent);
+				property.Export(writer, indent);
 			}
 			if (Properties.Count > 0)
 			{
@@ -83,10 +84,10 @@ namespace AssetRipper.Converters.Script
 			}
 			foreach (ScriptExportField field in Fields)
 			{
-				field.Export(writer, intent);
+				field.Export(writer, indent);
 			}
 
-			writer.WriteIndent(--intent);
+			writer.WriteIndent(--indent);
 			writer.WriteLine('}');
 		}
 

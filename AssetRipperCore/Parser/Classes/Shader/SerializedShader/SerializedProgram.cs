@@ -1,3 +1,5 @@
+using AssetRipper.Extensions;
+
 namespace AssetRipper.Classes.Shaders
 {
 	public struct SerializedProgram : IAssetReadable

@@ -1,3 +1,4 @@
+using AssetRipper.Extensions;
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;

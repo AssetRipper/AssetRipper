@@ -1,5 +1,6 @@
 using AssetRipper;
 using AssetRipper.Classes;
+using AssetRipper.Extensions;
 using AssetRipper.Logging;
 using AssetRipperLibrary.TextureContainers;
 using AssetRipperLibrary.TextureContainers.DDS;

@@ -1,4 +1,5 @@
 using AssetRipper.Classes.Shaders;
+using AssetRipper.Extensions;
 using System.IO;
 
 namespace AssetRipper.Converters.Shaders

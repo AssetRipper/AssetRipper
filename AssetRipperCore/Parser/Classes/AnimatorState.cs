@@ -1,6 +1,7 @@
 using AssetRipper.Classes.AnimatorControllers;
 using AssetRipper.Classes.Objects;
 using AssetRipper.Converters;
+using AssetRipper.Extensions;
 using AssetRipper.Layout;
 using AssetRipper.SerializedFiles;
 using AssetRipper.YAML;

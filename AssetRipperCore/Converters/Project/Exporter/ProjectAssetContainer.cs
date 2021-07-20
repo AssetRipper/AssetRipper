@@ -1,5 +1,6 @@
 using AssetRipper.Classes;
 using AssetRipper.Classes.Misc;
+using AssetRipper.Extensions;
 using AssetRipper.Layout;
 using AssetRipper.Project;
 using AssetRipper.SerializedFiles;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AssetRipper.Extensions;
+using System;
 using System.IO;
 
 namespace AssetRipper

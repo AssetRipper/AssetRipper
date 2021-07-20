@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Extensions;
+using System.Collections.Generic;
 using System.IO;
 
 namespace AssetRipper.Converters.Script
@@ -7,17 +8,17 @@ namespace AssetRipper.Converters.Script
 	{
 		public abstract void Init(IScriptExportManager manager);
 
-		public void Export(TextWriter writer, int intent)
+		public void Export(TextWriter writer, int indent)
 		{
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			string sharedKeyword = PropertyKeyword;
 			writer.WriteLine("{0} override {1} {2}", sharedKeyword, Type.GetTypeNestedName(DeclaringType), Name);
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			writer.WriteLine("{");
 
 			if (HasGetter)
 			{
-				writer.WriteIndent(intent + 1);
+				writer.WriteIndent(indent + 1);
 				if (GetKeyword != sharedKeyword)
 				{
 					writer.WriteLine("{0} ", GetKeyword);
@@ -26,7 +27,7 @@ namespace AssetRipper.Converters.Script
 			}
 			if (HasSetter)
 			{
-				writer.WriteIndent(intent + 1);
+				writer.WriteIndent(indent + 1);
 				if (SetKeyword != sharedKeyword)
 				{
 					writer.WriteLine("{0} ", SetKeyword);
@@ -34,7 +35,7 @@ namespace AssetRipper.Converters.Script
 				writer.WriteLine("set {}");
 			}
 
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			writer.WriteLine("}");
 		}
 

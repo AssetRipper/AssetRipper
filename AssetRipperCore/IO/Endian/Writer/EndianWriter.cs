@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using AssetRipper.Extensions;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 

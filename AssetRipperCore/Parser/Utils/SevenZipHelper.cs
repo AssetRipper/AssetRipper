@@ -1,4 +1,5 @@
-﻿using SevenZip.Compression.LZMA;
+﻿using AssetRipper.Extensions;
+using SevenZip.Compression.LZMA;
 using System;
 using System.IO;
 

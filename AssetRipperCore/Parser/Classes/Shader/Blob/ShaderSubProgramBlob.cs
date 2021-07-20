@@ -1,4 +1,5 @@
-﻿using AssetRipper.Layout;
+﻿using AssetRipper.Extensions;
+using AssetRipper.Layout;
 using AssetRipper.Lz4;
 using System;
 using System.IO;

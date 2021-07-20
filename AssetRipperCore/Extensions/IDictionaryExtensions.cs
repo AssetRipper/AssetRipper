@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AssetRipper
+namespace AssetRipper.Extensions
 {
 	public static class IDictionaryExtensions
 	{

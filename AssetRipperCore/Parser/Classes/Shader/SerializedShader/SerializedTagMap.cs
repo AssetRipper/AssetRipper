@@ -1,3 +1,4 @@
+using AssetRipper.Extensions;
 using System.Collections.Generic;
 using System.IO;
 
@@ -12,11 +13,11 @@ namespace AssetRipper.Classes.Shaders
 			m_tags.Read(reader);
 		}
 
-		public void Export(TextWriter writer, int intent)
+		public void Export(TextWriter writer, int indent)
 		{
 			if (Tags.Count != 0)
 			{
-				writer.WriteIndent(intent);
+				writer.WriteIndent(indent);
 				writer.Write("Tags { ");
 				foreach (var kvp in Tags)
 				{

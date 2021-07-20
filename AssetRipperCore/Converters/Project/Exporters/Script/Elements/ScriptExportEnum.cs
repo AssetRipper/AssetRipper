@@ -1,3 +1,4 @@
+using AssetRipper.Extensions;
 using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,9 @@ namespace AssetRipper.Converters.Script
 {
 	public abstract class ScriptExportEnum : ScriptExportType
 	{
-		public sealed override void Export(TextWriter writer, int intent)
+		public sealed override void Export(TextWriter writer, int indent)
 		{
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			writer.Write("{0} enum {1}", Keyword, TypeName);
 			if (Base != null && Base.TypeName != MonoUtils.IntName)
 			{
@@ -17,15 +18,15 @@ namespace AssetRipper.Converters.Script
 			}
 			writer.WriteLine();
 
-			writer.WriteIndent(intent++);
+			writer.WriteIndent(indent++);
 			writer.WriteLine('{');
 
 			foreach (ScriptExportField field in Fields)
 			{
-				field.ExportEnum(writer, intent);
+				field.ExportEnum(writer, indent);
 			}
 
-			writer.WriteIndent(--intent);
+			writer.WriteIndent(--indent);
 			writer.WriteLine('}');
 		}
 

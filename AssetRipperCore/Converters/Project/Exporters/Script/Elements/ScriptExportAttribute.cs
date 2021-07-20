@@ -1,3 +1,4 @@
+using AssetRipper.Extensions;
 using System.Collections.Generic;
 using System.IO;
 
@@ -7,9 +8,9 @@ namespace AssetRipper.Converters.Script
 	{
 		public abstract void Init(IScriptExportManager manager);
 
-		public void Export(TextWriter writer, int intent)
+		public void Export(TextWriter writer, int indent)
 		{
-			writer.WriteIndent(intent);
+			writer.WriteIndent(indent);
 			writer.WriteLine("[{0}]", Name);
 		}
 
