@@ -10,6 +10,8 @@ namespace AssetRipper.Logging
 
 		public FileLogger() : this("AssetRipper.log", true) { }
 
+		public FileLogger(string filePath) : this(filePath, false) { }
+
 		public FileLogger(string filePath, bool relativePath)
 		{
 			if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentException("Invalid path", nameof(filePath));
