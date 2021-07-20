@@ -5,73 +5,44 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AssemblyName>AssetRipperLibrary</AssemblyName>
     <RootNamespace>AssetRipperLibrary</RootNamespace>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
     <Platforms>x64;x86</Platforms>
     <Configurations>Debug;Release;Virtual</Configurations>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;WIN64</DefineConstants>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;WIN64</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Virtual|x64' ">
-    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;WIN64;VIRTUAL</DefineConstants>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Virtual|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;VIRTUAL</DefineConstants>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <Compile Remove="obj\**" />
-    <EmbeddedResource Remove="obj\**" />
-    <None Remove="obj\**" />
-  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
@@ -113,6 +84,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>texgenpack.dll</TargetPath>
     </ContentWithTargetPath>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
   </ItemGroup>
   
 </Project>

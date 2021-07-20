@@ -4,22 +4,10 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputType>WinExe</OutputType>
     <AssemblyName>AssetRipper</AssemblyName>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <RootNamespace>AssetRipperGUI</RootNamespace>
+    <OutputPath>..\Bins\AssetRipperGUI\$(Configuration)\$(Platform)\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
@@ -29,82 +17,45 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutputPath>..\Bins\AssetRipper\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;WIN64</DefineConstants>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>..\Bins\AssetRipper\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;WIN64</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Virtual|x64' ">
-    <OutputPath>..\Bins\AssetRipper\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;WIN64;VIRTUAL</DefineConstants>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>..\Bins\AssetRipper\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\Bins\AssetRipper\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Virtual|x86' ">
-    <OutputPath>..\Bins\AssetRipper\$(Configuration)\$(Platform)\</OutputPath>
     <DefineConstants>TRACE;DEBUG;VIRTUAL</DefineConstants>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <BaseIntermediateOutputPath>..\Bins\obj\</BaseIntermediateOutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   
   <PropertyGroup>
-    <ApplicationIcon>Resources\URIcon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\GUI_Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="obj\**" />
-    <EmbeddedResource Remove="obj\**" />
-    <None Remove="obj\**" />
-    <Page Remove="obj\**" />
-  </ItemGroup>
-  
   <ItemGroup>
     <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
     <ProjectReference Include="..\DXShaderRestorer\DXShaderRestorer.csproj" />
@@ -113,15 +64,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Resource Include="Resources\URIcon.ico" />
+    <Resource Include="Resources\GUI_Icon.ico" />
     <Resource Include="Resources\alert-decagram-outline.png" />
   </ItemGroup>
   
@@ -158,4 +101,11 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+    <Page Remove="obj\**" />
+  </ItemGroup>
+  
 </Project>
