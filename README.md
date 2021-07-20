@@ -70,10 +70,6 @@ If you want to build a solution, you'll need:
 
 If you want to run binary files, you need to install:
 
- * [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0)
- 
- * [Microsoft Visual C++ 2015](https://www.microsoft.com/en-us/download/details.aspx?id=53840) Redistributables
-
  * [Unity 2017.3.0f3 or greater](https://unity3d.com/get-unity/download/archive) (NOTE: your editor version must be no less than the game's version)
  
 
