@@ -11,24 +11,24 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 {
 	internal class MixedGameStructure : PlatformGameStructure
 	{
-		public MixedGameStructure(IEnumerable<string> pathes)
+		public MixedGameStructure(IEnumerable<string> paths)
 		{
 			Dictionary<string, string> files = new Dictionary<string, string>();
 			Dictionary<string, string> assemblies = new Dictionary<string, string>();
-			HashSet<string> dataPathes = new HashSet<string>();
-			foreach (string path in SelectUniquePathes(pathes))
+			HashSet<string> dataPaths = new HashSet<string>();
+			foreach (string path in SelectUniquePaths(paths))
 			{
 				if (MultiFileStream.Exists(path))
 				{
 					string name = MultiFileStream.GetFileName(path);
 					AddFile(files, name, path);
 					string directory = Path.GetDirectoryName(path);
-					dataPathes.Add(directory);
+					dataPaths.Add(directory);
 				}
 				else if (DirectoryUtils.Exists(path))
 				{
 					DirectoryInfo directory = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
-					CollectFromDirectory(directory, files, assemblies, dataPathes);
+					CollectFromDirectory(directory, files, assemblies, dataPaths);
 				}
 				else
 				{
@@ -36,18 +36,18 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 				}
 			}
 
-			DataPathes = dataPathes.ToArray();
+			DataPaths = dataPaths.ToArray();
 			Files = files;
 			Assemblies = assemblies;
 			Name = Files.Count == 0 ? string.Empty : Files.First().Key;
 		}
 
-		private IEnumerable<string> SelectUniquePathes(IEnumerable<string> pathes)
+		private IEnumerable<string> SelectUniquePaths(IEnumerable<string> paths)
 		{
-			return pathes.Select(t => MultiFileStream.GetFilePath(t)).Distinct();
+			return paths.Select(t => MultiFileStream.GetFilePath(t)).Distinct();
 		}
 
-		private void CollectFromDirectory(DirectoryInfo root, IDictionary<string, string> files, IDictionary<string, string> assemblies, ISet<string> dataPathes)
+		private void CollectFromDirectory(DirectoryInfo root, IDictionary<string, string> files, IDictionary<string, string> assemblies, ISet<string> dataPaths)
 		{
 			int count = files.Count;
 			CollectSerializedGameFiles(root, files);
@@ -56,12 +56,12 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			CollectAssembliesSafe(root, assemblies);
 			if (files.Count != count)
 			{
-				dataPathes.Add(root.FullName);
+				dataPaths.Add(root.FullName);
 			}
 
 			foreach (DirectoryInfo subDirectory in root.EnumerateDirectories())
 			{
-				CollectFromDirectory(subDirectory, files, assemblies, dataPathes);
+				CollectFromDirectory(subDirectory, files, assemblies, dataPaths);
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		}
 
 		public override string Name { get; }
-		public override IReadOnlyList<string> DataPathes { get; }
+		public override IReadOnlyList<string> DataPaths { get; }
 
 		public override IReadOnlyDictionary<string, string> Files { get; }
 		public override IReadOnlyDictionary<string, string> Assemblies { get; }

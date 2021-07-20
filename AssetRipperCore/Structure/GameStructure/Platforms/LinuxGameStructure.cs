@@ -24,7 +24,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 				throw new Exception($"Data directory wasn't found");
 			}
 			Name = name;
-			DataPathes = new string[] { dataPath };
+			DataPaths = new string[] { dataPath };
 
 			DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(dataPath));
 
@@ -75,7 +75,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		}
 
 		public override string Name { get; }
-		public override IReadOnlyList<string> DataPathes { get; }
+		public override IReadOnlyList<string> DataPaths { get; }
 
 		public override IReadOnlyDictionary<string, string> Files { get; }
 		public override IReadOnlyDictionary<string, string> Assemblies { get; }

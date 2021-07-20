@@ -30,7 +30,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			{
 				throw new Exception($"Data directory hasn't been found");
 			}
-			List<string> dataPathes = new List<string>() { apkDataPath };
+			List<string> dataPaths = new List<string>() { apkDataPath };
 
 			DirectoryInfo obbDataDirectory = null;
 			if (obbPath != null)
@@ -46,9 +46,9 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 				{
 					throw new Exception($"Obb data directory '{obbDataPath}' wasn't found");
 				}
-				dataPathes.Add(obbDataPath);
+				dataPaths.Add(obbDataPath);
 			}
-			DataPathes = dataPathes.ToArray();
+			DataPaths = dataPaths.ToArray();
 
 			Dictionary<string, string> files = new Dictionary<string, string>();
 			CollectGameFiles(apkDataDirectory, files);
@@ -150,7 +150,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		}
 
 		public override string Name => m_root.Name;
-		public override IReadOnlyList<string> DataPathes { get; }
+		public override IReadOnlyList<string> DataPaths { get; }
 
 		public override IReadOnlyDictionary<string, string> Files { get; }
 		public override IReadOnlyDictionary<string, string> Assemblies { get; }

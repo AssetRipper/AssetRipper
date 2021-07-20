@@ -25,7 +25,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 				throw new Exception($"Web player asset bundle data wasn't found");
 			}
 			Name = name;
-			DataPathes = new string[] { rootPath };
+			DataPaths = new string[] { rootPath };
 
 			Dictionary<string, string> files = new Dictionary<string, string>();
 			string abPath = Path.Combine(m_root.FullName, Name + AssetBundleExtension);
@@ -73,7 +73,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		}
 
 		public override string Name { get; }
-		public override IReadOnlyList<string> DataPathes { get; }
+		public override IReadOnlyList<string> DataPaths { get; }
 
 		public override IReadOnlyDictionary<string, string> Files { get; }
 		public override IReadOnlyDictionary<string, string> Assemblies { get; }

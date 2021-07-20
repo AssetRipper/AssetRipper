@@ -16,27 +16,22 @@ namespace AssetRipper.Structure.GameStructure
 {
 	public sealed class GameStructure : IDisposable
 	{
-		private GameStructure()
-		{
-		}
+		private GameStructure() { }
 
 		~GameStructure()
 		{
 			Dispose(false);
 		}
 
-		public static GameStructure Load(IEnumerable<string> pathes)
-		{
-			return Load(pathes, null);
-		}
+		public static GameStructure Load(IEnumerable<string> paths) => Load(paths, null);
 
-		public static GameStructure Load(IEnumerable<string> pathes, LayoutInfo layinfo)
+		public static GameStructure Load(IEnumerable<string> paths, LayoutInfo layinfo)
 		{
 			List<string> toProcess = new List<string>();
-			toProcess.AddRange(pathes);
+			toProcess.AddRange(paths);
 			if (toProcess.Count == 0)
 			{
-				throw new ArgumentException("Game files not found", nameof(pathes));
+				throw new ArgumentException("Game files not found", nameof(paths));
 			}
 
 			GameStructure structure = new GameStructure();
@@ -131,17 +126,17 @@ namespace AssetRipper.Structure.GameStructure
 			FileCollection?.Dispose();
 		}
 
-		private void Load(List<string> pathes, LayoutInfo layinfo)
+		private void Load(List<string> paths, LayoutInfo layinfo)
 		{
-			if (CheckPC(pathes)) { }
-			else if (CheckLinux(pathes)) { }
-			else if (CheckMac(pathes)) { }
-			else if (CheckAndroid(pathes)) { }
-			else if (CheckiOS(pathes)) { }
-			else if (CheckSwitch(pathes)) { }
-			else if (CheckWebGL(pathes)) { }
-			else if (CheckWebPlayer(pathes)) { }
-			CheckMixed(pathes);
+			if (CheckPC(paths)) { }
+			else if (CheckLinux(paths)) { }
+			else if (CheckMac(paths)) { }
+			else if (CheckAndroid(paths)) { }
+			else if (CheckiOS(paths)) { }
+			else if (CheckSwitch(paths)) { }
+			else if (CheckWebGL(paths)) { }
+			else if (CheckWebPlayer(paths)) { }
+			CheckMixed(paths);
 
 			using (GameStructureProcessor processor = new GameStructureProcessor())
 			{
@@ -169,14 +164,14 @@ namespace AssetRipper.Structure.GameStructure
 			}
 		}
 
-		private bool CheckPC(List<string> pathes)
+		private bool CheckPC(List<string> paths)
 		{
-			foreach (string path in pathes)
+			foreach (string path in paths)
 			{
 				if (PCGameStructure.IsPCStructure(path))
 				{
 					PlatformStructure = new PCGameStructure(path);
-					pathes.Remove(path);
+					paths.Remove(path);
 					Logger.Log(LogType.Info, LogCategory.Import, $"PC game structure has been found at '{path}'");
 					return true;
 				}
@@ -184,14 +179,14 @@ namespace AssetRipper.Structure.GameStructure
 			return false;
 		}
 
-		private bool CheckLinux(List<string> pathes)
+		private bool CheckLinux(List<string> paths)
 		{
-			foreach (string path in pathes)
+			foreach (string path in paths)
 			{
 				if (LinuxGameStructure.IsLinuxStructure(path))
 				{
 					PlatformStructure = new LinuxGameStructure(path);
-					pathes.Remove(path);
+					paths.Remove(path);
 					Logger.Log(LogType.Info, LogCategory.Import, $"Linux game structure has been found at '{path}'");
 					return true;
 				}
@@ -199,14 +194,14 @@ namespace AssetRipper.Structure.GameStructure
 			return false;
 		}
 
-		private bool CheckMac(List<string> pathes)
+		private bool CheckMac(List<string> paths)
 		{
-			foreach (string path in pathes)
+			foreach (string path in paths)
 			{
 				if (MacGameStructure.IsMacStructure(path))
 				{
 					PlatformStructure = new MacGameStructure(path);
-					pathes.Remove(path);
+					paths.Remove(path);
 					Logger.Log(LogType.Info, LogCategory.Import, $"Mac game structure has been found at '{path}'");
 					return true;
 				}
@@ -214,11 +209,11 @@ namespace AssetRipper.Structure.GameStructure
 			return false;
 		}
 
-		private bool CheckAndroid(List<string> pathes)
+		private bool CheckAndroid(List<string> paths)
 		{
 			string androidStructure = null;
 			string obbStructure = null;
-			foreach (string path in pathes)
+			foreach (string path in paths)
 			{
 				if (AndroidGameStructure.IsAndroidStructure(path))
 				{
@@ -247,11 +242,11 @@ namespace AssetRipper.Structure.GameStructure
 			if (androidStructure != null)
 			{
 				PlatformStructure = new AndroidGameStructure(androidStructure, obbStructure);
-				pathes.Remove(androidStructure);
+				paths.Remove(androidStructure);
 				Logger.Log(LogType.Info, LogCategory.Import, $"Android game structure has been found at '{androidStructure}'");
 				if (obbStructure != null)
 				{
-					pathes.Remove(obbStructure);
+					paths.Remove(obbStructure);
 					Logger.Log(LogType.Info, LogCategory.Import, $"Android obb game structure has been found at '{obbStructure}'");
 				}
 				return true;
@@ -260,14 +255,14 @@ namespace AssetRipper.Structure.GameStructure
 			return false;
 		}
 
-		private bool CheckiOS(List<string> pathes)
+		private bool CheckiOS(List<string> paths)
 		{
-			foreach (string path in pathes)
+			foreach (string path in paths)
 			{
 				if (iOSGameStructure.IsiOSStructure(path))
 				{
 					PlatformStructure = new iOSGameStructure(path);
-					pathes.Remove(path);
+					paths.Remove(path);
 					Logger.Log(LogType.Info, LogCategory.Import, $"iOS game structure has been found at '{path}'");
 					return true;
 				}
@@ -275,14 +270,14 @@ namespace AssetRipper.Structure.GameStructure
 			return false;
 		}
 
-		private bool CheckSwitch(List<string> pathes)
+		private bool CheckSwitch(List<string> paths)
 		{
-			foreach (string path in pathes)
+			foreach (string path in paths)
 			{
 				if (SwitchGameStructure.IsSwitchStructure(path))
 				{
 					PlatformStructure = new SwitchGameStructure(path);
-					pathes.Remove(path);
+					paths.Remove(path);
 					Logger.Log(LogType.Info, LogCategory.Import, $"Switch game structure has been found at '{path}'");
 					return true;
 				}
@@ -290,14 +285,14 @@ namespace AssetRipper.Structure.GameStructure
 			return false;
 		}
 
-		private bool CheckWebGL(List<string> pathes)
+		private bool CheckWebGL(List<string> paths)
 		{
-			foreach (string path in pathes)
+			foreach (string path in paths)
 			{
 				if (WebGLGameStructure.IsWebGLStructure(path))
 				{
 					PlatformStructure = new WebGLGameStructure(path);
-					pathes.Remove(path);
+					paths.Remove(path);
 					Logger.Log(LogType.Info, LogCategory.Import, $"WebPlayer game structure has been found at '{path}'");
 					return true;
 				}
@@ -305,14 +300,14 @@ namespace AssetRipper.Structure.GameStructure
 			return false;
 		}
 
-		private bool CheckWebPlayer(List<string> pathes)
+		private bool CheckWebPlayer(List<string> paths)
 		{
-			foreach (string path in pathes)
+			foreach (string path in paths)
 			{
 				if (WebPlayerGameStructure.IsWebPlayerStructure(path))
 				{
 					PlatformStructure = new WebPlayerGameStructure(path);
-					pathes.Remove(path);
+					paths.Remove(path);
 					Logger.Log(LogType.Info, LogCategory.Import, $"WebPlayer game structure has been found at '{path}'");
 					return true;
 				}
@@ -320,12 +315,12 @@ namespace AssetRipper.Structure.GameStructure
 			return false;
 		}
 
-		private void CheckMixed(List<string> pathes)
+		private void CheckMixed(List<string> paths)
 		{
-			if (pathes.Count > 0)
+			if (paths.Count > 0)
 			{
-				MixedStructure = new MixedGameStructure(pathes);
-				pathes.Clear();
+				MixedStructure = new MixedGameStructure(paths);
+				paths.Clear();
 			}
 		}
 

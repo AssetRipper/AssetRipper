@@ -46,7 +46,7 @@ namespace AssetRipper.Structure.GameStructure
 				return dependencyPath;
 			}
 
-			foreach (string dataPath in DataPathes)
+			foreach (string dataPath in DataPaths)
 			{
 				string filePath = Path.Combine(dataPath, dependency);
 				if (MultiFileStream.Exists(filePath))
@@ -80,7 +80,7 @@ namespace AssetRipper.Structure.GameStructure
 
 		public string RequestResource(string resource)
 		{
-			foreach (string dataPath in DataPathes)
+			foreach (string dataPath in DataPaths)
 			{
 				string path = Path.Combine(dataPath, resource);
 				if (MultiFileStream.Exists(path))
@@ -258,7 +258,7 @@ namespace AssetRipper.Structure.GameStructure
 		}
 
 		public abstract string Name { get; }
-		public abstract IReadOnlyList<string> DataPathes { get; }
+		public abstract IReadOnlyList<string> DataPaths { get; }
 
 		public abstract IReadOnlyDictionary<string, string> Files { get; }
 		public abstract IReadOnlyDictionary<string, string> Assemblies { get; }
