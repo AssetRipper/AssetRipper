@@ -1,6 +1,7 @@
-﻿using AssetRipper.Classes.TrailRenderers;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.TrailRenderer;
 
-namespace AssetRipper.Converters.TrailRenderers
+namespace AssetRipper.Converters.Classes.TrailRenderer
 {
 	public static class LineParametersConverter
 	{

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Rigidbody2Ds
+﻿namespace AssetRipper.Parser.Classes.Rigidbody2D
 {
 	public enum RigidbodyInterpolation2D
 	{

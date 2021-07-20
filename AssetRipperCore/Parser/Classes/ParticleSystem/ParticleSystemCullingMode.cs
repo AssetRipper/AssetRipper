@@ -1,4 +1,4 @@
-namespace AssetRipper.Classes.ParticleSystems
+namespace AssetRipper.Parser.Classes.ParticleSystem
 {
 	/// <summary>
 	/// The action to perform when the Particle System is offscreen.

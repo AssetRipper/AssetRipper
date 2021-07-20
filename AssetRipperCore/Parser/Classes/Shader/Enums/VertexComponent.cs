@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Shaders
+﻿namespace AssetRipper.Parser.Classes.Shader.Enums
 {
 	public enum VertexComponent : uint
 	{

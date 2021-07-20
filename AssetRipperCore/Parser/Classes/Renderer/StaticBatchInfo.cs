@@ -1,9 +1,11 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.MeshRenderers
+namespace AssetRipper.Parser.Classes.Renderer
 {
 	public struct StaticBatchInfo : IAssetReadable, IYAMLExportable
 	{

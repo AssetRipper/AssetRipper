@@ -1,8 +1,15 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.LightmapSettingss
+namespace AssetRipper.Parser.Classes.LightmapSettings
 {
 	public struct LightmapData : IAsset, IDependent
 	{
@@ -67,7 +74,7 @@ namespace AssetRipper.Classes.LightmapSettingss
 			}
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Lightmap, LightmapName);
 			if (HasIndirectLightmap(context.Version))
@@ -115,11 +122,11 @@ namespace AssetRipper.Classes.LightmapSettingss
 		public const string DirLightmapName = "m_DirLightmap";
 		public const string ShadowMaskName = "m_ShadowMask";
 
-		public PPtr<Texture2D> Lightmap;
-		public PPtr<Texture2D> IndirectLightmap;
-		public PPtr<Texture2D> LightInd;
-		public PPtr<Texture2D> DirInd;
-		public PPtr<Texture2D> DirLightmap;
-		public PPtr<Texture2D> ShadowMask;
+		public PPtr<Texture2D.Texture2D> Lightmap;
+		public PPtr<Texture2D.Texture2D> IndirectLightmap;
+		public PPtr<Texture2D.Texture2D> LightInd;
+		public PPtr<Texture2D.Texture2D> DirInd;
+		public PPtr<Texture2D.Texture2D> DirLightmap;
+		public PPtr<Texture2D.Texture2D> ShadowMask;
 	}
 }

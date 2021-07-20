@@ -1,10 +1,14 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Logging;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class MovieTexture : BaseVideoTexture
 	{
@@ -46,18 +50,18 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			if (HasData(context.Version) || IsInherited(context.Version))
 			{
-				foreach (PPtr<Object> asset in base.FetchDependencies(context))
+				foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 				{
 					yield return asset;
 				}
 			}
 			else
 			{
-				foreach (PPtr<Object> asset in FetchDependenciesTexture(context))
+				foreach (PPtr<Object.Object> asset in FetchDependenciesTexture(context))
 				{
 					yield return asset;
 				}

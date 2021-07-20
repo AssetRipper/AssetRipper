@@ -1,12 +1,16 @@
 using AssetRipper;
 using AssetRipper.Converters;
+using AssetRipper.Converters.Project.Exporter;
+using AssetRipper.Converters.Project.Exporter.Engine;
 using AssetRipper.IO.MultiFile;
 using AssetRipper.Logging;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Structure.GameStructure;
 using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Object = AssetRipper.Classes.Object;
+using Object = AssetRipper.Parser.Classes.Object.Object;
 
 namespace AssetRipperConsole
 {

@@ -1,4 +1,4 @@
-namespace AssetRipper.Classes.NavMeshObstacles
+namespace AssetRipper.Parser.Classes.NavMeshObstacle
 {
 	/// <summary>
 	/// Shape of the obstacle.

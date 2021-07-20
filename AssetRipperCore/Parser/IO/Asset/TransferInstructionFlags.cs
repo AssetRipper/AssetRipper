@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.IO.Asset
 {
 	[Flags]
 	public enum TransferInstructionFlags : uint

@@ -1,7 +1,7 @@
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Files.SerializedFile.Parser;
 using System.Collections.Generic;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Files.File
 {
 	public abstract class FileSchemeList : FileScheme
 	{

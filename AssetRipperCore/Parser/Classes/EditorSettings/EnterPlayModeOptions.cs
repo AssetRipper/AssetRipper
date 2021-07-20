@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.EditorSettingss
+namespace AssetRipper.Parser.Classes.EditorSettings
 {
 	[Flags]
 	public enum EnterPlayModeOptions

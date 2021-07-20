@@ -1,10 +1,15 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Converters;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Converters.Project.Exporter;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.Classes.GameObject;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Parser.Classes.PrefabInstance;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Project
+namespace AssetRipper.Structure.ProjectCollection.Collections
 {
 	public sealed class PrefabExportCollection : AssetsExportCollection
 	{

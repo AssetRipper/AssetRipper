@@ -1,6 +1,7 @@
 ﻿using System;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.Misc
+namespace AssetRipper.Parser.Classes.Misc.Bones
 {
 	public enum TDoFBoneType
 	{

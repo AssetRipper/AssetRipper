@@ -1,8 +1,12 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Layout;
+﻿using AssetRipper.Layout;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Parser.Files.File;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
 using System.Collections.Generic;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Asset
 {
 	public sealed class DependencyContext
 	{

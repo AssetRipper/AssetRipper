@@ -1,6 +1,12 @@
 using AssetRipper.Extensions;
+using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Parser.Classes.Shader.Enums.GpuProgramType;
+using AssetRipper.Parser.Classes.Shader.Parameters;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO;
+using AssetRipper.Parser.IO.Asset.Reader;
 
-namespace AssetRipper.Classes.Shaders
+namespace AssetRipper.Parser.Classes.Shader.SerializedShader
 {
 	public struct SerializedSubProgram : IAssetReadable
 	{

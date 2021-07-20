@@ -1,6 +1,9 @@
-﻿using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Misc.KeyframeTpl;
+using AssetRipper.Parser.Classes.Misc.KeyframeTpl.TangentMode;
+using AssetRipper.Parser.IO.Asset;
 
-namespace AssetRipper.Converters.Misc
+namespace AssetRipper.Converters.Classes.Misc
 {
 	public static class KeyframeTplConverter
 	{

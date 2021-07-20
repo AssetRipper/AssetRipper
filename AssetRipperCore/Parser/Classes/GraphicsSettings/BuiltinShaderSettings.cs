@@ -1,8 +1,13 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Converters.Project.Exporter.Engine;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.GraphicsSettingss
+namespace AssetRipper.Parser.Classes.GraphicsSettings
 {
 	public struct BuiltinShaderSettings : IAssetReadable, IYAMLExportable, IDependent
 	{
@@ -12,7 +17,7 @@ namespace AssetRipper.Classes.GraphicsSettingss
 			Shader.Read(reader);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Shader, ShaderName);
 		}
@@ -39,6 +44,6 @@ namespace AssetRipper.Classes.GraphicsSettingss
 		public const string ModeName = "m_Mode";
 		public const string ShaderName = "m_Shader";
 
-		public PPtr<Shader> Shader;
+		public PPtr<Shader.Shader> Shader;
 	}
 }

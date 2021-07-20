@@ -1,8 +1,12 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.ParticleSystem.Curve;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.ParticleSystems
+namespace AssetRipper.Parser.Classes.ParticleSystem
 {
 	public sealed class LightsModule : ParticleSystemModule, IDependent
 	{
@@ -36,7 +40,7 @@ namespace AssetRipper.Classes.ParticleSystems
 			MaxLights = reader.ReadInt32();
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Light, LightName);
 		}
@@ -73,7 +77,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public const string IntensityCurveName = "intensityCurve";
 		public const string MaxLightsName = "maxLights";
 
-		public PPtr<Light> Light;
+		public PPtr<Light.Light> Light;
 		public MinMaxCurve RangeCurve;
 		public MinMaxCurve IntensityCurve;
 	}

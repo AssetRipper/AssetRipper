@@ -1,10 +1,14 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
-using DateTime = AssetRipper.Classes.Misc.DateTime;
+using DateTime = AssetRipper.Parser.Classes.Misc.DateTime;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class MonoManager : GlobalGameManager
 	{
@@ -74,14 +78,14 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object> asset in context.FetchDependencies(Scripts, ScriptsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Scripts, ScriptsName))
 			{
 				yield return asset;
 			}

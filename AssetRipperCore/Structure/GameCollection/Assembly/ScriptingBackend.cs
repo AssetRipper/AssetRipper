@@ -1,4 +1,4 @@
-namespace AssetRipper.Game.Assembly
+namespace AssetRipper.Structure.GameCollection.Assembly
 {
 #warning TODO: rename
 	public enum ScriptingBackend

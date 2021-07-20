@@ -1,12 +1,13 @@
-using AssetRipper.Converters.Script;
-using AssetRipper.Game.Assembly;
-using AssetRipper.Game.Assembly.Mono;
+using AssetRipper.Converters.Project.Exporter.Script;
+using AssetRipper.Converters.Project.Exporter.Script.Elements;
 using AssetRipper.Layout;
+using AssetRipper.Structure.GameCollection.Assembly.Mono;
+using AssetRipper.Structure.GameCollection.Assembly.Serializable;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Game
+namespace AssetRipper.Structure.GameCollection.Assembly
 {
 	public sealed class AssemblyManager : IAssemblyManager
 	{

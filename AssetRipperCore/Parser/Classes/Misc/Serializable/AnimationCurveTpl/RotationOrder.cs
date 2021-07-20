@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Misc
+﻿namespace AssetRipper.Parser.Classes.Misc.Serializable.AnimationCurveTpl
 {
 	public enum RotationOrder
 	{

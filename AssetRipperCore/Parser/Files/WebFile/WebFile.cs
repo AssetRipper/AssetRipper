@@ -1,10 +1,11 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.IO.MultiFile;
 using AssetRipper.IO.Smart;
-using AssetRipper.WebFiles;
+using AssetRipper.Parser.Files.File.Parser;
+using AssetRipper.Parser.Files.WebFile.Parser;
 using System.IO;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Files.WebFile
 {
 	public sealed class WebFile : FileList
 	{

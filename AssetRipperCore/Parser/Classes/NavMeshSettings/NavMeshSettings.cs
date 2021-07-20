@@ -1,9 +1,14 @@
-using AssetRipper.Classes.NavMeshDatas;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.NavMeshData;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.NavMeshSettings
 {
 	public sealed class NavMeshSettings : LevelGameManager
 	{
@@ -35,9 +40,9 @@ namespace AssetRipper.Classes
 			m_navMeshData.Read(reader);
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -61,14 +66,14 @@ namespace AssetRipper.Classes
 			}
 			else
 			{
-				NavMeshData data = HasNavMeshData(container.Version) ? NavMeshData.FindAsset(container) : null;
+				NavMeshData.NavMeshData data = HasNavMeshData(container.Version) ? NavMeshData.FindAsset(container) : null;
 				if (data == null)
 				{
 					return new NavMeshBuildSettings(true);
 				}
 				else
 				{
-					if (Classes.NavMeshData.HasNavMeshParams(container.Version))
+					if (Classes.NavMeshData.NavMeshData.HasNavMeshParams(container.Version))
 					{
 						return new NavMeshBuildSettings(data.NavMeshParams);
 					}
@@ -85,7 +90,7 @@ namespace AssetRipper.Classes
 		public const string NavMeshDataName = "m_NavMeshData";
 
 		public PPtr<NavMeshObsolete> NavMesh => m_navMeshData.CastTo<NavMeshObsolete>();
-		public PPtr<NavMeshData> NavMeshData => m_navMeshData.CastTo<NavMeshData>();
+		public PPtr<NavMeshData.NavMeshData> NavMeshData => m_navMeshData.CastTo<NavMeshData.NavMeshData>();
 
 		public NavMeshBuildSettings BuildSettings;
 

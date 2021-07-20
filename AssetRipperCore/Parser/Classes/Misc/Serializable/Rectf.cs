@@ -1,9 +1,13 @@
-using AssetRipper.Converters;
-using AssetRipper.Layout;
+using AssetRipper.Converters.Project;
+using AssetRipper.Layout.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 using System.Globalization;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Misc.Serializable
 {
 	public struct Rectf : IAsset
 	{

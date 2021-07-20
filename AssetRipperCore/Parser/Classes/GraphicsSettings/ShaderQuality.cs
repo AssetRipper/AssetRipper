@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.GraphicsSettingss
+﻿namespace AssetRipper.Parser.Classes.GraphicsSettings
 {
 	/// <summary>
 	/// Shader quality preset.

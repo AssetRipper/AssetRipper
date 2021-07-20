@@ -1,13 +1,17 @@
-using AssetRipper.ArchiveFiles;
 using AssetRipper.IO.Endian;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Files.ArchiveFile.Parser;
+using AssetRipper.Parser.Files.File;
+using AssetRipper.Parser.Files.File.Parser;
+using AssetRipper.Parser.Files.SerializedFile.Parser;
+using AssetRipper.Parser.Files.WebFile;
+using AssetRipper.Structure.GameStructure;
 using Brotli;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Files.ArchiveFile
 {
 	public sealed class ArchiveFileScheme : FileScheme
 	{
@@ -65,7 +69,7 @@ namespace AssetRipper
 				}
 			}
 
-			WebScheme = WebFile.ReadScheme(buffer, FilePath);
+			WebScheme = WebFile.WebFile.ReadScheme(buffer, FilePath);
 		}
 
 		private byte[] ReadGZip(EndianReader reader)

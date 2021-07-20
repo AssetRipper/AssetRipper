@@ -1,7 +1,10 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.ParticleSystem.Curve;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.ParticleSystems
+namespace AssetRipper.Parser.Classes.ParticleSystem.TrailModule
 {
 	public sealed class TrailModule : ParticleSystemModule
 	{
@@ -18,9 +21,9 @@ namespace AssetRipper.Classes.ParticleSystems
 			DieWithParticles = true;
 			SizeAffectsWidth = true;
 			InheritParticleColor = true;
-			ColorOverLifetime = new MinMaxGradient(true);
+			ColorOverLifetime = new MinMaxGradient.MinMaxGradient(true);
 			WidthOverTrail = new MinMaxCurve(1.0f);
-			ColorOverTrail = new MinMaxGradient(true);
+			ColorOverTrail = new MinMaxGradient.MinMaxGradient(true);
 		}
 
 		/// <summary>
@@ -163,8 +166,8 @@ namespace AssetRipper.Classes.ParticleSystems
 		public const string ColorOverTrailName = "colorOverTrail";
 
 		public MinMaxCurve Lifetime;
-		public MinMaxGradient ColorOverLifetime;
+		public MinMaxGradient.MinMaxGradient ColorOverLifetime;
 		public MinMaxCurve WidthOverTrail;
-		public MinMaxGradient ColorOverTrail;
+		public MinMaxGradient.MinMaxGradient ColorOverTrail;
 	}
 }

@@ -1,10 +1,15 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
-using AssetRipper.Layout.AnimationClips;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Layout.Classes.AnimationClip.Curves;
+using AssetRipper.Parser.Classes.Misc.KeyframeTpl;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Misc.Serializable.AnimationCurveTpl;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.AnimationClips
+namespace AssetRipper.Parser.Classes.AnimationClip.Curves
 {
 	public struct Vector3Curve : IAsset, IYAMLExportable
 	{

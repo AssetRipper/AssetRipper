@@ -1,8 +1,10 @@
-﻿using AssetRipper.Converters;
-using AssetRipper.Layout.Misc;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Converters.Game;
+using AssetRipper.Layout.Classes.Misc;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Files.SerializedFile.Parser;
+using AssetRipper.Parser.IO.Asset;
 
-namespace AssetRipper.Layout
+namespace AssetRipper.Layout.Classes.PrefabInstance
 {
 	/// <summary>
 	/// 1.5.0 - first introduction

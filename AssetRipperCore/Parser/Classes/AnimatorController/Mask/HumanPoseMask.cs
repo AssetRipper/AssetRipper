@@ -1,4 +1,7 @@
-﻿namespace AssetRipper.Classes.AnimatorControllers
+﻿using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+
+namespace AssetRipper.Parser.Classes.AnimatorController.Mask
 {
 	public struct HumanPoseMask : IAssetReadable
 	{

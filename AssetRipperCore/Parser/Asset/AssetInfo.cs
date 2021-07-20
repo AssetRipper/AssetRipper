@@ -1,7 +1,8 @@
-﻿using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.SerializedFile;
 using System;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Asset
 {
 	public class AssetInfo
 	{

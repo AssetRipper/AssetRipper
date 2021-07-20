@@ -1,9 +1,13 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class TerrainLayer : NamedObject
 	{
@@ -31,9 +35,9 @@ namespace AssetRipper.Classes
 			MaskMapRemapMax.Read(reader);
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -63,7 +67,7 @@ namespace AssetRipper.Classes
 		}
 
 		public override string ExportExtension => "terrainlayer";
-		public override string ExportPath => Path.Combine(AssetsKeyword, nameof(Terrain), nameof(TerrainLayer));
+		public override string ExportPath => Path.Combine(AssetsKeyword, nameof(Terrain.Terrain), nameof(TerrainLayer));
 
 		public float Metallic { get; set; }
 		public float Smoothness { get; set; }
@@ -83,9 +87,9 @@ namespace AssetRipper.Classes
 		public const string MaskMapRemapMinName = "m_MaskMapRemapMin";
 		public const string MaskMapRemapMaxName = "m_MaskMapRemapMax";
 
-		public PPtr<Texture2D> DiffuseTexture;
-		public PPtr<Texture2D> NormalMapTexture;
-		public PPtr<Texture2D> MaskMapTexture;
+		public PPtr<Texture2D.Texture2D> DiffuseTexture;
+		public PPtr<Texture2D.Texture2D> NormalMapTexture;
+		public PPtr<Texture2D.Texture2D> MaskMapTexture;
 		public Vector2f TileSize;
 		public Vector2f TileOffset;
 		public ColorRGBAf Specular;

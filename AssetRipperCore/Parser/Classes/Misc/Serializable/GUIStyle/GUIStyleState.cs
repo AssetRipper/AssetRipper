@@ -1,16 +1,21 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Layout.Classes.Misc.Serializable.GUIStyle;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 
-namespace AssetRipper.Classes.GUIStyles
+namespace AssetRipper.Parser.Classes.Misc.Serializable.GUIStyle
 {
 	public struct GUIStyleState : IAsset
 	{
 		public GUIStyleState(AssetLayout layout)
 		{
 			Background = default;
-			ScaledBackgrounds = Array.Empty<PPtr<Texture2D>>();
+			ScaledBackgrounds = Array.Empty<PPtr<Texture2D.Texture2D>>();
 			TextColor = ColorRGBAf.Black;
 		}
 
@@ -18,7 +23,7 @@ namespace AssetRipper.Classes.GUIStyles
 		{
 			Background = copy.Background;
 			TextColor = copy.TextColor;
-			ScaledBackgrounds = new PPtr<Texture2D>[copy.ScaledBackgrounds.Length];
+			ScaledBackgrounds = new PPtr<Texture2D.Texture2D>[copy.ScaledBackgrounds.Length];
 			for (int i = 0; i < copy.ScaledBackgrounds.Length; i++)
 			{
 				ScaledBackgrounds[i] = copy.ScaledBackgrounds[i];
@@ -31,11 +36,11 @@ namespace AssetRipper.Classes.GUIStyles
 			Background.Read(reader);
 			if (layout.HasScaledBackgrounds)
 			{
-				ScaledBackgrounds = reader.ReadAssetArray<PPtr<Texture2D>>();
+				ScaledBackgrounds = reader.ReadAssetArray<PPtr<Texture2D.Texture2D>>();
 			}
 			else
 			{
-				ScaledBackgrounds = Array.Empty<PPtr<Texture2D>>();
+				ScaledBackgrounds = Array.Empty<PPtr<Texture2D.Texture2D>>();
 			}
 			TextColor.Read(reader);
 		}
@@ -64,9 +69,9 @@ namespace AssetRipper.Classes.GUIStyles
 			return node;
 		}
 
-		public PPtr<Texture2D>[] ScaledBackgrounds { get; set; }
+		public PPtr<Texture2D.Texture2D>[] ScaledBackgrounds { get; set; }
 
-		public PPtr<Texture2D> Background;
+		public PPtr<Texture2D.Texture2D> Background;
 		public ColorRGBAf TextColor;
 	}
 }

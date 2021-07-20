@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ClusterInputManagers
+﻿namespace AssetRipper.Parser.Classes.ClusterInputManager
 {
 	/// <summary>
 	/// Values to determine the type of input value to be expect from one entry of ClusterInput.

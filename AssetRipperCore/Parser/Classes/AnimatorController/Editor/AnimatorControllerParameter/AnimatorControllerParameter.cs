@@ -1,8 +1,11 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.AnimatorController.Constants;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
 using AssetRipper.YAML;
 using System;
 
-namespace AssetRipper.Classes.AnimatorControllers
+namespace AssetRipper.Parser.Classes.AnimatorController.Editor.AnimatorControllerParameter
 {
 	public sealed class AnimatorControllerParameter : IYAMLExportable
 	{

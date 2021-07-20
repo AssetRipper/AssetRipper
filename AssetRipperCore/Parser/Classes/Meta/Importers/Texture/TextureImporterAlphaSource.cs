@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.TextureImporters
+﻿namespace AssetRipper.Parser.Classes.Meta.Importers.Texture
 {
 	/// <summary>
 	/// Select how the alpha of the imported texture is generated.

@@ -1,6 +1,7 @@
 ﻿using AssetRipper;
-using AssetRipper.Classes.Shaders;
 using AssetRipper.IO.Endian;
+using AssetRipper.Parser.Classes.Shader;
+using AssetRipper.Parser.Classes.Shader.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;

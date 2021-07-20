@@ -1,8 +1,9 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.IO.Asset;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.IO.Extensions
 {
 	public static class ArrayYAMLExtensions
 	{

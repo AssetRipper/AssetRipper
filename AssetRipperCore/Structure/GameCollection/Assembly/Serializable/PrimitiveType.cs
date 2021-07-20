@@ -1,6 +1,6 @@
 using System;
 
-namespace AssetRipper.Game.Assembly
+namespace AssetRipper.Structure.GameCollection.Assembly.Serializable
 {
 	public enum PrimitiveType
 	{

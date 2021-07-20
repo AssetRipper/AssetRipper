@@ -1,9 +1,17 @@
-﻿using AssetRipper.YAML;
-using AssetRipper.Converters.TrailRenderers;
-using AssetRipper.Converters;
-using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Converters.Classes.TrailRenderer;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.KeyframeTpl;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Misc.Serializable.AnimationCurveTpl;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.TrailRenderers
+namespace AssetRipper.Parser.Classes.TrailRenderer
 {
 	public struct LineParameters : IAsset
 	{
@@ -12,7 +20,7 @@ namespace AssetRipper.Classes.TrailRenderers
 			WidthMultiplier = 1.0f;
 			WidthCurve = new AnimationCurveTpl<Float>(false);
 			WidthCurve.Curve = new KeyframeTpl<Float>[] { new KeyframeTpl<Float>(0.0f, 1.0f, KeyframeTpl<Float>.DefaultFloatWeight), };
-			ColorGradient = new Classes.Gradient(ColorRGBAf.White, ColorRGBAf.White);
+			ColorGradient = new Misc.Serializable.Gradient.Gradient(ColorRGBAf.White, ColorRGBAf.White);
 			NumCornerVertices = 0;
 			NumCapVertices = 0;
 			Alignment = LineAlignment.View;
@@ -127,6 +135,6 @@ namespace AssetRipper.Classes.TrailRenderers
 		public const string GenerateLightingDataName = "generateLightingData";
 
 		public AnimationCurveTpl<Float> WidthCurve;
-		public Classes.Gradient ColorGradient;
+		public Misc.Serializable.Gradient.Gradient ColorGradient;
 	}
 }

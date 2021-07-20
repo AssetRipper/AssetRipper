@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.SpriteRenderers
+﻿namespace AssetRipper.Parser.Classes.SpriteRenderer
 {
 	public enum SpriteMaskInteraction
 	{

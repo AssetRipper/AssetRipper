@@ -1,16 +1,23 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.AnimationClip.GenericBinding;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.AnimationClips
+namespace AssetRipper.Parser.Classes.AnimationClip
 {
 	public struct AnimationClipBindingConstant : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public AnimationClipBindingConstant(bool _)
 		{
-			GenericBindings = Array.Empty<GenericBinding>();
-			PPtrCurveMapping = Array.Empty<PPtr<Object>>();
+			GenericBindings = Array.Empty<GenericBinding.GenericBinding>();
+			PPtrCurveMapping = Array.Empty<PPtr<Object.Object>>();
 		}
 
 		/// <summary>
@@ -18,12 +25,12 @@ namespace AssetRipper.Classes.AnimationClips
 		/// </summary>
 		private static bool IsAlign(Version version) => version.IsGreater(2017);
 
-		public GenericBinding FindBinding(int index)
+		public GenericBinding.GenericBinding FindBinding(int index)
 		{
 			int curves = 0;
 			for (int i = 0; i < GenericBindings.Length; i++)
 			{
-				GenericBinding gb = GenericBindings[i];
+				GenericBinding.GenericBinding gb = GenericBindings[i];
 				if (gb.ClassID == ClassIDType.Transform)
 				{
 					curves += gb.TransformType.GetDimension();
@@ -43,20 +50,20 @@ namespace AssetRipper.Classes.AnimationClips
 
 		public void Read(AssetReader reader)
 		{
-			GenericBindings = reader.ReadAssetArray<GenericBinding>();
+			GenericBindings = reader.ReadAssetArray<GenericBinding.GenericBinding>();
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream();
 			}
 
-			PPtrCurveMapping = reader.ReadAssetArray<PPtr<Object>>();
+			PPtrCurveMapping = reader.ReadAssetArray<PPtr<Object.Object>>();
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream();
 			}
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			return context.FetchDependencies(PPtrCurveMapping, PptrCurveMappingName);
 		}
@@ -69,8 +76,8 @@ namespace AssetRipper.Classes.AnimationClips
 			return node;
 		}
 
-		public GenericBinding[] GenericBindings { get; set; }
-		public PPtr<Object>[] PPtrCurveMapping { get; set; }
+		public GenericBinding.GenericBinding[] GenericBindings { get; set; }
+		public PPtr<Object.Object>[] PPtrCurveMapping { get; set; }
 
 		public const string GenericBindingsName = "genericBindings";
 		public const string PptrCurveMappingName = "pptrCurveMapping";

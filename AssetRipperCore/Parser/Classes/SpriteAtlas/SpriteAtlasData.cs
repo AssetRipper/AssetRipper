@@ -1,9 +1,15 @@
-using AssetRipper.Classes.Sprites;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Sprite;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.SpriteAtlases
+namespace AssetRipper.Parser.Classes.SpriteAtlas
 {
 	public struct SpriteAtlasData : IAssetReadable, IYAMLExportable, IDependent
 	{
@@ -27,7 +33,7 @@ namespace AssetRipper.Classes.SpriteAtlases
 			SettingsRaw = reader.ReadUInt32();
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Texture, TextureName);
 			yield return context.FetchDependency(AlphaTexture, AlphaTextureName);
@@ -64,8 +70,8 @@ namespace AssetRipper.Classes.SpriteAtlases
 		public const string DownscaleMultiplierName = "downscaleMultiplier";
 		public const string SettingsRawName = "settingsRaw";
 
-		public PPtr<Texture2D> Texture;
-		public PPtr<Texture2D> AlphaTexture;
+		public PPtr<Texture2D.Texture2D> Texture;
+		public PPtr<Texture2D.Texture2D> AlphaTexture;
 		public Rectf TextureRect;
 		public Vector2f TextureRectOffset;
 		public Vector2f AtlasRectOffset;

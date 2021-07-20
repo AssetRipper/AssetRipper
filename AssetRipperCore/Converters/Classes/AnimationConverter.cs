@@ -1,8 +1,10 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Layout;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Layout.Classes;
+using AssetRipper.Parser.Classes.Animation;
+using AssetRipper.Parser.Classes.Misc;
 using System.Linq;
 
-namespace AssetRipper.Converters
+namespace AssetRipper.Converters.Classes
 {
 	public static class AnimationConverter
 	{
@@ -38,7 +40,7 @@ namespace AssetRipper.Converters
 			return instance;
 		}
 
-		private static PPtr<AnimationClip>[] GetAnimations(IExportContainer container, Animation origin)
+		private static PPtr<Parser.Classes.AnimationClip.AnimationClip>[] GetAnimations(IExportContainer container, Animation origin)
 		{
 			if (container.Layout.Animation.HasAnimations)
 			{
@@ -46,7 +48,7 @@ namespace AssetRipper.Converters
 			}
 			else
 			{
-				PPtr<AnimationClip>[] animations = new PPtr<AnimationClip>[origin.AnimationsPaired.Length];
+				PPtr<Parser.Classes.AnimationClip.AnimationClip>[] animations = new PPtr<Parser.Classes.AnimationClip.AnimationClip>[origin.AnimationsPaired.Length];
 				for (int i = 0; i < origin.AnimationsPaired.Length; i++)
 				{
 					animations[i] = origin.AnimationsPaired[i].Item2;

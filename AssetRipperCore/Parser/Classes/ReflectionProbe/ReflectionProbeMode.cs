@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ReflectionProbes
+﻿namespace AssetRipper.Parser.Classes.ReflectionProbe
 {
 	/// <summary>
 	/// Reflection probe's update mode.

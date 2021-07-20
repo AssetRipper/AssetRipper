@@ -1,9 +1,14 @@
-﻿using AssetRipper.Converters;
-using AssetRipper.Layout.GameObjects;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Layout.Classes.GameObject;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.GameObjects
+namespace AssetRipper.Parser.Classes.GameObject
 {
 	public struct ComponentPair : IAsset, IDependent
 	{
@@ -25,7 +30,7 @@ namespace AssetRipper.Classes.GameObjects
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			ComponentPairLayout layout = context.Layout.GameObject.ComponentPair;
 			yield return context.FetchDependency(Component, layout.ComponentName);

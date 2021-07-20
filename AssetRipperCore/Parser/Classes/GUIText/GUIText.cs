@@ -1,10 +1,15 @@
-﻿using AssetRipper.Classes.Fonts;
-using AssetRipper.Classes.GUITexts;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Font;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.GUIText
 {
 	public sealed class GUIText : GUIElement
 	{
@@ -72,9 +77,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -137,8 +142,8 @@ namespace AssetRipper.Classes
 		public const string RichTextName = "m_RichText";
 
 		public Vector2f PixelOffset;
-		public PPtr<Font> Font;
-		public PPtr<Material> Material;
+		public PPtr<Font.Font> Font;
+		public PPtr<Material.Material> Material;
 		public ColorRGBA32 Color;
 	}
 }

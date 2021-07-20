@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Classes.Shaders
+﻿using AssetRipper.Parser.IO.Asset.Reader;
+
+namespace AssetRipper.Parser.Classes.Shader.Parameters
 {
 	public struct BufferBinding : IAssetReadable
 	{

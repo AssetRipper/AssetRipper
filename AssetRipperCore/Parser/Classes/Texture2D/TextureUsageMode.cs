@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Textures
+﻿namespace AssetRipper.Parser.Classes.Texture2D
 {
 	/// <summary>
 	/// Lightmap format of a [[Texture2D|texture]]

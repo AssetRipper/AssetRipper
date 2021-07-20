@@ -1,10 +1,17 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Layout.Classes.PrefabInstance;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.Prefabs
+namespace AssetRipper.Parser.Classes.PrefabInstance
 {
 	public struct PrefabModification : IAsset, IDependent
 	{
@@ -39,15 +46,15 @@ namespace AssetRipper.Classes.Prefabs
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			PrefabModificationLayout layout = context.Layout.PrefabInstance.PrefabModification;
 			yield return context.FetchDependency(TransformParent, layout.TransformParentName);
-			foreach (PPtr<Object> asset in context.FetchDependencies(Modifications, layout.ModificationsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Modifications, layout.ModificationsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(RemovedComponents, layout.RemovedComponentsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(RemovedComponents, layout.RemovedComponentsName))
 			{
 				yield return asset;
 			}

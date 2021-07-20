@@ -1,4 +1,7 @@
-namespace AssetRipper.BundleFiles
+using AssetRipper.Parser.Files.BundleFile.IO;
+using AssetRipper.Parser.Utils;
+
+namespace AssetRipper.Parser.Files.BundleFile.Parser
 {
 	public sealed class Node : IBundleReadable
 	{

@@ -1,8 +1,13 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.NavMeshDatas
+namespace AssetRipper.Parser.Classes.NavMeshData
 {
 	public struct HeightmapData : IAssetReadable, IYAMLExportable, IDependent
 	{
@@ -12,7 +17,7 @@ namespace AssetRipper.Classes.NavMeshDatas
 			TerrainData.Read(reader);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(TerrainData, TerrainDataName);
 		}
@@ -29,6 +34,6 @@ namespace AssetRipper.Classes.NavMeshDatas
 		public const string TerrainDataName = "terrainData";
 
 		public Vector3f Position;
-		public PPtr<Object> TerrainData;
+		public PPtr<Object.Object> TerrainData;
 	}
 }

@@ -1,6 +1,7 @@
-﻿using AssetRipper.Classes.GameObjects;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.GameObject;
 
-namespace AssetRipper.Converters.GameObjects
+namespace AssetRipper.Converters.Classes.GameObject
 {
 	public static class ComponentPairConverter
 	{

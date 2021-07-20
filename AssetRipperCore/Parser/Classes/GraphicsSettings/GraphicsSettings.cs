@@ -1,12 +1,22 @@
-using AssetRipper.Classes.Cameras;
-using AssetRipper.Classes.GraphicsSettingss;
-using AssetRipper.Converters;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Converters.Project;
+using AssetRipper.Converters.Project.Exporter.Engine;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Camera;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.GraphicsSettings
 {
 	/// <summary>
 	/// RenderManager previously
@@ -21,7 +31,7 @@ namespace AssetRipper.Classes
 		private GraphicsSettings(AssetInfo assetInfo, bool _) :
 			base(assetInfo)
 		{
-			AlwaysIncludedShaders = Array.Empty<PPtr<Shader>>();
+			AlwaysIncludedShaders = Array.Empty<PPtr<Shader.Shader>>();
 		}
 
 		public static GraphicsSettings CreateVirtualInstance(VirtualSerializedFile virtualFile)
@@ -264,12 +274,12 @@ namespace AssetRipper.Classes
 
 			if (HasAlwaysIncludedShaders(reader.Version))
 			{
-				AlwaysIncludedShaders = reader.ReadAssetArray<PPtr<Shader>>();
+				AlwaysIncludedShaders = reader.ReadAssetArray<PPtr<Shader.Shader>>();
 			}
 
 			if (HasPreloadedShaders(reader.Version))
 			{
-				PreloadedShaders = reader.ReadAssetArray<PPtr<ShaderVariantCollection>>();
+				PreloadedShaders = reader.ReadAssetArray<PPtr<ShaderVariantCollection.ShaderVariantCollection>>();
 			}
 			if (HasSpritesDefaultMaterial(reader.Version))
 			{
@@ -428,56 +438,56 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object> asset in context.FetchDependencies(Deferred, DeferredName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Deferred, DeferredName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(DeferredReflections, DeferredReflectionsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(DeferredReflections, DeferredReflectionsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(ScreenSpaceShadows, ScreenSpaceShadowsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(ScreenSpaceShadows, ScreenSpaceShadowsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(LegacyDeferred, LegacyDeferredName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(LegacyDeferred, LegacyDeferredName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(DepthNormals, DepthNormalsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(DepthNormals, DepthNormalsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(MotionVectors, MotionVectorsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(MotionVectors, MotionVectorsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(LightHalo, LightHaloName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(LightHalo, LightHaloName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(LensFlare, LensFlareName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(LensFlare, LensFlareName))
 			{
 				yield return asset;
 			}
 
 			if (HasAlwaysIncludedShaders(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(AlwaysIncludedShaders, AlwaysIncludedShadersName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(AlwaysIncludedShaders, AlwaysIncludedShadersName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasPreloadedShaders(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(PreloadedShaders, PreloadedShadersName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(PreloadedShaders, PreloadedShadersName))
 				{
 					yield return asset;
 				}
@@ -584,10 +594,10 @@ namespace AssetRipper.Classes
 			HashSet<string> shaderNames = new HashSet<string>();
 			if (HasAlwaysIncludedShaders(container.Version))
 			{
-				foreach (PPtr<Shader> shaderPtr in AlwaysIncludedShaders)
+				foreach (PPtr<Shader.Shader> shaderPtr in AlwaysIncludedShaders)
 				{
 					node.Add(shaderPtr.ExportYAML(container));
-					Shader shader = shaderPtr.FindAsset(container);
+					Shader.Shader shader = shaderPtr.FindAsset(container);
 					if (shader != null)
 					{
 						shaderNames.Add(shader.ValidName);
@@ -603,17 +613,17 @@ namespace AssetRipper.Classes
 			ExportShaderPointer(container, node, shaderNames, EngineBuiltInAssets.UIDefault);
 			return node;
 		}
-		private IReadOnlyList<PPtr<ShaderVariantCollection>> GetPreloadedShaders(Version version)
+		private IReadOnlyList<PPtr<ShaderVariantCollection.ShaderVariantCollection>> GetPreloadedShaders(Version version)
 		{
-			return HasPreloadedShaders(version) ? PreloadedShaders : System.Array.Empty<PPtr<ShaderVariantCollection>>();
+			return HasPreloadedShaders(version) ? PreloadedShaders : System.Array.Empty<PPtr<ShaderVariantCollection.ShaderVariantCollection>>();
 		}
-		private PPtr<Material> GetSpritesDefaultMaterial(Version version)
+		private PPtr<Material.Material> GetSpritesDefaultMaterial(Version version)
 		{
 			if (HasSpritesDefaultMaterial(version))
 			{
 				return SpritesDefaultMaterial;
 			}
-			Material material = (Material)File.FindAsset(ClassIDType.Material, "Sprites-Default");
+			Material.Material material = (Material.Material)File.FindAsset(ClassIDType.Material, "Sprites-Default");
 			return material == null ? default : File.CreatePPtr(material);
 		}
 		private Vector3f GetTransparencySortAxis(Version version)
@@ -818,8 +828,8 @@ namespace AssetRipper.Classes
 			return HasAllowEnlightenSupportForUpgradedProject(version) ? AllowEnlightenSupportForUpgradedProject : true;
 		}
 
-		public PPtr<Shader>[] AlwaysIncludedShaders { get; set; }
-		public PPtr<ShaderVariantCollection>[] PreloadedShaders { get; set; }
+		public PPtr<Shader.Shader>[] AlwaysIncludedShaders { get; set; }
+		public PPtr<ShaderVariantCollection.ShaderVariantCollection>[] PreloadedShaders { get; set; }
 		public TransparencySortMode TransparencySortMode { get; set; }
 #if UNIVERSAL
 		public RenderingPath DefaultRenderingPath { get; set; }
@@ -860,7 +870,7 @@ namespace AssetRipper.Classes
 		public BuiltinShaderSettings MotionVectors;
 		public BuiltinShaderSettings LightHalo;
 		public BuiltinShaderSettings LensFlare;
-		public PPtr<Material> SpritesDefaultMaterial;
+		public PPtr<Material.Material> SpritesDefaultMaterial;
 		public PPtr<MonoBehaviour> CustomRenderPipeline;
 		public Vector3f TransparencySortAxis;
 

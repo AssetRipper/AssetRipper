@@ -1,27 +1,30 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Classes.Meshes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Shaders;
-using AssetRipper.Converters.Meshes;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.Extensions;
 using AssetRipper.IO.Endian;
+using AssetRipper.Parser.Classes.Mesh;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Shader.Enums.ShaderChannel;
+using AssetRipper.Parser.Classes.Shader.Enums.VertexFormat;
+using AssetRipper.Parser.Files.File;
+using AssetRipper.Parser.IO.Asset.Writer;
 using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
 
-namespace AssetRipper.Converters
+namespace AssetRipper.Converters.Classes.Mesh
 {
 	public static class MeshConverter
 	{
-		public static Mesh Convert(IExportContainer container, Mesh origin)
+		public static Parser.Classes.Mesh.Mesh Convert(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			Mesh instance = new Mesh(origin.AssetInfo);
+			Parser.Classes.Mesh.Mesh instance = new Parser.Classes.Mesh.Mesh(origin.AssetInfo);
 			NamedObjectConverter.Convert(container, origin, instance);
 
-			if (Mesh.HasBlendShapes(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasBlendShapes(container.ExportVersion))
 			{
-				if (Mesh.HasBlendChannels(container.ExportVersion))
+				if (Parser.Classes.Mesh.Mesh.HasBlendChannels(container.ExportVersion))
 				{
 					instance.Shapes = GetShapes(container, origin);
 				}
@@ -31,42 +34,42 @@ namespace AssetRipper.Converters
 					instance.ShapeVertices = GetShapeVertices(container, origin);
 				}
 			}
-			if (Mesh.HasBindPose(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasBindPose(container.ExportVersion))
 			{
 				instance.BindPose = GetBindPose(container, origin);
 			}
-			if (Mesh.HasBoneNameHashes(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasBoneNameHashes(container.ExportVersion))
 			{
 				instance.BoneNameHashes = GetBoneNameHashes(container, origin);
 				instance.RootBoneNameHash = GetRootBoneNameHash(container, origin);
 			}
-			if (Mesh.HasBonesAABB(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasBonesAABB(container.ExportVersion))
 			{
 				instance.BonesAABB = GetBonesAABB(container, origin);
 				instance.VariableBoneCountWeights = GetVariableBoneCountWeights(container, origin);
 			}
-			if (Mesh.HasMeshCompression(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasMeshCompression(container.ExportVersion))
 			{
 				instance.MeshCompression = GetMeshCompression(container, origin);
 			}
-			if (Mesh.HasStreamCompression(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasStreamCompression(container.ExportVersion))
 			{
 				instance.StreamCompression = GetStreamCompression(container, origin);
 			}
-			if (Mesh.HasIsReadable(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasIsReadable(container.ExportVersion))
 			{
 				instance.IsReadable = GetIsReadable(container, origin);
 				instance.KeepVertices = GetKeepVertices(container, origin);
 				instance.KeepIndices = GetKeepIndices(container, origin);
 			}
-			if (Mesh.HasSkin(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasSkin(container.ExportVersion))
 			{
 				instance.Skin = origin.Skin;
 			}
 
-			if (Mesh.HasVertexData(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasVertexData(container.ExportVersion))
 			{
-				if (Mesh.IsOnlyVertexData(container.ExportVersion))
+				if (Parser.Classes.Mesh.Mesh.IsOnlyVertexData(container.ExportVersion))
 				{
 					instance.VertexData = GetVertexData(container, origin);
 				}
@@ -91,11 +94,11 @@ namespace AssetRipper.Converters
 			{
 				instance.Vertices = origin.Vertices.ToArray();
 				instance.UV = origin.UV.ToArray();
-				if (Mesh.HasUV1(container.ExportVersion))
+				if (Parser.Classes.Mesh.Mesh.HasUV1(container.ExportVersion))
 				{
 					instance.UV1 = GetUV1(container, origin);
 				}
-				if (Mesh.HasTangentSpace(container.ExportVersion))
+				if (Parser.Classes.Mesh.Mesh.HasTangentSpace(container.ExportVersion))
 				{
 					instance.TangentSpace = origin.TangentSpace.ToArray();
 				}
@@ -107,22 +110,22 @@ namespace AssetRipper.Converters
 				instance.Colors = origin.Colors.ToArray();
 			}
 
-			if (Mesh.HasCompressedMesh(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasCompressedMesh(container.ExportVersion))
 			{
 				instance.CompressedMesh = GetCompressedMesh(container, origin);
 			}
 			instance.LocalAABB = origin.LocalAABB;
-			if (Mesh.HasCollisionTriangles(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasCollisionTriangles(container.ExportVersion))
 			{
 				instance.CollisionTriangles = origin.CollisionTriangles.ToArray();
 				instance.CollisionVertexCount = origin.CollisionVertexCount;
 			}
 			instance.MeshUsageFlags = origin.MeshUsageFlags;
-			if (Mesh.HasCollision(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasCollision(container.ExportVersion))
 			{
 				instance.CollisionData = GetCollisionData(container, origin);
 			}
-			if (Mesh.HasMeshMetrics(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasMeshMetrics(container.ExportVersion))
 			{
 				instance.MeshMetrics = GetMeshMetrics(container, origin);
 			}
@@ -131,17 +134,17 @@ namespace AssetRipper.Converters
 #endif
 			instance.StreamData = GetStreamData(container, origin);
 
-			if (Mesh.HasLODData(container.ExportVersion))
+			if (Parser.Classes.Mesh.Mesh.HasLODData(container.ExportVersion))
 			{
 				instance.LODData = origin.LODData.Select(t => t.Convert(container)).ToArray();
 			}
 			else
 			{
-				if (Mesh.HasUse16bitIndices(container.ExportVersion))
+				if (Parser.Classes.Mesh.Mesh.HasUse16bitIndices(container.ExportVersion))
 				{
 					instance.Use16BitIndices = GetUse16bitIndices(container, origin);
 				}
-				else if (Mesh.HasIndexFormat(container.ExportVersion))
+				else if (Parser.Classes.Mesh.Mesh.HasIndexFormat(container.ExportVersion))
 				{
 					instance.IndexFormat = GetIndexFormat(container, origin);
 				}
@@ -153,30 +156,30 @@ namespace AssetRipper.Converters
 			return instance;
 		}
 
-		private static uint GetUse16bitIndices(IExportContainer container, Mesh origin)
+		private static uint GetUse16bitIndices(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			if (Mesh.HasUse16bitIndices(container.Version))
+			if (Parser.Classes.Mesh.Mesh.HasUse16bitIndices(container.Version))
 			{
 				return origin.Use16BitIndices;
 			}
 			return 1;
 		}
 
-		private static BlendShape[] GetBlendShapes(IExportContainer container, Mesh origin)
+		private static BlendShape[] GetBlendShapes(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasBlendShapes(container.Version) ? origin.Shapes.Shapes : Array.Empty<BlendShape>();
+			return Parser.Classes.Mesh.Mesh.HasBlendShapes(container.Version) ? origin.Shapes.Shapes : Array.Empty<BlendShape>();
 		}
 
-		private static BlendShapeVertex[] GetShapeVertices(IExportContainer container, Mesh origin)
+		private static BlendShapeVertex[] GetShapeVertices(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasBlendShapes(container.Version) ? origin.Shapes.Vertices : Array.Empty<BlendShapeVertex>();
+			return Parser.Classes.Mesh.Mesh.HasBlendShapes(container.Version) ? origin.Shapes.Vertices : Array.Empty<BlendShapeVertex>();
 		}
 
-		private static BlendShapeData GetShapes(IExportContainer container, Mesh origin)
+		private static BlendShapeData GetShapes(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			if (Mesh.HasBlendShapes(container.Version))
+			if (Parser.Classes.Mesh.Mesh.HasBlendShapes(container.Version))
 			{
-				if (Mesh.HasBlendChannels(container.Version))
+				if (Parser.Classes.Mesh.Mesh.HasBlendChannels(container.Version))
 				{
 					return origin.Shapes.Convert();
 				}
@@ -196,72 +199,72 @@ namespace AssetRipper.Converters
 			}
 		}
 
-		private static Matrix4x4f[] GetBindPose(IExportContainer container, Mesh origin)
+		private static Matrix4x4f[] GetBindPose(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasBindPose(container.Version) ? origin.BindPose.ToArray() : Array.Empty<Matrix4x4f>();
+			return Parser.Classes.Mesh.Mesh.HasBindPose(container.Version) ? origin.BindPose.ToArray() : Array.Empty<Matrix4x4f>();
 		}
 
-		private static uint[] GetBoneNameHashes(IExportContainer container, Mesh origin)
+		private static uint[] GetBoneNameHashes(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasBoneNameHashes(container.Version) ? origin.BoneNameHashes.ToArray() : Array.Empty<uint>();
+			return Parser.Classes.Mesh.Mesh.HasBoneNameHashes(container.Version) ? origin.BoneNameHashes.ToArray() : Array.Empty<uint>();
 		}
 
-		private static uint GetRootBoneNameHash(IExportContainer container, Mesh origin)
+		private static uint GetRootBoneNameHash(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasBoneNameHashes(container.Version) ? origin.RootBoneNameHash : 0;
+			return Parser.Classes.Mesh.Mesh.HasBoneNameHashes(container.Version) ? origin.RootBoneNameHash : 0;
 		}
 
-		private static MinMaxAABB[] GetBonesAABB(IExportContainer container, Mesh origin)
+		private static MinMaxAABB[] GetBonesAABB(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasBonesAABB(container.Version) ? origin.BonesAABB.ToArray() : Array.Empty<MinMaxAABB>();
+			return Parser.Classes.Mesh.Mesh.HasBonesAABB(container.Version) ? origin.BonesAABB.ToArray() : Array.Empty<MinMaxAABB>();
 		}
 
-		private static VariableBoneCountWeights GetVariableBoneCountWeights(IExportContainer container, Mesh origin)
+		private static VariableBoneCountWeights GetVariableBoneCountWeights(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasBonesAABB(container.Version) ? origin.VariableBoneCountWeights : new VariableBoneCountWeights(true);
+			return Parser.Classes.Mesh.Mesh.HasBonesAABB(container.Version) ? origin.VariableBoneCountWeights : new VariableBoneCountWeights(true);
 		}
 
-		private static MeshCompression GetMeshCompression(IExportContainer container, Mesh origin)
+		private static MeshCompression GetMeshCompression(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasMeshCompression(container.Version) ? origin.MeshCompression : MeshCompression.Off;
+			return Parser.Classes.Mesh.Mesh.HasMeshCompression(container.Version) ? origin.MeshCompression : MeshCompression.Off;
 		}
 
-		private static byte GetStreamCompression(IExportContainer container, Mesh origin)
+		private static byte GetStreamCompression(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasStreamCompression(container.Version) ? origin.StreamCompression : (byte)0;
+			return Parser.Classes.Mesh.Mesh.HasStreamCompression(container.Version) ? origin.StreamCompression : (byte)0;
 		}
 
-		private static bool GetIsReadable(IExportContainer container, Mesh origin)
+		private static bool GetIsReadable(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasIsReadable(container.Version) ? origin.IsReadable : true;
+			return Parser.Classes.Mesh.Mesh.HasIsReadable(container.Version) ? origin.IsReadable : true;
 		}
 
-		private static bool GetKeepVertices(IExportContainer container, Mesh origin)
+		private static bool GetKeepVertices(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasIsReadable(container.Version) ? origin.KeepVertices : true;
+			return Parser.Classes.Mesh.Mesh.HasIsReadable(container.Version) ? origin.KeepVertices : true;
 		}
 
-		private static bool GetKeepIndices(IExportContainer container, Mesh origin)
+		private static bool GetKeepIndices(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasIsReadable(container.Version) ? origin.KeepIndices : true;
+			return Parser.Classes.Mesh.Mesh.HasIsReadable(container.Version) ? origin.KeepIndices : true;
 		}
 
-		private static IndexFormat GetIndexFormat(IExportContainer container, Mesh origin)
+		private static IndexFormat GetIndexFormat(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			if (Mesh.HasIndexFormat(container.Version))
+			if (Parser.Classes.Mesh.Mesh.HasIndexFormat(container.Version))
 			{
 				return origin.IndexFormat;
 			}
-			if (Mesh.HasUse16bitIndices(container.Version))
+			if (Parser.Classes.Mesh.Mesh.HasUse16bitIndices(container.Version))
 			{
 				return origin.Use16BitIndices == 0 ? IndexFormat.UInt32 : IndexFormat.UInt16;
 			}
 			return IndexFormat.UInt16;
 		}
 
-		private static byte[] GetIndexBuffer(IExportContainer container, Mesh origin)
+		private static byte[] GetIndexBuffer(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			if (Mesh.HasLODData(container.Version))
+			if (Parser.Classes.Mesh.Mesh.HasLODData(container.Version))
 			{
 				return LODConverter.GenerateIndexBuffer(container, ref origin.LODData[0]);
 			}
@@ -281,9 +284,9 @@ namespace AssetRipper.Converters
 			}
 		}
 
-		private static SubMesh[] GetSubMeshes(IExportContainer container, Mesh origin, Mesh instance)
+		private static SubMesh[] GetSubMeshes(IExportContainer container, Parser.Classes.Mesh.Mesh origin, Parser.Classes.Mesh.Mesh instance)
 		{
-			if (Mesh.HasLODData(container.Version))
+			if (Parser.Classes.Mesh.Mesh.HasLODData(container.Version))
 			{
 				return LODConverter.GenerateSubMeshes(container, instance, ref origin.LODData[0]);
 			}
@@ -293,11 +296,11 @@ namespace AssetRipper.Converters
 			}
 		}
 
-		private static VertexData GetVertexData(IExportContainer container, Mesh origin)
+		private static VertexData GetVertexData(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			if (Mesh.HasVertexData(container.Version))
+			if (Parser.Classes.Mesh.Mesh.HasVertexData(container.Version))
 			{
-				if (Mesh.IsOnlyVertexData(container.Version))
+				if (Parser.Classes.Mesh.Mesh.IsOnlyVertexData(container.Version))
 				{
 					return VertexDataConverter.Convert(container, origin);
 				}
@@ -319,46 +322,46 @@ namespace AssetRipper.Converters
 			}
 		}
 
-		private static Vector2f[] GetUV1(IExportContainer container, Mesh origin)
+		private static Vector2f[] GetUV1(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasUV1(container.Version) ? origin.UV1.ToArray() : Array.Empty<Vector2f>();
+			return Parser.Classes.Mesh.Mesh.HasUV1(container.Version) ? origin.UV1.ToArray() : Array.Empty<Vector2f>();
 		}
 
-		private static Vector4f[] GetTangents(IExportContainer container, Mesh origin)
+		private static Vector4f[] GetTangents(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasTangentSpace(container.Version) ? TangentConverter.GenerateTangents(origin.TangentSpace) : origin.Tangents.ToArray();
+			return Parser.Classes.Mesh.Mesh.HasTangentSpace(container.Version) ? TangentConverter.GenerateTangents(origin.TangentSpace) : origin.Tangents.ToArray();
 		}
 
-		private static Vector3f[] GetNormals(IExportContainer container, Mesh origin)
+		private static Vector3f[] GetNormals(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasTangentSpace(container.Version) ? TangentConverter.GenerateNormals(origin.TangentSpace) : origin.Normals.ToArray();
+			return Parser.Classes.Mesh.Mesh.HasTangentSpace(container.Version) ? TangentConverter.GenerateNormals(origin.TangentSpace) : origin.Normals.ToArray();
 		}
 
-		private static CompressedMesh GetCompressedMesh(IExportContainer container, Mesh origin)
+		private static CompressedMesh GetCompressedMesh(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasCompressedMesh(container.Version) ? origin.CompressedMesh.Convert(container) : new CompressedMesh(container.ExportVersion);
+			return Parser.Classes.Mesh.Mesh.HasCompressedMesh(container.Version) ? origin.CompressedMesh.Convert(container) : new CompressedMesh(container.ExportVersion);
 		}
 
-		private static CollisionMeshData GetCollisionData(IExportContainer container, Mesh origin)
+		private static CollisionMeshData GetCollisionData(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasCollision(container.Version) ? origin.CollisionData.Convert(container) : new CollisionMeshData(container.ExportVersion);
+			return Parser.Classes.Mesh.Mesh.HasCollision(container.Version) ? origin.CollisionData.Convert(container) : new CollisionMeshData(container.ExportVersion);
 		}
 
-		private static float[] GetMeshMetrics(IExportContainer container, Mesh origin)
+		private static float[] GetMeshMetrics(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasMeshMetrics(container.Version) ? origin.MeshMetrics.ToArray() : new float[] { 1.0f, 1.0f };
+			return Parser.Classes.Mesh.Mesh.HasMeshMetrics(container.Version) ? origin.MeshMetrics.ToArray() : new float[] { 1.0f, 1.0f };
 		}
 
-		private static StreamingInfo GetStreamData(IExportContainer container, Mesh origin)
+		private static StreamingInfo GetStreamData(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
-			return Mesh.HasStreamData(container.Version) ? origin.StreamData : new StreamingInfo(container.ExportVersion);
+			return Parser.Classes.Mesh.Mesh.HasStreamData(container.Version) ? origin.StreamData : new StreamingInfo(container.ExportVersion);
 		}
 
-		private static VertexData GenerateVertexData(IExportContainer container, Mesh origin)
+		private static VertexData GenerateVertexData(IExportContainer container, Parser.Classes.Mesh.Mesh origin)
 		{
 			Vector3f[] normals = origin.Normals;
 			Vector4f[] tangents = origin.Tangents;
-			if (Mesh.HasTangentSpace(container.Version))
+			if (Parser.Classes.Mesh.Mesh.HasTangentSpace(container.Version))
 			{
 				normals = TangentConverter.GenerateNormals(origin.TangentSpace);
 				tangents = TangentConverter.GenerateTangents(origin.TangentSpace);
@@ -369,7 +372,7 @@ namespace AssetRipper.Converters
 			bool hasNormals = normals.Length > 0;
 			bool hasColors = origin.Colors.Length > 0;
 			bool hasUV0 = origin.UV.Length > 0;
-			bool hasUV1 = Mesh.HasUV1(container.Version) && origin.UV1.Length > 0;
+			bool hasUV1 = Parser.Classes.Mesh.Mesh.HasUV1(container.Version) && origin.UV1.Length > 0;
 			bool hasTangents = tangents.Length > 0;
 			bool hasChannels = VertexData.HasChannels(container.ExportVersion);
 

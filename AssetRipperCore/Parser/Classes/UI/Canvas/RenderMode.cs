@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Canvases
+﻿namespace AssetRipper.Parser.Classes.UI.Canvas
 {
 	public enum RenderMode
 	{

@@ -1,10 +1,16 @@
-using AssetRipper.Classes.TerrainDatas;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Classes.TerrainData;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.TerrainData
 {
 	public sealed class TerrainData : NamedObject
 	{
@@ -33,7 +39,7 @@ namespace AssetRipper.Classes
 			return false;
 		}
 
-		public override Object Convert(IExportContainer container)
+		public override Object.Object Convert(IExportContainer container)
 		{
 			return TerrainDataConverter.Convert(container, this);
 		}
@@ -51,7 +57,7 @@ namespace AssetRipper.Classes
 			}
 			if (HasPreloadShaders(reader.Version))
 			{
-				PreloadShaders = reader.ReadAssetArray<PPtr<Shader>>();
+				PreloadShaders = reader.ReadAssetArray<PPtr<Shader.Shader>>();
 			}
 		}
 
@@ -72,22 +78,22 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object> asset in context.FetchDependencies(SplatDatabase, SplatDatabaseName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(SplatDatabase, SplatDatabaseName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(DetailDatabase, DetailDatabaseName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(DetailDatabase, DetailDatabaseName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(Heightmap, HeightmapName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Heightmap, HeightmapName))
 			{
 				yield return asset;
 			}
@@ -98,7 +104,7 @@ namespace AssetRipper.Classes
 			}
 			if (HasPreloadShaders(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(PreloadShaders, PreloadShadersName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(PreloadShaders, PreloadShadersName))
 				{
 					yield return asset;
 				}
@@ -122,9 +128,9 @@ namespace AssetRipper.Classes
 			return node;
 		}
 
-		public override string ExportPath => Path.Combine(AssetsKeyword, nameof(Terrain), nameof(TerrainData));
+		public override string ExportPath => Path.Combine(AssetsKeyword, nameof(Terrain.Terrain), nameof(TerrainData));
 
-		public PPtr<Shader>[] PreloadShaders { get; set; }
+		public PPtr<Shader.Shader>[] PreloadShaders { get; set; }
 
 		public const string SplatDatabaseName = "m_SplatDatabase";
 		public const string DetailDatabaseName = "m_DetailDatabase";
@@ -135,6 +141,6 @@ namespace AssetRipper.Classes
 		public SplatDatabase SplatDatabase;
 		public DetailDatabase DetailDatabase;
 		public Heightmap Heightmap;
-		public PPtr<Texture2D> Lightmap;
+		public PPtr<Texture2D.Texture2D> Lightmap;
 	}
 }

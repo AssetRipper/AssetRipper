@@ -1,9 +1,16 @@
-﻿using AssetRipper.Converters;
-using AssetRipper.Converters.Misc;
-using AssetRipper.Layout.Misc;
+﻿using AssetRipper.Converters.Classes.Misc;
+using AssetRipper.Converters.Project;
+using AssetRipper.Layout.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.KeyframeTpl.TangentMode;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.Misc
+namespace AssetRipper.Parser.Classes.Misc.KeyframeTpl
 {
 	public struct KeyframeTpl<T> : IAsset
 		where T : struct, IAsset
@@ -12,7 +19,7 @@ namespace AssetRipper.Classes.Misc
 			this(time, value, default, default, weight)
 		{
 			// this enum member is version agnostic
-			TangentMode = Misc.TangentMode.FreeSmooth.ToTangent(Version.MinVersion);
+			TangentMode = KeyframeTpl.TangentMode.TangentMode.FreeSmooth.ToTangent(Version.MinVersion);
 		}
 
 		public KeyframeTpl(float time, T value, T inSlope, T outSlope, T weight)
@@ -22,7 +29,7 @@ namespace AssetRipper.Classes.Misc
 			InSlope = inSlope;
 			OutSlope = outSlope;
 			// this enum member is version agnostic
-			TangentMode = Misc.TangentMode.FreeFree.ToTangent(Version.MinVersion);
+			TangentMode = KeyframeTpl.TangentMode.TangentMode.FreeFree.ToTangent(Version.MinVersion);
 			WeightedMode = WeightedMode.None;
 			InWeight = weight;
 			OutWeight = weight;
@@ -93,7 +100,7 @@ namespace AssetRipper.Classes.Misc
 			return node;
 		}
 
-		public TangentMode GetTangentMode(Version version)
+		public TangentMode.TangentMode GetTangentMode(Version version)
 		{
 			if (TangentModeExtensions.TangentMode5Relevant(version))
 			{

@@ -2,11 +2,15 @@
 using AssetRipper.IO.Endian;
 using AssetRipper.Layout;
 using AssetRipper.Lz4;
+using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Parser.IO;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using System;
 using System.IO;
 using System.Linq;
 
-namespace AssetRipper.Classes.Shaders
+namespace AssetRipper.Parser.Classes.Shader.Blob
 {
 	public struct ShaderSubProgramBlob
 	{

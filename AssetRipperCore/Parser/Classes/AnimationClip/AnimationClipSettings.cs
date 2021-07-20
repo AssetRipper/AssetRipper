@@ -1,8 +1,15 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.AnimationClip.Clip;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.AnimationClips
+namespace AssetRipper.Parser.Classes.AnimationClip
 {
 	/// <summary>
 	/// MuscleClipInfo previously
@@ -104,7 +111,7 @@ namespace AssetRipper.Classes.AnimationClips
 			reader.AlignStream();
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			if (HasAdditiveReferencePoseClip(context.Version))
 			{

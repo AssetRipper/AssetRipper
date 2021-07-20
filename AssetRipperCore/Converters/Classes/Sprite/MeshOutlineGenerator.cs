@@ -1,8 +1,8 @@
-﻿using AssetRipper.Classes;
+﻿using AssetRipper.Parser.Classes.Misc.Serializable;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Converters.Sprites
+namespace AssetRipper.Converters.Classes.Sprite
 {
 	public class MeshOutlineGenerator
 	{

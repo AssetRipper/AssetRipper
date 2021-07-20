@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.AnimatorTransitions
+﻿namespace AssetRipper.Parser.Classes.AnimatorTransition
 {
 	/// <summary>
 	/// The mode of the condition.

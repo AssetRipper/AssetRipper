@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystems
+﻿namespace AssetRipper.Parser.Classes.ParticleSystem.CollisionModule
 {
 	/// <summary>
 	/// The type of collisions to use for a given particle system.

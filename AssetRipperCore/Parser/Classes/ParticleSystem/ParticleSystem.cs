@@ -1,9 +1,21 @@
-using AssetRipper.Classes.ParticleSystems;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.ParticleSystem.Curve;
+using AssetRipper.Parser.Classes.ParticleSystem.Emission;
+using AssetRipper.Parser.Classes.ParticleSystem.InheritVelocity;
+using AssetRipper.Parser.Classes.ParticleSystem.Shape;
+using AssetRipper.Parser.Classes.ParticleSystem.SubEmitter;
+using AssetRipper.Parser.Classes.ParticleSystem.Trigger;
+using AssetRipper.Parser.Classes.ParticleSystem.UV;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.ParticleSystem
 {
 	public sealed class ParticleSystem : Component
 	{
@@ -233,19 +245,19 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(MoveWithCustomTransform, MoveWithCustomTransformName);
-			foreach (PPtr<Object> asset in context.FetchDependencies(CollisionModule, CollisionModuleName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(CollisionModule, CollisionModuleName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(SubModule, SubModuleName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(SubModule, SubModuleName))
 			{
 				yield return asset;
 			}
@@ -318,9 +330,9 @@ namespace AssetRipper.Classes
 		{
 			return HasExternalForcesModule(version) ? ExternalForcesModule : new ExternalForcesModule(true);
 		}
-		public NoiseModule GetNoiseModule(Version version)
+		public NoiseModule.NoiseModule GetNoiseModule(Version version)
 		{
-			return HasNoiseModule(version) ? NoiseModule : new NoiseModule(true);
+			return HasNoiseModule(version) ? NoiseModule : new NoiseModule.NoiseModule(true);
 		}
 		public TriggerModule GetTriggerModule(Version version)
 		{
@@ -330,13 +342,13 @@ namespace AssetRipper.Classes
 		{
 			return HasLightsModule(version) ? LightsModule : new LightsModule(true);
 		}
-		public TrailModule GetTrailModule(Version version)
+		public TrailModule.TrailModule GetTrailModule(Version version)
 		{
-			return HasLightsModule(version) ? TrailModule : new TrailModule(true);
+			return HasLightsModule(version) ? TrailModule : new TrailModule.TrailModule(true);
 		}
-		public CustomDataModule GetCustomDataModule(Version version)
+		public CustomDataModule.CustomDataModule GetCustomDataModule(Version version)
 		{
-			return HasCustomDataModule(version) ? CustomDataModule : new CustomDataModule(true);
+			return HasCustomDataModule(version) ? CustomDataModule : new CustomDataModule.CustomDataModule(true);
 		}
 
 		public float LengthInSec { get; set; }
@@ -370,16 +382,16 @@ namespace AssetRipper.Classes
 		public ForceModule ForceModule { get; } = new ForceModule();
 		public ExternalForcesModule ExternalForcesModule { get; } = new ExternalForcesModule();
 		public ClampVelocityModule ClampVelocityModule { get; } = new ClampVelocityModule();
-		public NoiseModule NoiseModule { get; } = new NoiseModule();
+		public NoiseModule.NoiseModule NoiseModule { get; } = new NoiseModule.NoiseModule();
 		public SizeBySpeedModule SizeBySpeedModule { get; } = new SizeBySpeedModule();
 		public RotationBySpeedModule RotationBySpeedModule { get; } = new RotationBySpeedModule();
 		public ColorBySpeedModule ColorBySpeedModule { get; } = new ColorBySpeedModule();
-		public CollisionModule CollisionModule { get; } = new CollisionModule();
+		public CollisionModule.CollisionModule CollisionModule { get; } = new CollisionModule.CollisionModule();
 		public TriggerModule TriggerModule { get; } = new TriggerModule();
 		public SubModule SubModule { get; } = new SubModule();
 		public LightsModule LightsModule { get; } = new LightsModule();
-		public TrailModule TrailModule { get; } = new TrailModule();
-		public CustomDataModule CustomDataModule { get; } = new CustomDataModule();
+		public TrailModule.TrailModule TrailModule { get; } = new TrailModule.TrailModule();
+		public CustomDataModule.CustomDataModule CustomDataModule { get; } = new CustomDataModule.CustomDataModule();
 
 		public const string LengthInSecName = "lengthInSec";
 		public const string SimulationSpeedName = "simulationSpeed";

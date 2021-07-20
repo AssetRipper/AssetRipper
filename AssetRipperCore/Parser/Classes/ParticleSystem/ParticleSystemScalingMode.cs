@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystems
+﻿namespace AssetRipper.Parser.Classes.ParticleSystem
 {
 	/// <summary>
 	/// Control how particle systems apply transform scale.

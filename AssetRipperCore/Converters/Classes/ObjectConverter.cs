@@ -1,8 +1,10 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Classes.Objects;
-using AssetRipper.Layout;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Layout.Classes;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Parser.IO.Asset;
 
-namespace AssetRipper.Converters
+namespace AssetRipper.Converters.Classes
 {
 	public static class ObjectConverter
 	{
@@ -25,7 +27,7 @@ namespace AssetRipper.Converters
 #warning TODO: set those flags at the moment of creation a prefab
 			if (origin.ClassID == ClassIDType.GameObject)
 			{
-				GameObject originGameObject = (GameObject)origin;
+				Parser.Classes.GameObject.GameObject originGameObject = (Parser.Classes.GameObject.GameObject)origin;
 				int depth = originGameObject.GetRootDepth();
 				return depth > 1 ? HideFlags.HideInHierarchy : HideFlags.None;
 			}

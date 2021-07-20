@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset.Reader;
+using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class Flare : NamedObject
 	{
@@ -16,7 +19,7 @@ namespace AssetRipper.Classes
 			throw new System.NotImplementedException();
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			throw new System.NotImplementedException();
 		}

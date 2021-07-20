@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Sprites
+﻿namespace AssetRipper.Parser.Classes.Sprite
 {
 	/// <summary>
 	/// Defines the type of mesh generated for a sprite.

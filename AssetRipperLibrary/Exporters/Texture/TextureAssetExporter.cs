@@ -1,17 +1,20 @@
 using AssetRipper;
-using AssetRipper.Classes;
-using AssetRipper.Classes.Textures;
 using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Converters.Project.Exporter;
 using AssetRipper.Logging;
-using AssetRipper.Project;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Sprite;
+using AssetRipper.Parser.Classes.Texture2D;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Structure.ProjectCollection.Collections;
 using AssetRipper.Utils;
 using AssetRipperLibrary.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
-using Object = AssetRipper.Classes.Object;
+using Object = AssetRipper.Parser.Classes.Object.Object;
 
 namespace AssetRipperLibrary.Exporters.Texture
 {

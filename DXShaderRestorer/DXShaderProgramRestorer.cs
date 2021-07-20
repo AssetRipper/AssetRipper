@@ -1,9 +1,9 @@
 using AssetRipper;
-using AssetRipper.Classes.Shaders;
 using AssetRipper.IO.Endian;
+using AssetRipper.Parser.Classes.Shader;
 using System.Collections.Generic;
 using System.IO;
-using Version = AssetRipper.Version;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
 namespace DXShaderRestorer
 {

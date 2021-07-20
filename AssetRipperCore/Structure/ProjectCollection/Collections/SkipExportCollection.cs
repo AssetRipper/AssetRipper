@@ -1,11 +1,16 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Converters.Project.Exporter;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Meta;
+using AssetRipper.Parser.Classes.Meta.Importers.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Classes.Object;
+using Object = AssetRipper.Parser.Classes.Object.Object;
 
-namespace AssetRipper.Project
+namespace AssetRipper.Structure.ProjectCollection.Collections
 {
 	public sealed class SkipExportCollection : IExportCollection
 	{

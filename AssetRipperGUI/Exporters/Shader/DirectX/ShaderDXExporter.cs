@@ -1,6 +1,8 @@
 using AssetRipper;
-using AssetRipper.Classes.Shaders;
-using AssetRipper.Converters.Shaders;
+using AssetRipper.Converters.Classes.Shader;
+using AssetRipper.Parser.Classes.Shader;
+using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Parser.IO;
 using DotNetDxc;
 using System;
 using System.Runtime.InteropServices;

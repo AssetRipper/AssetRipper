@@ -1,9 +1,13 @@
 using AssetRipper.Extensions;
 using AssetRipper.IO.Endian;
-using AssetRipper.WebFiles;
+using AssetRipper.Parser.Files.File;
+using AssetRipper.Parser.Files.File.Parser;
+using AssetRipper.Parser.Files.WebFile.Parser;
+using AssetRipper.Structure.GameCollection;
+using AssetRipper.Structure.GameStructure;
 using System.IO;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Files.WebFile
 {
 	public sealed class WebFileScheme : FileSchemeList
 	{

@@ -1,18 +1,24 @@
-using AssetRipper.Classes.AnimatorControllers;
-using AssetRipper.Classes.AnimatorStateMachines;
-using AssetRipper.Classes.Objects;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.AnimatorController.Constants;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.AnimatorStateMachine
 {
 	public sealed class AnimatorStateMachine : NamedObject
 	{
-		private AnimatorStateMachine(AssetLayout layout, AssetInfo assetInfo, AnimatorController controller, int stateMachineIndex) :
+		private AnimatorStateMachine(AssetLayout layout, AssetInfo assetInfo, AnimatorController.AnimatorController controller, int stateMachineIndex) :
 			base(layout)
 		{
 			AssetInfo = assetInfo;
@@ -106,7 +112,7 @@ namespace AssetRipper.Classes
 			DefaultState = ChildStates.Length > 0 ? ChildStates[stateMachine.DefaultState].State : default;
 		}
 
-		public static AnimatorStateMachine CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController controller, int stateMachineIndex)
+		public static AnimatorStateMachine CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController.AnimatorController controller, int stateMachineIndex)
 		{
 			return virtualFile.CreateAsset((assetInfo) => new AnimatorStateMachine(virtualFile.Layout, assetInfo, controller, stateMachineIndex));
 		}
@@ -143,8 +149,8 @@ namespace AssetRipper.Classes
 		public ChildAnimatorState[] ChildStates { get; set; }
 		public ChildAnimatorStateMachine[] ChildStateMachines { get; set; }
 		public PPtr<AnimatorStateTransition>[] AnyStateTransitions { get; set; }
-		public PPtr<AnimatorTransition>[] EntryTransitions { get; set; }
-		public Dictionary<PPtr<AnimatorStateMachine>, PPtr<AnimatorTransition>[]> StateMachineTransitions { get; set; } = new Dictionary<PPtr<AnimatorStateMachine>, PPtr<AnimatorTransition>[]>();
+		public PPtr<AnimatorTransition.AnimatorTransition>[] EntryTransitions { get; set; }
+		public Dictionary<PPtr<AnimatorStateMachine>, PPtr<AnimatorTransition.AnimatorTransition>[]> StateMachineTransitions { get; set; } = new Dictionary<PPtr<AnimatorStateMachine>, PPtr<AnimatorTransition.AnimatorTransition>[]>();
 		public PPtr<MonoBehaviour>[] StateMachineBehaviours { get; set; }
 
 		public Vector3f AnyStatePosition;

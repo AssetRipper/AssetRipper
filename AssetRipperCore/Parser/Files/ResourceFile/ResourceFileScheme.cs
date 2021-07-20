@@ -1,8 +1,10 @@
 using AssetRipper.IO.Smart;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Files.File;
+using AssetRipper.Parser.Files.File.Parser;
+using AssetRipper.Parser.Files.SerializedFile.Parser;
 using System.Collections.Generic;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Files.ResourceFile
 {
 	public sealed class ResourceFileScheme : FileScheme
 	{

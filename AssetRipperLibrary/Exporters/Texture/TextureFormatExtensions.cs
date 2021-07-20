@@ -1,4 +1,4 @@
-using AssetRipper.Classes.Textures;
+using AssetRipper.Parser.Classes.Texture2D;
 using AssetRipperLibrary.TextureContainers;
 using System;
 

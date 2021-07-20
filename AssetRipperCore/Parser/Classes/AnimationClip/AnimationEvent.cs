@@ -1,8 +1,13 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.AnimationClips
+namespace AssetRipper.Parser.Classes.AnimationClip
 {
 	public struct AnimationEvent : IAssetReadable, IYAMLExportable, IDependent
 	{
@@ -33,7 +38,7 @@ namespace AssetRipper.Classes.AnimationClips
 			MessageOptions = reader.ReadInt32();
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(ObjectReferenceParameter, ObjectReferenceParameterName);
 		}
@@ -69,6 +74,6 @@ namespace AssetRipper.Classes.AnimationClips
 		public const string IntParameterName = "intParameter";
 		public const string MessageOptionsName = "messageOptions";
 
-		public PPtr<Object> ObjectReferenceParameter;
+		public PPtr<Object.Object> ObjectReferenceParameter;
 	}
 }

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Fonts
+﻿namespace AssetRipper.Parser.Classes.Font
 {
 	public enum FontRenderingMode
 	{

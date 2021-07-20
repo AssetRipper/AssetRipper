@@ -1,10 +1,10 @@
+using AssetRipper.Attributes;
+using AssetRipper.Converters.Game;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using AssetRipper.Attributes;
-using AssetRipper.Converters;
 
-namespace AssetRipper.SerializedFiles
+namespace AssetRipper.Parser.Files.SerializedFile.Parser.TypeTree
 {
 	/// <summary>
 	/// Predefines types

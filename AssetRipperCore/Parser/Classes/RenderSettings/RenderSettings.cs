@@ -1,9 +1,15 @@
-﻿using AssetRipper.Classes.RenderSettingss;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.RenderSettings
 {
 	/// <summary>
 	/// LightManager previously
@@ -261,9 +267,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -412,20 +418,20 @@ namespace AssetRipper.Classes
 		public ColorRGBAf AmbientSkyColor;
 		public ColorRGBAf AmbientEquatorColor;
 		public ColorRGBAf AmbientGroundColor;
-		public PPtr<Light> AmbientSkyboxLight;
+		public PPtr<Light.Light> AmbientSkyboxLight;
 		public ColorRGBAf SubtractiveShadowColor;
-		public PPtr<Material> SkyboxMaterial;
-		public PPtr<Texture2D> HaloTexture;
+		public PPtr<Material.Material> SkyboxMaterial;
+		public PPtr<Texture2D.Texture2D> HaloTexture;
 		/// <summary>
 		/// SpecularTex previously
 		/// </summary>
 		public PPtr<Cubemap> SpecularTexture;
-		public PPtr<Texture2D> SpotCookie;
+		public PPtr<Texture2D.Texture2D> SpotCookie;
 		public PPtr<Cubemap> CustomReflection;
 		public SphericalHarmonicsL2 AmbientProbe;
 		public SphericalHarmonicsL2 AmbientProbeInGamma;
 		public PPtr<Cubemap> GeneratedSkyboxReflection;
-		public PPtr<Light> Sun;
+		public PPtr<Light.Light> Sun;
 		public ColorRGBAf IndirectSpecularColor;
 	}
 }

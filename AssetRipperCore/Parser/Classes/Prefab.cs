@@ -1,11 +1,16 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Layout.Classes;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
-	public sealed class Prefab : Object
+	public sealed class Prefab : Object.Object
 	{
 		public Prefab(AssetLayout layout) :
 			base(layout)
@@ -31,9 +36,9 @@ namespace AssetRipper.Classes
 			RootGameObject.Write(writer);
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -52,6 +57,6 @@ namespace AssetRipper.Classes
 
 		public override ClassIDType ClassID => ClassIDType.Prefab;
 
-		public PPtr<GameObject> RootGameObject;
+		public PPtr<GameObject.GameObject> RootGameObject;
 	}
 }

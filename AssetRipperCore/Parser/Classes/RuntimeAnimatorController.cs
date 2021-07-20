@@ -1,7 +1,9 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public abstract class RuntimeAnimatorController : NamedObject
 	{
@@ -15,7 +17,7 @@ namespace AssetRipper.Classes
 			base.Read(reader);
 		}
 
-		public abstract bool IsContainsAnimationClip(AnimationClip clip);
+		public abstract bool IsContainsAnimationClip(AnimationClip.AnimationClip clip);
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{

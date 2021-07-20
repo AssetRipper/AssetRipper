@@ -1,7 +1,13 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Misc.Serializable.Gradient;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.ParticleSystems
+namespace AssetRipper.Parser.Classes.ParticleSystem.MinMaxGradient
 {
 	public struct MinMaxGradient : IAssetReadable, IYAMLExportable
 	{

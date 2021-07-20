@@ -1,16 +1,25 @@
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
-using AssetRipper.Converters.Script;
-using AssetRipper.Game.Assembly;
+using AssetRipper.Converters.Project;
+using AssetRipper.Converters.Project.Exporter.Script;
+using AssetRipper.Converters.Project.Exporter.Script.Elements;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
+using AssetRipper.Parser.Utils;
+using AssetRipper.Structure.GameCollection.Assembly;
+using AssetRipper.Structure.GameCollection.Assembly.Serializable;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 using System.IO;
-#if UNIVERSAL
 using System.Linq;
+#if UNIVERSAL
+
 #endif
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class MonoScript : TextAsset
 	{
@@ -146,7 +155,7 @@ namespace AssetRipper.Classes
 			}
 			if (HasDefaultReferences(reader.Version, reader.Flags))
 			{
-				m_defaultReferences = new Dictionary<string, PPtr<Object>>();
+				m_defaultReferences = new Dictionary<string, PPtr<Object.Object>>();
 				m_defaultReferences.Read(reader);
 			}
 			if (HasIcon(reader.Version, reader.Flags))
@@ -196,9 +205,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -210,7 +219,7 @@ namespace AssetRipper.Classes
 			}
 			if (HasDefaultReferences(context.Version, context.Flags))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(DefaultReferences.Select(t => t.Value), DefaultReferencesName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(DefaultReferences.Select(t => t.Value), DefaultReferencesName))
 				{
 					yield return asset;
 				}
@@ -247,7 +256,7 @@ namespace AssetRipper.Classes
 			return System.Array.Empty<byte>();
 		}
 
-		private IReadOnlyDictionary<string, PPtr<Object>> GetDefaultReferences(Version version, TransferInstructionFlags flags)
+		private IReadOnlyDictionary<string, PPtr<Object.Object>> GetDefaultReferences(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasDefaultReferences(version, flags))
@@ -255,10 +264,10 @@ namespace AssetRipper.Classes
 				return DefaultReferences;
 			}
 #endif
-			return new Dictionary<string, PPtr<Object>>(0);
+			return new Dictionary<string, PPtr<Object.Object>>(0);
 		}
 
-		private PPtr<Object> GetIcon(Version version, TransferInstructionFlags flags)
+		private PPtr<Object.Object> GetIcon(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasIcon(version, flags))
@@ -283,7 +292,7 @@ namespace AssetRipper.Classes
 		public override string ExportExtension => "cs";
 
 #if UNIVERSAL
-		public IReadOnlyDictionary<string, PPtr<Object>> DefaultReferences => m_defaultReferences;
+		public IReadOnlyDictionary<string, PPtr<Object.Object>> DefaultReferences => m_defaultReferences;
 #endif
 		public int ExecutionOrder { get; set; }
 		public string ClassName { get; set; }
@@ -310,16 +319,16 @@ namespace AssetRipper.Classes
 		/// <summary>
 		/// PPtr<Texture> previously
 		/// </summary>
-		public PPtr<Object> Icon;
+		public PPtr<Object.Object> Icon;
 		/// <summary>
 		/// PPtr<MonoBehaviour> previously
 		/// </summary>
-		public PPtr<Object> EditorGraphData;
+		public PPtr<Object.Object> EditorGraphData;
 #endif
 		public Hash128 PropertiesHash;
 
 #if UNIVERSAL
-		private Dictionary<string, PPtr<Object>> m_defaultReferences;
+		private Dictionary<string, PPtr<Object.Object>> m_defaultReferences;
 #endif
 	}
 }

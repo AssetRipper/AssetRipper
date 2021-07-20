@@ -1,16 +1,24 @@
-using AssetRipper.Classes.Materials;
-using AssetRipper.Classes.Shaders;
-using AssetRipper.Converters;
-using AssetRipper.Converters.Shaders;
+using AssetRipper.Converters.Classes.Shader;
+using AssetRipper.Converters.Project;
 using AssetRipper.IO.Extensions;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Material;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Shader.Blob;
+using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Parser.IO;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Shader
 {
 	public sealed class Shader : TextAsset
 	{
@@ -208,16 +216,16 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			if (HasDependencies(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(Dependencies, DependenciesName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Dependencies, DependenciesName))
 				{
 					yield return asset;
 				}
@@ -316,7 +324,7 @@ namespace AssetRipper.Classes
 		public const string ErrorsName = "errors";
 		public const string DependenciesName = "m_Dependencies";
 
-		public SerializedShader ParsedForm;
+		public SerializedShader.SerializedShader ParsedForm;
 		public PPtr<Shader> Fallback;
 		public UnityPropertySheet DefaultProperties;
 		public UnityPropertySheet StaticProperties;

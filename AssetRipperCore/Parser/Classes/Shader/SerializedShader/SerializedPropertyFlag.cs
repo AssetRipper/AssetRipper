@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.Shaders
+namespace AssetRipper.Parser.Classes.Shader.SerializedShader
 {
 	[Flags]
 	public enum SerializedPropertyFlag : uint

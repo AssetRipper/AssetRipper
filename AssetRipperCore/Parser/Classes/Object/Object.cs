@@ -1,13 +1,18 @@
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Objects;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Layout.Classes;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Object
 {
 	public abstract class Object : IAsset, IDependent
 	{

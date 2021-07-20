@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.TextureImporters
+﻿namespace AssetRipper.Parser.Classes.Meta.Importers.Texture
 {
 	/// <summary>
 	/// Normal map filtering mode for TextureImporter.

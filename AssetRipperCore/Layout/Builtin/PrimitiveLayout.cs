@@ -1,6 +1,6 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Game;
 
-namespace AssetRipper.Layout
+namespace AssetRipper.Layout.Builtin
 {
 	public static class BoolLayout
 	{

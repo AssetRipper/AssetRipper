@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Renderers
+﻿namespace AssetRipper.Parser.Classes.Renderer
 {
 	/// <summary>
 	/// How shadows are cast from this object.

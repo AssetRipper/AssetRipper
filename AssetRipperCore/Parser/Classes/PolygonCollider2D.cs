@@ -1,9 +1,12 @@
-﻿using AssetRipper.Classes.BoxCollider2Ds;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.BoxCollider2D;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class PolygonCollider2D : Collider2D
 	{

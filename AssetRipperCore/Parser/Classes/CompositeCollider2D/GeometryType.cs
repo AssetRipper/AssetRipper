@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.CompositeCollider2Ds
+﻿namespace AssetRipper.Parser.Classes.CompositeCollider2D
 {
 	public enum GeometryType
 	{

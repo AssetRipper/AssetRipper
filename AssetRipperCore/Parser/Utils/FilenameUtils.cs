@@ -1,8 +1,8 @@
-using AssetRipper.Game.Assembly.Mono;
+using AssetRipper.Structure.GameCollection.Assembly.Mono;
 using System;
 using System.IO;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Utils
 {
 	public static class FilenameUtils
 	{

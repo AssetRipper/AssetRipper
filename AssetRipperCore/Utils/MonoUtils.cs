@@ -1,4 +1,4 @@
-using AssetRipper.Game.Assembly.Mono;
+using AssetRipper.Structure.GameCollection.Assembly.Mono;
 using Mono.Cecil;
 using Mono.Cecil.Extensions;
 using Mono.Cecil.Metadata;

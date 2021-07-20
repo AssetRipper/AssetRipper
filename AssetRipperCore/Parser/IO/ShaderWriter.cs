@@ -1,12 +1,15 @@
-using AssetRipper.Classes;
-using AssetRipper.Classes.Shaders;
-using AssetRipper.Converters.Shaders;
+using AssetRipper.Converters.Classes.Shader;
 using AssetRipper.IO;
+using AssetRipper.Parser.Classes.Shader;
+using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Parser.Classes.Shader.Enums.GpuProgramType;
+using AssetRipper.Parser.Files.File;
 using System;
 using System.IO;
 using System.Text;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.IO
 {
 	public class ShaderWriter : InvariantStreamWriter
 	{

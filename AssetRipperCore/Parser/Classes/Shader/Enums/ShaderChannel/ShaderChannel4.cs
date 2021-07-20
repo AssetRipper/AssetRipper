@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.Shaders
+namespace AssetRipper.Parser.Classes.Shader.Enums.ShaderChannel
 {
 	/// <summary>
 	/// Less than 5.0.0 version

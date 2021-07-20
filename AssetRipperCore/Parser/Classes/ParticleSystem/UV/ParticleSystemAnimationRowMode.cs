@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystems
+﻿namespace AssetRipper.Parser.Classes.ParticleSystem.UV
 {
 	/// <summary>
 	/// The mode used for selecting rows of an animation in the Texture Sheet Animation Module

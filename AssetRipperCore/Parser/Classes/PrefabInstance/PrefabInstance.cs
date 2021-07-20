@@ -1,14 +1,19 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Objects;
-using AssetRipper.Classes.Prefabs;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Layout.Classes.PrefabInstance;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.PrefabInstance
 {
 	public sealed class PrefabInstance : NamedObject
 	{
@@ -24,7 +29,7 @@ namespace AssetRipper.Classes
 		{
 		}
 
-		public static PrefabInstance CreateVirtualInstance(VirtualSerializedFile virtualFile, GameObject root)
+		public static PrefabInstance CreateVirtualInstance(VirtualSerializedFile virtualFile, GameObject.GameObject root)
 		{
 			PrefabInstance instance = virtualFile.CreateAsset((assetInfo) => new PrefabInstance(assetInfo));
 			instance.ObjectHideFlags = HideFlags.HideInHierarchy;
@@ -143,12 +148,12 @@ namespace AssetRipper.Classes
 			}*/
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			PrefabInstanceLayout layout = context.Layout.PrefabInstance;
 			if (layout.IsModificationFormat)
 			{
-				foreach (PPtr<Object> asset in FetchDependenciesObject(context))
+				foreach (PPtr<Object.Object> asset in FetchDependenciesObject(context))
 				{
 					yield return asset;
 				}
@@ -157,7 +162,7 @@ namespace AssetRipper.Classes
 				{
 					yield return context.FetchDependency(RootGameObject, layout.RootGameObjectName);
 				}
-				foreach (PPtr<Object> asset in context.FetchDependencies(Modification, layout.ModificationName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Modification, layout.ModificationName))
 				{
 					yield return asset;
 				}
@@ -165,13 +170,13 @@ namespace AssetRipper.Classes
 			}
 			else
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(Objects, layout.ObjectsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Objects, layout.ObjectsName))
 				{
 					yield return asset;
 				}
 				yield return context.FetchDependency(Father, layout.FatherName);
 
-				foreach (PPtr<Object> asset in base.FetchDependencies(context))
+				foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 				{
 					yield return asset;
 				}
@@ -283,6 +288,6 @@ namespace AssetRipper.Classes
 		public UnityGUID LastTemplateIdentifier;
 		public PrefabModification Modification;
 		public PPtr<PrefabInstance> SourcePrefab;
-		public PPtr<GameObject> RootGameObject;
+		public PPtr<GameObject.GameObject> RootGameObject;
 	}
 }

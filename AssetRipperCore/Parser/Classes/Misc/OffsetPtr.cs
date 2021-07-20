@@ -1,7 +1,9 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.Misc
+namespace AssetRipper.Parser.Classes.Misc
 {
 	public struct OffsetPtr<T> : IAssetReadable, IYAMLExportable
 		where T : struct, IAssetReadable, IYAMLExportable

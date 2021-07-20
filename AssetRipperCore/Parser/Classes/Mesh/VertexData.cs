@@ -1,15 +1,22 @@
-using AssetRipper;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Shaders;
-using AssetRipper.Converters;
-using AssetRipper.Converters.Meshes;
+using AssetRipper.Converters.Classes.Mesh;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Shader.Enums.ShaderChannel;
+using AssetRipper.Parser.Classes.Shader.Enums.VertexFormat;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System;
 using System.IO;
 using System.Linq;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.Meshes
+namespace AssetRipper.Parser.Classes.Mesh
 {
 	public struct VertexData : IAsset
 	{

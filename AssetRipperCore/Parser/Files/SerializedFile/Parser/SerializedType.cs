@@ -1,6 +1,8 @@
-using AssetRipper.Classes.Misc;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.SerializedFile.IO;
 
-namespace AssetRipper.SerializedFiles
+namespace AssetRipper.Parser.Files.SerializedFile.Parser
 {
 	public struct SerializedType : ISerializedReadable, ISerializedWritable
 	{
@@ -9,7 +11,7 @@ namespace AssetRipper.SerializedFiles
 		{
 			if (enableTypeTree)
 			{
-				OldType = new TypeTree();
+				OldType = new TypeTree.TypeTree();
 			}
 		}
 		
@@ -143,7 +145,7 @@ namespace AssetRipper.SerializedFiles
 		/// <summary>
 		/// The type of the class.
 		/// </summary>
-		public TypeTree OldType { get; set; }
+		public TypeTree.TypeTree OldType { get; set; }
 		public int[] TypeDependencies { get; set; }
 
 		public Hash128 ScriptID;

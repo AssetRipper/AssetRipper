@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.AudioClips
+﻿namespace AssetRipper.Parser.Classes.AudioClip
 {
 	public enum FMODSoundType
 	{

@@ -1,13 +1,21 @@
-using AssetRipper.Classes.AnimationClips;
-using AssetRipper.Classes.Animations;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Classes;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Layout.Classes;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.AnimationClip;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Animation
 {
 	public sealed class Animation : Behaviour
 	{
@@ -17,11 +25,11 @@ namespace AssetRipper.Classes
 			AnimationLayout classLayout = layout.Animation;
 			if (classLayout.HasAnimations)
 			{
-				Animations = Array.Empty<PPtr<AnimationClip>>();
+				Animations = Array.Empty<PPtr<AnimationClip.AnimationClip>>();
 			}
 			else
 			{
-				AnimationsPaired = Array.Empty<Tuple<string, PPtr<AnimationClip>>>();
+				AnimationsPaired = Array.Empty<Tuple<string, PPtr<AnimationClip.AnimationClip>>>();
 			}
 			PlayAutomatically = true;
 		}
@@ -31,7 +39,7 @@ namespace AssetRipper.Classes
 		{
 		}
 
-		public override Object Convert(IExportContainer container)
+		public override Object.Object Convert(IExportContainer container)
 		{
 			return AnimationConverter.Convert(container, this);
 		}
@@ -44,11 +52,11 @@ namespace AssetRipper.Classes
 			DefaultAnimation.Read(reader);
 			if (layout.HasAnimations)
 			{
-				Animations = reader.ReadAssetArray<PPtr<AnimationClip>>();
+				Animations = reader.ReadAssetArray<PPtr<AnimationClip.AnimationClip>>();
 			}
 			else
 			{
-				AnimationsPaired = reader.ReadTupleStringTArray<PPtr<AnimationClip>>();
+				AnimationsPaired = reader.ReadTupleStringTArray<PPtr<AnimationClip.AnimationClip>>();
 			}
 
 			WrapMode = (WrapMode)reader.ReadInt32();
@@ -110,9 +118,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -122,23 +130,23 @@ namespace AssetRipper.Classes
 
 			if (layout.HasAnimationsPaired)
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(AnimationsPaired.Select(t => t.Item2), layout.AnimationsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(AnimationsPaired.Select(t => t.Item2), layout.AnimationsName))
 				{
 					yield return asset;
 				}
 			}
 			else
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(Animations, layout.AnimationsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Animations, layout.AnimationsName))
 				{
 					yield return asset;
 				}
 			}
 		}
 
-		public bool IsContainsAnimationClip(AnimationClip clip)
+		public bool IsContainsAnimationClip(AnimationClip.AnimationClip clip)
 		{
-			foreach (PPtr<AnimationClip> clipPtr in Animations)
+			foreach (PPtr<AnimationClip.AnimationClip> clipPtr in Animations)
 			{
 				if (clipPtr.IsAsset(File, clip))
 				{
@@ -181,8 +189,8 @@ namespace AssetRipper.Classes
 			return node;
 		}
 
-		public PPtr<AnimationClip>[] Animations { get; set; }
-		public Tuple<string, PPtr<AnimationClip>>[] AnimationsPaired { get; set; }
+		public PPtr<AnimationClip.AnimationClip>[] Animations { get; set; }
+		public Tuple<string, PPtr<AnimationClip.AnimationClip>>[] AnimationsPaired { get; set; }
 		public WrapMode WrapMode { get; set; }
 		public bool PlayAutomatically { get; set; }
 		public bool AnimatePhysics { get; set; }
@@ -198,7 +206,7 @@ namespace AssetRipper.Classes
 		}
 		public AnimationCullingType CullingType { get; set; }
 
-		public PPtr<AnimationClip> DefaultAnimation;
+		public PPtr<AnimationClip.AnimationClip> DefaultAnimation;
 		public AABB UserAABB;
 	}
 }

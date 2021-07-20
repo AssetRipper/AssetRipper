@@ -1,10 +1,17 @@
-using AssetRipper.Classes.LightmapSettingss;
-using AssetRipper.Classes.Textures;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Texture2D;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.LightmapSettings
 {
 	public sealed class LightmapSettings : LevelGameManager
 	{
@@ -354,9 +361,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -367,7 +374,7 @@ namespace AssetRipper.Classes
 			}
 			if (HasEnlightenSceneMapping(context.Version, context.Flags))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
 				{
 					yield return asset;
 				}
@@ -375,7 +382,7 @@ namespace AssetRipper.Classes
 			if (HasLightProbes(context.Version, context.Flags))
 			{
 				yield return context.FetchDependency(LightProbes, LightProbesName);
-				foreach (PPtr<Object> asset in context.FetchDependencies(Lightmaps, LightmapsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Lightmaps, LightmapsName))
 				{
 					yield return asset;
 				}
@@ -383,7 +390,7 @@ namespace AssetRipper.Classes
 #if UNIVERSAL
 			if (HasLightmapEditorSettings(context.Version, context.Flags))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(LightmapEditorSettings, LightmapEditorSettingsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(LightmapEditorSettings, LightmapEditorSettingsName))
 				{
 					yield return asset;
 				}
@@ -478,9 +485,9 @@ namespace AssetRipper.Classes
 #endif
 			return GIWorkflowMode.OnDemand;
 		}
-		private GISettings GetExportGISettings(Version version)
+		private GISettings.GISettings GetExportGISettings(Version version)
 		{
-			return HasGISettings(version) ? GISettings : new GISettings(true);
+			return HasGISettings(version) ? GISettings : new GISettings.GISettings(true);
 		}
 		private LightmapEditorSettings GetExportLightmapEditorSettings(IExportContainer container)
 		{
@@ -492,7 +499,7 @@ namespace AssetRipper.Classes
 #endif
 			return new LightmapEditorSettings(container.ExportVersion);
 		}
-		private PPtr<LightingDataAsset> GetLightingDataAsset(Version version, TransferInstructionFlags flags)
+		private PPtr<LightingDataAsset.LightingDataAsset> GetLightingDataAsset(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasLightingDataAsset(version, flags))
@@ -527,7 +534,7 @@ namespace AssetRipper.Classes
 		/// <summary>
 		/// 5.3.0 - renamed to LightingDataAsset
 		/// </summary>
-		public PPtr<LightingDataAsset> LightmapSnapshot
+		public PPtr<LightingDataAsset.LightingDataAsset> LightmapSnapshot
 		{
 			get => LightingDataAsset;
 			set => LightingDataAsset = value;
@@ -552,13 +559,13 @@ namespace AssetRipper.Classes
 		public const string ShadowMaskModeName = "m_ShadowMaskMode";
 
 		// TODO: PPtr<LightProbesLegacy>
-		public PPtr<Object> LightProbesLegacy;
+		public PPtr<Object.Object> LightProbesLegacy;
 		public EnlightenSceneMapping EnlightenSceneMapping;
-		public PPtr<LightProbes> LightProbes;
-		public GISettings GISettings;
+		public PPtr<LightProbes.LightProbes> LightProbes;
+		public GISettings.GISettings GISettings;
 #if UNIVERSAL
 		public LightmapEditorSettings LightmapEditorSettings;
-		public PPtr<LightingDataAsset> LightingDataAsset;
+		public PPtr<LightingDataAsset.LightingDataAsset> LightingDataAsset;
 #endif
 	}
 }

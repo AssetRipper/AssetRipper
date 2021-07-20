@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AssetRipper.Game.Assembly.Mono
+namespace AssetRipper.Structure.GameCollection.Assembly.Mono
 {
 	public readonly struct MonoTypeContext
 	{

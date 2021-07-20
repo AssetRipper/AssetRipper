@@ -1,9 +1,13 @@
-using AssetRipper;
-using AssetRipper.Classes.OcclusionCullingDatas;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
 using AssetRipper.Logging;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System;
@@ -11,7 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.OcclusionCullingData
 {
 	public sealed class OcclusionCullingData : NamedObject
 	{
@@ -40,7 +44,7 @@ namespace AssetRipper.Classes
 			return !flags.IsRelease();
 		}
 
-		public void Initialize(IExportContainer container, OcclusionCullingSettings cullingSetting)
+		public void Initialize(IExportContainer container, OcclusionCullingSettings.OcclusionCullingSettings cullingSetting)
 		{
 			PVSData = (byte[])cullingSetting.PVSData;
 			int renderCount = cullingSetting.StaticRenderers.Length;
@@ -84,7 +88,7 @@ namespace AssetRipper.Classes
 			// if < 3.0.0 this asset doesn't exist
 
 			// 3.0.0 to 5.5.0 this asset is created by culling settings so it has set data already
-			if (OcclusionCullingSettings.HasReadPVSData(container.Version))
+			if (OcclusionCullingSettings.OcclusionCullingSettings.HasReadPVSData(container.Version))
 			{
 				return;
 			}
@@ -96,12 +100,12 @@ namespace AssetRipper.Classes
 			}
 
 			// if >= 5.5.0 and Release this asset doesn't containt renderers data so we need to create it
-			List<OcclusionCullingSettings> cullingSettings = new List<OcclusionCullingSettings>();
-			foreach (Object asset in File.Collection.FetchAssets())
+			List<OcclusionCullingSettings.OcclusionCullingSettings> cullingSettings = new List<OcclusionCullingSettings.OcclusionCullingSettings>();
+			foreach (Object.Object asset in File.Collection.FetchAssets())
 			{
 				if (asset.ClassID == ClassIDType.OcclusionCullingSettings)
 				{
-					OcclusionCullingSettings cullingSetting = (OcclusionCullingSettings)asset;
+					OcclusionCullingSettings.OcclusionCullingSettings cullingSetting = (OcclusionCullingSettings.OcclusionCullingSettings)asset;
 					if (cullingSetting.OcclusionCullingData.IsAsset(cullingSetting.File, this))
 					{
 						cullingSettings.Add(cullingSetting);
@@ -114,7 +118,7 @@ namespace AssetRipper.Classes
 			int maxPortal = Scenes.Max(j => j.IndexPortals + j.SizePortals);
 			Portals = new SceneObjectIdentifier[maxPortal];
 
-			foreach (OcclusionCullingSettings cullingSetting in cullingSettings)
+			foreach (OcclusionCullingSettings.OcclusionCullingSettings cullingSetting in cullingSettings)
 			{
 				int sceneIndex = Scenes.IndexOf(t => t.Scene == cullingSetting.SceneGUID);
 				if (sceneIndex == -1)
@@ -136,12 +140,12 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		private void SetIDs(IExportContainer container, OcclusionCullingSettings cullingSetting, OcclusionScene scene)
+		private void SetIDs(IExportContainer container, OcclusionCullingSettings.OcclusionCullingSettings cullingSetting, OcclusionScene scene)
 		{
 			for (int i = 0; i < cullingSetting.StaticRenderers.Length; i++)
 			{
-				PPtr<Renderer> prenderer = cullingSetting.StaticRenderers[i];
-				Renderer renderer = prenderer.FindAsset(cullingSetting.File);
+				PPtr<Renderer.Renderer> prenderer = cullingSetting.StaticRenderers[i];
+				Renderer.Renderer renderer = prenderer.FindAsset(cullingSetting.File);
 				StaticRenderers[scene.IndexRenderers + i] = CreateObjectID(container, renderer);
 			}
 
@@ -153,14 +157,14 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		private static SceneObjectIdentifier CreateObjectID(IExportContainer container, Object asset)
+		private static SceneObjectIdentifier CreateObjectID(IExportContainer container, Object.Object asset)
 		{
 			long lid = asset == null ? 0 : container.GetExportID(asset);
 			SceneObjectIdentifier soId = new SceneObjectIdentifier(lid, 0);
 			return soId;
 		}
 
-		public override string ExportPath => Path.Combine(AssetsKeyword, OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
+		public override string ExportPath => Path.Combine(AssetsKeyword, OcclusionCullingSettings.OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
 
 		public byte[] PVSData { get; set; }
 		public OcclusionScene[] Scenes { get; set; }

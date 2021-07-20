@@ -3,7 +3,7 @@ using SevenZip.Compression.LZMA;
 using System;
 using System.IO;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Utils
 {
 	public static class SevenZipHelper
 	{

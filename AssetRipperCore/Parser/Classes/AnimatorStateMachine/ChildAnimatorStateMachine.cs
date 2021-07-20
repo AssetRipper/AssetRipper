@@ -1,8 +1,13 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.IO.Asset;
 using AssetRipper.YAML;
 using System;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.AnimatorStateMachines
+namespace AssetRipper.Parser.Classes.AnimatorStateMachine
 {
 	public sealed class ChildAnimatorStateMachine : IYAMLExportable
 	{

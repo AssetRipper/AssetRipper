@@ -1,10 +1,12 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Classes.AnimationClip.Editor;
+using AssetRipper.Parser.IO.Asset.Reader;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Classes.AnimationClips
+namespace AssetRipper.Parser.Classes.AnimationClip.Clip
 {
 	public struct StreamedClip : IAssetReadable
 	{

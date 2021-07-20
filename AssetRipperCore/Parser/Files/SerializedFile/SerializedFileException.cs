@@ -1,7 +1,10 @@
-﻿using System;
+﻿using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Files.File;
+using System;
 using System.Text;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.SerializedFiles
+namespace AssetRipper.Parser.Files.SerializedFile
 {
 	public sealed class SerializedFileException : Exception
 	{

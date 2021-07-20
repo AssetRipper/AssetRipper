@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.AnimationClips
+﻿namespace AssetRipper.Parser.Classes.AnimationClip.GenericBinding
 {
 	public enum BindingCustomType : byte
 	{

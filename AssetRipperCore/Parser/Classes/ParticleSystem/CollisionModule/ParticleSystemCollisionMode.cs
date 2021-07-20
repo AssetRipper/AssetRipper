@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystems
+﻿namespace AssetRipper.Parser.Classes.ParticleSystem.CollisionModule
 {
 	/// <summary>
 	/// Whether to use 2D or 3D colliders for particle collisions.

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystemRenderers
+﻿namespace AssetRipper.Parser.Classes.ParticleSystemRenderer
 {
 	/// <summary>
 	/// How particles are aligned when rendered.

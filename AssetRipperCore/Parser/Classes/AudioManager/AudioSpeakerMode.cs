@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.AudioManagers
+﻿namespace AssetRipper.Parser.Classes.AudioManager
 {
 	public enum AudioSpeakerMode
 	{

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Animations
+﻿namespace AssetRipper.Parser.Classes.Animation
 {
 	public enum AnimationCullingType
 	{

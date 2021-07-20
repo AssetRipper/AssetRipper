@@ -1,8 +1,10 @@
-﻿using AssetRipper.Classes.CapsuleCollider2Ds;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.CapsuleCollider2D
 {
 	public sealed class CapsuleCollider2D : Collider2D
 	{

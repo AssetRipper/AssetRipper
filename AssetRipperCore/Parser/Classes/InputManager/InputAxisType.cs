@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.InputManagers
+﻿namespace AssetRipper.Parser.Classes.InputManager
 {
 	public enum InputAxisType
 	{

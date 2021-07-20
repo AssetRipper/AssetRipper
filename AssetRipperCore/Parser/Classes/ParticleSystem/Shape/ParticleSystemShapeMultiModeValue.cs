@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystems
+﻿namespace AssetRipper.Parser.Classes.ParticleSystem.Shape
 {
 	/// <summary>
 	/// The mode used to generate new points in a shape.

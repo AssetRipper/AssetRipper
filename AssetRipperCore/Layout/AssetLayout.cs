@@ -1,4 +1,10 @@
-﻿using System;
+﻿using AssetRipper.Layout.Categories;
+using AssetRipper.Layout.Classes;
+using AssetRipper.Layout.Classes.AnimationClip;
+using AssetRipper.Layout.Classes.GameObject;
+using AssetRipper.Layout.Classes.PrefabInstance;
+using AssetRipper.Parser.Asset;
+using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Layout

@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using System.Collections.Generic;
 
-namespace AssetRipper.Classes.AssetBundles
+namespace AssetRipper.Parser.Classes.AssetBundle
 {
 	public struct AssetInfo : IAssetReadable, IDependent
 	{
@@ -19,7 +23,7 @@ namespace AssetRipper.Classes.AssetBundles
 			Asset.Read(reader);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Asset, "asset");
 		}
@@ -27,6 +31,6 @@ namespace AssetRipper.Classes.AssetBundles
 		public int PreloadIndex { get; set; }
 		public int PreloadSize { get; set; }
 
-		public PPtr<Object> Asset;
+		public PPtr<Object.Object> Asset;
 	}
 }

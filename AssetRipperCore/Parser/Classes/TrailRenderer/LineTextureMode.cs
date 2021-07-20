@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.TrailRenderers
+﻿namespace AssetRipper.Parser.Classes.TrailRenderer
 {
 	public enum LineTextureMode
 	{

@@ -1,7 +1,9 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.Lights
+namespace AssetRipper.Parser.Classes.Light
 {
 	public struct LightmapBakeMode : IAssetReadable, IYAMLExportable
 	{

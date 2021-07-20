@@ -1,15 +1,23 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Classes.EditorBuildSettingss;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Converters.Project.Exporter;
 using AssetRipper.IO;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.Classes.EditorBuildSettings;
+using AssetRipper.Parser.Classes.EditorSettings;
+using AssetRipper.Parser.Classes.NavMeshProjectSettings;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Parser.Classes.Physics2DSettings;
+using AssetRipper.Parser.Classes.QualitySettings;
+using AssetRipper.Parser.Classes.UnityConnectSettings;
+using AssetRipper.Parser.Files.SerializedFile;
 using AssetRipper.Utils;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace AssetRipper.Project
+namespace AssetRipper.Structure.ProjectCollection.Collections
 {
 	public sealed class BuildSettingsExportCollection : ManagerExportCollection
 	{

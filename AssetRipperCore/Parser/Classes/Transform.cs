@@ -1,10 +1,18 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Classes;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Layout.Classes;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public class Transform : Component
 	{
@@ -56,7 +64,7 @@ namespace AssetRipper.Classes
 			return FindChild(path, 0);
 		}
 
-		public override Object Convert(IExportContainer container)
+		public override Object.Object Convert(IExportContainer container)
 		{
 			return TransformConverter.Convert(container, this);
 		}
@@ -105,15 +113,15 @@ namespace AssetRipper.Classes
 #endif
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			TransformLayout layout = context.Layout.Transform;
-			foreach (PPtr<Object> asset in context.FetchDependencies(Children, layout.ChildrenName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Children, layout.ChildrenName))
 			{
 				yield return asset;
 			}
@@ -143,7 +151,7 @@ namespace AssetRipper.Classes
 			foreach (PPtr<Transform> childPtr in Children)
 			{
 				Transform child = childPtr.GetAsset(File);
-				GameObject childGO = child.GameObject.GetAsset(File);
+				GameObject.GameObject childGO = child.GameObject.GetAsset(File);
 				if (childGO.Name == childName)
 				{
 					return separatorIndex == -1 ? child : child.FindChild(path, separatorIndex + 1);

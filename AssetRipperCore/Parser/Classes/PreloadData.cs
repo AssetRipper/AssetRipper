@@ -1,9 +1,13 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class PreloadData : NamedObject
 	{
@@ -25,7 +29,7 @@ namespace AssetRipper.Classes
 		{
 			base.Read(reader);
 
-			Assets = reader.ReadAssetArray<PPtr<Object>>();
+			Assets = reader.ReadAssetArray<PPtr<Object.Object>>();
 			if (HasDependencies(reader.Version))
 			{
 				Dependencies = reader.ReadStringArray();
@@ -36,14 +40,14 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object> asset in context.FetchDependencies(Assets, AssetsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Assets, AssetsName))
 			{
 				yield return asset;
 			}
@@ -54,7 +58,7 @@ namespace AssetRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		public PPtr<Object>[] Assets { get; set; }
+		public PPtr<Object.Object>[] Assets { get; set; }
 		public string[] Dependencies { get; set; }
 		public bool ExplicitDataLayout { get; set; }
 

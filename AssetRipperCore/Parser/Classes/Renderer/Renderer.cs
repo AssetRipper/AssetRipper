@@ -1,10 +1,15 @@
-using AssetRipper.Classes.MeshRenderers;
-using AssetRipper.Classes.Renderers;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Renderer
 {
 	public abstract class Renderer : Component
 	{
@@ -262,9 +267,9 @@ namespace AssetRipper.Classes
 
 		public string FindMaterialPropertyNameByCRC28(uint crc)
 		{
-			foreach (PPtr<Material> materialPtr in Materials)
+			foreach (PPtr<Material.Material> materialPtr in Materials)
 			{
-				Material material = materialPtr.FindAsset(File);
+				Material.Material material = materialPtr.FindAsset(File);
 				if (material == null)
 				{
 					continue;
@@ -343,7 +348,7 @@ namespace AssetRipper.Classes
 
 			if (IsMaterialFirst(reader.Version))
 			{
-				Materials = reader.ReadAssetArray<PPtr<Material>>();
+				Materials = reader.ReadAssetArray<PPtr<Material.Material>>();
 			}
 
 			if (HasLightmapTilingOffset(reader.Version, reader.Flags))
@@ -357,7 +362,7 @@ namespace AssetRipper.Classes
 
 			if (!IsMaterialFirst(reader.Version))
 			{
-				Materials = reader.ReadAssetArray<PPtr<Material>>();
+				Materials = reader.ReadAssetArray<PPtr<Material.Material>>();
 			}
 
 			if (HasStaticBatchInfo(reader.Version))
@@ -486,14 +491,14 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object> asset in context.FetchDependencies(Materials, MaterialsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Materials, MaterialsName))
 			{
 				yield return asset;
 			}
@@ -717,7 +722,7 @@ namespace AssetRipper.Classes
 		public int RendererPriority { get; set; }
 		public ushort LightmapIndex { get; set; }
 		public ushort LightmapIndexDynamic { get; set; }
-		public PPtr<Material>[] Materials { get; set; }
+		public PPtr<Material.Material>[] Materials { get; set; }
 		public uint[] SubsetIndices { get; set; }
 #if UNIVERSAL
 		public float ScaleInLightmap { get; set; }
@@ -778,7 +783,7 @@ namespace AssetRipper.Classes
 		/// LightProbeAnchor previously
 		/// </summary>
 		public PPtr<Transform> ProbeAnchor;
-		public PPtr<GameObject> LightProbeVolumeOverride;
+		public PPtr<GameObject.GameObject> LightProbeVolumeOverride;
 #if UNIVERSAL
 		/// <summary>
 		/// EnlightenSystemBuildParameters previously

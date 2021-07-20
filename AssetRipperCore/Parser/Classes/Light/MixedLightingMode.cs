@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Lights
+﻿namespace AssetRipper.Parser.Classes.Light
 {
 	/// <summary>
 	/// Enum describing what lighting mode to be used with Mixed lights.

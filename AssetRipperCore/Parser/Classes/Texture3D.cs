@@ -1,14 +1,16 @@
-using AssetRipper.Classes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Textures;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Logging;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Texture2D;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System;
 using System.Collections.Generic;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class Texture3D : Texture
 	{

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Cameras
+﻿namespace AssetRipper.Parser.Classes.Camera
 {
 	/// <summary>
 	/// Rendering path of a Camera.

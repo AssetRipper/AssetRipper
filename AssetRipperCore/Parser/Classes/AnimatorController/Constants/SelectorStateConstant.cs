@@ -1,9 +1,11 @@
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System;
 
-namespace AssetRipper.Classes.AnimatorControllers
+namespace AssetRipper.Parser.Classes.AnimatorController.Constants
 {
 	public struct SelectorStateConstant : IAssetReadable, IYAMLExportable
 	{

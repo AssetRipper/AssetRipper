@@ -1,13 +1,18 @@
-﻿using AssetRipper.Classes.AnimatorControllers;
-using AssetRipper.Converters;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.AnimatorController.Constants;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.BlendTrees
+namespace AssetRipper.Parser.Classes.BlendTree
 {
 	public sealed class ChildMotion : IYAMLExportable
 	{
-		public ChildMotion(VirtualSerializedFile file, AnimatorController controller, StateConstant state, int nodeIndex, int childIndex)
+		public ChildMotion(VirtualSerializedFile file, AnimatorController.AnimatorController controller, StateConstant state, int nodeIndex, int childIndex)
 		{
 			BlendTreeConstant treeConstant = state.GetBlendTree();
 			BlendTreeNodeConstant node = treeConstant.NodeArray[nodeIndex].Instance;

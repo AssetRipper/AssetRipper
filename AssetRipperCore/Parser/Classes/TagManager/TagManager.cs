@@ -1,11 +1,14 @@
-using AssetRipper;
-using AssetRipper.Classes.TagManagers;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.TagManager
 {
 	public sealed class TagManager : GlobalGameManager
 	{

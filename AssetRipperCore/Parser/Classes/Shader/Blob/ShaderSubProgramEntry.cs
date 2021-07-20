@@ -1,4 +1,8 @@
-﻿namespace AssetRipper.Classes.Shaders
+﻿using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+
+namespace AssetRipper.Parser.Classes.Shader.Blob
 {
 	public struct ShaderSubProgramEntry : IAssetReadable, IAssetWritable
 	{

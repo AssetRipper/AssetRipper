@@ -1,12 +1,13 @@
-﻿using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.Files.SerializedFile.Parser;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper
+namespace AssetRipper.Structure.GameStructure
 {
 	internal sealed class GameProcessorContext
 	{
-		public GameProcessorContext(GameCollection collection)
+		public GameProcessorContext(GameCollection.GameCollection collection)
 		{
 			Collection = collection;
 		}
@@ -50,7 +51,7 @@ namespace AssetRipper
 			m_files.Remove(file);
 		}
 
-		public GameCollection Collection { get; }
+		public GameCollection.GameCollection Collection { get; }
 
 		private Dictionary<SerializedFile, SerializedFileScheme> m_files = new Dictionary<SerializedFile, SerializedFileScheme>();
 		private readonly HashSet<string> m_knownFiles = new HashSet<string>();

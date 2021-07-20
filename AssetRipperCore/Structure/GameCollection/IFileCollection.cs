@@ -1,8 +1,12 @@
-using AssetRipper.Classes;
-using AssetRipper.Game;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Parser.Files.ResourceFile;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Structure.GameCollection.Assembly;
 using System.Collections.Generic;
 
-namespace AssetRipper
+namespace AssetRipper.Structure.GameCollection
 {
 	public interface IFileCollection
 	{

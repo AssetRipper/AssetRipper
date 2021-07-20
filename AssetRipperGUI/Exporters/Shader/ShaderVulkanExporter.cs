@@ -1,7 +1,9 @@
 using AssetRipper;
-using AssetRipper.Classes.Shaders;
-using AssetRipper.Converters.Shaders;
+using AssetRipper.Converters.Classes.Shader;
 using AssetRipper.IO;
+using AssetRipper.Parser.Classes.Shader;
+using AssetRipper.Parser.Classes.Shader.SerializedShader;
+using AssetRipper.Parser.IO;
 using Smolv;
 using SpirV;
 using System;

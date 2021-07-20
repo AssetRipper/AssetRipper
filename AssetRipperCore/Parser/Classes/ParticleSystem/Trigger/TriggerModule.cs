@@ -1,8 +1,11 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.ParticleSystems
+namespace AssetRipper.Parser.Classes.ParticleSystem.Trigger
 {
 	public sealed class TriggerModule : ParticleSystemModule, IDependent
 	{
@@ -33,7 +36,7 @@ namespace AssetRipper.Classes.ParticleSystems
 			RadiusScale = reader.ReadSingle();
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(CollisionShape0, CollisionShape0Name);
 			yield return context.FetchDependency(CollisionShape1, CollisionShape1Name);

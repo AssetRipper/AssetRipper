@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.GUIStyles
+﻿namespace AssetRipper.Parser.Classes.Misc.Serializable.GUIStyle
 {
 	public enum TextClipping
 	{

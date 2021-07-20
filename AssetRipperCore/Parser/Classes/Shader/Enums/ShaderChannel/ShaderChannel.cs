@@ -1,6 +1,8 @@
-﻿using System;
+﻿using AssetRipper.Parser.Classes.Shader.Enums.VertexFormat;
+using System;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.Shaders
+namespace AssetRipper.Parser.Classes.Shader.Enums.ShaderChannel
 {
 	public enum ShaderChannel
 	{
@@ -47,18 +49,18 @@ namespace AssetRipper.Classes.Shaders
 			}
 		}
 
-		public static VertexFormat GetVertexFormat(this ShaderChannel _this, Version version)
+		public static VertexFormat.VertexFormat GetVertexFormat(this ShaderChannel _this, Version version)
 		{
 			switch (_this)
 			{
 				case ShaderChannel.Vertex:
-					return VertexFormat.Float;
+					return VertexFormat.VertexFormat.Float;
 				case ShaderChannel.Normal:
-					return VertexFormat.Float;
+					return VertexFormat.VertexFormat.Float;
 				case ShaderChannel.Tangent:
-					return VertexFormat.Float;
+					return VertexFormat.VertexFormat.Float;
 				case ShaderChannel.Color:
-					return VertexFormatExtensions.VertexFormat2019Relevant(version) ? VertexFormat.Byte : VertexFormat.Color;
+					return VertexFormatExtensions.VertexFormat2019Relevant(version) ? VertexFormat.VertexFormat.Byte : VertexFormat.VertexFormat.Color;
 
 				case ShaderChannel.UV0:
 				case ShaderChannel.UV1:
@@ -68,12 +70,12 @@ namespace AssetRipper.Classes.Shaders
 				case ShaderChannel.UV5:
 				case ShaderChannel.UV6:
 				case ShaderChannel.UV7:
-					return VertexFormat.Float;
+					return VertexFormat.VertexFormat.Float;
 
 				case ShaderChannel.SkinWeight:
-					return VertexFormat.Float;
+					return VertexFormat.VertexFormat.Float;
 				case ShaderChannel.SkinBoneIndex:
-					return VertexFormat.Int;
+					return VertexFormat.VertexFormat.Int;
 
 				default:
 					throw new Exception($"Unsupported channel type {_this}");
@@ -114,7 +116,7 @@ namespace AssetRipper.Classes.Shaders
 
 		public static byte GetStride(this ShaderChannel _this, Version version)
 		{
-			VertexFormat format = _this.GetVertexFormat(version);
+			VertexFormat.VertexFormat format = _this.GetVertexFormat(version);
 			int dimention = _this.GetDimention(version);
 			return format.CalculateStride(version, dimention);
 		}

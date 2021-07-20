@@ -1,10 +1,16 @@
-using AssetRipper.Classes.NavMeshDatas;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.NavMeshData
 {
 	/// <summary>
 	/// Successor of NavMesh
@@ -59,14 +65,14 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object> asset in context.FetchDependencies(Heightmaps, HeightmapsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Heightmaps, HeightmapsName))
 			{
 				yield return asset;
 			}
@@ -97,7 +103,7 @@ namespace AssetRipper.Classes
 			return HasSourceBounds(version) ? Rotation : Quaternionf.Zero;
 		}
 
-		public override string ExportPath => Path.Combine(AssetsKeyword, OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
+		public override string ExportPath => Path.Combine(AssetsKeyword, OcclusionCullingSettings.OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
 
 		public NavMeshTileData[] NavMeshTiles { get; set; }
 		public HeightmapData[] Heightmaps { get; set; }

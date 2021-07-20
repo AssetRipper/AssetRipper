@@ -1,7 +1,10 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.ParticleSystem.Curve;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.ParticleSystems
+namespace AssetRipper.Parser.Classes.ParticleSystem.CustomDataModule
 {
 	public sealed class CustomDataModule : ParticleSystemModule
 	{
@@ -12,7 +15,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public CustomDataModule(bool _)
 		{
 			VectorComponentCount0 = 4;
-			Color0 = new MinMaxGradient(true);
+			Color0 = new MinMaxGradient.MinMaxGradient(true);
 			Vector0_0 = new MinMaxCurve(0.0f);
 			Vector0_1 = new MinMaxCurve(0.0f);
 			Vector0_2 = new MinMaxCurve(0.0f);
@@ -26,7 +29,7 @@ namespace AssetRipper.Classes.ParticleSystems
 #endif
 
 			VectorComponentCount0 = 4;
-			Color1 = new MinMaxGradient(true);
+			Color1 = new MinMaxGradient.MinMaxGradient(true);
 			Vector1_0 = new MinMaxCurve(0.0f);
 			Vector1_1 = new MinMaxCurve(0.0f);
 			Vector1_2 = new MinMaxCurve(0.0f);
@@ -192,12 +195,12 @@ namespace AssetRipper.Classes.ParticleSystems
 		public const string Vector12Name = "vector1_2";
 		public const string Vector13Name = "vector1_3";
 
-		public MinMaxGradient Color0;
+		public MinMaxGradient.MinMaxGradient Color0;
 		public MinMaxCurve Vector0_0;
 		public MinMaxCurve Vector0_1;
 		public MinMaxCurve Vector0_2;
 		public MinMaxCurve Vector0_3;
-		public MinMaxGradient Color1;
+		public MinMaxGradient.MinMaxGradient Color1;
 		public MinMaxCurve Vector1_0;
 		public MinMaxCurve Vector1_1;
 		public MinMaxCurve Vector1_2;

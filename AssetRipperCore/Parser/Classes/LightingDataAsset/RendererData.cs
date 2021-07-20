@@ -1,9 +1,14 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.LightingDataAssets
+namespace AssetRipper.Parser.Classes.LightingDataAsset
 {
 	public struct RendererData : IAssetReadable, IYAMLExportable, IDependent
 	{
@@ -27,7 +32,7 @@ namespace AssetRipper.Classes.LightingDataAssets
 			}
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(UVMesh, UvMeshName);
 		}
@@ -61,7 +66,7 @@ namespace AssetRipper.Classes.LightingDataAssets
 		public const string LightmapSTDynamicName = "lightmapSTDynamic";
 		public const string ExplicitProbeSetHashName = "explicitProbeSetHash";
 
-		public PPtr<Mesh> UVMesh;
+		public PPtr<Mesh.Mesh> UVMesh;
 		public Vector4f TerrainDynamicUVST;
 		public Vector4f TerrainChunkDynamicUVST;
 		public Vector4f LightmapST;

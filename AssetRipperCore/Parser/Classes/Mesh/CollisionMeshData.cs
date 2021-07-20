@@ -1,8 +1,11 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using System;
 using System.Linq;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.Meshes
+namespace AssetRipper.Parser.Classes.Mesh
 {
 	public struct CollisionMeshData : IAssetReadable, IAssetWritable
 	{

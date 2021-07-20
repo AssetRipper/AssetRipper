@@ -1,6 +1,7 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Game;
+using AssetRipper.Parser.IO.Asset;
 
-namespace AssetRipper.Layout
+namespace AssetRipper.Layout.Classes.Misc.Serializable.GUIStyle
 {
 	public sealed class GUIStyleStateLayout
 	{

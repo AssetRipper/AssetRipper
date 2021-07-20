@@ -1,11 +1,14 @@
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Extensions;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.AnimatorControllers
+namespace AssetRipper.Parser.Classes.AnimatorController.Constants
 {
 	public struct StateConstant : IAssetReadable, IYAMLExportable
 	{
@@ -146,7 +149,7 @@ namespace AssetRipper.Classes.AnimatorControllers
 				BlendTreeNodeConstant node = GetBlendTree().NodeArray[nodeIndex].Instance;
 				if (node.IsBlendTree)
 				{
-					BlendTree blendTree = BlendTree.CreateVirtualInstance(file, controller, this, nodeIndex);
+					BlendTree.BlendTree blendTree = BlendTree.BlendTree.CreateVirtualInstance(file, controller, this, nodeIndex);
 					return blendTree.File.CreatePPtr(blendTree).CastTo<Motion>();
 				}
 				else

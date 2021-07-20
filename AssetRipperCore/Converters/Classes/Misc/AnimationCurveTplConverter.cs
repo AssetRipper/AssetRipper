@@ -1,9 +1,10 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Layout;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Layout.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Misc.Serializable.AnimationCurveTpl;
+using AssetRipper.Parser.IO.Asset;
 using System.Linq;
 
-namespace AssetRipper.Converters.Misc
+namespace AssetRipper.Converters.Classes.Misc
 {
 	public static class AnimationCurveTplConverter
 	{

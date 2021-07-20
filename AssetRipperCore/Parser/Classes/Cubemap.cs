@@ -1,13 +1,20 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Classes.Cubemap;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Meta.Importers.Texture;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	/// <summary>
 	/// CubemapTexture previously
 	/// </summary>
-	public sealed class Cubemap : Texture2D
+	public sealed class Cubemap : Texture2D.Texture2D
 	{
 		public Cubemap(AssetInfo assetInfo) :
 			base(assetInfo)
@@ -30,21 +37,21 @@ namespace AssetRipper.Classes
 
 			if (HasSourceTextures(reader.Version))
 			{
-				SourceTextures = reader.ReadAssetArray<PPtr<Texture2D>>();
+				SourceTextures = reader.ReadAssetArray<PPtr<Texture2D.Texture2D>>();
 				reader.AlignStream();
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			if (HasSourceTextures(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(SourceTextures, SourceTexturesName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(SourceTextures, SourceTexturesName))
 				{
 					yield return asset;
 				}
@@ -58,7 +65,7 @@ namespace AssetRipper.Classes
 			return node;
 		}
 
-		public PPtr<Texture2D>[] SourceTextures { get; set; }
+		public PPtr<Texture2D.Texture2D>[] SourceTextures { get; set; }
 
 		public const string SourceTexturesName = "m_SourceTextures";
 	}

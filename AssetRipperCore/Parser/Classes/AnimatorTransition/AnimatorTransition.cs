@@ -1,12 +1,15 @@
-using AssetRipper.Classes.AnimatorControllers;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.AnimatorController.Constants;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.Files.SerializedFile;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.AnimatorTransition
 {
 	public sealed class AnimatorTransition : AnimatorTransitionBase
 	{

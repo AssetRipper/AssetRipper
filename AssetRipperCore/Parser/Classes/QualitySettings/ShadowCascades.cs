@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.QualitySettingss
+﻿namespace AssetRipper.Parser.Classes.QualitySettings
 {
 	public enum ShadowCascades
 	{

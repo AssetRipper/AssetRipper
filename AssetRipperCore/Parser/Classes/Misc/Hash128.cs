@@ -1,10 +1,15 @@
-﻿using AssetRipper.BundleFiles;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.IO.Endian;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.BundleFile.IO;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.Files.SerializedFile.IO;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.Misc
+namespace AssetRipper.Parser.Classes.Misc
 {
 	public struct Hash128 : IAsset, ISerializedReadable, ISerializedWritable, IBundleReadable
 	{

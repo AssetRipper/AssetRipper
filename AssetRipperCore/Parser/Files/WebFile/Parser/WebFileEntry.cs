@@ -1,6 +1,8 @@
 ﻿using AssetRipper.IO.Endian;
+using AssetRipper.Parser.Files.File.Parser;
+using AssetRipper.Parser.Utils;
 
-namespace AssetRipper.WebFiles
+namespace AssetRipper.Parser.Files.WebFile.Parser
 {
 	public class WebFileEntry : FileEntry, IEndianReadable
 	{

@@ -1,10 +1,14 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class NetworkManager : GlobalGameManager
 	{
@@ -17,7 +21,7 @@ namespace AssetRipper.Classes
 			this(assetInfo)
 		{
 			Sendrate = 15.0f;
-			m_assetToPrefab = new Dictionary<UnityGUID, PPtr<GameObject>>();
+			m_assetToPrefab = new Dictionary<UnityGUID, PPtr<GameObject.GameObject>>();
 		}
 
 		public static NetworkManager CreateVirtualInstance(VirtualSerializedFile virtualFile)
@@ -36,18 +40,18 @@ namespace AssetRipper.Classes
 
 			DebugLevel = reader.ReadInt32();
 			Sendrate = reader.ReadSingle();
-			m_assetToPrefab = new Dictionary<UnityGUID, PPtr<GameObject>>();
+			m_assetToPrefab = new Dictionary<UnityGUID, PPtr<GameObject.GameObject>>();
 			m_assetToPrefab.Read(reader);
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object> asset in context.FetchDependencies(AssetToPrefab.Values, AssetToPrefabName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(AssetToPrefab.Values, AssetToPrefabName))
 			{
 				yield return asset;
 			}
@@ -64,12 +68,12 @@ namespace AssetRipper.Classes
 
 		public int DebugLevel { get; set; }
 		public float Sendrate { get; set; }
-		public IReadOnlyDictionary<UnityGUID, PPtr<GameObject>> AssetToPrefab => m_assetToPrefab;
+		public IReadOnlyDictionary<UnityGUID, PPtr<GameObject.GameObject>> AssetToPrefab => m_assetToPrefab;
 
 		public const string DebugLevelName = "m_DebugLevel";
 		public const string SendrateName = "m_Sendrate";
 		public const string AssetToPrefabName = "m_AssetToPrefab";
 
-		private Dictionary<UnityGUID, PPtr<GameObject>> m_assetToPrefab;
+		private Dictionary<UnityGUID, PPtr<GameObject.GameObject>> m_assetToPrefab;
 	}
 }

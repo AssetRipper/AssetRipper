@@ -1,14 +1,18 @@
-using AssetRipper.Classes.Objects;
-using AssetRipper.Converters;
-using AssetRipper.Game.Assembly;
-using AssetRipper.Layout;
+using AssetRipper.Converters.Project;
+using AssetRipper.Layout.Classes;
 using AssetRipper.Logging;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Parser.Files.SerializedFile.Parser;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Structure.GameCollection.Assembly.Serializable;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class MonoBehaviour : Behaviour
 	{
@@ -83,9 +87,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -98,7 +102,7 @@ namespace AssetRipper.Classes
 
 			if (Structure != null)
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(Structure, Structure.Type.Name))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Structure, Structure.Type.Name))
 				{
 					yield return asset;
 				}
@@ -140,7 +144,7 @@ namespace AssetRipper.Classes
 #endif
 			return HideFlags.None;
 		}
-		private PPtr<Object> GetGeneratorAsset(IExportContainer container)
+		private PPtr<Object.Object> GetGeneratorAsset(IExportContainer container)
 		{
 #if UNIVERSAL
 			if (container.Layout.MonoBehaviour.HasGeneratorAsset)
@@ -221,7 +225,7 @@ namespace AssetRipper.Classes
 #endif
 
 #if UNIVERSAL
-		public PPtr<Object> GeneratorAsset;
+		public PPtr<Object.Object> GeneratorAsset;
 #endif
 		public PPtr<MonoScript> Script;
 	}

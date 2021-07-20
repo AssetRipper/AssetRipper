@@ -1,8 +1,12 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class TerrainCollider : Collider
 	{
@@ -33,9 +37,9 @@ namespace AssetRipper.Classes
 			EnableTreeColliders = reader.ReadBoolean();
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -59,7 +63,7 @@ namespace AssetRipper.Classes
 		public const string TerrainDataName = "m_TerrainData";
 		public const string EnableTreeCollidersName = "m_EnableTreeColliders";
 
-		public PPtr<TerrainData> TerrainData;
+		public PPtr<TerrainData.TerrainData> TerrainData;
 
 		protected override bool IncludesMaterial => HasTerrainMaterial(File.Version);
 		protected override bool IncludesIsTrigger => false;

@@ -1,11 +1,21 @@
-using AssetRipper.Classes.AnimatorControllers;
-using AssetRipper.Converters;
-using AssetRipper.Project;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.AnimatorController.Constants;
+using AssetRipper.Parser.Classes.AnimatorController.Editor.AnimatorControllerLayer;
+using AssetRipper.Parser.Classes.AnimatorController.Editor.AnimatorControllerParameter;
+using AssetRipper.Parser.Classes.AnimatorController.State;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
+using AssetRipper.Structure.ProjectCollection.Collections;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.AnimatorController
 {
 	public sealed class AnimatorController : RuntimeAnimatorController
 	{
@@ -63,7 +73,7 @@ namespace AssetRipper.Classes
 			Controller.Read(reader);
 			m_TOS.Clear();
 			m_TOS.Read(reader);
-			AnimationClips = reader.ReadAssetArray<PPtr<AnimationClip>>();
+			AnimationClips = reader.ReadAssetArray<PPtr<AnimationClip.AnimationClip>>();
 
 			if (HasStateMachineBehaviourVectorDescription(reader.Version))
 			{
@@ -85,20 +95,20 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object> asset in context.FetchDependencies(AnimationClips, AnimationClipsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(AnimationClips, AnimationClipsName))
 			{
 				yield return asset;
 			}
 			if (HasStateMachineBehaviourVectorDescription(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(StateMachineBehaviours, StateMachineBehavioursName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(StateMachineBehaviours, StateMachineBehavioursName))
 				{
 					yield return asset;
 				}
@@ -136,9 +146,9 @@ namespace AssetRipper.Classes
 			return Array.Empty<PPtr<MonoBehaviour>>();
 		}
 
-		public override bool IsContainsAnimationClip(AnimationClip clip)
+		public override bool IsContainsAnimationClip(AnimationClip.AnimationClip clip)
 		{
-			foreach (PPtr<AnimationClip> clipPtr in AnimationClips)
+			foreach (PPtr<AnimationClip.AnimationClip> clipPtr in AnimationClips)
 			{
 				if (clipPtr.IsAsset(File, clip))
 				{
@@ -162,7 +172,7 @@ namespace AssetRipper.Classes
 			for (int i = 0; i < Controller.LayerArray.Length; i++)
 			{
 				int stateMachineIndex = Controller.LayerArray[i].Instance.StateMachineIndex;
-				AnimatorStateMachine stateMachine = collection.StateMachines[stateMachineIndex];
+				AnimatorStateMachine.AnimatorStateMachine stateMachine = collection.StateMachines[stateMachineIndex];
 				layers[i] = new AnimatorControllerLayer(stateMachine, this, i);
 			}
 
@@ -188,7 +198,7 @@ namespace AssetRipper.Classes
 
 		public uint ControllerSize { get; set; }
 		public IReadOnlyDictionary<uint, string> TOS => m_TOS;
-		public PPtr<AnimationClip>[] AnimationClips { get; set; }
+		public PPtr<AnimationClip.AnimationClip>[] AnimationClips { get; set; }
 		public PPtr<MonoBehaviour>[] StateMachineBehaviours { get; set; }
 		public bool MultiThreadedStateMachine { get; set; }
 

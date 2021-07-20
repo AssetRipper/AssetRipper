@@ -1,20 +1,28 @@
-using AssetRipper;
-using AssetRipper.Classes;
-using AssetRipper.Converters;
-using AssetRipper.Game;
-using AssetRipper.Game.Assembly;
+using AssetRipper.Converters.Project;
 using AssetRipper.IO.Smart;
 using AssetRipper.Layout;
 using AssetRipper.Logging;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.ArchiveFile;
+using AssetRipper.Parser.Files.BundleFile;
+using AssetRipper.Parser.Files.File;
+using AssetRipper.Parser.Files.File.Parser;
+using AssetRipper.Parser.Files.ResourceFile;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.Files.SerializedFile.Parser;
+using AssetRipper.Parser.Files.WebFile;
+using AssetRipper.Parser.Utils;
+using AssetRipper.Structure.GameCollection.Assembly;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MonoManager = AssetRipper.Game.Assembly.Mono.MonoManager;
-using Object = AssetRipper.Classes.Object;
+using MonoManager = AssetRipper.Structure.GameCollection.Assembly.Mono.MonoManager;
+using Object = AssetRipper.Parser.Classes.Object.Object;
 
-namespace AssetRipper
+namespace AssetRipper.Structure.GameCollection
 {
 	public sealed class GameCollection : FileList, IFileCollection, IDisposable
 	{

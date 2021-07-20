@@ -1,6 +1,6 @@
 using System;
 
-namespace AssetRipper.Classes.ParticleSystems
+namespace AssetRipper.Parser.Classes.ParticleSystem.SubEmitter
 {
 	/// <summary>
 	/// The properties of sub-emitter particles.

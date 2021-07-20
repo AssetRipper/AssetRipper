@@ -1,13 +1,14 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Classes.TextureImporters;
-using AssetRipper.Classes.Textures;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Meta.Importers;
+using AssetRipper.Parser.Classes.Meta.Importers.Texture;
+using AssetRipper.Parser.Classes.Texture2D;
 using System;
 
-namespace AssetRipper.Converters
+namespace AssetRipper.Converters.Classes.Texture2D
 {
 	public static class Texture2DConverter
 	{
-		public static TextureImporter GenerateTextureImporter(IExportContainer container, Texture2D origin)
+		public static TextureImporter GenerateTextureImporter(IExportContainer container, Parser.Classes.Texture2D.Texture2D origin)
 		{
 			TextureImporter instance = new TextureImporter(container.ExportLayout);
 			instance.EnableMipMap = origin.MipCount > 1 ? 1 : 0;
@@ -24,7 +25,7 @@ namespace AssetRipper.Converters
 			return instance;
 		}
 
-		public static IHVImageFormatImporter GenerateIHVImporter(IExportContainer container, Texture2D origin)
+		public static IHVImageFormatImporter GenerateIHVImporter(IExportContainer container, Parser.Classes.Texture2D.Texture2D origin)
 		{
 			IHVImageFormatImporter instance = new IHVImageFormatImporter(container.ExportLayout);
 			instance.IsReadable = origin.IsReadable;

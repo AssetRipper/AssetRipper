@@ -1,4 +1,7 @@
-﻿namespace AssetRipper.Classes
+﻿using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.IO.Asset.Reader;
+
+namespace AssetRipper.Parser.Classes.Utils.Extensions
 {
 	public static class AssetReaderExtensions
 	{

@@ -1,4 +1,8 @@
-﻿namespace AssetRipper.Layout
+﻿using AssetRipper.Parser.Files.File;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+
+namespace AssetRipper.Layout
 {
 	public sealed class LayoutInfo
 	{

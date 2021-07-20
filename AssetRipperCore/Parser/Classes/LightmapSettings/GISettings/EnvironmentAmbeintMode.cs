@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.LightmapSettingss
+﻿namespace AssetRipper.Parser.Classes.LightmapSettings.GISettings
 {
 	public enum EnvironmentAmbeintMode
 	{

@@ -1,11 +1,14 @@
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.AnimatorControllers
+namespace AssetRipper.Parser.Classes.AnimatorController.Constants
 {
 	public struct StateMachineConstant : IAssetReadable, IYAMLExportable
 	{
@@ -40,7 +43,7 @@ namespace AssetRipper.Classes.AnimatorControllers
 			throw new NotSupportedException();
 		}
 
-		public PPtr<AnimatorTransition>[] CreateEntryTransitions(VirtualSerializedFile file, Parameters parameters)
+		public PPtr<AnimatorTransition.AnimatorTransition>[] CreateEntryTransitions(VirtualSerializedFile file, Parameters parameters)
 		{
 			if (HasConstantArray(parameters.Version))
 			{
@@ -49,11 +52,11 @@ namespace AssetRipper.Classes.AnimatorControllers
 					SelectorStateConstant selector = selectorPtr.Instance;
 					if (selector.FullPathID == parameters.ID && selector.IsEntry)
 					{
-						PPtr<AnimatorTransition>[] transitions = new PPtr<AnimatorTransition>[selector.TransitionConstantArray.Length - 1];
+						PPtr<AnimatorTransition.AnimatorTransition>[] transitions = new PPtr<AnimatorTransition.AnimatorTransition>[selector.TransitionConstantArray.Length - 1];
 						for (int i = 0; i < selector.TransitionConstantArray.Length - 1; i++)
 						{
 							SelectorTransitionConstant selectorTrans = selector.TransitionConstantArray[i].Instance;
-							AnimatorTransition.Parameters transParameters = new AnimatorTransition.Parameters
+							AnimatorTransition.AnimatorTransition.Parameters transParameters = new AnimatorTransition.AnimatorTransition.Parameters
 							{
 								StateMachine = this,
 								States = parameters.States,
@@ -61,14 +64,14 @@ namespace AssetRipper.Classes.AnimatorControllers
 								Transition = selectorTrans,
 								Version = parameters.Version,
 							};
-							AnimatorTransition transition = AnimatorTransition.CreateVirtualInstance(file, transParameters);
+							AnimatorTransition.AnimatorTransition transition = AnimatorTransition.AnimatorTransition.CreateVirtualInstance(file, transParameters);
 							transitions[i] = transition.File.CreatePPtr(transition);
 						}
 						return transitions;
 					}
 				}
 			}
-			return Array.Empty<PPtr<AnimatorTransition>>();
+			return Array.Empty<PPtr<AnimatorTransition.AnimatorTransition>>();
 		}
 
 		/// <summary>

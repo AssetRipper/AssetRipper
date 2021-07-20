@@ -1,11 +1,15 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.Extensions;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.Avatars
+namespace AssetRipper.Parser.Classes.Avatar
 {
 	public struct AvatarConstant : IAssetReadable, IYAMLExportable
 	{

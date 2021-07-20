@@ -1,7 +1,9 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.NavMeshDatas
+namespace AssetRipper.Parser.Classes.NavMeshData
 {
 	public struct NavMeshParams : IAssetReadable, IYAMLExportable
 	{

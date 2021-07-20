@@ -1,7 +1,8 @@
 ﻿using AssetRipper.IO.Endian;
 using System;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.BundleFiles
+namespace AssetRipper.Parser.Files.BundleFile.Parser.Header
 {
 	public sealed class BundleHeader
 	{
@@ -59,7 +60,7 @@ namespace AssetRipper.BundleFiles
 			Version = (BundleVersion)reader.ReadInt32();
 			UnityWebBundleVersion = reader.ReadStringZeroTerm();
 			string engineVersion = reader.ReadStringZeroTerm();
-			UnityWebMinimumRevision = AssetRipper.Version.Parse(engineVersion);
+			UnityWebMinimumRevision = File.Version.Version.Parse(engineVersion);
 
 			switch (Signature)
 			{

@@ -1,6 +1,7 @@
-﻿using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset.Reader;
 
-namespace AssetRipper.Classes.AnimationClips
+namespace AssetRipper.Parser.Classes.AnimationClip
 {
 	public struct HandPose : IAssetReadable
 	{

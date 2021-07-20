@@ -1,7 +1,9 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.CompositeCollider2Ds
+namespace AssetRipper.Parser.Classes.CompositeCollider2D
 {
 	public struct IntPoint : IAssetReadable, IYAMLExportable
 	{

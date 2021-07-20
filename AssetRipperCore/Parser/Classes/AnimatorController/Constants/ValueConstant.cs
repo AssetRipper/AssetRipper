@@ -1,4 +1,8 @@
-﻿namespace AssetRipper.Classes.AnimatorControllers
+﻿using AssetRipper.Parser.Classes.AnimatorController.Editor.AnimatorControllerParameter;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+
+namespace AssetRipper.Parser.Classes.AnimatorController.Constants
 {
 	public struct ValueConstant : IAssetReadable
 	{

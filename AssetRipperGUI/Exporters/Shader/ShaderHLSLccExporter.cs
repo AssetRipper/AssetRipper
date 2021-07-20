@@ -1,8 +1,11 @@
 using AssetRipper;
-using AssetRipper.Classes.Shaders;
+using AssetRipper.Parser.Classes.Shader;
+using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Parser.IO;
 using DXShaderRestorer;
 using HLSLccWrapper;
 using System.IO;
+using Shader = HLSLccWrapper.Shader;
 
 namespace AssetRipperGUI.Exporters
 {

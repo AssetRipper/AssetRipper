@@ -1,10 +1,13 @@
-﻿using AssetRipper.Classes.ShaderVariantCollections;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.ShaderVariantCollection
 {
 	public sealed class ShaderVariantCollection : NamedObject
 	{
@@ -17,26 +20,26 @@ namespace AssetRipper.Classes
 		{
 			base.Read(reader);
 
-			m_shaders = reader.ReadKVPTTArray<PPtr<Shader>, ShaderInfo>();
+			m_shaders = reader.ReadKVPTTArray<PPtr<Shader.Shader>, ShaderInfo>();
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object> asset in context.FetchDependencies(m_shaders.Select(t => t.Key), ShadersName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(m_shaders.Select(t => t.Key), ShadersName))
 			{
 				yield return asset;
 			}
 		}
 
-		public IReadOnlyDictionary<PPtr<Shader>, ShaderInfo> GetShaders()
+		public IReadOnlyDictionary<PPtr<Shader.Shader>, ShaderInfo> GetShaders()
 		{
-			Dictionary<PPtr<Shader>, ShaderInfo> shaders = new Dictionary<PPtr<Shader>, ShaderInfo>();
-			foreach (KeyValuePair<PPtr<Shader>, ShaderInfo> kvp in m_shaders)
+			Dictionary<PPtr<Shader.Shader>, ShaderInfo> shaders = new Dictionary<PPtr<Shader.Shader>, ShaderInfo>();
+			foreach (KeyValuePair<PPtr<Shader.Shader>, ShaderInfo> kvp in m_shaders)
 			{
 				if (!kvp.Key.IsNull)
 				{
@@ -55,10 +58,10 @@ namespace AssetRipper.Classes
 
 		public override string ExportExtension => "shadervariants";
 
-		public ILookup<PPtr<Shader>, ShaderInfo> Shaders => m_shaders.ToLookup(t => t.Key, t => t.Value);
+		public ILookup<PPtr<Shader.Shader>, ShaderInfo> Shaders => m_shaders.ToLookup(t => t.Key, t => t.Value);
 
 		public const string ShadersName = "m_Shaders";
 
-		private KeyValuePair<PPtr<Shader>, ShaderInfo>[] m_shaders;
+		private KeyValuePair<PPtr<Shader.Shader>, ShaderInfo>[] m_shaders;
 	}
 }

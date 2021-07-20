@@ -1,8 +1,10 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Layout;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Layout.Classes;
+using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.Classes.Misc.Serializable;
 using System.Linq;
 
-namespace AssetRipper.Converters
+namespace AssetRipper.Converters.Classes
 {
 	public static class TransformConverter
 	{

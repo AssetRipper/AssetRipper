@@ -1,10 +1,11 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Classes.Meshes;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.IO.Endian;
+using AssetRipper.Parser.Classes.Mesh;
+using AssetRipper.Parser.Files.File;
 using System.IO;
 using System.Linq;
 
-namespace AssetRipper.Converters.Meshes
+namespace AssetRipper.Converters.Classes.Mesh
 {
 	public static class LODConverter
 	{
@@ -34,7 +35,7 @@ namespace AssetRipper.Converters.Meshes
 			return buffer;
 		}
 
-		public static SubMesh[] GenerateSubMeshes(IExportContainer container, Mesh instanceMesh, ref LOD origin)
+		public static SubMesh[] GenerateSubMeshes(IExportContainer container, Parser.Classes.Mesh.Mesh instanceMesh, ref LOD origin)
 		{
 			int offset = 0;
 			SubMesh[] instances = new SubMesh[origin.MeshData.Length];

@@ -1,12 +1,18 @@
-using AssetRipper;
-using AssetRipper.Classes;
-using AssetRipper.Classes.Meshes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Classes.Mesh;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Mesh
 {
 	/// <summary>
 	/// LodMesh previously
@@ -237,7 +243,7 @@ namespace AssetRipper.Classes
 			return true;
 		}
 
-		public override Object Convert(IExportContainer container)
+		public override Object.Object Convert(IExportContainer container)
 		{
 			return MeshConverter.Convert(container, this);
 		}

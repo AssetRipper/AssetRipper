@@ -1,14 +1,18 @@
-﻿using AssetRipper.Classes.EditorSettingss;
-using AssetRipper.Converters;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.EditorSettings
 {
 	/// <summary>
 	/// First introduced in 2.6.0
 	/// </summary>
-	public sealed class EditorSettings : Object
+	public sealed class EditorSettings : Object.Object
 	{
 		public EditorSettings(AssetInfo assetInfo) :
 			base(assetInfo)

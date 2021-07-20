@@ -1,17 +1,21 @@
-using AssetRipper.Classes;
-using AssetRipper.Classes.AnimationClips;
-using AssetRipper.Classes.Lights;
 using AssetRipper.Layout;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.Classes.AnimationClip.GenericBinding;
+using AssetRipper.Parser.Classes.Camera;
+using AssetRipper.Parser.Classes.Light;
+using AssetRipper.Parser.Classes.Renderer;
+using AssetRipper.Parser.Classes.SpriteRenderer;
+using AssetRipper.Parser.Files.SerializedFile.Parser.TypeTree;
 using SevenZip;
 using System;
 using System.Linq;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Converters.AnimationClips
+namespace AssetRipper.Converters.Classes.AnimationClip
 {
 	public sealed class CustomCurveResolver
 	{
-		public CustomCurveResolver(AnimationClip clip)
+		public CustomCurveResolver(Parser.Classes.AnimationClip.AnimationClip clip)
 		{
 			if (clip == null)
 			{
@@ -32,7 +36,7 @@ namespace AssetRipper.Converters.AnimationClips
 							return Prefix + attribute;
 						}
 
-						foreach (GameObject root in Roots)
+						foreach (Parser.Classes.GameObject.GameObject root in Roots)
 						{
 							Transform rootTransform = root.GetTransform();
 							Transform child = rootTransform.FindChild(path);
@@ -45,7 +49,7 @@ namespace AssetRipper.Converters.AnimationClips
 							{
 								continue;
 							}
-							Mesh mesh = skin.Mesh.FindAsset(skin.File);
+							Parser.Classes.Mesh.Mesh mesh = skin.Mesh.FindAsset(skin.File);
 							if (mesh == null)
 							{
 								continue;
@@ -72,7 +76,7 @@ namespace AssetRipper.Converters.AnimationClips
 							return Prefix + attribute;
 						}
 
-						foreach (GameObject root in Roots)
+						foreach (Parser.Classes.GameObject.GameObject root in Roots)
 						{
 							Transform rootTransform = root.GetTransform();
 							Transform child = rootTransform.FindChild(path);
@@ -529,7 +533,7 @@ namespace AssetRipper.Converters.AnimationClips
 			}
 		}
 
-		private GameObject[] Roots
+		private Parser.Classes.GameObject.GameObject[] Roots
 		{
 			get
 			{
@@ -544,9 +548,9 @@ namespace AssetRipper.Converters.AnimationClips
 
 		private Version Version => m_clip.File.Version;
 
-		private readonly AnimationClip m_clip = null;
+		private readonly Parser.Classes.AnimationClip.AnimationClip m_clip = null;
 
-		private GameObject[] m_roots = null;
+		private Parser.Classes.GameObject.GameObject[] m_roots = null;
 		private bool m_rootInited = false;
 	}
 }

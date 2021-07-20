@@ -1,4 +1,4 @@
-﻿namespace AssetRipper
+﻿namespace AssetRipper.Parser.IO.Asset.Reader
 {
 	public interface IAssetReadable
 	{

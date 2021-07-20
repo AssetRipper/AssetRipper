@@ -1,6 +1,8 @@
+using AssetRipper.Parser.Files.File;
 using System;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.Shaders
+namespace AssetRipper.Parser.Classes.Shader.Enums.GpuProgramType
 {
 	public enum ShaderGpuProgramType
 	{

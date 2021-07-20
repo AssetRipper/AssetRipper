@@ -1,11 +1,18 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.AnimatorController.Constants;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.AnimatorControllers
+namespace AssetRipper.Parser.Classes.AnimatorController.Editor.AnimatorControllerLayer
 {
 	public sealed class AnimatorControllerLayer : IYAMLExportable
 	{
-		public AnimatorControllerLayer(AnimatorStateMachine stateMachine, AnimatorController controller, int layerIndex)
+		public AnimatorControllerLayer(AnimatorStateMachine.AnimatorStateMachine stateMachine, AnimatorController controller, int layerIndex)
 		{
 			LayerConstant layer = controller.Controller.LayerArray[layerIndex].Instance;
 
@@ -61,8 +68,8 @@ namespace AssetRipper.Classes.AnimatorControllers
 		public bool IKPass { get; set; }
 		public bool SyncedLayerAffectsTiming { get; set; }
 
-		public PPtr<AnimatorStateMachine> StateMachine;
-		public PPtr<AvatarMask> Mask;
+		public PPtr<AnimatorStateMachine.AnimatorStateMachine> StateMachine;
+		public PPtr<AvatarMask.AvatarMask> Mask;
 		public PPtr<AnimatorController> Controller;
 
 		public const string NameName = "m_Name";

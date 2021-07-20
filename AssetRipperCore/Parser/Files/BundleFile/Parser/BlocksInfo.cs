@@ -1,6 +1,7 @@
-﻿using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.BundleFile.IO;
 
-namespace AssetRipper.BundleFiles
+namespace AssetRipper.Parser.Files.BundleFile.Parser
 {
 	public struct BlocksInfo : IBundleReadable
 	{

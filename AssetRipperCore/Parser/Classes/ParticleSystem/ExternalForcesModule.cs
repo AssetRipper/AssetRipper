@@ -1,8 +1,13 @@
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.ParticleSystem.Curve;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.ParticleSystems
+namespace AssetRipper.Parser.Classes.ParticleSystem
 {
 	public sealed class ExternalForcesModule : ParticleSystemModule
 	{
@@ -53,7 +58,7 @@ namespace AssetRipper.Classes.ParticleSystems
 			{
 				InfluenceFilter = reader.ReadInt32();
 				InfluenceMask.Read(reader);
-				InfluenceList = reader.ReadAssetArray<PPtr<ParticleSystemForceField>>();
+				InfluenceList = reader.ReadAssetArray<PPtr<ParticleSystemForceField.ParticleSystemForceField>>();
 			}
 		}
 
@@ -80,7 +85,7 @@ namespace AssetRipper.Classes.ParticleSystems
 
 		public float Multiplier => MultiplierCurve.Scalar;
 		public int InfluenceFilter { get; set; }
-		public PPtr<ParticleSystemForceField>[] InfluenceList { get; set; }
+		public PPtr<ParticleSystemForceField.ParticleSystemForceField>[] InfluenceList { get; set; }
 
 		public const string MultiplierCurveName = "multiplierCurve";
 		public const string MultiplierName = "multiplier";

@@ -1,7 +1,12 @@
-using AssetRipper.Classes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
-using AssetRipper.Game.Assembly;
+using AssetRipper.Converters.Project;
+using AssetRipper.Converters.Project.Exporter;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.Classes.Meta;
+using AssetRipper.Parser.Classes.Meta.Importers;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Structure.GameCollection.Assembly;
 using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;
@@ -9,9 +14,9 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using Object = AssetRipper.Classes.Object;
+using Object = AssetRipper.Parser.Classes.Object.Object;
 
-namespace AssetRipper.Project
+namespace AssetRipper.Structure.ProjectCollection.Collections
 {
 	public class ScriptExportCollection : ExportCollection
 	{

@@ -1,8 +1,12 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Classes;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class RectTransform : Transform
 	{
@@ -16,7 +20,7 @@ namespace AssetRipper.Classes
 		{
 		}
 
-		public override Object Convert(IExportContainer container)
+		public override Object.Object Convert(IExportContainer container)
 		{
 			return RectTransformConverter.Convert(container, this);
 		}

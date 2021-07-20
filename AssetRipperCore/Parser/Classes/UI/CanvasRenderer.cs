@@ -1,7 +1,11 @@
 ﻿//using AssetRipper.AssetExporters;
 //using AssetRipper.YAML;
 
-namespace AssetRipper.Classes
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+
+namespace AssetRipper.Parser.Classes.UI
 {
 	public sealed class CanvasRenderer : Component
 	{

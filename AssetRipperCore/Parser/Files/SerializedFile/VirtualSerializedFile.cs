@@ -1,11 +1,19 @@
-using AssetRipper.Classes;
-using AssetRipper.Game;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File;
+using AssetRipper.Parser.Files.SerializedFile.Parser;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Structure.GameCollection;
+using AssetRipper.Structure.GameCollection.Assembly;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Classes.Object;
+using Object = AssetRipper.Parser.Classes.Object.Object;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.SerializedFiles
+namespace AssetRipper.Parser.Files.SerializedFile
 {
 	public class VirtualSerializedFile : ISerializedFile
 	{

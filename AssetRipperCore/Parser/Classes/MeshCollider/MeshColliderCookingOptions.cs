@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.MeshColliders
+namespace AssetRipper.Parser.Classes.MeshCollider
 {
 	/// <summary>
 	/// Cooking options that are available with MeshCollider

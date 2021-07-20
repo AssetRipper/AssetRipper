@@ -1,4 +1,4 @@
-namespace AssetRipper.Classes.NavMeshAgents
+namespace AssetRipper.Parser.Classes.NavMeshAgent
 {
 	/// <summary>
 	/// Level of obstacle avoidance.

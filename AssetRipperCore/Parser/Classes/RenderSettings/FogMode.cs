@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.RenderSettingss
+﻿namespace AssetRipper.Parser.Classes.RenderSettings
 {
 	/// <summary>
 	/// Fog mode to use.

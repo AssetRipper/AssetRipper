@@ -1,8 +1,12 @@
 using AssetRipper;
 using AssetRipper.Converters;
+using AssetRipper.Converters.Project.Exporter;
+using AssetRipper.Converters.Project.Exporter.Engine;
 using AssetRipper.IO.MultiFile;
 using AssetRipper.Logging;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Structure.GameStructure;
 using AssetRipper.Utils;
 using AssetRipperGUI.Exporters;
 using AssetRipperGUI.Properties;
@@ -15,8 +19,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using Object = AssetRipper.Classes.Object;
-using Version = AssetRipper.Version;
+using Object = AssetRipper.Parser.Classes.Object.Object;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
 namespace AssetRipperGUI
 {

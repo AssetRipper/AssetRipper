@@ -1,6 +1,9 @@
-﻿using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.SerializedFile.IO;
+using AssetRipper.Parser.Utils;
 
-namespace AssetRipper.SerializedFiles
+namespace AssetRipper.Parser.Files.SerializedFile.Parser
 {
 #warning TODO: move to classes
 	/// <summary>

@@ -1,7 +1,9 @@
-﻿using AssetRipper.Classes.Meshes;
-using AssetRipper.Classes.Shaders;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Mesh;
+using AssetRipper.Parser.Classes.Shader.Enums.ShaderChannel;
+using AssetRipper.Parser.Classes.Shader.Enums.VertexFormat;
 
-namespace AssetRipper.Converters.Meshes
+namespace AssetRipper.Converters.Classes.Mesh
 {
 	public static class ChannelInfoConverter
 	{

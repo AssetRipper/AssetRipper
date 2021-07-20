@@ -1,9 +1,14 @@
-using AssetRipper.Classes.Textures;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Classes.Texture2D;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.TextureImporters
+namespace AssetRipper.Parser.Classes.Meta.Importers.Texture
 {
 	/// <summary>
 	/// PlatformSettings in version < 2017.3

@@ -1,5 +1,4 @@
-using AssetRipper.Classes;
-using AssetRipper.Classes.Textures;
+using AssetRipper.Parser.Classes.Texture2D;
 using AssetRipperLibrary.TextureContainers.KTX;
 using AssetRipperLibrary.TextureDecoders.Astc;
 using AssetRipperLibrary.TextureDecoders.Atc;
@@ -11,7 +10,7 @@ using AssetRipperLibrary.TextureDecoders.Yuy2;
 using AssetRipperLibrary.Utils;
 using System;
 using System.Runtime.InteropServices;
-using Version = AssetRipper.Version;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
 namespace AssetRipperLibrary.Exporters.Texture
 {

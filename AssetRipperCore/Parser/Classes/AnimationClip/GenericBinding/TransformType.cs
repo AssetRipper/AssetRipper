@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.AnimationClips
+namespace AssetRipper.Parser.Classes.AnimationClip.GenericBinding
 {
 	public enum TransformType
 	{

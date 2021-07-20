@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Misc
+﻿namespace AssetRipper.Parser.Classes.Misc.KeyframeTpl.TangentMode
 {
 	/// <summary>
 	/// Less than 5.5.0

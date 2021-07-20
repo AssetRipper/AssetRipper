@@ -1,8 +1,12 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.LODGroups
+namespace AssetRipper.Parser.Classes.LODGroup
 {
 	public struct LODRenderer : IAssetReadable, IYAMLExportable, IDependent
 	{
@@ -11,7 +15,7 @@ namespace AssetRipper.Classes.LODGroups
 			Renderer.Read(reader);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Renderer, RendererName);
 		}
@@ -25,6 +29,6 @@ namespace AssetRipper.Classes.LODGroups
 
 		public const string RendererName = "renderer";
 
-		public PPtr<Renderer> Renderer;
+		public PPtr<Renderer.Renderer> Renderer;
 	}
 }

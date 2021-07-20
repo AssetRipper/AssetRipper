@@ -1,19 +1,21 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Classes.Meshes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Shaders;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.Extensions;
 using AssetRipper.IO.Endian;
+using AssetRipper.Parser.Classes.Mesh;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Shader.Enums.ShaderChannel;
+using AssetRipper.Parser.Classes.Shader.Enums.VertexFormat;
+using AssetRipper.Parser.Files.File;
 using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
 
-namespace AssetRipper.Converters.Meshes
+namespace AssetRipper.Converters.Classes.Mesh
 {
 	public static class VertexDataConverter
 	{
-		public static VertexData Convert(IExportContainer container, Mesh originMesh)
+		public static VertexData Convert(IExportContainer container, Parser.Classes.Mesh.Mesh originMesh)
 		{
 			VertexData instance = new VertexData();
 			if (VertexData.HasCurrentChannels(container.ExportVersion))
@@ -48,7 +50,7 @@ namespace AssetRipper.Converters.Meshes
 			}
 		}
 
-		private static ChannelInfo[] GetChannels(IExportContainer container, Mesh originMesh)
+		private static ChannelInfo[] GetChannels(IExportContainer container, Parser.Classes.Mesh.Mesh originMesh)
 		{
 			ref VertexData origin = ref originMesh.VertexData;
 			if (ShaderChannelExtensions.ShaderChannel2018Relevant(container.Version)) // 2018.1 <= Version
@@ -145,7 +147,7 @@ namespace AssetRipper.Converters.Meshes
 			}
 		}
 
-		private static void ConvertSkinChannels(IExportContainer container, Mesh origin, ChannelInfo[] channels)
+		private static void ConvertSkinChannels(IExportContainer container, Parser.Classes.Mesh.Mesh origin, ChannelInfo[] channels)
 		{
 			if (origin.Skin.Length > 0)
 			{
@@ -165,7 +167,7 @@ namespace AssetRipper.Converters.Meshes
 			}
 		}
 
-		private static byte[] GetData(IExportContainer container, Mesh originMesh, ref VertexData instance)
+		private static byte[] GetData(IExportContainer container, Parser.Classes.Mesh.Mesh originMesh, ref VertexData instance)
 		{
 			if (!originMesh.CheckAssetIntegrity())
 			{
@@ -212,7 +214,7 @@ namespace AssetRipper.Converters.Meshes
 			return false;
 		}
 
-		private static byte[] CopyChannelsData(IExportContainer container, Mesh originMesh, ref VertexData instance)
+		private static byte[] CopyChannelsData(IExportContainer container, Parser.Classes.Mesh.Mesh originMesh, ref VertexData instance)
 		{
 			int maxStream = instance.Channels.Max(t => t.Stream);
 			int lastSize = instance.GetStreamSize(container.ExportVersion, maxStream);
@@ -343,7 +345,7 @@ namespace AssetRipper.Converters.Meshes
 			}
 		}
 
-		private static byte[] AppendSkin(Mesh originMesh)
+		private static byte[] AppendSkin(Parser.Classes.Mesh.Mesh originMesh)
 		{
 			ref VertexData origin = ref originMesh.VertexData;
 			byte[] odata = originMesh.GetChannelsData();

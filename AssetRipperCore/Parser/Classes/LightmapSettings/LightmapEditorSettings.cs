@@ -1,9 +1,17 @@
-﻿using AssetRipper.Classes.Lights;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Light;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.LightmapSettingss
+namespace AssetRipper.Parser.Classes.LightmapSettings
 {
 	/// <summary>
 	/// 3.0.0 - first introduction
@@ -762,7 +770,7 @@ namespace AssetRipper.Classes.LightmapSettingss
 			}
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(LightmapParameters, LightmapParametersName);
 		}

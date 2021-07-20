@@ -1,11 +1,12 @@
-using AssetRipper.Converters.Script;
-using AssetRipper.Converters.Script.Mono;
+using AssetRipper.Converters.Project.Exporter.Script;
+using AssetRipper.Converters.Project.Exporter.Script.Mono;
+using AssetRipper.Structure.GameCollection.Assembly.Serializable;
 using AssetRipper.Utils;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Game.Assembly.Mono
+namespace AssetRipper.Structure.GameCollection.Assembly.Mono
 {
 	public class MonoType : SerializableType
 	{

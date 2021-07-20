@@ -1,6 +1,8 @@
-using AssetRipper.Classes.AnimatorControllers;
+using AssetRipper.Parser.Classes.AnimatorController.Constants;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
 
-namespace AssetRipper.Classes.AnimationClips
+namespace AssetRipper.Parser.Classes.AnimationClip.Clip
 {
 	public struct Clip : IAssetReadable
 	{

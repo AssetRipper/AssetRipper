@@ -1,7 +1,11 @@
-﻿using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.KeyframeTpl;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Misc.Serializable.AnimationCurveTpl;
+using AssetRipper.Parser.IO.Asset.Reader;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.AnimationClips
+namespace AssetRipper.Parser.Classes.AnimationClip.Editor
 {
 	public struct StreamedCurveKey : IAssetReadable
 	{

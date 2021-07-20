@@ -1,9 +1,12 @@
-﻿using AssetRipper.Classes.PhysicMaterials;
-using AssetRipper.Classes.WheelColliders;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.PhysicMaterial;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.WheelCollider
 {
 	public sealed class WheelCollider : Component
 	{

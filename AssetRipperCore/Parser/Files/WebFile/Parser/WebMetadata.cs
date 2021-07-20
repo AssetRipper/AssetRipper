@@ -1,7 +1,7 @@
 using AssetRipper.IO.Endian;
 using System.Collections.Generic;
 
-namespace AssetRipper.WebFiles
+namespace AssetRipper.Parser.Files.WebFile.Parser
 {
 	public class WebMetadata : IEndianReadable
 	{

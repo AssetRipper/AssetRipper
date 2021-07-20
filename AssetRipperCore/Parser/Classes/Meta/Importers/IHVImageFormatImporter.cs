@@ -1,9 +1,14 @@
-﻿using AssetRipper.Classes.Textures;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Meta.Importers.Asset;
+using AssetRipper.Parser.Classes.Texture2D;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Meta.Importers
 {
 	/// <summary>
 	/// First introduced in 5.6.0 as a replacement for such importers as DDSImporter

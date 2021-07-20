@@ -1,15 +1,19 @@
-using AssetRipper;
-using AssetRipper.Classes.LightingDataAssets;
-using AssetRipper.Classes.LightmapSettingss;
-using AssetRipper.Classes.Lights;
-using AssetRipper.Classes.OcclusionCullingDatas;
-using AssetRipper.Classes.RenderSettingss;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Light;
+using AssetRipper.Parser.Classes.LightmapSettings;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.OcclusionCullingData;
+using AssetRipper.Parser.Classes.RenderSettings;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.LightingDataAsset
 {
 	/// <summary>
 	/// 5.0.0 - first introduction as LightmapSnapshot
@@ -64,7 +68,7 @@ namespace AssetRipper.Classes
 
 			if (HasAOTextures(reader.Version))
 			{
-				AOTextures = reader.ReadAssetArray<PPtr<Texture2D>>();
+				AOTextures = reader.ReadAssetArray<PPtr<Texture2D.Texture2D>>();
 			}
 			if (HasLightmapsCacheFiles(reader.Version))
 			{
@@ -104,28 +108,28 @@ namespace AssetRipper.Classes
 			EnlightenDataVersion = reader.ReadInt32();
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(Scene, SceneName);
-			foreach (PPtr<Object> asset in context.FetchDependencies(Lightmaps, LightmapsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Lightmaps, LightmapsName))
 			{
 				yield return asset;
 			}
 			yield return context.FetchDependency(LightProbes, LightProbesName);
-			foreach (PPtr<Object> asset in context.FetchDependencies(LightmappedRendererData, LightmappedRendererDataName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(LightmappedRendererData, LightmappedRendererDataName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(BakedReflectionProbeCubemaps, BakedReflectionProbeCubemapsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(BakedReflectionProbeCubemaps, BakedReflectionProbeCubemapsName))
 			{
 				yield return asset;
 			}
@@ -165,9 +169,9 @@ namespace AssetRipper.Classes
 			return node;
 		}
 
-		private IReadOnlyList<PPtr<Texture2D>> GetAOTextures(Version version)
+		private IReadOnlyList<PPtr<Texture2D.Texture2D>> GetAOTextures(Version version)
 		{
-			return HasAOTextures(version) ? AOTextures : System.Array.Empty<PPtr<Texture2D>>();
+			return HasAOTextures(version) ? AOTextures : System.Array.Empty<PPtr<Texture2D.Texture2D>>();
 		}
 		private IReadOnlyList<string> GetLightmapsCacheFiles(Version version)
 		{
@@ -179,7 +183,7 @@ namespace AssetRipper.Classes
 		}
 
 		public LightmapData[] Lightmaps { get; set; }
-		public PPtr<Texture2D>[] AOTextures { get; set; }
+		public PPtr<Texture2D.Texture2D>[] AOTextures { get; set; }
 		public string[] LightmapsCacheFiles { get; set; }
 		public int LightmapsMode { get; set; }
 		public RendererData[] LightmappedRendererData { get; set; }
@@ -213,7 +217,7 @@ namespace AssetRipper.Classes
 		public const string EnlightenDataVersionName = "m_EnlightenDataVersion";
 
 		public PPtr<SceneAsset> Scene;
-		public PPtr<LightProbes> LightProbes;
+		public PPtr<LightProbes.LightProbes> LightProbes;
 		public SphericalHarmonicsL2 BakedAmbientProbeInLinear;
 		public EnlightenSceneMapping EnlightenSceneMapping;
 	}

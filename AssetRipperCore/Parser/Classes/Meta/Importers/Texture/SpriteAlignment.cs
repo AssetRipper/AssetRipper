@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.TextureImporters
+﻿namespace AssetRipper.Parser.Classes.Meta.Importers.Texture
 {
 	/// <summary>
 	/// How a Sprite's graphic rectangle is aligned with its pivot point.

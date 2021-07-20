@@ -1,13 +1,16 @@
-using AssetRipper;
-using AssetRipper.Classes.NavMeshDatas;
-using AssetRipper.Classes.NavMeshProjectSettingss;
-using AssetRipper.Converters;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.NavMeshData;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.NavMeshProjectSettings
 {
 	/// <summary>
 	/// NavMeshAreas previously

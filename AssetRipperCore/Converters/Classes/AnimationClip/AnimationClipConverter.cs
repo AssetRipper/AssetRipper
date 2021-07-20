@@ -1,20 +1,26 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Classes.AnimationClips;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters.AnimationClips;
-using AssetRipper.Layout;
+﻿using AssetRipper.Layout;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.Classes.AnimationClip;
+using AssetRipper.Parser.Classes.AnimationClip.Clip;
+using AssetRipper.Parser.Classes.AnimationClip.Curves;
+using AssetRipper.Parser.Classes.AnimationClip.Editor;
+using AssetRipper.Parser.Classes.AnimationClip.GenericBinding;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.KeyframeTpl;
+using AssetRipper.Parser.Classes.Misc.Serializable;
 using SevenZip;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Object = AssetRipper.Classes.Object;
+using Object = AssetRipper.Parser.Classes.Object.Object;
 
-namespace AssetRipper.Converters
+namespace AssetRipper.Converters.Classes.AnimationClip
 {
 	public class AnimationClipConverter
 	{
-		private AnimationClipConverter(AnimationClip clip)
+		private AnimationClipConverter(Parser.Classes.AnimationClip.AnimationClip clip)
 		{
 			if (clip == null)
 			{
@@ -24,7 +30,7 @@ namespace AssetRipper.Converters
 			m_customCurveResolver = new CustomCurveResolver(clip);
 		}
 
-		public static AnimationClipConverter Process(AnimationClip clip)
+		public static AnimationClipConverter Process(Parser.Classes.AnimationClip.AnimationClip clip)
 		{
 			AnimationClipConverter converter = new AnimationClipConverter(clip);
 			converter.ProcessInner();
@@ -484,7 +490,7 @@ namespace AssetRipper.Converters
 		private readonly Dictionary<FloatCurve, List<KeyframeTpl<Float>>> m_floats = new Dictionary<FloatCurve, List<KeyframeTpl<Float>>>();
 		private readonly Dictionary<PPtrCurve, List<PPtrKeyframe>> m_pptrs = new Dictionary<PPtrCurve, List<PPtrKeyframe>>();
 
-		private readonly AnimationClip m_clip;
+		private readonly Parser.Classes.AnimationClip.AnimationClip m_clip;
 		private readonly CustomCurveResolver m_customCurveResolver;
 	}
 }

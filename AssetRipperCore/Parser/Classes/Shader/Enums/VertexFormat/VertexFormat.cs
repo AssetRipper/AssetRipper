@@ -1,6 +1,8 @@
-﻿using System;
+﻿using AssetRipper.Parser.Classes.Shader.Enums.ShaderChannel;
+using System;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.Shaders
+namespace AssetRipper.Parser.Classes.Shader.Enums.VertexFormat
 {
 	public enum VertexFormat
 	{

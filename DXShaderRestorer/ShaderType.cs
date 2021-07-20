@@ -1,7 +1,9 @@
-﻿using System;
+﻿using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Parser.Classes.Shader.Enums.GpuProgramType;
+using AssetRipper.Parser.Classes.Shader.Parameters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssetRipper.Classes.Shaders;
 
 namespace DXShaderRestorer
 {

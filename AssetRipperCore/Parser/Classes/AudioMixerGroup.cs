@@ -1,10 +1,12 @@
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 #warning TODO: not implemented
 	public sealed class AudioMixerGroup : NamedObject
@@ -23,15 +25,15 @@ namespace AssetRipper.Classes
 			Children = reader.ReadAssetArray<PPtr<AudioMixerGroup>>();
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(AudioMixer, AudioMixerName);
-			foreach (PPtr<Object> asset in context.FetchDependencies(Children, ChildrenName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Children, ChildrenName))
 			{
 				yield return asset;
 			}
@@ -47,7 +49,7 @@ namespace AssetRipper.Classes
 		public const string AudioMixerName = "m_AudioMixer";
 		public const string ChildrenName = "m_Children";
 
-		public PPtr<AudioMixer> AudioMixer;
+		public PPtr<AudioMixer.AudioMixer> AudioMixer;
 		public UnityGUID GroupID;
 	}
 }

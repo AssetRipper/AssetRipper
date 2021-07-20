@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Avatars
+﻿namespace AssetRipper.Parser.Classes.Avatar
 {
 	public enum BodyDoF
 	{

@@ -1,16 +1,16 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.Extensions;
+﻿using AssetRipper.Extensions;
+using AssetRipper.Parser.Classes.Misc;
 using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Utils
 {
 	public static class ObjectUtils
 	{
-		public static long GenerateExportID(Object asset, Func<long, bool> duplicateChecker)
+		public static long GenerateExportID(Object.Object asset, Func<long, bool> duplicateChecker)
 		{
 			if (asset == null)
 			{
@@ -46,10 +46,10 @@ namespace AssetRipper.Classes
 			return BitConverter.ToInt64(s_idBuffer.Value, 0);
 		}
 
-		public static UnityGUID CalculateAssetsGUID(IEnumerable<Object> assets)
+		public static UnityGUID CalculateAssetsGUID(IEnumerable<Object.Object> assets)
 		{
 			List<uint> hashList = new List<uint>();
-			foreach (Object asset in assets)
+			foreach (Object.Object asset in assets)
 			{
 				hashList.Add(asset.GUID.Data0);
 				hashList.Add(asset.GUID.Data1);

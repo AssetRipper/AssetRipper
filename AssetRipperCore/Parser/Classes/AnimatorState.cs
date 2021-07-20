@@ -1,18 +1,25 @@
-using AssetRipper.Classes.AnimatorControllers;
-using AssetRipper.Classes.Objects;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Extensions;
 using AssetRipper.Layout;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.AnimatorController.Constants;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class AnimatorState : NamedObject
 	{
-		private AnimatorState(AssetLayout layout, AssetInfo assetInfo, AnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f position) :
+		private AnimatorState(AssetLayout layout, AssetInfo assetInfo, AnimatorController.AnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f position) :
 			base(layout)
 		{
 			AssetInfo = assetInfo;
@@ -70,7 +77,7 @@ namespace AssetRipper.Classes
 			TimeParameter = TOS[state.TimeParamID];
 		}
 
-		public static AnimatorState CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController controller, int stateMachineIndex,
+		public static AnimatorState CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController.AnimatorController controller, int stateMachineIndex,
 			int stateIndex, Vector3f position)
 		{
 			return virtualFile.CreateAsset((assetInfo) => new AnimatorState(virtualFile.Layout, assetInfo, controller, stateMachineIndex, stateIndex, position));

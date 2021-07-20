@@ -1,12 +1,19 @@
-﻿using AssetRipper.Converters;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Converters.Game;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Meta;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 using System;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Misc
 {
 	public struct PPtr<T> : IAsset
-		where T : Object
+		where T : Object.Object
 	{
 		public PPtr(int fileIndex, long pathID)
 		{
@@ -25,7 +32,7 @@ namespace AssetRipper.Classes
 		}
 
 		public PPtr<T1> CastTo<T1>()
-			where T1 : Object
+			where T1 : Object.Object
 		{
 			return new PPtr<T1>(FileIndex, PathID);
 		}
@@ -80,7 +87,7 @@ namespace AssetRipper.Classes
 			{
 				return null;
 			}
-			Object asset = file.FindAsset(FileIndex, PathID);
+			Object.Object asset = file.FindAsset(FileIndex, PathID);
 			switch (asset)
 			{
 				case null:
@@ -107,7 +114,7 @@ namespace AssetRipper.Classes
 			{
 				throw new Exception("Can't get null PPtr");
 			}
-			Object asset = file.GetAsset(FileIndex, PathID);
+			Object.Object asset = file.GetAsset(FileIndex, PathID);
 			if (asset is T t)
 			{
 				return t;
@@ -115,7 +122,7 @@ namespace AssetRipper.Classes
 			throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
 		}
 
-		public bool IsAsset(Object asset)
+		public bool IsAsset(Object.Object asset)
 		{
 			if (FileIndex == 0)
 			{
@@ -127,7 +134,7 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public bool IsAsset(IAssetContainer file, Object asset)
+		public bool IsAsset(IAssetContainer file, Object.Object asset)
 		{
 			if (FileIndex == 0)
 			{

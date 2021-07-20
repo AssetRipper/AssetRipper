@@ -1,8 +1,9 @@
 ﻿using AssetRipper.IO.Endian;
+using AssetRipper.Parser.Files.BundleFile.Parser;
 using System;
 using System.IO;
 
-namespace AssetRipper.BundleFiles
+namespace AssetRipper.Parser.Files.BundleFile.IO
 {
 	public sealed class BundleReader : EndianReader
 	{

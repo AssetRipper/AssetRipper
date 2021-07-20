@@ -1,6 +1,6 @@
-﻿using AssetRipper.Classes.Meshes;
+﻿using AssetRipper.Parser.Classes.Mesh;
 
-namespace AssetRipper.Converters.Meshes
+namespace AssetRipper.Converters.Classes.Mesh
 {
 	public static class BlendShapeConverter
 	{

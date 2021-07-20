@@ -1,16 +1,21 @@
-using AssetRipper.Classes.AssetBundles;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.IO.Extensions;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.AssetBundle
 {
 	public sealed class AssetBundle : NamedObject
 	{
-		public AssetBundle(AssetInfo assetInfo) :
+		public AssetBundle(Asset.AssetInfo assetInfo) :
 			base(assetInfo)
 		{
 		}
@@ -80,10 +85,10 @@ namespace AssetRipper.Classes
 
 			if (HasPreloadTable(reader.Version))
 			{
-				PreloadTable = reader.ReadAssetArray<PPtr<Object>>();
+				PreloadTable = reader.ReadAssetArray<PPtr<Object.Object>>();
 			}
 
-			Container = reader.ReadKVPStringTArray<AssetBundles.AssetInfo>();
+			Container = reader.ReadKVPStringTArray<AssetInfo>();
 			MainAsset.Read(reader);
 
 			if (HasScriptCampatibility(reader.Version))
@@ -132,14 +137,14 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
 			{
 				yield return asset;
 			}
@@ -152,8 +157,8 @@ namespace AssetRipper.Classes
 
 		public override string ExportExtension => throw new NotSupportedException();
 
-		public PPtr<Object>[] PreloadTable { get; set; }
-		public KeyValuePair<string, AssetBundles.AssetInfo>[] Container { get; set; }
+		public PPtr<Object.Object>[] PreloadTable { get; set; }
+		public KeyValuePair<string, AssetInfo>[] Container { get; set; }
 		public AssetBundleScriptInfo[] ScriptCampatibility { get; set; }
 		public KeyValuePair<int, uint>[] ClassCampatibility { get; set; }
 		public Dictionary<int, int> ClassVersionMap { get; set; }
@@ -167,6 +172,6 @@ namespace AssetRipper.Classes
 
 		public const string ContainerName = "m_Container";
 
-		public AssetBundles.AssetInfo MainAsset;
+		public AssetInfo MainAsset;
 	}
 }

@@ -1,14 +1,20 @@
-using AssetRipper.Classes;
-using AssetRipper.Classes.SpriteAtlases;
-using AssetRipper.Classes.Sprites;
-using AssetRipper.Classes.TextureImporters;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Converters.Project.Exporter;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Meta.Importers.Asset;
+using AssetRipper.Parser.Classes.Meta.Importers.Texture;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Sprite;
+using AssetRipper.Parser.Classes.SpriteAtlas;
+using AssetRipper.Parser.Classes.Texture2D;
+using AssetRipper.Parser.Classes.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Object = AssetRipper.Classes.Object;
+using Object = AssetRipper.Parser.Classes.Object.Object;
 
-namespace AssetRipper.Project
+namespace AssetRipper.Structure.ProjectCollection.Collections
 {
 	public class TextureExportCollection : AssetsExportCollection
 	{

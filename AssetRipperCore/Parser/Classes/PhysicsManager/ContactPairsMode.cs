@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.PhysicsManagers
+﻿namespace AssetRipper.Parser.Classes.PhysicsManager
 {
 	public enum ContactPairsMode
 	{

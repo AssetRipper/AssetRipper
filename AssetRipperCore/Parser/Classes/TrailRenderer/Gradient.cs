@@ -1,12 +1,16 @@
-﻿using AssetRipper.Converters;
-using AssetRipper.Converters.TrailRenderers;
+﻿using AssetRipper.Converters.Classes.TrailRenderer;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.TrailRenderers
+namespace AssetRipper.Parser.Classes.TrailRenderer
 {
 	public struct Gradient : IAsset
 	{
-		public Classes.Gradient GenerateGragient(IExportContainer container)
+		public Misc.Serializable.Gradient.Gradient GenerateGragient(IExportContainer container)
 		{
 			return GradientConverter.GenerateGradient(container, ref this);
 		}

@@ -1,7 +1,12 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.AnimationClips
+namespace AssetRipper.Parser.Classes.AnimationClip.GenericBinding
 {
 	public struct GenericBinding : IAssetReadable, IYAMLExportable
 	{
@@ -70,6 +75,6 @@ namespace AssetRipper.Classes.AnimationClips
 		public const string CustomTypeName = "customType";
 		public const string IsPPtrCurveName = "isPPtrCurve";
 
-		public PPtr<Object> Script;
+		public PPtr<Object.Object> Script;
 	}
 }

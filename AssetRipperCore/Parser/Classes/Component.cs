@@ -1,11 +1,16 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Layout.Classes;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public abstract class Component : EditorExtension
 	{
@@ -19,15 +24,15 @@ namespace AssetRipper.Classes
 		{
 		}
 
-		public GameObject GetRoot()
+		public GameObject.GameObject GetRoot()
 		{
-			GameObject go = GameObject.GetAsset(File);
+			GameObject.GameObject go = GameObject.GetAsset(File);
 			return go.GetRoot();
 		}
 
 		public int GetRootDepth()
 		{
-			GameObject go = GameObject.GetAsset(File);
+			GameObject.GameObject go = GameObject.GetAsset(File);
 			return go.GetRootDepth();
 		}
 
@@ -50,9 +55,9 @@ namespace AssetRipper.Classes
 			base.ExportBinary(container, stream);
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -71,6 +76,6 @@ namespace AssetRipper.Classes
 
 		public override string ExportExtension => throw new NotSupportedException();
 
-		public PPtr<GameObject> GameObject;
+		public PPtr<GameObject.GameObject> GameObject;
 	}
 }

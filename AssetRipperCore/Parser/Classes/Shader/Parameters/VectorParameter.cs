@@ -1,4 +1,7 @@
-﻿namespace AssetRipper.Classes.Shaders
+﻿using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Parser.IO.Asset.Reader;
+
+namespace AssetRipper.Parser.Classes.Shader.Parameters
 {
 	public struct VectorParameter : IAssetReadable
 	{

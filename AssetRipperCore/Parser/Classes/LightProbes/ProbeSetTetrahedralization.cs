@@ -1,7 +1,11 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.LightProbess
+namespace AssetRipper.Parser.Classes.LightProbes
 {
 	public struct ProbeSetTetrahedralization : IAssetReadable, IYAMLExportable
 	{

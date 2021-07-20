@@ -1,6 +1,7 @@
-﻿using System;
+﻿using AssetRipper.Parser.Asset;
+using System;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Utils.Extensions
 {
 	public static class AssetClassTypeExtensions
 	{
@@ -9,10 +10,10 @@ namespace AssetRipper.Classes
 			switch (_this)
 			{
 				case ClassIDType.Object:
-					return typeof(Object);
+					return typeof(Object.Object);
 
 				case ClassIDType.GameObject:
-					return typeof(GameObject);
+					return typeof(GameObject.GameObject);
 
 				case ClassIDType.Component:
 					return typeof(Component);
@@ -21,10 +22,10 @@ namespace AssetRipper.Classes
 					return typeof(Transform);
 
 				case ClassIDType.Material:
-					return typeof(Material);
+					return typeof(Material.Material);
 
 				case ClassIDType.Shader:
-					return typeof(Shader);
+					return typeof(Shader.Shader);
 
 				default:
 					throw new Exception($"Unsupported class type {_this}");

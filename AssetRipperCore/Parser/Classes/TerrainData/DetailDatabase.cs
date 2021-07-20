@@ -1,9 +1,18 @@
-using AssetRipper.Converters;
-using AssetRipper.Converters.TerrainDatas;
+using AssetRipper.Converters.Classes.TerrainData;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.TerrainDatas
+namespace AssetRipper.Parser.Classes.TerrainData
 {
 	public struct DetailDatabase : IAsset, IDependent
 	{
@@ -62,7 +71,7 @@ namespace AssetRipper.Classes.TerrainDatas
 			TreeDatabase.Read(reader);
 			if (!HasAtlasTexture(reader.Version))
 			{
-				PreloadTextureAtlasData = reader.ReadAssetArray<PPtr<Texture2D>>();
+				PreloadTextureAtlasData = reader.ReadAssetArray<PPtr<Texture2D.Texture2D>>();
 			}
 		}
 
@@ -128,9 +137,9 @@ namespace AssetRipper.Classes.TerrainDatas
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in context.FetchDependencies(DetailPrototypes, DetailPrototypesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(DetailPrototypes, DetailPrototypesName))
 			{
 				yield return asset;
 			}
@@ -138,13 +147,13 @@ namespace AssetRipper.Classes.TerrainDatas
 			{
 				yield return context.FetchDependency(AtlasTexture, AtlasTextureName);
 			}
-			foreach (PPtr<Object> asset in TreeDatabase.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in TreeDatabase.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			if (!HasAtlasTexture(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(PreloadTextureAtlasData, PreloadTextureAtlasDataName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(PreloadTextureAtlasData, PreloadTextureAtlasDataName))
 				{
 					yield return asset;
 				}
@@ -190,7 +199,7 @@ namespace AssetRipper.Classes.TerrainDatas
 		public float WavingGrassStrength { get; set; }
 		public float WavingGrassAmount { get; set; }
 		public float WavingGrassSpeed { get; set; }
-		public PPtr<Texture2D>[] PreloadTextureAtlasData { get; set; }
+		public PPtr<Texture2D.Texture2D>[] PreloadTextureAtlasData { get; set; }
 
 		public const string PatchesName = "m_Patches";
 		public const string DetailPrototypesName = "m_DetailPrototypes";
@@ -207,11 +216,11 @@ namespace AssetRipper.Classes.TerrainDatas
 		public const string DetailMeshGrassShaderName = "m_DetailMeshGrassShader";
 		public const string PreloadTextureAtlasDataName = "m_PreloadTextureAtlasData";
 
-		public PPtr<Texture2D> AtlasTexture;
+		public PPtr<Texture2D.Texture2D> AtlasTexture;
 		public ColorRGBAf WavingGrassTint;
-		public PPtr<Shader> DetailBillboardShader;
-		public PPtr<Shader> DetailMeshLitShader;
-		public PPtr<Shader> DetailMeshGrassShader;
+		public PPtr<Shader.Shader> DetailBillboardShader;
+		public PPtr<Shader.Shader> DetailMeshLitShader;
+		public PPtr<Shader.Shader> DetailMeshGrassShader;
 		public TreeDatabase TreeDatabase;
 	}
 }

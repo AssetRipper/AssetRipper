@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Classes.AssetBundles
+﻿using AssetRipper.Parser.IO.Asset.Reader;
+
+namespace AssetRipper.Parser.Classes.AssetBundle
 {
 	public struct AssetBundleScriptInfo : IAssetReadable
 	{

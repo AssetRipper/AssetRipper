@@ -7,3 +7,4 @@ Bins/
 Test/
 bin
 *.user
+.idea

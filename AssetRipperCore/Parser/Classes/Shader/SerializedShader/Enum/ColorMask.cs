@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.Shaders
+namespace AssetRipper.Parser.Classes.Shader.SerializedShader.Enum
 {
 	[Flags]
 	public enum ColorMask

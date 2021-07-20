@@ -1,9 +1,15 @@
-using AssetRipper.Converters;
-using AssetRipper.Layout.AnimationClips;
+using AssetRipper.Converters.Project;
+using AssetRipper.Layout.Classes.AnimationClip.Curves;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.AnimationClips
+namespace AssetRipper.Parser.Classes.AnimationClip.Curves
 {
 	public struct PPtrCurve : IAsset, IDependent
 	{
@@ -115,10 +121,10 @@ namespace AssetRipper.Classes.AnimationClips
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			PPtrCurveLayout layout = context.Layout.AnimationClip.PPtrCurve;
-			foreach (PPtr<Object> asset in context.FetchDependencies(Curve, layout.CurveName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Curve, layout.CurveName))
 			{
 				yield return asset;
 			}

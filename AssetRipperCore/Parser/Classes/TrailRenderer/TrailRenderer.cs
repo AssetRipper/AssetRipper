@@ -1,11 +1,18 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.TrailRenderers;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Classes.TrailRenderer;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.KeyframeTpl;
+using AssetRipper.Parser.Classes.Misc.Serializable.AnimationCurveTpl;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.TrailRenderer
 {
-	public sealed class TrailRenderer : Renderer
+	public sealed class TrailRenderer : Renderer.Renderer
 	{
 		public TrailRenderer(AssetInfo assetInfo) :
 			base(assetInfo)
@@ -31,7 +38,7 @@ namespace AssetRipper.Classes
 		/// </summary>
 		public static bool HasEmitting(Version version) => version.IsGreaterEqual(2018, 2);
 
-		public override Object Convert(IExportContainer container)
+		public override Object.Object Convert(IExportContainer container)
 		{
 			return TrailRendererConverter.Convert(container, this);
 		}
@@ -123,7 +130,7 @@ namespace AssetRipper.Classes
 		public const string AutodestructName = "m_Autodestruct";
 		public const string EmittingName = "m_Emitting";
 
-		public TrailRenderers.Gradient Colors;
+		public Gradient Colors;
 		public LineParameters Parameters;
 	}
 }

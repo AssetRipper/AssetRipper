@@ -1,4 +1,4 @@
-namespace AssetRipper.Classes.ParticleSystems
+namespace AssetRipper.Parser.Classes.ParticleSystem.TrailModule
 {
 	/// <summary>
 	/// Choose how textures are applied to Particle Trails.

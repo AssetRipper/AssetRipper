@@ -1,8 +1,12 @@
-﻿using AssetRipper.Classes.Shaders;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Shader.Enums.ShaderChannel;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.Meshes
+namespace AssetRipper.Parser.Classes.Mesh
 {
 	public struct StreamInfo : IAsset
 	{

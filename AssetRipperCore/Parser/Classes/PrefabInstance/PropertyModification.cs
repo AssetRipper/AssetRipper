@@ -1,9 +1,15 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Layout.Classes.PrefabInstance;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.Prefabs
+namespace AssetRipper.Parser.Classes.PrefabInstance
 {
 	public struct PropertyModification : IAsset, IDependent
 	{
@@ -42,7 +48,7 @@ namespace AssetRipper.Classes.Prefabs
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			PropertyModificationLayout layout = context.Layout.PrefabInstance.PropertyModification;
 			yield return context.FetchDependency(Target, layout.TargetName);
@@ -52,7 +58,7 @@ namespace AssetRipper.Classes.Prefabs
 		public string PropertyPath { get; set; }
 		public string Value { get; set; }
 
-		public PPtr<Object> Target;
-		public PPtr<Object> ObjectReference;
+		public PPtr<Object.Object> Target;
+		public PPtr<Object.Object> ObjectReference;
 	}
 }

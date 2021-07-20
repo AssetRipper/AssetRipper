@@ -1,15 +1,20 @@
-using AssetRipper.Classes.EditorBuildSettingss;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.IO.Extensions;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.EditorBuildSettings
 {
-	public sealed class EditorBuildSettings : Object
+	public sealed class EditorBuildSettings : Object.Object
 	{
 		public EditorBuildSettings(AssetInfo assetInfo) :
 			base(assetInfo)
@@ -49,7 +54,7 @@ namespace AssetRipper.Classes
 				throw new ArgumentNullException(nameof(scenes));
 			}
 			Scenes = scenes.ToArray();
-			ConfigObjects = new Dictionary<string, PPtr<Object>>();
+			ConfigObjects = new Dictionary<string, PPtr<Object.Object>>();
 		}
 
 		public override void Read(AssetReader reader)
@@ -67,7 +72,7 @@ namespace AssetRipper.Classes
 			}
 			if (HasConfigObjects(reader.Version))
 			{
-				ConfigObjects = new Dictionary<string, PPtr<Object>>();
+				ConfigObjects = new Dictionary<string, PPtr<Object.Object>>();
 				ConfigObjects.Read(reader);
 			}
 		}
@@ -84,13 +89,13 @@ namespace AssetRipper.Classes
 			return node;
 		}
 
-		private IReadOnlyDictionary<string, PPtr<Object>> GetConfigObjects(Version version)
+		private IReadOnlyDictionary<string, PPtr<Object.Object>> GetConfigObjects(Version version)
 		{
-			return HasConfigObjects(version) ? ConfigObjects : new Dictionary<string, PPtr<Object>>(0);
+			return HasConfigObjects(version) ? ConfigObjects : new Dictionary<string, PPtr<Object.Object>>(0);
 		}
 
 		public Scene[] Scenes { get; set; }
-		public Dictionary<string, PPtr<Object>> ConfigObjects { get; set; }
+		public Dictionary<string, PPtr<Object.Object>> ConfigObjects { get; set; }
 
 		public const string ScenesName = "m_Scenes";
 		public const string ConfigObjectsName = "m_configObjects";

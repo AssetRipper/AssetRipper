@@ -1,9 +1,10 @@
-using AssetRipper.Converters.Script;
-using AssetRipper.Game.Assembly;
+using AssetRipper.Converters.Project.Exporter.Script;
+using AssetRipper.Converters.Project.Exporter.Script.Elements;
+using AssetRipper.Structure.GameCollection.Assembly.Serializable;
 using System;
 using System.IO;
 
-namespace AssetRipper.Game
+namespace AssetRipper.Structure.GameCollection.Assembly
 {
 	public interface IAssemblyManager : IDisposable
 	{

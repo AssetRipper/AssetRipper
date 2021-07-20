@@ -1,28 +1,28 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Classes.TrailRenderers;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.TrailRenderer;
 
-namespace AssetRipper.Converters
+namespace AssetRipper.Converters.Classes.TrailRenderer
 {
 	public static class TrailRendererConverter
 	{
-		public static TrailRenderer Convert(IExportContainer container, TrailRenderer origin)
+		public static Parser.Classes.TrailRenderer.TrailRenderer Convert(IExportContainer container, Parser.Classes.TrailRenderer.TrailRenderer origin)
 		{
-			TrailRenderer instance = new TrailRenderer(origin.AssetInfo);
+			Parser.Classes.TrailRenderer.TrailRenderer instance = new Parser.Classes.TrailRenderer.TrailRenderer(origin.AssetInfo);
 			RendererConverter.Convert(container, origin, instance);
 			instance.Time = origin.Time;
 			instance.Parameters = GetParameters(container, origin);
 			instance.MinVertexDistance = origin.MinVertexDistance;
 			instance.Autodestruct = origin.Autodestruct;
-			if (TrailRenderer.HasEmitting(container.ExportVersion))
+			if (Parser.Classes.TrailRenderer.TrailRenderer.HasEmitting(container.ExportVersion))
 			{
 				instance.Emitting = GetEmitting(container, origin.Emitting);
 			}
 			return instance;
 		}
 
-		private static LineParameters GetParameters(IExportContainer container, TrailRenderer origin)
+		private static LineParameters GetParameters(IExportContainer container, Parser.Classes.TrailRenderer.TrailRenderer origin)
 		{
-			if (TrailRenderer.HasParameters(container.Version))
+			if (Parser.Classes.TrailRenderer.TrailRenderer.HasParameters(container.Version))
 			{
 				return origin.Parameters.Convert(container);
 			}
@@ -37,7 +37,7 @@ namespace AssetRipper.Converters
 
 		private static bool GetEmitting(IExportContainer container, bool origin)
 		{
-			return TrailRenderer.HasEmitting(container.Version) ? origin : true;
+			return Parser.Classes.TrailRenderer.TrailRenderer.HasEmitting(container.Version) ? origin : true;
 		}
 	}
 }

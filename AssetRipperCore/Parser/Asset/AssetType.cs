@@ -1,4 +1,4 @@
-namespace AssetRipper
+namespace AssetRipper.Parser.Asset
 {
 	public enum AssetType
 	{

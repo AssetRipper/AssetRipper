@@ -1,7 +1,10 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.ShaderVariantCollections
+namespace AssetRipper.Parser.Classes.ShaderVariantCollection
 {
 	public struct ShaderInfo : IAssetReadable, IYAMLExportable
 	{

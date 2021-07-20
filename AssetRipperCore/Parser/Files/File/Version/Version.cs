@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Files.File.Version
 {
 	public readonly struct Version : IComparable<Version>
 	{

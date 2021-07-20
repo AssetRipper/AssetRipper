@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.AudioSources
+﻿namespace AssetRipper.Parser.Classes.AudioSource
 {
 	public enum AudioRolloffMode
 	{

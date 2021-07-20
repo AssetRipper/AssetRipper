@@ -1,8 +1,14 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.ParticleSystems
+namespace AssetRipper.Parser.Classes.ParticleSystem.Shape
 {
 	public sealed class ShapeModule : ParticleSystemModule, IDependent
 	{
@@ -239,7 +245,7 @@ namespace AssetRipper.Classes.ParticleSystems
 			}
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Mesh, MeshName);
 			yield return context.FetchDependency(MeshRenderer, MeshRendererName);
@@ -405,12 +411,12 @@ namespace AssetRipper.Classes.ParticleSystems
 		public Vector3f Rotation;
 		public Vector3f Scale;
 		public MultiModeParameter MeshSpawn;
-		public PPtr<Mesh> Mesh;
+		public PPtr<Mesh.Mesh> Mesh;
 		public PPtr<MeshRenderer> MeshRenderer;
 		public PPtr<SkinnedMeshRenderer> SkinnedMeshRenderer;
-		public PPtr<Sprite> Sprite;
-		public PPtr<SpriteRenderer> SpriteRenderer;
-		public PPtr<Texture2D> Texture;
+		public PPtr<Sprite.Sprite> Sprite;
+		public PPtr<SpriteRenderer.SpriteRenderer> SpriteRenderer;
+		public PPtr<Texture2D.Texture2D> Texture;
 		public MultiModeParameter Radius;
 		public MultiModeParameter Arc;
 	}

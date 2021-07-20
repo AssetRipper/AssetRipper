@@ -1,6 +1,9 @@
-﻿using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable.AnimationCurveTpl;
+using AssetRipper.Parser.IO.Asset.Reader;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public sealed class TransformAnimationTrack : BaseAnimationTrack
 	{

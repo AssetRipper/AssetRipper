@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ReflectionProbes
+﻿namespace AssetRipper.Parser.Classes.ReflectionProbe
 {
 	/// <summary>
 	/// When a probe's ReflectionProbe.refreshMode is set to ReflectionProbeRefreshMode.EveryFrame, this enum specify whether or not Unity should update the probe's cubemap over several frames or update the whole cubemap in one frame.

@@ -1,11 +1,19 @@
-using AssetRipper;
-using AssetRipper.Converters;
-using AssetRipper.Converters.TerrainDatas;
+using AssetRipper.Converters.Classes.TerrainData;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.TerrainDatas
+namespace AssetRipper.Parser.Classes.TerrainData
 {
 	public struct Heightmap : IAsset, IDependent
 	{
@@ -199,7 +207,7 @@ namespace AssetRipper.Classes.TerrainDatas
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			if (HasDefaultPhysicMaterial(context.Version))
 			{
@@ -239,7 +247,7 @@ namespace AssetRipper.Classes.TerrainDatas
 		public const string LevelsName = "m_Levels";
 		public const string ScaleName = "m_Scale";
 
-		public PPtr<PhysicMaterial> DefaultPhysicMaterial;
+		public PPtr<PhysicMaterial.PhysicMaterial> DefaultPhysicMaterial;
 		public Vector3f Scale;
 	}
 }

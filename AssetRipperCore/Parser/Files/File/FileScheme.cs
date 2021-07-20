@@ -1,8 +1,10 @@
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Files.File.Parser;
+using AssetRipper.Parser.Files.SerializedFile.Parser;
+using AssetRipper.Parser.Utils;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Files.File
 {
 	public abstract class FileScheme : IDisposable
 	{

@@ -1,7 +1,10 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.RenderSettingss
+namespace AssetRipper.Parser.Classes.RenderSettings
 {
 	/// <summary>
 	/// LightProbeCoefficients and SH9Coefficients previously

@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Classes.AnimationClips
+﻿using AssetRipper.Parser.IO.Asset.Reader;
+
+namespace AssetRipper.Parser.Classes.AnimationClip.Clip
 {
 	public struct ConstantClip : IAssetReadable
 	{

@@ -1,14 +1,19 @@
-using AssetRipper;
-using AssetRipper.Classes.Fonts;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.IO.Extensions;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Font
 {
 	public sealed class Font : NamedObject
 	{
@@ -297,9 +302,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -415,7 +420,7 @@ namespace AssetRipper.Classes
 		public const string UseLegacyBoundsCalculationName = "m_UseLegacyBoundsCalculation";
 		public const string ShouldRoundAdvanceValueName = "m_ShouldRoundAdvanceValue";
 
-		public PPtr<Material> DefaultMaterial;
+		public PPtr<Material.Material> DefaultMaterial;
 		public PPtr<Texture> Texture;
 	}
 }

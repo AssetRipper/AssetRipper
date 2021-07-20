@@ -1,5 +1,6 @@
 ﻿using AssetRipper;
-using AssetRipper.Classes.Shaders;
+using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Parser.Files.File.Version;
 using System.IO;
 
 namespace AssetRipperGUI.Exporters

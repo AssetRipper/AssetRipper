@@ -1,9 +1,12 @@
-using AssetRipper;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 
-namespace AssetRipper.Classes.NavMeshDatas
+namespace AssetRipper.Parser.Classes.NavMeshData
 {
 	public struct HeightMeshData : IAssetReadable, IYAMLExportable
 	{

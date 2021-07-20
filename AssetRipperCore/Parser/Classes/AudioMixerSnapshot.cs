@@ -1,9 +1,11 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 #warning TODO: not implemented
 	public sealed class AudioMixerSnapshot : NamedObject
@@ -20,9 +22,9 @@ namespace AssetRipper.Classes
 			SnapshotID.Read(reader);
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -41,7 +43,7 @@ namespace AssetRipper.Classes
 		public const string AudioMixerName = "m_AudioMixer";
 		public const string SnapshotIDName = "m_SnapshotID";
 
-		public PPtr<AudioMixer> AudioMixer;
+		public PPtr<AudioMixer.AudioMixer> AudioMixer;
 		public UnityGUID SnapshotID;
 	}
 }

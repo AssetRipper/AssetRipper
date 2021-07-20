@@ -1,8 +1,8 @@
-using AssetRipper.Game;
-using AssetRipper.Game.Assembly;
-using AssetRipper.Game.Assembly.Mono;
 using AssetRipper.IO.MultiFile;
 using AssetRipper.Logging;
+using AssetRipper.Parser.Utils;
+using AssetRipper.Structure.GameCollection.Assembly;
+using AssetRipper.Structure.GameCollection.Assembly.Mono;
 using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper
+namespace AssetRipper.Structure.GameStructure
 {
 	public abstract class PlatformGameStructure
 	{

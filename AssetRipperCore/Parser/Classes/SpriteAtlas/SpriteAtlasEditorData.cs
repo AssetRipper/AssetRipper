@@ -1,12 +1,18 @@
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.TextureImporters;
-using AssetRipper.Classes.Textures;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Meta.Importers.Texture;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Texture2D;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.SpriteAtlases
+namespace AssetRipper.Parser.Classes.SpriteAtlas
 {
 	public class SpriteAtlasEditorData : IAssetReadable, IYAMLExportable, IDependent
 	{
@@ -14,16 +20,16 @@ namespace AssetRipper.Classes.SpriteAtlases
 		{
 		}
 
-		public SpriteAtlasEditorData(IReadOnlyList<PPtr<Sprite>> packables)
+		public SpriteAtlasEditorData(IReadOnlyList<PPtr<Sprite.Sprite>> packables)
 		{
 			TextureSettings = new TextureSettings(true);
 			PlatformSettings = Array.Empty<TextureImporterPlatformSettings>();
 			PackingSettings = new PackingSettings(true);
 			VariantMultiplier = 1;
-			Packables = new PPtr<Object>[packables.Count];
+			Packables = new PPtr<Object.Object>[packables.Count];
 			for (int i = 0; i < packables.Count; i++)
 			{
-				Packables[i] = packables[i].CastTo<Object>();
+				Packables[i] = packables[i].CastTo<Object.Object>();
 			}
 			BindAsDefault = true;
 		}
@@ -68,7 +74,7 @@ namespace AssetRipper.Classes.SpriteAtlases
 			PlatformSettings = reader.ReadAssetArray<TextureImporterPlatformSettings>();
 			PackingSettings.Read(reader);
 			VariantMultiplier = reader.ReadSingle();
-			Packables = reader.ReadAssetArray<PPtr<Object>>();
+			Packables = reader.ReadAssetArray<PPtr<Object.Object>>();
 			BindAsDefault = reader.ReadBoolean();
 			if (HasStoredHash(reader.Version))
 			{
@@ -77,9 +83,9 @@ namespace AssetRipper.Classes.SpriteAtlases
 			reader.AlignStream();
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in context.FetchDependencies(Packables, PackablesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Packables, PackablesName))
 			{
 				yield return asset;
 			}
@@ -134,7 +140,7 @@ namespace AssetRipper.Classes.SpriteAtlases
 
 		public TextureImporterPlatformSettings[] PlatformSettings { get; set; }
 		public float VariantMultiplier { get; set; }
-		public PPtr<Object>[] Packables { get; set; }
+		public PPtr<Object.Object>[] Packables { get; set; }
 		public bool BindAsDefault { get; set; }
 
 		public const string TextureSettingsName = "textureSettings";

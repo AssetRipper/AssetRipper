@@ -1,8 +1,13 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.TerrainDatas
+namespace AssetRipper.Parser.Classes.TerrainData
 {
 	public struct TreeDatabase : IAssetReadable, IAssetWritable
 	{
@@ -24,9 +29,9 @@ namespace AssetRipper.Classes.TerrainDatas
 			node.Add(TreePrototypesName, TreePrototypes.ExportYAML(container));
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in context.FetchDependencies(TreePrototypes, TreeInstancesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(TreePrototypes, TreeInstancesName))
 			{
 				yield return asset;
 			}

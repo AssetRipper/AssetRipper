@@ -1,8 +1,13 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.TextureImporters
+namespace AssetRipper.Parser.Classes.Meta.Importers.Texture
 {
 	public struct SecondarySpriteTexture : IAsset, IDependent
 	{
@@ -22,7 +27,7 @@ namespace AssetRipper.Classes.TextureImporters
 
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Texture, TextureName);
 		}
@@ -40,6 +45,6 @@ namespace AssetRipper.Classes.TextureImporters
 		public const string TextureName = "texture";
 		public const string NameName = "name";
 
-		public PPtr<Texture2D> Texture;
+		public PPtr<Texture2D.Texture2D> Texture;
 	}
 }

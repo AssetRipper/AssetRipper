@@ -1,11 +1,14 @@
-using AssetRipper.Converters.Script;
+using AssetRipper.Converters.Project.Exporter.Script;
+using AssetRipper.Converters.Project.Exporter.Script.Elements;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Utils;
+using AssetRipper.Structure.GameCollection.Assembly.Serializable;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Game.Assembly.Mono
+namespace AssetRipper.Structure.GameCollection.Assembly.Mono
 {
 	internal sealed class MonoManager : IAssemblyManager, IAssemblyResolver
 	{

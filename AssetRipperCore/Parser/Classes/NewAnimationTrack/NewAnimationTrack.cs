@@ -1,8 +1,10 @@
-using AssetRipper.Classes.NewAnimationTracks;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.NewAnimationTrack
 {
 	public sealed class NewAnimationTrack : BaseAnimationTrack
 	{

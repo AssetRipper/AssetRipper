@@ -1,8 +1,12 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.TextureImporters
+namespace AssetRipper.Parser.Classes.Meta.Importers.Texture
 {
 	public struct TextureImportOutput : IAsset
 	{

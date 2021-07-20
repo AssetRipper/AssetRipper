@@ -1,4 +1,4 @@
-﻿namespace AssetRipper
+﻿namespace AssetRipper.Parser.Files.File.Parser
 {
 	public enum FileEntryType
 	{

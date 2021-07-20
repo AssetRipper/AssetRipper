@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper
+namespace AssetRipper.Structure.GameStructure.Platforms
 {
 	internal class PCGameStructure : PlatformGameStructure
 	{

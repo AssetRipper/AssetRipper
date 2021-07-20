@@ -1,6 +1,6 @@
 ﻿using AssetRipper.IO.Endian;
 
-namespace AssetRipper.BundleFiles
+namespace AssetRipper.Parser.Files.BundleFile.Parser.Header
 {
 	public sealed class BundleFileStreamHeader
 	{

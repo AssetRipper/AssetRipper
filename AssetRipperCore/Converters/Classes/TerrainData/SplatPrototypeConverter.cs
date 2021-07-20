@@ -1,7 +1,8 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Classes.TerrainDatas;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.Classes.TerrainData;
 
-namespace AssetRipper.Converters.TerrainDatas
+namespace AssetRipper.Converters.Classes.TerrainData
 {
 	public static class SplatPrototypeConverter
 	{

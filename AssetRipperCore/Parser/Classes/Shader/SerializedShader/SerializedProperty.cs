@@ -1,9 +1,11 @@
 using AssetRipper.Extensions;
+using AssetRipper.Parser.Classes.Shader.SerializedShader.Enum;
+using AssetRipper.Parser.IO.Asset.Reader;
 using System;
 using System.Globalization;
 using System.IO;
 
-namespace AssetRipper.Classes.Shaders
+namespace AssetRipper.Parser.Classes.Shader.SerializedShader
 {
 	public struct SerializedProperty : IAssetReadable
 	{

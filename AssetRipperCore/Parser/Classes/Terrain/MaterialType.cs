@@ -1,4 +1,4 @@
-namespace AssetRipper.Classes.Terrains
+namespace AssetRipper.Parser.Classes.Terrain
 {
 	/// <summary>
 	/// The type of the material used to render a terrain object. Could be one of the built-in types or custom.

@@ -1,6 +1,7 @@
-﻿using AssetRipper.Classes;
+﻿using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.IO.Asset;
 
-namespace AssetRipper.Layout
+namespace AssetRipper.Layout.Classes
 {
 	public sealed class TransformLayout
 	{

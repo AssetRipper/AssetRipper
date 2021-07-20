@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Lights
+﻿namespace AssetRipper.Parser.Classes.Light
 {
 	/// <summary>
 	/// Shadow casting options for a Light.

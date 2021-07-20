@@ -1,6 +1,8 @@
-﻿using AssetRipper.Classes;
+﻿using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Parser.Classes.Utils.Extensions;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Utils.Extensions
 {
 	public static class IAssetContainerExtensions
 	{

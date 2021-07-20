@@ -1,4 +1,4 @@
-namespace AssetRipper.Classes.ParticleSystems
+namespace AssetRipper.Parser.Classes.ParticleSystem.UV
 {
 	/// <summary>
 	/// Control how animation frames are selected.

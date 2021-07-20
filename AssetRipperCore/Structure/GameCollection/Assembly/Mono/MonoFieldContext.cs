@@ -2,7 +2,7 @@ using AssetRipper.Layout;
 using Mono.Cecil;
 using System.Collections.Generic;
 
-namespace AssetRipper.Game.Assembly.Mono
+namespace AssetRipper.Structure.GameCollection.Assembly.Mono
 {
 	public readonly struct MonoFieldContext
 	{

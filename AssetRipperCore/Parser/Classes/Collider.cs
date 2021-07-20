@@ -1,8 +1,12 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public abstract class Collider : Component
 	{
@@ -44,9 +48,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -81,7 +85,7 @@ namespace AssetRipper.Classes
 		public const string IsTriggerName = "m_IsTrigger";
 		public const string EnabledName = "m_Enabled";
 
-		public PPtr<PhysicMaterial> Material;
+		public PPtr<PhysicMaterial.PhysicMaterial> Material;
 
 		protected abstract bool IncludesMaterial { get; }
 		protected abstract bool IncludesIsTrigger { get; }

@@ -1,7 +1,10 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.NavMeshProjectSettingss
+namespace AssetRipper.Parser.Classes.NavMeshProjectSettings
 {
 	/// <summary>
 	/// NavMeshLayerData previously

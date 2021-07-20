@@ -1,11 +1,22 @@
-using AssetRipper.Classes.AnimationClips;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Classes.AnimationClip;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.AnimationClip.Clip;
+using AssetRipper.Parser.Classes.AnimationClip.Curves;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.AnimationClip
 {
 	public sealed class AnimationClip : Motion
 	{
@@ -314,41 +325,41 @@ namespace AssetRipper.Classes
 #endif
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			if (HasClassIDToTrack(context.Version, context.Flags))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies((IEnumerable<PPtr<BaseAnimationTrack>>)ClassIDToTrack.Values, ClassIDToTrackName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies((IEnumerable<PPtr<BaseAnimationTrack>>)ClassIDToTrack.Values, ClassIDToTrackName))
 				{
 					yield return asset;
 				}
-				foreach (PPtr<Object> asset in context.FetchDependencies(ChildTracks, ChildTracksName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(ChildTracks, ChildTracksName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasCurves(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(FloatCurves, FloatCurvesName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(FloatCurves, FloatCurvesName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasPPtrCurves(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(PPtrCurves, PPtrCurvesName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(PPtrCurves, PPtrCurvesName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasClipBindingConstant(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(ClipBindingConstant, ClipBindingConstantName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(ClipBindingConstant, ClipBindingConstantName))
 				{
 					yield return asset;
 				}
@@ -356,18 +367,18 @@ namespace AssetRipper.Classes
 #if UNIVERSAL
 			if (HasAnimationClipSettings(context.Version, context.Flags))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(AnimationClipSettings, AnimationClipSettingsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(AnimationClipSettings, AnimationClipSettingsName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasEditorCurves(context.Version, context.Flags))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(EditorCurves, EditorCurvesName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(EditorCurves, EditorCurvesName))
 				{
 					yield return asset;
 				}
-				foreach (PPtr<Object> asset in context.FetchDependencies(EulerEditorCurves, EulerEditorCurvesName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(EulerEditorCurves, EulerEditorCurvesName))
 				{
 					yield return asset;
 				}
@@ -375,7 +386,7 @@ namespace AssetRipper.Classes
 #endif
 			if (HasEvents(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(Events, EventsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Events, EventsName))
 				{
 					yield return asset;
 				}
@@ -432,13 +443,13 @@ namespace AssetRipper.Classes
 		public IReadOnlyDictionary<uint, string> FindTOS()
 		{
 			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
-			foreach (Object asset in File.Collection.FetchAssets())
+			foreach (Object.Object asset in File.Collection.FetchAssets())
 			{
 				switch (asset.ClassID)
 				{
 					case ClassIDType.Avatar:
 						{
-							Avatar avatar = (Avatar)asset;
+							Avatar.Avatar avatar = (Avatar.Avatar)asset;
 							if (AddAvatarTOS(avatar, tos))
 							{
 								return tos;
@@ -447,7 +458,7 @@ namespace AssetRipper.Classes
 						break;
 
 					case ClassIDType.Animator:
-						Animator animator = (Animator)asset;
+						Animator.Animator animator = (Animator.Animator)asset;
 						if (IsAnimatorContainsClip(animator))
 						{
 							if (AddAnimatorTOS(animator, tos))
@@ -458,7 +469,7 @@ namespace AssetRipper.Classes
 						break;
 
 					case ClassIDType.Animation:
-						Animation animation = (Animation)asset;
+						Animation.Animation animation = (Animation.Animation)asset;
 						if (IsAnimationContainsClip(animation))
 						{
 							if (AddAnimationTOS(animation, tos))
@@ -472,14 +483,14 @@ namespace AssetRipper.Classes
 			return tos;
 		}
 
-		public IEnumerable<GameObject> FindRoots()
+		public IEnumerable<GameObject.GameObject> FindRoots()
 		{
-			foreach (Object asset in File.Collection.FetchAssets())
+			foreach (Object.Object asset in File.Collection.FetchAssets())
 			{
 				switch (asset.ClassID)
 				{
 					case ClassIDType.Animator:
-						Animator animator = (Animator)asset;
+						Animator.Animator animator = (Animator.Animator)asset;
 						if (IsAnimatorContainsClip(animator))
 						{
 							yield return animator.GameObject.GetAsset(animator.File);
@@ -487,7 +498,7 @@ namespace AssetRipper.Classes
 						break;
 
 					case ClassIDType.Animation:
-						Animation animation = (Animation)asset;
+						Animation.Animation animation = (Animation.Animation)asset;
 						if (IsAnimationContainsClip(animation))
 						{
 							yield return animation.GameObject.GetAsset(animation.File);
@@ -499,7 +510,7 @@ namespace AssetRipper.Classes
 			yield break;
 		}
 
-		private bool IsAnimatorContainsClip(Animator animator)
+		private bool IsAnimatorContainsClip(Animator.Animator animator)
 		{
 			RuntimeAnimatorController runetime = animator.Controller.FindAsset(animator.File);
 			if (runetime == null)
@@ -512,19 +523,19 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		private bool IsAnimationContainsClip(Animation animation)
+		private bool IsAnimationContainsClip(Animation.Animation animation)
 		{
 			return animation.IsContainsAnimationClip(this);
 		}
 
-		private bool AddAvatarTOS(Avatar avatar, Dictionary<uint, string> tos)
+		private bool AddAvatarTOS(Avatar.Avatar avatar, Dictionary<uint, string> tos)
 		{
 			return AddTOS(avatar.TOS, tos);
 		}
 
-		private bool AddAnimatorTOS(Animator animator, Dictionary<uint, string> tos)
+		private bool AddAnimatorTOS(Animator.Animator animator, Dictionary<uint, string> tos)
 		{
-			Avatar avatar = animator.Avatar.FindAsset(animator.File);
+			Avatar.Avatar avatar = animator.Avatar.FindAsset(animator.File);
 			if (avatar != null)
 			{
 				if (AddAvatarTOS(avatar, tos))
@@ -537,9 +548,9 @@ namespace AssetRipper.Classes
 			return AddTOS(animatorTOS, tos);
 		}
 
-		private bool AddAnimationTOS(Animation animation, Dictionary<uint, string> tos)
+		private bool AddAnimationTOS(Animation.Animation animation, Dictionary<uint, string> tos)
 		{
-			GameObject go = animation.GameObject.GetAsset(animation.File);
+			GameObject.GameObject go = animation.GameObject.GetAsset(animation.File);
 			IReadOnlyDictionary<uint, string> animationTOS = go.BuildTOS();
 			return AddTOS(animationTOS, tos);
 		}
@@ -549,7 +560,7 @@ namespace AssetRipper.Classes
 			int tosCount = ClipBindingConstant.GenericBindings.Length;
 			for (int i = 0; i < tosCount; i++)
 			{
-				ref GenericBinding binding = ref ClipBindingConstant.GenericBindings[i];
+				ref GenericBinding.GenericBinding binding = ref ClipBindingConstant.GenericBindings[i];
 				if (src.TryGetValue(binding.Path, out string path))
 				{
 					dest[binding.Path] = path;

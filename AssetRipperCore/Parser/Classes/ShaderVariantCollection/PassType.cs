@@ -1,5 +1,5 @@
 ﻿
-namespace AssetRipper.Classes.ShaderVariantCollections
+namespace AssetRipper.Parser.Classes.ShaderVariantCollection
 {
 	/// <summary>
 	/// Shader pass type for Unity's lighting pipeline.

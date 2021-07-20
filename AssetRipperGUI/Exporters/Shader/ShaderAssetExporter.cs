@@ -1,16 +1,19 @@
 using AssetRipper;
-using AssetRipper.Classes;
-using AssetRipper.Classes.Shaders;
 using AssetRipper.Converters;
-using AssetRipper.Converters.Shaders;
-using AssetRipper.Project;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Converters.Classes.Shader;
+using AssetRipper.Converters.Project;
+using AssetRipper.Converters.Project.Exporter;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Shader;
+using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Structure.ProjectCollection.Collections;
 using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Object = AssetRipper.Classes.Object;
-using Version = AssetRipper.Version;
+using Object = AssetRipper.Parser.Classes.Object.Object;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
 namespace AssetRipperGUI.Exporters
 {

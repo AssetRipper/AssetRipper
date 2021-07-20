@@ -1,10 +1,12 @@
 ﻿using AssetRipper.Extensions;
 using AssetRipper.IO.Smart;
 using AssetRipper.Lz4;
+using AssetRipper.Parser.Files.BundleFile.Parser;
+using AssetRipper.Parser.Utils;
 using System;
 using System.IO;
 
-namespace AssetRipper.BundleFiles
+namespace AssetRipper.Parser.Files.BundleFile.IO
 {
 	internal sealed class BundleFileBlockReader : IDisposable
 	{

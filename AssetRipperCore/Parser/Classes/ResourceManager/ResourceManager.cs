@@ -1,10 +1,15 @@
-using AssetRipper.Classes.ResourceManagers;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.ResourceManager
 {
 	public sealed class ResourceManager : GlobalGameManager
 	{
@@ -22,27 +27,27 @@ namespace AssetRipper.Classes
 		{
 			base.Read(reader);
 
-			Container = reader.ReadKVPStringTArray<PPtr<Object>>();
+			Container = reader.ReadKVPStringTArray<PPtr<Object.Object>>();
 			if (HasDependentAssets(reader.Version, reader.Flags))
 			{
 				DependentAssets = reader.ReadAssetArray<ResourceManagerDependency>();
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
 			{
 				yield return asset;
 			}
 			if (HasDependentAssets(context.Version, context.Flags))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(DependentAssets, DependentAssetsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(DependentAssets, DependentAssetsName))
 				{
 					yield return asset;
 				}
@@ -60,7 +65,7 @@ namespace AssetRipper.Classes
 			return node;
 		}
 
-		public KeyValuePair<string, PPtr<Object>>[] Container { get; set; }
+		public KeyValuePair<string, PPtr<Object.Object>>[] Container { get; set; }
 		public ResourceManagerDependency[] DependentAssets { get; set; }
 
 		public const string ContainerName = "m_Container";

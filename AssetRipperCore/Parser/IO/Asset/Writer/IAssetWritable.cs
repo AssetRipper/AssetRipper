@@ -1,4 +1,4 @@
-﻿namespace AssetRipper
+﻿namespace AssetRipper.Parser.IO.Asset.Writer
 {
 	public interface IAssetWritable
 	{

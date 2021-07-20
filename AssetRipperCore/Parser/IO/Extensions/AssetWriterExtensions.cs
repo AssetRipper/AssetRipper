@@ -1,7 +1,8 @@
 ﻿using AssetRipper.IO.Extensions;
+using AssetRipper.Parser.IO.Asset.Writer;
 using System;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.IO.Extensions
 {
 	public static class AssetWriterExtensions
 	{

@@ -1,6 +1,6 @@
 ﻿using AssetRipper.YAML;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Utils.Extensions
 {
 	public static class YAMLMappingNodeExtensions
 	{

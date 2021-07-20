@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.SpriteRenderers
+﻿namespace AssetRipper.Parser.Classes.SpriteRenderer
 {
 	/// <summary>
 	/// Determines the position of the Sprite used for sorting the Renderer.

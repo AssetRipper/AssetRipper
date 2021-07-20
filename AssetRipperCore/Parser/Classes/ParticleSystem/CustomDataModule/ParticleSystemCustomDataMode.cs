@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystems
+﻿namespace AssetRipper.Parser.Classes.ParticleSystem.CustomDataModule
 {
 	/// <summary>
 	/// Which mode the Custom Data module uses to generate its data.

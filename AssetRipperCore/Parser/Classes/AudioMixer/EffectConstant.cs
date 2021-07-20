@@ -1,8 +1,10 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 
-namespace AssetRipper.Classes.AudioMixers
+namespace AssetRipper.Parser.Classes.AudioMixer
 {
 #warning TODO: not implemented
 	public struct EffectConstant : IAssetReadable, IYAMLExportable

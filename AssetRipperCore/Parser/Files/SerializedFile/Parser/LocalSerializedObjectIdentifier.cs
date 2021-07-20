@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.SerializedFiles
+﻿using AssetRipper.Parser.Files.SerializedFile.IO;
+
+namespace AssetRipper.Parser.Files.SerializedFile.Parser
 {
 	public struct LocalSerializedObjectIdentifier : ISerializedReadable, ISerializedWritable
 	{

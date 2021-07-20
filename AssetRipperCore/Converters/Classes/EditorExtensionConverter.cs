@@ -1,7 +1,8 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Layout;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Layout.Classes;
+using AssetRipper.Parser.Classes;
 
-namespace AssetRipper.Converters
+namespace AssetRipper.Converters.Classes
 {
 	public static class EditorExtensionConverter
 	{

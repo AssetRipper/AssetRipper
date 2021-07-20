@@ -1,8 +1,13 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.TerrainDatas
+namespace AssetRipper.Parser.Classes.TerrainData
 {
 	public struct TreePrototype : IAsset, IDependent
 	{
@@ -18,7 +23,7 @@ namespace AssetRipper.Classes.TerrainDatas
 			writer.Write(BendFactor);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Prefab, PrefabName);
 		}
@@ -36,6 +41,6 @@ namespace AssetRipper.Classes.TerrainDatas
 		public const string PrefabName = "prefab";
 		public const string BendFactorName = "bendFactor";
 
-		public PPtr<GameObject> Prefab;
+		public PPtr<GameObject.GameObject> Prefab;
 	}
 }

@@ -1,16 +1,22 @@
-using AssetRipper.Classes;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Converters.Project.Exporter;
 using AssetRipper.Extensions;
 using AssetRipper.IO;
+using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.Classes.Meta;
+using AssetRipper.Parser.Classes.Meta.Importers.Asset;
+using AssetRipper.Parser.Classes.PrefabInstance;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset;
 using AssetRipper.Utils;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Object = AssetRipper.Classes.Object;
+using Object = AssetRipper.Parser.Classes.Object.Object;
 
-namespace AssetRipper.Project
+namespace AssetRipper.Structure.ProjectCollection.Collections
 {
 	public abstract class ExportCollection : IExportCollection
 	{

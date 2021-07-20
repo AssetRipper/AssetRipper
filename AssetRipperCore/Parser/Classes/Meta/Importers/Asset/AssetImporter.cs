@@ -1,14 +1,19 @@
-﻿using AssetRipper.Classes.AssetImporters;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Meta.Importers.Asset
 {
 	// NOTE: unknown layout for all importers for versions < 2.5.0
 	public abstract class AssetImporter : NamedObject
@@ -29,7 +34,7 @@ namespace AssetRipper.Classes
 			}
 			if (HasExternalObjects(layout.Info.Version))
 			{
-				ExternalObjects = new Dictionary<SourceAssetIdentifier, PPtr<Object>>();
+				ExternalObjects = new Dictionary<SourceAssetIdentifier, PPtr<Object.Object>>();
 			}
 			if (HasUsedFileIDs(layout.Info.Version))
 			{
@@ -133,7 +138,7 @@ namespace AssetRipper.Classes
 			}
 			if (HasExternalObjects(reader.Version))
 			{
-				ExternalObjects = new Dictionary<SourceAssetIdentifier, PPtr<Object>>();
+				ExternalObjects = new Dictionary<SourceAssetIdentifier, PPtr<Object.Object>>();
 				ExternalObjects.Read(reader);
 				if (IsAlignExternalObjects(reader.Version))
 				{
@@ -196,9 +201,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -209,7 +214,7 @@ namespace AssetRipper.Classes
 			}
 			if (HasExternalObjects(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(ExternalObjects.Select(t => t.Value), ExternalObjectsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(ExternalObjects.Select(t => t.Value), ExternalObjectsName))
 				{
 					yield return asset;
 				}
@@ -307,7 +312,7 @@ namespace AssetRipper.Classes
 
 		public Dictionary<Tuple<ClassIDType, long>, string> InternalIDToNameTable { get; set; }
 		public Dictionary<long, string> FileIDToRecycleName { get; set; }
-		public Dictionary<SourceAssetIdentifier, PPtr<Object>> ExternalObjects { get; set; }
+		public Dictionary<SourceAssetIdentifier, PPtr<Object.Object>> ExternalObjects { get; set; }
 		public long[] UsedFileIDs { get; set; }
 		public string UserData { get; set; }
 		public string AssetBundleName { get; set; }
@@ -347,7 +352,7 @@ namespace AssetRipper.Classes
 		public const string OldHashIdentityName = "m_OldHashIdentity";
 		public const string NewHashIdentityName = "m_NewHashIdentity";
 
-		public PPtr<Texture2D> Preview;
+		public PPtr<Texture2D.Texture2D> Preview;
 		public MdFour OldHashIdentity;
 		public MdFour NewHashIdentity;
 	}

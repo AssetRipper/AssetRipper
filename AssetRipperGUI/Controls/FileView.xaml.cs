@@ -1,5 +1,9 @@
 ﻿using AssetRipper;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Files.File.Parser;
+using AssetRipper.Parser.Files.ResourceFile;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.Files.SerializedFile.Parser;
+using AssetRipper.Structure.GameCollection;
 using System;
 using System.Collections.Generic;
 using System.Windows.Controls;

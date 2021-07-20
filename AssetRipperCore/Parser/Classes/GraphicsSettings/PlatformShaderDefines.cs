@@ -1,9 +1,11 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Shaders;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.GraphicsSettingss
+namespace AssetRipper.Parser.Classes.GraphicsSettings
 {
 	public struct PlatformShaderDefines : IAssetReadable, IYAMLExportable
 	{

@@ -1,19 +1,26 @@
-using AssetRipper.Classes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Converters.Project.Exporter;
 using AssetRipper.Logging;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.Classes.Meta;
+using AssetRipper.Parser.Classes.Meta.Importers;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.OcclusionCullingData;
+using AssetRipper.Parser.Classes.OcclusionCullingSettings;
+using AssetRipper.Parser.Files.SerializedFile;
 using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Object = AssetRipper.Classes.Object;
+using Object = AssetRipper.Parser.Classes.Object.Object;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Project
+namespace AssetRipper.Structure.ProjectCollection.Collections
 {
-	public sealed class SceneExportCollection : ExportCollection, IComparer<Object>
+	public sealed class SceneExportCollection : ExportCollection, IComparer<Parser.Classes.Object.Object>
 	{
 		public SceneExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, ISerializedFile file)
 		{

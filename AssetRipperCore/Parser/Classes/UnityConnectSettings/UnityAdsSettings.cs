@@ -1,9 +1,13 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.UnityConnectSettingss
+namespace AssetRipper.Parser.Classes.UnityConnectSettings
 {
 	public struct UnityAdsSettings : IAssetReadable, IYAMLExportable
 	{

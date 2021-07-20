@@ -1,4 +1,4 @@
-namespace AssetRipper
+namespace AssetRipper.Parser.Asset
 {
 	// Since some output is based on string representation renamed values has negative index
 	public enum ClassIDType

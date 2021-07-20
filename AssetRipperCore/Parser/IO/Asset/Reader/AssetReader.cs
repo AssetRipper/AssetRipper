@@ -1,10 +1,12 @@
 using AssetRipper.IO.Endian;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Files.File;
 using System;
 using System.IO;
 using System.Text;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.IO.Asset.Reader
 {
 	public sealed class AssetReader : EndianReader
 	{

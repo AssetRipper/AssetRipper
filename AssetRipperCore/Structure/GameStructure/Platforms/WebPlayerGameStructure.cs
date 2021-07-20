@@ -1,10 +1,10 @@
-using AssetRipper.Game.Assembly;
+using AssetRipper.Structure.GameCollection.Assembly;
 using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper
+namespace AssetRipper.Structure.GameStructure.Platforms
 {
 	internal sealed class WebPlayerGameStructure : PlatformGameStructure
 	{

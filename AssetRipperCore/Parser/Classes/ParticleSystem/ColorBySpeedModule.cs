@@ -1,7 +1,9 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.ParticleSystems
+namespace AssetRipper.Parser.Classes.ParticleSystem
 {
 	public sealed class ColorBySpeedModule : ParticleSystemModule
 	{
@@ -24,7 +26,7 @@ namespace AssetRipper.Classes.ParticleSystems
 		public const string GradientName = "gradient";
 		public const string RangeName = "range";
 
-		public MinMaxGradient Gradient;
+		public MinMaxGradient.MinMaxGradient Gradient;
 		public Vector2f Range;
 	}
 }

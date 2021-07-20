@@ -1,8 +1,10 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 
-namespace AssetRipper.Classes.Avatars
+namespace AssetRipper.Parser.Classes.Avatar
 {
 	public struct Hand : IAssetReadable, IYAMLExportable
 	{

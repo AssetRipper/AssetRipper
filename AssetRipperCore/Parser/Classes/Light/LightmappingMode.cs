@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.Lights
+namespace AssetRipper.Parser.Classes.Light
 {
 	[Flags]
 	public enum LightmappingMode

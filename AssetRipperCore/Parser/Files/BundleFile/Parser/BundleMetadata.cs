@@ -1,4 +1,6 @@
-namespace AssetRipper.BundleFiles
+using AssetRipper.Parser.Files.BundleFile.IO;
+
+namespace AssetRipper.Parser.Files.BundleFile.Parser
 {
 	/// <summary>
 	/// Metadata about bundle's block or chunk

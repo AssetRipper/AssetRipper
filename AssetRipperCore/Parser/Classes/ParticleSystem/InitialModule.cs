@@ -1,7 +1,11 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.ParticleSystem.Curve;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.ParticleSystems
+namespace AssetRipper.Parser.Classes.ParticleSystem
 {
 	public sealed class InitialModule : ParticleSystemModule
 	{
@@ -158,7 +162,7 @@ namespace AssetRipper.Classes.ParticleSystems
 
 		public MinMaxCurve StartLifetime;
 		public MinMaxCurve StartSpeed;
-		public MinMaxGradient StartColor;
+		public MinMaxGradient.MinMaxGradient StartColor;
 		public MinMaxCurve StartSize;
 		public MinMaxCurve StartSizeY;
 		public MinMaxCurve StartSizeZ;

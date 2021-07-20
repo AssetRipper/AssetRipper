@@ -1,8 +1,11 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Meta;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset;
 using System.Collections.Generic;
 
-namespace AssetRipper.Project
+namespace AssetRipper.Structure.ProjectCollection.Collections
 {
 	public interface IExportCollection
 	{

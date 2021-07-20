@@ -1,9 +1,13 @@
-using AssetRipper.Classes.MeshColliders;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.MeshCollider
 {
 	public sealed class MeshCollider : Collider
 	{
@@ -93,9 +97,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -155,7 +159,7 @@ namespace AssetRipper.Classes
 		public const string SkinWidthName = "m_SkinWidth";
 		public const string MeshName = "m_Mesh";
 
-		public PPtr<Mesh> Mesh;
+		public PPtr<Mesh.Mesh> Mesh;
 
 		protected override bool IncludesIsTrigger => true;
 		protected override bool IncludesMaterial => true;

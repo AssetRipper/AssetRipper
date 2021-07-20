@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystems
+﻿namespace AssetRipper.Parser.Classes.ParticleSystem.TrailModule
 {
 	/// <summary>
 	/// Choose how Particle Trails are generated.

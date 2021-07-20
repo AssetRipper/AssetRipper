@@ -1,12 +1,18 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Game;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.AnimationClips
+namespace AssetRipper.Parser.Classes.AnimationClip
 {
 	public struct PPtrKeyframe : IAsset, IDependent
 	{
-		public PPtrKeyframe(float time, PPtr<Object> script)
+		public PPtrKeyframe(float time, PPtr<Object.Object> script)
 		{
 			Time = time;
 			Value = script;
@@ -17,7 +23,7 @@ namespace AssetRipper.Classes.AnimationClips
 			context.AddNode(nameof(PPtrKeyframe), name);
 			context.BeginChildren();
 			context.AddSingle(TimeName);
-			context.AddPPtr(nameof(Object), ValueName);
+			context.AddPPtr(nameof(Object.Object), ValueName);
 			context.EndChildren();
 		}
 
@@ -41,7 +47,7 @@ namespace AssetRipper.Classes.AnimationClips
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Value, ValueName);
 		}
@@ -51,6 +57,6 @@ namespace AssetRipper.Classes.AnimationClips
 		public const string TimeName = "time";
 		public const string ValueName = "value";
 
-		public PPtr<Object> Value;
+		public PPtr<Object.Object> Value;
 	}
 }

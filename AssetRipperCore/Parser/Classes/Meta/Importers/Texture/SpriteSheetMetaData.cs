@@ -1,14 +1,21 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Sprites;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Sprite;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System;
 using System.Collections.Generic;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.TextureImporters
+namespace AssetRipper.Parser.Classes.Meta.Importers.Texture
 {
 	public struct SpriteSheetMetaData : IAsset, IDependent
 	{
@@ -141,9 +148,9 @@ namespace AssetRipper.Classes.TextureImporters
 			}
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
 			{
 				yield return asset;
 			}

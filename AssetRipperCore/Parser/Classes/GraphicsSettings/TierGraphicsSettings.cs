@@ -1,8 +1,11 @@
-﻿using AssetRipper.Classes.Cameras;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Camera;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.GraphicsSettingss
+namespace AssetRipper.Parser.Classes.GraphicsSettings
 {
 	public struct TierGraphicsSettings : IAssetReadable, IYAMLExportable
 	{

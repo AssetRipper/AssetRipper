@@ -1,12 +1,19 @@
-using AssetRipper.BundleFiles;
 using AssetRipper.Extensions;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Smart;
 using AssetRipper.Lz4;
+using AssetRipper.Parser.Files.BundleFile.IO;
+using AssetRipper.Parser.Files.BundleFile.Parser;
+using AssetRipper.Parser.Files.BundleFile.Parser.Header;
+using AssetRipper.Parser.Files.File;
+using AssetRipper.Parser.Files.File.Parser;
+using AssetRipper.Parser.Utils;
+using AssetRipper.Structure.GameCollection;
+using AssetRipper.Structure.GameStructure;
 using System;
 using System.IO;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Files.BundleFile
 {
 	public sealed class BundleFileScheme : FileSchemeList
 	{

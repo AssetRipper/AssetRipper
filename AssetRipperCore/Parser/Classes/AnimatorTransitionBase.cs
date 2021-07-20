@@ -1,14 +1,17 @@
-using AssetRipper.Classes.AnimatorControllers;
-using AssetRipper.Classes.AnimatorTransitions;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Objects;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.AnimatorController.Constants;
+using AssetRipper.Parser.Classes.AnimatorTransition;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
 	public abstract class AnimatorTransitionBase : NamedObject
 	{
@@ -117,7 +120,7 @@ namespace AssetRipper.Classes
 		public const string MuteName = "m_Mute";
 		public const string IsExitName = "m_IsExit";
 
-		public PPtr<AnimatorStateMachine> DstStateMachine;
+		public PPtr<AnimatorStateMachine.AnimatorStateMachine> DstStateMachine;
 		public PPtr<AnimatorState> DstState;
 	}
 }

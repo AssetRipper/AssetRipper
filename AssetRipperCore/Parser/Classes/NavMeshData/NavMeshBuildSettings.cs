@@ -1,7 +1,11 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.NavMeshDatas
+namespace AssetRipper.Parser.Classes.NavMeshData
 {
 	/// <summary>
 	/// Introduced in 5.6.0

@@ -1,13 +1,18 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Files;
 using AssetRipper.Extensions;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Smart;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Files.File;
+using AssetRipper.Parser.Files.File.Parser;
+using AssetRipper.Parser.Files.SerializedFile.Parser;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.Utils;
+using AssetRipper.Structure.GameStructure;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper
+namespace AssetRipper.Parser.Files.SerializedFile
 {
 	public sealed class SerializedFileScheme : FileScheme
 	{

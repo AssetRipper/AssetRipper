@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Classes.Misc
+﻿using AssetRipper.Parser.Files.File.Version;
+
+namespace AssetRipper.Parser.Classes.Misc.KeyframeTpl.TangentMode
 {
 	public enum TangentMode
 	{

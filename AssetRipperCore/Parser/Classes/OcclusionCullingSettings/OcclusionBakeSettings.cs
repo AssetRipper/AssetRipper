@@ -1,7 +1,11 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes.OcclusionCullingSettingses
+namespace AssetRipper.Parser.Classes.OcclusionCullingSettings
 {
 	public struct OcclusionBakeSettings : IAsset
 	{

@@ -1,7 +1,7 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Game;
+using AssetRipper.Parser.Classes;
 
-namespace AssetRipper.Layout
+namespace AssetRipper.Layout.Classes
 {
 	public sealed class NamedObjectLayout
 	{

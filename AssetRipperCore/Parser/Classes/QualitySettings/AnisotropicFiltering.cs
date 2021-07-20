@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.QualitySettingss
+﻿namespace AssetRipper.Parser.Classes.QualitySettings
 {
 	/// <summary>
 	/// Anisotropic filtering mode.

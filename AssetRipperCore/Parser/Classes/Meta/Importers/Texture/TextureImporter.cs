@@ -1,12 +1,20 @@
-using AssetRipper.Classes.Sprites;
-using AssetRipper.Classes.TextureImporters;
-using AssetRipper.Classes.Textures;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Meta.Importers.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Sprite;
+using AssetRipper.Parser.Classes.Texture2D;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Meta.Importers.Texture
 {
 	public sealed class TextureImporter : AssetImporter
 	{
@@ -720,14 +728,14 @@ namespace AssetRipper.Classes
 			PostWrite(writer);
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object> asset in context.FetchDependencies(SpriteSheet, SpriteSheetName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(SpriteSheet, SpriteSheetName))
 			{
 				yield return asset;
 			}

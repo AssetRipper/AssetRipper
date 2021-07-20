@@ -1,9 +1,11 @@
-﻿using AssetRipper.Classes.AnimatorTransitions;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Classes.AnimatorTransition;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
 using AssetRipper.YAML;
 using System;
 
-namespace AssetRipper.Classes.AnimatorControllers
+namespace AssetRipper.Parser.Classes.AnimatorController.Constants
 {
 	public struct ConditionConstant : IAssetReadable, IYAMLExportable
 	{

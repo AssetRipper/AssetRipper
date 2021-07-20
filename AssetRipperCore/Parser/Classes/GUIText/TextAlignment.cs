@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.GUITexts
+﻿namespace AssetRipper.Parser.Classes.GUIText
 {
 	/// <summary>
 	/// How multiline text should be aligned.

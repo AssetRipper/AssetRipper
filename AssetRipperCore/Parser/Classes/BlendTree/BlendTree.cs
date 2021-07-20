@@ -1,17 +1,19 @@
-﻿using AssetRipper.Classes.AnimatorControllers;
-using AssetRipper.Classes.BlendTrees;
-using AssetRipper.Classes.Objects;
-using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
-using AssetRipper.SerializedFiles;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.AnimatorController.Constants;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.BlendTree
 {
 	public sealed class BlendTree : Motion
 	{
-		private BlendTree(AssetLayout layout, AssetInfo assetInfo, AnimatorController controller, StateConstant state, int nodeIndex) :
+		private BlendTree(AssetLayout layout, AssetInfo assetInfo, AnimatorController.AnimatorController controller, StateConstant state, int nodeIndex) :
 			base(layout)
 		{
 			AssetInfo = assetInfo;
@@ -37,7 +39,7 @@ namespace AssetRipper.Classes
 			BlendType = node.BlendType;
 		}
 
-		public static BlendTree CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController controller, StateConstant state, int nodeIndex)
+		public static BlendTree CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController.AnimatorController controller, StateConstant state, int nodeIndex)
 		{
 			return virtualFile.CreateAsset((assetInfo) => new BlendTree(virtualFile.Layout, assetInfo, controller, state, nodeIndex));
 		}

@@ -1,4 +1,7 @@
-﻿namespace AssetRipper.Layout
+﻿using AssetRipper.Layout.Classes.Misc.Serializable;
+using AssetRipper.Layout.Classes.Misc.Serializable.GUIStyle;
+
+namespace AssetRipper.Layout.Categories
 {
 	public sealed class SerializedLayoutCategory
 	{

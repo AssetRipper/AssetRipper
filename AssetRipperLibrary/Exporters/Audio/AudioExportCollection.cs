@@ -1,6 +1,8 @@
-using AssetRipper.Classes;
 using AssetRipper.Converters;
-using AssetRipper.Project;
+using AssetRipper.Converters.Project.Exporter;
+using AssetRipper.Parser.Classes.AudioClip;
+using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Structure.ProjectCollection.Collections;
 
 namespace AssetRipperLibrary.Exporters.Audio
 {

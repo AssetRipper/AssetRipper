@@ -1,11 +1,24 @@
-using AssetRipper.Classes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Project;
+using AssetRipper.Converters.Project;
+using AssetRipper.Converters.Project.Exporter.Engine;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes;
+using AssetRipper.Parser.Classes.Font;
+using AssetRipper.Parser.Classes.Material;
+using AssetRipper.Parser.Classes.Mesh;
+using AssetRipper.Parser.Classes.Meta;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Shader;
+using AssetRipper.Parser.Classes.Sprite;
+using AssetRipper.Parser.Classes.Texture2D;
+using AssetRipper.Parser.Files.SerializedFile;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.Utils;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Classes.Object;
+using Object = AssetRipper.Parser.Classes.Object.Object;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Converters.Project
+namespace AssetRipper.Structure.ProjectCollection.Collections
 {
 	public class EngineExportCollection : IExportCollection
 	{

@@ -1,9 +1,17 @@
-﻿using AssetRipper.Converters;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Meta.Importers.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Meta.Importers
 {
 	public class MonoImporter : AssetImporter
 	{
@@ -12,7 +20,7 @@ namespace AssetRipper.Classes
 		{
 			if (HasDefaultReferences(layout.Info.Version))
 			{
-				DefaultReferences = new Dictionary<string, PPtr<Object>>();
+				DefaultReferences = new Dictionary<string, PPtr<Object.Object>>();
 			}
 		}
 
@@ -51,7 +59,7 @@ namespace AssetRipper.Classes
 
 			if (HasDefaultReferences(reader.Version))
 			{
-				DefaultReferences = new Dictionary<string, PPtr<Object>>();
+				DefaultReferences = new Dictionary<string, PPtr<Object.Object>>();
 				DefaultReferences.Read(reader);
 			}
 			if (HasExecutionOrder(reader.Version))
@@ -59,7 +67,7 @@ namespace AssetRipper.Classes
 				ExecutionOrder = reader.ReadInt16();
 				reader.AlignStream();
 
-				Icon = reader.ReadAsset<PPtr<Texture2D>>();
+				Icon = reader.ReadAsset<PPtr<Texture2D.Texture2D>>();
 			}
 
 			PostRead(reader);
@@ -103,10 +111,10 @@ namespace AssetRipper.Classes
 
 		public override ClassIDType ClassID => ClassIDType.MonoImporter;
 
-		public Dictionary<string, PPtr<Object>> DefaultReferences { get; set; }
+		public Dictionary<string, PPtr<Object.Object>> DefaultReferences { get; set; }
 		public short ExecutionOrder { get; set; }
 		// map to Preview field just to reduce structure size. also they has same meaning
-		public PPtr<Texture2D> Icon
+		public PPtr<Texture2D.Texture2D> Icon
 		{
 			get => Preview;
 			set => Preview = value;

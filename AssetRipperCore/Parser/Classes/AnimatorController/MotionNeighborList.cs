@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Classes.AnimatorControllers
+﻿using AssetRipper.Parser.IO.Asset.Reader;
+
+namespace AssetRipper.Parser.Classes.AnimatorController
 {
 	public struct MotionNeighborList : IAssetReadable
 	{

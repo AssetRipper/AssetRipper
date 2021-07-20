@@ -1,8 +1,15 @@
 using AssetRipper.Extensions;
+using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Parser.Classes.Shader.Enums.GpuProgramType;
+using AssetRipper.Parser.Classes.Shader.Parameters;
+using AssetRipper.Parser.IO;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using System;
 using System.Collections.Generic;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.Shaders
+namespace AssetRipper.Parser.Classes.Shader
 {
 	public struct ShaderSubProgram : IAssetReadable, IAssetWritable
 	{

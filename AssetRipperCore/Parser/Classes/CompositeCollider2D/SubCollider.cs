@@ -1,8 +1,14 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.CompositeCollider2Ds
+namespace AssetRipper.Parser.Classes.CompositeCollider2D
 {
 	public struct SubCollider : IAssetReadable, IYAMLExportable, IDependent
 	{
@@ -21,7 +27,7 @@ namespace AssetRipper.Classes.CompositeCollider2Ds
 			reader.AlignStream();
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Collider, ColliderName);
 		}

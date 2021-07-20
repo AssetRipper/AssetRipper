@@ -1,10 +1,15 @@
-using AssetRipper.Classes.Meshes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Converters.Sprites;
+using AssetRipper.Converters.Classes.Sprite;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Mesh;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset.Reader;
 using System;
 using System.Collections.Generic;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes.Sprites
+namespace AssetRipper.Parser.Classes.Sprite
 {
 	public struct SpriteRenderData : IAssetReadable, IDependent
 	{
@@ -140,14 +145,14 @@ namespace AssetRipper.Classes.Sprites
 			}
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Texture, TextureName);
 			yield return context.FetchDependency(AlphaTexture, AlphaTextureName);
 
 			if (HasSecondaryTextures(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
 				{
 					yield return asset;
 				}
@@ -209,8 +214,8 @@ namespace AssetRipper.Classes.Sprites
 		public const string AlphaTextureName = "alphaTexture";
 		public const string SecondaryTexturesName = "secondaryTextures";
 
-		public PPtr<Texture2D> Texture;
-		public PPtr<Texture2D> AlphaTexture;
+		public PPtr<Texture2D.Texture2D> Texture;
+		public PPtr<Texture2D.Texture2D> AlphaTexture;
 		public VertexData VertexData;
 		/// <summary>
 		/// Actual sprite rectangle inside atlas texture (or in original texture for non atlas sprite)

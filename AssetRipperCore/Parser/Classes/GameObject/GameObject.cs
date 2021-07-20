@@ -1,13 +1,20 @@
-using AssetRipper.Classes.GameObjects;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Classes.GameObject;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Layout.Classes.GameObject;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using SevenZip;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.GameObject
 {
 	public sealed class GameObject : EditorExtension
 	{
@@ -24,7 +31,7 @@ namespace AssetRipper.Classes
 				Component = Array.Empty<ComponentPair>();
 			}
 			Name = string.Empty;
-			TagString = TagManager.UntaggedTag;
+			TagString = TagManager.TagManager.UntaggedTag;
 			IsActive = true;
 		}
 
@@ -135,7 +142,7 @@ namespace AssetRipper.Classes
 			return tos;
 		}
 
-		public override Object Convert(IExportContainer container)
+		public override Object.Object Convert(IExportContainer container)
 		{
 			return GameObjectConverter.Convert(container, this);
 		}
@@ -270,9 +277,9 @@ namespace AssetRipper.Classes
 #endif
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -280,14 +287,14 @@ namespace AssetRipper.Classes
 			GameObjectLayout layout = context.Layout.GameObject;
 			if (layout.IsComponentTuple)
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(ComponentTuple.Select(t => t.Item2), layout.ComponentName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(ComponentTuple.Select(t => t.Item2), layout.ComponentName))
 				{
 					yield return asset;
 				}
 			}
 			else
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(Component, layout.ComponentName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Component, layout.ComponentName))
 				{
 					yield return asset;
 				}
@@ -453,10 +460,10 @@ namespace AssetRipper.Classes
 			set => StaticEditorFlags = value ? uint.MaxValue : 0;
 		}
 
-		public PPtr<Texture2D> Icon;
+		public PPtr<Texture2D.Texture2D> Icon;
 #else
 		private bool IsStatic => false;
-		private PPtr<Texture2D> Icon => default;
+		private PPtr<Texture2D.Texture2D> Icon => default;
 #endif
 
 		private object m_component;

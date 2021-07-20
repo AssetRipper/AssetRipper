@@ -1,7 +1,6 @@
-﻿using AssetRipper.Converters;
-using AssetRipper.Layout.Misc;
+﻿using AssetRipper.Converters.Game;
 
-namespace AssetRipper.Layout
+namespace AssetRipper.Layout.Classes.Misc.Serializable
 {
 	public sealed class AnimationCurveTplLayout
 	{

@@ -1,9 +1,17 @@
-using AssetRipper.Converters;
-using AssetRipper.Converters.TerrainDatas;
+using AssetRipper.Converters.Classes.TerrainData;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.TerrainDatas
+namespace AssetRipper.Parser.Classes.TerrainData
 {
 	public struct SplatDatabase : IAsset, IDependent
 	{
@@ -42,7 +50,7 @@ namespace AssetRipper.Classes.TerrainDatas
 				Splats = reader.ReadAssetArray<SplatPrototype>();
 			}
 
-			AlphaTextures = reader.ReadAssetArray<PPtr<Texture2D>>();
+			AlphaTextures = reader.ReadAssetArray<PPtr<Texture2D.Texture2D>>();
 			AlphamapResolution = reader.ReadInt32();
 			BaseMapResolution = reader.ReadInt32();
 			if (HasColorSpace(reader.Version))
@@ -102,24 +110,24 @@ namespace AssetRipper.Classes.TerrainDatas
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			if (HasTerrainLayers(context.Version))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(TerrainLayers, TerrainLayersName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(TerrainLayers, TerrainLayersName))
 				{
 					yield return asset;
 				}
 			}
 			else
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(Splats, SplatsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Splats, SplatsName))
 				{
 					yield return asset;
 				}
 			}
 
-			foreach (PPtr<Object> asset in context.FetchDependencies(AlphaTextures, AlphaTexturesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(AlphaTextures, AlphaTexturesName))
 			{
 				yield return asset;
 			}
@@ -127,7 +135,7 @@ namespace AssetRipper.Classes.TerrainDatas
 
 		public SplatPrototype[] Splats { get; set; }
 		public PPtr<TerrainLayer>[] TerrainLayers { get; set; }
-		public PPtr<Texture2D>[] AlphaTextures { get; set; }
+		public PPtr<Texture2D.Texture2D>[] AlphaTextures { get; set; }
 		public int AlphamapResolution { get; set; }
 		public int BaseMapResolution { get; set; }
 		public int ColorSpace { get; set; }

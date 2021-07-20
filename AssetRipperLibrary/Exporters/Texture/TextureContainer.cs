@@ -1,8 +1,9 @@
 using AssetRipper;
-using AssetRipper.Classes;
 using AssetRipper.Extensions;
 using AssetRipper.IO.Endian;
 using AssetRipper.Logging;
+using AssetRipper.Parser.Classes.Texture2D;
+using AssetRipper.Parser.Files.ResourceFile;
 using AssetRipperLibrary.TextureContainers;
 using AssetRipperLibrary.TextureContainers.DDS;
 using AssetRipperLibrary.TextureContainers.KTX;

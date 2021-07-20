@@ -1,11 +1,14 @@
-using AssetRipper.Classes.Fonts;
-using AssetRipper.Classes.GUIStyles;
-using AssetRipper.Classes.GUITexts;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
+using AssetRipper.Layout.Classes.Misc.Serializable.GUIStyle;
+using AssetRipper.Parser.Classes.Font;
+using AssetRipper.Parser.Classes.GUIText;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
 using AssetRipper.YAML;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Misc.Serializable.GUIStyle
 {
 	public struct GUIStyle : IAsset
 	{
@@ -251,7 +254,7 @@ namespace AssetRipper.Classes
 		public RectOffset Margin;
 		public RectOffset Padding;
 		public RectOffset Overflow;
-		public PPtr<Font> Font;
+		public PPtr<Font.Font> Font;
 		public Vector2f ContentOffset;
 		public Vector2f ClipOffset;
 	}

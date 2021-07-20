@@ -1,13 +1,15 @@
-using AssetRipper;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.SpriteAtlases;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.SpriteAtlas
 {
 	public sealed class SpriteAtlas : NamedObject
 	{
@@ -34,7 +36,7 @@ namespace AssetRipper.Classes
 				EditorData = reader.ReadAsset<SpriteAtlasEditorData>();
 				MasterAtlas.Read(reader);
 			}
-			PackedSprites = reader.ReadAssetArray<PPtr<Sprite>>();
+			PackedSprites = reader.ReadAssetArray<PPtr<Sprite.Sprite>>();
 			PackedSpriteNamesToIndex = reader.ReadStringArray();
 			if (HasRenderDataMap(reader.Flags))
 			{
@@ -45,26 +47,26 @@ namespace AssetRipper.Classes
 			reader.AlignStream();
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			if (HasEditorData(context.Flags))
 			{
-				foreach (PPtr<Object> asset in context.FetchDependencies(EditorData, EditorDataName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(EditorData, EditorDataName))
 				{
 					yield return asset;
 				}
 				yield return context.FetchDependency(MasterAtlas, MasterAtlasName);
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(PackedSprites, PackedSpritesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(PackedSprites, PackedSpritesName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies((IEnumerable<SpriteAtlasData>)RenderDataMap.Values, RenderDataMapName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies((IEnumerable<SpriteAtlasData>)RenderDataMap.Values, RenderDataMapName))
 			{
 				yield return asset;
 			}
@@ -101,7 +103,7 @@ namespace AssetRipper.Classes
 		public override string ExportExtension => "spriteatlas";
 
 		public SpriteAtlasEditorData EditorData { get; set; }
-		public PPtr<Sprite>[] PackedSprites { get; set; }
+		public PPtr<Sprite.Sprite>[] PackedSprites { get; set; }
 		public string[] PackedSpriteNamesToIndex { get; set; }
 		public Dictionary<Tuple<UnityGUID, long>, SpriteAtlasData> RenderDataMap { get; set; } = new Dictionary<Tuple<UnityGUID, long>, SpriteAtlasData>();
 		public string Tag { get; set; }

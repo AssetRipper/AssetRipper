@@ -1,22 +1,25 @@
-﻿using AssetRipper.Classes;
-using AssetRipper.Classes.Meshes;
-using AssetRipper.Classes.Shaders;
+﻿using AssetRipper.Converters.Project;
 using AssetRipper.IO.Endian;
 using AssetRipper.Layout;
+using AssetRipper.Parser.Classes.Mesh;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.Shader.Enums.ShaderChannel;
+using AssetRipper.Parser.IO.Asset.Reader;
 using System;
 using System.IO;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Converters.Meshes
+namespace AssetRipper.Converters.Classes.Mesh
 {
 	public static class SubMeshConverter
 	{
-		public static void CalculateSubMeshVertexRangeAndBounds(AssetLayout layout, Mesh mesh, ref SubMesh submesh)
+		public static void CalculateSubMeshVertexRangeAndBounds(AssetLayout layout, Parser.Classes.Mesh.Mesh mesh, ref SubMesh submesh)
 		{
 			UpdateSubMeshVertexRange(layout.Info.Version, mesh, ref submesh);
 			RecalculateSubmeshBounds(layout, mesh, ref submesh);
 		}
 
-		public static SubMesh[] Convert(IExportContainer container, Mesh instanceMesh, SubMesh[] origin)
+		public static SubMesh[] Convert(IExportContainer container, Parser.Classes.Mesh.Mesh instanceMesh, SubMesh[] origin)
 		{
 			SubMesh[] instances = new SubMesh[origin.Length];
 			for (int i = 0; i < origin.Length; i++)
@@ -26,7 +29,7 @@ namespace AssetRipper.Converters.Meshes
 			return instances;
 		}
 
-		private static SubMesh Convert(IExportContainer container, Mesh instanceMesh, ref SubMesh origin)
+		private static SubMesh Convert(IExportContainer container, Parser.Classes.Mesh.Mesh instanceMesh, ref SubMesh origin)
 		{
 			SubMesh instance = new SubMesh();
 			instance.FirstByte = origin.FirstByte;
@@ -57,7 +60,7 @@ namespace AssetRipper.Converters.Meshes
 			return 0;
 		}
 
-		private static void SetVertex(IExportContainer container, Mesh instanceMesh, ref SubMesh origin, ref SubMesh instance)
+		private static void SetVertex(IExportContainer container, Parser.Classes.Mesh.Mesh instanceMesh, ref SubMesh origin, ref SubMesh instance)
 		{
 			if (SubMesh.HasVertex(container.Version))
 			{
@@ -71,7 +74,7 @@ namespace AssetRipper.Converters.Meshes
 			}
 		}
 
-		private static void UpdateSubMeshVertexRange(Version version, Mesh mesh, ref SubMesh submesh)
+		private static void UpdateSubMeshVertexRange(Version version, Parser.Classes.Mesh.Mesh mesh, ref SubMesh submesh)
 		{
 			if (submesh.IndexCount == 0)
 			{
@@ -85,10 +88,10 @@ namespace AssetRipper.Converters.Meshes
 			submesh.VertexCount = maxIndex - minIndex + 1;
 		}
 
-		private static void FindMinMaxIndices(Version version, Mesh mesh, ref SubMesh submesh, out int min, out int max)
+		private static void FindMinMaxIndices(Version version, Parser.Classes.Mesh.Mesh mesh, ref SubMesh submesh, out int min, out int max)
 		{
 			bool is16bits = mesh.Is16BitIndices(version);
-			if (Mesh.HasCompressedMesh(version))
+			if (Parser.Classes.Mesh.Mesh.HasCompressedMesh(version))
 			{
 				if (mesh.CompressedMesh.Triangles.IsSet)
 				{
@@ -166,7 +169,7 @@ namespace AssetRipper.Converters.Meshes
 			}
 		}
 
-		private static void RecalculateSubmeshBounds(AssetLayout layout, Mesh mesh, ref SubMesh submesh)
+		private static void RecalculateSubmeshBounds(AssetLayout layout, Parser.Classes.Mesh.Mesh mesh, ref SubMesh submesh)
 		{
 			if (submesh.VertexCount == 0)
 			{
@@ -180,9 +183,9 @@ namespace AssetRipper.Converters.Meshes
 			submesh.LocalAABB = new AABB(center, extent);
 		}
 
-		private static void FindMinMaxBounds(AssetLayout layout, Mesh mesh, ref SubMesh submesh, out Vector3f min, out Vector3f max)
+		private static void FindMinMaxBounds(AssetLayout layout, Parser.Classes.Mesh.Mesh mesh, ref SubMesh submesh, out Vector3f min, out Vector3f max)
 		{
-			if (Mesh.HasCompressedMesh(layout.Info.Version))
+			if (Parser.Classes.Mesh.Mesh.HasCompressedMesh(layout.Info.Version))
 			{
 				if (mesh.CompressedMesh.Vertices.IsSet)
 				{
@@ -192,9 +195,9 @@ namespace AssetRipper.Converters.Meshes
 				}
 			}
 
-			if (Mesh.HasVertexData(layout.Info.Version))
+			if (Parser.Classes.Mesh.Mesh.HasVertexData(layout.Info.Version))
 			{
-				if (Mesh.IsOnlyVertexData(layout.Info.Version))
+				if (Parser.Classes.Mesh.Mesh.IsOnlyVertexData(layout.Info.Version))
 				{
 					FindMinMaxBounds(layout, ref mesh.VertexData, submesh.FirstVertex, submesh.VertexCount, out min, out max);
 				}

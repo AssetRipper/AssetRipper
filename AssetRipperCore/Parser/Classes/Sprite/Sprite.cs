@@ -1,13 +1,20 @@
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.SpriteAtlases;
-using AssetRipper.Classes.Sprites;
-using AssetRipper.Classes.TextureImporters;
-using AssetRipper.Converters;
+using AssetRipper.Converters.Classes.Sprite;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Meta.Importers.Texture;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Misc.Serializable;
+using AssetRipper.Parser.Classes.SpriteAtlas;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
+using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.Sprite
 {
 	public sealed class Sprite : NamedObject
 	{
@@ -63,12 +70,12 @@ namespace AssetRipper.Classes
 		/// </summary>
 		public static bool HasSpriteID(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2018);
 
-		public SpriteMetaData GenerateSpriteMetaData(IExportContainer container, SpriteAtlas atlas)
+		public SpriteMetaData GenerateSpriteMetaData(IExportContainer container, SpriteAtlas.SpriteAtlas atlas)
 		{
 			return SpriteConverter.GenerateSpriteMetaData(container, atlas, this);
 		}
 
-		public void GetSpriteCoordinatesInAtlas(SpriteAtlas atlas, out Rectf sAtlasRect, out Vector2f sAtlasPivot, out Vector4f sAtlasBorder)
+		public void GetSpriteCoordinatesInAtlas(SpriteAtlas.SpriteAtlas atlas, out Rectf sAtlasRect, out Vector2f sAtlasPivot, out Vector4f sAtlasBorder)
 		{
 			// sprite values are relative to original image (image, it was created from).
 			// since atlas shuffle and crop sprite images, we need to recalculate those values.
@@ -114,7 +121,7 @@ namespace AssetRipper.Classes
 			sAtlasBorder = new Vector4f(borderL, borderB, borderR, borderT);
 		}
 
-		public Vector2f[][] GenerateOutline(SpriteAtlas atlas, Rectf rect, Vector2f pivot)
+		public Vector2f[][] GenerateOutline(SpriteAtlas.SpriteAtlas atlas, Rectf rect, Vector2f pivot)
 		{
 			Vector2f[][] outlines = RD.GenerateOutline(File.Version);
 			float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
@@ -131,7 +138,7 @@ namespace AssetRipper.Classes
 			return FixRotation(atlas, outlines);
 		}
 
-		public Vector2f[][] GeneratePhysicsShape(SpriteAtlas atlas, Rectf rect, Vector2f pivot)
+		public Vector2f[][] GeneratePhysicsShape(SpriteAtlas.SpriteAtlas atlas, Rectf rect, Vector2f pivot)
 		{
 			if (PhysicsShape.Length > 0)
 			{
@@ -214,15 +221,15 @@ namespace AssetRipper.Classes
 #endif
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(SpriteAtlas, SpriteAtlasName);
-			foreach (PPtr<Object> asset in context.FetchDependencies(RD, RDName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(RD, RDName))
 			{
 				yield return asset;
 			}
@@ -233,7 +240,7 @@ namespace AssetRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		private Vector2f[][] FixRotation(SpriteAtlas atlas, Vector2f[][] outlines)
+		private Vector2f[][] FixRotation(SpriteAtlas.SpriteAtlas atlas, Vector2f[][] outlines)
 		{
 			bool isPacked = RD.IsPacked;
 			SpritePackingRotation rotation = RD.PackingRotation;
@@ -335,7 +342,7 @@ namespace AssetRipper.Classes
 		/// </summary>
 		public Vector2f Pivot;
 		public Tuple<UnityGUID, long> RenderDataKey;
-		public PPtr<SpriteAtlas> SpriteAtlas;
+		public PPtr<SpriteAtlas.SpriteAtlas> SpriteAtlas;
 		public SpriteRenderData RD;
 #if UNIVERSAL
 		public SpriteRenderData AtlasRD;

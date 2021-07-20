@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Classes
+﻿using AssetRipper.Parser.Asset;
+
+namespace AssetRipper.Parser.Classes
 {
 	public abstract class AudioBehaviour : Behaviour
 	{

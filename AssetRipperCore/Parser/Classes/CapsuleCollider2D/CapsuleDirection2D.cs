@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.CapsuleCollider2Ds
+﻿namespace AssetRipper.Parser.Classes.CapsuleCollider2D
 {
 	public enum CapsuleDirection2D
 	{

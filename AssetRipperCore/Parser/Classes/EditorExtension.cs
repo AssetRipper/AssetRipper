@@ -1,12 +1,18 @@
-using AssetRipper.Converters;
+using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
-using AssetRipper.Project;
+using AssetRipper.Layout.Classes;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Structure.ProjectCollection.Collections;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes
 {
-	public abstract class EditorExtension : Object
+	public abstract class EditorExtension : Object.Object
 	{
 		protected EditorExtension(AssetLayout layout) :
 			base(layout)
@@ -26,7 +32,7 @@ namespace AssetRipper.Classes
 			EditorExtensionLayout layout = reader.Layout.EditorExtension;
 			if (layout.HasExtensionPtr)
 			{
-				ExtensionPtr = reader.ReadAsset<PPtr<Object>>();
+				ExtensionPtr = reader.ReadAsset<PPtr<Object.Object>>();
 			}
 			if (layout.HasCorrespondingSourceObject)
 			{
@@ -62,9 +68,9 @@ namespace AssetRipper.Classes
 #endif
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -122,15 +128,15 @@ namespace AssetRipper.Classes
 			return base.ExportYAMLRoot(container);
 		}
 
-		protected IEnumerable<PPtr<Object>> FetchDependenciesObject(DependencyContext context)
+		protected IEnumerable<PPtr<Object.Object>> FetchDependenciesObject(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 		}
 
-		private PPtr<PrefabInstance> GetPrefabInstance(IExportContainer container)
+		private PPtr<PrefabInstance.PrefabInstance> GetPrefabInstance(IExportContainer container)
 		{
 #if UNIVERSAL
 			if (container.ExportLayout.EditorExtension.HasPrefabInstanceInvariant)
@@ -142,7 +148,7 @@ namespace AssetRipper.Classes
 			if (container.ExportFlags.IsForPrefab())
 			{
 				PrefabExportCollection prefabCollection = (PrefabExportCollection)container.CurrentCollection;
-				return prefabCollection.Asset.File.CreatePPtr((PrefabInstance)prefabCollection.Asset);
+				return prefabCollection.Asset.File.CreatePPtr((PrefabInstance.PrefabInstance)prefabCollection.Asset);
 			}
 			return default;
 		}
@@ -153,19 +159,19 @@ namespace AssetRipper.Classes
 			get => CorrespondingSourceObject;
 			set => CorrespondingSourceObject = value;
 		}
-		public PPtr<PrefabInstance> PrefabInternal
+		public PPtr<PrefabInstance.PrefabInstance> PrefabInternal
 		{
 			get => PrefabInstance;
 			set => PrefabInstance = value;
 		}
 
 #warning TODO: PPtr<EditorExtensionImpl>
-		public PPtr<Object> ExtensionPtr;
+		public PPtr<Object.Object> ExtensionPtr;
 		public PPtr<EditorExtension> CorrespondingSourceObject;
-		public PPtr<PrefabInstance> PrefabInstance;
+		public PPtr<PrefabInstance.PrefabInstance> PrefabInstance;
 		public PPtr<Prefab> PrefabAsset;
 #else
-		private PPtr<Object> ExtensionPtr => default;
+		private PPtr<Object.Object> ExtensionPtr => default;
 		private PPtr<EditorExtension> CorrespondingSourceObject => default;
 		private PPtr<Prefab> PrefabAsset => default;
 #endif

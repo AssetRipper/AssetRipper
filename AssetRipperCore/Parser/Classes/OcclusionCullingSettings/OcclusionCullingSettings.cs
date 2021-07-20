@@ -1,11 +1,15 @@
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.OcclusionCullingSettingses;
-using AssetRipper.Converters;
-using AssetRipper.Project;
+using AssetRipper.Converters.Project;
+using AssetRipper.Parser.Asset;
+using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Structure.ProjectCollection.Collections;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Parser.Classes.OcclusionCullingSettings
 {
 	/// <summary>
 	/// 5.5.0 - SceneSettings has been renamed to OcclusionCullingSettings
@@ -83,7 +87,7 @@ namespace AssetRipper.Classes
 		/// </summary>
 		private static bool IsOcclusionBakeSettingsFirst(Version version) => version.IsGreaterEqual(5, 5);
 
-		public static bool IsSceneCompatible(Object asset)
+		public static bool IsSceneCompatible(Object.Object asset)
 		{
 			if (asset.ClassID == ClassIDType.GameObject)
 			{
@@ -134,7 +138,7 @@ namespace AssetRipper.Classes
 			}
 			if (HasStaticRenderers(reader.Version, reader.Flags))
 			{
-				StaticRenderers = reader.ReadAssetArray<PPtr<Renderer>>();
+				StaticRenderers = reader.ReadAssetArray<PPtr<Renderer.Renderer>>();
 			}
 			if (HasPortals(reader.Version, reader.Flags))
 			{
@@ -153,19 +157,19 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(OcclusionCullingData, OcclusionCullingDataName);
-			foreach (PPtr<Object> asset in context.FetchDependencies(StaticRenderers, StaticRenderersName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(StaticRenderers, StaticRenderersName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object> asset in context.FetchDependencies(Portals, PortalsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Portals, PortalsName))
 			{
 				yield return asset;
 			}
@@ -208,7 +212,7 @@ namespace AssetRipper.Classes
 				return SceneGUID;
 			}
 		}
-		private PPtr<OcclusionCullingData> GetExportOcclusionCullingData(IExportContainer container)
+		private PPtr<OcclusionCullingData.OcclusionCullingData> GetExportOcclusionCullingData(IExportContainer container)
 		{
 			if (HasReadPVSData(container.Version))
 			{
@@ -231,7 +235,7 @@ namespace AssetRipper.Classes
 		/// <summary>
 		/// PVSObjectsArray/m_PVSObjectsArray previously
 		/// </summary>
-		public PPtr<Renderer>[] StaticRenderers { get; set; }
+		public PPtr<Renderer.Renderer>[] StaticRenderers { get; set; }
 		public float ViewCellSize
 		{
 			get => OcclusionBakeSettings.ViewCellSize;
@@ -244,7 +248,7 @@ namespace AssetRipper.Classes
 
 		public OcclusionBakeSettings OcclusionBakeSettings;
 		public UnityGUID SceneGUID;
-		public PPtr<OcclusionCullingData> OcclusionCullingData;
+		public PPtr<OcclusionCullingData.OcclusionCullingData> OcclusionCullingData;
 
 		public const string SceneKeyword = nameof(ClassIDType.Scene);
 
