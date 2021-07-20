@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 
-namespace AssetRipper
+namespace AssetRipper.Half
 {
 	/// <summary>
 	/// Represents a half-precision floating point number. 
@@ -22,7 +22,7 @@ namespace AssetRipper
 	///     - Fast Half Float Conversions, Jeroen van der Zijp, link: http://www.fox-toolkit.org/ftp/fasthalffloatconversion.pdf
 	///     - IEEE 754 revision, link: http://grouper.ieee.org/groups/754/
 	/// </remarks>
-	public struct Half : IComparable, IFormattable, IComparable<Half>, IEquatable<Half>
+	public struct HalfStruct : IComparable, IFormattable, IComparable<HalfStruct>, IEquatable<HalfStruct>
 	{
 		/// <summary>
 		/// Internal representation of the half-precision floating-point number.
@@ -34,27 +34,27 @@ namespace AssetRipper
 		/// <summary>
 		/// Represents the smallest positive System.Half value greater than zero. This field is constant.
 		/// </summary>
-		public static readonly Half Epsilon = Half.ToHalf(0x0001);
+		public static readonly HalfStruct Epsilon = HalfStruct.ToHalf(0x0001);
 		/// <summary>
 		/// Represents the largest possible value of System.Half. This field is constant.
 		/// </summary>
-		public static readonly Half MaxValue = Half.ToHalf(0x7bff);
+		public static readonly HalfStruct MaxValue = HalfStruct.ToHalf(0x7bff);
 		/// <summary>
 		/// Represents the smallest possible value of System.Half. This field is constant.
 		/// </summary>
-		public static readonly Half MinValue = Half.ToHalf(0xfbff);
+		public static readonly HalfStruct MinValue = HalfStruct.ToHalf(0xfbff);
 		/// <summary>
 		/// Represents not a number (NaN). This field is constant.
 		/// </summary>
-		public static readonly Half NaN = Half.ToHalf(0xfe00);
+		public static readonly HalfStruct NaN = HalfStruct.ToHalf(0xfe00);
 		/// <summary>
 		/// Represents negative infinity. This field is constant.
 		/// </summary>
-		public static readonly Half NegativeInfinity = Half.ToHalf(0xfc00);
+		public static readonly HalfStruct NegativeInfinity = HalfStruct.ToHalf(0xfc00);
 		/// <summary>
 		/// Represents positive infinity. This field is constant.
 		/// </summary>
-		public static readonly Half PositiveInfinity = Half.ToHalf(0x7c00);
+		public static readonly HalfStruct PositiveInfinity = HalfStruct.ToHalf(0x7c00);
 		#endregion
 
 		#region Constructors
@@ -62,37 +62,37 @@ namespace AssetRipper
 		/// Initializes a new instance of System.Half to the value of the specified single-precision floating-point number.
 		/// </summary>
 		/// <param name="value">The value to represent as a System.Half.</param>
-		public Half(float value) { this = HalfHelper.SingleToHalf(value); }
+		public HalfStruct(float value) { this = HalfHelper.SingleToHalf(value); }
 		/// <summary>
 		/// Initializes a new instance of System.Half to the value of the specified 32-bit signed integer.
 		/// </summary>
 		/// <param name="value">The value to represent as a System.Half.</param>
-		public Half(int value) : this((float)value) { }
+		public HalfStruct(int value) : this((float)value) { }
 		/// <summary>
 		/// Initializes a new instance of System.Half to the value of the specified 64-bit signed integer.
 		/// </summary>
 		/// <param name="value">The value to represent as a System.Half.</param>
-		public Half(long value) : this((float)value) { }
+		public HalfStruct(long value) : this((float)value) { }
 		/// <summary>
 		/// Initializes a new instance of System.Half to the value of the specified double-precision floating-point number.
 		/// </summary>
 		/// <param name="value">The value to represent as a System.Half.</param>
-		public Half(double value) : this((float)value) { }
+		public HalfStruct(double value) : this((float)value) { }
 		/// <summary>
 		/// Initializes a new instance of System.Half to the value of the specified decimal number.
 		/// </summary>
 		/// <param name="value">The value to represent as a System.Half.</param>
-		public Half(decimal value) : this((float)value) { }
+		public HalfStruct(decimal value) : this((float)value) { }
 		/// <summary>
 		/// Initializes a new instance of System.Half to the value of the specified 32-bit unsigned integer.
 		/// </summary>
 		/// <param name="value">The value to represent as a System.Half.</param>
-		public Half(uint value) : this((float)value) { }
+		public HalfStruct(uint value) : this((float)value) { }
 		/// <summary>
 		/// Initializes a new instance of System.Half to the value of the specified 64-bit unsigned integer.
 		/// </summary>
 		/// <param name="value">The value to represent as a System.Half.</param>
-		public Half(ulong value) : this((float)value) { }
+		public HalfStruct(ulong value) : this((float)value) { }
 		#endregion
 
 		#region Numeric operators
@@ -102,28 +102,28 @@ namespace AssetRipper
 		/// </summary>
 		/// <param name="half">A System.Half.</param>
 		/// <returns>A System.Half with the value of half, but the opposite sign. -or- Zero, if half is zero.</returns>
-		public static Half Negate(Half half) { return -half; }
+		public static HalfStruct Negate(HalfStruct half) { return -half; }
 		/// <summary>
 		/// Adds two specified System.Half values.
 		/// </summary>
 		/// <param name="half1">A System.Half.</param>
 		/// <param name="half2">A System.Half.</param>
 		/// <returns>A System.Half value that is the sum of half1 and half2.</returns>
-		public static Half Add(Half half1, Half half2) { return half1 + half2; }
+		public static HalfStruct Add(HalfStruct half1, HalfStruct half2) { return half1 + half2; }
 		/// <summary>
 		/// Subtracts one specified System.Half value from another.
 		/// </summary>
 		/// <param name="half1">A System.Half (the minuend).</param>
 		/// <param name="half2">A System.Half (the subtrahend).</param>
 		/// <returns>The System.Half result of subtracting half2 from half1.</returns>
-		public static Half Subtract(Half half1, Half half2) { return half1 - half2; }
+		public static HalfStruct Subtract(HalfStruct half1, HalfStruct half2) { return half1 - half2; }
 		/// <summary>
 		/// Multiplies two specified System.Half values.
 		/// </summary>
 		/// <param name="half1">A System.Half (the multiplicand).</param>
 		/// <param name="half2">A System.Half (the multiplier).</param>
 		/// <returns>A System.Half that is the result of multiplying half1 and half2.</returns>
-		public static Half Multiply(Half half1, Half half2) { return half1 * half2; }
+		public static HalfStruct Multiply(HalfStruct half1, HalfStruct half2) { return half1 * half2; }
 		/// <summary>
 		/// Divides two specified System.Half values.
 		/// </summary>
@@ -131,102 +131,102 @@ namespace AssetRipper
 		/// <param name="half2">A System.Half (the divisor).</param>
 		/// <returns>The System.Half that is the result of dividing half1 by half2.</returns>
 		/// <exception cref="System.DivideByZeroException">half2 is zero.</exception>
-		public static Half Divide(Half half1, Half half2) { return half1 / half2; }
+		public static HalfStruct Divide(HalfStruct half1, HalfStruct half2) { return half1 / half2; }
 
 		/// <summary>
 		/// Returns the value of the System.Half operand (the sign of the operand is unchanged).
 		/// </summary>
 		/// <param name="half">The System.Half operand.</param>
 		/// <returns>The value of the operand, half.</returns>
-		public static Half operator +(Half half) { return half; }
+		public static HalfStruct operator +(HalfStruct half) { return half; }
 		/// <summary>
 		/// Negates the value of the specified System.Half operand.
 		/// </summary>
 		/// <param name="half">The System.Half operand.</param>
 		/// <returns>The result of half multiplied by negative one (-1).</returns>
-		public static Half operator -(Half half) { return HalfHelper.Negate(half); }
+		public static HalfStruct operator -(HalfStruct half) { return HalfHelper.Negate(half); }
 		/// <summary>
 		/// Increments the System.Half operand by 1.
 		/// </summary>
 		/// <param name="half">The System.Half operand.</param>
 		/// <returns>The value of half incremented by 1.</returns>
-		public static Half operator ++(Half half) { return (Half)(half + 1f); }
+		public static HalfStruct operator ++(HalfStruct half) { return (HalfStruct)(half + 1f); }
 		/// <summary>
 		/// Decrements the System.Half operand by one.
 		/// </summary>
 		/// <param name="half">The System.Half operand.</param>
 		/// <returns>The value of half decremented by 1.</returns>
-		public static Half operator --(Half half) { return (Half)(half - 1f); }
+		public static HalfStruct operator --(HalfStruct half) { return (HalfStruct)(half - 1f); }
 		/// <summary>
 		/// Adds two specified System.Half values.
 		/// </summary>
 		/// <param name="half1">A System.Half.</param>
 		/// <param name="half2">A System.Half.</param>
 		/// <returns>The System.Half result of adding half1 and half2.</returns>
-		public static Half operator +(Half half1, Half half2) { return (Half)((float)half1 + (float)half2); }
+		public static HalfStruct operator +(HalfStruct half1, HalfStruct half2) { return (HalfStruct)((float)half1 + (float)half2); }
 		/// <summary>
 		/// Subtracts two specified System.Half values.
 		/// </summary>
 		/// <param name="half1">A System.Half.</param>
 		/// <param name="half2">A System.Half.</param>
 		/// <returns>The System.Half result of subtracting half1 and half2.</returns>        
-		public static Half operator -(Half half1, Half half2) { return (Half)((float)half1 - (float)half2); }
+		public static HalfStruct operator -(HalfStruct half1, HalfStruct half2) { return (HalfStruct)((float)half1 - (float)half2); }
 		/// <summary>
 		/// Multiplies two specified System.Half values.
 		/// </summary>
 		/// <param name="half1">A System.Half.</param>
 		/// <param name="half2">A System.Half.</param>
 		/// <returns>The System.Half result of multiplying half1 by half2.</returns>
-		public static Half operator *(Half half1, Half half2) { return (Half)((float)half1 * (float)half2); }
+		public static HalfStruct operator *(HalfStruct half1, HalfStruct half2) { return (HalfStruct)((float)half1 * (float)half2); }
 		/// <summary>
 		/// Divides two specified System.Half values.
 		/// </summary>
 		/// <param name="half1">A System.Half (the dividend).</param>
 		/// <param name="half2">A System.Half (the divisor).</param>
 		/// <returns>The System.Half result of half1 by half2.</returns>
-		public static Half operator /(Half half1, Half half2) { return (Half)((float)half1 / (float)half2); }
+		public static HalfStruct operator /(HalfStruct half1, HalfStruct half2) { return (HalfStruct)((float)half1 / (float)half2); }
 		/// <summary>
 		/// Returns a value indicating whether two instances of System.Half are equal.
 		/// </summary>
 		/// <param name="half1">A System.Half.</param>
 		/// <param name="half2">A System.Half.</param>
 		/// <returns>true if half1 and half2 are equal; otherwise, false.</returns>
-		public static bool operator ==(Half half1, Half half2) { return (!IsNaN(half1) && (half1.value == half2.value)); }
+		public static bool operator ==(HalfStruct half1, HalfStruct half2) { return (!IsNaN(half1) && (half1.value == half2.value)); }
 		/// <summary>
 		/// Returns a value indicating whether two instances of System.Half are not equal.
 		/// </summary>
 		/// <param name="half1">A System.Half.</param>
 		/// <param name="half2">A System.Half.</param>
 		/// <returns>true if half1 and half2 are not equal; otherwise, false.</returns>
-		public static bool operator !=(Half half1, Half half2) { return !(half1.value == half2.value); }
+		public static bool operator !=(HalfStruct half1, HalfStruct half2) { return !(half1.value == half2.value); }
 		/// <summary>
 		/// Returns a value indicating whether a specified System.Half is less than another specified System.Half.
 		/// </summary>
 		/// <param name="half1">A System.Half.</param>
 		/// <param name="half2">A System.Half.</param>
 		/// <returns>true if half1 is less than half1; otherwise, false.</returns>
-		public static bool operator <(Half half1, Half half2) { return (float)half1 < (float)half2; }
+		public static bool operator <(HalfStruct half1, HalfStruct half2) { return (float)half1 < (float)half2; }
 		/// <summary>
 		/// Returns a value indicating whether a specified System.Half is greater than another specified System.Half.
 		/// </summary>
 		/// <param name="half1">A System.Half.</param>
 		/// <param name="half2">A System.Half.</param>
 		/// <returns>true if half1 is greater than half2; otherwise, false.</returns>
-		public static bool operator >(Half half1, Half half2) { return (float)half1 > (float)half2; }
+		public static bool operator >(HalfStruct half1, HalfStruct half2) { return (float)half1 > (float)half2; }
 		/// <summary>
 		/// Returns a value indicating whether a specified System.Half is less than or equal to another specified System.Half.
 		/// </summary>
 		/// <param name="half1">A System.Half.</param>
 		/// <param name="half2">A System.Half.</param>
 		/// <returns>true if half1 is less than or equal to half2; otherwise, false.</returns>
-		public static bool operator <=(Half half1, Half half2) { return (half1 == half2) || (half1 < half2); }
+		public static bool operator <=(HalfStruct half1, HalfStruct half2) { return (half1 == half2) || (half1 < half2); }
 		/// <summary>
 		/// Returns a value indicating whether a specified System.Half is greater than or equal to another specified System.Half.
 		/// </summary>
 		/// <param name="half1">A System.Half.</param>
 		/// <param name="half2">A System.Half.</param>
 		/// <returns>true if half1 is greater than or equal to half2; otherwise, false.</returns>
-		public static bool operator >=(Half half1, Half half2) { return (half1 == half2) || (half1 > half2); }
+		public static bool operator >=(HalfStruct half1, HalfStruct half2) { return (half1 == half2) || (half1 > half2); }
 		#endregion
 
 		#region Type casting operators
@@ -235,145 +235,145 @@ namespace AssetRipper
 		/// </summary>
 		/// <param name="value">An 8-bit unsigned integer.</param>
 		/// <returns>A System.Half that represents the converted 8-bit unsigned integer.</returns>
-		public static implicit operator Half(byte value) { return new Half((float)value); }
+		public static implicit operator HalfStruct(byte value) { return new HalfStruct((float)value); }
 		/// <summary>
 		/// Converts a 16-bit signed integer to a System.Half.
 		/// </summary>
 		/// <param name="value">A 16-bit signed integer.</param>
 		/// <returns>A System.Half that represents the converted 16-bit signed integer.</returns>
-		public static implicit operator Half(short value) { return new Half((float)value); }
+		public static implicit operator HalfStruct(short value) { return new HalfStruct((float)value); }
 		/// <summary>
 		/// Converts a Unicode character to a System.Half.
 		/// </summary>
 		/// <param name="value">A Unicode character.</param>
 		/// <returns>A System.Half that represents the converted Unicode character.</returns>
-		public static implicit operator Half(char value) { return new Half((float)value); }
+		public static implicit operator HalfStruct(char value) { return new HalfStruct((float)value); }
 		/// <summary>
 		/// Converts a 32-bit signed integer to a System.Half.
 		/// </summary>
 		/// <param name="value">A 32-bit signed integer.</param>
 		/// <returns>A System.Half that represents the converted 32-bit signed integer.</returns>
-		public static implicit operator Half(int value) { return new Half((float)value); }
+		public static implicit operator HalfStruct(int value) { return new HalfStruct((float)value); }
 		/// <summary>
 		/// Converts a 64-bit signed integer to a System.Half.
 		/// </summary>
 		/// <param name="value">A 64-bit signed integer.</param>
 		/// <returns>A System.Half that represents the converted 64-bit signed integer.</returns>
-		public static implicit operator Half(long value) { return new Half((float)value); }
+		public static implicit operator HalfStruct(long value) { return new HalfStruct((float)value); }
 		/// <summary>
 		/// Converts a single-precision floating-point number to a System.Half.
 		/// </summary>
 		/// <param name="value">A single-precision floating-point number.</param>
 		/// <returns>A System.Half that represents the converted single-precision floating point number.</returns>
-		public static explicit operator Half(float value) { return new Half((float)value); }
+		public static explicit operator HalfStruct(float value) { return new HalfStruct((float)value); }
 		/// <summary>
 		/// Converts a double-precision floating-point number to a System.Half.
 		/// </summary>
 		/// <param name="value">A double-precision floating-point number.</param>
 		/// <returns>A System.Half that represents the converted double-precision floating point number.</returns>
-		public static explicit operator Half(double value) { return new Half((float)value); }
+		public static explicit operator HalfStruct(double value) { return new HalfStruct((float)value); }
 		/// <summary>
 		/// Converts a decimal number to a System.Half.
 		/// </summary>
 		/// <param name="value">decimal number</param>
 		/// <returns>A System.Half that represents the converted decimal number.</returns>
-		public static explicit operator Half(decimal value) { return new Half((float)value); }
+		public static explicit operator HalfStruct(decimal value) { return new HalfStruct((float)value); }
 		/// <summary>
 		/// Converts a System.Half to an 8-bit unsigned integer.
 		/// </summary>
 		/// <param name="value">A System.Half to convert.</param>
 		/// <returns>An 8-bit unsigned integer that represents the converted System.Half.</returns>
-		public static explicit operator byte(Half value) { return (byte)(float)value; }
+		public static explicit operator byte(HalfStruct value) { return (byte)(float)value; }
 		/// <summary>
 		/// Converts a System.Half to a Unicode character.
 		/// </summary>
 		/// <param name="value">A System.Half to convert.</param>
 		/// <returns>A Unicode character that represents the converted System.Half.</returns>
-		public static explicit operator char(Half value) { return (char)(float)value; }
+		public static explicit operator char(HalfStruct value) { return (char)(float)value; }
 		/// <summary>
 		/// Converts a System.Half to a 16-bit signed integer.
 		/// </summary>
 		/// <param name="value">A System.Half to convert.</param>
 		/// <returns>A 16-bit signed integer that represents the converted System.Half.</returns>
-		public static explicit operator short(Half value) { return (short)(float)value; }
+		public static explicit operator short(HalfStruct value) { return (short)(float)value; }
 		/// <summary>
 		/// Converts a System.Half to a 32-bit signed integer.
 		/// </summary>
 		/// <param name="value">A System.Half to convert.</param>
 		/// <returns>A 32-bit signed integer that represents the converted System.Half.</returns>
-		public static explicit operator int(Half value) { return (int)(float)value; }
+		public static explicit operator int(HalfStruct value) { return (int)(float)value; }
 		/// <summary>
 		/// Converts a System.Half to a 64-bit signed integer.
 		/// </summary>
 		/// <param name="value">A System.Half to convert.</param>
 		/// <returns>A 64-bit signed integer that represents the converted System.Half.</returns>
-		public static explicit operator long(Half value) { return (long)(float)value; }
+		public static explicit operator long(HalfStruct value) { return (long)(float)value; }
 		/// <summary>
 		/// Converts a System.Half to a single-precision floating-point number.
 		/// </summary>
 		/// <param name="value">A System.Half to convert.</param>
 		/// <returns>A single-precision floating-point number that represents the converted System.Half.</returns>
-		public static implicit operator float(Half value) { return (float)HalfHelper.HalfToSingle(value); }
+		public static implicit operator float(HalfStruct value) { return (float)HalfHelper.HalfToSingle(value); }
 		/// <summary>
 		/// Converts a System.Half to a double-precision floating-point number.
 		/// </summary>
 		/// <param name="value">A System.Half to convert.</param>
 		/// <returns>A double-precision floating-point number that represents the converted System.Half.</returns>
-		public static implicit operator double(Half value) { return (double)(float)value; }
+		public static implicit operator double(HalfStruct value) { return (double)(float)value; }
 		/// <summary>
 		/// Converts a System.Half to a decimal number.
 		/// </summary>
 		/// <param name="value">A System.Half to convert.</param>
 		/// <returns>A decimal number that represents the converted System.Half.</returns>
-		public static explicit operator decimal(Half value) { return (decimal)(float)value; }
+		public static explicit operator decimal(HalfStruct value) { return (decimal)(float)value; }
 		/// <summary>
 		/// Converts an 8-bit signed integer to a System.Half.
 		/// </summary>
 		/// <param name="value">An 8-bit signed integer.</param>
 		/// <returns>A System.Half that represents the converted 8-bit signed integer.</returns>
-		public static implicit operator Half(sbyte value) { return new Half((float)value); }
+		public static implicit operator HalfStruct(sbyte value) { return new HalfStruct((float)value); }
 		/// <summary>
 		/// Converts a 16-bit unsigned integer to a System.Half.
 		/// </summary>
 		/// <param name="value">A 16-bit unsigned integer.</param>
 		/// <returns>A System.Half that represents the converted 16-bit unsigned integer.</returns>
-		public static implicit operator Half(ushort value) { return new Half((float)value); }
+		public static implicit operator HalfStruct(ushort value) { return new HalfStruct((float)value); }
 		/// <summary>
 		/// Converts a 32-bit unsigned integer to a System.Half.
 		/// </summary>
 		/// <param name="value">A 32-bit unsigned integer.</param>
 		/// <returns>A System.Half that represents the converted 32-bit unsigned integer.</returns>
-		public static implicit operator Half(uint value) { return new Half((float)value); }
+		public static implicit operator HalfStruct(uint value) { return new HalfStruct((float)value); }
 		/// <summary>
 		/// Converts a 64-bit unsigned integer to a System.Half.
 		/// </summary>
 		/// <param name="value">A 64-bit unsigned integer.</param>
 		/// <returns>A System.Half that represents the converted 64-bit unsigned integer.</returns>
-		public static implicit operator Half(ulong value) { return new Half((float)value); }
+		public static implicit operator HalfStruct(ulong value) { return new HalfStruct((float)value); }
 		/// <summary>
 		/// Converts a System.Half to an 8-bit signed integer.
 		/// </summary>
 		/// <param name="value">A System.Half to convert.</param>
 		/// <returns>An 8-bit signed integer that represents the converted System.Half.</returns>
-		public static explicit operator sbyte(Half value) { return (sbyte)(float)value; }
+		public static explicit operator sbyte(HalfStruct value) { return (sbyte)(float)value; }
 		/// <summary>
 		/// Converts a System.Half to a 16-bit unsigned integer.
 		/// </summary>
 		/// <param name="value">A System.Half to convert.</param>
 		/// <returns>A 16-bit unsigned integer that represents the converted System.Half.</returns>
-		public static explicit operator ushort(Half value) { return (ushort)(float)value; }
+		public static explicit operator ushort(HalfStruct value) { return (ushort)(float)value; }
 		/// <summary>
 		/// Converts a System.Half to a 32-bit unsigned integer.
 		/// </summary>
 		/// <param name="value">A System.Half to convert.</param>
 		/// <returns>A 32-bit unsigned integer that represents the converted System.Half.</returns>
-		public static explicit operator uint(Half value) { return (uint)(float)value; }
+		public static explicit operator uint(HalfStruct value) { return (uint)(float)value; }
 		/// <summary>
 		/// Converts a System.Half to a 64-bit unsigned integer.
 		/// </summary>
 		/// <param name="value">A System.Half to convert.</param>
 		/// <returns>A 64-bit unsigned integer that represents the converted System.Half.</returns>
-		public static explicit operator ulong(Half value) { return (ulong)(float)value; }
+		public static explicit operator ulong(HalfStruct value) { return (ulong)(float)value; }
 		#endregion
 
 		/// <summary>
@@ -385,7 +385,7 @@ namespace AssetRipper
 		/// Return Value Meaning Less than zero This instance is less than value. Zero
 		/// This instance is equal to value. Greater than zero This instance is greater than value.
 		/// </returns>
-		public int CompareTo(Half other)
+		public int CompareTo(HalfStruct other)
 		{
 			int result = 0;
 			if (this < other)
@@ -430,9 +430,9 @@ namespace AssetRipper
 			}
 			else
 			{
-				if (obj is Half)
+				if (obj is HalfStruct)
 				{
-					result = CompareTo((Half)obj);
+					result = CompareTo((HalfStruct)obj);
 				}
 				else
 				{
@@ -447,7 +447,7 @@ namespace AssetRipper
 		/// </summary>
 		/// <param name="other">A System.Half object to compare to this instance.</param>
 		/// <returns>true if value is equal to this instance; otherwise, false.</returns>
-		public bool Equals(Half other)
+		public bool Equals(HalfStruct other)
 		{
 			return ((other == this) || (IsNaN(other) && IsNaN(this)));
 		}
@@ -460,9 +460,9 @@ namespace AssetRipper
 		public override bool Equals(object obj)
 		{
 			bool result = false;
-			if (obj is Half)
+			if (obj is HalfStruct)
 			{
-				Half half = (Half)obj;
+				HalfStruct half = (HalfStruct)obj;
 				if ((half == this) || (IsNaN(half) && IsNaN(this)))
 				{
 					result = true;
@@ -486,7 +486,7 @@ namespace AssetRipper
 		/// </summary>
 		/// <param name="value">The number to convert.</param>
 		/// <returns>An array of bytes with length 2.</returns>
-		public static byte[] GetBytes(Half value)
+		public static byte[] GetBytes(HalfStruct value)
 		{
 			return BitConverter.GetBytes(value.value);
 		}
@@ -495,7 +495,7 @@ namespace AssetRipper
 		/// </summary>
 		/// <param name="value">A System.Half value.</param>
 		/// <returns>A 16-bit unsigned integer that contain the binary representation of value.</returns>        
-		public static ushort GetBits(Half value)
+		public static ushort GetBits(HalfStruct value)
 		{
 			return value.value;
 		}
@@ -512,18 +512,18 @@ namespace AssetRipper
 		/// </exception>
 		/// <exception cref="System.ArgumentNullException">value is null.</exception>
 		/// <exception cref="System.ArgumentOutOfRangeException">startIndex is less than zero or greater than the length of value minus 1.</exception>
-		public static Half ToHalf(byte[] value, int startIndex)
+		public static HalfStruct ToHalf(byte[] value, int startIndex)
 		{
-			return Half.ToHalf(BitConverter.ToUInt16(value, startIndex));
+			return HalfStruct.ToHalf(BitConverter.ToUInt16(value, startIndex));
 		}
 		/// <summary>
 		/// Returns a half-precision floating point number converted from its binary representation.
 		/// </summary>
 		/// <param name="bits">Binary representation of System.Half value</param>
 		/// <returns>A half-precision floating point number formed by its binary representation.</returns>
-		public static Half ToHalf(ushort bits)
+		public static HalfStruct ToHalf(ushort bits)
 		{
-			return new Half { value = bits };
+			return new HalfStruct { value = bits };
 		}
 
 		/// <summary>
@@ -535,7 +535,7 @@ namespace AssetRipper
 		/// than zero. 0 value is equal to zero. 1 value is greater than zero.
 		/// </returns>
 		/// <exception cref="System.ArithmeticException">value is equal to System.Half.NaN.</exception>
-		public static int Sign(Half value)
+		public static int Sign(HalfStruct value)
 		{
 			if (value < 0)
 			{
@@ -560,7 +560,7 @@ namespace AssetRipper
 		/// </summary>
 		/// <param name="value">A number in the range System.Half.MinValue ≤ value ≤ System.Half.MaxValue.</param>
 		/// <returns>A half-precision floating-point number, x, such that 0 ≤ x ≤System.Half.MaxValue.</returns>
-		public static Half Abs(Half value)
+		public static HalfStruct Abs(HalfStruct value)
 		{
 			return HalfHelper.Abs(value);
 		}
@@ -573,7 +573,7 @@ namespace AssetRipper
 		/// Parameter value1 or value2, whichever is larger. If value1, or value2, or both val1
 		/// and value2 are equal to System.Half.NaN, System.Half.NaN is returned.
 		/// </returns>
-		public static Half Max(Half value1, Half value2)
+		public static HalfStruct Max(HalfStruct value1, HalfStruct value2)
 		{
 			return (value1 < value2) ? value2 : value1;
 		}
@@ -586,7 +586,7 @@ namespace AssetRipper
 		/// Parameter value1 or value2, whichever is smaller. If value1, or value2, or both val1
 		/// and value2 are equal to System.Half.NaN, System.Half.NaN is returned.
 		/// </returns>
-		public static Half Min(Half value1, Half value2)
+		public static HalfStruct Min(HalfStruct value1, HalfStruct value2)
 		{
 			return (value1 < value2) ? value1 : value2;
 		}
@@ -597,7 +597,7 @@ namespace AssetRipper
 		/// </summary>
 		/// <param name="half">A half-precision floating-point number.</param>
 		/// <returns>true if value evaluates to not a number (System.Half.NaN); otherwise, false.</returns>
-		public static bool IsNaN(Half half)
+		public static bool IsNaN(HalfStruct half)
 		{
 			return HalfHelper.IsNaN(half);
 		}
@@ -606,7 +606,7 @@ namespace AssetRipper
 		/// </summary>
 		/// <param name="half">A half-precision floating-point number.</param>
 		/// <returns>true if half evaluates to System.Half.PositiveInfinity or System.Half.NegativeInfinity; otherwise, false.</returns>
-		public static bool IsInfinity(Half half)
+		public static bool IsInfinity(HalfStruct half)
 		{
 			return HalfHelper.IsInfinity(half);
 		}
@@ -615,7 +615,7 @@ namespace AssetRipper
 		/// </summary>
 		/// <param name="half">A half-precision floating-point number.</param>
 		/// <returns>true if half evaluates to System.Half.NegativeInfinity; otherwise, false.</returns>
-		public static bool IsNegativeInfinity(Half half)
+		public static bool IsNegativeInfinity(HalfStruct half)
 		{
 			return HalfHelper.IsNegativeInfinity(half);
 		}
@@ -624,7 +624,7 @@ namespace AssetRipper
 		/// </summary>
 		/// <param name="half">A half-precision floating-point number.</param>
 		/// <returns>true if half evaluates to System.Half.PositiveInfinity; otherwise, false.</returns>
-		public static bool IsPositiveInfinity(Half half)
+		public static bool IsPositiveInfinity(HalfStruct half)
 		{
 			return HalfHelper.IsPositiveInfinity(half);
 		}
@@ -638,9 +638,9 @@ namespace AssetRipper
 		/// <exception cref="System.ArgumentNullException">value is null.</exception>
 		/// <exception cref="System.FormatException">value is not in the correct format.</exception>
 		/// <exception cref="System.OverflowException">value represents a number less than System.Half.MinValue or greater than System.Half.MaxValue.</exception>
-		public static Half Parse(string value)
+		public static HalfStruct Parse(string value)
 		{
-			return (Half)float.Parse(value, CultureInfo.InvariantCulture);
+			return (HalfStruct)float.Parse(value, CultureInfo.InvariantCulture);
 		}
 		/// <summary>
 		/// Converts the string representation of a number to its System.Half equivalent 
@@ -652,9 +652,9 @@ namespace AssetRipper
 		/// <exception cref="System.ArgumentNullException">value is null.</exception>
 		/// <exception cref="System.FormatException">value is not in the correct format.</exception>
 		/// <exception cref="System.OverflowException">value represents a number less than System.Half.MinValue or greater than System.Half.MaxValue.</exception>
-		public static Half Parse(string value, IFormatProvider provider)
+		public static HalfStruct Parse(string value, IFormatProvider provider)
 		{
-			return (Half)float.Parse(value, provider);
+			return (HalfStruct)float.Parse(value, provider);
 		}
 		/// <summary>
 		/// Converts the string representation of a number in a specified style to its System.Half equivalent.
@@ -673,9 +673,9 @@ namespace AssetRipper
 		/// </exception>
 		/// <exception cref="System.FormatException">value is not in the correct format.</exception>
 		/// <exception cref="System.OverflowException">value represents a number less than System.Half.MinValue or greater than System.Half.MaxValue.</exception>
-		public static Half Parse(string value, NumberStyles style)
+		public static HalfStruct Parse(string value, NumberStyles style)
 		{
-			return (Half)float.Parse(value, style, CultureInfo.InvariantCulture);
+			return (HalfStruct)float.Parse(value, style, CultureInfo.InvariantCulture);
 		}
 		/// <summary>
 		/// Converts the string representation of a number to its System.Half equivalent 
@@ -696,9 +696,9 @@ namespace AssetRipper
 		/// </exception>
 		/// <exception cref="System.FormatException">value is not in the correct format.</exception>
 		/// <exception cref="System.OverflowException">value represents a number less than System.Half.MinValue or greater than System.Half.MaxValue.</exception>
-		public static Half Parse(string value, NumberStyles style, IFormatProvider provider)
+		public static HalfStruct Parse(string value, NumberStyles style, IFormatProvider provider)
 		{
-			return (Half)float.Parse(value, style, provider);
+			return (HalfStruct)float.Parse(value, style, provider);
 		}
 		/// <summary>
 		/// Converts the string representation of a number to its System.Half equivalent.
@@ -713,16 +713,16 @@ namespace AssetRipper
 		/// or greater than System.Half.MaxValue. This parameter is passed uninitialized.
 		/// </param>
 		/// <returns>true if s was converted successfully; otherwise, false.</returns>
-		public static bool TryParse(string value, out Half result)
+		public static bool TryParse(string value, out HalfStruct result)
 		{
 			float f;
 			if (float.TryParse(value, out f))
 			{
-				result = (Half)f;
+				result = (HalfStruct)f;
 				return true;
 			}
 
-			result = new Half();
+			result = new HalfStruct();
 			return false;
 		}
 		/// <summary>
@@ -748,18 +748,18 @@ namespace AssetRipper
 		/// style is not a System.Globalization.NumberStyles value. -or- style 
 		/// is the System.Globalization.NumberStyles.AllowHexSpecifier value.
 		/// </exception>
-		public static bool TryParse(string value, NumberStyles style, IFormatProvider provider, out Half result)
+		public static bool TryParse(string value, NumberStyles style, IFormatProvider provider, out HalfStruct result)
 		{
 			bool parseResult = false;
 			float f;
 			if (float.TryParse(value, style, provider, out f))
 			{
-				result = (Half)f;
+				result = (HalfStruct)f;
 				parseResult = true;
 			}
 			else
 			{
-				result = new Half();
+				result = new HalfStruct();
 			}
 
 			return parseResult;
