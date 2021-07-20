@@ -1,5 +1,9 @@
 # AssetRipper
 
+![](Images/AssetRipperLogoBackground.png)
+
+![](https://img.shields.io/github/downloads/ds5678/AssetRipper/total.svg) ![](https://img.shields.io/github/downloads/ds5678/AssetRipper/latest/total.svg)
+
 AssetRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*.assets*, *\*.sharedAssets*, etc.) and assets bundles (*\*.unity3d*, *\*.assetbundle*, etc.) and converting them into the native Unity engine format.
 
 > Important note: This project is currently in an experimental state. Expect bugs and many changes.
