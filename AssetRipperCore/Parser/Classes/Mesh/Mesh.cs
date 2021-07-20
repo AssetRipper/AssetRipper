@@ -4,6 +4,7 @@ using AssetRipper.Classes.Meshes;
 using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 
 namespace AssetRipper.Classes
 {

@@ -2,6 +2,7 @@ using AssetRipper.Classes.ParticleSystemRenderers;
 using AssetRipper.Classes.SpriteRenderers;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Classes

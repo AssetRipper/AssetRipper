@@ -4,6 +4,7 @@ using AssetRipper.Classes.Sprites;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 

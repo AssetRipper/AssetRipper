@@ -5,6 +5,7 @@ using AssetRipper.Layout;
 using AssetRipper.Logging;
 using AssetRipper.SerializedFiles;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;

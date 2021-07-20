@@ -3,6 +3,7 @@ using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.Sprites;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System;
 
 namespace AssetRipper.Classes.TextureImporters

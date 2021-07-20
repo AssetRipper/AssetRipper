@@ -6,6 +6,7 @@ using AssetRipper.Classes.OcclusionCullingDatas;
 using AssetRipper.Classes.RenderSettingss;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Classes

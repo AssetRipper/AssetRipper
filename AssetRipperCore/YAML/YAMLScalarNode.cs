@@ -1,6 +1,7 @@
 ﻿//#define USE_HEX_FLOAT
 
 using AssetRipper.Extensions;
+using AssetRipper.YAML.Extensions;
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;

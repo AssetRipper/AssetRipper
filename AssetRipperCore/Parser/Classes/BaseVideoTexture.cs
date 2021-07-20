@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Classes.Textures;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 using System.IO;
 

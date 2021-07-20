@@ -2,6 +2,7 @@
 using AssetRipper.Converters;
 using AssetRipper.SerializedFiles;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Classes

@@ -3,6 +3,7 @@ using AssetRipper.Classes.Misc;
 using AssetRipper.Classes.SpriteAtlases;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 

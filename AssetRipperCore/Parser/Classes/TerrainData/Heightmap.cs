@@ -2,6 +2,7 @@ using AssetRipper;
 using AssetRipper.Converters;
 using AssetRipper.Converters.TerrainDatas;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Classes.TerrainDatas

@@ -3,6 +3,7 @@ using AssetRipper.Converters;
 using AssetRipper.Converters.Script;
 using AssetRipper.Game.Assembly;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 using System.IO;
 #if UNIVERSAL

@@ -4,6 +4,7 @@ using AssetRipper.Classes.Shaders;
 using AssetRipper.Converters;
 using AssetRipper.Converters.Meshes;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System;
 using System.IO;
 using System.Linq;

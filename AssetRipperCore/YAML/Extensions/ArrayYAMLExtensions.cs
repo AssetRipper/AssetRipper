@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Extensions;
 using System.Text;
 
-namespace AssetRipper.YAML
+namespace AssetRipper.YAML.Extensions
 {
 	public static class ArrayYAMLExtensions
 	{

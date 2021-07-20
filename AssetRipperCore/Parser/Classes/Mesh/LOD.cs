@@ -1,6 +1,7 @@
 using AssetRipper;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System.Linq;
 
 namespace AssetRipper.Classes.Meshes

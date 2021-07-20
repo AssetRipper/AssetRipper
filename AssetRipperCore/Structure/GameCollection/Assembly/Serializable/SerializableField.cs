@@ -3,6 +3,7 @@ using AssetRipper.Classes;
 using AssetRipper.Converters;
 using AssetRipper.Extensions;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

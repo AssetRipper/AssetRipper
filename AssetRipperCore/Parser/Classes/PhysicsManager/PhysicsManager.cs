@@ -1,6 +1,7 @@
 using AssetRipper.Classes.PhysicsManagers;
 using AssetRipper.Converters;
 using AssetRipper.YAML;
+using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Classes
