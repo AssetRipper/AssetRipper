@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper
+namespace AssetRipper.Attributes
 {
 	internal class EnumNameAttribute : Attribute
 	{

@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Classes.Misc;
+using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;

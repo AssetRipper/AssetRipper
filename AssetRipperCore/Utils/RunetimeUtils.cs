@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace AssetRipper
+namespace AssetRipper.Utils
 {
 	public static class RunetimeUtils
 	{

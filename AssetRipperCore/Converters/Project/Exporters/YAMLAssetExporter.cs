@@ -1,6 +1,7 @@
 using AssetRipper.Classes;
 using AssetRipper.Project;
 using AssetRipper.SerializedFiles;
+using AssetRipper.Utils;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;

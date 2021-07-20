@@ -3,6 +3,7 @@ using AssetRipper.Classes.Misc;
 using AssetRipper.Converters;
 using AssetRipper.Layout;
 using AssetRipper.SerializedFiles;
+using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;
 

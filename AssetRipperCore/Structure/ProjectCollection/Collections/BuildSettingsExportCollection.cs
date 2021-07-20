@@ -2,6 +2,7 @@
 using AssetRipper.Classes.EditorBuildSettingss;
 using AssetRipper.Converters;
 using AssetRipper.SerializedFiles;
+using AssetRipper.Utils;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

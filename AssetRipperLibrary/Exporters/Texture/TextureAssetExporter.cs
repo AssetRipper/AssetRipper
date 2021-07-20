@@ -5,6 +5,7 @@ using AssetRipper.Converters;
 using AssetRipper.Logging;
 using AssetRipper.Project;
 using AssetRipper.SerializedFiles;
+using AssetRipper.Utils;
 using AssetRipperLibrary.Utils;
 using System;
 using System.Collections.Generic;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper
+namespace AssetRipper.Utils
 {
 	public static class DirectoryUtils
 	{

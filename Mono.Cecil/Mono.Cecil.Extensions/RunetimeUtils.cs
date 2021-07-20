@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Mono.Cecil.Extensions
 {
-	public static class RunetimeUtils
+	internal static class RunetimeUtils
 	{
 		static RunetimeUtils()
 		{

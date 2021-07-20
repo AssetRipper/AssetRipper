@@ -1,3 +1,4 @@
+using AssetRipper.Utils;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;

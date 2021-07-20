@@ -1,5 +1,6 @@
 using AssetRipper.Game;
 using AssetRipper.Game.Assembly.Mono;
+using AssetRipper.Utils;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;

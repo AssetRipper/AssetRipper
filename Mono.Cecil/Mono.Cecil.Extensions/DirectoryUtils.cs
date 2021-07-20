@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Mono.Cecil.Extensions
 {
-	public static class DirectoryUtils
+	internal static class DirectoryUtils
 	{
 		public static bool Exists(string path)
 		{

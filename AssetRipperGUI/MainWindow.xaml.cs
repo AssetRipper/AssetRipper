@@ -2,6 +2,7 @@ using AssetRipper;
 using AssetRipper.Converters;
 using AssetRipper.Logging;
 using AssetRipper.SerializedFiles;
+using AssetRipper.Utils;
 using AssetRipperGUI.Exporters;
 using AssetRipperGUI.Properties;
 using AssetRipperGUI.Windows;

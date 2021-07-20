@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AssetRipper
+namespace AssetRipper.Utils
 {
 #warning TODO: merge with other Script/Mono static methods
 	public static class MonoUtils
