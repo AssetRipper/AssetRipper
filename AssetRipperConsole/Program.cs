@@ -1,5 +1,3 @@
-using AssetRipper;
-using AssetRipper.Converters;
 using AssetRipper.Converters.Project.Exporter;
 using AssetRipper.Converters.Project.Exporter.Engine;
 using AssetRipper.IO.MultiFile;

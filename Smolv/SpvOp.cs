@@ -310,49 +310,102 @@ namespace Smolv
 		NamedBarrierInitialize = 328,
 		MemoryNamedBarrier = 329,
 		ModuleProcessed = 330,
-
-		KnownOpsCount,
+		ExecutionModeId = 331,
+		DecorateId = 332,
+		GroupNonUniformElect = 333,
+		GroupNonUniformAll = 334,
+		GroupNonUniformAny = 335,
+		GroupNonUniformAllEqual = 336,
+		GroupNonUniformBroadcast = 337,
+		GroupNonUniformBroadcastFirst = 338,
+		GroupNonUniformBallot = 339,
+		GroupNonUniformInverseBallot = 340,
+		GroupNonUniformBallotBitExtract = 341,
+		GroupNonUniformBallotBitCount = 342,
+		GroupNonUniformBallotFindLSB = 343,
+		GroupNonUniformBallotFindMSB = 344,
+		GroupNonUniformShuffle = 345,
+		GroupNonUniformShuffleXor = 346,
+		GroupNonUniformShuffleUp = 347,
+		GroupNonUniformShuffleDown = 348,
+		GroupNonUniformIAdd = 349,
+		GroupNonUniformFAdd = 350,
+		GroupNonUniformIMul = 351,
+		GroupNonUniformFMul = 352,
+		GroupNonUniformSMin = 353,
+		GroupNonUniformUMin = 354,
+		GroupNonUniformFMin = 355,
+		GroupNonUniformSMax = 356,
+		GroupNonUniformUMax = 357,
+		GroupNonUniformFMax = 358,
+		GroupNonUniformBitwiseAnd = 359,
+		GroupNonUniformBitwiseOr = 360,
+		GroupNonUniformBitwiseXor = 361,
+		GroupNonUniformLogicalAnd = 362,
+		GroupNonUniformLogicalOr = 363,
+		GroupNonUniformLogicalXor = 364,
+		GroupNonUniformQuadBroadcast = 365,
+		GroupNonUniformQuadSwap = 366,
 	}
 
 	public static class SpvOpExtensions
 	{
-		public static bool OpHasResult(this SpvOp _this)
+		/// <summary>
+		/// Instruction encoding depends on the table that describes the various SPIR-V opcodes.<br/>
+		/// Whenever we change or expand the table, we need to bump up the SMOL-V version,<br/>
+		/// and make sure that we can still decode files encoded by an older version.
+		/// </summary>
+		static int GetKnownOpsCount(int version)
 		{
-			if (_this < 0 || _this >= SpvOp.KnownOpsCount)
+			if (version == 0)
+				return (int)(SpvOp.ModuleProcessed + 1);
+			if (version == 1) // 2020 February, version 1 added ExecutionModeId..GroupNonUniformQuadSwap
+				return (int)(SpvOp.GroupNonUniformQuadSwap + 1);
+			return 0;
+		}
+
+		public static bool OpHasResult(this SpvOp _this) => OpHasResult(_this, GetKnownOpsCount(0));
+		public static bool OpHasResult(this SpvOp _this, int opsCount)
+		{
+			if (_this < 0 || (int)_this >= opsCount)
 			{
 				return false;
 			}
 			return OpData.SpirvOpData[(int)_this].hasResult != 0;
 		}
 
-		public static bool OpHasType(this SpvOp _this)
+		public static bool OpHasType(this SpvOp _this) => OpHasType(_this, GetKnownOpsCount(0));
+		public static bool OpHasType(this SpvOp _this, int opsCount)
 		{
-			if (_this < 0 || _this >= SpvOp.KnownOpsCount)
+			if (_this < 0 || (int)_this >= opsCount)
 			{
 				return false;
 			}
 			return OpData.SpirvOpData[(int)_this].hasType != 0;
 		}
 
-		public static int OpDeltaFromResult(this SpvOp _this)
+		public static int OpDeltaFromResult(this SpvOp _this) => OpDeltaFromResult(_this, GetKnownOpsCount(0));
+		public static int OpDeltaFromResult(this SpvOp _this, int opsCount)
 		{
-			if (_this < 0 || _this >= SpvOp.KnownOpsCount)
+			if (_this < 0 || (int)_this >= opsCount)
 			{
 				return 0;
 			}
 			return OpData.SpirvOpData[(int)_this].deltaFromResult;
 		}
 
-		public static bool OpVarRest(this SpvOp _this)
+		public static bool OpVarRest(this SpvOp _this) => OpVarRest(_this, GetKnownOpsCount(0));
+		public static bool OpVarRest(this SpvOp _this, int opsCount)
 		{
-			if (_this < 0 || _this >= SpvOp.KnownOpsCount)
+			if (_this < 0 || (int)_this >= opsCount)
 			{
 				return false;
 			}
 			return OpData.SpirvOpData[(int)_this].varrest != 0;
 		}
 
-		public static bool OpDebugInfo(this SpvOp _this)
+		public static bool OpDebugInfo(this SpvOp _this) => OpDebugInfo(_this, GetKnownOpsCount(0));
+		public static bool OpDebugInfo(this SpvOp _this, int opsCount)
 		{
 			return
 				_this == SpvOp.SourceContinued ||

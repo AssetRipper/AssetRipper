@@ -360,6 +360,42 @@ namespace Smolv
 			new OpData(1, 1, 0, 1), // NamedBarrierInitialize
 			new OpData(0, 0, -2, 1), // MemoryNamedBarrier
 			new OpData(1, 1, 0, 0), // ModuleProcessed
+			new OpData(0, 0, 0, 1), // ExecutionModeId
+			new OpData(0, 0, 0, 1), // DecorateId
+			new OpData(1, 1, 1, 1), // GroupNonUniformElect
+			new OpData(1, 1, 1, 1), // GroupNonUniformAll
+			new OpData(1, 1, 1, 1), // GroupNonUniformAny
+			new OpData(1, 1, 1, 1), // GroupNonUniformAllEqual
+			new OpData(1, 1, 1, 1), // GroupNonUniformBroadcast
+			new OpData(1, 1, 1, 1), // GroupNonUniformBroadcastFirst
+			new OpData(1, 1, 1, 1), // GroupNonUniformBallot
+			new OpData(1, 1, 1, 1), // GroupNonUniformInverseBallot
+			new OpData(1, 1, 1, 1), // GroupNonUniformBallotBitExtract
+			new OpData(1, 1, 1, 1), // GroupNonUniformBallotBitCount
+			new OpData(1, 1, 1, 1), // GroupNonUniformBallotFindLSB
+			new OpData(1, 1, 1, 1), // GroupNonUniformBallotFindMSB
+			new OpData(1, 1, 1, 1), // GroupNonUniformShuffle
+			new OpData(1, 1, 1, 1), // GroupNonUniformShuffleXor
+			new OpData(1, 1, 1, 1), // GroupNonUniformShuffleUp
+			new OpData(1, 1, 1, 1), // GroupNonUniformShuffleDown
+			new OpData(1, 1, 1, 1), // GroupNonUniformIAdd
+			new OpData(1, 1, 1, 1), // GroupNonUniformFAdd
+			new OpData(1, 1, 1, 1), // GroupNonUniformIMul
+			new OpData(1, 1, 1, 1), // GroupNonUniformFMul
+			new OpData(1, 1, 1, 1), // GroupNonUniformSMin
+			new OpData(1, 1, 1, 1), // GroupNonUniformUMin
+			new OpData(1, 1, 1, 1), // GroupNonUniformFMin
+			new OpData(1, 1, 1, 1), // GroupNonUniformSMax
+			new OpData(1, 1, 1, 1), // GroupNonUniformUMax
+			new OpData(1, 1, 1, 1), // GroupNonUniformFMax
+			new OpData(1, 1, 1, 1), // GroupNonUniformBitwiseAnd
+			new OpData(1, 1, 1, 1), // GroupNonUniformBitwiseOr
+			new OpData(1, 1, 1, 1), // GroupNonUniformBitwiseXor
+			new OpData(1, 1, 1, 1), // GroupNonUniformLogicalAnd
+			new OpData(1, 1, 1, 1), // GroupNonUniformLogicalOr
+			new OpData(1, 1, 1, 1), // GroupNonUniformLogicalXor
+			new OpData(1, 1, 1, 1), // GroupNonUniformQuadBroadcast
+			new OpData(1, 1, 1, 1), // GroupNonUniformQuadSwap
 		};
 	};
 }
