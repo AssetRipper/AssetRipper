@@ -6,4 +6,4 @@ obj
 Bins/
 Test/
 bin
-*.DotSettings.user
+*.user
