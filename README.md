@@ -42,25 +42,25 @@ Current supported versions: `1.x` to `2019.x` (support for later versions is in 
 
 ## Structure
 
-* *AssetRipperCore*
+* [*AssetRipperCore*](AssetRipperCore/README.md) (Cross-Platform)
 
    Core library. It's designed as an single module without any third party dependencies.
    
-* *AssetRipperLibrary*
+* [*AssetRipperLibrary*](AssetRipperLibrary/README.md) (Cross-Platform)
 
-   This is an expansion library for AssetRipperCore. It includes some third party (Windows-only) dependencies and has some extra converters, so it additionally exports:
+   This is an expansion library for AssetRipperCore. It includes some third party dependencies and has some extra converters, so on Windows it additionally exports:
    * AudioClip .wav export
    * Texture2D .png export (with Sprites)
    * References to build-in Engine assets
    * Shader DirectX blob export
 
-* *AssetRipperGUI* (Windows-only)
+* [*AssetRipperGUI*](AssetRipperGUI/README.md) (Windows-only)
 
    Basic graphic interface application utilizing the AssetRipperLibrary.
    
-* *AssetRipperConsole* (Cross-Platform)
+* [*AssetRipperConsole*](AssetRipperConsole/README.md) (Cross-Platform)
 
-   This is a cross-platform command line application for asset ripping. Drag and drop resource file(s) or/and folder(s) onto the executable to retrieve the assets. It will then automaticly try to find resource dependencies, create a 'Ripped' folder and extract all supported assets into the created directory.
+   Command line equivalent of AssetRipperGUI. Since it has no GUI, it can be cross-platform compatible.
 
 
 ## Requirements:
@@ -79,13 +79,12 @@ If you want to run binary files, you need to install:
 
 ## To Do
  * Update Mono.Cecil
- * Some other third party projects need updated too
  * Set up proper build actions
- * Readme's describing the purpose of each subproject
+ * Better Issue Templates
  * Add some basic unit testing
+ * IL2Cpp support
 
 ## Goals
- * IL2Cpp support
  * Unity 2020 and 2021 support
  * Dummy shader implementation
  * NAudio implementation for exporting other audio formats
@@ -107,15 +106,17 @@ This began as a fork of [mafaca](https://github.com/mafaca)'s [uTinyRipper](http
 
 It has borrowed code from [Perfare](https://github.com/Perfare)'s [AssetStudio](https://github.com/Perfare/AssetStudio) project licensed under the MIT license.
 
-[Mono.Cecil](https://github.com/jbevain/cecil) is licensed under the MIT license.
-
 [Brotli](https://github.com/google/brotli) is licensed under the MIT license.
-
-[SpirV](https://github.com/Anteru/csspv) is licensed under the BSD 2-Clause license.
 
 [Lz4](https://github.com/lz4/lz4) is licensed under the MIT license and the BSD 2-Clause license.
 
+[Mono.Cecil](https://github.com/jbevain/cecil) is licensed under the MIT license.
+
+[SpirV](https://github.com/Anteru/csspv) is licensed under the BSD 2-Clause license.
+
 [Smolv](https://github.com/aras-p/smol-v) is licensed under the MIT license.
+
+[Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the MIT license.
 
 
 ## Disclaimer
