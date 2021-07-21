@@ -19,7 +19,7 @@ namespace AssetRipper.Logging
 			if (relativePath) this.filePath = Path.Combine(Environment.CurrentDirectory, filePath);
 			else this.filePath = filePath;
 
-			File.Create(this.filePath);
+			File.Create(this.filePath).Close();
 		}
 
 		public void Log(LogType type, LogCategory category, string message)
@@ -44,8 +44,14 @@ namespace AssetRipper.Logging
 			stringBuilder.Append(": ");
 			stringBuilder.Append(message);
 			stringBuilder.Append(Environment.NewLine);
-
-			File.AppendAllText(filePath, stringBuilder.ToString());
+			try
+			{
+				File.AppendAllText(filePath, stringBuilder.ToString());
+			}
+			catch(System.IO.IOException)
+			{
+				//Could not log to file
+			}
 		}
 	}
 }
