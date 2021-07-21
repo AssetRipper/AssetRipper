@@ -5,24 +5,20 @@ using AssetRipper.Logging;
 using AssetRipper.Parser.Asset;
 using AssetRipper.Structure.GameStructure;
 using AssetRipper.Utils;
+using AssetRipperLibrary.Exporters.Audio;
+using AssetRipperLibrary.Exporters.Texture;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Object = AssetRipper.Parser.Classes.Object.Object;
 
 namespace AssetRipperConsole
 {
 	public class Program
 	{
-		public static bool AssetSelector(Object asset)
-		{
-			return true;
-		}
-
 		public static void Main(string[] args)
 		{
 			Logger.Add(new ConsoleLogger());
-			Logger.Add(new FileLogger("AssetRipperConsole.log", true));
+			Logger.Add(new FileLogger("AssetRipperConsole.log"));
 
 			if (args.Length == 0)
 			{
@@ -64,11 +60,19 @@ namespace AssetRipperConsole
 				string exportPath = Path.Combine("Ripped", GameStructure.Name);
 				PrepareExportDirectory(exportPath);
 
+				//Core Exporters
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter());
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, new FontAssetExporter());
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.MovieTexture, new MovieTextureAssetExporter());
 
-#if DEBUG
+				//Library Exporters
+				TextureAssetExporter textureExporter = new TextureAssetExporter();
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, textureExporter);
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter());
+
+				//Engine Exporters
 				EngineAssetExporter engineExporter = new EngineAssetExporter();
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Material, engineExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, engineExporter);
@@ -77,9 +81,8 @@ namespace AssetRipperConsole
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, engineExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, engineExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.MonoBehaviour, engineExporter);
-#endif
 
-				GameStructure.Export(exportPath, AssetSelector);
+				GameStructure.Export(exportPath);
 				Logger.Log(LogType.Info, LogCategory.General, "Finished");
 			}
 #if !DEBUG

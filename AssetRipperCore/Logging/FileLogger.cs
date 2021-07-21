@@ -8,16 +8,13 @@ namespace AssetRipper.Logging
 	{
 		private readonly string filePath;
 
-		public FileLogger() : this("AssetRipper.log", true) { }
+		public FileLogger() : this("AssetRipper.log") { }
 
-		public FileLogger(string filePath) : this(filePath, false) { }
-
-		public FileLogger(string filePath, bool relativePath)
+		public FileLogger(string filePath)
 		{
 			if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentException("Invalid path", nameof(filePath));
 
-			if (relativePath) this.filePath = Path.Combine(Environment.CurrentDirectory, filePath);
-			else this.filePath = filePath;
+			this.filePath = filePath;
 
 			File.Create(this.filePath).Close();
 		}

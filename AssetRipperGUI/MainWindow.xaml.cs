@@ -17,7 +17,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using Object = AssetRipper.Parser.Classes.Object.Object;
 using Version = AssetRipper.Parser.Files.File.Version.Version;
 
 namespace AssetRipperGUI
@@ -27,11 +26,6 @@ namespace AssetRipperGUI
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public static bool AssetSelector(Object asset)
-		{
-			return true;
-		}
-
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -151,16 +145,22 @@ namespace AssetRipperGUI
 			m_exportPath = (string)data;
 			PrepareExportDirectory(m_exportPath);
 
+			//Core Exporters
+			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter());
+			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, new FontAssetExporter());
+			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.MovieTexture, new MovieTextureAssetExporter());
+
+			//Library Exporters
 			TextureAssetExporter textureExporter = new TextureAssetExporter();
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, textureExporter);
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter());
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter());
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter());
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, new FontAssetExporter());
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.MovieTexture, new MovieTextureAssetExporter());
 
+			//Windows-Only exporters
+			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter());
+
+			//Engine Exporters
 			EngineAssetExporter engineExporter = new EngineAssetExporter();
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Material, engineExporter);
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, engineExporter);
@@ -174,7 +174,7 @@ namespace AssetRipperGUI
 			try
 #endif
 			{
-				GameStructure.Export(m_exportPath, AssetSelector);
+				GameStructure.Export(m_exportPath);
 			}
 #if !DEBUG
 			catch (SerializedFileException ex)
