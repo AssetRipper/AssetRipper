@@ -150,6 +150,9 @@ namespace AssetRipper.Converters.Project
 			OverrideExporter(ClassIDType.MonoScript, ScriptExporter);
 		}
 
+		/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>
+		/// <param name="classType">The class id for this asset type</param>
+		/// <param name="exporter">The new exporter. If it doesn't work, the next one in the stack is used.</param>
 		public void OverrideExporter(ClassIDType classType, IAssetExporter exporter)
 		{
 			if (exporter == null)
@@ -159,7 +162,6 @@ namespace AssetRipper.Converters.Project
 			if (!m_exporters.ContainsKey(classType))
 			{
 				m_exporters[classType] = new Stack<IAssetExporter>(2);
-
 			}
 			m_exporters[classType].Push(exporter);
 		}
@@ -177,7 +179,7 @@ namespace AssetRipper.Converters.Project
 
 		public void OverrideBinaryExporter(ClassIDType classType)
 		{
-			OverrideExporter(classType, BinExporter);
+			OverrideExporter(classType, BinaryExporter);
 		}
 
 		public void Export(string path, GameCollection fileCollection, SerializedFile file, ExportOptions options)
@@ -328,7 +330,7 @@ namespace AssetRipper.Converters.Project
 		}
 
 		private YAMLAssetExporter YamlExporter { get; } = new YAMLAssetExporter();
-		private BinaryAssetExporter BinExporter { get; } = new BinaryAssetExporter();
+		private BinaryAssetExporter BinaryExporter { get; } = new BinaryAssetExporter();
 		private DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
 		private ScriptAssetExporter ScriptExporter { get; } = new ScriptAssetExporter();
 

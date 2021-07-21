@@ -6,23 +6,24 @@
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	  <AssemblyName>AssetRipperConsole</AssemblyName>
 	  <RootNamespace>AssetRipperConsole</RootNamespace>
-    <OutputPath>..\Bins\AssetRipperConsole\$(Configuration)\</OutputPath>
+    <OutputPath>..\Bins\AssetRipperConsole\$(Configuration)\$(Platform)\</OutputPath>
 	  <Configurations>Debug;Release;Virtual</Configurations>
+    <Platforms>x64;x86</Platforms>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <DefineConstants>TRACE</DefineConstants>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Virtual|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)'=='Virtual'">
     <DefineConstants>DEBUG;TRACE;VIRTUAL</DefineConstants>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>

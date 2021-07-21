@@ -22,7 +22,7 @@ namespace AssetRipperConsole
 		public static void Main(string[] args)
 		{
 			Logger.Add(new ConsoleLogger());
-			Logger.Add(new FileLogger());
+			Logger.Add(new FileLogger("AssetRipperConsole.log", true));
 
 			if (args.Length == 0)
 			{

@@ -22,7 +22,7 @@ namespace AssetRipperLibrary.Exporters.Texture
 	{
 		public static bool ExportTexture(Texture2D texture, Stream exportStream)
 		{
-			byte[] buffer = (byte[])texture.GetImageData();
+			byte[] buffer = texture.GetImageData();
 			if (buffer.Length == 0)
 			{
 				return false;

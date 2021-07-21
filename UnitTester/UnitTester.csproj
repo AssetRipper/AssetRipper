@@ -3,13 +3,20 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <OutputPath>..\Bins\UnitTester\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>..\Bins\UnitTester\$(Configuration)\$(Platform)\</OutputPath>
+    <Configurations>Release</Configurations>
+    <Platforms>x64;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="obj\**" />
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
   </ItemGroup>
 
 </Project>

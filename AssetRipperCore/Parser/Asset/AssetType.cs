@@ -16,7 +16,7 @@ namespace AssetRipper.Parser.Asset
 		/// </summary>
 		Serialized		= 2,
 		/// <summary>
-		/// Binary asset file. It containt all parameters inside meta file
+		/// Binary asset file. It contains all parameters inside meta file
 		/// </summary>
 		Meta			= 3,
 	}

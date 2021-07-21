@@ -467,9 +467,9 @@ namespace AssetRipperGUI
 		}
 
 		public const string RepositoryPage = "https://github.com/ds5678/AssetRipper/";
-		public const string ReadMePage = MainWindow.RepositoryPage + "blob/master/README.md";
-		public const string IssuePage = MainWindow.RepositoryPage + "issues/new";
-		public const string ArchivePage = MainWindow.RepositoryPage + "releases";
+		public const string ReadMePage = RepositoryPage + "blob/master/README.md";
+		public const string IssuePage = RepositoryPage + "issues/new";
+		public const string ArchivePage = RepositoryPage + "releases";
 
 		private GameStructure m_gameStructure;
 		private readonly string m_initialIntroText;
