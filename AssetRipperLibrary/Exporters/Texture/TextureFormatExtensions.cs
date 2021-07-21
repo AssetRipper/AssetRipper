@@ -1,9 +1,11 @@
 using AssetRipper.Parser.Classes.Texture2D;
 using AssetRipperLibrary.TextureContainers;
 using System;
+using System.Runtime.Versioning;
 
-namespace AssetRipperLibrary.Exporters.Texture
+namespace AssetRipperLibrary.Exporters.Textures
 {
+	[SupportedOSPlatform("windows")]
 	public static class TextureFormatExtensions
 	{
 		public static ContainerType ToContainerType(this TextureFormat _this)

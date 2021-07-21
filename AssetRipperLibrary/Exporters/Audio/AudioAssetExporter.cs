@@ -11,10 +11,12 @@ using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Versioning;
 using Object = AssetRipper.Parser.Classes.Object.Object;
 
 namespace AssetRipperLibrary.Exporters.Audio
 {
+	[SupportedOSPlatform("windows")]
 	public class AudioAssetExporter : IAssetExporter
 	{
 		public static byte[] ExportAudio(AudioClip audioClip)

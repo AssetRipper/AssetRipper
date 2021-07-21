@@ -14,10 +14,12 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.Versioning;
 using Object = AssetRipper.Parser.Classes.Object.Object;
 
-namespace AssetRipperLibrary.Exporters.Texture
+namespace AssetRipperLibrary.Exporters.Textures
 {
+	[SupportedOSPlatform("windows")]
 	public class TextureAssetExporter : IAssetExporter
 	{
 		public static bool ExportTexture(Texture2D texture, Stream exportStream)

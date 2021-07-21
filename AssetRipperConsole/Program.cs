@@ -6,7 +6,8 @@ using AssetRipper.Parser.Asset;
 using AssetRipper.Structure.GameStructure;
 using AssetRipper.Utils;
 using AssetRipperLibrary.Exporters.Audio;
-using AssetRipperLibrary.Exporters.Texture;
+using AssetRipperLibrary.Exporters.Shaders;
+using AssetRipperLibrary.Exporters.Textures;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -66,11 +67,15 @@ namespace AssetRipperConsole
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.MovieTexture, new MovieTextureAssetExporter());
 
 				//Library Exporters
-				TextureAssetExporter textureExporter = new TextureAssetExporter();
-				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, textureExporter);
-				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
-				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);
-				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter());
+				if (OperatingSystem.IsWindows())
+				{
+					TextureAssetExporter textureExporter = new TextureAssetExporter();
+					GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, textureExporter);
+					GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
+					GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);
+					GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter());
+					GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter());
+				}
 
 				//Engine Exporters
 				EngineAssetExporter engineExporter = new EngineAssetExporter();

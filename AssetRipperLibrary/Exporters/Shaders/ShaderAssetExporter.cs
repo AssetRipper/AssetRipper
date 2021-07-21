@@ -9,14 +9,17 @@ using AssetRipper.Parser.Classes.Shader.Enums;
 using AssetRipper.Parser.Files.SerializedFile;
 using AssetRipper.Structure.ProjectCollection.Collections;
 using AssetRipper.Utils;
+using AssetRipperLibrary.Exporters.Shaders.DirectX;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Versioning;
 using Object = AssetRipper.Parser.Classes.Object.Object;
 using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipperGUI.Exporters
+namespace AssetRipperLibrary.Exporters.Shaders
 {
+	[SupportedOSPlatform("windows")]
 	public sealed class ShaderAssetExporter : IAssetExporter
 	{
 		public bool IsHandle(Object asset, ExportOptions options)

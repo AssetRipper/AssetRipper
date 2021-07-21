@@ -48,19 +48,19 @@ Current supported versions: `1.x` to `2019.x` (support for later versions is in 
    
 * *AssetRipperLibrary*
 
-   This is an expansion library for AssetRipperCore. It includes some third party dependencies and has some extra converters, so it additionally exports:
+   This is an expansion library for AssetRipperCore. It includes some third party (Windows-only) dependencies and has some extra converters, so it additionally exports:
    * AudioClip .wav export
    * Texture2D .png export (with Sprites)
    * References to build-in Engine assets
-
-* *AssetRipperGUI*
-
-   Basic graphic interface application utilizing the AssetRipperLibrary. Since it's Windows-only, it can also export:
    * Shader DirectX blob export
-   
-* *AssetRipperConsole*
 
-   This is intended to become a cross-platform command line application. Drag and drop resource file(s) or/and folder(s) onto the .exe to retrieve the assets. It will then automaticly try to find resource dependencies, create a 'Ripped' folder and extract all supported assets into the created directory.
+* *AssetRipperGUI* (Windows-only)
+
+   Basic graphic interface application utilizing the AssetRipperLibrary.
+   
+* *AssetRipperConsole* (Cross-Platform)
+
+   This is a cross-platform command line application for asset ripping. Drag and drop resource file(s) or/and folder(s) onto the executable to retrieve the assets. It will then automaticly try to find resource dependencies, create a 'Ripped' folder and extract all supported assets into the created directory.
 
 
 ## Requirements:
@@ -88,7 +88,6 @@ If you want to run binary files, you need to install:
  * IL2Cpp support
  * Unity 2020 and 2021 support
  * Dummy shader implementation
- * Cross-Platform console application
  * NAudio implementation for exporting other audio formats
 
 

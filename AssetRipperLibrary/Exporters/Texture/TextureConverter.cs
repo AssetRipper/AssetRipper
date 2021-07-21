@@ -10,10 +10,12 @@ using AssetRipperLibrary.TextureDecoders.Yuy2;
 using AssetRipperLibrary.Utils;
 using System;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipperLibrary.Exporters.Texture
+namespace AssetRipperLibrary.Exporters.Textures
 {
+	[SupportedOSPlatform("windows")]
 	public static class TextureConverter
 	{
 		[DllImport("texgenpack", CallingConvention = CallingConvention.Cdecl)]

@@ -8,9 +8,11 @@ using Smolv;
 using SpirV;
 using System;
 using System.IO;
+using System.Runtime.Versioning;
 
-namespace AssetRipperGUI.Exporters
+namespace AssetRipperLibrary.Exporters.Shaders
 {
+	[SupportedOSPlatform("windows")]
 	public class ShaderVulkanExporter : ShaderTextExporter
 	{
 		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)

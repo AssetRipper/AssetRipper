@@ -2,13 +2,16 @@ using AssetRipper;
 using AssetRipper.Parser.Classes.Shader;
 using AssetRipper.Parser.Classes.Shader.Enums;
 using AssetRipper.Parser.IO;
+using AssetRipperLibrary.Exporters.Shaders.DirectX;
 using DXShaderRestorer;
 using HLSLccWrapper;
 using System.IO;
+using System.Runtime.Versioning;
 using Shader = HLSLccWrapper.Shader;
 
-namespace AssetRipperGUI.Exporters
+namespace AssetRipperLibrary.Exporters.Shaders
 {
+	[SupportedOSPlatform("windows")]
 	public class ShaderHLSLccExporter : ShaderDXExporter
 	{
 		public ShaderHLSLccExporter(GPUPlatform graphicApi) :

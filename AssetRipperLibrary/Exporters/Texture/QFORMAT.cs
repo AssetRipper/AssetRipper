@@ -1,5 +1,8 @@
-﻿namespace AssetRipperLibrary.Exporters.Texture
+﻿using System.Runtime.Versioning;
+
+namespace AssetRipperLibrary.Exporters.Textures
 {
+	[SupportedOSPlatform("windows")]
 	public enum QFormat
 	{
 		// General formats

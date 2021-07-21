@@ -58,9 +58,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
-    <ProjectReference Include="..\DXShaderRestorer\DXShaderRestorer.csproj" />
-    <ProjectReference Include="..\Smolv\Smolv.csproj" />
-    <ProjectReference Include="..\SpirV\SpirV.csproj" />
   </ItemGroup>
   
   <ItemGroup>
@@ -86,19 +83,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(Platform)' == 'x86' ">
-    <Reference Include="HLSLccWrapper_x86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\x86\HLSLccWrapper.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(Platform)' == 'x64' ">
-    <Reference Include="HLSLccWrapper_x64, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\x64\HLSLccWrapper.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

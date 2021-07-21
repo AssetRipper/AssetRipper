@@ -1,5 +1,8 @@
-﻿namespace AssetRipperGUI.Exporters
+﻿using System.Runtime.Versioning;
+
+namespace AssetRipperLibrary.Exporters.Shaders.DirectX
 {
+	[SupportedOSPlatform("windows")]
 	public enum DXInputPrimitive
 	{
 		None		= 0,

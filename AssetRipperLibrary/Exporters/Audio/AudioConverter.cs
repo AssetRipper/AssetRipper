@@ -2,9 +2,11 @@ using FMOD;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace AssetRipperLibrary.Exporters.Audio
 {
+	[SupportedOSPlatform("windows")]
 	public static class AudioConverter
 	{
 		public static byte[] ConvertToWav(byte[] data)

@@ -6,9 +6,11 @@ using AssetRipper.Parser.IO;
 using DotNetDxc;
 using System;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
-namespace AssetRipperGUI.Exporters
+namespace AssetRipperLibrary.Exporters.Shaders.DirectX
 {
+	[SupportedOSPlatform("windows")]
 	public class ShaderDXExporter : ShaderTextExporter
 	{
 		public ShaderDXExporter(GPUPlatform graphicApi)
