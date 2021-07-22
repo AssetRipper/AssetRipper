@@ -38,7 +38,8 @@ namespace UnitTester
 				return;
 			}
 
-			
+			int numTests = 0;
+			int numSuccessful = 0;
 			foreach (string versionPath in Directory.GetDirectories("Tests"))
 			{
 				string versionName = Path.GetRelativePath("Tests", versionPath);
@@ -46,6 +47,7 @@ namespace UnitTester
 				{
 					string testName = Path.GetRelativePath(versionPath, testPath);
 					Logger.Log(LogType.Info, LogCategory.General, $"Found test: '{testName}' for Unity version: '{versionName}'");
+					numTests++;
 					string inputPath = Path.Combine(testPath, "Input");
 					if (!DirectoryUtils.Exists(inputPath))
 					{
@@ -65,15 +67,19 @@ namespace UnitTester
 							PrepareExportDirectory(outputPath);
 							ripper.Export(outputPath);
 							Logger.Log(LogType.Info, LogCategory.General, $"Completed test: '{testName}' for Unity version: '{versionName}'");
-							Logger.BlankLine(3);
+							Logger.BlankLine(2);
+							numSuccessful++;
 						}
 						catch (Exception ex)
 						{
 							Logger.Log(LogType.Error, LogCategory.General, ex.ToString());
+							Logger.BlankLine(2);
 						}
 					}
 				}
 			}
+
+			Logger.Log(LogType.Info, LogCategory.General, $"{numSuccessful}/{numTests} tests successfully completed");
 		}
 
 		private static void PrepareExportDirectory(string path)

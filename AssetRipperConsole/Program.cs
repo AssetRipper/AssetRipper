@@ -12,9 +12,6 @@ namespace AssetRipperConsole
 	{
 		public static void Main(string[] args)
 		{
-			Logger.Add(new ConsoleLogger());
-			Logger.Add(new FileLogger("AssetRipperConsole.log"));
-
 			if (args.Length == 0)
 			{
 				Console.WriteLine("No arguments");
@@ -39,13 +36,22 @@ namespace AssetRipperConsole
 				return;
 			}
 
+			Logger.Add(new ConsoleLogger());
+			Logger.Add(new FileLogger("AssetRipperConsole.log"));
 			Logger.LogSystemInformation();
 
-			Ripper ripper = new Ripper();
-			GameStructure gameStructure = ripper.Load(args);
-			string exportPath = Path.Combine("Ripped", gameStructure.Name);
-			PrepareExportDirectory(exportPath);
-			ripper.Export(exportPath);
+			try
+			{
+				Ripper ripper = new Ripper();
+				GameStructure gameStructure = ripper.Load(args);
+				string exportPath = Path.Combine("Ripped", gameStructure.Name);
+				PrepareExportDirectory(exportPath);
+				ripper.Export(exportPath);
+			}
+			catch (Exception ex)
+			{
+				Logger.Log(LogType.Error, LogCategory.General, ex.ToString());
+			}
 			Console.ReadKey();
 		}
 
