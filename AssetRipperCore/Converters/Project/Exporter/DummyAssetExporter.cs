@@ -42,7 +42,7 @@ namespace AssetRipper.Converters.Project.Exporter
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
-			if (m_metaTypes.TryGetValue(asset.ClassID, out bool isEmptyCollection))
+			if (m_emptyTypes.TryGetValue(asset.ClassID, out bool isEmptyCollection))
 			{
 				if (isEmptyCollection)
 				{
