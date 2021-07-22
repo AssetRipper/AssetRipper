@@ -20,6 +20,12 @@ namespace AssetRipper.Logging
 			}
 		}
 
+		public void BlankLine(int numLines)
+		{
+			for (int i = 0; i < numLines; i++)
+				Console.WriteLine("");
+		}
+
 		public void Log(LogType type, LogCategory category, string message)
 		{
 #if !DEBUG

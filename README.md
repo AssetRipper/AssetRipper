@@ -61,6 +61,10 @@ Current supported versions: `1.x` to `2019.x` (support for later versions is in 
 * [*AssetRipperConsole*](AssetRipperConsole/README.md) (Cross-Platform)
 
    Command line equivalent of AssetRipperGUI. Since it has no GUI, it can be cross-platform compatible.
+   
+* [*UnitTester*](UnitTester/README.md) (Cross-Platform)
+
+   Automated tester to verify project integrity while making changes.
 
 
 ## Requirements:
@@ -86,7 +90,6 @@ The development of this project has a dedicated [Discord server](https://discord
  * Update Mono.Cecil
  * Set up proper build actions
  * Better Issue Templates
- * Add some basic unit testing
  * IL2Cpp support
 
 
@@ -94,6 +97,7 @@ The development of this project has a dedicated [Discord server](https://discord
  * Unity 2020 and 2021 support
  * Dummy shader implementation
  * NAudio implementation for exporting other audio formats
+ * Predetermined GUID support
 
 
 ## License

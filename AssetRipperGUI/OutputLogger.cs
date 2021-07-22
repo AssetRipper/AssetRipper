@@ -58,5 +58,11 @@ namespace AssetRipperGUI
 			m_textBox.AppendText(message);
 			m_textBox.AppendText(Environment.NewLine);
 		}
+
+		public void BlankLine(int numLines)
+		{
+			for(int i = 0; i < numLines; i++)
+				m_textBox.AppendText(Environment.NewLine);
+		}
 	}
 }

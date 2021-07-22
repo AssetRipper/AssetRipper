@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace AssetRipper.Logging
@@ -46,6 +47,18 @@ namespace AssetRipper.Logging
 				File.AppendAllText(filePath, stringBuilder.ToString());
 			}
 			catch(System.IO.IOException)
+			{
+				//Could not log to file
+			}
+		}
+
+		public void BlankLine(int numLines)
+		{
+			try
+			{
+				File.AppendAllLines(filePath, Enumerable.Repeat("", 5).ToArray());
+			}
+			catch (System.IO.IOException)
 			{
 				//Could not log to file
 			}

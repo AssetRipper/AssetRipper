@@ -22,6 +22,14 @@ namespace AssetRipper.Logging
 				Log(type, category, message);
 		}
 
+		public static void BlankLine() => BlankLine(1);
+
+		public static void BlankLine(int numLines)
+		{
+			foreach (ILogger instance in loggers)
+				instance?.BlankLine(numLines);
+		}
+
 		private static void LogReleaseInformation()
 		{
 #if VIRTUAL
