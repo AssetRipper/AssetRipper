@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Utils;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Logging
 {
@@ -8,8 +10,33 @@ namespace AssetRipper.Logging
 
 		public static void Log(LogType type, LogCategory category, string message)
 		{
+			if (message == null) throw new ArgumentNullException(nameof(message));
 			foreach (ILogger instance in loggers)
 				instance?.Log(type, category, message);
+		}
+
+		public static void Log(LogType type, LogCategory category, string[] messages)
+		{
+			if (messages == null) throw new ArgumentNullException(nameof(messages));
+			foreach (string message in messages)
+				Log(type, category, message);
+		}
+
+		private static void LogReleaseInformation()
+		{
+#if VIRTUAL
+			Log(LogType.Info, LogCategory.General, "Build type: Virtual");
+#elif DEBUG
+			Log(LogType.Info, LogCategory.General, "Build type: Debug");
+#else
+			Log(LogType.Info, LogCategory.General, "Build type: Release");
+#endif
+		}
+
+		public static void LogSystemInformation()
+		{
+			Log(LogType.Info, LogCategory.General, $"Operating System: {RunetimeUtils.RuntimeOS.ToString()}");
+			LogReleaseInformation();
 		}
 
 		public static void Add(ILogger logger) => loggers.Add(logger);

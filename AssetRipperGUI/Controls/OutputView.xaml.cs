@@ -14,6 +14,7 @@ namespace AssetRipperGUI.Controls
 
 			Logger.Add(new OutputLogger(Textbox));
 			Logger.Add(new FileLogger());
+			Logger.LogSystemInformation();
 		}
 
 		public void Clear()

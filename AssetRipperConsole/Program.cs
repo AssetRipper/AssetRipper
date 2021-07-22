@@ -45,6 +45,8 @@ namespace AssetRipperConsole
 				return;
 			}
 
+			Logger.LogSystemInformation();
+
 			Program program = new Program();
 			program.Load(args);
 			Console.ReadKey();
