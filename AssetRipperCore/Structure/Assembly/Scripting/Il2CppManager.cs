@@ -7,10 +7,33 @@ namespace AssetRipper.Structure.Assembly.Scripting
 	internal sealed class Il2CppManager : BaseManager
 	{
 		public const string GameAssemblyName = "GameAssembly.dll";
+		public const string UnityPlayerName = "UnityPlayer.dll";
 
+		public string GameAssemblyPath { get; private set; }
+		public string UnityPlayerPath { get; private set; }
+		public string GameDataPath { get; private set; }
+		public string RootPath { get; private set; }
+		public string MetaDataPath { get; private set; }
+		public int[] UnityVersion { get; private set; }
 		public Il2CppManager(AssemblyManager assemblyManager) : base(assemblyManager) { }
 
-		
+		public void Initialize(string gameAssemblyPath, string gameDataPath)
+		{
+			if (string.IsNullOrWhiteSpace(gameAssemblyPath)) throw new ArgumentNullException(nameof(gameAssemblyPath));
+			if (string.IsNullOrWhiteSpace(gameDataPath)) throw new ArgumentNullException(nameof(gameDataPath));
+
+			GameAssemblyPath = Path.GetFullPath(gameAssemblyPath);
+			RootPath = Path.GetDirectoryName(GameAssemblyPath);
+			UnityPlayerPath = Path.Combine(RootPath, UnityPlayerName);
+			GameDataPath = Path.GetFullPath(gameDataPath);
+			MetaDataPath = Path.Combine(GameDataPath, "il2cpp_data", "Metadata", "global-metadata.dat");
+			UnityVersion = Cpp2IL.Core.Cpp2IlApi.DetermineUnityVersion(UnityPlayerPath, GameDataPath);
+
+			Cpp2IL.Core.Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath, MetaDataPath, UnityVersion);
+
+			//var assemblies = Cpp2IL.Core.Cpp2IlApi.MakeDummyDLLs(true);
+		}
+
 		public override void Load(string filePath)
 		{
 			string fileName = Path.GetFileName(filePath);

@@ -41,6 +41,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Cpp2IL.Core.dll">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\Cpp2IL\Cpp2IL.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="LibCpp2IL.dll">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\Cpp2IL\LibCpp2IL.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="obj\**" />
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />

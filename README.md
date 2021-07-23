@@ -118,6 +118,8 @@ It has borrowed code from [Perfare](https://github.com/Perfare)'s [AssetStudio](
 
 [Brotli](https://github.com/google/brotli) is licensed under the MIT license.
 
+[Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the MIT license.
+
 [Lz4](https://github.com/lz4/lz4) is licensed under the MIT license and the BSD 2-Clause license.
 
 [Mono.Cecil](https://github.com/jbevain/cecil) is licensed under the MIT license.
@@ -125,8 +127,6 @@ It has borrowed code from [Perfare](https://github.com/Perfare)'s [AssetStudio](
 [SpirV](https://github.com/Anteru/csspv) is licensed under the BSD 2-Clause license.
 
 [Smolv](https://github.com/aras-p/smol-v) is licensed under the MIT license.
-
-[Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the MIT license.
 
 
 ## Disclaimer
