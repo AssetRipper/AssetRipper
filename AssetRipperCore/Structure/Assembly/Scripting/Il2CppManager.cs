@@ -41,7 +41,7 @@ namespace AssetRipper.Structure.Assembly.Scripting
 
 			foreach(var assembly in Cpp2IlApi.GeneratedAssemblies)
 			{
-				m_assemblies.Add(assembly.FullName, assembly);
+				m_assemblies.Add(assembly.Name.Name, assembly);
 			}
 		}
 

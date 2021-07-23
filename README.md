@@ -37,8 +37,8 @@ Current supported versions: `1.x` to `2019.x` (support for later versions is in 
   * Rigidbody
   * AudioSource
   * Camera
-  * MonoBehaviour (Mono only)
-  * MonoScript (Mono only)
+  * MonoBehaviour (Mono and Il2Cpp)
+  * MonoScript (Mono and Il2Cpp)
 
 ## Structure
 
@@ -89,14 +89,13 @@ The development of this project has a dedicated [Discord server](https://discord
 ## To Do
  * Set up proper build actions
  * Better Issue Templates
- * IL2Cpp support
+ * Predetermined GUID support
 
 
 ## Goals
  * Unity 2020 and 2021 support
  * Dummy shader implementation
  * NAudio implementation for exporting other audio formats
- * Predetermined GUID support
  * More Unity Component Exporters
 
 
