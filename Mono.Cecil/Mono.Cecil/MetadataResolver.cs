@@ -59,6 +59,15 @@ namespace Mono.Cecil {
 			this.member = member;
 		}
 
+		public ResolutionException (MemberReference member, Exception innerException)
+			: base ("Failed to resolve " + member.FullName, innerException)
+		{
+			if (member == null)
+				throw new ArgumentNullException ("member");
+
+			this.member = member;
+		}
+
 #if !NET_CORE
 		ResolutionException (
 			System.Runtime.Serialization.SerializationInfo info,
@@ -106,6 +115,9 @@ namespace Mono.Cecil {
 			case MetadataScopeType.ModuleDefinition:
 				return GetType ((ModuleDefinition) scope, type);
 			case MetadataScopeType.ModuleReference:
+				if (type.Module.Assembly == null)
+					return null;
+
 				var modules = type.Module.Assembly.Modules;
 				var module_ref = (ModuleReference) scope;
 				for (int i = 0; i < modules.Count; i++) {
@@ -349,7 +361,7 @@ namespace Mono.Cecil {
 			return true;
 		}
 
-		static bool AreSame (GenericParameter a, GenericParameter b)
+		public static bool AreSame (GenericParameter a, GenericParameter b)
 		{
 			return a.Position == b.Position;
 		}

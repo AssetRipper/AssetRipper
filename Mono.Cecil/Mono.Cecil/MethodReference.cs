@@ -10,7 +10,7 @@
 
 using System;
 using System.Text;
-
+using System.Threading;
 using Mono.Collections.Generic;
 
 namespace Mono.Cecil {
@@ -47,7 +47,7 @@ namespace Mono.Cecil {
 		public virtual Collection<ParameterDefinition> Parameters {
 			get {
 				if (parameters == null)
-					parameters = new ParameterDefinitionCollection (this);
+					Interlocked.CompareExchange (ref parameters, new ParameterDefinitionCollection (this), null);
 
 				return parameters;
 			}
@@ -78,10 +78,10 @@ namespace Mono.Cecil {
 
 		public virtual Collection<GenericParameter> GenericParameters {
 			get {
-				if (generic_parameters != null)
-					return generic_parameters;
+				if (generic_parameters == null)
+					Interlocked.CompareExchange (ref generic_parameters, new GenericParameterCollection (this), null);
 
-				return generic_parameters = new GenericParameterCollection (this);
+				return generic_parameters;
 			}
 		}
 
@@ -183,7 +183,7 @@ namespace Mono.Cecil {
 
 		public static bool IsVarArg (this IMethodSignature self)
 		{
-			return (self.CallingConvention & MethodCallingConvention.VarArg) != 0;
+			return self.CallingConvention == MethodCallingConvention.VarArg;
 		}
 
 		public static int GetSentinelPosition (this IMethodSignature self)

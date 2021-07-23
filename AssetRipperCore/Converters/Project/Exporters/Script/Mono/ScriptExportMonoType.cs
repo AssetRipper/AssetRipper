@@ -3,6 +3,7 @@ using AssetRipper.Structure.Assembly;
 using AssetRipper.Structure.Assembly.Scripting;
 using AssetRipper.Utils;
 using Mono.Cecil;
+using Mono.Cecil.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -222,7 +223,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Mono
 		{
 			// TypeReference contain parameters with "<!0,!1> (!index)" name but TypeDefinition's name is "<T1,T2> (RealParameterName)"
 			genericType = genericType.ResolveOrDefault();
-			return GetGenericName(genericType, genericType.GenericParameters);
+			return MonoUtils.GetGenericName(genericType, genericType.GenericParameters);
 		}
 
 		private static string GetGenericTypeName(TypeReference genericType, IReadOnlyList<TypeReference> genericArguments)
@@ -233,7 +234,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Mono
 
 		private static string GetGenericInstanceName(GenericInstanceType genericInstance)
 		{
-			return GetGenericName(genericInstance.ElementType, genericInstance.GenericArguments);
+			return MonoUtils.GetGenericName(genericInstance.ElementType, genericInstance.GenericArguments);
 		}
 
 		private static string GetGenericName(TypeReference genericType, IReadOnlyList<TypeReference> genericArguments)

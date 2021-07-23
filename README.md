@@ -87,7 +87,6 @@ The development of this project has a dedicated [Discord server](https://discord
 
 
 ## To Do
- * Update Mono.Cecil
  * Set up proper build actions
  * Better Issue Templates
  * IL2Cpp support
@@ -98,6 +97,7 @@ The development of this project has a dedicated [Discord server](https://discord
  * Dummy shader implementation
  * NAudio implementation for exporting other audio formats
  * Predetermined GUID support
+ * More Unity Component Exporters
 
 
 ## License

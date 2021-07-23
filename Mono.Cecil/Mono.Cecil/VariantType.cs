@@ -29,6 +29,8 @@ namespace Mono.Cecil {
 		UI1 = 17,
 		UI2 = 18,
 		UI4 = 19,
+		I8 = 20,
+		UI8 = 21,
 		Int = 22,
 		UInt = 23
 	}

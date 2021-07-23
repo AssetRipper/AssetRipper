@@ -8,10 +8,11 @@
 // Licensed under the MIT/X11 license.
 //
 
+using System;
+using System.Threading;
 using Mono.Collections.Generic;
 
-namespace Mono.Cecil
-{
+namespace Mono.Cecil {
 
 	public interface ICustomAttributeProvider : IMetadataTokenProvider {
 
@@ -34,9 +35,11 @@ namespace Mono.Cecil
 			ref Collection<CustomAttribute> variable,
 			ModuleDefinition module)
 		{
-			return module.HasImage ()
-				? module.Read (ref variable, self, (provider, reader) => reader.ReadCustomAttributes (provider))
-				: variable = new Collection<CustomAttribute>();
+			if (module.HasImage ())
+				return module.Read (ref variable, self, (provider, reader) => reader.ReadCustomAttributes (provider));
+
+			Interlocked.CompareExchange (ref variable, new Collection<CustomAttribute> (), null);
+			return variable;
 		}
 	}
 }

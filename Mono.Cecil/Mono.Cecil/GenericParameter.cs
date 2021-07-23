@@ -9,7 +9,7 @@
 //
 
 using System;
-
+using System.Threading;
 using Mono.Collections.Generic;
 
 using Mono.Cecil.Metadata;
@@ -23,7 +23,7 @@ namespace Mono.Cecil {
 		internal IGenericParameterProvider owner;
 
 		ushort attributes;
-		Collection<TypeReference> constraints;
+		GenericParameterConstraintCollection constraints;
 		Collection<CustomAttribute> custom_attributes;
 
 		public GenericParameterAttributes Attributes {
@@ -52,7 +52,7 @@ namespace Mono.Cecil {
 			}
 		}
 
-		public Collection<TypeReference> Constraints {
+		public Collection<GenericParameterConstraint> Constraints {
 			get {
 				if (constraints != null)
 					return constraints;
@@ -60,7 +60,8 @@ namespace Mono.Cecil {
 				if (HasImage)
 					return Module.Read (ref constraints, this, (generic_parameter, reader) => reader.ReadGenericConstraints (generic_parameter));
 
-				return constraints = new Collection<TypeReference> ();
+				Interlocked.CompareExchange (ref constraints, new GenericParameterConstraintCollection (this), null);
+				return constraints;
 			}
 		}
 
@@ -263,6 +264,99 @@ namespace Mono.Cecil {
 
 			for (int i = index + 1; i < size; i++)
 				items[i].position = i - 1;
+		}
+	}
+
+	public sealed class GenericParameterConstraint : ICustomAttributeProvider {
+
+		internal GenericParameter generic_parameter;
+		internal MetadataToken token;
+
+		TypeReference constraint_type;
+		Collection<CustomAttribute> custom_attributes;
+
+		public TypeReference ConstraintType {
+			get { return constraint_type; }
+			set { constraint_type = value; }
+		}
+
+		public bool HasCustomAttributes {
+			get {
+				if (custom_attributes != null)
+					return custom_attributes.Count > 0;
+
+				if (generic_parameter == null)
+					return false;
+
+				return this.GetHasCustomAttributes (generic_parameter.Module);
+			}
+		}
+
+		public Collection<CustomAttribute> CustomAttributes {
+			get {
+				if (generic_parameter == null) {
+					if (custom_attributes == null)
+						Interlocked.CompareExchange (ref custom_attributes, new Collection<CustomAttribute> (), null);
+					return custom_attributes;
+				}
+
+				return custom_attributes ?? (this.GetCustomAttributes (ref custom_attributes, generic_parameter.Module));
+			}
+		}
+
+		public MetadataToken MetadataToken {
+			get { return token; }
+			set { token = value; }
+		}
+
+		internal GenericParameterConstraint (TypeReference constraintType, MetadataToken token)
+		{
+			this.constraint_type = constraintType;
+			this.token = token;
+		}
+
+		public GenericParameterConstraint (TypeReference constraintType)
+		{
+			Mixin.CheckType (constraintType, Mixin.Argument.constraintType);
+
+			this.constraint_type = constraintType;
+			this.token = new MetadataToken (TokenType.GenericParamConstraint);
+		}
+	}
+
+	class GenericParameterConstraintCollection : Collection<GenericParameterConstraint>
+	{
+		readonly GenericParameter generic_parameter;
+
+		internal GenericParameterConstraintCollection (GenericParameter genericParameter)
+		{
+			this.generic_parameter = genericParameter;
+		}
+
+		internal GenericParameterConstraintCollection (GenericParameter genericParameter, int length)
+			: base (length)
+		{
+			this.generic_parameter = genericParameter;
+		}
+
+		protected override void OnAdd (GenericParameterConstraint item, int index)
+		{
+			item.generic_parameter = generic_parameter;
+		}
+
+		protected override void OnInsert (GenericParameterConstraint item, int index)
+		{
+			item.generic_parameter = generic_parameter;
+		}
+
+		protected override void OnSet (GenericParameterConstraint item, int index)
+		{
+			item.generic_parameter = generic_parameter;
+		}
+
+		protected override void OnRemove (GenericParameterConstraint item, int index)
+		{
+			item.generic_parameter = null;
 		}
 	}
 }

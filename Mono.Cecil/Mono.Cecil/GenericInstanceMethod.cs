@@ -8,12 +8,12 @@
 // Licensed under the MIT/X11 license.
 //
 
+using System;
 using System.Text;
-
+using System.Threading;
 using Mono.Collections.Generic;
 
-namespace Mono.Cecil
-{
+namespace Mono.Cecil {
 
 	public sealed class GenericInstanceMethod : MethodSpecification, IGenericInstance, IGenericContext {
 
@@ -24,7 +24,12 @@ namespace Mono.Cecil
 		}
 
 		public Collection<TypeReference> GenericArguments {
-			get { return arguments ?? (arguments = new Collection<TypeReference> ()); }
+			get {
+				if (arguments == null)
+					Interlocked.CompareExchange (ref arguments, new Collection<TypeReference> (), null);
+
+				return arguments;
+			}
 		}
 
 		public override bool IsGenericInstance {
@@ -62,6 +67,12 @@ namespace Mono.Cecil
 		public GenericInstanceMethod (MethodReference method)
 			: base (method)
 		{
+		}
+
+		internal GenericInstanceMethod (MethodReference method, int arity)
+			: this (method)
+		{
+			this.arguments = new Collection<TypeReference> (arity);
 		}
 	}
 }

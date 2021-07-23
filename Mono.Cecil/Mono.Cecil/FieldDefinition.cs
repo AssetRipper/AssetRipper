@@ -9,6 +9,7 @@
 //
 
 using System;
+using System.Threading;
 using Mono.Collections.Generic;
 
 namespace Mono.Cecil {
@@ -37,7 +38,11 @@ namespace Mono.Cecil {
 				return;
 			}
 
-			offset = Module.Read (this, (field, reader) => reader.ReadFieldLayout (field));
+			lock (Module.SyncRoot) {
+				if (offset != Mixin.NotResolvedMarker)
+					return;
+				offset = Module.Read (this, (field, reader) => reader.ReadFieldLayout (field));
+			}
 		}
 
 		public bool HasLayoutInfo {
@@ -63,7 +68,7 @@ namespace Mono.Cecil {
 			set { offset = value; }
 		}
 
-		internal new FieldDefinitionProjection WindowsRuntimeProjection {
+		internal FieldDefinitionProjection WindowsRuntimeProjection {
 			get { return (FieldDefinitionProjection) projection; }
 			set { projection = value; }
 		}
@@ -76,7 +81,11 @@ namespace Mono.Cecil {
 			if (!HasImage)
 				return;
 
-			rva = Module.Read (this, (field, reader) => reader.ReadFieldRVA (field));
+			lock (Module.SyncRoot) {
+				if (rva != Mixin.NotResolvedMarker)
+					return;
+				rva = Module.Read (this, (field, reader) => reader.ReadFieldRVA (field));
+			}
 		}
 
 		public int RVA {
@@ -104,6 +113,7 @@ namespace Mono.Cecil {
 			}
 			set {
 				initial_value = value;
+				HasFieldRVA = !initial_value.IsNullOrEmpty ();
 				rva = 0;
 			}
 		}
@@ -234,6 +244,11 @@ namespace Mono.Cecil {
 		public bool HasDefault {
 			get { return attributes.GetAttributes ((ushort) FieldAttributes.HasDefault); }
 			set { attributes = attributes.SetAttributes ((ushort) FieldAttributes.HasDefault, value); }
+		}
+
+		public bool HasFieldRVA {
+			get { return attributes.GetAttributes ((ushort) FieldAttributes.HasFieldRVA); }
+			set { attributes = attributes.SetAttributes ((ushort) FieldAttributes.HasFieldRVA, value); }
 		}
 
 		#endregion

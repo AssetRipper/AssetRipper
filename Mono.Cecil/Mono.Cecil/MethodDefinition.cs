@@ -9,6 +9,7 @@
 //
 
 using System;
+using System.Threading;
 using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
 
@@ -80,7 +81,7 @@ namespace Mono.Cecil {
 			set { sem_attrs = value; }
 		}
 
-		internal new MethodDefinitionProjection WindowsRuntimeProjection {
+		internal MethodDefinitionProjection WindowsRuntimeProjection {
 			get { return (MethodDefinitionProjection) projection; }
 			set { projection = value; }
 		}
@@ -97,7 +98,12 @@ namespace Mono.Cecil {
 			if (!module.HasImage)
 				return;
 
-			module.Read (this, (method, reader) => reader.ReadAllSemantics (method));
+			lock (module.SyncRoot) {
+				if (sem_attrs_ready)
+					return;
+
+				module.Read (this, (method, reader) => reader.ReadAllSemantics (method));
+			}
 		}
 
 		public bool HasSecurityDeclarations {
@@ -153,7 +159,9 @@ namespace Mono.Cecil {
 				if (HasImage && rva != 0)
 					return Module.Read (ref body, this, (method, reader) => reader.ReadMethodBody (method));
 
-				return body = new MethodBody (this);
+				Interlocked.CompareExchange (ref body, new MethodBody (this) , null);
+
+				return body;
 			}
 			set {
 				var module = this.Module;
@@ -175,10 +183,14 @@ namespace Mono.Cecil {
 			get {
 				Mixin.Read (Body);
 
-				if (debug_info != null)
-					return debug_info;
+				if (debug_info == null) {
+					Interlocked.CompareExchange (ref debug_info, new MethodDebugInformation (this), null);
+				}
 
-				return debug_info ?? (debug_info = new MethodDebugInformation (this));
+				return debug_info;
+			}
+			set {
+				debug_info = value;
 			}
 		}
 
@@ -224,7 +236,9 @@ namespace Mono.Cecil {
 				if (HasImage)
 					return Module.Read (ref overrides, this, (method, reader) => reader.ReadOverrides (method));
 
-				return overrides = new Collection<MethodReference> ();
+				Interlocked.CompareExchange (ref overrides, new Collection<MethodReference> (), null);
+
+				return overrides;
 			}
 		}
 
@@ -253,7 +267,10 @@ namespace Mono.Cecil {
 			get {
 				Mixin.Read (Body);
 
-				return custom_infos ?? (custom_infos = new Collection<CustomDebugInformation> ());
+				if (custom_infos == null)
+					Interlocked.CompareExchange (ref custom_infos, new Collection<CustomDebugInformation> (), null);
+
+				return custom_infos;
 			}
 		}
 

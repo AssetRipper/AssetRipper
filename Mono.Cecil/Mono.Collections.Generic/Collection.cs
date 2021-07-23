@@ -16,7 +16,7 @@ using Mono.Cecil;
 
 namespace Mono.Collections.Generic {
 
-	public class Collection<T> : IList<T>, IList, IReadOnlyList<T> {
+	public class Collection<T> : IList<T>, IList {
 
 		internal T [] items;
 		internal int size;
@@ -104,7 +104,9 @@ namespace Mono.Collections.Generic {
 			if (capacity < 0)
 				throw new ArgumentOutOfRangeException ();
 
-			items = new T [capacity];
+			items = capacity == 0 
+				? Empty<T>.Array
+				: new T [capacity];
 		}
 
 		public Collection (ICollection<T> items)

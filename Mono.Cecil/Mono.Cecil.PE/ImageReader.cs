@@ -13,9 +13,11 @@ using System.IO;
 
 using Mono.Cecil.Cil;
 using Mono.Cecil.Metadata;
+using Mono.Collections.Generic;
 
-namespace Mono.Cecil.PE
-{
+using RVA = System.UInt32;
+
+namespace Mono.Cecil.PE {
 
 	sealed class ImageReader : BinaryStreamReader {
 
@@ -36,12 +38,12 @@ namespace Mono.Cecil.PE
 
 		void MoveTo (DataDirectory directory)
 		{
-			Position = (int)image.ResolveVirtualAddress (directory.VirtualAddress);
+			BaseStream.Position = image.ResolveVirtualAddress (directory.VirtualAddress);
 		}
 
 		void ReadImage ()
 		{
-			if (Length < 128)
+			if (BaseStream.Length < 128)
 				throw new BadImageFormatException ();
 
 			// - DOSHeader
@@ -79,16 +81,16 @@ namespace Mono.Cecil.PE
 			// Characteristics		2
 			ushort characteristics = ReadUInt16 ();
 
-			ushort subsystem, dll_characteristics, linker_version;
-			ReadOptionalHeaders (out subsystem, out dll_characteristics, out linker_version);
+			ushort subsystem, dll_characteristics;
+			ReadOptionalHeaders (out subsystem, out dll_characteristics);
 			ReadSections (sections);
 			ReadCLIHeader ();
 			ReadMetadata ();
 			ReadDebugHeader ();
 
+			image.Characteristics = characteristics;
 			image.Kind = GetModuleKind (characteristics, subsystem);
-			image.Characteristics = (ModuleCharacteristics) dll_characteristics;
-			image.LinkerVersion = linker_version;
+			image.DllCharacteristics = (ModuleCharacteristics) dll_characteristics;
 		}
 
 		TargetArchitecture ReadArchitecture ()
@@ -107,7 +109,7 @@ namespace Mono.Cecil.PE
 			return ModuleKind.Console;
 		}
 
-		void ReadOptionalHeaders (out ushort subsystem, out ushort dll_characteristics, out ushort linker)
+		void ReadOptionalHeaders (out ushort subsystem, out ushort dll_characteristics)
 		{
 			// - PEOptionalHeader
 			//   - StandardFieldsHeader
@@ -117,7 +119,7 @@ namespace Mono.Cecil.PE
 
 			//						pe32 || pe64
 
-			linker = ReadUInt16 ();
+			image.LinkerVersion = ReadUInt16 ();
 			// CodeSize				4
 			// InitializedDataSize	4
 			// UninitializedDataSize4
@@ -136,11 +138,16 @@ namespace Mono.Cecil.PE
 			// UserMinor			2
 			// SubSysMajor			2
 			// SubSysMinor			2
+			Advance(44);
+
+			image.SubSystemMajor = ReadUInt16 ();
+			image.SubSystemMinor = ReadUInt16 ();
+
 			// Reserved				4
 			// ImageSize			4
 			// HeaderSize			4
 			// FileChecksum			4
-			Advance (64);
+			Advance (16);
 
 			// SubSystem			2
 			subsystem = ReadUInt16 ();
@@ -344,7 +351,7 @@ namespace Mono.Cecil.PE
 					PointerToRawData = ReadInt32 (),
 				};
 
-				if (directory.AddressOfRawData == 0) {
+				if (directory.PointerToRawData == 0 || directory.SizeOfData < 0) {
 					entries [i] = new ImageDebugHeaderEntry (directory, Empty<byte>.Array);
 					continue;
 				}
@@ -399,10 +406,10 @@ namespace Mono.Cecil.PE
 
 		byte [] ReadHeapData (uint offset, uint size)
 		{
-			var position = Position;
+			var position = BaseStream.Position;
 			MoveTo (offset + image.MetadataSection.PointerToRawData);
 			var data = ReadBytes ((int) size);
-			Position = position;
+			BaseStream.Position = position;
 
 			return data;
 		}
@@ -473,9 +480,9 @@ namespace Mono.Cecil.PE
 
 		void ComputeTableInformations ()
 		{
-			uint offset = (uint) Position - table_heap_offset - image.MetadataSection.PointerToRawData; // header
+			uint offset = (uint) BaseStream.Position - table_heap_offset - image.MetadataSection.PointerToRawData; // header
 
-			int stridx_size = image.StringHeap.IndexSize;
+			int stridx_size = image.StringHeap != null ? image.StringHeap.IndexSize : 2;
 			int guididx_size = image.GuidHeap != null ? image.GuidHeap.IndexSize : 2;
 			int blobidx_size = image.BlobHeap != null ? image.BlobHeap.IndexSize : 2;
 

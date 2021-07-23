@@ -23,6 +23,7 @@ namespace Mono.Cecil {
 		PrefixWindowsRuntimeName = 0x4,
 		RedirectToClrType = 0x5,
 		RedirectToClrAttribute = 0x6,
+		RedirectImplementedMethods = 0x7,
 
 		Abstract = 0x10,
 		Internal = 0x20,
@@ -38,7 +39,6 @@ namespace Mono.Cecil {
 	[Flags]
 	enum MethodDefinitionTreatment {
 		None = 0x0,
-		Dispose = 0x1,
 		Abstract = 0x2,
 		Private = 0x4,
 		Public = 0x8,
@@ -49,11 +49,6 @@ namespace Mono.Cecil {
 	enum FieldDefinitionTreatment {
 		None = 0x0,
 		Public = 0x1,
-	}
-
-	enum MemberReferenceTreatment {
-		None = 0x0,
-		Dispose = 0x1,
 	}
 
 	enum CustomAttributeValueTreatment {

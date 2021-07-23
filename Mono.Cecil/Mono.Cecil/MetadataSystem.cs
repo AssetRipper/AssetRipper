@@ -10,7 +10,8 @@
 
 using System;
 using System.Collections.Generic;
-
+using System.Runtime.CompilerServices;
+using System.Threading;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Metadata;
 using Mono.Collections.Generic;
@@ -56,7 +57,7 @@ namespace Mono.Cecil {
 		internal Dictionary<uint, Row<MethodSemanticsAttributes, MetadataToken>> Semantics;
 		internal Dictionary<uint, Row<PInvokeAttributes, uint, uint>> PInvokes;
 		internal Dictionary<MetadataToken, Range []> GenericParameters;
-		internal Dictionary<uint, Collection<MetadataToken>> GenericConstraints;
+		internal Dictionary<uint, Collection<Row<uint, MetadataToken>>> GenericConstraints;
 
 		internal Document [] Documents;
 		internal Dictionary<uint, Collection<Row<uint, Range, Range, uint, uint, uint>>> LocalScopes;
@@ -68,7 +69,7 @@ namespace Mono.Cecil {
 
 		static void InitializePrimitives ()
 		{
-			primitive_value_types = new Dictionary<string, Row<ElementType, bool>> (18, StringComparer.Ordinal) {
+			var types = new Dictionary<string, Row<ElementType, bool>> (18, StringComparer.Ordinal) {
 				{ "Void", new Row<ElementType, bool> (ElementType.Void, false) },
 				{ "Boolean", new Row<ElementType, bool> (ElementType.Boolean, true) },
 				{ "Char", new Row<ElementType, bool> (ElementType.Char, true) },
@@ -88,6 +89,8 @@ namespace Mono.Cecil {
 				{ "UIntPtr", new Row<ElementType, bool> (ElementType.U, true) },
 				{ "Object", new Row<ElementType, bool> (ElementType.Object, false) },
 			};
+
+			Interlocked.CompareExchange (ref primitive_value_types, types, null);
 		}
 
 		public static void TryProcessPrimitiveTypeReference (TypeReference type)
@@ -149,7 +152,7 @@ namespace Mono.Cecil {
 			if (Semantics != null) Semantics = new Dictionary<uint, Row<MethodSemanticsAttributes, MetadataToken>> (capacity: 0);
 			if (PInvokes != null) PInvokes = new Dictionary<uint, Row<PInvokeAttributes, uint, uint>> (capacity: 0);
 			if (GenericParameters != null) GenericParameters = new Dictionary<MetadataToken, Range []> (capacity: 0);
-			if (GenericConstraints != null) GenericConstraints = new Dictionary<uint, Collection<MetadataToken>> (capacity: 0);
+			if (GenericConstraints != null) GenericConstraints = new Dictionary<uint, Collection<Row<uint, MetadataToken>>> (capacity: 0);
 
 			Documents = Empty<Document>.Array;
 			ImportScopes = Empty<ImportDebugInformation>.Array;
@@ -335,12 +338,12 @@ namespace Mono.Cecil {
 			SecurityDeclarations.Remove (owner.MetadataToken);
 		}
 
-		public bool TryGetGenericConstraintMapping (GenericParameter generic_parameter, out Collection<MetadataToken> mapping)
+		public bool TryGetGenericConstraintMapping (GenericParameter generic_parameter, out Collection<Row<uint, MetadataToken>> mapping)
 		{
 			return GenericConstraints.TryGetValue (generic_parameter.token.RID, out mapping);
 		}
 
-		public void SetGenericConstraintMapping (uint gp_rid, Collection<MetadataToken> mapping)
+		public void SetGenericConstraintMapping (uint gp_rid, Collection<Row<uint, MetadataToken>> mapping)
 		{
 			GenericConstraints [gp_rid] = mapping;
 		}

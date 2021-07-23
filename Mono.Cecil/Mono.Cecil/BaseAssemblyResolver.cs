@@ -191,10 +191,7 @@ namespace Mono.Cecil {
 			string paths;
 
 			try {
-				// AppContext is only available on platforms that implement .NET Standard 1.6
-				var appContextType = Type.GetType ("System.AppContext, System.AppContext, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", throwOnError: false);
-				var getData = appContextType?.GetTypeInfo ().GetDeclaredMethod ("GetData");
-				paths = (string) getData?.Invoke (null, new [] { "TRUSTED_PLATFORM_ASSEMBLIES" });
+				paths = (string) AppDomain.CurrentDomain.GetData ("TRUSTED_PLATFORM_ASSEMBLIES");
 			} catch {
 				paths = null;
 			}
@@ -216,7 +213,7 @@ namespace Mono.Cecil {
 			foreach (var directory in directories) {
 				foreach (var extension in extensions) {
 					string file = Path.Combine (directory, name.Name + extension);
-					if (!Extensions.FileUtils.Exists (file))
+					if (!File.Exists (file))
 						continue;
 					try {
 						return GetAssembly (file, parameters);
@@ -242,8 +239,8 @@ namespace Mono.Cecil {
 			if (corlib.Version == version || IsZero (version))
 				return GetAssembly (typeof (object).Module.FullyQualifiedName, parameters);
 
-			var path = AssetRipper.DirectoryUtils.GetParent (
-				AssetRipper.DirectoryUtils.GetParent (
+			var path = Directory.GetParent (
+				Directory.GetParent (
 					typeof (object).Module.FullyQualifiedName).FullName
 				).FullName;
 
@@ -265,7 +262,7 @@ namespace Mono.Cecil {
 					if (version.MajorRevision == 3300)
 						path = Path.Combine (path, "v1.0.3705");
 					else
-						path = Path.Combine (path, "v1.0.5000.0");
+						path = Path.Combine (path, "v1.1.4322");
 					break;
 				case 2:
 					path = Path.Combine (path, "v2.0.50727");
@@ -279,12 +276,12 @@ namespace Mono.Cecil {
 			}
 
 			var file = Path.Combine (path, "mscorlib.dll");
-			if (AssetRipper.FileUtils.Exists (file))
+			if (File.Exists (file))
 				return GetAssembly (file, parameters);
 
-			if (on_mono && AssetRipper.DirectoryUtils.Exists (path + "-api")) {
+			if (on_mono && Directory.Exists (path + "-api")) {
 				file = Path.Combine (path + "-api", "mscorlib.dll");
-				if (AssetRipper.FileUtils.Exists (file))
+				if (File.Exists (file))
 					return GetAssembly (file, parameters);
 			}
 
@@ -323,7 +320,7 @@ namespace Mono.Cecil {
 					continue;
 
 				var gac_path = Path.Combine (Path.Combine (Path.Combine (prefix, "lib"), "mono"), "gac");
-				if (AssetRipper.DirectoryUtils.Exists (gac_path) && !paths.Contains (gac))
+				if (Directory.Exists (gac_path) && !paths.Contains (gac))
 					paths.Add (gac_path);
 			}
 
@@ -333,7 +330,7 @@ namespace Mono.Cecil {
 		static string GetCurrentMonoGac ()
 		{
 			return Path.Combine (
-				AssetRipper.DirectoryUtils.GetParent (
+				Directory.GetParent (
 					Path.GetDirectoryName (typeof (object).Module.FullyQualifiedName)).FullName,
 				"gac");
 		}
@@ -357,7 +354,7 @@ namespace Mono.Cecil {
 			for (int i = 0; i < gac_paths.Count; i++) {
 				var gac_path = gac_paths [i];
 				var file = GetAssemblyFile (reference, string.Empty, gac_path);
-				if (AssetRipper.FileUtils.Exists (file))
+				if (File.Exists (file))
 					return GetAssembly (file, parameters);
 			}
 
@@ -369,18 +366,18 @@ namespace Mono.Cecil {
 			var gacs = new [] { "GAC_MSIL", "GAC_32", "GAC_64", "GAC" };
 			var prefixes = new [] { string.Empty, "v4.0_" };
 
-			for (int i = 0; i < 2; i++) {
+			for (int i = 0; i < gac_paths.Count; i++) {
 				for (int j = 0; j < gacs.Length; j++) {
 					var gac = Path.Combine (gac_paths [i], gacs [j]);
 					var file = GetAssemblyFile (reference, prefixes [i], gac);
-					if (AssetRipper.DirectoryUtils.Exists (gac) && AssetRipper.FileUtils.Exists (file))
+					if (Directory.Exists (gac) && File.Exists (file))
 						return GetAssembly (file, parameters);
 				}
 			}
 
 			return null;
 		}
-#endif
+
 		static string GetAssemblyFile (AssemblyNameReference reference, string prefix, string gac)
 		{
 			var gac_folder = new StringBuilder ()
@@ -396,7 +393,7 @@ namespace Mono.Cecil {
 					Path.Combine (gac, reference.Name), gac_folder.ToString ()),
 				reference.Name + ".dll");
 		}
-
+#endif
 		public void Dispose ()
 		{
 			Dispose (true);

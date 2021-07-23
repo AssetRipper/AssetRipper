@@ -296,7 +296,7 @@ namespace Mono.Cecil {
 			if (generic_arguments.IsNullOrEmpty ())
 				return type;
 
-			var instance = new GenericInstanceType (type);
+			var instance = new GenericInstanceType (type, generic_arguments.Length);
 			var instance_arguments = instance.GenericArguments;
 
 			for (int i = 0; i < generic_arguments.Length; i++)
@@ -402,13 +402,13 @@ namespace Mono.Cecil {
 			return false;
 		}
 
-		public static string ToParseable (TypeReference type)
+		public static string ToParseable (TypeReference type, bool top_level = true)
 		{
 			if (type == null)
 				return null;
 
 			var name = new StringBuilder ();
-			AppendType (type, name, true, true);
+			AppendType (type, name, true, top_level);
 			return name.ToString ();
 		}
 

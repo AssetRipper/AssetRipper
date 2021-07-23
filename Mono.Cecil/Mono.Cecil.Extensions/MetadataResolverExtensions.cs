@@ -6,8 +6,8 @@
 		 * MetadataResolver.AreSame(TypeReference, TypeReference)
 		 */
 
-		/*
-		public static bool AreSame (TypeReference a, TypeReference b)
+		
+		/*public static bool AreSame (TypeReference a, TypeReference b)
 		{
 			if (ReferenceEquals (a, b))
 				return true;

@@ -9,7 +9,7 @@
 //
 
 using System;
-
+using System.Threading;
 using Mono.Cecil.Metadata;
 using Mono.Collections.Generic;
 
@@ -61,19 +61,21 @@ namespace Mono.Cecil {
 
 		void ResolveLayout ()
 		{
-			if (packing_size != Mixin.NotResolvedMarker || class_size != Mixin.NotResolvedMarker)
-				return;
-
 			if (!HasImage) {
 				packing_size = Mixin.NoDataMarker;
 				class_size = Mixin.NoDataMarker;
 				return;
 			}
 
-			var row = Module.Read (this, (type, reader) => reader.ReadTypeLayout (type));
+			lock (Module.SyncRoot) {
+				if (packing_size != Mixin.NotResolvedMarker || class_size != Mixin.NotResolvedMarker)
+					return;
 
-			packing_size = row.Col1;
-			class_size = row.Col2;
+				var row = Module.Read (this, (type, reader) => reader.ReadTypeLayout (type));
+
+				packing_size = row.Col1;
+				class_size = row.Col2;
+			}
 		}
 
 		public bool HasLayoutInfo {
@@ -128,7 +130,8 @@ namespace Mono.Cecil {
 				if (HasImage)
 					return Module.Read (ref interfaces, this, (type, reader) => reader.ReadInterfaces (type));
 
-				return interfaces = new InterfaceImplementationCollection (this);
+				Interlocked.CompareExchange (ref interfaces, new InterfaceImplementationCollection (this), null);
+				return interfaces;
 			}
 		}
 
@@ -149,7 +152,8 @@ namespace Mono.Cecil {
 				if (HasImage)
 					return Module.Read (ref nested_types, this, (type, reader) => reader.ReadNestedTypes (type));
 
-				return nested_types = new MemberDefinitionCollection<TypeDefinition> (this);
+				Interlocked.CompareExchange (ref nested_types, new MemberDefinitionCollection<TypeDefinition> (this), null);
+				return nested_types;
 			}
 		}
 
@@ -170,7 +174,8 @@ namespace Mono.Cecil {
 				if (HasImage)
 					return Module.Read (ref methods, this, (type, reader) => reader.ReadMethods (type));
 
-				return methods = new MemberDefinitionCollection<MethodDefinition> (this);
+				Interlocked.CompareExchange (ref methods, new MemberDefinitionCollection<MethodDefinition> (this) , null);
+				return methods;
 			}
 		}
 
@@ -191,7 +196,8 @@ namespace Mono.Cecil {
 				if (HasImage)
 					return Module.Read (ref fields, this, (type, reader) => reader.ReadFields (type));
 
-				return fields = new MemberDefinitionCollection<FieldDefinition> (this);
+				Interlocked.CompareExchange (ref fields, new MemberDefinitionCollection<FieldDefinition> (this), null);
+				return fields;
 			}
 		}
 
@@ -212,7 +218,8 @@ namespace Mono.Cecil {
 				if (HasImage)
 					return Module.Read (ref events, this, (type, reader) => reader.ReadEvents (type));
 
-				return events = new MemberDefinitionCollection<EventDefinition> (this);
+				Interlocked.CompareExchange (ref events, new MemberDefinitionCollection<EventDefinition> (this), null);
+				return events;
 			}
 		}
 
@@ -233,7 +240,8 @@ namespace Mono.Cecil {
 				if (HasImage)
 					return Module.Read (ref properties, this, (type, reader) => reader.ReadProperties (type));
 
-				return properties = new MemberDefinitionCollection<PropertyDefinition> (this);
+				Interlocked.CompareExchange (ref properties, new MemberDefinitionCollection<PropertyDefinition> (this), null);
+				return properties;
 			}
 		}
 
@@ -511,8 +519,11 @@ namespace Mono.Cecil {
 
 		public Collection<CustomAttribute> CustomAttributes {
 			get {
-				if (type == null)
-					return custom_attributes = new Collection<CustomAttribute> ();
+				if (type == null) {
+					if (custom_attributes == null)
+						Interlocked.CompareExchange (ref custom_attributes, new Collection<CustomAttribute> (), null);
+					return custom_attributes;
+				}
 
 				return custom_attributes ?? (this.GetCustomAttributes (ref custom_attributes, type.Module));
 			}

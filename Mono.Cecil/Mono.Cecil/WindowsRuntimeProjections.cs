@@ -15,29 +15,21 @@ using Mono.Collections.Generic;
 
 namespace Mono.Cecil {
 
-	sealed class MemberReferenceProjection {
-
-		public readonly string Name;
-		public readonly MemberReferenceTreatment Treatment;
-
-		public MemberReferenceProjection (MemberReference member, MemberReferenceTreatment treatment)
-		{
-			Name = member.Name;
-			Treatment = treatment;
-		}
-	}
-
 	sealed class TypeDefinitionProjection {
 
 		public readonly TypeAttributes Attributes;
 		public readonly string Name;
 		public readonly TypeDefinitionTreatment Treatment;
+		public readonly Collection<MethodDefinition> RedirectedMethods;
+		public readonly Collection<KeyValuePair<InterfaceImplementation, InterfaceImplementation>> RedirectedInterfaces;
 
-		public TypeDefinitionProjection (TypeDefinition type, TypeDefinitionTreatment treatment)
+		public TypeDefinitionProjection (TypeDefinition type, TypeDefinitionTreatment treatment, Collection<MethodDefinition> redirectedMethods, Collection<KeyValuePair<InterfaceImplementation, InterfaceImplementation>> redirectedInterfaces)
 		{
 			Attributes = type.Attributes;
 			Name = type.Name;
 			Treatment = treatment;
+			RedirectedMethods = redirectedMethods;
+			RedirectedInterfaces = redirectedInterfaces;
 		}
 	}
 
@@ -106,16 +98,14 @@ namespace Mono.Cecil {
 			public readonly string ClrName;
 			public readonly string ClrAssembly;
 			public readonly bool Attribute;
-			public readonly bool Disposable;
 
-			public ProjectionInfo (string winrt_namespace, string clr_namespace, string clr_name, string clr_assembly, bool attribute = false, bool disposable = false)
+			public ProjectionInfo (string winrt_namespace, string clr_namespace, string clr_name, string clr_assembly, bool attribute = false)
 			{
 				WinRTNamespace = winrt_namespace;
 				ClrNamespace = clr_namespace;
 				ClrName = clr_name;
 				ClrAssembly = clr_assembly;
 				Attribute = attribute;
-				Disposable = disposable;
 			}
 		}
 
@@ -146,7 +136,8 @@ namespace Mono.Cecil {
 				if (projections != null)
 					return projections;
 
-				return projections = new Dictionary<string, ProjectionInfo> {
+
+				var new_projections = new Dictionary<string, ProjectionInfo> {
 					{ "AttributeTargets", new ProjectionInfo ("Windows.Foundation.Metadata", "System", "AttributeTargets", "System.Runtime") },
 					{ "AttributeUsageAttribute", new ProjectionInfo ("Windows.Foundation.Metadata", "System", "AttributeUsageAttribute", "System.Runtime", attribute: true) },
 					{ "Color", new ProjectionInfo ("Windows.UI", "Windows.UI", "Color", "System.Runtime.WindowsRuntime") },
@@ -162,7 +153,7 @@ namespace Mono.Cecil {
 					{ "HResult", new ProjectionInfo ("Windows.Foundation", "System", "Exception", "System.Runtime") },
 					{ "IBindableIterable", new ProjectionInfo ("Windows.UI.Xaml.Interop", "System.Collections", "IEnumerable", "System.Runtime") },
 					{ "IBindableVector", new ProjectionInfo ("Windows.UI.Xaml.Interop", "System.Collections", "IList", "System.Runtime") },
-					{ "IClosable", new ProjectionInfo ("Windows.Foundation", "System", "IDisposable", "System.Runtime", disposable: true) },
+					{ "IClosable", new ProjectionInfo ("Windows.Foundation", "System", "IDisposable", "System.Runtime") },
 					{ "ICommand", new ProjectionInfo ("Windows.UI.Xaml.Input", "System.Windows.Input", "ICommand", "System.ObjectModel") },
 					{ "IIterable`1", new ProjectionInfo ("Windows.Foundation.Collections", "System.Collections.Generic", "IEnumerable`1", "System.Runtime") },
 					{ "IKeyValuePair`2", new ProjectionInfo ("Windows.Foundation.Collections", "System.Collections.Generic", "KeyValuePair`2", "System.Runtime") },
@@ -198,6 +189,9 @@ namespace Mono.Cecil {
 					{ "Vector3", new ProjectionInfo ("Windows.Foundation.Numerics", "System.Numerics", "Vector3", "System.Numerics.Vectors") },
 					{ "Vector4", new ProjectionInfo ("Windows.Foundation.Numerics", "System.Numerics", "Vector4", "System.Numerics.Vectors") },
 				};
+
+				Interlocked.CompareExchange (ref projections, new_projections, null);
+				return projections;
 			}
 		}
 
@@ -225,21 +219,24 @@ namespace Mono.Cecil {
 		{
 			var treatment = TypeDefinitionTreatment.None;
 			var metadata_kind = type.Module.MetadataKind;
+			Collection<MethodDefinition> redirectedMethods = null;
+			Collection<KeyValuePair<InterfaceImplementation, InterfaceImplementation>> redirectedInterfaces = null;
 
 			if (type.IsWindowsRuntime) {
 				if (metadata_kind == MetadataKind.WindowsMetadata) {
 					treatment = GetWellKnownTypeDefinitionTreatment (type);
 					if (treatment != TypeDefinitionTreatment.None) {
-						ApplyProjection (type, new TypeDefinitionProjection (type, treatment));
+						ApplyProjection (type, new TypeDefinitionProjection (type, treatment, redirectedMethods, redirectedInterfaces));
 						return;
 					}
 
 					var base_type = type.BaseType;
-					if (base_type != null && IsAttribute (base_type))
+					if (base_type != null && IsAttribute (base_type)) {
 						treatment = TypeDefinitionTreatment.NormalAttribute;
-					else
-						treatment = TypeDefinitionTreatment.NormalType;
-				}
+					} else {
+						treatment = GenerateRedirectionInformation (type, out redirectedMethods, out redirectedInterfaces);
+					}
+				} 
 				else if (metadata_kind == MetadataKind.ManagedWindowsMetadata && NeedsWindowsRuntimePrefix (type))
 					treatment = TypeDefinitionTreatment.PrefixWindowsRuntimeName;
 
@@ -251,7 +248,7 @@ namespace Mono.Cecil {
 				treatment = TypeDefinitionTreatment.UnmangleWindowsRuntimeName;
 
 			if (treatment != TypeDefinitionTreatment.None)
-				ApplyProjection (type, new TypeDefinitionProjection (type, treatment));
+				ApplyProjection (type, new TypeDefinitionProjection (type, treatment, redirectedMethods, redirectedInterfaces));
 		}
 
 		static TypeDefinitionTreatment GetWellKnownTypeDefinitionTreatment (TypeDefinition type)
@@ -269,6 +266,106 @@ namespace Mono.Cecil {
 				return treatment | TypeDefinitionTreatment.Internal;
 
 			return TypeDefinitionTreatment.None;
+		}
+
+		private static TypeDefinitionTreatment GenerateRedirectionInformation (TypeDefinition type, out Collection<MethodDefinition> redirectedMethods, out Collection<KeyValuePair<InterfaceImplementation, InterfaceImplementation>> redirectedInterfaces)
+		{
+			bool implementsProjectedInterface = false;
+			redirectedMethods = null;
+			redirectedInterfaces = null;
+
+			foreach (var implementedInterface in type.Interfaces) {
+				if (IsRedirectedType (implementedInterface.InterfaceType)) {
+					implementsProjectedInterface = true;
+					break;
+				}
+			}
+
+			if (!implementsProjectedInterface)
+				return TypeDefinitionTreatment.NormalType;
+
+			var allImplementedInterfaces = new HashSet<TypeReference> (new TypeReferenceEqualityComparer ());
+			redirectedMethods = new Collection<MethodDefinition> ();
+			redirectedInterfaces = new Collection<KeyValuePair<InterfaceImplementation, InterfaceImplementation>> ();
+
+			foreach (var @interface in type.Interfaces) {
+				var interfaceType = @interface.InterfaceType;
+
+				if (IsRedirectedType (interfaceType)) {
+					allImplementedInterfaces.Add (interfaceType);
+					CollectImplementedInterfaces (interfaceType, allImplementedInterfaces);
+				}
+			}
+
+			foreach (var implementedInterface in type.Interfaces) {
+				var interfaceType = implementedInterface.InterfaceType;
+				if (IsRedirectedType (implementedInterface.InterfaceType)) {
+					var etype = interfaceType.GetElementType ();
+					var unprojectedType = new TypeReference (etype.Namespace, etype.Name, etype.Module, etype.Scope) {
+						DeclaringType = etype.DeclaringType,
+						projection = etype.projection
+					};
+
+					RemoveProjection (unprojectedType);
+
+					var genericInstanceType = interfaceType as GenericInstanceType;
+					if (genericInstanceType != null) {
+						var genericUnprojectedType = new GenericInstanceType (unprojectedType);
+						foreach (var genericArgument in genericInstanceType.GenericArguments)
+							genericUnprojectedType.GenericArguments.Add (genericArgument);
+
+						unprojectedType = genericUnprojectedType;
+					}
+
+					var unprojectedInterface = new InterfaceImplementation (unprojectedType);
+					redirectedInterfaces.Add (new KeyValuePair<InterfaceImplementation, InterfaceImplementation> (implementedInterface, unprojectedInterface));
+				}
+			}
+
+			// Interfaces don't inherit methods of the interfaces they implement
+			if (!type.IsInterface) {
+				foreach (var implementedInterface in allImplementedInterfaces) {
+					RedirectInterfaceMethods (implementedInterface, redirectedMethods);
+				}
+			}
+
+			return TypeDefinitionTreatment.RedirectImplementedMethods;
+		}
+
+		private static void CollectImplementedInterfaces (TypeReference type, HashSet<TypeReference> results)
+		{
+			var typeResolver = TypeResolver.For (type);
+			var typeDef = type.Resolve ();
+
+			foreach (var implementedInterface in typeDef.Interfaces) {
+				var interfaceType = typeResolver.Resolve (implementedInterface.InterfaceType);
+				results.Add (interfaceType);
+				CollectImplementedInterfaces (interfaceType, results);
+			}
+		}
+
+		private static void RedirectInterfaceMethods (TypeReference interfaceType, Collection<MethodDefinition> redirectedMethods)
+		{
+			var typeResolver = TypeResolver.For (interfaceType);
+			var typeDef = interfaceType.Resolve ();
+
+			foreach (var method in typeDef.Methods) {
+				var redirectedMethod = new MethodDefinition (method.Name, MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.Final | MethodAttributes.NewSlot, typeResolver.Resolve (method.ReturnType));
+				redirectedMethod.ImplAttributes = MethodImplAttributes.Runtime;
+
+				foreach (var parameter in method.Parameters) {
+					redirectedMethod.Parameters.Add (new ParameterDefinition (parameter.Name, parameter.Attributes, typeResolver.Resolve (parameter.ParameterType)));
+				}
+
+				redirectedMethod.Overrides.Add (typeResolver.Resolve (method));
+				redirectedMethods.Add (redirectedMethod);
+			}
+		}
+
+		private static bool IsRedirectedType (TypeReference type)
+		{
+			var typeRefProjection = type.GetElementType ().projection as TypeReferenceProjection;
+			return typeRefProjection != null && typeRefProjection.Treatment == TypeReferenceTreatment.UseProjectionInfo;
 		}
 
 		static bool NeedsWindowsRuntimePrefix (TypeDefinition type)
@@ -292,7 +389,7 @@ namespace Mono.Cecil {
 			return true;
 		}
 
-		static bool IsClrImplementationType (TypeDefinition type)
+		public static bool IsClrImplementationType (TypeDefinition type)
 		{
 			if ((type.Attributes & (TypeAttributes.VisibilityMask | TypeAttributes.SpecialName)) != TypeAttributes.SpecialName)
 				return false;
@@ -332,6 +429,32 @@ namespace Mono.Cecil {
 			case TypeDefinitionTreatment.RedirectToClrAttribute:
 				type.Attributes = type.Attributes & ~TypeAttributes.Public;
 				break;
+
+			case TypeDefinitionTreatment.RedirectImplementedMethods: {
+					type.Attributes |= TypeAttributes.WindowsRuntime | TypeAttributes.Import;
+
+					foreach (var redirectedInterfacePair in projection.RedirectedInterfaces) {
+						type.Interfaces.Add (redirectedInterfacePair.Value);
+
+						foreach (var customAttribute in redirectedInterfacePair.Key.CustomAttributes)
+							redirectedInterfacePair.Value.CustomAttributes.Add (customAttribute);
+
+						redirectedInterfacePair.Key.CustomAttributes.Clear ();
+
+						foreach (var method in type.Methods) {
+							foreach (var @override in method.Overrides) {
+								if (TypeReferenceEqualityComparer.AreEqual (@override.DeclaringType, redirectedInterfacePair.Key.InterfaceType)) {
+									@override.DeclaringType = redirectedInterfacePair.Value.InterfaceType;
+								}
+							}
+						}
+					}
+
+					foreach (var method in projection.RedirectedMethods) {
+						type.Methods.Add (method);
+					}
+				}
+				break;
 			}
 
 			if ((treatment & TypeDefinitionTreatment.Abstract) != 0)
@@ -353,6 +476,28 @@ namespace Mono.Cecil {
 
 			type.Attributes = projection.Attributes;
 			type.Name = projection.Name;
+
+			if (projection.Treatment == TypeDefinitionTreatment.RedirectImplementedMethods) {
+				foreach (var method in projection.RedirectedMethods) {
+					type.Methods.Remove (method);
+				}
+
+				foreach (var redirectedInterfacePair in projection.RedirectedInterfaces) {
+					foreach (var method in type.Methods) {
+						foreach (var @override in method.Overrides) {
+							if (TypeReferenceEqualityComparer.AreEqual (@override.DeclaringType, redirectedInterfacePair.Value.InterfaceType)) {
+								@override.DeclaringType = redirectedInterfacePair.Key.InterfaceType;
+							}
+						}
+					}
+
+					foreach (var customAttribute in redirectedInterfacePair.Value.CustomAttributes)
+						redirectedInterfacePair.Key.CustomAttributes.Add (customAttribute);
+
+					redirectedInterfacePair.Value.CustomAttributes.Clear ();
+					type.Interfaces.Remove (redirectedInterfacePair.Value);
+				}
+			}
 
 			return projection;
 		}
@@ -478,27 +623,16 @@ namespace Mono.Cecil {
 			{
 				var seen_redirected = false;
 				var seen_non_redirected = false;
-				var disposable = false;
 
-				foreach (var @override in method.Overrides)
-				{
-					if (@override.MetadataToken.TokenType == TokenType.MemberRef && ImplementsRedirectedInterface (@override, out disposable))
-					{
+				foreach (var @override in method.Overrides) {
+					if (@override.MetadataToken.TokenType == TokenType.MemberRef && ImplementsRedirectedInterface (@override)) {
 						seen_redirected = true;
-						if (disposable)
-							break;
-					}
-					else
+					} else {
 						seen_non_redirected = true;
+					}
 				}
 
-				if (disposable)
-				{
-					treatment = MethodDefinitionTreatment.Dispose;
-					other = false;
-				}
-				else if (seen_redirected && !seen_non_redirected)
-				{
+				if (seen_redirected && !seen_non_redirected) {
 					treatment = MethodDefinitionTreatment.Runtime | MethodDefinitionTreatment.InternalCall | MethodDefinitionTreatment.Private;
 					other = false;
 				}
@@ -535,9 +669,6 @@ namespace Mono.Cecil {
 				return;
 
 			var treatment = projection.Treatment;
-
-			if ((treatment & MethodDefinitionTreatment.Dispose) != 0)
-				method.Name = "Dispose";
 
 			if ((treatment & MethodDefinitionTreatment.Abstract) != 0)
 				method.Attributes |= MethodAttributes.Abstract;
@@ -611,19 +742,8 @@ namespace Mono.Cecil {
 			return projection;
 		}
 
-		public static void Project (MemberReference member)
+		static bool ImplementsRedirectedInterface (MemberReference member)
 		{
-			bool disposable;
-			if (!ImplementsRedirectedInterface (member, out disposable) || !disposable)
-				return;
-
-			ApplyProjection (member, new MemberReferenceProjection (member, MemberReferenceTreatment.Dispose));
-		}
-
-		static bool ImplementsRedirectedInterface (MemberReference member, out bool disposable)
-		{
-			disposable = false;
-
 			var declaring_type = member.DeclaringType;
 			TypeReference type;
 			switch (declaring_type.MetadataToken.TokenType) {
@@ -651,7 +771,6 @@ namespace Mono.Cecil {
 
 			ProjectionInfo info;
 			if (Projections.TryGetValue (type.Name, out info) && type.Namespace == info.WinRTNamespace) {
-				disposable = info.Disposable;
 				found = true;
 			}
 
@@ -660,29 +779,6 @@ namespace Mono.Cecil {
 			return found;
 		}
 
-		public static void ApplyProjection (MemberReference member, MemberReferenceProjection projection)
-		{
-			if (projection == null)
-				return;
-
-			if (projection.Treatment == MemberReferenceTreatment.Dispose)
-				member.Name = "Dispose";
-
-			member.WindowsRuntimeProjection = projection;
-		}
-
-		public static MemberReferenceProjection RemoveProjection (MemberReference member)
-		{
-			if (!member.IsWindowsRuntimeProjection)
-				return null;
-
-			var projection = member.WindowsRuntimeProjection;
-			member.WindowsRuntimeProjection = null;
-
-			member.Name = projection.Name;
-
-			return projection;
-		}
 
 		public void AddVirtualReferences (Collection<AssemblyNameReference> references)
 		{

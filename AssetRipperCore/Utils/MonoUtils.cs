@@ -155,25 +155,51 @@ namespace AssetRipper.Utils
 			return type.Name;
 		}
 
-		private static string GetGenericTypeName(TypeReference genericType)
+		internal static string GetGenericTypeName(TypeReference genericType)
 		{
 			// TypeReference contain parameters with "<!0,!1> (!index)" name but TypeDefinition's name is "<T1,T2> (RealParameterName)"
 			genericType = genericType.ResolveOrDefault();
 			return GetGenericName(genericType, genericType.GenericParameters);
 		}
 
-		private static string GetGenericTypeName(TypeReference genericType, IReadOnlyList<TypeReference> genericArguments)
+		internal static string GetGenericTypeName(TypeReference genericType, IReadOnlyList<TypeReference> genericArguments)
 		{
 			genericType = genericType.ResolveOrDefault();
 			return GetGenericName(genericType, genericArguments);
 		}
 
-		private static string GetGenericInstanceName(GenericInstanceType genericInstance)
+		internal static string GetGenericInstanceName(GenericInstanceType genericInstance)
 		{
 			return GetGenericName(genericInstance.ElementType, genericInstance.GenericArguments);
 		}
 
-		private static string GetGenericName(TypeReference genericType, IReadOnlyList<TypeReference> genericArguments)
+		internal static string GetGenericName(TypeReference genericType, IReadOnlyList<TypeReference> genericArguments)
+		{
+			string name = genericType.Name;
+			int argumentCount = GetGenericParameterCount(genericType);
+			if (argumentCount == 0)
+			{
+				// nested class/enum (of generic class) is generic instance but it doesn't have '`' symbol in its name
+				return name;
+			}
+
+			int index = name.IndexOf('`');
+			StringBuilder sb = new StringBuilder(genericType.Name, 0, index, 50 + index);
+			sb.Append('<');
+			for (int i = genericArguments.Count - argumentCount; i < genericArguments.Count; i++)
+			{
+				TypeReference arg = genericArguments[i];
+				string argumentName = GetName(arg);
+				sb.Append(argumentName);
+				if (i < genericArguments.Count - 1)
+				{
+					sb.Append(", ");
+				}
+			}
+			sb.Append('>');
+			return sb.ToString();
+		}
+		internal static string GetGenericName<T>(TypeReference genericType, Mono.Collections.Generic.Collection<T> genericArguments) where T : TypeReference
 		{
 			string name = genericType.Name;
 			int argumentCount = GetGenericParameterCount(genericType);

@@ -10,7 +10,7 @@
 
 using System;
 using System.IO;
-
+using System.Threading;
 using Mono.Collections.Generic;
 
 namespace Mono.Cecil {
@@ -46,7 +46,8 @@ namespace Mono.Cecil {
 				if (main_module.HasImage)
 					return main_module.Read (ref modules, this, (_, reader) => reader.ReadModules ());
 
-				return modules = new Collection<ModuleDefinition> (1) { main_module };
+				Interlocked.CompareExchange (ref modules, new Collection<ModuleDefinition> (1) { main_module }, null);
+				return modules;
 			}
 		}
 
@@ -100,6 +101,26 @@ namespace Mono.Cecil {
 			for (int i = 0; i < modules.Count; i++)
 				modules [i].Dispose ();
 		}
+		public static AssemblyDefinition CreateAssembly (AssemblyNameDefinition assemblyName, string moduleName, ModuleKind kind)
+		{
+			return CreateAssembly (assemblyName, moduleName, new ModuleParameters { Kind = kind });
+		}
+
+		public static AssemblyDefinition CreateAssembly (AssemblyNameDefinition assemblyName, string moduleName, ModuleParameters parameters)
+		{
+			if (assemblyName == null)
+				throw new ArgumentNullException ("assemblyName");
+			if (moduleName == null)
+				throw new ArgumentNullException ("moduleName");
+			Mixin.CheckParameters (parameters);
+			if (parameters.Kind == ModuleKind.NetModule)
+				throw new ArgumentException ("kind");
+
+			var assembly = ModuleDefinition.CreateModule (moduleName, parameters).Assembly;
+			assembly.Name = assemblyName;
+
+			return assembly;
+		}
 
 		public static AssemblyDefinition ReadAssembly (string fileName)
 		{
@@ -129,7 +150,37 @@ namespace Mono.Cecil {
 
 			return assembly;
 		}
-		
+
+		public void Write (string fileName)
+		{
+			Write (fileName, new WriterParameters ());
+		}
+
+		public void Write (string fileName, WriterParameters parameters)
+		{
+			main_module.Write (fileName, parameters);
+		}
+
+		public void Write ()
+		{
+			main_module.Write ();
+		}
+
+		public void Write (WriterParameters parameters)
+		{
+			main_module.Write (parameters);
+		}
+
+		public void Write (Stream stream)
+		{
+			Write (stream, new WriterParameters ());
+		}
+
+		public void Write (Stream stream, WriterParameters parameters)
+		{
+			main_module.Write (stream, parameters);
+		}
+
 		public override string ToString ()
 		{
 			return this.FullName;

@@ -9,7 +9,7 @@
 //
 
 using System;
-
+using System.Threading;
 using Mono.Cecil.Metadata;
 using Mono.Collections.Generic;
 
@@ -87,9 +87,6 @@ namespace Mono.Cecil {
 			set { value_type = value; }
 		}
 
-		/// <summary>
-		/// Module is the place where type reference is located
-		/// </summary>
 		public override ModuleDefinition Module {
 			get {
 				if (module != null)
@@ -103,7 +100,7 @@ namespace Mono.Cecil {
 			}
 		}
 
-		internal new TypeReferenceProjection WindowsRuntimeProjection {
+		internal TypeReferenceProjection WindowsRuntimeProjection {
 			get { return (TypeReferenceProjection) projection; }
 			set { projection = value; }
 		}
@@ -126,16 +123,13 @@ namespace Mono.Cecil {
 
 		public virtual Collection<GenericParameter> GenericParameters {
 			get {
-				if (generic_parameters != null)
-					return generic_parameters;
-
-				return generic_parameters = new GenericParameterCollection (this);
+				if (generic_parameters == null)
+					Interlocked.CompareExchange (ref generic_parameters, new GenericParameterCollection (this), null);
+					
+				return generic_parameters;
 			}
 		}
 
-		/// <summary>
-		/// Scope is the place where type definition is located
-		/// </summary>
 		public virtual IMetadataScope Scope {
 			get {
 				var declaring_type = this.DeclaringType;
@@ -178,11 +172,11 @@ namespace Mono.Cecil {
 				if (fullname != null)
 					return fullname;
 
-				fullname = this.TypeFullName ();
+				var new_fullname = this.TypeFullName ();
 
 				if (IsNested)
-					fullname = DeclaringType.FullName + "/" + fullname;
-
+					new_fullname = DeclaringType.FullName + "/" + new_fullname;
+				Interlocked.CompareExchange (ref fullname, new_fullname, null);
 				return fullname;
 			}
 		}
@@ -284,19 +278,6 @@ namespace Mono.Cecil {
 				throw new NotSupportedException ();
 
 			return module.Resolve (this);
-		}
-
-		public TypeReference ResolveOrDefault()
-		{
-			var module = this.Module;
-			if (module == null)
-				return this;
-
-			var definition = module.Resolve (this);
-			if (definition == null)
-				return this;
-
-			return definition;
 		}
 	}
 

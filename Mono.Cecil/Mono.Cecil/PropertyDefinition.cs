@@ -9,7 +9,7 @@
 //
 
 using System.Text;
-
+using System.Threading;
 using Mono.Collections.Generic;
 
 namespace Mono.Cecil {
@@ -103,7 +103,8 @@ namespace Mono.Cecil {
 				if (other_methods != null)
 					return other_methods;
 
-				return other_methods = new Collection<MethodDefinition> ();
+				Interlocked.CompareExchange (ref other_methods, new Collection<MethodDefinition> (), null);
+				return other_methods;
 			}
 		}
 

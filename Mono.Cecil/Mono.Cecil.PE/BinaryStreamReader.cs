@@ -8,28 +8,25 @@
 // Licensed under the MIT/X11 license.
 //
 
+using System;
 using System.IO;
 
-namespace Mono.Cecil.PE
-{
+namespace Mono.Cecil.PE {
 
 	class BinaryStreamReader : BinaryReader {
 
-		public int BasePosition { get; }
-
 		public int Position {
-			get { return (int) BaseStream.Position - BasePosition; }
-			set { BaseStream.Position = BasePosition + value; }
+			get { return (int) BaseStream.Position; }
+			set { BaseStream.Position = value; }
 		}
 
 		public int Length {
-			get { return (int) BaseStream.Length - BasePosition; }
+			get { return (int) BaseStream.Length; }
 		}
 
 		public BinaryStreamReader (Stream stream)
 			: base (stream)
 		{
-			BasePosition = Position;
 		}
 
 		public void Advance (int bytes)
@@ -39,15 +36,14 @@ namespace Mono.Cecil.PE
 
 		public void MoveTo (uint position)
 		{
-			BaseStream.Seek (BasePosition + position, SeekOrigin.Begin);
+			BaseStream.Seek (position, SeekOrigin.Begin);
 		}
 
 		public void Align (int align)
 		{
-			int shift = BasePosition % align;
 			align--;
-			var position = (int)BaseStream.Position - shift;
-			Advance (((position + align) & ~align) - position + shift);
+			var position = Position;
+			Advance (((position + align) & ~align) - position);
 		}
 
 		public DataDirectory ReadDataDirectory ()

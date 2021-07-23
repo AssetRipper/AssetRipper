@@ -12,10 +12,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 using SR = System.Reflection;
 
 using Mono.Collections.Generic;
 using Mono.Cecil.Cil;
+using Mono.Cecil.PE;
 
 namespace Mono.Cecil.Cil {
 
@@ -117,7 +119,12 @@ namespace Mono.Cecil.Cil {
 		}
 
 		public Collection<ScopeDebugInformation> Scopes {
-			get { return scopes ?? (scopes = new Collection<ScopeDebugInformation> ()); }
+			get {
+				if (scopes == null)
+					Interlocked.CompareExchange (ref scopes, new Collection<ScopeDebugInformation> (), null);
+
+				return scopes;
+			}
 		}
 
 		public bool HasVariables {
@@ -125,7 +132,12 @@ namespace Mono.Cecil.Cil {
 		}
 
 		public Collection<VariableDebugInformation> Variables {
-			get { return variables ?? (variables = new Collection<VariableDebugInformation> ()); }
+			get {
+				if (variables == null)
+					Interlocked.CompareExchange (ref variables, new Collection<VariableDebugInformation> (), null);
+
+				return variables;
+			}
 		}
 
 		public bool HasConstants {
@@ -133,7 +145,12 @@ namespace Mono.Cecil.Cil {
 		}
 
 		public Collection<ConstantDebugInformation> Constants {
-			get { return constants ?? (constants = new Collection<ConstantDebugInformation> ()); }
+			get {
+				if (constants == null)
+					Interlocked.CompareExchange (ref constants, new Collection<ConstantDebugInformation> (), null);
+
+				return constants;
+			}
 		}
 
 		internal ScopeDebugInformation ()
@@ -190,6 +207,10 @@ namespace Mono.Cecil.Cil {
 			get { return instruction == null && !offset.HasValue; }
 		}
 
+		internal bool IsResolved => instruction != null || !offset.HasValue;
+
+		internal Instruction ResolvedInstruction => instruction;
+
 		public InstructionOffset (Instruction instruction)
 		{
 			if (instruction == null)
@@ -227,6 +248,10 @@ namespace Mono.Cecil.Cil {
 			}
 		}
 
+		internal bool IsResolved => variable != null;
+
+		internal VariableDefinition ResolvedVariable => variable;
+
 		public VariableIndex (VariableDefinition variable)
 		{
 			if (variable == null)
@@ -258,7 +283,12 @@ namespace Mono.Cecil.Cil {
 		}
 
 		public Collection<CustomDebugInformation> CustomDebugInformations {
-			get { return custom_infos ?? (custom_infos = new Collection<CustomDebugInformation> ()); }
+			get {
+				if (custom_infos == null)
+					Interlocked.CompareExchange (ref custom_infos, new Collection<CustomDebugInformation> (), null);
+
+				return custom_infos;
+			}
 		}
 
 		internal DebugInformation ()
@@ -408,7 +438,13 @@ namespace Mono.Cecil.Cil {
 		}
 
 		public Collection<ImportTarget> Targets {
-			get { return targets ?? (targets = new Collection<ImportTarget> ()); }
+			get
+			{
+				if (targets == null)
+					Interlocked.CompareExchange (ref targets, new Collection<ImportTarget> (), null);
+
+				return targets;
+			}
 		}
 
 		public ImportDebugInformation Parent {
@@ -487,11 +523,21 @@ namespace Mono.Cecil.Cil {
 		}
 
 		public Collection<InstructionOffset> Yields {
-			get { return yields ?? (yields = new Collection<InstructionOffset> ()); }
+			get {
+				if (yields == null)
+					Interlocked.CompareExchange (ref yields, new Collection<InstructionOffset> (), null);
+
+				return yields;
+			}
 		}
 
 		public Collection<InstructionOffset> Resumes {
-			get { return resumes ?? (resumes = new Collection<InstructionOffset> ()); }
+			get {
+				if (resumes == null)
+					Interlocked.CompareExchange (ref resumes, new Collection<InstructionOffset> (), null);
+
+				return resumes;
+			}
 		}
 
 		public Collection<MethodDefinition> ResumeMethods {
@@ -573,17 +619,36 @@ namespace Mono.Cecil.Cil {
 
 	public sealed class EmbeddedSourceDebugInformation : CustomDebugInformation {
 
+		internal uint index;
+		internal MetadataReader debug_reader;
+		internal bool resolved;
 		internal byte [] content;
 		internal bool compress;
 
 		public byte [] Content {
-			get { return content; }
-			set { content = value; }
+			get {
+				if (!resolved)
+					Resolve ();
+
+				return content;
+			}
+			set {
+				content = value;
+				resolved = true;
+			}
 		}
 
 		public bool Compress {
-			get { return compress; }
-			set { compress = value; }
+			get {
+				if (!resolved)
+					Resolve ();
+
+				return compress;
+			}
+			set {
+				compress = value;
+				resolved = true;
+			}
 		}
 
 		public override CustomDebugInformationKind Kind {
@@ -592,11 +657,41 @@ namespace Mono.Cecil.Cil {
 
 		public static Guid KindIdentifier = new Guid ("{0E8A571B-6926-466E-B4AD-8AB04611F5FE}");
 
+		internal EmbeddedSourceDebugInformation (uint index, MetadataReader debug_reader)
+			: base (KindIdentifier)
+		{
+			this.index = index;
+			this.debug_reader = debug_reader;
+		}
+
 		public EmbeddedSourceDebugInformation (byte [] content, bool compress)
 			: base (KindIdentifier)
 		{
+			this.resolved = true;
 			this.content = content;
 			this.compress = compress;
+		}
+
+		internal byte [] ReadRawEmbeddedSourceDebugInformation ()
+		{
+			if (debug_reader == null)
+				throw new InvalidOperationException ();
+
+			return debug_reader.ReadRawEmbeddedSourceDebugInformation (index);
+		}
+
+		void Resolve ()
+		{
+			if (resolved)
+				return;
+
+			if (debug_reader == null)
+				throw new InvalidOperationException ();
+
+			var row = debug_reader.ReadEmbeddedSourceDebugInformation (index);
+			content = row.Col1;
+			compress = row.Col2;
+			resolved = true;
 		}
 	}
 
@@ -628,6 +723,8 @@ namespace Mono.Cecil.Cil {
 		internal Collection<SequencePoint> sequence_points;
 		internal ScopeDebugInformation scope;
 		internal MethodDefinition kickoff_method;
+		internal int code_size;
+		internal MetadataToken local_var_token;
 
 		public MethodDefinition Method {
 			get { return method; }
@@ -638,7 +735,12 @@ namespace Mono.Cecil.Cil {
 		}
 
 		public Collection<SequencePoint> SequencePoints {
-			get { return sequence_points ?? (sequence_points = new Collection<SequencePoint> ()); }
+			get {
+				if (sequence_points == null)
+					Interlocked.CompareExchange (ref sequence_points, new Collection<SequencePoint> (), null);
+
+				return sequence_points;
+			}
 		}
 
 		public ScopeDebugInformation Scope {
@@ -747,6 +849,8 @@ namespace Mono.Cecil.Cil {
 	}
 
 	public interface ISymbolReader : IDisposable {
+
+		ISymbolWriterProvider GetWriterProvider ();
 		bool ProcessDebugHeader (ImageDebugHeader header);
 		MethodDebugInformation Read (MethodDefinition method);
 	}
@@ -822,7 +926,7 @@ namespace Mono.Cecil.Cil {
 
 			var pdb_file_name = Mixin.GetPdbFileName (fileName);
 
-			if (Extensions.FileUtils.Exists (pdb_file_name)) {
+			if (File.Exists (pdb_file_name)) {
 				if (Mixin.IsPortablePdb (Mixin.GetPdbFileName (fileName)))
 					return new PortablePdbReaderProvider ().GetSymbolReader (module, fileName);
 
@@ -834,7 +938,7 @@ namespace Mono.Cecil.Cil {
 			}
 
 			var mdb_file_name = Mixin.GetMdbFileName (fileName);
-			if (Extensions.FileUtils.Exists (mdb_file_name)) {
+			if (File.Exists (mdb_file_name)) {
 				try {
 					return SymbolProvider.GetReaderProvider (SymbolKind.Mdb).GetSymbolReader (module, fileName);
 				} catch (Exception) {
@@ -850,7 +954,69 @@ namespace Mono.Cecil.Cil {
 
 		public ISymbolReader GetSymbolReader (ModuleDefinition module, Stream symbolStream)
 		{
-			throw new NotSupportedException ();
+			if (module.Image.HasDebugTables ())
+				return null;
+
+			if (module.HasDebugHeader) {
+				var header = module.GetDebugHeader ();
+				var entry = header.GetEmbeddedPortablePdbEntry ();
+				if (entry != null)
+					return new EmbeddedPortablePdbReaderProvider ().GetSymbolReader (module, "");
+			}
+
+			Mixin.CheckStream (symbolStream);
+			Mixin.CheckReadSeek (symbolStream);
+
+			var position = symbolStream.Position;
+
+			const int portablePdbHeader = 0x424a5342;
+
+			var reader = new BinaryStreamReader (symbolStream);
+			var intHeader = reader.ReadInt32 ();
+			symbolStream.Position = position;
+
+			if (intHeader == portablePdbHeader) {
+				return new PortablePdbReaderProvider ().GetSymbolReader (module, symbolStream);
+			}
+
+			const string nativePdbHeader = "Microsoft C/C++ MSF 7.00";
+
+			var bytesHeader = reader.ReadBytes (nativePdbHeader.Length);
+			symbolStream.Position = position;
+			var isNativePdb = true;
+
+			for (var i = 0; i < bytesHeader.Length; i++) {
+				if (bytesHeader [i] != (byte) nativePdbHeader [i]) {
+					isNativePdb = false;
+					break;
+				}
+			}
+
+			if (isNativePdb) {
+				try {
+					return SymbolProvider.GetReaderProvider (SymbolKind.NativePdb).GetSymbolReader (module, symbolStream);
+				} catch (Exception) {
+					// We might not include support for native pdbs.
+				}
+			}
+
+			const long mdbHeader = 0x45e82623fd7fa614;
+
+			var longHeader = reader.ReadInt64 ();
+			symbolStream.Position = position;
+
+			if (longHeader == mdbHeader) {
+				try {
+					return SymbolProvider.GetReaderProvider (SymbolKind.Mdb).GetSymbolReader (module, symbolStream);
+				} catch (Exception) {
+					// We might not include support for mdbs.
+				}
+			}
+
+			if (throw_if_no_symbol)
+				throw new SymbolsNotFoundException (string.Format ("No symbols found in stream"));
+
+			return null;
 		}
 	}
 
@@ -870,11 +1036,16 @@ namespace Mono.Cecil.Cil {
 
 			var suffix = GetSymbolNamespace (kind);
 
-			var cecil_name = typeof (SymbolProvider).Assembly ().GetName ();
+			var cecil_name = typeof (SymbolProvider).Assembly.GetName ();
 
 			var name = new SR.AssemblyName {
 				Name = cecil_name.Name + "." + suffix,
 				Version = cecil_name.Version,
+#if NET_CORE
+				CultureName = cecil_name.CultureName,
+#else
+				CultureInfo = cecil_name.CultureInfo,
+#endif
 			};
 
 			name.SetPublicKeyToken (cecil_name.GetPublicKeyToken ());
@@ -899,6 +1070,7 @@ namespace Mono.Cecil.Cil {
 				if (assembly != null)
 					return assembly.GetType (fullname);
 			} catch (FileNotFoundException) {
+			} catch (FileLoadException) {
 			}
 
 			return null;
@@ -934,6 +1106,39 @@ namespace Mono.Cecil.Cil {
 				return "Mdb";
 
 			throw new ArgumentException ();
+		}
+	}
+
+	public interface ISymbolWriter : IDisposable {
+
+		ISymbolReaderProvider GetReaderProvider ();
+		ImageDebugHeader GetDebugHeader ();
+		void Write (MethodDebugInformation info);
+	}
+
+	public interface ISymbolWriterProvider {
+
+		ISymbolWriter GetSymbolWriter (ModuleDefinition module, string fileName);
+		ISymbolWriter GetSymbolWriter (ModuleDefinition module, Stream symbolStream);
+	}
+
+	public class DefaultSymbolWriterProvider : ISymbolWriterProvider {
+
+		public ISymbolWriter GetSymbolWriter (ModuleDefinition module, string fileName)
+		{
+			var reader = module.SymbolReader;
+			if (reader == null)
+				throw new InvalidOperationException ();
+
+			if (module.Image != null && module.Image.HasDebugTables ())
+				return null;
+
+			return reader.GetWriterProvider ().GetSymbolWriter (module, fileName);
+		}
+
+		public ISymbolWriter GetSymbolWriter (ModuleDefinition module, Stream symbolStream)
+		{
+			throw new NotSupportedException ();
 		}
 	}
 }
@@ -995,7 +1200,7 @@ namespace Mono.Cecil {
 
 		public static bool IsPortablePdb (string fileName)
 		{
-			using (var file = new FileStream (Extensions.FileUtils.ToLongPath(fileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+			using (var file = new FileStream (fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 				return IsPortablePdb (file);
 		}
 
