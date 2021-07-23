@@ -40,6 +40,10 @@ Current supported versions: `1.x` to `2019.x` (support for later versions is in 
   * MonoBehaviour (Mono and Il2Cpp)
   * MonoScript (Mono and Il2Cpp)
 
+## Downloads
+
+Download links can be found on the [latest release page](https://github.com/ds5678/AssetRipper/releases/latest).
+
 ## Structure
 
 * [*AssetRipperCore*](AssetRipperCore/README.md) (Cross-Platform)
