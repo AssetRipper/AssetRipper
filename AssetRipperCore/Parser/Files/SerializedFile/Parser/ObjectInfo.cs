@@ -1,7 +1,7 @@
 using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Files.SerializedFile.IO;
+using AssetRipper.Parser.Files.SerializedFiles.IO;
 
-namespace AssetRipper.Parser.Files.SerializedFile.Parser
+namespace AssetRipper.Parser.Files.SerializedFiles.Parser
 {
 	/// <summary>
 	/// Contains information for a block of raw serialized object data.

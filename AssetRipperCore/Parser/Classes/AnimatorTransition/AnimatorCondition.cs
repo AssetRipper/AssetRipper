@@ -1,6 +1,6 @@
 using AssetRipper.Converters.Project;
 using AssetRipper.Parser.Classes.AnimatorController.Constants;
-using AssetRipper.Parser.IO.Asset;
+using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 

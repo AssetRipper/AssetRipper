@@ -2,7 +2,7 @@
 using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes.Misc;
 using AssetRipper.Parser.Classes.Texture2D;
-using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;

@@ -1,7 +1,7 @@
 using AssetRipper.IO.Endian;
 using System;
 
-namespace AssetRipper.Parser.Files.SerializedFile.Parser
+namespace AssetRipper.Parser.Files.SerializedFiles.Parser
 {
 	/// <summary>
 	/// The file header is found at the beginning of an asset file. The header is always using big endian byte order.

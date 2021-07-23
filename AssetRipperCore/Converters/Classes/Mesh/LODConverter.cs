@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Converters.Project;
 using AssetRipper.IO.Endian;
 using AssetRipper.Parser.Classes.Mesh;
-using AssetRipper.Parser.Files.File;
+using AssetRipper.Parser.Files;
 using System.IO;
 using System.Linq;
 

@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace AssetRipper.Parser.Files.SerializedFile.IO
+namespace AssetRipper.Parser.Files.SerializedFiles.IO
 {
 	public sealed class SerializedReader : EndianReader
 	{

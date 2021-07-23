@@ -1,12 +1,12 @@
 using AssetRipper.Extensions;
 using AssetRipper.Parser.Classes.Shader.Enums;
 using AssetRipper.Parser.Classes.Shader.SerializedShader.Enum;
-using AssetRipper.Parser.IO;
-using AssetRipper.Parser.IO.Asset.Reader;
-using AssetRipper.Parser.IO.Extensions;
+using AssetRipper.IO;
+using AssetRipper.IO.Asset;
+using AssetRipper.IO.Extensions;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Parser.Classes.Shader.SerializedShader
 {

@@ -1,8 +1,7 @@
 using AssetRipper.Converters.Project;
 using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes.Misc;
-using AssetRipper.Parser.IO.Asset;
-using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 

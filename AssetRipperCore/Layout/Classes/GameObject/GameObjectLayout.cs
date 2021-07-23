@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Converters.Game;
 using AssetRipper.Layout.Builtin;
-using AssetRipper.Parser.IO.Asset;
+using AssetRipper.IO.Asset;
 
 namespace AssetRipper.Layout.Classes.GameObject
 {

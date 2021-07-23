@@ -1,8 +1,8 @@
 using AssetRipper.IO.MultiFile;
 using AssetRipper.Logging;
 using AssetRipper.Parser.Utils;
-using AssetRipper.Structure.GameCollection.Assembly;
-using AssetRipper.Structure.GameCollection.Assembly.Mono;
+using AssetRipper.Structure.Assembly;
+using AssetRipper.Structure.Assembly.Mono;
 using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;

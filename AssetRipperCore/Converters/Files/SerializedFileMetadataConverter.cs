@@ -1,5 +1,5 @@
-﻿using AssetRipper.Parser.Files.SerializedFile;
-using AssetRipper.Parser.Files.SerializedFile.Parser;
+﻿using AssetRipper.Parser.Files.SerializedFiles;
+using AssetRipper.Parser.Files.SerializedFiles.Parser;
 
 namespace AssetRipper.Converters.Files
 {

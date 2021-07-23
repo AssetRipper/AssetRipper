@@ -1,6 +1,6 @@
 using AssetRipper.Extensions;
 using AssetRipper.Parser.Classes.Shader;
-using AssetRipper.Parser.IO;
+using AssetRipper.IO;
 using System.IO;
 
 namespace AssetRipper.Converters.Classes.Shader

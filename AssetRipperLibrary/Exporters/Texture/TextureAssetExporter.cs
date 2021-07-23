@@ -1,13 +1,11 @@
-using AssetRipper;
-using AssetRipper.Converters;
 using AssetRipper.Converters.Project;
-using AssetRipper.Converters.Project.Exporter;
+using AssetRipper.Converters.Project.Exporters;
 using AssetRipper.Logging;
 using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes.Sprite;
 using AssetRipper.Parser.Classes.Texture2D;
-using AssetRipper.Parser.Files.SerializedFile;
-using AssetRipper.Structure.ProjectCollection.Collections;
+using AssetRipper.Parser.Files.SerializedFiles;
+using AssetRipper.Structure.Collections;
 using AssetRipper.Utils;
 using AssetRipperLibrary.Utils;
 using System;

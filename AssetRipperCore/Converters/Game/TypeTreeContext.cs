@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Layout;
 using AssetRipper.Layout.Classes;
-using AssetRipper.Parser.Files.SerializedFile.Parser;
-using AssetRipper.Parser.Files.SerializedFile.Parser.TypeTree;
+using AssetRipper.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;

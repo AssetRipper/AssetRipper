@@ -1,13 +1,12 @@
-using AssetRipper.Converters.Project.Exporter;
-using AssetRipper.Converters.Project.Exporter.Script;
+using AssetRipper.Converters.Project.Exporters;
+using AssetRipper.Converters.Project.Exporters.Script;
 using AssetRipper.Layout;
 using AssetRipper.Logging;
 using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes.Misc;
-using AssetRipper.Parser.Files.SerializedFile;
-using AssetRipper.Parser.Utils.Extensions;
-using AssetRipper.Structure.GameCollection;
-using AssetRipper.Structure.ProjectCollection.Collections;
+using AssetRipper.Parser.Files.SerializedFiles;
+using AssetRipper.Structure;
+using AssetRipper.Structure.Collections;
 using System;
 using System.Collections.Generic;
 using Object = AssetRipper.Parser.Classes.Object.Object;

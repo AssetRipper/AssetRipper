@@ -1,5 +1,5 @@
-﻿using AssetRipper.Converters.Project.Exporter;
-using AssetRipper.Converters.Project.Exporter.Engine;
+﻿using AssetRipper.Converters.Project.Exporters;
+using AssetRipper.Converters.Project.Exporters.Engine;
 using AssetRipper.Logging;
 using AssetRipper.Parser.Asset;
 using AssetRipper.Structure.GameStructure;

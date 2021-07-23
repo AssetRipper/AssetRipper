@@ -1,12 +1,11 @@
 using AssetRipper.Converters.Project;
 using AssetRipper.Extensions;
 using AssetRipper.Parser.Classes.Misc;
-using AssetRipper.Parser.Files.SerializedFile;
-using AssetRipper.Parser.IO.Asset;
-using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.Files.SerializedFiles;
+using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Parser.Classes.AnimatorController.Constants
 {

@@ -1,5 +1,4 @@
-﻿using AssetRipper;
-using AssetRipper.IO.Endian;
+﻿using AssetRipper.IO.Endian;
 using AssetRipper.Parser.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Parser.Classes.Shader.Parameters;
 using System;

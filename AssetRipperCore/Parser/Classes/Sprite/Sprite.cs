@@ -5,14 +5,13 @@ using AssetRipper.Parser.Classes.Meta.Importers.Texture;
 using AssetRipper.Parser.Classes.Misc;
 using AssetRipper.Parser.Classes.Misc.Serializable;
 using AssetRipper.Parser.Classes.SpriteAtlas;
-using AssetRipper.Parser.Files.File.Version;
-using AssetRipper.Parser.IO.Asset;
-using AssetRipper.Parser.IO.Asset.Reader;
-using AssetRipper.Parser.IO.Extensions;
+using AssetRipper.Parser.Files;
+using AssetRipper.IO.Asset;
+using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Parser.Classes.Sprite
 {

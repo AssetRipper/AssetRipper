@@ -4,7 +4,7 @@ using AssetRipper.Parser.Classes.Misc;
 using AssetRipper.YAML;
 using System;
 using DateTime = System.DateTime;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Parser.Classes.Meta
 {

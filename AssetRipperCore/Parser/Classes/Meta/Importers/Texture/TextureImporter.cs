@@ -7,10 +7,9 @@ using AssetRipper.Parser.Classes.Misc.Serializable;
 using AssetRipper.Parser.Classes.Sprite;
 using AssetRipper.Parser.Classes.Texture2D;
 using AssetRipper.Parser.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files.File.Version;
-using AssetRipper.Parser.IO.Asset.Reader;
-using AssetRipper.Parser.IO.Asset.Writer;
-using AssetRipper.Parser.IO.Extensions;
+using AssetRipper.Parser.Files;
+using AssetRipper.IO.Asset;
+using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 

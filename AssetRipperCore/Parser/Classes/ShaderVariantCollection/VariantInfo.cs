@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Converters.Project;
-using AssetRipper.Parser.IO.Asset;
-using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 
 namespace AssetRipper.Parser.Classes.ShaderVariantCollection

@@ -5,19 +5,16 @@ using AssetRipper.Layout;
 using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes;
 using AssetRipper.Parser.Classes.Misc;
-using AssetRipper.Parser.Files.File;
-using AssetRipper.Parser.Files.SerializedFile.Parser;
-using AssetRipper.Parser.IO.Asset;
-using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.IO.Asset;
 using AssetRipper.Parser.Utils;
-using AssetRipper.Structure.GameCollection;
+using AssetRipper.Structure;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Object = AssetRipper.Parser.Classes.Object.Object;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
 
-namespace AssetRipper.Parser.Files.SerializedFile
+namespace AssetRipper.Parser.Files.SerializedFiles
 {
 	/// <summary>
 	/// Serialized files contain binary serialized objects and optional run-time type information.

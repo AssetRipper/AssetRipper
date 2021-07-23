@@ -2,11 +2,10 @@
 using AssetRipper.Parser.Classes.AnimatorController.Editor.AnimatorControllerLayer;
 using AssetRipper.Parser.Classes.AnimatorController.Mask;
 using AssetRipper.Parser.Classes.Misc;
-using AssetRipper.Parser.IO.Asset;
-using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Parser.Classes.AnimatorController.Constants
 {

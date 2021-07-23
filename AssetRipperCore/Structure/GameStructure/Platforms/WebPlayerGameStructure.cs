@@ -1,4 +1,4 @@
-using AssetRipper.Structure.GameCollection.Assembly;
+using AssetRipper.Structure.Assembly;
 using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;

@@ -11,7 +11,7 @@ using AssetRipperLibrary.Utils;
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipperLibrary.Exporters.Textures
 {

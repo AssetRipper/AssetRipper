@@ -93,6 +93,16 @@ namespace AssetRipper.Utils
 			string escapedChars = Regex.Escape(invalidChars);
 			return new Regex($"[{escapedChars}]");
 		}
+		public static string GetRelativePath(string filePath, string folder)
+		{
+			Uri pathUri = new Uri(filePath);
+			if (!folder.EndsWith(Path.DirectorySeparatorChar.ToString()))
+			{
+				folder += Path.DirectorySeparatorChar;
+			}
+			Uri folderUri = new Uri(folder);
+			return Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', Path.DirectorySeparatorChar));
+		}
 
 		public const string LongPathPrefix = @"\\?\";
 		public const int MaxDirectoryLength = 248;

@@ -2,10 +2,9 @@ using AssetRipper.Layout;
 using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes.Meta;
 using AssetRipper.Parser.Classes.Object;
-using AssetRipper.Parser.Files.File;
-using AssetRipper.Parser.Files.File.Version;
-using AssetRipper.Parser.IO.Asset;
-using AssetRipper.Structure.ProjectCollection.Collections;
+using AssetRipper.Parser.Files;
+using AssetRipper.IO.Asset;
+using AssetRipper.Structure.Collections;
 
 namespace AssetRipper.Converters.Project
 {

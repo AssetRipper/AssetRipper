@@ -1,4 +1,4 @@
-﻿using AssetRipper.Parser.Files.File.Version;
+﻿using AssetRipper.Parser.Files;
 
 namespace AssetRipper.Parser.Classes.Misc.KeyframeTpl.TangentMode
 {

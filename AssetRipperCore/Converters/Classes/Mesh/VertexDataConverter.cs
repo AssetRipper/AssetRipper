@@ -5,7 +5,7 @@ using AssetRipper.Parser.Classes.Mesh;
 using AssetRipper.Parser.Classes.Misc;
 using AssetRipper.Parser.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Parser.Classes.Shader.Enums.VertexFormat;
-using AssetRipper.Parser.Files.File;
+using AssetRipper.Parser.Files;
 using System;
 using System.Collections;
 using System.IO;

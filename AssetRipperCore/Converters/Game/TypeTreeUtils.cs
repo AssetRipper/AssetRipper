@@ -1,4 +1,4 @@
-﻿using AssetRipper.Parser.Files.SerializedFile.Parser.TypeTree;
+﻿using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
 
 namespace AssetRipper.Converters.Game
 {

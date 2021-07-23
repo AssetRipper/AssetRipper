@@ -5,8 +5,8 @@ using AssetRipper.Layout.Classes.AnimationClip.Curves;
 using AssetRipper.Layout.Classes.Misc.Serializable;
 using AssetRipper.Layout.Classes.Misc.Serializable.GUIStyle;
 using AssetRipper.Parser.Classes;
-using AssetRipper.Parser.Files.SerializedFile.Parser.TypeTree;
-using AssetRipper.Structure.GameCollection.Assembly.Serializable;
+using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
+using AssetRipper.Structure.Assembly.Serializable;
 using System;
 using System.Linq;
 

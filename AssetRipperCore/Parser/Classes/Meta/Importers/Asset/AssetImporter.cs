@@ -2,16 +2,15 @@
 using AssetRipper.Layout;
 using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes.Misc;
-using AssetRipper.Parser.Files.File.Version;
-using AssetRipper.Parser.IO.Asset.Reader;
-using AssetRipper.Parser.IO.Asset.Writer;
-using AssetRipper.Parser.IO.Extensions;
+using AssetRipper.Parser.Files;
+using AssetRipper.IO.Asset;
+using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Parser.Classes.Meta.Importers.Asset
 {

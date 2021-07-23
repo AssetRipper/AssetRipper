@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Parser.Classes;
-using AssetRipper.Parser.IO.Asset;
+using AssetRipper.IO.Asset;
 
 namespace AssetRipper.Layout.Classes
 {

@@ -1,8 +1,8 @@
-﻿using AssetRipper.Parser.Files.SerializedFile.IO;
+﻿using AssetRipper.Parser.Files.SerializedFiles.IO;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AssetRipper.Parser.Files.SerializedFile.Parser.TypeTree
+namespace AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree
 {
 	public sealed class TypeTree : ISerializedReadable, ISerializedWritable
 	{

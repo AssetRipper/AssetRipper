@@ -1,5 +1,5 @@
 using AssetRipper.Extensions;
-using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.IO.Asset;
 using System.IO;
 
 namespace AssetRipper.Parser.Classes.Shader.SerializedShader

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Parser.Files.SerializedFile.IO
+﻿namespace AssetRipper.Parser.Files.SerializedFiles.IO
 {
 	public interface ISerializedWritable
 	{

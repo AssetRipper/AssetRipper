@@ -8,17 +8,17 @@ using AssetRipper.Parser.Classes.Misc;
 using AssetRipper.Parser.Classes.ResourceManager;
 using AssetRipper.Parser.Classes.TagManager;
 using AssetRipper.Parser.Classes.Utils;
-using AssetRipper.Parser.Files.File;
-using AssetRipper.Parser.Files.SerializedFile;
-using AssetRipper.Parser.Files.SerializedFile.Parser;
-using AssetRipper.Parser.IO.Asset;
-using AssetRipper.Structure.ProjectCollection.Collections;
+using AssetRipper.Parser.Files;
+using AssetRipper.Parser.Files.SerializedFiles;
+using AssetRipper.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.IO.Asset;
+using AssetRipper.Structure.Collections;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using AssetInfo = AssetRipper.Parser.Classes.AssetBundle.AssetInfo;
 using Object = AssetRipper.Parser.Classes.Object.Object;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Converters.Project
 {

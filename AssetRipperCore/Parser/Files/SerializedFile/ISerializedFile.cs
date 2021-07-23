@@ -1,11 +1,11 @@
 using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes.Misc;
 using AssetRipper.Parser.Classes.Object;
-using AssetRipper.Parser.Files.SerializedFile.Parser;
-using AssetRipper.Structure.GameCollection;
+using AssetRipper.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.Structure;
 using System.Collections.Generic;
 
-namespace AssetRipper.Parser.Files.SerializedFile
+namespace AssetRipper.Parser.Files.SerializedFiles
 {
 	public interface ISerializedFile : IAssetContainer
 	{

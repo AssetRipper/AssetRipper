@@ -1,13 +1,11 @@
-using AssetRipper;
-using AssetRipper.Converters;
 using AssetRipper.Converters.Classes.Shader;
 using AssetRipper.Converters.Project;
-using AssetRipper.Converters.Project.Exporter;
+using AssetRipper.Converters.Project.Exporters;
 using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes.Shader;
 using AssetRipper.Parser.Classes.Shader.Enums;
-using AssetRipper.Parser.Files.SerializedFile;
-using AssetRipper.Structure.ProjectCollection.Collections;
+using AssetRipper.Parser.Files.SerializedFiles;
+using AssetRipper.Structure.Collections;
 using AssetRipper.Utils;
 using AssetRipperLibrary.Exporters.Shaders.DirectX;
 using System;
@@ -15,7 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Versioning;
 using Object = AssetRipper.Parser.Classes.Object.Object;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipperLibrary.Exporters.Shaders
 {

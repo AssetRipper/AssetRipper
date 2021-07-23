@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Parser.Classes.Shader.Enums;
-using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.IO.Asset;
 
 namespace AssetRipper.Parser.Classes.Shader
 {

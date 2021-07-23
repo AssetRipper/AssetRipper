@@ -1,5 +1,4 @@
-﻿using AssetRipper;
-using AssetRipper.IO.Endian;
+﻿using AssetRipper.IO.Endian;
 using AssetRipper.Parser.Classes.Shader;
 using AssetRipper.Parser.Classes.Shader.Parameters;
 using System;

@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Converters.Project;
 using AssetRipper.Parser.Classes.Misc.KeyframeTpl;
 using AssetRipper.Parser.Classes.Misc.KeyframeTpl.TangentMode;
-using AssetRipper.Parser.IO.Asset;
+using AssetRipper.IO.Asset;
 
 namespace AssetRipper.Converters.Classes.Misc
 {

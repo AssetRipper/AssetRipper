@@ -3,11 +3,11 @@ using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes.Mesh;
 using AssetRipper.Parser.Classes.Misc;
 using AssetRipper.Parser.Classes.Misc.Serializable;
-using AssetRipper.Parser.Files.File.Version;
-using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.Parser.Files;
+using AssetRipper.IO.Asset;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Parser.Classes.Sprite
 {

@@ -1,10 +1,8 @@
 ﻿using AssetRipper.Converters.Project;
 using AssetRipper.Extensions;
 using AssetRipper.IO.Endian;
-using AssetRipper.Parser.Files.SerializedFile.IO;
-using AssetRipper.Parser.IO.Asset;
-using AssetRipper.Parser.IO.Asset.Reader;
-using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.Parser.Files.SerializedFiles.IO;
+using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System;
 using System.Text;

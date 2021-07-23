@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Converters.Project;
 using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes.Misc.Serializable;
-using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 
 namespace AssetRipper.Parser.Classes.CapsuleCollider2D

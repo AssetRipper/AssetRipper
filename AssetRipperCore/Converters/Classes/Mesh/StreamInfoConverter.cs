@@ -3,7 +3,7 @@ using AssetRipper.Parser.Classes.Mesh;
 using AssetRipper.Parser.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Parser.Classes.Shader.Enums.VertexFormat;
 using AssetRipper.Parser.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files.File.Version;
+using AssetRipper.Parser.Files;
 
 namespace AssetRipper.Converters.Classes.Mesh
 {

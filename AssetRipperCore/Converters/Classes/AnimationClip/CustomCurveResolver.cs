@@ -5,11 +5,11 @@ using AssetRipper.Parser.Classes.Camera;
 using AssetRipper.Parser.Classes.Light;
 using AssetRipper.Parser.Classes.Renderer;
 using AssetRipper.Parser.Classes.SpriteRenderer;
-using AssetRipper.Parser.Files.SerializedFile.Parser.TypeTree;
+using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
 using SevenZip;
 using System;
 using System.Linq;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Converters.Classes.AnimationClip
 {

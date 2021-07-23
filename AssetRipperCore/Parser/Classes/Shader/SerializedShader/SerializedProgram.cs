@@ -1,7 +1,7 @@
 using AssetRipper.Extensions;
 using AssetRipper.Parser.Classes.Shader.Enums;
-using AssetRipper.Parser.IO;
-using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.IO;
+using AssetRipper.IO.Asset;
 
 namespace AssetRipper.Parser.Classes.Shader.SerializedShader
 {

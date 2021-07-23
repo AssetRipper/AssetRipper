@@ -2,7 +2,7 @@ using AssetRipper.IO.Endian;
 using AssetRipper.IO.MultiFile;
 using AssetRipper.Parser.Files.BundleFile.Parser;
 using AssetRipper.Parser.Files.BundleFile.Parser.Header;
-using AssetRipper.Parser.Files.File.Parser;
+using AssetRipper.Parser.Files.Entries;
 using System;
 using System.IO;
 

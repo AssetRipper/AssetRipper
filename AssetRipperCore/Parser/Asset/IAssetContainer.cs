@@ -1,10 +1,10 @@
 ﻿using AssetRipper.Layout;
 using AssetRipper.Parser.Classes.Object;
-using AssetRipper.Parser.Files.File;
-using AssetRipper.Parser.Files.File.Version;
-using AssetRipper.Parser.Files.SerializedFile.Parser;
-using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.Files;
+using AssetRipper.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.IO.Asset;
 using System.Collections.Generic;
+using AssetRipper.Parser.Classes.Utils.Extensions;
 
 namespace AssetRipper.Parser.Asset
 {
@@ -42,5 +42,22 @@ namespace AssetRipper.Parser.Asset
 		TransferInstructionFlags Flags { get; }
 
 		IReadOnlyList<FileIdentifier> Dependencies { get; }
+	}
+
+	public static class IAssetContainerExtensions
+	{
+		public static string GetAssetLogString(this IAssetContainer _this, long pathID)
+		{
+			Object asset = _this.GetAsset(pathID);
+			string name = asset.TryGetName();
+			if (name == null)
+			{
+				return $"{asset.ClassID}_{pathID}";
+			}
+			else
+			{
+				return $"{asset.ClassID}_{pathID}({name})";
+			}
+		}
 	}
 }

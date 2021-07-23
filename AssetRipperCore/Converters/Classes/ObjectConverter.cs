@@ -2,7 +2,7 @@
 using AssetRipper.Layout.Classes;
 using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes.Object;
-using AssetRipper.Parser.IO.Asset;
+using AssetRipper.IO.Asset;
 
 namespace AssetRipper.Converters.Classes
 {

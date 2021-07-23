@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace AssetRipper.Parser.Files.SerializedFile.Parser.TypeTree
+namespace AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree
 {
 	/// <summary>
 	/// Predefines types

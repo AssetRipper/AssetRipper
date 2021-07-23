@@ -1,13 +1,11 @@
 ﻿using AssetRipper.Converters.Project;
 using AssetRipper.Parser.Classes.Utils.Extensions;
-using AssetRipper.Parser.IO.Asset;
-using AssetRipper.Parser.IO.Asset.Reader;
-using AssetRipper.Parser.IO.Asset.Writer;
-using AssetRipper.Parser.IO.Extensions;
+using AssetRipper.IO.Asset;
+using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Parser.Classes.Misc
 {

@@ -1,6 +1,6 @@
-﻿using AssetRipper.Parser.Files.File.Version;
-using AssetRipper.Parser.IO.Asset.Reader;
-using AssetRipper.Parser.IO.Extensions;
+﻿using AssetRipper.Parser.Files;
+using AssetRipper.IO.Asset;
+using AssetRipper.IO.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Parser.Classes.AnimatorController.State

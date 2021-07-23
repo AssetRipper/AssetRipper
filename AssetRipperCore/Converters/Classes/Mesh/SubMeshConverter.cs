@@ -4,10 +4,10 @@ using AssetRipper.Layout;
 using AssetRipper.Parser.Classes.Mesh;
 using AssetRipper.Parser.Classes.Misc.Serializable;
 using AssetRipper.Parser.Classes.Shader.Enums.ShaderChannel;
-using AssetRipper.Parser.IO.Asset.Reader;
+using AssetRipper.IO.Asset;
 using System;
 using System.IO;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Converters.Classes.Mesh
 {

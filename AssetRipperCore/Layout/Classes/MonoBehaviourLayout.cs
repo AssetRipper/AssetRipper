@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Converters.Game;
 using AssetRipper.Parser.Classes;
-using AssetRipper.Parser.Files.File.Version;
-using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.Files;
+using AssetRipper.IO.Asset;
 
 namespace AssetRipper.Layout.Classes
 {

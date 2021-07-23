@@ -2,10 +2,10 @@
 using AssetRipper.Parser.Classes.Misc;
 using AssetRipper.Parser.Classes.Misc.Serializable;
 using AssetRipper.Parser.Classes.Utils.Extensions;
-using AssetRipper.Parser.IO.Asset;
+using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Parser.Classes.AnimatorStateMachine
 {

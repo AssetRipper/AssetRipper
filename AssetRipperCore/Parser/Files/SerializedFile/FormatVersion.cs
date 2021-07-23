@@ -1,4 +1,4 @@
-namespace AssetRipper.Parser.Files.SerializedFile
+namespace AssetRipper.Parser.Files.SerializedFiles
 {
 	public enum FormatVersion
 	{

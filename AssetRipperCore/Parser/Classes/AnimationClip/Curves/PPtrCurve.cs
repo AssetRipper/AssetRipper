@@ -2,10 +2,8 @@ using AssetRipper.Converters.Project;
 using AssetRipper.Layout.Classes.AnimationClip.Curves;
 using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes.Misc;
-using AssetRipper.Parser.IO.Asset;
-using AssetRipper.Parser.IO.Asset.Reader;
-using AssetRipper.Parser.IO.Asset.Writer;
-using AssetRipper.Parser.IO.Extensions;
+using AssetRipper.IO.Asset;
+using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
 

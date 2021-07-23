@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Parser.Files.SerializedFile.Parser
+namespace AssetRipper.Parser.Files.SerializedFiles.Parser
 {
 	[Flags]
 	public enum TransferMetaFlags

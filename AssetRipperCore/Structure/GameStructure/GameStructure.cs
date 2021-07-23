@@ -1,16 +1,15 @@
 ﻿using AssetRipper.Converters.Project;
 using AssetRipper.Layout;
 using AssetRipper.Logging;
-using AssetRipper.Parser.Files.File;
-using AssetRipper.Parser.Files.File.Version;
-using AssetRipper.Parser.IO.Asset;
-using AssetRipper.Structure.GameCollection.Assembly;
+using AssetRipper.Parser.Files;
+using AssetRipper.IO.Asset;
+using AssetRipper.Structure.Assembly;
 using AssetRipper.Structure.GameStructure.Platforms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Object = AssetRipper.Parser.Classes.Object.Object;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Structure.GameStructure
 {
@@ -159,11 +158,11 @@ namespace AssetRipper.Structure.GameStructure
 				{
 					layinfo = layinfo ?? processor.GetLayoutInfo();
 					AssetLayout layout = new AssetLayout(layinfo);
-					GameCollection.GameCollection.Parameters pars = new GameCollection.GameCollection.Parameters(layout);
+					GameCollection.Parameters pars = new GameCollection.Parameters(layout);
 					pars.ScriptBackend = GetScriptingBackend();
 					pars.RequestAssemblyCallback = OnRequestAssembly;
 					pars.RequestResourceCallback = OnRequestResource;
-					FileCollection = new GameCollection.GameCollection(pars);
+					FileCollection = new GameCollection(pars);
 					processor.ProcessSchemes(FileCollection);
 				}
 			}
@@ -384,7 +383,7 @@ namespace AssetRipper.Structure.GameStructure
 		}
 		public bool IsValid => FileCollection != null;
 
-		public GameCollection.GameCollection FileCollection { get; private set; }
+		public GameCollection FileCollection { get; private set; }
 		public PlatformGameStructure PlatformStructure { get; private set; }
 		public PlatformGameStructure MixedStructure { get; private set; }
 	}

@@ -1,9 +1,7 @@
 ﻿using AssetRipper.Converters.Classes.TrailRenderer;
 using AssetRipper.Converters.Project;
 using AssetRipper.Parser.Classes.Misc.Serializable;
-using AssetRipper.Parser.IO.Asset;
-using AssetRipper.Parser.IO.Asset.Reader;
-using AssetRipper.Parser.IO.Asset.Writer;
+using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 
 namespace AssetRipper.Parser.Classes.TrailRenderer

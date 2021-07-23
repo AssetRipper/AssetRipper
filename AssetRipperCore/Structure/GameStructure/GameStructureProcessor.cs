@@ -1,17 +1,17 @@
 ﻿using AssetRipper.Layout;
 using AssetRipper.Logging;
-using AssetRipper.Parser.Files.ArchiveFile;
+using AssetRipper.Parser.Files.ArchiveFiles;
 using AssetRipper.Parser.Files.BundleFile;
-using AssetRipper.Parser.Files.File;
-using AssetRipper.Parser.Files.File.Parser;
-using AssetRipper.Parser.Files.File.Version;
-using AssetRipper.Parser.Files.SerializedFile;
-using AssetRipper.Parser.Files.SerializedFile.Parser;
-using AssetRipper.Parser.IO.Asset;
+using AssetRipper.Parser.Files.Schemes;
+using AssetRipper.Parser.Files.Entries;
+using AssetRipper.Parser.Files;
+using AssetRipper.Parser.Files.SerializedFiles;
+using AssetRipper.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.IO.Asset;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Version = AssetRipper.Parser.Files.File.Version.Version;
+using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Structure.GameStructure
 {
@@ -30,7 +30,7 @@ namespace AssetRipper.Structure.GameStructure
 
 		public void AddScheme(string filePath, string fileName)
 		{
-			FileScheme scheme = GameCollection.GameCollection.LoadScheme(filePath, fileName);
+			FileScheme scheme = GameCollection.LoadScheme(filePath, fileName);
 			OnSchemeLoaded(scheme);
 			m_schemes.Add(scheme);
 		}
@@ -60,7 +60,7 @@ namespace AssetRipper.Structure.GameStructure
 			}
 		}
 
-		public void ProcessSchemes(GameCollection.GameCollection fileCollection)
+		public void ProcessSchemes(GameCollection fileCollection)
 		{
 			GameProcessorContext context = new GameProcessorContext(fileCollection);
 			foreach (FileScheme scheme in m_schemes)

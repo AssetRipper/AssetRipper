@@ -1,4 +1,4 @@
-﻿using AssetRipper.Parser.Files.SerializedFile;
+﻿using AssetRipper.Parser.Files.SerializedFiles;
 using System;
 using System.Diagnostics;
 using System.Media;

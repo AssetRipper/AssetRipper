@@ -3,9 +3,9 @@ using AssetRipper.Layout;
 using AssetRipper.Parser.Asset;
 using AssetRipper.Parser.Classes.AnimatorController.Constants;
 using AssetRipper.Parser.Classes.Object;
-using AssetRipper.Parser.Files.SerializedFile;
-using AssetRipper.Parser.IO.Asset.Reader;
-using AssetRipper.Parser.IO.Extensions;
+using AssetRipper.Parser.Files.SerializedFiles;
+using AssetRipper.IO.Asset;
+using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 

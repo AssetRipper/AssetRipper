@@ -1,6 +1,5 @@
-﻿using AssetRipper.Parser.Files.File.Version;
-using AssetRipper.Parser.IO.Asset.Reader;
-using AssetRipper.Parser.IO.Asset.Writer;
+﻿using AssetRipper.Parser.Files;
+using AssetRipper.IO.Asset;
 
 namespace AssetRipper.Parser.Classes.Shader.Blob
 {
