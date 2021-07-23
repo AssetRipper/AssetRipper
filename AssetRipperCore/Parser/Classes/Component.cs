@@ -13,13 +13,11 @@ namespace AssetRipper.Parser.Classes
 {
 	public abstract class Component : EditorExtension
 	{
-		protected Component(AssetLayout layout) :
-			base(layout)
+		protected Component(AssetLayout layout) : base(layout)
 		{
 		}
 
-		protected Component(AssetInfo assetInfo) :
-			base(assetInfo)
+		protected Component(AssetInfo assetInfo) : base(assetInfo)
 		{
 		}
 

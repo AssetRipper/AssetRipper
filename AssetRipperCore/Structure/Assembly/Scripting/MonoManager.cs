@@ -36,5 +36,10 @@ namespace AssetRipper.Structure.Assembly.Scripting
 			}
 			return false;
 		}
+
+		~MonoManager()
+		{
+			Dispose(false);
+		}
 	}
 }

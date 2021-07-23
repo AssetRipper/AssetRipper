@@ -7,6 +7,8 @@
     <OutputPath>..\Bins\UnitTester\$(Configuration)\$(Platform)\</OutputPath>
     <Configurations>Release</Configurations>
     <Platforms>x64;x86</Platforms>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

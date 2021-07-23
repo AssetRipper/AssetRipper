@@ -5,6 +5,7 @@
 		General,
 		Import,
 		Export,
+		Cpp2IL,
 
 		Debug,
 	}

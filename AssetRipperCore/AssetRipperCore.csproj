@@ -6,28 +6,24 @@
 	  <AssemblyName>AssetRipperCore</AssemblyName>
 	  <RootNamespace>AssetRipper</RootNamespace>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <OutputPath>..\Bins\AssetRipper\$(Configuration)\</OutputPath>
+    <OutputPath>..\Bins\AssetRipperCore\$(Configuration)\</OutputPath>
 	  <Copyright>Copyright ©  2021</Copyright>
 	  <Authors>ds5678</Authors>
 	  <Configurations>Debug;Release;Virtual</Configurations>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE;NET_CORE;UNIVERSAL</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>TRACE;NET_CORE</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Virtual|AnyCPU'">
     <DefineConstants>DEBUG;TRACE;NET_CORE;VIRTUAL</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
@@ -47,7 +43,7 @@
 
   <ItemGroup>
     <PackageReference Include="Mono.Cecil" Version="0.11.4" />
-    <PackageReference Include="Samboy063.Cpp2IL.Core" Version="2021.2.1.1" />
+    <PackageReference Include="Samboy063.Cpp2IL.Core" Version="2021.2.2" />
   </ItemGroup>
 
 </Project>

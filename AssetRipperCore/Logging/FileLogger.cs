@@ -24,9 +24,7 @@ namespace AssetRipper.Logging
 		{
 #if !DEBUG
 			if (type == LogType.Debug)
-			{
 				return;
-			}
 #endif
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.Append(category.ToString());

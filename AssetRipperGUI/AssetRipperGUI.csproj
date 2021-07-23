@@ -14,38 +14,28 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <Platforms>x64;x86</Platforms>
     <Configurations>Debug;Release;Virtual</Configurations>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DefineConstants>TRACE;DEBUG;WIN64</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <DefineConstants>TRACE;WIN64</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Virtual|x64' ">
     <DefineConstants>TRACE;DEBUG;WIN64;VIRTUAL</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <DefineConstants>TRACE</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Virtual|x86' ">
     <DefineConstants>TRACE;DEBUG;VIRTUAL</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   
   <PropertyGroup>

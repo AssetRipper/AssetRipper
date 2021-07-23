@@ -8,6 +8,14 @@ namespace AssetRipper.Logging
 	{
 		private static readonly List<ILogger> loggers = new List<ILogger>();
 
+		static Logger()
+		{
+			Cpp2IL.Core.Logger.InfoOverride = new Action<string, string>((string message, string source) => Log(LogType.Info, LogCategory.Cpp2IL, message));
+			Cpp2IL.Core.Logger.WarnOverride = new Action<string, string>((string message, string source) => Log(LogType.Warning, LogCategory.Cpp2IL, message));
+			Cpp2IL.Core.Logger.ErrorOverride = new Action<string, string>((string message, string source) => Log(LogType.Error, LogCategory.Cpp2IL, message));
+			Cpp2IL.Core.Logger.VerboseOverride = new Action<string, string>((string message, string source) => Log(LogType.Debug, LogCategory.Cpp2IL, message));
+		}
+
 		public static void Log(LogType type, LogCategory category, string message)
 		{
 			if (message == null) throw new ArgumentNullException(nameof(message));

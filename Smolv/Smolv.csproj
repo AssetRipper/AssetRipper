@@ -7,24 +7,20 @@
     <RootNamespace>Smolv</RootNamespace>
     <OutputPath>..\Bins\Smolv\$(Configuration)\</OutputPath>
     <Configurations>Debug;Release;Virtual</Configurations>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>TRACE</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Virtual|AnyCPU'">
     <DefineConstants>DEBUG;TRACE;VIRTUAL</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

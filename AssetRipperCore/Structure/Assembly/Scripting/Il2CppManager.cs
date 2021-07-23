@@ -39,7 +39,9 @@ namespace AssetRipper.Structure.Assembly.Scripting
 
 			Cpp2IlApi.RunAttributeRestorationForAllAssemblies(keyFunctionAddresses);
 
-			foreach(var assembly in Cpp2IlApi.GeneratedAssemblies)
+			//Cpp2IlApi.SaveAssemblies("ExtractedScripts");
+
+			foreach (var assembly in Cpp2IlApi.GeneratedAssemblies)
 			{
 				m_assemblies.Add(assembly.Name.Name, assembly);
 			}
@@ -92,6 +94,11 @@ namespace AssetRipper.Structure.Assembly.Scripting
 				builder.Append(version[i].ToString());
 			}
 			return builder.ToString();
+		}
+
+		~Il2CppManager()
+		{
+			Dispose(false);
 		}
 	}
 }

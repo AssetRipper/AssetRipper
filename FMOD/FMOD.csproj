@@ -10,22 +10,18 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Platforms>x64;x86</Platforms>
     <Configurations>Debug;Release;Virtual</Configurations>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <DefineConstants>TRACE</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Virtual' ">
     <DefineConstants>TRACE;DEBUG;VIRTUAL</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(Platform)' == 'x86' ">

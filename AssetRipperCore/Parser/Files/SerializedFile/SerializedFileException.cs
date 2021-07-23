@@ -25,8 +25,7 @@ namespace AssetRipper.Parser.Files.SerializedFiles
 			FilePath = filePath;
 		}
 
-		public SerializedFileException(string message, Exception innerException, Version version, Platform platform, ClassIDType assetType, string fileName, string filePath) :
-			base(message, innerException)
+		public SerializedFileException(string message, Exception innerException, Version version, Platform platform, ClassIDType assetType, string fileName, string filePath) : base(message, innerException)
 		{
 			if (string.IsNullOrEmpty(fileName))
 			{
