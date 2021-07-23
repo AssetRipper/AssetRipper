@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MonoManager = AssetRipper.Structure.Assembly.Mono.MonoManager;
+using MonoManager = AssetRipper.Structure.Assembly.Scripting.MonoManager;
 using Object = AssetRipper.Parser.Classes.Object.Object;
 
 namespace AssetRipper.Structure

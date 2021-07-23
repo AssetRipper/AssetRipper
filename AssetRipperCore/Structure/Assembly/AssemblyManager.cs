@@ -1,7 +1,7 @@
 using AssetRipper.Converters.Project.Exporters.Script;
 using AssetRipper.Converters.Project.Exporters.Script.Elements;
 using AssetRipper.Layout;
-using AssetRipper.Structure.Assembly.Mono;
+using AssetRipper.Structure.Assembly.Scripting;
 using AssetRipper.Structure.Assembly.Serializable;
 using System;
 using System.Collections.Generic;
@@ -11,16 +11,31 @@ namespace AssetRipper.Structure.Assembly
 {
 	public sealed class AssemblyManager : IAssemblyManager
 	{
+		public ScriptingBackend Backend { get; }
+		public AssetLayout Layout { get; }
+		public bool IsSet => m_manager != null;
+
+		private event Action<string> m_requestAssemblyCallback;
+		private readonly Dictionary<string, SerializableType> m_serializableTypes = new Dictionary<string, SerializableType>();
+		private IAssemblyManager m_manager;
+
 		public AssemblyManager(ScriptingBackend backend, AssetLayout layout, Action<string> requestAssemblyCallback)
 		{
-			m_manager = backend == ScriptingBackend.Mono ? new MonoManager(this) : null;
+			switch (backend)
+			{
+				case ScriptingBackend.Mono:
+					m_manager = new MonoManager(this);
+					break;
+				case ScriptingBackend.Il2Cpp:
+					m_manager = new Il2CppManager(this);
+					break;
+				case ScriptingBackend.Unknown:
+					m_manager = null;
+					break;
+			}
+			Backend = backend;
 			Layout = layout;
 			m_requestAssemblyCallback = requestAssemblyCallback ?? throw new ArgumentNullException(nameof(requestAssemblyCallback));
-		}
-
-		~AssemblyManager()
-		{
-			Dispose(false);
 		}
 
 		public static bool IsAssembly(string fileName)
@@ -149,12 +164,10 @@ namespace AssetRipper.Structure.Assembly
 			}
 		}
 
-		public AssetLayout Layout { get; }
-		public bool IsSet => m_manager != null;
+		~AssemblyManager()
+		{
+			Dispose(false);
+		}
 
-		private event Action<string> m_requestAssemblyCallback;
-
-		private readonly Dictionary<string, SerializableType> m_serializableTypes = new Dictionary<string, SerializableType>();
-		private IAssemblyManager m_manager;
 	}
 }

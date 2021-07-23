@@ -1,4 +1,4 @@
-using AssetRipper.Structure.Assembly.Mono;
+using AssetRipper.Structure.Assembly.Scripting;
 using Mono.Cecil;
 using Mono.Cecil.Extensions;
 using Mono.Cecil.Metadata;

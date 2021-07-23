@@ -1,43 +1,37 @@
-using AssetRipper.Converters.Project.Exporters.Script;
+﻿using AssetRipper.Converters.Project.Exporters.Script;
 using AssetRipper.Converters.Project.Exporters.Script.Elements;
 using AssetRipper.Layout;
 using AssetRipper.Parser.Utils;
+using AssetRipper.Structure.Assembly.Scripting;
 using AssetRipper.Structure.Assembly.Serializable;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Structure.Assembly.Mono
+namespace AssetRipper.Structure.Assembly
 {
-	internal sealed class MonoManager : IAssemblyManager, IAssemblyResolver
+	internal class BaseManager : IAssemblyManager, IAssemblyResolver
 	{
-		public MonoManager(AssemblyManager assemblyManager)
+		public AssetLayout Layout => m_assemblyManager.Layout;
+		public bool IsSet => true;
+
+		protected readonly Dictionary<string, AssemblyDefinition> m_assemblies = new Dictionary<string, AssemblyDefinition>();
+		protected readonly Dictionary<string, bool> m_validTypes = new Dictionary<string, bool>();
+		protected readonly AssemblyManager m_assemblyManager;
+
+		public BaseManager(AssemblyManager assemblyManager)
 		{
 			m_assemblyManager = assemblyManager ?? throw new ArgumentNullException(nameof(assemblyManager));
 		}
 
-		~MonoManager()
-		{
-			Dispose(false);
-		}
-
-		public static bool IsMonoAssembly(string fileName)
-		{
-			if (fileName.EndsWith(AssemblyExtension, StringComparison.Ordinal))
-			{
-				return true;
-			}
-			return false;
-		}
-
-		public static string GetUniqueName(TypeReference type)
+		protected static string GetUniqueName(TypeReference type)
 		{
 			string assembly = FilenameUtils.FixAssemblyEndian(type.Scope.Name);
 			return ScriptIdentifier.ToUniqueName(assembly, type.FullName);
 		}
 
-		public void Load(string filePath)
+		public virtual void Load(string filePath)
 		{
 			ReaderParameters parameters = new ReaderParameters(ReadingMode.Deferred)
 			{
@@ -52,7 +46,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			m_assemblies[assemblyName] = assembly;
 		}
 
-		public void Read(Stream stream, string fileName)
+		public virtual void Read(Stream stream, string fileName)
 		{
 			ReaderParameters parameters = new ReaderParameters(ReadingMode.Immediate)
 			{
@@ -67,7 +61,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			m_assemblies[assemblyName] = assembly;
 		}
 
-		public void Unload(string fileName)
+		public virtual void Unload(string fileName)
 		{
 			if (m_assemblies.TryGetValue(fileName, out AssemblyDefinition assembly))
 			{
@@ -76,17 +70,17 @@ namespace AssetRipper.Structure.Assembly.Mono
 			}
 		}
 
-		public bool IsAssemblyLoaded(string assembly)
+		public virtual bool IsAssemblyLoaded(string assembly)
 		{
 			return m_assemblies.ContainsKey(assembly);
 		}
 
-		public bool IsPresent(ScriptIdentifier scriptID)
+		public virtual bool IsPresent(ScriptIdentifier scriptID)
 		{
 			return FindType(scriptID.Assembly, scriptID.Namespace, scriptID.Name) != null;
 		}
 
-		public bool IsValid(ScriptIdentifier scriptID)
+		public virtual bool IsValid(ScriptIdentifier scriptID)
 		{
 			TypeDefinition type = FindType(scriptID);
 			if (type == null)
@@ -109,7 +103,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			return true;
 		}
 
-		public SerializableType GetSerializableType(ScriptIdentifier scriptID)
+		public virtual SerializableType GetSerializableType(ScriptIdentifier scriptID)
 		{
 			TypeDefinition type = FindType(scriptID);
 			if (type == null)
@@ -119,7 +113,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			return new MonoType(this, type);
 		}
 
-		public ScriptExportType GetExportType(ScriptExportManager exportManager, ScriptIdentifier scriptID)
+		public virtual ScriptExportType GetExportType(ScriptExportManager exportManager, ScriptIdentifier scriptID)
 		{
 			TypeDefinition type = FindType(scriptID);
 			if (type == null)
@@ -129,7 +123,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			return exportManager.RetrieveType(type);
 		}
 
-		public ScriptIdentifier GetScriptID(string assembly, string name)
+		public virtual ScriptIdentifier GetScriptID(string assembly, string name)
 		{
 			TypeDefinition type = FindType(assembly, name);
 			if (type == null)
@@ -139,7 +133,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			return new ScriptIdentifier(type.Scope.Name, type.Namespace, type.Name);
 		}
 
-		public ScriptIdentifier GetScriptID(string assembly, string @namespace, string name)
+		public virtual ScriptIdentifier GetScriptID(string assembly, string @namespace, string name)
 		{
 			TypeDefinition type = FindType(assembly, @namespace, name);
 			if (type == null)
@@ -149,21 +143,15 @@ namespace AssetRipper.Structure.Assembly.Mono
 			return new ScriptIdentifier(assembly, type.Namespace, type.Name);
 		}
 
-		public AssemblyDefinition Resolve(AssemblyNameReference assemblyReference)
+		public virtual AssemblyDefinition Resolve(AssemblyNameReference assemblyReference)
 		{
 			string assemblyName = AssemblyManager.ToAssemblyName(assemblyReference.Name);
 			return FindAssembly(assemblyName);
 		}
 
-		public AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
+		public virtual AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
 		{
 			return Resolve(name);
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
 		}
 
 		public SerializableType GetSerializableType(MonoTypeContext context)
@@ -194,18 +182,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			m_assemblyManager.AddSerializableType(uniqueName, scriptType);
 		}
 
-		private void Dispose(bool disposing)
-		{
-			foreach (AssemblyDefinition assembly in m_assemblies.Values)
-			{
-				if (assembly != null)
-				{
-					assembly.Dispose();
-				}
-			}
-		}
-
-		private AssemblyDefinition FindAssembly(string name)
+		protected AssemblyDefinition FindAssembly(string name)
 		{
 			if (m_assemblies.TryGetValue(name, out AssemblyDefinition assembly))
 			{
@@ -221,7 +198,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			return null;
 		}
 
-		private TypeDefinition FindType(string assembly, string name)
+		protected TypeDefinition FindType(string assembly, string name)
 		{
 			AssemblyDefinition definition = FindAssembly(assembly);
 			if (definition == null)
@@ -242,7 +219,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			return null;
 		}
 
-		private TypeDefinition FindType(string assembly, string @namespace, string name)
+		protected TypeDefinition FindType(string assembly, string @namespace, string name)
 		{
 			AssemblyDefinition definition = FindAssembly(assembly);
 			if (definition == null)
@@ -261,7 +238,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			return null;
 		}
 
-		private TypeDefinition FindType(ScriptIdentifier scriptID)
+		protected TypeDefinition FindType(ScriptIdentifier scriptID)
 		{
 			return FindType(scriptID.Assembly, scriptID.Namespace, scriptID.Name);
 		}
@@ -272,7 +249,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 		/// <param name="type">Type to check</param>
 		/// <param name="arguments">Generic arguments for checking type</param>
 		/// <returns>Is type valid for serialization</returns>
-		private bool IsTypeValid(MonoTypeContext context)
+		protected bool IsTypeValid(MonoTypeContext context)
 		{
 			if (context.Type.IsGenericParameter)
 			{
@@ -357,7 +334,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			return true;
 		}
 
-		private bool IsInheritanceValid(TypeReference type)
+		protected bool IsInheritanceValid(TypeReference type)
 		{
 			while (type != null)
 			{
@@ -380,13 +357,27 @@ namespace AssetRipper.Structure.Assembly.Mono
 			return false;
 		}
 
-		public AssetLayout Layout => m_assemblyManager.Layout;
-		public bool IsSet => true;
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 
-		public const string AssemblyExtension = ".dll";
+		protected void Dispose(bool disposing)
+		{
+			foreach (AssemblyDefinition assembly in m_assemblies.Values)
+			{
+				if (assembly != null)
+				{
+					assembly.Dispose();
+				}
+			}
+		}
 
-		private readonly Dictionary<string, AssemblyDefinition> m_assemblies = new Dictionary<string, AssemblyDefinition>();
-		private readonly Dictionary<string, bool> m_validTypes = new Dictionary<string, bool>();
-		private readonly AssemblyManager m_assemblyManager;
+		~BaseManager()
+		{
+			Dispose(false);
+		}
+
 	}
 }

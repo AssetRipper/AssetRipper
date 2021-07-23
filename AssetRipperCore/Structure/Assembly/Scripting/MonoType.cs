@@ -6,17 +6,17 @@ using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Structure.Assembly.Mono
+namespace AssetRipper.Structure.Assembly.Scripting
 {
 	public class MonoType : SerializableType
 	{
-		internal MonoType(MonoManager manager, TypeReference type) :
-			this(manager, new MonoTypeContext(type))
+		private const string EnumValueFieldName = "value__";
+
+		internal MonoType(BaseManager manager, TypeReference type) : this(manager, new MonoTypeContext(type))
 		{
 		}
 
-		internal MonoType(MonoManager manager, MonoTypeContext context) :
-			base(context.Type.Namespace, ToPrimitiveType(context.Type), MonoUtils.GetName(context.Type))
+		internal MonoType(BaseManager manager, MonoTypeContext context) : base(context.Type.Namespace, ToPrimitiveType(context.Type), MonoUtils.GetName(context.Type))
 		{
 			if (context.Type.ContainsGenericParameter)
 			{
@@ -395,7 +395,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			return ToPrimitiveType(type.Namespace, type.Name);
 		}
 
-		private static SerializableType GetBaseType(MonoManager manager, MonoTypeContext context)
+		private static SerializableType GetBaseType(BaseManager manager, MonoTypeContext context)
 		{
 			MonoTypeContext baseContext = context.GetBase();
 			MonoTypeContext resolvedContext = baseContext.Resolve();
@@ -406,7 +406,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			return manager.GetSerializableType(resolvedContext);
 		}
 
-		private static Field[] CreateFields(MonoManager manager, MonoTypeContext context)
+		private static Field[] CreateFields(BaseManager manager, MonoTypeContext context)
 		{
 			List<Field> fields = new List<Field>();
 			TypeDefinition definition = context.Type.Resolve();
@@ -442,7 +442,5 @@ namespace AssetRipper.Structure.Assembly.Mono
 			}
 			return context;
 		}
-
-		private const string EnumValueFieldName = "value__";
 	}
 }

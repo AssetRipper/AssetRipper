@@ -1,6 +1,6 @@
 using AssetRipper.Converters.Project.Exporters.Script.Elements;
 using AssetRipper.Structure.Assembly;
-using AssetRipper.Structure.Assembly.Mono;
+using AssetRipper.Structure.Assembly.Scripting;
 using AssetRipper.Utils;
 using Mono.Cecil;
 using System;

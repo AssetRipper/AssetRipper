@@ -5,19 +5,21 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AssetRipper.Structure.Assembly.Mono
+namespace AssetRipper.Structure.Assembly.Scripting
 {
 	public readonly struct MonoTypeContext
 	{
-		public MonoTypeContext(TypeReference type) :
-			this(type, GetDeclaringArguments(type))
-		{
-		}
+		public TypeReference Type { get; }
+		/// <summary>
+		/// Arguments of the declaring type, where current Type is located
+		/// </summary>
+		private IReadOnlyDictionary<GenericParameter, TypeReference> Arguments { get; }
 
-		public MonoTypeContext(TypeReference type, MonoTypeContext context) :
-			this(type, context.Arguments)
-		{
-		}
+		private static readonly Dictionary<GenericParameter, TypeReference> s_emptyArguments = new Dictionary<GenericParameter, TypeReference>(0);
+
+		public MonoTypeContext(TypeReference type) : this(type, GetDeclaringArguments(type)) { }
+
+		public MonoTypeContext(TypeReference type, MonoTypeContext context) : this(type, context.Arguments) { }
 
 		public MonoTypeContext(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
@@ -235,12 +237,5 @@ namespace AssetRipper.Structure.Assembly.Mono
 			}
 		}
 
-		public TypeReference Type { get; }
-		/// <summary>
-		/// Arguments of the declaring type, where current Type is located
-		/// </summary>
-		private IReadOnlyDictionary<GenericParameter, TypeReference> Arguments { get; }
-
-		private static readonly Dictionary<GenericParameter, TypeReference> s_emptyArguments = new Dictionary<GenericParameter, TypeReference>(0);
 	}
 }
