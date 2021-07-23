@@ -286,6 +286,7 @@ namespace AssetRipper.Structure.GameStructure
 		}
 
 		public abstract string Name { get; }
+		public string GameDataPath { get; protected set; }
 		public abstract IReadOnlyList<string> DataPaths { get; }
 
 		public abstract IReadOnlyDictionary<string, string> Files { get; }

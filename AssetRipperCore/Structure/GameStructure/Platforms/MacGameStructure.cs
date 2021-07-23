@@ -22,6 +22,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			Name = m_root.Name.Substring(0, m_root.Name.Length - AppExtension.Length);
 
 			string dataPath = Path.Combine(m_root.FullName, ContentsName, DataFolderName);
+			GameDataPath = dataPath;
 			if (!Directory.Exists(dataPath))
 			{
 				throw new Exception("Data directory wasn't found");

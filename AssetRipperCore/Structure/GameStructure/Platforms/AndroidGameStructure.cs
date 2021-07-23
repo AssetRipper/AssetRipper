@@ -25,6 +25,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			}
 
 			string apkDataPath = Path.Combine(rootPath, AssetName, BinName, DataFolderName);
+			GameDataPath = apkDataPath;
 			DirectoryInfo apkDataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(apkDataPath));
 			if (!apkDataDirectory.Exists)
 			{

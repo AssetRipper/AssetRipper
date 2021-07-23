@@ -39,8 +39,23 @@ namespace AssetRipper.Structure
 			public Func<string, string> RequestResourceCallback { get; set; }
 		}
 
-		public GameCollection(Parameters pars) :
-			base(nameof(GameCollection))
+		public AssetLayout Layout { get; }
+
+		public ProjectExporter Exporter { get; }
+		public AssetFactory AssetFactory { get; } = new AssetFactory();
+		public IReadOnlyDictionary<string, SerializedFile> GameFiles => m_files;
+		public IAssemblyManager AssemblyManager { get; }
+
+		private readonly Dictionary<string, SerializedFile> m_files = new Dictionary<string, SerializedFile>();
+		private readonly Dictionary<string, ResourceFile> m_resources = new Dictionary<string, ResourceFile>();
+		private readonly Dictionary<LayoutInfo, AssetLayout> m_layouts = new Dictionary<LayoutInfo, AssetLayout>();
+
+		private readonly HashSet<SerializedFile> m_scenes = new HashSet<SerializedFile>();
+
+		private readonly Func<string, string> m_assemblyCallback;
+		private readonly Func<string, string> m_resourceCallback;
+
+		public GameCollection(Parameters pars) : base(nameof(GameCollection))
 		{
 			Layout = pars.Layout;
 			m_layouts.Add(Layout.Info, Layout);
@@ -48,11 +63,6 @@ namespace AssetRipper.Structure
 			m_assemblyCallback = pars.RequestAssemblyCallback;
 			m_resourceCallback = pars.RequestResourceCallback;
 			Exporter = new ProjectExporter(this);
-		}
-
-		~GameCollection()
-		{
-			Dispose(false);
 		}
 
 		public static FileScheme LoadScheme(string filePath, string fileName)
@@ -116,12 +126,6 @@ namespace AssetRipper.Structure
 		public void ReadAssembly(Stream stream, string fileName)
 		{
 			AssemblyManager.Read(stream, fileName);
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
 		}
 
 		public ISerializedFile FindSerializedFile(string fileName)
@@ -260,15 +264,6 @@ namespace AssetRipper.Structure
 			m_resources.Add(file.Name, file);
 		}
 
-		private void Dispose(bool disposing)
-		{
-			AssemblyManager.Dispose();
-			foreach (ResourceFile res in m_resources.Values)
-			{
-				res?.Dispose();
-			}
-		}
-
 		private bool IsSceneSerializedFile(SerializedFile file)
 		{
 			foreach (ObjectInfo entry in file.Metadata.Object)
@@ -302,20 +297,25 @@ namespace AssetRipper.Structure
 			Logger.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
 		}
 
-		public AssetLayout Layout { get; }
+		private void Dispose(bool disposing)
+		{
+			AssemblyManager.Dispose();
+			foreach (ResourceFile res in m_resources.Values)
+			{
+				res?.Dispose();
+			}
+		}
 
-		public ProjectExporter Exporter { get; }
-		public AssetFactory AssetFactory { get; } = new AssetFactory();
-		public IReadOnlyDictionary<string, SerializedFile> GameFiles => m_files;
-		public IAssemblyManager AssemblyManager { get; }
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 
-		private readonly Dictionary<string, SerializedFile> m_files = new Dictionary<string, SerializedFile>();
-		private readonly Dictionary<string, ResourceFile> m_resources = new Dictionary<string, ResourceFile>();
-		private readonly Dictionary<LayoutInfo, AssetLayout> m_layouts = new Dictionary<LayoutInfo, AssetLayout>();
+		~GameCollection()
+		{
+			Dispose(false);
+		}
 
-		private readonly HashSet<SerializedFile> m_scenes = new HashSet<SerializedFile>();
-
-		private readonly Func<string, string> m_assemblyCallback;
-		private readonly Func<string, string> m_resourceCallback;
 	}
 }

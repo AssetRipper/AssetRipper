@@ -1,6 +1,8 @@
 using AssetRipper.Logging;
 using System;
 using System.IO;
+using System.Text;
+using Cpp2IlApi = Cpp2IL.Core.Cpp2IlApi;
 
 namespace AssetRipper.Structure.Assembly.Scripting
 {
@@ -17,21 +19,30 @@ namespace AssetRipper.Structure.Assembly.Scripting
 		public int[] UnityVersion { get; private set; }
 		public Il2CppManager(AssemblyManager assemblyManager) : base(assemblyManager) { }
 
-		public void Initialize(string gameAssemblyPath, string gameDataPath)
+		public override void Initialize(string gameDataPath)
 		{
-			if (string.IsNullOrWhiteSpace(gameAssemblyPath)) throw new ArgumentNullException(nameof(gameAssemblyPath));
 			if (string.IsNullOrWhiteSpace(gameDataPath)) throw new ArgumentNullException(nameof(gameDataPath));
 
-			GameAssemblyPath = Path.GetFullPath(gameAssemblyPath);
-			RootPath = Path.GetDirectoryName(GameAssemblyPath);
-			UnityPlayerPath = Path.Combine(RootPath, UnityPlayerName);
 			GameDataPath = Path.GetFullPath(gameDataPath);
+			RootPath = (new DirectoryInfo(GameDataPath)).Parent.FullName;
+			GameAssemblyPath = Path.Combine(RootPath, GameAssemblyName);
+			UnityPlayerPath = Path.Combine(RootPath, UnityPlayerName);
 			MetaDataPath = Path.Combine(GameDataPath, "il2cpp_data", "Metadata", "global-metadata.dat");
-			UnityVersion = Cpp2IL.Core.Cpp2IlApi.DetermineUnityVersion(UnityPlayerPath, GameDataPath);
+			UnityVersion = Cpp2IlApi.DetermineUnityVersion(UnityPlayerPath, GameDataPath);
+			Logger.Log(LogType.Info, LogCategory.Import, $"During Il2Cpp initialization, found Unity version: {MakeVersionString(UnityVersion)}");
 
-			Cpp2IL.Core.Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath, MetaDataPath, UnityVersion);
+			Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath, MetaDataPath, UnityVersion);
 
-			var assemblies = Cpp2IL.Core.Cpp2IlApi.MakeDummyDLLs(true);
+			Cpp2IlApi.MakeDummyDLLs(true);
+
+			var keyFunctionAddresses = Cpp2IlApi.ScanForKeyFunctionAddresses();
+
+			Cpp2IlApi.RunAttributeRestorationForAllAssemblies(keyFunctionAddresses);
+
+			foreach(var assembly in Cpp2IlApi.GeneratedAssemblies)
+			{
+				m_assemblies.Add(assembly.FullName, assembly);
+			}
 		}
 
 		public override void Load(string filePath)
@@ -67,6 +78,20 @@ namespace AssetRipper.Structure.Assembly.Scripting
 		{
 			if (assemblyName == null) throw new ArgumentNullException(nameof(assemblyName));
 			else return assemblyName == GameAssemblyName;
+		}
+
+		private static string MakeVersionString(int[] version)
+		{
+			if (version == null || version.Length == 0) return "";
+
+			StringBuilder builder = new StringBuilder();
+			builder.Append(version[0].ToString());
+			for (int i = 1; i < version.Length; i++)
+			{
+				builder.Append(".");
+				builder.Append(version[i].ToString());
+			}
+			return builder.ToString();
 		}
 	}
 }

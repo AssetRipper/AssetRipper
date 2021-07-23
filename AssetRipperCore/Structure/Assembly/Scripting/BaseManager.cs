@@ -25,6 +25,8 @@ namespace AssetRipper.Structure.Assembly
 			m_assemblyManager = assemblyManager ?? throw new ArgumentNullException(nameof(assemblyManager));
 		}
 
+		public virtual void Initialize(string gameDataPath) { }
+
 		protected static string GetUniqueName(TypeReference type)
 		{
 			string assembly = FilenameUtils.FixAssemblyEndian(type.Scope.Name);

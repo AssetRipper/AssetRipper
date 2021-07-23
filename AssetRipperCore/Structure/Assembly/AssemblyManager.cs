@@ -1,6 +1,7 @@
 using AssetRipper.Converters.Project.Exporters.Script;
 using AssetRipper.Converters.Project.Exporters.Script.Elements;
 using AssetRipper.Layout;
+using AssetRipper.Logging;
 using AssetRipper.Structure.Assembly.Scripting;
 using AssetRipper.Structure.Assembly.Serializable;
 using System;
@@ -54,6 +55,15 @@ namespace AssetRipper.Structure.Assembly
 				return scopeName.Substring(0, scopeName.Length - MonoManager.AssemblyExtension.Length);
 			}
 			return scopeName;
+		}
+
+		public void Initialize(string gameDataPath)
+		{
+			if (IsSet && !string.IsNullOrWhiteSpace(gameDataPath))
+			{
+				Logger.Log(LogType.Info, LogCategory.Import, "Initializing Assembly Manager");
+				m_manager.Initialize(gameDataPath);
+			}
 		}
 
 		public void Load(string filePath)

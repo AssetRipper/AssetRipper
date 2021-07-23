@@ -24,6 +24,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 				throw new Exception($"Data directory wasn't found");
 			}
 
+			GameDataPath = dataPath;
 			DataPaths = new string[] { dataPath };
 
 			DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(dataPath));

@@ -15,12 +15,13 @@ namespace AssetRipper.Structure.GameStructure
 {
 	public sealed class GameStructure : IDisposable
 	{
-		private GameStructure() { }
+		public bool IsValid => FileCollection != null;
 
-		~GameStructure()
-		{
-			Dispose(false);
-		}
+		public GameCollection FileCollection { get; private set; }
+		public PlatformGameStructure PlatformStructure { get; private set; }
+		public PlatformGameStructure MixedStructure { get; private set; }
+
+		private GameStructure() { }
 
 		public static GameStructure Load(IEnumerable<string> paths) => Load(paths, null);
 
@@ -119,17 +120,6 @@ namespace AssetRipper.Structure.GameStructure
 			return null;
 		}
 
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		private void Dispose(bool _)
-		{
-			FileCollection?.Dispose();
-		}
-
 		private void Load(List<string> paths, LayoutInfo layinfo)
 		{
 			if (CheckPC(paths)) { }
@@ -164,6 +154,7 @@ namespace AssetRipper.Structure.GameStructure
 					pars.RequestAssemblyCallback = OnRequestAssembly;
 					pars.RequestResourceCallback = OnRequestResource;
 					FileCollection = new GameCollection(pars);
+					FileCollection.AssemblyManager.Initialize(this.PlatformStructure?.GameDataPath);
 					processor.ProcessSchemes(FileCollection);
 				}
 			}
@@ -382,10 +373,21 @@ namespace AssetRipper.Structure.GameStructure
 				}
 			}
 		}
-		public bool IsValid => FileCollection != null;
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 
-		public GameCollection FileCollection { get; private set; }
-		public PlatformGameStructure PlatformStructure { get; private set; }
-		public PlatformGameStructure MixedStructure { get; private set; }
+		private void Dispose(bool _)
+		{
+			FileCollection?.Dispose();
+		}
+
+		~GameStructure()
+		{
+			Dispose(false);
+		}
+
 	}
 }
