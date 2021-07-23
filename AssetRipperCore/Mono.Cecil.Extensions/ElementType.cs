@@ -1,16 +1,13 @@
-//
-// Author:
-//   Jb Evain (jbevain@gmail.com)
-//
-// Copyright (c) 2008 - 2015 Jb Evain
-// Copyright (c) 2008 - 2011 Novell, Inc.
-//
-// Licensed under the MIT/X11 license.
-//
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Mono.Cecil.Metadata {
-
-	public enum ElementType : byte {
+namespace Mono.Cecil.Extensions
+{
+	public enum ElementType : byte
+	{
 		None = 0x00,
 		Void = 0x01,
 		Boolean = 0x02,

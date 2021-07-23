@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Extensions;
 using Mono.Cecil;
+using Mono.Cecil.Extensions;
 using Mono.Cecil.Metadata;
 using System;
 using System.Collections.Generic;
@@ -146,7 +147,7 @@ namespace AssetRipper.Structure.Assembly.Scripting
 		/// </summary>
 		private MonoTypeContext ResolveGenericParameter()
 		{
-			switch (Type.etype)
+			switch (Type.GetEType())
 			{
 				case ElementType.Var:
 				case ElementType.MVar:

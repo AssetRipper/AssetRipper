@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Brotli\Brotli.csproj" />
-    <ProjectReference Include="..\Mono.Cecil\Mono.Cecil.csproj" />
     <ProjectReference Include="..\SevenZip\SevenZip.csproj" />
   </ItemGroup>
 
@@ -55,6 +54,10 @@
     <Compile Remove="obj\**" />
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mono.Cecil" Version="0.11.4" />
   </ItemGroup>
 
 </Project>

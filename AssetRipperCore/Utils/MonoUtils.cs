@@ -1,7 +1,6 @@
 using AssetRipper.Structure.Assembly.Scripting;
 using Mono.Cecil;
 using Mono.Cecil.Extensions;
-using Mono.Cecil.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,7 +12,7 @@ namespace AssetRipper.Utils
 	{
 		public static bool IsSerializablePrimitive(TypeReference type)
 		{
-			switch (type.etype)
+			switch (type.GetEType())
 			{
 				case ElementType.Boolean:
 				case ElementType.Char:
@@ -36,7 +35,7 @@ namespace AssetRipper.Utils
 
 		public static bool IsCPrimitive(TypeReference type)
 		{
-			switch (type.etype)
+			switch (type.GetEType())
 			{
 				case ElementType.Boolean:
 				case ElementType.Char:
@@ -278,7 +277,7 @@ namespace AssetRipper.Utils
 
 			MonoTypeContext context = new MonoTypeContext(checkType, checkContext);
 			MonoTypeContext resolvedContext = context.Resolve();
-			return MetadataResolver.AreSame(type, resolvedContext.Type);
+			return MetadataResolverExtensions.AreSame(type, resolvedContext.Type);
 		}
 
 		public static bool AreSame(MethodDefinition method, MonoTypeContext checkContext, MethodDefinition checkMethod)

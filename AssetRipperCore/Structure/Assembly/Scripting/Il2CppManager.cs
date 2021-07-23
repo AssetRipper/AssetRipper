@@ -31,7 +31,7 @@ namespace AssetRipper.Structure.Assembly.Scripting
 
 			Cpp2IL.Core.Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath, MetaDataPath, UnityVersion);
 
-			//var assemblies = Cpp2IL.Core.Cpp2IlApi.MakeDummyDLLs(true);
+			var assemblies = Cpp2IL.Core.Cpp2IlApi.MakeDummyDLLs(true);
 		}
 
 		public override void Load(string filePath)
