@@ -2,6 +2,7 @@ using AssetRipper.IO.MultiFile;
 using AssetRipper.Logging;
 using AssetRipper.Parser.Utils;
 using AssetRipper.Structure.Assembly;
+using AssetRipper.Structure.Assembly.Il2Cpp;
 using AssetRipper.Structure.Assembly.Mono;
 using AssetRipper.Utils;
 using System;
@@ -98,8 +99,12 @@ namespace AssetRipper.Structure.GameStructure
 				return ScriptingBackend.Unknown;
 			}
 
-			string assemblyPath = Assemblies.First().Value;
-			if (MonoManager.IsMonoAssembly(assemblyPath))
+			string assemblyName = Assemblies.First().Key;
+			if (Il2CppManager.IsIl2Cpp(assemblyName))
+			{
+				return ScriptingBackend.Il2Cpp;
+			}
+			else if (MonoManager.IsMonoAssembly(assemblyName))
 			{
 				return ScriptingBackend.Mono;
 			}
@@ -196,7 +201,11 @@ namespace AssetRipper.Structure.GameStructure
 		protected void CollectMainAssemblies(DirectoryInfo root, IDictionary<string, string> assemblies)
 		{
 			string managedPath = Path.Combine(root.FullName, ManagedName);
-			if (Directory.Exists(managedPath))
+			if (CollectIl2CppGameAssembly(root?.Parent, assemblies))
+			{
+				return;//If Il2Cpp, don't look for any other assemblies
+			}
+			else if (Directory.Exists(managedPath))
 			{
 				DirectoryInfo managedDirectory = new DirectoryInfo(managedPath);
 				CollectAssemblies(managedDirectory, assemblies);
@@ -211,6 +220,26 @@ namespace AssetRipper.Structure.GameStructure
 					CollectAssemblies(libDirectory, assemblies);
 				}
 			}
+		}
+
+		/// <summary>Searches a directory for an il2cpp game assembly</summary>
+		/// <param name="root">The directory to search for the assembly.</param>
+		/// <param name="assemblies">A dictionary to add the assembly to.</param>
+		/// <returns>True if the game assembly was found. False otherwise</returns>
+		protected bool CollectIl2CppGameAssembly(DirectoryInfo root, IDictionary<string, string> assemblies)
+		{
+			if(root != null)
+			{
+				foreach (FileInfo file in root.EnumerateFiles())
+				{
+					if (file.Name == Il2CppManager.GameAssemblyName)
+					{
+						assemblies.Add(file.Name, file.FullName);
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 		private string FindEngineDependency(string path, string dependency)
@@ -261,6 +290,7 @@ namespace AssetRipper.Structure.GameStructure
 		public abstract IReadOnlyList<string> DataPaths { get; }
 
 		public abstract IReadOnlyDictionary<string, string> Files { get; }
+		/// <summary>AssemblyName : AssemblyPath</summary>
 		public abstract IReadOnlyDictionary<string, string> Assemblies { get; }
 
 		protected static readonly Regex s_levelTemplate = new Regex($@"^level(0|[1-9][0-9]*)({MultiFileStream.MultifileRegPostfix}0)?$", RegexOptions.Compiled);

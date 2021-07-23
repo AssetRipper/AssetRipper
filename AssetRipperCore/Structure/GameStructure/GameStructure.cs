@@ -160,6 +160,7 @@ namespace AssetRipper.Structure.GameStructure
 					AssetLayout layout = new AssetLayout(layinfo);
 					GameCollection.Parameters pars = new GameCollection.Parameters(layout);
 					pars.ScriptBackend = GetScriptingBackend();
+					Logger.Log(LogType.Info, LogCategory.Import, $"Files use the '{pars.ScriptBackend}' scripting backend.");
 					pars.RequestAssemblyCallback = OnRequestAssembly;
 					pars.RequestResourceCallback = OnRequestResource;
 					FileCollection = new GameCollection(pars);
