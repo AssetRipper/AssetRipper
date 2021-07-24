@@ -46,6 +46,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperLibrary", "Asset
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTester", "UnitTester\UnitTester.csproj", "{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssueTemplates", "IssueTemplates", "{38C0DDA2-6C7D-41F1-90F6-0B1DDA86C0EC}"
+	ProjectSection(SolutionItems) = preProject
+		.github\ISSUE_TEMPLATE\bug_report.yaml = .github\ISSUE_TEMPLATE\bug_report.yaml
+		.github\ISSUE_TEMPLATE\config.yaml = .github\ISSUE_TEMPLATE\config.yaml
+		.github\ISSUE_TEMPLATE\enhancement.yaml = .github\ISSUE_TEMPLATE\enhancement.yaml
+		.github\ISSUE_TEMPLATE\other.yaml = .github\ISSUE_TEMPLATE\other.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -244,6 +252,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{56F5A3D3-3388-476F-9852-D531BE14A9F8} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
+		{38C0DDA2-6C7D-41F1-90F6-0B1DDA86C0EC} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ED4FF66B-4A6D-4440-8721-23C5ED09791C}

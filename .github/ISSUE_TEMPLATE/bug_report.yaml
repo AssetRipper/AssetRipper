@@ -36,6 +36,17 @@ body:
       description: Please tell us the name of the game and the game's Unity version. If it's a personal or private project, just the Unity version is fine.
     validations:
       required: true
+  - type: dropdown
+    id: backend
+    attributes:
+      label: Is the game Mono or IL2Cpp?
+      description: IL2Cpp games have a GameAssembly.dll in the same directory as the game executable file.
+      options:
+        - Mono
+        - IL2Cpp
+        - Not Applicable
+    validations:
+      required: true
   - type: textarea
     id: what-happened
     attributes:
