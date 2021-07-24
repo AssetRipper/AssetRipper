@@ -1,4 +1,5 @@
 using AssetRipper.Converters.Project.Exporters.Script.Elements;
+using AssetRipper.Structure.Assembly.Mono;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,10 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Mono
 				Definition = @enum.Resolve();
 			}
 
-			NestedName = ScriptExportMonoType.GetNestedName(Type);
-			CleanNestedName = ScriptExportMonoType.ToCleanName(NestedName);
-			Module = ScriptExportMonoType.GetModuleName(Type);
-			FullName = ScriptExportMonoType.GetFullName(Type, Module);
+			NestedName = MonoUtils.GetNestedName(Type);
+			CleanNestedName = MonoUtils.ToCleanName(NestedName);
+			Module = MonoUtils.GetModuleName(Type);
+			FullName = MonoUtils.GetFullName(Type, Module);
 		}
 
 		public override void Init(IScriptExportManager manager)

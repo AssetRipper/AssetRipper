@@ -1,4 +1,6 @@
-﻿namespace Mono.Cecil.Extensions
+﻿using Mono.Cecil;
+
+namespace AssetRipper.Structure.Assembly.Mono.Extensions
 {
 	public static class MethodDefinitionExtensions
 	{

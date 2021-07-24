@@ -4,7 +4,7 @@ using AssetRipper.Structure.Assembly.Serializable;
 using System;
 using System.IO;
 
-namespace AssetRipper.Structure.Assembly
+namespace AssetRipper.Structure.Assembly.Managers
 {
 	public interface IAssemblyManager : IDisposable
 	{

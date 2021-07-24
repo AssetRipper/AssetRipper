@@ -2,7 +2,8 @@
 using AssetRipper.Converters.Project.Exporters.Script.Elements;
 using AssetRipper.Layout;
 using AssetRipper.Parser.Utils;
-using AssetRipper.Structure.Assembly.Scripting;
+using AssetRipper.Structure.Assembly.Managers;
+using AssetRipper.Structure.Assembly.Mono;
 using AssetRipper.Structure.Assembly.Serializable;
 using Mono.Cecil;
 using System;
@@ -162,7 +163,7 @@ namespace AssetRipper.Structure.Assembly
 			{
 				throw new ArgumentException(nameof(context));
 			}
-			if (MonoType.IsSerializableArray(context.Type))
+			if (MonoUtils.IsSerializableArray(context.Type))
 			{
 				throw new ArgumentException(nameof(context));
 			}
@@ -264,7 +265,7 @@ namespace AssetRipper.Structure.Assembly
 				MonoTypeContext arrayContext = new MonoTypeContext(array.ElementType, context);
 				return IsTypeValid(arrayContext);
 			}
-			if (MonoType.IsBuiltinGeneric(context.Type))
+			if (MonoUtils.IsBuiltinGeneric(context.Type))
 			{
 				GenericInstanceType generic = (GenericInstanceType)context.Type;
 				TypeReference element = generic.GenericArguments[0];
@@ -272,7 +273,7 @@ namespace AssetRipper.Structure.Assembly
 				return IsTypeValid(genericContext);
 			}
 
-			if (MonoType.IsPrime(context.Type))
+			if (MonoUtils.IsPrime(context.Type))
 			{
 				return true;
 			}
@@ -321,7 +322,7 @@ namespace AssetRipper.Structure.Assembly
 			IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
 			foreach (FieldDefinition field in definition.Fields)
 			{
-				if (!MonoType.IsSerializableModifier(field))
+				if (!MonoUtils.IsSerializableModifier(field))
 				{
 					continue;
 				}
@@ -350,7 +351,7 @@ namespace AssetRipper.Structure.Assembly
 					return false;
 				}
 
-				if (MonoType.IsMonoBehaviour(definition) || MonoType.IsScriptableObject(definition))
+				if (MonoUtils.IsMonoBehaviour(definition) || MonoUtils.IsScriptableObject(definition))
 				{
 					return true;
 				}

@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Cpp2IlApi = Cpp2IL.Core.Cpp2IlApi;
 
-namespace AssetRipper.Structure.Assembly.Scripting
+namespace AssetRipper.Structure.Assembly.Managers
 {
 	internal sealed class Il2CppManager : BaseManager
 	{

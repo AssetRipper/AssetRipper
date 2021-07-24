@@ -15,11 +15,12 @@ using AssetRipper.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Parser.Files.WebFiles;
 using AssetRipper.Parser.Utils;
 using AssetRipper.Structure.Assembly;
+using AssetRipper.Structure.Assembly.Managers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MonoManager = AssetRipper.Structure.Assembly.Scripting.MonoManager;
+using MonoManager = AssetRipper.Structure.Assembly.Managers.MonoManager;
 using Object = AssetRipper.Parser.Classes.Object.Object;
 
 namespace AssetRipper.Structure

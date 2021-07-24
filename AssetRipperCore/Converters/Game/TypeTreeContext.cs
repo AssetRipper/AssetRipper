@@ -2,7 +2,7 @@
 using AssetRipper.Layout.Classes;
 using AssetRipper.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
-using AssetRipper.Utils;
+using AssetRipper.Structure.Assembly.Mono;
 using System;
 using System.Collections.Generic;
 

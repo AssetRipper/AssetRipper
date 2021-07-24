@@ -3,7 +3,7 @@ using AssetRipper.Parser.Classes;
 using AssetRipper.Parser.Classes.Object;
 using AssetRipper.Parser.Files.ResourceFiles;
 using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Structure.Assembly;
+using AssetRipper.Structure.Assembly.Managers;
 using System.Collections.Generic;
 
 namespace AssetRipper.Structure

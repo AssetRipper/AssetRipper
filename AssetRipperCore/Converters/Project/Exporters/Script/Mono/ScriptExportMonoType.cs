@@ -1,9 +1,8 @@
 using AssetRipper.Converters.Project.Exporters.Script.Elements;
-using AssetRipper.Structure.Assembly;
-using AssetRipper.Structure.Assembly.Scripting;
-using AssetRipper.Utils;
+using AssetRipper.Structure.Assembly.Managers;
+using AssetRipper.Structure.Assembly.Mono;
+using AssetRipper.Structure.Assembly.Mono.Extensions;
 using Mono.Cecil;
-using Mono.Cecil.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,248 +24,12 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Mono
 				Definition = type.Resolve();
 			}
 
-			CleanName = GetSimpleName(Type);
-			TypeName = GetTypeName(Type);
-			NestedName = GetNestedName(Type, TypeName);
-			CleanNestedName = ToCleanName(NestedName);
-			Module = GetModuleName(Type);
-			FullName = GetFullName(Type, Module);
-		}
-
-		public static string GetNestedName(TypeReference type)
-		{
-			string typeName = GetTypeName(type);
-			return GetNestedName(type, typeName);
-		}
-
-		public static string GetNestedName(TypeReference type, string typeName)
-		{
-			if (type.IsGenericParameter)
-			{
-				return typeName;
-			}
-			if (type.IsArray)
-			{
-				return GetNestedName(type.GetElementType(), typeName);
-			}
-			if (type.IsNested)
-			{
-				string declaringName;
-				if (type.IsGenericInstance)
-				{
-					GenericInstanceType generic = (GenericInstanceType)type;
-					int argumentCount = MonoUtils.GetGenericArgumentCount(generic);
-					List<TypeReference> genericArguments = new List<TypeReference>(generic.GenericArguments.Count - argumentCount);
-					for (int i = 0; i < generic.GenericArguments.Count - argumentCount; i++)
-					{
-						genericArguments.Add(generic.GenericArguments[i]);
-					}
-					declaringName = GetNestedGenericName(type.DeclaringType, genericArguments);
-				}
-				else if (type.HasGenericParameters)
-				{
-					List<TypeReference> genericArguments = new List<TypeReference>(type.GenericParameters);
-					declaringName = GetNestedGenericName(type.DeclaringType, genericArguments);
-				}
-				else
-				{
-					declaringName = GetNestedName(type.DeclaringType);
-				}
-				return $"{declaringName}.{typeName}";
-			}
-			return typeName;
-		}
-
-		public static string ToCleanName(string name)
-		{
-			int openIndex = name.IndexOf('<');
-			if (openIndex == -1)
-			{
-				return name;
-			}
-			string firstPart = name.Substring(0, openIndex);
-			int closeIndex = name.IndexOf('>');
-			string secondPart = name.Substring(closeIndex + 1, name.Length - (closeIndex + 1));
-			return firstPart + ToCleanName(secondPart);
-		}
-
-		public static string GetSimpleName(TypeReference type)
-		{
-			string name = type.Name;
-			int index = name.IndexOf('`');
-			if (index == -1)
-			{
-				return name;
-			}
-
-			bool strip = false;
-			StringBuilder sb = new StringBuilder(name.Length);
-			foreach (char c in name)
-			{
-				if (c == '`')
-				{
-					strip = true;
-				}
-				else if (!char.IsDigit(c))
-				{
-					strip = false;
-				}
-
-				if (!strip)
-				{
-					sb.Append(c);
-				}
-			}
-
-			return sb.ToString();
-		}
-
-		public static string GetTypeName(TypeReference type)
-		{
-			if (MonoType.IsCPrimitive(type))
-			{
-				return MonoUtils.ToCPrimitiveString(type.Name);
-			}
-
-			if (type.IsGenericInstance)
-			{
-				GenericInstanceType generic = (GenericInstanceType)type;
-				return GetGenericInstanceName(generic);
-			}
-			else if (type.HasGenericParameters)
-			{
-				return GetGenericTypeName(type);
-			}
-			else if (type.IsArray)
-			{
-				ArrayType array = (ArrayType)type;
-				return GetTypeName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
-			}
-			return type.Name;
-		}
-
-		public static string GetFullName(TypeReference type)
-		{
-			string module = GetModuleName(type);
-			return GetFullName(type, module);
-		}
-
-		public static string GetFullName(TypeReference type, string module)
-		{
-			string name = GetNestedName(type);
-			string fullName = $"{type.Namespace}.{name}";
-			return ScriptExportManager.ToFullName(module, fullName);
-		}
-
-		public static string GetModuleName(TypeReference type)
-		{
-			// reference and definition may has differrent module, so to avoid duplicates we need try to get defition
-			TypeReference definition = type.ResolveOrDefault();
-			definition = definition == null ? type : definition;
-			return AssemblyManager.ToAssemblyName(definition.Scope.Name);
-		}
-
-		public static bool HasMember(TypeReference type, string name)
-		{
-			if (type == null)
-			{
-				return false;
-			}
-			if (type.Module == null)
-			{
-				return false;
-			}
-			TypeDefinition definition = type.Resolve();
-			if (definition == null)
-			{
-				return false;
-			}
-
-			foreach (FieldDefinition field in definition.Fields)
-			{
-				if (field.Name == name)
-				{
-					return true;
-				}
-			}
-			foreach (PropertyDefinition property in definition.Properties)
-			{
-				if (property.Name == name)
-				{
-					return true;
-				}
-			}
-			return HasMember(definition.BaseType, name);
-		}
-
-		private static string GetNestedGenericName(TypeReference type, List<TypeReference> genericArguments)
-		{
-			string name = type.Name;
-			if (type.HasGenericParameters)
-			{
-				name = GetGenericTypeName(type, genericArguments);
-				int argumentCount = MonoUtils.GetGenericParameterCount(type);
-				genericArguments.RemoveRange(genericArguments.Count - argumentCount, argumentCount);
-			}
-			if (type.IsNested)
-			{
-				string declaringName = GetNestedGenericName(type.DeclaringType, genericArguments);
-				return $"{declaringName}.{name}";
-			}
-			else
-			{
-				return name;
-			}
-		}
-
-		private static string GetGenericTypeName(TypeReference genericType)
-		{
-			// TypeReference contain parameters with "<!0,!1> (!index)" name but TypeDefinition's name is "<T1,T2> (RealParameterName)"
-			genericType = genericType.ResolveOrDefault();
-			return MonoUtils.GetGenericName(genericType, genericType.GenericParameters);
-		}
-
-		private static string GetGenericTypeName(TypeReference genericType, IReadOnlyList<TypeReference> genericArguments)
-		{
-			genericType = genericType.ResolveOrDefault();
-			return GetGenericName(genericType, genericArguments);
-		}
-
-		private static string GetGenericInstanceName(GenericInstanceType genericInstance)
-		{
-			return MonoUtils.GetGenericName(genericInstance.ElementType, genericInstance.GenericArguments);
-		}
-
-		private static string GetGenericName(TypeReference genericType, IReadOnlyList<TypeReference> genericArguments)
-		{
-			string name = genericType.Name;
-			int argumentCount = MonoUtils.GetGenericParameterCount(genericType);
-			int index = name.IndexOf('`');
-			if (argumentCount == 0 || index < 0)
-			{
-				// nested class/enum (of generic class) is a generic instance but it doesn't have '`' symbol in its name
-				return name;
-			}
-
-			StringBuilder sb = new StringBuilder(genericType.Name, 0, index, 50 + index);
-			sb.Append('<');
-			for (int i = genericArguments.Count - argumentCount; i < genericArguments.Count; i++)
-			{
-				TypeReference arg = genericArguments[i];
-				string argumentName = GetArgumentName(arg);
-				sb.Append(argumentName);
-				if (i < genericArguments.Count - 1)
-				{
-					sb.Append(", ");
-				}
-			}
-			sb.Append('>');
-			return sb.ToString();
-		}
-
-		private static string GetArgumentName(TypeReference type)
-		{
-			return GetNestedName(type);
+			CleanName = MonoUtils.GetSimpleName(Type);
+			TypeName = MonoUtils.GetTypeName(Type);
+			NestedName = MonoUtils.GetNestedName(Type, TypeName);
+			CleanNestedName = MonoUtils.ToCleanName(NestedName);
+			Module = MonoUtils.GetModuleName(Type);
+			FullName = MonoUtils.GetFullName(Type, Module);
 		}
 
 		public override void Init(IScriptExportManager manager)
@@ -310,7 +73,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Mono
 			{
 				return true;
 			}
-			return HasMember(Type, name);
+			return MonoUtils.HasMember(Type, name);
 		}
 
 		private ScriptExportConstructor CreateConstructor(IScriptExportManager manager)
@@ -412,8 +175,8 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Mono
 					break;
 				}
 
-				string module = GetModuleName(definition);
-				bool isBuiltIn = ScriptExportManager.IsBuiltinLibrary(module);
+				string module = MonoUtils.GetModuleName(definition);
+				bool isBuiltIn = MonoUtils.IsBuiltinLibrary(module);
 				IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
 				// definition is a Template for GenericInstance, so we must recreate context
 				MonoTypeContext definitionContext = new MonoTypeContext(definition, arguments);
@@ -482,8 +245,8 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Mono
 					break;
 				}
 
-				string module = GetModuleName(context.Type);
-				bool isBuiltIn = ScriptExportManager.IsBuiltinLibrary(module);
+				string module = MonoUtils.GetModuleName(context.Type);
+				bool isBuiltIn = MonoUtils.IsBuiltinLibrary(module);
 				foreach (PropertyDefinition property in definition.Properties)
 				{
 					MethodDefinition method = property.GetMethod == null ? property.SetMethod : property.GetMethod;
@@ -520,7 +283,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Mono
 			List<ScriptExportField> fields = new List<ScriptExportField>();
 			foreach (FieldDefinition field in Definition.Fields)
 			{
-				if (!MonoType.IsSerializableModifier(field))
+				if (!MonoUtils.IsSerializableModifier(field))
 				{
 					continue;
 				}
@@ -529,7 +292,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Mono
 				if (IsSerializationApplicable(field.FieldType))
 				{
 					MonoFieldContext scope = new MonoFieldContext(field, manager.Layout);
-					if (!MonoType.IsFieldTypeSerializable(scope))
+					if (!MonoUtils.IsFieldTypeSerializable(scope))
 					{
 						continue;
 					}

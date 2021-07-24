@@ -1,6 +1,7 @@
-﻿using System.Reflection;
+﻿using Mono.Cecil;
+using System.Reflection;
 
-namespace Mono.Cecil.Extensions
+namespace AssetRipper.Structure.Assembly.Mono.Extensions
 {
 	public static class TypeReferenceExtensions
 	{

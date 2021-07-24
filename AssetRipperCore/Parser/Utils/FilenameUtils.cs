@@ -1,4 +1,4 @@
-using AssetRipper.Structure.Assembly.Scripting;
+using AssetRipper.Structure.Assembly.Managers;
 using System;
 using System.IO;
 

@@ -2,7 +2,7 @@ using AssetRipper.IO.MultiFile;
 using AssetRipper.Logging;
 using AssetRipper.Parser.Utils;
 using AssetRipper.Structure.Assembly;
-using AssetRipper.Structure.Assembly.Scripting;
+using AssetRipper.Structure.Assembly.Managers;
 using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,5 @@
 using AssetRipper.Converters.Project.Exporters.Script.Elements;
+using AssetRipper.Structure.Assembly.Mono;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,9 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Mono
 
 			Type = @delegate;
 
-			NestedName = ScriptExportMonoType.GetNestedName(Type);
-			Module = ScriptExportMonoType.GetModuleName(Type);
-			FullName = ScriptExportMonoType.GetFullName(Type, Module);
+			NestedName = MonoUtils.GetNestedName(Type);
+			Module = MonoUtils.GetModuleName(Type);
+			FullName = MonoUtils.GetFullName(Type, Module);
 		}
 
 		public static bool IsDelegate(TypeDefinition type)

@@ -2,13 +2,12 @@ using AssetRipper.Converters.Project.Exporters.Script;
 using AssetRipper.Converters.Project.Exporters.Script.Elements;
 using AssetRipper.Layout;
 using AssetRipper.Logging;
-using AssetRipper.Structure.Assembly.Scripting;
 using AssetRipper.Structure.Assembly.Serializable;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Structure.Assembly
+namespace AssetRipper.Structure.Assembly.Managers
 {
 	public sealed class AssemblyManager : IAssemblyManager
 	{

@@ -6,6 +6,7 @@ using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using Object = AssetRipper.Parser.Classes.Object.Object;
+using AssetRipper.Structure.Assembly.Mono;
 
 namespace AssetRipper.Structure.Assembly.Serializable
 {
@@ -95,7 +96,7 @@ namespace AssetRipper.Structure.Assembly.Serializable
 			}
 			if (field.Type.Type == PrimitiveType.Complex)
 			{
-				if (SerializableType.IsEngineStruct(field.Type.Namespace, field.Type.Name))
+				if (MonoUtils.IsEngineStruct(field.Type.Namespace, field.Type.Name))
 				{
 					return true;
 				}

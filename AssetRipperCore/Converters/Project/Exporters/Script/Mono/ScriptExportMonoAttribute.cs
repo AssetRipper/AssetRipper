@@ -1,4 +1,5 @@
 using AssetRipper.Converters.Project.Exporters.Script.Elements;
+using AssetRipper.Structure.Assembly.Mono;
 using Mono.Cecil;
 using System;
 using System.IO;
@@ -16,18 +17,18 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Mono
 
 			Attribute = attribute;
 
-			Module = ScriptExportMonoType.GetModuleName(Attribute.AttributeType);
+			Module = MonoUtils.GetModuleName(Attribute.AttributeType);
 			FullName = ToFullName(Attribute, Module);
 		}
 
 		public static string ToFullName(CustomAttribute attribute)
 		{
-			return ScriptExportMonoType.GetFullName(attribute.AttributeType);
+			return MonoUtils.GetFullName(attribute.AttributeType);
 		}
 
 		public static string ToFullName(CustomAttribute attribute, string module)
 		{
-			return ScriptExportMonoType.GetFullName(attribute.AttributeType, module);
+			return MonoUtils.GetFullName(attribute.AttributeType, module);
 		}
 
 		private static string GetModule(TypeReference type)

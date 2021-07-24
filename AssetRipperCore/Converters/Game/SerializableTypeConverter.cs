@@ -6,6 +6,7 @@ using AssetRipper.Layout.Classes.Misc.Serializable;
 using AssetRipper.Layout.Classes.Misc.Serializable.GUIStyle;
 using AssetRipper.Parser.Classes;
 using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
+using AssetRipper.Structure.Assembly.Mono;
 using AssetRipper.Structure.Assembly.Serializable;
 using System;
 using System.Linq;
@@ -67,10 +68,10 @@ namespace AssetRipper.Converters.Game
 		{
 			switch (origin.Name)
 			{
-				case SerializableType.FloatCurveName:
-				case SerializableType.Vector3CurveName:
-				case SerializableType.QuaternionCurveName:
-				case SerializableType.PPtrCurveName:
+				case MonoUtils.FloatCurveName:
+				case MonoUtils.Vector3CurveName:
+				case MonoUtils.QuaternionCurveName:
+				case MonoUtils.PPtrCurveName:
 					return true;
 
 				default:
@@ -82,16 +83,16 @@ namespace AssetRipper.Converters.Game
 		{
 			switch (origin.Name)
 			{
-				case SerializableType.FloatCurveName:
+				case MonoUtils.FloatCurveName:
 					FloatCurveLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.Vector3CurveName:
+				case MonoUtils.Vector3CurveName:
 					Vector3CurveLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.QuaternionCurveName:
+				case MonoUtils.QuaternionCurveName:
 					QuaternionCurveLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.PPtrCurveName:
+				case MonoUtils.PPtrCurveName:
 					PPtrCurveLayout.GenerateTypeTree(context, name);
 					break;
 
@@ -104,58 +105,58 @@ namespace AssetRipper.Converters.Game
 		{
 			switch (origin.Name)
 			{
-				case SerializableType.Vector2Name:
+				case MonoUtils.Vector2Name:
 					Vector2fLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.Vector2IntName:
+				case MonoUtils.Vector2IntName:
 					Vector2iLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.Vector3Name:
+				case MonoUtils.Vector3Name:
 					Vector3fLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.Vector3IntName:
+				case MonoUtils.Vector3IntName:
 					Vector3iLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.Vector4Name:
+				case MonoUtils.Vector4Name:
 					Vector4fLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.RectName:
+				case MonoUtils.RectName:
 					RectfLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.BoundsName:
+				case MonoUtils.BoundsName:
 					AABBLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.BoundsIntName:
+				case MonoUtils.BoundsIntName:
 					AABBiLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.QuaternionName:
+				case MonoUtils.QuaternionName:
 					QuaternionfLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.Matrix4x4Name:
+				case MonoUtils.Matrix4x4Name:
 					Matrix4x4fLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.ColorName:
+				case MonoUtils.ColorName:
 					ColorRGBAfLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.Color32Name:
+				case MonoUtils.Color32Name:
 					ColorRGBA32Layout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.LayerMaskName:
+				case MonoUtils.LayerMaskName:
 					LayerMaskLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.AnimationCurveName:
+				case MonoUtils.AnimationCurveName:
 					AnimationCurveTplLayout.GenerateTypeTree(context, name, SingleLayout.GenerateTypeTree);
 					break;
-				case SerializableType.GradientName:
+				case MonoUtils.GradientName:
 					GradientLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.RectOffsetName:
+				case MonoUtils.RectOffsetName:
 					RectOffsetLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.GUIStyleName:
+				case MonoUtils.GUIStyleName:
 					GUIStyleLayout.GenerateTypeTree(context, name);
 					break;
-				case SerializableType.PropertyNameName:
+				case MonoUtils.PropertyNameName:
 					PropertyNameLayout.GenerateTypeTree(context, name);
 					break;
 

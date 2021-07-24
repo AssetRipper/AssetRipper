@@ -19,8 +19,7 @@ namespace AssetRipper.Structure.Collections
 	public class TextureExportCollection : AssetsExportCollection
 	{
 #warning TODO: optimize (now it is suuuuuuuuper slow)
-		public TextureExportCollection(IAssetExporter assetExporter, Texture2D texture, bool convert) :
-			base(assetExporter, texture)
+		public TextureExportCollection(IAssetExporter assetExporter, Texture2D texture, bool convert) : base(assetExporter, texture)
 		{
 			m_convert = convert;
 			if (convert)

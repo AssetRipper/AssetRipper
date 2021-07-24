@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Mono.Cecil;
+using System;
 using System.Reflection;
 
-namespace Mono.Cecil.Extensions
+namespace AssetRipper.Structure.Assembly.Mono.Extensions
 {
 	public static class MetadataResolverExtensions 
 	{

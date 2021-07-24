@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mono.Cecil.Extensions
+﻿namespace AssetRipper.Structure.Assembly.Mono
 {
 	public enum ElementType : byte
 	{

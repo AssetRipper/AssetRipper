@@ -3,7 +3,8 @@ using AssetRipper.Converters.Project.Exporters.Script.Mono;
 using AssetRipper.IO;
 using AssetRipper.Layout;
 using AssetRipper.Logging;
-using AssetRipper.Structure.Assembly;
+using AssetRipper.Structure.Assembly.Managers;
+using AssetRipper.Structure.Assembly.Mono;
 using AssetRipper.Utils;
 using Mono.Cecil;
 using System;
@@ -24,66 +25,6 @@ namespace AssetRipper.Converters.Project.Exporters.Script
 			}
 			Layout = layout;
 			m_exportPath = exportPath;
-		}
-
-		public static string ToFullName(string module, string fullname)
-		{
-			return $"[{module}]{fullname}";
-		}
-
-		public static bool IsBuiltinLibrary(string module)
-		{
-			if (IsFrameworkLibrary(module))
-			{
-				return true;
-			}
-			if (IsUnityLibrary(module))
-			{
-				return true;
-			}
-
-			return false;
-		}
-
-		public static bool IsFrameworkLibrary(string module)
-		{
-			switch (module)
-			{
-				case MSCoreLibName:
-				case NetStandardName:
-				case SystemName:
-				case CLRName:
-					return true;
-
-				default:
-					return module.StartsWith($"{SystemName}.", StringComparison.Ordinal);
-			}
-		}
-
-		public static bool IsUnityLibrary(string module)
-		{
-			switch (module)
-			{
-				case UnityEngineName:
-				case BooName:
-				case BooLangName:
-				case UnityScriptName:
-				case UnityScriptLangName:
-					return true;
-
-				default:
-					{
-						if (module.StartsWith($"{UnityEngineName}.", StringComparison.Ordinal))
-						{
-							return true;
-						}
-						if (module.StartsWith($"{MonoName}.", StringComparison.Ordinal))
-						{
-							return true;
-						}
-						return false;
-					}
-			}
 		}
 
 		private static string GetExportSubPath(string assembly, string @namespace, string @class)
@@ -219,7 +160,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script
 				}
 			}
 
-			string fullname = ScriptExportMonoType.GetFullName(type);
+			string fullname = MonoUtils.GetFullName(type);
 			if (m_types.TryGetValue(fullname, out ScriptExportType exportType))
 			{
 				return exportType;
@@ -229,7 +170,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script
 
 		public ScriptExportArray RetrieveArray(TypeReference array)
 		{
-			string fullname = ScriptExportMonoType.GetFullName(array);
+			string fullname = MonoUtils.GetFullName(array);
 			if (m_arrays.TryGetValue(fullname, out ScriptExportArray exportArray))
 			{
 				return exportArray;
@@ -239,7 +180,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script
 
 		public ScriptExportPointer RetrievePointer(TypeReference pointer)
 		{
-			string fullname = ScriptExportMonoType.GetFullName(pointer);
+			string fullname = MonoUtils.GetFullName(pointer);
 			if (m_pointers.TryGetValue(fullname, out ScriptExportPointer exportArray))
 			{
 				return exportArray;
@@ -249,7 +190,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script
 
 		public ScriptExportGeneric RetrieveGeneric(TypeReference generic)
 		{
-			string fullname = ScriptExportMonoType.GetFullName(generic);
+			string fullname = MonoUtils.GetFullName(generic);
 			if (m_generic.TryGetValue(fullname, out ScriptExportGeneric exportGeneric))
 			{
 				return exportGeneric;
@@ -259,7 +200,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script
 
 		public ScriptExportEnum RetrieveEnum(TypeDefinition @enum)
 		{
-			string fullname = ScriptExportMonoType.GetFullName(@enum);
+			string fullname = MonoUtils.GetFullName(@enum);
 			if (m_enums.TryGetValue(fullname, out ScriptExportEnum exportEnum))
 			{
 				return exportEnum;
@@ -269,7 +210,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script
 
 		public ScriptExportDelegate RetrieveDelegate(TypeDefinition @delegate)
 		{
-			string fullname = ScriptExportMonoType.GetFullName(@delegate);
+			string fullname = MonoUtils.GetFullName(@delegate);
 			if (m_delegates.TryGetValue(fullname, out ScriptExportDelegate exportDelegate))
 			{
 				return exportDelegate;
@@ -425,7 +366,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script
 
 		private static bool IsBuiltInType(ScriptExportType type)
 		{
-			return IsBuiltinLibrary(type.Module);
+			return MonoUtils.IsBuiltinLibrary(type.Module);
 		}
 
 		public AssetLayout Layout { get; }
@@ -433,17 +374,6 @@ namespace AssetRipper.Converters.Project.Exporters.Script
 		public IEnumerable<ScriptExportType> Types => m_types.Values;
 		public IEnumerable<ScriptExportEnum> Enums => m_enums.Values;
 		public IEnumerable<ScriptExportDelegate> Delegates => m_delegates.Values;
-
-		private const string MSCoreLibName = "mscorlib";
-		private const string NetStandardName = "netstandard";
-		private const string SystemName = "System";
-		private const string CLRName = "CommonLanguageRuntimeLibrary";
-		private const string UnityEngineName = "UnityEngine";
-		private const string BooName = "Boo";
-		private const string BooLangName = "Boo.Lang";
-		private const string UnityScriptName = "UnityScript";
-		private const string UnityScriptLangName = "UnityScript.Lang";
-		private const string MonoName = "Mono";
 
 		private readonly Dictionary<string, ScriptExportType> m_types = new Dictionary<string, ScriptExportType>();
 		private readonly Dictionary<string, ScriptExportArray> m_arrays = new Dictionary<string, ScriptExportArray>();

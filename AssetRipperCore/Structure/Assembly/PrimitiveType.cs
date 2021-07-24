@@ -1,6 +1,6 @@
 using System;
 
-namespace AssetRipper.Structure.Assembly.Serializable
+namespace AssetRipper.Structure.Assembly
 {
 	public enum PrimitiveType
 	{
@@ -15,6 +15,7 @@ namespace AssetRipper.Structure.Assembly.Serializable
 		UInt,
 		Long,
 		ULong,
+		Half,
 		Single,
 		Double,
 		String,
@@ -35,6 +36,7 @@ namespace AssetRipper.Structure.Assembly.Serializable
 
 				case PrimitiveType.Short:
 				case PrimitiveType.UShort:
+				case PrimitiveType.Half:
 					return 2;
 
 				case PrimitiveType.Int:

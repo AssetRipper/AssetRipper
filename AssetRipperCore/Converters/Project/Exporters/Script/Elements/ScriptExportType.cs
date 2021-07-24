@@ -1,4 +1,5 @@
 using AssetRipper.Extensions;
+using AssetRipper.Structure.Assembly.Mono;
 using AssetRipper.Structure.Assembly.Serializable;
 using System.Collections.Generic;
 using System.IO;
@@ -35,7 +36,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Elements
 
 			writer.WriteIndent(indent);
 			writer.Write("{0} {1} {2}", Keyword, IsStruct ? "struct" : "class", TypeName);
-			if (Base != null && !SerializableType.IsBasic(Base.Namespace, Base.NestedName))
+			if (Base != null && !MonoUtils.IsBasic(Base.Namespace, Base.NestedName))
 			{
 				writer.Write(" : {0}", Base.GetTypeNestedName(DeclaringType));
 			}
@@ -93,7 +94,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Elements
 
 		public virtual void GetTypeNamespaces(ICollection<string> namespaces)
 		{
-			if (SerializableType.IsCPrimitive(Namespace, CleanNestedName))
+			if (MonoUtils.IsCPrimitive(Namespace, CleanNestedName))
 			{
 				return;
 			}
@@ -137,7 +138,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Elements
 				case "audio":
 				case "light":
 				case "collider":
-					return SerializableType.IsComponent(Namespace, NestedName);
+					return MonoUtils.IsComponent(Namespace, NestedName);
 			}
 			return false;
 		}
@@ -202,13 +203,13 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Elements
 
 		private string ExportNamespace()
 		{
-			if (Namespace == SerializableType.UnityEngineNamespace)
+			if (Namespace == MonoUtils.UnityEngineNamespace)
 			{
 				switch (CleanNestedName)
 				{
 					case "NavMeshAgent":
 					case "OffMeshLink":
-						return $"{SerializableType.UnityEngineNamespace}.AI";
+						return $"{MonoUtils.UnityEngineNamespace}.AI";
 				}
 			}
 			return Namespace;

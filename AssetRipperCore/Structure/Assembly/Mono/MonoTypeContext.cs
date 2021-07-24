@@ -1,12 +1,11 @@
 ﻿using AssetRipper.Extensions;
+using AssetRipper.Structure.Assembly.Mono.Extensions;
 using Mono.Cecil;
-using Mono.Cecil.Extensions;
-using Mono.Cecil.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AssetRipper.Structure.Assembly.Scripting
+namespace AssetRipper.Structure.Assembly.Mono
 {
 	public readonly struct MonoTypeContext
 	{

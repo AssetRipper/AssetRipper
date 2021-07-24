@@ -2,7 +2,7 @@ using AssetRipper.Logging;
 using System;
 using System.IO;
 
-namespace AssetRipper.Structure.Assembly.Scripting
+namespace AssetRipper.Structure.Assembly.Managers
 {
 	internal sealed class MonoManager : BaseManager
 	{

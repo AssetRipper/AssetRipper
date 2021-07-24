@@ -6,7 +6,7 @@ using AssetRipper.Parser.Classes.Utils.Extensions;
 using AssetRipper.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Asset;
 using AssetRipper.Structure;
-using AssetRipper.Structure.Assembly;
+using AssetRipper.Structure.Assembly.Managers;
 using System;
 using System.Collections.Generic;
 using Object = AssetRipper.Parser.Classes.Object.Object;
