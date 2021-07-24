@@ -43,7 +43,7 @@
 
   <ItemGroup>
     <PackageReference Include="Mono.Cecil" Version="0.11.4" />
-    <PackageReference Include="Samboy063.Cpp2IL.Core" Version="2021.2.2" />
+    <PackageReference Include="Samboy063.Cpp2IL.Core" Version="2021.2.4.1" />
   </ItemGroup>
 
 </Project>

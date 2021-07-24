@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper.Structure.GameStructure
+namespace AssetRipper.Structure.GameStructure.Platforms
 {
 	public abstract class PlatformGameStructure
 	{

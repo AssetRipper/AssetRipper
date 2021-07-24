@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper.Structure.GameStructure.Platforms;
 
 namespace AssetRipper.Structure.GameStructure
 {
