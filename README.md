@@ -92,7 +92,6 @@ The development of this project has a dedicated [Discord server](https://discord
 
 ## To Do
  * Set up proper build actions
- * Better Issue Templates
  * Predetermined GUID support
 
 

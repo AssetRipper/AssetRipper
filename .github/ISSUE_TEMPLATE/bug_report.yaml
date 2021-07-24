@@ -1,0 +1,56 @@
+name: Bug Report
+description: File a bug or crash report
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for submitting a bug report, please fill out as much detail as possible.
+  - type: checkboxes
+    id: latestversion
+    attributes:
+      label: Are you on the latest version of AssetRipper?
+      description: If not, you must update first.
+      options:
+        - label: Yes, I'm on the latest version of AssetRipper.
+          required: true
+  - type: dropdown
+    id: version
+    attributes:
+      label: Which release are you using?
+      description: Please select your environment for AssetRipper.
+      options:
+        - GUI Version Windows x64
+        - GUI Version Windows x86
+        - Console Version Windows x64
+        - Console Version Windows x86
+        - Console Version MacOS x64
+        - Console Version Linux x64
+    validations:
+      required: true
+  - type: textarea
+    id: game
+    attributes:
+      label: Which game did this occur on?
+      description: Please tell us the name of the game and the game's Unity version. If it's a personal or private project, just the Unity version is fine.
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Describe the issue.
+      description: What happened? Should something else have happened instead? Please provide steps to reproduce the issue if possible.
+      placeholder: Tell us what you see! 
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: |
+        Please drag and drop any relevant logs here.
+        * GUI version: `AssetRipper.log`
+        * Console version: `AssetRipperConsole.log`
+    validations:
+      required: false
