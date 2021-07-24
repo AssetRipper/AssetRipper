@@ -58,7 +58,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		{
 			foreach (FileInfo finfo in rootDiectory.EnumerateFiles())
 			{
-				if (finfo.Extension == x86Extension || finfo.Extension == x64Extension)
+				if (finfo.Extension == x86Extension || finfo.Extension == x64Extension || finfo.Extension == x86_64Extension)
 				{
 					name = Path.GetFileNameWithoutExtension(finfo.Name);
 					string dataFolder = $"{name}_{DataFolderName}";
@@ -83,6 +83,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 
 		private const string x86Extension = ".x86";
 		private const string x64Extension = ".x64";
+		private const string x86_64Extension = ".x86_64";
 
 		private readonly DirectoryInfo m_root;
 	}
