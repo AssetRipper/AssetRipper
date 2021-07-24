@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes.Misc
 {
 	public struct UnityGUID : IAsset, ISerializedReadable, ISerializedWritable
 	{
-		public UnityGUID(Guid guid) :
-			this(guid.ToByteArray())
-		{
-		}
+		public UnityGUID(Guid guid) : this(guid.ToByteArray()) { }
 
 		public UnityGUID(byte[] guidData)
 		{

@@ -10,8 +10,7 @@ namespace AssetRipper.Parser.Classes.UnityConnectSettings
 {
 	public struct UnityAdsSettings : IAssetReadable, IYAMLExportable
 	{
-		public UnityAdsSettings(bool _) :
-			this()
+		public UnityAdsSettings(bool _) : this()
 		{
 			InitializeOnStartup = true;
 			IosGameId = string.Empty;

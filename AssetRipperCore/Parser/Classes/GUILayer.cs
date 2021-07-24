@@ -4,9 +4,6 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class GUILayer : Behaviour
 	{
-		public GUILayer(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public GUILayer(AssetInfo assetInfo) : base(assetInfo) { }
 	}
 }

@@ -12,8 +12,7 @@ namespace AssetRipper.IO
 {
 	public class ShaderWriter : InvariantStreamWriter
 	{
-		public ShaderWriter(Stream stream, Shader shader, Func<Version, GPUPlatform, ShaderTextExporter> exporterInstantiator) :
-			base(stream, new UTF8Encoding(false), 4096, true)
+		public ShaderWriter(Stream stream, Shader shader, Func<Version, GPUPlatform, ShaderTextExporter> exporterInstantiator) : base(stream, new UTF8Encoding(false), 4096, true)
 		{
 			if (shader == null)
 			{

@@ -12,10 +12,7 @@ namespace AssetRipper.Parser.Classes.Camera
 {
 	public sealed class Camera : Behaviour
 	{
-		public Camera(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Camera(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

@@ -4,9 +4,7 @@ namespace AssetRipper.Layout.Classes.Misc.Serializable
 {
 	public sealed class AABBiLayout
 	{
-		public AABBiLayout(LayoutInfo info)
-		{
-		}
+		public AABBiLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{

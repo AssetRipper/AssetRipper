@@ -17,10 +17,7 @@ namespace AssetRipper.Parser.Classes.Misc.Serializable
 			Height = height;
 		}
 
-		public Rectf(Vector2f positon, Vector2f size) :
-			this(positon.X, positon.Y, size.X, size.Y)
-		{
-		}
+		public Rectf(Vector2f positon, Vector2f size) : this(positon.X, positon.Y, size.X, size.Y) { }
 
 		public static bool operator ==(Rectf left, Rectf right)
 		{

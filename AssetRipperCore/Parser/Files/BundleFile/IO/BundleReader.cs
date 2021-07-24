@@ -7,8 +7,7 @@ namespace AssetRipper.Parser.Files.BundleFile.IO
 {
 	public sealed class BundleReader : EndianReader
 	{
-		public BundleReader(Stream stream, EndianType endianess, BundleType signature, BundleVersion generation, BundleFlags flags) :
-			base(stream, endianess)
+		public BundleReader(Stream stream, EndianType endianess, BundleType signature, BundleVersion generation, BundleFlags flags) : base(stream, endianess)
 		{
 			Signature = signature;
 			Generation = generation;

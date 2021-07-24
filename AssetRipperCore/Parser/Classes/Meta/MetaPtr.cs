@@ -23,10 +23,7 @@ namespace AssetRipper.Parser.Classes.Meta
 			AssetType = assetType;
 		}
 
-		public MetaPtr(ClassIDType classID, AssetType assetType) :
-			this(ExportCollection.GetMainExportID((uint)classID), UnityGUID.MissingReference, assetType)
-		{
-		}
+		public MetaPtr(ClassIDType classID, AssetType assetType) : this(ExportCollection.GetMainExportID((uint)classID), UnityGUID.MissingReference, assetType) { }
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{

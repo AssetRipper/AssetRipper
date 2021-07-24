@@ -10,8 +10,7 @@ namespace AssetRipper.IO.Asset
 {
 	public sealed class AssetWriter : EndianWriter
 	{
-		public AssetWriter(Stream stream, EndianType endian, AssetLayout layout) :
-			base(stream, endian, layout.IsAlignArrays)
+		public AssetWriter(Stream stream, EndianType endian, AssetLayout layout) : base(stream, endian, layout.IsAlignArrays)
 		{
 			Layout = layout;
 			IsAlignString = layout.IsAlign;

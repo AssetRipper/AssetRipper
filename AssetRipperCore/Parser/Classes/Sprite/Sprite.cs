@@ -17,10 +17,7 @@ namespace AssetRipper.Parser.Classes.Sprite
 {
 	public sealed class Sprite : NamedObject
 	{
-		public Sprite(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Sprite(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

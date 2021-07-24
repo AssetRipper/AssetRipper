@@ -14,8 +14,7 @@ namespace AssetRipper.Parser.Classes.Meta.Importers
 {
 	public class MonoImporter : AssetImporter
 	{
-		public MonoImporter(AssetLayout layout) :
-			base(layout)
+		public MonoImporter(AssetLayout layout) : base(layout)
 		{
 			if (HasDefaultReferences(layout.Info.Version))
 			{
@@ -23,10 +22,7 @@ namespace AssetRipper.Parser.Classes.Meta.Importers
 			}
 		}
 
-		public MonoImporter(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public MonoImporter(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

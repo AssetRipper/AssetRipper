@@ -21,10 +21,7 @@ namespace AssetRipper.Parser.Classes.LightingDataAsset
 	/// </summary>
 	public sealed class LightingDataAsset : NamedObject
 	{
-		public LightingDataAsset(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public LightingDataAsset(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

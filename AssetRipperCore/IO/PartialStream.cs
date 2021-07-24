@@ -5,10 +5,7 @@ namespace AssetRipper.IO
 {
 	public class PartialStream : Stream
 	{
-		public PartialStream(Stream baseStream, long offset, long length) :
-			this(baseStream, offset, length, true)
-		{
-		}
+		public PartialStream(Stream baseStream, long offset, long length) : this(baseStream, offset, length, true) { }
 
 		public PartialStream(Stream baseStream, long offset, long length, bool leaveOpen)
 		{

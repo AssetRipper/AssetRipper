@@ -5,9 +5,7 @@ namespace AssetRipper.YAML
 {
 	public sealed class YAMLMappingNode : YAMLNode
 	{
-		public YAMLMappingNode()
-		{
-		}
+		public YAMLMappingNode() { }
 
 		public YAMLMappingNode(MappingStyle style)
 		{

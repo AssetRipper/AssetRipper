@@ -12,10 +12,7 @@ namespace AssetRipper.Parser.Classes.SpriteAtlas
 {
 	public sealed class SpriteAtlas : NamedObject
 	{
-		public SpriteAtlas(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public SpriteAtlas(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// Not Release

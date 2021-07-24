@@ -16,10 +16,7 @@ namespace AssetRipper.Parser.Classes
 	/// </summary>
 	public sealed class Cubemap : Texture2D.Texture2D
 	{
-		public Cubemap(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Cubemap(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 4.0.0 and greater

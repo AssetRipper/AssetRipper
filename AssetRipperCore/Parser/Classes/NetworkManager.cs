@@ -12,13 +12,9 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class NetworkManager : GlobalGameManager
 	{
-		public NetworkManager(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public NetworkManager(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public NetworkManager(AssetInfo assetInfo, bool _) :
-			this(assetInfo)
+		public NetworkManager(AssetInfo assetInfo, bool _) : this(assetInfo)
 		{
 			Sendrate = 15.0f;
 			m_assetToPrefab = new Dictionary<UnityGUID, PPtr<GameObject.GameObject>>();

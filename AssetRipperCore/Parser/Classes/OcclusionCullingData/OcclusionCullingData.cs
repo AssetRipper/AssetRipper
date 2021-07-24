@@ -18,13 +18,9 @@ namespace AssetRipper.Parser.Classes.OcclusionCullingData
 {
 	public sealed class OcclusionCullingData : NamedObject
 	{
-		public OcclusionCullingData(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public OcclusionCullingData(AssetInfo assetInfo) : base(assetInfo) { }
 
-		private OcclusionCullingData(AssetLayout layout, AssetInfo assetInfo) :
-			base(layout)
+		private OcclusionCullingData(AssetLayout layout, AssetInfo assetInfo) : base(layout)
 		{
 			AssetInfo = assetInfo;
 			Name = nameof(OcclusionCullingData);

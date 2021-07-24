@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes.Avatar
 {
 	public sealed class Avatar : NamedObject
 	{
-		public Avatar(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Avatar(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 2019.1 and greater

@@ -12,10 +12,7 @@ namespace AssetRipper.Parser.Classes.TagManager
 {
 	public sealed class TagManager : GlobalGameManager
 	{
-		public TagManager(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public TagManager(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

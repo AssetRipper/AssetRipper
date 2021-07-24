@@ -7,10 +7,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class PhysicsMaterial2D : NamedObject
 	{
-		public PhysicsMaterial2D(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public PhysicsMaterial2D(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

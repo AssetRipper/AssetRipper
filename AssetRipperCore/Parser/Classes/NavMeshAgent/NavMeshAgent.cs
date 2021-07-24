@@ -8,10 +8,7 @@ namespace AssetRipper.Parser.Classes.NavMeshAgent
 {
 	public sealed class NavMeshAgent : Behaviour
 	{
-		public NavMeshAgent(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public NavMeshAgent(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 5.6.0 and greater

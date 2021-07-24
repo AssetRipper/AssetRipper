@@ -7,10 +7,7 @@ namespace AssetRipper.Structure.Collections
 {
 	public sealed class FontExportCollection : AssetExportCollection
 	{
-		public FontExportCollection(IAssetExporter assetExporter, Font asset) :
-			base(assetExporter, asset)
-		{
-		}
+		public FontExportCollection(IAssetExporter assetExporter, Font asset) : base(assetExporter, asset) { }
 
 		protected override string GetExportExtension(Object asset)
 		{

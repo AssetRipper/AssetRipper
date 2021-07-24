@@ -8,13 +8,9 @@ namespace AssetRipper.IO.Endian
 {
 	public class EndianReader : BinaryReader
 	{
-		public EndianReader(Stream stream, EndianType endianess) :
-			this(stream, endianess, false)
-		{
-		}
+		public EndianReader(Stream stream, EndianType endianess) : this(stream, endianess, false) { }
 
-		protected EndianReader(Stream stream, EndianType endianess, bool alignArray) :
-			base(stream, Encoding.UTF8, true)
+		protected EndianReader(Stream stream, EndianType endianess, bool alignArray) : base(stream, Encoding.UTF8, true)
 		{
 			EndianType = endianess;
 			IsAlignArray = alignArray;

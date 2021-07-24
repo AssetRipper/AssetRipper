@@ -21,13 +21,9 @@ namespace AssetRipper.Parser.Classes.GraphicsSettings
 	/// </summary>
 	public sealed class GraphicsSettings : GlobalGameManager
 	{
-		public GraphicsSettings(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public GraphicsSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
-		private GraphicsSettings(AssetInfo assetInfo, bool _) :
-			base(assetInfo)
+		private GraphicsSettings(AssetInfo assetInfo, bool _) : base(assetInfo)
 		{
 			AlwaysIncludedShaders = Array.Empty<PPtr<Shader.Shader>>();
 		}

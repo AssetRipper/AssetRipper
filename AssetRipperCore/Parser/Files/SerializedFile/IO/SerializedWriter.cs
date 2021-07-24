@@ -5,8 +5,7 @@ namespace AssetRipper.Parser.Files.SerializedFiles.IO
 {
 	public sealed class SerializedWriter : EndianWriter
 	{
-		public SerializedWriter(Stream stream, EndianType endianess, FormatVersion generation) :
-			base(stream, endianess)
+		public SerializedWriter(Stream stream, EndianType endianess, FormatVersion generation) : base(stream, endianess)
 		{
 			Generation = generation;
 		}

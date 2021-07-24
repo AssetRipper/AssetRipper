@@ -14,10 +14,7 @@ namespace AssetRipper.Parser.Classes.AssetBundle
 {
 	public sealed class AssetBundle : NamedObject
 	{
-		public AssetBundle(Asset.AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public AssetBundle(Asset.AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

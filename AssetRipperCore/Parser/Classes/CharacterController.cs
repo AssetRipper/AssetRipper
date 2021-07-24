@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class CharacterController : Collider
 	{
-		public CharacterController(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public CharacterController(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

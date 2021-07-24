@@ -13,10 +13,7 @@ namespace AssetRipper.Parser.Classes.PhysicsManager
 {
 	public sealed class PhysicsManager : GlobalGameManager
 	{
-		public PhysicsManager(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public PhysicsManager(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

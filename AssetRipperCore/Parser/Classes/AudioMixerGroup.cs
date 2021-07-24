@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes
 #warning TODO: not implemented
 	public sealed class AudioMixerGroup : NamedObject
 	{
-		public AudioMixerGroup(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public AudioMixerGroup(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

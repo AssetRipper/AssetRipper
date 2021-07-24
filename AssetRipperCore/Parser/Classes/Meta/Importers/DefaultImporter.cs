@@ -10,15 +10,9 @@ namespace AssetRipper.Parser.Classes.Meta.Importers
 {
 	public sealed class DefaultImporter : AssetImporter
 	{
-		public DefaultImporter(AssetLayout layout) :
-			base(layout)
-		{
-		}
+		public DefaultImporter(AssetLayout layout) : base(layout) { }
 
-		public DefaultImporter(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public DefaultImporter(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override bool IncludesImporter(Version version)
 		{

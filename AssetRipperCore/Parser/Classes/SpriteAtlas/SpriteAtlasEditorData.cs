@@ -15,9 +15,7 @@ namespace AssetRipper.Parser.Classes.SpriteAtlas
 {
 	public class SpriteAtlasEditorData : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public SpriteAtlasEditorData()
-		{
-		}
+		public SpriteAtlasEditorData() { }
 
 		public SpriteAtlasEditorData(IReadOnlyList<PPtr<Sprite.Sprite>> packables)
 		{

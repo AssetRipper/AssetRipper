@@ -14,10 +14,7 @@ namespace AssetRipper.Parser.Classes.AudioClip
 {
 	public sealed class AudioClip : NamedObject
 	{
-		public AudioClip(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public AudioClip(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

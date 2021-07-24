@@ -12,10 +12,7 @@ namespace AssetRipper.Parser.Classes
 	/// </summary>
 	public sealed class LightmapParameters : NamedObject
 	{
-		public LightmapParameters(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public LightmapParameters(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

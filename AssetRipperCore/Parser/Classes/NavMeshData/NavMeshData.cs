@@ -17,10 +17,7 @@ namespace AssetRipper.Parser.Classes.NavMeshData
 	/// </summary>
 	public sealed class NavMeshData : NamedObject
 	{
-		public NavMeshData(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public NavMeshData(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

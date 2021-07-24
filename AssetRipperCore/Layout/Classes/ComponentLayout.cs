@@ -5,9 +5,7 @@ namespace AssetRipper.Layout.Classes
 {
 	public sealed class ComponentLayout
 	{
-		public ComponentLayout(LayoutInfo info)
-		{
-		}
+		public ComponentLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context)
 		{

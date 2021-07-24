@@ -6,10 +6,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 {
 	public readonly struct MonoFieldContext
 	{
-		public MonoFieldContext(FieldDefinition field, AssetLayout layout) :
-			this(field, null, layout)
-		{
-		}
+		public MonoFieldContext(FieldDefinition field, AssetLayout layout) : this(field, null, layout) { }
 
 		public MonoFieldContext(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments, AssetLayout layout)
 		{

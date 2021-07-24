@@ -6,8 +6,7 @@ namespace AssetRipper.Parser.Files.SerializedFiles.Parser
 {
 	public struct SerializedType : ISerializedReadable, ISerializedWritable
 	{
-		public SerializedType(bool enableTypeTree) :
-			this()
+		public SerializedType(bool enableTypeTree) : this()
 		{
 			if (enableTypeTree)
 			{

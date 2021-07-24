@@ -5,9 +5,7 @@ namespace AssetRipper.Layout.Classes
 {
 	public sealed class NamedObjectLayout
 	{
-		public NamedObjectLayout(LayoutInfo info)
-		{
-		}
+		public NamedObjectLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context)
 		{

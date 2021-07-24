@@ -7,8 +7,7 @@ namespace AssetRipper.Parser.Classes.UnityConnectSettings
 {
 	public struct UnityAnalyticsSettings : IAssetReadable, IYAMLExportable
 	{
-		public UnityAnalyticsSettings(bool _) :
-			this()
+		public UnityAnalyticsSettings(bool _) : this()
 		{
 			InitializeOnStartup = true;
 			TestEventUrl = string.Empty;

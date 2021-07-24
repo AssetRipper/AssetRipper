@@ -12,10 +12,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class MovieTexture : BaseVideoTexture
 	{
-		public MovieTexture(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public MovieTexture(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// Less than 5.0.0

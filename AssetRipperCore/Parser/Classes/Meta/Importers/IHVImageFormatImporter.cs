@@ -14,18 +14,14 @@ namespace AssetRipper.Parser.Classes.Meta.Importers
 	/// </summary>
 	public sealed class IHVImageFormatImporter : AssetImporter
 	{
-		public IHVImageFormatImporter(AssetLayout layout) :
-			base(layout)
+		public IHVImageFormatImporter(AssetLayout layout) : base(layout)
 		{
 			TextureSettings.FilterMode = FilterMode.Bilinear;
 			TextureSettings.Aniso = 1;
 			SRGBTexture = true;
 		}
 
-		public IHVImageFormatImporter(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public IHVImageFormatImporter(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 5.6.0 and greater

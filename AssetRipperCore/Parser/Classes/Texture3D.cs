@@ -14,10 +14,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class Texture3D : Texture
 	{
-		public Texture3D(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Texture3D(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

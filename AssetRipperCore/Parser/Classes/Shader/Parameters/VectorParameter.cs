@@ -15,8 +15,7 @@ namespace AssetRipper.Parser.Classes.Shader.Parameters
 			Dim = (byte)columns;
 		}
 
-		public VectorParameter(string name, ShaderParamType type, int index, int arraySize, int columns) :
-			this(name, type, index, columns)
+		public VectorParameter(string name, ShaderParamType type, int index, int arraySize, int columns) : this(name, type, index, columns)
 		{
 			ArraySize = arraySize;
 		}

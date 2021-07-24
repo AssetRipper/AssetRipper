@@ -15,16 +15,12 @@ namespace AssetRipper.Parser.Classes
 {
 	public class Transform : Component
 	{
-		public Transform(AssetLayout layout) :
-			base(layout)
+		public Transform(AssetLayout layout) : base(layout)
 		{
 			Children = Array.Empty<PPtr<Transform>>();
 		}
 
-		public Transform(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Transform(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public string GetRootPath()
 		{

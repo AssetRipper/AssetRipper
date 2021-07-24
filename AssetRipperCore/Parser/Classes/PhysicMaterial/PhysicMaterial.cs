@@ -9,10 +9,7 @@ namespace AssetRipper.Parser.Classes.PhysicMaterial
 {
 	public sealed class PhysicMaterial : NamedObject
 	{
-		public PhysicMaterial(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public PhysicMaterial(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// Less than 5.2.0

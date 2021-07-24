@@ -13,10 +13,7 @@ namespace AssetRipper.Parser.Classes.TrailRenderer
 {
 	public sealed class TrailRenderer : Renderer.Renderer
 	{
-		public TrailRenderer(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public TrailRenderer(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

@@ -9,9 +9,7 @@ namespace AssetRipper.Parser.Classes.ParticleSystem.Trigger
 {
 	public sealed class TriggerModule : ParticleSystemModule, IDependent
 	{
-		public TriggerModule()
-		{
-		}
+		public TriggerModule() { }
 
 		public TriggerModule(bool _)
 		{

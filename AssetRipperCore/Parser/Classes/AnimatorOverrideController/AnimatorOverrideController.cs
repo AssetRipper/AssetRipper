@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Classes.AnimatorOverrideController
 {
 	public sealed class AnimatorOverrideController : RuntimeAnimatorController
 	{
-		public AnimatorOverrideController(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public AnimatorOverrideController(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

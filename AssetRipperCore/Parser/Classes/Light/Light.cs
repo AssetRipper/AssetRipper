@@ -145,10 +145,7 @@ namespace AssetRipper.Parser.Classes.Light
 		/// </summary>
 		private static bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
 
-		public Light(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Light(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

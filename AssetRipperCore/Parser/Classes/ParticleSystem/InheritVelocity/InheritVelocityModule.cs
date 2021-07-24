@@ -7,12 +7,9 @@ namespace AssetRipper.Parser.Classes.ParticleSystem.InheritVelocity
 {
 	public sealed class InheritVelocityModule : ParticleSystemModule
 	{
-		public InheritVelocityModule()
-		{
-		}
+		public InheritVelocityModule() { }
 
-		public InheritVelocityModule(float value) :
-			base(value != 0.0f)
+		public InheritVelocityModule(float value) : base(value != 0.0f)
 		{
 			Curve = new MinMaxCurve(value);
 		}

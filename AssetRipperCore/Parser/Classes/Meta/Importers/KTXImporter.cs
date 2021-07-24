@@ -14,15 +14,9 @@ namespace AssetRipper.Parser.Classes.Meta.Importers
 	/// </summary>
 	public sealed class KTXImporter : AssetImporter
 	{
-		public KTXImporter(AssetLayout layout) :
-			base(layout)
-		{
-		}
+		public KTXImporter(AssetLayout layout) : base(layout) { }
 
-		public KTXImporter(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public KTXImporter(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override bool IncludesImporter(Version version)
 		{

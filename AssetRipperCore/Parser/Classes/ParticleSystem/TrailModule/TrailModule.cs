@@ -8,9 +8,7 @@ namespace AssetRipper.Parser.Classes.ParticleSystem.TrailModule
 {
 	public sealed class TrailModule : ParticleSystemModule
 	{
-		public TrailModule()
-		{
-		}
+		public TrailModule() { }
 
 		public TrailModule(bool _)
 		{

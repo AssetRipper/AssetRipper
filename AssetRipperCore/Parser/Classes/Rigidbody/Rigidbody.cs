@@ -9,10 +9,7 @@ namespace AssetRipper.Parser.Classes.Rigidbody
 {
 	public sealed class Rigidbody : Component
 	{
-		public Rigidbody(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Rigidbody(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

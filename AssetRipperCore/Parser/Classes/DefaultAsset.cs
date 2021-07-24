@@ -9,16 +9,12 @@ namespace AssetRipper.Parser.Classes
 {
 	public class DefaultAsset : NamedObject
 	{
-		public DefaultAsset(AssetLayout layout) :
-			base(layout)
+		public DefaultAsset(AssetLayout layout) : base(layout)
 		{
 			Message = string.Empty;
 		}
 
-		public DefaultAsset(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public DefaultAsset(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)

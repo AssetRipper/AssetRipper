@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public abstract class Collider : Component
 	{
-		protected Collider(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		protected Collider(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 3.4.0 and greater

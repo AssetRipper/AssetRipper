@@ -14,8 +14,7 @@ namespace AssetRipper.Parser.Classes.QualitySettings
 {
 	public sealed class QualitySettings : GlobalGameManager
 	{
-		public QualitySettings(AssetInfo assetInfo) :
-			base(assetInfo)
+		public QualitySettings(AssetInfo assetInfo) : base(assetInfo)
 		{
 
 		}

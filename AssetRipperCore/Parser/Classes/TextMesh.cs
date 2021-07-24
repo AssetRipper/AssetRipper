@@ -14,10 +14,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class TextMesh : Component
 	{
-		public TextMesh(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public TextMesh(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes.MeshCollider
 {
 	public sealed class MeshCollider : Collider
 	{
-		public MeshCollider(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public MeshCollider(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

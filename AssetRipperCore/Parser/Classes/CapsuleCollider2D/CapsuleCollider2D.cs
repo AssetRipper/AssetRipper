@@ -8,10 +8,7 @@ namespace AssetRipper.Parser.Classes.CapsuleCollider2D
 {
 	public sealed class CapsuleCollider2D : Collider2D
 	{
-		public CapsuleCollider2D(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public CapsuleCollider2D(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

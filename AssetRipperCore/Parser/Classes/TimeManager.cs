@@ -8,10 +8,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class TimeManager : GlobalGameManager
 	{
-		public TimeManager(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public TimeManager(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 3.0.0 and greater

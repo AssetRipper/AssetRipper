@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class OcclusionArea : Component
 	{
-		public OcclusionArea(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public OcclusionArea(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

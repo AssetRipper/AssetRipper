@@ -16,14 +16,12 @@ namespace AssetRipper.Parser.Files.SerializedFiles
 {
 	public sealed class SerializedFileScheme : FileScheme
 	{
-		private SerializedFileScheme(byte[] buffer, string filePath, string fileName) :
-			base(filePath, fileName)
+		private SerializedFileScheme(byte[] buffer, string filePath, string fileName) : base(filePath, fileName)
 		{
 			Stream = new MemoryStream(buffer, 0, buffer.Length, false);
 		}
 
-		private SerializedFileScheme(SmartStream stream, string filePath, string fileName) :
-			base(filePath, fileName)
+		private SerializedFileScheme(SmartStream stream, string filePath, string fileName) : base(filePath, fileName)
 		{
 			if (stream.Length <= int.MaxValue)
 			{

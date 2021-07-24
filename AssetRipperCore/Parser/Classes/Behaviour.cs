@@ -9,16 +9,12 @@ namespace AssetRipper.Parser.Classes
 {
 	public abstract class Behaviour : Component
 	{
-		protected Behaviour(AssetLayout layout) :
-			base(layout)
+		protected Behaviour(AssetLayout layout) : base(layout)
 		{
 			Enabled = 1;
 		}
 
-		protected Behaviour(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		protected Behaviour(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

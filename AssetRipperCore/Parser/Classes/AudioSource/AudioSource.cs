@@ -13,10 +13,7 @@ namespace AssetRipper.Parser.Classes.AudioSource
 {
 	public sealed class AudioSource : AudioBehaviour
 	{
-		public AudioSource(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public AudioSource(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

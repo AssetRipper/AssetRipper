@@ -21,13 +21,9 @@ namespace AssetRipper.Structure.Collections
 {
 	public sealed class BuildSettingsExportCollection : ManagerExportCollection
 	{
-		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile file, Object asset) :
-			this(assetExporter, file, (BuildSettings)asset)
-		{
-		}
+		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile file, Object asset) : this(assetExporter, file, (BuildSettings)asset) { }
 
-		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, BuildSettings asset) :
-			base(assetExporter, asset)
+		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, BuildSettings asset) : base(assetExporter, asset)
 		{
 			EditorBuildSettings = EditorBuildSettings.CreateVirtualInstance(virtualFile);
 			EditorSettings = EditorSettings.CreateVirtualInstance(virtualFile);

@@ -8,9 +8,7 @@ namespace AssetRipper.Layout.Classes
 	/// </summary>
 	public sealed class PrefabLayout
 	{
-		public PrefabLayout(LayoutInfo info)
-		{
-		}
+		public PrefabLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context)
 		{

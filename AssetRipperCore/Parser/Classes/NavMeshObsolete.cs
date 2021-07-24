@@ -16,10 +16,7 @@ namespace AssetRipper.Parser.Classes
 	/// </summary>
 	public sealed class NavMeshObsolete : NamedObject
 	{
-		public NavMeshObsolete(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public NavMeshObsolete(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

@@ -9,10 +9,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class MeshFilter : Component
 	{
-		public MeshFilter(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public MeshFilter(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

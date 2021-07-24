@@ -8,10 +8,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class MeshRenderer : Renderer.Renderer
 	{
-		public MeshRenderer(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public MeshRenderer(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 5.0.0 and greater

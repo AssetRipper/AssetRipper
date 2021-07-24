@@ -9,10 +9,7 @@ namespace AssetRipper.Parser.Classes.ParticleSystemForceField
 {
 	public sealed class ParticleSystemForceField : Behaviour
 	{
-		public ParticleSystemForceField(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public ParticleSystemForceField(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

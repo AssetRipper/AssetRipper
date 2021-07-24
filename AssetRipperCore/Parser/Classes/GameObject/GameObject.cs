@@ -17,8 +17,7 @@ namespace AssetRipper.Parser.Classes.GameObject
 {
 	public sealed class GameObject : EditorExtension
 	{
-		public GameObject(AssetLayout layout) :
-			base(layout)
+		public GameObject(AssetLayout layout) : base(layout)
 		{
 			GameObjectLayout classLayout = layout.GameObject;
 			if (classLayout.IsComponentTuple)
@@ -34,10 +33,7 @@ namespace AssetRipper.Parser.Classes.GameObject
 			IsActive = true;
 		}
 
-		public GameObject(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public GameObject(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public T GetComponent<T>()
 			where T : Component

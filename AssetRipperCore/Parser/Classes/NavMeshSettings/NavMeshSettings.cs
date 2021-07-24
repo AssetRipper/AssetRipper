@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes.NavMeshSettings
 {
 	public sealed class NavMeshSettings : LevelGameManager
 	{
-		public NavMeshSettings(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public NavMeshSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// Not Release

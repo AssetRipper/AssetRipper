@@ -7,13 +7,9 @@ namespace AssetRipper.IO.Endian
 {
 	public class EndianWriter : BinaryWriter
 	{
-		public EndianWriter(Stream stream, EndianType endianess) :
-			this(stream, endianess, false)
-		{
-		}
+		public EndianWriter(Stream stream, EndianType endianess) : this(stream, endianess, false) { }
 
-		protected EndianWriter(Stream stream, EndianType endianess, bool alignArray) :
-			base(stream, Encoding.UTF8, true)
+		protected EndianWriter(Stream stream, EndianType endianess, bool alignArray) : base(stream, Encoding.UTF8, true)
 		{
 			EndianType = endianess;
 			IsAlignArray = alignArray;

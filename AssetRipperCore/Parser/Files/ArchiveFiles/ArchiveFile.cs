@@ -7,8 +7,7 @@ namespace AssetRipper.Parser.Files.ArchiveFiles
 {
 	public sealed class ArchiveFile : FileList
 	{
-		internal ArchiveFile(ArchiveFileScheme scheme) :
-			base(scheme.NameOrigin)
+		internal ArchiveFile(ArchiveFileScheme scheme) : base(scheme.NameOrigin)
 		{
 			Header = scheme.Header;
 		}

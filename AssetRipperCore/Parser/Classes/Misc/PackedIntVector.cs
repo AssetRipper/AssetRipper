@@ -9,8 +9,7 @@ namespace AssetRipper.Parser.Classes.Misc
 {
 	public struct PackedIntVector : IAsset
 	{
-		public PackedIntVector(bool _) :
-			this()
+		public PackedIntVector(bool _) : this()
 		{
 			Data = Array.Empty<byte>();
 		}

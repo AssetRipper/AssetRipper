@@ -327,7 +327,7 @@ namespace AssetRipper.Converters.Project
 				string assetPath = kvp.Key;
 				if (AssetBundle.HasPathExtension(bundle.File.Version))
 				{
-					// custom names may not has extension
+					// custom names may not have extensions
 					int extensionIndex = assetPath.LastIndexOf('.');
 					if (extensionIndex != -1)
 					{
@@ -352,7 +352,7 @@ namespace AssetRipper.Converters.Project
 					m_pathAssets.Add(asset, new ProjectAssetPath(directory, assetPath));
 				}
 			}
-#warning TODO: asset bundle may contains more assets than listed in Container. need to export them in AssetBundleFullPath directory if KeepAssetBundleContentPath is false
+#warning TODO: asset bundle may contain more assets than listed in Container. Need to export them in AssetBundleFullPath directory if KeepAssetBundleContentPath is false
 		}
 
 		public IExportCollection CurrentCollection { get; set; }

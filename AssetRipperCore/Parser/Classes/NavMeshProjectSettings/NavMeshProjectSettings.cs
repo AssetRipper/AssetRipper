@@ -18,13 +18,9 @@ namespace AssetRipper.Parser.Classes.NavMeshProjectSettings
 	/// </summary>
 	public sealed class NavMeshProjectSettings : GlobalGameManager
 	{
-		public NavMeshProjectSettings(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public NavMeshProjectSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
-		private NavMeshProjectSettings(AssetInfo assetInfo, bool _) :
-			this(assetInfo)
+		private NavMeshProjectSettings(AssetInfo assetInfo, bool _) : this(assetInfo)
 		{
 			Areas = new NavMeshAreaData[32];
 			Areas[0] = new NavMeshAreaData("Walkable", 1, 2);

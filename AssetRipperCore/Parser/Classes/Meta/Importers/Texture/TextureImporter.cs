@@ -17,8 +17,7 @@ namespace AssetRipper.Parser.Classes.Meta.Importers.Texture
 {
 	public sealed class TextureImporter : AssetImporter
 	{
-		public TextureImporter(AssetLayout layout) :
-			base(layout)
+		public TextureImporter(AssetLayout layout) : base(layout)
 		{
 			EnableMipMap = 1;
 			SRGBTexture = 1;
@@ -49,10 +48,7 @@ namespace AssetRipper.Parser.Classes.Meta.Importers.Texture
 			Output = new TextureImportOutput(layout);
 		}
 
-		public TextureImporter(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public TextureImporter(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

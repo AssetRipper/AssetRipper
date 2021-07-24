@@ -30,10 +30,7 @@ namespace AssetRipper.Parser.Classes.AnimationClip
 			public IEnumerable<PPtrCurve> PPtrCurves { get; set; }
 		}
 
-		public AnimationClip(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public AnimationClip(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

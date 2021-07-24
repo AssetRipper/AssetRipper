@@ -8,8 +8,7 @@ namespace AssetRipper.Parser.Files.WebFiles
 {
 	public sealed class WebFile : FileList
 	{
-		internal WebFile(WebFileScheme scheme) :
-			base(scheme.NameOrigin)
+		internal WebFile(WebFileScheme scheme) : base(scheme.NameOrigin)
 		{
 			Header = scheme.Header;
 			Metadata = scheme.Metadata;

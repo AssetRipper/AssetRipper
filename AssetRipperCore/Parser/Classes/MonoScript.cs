@@ -22,10 +22,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class MonoScript : TextAsset
 	{
-		public MonoScript(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public MonoScript(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

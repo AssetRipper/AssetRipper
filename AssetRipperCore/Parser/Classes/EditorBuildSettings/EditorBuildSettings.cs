@@ -15,10 +15,7 @@ namespace AssetRipper.Parser.Classes.EditorBuildSettings
 {
 	public sealed class EditorBuildSettings : Object.Object
 	{
-		public EditorBuildSettings(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public EditorBuildSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static EditorBuildSettings CreateVirtualInstance(VirtualSerializedFile virtualFile)
 		{

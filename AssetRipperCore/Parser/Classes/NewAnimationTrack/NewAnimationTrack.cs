@@ -8,10 +8,7 @@ namespace AssetRipper.Parser.Classes.NewAnimationTrack
 {
 	public sealed class NewAnimationTrack : BaseAnimationTrack
 	{
-		public NewAnimationTrack(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public NewAnimationTrack(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

@@ -17,10 +17,7 @@ namespace AssetRipper.Parser.Classes.Mesh
 	/// </summary>
 	public sealed class Mesh : NamedObject
 	{
-		public Mesh(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Mesh(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

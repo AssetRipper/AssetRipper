@@ -11,15 +11,9 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class Prefab : Object.Object
 	{
-		public Prefab(AssetLayout layout) :
-			base(layout)
-		{
-		}
+		public Prefab(AssetLayout layout) : base(layout) { }
 
-		public Prefab(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Prefab(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

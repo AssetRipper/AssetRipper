@@ -16,10 +16,7 @@ namespace AssetRipper.Parser.Classes.OcclusionCullingSettings
 	/// </summary>
 	public sealed class OcclusionCullingSettings : LevelGameManager
 	{
-		public OcclusionCullingSettings(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public OcclusionCullingSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

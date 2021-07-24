@@ -4,9 +4,7 @@ namespace AssetRipper.Layout.Classes.Misc.Serializable
 {
 	public sealed class PropertyNameLayout
 	{
-		public PropertyNameLayout(LayoutInfo info)
-		{
-		}
+		public PropertyNameLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{

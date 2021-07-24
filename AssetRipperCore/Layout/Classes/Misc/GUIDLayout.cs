@@ -5,9 +5,7 @@ namespace AssetRipper.Layout.Classes.Misc
 {
 	public sealed class GUIDLayout
 	{
-		public GUIDLayout(LayoutInfo info)
-		{
-		}
+		public GUIDLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{

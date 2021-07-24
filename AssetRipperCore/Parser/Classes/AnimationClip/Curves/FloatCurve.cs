@@ -12,10 +12,7 @@ namespace AssetRipper.Parser.Classes.AnimationClip.Curves
 {
 	public struct FloatCurve : IAsset, IDependent
 	{
-		public FloatCurve(FloatCurve copy, IReadOnlyList<KeyframeTpl<Float>> keyframes) :
-			this(copy.Path, copy.Attribute, copy.ClassID, copy.Script, keyframes)
-		{
-		}
+		public FloatCurve(FloatCurve copy, IReadOnlyList<KeyframeTpl<Float>> keyframes) : this(copy.Path, copy.Attribute, copy.ClassID, copy.Script, keyframes) { }
 
 		public FloatCurve(string path, string attribute, ClassIDType classID, PPtr<MonoScript> script)
 		{

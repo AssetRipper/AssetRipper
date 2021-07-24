@@ -14,13 +14,9 @@ namespace AssetRipper.Parser.Classes.Physics2DSettings
 {
 	public sealed class Physics2DSettings : GlobalGameManager
 	{
-		public Physics2DSettings(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Physics2DSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
-		private Physics2DSettings(AssetInfo assetInfo, bool _) :
-			base(assetInfo)
+		private Physics2DSettings(AssetInfo assetInfo, bool _) : base(assetInfo)
 		{
 			Gravity = new Vector2f(0.0f, -9.81f);
 			VelocityIterations = 8;

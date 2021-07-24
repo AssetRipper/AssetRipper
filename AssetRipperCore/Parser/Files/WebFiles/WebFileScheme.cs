@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Files.WebFiles
 {
 	public sealed class WebFileScheme : FileSchemeList
 	{
-		private WebFileScheme(string filePath) :
-			base(filePath, string.Empty)
-		{
-		}
+		private WebFileScheme(string filePath) : base(filePath, string.Empty) { }
 
 		internal static WebFileScheme ReadScheme(byte[] buffer, string filePath)
 		{

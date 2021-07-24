@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class TerrainLayer : NamedObject
 	{
-		public TerrainLayer(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public TerrainLayer(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

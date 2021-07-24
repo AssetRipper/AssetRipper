@@ -13,9 +13,7 @@ namespace AssetRipper.Parser.Classes.QualitySettings
 {
 	public class QualitySetting : IAssetReadable, IYAMLExportable
 	{
-		public QualitySetting()
-		{
-		}
+		public QualitySetting() { }
 
 		public QualitySetting(bool _)
 		{

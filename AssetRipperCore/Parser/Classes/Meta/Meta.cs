@@ -10,15 +10,9 @@ namespace AssetRipper.Parser.Classes.Meta
 {
 	public struct Meta
 	{
-		public Meta(UnityGUID guid, AssetImporter importer) :
-			this(guid, true, importer)
-		{
-		}
+		public Meta(UnityGUID guid, AssetImporter importer) : this(guid, true, importer) { }
 
-		public Meta(UnityGUID guid, bool hasLicense, AssetImporter importer) :
-			this(guid, hasLicense, false, importer)
-		{
-		}
+		public Meta(UnityGUID guid, bool hasLicense, AssetImporter importer) : this(guid, hasLicense, false, importer) { }
 
 		public Meta(UnityGUID guid, bool hasLicense, bool isFolder, AssetImporter importer)
 		{

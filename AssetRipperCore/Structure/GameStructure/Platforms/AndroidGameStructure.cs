@@ -7,10 +7,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 {
 	internal class AndroidGameStructure : PlatformGameStructure
 	{
-		public AndroidGameStructure(string rootPath) :
-			this(rootPath, string.Empty)
-		{
-		}
+		public AndroidGameStructure(string rootPath) : this(rootPath, string.Empty) { }
 
 		public AndroidGameStructure(string rootPath, string obbPath)
 		{

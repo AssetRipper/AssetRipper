@@ -387,9 +387,7 @@ namespace SevenZip.Compression.LZMA
 		{
 			return 0;
 		}
-		public override void Write(byte[] buffer, int offset, int count)
-		{
-		}
+		public override void Write(byte[] buffer, int offset, int count) { }
 		public override long Seek(long offset, System.IO.SeekOrigin origin)
 		{
 			return 0;

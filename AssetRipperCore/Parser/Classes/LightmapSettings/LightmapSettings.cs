@@ -13,10 +13,7 @@ namespace AssetRipper.Parser.Classes.LightmapSettings
 {
 	public sealed class LightmapSettings : LevelGameManager
 	{
-		public LightmapSettings(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public LightmapSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

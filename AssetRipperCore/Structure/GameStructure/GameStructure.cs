@@ -44,13 +44,11 @@ namespace AssetRipper.Structure.GameStructure
 		public void Export(string exportPath) => Export(exportPath, null);
 		public void Export(string exportPath, Func<Object, bool> filter)
 		{
-			if (filter == null) filter = new Func<Object, bool>(DefaultAssetFilter);
-
 			Version defaultVersion = new Version(2017, 3, 0, VersionType.Final, 3);
 			Version maxVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
 			Version version = defaultVersion < maxVersion ? maxVersion : defaultVersion;
 			ExportOptions options = new ExportOptions(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
-			options.Filter = filter;
+			options.Filter = filter ?? new Func<Object, bool>(DefaultAssetFilter);
 			FileCollection.Exporter.Export(exportPath, FileCollection, FileCollection.FetchSerializedFiles(), options);
 		}
 

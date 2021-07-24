@@ -8,9 +8,7 @@ namespace AssetRipper.Parser.Classes.ParticleSystem.NoiseModule
 {
 	public sealed class NoiseModule : ParticleSystemModule
 	{
-		public NoiseModule()
-		{
-		}
+		public NoiseModule() { }
 
 		public NoiseModule(bool _)
 		{

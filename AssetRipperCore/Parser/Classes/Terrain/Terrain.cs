@@ -14,10 +14,7 @@ namespace AssetRipper.Parser.Classes.Terrain
 {
 	public sealed class Terrain : Behaviour
 	{
-		public Terrain(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Terrain(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

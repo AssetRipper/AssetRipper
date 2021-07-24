@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes.ShaderVariantCollection
 {
 	public sealed class ShaderVariantCollection : NamedObject
 	{
-		public ShaderVariantCollection(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public ShaderVariantCollection(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

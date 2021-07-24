@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class OffMeshLink : Behaviour
 	{
-		public OffMeshLink(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public OffMeshLink(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

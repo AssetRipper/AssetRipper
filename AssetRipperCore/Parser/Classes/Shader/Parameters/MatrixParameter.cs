@@ -16,8 +16,7 @@ namespace AssetRipper.Parser.Classes.Shader.Parameters
 			ColumnCount = (byte)columnCount;
 		}
 
-		public MatrixParameter(string name, ShaderParamType type, int index, int arraySize, int rowCount, int columnCount) :
-			this(name, type, index, rowCount, columnCount)
+		public MatrixParameter(string name, ShaderParamType type, int index, int arraySize, int rowCount, int columnCount) : this(name, type, index, rowCount, columnCount)
 		{
 			ArraySize = arraySize;
 		}

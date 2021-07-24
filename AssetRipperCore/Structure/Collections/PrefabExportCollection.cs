@@ -13,18 +13,11 @@ namespace AssetRipper.Structure.Collections
 {
 	public sealed class PrefabExportCollection : AssetsExportCollection
 	{
-		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, Object asset) :
-			this(assetExporter, virtualFile, GetAssetRoot(asset))
-		{
-		}
+		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, Object asset) : this(assetExporter, virtualFile, GetAssetRoot(asset)) { }
 
-		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, GameObject root) :
-			this(assetExporter, root.File, PrefabInstance.CreateVirtualInstance(virtualFile, root))
-		{
-		}
+		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, GameObject root) : this(assetExporter, root.File, PrefabInstance.CreateVirtualInstance(virtualFile, root)) { }
 
-		private PrefabExportCollection(IAssetExporter assetExporter, IAssetContainer file, PrefabInstance prefab) :
-			base(assetExporter, prefab)
+		private PrefabExportCollection(IAssetExporter assetExporter, IAssetContainer file, PrefabInstance prefab) : base(assetExporter, prefab)
 		{
 			foreach (EditorExtension asset in prefab.FetchObjects(file))
 			{

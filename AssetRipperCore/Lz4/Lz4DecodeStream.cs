@@ -23,19 +23,13 @@ namespace AssetRipper.Lz4
 			Finish,
 		}
 
-		public Lz4DecodeStream(byte[] buffer, int offset, int length) :
-			this(new MemoryStream(buffer, offset, length), length, false)
-		{
-		}
+		public Lz4DecodeStream(byte[] buffer, int offset, int length) : this(new MemoryStream(buffer, offset, length), length, false) { }
 
 		/// <summary>
 		/// Whole base stream is compressed data
 		/// </summary>
 		/// <param name="baseStream">Stream with compressed data</param>
-		public Lz4DecodeStream(Stream baseStream, bool leaveOpen = true) :
-			this(baseStream, baseStream.Length, leaveOpen)
-		{
-		}
+		public Lz4DecodeStream(Stream baseStream, bool leaveOpen = true) : this(baseStream, baseStream.Length, leaveOpen) { }
 
 		/// <summary>
 		/// Part of base stream is compressed data
@@ -61,9 +55,7 @@ namespace AssetRipper.Lz4
 			Dispose(false);
 		}
 
-		public override void Flush()
-		{
-		}
+		public override void Flush() { }
 
 		public override long Seek(long offset, SeekOrigin origin)
 		{

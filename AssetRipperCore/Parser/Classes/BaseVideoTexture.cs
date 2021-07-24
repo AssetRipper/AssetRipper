@@ -12,10 +12,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public abstract class BaseVideoTexture : Texture
 	{
-		public BaseVideoTexture(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public BaseVideoTexture(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

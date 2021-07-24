@@ -19,10 +19,7 @@ namespace AssetRipper.Parser.Classes.AnimatorController
 {
 	public sealed class AnimatorController : RuntimeAnimatorController
 	{
-		public AnimatorController(AssetInfo assetsInfo) :
-			base(assetsInfo)
-		{
-		}
+		public AnimatorController(AssetInfo assetsInfo) : base(assetsInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

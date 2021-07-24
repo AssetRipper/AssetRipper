@@ -12,10 +12,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class MonoManager : GlobalGameManager
 	{
-		public MonoManager(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public MonoManager(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// Less than 3.0.0

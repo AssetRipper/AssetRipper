@@ -11,20 +11,11 @@ namespace AssetRipper.Parser.Classes.ParticleSystem.Curve
 {
 	public struct MinMaxCurve : IAssetReadable, IYAMLExportable
 	{
-		public MinMaxCurve(float value) :
-			this(ParticleSystemCurveMode.Constant, value, value, 1.0f, 1.0f)
-		{
-		}
+		public MinMaxCurve(float value) : this(ParticleSystemCurveMode.Constant, value, value, 1.0f, 1.0f) { }
 
-		public MinMaxCurve(float minValue, float maxValue) :
-			this(ParticleSystemCurveMode.Constant, minValue, maxValue, 1.0f, 1.0f)
-		{
-		}
+		public MinMaxCurve(float minValue, float maxValue) : this(ParticleSystemCurveMode.Constant, minValue, maxValue, 1.0f, 1.0f) { }
 
-		public MinMaxCurve(float minValue, float maxValue, float minCurve, float maxCurve) :
-			this(ParticleSystemCurveMode.Constant, minValue, maxValue, minCurve, maxCurve)
-		{
-		}
+		public MinMaxCurve(float minValue, float maxValue, float minCurve, float maxCurve) : this(ParticleSystemCurveMode.Constant, minValue, maxValue, minCurve, maxCurve) { }
 
 		public MinMaxCurve(float minValue, float maxValue, float minCurve, float maxCurve1, float maxCurve2)
 		{

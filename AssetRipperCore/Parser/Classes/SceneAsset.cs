@@ -4,9 +4,6 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class SceneAsset : DefaultAsset
 	{
-		public SceneAsset(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public SceneAsset(AssetInfo assetInfo) : base(assetInfo) { }
 	}
 }

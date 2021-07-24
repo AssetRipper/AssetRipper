@@ -16,10 +16,7 @@ namespace AssetRipper.Parser.Files.BundleFile
 {
 	public sealed class BundleFileScheme : FileSchemeList
 	{
-		private BundleFileScheme(string filePath, string fileName) :
-			base(filePath, fileName)
-		{
-		}
+		private BundleFileScheme(string filePath, string fileName) : base(filePath, fileName) { }
 
 		internal static BundleFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
 		{

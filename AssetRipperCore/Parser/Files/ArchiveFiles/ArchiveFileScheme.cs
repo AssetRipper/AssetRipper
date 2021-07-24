@@ -14,10 +14,7 @@ namespace AssetRipper.Parser.Files.ArchiveFiles
 {
 	public sealed class ArchiveFileScheme : FileScheme
 	{
-		private ArchiveFileScheme(string filePath, string fileName) :
-			base(filePath, fileName)
-		{
-		}
+		private ArchiveFileScheme(string filePath, string fileName) : base(filePath, fileName) { }
 
 		internal static ArchiveFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
 		{

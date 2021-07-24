@@ -6,9 +6,7 @@ namespace AssetRipper.Layout.Classes.AnimationClip.Curves
 {
 	public sealed class QuaternionCurveLayout
 	{
-		public QuaternionCurveLayout(LayoutInfo info)
-		{
-		}
+		public QuaternionCurveLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{

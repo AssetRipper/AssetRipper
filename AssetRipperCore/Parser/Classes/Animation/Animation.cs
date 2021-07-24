@@ -18,8 +18,7 @@ namespace AssetRipper.Parser.Classes.Animation
 {
 	public sealed class Animation : Behaviour
 	{
-		public Animation(AssetLayout layout) :
-			base(layout)
+		public Animation(AssetLayout layout) : base(layout)
 		{
 			AnimationLayout classLayout = layout.Animation;
 			if (classLayout.HasAnimations)
@@ -33,10 +32,7 @@ namespace AssetRipper.Parser.Classes.Animation
 			PlayAutomatically = true;
 		}
 
-		public Animation(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Animation(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override Object.Object Convert(IExportContainer container)
 		{

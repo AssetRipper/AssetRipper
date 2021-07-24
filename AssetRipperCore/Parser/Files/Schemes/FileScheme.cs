@@ -31,9 +31,7 @@ namespace AssetRipper.Parser.Files.Schemes
 			return Name == null ? base.ToString() : $"T:{SchemeType} N:'{Name}'";
 		}
 
-		protected virtual void Dispose(bool disposing)
-		{
-		}
+		protected virtual void Dispose(bool disposing) { }
 
 		public string FilePath { get; }
 		public string NameOrigin { get; }

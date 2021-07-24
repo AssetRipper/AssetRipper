@@ -7,10 +7,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public abstract class RuntimeAnimatorController : NamedObject
 	{
-		protected RuntimeAnimatorController(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		protected RuntimeAnimatorController(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

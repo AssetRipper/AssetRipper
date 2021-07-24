@@ -9,14 +9,12 @@ namespace SevenZip
 			_value = 0xFFFFFFFF;
 		}
 
-		public CRC(byte[] data) :
-			this(true)
+		public CRC(byte[] data) : this(true)
 		{
 			_value = Update(data, 0, data.Length)._value;
 		}
 
-		public CRC(byte[] data, int offset, int size) :
-			this(true)
+		public CRC(byte[] data, int offset, int size) : this(true)
 		{
 			_value = Update(data, offset, size)._value;
 		}

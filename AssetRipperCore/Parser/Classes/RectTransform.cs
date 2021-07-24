@@ -10,15 +10,9 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class RectTransform : Transform
 	{
-		public RectTransform(AssetLayout layout) :
-			base(layout)
-		{
-		}
+		public RectTransform(AssetLayout layout) : base(layout) { }
 
-		public RectTransform(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public RectTransform(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override Object.Object Convert(IExportContainer container)
 		{

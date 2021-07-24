@@ -16,17 +16,13 @@ namespace AssetRipper.Parser.Classes.PrefabInstance
 {
 	public sealed class PrefabInstance : NamedObject
 	{
-		public PrefabInstance(AssetLayout layout) :
-			base(layout)
+		public PrefabInstance(AssetLayout layout) : base(layout)
 		{
 			Objects = Array.Empty<PPtr<EditorExtension>>();
 			Modification = new PrefabModification(layout);
 		}
 
-		public PrefabInstance(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public PrefabInstance(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static PrefabInstance CreateVirtualInstance(VirtualSerializedFile virtualFile, GameObject.GameObject root)
 		{

@@ -9,10 +9,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class Skybox : Behaviour
 	{
-		public Skybox(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Skybox(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

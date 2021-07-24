@@ -8,10 +8,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class CanvasGroup : Behaviour
 	{
-		public CanvasGroup(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public CanvasGroup(AssetInfo assetInfo) : base(assetInfo) { }
 
 		private static bool HasBehaviour(Version version)
 		{

@@ -16,8 +16,7 @@ namespace AssetRipper.Parser.Classes.LightmapSettings
 	/// </summary>
 	public struct LightmapEditorSettings : IAsset, IDependent
 	{
-		public LightmapEditorSettings(Version version) :
-			this()
+		public LightmapEditorSettings(Version version) : this()
 		{
 #warning TODO:
 			Resolution = 2.0f;

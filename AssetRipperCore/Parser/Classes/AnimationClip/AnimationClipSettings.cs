@@ -15,9 +15,7 @@ namespace AssetRipper.Parser.Classes.AnimationClip
 	/// </summary>
 	public class AnimationClipSettings : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public AnimationClipSettings()
-		{
-		}
+		public AnimationClipSettings() { }
 
 		public AnimationClipSettings(bool _)
 		{

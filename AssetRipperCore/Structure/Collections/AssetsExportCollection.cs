@@ -10,10 +10,7 @@ namespace AssetRipper.Structure.Collections
 {
 	public abstract class AssetsExportCollection : AssetExportCollection
 	{
-		public AssetsExportCollection(IAssetExporter assetExporter, Object asset) :
-			base(assetExporter, asset)
-		{
-		}
+		public AssetsExportCollection(IAssetExporter assetExporter, Object asset) : base(assetExporter, asset) { }
 
 		public override bool IsContains(Object asset)
 		{

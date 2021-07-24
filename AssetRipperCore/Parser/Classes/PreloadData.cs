@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class PreloadData : NamedObject
 	{
-		public PreloadData(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public PreloadData(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 5.0.0 and greater

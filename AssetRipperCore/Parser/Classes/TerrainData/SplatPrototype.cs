@@ -12,8 +12,7 @@ namespace AssetRipper.Parser.Classes.TerrainData
 {
 	public struct SplatPrototype : IAsset, IDependent
 	{
-		public SplatPrototype(bool _) :
-			this()
+		public SplatPrototype(bool _) : this()
 		{
 			TileSize = Vector2f.One;
 		}

@@ -6,9 +6,7 @@ namespace AssetRipper.Layout.Classes.AnimationClip.Curves
 {
 	public sealed class Vector3CurveLayout
 	{
-		public Vector3CurveLayout(LayoutInfo info)
-		{
-		}
+		public Vector3CurveLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{

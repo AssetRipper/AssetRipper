@@ -9,10 +9,7 @@ namespace AssetRipper.Parser.Classes.AudioManager
 {
 	public sealed class AudioManager : GlobalGameManager
 	{
-		public AudioManager(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public AudioManager(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

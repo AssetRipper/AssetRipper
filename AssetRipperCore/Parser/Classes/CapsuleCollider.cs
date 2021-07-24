@@ -9,10 +9,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class CapsuleCollider : Collider
 	{
-		public CapsuleCollider(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public CapsuleCollider(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 2.1.0 and greater

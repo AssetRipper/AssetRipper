@@ -13,10 +13,7 @@ namespace AssetRipper.Parser.Classes.GUIText
 {
 	public sealed class GUIText : GUIElement
 	{
-		public GUIText(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public GUIText(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

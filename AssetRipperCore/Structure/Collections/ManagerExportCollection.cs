@@ -11,15 +11,9 @@ namespace AssetRipper.Structure.Collections
 {
 	public class ManagerExportCollection : AssetExportCollection
 	{
-		public ManagerExportCollection(IAssetExporter assetExporter, Object asset) :
-			this(assetExporter, (GlobalGameManager)asset)
-		{
-		}
+		public ManagerExportCollection(IAssetExporter assetExporter, Object asset) : this(assetExporter, (GlobalGameManager)asset) { }
 
-		public ManagerExportCollection(IAssetExporter assetExporter, GlobalGameManager asset) :
-			base(assetExporter, asset)
-		{
-		}
+		public ManagerExportCollection(IAssetExporter assetExporter, GlobalGameManager asset) : base(assetExporter, asset) { }
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{

@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes.Rigidbody2D
 {
 	public sealed class Rigidbody2D : Component
 	{
-		public Rigidbody2D(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Rigidbody2D(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

@@ -8,9 +8,7 @@ namespace AssetRipper.Layout.Classes.GameObject
 	/// </summary>
 	public sealed class ComponentPairLayout
 	{
-		public ComponentPairLayout(LayoutInfo info)
-		{
-		}
+		public ComponentPairLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{

@@ -10,13 +10,9 @@ namespace AssetRipper.Parser.Classes.UnityConnectSettings
 {
 	public sealed class UnityConnectSettings : GlobalGameManager
 	{
-		public UnityConnectSettings(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public UnityConnectSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public UnityConnectSettings(AssetInfo assetInfo, bool _) :
-			base(assetInfo)
+		public UnityConnectSettings(AssetInfo assetInfo, bool _) : base(assetInfo)
 		{
 			TestEventUrl = string.Empty;
 			TestConfigUrl = string.Empty;

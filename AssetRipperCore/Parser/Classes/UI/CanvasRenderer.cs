@@ -9,10 +9,7 @@ namespace AssetRipper.Parser.Classes.UI
 {
 	public sealed class CanvasRenderer : Component
 	{
-		public CanvasRenderer(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public CanvasRenderer(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 2018.2 and greater

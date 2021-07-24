@@ -10,8 +10,7 @@ namespace AssetRipper.Parser.Files.BundleFile
 {
 	public sealed class BundleFile : FileList
 	{
-		internal BundleFile(BundleFileScheme scheme) :
-			base(scheme.NameOrigin)
+		internal BundleFile(BundleFileScheme scheme) : base(scheme.NameOrigin)
 		{
 			if (scheme == null)
 			{

@@ -6,8 +6,7 @@ namespace AssetRipper.Parser.Files.SerializedFiles
 {
 	public sealed class SerializedFileException : Exception
 	{
-		public SerializedFileException(string message, Version version, Platform platform, ClassIDType assetType, string fileName, string filePath) :
-			base(message)
+		public SerializedFileException(string message, Version version, Platform platform, ClassIDType assetType, string fileName, string filePath) : base(message)
 		{
 			if (string.IsNullOrEmpty(fileName))
 			{

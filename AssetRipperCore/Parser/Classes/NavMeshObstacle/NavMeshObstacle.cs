@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Classes.NavMeshObstacle
 {
 	public sealed class NavMeshObstacle : Behaviour
 	{
-		public NavMeshObstacle(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public NavMeshObstacle(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

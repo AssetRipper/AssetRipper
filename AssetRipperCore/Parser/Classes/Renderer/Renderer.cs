@@ -12,10 +12,7 @@ namespace AssetRipper.Parser.Classes.Renderer
 {
 	public abstract class Renderer : Component
 	{
-		protected Renderer(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		protected Renderer(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 1.5.0 and greater

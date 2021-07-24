@@ -13,10 +13,7 @@ namespace AssetRipper.Parser.Classes.LODGroup
 {
 	public sealed class LODGroup : Component
 	{
-		public LODGroup(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public LODGroup(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

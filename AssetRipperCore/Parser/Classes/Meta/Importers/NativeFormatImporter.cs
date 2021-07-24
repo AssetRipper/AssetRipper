@@ -10,15 +10,9 @@ namespace AssetRipper.Parser.Classes.Meta.Importers
 {
 	public sealed class NativeFormatImporter : AssetImporter
 	{
-		public NativeFormatImporter(AssetLayout layout) :
-			base(layout)
-		{
-		}
+		public NativeFormatImporter(AssetLayout layout) : base(layout) { }
 
-		public NativeFormatImporter(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public NativeFormatImporter(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 5.6.0 and greater

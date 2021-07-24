@@ -99,17 +99,11 @@ namespace AssetRipper.Parser.Files.Entries
 			}
 		}
 
-		protected virtual void OnSerializedFileAdded(SerializedFiles.SerializedFile file)
-		{
-		}
+		protected virtual void OnSerializedFileAdded(SerializedFiles.SerializedFile file) { }
 
-		protected virtual void OnFileListAdded(FileList list)
-		{
-		}
+		protected virtual void OnFileListAdded(FileList list) { }
 
-		protected virtual void OnResourceFileAdded(ResourceFiles.ResourceFile resource)
-		{
-		}
+		protected virtual void OnResourceFileAdded(ResourceFiles.ResourceFile resource) { }
 
 		public string Name { get; }
 

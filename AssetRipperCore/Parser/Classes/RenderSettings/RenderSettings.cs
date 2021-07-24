@@ -15,10 +15,7 @@ namespace AssetRipper.Parser.Classes.RenderSettings
 	/// </summary>
 	public sealed class RenderSettings : LevelGameManager
 	{
-		public RenderSettings(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public RenderSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

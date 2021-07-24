@@ -2,9 +2,7 @@
 {
 	public sealed class YAMLDocument
 	{
-		internal YAMLDocument()
-		{
-		}
+		internal YAMLDocument() { }
 
 		public YAMLScalarNode CreateScalarRoot()
 		{

@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes.LightProbes
 {
 	public sealed class LightProbes : NamedObject
 	{
-		public LightProbes(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public LightProbes(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 5.0.0b1

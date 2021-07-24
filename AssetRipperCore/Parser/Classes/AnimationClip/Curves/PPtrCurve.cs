@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes.AnimationClip.Curves
 {
 	public struct PPtrCurve : IAsset, IDependent
 	{
-		public PPtrCurve(PPtrCurve copy, IReadOnlyList<PPtrKeyframe> keyframes) :
-			this(copy.Path, copy.Attribute, copy.ClassID, copy.Script, keyframes)
-		{
-		}
+		public PPtrCurve(PPtrCurve copy, IReadOnlyList<PPtrKeyframe> keyframes) : this(copy.Path, copy.Attribute, copy.ClassID, copy.Script, keyframes) { }
 
 		public PPtrCurve(string path, string attribute, ClassIDType classID, PPtr<MonoScript> script)
 		{
@@ -25,8 +22,7 @@ namespace AssetRipper.Parser.Classes.AnimationClip.Curves
 			Curve = null;
 		}
 
-		public PPtrCurve(string path, string attribute, ClassIDType classID, PPtr<MonoScript> script, IReadOnlyList<PPtrKeyframe> keyframes) :
-			this(path, attribute, classID, script)
+		public PPtrCurve(string path, string attribute, ClassIDType classID, PPtr<MonoScript> script, IReadOnlyList<PPtrKeyframe> keyframes) : this(path, attribute, classID, script)
 		{
 			Curve = new PPtrKeyframe[keyframes.Count];
 			for (int i = 0; i < keyframes.Count; i++)

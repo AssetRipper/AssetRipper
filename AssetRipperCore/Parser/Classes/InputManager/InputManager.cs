@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes.InputManager
 {
 	public sealed class InputManager : GlobalGameManager
 	{
-		public InputManager(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public InputManager(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

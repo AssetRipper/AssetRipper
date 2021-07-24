@@ -4,9 +4,6 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class AudioListener : AudioBehaviour
 	{
-		public AudioListener(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public AudioListener(AssetInfo assetInfo) : base(assetInfo) { }
 	}
 }

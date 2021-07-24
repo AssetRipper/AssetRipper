@@ -7,8 +7,7 @@ namespace AssetRipper.Parser.Classes.UnityConnectSettings
 {
 	public struct CrashReportingSettings : IAssetReadable, IYAMLExportable
 	{
-		public CrashReportingSettings(bool _) :
-			this()
+		public CrashReportingSettings(bool _) : this()
 		{
 			EventUrl = "https://perf-events.cloud.unity3d.com/api/events/crashes";
 		}

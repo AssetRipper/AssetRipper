@@ -12,10 +12,7 @@ namespace AssetRipper.Parser.Classes.ResourceManager
 {
 	public sealed class ResourceManager : GlobalGameManager
 	{
-		public ResourceManager(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public ResourceManager(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 3.5.0 and greater and Release

@@ -12,10 +12,7 @@ namespace AssetRipper.Parser.Classes.ReflectionProbe
 {
 	public sealed class ReflectionProbe : Behaviour
 	{
-		public ReflectionProbe(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public ReflectionProbe(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

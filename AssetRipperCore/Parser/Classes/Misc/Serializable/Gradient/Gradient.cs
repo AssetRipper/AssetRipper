@@ -12,8 +12,7 @@ namespace AssetRipper.Parser.Classes.Misc.Serializable.Gradient
 	/// </summary>
 	public struct Gradient : IAsset
 	{
-		public Gradient(ColorRGBAf color1, ColorRGBAf color2) :
-			this()
+		public Gradient(ColorRGBAf color1, ColorRGBAf color2) : this()
 		{
 			Ctime0 = 0;
 			Atime0 = 0;

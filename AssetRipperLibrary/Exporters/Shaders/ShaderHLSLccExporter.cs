@@ -13,10 +13,7 @@ namespace AssetRipperLibrary.Exporters.Shaders
 	[SupportedOSPlatform("windows")]
 	public class ShaderHLSLccExporter : ShaderDXExporter
 	{
-		public ShaderHLSLccExporter(GPUPlatform graphicApi) :
-			base(graphicApi)
-		{
-		}
+		public ShaderHLSLccExporter(GPUPlatform graphicApi) : base(graphicApi) { }
 
 		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 		{

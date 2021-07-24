@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class PolygonCollider2D : Collider2D
 	{
-		public PolygonCollider2D(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public PolygonCollider2D(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 5.6.0b5 and greater

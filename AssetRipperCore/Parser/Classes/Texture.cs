@@ -9,10 +9,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public abstract class Texture : NamedObject
 	{
-		protected Texture(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		protected Texture(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 5.0.0 and greater and not Release

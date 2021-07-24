@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class SphereCollider : Collider
 	{
-		public SphereCollider(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public SphereCollider(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

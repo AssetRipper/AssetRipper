@@ -20,10 +20,7 @@ namespace AssetRipper.Parser.Classes.Shader
 {
 	public sealed class Shader : TextAsset
 	{
-		public Shader(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Shader(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

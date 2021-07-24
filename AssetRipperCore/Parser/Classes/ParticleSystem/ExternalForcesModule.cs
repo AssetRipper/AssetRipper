@@ -11,9 +11,7 @@ namespace AssetRipper.Parser.Classes.ParticleSystem
 {
 	public sealed class ExternalForcesModule : ParticleSystemModule
 	{
-		public ExternalForcesModule()
-		{
-		}
+		public ExternalForcesModule() { }
 
 		public ExternalForcesModule(bool _)
 		{

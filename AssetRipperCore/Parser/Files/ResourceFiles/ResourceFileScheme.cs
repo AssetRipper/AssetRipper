@@ -8,8 +8,7 @@ namespace AssetRipper.Parser.Files.ResourceFiles
 {
 	public sealed class ResourceFileScheme : FileScheme
 	{
-		private ResourceFileScheme(SmartStream stream, string filePath, string fileName) :
-			base(filePath, fileName)
+		private ResourceFileScheme(SmartStream stream, string filePath, string fileName) : base(filePath, fileName)
 		{
 			Stream = stream.CreateReference();
 		}

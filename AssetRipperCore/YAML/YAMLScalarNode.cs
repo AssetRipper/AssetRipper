@@ -10,14 +10,9 @@ namespace AssetRipper.YAML
 {
 	public sealed class YAMLScalarNode : YAMLNode
 	{
-		public YAMLScalarNode()
-		{
-		}
+		public YAMLScalarNode() { }
 
-		public YAMLScalarNode(bool value) :
-			this(value, false)
-		{
-		}
+		public YAMLScalarNode(bool value) : this(value, false) { }
 
 		public YAMLScalarNode(bool value, bool isHex)
 		{
@@ -25,10 +20,7 @@ namespace AssetRipper.YAML
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(byte value) :
-			this(value, false)
-		{
-		}
+		public YAMLScalarNode(byte value) : this(value, false) { }
 
 		public YAMLScalarNode(byte value, bool isHex)
 		{
@@ -36,10 +28,7 @@ namespace AssetRipper.YAML
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(short value) :
-			this(value, false)
-		{
-		}
+		public YAMLScalarNode(short value) : this(value, false) { }
 
 		public YAMLScalarNode(short value, bool isHex)
 		{
@@ -47,10 +36,7 @@ namespace AssetRipper.YAML
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(ushort value) :
-			this(value, false)
-		{
-		}
+		public YAMLScalarNode(ushort value) : this(value, false) { }
 
 		public YAMLScalarNode(ushort value, bool isHex)
 		{
@@ -58,10 +44,7 @@ namespace AssetRipper.YAML
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(int value) :
-			this(value, false)
-		{
-		}
+		public YAMLScalarNode(int value) : this(value, false) { }
 
 		public YAMLScalarNode(int value, bool isHex)
 		{
@@ -69,10 +52,7 @@ namespace AssetRipper.YAML
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(uint value) :
-			this(value, false)
-		{
-		}
+		public YAMLScalarNode(uint value) : this(value, false) { }
 
 		public YAMLScalarNode(uint value, bool isHex)
 		{
@@ -80,10 +60,7 @@ namespace AssetRipper.YAML
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(long value) :
-			this(value, false)
-		{
-		}
+		public YAMLScalarNode(long value) : this(value, false) { }
 
 		public YAMLScalarNode(long value, bool isHex)
 		{
@@ -91,10 +68,7 @@ namespace AssetRipper.YAML
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(ulong value) :
-			this(value, false)
-		{
-		}
+		public YAMLScalarNode(ulong value) : this(value, false) { }
 
 		public YAMLScalarNode(ulong value, bool isHex)
 		{
@@ -102,10 +76,7 @@ namespace AssetRipper.YAML
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(float value) :
-			this(value, false)
-		{
-		}
+		public YAMLScalarNode(float value) : this(value, false) { }
 
 		public YAMLScalarNode(float value, bool isHex)
 		{
@@ -113,10 +84,7 @@ namespace AssetRipper.YAML
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(double value) :
-			this(value, false)
-		{
-		}
+		public YAMLScalarNode(double value) : this(value, false) { }
 
 		public YAMLScalarNode(double value, bool isHex)
 		{

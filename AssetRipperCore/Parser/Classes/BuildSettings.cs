@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class BuildSettings : GlobalGameManager
 	{
-		public BuildSettings(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public BuildSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

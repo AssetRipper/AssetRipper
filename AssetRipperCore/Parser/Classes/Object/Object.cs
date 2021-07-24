@@ -14,9 +14,7 @@ namespace AssetRipper.Parser.Classes.Object
 {
 	public abstract class Object : IAsset, IDependent
 	{
-		protected Object(AssetLayout layout)
-		{
-		}
+		protected Object(AssetLayout layout) { }
 
 		protected Object(AssetInfo assetInfo)
 		{

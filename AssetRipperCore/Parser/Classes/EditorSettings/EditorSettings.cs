@@ -14,13 +14,9 @@ namespace AssetRipper.Parser.Classes.EditorSettings
 	/// </summary>
 	public sealed class EditorSettings : Object.Object
 	{
-		public EditorSettings(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public EditorSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
-		private EditorSettings(AssetInfo assetInfo, bool _) :
-			base(assetInfo)
+		private EditorSettings(AssetInfo assetInfo, bool _) : base(assetInfo)
 		{
 			ExternalVersionControlSupport = VisibleMeta;
 			SerializationMode = SerializationMode.ForceText;

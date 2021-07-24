@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class BoxCollider : Collider
 	{
-		public BoxCollider(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public BoxCollider(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

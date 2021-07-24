@@ -4,9 +4,7 @@ namespace AssetRipper.Layout.Classes.Misc.Serializable
 {
 	public sealed class RectOffsetLayout
 	{
-		public RectOffsetLayout(LayoutInfo info)
-		{
-		}
+		public RectOffsetLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{

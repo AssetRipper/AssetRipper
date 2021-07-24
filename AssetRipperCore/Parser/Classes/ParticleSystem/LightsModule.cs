@@ -10,9 +10,7 @@ namespace AssetRipper.Parser.Classes.ParticleSystem
 {
 	public sealed class LightsModule : ParticleSystemModule, IDependent
 	{
-		public LightsModule()
-		{
-		}
+		public LightsModule() { }
 
 		public LightsModule(bool _)
 		{

@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes.AnimationClip.Curves
 {
 	public struct QuaternionCurve : IAsset, IYAMLExportable
 	{
-		public QuaternionCurve(QuaternionCurve copy, IReadOnlyList<KeyframeTpl<Quaternionf>> keyframes) :
-			this(copy.Path, keyframes)
-		{
-		}
+		public QuaternionCurve(QuaternionCurve copy, IReadOnlyList<KeyframeTpl<Quaternionf>> keyframes) : this(copy.Path, keyframes) { }
 
 		public QuaternionCurve(string path)
 		{

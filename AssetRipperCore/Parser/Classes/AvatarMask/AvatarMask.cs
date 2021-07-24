@@ -9,10 +9,7 @@ namespace AssetRipper.Parser.Classes.AvatarMask
 {
 	public sealed class AvatarMask : NamedObject
 	{
-		public AvatarMask(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public AvatarMask(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

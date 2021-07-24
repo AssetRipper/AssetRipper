@@ -4,9 +4,7 @@ namespace AssetRipper.Layout.Classes.Misc.Serializable
 {
 	public sealed class Vector2fLayout
 	{
-		public Vector2fLayout(LayoutInfo info)
-		{
-		}
+		public Vector2fLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{

@@ -14,10 +14,7 @@ namespace AssetRipper.Parser.Classes.ParticleSystemRenderer
 {
 	public sealed class ParticleSystemRenderer : Renderer.Renderer
 	{
-		public ParticleSystemRenderer(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public ParticleSystemRenderer(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

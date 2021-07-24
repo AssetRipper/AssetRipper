@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes.Animator
 {
 	public sealed class Animator : Behaviour
 	{
-		public Animator(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Animator(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

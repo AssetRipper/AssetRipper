@@ -9,10 +9,7 @@ namespace AssetRipperLibrary.Exporters.Audio
 	[SupportedOSPlatform("windows")]
 	public class AudioExportCollection : AssetExportCollection
 	{
-		public AudioExportCollection(IAssetExporter assetExporter, AudioClip asset) :
-			base(assetExporter, asset)
-		{
-		}
+		public AudioExportCollection(IAssetExporter assetExporter, AudioClip asset) : base(assetExporter, asset) { }
 
 		protected override string GetExportExtension(Object asset)
 		{

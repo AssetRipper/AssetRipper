@@ -15,9 +15,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class MonoBehaviour : Behaviour
 	{
-		public MonoBehaviour(AssetInfo assetInfo) : base(assetInfo)
-		{
-		}
+		public MonoBehaviour(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

@@ -13,8 +13,7 @@ namespace AssetRipper.Parser.Classes.Misc.KeyframeTpl
 	public struct KeyframeTpl<T> : IAsset
 		where T : struct, IAsset
 	{
-		public KeyframeTpl(float time, T value, T weight) :
-			this(time, value, default, default, weight)
+		public KeyframeTpl(float time, T value, T weight) : this(time, value, default, default, weight)
 		{
 			// this enum member is version agnostic
 			TangentMode = KeyframeTpl.TangentMode.TangentMode.FreeSmooth.ToTangent(Version.MinVersion);

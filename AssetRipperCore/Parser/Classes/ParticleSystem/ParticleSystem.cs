@@ -19,10 +19,7 @@ namespace AssetRipper.Parser.Classes.ParticleSystem
 {
 	public sealed class ParticleSystem : Component
 	{
-		public ParticleSystem(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public ParticleSystem(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

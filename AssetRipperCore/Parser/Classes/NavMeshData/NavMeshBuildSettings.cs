@@ -29,16 +29,14 @@ namespace AssetRipper.Parser.Classes.NavMeshData
 			Debug = default;
 		}
 
-		public NavMeshBuildSettings(float agentClimb, float cellSize) :
-			this(true)
+		public NavMeshBuildSettings(float agentClimb, float cellSize) : this(true)
 		{
 			AgentClimb = agentClimb;
 			ManualCellSize = 1;
 			CellSize = cellSize;
 		}
 
-		public NavMeshBuildSettings(NavMeshParams navParams) :
-			this(true)
+		public NavMeshBuildSettings(NavMeshParams navParams) : this(true)
 		{
 			AgentRadius = navParams.WalkableRadius;
 			AgentHeight = navParams.WalkableHeight;

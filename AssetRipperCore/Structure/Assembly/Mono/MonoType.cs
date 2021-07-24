@@ -8,9 +8,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 {
 	public class MonoType : SerializableType
 	{
-		internal MonoType(BaseManager manager, TypeReference type) : this(manager, new MonoTypeContext(type))
-		{
-		}
+		internal MonoType(BaseManager manager, TypeReference type) : this(manager, new MonoTypeContext(type)) { }
 
 		internal MonoType(BaseManager manager, MonoTypeContext context) : base(context.Type.Namespace, ToPrimitiveType(context.Type), MonoUtils.GetName(context.Type))
 		{

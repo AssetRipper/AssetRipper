@@ -4,9 +4,7 @@ namespace AssetRipper.YAML
 {
 	public sealed class YAMLSequenceNode : YAMLNode
 	{
-		public YAMLSequenceNode()
-		{
-		}
+		public YAMLSequenceNode() { }
 
 		public YAMLSequenceNode(SequenceStyle style)
 		{

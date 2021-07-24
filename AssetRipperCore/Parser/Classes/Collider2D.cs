@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public abstract class Collider2D : Behaviour
 	{
-		protected Collider2D(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		protected Collider2D(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 5.3.0 and greater

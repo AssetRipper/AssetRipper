@@ -4,9 +4,7 @@ namespace AssetRipper.Layout.Classes.Misc.Serializable
 {
 	public sealed class QuaternionfLayout
 	{
-		public QuaternionfLayout(LayoutInfo info)
-		{
-		}
+		public QuaternionfLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{

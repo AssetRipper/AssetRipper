@@ -10,8 +10,7 @@ namespace AssetRipper.Parser.Classes.Misc.Serializable.GUIStyle
 {
 	public struct GUIStyle : IAsset
 	{
-		public GUIStyle(AssetLayout layout) :
-			this()
+		public GUIStyle(AssetLayout layout) : this()
 		{
 			Name = string.Empty;
 			Normal = new GUIStyleState(layout);

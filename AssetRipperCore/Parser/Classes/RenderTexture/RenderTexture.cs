@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Classes.RenderTexture
 {
 	public sealed class RenderTexture : Texture
 	{
-		public RenderTexture(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public RenderTexture(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

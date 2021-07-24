@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace AssetRipper.Extensions
+namespace AssetRipper.IO.Extensions
 {
 	public static class BinaryReaderExtensions
 	{

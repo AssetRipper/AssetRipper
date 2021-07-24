@@ -8,9 +8,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class AudioReverbZone : Behaviour
 	{
-		public AudioReverbZone(AssetInfo assetInfo) : base(assetInfo)
-		{
-		}
+		public AudioReverbZone(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// Less than 5.6.0

@@ -9,10 +9,7 @@ namespace AssetRipper.Parser.Classes.Misc.Serializable
 {
 	public struct Vector2f : IAsset
 	{
-		public Vector2f(float value) :
-			this(value, value)
-		{
-		}
+		public Vector2f(float value) : this(value, value) { }
 
 		public Vector2f(float x, float y)
 		{

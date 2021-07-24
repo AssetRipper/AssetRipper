@@ -4,9 +4,7 @@ namespace AssetRipper.Layout.Classes.PrefabInstance
 {
 	public sealed class PropertyModificationLayout
 	{
-		public PropertyModificationLayout(LayoutInfo info)
-		{
-		}
+		public PropertyModificationLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{

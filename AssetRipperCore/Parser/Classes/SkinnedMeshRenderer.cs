@@ -17,10 +17,7 @@ namespace AssetRipper.Parser.Classes
 	/// </summary>
 	public sealed class SkinnedMeshRenderer : Renderer.Renderer
 	{
-		public SkinnedMeshRenderer(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public SkinnedMeshRenderer(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

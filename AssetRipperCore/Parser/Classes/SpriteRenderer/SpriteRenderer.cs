@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes.SpriteRenderer
 {
 	public sealed class SpriteRenderer : Renderer.Renderer
 	{
-		public SpriteRenderer(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public SpriteRenderer(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 5.3.0 and greater

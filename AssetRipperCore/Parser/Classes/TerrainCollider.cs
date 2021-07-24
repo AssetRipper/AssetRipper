@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class TerrainCollider : Collider
 	{
-		public TerrainCollider(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public TerrainCollider(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 5.0.0 and greater

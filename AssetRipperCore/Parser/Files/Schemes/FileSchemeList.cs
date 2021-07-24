@@ -5,10 +5,7 @@ namespace AssetRipper.Parser.Files.Schemes
 {
 	public abstract class FileSchemeList : FileScheme
 	{
-		protected FileSchemeList(string filePath, string fileName) :
-			base(filePath, fileName)
-		{
-		}
+		protected FileSchemeList(string filePath, string fileName) : base(filePath, fileName) { }
 
 		protected override void Dispose(bool disposing)
 		{

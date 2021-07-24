@@ -13,10 +13,7 @@ namespace AssetRipper.Parser.Classes.Material
 {
 	public sealed class Material : NamedObject
 	{
-		public Material(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Material(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

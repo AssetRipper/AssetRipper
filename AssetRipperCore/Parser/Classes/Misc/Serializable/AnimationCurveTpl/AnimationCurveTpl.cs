@@ -22,47 +22,41 @@ namespace AssetRipper.Parser.Classes.Misc.Serializable.AnimationCurveTpl
 			Curve = init ? Array.Empty<KeyframeTpl<T>>() : null;
 		}
 
-		public AnimationCurveTpl(T defaultValue, T defaultWeight) :
-			this(false)
+		public AnimationCurveTpl(T defaultValue, T defaultWeight) : this(false)
 		{
 			Curve = new KeyframeTpl<T>[2];
 			Curve[0] = new KeyframeTpl<T>(0.0f, defaultValue, defaultWeight);
 			Curve[1] = new KeyframeTpl<T>(1.0f, defaultValue, defaultWeight);
 		}
 
-		public AnimationCurveTpl(T value1, T value2, T defaultWeight) :
-			this(false)
+		public AnimationCurveTpl(T value1, T value2, T defaultWeight) : this(false)
 		{
 			Curve = new KeyframeTpl<T>[2];
 			Curve[0] = new KeyframeTpl<T>(0.0f, value1, defaultWeight);
 			Curve[1] = new KeyframeTpl<T>(1.0f, value2, defaultWeight);
 		}
 
-		public AnimationCurveTpl(T value1, T inSlope1, T outSlope1, T value2, T inSlope2, T outSlope2, T defaultWeight) :
-			this(false)
+		public AnimationCurveTpl(T value1, T inSlope1, T outSlope1, T value2, T inSlope2, T outSlope2, T defaultWeight) : this(false)
 		{
 			Curve = new KeyframeTpl<T>[2];
 			Curve[0] = new KeyframeTpl<T>(0.0f, value1, inSlope1, outSlope1, defaultWeight);
 			Curve[1] = new KeyframeTpl<T>(1.0f, value2, inSlope2, outSlope2, defaultWeight);
 		}
 
-		public AnimationCurveTpl(KeyframeTpl<T> keyframe) :
-			this(false)
+		public AnimationCurveTpl(KeyframeTpl<T> keyframe) : this(false)
 		{
 			Curve = new KeyframeTpl<T>[1];
 			Curve[0] = keyframe;
 		}
 
-		public AnimationCurveTpl(KeyframeTpl<T> keyframe1, KeyframeTpl<T> keyframe2) :
-			this(false)
+		public AnimationCurveTpl(KeyframeTpl<T> keyframe1, KeyframeTpl<T> keyframe2) : this(false)
 		{
 			Curve = new KeyframeTpl<T>[2];
 			Curve[0] = keyframe1;
 			Curve[1] = keyframe2;
 		}
 
-		public AnimationCurveTpl(IReadOnlyList<KeyframeTpl<T>> keyframes) :
-			this(false)
+		public AnimationCurveTpl(IReadOnlyList<KeyframeTpl<T>> keyframes) : this(false)
 		{
 			Curve = new KeyframeTpl<T>[keyframes.Count];
 			for (int i = 0; i < keyframes.Count; i++)

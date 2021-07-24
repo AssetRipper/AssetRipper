@@ -17,8 +17,7 @@ namespace AssetRipper.Parser.Classes.Meta.Importers.Asset
 	// NOTE: unknown layout for all importers for versions < 2.5.0
 	public abstract class AssetImporter : NamedObject
 	{
-		protected AssetImporter(AssetLayout layout) :
-			base(layout)
+		protected AssetImporter(AssetLayout layout) : base(layout)
 		{
 			if (IncludesIDToName)
 			{
@@ -44,10 +43,7 @@ namespace AssetRipper.Parser.Classes.Meta.Importers.Asset
 			AssetBundleVariant = string.Empty;
 		}
 
-		protected AssetImporter(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		protected AssetImporter(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 2019.1 and greater

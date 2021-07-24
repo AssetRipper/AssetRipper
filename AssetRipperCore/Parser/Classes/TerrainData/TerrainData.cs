@@ -13,10 +13,7 @@ namespace AssetRipper.Parser.Classes.TerrainData
 {
 	public sealed class TerrainData : NamedObject
 	{
-		public TerrainData(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public TerrainData(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// Less than 3.0.0

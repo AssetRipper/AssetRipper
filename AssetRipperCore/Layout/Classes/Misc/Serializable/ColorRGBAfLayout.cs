@@ -4,9 +4,7 @@ namespace AssetRipper.Layout.Classes.Misc.Serializable
 {
 	public sealed class ColorRGBAfLayout
 	{
-		public ColorRGBAfLayout(LayoutInfo info)
-		{
-		}
+		public ColorRGBAfLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{

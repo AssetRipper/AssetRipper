@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class GUITexture : GUIElement
 	{
-		public GUITexture(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public GUITexture(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

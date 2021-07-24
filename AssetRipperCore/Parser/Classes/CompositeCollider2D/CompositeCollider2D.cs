@@ -14,10 +14,7 @@ namespace AssetRipper.Parser.Classes.CompositeCollider2D
 	/// </summary>
 	public sealed class CompositeCollider2D : Collider2D
 	{
-		public CompositeCollider2D(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public CompositeCollider2D(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// 5.6.0b5 and greater

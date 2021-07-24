@@ -8,10 +8,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public abstract class GameManager : EditorExtension
 	{
-		protected GameManager(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		protected GameManager(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// Less than 3.0.0

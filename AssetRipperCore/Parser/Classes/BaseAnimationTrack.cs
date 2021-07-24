@@ -4,9 +4,6 @@ namespace AssetRipper.Parser.Classes
 {
 	public abstract class BaseAnimationTrack : NamedObject
 	{
-		protected BaseAnimationTrack(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		protected BaseAnimationTrack(AssetInfo assetInfo) : base(assetInfo) { }
 	}
 }

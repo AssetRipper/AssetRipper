@@ -7,9 +7,7 @@ namespace AssetRipper.Parser.Classes.ParticleSystem.CustomDataModule
 {
 	public sealed class CustomDataModule : ParticleSystemModule
 	{
-		public CustomDataModule()
-		{
-		}
+		public CustomDataModule() { }
 
 		public CustomDataModule(bool _)
 		{

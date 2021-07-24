@@ -5,20 +5,11 @@ namespace AssetRipper.IO
 {
 	public class ReverseStream : Stream
 	{
-		public ReverseStream(Stream stream) :
-			this(stream, true)
-		{
-		}
+		public ReverseStream(Stream stream) : this(stream, true) { }
 
-		public ReverseStream(Stream stream, bool leaveOpen) :
-			this(stream, 0, stream.Length, leaveOpen)
-		{
-		}
+		public ReverseStream(Stream stream, bool leaveOpen) : this(stream, 0, stream.Length, leaveOpen) { }
 
-		public ReverseStream(Stream stream, long offset, long size) :
-			this(stream, offset, size, true)
-		{
-		}
+		public ReverseStream(Stream stream, long offset, long size) : this(stream, offset, size, true) { }
 
 		public ReverseStream(Stream stream, long offset, long size, bool leaveOpen)
 		{

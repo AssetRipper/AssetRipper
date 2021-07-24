@@ -8,10 +8,7 @@ namespace AssetRipper.Parser.Classes.ClusterInputManager
 {
 	public sealed class ClusterInputManager : GlobalGameManager
 	{
-		public ClusterInputManager(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public ClusterInputManager(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

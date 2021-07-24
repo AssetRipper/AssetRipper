@@ -14,10 +14,7 @@ namespace AssetRipper.Parser.Classes
 	/// </summary>
 	public class TextAsset : NamedObject
 	{
-		public TextAsset(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public TextAsset(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>
 		/// Less than 2017.1

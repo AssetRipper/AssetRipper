@@ -7,10 +7,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class Flare : NamedObject
 	{
-		public Flare(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Flare(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

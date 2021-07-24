@@ -21,10 +21,7 @@ namespace AssetRipper.Parser.Classes.Texture2D
 	/// </summary>
 	public class Texture2D : Texture
 	{
-		public Texture2D(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Texture2D(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

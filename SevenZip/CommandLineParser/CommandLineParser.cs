@@ -30,14 +30,8 @@ namespace SevenZip.CommandLineParser
 			MaxLen = maxLen;
 			PostCharSet = postCharSet;
 		}
-		public SwitchForm(string idString, SwitchType type, bool multi, int minLen) :
-			this(idString, type, multi, minLen, 0, "")
-		{
-		}
-		public SwitchForm(string idString, SwitchType type, bool multi) :
-			this(idString, type, multi, 0)
-		{
-		}
+		public SwitchForm(string idString, SwitchType type, bool multi, int minLen) : this(idString, type, multi, minLen, 0, "") { }
+		public SwitchForm(string idString, SwitchType type, bool multi) : this(idString, type, multi, 0) { }
 	}
 
 	public class SwitchResult

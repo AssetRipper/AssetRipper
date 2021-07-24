@@ -16,10 +16,7 @@ namespace AssetRipper.Parser.Classes.Font
 {
 	public sealed class Font : NamedObject
 	{
-		public Font(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Font(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

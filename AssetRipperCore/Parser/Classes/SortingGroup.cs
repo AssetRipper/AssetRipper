@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes
 	/// </summary>
 	public sealed class SortingGroup : Behaviour
 	{
-		public SortingGroup(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public SortingGroup(AssetInfo assetInfo) : base(assetInfo) { }
 
 		private static bool IsSortingLayerIDFirst(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Final);
 

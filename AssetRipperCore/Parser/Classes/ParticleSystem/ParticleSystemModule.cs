@@ -6,9 +6,7 @@ namespace AssetRipper.Parser.Classes.ParticleSystem
 {
 	public abstract class ParticleSystemModule : IAssetReadable, IYAMLExportable
 	{
-		protected ParticleSystemModule()
-		{
-		}
+		protected ParticleSystemModule() { }
 
 		protected ParticleSystemModule(bool enabled)
 		{

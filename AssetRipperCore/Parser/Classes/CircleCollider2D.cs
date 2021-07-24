@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class CircleCollider2D : Collider2D
 	{
-		public CircleCollider2D(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public CircleCollider2D(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

@@ -8,10 +8,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class OcclusionPortal : Component
 	{
-		public OcclusionPortal(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public OcclusionPortal(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{

@@ -4,9 +4,7 @@ namespace AssetRipper.Layout.Classes.Misc.Serializable
 {
 	public sealed class Matrix4x4fLayout
 	{
-		public Matrix4x4fLayout(LayoutInfo info)
-		{
-		}
+		public Matrix4x4fLayout(LayoutInfo info) { }
 
 		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{

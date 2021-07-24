@@ -11,10 +11,7 @@ namespace AssetRipper.Parser.Classes.UI.Canvas
 {
 	public sealed class Canvas : Behaviour
 	{
-		public Canvas(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public Canvas(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(Version version)
 		{

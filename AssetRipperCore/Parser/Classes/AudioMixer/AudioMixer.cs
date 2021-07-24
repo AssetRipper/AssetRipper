@@ -10,10 +10,7 @@ namespace AssetRipper.Parser.Classes.AudioMixer
 #warning TODO: not implemented
 	public sealed class AudioMixer : NamedObject
 	{
-		public AudioMixer(AssetInfo assetInfo) :
-			base(assetInfo)
-		{
-		}
+		public AudioMixer(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/*public static int ToSerializedVersion(Version version)
 		{
