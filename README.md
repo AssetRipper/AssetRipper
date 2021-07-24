@@ -2,7 +2,9 @@
 
 ![](Images/AssetRipperLogoBackground.png)
 
-![](https://img.shields.io/github/downloads/ds5678/AssetRipper/total.svg) ![](https://img.shields.io/github/downloads/ds5678/AssetRipper/latest/total.svg)
+[![](https://img.shields.io/github/downloads/ds5678/AssetRipper/total.svg)](https://github.com/ds5678/AssetRipper/releases)
+[![](https://img.shields.io/github/downloads/ds5678/AssetRipper/latest/total.svg)](https://github.com/ds5678/AssetRipper/releases/latest)
+[![](https://img.shields.io/github/v/release/ds5678/AssetRipper)](https://github.com/ds5678/AssetRipper/releases/latest)
 
 AssetRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*.assets*, *\*.sharedAssets*, etc.) and assets bundles (*\*.unity3d*, *\*.assetbundle*, etc.) and converting them into the native Unity engine format.
 
@@ -114,21 +116,23 @@ Please be aware that distributing the output from this software may be against c
 
 ## Credits
 
-This began as a fork of [mafaca](https://github.com/mafaca)'s [uTinyRipper](https://github.com/mafaca/UtinyRipper) project licensed under the MIT license.
+This began as a fork of [mafaca](https://github.com/mafaca)'s [uTinyRipper](https://github.com/mafaca/UtinyRipper) project licensed under the [MIT license](Licenses/uTinyRipper.md).
 
-It has borrowed code from [Perfare](https://github.com/Perfare)'s [AssetStudio](https://github.com/Perfare/AssetStudio) project licensed under the MIT license.
+It has borrowed code from [Perfare](https://github.com/Perfare)'s [AssetStudio](https://github.com/Perfare/AssetStudio) project licensed under the [MIT license](Licenses/AssetStudio.md).
 
-[Brotli](https://github.com/google/brotli) is licensed under the MIT license.
+[Brotli](https://github.com/google/brotli) is licensed under the [MIT license](Licenses/Brotli.md).
 
-[Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the MIT license.
+[Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the [MIT license](Licenses/Cpp2IL.md).
 
-[Lz4](https://github.com/lz4/lz4) is licensed under the MIT license and the BSD 2-Clause license.
+FMOD is licensed under a [non-commercial license](Licenses/FMOD.md).
 
-[Mono.Cecil](https://github.com/jbevain/cecil) is licensed under the MIT license.
+[Lz4](https://github.com/lz4/lz4) is licensed under the [MIT license and the BSD 2-Clause license](Licenses/Lz4.md).
 
-[SpirV](https://github.com/Anteru/csspv) is licensed under the BSD 2-Clause license.
+[Mono.Cecil](https://github.com/jbevain/cecil) is licensed under the [MIT license](Licenses/MonoCecil.md).
 
-[Smolv](https://github.com/aras-p/smol-v) is licensed under the MIT license.
+[Smolv](https://github.com/aras-p/smol-v) is licensed under the [MIT license](Licenses/Smolv.md).
+
+[SpirV](https://github.com/Anteru/csspv) is licensed under the [BSD 2-Clause license](Licenses/SpirV.md).
 
 
 ## Disclaimer
