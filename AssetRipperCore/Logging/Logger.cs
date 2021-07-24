@@ -10,10 +10,15 @@ namespace AssetRipper.Logging
 
 		static Logger()
 		{
-			Cpp2IL.Core.Logger.InfoOverride = new Action<string, string>((string message, string source) => Log(LogType.Info, LogCategory.Cpp2IL, message));
-			Cpp2IL.Core.Logger.WarnOverride = new Action<string, string>((string message, string source) => Log(LogType.Warning, LogCategory.Cpp2IL, message));
-			Cpp2IL.Core.Logger.ErrorOverride = new Action<string, string>((string message, string source) => Log(LogType.Error, LogCategory.Cpp2IL, message));
-			Cpp2IL.Core.Logger.VerboseOverride = new Action<string, string>((string message, string source) => Log(LogType.Debug, LogCategory.Cpp2IL, message));
+			Cpp2IL.Core.Logger.InfoOverride = new Action<string, string>((string message, string source) => LogCpp2IL(LogType.Info, message));
+			Cpp2IL.Core.Logger.WarnOverride = new Action<string, string>((string message, string source) => LogCpp2IL(LogType.Warning, message));
+			Cpp2IL.Core.Logger.ErrorOverride = new Action<string, string>((string message, string source) => LogCpp2IL(LogType.Error, message));
+			Cpp2IL.Core.Logger.VerboseOverride = new Action<string, string>((string message, string source) => LogCpp2IL(LogType.Debug, message));
+		}
+
+		private static void LogCpp2IL(LogType logType, string message)
+		{
+			Log(logType, LogCategory.Cpp2IL, message.Trim());
 		}
 
 		public static void Log(LogType type, LogCategory category, string message)

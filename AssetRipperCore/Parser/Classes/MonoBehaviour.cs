@@ -15,8 +15,7 @@ namespace AssetRipper.Parser.Classes
 {
 	public sealed class MonoBehaviour : Behaviour
 	{
-		public MonoBehaviour(AssetInfo assetInfo) :
-			base(assetInfo)
+		public MonoBehaviour(AssetInfo assetInfo) : base(assetInfo)
 		{
 		}
 
@@ -164,6 +163,11 @@ namespace AssetRipper.Parser.Classes
 			return string.Empty;
 		}
 
+		/// <summary>Reads the structure with an AssetReader</summary>
+		/// <returns>
+		/// Returns true if the position does not need reset.<br/>
+		/// Returns false if the position does need reset. 
+		/// </returns>
 		private bool ReadStructure(AssetReader reader)
 		{
 			if (!File.Collection.AssemblyManager.IsSet)
@@ -192,14 +196,15 @@ namespace AssetRipper.Parser.Classes
 				Structure.Read(reader);
 			}
 #if !DEBUG
-			catch
+			catch(System.Exception ex)
 			{
 				Structure = null;
 				Logger.Log(LogType.Error, LogCategory.Import, $"Unable to read {ValidName}, because script layout {script.ValidName} mismatch binary content");
+				Logger.Log(LogType.Debug, LogCategory.Import, $"Stack trace: {ex.ToString()}");
 			}
-			return false;
+			return false;//In a Release Build, always recalculate the position.
 #else
-			return true;
+			return true;//In a Debug Build, let the position stay as is.
 #endif
 		}
 

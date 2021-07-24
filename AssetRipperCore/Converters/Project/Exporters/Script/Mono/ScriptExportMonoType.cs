@@ -241,13 +241,13 @@ namespace AssetRipper.Converters.Project.Exporters.Script.Mono
 		{
 			string name = genericType.Name;
 			int argumentCount = MonoUtils.GetGenericParameterCount(genericType);
-			if (argumentCount == 0)
+			int index = name.IndexOf('`');
+			if (argumentCount == 0 || index < 0)
 			{
 				// nested class/enum (of generic class) is a generic instance but it doesn't have '`' symbol in its name
 				return name;
 			}
 
-			int index = name.IndexOf('`');
 			StringBuilder sb = new StringBuilder(genericType.Name, 0, index, 50 + index);
 			sb.Append('<');
 			for (int i = genericArguments.Count - argumentCount; i < genericArguments.Count; i++)

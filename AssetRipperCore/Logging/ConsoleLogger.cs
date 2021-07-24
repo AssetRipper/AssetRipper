@@ -29,7 +29,7 @@ namespace AssetRipper.Logging
 		public void Log(LogType type, LogCategory category, string message)
 		{
 #if !DEBUG
-			if (category == LogCategory.Debug)
+			if (type == LogType.Debug)
 			{
 				return;
 			}
