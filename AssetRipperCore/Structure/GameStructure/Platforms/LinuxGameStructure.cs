@@ -11,7 +11,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
-				throw new ArgumentNullException(rootPath);
+				throw new ArgumentNullException(nameof(rootPath));
 			}
 			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
 			if (!m_root.Exists)
@@ -23,20 +23,30 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			{
 				throw new Exception($"Data directory wasn't found");
 			}
-			GameDataPath = dataPath;
+
 			Name = name;
+			RootPath = DirectoryUtils.ToLongPath(rootPath);
+			GameDataPath = dataPath;
+			ManagedPath = Path.Combine(GameDataPath, ManagedName);
+			UnityPlayerPath = Path.Combine(RootPath, "UnityPlayer.dll");
+			Il2CppGameAssemblyPath = Path.Combine(RootPath, "GameAssembly.dll");
+			Il2CppMetaDataPath = Path.Combine(GameDataPath, "il2cpp_data", "Metadata", "global-metadata.dat");
+
+			if (File.Exists(Il2CppGameAssemblyPath) && File.Exists(UnityPlayerPath))
+				Backend = Assembly.ScriptingBackend.Il2Cpp;
+			else if (IsMono(ManagedPath))
+				Backend = Assembly.ScriptingBackend.Mono;
+			else
+				Backend = Assembly.ScriptingBackend.Unknown;
+
 			DataPaths = new string[] { dataPath };
 
 			DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(dataPath));
 
-			Dictionary<string, string> files = new Dictionary<string, string>();
-			CollectGameFiles(dataDirectory, files);
-			CollectStreamingAssets(dataDirectory, files);
-			Files = files;
-
-			Dictionary<string, string> assemblies = new Dictionary<string, string>();
-			CollectMainAssemblies(dataDirectory, assemblies);
-			Assemblies = assemblies;
+			CollectGameFiles(dataDirectory, Files);
+			CollectStreamingAssets(dataDirectory, Files);
+			
+			CollectMainAssemblies(dataDirectory, Assemblies);
 		}
 
 		public static bool IsLinuxStructure(string path)
@@ -75,11 +85,14 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			return false;
 		}
 
-		public override string Name { get; }
-		public override IReadOnlyList<string> DataPaths { get; }
+		private static bool IsMono(string managedDirectory)
+		{
+			if (string.IsNullOrEmpty(managedDirectory) || !Directory.Exists(managedDirectory)) return false;
 
-		public override IReadOnlyDictionary<string, string> Files { get; }
-		public override IReadOnlyDictionary<string, string> Assemblies { get; }
+			return Directory.GetFiles(managedDirectory, "*.dll").Length > 0;
+		}
+
+		public override PlatformType Platform => PlatformType.Linux;
 
 		private const string x86Extension = ".x86";
 		private const string x64Extension = ".x64";

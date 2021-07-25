@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace AssetRipper.Structure.GameStructure.Platforms
 {
@@ -13,7 +14,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
-				throw new ArgumentNullException(rootPath);
+				throw new ArgumentNullException(nameof(rootPath));
 			}
 			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
 			if (!m_root.Exists)
@@ -22,13 +23,27 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			}
 
 			string apkDataPath = Path.Combine(rootPath, AssetName, BinName, DataFolderName);
-			GameDataPath = apkDataPath;
 			DirectoryInfo apkDataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(apkDataPath));
 			if (!apkDataDirectory.Exists)
 			{
 				throw new Exception($"Data directory hasn't been found");
 			}
 			List<string> dataPaths = new List<string>() { apkDataPath };
+
+			RootPath = apkDataPath;
+			GameDataPath = apkDataPath;
+			ManagedPath = Path.Combine(GameDataPath, ManagedName);
+			LibPath = Path.Combine(RootPath, LibName);
+			Il2CppGameAssemblyPath = GetIl2CppGameAssemblyPath(LibPath);
+			Il2CppMetaDataPath = Path.Combine(ManagedPath, MetadataName, "global-metadata.dat");
+			UnityPlayerPath = GetAndroidUnityPlayerPath(LibPath);
+
+			if (Il2CppGameAssemblyPath != null && UnityPlayerPath != null)
+				Backend = Assembly.ScriptingBackend.Il2Cpp;
+			else if (IsMono(ManagedPath))
+				Backend = Assembly.ScriptingBackend.Mono;
+			else
+				Backend = Assembly.ScriptingBackend.Unknown;
 
 			DirectoryInfo obbDataDirectory = null;
 			if (obbPath != null)
@@ -48,18 +63,14 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			}
 			DataPaths = dataPaths.ToArray();
 
-			Dictionary<string, string> files = new Dictionary<string, string>();
-			CollectGameFiles(apkDataDirectory, files);
+			CollectGameFiles(apkDataDirectory, Files);
 			if (obbDataDirectory != null)
 			{
-				CollectGameFiles(obbDataDirectory, files);
+				CollectGameFiles(obbDataDirectory, Files);
 			}
-			CollectApkAssetBundles(files);
-			Files = files;
+			CollectApkAssetBundles(Files);
 
-			Dictionary<string, string> assemblies = new Dictionary<string, string>();
-			CollectMainAssemblies(apkDataDirectory, assemblies);
-			Assemblies = assemblies;
+			CollectMainAssemblies(apkDataDirectory, Assemblies);
 		}
 
 		public static bool IsAndroidStructure(string path)
@@ -147,15 +158,35 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			}
 		}
 
-		public override string Name => m_root.Name;
-		public override IReadOnlyList<string> DataPaths { get; }
+		private static string GetIl2CppGameAssemblyPath(string libDirectory)
+		{
+			if (string.IsNullOrEmpty(libDirectory) || !Directory.Exists(libDirectory)) return null;
 
-		public override IReadOnlyDictionary<string, string> Files { get; }
-		public override IReadOnlyDictionary<string, string> Assemblies { get; }
+			return Directory.GetFiles(libDirectory, Il2CppGameAssemblyName, SearchOption.AllDirectories).FirstOrDefault();
+		}
+
+		private static string GetAndroidUnityPlayerPath(string libDirectory)
+		{
+			if (string.IsNullOrEmpty(libDirectory) || !Directory.Exists(libDirectory)) return null;
+
+			return Directory.GetFiles(libDirectory, AndroidUnityPlayerName, SearchOption.AllDirectories).FirstOrDefault();
+		}
+
+		private static bool IsMono(string managedDirectory)
+		{
+			if (string.IsNullOrEmpty(managedDirectory) || !Directory.Exists(managedDirectory)) return false;
+
+			return Directory.GetFiles(managedDirectory, "*.dll").Length > 0;
+		}
+
+		public override PlatformType Platform => PlatformType.Android;
+		public string LibPath { get; protected set; }
 
 		private const string AssetName = "assets";
 		private const string MetaName = "META-INF";
 		private const string BinName = "bin";
+		private const string Il2CppGameAssemblyName = "libil2cpp.so";
+		private const string AndroidUnityPlayerName = "libunity.so";
 
 		private readonly DirectoryInfo m_root;
 		private readonly DirectoryInfo m_obbRoot;

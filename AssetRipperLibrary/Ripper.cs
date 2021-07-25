@@ -26,6 +26,10 @@ namespace AssetRipperLibrary
 		public void Export(string exportPath)
 		{
 			Logger.Log(LogType.Info, LogCategory.General, $"Attempting to export assets to {exportPath}...");
+			if (GameStructure == null) throw new NullReferenceException("GameStructure cannot be null");
+			if (GameStructure.FileCollection == null) throw new NullReferenceException("FileCollection cannot be null");
+			if (GameStructure.FileCollection.Exporter == null) throw new NullReferenceException("Project Exporter cannot be null");
+
 			//Core Exporters
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter());
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, new FontAssetExporter());

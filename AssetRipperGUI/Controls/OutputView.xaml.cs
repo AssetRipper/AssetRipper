@@ -14,7 +14,11 @@ namespace AssetRipperGUI.Controls
 
 			Logger.Add(new OutputLogger(Textbox));
 			Logger.Add(new FileLogger());
-			Logger.LogSystemInformation();
+#if PLATFORM_X64
+			Logger.LogSystemInformation("AssetRipper GUI Version", "x64");
+#elif PLATFORM_X86
+			Logger.LogSystemInformation("AssetRipper GUI Version", "x86");
+#endif
 		}
 
 		public void Clear()

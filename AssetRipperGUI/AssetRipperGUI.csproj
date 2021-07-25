@@ -18,26 +18,24 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DefineConstants>TRACE;DEBUG;WIN64</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <DefineConstants>TRACE;WIN64</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Virtual|x64' ">
-    <DefineConstants>TRACE;DEBUG;WIN64;VIRTUAL</DefineConstants>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <DefineConstants>TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Virtual|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Virtual' ">
     <DefineConstants>TRACE;DEBUG;VIRTUAL</DefineConstants>
   </PropertyGroup>
-  
+
+  <PropertyGroup Condition="'$(Platform)'=='x64'">
+    <DefineConstants>PLATFORM_X64;WIN64</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)'=='x86'">
+    <DefineConstants>PLATFORM_X86</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup>
     <ApplicationIcon>Resources\GUI_Icon.ico</ApplicationIcon>
   </PropertyGroup>

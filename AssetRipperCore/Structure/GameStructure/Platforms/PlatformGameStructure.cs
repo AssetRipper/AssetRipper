@@ -4,16 +4,50 @@ using AssetRipper.Parser.Utils;
 using AssetRipper.Structure.Assembly;
 using AssetRipper.Structure.Assembly.Managers;
 using AssetRipper.Utils;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace AssetRipper.Structure.GameStructure.Platforms
 {
 	public abstract class PlatformGameStructure
 	{
+		public string Name { get; protected set; }
+		public string RootPath { get; protected set; }
+		public string GameDataPath { get; protected set; }
+		public ScriptingBackend Backend { get; protected set; } = ScriptingBackend.Unknown;
+		public abstract PlatformType Platform { get; }
+		public string ManagedPath { get; protected set; }
+		public string UnityPlayerPath { get; protected set; }
+		public string Il2CppGameAssemblyPath { get; protected set; }
+		public string Il2CppMetaDataPath { get; protected set; }
+		//public AssemblyManager AssemblyManager { get; protected set; }
+		public IReadOnlyList<string> DataPaths { get; protected set; }
+
+		public Dictionary<string, string> Files { get; } = new Dictionary<string, string>();
+		/// <summary>AssemblyName : AssemblyPath</summary>
+		public Dictionary<string, string> Assemblies { get; } = new Dictionary<string, string>();
+
+		protected static readonly Regex s_levelTemplate = new Regex($@"^level(0|[1-9][0-9]*)({MultiFileStream.MultifileRegPostfix}0)?$", RegexOptions.Compiled);
+		protected static readonly Regex s_sharedAssetTemplate = new Regex(@"^sharedassets[0-9]+\.assets", RegexOptions.Compiled);
+
+		protected const string DataFolderName = "Data";
+		protected const string ManagedName = "Managed";
+		protected const string LibName = "lib";
+		protected const string ResourcesName = "Resources";
+		protected const string UnityName = "unity";
+		protected const string StreamingName = "StreamingAssets";
+		protected const string MetadataName = "Metadata";
+
+		protected const string DataName = "data";
+		protected const string MainDataName = "mainData";
+		protected const string GlobalGameManagerName = "globalgamemanagers";
+		protected const string GlobalGameManagerAssetsName = "globalgamemanagers.assets";
+		protected const string ResourcesAssetsName = "resources.assets";
+		protected const string LevelPrefix = "level";
+
+		protected const string AssetBundleExtension = ".unity3d";
+
 		public static bool IsPrimaryEngineFile(string fileName)
 		{
 			if (fileName == MainDataName)
@@ -89,28 +123,6 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 				}
 			}
 			return null;
-		}
-
-		public virtual ScriptingBackend GetScriptingBackend()
-		{
-			if (Assemblies.Count == 0)
-			{
-				return ScriptingBackend.Unknown;
-			}
-
-			string assemblyName = Assemblies.First().Key;
-			if (Il2CppManager.IsIl2Cpp(assemblyName))
-			{
-				return ScriptingBackend.Il2Cpp;
-			}
-			else if (MonoManager.IsMonoAssembly(assemblyName))
-			{
-				return ScriptingBackend.Mono;
-			}
-			else
-			{
-				throw new NotImplementedException();
-			}
 		}
 
 		protected void CollectGameFiles(DirectoryInfo root, IDictionary<string, string> files)
@@ -190,31 +202,31 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		{
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
-				if (AssemblyManager.IsAssembly(file.Name))
+				if (MonoManager.IsMonoAssembly(file.Name))
 				{
 					assemblies.Add(file.Name, file.FullName);
 				}
 			}
 		}
 
-		protected void CollectMainAssemblies(DirectoryInfo root, IDictionary<string, string> assemblies)
+		protected void CollectMainAssemblies(DirectoryInfo dataDirectory, IDictionary<string, string> assemblies)
 		{
-			string managedPath = Path.Combine(root.FullName, ManagedName);
-			if (CollectIl2CppGameAssembly(root?.Parent, assemblies))
+			string managedPath = ManagedPath ?? Path.Combine(dataDirectory.FullName, ManagedName);
+			if (Backend == ScriptingBackend.Il2Cpp)
 			{
 				return;//If Il2Cpp, don't look for any other assemblies
 			}
-			else if (Directory.Exists(managedPath))
+			else if (Directory.Exists(ManagedPath))
 			{
-				DirectoryInfo managedDirectory = new DirectoryInfo(managedPath);
+				DirectoryInfo managedDirectory = new DirectoryInfo(ManagedPath);
 				CollectAssemblies(managedDirectory, assemblies);
 			}
 			else
 			{
-				string libPath = Path.Combine(root.FullName, LibName);
+				string libPath = Path.Combine(dataDirectory.FullName, LibName);
 				if (Directory.Exists(libPath))
 				{
-					CollectAssemblies(root, assemblies);
+					CollectAssemblies(dataDirectory, assemblies);
 					DirectoryInfo libDirectory = new DirectoryInfo(libPath);
 					CollectAssemblies(libDirectory, assemblies);
 				}
@@ -225,13 +237,13 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		/// <param name="root">The directory to search for the assembly.</param>
 		/// <param name="assemblies">A dictionary to add the assembly to.</param>
 		/// <returns>True if the game assembly was found. False otherwise</returns>
-		protected bool CollectIl2CppGameAssembly(DirectoryInfo root, IDictionary<string, string> assemblies)
+		protected virtual bool CollectIl2CppGameAssembly(DirectoryInfo root, IDictionary<string, string> assemblies)
 		{
 			if(root != null)
 			{
 				foreach (FileInfo file in root.EnumerateFiles())
 				{
-					if (file.Name == Il2CppManager.GameAssemblyName)
+					if (file.Name == Il2CppManager.DefaultGameAssemblyName)
 					{
 						assemblies.Add(file.Name, file.FullName);
 						return true;
@@ -284,32 +296,5 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			files.Add(uniqueName, path);
 			Logger.Log(LogType.Info, LogCategory.Import, $"Asset bundle '{name}' has been found");
 		}
-
-		public abstract string Name { get; }
-		public string GameDataPath { get; protected set; }
-		public abstract IReadOnlyList<string> DataPaths { get; }
-
-		public abstract IReadOnlyDictionary<string, string> Files { get; }
-		/// <summary>AssemblyName : AssemblyPath</summary>
-		public abstract IReadOnlyDictionary<string, string> Assemblies { get; }
-
-		protected static readonly Regex s_levelTemplate = new Regex($@"^level(0|[1-9][0-9]*)({MultiFileStream.MultifileRegPostfix}0)?$", RegexOptions.Compiled);
-		protected static readonly Regex s_sharedAssetTemplate = new Regex(@"^sharedassets[0-9]+\.assets", RegexOptions.Compiled);
-
-		protected const string DataFolderName = "Data";
-		protected const string ManagedName = "Managed";
-		protected const string LibName = "lib";
-		protected const string ResourcesName = "Resources";
-		protected const string UnityName = "unity";
-		protected const string StreamingName = "StreamingAssets";
-
-		protected const string DataName = "data";
-		protected const string MainDataName = "mainData";
-		protected const string GlobalGameManagerName = "globalgamemanagers";
-		protected const string GlobalGameManagerAssetsName = "globalgamemanagers.assets";
-		protected const string ResourcesAssetsName = "resources.assets";
-		protected const string LevelPrefix = "level";
-
-		protected const string AssetBundleExtension = ".unity3d";
 	}
 }

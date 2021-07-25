@@ -11,7 +11,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
-				throw new ArgumentNullException(rootPath);
+				throw new ArgumentNullException(nameof(rootPath));
 			}
 			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
 			if (!m_root.Exists)
@@ -19,7 +19,6 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
 			}
 
-			Dictionary<string, string> files = new Dictionary<string, string>();
 			string buildPath = Path.Combine(m_root.FullName, BuildName);
 			if (Directory.Exists(buildPath))
 			{
@@ -29,7 +28,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 					if (file.Name.EndsWith(DataWebExtension, StringComparison.Ordinal))
 					{
 						Name = file.Name.Substring(0, file.Name.Length - DataWebExtension.Length);
-						files.Add(Name, file.FullName);
+						Files.Add(Name, file.FullName);
 						break;
 					}
 				}
@@ -46,7 +45,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 						if (file.Extension == DataExtension)
 						{
 							Name = file.Name.Substring(0, file.Name.Length - DataExtension.Length);
-							files.Add(Name, file.FullName);
+							Files.Add(Name, file.FullName);
 							break;
 						}
 					}
@@ -63,7 +62,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 							if (file.Extension == DataGzExtension)
 							{
 								Name = file.Name.Substring(0, file.Name.Length - DataGzExtension.Length);
-								files.Add(Name, file.FullName);
+								Files.Add(Name, file.FullName);
 								break;
 							}
 						}
@@ -76,15 +75,22 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 				}
 			}
 
-			if (files.Count == 0)
+#warning TODO: WebGL paths
+			Name = m_root.Name;
+			RootPath = rootPath;
+			GameDataPath = null;
+			ManagedPath = null;
+			UnityPlayerPath = null;
+			Il2CppGameAssemblyPath = null;
+			Il2CppMetaDataPath = null;
+			Backend = Assembly.ScriptingBackend.Unknown;
+
+			if (Files.Count == 0)
 			{
 				throw new Exception("No files were found");
 			}
 
-			CollectStreamingAssets(m_root, files);
-			Files = files;
-
-			Assemblies = new Dictionary<string, string>();
+			CollectStreamingAssets(m_root, Files);
 		}
 
 		public static bool IsWebGLStructure(string path)
@@ -147,11 +153,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			return false;
 		}
 
-		public override string Name { get; }
-		public override IReadOnlyList<string> DataPaths { get; }
-
-		public override IReadOnlyDictionary<string, string> Files { get; }
-		public override IReadOnlyDictionary<string, string> Assemblies { get; }
+		public override PlatformType Platform => PlatformType.WebGL;
 
 		private const string DevelopmentName = "Development";
 		private const string ReleaseName = "Release";

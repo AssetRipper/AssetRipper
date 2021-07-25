@@ -12,7 +12,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
-				throw new ArgumentNullException(rootPath);
+				throw new ArgumentNullException(nameof(rootPath));
 			}
 			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
 			if (!m_root.Exists)
@@ -24,18 +24,24 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			{
 				throw new Exception($"Web player asset bundle data wasn't found");
 			}
+
+#warning TODO: WebPlayer paths
 			Name = name;
+			RootPath = rootPath;
+			GameDataPath = null;
+			ManagedPath = null;
+			UnityPlayerPath = null;
+			Il2CppGameAssemblyPath = null;
+			Il2CppMetaDataPath = null;
+			Backend = Assembly.ScriptingBackend.Mono;
+
 			DataPaths = new string[] { rootPath };
 
-			Dictionary<string, string> files = new Dictionary<string, string>();
 			string abPath = Path.Combine(m_root.FullName, Name + AssetBundleExtension);
-			files.Add(Name, abPath);
-			CollectStreamingAssets(m_root, files);
-			Files = files;
-
-			Dictionary<string, string> assemblies = new Dictionary<string, string>();
-			CollectMainAssemblies(m_root, assemblies);
-			Assemblies = assemblies;
+			Files.Add(Name, abPath);
+			CollectStreamingAssets(m_root, Files);
+			
+			CollectMainAssemblies(m_root, Assemblies);
 		}
 
 		public static bool IsWebPlayerStructure(string path)
@@ -67,16 +73,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			return false;
 		}
 
-		public override ScriptingBackend GetScriptingBackend()
-		{
-			return ScriptingBackend.Mono;
-		}
-
-		public override string Name { get; }
-		public override IReadOnlyList<string> DataPaths { get; }
-
-		public override IReadOnlyDictionary<string, string> Files { get; }
-		public override IReadOnlyDictionary<string, string> Assemblies { get; }
+		public override PlatformType Platform => PlatformType.WebPlayer;
 
 		private const string HtmlExtension = ".html";
 

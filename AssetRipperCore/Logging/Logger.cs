@@ -43,21 +43,33 @@ namespace AssetRipper.Logging
 				instance?.BlankLine(numLines);
 		}
 
-		private static void LogReleaseInformation()
+		private static void LogReleaseInformation(string platformType)
 		{
 #if VIRTUAL
-			Log(LogType.Info, LogCategory.General, "Build type: Virtual");
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Virtual {platformType}");
 #elif DEBUG
-			Log(LogType.Info, LogCategory.General, "Build type: Debug");
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Debug {platformType}");
 #else
-			Log(LogType.Info, LogCategory.General, "Build type: Release");
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Release {platformType}");
 #endif
 		}
 
-		public static void LogSystemInformation()
+		private static void LogOperatingSystemInformation()
 		{
-			Log(LogType.Info, LogCategory.General, $"Operating System: {RunetimeUtils.RuntimeOS.ToString()}");
-			LogReleaseInformation();
+			Log(LogType.Info, LogCategory.System, $"System Version: {Environment.OSVersion.VersionString}");
+			string osBitness = Environment.Is64BitOperatingSystem ? "x64" : "x86";
+			string operatingSystem = RunetimeUtils.RuntimeOS.ToString();
+			Log(LogType.Info, LogCategory.System, $"Operating System: {operatingSystem} {osBitness}");
+		}
+
+		public static void LogSystemInformation(string programName, string platformType)
+		{
+			Log(LogType.Info, LogCategory.System, programName);
+			LogOperatingSystemInformation();
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Version: {BuildInfo.Version}");
+			LogReleaseInformation(platformType);
+			string processBitness = Environment.Is64BitProcess ? "x64" : "x86";
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Process: {processBitness}");
 		}
 
 		public static void Add(ILogger logger) => loggers.Add(logger);

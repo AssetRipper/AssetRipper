@@ -199,8 +199,9 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			if (paths.Count > 0)
 			{
 				gameStructure = new MixedGameStructure(paths);
+				Logger.Log(LogType.Info, LogCategory.Import, $"Mixed game structure has been found for {paths.Count} path(s)");
 				paths.Clear();
-				return false;
+				return true;
 			}
 			gameStructure = null;
 			return false;

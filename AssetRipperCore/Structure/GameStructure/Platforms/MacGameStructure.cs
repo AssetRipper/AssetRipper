@@ -11,7 +11,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
-				throw new ArgumentNullException(rootPath);
+				throw new ArgumentNullException(nameof(rootPath));
 			}
 			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
 			if (!m_root.Exists)
@@ -19,10 +19,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
 			}
 
-			Name = m_root.Name.Substring(0, m_root.Name.Length - AppExtension.Length);
-
 			string dataPath = Path.Combine(m_root.FullName, ContentsName, DataFolderName);
-			GameDataPath = dataPath;
 			if (!Directory.Exists(dataPath))
 			{
 				throw new Exception("Data directory wasn't found");
@@ -34,16 +31,29 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			}
 			DataPaths = new string[] { dataPath, resourcePath };
 
+
+			Name = m_root.Name.Substring(0, m_root.Name.Length - AppExtension.Length);
+			RootPath = rootPath;
+			GameDataPath = dataPath;
+			ManagedPath = Path.Combine(GameDataPath, ManagedName);
+			UnityPlayerPath = Path.Combine(RootPath, "UnityPlayer.dll");
+			Il2CppGameAssemblyPath = Path.Combine(RootPath, "GameAssembly.dll");
+			Il2CppMetaDataPath = Path.Combine(GameDataPath, "il2cpp_data", "Metadata", "global-metadata.dat");
+
+			if (File.Exists(Il2CppGameAssemblyPath) && File.Exists(UnityPlayerPath))
+				Backend = Assembly.ScriptingBackend.Il2Cpp;
+			else if (IsMono(ManagedPath))
+				Backend = Assembly.ScriptingBackend.Mono;
+			else
+				Backend = Assembly.ScriptingBackend.Unknown;
+
+
 			DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(dataPath));
 
-			Dictionary<string, string> files = new Dictionary<string, string>();
-			CollectGameFiles(dataDirectory, files);
-			CollectStreamingAssets(dataDirectory, files);
-			Files = files;
+			CollectGameFiles(dataDirectory, Files);
+			CollectStreamingAssets(dataDirectory, Files);
 
-			Dictionary<string, string> assemblies = new Dictionary<string, string>();
-			CollectMainAssemblies(dataDirectory, assemblies);
-			Assemblies = assemblies;
+			CollectMainAssemblies(dataDirectory, Assemblies);
 		}
 
 		public static bool IsMacStructure(string path)
@@ -71,11 +81,14 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			return true;
 		}
 
-		public override string Name { get; }
-		public override IReadOnlyList<string> DataPaths { get; }
+		private static bool IsMono(string managedDirectory)
+		{
+			if (string.IsNullOrEmpty(managedDirectory) || !Directory.Exists(managedDirectory)) return false;
 
-		public override IReadOnlyDictionary<string, string> Files { get; }
-		public override IReadOnlyDictionary<string, string> Assemblies { get; }
+			return Directory.GetFiles(managedDirectory, "*.dll").Length > 0;
+		}
+
+		public override PlatformType Platform => PlatformType.Mac;
 
 		private const string ContentsName = "Contents";
 		private const string AppExtension = ".app";

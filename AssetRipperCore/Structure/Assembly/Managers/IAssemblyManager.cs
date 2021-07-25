@@ -1,6 +1,7 @@
 using AssetRipper.Converters.Project.Exporters.Script;
 using AssetRipper.Converters.Project.Exporters.Script.Elements;
 using AssetRipper.Structure.Assembly.Serializable;
+using AssetRipper.Structure.GameStructure.Platforms;
 using System;
 using System.IO;
 
@@ -8,7 +9,7 @@ namespace AssetRipper.Structure.Assembly.Managers
 {
 	public interface IAssemblyManager : IDisposable
 	{
-		void Initialize(string gameDataPath);
+		void Initialize(PlatformGameStructure gameStructure);
 		void Load(string filePath);
 		void Read(Stream stream, string fileName);
 		void Unload(string fileName);

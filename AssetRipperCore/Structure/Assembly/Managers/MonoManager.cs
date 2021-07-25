@@ -1,4 +1,6 @@
+using AssetRipper.Layout;
 using AssetRipper.Logging;
+using AssetRipper.Structure.GameStructure.Platforms;
 using System;
 using System.IO;
 
@@ -10,11 +12,14 @@ namespace AssetRipper.Structure.Assembly.Managers
 		public string GameDataPath { get; private set; }
 		public string ManagedPath { get; private set; }
 
-		public MonoManager(AssemblyManager assemblyManager) : base(assemblyManager) { }
+		public override bool IsSet => true;
 
-		public override void Initialize(string gameDataPath)
+		public MonoManager(AssetLayout layout, Action<string> requestAssemblyCallback) : base(layout, requestAssemblyCallback) { }
+
+		public override void Initialize(PlatformGameStructure gameStructure)
 		{
-			if (string.IsNullOrWhiteSpace(gameDataPath)) throw new ArgumentNullException(nameof(gameDataPath));
+			string gameDataPath = gameStructure?.GameDataPath;
+			if (string.IsNullOrWhiteSpace(gameDataPath)) return;//Mixed Game Structures don't necessarily have a managed folder
 
 			GameDataPath = Path.GetFullPath(gameDataPath);
 			ManagedPath = Path.Combine(GameDataPath, "Managed");

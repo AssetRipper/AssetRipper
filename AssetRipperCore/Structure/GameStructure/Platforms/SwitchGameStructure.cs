@@ -11,7 +11,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
-				throw new ArgumentNullException(rootPath);
+				throw new ArgumentNullException(nameof(rootPath));
 			}
 			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
 			if (!m_root.Exists)
@@ -24,18 +24,23 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 				throw new Exception($"Data directory wasn't found");
 			}
 
+#warning TODO: Switch paths
+			Name = m_root.Name;
+			RootPath = rootPath;
 			GameDataPath = dataPath;
+			ManagedPath = null;
+			UnityPlayerPath = null;
+			Il2CppGameAssemblyPath = null;
+			Il2CppMetaDataPath = null;
+			Backend = Assembly.ScriptingBackend.Unknown;
+
 			DataPaths = new string[] { dataPath };
 
 			DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(dataPath));
 
-			Dictionary<string, string> files = new Dictionary<string, string>();
-			CollectGameFiles(dataDirectory, files);
-			Files = files;
+			CollectGameFiles(dataDirectory, Files);
 
-			Dictionary<string, string> assemblies = new Dictionary<string, string>();
-			CollectMainAssemblies(dataDirectory, assemblies);
-			Assemblies = assemblies;
+			CollectMainAssemblies(dataDirectory, Assemblies);
 		}
 
 		public static bool IsSwitchStructure(string path)
@@ -73,11 +78,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			return true;
 		}
 
-		public override string Name => m_root.Name;
-		public override IReadOnlyList<string> DataPaths { get; }
-
-		public override IReadOnlyDictionary<string, string> Files { get; }
-		public override IReadOnlyDictionary<string, string> Assemblies { get; }
+		public override PlatformType Platform => PlatformType.Switch;
 
 		private const string ExecutableName = "exefs";
 		private const string RomName = "romfs";

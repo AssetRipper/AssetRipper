@@ -316,7 +316,7 @@ namespace AssetRipper.Structure.Assembly.Mono
 			// reference and definition may has differrent module, so to avoid duplicates we need try to get defition
 			TypeReference definition = type.ResolveOrDefault();
 			definition = definition == null ? type : definition;
-			return AssemblyManager.ToAssemblyName(definition.Scope.Name);
+			return BaseManager.ToAssemblyName(definition.Scope.Name);
 		}
 
 		private static string GetNestedGenericName(TypeReference type, List<TypeReference> genericArguments)

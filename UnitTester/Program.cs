@@ -22,7 +22,11 @@ namespace UnitTester
 
 			Logger.Add(new ConsoleLogger());
 			Logger.Add(new FileLogger("UnitTester.log"));
-			Logger.LogSystemInformation();
+#if PLATFORM_X64
+			Logger.LogSystemInformation("Unit Tester", "x64");
+#elif PLATFORM_X86
+			Logger.LogSystemInformation("Unit Tester", "x86");
+#endif
 			Logger.BlankLine();
 
 			RunTests();

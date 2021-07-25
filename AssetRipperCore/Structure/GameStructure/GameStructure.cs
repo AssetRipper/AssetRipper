@@ -24,7 +24,6 @@ namespace AssetRipper.Structure.GameStructure
 		private GameStructure() { }
 
 		public static GameStructure Load(IEnumerable<string> paths) => Load(paths, null);
-
 		public static GameStructure Load(IEnumerable<string> paths, LayoutInfo layinfo)
 		{
 			List<string> toProcess = new List<string>();
@@ -39,7 +38,43 @@ namespace AssetRipper.Structure.GameStructure
 			return structure;
 		}
 
-		private static bool DefaultAssetFilter(Object asset) => true;
+		private void Load(List<string> paths, LayoutInfo layinfo)
+		{
+			PlatformChecker.CheckPlatform(paths, out PlatformGameStructure platformStructure, out MixedGameStructure mixedStructure);
+			PlatformStructure = platformStructure;
+			MixedStructure = mixedStructure;
+
+			using (GameStructureProcessor processor = new GameStructureProcessor())
+			{
+				if (PlatformStructure != null)
+				{
+					ProcessPlatformStructure(processor, PlatformStructure);
+				}
+				if (MixedStructure != null)
+				{
+					ProcessPlatformStructure(processor, MixedStructure);
+				}
+				processor.AddDependencySchemes(RequestDependency);
+
+				if (!processor.IsValid)
+				{
+					Logger.Log(LogType.Warning, LogCategory.Import, "The game structure processor could not find any valid assets.");
+				}
+				else
+				{
+					layinfo = layinfo ?? processor.GetLayoutInfo();
+					AssetLayout layout = new AssetLayout(layinfo);
+					GameCollection.Parameters pars = new GameCollection.Parameters(layout);
+					pars.ScriptBackend = GetScriptingBackend();
+					Logger.Log(LogType.Info, LogCategory.Import, $"Files use the '{pars.ScriptBackend}' scripting backend.");
+					pars.RequestAssemblyCallback = OnRequestAssembly;
+					pars.RequestResourceCallback = OnRequestResource;
+					FileCollection = new GameCollection(pars);
+					FileCollection.AssemblyManager.Initialize(PlatformStructure);
+					processor.ProcessSchemes(FileCollection);
+				}
+			}
+		}
 
 		public void Export(string exportPath) => Export(exportPath, null);
 		public void Export(string exportPath, Func<Object, bool> filter)
@@ -48,7 +83,7 @@ namespace AssetRipper.Structure.GameStructure
 			Version maxVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
 			Version version = defaultVersion < maxVersion ? maxVersion : defaultVersion;
 			ExportOptions options = new ExportOptions(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
-			options.Filter = filter ?? new Func<Object, bool>(DefaultAssetFilter);
+			options.Filter = filter ?? new Func<Object, bool>((Object obj) => true);
 			FileCollection.Exporter.Export(exportPath, FileCollection, FileCollection.FetchSerializedFiles(), options);
 		}
 
@@ -118,40 +153,6 @@ namespace AssetRipper.Structure.GameStructure
 			return null;
 		}
 
-		private void Load(List<string> paths, LayoutInfo layinfo)
-		{
-			PlatformChecker.CheckPlatform(paths, out PlatformGameStructure platformStructure, out MixedGameStructure mixedStructure);
-			PlatformStructure = platformStructure;
-			MixedStructure = mixedStructure;
-
-			using (GameStructureProcessor processor = new GameStructureProcessor())
-			{
-				if (PlatformStructure != null)
-				{
-					ProcessPlatformStructure(processor, PlatformStructure);
-				}
-				if (MixedStructure != null)
-				{
-					ProcessPlatformStructure(processor, MixedStructure);
-				}
-				processor.AddDependencySchemes(RequestDependency);
-
-				if (processor.IsValid)
-				{
-					layinfo = layinfo ?? processor.GetLayoutInfo();
-					AssetLayout layout = new AssetLayout(layinfo);
-					GameCollection.Parameters pars = new GameCollection.Parameters(layout);
-					pars.ScriptBackend = GetScriptingBackend();
-					Logger.Log(LogType.Info, LogCategory.Import, $"Files use the '{pars.ScriptBackend}' scripting backend.");
-					pars.RequestAssemblyCallback = OnRequestAssembly;
-					pars.RequestResourceCallback = OnRequestResource;
-					FileCollection = new GameCollection(pars);
-					FileCollection.AssemblyManager.Initialize(this.PlatformStructure?.GameDataPath);
-					processor.ProcessSchemes(FileCollection);
-				}
-			}
-		}
-
 		private void ProcessPlatformStructure(GameStructureProcessor processor, PlatformGameStructure structure)
 		{
 			foreach (KeyValuePair<string, string> file in structure.Files)
@@ -164,7 +165,7 @@ namespace AssetRipper.Structure.GameStructure
 		{
 			if (PlatformStructure != null)
 			{
-				ScriptingBackend backend = PlatformStructure.GetScriptingBackend();
+				ScriptingBackend backend = PlatformStructure.Backend;
 				if (backend != ScriptingBackend.Unknown)
 				{
 					return backend;
@@ -172,7 +173,7 @@ namespace AssetRipper.Structure.GameStructure
 			}
 			if (MixedStructure != null)
 			{
-				ScriptingBackend backend = MixedStructure.GetScriptingBackend();
+				ScriptingBackend backend = MixedStructure.Backend;
 				if (backend != ScriptingBackend.Unknown)
 				{
 					return backend;
@@ -181,30 +182,21 @@ namespace AssetRipper.Structure.GameStructure
 			return ScriptingBackend.Unknown;
 		}
 
-		private string OnRequestAssembly(string assembly)
-		{
-			return RequestAssembly(assembly);
-		}
+		private string OnRequestAssembly(string assembly) => RequestAssembly(assembly);
 
-		private string OnRequestResource(string resource)
-		{
-			return RequestResource(resource);
-		}
+		private string OnRequestResource(string resource) => RequestResource(resource);
 
 		public string Name
 		{
 			get
 			{
 				if (PlatformStructure == null)
-				{
 					return MixedStructure.Name;
-				}
 				else
-				{
 					return PlatformStructure.Name;
-				}
 			}
 		}
+
 		public void Dispose()
 		{
 			Dispose(true);

@@ -11,7 +11,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
-				throw new ArgumentNullException(rootPath);
+				throw new ArgumentNullException(nameof(rootPath));
 			}
 			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
 			if (!m_root.Exists)
@@ -23,20 +23,25 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			{
 				throw new Exception($"Data directory wasn't found");
 			}
-			GameDataPath = dataPath;
+
+#warning TODO: ios script support
 			Name = name;
+			RootPath = rootPath;
+			GameDataPath = dataPath;
+			ManagedPath = null;
+			UnityPlayerPath = null;
+			Il2CppGameAssemblyPath = null;
+			Il2CppMetaDataPath = null;
+			Backend = Assembly.ScriptingBackend.Unknown;
+
 			DataPaths = new string[] { dataPath };
 
 			DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(dataPath));
 
-			Dictionary<string, string> files = new Dictionary<string, string>();
-			CollectGameFiles(dataDirectory, files);
-			CollectiOSStreamingAssets(dataDirectory, files);
-			Files = files;
+			CollectGameFiles(dataDirectory, Files);
+			CollectiOSStreamingAssets(dataDirectory, Files);
 
-			Dictionary<string, string> assemblies = new Dictionary<string, string>();
-			CollectMainAssemblies(dataDirectory, assemblies);
-			Assemblies = assemblies;
+			CollectMainAssemblies(dataDirectory, Assemblies);
 		}
 
 		public static bool IsiOSStructure(string path)
@@ -90,11 +95,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			}
 		}
 
-		public override string Name { get; }
-		public override IReadOnlyList<string> DataPaths { get; }
-
-		public override IReadOnlyDictionary<string, string> Files { get; }
-		public override IReadOnlyDictionary<string, string> Assemblies { get; }
+		public override PlatformType Platform => PlatformType.iOS;
 
 		private const string iOSStreamingName = "Raw";
 

@@ -18,16 +18,10 @@ namespace AssetRipper.Structure.GameStructure
 {
 	internal sealed class GameStructureProcessor : IDisposable
 	{
-		~GameStructureProcessor()
-		{
-			Dispose(false);
-		}
+		private readonly List<FileScheme> m_schemes = new List<FileScheme>();
+		private readonly HashSet<string> m_knownFiles = new HashSet<string>();
 
-		public void Dispose()
-		{
-			GC.SuppressFinalize(this);
-			Dispose(true);
-		}
+		public bool IsValid => m_schemes.Any(t => t.SchemeType != FileEntryType.Resource);
 
 		public void AddScheme(string filePath, string fileName)
 		{
@@ -127,14 +121,6 @@ namespace AssetRipper.Structure.GameStructure
 			}
 		}
 
-		private void Dispose(bool disposing)
-		{
-			foreach (FileScheme scheme in m_schemes)
-			{
-				scheme.Dispose();
-			}
-		}
-
 		private LayoutInfo GetLayoutInfo(SerializedFileScheme serialized)
 		{
 			if (SerializedFileMetadata.HasPlatform(serialized.Header.Version))
@@ -217,9 +203,23 @@ namespace AssetRipper.Structure.GameStructure
 			}
 		}
 
-		public bool IsValid => m_schemes.Any(t => t.SchemeType != FileEntryType.Resource);
+		~GameStructureProcessor()
+		{
+			Dispose(false);
+		}
 
-		private readonly List<FileScheme> m_schemes = new List<FileScheme>();
-		private readonly HashSet<string> m_knownFiles = new HashSet<string>();
+		public void Dispose()
+		{
+			GC.SuppressFinalize(this);
+			Dispose(true);
+		}
+
+		private void Dispose(bool disposing)
+		{
+			foreach (FileScheme scheme in m_schemes)
+			{
+				scheme.Dispose();
+			}
+		}
 	}
 }

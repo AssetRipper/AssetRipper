@@ -11,6 +11,14 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Platform)'=='x64'">
+    <DefineConstants>PLATFORM_X64</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)'=='x86'">
+    <DefineConstants>PLATFORM_X86</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="obj\**" />
     <EmbeddedResource Remove="obj\**" />

@@ -29,7 +29,7 @@ namespace AssetRipper.Converters.Project.Exporters.Script
 
 		private static string GetExportSubPath(string assembly, string @namespace, string @class)
 		{
-			string assemblyFolder = AssemblyManager.ToAssemblyName(assembly);
+			string assemblyFolder = BaseManager.ToAssemblyName(assembly);
 			string namespaceFolder = @namespace.Replace('.', Path.DirectorySeparatorChar);
 			string folderPath = Path.Combine(assemblyFolder, namespaceFolder);
 			string filePath = Path.Combine(folderPath, @class);

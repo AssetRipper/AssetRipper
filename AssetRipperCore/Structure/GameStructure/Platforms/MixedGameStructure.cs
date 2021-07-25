@@ -13,22 +13,20 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 	{
 		public MixedGameStructure(IEnumerable<string> paths)
 		{
-			Dictionary<string, string> files = new Dictionary<string, string>();
-			Dictionary<string, string> assemblies = new Dictionary<string, string>();
 			HashSet<string> dataPaths = new HashSet<string>();
 			foreach (string path in SelectUniquePaths(paths))
 			{
 				if (MultiFileStream.Exists(path))
 				{
 					string name = MultiFileStream.GetFileName(path);
-					AddFile(files, name, path);
+					AddFile(Files, name, path);
 					string directory = Path.GetDirectoryName(path);
 					dataPaths.Add(directory);
 				}
 				else if (DirectoryUtils.Exists(path))
 				{
 					DirectoryInfo directory = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
-					CollectFromDirectory(directory, files, assemblies, dataPaths);
+					CollectFromDirectory(directory, Files, Assemblies, dataPaths);
 				}
 				else
 				{
@@ -37,9 +35,14 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			}
 
 			DataPaths = dataPaths.ToArray();
-			Files = files;
-			Assemblies = assemblies;
 			Name = Files.Count == 0 ? string.Empty : Files.First().Key;
+			RootPath = null;
+			GameDataPath = null;
+			ManagedPath = null;
+			UnityPlayerPath = null;
+			Il2CppGameAssemblyPath = null;
+			Il2CppMetaDataPath = null;
+			Backend = Assemblies.Count > 0 ? Assembly.ScriptingBackend.Mono : Assembly.ScriptingBackend.Unknown;
 		}
 
 		private IEnumerable<string> SelectUniquePaths(IEnumerable<string> paths)
@@ -97,7 +100,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		{
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
-				if (AssemblyManager.IsAssembly(file.Name))
+				if (MonoManager.IsMonoAssembly(file.Name))
 				{
 					if (assemblies.ContainsKey(file.Name))
 					{
@@ -111,11 +114,6 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			}
 		}
 
-		public override string Name { get; }
-		public override IReadOnlyList<string> DataPaths { get; }
-
-		public override IReadOnlyDictionary<string, string> Files { get; }
-		public override IReadOnlyDictionary<string, string> Assemblies { get; }
-
+		public override PlatformType Platform => PlatformType.Mixed;
 	}
 }

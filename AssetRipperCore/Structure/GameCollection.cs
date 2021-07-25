@@ -60,7 +60,20 @@ namespace AssetRipper.Structure
 		{
 			Layout = pars.Layout;
 			m_layouts.Add(Layout.Info, Layout);
-			AssemblyManager = new AssemblyManager(pars.ScriptBackend, Layout, OnRequestAssembly);
+
+			switch (pars.ScriptBackend)
+			{
+				case ScriptingBackend.Mono:
+					AssemblyManager = new MonoManager(Layout, OnRequestAssembly);
+					break;
+				case ScriptingBackend.Il2Cpp:
+					AssemblyManager = new Il2CppManager(Layout, OnRequestAssembly);
+					break;
+				case ScriptingBackend.Unknown:
+					AssemblyManager = new BaseManager(Layout, OnRequestAssembly);
+					break;
+			}
+
 			m_assemblyCallback = pars.RequestAssemblyCallback;
 			m_resourceCallback = pars.RequestResourceCallback;
 			Exporter = new ProjectExporter(this);

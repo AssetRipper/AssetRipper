@@ -1,3 +1,4 @@
+using AssetRipper.Structure.Assembly.Managers;
 using AssetRipper.Structure.Assembly.Serializable;
 using Mono.Cecil;
 using System;

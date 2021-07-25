@@ -38,7 +38,12 @@ namespace AssetRipperConsole
 
 			Logger.Add(new ConsoleLogger());
 			Logger.Add(new FileLogger("AssetRipperConsole.log"));
-			Logger.LogSystemInformation();
+			Logger.Log(LogType.Info, LogCategory.System, "AssetRipper Console Version");
+#if PLATFORM_X64
+			Logger.LogSystemInformation("AssetRipper Console Version", "x64");
+#elif PLATFORM_X86
+			Logger.LogSystemInformation("AssetRipper Console Version", "x86");
+#endif
 
 			try
 			{
