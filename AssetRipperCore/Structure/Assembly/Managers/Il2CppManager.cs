@@ -10,9 +10,6 @@ namespace AssetRipper.Structure.Assembly.Managers
 {
 	internal sealed class Il2CppManager : BaseManager
 	{
-		public const string DefaultGameAssemblyName = "GameAssembly.dll";
-		public const string UnityPlayerName = "UnityPlayer.dll";
-
 		public string GameAssemblyPath { get; private set; }
 		public string UnityPlayerPath { get; private set; }
 		public string GameDataPath { get; private set; }
@@ -31,8 +28,16 @@ namespace AssetRipper.Structure.Assembly.Managers
 			GameAssemblyPath = gameStructure.Il2CppGameAssemblyPath;
 			UnityPlayerPath = gameStructure.UnityPlayerPath;
 			MetaDataPath = gameStructure.Il2CppMetaDataPath;
-			UnityVersion = Cpp2IlApi.DetermineUnityVersion(UnityPlayerPath, GameDataPath);
-			Logger.Log(LogType.Info, LogCategory.Import, $"During Il2Cpp initialization, found Unity version: {MakeVersionString(UnityVersion)}");
+
+			if (gameStructure.UnityVersion != null)
+				UnityVersion = gameStructure.UnityVersion;
+			else if (gameStructure.UnityPlayerPath != null)
+				UnityVersion = Cpp2IlApi.DetermineUnityVersion(UnityPlayerPath, GameDataPath);
+
+			if (UnityVersion == null)
+				throw new NullReferenceException("gameStructure.UnityVersion and gameStructure.UnityPlayerPath cannot both be null");
+			else
+				Logger.Log(LogType.Info, LogCategory.Import, $"During Il2Cpp initialization, found Unity version: {MakeVersionString(UnityVersion)}");
 
 			Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath, MetaDataPath, UnityVersion);
 
@@ -52,15 +57,7 @@ namespace AssetRipper.Structure.Assembly.Managers
 
 		public override void Load(string filePath)
 		{
-			string fileName = Path.GetFileName(filePath);
-			if(fileName != DefaultGameAssemblyName)
-			{
-				throw new NotSupportedException("Only Il2Cpp game assemblies can be read.");
-			}
-			else
-			{
-				Logger.Log(LogType.Info, LogCategory.Import, $"Trying to load '{fileName}' from {filePath}");
-			}
+			throw new NotSupportedException();
 		}
 
 		public override void Read(Stream stream, string fileName)

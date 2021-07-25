@@ -30,6 +30,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			GameDataPath = dataPath;
 			ManagedPath = null;
 			UnityPlayerPath = null;
+			UnityVersion = null;
 			Il2CppGameAssemblyPath = null;
 			Il2CppMetaDataPath = null;
 			Backend = Assembly.ScriptingBackend.Unknown;

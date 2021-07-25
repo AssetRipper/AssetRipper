@@ -18,10 +18,11 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		public ScriptingBackend Backend { get; protected set; } = ScriptingBackend.Unknown;
 		public abstract PlatformType Platform { get; }
 		public string ManagedPath { get; protected set; }
-		public string UnityPlayerPath { get; protected set; }
 		public string Il2CppGameAssemblyPath { get; protected set; }
 		public string Il2CppMetaDataPath { get; protected set; }
-		//public AssemblyManager AssemblyManager { get; protected set; }
+		public string UnityPlayerPath { get; protected set; }
+		public int[] UnityVersion { get; protected set; }
+		
 		public IReadOnlyList<string> DataPaths { get; protected set; }
 
 		public Dictionary<string, string> Files { get; } = new Dictionary<string, string>();
@@ -38,6 +39,9 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		protected const string UnityName = "unity";
 		protected const string StreamingName = "StreamingAssets";
 		protected const string MetadataName = "Metadata";
+		protected const string DefaultUnityPlayerName = "UnityPlayer.dll";
+		protected const string DefaultGameAssemblyName = "GameAssembly.dll";
+		protected const string DefaultGlobalMetadataName = "global-metadata.dat";
 
 		protected const string DataName = "data";
 		protected const string MainDataName = "mainData";
@@ -233,26 +237,6 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			}
 		}
 
-		/// <summary>Searches a directory for an il2cpp game assembly</summary>
-		/// <param name="root">The directory to search for the assembly.</param>
-		/// <param name="assemblies">A dictionary to add the assembly to.</param>
-		/// <returns>True if the game assembly was found. False otherwise</returns>
-		protected virtual bool CollectIl2CppGameAssembly(DirectoryInfo root, IDictionary<string, string> assemblies)
-		{
-			if(root != null)
-			{
-				foreach (FileInfo file in root.EnumerateFiles())
-				{
-					if (file.Name == Il2CppManager.DefaultGameAssemblyName)
-					{
-						assemblies.Add(file.Name, file.FullName);
-						return true;
-					}
-				}
-			}
-			return false;
-		}
-
 		private string FindEngineDependency(string path, string dependency)
 		{
 			string filePath = Path.Combine(path, dependency);
@@ -295,6 +279,21 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			}
 			files.Add(uniqueName, path);
 			Logger.Log(LogType.Info, LogCategory.Import, $"Asset bundle '{name}' has been found");
+		}
+
+		protected static bool HasMonoAssemblies(string managedDirectory)
+		{
+			if (string.IsNullOrEmpty(managedDirectory) || !Directory.Exists(managedDirectory)) return false;
+
+			return Directory.GetFiles(managedDirectory, "*.dll").Length > 0;
+		}
+
+		protected bool HasIl2CppFiles()
+		{
+			return Il2CppGameAssemblyPath != null &&
+				Il2CppMetaDataPath != null &&
+				FileUtils.Exists(Il2CppGameAssemblyPath) &&
+				FileUtils.Exists(Il2CppMetaDataPath);
 		}
 	}
 }

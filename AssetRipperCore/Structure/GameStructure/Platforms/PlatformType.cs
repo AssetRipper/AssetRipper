@@ -7,6 +7,7 @@
 		Linux,
 		Mac,
 		PC,
+		PS4,
 		Switch,
 		WebGL,
 		WebPlayer,

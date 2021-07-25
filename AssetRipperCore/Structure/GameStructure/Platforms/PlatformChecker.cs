@@ -27,6 +27,8 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 				platformStructure = webglGameStructure;
 			else if (CheckWebPlayer(paths, out WebPlayerGameStructure webplayerGameStructure))
 				platformStructure = webplayerGameStructure;
+			else if (CheckPS4(paths, out PS4GameStructure ps4GameStructure))
+				platformStructure = ps4GameStructure;
 
 			if (CheckMixed(paths, out MixedGameStructure mixedGameStructure))
 				mixedStructure = mixedGameStructure;
@@ -139,6 +141,22 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 					gameStructure = new iOSGameStructure(path);
 					paths.Remove(path);
 					Logger.Log(LogType.Info, LogCategory.Import, $"iOS game structure has been found at '{path}'");
+					return true;
+				}
+			}
+			gameStructure = null;
+			return false;
+		}
+
+		private static bool CheckPS4(List<string> paths, out PS4GameStructure gameStructure)
+		{
+			foreach (string path in paths)
+			{
+				if (PS4GameStructure.IsPS4Structure(path))
+				{
+					gameStructure = new PS4GameStructure(path);
+					paths.Remove(path);
+					Logger.Log(LogType.Info, LogCategory.Import, $"PS4 game structure has been found at '{path}'");
 					return true;
 				}
 			}

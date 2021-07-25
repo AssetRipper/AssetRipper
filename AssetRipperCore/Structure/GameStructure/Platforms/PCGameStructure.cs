@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Logging;
+using AssetRipper.Structure.Assembly.Managers;
 using AssetRipper.Utils;
 using System;
 using System.IO;
@@ -28,13 +29,14 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			RootPath = rootPath;
 			GameDataPath = dataPath;
 			ManagedPath = Path.Combine(GameDataPath, ManagedName);
-			UnityPlayerPath = Path.Combine(RootPath, "UnityPlayer.dll");
-			Il2CppGameAssemblyPath = Path.Combine(RootPath, "GameAssembly.dll");
-			Il2CppMetaDataPath = Path.Combine(GameDataPath, "il2cpp_data", "Metadata", "global-metadata.dat");
+			UnityPlayerPath = Path.Combine(RootPath, DefaultUnityPlayerName);
+			UnityVersion = null;
+			Il2CppGameAssemblyPath = Path.Combine(RootPath, DefaultGameAssemblyName);
+			Il2CppMetaDataPath = Path.Combine(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
 
-			if (File.Exists(Il2CppGameAssemblyPath) && File.Exists(UnityPlayerPath))
+			if (HasIl2CppFiles())
 				Backend = Assembly.ScriptingBackend.Il2Cpp;
-			else if (IsMono(ManagedPath))
+			else if (HasMonoAssemblies(ManagedPath))
 				Backend = Assembly.ScriptingBackend.Mono;
 			else
 				Backend = Assembly.ScriptingBackend.Unknown;
@@ -95,13 +97,6 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			name = null;
 			dataPath = null;
 			return false;
-		}
-
-		private static bool IsMono(string managedDirectory)
-		{
-			if (string.IsNullOrEmpty(managedDirectory) || !Directory.Exists(managedDirectory)) return false;
-			
-			return Directory.GetFiles(managedDirectory, "*.dll").Length > 0;
 		}
 
 		public override PlatformType Platform => PlatformType.PC;

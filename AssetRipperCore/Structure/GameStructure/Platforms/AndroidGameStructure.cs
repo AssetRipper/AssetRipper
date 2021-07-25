@@ -35,10 +35,11 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			ManagedPath = Path.Combine(GameDataPath, ManagedName);
 			LibPath = Path.Combine(RootPath, LibName);
 			Il2CppGameAssemblyPath = GetIl2CppGameAssemblyPath(LibPath);
-			Il2CppMetaDataPath = Path.Combine(ManagedPath, MetadataName, "global-metadata.dat");
+			Il2CppMetaDataPath = Path.Combine(ManagedPath, MetadataName, DefaultGlobalMetadataName);
 			UnityPlayerPath = GetAndroidUnityPlayerPath(LibPath);
+			UnityVersion = null;
 
-			if (Il2CppGameAssemblyPath != null && UnityPlayerPath != null)
+			if (HasIl2CppFiles())
 				Backend = Assembly.ScriptingBackend.Il2Cpp;
 			else if (IsMono(ManagedPath))
 				Backend = Assembly.ScriptingBackend.Mono;
