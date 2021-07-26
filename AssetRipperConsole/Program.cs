@@ -38,6 +38,10 @@ namespace AssetRipperConsole
 					{
 						Run(options);
 					}
+					else
+					{
+						Environment.ExitCode = 1;
+					}
 
 					if (!options.Quit)
 					{
