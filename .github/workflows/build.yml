@@ -38,7 +38,7 @@ jobs:
       run: dotnet build /p:Configuration=Release --no-restore
       working-directory: ./SpirV/
     - name: Build - FMOD x64
-      run: dotnet build /p:Configuration=Release --no-restore -r win-x64
+      run: dotnet build /p:Configuration=Release -r win-x64
       working-directory: ./FMOD/
     - name: Build - AssetRipperLibrary x64
       run: dotnet build /p:Configuration=Release --no-restore -r win-x64
