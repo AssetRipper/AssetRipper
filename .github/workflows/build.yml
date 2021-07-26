@@ -41,13 +41,13 @@ jobs:
       run: dotnet build /p:Configuration=Release -r win-x64
       working-directory: ./FMOD/
     - name: Build - AssetRipperLibrary x64
-      run: dotnet build /p:Configuration=Release --no-restore -r win-x64
+      run: dotnet build /p:Configuration=Release -r win-x64
       working-directory: ./AssetRipperLibrary/
     - name: Build - AssetRipperConsole x64
-      run: dotnet build /p:Configuration=Release --no-restore -r win-x64
+      run: dotnet build /p:Configuration=Release -r win-x64
       working-directory: ./AssetRipperConsole/
     - name: Build - AssetRipperGUI x64
-      run: dotnet build /p:Configuration=Release --no-restore -r win-x64
+      run: dotnet build /p:Configuration=Release -r win-x64
       working-directory: ./AssetRipperGUI/
     - name: Upload AssetRipperConsole
       uses: actions/upload-artifact@v2
