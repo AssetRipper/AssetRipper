@@ -25,11 +25,11 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperConsole
-        path: ./Bins/AssetRipperConsole/Release/x64/publish/AssetRipperConsole*
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperConsole\Release\x64\*
     - name: Upload AssetRipperGUI
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperGUI
-        path: ./Bins/AssetRipperGUI/Release/x64/publish/AssetRipperGUI*
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperGUI\Release\x64\*
     - name: Test
       run: dotnet test --no-build --verbosity normal
