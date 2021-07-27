@@ -1,4 +1,4 @@
-name: .NET
+name: Build Windows x64
 
 on:
   push:
@@ -21,6 +21,20 @@ jobs:
       run: dotnet restore
     - name: Build x64
       run: dotnet build /p:Configuration=Release /p:Platform=x64
+      
+    - name: AssetRipperConsole - Windows x64
+      working-directory: ./AssetRipperConsole/
+      run: dotnet publish /p:Configuration=Release /p:Platform=x64--no-restore -r win-x64
+    - name: AssetRipperConsole - Ubuntu x64
+      working-directory: ./AssetRipperConsole/
+      run: dotnet publish /p:Configuration=Release /p:Platform=x64 --no-restore -r ubuntu-x64
+    - name: AssetRipperConsole - OSX x64
+      working-directory: ./AssetRipperConsole/
+      run: dotnet publish /p:Configuration=Release /p:Platform=x64 --no-restore -r osx-x64
+    - name: AssetRipperGUI - Windows x64
+      working-directory: ./AssetRipperGUI/
+      run: dotnet publish /p:Configuration=Release /p:Platform=x64--no-restore -r win-x64
+      
     - name: Upload AssetRipperConsole
       uses: actions/upload-artifact@v2
       with:
