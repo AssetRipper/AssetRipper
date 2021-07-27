@@ -93,15 +93,19 @@ The development of this project has a dedicated [Discord server](https://discord
 
 
 ## To Do
- * Set up proper build actions
+ * Asset File Analyzer
+ * Unity 2020 and 2021 support
  * Predetermined GUID support
+ * Fix build actions
 
 
 ## Goals
- * Unity 2020 and 2021 support
- * Dummy shader implementation
+ * Dummy and/or Better shader implementation
  * NAudio implementation for exporting other audio formats
  * More Unity Component Exporters
+ * Option to reference assemblies instead of scripts
+ * Better platform support
+ * Port C++ dependencies to C# where possible
 
 
 ## License
