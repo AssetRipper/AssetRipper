@@ -1,4 +1,4 @@
-name: Build Windows x64
+name: Build
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build windows:
 
     runs-on: windows-latest
 
@@ -21,29 +21,69 @@ jobs:
       run: dotnet restore
     - name: Build x64
       run: dotnet build /p:Configuration=Release /p:Platform=x64
-      
-    - name: AssetRipperConsole - Windows x64
-      working-directory: ./AssetRipperConsole/
-      run: dotnet publish /p:Configuration=Release /p:Platform=x64--no-restore -r win-x64
-    - name: AssetRipperConsole - Ubuntu x64
-      working-directory: ./AssetRipperConsole/
-      run: dotnet publish /p:Configuration=Release /p:Platform=x64 --no-restore -r ubuntu-x64
-    - name: AssetRipperConsole - OSX x64
-      working-directory: ./AssetRipperConsole/
-      run: dotnet publish /p:Configuration=Release /p:Platform=x64 --no-restore -r osx-x64
-    - name: AssetRipperGUI - Windows x64
-      working-directory: ./AssetRipperGUI/
-      run: dotnet publish /p:Configuration=Release /p:Platform=x64--no-restore -r win-x64
-      
+    - name: Build x86
+      run: dotnet build /p:Configuration=Release /p:Platform=x86
+    - name: Upload AssetRipperConsole x64
+      uses: actions/upload-artifact@v2
+      with:
+        name: AssetRipperConsole_win64
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperConsole\Release\x64\*
+    - name: Upload AssetRipperConsole x86
+      uses: actions/upload-artifact@v2
+      with:
+        name: AssetRipperConsole_win86
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperConsole\Release\x86\*
+    - name: Upload AssetRipperGUI x64
+      uses: actions/upload-artifact@v2
+      with:
+        name: AssetRipperGUI_win64
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperGUI\Release\x64\*
+    - name: Upload AssetRipperGUI x86
+      uses: actions/upload-artifact@v2
+      with:
+        name: AssetRipperGUI_win86
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperGUI\Release\x86\*
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+  build linux:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build x64
+      run: dotnet build /p:Configuration=Release /p:Platform=x64
     - name: Upload AssetRipperConsole
       uses: actions/upload-artifact@v2
       with:
-        name: AssetRipperConsole
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperConsole\Release\x64\*
-    - name: Upload AssetRipperGUI
+        name: AssetRipperConsole_linux64
+        path: .\Bins\AssetRipperConsole\Release\x64\*
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+  build macos:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build x64
+      run: dotnet build /p:Configuration=Release /p:Platform=x64
+    - name: Upload AssetRipperConsole
       uses: actions/upload-artifact@v2
       with:
-        name: AssetRipperGUI
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperGUI\Release\x64\*
+        name: AssetRipperConsole_mac64
+        path: .\Bins\AssetRipperConsole\Release\x64\*
     - name: Test
       run: dotnet test --no-build --verbosity normal
