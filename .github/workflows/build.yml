@@ -28,21 +28,25 @@ jobs:
       with:
         name: AssetRipperConsole_win64
         path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperConsole\Release\x64\*
+        if-no-files-found: error
     - name: Upload AssetRipperConsole x86
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperConsole_win86
         path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperConsole\Release\x86\*
+        if-no-files-found: error
     - name: Upload AssetRipperGUI x64
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperGUI_win64
         path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperGUI\Release\x64\*
+        if-no-files-found: error
     - name: Upload AssetRipperGUI x86
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperGUI_win86
         path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperGUI\Release\x86\*
+        if-no-files-found: error
     - name: Test
       run: dotnet test --no-build --verbosity normal
   build_linux:
@@ -64,7 +68,8 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperConsole_linux64
-        path: .\Bins\AssetRipperConsole\Release\x64\*
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/AssetRipperConsole/Release/x64/*
+        if-no-files-found: error
     - name: Test
       run: dotnet test --no-build --verbosity normal
   build_macos:
@@ -86,6 +91,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperConsole_mac64
-        path: .\Bins\AssetRipperConsole\Release\x64\*
+        path: /Users/runner/work/AssetRipper/AssetRipper/Bins/AssetRipperConsole/Release/x64/*
+        if-no-files-found: error
     - name: Test
       run: dotnet test --no-build --verbosity normal
