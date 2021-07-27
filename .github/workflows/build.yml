@@ -40,6 +40,9 @@ jobs:
     - name: Build - FMOD x64
       run: dotnet build /p:Configuration=Release -r win-x64
       working-directory: ./FMOD/
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: ./AssetRipperLibrary/
     - name: Build - AssetRipperLibrary x64
       run: dotnet build /p:Configuration=Release -r win-x64
       working-directory: ./AssetRipperLibrary/
