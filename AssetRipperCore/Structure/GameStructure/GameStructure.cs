@@ -33,7 +33,7 @@ namespace AssetRipper.Structure.GameStructure
 				throw new ArgumentException("Game files not found", nameof(paths));
 			}
 
-			GameStructure structure = new GameStructure();
+			GameStructure structure = new GameStructure();//an empty constructor
 			structure.Load(toProcess, layinfo);
 			return structure;
 		}
@@ -43,9 +43,13 @@ namespace AssetRipper.Structure.GameStructure
 			PlatformChecker.CheckPlatform(paths, out PlatformGameStructure platformStructure, out MixedGameStructure mixedStructure);
 			PlatformStructure = platformStructure;
 			MixedStructure = mixedStructure;
+			//The PlatformGameStructure constructor adds all the paths to the Assemblies and Files dictionaries
+			//No bundles or assemblies have been loaded yet
 
 			using (GameStructureProcessor processor = new GameStructureProcessor())
 			{
+				//This block adds all the files to the processor
+				//It determines each of their file types, but still no extraction
 				if (PlatformStructure != null)
 				{
 					ProcessPlatformStructure(processor, PlatformStructure);
@@ -62,15 +66,26 @@ namespace AssetRipper.Structure.GameStructure
 				}
 				else
 				{
+					//Assigns a layout if one wasn't already provided
 					layinfo = layinfo ?? processor.GetLayoutInfo();
+
+					//Initializes all the component layouts
 					AssetLayout layout = new AssetLayout(layinfo);
+
+					//Setting the parameters for exporting
 					GameCollection.Parameters pars = new GameCollection.Parameters(layout);
 					pars.ScriptBackend = GetScriptingBackend();
 					Logger.Log(LogType.Info, LogCategory.Import, $"Files use the '{pars.ScriptBackend}' scripting backend.");
 					pars.RequestAssemblyCallback = OnRequestAssembly;
 					pars.RequestResourceCallback = OnRequestResource;
+
+					//Sets its fields and creates the Project Exporter
 					FileCollection = new GameCollection(pars);
+
+					//Loads any Mono or IL2Cpp assemblies
 					FileCollection.AssemblyManager.Initialize(PlatformStructure);
+
+					//Creates new objects for each scheme in the collection
 					processor.ProcessSchemes(FileCollection);
 				}
 			}
@@ -82,11 +97,13 @@ namespace AssetRipper.Structure.GameStructure
 			Version defaultVersion = new Version(2017, 3, 0, VersionType.Final, 3);
 			Version maxVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
 			Version version = defaultVersion < maxVersion ? maxVersion : defaultVersion;
+			Logger.Log(LogType.Info, LogCategory.Export, $"Exporting to Unity version {version.ToString()}");
 			ExportOptions options = new ExportOptions(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 			options.Filter = filter ?? new Func<Object, bool>((Object obj) => true);
 			FileCollection.Exporter.Export(exportPath, FileCollection, FileCollection.FetchSerializedFiles(), options);
 		}
 
+		/// <summary>Attempts to find the path for the dependency with that name.</summary>
 		public string RequestDependency(string dependency)
 		{
 			if (PlatformStructure != null)
@@ -153,6 +170,7 @@ namespace AssetRipper.Structure.GameStructure
 			return null;
 		}
 
+		/// <summary>Processes all files, gets their file type, and adds it to one big list.</summary>
 		private void ProcessPlatformStructure(GameStructureProcessor processor, PlatformGameStructure structure)
 		{
 			foreach (KeyValuePair<string, string> file in structure.Files)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AssetRipper.Utils;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,9 @@ namespace AssetRipper.Logging
 	{
 		private readonly string filePath;
 
-		public FileLogger() : this("AssetRipper.log") { }
+		public FileLogger() : this(Path.Combine(DirectoryUtils.GetExecutingDirectory(),"AssetRipper.log")) { }
 
+		/// <param name="filePath">The absolute path to the log file</param>
 		public FileLogger(string filePath)
 		{
 			if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentException("Invalid path", nameof(filePath));
@@ -27,14 +29,14 @@ namespace AssetRipper.Logging
 				return;
 #endif
 			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.Append(category.ToString());
+
+			if (category != LogCategory.None)
+				stringBuilder.Append($"{category.ToString()} ");
 			switch (type)
 			{
 				case LogType.Warning:
 				case LogType.Error:
-					stringBuilder.Append(" [");
-					stringBuilder.Append(type.ToString());
-					stringBuilder.Append("]");
+					stringBuilder.Append($"[{type.ToString()}] ");
 					break;
 			}
 			stringBuilder.Append(": ");

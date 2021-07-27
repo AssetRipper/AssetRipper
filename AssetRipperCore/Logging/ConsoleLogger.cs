@@ -57,7 +57,8 @@ namespace AssetRipper.Logging
 					break;
 			}
 
-			Console.WriteLine($"{category}: {message}");
+			if (category == LogCategory.None) Console.WriteLine(message);
+			else Console.WriteLine($"{category} : {message}");
 
 			Console.BackgroundColor = backColor;
 			Console.ForegroundColor = foreColor;

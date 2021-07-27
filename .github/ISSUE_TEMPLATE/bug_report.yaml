@@ -32,8 +32,8 @@ body:
   - type: textarea
     id: game
     attributes:
-      label: Which game did this occur on?
-      description: Please tell us the name of the game and the game's Unity version. If it's a personal or private project, just the Unity version is fine.
+      label: Which Unity version did this occur on?
+      description: Please tell us the game's Unity version. If you don't know, [here](https://ngyikp.com/find-unity-game-build-version/) is a short guide to determine it.
     validations:
       required: true
   - type: dropdown
@@ -60,7 +60,7 @@ body:
     attributes:
       label: Relevant log output
       description: |
-        Please drag and drop any relevant logs here.
+        Please drag and drop your relevant log here. It is located in the same folder as the `exe` file. A screenshot is not normally sufficient.
         * GUI version: `AssetRipper.log`
         * Console version: `AssetRipperConsole.log`
     validations:

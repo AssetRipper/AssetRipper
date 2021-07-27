@@ -6,8 +6,10 @@
 		Import,
 		Export,
 		Cpp2IL,
+		LibCpp2IL,
 		System,
 
+		None,
 		Debug,
 	}
 }

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
@@ -33,6 +34,16 @@ namespace AssetRipper.Utils
 		public static void Delete(string path, bool recursive)
 		{
 			Directory.Delete(ToLongPath(path, true), recursive);
+		}
+
+		public static string GetExecutingDirectory()
+		{
+			return GetExecutingDirectoryInfo().FullName;
+		}
+
+		public static DirectoryInfo GetExecutingDirectoryInfo()
+		{
+			return new FileInfo(Assembly.GetEntryAssembly().Location).Directory;
 		}
 
 		public static string[] GetFiles(string path)

@@ -44,14 +44,13 @@ namespace AssetRipperGUI
 			}
 #endif
 
-			m_textBox.AppendText(category.ToString());
+			if(category != LogCategory.None)
+				m_textBox.AppendText($"{category.ToString()} ");
 			switch (type)
 			{
 				case LogType.Warning:
 				case LogType.Error:
-					m_textBox.AppendText(" [");
-					m_textBox.AppendText(type.ToString());
-					m_textBox.AppendText("]");
+					m_textBox.AppendText($"[{type.ToString()}] ");
 					break;
 			}
 			m_textBox.AppendText(": ");

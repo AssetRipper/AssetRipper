@@ -3,8 +3,15 @@ using AssetRipper.IO.Asset;
 
 namespace AssetRipper.Layout
 {
+	/// <summary>
+	/// A class for holding the Version, Platform, and Transfer Instruction Flags
+	/// </summary>
 	public sealed class LayoutInfo
 	{
+		public Version Version { get; }
+		public Platform Platform { get; }
+		public TransferInstructionFlags Flags { get; }
+
 		public LayoutInfo(Version version, Platform platform, TransferInstructionFlags flags)
 		{
 			Version = version;
@@ -72,8 +79,5 @@ namespace AssetRipper.Layout
 			return $"v{Version} {Platform} [{Flags}]";
 		}
 
-		public Version Version { get; }
-		public Platform Platform { get; }
-		public TransferInstructionFlags Flags { get; }
 	}
 }

@@ -43,6 +43,10 @@ namespace AssetRipper.Logging
 				instance?.BlankLine(numLines);
 		}
 
+		public static void Info(string message) => Log(LogType.Info, LogCategory.None, message);
+		public static void Warning(string message) => Log(LogType.Warning, LogCategory.None, message);
+		public static void Error(string message) => Log(LogType.Error, LogCategory.None, message);
+
 		private static void LogReleaseInformation(string platformType)
 		{
 #if VIRTUAL

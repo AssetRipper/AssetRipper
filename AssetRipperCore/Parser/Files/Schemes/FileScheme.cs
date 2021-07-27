@@ -15,23 +15,10 @@ namespace AssetRipper.Parser.Files.Schemes
 			Name = FilenameUtils.FixFileIdentifier(fileName);
 		}
 
-		~FileScheme()
-		{
-			Dispose(false);
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
 		public override string ToString()
 		{
 			return Name == null ? base.ToString() : $"T:{SchemeType} N:'{Name}'";
 		}
-
-		protected virtual void Dispose(bool disposing) { }
 
 		public string FilePath { get; }
 		public string NameOrigin { get; }
@@ -39,5 +26,19 @@ namespace AssetRipper.Parser.Files.Schemes
 
 		public abstract FileEntryType SchemeType { get; }
 		public abstract IEnumerable<FileIdentifier> Dependencies { get; }
+
+		~FileScheme()
+		{
+			Dispose(false);
+		}
+
+		protected virtual void Dispose(bool disposing) { }
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
 	}
 }

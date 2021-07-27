@@ -25,6 +25,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 		
 		public IReadOnlyList<string> DataPaths { get; protected set; }
 
+		/// <summary>Name : FullName</summary>
 		public Dictionary<string, string> Files { get; } = new Dictionary<string, string>();
 		/// <summary>AssemblyName : AssemblyPath</summary>
 		public Dictionary<string, string> Assemblies { get; } = new Dictionary<string, string>();
@@ -77,6 +78,7 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			return false;
 		}
 
+		/// <summary>Attempts to find the path for the dependency with that name.</summary>
 		public string RequestDependency(string dependency)
 		{
 			if (Files.TryGetValue(dependency, out string dependencyPath))

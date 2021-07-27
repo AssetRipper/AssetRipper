@@ -1,3 +1,4 @@
+// official Class ID Reference: https://docs.unity3d.com/Manual/ClassIDReference.html
 namespace AssetRipper.Parser.Asset
 {
 	// Since some output is based on string representation renamed values has negative index

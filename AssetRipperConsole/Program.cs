@@ -12,10 +12,10 @@ namespace AssetRipperConsole
 {
 	public class Program
 	{
+		private const string DefaultLogFileName = "AssetRipperConsole.log";
+
 		internal class Options
 		{
-			private const string DefaultLogFileName = "AssetRipperConsole.log";
-
 			[Value(0, Required = true, HelpText = "Input files or directory to export.")]
 			public IReadOnlyList<string> FilesToExport { get; set; }
 
@@ -23,7 +23,7 @@ namespace AssetRipperConsole
 			public DirectoryInfo OutputDirectory { get; set; }
 
 			[Option("logFile", HelpText = "(Default: " + DefaultLogFileName + ") File to log to.")]
-			public FileInfo LogFile { get; set; } = new(DefaultLogFileName);
+			public FileInfo LogFile { get; set; }
 
 			[Option('q', "quit", Default = false, HelpText = "Close console after export.")]
 			public bool Quit { get; set; }
@@ -71,6 +71,19 @@ namespace AssetRipperConsole
 				return false;
 			}
 
+			try
+			{
+				if (options.LogFile == null)
+					options.LogFile = new FileInfo(Path.Combine(DirectoryUtils.GetExecutingDirectory(), DefaultLogFileName));
+				if (options.OutputDirectory == null)
+					options.OutputDirectory = new DirectoryInfo(Path.Combine(DirectoryUtils.GetExecutingDirectory(), "Ripped"));
+			}
+			catch(Exception ex)
+			{
+				Console.WriteLine($"Failed to initialize the output and log paths. {ex}");
+				return false;
+			}
+
 			return true;
 		}
 
@@ -78,7 +91,6 @@ namespace AssetRipperConsole
 		{
 			Logger.Add(new ConsoleLogger());
 			Logger.Add(new FileLogger(options.LogFile.FullName));
-			Logger.Log(LogType.Info, LogCategory.System, "AssetRipper Console Version");
 #if PLATFORM_X64
 			Logger.LogSystemInformation("AssetRipper Console Version", "x64");
 #elif PLATFORM_X86
@@ -89,9 +101,8 @@ namespace AssetRipperConsole
 			{
 				Ripper ripper = new Ripper();
 				GameStructure gameStructure = ripper.Load(options.FilesToExport);
-				string exportPath = options.OutputDirectory?.FullName ?? Path.Combine("Ripped", gameStructure.Name);
-				PrepareExportDirectory(exportPath);
-				ripper.Export(exportPath);
+				PrepareExportDirectory(options.OutputDirectory.FullName);
+				ripper.Export(options.OutputDirectory.FullName);
 			}
 			catch (Exception ex)
 			{
