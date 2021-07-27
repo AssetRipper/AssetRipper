@@ -59,6 +59,7 @@ jobs:
       run: dotnet restore
     - name: Build x64
       run: dotnet build /p:Configuration=Release /p:Platform=x64
+      working-directory: ./AssetRipperConsole/
     - name: Upload AssetRipperConsole
       uses: actions/upload-artifact@v2
       with:
@@ -80,6 +81,7 @@ jobs:
       run: dotnet restore
     - name: Build x64
       run: dotnet build /p:Configuration=Release /p:Platform=x64
+      working-directory: ./AssetRipperConsole/
     - name: Upload AssetRipperConsole
       uses: actions/upload-artifact@v2
       with:
