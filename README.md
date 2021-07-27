@@ -92,11 +92,15 @@ If you want to run binary files, you need to install:
 The development of this project has a dedicated [Discord server](https://discord.gg/XqXa53W2Yh). Feel free to come say hi. This is also an alternative location for people without Github accounts to post issues.
 
 
+## Build Actions
+
+Every commit is automatically built for the Windows x64 GUI and Console. You can obtain these builds on the [actions page](https://github.com/ds5678/AssetRipper/actions) if you're logged in with a github account.
+
+
 ## To Do
  * Asset File Analyzer
  * Unity 2020 and 2021 support
  * Predetermined GUID support
- * Fix build actions
 
 
 ## Goals
