@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -19,39 +19,8 @@ jobs:
         dotnet-version: 5.0.x
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build - Brotli
-      run: dotnet build /p:Configuration=Release --no-restore
-      working-directory: ./Brotli/
-    - name: Build - SevenZip
-      run: dotnet build /p:Configuration=Release --no-restore
-      working-directory: ./SevenZip/
-    - name: Build - AssetRipperCore
-      run: dotnet build /p:Configuration=Release --no-restore
-      working-directory: ./AssetRipperCore/
-    - name: Build - DXShaderRestorer
-      run: dotnet build /p:Configuration=Release --no-restore
-      working-directory: ./DXShaderRestorer/
-    - name: Build - Smolv
-      run: dotnet build /p:Configuration=Release --no-restore
-      working-directory: ./Smolv/
-    - name: Build - SpirV
-      run: dotnet build /p:Configuration=Release --no-restore
-      working-directory: ./SpirV/
-    - name: Build - FMOD x64
-      run: dotnet build /p:Configuration=Release -r win-x64
-      working-directory: ./FMOD/
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: ./AssetRipperLibrary/
-    - name: Build - AssetRipperLibrary x64
-      run: dotnet build /p:Configuration=Release -r win-x64
-      working-directory: ./AssetRipperLibrary/
-    - name: Build - AssetRipperConsole x64
-      run: dotnet build /p:Configuration=Release -r win-x64
-      working-directory: ./AssetRipperConsole/
-    - name: Build - AssetRipperGUI x64
-      run: dotnet build /p:Configuration=Release -r win-x64
-      working-directory: ./AssetRipperGUI/
+    - name: Build x64
+      run: dotnet build --no-restore /p:Configuration=Release -r win-x64
     - name: Upload AssetRipperConsole
       uses: actions/upload-artifact@v2
       with:
@@ -62,3 +31,5 @@ jobs:
       with:
         name: AssetRipperGUI
         path: ./Bins/AssetRipperGUI/Release/x64/publish/AssetRipperGUI*
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
