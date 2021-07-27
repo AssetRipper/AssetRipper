@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build windows:
+  build_windows:
 
     runs-on: windows-latest
 
@@ -45,7 +45,7 @@ jobs:
         path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperGUI\Release\x86\*
     - name: Test
       run: dotnet test --no-build --verbosity normal
-  build linux:
+  build_linux:
 
     runs-on: ubuntu-latest
 
@@ -66,7 +66,7 @@ jobs:
         path: .\Bins\AssetRipperConsole\Release\x64\*
     - name: Test
       run: dotnet test --no-build --verbosity normal
-  build macos:
+  build_macos:
 
     runs-on: macos-latest
 
