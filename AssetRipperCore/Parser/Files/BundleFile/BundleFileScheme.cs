@@ -191,7 +191,7 @@ namespace AssetRipper.Parser.Files.BundleFile
 				byte[] buffer = new byte[entry.Size];
 				stream.Position = metadataOffset + entry.Offset;
 				stream.ReadBuffer(buffer, 0, buffer.Length);
-				FileScheme scheme = GameCollection.ReadScheme(buffer, FilePath, entry.PathOrigin);
+				FileScheme scheme = SchemeReader.ReadScheme(buffer, FilePath, entry.PathOrigin);
 				AddScheme(scheme);
 			}
 		}
@@ -208,7 +208,7 @@ namespace AssetRipper.Parser.Files.BundleFile
 				foreach (Node entry in Metadata.DirectoryInfo.Nodes)
 				{
 					SmartStream entryStream = blockReader.ReadEntry(entry);
-					FileScheme scheme = GameCollection.ReadScheme(entryStream, FilePath, entry.PathOrigin);
+					FileScheme scheme = SchemeReader.ReadScheme(entryStream, FilePath, entry.PathOrigin);
 					AddScheme(scheme);
 				}
 			}

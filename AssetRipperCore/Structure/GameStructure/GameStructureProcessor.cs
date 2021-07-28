@@ -23,13 +23,33 @@ namespace AssetRipper.Structure.GameStructure
 
 		public bool IsValid => m_schemes.Any(t => t.SchemeType != FileEntryType.Resource);
 
+		/// <summary>Adds a file and its type to the list of files</summary>
 		public void AddScheme(string filePath, string fileName)
 		{
-			FileScheme scheme = GameCollection.LoadScheme(filePath, fileName);
+			FileScheme scheme = SchemeReader.LoadScheme(filePath, fileName);
 			OnSchemeLoaded(scheme);
 			m_schemes.Add(scheme);
 		}
 
+		/// <summary>Recursively adds Serialized files to the m_knownFiles hashset</summary>
+		private void OnSchemeLoaded(FileScheme scheme)
+		{
+			if (scheme.SchemeType == FileEntryType.Serialized)
+			{
+				m_knownFiles.Add(scheme.Name);
+			}
+
+			if (scheme is FileSchemeList list)
+			{
+				foreach (FileScheme nestedScheme in list.Schemes)
+				{
+					OnSchemeLoaded(nestedScheme);
+				}
+			}
+		}
+
+		/// <summary>Attempts to add any missing dependencies to the file list</summary>
+		/// <param name="dependencyCallback">A method that takes a dependency name and tries to output a path</param>
 		public void AddDependencySchemes(Func<string, string> dependencyCallback)
 		{
 			for (int i = 0; i < m_schemes.Count; i++)
@@ -57,9 +77,13 @@ namespace AssetRipper.Structure.GameStructure
 
 		public void ProcessSchemes(GameCollection fileCollection)
 		{
+			//Initializes it with a reference to the file collection
 			GameProcessorContext context = new GameProcessorContext(fileCollection);
 			foreach (FileScheme scheme in m_schemes)
 			{
+				//Not just a simple add
+				//Grouped by scheme type
+				//And new objects are added to lists
 				fileCollection.AddFile(context, scheme);
 			}
 			context.ReadSerializedFiles();
@@ -185,22 +209,6 @@ namespace AssetRipper.Structure.GameStructure
 				}
 			}
 			return null;
-		}
-
-		private void OnSchemeLoaded(FileScheme scheme)
-		{
-			if (scheme.SchemeType == FileEntryType.Serialized)
-			{
-				m_knownFiles.Add(scheme.Name);
-			}
-
-			if (scheme is FileSchemeList list)
-			{
-				foreach (FileScheme nestedScheme in list.Schemes)
-				{
-					OnSchemeLoaded(nestedScheme);
-				}
-			}
 		}
 
 		~GameStructureProcessor()

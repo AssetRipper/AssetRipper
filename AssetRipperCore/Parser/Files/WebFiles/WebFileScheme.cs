@@ -52,7 +52,7 @@ namespace AssetRipper.Parser.Files.WebFiles
 				byte[] buffer = new byte[entry.Size];
 				stream.Position = entry.Offset;
 				stream.ReadBuffer(buffer, 0, buffer.Length);
-				FileScheme scheme = GameCollection.ReadScheme(buffer, FilePath, entry.NameOrigin);
+				FileScheme scheme = SchemeReader.ReadScheme(buffer, FilePath, entry.NameOrigin);
 				AddScheme(scheme);
 			}
 		}
