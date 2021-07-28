@@ -7,14 +7,17 @@ body:
     attributes:
       value: |
         Thanks for submitting a bug report, please fill out as much detail as possible.
-  - type: checkboxes
+  - type: dropdown
     id: latestversion
     attributes:
       label: Are you on the latest version of AssetRipper?
       description: If not, you must update first.
       options:
-        - label: Yes, I'm on the latest version of AssetRipper.
-          required: true
+        - Yes, I'm on the latest release of AssetRipper.
+        - Yes, I'm on the latest pre-release of AssetRipper.
+        - Yes, I'm on the latest alpha-build of AssetRipper.
+    validations:
+      required: true
   - type: dropdown
     id: version
     attributes:
