@@ -19,9 +19,9 @@ namespace AssetRipper.Reading.Classes
             reader.AlignStream();
         }
 
-        public Quaternion[] UnpackQuats()
+        public Quaternionf[] UnpackQuats()
         {
-            var data = new Quaternion[m_NumItems];
+            var data = new Quaternionf[m_NumItems];
             int indexPos = 0;
             int bitPos = 0;
 
@@ -45,7 +45,7 @@ namespace AssetRipper.Reading.Classes
                 flags &= 7;
 
 
-                var q = new Quaternion();
+                var q = new Quaternionf();
                 float sum = 0;
                 for (int j = 0; j < 4; j++)
                 {

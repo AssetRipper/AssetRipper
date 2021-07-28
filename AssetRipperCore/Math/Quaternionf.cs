@@ -1,14 +1,20 @@
 using AssetRipper.Project;
-using AssetRipper.Layout.Classes.Misc.Serializable;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace AssetRipper.Math
 {
-	public struct Quaternionf : IAsset
+	[StructLayout(LayoutKind.Sequential, Pack = 4)]
+	public struct Quaternionf : IAsset, IEquatable<Quaternionf>
 	{
+		public float X;
+		public float Y;
+		public float Z;
+		public float W;
+
 		public Quaternionf(float x, float y, float z, float w)
 		{
 			X = x;
@@ -140,9 +146,43 @@ namespace AssetRipper.Math
 			}
 		}
 
-		public float X { get; set; }
-		public float Y { get; set; }
-		public float Z { get; set; }
-		public float W { get; set; }
+		public static float Dot(Quaternionf a, Quaternionf b)
+		{
+			return a.X * b.X + a.Y * b.Y + a.Z * b.Z + a.W * b.W;
+		}
+
+		private static bool IsEqualUsingDot(float dot)
+		{
+			return dot > 1.0f - kEpsilon;
+		}
+
+		public override int GetHashCode()
+		{
+			return X.GetHashCode() ^ (Y.GetHashCode() << 2) ^ (Z.GetHashCode() >> 2) ^ (W.GetHashCode() >> 1);
+		}
+
+		public override bool Equals(object other)
+		{
+			if (!(other is Quaternionf))
+				return false;
+			return Equals((Quaternionf)other);
+		}
+
+		public bool Equals(Quaternionf other)
+		{
+			return X == other.X && Y == other.Y && Z == other.Z && W == other.W;
+		}
+
+		public static bool operator ==(Quaternionf lhs, Quaternionf rhs)
+		{
+			return lhs.Equals(rhs);
+		}
+
+		public static bool operator !=(Quaternionf lhs, Quaternionf rhs)
+		{
+			return !(lhs == rhs);
+		}
+
+		private const float kEpsilon = 0.000001F;
 	}
 }

@@ -80,9 +80,9 @@ namespace AssetRipper.IO.Extensions
 			return Encoding.UTF8.GetString(bytes.ToArray());
 		}
 
-		public static Quaternion ReadQuaternion(this BinaryReader reader)
+		public static Quaternionf ReadQuaternionf(this BinaryReader reader)
 		{
-			return new Quaternion(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+			return new Quaternionf(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 		}
 
 		public static Vector2f ReadVector2f(this BinaryReader reader)

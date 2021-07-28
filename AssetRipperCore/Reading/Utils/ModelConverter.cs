@@ -52,7 +52,7 @@ namespace AssetRipper.Reading.Utils
         public ModelConverter(string rootName, List<GameObject> m_GameObjects, ImageFormat imageFormat, AnimationClip[] animationList = null)
         {
             this.imageFormat = imageFormat;
-            RootFrame = CreateFrame(rootName, Vector3.Zero, new Quaternion(0, 0, 0, 0), Vector3.One);
+            RootFrame = CreateFrame(rootName, Vector3.Zero, new Quaternionf(0, 0, 0, 0), Vector3.One);
             foreach (var m_GameObject in m_GameObjects)
             {
                 if (m_GameObject.m_Animator != null && animationList == null)
@@ -224,7 +224,7 @@ namespace AssetRipper.Reading.Utils
             return frame;
         }
 
-        private static ImportedFrame CreateFrame(string name, Vector3f t, Quaternion q, Vector3f s)
+        private static ImportedFrame CreateFrame(string name, Vector3f t, Quaternionf q, Vector3f s)
         {
             var frame = new ImportedFrame();
             frame.Name = name;
@@ -232,10 +232,10 @@ namespace AssetRipper.Reading.Utils
             return frame;
         }
 
-        private static void SetFrame(ImportedFrame frame, Vector3f t, Quaternion q, Vector3f s)
+        private static void SetFrame(ImportedFrame frame, Vector3f t, Quaternionf q, Vector3f s)
         {
             frame.LocalPosition = new Vector3f(-t.X, t.Y, t.Z);
-            frame.LocalRotation = Fbx.QuaternionToEuler(new Quaternion(q.X, -q.Y, -q.Z, q.W));
+            frame.LocalRotation = Fbx.QuaternionToEuler(new Quaternionf(q.X, -q.Y, -q.Z, q.W));
             frame.LocalScale = s;
         }
 
@@ -807,7 +807,7 @@ namespace AssetRipper.Reading.Utils
                         for (int i = 0; i < numKeys; i++)
                         {
                             var quat = quats[i];
-                            var value = Fbx.QuaternionToEuler(new Quaternion(quat.X, -quat.Y, -quat.Z, quat.W));
+                            var value = Fbx.QuaternionToEuler(new Quaternionf(quat.X, -quat.Y, -quat.Z, quat.W));
                             track.Rotations.Add(new ImportedKeyframe<Vector3f>(times[i], value));
                         }
                     }
@@ -816,7 +816,7 @@ namespace AssetRipper.Reading.Utils
                         var track = iAnim.FindTrack(FixBonePath(animationClip, m_RotationCurve.path));
                         foreach (var m_Curve in m_RotationCurve.curve.m_Curve)
                         {
-                            var value = Fbx.QuaternionToEuler(new Quaternion(m_Curve.value.X, -m_Curve.value.Y, -m_Curve.value.Z, m_Curve.value.W));
+                            var value = Fbx.QuaternionToEuler(new Quaternionf(m_Curve.value.X, -m_Curve.value.Y, -m_Curve.value.Z, m_Curve.value.W));
                             track.Rotations.Add(new ImportedKeyframe<Vector3f>(m_Curve.time, value));
                         }
                     }

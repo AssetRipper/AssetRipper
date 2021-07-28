@@ -5,7 +5,7 @@ namespace AssetRipper.Reading.Classes
 {
 	public class Transform : Component
     {
-        public Quaternion m_LocalRotation;
+        public Quaternionf m_LocalRotation;
         public Vector3f m_LocalPosition;
         public Vector3f m_LocalScale;
         public PPtr<Transform>[] m_Children;
@@ -13,7 +13,7 @@ namespace AssetRipper.Reading.Classes
 
         public Transform(ObjectReader reader) : base(reader)
         {
-            m_LocalRotation = reader.ReadQuaternion();
+            m_LocalRotation = reader.ReadQuaternionf();
             m_LocalPosition = reader.ReadVector3f();
             m_LocalScale = reader.ReadVector3f();
 

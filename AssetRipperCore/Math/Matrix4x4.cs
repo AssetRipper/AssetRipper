@@ -215,7 +215,7 @@ namespace AssetRipper.Math
 			return m;
 		}
 
-		public static Matrix4x4 Rotate(Quaternion q)
+		public static Matrix4x4 Rotate(Quaternionf q)
 		{
 			float x = q.X * 2.0F;
 			float y = q.Y * 2.0F;

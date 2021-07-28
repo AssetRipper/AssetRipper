@@ -5,12 +5,12 @@ namespace AssetRipper.Reading.Classes
 {
 	public class QuaternionCurve
     {
-        public AnimationCurve<Quaternion> curve;
+        public AnimationCurve<Quaternionf> curve;
         public string path;
 
         public QuaternionCurve(ObjectReader reader)
         {
-            curve = new AnimationCurve<Quaternion>(reader, reader.ReadQuaternion);
+            curve = new AnimationCurve<Quaternionf>(reader, reader.ReadQuaternionf);
             path = reader.ReadAlignedString();
         }
     }
