@@ -1,5 +1,3 @@
-using AssetRipper.Converters.Project.Exporters.Script;
-using AssetRipper.Converters.Project.Exporters.Script.Mono;
 using AssetRipper.Structure.Assembly.Managers;
 using AssetRipper.Structure.Assembly.Mono.Extensions;
 using Mono.Cecil;

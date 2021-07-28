@@ -2,7 +2,6 @@
 using AssetRipper.Converters.Project.Exporters.Script.Elements;
 using AssetRipper.Layout;
 using AssetRipper.Parser.Utils;
-using AssetRipper.Structure.Assembly.Managers;
 using AssetRipper.Structure.Assembly.Mono;
 using AssetRipper.Structure.Assembly.Serializable;
 using AssetRipper.Structure.GameStructure.Platforms;
