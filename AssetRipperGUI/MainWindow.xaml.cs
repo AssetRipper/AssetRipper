@@ -28,6 +28,8 @@ namespace AssetRipperGUI
 	{
 		public MainWindow()
 		{
+			Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+			Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
 			InitializeComponent();
 
 			m_initialIntroText = IntroText.Text;
@@ -97,11 +99,13 @@ namespace AssetRipperGUI
 #if !DEBUG
 			catch (SerializedFileException ex)
 			{
+				Logger.Error(ex);
 				ReportCrash(ex);
 				return;
 			}
 			catch (Exception ex)
 			{
+				Logger.Error(ex);
 				ReportCrash(ex);
 				return;
 			}
@@ -180,11 +184,13 @@ namespace AssetRipperGUI
 #if !DEBUG
 			catch (SerializedFileException ex)
 			{
+				Logger.Error(ex);
 				ReportCrash(ex);
 				return;
 			}
 			catch (Exception ex)
 			{
+				Logger.Error(ex);
 				ReportCrash(ex);
 				return;
 			}

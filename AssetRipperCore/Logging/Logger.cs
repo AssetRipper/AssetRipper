@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace AssetRipper.Logging
 {
@@ -44,8 +45,20 @@ namespace AssetRipper.Logging
 		}
 
 		public static void Info(string message) => Log(LogType.Info, LogCategory.None, message);
+		public static void Info(LogCategory category, string message) => Log(LogType.Info, category, message);
 		public static void Warning(string message) => Log(LogType.Warning, LogCategory.None, message);
+		public static void Warning(LogCategory category, string message) => Log(LogType.Warning, category, message);
 		public static void Error(string message) => Log(LogType.Error, LogCategory.None, message);
+		public static void Error(LogCategory category, string message) => Log(LogType.Error, category, message);
+		public static void Error(Exception e) => Error(LogCategory.None, null, e);
+		public static void Error(string message, Exception e) => Error(LogCategory.None, message, e);
+		public static void Error(LogCategory category, string message, Exception e)
+		{
+			var sb = new StringBuilder();
+			if(message != null) sb.AppendLine(message);
+			sb.AppendLine(e.ToString());
+			Log(LogType.Error, category, sb.ToString());
+		}
 
 		private static void LogReleaseInformation(string platformType)
 		{
