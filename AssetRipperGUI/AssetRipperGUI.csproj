@@ -41,13 +41,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Resource Include="Resources\GUI_Icon.ico" />
     <Resource Include="Resources\alert-decagram-outline.png" />
