@@ -60,14 +60,12 @@ namespace AssetRipper.IO.Asset
 			}
 		}
 
-		public void WriteAsset<T>(T value)
-			where T : IAssetWritable
+		public void WriteAsset<T>(T value) where T : IAssetWritable
 		{
 			value.Write(this);
 		}
 
-		public void WriteAssetArray<T>(T[] buffer)
-			where T : IAssetWritable
+		public void WriteAssetArray<T>(T[] buffer) where T : IAssetWritable
 		{
 			FillInnerBuffer(buffer.Length);
 			Write(m_buffer, 0, sizeof(int));
@@ -82,8 +80,7 @@ namespace AssetRipper.IO.Asset
 			}
 		}
 
-		public void WriteAssetArray<T>(T[][] buffer)
-			where T : IAssetWritable
+		public void WriteAssetArray<T>(T[][] buffer) where T : IAssetWritable
 		{
 			FillInnerBuffer(buffer.Length);
 			Write(m_buffer, 0, sizeof(int));

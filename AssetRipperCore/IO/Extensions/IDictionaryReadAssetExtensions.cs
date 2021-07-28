@@ -111,8 +111,7 @@ namespace AssetRipper.IO.Extensions
 			IDictionaryReadEndianExtensions.Read(_this, reader, converter);
 		}
 
-		public static void Read<T>(this IDictionary<int, T> _this, AssetReader reader)
-			where T : IAssetReadable, new()
+		public static void Read<T>(this IDictionary<int, T> _this, AssetReader reader) where T : IAssetReadable, new()
 		{
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
@@ -124,8 +123,7 @@ namespace AssetRipper.IO.Extensions
 			}
 		}
 
-		public static void Read<T>(this IDictionary<int, T> _this, AssetReader reader, Func<T> instantiator)
-			where T : IAssetReadable
+		public static void Read<T>(this IDictionary<int, T> _this, AssetReader reader, Func<T> instantiator) where T : IAssetReadable
 		{
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
@@ -137,8 +135,7 @@ namespace AssetRipper.IO.Extensions
 			}
 		}
 
-		public static void Read<T>(this IDictionary<string, T> _this, AssetReader reader)
-			where T : IAssetReadable, new()
+		public static void Read<T>(this IDictionary<string, T> _this, AssetReader reader) where T : IAssetReadable, new()
 		{
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
@@ -150,8 +147,7 @@ namespace AssetRipper.IO.Extensions
 			}
 		}
 
-		public static void Read<T>(this IDictionary<string, T> _this, AssetReader reader, Func<T> instantiator)
-			where T : IAssetReadable
+		public static void Read<T>(this IDictionary<string, T> _this, AssetReader reader, Func<T> instantiator) where T : IAssetReadable
 		{
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
@@ -163,9 +159,7 @@ namespace AssetRipper.IO.Extensions
 			}
 		}
 
-		public static void Read<T1, T2>(this IDictionary<Tuple<T1, long>, T2> _this, AssetReader reader)
-			where T1 : IAssetReadable, new()
-			where T2 : IAssetReadable, new()
+		public static void Read<T1, T2>(this IDictionary<Tuple<T1, long>, T2> _this, AssetReader reader) where T1 : IAssetReadable, new() where T2 : IAssetReadable, new()
 		{
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
@@ -177,8 +171,7 @@ namespace AssetRipper.IO.Extensions
 			}
 		}
 
-		public static void Read<T>(this IDictionary<T, int> _this, AssetReader reader)
-			where T : IAssetReadable, new()
+		public static void Read<T>(this IDictionary<T, int> _this, AssetReader reader) where T : IAssetReadable, new()
 		{
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
@@ -190,8 +183,7 @@ namespace AssetRipper.IO.Extensions
 			}
 		}
 
-		public static void Read<T>(this IDictionary<T, float> _this, AssetReader reader)
-			where T : IAssetReadable, new()
+		public static void Read<T>(this IDictionary<T, float> _this, AssetReader reader) where T : IAssetReadable, new()
 		{
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
@@ -203,8 +195,7 @@ namespace AssetRipper.IO.Extensions
 			}
 		}
 
-		public static void Read<T>(this IDictionary<T, float> _this, AssetReader reader, Func<T> instantiator)
-			where T : IAssetReadable
+		public static void Read<T>(this IDictionary<T, float> _this, AssetReader reader, Func<T> instantiator) where T : IAssetReadable
 		{
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
@@ -216,9 +207,7 @@ namespace AssetRipper.IO.Extensions
 			}
 		}
 
-		public static void Read<T1, T2>(this IDictionary<T1, T2> _this, AssetReader reader)
-			where T1 : IAssetReadable, new()
-			where T2 : IAssetReadable, new()
+		public static void Read<T1, T2>(this IDictionary<T1, T2> _this, AssetReader reader) where T1 : IAssetReadable, new() where T2 : IAssetReadable, new()
 		{
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
@@ -231,8 +220,7 @@ namespace AssetRipper.IO.Extensions
 			}
 		}
 
-		public static void Read<T1, T2>(this IDictionary<T1, T2> _this, AssetReader reader, Func<T1> keyInstantiator)
-			where T1 : IAssetReadable
+		public static void Read<T1, T2>(this IDictionary<T1, T2> _this, AssetReader reader, Func<T1> keyInstantiator) where T1 : IAssetReadable
 			where T2 : IAssetReadable, new()
 		{
 			int count = reader.ReadInt32();
@@ -246,9 +234,7 @@ namespace AssetRipper.IO.Extensions
 			}
 		}
 
-		public static void Read<T1, T2>(this IDictionary<T1, T2> _this, AssetReader reader, Func<T2> valueInstantiator)
-			where T1 : IAssetReadable, new()
-			where T2 : IAssetReadable
+		public static void Read<T1, T2>(this IDictionary<T1, T2> _this, AssetReader reader, Func<T2> valueInstantiator) where T1 : IAssetReadable, new() where T2 : IAssetReadable
 		{
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++)
@@ -261,8 +247,7 @@ namespace AssetRipper.IO.Extensions
 			}
 		}
 
-		public static void Read<T1, T2>(this IDictionary<T1, T2> _this, AssetReader reader, Func<T1> keyInstantiator, Func<T2> valueInstantiator)
-			where T1 : IAssetReadable
+		public static void Read<T1, T2>(this IDictionary<T1, T2> _this, AssetReader reader, Func<T1> keyInstantiator, Func<T2> valueInstantiator) where T1 : IAssetReadable
 			where T2 : IAssetReadable
 		{
 			int count = reader.ReadInt32();

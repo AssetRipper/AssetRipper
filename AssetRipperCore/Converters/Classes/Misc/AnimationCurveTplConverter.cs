@@ -8,8 +8,7 @@ namespace AssetRipper.Converters.Classes.Misc
 {
 	public static class AnimationCurveTplConverter
 	{
-		public static AnimationCurveTpl<T> Convert<T>(IExportContainer container, ref AnimationCurveTpl<T> origin)
-			where T : struct, IAsset
+		public static AnimationCurveTpl<T> Convert<T>(IExportContainer container, ref AnimationCurveTpl<T> origin) where T : struct, IAsset
 		{
 			AnimationCurveTplLayout exlayout = container.ExportLayout.Serialized.AnimationCurveTpl;
 			AnimationCurveTpl<T> instance = new AnimationCurveTpl<T>();
@@ -23,8 +22,7 @@ namespace AssetRipper.Converters.Classes.Misc
 			return instance;
 		}
 
-		private static RotationOrder GetRotationOrder<T>(IExportContainer container, ref AnimationCurveTpl<T> origin)
-			where T : struct, IAsset
+		private static RotationOrder GetRotationOrder<T>(IExportContainer container, ref AnimationCurveTpl<T> origin) where T : struct, IAsset
 		{
 			return container.Layout.Serialized.AnimationCurveTpl.HasRotationOrder ? origin.RotationOrder : RotationOrder.OrderZXY;
 		}

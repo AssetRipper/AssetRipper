@@ -16,8 +16,7 @@ namespace AssetRipper.Parser.Asset
 			m_hierarchy = log ? new Stack<string>() : null;
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(T dependent, string name)
-			where T : IDependent
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(T dependent, string name) where T : IDependent
 		{
 			if (IsLog)
 			{
@@ -36,20 +35,17 @@ namespace AssetRipper.Parser.Asset
 			}
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(T[] dependents, string name)
-			where T : IDependent
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(T[] dependents, string name) where T : IDependent
 		{
 			return FetchDependencies((IEnumerable<T>)dependents, name);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IReadOnlyList<T> dependents, string name)
-			where T : IDependent
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IReadOnlyList<T> dependents, string name) where T : IDependent
 		{
 			return FetchDependencies((IEnumerable<T>)dependents, name);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IEnumerable<T> dependents, string name)
-			where T : IDependent
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IEnumerable<T> dependents, string name) where T : IDependent
 		{
 			if (IsLog)
 			{
@@ -71,20 +67,17 @@ namespace AssetRipper.Parser.Asset
 			}
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(PPtr<T>[] pointers, string name)
-			where T : Object
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(PPtr<T>[] pointers, string name) where T : Object
 		{
 			return FetchDependencies((IEnumerable<PPtr<T>>)pointers, name);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IReadOnlyList<PPtr<T>> pointers, string name)
-			where T : Object
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IReadOnlyList<PPtr<T>> pointers, string name) where T : Object
 		{
 			return FetchDependencies((IEnumerable<PPtr<T>>)pointers, name);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IEnumerable<PPtr<T>> pointers, string name)
-			where T : Object
+		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IEnumerable<PPtr<T>> pointers, string name) where T : Object
 		{
 			foreach (PPtr<T> pointer in pointers)
 			{
@@ -95,8 +88,7 @@ namespace AssetRipper.Parser.Asset
 			}
 		}
 
-		public PPtr<Object> FetchDependency<T>(PPtr<T> pointer, string name)
-			where T : Object
+		public PPtr<Object> FetchDependency<T>(PPtr<T> pointer, string name) where T : Object
 		{
 			if (IsLog)
 			{

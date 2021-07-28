@@ -31,8 +31,7 @@ namespace AssetRipper.IO.Extensions
 			IDictionaryWriteEndianExtensions.Write(_this, writer, converter);
 		}
 
-		public static void Write<T>(this IReadOnlyDictionary<string, T> _this, AssetWriter writer)
-			where T : IAssetWritable
+		public static void Write<T>(this IReadOnlyDictionary<string, T> _this, AssetWriter writer) where T : IAssetWritable
 		{
 			writer.Write(_this.Count);
 			foreach (var kvp in _this)
@@ -42,8 +41,7 @@ namespace AssetRipper.IO.Extensions
 			}
 		}
 
-		public static void Write<T1, T2>(this IReadOnlyDictionary<T1, T2> _this, AssetWriter writer)
-			where T1 : IAssetWritable
+		public static void Write<T1, T2>(this IReadOnlyDictionary<T1, T2> _this, AssetWriter writer) where T1 : IAssetWritable
 			where T2 : IAssetWritable
 		{
 			writer.Write(_this.Count);

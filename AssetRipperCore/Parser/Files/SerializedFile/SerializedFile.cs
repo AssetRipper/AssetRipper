@@ -197,8 +197,7 @@ namespace AssetRipper.Parser.Files.SerializedFiles
 			return Metadata.Object[m_assetEntryLookup[pathID]].ClassID;
 		}
 
-		public PPtr<T> CreatePPtr<T>(T asset)
-			where T : Object
+		public PPtr<T> CreatePPtr<T>(T asset) where T : Object
 		{
 			if (asset.File == this)
 			{

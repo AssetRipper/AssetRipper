@@ -10,14 +10,12 @@ namespace AssetRipper.Parser.Files.SerializedFiles.IO
 			Generation = generation;
 		}
 
-		public void WriteSerialized<T>(T value)
-			where T : ISerializedWritable
+		public void WriteSerialized<T>(T value) where T : ISerializedWritable
 		{
 			value.Write(this);
 		}
 
-		public void WriteSerializedArray<T>(T[] buffer)
-			where T : ISerializedWritable
+		public void WriteSerializedArray<T>(T[] buffer) where T : ISerializedWritable
 		{
 			FillInnerBuffer(buffer.Length);
 			Write(m_buffer, 0, sizeof(int));

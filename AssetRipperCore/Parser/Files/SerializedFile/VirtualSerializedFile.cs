@@ -93,8 +93,7 @@ namespace AssetRipper.Parser.Files.SerializedFiles
 			return m_assets[pathID].ClassID;
 		}
 
-		public PPtr<T> CreatePPtr<T>(T asset)
-			where T : Object
+		public PPtr<T> CreatePPtr<T>(T asset) where T : Object
 		{
 			if (asset.File == this)
 			{
@@ -108,8 +107,7 @@ namespace AssetRipper.Parser.Files.SerializedFiles
 			return m_assets.Values;
 		}
 
-		public T CreateAsset<T>(Func<AssetInfo, T> instantiator)
-			where T : Object
+		public T CreateAsset<T>(Func<AssetInfo, T> instantiator) where T : Object
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
 			AssetInfo assetInfo = new AssetInfo(this, ++m_nextId, classID);

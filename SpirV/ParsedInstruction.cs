@@ -19,8 +19,7 @@ namespace SpirV
 			Operand = operand;
 		}
 
-		public T GetSingleEnumValue<T>()
-			where T : Enum
+		public T GetSingleEnumValue<T>() where T : Enum
 		{
 			IValueEnumOperandValue v = (IValueEnumOperandValue)Value;
 			if (v.Value.Count == 0)
@@ -41,8 +40,7 @@ namespace SpirV
 			return ((ObjectReference)Value).Id;
 		}
 
-		public T GetBitEnumValue<T>()
-			where T : Enum
+		public T GetBitEnumValue<T>() where T : Enum
 		{
 			var v = Value as IBitEnumOperandValue;
 

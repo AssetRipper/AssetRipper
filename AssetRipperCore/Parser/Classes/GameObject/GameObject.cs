@@ -35,8 +35,7 @@ namespace AssetRipper.Parser.Classes.GameObject
 
 		public GameObject(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public T GetComponent<T>()
-			where T : Component
+		public T GetComponent<T>() where T : Component
 		{
 			T component = FindComponent<T>();
 			if (component == null)
@@ -46,8 +45,7 @@ namespace AssetRipper.Parser.Classes.GameObject
 			return component;
 		}
 
-		public T FindComponent<T>()
-			where T : Component
+		public T FindComponent<T>() where T : Component
 		{
 			foreach (PPtr<Component> ptr in FetchComponents())
 			{

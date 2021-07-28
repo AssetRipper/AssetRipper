@@ -8,8 +8,7 @@ namespace AssetRipper.IO.Extensions
 {
 	public static class IDictionaryExportYAMLExtensions
 	{
-		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<int, T> _this, IExportContainer container)
-			where T : IYAMLExportable
+		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<int, T> _this, IExportContainer container) where T : IYAMLExportable
 		{
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
@@ -21,8 +20,7 @@ namespace AssetRipper.IO.Extensions
 			return node;
 		}
 
-		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<string, T> _this, IExportContainer container)
-			where T : IYAMLExportable
+		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<string, T> _this, IExportContainer container) where T : IYAMLExportable
 		{
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
@@ -34,8 +32,7 @@ namespace AssetRipper.IO.Extensions
 			return node;
 		}
 
-		public static YAMLNode ExportYAML<T1, T2>(this IReadOnlyDictionary<Tuple<T1, long>, T2> _this, IExportContainer container)
-			where T1 : IYAMLExportable
+		public static YAMLNode ExportYAML<T1, T2>(this IReadOnlyDictionary<Tuple<T1, long>, T2> _this, IExportContainer container) where T1 : IYAMLExportable
 			where T2 : IYAMLExportable
 		{
 			// TODO: test
@@ -53,8 +50,7 @@ namespace AssetRipper.IO.Extensions
 			return node;
 		}
 
-		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<T, int> _this, IExportContainer container)
-			where T : IYAMLExportable
+		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<T, int> _this, IExportContainer container) where T : IYAMLExportable
 		{
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
@@ -75,8 +71,7 @@ namespace AssetRipper.IO.Extensions
 			return node;
 		}
 
-		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<T, float> _this, IExportContainer container)
-			where T : IYAMLExportable
+		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<T, float> _this, IExportContainer container) where T : IYAMLExportable
 		{
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
@@ -97,8 +92,7 @@ namespace AssetRipper.IO.Extensions
 			return node;
 		}
 
-		public static YAMLNode ExportYAML<T1, T2>(this IReadOnlyDictionary<T1, T2> _this, IExportContainer container)
-			where T1 : IYAMLExportable
+		public static YAMLNode ExportYAML<T1, T2>(this IReadOnlyDictionary<T1, T2> _this, IExportContainer container) where T1 : IYAMLExportable
 			where T2 : IYAMLExportable
 		{
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
@@ -120,8 +114,7 @@ namespace AssetRipper.IO.Extensions
 			return node;
 		}
 
-		public static YAMLNode ExportYAML<T1, T2>(this IReadOnlyDictionary<T1, T2[]> _this, IExportContainer container)
-			where T1 : IYAMLExportable
+		public static YAMLNode ExportYAML<T1, T2>(this IReadOnlyDictionary<T1, T2[]> _this, IExportContainer container) where T1 : IYAMLExportable
 			where T2 : IYAMLExportable
 		{
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);

@@ -13,10 +13,8 @@ namespace AssetRipper.Structure
 		ISerializedFile FindSerializedFile(string fileName);
 		IResourceFile FindResourceFile(string fileName);
 
-		T FindAsset<T>()
-			where T : Object;
-		T FindAsset<T>(string name)
-			where T : NamedObject;
+		T FindAsset<T>() where T : Object;
+		T FindAsset<T>(string name) where T : NamedObject;
 		IEnumerable<Object> FetchAssets();
 
 		bool IsScene(ISerializedFile file);

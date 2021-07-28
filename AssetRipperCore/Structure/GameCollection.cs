@@ -115,8 +115,7 @@ namespace AssetRipper.Structure
 			return m_resources[fixedName];
 		}
 
-		public T FindAsset<T>()
-			where T : Object
+		public T FindAsset<T>() where T : Object
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
 			foreach (Object asset in FetchAssets())
@@ -129,8 +128,7 @@ namespace AssetRipper.Structure
 			return null;
 		}
 
-		public T FindAsset<T>(string name)
-			where T : NamedObject
+		public T FindAsset<T>(string name) where T : NamedObject
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
 			foreach (Object asset in FetchAssets())

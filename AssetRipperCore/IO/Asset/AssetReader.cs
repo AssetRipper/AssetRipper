@@ -55,16 +55,14 @@ namespace AssetRipper.IO.Asset
 			return count;
 		}
 
-		public T ReadAsset<T>()
-			where T : IAssetReadable, new()
+		public T ReadAsset<T>() where T : IAssetReadable, new()
 		{
 			T t = new T();
 			t.Read(this);
 			return t;
 		}
 
-		public T[] ReadAssetArray<T>()
-			where T : IAssetReadable, new()
+		public T[] ReadAssetArray<T>() where T : IAssetReadable, new()
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -82,8 +80,7 @@ namespace AssetRipper.IO.Asset
 			return array;
 		}
 
-		public T[][] ReadAssetArrayArray<T>()
-			where T : IAssetReadable, new()
+		public T[][] ReadAssetArrayArray<T>() where T : IAssetReadable, new()
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();

@@ -29,8 +29,7 @@ namespace AssetRipper.Parser.Classes.Misc
 			return left.FileIndex != right.FileIndex || left.PathID != right.PathID;
 		}
 
-		public PPtr<T1> CastTo<T1>()
-			where T1 : Object.Object
+		public PPtr<T1> CastTo<T1>() where T1 : Object.Object
 		{
 			return new PPtr<T1>(FileIndex, PathID);
 		}

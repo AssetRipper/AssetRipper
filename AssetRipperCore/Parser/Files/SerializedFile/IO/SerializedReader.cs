@@ -11,16 +11,14 @@ namespace AssetRipper.Parser.Files.SerializedFiles.IO
 			Generation = generation;
 		}
 
-		public T ReadSerialized<T>()
-			where T : ISerializedReadable, new()
+		public T ReadSerialized<T>() where T : ISerializedReadable, new()
 		{
 			T t = new T();
 			t.Read(this);
 			return t;
 		}
 
-		public T[] ReadSerializedArray<T>()
-			where T : ISerializedReadable, new()
+		public T[] ReadSerializedArray<T>() where T : ISerializedReadable, new()
 		{
 			int count = ReadInt32();
 			T[] array = new T[count];
@@ -33,8 +31,7 @@ namespace AssetRipper.Parser.Files.SerializedFiles.IO
 			return array;
 		}
 
-		public T[] ReadSerializedArray<T>(Func<T> instantiator)
-			where T : ISerializedReadable
+		public T[] ReadSerializedArray<T>(Func<T> instantiator) where T : ISerializedReadable
 		{
 			int count = ReadInt32();
 			T[] array = new T[count];

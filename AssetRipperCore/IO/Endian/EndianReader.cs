@@ -595,16 +595,14 @@ namespace AssetRipper.IO.Endian
 			return array;
 		}
 
-		public T ReadEnadian<T>()
-			where T : IEndianReadable, new()
+		public T ReadEnadian<T>() where T : IEndianReadable, new()
 		{
 			T t = new T();
 			t.Read(this);
 			return t;
 		}
 
-		public T[] ReadEndianArray<T>()
-			where T : IEndianReadable, new()
+		public T[] ReadEndianArray<T>() where T : IEndianReadable, new()
 		{
 			FillInnerBuffer(4);
 			int count = BufferToInt32();
@@ -622,8 +620,7 @@ namespace AssetRipper.IO.Endian
 			return array;
 		}
 
-		public T[][] ReadEndianArrayArray<T>()
-			where T : IEndianReadable, new()
+		public T[][] ReadEndianArrayArray<T>() where T : IEndianReadable, new()
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();

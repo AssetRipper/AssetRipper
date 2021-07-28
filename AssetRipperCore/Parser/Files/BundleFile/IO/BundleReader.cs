@@ -14,16 +14,14 @@ namespace AssetRipper.Parser.Files.BundleFile.IO
 			Flags = flags;
 		}
 
-		public T ReadBundle<T>()
-			where T : IBundleReadable, new()
+		public T ReadBundle<T>() where T : IBundleReadable, new()
 		{
 			T t = new T();
 			t.Read(this);
 			return t;
 		}
 
-		public T[] ReadBundleArray<T>()
-			where T : IBundleReadable, new()
+		public T[] ReadBundleArray<T>() where T : IBundleReadable, new()
 		{
 			int count = ReadInt32();
 			T[] array = new T[count];
@@ -36,8 +34,7 @@ namespace AssetRipper.Parser.Files.BundleFile.IO
 			return array;
 		}
 
-		public T[] ReadBundleArray<T>(Func<T> instantiator)
-			where T : IBundleReadable
+		public T[] ReadBundleArray<T>(Func<T> instantiator) where T : IBundleReadable
 		{
 			int count = ReadInt32();
 			T[] array = new T[count];

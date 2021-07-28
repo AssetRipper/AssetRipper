@@ -402,14 +402,12 @@ namespace AssetRipper.IO.Endian
 			}
 		}
 
-		public void WriteEndian<T>(T value)
-			where T : IEndianWritable
+		public void WriteEndian<T>(T value) where T : IEndianWritable
 		{
 			value.Write(this);
 		}
 
-		public void WriteEndianArray<T>(T[] buffer)
-			where T : IEndianWritable
+		public void WriteEndianArray<T>(T[] buffer) where T : IEndianWritable
 		{
 			FillInnerBuffer(buffer.Length);
 			Write(m_buffer, 0, sizeof(int));
@@ -425,8 +423,7 @@ namespace AssetRipper.IO.Endian
 			}
 		}
 
-		public void WriteEndianArray<T>(T[][] buffer)
-			where T : IEndianWritable
+		public void WriteEndianArray<T>(T[][] buffer) where T : IEndianWritable
 		{
 			FillInnerBuffer(buffer.Length);
 			Write(m_buffer, 0, sizeof(int));
