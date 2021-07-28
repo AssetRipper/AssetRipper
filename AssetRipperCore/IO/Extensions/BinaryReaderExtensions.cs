@@ -100,9 +100,9 @@ namespace AssetRipper.IO.Extensions
 			return new Vector4f(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 		}
 
-		public static Color ReadColor4(this BinaryReader reader)
+		public static ColorRGBAf ReadColor4(this BinaryReader reader)
 		{
-			return new Color(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+			return new ColorRGBAf(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 		}
 
 		public static Matrix4x4 ReadMatrix(this BinaryReader reader)

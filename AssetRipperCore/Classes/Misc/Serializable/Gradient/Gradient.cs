@@ -190,11 +190,11 @@ namespace AssetRipper.Classes.Misc.Serializable.Gradient
 
 		public void Add(ushort time, ColorRGBAf color)
 		{
-			AddColor(time, color.R, color.G, color.B);
+			AddColorRGBAf(time, color.R, color.G, color.B);
 			AddAlpha(time, color.A);
 		}
 
-		public void AddColor(ushort time, float r, float g, float b)
+		public void AddColorRGBAf(ushort time, float r, float g, float b)
 		{
 			switch (NumColorKeys)
 			{

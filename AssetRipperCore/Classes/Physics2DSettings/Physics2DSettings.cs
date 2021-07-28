@@ -113,7 +113,7 @@ namespace AssetRipper.Classes.Physics2DSettings
 		/// <summary>
 		/// 5.5.0 and greater and editor
 		/// </summary>
-		public static bool HasColliderAABBColor(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 5);
+		public static bool HasColliderAABBColorRGBAf(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -198,7 +198,7 @@ namespace AssetRipper.Classes.Physics2DSettings
 				ColliderAsleepColor.Read(reader);
 				ColliderContactColor.Read(reader);
 			}
-			if (HasColliderAABBColor(reader.Version, reader.Flags))
+			if (HasColliderAABBColorRGBAf(reader.Version, reader.Flags))
 			{
 				ColliderAABBColor.Read(reader);
 			}
@@ -248,10 +248,10 @@ namespace AssetRipper.Classes.Physics2DSettings
 			node.Add(ShowColliderContactsName, GetShowColliderContacts());
 			node.Add(ShowColliderAABBName, GetShowColliderAABB());
 			node.Add(ContactArrowScaleName, GetContactArrowScale(container.Version, container.Flags));
-			node.Add(ColliderAwakeColorName, GetColliderAwakeColor(container.Version, container.Flags).ExportYAML(container));
-			node.Add(ColliderAsleepColorName, GetColliderAsleepColor(container.Version, container.Flags).ExportYAML(container));
-			node.Add(ColliderContactColorName, GetColliderContactColor(container.Version, container.Flags).ExportYAML(container));
-			node.Add(ColliderAABBColorName, GetColliderAABBColor(container.Version, container.Flags).ExportYAML(container));
+			node.Add(ColliderAwakeColorName, GetColliderAwakeColorRGBAf(container.Version, container.Flags).ExportYAML(container));
+			node.Add(ColliderAsleepColorName, GetColliderAsleepColorRGBAf(container.Version, container.Flags).ExportYAML(container));
+			node.Add(ColliderContactColorName, GetColliderContactColorRGBAf(container.Version, container.Flags).ExportYAML(container));
+			node.Add(ColliderAABBColorName, GetColliderAABBColorRGBAf(container.Version, container.Flags).ExportYAML(container));
 			node.Add(LayerCollisionMatrixName, LayerCollisionMatrix.ExportYAML(true));
 			return node;
 		}
@@ -360,7 +360,7 @@ namespace AssetRipper.Classes.Physics2DSettings
 #endif
 			return 0.2f;
 		}
-		private ColorRGBAf GetColliderAwakeColor(Version version, TransferInstructionFlags flags)
+		private ColorRGBAf GetColliderAwakeColorRGBAf(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasContactArrowScale(version, flags))
@@ -370,7 +370,7 @@ namespace AssetRipper.Classes.Physics2DSettings
 #endif
 			return new ColorRGBAf(0.5686275f, 0.95686275f, 0.54509807f, 0.7529412f);
 		}
-		private ColorRGBAf GetColliderAsleepColor(Version version, TransferInstructionFlags flags)
+		private ColorRGBAf GetColliderAsleepColorRGBAf(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasContactArrowScale(version, flags))
@@ -380,7 +380,7 @@ namespace AssetRipper.Classes.Physics2DSettings
 #endif
 			return new ColorRGBAf(0.5686275f, 0.95686275f, 0.54509807f, 0.36078432f);
 		}
-		private ColorRGBAf GetColliderContactColor(Version version, TransferInstructionFlags flags)
+		private ColorRGBAf GetColliderContactColorRGBAf(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasContactArrowScale(version, flags))
@@ -390,7 +390,7 @@ namespace AssetRipper.Classes.Physics2DSettings
 #endif
 			return new ColorRGBAf(1.0f, 0.0f, 1.0f, 0.6862745f);
 		}
-		private ColorRGBAf GetColliderAABBColor(Version version, TransferInstructionFlags flags)
+		private ColorRGBAf GetColliderAABBColorRGBAf(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasContactArrowScale(version, flags))

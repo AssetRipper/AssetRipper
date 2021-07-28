@@ -49,7 +49,7 @@ namespace AssetRipper.Classes.SpriteRenderer
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		private static bool IsAlignColor(Version version) => version.IsGreaterEqual(4, 5);
+		private static bool IsAlignColorRGBAf(Version version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
@@ -61,7 +61,7 @@ namespace AssetRipper.Classes.SpriteRenderer
 
 			Sprite.Read(reader);
 			Color.Read(reader);
-			if (IsAlignColor(reader.Version))
+			if (IsAlignColorRGBAf(reader.Version))
 			{
 				reader.AlignStream();
 			}

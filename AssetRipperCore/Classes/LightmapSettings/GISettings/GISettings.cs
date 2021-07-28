@@ -41,7 +41,7 @@ namespace AssetRipper.Classes.LightmapSettings.GISettings
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasSkyLightColor(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasSkyLightColorRGBAf(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
 		/// <summary>
 		/// 5.0.0f1 to 2018.3 exclusive
 		/// </summary>
@@ -53,7 +53,7 @@ namespace AssetRipper.Classes.LightmapSettings.GISettings
 
 		public void Read(AssetReader reader)
 		{
-			if (HasSkyLightColor(reader.Version))
+			if (HasSkyLightColorRGBAf(reader.Version))
 			{
 				SkyLightColor.Read(reader);
 				SkyLightIntensity = reader.ReadSingle();
@@ -81,7 +81,7 @@ namespace AssetRipper.Classes.LightmapSettings.GISettings
 
 		public void Write(AssetWriter writer)
 		{
-			if (HasSkyLightColor(writer.Version))
+			if (HasSkyLightColorRGBAf(writer.Version))
 			{
 				SkyLightColor.Write(writer);
 				writer.Write(SkyLightIntensity);
@@ -111,7 +111,7 @@ namespace AssetRipper.Classes.LightmapSettings.GISettings
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			if (HasSkyLightColor(container.ExportVersion))
+			if (HasSkyLightColorRGBAf(container.ExportVersion))
 			{
 				node.Add(SkyLightColorName, SkyLightColor.ExportYAML(container));
 				node.Add(SkyLightIntensityName, SkyLightIntensity);

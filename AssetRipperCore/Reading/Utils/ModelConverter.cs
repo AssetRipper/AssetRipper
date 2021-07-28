@@ -391,11 +391,11 @@ namespace AssetRipper.Reading.Utils
                 {
                     if (mesh.m_Colors.Length == mesh.m_VertexCount * 3)
                     {
-                        iVertex.Color = new Color(mesh.m_Colors[j * 3], mesh.m_Colors[j * 3 + 1], mesh.m_Colors[j * 3 + 2], 1.0f);
+                        iVertex.Color = new ColorRGBAf(mesh.m_Colors[j * 3], mesh.m_Colors[j * 3 + 1], mesh.m_Colors[j * 3 + 2], 1.0f);
                     }
                     else
                     {
-                        iVertex.Color = new Color(mesh.m_Colors[j * 4], mesh.m_Colors[j * 4 + 1], mesh.m_Colors[j * 4 + 2], mesh.m_Colors[j * 4 + 3]);
+                        iVertex.Color = new ColorRGBAf(mesh.m_Colors[j * 4], mesh.m_Colors[j * 4 + 1], mesh.m_Colors[j * 4 + 2], mesh.m_Colors[j * 4 + 3]);
                     }
                 }
                 //BoneInfluence
@@ -642,11 +642,11 @@ namespace AssetRipper.Reading.Utils
                 iMat = new ImportedMaterial();
                 iMat.Name = mat.m_Name;
                 //default values
-                iMat.Diffuse = new Color(0.8f, 0.8f, 0.8f, 1);
-                iMat.Ambient = new Color(0.2f, 0.2f, 0.2f, 1);
-                iMat.Emissive = new Color(0, 0, 0, 1);
-                iMat.Specular = new Color(0.2f, 0.2f, 0.2f, 1);
-                iMat.Reflection = new Color(0, 0, 0, 1);
+                iMat.Diffuse = new ColorRGBAf(0.8f, 0.8f, 0.8f, 1);
+                iMat.Ambient = new ColorRGBAf(0.2f, 0.2f, 0.2f, 1);
+                iMat.Emissive = new ColorRGBAf(0, 0, 0, 1);
+                iMat.Specular = new ColorRGBAf(0.2f, 0.2f, 0.2f, 1);
+                iMat.Reflection = new ColorRGBAf(0, 0, 0, 1);
                 iMat.Shininess = 20f;
                 iMat.Transparency = 0f;
                 foreach (var col in mat.m_SavedProperties.m_Colors)

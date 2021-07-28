@@ -38,7 +38,7 @@ namespace AssetRipper.Classes
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasColor(Version version) => version.IsGreaterEqual(4, 2);
+		public static bool HasColorRGBAf(Version version) => version.IsGreaterEqual(4, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -62,7 +62,7 @@ namespace AssetRipper.Classes
 				reader.AlignStream();
 			}
 			Font.Read(reader);
-			if (HasColor(reader.Version))
+			if (HasColorRGBAf(reader.Version))
 			{
 				Color.Read(reader);
 			}
@@ -99,9 +99,9 @@ namespace AssetRipper.Classes
 				node.Add(RichTextName, GetRichText(container.Version));
 			}
 			node.Add(FontName, Font.ExportYAML(container));
-			if (HasColor(container.ExportVersion))
+			if (HasColorRGBAf(container.ExportVersion))
 			{
-				node.Add(ColorName, GetColor(container.Version).ExportYAML(container));
+				node.Add(ColorName, GetColorRGBAf(container.Version).ExportYAML(container));
 			}
 			return node;
 		}
@@ -110,7 +110,7 @@ namespace AssetRipper.Classes
 		{
 			return HasRichText(version) ? RichText : true;
 		}
-		private ColorRGBA32 GetColor(Version version)
+		private ColorRGBA32 GetColorRGBAf(Version version)
 		{
 			return HasFontSize(version) ? Color : ColorRGBA32.White;
 		}

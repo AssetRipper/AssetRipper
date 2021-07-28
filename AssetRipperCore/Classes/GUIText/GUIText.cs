@@ -38,7 +38,7 @@ namespace AssetRipper.Classes.GUIText
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasColor(Version version) => version.IsGreaterEqual(4, 2);
+		public static bool HasColorRGBAf(Version version) => version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
@@ -64,7 +64,7 @@ namespace AssetRipper.Classes.GUIText
 				FontSize = reader.ReadInt32();
 				FontStyle = (FontStyle)reader.ReadInt32();
 			}
-			if (HasColor(reader.Version))
+			if (HasColorRGBAf(reader.Version))
 			{
 				Color.Read(reader);
 			}
@@ -100,13 +100,13 @@ namespace AssetRipper.Classes.GUIText
 			node.Add(MaterialName, Material.ExportYAML(container));
 			node.Add(FontSizeName, FontSize);
 			node.Add(FontStyleName, (int)FontStyle);
-			node.Add(ColorName, GetColor(container.Version).ExportYAML(container));
+			node.Add(ColorName, GetColorRGBAf(container.Version).ExportYAML(container));
 			node.Add(PixelCorrectName, PixelCorrect);
 			node.Add(RichTextName, GetRichText(container.Version));
 			return node;
 		}
 
-		private ColorRGBA32 GetColor(Version version)
+		private ColorRGBA32 GetColorRGBAf(Version version)
 		{
 			return HasFontSize(version) ? Color : ColorRGBA32.White;
 		}

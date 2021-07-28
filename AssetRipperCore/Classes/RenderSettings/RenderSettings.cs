@@ -62,7 +62,7 @@ namespace AssetRipper.Classes.RenderSettings
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasAmbientEquatorColor(Version version) => version.IsGreaterEqual(5);
+		public static bool HasAmbientEquatorColorRGBAf(Version version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
@@ -78,7 +78,7 @@ namespace AssetRipper.Classes.RenderSettings
 		/// <summary>
 		/// 5.6.0b2 and greater
 		/// </summary>
-		public static bool HasSubtractiveShadowColor(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
+		public static bool HasSubtractiveShadowColorRGBAf(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
@@ -132,7 +132,7 @@ namespace AssetRipper.Classes.RenderSettings
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasIndirectSpecularColor(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasIndirectSpecularColorRGBAf(Version version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
@@ -169,7 +169,7 @@ namespace AssetRipper.Classes.RenderSettings
 				LinearFogEnd = reader.ReadSingle();
 			}
 			AmbientSkyColor.Read(reader);
-			if (HasAmbientEquatorColor(reader.Version))
+			if (HasAmbientEquatorColorRGBAf(reader.Version))
 			{
 				AmbientEquatorColor.Read(reader);
 				AmbientGroundColor.Read(reader);
@@ -195,7 +195,7 @@ namespace AssetRipper.Classes.RenderSettings
 				}
 				reader.AlignStream();
 			}
-			if (HasSubtractiveShadowColor(reader.Version))
+			if (HasSubtractiveShadowColorRGBAf(reader.Version))
 			{
 				SubtractiveShadowColor.Read(reader);
 			}
@@ -254,7 +254,7 @@ namespace AssetRipper.Classes.RenderSettings
 			{
 				Sun.Read(reader);
 			}
-			if (HasIndirectSpecularColor(reader.Version))
+			if (HasIndirectSpecularColorRGBAf(reader.Version))
 			{
 				IndirectSpecularColor.Read(reader);
 			}
@@ -293,11 +293,11 @@ namespace AssetRipper.Classes.RenderSettings
 			node.Add(LinearFogStartName, LinearFogStart);
 			node.Add(LinearFogEndName, GetExportLinearFogEnd(container.Version));
 			node.Add(AmbientSkyColorName, AmbientSkyColor.ExportYAML(container));
-			node.Add(AmbientEquatorColorName, GetExportAmbientEquatorColor(container.Version).ExportYAML(container));
-			node.Add(AmbientGroundColorName, GetExportAmbientGroundColor(container.Version).ExportYAML(container));
+			node.Add(AmbientEquatorColorName, GetExportAmbientEquatorColorRGBAf(container.Version).ExportYAML(container));
+			node.Add(AmbientGroundColorName, GetExportAmbientGroundColorRGBAf(container.Version).ExportYAML(container));
 			node.Add(AmbientIntensityName, GetExportAmbientIntensity(container.Version));
 			node.Add(AmbientModeName, (int)AmbientMode);
-			node.Add(SubtractiveShadowColorName, GetExportSubtractiveShadowColor(container.Version).ExportYAML(container));
+			node.Add(SubtractiveShadowColorName, GetExportSubtractiveShadowColorRGBAf(container.Version).ExportYAML(container));
 			node.Add(SkyboxMaterialName, SkyboxMaterial.ExportYAML(container));
 			node.Add(HaloStrengthName, HaloStrength);
 			node.Add(FlareStrengthName, FlareStrength);
@@ -310,7 +310,7 @@ namespace AssetRipper.Classes.RenderSettings
 			node.Add(ReflectionIntensityName, GetExportReflectionIntensity(container.Version));
 			node.Add(CustomReflectionName, CustomReflection.ExportYAML(container));
 			node.Add(SunName, Sun.ExportYAML(container));
-			node.Add(IndirectSpecularColorName, GetExportIndirectSpecularColor(container.Version).ExportYAML(container));
+			node.Add(IndirectSpecularColorName, GetExportIndirectSpecularColorRGBAf(container.Version).ExportYAML(container));
 			return node;
 		}
 
@@ -322,21 +322,21 @@ namespace AssetRipper.Classes.RenderSettings
 		{
 			return HasLinearFogStart(version) ? LinearFogEnd : 300.0f;
 		}
-		private ColorRGBAf GetExportAmbientEquatorColor(Version version)
+		private ColorRGBAf GetExportAmbientEquatorColorRGBAf(Version version)
 		{
-			return HasAmbientEquatorColor(version) ? AmbientEquatorColor : new ColorRGBAf(0.114f, 0.125f, 0.133f, 1.0f);
+			return HasAmbientEquatorColorRGBAf(version) ? AmbientEquatorColor : new ColorRGBAf(0.114f, 0.125f, 0.133f, 1.0f);
 		}
-		private ColorRGBAf GetExportAmbientGroundColor(Version version)
+		private ColorRGBAf GetExportAmbientGroundColorRGBAf(Version version)
 		{
-			return HasAmbientEquatorColor(version) ? AmbientGroundColor : new ColorRGBAf(0.047f, 0.043f, 0.035f, 1.0f);
+			return HasAmbientEquatorColorRGBAf(version) ? AmbientGroundColor : new ColorRGBAf(0.047f, 0.043f, 0.035f, 1.0f);
 		}
 		private float GetExportAmbientIntensity(Version version)
 		{
-			return HasAmbientEquatorColor(version) ? AmbientIntensity : 1.0f;
+			return HasAmbientEquatorColorRGBAf(version) ? AmbientIntensity : 1.0f;
 		}
-		private ColorRGBAf GetExportSubtractiveShadowColor(Version version)
+		private ColorRGBAf GetExportSubtractiveShadowColorRGBAf(Version version)
 		{
-			return HasSubtractiveShadowColor(version) ? SubtractiveShadowColor : new ColorRGBAf(0.42f, 0.478f, 0.627f, 1.0f);
+			return HasSubtractiveShadowColorRGBAf(version) ? SubtractiveShadowColor : new ColorRGBAf(0.42f, 0.478f, 0.627f, 1.0f);
 		}
 		private float GetExportFlareFadeSpeed(Version version)
 		{
@@ -354,9 +354,9 @@ namespace AssetRipper.Classes.RenderSettings
 		{
 			return HasDefaultReflectionResolution(version) ? ReflectionIntensity : 1.0f;
 		}
-		private ColorRGBAf GetExportIndirectSpecularColor(Version version)
+		private ColorRGBAf GetExportIndirectSpecularColorRGBAf(Version version)
 		{
-			return HasIndirectSpecularColor(version) ? IndirectSpecularColor : new ColorRGBAf(0.44657898f, 0.4964133f, 0.5748178f, 1.0f);
+			return HasIndirectSpecularColorRGBAf(version) ? IndirectSpecularColor : new ColorRGBAf(0.44657898f, 0.4964133f, 0.5748178f, 1.0f);
 		}
 
 		public bool Fog { get; set; }

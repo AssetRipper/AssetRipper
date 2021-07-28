@@ -16,7 +16,7 @@ namespace AssetRipper.Classes.Meta.Importers.Texture
 		/// <summary>
 		/// 3.5.0 to 5.0.0 exclusive
 		/// </summary>
-		public static bool HasDoesTextureContainColor(Version version) => version.IsLess(5) && version.IsGreaterEqual(3, 5);
+		public static bool HasDoesTextureContainColorRGBAf(Version version) => version.IsLess(5) && version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
@@ -27,7 +27,7 @@ namespace AssetRipper.Classes.Meta.Importers.Texture
 			Width = reader.ReadInt32();
 			Height = reader.ReadInt32();
 			DoesTextureContainAlpha = reader.ReadBoolean();
-			if (HasDoesTextureContainColor(reader.Version))
+			if (HasDoesTextureContainColorRGBAf(reader.Version))
 			{
 				DoesTextureContainColor = reader.ReadBoolean();
 			}
@@ -43,7 +43,7 @@ namespace AssetRipper.Classes.Meta.Importers.Texture
 			writer.Write(Width);
 			writer.Write(Height);
 			writer.Write(DoesTextureContainAlpha);
-			if (HasDoesTextureContainColor(writer.Version))
+			if (HasDoesTextureContainColorRGBAf(writer.Version))
 			{
 				writer.Write(DoesTextureContainColor);
 			}
@@ -60,7 +60,7 @@ namespace AssetRipper.Classes.Meta.Importers.Texture
 			node.Add(WidthName, Width);
 			node.Add(HeightName, Height);
 			node.Add(DoesTextureContainAlphaName, DoesTextureContainAlpha);
-			if (HasDoesTextureContainColor(container.ExportVersion))
+			if (HasDoesTextureContainColorRGBAf(container.ExportVersion))
 			{
 				node.Add(DoesTextureContainColorName, DoesTextureContainColor);
 			}

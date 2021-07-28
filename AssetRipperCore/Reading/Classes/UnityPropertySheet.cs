@@ -9,7 +9,7 @@ namespace AssetRipper.Reading.Classes
         public KeyValuePair<string, UnityTexEnv>[] m_TexEnvs;
         public KeyValuePair<string, int>[] m_Ints;
         public KeyValuePair<string, float>[] m_Floats;
-        public KeyValuePair<string, Color>[] m_Colors;
+        public KeyValuePair<string, ColorRGBAf>[] m_Colors;
 
         public UnityPropertySheet(ObjectReader reader)
         {
@@ -40,10 +40,10 @@ namespace AssetRipper.Reading.Classes
             }
 
             int m_ColorsSize = reader.ReadInt32();
-            m_Colors = new KeyValuePair<string, Color>[m_ColorsSize];
+            m_Colors = new KeyValuePair<string, ColorRGBAf>[m_ColorsSize];
             for (int i = 0; i < m_ColorsSize; i++)
             {
-                m_Colors[i] = new KeyValuePair<string, Color>(reader.ReadAlignedString(), reader.ReadColor4());
+                m_Colors[i] = new KeyValuePair<string, ColorRGBAf>(reader.ReadAlignedString(), reader.ReadColor4());
             }
         }
     }
