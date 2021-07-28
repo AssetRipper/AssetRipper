@@ -1,12 +1,12 @@
-using AssetRipper.Converters.Project.Exporters;
-using AssetRipper.Parser.Classes;
-using AssetRipper.Parser.Classes.AnimatorController;
-using AssetRipper.Parser.Classes.AnimatorController.Constants;
-using AssetRipper.Parser.Classes.AnimatorStateMachine;
-using AssetRipper.Parser.Classes.AnimatorTransition;
-using AssetRipper.Parser.Classes.BlendTree;
-using AssetRipper.Parser.Classes.Misc;
-using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Project.Exporters;
+using AssetRipper.Classes;
+using AssetRipper.Classes.AnimatorController;
+using AssetRipper.Classes.AnimatorController.Constants;
+using AssetRipper.Classes.AnimatorStateMachine;
+using AssetRipper.Classes.AnimatorTransition;
+using AssetRipper.Classes.BlendTree;
+using AssetRipper.Classes.Misc;
+using AssetRipper.Classes.Object;
 using AssetRipper.Parser.Files.SerializedFiles;
 using System.Collections.Generic;
 
@@ -14,7 +14,7 @@ namespace AssetRipper.Structure.Collections
 {
 	public class AnimatorControllerExportCollection : AssetsExportCollection
 	{
-		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, Object asset) : this(assetExporter, virtualFile, (AnimatorController)asset) { }
+		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, UnityObject asset) : this(assetExporter, virtualFile, (AnimatorController)asset) { }
 
 		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, AnimatorController asset) : base(assetExporter, asset)
 		{

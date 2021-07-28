@@ -1,5 +1,5 @@
-using AssetRipper.Parser.Classes.Shader;
-using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Classes.Shader;
+using AssetRipper.Classes.Shader.Enums;
 using AssetRipper.IO;
 using AssetRipperLibrary.Exporters.Shaders.DirectX;
 using DXShaderRestorer;

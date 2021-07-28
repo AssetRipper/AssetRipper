@@ -1,4 +1,4 @@
-﻿using AssetRipper.Parser.Classes.Shader.Enums;
+﻿using AssetRipper.Classes.Shader.Enums;
 using AssetRipper.Parser.Files;
 using System.IO;
 using System.Runtime.Versioning;

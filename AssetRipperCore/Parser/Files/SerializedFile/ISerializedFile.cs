@@ -1,6 +1,6 @@
 using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Classes.Misc;
-using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Classes.Misc;
+using AssetRipper.Classes.Object;
 using AssetRipper.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Structure;
 using System.Collections.Generic;
@@ -14,13 +14,13 @@ namespace AssetRipper.Parser.Files.SerializedFiles
 		/// </summary>
 		/// <param name="pathID">Path ID of the asset</param>
 		/// <returns>Found asset or null</returns>
-		Object FindAsset(long pathID);
+		UnityObject FindAsset(long pathID);
 
 		ObjectInfo GetAssetEntry(long pathID);
 
-		PPtr<T> CreatePPtr<T>(T asset) where T : Object;
+		PPtr<T> CreatePPtr<T>(T asset) where T : UnityObject;
 
-		IEnumerable<Object> FetchAssets();
+		IEnumerable<UnityObject> FetchAssets();
 
 		IFileCollection Collection { get; }
 	}

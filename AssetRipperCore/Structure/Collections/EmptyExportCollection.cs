@@ -1,12 +1,12 @@
-﻿using AssetRipper.Converters.Project;
-using AssetRipper.Parser.Classes.Meta;
-using AssetRipper.Parser.Classes.Meta.Importers.Asset;
-using AssetRipper.Parser.Classes.Misc;
+﻿using AssetRipper.Project;
+using AssetRipper.Classes.Meta;
+using AssetRipper.Classes.Meta.Importers.Asset;
+using AssetRipper.Classes.Misc;
 using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.IO.Asset;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 
 namespace AssetRipper.Structure.Collections
 {
@@ -17,29 +17,29 @@ namespace AssetRipper.Structure.Collections
 			return false;
 		}
 
-		public bool IsContains(Object asset)
+		public bool IsContains(UnityObject asset)
 		{
 			return false;
 		}
 
-		public long GetExportID(Object asset)
+		public long GetExportID(UnityObject asset)
 		{
 			throw new NotSupportedException();
 		}
 
-		public UnityGUID GetExportGUID(Object asset)
+		public UnityGUID GetExportGUID(UnityObject asset)
 		{
 			throw new NotSupportedException();
 		}
 
-		public MetaPtr CreateExportPointer(Object asset, bool isLocal)
+		public MetaPtr CreateExportPointer(UnityObject asset, bool isLocal)
 		{
 			throw new NotSupportedException();
 		}
 
 		public ISerializedFile File => throw new NotSupportedException();
 		public TransferInstructionFlags Flags => throw new NotSupportedException();
-		public IEnumerable<Object> Assets
+		public IEnumerable<UnityObject> Assets
 		{
 			get { yield break; }
 		}

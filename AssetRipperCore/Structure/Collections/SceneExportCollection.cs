@@ -1,13 +1,13 @@
-using AssetRipper.Converters.Project;
-using AssetRipper.Converters.Project.Exporters;
+using AssetRipper.Project;
+using AssetRipper.Project.Exporters;
 using AssetRipper.Logging;
 using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Classes;
-using AssetRipper.Parser.Classes.Meta;
-using AssetRipper.Parser.Classes.Meta.Importers;
-using AssetRipper.Parser.Classes.Misc;
-using AssetRipper.Parser.Classes.OcclusionCullingData;
-using AssetRipper.Parser.Classes.OcclusionCullingSettings;
+using AssetRipper.Classes;
+using AssetRipper.Classes.Meta;
+using AssetRipper.Classes.Meta.Importers;
+using AssetRipper.Classes.Misc;
+using AssetRipper.Classes.OcclusionCullingData;
+using AssetRipper.Classes.OcclusionCullingSettings;
 using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.Utils;
 using System;
@@ -15,12 +15,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Structure.Collections
 {
-	public sealed class SceneExportCollection : ExportCollection, IComparer<Parser.Classes.Object.Object>
+	public sealed class SceneExportCollection : ExportCollection, IComparer<AssetRipper.Classes.Object.UnityObject>
 	{
 		public SceneExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, ISerializedFile file)
 		{
@@ -37,8 +37,8 @@ namespace AssetRipper.Structure.Collections
 			Name = file.Name;
 			m_file = file;
 
-			List<Object> components = new List<Object>();
-			foreach (Object asset in file.FetchAssets())
+			List<UnityObject> components = new List<UnityObject>();
+			foreach (UnityObject asset in file.FetchAssets())
 			{
 				if (OcclusionCullingSettings.IsSceneCompatible(asset))
 				{
@@ -63,7 +63,7 @@ namespace AssetRipper.Structure.Collections
 
 			if (OcclusionCullingSettings.HasReadPVSData(File.Version))
 			{
-				foreach (Object comp in Components)
+				foreach (UnityObject comp in Components)
 				{
 					if (comp.ClassID == ClassIDType.OcclusionCullingSettings)
 					{
@@ -115,7 +115,7 @@ namespace AssetRipper.Structure.Collections
 
 		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
-			string folderPath = Path.Combine(dirPath, Object.AssetsKeyword, OcclusionCullingSettings.SceneKeyword);
+			string folderPath = Path.Combine(dirPath, UnityObject.AssetsKeyword, OcclusionCullingSettings.SceneKeyword);
 			string sceneSubPath = GetSceneName(container);
 			string fileName = $"{sceneSubPath}.unity";
 			string filePath = Path.Combine(folderPath, fileName);
@@ -151,7 +151,7 @@ namespace AssetRipper.Structure.Collections
 			return true;
 		}
 
-		public override bool IsContains(Object asset)
+		public override bool IsContains(UnityObject asset)
 		{
 			if (asset == OcclusionCullingData)
 			{
@@ -160,12 +160,12 @@ namespace AssetRipper.Structure.Collections
 			return m_cexportIDs.ContainsKey(asset.AssetInfo);
 		}
 
-		public override long GetExportID(Object asset)
+		public override long GetExportID(UnityObject asset)
 		{
 			return IsComponent(asset) ? m_cexportIDs[asset.AssetInfo] : GetMainExportID(asset);
 		}
 
-		public override MetaPtr CreateExportPointer(Object asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(UnityObject asset, bool isLocal)
 		{
 			long exportID = GetExportID(asset);
 			if (isLocal && IsComponent(asset))
@@ -179,7 +179,7 @@ namespace AssetRipper.Structure.Collections
 			}
 		}
 
-		public int Compare(Object obj1, Object obj2)
+		public int Compare(UnityObject obj1, UnityObject obj2)
 		{
 			if (obj1.ClassID == obj2.ClassID)
 			{
@@ -217,7 +217,7 @@ namespace AssetRipper.Structure.Collections
 			ExportAsset(container, importer, asset, path, asset.Name);
 		}
 
-		private bool IsComponent(Object asset)
+		private bool IsComponent(UnityObject asset)
 		{
 			return asset != OcclusionCullingData;
 		}
@@ -267,11 +267,11 @@ namespace AssetRipper.Structure.Collections
 		private bool IsSceneName => Name == MainSceneName || s_sceneNameFormat.IsMatch(Name);
 
 		public override IAssetExporter AssetExporter { get; }
-		public override IEnumerable<Object> Assets
+		public override IEnumerable<UnityObject> Assets
 		{
 			get
 			{
-				foreach (Object asset in Components)
+				foreach (UnityObject asset in Components)
 				{
 					yield return asset;
 				}
@@ -287,7 +287,7 @@ namespace AssetRipper.Structure.Collections
 		public OcclusionCullingData OcclusionCullingData { get; }
 		public UnityGUID GUID { get; }
 
-		private IEnumerable<Object> Components => m_components;
+		private IEnumerable<UnityObject> Components => m_components;
 
 		private const string AssetsName = "Assets/";
 		private const string LevelName = "level";
@@ -295,7 +295,7 @@ namespace AssetRipper.Structure.Collections
 
 		private static readonly Regex s_sceneNameFormat = new Regex($"^{LevelName}(0|[1-9][0-9]*)$");
 
-		private readonly Object[] m_components;
+		private readonly UnityObject[] m_components;
 		private readonly Dictionary<AssetInfo, long> m_cexportIDs = new Dictionary<AssetInfo, long>();
 		private readonly ISerializedFile m_file;
 		private readonly OcclusionCullingSettings m_occlusionCullingSettings;

@@ -1,18 +1,18 @@
-using AssetRipper.Converters.Project;
-using AssetRipper.Converters.Project.Exporters;
+using AssetRipper.Project;
+using AssetRipper.Project.Exporters;
 using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Classes.Meta.Importers.Asset;
-using AssetRipper.Parser.Classes.Meta.Importers.Texture;
-using AssetRipper.Parser.Classes.Misc;
-using AssetRipper.Parser.Classes.Misc.Serializable;
-using AssetRipper.Parser.Classes.Sprite;
-using AssetRipper.Parser.Classes.SpriteAtlas;
-using AssetRipper.Parser.Classes.Texture2D;
-using AssetRipper.Parser.Classes.Utils;
+using AssetRipper.Classes.Meta.Importers.Asset;
+using AssetRipper.Classes.Meta.Importers.Texture;
+using AssetRipper.Classes.Misc;
+using AssetRipper.Classes.Misc.Serializable;
+using AssetRipper.Classes.Sprite;
+using AssetRipper.Classes.SpriteAtlas;
+using AssetRipper.Classes.Texture2D;
+using AssetRipper.Classes.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 
 namespace AssetRipper.Structure.Collections
 {
@@ -24,7 +24,7 @@ namespace AssetRipper.Structure.Collections
 			m_convert = convert;
 			if (convert)
 			{
-				foreach (Object asset in texture.File.Collection.FetchAssets())
+				foreach (UnityObject asset in texture.File.Collection.FetchAssets())
 				{
 					switch (asset.ClassID)
 					{
@@ -96,7 +96,7 @@ namespace AssetRipper.Structure.Collections
 			return AssetExporter.Export(container, Asset, filePath);
 		}
 
-		protected override string GetExportExtension(Object asset)
+		protected override string GetExportExtension(UnityObject asset)
 		{
 			if (m_convert)
 			{
@@ -105,7 +105,7 @@ namespace AssetRipper.Structure.Collections
 			return base.GetExportExtension(asset);
 		}
 
-		protected override long GenerateExportID(Object asset)
+		protected override long GenerateExportID(UnityObject asset)
 		{
 			long exportID = GetMainExportID(asset, m_nextExportID);
 			m_nextExportID += 2;

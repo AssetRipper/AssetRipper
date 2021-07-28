@@ -1,9 +1,9 @@
-using AssetRipper.Converters.Project;
+using AssetRipper.Project;
 using AssetRipper.Layout;
 using AssetRipper.Logging;
 using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Classes;
-using AssetRipper.Parser.Classes.Utils.Extensions;
+using AssetRipper.Classes;
+using AssetRipper.Classes.Utils.Extensions;
 using AssetRipper.Parser.Files.Entries;
 using AssetRipper.Parser.Files.ResourceFiles;
 using AssetRipper.Parser.Files.SerializedFiles;
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MonoManager = AssetRipper.Structure.Assembly.Managers.MonoManager;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 
 namespace AssetRipper.Structure
 {
@@ -115,10 +115,10 @@ namespace AssetRipper.Structure
 			return m_resources[fixedName];
 		}
 
-		public T FindAsset<T>() where T : Object
+		public T FindAsset<T>() where T : UnityObject
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
-			foreach (Object asset in FetchAssets())
+			foreach (UnityObject asset in FetchAssets())
 			{
 				if (asset.ClassID == classID)
 				{
@@ -131,7 +131,7 @@ namespace AssetRipper.Structure
 		public T FindAsset<T>(string name) where T : NamedObject
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
-			foreach (Object asset in FetchAssets())
+			foreach (UnityObject asset in FetchAssets())
 			{
 				if (asset.ClassID == classID)
 				{
@@ -145,11 +145,11 @@ namespace AssetRipper.Structure
 			return null;
 		}
 
-		public IEnumerable<Object> FetchAssets()
+		public IEnumerable<UnityObject> FetchAssets()
 		{
 			foreach (SerializedFile file in m_files.Values)
 			{
-				foreach (Object asset in file.FetchAssets())
+				foreach (UnityObject asset in file.FetchAssets())
 				{
 					yield return asset;
 				}

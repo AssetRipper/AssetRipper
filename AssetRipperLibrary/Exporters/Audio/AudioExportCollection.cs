@@ -1,6 +1,6 @@
-using AssetRipper.Converters.Project.Exporters;
-using AssetRipper.Parser.Classes.AudioClip;
-using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Project.Exporters;
+using AssetRipper.Classes.AudioClip;
+using AssetRipper.Classes.Object;
 using AssetRipper.Structure.Collections;
 using System.Runtime.Versioning;
 
@@ -11,7 +11,7 @@ namespace AssetRipperLibrary.Exporters.Audio
 	{
 		public AudioExportCollection(IAssetExporter assetExporter, AudioClip asset) : base(assetExporter, asset) { }
 
-		protected override string GetExportExtension(Object asset)
+		protected override string GetExportExtension(UnityObject asset)
 		{
 			AudioClip audioClip = (AudioClip)asset;
 			return AudioAssetExporter.IsSupported(audioClip) ? "wav" : audioClip.ExportExtension;

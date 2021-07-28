@@ -13,7 +13,7 @@ namespace AssetRipper.Layout.Classes.AnimationClip
 			Vector3Curve = new Vector3CurveLayout(info);
 		}
 
-		public string Name => nameof(Parser.Classes.AnimationClip.AnimationClip);
+		public string Name => nameof(AssetRipper.Classes.AnimationClip.AnimationClip);
 
 		public FloatCurveLayout FloatCurve { get; }
 		public PPtrCurveLayout PPtrCurve { get; }

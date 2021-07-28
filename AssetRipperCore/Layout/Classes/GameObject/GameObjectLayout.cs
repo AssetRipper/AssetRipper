@@ -204,7 +204,7 @@ namespace AssetRipper.Layout.Classes.GameObject
 		/// </summary>
 		public bool IsActiveInherited { get; }
 
-		public string Name => nameof(Parser.Classes.GameObject.GameObject);
+		public string Name => nameof(AssetRipper.Classes.GameObject.GameObject);
 		public string ComponentName => "m_Component";
 		public string LayerName => "m_Layer";
 		public string NameName => "m_Name";

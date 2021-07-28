@@ -1,28 +1,28 @@
-using AssetRipper.Converters.Project;
-using AssetRipper.Converters.Project.Exporters.Engine;
+using AssetRipper.Project;
+using AssetRipper.Project.Exporters.Engine;
 using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Classes;
-using AssetRipper.Parser.Classes.Font;
-using AssetRipper.Parser.Classes.Material;
-using AssetRipper.Parser.Classes.Mesh;
-using AssetRipper.Parser.Classes.Meta;
-using AssetRipper.Parser.Classes.Misc;
-using AssetRipper.Parser.Classes.Shader;
-using AssetRipper.Parser.Classes.Sprite;
-using AssetRipper.Parser.Classes.Texture2D;
+using AssetRipper.Classes;
+using AssetRipper.Classes.Font;
+using AssetRipper.Classes.Material;
+using AssetRipper.Classes.Mesh;
+using AssetRipper.Classes.Meta;
+using AssetRipper.Classes.Misc;
+using AssetRipper.Classes.Shader;
+using AssetRipper.Classes.Sprite;
+using AssetRipper.Classes.Texture2D;
 using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.IO.Asset;
 using AssetRipper.Parser.Utils;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Structure.Collections
 {
 	public class EngineExportCollection : IExportCollection
 	{
-		public EngineExportCollection(Object asset, Version version)
+		public EngineExportCollection(UnityObject asset, Version version)
 		{
 			if (asset == null)
 			{
@@ -33,7 +33,7 @@ namespace AssetRipper.Structure.Collections
 			m_version = version;
 			if (IsEngineFile(asset.File.Name))
 			{
-				foreach (Object builtInAsset in File.FetchAssets())
+				foreach (UnityObject builtInAsset in File.FetchAssets())
 				{
 					if (IsEngineAsset(builtInAsset, version))
 					{
@@ -47,7 +47,7 @@ namespace AssetRipper.Structure.Collections
 			}
 		}
 
-		public static bool IsEngineAsset(Object asset, Version version)
+		public static bool IsEngineAsset(UnityObject asset, Version version)
 		{
 			if (!GetEngineBuildInAsset(asset, version, out EngineBuiltInAsset builtinAsset))
 			{
@@ -117,7 +117,7 @@ namespace AssetRipper.Structure.Collections
 			return false;
 		}
 
-		private static bool GetEngineBuildInAsset(Object asset, Version version, out EngineBuiltInAsset engineAsset)
+		private static bool GetEngineBuildInAsset(UnityObject asset, Version version, out EngineBuiltInAsset engineAsset)
 		{
 			switch (asset.ClassID)
 			{
@@ -213,18 +213,18 @@ namespace AssetRipper.Structure.Collections
 			return false;
 		}
 
-		public bool IsContains(Object asset)
+		public bool IsContains(UnityObject asset)
 		{
 			return m_assets.Contains(asset);
 		}
 
-		public long GetExportID(Object asset)
+		public long GetExportID(UnityObject asset)
 		{
 			GetEngineBuildInAsset(asset, m_version, out EngineBuiltInAsset engneAsset);
 			return engneAsset.ExportID;
 		}
 
-		public MetaPtr CreateExportPointer(Object asset, bool isLocal)
+		public MetaPtr CreateExportPointer(UnityObject asset, bool isLocal)
 		{
 			if (isLocal)
 			{
@@ -242,10 +242,10 @@ namespace AssetRipper.Structure.Collections
 
 		public ISerializedFile File { get; }
 		public TransferInstructionFlags Flags => File.Flags;
-		public IEnumerable<Object> Assets => m_assets;
+		public IEnumerable<UnityObject> Assets => m_assets;
 		public string Name => "Engine 2017.3.0f3";
 
-		private readonly HashSet<Object> m_assets = new HashSet<Object>();
+		private readonly HashSet<UnityObject> m_assets = new HashSet<UnityObject>();
 
 		private readonly Version m_version;
 	}

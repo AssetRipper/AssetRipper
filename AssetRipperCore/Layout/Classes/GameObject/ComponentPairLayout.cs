@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Converters.Game;
-using AssetRipper.Parser.Classes.GameObject;
+using AssetRipper.Classes.GameObject;
 
 namespace AssetRipper.Layout.Classes.GameObject
 {

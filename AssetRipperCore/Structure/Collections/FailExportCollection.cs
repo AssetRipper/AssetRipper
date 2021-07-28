@@ -1,22 +1,22 @@
-﻿using AssetRipper.Converters.Project;
-using AssetRipper.Converters.Project.Exporters;
+﻿using AssetRipper.Project;
+using AssetRipper.Project.Exporters;
 using AssetRipper.Logging;
 using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Classes;
-using AssetRipper.Parser.Classes.Meta;
-using AssetRipper.Parser.Classes.Meta.Importers.Asset;
-using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Classes;
+using AssetRipper.Classes.Meta;
+using AssetRipper.Classes.Meta.Importers.Asset;
+using AssetRipper.Classes.Misc;
 using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.IO.Asset;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 
 namespace AssetRipper.Structure.Collections
 {
 	public class FailExportCollection : IExportCollection
 	{
-		public FailExportCollection(IAssetExporter assetExporter, Object asset)
+		public FailExportCollection(IAssetExporter assetExporter, UnityObject asset)
 		{
 			if (assetExporter == null)
 			{
@@ -37,12 +37,12 @@ namespace AssetRipper.Structure.Collections
 			return false;
 		}
 
-		public bool IsContains(Object asset)
+		public bool IsContains(UnityObject asset)
 		{
 			return asset == m_asset;
 		}
 
-		public long GetExportID(Object asset)
+		public long GetExportID(UnityObject asset)
 		{
 			if (asset == m_asset)
 			{
@@ -51,12 +51,12 @@ namespace AssetRipper.Structure.Collections
 			throw new ArgumentException(nameof(asset));
 		}
 
-		public UnityGUID GetExportGUID(Object _)
+		public UnityGUID GetExportGUID(UnityObject _)
 		{
 			throw new NotSupportedException();
 		}
 
-		public MetaPtr CreateExportPointer(Object asset, bool isLocal)
+		public MetaPtr CreateExportPointer(UnityObject asset, bool isLocal)
 		{
 			if (isLocal)
 			{
@@ -71,13 +71,13 @@ namespace AssetRipper.Structure.Collections
 		public IAssetExporter AssetExporter { get; }
 		public ISerializedFile File => m_asset.File;
 		public TransferInstructionFlags Flags => File.Flags;
-		public IEnumerable<Object> Assets
+		public IEnumerable<UnityObject> Assets
 		{
 			get { yield return m_asset; }
 		}
 		public string Name => m_asset is NamedObject namedAsset ? namedAsset.ValidName : m_asset.GetType().Name;
 		public AssetImporter MetaImporter => throw new NotSupportedException();
 
-		private readonly Object m_asset;
+		private readonly UnityObject m_asset;
 	}
 }

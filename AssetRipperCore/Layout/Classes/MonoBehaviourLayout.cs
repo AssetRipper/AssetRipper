@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Converters.Game;
-using AssetRipper.Parser.Classes;
+using AssetRipper.Classes;
 using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 

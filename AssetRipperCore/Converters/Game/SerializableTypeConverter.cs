@@ -4,7 +4,7 @@ using AssetRipper.Layout.Classes;
 using AssetRipper.Layout.Classes.AnimationClip.Curves;
 using AssetRipper.Layout.Classes.Misc.Serializable;
 using AssetRipper.Layout.Classes.Misc.Serializable.GUIStyle;
-using AssetRipper.Parser.Classes;
+using AssetRipper.Classes;
 using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Structure.Assembly.Mono;
 using AssetRipper.Structure.Assembly.Serializable;

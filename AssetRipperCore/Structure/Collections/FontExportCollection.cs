@@ -1,7 +1,7 @@
-using AssetRipper.Converters.Project.Exporters;
-using AssetRipper.Parser.Classes.Font;
+using AssetRipper.Project.Exporters;
+using AssetRipper.Classes.Font;
 using System;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 
 namespace AssetRipper.Structure.Collections
 {
@@ -9,7 +9,7 @@ namespace AssetRipper.Structure.Collections
 	{
 		public FontExportCollection(IAssetExporter assetExporter, Font asset) : base(assetExporter, asset) { }
 
-		protected override string GetExportExtension(Object asset)
+		protected override string GetExportExtension(UnityObject asset)
 		{
 			Font font = (Font)asset;
 			byte[] fontData = (byte[])font.FontData;

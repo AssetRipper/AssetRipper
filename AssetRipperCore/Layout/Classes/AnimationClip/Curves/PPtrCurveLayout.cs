@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Converters.Game;
-using AssetRipper.Parser.Classes.AnimationClip;
-using AssetRipper.Parser.Classes.AnimationClip.Curves;
+using AssetRipper.Classes.AnimationClip;
+using AssetRipper.Classes.AnimationClip.Curves;
 
 namespace AssetRipper.Layout.Classes.AnimationClip.Curves
 {

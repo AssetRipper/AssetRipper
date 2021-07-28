@@ -1,4 +1,4 @@
-﻿using AssetRipper.Converters.Project;
+﻿using AssetRipper.Project;
 using AssetRipper.Layout;
 using AssetRipper.Logging;
 using AssetRipper.Parser.Files;
@@ -8,7 +8,7 @@ using AssetRipper.Structure.GameStructure.Platforms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Structure.GameStructure
@@ -92,14 +92,14 @@ namespace AssetRipper.Structure.GameStructure
 		}
 
 		public void Export(string exportPath) => Export(exportPath, null);
-		public void Export(string exportPath, Func<Object, bool> filter)
+		public void Export(string exportPath, Func<UnityObject, bool> filter)
 		{
 			Version defaultVersion = new Version(2017, 3, 0, VersionType.Final, 3);
 			Version maxVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
 			Version version = defaultVersion < maxVersion ? maxVersion : defaultVersion;
 			Logger.Log(LogType.Info, LogCategory.Export, $"Exporting to Unity version {version.ToString()}");
 			ExportOptions options = new ExportOptions(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
-			options.Filter = filter ?? new Func<Object, bool>((Object obj) => true);
+			options.Filter = filter ?? new Func<UnityObject, bool>((UnityObject obj) => true);
 			FileCollection.Exporter.Export(exportPath, FileCollection, FileCollection.FetchSerializedFiles(), options);
 		}
 

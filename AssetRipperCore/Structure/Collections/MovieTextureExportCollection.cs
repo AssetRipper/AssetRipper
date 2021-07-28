@@ -1,6 +1,6 @@
-using AssetRipper.Converters.Project.Exporters;
-using AssetRipper.Parser.Classes;
-using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Project.Exporters;
+using AssetRipper.Classes;
+using AssetRipper.Classes.Object;
 
 namespace AssetRipper.Structure.Collections
 {
@@ -8,7 +8,7 @@ namespace AssetRipper.Structure.Collections
 	{
 		public MovieTextureExportCollection(IAssetExporter assetExporter, MovieTexture asset) : base(assetExporter, asset) { }
 
-		protected override string GetExportExtension(Object asset)
+		protected override string GetExportExtension(UnityObject asset)
 		{
 			return "ogv";
 		}

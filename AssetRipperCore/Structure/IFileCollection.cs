@@ -1,6 +1,6 @@
 using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Classes;
-using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Classes;
+using AssetRipper.Classes.Object;
 using AssetRipper.Parser.Files.ResourceFiles;
 using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.Structure.Assembly.Managers;
@@ -13,9 +13,9 @@ namespace AssetRipper.Structure
 		ISerializedFile FindSerializedFile(string fileName);
 		IResourceFile FindResourceFile(string fileName);
 
-		T FindAsset<T>() where T : Object;
+		T FindAsset<T>() where T : UnityObject;
 		T FindAsset<T>(string name) where T : NamedObject;
-		IEnumerable<Object> FetchAssets();
+		IEnumerable<UnityObject> FetchAssets();
 
 		bool IsScene(ISerializedFile file);
 

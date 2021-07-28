@@ -1,15 +1,15 @@
-﻿using AssetRipper.Converters.Project;
-using AssetRipper.Converters.Project.Exporters;
+﻿using AssetRipper.Project;
+using AssetRipper.Project.Exporters;
 using AssetRipper.IO;
 using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Classes;
-using AssetRipper.Parser.Classes.EditorBuildSettings;
-using AssetRipper.Parser.Classes.EditorSettings;
-using AssetRipper.Parser.Classes.NavMeshProjectSettings;
-using AssetRipper.Parser.Classes.Object;
-using AssetRipper.Parser.Classes.Physics2DSettings;
-using AssetRipper.Parser.Classes.QualitySettings;
-using AssetRipper.Parser.Classes.UnityConnectSettings;
+using AssetRipper.Classes;
+using AssetRipper.Classes.EditorBuildSettings;
+using AssetRipper.Classes.EditorSettings;
+using AssetRipper.Classes.NavMeshProjectSettings;
+using AssetRipper.Classes.Object;
+using AssetRipper.Classes.Physics2DSettings;
+using AssetRipper.Classes.QualitySettings;
+using AssetRipper.Classes.UnityConnectSettings;
 using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.Utils;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace AssetRipper.Structure.Collections
 {
 	public sealed class BuildSettingsExportCollection : ManagerExportCollection
 	{
-		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile file, Object asset) : this(assetExporter, file, (BuildSettings)asset) { }
+		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile file, UnityObject asset) : this(assetExporter, file, (BuildSettings)asset) { }
 
 		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, BuildSettings asset) : base(assetExporter, asset)
 		{
@@ -119,7 +119,7 @@ namespace AssetRipper.Structure.Collections
 			return true;
 		}
 
-		public override bool IsContains(Object asset)
+		public override bool IsContains(UnityObject asset)
 		{
 			switch (asset.ClassID)
 			{
@@ -143,12 +143,12 @@ namespace AssetRipper.Structure.Collections
 			}
 		}
 
-		public override long GetExportID(Object asset)
+		public override long GetExportID(UnityObject asset)
 		{
 			return 1;
 		}
 
-		public override IEnumerable<Object> Assets
+		public override IEnumerable<UnityObject> Assets
 		{
 			get
 			{

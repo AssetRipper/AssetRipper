@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Converters.Game;
-using AssetRipper.Parser.Classes.PrefabInstance;
+using AssetRipper.Classes.PrefabInstance;
 
 namespace AssetRipper.Layout.Classes.PrefabInstance
 {

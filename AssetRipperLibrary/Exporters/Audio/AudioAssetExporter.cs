@@ -1,8 +1,8 @@
-using AssetRipper.Converters.Project;
-using AssetRipper.Converters.Project.Exporters;
+using AssetRipper.Project;
+using AssetRipper.Project.Exporters;
 using AssetRipper.Logging;
 using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Classes.AudioClip;
+using AssetRipper.Classes.AudioClip;
 using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.Structure.Collections;
 using AssetRipper.Utils;
@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Versioning;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 
 namespace AssetRipperLibrary.Exporters.Audio
 {
@@ -66,17 +66,17 @@ namespace AssetRipperLibrary.Exporters.Audio
 			}
 		}
 
-		public bool IsHandle(Object asset, ExportOptions options)
+		public bool IsHandle(UnityObject asset, ExportOptions options)
 		{
 			return true;
 		}
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
 		{
 			return new AudioExportCollection(this, (AudioClip)asset);
 		}
 
-		public bool Export(IExportContainer container, Object asset, string path)
+		public bool Export(IExportContainer container, UnityObject asset, string path)
 		{
 			AudioClip audioClip = (AudioClip)asset;
 			if (!audioClip.CheckAssetIntegrity())
@@ -109,7 +109,7 @@ namespace AssetRipperLibrary.Exporters.Audio
 			return true;
 		}
 
-		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		public void Export(IExportContainer container, UnityObject asset, string path, Action<IExportContainer, UnityObject, string> callback)
 		{
 			if (Export(container, asset, path))
 			{
@@ -117,17 +117,17 @@ namespace AssetRipperLibrary.Exporters.Audio
 			}
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<UnityObject> assets, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback)
+		public void Export(IExportContainer container, IEnumerable<UnityObject> assets, string path, Action<IExportContainer, UnityObject, string> callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public AssetType ToExportType(Object asset)
+		public AssetType ToExportType(UnityObject asset)
 		{
 			ToUnknownExportType(asset.ClassID, out AssetType assetType);
 			return assetType;

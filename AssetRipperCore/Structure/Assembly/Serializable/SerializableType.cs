@@ -1,10 +1,10 @@
 using AssetRipper.Converters.Game;
 using AssetRipper.Layout;
-using AssetRipper.Parser.Classes.Misc;
-using AssetRipper.Parser.Classes.Misc.Serializable;
-using AssetRipper.Parser.Classes.Misc.Serializable.AnimationCurveTpl;
-using AssetRipper.Parser.Classes.Misc.Serializable.Gradient;
-using AssetRipper.Parser.Classes.Misc.Serializable.GUIStyle;
+using AssetRipper.Classes.Misc;
+using AssetRipper.Classes.Misc.Serializable;
+using AssetRipper.Classes.Misc.Serializable.AnimationCurveTpl;
+using AssetRipper.Classes.Misc.Serializable.Gradient;
+using AssetRipper.Classes.Misc.Serializable.GUIStyle;
 using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.IO.Asset;
 using System;

@@ -1,5 +1,5 @@
-﻿using AssetRipper.Converters.Project.Exporters.Script;
-using AssetRipper.Converters.Project.Exporters.Script.Elements;
+﻿using AssetRipper.Project.Exporters.Script;
+using AssetRipper.Project.Exporters.Script.Elements;
 using AssetRipper.Layout;
 using AssetRipper.Parser.Utils;
 using AssetRipper.Structure.Assembly.Mono;

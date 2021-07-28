@@ -1,10 +1,10 @@
-using AssetRipper.Converters.Project;
+using AssetRipper.Project;
 using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Classes.Misc;
+using AssetRipper.Classes.Misc;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System.Collections.Generic;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 
 namespace AssetRipper.Structure.Assembly.Serializable
 {
@@ -20,7 +20,7 @@ namespace AssetRipper.Structure.Assembly.Serializable
 			Pointer.Write(writer);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<UnityObject>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Pointer, string.Empty);
 		}
@@ -30,6 +30,6 @@ namespace AssetRipper.Structure.Assembly.Serializable
 			return Pointer.ExportYAML(container);
 		}
 
-		public PPtr<Object> Pointer;
+		public PPtr<UnityObject> Pointer;
 	}
 }

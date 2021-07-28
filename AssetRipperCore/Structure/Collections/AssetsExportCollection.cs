@@ -1,8 +1,8 @@
-using AssetRipper.Converters.Project;
-using AssetRipper.Converters.Project.Exporters;
+using AssetRipper.Project;
+using AssetRipper.Project.Exporters;
 using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Classes.Object;
-using AssetRipper.Parser.Classes.Utils;
+using AssetRipper.Classes.Object;
+using AssetRipper.Classes.Utils;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,9 +10,9 @@ namespace AssetRipper.Structure.Collections
 {
 	public abstract class AssetsExportCollection : AssetExportCollection
 	{
-		public AssetsExportCollection(IAssetExporter assetExporter, Object asset) : base(assetExporter, asset) { }
+		public AssetsExportCollection(IAssetExporter assetExporter, UnityObject asset) : base(assetExporter, asset) { }
 
-		public override bool IsContains(Object asset)
+		public override bool IsContains(UnityObject asset)
 		{
 			if (base.IsContains(asset))
 			{
@@ -21,7 +21,7 @@ namespace AssetRipper.Structure.Collections
 			return m_exportIDs.ContainsKey(asset.AssetInfo);
 		}
 
-		public override long GetExportID(Object asset)
+		public override long GetExportID(UnityObject asset)
 		{
 			if (asset.AssetInfo == Asset.AssetInfo)
 			{
@@ -35,27 +35,27 @@ namespace AssetRipper.Structure.Collections
 			return AssetExporter.Export(container, Assets.Select(t => t.Convert(container)), filePath);
 		}
 
-		public override IEnumerable<Object> Assets
+		public override IEnumerable<UnityObject> Assets
 		{
 			get
 			{
-				foreach (Object asset in base.Assets)
+				foreach (UnityObject asset in base.Assets)
 				{
 					yield return asset;
 				}
-				foreach (Object asset in m_assets)
+				foreach (UnityObject asset in m_assets)
 				{
 					yield return asset;
 				}
 			}
 		}
 
-		protected virtual long GenerateExportID(Object asset)
+		protected virtual long GenerateExportID(UnityObject asset)
 		{
 			return ObjectUtils.GenerateExportID(asset, ContainsID);
 		}
 
-		protected void AddAsset(Object asset)
+		protected void AddAsset(UnityObject asset)
 		{
 			long exportID = GenerateExportID(asset);
 			m_assets.Add(asset);
@@ -67,7 +67,7 @@ namespace AssetRipper.Structure.Collections
 			return m_exportIDs.ContainsValue(id);
 		}
 
-		protected readonly List<Object> m_assets = new List<Object>();
+		protected readonly List<UnityObject> m_assets = new List<UnityObject>();
 		protected readonly Dictionary<AssetInfo, long> m_exportIDs = new Dictionary<AssetInfo, long>();
 	}
 }

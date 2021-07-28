@@ -1,17 +1,17 @@
-﻿using AssetRipper.Converters.Project;
-using AssetRipper.Converters.Project.Exporters;
-using AssetRipper.Parser.Classes;
-using AssetRipper.Parser.Classes.Meta;
+﻿using AssetRipper.Project;
+using AssetRipper.Project.Exporters;
+using AssetRipper.Classes;
+using AssetRipper.Classes.Meta;
 using AssetRipper.Utils;
 using System;
 using System.IO;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 
 namespace AssetRipper.Structure.Collections
 {
 	public class ManagerExportCollection : AssetExportCollection
 	{
-		public ManagerExportCollection(IAssetExporter assetExporter, Object asset) : this(assetExporter, (GlobalGameManager)asset) { }
+		public ManagerExportCollection(IAssetExporter assetExporter, UnityObject asset) : this(assetExporter, (GlobalGameManager)asset) { }
 
 		public ManagerExportCollection(IAssetExporter assetExporter, GlobalGameManager asset) : base(assetExporter, asset) { }
 
@@ -30,7 +30,7 @@ namespace AssetRipper.Structure.Collections
 			return true;
 		}
 
-		public override long GetExportID(Object asset)
+		public override long GetExportID(UnityObject asset)
 		{
 			if (asset == Asset)
 			{
@@ -39,7 +39,7 @@ namespace AssetRipper.Structure.Collections
 			throw new ArgumentException(nameof(asset));
 		}
 
-		public override MetaPtr CreateExportPointer(Object asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(UnityObject asset, bool isLocal)
 		{
 			throw new NotSupportedException();
 		}

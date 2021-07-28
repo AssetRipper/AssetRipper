@@ -1,4 +1,4 @@
-﻿using AssetRipper.Parser.Classes;
+﻿using AssetRipper.Classes;
 
 namespace AssetRipper.Layout.Classes
 {

@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Converters.Game;
-using AssetRipper.Parser.Classes.Object;
+using AssetRipper.Classes.Object;
 using AssetRipper.IO.Asset;
 
 namespace AssetRipper.Layout.Classes
@@ -28,7 +28,7 @@ namespace AssetRipper.Layout.Classes
 		/// </summary>
 		public bool HasHideFlag { get; }
 
-		public string Name => nameof(Object);
+		public string Name => nameof(UnityObject);
 		public string ObjectHideFlagsName => "m_ObjectHideFlags";
 		public string InstanceIDName => "m_InstanceID";
 		public string LocalIdentfierInFileName => "m_LocalIdentfierInFile";

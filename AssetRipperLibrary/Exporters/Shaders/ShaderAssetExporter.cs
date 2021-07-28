@@ -1,9 +1,9 @@
-using AssetRipper.Converters.Classes.Shader;
-using AssetRipper.Converters.Project;
-using AssetRipper.Converters.Project.Exporters;
+using AssetRipper.Converters.Shader;
+using AssetRipper.Project;
+using AssetRipper.Project.Exporters;
 using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Classes.Shader;
-using AssetRipper.Parser.Classes.Shader.Enums;
+using AssetRipper.Classes.Shader;
+using AssetRipper.Classes.Shader.Enums;
 using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.Structure.Collections;
 using AssetRipper.Utils;
@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Versioning;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipperLibrary.Exporters.Shaders
@@ -20,12 +20,12 @@ namespace AssetRipperLibrary.Exporters.Shaders
 	[SupportedOSPlatform("windows")]
 	public sealed class ShaderAssetExporter : IAssetExporter
 	{
-		public bool IsHandle(Object asset, ExportOptions options)
+		public bool IsHandle(UnityObject asset, ExportOptions options)
 		{
 			return true;
 		}
 
-		public bool Export(IExportContainer container, Object asset, string path)
+		public bool Export(IExportContainer container, UnityObject asset, string path)
 		{
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
@@ -35,28 +35,28 @@ namespace AssetRipperLibrary.Exporters.Shaders
 			return true;
 		}
 
-		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		public void Export(IExportContainer container, UnityObject asset, string path, Action<IExportContainer, UnityObject, string> callback)
 		{
 			Export(container, asset, path);
 			callback?.Invoke(container, asset, path);
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<UnityObject> assets, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback)
+		public void Export(IExportContainer container, IEnumerable<UnityObject> assets, string path, Action<IExportContainer, UnityObject, string> callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
 		{
 			return new AssetExportCollection(this, asset);
 		}
 
-		public AssetType ToExportType(Object asset)
+		public AssetType ToExportType(UnityObject asset)
 		{
 			ToUnknownExportType(asset.ClassID, out AssetType assetType);
 			return assetType;

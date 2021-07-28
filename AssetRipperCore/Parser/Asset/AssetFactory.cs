@@ -1,89 +1,89 @@
-using AssetRipper.Parser.Classes;
-using AssetRipper.Parser.Classes.Animation;
-using AssetRipper.Parser.Classes.AnimationClip;
-using AssetRipper.Parser.Classes.Animator;
-using AssetRipper.Parser.Classes.AnimatorController;
-using AssetRipper.Parser.Classes.AnimatorOverrideController;
-using AssetRipper.Parser.Classes.AssetBundle;
-using AssetRipper.Parser.Classes.AudioClip;
-using AssetRipper.Parser.Classes.AudioManager;
-using AssetRipper.Parser.Classes.AudioSource;
-using AssetRipper.Parser.Classes.Avatar;
-using AssetRipper.Parser.Classes.AvatarMask;
-using AssetRipper.Parser.Classes.BoxCollider2D;
-using AssetRipper.Parser.Classes.Camera;
-using AssetRipper.Parser.Classes.CapsuleCollider2D;
-using AssetRipper.Parser.Classes.ClusterInputManager;
-using AssetRipper.Parser.Classes.CompositeCollider2D;
-using AssetRipper.Parser.Classes.EditorSettings;
-using AssetRipper.Parser.Classes.Font;
-using AssetRipper.Parser.Classes.GameObject;
-using AssetRipper.Parser.Classes.GraphicsSettings;
-using AssetRipper.Parser.Classes.GUIText;
-using AssetRipper.Parser.Classes.InputManager;
-using AssetRipper.Parser.Classes.Light;
-using AssetRipper.Parser.Classes.LightingDataAsset;
-using AssetRipper.Parser.Classes.LightmapSettings;
-using AssetRipper.Parser.Classes.LODGroup;
-using AssetRipper.Parser.Classes.Material;
-using AssetRipper.Parser.Classes.Mesh;
-using AssetRipper.Parser.Classes.MeshCollider;
-using AssetRipper.Parser.Classes.Meta.Importers;
-using AssetRipper.Parser.Classes.Meta.Importers.Texture;
-using AssetRipper.Parser.Classes.NavMeshAgent;
-using AssetRipper.Parser.Classes.NavMeshData;
-using AssetRipper.Parser.Classes.NavMeshObstacle;
-using AssetRipper.Parser.Classes.NavMeshProjectSettings;
-using AssetRipper.Parser.Classes.NavMeshSettings;
-using AssetRipper.Parser.Classes.NewAnimationTrack;
-using AssetRipper.Parser.Classes.OcclusionCullingData;
-using AssetRipper.Parser.Classes.OcclusionCullingSettings;
-using AssetRipper.Parser.Classes.ParticleSystem;
-using AssetRipper.Parser.Classes.ParticleSystemForceField;
-using AssetRipper.Parser.Classes.ParticleSystemRenderer;
-using AssetRipper.Parser.Classes.PhysicMaterial;
-using AssetRipper.Parser.Classes.Physics2DSettings;
-using AssetRipper.Parser.Classes.PhysicsManager;
-using AssetRipper.Parser.Classes.PrefabInstance;
-using AssetRipper.Parser.Classes.QualitySettings;
-using AssetRipper.Parser.Classes.ReflectionProbe;
-using AssetRipper.Parser.Classes.RenderSettings;
-using AssetRipper.Parser.Classes.RenderTexture;
-using AssetRipper.Parser.Classes.ResourceManager;
-using AssetRipper.Parser.Classes.Rigidbody;
-using AssetRipper.Parser.Classes.Rigidbody2D;
-using AssetRipper.Parser.Classes.Shader;
-using AssetRipper.Parser.Classes.ShaderVariantCollection;
-using AssetRipper.Parser.Classes.Sprite;
-using AssetRipper.Parser.Classes.SpriteAtlas;
-using AssetRipper.Parser.Classes.SpriteRenderer;
-using AssetRipper.Parser.Classes.TagManager;
-using AssetRipper.Parser.Classes.Terrain;
-using AssetRipper.Parser.Classes.TerrainData;
-using AssetRipper.Parser.Classes.Texture2D;
-using AssetRipper.Parser.Classes.TrailRenderer;
-using AssetRipper.Parser.Classes.UI;
-using AssetRipper.Parser.Classes.UI.Canvas;
-using AssetRipper.Parser.Classes.UnityConnectSettings;
-using AssetRipper.Parser.Classes.WheelCollider;
+using AssetRipper.Classes;
+using AssetRipper.Classes.Animation;
+using AssetRipper.Classes.AnimationClip;
+using AssetRipper.Classes.Animator;
+using AssetRipper.Classes.AnimatorController;
+using AssetRipper.Classes.AnimatorOverrideController;
+using AssetRipper.Classes.AssetBundle;
+using AssetRipper.Classes.AudioClip;
+using AssetRipper.Classes.AudioManager;
+using AssetRipper.Classes.AudioSource;
+using AssetRipper.Classes.Avatar;
+using AssetRipper.Classes.AvatarMask;
+using AssetRipper.Classes.BoxCollider2D;
+using AssetRipper.Classes.Camera;
+using AssetRipper.Classes.CapsuleCollider2D;
+using AssetRipper.Classes.ClusterInputManager;
+using AssetRipper.Classes.CompositeCollider2D;
+using AssetRipper.Classes.EditorSettings;
+using AssetRipper.Classes.Font;
+using AssetRipper.Classes.GameObject;
+using AssetRipper.Classes.GraphicsSettings;
+using AssetRipper.Classes.GUIText;
+using AssetRipper.Classes.InputManager;
+using AssetRipper.Classes.Light;
+using AssetRipper.Classes.LightingDataAsset;
+using AssetRipper.Classes.LightmapSettings;
+using AssetRipper.Classes.LODGroup;
+using AssetRipper.Classes.Material;
+using AssetRipper.Classes.Mesh;
+using AssetRipper.Classes.MeshCollider;
+using AssetRipper.Classes.Meta.Importers;
+using AssetRipper.Classes.Meta.Importers.Texture;
+using AssetRipper.Classes.NavMeshAgent;
+using AssetRipper.Classes.NavMeshData;
+using AssetRipper.Classes.NavMeshObstacle;
+using AssetRipper.Classes.NavMeshProjectSettings;
+using AssetRipper.Classes.NavMeshSettings;
+using AssetRipper.Classes.NewAnimationTrack;
+using AssetRipper.Classes.OcclusionCullingData;
+using AssetRipper.Classes.OcclusionCullingSettings;
+using AssetRipper.Classes.ParticleSystem;
+using AssetRipper.Classes.ParticleSystemForceField;
+using AssetRipper.Classes.ParticleSystemRenderer;
+using AssetRipper.Classes.PhysicMaterial;
+using AssetRipper.Classes.Physics2DSettings;
+using AssetRipper.Classes.PhysicsManager;
+using AssetRipper.Classes.PrefabInstance;
+using AssetRipper.Classes.QualitySettings;
+using AssetRipper.Classes.ReflectionProbe;
+using AssetRipper.Classes.RenderSettings;
+using AssetRipper.Classes.RenderTexture;
+using AssetRipper.Classes.ResourceManager;
+using AssetRipper.Classes.Rigidbody;
+using AssetRipper.Classes.Rigidbody2D;
+using AssetRipper.Classes.Shader;
+using AssetRipper.Classes.ShaderVariantCollection;
+using AssetRipper.Classes.Sprite;
+using AssetRipper.Classes.SpriteAtlas;
+using AssetRipper.Classes.SpriteRenderer;
+using AssetRipper.Classes.TagManager;
+using AssetRipper.Classes.Terrain;
+using AssetRipper.Classes.TerrainData;
+using AssetRipper.Classes.Texture2D;
+using AssetRipper.Classes.TrailRenderer;
+using AssetRipper.Classes.UI;
+using AssetRipper.Classes.UI.Canvas;
+using AssetRipper.Classes.UnityConnectSettings;
+using AssetRipper.Classes.WheelCollider;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 
 namespace AssetRipper.Parser.Asset
 {
 	public class AssetFactory
 	{
-		public Object CreateAsset(AssetInfo assetInfo)
+		public UnityObject CreateAsset(AssetInfo assetInfo)
 		{
-			if (m_instantiators.TryGetValue(assetInfo.ClassID, out Func<AssetInfo, Object> instantiator))
+			if (m_instantiators.TryGetValue(assetInfo.ClassID, out Func<AssetInfo, UnityObject> instantiator))
 			{
 				return instantiator(assetInfo);
 			}
 			return DefaultInstantiator(assetInfo);
 		}
 
-		public void OverrideInstantiator(ClassIDType classType, Func<AssetInfo, Object> instantiator)
+		public void OverrideInstantiator(ClassIDType classType, Func<AssetInfo, UnityObject> instantiator)
 		{
 			if (instantiator == null)
 			{
@@ -92,7 +92,7 @@ namespace AssetRipper.Parser.Asset
 			m_instantiators[classType] = instantiator;
 		}
 
-		private static Object DefaultInstantiator(AssetInfo assetInfo)
+		private static UnityObject DefaultInstantiator(AssetInfo assetInfo)
 		{
 			switch (assetInfo.ClassID)
 			{
@@ -336,6 +336,6 @@ namespace AssetRipper.Parser.Asset
 			}
 		}
 
-		private readonly Dictionary<ClassIDType, Func<AssetInfo, Object>> m_instantiators = new Dictionary<ClassIDType, Func<AssetInfo, Object>>();
+		private readonly Dictionary<ClassIDType, Func<AssetInfo, UnityObject>> m_instantiators = new Dictionary<ClassIDType, Func<AssetInfo, UnityObject>>();
 	}
 }

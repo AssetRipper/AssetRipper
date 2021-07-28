@@ -1,4 +1,4 @@
-using AssetRipper.Converters.Project;
+using AssetRipper.Project;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System;

@@ -1,20 +1,20 @@
-using AssetRipper.Converters.Project;
-using AssetRipper.Converters.Project.Exporters;
-using AssetRipper.Parser.Classes.Meta;
-using AssetRipper.Parser.Classes.Meta.Importers;
-using AssetRipper.Parser.Classes.Meta.Importers.Asset;
+using AssetRipper.Project;
+using AssetRipper.Project.Exporters;
+using AssetRipper.Classes.Meta;
+using AssetRipper.Classes.Meta.Importers;
+using AssetRipper.Classes.Meta.Importers.Asset;
 using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Object = AssetRipper.Parser.Classes.Object.Object;
+using UnityObject = AssetRipper.Classes.Object.UnityObject;
 
 namespace AssetRipper.Structure.Collections
 {
 	public class AssetExportCollection : ExportCollection
 	{
-		public AssetExportCollection(IAssetExporter assetExporter, Object asset)
+		public AssetExportCollection(IAssetExporter assetExporter, UnityObject asset)
 		{
 			if (assetExporter == null)
 			{
@@ -32,7 +32,7 @@ namespace AssetRipper.Structure.Collections
 		{
 			string subPath;
 			string fileName;
-			if (container.TryGetAssetPathFromAssets(Assets, out Object asset, out string assetPath))
+			if (container.TryGetAssetPathFromAssets(Assets, out UnityObject asset, out string assetPath))
 			{
 				string resourcePath = Path.Combine(dirPath, $"{assetPath}.{GetExportExtension(asset)}");
 				subPath = Path.GetDirectoryName(resourcePath);
@@ -64,12 +64,12 @@ namespace AssetRipper.Structure.Collections
 			return false;
 		}
 
-		public override bool IsContains(Object asset)
+		public override bool IsContains(UnityObject asset)
 		{
 			return Asset.AssetInfo == asset.AssetInfo;
 		}
 
-		public override long GetExportID(Object asset)
+		public override long GetExportID(UnityObject asset)
 		{
 			if (asset.AssetInfo == Asset.AssetInfo)
 			{
@@ -78,7 +78,7 @@ namespace AssetRipper.Structure.Collections
 			throw new ArgumentException(nameof(asset));
 		}
 
-		public override MetaPtr CreateExportPointer(Object asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(UnityObject asset, bool isLocal)
 		{
 			long exportID = GetExportID(asset);
 			return isLocal ?
@@ -100,11 +100,11 @@ namespace AssetRipper.Structure.Collections
 
 		public override IAssetExporter AssetExporter { get; }
 		public override ISerializedFile File => Asset.File;
-		public override IEnumerable<Object> Assets
+		public override IEnumerable<UnityObject> Assets
 		{
 			get { yield return Asset; }
 		}
 		public override string Name => Asset.ToString();
-		public Object Asset { get; }
+		public UnityObject Asset { get; }
 	}
 }
