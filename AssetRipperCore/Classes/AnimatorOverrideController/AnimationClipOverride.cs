@@ -23,7 +23,7 @@ namespace AssetRipper.Classes.AnimatorOverrideController
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(OriginalClip, OriginalClipName);
 			yield return context.FetchDependency(OverrideClip, OverrideClipName);

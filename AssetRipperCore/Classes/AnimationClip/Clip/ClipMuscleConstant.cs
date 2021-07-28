@@ -4,6 +4,7 @@ using AssetRipper.Classes.Misc.Serializable;
 using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.AnimationClip.Clip
 {
@@ -50,7 +51,7 @@ namespace AssetRipper.Classes.AnimationClip.Clip
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		private static bool IsVector3(Version version) => version.IsGreaterEqual(5, 4);
+		private static bool IsVector3f(Version version) => version.IsGreaterEqual(5, 4);
 
 		public void Read(AssetReader reader)
 		{
@@ -69,7 +70,7 @@ namespace AssetRipper.Classes.AnimationClip.Clip
 				MotionStopX.Read(reader);
 			}
 
-			if (IsVector3(reader.Version))
+			if (IsVector3f(reader.Version))
 			{
 				AverageSpeed = reader.ReadAsset<Vector3f>();
 			}

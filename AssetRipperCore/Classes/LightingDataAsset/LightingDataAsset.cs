@@ -105,28 +105,28 @@ namespace AssetRipper.Classes.LightingDataAsset
 			EnlightenDataVersion = reader.ReadInt32();
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(Scene, SceneName);
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Lightmaps, LightmapsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Lightmaps, LightmapsName))
 			{
 				yield return asset;
 			}
 			yield return context.FetchDependency(LightProbes, LightProbesName);
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(LightmappedRendererData, LightmappedRendererDataName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(LightmappedRendererData, LightmappedRendererDataName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(BakedReflectionProbeCubemaps, BakedReflectionProbeCubemapsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(BakedReflectionProbeCubemaps, BakedReflectionProbeCubemapsName))
 			{
 				yield return asset;
 			}

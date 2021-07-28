@@ -12,6 +12,7 @@ using AssetRipper.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Meta.Importers.Texture
 {
@@ -146,9 +147,9 @@ namespace AssetRipper.Classes.Meta.Importers.Texture
 			}
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
 			{
 				yield return asset;
 			}

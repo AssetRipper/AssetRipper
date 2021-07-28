@@ -32,7 +32,7 @@ namespace AssetRipper.Classes.Meta.Importers.Asset
 			}
 			if (HasExternalObjects(layout.Info.Version))
 			{
-				ExternalObjects = new Dictionary<SourceAssetIdentifier, PPtr<Object.UnityObject>>();
+				ExternalObjects = new Dictionary<SourceAssetIdentifier, PPtr<Object.Object>>();
 			}
 			if (HasUsedFileIDs(layout.Info.Version))
 			{
@@ -133,7 +133,7 @@ namespace AssetRipper.Classes.Meta.Importers.Asset
 			}
 			if (HasExternalObjects(reader.Version))
 			{
-				ExternalObjects = new Dictionary<SourceAssetIdentifier, PPtr<Object.UnityObject>>();
+				ExternalObjects = new Dictionary<SourceAssetIdentifier, PPtr<Object.Object>>();
 				ExternalObjects.Read(reader);
 				if (IsAlignExternalObjects(reader.Version))
 				{
@@ -196,9 +196,9 @@ namespace AssetRipper.Classes.Meta.Importers.Asset
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -209,7 +209,7 @@ namespace AssetRipper.Classes.Meta.Importers.Asset
 			}
 			if (HasExternalObjects(context.Version))
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(ExternalObjects.Select(t => t.Value), ExternalObjectsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(ExternalObjects.Select(t => t.Value), ExternalObjectsName))
 				{
 					yield return asset;
 				}
@@ -307,7 +307,7 @@ namespace AssetRipper.Classes.Meta.Importers.Asset
 
 		public Dictionary<Tuple<ClassIDType, long>, string> InternalIDToNameTable { get; set; }
 		public Dictionary<long, string> FileIDToRecycleName { get; set; }
-		public Dictionary<SourceAssetIdentifier, PPtr<Object.UnityObject>> ExternalObjects { get; set; }
+		public Dictionary<SourceAssetIdentifier, PPtr<Object.Object>> ExternalObjects { get; set; }
 		public long[] UsedFileIDs { get; set; }
 		public string UserData { get; set; }
 		public string AssetBundleName { get; set; }

@@ -9,6 +9,7 @@ using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Meta.Importers.Texture
 {

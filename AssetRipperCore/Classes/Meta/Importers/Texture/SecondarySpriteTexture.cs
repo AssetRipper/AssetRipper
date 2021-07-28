@@ -25,7 +25,7 @@ namespace AssetRipper.Classes.Meta.Importers.Texture
 
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Texture, TextureName);
 		}

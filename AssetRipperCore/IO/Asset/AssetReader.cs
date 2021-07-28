@@ -45,7 +45,7 @@ namespace AssetRipper.IO.Asset
 			count += index;
 			while (index < count)
 			{
-				int toRead = Math.Min((count - index) * sizeof(char), BufferSize);
+				int toRead = System.Math.Min((count - index) * sizeof(char), BufferSize);
 				FillInnerBuffer(toRead);
 				for (int i = 0; i < toRead; i += sizeof(char), index++)
 				{

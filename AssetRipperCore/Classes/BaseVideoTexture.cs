@@ -36,9 +36,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -61,7 +61,7 @@ namespace AssetRipper.Classes
 			base.Read(reader);
 		}
 
-		protected IEnumerable<PPtr<Object.UnityObject>> FetchDependenciesTexture(DependencyContext context)
+		protected IEnumerable<PPtr<Object.Object>> FetchDependenciesTexture(DependencyContext context)
 		{
 			return base.FetchDependencies(context);
 		}

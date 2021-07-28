@@ -14,6 +14,7 @@ using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System.Collections.Generic;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.ParticleSystem
 {
@@ -242,19 +243,19 @@ namespace AssetRipper.Classes.ParticleSystem
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(MoveWithCustomTransform, MoveWithCustomTransformName);
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(CollisionModule, CollisionModuleName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(CollisionModule, CollisionModuleName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(SubModule, SubModuleName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(SubModule, SubModuleName))
 			{
 				yield return asset;
 			}

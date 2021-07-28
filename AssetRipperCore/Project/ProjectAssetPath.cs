@@ -3,7 +3,7 @@ using AssetRipper.Classes.Utils.Extensions;
 using AssetRipper.Utils;
 using System;
 using System.IO;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 
 namespace AssetRipper.Project
 {
@@ -15,7 +15,7 @@ namespace AssetRipper.Project
 			AssetPath = path;
 		}
 
-		public string SubstituteExportPath(UnityObject asset)
+		public string SubstituteExportPath(Object asset)
 		{
 			string projectPath = SubstitutePath(asset.GetOriginalName());
 			projectPath = DirectoryUtils.FixInvalidPathCharacters(projectPath);

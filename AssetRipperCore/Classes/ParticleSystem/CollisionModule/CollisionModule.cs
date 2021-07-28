@@ -134,7 +134,7 @@ namespace AssetRipper.Classes.ParticleSystem.CollisionModule
 			}
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Plane0, Plane0Name);
 			yield return context.FetchDependency(Plane1, Plane1Name);

@@ -13,9 +13,9 @@ namespace AssetRipper.Structure
 		ISerializedFile FindSerializedFile(string fileName);
 		IResourceFile FindResourceFile(string fileName);
 
-		T FindAsset<T>() where T : UnityObject;
+		T FindAsset<T>() where T : Object;
 		T FindAsset<T>(string name) where T : NamedObject;
-		IEnumerable<UnityObject> FetchAssets();
+		IEnumerable<Object> FetchAssets();
 
 		bool IsScene(ISerializedFile file);
 

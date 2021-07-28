@@ -77,7 +77,7 @@ namespace AssetRipper.IO
 
 			while (count > 0)
 			{
-				int toWrite = Math.Min(DefaultBufferSize, count);
+				int toWrite = System.Math.Min(DefaultBufferSize, count);
 				Buffer.BlockCopy(buffer, offset, m_buffer, 0, toWrite);
 				Array.Reverse(m_buffer, 0, toWrite);
 
@@ -120,7 +120,7 @@ namespace AssetRipper.IO
 			int totalRead = 0;
 			while (count > 0)
 			{
-				int toRead = Math.Min(DefaultBufferSize, count);
+				int toRead = System.Math.Min(DefaultBufferSize, count);
 				m_stream.Position = m_end - Position - toRead;
 				int read = m_stream.Read(m_buffer, 0, toRead);
 

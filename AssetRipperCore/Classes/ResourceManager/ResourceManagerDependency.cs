@@ -13,13 +13,13 @@ namespace AssetRipper.Classes.ResourceManager
 		public void Read(AssetReader reader)
 		{
 			Object.Read(reader);
-			Dependencies = reader.ReadAssetArray<PPtr<Object.UnityObject>>();
+			Dependencies = reader.ReadAssetArray<PPtr<Object.Object>>();
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Object, ObjectName);
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Dependencies, DependenciesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Dependencies, DependenciesName))
 			{
 				yield return asset;
 			}
@@ -33,11 +33,11 @@ namespace AssetRipper.Classes.ResourceManager
 			return node;
 		}
 
-		public PPtr<Object.UnityObject>[] Dependencies { get; set; }
+		public PPtr<Object.Object>[] Dependencies { get; set; }
 
 		public const string ObjectName = "m_Object";
 		public const string DependenciesName = "m_Dependencies";
 
-		public PPtr<Object.UnityObject> Object;
+		public PPtr<Object.Object> Object;
 	}
 }

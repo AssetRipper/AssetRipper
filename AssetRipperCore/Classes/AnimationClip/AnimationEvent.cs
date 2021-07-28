@@ -37,7 +37,7 @@ namespace AssetRipper.Classes.AnimationClip
 			MessageOptions = reader.ReadInt32();
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(ObjectReferenceParameter, ObjectReferenceParameterName);
 		}
@@ -73,6 +73,6 @@ namespace AssetRipper.Classes.AnimationClip
 		public const string IntParameterName = "intParameter";
 		public const string MessageOptionsName = "messageOptions";
 
-		public PPtr<Object.UnityObject> ObjectReferenceParameter;
+		public PPtr<Object.Object> ObjectReferenceParameter;
 	}
 }

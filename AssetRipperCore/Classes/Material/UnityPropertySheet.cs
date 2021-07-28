@@ -9,6 +9,7 @@ using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using SevenZip;
 using System.Collections.Generic;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Material
 {
@@ -82,9 +83,9 @@ namespace AssetRipper.Classes.Material
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(TexEnvs.Values, TexEnvsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(TexEnvs.Values, TexEnvsName))
 			{
 				yield return asset;
 			}

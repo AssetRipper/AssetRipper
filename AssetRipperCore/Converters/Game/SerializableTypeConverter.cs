@@ -10,6 +10,7 @@ using AssetRipper.Structure.Assembly.Mono;
 using AssetRipper.Structure.Assembly.Serializable;
 using System;
 using System.Linq;
+using AssetRipper.Math;
 
 namespace AssetRipper.Converters.Game
 {

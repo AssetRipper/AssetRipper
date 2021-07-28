@@ -92,20 +92,20 @@ namespace AssetRipper.Classes.AnimatorController
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(AnimationClips, AnimationClipsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(AnimationClips, AnimationClipsName))
 			{
 				yield return asset;
 			}
 			if (HasStateMachineBehaviourVectorDescription(context.Version))
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(StateMachineBehaviours, StateMachineBehavioursName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(StateMachineBehaviours, StateMachineBehavioursName))
 				{
 					yield return asset;
 				}

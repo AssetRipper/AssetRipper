@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using static AssetRipper.Structure.Assembly.Mono.MonoUtils;
 using AssetRipper.Structure.Assembly.Mono;
+using AssetRipper.Math;
 
 namespace AssetRipper.Structure.Assembly.Serializable
 {

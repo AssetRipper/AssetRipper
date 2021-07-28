@@ -38,7 +38,7 @@ namespace AssetRipper.Classes.ParticleSystem
 			MaxLights = reader.ReadInt32();
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Light, LightName);
 		}

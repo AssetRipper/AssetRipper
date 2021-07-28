@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using System;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Project
@@ -15,7 +15,7 @@ namespace AssetRipper.Project
 			Flags = flags;
 		}
 
-		private static bool DefaultFilter(UnityObject asset)
+		private static bool DefaultFilter(Object asset)
 		{
 			return true;
 		}
@@ -32,6 +32,6 @@ namespace AssetRipper.Project
 		/// Export asset bundle content to its original path instead of AssetBundle directory
 		/// </summary>
 		public bool KeepAssetBundleContentPath { get; set; }
-		public Func<UnityObject, bool> Filter { get; set; } = DefaultFilter;
+		public Func<Object, bool> Filter { get; set; } = DefaultFilter;
 	}
 }

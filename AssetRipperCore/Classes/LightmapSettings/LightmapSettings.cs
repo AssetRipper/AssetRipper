@@ -356,9 +356,9 @@ namespace AssetRipper.Classes.LightmapSettings
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -369,7 +369,7 @@ namespace AssetRipper.Classes.LightmapSettings
 			}
 			if (HasEnlightenSceneMapping(context.Version, context.Flags))
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
 				{
 					yield return asset;
 				}
@@ -377,7 +377,7 @@ namespace AssetRipper.Classes.LightmapSettings
 			if (HasLightProbes(context.Version, context.Flags))
 			{
 				yield return context.FetchDependency(LightProbes, LightProbesName);
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Lightmaps, LightmapsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Lightmaps, LightmapsName))
 				{
 					yield return asset;
 				}
@@ -554,7 +554,7 @@ namespace AssetRipper.Classes.LightmapSettings
 		public const string ShadowMaskModeName = "m_ShadowMaskMode";
 
 		// TODO: PPtr<LightProbesLegacy>
-		public PPtr<Object.UnityObject> LightProbesLegacy;
+		public PPtr<Object.Object> LightProbesLegacy;
 		public EnlightenSceneMapping EnlightenSceneMapping;
 		public PPtr<LightProbes.LightProbes> LightProbes;
 		public GISettings.GISettings GISettings;

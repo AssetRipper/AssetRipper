@@ -4,6 +4,7 @@ using AssetRipper.Classes.Utils.Extensions;
 using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.LightmapSettings.GISettings
 {

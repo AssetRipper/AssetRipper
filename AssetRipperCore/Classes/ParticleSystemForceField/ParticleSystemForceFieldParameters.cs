@@ -6,6 +6,7 @@ using AssetRipper.Classes.ParticleSystem.Curve;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System.Collections.Generic;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.ParticleSystemForceField
 {
@@ -34,7 +35,7 @@ namespace AssetRipper.Classes.ParticleSystemForceField
 			reader.AlignStream();
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(VectorField, VectorFieldName);
 		}

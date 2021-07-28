@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper;
 
 namespace AssetRipperGUI
 {

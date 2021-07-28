@@ -8,7 +8,7 @@ namespace AssetRipper.Structure.Collections
 	{
 		public TextAssetExportCollection(IAssetExporter assetExporter, TextAsset asset) : base(assetExporter, asset) { }
 
-		protected override string GetExportExtension(UnityObject asset)
+		protected override string GetExportExtension(Object asset)
 		{
 			return "bytes";
 		}

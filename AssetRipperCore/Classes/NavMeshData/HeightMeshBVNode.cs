@@ -2,6 +2,7 @@ using AssetRipper.Project;
 using AssetRipper.Classes.Misc.Serializable;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.NavMeshData
 {

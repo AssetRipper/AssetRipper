@@ -14,6 +14,7 @@ using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes
 {

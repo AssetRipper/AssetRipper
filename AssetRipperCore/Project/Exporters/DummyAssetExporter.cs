@@ -3,7 +3,7 @@ using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.Structure.Collections;
 using System;
 using System.Collections.Generic;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 
 namespace AssetRipper.Project.Exporters
 {
@@ -15,32 +15,32 @@ namespace AssetRipper.Project.Exporters
 			m_metaTypes[classType] = isMetaType;
 		}
 
-		public bool IsHandle(UnityObject asset, ExportOptions options)
+		public bool IsHandle(Object asset, ExportOptions options)
 		{
 			return true;
 		}
 
-		public bool Export(IExportContainer container, UnityObject asset, string path)
+		public bool Export(IExportContainer container, Object asset, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, UnityObject asset, string path, Action<IExportContainer, UnityObject, string> callback)
+		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<UnityObject> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<UnityObject> assets, string path, Action<IExportContainer, UnityObject, string> callback)
+		public void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
 			if (m_emptyTypes.TryGetValue(asset.ClassID, out bool isEmptyCollection))
 			{
@@ -59,7 +59,7 @@ namespace AssetRipper.Project.Exporters
 			}
 		}
 
-		public AssetType ToExportType(UnityObject asset)
+		public AssetType ToExportType(Object asset)
 		{
 			ToUnknownExportType(asset.ClassID, out AssetType assetType);
 			return assetType;

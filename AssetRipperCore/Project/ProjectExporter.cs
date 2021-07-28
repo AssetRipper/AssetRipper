@@ -9,7 +9,7 @@ using AssetRipper.Structure;
 using AssetRipper.Structure.Collections;
 using System;
 using System.Collections.Generic;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 
 namespace AssetRipper.Project
 {
@@ -195,12 +195,12 @@ namespace AssetRipper.Project
 			VirtualSerializedFile virtualFile = new VirtualSerializedFile(exportLayout);
 			List<IExportCollection> collections = new List<IExportCollection>();
 			// speed up fetching
-			List<UnityObject> depList = new List<UnityObject>();
-			HashSet<UnityObject> depSet = new HashSet<UnityObject>();
-			HashSet<UnityObject> queued = new HashSet<UnityObject>();
+			List<Object> depList = new List<Object>();
+			HashSet<Object> depSet = new HashSet<Object>();
+			HashSet<Object> queued = new HashSet<Object>();
 			foreach (SerializedFile file in files)
 			{
-				foreach (UnityObject asset in file.FetchAssets())
+				foreach (Object asset in file.FetchAssets())
 				{
 					if (!options.Filter(asset))
 					{
@@ -215,11 +215,11 @@ namespace AssetRipper.Project
 
 			for (int i = 0; i < depList.Count; i++)
 			{
-				UnityObject asset = depList[i];
+				Object asset = depList[i];
 				if (!queued.Contains(asset))
 				{
 					IExportCollection collection = CreateCollection(virtualFile, asset, options);
-					foreach (UnityObject element in collection.Assets)
+					foreach (Object element in collection.Assets)
 					{
 						queued.Add(element);
 					}
@@ -229,14 +229,14 @@ namespace AssetRipper.Project
 				if (options.ExportDependencies)
 				{
 					DependencyContext context = new DependencyContext(exportLayout, true);
-					foreach (PPtr<UnityObject> pointer in asset.FetchDependencies(context))
+					foreach (PPtr<Object> pointer in asset.FetchDependencies(context))
 					{
 						if (pointer.IsNull)
 						{
 							continue;
 						}
 
-						UnityObject dependency = pointer.FindAsset(asset.File);
+						Object dependency = pointer.FindAsset(asset.File);
 						if (dependency == null)
 						{
 							string hierarchy = $"[{asset.File.Name}]" + asset.File.GetAssetLogString(asset.PathID) + "." + context.GetPointerPath();
@@ -315,7 +315,7 @@ namespace AssetRipper.Project
 			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{classID}'");
 		}
 
-		private IExportCollection CreateCollection(VirtualSerializedFile file, UnityObject asset, ExportOptions options)
+		private IExportCollection CreateCollection(VirtualSerializedFile file, Object asset, ExportOptions options)
 		{
 			Stack<IAssetExporter> exporters = m_exporters[asset.ClassID];
 			foreach (IAssetExporter exporter in exporters)

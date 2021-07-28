@@ -17,14 +17,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using AssetInfo = AssetRipper.Classes.AssetBundle.AssetInfo;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Project
 {
 	public class ProjectAssetContainer : IExportContainer
 	{
-		public ProjectAssetContainer(ProjectExporter exporter, ExportOptions options, VirtualSerializedFile file, IEnumerable<UnityObject> assets,
+		public ProjectAssetContainer(ProjectExporter exporter, ExportOptions options, VirtualSerializedFile file, IEnumerable<Object> assets,
 			IReadOnlyList<IExportCollection> collections)
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
@@ -32,7 +32,7 @@ namespace AssetRipper.Project
 			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
 			ExportLayout = file.Layout;
 
-			foreach (UnityObject asset in assets)
+			foreach (Object asset in assets)
 			{
 				switch (asset.ClassID)
 				{
@@ -57,7 +57,7 @@ namespace AssetRipper.Project
 			List<SceneExportCollection> scenes = new List<SceneExportCollection>();
 			foreach (IExportCollection collection in collections)
 			{
-				foreach (UnityObject asset in collection.Assets)
+				foreach (Object asset in collection.Assets)
 				{
 #warning TODO: unique asset:collection (m_assetCollections.Add)
 					m_assetCollections[asset.AssetInfo] = collection;
@@ -71,13 +71,13 @@ namespace AssetRipper.Project
 		}
 
 #warning TODO: get rid of IEnumerable. pass only main asset (issues: prefab, texture with sprites, animatorController)
-		public bool TryGetAssetPathFromAssets(IEnumerable<UnityObject> assets, out UnityObject selectedAsset, out string assetPath)
+		public bool TryGetAssetPathFromAssets(IEnumerable<Object> assets, out Object selectedAsset, out string assetPath)
 		{
 			selectedAsset = null;
 			assetPath = string.Empty;
 			if (m_pathAssets.Count > 0)
 			{
-				foreach (UnityObject asset in assets)
+				foreach (Object asset in assets)
 				{
 					if (m_pathAssets.TryGetValue(asset, out ProjectAssetPath projectPath))
 					{
@@ -91,12 +91,12 @@ namespace AssetRipper.Project
 			return false;
 		}
 
-		public UnityObject GetAsset(long pathID)
+		public Object GetAsset(long pathID)
 		{
 			return File.GetAsset(pathID);
 		}
 
-		public UnityObject FindAsset(int fileIndex, long pathID)
+		public Object FindAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
@@ -108,7 +108,7 @@ namespace AssetRipper.Project
 			}
 		}
 
-		public UnityObject GetAsset(int fileIndex, long pathID)
+		public Object GetAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
@@ -120,12 +120,12 @@ namespace AssetRipper.Project
 			}
 		}
 
-		public UnityObject FindAsset(ClassIDType classID)
+		public Object FindAsset(ClassIDType classID)
 		{
 			return File.FindAsset(classID);
 		}
 
-		public UnityObject FindAsset(ClassIDType classID, string name)
+		public Object FindAsset(ClassIDType classID, string name)
 		{
 			return File.FindAsset(classID, name);
 		}
@@ -135,7 +135,7 @@ namespace AssetRipper.Project
 			return File.GetAssetType(pathID);
 		}
 
-		public long GetExportID(UnityObject asset)
+		public long GetExportID(Object asset)
 		{
 			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection collection))
 			{
@@ -150,7 +150,7 @@ namespace AssetRipper.Project
 			return m_exporter.ToExportType(classID);
 		}
 
-		public MetaPtr CreateExportPointer(UnityObject asset)
+		public MetaPtr CreateExportPointer(Object asset)
 		{
 			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection collection))
 			{
@@ -284,9 +284,9 @@ namespace AssetRipper.Project
 
 		private void AddResources(ResourceManager manager)
 		{
-			foreach (KeyValuePair<string, PPtr<UnityObject>> kvp in manager.Container)
+			foreach (KeyValuePair<string, PPtr<Object>> kvp in manager.Container)
 			{
-				UnityObject asset = kvp.Value.FindAsset(manager.File);
+				Object asset = kvp.Value.FindAsset(manager.File);
 				if (asset == null)
 				{
 					continue;
@@ -318,7 +318,7 @@ namespace AssetRipper.Project
 				{
 					continue;
 				}
-				UnityObject asset = kvp.Value.Asset.FindAsset(bundle.File);
+				Object asset = kvp.Value.Asset.FindAsset(bundle.File);
 				if (asset == null)
 				{
 					continue;
@@ -371,14 +371,14 @@ namespace AssetRipper.Project
 
 		private const string ResourceKeyword = "Resources";
 		private const string AssetBundleKeyword = "AssetBundles";
-		private const string AssetsDirectory = UnityObject.AssetsKeyword + ObjectUtils.DirectorySeparator;
+		private const string AssetsDirectory = Object.AssetsKeyword + ObjectUtils.DirectorySeparator;
 		private const string ResourceFullPath = AssetsDirectory + ResourceKeyword;
 		private const string AssetBundleFullPath = AssetsDirectory + AssetBundleKeyword;
 
 		private readonly ProjectExporter m_exporter;
 		private readonly ExportOptions m_options;
 		private readonly Dictionary<Parser.Asset.AssetInfo, IExportCollection> m_assetCollections = new Dictionary<Parser.Asset.AssetInfo, IExportCollection>();
-		private readonly Dictionary<UnityObject, ProjectAssetPath> m_pathAssets = new Dictionary<UnityObject, ProjectAssetPath>();
+		private readonly Dictionary<Object, ProjectAssetPath> m_pathAssets = new Dictionary<Object, ProjectAssetPath>();
 
 		private readonly BuildSettings m_buildSettings;
 		private readonly TagManager m_tagManager;

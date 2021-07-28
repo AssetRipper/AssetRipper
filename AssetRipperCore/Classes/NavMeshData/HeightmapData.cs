@@ -5,6 +5,7 @@ using AssetRipper.Classes.Misc.Serializable;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System.Collections.Generic;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.NavMeshData
 {
@@ -16,7 +17,7 @@ namespace AssetRipper.Classes.NavMeshData
 			TerrainData.Read(reader);
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(TerrainData, TerrainDataName);
 		}
@@ -33,6 +34,6 @@ namespace AssetRipper.Classes.NavMeshData
 		public const string TerrainDataName = "terrainData";
 
 		public Vector3f Position;
-		public PPtr<Object.UnityObject> TerrainData;
+		public PPtr<Object.Object> TerrainData;
 	}
 }

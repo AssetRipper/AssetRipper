@@ -12,8 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Versioning;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using UnityObject = AssetRipper.Classes.Object.Object;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper;
 
 namespace AssetRipperLibrary.Exporters.Shaders
 {

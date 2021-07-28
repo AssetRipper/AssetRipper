@@ -9,6 +9,7 @@ using AssetRipper.IO.Asset;
 using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.ParticleSystem.UV
 {
@@ -129,9 +130,9 @@ namespace AssetRipper.Classes.ParticleSystem.UV
 			}
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Sprites, SpritesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Sprites, SpritesName))
 			{
 				yield return asset;
 			}

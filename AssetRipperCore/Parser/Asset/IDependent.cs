@@ -6,6 +6,6 @@ namespace AssetRipper.Parser.Asset
 {
 	public interface IDependent
 	{
-		IEnumerable<PPtr<UnityObject>> FetchDependencies(DependencyContext context);
+		IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context);
 	}
 }

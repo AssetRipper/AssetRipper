@@ -34,7 +34,7 @@ namespace AssetRipper.Classes.TrailRenderer
 		/// </summary>
 		public static bool HasEmitting(Version version) => version.IsGreaterEqual(2018, 2);
 
-		public override Object.UnityObject Convert(IExportContainer container)
+		public override Object.Object Convert(IExportContainer container)
 		{
 			return TrailRendererConverter.Convert(container, this);
 		}

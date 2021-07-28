@@ -8,6 +8,7 @@ using AssetRipper.IO.Asset;
 using System;
 using System.Collections.Generic;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Sprite
 {
@@ -145,14 +146,14 @@ namespace AssetRipper.Classes.Sprite
 			}
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Texture, TextureName);
 			yield return context.FetchDependency(AlphaTexture, AlphaTextureName);
 
 			if (HasSecondaryTextures(context.Version))
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
 				{
 					yield return asset;
 				}

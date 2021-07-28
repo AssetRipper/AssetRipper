@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 using AssetRipper.Extensions;
 
 namespace AssetRipper.Structure.Collections
@@ -37,7 +37,7 @@ namespace AssetRipper.Structure.Collections
 			}
 		}
 
-		public static long GetMainExportID(UnityObject asset)
+		public static long GetMainExportID(Object asset)
 		{
 			return GetMainExportID((uint)asset.ClassID, 0);
 		}
@@ -47,7 +47,7 @@ namespace AssetRipper.Structure.Collections
 			return GetMainExportID(classID, 0);
 		}
 
-		public static long GetMainExportID(UnityObject asset, uint value)
+		public static long GetMainExportID(Object asset, uint value)
 		{
 			return GetMainExportID((uint)asset.ClassID, value);
 		}
@@ -74,11 +74,11 @@ namespace AssetRipper.Structure.Collections
 		}
 
 		public abstract bool Export(ProjectAssetContainer container, string dirPath);
-		public abstract bool IsContains(UnityObject asset);
-		public abstract long GetExportID(UnityObject asset);
-		public abstract MetaPtr CreateExportPointer(UnityObject asset, bool isLocal);
+		public abstract bool IsContains(Object asset);
+		public abstract long GetExportID(Object asset);
+		public abstract MetaPtr CreateExportPointer(Object asset, bool isLocal);
 
-		protected void ExportAsset(ProjectAssetContainer container, AssetImporter importer, UnityObject asset, string path, string name)
+		protected void ExportAsset(ProjectAssetContainer container, AssetImporter importer, Object asset, string path, string name)
 		{
 			if (!DirectoryUtils.Exists(path))
 			{
@@ -93,7 +93,7 @@ namespace AssetRipper.Structure.Collections
 			ExportMeta(container, meta, filePath);
 		}
 
-		protected string GetUniqueFileName(ISerializedFile file, UnityObject asset, string dirPath)
+		protected string GetUniqueFileName(ISerializedFile file, Object asset, string dirPath)
 		{
 			string fileName;
 			switch (asset)
@@ -123,7 +123,7 @@ namespace AssetRipper.Structure.Collections
 			return FileUtils.GetUniqueName(directoryPath, fileName, FileUtils.MaxFileNameLength - MetaExtension.Length);
 		}
 
-		protected virtual string GetExportExtension(UnityObject asset)
+		protected virtual string GetExportExtension(Object asset)
 		{
 			return asset.ExportExtension;
 		}
@@ -131,7 +131,7 @@ namespace AssetRipper.Structure.Collections
 		public abstract IAssetExporter AssetExporter { get; }
 		public abstract ISerializedFile File { get; }
 		public virtual TransferInstructionFlags Flags => TransferInstructionFlags.NoTransferInstructionFlags;
-		public abstract IEnumerable<UnityObject> Assets { get; }
+		public abstract IEnumerable<Object> Assets { get; }
 		public abstract string Name { get; }
 
 		private const string MetaExtension = ".meta";

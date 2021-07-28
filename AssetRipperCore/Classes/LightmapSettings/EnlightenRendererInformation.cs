@@ -5,6 +5,7 @@ using AssetRipper.Classes.Misc.Serializable;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System.Collections.Generic;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.LightmapSettings
 {
@@ -39,7 +40,7 @@ namespace AssetRipper.Classes.LightmapSettings
 			}
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Renderer, RendererName);
 		}
@@ -63,7 +64,7 @@ namespace AssetRipper.Classes.LightmapSettings
 		public const string InstanceHashName = "instanceHash";
 		public const string GeometryHashName = "geometryHash";
 
-		public PPtr<Object.UnityObject> Renderer;
+		public PPtr<Object.Object> Renderer;
 		public Vector4f DynamicLightmapSTInSystem;
 		public Hash128 InstanceHash;
 		public Hash128 GeometryHash;

@@ -321,41 +321,41 @@ namespace AssetRipper.Classes.AnimationClip
 #endif
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			if (HasClassIDToTrack(context.Version, context.Flags))
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies((IEnumerable<PPtr<BaseAnimationTrack>>)ClassIDToTrack.Values, ClassIDToTrackName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies((IEnumerable<PPtr<BaseAnimationTrack>>)ClassIDToTrack.Values, ClassIDToTrackName))
 				{
 					yield return asset;
 				}
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(ChildTracks, ChildTracksName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(ChildTracks, ChildTracksName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasCurves(context.Version))
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(FloatCurves, FloatCurvesName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(FloatCurves, FloatCurvesName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasPPtrCurves(context.Version))
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(PPtrCurves, PPtrCurvesName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(PPtrCurves, PPtrCurvesName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasClipBindingConstant(context.Version))
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(ClipBindingConstant, ClipBindingConstantName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(ClipBindingConstant, ClipBindingConstantName))
 				{
 					yield return asset;
 				}
@@ -382,7 +382,7 @@ namespace AssetRipper.Classes.AnimationClip
 #endif
 			if (HasEvents(context.Version))
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Events, EventsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Events, EventsName))
 				{
 					yield return asset;
 				}
@@ -439,7 +439,7 @@ namespace AssetRipper.Classes.AnimationClip
 		public IReadOnlyDictionary<uint, string> FindTOS()
 		{
 			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
-			foreach (Object.UnityObject asset in File.Collection.FetchAssets())
+			foreach (Object.Object asset in File.Collection.FetchAssets())
 			{
 				switch (asset.ClassID)
 				{
@@ -481,7 +481,7 @@ namespace AssetRipper.Classes.AnimationClip
 
 		public IEnumerable<GameObject.GameObject> FindRoots()
 		{
-			foreach (Object.UnityObject asset in File.Collection.FetchAssets())
+			foreach (Object.Object asset in File.Collection.FetchAssets())
 			{
 				switch (asset.ClassID)
 				{

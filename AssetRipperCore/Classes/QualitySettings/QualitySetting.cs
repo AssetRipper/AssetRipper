@@ -8,6 +8,7 @@ using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.QualitySettings
 {

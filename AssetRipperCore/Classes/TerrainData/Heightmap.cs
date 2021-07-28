@@ -10,6 +10,7 @@ using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.TerrainData
 {
@@ -205,7 +206,7 @@ namespace AssetRipper.Classes.TerrainData
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			if (HasDefaultPhysicMaterial(context.Version))
 			{

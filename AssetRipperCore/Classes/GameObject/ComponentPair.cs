@@ -28,7 +28,7 @@ namespace AssetRipper.Classes.GameObject
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			ComponentPairLayout layout = context.Layout.GameObject.ComponentPair;
 			yield return context.FetchDependency(Component, layout.ComponentName);

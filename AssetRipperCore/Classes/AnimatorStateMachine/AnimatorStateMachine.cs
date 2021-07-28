@@ -13,6 +13,7 @@ using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.AnimatorStateMachine
 {
@@ -34,7 +35,7 @@ namespace AssetRipper.Classes.AnimatorStateMachine
 			int stateCount = stateMachine.StateConstantArray.Length;
 			int stateMachineCount = 0;
 			int count = stateCount + stateMachineCount;
-			int side = (int)Math.Ceiling(Math.Sqrt(count));
+			int side = (int)System.Math.Ceiling(System.Math.Sqrt(count));
 
 			List<AnimatorState> states = new List<AnimatorState>();
 			ChildStates = new ChildAnimatorState[stateCount];

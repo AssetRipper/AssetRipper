@@ -72,7 +72,7 @@ namespace AssetRipper.Classes.LightmapSettings
 			}
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Lightmap, LightmapName);
 			if (HasIndirectLightmap(context.Version))

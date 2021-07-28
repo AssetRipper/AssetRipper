@@ -93,7 +93,7 @@ namespace AssetRipper.Utils
 				string fullPath = GetFullPath(path);
 				int sepIndex = fullPath.LastIndexOf(Path.DirectorySeparatorChar);
 				int asepIndex = fullPath.LastIndexOf(Path.AltDirectorySeparatorChar);
-				int index = Math.Max(sepIndex, asepIndex);
+				int index = System.Math.Max(sepIndex, asepIndex);
 				if (fullPath.Length - index > MaxFileNameLength)
 				{
 					// file name is too long. need to shrink

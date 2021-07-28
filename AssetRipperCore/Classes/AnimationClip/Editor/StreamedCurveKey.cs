@@ -3,6 +3,7 @@ using AssetRipper.Classes.Misc.KeyframeTpl;
 using AssetRipper.Classes.Misc.Serializable;
 using AssetRipper.Classes.Misc.Serializable.AnimationCurveTpl;
 using AssetRipper.IO.Asset;
+using AssetRipper.Math;
 using System.Collections.Generic;
 
 namespace AssetRipper.Classes.AnimationClip.Editor

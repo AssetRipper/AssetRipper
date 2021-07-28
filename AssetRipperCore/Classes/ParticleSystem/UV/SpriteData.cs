@@ -14,7 +14,7 @@ namespace AssetRipper.Classes.ParticleSystem.UV
 			Sprite.Read(reader);
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Sprite, SpriteName);
 		}
@@ -28,6 +28,6 @@ namespace AssetRipper.Classes.ParticleSystem.UV
 
 		public const string SpriteName = "sprite";
 
-		public PPtr<Object.UnityObject> Sprite;
+		public PPtr<Object.Object> Sprite;
 	}
 }

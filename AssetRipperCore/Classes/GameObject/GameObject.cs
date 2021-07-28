@@ -135,7 +135,7 @@ namespace AssetRipper.Classes.GameObject
 			return tos;
 		}
 
-		public override Object.UnityObject Convert(IExportContainer container)
+		public override Object.Object Convert(IExportContainer container)
 		{
 			return GameObjectConverter.Convert(container, this);
 		}
@@ -270,9 +270,9 @@ namespace AssetRipper.Classes.GameObject
 #endif
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -280,14 +280,14 @@ namespace AssetRipper.Classes.GameObject
 			GameObjectLayout layout = context.Layout.GameObject;
 			if (layout.IsComponentTuple)
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(ComponentTuple.Select(t => t.Item2), layout.ComponentName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(ComponentTuple.Select(t => t.Item2), layout.ComponentName))
 				{
 					yield return asset;
 				}
 			}
 			else
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Component, layout.ComponentName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Component, layout.ComponentName))
 				{
 					yield return asset;
 				}

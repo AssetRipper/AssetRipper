@@ -23,27 +23,27 @@ namespace AssetRipper.Classes.ResourceManager
 		{
 			base.Read(reader);
 
-			Container = reader.ReadKVPStringTArray<PPtr<Object.UnityObject>>();
+			Container = reader.ReadKVPStringTArray<PPtr<Object.Object>>();
 			if (HasDependentAssets(reader.Version, reader.Flags))
 			{
 				DependentAssets = reader.ReadAssetArray<ResourceManagerDependency>();
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
 			{
 				yield return asset;
 			}
 			if (HasDependentAssets(context.Version, context.Flags))
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(DependentAssets, DependentAssetsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(DependentAssets, DependentAssetsName))
 				{
 					yield return asset;
 				}
@@ -61,7 +61,7 @@ namespace AssetRipper.Classes.ResourceManager
 			return node;
 		}
 
-		public KeyValuePair<string, PPtr<Object.UnityObject>>[] Container { get; set; }
+		public KeyValuePair<string, PPtr<Object.Object>>[] Container { get; set; }
 		public ResourceManagerDependency[] DependentAssets { get; set; }
 
 		public const string ContainerName = "m_Container";

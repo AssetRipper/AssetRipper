@@ -13,7 +13,7 @@ using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Classes.EditorBuildSettings
 {
-	public sealed class EditorBuildSettings : Object.UnityObject
+	public sealed class EditorBuildSettings : Object.Object
 	{
 		public EditorBuildSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -50,7 +50,7 @@ namespace AssetRipper.Classes.EditorBuildSettings
 				throw new ArgumentNullException(nameof(scenes));
 			}
 			Scenes = scenes.ToArray();
-			ConfigObjects = new Dictionary<string, PPtr<Object.UnityObject>>();
+			ConfigObjects = new Dictionary<string, PPtr<Object.Object>>();
 		}
 
 		public override void Read(AssetReader reader)
@@ -68,7 +68,7 @@ namespace AssetRipper.Classes.EditorBuildSettings
 			}
 			if (HasConfigObjects(reader.Version))
 			{
-				ConfigObjects = new Dictionary<string, PPtr<Object.UnityObject>>();
+				ConfigObjects = new Dictionary<string, PPtr<Object.Object>>();
 				ConfigObjects.Read(reader);
 			}
 		}
@@ -85,13 +85,13 @@ namespace AssetRipper.Classes.EditorBuildSettings
 			return node;
 		}
 
-		private IReadOnlyDictionary<string, PPtr<Object.UnityObject>> GetConfigObjects(Version version)
+		private IReadOnlyDictionary<string, PPtr<Object.Object>> GetConfigObjects(Version version)
 		{
-			return HasConfigObjects(version) ? ConfigObjects : new Dictionary<string, PPtr<Object.UnityObject>>(0);
+			return HasConfigObjects(version) ? ConfigObjects : new Dictionary<string, PPtr<Object.Object>>(0);
 		}
 
 		public Scene[] Scenes { get; set; }
-		public Dictionary<string, PPtr<Object.UnityObject>> ConfigObjects { get; set; }
+		public Dictionary<string, PPtr<Object.Object>> ConfigObjects { get; set; }
 
 		public const string ScenesName = "m_Scenes";
 		public const string ConfigObjectsName = "m_configObjects";

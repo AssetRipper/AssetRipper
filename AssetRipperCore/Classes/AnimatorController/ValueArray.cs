@@ -4,6 +4,7 @@ using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.AnimatorController
 {
@@ -16,7 +17,7 @@ namespace AssetRipper.Classes.AnimatorController
 		/// <summary>
 		/// Less than 5.4.0
 		/// </summary>
-		public static bool IsVector4(Version version) => version.IsLess(5, 4);
+		public static bool IsVector4f(Version version) => version.IsLess(5, 4);
 
 		/// <summary>
 		/// Less than 5.5.0
@@ -40,7 +41,7 @@ namespace AssetRipper.Classes.AnimatorController
 			}
 			else
 			{
-				if (IsVector4(reader.Version))
+				if (IsVector4f(reader.Version))
 				{
 					Position4Values = reader.ReadAssetArray<Vector4f>();
 				}
@@ -49,7 +50,7 @@ namespace AssetRipper.Classes.AnimatorController
 					Position3Values = reader.ReadAssetArray<Vector3f>();
 				}
 				QuaternionValues = reader.ReadAssetArray<Quaternionf>();
-				if (IsVector4(reader.Version))
+				if (IsVector4f(reader.Version))
 				{
 					Scale4Values = reader.ReadAssetArray<Vector4f>();
 				}

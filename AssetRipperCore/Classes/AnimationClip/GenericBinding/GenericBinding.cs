@@ -74,6 +74,6 @@ namespace AssetRipper.Classes.AnimationClip.GenericBinding
 		public const string CustomTypeName = "customType";
 		public const string IsPPtrCurveName = "isPPtrCurve";
 
-		public PPtr<Object.UnityObject> Script;
+		public PPtr<Object.Object> Script;
 	}
 }

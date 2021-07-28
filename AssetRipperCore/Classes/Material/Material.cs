@@ -101,15 +101,15 @@ namespace AssetRipper.Classes.Material
 			SavedProperties.Read(reader);
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(Shader, ShaderName);
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(SavedProperties, SavedPropertiesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(SavedProperties, SavedPropertiesName))
 			{
 				yield return asset;
 			}

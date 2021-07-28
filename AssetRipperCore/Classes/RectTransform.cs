@@ -5,6 +5,7 @@ using AssetRipper.Parser.Asset;
 using AssetRipper.Classes.Misc.Serializable;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes
 {
@@ -14,7 +15,7 @@ namespace AssetRipper.Classes
 
 		public RectTransform(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public override Object.UnityObject Convert(IExportContainer container)
+		public override Object.Object Convert(IExportContainer container)
 		{
 			return RectTransformConverter.Convert(container, this);
 		}

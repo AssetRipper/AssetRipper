@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Layout.Classes.Misc.Serializable;
 using AssetRipper.Layout.Classes.Misc.Serializable.GUIStyle;
+using AssetRipper.Math;
 
 namespace AssetRipper.Layout.Categories
 {

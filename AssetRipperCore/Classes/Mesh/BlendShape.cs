@@ -4,6 +4,7 @@ using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using SevenZip;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Mesh
 {

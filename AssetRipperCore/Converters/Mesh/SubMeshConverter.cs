@@ -8,6 +8,7 @@ using AssetRipper.IO.Asset;
 using System;
 using System.IO;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper.Math;
 
 namespace AssetRipper.Converters.Mesh
 {

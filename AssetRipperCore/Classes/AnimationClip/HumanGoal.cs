@@ -2,6 +2,7 @@
 using AssetRipper.Classes.Misc.Serializable;
 using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.AnimationClip
 {
@@ -14,7 +15,7 @@ namespace AssetRipper.Classes.AnimationClip
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool IsVector3(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool IsVector3f(Version version) => version.IsGreaterEqual(5, 4);
 
 		public void Read(AssetReader reader)
 		{
@@ -24,7 +25,7 @@ namespace AssetRipper.Classes.AnimationClip
 			WeightR = reader.ReadSingle();
 			if (HasHints(reader.Version))
 			{
-				if (IsVector3(reader.Version))
+				if (IsVector3f(reader.Version))
 				{
 					HintT = reader.ReadAsset<Vector3f>();
 				}

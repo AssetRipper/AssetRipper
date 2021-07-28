@@ -26,7 +26,7 @@ namespace AssetRipper.Classes
 		{
 			base.Read(reader);
 
-			Assets = reader.ReadAssetArray<PPtr<Object.UnityObject>>();
+			Assets = reader.ReadAssetArray<PPtr<Object.Object>>();
 			if (HasDependencies(reader.Version))
 			{
 				Dependencies = reader.ReadStringArray();
@@ -37,14 +37,14 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Assets, AssetsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Assets, AssetsName))
 			{
 				yield return asset;
 			}
@@ -55,7 +55,7 @@ namespace AssetRipper.Classes
 			throw new NotSupportedException();
 		}
 
-		public PPtr<Object.UnityObject>[] Assets { get; set; }
+		public PPtr<Object.Object>[] Assets { get; set; }
 		public string[] Dependencies { get; set; }
 		public bool ExplicitDataLayout { get; set; }
 

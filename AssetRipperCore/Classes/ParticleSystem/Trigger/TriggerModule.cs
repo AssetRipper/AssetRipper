@@ -34,7 +34,7 @@ namespace AssetRipper.Classes.ParticleSystem.Trigger
 			RadiusScale = reader.ReadSingle();
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(CollisionShape0, CollisionShape0Name);
 			yield return context.FetchDependency(CollisionShape1, CollisionShape1Name);

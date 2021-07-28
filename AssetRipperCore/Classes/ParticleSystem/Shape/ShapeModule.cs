@@ -7,6 +7,7 @@ using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System.Collections.Generic;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.ParticleSystem.Shape
 {
@@ -245,7 +246,7 @@ namespace AssetRipper.Classes.ParticleSystem.Shape
 			}
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Mesh, MeshName);
 			yield return context.FetchDependency(MeshRenderer, MeshRendererName);

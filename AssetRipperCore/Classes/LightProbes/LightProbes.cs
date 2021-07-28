@@ -6,6 +6,7 @@ using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.LightProbes
 {

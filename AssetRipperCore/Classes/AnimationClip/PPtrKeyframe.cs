@@ -10,7 +10,7 @@ namespace AssetRipper.Classes.AnimationClip
 {
 	public struct PPtrKeyframe : IAsset, IDependent
 	{
-		public PPtrKeyframe(float time, PPtr<Object.UnityObject> script)
+		public PPtrKeyframe(float time, PPtr<Object.Object> script)
 		{
 			Time = time;
 			Value = script;
@@ -21,7 +21,7 @@ namespace AssetRipper.Classes.AnimationClip
 			context.AddNode(nameof(PPtrKeyframe), name);
 			context.BeginChildren();
 			context.AddSingle(TimeName);
-			context.AddPPtr(nameof(Object.UnityObject), ValueName);
+			context.AddPPtr(nameof(Object.Object), ValueName);
 			context.EndChildren();
 		}
 
@@ -45,7 +45,7 @@ namespace AssetRipper.Classes.AnimationClip
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Value, ValueName);
 		}
@@ -55,6 +55,6 @@ namespace AssetRipper.Classes.AnimationClip
 		public const string TimeName = "time";
 		public const string ValueName = "value";
 
-		public PPtr<Object.UnityObject> Value;
+		public PPtr<Object.Object> Value;
 	}
 }

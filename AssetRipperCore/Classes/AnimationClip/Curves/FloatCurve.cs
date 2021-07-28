@@ -58,7 +58,7 @@ namespace AssetRipper.Classes.AnimationClip.Curves
 			}
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			FloatCurveLayout layout = context.Layout.AnimationClip.FloatCurve;
 			yield return context.FetchDependency(Script, layout.ScriptName);

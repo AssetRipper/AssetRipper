@@ -5,7 +5,7 @@ using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 using AssetRipper.Structure.Assembly.Mono;
 
 namespace AssetRipper.Structure.Assembly.Serializable
@@ -57,14 +57,14 @@ namespace AssetRipper.Structure.Assembly.Serializable
 			return node;
 		}
 
-		public IEnumerable<PPtr<UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{
 				SerializableType.Field etalon = Type.GetField(i);
 				if (IsAvailable(etalon))
 				{
-					foreach (PPtr<UnityObject> asset in Fields[i].FetchDependencies(context, etalon))
+					foreach (PPtr<Object> asset in Fields[i].FetchDependencies(context, etalon))
 					{
 						yield return asset;
 					}

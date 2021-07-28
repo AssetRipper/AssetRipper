@@ -4,6 +4,7 @@ using AssetRipper.IO.Asset;
 using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.NavMeshData
 {

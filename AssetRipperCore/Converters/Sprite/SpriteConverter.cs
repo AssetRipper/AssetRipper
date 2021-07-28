@@ -3,6 +3,7 @@ using AssetRipper.Classes.Meta.Importers.Texture;
 using AssetRipper.Classes.Misc.Serializable;
 using AssetRipper.Classes.SpriteAtlas;
 using System;
+using AssetRipper.Math;
 
 namespace AssetRipper.Converters.Sprite
 {

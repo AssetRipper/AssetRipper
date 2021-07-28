@@ -3,44 +3,44 @@ using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.Structure.Collections;
 using System;
 using System.Collections.Generic;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 
 namespace AssetRipper.Project.Exporters
 {
 	/// <summary>Designed to cause stack traces</summary>
 	public class NoSupportExporter : IAssetExporter
 	{
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
 			throw new NotSupportedException();
 		}
 
-		public bool Export(IExportContainer container, UnityObject asset, string path)
+		public bool Export(IExportContainer container, Object asset, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, UnityObject asset, string path, Action<IExportContainer, UnityObject, string> callback)
+		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<UnityObject> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<UnityObject> assets, string path, Action<IExportContainer, UnityObject, string> callback)
+		public void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public bool IsHandle(UnityObject asset, ExportOptions options)
+		public bool IsHandle(Object asset, ExportOptions options)
 		{
 			throw new NotSupportedException();
 		}
 
-		public AssetType ToExportType(UnityObject asset)
+		public AssetType ToExportType(Object asset)
 		{
 			throw new NotSupportedException();
 		}

@@ -180,8 +180,8 @@ namespace AssetRipper.Classes.Texture2D
 				bool mipMap = reader.ReadBoolean();
 				if (mipMap)
 				{
-					int maxSide = Math.Max(Width, Height);
-					MipCount = System.Convert.ToInt32(Math.Log(maxSide) / Math.Log(2));
+					int maxSide = System.Math.Max(Width, Height);
+					MipCount = System.Convert.ToInt32(System.Math.Log(maxSide) / System.Math.Log(2));
 				}
 				else
 				{

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
-	public abstract class EditorExtension : Object.UnityObject
+	public abstract class EditorExtension : Object.Object
 	{
 		protected EditorExtension(AssetLayout layout) : base(layout) { }
 
@@ -60,9 +60,9 @@ namespace AssetRipper.Classes
 #endif
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -120,9 +120,9 @@ namespace AssetRipper.Classes
 			return base.ExportYAMLRoot(container);
 		}
 
-		protected IEnumerable<PPtr<Object.UnityObject>> FetchDependenciesObject(DependencyContext context)
+		protected IEnumerable<PPtr<Object.Object>> FetchDependenciesObject(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -163,7 +163,7 @@ namespace AssetRipper.Classes
 		public PPtr<PrefabInstance.PrefabInstance> PrefabInstance;
 		public PPtr<Prefab> PrefabAsset;
 #else
-		private PPtr<Object.UnityObject> ExtensionPtr => default;
+		private PPtr<Object.Object> ExtensionPtr => default;
 		private PPtr<EditorExtension> CorrespondingSourceObject => default;
 		private PPtr<Prefab> PrefabAsset => default;
 #endif

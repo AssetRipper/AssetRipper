@@ -3,6 +3,9 @@ using AssetRipper.Layout.Classes;
 using AssetRipper.Classes;
 using AssetRipper.Classes.Misc.Serializable;
 using System.Linq;
+#if UNIVERSAL
+using AssetRipper.Math;
+#endif
 
 namespace AssetRipper.Converters
 {

@@ -17,7 +17,7 @@ namespace AssetRipper.Converters.Texture2D
 			instance.StreamingMipmapsPriority = origin.StreamingMipmapsPriority;
 			instance.IsReadable = origin.IsReadable ? 1 : 0;
 			instance.TextureFormat = origin.TextureFormat;
-			instance.MaxTextureSize = Math.Min(2048, Math.Max(origin.Width, origin.Height));
+			instance.MaxTextureSize = System.Math.Min(2048, System.Math.Max(origin.Width, origin.Height));
 			instance.TextureSettings = origin.TextureSettings;
 			instance.NPOTScale = TextureImporterNPOTScale.None;
 			instance.AlphaIsTransparency = 1;

@@ -12,6 +12,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
+using AssetRipper.Math;
 
 namespace AssetRipper.Converters.Mesh
 {

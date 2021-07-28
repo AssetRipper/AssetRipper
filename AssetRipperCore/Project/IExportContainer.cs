@@ -11,9 +11,9 @@ namespace AssetRipper.Project
 #warning TODO: remove
 	public interface IExportContainer : IAssetContainer
 	{
-		long GetExportID(UnityObject asset);
+		long GetExportID(Object asset);
 		AssetType ToExportType(ClassIDType classID);
-		MetaPtr CreateExportPointer(UnityObject asset);
+		MetaPtr CreateExportPointer(Object asset);
 
 		string SceneIndexToName(int sceneID);
 		bool IsSceneDuplicate(int sceneID);

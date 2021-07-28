@@ -9,6 +9,7 @@ using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System.Collections.Generic;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes
 {
@@ -185,9 +186,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -197,7 +198,7 @@ namespace AssetRipper.Classes
 				yield return context.FetchDependency(DisableAnimationWhenOffscreen, DisableAnimationWhenOffscreenName);
 			}
 			yield return context.FetchDependency(Mesh, MeshName);
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Bones, BonesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Bones, BonesName))
 			{
 				yield return asset;
 			}

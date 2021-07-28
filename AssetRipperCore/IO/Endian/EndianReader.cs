@@ -104,7 +104,7 @@ namespace AssetRipper.IO.Endian
 		/// <returns>Whether zero term has been found</returns>
 		public bool ReadStringZeroTerm(int maxLength, out string result)
 		{
-			maxLength = Math.Min(maxLength, m_buffer.Length);
+			maxLength = System.Math.Min(maxLength, m_buffer.Length);
 			for (int i = 0; i < maxLength; i++)
 			{
 				byte bt = ReadByte();

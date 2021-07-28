@@ -5,6 +5,7 @@ using AssetRipper.IO.Asset;
 using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using System;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Misc.Serializable.GUIStyle
 {

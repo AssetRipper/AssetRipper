@@ -108,7 +108,7 @@ namespace AssetRipper.Classes.AnimationClip
 			reader.AlignStream();
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			if (HasAdditiveReferencePoseClip(context.Version))
 			{

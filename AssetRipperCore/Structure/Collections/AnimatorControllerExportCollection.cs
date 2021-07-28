@@ -14,7 +14,7 @@ namespace AssetRipper.Structure.Collections
 {
 	public class AnimatorControllerExportCollection : AssetsExportCollection
 	{
-		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, UnityObject asset) : this(assetExporter, virtualFile, (AnimatorController)asset) { }
+		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, Object asset) : this(assetExporter, virtualFile, (AnimatorController)asset) { }
 
 		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, AnimatorController asset) : base(assetExporter, asset)
 		{

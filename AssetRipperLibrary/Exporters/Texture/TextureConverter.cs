@@ -339,7 +339,7 @@ namespace AssetRipperLibrary.Exporters.Textures
 				double vg = g * 2.0 - 255.0;
 				double hypotenuseSqr = vr * vr + vg * vg;
 				hypotenuseSqr = hypotenuseSqr > MagnitudeSqr ? MagnitudeSqr : hypotenuseSqr;
-				double b = (Math.Sqrt(MagnitudeSqr - hypotenuseSqr) + 255.0) / 2.0;
+				double b = (System.Math.Sqrt(MagnitudeSqr - hypotenuseSqr) + 255.0) / 2.0;
 				dataPtr[0] = (byte)b;
 			}
 		}

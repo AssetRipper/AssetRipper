@@ -14,7 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
+using AssetRipper.Math;
 
 namespace AssetRipper.Converters.AnimationClip
 {
@@ -46,7 +47,7 @@ namespace AssetRipper.Converters.AnimationClip
 			IReadOnlyList<StreamedFrame> streamedFrames = clip.StreamedClip.GenerateFrames(Layout);
 			float lastDenseFrame = clip.DenseClip.FrameCount / clip.DenseClip.SampleRate;
 			float lastSampleFrame = streamedFrames.Count > 1 ? streamedFrames[streamedFrames.Count - 2].Time : 0.0f;
-			float lastFrame = Math.Max(lastDenseFrame, lastSampleFrame);
+			float lastFrame = System.Math.Max(lastDenseFrame, lastSampleFrame);
 
 			ProcessStreams(streamedFrames, bindings, tos, clip.DenseClip.SampleRate);
 			ProcessDenses(clip, bindings, tos);
@@ -419,7 +420,7 @@ namespace AssetRipper.Converters.AnimationClip
 				AddPPtrKeyframe(curve, bindings, 0.0f, index - 1);
 			}
 
-			PPtr<UnityObject> value = bindings.PPtrCurveMapping[index];
+			PPtr<Object> value = bindings.PPtrCurveMapping[index];
 			PPtrKeyframe pptrKey = new PPtrKeyframe(time, value);
 			pptrCurve.Add(pptrKey);
 		}

@@ -5,49 +5,49 @@ using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.Structure.Collections;
 using System;
 using System.Collections.Generic;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 
 namespace AssetRipper.Project.Exporters.Script
 {
 	public class ScriptAssetExporter : IAssetExporter
 	{
-		public bool IsHandle(UnityObject asset, ExportOptions options)
+		public bool IsHandle(Object asset, ExportOptions options)
 		{
 			return true;
 		}
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
 			return new ScriptExportCollection(this, (MonoScript)asset);
 		}
 
-		public bool Export(IExportContainer container, UnityObject asset, string path)
+		public bool Export(IExportContainer container, Object asset, string path)
 		{
 			throw new NotSupportedException("Need to export all scripts at once");
 		}
 
-		public void Export(IExportContainer container, UnityObject asset, string path, Action<IExportContainer, UnityObject, string> callback)
+		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
 		{
 			throw new NotSupportedException("Need to export all scripts at once");
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<UnityObject> assets, string dirPath)
+		public bool Export(IExportContainer container, IEnumerable<Object> assets, string dirPath)
 		{
 			Export(container, assets, dirPath, null);
 			return true;
 		}
 
-		public void Export(IExportContainer container, IEnumerable<UnityObject> assets, string dirPath, Action<IExportContainer, UnityObject, string> callback)
+		public void Export(IExportContainer container, IEnumerable<Object> assets, string dirPath, Action<IExportContainer, Object, string> callback)
 		{
 			ScriptExportManager scriptManager = new ScriptExportManager(container.Layout, dirPath);
-			Dictionary<UnityObject, ScriptExportType> exportTypes = new Dictionary<UnityObject, ScriptExportType>();
-			foreach (UnityObject asset in assets)
+			Dictionary<Object, ScriptExportType> exportTypes = new Dictionary<Object, ScriptExportType>();
+			foreach (Object asset in assets)
 			{
 				MonoScript script = (MonoScript)asset;
 				ScriptExportType exportType = script.GetExportType(scriptManager);
 				exportTypes.Add(asset, exportType);
 			}
-			foreach (KeyValuePair<UnityObject, ScriptExportType> exportType in exportTypes)
+			foreach (KeyValuePair<Object, ScriptExportType> exportType in exportTypes)
 			{
 				string path = scriptManager.Export(exportType.Value);
 				if (path != null)
@@ -58,7 +58,7 @@ namespace AssetRipper.Project.Exporters.Script
 			scriptManager.ExportRest();
 		}
 
-		public AssetType ToExportType(UnityObject asset)
+		public AssetType ToExportType(Object asset)
 		{
 			return AssetType.Meta;
 		}

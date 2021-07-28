@@ -13,7 +13,8 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.Versioning;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using UnityObject = AssetRipper.Classes.Object.Object;
+using AssetRipper;
 
 namespace AssetRipperLibrary.Exporters.Textures
 {

@@ -13,6 +13,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Mesh
 {
@@ -86,10 +87,10 @@ namespace AssetRipper.Classes.Mesh
 			{
 				using (BinaryReader reader = new BinaryReader(memStream))
 				{
-					int weightCount = Math.Min((int)weightChannel.Dimension, 4);
-					int indexCount = Math.Min((int)indexChannel.Dimension, 4);
-					float[] weights = new float[Math.Max(weightCount, 4)];
-					int[] indices = new int[Math.Max(indexCount, 4)];
+					int weightCount = System.Math.Min((int)weightChannel.Dimension, 4);
+					int indexCount = System.Math.Min((int)indexChannel.Dimension, 4);
+					float[] weights = new float[System.Math.Max(weightCount, 4)];
+					int[] indices = new int[System.Math.Max(indexCount, 4)];
 					for (int v = 0; v < VertexCount; v++)
 					{
 						memStream.Position = weightStreamOffset + v * weightStride + weightChannel.Offset;

@@ -7,7 +7,7 @@ namespace AssetRipper.Project.Exporters
 {
 	public sealed class TextAssetExporter : BinaryAssetExporter
 	{
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
 			return new TextAssetExportCollection(this, (TextAsset)asset);
 		}

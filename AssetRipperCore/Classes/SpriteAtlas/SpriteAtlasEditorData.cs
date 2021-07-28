@@ -23,10 +23,10 @@ namespace AssetRipper.Classes.SpriteAtlas
 			PlatformSettings = Array.Empty<TextureImporterPlatformSettings>();
 			PackingSettings = new PackingSettings(true);
 			VariantMultiplier = 1;
-			Packables = new PPtr<Object.UnityObject>[packables.Count];
+			Packables = new PPtr<Object.Object>[packables.Count];
 			for (int i = 0; i < packables.Count; i++)
 			{
-				Packables[i] = packables[i].CastTo<Object.UnityObject>();
+				Packables[i] = packables[i].CastTo<Object.Object>();
 			}
 			BindAsDefault = true;
 		}
@@ -71,7 +71,7 @@ namespace AssetRipper.Classes.SpriteAtlas
 			PlatformSettings = reader.ReadAssetArray<TextureImporterPlatformSettings>();
 			PackingSettings.Read(reader);
 			VariantMultiplier = reader.ReadSingle();
-			Packables = reader.ReadAssetArray<PPtr<Object.UnityObject>>();
+			Packables = reader.ReadAssetArray<PPtr<Object.Object>>();
 			BindAsDefault = reader.ReadBoolean();
 			if (HasStoredHash(reader.Version))
 			{
@@ -80,9 +80,9 @@ namespace AssetRipper.Classes.SpriteAtlas
 			reader.AlignStream();
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Packables, PackablesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Packables, PackablesName))
 			{
 				yield return asset;
 			}
@@ -137,7 +137,7 @@ namespace AssetRipper.Classes.SpriteAtlas
 
 		public TextureImporterPlatformSettings[] PlatformSettings { get; set; }
 		public float VariantMultiplier { get; set; }
-		public PPtr<Object.UnityObject>[] Packables { get; set; }
+		public PPtr<Object.Object>[] Packables { get; set; }
 		public bool BindAsDefault { get; set; }
 
 		public const string TextureSettingsName = "textureSettings";

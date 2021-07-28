@@ -2,6 +2,7 @@ using AssetRipper.Project;
 using AssetRipper.Layout.Classes.Misc.Serializable;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Misc.Serializable
 {

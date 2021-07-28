@@ -2,6 +2,7 @@
 using AssetRipper.Classes.Misc;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.LightProbes
 {

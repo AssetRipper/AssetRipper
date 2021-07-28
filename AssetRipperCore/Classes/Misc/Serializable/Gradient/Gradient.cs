@@ -4,6 +4,7 @@ using AssetRipper.Classes.Utils.Extensions;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Misc.Serializable.Gradient
 {

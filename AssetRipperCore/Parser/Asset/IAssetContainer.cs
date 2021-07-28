@@ -15,23 +15,23 @@ namespace AssetRipper.Parser.Asset
 		/// </summary>
 		/// <param name="fileIndex">Path ID of the asset</param>
 		/// <returns>Found asset</returns>
-		UnityObject GetAsset(long pathID);
+		Object GetAsset(long pathID);
 		/// <summary>
 		/// Try to get asset in the dependency file with specified file index
 		/// </summary>
 		/// <param name="fileIndex">Dependent file index</param>
 		/// <param name="pathID">Path ID of the asset</param>
 		/// <returns>Found asset or null</returns>
-		UnityObject FindAsset(int fileIndex, long pathID);
+		Object FindAsset(int fileIndex, long pathID);
 		/// <summary>
 		/// Get asset in the dependency with specified file index
 		/// </summary>
 		/// <param name="fileIndex">Dependent file index</param>
 		/// <param name="pathID">Path ID of the asset</param>
 		/// <returns>Found asset</returns>
-		UnityObject GetAsset(int fileIndex, long pathID);
-		UnityObject FindAsset(ClassIDType classID);
-		UnityObject FindAsset(ClassIDType classID, string name);
+		Object GetAsset(int fileIndex, long pathID);
+		Object FindAsset(ClassIDType classID);
+		Object FindAsset(ClassIDType classID, string name);
 
 		ClassIDType GetAssetType(long pathID);
 
@@ -48,7 +48,7 @@ namespace AssetRipper.Parser.Asset
 	{
 		public static string GetAssetLogString(this IAssetContainer _this, long pathID)
 		{
-			UnityObject asset = _this.GetAsset(pathID);
+			Object asset = _this.GetAsset(pathID);
 			string name = asset.TryGetName();
 			if (name == null)
 			{

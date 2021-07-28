@@ -34,7 +34,7 @@ namespace AssetRipper.Classes.Animation
 
 		public Animation(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public override Object.UnityObject Convert(IExportContainer container)
+		public override Object.Object Convert(IExportContainer container)
 		{
 			return AnimationConverter.Convert(container, this);
 		}
@@ -113,9 +113,9 @@ namespace AssetRipper.Classes.Animation
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -125,14 +125,14 @@ namespace AssetRipper.Classes.Animation
 
 			if (layout.HasAnimationsPaired)
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(AnimationsPaired.Select(t => t.Item2), layout.AnimationsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(AnimationsPaired.Select(t => t.Item2), layout.AnimationsName))
 				{
 					yield return asset;
 				}
 			}
 			else
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Animations, layout.AnimationsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Animations, layout.AnimationsName))
 				{
 					yield return asset;
 				}

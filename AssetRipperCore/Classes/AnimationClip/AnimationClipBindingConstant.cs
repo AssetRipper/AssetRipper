@@ -16,7 +16,7 @@ namespace AssetRipper.Classes.AnimationClip
 		public AnimationClipBindingConstant(bool _)
 		{
 			GenericBindings = Array.Empty<GenericBinding.GenericBinding>();
-			PPtrCurveMapping = Array.Empty<PPtr<Object.UnityObject>>();
+			PPtrCurveMapping = Array.Empty<PPtr<Object.Object>>();
 		}
 
 		/// <summary>
@@ -55,14 +55,14 @@ namespace AssetRipper.Classes.AnimationClip
 				reader.AlignStream();
 			}
 
-			PPtrCurveMapping = reader.ReadAssetArray<PPtr<Object.UnityObject>>();
+			PPtrCurveMapping = reader.ReadAssetArray<PPtr<Object.Object>>();
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream();
 			}
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			return context.FetchDependencies(PPtrCurveMapping, PptrCurveMappingName);
 		}
@@ -76,7 +76,7 @@ namespace AssetRipper.Classes.AnimationClip
 		}
 
 		public GenericBinding.GenericBinding[] GenericBindings { get; set; }
-		public PPtr<Object.UnityObject>[] PPtrCurveMapping { get; set; }
+		public PPtr<Object.Object>[] PPtrCurveMapping { get; set; }
 
 		public const string GenericBindingsName = "genericBindings";
 		public const string PptrCurveMappingName = "pptrCurveMapping";

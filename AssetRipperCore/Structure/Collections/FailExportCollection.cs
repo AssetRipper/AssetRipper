@@ -10,13 +10,13 @@ using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.IO.Asset;
 using System;
 using System.Collections.Generic;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 
 namespace AssetRipper.Structure.Collections
 {
 	public class FailExportCollection : IExportCollection
 	{
-		public FailExportCollection(IAssetExporter assetExporter, UnityObject asset)
+		public FailExportCollection(IAssetExporter assetExporter, Object asset)
 		{
 			if (assetExporter == null)
 			{
@@ -37,12 +37,12 @@ namespace AssetRipper.Structure.Collections
 			return false;
 		}
 
-		public bool IsContains(UnityObject asset)
+		public bool IsContains(Object asset)
 		{
 			return asset == m_asset;
 		}
 
-		public long GetExportID(UnityObject asset)
+		public long GetExportID(Object asset)
 		{
 			if (asset == m_asset)
 			{
@@ -51,12 +51,12 @@ namespace AssetRipper.Structure.Collections
 			throw new ArgumentException(nameof(asset));
 		}
 
-		public UnityGUID GetExportGUID(UnityObject _)
+		public UnityGUID GetExportGUID(Object _)
 		{
 			throw new NotSupportedException();
 		}
 
-		public MetaPtr CreateExportPointer(UnityObject asset, bool isLocal)
+		public MetaPtr CreateExportPointer(Object asset, bool isLocal)
 		{
 			if (isLocal)
 			{
@@ -71,13 +71,13 @@ namespace AssetRipper.Structure.Collections
 		public IAssetExporter AssetExporter { get; }
 		public ISerializedFile File => m_asset.File;
 		public TransferInstructionFlags Flags => File.Flags;
-		public IEnumerable<UnityObject> Assets
+		public IEnumerable<Object> Assets
 		{
 			get { yield return m_asset; }
 		}
 		public string Name => m_asset is NamedObject namedAsset ? namedAsset.ValidName : m_asset.GetType().Name;
 		public AssetImporter MetaImporter => throw new NotSupportedException();
 
-		private readonly UnityObject m_asset;
+		private readonly Object m_asset;
 	}
 }

@@ -15,14 +15,14 @@ using AssetRipper.IO.Asset;
 using AssetRipper.Parser.Utils;
 using System;
 using System.Collections.Generic;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Structure.Collections
 {
 	public class EngineExportCollection : IExportCollection
 	{
-		public EngineExportCollection(UnityObject asset, Version version)
+		public EngineExportCollection(Object asset, Version version)
 		{
 			if (asset == null)
 			{
@@ -33,7 +33,7 @@ namespace AssetRipper.Structure.Collections
 			m_version = version;
 			if (IsEngineFile(asset.File.Name))
 			{
-				foreach (UnityObject builtInAsset in File.FetchAssets())
+				foreach (Object builtInAsset in File.FetchAssets())
 				{
 					if (IsEngineAsset(builtInAsset, version))
 					{
@@ -47,7 +47,7 @@ namespace AssetRipper.Structure.Collections
 			}
 		}
 
-		public static bool IsEngineAsset(UnityObject asset, Version version)
+		public static bool IsEngineAsset(Object asset, Version version)
 		{
 			if (!GetEngineBuildInAsset(asset, version, out EngineBuiltInAsset builtinAsset))
 			{
@@ -117,7 +117,7 @@ namespace AssetRipper.Structure.Collections
 			return false;
 		}
 
-		private static bool GetEngineBuildInAsset(UnityObject asset, Version version, out EngineBuiltInAsset engineAsset)
+		private static bool GetEngineBuildInAsset(Object asset, Version version, out EngineBuiltInAsset engineAsset)
 		{
 			switch (asset.ClassID)
 			{
@@ -213,18 +213,18 @@ namespace AssetRipper.Structure.Collections
 			return false;
 		}
 
-		public bool IsContains(UnityObject asset)
+		public bool IsContains(Object asset)
 		{
 			return m_assets.Contains(asset);
 		}
 
-		public long GetExportID(UnityObject asset)
+		public long GetExportID(Object asset)
 		{
 			GetEngineBuildInAsset(asset, m_version, out EngineBuiltInAsset engneAsset);
 			return engneAsset.ExportID;
 		}
 
-		public MetaPtr CreateExportPointer(UnityObject asset, bool isLocal)
+		public MetaPtr CreateExportPointer(Object asset, bool isLocal)
 		{
 			if (isLocal)
 			{
@@ -242,10 +242,10 @@ namespace AssetRipper.Structure.Collections
 
 		public ISerializedFile File { get; }
 		public TransferInstructionFlags Flags => File.Flags;
-		public IEnumerable<UnityObject> Assets => m_assets;
+		public IEnumerable<Object> Assets => m_assets;
 		public string Name => "Engine 2017.3.0f3";
 
-		private readonly HashSet<UnityObject> m_assets = new HashSet<UnityObject>();
+		private readonly HashSet<Object> m_assets = new HashSet<Object>();
 
 		private readonly Version m_version;
 	}

@@ -6,7 +6,7 @@ using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.IO.Asset;
 using System;
 using System.Collections.Generic;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 
 namespace AssetRipper.Structure.Collections
 {
@@ -17,29 +17,29 @@ namespace AssetRipper.Structure.Collections
 			return false;
 		}
 
-		public bool IsContains(UnityObject asset)
+		public bool IsContains(Object asset)
 		{
 			return false;
 		}
 
-		public long GetExportID(UnityObject asset)
+		public long GetExportID(Object asset)
 		{
 			throw new NotSupportedException();
 		}
 
-		public UnityGUID GetExportGUID(UnityObject asset)
+		public UnityGUID GetExportGUID(Object asset)
 		{
 			throw new NotSupportedException();
 		}
 
-		public MetaPtr CreateExportPointer(UnityObject asset, bool isLocal)
+		public MetaPtr CreateExportPointer(Object asset, bool isLocal)
 		{
 			throw new NotSupportedException();
 		}
 
 		public ISerializedFile File => throw new NotSupportedException();
 		public TransferInstructionFlags Flags => throw new NotSupportedException();
-		public IEnumerable<UnityObject> Assets
+		public IEnumerable<Object> Assets
 		{
 			get { yield break; }
 		}

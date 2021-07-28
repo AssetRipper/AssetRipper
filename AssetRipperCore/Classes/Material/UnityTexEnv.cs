@@ -6,6 +6,7 @@ using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System.Collections.Generic;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Material
 {
@@ -14,12 +15,12 @@ namespace AssetRipper.Classes.Material
 		/// <summary>
 		/// Less than 2.1.0
 		/// </summary>
-		private static bool IsVector3(Version version) => version.IsLess(2, 1);
+		private static bool IsVector3f(Version version) => version.IsLess(2, 1);
 
 		public void Read(AssetReader reader)
 		{
 			Texture.Read(reader);
-			if (IsVector3(reader.Version))
+			if (IsVector3f(reader.Version))
 			{
 				Scale3.Read(reader);
 				Offset3.Read(reader);
@@ -31,7 +32,7 @@ namespace AssetRipper.Classes.Material
 			}
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Texture, TextureName);
 		}

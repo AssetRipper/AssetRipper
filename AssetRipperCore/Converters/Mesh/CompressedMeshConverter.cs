@@ -2,6 +2,7 @@
 using AssetRipper.Logging;
 using AssetRipper.Classes.Mesh;
 using AssetRipper.Classes.Misc;
+using AssetRipper.Math;
 
 namespace AssetRipper.Converters.Mesh
 {

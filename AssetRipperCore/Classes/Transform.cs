@@ -10,6 +10,7 @@ using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes
 {
@@ -59,7 +60,7 @@ namespace AssetRipper.Classes
 			return FindChild(path, 0);
 		}
 
-		public override Object.UnityObject Convert(IExportContainer container)
+		public override Object.Object Convert(IExportContainer container)
 		{
 			return TransformConverter.Convert(container, this);
 		}
@@ -108,15 +109,15 @@ namespace AssetRipper.Classes
 #endif
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			TransformLayout layout = context.Layout.Transform;
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Children, layout.ChildrenName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Children, layout.ChildrenName))
 			{
 				yield return asset;
 			}

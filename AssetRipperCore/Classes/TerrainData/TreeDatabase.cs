@@ -28,9 +28,9 @@ namespace AssetRipper.Classes.TerrainData
 			node.Add(TreePrototypesName, TreePrototypes.ExportYAML(container));
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(TreePrototypes, TreeInstancesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(TreePrototypes, TreeInstancesName))
 			{
 				yield return asset;
 			}

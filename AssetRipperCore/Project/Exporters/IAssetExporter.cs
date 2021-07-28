@@ -3,21 +3,21 @@ using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.Structure.Collections;
 using System;
 using System.Collections.Generic;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 
 namespace AssetRipper.Project.Exporters
 {
 	public interface IAssetExporter
 	{
-		bool IsHandle(UnityObject asset, ExportOptions options);
+		bool IsHandle(Object asset, ExportOptions options);
 
-		bool Export(IExportContainer container, UnityObject asset, string path);
-		void Export(IExportContainer container, UnityObject asset, string path, Action<IExportContainer, UnityObject, string> callback);
-		bool Export(IExportContainer container, IEnumerable<UnityObject> assets, string path);
-		void Export(IExportContainer container, IEnumerable<UnityObject> assets, string path, Action<IExportContainer, UnityObject, string> callback);
+		bool Export(IExportContainer container, Object asset, string path);
+		void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback);
+		bool Export(IExportContainer container, IEnumerable<Object> assets, string path);
+		void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback);
 
-		IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset);
-		AssetType ToExportType(UnityObject asset);
+		IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset);
+		AssetType ToExportType(Object asset);
 		bool ToUnknownExportType(ClassIDType classID, out AssetType assetType);
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Classes.Misc.Serializable;
 using AssetRipper.IO.Asset;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Utils.Extensions
 {

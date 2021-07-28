@@ -16,7 +16,7 @@ namespace AssetRipper.Classes.AnimationClip
 			Track.Read(reader);
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Track, TrackName);
 		}

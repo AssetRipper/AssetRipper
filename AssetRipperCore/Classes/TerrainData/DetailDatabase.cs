@@ -9,6 +9,7 @@ using AssetRipper.IO.Asset;
 using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using System.Collections.Generic;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.TerrainData
 {
@@ -135,9 +136,9 @@ namespace AssetRipper.Classes.TerrainData
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(DetailPrototypes, DetailPrototypesName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(DetailPrototypes, DetailPrototypesName))
 			{
 				yield return asset;
 			}
@@ -145,13 +146,13 @@ namespace AssetRipper.Classes.TerrainData
 			{
 				yield return context.FetchDependency(AtlasTexture, AtlasTextureName);
 			}
-			foreach (PPtr<Object.UnityObject> asset in TreeDatabase.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in TreeDatabase.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			if (!HasAtlasTexture(context.Version))
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(PreloadTextureAtlasData, PreloadTextureAtlasDataName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(PreloadTextureAtlasData, PreloadTextureAtlasDataName))
 				{
 					yield return asset;
 				}

@@ -81,7 +81,7 @@ namespace AssetRipper.Classes.AssetBundle
 
 			if (HasPreloadTable(reader.Version))
 			{
-				PreloadTable = reader.ReadAssetArray<PPtr<Object.UnityObject>>();
+				PreloadTable = reader.ReadAssetArray<PPtr<Object.Object>>();
 			}
 
 			Container = reader.ReadKVPStringTArray<AssetInfo>();
@@ -133,14 +133,14 @@ namespace AssetRipper.Classes.AssetBundle
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
 			{
 				yield return asset;
 			}
@@ -153,7 +153,7 @@ namespace AssetRipper.Classes.AssetBundle
 
 		public override string ExportExtension => throw new NotSupportedException();
 
-		public PPtr<Object.UnityObject>[] PreloadTable { get; set; }
+		public PPtr<Object.Object>[] PreloadTable { get; set; }
 		public KeyValuePair<string, AssetInfo>[] Container { get; set; }
 		public AssetBundleScriptInfo[] ScriptCampatibility { get; set; }
 		public KeyValuePair<int, uint>[] ClassCampatibility { get; set; }

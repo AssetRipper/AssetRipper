@@ -3,6 +3,7 @@ using AssetRipper.Classes.Misc.Serializable;
 using AssetRipper.Classes.Utils.Extensions;
 using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.AnimationClip
 {
@@ -11,7 +12,7 @@ namespace AssetRipper.Classes.AnimationClip
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool IsVector3(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool IsVector3f(Version version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
@@ -20,7 +21,7 @@ namespace AssetRipper.Classes.AnimationClip
 		public void Read(AssetReader reader)
 		{
 			RootX.Read(reader);
-			if (IsVector3(reader.Version))
+			if (IsVector3f(reader.Version))
 			{
 				LookAtPosition = reader.ReadAsset<Vector3f>();
 			}
@@ -36,7 +37,7 @@ namespace AssetRipper.Classes.AnimationClip
 
 			if (HasTArray(reader.Version))
 			{
-				if (IsVector3(reader.Version))
+				if (IsVector3f(reader.Version))
 				{
 					TDoFArray = reader.ReadVector3Array();
 				}

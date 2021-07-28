@@ -96,7 +96,7 @@ namespace AssetRipper.Classes.OcclusionCullingData
 
 			// if >= 5.5.0 and Release this asset doesn't containt renderers data so we need to create it
 			List<OcclusionCullingSettings.OcclusionCullingSettings> cullingSettings = new List<OcclusionCullingSettings.OcclusionCullingSettings>();
-			foreach (Object.UnityObject asset in File.Collection.FetchAssets())
+			foreach (Object.Object asset in File.Collection.FetchAssets())
 			{
 				if (asset.ClassID == ClassIDType.OcclusionCullingSettings)
 				{
@@ -152,7 +152,7 @@ namespace AssetRipper.Classes.OcclusionCullingData
 			}
 		}
 
-		private static SceneObjectIdentifier CreateObjectID(IExportContainer container, Object.UnityObject asset)
+		private static SceneObjectIdentifier CreateObjectID(IExportContainer container, Object.Object asset)
 		{
 			long lid = asset == null ? 0 : container.GetExportID(asset);
 			SceneObjectIdentifier soId = new SceneObjectIdentifier(lid, 0);

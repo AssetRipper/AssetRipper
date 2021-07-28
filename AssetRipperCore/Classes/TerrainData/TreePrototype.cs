@@ -21,7 +21,7 @@ namespace AssetRipper.Classes.TerrainData
 			writer.Write(BendFactor);
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Prefab, PrefabName);
 		}

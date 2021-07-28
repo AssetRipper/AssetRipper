@@ -68,22 +68,22 @@ using AssetRipper.Classes.UnityConnectSettings;
 using AssetRipper.Classes.WheelCollider;
 using System;
 using System.Collections.Generic;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 
 namespace AssetRipper.Parser.Asset
 {
 	public class AssetFactory
 	{
-		public UnityObject CreateAsset(AssetInfo assetInfo)
+		public Object CreateAsset(AssetInfo assetInfo)
 		{
-			if (m_instantiators.TryGetValue(assetInfo.ClassID, out Func<AssetInfo, UnityObject> instantiator))
+			if (m_instantiators.TryGetValue(assetInfo.ClassID, out Func<AssetInfo, Object> instantiator))
 			{
 				return instantiator(assetInfo);
 			}
 			return DefaultInstantiator(assetInfo);
 		}
 
-		public void OverrideInstantiator(ClassIDType classType, Func<AssetInfo, UnityObject> instantiator)
+		public void OverrideInstantiator(ClassIDType classType, Func<AssetInfo, Object> instantiator)
 		{
 			if (instantiator == null)
 			{
@@ -92,7 +92,7 @@ namespace AssetRipper.Parser.Asset
 			m_instantiators[classType] = instantiator;
 		}
 
-		private static UnityObject DefaultInstantiator(AssetInfo assetInfo)
+		private static Object DefaultInstantiator(AssetInfo assetInfo)
 		{
 			switch (assetInfo.ClassID)
 			{
@@ -336,6 +336,6 @@ namespace AssetRipper.Parser.Asset
 			}
 		}
 
-		private readonly Dictionary<ClassIDType, Func<AssetInfo, UnityObject>> m_instantiators = new Dictionary<ClassIDType, Func<AssetInfo, UnityObject>>();
+		private readonly Dictionary<ClassIDType, Func<AssetInfo, Object>> m_instantiators = new Dictionary<ClassIDType, Func<AssetInfo, Object>>();
 	}
 }

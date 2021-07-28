@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Classes
 {
-	public sealed class Prefab : Object.UnityObject
+	public sealed class Prefab : Object.Object
 	{
 		public Prefab(AssetLayout layout) : base(layout) { }
 
@@ -29,9 +29,9 @@ namespace AssetRipper.Classes
 			RootGameObject.Write(writer);
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}

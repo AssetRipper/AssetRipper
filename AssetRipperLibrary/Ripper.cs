@@ -8,6 +8,7 @@ using AssetRipperLibrary.Exporters.Shaders;
 using AssetRipperLibrary.Exporters.Textures;
 using System;
 using System.Collections.Generic;
+using AssetRipper;
 
 namespace AssetRipperLibrary
 {

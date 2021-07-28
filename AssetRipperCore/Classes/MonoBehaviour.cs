@@ -83,9 +83,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -98,7 +98,7 @@ namespace AssetRipper.Classes
 
 			if (Structure != null)
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Structure, Structure.Type.Name))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Structure, Structure.Type.Name))
 				{
 					yield return asset;
 				}
@@ -140,7 +140,7 @@ namespace AssetRipper.Classes
 #endif
 			return HideFlags.None;
 		}
-		private PPtr<Object.UnityObject> GetGeneratorAsset(IExportContainer container)
+		private PPtr<Object.Object> GetGeneratorAsset(IExportContainer container)
 		{
 #if UNIVERSAL
 			if (container.Layout.MonoBehaviour.HasGeneratorAsset)

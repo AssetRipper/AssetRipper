@@ -14,7 +14,7 @@ namespace AssetRipper.Classes.LODGroup
 			Renderer.Read(reader);
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Renderer, RendererName);
 		}

@@ -12,7 +12,8 @@ using AssetRipper.Classes.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
+using AssetRipper.Math;
 
 namespace AssetRipper.Structure.Collections
 {
@@ -24,7 +25,7 @@ namespace AssetRipper.Structure.Collections
 			m_convert = convert;
 			if (convert)
 			{
-				foreach (UnityObject asset in texture.File.Collection.FetchAssets())
+				foreach (Object asset in texture.File.Collection.FetchAssets())
 				{
 					switch (asset.ClassID)
 					{
@@ -96,7 +97,7 @@ namespace AssetRipper.Structure.Collections
 			return AssetExporter.Export(container, Asset, filePath);
 		}
 
-		protected override string GetExportExtension(UnityObject asset)
+		protected override string GetExportExtension(Object asset)
 		{
 			if (m_convert)
 			{
@@ -105,7 +106,7 @@ namespace AssetRipper.Structure.Collections
 			return base.GetExportExtension(asset);
 		}
 
-		protected override long GenerateExportID(UnityObject asset)
+		protected override long GenerateExportID(Object asset)
 		{
 			long exportID = GetMainExportID(asset, m_nextExportID);
 			m_nextExportID += 2;

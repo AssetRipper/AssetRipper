@@ -106,7 +106,7 @@ namespace AssetRipper.Parser.Files.BundleFile.IO
 					blockStream.Position = blockStreamOffset + entryOffsetInsideBlock;
 					entryOffsetInsideBlock = 0;
 
-					long size = Math.Min(blockSize, left);
+					long size = System.Math.Min(blockSize, left);
 					blockStream.CopyStream(entryStream, size);
 					blockIndex++;
 

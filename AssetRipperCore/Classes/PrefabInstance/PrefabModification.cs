@@ -44,15 +44,15 @@ namespace AssetRipper.Classes.PrefabInstance
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			PrefabModificationLayout layout = context.Layout.PrefabInstance.PrefabModification;
 			yield return context.FetchDependency(TransformParent, layout.TransformParentName);
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Modifications, layout.ModificationsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Modifications, layout.ModificationsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(RemovedComponents, layout.RemovedComponentsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(RemovedComponents, layout.RemovedComponentsName))
 			{
 				yield return asset;
 			}

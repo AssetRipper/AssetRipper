@@ -9,6 +9,7 @@ using AssetRipper.IO.Asset;
 using AssetRipper.IO.Extensions;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Mesh
 {
@@ -238,7 +239,7 @@ namespace AssetRipper.Classes.Mesh
 			return true;
 		}
 
-		public override Object.UnityObject Convert(IExportContainer container)
+		public override Object.Object Convert(IExportContainer container)
 		{
 			return MeshConverter.Convert(container, this);
 		}

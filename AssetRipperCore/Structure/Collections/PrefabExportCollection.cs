@@ -13,7 +13,7 @@ namespace AssetRipper.Structure.Collections
 {
 	public sealed class PrefabExportCollection : AssetsExportCollection
 	{
-		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, UnityObject asset) : this(assetExporter, virtualFile, GetAssetRoot(asset)) { }
+		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, Object asset) : this(assetExporter, virtualFile, GetAssetRoot(asset)) { }
 
 		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, GameObject root) : this(assetExporter, root.File, PrefabInstance.CreateVirtualInstance(virtualFile, root)) { }
 
@@ -25,7 +25,7 @@ namespace AssetRipper.Structure.Collections
 			}
 		}
 
-		public static bool IsValidAsset(UnityObject asset)
+		public static bool IsValidAsset(Object asset)
 		{
 			if (asset.ClassID == ClassIDType.GameObject)
 			{
@@ -35,12 +35,12 @@ namespace AssetRipper.Structure.Collections
 			return component.GameObject.FindAsset(component.File) != null;
 		}
 
-		protected override string GetExportExtension(UnityObject asset)
+		protected override string GetExportExtension(Object asset)
 		{
 			return PrefabInstance.PrefabKeyword;
 		}
 
-		private static GameObject GetAssetRoot(UnityObject asset)
+		private static GameObject GetAssetRoot(Object asset)
 		{
 			GameObject go;
 			if (asset.ClassID == ClassIDType.GameObject)
@@ -60,14 +60,14 @@ namespace AssetRipper.Structure.Collections
 
 		// TODO: HACK: prefab's assets may be stored in different files
 		// Need to find a way to set a file for current asset nicely
-		public override IEnumerable<UnityObject> Assets
+		public override IEnumerable<Object> Assets
 		{
 			get
 			{
 				m_file = m_exportIDs.Keys.First().File;
 				yield return Asset;
 
-				foreach (UnityObject asset in m_assets)
+				foreach (Object asset in m_assets)
 				{
 					m_file = asset.File;
 					yield return asset;

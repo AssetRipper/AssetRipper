@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Classes.Mesh;
 using AssetRipper.Classes.Misc.Serializable;
+using AssetRipper.Math;
 
 namespace AssetRipper.Converters.Mesh
 {

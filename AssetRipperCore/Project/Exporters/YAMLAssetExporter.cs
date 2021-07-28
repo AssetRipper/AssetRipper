@@ -10,18 +10,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 
 namespace AssetRipper.Project.Exporters
 {
 	public class YAMLAssetExporter : IAssetExporter
 	{
-		public bool IsHandle(UnityObject asset, ExportOptions options)
+		public bool IsHandle(Object asset, ExportOptions options)
 		{
 			return true;
 		}
 
-		public bool Export(IExportContainer container, UnityObject asset, string path)
+		public bool Export(IExportContainer container, Object asset, string path)
 		{
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
@@ -39,13 +39,13 @@ namespace AssetRipper.Project.Exporters
 			return true;
 		}
 
-		public void Export(IExportContainer container, UnityObject asset, string path, Action<IExportContainer, UnityObject, string> callback)
+		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
 		{
 			Export(container, asset, path);
 			callback?.Invoke(container, asset, path);
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<UnityObject> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
@@ -55,7 +55,7 @@ namespace AssetRipper.Project.Exporters
 					{
 						YAMLWriter writer = new YAMLWriter();
 						writer.WriteHead(streamWriter);
-						foreach (UnityObject asset in assets)
+						foreach (Object asset in assets)
 						{
 							YAMLDocument doc = asset.ExportYAMLDocument(container);
 							writer.WriteDocument(doc);
@@ -67,12 +67,12 @@ namespace AssetRipper.Project.Exporters
 			return true;
 		}
 
-		public void Export(IExportContainer container, IEnumerable<UnityObject> assets, string path, Action<IExportContainer, UnityObject, string> callback)
+		public void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback)
 		{
 			throw new NotSupportedException("YAML supports only single file export");
 		}
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
 			if (OcclusionCullingSettings.IsSceneCompatible(asset))
 			{
@@ -132,7 +132,7 @@ namespace AssetRipper.Project.Exporters
 			}
 		}
 
-		public AssetType ToExportType(UnityObject asset)
+		public AssetType ToExportType(Object asset)
 		{
 			ToUnknownExportType(asset.ClassID, out AssetType assetType);
 			return assetType;

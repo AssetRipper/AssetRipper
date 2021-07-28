@@ -11,7 +11,7 @@ using System;
 namespace AssetRipper.Classes.Misc
 {
 	public struct PPtr<T> : IAsset
-		where T : Object.UnityObject
+		where T : Object.Object
 	{
 		public PPtr(int fileIndex, long pathID)
 		{
@@ -29,7 +29,7 @@ namespace AssetRipper.Classes.Misc
 			return left.FileIndex != right.FileIndex || left.PathID != right.PathID;
 		}
 
-		public PPtr<T1> CastTo<T1>() where T1 : Object.UnityObject
+		public PPtr<T1> CastTo<T1>() where T1 : Object.Object
 		{
 			return new PPtr<T1>(FileIndex, PathID);
 		}
@@ -84,7 +84,7 @@ namespace AssetRipper.Classes.Misc
 			{
 				return null;
 			}
-			Object.UnityObject asset = file.FindAsset(FileIndex, PathID);
+			Object.Object asset = file.FindAsset(FileIndex, PathID);
 			switch (asset)
 			{
 				case null:
@@ -111,7 +111,7 @@ namespace AssetRipper.Classes.Misc
 			{
 				throw new Exception("Can't get null PPtr");
 			}
-			Object.UnityObject asset = file.GetAsset(FileIndex, PathID);
+			Object.Object asset = file.GetAsset(FileIndex, PathID);
 			if (asset is T t)
 			{
 				return t;
@@ -119,7 +119,7 @@ namespace AssetRipper.Classes.Misc
 			throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
 		}
 
-		public bool IsAsset(Object.UnityObject asset)
+		public bool IsAsset(Object.Object asset)
 		{
 			if (FileIndex == 0)
 			{
@@ -131,7 +131,7 @@ namespace AssetRipper.Classes.Misc
 			}
 		}
 
-		public bool IsAsset(IAssetContainer file, Object.UnityObject asset)
+		public bool IsAsset(IAssetContainer file, Object.Object asset)
 		{
 			if (FileIndex == 0)
 			{

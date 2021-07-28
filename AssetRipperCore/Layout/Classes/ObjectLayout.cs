@@ -28,7 +28,7 @@ namespace AssetRipper.Layout.Classes
 		/// </summary>
 		public bool HasHideFlag { get; }
 
-		public string Name => nameof(UnityObject);
+		public string Name => nameof(Object);
 		public string ObjectHideFlagsName => "m_ObjectHideFlags";
 		public string InstanceIDName => "m_InstanceID";
 		public string LocalIdentfierInFileName => "m_LocalIdentfierInFile";

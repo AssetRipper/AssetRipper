@@ -46,7 +46,7 @@ namespace AssetRipper.Classes.PrefabInstance
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			PropertyModificationLayout layout = context.Layout.PrefabInstance.PropertyModification;
 			yield return context.FetchDependency(Target, layout.TargetName);
@@ -56,7 +56,7 @@ namespace AssetRipper.Classes.PrefabInstance
 		public string PropertyPath { get; set; }
 		public string Value { get; set; }
 
-		public PPtr<Object.UnityObject> Target;
-		public PPtr<Object.UnityObject> ObjectReference;
+		public PPtr<Object.Object> Target;
+		public PPtr<Object.Object> ObjectReference;
 	}
 }

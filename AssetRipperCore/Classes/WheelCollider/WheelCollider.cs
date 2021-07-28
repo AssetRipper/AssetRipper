@@ -5,6 +5,7 @@ using AssetRipper.Classes.PhysicMaterial;
 using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.WheelCollider
 {

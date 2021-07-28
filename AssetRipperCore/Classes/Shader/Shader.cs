@@ -211,16 +211,16 @@ namespace AssetRipper.Classes.Shader
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			if (HasDependencies(context.Version))
 			{
-				foreach (PPtr<Object.UnityObject> asset in context.FetchDependencies(Dependencies, DependenciesName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Dependencies, DependenciesName))
 				{
 					yield return asset;
 				}

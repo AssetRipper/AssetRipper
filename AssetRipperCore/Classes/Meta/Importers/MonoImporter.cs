@@ -18,7 +18,7 @@ namespace AssetRipper.Classes.Meta.Importers
 		{
 			if (HasDefaultReferences(layout.Info.Version))
 			{
-				DefaultReferences = new Dictionary<string, PPtr<Object.UnityObject>>();
+				DefaultReferences = new Dictionary<string, PPtr<Object.Object>>();
 			}
 		}
 
@@ -54,7 +54,7 @@ namespace AssetRipper.Classes.Meta.Importers
 
 			if (HasDefaultReferences(reader.Version))
 			{
-				DefaultReferences = new Dictionary<string, PPtr<Object.UnityObject>>();
+				DefaultReferences = new Dictionary<string, PPtr<Object.Object>>();
 				DefaultReferences.Read(reader);
 			}
 			if (HasExecutionOrder(reader.Version))
@@ -106,7 +106,7 @@ namespace AssetRipper.Classes.Meta.Importers
 
 		public override ClassIDType ClassID => ClassIDType.MonoImporter;
 
-		public Dictionary<string, PPtr<Object.UnityObject>> DefaultReferences { get; set; }
+		public Dictionary<string, PPtr<Object.Object>> DefaultReferences { get; set; }
 		public short ExecutionOrder { get; set; }
 		// map to Preview field just to reduce structure size. also they has same meaning
 		public PPtr<Texture2D.Texture2D> Icon

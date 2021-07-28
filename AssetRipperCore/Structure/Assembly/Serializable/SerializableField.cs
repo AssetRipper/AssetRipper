@@ -9,7 +9,7 @@ using AssetRipper.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 
 namespace AssetRipper.Structure.Assembly.Serializable
 {
@@ -490,7 +490,7 @@ namespace AssetRipper.Structure.Assembly.Serializable
 			}
 		}
 
-		public IEnumerable<PPtr<UnityObject>> FetchDependencies(DependencyContext context, SerializableType.Field etalon)
+		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context, SerializableType.Field etalon)
 		{
 			if (etalon.Type.Type == PrimitiveType.Complex)
 			{
@@ -499,7 +499,7 @@ namespace AssetRipper.Structure.Assembly.Serializable
 					IAsset[] structures = (IAsset[])CValue;
 					if (structures.Length > 0 && structures[0] is IDependent)
 					{
-						foreach (PPtr<UnityObject> asset in context.FetchDependencies(structures.Cast<IDependent>(), etalon.Name))
+						foreach (PPtr<Object> asset in context.FetchDependencies(structures.Cast<IDependent>(), etalon.Name))
 						{
 							yield return asset;
 						}
@@ -510,7 +510,7 @@ namespace AssetRipper.Structure.Assembly.Serializable
 					IAsset structure = (IAsset)CValue;
 					if (structure is IDependent dependent)
 					{
-						foreach (PPtr<UnityObject> asset in context.FetchDependencies(dependent, etalon.Name))
+						foreach (PPtr<Object> asset in context.FetchDependencies(dependent, etalon.Name))
 						{
 							yield return asset;
 						}

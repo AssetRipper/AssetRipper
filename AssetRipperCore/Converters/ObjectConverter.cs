@@ -8,7 +8,7 @@ namespace AssetRipper.Converters
 {
 	public static class ObjectConverter
 	{
-		public static void Convert(IExportContainer container, UnityObject origin, UnityObject instance)
+		public static void Convert(IExportContainer container, Object origin, Object instance)
 		{
 			instance.AssetInfo = origin.AssetInfo;
 			ObjectLayout exlayout = container.ExportLayout.Object;
@@ -18,7 +18,7 @@ namespace AssetRipper.Converters
 			}
 		}
 
-		private static HideFlags GetObjectHideFlags(IExportContainer container, UnityObject origin)
+		private static HideFlags GetObjectHideFlags(IExportContainer container, Object origin)
 		{
 			if (container.Layout.Object.HasHideFlag)
 			{

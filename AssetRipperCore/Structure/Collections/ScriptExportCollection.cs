@@ -14,7 +14,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using UnityObject = AssetRipper.Classes.Object.UnityObject;
+using Object = AssetRipper.Classes.Object.Object;
 
 namespace AssetRipper.Structure.Collections
 {
@@ -27,7 +27,7 @@ namespace AssetRipper.Structure.Collections
 			File = script.File;
 
 			// find copies in whole project and skip them
-			foreach (UnityObject asset in script.File.Collection.FetchAssets())
+			foreach (Object asset in script.File.Collection.FetchAssets())
 			{
 				if (asset.ClassID != ClassIDType.MonoScript)
 				{
@@ -81,17 +81,17 @@ namespace AssetRipper.Structure.Collections
 			return true;
 		}
 
-		public override bool IsContains(UnityObject asset)
+		public override bool IsContains(Object asset)
 		{
 			return m_scripts.ContainsKey(asset);
 		}
 
-		public override long GetExportID(UnityObject asset)
+		public override long GetExportID(Object asset)
 		{
 			return GetMainExportID(asset);
 		}
 
-		public override MetaPtr CreateExportPointer(UnityObject asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(Object asset, bool isLocal)
 		{
 			if (isLocal)
 			{
@@ -140,7 +140,7 @@ namespace AssetRipper.Structure.Collections
 			}
 		}
 
-		private void OnScriptExported(IExportContainer container, UnityObject asset, string path)
+		private void OnScriptExported(IExportContainer container, Object asset, string path)
 		{
 			MonoScript script = (MonoScript)asset;
 			MonoImporter importer = new MonoImporter(container.ExportLayout);
@@ -151,7 +151,7 @@ namespace AssetRipper.Structure.Collections
 
 		public override IAssetExporter AssetExporter { get; }
 		public override ISerializedFile File { get; }
-		public override IEnumerable<UnityObject> Assets => m_scripts.Keys;
+		public override IEnumerable<Object> Assets => m_scripts.Keys;
 		public override string Name => nameof(ScriptExportCollection);
 
 		private static readonly UnityGUID UnityEngineGUID = new UnityGUID(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
@@ -159,6 +159,6 @@ namespace AssetRipper.Structure.Collections
 
 		private readonly List<MonoScript> m_export = new List<MonoScript>();
 		private readonly HashSet<MonoScript> m_unique = new HashSet<MonoScript>();
-		private readonly Dictionary<UnityObject, MonoScript> m_scripts = new Dictionary<UnityObject, MonoScript>();
+		private readonly Dictionary<Object, MonoScript> m_scripts = new Dictionary<Object, MonoScript>();
 	}
 }

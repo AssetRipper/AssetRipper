@@ -6,6 +6,7 @@ using AssetRipper.Classes.Misc.Serializable;
 using AssetRipper.Classes.Misc.Serializable.AnimationCurveTpl;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.AnimationClip
 {

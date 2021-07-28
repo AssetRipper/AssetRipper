@@ -10,7 +10,7 @@ namespace AssetRipper.Classes.Utils.Extensions
 			switch (_this)
 			{
 				case ClassIDType.Object:
-					return typeof(Object.UnityObject);
+					return typeof(Object.Object);
 
 				case ClassIDType.GameObject:
 					return typeof(GameObject.GameObject);

@@ -3,6 +3,7 @@ using AssetRipper.Classes.Misc.Serializable;
 using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Light
 {

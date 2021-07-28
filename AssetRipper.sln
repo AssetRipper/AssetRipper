@@ -54,6 +54,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssueTemplates", "IssueTemp
 		.github\ISSUE_TEMPLATE\other.yaml = .github\ISSUE_TEMPLATE\other.yaml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetAnalyzer", "AssetAnalyzer\AssetAnalyzer.csproj", "{80284066-08A7-496A-A9EB-732966584CE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -246,6 +248,24 @@ Global
 		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Virtual|Any CPU.ActiveCfg = Release|x64
 		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Virtual|x64.ActiveCfg = Release|x64
 		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Virtual|x86.ActiveCfg = Release|x86
+		{80284066-08A7-496A-A9EB-732966584CE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Debug|x64.Build.0 = Debug|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Debug|x86.Build.0 = Debug|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Release|x64.ActiveCfg = Release|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Release|x64.Build.0 = Release|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Release|x86.ActiveCfg = Release|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Release|x86.Build.0 = Release|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Virtual|Any CPU.ActiveCfg = Virtual|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Virtual|Any CPU.Build.0 = Virtual|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Virtual|x64.ActiveCfg = Virtual|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Virtual|x64.Build.0 = Virtual|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Virtual|x86.ActiveCfg = Virtual|Any CPU
+		{80284066-08A7-496A-A9EB-732966584CE8}.Virtual|x86.Build.0 = Virtual|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

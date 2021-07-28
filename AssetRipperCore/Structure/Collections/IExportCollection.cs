@@ -10,13 +10,13 @@ namespace AssetRipper.Structure.Collections
 	public interface IExportCollection
 	{
 		bool Export(ProjectAssetContainer container, string dirPath);
-		bool IsContains(UnityObject asset);
-		long GetExportID(UnityObject asset);
-		MetaPtr CreateExportPointer(UnityObject asset, bool isLocal);
+		bool IsContains(Object asset);
+		long GetExportID(Object asset);
+		MetaPtr CreateExportPointer(Object asset, bool isLocal);
 
 		ISerializedFile File { get; }
 		TransferInstructionFlags Flags { get; }
-		IEnumerable<UnityObject> Assets { get; }
+		IEnumerable<Object> Assets { get; }
 		string Name { get; }
 	}
 }

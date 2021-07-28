@@ -6,6 +6,7 @@ using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.AnimatorStateMachine
 {

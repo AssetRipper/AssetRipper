@@ -23,7 +23,7 @@ namespace AssetRipper.Classes.AssetBundle
 			Asset.Read(reader);
 		}
 
-		public IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Asset, "asset");
 		}
@@ -31,6 +31,6 @@ namespace AssetRipper.Classes.AssetBundle
 		public int PreloadIndex { get; set; }
 		public int PreloadSize { get; set; }
 
-		public PPtr<Object.UnityObject> Asset;
+		public PPtr<Object.Object> Asset;
 	}
 }

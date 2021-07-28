@@ -7,13 +7,13 @@ namespace AssetRipper.Project.Exporters
 {
 	public sealed class FontAssetExporter : BinaryAssetExporter
 	{
-		public override bool IsHandle(UnityObject asset, ExportOptions options)
+		public override bool IsHandle(Object asset, ExportOptions options)
 		{
 			Font font = (Font)asset;
 			return font.IsValidData;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
 			return new FontExportCollection(this, (Font)asset);
 		}

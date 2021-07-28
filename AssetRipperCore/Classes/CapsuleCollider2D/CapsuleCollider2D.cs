@@ -3,6 +3,7 @@ using AssetRipper.Parser.Asset;
 using AssetRipper.Classes.Misc.Serializable;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.CapsuleCollider2D
 {

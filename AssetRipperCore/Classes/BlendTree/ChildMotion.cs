@@ -7,6 +7,7 @@ using AssetRipper.Parser.Files;
 using AssetRipper.Parser.Files.SerializedFiles;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.BlendTree
 {

@@ -201,9 +201,9 @@ namespace AssetRipper.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.UnityObject>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.UnityObject> asset in base.FetchDependencies(context))
+			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -252,7 +252,7 @@ namespace AssetRipper.Classes
 			return System.Array.Empty<byte>();
 		}
 
-		private IReadOnlyDictionary<string, PPtr<Object.UnityObject>> GetDefaultReferences(Version version, TransferInstructionFlags flags)
+		private IReadOnlyDictionary<string, PPtr<Object.Object>> GetDefaultReferences(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasDefaultReferences(version, flags))
@@ -260,10 +260,10 @@ namespace AssetRipper.Classes
 				return DefaultReferences;
 			}
 #endif
-			return new Dictionary<string, PPtr<Object.UnityObject>>(0);
+			return new Dictionary<string, PPtr<Object.Object>>(0);
 		}
 
-		private PPtr<Object.UnityObject> GetIcon(Version version, TransferInstructionFlags flags)
+		private PPtr<Object.Object> GetIcon(Version version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasIcon(version, flags))

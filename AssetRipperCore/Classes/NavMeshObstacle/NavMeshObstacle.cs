@@ -5,6 +5,7 @@ using AssetRipper.Classes.Utils.Extensions;
 using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.Math;
 
 namespace AssetRipper.Classes.NavMeshObstacle
 {
@@ -19,7 +20,7 @@ namespace AssetRipper.Classes.NavMeshObstacle
 			{
 				return 3;
 			}
-			// 5.0.0a_unknown added 'Vector3 m_Size'
+			// 5.0.0a_unknown added 'Vector3f m_Size'
 			// return 2;
 			return 1;
 		}
