@@ -2,12 +2,12 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("AssetRipperGUI")]
+[assembly: AssemblyTitle(AssetRipper.BuildInfo.GUIName)]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AssetRipperGUI")]
-[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyCompany(AssetRipper.BuildInfo.Author)]
+[assembly: AssemblyProduct(AssetRipper.BuildInfo.GUIName)]
+[assembly: AssemblyCopyright(AssetRipper.BuildInfo.CopyRight)]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,5 +33,5 @@ using System.Windows;
 )]
 
 
-[assembly: AssemblyVersion("0.1.0.0")]
-[assembly: AssemblyFileVersion("0.1.0.0")]
+[assembly: AssemblyVersion(AssetRipper.BuildInfo.Version)]
+[assembly: AssemblyFileVersion(AssetRipper.BuildInfo.Version)]

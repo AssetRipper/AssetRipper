@@ -75,5 +75,5 @@
     <None Remove="obj\**" />
     <Page Remove="obj\**" />
   </ItemGroup>
-  
+
 </Project>
