@@ -14,7 +14,7 @@ namespace AssetRipper.Reading.Classes
         public SubMesh[] m_SubMeshes;
         private uint[] m_IndexBuffer;
         public BlendShapeData m_Shapes;
-        public Matrix4x4[] m_BindPose;
+        public Matrix4x4f[] m_BindPose;
         public uint[] m_BoneNameHashes;
         public int m_VertexCount;
         public float[] m_Vertices;
@@ -469,13 +469,13 @@ namespace AssetRipper.Reading.Classes
             {
                 if (m_CompressedMesh.m_BindPoses.m_NumItems > 0)
                 {
-                    m_BindPose = new Matrix4x4[m_CompressedMesh.m_BindPoses.m_NumItems / 16];
+                    m_BindPose = new Matrix4x4f[m_CompressedMesh.m_BindPoses.m_NumItems / 16];
                     var m_BindPoses_Unpacked = m_CompressedMesh.m_BindPoses.UnpackFloats(16, 4 * 16);
                     var buffer = new float[16];
                     for (int i = 0; i < m_BindPose.Length; i++)
                     {
                         Array.Copy(m_BindPoses_Unpacked, i * 16, buffer, 0, 16);
-                        m_BindPose[i] = new Matrix4x4(buffer);
+                        m_BindPose[i] = new Matrix4x4f(buffer);
                     }
                 }
             }

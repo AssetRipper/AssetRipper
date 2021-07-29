@@ -13,7 +13,7 @@ namespace AssetRipper.Reading.Classes
         public VertexData m_VertexData;
         public SpriteVertex[] vertices;
         public ushort[] indices;
-        public Matrix4x4[] m_Bindpose;
+        public Matrix4x4f[] m_Bindpose;
         public BoneWeights4[] m_SourceSkin;
         public Rectf textureRect;
         public Vector2f textureRectOffset;

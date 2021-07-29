@@ -105,9 +105,9 @@ namespace AssetRipper.IO.Extensions
 			return new ColorRGBAf(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 		}
 
-		public static Matrix4x4 ReadMatrix(this BinaryReader reader)
+		public static Matrix4x4f ReadMatrix(this BinaryReader reader)
 		{
-			return new Matrix4x4(reader.ReadSingleArray(16));
+			return new Matrix4x4f(reader.ReadSingleArray(16));
 		}
 
 		private static T[] ReadArray<T>(Func<T> del, int length)
@@ -185,7 +185,7 @@ namespace AssetRipper.IO.Extensions
 			return ReadArray(reader.ReadVector4f, reader.ReadInt32());
 		}
 
-		public static Matrix4x4[] ReadMatrixArray(this BinaryReader reader)
+		public static Matrix4x4f[] ReadMatrixArray(this BinaryReader reader)
 		{
 			return ReadArray(reader.ReadMatrix, reader.ReadInt32());
 		}
