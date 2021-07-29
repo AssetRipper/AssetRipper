@@ -48,6 +48,10 @@ Download links can be found on the [latest release page](https://github.com/ds56
 
 ## Structure
 
+* [*AssetAnalyzer*](AssetAnalyzer/README.md) (Cross-Platform)
+
+   Simple program to investigate file header information.
+
 * [*AssetRipperCore*](AssetRipperCore/README.md) (Cross-Platform)
 
    Core library. It's designed as an single module without any third party dependencies.
@@ -98,7 +102,6 @@ For advanced users, every commit is automatically built into an alpha build with
 
 
 ## To Do
- * Asset File Analyzer
  * Unity 2020 and 2021 support
  * Predetermined GUID support
 
