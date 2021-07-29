@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.AudioClip;
+using AssetRipper.IO;
 using AssetRipper.IO.Extensions;
 
 namespace AssetRipper.Reading.Classes

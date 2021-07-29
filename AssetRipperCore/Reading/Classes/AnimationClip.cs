@@ -1,4 +1,6 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.AnimationClip;
+using AssetRipper.Classes.Misc.Serializable;
+using AssetRipper.IO;
 using AssetRipper.IO.Extensions;
 
 namespace AssetRipper.Reading.Classes
@@ -34,7 +36,7 @@ namespace AssetRipper.Reading.Classes
             else if (version[0] >= 4)//4.0 and up
             {
                 m_AnimationType = (AnimationType)reader.ReadInt32();
-                if (m_AnimationType == AnimationType.kLegacy)
+                if (m_AnimationType == AnimationType.Legacy)
                     m_Legacy = true;
             }
             else

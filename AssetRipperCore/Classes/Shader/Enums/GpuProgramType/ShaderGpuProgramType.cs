@@ -32,7 +32,10 @@ namespace AssetRipper.Classes.Shader.Enums.GpuProgramType
 		MetalVS,
 		MetalFS,
 		SPIRV,
+
+#warning Console is omitted in AssetStudio
 		Console,
+
 		ConsoleVS,
 		ConsoleFS,
 		ConsoleHS,

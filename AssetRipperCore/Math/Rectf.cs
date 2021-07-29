@@ -4,17 +4,31 @@ using AssetRipper.Classes.Utils.Extensions;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System.Globalization;
+using System.IO;
 
 namespace AssetRipper.Math
 {
 	public struct Rectf : IAsset
 	{
+		public float X { get; set; }
+		public float Y { get; set; }
+		public float Width { get; set; }
+		public float Height { get; set; }
+
 		public Rectf(float x, float y, float width, float height)
 		{
 			X = x;
 			Y = y;
 			Width = width;
 			Height = height;
+		}
+
+		public Rectf(BinaryReader reader)
+		{
+			X = reader.ReadSingle();
+			Y = reader.ReadSingle();
+			Width = reader.ReadSingle();
+			Height = reader.ReadSingle();
 		}
 
 		public Rectf(Vector2f positon, Vector2f size) : this(positon.X, positon.Y, size.X, size.Y) { }
@@ -238,10 +252,5 @@ namespace AssetRipper.Math
 			get => Y + Height;
 			set => Height = value - YMin;
 		}
-
-		public float X { get; set; }
-		public float Y { get; set; }
-		public float Width { get; set; }
-		public float Height { get; set; }
 	}
 }

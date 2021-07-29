@@ -13,6 +13,7 @@ using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AssetRipper.IO;
 
 namespace AssetRipper.Classes.Animation
 {
@@ -33,6 +34,17 @@ namespace AssetRipper.Classes.Animation
 		}
 
 		public Animation(AssetInfo assetInfo) : base(assetInfo) { }
+
+		/*public Animation(ObjectReader reader) : base(reader)
+		{
+			var m_Animation = new PPtr<AnimationClip>(reader);
+			int numAnimations = reader.ReadInt32();
+			m_Animations = new PPtr<AnimationClip>[numAnimations];
+			for (int i = 0; i < numAnimations; i++)
+			{
+				m_Animations[i] = new PPtr<AnimationClip>(reader);
+			}
+		}*/
 
 		public override Object.Object Convert(IExportContainer container)
 		{

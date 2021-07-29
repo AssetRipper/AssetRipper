@@ -3,11 +3,28 @@ using AssetRipper.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.IO;
 
 namespace AssetRipper.Classes.Mesh
 {
-	public struct StreamInfo : IAsset
+	public class StreamInfo : IAsset
 	{
+		public uint ChannelMask { get; set; }
+		public uint Offset { get; set; }
+		public uint Stride { get; set; }
+		public uint Align { get; set; }
+		public byte DividerOp { get; set; }
+		public ushort Frequency { get; set; }
+
+		public const string ChannelMaskName = "channelMask";
+		public const string OffsetName = "offset";
+		public const string StrideName = "stride";
+		public const string AlignName = "align";
+		public const string DividerOpMaskName = "dividerOp";
+		public const string FrequencyMaskName = "frequency";
+
+		public StreamInfo() { }
+
 		public StreamInfo(uint mask, uint offset, uint stride)
 		{
 			ChannelMask = mask;
@@ -16,6 +33,29 @@ namespace AssetRipper.Classes.Mesh
 			Align = 0;
 			DividerOp = 0;
 			Frequency = 0;
+		}
+
+		public StreamInfo(ObjectReader reader)
+		{
+			var version = reader.version;
+
+			ChannelMask = reader.ReadUInt32();
+			Offset = reader.ReadUInt32();
+
+			if (version[0] < 4) //4.0 down
+			{
+				Stride = reader.ReadUInt32();
+				Align = reader.ReadUInt32();
+				DividerOp = 0;
+				Frequency = 0;
+			}
+			else
+			{
+				Stride = reader.ReadByte();
+				Align = 0;
+				DividerOp = reader.ReadByte();
+				Frequency = reader.ReadUInt16();
+			}
 		}
 
 		/// <summary>
@@ -82,19 +122,5 @@ namespace AssetRipper.Classes.Mesh
 			}
 			return node;
 		}
-
-		public uint ChannelMask { get; set; }
-		public uint Offset { get; set; }
-		public uint Stride { get; set; }
-		public uint Align { get; set; }
-		public byte DividerOp { get; set; }
-		public ushort Frequency { get; set; }
-
-		public const string ChannelMaskName = "channelMask";
-		public const string OffsetName = "offset";
-		public const string StrideName = "stride";
-		public const string AlignName = "align";
-		public const string DividerOpMaskName = "dividerOp";
-		public const string FrequencyMaskName = "frequency";
 	}
 }

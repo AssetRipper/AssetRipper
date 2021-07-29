@@ -9,6 +9,30 @@ namespace AssetRipper.Parser.Files.SerializedFiles.Parser
 	public sealed class SerializedFileHeader
 	{
 		/// <summary>
+		/// Size of the metadata parts of the file
+		/// </summary>
+		public int MetadataSize { get; set; }
+		/// <summary>
+		/// Size of the whole file
+		/// </summary>
+		public uint FileSize { get; set; }
+		/// <summary>
+		/// File format version. The number is required for backward compatibility and is normally incremented after the file format has been changed in a major update
+		/// </summary>
+		public FormatVersion Version { get; set; }
+		/// <summary>
+		/// Offset to the serialized object data. It starts at the data for the first object
+		/// </summary>
+		public uint DataOffset { get; set; }
+		/// <summary>
+		/// Presumably controls the byte order of the data structure. This field is normally set to 0, which may indicate a little endian byte order.
+		/// </summary>
+		public bool Endianess { get; set; }
+
+		public const int HeaderMinSize = 16;
+
+
+		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
 		public static bool HasEndianess(FormatVersion generation) => generation >= FormatVersion.Unknown_9;
@@ -81,28 +105,5 @@ namespace AssetRipper.Parser.Files.SerializedFiles.Parser
 				writer.AlignStream();
 			}
 		}
-
-		/// <summary>
-		/// Size of the metadata parts of the file
-		/// </summary>
-		public int MetadataSize { get; set; }
-		/// <summary>
-		/// Size of the whole file
-		/// </summary>
-		public uint FileSize { get; set; }
-		/// <summary>
-		/// File format version. The number is required for backward compatibility and is normally incremented after the file format has been changed in a major update
-		/// </summary>
-		public FormatVersion Version { get; set; }
-		/// <summary>
-		/// Offset to the serialized object data. It starts at the data for the first object
-		/// </summary>
-		public uint DataOffset { get; set; }
-		/// <summary>
-		/// Presumably controls the byte order of the data structure. This field is normally set to 0, which may indicate a little endian byte order.
-		/// </summary>
-		public bool Endianess { get; set; }
-
-		public const int HeaderMinSize = 16;
 	}
 }

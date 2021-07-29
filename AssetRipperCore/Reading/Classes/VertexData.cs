@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.Mesh;
+using AssetRipper.IO;
 using AssetRipper.IO.Extensions;
 using System.Collections;
 using System.Linq;
@@ -87,11 +88,11 @@ namespace AssetRipper.Reading.Classes
                 }
                 m_Streams[s] = new StreamInfo
                 {
-                    channelMask = chnMask,
-                    offset = offset,
-                    stride = stride,
-                    dividerOp = 0,
-                    frequency = 0
+                    ChannelMask = chnMask,
+                    Offset = offset,
+                    Stride = stride,
+                    DividerOp = 0,
+                    Frequency = 0
                 };
                 offset += m_VertexCount * stride;
                 //static size_t AlignStreamSize (size_t size) { return (size + (kVertexStreamAlign-1)) & ~(kVertexStreamAlign-1); }
@@ -109,7 +110,7 @@ namespace AssetRipper.Reading.Classes
             for (var s = 0; s < m_Streams.Length; s++)
             {
                 var m_Stream = m_Streams[s];
-                var channelMask = new BitArray(new[] { (int)m_Stream.channelMask });
+                var channelMask = new BitArray(new[] { (int)m_Stream.ChannelMask });
                 byte offset = 0;
                 for (int i = 0; i < 6; i++)
                 {

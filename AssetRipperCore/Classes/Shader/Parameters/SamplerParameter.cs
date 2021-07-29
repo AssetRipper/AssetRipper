@@ -1,4 +1,5 @@
 ﻿using AssetRipper.IO.Asset;
+using System.IO;
 
 namespace AssetRipper.Classes.Shader.Parameters
 {
@@ -11,6 +12,12 @@ namespace AssetRipper.Classes.Shader.Parameters
 		}
 
 		public void Read(AssetReader reader)
+		{
+			Sampler = reader.ReadUInt32();
+			BindPoint = reader.ReadInt32();
+		}
+
+		public SamplerParameter(BinaryReader reader)
 		{
 			Sampler = reader.ReadUInt32();
 			BindPoint = reader.ReadInt32();

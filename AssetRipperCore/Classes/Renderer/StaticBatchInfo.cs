@@ -3,11 +3,18 @@ using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
+using AssetRipper.IO;
 
 namespace AssetRipper.Classes.Renderer
 {
 	public struct StaticBatchInfo : IAssetReadable, IYAMLExportable
 	{
+		public ushort FirstSubMesh { get; set; }
+		public ushort SubMeshCount { get; set; }
+
+		public const string FirstSubMeshName = "firstSubMesh";
+		public const string SubMeshCountName = "subMeshCount";
+
 		public StaticBatchInfo(IReadOnlyList<uint> subsetIndices)
 		{
 			if (subsetIndices.Count == 0)
@@ -29,6 +36,12 @@ namespace AssetRipper.Classes.Renderer
 			}
 		}
 
+		public StaticBatchInfo(ObjectReader reader)
+		{
+			FirstSubMesh = reader.ReadUInt16();
+			SubMeshCount = reader.ReadUInt16();
+		}
+
 		public void Read(AssetReader reader)
 		{
 			FirstSubMesh = reader.ReadUInt16();
@@ -42,11 +55,5 @@ namespace AssetRipper.Classes.Renderer
 			node.Add(SubMeshCountName, SubMeshCount);
 			return node;
 		}
-
-		public ushort FirstSubMesh { get; set; }
-		public ushort SubMeshCount { get; set; }
-
-		public const string FirstSubMeshName = "firstSubMesh";
-		public const string SubMeshCountName = "subMeshCount";
 	}
 }

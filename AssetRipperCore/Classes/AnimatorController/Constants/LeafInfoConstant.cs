@@ -1,16 +1,24 @@
-﻿using AssetRipper.IO.Asset;
+﻿using AssetRipper.IO;
+using AssetRipper.IO.Asset;
+using AssetRipper.IO.Extensions;
 
 namespace AssetRipper.Classes.AnimatorController.Constants
 {
 	public struct LeafInfoConstant : IAssetReadable
 	{
-		public void Read(AssetReader reader)
+		public uint[] m_IDArray;
+		public uint m_IndexOffset;
+
+		public LeafInfoConstant(ObjectReader reader)
 		{
-			IDArray = reader.ReadUInt32Array();
-			IndexOffset = (int)reader.ReadUInt32();
+			m_IDArray = reader.ReadUInt32Array();
+			m_IndexOffset = reader.ReadUInt32();
 		}
 
-		public uint[] IDArray { get; set; }
-		public int IndexOffset { get; set; }
+		public void Read(AssetReader reader)
+		{
+			m_IDArray = reader.ReadUInt32Array();
+			m_IndexOffset = reader.ReadUInt32();
+		}
 	}
 }

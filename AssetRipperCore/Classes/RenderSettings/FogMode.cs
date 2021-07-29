@@ -6,6 +6,14 @@
 	public enum FogMode
 	{
 		/// <summary>
+		/// Unknown fog.
+		/// </summary>
+		Unknown				= -1,
+		/// <summary>
+		/// Disabled fog.
+		/// </summary>
+		Disabled			= 0,
+		/// <summary>
 		/// Linear fog.
 		/// </summary>
 		Linear				= 1,

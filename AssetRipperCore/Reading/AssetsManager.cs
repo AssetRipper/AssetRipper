@@ -2,6 +2,7 @@
 using AssetRipper.IO.FileReading;
 using AssetRipper.Logging;
 using AssetRipper.Reading.Classes;
+using AssetRipper.SerializedFiles;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -1,5 +1,5 @@
 ﻿using AssetRipper.IO.Extensions;
-using AssetRipper.Reading;
+using AssetRipper.SerializedFiles;
 using System.IO;
 
 namespace AssetRipper.IO

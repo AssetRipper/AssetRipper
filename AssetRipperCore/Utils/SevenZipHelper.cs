@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace AssetRipper.Reading
+namespace AssetRipper.Utils
 {
 	public static class SevenZipHelper
 	{
@@ -22,7 +22,7 @@ namespace AssetRipper.Reading
 				var v = inStream.ReadByte();
 				if (v < 0)
 					throw new Exception("Can't Read 1");
-				outSize |= ((long)(byte)v) << (8 * i);
+				outSize |= (long)(byte)v << 8 * i;
 			}
 			decoder.SetDecoderProperties(properties);
 

@@ -1,4 +1,6 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.Misc;
+using AssetRipper.Classes.Shader.SerializedShader.Enum;
+using AssetRipper.IO;
 using AssetRipper.IO.Extensions;
 using System.Collections.Generic;
 
@@ -11,7 +13,7 @@ namespace AssetRipper.Reading.Classes
         public ushort[] m_LocalKeywordMask;
         public ushort[] m_GlobalKeywordMask;
         public KeyValuePair<string, int>[] m_NameIndices;
-        public PassType m_Type;
+        public SerializedPassType m_Type;
         public SerializedShaderState m_State;
         public uint m_ProgramMask;
         public SerializedProgram progVertex;
@@ -54,7 +56,7 @@ namespace AssetRipper.Reading.Classes
                 m_NameIndices[i] = new KeyValuePair<string, int>(reader.ReadAlignedString(), reader.ReadInt32());
             }
 
-            m_Type = (PassType)reader.ReadInt32();
+            m_Type = (SerializedPassType)reader.ReadInt32();
             m_State = new SerializedShaderState(reader);
             m_ProgramMask = reader.ReadUInt32();
             progVertex = new SerializedProgram(reader);

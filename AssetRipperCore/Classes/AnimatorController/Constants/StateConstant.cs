@@ -159,10 +159,10 @@ namespace AssetRipper.Classes.AnimatorController.Constants
 						for (int i = 0; i < LeafInfoArray.Length; i++)
 						{
 							LeafInfoConstant leafInfo = LeafInfoArray[i];
-							int index = leafInfo.IDArray.IndexOf(node.ClipID);
+							int index = leafInfo.m_IDArray.IndexOf(node.ClipID);
 							if (index >= 0)
 							{
-								clipIndex = leafInfo.IndexOffset + index;
+								clipIndex = (int)leafInfo.m_IndexOffset + index;
 								break;
 							}
 						}

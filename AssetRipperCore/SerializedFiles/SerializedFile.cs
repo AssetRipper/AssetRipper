@@ -1,13 +1,14 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.IO.Extensions;
 using AssetRipper.IO.FileReading;
+using AssetRipper.Reading;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper.Reading
+namespace AssetRipper.SerializedFiles
 {
 	public class SerializedFile
 	{
@@ -18,8 +19,8 @@ namespace AssetRipper.Reading
 		public string fileName;
 		public int[] version = { 0, 0, 0, 0 };
 		public BuildType buildType;
-		public List<Classes.Object> Objects;
-		public Dictionary<long, Classes.Object> ObjectsDic;
+		public List<Reading.Classes.Object> Objects;
+		public Dictionary<long, Reading.Classes.Object> ObjectsDic;
 
 		public SerializedFileHeader header;
 		private byte m_FileEndianess;
@@ -107,8 +108,8 @@ namespace AssetRipper.Reading
 			// Read Objects
 			int objectCount = reader.ReadInt32();
 			m_Objects = new List<ObjectInfo>(objectCount);
-			Objects = new List<Classes.Object>(objectCount);
-			ObjectsDic = new Dictionary<long, Classes.Object>(objectCount);
+			Objects = new List<Reading.Classes.Object>(objectCount);
+			ObjectsDic = new Dictionary<long, Reading.Classes.Object>(objectCount);
 			for (int i = 0; i < objectCount; i++)
 			{
 				var objectInfo = new ObjectInfo();
@@ -254,7 +255,7 @@ namespace AssetRipper.Reading
 				{
 					type.m_ScriptID = reader.ReadBytes(16);
 				}
-				else if ((header.m_Version < SerializedFileFormatVersion.kRefactoredClassId && type.classID < 0) || (header.m_Version >= SerializedFileFormatVersion.kRefactoredClassId && type.classID == 114))
+				else if (header.m_Version < SerializedFileFormatVersion.kRefactoredClassId && type.classID < 0 || header.m_Version >= SerializedFileFormatVersion.kRefactoredClassId && type.classID == 114)
 				{
 					type.m_ScriptID = reader.ReadBytes(16);
 				}
@@ -371,7 +372,7 @@ namespace AssetRipper.Reading
 			}
 		}
 
-		public void AddObject(Classes.Object obj)
+		public void AddObject(Reading.Classes.Object obj)
 		{
 			Objects.Add(obj);
 			ObjectsDic.Add(obj.m_PathID, obj);

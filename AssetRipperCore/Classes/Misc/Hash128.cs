@@ -6,6 +6,7 @@ using AssetRipper.Parser.Files;
 using AssetRipper.Parser.Files.SerializedFiles.IO;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using System.IO;
 
 namespace AssetRipper.Classes.Misc
 {
@@ -19,6 +20,14 @@ namespace AssetRipper.Classes.Misc
 			Data1 = v1;
 			Data2 = v2;
 			Data3 = v3;
+		}
+
+		public Hash128(BinaryReader reader)
+		{
+			Data0 = reader.ReadUInt32();
+			Data1 = reader.ReadUInt32();
+			Data2 = reader.ReadUInt32();
+			Data3 = reader.ReadUInt32();
 		}
 
 		public static int ToSerializedVersion(Version version)

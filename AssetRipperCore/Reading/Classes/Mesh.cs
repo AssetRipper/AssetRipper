@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.Misc;
+using AssetRipper.IO;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Extensions;
 using AssetRipper.Math;
@@ -273,7 +274,7 @@ namespace AssetRipper.Reading.Classes
                 if (m_Channel.dimension > 0)
                 {
                     var m_Stream = m_VertexData.m_Streams[m_Channel.stream];
-                    var channelMask = new BitArray(new[] { (int)m_Stream.channelMask });
+                    var channelMask = new BitArray(new[] { (int)m_Stream.ChannelMask });
                     if (channelMask.Get(chn))
                     {
                         if (version[0] < 2018 && chn == 2 && m_Channel.format == 2) //kShaderChannelColor && kChannelFormatColor
@@ -286,7 +287,7 @@ namespace AssetRipper.Reading.Classes
                         var componentBytes = new byte[m_VertexCount * m_Channel.dimension * componentByteSize];
                         for (int v = 0; v < m_VertexCount; v++)
                         {
-                            var vertexOffset = (int)m_Stream.offset + m_Channel.offset + (int)m_Stream.stride * v;
+                            var vertexOffset = (int)m_Stream.Offset + m_Channel.offset + (int)m_Stream.Stride * v;
                             for (int d = 0; d < m_Channel.dimension; d++)
                             {
                                 var componentOffset = vertexOffset + componentByteSize * d;

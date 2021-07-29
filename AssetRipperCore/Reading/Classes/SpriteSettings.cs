@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using AssetRipper.Classes.Sprite;
+using System.IO;
 
 namespace AssetRipper.Reading.Classes
 {

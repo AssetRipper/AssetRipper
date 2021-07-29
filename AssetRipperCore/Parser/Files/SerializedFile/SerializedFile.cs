@@ -22,6 +22,21 @@ namespace AssetRipper.Parser.Files.SerializedFiles
 	/// </summary>
 	public sealed class SerializedFile : ISerializedFile
 	{
+		public string Name { get; }
+		public string NameOrigin { get; }
+		public string FilePath { get; }
+		public SerializedFileHeader Header { get; }
+		public SerializedFileMetadata Metadata { get; }
+		public AssetLayout Layout { get; }
+		public Version Version => Layout.Info.Version;
+		public Platform Platform => Layout.Info.Platform;
+		public TransferInstructionFlags Flags => Layout.Info.Flags;
+
+		public IFileCollection Collection { get; }
+		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Externals;
+
+		private readonly Dictionary<long, Object> m_assets = new Dictionary<long, Object>();
+		private readonly Dictionary<long, int> m_assetEntryLookup = new Dictionary<long, int>();
 		internal SerializedFile(GameCollection collection, SerializedFileScheme scheme)
 		{
 			Collection = collection ?? throw new ArgumentNullException(nameof(collection));
@@ -323,18 +338,14 @@ namespace AssetRipper.Parser.Files.SerializedFiles
 			}
 
 			reader.BaseStream.Position = offset;
-#if !DEBUG
 			try
-#endif
 			{
 				asset.Read(reader);
 			}
-#if !DEBUG
 			catch (Exception ex)
 			{
 				throw new SerializedFileException($"Error during reading of asset type {asset.ClassID}", ex, Version, Platform, asset.ClassID, Name, FilePath);
 			}
-#endif
 			long read = reader.BaseStream.Position - offset;
 			if (read != size)
 			{
@@ -370,20 +381,5 @@ namespace AssetRipper.Parser.Files.SerializedFiles
 			return swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
 		}
 
-		public string Name { get; }
-		public string NameOrigin { get; }
-		public string FilePath { get; }
-		public SerializedFileHeader Header { get; }
-		public SerializedFileMetadata Metadata { get; }
-		public AssetLayout Layout { get; }
-		public Version Version => Layout.Info.Version;
-		public Platform Platform => Layout.Info.Platform;
-		public TransferInstructionFlags Flags => Layout.Info.Flags;
-
-		public IFileCollection Collection { get; }
-		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Externals;
-
-		private readonly Dictionary<long, Object> m_assets = new Dictionary<long, Object>();
-		private readonly Dictionary<long, int> m_assetEntryLookup = new Dictionary<long, int>();
 	}
 }

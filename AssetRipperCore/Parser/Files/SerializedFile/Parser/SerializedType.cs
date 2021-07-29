@@ -6,6 +6,21 @@ namespace AssetRipper.Parser.Files.SerializedFiles.Parser
 {
 	public struct SerializedType : ISerializedReadable, ISerializedWritable
 	{
+		public ClassIDType TypeID { get; set; }
+		public bool IsStrippedType { get; set; }
+		/// <summary>
+		/// For <see cref="ClassIDType.MonoBehaviour"/> specifies script type
+		/// </summary>
+		public short ScriptTypeIndex { get; set; }
+		/// <summary>
+		/// The type of the class.
+		/// </summary>
+		public TypeTree.TypeTree OldType { get; set; }
+		public int[] TypeDependencies { get; set; }
+
+		public Hash128 ScriptID;
+		public Hash128 OldTypeHash;
+
 		public SerializedType(bool enableTypeTree) : this()
 		{
 			if (enableTypeTree)
@@ -135,19 +150,5 @@ namespace AssetRipper.Parser.Files.SerializedFiles.Parser
 				}
 			}
 		}
-		public ClassIDType TypeID { get; set; }
-		public bool IsStrippedType { get; set; }
-		/// <summary>
-		/// For <see cref="ClassIDType.MonoBehaviour"/> specifies script type
-		/// </summary>
-		public short ScriptTypeIndex { get; set; }
-		/// <summary>
-		/// The type of the class.
-		/// </summary>
-		public TypeTree.TypeTree OldType { get; set; }
-		public int[] TypeDependencies { get; set; }
-
-		public Hash128 ScriptID;
-		public Hash128 OldTypeHash;
 	}
 }

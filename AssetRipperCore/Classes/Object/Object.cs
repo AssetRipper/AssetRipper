@@ -9,11 +9,27 @@ using AssetRipper.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using AssetRipper.IO;
 
 namespace AssetRipper.Classes.Object
 {
 	public abstract class Object : IAsset, IDependent
 	{
+#warning TODO: remove this whole block
+		public AssetInfo AssetInfo { get; set; }
+		public ISerializedFile File => AssetInfo.File;
+		public virtual ClassIDType ClassID => AssetInfo.ClassID;
+		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
+		public virtual string ExportExtension => AssetExtension;
+		public long PathID => AssetInfo.PathID;
+		public UnityGUID GUID => AssetInfo.GUID;
+
+		public HideFlags ObjectHideFlags { get; set; }
+
+		public const string AssetsKeyword = "Assets";
+		protected const string AssetExtension = "asset";
+		internal long m_PathID;
+
 		protected Object(AssetLayout layout) { }
 
 		protected Object(AssetInfo assetInfo)
@@ -84,18 +100,6 @@ namespace AssetRipper.Classes.Object
 			return node;
 		}
 
-#warning TODO: remove this whole block
-		public AssetInfo AssetInfo { get; set; }
-		public ISerializedFile File => AssetInfo.File;
-		public virtual ClassIDType ClassID => AssetInfo.ClassID;
-		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
-		public virtual string ExportExtension => AssetExtension;
-		public long PathID => AssetInfo.PathID;
-		public UnityGUID GUID => AssetInfo.GUID;
 
-		public HideFlags ObjectHideFlags { get; set; }
-
-		public const string AssetsKeyword = "Assets";
-		protected const string AssetExtension = "asset";
 	}
 }

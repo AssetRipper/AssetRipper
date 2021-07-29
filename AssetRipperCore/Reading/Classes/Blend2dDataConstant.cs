@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.AnimatorController;
+using AssetRipper.IO;
 using AssetRipper.IO.Extensions;
 using AssetRipper.Math;
 

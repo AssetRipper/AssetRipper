@@ -4,6 +4,8 @@ using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using AssetRipper.Math;
+using AssetRipper.IO;
+using AssetRipper.IO.Extensions;
 
 namespace AssetRipper.Classes.Avatar
 {
@@ -13,6 +15,21 @@ namespace AssetRipper.Classes.Avatar
 		/// 5.4.0 and greater
 		/// </summary>
 		public static bool IsVector3f(Version version) => version.IsGreaterEqual(5, 4);
+
+		public Limit(ObjectReader reader)
+		{
+			var version = reader.version;
+			if (version[0] > 5 || (version[0] == 5 && version[1] >= 4))//5.4 and up
+			{
+				Min4 = reader.ReadVector3f();
+				Max4 = reader.ReadVector3f();
+			}
+			else
+			{
+				Min4 = reader.ReadVector4f();
+				Max4 = reader.ReadVector4f();
+			}
+		}
 
 		public void Read(AssetReader reader)
 		{

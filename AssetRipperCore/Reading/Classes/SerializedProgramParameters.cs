@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.Shader.Parameters;
+using AssetRipper.IO;
 
 namespace AssetRipper.Reading.Classes
 {

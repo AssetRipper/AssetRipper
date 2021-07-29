@@ -1,4 +1,5 @@
 ﻿using AssetRipper.IO;
+using AssetRipper.SerializedFiles;
 using System;
 
 namespace AssetRipper.Reading.Classes
