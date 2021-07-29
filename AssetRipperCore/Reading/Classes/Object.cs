@@ -1,8 +1,9 @@
-﻿using System.Collections.Specialized;
+﻿using AssetRipper.IO;
+using System.Collections.Specialized;
 
 namespace AssetRipper.Reading.Classes
 {
-    public class Object
+	public class Object
     {
         public SerializedFile assetsFile;
         public ObjectReader reader;

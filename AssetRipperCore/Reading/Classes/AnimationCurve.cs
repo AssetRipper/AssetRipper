@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AssetRipper.IO;
+using System;
 
 namespace AssetRipper.Reading.Classes
 {

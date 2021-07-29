@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO.FileReading;
+﻿using AssetRipper.IO;
+using AssetRipper.IO.FileReading;
 using AssetRipper.Logging;
 using AssetRipper.Reading.Classes;
 using System;

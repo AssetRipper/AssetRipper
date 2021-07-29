@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Reading.Classes
+﻿using AssetRipper.IO;
+
+namespace AssetRipper.Reading.Classes
 {
 	public class ValueDelta
     {

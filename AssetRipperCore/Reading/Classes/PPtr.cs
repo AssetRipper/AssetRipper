@@ -1,8 +1,9 @@
-﻿using System;
+﻿using AssetRipper.IO;
+using System;
 
 namespace AssetRipper.Reading.Classes
 {
-    public sealed class PPtr<T> where T : Classes.Object
+	public sealed class PPtr<T> where T : Classes.Object
     {
         public int m_FileID;
         public long m_PathID;
