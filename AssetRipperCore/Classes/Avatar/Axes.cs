@@ -4,11 +4,38 @@ using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using AssetRipper.Math;
+using AssetRipper.IO;
+using AssetRipper.IO.Extensions;
 
 namespace AssetRipper.Classes.Avatar
 {
 	public struct Axes : IAssetReadable, IYAMLExportable
 	{
+		public Vector4f m_PreQ;
+		public Vector4f m_PostQ;
+		public Vector4f m_Sgn;
+		public Limit m_Limit;
+		public float m_Length { get; set; }
+		public uint m_Type { get; set; }
+
+		public Axes(ObjectReader reader)
+		{
+			var version = reader.version;
+			m_PreQ = reader.ReadVector4f();
+			m_PostQ = reader.ReadVector4f();
+			if (version[0] > 5 || (version[0] == 5 && version[1] >= 4)) //5.4 and up
+			{
+				m_Sgn = reader.ReadVector3f();
+			}
+			else
+			{
+				m_Sgn = reader.ReadVector4f();
+			}
+			m_Limit = new Limit(reader);
+			m_Length = reader.ReadSingle();
+			m_Type = reader.ReadUInt32();
+		}
+
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
@@ -16,35 +43,32 @@ namespace AssetRipper.Classes.Avatar
 
 		public void Read(AssetReader reader)
 		{
-			PreQ.Read(reader);
-			PostQ.Read(reader);
+			m_PreQ.Read(reader);
+			m_PostQ.Read(reader);
 			if (IsVector3f(reader.Version))
 			{
-				Sgn = reader.ReadAsset<Vector3f>();
+				m_Sgn = reader.ReadAsset<Vector3f>();
 			}
 			else
 			{
-				Sgn.Read(reader);
+				m_Sgn.Read(reader);
 			}
-			Limit.Read(reader);
-			Length = reader.ReadSingle();
-			Type = reader.ReadUInt32();
+			m_Limit.Read(reader);
+			m_Length = reader.ReadSingle();
+			m_Type = reader.ReadUInt32();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(PreQName, PreQ.ExportYAML(container));
-			node.Add(PostQName, PostQ.ExportYAML(container));
-			node.Add(SgnName, Sgn.ExportYAML(container));
-			node.Add(LimitName, Limit.ExportYAML(container));
-			node.Add(LengthName, Length);
-			node.Add(TypeName, Type);
+			node.Add(PreQName, m_PreQ.ExportYAML(container));
+			node.Add(PostQName, m_PostQ.ExportYAML(container));
+			node.Add(SgnName, m_Sgn.ExportYAML(container));
+			node.Add(LimitName, m_Limit.ExportYAML(container));
+			node.Add(LengthName, m_Length);
+			node.Add(TypeName, m_Type);
 			return node;
 		}
-
-		public float Length { get; set; }
-		public uint Type { get; set; }
 
 		public const string PreQName = "m_PreQ";
 		public const string PostQName = "m_PostQ";
@@ -52,10 +76,5 @@ namespace AssetRipper.Classes.Avatar
 		public const string LimitName = "m_Limit";
 		public const string LengthName = "m_Length";
 		public const string TypeName = "m_Type";
-
-		public Vector4f PreQ;
-		public Vector4f PostQ;
-		public Vector4f Sgn;
-		public Limit Limit;
 	}
 }

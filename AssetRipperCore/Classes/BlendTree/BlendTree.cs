@@ -34,7 +34,7 @@ namespace AssetRipper.Classes.BlendTree
 			MinThreshold = node.GetMinThreshold(controller.File.Version);
 			MaxThreshold = node.GetMaxThreshold(controller.File.Version);
 			UseAutomaticThresholds = false;
-			NormalizedBlendValues = node.BlendDirectData.Instance.NormalizedBlendValues;
+			NormalizedBlendValues = node.BlendDirectData.Instance.m_NormalizedBlendValues;
 			BlendType = node.BlendType;
 		}
 

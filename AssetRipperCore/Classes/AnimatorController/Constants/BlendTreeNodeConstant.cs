@@ -7,6 +7,8 @@ using AssetRipper.YAML;
 using System;
 using System.Linq;
 using Version = AssetRipper.Parser.Files.Version;
+using AssetRipper.IO;
+using AssetRipper.IO.Extensions;
 
 namespace AssetRipper.Classes.AnimatorController.Constants
 {
@@ -41,6 +43,57 @@ namespace AssetRipper.Classes.AnimatorController.Constants
 		/// 4.1.3 and greater
 		/// </summary>
 		public static bool HasCycleOffset(Version version) => version.IsGreaterEqual(4, 1, 3);
+
+		public BlendTreeNodeConstant(ObjectReader reader)
+		{
+			var version = reader.version;
+
+			if (version[0] > 4 || (version[0] == 4 && version[1] >= 1)) //4.1 and up
+			{
+				BlendType = (BlendTreeType)reader.ReadUInt32();
+			}
+			BlendEventID = reader.ReadUInt32();
+			if (version[0] > 4 || (version[0] == 4 && version[1] >= 1)) //4.1 and up
+			{
+				BlendEventYID = reader.ReadUInt32();
+			}
+			ChildIndices = reader.ReadUInt32Array();
+			if (version[0] < 4 || (version[0] == 4 && version[1] < 1)) //4.1 down
+			{
+				ChildThresholdArray = reader.ReadSingleArray();
+			}
+
+			if (version[0] > 4 || (version[0] == 4 && version[1] >= 1)) //4.1 and up
+			{
+				//Blend1dData = 
+					new Blend1dDataConstant(reader);
+				//Blend2dData = 
+					new Blend2dDataConstant(reader);
+			}
+
+			if (version[0] >= 5) //5.0 and up
+			{
+				//BlendDirectData = 
+					new BlendDirectDataConstant(reader);
+			}
+
+			ClipID = reader.ReadUInt32();
+			if (version[0] == 4 && version[1] >= 5) //4.5 - 5.0
+			{
+				ClipIndex = reader.ReadUInt32();
+			}
+
+			Duration = reader.ReadSingle();
+
+			if (version[0] > 4
+				|| (version[0] == 4 && version[1] > 1)
+				|| (version[0] == 4 && version[1] == 1 && version[2] >= 3)) //4.1.3 and up
+			{
+				CycleOffset = reader.ReadSingle();
+				Mirror = reader.ReadBoolean();
+				reader.AlignStream();
+			}
+		}
 
 		public void Read(AssetReader reader)
 		{
@@ -107,7 +160,7 @@ namespace AssetRipper.Classes.AnimatorController.Constants
 			{
 				if (BlendType == BlendTreeType.Simple1D)
 				{
-					return Blend1dData.Instance.ChildThresholdArray[index];
+					return Blend1dData.Instance.m_ChildThresholdArray[index];
 				}
 			}
 			return 0.0f;
@@ -119,7 +172,7 @@ namespace AssetRipper.Classes.AnimatorController.Constants
 			{
 				if (BlendType == BlendTreeType.Simple1D)
 				{
-					return Blend1dData.Instance.ChildThresholdArray.Min();
+					return Blend1dData.Instance.m_ChildThresholdArray.Min();
 				}
 			}
 			return 0.0f;
@@ -131,7 +184,7 @@ namespace AssetRipper.Classes.AnimatorController.Constants
 			{
 				if (BlendType == BlendTreeType.Simple1D)
 				{
-					return Blend1dData.Instance.ChildThresholdArray.Max();
+					return Blend1dData.Instance.m_ChildThresholdArray.Max();
 				}
 			}
 			return 1.0f;
@@ -143,7 +196,7 @@ namespace AssetRipper.Classes.AnimatorController.Constants
 			{
 				if (BlendType == BlendTreeType.Direct)
 				{
-					return BlendDirectData.Instance.ChildBlendEventIDArray[index];
+					return BlendDirectData.Instance.m_ChildBlendEventIDArray[index];
 				}
 			}
 			return 0;

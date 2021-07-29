@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.AnimatorController.Constants;
+using AssetRipper.IO;
 
 namespace AssetRipper.Reading.Classes
 {
