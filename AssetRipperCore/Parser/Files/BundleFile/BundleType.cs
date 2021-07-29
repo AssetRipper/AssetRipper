@@ -2,6 +2,7 @@
 {
 	public enum BundleType
 	{
+		UnityArchive,//not supported
 		UnityRaw,
 		UnityWeb,
 		UnityFS,

@@ -4,6 +4,7 @@ using AssetRipper.IO.Endian;
 using AssetRipper.IO.Extensions;
 using AssetRipper.IO.FileReading;
 using AssetRipper.Lz4;
+using AssetRipper.Parser.Files.BundleFile;
 using AssetRipper.Utils;
 
 namespace AssetRipper.Reading
