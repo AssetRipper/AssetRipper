@@ -104,6 +104,8 @@ namespace AssetRipper.Math
 
 		public static Quaternionf Zero => new Quaternionf(0.0f, 0.0f, 0.0f, 1.0f);
 
+		public static implicit operator Quaternionf(Vector4f v) => new Vector4f(v.X, v.Y, v.Z, v.W);
+
 		public float this[int index]
 		{
 			get

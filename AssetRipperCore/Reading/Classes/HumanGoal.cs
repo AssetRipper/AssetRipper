@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.Misc;
+using AssetRipper.IO;
 using AssetRipper.IO.Extensions;
 using AssetRipper.Math;
 
@@ -6,7 +7,7 @@ namespace AssetRipper.Reading.Classes
 {
 	public class HumanGoal
     {
-        public xform m_X;
+        public XForm m_X;
         public float m_WeightT;
         public float m_WeightR;
         public Vector3f m_HintT;
@@ -15,7 +16,7 @@ namespace AssetRipper.Reading.Classes
         public HumanGoal(ObjectReader reader)
         {
             var version = reader.version;
-            m_X = new xform(reader);
+            m_X = new XForm(reader);
             m_WeightT = reader.ReadSingle();
             m_WeightR = reader.ReadSingle();
             if (version[0] >= 5)//5.0 and up

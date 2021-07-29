@@ -40,5 +40,6 @@
 		/// </summary>
 		CubeArray = 6,
 		CountOld = 6,
+		Force32Bit = 2147483647,
 	}
 }

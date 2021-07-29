@@ -1,11 +1,12 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.Misc;
+using AssetRipper.IO;
 using AssetRipper.IO.Extensions;
 
 namespace AssetRipper.Reading.Classes
 {
 	public class Human
     {
-        public xform m_RootX;
+        public XForm m_RootX;
         public Skeleton m_Skeleton;
         public SkeletonPose m_SkeletonPose;
         public Hand m_LeftHand;
@@ -30,7 +31,7 @@ namespace AssetRipper.Reading.Classes
         public Human(ObjectReader reader)
         {
             var version = reader.version;
-            m_RootX = new xform(reader);
+            m_RootX = new XForm(reader);
             m_Skeleton = new Skeleton(reader);
             m_SkeletonPose = new SkeletonPose(reader);
             m_LeftHand = new Hand(reader);

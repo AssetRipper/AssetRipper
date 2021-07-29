@@ -1,10 +1,11 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.Misc;
+using AssetRipper.IO;
 
 namespace AssetRipper.Reading.Classes
 {
 	public class Collider
     {
-        public xform m_X;
+        public XForm m_X;
         public uint m_Type;
         public uint m_XMotionType;
         public uint m_YMotionType;
@@ -16,7 +17,7 @@ namespace AssetRipper.Reading.Classes
 
         public Collider(ObjectReader reader)
         {
-            m_X = new xform(reader);
+            m_X = new XForm(reader);
             m_Type = reader.ReadUInt32();
             m_XMotionType = reader.ReadUInt32();
             m_YMotionType = reader.ReadUInt32();

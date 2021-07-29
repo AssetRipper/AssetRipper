@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.Misc;
+using AssetRipper.IO;
 using AssetRipper.IO.Extensions;
 using AssetRipper.Math;
 
@@ -6,7 +7,7 @@ namespace AssetRipper.Reading.Classes
 {
 	public class HumanPose
     {
-        public xform m_RootX;
+        public XForm m_RootX;
         public Vector3f m_LookAtPosition;
         public Vector4f m_LookAtWeight;
         public HumanGoal[] m_GoalArray;
@@ -18,7 +19,7 @@ namespace AssetRipper.Reading.Classes
         public HumanPose(ObjectReader reader)
         {
             var version = reader.version;
-            m_RootX = new xform(reader);
+            m_RootX = new XForm(reader);
             m_LookAtPosition = version[0] > 5 || (version[0] == 5 && version[1] >= 4) ? reader.ReadVector3f() : (Vector3f)reader.ReadVector4f();//5.4 and up
             m_LookAtWeight = reader.ReadVector4f();
 

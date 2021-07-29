@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.Misc;
+using AssetRipper.IO;
 using AssetRipper.IO.Extensions;
 using AssetRipper.Math;
 
@@ -7,12 +8,12 @@ namespace AssetRipper.Reading.Classes
 	public class ClipMuscleConstant
     {
         public HumanPose m_DeltaPose;
-        public xform m_StartX;
-        public xform m_StopX;
-        public xform m_LeftFootStartX;
-        public xform m_RightFootStartX;
-        public xform m_MotionStartX;
-        public xform m_MotionStopX;
+        public XForm m_StartX;
+        public XForm m_StopX;
+        public XForm m_LeftFootStartX;
+        public XForm m_RightFootStartX;
+        public XForm m_MotionStartX;
+        public XForm m_MotionStopX;
         public Vector3f m_AverageSpeed;
         public Clip m_Clip;
         public float m_StartTime;
@@ -40,17 +41,17 @@ namespace AssetRipper.Reading.Classes
         {
             var version = reader.version;
             m_DeltaPose = new HumanPose(reader);
-            m_StartX = new xform(reader);
+            m_StartX = new XForm(reader);
             if (version[0] > 5 || (version[0] == 5 && version[1] >= 5))//5.5 and up
             {
-                m_StopX = new xform(reader);
+                m_StopX = new XForm(reader);
             }
-            m_LeftFootStartX = new xform(reader);
-            m_RightFootStartX = new xform(reader);
+            m_LeftFootStartX = new XForm(reader);
+            m_RightFootStartX = new XForm(reader);
             if (version[0] < 5)//5.0 down
             {
-                m_MotionStartX = new xform(reader);
-                m_MotionStopX = new xform(reader);
+                m_MotionStartX = new XForm(reader);
+                m_MotionStopX = new XForm(reader);
             }
             m_AverageSpeed = version[0] > 5 || (version[0] == 5 && version[1] >= 4) ? reader.ReadVector3f() : (Vector3f)reader.ReadVector4f();//5.4 and up
             m_Clip = new Clip(reader);

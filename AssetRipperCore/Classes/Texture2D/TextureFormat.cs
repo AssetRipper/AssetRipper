@@ -262,7 +262,16 @@ namespace AssetRipper.Classes.Texture2D
 		/// <summary>
 		/// Compressed color with alpha channel texture format with Crunch compression for smaller storage sizes.
 		/// </summary>
-		ETC2_RGBA8Crunched = 65
+		ETC2_RGBA8Crunched = 65,
+		ASTC_HDR_4x4,
+		ASTC_HDR_5x5,
+		ASTC_HDR_6x6,
+		ASTC_HDR_8x8,
+		ASTC_HDR_10x10,
+		ASTC_HDR_12x12,
+		RG32,
+		RGB48,
+		RGBA64,
 	}
 
 	public static class TextureFormatExtensions

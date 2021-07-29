@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.Misc;
+using AssetRipper.IO;
 using AssetRipper.IO.Extensions;
 
 namespace AssetRipper.Reading.Classes
@@ -13,7 +14,7 @@ namespace AssetRipper.Reading.Classes
         public int[] m_HumanSkeletonIndexArray;
         public int[] m_HumanSkeletonReverseIndexArray;
         public int m_RootMotionBoneIndex;
-        public xform m_RootMotionBoneX;
+        public XForm m_RootMotionBoneX;
         public Skeleton m_RootMotionSkeleton;
         public SkeletonPose m_RootMotionSkeletonPose;
         public int[] m_RootMotionSkeletonIndexArray;
@@ -41,7 +42,7 @@ namespace AssetRipper.Reading.Classes
             }
 
             m_RootMotionBoneIndex = reader.ReadInt32();
-            m_RootMotionBoneX = new xform(reader);
+            m_RootMotionBoneX = new XForm(reader);
 
             if (version[0] > 4 || (version[0] == 4 && version[1] >= 3)) //4.3 and up
             {

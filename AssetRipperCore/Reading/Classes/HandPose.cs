@@ -1,11 +1,12 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.Misc;
+using AssetRipper.IO;
 using AssetRipper.IO.Extensions;
 
 namespace AssetRipper.Reading.Classes
 {
 	public class HandPose
     {
-        public xform m_GrabX;
+        public XForm m_GrabX;
         public float[] m_DoFArray;
         public float m_Override;
         public float m_CloseOpen;
@@ -14,7 +15,7 @@ namespace AssetRipper.Reading.Classes
 
         public HandPose(ObjectReader reader)
         {
-            m_GrabX = new xform(reader);
+            m_GrabX = new XForm(reader);
             m_DoFArray = reader.ReadSingleArray();
             m_Override = reader.ReadSingle();
             m_CloseOpen = reader.ReadSingle();
