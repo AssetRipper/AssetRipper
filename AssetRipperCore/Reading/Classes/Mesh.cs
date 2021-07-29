@@ -1,4 +1,5 @@
-﻿using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Classes.Mesh;
+using AssetRipper.Classes.Misc;
 using AssetRipper.IO;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Extensions;
@@ -619,14 +620,14 @@ namespace AssetRipper.Reading.Classes
         {
             foreach (var m_SubMesh in m_SubMeshes)
             {
-                var firstIndex = m_SubMesh.firstByte / 2;
+                var firstIndex = m_SubMesh.FirstByte / 2;
                 if (!m_Use16BitIndices)
                 {
                     firstIndex /= 2;
                 }
-                var indexCount = m_SubMesh.indexCount;
-                var topology = m_SubMesh.topology;
-                if (topology == GfxPrimitiveType.kPrimitiveTriangles)
+                var indexCount = m_SubMesh.IndexCount;
+                var topology = m_SubMesh.Topology;
+                if (topology == MeshTopology.Triangles)
                 {
                     for (int i = 0; i < indexCount; i += 3)
                     {
@@ -635,7 +636,7 @@ namespace AssetRipper.Reading.Classes
                         m_Indices.Add(m_IndexBuffer[firstIndex + i + 2]);
                     }
                 }
-                else if (version[0] < 4 || topology == GfxPrimitiveType.kPrimitiveTriangleStrip)
+                else if (version[0] < 4 || topology == MeshTopology.TriangleStrip)
                 {
                     // de-stripify :
                     uint triIndex = 0;
@@ -664,9 +665,9 @@ namespace AssetRipper.Reading.Classes
                         triIndex += 3;
                     }
                     //fix indexCount
-                    m_SubMesh.indexCount = triIndex;
+                    m_SubMesh.IndexCount = triIndex;
                 }
-                else if (topology == GfxPrimitiveType.kPrimitiveQuads)
+                else if (topology == MeshTopology.Quads)
                 {
                     for (int q = 0; q < indexCount; q += 4)
                     {
@@ -678,7 +679,7 @@ namespace AssetRipper.Reading.Classes
                         m_Indices.Add(m_IndexBuffer[firstIndex + q + 3]);
                     }
                     //fix indexCount
-                    m_SubMesh.indexCount = indexCount / 2 * 3;
+                    m_SubMesh.IndexCount = indexCount / 2 * 3;
                 }
                 else
                 {

@@ -4,11 +4,53 @@ using AssetRipper.Classes.Utils.Extensions;
 using AssetRipper.Parser.Files;
 using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
+using AssetRipper.IO;
 
 namespace AssetRipper.Classes.Mesh
 {
-	public struct SubMesh : IAsset
+	public class SubMesh : IAsset
 	{
+		/// <summary>Offset in index buffer</summary>
+		public uint FirstByte { get; set; }
+		public uint IndexCount { get; set; }
+		public MeshTopology Topology { get; set; }
+		public uint TriangleCount { get; set; }
+		public uint BaseVertex { get; set; }
+		/// <summary>Offset in Vertices</summary>
+		public uint FirstVertex { get; set; }
+		public uint VertexCount { get; set; }
+		public AABB LocalAABB { get; set; }
+
+		public uint IsTriStrip => (uint)Topology;
+
+		public SubMesh() { }
+
+		public SubMesh(ObjectReader reader)
+		{
+			var version = reader.version;
+
+			FirstByte = reader.ReadUInt32();
+			IndexCount = reader.ReadUInt32();
+			Topology = (MeshTopology)reader.ReadInt32();
+
+			if (version[0] < 4) //4.0 down
+			{
+				TriangleCount = reader.ReadUInt32();
+			}
+
+			if (version[0] > 2017 || (version[0] == 2017 && version[1] >= 3)) //2017.3 and up
+			{
+				BaseVertex = reader.ReadUInt32();
+			}
+
+			if (version[0] >= 3) //3.0 and up
+			{
+				FirstVertex = reader.ReadUInt32();
+				VertexCount = reader.ReadUInt32();
+				LocalAABB = new AABB(reader);
+			}
+		}
+
 		public static int ToSerializedVersion(Version version)
 		{
 			// IsTriStrip has been replaced by Topology
@@ -34,29 +76,29 @@ namespace AssetRipper.Classes.Mesh
 
 		public void Read(AssetReader reader)
 		{
-			FirstByte = (int)reader.ReadUInt32();
-			IndexCount = (int)reader.ReadUInt32();
+			FirstByte = reader.ReadUInt32();
+			IndexCount = reader.ReadUInt32();
 			Topology = (MeshTopology)reader.ReadInt32();
 			if (HasTriangleCount(reader.Version))
 			{
-				TriangleCount = (int)reader.ReadUInt32();
+				TriangleCount = reader.ReadUInt32();
 			}
 			if (HasBaseVertex(reader.Version))
 			{
-				BaseVertex = (int)reader.ReadUInt32();
+				BaseVertex = reader.ReadUInt32();
 			}
 			if (HasVertex(reader.Version))
 			{
-				FirstVertex = (int)reader.ReadUInt32();
-				VertexCount = (int)reader.ReadUInt32();
+				FirstVertex = reader.ReadUInt32();
+				VertexCount = reader.ReadUInt32();
 				LocalAABB.Read(reader);
 			}
 		}
 
 		public void Write(AssetWriter writer)
 		{
-			writer.Write((uint)FirstByte);
-			writer.Write((uint)IndexCount);
+			writer.Write(FirstByte);
+			writer.Write(IndexCount);
 			writer.Write((int)Topology);
 			if (HasTriangleCount(writer.Version))
 			{
@@ -64,12 +106,12 @@ namespace AssetRipper.Classes.Mesh
 			}
 			if (HasBaseVertex(writer.Version))
 			{
-				writer.Write((uint)BaseVertex);
+				writer.Write(BaseVertex);
 			}
 			if (HasVertex(writer.Version))
 			{
-				writer.Write((uint)FirstVertex);
-				writer.Write((uint)VertexCount);
+				writer.Write(FirstVertex);
+				writer.Write(VertexCount);
 				LocalAABB.Write(writer);
 			}
 		}
@@ -114,20 +156,6 @@ namespace AssetRipper.Classes.Mesh
 			}
 		}
 
-		/// <summary>
-		/// Offset in index buffer
-		/// </summary>
-		public int FirstByte { get; set; }
-		public int IndexCount { get; set; }
-		public uint IsTriStrip => (uint)Topology;
-		public MeshTopology Topology { get; set; }
-		public int TriangleCount { get; set; }
-		public int BaseVertex { get; set; }
-		/// <summary>
-		/// Offset in Vertices
-		/// </summary>
-		public int FirstVertex { get; set; }
-		public int VertexCount { get; set; }
 
 		public const string FirstByteName = "firstByte";
 		public const string IndexCountName = "indexCount";
@@ -138,7 +166,5 @@ namespace AssetRipper.Classes.Mesh
 		public const string FirstVertexName = "firstVertex";
 		public const string VertexCountName = "vertexCount";
 		public const string LocalAABBName = "localAABB";
-
-		public AABB LocalAABB;
 	}
 }

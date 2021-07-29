@@ -43,14 +43,14 @@ namespace AssetRipper.Converters.Mesh
 			{
 				MeshData meshData = origin.MeshData[i];
 				SubMesh instance = new SubMesh();
-				instance.FirstByte = offset;
+				instance.FirstByte = (uint)offset;
 #warning TODO: stripping
 				int indexCount = meshData.Faces.Length * 3;
-				instance.IndexCount = indexCount;
+				instance.IndexCount = (uint)indexCount;
 				instance.Topology = MeshTopology.Triangles;
 				if (SubMesh.HasTriangleCount(container.ExportVersion))
 				{
-					instance.TriangleCount = meshData.Faces.Length;
+					instance.TriangleCount = (uint)meshData.Faces.Length;
 				}
 				if (SubMesh.HasVertex(container.ExportVersion))
 				{

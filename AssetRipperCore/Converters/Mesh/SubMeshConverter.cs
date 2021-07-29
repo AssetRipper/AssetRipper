@@ -42,7 +42,7 @@ namespace AssetRipper.Converters.Mesh
 			}
 			if (SubMesh.HasBaseVertex(container.ExportVersion))
 			{
-				instance.BaseVertex = GetBaseVertex(container, ref origin);
+				instance.BaseVertex = (uint)GetBaseVertex(container, ref origin);
 			}
 			if (SubMesh.HasVertex(container.ExportVersion))
 			{
@@ -55,7 +55,7 @@ namespace AssetRipper.Converters.Mesh
 		{
 			if (SubMesh.HasBaseVertex(container.Version))
 			{
-				return origin.BaseVertex;
+				return (int)origin.BaseVertex;
 			}
 #warning TODO: calculate or default value?
 			return 0;
@@ -85,8 +85,8 @@ namespace AssetRipper.Converters.Mesh
 			}
 
 			FindMinMaxIndices(version, mesh, ref submesh, out int minIndex, out int maxIndex);
-			submesh.FirstVertex = minIndex;
-			submesh.VertexCount = maxIndex - minIndex + 1;
+			submesh.FirstVertex = (uint)minIndex;
+			submesh.VertexCount = (uint)(maxIndex - minIndex + 1);
 		}
 
 		private static void FindMinMaxIndices(Version version, AssetRipper.Classes.Mesh.Mesh mesh, ref SubMesh submesh, out int min, out int max)
@@ -97,19 +97,19 @@ namespace AssetRipper.Converters.Mesh
 				if (mesh.CompressedMesh.Triangles.IsSet)
 				{
 					int[] triangles = mesh.CompressedMesh.Triangles.Unpack();
-					int firstByte = is16bits ? submesh.FirstByte * 2 : submesh.FirstByte;
-					FindMinMaxIndices(triangles, firstByte / sizeof(int), submesh.IndexCount, out min, out max);
+					int firstByte = (int)(is16bits ? submesh.FirstByte * 2 : submesh.FirstByte);
+					FindMinMaxIndices(triangles, (int)(firstByte / sizeof(int)), (int)submesh.IndexCount, out min, out max);
 					return;
 				}
 			}
 
 			if (is16bits)
 			{
-				FindMinMax16Indices(mesh.IndexBuffer, submesh.FirstByte, submesh.IndexCount, out min, out max);
+				FindMinMax16Indices(mesh.IndexBuffer, (int)submesh.FirstByte, (int)submesh.IndexCount, out min, out max);
 			}
 			else
 			{
-				FindMinMax32Indices(mesh.IndexBuffer, submesh.FirstByte, submesh.IndexCount, out min, out max);
+				FindMinMax32Indices(mesh.IndexBuffer, (int)submesh.FirstByte, (int)submesh.IndexCount, out min, out max);
 			}
 		}
 
@@ -191,7 +191,7 @@ namespace AssetRipper.Converters.Mesh
 				if (mesh.CompressedMesh.Vertices.IsSet)
 				{
 					float[] vertices = mesh.CompressedMesh.Vertices.Unpack();
-					FindMinMaxBounds(vertices, submesh.FirstVertex, submesh.VertexCount, out min, out max);
+					FindMinMaxBounds(vertices, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
 					return;
 				}
 			}
@@ -200,23 +200,23 @@ namespace AssetRipper.Converters.Mesh
 			{
 				if (AssetRipper.Classes.Mesh.Mesh.IsOnlyVertexData(layout.Info.Version))
 				{
-					FindMinMaxBounds(layout, ref mesh.VertexData, submesh.FirstVertex, submesh.VertexCount, out min, out max);
+					FindMinMaxBounds(layout, ref mesh.VertexData, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
 				}
 				else
 				{
 					if (mesh.MeshCompression == MeshCompression.Off)
 					{
-						FindMinMaxBounds(layout, ref mesh.VertexData, submesh.FirstVertex, submesh.VertexCount, out min, out max);
+						FindMinMaxBounds(layout, ref mesh.VertexData, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
 					}
 					else
 					{
-						FindMinMaxBounds(mesh.Vertices, submesh.FirstVertex, submesh.VertexCount, out min, out max);
+						FindMinMaxBounds(mesh.Vertices, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
 					}
 				}
 			}
 			else
 			{
-				FindMinMaxBounds(mesh.Vertices, submesh.FirstVertex, submesh.VertexCount, out min, out max);
+				FindMinMaxBounds(mesh.Vertices, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
 			}
 		}
 

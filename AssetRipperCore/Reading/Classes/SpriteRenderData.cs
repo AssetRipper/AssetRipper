@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Classes.Mesh;
+using AssetRipper.IO;
 using AssetRipper.IO.Extensions;
 using AssetRipper.Math;
 

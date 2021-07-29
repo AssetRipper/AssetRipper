@@ -184,7 +184,7 @@ namespace AssetRipper.Classes.Sprite
 		private void VertexDataToOutline(List<Vector2f[]> outlines, Vector3f[] vertices, ref SubMesh submesh)
 		{
 			Vector3i[] triangles = new Vector3i[submesh.IndexCount / 3];
-			for (int o = submesh.FirstByte, ti = 0; ti < triangles.Length; o += 6, ti++)
+			for (int o = (int)submesh.FirstByte, ti = 0; ti < triangles.Length; o += 6, ti++)
 			{
 				int x = BitConverter.ToUInt16(IndexBuffer, o + 0);
 				int y = BitConverter.ToUInt16(IndexBuffer, o + 2);
