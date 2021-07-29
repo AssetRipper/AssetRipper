@@ -516,9 +516,9 @@ namespace AssetRipper.Classes.EditorSettings
 		public const string CacheServerEnableDownloadName = "m_CacheServerEnableDownload";
 		public const string CacheServerEnableUploadName = "m_CacheServerEnableUpload";
 
-		public PPtr<SceneAsset> PrefabRegularEnvironment;
-		public PPtr<SceneAsset> PrefabUIEnvironment;
-		public CollabEditorSettings CollabEditorSettings;
+		public PPtr<SceneAsset> PrefabRegularEnvironment = new();
+		public PPtr<SceneAsset> PrefabUIEnvironment = new();
+		public CollabEditorSettings CollabEditorSettings = new();
 
 		private const string DefaultExtensions = "txt;xml;fnt;cd;asmdef;rsp";
 		private const string AsmrefExtension = "asmref";

@@ -8,8 +8,10 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Classes.AnimationClip
 {
-	public struct AnimationEvent : IAssetReadable, IYAMLExportable, IDependent
+	public class AnimationEvent : IAssetReadable, IYAMLExportable, IDependent
 	{
+		public AnimationEvent() { }
+
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
@@ -73,6 +75,6 @@ namespace AssetRipper.Classes.AnimationClip
 		public const string IntParameterName = "intParameter";
 		public const string MessageOptionsName = "messageOptions";
 
-		public PPtr<Object.Object> ObjectReferenceParameter;
+		public PPtr<Object.Object> ObjectReferenceParameter = new();
 	}
 }

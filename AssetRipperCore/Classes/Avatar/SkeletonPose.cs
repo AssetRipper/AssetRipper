@@ -6,8 +6,9 @@ using AssetRipper.YAML;
 
 namespace AssetRipper.Classes.Avatar
 {
-	public struct SkeletonPose : IAssetReadable, IYAMLExportable
+	public class SkeletonPose : IAssetReadable, IYAMLExportable
 	{
+		public SkeletonPose() { }
 		public void Read(AssetReader reader)
 		{
 			X = reader.ReadAssetArray<XForm>();

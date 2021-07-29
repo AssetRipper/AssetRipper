@@ -254,6 +254,6 @@ namespace DXShaderRestorer
 		private readonly Dictionary<string, uint> m_nameLookup;
 		private readonly List<Sampler> m_Samplers;
 
-		private ShaderSubProgram m_shaderSubprogram;
+		private ShaderSubProgram m_shaderSubprogram = new();
 	}
 }

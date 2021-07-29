@@ -415,20 +415,20 @@ namespace AssetRipper.Classes.RenderSettings
 		public ColorRGBAf AmbientSkyColor;
 		public ColorRGBAf AmbientEquatorColor;
 		public ColorRGBAf AmbientGroundColor;
-		public PPtr<Light.Light> AmbientSkyboxLight;
+		public PPtr<Light.Light> AmbientSkyboxLight = new();
 		public ColorRGBAf SubtractiveShadowColor;
-		public PPtr<Material.Material> SkyboxMaterial;
-		public PPtr<Texture2D.Texture2D> HaloTexture;
+		public PPtr<Material.Material> SkyboxMaterial = new();
+		public PPtr<Texture2D.Texture2D> HaloTexture = new();
 		/// <summary>
 		/// SpecularTex previously
 		/// </summary>
-		public PPtr<Cubemap> SpecularTexture;
-		public PPtr<Texture2D.Texture2D> SpotCookie;
-		public PPtr<Cubemap> CustomReflection;
-		public SphericalHarmonicsL2 AmbientProbe;
-		public SphericalHarmonicsL2 AmbientProbeInGamma;
-		public PPtr<Cubemap> GeneratedSkyboxReflection;
-		public PPtr<Light.Light> Sun;
+		public PPtr<Cubemap> SpecularTexture = new();
+		public PPtr<Texture2D.Texture2D> SpotCookie = new();
+		public PPtr<Cubemap> CustomReflection = new();
+		public SphericalHarmonicsL2 AmbientProbe = new();
+		public SphericalHarmonicsL2 AmbientProbeInGamma = new();
+		public PPtr<Cubemap> GeneratedSkyboxReflection = new();
+		public PPtr<Light.Light> Sun = new();
 		public ColorRGBAf IndirectSpecularColor;
 	}
 }

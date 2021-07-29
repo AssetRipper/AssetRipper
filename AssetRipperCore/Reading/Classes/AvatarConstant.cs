@@ -14,8 +14,8 @@ namespace AssetRipper.Reading.Classes
         public int[] m_HumanSkeletonIndexArray;
         public int[] m_HumanSkeletonReverseIndexArray;
         public int m_RootMotionBoneIndex;
-        public XForm m_RootMotionBoneX;
-        public Skeleton m_RootMotionSkeleton;
+        public XForm m_RootMotionBoneX = new();
+		public Skeleton m_RootMotionSkeleton;
         public SkeletonPose m_RootMotionSkeletonPose;
         public int[] m_RootMotionSkeletonIndexArray;
 

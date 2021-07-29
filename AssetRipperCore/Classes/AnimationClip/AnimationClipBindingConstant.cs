@@ -11,13 +11,15 @@ using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Classes.AnimationClip
 {
-	public struct AnimationClipBindingConstant : IAssetReadable, IYAMLExportable, IDependent
+	public class AnimationClipBindingConstant : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public AnimationClipBindingConstant(bool _)
 		{
 			GenericBindings = Array.Empty<GenericBinding.GenericBinding>();
 			PPtrCurveMapping = Array.Empty<PPtr<Object.Object>>();
 		}
+
+		public AnimationClipBindingConstant() { }
 
 		/// <summary>
 		/// 2017.1 and greater

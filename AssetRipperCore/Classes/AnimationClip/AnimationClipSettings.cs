@@ -185,6 +185,6 @@ namespace AssetRipper.Classes.AnimationClip
 		public const string MirrorName = "m_Mirror";
 		public const string KeepAdditionalBonesAnimationName = "m_KeepAdditionalBonesAnimation";
 
-		public PPtr<AnimationClip> AdditiveReferencePoseClip;
+		public PPtr<AnimationClip> AdditiveReferencePoseClip = new();
 	}
 }

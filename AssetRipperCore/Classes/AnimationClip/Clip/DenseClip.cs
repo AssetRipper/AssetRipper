@@ -2,8 +2,10 @@
 
 namespace AssetRipper.Classes.AnimationClip.Clip
 {
-	public struct DenseClip : IAssetReadable
+	public class DenseClip : IAssetReadable
 	{
+		public DenseClip() { }
+
 		public void Read(AssetReader reader)
 		{
 			FrameCount = reader.ReadInt32();

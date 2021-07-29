@@ -158,6 +158,6 @@ namespace AssetRipper.Classes
 		public const string TimeParameterName = "m_TimeParameter";
 
 		public Vector3f Position;
-		public PPtr<Motion> Motion;
+		public PPtr<Motion> Motion = new();
 	}
 }

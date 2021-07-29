@@ -7,11 +7,12 @@ using AssetRipper.YAML;
 
 namespace AssetRipper.Classes.Avatar
 {
-	public struct HumanDescription : IAssetReadable, IYAMLExportable
+	public class HumanDescription : IAssetReadable, IYAMLExportable
 	{
+		public HumanDescription() { }
 		public static int ToSerializedVersion(Version version)
 		{
-			// TODO:
+#warning TODO: To SerializedVersion
 			return 3;
 		}
 

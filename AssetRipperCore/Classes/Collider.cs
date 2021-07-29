@@ -82,7 +82,7 @@ namespace AssetRipper.Classes
 		public const string IsTriggerName = "m_IsTrigger";
 		public const string EnabledName = "m_Enabled";
 
-		public PPtr<PhysicMaterial.PhysicMaterial> Material;
+		public PPtr<PhysicMaterial.PhysicMaterial> Material = new();
 
 		protected abstract bool IncludesMaterial { get; }
 		protected abstract bool IncludesIsTrigger { get; }

@@ -119,7 +119,7 @@ namespace AssetRipper.Classes.AnimatorStateMachine
 
 		public static int ToSerializedVersion(Version version)
 		{
-			// TODO:
+#warning TODO: ToSerializedVersion
 			return 5;
 		}
 
@@ -157,7 +157,7 @@ namespace AssetRipper.Classes.AnimatorStateMachine
 		public Vector3f EntryPosition;
 		public Vector3f ExitPosition;
 		public Vector3f ParentStateMachinePosition;
-		public PPtr<AnimatorState> DefaultState;
+		public PPtr<AnimatorState> DefaultState = new();
 
 		public const string ChildStatesName = "m_ChildStates";
 		public const string ChildStateMachinesName = "m_ChildStateMachines";

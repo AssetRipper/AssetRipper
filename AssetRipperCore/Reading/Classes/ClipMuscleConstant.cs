@@ -8,13 +8,13 @@ namespace AssetRipper.Reading.Classes
 	public class ClipMuscleConstant
     {
         public HumanPose m_DeltaPose;
-        public XForm m_StartX;
-        public XForm m_StopX;
-        public XForm m_LeftFootStartX;
-        public XForm m_RightFootStartX;
-        public XForm m_MotionStartX;
-        public XForm m_MotionStopX;
-        public Vector3f m_AverageSpeed;
+        public XForm m_StartX = new();
+		public XForm m_StopX = new();
+		public XForm m_LeftFootStartX = new();
+		public XForm m_RightFootStartX = new();
+		public XForm m_MotionStartX = new();
+		public XForm m_MotionStopX = new();
+		public Vector3f m_AverageSpeed;
         public Clip m_Clip;
         public float m_StartTime;
         public float m_StopTime;

@@ -91,7 +91,7 @@ namespace AssetRipper.Classes
 		public const string UsedByCompositeName = "m_UsedByComposite";
 		public const string OffsetName = "m_Offset";
 
-		public PPtr<PhysicsMaterial2D> Material;
+		public PPtr<PhysicsMaterial2D> Material = new();
 		public Vector2f Offset;
 	}
 }

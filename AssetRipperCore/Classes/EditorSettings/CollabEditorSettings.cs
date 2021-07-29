@@ -4,8 +4,9 @@ using AssetRipper.YAML;
 
 namespace AssetRipper.Classes.EditorSettings
 {
-	public struct CollabEditorSettings : IAssetReadable, IYAMLExportable
+	public class CollabEditorSettings : IAssetReadable, IYAMLExportable
 	{
+		public CollabEditorSettings() { }
 		public CollabEditorSettings(bool _)
 		{
 			InProgressEnabled = true;

@@ -7,8 +7,9 @@ using Version = AssetRipper.Parser.Files.Version;
 
 namespace AssetRipper.Classes.AnimatorController.Constants
 {
-	public struct BlendTreeConstant : IAssetReadable, IYAMLExportable
+	public class BlendTreeConstant : IAssetReadable, IYAMLExportable
 	{
+		public BlendTreeConstant() { }
 		/// <summary>
 		/// Less than 4.5.0
 		/// </summary>
@@ -30,6 +31,6 @@ namespace AssetRipper.Classes.AnimatorController.Constants
 
 		public OffsetPtr<BlendTreeNodeConstant>[] NodeArray { get; set; }
 
-		public OffsetPtr<ValueArrayConstant> BlendEventArrayConstant;
+		public OffsetPtr<ValueArrayConstant> BlendEventArrayConstant = new();
 	}
 }

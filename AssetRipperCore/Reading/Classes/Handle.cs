@@ -5,8 +5,8 @@ namespace AssetRipper.Reading.Classes
 {
 	public class Handle
     {
-        public XForm m_X;
-        public uint m_ParentHumanIndex;
+        public XForm m_X = new();
+		public uint m_ParentHumanIndex;
         public uint m_ID;
 
         public Handle(ObjectReader reader)

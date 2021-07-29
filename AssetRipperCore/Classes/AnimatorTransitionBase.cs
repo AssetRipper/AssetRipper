@@ -119,7 +119,7 @@ namespace AssetRipper.Classes
 		public const string MuteName = "m_Mute";
 		public const string IsExitName = "m_IsExit";
 
-		public PPtr<AnimatorStateMachine.AnimatorStateMachine> DstStateMachine;
-		public PPtr<AnimatorState> DstState;
+		public PPtr<AnimatorStateMachine.AnimatorStateMachine> DstStateMachine = new();
+		public PPtr<AnimatorState> DstState = new();
 	}
 }

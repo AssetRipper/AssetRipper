@@ -5,8 +5,9 @@ using AssetRipper.YAML;
 
 namespace AssetRipper.Classes.Avatar
 {
-	public struct Handle : IAssetReadable, IYAMLExportable
+	public class Handle : IAssetReadable, IYAMLExportable
 	{
+		public Handle() { }
 		public void Read(AssetReader reader)
 		{
 			X.Read(reader);
@@ -30,6 +31,6 @@ namespace AssetRipper.Classes.Avatar
 		public const string ParentHumanIndexName = "m_ParentHumanIndex";
 		public const string IDName = "m_ID";
 
-		public XForm X;
+		public XForm X = new();
 	}
 }

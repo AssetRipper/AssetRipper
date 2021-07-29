@@ -4,9 +4,13 @@ using AssetRipper.YAML;
 
 namespace AssetRipper.Classes.Misc
 {
-	public struct OffsetPtr<T> : IAssetReadable, IYAMLExportable
-		where T : struct, IAssetReadable, IYAMLExportable
+	public class OffsetPtr<T> : IAssetReadable, IYAMLExportable where T : IAssetReadable, IYAMLExportable, new()
 	{
+		public OffsetPtr()
+		{
+			Instance = new();
+		}
+
 		public OffsetPtr(T instance)
 		{
 			Instance = instance;

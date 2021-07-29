@@ -15,8 +15,9 @@ namespace AssetRipper.Classes.LightmapSettings
 	/// <summary>
 	/// 3.0.0 - first introduction
 	/// </summary>
-	public struct LightmapEditorSettings : IAsset, IDependent
+	public class LightmapEditorSettings : IAsset, IDependent
 	{
+		public LightmapEditorSettings() { }
 		public LightmapEditorSettings(Version version) : this()
 		{
 #warning TODO:
@@ -1105,7 +1106,7 @@ namespace AssetRipper.Classes.LightmapSettings
 		public bool ExtractAmbientOcclusion { get; set; }
 		public float LODSurfaceMappingDistance { get; set; }
 		public int Padding { get; set; }
-		public PPtr<LightmapParameters> LightmapParameters { get; set; }
+		public PPtr<LightmapParameters> LightmapParameters { get; set; } = new();
 		public LightmapsMode LightmapsBakeMode { get; set; }
 		public bool TextureCompression { get; set; }
 		public bool LockAtlas { get; set; }

@@ -6,8 +6,9 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Classes.AssetBundle
 {
-	public struct AssetInfo : IAssetReadable, IDependent
+	public class AssetInfo : IAssetReadable, IDependent
 	{
+		public AssetInfo() { }
 		/// <summary>
 		/// 2.5.0 and greater
 		/// </summary>
@@ -31,6 +32,6 @@ namespace AssetRipper.Classes.AssetBundle
 		public int PreloadIndex { get; set; }
 		public int PreloadSize { get; set; }
 
-		public PPtr<Object.Object> Asset;
+		public PPtr<Object.Object> Asset = new();
 	}
 }

@@ -7,8 +7,9 @@ using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Light
 {
-	public struct ShadowSettings : IAssetReadable, IYAMLExportable
+	public class ShadowSettings : IAssetReadable, IYAMLExportable
 	{
+		public ShadowSettings() { }
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>

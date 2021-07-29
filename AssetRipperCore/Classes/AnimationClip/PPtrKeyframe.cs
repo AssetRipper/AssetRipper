@@ -8,8 +8,9 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Classes.AnimationClip
 {
-	public struct PPtrKeyframe : IAsset, IDependent
+	public class PPtrKeyframe : IAsset, IDependent
 	{
+		public PPtrKeyframe() { }
 		public PPtrKeyframe(float time, PPtr<Object.Object> script)
 		{
 			Time = time;
@@ -55,6 +56,6 @@ namespace AssetRipper.Classes.AnimationClip
 		public const string TimeName = "time";
 		public const string ValueName = "value";
 
-		public PPtr<Object.Object> Value;
+		public PPtr<Object.Object> Value = new();
 	}
 }

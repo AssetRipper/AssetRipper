@@ -6,8 +6,9 @@ using AssetRipper.YAML;
 
 namespace AssetRipper.Classes.Light
 {
-	public struct LightBakingOutput : IAssetReadable, IYAMLExportable
+	public class LightBakingOutput : IAssetReadable, IYAMLExportable
 	{
+		public LightBakingOutput() { }
 		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(2017, 3))
@@ -71,6 +72,6 @@ namespace AssetRipper.Classes.Light
 		public const string IsBakedName = "isBaked";
 		public const string LightmappingMaskName = "lightmappingMask";
 
-		public LightmapBakeMode LightmapBakeMode;
+		public LightmapBakeMode LightmapBakeMode = new();
 	}
 }

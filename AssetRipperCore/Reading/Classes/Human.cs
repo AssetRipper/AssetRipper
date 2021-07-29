@@ -6,8 +6,8 @@ namespace AssetRipper.Reading.Classes
 {
 	public class Human
     {
-        public XForm m_RootX;
-        public Skeleton m_Skeleton;
+        public XForm m_RootX = new();
+		public Skeleton m_Skeleton;
         public SkeletonPose m_SkeletonPose;
         public Hand m_LeftHand;
         public Hand m_RightHand;

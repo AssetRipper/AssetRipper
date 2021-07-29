@@ -44,6 +44,6 @@ namespace AssetRipper.Classes.AnimatorController.Editor.AnimatorControllerLayer
 		public const string StateName = "m_State";
 		public const string StateMachineBehavioursName = "m_StateMachineBehaviours";
 
-		public PPtr<AnimatorState> State;
+		public PPtr<AnimatorState> State = new();
 	}
 }

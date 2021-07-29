@@ -10,8 +10,10 @@ using AssetRipper.Math;
 
 namespace AssetRipper.Classes.AnimationClip.Curves
 {
-	public struct Vector3Curve : IAsset, IYAMLExportable
+	public class Vector3Curve : IAsset, IYAMLExportable
 	{
+		public Vector3Curve() { }
+
 		public Vector3Curve(Vector3Curve copy, IReadOnlyList<KeyframeTpl<Vector3f>> keyframes) : this(copy.Path, keyframes) { }
 
 		public Vector3Curve(string path)

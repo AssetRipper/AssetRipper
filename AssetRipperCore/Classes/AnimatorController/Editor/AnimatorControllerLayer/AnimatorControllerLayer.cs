@@ -69,9 +69,9 @@ namespace AssetRipper.Classes.AnimatorController.Editor.AnimatorControllerLayer
 		public bool IKPass { get; set; }
 		public bool SyncedLayerAffectsTiming { get; set; }
 
-		public PPtr<AnimatorStateMachine.AnimatorStateMachine> StateMachine;
-		public PPtr<AvatarMask.AvatarMask> Mask;
-		public PPtr<AnimatorController> Controller;
+		public PPtr<AnimatorStateMachine.AnimatorStateMachine> StateMachine = new();
+		public PPtr<AvatarMask.AvatarMask> Mask = new();
+		public PPtr<AnimatorController> Controller = new();
 
 		public const string NameName = "m_Name";
 		public const string StateMachineName = "m_StateMachine";

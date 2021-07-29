@@ -4,8 +4,9 @@ using AssetRipper.YAML;
 
 namespace AssetRipper.Classes.Light
 {
-	public struct FalloffTable : IAssetReadable, IYAMLExportable
+	public class FalloffTable : IAssetReadable, IYAMLExportable
 	{
+		public FalloffTable() { }
 		public void Read(AssetReader reader)
 		{
 			Table = new float[13];

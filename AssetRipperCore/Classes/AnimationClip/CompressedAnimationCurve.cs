@@ -10,8 +10,10 @@ using AssetRipper.Math;
 
 namespace AssetRipper.Classes.AnimationClip
 {
-	public struct CompressedAnimationCurve : IAssetReadable, IYAMLExportable
+	public class CompressedAnimationCurve : IAssetReadable, IYAMLExportable
 	{
+		public CompressedAnimationCurve() { }
+
 		public QuaternionCurve Unpack()
 		{
 			int[] timesValues = Times.Unpack();

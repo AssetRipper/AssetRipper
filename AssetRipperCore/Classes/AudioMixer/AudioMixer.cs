@@ -67,9 +67,9 @@ namespace AssetRipper.Classes.AudioMixer
 		public const string UpdateModeName = "m_UpdateMode";
 		public const string MixerConstantName = "m_MixerConstant";
 
-		public PPtr<AudioMixerGroup> OutputGroup;
-		public PPtr<AudioMixerGroup> MasterGroup;
-		public PPtr<AudioMixerSnapshot> StartSnapshot;
+		public PPtr<AudioMixerGroup> OutputGroup = new();
+		public PPtr<AudioMixerGroup> MasterGroup = new();
+		public PPtr<AudioMixerSnapshot> StartSnapshot = new();
 		public AudioMixerConstant MixerConstant;
 	}
 }

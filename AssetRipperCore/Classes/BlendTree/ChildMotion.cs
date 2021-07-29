@@ -65,7 +65,7 @@ namespace AssetRipper.Classes.BlendTree
 		public const string DirectBlendParameterName = "m_DirectBlendParameter";
 		public const string MirrorName = "m_Mirror";
 
-		public PPtr<Motion> Motion;
+		public PPtr<Motion> Motion = new();
 		public Vector2f Position;
 	}
 }

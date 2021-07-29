@@ -4,8 +4,10 @@ using AssetRipper.IO.Asset;
 
 namespace AssetRipper.Classes.AnimationClip.Clip
 {
-	public struct Clip : IAssetReadable
+	public class Clip : IAssetReadable
 	{
+		public Clip() { }
+
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
@@ -49,9 +51,9 @@ namespace AssetRipper.Classes.AnimationClip.Clip
 			return false;
 		}
 
-		public StreamedClip StreamedClip;
-		public DenseClip DenseClip;
-		public ConstantClip ConstantClip;
+		public StreamedClip StreamedClip = new StreamedClip();
+		public DenseClip DenseClip = new DenseClip();
+		public ConstantClip ConstantClip = new ConstantClip();
 		public ValueArrayConstant Binding;
 	}
 }

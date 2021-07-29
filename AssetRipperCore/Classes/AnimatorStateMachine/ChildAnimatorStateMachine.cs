@@ -24,7 +24,7 @@ namespace AssetRipper.Classes.AnimatorStateMachine
 
 		public static int ToSerializedVersion(Version version)
 		{
-			// TODO:
+#warning TODO: ToSerializedVersion
 			return 1;
 		}
 
@@ -40,7 +40,7 @@ namespace AssetRipper.Classes.AnimatorStateMachine
 		public const string StateMachineName = "m_StateMachine";
 		public const string PositionName = "m_Position";
 
-		public PPtr<AnimatorStateMachine> StateMachine;
+		public PPtr<AnimatorStateMachine> StateMachine = new();
 		public Vector3f Position;
 	}
 }

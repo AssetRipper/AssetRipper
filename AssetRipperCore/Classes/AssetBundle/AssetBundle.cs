@@ -168,6 +168,6 @@ namespace AssetRipper.Classes.AssetBundle
 
 		public const string ContainerName = "m_Container";
 
-		public AssetInfo MainAsset;
+		public AssetInfo MainAsset = new();
 	}
 }

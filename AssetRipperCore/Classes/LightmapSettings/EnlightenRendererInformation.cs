@@ -9,8 +9,9 @@ using AssetRipper.Math;
 
 namespace AssetRipper.Classes.LightmapSettings
 {
-	public struct EnlightenRendererInformation : IAsset, IDependent
+	public class EnlightenRendererInformation : IAsset, IDependent
 	{
+		public EnlightenRendererInformation() { }
 		/// <summary>
 		/// Not Release
 		/// </summary>
@@ -64,9 +65,9 @@ namespace AssetRipper.Classes.LightmapSettings
 		public const string InstanceHashName = "instanceHash";
 		public const string GeometryHashName = "geometryHash";
 
-		public PPtr<Object.Object> Renderer;
+		public PPtr<Object.Object> Renderer = new();
 		public Vector4f DynamicLightmapSTInSystem;
-		public Hash128 InstanceHash;
-		public Hash128 GeometryHash;
+		public Hash128 InstanceHash = new();
+		public Hash128 GeometryHash = new();
 	}
 }

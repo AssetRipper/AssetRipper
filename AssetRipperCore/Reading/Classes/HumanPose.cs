@@ -7,8 +7,8 @@ namespace AssetRipper.Reading.Classes
 {
 	public class HumanPose
     {
-        public XForm m_RootX;
-        public Vector3f m_LookAtPosition;
+        public XForm m_RootX = new();
+		public Vector3f m_LookAtPosition;
         public Vector4f m_LookAtWeight;
         public HumanGoal[] m_GoalArray;
         public HandPose m_LeftHandPose;

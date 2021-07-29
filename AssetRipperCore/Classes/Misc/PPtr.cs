@@ -10,8 +10,7 @@ using System;
 
 namespace AssetRipper.Classes.Misc
 {
-	public struct PPtr<T> : IAsset
-		where T : Object.Object
+	public struct PPtr<T> : IAsset where T : Object.Object
 	{
 		public PPtr(int fileIndex, long pathID)
 		{

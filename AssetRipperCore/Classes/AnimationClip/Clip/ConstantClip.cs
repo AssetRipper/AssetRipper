@@ -2,8 +2,10 @@
 
 namespace AssetRipper.Classes.AnimationClip.Clip
 {
-	public struct ConstantClip : IAssetReadable
+	public class ConstantClip : IAssetReadable
 	{
+		public ConstantClip() { }
+
 		public void Read(AssetReader reader)
 		{
 			Constants = reader.ReadSingleArray();

@@ -13,8 +13,9 @@ using AssetRipper.Math;
 
 namespace AssetRipper.Classes.Material
 {
-	public struct UnityPropertySheet : IAssetReadable, IYAMLExportable, IDependent
+	public class UnityPropertySheet : IAssetReadable, IYAMLExportable, IDependent
 	{
+		public UnityPropertySheet() { }
 		public static int ToSerializedVersion(Version version)
 		{
 			if (version.IsGreaterEqual(2017, 3))

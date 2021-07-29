@@ -554,13 +554,13 @@ namespace AssetRipper.Classes.LightmapSettings
 		public const string ShadowMaskModeName = "m_ShadowMaskMode";
 
 		// TODO: PPtr<LightProbesLegacy>
-		public PPtr<Object.Object> LightProbesLegacy;
-		public EnlightenSceneMapping EnlightenSceneMapping;
-		public PPtr<LightProbes.LightProbes> LightProbes;
-		public GISettings.GISettings GISettings;
+		public PPtr<Object.Object> LightProbesLegacy = new();
+		public EnlightenSceneMapping EnlightenSceneMapping = new();
+		public PPtr<LightProbes.LightProbes> LightProbes = new();
+		public GISettings.GISettings GISettings = new();
 #if UNIVERSAL
-		public LightmapEditorSettings LightmapEditorSettings;
-		public PPtr<LightingDataAsset.LightingDataAsset> LightingDataAsset;
+		public LightmapEditorSettings LightmapEditorSettings = new();
+		public PPtr<LightingDataAsset.LightingDataAsset> LightingDataAsset = new();
 #endif
 	}
 }

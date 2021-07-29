@@ -10,8 +10,10 @@ using AssetRipper.Math;
 
 namespace AssetRipper.Classes.AnimationClip.Curves
 {
-	public struct QuaternionCurve : IAsset, IYAMLExportable
+	public class QuaternionCurve : IAsset, IYAMLExportable
 	{
+		public QuaternionCurve() { }
+
 		public QuaternionCurve(QuaternionCurve copy, IReadOnlyList<KeyframeTpl<Quaternionf>> keyframes) : this(copy.Path, keyframes) { }
 
 		public QuaternionCurve(string path)
