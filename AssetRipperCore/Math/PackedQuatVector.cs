@@ -4,23 +4,41 @@ using AssetRipper.IO.Asset;
 using AssetRipper.YAML;
 using AssetRipper.YAML.Extensions;
 using System;
+using AssetRipper.IO;
+using AssetRipper.IO.Extensions;
 
 namespace AssetRipper.Math
 {
 	public struct PackedQuatVector : IAssetReadable, IYAMLExportable
 	{
+		public const string NumItemsName = "m_NumItems";
+		public const string DataName = "m_Data";
+
+		public uint m_NumItems;
+		public byte[] m_Data;
+
+		public PackedQuatVector(ObjectReader reader)
+		{
+			m_NumItems = reader.ReadUInt32();
+
+			int numData = reader.ReadInt32();
+			m_Data = reader.ReadBytes(numData);
+
+			reader.AlignStream();
+		}
+
 		public Quaternionf[] Unpack()
 		{
 			int bitIndex = 0;
 			int byteIndex = 0;
-			Quaternionf[] buffer = new Quaternionf[NumItems];
-			for (int i = 0; i < NumItems; i++)
+			Quaternionf[] buffer = new Quaternionf[m_NumItems];
+			for (int i = 0; i < m_NumItems; i++)
 			{
 				int flags = 0;
 				int bitOffset = 0;
 				while (bitOffset < 3)
 				{
-					flags |= Data[byteIndex] >> bitIndex << bitOffset;
+					flags |= m_Data[byteIndex] >> bitIndex << bitOffset;
 					int read = System.Math.Min(3 - bitOffset, 8 - bitIndex);
 					bitIndex += read;
 					bitOffset += read;
@@ -45,7 +63,7 @@ namespace AssetRipper.Math
 						bitOffset = 0;
 						while (bitOffset < bitSize)
 						{
-							value |= Data[byteIndex] >> bitIndex << bitOffset;
+							value |= m_Data[byteIndex] >> bitIndex << bitOffset;
 							int num = System.Math.Min(bitSize - bitOffset, 8 - bitIndex);
 							bitIndex += num;
 							bitOffset += num;
@@ -75,23 +93,18 @@ namespace AssetRipper.Math
 
 		public void Read(AssetReader reader)
 		{
-			NumItems = reader.ReadUInt32();
-			Data = reader.ReadByteArray();
+			m_NumItems = reader.ReadUInt32();
+			m_Data = reader.ReadByteArray();
 			reader.AlignStream();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(NumItemsName, NumItems);
-			node.Add(DataName, Data == null ? YAMLSequenceNode.Empty : Data.ExportYAML());
+			node.Add(NumItemsName, m_NumItems);
+			node.Add(DataName, m_Data == null ? YAMLSequenceNode.Empty : m_Data.ExportYAML());
 			return node;
 		}
 
-		public uint NumItems { get; set; }
-		public byte[] Data { get; set; }
-
-		public const string NumItemsName = "m_NumItems";
-		public const string DataName = "m_Data";
 	}
 }

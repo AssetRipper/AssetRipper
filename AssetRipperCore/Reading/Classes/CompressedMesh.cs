@@ -1,4 +1,5 @@
 ﻿using AssetRipper.IO;
+using AssetRipper.Math;
 
 namespace AssetRipper.Reading.Classes
 {

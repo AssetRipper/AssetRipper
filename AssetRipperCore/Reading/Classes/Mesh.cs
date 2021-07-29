@@ -484,7 +484,7 @@ namespace AssetRipper.Reading.Classes
             if (m_CompressedMesh.m_Normals.m_NumItems > 0)
             {
                 var normalData = m_CompressedMesh.m_Normals.UnpackFloats(2, 4 * 2);
-                var signs = m_CompressedMesh.m_NormalSigns.UnpackInts();
+                var signs = m_CompressedMesh.m_NormalSigns.Unpack();
                 m_Normals = new float[m_CompressedMesh.m_Normals.m_NumItems / 2 * 3];
                 for (int i = 0; i < m_CompressedMesh.m_Normals.m_NumItems / 2; ++i)
                 {
@@ -514,7 +514,7 @@ namespace AssetRipper.Reading.Classes
             if (m_CompressedMesh.m_Tangents.m_NumItems > 0)
             {
                 var tangentData = m_CompressedMesh.m_Tangents.UnpackFloats(2, 4 * 2);
-                var signs = m_CompressedMesh.m_TangentSigns.UnpackInts();
+                var signs = m_CompressedMesh.m_TangentSigns.Unpack();
                 m_Tangents = new float[m_CompressedMesh.m_Tangents.m_NumItems / 2 * 4];
                 for (int i = 0; i < m_CompressedMesh.m_Tangents.m_NumItems / 2; ++i)
                 {
@@ -553,8 +553,8 @@ namespace AssetRipper.Reading.Classes
             //Skin
             if (m_CompressedMesh.m_Weights.m_NumItems > 0)
             {
-                var weights = m_CompressedMesh.m_Weights.UnpackInts();
-                var boneIndices = m_CompressedMesh.m_BoneIndices.UnpackInts();
+                var weights = m_CompressedMesh.m_Weights.Unpack();
+                var boneIndices = m_CompressedMesh.m_BoneIndices.Unpack();
 
                 InitMSkin();
 
@@ -598,14 +598,14 @@ namespace AssetRipper.Reading.Classes
             //IndexBuffer
             if (m_CompressedMesh.m_Triangles.m_NumItems > 0)
             {
-                m_IndexBuffer = Array.ConvertAll(m_CompressedMesh.m_Triangles.UnpackInts(), x => (uint)x);
+                m_IndexBuffer = Array.ConvertAll(m_CompressedMesh.m_Triangles.Unpack(), x => (uint)x);
             }
             //Color
-            if (m_CompressedMesh.m_Colors?.m_NumItems > 0)
+            if (m_CompressedMesh.m_Colors.m_NumItems > 0)
             {
                 m_CompressedMesh.m_Colors.m_NumItems *= 4;
                 m_CompressedMesh.m_Colors.m_BitSize /= 4;
-                var tempColors = m_CompressedMesh.m_Colors.UnpackInts();
+                var tempColors = m_CompressedMesh.m_Colors.Unpack();
                 m_Colors = new float[m_CompressedMesh.m_Colors.m_NumItems];
                 for (int v = 0; v < m_CompressedMesh.m_Colors.m_NumItems; v++)
                 {
