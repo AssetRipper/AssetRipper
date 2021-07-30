@@ -11,6 +11,7 @@ namespace AssetRipper.Logging
 				try
 				{
 					Console.WindowWidth = (int)(Console.LargestWindowWidth * 0.8f);
+					Console.WindowHeight = (int)(Console.LargestWindowHeight * 0.8f);
 					Console.BufferHeight = 2000;
 				}
 				catch
@@ -28,13 +29,6 @@ namespace AssetRipper.Logging
 
 		public void Log(LogType type, LogCategory category, string message)
 		{
-#if !DEBUG
-			if (type == LogType.Debug)
-			{
-				return;
-			}
-#endif
-
 			ConsoleColor backColor = Console.BackgroundColor;
 			ConsoleColor foreColor = Console.ForegroundColor;
 
@@ -45,6 +39,10 @@ namespace AssetRipper.Logging
 					break;
 
 				case LogType.Debug:
+					Console.ForegroundColor = ConsoleColor.DarkBlue;
+					break;
+
+				case LogType.Verbose:
 					Console.ForegroundColor = ConsoleColor.DarkGray;
 					break;
 

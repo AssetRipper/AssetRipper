@@ -25,6 +25,9 @@ namespace AssetRipperConsole
 			[Option("logFile", HelpText = "(Default: " + DefaultLogFileName + ") File to log to.")]
 			public FileInfo LogFile { get; set; }
 
+			[Option('v', "verbose", Default = false, HelpText = "Verbose logging output.")]
+			public bool verbose { get; set; }
+
 			[Option('q', "quit", Default = false, HelpText = "Close console after export.")]
 			public bool Quit { get; set; }
 		}
@@ -89,13 +92,10 @@ namespace AssetRipperConsole
 
 		private static void Run(Options options)
 		{
+			Logger.Verbose = options.verbose;
 			Logger.Add(new ConsoleLogger());
 			Logger.Add(new FileLogger(options.LogFile.FullName));
-#if PLATFORM_X64
-			Logger.LogSystemInformation("AssetRipper Console Version", "x64");
-#elif PLATFORM_X86
-			Logger.LogSystemInformation("AssetRipper Console Version", "x86");
-#endif
+			Logger.LogSystemInformation("AssetRipper Console Version");
 
 			try
 			{

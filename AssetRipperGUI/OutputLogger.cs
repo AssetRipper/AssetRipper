@@ -37,13 +37,6 @@ namespace AssetRipperGUI
 
 		private void LogInner(LogType type, LogCategory category, string message)
 		{
-#if !DEBUG
-			if (type == LogType.Debug)
-			{
-				return;
-			}
-#endif
-
 			if(category != LogCategory.None)
 				m_textBox.AppendText($"{category.ToString()} ");
 			switch (type)

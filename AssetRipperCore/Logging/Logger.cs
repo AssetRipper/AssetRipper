@@ -8,6 +8,7 @@ namespace AssetRipper.Logging
 	public static class Logger
 	{
 		private static readonly List<ILogger> loggers = new List<ILogger>();
+		public static bool Verbose { private get; set; }
 
 		static Logger()
 		{
@@ -24,6 +25,11 @@ namespace AssetRipper.Logging
 
 		public static void Log(LogType type, LogCategory category, string message)
 		{
+#if !DEBUG
+			if (type == LogType.Debug) return;
+#endif
+			if (type == LogType.Verbose && !Verbose) return;
+
 			if (message == null) throw new ArgumentNullException(nameof(message));
 			foreach (ILogger instance in loggers)
 				instance?.Log(type, category, message);
@@ -60,33 +66,36 @@ namespace AssetRipper.Logging
 			Log(LogType.Error, category, sb.ToString());
 		}
 
-		private static void LogReleaseInformation(string platformType)
+		private static void LogReleaseInformation()
 		{
 #if VIRTUAL
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Virtual {platformType}");
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Virtual {GetBuildArchitecture()}");
 #elif DEBUG
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Debug {platformType}");
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Debug {GetBuildArchitecture()}");
 #else
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Release {platformType}");
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Release {GetBuildArchitecture()}");
 #endif
+		}
+
+		private static string GetBuildArchitecture()
+		{
+			return Environment.Is64BitProcess ? "x64" : "x86";
 		}
 
 		private static void LogOperatingSystemInformation()
 		{
 			Log(LogType.Info, LogCategory.System, $"System Version: {Environment.OSVersion.VersionString}");
-			string osBitness = Environment.Is64BitOperatingSystem ? "x64" : "x86";
+			string architecture = Environment.Is64BitOperatingSystem ? "x64" : "x86";
 			string operatingSystem = RunetimeUtils.RuntimeOS.ToString();
-			Log(LogType.Info, LogCategory.System, $"Operating System: {operatingSystem} {osBitness}");
+			Log(LogType.Info, LogCategory.System, $"Operating System: {operatingSystem} {architecture}");
 		}
 
-		public static void LogSystemInformation(string programName, string platformType)
+		public static void LogSystemInformation(string programName)
 		{
 			Log(LogType.Info, LogCategory.System, programName);
 			LogOperatingSystemInformation();
 			Log(LogType.Info, LogCategory.System, $"AssetRipper Version: {BuildInfo.Version}");
-			LogReleaseInformation(platformType);
-			string processBitness = Environment.Is64BitProcess ? "x64" : "x86";
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Process: {processBitness}");
+			LogReleaseInformation();
 		}
 
 		public static void Add(ILogger logger) => loggers.Add(logger);

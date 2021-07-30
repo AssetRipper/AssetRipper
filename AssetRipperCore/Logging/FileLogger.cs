@@ -24,10 +24,6 @@ namespace AssetRipper.Logging
 
 		public void Log(LogType type, LogCategory category, string message)
 		{
-#if !DEBUG
-			if (type == LogType.Debug)
-				return;
-#endif
 			StringBuilder stringBuilder = new StringBuilder();
 
 			if (category != LogCategory.None)
