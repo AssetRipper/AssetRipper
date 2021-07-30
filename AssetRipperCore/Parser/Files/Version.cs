@@ -68,6 +68,8 @@ namespace AssetRipper.Parser.Files
 			return left.m_data <= right.m_data;
 		}
 
+		public int[] ToArray() => new int[] { Major, Minor, Build };
+
 		public static Version Parse(string version)
 		{
 			if (string.IsNullOrEmpty(version))

@@ -32,10 +32,10 @@ namespace AssetRipper.Classes.Shader.Enums.GpuProgramType
 		SPIRV				= 25,
 		Console				= 26,
 		//ConsoleVS			= 26,
-		//ConsoleFS			= 27,
-		//ConsoleHS			= 28,
-		//ConsoleDS			= 29,
-		//ConsoleGS			= 30,
+		ConsoleFS			= 27,
+		ConsoleHS			= 28,
+		ConsoleDS			= 29,
+		ConsoleGS			= 30,
 		RayTracing			= 31,
 	}
 
@@ -98,6 +98,14 @@ namespace AssetRipper.Classes.Shader.Enums.GpuProgramType
 				case ShaderGpuProgramType55.SPIRV:
 					return ShaderGpuProgramType.SPIRV;
 				case ShaderGpuProgramType55.Console:
+					return ShaderGpuProgramType.Console;
+				case ShaderGpuProgramType55.ConsoleFS:
+					return ShaderGpuProgramType.Console;
+				case ShaderGpuProgramType55.ConsoleHS:
+					return ShaderGpuProgramType.Console;
+				case ShaderGpuProgramType55.ConsoleDS:
+					return ShaderGpuProgramType.Console;
+				case ShaderGpuProgramType55.ConsoleGS:
 					return ShaderGpuProgramType.Console;
 				case ShaderGpuProgramType55.RayTracing:
 					return ShaderGpuProgramType.RayTracing;
