@@ -1,10 +1,36 @@
 ﻿using AssetRipper.IO.Endian;
+using AssetRipper.IO.Extensions;
 using System;
 
 namespace AssetRipper.Parser.Files.BundleFile.Parser.Header
 {
 	public sealed class BundleHeader
 	{
+		public BundleType Signature { get; set; }
+		public BundleVersion Version { get; set; }
+		/// <summary>
+		/// Generation version
+		/// </summary>
+		public string UnityWebBundleVersion { get; set; }
+		/// <summary>
+		/// Actual engine version
+		/// </summary>
+		public Version UnityWebMinimumRevision { get; set; }
+		public BundleFlags Flags
+		{
+			get
+			{
+				if (Signature == BundleType.UnityFS)
+				{
+					return FileStream.Flags;
+				}
+				return 0;
+			}
+		}
+
+		public BundleRawWebHeader RawWeb { get; set; }
+		public BundleFileStreamHeader FileStream { get; set; }
+
 		public static BundleType ParseSignature(string signature)
 		{
 			if (TryParseSignature(signature, out BundleType bundleType))
@@ -28,6 +54,10 @@ namespace AssetRipper.Parser.Files.BundleFile.Parser.Header
 
 				case nameof(BundleType.UnityFS):
 					type = BundleType.UnityFS;
+					return true;
+
+				case nameof(BundleType.UnityArchive):
+					type = BundleType.UnityArchive;
 					return true;
 
 				default:
@@ -74,34 +104,12 @@ namespace AssetRipper.Parser.Files.BundleFile.Parser.Header
 					FileStream.Read(reader);
 					break;
 
+				case BundleType.UnityArchive:
+					throw new NotSupportedException("UnityArchives are not supported");
+
 				default:
 					throw new Exception($"Unknown bundle signature '{Signature}'");
 			}
 		}
-
-		public BundleType Signature { get; set; }
-		public BundleVersion Version { get; set; }
-		/// <summary>
-		/// Generation version
-		/// </summary>
-		public string UnityWebBundleVersion { get; set; }
-		/// <summary>
-		/// Actual engine version
-		/// </summary>
-		public Version UnityWebMinimumRevision { get; set; }
-		public BundleFlags Flags
-		{
-			get
-			{
-				if (Signature == BundleType.UnityFS)
-				{
-					return FileStream.Flags;
-				}
-				return 0;
-			}
-		}
-
-		public BundleRawWebHeader RawWeb { get; set; }
-		public BundleFileStreamHeader FileStream { get; set; }
 	}
 }
