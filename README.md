@@ -98,7 +98,7 @@ The development of this project has a dedicated [Discord server](https://discord
 
 ## Build Actions
 
-For advanced users, every commit is automatically built into an alpha build with Github Actions. You can obtain these builds on the [actions page](https://github.com/ds5678/AssetRipper/actions) if you're logged in with a github account. Note that these builds are framework dependent, i.e. you need [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0) installed to run them.
+For advanced users, every commit is automatically built into an alpha build with Github Actions. You can obtain these builds on the [actions page](https://github.com/ds5678/AssetRipper/actions) if you're logged in with a github account.
 
 
 ## To Do
