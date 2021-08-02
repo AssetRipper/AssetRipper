@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build_windows:
+  build_test:
 
     runs-on: windows-latest
 
@@ -19,51 +19,11 @@ jobs:
         dotnet-version: 5.0.x
     - name: Build x64
       run: dotnet build /p:Configuration=Release /p:Platform=x64
-    - name: Build x86
-      run: dotnet build /p:Configuration=Release /p:Platform=x86
-      
-    - name: Publish AssetRipperConsole x64
-      run: dotnet publish /p:Configuration=Release /p:Platform=x64 /p:PublishSingleFile=true --self-contained true -r win-x64
-      working-directory: ./AssetRipperConsole/
-    - name: Publish AssetRipperConsole x86
-      run: dotnet publish /p:Configuration=Release /p:Platform=x86 /p:PublishSingleFile=true --self-contained true -r win-x86
-      working-directory: ./AssetRipperConsole/
-      
-    - name: Publish AssetRipperGUI x64
-      run: dotnet publish /p:Configuration=Release /p:Platform=x64 /p:PublishSingleFile=true --self-contained true -r win-x64
-      working-directory: ./AssetRipperGUI/
-    - name: Publish AssetRippeGUI x86
-      run: dotnet publish /p:Configuration=Release /p:Platform=x86 /p:PublishSingleFile=true --self-contained true -r win-x86
-      working-directory: ./AssetRipperGUI/
-      
-    - name: Upload AssetRipperConsole x64
-      uses: actions/upload-artifact@v2
-      with:
-        name: AssetRipperConsole_win64
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperConsole\Release\x64\win-x64\publish\*
-        if-no-files-found: error
-    - name: Upload AssetRipperConsole x86
-      uses: actions/upload-artifact@v2
-      with:
-        name: AssetRipperConsole_win86
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperConsole\Release\x86\win-x86\publish\*
-        if-no-files-found: error
-    - name: Upload AssetRipperGUI x64
-      uses: actions/upload-artifact@v2
-      with:
-        name: AssetRipperGUI_win64
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperGUI\Release\x64\win-x64\publish\*
-        if-no-files-found: error
-    - name: Upload AssetRipperGUI x86
-      uses: actions/upload-artifact@v2
-      with:
-        name: AssetRipperGUI_win86
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperGUI\Release\x86\win-x86\publish\*
-        if-no-files-found: error
+    
     - name: Test
       run: dotnet test --no-build --verbosity normal
-  build_linux:
-
+      
+  publish:
     runs-on: ubuntu-latest
 
     steps:
@@ -72,35 +32,63 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: Publish x64
-      run: dotnet publish /p:Configuration=Release /p:Platform=x64 /p:PublishSingleFile=true --self-contained true -r ubuntu-x64
+        
+        
+    - name: Publish AssetRipperConsole Windows x64
+      run: dotnet publish /p:PublishProfile=windows_x64
       working-directory: ./AssetRipperConsole/
-    - name: Upload AssetRipperConsole
+    - name: Publish AssetRipperConsole Windows x86
+      run: dotnet publish /p:PublishProfile=windows_x86
+      working-directory: ./AssetRipperConsole/
+      
+    - name: Publish AssetRipperGUI x64
+      run: dotnet publish /p:PublishProfile=GUI_x64
+      working-directory: ./AssetRipperGUI/
+    - name: Publish AssetRippeGUI x86
+      run: dotnet publish /p:PublishProfile=GUI_x86
+      working-directory: ./AssetRipperGUI/
+      
+    - name: Publish AssetRipperConsole Linux x64
+      run: dotnet publish /p:PublishProfile=linux_x64
+      working-directory: ./AssetRipperConsole/
+    - name: Publish AssetRipperConsole Mac x64
+      run: dotnet publish /p:PublishProfile=mac_x64
+      working-directory: ./AssetRipperConsole/
+      
+    - name: Upload AssetRipperConsole Windows x64
+      uses: actions/upload-artifact@v2
+      with:
+        name: AssetRipperConsole_win64
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_win64/*
+        if-no-files-found: error
+    - name: Upload AssetRipperConsole Windows x86
+      uses: actions/upload-artifact@v2
+      with:
+        name: AssetRipperConsole_win86
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_win86/*
+        if-no-files-found: error
+    - name: Upload AssetRipperGUI Windows x64
+      uses: actions/upload-artifact@v2
+      with:
+        name: AssetRipperGUI_win64
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_win64/*
+        if-no-files-found: error
+    - name: Upload AssetRipperGUI Windows x86
+      uses: actions/upload-artifact@v2
+      with:
+        name: AssetRipperGUI_win86
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_win86/*
+        if-no-files-found: error
+      
+    - name: Upload AssetRipperConsole Linux x64
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperConsole_linux64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/AssetRipperConsole/Release/x64/ubuntu-x64/publish/*
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_linux64/*
         if-no-files-found: error
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-  build_macos:
-
-    runs-on: macos-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
-    - name: Publish x64
-      run: dotnet publish /p:Configuration=Release /p:Platform=x64 /p:PublishSingleFile=true --self-contained true -r osx-x64
-      working-directory: ./AssetRipperConsole/
-    - name: Upload AssetRipperConsole
+    - name: Upload AssetRipperConsole Mac x64
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperConsole_mac64
-        path: /Users/runner/work/AssetRipper/AssetRipper/Bins/AssetRipperConsole/Release/x64/osx-x64/publish/*
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_mac64/*
         if-no-files-found: error
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
