@@ -1,6 +1,8 @@
 name: Build
 
-#on:
+on:
+   schedule:
+     - cron: 0 0 1 1 * #midnight on January 1st is a long time away from now
 #  push:
 #    branches: [ master ]
 #  pull_request:
