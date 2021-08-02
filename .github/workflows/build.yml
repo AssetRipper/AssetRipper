@@ -23,6 +23,21 @@ jobs:
       run: dotnet build /p:Configuration=Release /p:Platform=x64
     - name: Build x86
       run: dotnet build /p:Configuration=Release /p:Platform=x86
+      
+    - name: Publish AssetRipperConsole x64
+      run: dotnet publish /p:Configuration=Release /p:Platform=x64
+      working-directory: ./AssetRipperConsole/
+    - name: Publish AssetRipperConsole x86
+      run: dotnet publish /p:Configuration=Release /p:Platform=x86
+      working-directory: ./AssetRipperConsole/
+      
+    - name: Publish AssetRipperGUI x64
+      run: dotnet publish /p:Configuration=Release /p:Platform=x64
+      working-directory: ./AssetRipperGUI/
+    - name: Publish AssetRippeGUI x86
+      run: dotnet publish /p:Configuration=Release /p:Platform=x86
+      working-directory: ./AssetRipperGUI/
+      
     - name: Upload AssetRipperConsole x64
       uses: actions/upload-artifact@v2
       with:
@@ -64,6 +79,9 @@ jobs:
     - name: Build x64
       run: dotnet build /p:Configuration=Release /p:Platform=x64
       working-directory: ./AssetRipperConsole/
+    - name: Publish x64
+      run: dotnet publish /p:Configuration=Release /p:Platform=x64
+      working-directory: ./AssetRipperConsole/
     - name: Upload AssetRipperConsole
       uses: actions/upload-artifact@v2
       with:
@@ -86,6 +104,9 @@ jobs:
       run: dotnet restore
     - name: Build x64
       run: dotnet build /p:Configuration=Release /p:Platform=x64
+      working-directory: ./AssetRipperConsole/
+    - name: Publish x64
+      run: dotnet publish /p:Configuration=Release /p:Platform=x64
       working-directory: ./AssetRipperConsole/
     - name: Upload AssetRipperConsole
       uses: actions/upload-artifact@v2
