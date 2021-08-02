@@ -23,17 +23,17 @@ jobs:
       run: dotnet build /p:Configuration=Release /p:Platform=x86
       
     - name: Publish AssetRipperConsole x64
-      run: dotnet publish /p:Configuration=Release /p:Platform=x64 --self-contained true -r win-x64
+      run: dotnet publish /p:Configuration=Release /p:Platform=x64 /p:PublishSingleFile=true --self-contained true -r win-x64
       working-directory: ./AssetRipperConsole/
     - name: Publish AssetRipperConsole x86
-      run: dotnet publish /p:Configuration=Release /p:Platform=x86 --self-contained true -r win-x86
+      run: dotnet publish /p:Configuration=Release /p:Platform=x86 /p:PublishSingleFile=true --self-contained true -r win-x86
       working-directory: ./AssetRipperConsole/
       
     - name: Publish AssetRipperGUI x64
-      run: dotnet publish /p:Configuration=Release /p:Platform=x64 --self-contained true -r win-x64
+      run: dotnet publish /p:Configuration=Release /p:Platform=x64 /p:PublishSingleFile=true --self-contained true -r win-x64
       working-directory: ./AssetRipperGUI/
     - name: Publish AssetRippeGUI x86
-      run: dotnet publish /p:Configuration=Release /p:Platform=x86 --self-contained true -r win-x86
+      run: dotnet publish /p:Configuration=Release /p:Platform=x86 /p:PublishSingleFile=true --self-contained true -r win-x86
       working-directory: ./AssetRipperGUI/
       
     - name: Upload AssetRipperConsole x64
@@ -73,7 +73,7 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Publish x64
-      run: dotnet publish /p:Configuration=Release /p:Platform=x64 --self-contained true -r ubuntu-x64
+      run: dotnet publish /p:Configuration=Release /p:Platform=x64 /p:PublishSingleFile=true --self-contained true -r ubuntu-x64
       working-directory: ./AssetRipperConsole/
     - name: Upload AssetRipperConsole
       uses: actions/upload-artifact@v2
@@ -94,7 +94,7 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Publish x64
-      run: dotnet publish /p:Configuration=Release /p:Platform=x64 --self-contained true -r osx-x64
+      run: dotnet publish /p:Configuration=Release /p:Platform=x64 /p:PublishSingleFile=true --self-contained true -r osx-x64
       working-directory: ./AssetRipperConsole/
     - name: Upload AssetRipperConsole
       uses: actions/upload-artifact@v2
