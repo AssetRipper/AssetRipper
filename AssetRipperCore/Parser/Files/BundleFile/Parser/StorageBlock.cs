@@ -3,8 +3,8 @@
 namespace AssetRipper.Parser.Files.BundleFile.Parser
 {
 	/// <summary>
-	/// Contains compression information about block
-	/// Block is a similar to chunk structure that contains data blob but without file entries
+	/// Contains compression information about a block<br/>
+	/// Blocks are similar to chunk structure in that it contains a data blob but without file entries
 	/// </summary>
 	public struct StorageBlock : IBundleReadable
 	{
