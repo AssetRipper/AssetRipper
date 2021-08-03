@@ -1,11 +1,11 @@
-using AssetRipper.Structure.Assembly.Managers;
-using AssetRipper.Structure.Assembly.Serializable;
+using AssetRipper.Core.Structure.Assembly.Managers;
+using AssetRipper.Core.Structure.Assembly.Serializable;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
-using static AssetRipper.Structure.Assembly.Mono.MonoUtils;
+using static AssetRipper.Core.Structure.Assembly.Mono.MonoUtils;
 
-namespace AssetRipper.Structure.Assembly.Mono
+namespace AssetRipper.Core.Structure.Assembly.Mono
 {
 	public class MonoType : SerializableType
 	{

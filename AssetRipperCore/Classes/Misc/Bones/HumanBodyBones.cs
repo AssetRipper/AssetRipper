@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Misc.Bones
+﻿namespace AssetRipper.Core.Classes.Misc.Bones
 {
 	public enum HumanBodyBones
 	{

@@ -1,12 +1,12 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
-using AssetRipper.Math;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.Math;
 using System.IO;
-using AssetRipper.IO.Extensions;
+using AssetRipper.Core.IO.Extensions;
 
-namespace AssetRipper.Classes.Misc
+namespace AssetRipper.Core.Classes.Misc
 {
 	public struct MinMaxAABB : IAsset
 	{

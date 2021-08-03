@@ -1,9 +1,9 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Misc.KeyframeTpl;
-using AssetRipper.Classes.Misc.KeyframeTpl.TangentMode;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc.KeyframeTpl;
+using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
+using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Converters.Misc
+namespace AssetRipper.Core.Converters.Misc
 {
 	public static class KeyframeTplConverter
 	{

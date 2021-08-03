@@ -1,16 +1,16 @@
-﻿using AssetRipper.Project.Exporters.Script;
-using AssetRipper.Project.Exporters.Script.Elements;
-using AssetRipper.Layout;
-using AssetRipper.Parser.Utils;
-using AssetRipper.Structure.Assembly.Mono;
-using AssetRipper.Structure.Assembly.Serializable;
-using AssetRipper.Structure.GameStructure.Platforms;
+﻿using AssetRipper.Core.Project.Exporters.Script;
+using AssetRipper.Core.Project.Exporters.Script.Elements;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Utils;
+using AssetRipper.Core.Structure.Assembly.Mono;
+using AssetRipper.Core.Structure.Assembly.Serializable;
+using AssetRipper.Core.Structure.GameStructure.Platforms;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Structure.Assembly.Managers
+namespace AssetRipper.Core.Structure.Assembly.Managers
 {
 	internal class BaseManager : IAssemblyManager, IAssemblyResolver
 	{

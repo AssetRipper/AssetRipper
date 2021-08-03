@@ -1,4 +1,4 @@
-namespace AssetRipper.Parser.Files
+namespace AssetRipper.Core.Parser.Files
 {
 	public enum Platform : uint
 	{

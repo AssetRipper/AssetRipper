@@ -1,11 +1,11 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.Shader
+namespace AssetRipper.Core.Classes.Shader
 {
 	public struct ShaderCompilationInfo : IAssetReadable, IYAMLExportable
 	{

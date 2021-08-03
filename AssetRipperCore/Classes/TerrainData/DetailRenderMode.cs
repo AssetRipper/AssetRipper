@@ -1,4 +1,4 @@
-namespace AssetRipper.Classes.TerrainData
+namespace AssetRipper.Core.Classes.TerrainData
 {
 	/// <summary>
 	/// Render mode for detail prototypes.

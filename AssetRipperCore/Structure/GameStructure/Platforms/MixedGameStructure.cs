@@ -1,13 +1,13 @@
-﻿using AssetRipper.IO.MultiFile;
-using AssetRipper.Logging;
-using AssetRipper.Structure.Assembly.Managers;
-using AssetRipper.Utils;
+﻿using AssetRipper.Core.IO.MultiFile;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Structure.Assembly.Managers;
+using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace AssetRipper.Structure.GameStructure.Platforms
+namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
 	internal class MixedGameStructure : PlatformGameStructure
 	{

@@ -1,12 +1,12 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Meta.Importers.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Meta.Importers.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.YAML;
 using System;
 using DateTime = System.DateTime;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Classes.Meta
+namespace AssetRipper.Core.Classes.Meta
 {
 	public struct Meta
 	{

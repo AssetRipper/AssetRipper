@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.QualitySettings
+﻿namespace AssetRipper.Core.Classes.QualitySettings
 {
 	/// <summary>
 	/// The rendering mode of Shadowmask.

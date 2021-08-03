@@ -1,8 +1,8 @@
-﻿using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.IO.Asset;
-using AssetRipper.Math;
+﻿using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.Utils.Extensions
+namespace AssetRipper.Core.Classes.Utils.Extensions
 {
 	public static class AssetReaderExtensions
 	{

@@ -1,11 +1,11 @@
-﻿using AssetRipper.Converters.TrailRenderer;
-using AssetRipper.Project;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
-using AssetRipper.Math;
+﻿using AssetRipper.Core.Converters.TrailRenderer;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.TrailRenderer
+namespace AssetRipper.Core.Classes.TrailRenderer
 {
 	public struct Gradient : IAsset
 	{

@@ -4,7 +4,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputType>WinExe</OutputType>
     <AssemblyName>AssetRipper</AssemblyName>
-    <RootNamespace>AssetRipperGUI</RootNamespace>
+    <RootNamespace>AssetRipper.GUI</RootNamespace>
     <OutputPath>..\Bins\AssetRipperGUI\$(Configuration)\$(Platform)\</OutputPath>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>

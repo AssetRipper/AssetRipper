@@ -1,9 +1,9 @@
-﻿using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
+﻿using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.AnimatorController.State
+namespace AssetRipper.Core.Classes.AnimatorController.State
 {
 	public struct StateMachineBehaviourVectorDescription : IAssetReadable
 	{

@@ -1,14 +1,14 @@
-using AssetRipper.Converters.Shader;
-using AssetRipper.IO;
-using AssetRipper.Classes.Shader;
-using AssetRipper.Classes.Shader.SerializedShader;
+using AssetRipper.Core.Converters.Shader;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.Classes.Shader.SerializedShader;
 using Smolv;
 using SpirV;
 using System;
 using System.IO;
 using System.Runtime.Versioning;
 
-namespace AssetRipperLibrary.Exporters.Shaders
+namespace AssetRipper.Library.Exporters.Shaders
 {
 	[SupportedOSPlatform("windows")]
 	public class ShaderVulkanExporter : ShaderTextExporter

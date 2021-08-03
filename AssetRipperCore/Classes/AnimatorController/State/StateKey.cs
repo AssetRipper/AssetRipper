@@ -1,6 +1,6 @@
-﻿using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Classes.AnimatorController.State
+namespace AssetRipper.Core.Classes.AnimatorController.State
 {
 	public struct StateKey : IAssetReadable
 	{

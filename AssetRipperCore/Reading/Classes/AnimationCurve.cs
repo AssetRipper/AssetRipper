@@ -1,7 +1,7 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Core.IO;
 using System;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public class AnimationCurve<T>
     {

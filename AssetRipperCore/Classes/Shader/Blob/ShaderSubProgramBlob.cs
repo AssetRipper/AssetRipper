@@ -1,15 +1,15 @@
-﻿using AssetRipper.Extensions;
-using AssetRipper.IO.Endian;
-using AssetRipper.Layout;
-using AssetRipper.Lz4;
-using AssetRipper.Classes.Shader.Enums;
-using AssetRipper.IO;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Extensions;
+using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Lz4;
+using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Asset;
 using System;
 using System.IO;
 using System.Linq;
 
-namespace AssetRipper.Classes.Shader.Blob
+namespace AssetRipper.Core.Classes.Shader.Blob
 {
 	public struct ShaderSubProgramBlob
 	{

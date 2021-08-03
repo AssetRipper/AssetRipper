@@ -2,12 +2,12 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle(AssetRipper.BuildInfo.GUIName)]
+[assembly: AssemblyTitle(AssetRipper.Core.BuildInfo.GUIName)]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany(AssetRipper.BuildInfo.Author)]
-[assembly: AssemblyProduct(AssetRipper.BuildInfo.GUIName)]
-[assembly: AssemblyCopyright(AssetRipper.BuildInfo.CopyRight)]
+[assembly: AssemblyCompany(AssetRipper.Core.BuildInfo.Author)]
+[assembly: AssemblyProduct(AssetRipper.Core.BuildInfo.GUIName)]
+[assembly: AssemblyCopyright(AssetRipper.Core.BuildInfo.CopyRight)]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,5 +33,5 @@ using System.Windows;
 )]
 
 
-[assembly: AssemblyVersion(AssetRipper.BuildInfo.Version)]
-[assembly: AssemblyFileVersion(AssetRipper.BuildInfo.Version)]
+[assembly: AssemblyVersion(AssetRipper.Core.BuildInfo.Version)]
+[assembly: AssemblyFileVersion(AssetRipper.Core.BuildInfo.Version)]

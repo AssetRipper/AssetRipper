@@ -1,5 +1,5 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.IO.Extensions;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.IO.Extensions;
 using Brotli;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 
-namespace AssetRipper.Reading
+namespace AssetRipper.Core.Reading
 {
 	public class WebFile
 	{

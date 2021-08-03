@@ -2,7 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace AssetRipper.Extensions
+namespace AssetRipper.Core.Extensions
 {
 	public static class BitConverterExtensions
 	{

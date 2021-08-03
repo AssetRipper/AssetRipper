@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystem.Curve
+﻿namespace AssetRipper.Core.Classes.ParticleSystem.Curve
 {
 	public enum ParticleSystemCurveMode : ushort
 	{

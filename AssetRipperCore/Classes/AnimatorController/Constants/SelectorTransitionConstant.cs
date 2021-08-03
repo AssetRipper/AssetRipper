@@ -1,10 +1,10 @@
-using AssetRipper.Project;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System;
 
-namespace AssetRipper.Classes.AnimatorController.Constants
+namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
 	public struct SelectorTransitionConstant : IAssetReadable, IYAMLExportable
 	{

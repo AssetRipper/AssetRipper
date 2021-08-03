@@ -1,7 +1,7 @@
-﻿using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Layout
+namespace AssetRipper.Core.Layout
 {
 	/// <summary>
 	/// A class for holding the Version, Platform, and Transfer Instruction Flags

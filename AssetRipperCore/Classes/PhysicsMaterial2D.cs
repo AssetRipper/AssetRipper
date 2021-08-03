@@ -1,9 +1,9 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Core.Classes
 {
 	public sealed class PhysicsMaterial2D : NamedObject
 	{

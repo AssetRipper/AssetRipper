@@ -1,16 +1,16 @@
-using AssetRipper.Converters.Sprite;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Mesh;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
+using AssetRipper.Core.Converters.Sprite;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Mesh;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Parser.Files.Version;
-using AssetRipper.Math;
+using Version = AssetRipper.Core.Parser.Files.Version;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.Sprite
+namespace AssetRipper.Core.Classes.Sprite
 {
 	public struct SpriteRenderData : IAssetReadable, IDependent
 	{

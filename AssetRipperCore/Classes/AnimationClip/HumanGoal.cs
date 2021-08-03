@@ -1,10 +1,10 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.Math;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.AnimationClip
+namespace AssetRipper.Core.Classes.AnimationClip
 {
 	public class HumanGoal : IAssetReadable
 	{

@@ -1,10 +1,10 @@
-using AssetRipper.Project;
-using AssetRipper.Classes.AnimatorController.Constants;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.AnimatorController.Constants;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.AnimatorTransition
+namespace AssetRipper.Core.Classes.AnimatorTransition
 {
 	public sealed class AnimatorCondition : IYAMLExportable
 	{

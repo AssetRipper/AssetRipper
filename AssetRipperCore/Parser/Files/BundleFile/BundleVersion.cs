@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Parser.Files.BundleFile
+﻿namespace AssetRipper.Core.Parser.Files.BundleFile
 {
 	public enum BundleVersion
 	{

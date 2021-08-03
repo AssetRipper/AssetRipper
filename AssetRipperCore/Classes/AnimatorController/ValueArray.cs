@@ -1,12 +1,12 @@
-using AssetRipper.Project;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System;
-using Version = AssetRipper.Parser.Files.Version;
-using AssetRipper.Math;
+using Version = AssetRipper.Core.Parser.Files.Version;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.AnimatorController
+namespace AssetRipper.Core.Classes.AnimatorController
 {
 	public struct ValueArray : IAssetReadable, IYAMLExportable
 	{

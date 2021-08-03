@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystem.NoiseModule
+﻿namespace AssetRipper.Core.Classes.ParticleSystem.NoiseModule
 {
 	/// <summary>
 	/// The quality of the generated noise.

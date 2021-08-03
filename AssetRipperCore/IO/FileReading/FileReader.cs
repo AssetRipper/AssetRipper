@@ -1,11 +1,11 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.IO.Extensions;
-using AssetRipper.Reading;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Reading;
 using System;
 using System.IO;
 using System.Linq;
 
-namespace AssetRipper.IO.FileReading
+namespace AssetRipper.Core.IO.FileReading
 {
 	public class FileReader : AltEndianBinaryReader
 	{

@@ -1,12 +1,12 @@
-using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System.Collections.Generic;
-using Object = AssetRipper.Classes.Object.Object;
+using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Structure.Assembly.Serializable
+namespace AssetRipper.Core.Structure.Assembly.Serializable
 {
 	public sealed class SerializablePointer : IAsset, IDependent
 	{

@@ -1,6 +1,6 @@
-﻿using AssetRipper.Math;
+﻿using AssetRipper.Core.Math;
 
-namespace AssetRipper.Imported
+namespace AssetRipper.Core.Imported
 {
 	public class ImportedVertex
 	{

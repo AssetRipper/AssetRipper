@@ -1,17 +1,17 @@
-using AssetRipper.Layout;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Asset;
-using AssetRipper.Structure;
-using AssetRipper.Structure.Assembly.Managers;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Structure;
+using AssetRipper.Core.Structure.Assembly.Managers;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Classes.Object.Object;
+using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Parser.Files.SerializedFiles
+namespace AssetRipper.Core.Parser.Files.SerializedFiles
 {
 	public class VirtualSerializedFile : ISerializedFile
 	{

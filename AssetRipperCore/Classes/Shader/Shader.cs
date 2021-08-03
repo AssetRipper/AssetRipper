@@ -1,22 +1,22 @@
-using AssetRipper.Converters.Shader;
-using AssetRipper.Project;
-using AssetRipper.IO.Extensions;
-using AssetRipper.Layout;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Material;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Shader.Blob;
-using AssetRipper.Classes.Shader.Enums;
-using AssetRipper.IO;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Converters.Shader;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Material;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Shader.Blob;
+using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Classes.Shader
+namespace AssetRipper.Core.Classes.Shader
 {
 	public sealed class Shader : TextAsset
 	{

@@ -1,6 +1,6 @@
-﻿using AssetRipper.IO;
+﻿using AssetRipper.Core.IO;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public class ValueArrayConstant
     {

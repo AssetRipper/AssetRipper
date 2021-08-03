@@ -1,7 +1,7 @@
-﻿using AssetRipper.Parser.Asset;
+﻿using AssetRipper.Core.Parser.Asset;
 using System;
 
-namespace AssetRipper.Classes.Utils.Extensions
+namespace AssetRipper.Core.Classes.Utils.Extensions
 {
 	public static class TypeExtensions
 	{

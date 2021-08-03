@@ -1,9 +1,9 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.ParticleSystem.Curve;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.ParticleSystem.Curve;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.ParticleSystem
+namespace AssetRipper.Core.Classes.ParticleSystem
 {
 	public sealed class ForceModule : ParticleSystemModule
 	{

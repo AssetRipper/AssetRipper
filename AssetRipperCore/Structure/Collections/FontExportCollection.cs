@@ -1,9 +1,9 @@
-using AssetRipper.Project.Exporters;
-using AssetRipper.Classes.Font;
+using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.Classes.Font;
 using System;
-using Object = AssetRipper.Classes.Object.Object;
+using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Structure.Collections
+namespace AssetRipper.Core.Structure.Collections
 {
 	public sealed class FontExportCollection : AssetExportCollection
 	{

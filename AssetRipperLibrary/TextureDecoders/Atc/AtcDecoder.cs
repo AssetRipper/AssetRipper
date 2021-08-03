@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace AssetRipperLibrary.TextureDecoders.Atc
+namespace AssetRipper.Library.TextureDecoders.Atc
 {
 	public static class AtcDecoder
 	{

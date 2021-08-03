@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Misc.KeyframeTpl
+﻿namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 {
 	public enum WeightedMode
 	{

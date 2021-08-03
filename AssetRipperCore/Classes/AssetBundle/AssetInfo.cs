@@ -1,10 +1,10 @@
-﻿using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.AssetBundle
+namespace AssetRipper.Core.Classes.AssetBundle
 {
 	public class AssetInfo : IAssetReadable, IDependent
 	{

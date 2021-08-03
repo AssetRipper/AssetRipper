@@ -1,27 +1,27 @@
-﻿using AssetRipper.Layout;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes;
-using AssetRipper.Classes.AnimationClip;
-using AssetRipper.Classes.AnimationClip.Clip;
-using AssetRipper.Classes.AnimationClip.Curves;
-using AssetRipper.Classes.AnimationClip.Editor;
-using AssetRipper.Classes.AnimationClip.GenericBinding;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Misc.KeyframeTpl;
-using AssetRipper.Classes.Misc.Serializable;
+﻿using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.AnimationClip;
+using AssetRipper.Core.Classes.AnimationClip.Clip;
+using AssetRipper.Core.Classes.AnimationClip.Curves;
+using AssetRipper.Core.Classes.AnimationClip.Editor;
+using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.KeyframeTpl;
+using AssetRipper.Core.Classes.Misc.Serializable;
 using SevenZip;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Object = AssetRipper.Classes.Object.Object;
-using AssetRipper.Math;
+using Object = AssetRipper.Core.Classes.Object.Object;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Converters.AnimationClip
+namespace AssetRipper.Core.Converters.AnimationClip
 {
 	public class AnimationClipConverter
 	{
-		private AnimationClipConverter(AssetRipper.Classes.AnimationClip.AnimationClip clip)
+		private AnimationClipConverter(AssetRipper.Core.Classes.AnimationClip.AnimationClip clip)
 		{
 			if (clip == null)
 			{
@@ -31,7 +31,7 @@ namespace AssetRipper.Converters.AnimationClip
 			m_customCurveResolver = new CustomCurveResolver(clip);
 		}
 
-		public static AnimationClipConverter Process(AssetRipper.Classes.AnimationClip.AnimationClip clip)
+		public static AnimationClipConverter Process(AssetRipper.Core.Classes.AnimationClip.AnimationClip clip)
 		{
 			AnimationClipConverter converter = new AnimationClipConverter(clip);
 			converter.ProcessInner();
@@ -491,7 +491,7 @@ namespace AssetRipper.Converters.AnimationClip
 		private readonly Dictionary<FloatCurve, List<KeyframeTpl<Float>>> m_floats = new Dictionary<FloatCurve, List<KeyframeTpl<Float>>>();
 		private readonly Dictionary<PPtrCurve, List<PPtrKeyframe>> m_pptrs = new Dictionary<PPtrCurve, List<PPtrKeyframe>>();
 
-		private readonly AssetRipper.Classes.AnimationClip.AnimationClip m_clip;
+		private readonly AssetRipper.Core.Classes.AnimationClip.AnimationClip m_clip;
 		private readonly CustomCurveResolver m_customCurveResolver;
 	}
 }

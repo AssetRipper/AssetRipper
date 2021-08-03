@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.Utils.Extensions
+namespace AssetRipper.Core.Classes.Utils.Extensions
 {
 	public static class ObjectExtensions
 	{

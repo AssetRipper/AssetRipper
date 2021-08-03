@@ -1,6 +1,6 @@
-﻿using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Classes.Shader.SerializedShader
+namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
 	public struct SerializedTextureProperty : IAssetReadable
 	{

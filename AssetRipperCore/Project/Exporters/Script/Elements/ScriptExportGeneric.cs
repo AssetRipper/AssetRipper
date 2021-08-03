@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Project.Exporters.Script.Elements
+namespace AssetRipper.Core.Project.Exporters.Script.Elements
 {
 	public abstract class ScriptExportGeneric : ScriptExportType
 	{

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public static class MeshHelper
     {
@@ -148,7 +148,7 @@ namespace AssetRipper.Reading.Classes
                         result[i] = BitConverter.ToSingle(inputBytes, i * 4);
                         break;
                     case VertexFormat.kVertexFormatFloat16:
-                        result[i] = (float)AssetRipper.Utils.HalfUtils.ToHalf(inputBytes, i * 2);
+                        result[i] = (float)AssetRipper.Core.Utils.HalfUtils.ToHalf(inputBytes, i * 2);
                         break;
                     case VertexFormat.kVertexFormatUNorm8:
                         result[i] = inputBytes[i] / 255f;

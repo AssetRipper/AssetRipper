@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Utils
+namespace AssetRipper.Core.Utils
 {
 	public class ThreadSafeRandom
 	{

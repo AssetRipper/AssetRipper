@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Misc.Serializable.Gradient
+﻿namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 {
 	/// <summary>
 	/// Select how gradients will be evaluated.

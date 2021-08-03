@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Meta.Importers.Texture
+﻿namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	/// <summary>
 	/// Cubemap generation mode for TextureImporter.

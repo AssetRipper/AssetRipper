@@ -1,26 +1,26 @@
-using AssetRipper.Project.Exporters;
-using AssetRipper.Project.Exporters.Engine;
-using AssetRipper.IO.MultiFile;
-using AssetRipper.Logging;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Structure.GameStructure;
-using AssetRipper.Utils;
-using AssetRipperGUI.Properties;
-using AssetRipperGUI.Windows;
-using AssetRipperLibrary.Exporters.Audio;
-using AssetRipperLibrary.Exporters.Shaders;
-using AssetRipperLibrary.Exporters.Textures;
+using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.Project.Exporters.Engine;
+using AssetRipper.Core.IO.MultiFile;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Core.Utils;
+using AssetRipper.GUI.Properties;
+using AssetRipper.GUI.Windows;
+using AssetRipper.Library.Exporters.Audio;
+using AssetRipper.Library.Exporters.Shaders;
+using AssetRipper.Library.Exporters.Textures;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using Version = AssetRipper.Parser.Files.Version;
-using AssetRipper;
+using Version = AssetRipper.Core.Parser.Files.Version;
+using AssetRipper.Core;
 
-namespace AssetRipperGUI
+namespace AssetRipper.GUI
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml

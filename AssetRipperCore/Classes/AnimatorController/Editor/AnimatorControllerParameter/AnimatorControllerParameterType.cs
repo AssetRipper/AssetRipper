@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.AnimatorController.Editor.AnimatorControllerParameter
+﻿namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerParameter
 {
 	/// <summary>
 	/// The type of the parameter.

@@ -1,9 +1,9 @@
-﻿using AssetRipper.Utils;
+﻿using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AssetRipper.Logging
+namespace AssetRipper.Core.Logging
 {
 	public static class Logger
 	{

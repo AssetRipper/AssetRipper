@@ -1,10 +1,10 @@
-using AssetRipper.Project;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
-using AssetRipper.YAML.Extensions;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 
-namespace AssetRipper.Classes.Avatar
+namespace AssetRipper.Core.Classes.Avatar
 {
 	public class Skeleton : IAssetReadable, IYAMLExportable
 	{

@@ -1,6 +1,6 @@
-﻿using AssetRipper.Classes.Texture2D;
+﻿using AssetRipper.Core.Classes.Texture2D;
 
-namespace AssetRipper.Layout.Classes
+namespace AssetRipper.Core.Layout.Classes
 {
 #warning TODO:
 	public sealed class Texture2DLayout

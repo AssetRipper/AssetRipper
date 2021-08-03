@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.EditorSettings
+﻿namespace AssetRipper.Core.Classes.EditorSettings
 {
 	public enum SerializationMode
 	{

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.YAML.Extensions
+namespace AssetRipper.Core.YAML.Extensions
 {
 	public static class IDictionaryYAMLExtensions
 	{

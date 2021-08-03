@@ -1,7 +1,7 @@
-﻿using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Classes.Shader.Blob
+namespace AssetRipper.Core.Classes.Shader.Blob
 {
 	public struct ShaderSubProgramEntry : IAssetReadable, IAssetWritable
 	{

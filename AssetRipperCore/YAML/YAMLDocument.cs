@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.YAML
+﻿namespace AssetRipper.Core.YAML
 {
 	public sealed class YAMLDocument
 	{

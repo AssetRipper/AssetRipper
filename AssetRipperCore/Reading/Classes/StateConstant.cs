@@ -1,8 +1,8 @@
-﻿using AssetRipper.Classes.AnimatorController.Constants;
-using AssetRipper.IO;
-using AssetRipper.IO.Extensions;
+﻿using AssetRipper.Core.Classes.AnimatorController.Constants;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Extensions;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public class StateConstant
     {

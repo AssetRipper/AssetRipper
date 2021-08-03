@@ -1,8 +1,8 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Object;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Object;
 using System.Collections.Generic;
 
-namespace AssetRipper.Parser.Asset
+namespace AssetRipper.Core.Parser.Asset
 {
 	public interface IDependent
 	{

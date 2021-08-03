@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.AnimatorController.Editor.AnimatorControllerLayer
+﻿namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerLayer
 {
 	/// <summary>
 	/// Specifies how the layer is blended with the previous layers.

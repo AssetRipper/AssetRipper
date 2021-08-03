@@ -1,9 +1,9 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.TerrainData;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.TerrainData;
 using System;
 using System.Linq;
 
-namespace AssetRipper.Converters.TerrainData
+namespace AssetRipper.Core.Converters.TerrainData
 {
 	public static class HeightmapConverter
 	{

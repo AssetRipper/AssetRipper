@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystemRenderer
+﻿namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 {
 	/// <summary>
 	/// The rendering mode for particle systems

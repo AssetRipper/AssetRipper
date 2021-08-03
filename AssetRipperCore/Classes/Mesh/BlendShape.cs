@@ -1,12 +1,12 @@
-using AssetRipper.Project;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using SevenZip;
-using AssetRipper.Math;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.Mesh
+namespace AssetRipper.Core.Classes.Mesh
 {
 	/// <summary>
 	/// MeshBlendShape previously

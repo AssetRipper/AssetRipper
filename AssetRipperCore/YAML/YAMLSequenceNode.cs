@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AssetRipper.YAML
+namespace AssetRipper.Core.YAML
 {
 	public sealed class YAMLSequenceNode : YAMLNode
 	{

@@ -1,14 +1,14 @@
-using AssetRipper.Classes.Texture2D;
-using AssetRipperLibrary.TextureContainers.DDS;
-using AssetRipperLibrary.TextureContainers.KTX;
-using AssetRipperLibrary.TextureContainers.PVR;
+using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Library.TextureContainers.DDS;
+using AssetRipper.Library.TextureContainers.KTX;
+using AssetRipper.Library.TextureContainers.PVR;
 using System;
 using System.Runtime.Versioning;
-using KTXBaseFormat = AssetRipperLibrary.TextureContainers.KTX.KTXBaseInternalFormat;
-using KTXFormat = AssetRipperLibrary.TextureContainers.KTX.KTXInternalFormat;
-using PVRFormat = AssetRipperLibrary.TextureContainers.PVR.PVRPixelFormat;
+using KTXBaseFormat = AssetRipper.Library.TextureContainers.KTX.KTXBaseInternalFormat;
+using KTXFormat = AssetRipper.Library.TextureContainers.KTX.KTXInternalFormat;
+using PVRFormat = AssetRipper.Library.TextureContainers.PVR.PVRPixelFormat;
 
-namespace AssetRipperLibrary.Exporters.Textures
+namespace AssetRipper.Library.Exporters.Textures
 {
 	[SupportedOSPlatform("windows")]
 	public static class Texture2DExtensions

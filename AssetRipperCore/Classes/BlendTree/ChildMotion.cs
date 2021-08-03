@@ -1,15 +1,15 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.AnimatorController.Constants;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
-using AssetRipper.Math;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.AnimatorController.Constants;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.BlendTree
+namespace AssetRipper.Core.Classes.BlendTree
 {
 	public sealed class ChildMotion : IYAMLExportable
 	{

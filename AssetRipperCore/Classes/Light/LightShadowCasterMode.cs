@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Light
+﻿namespace AssetRipper.Core.Classes.Light
 {
 	/// <summary>
 	/// Allows mixed lights to control shadow caster culling when Shadowmasks are present.

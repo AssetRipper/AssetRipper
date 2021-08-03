@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace AssetRipper.Parser.Files.ResourceFiles
+namespace AssetRipper.Core.Parser.Files.ResourceFiles
 {
 	public interface IResourceFile
 	{

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public class UAVParameter
     {

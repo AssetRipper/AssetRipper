@@ -1,7 +1,7 @@
-﻿using AssetRipper.Layout;
-using AssetRipper.Parser.Asset;
+﻿using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Asset;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Core.Classes
 {
 	public abstract class Motion : NamedObject
 	{

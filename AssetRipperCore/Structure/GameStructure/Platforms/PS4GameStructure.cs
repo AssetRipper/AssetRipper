@@ -1,9 +1,9 @@
-﻿using AssetRipper.IO.FileReading;
-using AssetRipper.Utils;
+﻿using AssetRipper.Core.IO.FileReading;
+using AssetRipper.Core.Utils;
 using System;
 using System.IO;
 
-namespace AssetRipper.Structure.GameStructure.Platforms
+namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
 	internal sealed class PS4GameStructure : PlatformGameStructure
 	{
@@ -41,8 +41,8 @@ namespace AssetRipper.Structure.GameStructure.Platforms
 			ModulesPath = Path.Combine(GameDataPath, ModulesName);
 			UnityPlayerPath = null;
 			string globalGameManagersPath = Path.Combine(GameDataPath, "globalgamemanagers");
-			string unityVersion = (new AssetRipper.SerializedFiles.SerializedFile(new FileReader(globalGameManagersPath), null)).unityVersion;
-			UnityVersion = AssetRipper.Parser.Files.Version.Parse(unityVersion).ToArray();
+			string unityVersion = (new AssetRipper.Core.SerializedFiles.SerializedFile(new FileReader(globalGameManagersPath), null)).unityVersion;
+			UnityVersion = AssetRipper.Core.Parser.Files.Version.Parse(unityVersion).ToArray();
 			Il2CppGameAssemblyPath = Path.Combine(ModulesPath, PS4IL2CppGameAssemblyName);
 			Il2CppMetaDataPath = Path.Combine(GameDataPath, MetadataName, DefaultGlobalMetadataName);
 

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Texture2D
+﻿namespace AssetRipper.Core.Classes.Texture2D
 {
 	/// <summary>
 	/// TextureDimension enum as it present in Engine 2017.3

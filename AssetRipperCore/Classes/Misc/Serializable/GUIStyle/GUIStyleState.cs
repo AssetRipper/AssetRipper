@@ -1,13 +1,13 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Layout;
-using AssetRipper.Layout.Classes.Misc.Serializable.GUIStyle;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
 using System;
-using AssetRipper.Math;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.Misc.Serializable.GUIStyle
+namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 {
 	public struct GUIStyleState : IAsset
 	{

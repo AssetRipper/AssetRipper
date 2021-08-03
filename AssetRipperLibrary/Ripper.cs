@@ -1,16 +1,16 @@
-﻿using AssetRipper.Project.Exporters;
-using AssetRipper.Project.Exporters.Engine;
-using AssetRipper.Logging;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Structure.GameStructure;
-using AssetRipperLibrary.Exporters.Audio;
-using AssetRipperLibrary.Exporters.Shaders;
-using AssetRipperLibrary.Exporters.Textures;
+﻿using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.Project.Exporters.Engine;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Library.Exporters.Audio;
+using AssetRipper.Library.Exporters.Shaders;
+using AssetRipper.Library.Exporters.Textures;
 using System;
 using System.Collections.Generic;
-using AssetRipper;
+using AssetRipper.Core;
 
-namespace AssetRipperLibrary
+namespace AssetRipper.Library
 {
 	public class Ripper
 	{

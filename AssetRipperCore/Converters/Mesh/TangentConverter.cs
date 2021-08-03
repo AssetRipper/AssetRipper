@@ -1,8 +1,8 @@
-﻿using AssetRipper.Classes.Mesh;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.Math;
+﻿using AssetRipper.Core.Classes.Mesh;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Converters.Mesh
+namespace AssetRipper.Core.Converters.Mesh
 {
 	public static class TangentConverter
 	{

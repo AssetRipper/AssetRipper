@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystem.MinMaxGradient
+﻿namespace AssetRipper.Core.Classes.ParticleSystem.MinMaxGradient
 {
 	public enum MinMaxGradientState : ushort
 	{

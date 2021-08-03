@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Animator
+﻿namespace AssetRipper.Core.Classes.Animator
 {
 	/// <summary>
 	/// Culling mode for the Animator.

@@ -1,13 +1,13 @@
-using AssetRipper.Project.Exporters.Script.Elements;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Structure.Collections;
+using AssetRipper.Core.Project.Exporters.Script.Elements;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Structure.Collections;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Classes.Object.Object;
+using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Project.Exporters.Script
+namespace AssetRipper.Core.Project.Exporters.Script
 {
 	public class ScriptAssetExporter : IAssetExporter
 	{

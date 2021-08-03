@@ -1,17 +1,17 @@
-using AssetRipper.Extensions;
-using AssetRipper.IO.Endian;
-using AssetRipper.Logging;
-using AssetRipper.Classes.Texture2D;
-using AssetRipper.Parser.Files.ResourceFiles;
-using AssetRipperLibrary.TextureContainers;
-using AssetRipperLibrary.TextureContainers.DDS;
-using AssetRipperLibrary.TextureContainers.KTX;
-using AssetRipperLibrary.TextureContainers.PVR;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Parser.Files.ResourceFiles;
+using AssetRipper.Library.TextureContainers;
+using AssetRipper.Library.TextureContainers.DDS;
+using AssetRipper.Library.TextureContainers.KTX;
+using AssetRipper.Library.TextureContainers.PVR;
 using System;
 using System.IO;
 using System.Runtime.Versioning;
 
-namespace AssetRipperLibrary.Exporters.Textures
+namespace AssetRipper.Library.Exporters.Textures
 {
 	[SupportedOSPlatform("windows")]
 	public static class TextureContainer

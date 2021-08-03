@@ -1,13 +1,13 @@
-using AssetRipper.Project;
-using AssetRipper.Layout.Classes.AnimationClip.Curves;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout.Classes.AnimationClip.Curves;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.AnimationClip.Curves
+namespace AssetRipper.Core.Classes.AnimationClip.Curves
 {
 	public class PPtrCurve : IAsset, IDependent
 	{

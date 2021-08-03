@@ -1,20 +1,20 @@
-﻿using AssetRipper.Layout;
-using AssetRipper.Logging;
-using AssetRipper.Parser.Files.ArchiveFiles;
-using AssetRipper.Parser.Files.BundleFile;
-using AssetRipper.Parser.Files.Schemes;
-using AssetRipper.Parser.Files.Entries;
-using AssetRipper.Parser.Files;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Layout;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Files.ArchiveFiles;
+using AssetRipper.Core.Parser.Files.BundleFile;
+using AssetRipper.Core.Parser.Files.Schemes;
+using AssetRipper.Core.Parser.Files.Entries;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.Core.IO.Asset;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Version = AssetRipper.Parser.Files.Version;
-using AssetRipper.Structure.GameStructure.Platforms;
+using Version = AssetRipper.Core.Parser.Files.Version;
+using AssetRipper.Core.Structure.GameStructure.Platforms;
 
-namespace AssetRipper.Structure.GameStructure
+namespace AssetRipper.Core.Structure.GameStructure
 {
 	internal sealed class GameStructureProcessor : IDisposable
 	{

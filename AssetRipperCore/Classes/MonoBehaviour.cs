@@ -1,17 +1,17 @@
-using AssetRipper.Project;
-using AssetRipper.Layout.Classes;
-using AssetRipper.Logging;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Object;
-using AssetRipper.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Asset;
-using AssetRipper.Structure.Assembly.Serializable;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout.Classes;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Structure.Assembly.Serializable;
+using AssetRipper.Core.YAML;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Core.Classes
 {
 	public sealed class MonoBehaviour : Behaviour
 	{

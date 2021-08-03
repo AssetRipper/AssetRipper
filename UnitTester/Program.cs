@@ -1,7 +1,7 @@
-﻿using AssetRipper.Logging;
-using AssetRipper.Structure.GameStructure;
-using AssetRipper.Utils;
-using AssetRipperLibrary;
+﻿using AssetRipper.Core.Logging;
+using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Core.Utils;
+using AssetRipper.Library;
 using System;
 using System.IO;
 

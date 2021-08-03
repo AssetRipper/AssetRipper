@@ -1,9 +1,9 @@
-using AssetRipper.Utils;
+using AssetRipper.Core.Utils;
 using System;
 using System.IO;
 using System.Text;
 
-namespace AssetRipperLibrary.TextureContainers.DDS
+namespace AssetRipper.Library.TextureContainers.DDS
 {
 	public static class DDSContainer
 	{

@@ -1,12 +1,12 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.TerrainData
+namespace AssetRipper.Core.Classes.TerrainData
 {
 	public struct TreeDatabase : IAssetReadable, IAssetWritable
 	{

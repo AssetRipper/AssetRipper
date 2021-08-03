@@ -1,7 +1,7 @@
-﻿using AssetRipper.Classes.Shader.Parameters;
-using AssetRipper.IO;
+﻿using AssetRipper.Core.Classes.Shader.Parameters;
+using AssetRipper.Core.IO;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public class SerializedProgramParameters
     {

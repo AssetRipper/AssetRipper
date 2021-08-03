@@ -1,15 +1,15 @@
-﻿using AssetRipper.Classes.Mesh;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO;
-using AssetRipper.IO.Endian;
-using AssetRipper.IO.Extensions;
-using AssetRipper.Math;
+﻿using AssetRipper.Core.Classes.Mesh;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Math;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public sealed class Mesh : NamedObject
     {

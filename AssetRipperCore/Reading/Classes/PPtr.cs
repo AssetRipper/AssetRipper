@@ -1,8 +1,8 @@
-﻿using AssetRipper.IO;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Core.IO;
+using AssetRipper.Core.SerializedFiles;
 using System;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public sealed class PPtr<T> where T : Classes.Object
     {

@@ -1,19 +1,19 @@
-using AssetRipper.Converters.Game;
-using AssetRipper.Layout;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.Classes.Misc.Serializable.AnimationCurveTpl;
-using AssetRipper.Classes.Misc.Serializable.Gradient;
-using AssetRipper.Classes.Misc.Serializable.GUIStyle;
-using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
-using AssetRipper.IO.Asset;
+using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
+using AssetRipper.Core.Classes.Misc.Serializable.Gradient;
+using AssetRipper.Core.Classes.Misc.Serializable.GUIStyle;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
+using AssetRipper.Core.IO.Asset;
 using System;
 using System.Collections.Generic;
-using static AssetRipper.Structure.Assembly.Mono.MonoUtils;
-using AssetRipper.Structure.Assembly.Mono;
-using AssetRipper.Math;
+using static AssetRipper.Core.Structure.Assembly.Mono.MonoUtils;
+using AssetRipper.Core.Structure.Assembly.Mono;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Structure.Assembly.Serializable
+namespace AssetRipper.Core.Structure.Assembly.Serializable
 {
 	public abstract class SerializableType
 	{

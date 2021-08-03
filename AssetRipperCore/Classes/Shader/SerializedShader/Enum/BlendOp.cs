@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Shader.SerializedShader.Enum
+﻿namespace AssetRipper.Core.Classes.Shader.SerializedShader.Enum
 {
 	public enum BlendOp
 	{

@@ -1,11 +1,11 @@
-using AssetRipper.Project.Exporters.Script;
-using AssetRipper.Project.Exporters.Script.Elements;
-using AssetRipper.Structure.Assembly.Serializable;
-using AssetRipper.Structure.GameStructure.Platforms;
+using AssetRipper.Core.Project.Exporters.Script;
+using AssetRipper.Core.Project.Exporters.Script.Elements;
+using AssetRipper.Core.Structure.Assembly.Serializable;
+using AssetRipper.Core.Structure.GameStructure.Platforms;
 using System;
 using System.IO;
 
-namespace AssetRipper.Structure.Assembly.Managers
+namespace AssetRipper.Core.Structure.Assembly.Managers
 {
 	public interface IAssemblyManager : IDisposable
 	{

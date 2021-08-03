@@ -1,8 +1,8 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.Classes.Shader;
-using AssetRipper.Classes.Shader.Enums.GpuProgramType;
-using AssetRipper.Classes.Shader.Parameters;
-using AssetRipper.Parser.Files;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
+using AssetRipper.Core.Classes.Shader.Parameters;
+using AssetRipper.Core.Parser.Files;
 using System.Collections.Generic;
 
 namespace DXShaderRestorer

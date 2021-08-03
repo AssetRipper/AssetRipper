@@ -1,14 +1,14 @@
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Texture2D;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Structure.Collections;
-using AssetRipper.Utils;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Object = AssetRipper.Classes.Object.Object;
+using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Project.Exporters
+namespace AssetRipper.Core.Project.Exporters
 {
 	public class BinaryAssetExporter : IAssetExporter
 	{

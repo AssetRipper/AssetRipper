@@ -1,9 +1,9 @@
-using AssetRipper.Extensions;
-using AssetRipper.Classes.Shader;
-using AssetRipper.IO;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.IO;
 using System.IO;
 
-namespace AssetRipper.Converters.Shader
+namespace AssetRipper.Core.Converters.Shader
 {
 	public class ShaderTextExporter
 	{

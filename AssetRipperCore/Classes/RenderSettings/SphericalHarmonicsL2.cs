@@ -1,9 +1,9 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.RenderSettings
+namespace AssetRipper.Core.Classes.RenderSettings
 {
 	/// <summary>
 	/// LightProbeCoefficients and SH9Coefficients previously

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.PhysicsManager
+﻿namespace AssetRipper.Core.Classes.PhysicsManager
 {
 	public enum ContactsGeneration
 	{

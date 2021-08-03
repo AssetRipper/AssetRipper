@@ -1,4 +1,4 @@
-﻿using AssetRipper.Logging;
+﻿using AssetRipper.Core.Logging;
 using System;
 
 namespace AssetAnalyzer

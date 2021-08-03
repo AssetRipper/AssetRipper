@@ -1,21 +1,21 @@
-using AssetRipper.Converters;
-using AssetRipper.Project;
-using AssetRipper.Layout;
-using AssetRipper.Layout.Classes;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.AnimationClip;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
+using AssetRipper.Core.Converters;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Layout.Classes;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.AnimationClip;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssetRipper.IO;
+using AssetRipper.Core.IO;
 
-namespace AssetRipper.Classes.Animation
+namespace AssetRipper.Core.Classes.Animation
 {
 	public sealed class Animation : Behaviour
 	{

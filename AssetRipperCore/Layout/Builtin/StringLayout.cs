@@ -1,6 +1,6 @@
-﻿using AssetRipper.Converters.Game;
+﻿using AssetRipper.Core.Converters.Game;
 
-namespace AssetRipper.Layout.Builtin
+namespace AssetRipper.Core.Layout.Builtin
 {
 	public static class StringLayout
 	{

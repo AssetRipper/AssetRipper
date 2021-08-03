@@ -1,8 +1,8 @@
-﻿using AssetRipper.Converters.Game;
-using AssetRipper.Layout.Builtin;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.Layout.Builtin;
+using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Layout.Classes.GameObject
+namespace AssetRipper.Core.Layout.Classes.GameObject
 {
 	public sealed class GameObjectLayout
 	{
@@ -204,7 +204,7 @@ namespace AssetRipper.Layout.Classes.GameObject
 		/// </summary>
 		public bool IsActiveInherited { get; }
 
-		public string Name => nameof(AssetRipper.Classes.GameObject.GameObject);
+		public string Name => nameof(AssetRipper.Core.Classes.GameObject.GameObject);
 		public string ComponentName => "m_Component";
 		public string LayerName => "m_Layer";
 		public string NameName => "m_Name";

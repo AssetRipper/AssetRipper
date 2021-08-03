@@ -1,8 +1,8 @@
-﻿using AssetRipper.Converters.Game;
-using AssetRipper.Classes.Object;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Layout.Classes
+namespace AssetRipper.Core.Layout.Classes
 {
 	public sealed class ObjectLayout
 	{

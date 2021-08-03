@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace AssetRipper.Extensions
+namespace AssetRipper.Core.Extensions
 {
 	public static class TextWriterExtensions
 	{

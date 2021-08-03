@@ -1,17 +1,17 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Layout;
-using AssetRipper.Logging;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.Structure.Assembly;
-using AssetRipper.Structure.GameStructure.Platforms;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Structure.Assembly;
+using AssetRipper.Core.Structure.GameStructure.Platforms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Object = AssetRipper.Classes.Object.Object;
-using Version = AssetRipper.Parser.Files.Version;
+using Object = AssetRipper.Core.Classes.Object.Object;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Structure.GameStructure
+namespace AssetRipper.Core.Structure.GameStructure
 {
 	public sealed class GameStructure : IDisposable
 	{

@@ -1,7 +1,7 @@
-﻿using AssetRipper.Converters.Game;
-using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.Classes.Misc;
 
-namespace AssetRipper.Layout.Classes.Misc
+namespace AssetRipper.Core.Layout.Classes.Misc
 {
 	public sealed class GUIDLayout
 	{

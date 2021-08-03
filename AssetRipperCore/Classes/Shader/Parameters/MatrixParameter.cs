@@ -1,7 +1,7 @@
-﻿using AssetRipper.Classes.Shader.Enums;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Classes.Shader.Parameters
+namespace AssetRipper.Core.Classes.Shader.Parameters
 {
 	public struct MatrixParameter : IAssetReadable
 	{

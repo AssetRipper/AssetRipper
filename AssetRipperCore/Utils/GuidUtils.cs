@@ -1,9 +1,9 @@
-﻿using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Misc;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Classes.Object.Object;
+using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Utils
+namespace AssetRipper.Core.Utils
 {
 	public static class GuidUtils
 	{

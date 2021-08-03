@@ -1,4 +1,4 @@
-namespace AssetRipper.Classes.Shader.Enums
+namespace AssetRipper.Core.Classes.Shader.Enums
 {
 	/// <summary>
 	/// Graphic API

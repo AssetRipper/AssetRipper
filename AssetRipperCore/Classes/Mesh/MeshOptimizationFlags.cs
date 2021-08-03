@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.Mesh
+namespace AssetRipper.Core.Classes.Mesh
 {
 	/// <summary>
 	/// Options to control the optimization of mesh data during asset import

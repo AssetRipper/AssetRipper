@@ -1,16 +1,16 @@
-using AssetRipper.Project;
-using AssetRipper.Classes.BlendTree;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.BlendTree;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System;
 using System.Linq;
-using Version = AssetRipper.Parser.Files.Version;
-using AssetRipper.IO;
-using AssetRipper.IO.Extensions;
+using Version = AssetRipper.Core.Parser.Files.Version;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Extensions;
 
-namespace AssetRipper.Classes.AnimatorController.Constants
+namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
 	public class BlendTreeNodeConstant : IAssetReadable, IYAMLExportable
 	{

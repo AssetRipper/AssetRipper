@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystem
+﻿namespace AssetRipper.Core.Classes.ParticleSystem
 {
 	/// <summary>
 	/// The space to simulate particles in.

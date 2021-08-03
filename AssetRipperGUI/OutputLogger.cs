@@ -1,10 +1,10 @@
-using AssetRipper.Logging;
+using AssetRipper.Core.Logging;
 using System;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace AssetRipperGUI
+namespace AssetRipper.GUI
 {
 	public sealed class OutputLogger : ILogger
 	{

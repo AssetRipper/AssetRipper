@@ -1,13 +1,13 @@
-using AssetRipper.Project;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System;
-using AssetRipper.Math;
-using AssetRipper.IO;
-using AssetRipper.IO.Extensions;
+using AssetRipper.Core.Math;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Extensions;
 
-namespace AssetRipper.Classes.AnimatorController.Constants
+namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
 	public struct Blend2dDataConstant : IAssetReadable, IYAMLExportable
 	{

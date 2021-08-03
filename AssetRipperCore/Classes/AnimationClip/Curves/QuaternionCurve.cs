@@ -1,14 +1,14 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Layout.Classes.AnimationClip.Curves;
-using AssetRipper.Classes.Misc.KeyframeTpl;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.Classes.Misc.Serializable.AnimationCurveTpl;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout.Classes.AnimationClip.Curves;
+using AssetRipper.Core.Classes.Misc.KeyframeTpl;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System.Collections.Generic;
-using AssetRipper.Math;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.AnimationClip.Curves
+namespace AssetRipper.Core.Classes.AnimationClip.Curves
 {
 	public class QuaternionCurve : IAsset, IYAMLExportable
 	{

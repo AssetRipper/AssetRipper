@@ -1,9 +1,9 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.Classes.Shader;
-using AssetRipper.IO;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.IO;
 using System.IO;
 
-namespace AssetRipper.Converters.Shader
+namespace AssetRipper.Core.Converters.Shader
 {
 	public class ShaderMetalExporter : ShaderTextExporter
 	{
@@ -13,7 +13,7 @@ namespace AssetRipper.Converters.Shader
 			{
 				using (BinaryReader reader = new BinaryReader(memStream))
 				{
-					if (AssetRipper.Classes.Shader.Shader.HasBlob(writer.Version))
+					if (AssetRipper.Core.Classes.Shader.Shader.HasBlob(writer.Version))
 					{
 						long position = reader.BaseStream.Position;
 						uint fourCC = reader.ReadUInt32();

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper
+﻿namespace AssetRipper.Core
 {
 	public enum BuildTarget
 	{

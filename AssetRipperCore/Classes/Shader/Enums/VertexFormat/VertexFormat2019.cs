@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.Shader.Enums.VertexFormat
+namespace AssetRipper.Core.Classes.Shader.Enums.VertexFormat
 {
 	/// <summary>
 	/// 2019.1 and greater

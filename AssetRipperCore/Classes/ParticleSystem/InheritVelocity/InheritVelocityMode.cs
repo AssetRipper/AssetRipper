@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystem.InheritVelocity
+﻿namespace AssetRipper.Core.Classes.ParticleSystem.InheritVelocity
 {
 	public enum InheritVelocityMode
 	{

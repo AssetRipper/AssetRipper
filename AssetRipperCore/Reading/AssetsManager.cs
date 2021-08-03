@@ -1,16 +1,16 @@
-﻿using AssetRipper.IO;
-using AssetRipper.IO.FileReading;
-using AssetRipper.Logging;
-using AssetRipper.Reading.Classes;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.FileReading;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Reading.Classes;
+using AssetRipper.Core.SerializedFiles;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using static AssetRipper.Reading.ImportHelper;
+using static AssetRipper.Core.Reading.ImportHelper;
 
-namespace AssetRipper.Reading
+namespace AssetRipper.Core.Reading
 {
 	public class AssetsManager
 	{

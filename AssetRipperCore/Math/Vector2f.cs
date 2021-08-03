@@ -1,11 +1,11 @@
-using AssetRipper.Project;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace AssetRipper.Math
+namespace AssetRipper.Core.Math
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 4)]
 	public struct Vector2f : IAsset, IEquatable<Vector2f>

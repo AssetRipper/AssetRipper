@@ -1,24 +1,24 @@
-using AssetRipper.Project;
-using AssetRipper.Layout;
-using AssetRipper.Logging;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files.Entries;
-using AssetRipper.Parser.Files.ResourceFiles;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.Parser.Utils;
-using AssetRipper.Structure.Assembly;
-using AssetRipper.Structure.Assembly.Managers;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files.Entries;
+using AssetRipper.Core.Parser.Files.ResourceFiles;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.Core.Parser.Utils;
+using AssetRipper.Core.Structure.Assembly;
+using AssetRipper.Core.Structure.Assembly.Managers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MonoManager = AssetRipper.Structure.Assembly.Managers.MonoManager;
-using Object = AssetRipper.Classes.Object.Object;
+using MonoManager = AssetRipper.Core.Structure.Assembly.Managers.MonoManager;
+using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Structure
+namespace AssetRipper.Core.Structure
 {
 	public sealed class GameCollection : FileList, IFileCollection, IDisposable
 	{

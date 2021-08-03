@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Renderer
+﻿namespace AssetRipper.Core.Classes.Renderer
 {
 	/// <summary>
 	/// The editor selected render mode for Scene View selection.

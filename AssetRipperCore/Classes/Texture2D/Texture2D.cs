@@ -1,20 +1,20 @@
-using AssetRipper.Converters.Texture2D;
-using AssetRipper.Project;
-using AssetRipper.Logging;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Meta.Importers;
-using AssetRipper.Classes.Meta.Importers.Texture;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
-using AssetRipper.YAML.Extensions;
+using AssetRipper.Core.Converters.Texture2D;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Meta.Importers;
+using AssetRipper.Core.Classes.Meta.Importers.Texture;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Classes.Texture2D
+namespace AssetRipper.Core.Classes.Texture2D
 {
 	/// <summary>
 	/// FileTexture previously

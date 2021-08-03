@@ -1,6 +1,6 @@
-﻿using AssetRipper.Classes;
+﻿using AssetRipper.Core.Classes;
 
-namespace AssetRipper.Layout.Classes
+namespace AssetRipper.Core.Layout.Classes
 {
 #warning TODO:
 	public sealed class MonoScriptLayout

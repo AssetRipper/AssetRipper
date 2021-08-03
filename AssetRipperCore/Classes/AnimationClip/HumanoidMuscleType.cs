@@ -1,8 +1,8 @@
-﻿using AssetRipper.Classes.Misc.Bones;
+﻿using AssetRipper.Core.Classes.Misc.Bones;
 using System;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Classes.AnimationClip
+namespace AssetRipper.Core.Classes.AnimationClip
 {
 	public enum HumanoidMuscleType
 	{

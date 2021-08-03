@@ -1,9 +1,9 @@
-﻿using AssetRipper.Classes.Shader.Enums.GpuProgramType;
-using AssetRipper.Classes.Shader.Parameters;
-using AssetRipper.IO;
-using AssetRipper.IO.Extensions;
+﻿using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
+using AssetRipper.Core.Classes.Shader.Parameters;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Extensions;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public class SerializedSubProgram
     {

@@ -1,10 +1,10 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Misc.Serializable.AnimationCurveTpl;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.NewAnimationTrack
+namespace AssetRipper.Core.Classes.NewAnimationTrack
 {
 	public struct Channel : IAssetReadable, IYAMLExportable
 	{

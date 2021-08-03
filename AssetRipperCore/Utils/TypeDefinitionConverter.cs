@@ -1,4 +1,4 @@
-﻿using AssetRipper.Reading;
+﻿using AssetRipper.Core.Reading;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using Unity.CecilTools;
 using Unity.SerializationLogic;
 
-namespace AssetRipper.Utils
+namespace AssetRipper.Core.Utils
 {
 	public class TypeDefinitionConverter
 	{

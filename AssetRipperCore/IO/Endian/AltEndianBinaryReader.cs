@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace AssetRipper.IO.Endian
+namespace AssetRipper.Core.IO.Endian
 {
 	public class AltEndianBinaryReader : BinaryReader
 	{

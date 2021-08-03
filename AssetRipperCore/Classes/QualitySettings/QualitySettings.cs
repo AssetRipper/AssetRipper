@@ -1,16 +1,16 @@
-using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
-using AssetRipper.YAML.Extensions;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.QualitySettings
+namespace AssetRipper.Core.Classes.QualitySettings
 {
 	public sealed class QualitySettings : GlobalGameManager
 	{

@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
-namespace AssetRipperLibrary.Exporters.Audio
+namespace AssetRipper.Library.Exporters.Audio
 {
 	[SupportedOSPlatform("windows")]
 	public static class AudioConverter

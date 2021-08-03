@@ -1,4 +1,4 @@
-namespace AssetRipper.Classes.Texture2D
+namespace AssetRipper.Core.Classes.Texture2D
 {
 	public enum TextureFormat
 	{

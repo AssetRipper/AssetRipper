@@ -1,11 +1,11 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.GameObject;
-using AssetRipper.Classes.Misc;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.GameObject;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.Utils.Extensions
+namespace AssetRipper.Core.Classes.Utils.Extensions
 {
 	public static class IEnumerableExtensions
 	{

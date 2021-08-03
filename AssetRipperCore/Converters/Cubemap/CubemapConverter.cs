@@ -1,12 +1,12 @@
-﻿using AssetRipper.Converters.Texture2D;
-using AssetRipper.Project;
-using AssetRipper.Classes.Meta.Importers.Texture;
+﻿using AssetRipper.Core.Converters.Texture2D;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Meta.Importers.Texture;
 
-namespace AssetRipper.Converters.Cubemap
+namespace AssetRipper.Core.Converters.Cubemap
 {
 	public static class CubemapConverter
 	{
-		public static TextureImporter GeenrateTextureImporter(IExportContainer container, AssetRipper.Classes.Cubemap origin)
+		public static TextureImporter GeenrateTextureImporter(IExportContainer container, AssetRipper.Core.Classes.Cubemap origin)
 		{
 			TextureImporter importer = Texture2DConverter.GenerateTextureImporter(container, origin);
 			importer.TextureShape = TextureImporterShape.TextureCube;

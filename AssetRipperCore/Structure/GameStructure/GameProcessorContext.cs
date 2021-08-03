@@ -1,9 +1,9 @@
-﻿using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Parser.Files.SerializedFiles.Parser;
+﻿using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Structure.GameStructure
+namespace AssetRipper.Core.Structure.GameStructure
 {
 	internal sealed class GameProcessorContext
 	{

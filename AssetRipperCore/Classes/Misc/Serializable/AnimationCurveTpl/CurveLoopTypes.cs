@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Misc.Serializable.AnimationCurveTpl
+﻿namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 {
 	public enum CurveLoopTypes
 	{

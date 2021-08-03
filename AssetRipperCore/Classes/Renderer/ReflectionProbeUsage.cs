@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Renderer
+﻿namespace AssetRipper.Core.Classes.Renderer
 {
 	/// <summary>
 	/// Reflection Probe usage.

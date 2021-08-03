@@ -1,9 +1,9 @@
-using AssetRipper.Extensions;
-using AssetRipper.Classes.Shader.Enums;
-using AssetRipper.IO;
-using AssetRipper.IO.Asset;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Classes.Shader.SerializedShader
+namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
 	public struct SerializedProgram : IAssetReadable
 	{

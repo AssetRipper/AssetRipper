@@ -1,11 +1,11 @@
-using AssetRipper.Project;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
-using AssetRipper.YAML.Extensions;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 
-namespace AssetRipper.Classes.AudioMixer
+namespace AssetRipper.Core.Classes.AudioMixer
 {
 #warning TODO: not implemented
 	public struct AudioMixerConstant : IAssetReadable, IYAMLExportable

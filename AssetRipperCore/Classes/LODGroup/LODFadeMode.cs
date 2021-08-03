@@ -1,4 +1,4 @@
-namespace AssetRipper.Classes.LODGroup
+namespace AssetRipper.Core.Classes.LODGroup
 {
 	/// <summary>
 	/// The LOD fade modes. Modes other than LODFadeMode.None will result in Unity calculating a blend factor

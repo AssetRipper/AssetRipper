@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Renderer
+﻿namespace AssetRipper.Core.Classes.Renderer
 {
 	/// <summary>
 	/// Light probe interpolation type.

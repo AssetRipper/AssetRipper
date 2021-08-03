@@ -1,6 +1,6 @@
-﻿using AssetRipper.Converters.Game;
+﻿using AssetRipper.Core.Converters.Game;
 
-namespace AssetRipper.Layout.Classes
+namespace AssetRipper.Core.Layout.Classes
 {
 	public sealed class PPtrLayout
 	{

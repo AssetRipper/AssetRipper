@@ -1,6 +1,6 @@
-﻿using AssetRipper.IO.Endian;
+﻿using AssetRipper.Core.IO.Endian;
 
-namespace AssetRipper.Parser.Files.BundleFile.Parser
+namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 {
 	/// <summary>
 	/// Contains compression information about chunk

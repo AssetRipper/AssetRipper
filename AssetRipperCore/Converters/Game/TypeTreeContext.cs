@@ -1,12 +1,12 @@
-﻿using AssetRipper.Layout;
-using AssetRipper.Layout.Classes;
-using AssetRipper.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
-using AssetRipper.Structure.Assembly.Mono;
+﻿using AssetRipper.Core.Layout;
+using AssetRipper.Core.Layout.Classes;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
+using AssetRipper.Core.Structure.Assembly.Mono;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Converters.Game
+namespace AssetRipper.Core.Converters.Game
 {
 	public delegate void TypeTreeGenerator(TypeTreeContext context, string name);
 	public delegate void TypeTreeExGenerator(TypeTreeContext context, string type, string name);

@@ -1,7 +1,7 @@
-﻿using AssetRipper.IO.Endian;
+﻿using AssetRipper.Core.IO.Endian;
 using System.IO;
 
-namespace AssetRipper.Parser.Files.SerializedFiles.IO
+namespace AssetRipper.Core.Parser.Files.SerializedFiles.IO
 {
 	public sealed class SerializedWriter : EndianWriter
 	{

@@ -1,9 +1,9 @@
-﻿using AssetRipper.Classes.AnimationClip;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.IO;
-using AssetRipper.IO.Extensions;
+﻿using AssetRipper.Core.Classes.AnimationClip;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Extensions;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public sealed class AnimationClip : NamedObject
     {

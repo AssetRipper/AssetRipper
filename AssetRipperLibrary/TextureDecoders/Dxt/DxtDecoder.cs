@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace AssetRipperLibrary.TextureDecoders.Dxt
+namespace AssetRipper.Library.TextureDecoders.Dxt
 {
 	public static class DxtDecoder
 	{

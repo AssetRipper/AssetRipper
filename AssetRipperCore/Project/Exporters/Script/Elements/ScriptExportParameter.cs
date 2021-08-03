@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Project.Exporters.Script.Elements
+namespace AssetRipper.Core.Project.Exporters.Script.Elements
 {
 	public abstract class ScriptExportParameter
 	{

@@ -1,8 +1,8 @@
-﻿using AssetRipper.IO.Extensions;
+﻿using AssetRipper.Core.IO.Extensions;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public class SerializedTagMap
     {

@@ -1,7 +1,7 @@
-﻿using AssetRipper.Parser.Files.Entries;
-using AssetRipper.Parser.Utils;
+﻿using AssetRipper.Core.Parser.Files.Entries;
+using AssetRipper.Core.Parser.Utils;
 
-namespace AssetRipper.Parser.Files.ArchiveFiles
+namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 {
 	public sealed class ArchiveFileEntry : FileEntry
 	{

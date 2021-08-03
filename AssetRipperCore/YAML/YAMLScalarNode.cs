@@ -1,12 +1,12 @@
 ﻿//#define USE_HEX_FLOAT
 
-using AssetRipper.Extensions;
-using AssetRipper.YAML.Extensions;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.YAML.Extensions;
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper.YAML
+namespace AssetRipper.Core.YAML
 {
 	public sealed class YAMLScalarNode : YAMLNode
 	{

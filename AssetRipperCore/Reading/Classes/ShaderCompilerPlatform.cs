@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Reading.Classes
+﻿namespace AssetRipper.Core.Reading.Classes
 {
 	public enum ShaderCompilerPlatform
     {

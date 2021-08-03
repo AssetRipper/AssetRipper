@@ -1,19 +1,19 @@
-using AssetRipper.Converters.GameObject;
-using AssetRipper.Project;
-using AssetRipper.Layout;
-using AssetRipper.Layout.Classes.GameObject;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
+using AssetRipper.Core.Converters.GameObject;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Layout.Classes.GameObject;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
 using SevenZip;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Classes.GameObject
+namespace AssetRipper.Core.Classes.GameObject
 {
 	public sealed class GameObject : EditorExtension
 	{

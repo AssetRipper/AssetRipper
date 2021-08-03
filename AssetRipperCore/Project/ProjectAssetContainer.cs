@@ -1,26 +1,26 @@
-using AssetRipper.Extensions;
-using AssetRipper.Layout;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes;
-using AssetRipper.Classes.AssetBundle;
-using AssetRipper.Classes.Meta;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.ResourceManager;
-using AssetRipper.Classes.TagManager;
-using AssetRipper.Classes.Utils;
-using AssetRipper.Parser.Files;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Asset;
-using AssetRipper.Structure.Collections;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.AssetBundle;
+using AssetRipper.Core.Classes.Meta;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.ResourceManager;
+using AssetRipper.Core.Classes.TagManager;
+using AssetRipper.Core.Classes.Utils;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Structure.Collections;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using AssetInfo = AssetRipper.Classes.AssetBundle.AssetInfo;
-using Object = AssetRipper.Classes.Object.Object;
-using Version = AssetRipper.Parser.Files.Version;
+using AssetInfo = AssetRipper.Core.Classes.AssetBundle.AssetInfo;
+using Object = AssetRipper.Core.Classes.Object.Object;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Project
+namespace AssetRipper.Core.Project
 {
 	public class ProjectAssetContainer : IExportContainer
 	{

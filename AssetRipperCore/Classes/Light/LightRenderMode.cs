@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Light
+﻿namespace AssetRipper.Core.Classes.Light
 {
 	public enum LightRenderMode
 	{

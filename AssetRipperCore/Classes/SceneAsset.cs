@@ -1,6 +1,6 @@
-﻿using AssetRipper.Parser.Asset;
+﻿using AssetRipper.Core.Parser.Asset;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Core.Classes
 {
 	public sealed class SceneAsset : DefaultAsset
 	{

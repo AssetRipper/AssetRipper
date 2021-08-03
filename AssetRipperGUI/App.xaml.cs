@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace AssetRipperGUI
+namespace AssetRipper.GUI
 {
 	/// <summary>
 	/// Interaction logic for App.xaml

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Meta.Importers.Texture
+﻿namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	/// <summary>
 	/// Select this to set basic parameters depending on the purpose of your texture.

@@ -1,13 +1,13 @@
-using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.ParticleSystem.SubEmitter
+namespace AssetRipper.Core.Classes.ParticleSystem.SubEmitter
 {
 	public struct SubEmitterData : IAssetReadable, IYAMLExportable, IDependent
 	{

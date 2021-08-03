@@ -1,9 +1,9 @@
-﻿using AssetRipper.Extensions;
+﻿using AssetRipper.Core.Extensions;
 using SevenZip.Compression.LZMA;
 using System;
 using System.IO;
 
-namespace AssetRipper.Parser.Files.BundleFile
+namespace AssetRipper.Core.Parser.Files.BundleFile
 {
 	public static class SevenZipHelper
 	{

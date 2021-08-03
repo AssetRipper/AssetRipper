@@ -1,8 +1,8 @@
-﻿using AssetRipper.Project.Exporters.Script.Elements;
+﻿using AssetRipper.Core.Project.Exporters.Script.Elements;
 using Mono.Cecil;
 using System;
 
-namespace AssetRipper.Project.Exporters.Script.Mono
+namespace AssetRipper.Core.Project.Exporters.Script.Mono
 {
 	public sealed class ScriptExportMonoProperty : ScriptExportProperty
 	{

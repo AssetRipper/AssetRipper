@@ -1,8 +1,8 @@
-﻿using AssetRipper.Classes.Texture2D;
-using AssetRipper.IO.Extensions;
+﻿using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.IO.Extensions;
 using System.IO;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public class SerializedTextureProperty
     {

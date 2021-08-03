@@ -1,6 +1,6 @@
-﻿using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
+﻿using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 
-namespace AssetRipper.Converters.Game
+namespace AssetRipper.Core.Converters.Game
 {
 	public static class TypeTreeUtils
 	{

@@ -1,4 +1,4 @@
-namespace AssetRipper.Classes.ParticleSystem
+namespace AssetRipper.Core.Classes.ParticleSystem
 {
 	/// <summary>
 	/// Control how particles are removed from the Particle System.

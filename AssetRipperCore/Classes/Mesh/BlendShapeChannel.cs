@@ -1,9 +1,9 @@
-using AssetRipper.Project;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using SevenZip;
 
-namespace AssetRipper.Classes.Mesh
+namespace AssetRipper.Core.Classes.Mesh
 {
 	/// <summary>
 	/// MeshBlendShapeChannel previously

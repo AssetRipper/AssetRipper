@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Utils
+﻿namespace AssetRipper.Core.Utils
 {
 	public enum RuntimeOperatingSystem
 	{

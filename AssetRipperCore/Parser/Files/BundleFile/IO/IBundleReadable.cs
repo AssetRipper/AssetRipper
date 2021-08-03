@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Parser.Files.BundleFile.IO
+﻿namespace AssetRipper.Core.Parser.Files.BundleFile.IO
 {
 	public interface IBundleReadable
 	{

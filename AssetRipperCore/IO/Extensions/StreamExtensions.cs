@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace AssetRipper.IO.Extensions
+namespace AssetRipper.Core.IO.Extensions
 {
 	public static class StreamExtensions
 	{

@@ -1,6 +1,6 @@
-﻿using AssetRipper.Converters.Game;
+﻿using AssetRipper.Core.Converters.Game;
 
-namespace AssetRipper.Layout.Classes.PrefabInstance
+namespace AssetRipper.Core.Layout.Classes.PrefabInstance
 {
 	public sealed class PropertyModificationLayout
 	{

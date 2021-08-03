@@ -1,4 +1,4 @@
-namespace AssetRipperLibrary.TextureContainers.KTX
+namespace AssetRipper.Library.TextureContainers.KTX
 {
 	public struct KTXContainerParameters
 	{

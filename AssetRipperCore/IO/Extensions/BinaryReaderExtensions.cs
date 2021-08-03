@@ -1,10 +1,10 @@
-using AssetRipper.Math;
+using AssetRipper.Core.Math;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace AssetRipper.IO.Extensions
+namespace AssetRipper.Core.IO.Extensions
 {
 	public static class BinaryReaderExtensions
 	{

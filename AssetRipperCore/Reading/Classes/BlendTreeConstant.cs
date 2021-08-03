@@ -1,7 +1,7 @@
-﻿using AssetRipper.Classes.AnimatorController.Constants;
-using AssetRipper.IO;
+﻿using AssetRipper.Core.Classes.AnimatorController.Constants;
+using AssetRipper.Core.IO;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public class BlendTreeConstant
     {

@@ -1,14 +1,14 @@
-using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using DateTime = AssetRipper.Classes.Misc.DateTime;
-using Version = AssetRipper.Parser.Files.Version;
+using DateTime = AssetRipper.Core.Classes.Misc.DateTime;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Core.Classes
 {
 	public sealed class MonoManager : GlobalGameManager
 	{

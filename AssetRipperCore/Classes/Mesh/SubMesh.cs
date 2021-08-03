@@ -1,12 +1,12 @@
-using AssetRipper.Project;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
-using AssetRipper.IO;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.IO;
 
-namespace AssetRipper.Classes.Mesh
+namespace AssetRipper.Core.Classes.Mesh
 {
 	public class SubMesh : IAsset
 	{

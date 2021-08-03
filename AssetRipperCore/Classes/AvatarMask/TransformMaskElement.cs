@@ -1,8 +1,8 @@
-﻿using AssetRipper.Project;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.AvatarMask
+namespace AssetRipper.Core.Classes.AvatarMask
 {
 	public sealed class TransformMaskElement : IAssetReadable, IYAMLExportable
 	{

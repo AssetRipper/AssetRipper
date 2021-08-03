@@ -1,8 +1,8 @@
-using AssetRipper.Classes.AnimatorController.Constants;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
+using AssetRipper.Core.Classes.AnimatorController.Constants;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Classes.AnimationClip.Clip
+namespace AssetRipper.Core.Classes.AnimationClip.Clip
 {
 	public class Clip : IAssetReadable
 	{

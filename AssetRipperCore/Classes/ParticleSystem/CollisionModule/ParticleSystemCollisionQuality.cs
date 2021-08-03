@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystem.CollisionModule
+﻿namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 {
 	/// <summary>
 	/// Quality of world collisions. Medium and low quality are approximate and may leak particles.

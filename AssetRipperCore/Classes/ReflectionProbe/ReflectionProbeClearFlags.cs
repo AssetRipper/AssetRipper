@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ReflectionProbe
+﻿namespace AssetRipper.Core.Classes.ReflectionProbe
 {
 	public enum ReflectionProbeClearFlags
 	{

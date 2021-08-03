@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace AssetRipper.YAML
+namespace AssetRipper.Core.YAML
 {
 	internal class Emitter
 	{

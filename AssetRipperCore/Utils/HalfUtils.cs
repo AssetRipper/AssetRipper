@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace AssetRipper.Utils
+namespace AssetRipper.Core.Utils
 {
 	public static class HalfUtils
 	{

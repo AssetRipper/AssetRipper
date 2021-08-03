@@ -1,19 +1,19 @@
-using AssetRipper.Classes.Texture2D;
-using AssetRipperLibrary.TextureContainers.KTX;
-using AssetRipperLibrary.TextureDecoders.Astc;
-using AssetRipperLibrary.TextureDecoders.Atc;
-using AssetRipperLibrary.TextureDecoders.Dxt;
-using AssetRipperLibrary.TextureDecoders.Etc;
-using AssetRipperLibrary.TextureDecoders.Pvrtc;
-using AssetRipperLibrary.TextureDecoders.Rgb;
-using AssetRipperLibrary.TextureDecoders.Yuy2;
-using AssetRipperLibrary.Utils;
+using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Library.TextureContainers.KTX;
+using AssetRipper.Library.TextureDecoders.Astc;
+using AssetRipper.Library.TextureDecoders.Atc;
+using AssetRipper.Library.TextureDecoders.Dxt;
+using AssetRipper.Library.TextureDecoders.Etc;
+using AssetRipper.Library.TextureDecoders.Pvrtc;
+using AssetRipper.Library.TextureDecoders.Rgb;
+using AssetRipper.Library.TextureDecoders.Yuy2;
+using AssetRipper.Library.Utils;
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipperLibrary.Exporters.Textures
+namespace AssetRipper.Library.Exporters.Textures
 {
 	[SupportedOSPlatform("windows")]
 	public static class TextureConverter

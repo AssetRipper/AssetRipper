@@ -1,11 +1,11 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.Utils;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading;
 
-namespace AssetRipper.Classes.Utils
+namespace AssetRipper.Core.Classes.Utils
 {
 	public static class ObjectUtils
 	{
@@ -19,7 +19,7 @@ namespace AssetRipper.Classes.Utils
 			ThreadSafeRandom random = new ThreadSafeRandom();
 			uint classID = (uint)asset.ClassID;
 #if DEBUG
-			int length = AssetRipper.Extensions.BitConverterExtensions.GetDigitsCount(classID);
+			int length = AssetRipper.Core.Extensions.BitConverterExtensions.GetDigitsCount(classID);
 			if (length > 4)
 			{
 				throw new NotSupportedException($"Class ID {classID} with more that 4 digits isn't supported");

@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil;
 
-namespace AssetRipper.Utils
+namespace AssetRipper.Core.Utils
 {
 	public class MyAssemblyResolver : DefaultAssemblyResolver
 	{

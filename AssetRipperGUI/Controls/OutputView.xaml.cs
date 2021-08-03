@@ -1,7 +1,7 @@
-using AssetRipper.Logging;
+using AssetRipper.Core.Logging;
 using System.Windows.Controls;
 
-namespace AssetRipperGUI.Controls
+namespace AssetRipper.GUI.Controls
 {
 	/// <summary>
 	/// Interaction logic for OutputView.xaml

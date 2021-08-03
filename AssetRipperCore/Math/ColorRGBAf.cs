@@ -1,12 +1,12 @@
-using AssetRipper.Project;
-using AssetRipper.Layout.Classes.Misc.Serializable;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout.Classes.Misc.Serializable;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System;
 
-namespace AssetRipper.Math
+namespace AssetRipper.Core.Math
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 4)]
 	public struct ColorRGBAf : IAsset, IEquatable<ColorRGBAf>

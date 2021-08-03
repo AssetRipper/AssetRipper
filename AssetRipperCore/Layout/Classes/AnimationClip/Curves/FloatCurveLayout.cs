@@ -1,9 +1,9 @@
-﻿using AssetRipper.Converters.Game;
-using AssetRipper.Layout.Builtin;
-using AssetRipper.Layout.Classes.Misc.Serializable;
-using AssetRipper.Classes.AnimationClip.Curves;
+﻿using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.Layout.Builtin;
+using AssetRipper.Core.Layout.Classes.Misc.Serializable;
+using AssetRipper.Core.Classes.AnimationClip.Curves;
 
-namespace AssetRipper.Layout.Classes.AnimationClip.Curves
+namespace AssetRipper.Core.Layout.Classes.AnimationClip.Curves
 {
 	public sealed class FloatCurveLayout
 	{

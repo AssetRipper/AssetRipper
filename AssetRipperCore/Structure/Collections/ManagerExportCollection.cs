@@ -1,13 +1,13 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Project.Exporters;
-using AssetRipper.Classes;
-using AssetRipper.Classes.Meta;
-using AssetRipper.Utils;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.Meta;
+using AssetRipper.Core.Utils;
 using System;
 using System.IO;
-using Object = AssetRipper.Classes.Object.Object;
+using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Structure.Collections
+namespace AssetRipper.Core.Structure.Collections
 {
 	public class ManagerExportCollection : AssetExportCollection
 	{

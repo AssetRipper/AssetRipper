@@ -1,9 +1,9 @@
-using AssetRipper.Classes;
-using AssetRipper.Classes.Object;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Structure.Collections;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Structure.Collections;
 
-namespace AssetRipper.Project.Exporters
+namespace AssetRipper.Core.Project.Exporters
 {
 	public sealed class TextAssetExporter : BinaryAssetExporter
 	{

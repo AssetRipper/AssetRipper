@@ -1,24 +1,24 @@
-using AssetRipper.Project;
-using AssetRipper.Project.Exporters.Engine;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes;
-using AssetRipper.Classes.Font;
-using AssetRipper.Classes.Material;
-using AssetRipper.Classes.Mesh;
-using AssetRipper.Classes.Meta;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Shader;
-using AssetRipper.Classes.Sprite;
-using AssetRipper.Classes.Texture2D;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.IO.Asset;
-using AssetRipper.Parser.Utils;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Exporters.Engine;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.Font;
+using AssetRipper.Core.Classes.Material;
+using AssetRipper.Core.Classes.Mesh;
+using AssetRipper.Core.Classes.Meta;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.Classes.Sprite;
+using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Utils;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Classes.Object.Object;
-using Version = AssetRipper.Parser.Files.Version;
+using Object = AssetRipper.Core.Classes.Object.Object;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Structure.Collections
+namespace AssetRipper.Core.Structure.Collections
 {
 	public class EngineExportCollection : IExportCollection
 	{

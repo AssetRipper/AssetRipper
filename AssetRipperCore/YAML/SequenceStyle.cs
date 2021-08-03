@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.YAML
+﻿namespace AssetRipper.Core.YAML
 {
 	/// <summary>
 	/// Specifies the style of a sequence.

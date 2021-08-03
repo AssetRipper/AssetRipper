@@ -1,22 +1,22 @@
-using AssetRipper.Project;
-using AssetRipper.Project.Exporters;
-using AssetRipper.Logging;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Sprite;
-using AssetRipper.Classes.Texture2D;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Structure.Collections;
-using AssetRipper.Utils;
-using AssetRipperLibrary.Utils;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Sprite;
+using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.Utils;
+using AssetRipper.Library.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.Versioning;
-using UnityObject = AssetRipper.Classes.Object.Object;
-using AssetRipper;
+using UnityObject = AssetRipper.Core.Classes.Object.Object;
+using AssetRipper.Core;
 
-namespace AssetRipperLibrary.Exporters.Textures
+namespace AssetRipper.Library.Exporters.Textures
 {
 	[SupportedOSPlatform("windows")]
 	public class TextureAssetExporter : IAssetExporter

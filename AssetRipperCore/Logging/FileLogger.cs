@@ -1,10 +1,10 @@
-﻿using AssetRipper.Utils;
+﻿using AssetRipper.Core.Utils;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace AssetRipper.Logging
+namespace AssetRipper.Core.Logging
 {
 	public class FileLogger : ILogger
 	{

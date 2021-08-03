@@ -1,9 +1,9 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.IO.MultiFile;
-using AssetRipper.Parser.Files.Entries;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.IO.MultiFile;
+using AssetRipper.Core.Parser.Files.Entries;
 using System.IO;
 
-namespace AssetRipper.Parser.Files.ArchiveFiles
+namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 {
 	public sealed class ArchiveFile : FileList
 	{

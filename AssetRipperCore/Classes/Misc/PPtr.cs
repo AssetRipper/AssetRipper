@@ -1,14 +1,14 @@
-﻿using AssetRipper.Converters.Game;
-using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Meta;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Meta;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System;
 
-namespace AssetRipper.Classes.Misc
+namespace AssetRipper.Core.Classes.Misc
 {
 	public struct PPtr<T> : IAsset where T : Object.Object
 	{

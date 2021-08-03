@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.AnimationClip
+﻿namespace AssetRipper.Core.Classes.AnimationClip
 {
 	public enum AnimationType
 	{

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Mesh
+﻿namespace AssetRipper.Core.Classes.Mesh
 {
 	/// <summary>
 	/// Topology of Mesh faces.

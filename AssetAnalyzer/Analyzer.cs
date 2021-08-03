@@ -1,7 +1,7 @@
-﻿using AssetRipper.IO.FileReading;
-using AssetRipper.Logging;
-using AssetRipper.Reading;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Core.IO.FileReading;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Reading;
+using AssetRipper.Core.SerializedFiles;
 using System;
 using System.IO;
 

@@ -1,10 +1,10 @@
-using AssetRipper.Layout;
-using AssetRipper.Logging;
-using AssetRipper.Structure.GameStructure.Platforms;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Structure.GameStructure.Platforms;
 using System;
 using System.IO;
 
-namespace AssetRipper.Structure.Assembly.Managers
+namespace AssetRipper.Core.Structure.Assembly.Managers
 {
 	internal sealed class MonoManager : BaseManager
 	{

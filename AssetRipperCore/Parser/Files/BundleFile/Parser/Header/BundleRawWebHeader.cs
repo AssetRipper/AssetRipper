@@ -1,7 +1,7 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Classes.Misc;
 
-namespace AssetRipper.Parser.Files.BundleFile.Parser.Header
+namespace AssetRipper.Core.Parser.Files.BundleFile.Parser.Header
 {
 	public sealed class BundleRawWebHeader
 	{

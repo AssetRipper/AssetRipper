@@ -1,7 +1,7 @@
 ﻿using System;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Classes.Misc.Bones
+namespace AssetRipper.Core.Classes.Misc.Bones
 {
 	public enum MuscleType
 	{

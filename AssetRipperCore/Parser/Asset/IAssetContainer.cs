@@ -1,12 +1,12 @@
-﻿using AssetRipper.Layout;
-using AssetRipper.Classes.Object;
-using AssetRipper.Parser.Files;
-using AssetRipper.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Layout;
+using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.Core.IO.Asset;
 using System.Collections.Generic;
-using AssetRipper.Classes.Utils.Extensions;
+using AssetRipper.Core.Classes.Utils.Extensions;
 
-namespace AssetRipper.Parser.Asset
+namespace AssetRipper.Core.Parser.Asset
 {
 	public interface IAssetContainer
 	{

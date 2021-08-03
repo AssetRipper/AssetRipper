@@ -1,13 +1,13 @@
-using AssetRipper.Project;
-using AssetRipper.Layout;
-using AssetRipper.Layout.Classes.Misc.Serializable.GUIStyle;
-using AssetRipper.Classes.Font;
-using AssetRipper.Classes.GUIText;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
-using AssetRipper.Math;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle;
+using AssetRipper.Core.Classes.Font;
+using AssetRipper.Core.Classes.GUIText;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.Misc.Serializable.GUIStyle
+namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 {
 	public struct GUIStyle : IAsset
 	{

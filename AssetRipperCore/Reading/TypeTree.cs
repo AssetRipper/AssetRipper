@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AssetRipper.Reading
+namespace AssetRipper.Core.Reading
 {
 	public class TypeTree
 	{

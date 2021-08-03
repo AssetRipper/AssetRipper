@@ -1,6 +1,6 @@
-﻿using AssetRipper.Layout.Classes.Misc;
+﻿using AssetRipper.Core.Layout.Classes.Misc;
 
-namespace AssetRipper.Layout.Categories
+namespace AssetRipper.Core.Layout.Categories
 {
 	public sealed class MiscLayoutCategory
 	{

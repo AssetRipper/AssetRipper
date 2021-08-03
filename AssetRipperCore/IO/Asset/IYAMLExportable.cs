@@ -1,7 +1,7 @@
-﻿using AssetRipper.Project;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.IO.Asset
+namespace AssetRipper.Core.IO.Asset
 {
 	public interface IYAMLExportable
 	{

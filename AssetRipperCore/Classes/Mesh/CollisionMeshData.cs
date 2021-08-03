@@ -1,10 +1,10 @@
-﻿using AssetRipper.Project;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.IO.Asset;
 using System;
 using System.Linq;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Classes.Mesh
+namespace AssetRipper.Core.Classes.Mesh
 {
 	public struct CollisionMeshData : IAssetReadable, IAssetWritable
 	{

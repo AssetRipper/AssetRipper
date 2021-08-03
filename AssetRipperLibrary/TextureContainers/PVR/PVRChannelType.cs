@@ -1,4 +1,4 @@
-namespace AssetRipperLibrary.TextureContainers.PVR
+namespace AssetRipper.Library.TextureContainers.PVR
 {
 	public enum PVRChannelType : uint
 	{

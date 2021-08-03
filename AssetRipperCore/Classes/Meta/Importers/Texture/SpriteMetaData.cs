@@ -1,17 +1,17 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.Classes.Sprite;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
-using AssetRipper.YAML.Extensions;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.Classes.Sprite;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 using System;
-using Version = AssetRipper.Parser.Files.Version;
-using AssetRipper.Math;
+using Version = AssetRipper.Core.Parser.Files.Version;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.Meta.Importers.Texture
+namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	public struct SpriteMetaData : IAsset
 	{

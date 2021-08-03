@@ -1,11 +1,11 @@
-using AssetRipper.Utils;
+using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper.IO.MultiFile
+namespace AssetRipper.Core.IO.MultiFile
 {
 	public sealed class MultiFileStream : Stream
 	{

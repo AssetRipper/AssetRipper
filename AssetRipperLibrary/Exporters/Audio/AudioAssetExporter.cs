@@ -1,19 +1,19 @@
-using AssetRipper.Project;
-using AssetRipper.Project.Exporters;
-using AssetRipper.Logging;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.AudioClip;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Structure.Collections;
-using AssetRipper.Utils;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.AudioClip;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Versioning;
-using UnityObject = AssetRipper.Classes.Object.Object;
-using AssetRipper;
+using UnityObject = AssetRipper.Core.Classes.Object.Object;
+using AssetRipper.Core;
 
-namespace AssetRipperLibrary.Exporters.Audio
+namespace AssetRipper.Library.Exporters.Audio
 {
 	[SupportedOSPlatform("windows")]
 	public class AudioAssetExporter : IAssetExporter

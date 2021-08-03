@@ -1,7 +1,7 @@
-﻿using AssetRipper.IO.Endian;
+﻿using AssetRipper.Core.IO.Endian;
 using System;
 
-namespace AssetRipper.Parser.Files.ArchiveFiles
+namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 {
 	public sealed class ArchiveHeader
 	{

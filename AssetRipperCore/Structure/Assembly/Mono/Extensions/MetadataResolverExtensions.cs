@@ -2,7 +2,7 @@
 using System;
 using System.Reflection;
 
-namespace AssetRipper.Structure.Assembly.Mono.Extensions
+namespace AssetRipper.Core.Structure.Assembly.Mono.Extensions
 {
 	public static class MetadataResolverExtensions 
 	{

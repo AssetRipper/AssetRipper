@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AssetRipper.IO.MultiFile
+namespace AssetRipper.Core.IO.MultiFile
 {
 	public class SplitNameComparer : IComparer<string>
 	{

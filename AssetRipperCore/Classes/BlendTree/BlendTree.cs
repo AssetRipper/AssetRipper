@@ -1,15 +1,15 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Layout;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.AnimatorController.Constants;
-using AssetRipper.Classes.Object;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.AnimatorController.Constants;
+using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
 using System;
 
-namespace AssetRipper.Classes.BlendTree
+namespace AssetRipper.Core.Classes.BlendTree
 {
 	public sealed class BlendTree : Motion
 	{

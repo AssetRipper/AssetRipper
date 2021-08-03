@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.LightmapSettings
+﻿namespace AssetRipper.Core.Classes.LightmapSettings
 {
 	public enum DenoiserType
 	{

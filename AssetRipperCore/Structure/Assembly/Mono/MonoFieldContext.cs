@@ -1,8 +1,8 @@
-using AssetRipper.Layout;
+using AssetRipper.Core.Layout;
 using Mono.Cecil;
 using System.Collections.Generic;
 
-namespace AssetRipper.Structure.Assembly.Mono
+namespace AssetRipper.Core.Structure.Assembly.Mono
 {
 	public readonly struct MonoFieldContext
 	{

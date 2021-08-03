@@ -1,18 +1,18 @@
-﻿using AssetRipper.Layout;
-using AssetRipper.Layout.Builtin;
-using AssetRipper.Layout.Classes;
-using AssetRipper.Layout.Classes.AnimationClip.Curves;
-using AssetRipper.Layout.Classes.Misc.Serializable;
-using AssetRipper.Layout.Classes.Misc.Serializable.GUIStyle;
-using AssetRipper.Classes;
-using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
-using AssetRipper.Structure.Assembly.Mono;
-using AssetRipper.Structure.Assembly.Serializable;
+﻿using AssetRipper.Core.Layout;
+using AssetRipper.Core.Layout.Builtin;
+using AssetRipper.Core.Layout.Classes;
+using AssetRipper.Core.Layout.Classes.AnimationClip.Curves;
+using AssetRipper.Core.Layout.Classes.Misc.Serializable;
+using AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
+using AssetRipper.Core.Structure.Assembly.Mono;
+using AssetRipper.Core.Structure.Assembly.Serializable;
 using System;
 using System.Linq;
-using AssetRipper.Math;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Converters.Game
+namespace AssetRipper.Core.Converters.Game
 {
 	public static class SerializableTypeConverter
 	{

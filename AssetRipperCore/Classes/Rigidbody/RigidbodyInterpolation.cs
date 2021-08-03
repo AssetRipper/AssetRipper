@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Rigidbody
+﻿namespace AssetRipper.Core.Classes.Rigidbody
 {
 	public enum RigidbodyInterpolation : byte
 	{

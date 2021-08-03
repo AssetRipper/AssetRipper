@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Mesh
+﻿namespace AssetRipper.Core.Classes.Mesh
 {
 	/// <summary>
 	/// Format of the mesh index buffer data

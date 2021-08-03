@@ -1,11 +1,11 @@
-using AssetRipper.Project.Exporters.Script.Elements;
-using AssetRipper.Project.Exporters.Script.Mono;
-using AssetRipper.IO;
-using AssetRipper.Layout;
-using AssetRipper.Logging;
-using AssetRipper.Structure.Assembly.Managers;
-using AssetRipper.Structure.Assembly.Mono;
-using AssetRipper.Utils;
+using AssetRipper.Core.Project.Exporters.Script.Elements;
+using AssetRipper.Core.Project.Exporters.Script.Mono;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Structure.Assembly.Managers;
+using AssetRipper.Core.Structure.Assembly.Mono;
+using AssetRipper.Core.Utils;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace AssetRipper.Project.Exporters.Script
+namespace AssetRipper.Core.Project.Exporters.Script
 {
 	public sealed class ScriptExportManager : IScriptExportManager
 	{

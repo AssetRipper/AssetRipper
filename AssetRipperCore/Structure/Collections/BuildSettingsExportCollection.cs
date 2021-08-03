@@ -1,23 +1,23 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Project.Exporters;
-using AssetRipper.IO;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes;
-using AssetRipper.Classes.EditorBuildSettings;
-using AssetRipper.Classes.EditorSettings;
-using AssetRipper.Classes.NavMeshProjectSettings;
-using AssetRipper.Classes.Object;
-using AssetRipper.Classes.Physics2DSettings;
-using AssetRipper.Classes.QualitySettings;
-using AssetRipper.Classes.UnityConnectSettings;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Utils;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.EditorBuildSettings;
+using AssetRipper.Core.Classes.EditorSettings;
+using AssetRipper.Core.Classes.NavMeshProjectSettings;
+using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.Classes.Physics2DSettings;
+using AssetRipper.Core.Classes.QualitySettings;
+using AssetRipper.Core.Classes.UnityConnectSettings;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Utils;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace AssetRipper.Structure.Collections
+namespace AssetRipper.Core.Structure.Collections
 {
 	public sealed class BuildSettingsExportCollection : ManagerExportCollection
 	{

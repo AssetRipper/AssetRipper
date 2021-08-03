@@ -1,13 +1,13 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Layout;
-using AssetRipper.Layout.Classes.PrefabInstance;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Layout.Classes.PrefabInstance;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.PrefabInstance
+namespace AssetRipper.Core.Classes.PrefabInstance
 {
 	public struct PropertyModification : IAsset, IDependent
 	{

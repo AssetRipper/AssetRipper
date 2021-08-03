@@ -1,4 +1,4 @@
-namespace AssetRipper.Classes.ParticleSystem
+namespace AssetRipper.Core.Classes.ParticleSystem
 {
 	/// <summary>
 	/// The action to perform when the Particle System stops.

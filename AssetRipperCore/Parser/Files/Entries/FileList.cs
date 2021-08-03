@@ -1,14 +1,14 @@
-using AssetRipper.Parser.Files.ArchiveFiles;
-using AssetRipper.Parser.Files.BundleFile;
-using AssetRipper.Parser.Files.Schemes;
-using AssetRipper.Parser.Files.ResourceFiles;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Parser.Files.WebFiles;
-using AssetRipper.Structure.GameStructure;
+using AssetRipper.Core.Parser.Files.ArchiveFiles;
+using AssetRipper.Core.Parser.Files.BundleFile;
+using AssetRipper.Core.Parser.Files.Schemes;
+using AssetRipper.Core.Parser.Files.ResourceFiles;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Parser.Files.WebFiles;
+using AssetRipper.Core.Structure.GameStructure;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Parser.Files.Entries
+namespace AssetRipper.Core.Parser.Files.Entries
 {
 	public abstract class FileList
 	{

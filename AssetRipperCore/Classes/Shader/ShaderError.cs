@@ -1,9 +1,9 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.Shader
+namespace AssetRipper.Core.Classes.Shader
 {
 	public struct ShaderError : IAssetReadable, IYAMLExportable
 	{

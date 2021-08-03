@@ -1,6 +1,6 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.Classes.Shader.Enums.GpuProgramType;
-using AssetRipper.Classes.Shader.Parameters;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
+using AssetRipper.Core.Classes.Shader.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;

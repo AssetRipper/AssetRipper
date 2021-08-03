@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.Object
+namespace AssetRipper.Core.Classes.Object
 {
 	/// <summary>
 	/// Bit mask that controls object destruction, saving and visibility in inspectors.

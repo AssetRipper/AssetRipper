@@ -1,4 +1,4 @@
-namespace AssetRipperLibrary.TextureContainers
+namespace AssetRipper.Library.TextureContainers
 {
 	public enum ContainerType
 	{

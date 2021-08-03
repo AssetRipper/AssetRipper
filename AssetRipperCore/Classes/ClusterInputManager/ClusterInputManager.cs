@@ -1,10 +1,10 @@
-using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.ClusterInputManager
+namespace AssetRipper.Core.Classes.ClusterInputManager
 {
 	public sealed class ClusterInputManager : GlobalGameManager
 	{

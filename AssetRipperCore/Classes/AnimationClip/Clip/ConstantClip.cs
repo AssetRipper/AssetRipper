@@ -1,6 +1,6 @@
-﻿using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Classes.AnimationClip.Clip
+namespace AssetRipper.Core.Classes.AnimationClip.Clip
 {
 	public class ConstantClip : IAssetReadable
 	{

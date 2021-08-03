@@ -1,10 +1,10 @@
-using AssetRipper.Project;
-using AssetRipper.Layout.Classes.Misc.Serializable;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
-using AssetRipper.Math;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout.Classes.Misc.Serializable;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.Misc.Serializable
+namespace AssetRipper.Core.Classes.Misc.Serializable
 {
 	public struct AABBi : IAsset
 	{

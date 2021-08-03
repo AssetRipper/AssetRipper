@@ -1,7 +1,7 @@
-﻿using AssetRipper.Classes.Sprite;
+﻿using AssetRipper.Core.Classes.Sprite;
 using System.IO;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public class SpriteSettings
     {

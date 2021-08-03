@@ -1,33 +1,33 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc;
 using System;
 using System.Linq;
 
-namespace AssetRipper.Converters.TerrainData
+namespace AssetRipper.Core.Converters.TerrainData
 {
 	public static class TerrainDataConverter
 	{
-		public static AssetRipper.Classes.TerrainData.TerrainData Convert(IExportContainer container, AssetRipper.Classes.TerrainData.TerrainData origin)
+		public static AssetRipper.Core.Classes.TerrainData.TerrainData Convert(IExportContainer container, AssetRipper.Core.Classes.TerrainData.TerrainData origin)
 		{
-			AssetRipper.Classes.TerrainData.TerrainData instance = new AssetRipper.Classes.TerrainData.TerrainData(origin.AssetInfo);
+			AssetRipper.Core.Classes.TerrainData.TerrainData instance = new AssetRipper.Core.Classes.TerrainData.TerrainData(origin.AssetInfo);
 			NamedObjectConverter.Convert(container, origin, instance);
 			instance.SplatDatabase = origin.SplatDatabase.Convert(container);
 			instance.DetailDatabase = origin.DetailDatabase.Convert(container);
 			instance.Heightmap = origin.Heightmap.Convert(container);
-			if (AssetRipper.Classes.TerrainData.TerrainData.HasLightmap(container.ExportVersion))
+			if (AssetRipper.Core.Classes.TerrainData.TerrainData.HasLightmap(container.ExportVersion))
 			{
 				instance.Lightmap = origin.Lightmap;
 			}
-			if (AssetRipper.Classes.TerrainData.TerrainData.HasPreloadShaders(container.ExportVersion))
+			if (AssetRipper.Core.Classes.TerrainData.TerrainData.HasPreloadShaders(container.ExportVersion))
 			{
 				instance.PreloadShaders = GetPreloadShaders(container, origin);
 			}
 			return instance;
 		}
 
-		private static PPtr<AssetRipper.Classes.Shader.Shader>[] GetPreloadShaders(IExportContainer container, AssetRipper.Classes.TerrainData.TerrainData origin)
+		private static PPtr<AssetRipper.Core.Classes.Shader.Shader>[] GetPreloadShaders(IExportContainer container, AssetRipper.Core.Classes.TerrainData.TerrainData origin)
 		{
-			return AssetRipper.Classes.TerrainData.TerrainData.HasPreloadShaders(container.Version) ? origin.PreloadShaders.ToArray() : Array.Empty<PPtr<AssetRipper.Classes.Shader.Shader>>();
+			return AssetRipper.Core.Classes.TerrainData.TerrainData.HasPreloadShaders(container.Version) ? origin.PreloadShaders.ToArray() : Array.Empty<PPtr<AssetRipper.Core.Classes.Shader.Shader>>();
 		}
 	}
 }

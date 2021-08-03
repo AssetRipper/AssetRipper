@@ -1,20 +1,20 @@
-using AssetRipper.IO.Endian;
-using AssetRipper.IO.MultiFile;
-using AssetRipper.IO.Smart;
-using AssetRipper.Layout;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Asset;
-using AssetRipper.Parser.Utils;
-using AssetRipper.Structure;
+using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.IO.MultiFile;
+using AssetRipper.Core.IO.Smart;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Utils;
+using AssetRipper.Core.Structure;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Object = AssetRipper.Classes.Object.Object;
+using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Parser.Files.SerializedFiles
+namespace AssetRipper.Core.Parser.Files.SerializedFiles
 {
 	/// <summary>
 	/// Serialized files contain binary serialized objects and optional run-time type information.

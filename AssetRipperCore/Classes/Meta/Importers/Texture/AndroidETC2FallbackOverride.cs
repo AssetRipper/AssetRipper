@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Meta.Importers.Texture
+﻿namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	/// <summary>
 	/// This enumeration has values for different qualities to decompress an ETC2 texture on Android devices

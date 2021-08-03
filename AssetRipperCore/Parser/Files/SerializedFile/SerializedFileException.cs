@@ -1,8 +1,8 @@
-﻿using AssetRipper.Parser.Asset;
+﻿using AssetRipper.Core.Parser.Asset;
 using System;
 using System.Text;
 
-namespace AssetRipper.Parser.Files.SerializedFiles
+namespace AssetRipper.Core.Parser.Files.SerializedFiles
 {
 	public sealed class SerializedFileException : Exception
 	{

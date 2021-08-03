@@ -1,14 +1,14 @@
-using AssetRipper.IO.MultiFile;
-using AssetRipper.Logging;
-using AssetRipper.Structure.GameStructure;
-using AssetRipper.Utils;
-using AssetRipperLibrary;
+using AssetRipper.Core.IO.MultiFile;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Core.Utils;
+using AssetRipper.Library;
 using CommandLine;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipperConsole
+namespace AssetRipper.Console
 {
 	public class Program
 	{
@@ -48,7 +48,7 @@ namespace AssetRipperConsole
 
 					if (!options.Quit)
 					{
-						Console.ReadKey();
+						System.Console.ReadKey();
 					}
 				});
 		}
@@ -67,7 +67,7 @@ namespace AssetRipperConsole
 					continue;
 				}
 
-				Console.WriteLine(MultiFileStream.IsMultiFile(arg)
+				System.Console.WriteLine(MultiFileStream.IsMultiFile(arg)
 					? $"File '{arg}' doesn't have all parts for combining"
 					: $"Neither file nor directory with path '{arg}' exists");
 
@@ -83,7 +83,7 @@ namespace AssetRipperConsole
 			}
 			catch(Exception ex)
 			{
-				Console.WriteLine($"Failed to initialize the output and log paths.", ex);
+				System.Console.WriteLine($"Failed to initialize the output and log paths.", ex);
 				return false;
 			}
 

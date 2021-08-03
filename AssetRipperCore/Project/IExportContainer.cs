@@ -1,12 +1,12 @@
-using AssetRipper.Layout;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Meta;
-using AssetRipper.Classes.Object;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.Structure.Collections;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Meta;
+using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Structure.Collections;
 
-namespace AssetRipper.Project
+namespace AssetRipper.Core.Project
 {
 #warning TODO: remove
 	public interface IExportContainer : IAssetContainer

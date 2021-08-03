@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.RenderTexture
+﻿namespace AssetRipper.Core.Classes.RenderTexture
 {
 	public enum RenderTextureFormat
 	{

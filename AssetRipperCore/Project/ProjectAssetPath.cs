@@ -1,11 +1,11 @@
-﻿using AssetRipper.Classes.Utils;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Utils;
+﻿using AssetRipper.Core.Classes.Utils;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Utils;
 using System;
 using System.IO;
-using Object = AssetRipper.Classes.Object.Object;
+using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Project
+namespace AssetRipper.Core.Project
 {
 	public struct ProjectAssetPath
 	{

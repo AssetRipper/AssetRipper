@@ -1,7 +1,7 @@
-﻿using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.IO.Asset;
 using System.IO;
 
-namespace AssetRipper.Classes.Shader.Parameters
+namespace AssetRipper.Core.Classes.Shader.Parameters
 {
 	public struct SamplerParameter : IAssetReadable
 	{

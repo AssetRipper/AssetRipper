@@ -1,8 +1,8 @@
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Parser.Files.SerializedFiles.IO;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
 
-namespace AssetRipper.Parser.Files.SerializedFiles.Parser
+namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 {
 	public struct SerializedType : ISerializedReadable, ISerializedWritable
 	{

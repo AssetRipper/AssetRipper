@@ -1,7 +1,7 @@
-﻿using AssetRipper.IO.Endian;
+﻿using AssetRipper.Core.IO.Endian;
 using System;
 
-namespace AssetRipper.Parser.Files.WebFiles
+namespace AssetRipper.Core.Parser.Files.WebFiles
 {
 	public sealed class WebHeader : IEndianReadable
 	{

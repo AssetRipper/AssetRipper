@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.QualitySettings
+﻿namespace AssetRipper.Core.Classes.QualitySettings
 {
 	public enum VSyncCount
 	{

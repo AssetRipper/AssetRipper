@@ -1,22 +1,22 @@
-using AssetRipper.Converters.Shader;
-using AssetRipper.Project;
-using AssetRipper.Project.Exporters;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Shader;
-using AssetRipper.Classes.Shader.Enums;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Structure.Collections;
-using AssetRipper.Utils;
-using AssetRipperLibrary.Exporters.Shaders.DirectX;
+using AssetRipper.Core.Converters.Shader;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.Utils;
+using AssetRipper.Library.Exporters.Shaders.DirectX;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Versioning;
-using UnityObject = AssetRipper.Classes.Object.Object;
-using Version = AssetRipper.Parser.Files.Version;
-using AssetRipper;
+using UnityObject = AssetRipper.Core.Classes.Object.Object;
+using Version = AssetRipper.Core.Parser.Files.Version;
+using AssetRipper.Core;
 
-namespace AssetRipperLibrary.Exporters.Shaders
+namespace AssetRipper.Library.Exporters.Shaders
 {
 	[SupportedOSPlatform("windows")]
 	public sealed class ShaderAssetExporter : IAssetExporter

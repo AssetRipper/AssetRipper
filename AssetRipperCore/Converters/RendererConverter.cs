@@ -1,7 +1,7 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Renderer;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Renderer;
 
-namespace AssetRipper.Converters
+namespace AssetRipper.Core.Converters
 {
 	public static class RendererConverter
 	{

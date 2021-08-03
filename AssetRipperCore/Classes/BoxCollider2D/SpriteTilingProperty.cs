@@ -1,10 +1,10 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
-using AssetRipper.Math;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.BoxCollider2D
+namespace AssetRipper.Core.Classes.BoxCollider2D
 {
 	public struct SpriteTilingProperty : IAssetReadable, IYAMLExportable
 	{

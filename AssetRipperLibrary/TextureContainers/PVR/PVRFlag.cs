@@ -1,6 +1,6 @@
 using System;
 
-namespace AssetRipperLibrary.TextureContainers.PVR
+namespace AssetRipper.Library.TextureContainers.PVR
 {
 	[Flags]
 	public enum PVRFlag : uint

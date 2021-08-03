@@ -7,7 +7,7 @@
 using System;
 using System.IO;
 
-namespace AssetRipper.Lz4
+namespace AssetRipper.Core.Lz4
 {
 	public class Lz4DecodeStream : Stream
 	{

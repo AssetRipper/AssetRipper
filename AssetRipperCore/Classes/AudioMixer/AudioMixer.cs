@@ -1,11 +1,11 @@
-using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.AudioMixer
+namespace AssetRipper.Core.Classes.AudioMixer
 {
 #warning TODO: not implemented
 	public sealed class AudioMixer : NamedObject

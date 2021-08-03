@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Parser.Files.BundleFile.Parser
+namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 {
 	[Flags]
 	public enum BundleFlags

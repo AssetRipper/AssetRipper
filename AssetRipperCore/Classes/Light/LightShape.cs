@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Light
+﻿namespace AssetRipper.Core.Classes.Light
 {
 	/// <summary>
 	/// Describes the shape of a spot light.

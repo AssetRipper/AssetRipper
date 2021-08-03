@@ -1,6 +1,6 @@
-using AssetRipper.Extensions;
+using AssetRipper.Core.Extensions;
 
-namespace AssetRipper.YAML.Extensions
+namespace AssetRipper.Core.YAML.Extensions
 {
 	internal static class EmitterExtensions
 	{

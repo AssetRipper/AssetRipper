@@ -1,12 +1,12 @@
-using AssetRipper.Project;
-using AssetRipper.Classes.AnimatorTransition;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.AnimatorTransition;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Classes.AnimatorController.Constants
+namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
 	public struct TransitionConstant : IAssetReadable, IYAMLExportable
 	{

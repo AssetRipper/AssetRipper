@@ -1,13 +1,13 @@
-﻿using AssetRipper.Parser.Files.Entries;
-using AssetRipper.Parser.Files.ResourceFiles;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.Structure;
+﻿using AssetRipper.Core.Parser.Files.Entries;
+using AssetRipper.Core.Parser.Files.ResourceFiles;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.Core.Structure;
 using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 
-namespace AssetRipperGUI.Controls
+namespace AssetRipper.GUI.Controls
 {
 	public partial class FileView : UserControl
 	{

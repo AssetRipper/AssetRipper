@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Structure.Assembly.Mono
+﻿namespace AssetRipper.Core.Structure.Assembly.Mono
 {
 	public enum ElementType : byte
 	{

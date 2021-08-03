@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Meta.Importers.Texture
+﻿namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	/// <summary>
 	/// Select the kind of compression you want for your texture.

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace AssetRipper.Utils
+namespace AssetRipper.Core.Utils
 {
 	public class MD4 : HashAlgorithm
 	{

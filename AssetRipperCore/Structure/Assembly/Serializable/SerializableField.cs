@@ -1,17 +1,17 @@
-using AssetRipper.Project;
-using AssetRipper.Extensions;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
-using AssetRipper.YAML.Extensions;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Object = AssetRipper.Classes.Object.Object;
+using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Structure.Assembly.Serializable
+namespace AssetRipper.Core.Structure.Assembly.Serializable
 {
 	public struct SerializableField
 	{

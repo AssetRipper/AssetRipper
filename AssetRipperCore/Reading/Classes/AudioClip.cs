@@ -1,8 +1,8 @@
-﻿using AssetRipper.Classes.AudioClip;
-using AssetRipper.IO;
-using AssetRipper.IO.Extensions;
+﻿using AssetRipper.Core.Classes.AudioClip;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Extensions;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public sealed class AudioClip : NamedObject
     {

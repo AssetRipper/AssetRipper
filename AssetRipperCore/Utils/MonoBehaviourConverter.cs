@@ -1,8 +1,8 @@
-﻿using AssetRipper.Reading;
-using AssetRipper.Reading.Classes;
+﻿using AssetRipper.Core.Reading;
+using AssetRipper.Core.Reading.Classes;
 using System.Collections.Generic;
 
-namespace AssetRipper.Utils
+namespace AssetRipper.Core.Utils
 {
 	public static class MonoBehaviourConverter
 	{

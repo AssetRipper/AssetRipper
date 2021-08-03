@@ -1,10 +1,10 @@
-﻿using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
 using System;
-using Object = AssetRipper.Classes.Object.Object;
-using Version = AssetRipper.Parser.Files.Version;
+using Object = AssetRipper.Core.Classes.Object.Object;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Project
+namespace AssetRipper.Core.Project
 {
 	public sealed class ExportOptions
 	{

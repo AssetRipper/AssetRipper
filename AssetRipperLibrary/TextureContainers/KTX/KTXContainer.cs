@@ -1,8 +1,8 @@
-using AssetRipper.Extensions;
+using AssetRipper.Core.Extensions;
 using System.IO;
 using System.Text;
 
-namespace AssetRipperLibrary.TextureContainers.KTX
+namespace AssetRipper.Library.TextureContainers.KTX
 {
 	public static class KTXContainer
 	{

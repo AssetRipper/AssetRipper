@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystem.Trigger
+﻿namespace AssetRipper.Core.Classes.ParticleSystem.Trigger
 {
 	public enum TriggerAction
 	{

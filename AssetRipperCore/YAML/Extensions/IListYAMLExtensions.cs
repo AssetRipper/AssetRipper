@@ -1,8 +1,8 @@
-﻿using AssetRipper.Extensions;
+﻿using AssetRipper.Core.Extensions;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AssetRipper.YAML.Extensions
+namespace AssetRipper.Core.YAML.Extensions
 {
 	public static class IListYAMLExtensions
 	{

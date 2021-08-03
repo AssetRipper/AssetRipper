@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Utils
+namespace AssetRipper.Core.Utils
 {
 	public static class ArrayUtils
 	{

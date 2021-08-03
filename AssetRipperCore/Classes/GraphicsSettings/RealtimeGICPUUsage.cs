@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.GraphicsSettings
+﻿namespace AssetRipper.Core.Classes.GraphicsSettings
 {
 	/// <summary>
 	/// How much CPU usage to assign to the final lighting calculations at runtime.

@@ -1,4 +1,4 @@
-﻿using AssetRipper.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Core.Parser.Files.SerializedFiles;
 using System;
 using System.Diagnostics;
 using System.Media;
@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Navigation;
 
-namespace AssetRipperGUI.Windows
+namespace AssetRipper.GUI.Windows
 {
 	/// <summary>
 	/// Interaction logic for BugReportWindow.xaml

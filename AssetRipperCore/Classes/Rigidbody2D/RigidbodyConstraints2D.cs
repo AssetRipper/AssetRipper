@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.Rigidbody2D
+namespace AssetRipper.Core.Classes.Rigidbody2D
 {
 	[Flags]
 	public enum RigidbodyConstraints2D

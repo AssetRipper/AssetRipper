@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.Shader.Enums.GpuProgramType
+namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 {
 	public enum ShaderGpuProgramType53
 	{

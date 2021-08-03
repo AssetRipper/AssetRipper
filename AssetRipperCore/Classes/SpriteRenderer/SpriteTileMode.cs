@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.SpriteRenderer
+﻿namespace AssetRipper.Core.Classes.SpriteRenderer
 {
 	public enum SpriteTileMode
 	{

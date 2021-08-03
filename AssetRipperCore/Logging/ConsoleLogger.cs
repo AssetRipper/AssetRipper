@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Logging
+namespace AssetRipper.Core.Logging
 {
 	public class ConsoleLogger : ILogger
 	{

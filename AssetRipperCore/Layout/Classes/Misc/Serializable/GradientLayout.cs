@@ -1,6 +1,6 @@
-﻿using AssetRipper.Converters.Game;
+﻿using AssetRipper.Core.Converters.Game;
 
-namespace AssetRipper.Layout.Classes.Misc.Serializable
+namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 {
 	/// <summary>
 	/// 3.5.0 - first introduction

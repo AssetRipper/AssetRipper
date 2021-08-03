@@ -1,16 +1,16 @@
-using AssetRipper.Project.Exporters;
-using AssetRipper.Classes;
-using AssetRipper.Classes.AnimatorController;
-using AssetRipper.Classes.AnimatorController.Constants;
-using AssetRipper.Classes.AnimatorStateMachine;
-using AssetRipper.Classes.AnimatorTransition;
-using AssetRipper.Classes.BlendTree;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Object;
-using AssetRipper.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.AnimatorController;
+using AssetRipper.Core.Classes.AnimatorController.Constants;
+using AssetRipper.Core.Classes.AnimatorStateMachine;
+using AssetRipper.Core.Classes.AnimatorTransition;
+using AssetRipper.Core.Classes.BlendTree;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
 using System.Collections.Generic;
 
-namespace AssetRipper.Structure.Collections
+namespace AssetRipper.Core.Structure.Collections
 {
 	public class AnimatorControllerExportCollection : AssetsExportCollection
 	{

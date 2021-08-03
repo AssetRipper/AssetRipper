@@ -1,12 +1,12 @@
-using AssetRipper.IO.Endian;
-using AssetRipper.IO.MultiFile;
-using AssetRipper.Parser.Files.BundleFile.Parser;
-using AssetRipper.Parser.Files.BundleFile.Parser.Header;
-using AssetRipper.Parser.Files.Entries;
+using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.IO.MultiFile;
+using AssetRipper.Core.Parser.Files.BundleFile.Parser;
+using AssetRipper.Core.Parser.Files.BundleFile.Parser.Header;
+using AssetRipper.Core.Parser.Files.Entries;
 using System;
 using System.IO;
 
-namespace AssetRipper.Parser.Files.BundleFile
+namespace AssetRipper.Core.Parser.Files.BundleFile
 {
 	public sealed class BundleFile : FileList
 	{

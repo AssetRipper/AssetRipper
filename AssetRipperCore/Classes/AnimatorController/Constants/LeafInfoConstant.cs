@@ -1,8 +1,8 @@
-﻿using AssetRipper.IO;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
+﻿using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 
-namespace AssetRipper.Classes.AnimatorController.Constants
+namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
 	public struct LeafInfoConstant : IAssetReadable
 	{

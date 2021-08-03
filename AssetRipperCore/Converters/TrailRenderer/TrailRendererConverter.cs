@@ -1,28 +1,28 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.TrailRenderer;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.TrailRenderer;
 
-namespace AssetRipper.Converters.TrailRenderer
+namespace AssetRipper.Core.Converters.TrailRenderer
 {
 	public static class TrailRendererConverter
 	{
-		public static AssetRipper.Classes.TrailRenderer.TrailRenderer Convert(IExportContainer container, AssetRipper.Classes.TrailRenderer.TrailRenderer origin)
+		public static AssetRipper.Core.Classes.TrailRenderer.TrailRenderer Convert(IExportContainer container, AssetRipper.Core.Classes.TrailRenderer.TrailRenderer origin)
 		{
-			AssetRipper.Classes.TrailRenderer.TrailRenderer instance = new AssetRipper.Classes.TrailRenderer.TrailRenderer(origin.AssetInfo);
+			AssetRipper.Core.Classes.TrailRenderer.TrailRenderer instance = new AssetRipper.Core.Classes.TrailRenderer.TrailRenderer(origin.AssetInfo);
 			RendererConverter.Convert(container, origin, instance);
 			instance.Time = origin.Time;
 			instance.Parameters = GetParameters(container, origin);
 			instance.MinVertexDistance = origin.MinVertexDistance;
 			instance.Autodestruct = origin.Autodestruct;
-			if (AssetRipper.Classes.TrailRenderer.TrailRenderer.HasEmitting(container.ExportVersion))
+			if (AssetRipper.Core.Classes.TrailRenderer.TrailRenderer.HasEmitting(container.ExportVersion))
 			{
 				instance.Emitting = GetEmitting(container, origin.Emitting);
 			}
 			return instance;
 		}
 
-		private static LineParameters GetParameters(IExportContainer container, AssetRipper.Classes.TrailRenderer.TrailRenderer origin)
+		private static LineParameters GetParameters(IExportContainer container, AssetRipper.Core.Classes.TrailRenderer.TrailRenderer origin)
 		{
-			if (AssetRipper.Classes.TrailRenderer.TrailRenderer.HasParameters(container.Version))
+			if (AssetRipper.Core.Classes.TrailRenderer.TrailRenderer.HasParameters(container.Version))
 			{
 				return origin.Parameters.Convert(container);
 			}
@@ -37,7 +37,7 @@ namespace AssetRipper.Converters.TrailRenderer
 
 		private static bool GetEmitting(IExportContainer container, bool origin)
 		{
-			return AssetRipper.Classes.TrailRenderer.TrailRenderer.HasEmitting(container.Version) ? origin : true;
+			return AssetRipper.Core.Classes.TrailRenderer.TrailRenderer.HasEmitting(container.Version) ? origin : true;
 		}
 	}
 }

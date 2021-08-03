@@ -1,12 +1,12 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Texture2D;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.RenderTexture
+namespace AssetRipper.Core.Classes.RenderTexture
 {
 	public sealed class RenderTexture : Texture
 	{

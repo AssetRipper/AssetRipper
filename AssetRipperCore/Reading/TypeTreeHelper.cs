@@ -1,11 +1,11 @@
-﻿using AssetRipper.IO;
-using AssetRipper.IO.Extensions;
+﻿using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Extensions;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Text;
 
-namespace AssetRipper.Reading
+namespace AssetRipper.Core.Reading
 {
 	public static class TypeTreeHelper
 	{

@@ -1,9 +1,9 @@
-﻿using AssetRipper.Utils;
+﻿using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Structure.GameStructure.Platforms
+namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
 	internal sealed class iOSGameStructure : PlatformGameStructure
 	{

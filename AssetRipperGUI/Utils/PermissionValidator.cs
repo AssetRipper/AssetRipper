@@ -1,5 +1,5 @@
-﻿using AssetRipper.Logging;
-using AssetRipper.Utils;
+﻿using AssetRipper.Core.Logging;
+using AssetRipper.Core.Utils;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -7,7 +7,7 @@ using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
-namespace AssetRipperGUI
+namespace AssetRipper.GUI
 {
 	public static class PermissionValidator
 	{

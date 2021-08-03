@@ -1,8 +1,8 @@
-using AssetRipper.Structure.Assembly.Managers;
+using AssetRipper.Core.Structure.Assembly.Managers;
 using System;
 using System.IO;
 
-namespace AssetRipper.Parser.Utils
+namespace AssetRipper.Core.Parser.Utils
 {
 	public static class FilenameUtils
 	{

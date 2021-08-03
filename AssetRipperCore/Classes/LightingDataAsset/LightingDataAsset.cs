@@ -1,19 +1,19 @@
-using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Light;
-using AssetRipper.Classes.LightmapSettings;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.OcclusionCullingData;
-using AssetRipper.Classes.RenderSettings;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
-using AssetRipper.YAML.Extensions;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Light;
+using AssetRipper.Core.Classes.LightmapSettings;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.OcclusionCullingData;
+using AssetRipper.Core.Classes.RenderSettings;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.LightingDataAsset
+namespace AssetRipper.Core.Classes.LightingDataAsset
 {
 	/// <summary>
 	/// 5.0.0 - first introduction as LightmapSnapshot

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Parser.Files.Entries
+﻿namespace AssetRipper.Core.Parser.Files.Entries
 {
 	public abstract class FileEntry
 	{

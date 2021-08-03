@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Logging
+﻿namespace AssetRipper.Core.Logging
 {
 	public enum LogCategory
 	{

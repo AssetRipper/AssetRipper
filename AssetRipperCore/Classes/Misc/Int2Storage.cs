@@ -1,8 +1,8 @@
-﻿using AssetRipper.Project;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.Misc
+namespace AssetRipper.Core.Classes.Misc
 {
 	/// <summary>
 	/// Real name is 'int2_storage'

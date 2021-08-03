@@ -1,12 +1,12 @@
-using AssetRipper.Project;
-using AssetRipper.Project.Exporters;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Object;
-using AssetRipper.Classes.Utils;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.Classes.Utils;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Structure.Collections
+namespace AssetRipper.Core.Structure.Collections
 {
 	public abstract class AssetsExportCollection : AssetExportCollection
 	{

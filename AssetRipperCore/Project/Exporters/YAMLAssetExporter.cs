@@ -1,18 +1,18 @@
-using AssetRipper.IO;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes;
-using AssetRipper.Classes.OcclusionCullingSettings;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Structure.Collections;
-using AssetRipper.Utils;
-using AssetRipper.YAML;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.OcclusionCullingSettings;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.Utils;
+using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Object = AssetRipper.Classes.Object.Object;
+using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Project.Exporters
+namespace AssetRipper.Core.Project.Exporters
 {
 	public class YAMLAssetExporter : IAssetExporter
 	{

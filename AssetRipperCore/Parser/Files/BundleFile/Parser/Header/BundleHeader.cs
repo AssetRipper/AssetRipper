@@ -1,8 +1,8 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.IO.Extensions;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.IO.Extensions;
 using System;
 
-namespace AssetRipper.Parser.Files.BundleFile.Parser.Header
+namespace AssetRipper.Core.Parser.Files.BundleFile.Parser.Header
 {
 	public sealed class BundleHeader
 	{

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.GUIText
+﻿namespace AssetRipper.Core.Classes.GUIText
 {
 	/// <summary>
 	/// Where the anchor of the text is placed.

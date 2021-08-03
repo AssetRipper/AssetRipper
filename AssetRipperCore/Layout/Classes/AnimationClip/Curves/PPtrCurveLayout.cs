@@ -1,8 +1,8 @@
-﻿using AssetRipper.Converters.Game;
-using AssetRipper.Classes.AnimationClip;
-using AssetRipper.Classes.AnimationClip.Curves;
+﻿using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.Classes.AnimationClip;
+using AssetRipper.Core.Classes.AnimationClip.Curves;
 
-namespace AssetRipper.Layout.Classes.AnimationClip.Curves
+namespace AssetRipper.Core.Layout.Classes.AnimationClip.Curves
 {
 	public sealed class PPtrCurveLayout
 	{

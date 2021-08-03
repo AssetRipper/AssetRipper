@@ -1,12 +1,12 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.Layout;
-using AssetRipper.Classes.AnimationClip.Editor;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Classes.AnimationClip.Editor;
+using AssetRipper.Core.IO.Asset;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Classes.AnimationClip.Clip
+namespace AssetRipper.Core.Classes.AnimationClip.Clip
 {
 	public class StreamedClip : IAssetReadable
 	{

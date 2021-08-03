@@ -1,13 +1,13 @@
-using AssetRipper.Project;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.ParticleSystem.Curve;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.ParticleSystem.Curve;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.ParticleSystem
+namespace AssetRipper.Core.Classes.ParticleSystem
 {
 	public sealed class ExternalForcesModule : ParticleSystemModule
 	{

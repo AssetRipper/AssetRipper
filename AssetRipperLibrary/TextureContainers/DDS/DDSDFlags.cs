@@ -1,6 +1,6 @@
 using System;
 
-namespace AssetRipperLibrary.TextureContainers.DDS
+namespace AssetRipper.Library.TextureContainers.DDS
 {
 	[Flags]
 	public enum DDSDFlags : uint

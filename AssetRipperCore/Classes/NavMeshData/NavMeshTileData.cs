@@ -1,11 +1,11 @@
-using AssetRipper.Project;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
-using AssetRipper.YAML.Extensions;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 
-namespace AssetRipper.Classes.NavMeshData
+namespace AssetRipper.Core.Classes.NavMeshData
 {
 	public struct NavMeshTileData : IAssetReadable, IYAMLExportable
 	{

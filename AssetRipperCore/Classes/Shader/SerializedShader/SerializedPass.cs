@@ -1,14 +1,14 @@
-using AssetRipper.Extensions;
-using AssetRipper.Classes.Shader.Enums;
-using AssetRipper.Classes.Shader.SerializedShader.Enum;
-using AssetRipper.IO;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Classes.Shader.SerializedShader
+namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
 	public struct SerializedPass : IAssetReadable
 	{

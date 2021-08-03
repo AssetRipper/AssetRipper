@@ -5,7 +5,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	  <AssemblyName>AssetRipperCore</AssemblyName>
-	  <RootNamespace>AssetRipper</RootNamespace>
+	  <RootNamespace>AssetRipper.Core</RootNamespace>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <OutputPath>..\Bins\AssetRipperCore\$(Configuration)\</OutputPath>
 	  <Copyright>Copyright ©  2021</Copyright>

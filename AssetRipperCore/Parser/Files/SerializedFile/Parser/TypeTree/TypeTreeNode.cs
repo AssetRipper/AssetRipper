@@ -1,7 +1,7 @@
-﻿using AssetRipper.Parser.Files.SerializedFiles.IO;
+﻿using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
 using System.Text;
 
-namespace AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree
+namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 {
 	public class TypeTreeNode : ISerializedReadable, ISerializedWritable
 	{

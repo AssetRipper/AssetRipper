@@ -1,11 +1,11 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.Structure.Collections;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.Meta
+namespace AssetRipper.Core.Classes.Meta
 {
 	public sealed class MetaPtr : IYAMLExportable
 	{

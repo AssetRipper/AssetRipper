@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.GraphicsSettings
+﻿namespace AssetRipper.Core.Classes.GraphicsSettings
 {
 	/// <summary>
 	/// The HDR mode to use for rendering.

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Mesh
+﻿namespace AssetRipper.Core.Classes.Mesh
 {
 	/// <summary>
 	/// Compressing meshes saves space in the built game, but more compression introduces more artifacts in vertex data.

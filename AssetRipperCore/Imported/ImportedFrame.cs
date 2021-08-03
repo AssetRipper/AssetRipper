@@ -1,8 +1,8 @@
-﻿using AssetRipper.Math;
+﻿using AssetRipper.Core.Math;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Imported
+namespace AssetRipper.Core.Imported
 {
 	public class ImportedFrame
 	{

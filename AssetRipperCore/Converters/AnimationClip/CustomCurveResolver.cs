@@ -1,21 +1,21 @@
-using AssetRipper.Layout;
-using AssetRipper.Classes;
-using AssetRipper.Classes.AnimationClip.GenericBinding;
-using AssetRipper.Classes.Camera;
-using AssetRipper.Classes.Light;
-using AssetRipper.Classes.Renderer;
-using AssetRipper.Classes.SpriteRenderer;
-using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
+using AssetRipper.Core.Classes.Camera;
+using AssetRipper.Core.Classes.Light;
+using AssetRipper.Core.Classes.Renderer;
+using AssetRipper.Core.Classes.SpriteRenderer;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using SevenZip;
 using System;
 using System.Linq;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Converters.AnimationClip
+namespace AssetRipper.Core.Converters.AnimationClip
 {
 	public sealed class CustomCurveResolver
 	{
-		public CustomCurveResolver(AssetRipper.Classes.AnimationClip.AnimationClip clip)
+		public CustomCurveResolver(AssetRipper.Core.Classes.AnimationClip.AnimationClip clip)
 		{
 			if (clip == null)
 			{
@@ -36,7 +36,7 @@ namespace AssetRipper.Converters.AnimationClip
 							return Prefix + attribute;
 						}
 
-						foreach (AssetRipper.Classes.GameObject.GameObject root in Roots)
+						foreach (AssetRipper.Core.Classes.GameObject.GameObject root in Roots)
 						{
 							Transform rootTransform = root.GetTransform();
 							Transform child = rootTransform.FindChild(path);
@@ -49,7 +49,7 @@ namespace AssetRipper.Converters.AnimationClip
 							{
 								continue;
 							}
-							AssetRipper.Classes.Mesh.Mesh mesh = skin.Mesh.FindAsset(skin.File);
+							AssetRipper.Core.Classes.Mesh.Mesh mesh = skin.Mesh.FindAsset(skin.File);
 							if (mesh == null)
 							{
 								continue;
@@ -76,7 +76,7 @@ namespace AssetRipper.Converters.AnimationClip
 							return Prefix + attribute;
 						}
 
-						foreach (AssetRipper.Classes.GameObject.GameObject root in Roots)
+						foreach (AssetRipper.Core.Classes.GameObject.GameObject root in Roots)
 						{
 							Transform rootTransform = root.GetTransform();
 							Transform child = rootTransform.FindChild(path);
@@ -533,7 +533,7 @@ namespace AssetRipper.Converters.AnimationClip
 			}
 		}
 
-		private AssetRipper.Classes.GameObject.GameObject[] Roots
+		private AssetRipper.Core.Classes.GameObject.GameObject[] Roots
 		{
 			get
 			{
@@ -548,9 +548,9 @@ namespace AssetRipper.Converters.AnimationClip
 
 		private Version Version => m_clip.File.Version;
 
-		private readonly AssetRipper.Classes.AnimationClip.AnimationClip m_clip = null;
+		private readonly AssetRipper.Core.Classes.AnimationClip.AnimationClip m_clip = null;
 
-		private AssetRipper.Classes.GameObject.GameObject[] m_roots = null;
+		private AssetRipper.Core.Classes.GameObject.GameObject[] m_roots = null;
 		private bool m_rootInited = false;
 	}
 }

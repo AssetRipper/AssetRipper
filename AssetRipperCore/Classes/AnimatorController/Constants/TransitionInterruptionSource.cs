@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.AnimatorController.Constants
+﻿namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
 	/// <summary>
 	/// Which AnimatorState transitions can interrupt the Transition.

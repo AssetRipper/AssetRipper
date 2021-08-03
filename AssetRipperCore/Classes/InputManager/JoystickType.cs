@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.InputManager
+﻿namespace AssetRipper.Core.Classes.InputManager
 {
 	public enum JoystickType
 	{

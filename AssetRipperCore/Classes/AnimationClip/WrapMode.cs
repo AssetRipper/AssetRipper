@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.AnimationClip
+﻿namespace AssetRipper.Core.Classes.AnimationClip
 {
 	/// <summary>
 	/// Determines how time is treated outside of the keyframed range of an AnimationClip or AnimationCurve.

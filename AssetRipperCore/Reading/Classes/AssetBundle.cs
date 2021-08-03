@@ -1,8 +1,8 @@
-﻿using AssetRipper.IO;
-using AssetRipper.IO.Extensions;
+﻿using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Extensions;
 using System.Collections.Generic;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public sealed class AssetBundle : NamedObject
     {

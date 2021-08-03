@@ -6,7 +6,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	  <AssemblyName>AssetRipperConsole</AssemblyName>
-	  <RootNamespace>AssetRipperConsole</RootNamespace>
+	  <RootNamespace>AssetRipper.Console</RootNamespace>
     <OutputPath>..\Bins\AssetRipperConsole\$(Configuration)\$(Platform)\</OutputPath>
 	  <Configurations>Debug;Release;Virtual</Configurations>
     <Platforms>x64;x86</Platforms>

@@ -1,8 +1,8 @@
-using AssetRipper.IO.Smart;
+using AssetRipper.Core.IO.Smart;
 using System;
 using System.IO;
 
-namespace AssetRipper.Parser.Files.ResourceFiles
+namespace AssetRipper.Core.Parser.Files.ResourceFiles
 {
 	public sealed class ResourceFile : IResourceFile, IDisposable
 	{

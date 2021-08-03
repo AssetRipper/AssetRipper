@@ -1,14 +1,14 @@
-using AssetRipper.IO.MultiFile;
-using AssetRipper.Logging;
-using AssetRipper.Parser.Utils;
-using AssetRipper.Structure.Assembly;
-using AssetRipper.Structure.Assembly.Managers;
-using AssetRipper.Utils;
+using AssetRipper.Core.IO.MultiFile;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Utils;
+using AssetRipper.Core.Structure.Assembly;
+using AssetRipper.Core.Structure.Assembly.Managers;
+using AssetRipper.Core.Utils;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper.Structure.GameStructure.Platforms
+namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
 	public abstract class PlatformGameStructure
 	{

@@ -1,11 +1,11 @@
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Meta;
-using AssetRipper.Classes.Misc;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Meta;
+using AssetRipper.Core.Classes.Misc;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Project.Exporters.Engine
+namespace AssetRipper.Core.Project.Exporters.Engine
 {
 	public struct EngineBuiltInAsset
 	{

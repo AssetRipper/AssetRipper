@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace AssetRipper.Imported
+namespace AssetRipper.Core.Imported
 {
 	public class ImportedTexture
 	{

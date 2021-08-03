@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace AssetRipper.Reading
+namespace AssetRipper.Core.Reading
 {
 	public static class ImportHelper
 	{

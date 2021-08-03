@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Parser.Files.ArchiveFiles
+﻿namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 {
 	public enum ArchiveType
 	{

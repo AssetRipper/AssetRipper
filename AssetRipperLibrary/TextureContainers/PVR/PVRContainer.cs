@@ -1,8 +1,8 @@
-using AssetRipper.Extensions;
+using AssetRipper.Core.Extensions;
 using System.IO;
 using System.Text;
 
-namespace AssetRipperLibrary.TextureContainers.PVR
+namespace AssetRipper.Library.TextureContainers.PVR
 {
 	public static class PVRContainer
 	{

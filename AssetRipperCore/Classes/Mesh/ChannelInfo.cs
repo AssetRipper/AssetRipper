@@ -1,11 +1,11 @@
-using AssetRipper.Converters.Mesh;
-using AssetRipper.Project;
-using AssetRipper.Classes.Shader.Enums.VertexFormat;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Converters.Mesh;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.Mesh
+namespace AssetRipper.Core.Classes.Mesh
 {
 	public struct ChannelInfo : IAsset
 	{

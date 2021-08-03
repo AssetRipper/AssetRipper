@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Parser.Files
+namespace AssetRipper.Core.Parser.Files
 {
 	public enum VersionType
 	{

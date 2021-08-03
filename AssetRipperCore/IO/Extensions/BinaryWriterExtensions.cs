@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace AssetRipper.IO.Extensions
+namespace AssetRipper.Core.IO.Extensions
 {
 	public static class BinaryWriterExtensions
 	{

@@ -1,13 +1,13 @@
-using AssetRipper.Project.Exporters.Script.Elements;
-using AssetRipper.Structure.Assembly.Managers;
-using AssetRipper.Structure.Assembly.Mono;
-using AssetRipper.Structure.Assembly.Mono.Extensions;
+using AssetRipper.Core.Project.Exporters.Script.Elements;
+using AssetRipper.Core.Structure.Assembly.Managers;
+using AssetRipper.Core.Structure.Assembly.Mono;
+using AssetRipper.Core.Structure.Assembly.Mono.Extensions;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AssetRipper.Project.Exporters.Script.Mono
+namespace AssetRipper.Core.Project.Exporters.Script.Mono
 {
 	public sealed class ScriptExportMonoType : ScriptExportType
 	{

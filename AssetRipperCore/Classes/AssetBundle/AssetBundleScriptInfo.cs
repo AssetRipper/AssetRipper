@@ -1,6 +1,6 @@
-﻿using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Classes.AssetBundle
+namespace AssetRipper.Core.Classes.AssetBundle
 {
 	public struct AssetBundleScriptInfo : IAssetReadable
 	{

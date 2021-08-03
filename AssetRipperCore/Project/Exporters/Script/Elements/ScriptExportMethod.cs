@@ -1,9 +1,9 @@
-using AssetRipper.Extensions;
-using AssetRipper.Structure.Assembly.Mono;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Structure.Assembly.Mono;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Project.Exporters.Script.Elements
+namespace AssetRipper.Core.Project.Exporters.Script.Elements
 {
 	public abstract class ScriptExportMethod
 	{

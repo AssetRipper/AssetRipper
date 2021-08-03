@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.TrailRenderer
+﻿namespace AssetRipper.Core.Classes.TrailRenderer
 {
 	public enum LineAlignment
 	{

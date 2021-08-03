@@ -1,13 +1,13 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
-using AssetRipper.YAML.Extensions;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 using System;
-using AssetRipper.IO;
-using AssetRipper.IO.Extensions;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Extensions;
 
-namespace AssetRipper.Math
+namespace AssetRipper.Core.Math
 {
 	public struct PackedQuatVector : IAssetReadable, IYAMLExportable
 	{

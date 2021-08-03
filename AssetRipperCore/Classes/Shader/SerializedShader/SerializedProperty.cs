@@ -1,11 +1,11 @@
-using AssetRipper.Extensions;
-using AssetRipper.Classes.Shader.SerializedShader.Enum;
-using AssetRipper.IO.Asset;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
+using AssetRipper.Core.IO.Asset;
 using System;
 using System.Globalization;
 using System.IO;
 
-namespace AssetRipper.Classes.Shader.SerializedShader
+namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
 	public struct SerializedProperty : IAssetReadable
 	{

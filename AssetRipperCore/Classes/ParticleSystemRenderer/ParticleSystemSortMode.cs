@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystemRenderer
+﻿namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 {
 	/// <summary>
 	/// The sorting mode for particle systems.

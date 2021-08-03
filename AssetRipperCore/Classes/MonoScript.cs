@@ -1,16 +1,16 @@
-using AssetRipper.Project;
-using AssetRipper.Project.Exporters.Script;
-using AssetRipper.Project.Exporters.Script.Elements;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.Parser.Utils;
-using AssetRipper.Structure.Assembly;
-using AssetRipper.Structure.Assembly.Serializable;
-using AssetRipper.YAML;
-using AssetRipper.YAML.Extensions;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Exporters.Script;
+using AssetRipper.Core.Project.Exporters.Script.Elements;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Parser.Utils;
+using AssetRipper.Core.Structure.Assembly;
+using AssetRipper.Core.Structure.Assembly.Serializable;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,7 +18,7 @@ using System.Linq;
 
 #endif
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Core.Classes
 {
 	public sealed class MonoScript : TextAsset
 	{

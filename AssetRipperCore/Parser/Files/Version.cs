@@ -1,8 +1,8 @@
-﻿using AssetRipper.Extensions;
+﻿using AssetRipper.Core.Extensions;
 using System;
 using System.IO;
 
-namespace AssetRipper.Parser.Files
+namespace AssetRipper.Core.Parser.Files
 {
 	public readonly struct Version : IComparable<Version>
 	{

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace AssetRipper.Imported
+namespace AssetRipper.Core.Imported
 {
 	public interface IImported
 	{

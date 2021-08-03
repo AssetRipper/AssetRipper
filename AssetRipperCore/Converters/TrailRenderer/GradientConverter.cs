@@ -1,11 +1,11 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Misc.Serializable.Gradient;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc.Serializable.Gradient;
 
-namespace AssetRipper.Converters.TrailRenderer
+namespace AssetRipper.Core.Converters.TrailRenderer
 {
 	public static class GradientConverter
 	{
-		public static Gradient GenerateGradient(IExportContainer container, ref AssetRipper.Classes.TrailRenderer.Gradient origin)
+		public static Gradient GenerateGradient(IExportContainer container, ref AssetRipper.Core.Classes.TrailRenderer.Gradient origin)
 		{
 			Gradient instance = new Gradient();
 			instance.Add(0 * ushort.MaxValue / 4, origin.Color0);

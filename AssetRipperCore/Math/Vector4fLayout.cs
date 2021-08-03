@@ -1,7 +1,7 @@
-﻿using AssetRipper.Converters.Game;
-using AssetRipper.Layout;
+﻿using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.Layout;
 
-namespace AssetRipper.Math
+namespace AssetRipper.Core.Math
 {
 	public sealed class Vector4fLayout
 	{

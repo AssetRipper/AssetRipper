@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil;
 
-namespace AssetRipper.Structure.Assembly.Mono.Extensions
+namespace AssetRipper.Core.Structure.Assembly.Mono.Extensions
 {
 	public static class MethodDefinitionExtensions
 	{

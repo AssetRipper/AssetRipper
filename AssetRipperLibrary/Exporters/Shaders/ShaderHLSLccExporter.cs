@@ -1,14 +1,14 @@
-using AssetRipper.Classes.Shader;
-using AssetRipper.Classes.Shader.Enums;
-using AssetRipper.IO;
-using AssetRipperLibrary.Exporters.Shaders.DirectX;
+using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.Core.IO;
+using AssetRipper.Library.Exporters.Shaders.DirectX;
 using DXShaderRestorer;
 using HLSLccWrapper;
 using System.IO;
 using System.Runtime.Versioning;
 using Shader = HLSLccWrapper.Shader;
 
-namespace AssetRipperLibrary.Exporters.Shaders
+namespace AssetRipper.Library.Exporters.Shaders
 {
 	[SupportedOSPlatform("windows")]
 	public class ShaderHLSLccExporter : ShaderDXExporter

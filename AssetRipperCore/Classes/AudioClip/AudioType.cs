@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.AudioClip
+﻿namespace AssetRipper.Core.Classes.AudioClip
 {
 	public enum AudioType
 	{

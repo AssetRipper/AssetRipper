@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Rigidbody2D
+﻿namespace AssetRipper.Core.Classes.Rigidbody2D
 {
 	public enum CollisionDetectionMode2D
 	{

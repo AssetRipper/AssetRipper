@@ -1,7 +1,7 @@
-﻿using AssetRipper.Reading;
+﻿using AssetRipper.Core.Reading;
 using System.Collections.Generic;
 
-namespace AssetRipper.Utils
+namespace AssetRipper.Core.Utils
 {
 	public class SerializedTypeHelper
 	{

@@ -1,12 +1,12 @@
-using AssetRipper.Structure.Assembly.Managers;
-using AssetRipper.Structure.Assembly.Mono.Extensions;
+using AssetRipper.Core.Structure.Assembly.Managers;
+using AssetRipper.Core.Structure.Assembly.Mono.Extensions;
 using Mono.Cecil;
 using Mono.Collections.Generic;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AssetRipper.Structure.Assembly.Mono
+namespace AssetRipper.Core.Structure.Assembly.Mono
 {
 	public static class MonoUtils
 	{

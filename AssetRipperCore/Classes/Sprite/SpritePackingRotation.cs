@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Sprite
+﻿namespace AssetRipper.Core.Classes.Sprite
 {
 	public enum SpritePackingRotation
 	{

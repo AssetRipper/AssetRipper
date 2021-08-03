@@ -1,6 +1,6 @@
-using AssetRipper.IO.Asset;
+using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Classes.Shader
+namespace AssetRipper.Core.Classes.Shader
 {
 	public struct ParserBindChannels : IAssetReadable
 	{

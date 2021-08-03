@@ -1,9 +1,9 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.LightProbes
+namespace AssetRipper.Core.Classes.LightProbes
 {
 	public struct ProbeSetIndex : IAssetReadable, IYAMLExportable
 	{

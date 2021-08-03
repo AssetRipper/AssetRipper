@@ -1,6 +1,6 @@
-﻿using AssetRipper.Layout.Classes.AnimationClip.Curves;
+﻿using AssetRipper.Core.Layout.Classes.AnimationClip.Curves;
 
-namespace AssetRipper.Layout.Classes.AnimationClip
+namespace AssetRipper.Core.Layout.Classes.AnimationClip
 {
 #warning TODO:
 	public sealed class AnimationClipLayout
@@ -13,7 +13,7 @@ namespace AssetRipper.Layout.Classes.AnimationClip
 			Vector3Curve = new Vector3CurveLayout(info);
 		}
 
-		public string Name => nameof(AssetRipper.Classes.AnimationClip.AnimationClip);
+		public string Name => nameof(AssetRipper.Core.Classes.AnimationClip.AnimationClip);
 
 		public FloatCurveLayout FloatCurve { get; }
 		public PPtrCurveLayout PPtrCurve { get; }

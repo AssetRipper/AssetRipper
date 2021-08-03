@@ -1,4 +1,4 @@
-namespace AssetRipperLibrary.TextureContainers.DDS
+namespace AssetRipper.Library.TextureContainers.DDS
 {
 	public enum DDSFourCCType
 	{

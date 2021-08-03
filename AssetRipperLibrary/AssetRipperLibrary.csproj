@@ -5,7 +5,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AssemblyName>AssetRipperLibrary</AssemblyName>
-    <RootNamespace>AssetRipperLibrary</RootNamespace>
+    <RootNamespace>AssetRipper.Library</RootNamespace>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>

@@ -1,13 +1,13 @@
-﻿using AssetRipper.Layout.Categories;
-using AssetRipper.Layout.Classes;
-using AssetRipper.Layout.Classes.AnimationClip;
-using AssetRipper.Layout.Classes.GameObject;
-using AssetRipper.Layout.Classes.PrefabInstance;
-using AssetRipper.Parser.Asset;
+﻿using AssetRipper.Core.Layout.Categories;
+using AssetRipper.Core.Layout.Classes;
+using AssetRipper.Core.Layout.Classes.AnimationClip;
+using AssetRipper.Core.Layout.Classes.GameObject;
+using AssetRipper.Core.Layout.Classes.PrefabInstance;
+using AssetRipper.Core.Parser.Asset;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Layout
+namespace AssetRipper.Core.Layout
 {
 	public sealed class AssetLayout
 	{

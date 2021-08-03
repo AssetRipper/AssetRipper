@@ -1,5 +1,5 @@
-﻿using AssetRipper.Classes.Shader.Enums.GpuProgramType;
-using AssetRipper.Classes.Shader.Parameters;
+﻿using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
+using AssetRipper.Core.Classes.Shader.Parameters;
 
 namespace DXShaderRestorer
 {

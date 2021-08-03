@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystem.Emission
+﻿namespace AssetRipper.Core.Classes.ParticleSystem.Emission
 {
 	public enum EmissionType
 	{

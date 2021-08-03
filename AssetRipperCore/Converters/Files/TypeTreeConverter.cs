@@ -1,11 +1,11 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Parser.Files.SerializedFiles.Parser.TypeTree;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Converters.Files
+namespace AssetRipper.Core.Converters.Files
 {
 	public static class TypeTreeConverter
 	{

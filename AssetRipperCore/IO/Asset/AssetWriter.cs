@@ -1,12 +1,12 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.Layout;
-using AssetRipper.Parser.Files;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Files;
 using System;
 using System.IO;
 using System.Text;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.IO.Asset
+namespace AssetRipper.Core.IO.Asset
 {
 	public sealed class AssetWriter : EndianWriter
 	{

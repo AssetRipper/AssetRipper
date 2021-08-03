@@ -1,4 +1,4 @@
-namespace AssetRipper.Parser.Files.BundleFile.Parser
+namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 {
 	public enum CompressionType
 	{

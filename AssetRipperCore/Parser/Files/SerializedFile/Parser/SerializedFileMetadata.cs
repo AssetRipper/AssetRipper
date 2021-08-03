@@ -1,8 +1,8 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.Parser.Files.SerializedFiles.IO;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
 using System.IO;
 
-namespace AssetRipper.Parser.Files.SerializedFiles.Parser
+namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 {
 	public sealed class SerializedFileMetadata
 	{

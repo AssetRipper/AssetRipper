@@ -1,22 +1,22 @@
-using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Misc.Serializable;
-using AssetRipper.Classes.ParticleSystem.Curve;
-using AssetRipper.Classes.ParticleSystem.Emission;
-using AssetRipper.Classes.ParticleSystem.InheritVelocity;
-using AssetRipper.Classes.ParticleSystem.Shape;
-using AssetRipper.Classes.ParticleSystem.SubEmitter;
-using AssetRipper.Classes.ParticleSystem.Trigger;
-using AssetRipper.Classes.ParticleSystem.UV;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.Serializable;
+using AssetRipper.Core.Classes.ParticleSystem.Curve;
+using AssetRipper.Core.Classes.ParticleSystem.Emission;
+using AssetRipper.Core.Classes.ParticleSystem.InheritVelocity;
+using AssetRipper.Core.Classes.ParticleSystem.Shape;
+using AssetRipper.Core.Classes.ParticleSystem.SubEmitter;
+using AssetRipper.Core.Classes.ParticleSystem.Trigger;
+using AssetRipper.Core.Classes.ParticleSystem.UV;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System.Collections.Generic;
-using AssetRipper.Math;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Classes.ParticleSystem
+namespace AssetRipper.Core.Classes.ParticleSystem
 {
 	public sealed class ParticleSystem : Component
 	{

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.BlendTree
+﻿namespace AssetRipper.Core.Classes.BlendTree
 {
 	/// <summary>
 	/// The type of blending algorithm that the blend tree uses.

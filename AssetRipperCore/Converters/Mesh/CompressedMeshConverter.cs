@@ -1,10 +1,10 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Logging;
-using AssetRipper.Classes.Mesh;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Math;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Classes.Mesh;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Converters.Mesh
+namespace AssetRipper.Core.Converters.Mesh
 {
 	public static class CompressedMeshConverter
 	{

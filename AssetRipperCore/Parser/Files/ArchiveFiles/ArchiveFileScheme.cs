@@ -1,16 +1,16 @@
-using AssetRipper.IO.Endian;
-using AssetRipper.Parser.Files.Schemes;
-using AssetRipper.Parser.Files.Entries;
-using AssetRipper.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.Parser.Files.WebFiles;
-using AssetRipper.Structure.GameStructure;
+using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Parser.Files.Schemes;
+using AssetRipper.Core.Parser.Files.Entries;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.Core.Parser.Files.WebFiles;
+using AssetRipper.Core.Structure.GameStructure;
 using Brotli;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 
-namespace AssetRipper.Parser.Files.ArchiveFiles
+namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 {
 	public sealed class ArchiveFileScheme : FileScheme
 	{

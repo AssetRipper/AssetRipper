@@ -1,8 +1,8 @@
-﻿using AssetRipper.Converters.Game;
-using AssetRipper.Classes.Misc.KeyframeTpl.TangentMode;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
+using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Layout.Classes.Misc
+namespace AssetRipper.Core.Layout.Classes.Misc
 {
 	public sealed class KeyframeTplLayout
 	{

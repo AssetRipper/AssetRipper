@@ -1,4 +1,4 @@
-namespace AssetRipper.Classes.ParticleSystemForceField
+namespace AssetRipper.Core.Classes.ParticleSystemForceField
 {
 	public enum ParticleSystemForceFieldShape
 	{

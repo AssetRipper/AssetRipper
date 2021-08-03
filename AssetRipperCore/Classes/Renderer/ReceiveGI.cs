@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Renderer
+﻿namespace AssetRipper.Core.Classes.Renderer
 {
 	/// <summary>
 	/// Determines if the object receives Global Illumination from its surroundings through either Lightmaps or LightProbes.

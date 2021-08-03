@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.Shader.Enums
+namespace AssetRipper.Core.Classes.Shader.Enums
 {
 	public enum ShaderType
 	{

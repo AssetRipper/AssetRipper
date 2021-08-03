@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Reading
+﻿namespace AssetRipper.Core.Reading
 {
 	public class ObjectInfo
 	{

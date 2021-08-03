@@ -1,7 +1,7 @@
-﻿using AssetRipper.Converters.Game;
-using AssetRipper.Classes;
+﻿using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.Classes;
 
-namespace AssetRipper.Layout.Classes
+namespace AssetRipper.Core.Layout.Classes
 {
 	/// <summary>
 	/// 2018.3 - first introduction

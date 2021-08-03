@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.QualitySettings
+﻿namespace AssetRipper.Core.Classes.QualitySettings
 {
 	/// <summary>
 	/// Determines which type of shadows should be used.

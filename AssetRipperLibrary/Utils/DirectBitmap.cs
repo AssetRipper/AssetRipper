@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace AssetRipperLibrary.Utils
+namespace AssetRipper.Library.Utils
 {
 	public sealed class DirectBitmap : IDisposable
 	{

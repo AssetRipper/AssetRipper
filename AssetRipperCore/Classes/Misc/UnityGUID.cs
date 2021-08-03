@@ -1,13 +1,13 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Extensions;
-using AssetRipper.IO.Endian;
-using AssetRipper.Parser.Files.SerializedFiles.IO;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System;
 using System.Text;
 
-namespace AssetRipper.Classes.Misc
+namespace AssetRipper.Core.Classes.Misc
 {
 	public struct UnityGUID : IAsset, ISerializedReadable, ISerializedWritable
 	{

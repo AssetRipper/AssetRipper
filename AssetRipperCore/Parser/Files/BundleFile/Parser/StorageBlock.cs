@@ -1,6 +1,6 @@
-﻿using AssetRipper.Parser.Files.BundleFile.IO;
+﻿using AssetRipper.Core.Parser.Files.BundleFile.IO;
 
-namespace AssetRipper.Parser.Files.BundleFile.Parser
+namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 {
 	/// <summary>
 	/// Contains compression information about a block<br/>

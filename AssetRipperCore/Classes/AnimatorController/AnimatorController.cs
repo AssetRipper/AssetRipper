@@ -1,21 +1,21 @@
-using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes.AnimatorController.Constants;
-using AssetRipper.Classes.AnimatorController.Editor.AnimatorControllerLayer;
-using AssetRipper.Classes.AnimatorController.Editor.AnimatorControllerParameter;
-using AssetRipper.Classes.AnimatorController.State;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.Structure.Collections;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes.AnimatorController.Constants;
+using AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerLayer;
+using AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerParameter;
+using AssetRipper.Core.Classes.AnimatorController.State;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Classes.AnimatorController
+namespace AssetRipper.Core.Classes.AnimatorController
 {
 	public sealed class AnimatorController : RuntimeAnimatorController
 	{

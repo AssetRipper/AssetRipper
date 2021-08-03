@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipper.Classes.Light
+namespace AssetRipper.Core.Classes.Light
 {
 	/// <summary>
 	/// Enum describing what part of a light contribution can be baked.

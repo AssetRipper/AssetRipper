@@ -1,11 +1,11 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
 using System;
 
-namespace AssetRipper.Classes.AnimatorController.Editor.AnimatorControllerLayer
+namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerLayer
 {
 	public sealed class StateBehavioursPair : IYAMLExportable
 	{

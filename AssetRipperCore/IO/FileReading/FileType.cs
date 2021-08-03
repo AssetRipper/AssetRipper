@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.IO.FileReading
+﻿namespace AssetRipper.Core.IO.FileReading
 {
 	public enum FileType
 	{

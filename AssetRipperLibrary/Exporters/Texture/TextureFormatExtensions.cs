@@ -1,9 +1,9 @@
-using AssetRipper.Classes.Texture2D;
-using AssetRipperLibrary.TextureContainers;
+using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Library.TextureContainers;
 using System;
 using System.Runtime.Versioning;
 
-namespace AssetRipperLibrary.Exporters.Textures
+namespace AssetRipper.Library.Exporters.Textures
 {
 	[SupportedOSPlatform("windows")]
 	public static class TextureFormatExtensions

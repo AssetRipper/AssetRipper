@@ -1,21 +1,21 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Layout.Classes.GameObject;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Classes;
-using AssetRipper.Classes.GameObject;
-using AssetRipper.Classes.Misc;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout.Classes.GameObject;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.GameObject;
+using AssetRipper.Core.Classes.Misc;
 using System;
 using System.Linq;
 
-namespace AssetRipper.Converters.GameObject
+namespace AssetRipper.Core.Converters.GameObject
 {
 	public static class GameObjectConverter
 	{
-		public static AssetRipper.Classes.GameObject.GameObject Convert(IExportContainer container, AssetRipper.Classes.GameObject.GameObject origin)
+		public static AssetRipper.Core.Classes.GameObject.GameObject Convert(IExportContainer container, AssetRipper.Core.Classes.GameObject.GameObject origin)
 		{
 			GameObjectLayout layout = container.Layout.GameObject;
 			GameObjectLayout exlayout = container.ExportLayout.GameObject;
-			AssetRipper.Classes.GameObject.GameObject instance = new AssetRipper.Classes.GameObject.GameObject(container.ExportLayout);
+			AssetRipper.Core.Classes.GameObject.GameObject instance = new AssetRipper.Core.Classes.GameObject.GameObject(container.ExportLayout);
 			EditorExtensionConverter.Convert(container, origin, instance);
 			if (exlayout.IsComponentTuple)
 			{
@@ -54,7 +54,7 @@ namespace AssetRipper.Converters.GameObject
 			return instance;
 		}
 
-		private static ComponentPair[] GetComponent(IExportContainer container, AssetRipper.Classes.GameObject.GameObject origin)
+		private static ComponentPair[] GetComponent(IExportContainer container, AssetRipper.Core.Classes.GameObject.GameObject origin)
 		{
 			if (container.Layout.GameObject.IsComponentTuple)
 			{
@@ -74,7 +74,7 @@ namespace AssetRipper.Converters.GameObject
 			}
 		}
 
-		private static bool GetIsActive(IExportContainer container, AssetRipper.Classes.GameObject.GameObject origin)
+		private static bool GetIsActive(IExportContainer container, AssetRipper.Core.Classes.GameObject.GameObject origin)
 		{
 			if (container.Layout.GameObject.IsActiveInherited)
 			{
@@ -83,7 +83,7 @@ namespace AssetRipper.Converters.GameObject
 			return origin.IsActive;
 		}
 
-		private static ushort GetTag(IExportContainer container, AssetRipper.Classes.GameObject.GameObject origin)
+		private static ushort GetTag(IExportContainer container, AssetRipper.Core.Classes.GameObject.GameObject origin)
 		{
 			if (container.Layout.GameObject.HasTag)
 			{
@@ -92,7 +92,7 @@ namespace AssetRipper.Converters.GameObject
 			return container.TagNameToID(origin.TagString);
 		}
 
-		private static string GetTagString(IExportContainer container, AssetRipper.Classes.GameObject.GameObject origin)
+		private static string GetTagString(IExportContainer container, AssetRipper.Core.Classes.GameObject.GameObject origin)
 		{
 			if (container.Layout.GameObject.HasTagString)
 			{

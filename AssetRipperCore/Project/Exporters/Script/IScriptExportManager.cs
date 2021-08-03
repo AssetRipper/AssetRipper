@@ -1,9 +1,9 @@
-﻿using AssetRipper.Project.Exporters.Script.Elements;
-using AssetRipper.Layout;
+﻿using AssetRipper.Core.Project.Exporters.Script.Elements;
+using AssetRipper.Core.Layout;
 using Mono.Cecil;
 using System.Collections.Generic;
 
-namespace AssetRipper.Project.Exporters.Script
+namespace AssetRipper.Core.Project.Exporters.Script
 {
 	public interface IScriptExportManager
 	{

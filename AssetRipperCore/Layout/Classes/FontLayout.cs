@@ -1,6 +1,6 @@
-﻿using AssetRipper.Classes.Font;
+﻿using AssetRipper.Core.Classes.Font;
 
-namespace AssetRipper.Layout.Classes
+namespace AssetRipper.Core.Layout.Classes
 {
 #warning TODO:
 	public sealed class FontLayout

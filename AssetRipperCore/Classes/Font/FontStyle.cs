@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Font
+﻿namespace AssetRipper.Core.Classes.Font
 {
 	public enum FontStyle
 	{

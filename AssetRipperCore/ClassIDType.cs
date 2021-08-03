@@ -1,5 +1,5 @@
 // official Class ID Reference: https://docs.unity3d.com/Manual/ClassIDReference.html
-namespace AssetRipper
+namespace AssetRipper.Core
 {
 	// Since some output is based on string representation renamed values has negative index
 	public enum ClassIDType

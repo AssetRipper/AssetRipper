@@ -1,11 +1,11 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Mesh;
-using AssetRipper.Classes.Shader.Enums.ShaderChannel;
-using AssetRipper.Classes.Shader.Enums.VertexFormat;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.Parser.Files;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Mesh;
+using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
+using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Parser.Files;
 
-namespace AssetRipper.Converters.Mesh
+namespace AssetRipper.Core.Converters.Mesh
 {
 	public static class StreamInfoConverter
 	{

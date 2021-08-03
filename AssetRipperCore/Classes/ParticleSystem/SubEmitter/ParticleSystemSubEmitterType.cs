@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.ParticleSystem.SubEmitter
+﻿namespace AssetRipper.Core.Classes.ParticleSystem.SubEmitter
 {
 	public enum ParticleSystemSubEmitterType
 	{

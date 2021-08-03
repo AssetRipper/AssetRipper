@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.RenderSettings
+﻿namespace AssetRipper.Core.Classes.RenderSettings
 {
 	public enum AmbientMode
 	{

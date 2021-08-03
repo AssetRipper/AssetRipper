@@ -1,9 +1,9 @@
-﻿using AssetRipper.Converters.Game;
-using AssetRipper.Layout.Builtin;
-using AssetRipper.Layout.Classes.Misc.Serializable;
-using AssetRipper.Classes.Animation;
+﻿using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.Layout.Builtin;
+using AssetRipper.Core.Layout.Classes.Misc.Serializable;
+using AssetRipper.Core.Classes.Animation;
 
-namespace AssetRipper.Layout.Classes
+namespace AssetRipper.Core.Layout.Classes
 {
 	public sealed class AnimationLayout
 	{

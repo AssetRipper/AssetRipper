@@ -1,8 +1,8 @@
-﻿using AssetRipper.IO.Extensions;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.SerializedFiles;
 using System.IO;
 
-namespace AssetRipper.IO
+namespace AssetRipper.Core.IO
 {
 	public class ResourceReader
 	{

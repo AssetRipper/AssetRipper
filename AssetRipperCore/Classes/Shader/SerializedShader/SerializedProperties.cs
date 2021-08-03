@@ -1,8 +1,8 @@
-using AssetRipper.Extensions;
-using AssetRipper.IO.Asset;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.IO.Asset;
 using System.IO;
 
-namespace AssetRipper.Classes.Shader.SerializedShader
+namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
 	public struct SerializedProperties : IAssetReadable
 	{

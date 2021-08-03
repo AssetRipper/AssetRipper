@@ -1,8 +1,8 @@
-﻿using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.IO.Asset;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.IO.Extensions
+namespace AssetRipper.Core.IO.Extensions
 {
 	public static class IDictionaryReadAssetExtensions
 	{

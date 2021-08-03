@@ -1,12 +1,12 @@
-using AssetRipper.Project;
-using AssetRipper.Extensions;
-using AssetRipper.Parser.Files;
-using AssetRipper.Parser.Files.ResourceFiles;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Files.ResourceFiles;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.AudioClip
+namespace AssetRipper.Core.Classes.AudioClip
 {
 	public struct StreamedResource : IAssetReadable, IYAMLExportable
 	{

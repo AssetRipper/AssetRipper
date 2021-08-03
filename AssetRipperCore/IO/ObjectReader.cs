@@ -1,9 +1,9 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.Reading;
-using AssetRipper.SerializedFiles;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Reading;
+using AssetRipper.Core.SerializedFiles;
 using System;
 
-namespace AssetRipper.IO
+namespace AssetRipper.Core.IO
 {
 	public class ObjectReader : AltEndianBinaryReader
 	{

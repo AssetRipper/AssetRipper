@@ -1,8 +1,8 @@
-﻿using AssetRipper.IO.Endian;
+﻿using AssetRipper.Core.IO.Endian;
 using System;
 using System.IO;
 
-namespace AssetRipper.Extensions
+namespace AssetRipper.Core.Extensions
 {
 	public static class ByteArrayExtensions
 	{

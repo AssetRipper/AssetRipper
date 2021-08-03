@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Classes.Camera
+﻿namespace AssetRipper.Core.Classes.Camera
 {
 	/// <summary>
 	/// Enumerates which axis to use when expressing the value for the field of view

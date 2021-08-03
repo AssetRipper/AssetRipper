@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace AssetRipperLibrary.TextureContainers.DDS
+namespace AssetRipper.Library.TextureContainers.DDS
 {
 	public struct DDSPixelFormat
 	{

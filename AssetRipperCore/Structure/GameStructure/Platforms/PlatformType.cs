@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Structure.GameStructure.Platforms
+﻿namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
 	public enum PlatformType
 	{

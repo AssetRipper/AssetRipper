@@ -1,10 +1,10 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Layout;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.Meta.Importers.Texture
+namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	public struct TextureImportOutput : IAsset
 	{

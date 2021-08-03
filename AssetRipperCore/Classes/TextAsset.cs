@@ -1,13 +1,13 @@
-using AssetRipper.Project;
-using AssetRipper.Parser.Asset;
-using AssetRipper.Parser.Files;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
-using AssetRipper.YAML.Extensions;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 using System.IO;
 using System.Text;
 
-namespace AssetRipper.Classes
+namespace AssetRipper.Core.Classes
 {
 	/// <summary>
 	/// Script previously

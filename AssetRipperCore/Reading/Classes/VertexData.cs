@@ -1,10 +1,10 @@
-﻿using AssetRipper.Classes.Mesh;
-using AssetRipper.IO;
-using AssetRipper.IO.Extensions;
+﻿using AssetRipper.Core.Classes.Mesh;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Extensions;
 using System.Collections;
 using System.Linq;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public class VertexData
     {

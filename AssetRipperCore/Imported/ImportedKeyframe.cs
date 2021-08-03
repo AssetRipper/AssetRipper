@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Imported
+﻿namespace AssetRipper.Core.Imported
 {
 	public class ImportedKeyframe<T>
 	{

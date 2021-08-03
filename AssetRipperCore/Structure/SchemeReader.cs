@@ -1,13 +1,13 @@
-﻿using AssetRipper.IO.Smart;
-using AssetRipper.Parser.Files.ArchiveFiles;
-using AssetRipper.Parser.Files.BundleFile;
-using AssetRipper.Parser.Files.ResourceFiles;
-using AssetRipper.Parser.Files.Schemes;
-using AssetRipper.Parser.Files.SerializedFiles;
-using AssetRipper.Parser.Files.WebFiles;
+﻿using AssetRipper.Core.IO.Smart;
+using AssetRipper.Core.Parser.Files.ArchiveFiles;
+using AssetRipper.Core.Parser.Files.BundleFile;
+using AssetRipper.Core.Parser.Files.ResourceFiles;
+using AssetRipper.Core.Parser.Files.Schemes;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Parser.Files.WebFiles;
 using System.IO;
 
-namespace AssetRipper.Structure
+namespace AssetRipper.Core.Structure
 {
 	internal static class SchemeReader
 	{

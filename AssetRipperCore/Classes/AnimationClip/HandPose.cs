@@ -1,7 +1,7 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
 
-namespace AssetRipper.Classes.AnimationClip
+namespace AssetRipper.Core.Classes.AnimationClip
 {
 	public class HandPose : IAssetReadable
 	{

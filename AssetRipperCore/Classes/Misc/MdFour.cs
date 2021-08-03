@@ -1,13 +1,13 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
-using AssetRipper.YAML.Extensions;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 using System;
-using Version = AssetRipper.Parser.Files.Version;
+using Version = AssetRipper.Core.Parser.Files.Version;
 
-namespace AssetRipper.Classes.Misc
+namespace AssetRipper.Core.Classes.Misc
 {
 	public struct MdFour : IAsset
 	{

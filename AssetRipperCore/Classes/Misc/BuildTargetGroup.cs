@@ -1,7 +1,7 @@
-﻿using AssetRipper.Parser.Files;
+﻿using AssetRipper.Core.Parser.Files;
 using System;
 
-namespace AssetRipper.Classes.Misc
+namespace AssetRipper.Core.Classes.Misc
 {
 	public enum BuildTargetGroup
 	{

@@ -1,10 +1,10 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Misc;
-using AssetRipper.Classes.TerrainData;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.TerrainData;
 using System;
 using System.Linq;
 
-namespace AssetRipper.Converters.TerrainData
+namespace AssetRipper.Core.Converters.TerrainData
 {
 	public static class DetailDatabaseConverter
 	{
@@ -33,7 +33,7 @@ namespace AssetRipper.Converters.TerrainData
 			return instance;
 		}
 
-		private static PPtr<AssetRipper.Classes.Shader.Shader> GetDetailBillboardShader(IExportContainer container, ref DetailDatabase origin)
+		private static PPtr<AssetRipper.Core.Classes.Shader.Shader> GetDetailBillboardShader(IExportContainer container, ref DetailDatabase origin)
 		{
 			if (DetailDatabase.HasDetailBillboardShader(container.Version))
 			{
@@ -46,7 +46,7 @@ namespace AssetRipper.Converters.TerrainData
 			}
 		}
 
-		private static PPtr<AssetRipper.Classes.Shader.Shader> GetDetailMeshLitShader(IExportContainer container, ref DetailDatabase origin)
+		private static PPtr<AssetRipper.Core.Classes.Shader.Shader> GetDetailMeshLitShader(IExportContainer container, ref DetailDatabase origin)
 		{
 			if (DetailDatabase.HasDetailBillboardShader(container.Version))
 			{
@@ -59,7 +59,7 @@ namespace AssetRipper.Converters.TerrainData
 			}
 		}
 
-		private static PPtr<AssetRipper.Classes.Shader.Shader> GetDetailMeshGrassShader(IExportContainer container, ref DetailDatabase origin)
+		private static PPtr<AssetRipper.Core.Classes.Shader.Shader> GetDetailMeshGrassShader(IExportContainer container, ref DetailDatabase origin)
 		{
 			if (DetailDatabase.HasDetailBillboardShader(container.Version))
 			{

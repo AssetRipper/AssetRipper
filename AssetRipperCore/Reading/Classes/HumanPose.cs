@@ -1,9 +1,9 @@
-﻿using AssetRipper.Classes.Misc;
-using AssetRipper.IO;
-using AssetRipper.IO.Extensions;
-using AssetRipper.Math;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Math;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public class HumanPose
     {

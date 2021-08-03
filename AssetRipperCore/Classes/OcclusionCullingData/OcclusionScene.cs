@@ -1,9 +1,9 @@
-﻿using AssetRipper.Project;
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+﻿using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Classes.OcclusionCullingData
+namespace AssetRipper.Core.Classes.OcclusionCullingData
 {
 	public struct OcclusionScene : IAssetReadable, IYAMLExportable
 	{

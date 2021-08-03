@@ -1,10 +1,10 @@
-using AssetRipper.Extensions;
+using AssetRipper.Core.Extensions;
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace AssetRipper.IO.Endian
+namespace AssetRipper.Core.IO.Endian
 {
 	public class EndianReader : BinaryReader
 	{

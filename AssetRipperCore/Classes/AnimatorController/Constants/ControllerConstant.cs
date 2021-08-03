@@ -1,8 +1,8 @@
-using AssetRipper.Classes.Misc;
-using AssetRipper.IO.Asset;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
 using System;
 
-namespace AssetRipper.Classes.AnimatorController.Constants
+namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
 	public class ControllerConstant : IAssetReadable
 	{

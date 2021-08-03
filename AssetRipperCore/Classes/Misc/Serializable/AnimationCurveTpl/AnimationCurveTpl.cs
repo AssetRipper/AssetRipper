@@ -1,15 +1,15 @@
-using AssetRipper.Converters.Misc;
-using AssetRipper.Project;
-using AssetRipper.Layout.Classes.Misc.Serializable;
-using AssetRipper.Classes.Misc.KeyframeTpl;
-using AssetRipper.Classes.Utils.Extensions;
-using AssetRipper.IO.Asset;
-using AssetRipper.IO.Extensions;
-using AssetRipper.YAML;
+using AssetRipper.Core.Converters.Misc;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Layout.Classes.Misc.Serializable;
+using AssetRipper.Core.Classes.Misc.KeyframeTpl;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Classes.Misc.Serializable.AnimationCurveTpl
+namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 {
 	public struct AnimationCurveTpl<T> : IAsset
 		where T : struct, IAsset, IYAMLExportable

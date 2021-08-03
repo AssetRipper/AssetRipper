@@ -1,10 +1,10 @@
-﻿using AssetRipper.IO;
-using AssetRipper.IO.Extensions;
-using AssetRipper.Math;
+﻿using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Math;
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Reading.Classes
+namespace AssetRipper.Core.Reading.Classes
 {
 	public sealed class Sprite : NamedObject
     {

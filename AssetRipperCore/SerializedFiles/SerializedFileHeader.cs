@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.SerializedFiles
+﻿namespace AssetRipper.Core.SerializedFiles
 {
 	public class SerializedFileHeader
 	{

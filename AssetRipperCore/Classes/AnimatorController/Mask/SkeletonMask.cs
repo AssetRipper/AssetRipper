@@ -1,9 +1,9 @@
-using AssetRipper.Project;
-using AssetRipper.IO.Asset;
-using AssetRipper.YAML;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 using System;
 
-namespace AssetRipper.Classes.AnimatorController.Mask
+namespace AssetRipper.Core.Classes.AnimatorController.Mask
 {
 	public struct SkeletonMask : IAssetReadable, IYAMLExportable
 	{

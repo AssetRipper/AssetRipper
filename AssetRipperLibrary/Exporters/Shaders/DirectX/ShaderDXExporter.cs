@@ -1,13 +1,13 @@
-using AssetRipper.Converters.Shader;
-using AssetRipper.Classes.Shader;
-using AssetRipper.Classes.Shader.Enums;
-using AssetRipper.IO;
+using AssetRipper.Core.Converters.Shader;
+using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.Core.IO;
 using DotNetDxc;
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
-namespace AssetRipperLibrary.Exporters.Shaders.DirectX
+namespace AssetRipper.Library.Exporters.Shaders.DirectX
 {
 	[SupportedOSPlatform("windows")]
 	public class ShaderDXExporter : ShaderTextExporter

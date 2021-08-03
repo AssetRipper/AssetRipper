@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace AssetRipper.YAML
+namespace AssetRipper.Core.YAML
 {
 	using Version = System.Version;
 
