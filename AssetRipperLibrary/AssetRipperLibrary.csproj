@@ -64,7 +64,7 @@
     </ContentWithTargetPath>
     <Reference Include="HLSLccWrapper_x86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\x86\HLSLccWrapper.dll</HintPath>
+      <HintPath>Libraries\x86\HLSLccWrapper_x86.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup Condition=" '$(Platform)' == 'x64' ">
@@ -82,7 +82,7 @@
     </ContentWithTargetPath>
     <Reference Include="HLSLccWrapper_x64, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\x64\HLSLccWrapper.dll</HintPath>
+      <HintPath>Libraries\x64\HLSLccWrapper_x64.dll</HintPath>
     </Reference>
   </ItemGroup>
   
