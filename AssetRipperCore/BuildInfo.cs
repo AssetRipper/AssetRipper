@@ -11,6 +11,6 @@
 		public const string Author = "ds5678";
 		public const string CopyRight = "Copyright ©  2021";
 
-		public const string Version = "0.1.3.1";
+		public const string Version = "0.1.3.2";
 	}
 }
