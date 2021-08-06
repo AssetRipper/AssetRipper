@@ -45,6 +45,8 @@ namespace AssetRipper.Core.Parser.Files
 		#region Properties
 		public static UnityVersion MinVersion => new UnityVersion(0UL);
 		public static UnityVersion MaxVersion => new UnityVersion(ulong.MaxValue);
+		/// <summary> 2017.3.0f3 </summary>
+		public static UnityVersion DefaultVersion => new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3);
 
 		public int Major => unchecked((int)((m_data >> 48) & 0xFFFFUL));
 		public int Minor => unchecked((int)((m_data >> 40) & 0xFFUL));
@@ -59,6 +61,18 @@ namespace AssetRipper.Core.Parser.Files
 		public override string ToString()
 		{
 			return $"{Major}.{Minor}.{Build}{Type.ToLiteral()}{TypeNumber}";
+		}
+
+		public static UnityVersion Max(UnityVersion left, UnityVersion right)
+		{
+			if (left > right) return left;
+			else return right;
+		}
+
+		public static UnityVersion Min(UnityVersion left, UnityVersion right)
+		{
+			if (left < right) return left;
+			else return right;
 		}
 
 		public static UnityVersion Parse(string version)

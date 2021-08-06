@@ -94,9 +94,8 @@ namespace AssetRipper.Core.Structure.GameStructure
 		public void Export(string exportPath) => Export(exportPath, null);
 		public void Export(string exportPath, Func<Object, bool> filter)
 		{
-			UnityVersion defaultVersion = new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3);
-			UnityVersion maxVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
-			UnityVersion version = defaultVersion < maxVersion ? maxVersion : defaultVersion;
+			UnityVersion maxFileVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
+			UnityVersion version = UnityVersion.Max(maxFileVersion, UnityVersion.DefaultVersion);
 			Logger.Log(LogType.Info, LogCategory.Export, $"Exporting to Unity version {version.ToString()}");
 			ExportOptions options = new ExportOptions(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 			options.Filter = filter ?? new Func<Object, bool>((Object obj) => true);
