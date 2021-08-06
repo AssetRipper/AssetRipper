@@ -4,11 +4,14 @@ using System.IO;
 
 namespace AssetRipper.Core.Parser.Files
 {
-	public readonly struct Version : IComparable<Version>
+	public readonly struct Version : IEquatable<Version>, IComparable, IComparable<Version>
 	{
+		private readonly ulong m_data;
+
+		#region Constructors
 		public Version(int major)
 		{
-			m_data = ((ulong)(major & 0xFFFF) << 48);
+			m_data = (ulong)(major & 0xFFFF) << 48;
 		}
 
 		public Version(int major, int minor)
@@ -37,37 +40,20 @@ namespace AssetRipper.Core.Parser.Files
 		{
 			m_data = data;
 		}
+		#endregion
 
-		public static bool operator ==(Version left, Version right)
-		{
-			return left.m_data == right.m_data;
-		}
+		#region Properties
+		public static Version MinVersion => new Version(0UL);
+		public static Version MaxVersion => new Version(ulong.MaxValue);
 
-		public static bool operator !=(Version left, Version right)
-		{
-			return left.m_data != right.m_data;
-		}
+		public int Major => unchecked((int)((m_data >> 48) & 0xFFFFUL));
+		public int Minor => unchecked((int)((m_data >> 40) & 0xFFUL));
+		public int Build => unchecked((int)((m_data >> 32) & 0xFFUL));
+		public VersionType Type => (VersionType)unchecked((int)((m_data >> 24) & 0xFFUL));
+		public int TypeNumber => unchecked((int)((m_data >> 16) & 0xFFUL));
+		#endregion
 
-		public static bool operator >(Version left, Version right)
-		{
-			return left.m_data > right.m_data;
-		}
-
-		public static bool operator >=(Version left, Version right)
-		{
-			return left.m_data >= right.m_data;
-		}
-
-		public static bool operator <(Version left, Version right)
-		{
-			return left.m_data < right.m_data;
-		}
-
-		public static bool operator <=(Version left, Version right)
-		{
-			return left.m_data <= right.m_data;
-		}
-
+		#region Miscellaneous Methods
 		public int[] ToArray() => new int[] { Major, Minor, Build };
 
 		public static Version Parse(string version)
@@ -171,195 +157,117 @@ namespace AssetRipper.Core.Parser.Files
 			return new Version(major, minor, build, versionType, typeNumber);
 		}
 
+		public override string ToString()
+		{
+			return $"{Major}.{Minor}.{Build}{Type.ToLiteral()}{TypeNumber}";
+		}
+		#endregion
+
+		#region Comparison Operators
+		public static bool operator ==(Version left, Version right)
+		{
+			return left.m_data == right.m_data;
+		}
+
+		public static bool operator !=(Version left, Version right)
+		{
+			return left.m_data != right.m_data;
+		}
+
+		public static bool operator >(Version left, Version right)
+		{
+			return left.m_data > right.m_data;
+		}
+
+		public static bool operator >=(Version left, Version right)
+		{
+			return left.m_data >= right.m_data;
+		}
+
+		public static bool operator <(Version left, Version right)
+		{
+			return left.m_data < right.m_data;
+		}
+
+		public static bool operator <=(Version left, Version right)
+		{
+			return left.m_data <= right.m_data;
+		}
+		#endregion
+
+		#region IEquatable and IComparable
+		public int CompareTo(object obj)
+		{
+			if (obj is Version version)
+				return CompareTo(version);
+			else
+				return 1;
+		}
+
 		public int CompareTo(Version other)
 		{
 			if (this > other)
-			{
 				return 1;
-			}
 			else if (this < other)
-			{
 				return -1;
-			}
 			else
-			{
 				return 0;
-			}
 		}
 
 		public override bool Equals(object obj)
 		{
-			if (obj is null)
-			{
+			if (obj is Version version) 
+				return this == version;
+			else 
 				return false;
-			}
-			if (obj.GetType() != typeof(Version))
-			{
-				return false;
-			}
-			return this == (Version)obj;
 		}
+
+		public bool Equals(Version other) => this == other;
 
 		public override int GetHashCode()
 		{
 			return unchecked(827 + 911 * m_data.GetHashCode());
 		}
+		#endregion
 
-		public override string ToString()
-		{
-			return $"{Major}.{Minor}.{Build}{Type.ToLiteral()}{TypeNumber}";
-		}
+		#region Comparison Methods
+		public bool IsEqual(int major) => this == From(major);
+		public bool IsEqual(int major, int minor) => this == From(major, minor);
+		public bool IsEqual(int major, int minor, int build) => this == From(major, minor, build);
+		public bool IsEqual(int major, int minor, int build, VersionType type) => this == From(major, minor, build, type);
+		public bool IsEqual(int major, int minor, int build, VersionType type, int typeNumber) => this == new Version(major, minor, build, type, typeNumber);
+		public bool IsEqual(string version) => this == Parse(version);
 
-		public bool IsEqual(int major)
-		{
-			return this == From(major);
-		}
+		public bool IsLess(int major) => this < From(major);
+		public bool IsLess(int major, int minor) => this < From(major, minor);
+		public bool IsLess(int major, int minor, int build) => this < From(major, minor, build);
+		public bool IsLess(int major, int minor, int build, VersionType type) => this < From(major, minor, build, type);
+		public bool IsLess(int major, int minor, int build, VersionType type, int typeNumber) => this < new Version(major, minor, build, type, typeNumber);
+		public bool IsLess(string version) => this < Parse(version);
 
-		public bool IsEqual(int major, int minor)
-		{
-			return this == From(major, minor);
-		}
+		public bool IsLessEqual(int major) => this <= From(major);
+		public bool IsLessEqual(int major, int minor) => this <= From(major, minor);
+		public bool IsLessEqual(int major, int minor, int build) => this <= From(major, minor, build);
+		public bool IsLessEqual(int major, int minor, int build, VersionType type) => this <= From(major, minor, build, type);
+		public bool IsLessEqual(int major, int minor, int build, VersionType type, int typeNumber) => this <= new Version(major, minor, build, type, typeNumber);
+		public bool IsLessEqual(string version) => this <= Parse(version);
 
-		public bool IsEqual(int major, int minor, int build)
-		{
-			return this == From(major, minor, build);
-		}
+		public bool IsGreater(int major) => this > From(major);
+		public bool IsGreater(int major, int minor) => this > From(major, minor);
+		public bool IsGreater(int major, int minor, int build) => this > From(major, minor, build);
+		public bool IsGreater(int major, int minor, int build, VersionType type) => this > From(major, minor, build, type);
+		public bool IsGreater(int major, int minor, int build, VersionType type, int typeNumber) => this > new Version(major, minor, build, type, typeNumber);
+		public bool IsGreater(string version) => this > Parse(version);
 
-		public bool IsEqual(int major, int minor, int build, VersionType type)
-		{
-			return this == From(major, minor, build, type);
-		}
+		public bool IsGreaterEqual(int major) => this >= From(major);
+		public bool IsGreaterEqual(int major, int minor) => this >= From(major, minor);
+		public bool IsGreaterEqual(int major, int minor, int build) => this >= From(major, minor, build);
+		public bool IsGreaterEqual(int major, int minor, int build, VersionType type) => this >= From(major, minor, build, type);
+		public bool IsGreaterEqual(int major, int minor, int build, VersionType type, int typeNumber) => this >= new Version(major, minor, build, type, typeNumber);
+		public bool IsGreaterEqual(string version) => this >= Parse(version);
+		#endregion
 
-		public bool IsEqual(int major, int minor, int build, VersionType type, int typeNumber)
-		{
-			return this == new Version(major, minor, build, type, typeNumber);
-		}
-
-		public bool IsEqual(string version)
-		{
-			return this == Parse(version);
-		}
-
-		public bool IsLess(int major)
-		{
-			return this < From(major);
-		}
-
-		public bool IsLess(int major, int minor)
-		{
-			return this < From(major, minor);
-		}
-
-		public bool IsLess(int major, int minor, int build)
-		{
-			return this < From(major, minor, build);
-		}
-
-		public bool IsLess(int major, int minor, int build, VersionType type)
-		{
-			return this < From(major, minor, build, type);
-		}
-
-		public bool IsLess(int major, int minor, int build, VersionType type, int typeNumber)
-		{
-			return this < new Version(major, minor, build, type, typeNumber);
-		}
-
-		public bool IsLess(string version)
-		{
-			return this < Parse(version);
-		}
-
-		public bool IsLessEqual(int major)
-		{
-			return this <= From(major);
-		}
-
-		public bool IsLessEqual(int major, int minor)
-		{
-			return this <= From(major, minor);
-		}
-
-		public bool IsLessEqual(int major, int minor, int build)
-		{
-			return this <= From(major, minor, build);
-		}
-
-		public bool IsLessEqual(int major, int minor, int build, VersionType type)
-		{
-			return this <= From(major, minor, build, type);
-		}
-
-		public bool IsLessEqual(int major, int minor, int build, VersionType type, int typeNumber)
-		{
-			return this <= new Version(major, minor, build, type, typeNumber);
-		}
-
-		public bool IsLessEqual(string version)
-		{
-			return this <= Parse(version);
-		}
-
-		public bool IsGreater(int major)
-		{
-			return this > From(major);
-		}
-
-		public bool IsGreater(int major, int minor)
-		{
-			return this > From(major, minor);
-		}
-
-		public bool IsGreater(int major, int minor, int build)
-		{
-			return this > From(major, minor, build);
-		}
-
-		public bool IsGreater(int major, int minor, int build, VersionType type)
-		{
-			return this > From(major, minor, build, type);
-		}
-
-		public bool IsGreater(int major, int minor, int build, VersionType type, int typeNumber)
-		{
-			return this > new Version(major, minor, build, type, typeNumber);
-		}
-
-		public bool IsGreater(string version)
-		{
-			return this > Parse(version);
-		}
-
-		public bool IsGreaterEqual(int major)
-		{
-			return this >= From(major);
-		}
-
-		public bool IsGreaterEqual(int major, int minor)
-		{
-			return this >= From(major, minor);
-		}
-
-		public bool IsGreaterEqual(int major, int minor, int build)
-		{
-			return this >= From(major, minor, build);
-		}
-
-		public bool IsGreaterEqual(int major, int minor, int build, VersionType type)
-		{
-			return this >= From(major, minor, build, type);
-		}
-
-		public bool IsGreaterEqual(int major, int minor, int build, VersionType type, int typeNumber)
-		{
-			return this >= new Version(major, minor, build, type, typeNumber);
-		}
-
-		public bool IsGreaterEqual(string version)
-		{
-			return this >= Parse(version);
-		}
-
+		#region From
 		private Version From(int major)
 		{
 			ulong data = ((ulong)(major & 0xFFFF) << 48) | (0x0000FFFFFFFFFFFFUL & m_data);
@@ -388,31 +296,6 @@ namespace AssetRipper.Core.Parser.Files
 				| ((ulong)((int)type & 0xFF) << 24) | ((ulong)(typeNumber & 0xFF) << 16) | (0x000000000000FFFFUL & m_data);
 			return new Version(data);
 		}
-
-		public static Version MinVersion => new Version(0UL);
-		public static Version MaxVersion => new Version(ulong.MaxValue);
-
-		public int Major
-		{
-			get => unchecked((int)((m_data >> 48) & 0xFFFFUL));
-		}
-		public int Minor
-		{
-			get => unchecked((int)((m_data >> 40) & 0xFFUL));
-		}
-		public int Build
-		{
-			get => unchecked((int)((m_data >> 32) & 0xFFUL));
-		}
-		public VersionType Type
-		{
-			get => (VersionType)unchecked((int)((m_data >> 24) & 0xFFUL));
-		}
-		public int TypeNumber
-		{
-			get => unchecked((int)((m_data >> 16) & 0xFFUL));
-		}
-
-		private readonly ulong m_data;
+		#endregion
 	}
 }

@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Classes;
 using System.Linq;
 #if UNIVERSAL
+using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Math;
 #endif
 
