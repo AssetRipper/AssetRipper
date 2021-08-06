@@ -141,6 +141,8 @@ FMOD is licensed under a [non-commercial license](Licenses/FMOD.md).
 
 [Mono.Cecil](https://github.com/jbevain/cecil) is licensed under the [MIT license](Licenses/MonoCecil.md).
 
+[SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the [MIT license](Licenses/SharpZipLib.md).
+
 [Smolv](https://github.com/aras-p/smol-v) is licensed under the [MIT license](Licenses/Smolv.md).
 
 [SpirV](https://github.com/Anteru/csspv) is licensed under the [BSD 2-Clause license](Licenses/SpirV.md).

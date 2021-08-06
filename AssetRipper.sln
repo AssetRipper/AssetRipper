@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\FMOD.md = Licenses\FMOD.md
 		Licenses\Lz4.md = Licenses\Lz4.md
 		Licenses\MonoCecil.md = Licenses\MonoCecil.md
+		Licenses\SharpZipLib.md = Licenses\SharpZipLib.md
 		Licenses\Smolv.md = Licenses\Smolv.md
 		Licenses\SpirV.md = Licenses\SpirV.md
 		Licenses\uTinyRipper.md = Licenses\uTinyRipper.md
@@ -54,7 +55,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssueTemplates", "IssueTemp
 		.github\ISSUE_TEMPLATE\other.yaml = .github\ISSUE_TEMPLATE\other.yaml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetAnalyzer", "AssetAnalyzer\AssetAnalyzer.csproj", "{80284066-08A7-496A-A9EB-732966584CE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetAnalyzer", "AssetAnalyzer\AssetAnalyzer.csproj", "{80284066-08A7-496A-A9EB-732966584CE8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{88179FFC-0863-4C4F-9860-68EB1471E59F}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\codeql.yml = .github\workflows\codeql.yml
+		.github\workflows\greetings.yml = .github\workflows\greetings.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+		.github\workflows\stale.yml = .github\workflows\stale.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -273,6 +283,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{56F5A3D3-3388-476F-9852-D531BE14A9F8} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
 		{38C0DDA2-6C7D-41F1-90F6-0B1DDA86C0EC} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
+		{88179FFC-0863-4C4F-9860-68EB1471E59F} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ED4FF66B-4A6D-4440-8721-23C5ED09791C}

@@ -13,6 +13,9 @@ using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Parser.Files.SerializedFiles
 {
+	/// <summary>
+	/// A serialized file without any actual file backing it
+	/// </summary>
 	public class VirtualSerializedFile : ISerializedFile
 	{
 		public VirtualSerializedFile(AssetLayout layout)
