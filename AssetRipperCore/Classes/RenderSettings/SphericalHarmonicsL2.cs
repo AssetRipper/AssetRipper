@@ -14,10 +14,10 @@ namespace AssetRipper.Core.Classes.RenderSettings
 		/// <summary>
 		/// Not 5.0.0b
 		/// </summary>
-		public static bool Has25(Version version)
+		public static bool Has25(UnityVersion version)
 		{
 			// unknown version
-			return !version.IsEqual(5, 0, 0, VersionType.Beta);
+			return !version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 		}
 
 		public void Read(AssetReader reader)

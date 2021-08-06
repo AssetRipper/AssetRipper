@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 
 		public MonoImporter(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// NOTE: unknown conversion (default values has been changed?)
 			if (version.IsGreaterEqual(3, 5))
@@ -37,13 +37,13 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool HasDefaultReferences(Version version) => version.IsGreaterEqual(2, 6);
+		public static bool HasDefaultReferences(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 3.4.0 and greater
 		/// </summary>
-		public static bool HasExecutionOrder(Version version) => version.IsGreaterEqual(3, 4);
+		public static bool HasExecutionOrder(UnityVersion version) => version.IsGreaterEqual(3, 4);
 
-		public override bool IncludesImporter(Version version)
+		public override bool IncludesImporter(UnityVersion version)
 		{
 			return true;
 		}

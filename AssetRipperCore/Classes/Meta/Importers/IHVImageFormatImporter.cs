@@ -26,18 +26,18 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasImporter(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasImporter(UnityVersion version) => version.IsGreaterEqual(5, 6);
 
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasStreamingMipmaps(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasStreamingMipmaps(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasSRGBTexture(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasSRGBTexture(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
-		public override bool IncludesImporter(Version version)
+		public override bool IncludesImporter(UnityVersion version)
 		{
 			return true;
 		}

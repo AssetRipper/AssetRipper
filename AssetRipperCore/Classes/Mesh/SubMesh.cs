@@ -51,7 +51,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// IsTriStrip has been replaced by Topology
 			if (version.IsGreaterEqual(4))
@@ -64,15 +64,15 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		public static bool HasTriangleCount(Version version) => version.IsLess(4);
+		public static bool HasTriangleCount(UnityVersion version) => version.IsLess(4);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasVertex(Version version) => version.IsGreaterEqual(3);
+		public static bool HasVertex(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasBaseVertex(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasBaseVertex(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
 		public void Read(AssetReader reader)
 		{
@@ -144,7 +144,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return node;
 		}
 
-		public MeshTopology GetTopology(Version version)
+		public MeshTopology GetTopology(UnityVersion version)
 		{
 			if (ToSerializedVersion(version) >= 2)
 			{

@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.LODGroup
 	{
 		public LODGroup(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// FadeMode has been transfered from LOD to LODGroup
 			if (version.IsGreaterEqual(5, 1))
@@ -29,24 +29,24 @@ namespace AssetRipper.Core.Classes.LODGroup
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool HasScreenRelativeTransitionHeightName(Version version) => version.IsLess(5);
+		public static bool HasScreenRelativeTransitionHeightName(UnityVersion version) => version.IsLess(5);
 		/// <summary>
 		/// 5.1.0 and greater
 		/// </summary>
-		public static bool HasFadeMode(Version version) => version.IsGreaterEqual(5, 1);
+		public static bool HasFadeMode(UnityVersion version) => version.IsGreaterEqual(5, 1);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasLastLODIsBillboard(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasLastLODIsBillboard(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 
 		/// <summary>
 		/// 5.1.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(5, 1);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(5, 1);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		private static bool IsAlign2(Version version) => version.IsGreaterEqual(5);
+		private static bool IsAlign2(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -107,7 +107,7 @@ namespace AssetRipper.Core.Classes.LODGroup
 			return node;
 		}
 
-		private LODFadeMode GetFadeMode(Version version)
+		private LODFadeMode GetFadeMode(UnityVersion version)
 		{
 			return HasFadeMode(version) ? FadeMode : LODs[0].FadeMode;
 		}

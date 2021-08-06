@@ -33,12 +33,12 @@ namespace AssetRipper.Core.Classes.ParticleSystem.NoiseModule
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		public static bool HasPositionAmount(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		public static bool HasPositionAmount(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
 
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -100,15 +100,15 @@ namespace AssetRipper.Core.Classes.ParticleSystem.NoiseModule
 			return node;
 		}
 
-		private MinMaxCurve GetExportPositionAmount(Version version)
+		private MinMaxCurve GetExportPositionAmount(UnityVersion version)
 		{
 			return HasPositionAmount(version) ? PositionAmount : new MinMaxCurve(1.0f);
 		}
-		private MinMaxCurve GetExportRotationAmount(Version version)
+		private MinMaxCurve GetExportRotationAmount(UnityVersion version)
 		{
 			return HasPositionAmount(version) ? RotationAmount : new MinMaxCurve(0.0f);
 		}
-		private MinMaxCurve GetExportSizeAmount(Version version)
+		private MinMaxCurve GetExportSizeAmount(UnityVersion version)
 		{
 			return HasPositionAmount(version) ? SizeAmount : new MinMaxCurve(0.0f);
 		}

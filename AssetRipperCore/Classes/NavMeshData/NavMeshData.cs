@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Classes.NavMeshData
 	{
 		public NavMeshData(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5, 6))
 			{
@@ -32,11 +32,11 @@ namespace AssetRipper.Core.Classes.NavMeshData
 		/// <summary>
 		/// Less than 5.6.0
 		/// </summary>
-		public static bool HasNavMeshParams(Version version) => version.IsLess(5, 6);
+		public static bool HasNavMeshParams(UnityVersion version) => version.IsLess(5, 6);
 		/// <summary>
 		/// 5.6.0p1 and greater
 		/// </summary>
-		public static bool HasSourceBounds(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Patch);
+		public static bool HasSourceBounds(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Patch);
 
 		public override void Read(AssetReader reader)
 		{
@@ -92,11 +92,11 @@ namespace AssetRipper.Core.Classes.NavMeshData
 			return node;
 		}
 
-		private NavMeshBuildSettings GetExportNavMeshBuildSettings(Version version)
+		private NavMeshBuildSettings GetExportNavMeshBuildSettings(UnityVersion version)
 		{
 			return HasNavMeshParams(version) ? new NavMeshBuildSettings(NavMeshParams) : NavMeshBuildSettings;
 		}
-		private Quaternionf GetExportRotation(Version version)
+		private Quaternionf GetExportRotation(UnityVersion version)
 		{
 			return HasSourceBounds(version) ? Rotation : Quaternionf.Zero;
 		}

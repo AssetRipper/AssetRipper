@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasAtlasRectOffset(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasAtlasRectOffset(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 
 		public void Read(AssetReader reader)
 		{

@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasZClip(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasZClip(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 
 		public void Read(AssetReader reader)
 		{

@@ -13,7 +13,7 @@ using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimatorController
 {
@@ -21,15 +21,15 @@ namespace AssetRipper.Core.Classes.AnimatorController
 	{
 		public AnimatorController(AssetInfo assetsInfo) : base(assetsInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// unknown version
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
+			if (version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final))
 			{
 				return 5;
 			}
 			// unknown version
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Beta))
+			if (version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta))
 			{
 				return 4;
 			}
@@ -47,20 +47,20 @@ namespace AssetRipper.Core.Classes.AnimatorController
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasStateMachineBehaviourVectorDescription(Version version) => version.IsGreaterEqual(5);
+		public static bool HasStateMachineBehaviourVectorDescription(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0b2 to 5.1.x and 5.4.0 and greater
 		/// </summary>
-		public static bool HasMultiThreadedStateMachine(Version version)
+		public static bool HasMultiThreadedStateMachine(UnityVersion version)
 		{
 			// unknown start version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 2) || version.IsGreaterEqual(5, 4);
+			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final) && version.IsLess(5, 2) || version.IsGreaterEqual(5, 4);
 		}
 
 		/// <summary>
 		/// 5.1.0 and greater
 		/// </summary>
-		private static bool IsAlignMultiThreadedStateMachine(Version version) => version.IsGreaterEqual(5, 1);
+		private static bool IsAlignMultiThreadedStateMachine(UnityVersion version) => version.IsGreaterEqual(5, 1);
 
 		public override void Read(AssetReader reader)
 		{

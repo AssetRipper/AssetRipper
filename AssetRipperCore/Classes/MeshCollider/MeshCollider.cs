@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.MeshCollider
 	{
 		public MeshCollider(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// MeshColliderCookingOptions.UseFastMidphase is a force option for old versions (even though it was introduced in 2019.3.0)
 			if (version.IsGreaterEqual(2019, 3, 7))
@@ -32,28 +32,28 @@ namespace AssetRipper.Core.Classes.MeshCollider
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool HasSmoothSphereCollisions(Version version) => version.IsLess(5);
+		public static bool HasSmoothSphereCollisions(UnityVersion version) => version.IsLess(5);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasCookingOptions(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasCookingOptions(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 5.5.0 to 2018.3 exclusive
 		/// </summary>
-		public static bool HasSkinWidth(Version version) => version.IsGreaterEqual(5, 5) && version.IsLess(2018, 3);
+		public static bool HasSkinWidth(UnityVersion version) => version.IsGreaterEqual(5, 5) && version.IsLess(2018, 3);
 		/// <summary>
 		/// 5.5.0 to 2017.3 exclusive
 		/// </summary>
-		public static bool HasInflateMesh(Version version) => version.IsGreaterEqual(5, 5) && version.IsLess(2017, 3);
+		public static bool HasInflateMesh(UnityVersion version) => version.IsGreaterEqual(5, 5) && version.IsLess(2017, 3);
 
 		/// <summary>
 		/// Less than 2.1.0
 		/// </summary>
-		private static bool IsMeshFirst(Version version) => version.IsLess(2, 1);
+		private static bool IsMeshFirst(UnityVersion version) => version.IsLess(2, 1);
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2, 1);
 
 		public override void Read(AssetReader reader)
 		{
@@ -115,7 +115,7 @@ namespace AssetRipper.Core.Classes.MeshCollider
 			return node;
 		}
 
-		private MeshColliderCookingOptions GetCookingOptions(Version origin, Version export)
+		private MeshColliderCookingOptions GetCookingOptions(UnityVersion origin, UnityVersion export)
 		{
 			if (HasCookingOptions(origin))
 			{
@@ -140,7 +140,7 @@ namespace AssetRipper.Core.Classes.MeshCollider
 			}
 		}
 
-		private float GetSkinWidth(Version version)
+		private float GetSkinWidth(UnityVersion version)
 		{
 			return HasSkinWidth(version) ? SkinWidth : 0.01f;
 		}

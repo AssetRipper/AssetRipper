@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.TagManager
 	{
 		public TagManager(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5))
 			{
@@ -26,17 +26,17 @@ namespace AssetRipper.Core.Classes.TagManager
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasSortingLayers(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasSortingLayers(UnityVersion version) => version.IsGreaterEqual(4, 3);
 
 		/// <summary>
 		/// 5.0.0 to 5.5.0 exclusive
 		/// </summary>
-		public static bool IsBrokenCustomTags(Version version) => version.IsGreaterEqual(5) && version.IsLess(5, 5);
+		public static bool IsBrokenCustomTags(UnityVersion version) => version.IsGreaterEqual(5) && version.IsLess(5, 5);
 
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		private static bool IsStaticArray(Version version) => version.IsLess(5);
+		private static bool IsStaticArray(UnityVersion version) => version.IsLess(5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -71,7 +71,7 @@ namespace AssetRipper.Core.Classes.TagManager
 			return node;
 		}
 
-		private IReadOnlyList<SortingLayerEntry> GetSortingLayers(Version version)
+		private IReadOnlyList<SortingLayerEntry> GetSortingLayers(UnityVersion version)
 		{
 			return HasSortingLayers(version) ? SortingLayers : System.Array.Empty<SortingLayerEntry>();
 		}

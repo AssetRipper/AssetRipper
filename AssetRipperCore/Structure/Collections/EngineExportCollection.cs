@@ -16,13 +16,13 @@ using AssetRipper.Core.Parser.Utils;
 using System;
 using System.Collections.Generic;
 using Object = AssetRipper.Core.Classes.Object.Object;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Structure.Collections
 {
 	public class EngineExportCollection : IExportCollection
 	{
-		public EngineExportCollection(Object asset, Version version)
+		public EngineExportCollection(Object asset, UnityVersion version)
 		{
 			if (asset == null)
 			{
@@ -47,7 +47,7 @@ namespace AssetRipper.Core.Structure.Collections
 			}
 		}
 
-		public static bool IsEngineAsset(Object asset, Version version)
+		public static bool IsEngineAsset(Object asset, UnityVersion version)
 		{
 			if (!GetEngineBuildInAsset(asset, version, out EngineBuiltInAsset builtinAsset))
 			{
@@ -117,7 +117,7 @@ namespace AssetRipper.Core.Structure.Collections
 			return false;
 		}
 
-		private static bool GetEngineBuildInAsset(Object asset, Version version, out EngineBuiltInAsset engineAsset)
+		private static bool GetEngineBuildInAsset(Object asset, UnityVersion version, out EngineBuiltInAsset engineAsset)
 		{
 			switch (asset.ClassID)
 			{
@@ -247,6 +247,6 @@ namespace AssetRipper.Core.Structure.Collections
 
 		private readonly HashSet<Object> m_assets = new HashSet<Object>();
 
-		private readonly Version m_version;
+		private readonly UnityVersion m_version;
 	}
 }

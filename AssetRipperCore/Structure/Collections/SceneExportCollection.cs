@@ -16,7 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Object = AssetRipper.Core.Classes.Object.Object;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Structure.Collections
 {
@@ -79,9 +79,9 @@ namespace AssetRipper.Core.Structure.Collections
 			}
 		}
 
-		public static bool HasMainData(Version version) => version.IsLess(5, 3);
+		public static bool HasMainData(UnityVersion version) => version.IsLess(5, 3);
 
-		public static string SceneIndexToFileName(int index, Version version)
+		public static string SceneIndexToFileName(int index, UnityVersion version)
 		{
 			if (HasMainData(version))
 			{
@@ -94,7 +94,7 @@ namespace AssetRipper.Core.Structure.Collections
 			return LevelName + index.ToString();
 		}
 
-		public static int FileNameToSceneIndex(string name, Version version)
+		public static int FileNameToSceneIndex(string name, UnityVersion version)
 		{
 			if (HasMainData(version))
 			{

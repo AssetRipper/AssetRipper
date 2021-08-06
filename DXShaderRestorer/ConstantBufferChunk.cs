@@ -9,7 +9,7 @@ namespace DXShaderRestorer
 {
 	internal class ConstantBufferChunk
 	{
-		public ConstantBufferChunk(Version version, ref ShaderSubProgram shaderSubprogram, uint contantBufferOffset, Dictionary<string, uint> nameLookup)
+		public ConstantBufferChunk(UnityVersion version, ref ShaderSubProgram shaderSubprogram, uint contantBufferOffset, Dictionary<string, uint> nameLookup)
 		{
 			m_shaderSubprogram = shaderSubprogram;
 			m_contantBufferOffset = contantBufferOffset;

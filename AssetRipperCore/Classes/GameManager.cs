@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool HasEditorExtension(Version version) => version.IsLess(3);
+		public static bool HasEditorExtension(UnityVersion version) => version.IsLess(3);
 
 		public override void Read(AssetReader reader)
 		{

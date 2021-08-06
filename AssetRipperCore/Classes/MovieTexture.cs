@@ -17,11 +17,11 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		private static bool HasData(Version version) => version.IsLess(5);
+		private static bool HasData(UnityVersion version) => version.IsLess(5);
 		/// <summary>
 		/// 5.0.0 to 2019.3 exclusive
 		/// </summary>
-		private static bool IsInherited(Version version) => version.IsGreaterEqual(5) && version.IsLess(2019, 3);
+		private static bool IsInherited(UnityVersion version) => version.IsGreaterEqual(5) && version.IsLess(2019, 3);
 
 		public override void Read(AssetReader reader)
 		{

@@ -10,9 +10,9 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Emission
 {
 	public sealed class EmissionModule : ParticleSystemModule
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 5))
 			{
 				return 4;
 			}
@@ -30,20 +30,20 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Emission
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
-		public static bool HasType(Version version) => version.IsLess(5, 5);
+		public static bool HasType(UnityVersion version) => version.IsLess(5, 5);
 		/// <summary>
 		/// Less or equal to 5.6.0b4
 		/// </summary>
-		public static bool HasCnt(Version version) => version.IsLessEqual(5, 6, 0, VersionType.Beta, 4);
+		public static bool HasCnt(UnityVersion version) => version.IsLessEqual(5, 6, 0, UnityVersionType.Beta, 4);
 		/// <summary>
 		/// 5.3.0 to 5.6.0 exclusive
 		/// </summary>
-		public static bool HasCntMax(Version version) => version.IsGreaterEqual(5, 3) && version.IsLess(5, 6);
+		public static bool HasCntMax(UnityVersion version) => version.IsGreaterEqual(5, 3) && version.IsLess(5, 6);
 
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		private static bool IsIntCount(Version version) => version.IsGreaterEqual(5, 4);
+		private static bool IsIntCount(UnityVersion version) => version.IsGreaterEqual(5, 4);
 
 		public override void Read(AssetReader reader)
 		{

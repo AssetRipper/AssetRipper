@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
 using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 {
@@ -27,13 +27,13 @@ namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool ShaderChannel2018Relevant(Version version) => version.IsGreaterEqual(2018);
+		public static bool ShaderChannel2018Relevant(UnityVersion version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool ShaderChannel5Relevant(Version version) => version.IsGreaterEqual(5);
+		public static bool ShaderChannel5Relevant(UnityVersion version) => version.IsGreaterEqual(5);
 
-		public static int GetChannelCount(Version version)
+		public static int GetChannelCount(UnityVersion version)
 		{
 			if (ShaderChannel2018Relevant(version))
 			{
@@ -49,7 +49,7 @@ namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 			}
 		}
 
-		public static VertexFormat.VertexFormat GetVertexFormat(this ShaderChannel _this, Version version)
+		public static VertexFormat.VertexFormat GetVertexFormat(this ShaderChannel _this, UnityVersion version)
 		{
 			switch (_this)
 			{
@@ -82,7 +82,7 @@ namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 			}
 		}
 
-		public static byte GetDimention(this ShaderChannel _this, Version version)
+		public static byte GetDimention(this ShaderChannel _this, UnityVersion version)
 		{
 			switch (_this)
 			{
@@ -114,14 +114,14 @@ namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 			}
 		}
 
-		public static byte GetStride(this ShaderChannel _this, Version version)
+		public static byte GetStride(this ShaderChannel _this, UnityVersion version)
 		{
 			VertexFormat.VertexFormat format = _this.GetVertexFormat(version);
 			int dimention = _this.GetDimention(version);
 			return format.CalculateStride(version, dimention);
 		}
 
-		public static bool HasChannel(this ShaderChannel _this, Version version)
+		public static bool HasChannel(this ShaderChannel _this, UnityVersion version)
 		{
 			if (ShaderChannel2018Relevant(version))
 			{
@@ -137,7 +137,7 @@ namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 			}
 		}
 
-		public static int ToChannel(this ShaderChannel _this, Version version)
+		public static int ToChannel(this ShaderChannel _this, UnityVersion version)
 		{
 			if (ShaderChannel2018Relevant(version))
 			{

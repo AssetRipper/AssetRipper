@@ -12,10 +12,10 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 	public class LightmapData : IAsset, IDependent
 	{
 		public LightmapData() { }
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// NOTE: unknown conversion
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2))
 			{
 				return 2;
 			}
@@ -25,15 +25,15 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// <summary>
 		/// 3.0.0 to 5.6.0b1
 		/// </summary>
-		public static bool HasIndirectLightmap(Version version) => version.IsGreaterEqual(3) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 1);
+		public static bool HasIndirectLightmap(UnityVersion version) => version.IsGreaterEqual(3) && version.IsLessEqual(5, 6, 0, UnityVersionType.Beta, 1);
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasLightInd(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasLightInd(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// 5.6.0b2 and greater
 		/// </summary>
-		public static bool HasDirLightmap(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
+		public static bool HasDirLightmap(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2);
 
 		public void Read(AssetReader reader)
 		{

@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 {
 	public struct SplatDatabase : IAsset, IDependent
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// SplatPrototype is replaced by TerrainLayer
 			if (version.IsGreaterEqual(2018, 3))
@@ -26,11 +26,11 @@ namespace AssetRipper.Core.Classes.TerrainData
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasTerrainLayers(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasTerrainLayers(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 5.0.0p1 to 2018.3 exclusive
 		/// </summary>
-		public static bool HasColorSpace(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Patch) && version.IsLess(2018, 3);
+		public static bool HasColorSpace(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Patch) && version.IsLess(2018, 3);
 
 		public SplatDatabase Convert(IExportContainer container)
 		{

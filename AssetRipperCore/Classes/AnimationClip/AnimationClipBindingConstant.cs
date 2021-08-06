@@ -7,7 +7,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreater(2017);
+		private static bool IsAlign(UnityVersion version) => version.IsGreater(2017);
 
 		public GenericBinding.GenericBinding FindBinding(int index)
 		{

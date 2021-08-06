@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.Avatar
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasHumanDescription(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasHumanDescription(UnityVersion version) => version.IsGreaterEqual(2019);
 
 		public override void Read(AssetReader reader)
 		{

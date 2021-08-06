@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool IsConditionalValue(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool IsConditionalValue(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 
 		public void Read(AssetReader reader)
 		{

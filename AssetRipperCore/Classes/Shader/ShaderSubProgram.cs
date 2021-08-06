@@ -6,7 +6,7 @@ using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader
 {
@@ -15,36 +15,36 @@ namespace AssetRipper.Core.Classes.Shader
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasLocalKeywords(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasLocalKeywords(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasUAVParameters(Version version) => Shader.IsSerialized(version);
+		public static bool HasUAVParameters(UnityVersion version) => Shader.IsSerialized(version);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasSamplerParameters(Version version) => version.IsGreaterEqual(2017, 1);
+		public static bool HasSamplerParameters(UnityVersion version) => version.IsGreaterEqual(2017, 1);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasMultiSampled(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasMultiSampled(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		private static bool HasStatsTempRegister(Version version) => Shader.IsSerialized(version);
+		private static bool HasStatsTempRegister(UnityVersion version) => Shader.IsSerialized(version);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		private static bool IsAllParamArgs(Version version) => Shader.IsSerialized(version);
+		private static bool IsAllParamArgs(UnityVersion version) => Shader.IsSerialized(version);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		private static bool HasStructParameters(Version version) => version.IsGreaterEqual(2017, 3);
+		private static bool HasStructParameters(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		private static bool HasNewTextureParams(Version version) => version.IsGreaterEqual(2018, 2);
-		private static int GetExpectedProgramVersion(Version version)
+		private static bool HasNewTextureParams(UnityVersion version) => version.IsGreaterEqual(2018, 2);
+		private static int GetExpectedProgramVersion(UnityVersion version)
 		{
 			if (version.IsEqual(5, 3))
 			{
@@ -344,7 +344,7 @@ namespace AssetRipper.Core.Classes.Shader
 			writer.Write('"');
 		}
 
-		public ShaderGpuProgramType GetProgramType(Version version)
+		public ShaderGpuProgramType GetProgramType(UnityVersion version)
 		{
 			if (ShaderGpuProgramTypeExtensions.GpuProgramType55Relevant(version))
 			{

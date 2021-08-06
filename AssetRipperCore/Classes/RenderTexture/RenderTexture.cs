@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes.RenderTexture
 	{
 		public RenderTexture(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// unknown
 			if (version.IsGreaterEqual(2019))
@@ -29,56 +29,56 @@ namespace AssetRipper.Core.Classes.RenderTexture
 		/// <summary>
 		/// Less than 3.5.0
 		/// </summary>
-		public static bool HasIsPowerOfTwo(Version version) => version.IsLess(3, 5);
+		public static bool HasIsPowerOfTwo(UnityVersion version) => version.IsLess(3, 5);
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasAntiAliasing(Version version) => version.IsGreaterEqual(4, 2);
+		public static bool HasAntiAliasing(UnityVersion version) => version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 2019.2 and greater
 		/// </summary>
-		public static bool HasMipCount(Version version) => version.IsGreaterEqual(2019, 2);
+		public static bool HasMipCount(UnityVersion version) => version.IsGreaterEqual(2019, 2);
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool HasColorFormat(Version version) => version.IsGreaterEqual(2);
+		public static bool HasColorFormat(UnityVersion version) => version.IsGreaterEqual(2);
 		/// <summary>
 		/// 2.0.0 to 4.0.0 exclusive
 		/// </summary>
-		public static bool HasIsCubemap(Version version) => version.IsGreaterEqual(2) && version.IsLess(4);
+		public static bool HasIsCubemap(UnityVersion version) => version.IsGreaterEqual(2) && version.IsLess(4);
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool HasMipMap(Version version) => version.IsGreaterEqual(2);
+		public static bool HasMipMap(UnityVersion version) => version.IsGreaterEqual(2);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasGenerateMips(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasGenerateMips(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasSRGB(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasSRGB(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasUseDynamicScale(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasUseDynamicScale(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasEnableCompatibleFormat(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasEnableCompatibleFormat(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasDimension(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasDimension(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// Less than 2.1.0
 		/// </summary>
-		public static bool HasIsPowerOfTwoFirst(Version version) => version.IsLess(2, 1);
+		public static bool HasIsPowerOfTwoFirst(UnityVersion version) => version.IsLess(2, 1);
 
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2, 1);
 
 		public override void Read(AssetReader reader)
 		{
@@ -179,7 +179,7 @@ namespace AssetRipper.Core.Classes.RenderTexture
 			return node;
 		}
 
-		private bool GetEnableCompatibleFormat(Version version)
+		private bool GetEnableCompatibleFormat(UnityVersion version)
 		{
 			return HasEnableCompatibleFormat(version) ? EnableCompatibleFormat : true;
 		}

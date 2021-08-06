@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Mask
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasIndex(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasIndex(UnityVersion version) => version.IsGreaterEqual(4, 3);
 
 		public void Read(AssetReader reader)
 		{

@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public OffMeshLink(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// m_NavMeshLayer has been renamed to m_AreaIndex
 			if (version.IsGreaterEqual(5))
@@ -30,19 +30,19 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasAreaIndex(Version version) => version.IsGreaterEqual(4);
+		public static bool HasAreaIndex(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasAgentTypeID(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasAgentTypeID(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool HasDtPolyRef(Version version) => version.IsLess(5);
+		public static bool HasDtPolyRef(UnityVersion version) => version.IsLess(5);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasAutoUpdatePositions(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasAutoUpdatePositions(UnityVersion version) => version.IsGreaterEqual(4, 3);
 
 		public override void Read(AssetReader reader)
 		{

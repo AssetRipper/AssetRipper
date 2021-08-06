@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.Camera
 	{
 		public Camera(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// min version is 2nd
 			return 2;
@@ -24,79 +24,79 @@ namespace AssetRipper.Core.Classes.Camera
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasProjectionMatrixMode(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasProjectionMatrixMode(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 2019.1 and greater and Not Release
 		/// </summary>
-		public static bool HasFOVAxisMode(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2019);
+		public static bool HasFOVAxisMode(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasSensorSize(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasSensorSize(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasGateFitMode(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasGateFitMode(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasFocalLength(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasFocalLength(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasRenderingPath(Version version) => version.IsGreaterEqual(3);
+		public static bool HasRenderingPath(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool HasTargetDisplay(Version version) => version.IsGreaterEqual(4, 5);
+		public static bool HasTargetDisplay(UnityVersion version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 5.1.3 and greater
 		/// </summary>
-		public static bool HasTargetEye(Version version) => version.IsGreaterEqual(5, 1, 3);
+		public static bool HasTargetEye(UnityVersion version) => version.IsGreaterEqual(5, 1, 3);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasHDR(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasHDR(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasAllowMSAA(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasAllowMSAA(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasAllowDynamicResolution(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasAllowDynamicResolution(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasForceIntoRT(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasForceIntoRT(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasOcclusionCulling(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasOcclusionCulling(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool HasStereoConvergence(Version version) => version.IsGreaterEqual(4, 5);
+		public static bool HasStereoConvergence(UnityVersion version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 5.1.0 to 2017.2 exclusive
 		/// </summary>
-		public static bool HasStereoMirrorMode(Version version) => version.IsGreaterEqual(5, 1) && version.IsLess(2017, 2);
+		public static bool HasStereoMirrorMode(UnityVersion version) => version.IsGreaterEqual(5, 1) && version.IsLess(2017, 2);
 
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		private static bool HasGateFitModeFirst(Version version)
+		private static bool HasGateFitModeFirst(UnityVersion version)
 		{
 			return version.IsGreaterEqual(2019);
 		}
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		private static bool IsAlign1(Version version) => version.IsGreaterEqual(2018, 2);
+		private static bool IsAlign1(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		private static bool IsAlign2(Version version) => version.IsGreaterEqual(4, 5);
+		private static bool IsAlign2(UnityVersion version) => version.IsGreaterEqual(4, 5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -261,7 +261,7 @@ namespace AssetRipper.Core.Classes.Camera
 			return node;
 		}
 
-		private FieldOfViewAxis GetFOVAxisMode(Version version, TransferInstructionFlags flags)
+		private FieldOfViewAxis GetFOVAxisMode(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasFOVAxisMode(version, flags))

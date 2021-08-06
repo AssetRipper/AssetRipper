@@ -2,13 +2,13 @@ using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Classes.Shader;
 using System.Collections.Generic;
 using System.IO;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace DXShaderRestorer
 {
 	public static class DXShaderProgramRestorer
 	{
-		public static byte[] RestoreProgramData(BinaryReader reader, Version version, ref ShaderSubProgram shaderSubProgram)
+		public static byte[] RestoreProgramData(BinaryReader reader, UnityVersion version, ref ShaderSubProgram shaderSubProgram)
 		{
 			using (MemoryStream dest = new MemoryStream())
 			{
@@ -67,7 +67,7 @@ namespace DXShaderRestorer
 			}
 		}
 
-		private static byte[] GetResourceChunk(Version version, ref ShaderSubProgram shaderSubprogram)
+		private static byte[] GetResourceChunk(UnityVersion version, ref ShaderSubProgram shaderSubprogram)
 		{
 			using (MemoryStream memoryStream = new MemoryStream())
 			{

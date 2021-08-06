@@ -13,9 +13,9 @@ namespace AssetRipper.Core.Classes.UI.Canvas
 	{
 		public Canvas(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 5))
 			{
 				return 3;
 			}
@@ -29,31 +29,31 @@ namespace AssetRipper.Core.Classes.UI.Canvas
 		/// <summary>
 		/// Less than 4.6.0
 		/// </summary>
-		public static bool HasAlpha(Version version) => version.IsLess(4, 6);
+		public static bool HasAlpha(UnityVersion version) => version.IsLess(4, 6);
 		/// <summary>
 		/// Less than 4.6.0
 		/// </summary>
-		public static bool HasNormals(Version version) => version.IsLess(4, 6);
+		public static bool HasNormals(UnityVersion version) => version.IsLess(4, 6);
 		/// <summary>
 		/// 4.6.0 and greater
 		/// </summary>
-		public static bool HasPlaneDistance(Version version) => version.IsGreaterEqual(4, 6);
+		public static bool HasPlaneDistance(UnityVersion version) => version.IsGreaterEqual(4, 6);
 		/// <summary>
 		/// 4.6.0 and greater
 		/// </summary>
-		public static bool HasRecievesEvents(Version version) => version.IsGreaterEqual(4, 6);
+		public static bool HasRecievesEvents(UnityVersion version) => version.IsGreaterEqual(4, 6);
 		/// <summary>
 		/// 5.3.4 and greater
 		/// </summary>
-		public static bool HasSortingBucketNormalizedSize(Version version) => version.IsGreaterEqual(5, 3, 4);
+		public static bool HasSortingBucketNormalizedSize(UnityVersion version) => version.IsGreaterEqual(5, 3, 4);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasTargetDisplay(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasTargetDisplay(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.6.0b5 and greater
 		/// </summary>
-		public static bool HasAdditionalShaderChannelsFlag(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
+		public static bool HasAdditionalShaderChannelsFlag(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 5);
 
 		public override void Read(AssetReader reader)
 		{

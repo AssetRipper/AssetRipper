@@ -14,11 +14,11 @@ namespace AssetRipper.Core.Classes.AnimationClip.GenericBinding
 		/// <summary>
 		/// 5.6.0 an greater
 		/// </summary>
-		private static bool IsInt32ID(Version version) => version.IsGreaterEqual(5, 6);
+		private static bool IsInt32ID(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(5, 6);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(5, 6);
 
 		public void Read(AssetReader reader)
 		{
@@ -55,7 +55,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.GenericBinding
 			return node;
 		}
 
-		public HumanoidMuscleType GetHumanoidMuscle(Version version)
+		public HumanoidMuscleType GetHumanoidMuscle(UnityVersion version)
 		{
 			return ((HumanoidMuscleType)Attribute).Update(version);
 		}

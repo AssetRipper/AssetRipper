@@ -8,7 +8,7 @@ using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes
 {
@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public Texture3D(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// ColorSpace has been added which affects on Format
 			if (version.IsGreaterEqual(2019))
@@ -34,59 +34,59 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasDepth(Version version) => version.IsGreaterEqual(4);
+		public static bool HasDepth(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 2.6.0 to 4.0.0 exclusize or 5.4.0 and greater
 		/// </summary>
-		public static bool HasIsReadable(Version version) => IsReadableFirst(version) || IsReadableSecond(version);
+		public static bool HasIsReadable(UnityVersion version) => IsReadableFirst(version) || IsReadableSecond(version);
 		/// <summary>
 		/// From 3.0.0 to 4.0.0 exclusive
 		/// </summary>
-		public static bool HasReadAllowed(Version version) => version.IsGreaterEqual(3) && version.IsLess(4);
+		public static bool HasReadAllowed(UnityVersion version) => version.IsGreaterEqual(3) && version.IsLess(4);
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		public static bool HasImageCount(Version version) => version.IsLess(4);
+		public static bool HasImageCount(UnityVersion version) => version.IsLess(4);
 		/// <summary>
 		/// 3.0.0 to 4.0.0 exclusive
 		/// </summary>
-		public static bool HasLightmapFormat(Version version) => version.IsGreaterEqual(3) && version.IsLess(4);
+		public static bool HasLightmapFormat(UnityVersion version) => version.IsGreaterEqual(3) && version.IsLess(4);
 		/// <summary>
 		/// 3.5.0 to 4.0.0 exclusive or 2019.1 and greater
 		/// </summary>
-		public static bool HasColorSpace(Version version)
+		public static bool HasColorSpace(UnityVersion version)
 		{
 			return version.IsGreaterEqual(2019) || version.IsGreaterEqual(3, 5) && version.IsLess(4);
 		}
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasStreamData(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasStreamData(UnityVersion version) => version.IsGreaterEqual(5, 6);
 
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		private static bool IsColorSpaceFirst(Version version) => version.IsGreaterEqual(2019);
+		private static bool IsColorSpaceFirst(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		private static bool IsFormatFirst(Version version) => version.IsGreaterEqual(2019);
+		private static bool IsFormatFirst(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		private static bool IsDataSizeFirst(Version version) => version.IsLess(4);
+		private static bool IsDataSizeFirst(UnityVersion version) => version.IsLess(4);
 		/// <summary>
 		/// Less than 5.2.0
 		/// </summary>
-		private static bool IsBoolMinMap(Version version) => version.IsLess(5, 2);
+		private static bool IsBoolMinMap(UnityVersion version) => version.IsLess(5, 2);
 		/// <summary>
 		/// 2.6.0 to 4.0.0 exclusize
 		/// </summary>
-		private static bool IsReadableFirst(Version version) => version.IsGreaterEqual(2, 6) && version.IsLess(4);
+		private static bool IsReadableFirst(UnityVersion version) => version.IsGreaterEqual(2, 6) && version.IsLess(4);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		private static bool IsReadableSecond(Version version) => version.IsGreaterEqual(5, 4);
+		private static bool IsReadableSecond(UnityVersion version) => version.IsGreaterEqual(5, 4);
 
 		public override void Read(AssetReader reader)
 		{
@@ -206,7 +206,7 @@ namespace AssetRipper.Core.Classes
 			return node;
 		}
 
-		private byte[] GetImageData(Version version)
+		private byte[] GetImageData(UnityVersion version)
 		{
 			if (HasStreamData(version) && StreamData.IsSet)
 			{

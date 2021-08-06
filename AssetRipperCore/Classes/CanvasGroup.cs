@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public CanvasGroup(AssetInfo assetInfo) : base(assetInfo) { }
 
-		private static bool HasBehaviour(Version version)
+		private static bool HasBehaviour(UnityVersion version)
 		{
 			return version.IsGreaterEqual(4, 6, 1);
 		}

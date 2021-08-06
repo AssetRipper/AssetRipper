@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public TextMesh(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(1, 5))
 			{
@@ -30,15 +30,15 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasFontSize(Version version) => version.IsGreaterEqual(3);
+		public static bool HasFontSize(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasRichText(Version version) => version.IsGreaterEqual(4);
+		public static bool HasRichText(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasColorRGBAf(Version version) => version.IsGreaterEqual(4, 2);
+		public static bool HasColorRGBAf(UnityVersion version) => version.IsGreaterEqual(4, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -106,11 +106,11 @@ namespace AssetRipper.Core.Classes
 			return node;
 		}
 
-		private bool GetRichText(Version version)
+		private bool GetRichText(UnityVersion version)
 		{
 			return HasRichText(version) ? RichText : true;
 		}
-		private ColorRGBA32 GetColorRGBAf(Version version)
+		private ColorRGBA32 GetColorRGBAf(UnityVersion version)
 		{
 			return HasFontSize(version) ? Color : ColorRGBA32.White;
 		}

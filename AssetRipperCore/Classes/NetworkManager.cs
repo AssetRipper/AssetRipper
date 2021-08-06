@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool HasNetworkManager(Version version) => version.IsGreaterEqual(2);
+		public static bool HasNetworkManager(UnityVersion version) => version.IsGreaterEqual(2);
 
 		public override void Read(AssetReader reader)
 		{

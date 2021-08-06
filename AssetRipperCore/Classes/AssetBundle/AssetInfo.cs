@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes.AssetBundle
 		/// <summary>
 		/// 2.5.0 and greater
 		/// </summary>
-		public static bool HasPreload(Version version) => version.IsGreaterEqual(2, 5);
+		public static bool HasPreload(UnityVersion version) => version.IsGreaterEqual(2, 5);
 
 		public void Read(AssetReader reader)
 		{

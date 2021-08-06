@@ -10,11 +10,11 @@ namespace AssetRipper.Core.Classes.Shader
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasMessageDetails(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasMessageDetails(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool HasFile(Version version) => version.IsGreaterEqual(4, 5);
+		public static bool HasFile(UnityVersion version) => version.IsGreaterEqual(4, 5);
 
 		public void Read(AssetReader reader)
 		{
@@ -46,11 +46,11 @@ namespace AssetRipper.Core.Classes.Shader
 			return node;
 		}
 
-		private string GetMessageDetails(Version version)
+		private string GetMessageDetails(UnityVersion version)
 		{
 			return HasMessageDetails(version) ? MessageDetails : string.Empty;
 		}
-		private string GetFile(Version version)
+		private string GetFile(UnityVersion version)
 		{
 			return HasFile(version) ? File : string.Empty;
 		}

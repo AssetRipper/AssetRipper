@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Classes.NavMeshProjectSettings
 			return virtualFile.CreateAsset((assetInfo) => new NavMeshProjectSettings(assetInfo, true));
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// NavMeshLayerData with individual names converted to dynamic array of NavMeshAreaData
 			if (version.IsGreaterEqual(5))
@@ -50,15 +50,15 @@ namespace AssetRipper.Core.Classes.NavMeshProjectSettings
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasNavMeshProjectSettings(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasNavMeshProjectSettings(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasLastAgentTypeID(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasLastAgentTypeID(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		private static bool HasStaticAreas(Version version) => version.IsLess(5);
+		private static bool HasStaticAreas(UnityVersion version) => version.IsLess(5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -95,15 +95,15 @@ namespace AssetRipper.Core.Classes.NavMeshProjectSettings
 			return node;
 		}
 
-		private int GetLastAgentTypeID(Version version)
+		private int GetLastAgentTypeID(UnityVersion version)
 		{
 			return HasLastAgentTypeID(version) ? LastAgentTypeID : -887442657;
 		}
-		private IReadOnlyList<NavMeshBuildSettings> GetSettings(Version version)
+		private IReadOnlyList<NavMeshBuildSettings> GetSettings(UnityVersion version)
 		{
 			return HasLastAgentTypeID(version) ? Settings : new[] { new NavMeshBuildSettings(0.75f, 1.0f / 6.0f) };
 		}
-		private IReadOnlyList<string> GetSettingNames(Version version)
+		private IReadOnlyList<string> GetSettingNames(UnityVersion version)
 		{
 			return HasLastAgentTypeID(version) ? SettingNames : new[] { "Humanoid" };
 		}

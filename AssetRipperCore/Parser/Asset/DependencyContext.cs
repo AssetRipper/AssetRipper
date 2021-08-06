@@ -122,7 +122,7 @@ namespace AssetRipper.Core.Parser.Asset
 		}
 
 		public AssetLayout Layout { get; }
-		public Version Version => Layout.Info.Version;
+		public UnityVersion Version => Layout.Info.Version;
 		public Platform Platform => Layout.Info.Platform;
 		public TransferInstructionFlags Flags => Layout.Info.Flags;
 		public bool IsLog { get; }

@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Project
 
 		IExportCollection CurrentCollection { get; }
 		AssetLayout ExportLayout { get; }
-		Version ExportVersion { get; }
+		UnityVersion ExportVersion { get; }
 		Platform ExportPlatform { get; }
 		TransferInstructionFlags ExportFlags { get; }
 	}

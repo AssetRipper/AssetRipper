@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.Material
 		/// <summary>
 		/// Less than 2.1.0
 		/// </summary>
-		private static bool IsVector3f(Version version) => version.IsLess(2, 1);
+		private static bool IsVector3f(UnityVersion version) => version.IsLess(2, 1);
 
 		public void Read(AssetReader reader)
 		{

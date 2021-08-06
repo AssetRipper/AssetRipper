@@ -13,11 +13,11 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasMaximumAllowedTimestep(Version version) => version.IsGreaterEqual(3);
+		public static bool HasMaximumAllowedTimestep(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasMaximumParticleTimestep(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasMaximumParticleTimestep(UnityVersion version) => version.IsGreaterEqual(5, 5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -45,11 +45,11 @@ namespace AssetRipper.Core.Classes
 			return node;
 		}
 
-		private float GetMaximumAllowedTimestep(Version version)
+		private float GetMaximumAllowedTimestep(UnityVersion version)
 		{
 			return HasMaximumAllowedTimestep(version) ? MaximumAllowedTimestep : 1.0f / 3.0f;
 		}
-		private float GetMaximumParticleTimestep(Version version)
+		private float GetMaximumParticleTimestep(UnityVersion version)
 		{
 			return HasMaximumParticleTimestep(version) ? MaximumParticleTimestep : 0.03f;
 		}

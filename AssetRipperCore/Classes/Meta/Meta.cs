@@ -4,7 +4,7 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.YAML;
 using System;
 using DateTime = System.DateTime;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Meta
 {
@@ -27,7 +27,7 @@ namespace AssetRipper.Core.Classes.Meta
 			Importer = importer ?? throw new ArgumentNullException(nameof(importer));
 		}
 
-		public static int ToFileFormatVersion(Version version)
+		public static int ToFileFormatVersion(UnityVersion version)
 		{
 #warning TODO:
 			return 2;

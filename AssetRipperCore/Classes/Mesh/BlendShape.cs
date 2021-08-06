@@ -16,16 +16,16 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// Less than 4.3.0
 		/// </summary>
-		public static bool HasName(Version version) => version.IsLess(4, 3);
+		public static bool HasName(UnityVersion version) => version.IsLess(4, 3);
 		/// <summary>
 		/// Less than 4.3
 		/// </summary>
-		public static bool HasAABB(Version version) => version.IsLess(4, 3);
+		public static bool HasAABB(UnityVersion version) => version.IsLess(4, 3);
 
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(4, 3);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(4, 3);
 
 		public void Read(AssetReader reader)
 		{

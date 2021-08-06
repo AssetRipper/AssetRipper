@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public SkinnedMeshRenderer(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2, 6))
 			{
@@ -32,68 +32,68 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool HasRenderer(Version version) => version.IsGreaterEqual(2);
+		public static bool HasRenderer(UnityVersion version) => version.IsGreaterEqual(2);
 		/// <summary>
 		/// 1.5.0 and greater
 		/// </summary>
-		public static bool HasUpdateWhenOffscreen(Version version) => version.IsGreaterEqual(1, 5);
+		public static bool HasUpdateWhenOffscreen(UnityVersion version) => version.IsGreaterEqual(1, 5);
 		/// <summary>
 		/// 1.5.0 to 3.2.0
 		/// </summary>
-		public static bool HasSkinNormals(Version version) => version.IsGreaterEqual(1, 5) && version.IsLess(3, 2);
+		public static bool HasSkinNormals(UnityVersion version) => version.IsGreaterEqual(1, 5) && version.IsLess(3, 2);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasSkinMotionVector(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasSkinMotionVector(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 2.1.0 to 2.6.0 exclusive
 		/// </summary>
-		public static bool HasOffscreen(Version version) => version.IsGreaterEqual(2, 1) && version.IsLess(2, 6);
+		public static bool HasOffscreen(UnityVersion version) => version.IsGreaterEqual(2, 1) && version.IsLess(2, 6);
 		/// <summary>
 		/// 1.5.0 to 2.1.0 exclusive
 		/// </summary>
-		public static bool HasAnimation(Version version) => version.IsGreaterEqual(1, 5) && version.IsLess(2, 1);
+		public static bool HasAnimation(UnityVersion version) => version.IsGreaterEqual(1, 5) && version.IsLess(2, 1);
 		/// <summary>
 		/// Less 3.0.0
 		/// </summary>
-		public static bool HasBindPose(Version version) => version.IsLess(3);
+		public static bool HasBindPose(UnityVersion version) => version.IsLess(3);
 		/// <summary>
 		/// Less than 2.1.0
 		/// </summary>
-		public static bool HasCurrentPose(Version version) => version.IsLess(2, 1);
+		public static bool HasCurrentPose(UnityVersion version) => version.IsLess(2, 1);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasWeights(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasWeights(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasRootBone(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasRootBone(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 3.4.0 and greater
 		/// </summary>
-		public static bool HasAABB(Version version) => version.IsGreaterEqual(3, 4);
+		public static bool HasAABB(UnityVersion version) => version.IsGreaterEqual(3, 4);
 
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsQualityFirst(Version version) => version.IsGreaterEqual(2, 1);
+		private static bool IsQualityFirst(UnityVersion version) => version.IsGreaterEqual(2, 1);
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsAlignBools(Version version) => version.IsGreaterEqual(2, 1);
+		private static bool IsAlignBools(UnityVersion version) => version.IsGreaterEqual(2, 1);
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsMeshFirst(Version version) => version.IsGreaterEqual(2, 1);
+		private static bool IsMeshFirst(UnityVersion version) => version.IsGreaterEqual(2, 1);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		private static bool IsAlignBones(Version version) => version.IsGreaterEqual(4, 3);
+		private static bool IsAlignBones(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
-		private static bool IsAlignDirty(Version version) => version.IsGreaterEqual(4, 1);
+		private static bool IsAlignDirty(UnityVersion version) => version.IsGreaterEqual(4, 1);
 
 		public override void Read(AssetReader reader)
 		{

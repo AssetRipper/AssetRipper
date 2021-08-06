@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes.LightProbes
 		/// <summary>
 		/// 5.6.0b2 and greater
 		/// </summary>
-		public static bool HasOcclusionMaskChannel(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
+		public static bool HasOcclusionMaskChannel(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2);
 
 		public void Read(AssetReader reader)
 		{

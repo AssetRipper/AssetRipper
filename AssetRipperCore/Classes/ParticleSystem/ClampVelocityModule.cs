@@ -11,15 +11,15 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasInWorldSpace(Version version) => version.IsGreaterEqual(4);
+		public static bool HasInWorldSpace(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasMultiplyDragByParticleSize(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasMultiplyDragByParticleSize(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasDrag(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasDrag(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -64,15 +64,15 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			return node;
 		}
 
-		private bool GetExportMultiplyDragByParticleSize(Version version)
+		private bool GetExportMultiplyDragByParticleSize(UnityVersion version)
 		{
 			return HasMultiplyDragByParticleSize(version) ? MultiplyDragByParticleSize : true;
 		}
-		private bool GetExportMultiplyDragByParticleVelocity(Version version)
+		private bool GetExportMultiplyDragByParticleVelocity(UnityVersion version)
 		{
 			return HasMultiplyDragByParticleSize(version) ? MultiplyDragByParticleVelocity : true;
 		}
-		private MinMaxCurve GetExportDrag(Version version)
+		private MinMaxCurve GetExportDrag(UnityVersion version)
 		{
 			return HasDrag(version) ? Drag : new MinMaxCurve(0.0f);
 		}

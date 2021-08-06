@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			RawDimension = rawDimention;
 		}
 
-		public byte GetStride(Version version)
+		public byte GetStride(UnityVersion version)
 		{
 			return GetVertexFormat(version).CalculateStride(version, Dimension);
 		}
@@ -53,7 +53,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return node;
 		}
 
-		public VertexFormat GetVertexFormat(Version version)
+		public VertexFormat GetVertexFormat(UnityVersion version)
 		{
 			if (VertexFormatExtensions.VertexFormat2019Relevant(version))
 			{

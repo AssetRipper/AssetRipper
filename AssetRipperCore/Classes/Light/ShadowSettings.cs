@@ -13,35 +13,35 @@ namespace AssetRipper.Core.Classes.Light
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasCustomResolution(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasCustomResolution(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// Less than 3.4.0
 		/// </summary>
-		public static bool HasProjection(Version version) => version.IsLess(3, 4);
+		public static bool HasProjection(UnityVersion version) => version.IsLess(3, 4);
 		/// <summary>
 		/// Less than 3
 		/// </summary>
-		public static bool HasConstantBias(Version version) => version.IsLess(3);
+		public static bool HasConstantBias(UnityVersion version) => version.IsLess(3);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasBias(Version version) => version.IsGreaterEqual(3);
+		public static bool HasBias(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 3.2.0 to 5.0.0beta
 		/// </summary>
-		public static bool HasSoftness(Version version) => version.IsGreaterEqual(3, 2) && version.IsLess(5, 0, 0, VersionType.Beta);
+		public static bool HasSoftness(UnityVersion version) => version.IsGreaterEqual(3, 2) && version.IsLess(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// 5.0.0f and greater
 		/// </summary>
-		public static bool HasNormalBias(Version version) => version.IsGreater(5, 0, 0, VersionType.Beta);
+		public static bool HasNormalBias(UnityVersion version) => version.IsGreater(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// 5.3.0b6 and greater
 		/// </summary>
-		public static bool HasNearPlane(Version version) => version.IsGreaterEqual(5, 3, 0, VersionType.Beta, 6);
+		public static bool HasNearPlane(UnityVersion version) => version.IsGreaterEqual(5, 3, 0, UnityVersionType.Beta, 6);
 		/// <summary>
 		/// 2019.1.0b4 and greater
 		/// </summary>
-		public static bool HasCullingMatrixOverride(Version version) => version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 4);
+		public static bool HasCullingMatrixOverride(UnityVersion version) => version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Beta, 4);
 
 		public void Read(AssetReader reader)
 		{
@@ -104,7 +104,7 @@ namespace AssetRipper.Core.Classes.Light
 			return node;
 		}
 
-		private Matrix4x4f GetCullingMatrixOverride(Version version)
+		private Matrix4x4f GetCullingMatrixOverride(UnityVersion version)
 		{
 			return HasCullingMatrixOverride(version) ? CullingMatrixOverride : Matrix4x4f.Identity;
 		}

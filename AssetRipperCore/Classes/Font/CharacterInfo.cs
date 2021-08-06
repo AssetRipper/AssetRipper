@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.Font
 {
 	public struct CharacterInfo : IAssetReadable, IYAMLExportable
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(1, 6))
 			{
@@ -22,19 +22,19 @@ namespace AssetRipper.Core.Classes.Font
 		/// <summary>
 		/// 1.6.0 and greater
 		/// </summary>
-		public static bool HasIndex(Version version) => version.IsGreaterEqual(1, 6);
+		public static bool HasIndex(UnityVersion version) => version.IsGreaterEqual(1, 6);
 		/// <summary>
 		/// 1.6.0 to 5.3.0 exclusive
 		/// </summary>
-		public static bool HasWidth(Version version) => version.IsGreaterEqual(1, 6) && version.IsLess(5, 3);
+		public static bool HasWidth(UnityVersion version) => version.IsGreaterEqual(1, 6) && version.IsLess(5, 3);
 		/// <summary>
 		/// 5.3.0 and greater 
 		/// </summary>
-		public static bool HasAdvance(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasAdvance(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasFlipped(Version version) => version.IsGreaterEqual(4);
+		public static bool HasFlipped(UnityVersion version) => version.IsGreaterEqual(4);
 
 		public void Read(AssetReader reader)
 		{

@@ -15,16 +15,16 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasProbesets(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasProbesets(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasTerrainChunks(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasTerrainChunks(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(2017);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2017);
 
 		public void Read(AssetReader reader)
 		{

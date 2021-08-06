@@ -16,20 +16,20 @@ namespace AssetRipper.Core.Classes.WheelCollider
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasForceAppPointDistance(Version version) => version.IsGreaterEqual(5);
+		public static bool HasForceAppPointDistance(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasWheelDampingRate(Version version) => version.IsGreaterEqual(5);
+		public static bool HasWheelDampingRate(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasEnabled(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasEnabled(UnityVersion version) => version.IsGreaterEqual(3, 5);
 
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		private static bool HasSuspensionSpringFirst(Version version)
+		private static bool HasSuspensionSpringFirst(UnityVersion version)
 		{
 			return version.IsGreaterEqual(5);
 		}

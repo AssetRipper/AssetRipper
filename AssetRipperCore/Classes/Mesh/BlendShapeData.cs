@@ -5,13 +5,13 @@ using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
 using System.Linq;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
 	public struct BlendShapeData : IAsset
 	{
-		public BlendShapeData(Version version)
+		public BlendShapeData(UnityVersion version)
 		{
 			Vertices = Array.Empty<BlendShapeVertex>();
 			Shapes = Array.Empty<BlendShape>();
@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(2017);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2017);
 
 		public string FindShapeNameByCRC(uint crc)
 		{

@@ -14,11 +14,11 @@ namespace AssetRipper.Core.Classes
 	{
 		public LightmapParameters(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// Default value for ModellingTolerance has been changed from 0.001 to 0.01
 			// unknown version
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
+			if (version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final))
 			{
 				return 3;
 			}
@@ -31,48 +31,48 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasResolution(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasResolution(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasIrradianceQuality(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasIrradianceQuality(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasEnvironmentResolution(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasEnvironmentResolution(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasIsTransparent(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasIsTransparent(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasEdgeStitching(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasEdgeStitching(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.0.0p2 and greater
 		/// </summary>
-		public static bool HasPushoff(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Patch, 2);
+		public static bool HasPushoff(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Patch, 2);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasBakedLightmapTag(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasBakedLightmapTag(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasLimitLightmapCount(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasLimitLightmapCount(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasAOQuality(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasAOQuality(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		private static bool IsPushoffFirst(Version version) => version.IsGreaterEqual(2019);
+		private static bool IsPushoffFirst(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 5.0.0p2 and greater
 		/// </summary>
-		private static bool IsBakedLightmapTagFirst(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Patch, 2);
+		private static bool IsBakedLightmapTagFirst(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Patch, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -176,51 +176,51 @@ namespace AssetRipper.Core.Classes
 			return node;
 		}
 
-		private float GetResolution(Version version)
+		private float GetResolution(UnityVersion version)
 		{
 			return HasResolution(version) ? Resolution : 1.0f;
 		}
-		private int GetIrradianceQuality(Version version)
+		private int GetIrradianceQuality(UnityVersion version)
 		{
 			return HasIrradianceQuality(version) ? IrradianceQuality : 8192;
 		}
-		private float GetModellingTolerance(Version version)
+		private float GetModellingTolerance(UnityVersion version)
 		{
 			return HasIsTransparent(version) ? ModellingTolerance : 0.001f;
 		}
-		private int GetEdgeStitching(Version version)
+		private int GetEdgeStitching(UnityVersion version)
 		{
 			return HasEdgeStitching(version) ? EdgeStitching : 1;
 		}
-		private int GetBlurRadius(Version version)
+		private int GetBlurRadius(UnityVersion version)
 		{
 			return HasEdgeStitching(version) ? BlurRadius : 2;
 		}
-		private int GetDirectLightQuality(Version version)
+		private int GetDirectLightQuality(UnityVersion version)
 		{
 			return HasEdgeStitching(version) ? DirectLightQuality : 64;
 		}
-		private int GetAntiAliasingSamples(Version version)
+		private int GetAntiAliasingSamples(UnityVersion version)
 		{
 			return HasEdgeStitching(version) ? AntiAliasingSamples : 8;
 		}
-		private int GetBakedLightmapTag(Version version)
+		private int GetBakedLightmapTag(UnityVersion version)
 		{
 			return HasEdgeStitching(version) ? BakedLightmapTag : -1;
 		}
-		private float GetPushoff(Version version)
+		private float GetPushoff(UnityVersion version)
 		{
 			return HasEdgeStitching(version) ? Pushoff : 0.0001f;
 		}
-		private int GetMaxLightmapCount(Version version)
+		private int GetMaxLightmapCount(UnityVersion version)
 		{
 			return HasLimitLightmapCount(version) ? MaxLightmapCount : 1;
 		}
-		private int GetAOQuality(Version version)
+		private int GetAOQuality(UnityVersion version)
 		{
 			return HasEdgeStitching(version) ? AOQuality : 256;
 		}
-		private int GetAOAntiAliasingSamples(Version version)
+		private int GetAOAntiAliasingSamples(UnityVersion version)
 		{
 			return HasEdgeStitching(version) ? AOAntiAliasingSamples : 16;
 		}

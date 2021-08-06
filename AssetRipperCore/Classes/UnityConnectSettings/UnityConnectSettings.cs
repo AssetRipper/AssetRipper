@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			return virtualFile.CreateAsset((assetInfo) => new UnityConnectSettings(assetInfo, true));
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2018, 3))
 			{
@@ -38,31 +38,31 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasUnityConnectSettings(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasUnityConnectSettings(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasEnabled(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasEnabled(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasOldEventUrl(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasOldEventUrl(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasEventUrl(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasEventUrl(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasTestConfigUrl(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasTestConfigUrl(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.6.0b6 and greater
 		/// </summary>
-		public static bool HasTestInitMode(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
+		public static bool HasTestInitMode(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 6);
 		/// <summary>
 		/// 5.4.0 and greater and (Not Release or IsSupported)
 		/// </summary>
-		public static bool HasCrashReportingSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasCrashReportingSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 4))
 			{
@@ -104,7 +104,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// <summary>
 		/// Less than 5.4.0 or Not Release or IsSupported
 		/// </summary>
-		public static bool HasUnityPurchasingSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasUnityPurchasingSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 4))
 			{
@@ -142,7 +142,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// <summary>
 		/// Less than 5.4.0 or Not Release or IsSupported
 		/// </summary>
-		public static bool HasUnityAnalyticsSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasUnityAnalyticsSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 4))
 			{
@@ -180,7 +180,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// <summary>
 		/// 5.5.0 and greater and (Not Release or IsSupported)
 		/// </summary>
-		public static bool HasUnityAdsSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasUnityAdsSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 5))
 			{
@@ -218,7 +218,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// <summary>
 		/// 5.6.0 and greater and (Not Release or IsSupported)
 		/// </summary>
-		public static bool HasPerformanceReportingSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasPerformanceReportingSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 6))
 			{
@@ -324,23 +324,23 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			return node;
 		}
 
-		private string GetTestEventUrl(Version version)
+		private string GetTestEventUrl(UnityVersion version)
 		{
 			return HasEnabled(version) ? TestEventUrl : "https://api.uca.cloud.unity3d.com/v1/events";
 		}
-		private string GetTestConfigUrl(Version version)
+		private string GetTestConfigUrl(UnityVersion version)
 		{
 			return HasEnabled(version) ? TestConfigUrl : "https://config.uca.cloud.unity3d.com";
 		}
-		private CrashReportingSettings GetCrashReportingSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		private CrashReportingSettings GetCrashReportingSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
 			return HasCrashReportingSettings(version, platform, flags) ? CrashReportingSettings : new CrashReportingSettings(true);
 		}
-		private UnityAnalyticsSettings GetUnityAnalyticsSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		private UnityAnalyticsSettings GetUnityAnalyticsSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
 			return HasUnityAnalyticsSettings(version, platform, flags) ? UnityAnalyticsSettings : new UnityAnalyticsSettings(true);
 		}
-		private UnityAdsSettings GetUnityAdsSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		private UnityAdsSettings GetUnityAdsSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
 			return HasUnityAdsSettings(version, platform, flags) ? UnityAdsSettings : new UnityAdsSettings(true);
 		}

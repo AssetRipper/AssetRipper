@@ -14,11 +14,11 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 5.0.0 and greater and not Release
 		/// </summary>
-		public static bool HasImageContentsHash(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5);
+		public static bool HasImageContentsHash(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasFallbackFormat(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasFallbackFormat(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
 		public override void Read(AssetReader reader)
 		{
@@ -53,7 +53,7 @@ namespace AssetRipper.Core.Classes
 			return node;
 		}
 
-		private Hash128 GetImageContentsHash(Version version, TransferInstructionFlags flags)
+		private Hash128 GetImageContentsHash(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			return HasImageContentsHash(version, flags) ? ImageContentsHash : default;

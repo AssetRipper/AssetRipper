@@ -11,23 +11,23 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasHdrMode(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasHdrMode(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 5.6.0b7 and greater
 		/// </summary>
-		public static bool HasRealtimeGICPUUsage(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 7);
+		public static bool HasRealtimeGICPUUsage(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 7);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasPrefer32BitShadowMaps(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasPrefer32BitShadowMaps(UnityVersion version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 5.6.3 and greater
 		/// </summary>
-		public static bool HasEnableLPPV(Version version) => version.IsGreaterEqual(5, 6, 3);
+		public static bool HasEnableLPPV(UnityVersion version) => version.IsGreaterEqual(5, 6, 3);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasUseHDR(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasUseHDR(UnityVersion version) => version.IsGreaterEqual(5, 6);
 
 		public void Read(AssetReader reader)
 		{

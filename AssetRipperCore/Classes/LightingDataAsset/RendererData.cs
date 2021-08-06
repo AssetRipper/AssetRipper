@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.LightingDataAsset
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasExplicitProbeSetHash(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasExplicitProbeSetHash(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 
 		public void Read(AssetReader reader)
 		{

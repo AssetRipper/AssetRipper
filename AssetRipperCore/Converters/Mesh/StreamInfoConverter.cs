@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			return GenerateChannelInfo(container.ExportVersion, origin, channelType);
 		}
 
-		public static ChannelInfo GenerateChannelInfo(Version instanceVersion, StreamInfo[] origin, ShaderChannel channelType)
+		public static ChannelInfo GenerateChannelInfo(UnityVersion instanceVersion, StreamInfo[] origin, ShaderChannel channelType)
 		{
 			ChannelInfo instance = new ChannelInfo();
 			ShaderChannel4 channelv4 = channelType.ToShaderChannel4();

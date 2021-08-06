@@ -118,7 +118,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		public string Name => nameof(VirtualSerializedFile);
 		public Platform Platform => Layout.Info.Platform;
-		public Version Version => Layout.Info.Version;
+		public UnityVersion Version => Layout.Info.Version;
 		public TransferInstructionFlags Flags => Layout.Info.Flags;
 
 		public bool IsScene => throw new NotSupportedException();

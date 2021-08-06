@@ -16,11 +16,11 @@ namespace AssetRipper.Core.Classes.TerrainData
 {
 	public struct Heightmap : IAsset, IDependent
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// NODE: unknown version
 			// Width and Height has been replaced by Resolution
-			if (version.IsGreaterEqual(2019, 3, 0, VersionType.Beta))
+			if (version.IsGreaterEqual(2019, 3, 0, UnityVersionType.Beta))
 			{
 				return 5;
 			}
@@ -44,32 +44,32 @@ namespace AssetRipper.Core.Classes.TerrainData
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasHoles(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasHoles(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 		/// <summary>
 		/// 2.1.0 to 2.6.0 exclusive
 		/// </summary>
-		public static bool HasShifts(Version version) => version.IsGreaterEqual(2, 1) && version.IsLess(2, 6);
+		public static bool HasShifts(UnityVersion version) => version.IsGreaterEqual(2, 1) && version.IsLess(2, 6);
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool HasDefaultPhysicMaterial(Version version) => version.IsLess(5);
+		public static bool HasDefaultPhysicMaterial(UnityVersion version) => version.IsLess(5);
 		/// <summary>
 		/// Less than 2019.3
 		/// </summary>
-		public static bool HasWidth(Version version) => version.IsLess(2019, 3);
+		public static bool HasWidth(UnityVersion version) => version.IsLess(2019, 3);
 		/// <summary>
 		/// 5.0.0 to 2019.3 exclusive
 		/// </summary>
-		public static bool HasThickness(Version version) => version.IsGreaterEqual(5) && version.IsLess(2019, 3);
+		public static bool HasThickness(UnityVersion version) => version.IsGreaterEqual(5) && version.IsLess(2019, 3);
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasResolution(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasResolution(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool HasAlign(Version version) => version.IsGreaterEqual(2, 1);
+		private static bool HasAlign(UnityVersion version) => version.IsGreaterEqual(2, 1);
 
 		public Heightmap Convert(IExportContainer container)
 		{

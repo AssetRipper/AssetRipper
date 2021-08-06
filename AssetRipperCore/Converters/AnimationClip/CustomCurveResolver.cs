@@ -9,7 +9,7 @@ using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using SevenZip;
 using System;
 using System.Linq;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Converters.AnimationClip
 {
@@ -546,7 +546,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 			}
 		}
 
-		private Version Version => m_clip.File.Version;
+		private UnityVersion Version => m_clip.File.Version;
 
 		private readonly AssetRipper.Core.Classes.AnimationClip.AnimationClip m_clip = null;
 

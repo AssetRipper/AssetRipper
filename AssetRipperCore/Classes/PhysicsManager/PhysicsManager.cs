@@ -16,10 +16,10 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 	{
 		public PhysicsManager(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// DefaultMaxAngluarSpeed has been renamed to DefaultMaxAngularSpeed
-			if (version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 5))
+			if (version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Beta, 5))
 			{
 				return 13;
 			}
@@ -69,84 +69,84 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasSleepThreshold(Version version) => version.IsGreaterEqual(5);
+		public static bool HasSleepThreshold(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0b1 and less
 		/// </summary>
-		public static bool HasSleepAngularVelocity(Version version) => version.IsLessEqual(5, 0, 0, VersionType.Beta, 1);
+		public static bool HasSleepAngularVelocity(UnityVersion version) => version.IsLessEqual(5, 0, 0, UnityVersionType.Beta, 1);
 		/// <summary>
 		/// Greater than 5.0.0b1
 		/// </summary>
-		public static bool HasDefaultContactOffset(Version version) => version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+		public static bool HasDefaultContactOffset(UnityVersion version) => version.IsGreater(5, 0, 0, UnityVersionType.Beta, 1);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasDefaultSolverVelocityIterations(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasDefaultSolverVelocityIterations(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasQueriesHitBackfaces(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasQueriesHitBackfaces(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool HasQueriesHitTriggers(Version version) => version.IsGreaterEqual(2, 6);
+		public static bool HasQueriesHitTriggers(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasEnableAdaptiveForce(Version version) => version.IsGreaterEqual(5);
+		public static bool HasEnableAdaptiveForce(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0 to 2017.2
 		/// </summary>
-		public static bool HasEnablePCM(Version version) => version.IsGreaterEqual(5) && version.IsLessEqual(2017, 2);
+		public static bool HasEnablePCM(UnityVersion version) => version.IsGreaterEqual(5) && version.IsLessEqual(2017, 2);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasClothInterCollisionDistance(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasClothInterCollisionDistance(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasLayerCollisionMatrix(Version version) => version.IsGreaterEqual(3);
+		public static bool HasLayerCollisionMatrix(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		public static bool HasAutoSimulation(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		public static bool HasAutoSimulation(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasAutoSyncTransforms(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasAutoSyncTransforms(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasClothInterCollisionSettingsToggle(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasClothInterCollisionSettingsToggle(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasClothGravity(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasClothGravity(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasContactPairsMode(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasContactPairsMode(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasFrictionType(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasFrictionType(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasSolverType(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasSolverType(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasDefaultMaxAngularSpeed(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasDefaultMaxAngularSpeed(UnityVersion version) => version.IsGreaterEqual(2019);
 
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(3);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool IsAlign2(Version version) => version.IsGreaterEqual(2019);
+		public static bool IsAlign2(UnityVersion version) => version.IsGreaterEqual(2019);
 
 		public override void Read(AssetReader reader)
 		{
@@ -318,23 +318,23 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 			return node;
 		}
 
-		private float GetSleepThreshold(Version version)
+		private float GetSleepThreshold(UnityVersion version)
 		{
 			return HasSleepThreshold(version) ? SleepThreshold : 0.005f;
 		}
-		private float GetDefaultContactOffset(Version version)
+		private float GetDefaultContactOffset(UnityVersion version)
 		{
 			return HasDefaultContactOffset(version) ? DefaultContactOffset : 0.01f;
 		}
-		private int GetDefaultSolverVelocityIterations(Version version)
+		private int GetDefaultSolverVelocityIterations(UnityVersion version)
 		{
 			return HasDefaultSolverVelocityIterations(version) ? DefaultSolverVelocityIterations : 1;
 		}
-		private bool GetQueriesHitTriggers(Version version)
+		private bool GetQueriesHitTriggers(UnityVersion version)
 		{
 			return HasQueriesHitTriggers(version) ? QueriesHitTriggers : true;
 		}
-		private ContactsGeneration GetContactsGeneration(Version version)
+		private ContactsGeneration GetContactsGeneration(UnityVersion version)
 		{
 			if (HasClothInterCollisionDistance(version))
 			{
@@ -342,7 +342,7 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 			}
 			return EnablePCM ? ContactsGeneration.PersistentContactManifold : ContactsGeneration.LegacyContactsGeneration;
 		}
-		private IReadOnlyList<uint> GetLayerCollisionMatrix(Version version)
+		private IReadOnlyList<uint> GetLayerCollisionMatrix(UnityVersion version)
 		{
 			if (HasLayerCollisionMatrix(version))
 			{
@@ -355,19 +355,19 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 			}
 			return matrix;
 		}
-		private bool GetAutoSimulation(Version version)
+		private bool GetAutoSimulation(UnityVersion version)
 		{
 			return HasAutoSimulation(version) ? AutoSimulation : true;
 		}
-		private bool GetAutoSyncTransforms(Version version)
+		private bool GetAutoSyncTransforms(UnityVersion version)
 		{
 			return HasAutoSyncTransforms(version) ? AutoSyncTransforms : true;
 		}
-		private Vector3f GetClothGravity(Version version)
+		private Vector3f GetClothGravity(UnityVersion version)
 		{
 			return HasClothGravity(version) ? ClothGravity : new Vector3f(0.0f, -9.81f, 0.0f);
 		}
-		private AABB GetWorldBounds(Version version)
+		private AABB GetWorldBounds(UnityVersion version)
 		{
 			if (HasAutoSyncTransforms(version))
 			{
@@ -375,15 +375,15 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 			}
 			return new AABB(default, new Vector3f(250.0f, 250.0f, 250.0f));
 		}
-		private int GetWorldSubdivisions(Version version)
+		private int GetWorldSubdivisions(UnityVersion version)
 		{
 			return HasClothInterCollisionSettingsToggle(version) ? WorldSubdivisions : 8;
 		}
-		private bool GetEnableUnifiedHeightmaps(Version version)
+		private bool GetEnableUnifiedHeightmaps(UnityVersion version)
 		{
 			return HasFrictionType(version) ? EnableUnifiedHeightmaps : true;
 		}
-		private float GetDefaultMaxAngularSpeed(Version version)
+		private float GetDefaultMaxAngularSpeed(UnityVersion version)
 		{
 			return HasDefaultMaxAngularSpeed(version) ? DefaultMaxAngularSpeed : 7.0f;
 		}

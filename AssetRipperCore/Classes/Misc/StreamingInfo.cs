@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.Misc
 			Path = string.Empty;
 		}
 
-		public StreamingInfo(Version version)
+		public StreamingInfo(UnityVersion version)
 		{
 			Offset = 0;
 			Size = 0;

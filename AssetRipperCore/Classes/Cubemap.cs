@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasSourceTextures(Version version) => version.IsGreaterEqual(4);
+		public static bool HasSourceTextures(UnityVersion version) => version.IsGreaterEqual(4);
 
 		public override TextureImporter GenerateTextureImporter(IExportContainer container)
 		{

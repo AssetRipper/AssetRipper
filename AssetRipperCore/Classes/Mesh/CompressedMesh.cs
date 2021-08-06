@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.Mesh
 {
 	public struct CompressedMesh : IAsset
 	{
-		public CompressedMesh(Version version)
+		public CompressedMesh(UnityVersion version)
 		{
 			Vertices = new PackedFloatVector(true);
 			UV = new PackedFloatVector(true);
@@ -51,19 +51,19 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool HasBindPoses(Version version) => version.IsLess(5);
+		public static bool HasBindPoses(UnityVersion version) => version.IsLess(5);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasFloatColors(Version version) => version.IsGreaterEqual(5);
+		public static bool HasFloatColors(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 3.5.0 to 5.0.0 exclusive
 		/// </summary>
-		public static bool HasColors(Version version) => version.IsGreaterEqual(3, 5) && version.IsLess(5);
+		public static bool HasColors(UnityVersion version) => version.IsGreaterEqual(3, 5) && version.IsLess(5);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasUVInfo(Version version) => version.IsGreaterEqual(5);
+		public static bool HasUVInfo(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public CompressedMesh Convert(IExportContainer container)
 		{

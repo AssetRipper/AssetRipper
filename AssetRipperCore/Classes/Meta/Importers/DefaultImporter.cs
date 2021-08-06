@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 
 		public DefaultImporter(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public override bool IncludesImporter(Version version)
+		public override bool IncludesImporter(UnityVersion version)
 		{
 			return version.IsGreaterEqual(4);
 		}

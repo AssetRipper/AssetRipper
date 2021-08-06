@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 {
 	public struct DetailPrototype : IAsset, IDependent
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// this is min version
 			return 2;
@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool HasGrayscaleLighting(Version version) => version.IsLess(3);
+		public static bool HasGrayscaleLighting(UnityVersion version) => version.IsLess(3);
 
 		public void Read(AssetReader reader)
 		{

@@ -11,11 +11,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		/// <summary>
 		/// 2018.1.1 and greater
 		/// </summary>
-		public static bool HasOrbital(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasOrbital(UnityVersion version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasSpeedModifier(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasSpeedModifier(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
 		public override void Read(AssetReader reader)
 		{
@@ -53,35 +53,35 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			return node;
 		}
 
-		private MinMaxCurve GetSpeedModifier(Version version)
+		private MinMaxCurve GetSpeedModifier(UnityVersion version)
 		{
 			return HasSpeedModifier(version) ? SpeedModifier : new MinMaxCurve(1.0f);
 		}
-		private MinMaxCurve GetOrbitalX(Version version)
+		private MinMaxCurve GetOrbitalX(UnityVersion version)
 		{
 			return HasOrbital(version) ? OrbitalX : new MinMaxCurve(0.0f);
 		}
-		private MinMaxCurve GetOrbitalY(Version version)
+		private MinMaxCurve GetOrbitalY(UnityVersion version)
 		{
 			return HasOrbital(version) ? OrbitalY : new MinMaxCurve(0.0f);
 		}
-		private MinMaxCurve GetOrbitalZ(Version version)
+		private MinMaxCurve GetOrbitalZ(UnityVersion version)
 		{
 			return HasOrbital(version) ? OrbitalZ : new MinMaxCurve(0.0f);
 		}
-		private MinMaxCurve GetOrbitalOffsetX(Version version)
+		private MinMaxCurve GetOrbitalOffsetX(UnityVersion version)
 		{
 			return HasOrbital(version) ? OrbitalOffsetX : new MinMaxCurve(0.0f);
 		}
-		private MinMaxCurve GetOrbitalOffsetY(Version version)
+		private MinMaxCurve GetOrbitalOffsetY(UnityVersion version)
 		{
 			return HasOrbital(version) ? OrbitalOffsetY : new MinMaxCurve(0.0f);
 		}
-		private MinMaxCurve GetOrbitalOffsetZ(Version version)
+		private MinMaxCurve GetOrbitalOffsetZ(UnityVersion version)
 		{
 			return HasOrbital(version) ? OrbitalOffsetZ : new MinMaxCurve(0.0f);
 		}
-		private MinMaxCurve GetRadial(Version version)
+		private MinMaxCurve GetRadial(UnityVersion version)
 		{
 			return HasOrbital(version) ? Radial : new MinMaxCurve(0.0f);
 		}

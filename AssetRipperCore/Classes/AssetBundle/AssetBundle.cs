@@ -8,7 +8,7 @@ using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AssetBundle
 {
@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.AssetBundle
 	{
 		public AssetBundle(Parser.Asset.AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(4, 2))
 			{
@@ -32,48 +32,48 @@ namespace AssetRipper.Core.Classes.AssetBundle
 		/// <summary>
 		/// 2.5.0 and greater
 		/// </summary>
-		public static bool HasPreloadTable(Version version) => version.IsGreaterEqual(2, 5);
+		public static bool HasPreloadTable(UnityVersion version) => version.IsGreaterEqual(2, 5);
 		/// <summary>
 		/// 3.4.0 to 5.0.0 exclusive
 		/// </summary>
-		public static bool HasScriptCampatibility(Version version) => version.IsGreaterEqual(3, 4) && version.IsLess(5);
+		public static bool HasScriptCampatibility(UnityVersion version) => version.IsGreaterEqual(3, 4) && version.IsLess(5);
 		/// <summary>
 		/// 3.5.0 to 5.0.0 exclusive
 		/// </summary>
-		public static bool HasClassCampatibility(Version version) => version.IsGreaterEqual(3, 5) && version.IsLess(5);
+		public static bool HasClassCampatibility(UnityVersion version) => version.IsGreaterEqual(3, 5) && version.IsLess(5);
 		/// <summary>
 		/// 5.4.0 to 5.5.0 exclusive
 		/// </summary>
-		public static bool HasClassVersionMap(Version version) => version.IsGreaterEqual(5, 4) && version.IsLess(5, 5);
+		public static bool HasClassVersionMap(UnityVersion version) => version.IsGreaterEqual(5, 4) && version.IsLess(5, 5);
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasRuntimeCompatibility(Version version) => version.IsGreaterEqual(4, 2);
+		public static bool HasRuntimeCompatibility(UnityVersion version) => version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasAssetBundleName(Version version) => version.IsGreaterEqual(5);
+		public static bool HasAssetBundleName(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0b2
 		/// </summary>
-		public static bool HasIsStreamedSceneAssetBundle(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		public static bool HasIsStreamedSceneAssetBundle(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasExplicitDataLayout(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasExplicitDataLayout(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		public static bool HasPathFlags(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		public static bool HasPathFlags(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasSceneHashes(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasSceneHashes(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasPathExtension(Version version) => version.IsGreaterEqual(5);
+		public static bool HasPathExtension(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public override void Read(AssetReader reader)
 		{

@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.TagManager
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool HasUserID(Version version) => version.IsLess(5);
+		public static bool HasUserID(UnityVersion version) => version.IsLess(5);
 
 		public void Read(AssetReader reader)
 		{

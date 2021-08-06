@@ -41,9 +41,9 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool TangentMode5Relevant(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool TangentMode5Relevant(UnityVersion version) => version.IsGreaterEqual(5, 5);
 
-		public static int ToTangent(this TangentMode _this, Version version)
+		public static int ToTangent(this TangentMode _this, UnityVersion version)
 		{
 			if (TangentMode5Relevant(version))
 			{

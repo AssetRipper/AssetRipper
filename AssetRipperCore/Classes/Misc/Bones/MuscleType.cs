@@ -1,5 +1,5 @@
 ﻿using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Misc.Bones
 {
@@ -69,9 +69,9 @@ namespace AssetRipper.Core.Classes.Misc.Bones
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsIncludeUpperChest(Version version) => BoneTypeExtensions.IsIncludeUpperChest(version);
+		public static bool IsIncludeUpperChest(UnityVersion version) => BoneTypeExtensions.IsIncludeUpperChest(version);
 
-		public static MuscleType Update(this MuscleType _this, Version version)
+		public static MuscleType Update(this MuscleType _this, UnityVersion version)
 		{
 			if (!IsIncludeUpperChest(version))
 			{

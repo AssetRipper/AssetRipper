@@ -7,7 +7,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.QualitySettings
@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Classes.QualitySettings
 #endif
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// SyncToVBL has been removed
 			if (version.IsGreaterEqual(3, 4))
@@ -48,94 +48,94 @@ namespace AssetRipper.Core.Classes.QualitySettings
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasName(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasName(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool HasShadows(Version version) => version.IsGreaterEqual(2);
+		public static bool HasShadows(UnityVersion version) => version.IsGreaterEqual(2);
 		/// <summary>
 		/// 3.4.0 and greater
 		/// </summary>
-		public static bool HasShadowProjection(Version version) => version.IsGreaterEqual(3, 4);
+		public static bool HasShadowProjection(UnityVersion version) => version.IsGreaterEqual(3, 4);
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool HasShadowCascades(Version version) => version.IsGreaterEqual(2);
+		public static bool HasShadowCascades(UnityVersion version) => version.IsGreaterEqual(2);
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		public static bool HasShadowNearPlaneOffset(Version version) => version.IsGreaterEqual(5, 2);
+		public static bool HasShadowNearPlaneOffset(UnityVersion version) => version.IsGreaterEqual(5, 2);
 		/// <summary>
 		/// 5.0.0b2 and greater
 		/// </summary>
-		public static bool HasShadowCascade2Split(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		public static bool HasShadowCascade2Split(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasShadowmaskMode(Version version) => version.IsGreaterEqual(2017, 1);
+		public static bool HasShadowmaskMode(UnityVersion version) => version.IsGreaterEqual(2017, 1);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasSoftParticles(Version version) => version.IsGreaterEqual(3);
+		public static bool HasSoftParticles(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool HasSoftVegetation(Version version) => version.IsGreaterEqual(2);
+		public static bool HasSoftVegetation(UnityVersion version) => version.IsGreaterEqual(2);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasRealtimeReflectionProbes(Version version) => version.IsGreaterEqual(2);
+		public static bool HasRealtimeReflectionProbes(UnityVersion version) => version.IsGreaterEqual(2);
 		/// <summary>
 		/// 5.0.0b2 and greater
 		/// </summary>
-		public static bool HasBillboardsFaceCameraPosition(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		public static bool HasBillboardsFaceCameraPosition(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// Less than 3.4.0
 		/// </summary>
-		public static bool HasSyncToVBL(Version version) => version.IsLess(3, 4);
+		public static bool HasSyncToVBL(UnityVersion version) => version.IsLess(3, 4);
 		/// <summary>
 		/// 3.4.0 and greater
 		/// </summary>
-		public static bool HasVSyncCount(Version version) => version.IsGreaterEqual(3, 4);
+		public static bool HasVSyncCount(UnityVersion version) => version.IsGreaterEqual(3, 4);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasLodBias(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasLodBias(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasStreamingMipmapsActive(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasStreamingMipmapsActive(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasParticleRaycastBudget(Version version) => version.IsGreaterEqual(4);
+		public static bool HasParticleRaycastBudget(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasAsyncUploadTimeSlice(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasAsyncUploadTimeSlice(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasAsyncUploadPersistentBuffer(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasAsyncUploadPersistentBuffer(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasResolutionScalingFixedDPIFactor(Version version) => version.IsGreaterEqual(2017, 1);
+		public static bool HasResolutionScalingFixedDPIFactor(UnityVersion version) => version.IsGreaterEqual(2017, 1);
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasCustomRenderPipeline(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasCustomRenderPipeline(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 		/// <summary>
 		/// 3.5.0 and greater and Not Release
 		/// </summary>
-		public static bool HasExcludedTargetPlatforms(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 5);
+		public static bool HasExcludedTargetPlatforms(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 5);
 
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
+		private bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2, 1);
 
-		public void Merge(QualitySetting setting, Version version, TransferInstructionFlags flags)
+		public void Merge(QualitySetting setting, UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (!HasShadows(version))
 			{
@@ -397,7 +397,7 @@ namespace AssetRipper.Core.Classes.QualitySettings
 			return node;
 		}
 
-		private IReadOnlyList<string> GetExcludedTargetPlatforms(Version version, TransferInstructionFlags flags)
+		private IReadOnlyList<string> GetExcludedTargetPlatforms(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasExcludedTargetPlatforms(version, flags))
@@ -407,28 +407,28 @@ namespace AssetRipper.Core.Classes.QualitySettings
 #endif
 			return System.Array.Empty<string>();
 		}
-		private bool GetStreamingMipmapsAddAllCameras(Version version)
+		private bool GetStreamingMipmapsAddAllCameras(UnityVersion version)
 		{
 			return HasStreamingMipmapsActive(version) ? StreamingMipmapsAddAllCameras : true;
 		}
-		private float GetStreamingMipmapsMemoryBudget(Version version)
+		private float GetStreamingMipmapsMemoryBudget(UnityVersion version)
 		{
 			return HasStreamingMipmapsActive(version) ? StreamingMipmapsMemoryBudget : 512.0f;
 		}
-		private int GetStreamingMipmapsRenderersPerFrame(Version version)
+		private int GetStreamingMipmapsRenderersPerFrame(UnityVersion version)
 		{
 			return HasStreamingMipmapsActive(version) ? StreamingMipmapsRenderersPerFrame : 512;
 		}
-		private int GetStreamingMipmapsMaxLevelReduction(Version version)
+		private int GetStreamingMipmapsMaxLevelReduction(UnityVersion version)
 		{
 			return HasStreamingMipmapsActive(version) ? StreamingMipmapsMaxLevelReduction : 2;
 		}
-		private int GetStreamingMipmapsMaxFileIORequests(Version version)
+		private int GetStreamingMipmapsMaxFileIORequests(UnityVersion version)
 		{
 			return HasStreamingMipmapsActive(version) ? StreamingMipmapsMaxFileIORequests : 1024;
 		}
 
-		private string GetSkinWeightsName(Version version)
+		private string GetSkinWeightsName(UnityVersion version)
 		{
 			return version.IsGreaterEqual(2019) ? SkinWeightsName : BlendWeightsName;
 		}

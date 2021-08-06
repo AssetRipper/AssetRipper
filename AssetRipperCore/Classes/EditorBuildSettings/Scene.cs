@@ -4,7 +4,7 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.EditorBuildSettings
 {
@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 		/// <summary>
 		/// 5.6.0b10 and greater
 		/// </summary>
-		public static bool HasGuid(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 10);
+		public static bool HasGuid(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 10);
 
 		public void Read(AssetReader reader)
 		{

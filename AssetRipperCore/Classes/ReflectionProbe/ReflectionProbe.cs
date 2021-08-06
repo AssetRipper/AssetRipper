@@ -15,10 +15,10 @@ namespace AssetRipper.Core.Classes.ReflectionProbe
 	{
 		public ReflectionProbe(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// NOTE: unknown version
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
+			if (version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final))
 			{
 				return 2;
 			}
@@ -28,34 +28,34 @@ namespace AssetRipper.Core.Classes.ReflectionProbe
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasRefreshMode(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasRefreshMode(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasImportance(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasImportance(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		public static bool HasBlendDistance(Version version) => version.IsGreaterEqual(5, 2);
+		public static bool HasBlendDistance(UnityVersion version) => version.IsGreaterEqual(5, 2);
 		/// <summary>
 		/// Less than 5.0.0f1 (NOTE: unknown version)
 		/// </summary>
-		public static bool HasBakedRenderPassCount(Version version) => version.IsLess(5, 0, 0, VersionType.Final);
+		public static bool HasBakedRenderPassCount(UnityVersion version) => version.IsLess(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasBoxProjection(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasBoxProjection(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasCustomBakedTexture(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasCustomBakedTexture(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// (Less than 5.0.0) or (5.0.0 and greater and Release)
 		/// </summary>
-		public static bool HasBakedTexture(Version version, TransferInstructionFlags flags)
+		public static bool HasBakedTexture(UnityVersion version, TransferInstructionFlags flags)
 		{
 			// NOTE: unknown version
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
+			if (version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final))
 			{
 				return flags.IsRelease();
 			}
@@ -65,9 +65,9 @@ namespace AssetRipper.Core.Classes.ReflectionProbe
 		/// <summary>
 		/// 5.0.0f1 to 5.4.0 exclusive (NOTE: unknown version)
 		/// </summary>
-		private static bool HasImportanceFirst(Version version)
+		private static bool HasImportanceFirst(UnityVersion version)
 		{
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 4);
+			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final) && version.IsLess(5, 4);
 		}
 
 		public override void Read(AssetReader reader)

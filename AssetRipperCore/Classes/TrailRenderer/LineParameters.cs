@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 {
 	public struct LineParameters : IAsset
 	{
-		public LineParameters(Version version)
+		public LineParameters(UnityVersion version)
 		{
 			WidthMultiplier = 1.0f;
 			WidthCurve = new AnimationCurveTpl<Float>(false);
@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 			GenerateLightingData = false;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// ShadowBias default value has been changed from 0 to 0.5
 			if (version.IsGreaterEqual(2018, 3))
@@ -42,11 +42,11 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 		/// <summary>
 		/// 2018.3.0 and greater
 		/// </summary>
-		public static bool HasShadowBias(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasShadowBias(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		public static bool HasGenerateLightingData(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		public static bool HasGenerateLightingData(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
 
 		public LineParameters Convert(IExportContainer container)
 		{

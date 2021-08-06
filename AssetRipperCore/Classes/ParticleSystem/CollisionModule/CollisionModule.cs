@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 {
 	public sealed class CollisionModule : ParticleSystemModule, IDependent
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5, 4))
 			{
@@ -28,39 +28,39 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasCollisionMode(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasCollisionMode(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasColliderForce(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasColliderForce(UnityVersion version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// Less than 5.3.0
 		/// </summary>
-		public static bool HasDampenSingle(Version version) => version.IsLess(5, 3);
+		public static bool HasDampenSingle(UnityVersion version) => version.IsLess(5, 3);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasMaxKillSpeed(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasMaxKillSpeed(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasRadiusScale(Version version) => version.IsGreaterEqual(4);
+		public static bool HasRadiusScale(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasQuality(Version version) => version.IsGreaterEqual(4);
+		public static bool HasQuality(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasMaxCollisionShapes(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasMaxCollisionShapes(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasCollisionMessages(Version version) => version.IsGreaterEqual(4, 2);
+		public static bool HasCollisionMessages(UnityVersion version) => version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasCollidesWithDynamic(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasCollidesWithDynamic(UnityVersion version) => version.IsGreaterEqual(5, 3);
 
 		public override void Read(AssetReader reader)
 		{
@@ -176,31 +176,31 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 			return node;
 		}
 
-		private bool GetExportMultiplyColliderForceByCollisionAngle(Version version)
+		private bool GetExportMultiplyColliderForceByCollisionAngle(UnityVersion version)
 		{
 			return HasColliderForce(version) ? MultiplyColliderForceByCollisionAngle : true;
 		}
-		private float GetExportMaxKillSpeed(Version version)
+		private float GetExportMaxKillSpeed(UnityVersion version)
 		{
 			return HasMaxKillSpeed(version) ? MaxKillSpeed : 10000;
 		}
-		private float GetExportRadiusScale(Version version)
+		private float GetExportRadiusScale(UnityVersion version)
 		{
 			return HasRadiusScale(version) ? RadiusScale : 1.0f;
 		}
-		private BitField GetExportCollidesWith(Version version)
+		private BitField GetExportCollidesWith(UnityVersion version)
 		{
 			return HasRadiusScale(version) ? CollidesWith : new BitField(uint.MaxValue);
 		}
-		private int GetExportMaxCollisionShapes(Version version)
+		private int GetExportMaxCollisionShapes(UnityVersion version)
 		{
 			return HasMaxCollisionShapes(version) ? MaxCollisionShapes : 256;
 		}
-		private float GetExportVoxelSize(Version version)
+		private float GetExportVoxelSize(UnityVersion version)
 		{
 			return HasQuality(version) ? VoxelSize : 0.5f;
 		}
-		private bool GetExportCollidesWithDynamic(Version version)
+		private bool GetExportCollidesWithDynamic(UnityVersion version)
 		{
 			return HasCollidesWithDynamic(version) ? CollidesWithDynamic : true;
 		}

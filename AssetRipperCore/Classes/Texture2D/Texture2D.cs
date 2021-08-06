@@ -12,7 +12,7 @@ using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Texture2D
 {
@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 	{
 		public Texture2D(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// MipMap has been converted to MipCount
 			if (version.IsGreaterEqual(5, 2))
@@ -36,47 +36,47 @@ namespace AssetRipper.Core.Classes.Texture2D
 		/// <summary>
 		/// Less than 5.2.0
 		/// </summary>
-		public static bool IsBoolMinMap(Version version) => version.IsLess(5, 2);
+		public static bool IsBoolMinMap(UnityVersion version) => version.IsLess(5, 2);
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool HasReadable(Version version) => version.IsGreaterEqual(2, 6);
+		public static bool HasReadable(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 2019.3.1 and greater
 		/// </summary>
-		public static bool HasIgnoreMasterTextureLimit(Version version) => version.IsGreaterEqual(2019, 3, 1);
+		public static bool HasIgnoreMasterTextureLimit(UnityVersion version) => version.IsGreaterEqual(2019, 3, 1);
 		/// <summary>
 		/// 2019.4.9 and greater
 		/// </summary>
-		public static bool HasIsPreProcessed(Version version) => version.IsGreaterEqual(2019, 4, 9);
+		public static bool HasIsPreProcessed(UnityVersion version) => version.IsGreaterEqual(2019, 4, 9);
 		/// <summary>
 		/// From 3.0.0 to 5.5.0 exclusive
 		/// </summary>
-		public static bool HasReadAllowed(Version version) => version.IsGreaterEqual(3) && version.IsLess(5, 5);
+		public static bool HasReadAllowed(UnityVersion version) => version.IsGreaterEqual(3) && version.IsLess(5, 5);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasStreamingMipmaps(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasStreamingMipmaps(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasStreamingMipmapsPriority(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasStreamingMipmapsPriority(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 4.2.0 and greater and not Release
 		/// </summary>
-		public static bool HasAlphaIsTransparency(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(4, 2);
+		public static bool HasAlphaIsTransparency(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasLightmapFormat(Version version) => version.IsGreaterEqual(3);
+		public static bool HasLightmapFormat(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasColorSpace(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasColorSpace(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasStreamData(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasStreamData(UnityVersion version) => version.IsGreaterEqual(5, 3);
 
 		public static bool IsSwapBytes(Platform platform, TextureFormat format)
 		{
@@ -103,7 +103,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 		/// <para>1 - less than 2018.2</para>
 		/// <para>2 - 2018.2 and greater</para>
 		/// </summary>
-		private static int GetAlphaIsTransparencyOrder(Version version)
+		private static int GetAlphaIsTransparencyOrder(UnityVersion version)
 		{
 			if (version.IsLess(5))
 			{
@@ -294,7 +294,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 			return node;
 		}
 
-		private bool GetAlphaIsTransparency(Version version, TransferInstructionFlags flags)
+		private bool GetAlphaIsTransparency(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			return HasAlphaIsTransparency(version, flags) ? AlphaIsTransparency : true;

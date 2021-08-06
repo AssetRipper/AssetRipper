@@ -15,9 +15,9 @@ namespace AssetRipper.Library.Exporters.Shaders.DirectX
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasGSInputPrimitive(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasGSInputPrimitive(UnityVersion version) => version.IsGreaterEqual(5, 4);
 
-		public static int GetDataOffset(Version version, GPUPlatform graphicApi)
+		public static int GetDataOffset(UnityVersion version, GPUPlatform graphicApi)
 		{
 			if (HasHeader(graphicApi))
 			{
@@ -29,7 +29,7 @@ namespace AssetRipper.Library.Exporters.Shaders.DirectX
 			}
 		}
 
-		public void Read(BinaryReader reader, Version version)
+		public void Read(BinaryReader reader, UnityVersion version)
 		{
 			Unknown1 = reader.ReadByte();
 			Textures = reader.ReadByte();
@@ -42,7 +42,7 @@ namespace AssetRipper.Library.Exporters.Shaders.DirectX
 			}
 		}
 
-		public void Write(BinaryWriter writer, Version version)
+		public void Write(BinaryWriter writer, UnityVersion version)
 		{
 			writer.Write(Unknown1);
 			writer.Write(Textures);

@@ -21,19 +21,19 @@ namespace AssetRipper.Core.Classes.TerrainData
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasNormalMap(Version version) => version.IsGreaterEqual(4);
+		public static bool HasNormalMap(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasTileOffset(Version version) => version.IsGreaterEqual(3);
+		public static bool HasTileOffset(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 5.0.0f1 and greater (unknown version)
 		/// </summary>
-		public static bool HasSpecularMetallic(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasSpecularMetallic(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.0.0p1 and greater
 		/// </summary>
-		public static bool HasSmoothness(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Patch);
+		public static bool HasSmoothness(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Patch);
 
 		public TerrainLayer Convert(IExportContainer container)
 		{

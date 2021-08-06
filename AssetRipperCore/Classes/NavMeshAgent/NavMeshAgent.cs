@@ -13,15 +13,15 @@ namespace AssetRipper.Core.Classes.NavMeshAgent
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasAgentTypeID(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasAgentTypeID(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasAvoidancePriority(Version version) => version.IsGreaterEqual(4);
+		public static bool HasAvoidancePriority(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
-		public static bool HasAutoBraking(Version version) => version.IsGreaterEqual(4, 1);
+		public static bool HasAutoBraking(UnityVersion version) => version.IsGreaterEqual(4, 1);
 
 		public override void Read(AssetReader reader)
 		{
@@ -74,11 +74,11 @@ namespace AssetRipper.Core.Classes.NavMeshAgent
 			return node;
 		}
 
-		private float GetAvoidancePriority(Version version)
+		private float GetAvoidancePriority(UnityVersion version)
 		{
 			return HasAvoidancePriority(version) ? AvoidancePriority : 50.0f;
 		}
-		private bool GetAutoBraking(Version version)
+		private bool GetAutoBraking(UnityVersion version)
 		{
 			return HasAutoBraking(version) ? AutoBraking : true;
 		}

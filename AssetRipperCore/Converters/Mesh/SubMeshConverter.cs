@@ -7,7 +7,7 @@ using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.IO.Asset;
 using System;
 using System.IO;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Converters.Mesh
@@ -75,7 +75,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 		}
 
-		private static void UpdateSubMeshVertexRange(Version version, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh)
+		private static void UpdateSubMeshVertexRange(UnityVersion version, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh)
 		{
 			if (submesh.IndexCount == 0)
 			{
@@ -89,7 +89,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			submesh.VertexCount = (uint)(maxIndex - minIndex + 1);
 		}
 
-		private static void FindMinMaxIndices(Version version, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh, out int min, out int max)
+		private static void FindMinMaxIndices(UnityVersion version, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh, out int min, out int max)
 		{
 			bool is16bits = mesh.Is16BitIndices(version);
 			if (AssetRipper.Core.Classes.Mesh.Mesh.HasCompressedMesh(version))

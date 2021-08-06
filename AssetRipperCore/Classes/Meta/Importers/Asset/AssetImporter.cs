@@ -10,7 +10,7 @@ using AssetRipper.Core.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 {
@@ -48,50 +48,50 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasInternalIDToNameTable(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasInternalIDToNameTable(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// Less than 3.5.0 or 4.5.2 and greater
 		/// </summary>
-		public static bool FileIDToRecycleNameRelevant(Version version) => version.IsGreaterEqual(4, 5, 2) || version.IsLess(3, 5);
+		public static bool FileIDToRecycleNameRelevant(UnityVersion version) => version.IsGreaterEqual(4, 5, 2) || version.IsLess(3, 5);
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool HasPreview(Version version) => version.IsLess(3);
+		public static bool HasPreview(UnityVersion version) => version.IsLess(3);
 		/// <summary>
 		/// Less than 3.5.0
 		/// </summary>
-		public static bool HasHash(Version version) => version.IsLess(3, 5);
+		public static bool HasHash(UnityVersion version) => version.IsLess(3, 5);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasExternalObjects(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasExternalObjects(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasUsedFileIDs(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasUsedFileIDs(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasAssetBundleName(Version version) => version.IsGreaterEqual(5);
+		public static bool HasAssetBundleName(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasAssetBundleVariant(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasAssetBundleVariant(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasUserData(Version version) => version.IsGreaterEqual(4);
+		public static bool HasUserData(UnityVersion version) => version.IsGreaterEqual(4);
 
 		/// <summary>
 		/// 4.5.2 and greater
 		/// </summary>
-		private static bool IsFileIDToRecycleNameConditional(Version version) => version.IsGreaterEqual(4, 5, 2);
+		private static bool IsFileIDToRecycleNameConditional(UnityVersion version) => version.IsGreaterEqual(4, 5, 2);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		private static bool IsAlignExternalObjects(Version version) => version.IsGreaterEqual(2019);
+		private static bool IsAlignExternalObjects(UnityVersion version) => version.IsGreaterEqual(2019);
 
-		public abstract bool IncludesImporter(Version version);
+		public abstract bool IncludesImporter(UnityVersion version);
 
 		public override void Read(AssetReader reader)
 		{

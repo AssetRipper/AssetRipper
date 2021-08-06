@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 using AssetInfo = AssetRipper.Core.Classes.AssetBundle.AssetInfo;
 using Object = AssetRipper.Core.Classes.Object.Object;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Project
 {
@@ -360,11 +360,11 @@ namespace AssetRipper.Core.Project
 		public ISerializedFile File => CurrentCollection.File;
 		public string Name => File.Name;
 		public AssetLayout Layout => File.Layout;
-		public Version Version => File.Version;
+		public UnityVersion Version => File.Version;
 		public Platform Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
 		public AssetLayout ExportLayout { get; }
-		public Version ExportVersion => ExportLayout.Info.Version;
+		public UnityVersion ExportVersion => ExportLayout.Info.Version;
 		public Platform ExportPlatform => ExportLayout.Info.Platform;
 		public TransferInstructionFlags ExportFlags => ExportLayout.Info.Flags | CurrentCollection.Flags;
 		public IReadOnlyList<FileIdentifier> Dependencies => File.Dependencies;

@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes.NavMeshData
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasHash(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasHash(UnityVersion version) => version.IsGreaterEqual(5, 6);
 
 		public void Read(AssetReader reader)
 		{

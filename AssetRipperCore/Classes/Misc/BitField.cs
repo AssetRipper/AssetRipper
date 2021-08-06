@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.Misc
 			Bits = bits;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2))
 			{
@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Classes.Misc
 		/// <summary>
 		/// Less than 2.0.0
 		/// </summary>
-		private static bool Is16Bits(Version version) => version.IsLess(2);
+		private static bool Is16Bits(UnityVersion version) => version.IsLess(2);
 
 		public void Read(AssetReader reader)
 		{

@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Classes.NavMeshData
 			CellSize = navParams.CellSize;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			return 2;
 			// NOTE: unknown version (5.6.0a)
@@ -55,11 +55,11 @@ namespace AssetRipper.Core.Classes.NavMeshData
 		/// <summary>
 		/// 5.6.0bx
 		/// </summary>
-		public static bool IsBoolFlags(Version version) => version.IsEqual(5, 6, 0, VersionType.Beta);
+		public static bool IsBoolFlags(UnityVersion version) => version.IsEqual(5, 6, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasDebug(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasDebug(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 
 		public void Read(AssetReader reader)
 		{

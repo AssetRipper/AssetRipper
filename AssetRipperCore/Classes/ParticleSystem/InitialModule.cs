@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 {
 	public sealed class InitialModule : ParticleSystemModule
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5, 5))
 			{
@@ -25,31 +25,31 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasSizeAxes(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasSizeAxes(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasRotationAxes(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasRotationAxes(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// Less than 5.3.0
 		/// </summary>
-		public static bool HasInheritVelocity(Version version) => version.IsLess(5, 3);
+		public static bool HasInheritVelocity(UnityVersion version) => version.IsLess(5, 3);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasRandomizeRotationDirection(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasRandomizeRotationDirection(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
-		public static bool HasGravityModifierSingle(Version version) => version.IsLess(5, 5);
+		public static bool HasGravityModifierSingle(UnityVersion version) => version.IsLess(5, 5);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasSize3D(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasSize3D(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasRotation3D(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasRotation3D(UnityVersion version) => version.IsGreaterEqual(5, 3);
 
 		public override void Read(AssetReader reader)
 		{
@@ -122,19 +122,19 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			return node;
 		}
 
-		private MinMaxCurve GetStartSizeY(Version version)
+		private MinMaxCurve GetStartSizeY(UnityVersion version)
 		{
 			return HasSizeAxes(version) ? StartSizeY : new MinMaxCurve(1.0f);
 		}
-		private MinMaxCurve GetStartSizeZ(Version version)
+		private MinMaxCurve GetStartSizeZ(UnityVersion version)
 		{
 			return HasSizeAxes(version) ? StartSizeZ : new MinMaxCurve(1.0f);
 		}
-		private MinMaxCurve GetStartRotationX(Version version)
+		private MinMaxCurve GetStartRotationX(UnityVersion version)
 		{
 			return HasRotationAxes(version) ? StartRotationX : new MinMaxCurve(0.0f);
 		}
-		private MinMaxCurve GetStartRotationY(Version version)
+		private MinMaxCurve GetStartRotationY(UnityVersion version)
 		{
 			return HasRotationAxes(version) ? StartRotationY : new MinMaxCurve(0.0f);
 		}

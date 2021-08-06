@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 	/// </summary>
 	public struct TierSettings : IAssetReadable, IYAMLExportable
 	{
-		public TierSettings(PlatformShaderSettings settings, Platform platfrom, GraphicsTier tier, Version version, TransferInstructionFlags flags)
+		public TierSettings(PlatformShaderSettings settings, Platform platfrom, GraphicsTier tier, UnityVersion version, TransferInstructionFlags flags)
 		{
 			BuildTarget = platfrom.PlatformToBuildGroup();
 			Tier = tier;
@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			Automatic = false;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// changed default value for Settings.Prefer32BitShadowMaps to platform specific
 			if (version.IsGreaterEqual(2017))
@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 				return 5;
 			}
 			// changed default value for Settings.RealtimeGICPUUsage to platform specific
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 7))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 7))
 			{
 				return 4;
 			}
@@ -56,16 +56,16 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasTier(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasTier(UnityVersion version) => version.IsGreaterEqual(5, 4);
 
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
-		private static bool HasBuildTargetString(Version version) => version.IsLess(5, 5);
+		private static bool HasBuildTargetString(UnityVersion version) => version.IsLess(5, 5);
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
-		private static bool HasPlatfromSettings(Version version) => version.IsLess(5, 5);
+		private static bool HasPlatfromSettings(UnityVersion version) => version.IsLess(5, 5);
 
 		public void Read(AssetReader reader)
 		{
@@ -108,7 +108,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			return node;
 		}
 
-		private GraphicsTier GetTier(Version version)
+		private GraphicsTier GetTier(UnityVersion version)
 		{
 			return HasTier(version) ? Tier : GraphicsTier.Tier1;
 		}

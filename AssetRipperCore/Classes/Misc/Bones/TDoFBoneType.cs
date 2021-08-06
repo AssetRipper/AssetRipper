@@ -1,5 +1,5 @@
 ﻿using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Misc.Bones
 {
@@ -35,29 +35,29 @@ namespace AssetRipper.Core.Classes.Misc.Bones
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsIncludeUpperChest(Version version) => BoneTypeExtensions.IsIncludeUpperChest(version);
+		public static bool IsIncludeUpperChest(UnityVersion version) => BoneTypeExtensions.IsIncludeUpperChest(version);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsIncludeHead(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool IsIncludeHead(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsIncludeLeftLowerLeg(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool IsIncludeLeftLowerLeg(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsIncludeRightLowerLeg(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool IsIncludeRightLowerLeg(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsIncludeLeftUpperArm(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool IsIncludeLeftUpperArm(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsIncludeRightUpperArm(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool IsIncludeRightUpperArm(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
-		public static TDoFBoneType Update(this TDoFBoneType _this, Version version)
+		public static TDoFBoneType Update(this TDoFBoneType _this, UnityVersion version)
 		{
 			if (!IsIncludeUpperChest(version))
 			{

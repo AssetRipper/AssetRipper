@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Classes
 			public override bool IsExit => Transition.IsExit;
 			public override int DestinationState => Transition.DestinationState;
 			public TransitionConstant Transition { get; set; }
-			public Version Version { get; set; }
+			public UnityVersion Version { get; set; }
 			public override IReadOnlyList<OffsetPtr<ConditionConstant>> ConditionConstants => Transition.ConditionConstantArray;
 		}
 
@@ -40,7 +40,7 @@ namespace AssetRipper.Core.Classes
 			return virtualFile.CreateAsset((assetInfo) => new AnimatorStateTransition(virtualFile.Layout, assetInfo, parameters));
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// TODO:
 			return 3;

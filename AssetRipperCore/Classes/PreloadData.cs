@@ -5,7 +5,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes
 {
@@ -16,11 +16,11 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasDependencies(Version version) => version.IsGreaterEqual(5);
+		public static bool HasDependencies(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasExplicitDataLayout(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasExplicitDataLayout(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 
 		public override void Read(AssetReader reader)
 		{

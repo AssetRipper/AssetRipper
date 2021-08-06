@@ -23,9 +23,9 @@ namespace AssetRipper.Core.Classes.LightingDataAsset
 	{
 		public LightingDataAsset(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2))
 			{
 				return 4;
 			}
@@ -44,15 +44,15 @@ namespace AssetRipper.Core.Classes.LightingDataAsset
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasAOTextures(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasAOTextures(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasLightmapsCacheFiles(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasLightmapsCacheFiles(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasBakedReflectionProbeCubemapCacheFiles(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasBakedReflectionProbeCubemapCacheFiles(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -166,15 +166,15 @@ namespace AssetRipper.Core.Classes.LightingDataAsset
 			return node;
 		}
 
-		private IReadOnlyList<PPtr<Texture2D.Texture2D>> GetAOTextures(Version version)
+		private IReadOnlyList<PPtr<Texture2D.Texture2D>> GetAOTextures(UnityVersion version)
 		{
 			return HasAOTextures(version) ? AOTextures : System.Array.Empty<PPtr<Texture2D.Texture2D>>();
 		}
-		private IReadOnlyList<string> GetLightmapsCacheFiles(Version version)
+		private IReadOnlyList<string> GetLightmapsCacheFiles(UnityVersion version)
 		{
 			return HasLightmapsCacheFiles(version) ? LightmapsCacheFiles : System.Array.Empty<string>();
 		}
-		private IReadOnlyList<string> GetBakedReflectionProbeCubemapCacheFiles(Version version)
+		private IReadOnlyList<string> GetBakedReflectionProbeCubemapCacheFiles(UnityVersion version)
 		{
 			return HasBakedReflectionProbeCubemapCacheFiles(version) ? BakedReflectionProbeCubemapCacheFiles : System.Array.Empty<string>();
 		}

@@ -4,7 +4,7 @@ using AssetRipper.Core.Parser.Files;
 using System;
 using System.IO;
 using System.Text;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.IO.Asset
 {
@@ -103,7 +103,7 @@ namespace AssetRipper.Core.IO.Asset
 		}
 
 		public AssetLayout Layout { get; }
-		public Version Version => Layout.Info.Version;
+		public UnityVersion Version => Layout.Info.Version;
 		public Platform Platform => Layout.Info.Platform;
 		public TransferInstructionFlags Flags => Layout.Info.Flags;
 

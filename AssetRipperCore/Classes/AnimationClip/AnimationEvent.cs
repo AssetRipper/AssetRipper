@@ -15,11 +15,11 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool HasObjectReferenceParameter(Version version) => version.IsGreaterEqual(2, 6);
+		public static bool HasObjectReferenceParameter(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasIntParameter(Version version) => version.IsGreaterEqual(3);
+		public static bool HasIntParameter(UnityVersion version) => version.IsGreaterEqual(3);
 
 		public void Read(AssetReader reader)
 		{

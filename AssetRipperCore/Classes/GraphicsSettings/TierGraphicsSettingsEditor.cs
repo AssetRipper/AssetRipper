@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 {
 	public struct TierGraphicsSettingsEditor : IAssetReadable, IYAMLExportable
 	{
-		public TierGraphicsSettingsEditor(PlatformShaderSettings settings, Version version, TransferInstructionFlags flags)
+		public TierGraphicsSettingsEditor(PlatformShaderSettings settings, UnityVersion version, TransferInstructionFlags flags)
 		{
 			StandardShaderQuality = settings.GetStandardShaderQuality(version, flags);
 			RenderingPath = RenderingPath.Forward;
@@ -43,28 +43,28 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasHdrMode(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasHdrMode(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasUseHDR(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasUseHDR(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasPrefer32BitShadowMaps(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasPrefer32BitShadowMaps(UnityVersion version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 5.6.3 and greater
 		/// </summary>
-		public static bool HasEnableLPPV(Version version) => version.IsGreaterEqual(5, 6, 3);
+		public static bool HasEnableLPPV(UnityVersion version) => version.IsGreaterEqual(5, 6, 3);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasUseDitherMaskForAlphaBlendedShadows(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasUseDitherMaskForAlphaBlendedShadows(UnityVersion version) => version.IsGreaterEqual(5, 6);
 
 		/// <summary>
 		/// Less than 5.6.0
 		/// </summary>
-		private static bool HasUseCascadedShadowMapsFirst(Version version)
+		private static bool HasUseCascadedShadowMapsFirst(UnityVersion version)
 		{
 			return version.IsLess(5, 6);
 		}

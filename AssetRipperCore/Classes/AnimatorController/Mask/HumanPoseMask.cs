@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Mask
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		public static bool HasSecondWord(Version version) => version.IsGreaterEqual(5, 2);
+		public static bool HasSecondWord(UnityVersion version) => version.IsGreaterEqual(5, 2);
 
 		public void Read(AssetReader reader)
 		{

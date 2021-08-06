@@ -5,7 +5,7 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
@@ -14,41 +14,41 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		/// <summary>
 		/// Less than 5.2.0
 		/// </summary>
-		public static bool HasLeafInfo(Version version) => version.IsLess(5, 2);
+		public static bool HasLeafInfo(UnityVersion version) => version.IsLess(5, 2);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasPathID(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasPathID(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasFullPathID(Version version) => version.IsGreaterEqual(5);
+		public static bool HasFullPathID(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.1.0 and greater
 		/// </summary>
-		public static bool HasSpeedParam(Version version) => version.IsGreaterEqual(5, 1);
+		public static bool HasSpeedParam(UnityVersion version) => version.IsGreaterEqual(5, 1);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasTimeParam(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasTimeParam(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
-		public static bool HasCycleOffset(Version version) => version.IsGreaterEqual(4, 1);
+		public static bool HasCycleOffset(UnityVersion version) => version.IsGreaterEqual(4, 1);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasDefaultValues(Version version) => version.IsGreaterEqual(5);
+		public static bool HasDefaultValues(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
-		public static bool HasMirror(Version version) => version.IsGreaterEqual(4, 1);
+		public static bool HasMirror(UnityVersion version) => version.IsGreaterEqual(4, 1);
 
-		public bool GetWriteDefaultValues(Version version)
+		public bool GetWriteDefaultValues(UnityVersion version)
 		{
 			return HasDefaultValues(version) ? WriteDefaultValues : true;
 		}
-		public uint GetID(Version version)
+		public uint GetID(UnityVersion version)
 		{
 			return HasFullPathID(version) ? FullPathID : NameID;
 		}
@@ -110,7 +110,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			throw new NotSupportedException();
 		}
 
-		public bool IsBlendTree(Version version)
+		public bool IsBlendTree(UnityVersion version)
 		{
 			if (BlendTreeConstantArray.Length == 0)
 			{

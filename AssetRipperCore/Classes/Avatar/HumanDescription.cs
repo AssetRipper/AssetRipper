@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.Avatar
 	public class HumanDescription : IAssetReadable, IYAMLExportable
 	{
 		public HumanDescription() { }
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 #warning TODO: To SerializedVersion
 			return 3;

@@ -79,7 +79,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 			if (HasSignature(reader.Generation))
 			{
 				string signature = reader.ReadStringZeroTerm();
-				UnityVersion = Version.Parse(signature);
+				UnityVersion = UnityVersion.Parse(signature);
 			}
 			if (HasPlatform(reader.Generation))
 			{
@@ -158,7 +158,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 			}
 		}
 
-		public Version UnityVersion { get; set; }
+		public UnityVersion UnityVersion { get; set; }
 		public Platform TargetPlatform { get; set; }
 		public bool EnableTypeTree { get; set; }
 		public SerializedType[] Types { get; set; }

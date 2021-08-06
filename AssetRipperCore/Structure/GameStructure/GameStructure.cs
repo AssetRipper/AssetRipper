@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Object = AssetRipper.Core.Classes.Object.Object;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Structure.GameStructure
 {
@@ -94,9 +94,9 @@ namespace AssetRipper.Core.Structure.GameStructure
 		public void Export(string exportPath) => Export(exportPath, null);
 		public void Export(string exportPath, Func<Object, bool> filter)
 		{
-			Version defaultVersion = new Version(2017, 3, 0, VersionType.Final, 3);
-			Version maxVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
-			Version version = defaultVersion < maxVersion ? maxVersion : defaultVersion;
+			UnityVersion defaultVersion = new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3);
+			UnityVersion maxVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
+			UnityVersion version = defaultVersion < maxVersion ? maxVersion : defaultVersion;
 			Logger.Log(LogType.Info, LogCategory.Export, $"Exporting to Unity version {version.ToString()}");
 			ExportOptions options = new ExportOptions(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 			options.Filter = filter ?? new Func<Object, bool>((Object obj) => true);

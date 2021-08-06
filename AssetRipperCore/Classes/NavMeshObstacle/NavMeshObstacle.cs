@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.NavMeshObstacle
 	{
 		public NavMeshObstacle(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// added Shape and Extents
 			if (version.IsGreaterEqual(5))
@@ -28,15 +28,15 @@ namespace AssetRipper.Core.Classes.NavMeshObstacle
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasShape(Version version) => version.IsGreaterEqual(5);
+		public static bool HasShape(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasMoveThreshold(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasMoveThreshold(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasCarveOnlyStationary(Version version) => version.IsGreaterEqual(5);
+		public static bool HasCarveOnlyStationary(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -84,15 +84,15 @@ namespace AssetRipper.Core.Classes.NavMeshObstacle
 			return node;
 		}
 
-		private float GetMoveThreshold(Version version)
+		private float GetMoveThreshold(UnityVersion version)
 		{
 			return HasMoveThreshold(version) ? MoveThreshold : 0.1f;
 		}
-		private bool GetCarveOnlyStationary(Version version)
+		private bool GetCarveOnlyStationary(UnityVersion version)
 		{
 			return HasCarveOnlyStationary(version) ? CarveOnlyStationary : true;
 		}
-		private float GetTimeToStationary(Version version)
+		private float GetTimeToStationary(UnityVersion version)
 		{
 			return HasCarveOnlyStationary(version) ? TimeToStationary : 0.5f;
 		}

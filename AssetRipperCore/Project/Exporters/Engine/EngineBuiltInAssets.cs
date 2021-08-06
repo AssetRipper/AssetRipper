@@ -3,7 +3,7 @@ using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Misc;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Project.Exporters.Engine
 {
@@ -35,19 +35,19 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 
 	internal struct EngineBuiltInAssetInfo
 	{
-		public EngineBuiltInAssetInfo(Version version, EngineBuiltInAsset asset)
+		public EngineBuiltInAssetInfo(UnityVersion version, EngineBuiltInAsset asset)
 		{
-			KeyValuePair<Version, EngineBuiltInAsset> kvp = new KeyValuePair<Version, EngineBuiltInAsset>(version, asset);
-			m_variations = new List<KeyValuePair<Version, EngineBuiltInAsset>>(1);
+			KeyValuePair<UnityVersion, EngineBuiltInAsset> kvp = new KeyValuePair<UnityVersion, EngineBuiltInAsset>(version, asset);
+			m_variations = new List<KeyValuePair<UnityVersion, EngineBuiltInAsset>>(1);
 			m_variations.Add(kvp);
 		}
 
-		public void AddVariation(Version version, EngineBuiltInAsset asset)
+		public void AddVariation(UnityVersion version, EngineBuiltInAsset asset)
 		{
-			KeyValuePair<Version, EngineBuiltInAsset> kvp = new KeyValuePair<Version, EngineBuiltInAsset>(version, asset);
+			KeyValuePair<UnityVersion, EngineBuiltInAsset> kvp = new KeyValuePair<UnityVersion, EngineBuiltInAsset>(version, asset);
 			for (int i = 0; i < m_variations.Count; i++)
 			{
-				Version key = m_variations[i].Key;
+				UnityVersion key = m_variations[i].Key;
 				if (key < version)
 				{
 					m_variations.Insert(i, kvp);
@@ -57,9 +57,9 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			m_variations.Add(kvp);
 		}
 
-		public bool ContainsAsset(Version version)
+		public bool ContainsAsset(UnityVersion version)
 		{
-			foreach (KeyValuePair<Version, EngineBuiltInAsset> kvp in m_variations)
+			foreach (KeyValuePair<UnityVersion, EngineBuiltInAsset> kvp in m_variations)
 			{
 				if (version >= kvp.Key)
 				{
@@ -69,9 +69,9 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			return false;
 		}
 
-		public EngineBuiltInAsset GetAsset(Version version)
+		public EngineBuiltInAsset GetAsset(UnityVersion version)
 		{
-			foreach (KeyValuePair<Version, EngineBuiltInAsset> kvp in m_variations)
+			foreach (KeyValuePair<UnityVersion, EngineBuiltInAsset> kvp in m_variations)
 			{
 				if (version >= kvp.Key)
 				{
@@ -81,9 +81,9 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			throw new Exception($"There is no asset for {version} version");
 		}
 
-		public bool TryGetAsset(Version version, out EngineBuiltInAsset asset)
+		public bool TryGetAsset(UnityVersion version, out EngineBuiltInAsset asset)
 		{
-			foreach (KeyValuePair<Version, EngineBuiltInAsset> kvp in m_variations)
+			foreach (KeyValuePair<UnityVersion, EngineBuiltInAsset> kvp in m_variations)
 			{
 				if (version >= kvp.Key)
 				{
@@ -95,7 +95,7 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			return false;
 		}
 
-		private readonly List<KeyValuePair<Version, EngineBuiltInAsset>> m_variations;
+		private readonly List<KeyValuePair<UnityVersion, EngineBuiltInAsset>> m_variations;
 	}
 
 	public static class EngineBuiltInAssets
@@ -117,11 +117,11 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			AddShader("Legacy Shaders/Particles/VertexLit Blended", 208, true);
 			AddShader("Legacy Shaders/Particles/Anim Alpha Blended", 209, true);
 			AddShader("Mobile/Bumped Specular (1 Directional Realtime Light)", 10706, true);
-			AddShader("Hidden/VideoComposite", new Version(2019), 16000, true);
-			AddShader("Hidden/VideoDecode", new Version(2019), 16001, true);
-			AddShader("Hidden/VideoDecodeOSX", new Version(2019), 16002, true);
-			AddShader("Hidden/VideoDecodeAndroid", new Version(2019), 16003, true);
-			AddShader("Hidden/VideoDecodeML", new Version(2019), 16004, true);
+			AddShader("Hidden/VideoComposite", new UnityVersion(2019), 16000, true);
+			AddShader("Hidden/VideoDecode", new UnityVersion(2019), 16001, true);
+			AddShader("Hidden/VideoDecodeOSX", new UnityVersion(2019), 16002, true);
+			AddShader("Hidden/VideoDecodeAndroid", new UnityVersion(2019), 16003, true);
+			AddShader("Hidden/VideoDecodeML", new UnityVersion(2019), 16004, true);
 
 			///////////////////////////////////////////////////////
 			// Current default
@@ -219,7 +219,7 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			AddTexture("Default-ParticleSystem", 10307, true);
 			AddTexture("Default-Checker-Gray", 10309, true);
 			AddTexture("Checkmark", 10900, true);
-			AddTexture("UISprite", Version.MinVersion, 10904, 5460, true);
+			AddTexture("UISprite", UnityVersion.MinVersion, 10904, 5460, true);
 			AddTexture("Background", 10906, true);
 			AddTexture("InputFieldBackground", 10910, true);
 			AddTexture("Knob", 10912, true);
@@ -508,7 +508,7 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			AddShader("Lightmap-Glossy", 43, true);
 			AddShader("Lightmap-BumpSpec", 44, true);
 			AddShader("StandardSpecular", 45, true);
-			AddShader("Shader", new Version(5), 46, true);
+			AddShader("Shader", new UnityVersion(5), 46, true);
 			AddShader("AlphaTest-VertexLit", 50, true);
 			AddShader("AlphaTest-Diffuse", 51, true);
 			AddShader("AlphaTest-Bumped", 52, true);
@@ -516,7 +516,7 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			AddShader("AlphaTest-BumpSpec", 54, true);
 			AddShader("Internal-DeferredShading", 69, false);
 			AddShader("Internal-DeferredReflections", 74, false);
-			AddShader("Shader", Version.MinVersion, 100, true);
+			AddShader("Shader", UnityVersion.MinVersion, 100, true);
 			AddShader("Decal", 100, false);
 			AddShader("Flare", 101, true);
 			AddShader("skybox cubed", 103, true);
@@ -598,181 +598,181 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			AddShader("CubeBlend", 15106, false);
 		}
 
-		public static bool ContainsMaterial(string name, Version version)
+		public static bool ContainsMaterial(string name, UnityVersion version)
 		{
 			return ContainsAsset(m_materials, name, version);
 		}
-		public static bool ContainsTexture(string name, Version version)
+		public static bool ContainsTexture(string name, UnityVersion version)
 		{
 			return ContainsAsset(m_textures, name, version);
 		}
-		public static bool ContainsMesh(string name, Version version)
+		public static bool ContainsMesh(string name, UnityVersion version)
 		{
 			return ContainsAsset(m_meshes, name, version);
 		}
-		public static bool ContainsFont(string name, Version version)
+		public static bool ContainsFont(string name, UnityVersion version)
 		{
 			return ContainsAsset(m_fonts, name, version);
 		}
-		public static bool ContainsShader(string name, Version version)
+		public static bool ContainsShader(string name, UnityVersion version)
 		{
 			return ContainsAsset(m_shaders, name, version);
 		}
-		public static bool ContainsSprite(string name, Version version)
+		public static bool ContainsSprite(string name, UnityVersion version)
 		{
 			return ContainsAsset(m_sprites, name, version);
 		}
-		public static bool ContainsLightmapParams(string name, Version version)
+		public static bool ContainsLightmapParams(string name, UnityVersion version)
 		{
 			return ContainsAsset(m_lightmapParams, name, version);
 		}
-		public static bool ContainsBehaviour(string name, Version version)
+		public static bool ContainsBehaviour(string name, UnityVersion version)
 		{
 			return ContainsAsset(m_behaviours, name, version);
 		}
 
-		public static EngineBuiltInAsset GetMaterial(string name, Version version)
+		public static EngineBuiltInAsset GetMaterial(string name, UnityVersion version)
 		{
 			return m_materials[name].GetAsset(version);
 		}
-		public static bool TryGetMaterial(string name, Version version, out EngineBuiltInAsset asset)
+		public static bool TryGetMaterial(string name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_materials, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetTexture(string name, Version version)
+		public static EngineBuiltInAsset GetTexture(string name, UnityVersion version)
 		{
 			return m_textures[name].GetAsset(version);
 		}
-		public static bool TryGetTexture(string name, Version version, out EngineBuiltInAsset asset)
+		public static bool TryGetTexture(string name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_textures, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetMesh(string name, Version version)
+		public static EngineBuiltInAsset GetMesh(string name, UnityVersion version)
 		{
 			return m_meshes[name].GetAsset(version);
 		}
-		public static bool TryGetMesh(string name, Version version, out EngineBuiltInAsset asset)
+		public static bool TryGetMesh(string name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_meshes, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetFont(string name, Version version)
+		public static EngineBuiltInAsset GetFont(string name, UnityVersion version)
 		{
 			return m_fonts[name].GetAsset(version);
 		}
-		public static bool TryGetFont(string name, Version version, out EngineBuiltInAsset asset)
+		public static bool TryGetFont(string name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_fonts, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetShader(string name, Version version)
+		public static EngineBuiltInAsset GetShader(string name, UnityVersion version)
 		{
 			return m_shaders[name].GetAsset(version);
 		}
-		public static bool TryGetShader(string name, Version version, out EngineBuiltInAsset asset)
+		public static bool TryGetShader(string name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_shaders, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetSprite(string name, Version version)
+		public static EngineBuiltInAsset GetSprite(string name, UnityVersion version)
 		{
 			return m_sprites[name].GetAsset(version);
 		}
-		public static bool TryGetSprite(string name, Version version, out EngineBuiltInAsset asset)
+		public static bool TryGetSprite(string name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_sprites, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetLightmapParams(string name, Version version)
+		public static EngineBuiltInAsset GetLightmapParams(string name, UnityVersion version)
 		{
 			return m_lightmapParams[name].GetAsset(version);
 		}
-		public static bool TryGetLightmapParams(string name, Version version, out EngineBuiltInAsset asset)
+		public static bool TryGetLightmapParams(string name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_lightmapParams, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetBehaviour(string name, Version version)
+		public static EngineBuiltInAsset GetBehaviour(string name, UnityVersion version)
 		{
 			return m_behaviours[name].GetAsset(version);
 		}
-		public static bool TryGetBehaviour(string name, Version version, out EngineBuiltInAsset asset)
+		public static bool TryGetBehaviour(string name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_behaviours, name, version, out asset);
 		}
 
 		private static void AddMaterial(string name, uint exportID, bool isF)
 		{
-			AddMaterial(name, Version.MinVersion, exportID, isF);
+			AddMaterial(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddMaterial(string name, Version version, uint exportID, bool isF)
+		private static void AddMaterial(string name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_materials, name, version, exportID, 0, isF);
 		}
 
 		private static void AddTexture(string name, uint exportID, bool isF)
 		{
-			AddTexture(name, Version.MinVersion, exportID, isF);
+			AddTexture(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddTexture(string name, Version version, uint exportID, bool isF)
+		private static void AddTexture(string name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_textures, name, version, exportID, 0, isF);
 		}
-		private static void AddTexture(string name, Version version, uint exportID, uint param, bool isF)
+		private static void AddTexture(string name, UnityVersion version, uint exportID, uint param, bool isF)
 		{
 			AddAsset(m_textures, name, version, exportID, param, isF);
 		}
 
 		private static void AddMesh(string name, uint exportID, bool isF)
 		{
-			AddMesh(name, Version.MinVersion, exportID, isF);
+			AddMesh(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddMesh(string name, Version version, uint exportID, bool isF)
+		private static void AddMesh(string name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_meshes, name, version, exportID, 0, isF);
 		}
 
 		private static void AddFont(string name, uint exportID, bool isF)
 		{
-			AddFont(name, Version.MinVersion, exportID, isF);
+			AddFont(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddFont(string name, Version version, uint exportID, bool isF)
+		private static void AddFont(string name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_fonts, name, version, exportID, 0, isF);
 		}
 
 		private static void AddShader(string name, uint exportID, bool isF)
 		{
-			AddShader(name, Version.MinVersion, exportID, isF);
+			AddShader(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddShader(string name, Version version, uint exportID, bool isF)
+		private static void AddShader(string name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_shaders, name, version, exportID, 0, isF);
 		}
 
 		private static void AddSprite(string name, uint exportID, bool isF)
 		{
-			AddSprite(name, Version.MinVersion, exportID, isF);
+			AddSprite(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddSprite(string name, Version version, uint exportID, bool isF)
+		private static void AddSprite(string name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_sprites, name, version, exportID, 0, isF);
 		}
 
 		private static void AddLightmapParams(string name, uint exportID, bool isF)
 		{
-			AddLightmapParams(name, Version.MinVersion, exportID, isF);
+			AddLightmapParams(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddLightmapParams(string name, Version version, uint exportID, bool isF)
+		private static void AddLightmapParams(string name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_lightmapParams, name, version, exportID, 0, isF);
 		}
 
 		private static void AddBehaviour(string name, uint exportID, bool isF)
 		{
-			AddBehaviour(name, Version.MinVersion, exportID, isF);
+			AddBehaviour(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddBehaviour(string name, Version version, uint exportID, bool isF)
+		private static void AddBehaviour(string name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_behaviours, name, version, exportID, 0, isF);
 		}
 
-		private static bool ContainsAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, Version version)
+		private static bool ContainsAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, UnityVersion version)
 		{
 			if (lookup.TryGetValue(name, out EngineBuiltInAssetInfo info))
 			{
@@ -781,7 +781,7 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			return false;
 		}
 
-		private static bool TryGetAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, Version version, out EngineBuiltInAsset asset)
+		private static bool TryGetAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			if (lookup.TryGetValue(name, out EngineBuiltInAssetInfo info))
 			{
@@ -791,7 +791,7 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			return false;
 		}
 
-		private static void AddAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, Version version, uint exportID, uint param, bool isF)
+		private static void AddAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, UnityVersion version, uint exportID, uint param, bool isF)
 		{
 			EngineBuiltInAsset asset = new EngineBuiltInAsset(exportID, param, isF);
 			if (lookup.TryGetValue(name, out EngineBuiltInAssetInfo assetInfo))

@@ -14,9 +14,9 @@ namespace AssetRipper.Core.Classes.Avatar
 	public class Human : IAssetReadable, IYAMLExportable
 	{
 		public Human() { }
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Patch, 2))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Patch, 2))
 			{
 				return 2;
 			}
@@ -26,15 +26,15 @@ namespace AssetRipper.Core.Classes.Avatar
 		/// <summary>
 		/// Less than 2018.2
 		/// </summary>
-		public static bool HasHandles(Version version) => version.IsLess(2018, 2);
+		public static bool HasHandles(UnityVersion version) => version.IsLess(2018, 2);
 		/// <summary>
 		/// Less than 2018.2
 		/// </summary>
-		public static bool HasColliderIndex(Version version) => version.IsLess(2018, 2);
+		public static bool HasColliderIndex(UnityVersion version) => version.IsLess(2018, 2);
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		public static bool HasHasTDoF(Version version) => version.IsGreaterEqual(5, 2);
+		public static bool HasHasTDoF(UnityVersion version) => version.IsGreaterEqual(5, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -104,7 +104,7 @@ namespace AssetRipper.Core.Classes.Avatar
 			return node;
 		}
 
-		private int[] UpdateBoneArray(int[] array, Version version)
+		private int[] UpdateBoneArray(int[] array, UnityVersion version)
 		{
 			if (!BoneTypeExtensions.IsIncludeUpperChest(version))
 			{
@@ -123,7 +123,7 @@ namespace AssetRipper.Core.Classes.Avatar
 			}
 			return array;
 		}
-		private float[] UpdateBoneArray(float[] array, Version version)
+		private float[] UpdateBoneArray(float[] array, UnityVersion version)
 		{
 			if (!BoneTypeExtensions.IsIncludeUpperChest(version))
 			{
@@ -143,15 +143,15 @@ namespace AssetRipper.Core.Classes.Avatar
 			return array;
 		}
 
-		private IReadOnlyList<Handle> GetExportHandles(Version version)
+		private IReadOnlyList<Handle> GetExportHandles(UnityVersion version)
 		{
 			return HasHandles(version) ? Handles : System.Array.Empty<Handle>();
 		}
-		private IReadOnlyList<Collider> GetExportColliderArray(Version version)
+		private IReadOnlyList<Collider> GetExportColliderArray(UnityVersion version)
 		{
 			return HasHandles(version) ? ColliderArray : System.Array.Empty<Collider>();
 		}
-		private IReadOnlyList<int> GetExportColliderIndex(Version version)
+		private IReadOnlyList<int> GetExportColliderIndex(UnityVersion version)
 		{
 			return HasColliderIndex(version) ? ColliderIndex : System.Array.Empty<int>();
 		}

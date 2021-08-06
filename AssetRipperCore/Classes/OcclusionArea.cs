@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public OcclusionArea(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			return 2;
 			// NOTE: unknown version
@@ -23,13 +23,13 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// Less than 4.3.0
 		/// </summary>
-		public static bool HasIsTargetVolume(Version version) => version.IsLess(4, 3);
+		public static bool HasIsTargetVolume(UnityVersion version) => version.IsLess(4, 3);
 		/// <summary>
 		/// Less than 4.3.0
 		/// </summary>
-		public static bool HasTargetResolution(Version version) => version.IsLess(4, 3);
+		public static bool HasTargetResolution(UnityVersion version) => version.IsLess(4, 3);
 
-		private static bool IsExportIsTargetVolume(Version version, TransferInstructionFlags flags) => flags.IsRelease() || HasIsTargetVolume(version);
+		private static bool IsExportIsTargetVolume(UnityVersion version, TransferInstructionFlags flags) => flags.IsRelease() || HasIsTargetVolume(version);
 
 		public override void Read(AssetReader reader)
 		{

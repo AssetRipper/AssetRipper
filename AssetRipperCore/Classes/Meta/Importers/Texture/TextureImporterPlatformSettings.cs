@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			ForceMaximumCompressionQuality_BC6H_BC7 = false;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// ForceMaximumCompressionQuality_BC6H_BC7 default value has been changed from 1 to 0
 			if (version.IsGreaterEqual(2019, 2))
@@ -47,40 +47,40 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasResizeAlgorithm(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasResizeAlgorithm(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasTextureCompression(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasTextureCompression(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasCrunchedCompression(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasCrunchedCompression(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasCompressionQuality(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasCompressionQuality(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		public static bool HasAllowsAlphaSplitting(Version version) => version.IsGreaterEqual(5, 2);
+		public static bool HasAllowsAlphaSplitting(UnityVersion version) => version.IsGreaterEqual(5, 2);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasOverridden(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasOverridden(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasAndroidETC2FallbackOverride(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasAndroidETC2FallbackOverride(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2019.2 and greater
 		/// </summary>
-		public static bool HasForceMaximumCompressionQuality_BC6H_BC7(Version version) => version.IsGreaterEqual(2019, 2);
+		public static bool HasForceMaximumCompressionQuality_BC6H_BC7(UnityVersion version) => version.IsGreaterEqual(2019, 2);
 
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(5, 2);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(5, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -212,7 +212,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			return node;
 		}
 
-		private TextureFormat GetTextureFormat(Version version)
+		private TextureFormat GetTextureFormat(UnityVersion version)
 		{
 			if (ToSerializedVersion(version) > 1)
 			{
@@ -241,7 +241,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 			return CompressionQuality;
 		}
-		private bool GetForceMaximumCompressionQuality_BC6H_BC7(Version version)
+		private bool GetForceMaximumCompressionQuality_BC6H_BC7(UnityVersion version)
 		{
 			return HasForceMaximumCompressionQuality_BC6H_BC7(version) ? ForceMaximumCompressionQuality_BC6H_BC7 : true;
 		}

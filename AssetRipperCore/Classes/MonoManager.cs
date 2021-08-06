@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using DateTime = AssetRipper.Core.Classes.Misc.DateTime;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes
 {
@@ -17,26 +17,26 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool HasHasCompileErrors(Version version) => version.IsLess(3, 0, 0);
+		public static bool HasHasCompileErrors(UnityVersion version) => version.IsLess(3, 0, 0);
 		/// <summary>
 		/// 1.6.0 to 3.0.0 exclusive
 		/// </summary>
-		public static bool HasCustomDlls(Version version) => version.IsGreaterEqual(1, 6) && version.IsLess(3, 0, 0);
+		public static bool HasCustomDlls(UnityVersion version) => version.IsGreaterEqual(1, 6) && version.IsLess(3, 0, 0);
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool HasAssemblyIdentifiers(Version version) => version.IsLess(3);
+		public static bool HasAssemblyIdentifiers(UnityVersion version) => version.IsLess(3);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasAssemblyTypes(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasAssemblyTypes(UnityVersion version) => version.IsGreaterEqual(2017);
 
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2, 1);
 
-		private int GetSerializedVersion(Version version)
+		private int GetSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(3))
 			{

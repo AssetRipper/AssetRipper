@@ -11,7 +11,7 @@ using AssetRipper.Core.IO.Asset;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
 
 namespace AssetRipper.Core.Structure.GameStructure
@@ -125,21 +125,21 @@ namespace AssetRipper.Core.Structure.GameStructure
 			}
 		}
 
-		private static Version GetDefaultGenerationVersions(FormatVersion generation)
+		private static UnityVersion GetDefaultGenerationVersions(FormatVersion generation)
 		{
 			if (generation < FormatVersion.Unknown_5)
 			{
-				return new Version(1, 2, 2);
+				return new UnityVersion(1, 2, 2);
 			}
 
 			switch (generation)
 			{
 				case FormatVersion.Unknown_5:
-					return new Version(1, 6);
+					return new UnityVersion(1, 6);
 				case FormatVersion.Unknown_6:
-					return new Version(2, 5);
+					return new UnityVersion(2, 5);
 				case FormatVersion.Unknown_7:
-					return new Version(3, 0, 0, VersionType.Beta, 1);
+					return new UnityVersion(3, 0, 0, UnityVersionType.Beta, 1);
 				default:
 					throw new NotSupportedException();
 			}
@@ -160,7 +160,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 				if (bundle == null)
 				{
 					Logger.Log(LogType.Warning, LogCategory.Import, "Unable to determine layout for provided files. Tring default one");
-					Version version = GetDefaultGenerationVersions(serialized.Header.Version);
+					UnityVersion version = GetDefaultGenerationVersions(serialized.Header.Version);
 					return new LayoutInfo(version, DefaultPlatform, DefaultFlags);
 
 				}

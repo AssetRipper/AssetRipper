@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Classes.Mesh
 	{
 		public Mesh(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// MeshOptimized has been extended to MeshOptimizationFlags
 			if (version.IsGreaterEqual(2019))
@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 			// MeshTopology == 1 has become deprecated
 			// unknown alpha/beta version
-			if (version.IsGreaterEqual(4, 0, 0, VersionType.Beta))
+			if (version.IsGreaterEqual(4, 0, 0, UnityVersionType.Beta))
 			{
 				return 8;
 			}
@@ -55,7 +55,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 			// MeshCompression has been added
 			// unknown alpha/beta version
-			if (version.IsGreaterEqual(2, 6, 0, VersionType.Beta))
+			if (version.IsGreaterEqual(2, 6, 0, UnityVersionType.Beta))
 			{
 				return 4;
 			}
@@ -75,120 +75,120 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// Less than 2.0.0
 		/// </summary>
-		public static bool HasLODData(Version version) => version.IsLess(2, 0, 0);
+		public static bool HasLODData(UnityVersion version) => version.IsLess(2, 0, 0);
 		/// <summary>
 		/// 2.0.0 to 3.5.0 exclusive
 		/// </summary>
-		public static bool HasUse16bitIndices(Version version) => version.IsLess(3, 5);
+		public static bool HasUse16bitIndices(UnityVersion version) => version.IsLess(3, 5);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasBlendChannels(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasBlendChannels(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// Greater than 4.1.0a
 		/// </summary>
-		public static bool HasBlendShapes(Version version) => version.IsGreater(4, 1, 0, VersionType.Alpha);
+		public static bool HasBlendShapes(UnityVersion version) => version.IsGreater(4, 1, 0, UnityVersionType.Alpha);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasBoneNameHashes(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasBoneNameHashes(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasBonesAABB(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasBonesAABB(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool HasMeshCompression(Version version) => version.IsGreaterEqual(2, 6);
+		public static bool HasMeshCompression(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 4.0.0 to 5.0.0 exclusive
 		/// </summary>
-		public static bool HasStreamCompression(Version version) => version.IsGreaterEqual(4) && version.IsLess(5);
+		public static bool HasStreamCompression(UnityVersion version) => version.IsGreaterEqual(4) && version.IsLess(5);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasIsReadable(Version version) => version.IsGreaterEqual(4);
+		public static bool HasIsReadable(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasIndexFormat(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasIndexFormat(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// Less than 2018.2
 		/// </summary>
-		public static bool HasSkin(Version version) => version.IsLess(2018, 2);
+		public static bool HasSkin(UnityVersion version) => version.IsLess(2018, 2);
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		public static bool HasBindPose(Version version) => version.IsGreaterEqual(2, 1);
+		public static bool HasBindPose(UnityVersion version) => version.IsGreaterEqual(2, 1);
 		/// <summary>
 		/// 1.6.0 and greater
 		/// </summary>
-		public static bool HasUV1(Version version) => version.IsGreaterEqual(1, 6);
+		public static bool HasUV1(UnityVersion version) => version.IsGreaterEqual(1, 6);
 		/// <summary>
 		/// Less than 2.6.0
 		/// </summary>
-		public static bool HasTangentSpace(Version version) => version.IsLess(2, 6);
+		public static bool HasTangentSpace(UnityVersion version) => version.IsLess(2, 6);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasVertexData(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasVertexData(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 3.5.1 and greater
 		/// </summary>
-		public static bool IsOnlyVertexData(Version version) => version.IsGreaterEqual(3, 5, 1);
+		public static bool IsOnlyVertexData(UnityVersion version) => version.IsGreaterEqual(3, 5, 1);
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool HasCompressedMesh(Version version) => version.IsGreaterEqual(2, 6);
+		public static bool HasCompressedMesh(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// Less than 3.5.0f1
 		/// </summary>
-		public static bool HasCollisionTriangles(Version version) => version.IsLessEqual(3, 5, 0, VersionType.Beta);
+		public static bool HasCollisionTriangles(UnityVersion version) => version.IsLessEqual(3, 5, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// 2.5.0 and greater
 		/// </summary>
-		public static bool HasMeshUsageFlags(Version version) => version.IsGreaterEqual(2, 5);
+		public static bool HasMeshUsageFlags(UnityVersion version) => version.IsGreaterEqual(2, 5);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasCollision(Version version) => version.IsGreaterEqual(5);
+		public static bool HasCollision(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasMeshMetrics(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasMeshMetrics(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 3.5.0 and greater and Not Release
 		/// </summary>
-		public static bool HasMeshOptimization(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 5);
+		public static bool HasMeshOptimization(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasStreamData(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasStreamData(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 
 		/// <summary>
 		/// Less than 2.6.0
 		/// </summary>
-		private static bool IsIndexBufferFirst(Version version) => version.IsLess(2, 6);
+		private static bool IsIndexBufferFirst(UnityVersion version) => version.IsLess(2, 6);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		private static bool IsBindPoseFirst(Version version) => version.IsGreaterEqual(4, 3);
+		private static bool IsBindPoseFirst(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		private static bool IsAlignVertex(Version version) => version.IsGreaterEqual(2, 6);
+		private static bool IsAlignVertex(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		private static bool IsAlignFlags(Version version) => version.IsGreaterEqual(2, 6);
+		private static bool IsAlignFlags(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// Less than 2017.3.1p1
 		/// </summary>
-		private static bool IsIndexFormatCondition(Version version) => version.IsLess(2017, 3, 1, VersionType.Patch);
+		private static bool IsIndexFormatCondition(UnityVersion version) => version.IsLess(2017, 3, 1, UnityVersionType.Patch);
 		/// <summary>
 		/// 2019.1 and greater and Not Release
 		/// </summary>
-		private static bool IsMeshOptimizationFlags(Version version) => version.IsGreaterEqual(2019);
+		private static bool IsMeshOptimizationFlags(UnityVersion version) => version.IsGreaterEqual(2019);
 
 		public bool CheckAssetIntegrity()
 		{
@@ -222,7 +222,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		}
 
 		// TEMP: argument
-		public bool Is16BitIndices(Version version)
+		public bool Is16BitIndices(UnityVersion version)
 		{
 			if (HasLODData(version))
 			{

@@ -3,7 +3,7 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		/// <summary>
 		/// Less than 4.5.0
 		/// </summary>
-		public static bool HasBlendEventArrayConstant(Version version) => version.IsLess(4, 5);
+		public static bool HasBlendEventArrayConstant(UnityVersion version) => version.IsLess(4, 5);
 
 		public void Read(AssetReader reader)
 		{

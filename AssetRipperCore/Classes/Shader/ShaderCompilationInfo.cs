@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes.Shader
 		/// <summary>
 		/// 5.2.0 adn greater
 		/// </summary>
-		public static bool HasHasFixedFunctionShaders(Version version) => version.IsGreaterEqual(5, 2);
+		public static bool HasHasFixedFunctionShaders(UnityVersion version) => version.IsGreaterEqual(5, 2);
 
 		public void Read(AssetReader reader)
 		{

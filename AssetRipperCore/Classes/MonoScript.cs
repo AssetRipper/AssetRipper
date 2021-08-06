@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public MonoScript(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2018, 2))
 			{
@@ -46,61 +46,61 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// Not Release (NOTE: unknown version 1.5.0-2.5.0)
 		/// </summary>
-		public static bool HasScript(Version version, TransferInstructionFlags flags) => !flags.IsRelease();
+		public static bool HasScript(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease();
 		/// <summary>
 		/// 1.5.0 to 2.6.0 and Not Release
 		/// </summary>
-		public static bool HasDefaultProperties(Version version, TransferInstructionFlags flags)
+		public static bool HasDefaultProperties(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(1, 5) && version.IsLess(2, 6);
 		}
 		/// <summary>
 		/// 2.6.0 and greater and Not Release
 		/// </summary>
-		public static bool HasDefaultReferences(Version version, TransferInstructionFlags flags)
+		public static bool HasDefaultReferences(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(2, 6);
 		}
 		/// <summary>
 		/// 3.4.0 and greater and Not Release
 		/// </summary>
-		public static bool HasIcon(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 4);
+		public static bool HasIcon(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 4);
 		/// <summary>
 		/// 3.4.0 to 5.0.0 and Not Release
 		/// </summary>
-		public static bool HasEditorGraphData(Version version, TransferInstructionFlags flags)
+		public static bool HasEditorGraphData(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(3, 4) && version.IsLess(5);
 		}
 		/// <summary>
 		/// 3.4.0 and greater
 		/// </summary>
-		public static bool HasExecutionOrder(Version version) => version.IsGreaterEqual(3, 4);
+		public static bool HasExecutionOrder(UnityVersion version) => version.IsGreaterEqual(3, 4);
 		/// <summary>
 		/// 3.4.0 and greater and Release
 		/// </summary>
-		public static bool HasPropertiesHash(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 4) && flags.IsRelease();
+		public static bool HasPropertiesHash(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 4) && flags.IsRelease();
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool HasPathName(Version version) => version.IsLess(3);
+		public static bool HasPathName(UnityVersion version) => version.IsLess(3);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasNamespace(Version version) => version.IsGreaterEqual(3);
+		public static bool HasNamespace(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// Less than 2018.1.2 or Release
 		/// </summary>
-		public static bool HasAssemblyName(Version version, TransferInstructionFlags flags) => flags.IsRelease() || version.IsLess(2018, 1, 2);
+		public static bool HasAssemblyName(UnityVersion version, TransferInstructionFlags flags) => flags.IsRelease() || version.IsLess(2018, 1, 2);
 		/// <summary>
 		/// Less than 2018.2
 		/// </summary>
-		public static bool HasIsEditorScript(Version version) => version.IsLess(2018, 2);
+		public static bool HasIsEditorScript(UnityVersion version) => version.IsLess(2018, 2);
 
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		private static bool IsUInt32Hash(Version version) => version.IsLess(5);
+		private static bool IsUInt32Hash(UnityVersion version) => version.IsLess(5);
 
 		public bool IsScriptPresents()
 		{
@@ -241,7 +241,7 @@ namespace AssetRipper.Core.Classes
 			return node;
 		}
 
-		private byte[] GetScript(Version version, TransferInstructionFlags flags)
+		private byte[] GetScript(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasScript(version, flags))
@@ -252,7 +252,7 @@ namespace AssetRipper.Core.Classes
 			return System.Array.Empty<byte>();
 		}
 
-		private IReadOnlyDictionary<string, PPtr<Object.Object>> GetDefaultReferences(Version version, TransferInstructionFlags flags)
+		private IReadOnlyDictionary<string, PPtr<Object.Object>> GetDefaultReferences(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasDefaultReferences(version, flags))
@@ -263,7 +263,7 @@ namespace AssetRipper.Core.Classes
 			return new Dictionary<string, PPtr<Object.Object>>(0);
 		}
 
-		private PPtr<Object.Object> GetIcon(Version version, TransferInstructionFlags flags)
+		private PPtr<Object.Object> GetIcon(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasIcon(version, flags))
@@ -274,12 +274,12 @@ namespace AssetRipper.Core.Classes
 			return default;
 		}
 
-		private string GetNamespace(Version version)
+		private string GetNamespace(UnityVersion version)
 		{
 			return HasNamespace(version) ? Namespace : string.Empty;
 		}
 
-		private string GetAssemblyName(Version version, TransferInstructionFlags flags)
+		private string GetAssemblyName(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return HasAssemblyName(version, flags) ? AssemblyNameOrigin : string.Empty;
 		}

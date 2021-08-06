@@ -17,7 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core;
 
 namespace AssetRipper.GUI
@@ -210,11 +210,11 @@ namespace AssetRipper.GUI
 
 		private void Validate()
 		{
-			Version[] versions = GameStructure.FileCollection.GameFiles.Values.Select(t => t.Version).Distinct().ToArray();
+			UnityVersion[] versions = GameStructure.FileCollection.GameFiles.Values.Select(t => t.Version).Distinct().ToArray();
 			if (versions.Length > 1)
 			{
 				Logger.Log(LogType.Warning, LogCategory.Import, $"Asset collection has versions probably incompatible with each other. Here they are:");
-				foreach (Version version in versions)
+				foreach (UnityVersion version in versions)
 				{
 					Logger.Log(LogType.Warning, LogCategory.Import, version.ToString());
 				}

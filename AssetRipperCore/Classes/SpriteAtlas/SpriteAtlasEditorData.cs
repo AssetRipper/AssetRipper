@@ -9,7 +9,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.SpriteAtlas
 {
@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			BindAsDefault = true;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// PackingParameters was renamed to PackingSettings
 			// DefaultPlatformSettings has been added
@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 		/// <summary>
 		/// (2018.4.9 to 2018.4.15) or (2019.2.9 to 2019.2.18) or (2019.3.0 to 2019.3.1)
 		/// </summary>
-		public static bool HasStoredHash(Version version)
+		public static bool HasStoredHash(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2019))
 			{
@@ -130,7 +130,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			}
 		}
 
-		private string GetPackingSettingsName(Version version)
+		private string GetPackingSettingsName(UnityVersion version)
 		{
 			return ToSerializedVersion(version) > 1 ? PackingSettingsName : PackingParametersName;
 		}

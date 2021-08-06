@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasSegment(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasSegment(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 
 		public void Read(AssetReader reader)
 		{

@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.UI
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasCullTransparentMesh(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasCullTransparentMesh(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 
 		public override void Read(AssetReader reader)
 		{

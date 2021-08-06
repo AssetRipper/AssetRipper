@@ -29,10 +29,10 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 			IslandSolverContactsPerJob = 50;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// m_UseMultithreading renamed to useMultithreading, m_UseConsistencySorting to useConsistencySorting
-			if (version.IsGreaterEqual(2018, 1, 0, VersionType.Beta, 11))
+			if (version.IsGreaterEqual(2018, 1, 0, UnityVersionType.Beta, 11))
 			{
 				return 2;
 			}

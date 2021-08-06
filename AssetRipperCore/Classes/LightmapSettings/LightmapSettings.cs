@@ -15,11 +15,11 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 	{
 		public LightmapSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// NOTE: unknown version
 			// ShadowMaskMode has been replaced by UseShadowmask?
-			if (version.IsGreaterEqual(2017, 0, 0, VersionType.Beta))
+			if (version.IsGreaterEqual(2017, 0, 0, UnityVersionType.Beta))
 			{
 				return 11;
 			}
@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 				return 10;
 			}
 			// NOTE: unknown conversion
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2))
 			{
 				return 9;
 			}
@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 			// NOTE: unknown version
 			// NOTE: unknown conversion
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
+			if (version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final))
 			{
 				return 5;
 			}
@@ -56,7 +56,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 
 			// NOTE: unknown version
 			// NOTE: unknown conversion
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Beta))
+			if (version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta))
 			{
 				return 3;
 			}
@@ -71,26 +71,26 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasLightProbesLegacy(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasLightProbesLegacy(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// 5.0.0f1 and greater and Release
 		/// </summary>
-		public static bool HasEnlightenSceneMapping(Version version, TransferInstructionFlags flags)
+		public static bool HasEnlightenSceneMapping(UnityVersion version, TransferInstructionFlags flags)
 		{
 			// NOTE: unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && flags.IsRelease();
+			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final) && flags.IsRelease();
 		}
 		/// <summary>
 		/// 5.0.0bx or (5.0.0 and greater and Not Release)
 		/// </summary>
-		public static bool HasGIWorkflowMode(Version version, TransferInstructionFlags flags)
+		public static bool HasGIWorkflowMode(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(5))
 			{
 				if (flags.IsRelease())
 				{
 					// NOTE: unknown version
-					return version.IsEqual(5, 0, 0, VersionType.Beta);
+					return version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 				}
 				return true;
 			}
@@ -99,7 +99,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// <summary>
 		/// (3.5.0 to 5.0.0f1 exclusive) or (3.5.0 and greater and Release or Resource)
 		/// </summary>
-		public static bool HasLightProbes(Version version, TransferInstructionFlags flags)
+		public static bool HasLightProbes(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(3, 5))
 			{
@@ -108,7 +108,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 					return true;
 				}
 				// NOTE: unknown version
-				if (version.IsLess(5, 0, 0, VersionType.Final))
+				if (version.IsLess(5, 0, 0, UnityVersionType.Final))
 				{
 					return true;
 				}
@@ -118,14 +118,14 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// <summary>
 		/// Less than 5.0.0f1 or Release or Resource
 		/// </summary>
-		public static bool HasLightmaps(Version version, TransferInstructionFlags flags)
+		public static bool HasLightmaps(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (flags.IsRelease() || flags.IsBuiltinResources())
 			{
 				return true;
 			}
 			// NOTE: unknown version
-			if (version.IsLess(5, 0, 0, VersionType.Final))
+			if (version.IsLess(5, 0, 0, UnityVersionType.Final))
 			{
 				return true;
 			}
@@ -134,11 +134,11 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasLightmapsModeLegacy(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasLightmapsModeLegacy(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// (3.0.0 to 5.4.0 exclusive) or (5.4.0 and greater and Release)
 		/// </summary>
-		public static bool HasLightmapsMode(Version version, TransferInstructionFlags flags)
+		public static bool HasLightmapsMode(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(5, 4))
 			{
@@ -149,48 +149,48 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// <summary>
 		/// 3.2.0 to 5.0.0f1 exclusive
 		/// </summary>
-		public static bool HasUseDualLightmapsInForward(Version version) => version.IsGreaterEqual(3, 2) && version.IsLess(5, 0, 0, VersionType.Final);
+		public static bool HasUseDualLightmapsInForward(UnityVersion version) => version.IsGreaterEqual(3, 2) && version.IsLess(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 3.5.0 to 5.0.0f1 exclusive
 		/// </summary>
-		public static bool HasBakedColorSpace(Version version) => version.IsGreaterEqual(3, 5) && version.IsLess(5, 0, 0, VersionType.Final);
+		public static bool HasBakedColorSpace(UnityVersion version) => version.IsGreaterEqual(3, 5) && version.IsLess(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasGISettings(Version version) => version.IsGreaterEqual(5);
+		public static bool HasGISettings(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 3.0.0 and greater and Not Release
 		/// </summary>
-		public static bool HasLightmapEditorSettings(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3);
+		public static bool HasLightmapEditorSettings(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3);
 		/// <summary>
 		/// 5.0.0 and greater and Not Release
 		/// </summary>
-		public static bool HasLightingDataAsset(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5);
+		public static bool HasLightingDataAsset(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0 to 5.6.0b6
 		/// </summary>
-		public static bool HasRuntimeCPUUsage(Version version) => version.IsGreaterEqual(5) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 6);
+		public static bool HasRuntimeCPUUsage(UnityVersion version) => version.IsGreaterEqual(5) && version.IsLessEqual(5, 6, 0, UnityVersionType.Beta, 6);
 		/// <summary>
 		/// 5.6.0b2 and greater
 		/// </summary>
-		public static bool HasUseShadowmask(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
+		public static bool HasUseShadowmask(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2);
 
 		/// <summary>
 		/// 2017.1 and (Release or Resource)
 		/// </summary>
-		private static bool IsAlign1(Version version, TransferInstructionFlags flags)
+		private static bool IsAlign1(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return version.IsGreaterEqual(2017) && (flags.IsRelease() || flags.IsBuiltinResources());
 		}
 		/// <summary>
 		/// 3.2.0 and greater
 		/// </summary>
-		private static bool IsAlign2(Version version) => version.IsGreaterEqual(3, 2);
+		private static bool IsAlign2(UnityVersion version) => version.IsGreaterEqual(3, 2);
 
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		private static bool IsBoolShadowmask(Version version) => version.IsGreaterEqual(2017);
+		private static bool IsBoolShadowmask(UnityVersion version) => version.IsGreaterEqual(2017);
 
 		public override void Read(AssetReader reader)
 		{
@@ -470,7 +470,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			return node;
 		}
 
-		private GIWorkflowMode GetExportGIWorkflowMode(Version version, TransferInstructionFlags flags)
+		private GIWorkflowMode GetExportGIWorkflowMode(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasGIWorkflowMode(version, flags))
@@ -480,7 +480,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 #endif
 			return GIWorkflowMode.OnDemand;
 		}
-		private GISettings.GISettings GetExportGISettings(Version version)
+		private GISettings.GISettings GetExportGISettings(UnityVersion version)
 		{
 			return HasGISettings(version) ? GISettings : new GISettings.GISettings(true);
 		}
@@ -494,7 +494,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 #endif
 			return new LightmapEditorSettings(container.ExportVersion);
 		}
-		private PPtr<LightingDataAsset.LightingDataAsset> GetLightingDataAsset(Version version, TransferInstructionFlags flags)
+		private PPtr<LightingDataAsset.LightingDataAsset> GetLightingDataAsset(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasLightingDataAsset(version, flags))
@@ -504,7 +504,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 #endif
 			return default;
 		}
-		private bool GetExportUseShadowmask(Version version)
+		private bool GetExportUseShadowmask(UnityVersion version)
 		{
 			return HasUseShadowmask(version) ? UseShadowmask : true;
 		}

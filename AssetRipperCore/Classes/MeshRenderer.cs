@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasVertex(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(5) && flags.IsRelease();
+		public static bool HasVertex(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(5) && flags.IsRelease();
 
 		public override void Read(AssetReader reader)
 		{

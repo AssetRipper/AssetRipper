@@ -8,14 +8,14 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	public struct SpriteMetaData : IAsset
 	{
-		public SpriteMetaData(Version version)
+		public SpriteMetaData(UnityVersion version)
 		{
 			Name = "sprite_0";
 			Rect = default;
@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			Weights = Array.Empty<BoneWeights4>();
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// NOTE: unknown conversion
 			if (version.IsGreaterEqual(5, 3, 6))
@@ -47,27 +47,27 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool HasBorder(Version version) => version.IsGreaterEqual(4, 5);
+		public static bool HasBorder(UnityVersion version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasOutline(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasOutline(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasPhysicsShape(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasPhysicsShape(UnityVersion version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasTessellationDetail(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasTessellationDetail(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasBones(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasBones(UnityVersion version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// 2019.1. and greater
 		/// </summary>
-		public static bool HasInternalID(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasInternalID(UnityVersion version) => version.IsGreaterEqual(2019);
 
 		public void Read(AssetReader reader)
 		{

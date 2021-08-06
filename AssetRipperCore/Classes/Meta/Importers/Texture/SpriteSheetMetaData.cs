@@ -11,7 +11,7 @@ using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Texture
@@ -48,7 +48,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			SecondaryTextures = Array.Empty<SecondarySpriteTexture>();
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// NOTE: unknown conversion
 			if (version.IsGreaterEqual(5, 3, 7))
@@ -61,7 +61,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasSecondaryTextures(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasSecondaryTextures(UnityVersion version) => version.IsGreaterEqual(2019);
 
 		public ref SpriteMetaData GetSpriteMetaData(string name)
 		{

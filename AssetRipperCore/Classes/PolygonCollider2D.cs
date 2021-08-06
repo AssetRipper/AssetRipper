@@ -15,11 +15,11 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 5.6.0b5 and greater
 		/// </summary>
-		public static bool HasSpriteTilingProperty(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
+		public static bool HasSpriteTilingProperty(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 5);
 		/// <summary>
 		/// 5.6.0b3 and greater
 		/// </summary>
-		public static bool HasAutoTiling(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 3);
+		public static bool HasAutoTiling(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 3);
 
 		public override void Read(AssetReader reader)
 		{

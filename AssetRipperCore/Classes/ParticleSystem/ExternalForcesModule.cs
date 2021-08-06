@@ -18,10 +18,10 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			MultiplierCurve = new MinMaxCurve(1.0f);
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// float Multiplier has been converted to MinMaxCurve multiplierCurve
-			if (version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 8))
+			if (version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Beta, 8))
 			{
 				return 2;
 			}
@@ -32,11 +32,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		/// <summary>
 		/// 2019.1.0b8 and greater
 		/// </summary>
-		public static bool HasMultiplierCurve(Version version) => version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 8);
+		public static bool HasMultiplierCurve(UnityVersion version) => version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Beta, 8);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasInfluenceFilter(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasInfluenceFilter(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 
 		public override void Read(AssetReader reader)
 		{

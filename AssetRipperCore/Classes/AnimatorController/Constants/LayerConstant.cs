@@ -5,7 +5,7 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
@@ -18,11 +18,11 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasDefaultWeight(Version version) => version.IsGreaterEqual(4, 2);
+		public static bool HasDefaultWeight(UnityVersion version) => version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasSyncedLayerAffectsTiming(Version version) => version.IsGreaterEqual(4, 2);
+		public static bool HasSyncedLayerAffectsTiming(UnityVersion version) => version.IsGreaterEqual(4, 2);
 
 		public void Read(AssetReader reader)
 		{

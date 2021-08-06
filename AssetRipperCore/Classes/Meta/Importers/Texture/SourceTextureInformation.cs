@@ -16,11 +16,11 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		/// <summary>
 		/// 3.5.0 to 5.0.0 exclusive
 		/// </summary>
-		public static bool HasDoesTextureContainColorRGBAf(Version version) => version.IsLess(5) && version.IsGreaterEqual(3, 5);
+		public static bool HasDoesTextureContainColorRGBAf(UnityVersion version) => version.IsLess(5) && version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasSourceWasHDR(Version version) => version.IsGreaterEqual(5);
+		public static bool HasSourceWasHDR(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public void Read(AssetReader reader)
 		{

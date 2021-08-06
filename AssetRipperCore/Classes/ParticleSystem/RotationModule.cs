@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasAxes(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasAxes(UnityVersion version) => version.IsGreaterEqual(5, 3);
 
 		public override void Read(AssetReader reader)
 		{
@@ -41,11 +41,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			return node;
 		}
 
-		private MinMaxCurve GetExportX(Version version)
+		private MinMaxCurve GetExportX(UnityVersion version)
 		{
 			return HasAxes(version) ? X : new MinMaxCurve(0.0f);
 		}
-		private MinMaxCurve GetExportY(Version version)
+		private MinMaxCurve GetExportY(UnityVersion version)
 		{
 			return HasAxes(version) ? Y : new MinMaxCurve(0.0f);
 		}

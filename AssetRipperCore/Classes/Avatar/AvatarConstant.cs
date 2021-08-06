@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.Avatar
 	public class AvatarConstant : IAssetReadable, IYAMLExportable
 	{
 		public AvatarConstant() { }
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreater(4, 3))
 			{
@@ -28,15 +28,15 @@ namespace AssetRipper.Core.Classes.Avatar
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasDefaultPose(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasDefaultPose(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasHumanSkeletonReverseIndexArray(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasHumanSkeletonReverseIndexArray(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasRootMotionSkeleton(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasRootMotionSkeleton(UnityVersion version) => version.IsGreaterEqual(4, 3);
 
 		public void Read(AssetReader reader)
 		{
@@ -90,15 +90,15 @@ namespace AssetRipper.Core.Classes.Avatar
 			return node;
 		}
 
-		private OffsetPtr<SkeletonPose> GetDefaultPose(Version version)
+		private OffsetPtr<SkeletonPose> GetDefaultPose(UnityVersion version)
 		{
 			return HasDefaultPose(version) ? DefaultPose : AvatarSkeletonPose;
 		}
-		private IReadOnlyList<uint> GetSkeletonNameIDArray(Version version)
+		private IReadOnlyList<uint> GetSkeletonNameIDArray(UnityVersion version)
 		{
 			return HasDefaultPose(version) ? SkeletonNameIDArray : AvatarSkeleton.Instance.ID;
 		}
-		private IReadOnlyList<int> GetRootMotionSkeletonIndexArray(Version version)
+		private IReadOnlyList<int> GetRootMotionSkeletonIndexArray(UnityVersion version)
 		{
 			return HasRootMotionSkeleton(version) ? RootMotionSkeletonIndexArray : System.Array.Empty<int>();
 		}

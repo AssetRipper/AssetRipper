@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.MinMaxGradient
 			MinGradient = new Gradient(ColorRGBAf.White, ColorRGBAf.White);
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5, 4))
 			{
@@ -33,11 +33,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem.MinMaxGradient
 		/// <summary>
 		/// Less than 5.4.0
 		/// </summary>
-		public static bool IsColor32(Version version) => version.IsLess(5, 4);
+		public static bool IsColor32(UnityVersion version) => version.IsLess(5, 4);
 
-		private static int GetMaxGradientPlacement(Version version)
+		private static int GetMaxGradientPlacement(UnityVersion version)
 		{
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Patch, 4))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Patch, 4))
 			{
 				return 3;
 			}

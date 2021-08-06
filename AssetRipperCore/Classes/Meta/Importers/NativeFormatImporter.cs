@@ -17,9 +17,9 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasMainObjectFileID(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasMainObjectFileID(UnityVersion version) => version.IsGreaterEqual(5, 6);
 
-		public override bool IncludesImporter(Version version)
+		public override bool IncludesImporter(UnityVersion version)
 		{
 			return version.IsGreaterEqual(4);
 		}

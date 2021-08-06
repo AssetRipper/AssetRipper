@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Classes.BlendTree
 			Mirror = node.Mirror;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// TODO:
 			return 2;

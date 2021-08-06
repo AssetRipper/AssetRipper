@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasMultiSampled(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasMultiSampled(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
 		public TextureParameter(string name, int index, byte dimension, int sampler)
 		{

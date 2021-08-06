@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			Mirror = false;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// LoopBlend has been splitted to LoopBlend and LoopTime
 			if (version.IsGreaterEqual(4, 3))
@@ -58,19 +58,19 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasAdditiveReferencePoseClip(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasAdditiveReferencePoseClip(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasHasAdditiveReferencePose(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasHasAdditiveReferencePose(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasLoopTime(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasLoopTime(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// Less than 4.1.0
 		/// </summary>
-		public static bool HasKeepAdditionalBonesAnimation(Version version) => version.IsLess(4, 1);
+		public static bool HasKeepAdditionalBonesAnimation(UnityVersion version) => version.IsLess(4, 1);
 
 		public void Read(AssetReader reader)
 		{
@@ -141,7 +141,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			return node;
 		}
 
-		private bool GetLoopTime(Version version)
+		private bool GetLoopTime(UnityVersion version)
 		{
 			return HasLoopTime(version) ? LoopTime : LoopBlend;
 		}

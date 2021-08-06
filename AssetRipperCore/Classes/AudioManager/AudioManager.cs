@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes.AudioManager
 	{
 		public AudioManager(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// RequestedDSPBufferSize has been added
 			if (HasRequestedDSPBufferSize(version))
@@ -24,47 +24,47 @@ namespace AssetRipper.Core.Classes.AudioManager
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasRolloffScale(Version version) => version.IsGreaterEqual(3);
+		public static bool HasRolloffScale(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 5.0.0b1 and less
 		/// </summary>
-		public static bool HasSpeedOfSound(Version version) => version.IsLessEqual(5, 0, 0, VersionType.Beta, 1);
+		public static bool HasSpeedOfSound(UnityVersion version) => version.IsLessEqual(5, 0, 0, UnityVersionType.Beta, 1);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasDefaultSpeakerMode(Version version) => version.IsGreaterEqual(3);
+		public static bool HasDefaultSpeakerMode(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// Greater than 5.0.0b1
 		/// </summary>
-		public static bool HasSampleRate(Version version) => version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+		public static bool HasSampleRate(UnityVersion version) => version.IsGreater(5, 0, 0, UnityVersionType.Beta, 1);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasDSPBufferSize(Version version) => version.IsGreaterEqual(3);
+		public static bool HasDSPBufferSize(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// Greater than 5.0.0b1
 		/// </summary>
-		public static bool HasVirtualVoiceCount(Version version) => version.IsGreater(5, 0, 0, VersionType.Beta, 1);
+		public static bool HasVirtualVoiceCount(UnityVersion version) => version.IsGreater(5, 0, 0, UnityVersionType.Beta, 1);
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		public static bool HasSpatializerPlugin(Version version) => version.IsGreaterEqual(5, 2);
+		public static bool HasSpatializerPlugin(UnityVersion version) => version.IsGreaterEqual(5, 2);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasAmbisonicDecoderPlugin(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasAmbisonicDecoderPlugin(UnityVersion version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasDisableAudio(Version version) => version.IsGreaterEqual(4, 2);
+		public static bool HasDisableAudio(UnityVersion version) => version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 5.3.6 and greater
 		/// </summary>
-		public static bool HasVirtualizeEffects(Version version) => version.IsGreaterEqual(5, 3, 6);
+		public static bool HasVirtualizeEffects(UnityVersion version) => version.IsGreaterEqual(5, 3, 6);
 		/// <summary>
 		/// 2019.1.1 and greater
 		/// </summary>
-		public static bool HasRequestedDSPBufferSize(Version version)
+		public static bool HasRequestedDSPBufferSize(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2019))
 			{
@@ -76,12 +76,12 @@ namespace AssetRipper.Core.Classes.AudioManager
 		/// <summary>
 		/// 5.0.0b2 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2);
 
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		private static bool IsRolloffScaleFirst(Version version) => version.IsGreaterEqual(3, 5);
+		private static bool IsRolloffScaleFirst(UnityVersion version) => version.IsGreaterEqual(3, 5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -174,27 +174,27 @@ namespace AssetRipper.Core.Classes.AudioManager
 			return node;
 		}
 
-		private int GetVirtualVoiceCount(Version version)
+		private int GetVirtualVoiceCount(UnityVersion version)
 		{
 			return HasVirtualVoiceCount(version) ? VirtualVoiceCount : 512;
 		}
-		private int GetRealVoiceCount(Version version)
+		private int GetRealVoiceCount(UnityVersion version)
 		{
 			return HasVirtualVoiceCount(version) ? RealVoiceCount : 32;
 		}
-		private string GetSpatializerPlugin(Version version)
+		private string GetSpatializerPlugin(UnityVersion version)
 		{
 			return HasSpatializerPlugin(version) ? SpatializerPlugin : string.Empty;
 		}
-		private string GetAmbisonicDecoderPlugin(Version version)
+		private string GetAmbisonicDecoderPlugin(UnityVersion version)
 		{
 			return HasAmbisonicDecoderPlugin(version) ? AmbisonicDecoderPlugin : string.Empty;
 		}
-		private bool GetVirtualizeEffects(Version version)
+		private bool GetVirtualizeEffects(UnityVersion version)
 		{
 			return HasVirtualizeEffects(version) ? VirtualizeEffects : true;
 		}
-		private int GetRequestedDSPBufferSize(Version version)
+		private int GetRequestedDSPBufferSize(UnityVersion version)
 		{
 			return HasRequestedDSPBufferSize(version) ? RequestedDSPBufferSize : DSPBufferSize;
 		}

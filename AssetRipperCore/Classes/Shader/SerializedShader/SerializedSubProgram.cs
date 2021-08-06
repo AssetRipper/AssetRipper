@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
 	public struct SerializedSubProgram : IAssetReadable
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// KeywordIndices has been renamed to GlobalKeywordIndices
 			if (version.IsGreaterEqual(2019))
@@ -26,20 +26,20 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasLocalKeywordIndices(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasLocalKeywordIndices(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasSamplers(Version version) => version.IsGreaterEqual(2017, 1);
+		public static bool HasSamplers(UnityVersion version) => version.IsGreaterEqual(2017, 1);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasShaderRequirements(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasShaderRequirements(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		private static bool IsAlignKeywordIndices(Version version) => version.IsGreaterEqual(2017, 1);
+		private static bool IsAlignKeywordIndices(UnityVersion version) => version.IsGreaterEqual(2017, 1);
 
 		public void Read(AssetReader reader)
 		{
@@ -100,7 +100,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			writer.Write("}\n");
 		}
 
-		public ShaderGpuProgramType GetProgramType(Version version)
+		public ShaderGpuProgramType GetProgramType(UnityVersion version)
 		{
 			if (ShaderGpuProgramTypeExtensions.GpuProgramType55Relevant(version))
 			{

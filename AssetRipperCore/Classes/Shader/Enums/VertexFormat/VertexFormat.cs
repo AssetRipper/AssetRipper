@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader.Enums.VertexFormat
 {
@@ -18,18 +18,18 @@ namespace AssetRipper.Core.Classes.Shader.Enums.VertexFormat
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool VertexFormat2019Relevant(Version version) => version.IsGreaterEqual(2019);
+		public static bool VertexFormat2019Relevant(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool VertexFormat2017Relevant(Version version) => version.IsGreaterEqual(2017);
+		public static bool VertexFormat2017Relevant(UnityVersion version) => version.IsGreaterEqual(2017);
 
-		public static byte CalculateStride(this VertexFormat _this, Version version, int dimention)
+		public static byte CalculateStride(this VertexFormat _this, UnityVersion version, int dimention)
 		{
 			return (byte)(_this.GetSize(version) * dimention);
 		}
 
-		public static int GetSize(this VertexFormat _this, Version version)
+		public static int GetSize(this VertexFormat _this, UnityVersion version)
 		{
 			switch (_this)
 			{
@@ -49,7 +49,7 @@ namespace AssetRipper.Core.Classes.Shader.Enums.VertexFormat
 			}
 		}
 
-		public static byte ToFormat(this VertexFormat _this, Version version)
+		public static byte ToFormat(this VertexFormat _this, UnityVersion version)
 		{
 			if (VertexFormat2019Relevant(version))
 			{

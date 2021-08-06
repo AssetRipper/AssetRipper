@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.Terrain
 	{
 		public Terrain(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// RenderingLayerMask value has been changed from 1 to custom
 			if (version.IsGreaterEqual(2019, 3))
@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Classes.Terrain
 				return 4;
 			}
 			// unknown version
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
+			if (version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final))
 			{
 				return 3;
 			}
@@ -47,39 +47,39 @@ namespace AssetRipper.Core.Classes.Terrain
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasShadowCastingMode(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasShadowCastingMode(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 5.0.0f1 and greater
 		/// </summary>
-		public static bool HasDrawHeightmap(Version version)
+		public static bool HasDrawHeightmap(UnityVersion version)
 		{
 			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		}
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasDrawInstanced(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasDrawInstanced(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 5.0.0f1 and greater
 		/// </summary>
-		public static bool HasReflectionProbeUsage(Version version)
+		public static bool HasReflectionProbeUsage(UnityVersion version)
 		{
 			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		}
 		/// <summary>
 		/// 5.0.0f1 to 2019.2 exclusive
 		/// </summary>
-		public static bool HasMaterialType(Version version)
+		public static bool HasMaterialType(UnityVersion version)
 		{
 			// unknown bottom version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(2019, 2);
+			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final) && version.IsLess(2019, 2);
 		}
 		/// <summary>
 		/// 5.0.0f1 to 5.0.1 exclusive
 		/// </summary>
-		public static bool HasDefaultSmoothness(Version version) => version.IsEqual(5, 0, 0, VersionType.Final);
+		public static bool HasDefaultSmoothness(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// Release
 		/// </summary>
@@ -90,31 +90,31 @@ namespace AssetRipper.Core.Classes.Terrain
 		/// <summary>
 		/// 2017.2 and greater and Release
 		/// </summary>
-		public static bool HasExplicitProbeSetHash(Version version, TransferInstructionFlags flags)
+		public static bool HasExplicitProbeSetHash(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return version.IsGreaterEqual(2017, 2) && flags.IsRelease();
 		}
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasBakeLightProbesForTrees(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasBakeLightProbesForTrees(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasPreserveTreePrototypeLayers(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasPreserveTreePrototypeLayers(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 2019.1 and greater and Not Release
 		/// </summary>
-		public static bool HasDeringLightProbesForTrees(Version version, TransferInstructionFlags flags)
+		public static bool HasDeringLightProbesForTrees(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(2019);
 		}
 		/// <summary>
 		/// 5.0.0f1 and greater and Release (NOTE: unknown version)
 		/// </summary>
-		public static bool HasDynamicUVST(Version version, TransferInstructionFlags flags)
+		public static bool HasDynamicUVST(UnityVersion version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && flags.IsRelease();
+			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final) && flags.IsRelease();
 		}
 		/// <summary>
 		/// Not Release (NOTE: unknown version)
@@ -123,16 +123,16 @@ namespace AssetRipper.Core.Classes.Terrain
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasGroupingID(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasGroupingID(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasRenderingLayerMask(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasRenderingLayerMask(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 
 		public override void Read(AssetReader reader)
 		{
@@ -313,7 +313,7 @@ namespace AssetRipper.Core.Classes.Terrain
 			return node;
 		}
 
-		private MaterialType GetMaterialType(Version version)
+		private MaterialType GetMaterialType(UnityVersion version)
 		{
 			if (ToSerializedVersion(version) > 2)
 			{
@@ -350,7 +350,7 @@ namespace AssetRipper.Core.Classes.Terrain
 			}
 			return MaterialTemplate.ExportYAML(container);
 		}
-		private bool GetDeringLightProbesForTrees(Version version, TransferInstructionFlags flags)
+		private bool GetDeringLightProbesForTrees(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return HasDeringLightProbesForTrees(version, flags) ? DeringLightProbesForTrees : true;
 		}
@@ -374,7 +374,7 @@ namespace AssetRipper.Core.Classes.Terrain
 #endif
 			return default;
 		}
-		private uint GetRenderingLayerMask(Version version)
+		private uint GetRenderingLayerMask(UnityVersion version)
 		{
 			return HasRenderingLayerMask(version) ? RenderingLayerMask : 1;
 		}

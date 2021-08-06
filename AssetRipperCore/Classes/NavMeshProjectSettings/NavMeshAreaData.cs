@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Classes.NavMeshProjectSettings
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool HasEditType(Version version) => version.IsLess(5);
+		public static bool HasEditType(UnityVersion version) => version.IsLess(5);
 
 		public void Read(AssetReader reader)
 		{

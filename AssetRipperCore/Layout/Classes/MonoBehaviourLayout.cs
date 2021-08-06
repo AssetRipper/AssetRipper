@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Layout.Classes
 			{
 				HasEditorHideFlags = true;
 			}
-			if (info.Version.IsGreaterEqual(2019) && info.Version.IsLess(2019, 1, 0, VersionType.Beta, 4) && !info.Flags.IsRelease())
+			if (info.Version.IsGreaterEqual(2019) && info.Version.IsLess(2019, 1, 0, UnityVersionType.Beta, 4) && !info.Flags.IsRelease())
 			{
 				HasGeneratorAsset = true;
 			}

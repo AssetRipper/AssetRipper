@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		public SerializedFileHeader Header { get; }
 		public SerializedFileMetadata Metadata { get; }
 		public AssetLayout Layout { get; }
-		public Version Version => Layout.Info.Version;
+		public UnityVersion Version => Layout.Info.Version;
 		public Platform Platform => Layout.Info.Platform;
 		public TransferInstructionFlags Flags => Layout.Info.Flags;
 
@@ -363,7 +363,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 					if (asset.ClassID == ClassIDType.BuildSettings)
 					{
 						BuildSettings settings = (BuildSettings)asset;
-						Metadata.UnityVersion = Version.Parse(settings.Version);
+						Metadata.UnityVersion = UnityVersion.Parse(settings.Version);
 						return;
 					}
 				}

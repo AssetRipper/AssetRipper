@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Classes.NavMeshSettings
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasNavMeshData(Version version) => version.IsGreaterEqual(5);
+		public static bool HasNavMeshData(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public override void Read(AssetReader reader)
 		{

@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			return virtualFile.CreateAsset((assetInfo) => new EditorSettings(assetInfo, true));
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// UseLegacyProbeSampleCount default value has been changed from 1 to custom?
 			if (version.IsGreaterEqual(2019, 3))
@@ -95,88 +95,88 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		public static bool HasExternalVersionControl(Version version) => version.IsLess(4);
+		public static bool HasExternalVersionControl(UnityVersion version) => version.IsLess(4);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasSerializationMode(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasSerializationMode(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.4.x and less
 		/// </summary>
-		public static bool HasWebSecurityEmulationEnabled(Version version) => version.IsLessEqual(5, 4);
+		public static bool HasWebSecurityEmulationEnabled(UnityVersion version) => version.IsLessEqual(5, 4);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasLineEndingsForNewScripts(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasLineEndingsForNewScripts(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasDefaultBehaviorMode(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasDefaultBehaviorMode(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasPrefabRegularEnvironment(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasPrefabRegularEnvironment(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasSpritePackerMode(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasSpritePackerMode(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 5.1.0 and greater
 		/// </summary>
-		public static bool HasSpritePackerPaddingPower(Version version) => version.IsGreaterEqual(5, 1);
+		public static bool HasSpritePackerPaddingPower(UnityVersion version) => version.IsGreaterEqual(5, 1);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasEtcTextureCompressorBehavior(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasEtcTextureCompressorBehavior(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 5.1.0 and greater
 		/// </summary>
-		public static bool HasProjectGenerationIncludedExtensions(Version version) => version.IsGreaterEqual(5, 1);
+		public static bool HasProjectGenerationIncludedExtensions(UnityVersion version) => version.IsGreaterEqual(5, 1);
 		/// <summary>
 		/// 5.5.0 to 2018.3 exclusive
 		/// </summary>
-		public static bool HasUserGeneratedProjectSuffix(Version version) => version.IsLess(2018, 3) && version.IsGreaterEqual(5, 5);
+		public static bool HasUserGeneratedProjectSuffix(UnityVersion version) => version.IsLess(2018, 3) && version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasCollabEditorSettings(Version version) => version.IsGreaterEqual(2017, 1);
+		public static bool HasCollabEditorSettings(UnityVersion version) => version.IsGreaterEqual(2017, 1);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasEnableTextureStreamingInEditMode(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasEnableTextureStreamingInEditMode(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasEnableTextureStreamingInPlayMode(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasEnableTextureStreamingInPlayMode(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 2019.1.0b6 and greater
 		/// </summary>
-		public static bool HasAsyncShaderCompilation(Version version) => version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 6);
+		public static bool HasAsyncShaderCompilation(UnityVersion version) => version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Beta, 6);
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasEnterPlayModeOptions(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasEnterPlayModeOptions(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 		/// <summary>
 		/// 2019.2 and greater
 		/// </summary>
-		public static bool HasShowLightmapResolutionOverlay(Version version) => version.IsGreaterEqual(2019, 2);
+		public static bool HasShowLightmapResolutionOverlay(UnityVersion version) => version.IsGreaterEqual(2019, 2);
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasUseLegacyProbeSampleCount(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasUseLegacyProbeSampleCount(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 		/// <summary>
 		/// 2019.3.0b7 and greater
 		/// </summary>
-		public static bool HasAssetPipelineMode(Version version) => version.IsGreaterEqual(2019, 3, 0, VersionType.Beta, 7);
+		public static bool HasAssetPipelineMode(UnityVersion version) => version.IsGreaterEqual(2019, 3, 0, UnityVersionType.Beta, 7);
 
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		private static bool IsAlign1(Version version) => version.IsGreaterEqual(2018, 2);
+		private static bool IsAlign1(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 2019.2 and greater
 		/// </summary>
-		private static bool IsAlign2(Version version) => version.IsGreaterEqual(2019, 2);
+		private static bool IsAlign2(UnityVersion version) => version.IsGreaterEqual(2019, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -387,72 +387,72 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			return node;
 		}
 
-		private int GetSpritePackerPaddingPower(Version version)
+		private int GetSpritePackerPaddingPower(UnityVersion version)
 		{
 			return HasSpritePackerPaddingPower(version) ? SpritePackerPaddingPower : 1;
 		}
-		private int GetEtcTextureCompressorBehavior(Version version)
+		private int GetEtcTextureCompressorBehavior(UnityVersion version)
 		{
 			return HasEtcTextureCompressorBehavior(version) ? EtcTextureCompressorBehavior : 1;
 		}
-		private int GetEtcTextureFastCompressor(Version version)
+		private int GetEtcTextureFastCompressor(UnityVersion version)
 		{
 			return HasEtcTextureCompressorBehavior(version) ? EtcTextureFastCompressor : 1;
 		}
-		private int GetEtcTextureNormalCompressor(Version version)
+		private int GetEtcTextureNormalCompressor(UnityVersion version)
 		{
 			return HasEtcTextureCompressorBehavior(version) ? EtcTextureNormalCompressor : 2;
 		}
-		private int GetEtcTextureBestCompressor(Version version)
+		private int GetEtcTextureBestCompressor(UnityVersion version)
 		{
 			return HasEtcTextureCompressorBehavior(version) ? EtcTextureBestCompressor : 4;
 		}
-		private string GetProjectGenerationIncludedExtensions(Version version)
+		private string GetProjectGenerationIncludedExtensions(UnityVersion version)
 		{
 			string exts = HasProjectGenerationIncludedExtensions(version) ? ProjectGenerationIncludedExtensions : DefaultExtensions;
 			return ToSerializedVersion(version) < 8 ? exts : $"{exts};{AsmrefExtension}";
 		}
-		private string GetProjectGenerationRootNamespace(Version version)
+		private string GetProjectGenerationRootNamespace(UnityVersion version)
 		{
 			return HasProjectGenerationIncludedExtensions(version) ? ProjectGenerationRootNamespace : string.Empty;
 		}
-		private string GetUserGeneratedProjectSuffix(Version version)
+		private string GetUserGeneratedProjectSuffix(UnityVersion version)
 		{
 			return HasUserGeneratedProjectSuffix(version) ? UserGeneratedProjectSuffix : string.Empty;
 		}
-		private CollabEditorSettings GetCollabEditorSettings(Version version)
+		private CollabEditorSettings GetCollabEditorSettings(UnityVersion version)
 		{
 			return HasCollabEditorSettings(version) ? CollabEditorSettings : new CollabEditorSettings(true);
 		}
-		private bool GetEnableTextureStreamingInEditMode(Version version)
+		private bool GetEnableTextureStreamingInEditMode(UnityVersion version)
 		{
 			return HasEnableTextureStreamingInEditMode(version) ? EnableTextureStreamingInEditMode : true;
 		}
-		private bool GetEnableTextureStreamingInPlayMode(Version version)
+		private bool GetEnableTextureStreamingInPlayMode(UnityVersion version)
 		{
 			return HasEnableTextureStreamingInPlayMode(version) ? EnableTextureStreamingInPlayMode : true;
 		}
-		private bool GetAsyncShaderCompilation(Version version)
+		private bool GetAsyncShaderCompilation(UnityVersion version)
 		{
 			return HasAsyncShaderCompilation(version) ? AsyncShaderCompilation : true;
 		}
-		public EnterPlayModeOptions GetEnterPlayModeOptions(Version version)
+		public EnterPlayModeOptions GetEnterPlayModeOptions(UnityVersion version)
 		{
 			return HasEnterPlayModeOptions(version) ? EnterPlayModeOptions : EnterPlayModeOptions.DisableDomainReload | EnterPlayModeOptions.DisableSceneReload;
 		}
-		private bool GetShowLightmapResolutionOverlay(Version version)
+		private bool GetShowLightmapResolutionOverlay(UnityVersion version)
 		{
 			return HasShowLightmapResolutionOverlay(version) ? ShowLightmapResolutionOverlay : true;
 		}
-		private int GetUseLegacyProbeSampleCount(Version version)
+		private int GetUseLegacyProbeSampleCount(UnityVersion version)
 		{
 			return HasUseLegacyProbeSampleCount(version) ? UseLegacyProbeSampleCount : 1;
 		}
-		private string GetCacheServerEndpoint(Version version)
+		private string GetCacheServerEndpoint(UnityVersion version)
 		{
 			return HasAssetPipelineMode(version) ? CacheServerEndpoint : string.Empty;
 		}
-		private string GetCacheServerNamespacePrefix(Version version)
+		private string GetCacheServerNamespacePrefix(UnityVersion version)
 		{
 			return HasAssetPipelineMode(version) ? CacheServerNamespacePrefix : "default";
 		}

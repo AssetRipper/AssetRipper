@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 	{
 		public TrailRenderer(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// Width and Color has been replaced by Parameters
 			if (version.IsGreaterEqual(5, 5))
@@ -28,11 +28,11 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasParameters(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasParameters(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasEmitting(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasEmitting(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 
 		public override Object.Object Convert(IExportContainer container)
 		{

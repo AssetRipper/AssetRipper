@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Classes.Light
 	public class LightBakingOutput : IAssetReadable, IYAMLExportable
 	{
 		public LightBakingOutput() { }
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2017, 3))
 			{
@@ -21,11 +21,11 @@ namespace AssetRipper.Core.Classes.Light
 		/// <summary>
 		/// Less than 2017.3
 		/// </summary>
-		public static bool HasLightmappingMask(Version version) => version.IsLess(2017, 3);
+		public static bool HasLightmappingMask(UnityVersion version) => version.IsLess(2017, 3);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasIsBaked(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasIsBaked(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
 		public void Read(AssetReader reader)
 		{

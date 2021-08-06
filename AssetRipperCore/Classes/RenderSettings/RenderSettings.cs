@@ -18,14 +18,14 @@ namespace AssetRipper.Core.Classes.RenderSettings
 	{
 		public RenderSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 #warning TODO:
 			/*if (version.IsGreaterEqual(2018))
 			{
 				return 9;
 			}*/
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2))
 			{
 				return 8;
 			}
@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Classes.RenderSettings
 				return 7;
 			}
 			// unknown version
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
+			if (version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final))
 			{
 				return 6;
 			}
@@ -54,98 +54,98 @@ namespace AssetRipper.Core.Classes.RenderSettings
 		/// <summary>
 		/// 3.2.0 and greater
 		/// </summary>
-		public static bool HasFogMode(Version version) => version.IsGreaterEqual(3, 2);
+		public static bool HasFogMode(UnityVersion version) => version.IsGreaterEqual(3, 2);
 		/// <summary>
 		/// 3.2.0 and greater
 		/// </summary>
-		public static bool HasLinearFogStart(Version version) => version.IsGreaterEqual(3, 2);
+		public static bool HasLinearFogStart(UnityVersion version) => version.IsGreaterEqual(3, 2);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasAmbientEquatorColorRGBAf(Version version) => version.IsGreaterEqual(5);
+		public static bool HasAmbientEquatorColorRGBAf(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasAmbientSkyboxLight(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasAmbientSkyboxLight(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasAmbientMode(Version version) => version.IsGreaterEqual(5);
+		public static bool HasAmbientMode(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasCreateAmbientLight(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasCreateAmbientLight(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// 5.6.0b2 and greater
 		/// </summary>
-		public static bool HasSubtractiveShadowColorRGBAf(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
+		public static bool HasSubtractiveShadowColorRGBAf(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasFlareFadeSpeed(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasFlareFadeSpeed(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// Less than 1.5.0
 		/// </summary>
-		public static bool HasPixelLightCount(Version version) => version.IsLess(1, 5);
+		public static bool HasPixelLightCount(UnityVersion version) => version.IsLess(1, 5);
 		/// <summary>
 		/// Less than 1.5.0
 		/// </summary>
-		public static bool HasAmbientLightScale(Version version) => version.IsLess(1, 5);
+		public static bool HasAmbientLightScale(UnityVersion version) => version.IsLess(1, 5);
 		/// <summary>
 		/// Less than 1.6.0
 		/// </summary>
-		public static bool HasSpecularTex(Version version) => version.IsLess(1, 6);
+		public static bool HasSpecularTex(UnityVersion version) => version.IsLess(1, 6);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasDefaultReflectionMode(Version version) => version.IsGreaterEqual(5);
+		public static bool HasDefaultReflectionMode(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasDefaultReflectionResolution(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasDefaultReflectionResolution(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasCustomReflection(Version version) => version.IsGreaterEqual(5);
+		public static bool HasCustomReflection(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0 and Release
 		/// </summary>
-		public static bool HasAmbientProbe(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(5) && flags.IsRelease();
+		public static bool HasAmbientProbe(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(5) && flags.IsRelease();
 		/// <summary>
 		/// 5.0.0f1 to 5.3.0 exclusive and Release
 		/// </summary>
-		public static bool HasAmbientProbeInGamma(Version version, TransferInstructionFlags flags)
+		public static bool HasAmbientProbeInGamma(UnityVersion version, TransferInstructionFlags flags)
 		{
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final) && version.IsLess(5, 3) && flags.IsRelease();
+			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final) && version.IsLess(5, 3) && flags.IsRelease();
 		}
 		/// <summary>
 		/// 5.0.0 and (Release or ResourcesFile)
 		/// </summary>
-		public static bool HasGeneratedSkyboxReflection(Version version, TransferInstructionFlags flags)
+		public static bool HasGeneratedSkyboxReflection(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return version.IsGreaterEqual(5) && (flags.IsRelease() || flags.IsBuiltinResources());
 		}
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasSun(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasSun(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasIndirectSpecularColorRGBAf(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasIndirectSpecularColorRGBAf(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasUseRadianceAmbientProbe(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasUseRadianceAmbientProbe(UnityVersion version) => version.IsGreaterEqual(2018);
 
 		/// <summary>
 		/// Less than 5.0.0f1 (NOTE: unknown version)
 		/// </summary>
-		private static bool HasAmbientProbeFirst(Version version) => version.IsLess(5, 0, 0, VersionType.Final);
+		private static bool HasAmbientProbeFirst(UnityVersion version) => version.IsLess(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2, 1);
 
 		public override void Read(AssetReader reader)
 		{
@@ -314,47 +314,47 @@ namespace AssetRipper.Core.Classes.RenderSettings
 			return node;
 		}
 
-		private FogMode GetExportFogMode(Version version)
+		private FogMode GetExportFogMode(UnityVersion version)
 		{
 			return HasFogMode(version) ? FogMode : FogMode.ExponentialSquared;
 		}
-		private float GetExportLinearFogEnd(Version version)
+		private float GetExportLinearFogEnd(UnityVersion version)
 		{
 			return HasLinearFogStart(version) ? LinearFogEnd : 300.0f;
 		}
-		private ColorRGBAf GetExportAmbientEquatorColorRGBAf(Version version)
+		private ColorRGBAf GetExportAmbientEquatorColorRGBAf(UnityVersion version)
 		{
 			return HasAmbientEquatorColorRGBAf(version) ? AmbientEquatorColor : new ColorRGBAf(0.114f, 0.125f, 0.133f, 1.0f);
 		}
-		private ColorRGBAf GetExportAmbientGroundColorRGBAf(Version version)
+		private ColorRGBAf GetExportAmbientGroundColorRGBAf(UnityVersion version)
 		{
 			return HasAmbientEquatorColorRGBAf(version) ? AmbientGroundColor : new ColorRGBAf(0.047f, 0.043f, 0.035f, 1.0f);
 		}
-		private float GetExportAmbientIntensity(Version version)
+		private float GetExportAmbientIntensity(UnityVersion version)
 		{
 			return HasAmbientEquatorColorRGBAf(version) ? AmbientIntensity : 1.0f;
 		}
-		private ColorRGBAf GetExportSubtractiveShadowColorRGBAf(Version version)
+		private ColorRGBAf GetExportSubtractiveShadowColorRGBAf(UnityVersion version)
 		{
 			return HasSubtractiveShadowColorRGBAf(version) ? SubtractiveShadowColor : new ColorRGBAf(0.42f, 0.478f, 0.627f, 1.0f);
 		}
-		private float GetExportFlareFadeSpeed(Version version)
+		private float GetExportFlareFadeSpeed(UnityVersion version)
 		{
 			return HasFlareFadeSpeed(version) ? FlareFadeSpeed : 3.0f;
 		}
-		private int GetExportDefaultReflectionResolution(Version version)
+		private int GetExportDefaultReflectionResolution(UnityVersion version)
 		{
 			return HasDefaultReflectionResolution(version) ? DefaultReflectionResolution : 128;
 		}
-		private int GetExportReflectionBounces(Version version)
+		private int GetExportReflectionBounces(UnityVersion version)
 		{
 			return HasDefaultReflectionResolution(version) ? ReflectionBounces : 1;
 		}
-		private float GetExportReflectionIntensity(Version version)
+		private float GetExportReflectionIntensity(UnityVersion version)
 		{
 			return HasDefaultReflectionResolution(version) ? ReflectionIntensity : 1.0f;
 		}
-		private ColorRGBAf GetExportIndirectSpecularColorRGBAf(Version version)
+		private ColorRGBAf GetExportIndirectSpecularColorRGBAf(UnityVersion version)
 		{
 			return HasIndirectSpecularColorRGBAf(version) ? IndirectSpecularColor : new ColorRGBAf(0.44657898f, 0.4964133f, 0.5748178f, 1.0f);
 		}

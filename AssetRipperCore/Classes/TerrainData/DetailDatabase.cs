@@ -15,10 +15,10 @@ namespace AssetRipper.Core.Classes.TerrainData
 {
 	public struct DetailDatabase : IAsset, IDependent
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// Detail shaders has been added
-			if (version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 6))
+			if (version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Beta, 6))
 			{
 				return 3;
 			}
@@ -33,11 +33,11 @@ namespace AssetRipper.Core.Classes.TerrainData
 		/// <summary>
 		/// Less than 2.6.0
 		/// </summary>
-		public static bool HasAtlasTexture(Version version) => version.IsLess(2, 6);
+		public static bool HasAtlasTexture(UnityVersion version) => version.IsLess(2, 6);
 		/// <summary>
 		/// 2019.1.0b6 and greater
 		/// </summary>
-		public static bool HasDetailBillboardShader(Version version) => version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 6);
+		public static bool HasDetailBillboardShader(UnityVersion version) => version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Beta, 6);
 
 		public DetailDatabase Convert(IExportContainer container)
 		{

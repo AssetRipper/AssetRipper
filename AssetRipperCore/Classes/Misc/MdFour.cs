@@ -5,13 +5,13 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Misc
 {
 	public struct MdFour : IAsset
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// unknown version
 			return 2;

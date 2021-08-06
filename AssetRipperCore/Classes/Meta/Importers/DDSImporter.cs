@@ -20,9 +20,9 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasIsReadable(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasIsReadable(UnityVersion version) => version.IsGreaterEqual(5, 5);
 
-		public override bool IncludesImporter(Version version)
+		public override bool IncludesImporter(UnityVersion version)
 		{
 			return version.IsGreaterEqual(4);
 		}

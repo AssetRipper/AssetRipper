@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.SubEmitter
 {
 	public sealed class SubModule : ParticleSystemModule, IDependent
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5, 5))
 			{
@@ -24,11 +24,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem.SubEmitter
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasSubEmitters(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasSubEmitters(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasSecond(Version version) => version.IsGreaterEqual(4);
+		public static bool HasSecond(UnityVersion version) => version.IsGreaterEqual(4);
 
 		public override void Read(AssetReader reader)
 		{

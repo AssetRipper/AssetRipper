@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasMessage(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasMessage(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 
 		public override void Read(AssetReader reader)
 		{

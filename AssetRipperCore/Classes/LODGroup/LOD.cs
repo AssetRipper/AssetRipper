@@ -14,11 +14,11 @@ namespace AssetRipper.Core.Classes.LODGroup
 		/// <summary>
 		/// 5.0.0 to 5.1.0 exclusive
 		/// </summary>
-		public static bool HasFadeMode(Version version) => version.IsGreaterEqual(5) && version.IsLess(5, 1);
+		public static bool HasFadeMode(UnityVersion version) => version.IsGreaterEqual(5) && version.IsLess(5, 1);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasFadeTransitionWidth(Version version) => version.IsGreaterEqual(5);
+		public static bool HasFadeTransitionWidth(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public void Read(AssetReader reader)
 		{

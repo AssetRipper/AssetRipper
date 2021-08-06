@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2, 1);
 
 		public override void Read(AssetReader reader)
 		{

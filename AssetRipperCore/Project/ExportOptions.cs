@@ -2,13 +2,13 @@
 using AssetRipper.Core.IO.Asset;
 using System;
 using Object = AssetRipper.Core.Classes.Object.Object;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Project
 {
 	public sealed class ExportOptions
 	{
-		public ExportOptions(Version version, Platform platform, TransferInstructionFlags flags)
+		public ExportOptions(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
 			Version = version;
 			Platform = platform;
@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Project
 			return true;
 		}
 
-		public Version Version { get; }
+		public UnityVersion Version { get; }
 		public Platform Platform { get; }
 		public TransferInstructionFlags Flags { get; }
 

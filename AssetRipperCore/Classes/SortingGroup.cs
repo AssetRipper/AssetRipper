@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public SortingGroup(AssetInfo assetInfo) : base(assetInfo) { }
 
-		private static bool IsSortingLayerIDFirst(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Final);
+		private static bool IsSortingLayerIDFirst(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Final);
 
 		public override void Read(AssetReader reader)
 		{

@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		/// <summary>
 		/// 5.4.0 and greater and Not Release
 		/// </summary>
-		public static bool HasStandardShaderQuality(Version version, TransferInstructionFlags flags)
+		public static bool HasStandardShaderQuality(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return version.IsGreaterEqual(5, 4) && !flags.IsRelease();
 		}
@@ -41,7 +41,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			return node;
 		}
 
-		public ShaderQuality GetStandardShaderQuality(Version version, TransferInstructionFlags flags)
+		public ShaderQuality GetStandardShaderQuality(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasStandardShaderQuality(version, flags))
@@ -51,7 +51,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return ShaderQuality.High;
 		}
-		public bool GetUseReflectionProbeBoxProjection(Version version, TransferInstructionFlags flags)
+		public bool GetUseReflectionProbeBoxProjection(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasStandardShaderQuality(version, flags))
@@ -61,7 +61,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return true;
 		}
-		public bool GetUseReflectionProbeBlending(Version version, TransferInstructionFlags flags)
+		public bool GetUseReflectionProbeBlending(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasStandardShaderQuality(version, flags))

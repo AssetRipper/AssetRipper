@@ -9,7 +9,7 @@ using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.EditorBuildSettings
 {
@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 			return virtualFile.CreateAsset((assetInfo) => new EditorBuildSettings(assetInfo));
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// unknown version
 			// KeyValuePairs to Scene class
@@ -36,12 +36,12 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasConfigObjects(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasConfigObjects(UnityVersion version) => version.IsGreaterEqual(2018);
 
 		/// <summary>
 		/// 2.5.0 and greater (NOTE: unknown version)
 		/// </summary>
-		private static bool HasScenes(Version version) => version.IsGreaterEqual(2, 5);
+		private static bool HasScenes(UnityVersion version) => version.IsGreaterEqual(2, 5);
 
 		public void Initialize(IEnumerable<Scene> scenes)
 		{
@@ -85,7 +85,7 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 			return node;
 		}
 
-		private IReadOnlyDictionary<string, PPtr<Object.Object>> GetConfigObjects(Version version)
+		private IReadOnlyDictionary<string, PPtr<Object.Object>> GetConfigObjects(UnityVersion version)
 		{
 			return HasConfigObjects(version) ? ConfigObjects : new Dictionary<string, PPtr<Object.Object>>(0);
 		}

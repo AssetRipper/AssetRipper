@@ -12,14 +12,14 @@ using AssetRipper.Core.YAML.Extensions;
 using System;
 using System.IO;
 using System.Linq;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
 	public struct VertexData : IAsset
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// VertexFormat enum has been changed
 			if (VertexFormatExtensions.VertexFormat2019Relevant(version))
@@ -37,27 +37,27 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// Less than 2018.1
 		/// </summary>
-		public static bool HasCurrentChannels(Version version) => version.IsLess(2018);
+		public static bool HasCurrentChannels(UnityVersion version) => version.IsLess(2018);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasChannels(Version version) => version.IsGreaterEqual(4);
+		public static bool HasChannels(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool HasStreams(Version version) => version.IsLess(5);
+		public static bool HasStreams(UnityVersion version) => version.IsLess(5);
 
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		public static bool IsStreamStatic(Version version) => version.IsLess(4);
+		public static bool IsStreamStatic(UnityVersion version) => version.IsLess(4);
 
 		/// <summary>
 		/// 5.6.0
 		/// </summary>
-		private static bool AllowUnsetVertexChannel(Version version) => version.IsEqual(5, 6, 0);
+		private static bool AllowUnsetVertexChannel(UnityVersion version) => version.IsEqual(5, 6, 0);
 
-		public ChannelInfo GetChannel(Version version, ShaderChannel channelType)
+		public ChannelInfo GetChannel(UnityVersion version, ShaderChannel channelType)
 		{
 			if (HasChannels(version))
 			{
@@ -112,7 +112,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return skin;
 		}
 
-		public Vector3f[] GenerateVertices(Version version, ref SubMesh submesh)
+		public Vector3f[] GenerateVertices(UnityVersion version, ref SubMesh submesh)
 		{
 			ChannelInfo channel = GetChannel(version, ShaderChannel.Vertex);
 			if (!channel.IsSet)
@@ -247,18 +247,18 @@ namespace AssetRipper.Core.Classes.Mesh
 			return node;
 		}
 
-		public int GetStreamStride(Version version, int stream)
+		public int GetStreamStride(UnityVersion version, int stream)
 		{
 			return HasStreams(version) ?
 				(int)Streams[stream].Stride : Channels.Where(t => t.IsSet && t.Stream == stream).Sum(t => t.GetStride(version));
 		}
 
-		public int GetStreamSize(Version version, int stream)
+		public int GetStreamSize(UnityVersion version, int stream)
 		{
 			return GetStreamStride(version, stream) * VertexCount;
 		}
 
-		public int GetStreamOffset(Version version, int stream)
+		public int GetStreamOffset(UnityVersion version, int stream)
 		{
 			int offset = 0;
 			for (int i = 0; i < stream; i++)

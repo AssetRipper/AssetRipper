@@ -35,10 +35,10 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 			return virtualFile.CreateAsset((assetInfo) => new Physics2DSettings(assetInfo, true));
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// disabled RaycastsHitTriggers backward compatibility?
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 7))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 7))
 			{
 				return 3;
 			}
@@ -53,67 +53,67 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasPhysics2DSettings(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasPhysics2DSettings(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool HasVelocityThreshold(Version version) => version.IsGreaterEqual(4, 5);
+		public static bool HasVelocityThreshold(UnityVersion version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 4.6.1 to 5.6.0b6
 		/// </summary>
-		public static bool HasMinPenetrationForPenalty(Version version) => version.IsGreaterEqual(4, 6, 1) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 6);
+		public static bool HasMinPenetrationForPenalty(UnityVersion version) => version.IsGreaterEqual(4, 6, 1) && version.IsLessEqual(5, 6, 0, UnityVersionType.Beta, 6);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool HasBaumgarteScale(Version version) => version.IsGreaterEqual(4, 5);
+		public static bool HasBaumgarteScale(UnityVersion version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 5.6.0b7 and greater
 		/// </summary>
-		public static bool HasDefaultContactOffset(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 7);
+		public static bool HasDefaultContactOffset(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 7);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasJobOptions(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasJobOptions(UnityVersion version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		public static bool HasAutoSimulation(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		public static bool HasAutoSimulation(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 4.6.1 and greater
 		/// </summary>
-		public static bool HasQueriesStartInColliders(Version version) => version.IsGreaterEqual(4, 6, 1);
+		public static bool HasQueriesStartInColliders(UnityVersion version) => version.IsGreaterEqual(4, 6, 1);
 		/// <summary>
 		/// 4.5.3 to 4.6.0
 		/// </summary>
-		public static bool HasDeleteStopsCallbacks(Version version) => version.IsLessEqual(4, 6) && version.IsGreaterEqual(4, 5, 3);
+		public static bool HasDeleteStopsCallbacks(UnityVersion version) => version.IsLessEqual(4, 6) && version.IsGreaterEqual(4, 5, 3);
 		/// <summary>
 		/// 4.6.1 to 2018.1 exclusive
 		/// </summary>
-		public static bool HasChangeStopsCallbacks(Version version) => version.IsGreaterEqual(4, 6, 1) && version.IsLess(2018);
+		public static bool HasChangeStopsCallbacks(UnityVersion version) => version.IsGreaterEqual(4, 6, 1) && version.IsLess(2018);
 		/// <summary>
 		/// 5.6.0p1 and greater
 		/// </summary>
-		public static bool HasCallbacksOnDisable(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Patch);
+		public static bool HasCallbacksOnDisable(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Patch);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasAutoSyncTransforms(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasAutoSyncTransforms(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 5.4.0 and greater and Not Release
 		/// </summary>
-		public static bool HasAlwaysShowColliders(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 4);
+		public static bool HasAlwaysShowColliders(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.5.0 and greater and editor
 		/// </summary>
-		public static bool HasShowColliderAABB(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 5);
+		public static bool HasShowColliderAABB(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 5.4.0 and greater and Not Release
 		/// </summary>
-		public static bool HasContactArrowScale(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 4);
+		public static bool HasContactArrowScale(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.5.0 and greater and editor
 		/// </summary>
-		public static bool HasColliderAABBColorRGBAf(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 5);
+		public static bool HasColliderAABBColorRGBAf(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -256,63 +256,63 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 			return node;
 		}
 
-		private float GetVelocityThreshold(Version version)
+		private float GetVelocityThreshold(UnityVersion version)
 		{
 			return HasVelocityThreshold(version) ? VelocityThreshold : 1.0f;
 		}
-		private float GetMaxLinearCorrection(Version version)
+		private float GetMaxLinearCorrection(UnityVersion version)
 		{
 			return HasVelocityThreshold(version) ? MaxLinearCorrection : 0.2f;
 		}
-		private float GetMaxAngularCorrection(Version version)
+		private float GetMaxAngularCorrection(UnityVersion version)
 		{
 			return HasVelocityThreshold(version) ? MaxAngularCorrection : 8.0f;
 		}
-		private float GetMaxTranslationSpeed(Version version)
+		private float GetMaxTranslationSpeed(UnityVersion version)
 		{
 			return HasVelocityThreshold(version) ? MaxTranslationSpeed : 100.0f;
 		}
-		private float GetMaxRotationSpeed(Version version)
+		private float GetMaxRotationSpeed(UnityVersion version)
 		{
 			return HasVelocityThreshold(version) ? MaxRotationSpeed : 360.0f;
 		}
-		private float GetBaumgarteScale(Version version)
+		private float GetBaumgarteScale(UnityVersion version)
 		{
 			return HasBaumgarteScale(version) ? BaumgarteScale : 0.2f;
 		}
-		private float GetBaumgarteTimeOfImpactScale(Version version)
+		private float GetBaumgarteTimeOfImpactScale(UnityVersion version)
 		{
 			return HasBaumgarteScale(version) ? BaumgarteTimeOfImpactScale : 0.75f;
 		}
-		private float GetTimeToSleep(Version version)
+		private float GetTimeToSleep(UnityVersion version)
 		{
 			return HasBaumgarteScale(version) ? TimeToSleep : 0.5f;
 		}
-		private float GetLinearSleepTolerance(Version version)
+		private float GetLinearSleepTolerance(UnityVersion version)
 		{
 			return HasBaumgarteScale(version) ? LinearSleepTolerance : 0.01f;
 		}
-		private float GetAngularSleepTolerance(Version version)
+		private float GetAngularSleepTolerance(UnityVersion version)
 		{
 			return HasBaumgarteScale(version) ? AngularSleepTolerance : 2.0f;
 		}
-		private float GetDefaultContactOffset(Version version)
+		private float GetDefaultContactOffset(UnityVersion version)
 		{
 			return HasDefaultContactOffset(version) ? DefaultContactOffset : 0.01f;
 		}
-		private bool GetAutoSimulation(Version version)
+		private bool GetAutoSimulation(UnityVersion version)
 		{
 			return HasAutoSimulation(version) ? AutoSimulation : true;
 		}
-		private bool GetQueriesStartInColliders(Version version)
+		private bool GetQueriesStartInColliders(UnityVersion version)
 		{
 			return HasQueriesStartInColliders(version) ? QueriesStartInColliders : true;
 		}
-		private bool GetCallbacksOnDisable(Version version)
+		private bool GetCallbacksOnDisable(UnityVersion version)
 		{
 			return HasCallbacksOnDisable(version) ? CallbacksOnDisable : true;
 		}
-		private bool GetAutoSyncTransforms(Version version)
+		private bool GetAutoSyncTransforms(UnityVersion version)
 		{
 			return HasAutoSyncTransforms(version) ? AutoSyncTransforms : true;
 		}
@@ -324,7 +324,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 			return false;
 #endif
 		}
-		private bool GetShowColliderSleep(Version version, TransferInstructionFlags flags)
+		private bool GetShowColliderSleep(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasAlwaysShowColliders(version, flags))
@@ -350,7 +350,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 			return false;
 #endif
 		}
-		private float GetContactArrowScale(Version version, TransferInstructionFlags flags)
+		private float GetContactArrowScale(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasContactArrowScale(version, flags))
@@ -360,7 +360,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 #endif
 			return 0.2f;
 		}
-		private ColorRGBAf GetColliderAwakeColorRGBAf(Version version, TransferInstructionFlags flags)
+		private ColorRGBAf GetColliderAwakeColorRGBAf(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasContactArrowScale(version, flags))
@@ -370,7 +370,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 #endif
 			return new ColorRGBAf(0.5686275f, 0.95686275f, 0.54509807f, 0.7529412f);
 		}
-		private ColorRGBAf GetColliderAsleepColorRGBAf(Version version, TransferInstructionFlags flags)
+		private ColorRGBAf GetColliderAsleepColorRGBAf(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasContactArrowScale(version, flags))
@@ -380,7 +380,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 #endif
 			return new ColorRGBAf(0.5686275f, 0.95686275f, 0.54509807f, 0.36078432f);
 		}
-		private ColorRGBAf GetColliderContactColorRGBAf(Version version, TransferInstructionFlags flags)
+		private ColorRGBAf GetColliderContactColorRGBAf(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasContactArrowScale(version, flags))
@@ -390,7 +390,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 #endif
 			return new ColorRGBAf(1.0f, 0.0f, 1.0f, 0.6862745f);
 		}
-		private ColorRGBAf GetColliderAABBColorRGBAf(Version version, TransferInstructionFlags flags)
+		private ColorRGBAf GetColliderAABBColorRGBAf(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasContactArrowScale(version, flags))

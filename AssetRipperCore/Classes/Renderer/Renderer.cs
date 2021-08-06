@@ -18,31 +18,31 @@ namespace AssetRipper.Core.Classes.Renderer
 		/// <summary>
 		/// 1.5.0 and greater
 		/// </summary>
-		public static bool HasEnabled(Version version) => version.IsGreaterEqual(1, 5);
+		public static bool HasEnabled(UnityVersion version) => version.IsGreaterEqual(1, 5);
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool HasCastShadows(Version version) => version.IsGreaterEqual(2);
+		public static bool HasCastShadows(UnityVersion version) => version.IsGreaterEqual(2);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasDynamicOccludee(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasDynamicOccludee(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasMotionVector(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasMotionVector(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasRenderingLayerMask(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasRenderingLayerMask(UnityVersion version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasRendererPriority(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasRendererPriority(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		public static bool HasLightmapIndex(Version version, TransferInstructionFlags flags)
+		public static bool HasLightmapIndex(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(2, 1))
 			{
@@ -51,7 +51,7 @@ namespace AssetRipper.Core.Classes.Renderer
 					return true;
 				}
 				// unknown version
-				if (version.IsLess(5, 0, 0, VersionType.Final))
+				if (version.IsLess(5, 0, 0, UnityVersionType.Final))
 				{
 					return true;
 				}
@@ -61,7 +61,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasLightmapIndexDynamic(Version version, TransferInstructionFlags flags)
+		public static bool HasLightmapIndexDynamic(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(5))
 			{
@@ -70,7 +70,7 @@ namespace AssetRipper.Core.Classes.Renderer
 					return true;
 				}
 				// unknown version
-				if (version.IsLess(5, 0, 0, VersionType.Final))
+				if (version.IsLess(5, 0, 0, UnityVersionType.Final))
 				{
 					return true;
 				}
@@ -80,7 +80,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		public static bool HasLightmapTilingOffset(Version version, TransferInstructionFlags flags)
+		public static bool HasLightmapTilingOffset(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(2, 1))
 			{
@@ -89,7 +89,7 @@ namespace AssetRipper.Core.Classes.Renderer
 					return true;
 				}
 				// unknown version
-				if (version.IsLess(5, 0, 0, VersionType.Final))
+				if (version.IsLess(5, 0, 0, UnityVersionType.Final))
 				{
 					return true;
 				}
@@ -99,7 +99,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasLightmapTilingOffsetDynamic(Version version, TransferInstructionFlags flags)
+		public static bool HasLightmapTilingOffsetDynamic(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(5))
 			{
@@ -108,7 +108,7 @@ namespace AssetRipper.Core.Classes.Renderer
 					return true;
 				}
 				// unknown version
-				if (version.IsLess(5, 0, 0, VersionType.Final))
+				if (version.IsLess(5, 0, 0, UnityVersionType.Final))
 				{
 					return true;
 				}
@@ -118,91 +118,91 @@ namespace AssetRipper.Core.Classes.Renderer
 		/// <summary>
 		/// 3.0.0 to 5.5.0
 		/// </summary>
-		public static bool HasSubsetIndices(Version version) => version.IsGreaterEqual(3) && version.IsLess(5, 5);
+		public static bool HasSubsetIndices(UnityVersion version) => version.IsGreaterEqual(3) && version.IsLess(5, 5);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasStaticBatchInfo(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasStaticBatchInfo(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasStaticBatchRoot(Version version) => version.IsGreaterEqual(3);
+		public static bool HasStaticBatchRoot(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 3.5.0 to 5.4.0
 		/// </summary>
-		public static bool HasUseLight(Version version) => version.IsGreaterEqual(3, 5) && version.IsLess(5, 4);
+		public static bool HasUseLight(UnityVersion version) => version.IsGreaterEqual(3, 5) && version.IsLess(5, 4);
 		/// <summary>
 		/// 5.0.0bx
 		/// </summary>
-		public static bool HasUseReflectionProbes(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasUseReflectionProbes(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// 5.0.0f1 and greater
 		/// </summary>
-		public static bool HasReflectUsage(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasReflectUsage(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasRayTracingMode(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasRayTracingMode(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasProbeAnchor(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasProbeAnchor(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasLightOverride(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasLightOverride(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 3.0.0 and greater and Not Release
 		/// </summary>
-		public static bool HasScaleInLightmap(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3);
+		public static bool HasScaleInLightmap(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3);
 		/// <summary>
 		/// 2019.2 and greater and Not Release
 		/// </summary>
-		public static bool HasReceiveGI(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2019, 2);
+		public static bool HasReceiveGI(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2019, 2);
 		/// <summary>
 		/// 5.0.0f1 and greater and Not Release
 		/// </summary>
-		public static bool HasPreserveUVs(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasPreserveUVs(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.2.3 and greater and Not Release
 		/// </summary>
-		public static bool HasIgnoreNormalsForChartDetection(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 2, 3);
+		public static bool HasIgnoreNormalsForChartDetection(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 2, 3);
 		/// <summary>
 		/// 5.0.0f1 and greater and Not Release
 		/// </summary>
-		public static bool HasImportantGI(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasImportantGI(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.4.x and Not Release
 		/// </summary>
-		public static bool HasSelectedWireframeHidden(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsEqual(5, 4);
+		public static bool HasSelectedWireframeHidden(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsEqual(5, 4);
 		/// <summary>
 		/// 2017.2 and greater and Not Release
 		/// </summary>
-		public static bool HasStitchLightmapSeams(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2017, 2);
+		public static bool HasStitchLightmapSeams(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 5.5.0 and greater and Not Release
 		/// </summary>
-		public static bool HasSelectedEditorRenderState(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 5);
+		public static bool HasSelectedEditorRenderState(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 5.2.3 and greater and Not Release
 		/// </summary>
-		public static bool HasMinimumChartSize(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 2, 3);
+		public static bool HasMinimumChartSize(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 2, 3);
 		/// <summary>
 		/// 5.0.0 and greater and Not Release 
 		/// </summary>
-		public static bool HasAutoUVMaxDistance(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5);
+		public static bool HasAutoUVMaxDistance(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0bx and Not Release 
 		/// </summary>
-		public static bool HasGIBackfaceCull(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasGIBackfaceCull(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// 4.5.0 and greater (Release exlude 5.6.0bx)
 		/// </summary>
-		public static bool HasSortingLayerID(Version version, TransferInstructionFlags flags)
+		public static bool HasSortingLayerID(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(4, 5))
 			{
-				if (version.IsEqual(5, 6, 0, VersionType.Beta) && flags.IsRelease())
+				if (version.IsEqual(5, 6, 0, UnityVersionType.Beta) && flags.IsRelease())
 				{
 					return false;
 				}
@@ -213,54 +213,54 @@ namespace AssetRipper.Core.Classes.Renderer
 		/// <summary>
 		/// 4.3.x or 5.6.0 and greater
 		/// </summary>
-		public static bool HasSortingLayer(Version version) => version.IsEqual(4, 3) || version.IsGreaterEqual(5, 6);
+		public static bool HasSortingLayer(UnityVersion version) => version.IsEqual(4, 3) || version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasSortingOrder(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasSortingOrder(UnityVersion version) => version.IsGreaterEqual(4, 3);
 
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		private static bool IsLightmapIndexShort(Version version) => version.IsGreaterEqual(5);
+		private static bool IsLightmapIndexShort(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		private static bool IsMaterialFirst(Version version)
+		private static bool IsMaterialFirst(UnityVersion version)
 		{
 			return version.IsLess(3);
 		}
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		private static bool IsReflectUsageFirst(Version version)
+		private static bool IsReflectUsageFirst(UnityVersion version)
 		{
 			return version.IsGreaterEqual(5, 4);
 		}
 		/// <summary>
 		/// 5.6.0bx
 		/// </summary>
-		private static bool IsSortingLayerIDFirst(Version version)
+		private static bool IsSortingLayerIDFirst(UnityVersion version)
 		{
-			return version.IsEqual(5, 6, 0, VersionType.Beta);
+			return version.IsEqual(5, 6, 0, UnityVersionType.Beta);
 		}
 
 		/// <summary>
 		/// 5.0.0 to 5.3.x (NOTE: unknown version)
 		/// </summary>
-		private static bool IsAlign1(Version version) => version.IsGreaterEqual(5) && version.IsLess(5, 4);
+		private static bool IsAlign1(UnityVersion version) => version.IsGreaterEqual(5) && version.IsLess(5, 4);
 		/// <summary>
 		/// 5.0.0 and greater (NOTE: unknown version)
 		/// </summary>
-		private static bool IsAlign2(Version version) => version.IsGreaterEqual(5);
+		private static bool IsAlign2(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		private static bool IsAlign3(Version version) => version.IsGreaterEqual(4, 3);
+		private static bool IsAlign3(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		private static bool IsAlign4(Version version) => version.IsGreaterEqual(4, 5);
+		private static bool IsAlign4(UnityVersion version) => version.IsGreaterEqual(4, 5);
 
 		public string FindMaterialPropertyNameByCRC28(uint crc)
 		{
@@ -556,35 +556,35 @@ namespace AssetRipper.Core.Classes.Renderer
 			return node;
 		}
 
-		private bool GetEnabled(Version version)
+		private bool GetEnabled(UnityVersion version)
 		{
 			return HasEnabled(version) ? Enabled : true;
 		}
-		private ShadowCastingMode GetCastShadows(Version version)
+		private ShadowCastingMode GetCastShadows(UnityVersion version)
 		{
 			return HasCastShadows(version) ? CastShadows : ShadowCastingMode.On;
 		}
-		private byte GetReceiveShadows(Version version)
+		private byte GetReceiveShadows(UnityVersion version)
 		{
 			return HasCastShadows(version) ? ReceiveShadows : (byte)1;
 		}
-		private int GetDynamicOccludee(Version version)
+		private int GetDynamicOccludee(UnityVersion version)
 		{
 			return HasDynamicOccludee(version) ? DynamicOccludee : 1;
 		}
-		private MotionVectorGenerationMode GetMotionVectors(Version version)
+		private MotionVectorGenerationMode GetMotionVectors(UnityVersion version)
 		{
 			return HasMotionVector(version) ? MotionVectors : MotionVectorGenerationMode.Object;
 		}
-		private ReflectionProbeUsage GetReflectionProbeUsage(Version version)
+		private ReflectionProbeUsage GetReflectionProbeUsage(UnityVersion version)
 		{
 			return HasReflectUsage(version) ? ReflectionProbeUsage : ReflectionProbeUsage.BlendProbes;
 		}
-		private uint GetRenderingLayerMask(Version version)
+		private uint GetRenderingLayerMask(UnityVersion version)
 		{
 			return HasRenderingLayerMask(version) ? RenderingLayerMask : 1;
 		}
-		private StaticBatchInfo GetStaticBatchInfo(Version version)
+		private StaticBatchInfo GetStaticBatchInfo(UnityVersion version)
 		{
 			if (HasStaticBatchInfo(version))
 			{
@@ -596,7 +596,7 @@ namespace AssetRipper.Core.Classes.Renderer
 			}
 			return default;
 		}
-		private float GetScaleInLightmap(Version version, TransferInstructionFlags flags)
+		private float GetScaleInLightmap(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasScaleInLightmap(version, flags))
@@ -606,7 +606,7 @@ namespace AssetRipper.Core.Classes.Renderer
 #endif
 			return 1.0f;
 		}
-		private ReceiveGI GetReceiveGI(Version version, TransferInstructionFlags flags)
+		private ReceiveGI GetReceiveGI(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasReceiveGI(version, flags))
@@ -616,7 +616,7 @@ namespace AssetRipper.Core.Classes.Renderer
 #endif
 			return ReceiveGI.Lightmaps;
 		}
-		private bool GetPreserveUVs(Version version, TransferInstructionFlags flags)
+		private bool GetPreserveUVs(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasPreserveUVs(version, flags))
@@ -626,7 +626,7 @@ namespace AssetRipper.Core.Classes.Renderer
 #endif
 			return false;
 		}
-		private bool GetIgnoreNormalsForChartDetection(Version version, TransferInstructionFlags flags)
+		private bool GetIgnoreNormalsForChartDetection(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasIgnoreNormalsForChartDetection(version, flags))
@@ -636,7 +636,7 @@ namespace AssetRipper.Core.Classes.Renderer
 #endif
 			return false;
 		}
-		private bool GetImportantGI(Version version, TransferInstructionFlags flags)
+		private bool GetImportantGI(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasImportantGI(version, flags))
@@ -646,7 +646,7 @@ namespace AssetRipper.Core.Classes.Renderer
 #endif
 			return false;
 		}
-		private bool GetStitchLightmapSeams(Version version, TransferInstructionFlags flags)
+		private bool GetStitchLightmapSeams(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasStitchLightmapSeams(version, flags))
@@ -656,7 +656,7 @@ namespace AssetRipper.Core.Classes.Renderer
 #endif
 			return false;
 		}
-		private EditorSelectedRenderState GetSelectedEditorRenderState(Version version, TransferInstructionFlags flags)
+		private EditorSelectedRenderState GetSelectedEditorRenderState(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasSelectedEditorRenderState(version, flags))
@@ -666,7 +666,7 @@ namespace AssetRipper.Core.Classes.Renderer
 #endif
 			return (EditorSelectedRenderState)3;
 		}
-		private int GetMinimumChartSize(Version version, TransferInstructionFlags flags)
+		private int GetMinimumChartSize(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasMinimumChartSize(version, flags))
@@ -676,7 +676,7 @@ namespace AssetRipper.Core.Classes.Renderer
 #endif
 			return 4;
 		}
-		private float GetAutoUVMaxDistance(Version version, TransferInstructionFlags flags)
+		private float GetAutoUVMaxDistance(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasAutoUVMaxDistance(version, flags))
@@ -686,7 +686,7 @@ namespace AssetRipper.Core.Classes.Renderer
 #endif
 			return 0.5f;
 		}
-		private float GetAutoUVMaxAngle(Version version, TransferInstructionFlags flags)
+		private float GetAutoUVMaxAngle(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasAutoUVMaxDistance(version, flags))

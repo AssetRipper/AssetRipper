@@ -8,11 +8,11 @@ namespace AssetRipper.Core.Layout
 	/// </summary>
 	public sealed class LayoutInfo
 	{
-		public Version Version { get; }
+		public UnityVersion Version { get; }
 		public Platform Platform { get; }
 		public TransferInstructionFlags Flags { get; }
 
-		public LayoutInfo(Version version, Platform platform, TransferInstructionFlags flags)
+		public LayoutInfo(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
 			Version = version;
 			Platform = platform;

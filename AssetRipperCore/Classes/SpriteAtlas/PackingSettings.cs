@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			EnableTightPacking = true;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// paddingPower was renamed to padding
 			if (version.IsGreaterEqual(2017, 1, 2))

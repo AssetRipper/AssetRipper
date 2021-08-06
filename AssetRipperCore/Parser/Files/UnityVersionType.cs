@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Parser.Files
 {
-	public enum VersionType
+	public enum UnityVersionType
 	{
 		Alpha = 0,
 		Beta,
@@ -12,22 +12,22 @@ namespace AssetRipper.Core.Parser.Files
 		MaxValue = Patch,
 	}
 
-	public static class VersionTypeExtentions
+	public static class UnityVersionTypeExtentions
 	{
-		public static string ToLiteral(this VersionType _this)
+		public static string ToLiteral(this UnityVersionType _this)
 		{
 			switch (_this)
 			{
-				case VersionType.Alpha:
+				case UnityVersionType.Alpha:
 					return "a";
 
-				case VersionType.Beta:
+				case UnityVersionType.Beta:
 					return "b";
 
-				case VersionType.Final:
+				case UnityVersionType.Final:
 					return "f";
 
-				case VersionType.Patch:
+				case UnityVersionType.Patch:
 					return "p";
 
 				default:

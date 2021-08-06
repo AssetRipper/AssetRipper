@@ -10,10 +10,10 @@ namespace AssetRipper.Core.Classes.AnimatorController.State
 		/// <summary>
 		/// 5.0.0f1 and greater
 		/// </summary>
-		public static bool HasStateMachineBehaviourIndices(Version version)
+		public static bool HasStateMachineBehaviourIndices(UnityVersion version)
 		{
 			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		}
 
 		public void Read(AssetReader reader)

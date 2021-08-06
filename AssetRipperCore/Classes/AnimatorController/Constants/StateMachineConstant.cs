@@ -5,7 +5,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		public struct Parameters
 		{
 			public uint ID { get; set; }
-			public Version Version { get; set; }
+			public UnityVersion Version { get; set; }
 			public IReadOnlyList<AnimatorState> States { get; set; }
 			public IReadOnlyDictionary<uint, string> TOS { get; set; }
 		}
@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasConstantArray(Version version) => version.IsGreaterEqual(5);
+		public static bool HasConstantArray(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public void Read(AssetReader reader)
 		{

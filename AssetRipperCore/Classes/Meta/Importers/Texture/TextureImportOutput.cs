@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasImportInspectorWarnings(Version version) => version.IsGreaterEqual(5);
+		public static bool HasImportInspectorWarnings(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public void Read(AssetReader reader)
 		{

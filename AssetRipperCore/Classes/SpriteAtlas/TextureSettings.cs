@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			SRGB = true;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// colorSpace was renamed to sRGB
 			if (version.IsGreaterEqual(2017, 1, 2))
@@ -36,12 +36,12 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 		/// <summary>
 		/// 2017.1.0b3
 		/// </summary>
-		public static bool HasCrunchedCompression(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 3);
+		public static bool HasCrunchedCompression(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 3);
 
 		/// <summary>
 		/// Less than 2017.1.2
 		/// </summary>
-		private static bool HasColorSpace(Version version) => version.IsLess(2017, 1, 2);
+		private static bool HasColorSpace(UnityVersion version) => version.IsLess(2017, 1, 2);
 
 		public void Read(AssetReader reader)
 		{

@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser.Header
 		/// <summary>
 		/// Actual engine version
 		/// </summary>
-		public Version UnityWebMinimumRevision { get; set; }
+		public UnityVersion UnityWebMinimumRevision { get; set; }
 		public BundleFlags Flags
 		{
 			get
@@ -89,7 +89,7 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser.Header
 			Version = (BundleVersion)reader.ReadInt32();
 			UnityWebBundleVersion = reader.ReadStringZeroTerm();
 			string engineVersion = reader.ReadStringZeroTerm();
-			UnityWebMinimumRevision = Files.Version.Parse(engineVersion);
+			UnityWebMinimumRevision = Files.UnityVersion.Parse(engineVersion);
 
 			switch (Signature)
 			{

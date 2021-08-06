@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.Material
 	public class UnityPropertySheet : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public UnityPropertySheet() { }
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2017, 3))
 			{

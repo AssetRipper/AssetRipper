@@ -13,11 +13,11 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasHints(Version version) => version.IsGreaterEqual(5);
+		public static bool HasHints(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool IsVector3f(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool IsVector3f(UnityVersion version) => version.IsGreaterEqual(5, 4);
 
 		public void Read(AssetReader reader)
 		{

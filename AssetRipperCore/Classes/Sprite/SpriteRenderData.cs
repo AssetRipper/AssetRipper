@@ -7,7 +7,7 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.Sprite
@@ -17,35 +17,35 @@ namespace AssetRipper.Core.Classes.Sprite
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		public static bool HasAlphaTexture(Version version) => version.IsGreaterEqual(5, 2);
+		public static bool HasAlphaTexture(UnityVersion version) => version.IsGreaterEqual(5, 2);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasSecondaryTextures(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasSecondaryTextures(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasVertexData(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasVertexData(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasBindpose(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasBindpose(UnityVersion version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// 2018.1
 		/// </summary>
-		public static bool HasSourceSkin(Version version) => version.IsEqual(2018, 1);
+		public static bool HasSourceSkin(UnityVersion version) => version.IsEqual(2018, 1);
 		/// <summary>
 		/// 5.4.x-5.6.x and greater
 		/// </summary>
-		public static bool HasAtlasRectOffset(Version version)
+		public static bool HasAtlasRectOffset(UnityVersion version)
 		{
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 10))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 10))
 			{
 				return true;
 			}
-			if (version.IsGreaterEqual(5, 4, 5, VersionType.Patch, 1))
+			if (version.IsGreaterEqual(5, 4, 5, UnityVersionType.Patch, 1))
 			{
-				if (version.IsGreaterEqual(5, 5, 2, VersionType.Patch))
+				if (version.IsGreaterEqual(5, 5, 2, UnityVersionType.Patch))
 				{
 					return version.IsEqual(5, 5);
 				}
@@ -56,13 +56,13 @@ namespace AssetRipper.Core.Classes.Sprite
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool HasUVTransform(Version version) => version.IsGreaterEqual(4, 5);
+		public static bool HasUVTransform(UnityVersion version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasDownscaleMultiplier(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasDownscaleMultiplier(UnityVersion version) => version.IsGreaterEqual(2017);
 
-		public Vector2f[][] GenerateOutline(Version version)
+		public Vector2f[][] GenerateOutline(UnityVersion version)
 		{
 			if (HasVertexData(version))
 			{

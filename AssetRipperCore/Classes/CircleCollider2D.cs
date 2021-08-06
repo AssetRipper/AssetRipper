@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public CircleCollider2D(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5))
 			{
@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool HasCenter(Version version) => version.IsLess(5);
+		public static bool HasCenter(UnityVersion version) => version.IsLess(5);
 
 		public override void Read(AssetReader reader)
 		{

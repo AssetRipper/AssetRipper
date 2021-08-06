@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Versioning;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core;
 
 namespace AssetRipper.Library.Exporters.Shaders
@@ -69,7 +69,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			return true;
 		}
 
-		private static ShaderTextExporter ShaderExporterInstantiator(Version version, GPUPlatform graphicApi)
+		private static ShaderTextExporter ShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
 		{
 			switch (graphicApi)
 			{

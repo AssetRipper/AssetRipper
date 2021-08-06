@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.Animator
 	{
 		public Animator(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(4, 5))
 			{
@@ -29,40 +29,40 @@ namespace AssetRipper.Core.Classes.Animator
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool HasUpdateMode(Version version) => version.IsGreaterEqual(4, 5);
+		public static bool HasUpdateMode(UnityVersion version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// Less than 4.5.0
 		/// </summary>
-		public static bool HasAnimatePhisics(Version version) => version.IsLess(4, 5);
+		public static bool HasAnimatePhisics(UnityVersion version) => version.IsLess(4, 5);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasHasTransformHierarchy(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasHasTransformHierarchy(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasLinearVelocityBlending(Version version) => version.IsGreaterEqual(5);
+		public static bool HasLinearVelocityBlending(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0 and greater and Not Release
 		/// </summary>
-		public static bool HasWarningMessage(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5);
+		public static bool HasWarningMessage(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5);
 		/// <summary>
 		/// 4.5.3 and greater
 		/// </summary>
-		public static bool HasAllowConstantOptimization(Version version) => version.IsGreaterEqual(4, 5, 3);
+		public static bool HasAllowConstantOptimization(UnityVersion version) => version.IsGreaterEqual(4, 5, 3);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasKeepAnimatorControllerStateOnDisable(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasKeepAnimatorControllerStateOnDisable(UnityVersion version) => version.IsGreaterEqual(2018);
 
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		private static bool IsAlignMiddle(Version version) => version.IsGreaterEqual(4, 5);
+		private static bool IsAlignMiddle(UnityVersion version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		private static bool IsAlignEnd(Version version) => version.IsGreaterEqual(5);
+		private static bool IsAlignEnd(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -172,7 +172,7 @@ namespace AssetRipper.Core.Classes.Animator
 			return node;
 		}
 
-		private string GetWarningMessage(Version version, TransferInstructionFlags flags)
+		private string GetWarningMessage(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasWarningMessage(version, flags))

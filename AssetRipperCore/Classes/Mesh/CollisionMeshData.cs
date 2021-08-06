@@ -2,13 +2,13 @@
 using AssetRipper.Core.IO.Asset;
 using System;
 using System.Linq;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
 	public struct CollisionMeshData : IAssetReadable, IAssetWritable
 	{
-		public CollisionMeshData(Version version)
+		public CollisionMeshData(UnityVersion version)
 		{
 			BakedConvexCollisionMesh = Array.Empty<byte>();
 			BakedTriangleCollisionMesh = Array.Empty<byte>();

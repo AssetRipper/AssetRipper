@@ -15,16 +15,16 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 3.4.0 and greater
 		/// </summary>
-		public static bool HasEnabled(Version version) => version.IsGreaterEqual(3, 4);
+		public static bool HasEnabled(UnityVersion version) => version.IsGreaterEqual(3, 4);
 
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		private static bool IsMaterialConditional(Version version) => version.IsGreaterEqual(4, 3);
+		private static bool IsMaterialConditional(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		private static bool IsTriggerConditional(Version version) => version.IsGreaterEqual(5);
+		private static bool IsTriggerConditional(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public override void Read(AssetReader reader)
 		{

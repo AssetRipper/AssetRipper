@@ -6,13 +6,13 @@ using AssetRipper.Core.Parser.Files;
 using System;
 using System.IO;
 using System.Text;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.IO
 {
 	public class ShaderWriter : InvariantStreamWriter
 	{
-		public ShaderWriter(Stream stream, Shader shader, Func<Version, GPUPlatform, ShaderTextExporter> exporterInstantiator) : base(stream, new UTF8Encoding(false), 4096, true)
+		public ShaderWriter(Stream stream, Shader shader, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator) : base(stream, new UTF8Encoding(false), 4096, true)
 		{
 			if (shader == null)
 			{
@@ -36,9 +36,9 @@ namespace AssetRipper.Core.IO
 		}
 
 		public Shader Shader { get; }
-		public Version Version => Shader.File.Version;
+		public UnityVersion Version => Shader.File.Version;
 		public Platform Platform => Shader.File.Platform;
 
-		private readonly Func<Version, GPUPlatform, ShaderTextExporter> m_exporterInstantiator;
+		private readonly Func<UnityVersion, GPUPlatform, ShaderTextExporter> m_exporterInstantiator;
 	}
 }

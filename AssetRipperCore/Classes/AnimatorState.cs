@@ -13,7 +13,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes
@@ -83,7 +83,7 @@ namespace AssetRipper.Core.Classes
 			return virtualFile.CreateAsset((assetInfo) => new AnimatorState(virtualFile.Layout, assetInfo, controller, stateMachineIndex, stateIndex, position));
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// TODO:
 			return 5;

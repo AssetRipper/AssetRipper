@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 	{
 		public ParticleSystemRenderer(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// m_ApplyActiveColorSpace previous value is false
 			if (version.IsGreaterEqual(2018, 2))
@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 			{
 				return 5;
 			}
-			if (version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2))
+			if (version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2))
 			{
 				return 4;
 			}
@@ -47,65 +47,65 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasMinParticleSize(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasMinParticleSize(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasNormalDirection(Version version) => version.IsGreaterEqual(4);
+		public static bool HasNormalDirection(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasShadowBias(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasShadowBias(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasRenderAlignment(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasRenderAlignment(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasFlip(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasFlip(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 5.5.0b11 and greater
 		/// </summary>
-		public static bool HasUseCustomVertexStreams(Version version) => version.IsGreaterEqual(5, 5, 0, VersionType.Beta, 11);
+		public static bool HasUseCustomVertexStreams(UnityVersion version) => version.IsGreaterEqual(5, 5, 0, UnityVersionType.Beta, 11);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasEnableGPUInstancing(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasEnableGPUInstancing(UnityVersion version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasApplyActiveColorSpace(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasApplyActiveColorSpace(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasAllowRoll(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasAllowRoll(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 5.5.0 to 5.6.0 exclusive
 		/// </summary>
-		public static bool HasVertexStreamMask(Version version) => version.IsGreaterEqual(5, 5) && version.IsLess(5, 6);
+		public static bool HasVertexStreamMask(UnityVersion version) => version.IsGreaterEqual(5, 5) && version.IsLess(5, 6);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasVertexStreams(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasVertexStreams(UnityVersion version) => version.IsGreaterEqual(5, 6);
 
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasMeshes(Version version) => version.IsGreaterEqual(4);
+		public static bool HasMeshes(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		public static bool HasMaskInteraction(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		public static bool HasMaskInteraction(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
 
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		private static bool IsModeShort(Version version) => version.IsGreaterEqual(5, 3);
+		private static bool IsModeShort(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		private static bool IsSortModeFirst(Version version) => version.IsGreaterEqual(5, 3);
+		private static bool IsSortModeFirst(UnityVersion version) => version.IsGreaterEqual(5, 3);
 
 		public override void Read(AssetReader reader)
 		{
@@ -245,11 +245,11 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 			return node;
 		}
 
-		private float GetNormalDirection(Version version)
+		private float GetNormalDirection(UnityVersion version)
 		{
 			return HasNormalDirection(version) ? NormalDirection : 1.0f;
 		}
-		private byte[] GetVertexStreams(Version version)
+		private byte[] GetVertexStreams(UnityVersion version)
 		{
 			return HasUseCustomVertexStreams(version) ? VertexStreams : new byte[] { 0, 1, 3, 4, 5 };
 		}

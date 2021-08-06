@@ -15,11 +15,11 @@ namespace AssetRipper.Core.Classes.PhysicMaterial
 		/// <summary>
 		/// Less than 5.2.0
 		/// </summary>
-		public static bool HasFrictionDirection2(Version version) => version.IsLess(5, 2);
+		public static bool HasFrictionDirection2(UnityVersion version) => version.IsLess(5, 2);
 		/// <summary>
 		/// Less than 2.0.0
 		/// </summary>
-		public static bool HasUseSpring(Version version) => version.IsLess(2);
+		public static bool HasUseSpring(UnityVersion version) => version.IsLess(2);
 
 		public override void Read(AssetReader reader)
 		{

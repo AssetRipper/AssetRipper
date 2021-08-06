@@ -17,43 +17,43 @@ namespace AssetRipper.Core.Classes.SpriteRenderer
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasFlip(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasFlip(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.6.0b3 and greater
 		/// </summary>
-		public static bool HasDrawMode(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 3);
+		public static bool HasDrawMode(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 3);
 		/// <summary>
 		/// 5.6.1p2 to 5.6.x
 		/// 2017.1.0b5 and greater
 		/// </summary>
-		public static bool HasWasSpriteAssigned(Version version)
+		public static bool HasWasSpriteAssigned(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2017))
 			{
-				return version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 5);
+				return version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 5);
 			}
 			else
 			{
-				return version.IsGreaterEqual(5, 6, 1, VersionType.Patch, 2);
+				return version.IsGreaterEqual(5, 6, 1, UnityVersionType.Patch, 2);
 			}
 		}
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasMaskInteraction(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasMaskInteraction(UnityVersion version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasSpriteSortPoint(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasSpriteSortPoint(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		private static bool IsAlignColorRGBAf(Version version) => version.IsGreaterEqual(4, 5);
+		private static bool IsAlignColorRGBAf(UnityVersion version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		private static bool IsAlignFlip(Version version) => version.IsGreaterEqual(5, 4);
+		private static bool IsAlignFlip(UnityVersion version) => version.IsGreaterEqual(5, 4);
 
 		public override void Read(AssetReader reader)
 		{

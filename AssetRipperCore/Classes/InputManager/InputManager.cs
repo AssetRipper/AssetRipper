@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.InputManager
 	{
 		public InputManager(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// added some new default Axes
 			if (version.IsGreaterEqual(4, 6))
@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Classes.InputManager
 			return node;
 		}
 
-		private IReadOnlyList<InputAxis> GetAxes(Version version)
+		private IReadOnlyList<InputAxis> GetAxes(UnityVersion version)
 		{
 			if (ToSerializedVersion(version) >= 2)
 			{

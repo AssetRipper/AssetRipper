@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Emission
 			Probability = 1.0f;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2017, 2))
 			{
@@ -30,11 +30,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Emission
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasCurve(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasCurve(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasProbability(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasProbability(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 
 		public void Read(AssetReader reader)
 		{

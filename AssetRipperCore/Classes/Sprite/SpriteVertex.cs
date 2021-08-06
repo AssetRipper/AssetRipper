@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.Sprite
 {
 	public struct SpriteVertex : IAssetReadable, IYAMLExportable
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// TODO:
 			return 2;
@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Classes.Sprite
 		/// <summary>
 		/// Less than 4.5.0 
 		/// </summary>
-		public static bool HasUV(Version version) => version.IsLess(4, 5);
+		public static bool HasUV(UnityVersion version) => version.IsLess(4, 5);
 
 		public void Read(AssetReader reader)
 		{

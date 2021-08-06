@@ -9,9 +9,9 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
-		public static bool HasType(Version version) => version.IsLess(5, 5);
+		public static bool HasType(UnityVersion version) => version.IsLess(5, 5);
 
-		public AnimatorControllerParameterType GetTypeValue(Version version)
+		public AnimatorControllerParameterType GetTypeValue(UnityVersion version)
 		{
 			return HasType(version) ? Type : (AnimatorControllerParameterType)TypeID;
 		}

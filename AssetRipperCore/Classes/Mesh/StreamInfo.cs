@@ -61,7 +61,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		public static bool HasAlign(Version version) => version.IsLess(4);
+		public static bool HasAlign(UnityVersion version) => version.IsLess(4);
 
 		public bool IsMatch(ShaderChannel4 channel)
 		{

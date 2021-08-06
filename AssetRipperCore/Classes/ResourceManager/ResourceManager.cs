@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.ResourceManager
 		/// <summary>
 		/// 3.5.0 and greater and Release
 		/// </summary>
-		public static bool HasDependentAssets(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 5) && flags.IsRelease();
+		public static bool HasDependentAssets(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 5) && flags.IsRelease();
 
 		public override void Read(AssetReader reader)
 		{

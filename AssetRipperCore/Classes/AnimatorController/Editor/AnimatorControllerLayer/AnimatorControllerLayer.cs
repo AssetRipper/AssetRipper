@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerL
 			Controller = controller.File.CreatePPtr(controller);
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// TODO:
 			return 5;

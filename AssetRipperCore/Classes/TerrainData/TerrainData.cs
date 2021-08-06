@@ -18,11 +18,11 @@ namespace AssetRipper.Core.Classes.TerrainData
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool HasLightmap(Version version) => version.IsLess(3);
+		public static bool HasLightmap(UnityVersion version) => version.IsLess(3);
 		/// <summary>
 		/// (2018.4.14 to 2019.1 exclusive) or (2019.2.17 and greater)
 		/// </summary>
-		public static bool HasPreloadShaders(Version version)
+		public static bool HasPreloadShaders(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2019, 2, 17))
 			{

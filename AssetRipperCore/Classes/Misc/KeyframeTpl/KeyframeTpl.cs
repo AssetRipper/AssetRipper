@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 		public KeyframeTpl(float time, T value, T weight) : this(time, value, default, default, weight)
 		{
 			// this enum member is version agnostic
-			TangentMode = KeyframeTpl.TangentMode.TangentMode.FreeSmooth.ToTangent(Version.MinVersion);
+			TangentMode = KeyframeTpl.TangentMode.TangentMode.FreeSmooth.ToTangent(UnityVersion.MinVersion);
 		}
 
 		public KeyframeTpl(float time, T value, T inSlope, T outSlope, T weight)
@@ -27,7 +27,7 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 			InSlope = inSlope;
 			OutSlope = outSlope;
 			// this enum member is version agnostic
-			TangentMode = KeyframeTpl.TangentMode.TangentMode.FreeFree.ToTangent(Version.MinVersion);
+			TangentMode = KeyframeTpl.TangentMode.TangentMode.FreeFree.ToTangent(UnityVersion.MinVersion);
 			WeightedMode = WeightedMode.None;
 			InWeight = weight;
 			OutWeight = weight;
@@ -98,7 +98,7 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 			return node;
 		}
 
-		public TangentMode.TangentMode GetTangentMode(Version version)
+		public TangentMode.TangentMode GetTangentMode(UnityVersion version)
 		{
 			if (TangentModeExtensions.TangentMode5Relevant(version))
 			{

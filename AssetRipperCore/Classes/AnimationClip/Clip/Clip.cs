@@ -11,11 +11,11 @@ namespace AssetRipper.Core.Classes.AnimationClip.Clip
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasConstantClip(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasConstantClip(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// Less than 2018.3
 		/// </summary>
-		public static bool HasBinding(Version version) => version.IsLess(2018, 3);
+		public static bool HasBinding(UnityVersion version) => version.IsLess(2018, 3);
 
 		public void Read(AssetReader reader)
 		{
@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Clip
 			}
 		}
 
-		public bool IsSet(Version version)
+		public bool IsSet(UnityVersion version)
 		{
 			if (StreamedClip.IsSet)
 			{

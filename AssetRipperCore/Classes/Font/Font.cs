@@ -10,7 +10,7 @@ using AssetRipper.Core.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Font
 {
@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Classes.Font
 	{
 		public Font(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5, 4))
 			{
@@ -39,73 +39,73 @@ namespace AssetRipper.Core.Classes.Font
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		public static bool HasFontCount(Version version) => version.IsLess(4);
+		public static bool HasFontCount(UnityVersion version) => version.IsLess(4);
 		/// <summary>
 		/// Less than 5.3.0
 		/// </summary>
-		public static bool HasKerning(Version version) => version.IsLess(5, 3);
+		public static bool HasKerning(UnityVersion version) => version.IsLess(5, 3);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasTracking(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasTracking(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasCharacterSpacing(Version version) => version.IsGreaterEqual(4);
+		public static bool HasCharacterSpacing(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		public static bool HasPerCharacterKerning(Version version) => version.IsLess(4);
+		public static bool HasPerCharacterKerning(UnityVersion version) => version.IsLess(4);
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		public static bool HasGridFont(Version version) => version.IsLess(4);
+		public static bool HasGridFont(UnityVersion version) => version.IsLess(4);
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		public static bool IsBytePerCharacterKerning(Version version) => version.IsLess(2, 1);
+		public static bool IsBytePerCharacterKerning(UnityVersion version) => version.IsLess(2, 1);
 		/// <summary>
 		/// Less than 1.6.0
 		/// </summary>
-		public static bool IsByteKerningValues(Version version) => version.IsLess(1, 6);
+		public static bool IsByteKerningValues(UnityVersion version) => version.IsLess(1, 6);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasPixelScale(Version version) => version.IsGreaterEqual(4);
+		public static bool HasPixelScale(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasFontData(Version version) => version.IsGreaterEqual(3);
+		public static bool HasFontData(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasDescent(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasDescent(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasDefaultStyle(Version version) => version.IsGreaterEqual(3);
+		public static bool HasDefaultStyle(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasFallbackFonts(Version version) => version.IsGreaterEqual(4);
+		public static bool HasFallbackFonts(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 5.6.x-2017.x and greater
 		/// </summary>
-		public static bool HasUseLegacyBoundsCalculation(Version version)
+		public static bool HasUseLegacyBoundsCalculation(UnityVersion version)
 		{
-			if (version.IsGreaterEqual(2017, 3, 0, VersionType.Beta, 11))
+			if (version.IsGreaterEqual(2017, 3, 0, UnityVersionType.Beta, 11))
 			{
 				return true;
 			}
-			if (version.IsGreaterEqual(2017, 2, 0, VersionType.Patch, 2))
+			if (version.IsGreaterEqual(2017, 2, 0, UnityVersionType.Patch, 2))
 			{
 				return version.IsEqual(2017, 2);
 			}
-			if (version.IsGreaterEqual(2017, 1, 2, VersionType.Patch))
+			if (version.IsGreaterEqual(2017, 1, 2, UnityVersionType.Patch))
 			{
 				return version.IsEqual(2017, 1);
 			}
-			if (version.IsGreaterEqual(5, 6, 4, VersionType.Patch))
+			if (version.IsGreaterEqual(5, 6, 4, UnityVersionType.Patch))
 			{
 				return version.IsEqual(5);
 			}
@@ -114,24 +114,24 @@ namespace AssetRipper.Core.Classes.Font
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasShouldRoundAdvanceValue(Version version) => version.IsGreaterEqual(2018, 1);
+		public static bool HasShouldRoundAdvanceValue(UnityVersion version) => version.IsGreaterEqual(2018, 1);
 
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		private static bool IsFontGrouped(Version version) => version.IsGreaterEqual(5, 5);
+		private static bool IsFontGrouped(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// Less than 2.1.0
 		/// </summary>
-		private static bool IsShortAsciiStartOffset(Version version) => version.IsLess(2, 1);
+		private static bool IsShortAsciiStartOffset(UnityVersion version) => version.IsLess(2, 1);
 		/// <summary>
 		/// Less than 2.1.0
 		/// </summary>
-		private static bool IsGridFontFirst(Version version) => version.IsLess(2, 1);
+		private static bool IsGridFontFirst(UnityVersion version) => version.IsLess(2, 1);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(3);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(3);
 
 		public override void Read(AssetReader reader)
 		{
@@ -337,31 +337,31 @@ namespace AssetRipper.Core.Classes.Font
 			return node;
 		}
 
-		private float GetTracking(Version version)
+		private float GetTracking(UnityVersion version)
 		{
 			return HasTracking(version) ? Tracking : 1.0f;
 		}
-		private int GetCharacterPadding(Version version)
+		private int GetCharacterPadding(UnityVersion version)
 		{
 			return HasCharacterSpacing(version) ? CharacterPadding : 1;
 		}
-		private float GetPixelScale(Version version)
+		private float GetPixelScale(UnityVersion version)
 		{
 			return HasPixelScale(version) ? PixelScale : 0.1f;
 		}
-		private byte[] GetFontData(Version version)
+		private byte[] GetFontData(UnityVersion version)
 		{
 			return HasFontData(version) ? FontData : Array.Empty<byte>();
 		}
-		private IReadOnlyList<string> GetFontNames(Version version)
+		private IReadOnlyList<string> GetFontNames(UnityVersion version)
 		{
 			return HasDefaultStyle(version) ? FontNames : new string[] { Name };
 		}
-		private IReadOnlyList<PPtr<Font>> GetFallbackFonts(Version version)
+		private IReadOnlyList<PPtr<Font>> GetFallbackFonts(UnityVersion version)
 		{
 			return HasFallbackFonts(version) ? FallbackFonts : Array.Empty<PPtr<Font>>();
 		}
-		private bool GetShouldRoundAdvanceValue(Version version)
+		private bool GetShouldRoundAdvanceValue(UnityVersion version)
 		{
 			return HasShouldRoundAdvanceValue(version) ? ShouldRoundAdvanceValue : true;
 		}

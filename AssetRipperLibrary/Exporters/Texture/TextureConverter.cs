@@ -11,7 +11,7 @@ using AssetRipper.Library.Utils;
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
@@ -27,7 +27,7 @@ namespace AssetRipper.Library.Exporters.Textures
 		[DllImport("crunchunity.dll", CallingConvention = CallingConvention.Cdecl)]
 		private static extern bool DecompressUnityCRN(byte[] pSrc_file_data, int src_file_size, out IntPtr uncompressedData, out int uncompressedSize);
 
-		private static bool IsUseUnityCrunch(Version version, TextureFormat format)
+		private static bool IsUseUnityCrunch(UnityVersion version, TextureFormat format)
 		{
 			if (version.IsGreaterEqual(2017, 3))
 			{

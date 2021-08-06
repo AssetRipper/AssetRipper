@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 	{
 		public OcclusionCullingSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// min version is 2nd
 			return 2;
@@ -27,15 +27,15 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 		/// <summary>
 		/// 3.0.0 to 5.5.0 exclusive
 		/// </summary>
-		public static bool HasReadPVSData(Version version) => version.IsGreaterEqual(3) && version.IsLess(5, 5);
+		public static bool HasReadPVSData(UnityVersion version) => version.IsGreaterEqual(3) && version.IsLess(5, 5);
 		/// <summary>
 		/// 3.5.0 to 4.3.0 exclusive
 		/// </summary>
-		public static bool HasQueryMode(Version version) => version.IsGreaterEqual(3, 5) && version.IsLess(4, 3);
+		public static bool HasQueryMode(UnityVersion version) => version.IsGreaterEqual(3, 5) && version.IsLess(4, 3);
 		/// <summary>
 		/// (3.5.0 to 5.5.0 exclusive) or (5.0.0 and greater and Release)
 		/// </summary>
-		public static bool HasPortals(Version version, TransferInstructionFlags flags)
+		public static bool HasPortals(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(3, 5, 0))
 			{
@@ -50,15 +50,15 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 		/// <summary>
 		/// 3.5.0 and greater and Not Release
 		/// </summary>
-		public static bool HasOcclusionBakeSettings(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 5);
+		public static bool HasOcclusionBakeSettings(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasSceneGUID(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasSceneGUID(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// (3.0.0 to 5.5.0 exclusive) or (5.5.0 and greater and Release)
 		/// </summary>
-		public static bool HasStaticRenderers(Version version, TransferInstructionFlags flags)
+		public static bool HasStaticRenderers(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(3, 0, 0))
 			{
@@ -73,7 +73,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 		/// <summary>
 		/// 3.0.0 to 3.5.0 exclusive and Not Release
 		/// </summary>
-		public static bool HasViewCellSize(Version version, TransferInstructionFlags flags)
+		public static bool HasViewCellSize(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsLess(3, 5) && version.IsGreaterEqual(3);
 		}
@@ -81,7 +81,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		private static bool IsOcclusionBakeSettingsFirst(Version version) => version.IsGreaterEqual(5, 5);
+		private static bool IsOcclusionBakeSettingsFirst(UnityVersion version) => version.IsGreaterEqual(5, 5);
 
 		public static bool IsSceneCompatible(Object.Object asset)
 		{

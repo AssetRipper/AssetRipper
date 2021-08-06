@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.SubEmitter
 			EmitProbability = 1.0f;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// ParticleSystemSubEmitterProperties.InheritDuration added
 			if (version.IsGreaterEqual(2018, 3))
@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.SubEmitter
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasEmitProbability(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasEmitProbability(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 
 		public void Read(AssetReader reader)
 		{

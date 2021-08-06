@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.UV
 {
 	public sealed class UVModule : ParticleSystemModule, IDependent
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// RandomRow has been converted to RowMode
 			if (version.IsGreaterEqual(2019))
@@ -28,40 +28,40 @@ namespace AssetRipper.Core.Classes.ParticleSystem.UV
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasMode(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasMode(UnityVersion version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasTimeMode(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasTimeMode(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasStartFrame(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasStartFrame(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasSpeedRange(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasSpeedRange(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasUvChannelMask(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasUvChannelMask(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasFlipU(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasFlipU(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasRowMode(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasRowMode(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasSprites(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasSprites(UnityVersion version) => version.IsGreaterEqual(2017);
 
 		/// <summary>
 		/// Less than 2018.3
 		/// </summary>
-		private static bool HasFlipUFirst(Version version)
+		private static bool HasFlipUFirst(UnityVersion version)
 		{
 			return version.IsLess(2018, 3);
 		}
@@ -174,15 +174,15 @@ namespace AssetRipper.Core.Classes.ParticleSystem.UV
 			return node;
 		}
 
-		private MinMaxCurve GetExportStartFrame(Version version)
+		private MinMaxCurve GetExportStartFrame(UnityVersion version)
 		{
 			return HasStartFrame(version) ? StartFrame : new MinMaxCurve(0.0f);
 		}
-		private int GetExportUvChannelMask(Version version)
+		private int GetExportUvChannelMask(UnityVersion version)
 		{
 			return HasUvChannelMask(version) ? UvChannelMask : -1;
 		}
-		private IReadOnlyList<SpriteData> GetExportSprites(Version version)
+		private IReadOnlyList<SpriteData> GetExportSprites(UnityVersion version)
 		{
 			return HasSprites(version) ? Sprites : new SpriteData[] { default };
 		}

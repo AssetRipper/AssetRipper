@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Misc.Bones;
 using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 
 	public static class AnimationMuscleTypeExtensions
 	{
-		public static HumanoidMuscleType Update(this HumanoidMuscleType _this, Version version)
+		public static HumanoidMuscleType Update(this HumanoidMuscleType _this, UnityVersion version)
 		{
 			if (_this < HumanoidMuscleType.Muscles)
 			{

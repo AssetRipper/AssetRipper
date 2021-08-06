@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// <summary>
 		/// Less than 2018.3
 		/// </summary>
-		public static bool HasTestEventUrl(Version version) => version.IsLess(2018, 3);
+		public static bool HasTestEventUrl(UnityVersion version) => version.IsLess(2018, 3);
 
 		public void Read(AssetReader reader)
 		{
@@ -53,11 +53,11 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			return node;
 		}
 
-		private string GetTestEventUrl(Version version)
+		private string GetTestEventUrl(UnityVersion version)
 		{
 			return HasTestEventUrl(version) ? TestEventUrl : string.Empty;
 		}
-		private string GetTestConfigUrl(Version version)
+		private string GetTestConfigUrl(UnityVersion version)
 		{
 			return HasTestEventUrl(version) ? TestConfigUrl : string.Empty;
 		}

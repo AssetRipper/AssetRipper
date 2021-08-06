@@ -9,7 +9,7 @@ namespace DXShaderRestorer
 {
 	internal class ResourceChunk
 	{
-		public ResourceChunk(Version version, ref ShaderSubProgram shaderSubprogram)
+		public ResourceChunk(UnityVersion version, ref ShaderSubProgram shaderSubprogram)
 		{
 			ShaderGpuProgramType programType = shaderSubprogram.GetProgramType(version);
 			m_majorVersion = (byte)programType.GetMajorDXVersion();

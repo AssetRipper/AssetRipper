@@ -17,19 +17,19 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasDensity(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasDensity(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasUsedByEffector(Version version) => version.IsGreaterEqual(5);
+		public static bool HasUsedByEffector(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasUsedByComposite(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasUsedByComposite(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasOffset(Version version) => version.IsGreaterEqual(5);
+		public static bool HasOffset(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public override void Read(AssetReader reader)
 		{

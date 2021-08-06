@@ -6,7 +6,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
 using System.Linq;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Extensions;
 
@@ -18,31 +18,31 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
-		public static bool HasBlendType(Version version) => version.IsGreaterEqual(4, 1);
+		public static bool HasBlendType(UnityVersion version) => version.IsGreaterEqual(4, 1);
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
-		public static bool HasBlendEventYID(Version version) => version.IsGreaterEqual(4, 1);
+		public static bool HasBlendEventYID(UnityVersion version) => version.IsGreaterEqual(4, 1);
 		/// <summary>
 		/// 4.0.x
 		/// </summary>
-		public static bool HasChildThresholdArray(Version version) => version.IsLess(4, 1);
+		public static bool HasChildThresholdArray(UnityVersion version) => version.IsLess(4, 1);
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
-		public static bool HasBlendData(Version version) => version.IsGreaterEqual(4, 1);
+		public static bool HasBlendData(UnityVersion version) => version.IsGreaterEqual(4, 1);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasBlendDirectData(Version version) => version.IsGreaterEqual(5);
+		public static bool HasBlendDirectData(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 4.5.2 to 5.0.0 exclusive
 		/// </summary>
-		public static bool HasClipIndex(Version version) => version.IsGreaterEqual(4, 5, 1, VersionType.Patch, 3) && version.IsLess(5);
+		public static bool HasClipIndex(UnityVersion version) => version.IsGreaterEqual(4, 5, 1, UnityVersionType.Patch, 3) && version.IsLess(5);
 		/// <summary>
 		/// 4.1.3 and greater
 		/// </summary>
-		public static bool HasCycleOffset(Version version) => version.IsGreaterEqual(4, 1, 3);
+		public static bool HasCycleOffset(UnityVersion version) => version.IsGreaterEqual(4, 1, 3);
 
 		public BlendTreeNodeConstant(ObjectReader reader)
 		{
@@ -154,7 +154,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			}
 		}
 
-		public float GetThreshold(Version version, int index)
+		public float GetThreshold(UnityVersion version, int index)
 		{
 			if (HasBlendData(version))
 			{
@@ -166,7 +166,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			return 0.0f;
 		}
 
-		public float GetMinThreshold(Version version)
+		public float GetMinThreshold(UnityVersion version)
 		{
 			if (HasBlendData(version))
 			{
@@ -178,7 +178,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			return 0.0f;
 		}
 
-		public float GetMaxThreshold(Version version)
+		public float GetMaxThreshold(UnityVersion version)
 		{
 			if (HasBlendData(version))
 			{
@@ -190,7 +190,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			return 1.0f;
 		}
 
-		public uint GetDirectBlendParameter(Version version, int index)
+		public uint GetDirectBlendParameter(UnityVersion version, int index)
 		{
 			if (HasBlendDirectData(version))
 			{

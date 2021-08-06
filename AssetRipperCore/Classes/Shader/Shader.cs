@@ -14,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader
 {
@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Classes.Shader
 	{
 		public Shader(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// double blob arrays (offsets, compressedLengths and decompressedLengths)
 			if (version.IsGreaterEqual(2019, 3))
@@ -35,50 +35,50 @@ namespace AssetRipper.Core.Classes.Shader
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool IsSerialized(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool IsSerialized(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasBlob(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasBlob(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// Less than 2.0.0
 		/// </summary>
-		public static bool HasFallback(Version version) => version.IsLess(2);
+		public static bool HasFallback(UnityVersion version) => version.IsLess(2);
 		/// <summary>
 		/// Less than 3.2.0
 		/// </summary>
-		public static bool HasDefaultProperties(Version version) => version.IsLess(3, 2);
+		public static bool HasDefaultProperties(UnityVersion version) => version.IsLess(3, 2);
 		/// <summary>
 		/// 2.0.0 to 3.0.0 exclusive
 		/// </summary>
-		public static bool HasStaticProperties(Version version) => version.IsGreaterEqual(2) && version.IsLess(3);
+		public static bool HasStaticProperties(UnityVersion version) => version.IsGreaterEqual(2) && version.IsLess(3);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasDependencies(Version version) => version.IsGreaterEqual(4);
+		public static bool HasDependencies(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasNonModifiableTextures(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasNonModifiableTextures(UnityVersion version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasShaderIsBaked(Version version) => version.IsGreaterEqual(4);
+		public static bool HasShaderIsBaked(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 3.4.0 to 5.5.0 exclusive and Not Release
 		/// </summary>
-		public static bool HasErrors(Version version, TransferInstructionFlags flags)
+		public static bool HasErrors(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(3, 4) && version.IsLess(5, 5);
 		}
 		/// <summary>
 		/// 4.2.0 and greater and Not Release
 		/// </summary>
-		public static bool HasDefaultTextures(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(4, 2);
+		public static bool HasDefaultTextures(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 4.5.0 and greater and Not Release and Not Buildin
 		/// </summary>
-		public static bool HasCompileInfo(Version version, TransferInstructionFlags flags)
+		public static bool HasCompileInfo(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && !flags.IsBuiltinResources() && version.IsGreaterEqual(4, 5);
 		}
@@ -86,7 +86,7 @@ namespace AssetRipper.Core.Classes.Shader
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		private static bool IsDoubleArray(Version version) => version.IsGreaterEqual(2019, 3);
+		private static bool IsDoubleArray(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 
 		public override void Read(AssetReader reader)
 		{
@@ -181,7 +181,7 @@ namespace AssetRipper.Core.Classes.Shader
 			ExportBinary(container, stream, DefaultShaderExporterInstantiator);
 		}
 
-		public void ExportBinary(IExportContainer container, Stream stream, Func<Version, GPUPlatform, ShaderTextExporter> exporterInstantiator)
+		public void ExportBinary(IExportContainer container, Stream stream, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
 		{
 			if (IsSerialized(container.Version))
 			{
@@ -227,7 +227,7 @@ namespace AssetRipper.Core.Classes.Shader
 			}
 		}
 
-		public static ShaderTextExporter DefaultShaderExporterInstantiator(Version version, GPUPlatform graphicApi)
+		public static ShaderTextExporter DefaultShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
 		{
 			switch (graphicApi)
 			{

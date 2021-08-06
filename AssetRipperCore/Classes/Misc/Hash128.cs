@@ -30,7 +30,7 @@ namespace AssetRipper.Core.Classes.Misc
 			Data3 = reader.ReadUInt32();
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5))
 			{

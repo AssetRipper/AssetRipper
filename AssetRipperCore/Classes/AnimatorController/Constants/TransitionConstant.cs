@@ -4,7 +4,7 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
@@ -13,15 +13,15 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasPathID(Version version) => version.IsGreaterEqual(5);
+		public static bool HasPathID(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool HasAtomic(Version version) => version.IsLess(5);
+		public static bool HasAtomic(UnityVersion version) => version.IsLess(5);
 		/// <summary>
 		/// Less than 4.5.0
 		/// </summary>
-		public static bool IsCanTransitionToSelf(Version version) => version.IsGreaterEqual(4, 5);
+		public static bool IsCanTransitionToSelf(UnityVersion version) => version.IsGreaterEqual(4, 5);
 
 		public void Read(AssetReader reader)
 		{
@@ -62,12 +62,12 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			throw new NotSupportedException();
 		}
 
-		public bool GetHasFixedDuration(Version version)
+		public bool GetHasFixedDuration(UnityVersion version)
 		{
 			return HasAtomic(version) ? true : HasFixedDuration;
 		}
 
-		public TransitionInterruptionSource GetInterruptionSource(Version version)
+		public TransitionInterruptionSource GetInterruptionSource(UnityVersion version)
 		{
 			if (HasAtomic(version))
 			{
@@ -79,7 +79,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			}
 		}
 
-		public float GetExitTime(Version version)
+		public float GetExitTime(UnityVersion version)
 		{
 			if (HasAtomic(version))
 			{
@@ -98,7 +98,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			}
 		}
 
-		public bool GetHasExitTime(Version version)
+		public bool GetHasExitTime(UnityVersion version)
 		{
 			if (HasAtomic(version))
 			{

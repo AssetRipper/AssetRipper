@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.CompositeCollider2D
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		private static bool HasDoubleColliderPath(Version version)
+		private static bool HasDoubleColliderPath(UnityVersion version)
 		{
 			return version.IsGreaterEqual(2018, 3);
 		}

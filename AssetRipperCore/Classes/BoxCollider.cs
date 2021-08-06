@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public BoxCollider(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// min version is 2nd
 			return 2;
@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2, 1);
 
 		public override void Read(AssetReader reader)
 		{

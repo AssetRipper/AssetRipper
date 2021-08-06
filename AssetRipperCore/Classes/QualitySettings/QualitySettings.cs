@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Classes.QualitySettings
 			return virtualFile.CreateAsset((assetInfo) => new QualitySettings(assetInfo));
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// static PlatformDefaultQuality has been replaced by dictionary
 			if (version.IsGreaterEqual(3, 5))
@@ -52,34 +52,34 @@ namespace AssetRipper.Core.Classes.QualitySettings
 		/// <summary>
 		/// 1.5.0 and greater
 		/// </summary>
-		public static bool HasQualitySettings(Version version) => version.IsGreaterEqual(1, 5);
+		public static bool HasQualitySettings(UnityVersion version) => version.IsGreaterEqual(1, 5);
 		/// <summary>
 		/// 1.6.0 to 3.5.0 exclusive
 		/// </summary>
-		public static bool HasDefaultStandaloneQuality(Version version) => version.IsLess(3, 5) && version.IsGreaterEqual(1, 6);
+		public static bool HasDefaultStandaloneQuality(UnityVersion version) => version.IsLess(3, 5) && version.IsGreaterEqual(1, 6);
 		/// <summary>
 		/// 3.2.0 to 3.5.0 exclusive
 		/// </summary>
-		public static bool HasDefaultMobileQuality(Version version) => version.IsLess(3, 5) && version.IsGreaterEqual(3, 2);
+		public static bool HasDefaultMobileQuality(UnityVersion version) => version.IsLess(3, 5) && version.IsGreaterEqual(3, 2);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasQualitySettingArray(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasQualitySettingArray(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool HasWebPlayer(Version version) => version.IsLess(3);
+		public static bool HasWebPlayer(UnityVersion version) => version.IsLess(3);
 		/// <summary>
 		/// 3.5.0 and greater and Not Release
 		/// </summary>
-		public static bool HasPerPlatformDefaultQuality(Version version, TransferInstructionFlags flags)
+		public static bool HasPerPlatformDefaultQuality(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(3, 5);
 		}
 		/// <summary>
 		/// 3.5.0 and greater and Release
 		/// </summary>
-		public static bool HasStrippedMaximumLODLevel(Version version, TransferInstructionFlags flags)
+		public static bool HasStrippedMaximumLODLevel(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return flags.IsRelease() && version.IsGreaterEqual(3, 5);
 		}
@@ -207,7 +207,7 @@ namespace AssetRipper.Core.Classes.QualitySettings
 			return node;
 		}
 
-		private IReadOnlyDictionary<string, int> GetPerPlatformDefaultQuality(Version version, TransferInstructionFlags flags)
+		private IReadOnlyDictionary<string, int> GetPerPlatformDefaultQuality(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (HasDefaultStandaloneQuality(version))
 			{

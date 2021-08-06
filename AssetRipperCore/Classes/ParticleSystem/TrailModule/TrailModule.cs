@@ -27,27 +27,27 @@ namespace AssetRipper.Core.Classes.ParticleSystem.TrailModule
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasMode(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasMode(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasRibbonCount(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasRibbonCount(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasShadowBias(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasShadowBias(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 2017.1.0b2
 		/// </summary>
-		public static bool HasGenerateLightingData(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		public static bool HasGenerateLightingData(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasSplitSubEmitterRibbons(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasSplitSubEmitterRibbons(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasAttachRibbonsToTransform(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasAttachRibbonsToTransform(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 
 		public override void Read(AssetReader reader)
 		{
@@ -124,7 +124,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.TrailModule
 
 		}
 
-		private int GetExportRibbonCount(Version version)
+		private int GetExportRibbonCount(UnityVersion version)
 		{
 			return HasRibbonCount(version) ? RibbonCount : 1;
 		}

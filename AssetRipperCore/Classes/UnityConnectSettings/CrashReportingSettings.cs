@@ -15,15 +15,15 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// <summary>
 		/// 2017.2 to 2018.3 exclusive
 		/// </summary>
-		public static bool HasNativeEventUrl(Version version) => version.IsGreaterEqual(2017, 2) && version.IsLess(2018, 3);
+		public static bool HasNativeEventUrl(UnityVersion version) => version.IsGreaterEqual(2017, 2) && version.IsLess(2018, 3);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasLogBufferSize(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasLogBufferSize(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 5.5.0 and greater and Not Release
 		/// </summary>
-		public static bool HasCaptureEditorExceptions(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 5);
+		public static bool HasCaptureEditorExceptions(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(5, 5);
 
 		public void Read(AssetReader reader)
 		{
@@ -63,17 +63,17 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			return node;
 		}
 
-		private string GetNativeEventUrl(Version version)
+		private string GetNativeEventUrl(UnityVersion version)
 		{
 			return HasNativeEventUrl(version) ? NativeEventUrl : "https://perf-events.cloud.unity3d.com/symbolicate";
 		}
-		private uint GetLogBufferSize(Version version)
+		private uint GetLogBufferSize(UnityVersion version)
 		{
 			// NOTE: editor has different value than player
 			//return HasLogBufferSize(version) ? LogBufferSize : 10;
 			return 10;
 		}
-		private bool GetCaptureEditorExceptions(Version version, TransferInstructionFlags flags)
+		private bool GetCaptureEditorExceptions(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasCaptureEditorExceptions(version, flags))

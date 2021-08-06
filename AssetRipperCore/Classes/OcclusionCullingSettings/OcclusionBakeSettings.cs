@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 		/// <summary>
 		/// Less than 4.3.0
 		/// </summary>
-		public static bool HasViewCellSize(Version version) => version.IsLess(4, 3);
+		public static bool HasViewCellSize(UnityVersion version) => version.IsLess(4, 3);
 
 		public void Read(AssetReader reader)
 		{

@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.BoxCollider2D
 	{
 		public BoxCollider2D(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5))
 			{
@@ -25,19 +25,19 @@ namespace AssetRipper.Core.Classes.BoxCollider2D
 		/// <summary>
 		/// 5.6.0b5 and greater
 		/// </summary>
-		public static bool HasSpriteTilingProperty(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
+		public static bool HasSpriteTilingProperty(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 5);
 		/// <summary>
 		/// 5.6.0b3 and greater
 		/// </summary>
-		public static bool HasAutoTiling(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 3);
+		public static bool HasAutoTiling(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 3);
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool HasCenter(Version version) => version.IsLess(5);
+		public static bool HasCenter(UnityVersion version) => version.IsLess(5);
 		/// <summary>
 		/// 5.6.0b5 and greater
 		/// </summary>
-		public static bool HasEdgeRadius(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
+		public static bool HasEdgeRadius(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 5);
 
 		public override void Read(AssetReader reader)
 		{

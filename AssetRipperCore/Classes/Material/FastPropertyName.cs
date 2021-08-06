@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes.Material
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		private static bool IsPlainString(Version version) => version.IsGreaterEqual(2017, 3);
+		private static bool IsPlainString(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
 		public bool IsCRC28Match(uint crc)
 		{

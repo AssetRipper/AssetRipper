@@ -27,7 +27,7 @@ namespace AssetRipper.Core.Classes.InputManager
 			JoyNum = JoystickType.AllJoysticks;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// this is min version
 			return 3;

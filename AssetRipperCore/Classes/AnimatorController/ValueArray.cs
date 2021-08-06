@@ -3,7 +3,7 @@ using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.AnimatorController
@@ -13,16 +13,16 @@ namespace AssetRipper.Core.Classes.AnimatorController
 		/// <summary>
 		/// Less than 4.3
 		/// </summary>
-		public static bool HasVectorValues(Version version) => version.IsLess(4, 3);
+		public static bool HasVectorValues(UnityVersion version) => version.IsLess(4, 3);
 		/// <summary>
 		/// Less than 5.4.0
 		/// </summary>
-		public static bool IsVector4f(Version version) => version.IsLess(5, 4);
+		public static bool IsVector4f(UnityVersion version) => version.IsLess(5, 4);
 
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
-		private static bool IsPrimeFirst(Version version) => version.IsLess(5, 5);
+		private static bool IsPrimeFirst(UnityVersion version) => version.IsLess(5, 5);
 
 		public void Read(AssetReader reader)
 		{

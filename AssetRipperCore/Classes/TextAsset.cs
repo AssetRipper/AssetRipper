@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// Less than 2017.1
 		/// </summary>
-		public static bool HasPath(Version version) => version.IsLess(2017);
+		public static bool HasPath(UnityVersion version) => version.IsLess(2017);
 
 		public override void Read(AssetReader reader)
 		{

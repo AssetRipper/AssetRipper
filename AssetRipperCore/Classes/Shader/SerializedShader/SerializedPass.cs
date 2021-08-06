@@ -6,7 +6,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasProgRayTracing(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasProgRayTracing(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 
 		public void Read(AssetReader reader)
 		{

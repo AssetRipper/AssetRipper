@@ -11,7 +11,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.Sprite
@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Classes.Sprite
 	{
 		public Sprite(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 #warning TODO:
 			/*if (version.IsGreaterEqual(2018))
@@ -33,15 +33,15 @@ namespace AssetRipper.Core.Classes.Sprite
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool HasBorder(Version version) => version.IsGreaterEqual(4, 5);
+		public static bool HasBorder(UnityVersion version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 5.4.1p3 and greater
 		/// </summary>
-		public static bool HasPivot(Version version) => version.IsGreaterEqual(5, 4, 1, VersionType.Patch, 3);
+		public static bool HasPivot(UnityVersion version) => version.IsGreaterEqual(5, 4, 1, UnityVersionType.Patch, 3);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasPolygon(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasPolygon(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// Not Release
 		/// </summary>
@@ -49,23 +49,23 @@ namespace AssetRipper.Core.Classes.Sprite
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasRendererData(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasRendererData(UnityVersion version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 2017.1 and greater and Not Release
 		/// </summary>
-		public static bool HasAtlasRD(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2017);
+		public static bool HasAtlasRD(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasPhysicsShape(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasPhysicsShape(UnityVersion version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasBones(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasBones(UnityVersion version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// and greater and Not Release
 		/// </summary>
-		public static bool HasSpriteID(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2018);
+		public static bool HasSpriteID(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2018);
 
 		public SpriteMetaData GenerateSpriteMetaData(IExportContainer container, SpriteAtlas.SpriteAtlas atlas)
 		{

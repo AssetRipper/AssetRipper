@@ -5,7 +5,7 @@ using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.AnimatorStateMachine
@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 			Position = position;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// TODO:
 			return 1;

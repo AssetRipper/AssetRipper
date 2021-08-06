@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 	public class LightmapEditorSettings : IAsset, IDependent
 	{
 		public LightmapEditorSettings() { }
-		public LightmapEditorSettings(Version version) : this()
+		public LightmapEditorSettings(UnityVersion version) : this()
 		{
 #warning TODO:
 			Resolution = 2.0f;
@@ -67,11 +67,11 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			LightProbeSampleCountMultiplier = 4.0f;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// PVREnvironmentMIS default value has been changed from 0 to 1
 			// PVREnvironmentSampleCount is no longer equal to PVRSampleCount
-			if (version.IsGreaterEqual(2019, 1, 0, VersionType.Beta))
+			if (version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Beta))
 			{
 				return 12;
 			}
@@ -98,17 +98,17 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 				return 9;
 			}
 			// StationaryBakeMode has been renamed to MixedBakeMode
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 8))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 8))
 			{
 				return 8;
 			}
 			// NOTE: unknown conversion
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 6))
 			{
 				return 7;
 			}
 			// NOTE: unknown conversion
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2))
 			{
 				return 6;
 			}
@@ -119,7 +119,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 			// NOTE: unknown version
 			// NOTE: unknown conversion
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final))
+			if (version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final))
 			{
 				return 3;
 			}
@@ -134,121 +134,121 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasBakeResolution(Version version) => version.IsGreaterEqual(5);
+		public static bool HasBakeResolution(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasSystemTexelWidth(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasSystemTexelWidth(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// 3.0.0 to 5.0.0f1 exclusive (NOTE: unknown version)
 		/// </summary>
-		public static bool HasLastUsedResolution(Version version) => version.IsGreaterEqual(3) && version.IsLess(5, 0, 0, VersionType.Final);
+		public static bool HasLastUsedResolution(UnityVersion version) => version.IsGreaterEqual(3) && version.IsLess(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasAtlasSize(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasAtlasSize(UnityVersion version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// Less than 5.0.0f1 (NOTE: unknown version)
 		/// </summary>
-		public static bool HasBounceBoost(Version version) => version.IsLess(5, 0, 0, VersionType.Final);
+		public static bool HasBounceBoost(UnityVersion version) => version.IsLess(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasAO(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasAO(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// Less than 5.0.0f1
 		/// </summary>
-		public static bool HasAOAmount(Version version) => version.IsLess(5, 0, 0, VersionType.Final);
+		public static bool HasAOAmount(UnityVersion version) => version.IsLess(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// Less than 5.0.0f1 (NOTE: unknown version)
 		/// </summary>
-		public static bool HasAOContrast(Version version) => version.IsLess(5, 0, 0, VersionType.Final);
+		public static bool HasAOContrast(UnityVersion version) => version.IsLess(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasCompAOExponent(Version version) => version.IsGreaterEqual(5);
+		public static bool HasCompAOExponent(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasCompAOExponentDirect(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasCompAOExponentDirect(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasExtractAmbientOcclusion(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasExtractAmbientOcclusion(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 3.5.0 to 5.0.0f1 exclusive (NOTE: unknown version)
 		/// </summary>
-		public static bool HasLODSurfaceMappingDistance(Version version) => version.IsLess(5, 0, 0, VersionType.Final) && version.IsGreaterEqual(3, 5);
+		public static bool HasLODSurfaceMappingDistance(UnityVersion version) => version.IsLess(5, 0, 0, UnityVersionType.Final) && version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasPadding(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasPadding(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasCompDirectScale(Version version) => version.IsEqual(5, 0, 0, VersionType.Final);
+		public static bool HasCompDirectScale(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasLightmapParameters(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasLightmapParameters(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasLightmapsBakeMode(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasLightmapsBakeMode(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// Less than 5.0.0f1 (NOTE: unknown version)
 		/// </summary>
-		public static bool HasLockAtlas(Version version) => version.IsLess(5, 0, 0, VersionType.Final);
+		public static bool HasLockAtlas(UnityVersion version) => version.IsLess(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.4.0 to 5.6.0b1
 		/// </summary>
-		public static bool HasDirectLightInLightProbes(Version version) => version.IsGreaterEqual(5, 4) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 1);
+		public static bool HasDirectLightInLightProbes(UnityVersion version) => version.IsGreaterEqual(5, 4) && version.IsLessEqual(5, 6, 0, UnityVersionType.Beta, 1);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasFinalGather(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasFinalGather(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasFinalGatherFiltering(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasFinalGatherFiltering(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasFinalGatherRayCount(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasFinalGatherRayCount(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		public static bool HasReflectionCompression(Version version) => version.IsGreaterEqual(5, 2);
+		public static bool HasReflectionCompression(UnityVersion version) => version.IsGreaterEqual(5, 2);
 		/// <summary>
 		/// 5.6.0b2 and greater
 		/// </summary>
-		public static bool HasMixedBakeMode(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
+		public static bool HasMixedBakeMode(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 5.6.0b6 and greater
 		/// </summary>
-		public static bool HasBakeBackend(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
+		public static bool HasBakeBackend(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 6);
 		/// <summary>
 		/// 5.6.0b10 and greater
 		/// </summary>
-		public static bool HasPVRDirectSampleCount(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 10);
+		public static bool HasPVRDirectSampleCount(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 10);
 		/// <summary>
 		/// 5.6.0b6 and greater
 		/// </summary>
-		public static bool HasPVRSampleCount(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
+		public static bool HasPVRSampleCount(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 6);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasPVREnvironmentSampleCount(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasPVREnvironmentSampleCount(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 5.6.0b6 to 5.6.4 or 2017.1.0 to 2017.1.2 exclusive
 		/// </summary>
-		public static bool HasPVRFiltering(Version version)
+		public static bool HasPVRFiltering(UnityVersion version)
 		{
 			if (version.IsLess(2017, 1, 2))
 			{
 				if (version.IsLess(5, 6, 5))
 				{
-					return version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
+					return version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 6);
 				}
 				return version.IsGreaterEqual(2017);
 			}
@@ -257,7 +257,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// <summary>
 		/// 5.6.5 to 2017.1 exclusive or 2017.1.2 and greater
 		/// </summary>
-		public static bool HasPVRFilterTypeDirect(Version version)
+		public static bool HasPVRFilterTypeDirect(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2017, 1, 2))
 			{
@@ -272,25 +272,25 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasPVREnvironmentMIS(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasPVREnvironmentMIS(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 5.6.0b6 and greater
 		/// </summary>
-		public static bool HasPVRFilteringMode(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
+		public static bool HasPVRFilteringMode(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 6);
 		/// <summary>
 		/// 5.6.0b6 and greater
 		/// </summary>
-		public static bool HasPVRCulling(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
+		public static bool HasPVRCulling(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 6);
 		/// <summary>
 		/// 5.6.0b6 to 5.6.4 or 2017.1.0 to 2017.1.2 exclusive
 		/// </summary>
-		public static bool HasPVRFilteringAtrousColorSigma(Version version)
+		public static bool HasPVRFilteringAtrousColorSigma(UnityVersion version)
 		{
 			if (version.IsLess(2017, 1, 2))
 			{
 				if (version.IsLess(5, 6, 5))
 				{
-					return version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 6);
+					return version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 6);
 				}
 				return version.IsGreaterEqual(2017);
 			}
@@ -299,7 +299,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// <summary>
 		/// 5.6.5 to 2017.1 exclusive or 2017.1.2 and greater
 		/// </summary>
-		public static bool HasPVRFilteringAtrousPositionSigmaDirect(Version version)
+		public static bool HasPVRFilteringAtrousPositionSigmaDirect(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2017, 1, 2))
 			{
@@ -314,32 +314,32 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// <summary>
 		/// 2017.2.1 to 2019.2 exclusive
 		/// </summary>
-		public static bool HasShowResolutionOverlay(Version version) => version.IsGreaterEqual(2017, 2, 1) && version.IsLess(2019, 2);
+		public static bool HasShowResolutionOverlay(UnityVersion version) => version.IsGreaterEqual(2017, 2, 1) && version.IsLess(2019, 2);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasExportTrainingData(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasExportTrainingData(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 2019.2 and greater
 		/// </summary>
-		public static bool HasTrainingDataDestination(Version version) => version.IsGreaterEqual(2019, 2);
+		public static bool HasTrainingDataDestination(UnityVersion version) => version.IsGreaterEqual(2019, 2);
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasLightProbeSampleCountMultiplier(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasLightProbeSampleCountMultiplier(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		private static bool CompAOExponentFirst(Version version) => version.IsGreaterEqual(5, 4);
+		private static bool CompAOExponentFirst(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		private static bool IsAlign1(Version version) => version.IsGreaterEqual(5);
+		private static bool IsAlign1(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 2017.2.1 and greater
 		/// </summary>
-		private static bool IsAlign2(Version version) => version.IsGreaterEqual(2017, 2, 1);
+		private static bool IsAlign2(UnityVersion version) => version.IsGreaterEqual(2017, 2, 1);
 
 		public void Read(AssetReader reader)
 		{
@@ -976,15 +976,15 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			return node;
 		}
 
-		private int GetPVREnvironmentSampleCount(Version version)
+		private int GetPVREnvironmentSampleCount(UnityVersion version)
 		{
 			return HasPVREnvironmentSampleCount(version) ? PVREnvironmentSampleCount : PVRSampleCount;
 		}
-		private int GetPVREnvironmentReferencePointCount(Version version)
+		private int GetPVREnvironmentReferencePointCount(UnityVersion version)
 		{
 			return HasPVREnvironmentSampleCount(version) ? PVREnvironmentReferencePointCount : 2048;
 		}
-		private FilterMode GetPVRFilteringMode(Version version)
+		private FilterMode GetPVRFilteringMode(UnityVersion version)
 		{
 			if (ToSerializedVersion(version) < 11)
 			{
@@ -995,19 +995,19 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 			return PVRFilteringMode;
 		}
-		private DenoiserType GetPVRDenoiserTypeDirect(Version version)
+		private DenoiserType GetPVRDenoiserTypeDirect(UnityVersion version)
 		{
 			return HasPVREnvironmentSampleCount(version) ? PVRDenoiserTypeDirect : DenoiserType.None;
 		}
-		private DenoiserType GetPVRDenoiserTypeIndirect(Version version)
+		private DenoiserType GetPVRDenoiserTypeIndirect(UnityVersion version)
 		{
 			return HasPVREnvironmentSampleCount(version) ? PVRDenoiserTypeIndirect : DenoiserType.Optix;
 		}
-		private DenoiserType GetPVRDenoiserTypeAO(Version version)
+		private DenoiserType GetPVRDenoiserTypeAO(UnityVersion version)
 		{
 			return HasPVREnvironmentSampleCount(version) ? PVRDenoiserTypeAO : DenoiserType.None;
 		}
-		private FilterType GetPVRFilterTypeDirect(Version version)
+		private FilterType GetPVRFilterTypeDirect(UnityVersion version)
 		{
 			if (ToSerializedVersion(version) < 11)
 			{
@@ -1018,7 +1018,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 			return PVRFilterTypeDirect;
 		}
-		private FilterType GetPVRFilterTypeAO(Version version)
+		private FilterType GetPVRFilterTypeAO(UnityVersion version)
 		{
 			if (ToSerializedVersion(version) < 11)
 			{
@@ -1029,11 +1029,11 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 			return PVRFilterTypeAO;
 		}
-		private int GetPVREnvironmentMIS(Version version)
+		private int GetPVREnvironmentMIS(UnityVersion version)
 		{
 			return HasPVREnvironmentMIS(version) ? PVREnvironmentMIS : 0;
 		}
-		private int GetPVRFilteringGaussRadiusDirect(Version version)
+		private int GetPVRFilteringGaussRadiusDirect(UnityVersion version)
 		{
 			if (ToSerializedVersion(version) < 11)
 			{
@@ -1044,7 +1044,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 			return PVRFilteringGaussRadiusDirect;
 		}
-		private int GetPVRFilteringGaussRadiusIndirect(Version version)
+		private int GetPVRFilteringGaussRadiusIndirect(UnityVersion version)
 		{
 			if (ToSerializedVersion(version) < 11)
 			{
@@ -1055,7 +1055,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 			return PVRFilteringGaussRadiusIndirect;
 		}
-		private int GetPVRFilteringGaussRadiusAO(Version version)
+		private int GetPVRFilteringGaussRadiusAO(UnityVersion version)
 		{
 			if (ToSerializedVersion(version) < 11)
 			{
@@ -1066,11 +1066,11 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 			return PVRFilteringGaussRadiusAO;
 		}
-		private string GetTrainingDataDestination(Version version)
+		private string GetTrainingDataDestination(UnityVersion version)
 		{
 			return HasTrainingDataDestination(version) ? TrainingDataDestination : TrainingDataName;
 		}
-		private float GetLightProbeSampleCountMultiplier(Version version)
+		private float GetLightProbeSampleCountMultiplier(UnityVersion version)
 		{
 			return HasLightProbeSampleCountMultiplier(version) ? LightProbeSampleCountMultiplier : 4.0f;
 		}

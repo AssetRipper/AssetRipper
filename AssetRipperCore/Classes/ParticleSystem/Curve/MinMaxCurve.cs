@@ -37,9 +37,9 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Curve
 			MaxCurve = new AnimationCurveTpl<Float>(maxCurve, KeyframeTpl<Float>.DefaultFloatWeight);
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Patch, 4))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Patch, 4))
 			{
 				return 2;
 			}
@@ -49,12 +49,12 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Curve
 		/// <summary>
 		/// 5.6.0p4 and greater
 		/// </summary>
-		public static bool HasMinScalar(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Patch, 4);
+		public static bool HasMinScalar(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Patch, 4);
 
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		private static bool IsMinMaxStateFirst(Version version) => version.IsGreaterEqual(5, 6);
+		private static bool IsMinMaxStateFirst(UnityVersion version) => version.IsGreaterEqual(5, 6);
 
 		public void Read(AssetReader reader)
 		{
@@ -88,7 +88,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Curve
 			return node;
 		}
 
-		private float GetExportScalar(Version version)
+		private float GetExportScalar(UnityVersion version)
 		{
 			if (HasMinScalar(version))
 			{
@@ -106,7 +106,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Curve
 				}
 			}
 		}
-		private float GetExportMinScalar(Version version)
+		private float GetExportMinScalar(UnityVersion version)
 		{
 			if (HasMinScalar(version))
 			{

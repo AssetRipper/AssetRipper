@@ -8,13 +8,13 @@ using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader
 {
 	public struct ShaderSnippet : IAssetReadable, IYAMLExportable
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// VariantsUsers has been renamed to VariantsUserGlobals
 			if (version.IsGreaterEqual(3))
@@ -32,60 +32,60 @@ namespace AssetRipper.Core.Classes.Shader
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasHardwareTierVariantsMask(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasHardwareTierVariantsMask(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasStartLine(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasStartLine(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasCodeHash(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasCodeHash(UnityVersion version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// Less or equal to 5.6.0b1
 		/// </summary>
-		public static bool HasTarget(Version version) => version.IsLessEqual(5, 6, 0, VersionType.Beta, 1);
+		public static bool HasTarget(UnityVersion version) => version.IsLessEqual(5, 6, 0, UnityVersionType.Beta, 1);
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
-		public static bool HasIsGLSL(Version version) => version.IsLess(5, 5);
+		public static bool HasIsGLSL(UnityVersion version) => version.IsLess(5, 5);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasForceSyncCompilation(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasForceSyncCompilation(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasLanguage(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasLanguage(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool HasKeywordCombinations(Version version) => version.IsLess(5);
+		public static bool HasKeywordCombinations(UnityVersion version) => version.IsLess(5);
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasVariant6(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasVariant6(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasVariantsUserLocal(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasVariantsUserLocal(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 5.0.0 to 5.6.0b1
 		/// </summary>
-		public static bool HasTargetVariants(Version version) => version.IsGreaterEqual(5) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 1);
+		public static bool HasTargetVariants(UnityVersion version) => version.IsGreaterEqual(5) && version.IsLessEqual(5, 6, 0, UnityVersionType.Beta, 1);
 		/// <summary>
 		/// 5.6.0b2 and greater
 		/// </summary>
-		public static bool HasBaseRequirements(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
+		public static bool HasBaseRequirements(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasNonStrippedUserKeywords(Version version) => version.IsGreaterEqual(5);
+		public static bool HasNonStrippedUserKeywords(UnityVersion version) => version.IsGreaterEqual(5);
 
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		private static bool HasTargetFirst(Version version) => version.IsLess(5);
+		private static bool HasTargetFirst(UnityVersion version) => version.IsLess(5);
 
 		public void Read(AssetReader reader)
 		{
@@ -245,61 +245,61 @@ namespace AssetRipper.Core.Classes.Shader
 			return node;
 		}
 
-		private string[][] GetVariantsUser0(Version version)
+		private string[][] GetVariantsUser0(UnityVersion version)
 		{
 			return HasKeywordCombinations(version) ? Array.Empty<string[]>() : VariantsUserGlobal0;
 		}
-		private string[][] GetVariantsUser1(Version version)
+		private string[][] GetVariantsUser1(UnityVersion version)
 		{
 			return HasKeywordCombinations(version) ? Array.Empty<string[]>() : VariantsUserGlobal1;
 		}
-		private string[][] GetVariantsUser2(Version version)
+		private string[][] GetVariantsUser2(UnityVersion version)
 		{
 			return HasKeywordCombinations(version) ? Array.Empty<string[]>() : VariantsUserGlobal2;
 		}
-		private string[][] GetVariantsUser3(Version version)
+		private string[][] GetVariantsUser3(UnityVersion version)
 		{
 			return HasKeywordCombinations(version) ? Array.Empty<string[]>() : VariantsUserGlobal3;
 		}
-		private string[][] GetVariantsUser4(Version version)
+		private string[][] GetVariantsUser4(UnityVersion version)
 		{
 			return HasKeywordCombinations(version) ? Array.Empty<string[]>() : VariantsUserGlobal4;
 		}
-		private string[][] GetVariantsUser5(Version version)
+		private string[][] GetVariantsUser5(UnityVersion version)
 		{
 			return HasKeywordCombinations(version) ? Array.Empty<string[]>() : VariantsUserGlobal5;
 		}
-		private string[][] GetVariantsBuiltin0(Version version)
+		private string[][] GetVariantsBuiltin0(UnityVersion version)
 		{
 			return HasKeywordCombinations(version) ? Array.Empty<string[]>() : VariantsBuiltin0;
 		}
-		private string[][] GetVariantsBuiltin1(Version version)
+		private string[][] GetVariantsBuiltin1(UnityVersion version)
 		{
 			return HasKeywordCombinations(version) ? Array.Empty<string[]>() : VariantsBuiltin1;
 		}
-		private string[][] GetVariantsBuiltin2(Version version)
+		private string[][] GetVariantsBuiltin2(UnityVersion version)
 		{
 			return HasKeywordCombinations(version) ? Array.Empty<string[]>() : VariantsBuiltin2;
 		}
-		private string[][] GetVariantsBuiltin3(Version version)
+		private string[][] GetVariantsBuiltin3(UnityVersion version)
 		{
 			return HasKeywordCombinations(version) ? Array.Empty<string[]>() : VariantsBuiltin3;
 		}
-		private string[][] GetVariantsBuiltin4(Version version)
+		private string[][] GetVariantsBuiltin4(UnityVersion version)
 		{
 			return HasKeywordCombinations(version) ? Array.Empty<string[]>() : VariantsBuiltin4;
 		}
-		private string[][] GetVariantsBuiltin5(Version version)
+		private string[][] GetVariantsBuiltin5(UnityVersion version)
 		{
 			return HasKeywordCombinations(version) ? Array.Empty<string[]>() : VariantsBuiltin5;
 		}
 
-		private int GetBaseRequirements(Version version)
+		private int GetBaseRequirements(UnityVersion version)
 		{
 			return HasBaseRequirements(version) ? BaseRequirements : 33;
 		}
 
-		private IReadOnlyList<KeywordTargetInfo> GetKeywordTargetInfo(Version version)
+		private IReadOnlyList<KeywordTargetInfo> GetKeywordTargetInfo(UnityVersion version)
 		{
 			if (HasBaseRequirements(version))
 			{
@@ -321,12 +321,12 @@ namespace AssetRipper.Core.Classes.Shader
 			}
 		}
 
-		private string GetNonStrippedUserKeywords(Version version)
+		private string GetNonStrippedUserKeywords(UnityVersion version)
 		{
 			return HasNonStrippedUserKeywords(version) ? NonStrippedUserKeywords : "FOG_EXP FOG_EXP2 FOG_LINEAR";
 		}
 
-		private string GetBuiltinKeywords(Version version)
+		private string GetBuiltinKeywords(UnityVersion version)
 		{
 			return HasBaseRequirements(version) ? BuiltinKeywords : string.Empty;
 		}

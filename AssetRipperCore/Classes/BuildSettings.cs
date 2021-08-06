@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public BuildSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// min version is 2nd
 			return 2;
@@ -22,92 +22,92 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasPreloadPlugin(Version version) => version.IsGreaterEqual(5);
+		public static bool HasPreloadPlugin(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasEnabledVRDevices(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasEnabledVRDevices(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasBuildTags(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasBuildTags(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 5.6.0b3 and greater
 		/// </summary>
-		public static bool HasBuildGUID(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 3);
+		public static bool HasBuildGUID(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 3);
 		/// <summary>
 		/// Less than 5.3.0
 		/// </summary>
-		public static bool HasHasRenderTexture(Version version) => version.IsLess(5, 3);
+		public static bool HasHasRenderTexture(UnityVersion version) => version.IsLess(5, 3);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasIsNoWatermarkBuild(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasIsNoWatermarkBuild(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 3.1.0 and greater
 		/// </summary>
-		public static bool HasIsEducationalBuild(Version version) => version.IsGreaterEqual(3, 1);
+		public static bool HasIsEducationalBuild(UnityVersion version) => version.IsGreaterEqual(3, 1);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasIsEmbedded(Version version) => version.IsGreaterEqual(4);
+		public static bool HasIsEmbedded(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool HasHasShadows(Version version) => version.IsGreaterEqual(2);
+		public static bool HasHasShadows(UnityVersion version) => version.IsGreaterEqual(2);
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasHasSoftShadows(Version version) => version.IsGreaterEqual(4, 2);
+		public static bool HasHasSoftShadows(UnityVersion version) => version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasHasAdvancedVersion(Version version) => version.IsGreaterEqual(3);
+		public static bool HasHasAdvancedVersion(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasUsesOnMouseEvents(Version version) => version.IsGreater(4);
+		public static bool HasUsesOnMouseEvents(UnityVersion version) => version.IsGreater(4);
 		/// <summary>
 		/// 5.0.0 to 5.3.0 exclusive
 		/// </summary>
-		public static bool HasEnableMultipleDisplays(Version version) => version.IsGreater(5) && version.IsLess(5, 3);
+		public static bool HasEnableMultipleDisplays(UnityVersion version) => version.IsGreater(5) && version.IsLess(5, 3);
 		/// <summary>
 		/// 4.6.2 to 5.0.0 exclusive
 		/// </summary>
-		public static bool HasHasOculusPlugin(Version version) => version.IsGreater(4, 6, 2) && version.IsLess(5);
+		public static bool HasHasOculusPlugin(UnityVersion version) => version.IsGreater(4, 6, 2) && version.IsLess(5);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasHasClusterRendering(Version version) => version.IsGreater(5);
+		public static bool HasHasClusterRendering(UnityVersion version) => version.IsGreater(5);
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool HasVersion(Version version) => version.IsGreaterEqual(2);
+		public static bool HasVersion(UnityVersion version) => version.IsGreaterEqual(2);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasAuthToken(Version version) => version.IsGreaterEqual(3);
+		public static bool HasAuthToken(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasRuntimeClassHashes(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasRuntimeClassHashes(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool IsRuntimeClassHashesUInt32(Version version) => version.IsLess(5);
+		public static bool IsRuntimeClassHashesUInt32(UnityVersion version) => version.IsLess(5);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasScriptHashes(Version version) => version.IsGreaterEqual(5);
+		public static bool HasScriptHashes(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.1.0 and greater
 		/// </summary>
-		public static bool HasGraphicsAPIs(Version version) => version.IsGreaterEqual(5, 1);
+		public static bool HasGraphicsAPIs(UnityVersion version) => version.IsGreaterEqual(5, 1);
 
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		private static bool IsAlignBools(Version version) => version.IsGreaterEqual(3);
+		private static bool IsAlignBools(UnityVersion version) => version.IsGreaterEqual(3);
 
 		public override void Read(AssetReader reader)
 		{

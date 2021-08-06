@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Clip
 {
 	public class ClipMuscleConstant : IAssetReadable, IYAMLExportable
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5, 6))
 			{
@@ -26,32 +26,32 @@ namespace AssetRipper.Core.Classes.AnimationClip.Clip
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasStopX(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasStopX(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		public static bool HasMotion(Version version) => version.IsLess(5);
+		public static bool HasMotion(UnityVersion version) => version.IsLess(5);
 		/// <summary>
 		/// Less than 4.3.0
 		/// </summary>
-		public static bool HasAdditionalCurveIndexArray(Version version) => version.IsLess(4, 3);
+		public static bool HasAdditionalCurveIndexArray(UnityVersion version) => version.IsLess(4, 3);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasValueArrayReferencePose(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasValueArrayReferencePose(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasLoopTime(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasLoopTime(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasStartAtOrigin(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasStartAtOrigin(UnityVersion version) => version.IsGreaterEqual(5, 5);
 
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		private static bool IsVector3f(Version version) => version.IsGreaterEqual(5, 4);
+		private static bool IsVector3f(UnityVersion version) => version.IsGreaterEqual(5, 4);
 
 		public void Read(AssetReader reader)
 		{

@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// Less than 5.6.0
 		/// </summary>
-		public static bool HasRoomRolloffFactor(Version version) => version.IsLess(5, 6);
+		public static bool HasRoomRolloffFactor(UnityVersion version) => version.IsLess(5, 6);
 
 		public override void Read(AssetReader reader)
 		{

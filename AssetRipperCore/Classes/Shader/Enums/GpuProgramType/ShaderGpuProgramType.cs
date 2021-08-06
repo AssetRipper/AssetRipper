@@ -1,6 +1,6 @@
 using AssetRipper.Core.Parser.Files;
 using System;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 {
@@ -49,7 +49,7 @@ namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool GpuProgramType55Relevant(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool GpuProgramType55Relevant(UnityVersion version) => version.IsGreaterEqual(5, 5);
 
 		public static bool IsGL(this ShaderGpuProgramType _this)
 		{

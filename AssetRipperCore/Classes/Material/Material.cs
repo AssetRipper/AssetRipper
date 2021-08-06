@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.Material
 	{
 		public Material(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// TODO:
 			return 6;
@@ -24,31 +24,31 @@ namespace AssetRipper.Core.Classes.Material
 		/// <summary>
 		/// 4.1.0b and greater
 		/// </summary>
-		public static bool HasKeywords(Version version) => version.IsGreaterEqual(4, 1, 0, VersionType.Beta);
+		public static bool HasKeywords(UnityVersion version) => version.IsGreaterEqual(4, 1, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// Less 5.0.0
 		/// </summary>
-		public static bool IsKeywordsArray(Version version) => version.IsLess(5);
+		public static bool IsKeywordsArray(UnityVersion version) => version.IsLess(5);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasCustomRenderQueue(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasCustomRenderQueue(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 5.0.0f1 and greater
 		/// </summary>
-		public static bool HasLightmapFlags(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasLightmapFlags(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasOtherFlags(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasOtherFlags(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 5.1.0 and greater
 		/// </summary>
-		public static bool HasStringTagMap(Version version) => version.IsGreaterEqual(5, 1);
+		public static bool HasStringTagMap(UnityVersion version) => version.IsGreaterEqual(5, 1);
 		/// <summary>
 		/// 5.6.0b5 and greater
 		/// </summary>
-		public static bool HasDisabledShaderPasses(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
+		public static bool HasDisabledShaderPasses(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 5);
 
 		public string FindPropertyNameByCRC28(uint crc)
 		{

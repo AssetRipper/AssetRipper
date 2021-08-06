@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasRotation(Version version) => version.IsGreaterEqual(5);
+		public static bool HasRotation(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public void Read(AssetReader reader)
 		{

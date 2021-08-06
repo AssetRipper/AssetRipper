@@ -13,7 +13,7 @@ using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
@@ -32,9 +32,9 @@ namespace AssetRipper.Core.Classes.AnimationClip
 
 		public AnimationClip(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2))
+			if (version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2))
 			{
 				return 6;
 			}
@@ -57,7 +57,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		/// <summary>
 		/// Less than 2.0.0
 		/// </summary>
-		public static bool HasClassIDToTrack(Version version, TransferInstructionFlags flags)
+		public static bool HasClassIDToTrack(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (version.IsGreaterEqual(2, 6))
 			{
@@ -72,68 +72,68 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		/// <summary>
 		/// 4.x.x
 		/// </summary>
-		public static bool HasAnimationType(Version version) => version.IsEqual(4);
+		public static bool HasAnimationType(UnityVersion version) => version.IsEqual(4);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasLegacy(Version version) => version.IsGreaterEqual(5);
+		public static bool HasLegacy(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool HasCompressed(Version version) => version.IsGreaterEqual(2, 6);
+		public static bool HasCompressed(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasUseHightQualityCurve(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasUseHightQualityCurve(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 1.5.0 and greater
 		/// </summary>
-		public static bool HasCurves(Version version) => version.IsGreaterEqual(1, 5);
+		public static bool HasCurves(UnityVersion version) => version.IsGreaterEqual(1, 5);
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool HasCompressedRotationCurves(Version version) => version.IsGreaterEqual(2, 6);
+		public static bool HasCompressedRotationCurves(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasEulerCurves(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasEulerCurves(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasPPtrCurves(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasPPtrCurves(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 1.5.0 and greater
 		/// </summary>
-		public static bool HasSampleRate(Version version) => version.IsGreaterEqual(1, 5);
+		public static bool HasSampleRate(UnityVersion version) => version.IsGreaterEqual(1, 5);
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool HasWrapMode(Version version) => version.IsGreaterEqual(2, 6);
+		public static bool HasWrapMode(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 3.4.0 and greater
 		/// </summary>
-		public static bool HasBounds(Version version) => version.IsGreaterEqual(3, 4);
+		public static bool HasBounds(UnityVersion version) => version.IsGreaterEqual(3, 4);
 		/// <summary>
 		/// 4.0.0 and greater and Release
 		/// </summary>
-		public static bool HasMuscleClip(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(4) && flags.IsRelease();
+		public static bool HasMuscleClip(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(4) && flags.IsRelease();
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasClipBindingConstant(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasClipBindingConstant(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 4.0.0 and Not Release
 		/// </summary>
-		public static bool HasAnimationClipSettings(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(4);
+		public static bool HasAnimationClipSettings(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(4);
 		/// <summary>
 		/// 2.6.0 and greater and Not Release
 		/// </summary>
-		public static bool HasEditorCurves(Version version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2, 6);
+		public static bool HasEditorCurves(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// <para>5.0.0 and greater and Not Release</para>
 		/// <para>2018.3 and greater</para>
 		/// </summary>
-		public static bool HasHasGenericRootTransform(Version version, TransferInstructionFlags flags)
+		public static bool HasHasGenericRootTransform(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (flags.IsRelease())
 			{
@@ -145,37 +145,37 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		/// <para>5.0.0f1 and greater and Not Release</para>
 		/// <para>2018.3 and greater</para>
 		/// </summary>
-		public static bool HasHasMotionFloatCurves(Version version, TransferInstructionFlags flags)
+		public static bool HasHasMotionFloatCurves(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (flags.IsRelease())
 			{
 				return version.IsGreaterEqual(2018, 3);
 			}
 			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		}
 		/// <summary>
 		/// 5.0.0 to 2018.3 exclusive and Not Release
 		/// </summary>
-		public static bool HasGenerateMotionCurves(Version version, TransferInstructionFlags flags)
+		public static bool HasGenerateMotionCurves(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(5) && version.IsLess(2018, 3);
 		}
 		/// <summary>
 		/// 5.5.0 to 5.6.0b9 and Not Release
 		/// </summary>
-		public static bool HasIsEmpty(Version version, TransferInstructionFlags flags)
+		public static bool HasIsEmpty(UnityVersion version, TransferInstructionFlags flags)
 		{
-			return !flags.IsRelease() && version.IsGreaterEqual(5, 5) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 9);
+			return !flags.IsRelease() && version.IsGreaterEqual(5, 5) && version.IsLessEqual(5, 6, 0, UnityVersionType.Beta, 9);
 		}
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		public static bool HasEvents(Version version) => version.IsGreaterEqual(2, 1);
+		public static bool HasEvents(UnityVersion version) => version.IsGreaterEqual(2, 1);
 		/// <summary>
 		/// 2.1.0 to 2.6.0 exclusive and Not Release
 		/// </summary>
-		public static bool HasRuntimeEvents(Version version, TransferInstructionFlags flags)
+		public static bool HasRuntimeEvents(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return !flags.IsRelease() && version.IsGreaterEqual(2, 1) && version.IsLess(2, 6);
 		}
@@ -183,11 +183,11 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		private static bool IsAlignCompressed(Version version) => version.IsGreaterEqual(2, 6);
+		private static bool IsAlignCompressed(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(2017);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2017);
 
 		public override void Read(AssetReader reader)
 		{
@@ -569,7 +569,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			return false;
 		}
 
-		private bool IsExportGenericData(Version version, TransferInstructionFlags flags)
+		private bool IsExportGenericData(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (HasLegacy(version))
 			{
@@ -597,7 +597,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			return false;
 		}
 
-		private bool GetLegacy(Version version)
+		private bool GetLegacy(UnityVersion version)
 		{
 			if (HasLegacy(version))
 			{
@@ -606,7 +606,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			return AnimationType == AnimationType.Legacy;
 		}
 
-		private AnimationCurves GetAnimationCurves(Version version, TransferInstructionFlags flags)
+		private AnimationCurves GetAnimationCurves(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (IsExportGenericData(version, flags))
 			{
@@ -627,39 +627,39 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			}
 		}
 
-		private IReadOnlyList<QuaternionCurve> GetRotationCurves(Version version)
+		private IReadOnlyList<QuaternionCurve> GetRotationCurves(UnityVersion version)
 		{
 			return HasCurves(version) ? RotationCurves : Array.Empty<QuaternionCurve>();
 		}
-		private IReadOnlyList<CompressedAnimationCurve> GetCompressedRotationCurves(Version version)
+		private IReadOnlyList<CompressedAnimationCurve> GetCompressedRotationCurves(UnityVersion version)
 		{
 			return HasCompressedRotationCurves(version) ? CompressedRotationCurves : Array.Empty<CompressedAnimationCurve>();
 		}
-		private IReadOnlyList<Vector3Curve> GetEulerCurves(Version version)
+		private IReadOnlyList<Vector3Curve> GetEulerCurves(UnityVersion version)
 		{
 			return HasEulerCurves(version) ? EulerCurves : Array.Empty<Vector3Curve>();
 		}
-		private IReadOnlyList<Vector3Curve> GetPositionCurves(Version version)
+		private IReadOnlyList<Vector3Curve> GetPositionCurves(UnityVersion version)
 		{
 			return HasCurves(version) ? PositionCurves : Array.Empty<Vector3Curve>();
 		}
-		private IReadOnlyList<Vector3Curve> GetScaleCurves(Version version)
+		private IReadOnlyList<Vector3Curve> GetScaleCurves(UnityVersion version)
 		{
 			return HasCurves(version) ? ScaleCurves : Array.Empty<Vector3Curve>();
 		}
-		private IReadOnlyList<FloatCurve> GetFloatCurves(Version version)
+		private IReadOnlyList<FloatCurve> GetFloatCurves(UnityVersion version)
 		{
 			return HasCurves(version) ? FloatCurves : Array.Empty<FloatCurve>();
 		}
-		private IReadOnlyList<PPtrCurve> GetPPtrCurves(Version version)
+		private IReadOnlyList<PPtrCurve> GetPPtrCurves(UnityVersion version)
 		{
 			return HasPPtrCurves(version) ? PPtrCurves : Array.Empty<PPtrCurve>();
 		}
-		private AnimationClipBindingConstant GetClipBindingConstant(Version version)
+		private AnimationClipBindingConstant GetClipBindingConstant(UnityVersion version)
 		{
 			return HasClipBindingConstant(version) ? ClipBindingConstant : new AnimationClipBindingConstant(true);
 		}
-		private AnimationClipSettings GetAnimationClipSettings(Version version, TransferInstructionFlags flags)
+		private AnimationClipSettings GetAnimationClipSettings(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasAnimationClipSettings(version, flags))
@@ -669,7 +669,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 #endif
 			return HasMuscleClip(version, flags) ? new AnimationClipSettings(MuscleClip) : new AnimationClipSettings(true);
 		}
-		private IReadOnlyList<FloatCurve> GetEditorCurves(Version version, TransferInstructionFlags flags)
+		private IReadOnlyList<FloatCurve> GetEditorCurves(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorCurves(version, flags))
@@ -679,7 +679,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 #endif
 			return Array.Empty<FloatCurve>();
 		}
-		private IReadOnlyList<FloatCurve> GetEulerEditorCurves(Version version, TransferInstructionFlags flags)
+		private IReadOnlyList<FloatCurve> GetEulerEditorCurves(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorCurves(version, flags))
@@ -689,7 +689,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 #endif
 			return Array.Empty<FloatCurve>();
 		}
-		private bool GetGenerateMotionCurves(Version version, TransferInstructionFlags flags)
+		private bool GetGenerateMotionCurves(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasGenerateMotionCurves(version, flags))
@@ -699,7 +699,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 #endif
 			return false;
 		}
-		private IReadOnlyList<AnimationEvent> GetEvents(Version version)
+		private IReadOnlyList<AnimationEvent> GetEvents(UnityVersion version)
 		{
 			return HasEvents(version) ? Events : Array.Empty<AnimationEvent>();
 		}

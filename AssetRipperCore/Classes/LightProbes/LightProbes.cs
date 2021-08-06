@@ -17,23 +17,23 @@ namespace AssetRipper.Core.Classes.LightProbes
 		/// <summary>
 		/// 5.0.0b1
 		/// </summary>
-		public static bool HasBakedCoefficients11(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta, 1);
+		public static bool HasBakedCoefficients11(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Beta, 1);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasBakedLightOcclusion(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasBakedLightOcclusion(UnityVersion version) => version.IsGreaterEqual(5, 4);
 
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		private static bool HasBakedPositions(Version version)
+		private static bool HasBakedPositions(UnityVersion version)
 		{
 			return version.IsLess(5);
 		}
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		private static bool HasBakedCoefficientsFirst(Version version)
+		private static bool HasBakedCoefficientsFirst(UnityVersion version)
 		{
 			return version.IsLess(5);
 		}

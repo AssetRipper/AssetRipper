@@ -16,15 +16,15 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		/// <summary>
 		/// Less than 5.5.0 and greater
 		/// </summary>
-		public static bool HasRecommendedFormat(Version version) => version.IsLess(5, 5);
+		public static bool HasRecommendedFormat(UnityVersion version) => version.IsLess(5, 5);
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasDesiredFormat(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasDesiredFormat(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasAndroidETC2Fallback(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasAndroidETC2Fallback(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
 		public void Read(AssetReader reader)
 		{

@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 
 		public KTXImporter(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public override bool IncludesImporter(Version version)
+		public override bool IncludesImporter(UnityVersion version)
 		{
 			return true;
 		}

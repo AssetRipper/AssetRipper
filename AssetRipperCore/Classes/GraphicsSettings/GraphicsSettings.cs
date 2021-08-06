@@ -12,7 +12,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			return virtualFile.CreateAsset((assetInfo) => new GraphicsSettings(assetInfo, true));
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// AllowEnlightenSupportForUpgradedProject default value has been changed from True to custom?
 			if (version.IsGreaterEqual(2019, 3))
@@ -42,13 +42,13 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 				return 13;
 			}
 			// changed TierSettings to platform specific
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 7))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 7))
 			{
 				return 12;
 			}
 			// changed default LightsUseLinearIntensity value
 			// NOTE: unknown version (maybe some alpha)
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta))
 			{
 				return 11;
 			}
@@ -86,7 +86,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 				return 4;
 			}
 			// default shaders included in AlwaysIncludedShaders
-			if (version.IsGreater(5, 0, 0, VersionType.Beta, 1))
+			if (version.IsGreater(5, 0, 0, UnityVersionType.Beta, 1))
 			{
 				return 3;
 			}
@@ -101,47 +101,47 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasDeferred(Version version) => version.IsGreaterEqual(5);
+		public static bool HasDeferred(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		public static bool HasDeferredReflections(Version version) => version.IsGreaterEqual(5, 2);
+		public static bool HasDeferredReflections(UnityVersion version) => version.IsGreaterEqual(5, 2);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasScreenSpaceShadows(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasScreenSpaceShadows(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasLegacyDeferred(Version version) => version.IsGreaterEqual(5);
+		public static bool HasLegacyDeferred(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasDepthNormals(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasDepthNormals(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasAlwaysIncludedShaders(Version version) => version.IsGreaterEqual(4, 2);
+		public static bool HasAlwaysIncludedShaders(UnityVersion version) => version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 5.0.0b2 and greater
 		/// </summary>
-		public static bool HasPreloadedShaders(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		public static bool HasPreloadedShaders(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasSpritesDefaultMaterial(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasSpritesDefaultMaterial(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.6.0b5 and greater
 		/// </summary>
-		public static bool HasCustomRenderPipeline(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
+		public static bool HasCustomRenderPipeline(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 5);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasTransparencySortMode(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasTransparencySortMode(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// Release or less than 5.6.0
 		/// </summary>
-		public static bool HasStaticTierGraphicsSettings(Version version, TransferInstructionFlags flags) => flags.IsRelease() || version.IsLess(5, 6);
+		public static bool HasStaticTierGraphicsSettings(UnityVersion version, TransferInstructionFlags flags) => flags.IsRelease() || version.IsLess(5, 6);
 		/// <summary>
 		/// Not Release
 		/// </summary>
@@ -149,63 +149,63 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasDefaultRenderingPath(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasDefaultRenderingPath(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasTierSettings(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasTierSettings(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.0.0b2 and greater
 		/// </summary>
-		public static bool HasLightmapStripping(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		public static bool HasLightmapStripping(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 5.0.0b2 and greater
 		/// </summary>
-		public static bool HasFogStripping(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		public static bool HasFogStripping(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasInstancingStripping(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasInstancingStripping(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 5.0.0b2 and greater
 		/// </summary>
-		public static bool HasLightmapKeepPlain(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		public static bool HasLightmapKeepPlain(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 5.0.0b2 to 5.6.0b1
 		/// </summary>
-		public static bool HasLightmapKeepDirSeparate(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 1);
+		public static bool HasLightmapKeepDirSeparate(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2) && version.IsLessEqual(5, 6, 0, UnityVersionType.Beta, 1);
 		/// <summary>
 		/// 5.0.0b2 and greater
 		/// </summary>
-		public static bool HasLightmapKeepDynamicPlain(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		public static bool HasLightmapKeepDynamicPlain(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 5.2.0 to 5.6.0b1
 		/// </summary>
-		public static bool HasLightmapKeepDynamicDirSeparate(Version version) => version.IsGreaterEqual(5, 2) && version.IsLessEqual(5, 6, 0, VersionType.Beta, 1);
+		public static bool HasLightmapKeepDynamicDirSeparate(UnityVersion version) => version.IsGreaterEqual(5, 2) && version.IsLessEqual(5, 6, 0, UnityVersionType.Beta, 1);
 		/// <summary>
 		/// 5.6.0b2 and greater
 		/// </summary>
-		public static bool HasLightmapKeepShadowMask(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 2);
+		public static bool HasLightmapKeepShadowMask(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 5.0.0b2 and greater
 		/// </summary>
-		public static bool HasFogKeepLinear(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2);
+		public static bool HasFogKeepLinear(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasAlbedoSwatchInfos(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasAlbedoSwatchInfos(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 2017.1.0.b2 and greater
 		/// </summary>
-		public static bool HasShaderDefinesPerShaderCompiler(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		public static bool HasShaderDefinesPerShaderCompiler(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasLightsUseLinearIntensity(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasLightsUseLinearIntensity(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 2018.4.6 to 2019.1 exclusive or 2019.2.7 and greater
 		/// </summary>
-		public static bool HasLogWhenShaderIsCompiled(Version version)
+		public static bool HasLogWhenShaderIsCompiled(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2019))
 			{
@@ -216,28 +216,28 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasAllowEnlightenSupportForUpgradedProject(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasAllowEnlightenSupportForUpgradedProject(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 
 		/// <summary>
 		/// 5.3.0 to 5.5.0 exclusive
 		/// </summary>
-		private static bool HasPlatformSettings(Version version) => version.IsGreaterEqual(5, 3) && version.IsLess(5, 5);
+		private static bool HasPlatformSettings(UnityVersion version) => version.IsGreaterEqual(5, 3) && version.IsLess(5, 5);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		private static bool HasPlatformSettingsTiers(Version version) => version.IsGreaterEqual(5, 4);
+		private static bool HasPlatformSettingsTiers(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// Less than 5.2.0
 		/// </summary>
-		private static bool HasLightmapKeepDynamic(Version version) => version.IsLess(5, 2);
+		private static bool HasLightmapKeepDynamic(UnityVersion version) => version.IsLess(5, 2);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		private static bool IsFogStrippingFirst(Version version) => version.IsGreaterEqual(5, 3);
+		private static bool IsFogStrippingFirst(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.0.0b2 to 5.3.0 exclusive
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta, 2) && version.IsLess(5, 3);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2) && version.IsLess(5, 3);
 
 		public override void Read(AssetReader reader)
 		{
@@ -608,11 +608,11 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			ExportShaderPointer(container, node, shaderNames, EngineBuiltInAssets.UIDefault);
 			return node;
 		}
-		private IReadOnlyList<PPtr<ShaderVariantCollection.ShaderVariantCollection>> GetPreloadedShaders(Version version)
+		private IReadOnlyList<PPtr<ShaderVariantCollection.ShaderVariantCollection>> GetPreloadedShaders(UnityVersion version)
 		{
 			return HasPreloadedShaders(version) ? PreloadedShaders : System.Array.Empty<PPtr<ShaderVariantCollection.ShaderVariantCollection>>();
 		}
-		private PPtr<Material.Material> GetSpritesDefaultMaterial(Version version)
+		private PPtr<Material.Material> GetSpritesDefaultMaterial(UnityVersion version)
 		{
 			if (HasSpritesDefaultMaterial(version))
 			{
@@ -621,11 +621,11 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			Material.Material material = (Material.Material)File.FindAsset(ClassIDType.Material, "Sprites-Default");
 			return material == null ? default : File.CreatePPtr(material);
 		}
-		private Vector3f GetTransparencySortAxis(Version version)
+		private Vector3f GetTransparencySortAxis(UnityVersion version)
 		{
 			return HasTransparencySortMode(version) ? TransparencySortAxis : new Vector3f(0.0f, 0.0f, 1.0f);
 		}
-		private RenderingPath GetDefaultRenderingPath(Version version, TransferInstructionFlags flags)
+		private RenderingPath GetDefaultRenderingPath(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorSettings(flags) && HasDefaultRenderingPath(version))
@@ -635,7 +635,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return RenderingPath.Forward;
 		}
-		private RenderingPath GetDefaultMobileRenderingPath(Version version, TransferInstructionFlags flags)
+		private RenderingPath GetDefaultMobileRenderingPath(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorSettings(flags) && HasDefaultRenderingPath(version))
@@ -645,7 +645,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return RenderingPath.Forward;
 		}
-		private IReadOnlyList<TierSettings> GetTierSettings(Version version, Platform platform, TransferInstructionFlags flags)
+		private IReadOnlyList<TierSettings> GetTierSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
 			if (!HasTierSettings(version))
 			{
@@ -708,7 +708,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return InstancingStrippingVariant.StripUnused;
 		}
-		private bool GetLightmapKeepPlain(Version version, TransferInstructionFlags flags)
+		private bool GetLightmapKeepPlain(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorSettings(flags) && HasLightmapKeepPlain(version))
@@ -718,7 +718,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return true;
 		}
-		private bool GetLightmapKeepDirCombined(Version version, TransferInstructionFlags flags)
+		private bool GetLightmapKeepDirCombined(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorSettings(flags) && HasLightmapKeepPlain(version))
@@ -728,7 +728,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return true;
 		}
-		private bool GetLightmapKeepDynamicPlain(Version version, TransferInstructionFlags flags)
+		private bool GetLightmapKeepDynamicPlain(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorSettings(flags) && HasLightmapKeepDynamicPlain(version))
@@ -738,7 +738,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return true;
 		}
-		private bool GetLightmapKeepDynamicDirCombined(Version version, TransferInstructionFlags flags)
+		private bool GetLightmapKeepDynamicDirCombined(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorSettings(flags) && HasLightmapKeepDynamicPlain(version))
@@ -748,7 +748,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return true;
 		}
-		private bool GetLightmapKeepShadowMask(Version version, TransferInstructionFlags flags)
+		private bool GetLightmapKeepShadowMask(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorSettings(flags) && HasLightmapKeepShadowMask(version))
@@ -758,7 +758,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return true;
 		}
-		private bool GetLightmapKeepSubtractive(Version version, TransferInstructionFlags flags)
+		private bool GetLightmapKeepSubtractive(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorSettings(flags) && HasLightmapKeepShadowMask(version))
@@ -768,7 +768,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return true;
 		}
-		private bool GetFogKeepLinear(Version version, TransferInstructionFlags flags)
+		private bool GetFogKeepLinear(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorSettings(flags) && HasFogKeepLinear(version))
@@ -778,7 +778,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return true;
 		}
-		private bool GetFogKeepExp(Version version, TransferInstructionFlags flags)
+		private bool GetFogKeepExp(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorSettings(flags) && HasFogKeepLinear(version))
@@ -788,7 +788,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return true;
 		}
-		private bool GetFogKeepExp2(Version version, TransferInstructionFlags flags)
+		private bool GetFogKeepExp2(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorSettings(flags) && HasFogKeepLinear(version))
@@ -798,7 +798,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 #endif
 			return true;
 		}
-		private IReadOnlyList<AlbedoSwatchInfo> GetAlbedoSwatchInfos(Version version, TransferInstructionFlags flags)
+		private IReadOnlyList<AlbedoSwatchInfo> GetAlbedoSwatchInfos(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasEditorSettings(flags) && HasAlbedoSwatchInfos(version))
@@ -818,7 +818,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			}
 		}
 
-		private bool GetAllowEnlightenSupportForUpgradedProject(Version version)
+		private bool GetAllowEnlightenSupportForUpgradedProject(UnityVersion version)
 		{
 			return HasAllowEnlightenSupportForUpgradedProject(version) ? AllowEnlightenSupportForUpgradedProject : true;
 		}

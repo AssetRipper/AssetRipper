@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings.GISettings
 			EnableRealtimeLightmaps = true;
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// NOTE: unknown version
 			// DynamicEnv has been replaved by EnvironmentLightingMode?
@@ -42,15 +42,15 @@ namespace AssetRipper.Core.Classes.LightmapSettings.GISettings
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasSkyLightColorRGBAf(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasSkyLightColorRGBAf(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// 5.0.0f1 to 2018.3 exclusive
 		/// </summary>
-		public static bool HasTemporalCoherenceThreshold(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Beta) && version.IsLess(2018, 3);
+		public static bool HasTemporalCoherenceThreshold(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta) && version.IsLess(2018, 3);
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasDynamicEnv(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasDynamicEnv(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 
 		public void Read(AssetReader reader)
 		{

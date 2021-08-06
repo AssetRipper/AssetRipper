@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.Rigidbody2D
 	{
 		public Rigidbody2D(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5, 5))
 			{
@@ -30,28 +30,28 @@ namespace AssetRipper.Core.Classes.Rigidbody2D
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasBodyType(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasBodyType(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasUseAutoMass(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasUseAutoMass(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasMaterial(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasMaterial(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasInterpolate(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasInterpolate(UnityVersion version) => version.IsGreaterEqual(5, 5);
 
 		/// <summary>
 		/// Less than 5.1.0
 		/// </summary>
-		private static bool HasFixedAngle(Version version) => version.IsLess(5, 1);
+		private static bool HasFixedAngle(UnityVersion version) => version.IsLess(5, 1);
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
-		private static bool HasIsKinematic(Version version) => version.IsLess(5, 5);
+		private static bool HasIsKinematic(UnityVersion version) => version.IsLess(5, 5);
 
 		public override void Read(AssetReader reader)
 		{

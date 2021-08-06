@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes.Rigidbody
 	{
 		public Rigidbody(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(3, 2))
 			{
@@ -23,21 +23,21 @@ namespace AssetRipper.Core.Classes.Rigidbody
 		/// <summary>
 		/// 1.5.0 and greater
 		/// </summary>
-		public static bool HasInterpolate(Version version) => version.IsGreaterEqual(1, 5);
+		public static bool HasInterpolate(UnityVersion version) => version.IsGreaterEqual(1, 5);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasCollisionDetection(Version version) => version.IsGreaterEqual(3);
+		public static bool HasCollisionDetection(UnityVersion version) => version.IsGreaterEqual(3);
 
 		/// <summary>
 		/// Less than 3.2.0
 		/// </summary>
-		private static bool HasFreezeRotation(Version version) => version.IsLess(3, 2);
+		private static bool HasFreezeRotation(UnityVersion version) => version.IsLess(3, 2);
 
 		/// <summary>
 		/// 3.2.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(3, 2);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(3, 2);
 
 		public override void Read(AssetReader reader)
 		{

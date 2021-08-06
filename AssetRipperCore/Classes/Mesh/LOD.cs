@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// Less than 1.5.0
 		/// </summary>
-		public static bool HasVertexCount(Version version) => version.IsLess(1, 5);
+		public static bool HasVertexCount(UnityVersion version) => version.IsLess(1, 5);
 
 		public LOD Convert(IExportContainer container)
 		{

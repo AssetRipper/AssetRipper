@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.Avatar
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool IsVector3f(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool IsVector3f(UnityVersion version) => version.IsGreaterEqual(5, 4);
 
 		public Limit(ObjectReader reader)
 		{

@@ -8,7 +8,7 @@ using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AudioClip
 {
@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.AudioClip
 	{
 		public AudioClip(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5))
 			{
@@ -38,28 +38,28 @@ namespace AssetRipper.Core.Classes.AudioClip
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasLoadType(Version version) => version.IsGreaterEqual(5);
+		public static bool HasLoadType(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasIsTrackerFormat(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasIsTrackerFormat(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasAmbisonic(Version version) => version.IsGreater(2017);
+		public static bool HasAmbisonic(UnityVersion version) => version.IsGreater(2017);
 
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasAudioClipFlags(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasAudioClipFlags(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// (Less or equal to 5.6.0b4) or (5.6.011 and greater)
 		/// </summary>
-		public static bool HasLoadInBackground(Version version) => version.IsLessEqual(5, 6, 0, VersionType.Beta, 4) || version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 11);
+		public static bool HasLoadInBackground(UnityVersion version) => version.IsLessEqual(5, 6, 0, UnityVersionType.Beta, 4) || version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 11);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasCompressionFormat(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasCompressionFormat(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		/// <summary>
 		/// Not Release
 		/// </summary>
@@ -68,46 +68,46 @@ namespace AssetRipper.Core.Classes.AudioClip
 		/// <summary>
 		/// 2.0.0 to 3.0.0 exclusive
 		/// </summary>
-		public static bool HasDecompressOnLoad(Version version) => version.IsGreaterEqual(2) && version.IsLess(3);
+		public static bool HasDecompressOnLoad(UnityVersion version) => version.IsGreaterEqual(2) && version.IsLess(3);
 		/// <summary>
 		/// 2.6.0 to 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasType(Version version) => version.IsGreaterEqual(2, 6) && version.IsLessEqual(5, 0, 0, VersionType.Beta);
+		public static bool HasType(UnityVersion version) => version.IsGreaterEqual(2, 6) && version.IsLessEqual(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// Less than 2.6.0
 		/// </summary>
-		public static bool HasLength(Version version) => version.IsLess(2, 6);
+		public static bool HasLength(UnityVersion version) => version.IsLess(2, 6);
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool Has3D(Version version) => version.IsGreaterEqual(2, 6);
+		public static bool Has3D(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 3.0.0 to 5.0.0 exclusive
 		/// </summary>
-		public static bool HasUseHardware(Version version) => version.IsGreaterEqual(3);
+		public static bool HasUseHardware(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 3.2.0 and greater
 		/// </summary>
-		public static bool HasStreamingInfo(Version version) => version.IsGreaterEqual(3, 2);
+		public static bool HasStreamingInfo(UnityVersion version) => version.IsGreaterEqual(3, 2);
 		/// <summary>
 		/// 3.0.0 to 5.0.0 exclusive
 		/// </summary>
-		public static bool HasStream(Version version) => version.IsGreaterEqual(3);
+		public static bool HasStream(UnityVersion version) => version.IsGreaterEqual(3);
 
 		/// <summary>
 		/// 5.0.0f1 and greater
 		/// </summary>
-		private static bool IsAlignTrackerFormat(Version version)
+		private static bool IsAlignTrackerFormat(UnityVersion version)
 		{
 			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		}
 
 		/// <summary>
 		/// 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		private static bool IsFSBResourceFirst(Version version) => version.IsEqual(5, 0, 0, VersionType.Beta);
-		private static int GetDecompressOnLoadOrder(Version version)
+		private static bool IsFSBResourceFirst(UnityVersion version) => version.IsEqual(5, 0, 0, UnityVersionType.Beta);
+		private static int GetDecompressOnLoadOrder(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(3))
 			{
@@ -127,15 +127,15 @@ namespace AssetRipper.Core.Classes.AudioClip
 		/// <summary>
 		/// 3.2.0 and greater
 		/// </summary>
-		private static bool IsStreamInt32(Version version) => version.IsGreaterEqual(3, 2);
+		private static bool IsStreamInt32(UnityVersion version) => version.IsGreaterEqual(3, 2);
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsAlignBools(Version version) => version.IsGreaterEqual(2, 1);
+		private static bool IsAlignBools(UnityVersion version) => version.IsGreaterEqual(2, 1);
 		/// <summary>
 		/// 2.1.0 to 3.0.0 exclusive or 3.2.0 and greater
 		/// </summary>
-		private static bool IsAlignAudioData(Version version) => version.IsGreaterEqual(2, 1) && version.IsLess(3) || version.IsGreaterEqual(3, 2);
+		private static bool IsAlignAudioData(UnityVersion version) => version.IsGreaterEqual(2, 1) && version.IsLess(3) || version.IsGreaterEqual(3, 2);
 
 		public bool CheckAssetIntegrity()
 		{

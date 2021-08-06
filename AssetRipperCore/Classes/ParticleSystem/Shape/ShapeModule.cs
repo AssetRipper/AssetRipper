@@ -13,17 +13,17 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 {
 	public sealed class ShapeModule : ParticleSystemModule, IDependent
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2018, 3))
 			{
 				return 6;
 			}
-			if (version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2))
+			if (version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2))
 			{
 				return 5;
 			}
-			if (version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5))
+			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 5))
 			{
 				return 4;
 			}
@@ -41,79 +41,79 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 		/// <summary>
 		/// 5.6.0b5 and greater
 		/// </summary>
-		public static bool IsMultimodeParameter(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 5);
+		public static bool IsMultimodeParameter(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 5);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasLength(Version version) => version.IsGreaterEqual(4);
+		public static bool HasLength(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// Less than 2017.1.0b2
 		/// </summary>
-		public static bool HasBoxAxes(Version version) => version.IsLess(2017, 1, 0, VersionType.Beta, 2);
+		public static bool HasBoxAxes(UnityVersion version) => version.IsLess(2017, 1, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasArc(Version version) => version.IsGreaterEqual(5);
+		public static bool HasArc(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		public static bool HasBoxThickness(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		public static bool HasBoxThickness(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasMeshMaterialIndex(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasMeshMaterialIndex(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasMeshSpawn(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasMeshSpawn(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasMeshRenderer(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasMeshRenderer(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasSprite(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasSprite(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 5.5.0b11 to 2017.1.0b1
 		/// </summary>
-		public static bool HasMeshScale(Version version)
+		public static bool HasMeshScale(UnityVersion version)
 		{
-			return version.IsGreaterEqual(5, 5, 0, VersionType.Beta, 11) && version.IsLessEqual(2017, 1, 0, VersionType.Beta, 1);
+			return version.IsGreaterEqual(5, 5, 0, UnityVersionType.Beta, 11) && version.IsLessEqual(2017, 1, 0, UnityVersionType.Beta, 1);
 		}
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasUseMeshMaterialIndex(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasUseMeshMaterialIndex(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasAlignToDirection(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasAlignToDirection(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// Less than 5.5.0b11
 		/// </summary>
-		public static bool HasRandomDirection(Version version) => version.IsLess(5, 5, 0, VersionType.Beta, 11);
+		public static bool HasRandomDirection(UnityVersion version) => version.IsLess(5, 5, 0, UnityVersionType.Beta, 11);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasTexture(Version version) => version.IsGreaterEqual(2018, 1);
+		public static bool HasTexture(UnityVersion version) => version.IsGreaterEqual(2018, 1);
 		/// <summary>
 		/// 5.5.0b11 and greater
 		/// </summary>
-		public static bool HasRandomDirectionAmount(Version version) => version.IsGreaterEqual(5, 5, 0, VersionType.Beta, 11);
+		public static bool HasRandomDirectionAmount(UnityVersion version) => version.IsGreaterEqual(5, 5, 0, UnityVersionType.Beta, 11);
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		public static bool HasRandomPositionAmount(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		public static bool HasRandomPositionAmount(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
 
 		/// <summary>
 		/// Less than 2017.1.0b2
 		/// </summary>
-		private static bool HasRadiusFirst(Version version) => version.IsLess(2017, 1, 0, VersionType.Beta, 2);
+		private static bool HasRadiusFirst(UnityVersion version) => version.IsLess(2017, 1, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// Less than 2017.1.0b2
 		/// </summary>
-		private static bool HasMeshMaterialIndexFirst(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		private static bool HasMeshMaterialIndexFirst(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -287,7 +287,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 			return node;
 		}
 
-		private ParticleSystemShapeType GetType(Version version)
+		private ParticleSystemShapeType GetType(UnityVersion version)
 		{
 			if (HasBoxThickness(version))
 			{
@@ -310,11 +310,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 					return Type;
 			}
 		}
-		private float GetExportLength(Version version)
+		private float GetExportLength(UnityVersion version)
 		{
 			return HasLength(version) ? Length : 5.0f;
 		}
-		private float GetExportRadiusThickness(Version version)
+		private float GetExportRadiusThickness(UnityVersion version)
 		{
 			if (HasBoxThickness(version))
 			{
@@ -334,27 +334,27 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 					return 1.0f;
 			}
 		}
-		private float GetExportDonutRadius(Version version)
+		private float GetExportDonutRadius(UnityVersion version)
 		{
 			return HasBoxThickness(version) ? DonutRadius : 0.2f;
 		}
-		private bool GetExportUseMeshColors(Version version)
+		private bool GetExportUseMeshColors(UnityVersion version)
 		{
 			return HasUseMeshMaterialIndex(version) ? UseMeshColors : true;
 		}
-		private int GetTextureClipChannel(Version version)
+		private int GetTextureClipChannel(UnityVersion version)
 		{
 			return HasTexture(version) ? TextureClipChannel : 3;
 		}
-		private bool GetTextureColorAffectsParticles(Version version)
+		private bool GetTextureColorAffectsParticles(UnityVersion version)
 		{
 			return HasTexture(version) ? TextureColorAffectsParticles : true;
 		}
-		private bool GetTextureAlphaAffectsParticles(Version version)
+		private bool GetTextureAlphaAffectsParticles(UnityVersion version)
 		{
 			return HasTexture(version) ? TextureAlphaAffectsParticles : true;
 		}
-		private MultiModeParameter GetArc(Version version)
+		private MultiModeParameter GetArc(UnityVersion version)
 		{
 			return HasArc(version) ? Arc : new MultiModeParameter(360.0f);
 		}

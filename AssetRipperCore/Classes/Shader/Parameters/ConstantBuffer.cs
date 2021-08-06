@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasStructParams(Version version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasStructParams(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
 		public ConstantBuffer(string name, MatrixParameter[] matrices, VectorParameter[] vectors, StructParameter[] structs, int usedSize)
 		{

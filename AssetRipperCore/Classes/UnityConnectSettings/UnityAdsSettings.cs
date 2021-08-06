@@ -24,19 +24,19 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// <summary>
 		/// Less than 2017.2
 		/// </summary>
-		public static bool HasEnabledPlatforms(Version version) => version.IsLess(2017, 2);
+		public static bool HasEnabledPlatforms(UnityVersion version) => version.IsLess(2017, 2);
 		/// <summary>
 		/// Less than 2017.1 or Not Release
 		/// </summary>
-		public static bool HasIosGameId(Version version, TransferInstructionFlags flags) => version.IsLess(2017) || !flags.IsRelease();
+		public static bool HasIosGameId(UnityVersion version, TransferInstructionFlags flags) => version.IsLess(2017) || !flags.IsRelease();
 		/// <summary>
 		/// 2017.1 and greater and Not Release
 		/// </summary>
-		public static bool HasGameIds(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(2017) && !flags.IsRelease();
+		public static bool HasGameIds(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(2017) && !flags.IsRelease();
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasGameId(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasGameId(UnityVersion version) => version.IsGreaterEqual(2017);
 
 		public void Read(AssetReader reader)
 		{
@@ -80,7 +80,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			return node;
 		}
 
-		private string GetIosGameId(Version version, TransferInstructionFlags flags)
+		private string GetIosGameId(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (HasIosGameId(version, flags))
 			{
@@ -88,7 +88,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			}
 			return string.Empty;
 		}
-		private string GetAndroidGameId(Version version, TransferInstructionFlags flags)
+		private string GetAndroidGameId(UnityVersion version, TransferInstructionFlags flags)
 		{
 			if (HasIosGameId(version, flags))
 			{
@@ -96,7 +96,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			}
 			return string.Empty;
 		}
-		private IReadOnlyDictionary<string, string> GetGameIds(Version version, TransferInstructionFlags flags)
+		private IReadOnlyDictionary<string, string> GetGameIds(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasGameIds(version, flags))
@@ -106,7 +106,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 #endif
 			return new Dictionary<string, string>();
 		}
-		private string GetGameId(Version version)
+		private string GetGameId(UnityVersion version)
 		{
 			return HasGameId(version) ? GameId : string.Empty;
 		}

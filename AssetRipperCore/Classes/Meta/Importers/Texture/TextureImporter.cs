@@ -51,7 +51,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 
 		public TextureImporter(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// ApplyGammaDecoding default value has been changed from 1 to 0
 			if (version.IsGreaterEqual(2019, 3, 6))
@@ -59,7 +59,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 				return 11;
 			}
 			// NOTE: unknown conversion
-			if (version.IsGreaterEqual(2019, 1, 0, VersionType.Final))
+			if (version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Final))
 			{
 				return 10;
 			}
@@ -67,7 +67,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			if (version.IsGreaterEqual(2018, 3, 4))
 			{
 				// NOTE: unknown conversion
-				if (version.IsEqual(2019, 1, 0, VersionType.Beta, 1))
+				if (version.IsEqual(2019, 1, 0, UnityVersionType.Beta, 1))
 				{
 					return 8;
 				}
@@ -105,59 +105,59 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasSRGBTexture(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasSRGBTexture(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasLinearTexture(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasLinearTexture(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
-		public static bool HasCorrectGamma(Version version) => version.IsLess(5, 5);
+		public static bool HasCorrectGamma(UnityVersion version) => version.IsLess(5, 5);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasMipMapsPreserveCoverage(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasMipMapsPreserveCoverage(UnityVersion version) => version.IsGreaterEqual(2017);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasExternalNormalMap(Version version) => version.IsGreaterEqual(3);
+		public static bool HasExternalNormalMap(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 2.5.0 and greater
 		/// </summary>
-		public static bool HasIsReadable(Version version) => version.IsGreaterEqual(2, 5);
+		public static bool HasIsReadable(UnityVersion version) => version.IsGreaterEqual(2, 5);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasStreamingMipmaps(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasStreamingMipmaps(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasCubemapConvolution(Version version) => version.IsGreaterEqual(5);
+		public static bool HasCubemapConvolution(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 5.0.0 to 5.5.0 exclusive
 		/// </summary>
-		public static bool HasCubemapConvolutionSteps(Version version) => version.IsLess(5, 5) && HasCubemapConvolution(version);
+		public static bool HasCubemapConvolutionSteps(UnityVersion version) => version.IsLess(5, 5) && HasCubemapConvolution(version);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasSeamlessCubemap(Version version) => version.IsGreaterEqual(4);
+		public static bool HasSeamlessCubemap(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasLightmap(Version version) => version.IsGreaterEqual(3);
+		public static bool HasLightmap(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 5.0.0 to 5.5.0 exclusive
 		/// </summary>
-		public static bool HasRGBM(Version version) => version.IsLess(5, 5) && version.IsGreaterEqual(5);
+		public static bool HasRGBM(UnityVersion version) => version.IsLess(5, 5) && version.IsGreaterEqual(5);
 		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
-		public static bool HasCompressionQuality(Version version) => version.IsGreaterEqual(3, 5);
+		public static bool HasCompressionQuality(UnityVersion version) => version.IsGreaterEqual(3, 5);
 		/// <summary>
 		/// 5.2.0 to 5.3.7 or 5.4.0 to 5.4.4 exclusive
 		/// </summary>
-		public static bool HasAllowsAlphaSplitting(Version version)
+		public static bool HasAllowsAlphaSplitting(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5, 4, 4))
 			{
@@ -176,17 +176,17 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
-		public static bool HasSprite(Version version) => version.IsGreaterEqual(4, 3);
+		public static bool HasSprite(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
 		/// 4.5.0 and greater
 		/// </summary>
-		public static bool HasSpriteBorder(Version version) => version.IsGreaterEqual(4, 5);
+		public static bool HasSpriteBorder(UnityVersion version) => version.IsGreaterEqual(4, 5);
 		/// <summary>
 		/// 2017.4 to 2018.1 exclusive or 2018.1.0b8 and greater
 		/// </summary>
-		public static bool HasSpriteGenerateFallbackPhysicsShape(Version version)
+		public static bool HasSpriteGenerateFallbackPhysicsShape(UnityVersion version)
 		{
-			if (version.IsGreaterEqual(2018, 1, 0, VersionType.Beta, 8))
+			if (version.IsGreaterEqual(2018, 1, 0, UnityVersionType.Beta, 8))
 			{
 				return true;
 			}
@@ -199,83 +199,83 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasAlphaUsage(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasAlphaUsage(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasAlphaIsTransparency(Version version) => version.IsGreater(4, 2);
+		public static bool HasAlphaIsTransparency(UnityVersion version) => version.IsGreater(4, 2);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasSpriteTessellationDetail(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasSpriteTessellationDetail(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasTextureType(Version version) => version.IsGreaterEqual(3);
+		public static bool HasTextureType(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		public static bool HasRecommendedTextureFormat(Version version) => version.IsLess(4);
+		public static bool HasRecommendedTextureFormat(UnityVersion version) => version.IsLess(4);
 		/// <summary>
 		/// 3.0.0 to 4.0.0 exclusive
 		/// </summary>
-		public static bool HasSourceTextureInformation(Version version) => version.IsLess(4) && version.IsGreaterEqual(3);
+		public static bool HasSourceTextureInformation(UnityVersion version) => version.IsLess(4) && version.IsGreaterEqual(3);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasTextureShape(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasTextureShape(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool HasSingleChannelComponent(Version version) => version.IsGreaterEqual(2018);
+		public static bool HasSingleChannelComponent(UnityVersion version) => version.IsGreaterEqual(2018);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasMaxTextureSizeSet(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasMaxTextureSizeSet(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 2019.3.6 and greater
 		/// </summary>
-		public static bool HasApplyGammaDecoding(Version version) => version.IsGreaterEqual(2019, 3, 6);
+		public static bool HasApplyGammaDecoding(UnityVersion version) => version.IsGreaterEqual(2019, 3, 6);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasPlatformSettings(Version version) => version.IsGreaterEqual(3);
+		public static bool HasPlatformSettings(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasOutput(Version version) => version.IsGreaterEqual(4);
+		public static bool HasOutput(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 2018.2.1 and greater
 		/// </summary>
-		public static bool HasPSDRemoveMatte(Version version) => version.IsGreaterEqual(2018, 2, 1);
+		public static bool HasPSDRemoveMatte(UnityVersion version) => version.IsGreaterEqual(2018, 2, 1);
 
 		/// <summary>
 		/// Less than 3
 		/// </summary>
-		private static bool IsBoolFlags(Version version) => version.IsLess(3);
+		private static bool IsBoolFlags(UnityVersion version) => version.IsLess(3);
 		/// <summary>
 		/// 2017.4 to 2018.1 exclusive or 2018.1.0b8 and greater
 		/// </summary>
-		private static bool SpritePixelsToUnitsFirst(Version version) => HasSpriteGenerateFallbackPhysicsShape(version);
+		private static bool SpritePixelsToUnitsFirst(UnityVersion version) => HasSpriteGenerateFallbackPhysicsShape(version);
 		/// <summary>
 		/// Less than 3.5.0
 		/// </summary>
-		private static bool IsReadableFirst(Version version) => version.IsLess(3, 5);
+		private static bool IsReadableFirst(UnityVersion version) => version.IsLess(3, 5);
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		private static bool IsAlignGrayScaleToAlpha(Version version) => version.IsLess(4);
+		private static bool IsAlignGrayScaleToAlpha(UnityVersion version) => version.IsLess(4);
 		/// <summary>
 		/// 3.0.0 to 4.0.0 exclusive
 		/// </summary>
-		private static bool IsAlignTextureFormat(Version version) => version.IsLess(4) && version.IsGreaterEqual(3);
+		private static bool IsAlignTextureFormat(UnityVersion version) => version.IsLess(4) && version.IsGreaterEqual(3);
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		private static bool RecommendedTextureFormatFirst(Version version) => version.IsLess(3);
+		private static bool RecommendedTextureFormatFirst(UnityVersion version) => version.IsLess(3);
 
 
-		public override bool IncludesImporter(Version version)
+		public override bool IncludesImporter(UnityVersion version)
 		{
 			return true;
 		}
@@ -917,12 +917,12 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			return node;
 		}
 
-		private int GetApplyGammaDecoding(Version version)
+		private int GetApplyGammaDecoding(UnityVersion version)
 		{
 			return ToSerializedVersion(version) < 11 ? 1 : ApplyGammaDecoding;
 		}
 
-		private string GetPlatformSettingsName(Version version)
+		private string GetPlatformSettingsName(UnityVersion version)
 		{
 			return ToSerializedVersion(version) >= 4 ? PlatformSettingsName : BuildTargetSettingsName;
 		}

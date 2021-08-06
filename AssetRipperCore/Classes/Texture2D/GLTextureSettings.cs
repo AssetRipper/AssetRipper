@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 			WrapW = (TextureWrapMode)(-1);
 		}
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// WrapMode has been replaced by WrapU
 			if (version.IsGreaterEqual(2017))
@@ -32,7 +32,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasWraps(Version version) => version.IsGreaterEqual(2017);
+		public static bool HasWraps(UnityVersion version) => version.IsGreaterEqual(2017);
 
 		public void Read(AssetReader reader)
 		{

@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.AudioSource
 	{
 		public AudioSource(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5))
 			{
@@ -35,60 +35,60 @@ namespace AssetRipper.Core.Classes.AudioSource
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasOutputAudioMixerGroup(Version version) => version.IsGreaterEqual(5);
+		public static bool HasOutputAudioMixerGroup(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool HasMinVolume(Version version) => version.IsLess(3);
+		public static bool HasMinVolume(UnityVersion version) => version.IsLess(3);
 		/// <summary>
 		/// 1.6.0 and greater
 		/// </summary>
-		public static bool HasPitch(Version version) => version.IsGreaterEqual(1, 6);
+		public static bool HasPitch(UnityVersion version) => version.IsGreaterEqual(1, 6);
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool HasRolloffFactor(Version version) => version.IsLess(3);
+		public static bool HasRolloffFactor(UnityVersion version) => version.IsLess(3);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasMute(Version version) => version.IsGreaterEqual(3);
+		public static bool HasMute(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 5.2.0 and greater
 		/// </summary>
-		public static bool HasSpatialize(Version version) => version.IsGreaterEqual(5, 2);
+		public static bool HasSpatialize(UnityVersion version) => version.IsGreaterEqual(5, 2);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasSpatializePostEffects(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasSpatializePostEffects(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasPriority(Version version) => version.IsGreaterEqual(3);
+		public static bool HasPriority(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
-		public static bool HasBypassListenerEffects(Version version) => version.IsGreaterEqual(4, 2);
+		public static bool HasBypassListenerEffects(UnityVersion version) => version.IsGreaterEqual(4, 2);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasRolloffCustomCurve(Version version) => version.IsGreaterEqual(3);
+		public static bool HasRolloffCustomCurve(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
 		/// </summary>
-		public static bool HasReverbZoneMixCustomCurve(Version version) => version.IsGreaterEqual(5, 0, 0, VersionType.Final);
+		public static bool HasReverbZoneMixCustomCurve(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsAlignAwake(Version version) => version.IsGreaterEqual(2, 1);
+		private static bool IsAlignAwake(UnityVersion version) => version.IsGreaterEqual(2, 1);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		private static bool IsAlignMute(Version version) => version.IsGreaterEqual(3);
+		private static bool IsAlignMute(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		private static bool IsAlignBypass(Version version) => version.IsGreaterEqual(3);
+		private static bool IsAlignBypass(UnityVersion version) => version.IsGreaterEqual(3);
 
 		public override void Read(AssetReader reader)
 		{
@@ -209,11 +209,11 @@ namespace AssetRipper.Core.Classes.AudioSource
 			return node;
 		}
 
-		private AnimationCurveTpl<Float> GetRolloffCustomCurve(Version version)
+		private AnimationCurveTpl<Float> GetRolloffCustomCurve(UnityVersion version)
 		{
 			return HasRolloffCustomCurve(version) ? RolloffCustomCurve : new AnimationCurveTpl<Float>(1.0f, 0.0f, 1.0f / 3.0f);
 		}
-		private AnimationCurveTpl<Float> GetPanLevelCustomCurve(Version version)
+		private AnimationCurveTpl<Float> GetPanLevelCustomCurve(UnityVersion version)
 		{
 			if (HasRolloffCustomCurve(version))
 			{
@@ -223,7 +223,7 @@ namespace AssetRipper.Core.Classes.AudioSource
 			KeyframeTpl<Float> frame = new KeyframeTpl<Float>(0.0f, 0.0f, 1.0f / 3.0f);
 			return new AnimationCurveTpl<Float>(frame);
 		}
-		private AnimationCurveTpl<Float> GetSpreadCustomCurve(Version version)
+		private AnimationCurveTpl<Float> GetSpreadCustomCurve(UnityVersion version)
 		{
 			if (HasRolloffCustomCurve(version))
 			{
@@ -233,7 +233,7 @@ namespace AssetRipper.Core.Classes.AudioSource
 			KeyframeTpl<Float> frame = new KeyframeTpl<Float>(0.0f, 0.0f, 1.0f / 3.0f);
 			return new AnimationCurveTpl<Float>(frame);
 		}
-		private AnimationCurveTpl<Float> GetReverbZoneMixCustomCurve(Version version)
+		private AnimationCurveTpl<Float> GetReverbZoneMixCustomCurve(UnityVersion version)
 		{
 			if (HasReverbZoneMixCustomCurve(version))
 			{

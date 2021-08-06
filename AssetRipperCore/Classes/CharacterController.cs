@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public CharacterController(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// SlopeLimit default value has been changed to 45.0f
 			if (version.IsGreaterEqual(3))
@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasCollider(Version version) => version.IsGreaterEqual(5);
+		public static bool HasCollider(UnityVersion version) => version.IsGreaterEqual(5);
 
 		public override void Read(AssetReader reader)
 		{
@@ -63,7 +63,7 @@ namespace AssetRipper.Core.Classes
 			return node;
 		}
 
-		private float GetSlopeLimit(Version version)
+		private float GetSlopeLimit(UnityVersion version)
 		{
 			if (ToSerializedVersion(version) >= 2)
 			{

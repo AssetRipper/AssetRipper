@@ -8,14 +8,14 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using Version = AssetRipper.Core.Parser.Files.Version;
+using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.Light
 {
 	public sealed class Light : Behaviour
 	{
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// unknown conversion
 			if (version.IsGreaterEqual(2019, 3))
@@ -37,11 +37,11 @@ namespace AssetRipper.Core.Classes.Light
 			{
 				return 7;
 			}
-			if (version.IsGreaterEqual(5, 0, 0, VersionType.Final, 4))
+			if (version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final, 4))
 			{
 				return 6;
 			}
-			if (version.IsEqual(5, 0, 0, VersionType.Beta, 1))
+			if (version.IsEqual(5, 0, 0, UnityVersionType.Beta, 1))
 			{
 				return 4;
 			}
@@ -63,88 +63,88 @@ namespace AssetRipper.Core.Classes.Light
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasShape(Version version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasShape(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 		/// <summary>
 		/// Less than 3.0.0
 		/// </summary>
-		public static bool HasAttenuate(Version version) => version.IsLess(3);
+		public static bool HasAttenuate(UnityVersion version) => version.IsLess(3);
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool HasIntensity(Version version) => version.IsGreaterEqual(2);
+		public static bool HasIntensity(UnityVersion version) => version.IsGreaterEqual(2);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasInnerSpotAngle(Version version) => version.IsGreaterEqual(2019);
+		public static bool HasInnerSpotAngle(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasCookieSize(Version version) => version.IsGreaterEqual(3);
+		public static bool HasCookieSize(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>
-		public static bool HasShadows(Version version) => version.IsGreaterEqual(2);
+		public static bool HasShadows(UnityVersion version) => version.IsGreaterEqual(2);
 		/// <summary>
 		/// 3.0.0 to 5.4.0 excludsive
 		/// </summary>
-		public static bool HasActuallyLightmapped(Version version) => version.IsGreaterEqual(3) && version.IsLess(5, 4);
+		public static bool HasActuallyLightmapped(UnityVersion version) => version.IsGreaterEqual(3) && version.IsLess(5, 4);
 		/// <summary>
 		/// 5.4.0 to 5.6.0 exclusive
 		/// </summary>
-		public static bool HasBakedIndex(Version version) => version.IsGreaterEqual(5, 4) && version.IsLess(5, 6);
+		public static bool HasBakedIndex(UnityVersion version) => version.IsGreaterEqual(5, 4) && version.IsLess(5, 6);
 		/// <summary>
 		/// 5.6.0 and greater and Release
 		/// </summary>
-		public static bool HasBakingOutput(Version version, TransferInstructionFlags flags) => version.IsGreaterEqual(5, 6) && flags.IsRelease();
+		public static bool HasBakingOutput(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(5, 6) && flags.IsRelease();
 		/// <summary>
 		/// 1.5.0 and greater
 		/// </summary>
-		public static bool HasCullingMask(Version version) => version.IsGreaterEqual(1, 5);
+		public static bool HasCullingMask(UnityVersion version) => version.IsGreaterEqual(1, 5);
 		/// <summary>
 		/// 2019.1.0b3 and greater
 		/// </summary>
-		public static bool HasRenderingLayerMask(Version version) => version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 3);
+		public static bool HasRenderingLayerMask(UnityVersion version) => version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Beta, 3);
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>
-		public static bool HasLightmapping(Version version) => version.IsGreaterEqual(3);
+		public static bool HasLightmapping(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		public static bool HasLightShadowCasterMode(Version version) => version.IsGreaterEqual(2018, 2);
+		public static bool HasLightShadowCasterMode(UnityVersion version) => version.IsGreaterEqual(2018, 2);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasAreaSize(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasAreaSize(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasBounceIntensity(Version version) => version.IsGreaterEqual(5);
+		public static bool HasBounceIntensity(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
 		/// 2017.1.0b1 to 2017.1.0p4
 		/// </summary>
-		public static bool HasFalloffTable(Version version) => version.IsGreaterEqual(2017, 1, 0) && version.IsLessEqual(2017, 1, 0, VersionType.Patch, 4);
+		public static bool HasFalloffTable(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0) && version.IsLessEqual(2017, 1, 0, UnityVersionType.Patch, 4);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasColorTemperature(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasColorTemperature(UnityVersion version) => version.IsGreaterEqual(5, 6);
 		/// <summary>
 		/// 5.6.0b10 and greater
 		/// </summary>
-		public static bool HasUseColorTemperature(Version version) => version.IsGreaterEqual(5, 6, 0, VersionType.Beta, 10);
+		public static bool HasUseColorTemperature(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 10);
 		/// <summary>
 		/// 2019.1.0b4 and greater
 		/// </summary>
-		public static bool HasBoundingSphereOverride(Version version) => version.IsGreaterEqual(2019, 1, 0, VersionType.Beta, 4);
+		public static bool HasBoundingSphereOverride(UnityVersion version) => version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Beta, 4);
 		/// <summary>
 		/// Not Release (NOTE: unknown version)
 		/// </summary>
-		public static bool HasShadowRadius(Version version, TransferInstructionFlags flags) => !flags.IsRelease();
+		public static bool HasShadowRadius(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease();
 
 		/// <summary>
 		/// 2.1.0 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(2, 1);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2, 1);
 
 		public Light(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -315,7 +315,7 @@ namespace AssetRipper.Core.Classes.Light
 			return node;
 		}
 
-		private float GetShadowRadius(Version version, TransferInstructionFlags flags)
+		private float GetShadowRadius(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasShadowRadius(version, flags))
@@ -325,7 +325,7 @@ namespace AssetRipper.Core.Classes.Light
 #endif
 			return 0.0f;
 		}
-		private float GetShadowAngle(Version version, TransferInstructionFlags flags)
+		private float GetShadowAngle(UnityVersion version, TransferInstructionFlags flags)
 		{
 #if UNIVERSAL
 			if (HasShadowRadius(version, flags))

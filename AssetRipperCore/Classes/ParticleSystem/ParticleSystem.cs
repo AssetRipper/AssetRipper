@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 	{
 		public ParticleSystem(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static int ToSerializedVersion(Version version)
+		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2018, 3))
 			{
@@ -32,7 +32,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			{
 				return 5;
 			}
-			if (version.IsGreaterEqual(5, 4, 0, VersionType.Patch, 4))
+			if (version.IsGreaterEqual(5, 4, 0, UnityVersionType.Patch, 4))
 			{
 				return 4;
 			}
@@ -47,76 +47,76 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		/// <summary>
 		/// Less than 5.3.0
 		/// </summary>
-		public static bool HasStartDelaySingle(Version version) => version.IsLess(5, 3);
+		public static bool HasStartDelaySingle(UnityVersion version) => version.IsLess(5, 3);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasStopAction(Version version) => version.IsGreaterEqual(2017, 2);
+		public static bool HasStopAction(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
 		/// 2018.3 and greater
 		/// </summary>
-		public static bool HasCullingMode(Version version) => version.IsGreaterEqual(2018, 3);
+		public static bool HasCullingMode(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
-		public static bool HasUseUnscaledTime(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Beta, 2);
+		public static bool HasUseUnscaledTime(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
 		/// <summary>
 		/// 5.4.0p4 and greater
 		/// </summary>
-		public static bool HasAutoRandomSeed(Version version) => version.IsGreaterEqual(5, 4, 0, VersionType.Patch, 4);
+		public static bool HasAutoRandomSeed(UnityVersion version) => version.IsGreaterEqual(5, 4, 0, UnityVersionType.Patch, 4);
 		/// <summary>
 		/// 2017.1.0f1 and greater
 		/// </summary>
-		public static bool HasUseRigidbodyForVelocity(Version version) => version.IsGreaterEqual(2017, 1, 0, VersionType.Final);
+		public static bool HasUseRigidbodyForVelocity(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Final);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasMoveWithCustomTransform(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasMoveWithCustomTransform(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasScalingMode(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasScalingMode(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasInheritVelocityModule(Version version) => version.IsGreaterEqual(5, 3);
+		public static bool HasInheritVelocityModule(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		public static bool HasExternalForcesModule(Version version) => version.IsGreaterEqual(4);
+		public static bool HasExternalForcesModule(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasNoiseModule(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasNoiseModule(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasTriggerModule(Version version) => version.IsGreaterEqual(5, 4);
+		public static bool HasTriggerModule(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasLightsModule(Version version) => version.IsGreaterEqual(5, 5);
+		public static bool HasLightsModule(UnityVersion version) => version.IsGreaterEqual(5, 5);
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool HasCustomDataModule(Version version) => version.IsGreaterEqual(5, 6);
+		public static bool HasCustomDataModule(UnityVersion version) => version.IsGreaterEqual(5, 6);
 
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
-		private static bool IsStartDelayFirst(Version version) => version.IsLess(5, 5);
+		private static bool IsStartDelayFirst(UnityVersion version) => version.IsLess(5, 5);
 		/// <summary>
 		/// Less than 5.4.0p4
 		/// </summary>
-		private static bool IsRandomSeedFirst(Version version) => version.IsLess(5, 4, 0, VersionType.Patch, 4);
+		private static bool IsRandomSeedFirst(UnityVersion version) => version.IsLess(5, 4, 0, UnityVersionType.Patch, 4);
 		/// <summary>
 		/// Less than 5.5.0
 		/// </summary>
-		private static bool IsMoveWithTransformBool(Version version) => version.IsLess(5, 5);
+		private static bool IsMoveWithTransformBool(UnityVersion version) => version.IsLess(5, 5);
 		/// <summary>
 		/// 5.4.0p4 and greater
 		/// </summary>
-		private static bool IsAlign(Version version) => version.IsGreaterEqual(5, 4, 0, VersionType.Patch, 4);
+		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(5, 4, 0, UnityVersionType.Patch, 4);
 
 		public override void Read(AssetReader reader)
 		{
@@ -304,47 +304,47 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			return node;
 		}
 
-		private bool GetAutoRandomSeed(Version version)
+		private bool GetAutoRandomSeed(UnityVersion version)
 		{
 			return HasAutoRandomSeed(version) ? AutoRandomSeed : true;
 		}
-		public bool GetUseRigidbodyForVelocity(Version version)
+		public bool GetUseRigidbodyForVelocity(UnityVersion version)
 		{
 			return HasUseRigidbodyForVelocity(version) ? UseRigidbodyForVelocity : true;
 		}
-		private MinMaxCurve GetStartDelay(Version version)
+		private MinMaxCurve GetStartDelay(UnityVersion version)
 		{
 			return HasStartDelaySingle(version) ? new MinMaxCurve(StartDelaySingle) : StartDelay;
 		}
-		private ParticleSystemScalingMode GetScalingMode(Version version)
+		private ParticleSystemScalingMode GetScalingMode(UnityVersion version)
 		{
 			return HasScalingMode(version) ? ScalingMode : ParticleSystemScalingMode.Shape;
 		}
-		private InheritVelocityModule GetInheritVelocityModule(Version version)
+		private InheritVelocityModule GetInheritVelocityModule(UnityVersion version)
 		{
 			return HasInheritVelocityModule(version) ? InheritVelocityModule : new InheritVelocityModule(InitialModule.InheritVelocity);
 		}
-		private ExternalForcesModule GetExternalForcesModule(Version version)
+		private ExternalForcesModule GetExternalForcesModule(UnityVersion version)
 		{
 			return HasExternalForcesModule(version) ? ExternalForcesModule : new ExternalForcesModule(true);
 		}
-		public NoiseModule.NoiseModule GetNoiseModule(Version version)
+		public NoiseModule.NoiseModule GetNoiseModule(UnityVersion version)
 		{
 			return HasNoiseModule(version) ? NoiseModule : new NoiseModule.NoiseModule(true);
 		}
-		public TriggerModule GetTriggerModule(Version version)
+		public TriggerModule GetTriggerModule(UnityVersion version)
 		{
 			return HasTriggerModule(version) ? TriggerModule : new TriggerModule(true);
 		}
-		public LightsModule GetLightsModule(Version version)
+		public LightsModule GetLightsModule(UnityVersion version)
 		{
 			return HasLightsModule(version) ? LightsModule : new LightsModule(true);
 		}
-		public TrailModule.TrailModule GetTrailModule(Version version)
+		public TrailModule.TrailModule GetTrailModule(UnityVersion version)
 		{
 			return HasLightsModule(version) ? TrailModule : new TrailModule.TrailModule(true);
 		}
-		public CustomDataModule.CustomDataModule GetCustomDataModule(Version version)
+		public CustomDataModule.CustomDataModule GetCustomDataModule(UnityVersion version)
 		{
 			return HasCustomDataModule(version) ? CustomDataModule : new CustomDataModule.CustomDataModule(true);
 		}
