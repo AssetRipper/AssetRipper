@@ -9,9 +9,23 @@ namespace AssetRipper.Core.Utils
 {
 	public static class DirectoryUtils
 	{
+		public static DirectoryInfo ExecutingDirectoryInfo => new FileInfo(Assembly.GetEntryAssembly().Location).Directory;
+		public static string ExecutingDirectoryName => ExecutingDirectoryInfo.Name;
+		public static string ExecutingDirectoryPath => ExecutingDirectoryInfo.FullName;
+
 		public static bool Exists(string path)
 		{
 			return Directory.Exists(ToLongPath(path));
+		}
+
+		public static string CombineRelativeToExecutingDirectory(string relativePath)
+		{
+			return Path.Combine(ExecutingDirectoryPath, relativePath);
+		}
+
+		public static string CombineRelativeToExecutingDirectory(params string[] names)
+		{
+			return Path.Combine(ExecutingDirectoryPath, Path.Combine(names));
 		}
 
 		public static DirectoryInfo CreateDirectory(string path)
@@ -34,16 +48,6 @@ namespace AssetRipper.Core.Utils
 		public static void Delete(string path, bool recursive)
 		{
 			Directory.Delete(ToLongPath(path, true), recursive);
-		}
-
-		public static string GetExecutingDirectory()
-		{
-			return GetExecutingDirectoryInfo().FullName;
-		}
-
-		public static DirectoryInfo GetExecutingDirectoryInfo()
-		{
-			return new FileInfo(Assembly.GetEntryAssembly().Location).Directory;
 		}
 
 		public static string[] GetFiles(string path)
