@@ -32,6 +32,10 @@ namespace AssetRipper.Core.Project
 		/// Export asset bundle content to its original path instead of AssetBundle directory
 		/// </summary>
 		public bool KeepAssetBundleContentPath { get; set; }
+		/// <summary>
+		/// A function to determine if an object is allowed to be exported.<br/>
+		/// Set by default to allow everything.
+		/// </summary>
 		public Func<Object, bool> Filter { get; set; } = DefaultFilter;
 	}
 }
