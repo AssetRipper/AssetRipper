@@ -296,7 +296,7 @@ namespace AssetRipper.Core.Reading.Classes
                             }
                         }
 
-                        if (reader.endian == EndianType.BigEndian && componentByteSize > 1) //swap bytes
+                        if (reader.EndianType == EndianType.BigEndian && componentByteSize > 1) //swap bytes
                         {
                             for (var i = 0; i < componentBytes.Length / componentByteSize; i++)
                             {

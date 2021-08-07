@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Reading
 			public string path;
 		}
 
-		public WebFile(AltEndianBinaryReader reader)
+		public WebFile(EndianReader reader)
 		{
 			var magic = reader.ReadBytes(2);
 			reader.Position = 0;
@@ -58,7 +58,7 @@ namespace AssetRipper.Core.Reading
 				}
 				else
 				{
-					reader.endian = EndianType.LittleEndian;
+					reader.EndianType = EndianType.LittleEndian;
 					ReadWebData(reader);
 				}
 			}

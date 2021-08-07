@@ -8,6 +8,20 @@ namespace AssetRipper.Core.IO.Endian
 {
 	public class EndianReader : BinaryReader
 	{
+		public EndianType EndianType { get; set; }
+
+		protected bool IsAlignArray { get; }
+
+		protected const int BufferSize = 4096;
+
+		private readonly byte[] m_buffer = new byte[BufferSize];
+
+		public long Position
+		{
+			get => BaseStream.Position;
+			set => BaseStream.Position = value;
+		}
+
 		public EndianReader(Stream stream, EndianType endianess) : this(stream, endianess, false) { }
 
 		protected EndianReader(Stream stream, EndianType endianess, bool alignArray) : base(stream, Encoding.UTF8, true)
@@ -725,13 +739,5 @@ namespace AssetRipper.Core.IO.Endian
 				count -= read;
 			}
 		}
-
-		public EndianType EndianType { get; }
-
-		protected bool IsAlignArray { get; }
-
-		protected const int BufferSize = 4096;
-
-		private readonly byte[] m_buffer = new byte[BufferSize];
 	}
 }

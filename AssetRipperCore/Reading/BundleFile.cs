@@ -80,7 +80,7 @@ namespace AssetRipper.Core.Reading
 			}
 		}
 
-		private void ReadHeaderAndBlocksInfo(AltEndianBinaryReader reader)
+		private void ReadHeaderAndBlocksInfo(EndianReader reader)
 		{
 			var isCompressed = m_Header.signature == "UnityWeb";
 			if (m_Header.version >= 4)
@@ -134,7 +134,7 @@ namespace AssetRipper.Core.Reading
 			return blocksStream;
 		}
 
-		private void ReadBlocksAndDirectory(AltEndianBinaryReader reader, Stream blocksStream)
+		private void ReadBlocksAndDirectory(EndianReader reader, Stream blocksStream)
 		{
 			foreach (var blockInfo in m_BlocksInfo)
 			{
@@ -152,7 +152,7 @@ namespace AssetRipper.Core.Reading
 				blocksStream.Write(uncompressedBytes, 0, uncompressedBytes.Length);
 			}
 			blocksStream.Position = 0;
-			var blocksReader = new AltEndianBinaryReader(blocksStream);
+			var blocksReader = new EndianReader(blocksStream, EndianType.BigEndian);
 			var nodesCount = blocksReader.ReadInt32();
 			m_DirectoryInfo = new Node[nodesCount];
 			for (int i = 0; i < nodesCount; i++)
@@ -194,7 +194,7 @@ namespace AssetRipper.Core.Reading
 			}
 		}
 
-		private void ReadHeader(AltEndianBinaryReader reader)
+		private void ReadHeader(EndianReader reader)
 		{
 			m_Header.size = reader.ReadInt64();
 			m_Header.compressedBlocksInfoSize = reader.ReadUInt32();
@@ -206,7 +206,7 @@ namespace AssetRipper.Core.Reading
 			}
 		}
 
-		private void ReadBlocksInfoAndDirectory(AltEndianBinaryReader reader)
+		private void ReadBlocksInfoAndDirectory(EndianReader reader)
 		{
 			byte[] blocksInfoBytes;
 			if (m_Header.version >= 7)
@@ -253,7 +253,7 @@ namespace AssetRipper.Core.Reading
 						break;
 					}
 			}
-			using (var blocksInfoReader = new AltEndianBinaryReader(blocksInfoUncompresseddStream))
+			using (var blocksInfoReader = new EndianReader(blocksInfoUncompresseddStream, EndianType.BigEndian))
 			{
 				var uncompressedDataHash = blocksInfoReader.ReadBytes(16);
 				var blocksInfoCount = blocksInfoReader.ReadInt32();
@@ -283,7 +283,7 @@ namespace AssetRipper.Core.Reading
 			}
 		}
 
-		private void ReadBlocks(AltEndianBinaryReader reader, Stream blocksStream)
+		private void ReadBlocks(EndianReader reader, Stream blocksStream)
 		{
 			foreach (var blockInfo in m_BlocksInfo)
 			{

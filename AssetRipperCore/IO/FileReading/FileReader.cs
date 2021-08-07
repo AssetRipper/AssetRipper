@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.IO.FileReading
 {
-	public class FileReader : AltEndianBinaryReader
+	public class FileReader : EndianReader
 	{
 		public string FullPath;
 		public string FileName;
