@@ -32,7 +32,10 @@ namespace AssetRipper.Core.Structure.GameStructure
 				{
 					case ZipExtension:
 					case ApkExtension:
-						result.Add(ExtractToRandomTempFolder(path));
+						result.Add(ExtractZip(path));
+						break;
+					case XapkExtension:
+						result.Add(ExtractXapk(path));
 						break;
 					default:
 						result.Add(path);
@@ -42,10 +45,29 @@ namespace AssetRipper.Core.Structure.GameStructure
 			return result;
 		}
 
-		private static string ExtractToRandomTempFolder(string zipFilePath)
+		private static string ExtractZip(string zipFilePath)
 		{
 			string outputDirectory = GetNewRandomTempFolder();
-			Logger.Log(LogType.Info, LogCategory.Import, $"Uncompressing files...{Environment.NewLine}\tFrom: {zipFilePath}{Environment.NewLine}\tTo: {outputDirectory}");
+			DecompressZipArchive(zipFilePath, outputDirectory);
+			return outputDirectory;
+		}
+
+		private static string ExtractXapk(string xapkFilePath)
+		{
+			string intermediateDirectory = GetNewRandomTempFolder();
+			string outputDirectory = GetNewRandomTempFolder();
+			DecompressZipArchive(xapkFilePath, intermediateDirectory);
+			foreach(var filePath in DirectoryUtils.GetFiles(intermediateDirectory))
+			{
+				if (GetFileExtension(filePath) == ApkExtension)
+					DecompressZipArchive(filePath, outputDirectory);
+			}
+			return outputDirectory;
+		}
+
+		private static void DecompressZipArchive(string zipFilePath, string outputDirectory)
+		{
+			Logger.Log(LogType.Info, LogCategory.Import, $"Decompressing files...{Environment.NewLine}\tFrom: {zipFilePath}{Environment.NewLine}\tTo: {outputDirectory}");
 			using (ZipFile zipFile = new ZipFile(zipFilePath))
 			{
 				foreach (ZipEntry entry in zipFile)
@@ -74,7 +96,6 @@ namespace AssetRipper.Core.Structure.GameStructure
 					}
 				}
 			}
-			return outputDirectory;
 		}
 
 		private static string GetNewRandomTempFolder() => Path.Combine(tempFolder, GuidUtils.GetNewGuidString(NumberOfRandomCharacters));
