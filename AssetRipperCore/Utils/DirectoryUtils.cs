@@ -9,9 +9,18 @@ namespace AssetRipper.Core.Utils
 {
 	public static class DirectoryUtils
 	{
-		public static DirectoryInfo ExecutingDirectoryInfo => new FileInfo(Assembly.GetEntryAssembly().Location).Directory;
+		public static DirectoryInfo ExecutingDirectoryInfo { get; }
 		public static string ExecutingDirectoryName => ExecutingDirectoryInfo.Name;
 		public static string ExecutingDirectoryPath => ExecutingDirectoryInfo.FullName;
+
+		static DirectoryUtils()
+		{
+			string path = Assembly.GetEntryAssembly().Location;
+			if (string.IsNullOrEmpty(path))
+				ExecutingDirectoryInfo = new DirectoryInfo(Environment.CurrentDirectory);
+			else
+				ExecutingDirectoryInfo = new FileInfo(path).Directory;
+		}
 
 		public static bool Exists(string path)
 		{
