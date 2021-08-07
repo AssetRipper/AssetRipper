@@ -83,7 +83,8 @@ namespace AssetRipper.Console
 			}
 			catch(Exception ex)
 			{
-				System.Console.WriteLine($"Failed to initialize the output and log paths.", ex);
+				System.Console.WriteLine($"Failed to initialize the output and log paths.");
+				System.Console.WriteLine(ex.ToString());
 				return false;
 			}
 
