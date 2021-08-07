@@ -132,6 +132,8 @@ It has borrowed code from [Perfare](https://github.com/Perfare)'s [AssetStudio](
 
 [Brotli](https://github.com/google/brotli) is licensed under the [MIT license](Licenses/Brotli.md).
 
+[CommandLineParser](https://github.com/commandlineparser/commandline) is licensed under the [MIT license](Licenses/CommandLineParser.md).
+
 [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the [MIT license](Licenses/Cpp2IL.md).
 
 FMOD is licensed under a [non-commercial license](Licenses/FMOD.md).
