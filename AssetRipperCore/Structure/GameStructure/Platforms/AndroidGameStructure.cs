@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Utils;
+﻿using AssetRipper.Core.IO.FileReading;
+using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,14 +31,16 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 			List<string> dataPaths = new List<string>() { apkDataPath };
 
-			RootPath = apkDataPath;
+			RootPath = rootPath;
 			GameDataPath = apkDataPath;
 			ManagedPath = Path.Combine(GameDataPath, ManagedName);
 			LibPath = Path.Combine(RootPath, LibName);
 			Il2CppGameAssemblyPath = GetIl2CppGameAssemblyPath(LibPath);
 			Il2CppMetaDataPath = Path.Combine(ManagedPath, MetadataName, DefaultGlobalMetadataName);
-			UnityPlayerPath = GetAndroidUnityPlayerPath(LibPath);
-			UnityVersion = null;
+			UnityPlayerPath = null;
+			string globalGameManagersPath = Path.Combine(GameDataPath, "globalgamemanagers");
+			string unityVersion = (new AssetRipper.Core.SerializedFiles.SerializedFile(new FileReader(globalGameManagersPath), null)).unityVersion;
+			UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion.Parse(unityVersion).ToArray();
 
 			if (HasIl2CppFiles())
 				Backend = Assembly.ScriptingBackend.Il2Cpp;
