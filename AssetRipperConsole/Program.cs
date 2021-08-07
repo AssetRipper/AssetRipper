@@ -77,9 +77,9 @@ namespace AssetRipper.Console
 			try
 			{
 				if (options.LogFile == null)
-					options.LogFile = new FileInfo(DirectoryUtils.CombineRelativeToExecutingDirectory(DefaultLogFileName));
+					options.LogFile = new FileInfo(DirectoryUtils.CombineWithExecutingDirectory(DefaultLogFileName));
 				if (options.OutputDirectory == null)
-					options.OutputDirectory = new DirectoryInfo(DirectoryUtils.CombineRelativeToExecutingDirectory("Ripped"));
+					options.OutputDirectory = new DirectoryInfo(DirectoryUtils.CombineWithExecutingDirectory("Ripped"));
 			}
 			catch(Exception ex)
 			{

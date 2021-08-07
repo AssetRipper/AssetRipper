@@ -26,8 +26,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 		public static GameStructure Load(IEnumerable<string> paths) => Load(paths, null);
 		public static GameStructure Load(IEnumerable<string> paths, LayoutInfo layinfo)
 		{
-			List<string> toProcess = new List<string>();
-			toProcess.AddRange(paths);
+			List<string> toProcess = Preprocessor.Process(paths);
 			if (toProcess.Count == 0)
 			{
 				throw new ArgumentException("Game files not found", nameof(paths));

@@ -61,7 +61,6 @@ Download links can be found on the [latest release page](https://github.com/ds56
    This is an expansion library for AssetRipperCore. It includes some third party dependencies and has some extra converters, so on Windows it additionally exports:
    * AudioClip .wav export
    * Texture2D .png export (with Sprites)
-   * References to build-in Engine assets
    * Shader DirectX blob export
 
 * [*AssetRipperGUI*](AssetRipperGUI/README.md) (Windows-only)
@@ -93,7 +92,7 @@ If you want to run binary files, you need to install:
 
 ## Discord [![](https://img.shields.io/discord/867514400701153281?color=blue&label=AssetRipper)](https://discord.gg/XqXa53W2Yh)
 
-The development of this project has a dedicated [Discord server](https://discord.gg/XqXa53W2Yh). Feel free to come say hi. This is also an alternative location for people without Github accounts to post issues.
+The development of this project has a dedicated [Discord server](https://discord.gg/XqXa53W2Yh). Feel free to come say hi. This is also an alternative location for people to post issues.
 
 
 ## Build Actions

@@ -18,12 +18,12 @@ namespace AssetRipper.Core.Utils
 			return Directory.Exists(ToLongPath(path));
 		}
 
-		public static string CombineRelativeToExecutingDirectory(string relativePath)
+		public static string CombineWithExecutingDirectory(string relativePath)
 		{
 			return Path.Combine(ExecutingDirectoryPath, relativePath);
 		}
 
-		public static string CombineRelativeToExecutingDirectory(params string[] names)
+		public static string CombineWithExecutingDirectory(params string[] names)
 		{
 			return Path.Combine(ExecutingDirectoryPath, Path.Combine(names));
 		}

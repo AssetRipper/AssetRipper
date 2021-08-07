@@ -7,6 +7,20 @@ namespace AssetRipper.Core.Utils
 {
 	public static class GuidUtils
 	{
+		public static Guid GetNewGuid() => Guid.NewGuid();
+		/// <returns>A new guid in hexadecimal characters without any dashes</returns>
+		public static string GetNewGuidString() => Guid.NewGuid().ToString().Replace("-","");
+		/// <summary> Get the first characters of a new random guid </summary>
+		/// <param name="numCharacters">The number of characters to return up to 32</param>
+		/// <returns>A new string of pseudorandom hexadecimal characters</returns>
+		public static string GetNewGuidString(int numCharacters)
+		{
+			string guid = GetNewGuidString();
+			if (numCharacters < 1 || numCharacters > 31)
+				return guid;
+			else
+				return guid.Substring(0, numCharacters);
+		}
 		public static void RandomizeAssetGuid(IEnumerable<Object> assets)
 		{
 			foreach (var asset in assets)
