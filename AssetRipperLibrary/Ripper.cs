@@ -18,7 +18,10 @@ namespace AssetRipper.Library
 
 		public GameStructure Load(IReadOnlyList<string> paths)
 		{
-			Logger.Log(LogType.Info, LogCategory.General, "Attempting to read files...");
+			if(paths.Count == 1)
+				Logger.Log(LogType.Info, LogCategory.General, $"Attempting to read files from {paths[0]}");
+			else
+				Logger.Log(LogType.Info, LogCategory.General, "Attempting to read files...");
 			GameStructure = GameStructure.Load(paths);
 			Logger.Log(LogType.Info, LogCategory.General, "Finished reading files");
 			return GameStructure;
