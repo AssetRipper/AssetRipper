@@ -96,6 +96,7 @@ namespace AssetRipper.Core.Logging
 			LogOperatingSystemInformation();
 			Log(LogType.Info, LogCategory.System, $"AssetRipper Version: {BuildInfo.Version}");
 			LogReleaseInformation();
+			Log(LogType.Info, LogCategory.System, $"Current UTC Time: {System.DateTime.UtcNow.ToString()}");
 		}
 
 		public static void Add(ILogger logger) => loggers.Add(logger);
