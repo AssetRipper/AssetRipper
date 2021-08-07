@@ -62,8 +62,11 @@ namespace AssetRipper.Core.IO.MultiFile
 			}
 
 			{
-				SplitPath(path, out string directory, out string file);
-				return Exists(directory, file);
+				SplitPath(path, out string directory, out string file, true);
+				if (string.IsNullOrEmpty(file))
+					return false;
+				else
+					return Exists(directory, file);
 			}
 		}
 
@@ -199,12 +202,13 @@ namespace AssetRipper.Core.IO.MultiFile
 			}
 		}
 
-		private static void SplitPath(string path, out string directory, out string file)
+		private static void SplitPath(string path, out string directory, out string file) => SplitPath(path, out directory, out file, false);
+		private static void SplitPath(string path, out string directory, out string file, bool allowNullReturn)
 		{
 			directory = Path.GetDirectoryName(path);
 			directory = string.IsNullOrEmpty(directory) ? "." : directory;
 			file = Path.GetFileName(path);
-			if (string.IsNullOrEmpty(file))
+			if (string.IsNullOrEmpty(file) && !allowNullReturn)
 			{
 				throw new Exception($"Can't determine file name for {path}");
 			}
