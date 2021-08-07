@@ -39,7 +39,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			else
 				Logger.Log(LogType.Info, LogCategory.Import, $"During Il2Cpp initialization, found Unity version: {MakeVersionString(UnityVersion)}");
 
-			Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath, MetaDataPath, UnityVersion);
+			Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath, MetaDataPath, UnityVersion, false);
 
 			Cpp2IlApi.MakeDummyDLLs(true);
 
