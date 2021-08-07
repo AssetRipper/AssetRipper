@@ -18,8 +18,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 		static Preprocessor()
 		{
 			tempFolder = DirectoryUtils.CombineWithExecutingDirectory("temp");
-			if(DirectoryUtils.Exists(tempFolder))
-				DirectoryUtils.Delete(tempFolder, true);
+			DeleteTempFolder();
 			DirectoryUtils.CreateDirectory(tempFolder);
 		}
 
@@ -106,6 +105,12 @@ namespace AssetRipper.Core.Structure.GameStructure
 				return Path.GetExtension(path);
 			else
 				return null;
+		}
+
+		public static void DeleteTempFolder()
+		{
+			if (DirectoryUtils.Exists(tempFolder))
+				DirectoryUtils.Delete(tempFolder, true);
 		}
 	}
 }
