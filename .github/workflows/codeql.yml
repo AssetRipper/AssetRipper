@@ -32,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp' ]
+        language: [ 'csharp' , 'cpp']
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python' ]
         # Learn more:
         # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
@@ -56,7 +56,7 @@ jobs:
     #- name: Autobuild
     #  uses: github/codeql-action/autobuild@v1
     - name: Build x64
-      run: dotnet build /p:Configuration=Release /p:Platform=x64
+      run: msbuild /m /p:Configuration=Release /p:Platform=x64
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
