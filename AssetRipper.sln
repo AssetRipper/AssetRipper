@@ -61,7 +61,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{88179FFC-0863-4C4F-9860-68EB1471E59F}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build.yml = .github\workflows\build.yml
-		.github\workflows\codeql.yml = .github\workflows\codeql.yml
 		.github\workflows\greetings.yml = .github\workflows\greetings.yml
 		.github\workflows\publish.yml = .github\workflows\publish.yml
 		.github\workflows\stale.yml = .github\workflows\stale.yml
