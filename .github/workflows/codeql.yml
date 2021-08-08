@@ -55,6 +55,10 @@ jobs:
     # If this step fails, then you should remove it and run the build manually (see below)
     #- name: Autobuild
     #  uses: github/codeql-action/autobuild@v1
+    - name: Setup msbuild
+      uses: microsoft/setup-msbuild@v1.0.2
+    - name: Restore dependencies
+      run: nuget restore
     - name: Build x64
       run: msbuild /m /p:Configuration=Release /p:Platform=x64
 
